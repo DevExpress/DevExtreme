@@ -33,6 +33,7 @@ export class GridCoreNewBase<
 
   protected columnsController!: ColumnsControllerModule.ColumnsController;
 
+  // eslint-disable-next-line @typescript-eslint/prefer-readonly
   private editingController!: EditingController;
 
   private pagerView!: PagerView;
@@ -77,7 +78,7 @@ export class GridCoreNewBase<
     this.columnsController = this.diContext.get(ColumnsControllerModule.ColumnsController);
     this.toolbarController = this.diContext.get(ToolbarController);
     this.toolbarView = this.diContext.get(ToolbarView);
-    this.editingController = this.diContext.get(EditingController);
+    // this.editingController = this.diContext.get(EditingController);
     this.pagerView = this.diContext.get(PagerView);
     this.search = this.diContext.get(Search);
     this.errorController = this.diContext.get(ErrorController);

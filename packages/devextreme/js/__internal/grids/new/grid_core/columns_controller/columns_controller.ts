@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-shadow */
 /* eslint-disable spellcheck/spell-checker */
 import formatHelper from '@js/format_helper';
 import type { Subscribable, SubsGets, SubsGetsUpd } from '@ts/core/reactive/index';
@@ -17,6 +16,7 @@ import {
 
 export class ColumnsController {
   private readonly columnsConfiguration: Subscribable<ColumnProperties[] | undefined>;
+
   private readonly columnsSettings: SubsGetsUpd<PreNormalizedColumn[]>;
 
   public readonly columns: SubsGets<Column[]>;

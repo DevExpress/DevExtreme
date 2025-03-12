@@ -27,10 +27,11 @@ const CardView = memo(
         }
       ), [baseRef.current]);
 
-      const independentEvents = useMemo(() => (["onContentReady","onDisposing","onInitialized"]), []);
+      const independentEvents = useMemo(() => (["onContentReady","onDataErrorOccurred","onDisposing","onInitialized"]), []);
 
       const expectedChildren = useMemo(() => ({
-        paging: { optionName: "paging", isCollectionItem: false }
+        paging: { optionName: "paging", isCollectionItem: false },
+        remoteOperations: { optionName: "remoteOperations", isCollectionItem: false }
       }), []);
 
       return (
@@ -50,19 +51,49 @@ const CardView = memo(
 // owners:
 // CardView
 type IPagingProps = React.PropsWithChildren<{
+  enabled?: boolean;
   pageIndex?: number;
   pageSize?: number;
+  defaultPageIndex?: number;
+  onPageIndexChange?: (value: number) => void;
+  defaultPageSize?: number;
+  onPageSizeChange?: (value: number) => void;
 }>
 const _componentPaging = (props: IPagingProps) => {
   return React.createElement(NestedOption<IPagingProps>, {
     ...props,
     elementDescriptor: {
       OptionName: "paging",
+      DefaultsProps: {
+        defaultPageIndex: "pageIndex",
+        defaultPageSize: "pageSize"
+      },
     },
   });
 };
 
 const Paging = Object.assign<typeof _componentPaging, NestedComponentMeta>(_componentPaging, {
+  componentType: "option",
+});
+
+// owners:
+// CardView
+type IRemoteOperationsProps = React.PropsWithChildren<{
+  filtering?: boolean;
+  paging?: boolean;
+  sorting?: boolean;
+  summary?: boolean;
+}>
+const _componentRemoteOperations = (props: IRemoteOperationsProps) => {
+  return React.createElement(NestedOption<IRemoteOperationsProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "remoteOperations",
+    },
+  });
+};
+
+const RemoteOperations = Object.assign<typeof _componentRemoteOperations, NestedComponentMeta>(_componentRemoteOperations, {
   componentType: "option",
 });
 
@@ -72,7 +103,9 @@ export {
   ICardViewOptions,
   CardViewRef,
   Paging,
-  IPagingProps
+  IPagingProps,
+  RemoteOperations,
+  IRemoteOperationsProps
 };
 import type * as CardViewTypes from 'devextreme/ui/card_view_types';
 export { CardViewTypes };

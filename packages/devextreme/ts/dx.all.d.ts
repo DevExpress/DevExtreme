@@ -9751,13 +9751,14 @@ declare module DevExpress.ui {
   module dxCardView {
     export type Properties = dxCardViewOptions;
   }
+
   /**
    * [descr:dxCardViewOptions]
    * @deprecated [depNote:dxCardViewOptions]
    */
   export interface dxCardViewOptions
     extends WidgetOptions<dxCardView>,
-      DevExpress.ui.dxCardView.DataControllerProperties {}
+      DevExpress.ui.dxCardView.DataControllerOptions {}
   /**
    * [descr:dxChat]
    */
@@ -31339,24 +31340,75 @@ declare module DevExpress.ui.dxButtonGroup {
 }
 declare module DevExpress.ui.dxCardView {
   /**
-   * [descr:DataControllerProperties]
+   * [descr:DataControllerOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export type DataControllerProperties = {
+  export type DataControllerOptions = {
     /**
-     * [descr:DataControllerProperties.paging]
+     * [descr:DataControllerOptions.dataSource]
      */
-    paging?: {
-      /**
-       * [descr:DataControllerProperties.paging.pageSize]
-       */
-      pageSize?: number;
-      /**
-       * [descr:DataControllerProperties.paging.pageIndex]
-       */
-      pageIndex?: number;
-    };
+    dataSource?: DevExpress.data.DataSourceLike<any, any>;
+    /**
+     * [descr:DataControllerOptions.paging]
+     */
+    paging?: Paging;
+    /**
+     * [descr:DataControllerOptions.keyExpr]
+     */
+    keyExpr?: string | string[];
+    /**
+     * [descr:DataControllerOptions.onDataErrorOccurred]
+     */
+    onDataErrorOccurred?: (
+      args: DevExpress.common.grids.DataErrorOccurredInfo &
+        DevExpress.common.core.events.EventInfo<dxCardView>
+    ) => void;
+    /**
+     * [descr:DataControllerOptions.remoteOperations]
+     */
+    remoteOperations?: RemoteOperations | boolean | 'auto';
   };
+
+  /**
+   * [descr:Paging]
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  interface Paging {
+    /**
+     * [descr:Paging.enabled]
+     */
+    enabled?: boolean;
+    /**
+     * [descr:Paging.pageIndex]
+     */
+    pageIndex?: number;
+    /**
+     * [descr:Paging.pageSize]
+     */
+    pageSize?: number;
+  }
+  /**
+   * [descr:RemoteOperations]
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  interface RemoteOperations {
+    /**
+     * [descr:RemoteOperations.filtering]
+     */
+    filtering?: boolean;
+    /**
+     * [descr:RemoteOperations.paging]
+     */
+    paging?: boolean;
+    /**
+     * [descr:RemoteOperations.sorting]
+     */
+    sorting?: boolean;
+    /**
+     * [descr:RemoteOperations.summary]
+     */
+    summary?: boolean;
+  }
 }
 declare module DevExpress.ui.dxChat {
   /**

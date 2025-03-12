@@ -1,28 +1,8 @@
-import type { DataSourceLike } from '@js/data/data_source';
+import type { DataControllerOptions } from '@js/ui/card_view';
 
-import type { Action } from '../types';
-
-interface PagingOptions {
-  enabled?: boolean;
-  pageSize?: number;
-  pageIndex?: number;
-}
-
-interface RemoteOperationsOptions {
-  filtering?: boolean;
-  paging?: boolean;
-  sorting?: boolean;
-  summary?: boolean;
-}
-
-export interface Options {
-  cacheEnabled?: boolean;
-  dataSource?: DataSourceLike<unknown>;
-  keyExpr?: string | string[];
-  onDataErrorOccurred?: Action<{ error: string }>;
-  paging?: PagingOptions;
-  remoteOperations?: RemoteOperationsOptions | boolean | 'auto';
-}
+export type {
+  DataControllerOptions as Options,
+};
 
 export const defaultOptions = {
   paging: {
@@ -31,5 +11,4 @@ export const defaultOptions = {
     pageIndex: 0,
   },
   remoteOperations: 'auto',
-  cacheEnabled: true,
-} satisfies Options;
+} satisfies DataControllerOptions;

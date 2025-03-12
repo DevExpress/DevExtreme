@@ -31,50 +31,50 @@ const setup = (options: Options) => {
 };
 
 describe('Options', () => {
-  describe('cacheEnabled', () => {
-    const setupForCacheEnabled = ({ cacheEnabled }) => {
-      const store = new ArrayStore({
-        data: [
-          { id: 1, value: 'value 1' },
-          { id: 2, value: 'value 2' },
-          { id: 3, value: 'value 3' },
-        ],
-        key: 'id',
-      });
+  // describe('cacheEnabled', () => {
+  //   const setupForCacheEnabled = ({ cacheEnabled }) => {
+  //     const store = new ArrayStore({
+  //       data: [
+  //         { id: 1, value: 'value 1' },
+  //         { id: 2, value: 'value 2' },
+  //         { id: 3, value: 'value 3' },
+  //       ],
+  //       key: 'id',
+  //     });
 
-      jest.spyOn(store, 'load');
+  //     jest.spyOn(store, 'load');
 
-      const { dataController } = setup({
-        cacheEnabled,
-        dataSource: store,
-        paging: {
-          pageSize: 1,
-        },
-      });
+  //     const { dataController } = setup({
+  //       cacheEnabled,
+  //       dataSource: store,
+  //       paging: {
+  //         pageSize: 1,
+  //       },
+  //     });
 
-      return { store, dataController };
-    };
+  //     return { store, dataController };
+  //   };
 
-    describe('when it is false', () => {
-      it('should skip caching requests', () => {
-        const { store, dataController } = setupForCacheEnabled({
-          cacheEnabled: false,
-        });
-        expect(store.load).toBeCalledTimes(1);
+  //   describe('when it is false', () => {
+  //     it('should skip caching requests', () => {
+  //       const { store, dataController } = setupForCacheEnabled({
+  //         cacheEnabled: false,
+  //       });
+  //       expect(store.load).toBeCalledTimes(1);
 
-        dataController.pageIndex.update(1);
-        expect(store.load).toBeCalledTimes(2);
+  //       dataController.pageIndex.update(1);
+  //       expect(store.load).toBeCalledTimes(2);
 
-        dataController.pageIndex.update(0);
-        expect(store.load).toBeCalledTimes(3);
-      });
-    });
+  //       dataController.pageIndex.update(0);
+  //       expect(store.load).toBeCalledTimes(3);
+  //     });
+  //   });
 
-    describe('when it is true', () => {
-      it.skip('should cache previously loaded pages', () => {});
-      it.skip('should clear cache if not only pageIndex changed', () => {});
-    });
-  });
+  //   describe('when it is true', () => {
+  //     it.skip('should cache previously loaded pages', () => {});
+  //     it.skip('should clear cache if not only pageIndex changed', () => {});
+  //   });
+  // });
 
   describe('dataSourse', () => {
     describe('when it is dataSource instance', () => {
