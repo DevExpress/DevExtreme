@@ -11,6 +11,7 @@ import Form from '@js/ui/form';
 import ScrollView from '@js/ui/scroll_view';
 
 import { getQuill } from '../m_quill_importer';
+import { AI } from '../modules/m_toolbar';
 import { ImageUploader } from './m_image_uploader_helper';
 import {
   getAutoSizedElements,
@@ -102,6 +103,7 @@ function getFormatHandlers(module) {
     deleteTable: getTableOperationHandler(module.quill, 'deleteTable'),
     cellProperties: prepareShowFormProperties(module, 'cell'),
     tableProperties: prepareShowFormProperties(module, 'table'),
+    ai: prepareAIHandlers(module),
   };
 }
 
@@ -115,6 +117,99 @@ function resetFormDialogOptions(editorInstance, {
     minWidth: minWidth ?? 0,
     maxWidth: maxWidth ?? 'none',
   });
+}
+
+function prepareAIHandlers(module) {
+  const handlers = {
+    translate: prepareAITranslateHandler(module),
+  };
+
+  return handlers;
+}
+
+function aITranslateItems(ai, form) {
+  return [
+    {
+      dataField: 'selectedText',
+      editorType: 'dxTextArea',
+      editorOptions: {
+        height: 200,
+        width: 400,
+        readOnly: true,
+      },
+    },
+    {
+      dataField: 'modelResponse',
+      editorType: 'dxTextArea',
+      editorOptions: {
+        height: 200,
+        width: 400,
+        readOnly: true,
+      },
+    },
+    {
+      itemType: 'button',
+      buttonOptions: {
+        text: 'Generate',
+        onClick: () => {
+          const text = form.option('formData').selectedText;
+
+          const callbacks = {
+            onChunk: (chunk) => { console.log(chunk); },
+            onComplete: (finalResponse) => {
+              form.option('formData.modelResponse', finalResponse);
+            },
+            onError: (error) => { console.log(error); },
+          };
+
+          const params = {
+            text,
+            lang: 'ru',
+          };
+
+          const abort = ai.translate(params, callbacks);
+        },
+      },
+    },
+  ];
+}
+
+function prepareAITranslateHandler(module) {
+  const handler = (params) => {
+    const { quill } = module;
+    const selection = quill.getSelection();
+    const hasSelection = selection?.length > 0;
+    const selectedText = hasSelection ? quill.getText(selection) : quill.getText();
+
+    const formData = { selectedText, modelResponse: '' };
+
+    module.editorInstance.formDialogOption({ title: AI.LABEL });
+
+    const { ai } = module.editorInstance.option();
+    const form = module.editorInstance._formDialog._form;
+
+    module.editorInstance.showFormDialog({
+      formData,
+      items: aITranslateItems(ai, form),
+    }).done((data, event) => {
+      const insertIndex = hasSelection ? selection.index : 0;
+
+      quill.focus();
+      quill.deleteText(
+        insertIndex,
+        hasSelection ? selection.length : selectedText.length,
+        SILENT_ACTION,
+      );
+      quill.insertText(insertIndex, data.modelResponse, '', data.modelResponse, USER_ACTION);
+
+      quill.setSelection(insertIndex, data.modelResponse.length, USER_ACTION);
+      module.saveValueChangeEvent(event);
+    }).always(() => {
+      quill.focus();
+    });
+  };
+
+  return handler;
 }
 
 function prepareShowFormProperties(module, type) {

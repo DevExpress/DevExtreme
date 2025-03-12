@@ -10,9 +10,7 @@ import $ from '@js/core/renderer';
 import { extend } from '@js/core/utils/extend';
 import { camelize, titleize } from '@js/core/utils/inflector';
 import { each } from '@js/core/utils/iterator';
-import {
-  isDefined, isEmptyObject, isObject, isString,
-} from '@js/core/utils/type';
+import { isDefined, isEmptyObject, isObject } from '@js/core/utils/type';
 import type { Item } from '@js/ui/toolbar';
 import Toolbar from '@js/ui/toolbar';
 import errors from '@js/ui/widget/ui.errors';
@@ -26,6 +24,22 @@ import BaseModule from './m_base';
 import WidgetCollector from './m_widget_collector';
 // eslint-disable-next-line import/no-mutable-exports
 let ToolbarModule = BaseModule;
+
+export const AI = {
+  OPTION_NAME: 'ai',
+  LABEL: 'AI Assistant',
+  COMMANDS: [
+    'shorten',
+    'translate',
+    'summarize',
+    'expand',
+    'proofread',
+    'explain',
+    'changestyle',
+    'changetone',
+    'custom',
+  ],
+};
 
 if (Quill) {
   const TOOLBAR_WRAPPER_CLASS = 'dx-htmleditor-toolbar-wrapper';
@@ -280,42 +294,80 @@ if (Quill) {
       }
     }
 
-    _prepareToolbarItems() {
-      const resultItems: Item[] = [];
+    _handleStringItem(item) {
+      const buttonItemConfig = this._prepareButtonItemConfig(item);
 
-      each(this.options.items, (index, item) => {
-        let newItem;
+      return this._getToolbarItem(buttonItemConfig);
+    }
+
+    _prepareToolbarItems() {
+      const { items } = this.options;
+
+      const resultItems: Item[] = items.map((item) => {
         this._detectRenamedOptions(item);
-        if (isObject(item)) {
-          newItem = this._handleObjectItem(item);
-        } else if (isString(item)) {
-          const buttonItemConfig = this._prepareButtonItemConfig(item);
-          newItem = this._getToolbarItem(buttonItemConfig);
-        }
-        if (newItem) {
-          resultItems.push(newItem);
-        }
-      });
+
+        const isObjectItem = isObject(item);
+        const newItem = isObjectItem ? this._handleObjectItem(item) : this._handleStringItem(item);
+
+        return newItem;
+      }).filter(Boolean);
 
       return resultItems;
     }
 
     _handleObjectItem(item) {
-      if (item.name && item.acceptedValues && this._isAcceptableItem(item.widget, 'dxSelectBox')) {
+      if (!item.name) {
+        return this._getToolbarItem(item);
+      }
+
+      if (item.name === AI.OPTION_NAME) {
+        const config = this._prepareAIItemConfig(item);
+
+        return this._getToolbarItem(config);
+      }
+
+      if (item.acceptedValues && this._isAcceptableItem(item.widget, 'dxSelectBox')) {
         const selectItemConfig = this._prepareSelectItemConfig(item);
 
         return this._getToolbarItem(selectItemConfig);
-      } if (item.name && this._isAcceptableItem(item.widget, 'dxButton')) {
+      }
+
+      if (this._isAcceptableItem(item.widget, 'dxButton')) {
         const defaultButtonItemConfig = this._prepareButtonItemConfig(item.name);
         const buttonItemConfig = extend(true, defaultButtonItemConfig, item);
 
         return this._getToolbarItem(buttonItemConfig);
       }
-      return this._getToolbarItem(item);
     }
 
     _isAcceptableItem(widget, acceptableWidgetName) {
       return !widget || widget === acceptableWidgetName;
+    }
+
+    _prepareAIItemConfig(props) {
+      const { name, commands, options } = props;
+
+      const config = {
+        name,
+        widget: 'dxDropDownButton',
+        options: {
+          ...options,
+          items: commands
+            .map((command) => command.name)
+            .filter((name) => AI.COMMANDS.includes(name)),
+          text: AI.LABEL,
+          dropDownOptions: { width: 'auto' },
+          onItemClick: (e) => {
+            const command = commands.find((command) => command.name === e.itemData);
+
+            this._formatHandlers[name][command.name](command.params);
+
+            options.onItemClick?.(e);
+          },
+        },
+      };
+
+      return config;
     }
 
     _prepareButtonItemConfig(name) {

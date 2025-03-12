@@ -105,6 +105,7 @@ class HtmlEditor extends Editor<Properties> {
       stylingMode: config().editorStylingMode || 'outlined',
       // @ts-expect-error ts-error
       converter: null,
+      ai: null,
     };
   }
 
@@ -182,8 +183,7 @@ class HtmlEditor extends Editor<Properties> {
     const template = this._getTemplate(ANONYMOUS_TEMPLATE_NAME);
     const transclude = true;
 
-    // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
-    this._$templateResult = template && template.render({
+    this._$templateResult = template?.render({
       container: getPublicElement(this._$htmlContainer),
       noModel: true,
       transclude,
@@ -429,8 +429,7 @@ class HtmlEditor extends Editor<Properties> {
   }
 
   _hasTranscludedContent() {
-    // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
-    return this._$templateResult && this._$templateResult.length;
+    return this._$templateResult?.length;
   }
 
   _getModulesConfig() {
@@ -652,6 +651,8 @@ class HtmlEditor extends Editor<Properties> {
         break;
       case 'imageUpload':
         this._moduleOptionChanged('imageUpload', args);
+        break;
+      case 'ai':
         break;
       default:
         super._optionChanged(args);

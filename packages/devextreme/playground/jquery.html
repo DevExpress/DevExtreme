@@ -18,7 +18,7 @@
 
     <script type="text/javascript" src="../artifacts/js/jquery.js"></script>
     <!-- HtmlEditor -->
-    <!-- <script type="text/javascript" src="../artifacts/js/dx-quill.min.js"></script> -->
+    <script type="text/javascript" src="../artifacts/js/dx-quill.min.js"></script>
 
     <!--<script type="text/javascript" src="../artifacts/js/cldr.js"></script>
     <script type="text/javascript" src="../artifacts/js/cldr/event.js"></script>
@@ -39,23 +39,128 @@
     -->
 
     <script type="text/javascript" src="../artifacts/js/dx.all.debug.js" charset="utf-8"></script>
-    <script type="text/javascript" src="./themeSelector.js"></script>
     <script type="text/javascript" src="../../../node_modules/axe-core/axe.min.js"></script>
+
+    <!-- <script type="module">
+        import { AzureOpenAI } from 'https://esm.sh/openai';
+
+        window.AzureOpenAI = AzureOpenAI;
+    </script> -->
+
+    <script type="module">
+        import { AI } from './ai.js';
+
+        window.DXAI = AI;
+    </script>
 </head>
 <body class="dx-surface">
     <div role="main">
-        <h1 style="position: fixed; left: 0; top: 0; clip: rect(1px, 1px, 1px, 1px);">Test header</h1>
+        <div id="aipowered"></div>
 
-        <select id="theme-selector" style="display: block;">
-        </select>
-        <br />
-        <div id="button"></div>
         <script>
-            $(function() {
-                $("#button").dxButton({
-                    text: 'Click me!',
-                    onClick: function() { alert("clicked"); }
-                });
+            $(() => {
+                // const deployment = 'gpt-4o-mini';
+                // const apiVersion = '2024-02-01';
+                // const endpoint = 'https://public-api.devexpress.com/demo-openai';
+                // const apiKey = 'DEMO';
+
+                // const aIService = new AzureOpenAI({
+                //     dangerouslyAllowBrowser: true,
+                //     deployment,
+                //     endpoint,
+                //     apiVersion,
+                //     apiKey,
+                // });
+
+                const aIService = {
+                    getModelResponse: (params) => {
+                        return new Promise(resolve => setTimeout(() => resolve('Солнце, звезда главной последовательности типа G2V, является центральным телом нашей планетной системы, обеспечивая тепло и свет, необходимые для жизни на Земле. Состоящее в основном из водорода и гелия, оно проходит термоядерный синтез в своем ядре, генерируя огромную энергию. Его структура включает ядро, зоны радиации и конвекции, а также атмосферные слои, такие как фотосфера, хромосфера и корона. Магнитная активность Солнца вызывает солнечные пятна, вспышки и корональные выбросы массы, влияя на магнитосферу Земли, вызывая авроры и геомагнитные бури, которые воздействуют на спутники и энергосети. На протяжении своего 4,6-миллиардного существования Солнце в конечном итоге станет красным гигантом, прежде чем превратится в белого карлика. Его активность также влияет на климат Земли, что делает солнечные исследования жизненно важными для прогнозирования геомагнитных нарушений и понимания долгосрочных климатических изменений.'), 500))
+                    },
+                }
+
+                // Try to stream
+                const generateAIServiceResponse = (prompt) => {
+                    const { system, user } = prompt;
+
+                    const params = {
+                        messages: [
+                            { role: 'system', content: system },
+                            { role: 'user', content: user },
+                        ],
+                        // model: deployment,
+                        max_tokens: 1000,
+                        temperature: 0.7,
+                    };
+
+                    // const aIResponsePromise = aIService.chat.completions.create(params);
+                    const aIResponsePromise = aIService.getModelResponse(params);
+
+                    return aIResponsePromise;
+                };
+
+                const aiProvider = {
+                    sendRequest: (requestParams) => {
+                        const { prompt, onChunk } = requestParams;
+                        const promise = generateAIServiceResponse(prompt);
+
+                        const responseParams = {
+                            promise,
+                            abort: () => { console.log('Aborted'); },
+                        };
+
+                        return responseParams;
+                    },
+                };
+
+                const ai = new DXAI(aiProvider);
+
+                const value = 'The Sun, a G2V main-sequence star, is the central body of our planetary system, providing heat and light essential for life on Earth. Composed mostly of hydrogen and helium, it undergoes thermonuclear fusion in its core, generating vast energy. Its structure includes the core, radiation and convection zones, and atmospheric layers such as the photosphere, chromosphere, and corona. The Sun\'s magnetic activity drives sunspots, flares, and coronal mass ejections, influencing Earth\'s magnetosphere, causing auroras and geomagnetic storms that impact satellites and power grids. Over its 4.6-billion-year lifespan, the Sun will eventually evolve into a red giant before becoming a white dwarf. Its activity also affects Earth\'s climate, making solar research vital for predicting geomagnetic disturbances and understanding long-term climate changes.';
+
+                $('#aipowered').dxHtmlEditor({
+                    height: 400,
+                    value,
+                    ai,
+                    toolbar: {
+                        items: [
+                            {
+                                name: 'ai',
+                                options: {},
+                                commands: [
+                                    'summarize',
+                                    {
+                                        name: 'translate',
+                                        text: 'Translate to',
+                                        params: [ 'English', 'French', 'Thai' ],
+                                    },
+                                    {
+                                        name: 'summarize',
+                                        text: 'Summarize that',
+                                    },
+                                    {
+                                        name: 'explain',
+                                        text: 'Explain this',
+                                    },
+                                    {
+                                        name: 'shorten',
+                                        text: 'Shorten Text',
+                                    },
+                                    {
+                                        name: 'translate',
+                                        text: 'Translate',
+                                        params: [ 'English', 'French', 'Thai' ],
+                                    },
+                                    {
+                                        name: 'custom',
+                                        text: 'Custom command',
+                                        params: [ 'custom1', 'custom2' ],
+                                        prompt: (param) => `my custom prompt with ${param}`,
+                                    },
+                                ],
+                            },
+                            'undo',
+                        ],
+                    },
+                }).dxHtmlEditor('instance');
             });
         </script>
     </div>
