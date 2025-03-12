@@ -36,7 +36,7 @@ import {
 import { createStore } from 'devextreme-aspnet-data-nojquery';
 import 'whatwg-fetch';
 
-const URL = 'https://js.devexpress.com/Demos/Mvc/api/DataGridBatchUpdateWebApi';
+const URL = 'https://js.devexpress.com/Demos/NetCore/api/DataGridBatchUpdateWebApi';
 
 const ordersStore = createStore({
   key: 'OrderID',
@@ -50,9 +50,33 @@ const onSaving = (e: DxDataGridTypes.SavingEvent) => {
   e.cancel = true;
 
   if (e.changes.length) {
-    e.promise = processBatchRequest(`${URL}/Batch`, e.changes, e.component);
+    const changes = normalizeChanges(e.changes);
+    e.promise = processBatchRequest(`${URL}/Batch`, changes, e.component);
   }
 };
+
+function normalizeChanges(changes: DxDataGridTypes.DataChange[]): DxDataGridTypes.DataChange[] {
+  return changes.map(c => {
+    switch (c.type) {
+      case 'insert':
+        return {
+          type: c.type,
+          data: c.data,
+        };
+      case 'update':
+        return {
+          type: c.type,
+          key: c.key,
+          data: c.data,
+        };
+      case 'remove':
+        return {
+          type: c.type,
+          key: c.key,
+        };
+    }
+  }) as DxDataGridTypes.DataChange[];
+}
 
 async function processBatchRequest(
   url: string, changes: DxDataGridTypes.DataChange[], component: DxDataGrid['instance'],
