@@ -30,8 +30,6 @@ const azureMapsLoaded = function () {
 
 let azureMapsLoader;
 class AzureProvider extends DynamicProvider {
-  _geocodedLocations!: {};
-
   _preventZoomChangeEvent?: boolean;
 
   _mapType(type) {
