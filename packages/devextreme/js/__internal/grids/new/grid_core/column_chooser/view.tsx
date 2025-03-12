@@ -18,6 +18,7 @@ import dxPopup from '@js/ui/popup';
 import { createRef } from 'inferno';
 import { current, isGeneric, isMaterial } from '@js/ui/themes';
 import messageLocalization from '@js/localization/message';
+import { CLASSES as ContentViewClasses } from '../content_view/content_view'
 
 const COLUMN_CHOOSER_CLASS = 'column-chooser';
 const COLUMN_CHOOSER_BUTTON_CLASS = 'column-chooser-button';
@@ -62,7 +63,7 @@ export class ColumnChooserView extends View<ColumnChooserProps> {
             onClick: () => { this.popupVisible.update(true); },
             elementAttr: { 
               'aria-haspopup': 'dialog',
-              class: COLUMN_CHOOSER_BUTTON_CLASS
+              class: this.addWidgetPrefix(COLUMN_CHOOSER_BUTTON_CLASS)
             },
           } as ButtonProperties,
           showText: 'inMenu',
@@ -113,17 +114,17 @@ export class ColumnChooserView extends View<ColumnChooserProps> {
         container: this.options.oneWay('columnChooser.container'),
         rtlEnabled: this.options.oneWay('rtlEnabled'),
 
-        // position: computed(
-        //   (v) => v ?? {
-        //     my: 'right bottom',
-        //     at: 'right bottom',
-        //     of: this.contentView.containerRef?.current,
-        //     collision: 'fit',
-        //     offset: '-2 -2',
-        //     boundaryOffset: '2 2',
-        //   },
-        //   [this.options.oneWay('columnChooser.position')],
-        // ),
+        position: computed(
+          (v) => v ?? {
+            my: 'right bottom',
+            at: 'right bottom',
+            of: ContentViewClasses.contentView,
+            collision: 'fit',
+            offset: '-2 -2',
+            boundaryOffset: '2 2',
+          },
+          [this.options.oneWay('columnChooser.position')],
+        ),
 
         toolbarItems: computed(
           (title) => {
