@@ -28,7 +28,7 @@
   "types": "./bundles/dx.all.d.ts",
   "license": "SEE LICENSE IN README.md",
   "dependencies": {
-    "@babel/runtime": "^7.12.1",
+    "@babel/runtime": "^7.26.10",
     "@devextreme/runtime": "3.0.13",
     "devexpress-diagram": "catalog:",
     "devexpress-gantt": "catalog:",
