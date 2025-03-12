@@ -30,7 +30,6 @@ const moduleConfig = {
         const fakeURL = '/fakeAzureUrl';
 
         AzureProvider.remapConstant(fakeURL);
-        AzureProvider.prototype._geocodedLocations = {};
 
         ajaxMock.setup({
             url: fakeURL,
