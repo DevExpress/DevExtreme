@@ -161,7 +161,6 @@ class NumberBoxBase<
     return this._$submitElement;
   }
 
-  // @ts-expect-error
   _keyPressHandler(e) {
     super._keyPressHandler();
 
