@@ -303,7 +303,8 @@ export class KeyboardNavigationController extends modules.ViewController {
         ? !isAppend
         : this._isHiddenFocus && isFullUpdate && !e?.virtualColumnsScrolling;
       if (needUpdateFocus) {
-        this._updateFocus(true, e?.virtualColumnsScrolling);
+        const skipFocusEvent = !isFocusedElementCorrect;
+        this._updateFocus(true, skipFocusEvent);
       }
     }
   }
