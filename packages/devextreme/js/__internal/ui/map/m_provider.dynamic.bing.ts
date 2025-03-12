@@ -30,8 +30,6 @@ const msMapsLoaded = function () {
 
 let msMapsLoader;
 class BingProvider extends DynamicProvider {
-  _geocodedLocations!: Record<string, unknown>;
-
   _providerClickHandler?: any;
 
   _providerViewChangeHandler?: any;
