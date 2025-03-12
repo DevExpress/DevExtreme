@@ -64,7 +64,7 @@ import { text } from './data.ts';
 const showModes = ['push', 'shrink', 'overlap'];
 const positionModes = ['top', 'bottom'];
 const showSubmenuModes = ['slide', 'expand'];
-const selectedOpenMode = ref('shrink');
+const selectedOpenMode = ref<DxDrawerTypes.OpenedStateMode>('shrink');
 const selectedPosition = ref<DxDrawerTypes.PanelLocation>('top');
 const selectedRevealMode = ref<DxDrawerTypes.RevealMode>('expand');
 const openState = ref(false);

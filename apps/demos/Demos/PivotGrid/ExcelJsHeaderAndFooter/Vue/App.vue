@@ -61,7 +61,7 @@ import DxPivotGrid, {
   DxFieldPanel,
   type DxPivotGridTypes,
 } from 'devextreme-vue/pivot-grid';
-import DxCheckBox from 'devextreme-vue/check-box';
+import DxCheckBox, { type DxCheckBoxTypes } from 'devextreme-vue/check-box';
 import PivotGridDataSource from 'devextreme/ui/pivot_grid/data_source';
 import { Workbook } from 'exceljs';
 import { saveAs } from 'file-saver-es';
@@ -105,16 +105,16 @@ const dataSource = new PivotGridDataSource({
   store: sales,
 });
 
-function onExportDataFieldHeadersChanged({ value }) {
+function onExportDataFieldHeadersChanged({ value }: DxCheckBoxTypes.ValueChangedEvent) {
   exportDataFieldHeaders.value = value;
 }
-function onExportRowFieldHeadersChanged({ value }) {
+function onExportRowFieldHeadersChanged({ value }: DxCheckBoxTypes.ValueChangedEvent) {
   exportRowFieldHeaders.value = value;
 }
-function onExportColumnFieldHeadersChanged({ value }) {
+function onExportColumnFieldHeadersChanged({ value }: DxCheckBoxTypes.ValueChangedEvent) {
   exportColumnFieldHeaders.value = value;
 }
-function onExportFilterFieldHeadersChanged({ value }) {
+function onExportFilterFieldHeadersChanged({ value }: DxCheckBoxTypes.ValueChangedEvent) {
   exportFilterFieldHeaders.value = value;
 }
 function onExporting(e: DxPivotGridTypes.ExportingEvent) {

@@ -89,8 +89,8 @@ function onExporting(e: DxPivotGridTypes.ExportingEvent) {
     });
   });
 }
-function onCellPrepared({ cell, area, cellElement }) {
-  cell.area = area;
+function onCellPrepared({ cell, area, cellElement }: DxPivotGridTypes.CellPreparedEvent) {
+  (cell as any).area = area;
   if (isDataCell(cell) || isTotalCell(cell)) {
     const appearance = getConditionalAppearance(cell);
     Object.assign(cellElement.style, getCssStyles(appearance));
