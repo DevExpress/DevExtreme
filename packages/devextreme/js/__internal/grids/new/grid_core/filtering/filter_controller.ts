@@ -22,4 +22,8 @@ export class FilterController {
   constructor(
     private readonly options: OptionsController,
   ) { }
+
+  public clearFilter(): void {
+    this.filter.update(null);
+  }
 }

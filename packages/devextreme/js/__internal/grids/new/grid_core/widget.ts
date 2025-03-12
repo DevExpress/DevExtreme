@@ -13,8 +13,7 @@ import * as ColumnsControllerModule from './columns_controller/index';
 import * as DataControllerModule from './data_controller/index';
 import { EditingController } from './editing/controller';
 import { ErrorController } from './error_controller/error_controller';
-import { FilterController } from './filtering';
-import { FilterPanelView } from './filtering/filter_panel/view';
+import * as FilterControllerModule from './filtering';
 import { MainView } from './main_view';
 import { defaultOptions, defaultOptionsRules, type Options } from './options';
 import { PagerView } from './pager/view';
@@ -48,9 +47,9 @@ export class GridCoreNewBase<
 
   private search!: Search;
 
-  private filterController!: FilterController;
+  public filterController!: FilterControllerModule.FilterController;
 
-  private filterPanelView!: FilterPanelView;
+  private filterPanelView!: FilterControllerModule.FilterPanelView;
 
   protected _registerDIContext(): void {
     this.diContext = new DIContext();
@@ -64,8 +63,8 @@ export class GridCoreNewBase<
     this.diContext.register(PagerView);
     this.diContext.register(ColumnsChooserView);
     this.diContext.register(Search);
-    this.diContext.register(FilterController);
-    this.diContext.register(FilterPanelView);
+    this.diContext.register(FilterControllerModule.FilterController);
+    this.diContext.register(FilterControllerModule.FilterPanelView);
     this.diContext.register(ErrorController);
   }
 
@@ -87,8 +86,8 @@ export class GridCoreNewBase<
     this.pagerView = this.diContext.get(PagerView);
     this.search = this.diContext.get(Search);
     this.errorController = this.diContext.get(ErrorController);
-    this.filterController = this.diContext.get(FilterController);
-    this.filterPanelView = this.diContext.get(FilterPanelView);
+    this.filterController = this.diContext.get(FilterControllerModule.FilterController);
+    this.filterPanelView = this.diContext.get(FilterControllerModule.FilterPanelView);
   }
 
   protected _init(): void {
@@ -147,6 +146,8 @@ export class GridCoreNewBase<
 
 export class GridCoreNew extends ColumnsControllerModule.PublicMethods(
   DataControllerModule.PublicMethods(
-    GridCoreNewBase,
+    FilterControllerModule.PublicMethods(
+      GridCoreNewBase,
+    ),
   ),
 ) {}

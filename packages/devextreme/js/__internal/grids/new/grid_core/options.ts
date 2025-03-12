@@ -22,7 +22,6 @@ export type Options =
   & pager.Options
   & columnsController.Options
   & filterController.Options
-  & filterController.filterPanel.Options
   & contentView.Options
   & SearchProperties
   & {
