@@ -1139,7 +1139,7 @@ QUnit.test('routes', function(assert) {
 
 QUnit.test('Route mode should be passed without changes if it is not driving or walking mode', function(assert) {
     const done = assert.async();
-    const customRouteMode = 'swiming';
+    const customRouteMode = 'transit';
 
     $('#map').dxMap({
         provider: 'bing',
