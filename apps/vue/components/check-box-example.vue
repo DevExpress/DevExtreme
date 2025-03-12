@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import { ref, watch } from 'vue';
+import { ref, watch } from "vue";
 import ExampleBlock from "./example-block";
 import { DxCheckBox } from "devextreme-vue/check-box";
 
