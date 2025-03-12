@@ -1,5 +1,6 @@
 import type { ColumnChooserMode } from '@js/common/grids';
 import type { Properties as PopupProperties } from '@js/ui/popup';
+import type dxPopup from '@js/ui/popup';
 import type { Properties as TreeViewProperties } from '@js/ui/tree_view';
 import type dxTreeView from '@js/ui/tree_view';
 import type { RefObject } from 'inferno';
@@ -7,7 +8,6 @@ import type { RefObject } from 'inferno';
 import type { Column } from '../columns_controller/types';
 import { Popup } from '../inferno_wrappers/popup';
 import { TreeView } from '../inferno_wrappers/tree_view';
-import dxPopup from '@js/ui/popup';
 
 export interface ColumnChooserProps {
   popupRef: RefObject<dxPopup>;
