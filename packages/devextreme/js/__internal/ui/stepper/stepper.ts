@@ -9,13 +9,17 @@ import { getImageContainer } from '@ts/core/utils/m_icon';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { ItemRenderInfo } from '@ts/ui/collection/collection_widget.base';
 import CollectionWidgetAsync from '@ts/ui/collection/m_collection_widget.async';
+import Connector from '@ts/ui/stepper/connector';
+import type { StepperItemProperties } from '@ts/ui/stepper/stepper_item';
+import StepperItem from '@ts/ui/stepper/stepper_item';
 
 import type { CollectionWidgetEditProperties } from '../collection/m_collection_widget.edit';
-import type { StepperItemProperties } from './stepper_item';
-import StepperItem from './stepper_item';
 
 export const STEPPER_CLASS = 'dx-stepper';
 export const STEP_LIST_CLASS = 'dx-step-list';
+export const STEPPER_PROGRESS_BAR_CLASS = 'dx-stepper-progressbar';
+export const STEPPER_PROGRESS_BAR_CONTAINER_CLASS = 'dx-stepper-progressbar-container';
+export const STEPPER_PROGRESS_BAR_STATUS_CLASS = 'dx-stepper-progressbar-status';
 export const STEP_CLASS = 'dx-step';
 export const STEP_SELECTED_CLASS = 'dx-step-selected';
 export const STEPPER_HORIZONTAL_ORIENTATION_CLASS = 'dx-stepper-horizontal';
@@ -24,9 +28,11 @@ export const STEP_INDICATOR_CLASS = 'dx-step-indicator';
 export const STEP_TEXT_CLASS = 'dx-step-text';
 export const STEP_TITLE_CLASS = 'dx-step-title';
 
+const PERCENT_UNIT = '%';
+
 export const STEPPER_ITEM_DATA_KEY = 'dxStepperItemData';
 
-const ORIENTATION: Record<string, Orientation> = {
+export const ORIENTATION: Record<string, Orientation> = {
   horizontal: 'horizontal',
   vertical: 'vertical',
 };
@@ -37,6 +43,8 @@ export interface StepperProperties extends CollectionWidgetEditProperties<Steppe
 
 class Stepper extends CollectionWidgetAsync<StepperProperties> {
   static ItemClass = StepperItem;
+
+  _connector!: Connector;
 
   _$stepsContainer!: dxElementWrapper;
 
@@ -118,9 +126,44 @@ class Stepper extends CollectionWidgetAsync<StepperProperties> {
   _initMarkup(): void {
     $(this.element()).addClass(STEPPER_CLASS);
 
+    this._renderConnector();
     this._toggleOrientationClass();
 
     super._initMarkup();
+  }
+
+  _renderConnector(): void {
+    if (this._connector) {
+      return;
+    }
+
+    const { orientation } = this.option();
+
+    this._connector = this._createComponent($('<div>'), Connector, {
+      orientation,
+      size: this._getConnectorSize(),
+      value: this._getConnectorValue(),
+    });
+
+    $(this.element())
+      .prepend(this._connector.$element());
+  }
+
+  _getConnectorSize(): string {
+    const { items = [] } = this.option();
+
+    const itemRatio = 100 / (items.length || 1);
+
+    return `${100 - itemRatio}${PERCENT_UNIT}`;
+  }
+
+  _getConnectorValue(): string {
+    const { items = [], selectedIndex = 0 } = this.option();
+
+    const segmentsCount = (items.length || 1) - 1;
+    const itemRatio = 100 / (segmentsCount || 1);
+
+    return `${selectedIndex * itemRatio}${PERCENT_UNIT}`;
   }
 
   _appendStepsContainer(): void {
@@ -155,11 +198,13 @@ class Stepper extends CollectionWidgetAsync<StepperProperties> {
   }
 
   _optionChanged(args: OptionChanged<StepperProperties>): void {
-    const { name } = args;
+    const { name, value } = args;
 
     switch (name) {
       case 'orientation':
         this._toggleOrientationClass();
+
+        this._connector.option(name, value);
         break;
       default:
         super._optionChanged(args);

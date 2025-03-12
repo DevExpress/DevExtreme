@@ -47,6 +47,7 @@ import Tooltip from 'ui/tooltip';
 import RadioGroup from 'ui/radio_group';
 import Resizable from 'ui/resizable';
 import ResizeHandle from '__internal/ui/splitter/resize_handle';
+import Connector from '__internal/ui/stepper/connector';
 import Scheduler from '__internal/scheduler/m_scheduler';
 import Scrollable from '__internal/ui/scroll_view/m_scrollable';
 import ScrollView from 'ui/scroll_view';
@@ -845,6 +846,15 @@ testComponentDefaults(ResizeHandle,
         onResize: null,
         onResizeStart: null,
         onResizeEnd: null,
+    }
+);
+
+testComponentDefaults(Connector,
+    {},
+    {
+        orientation: 'horizontal',
+        size: '100%',
+        value: '0%',
     }
 );
 
