@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react';
-import Menu, { MenuTypes } from 'devextreme-react/menu';
+import Menu, { type MenuTypes } from 'devextreme-react/menu';
 import SelectBox, { SelectBoxTypes } from 'devextreme-react/select-box';
 import CheckBox, { CheckBoxTypes } from 'devextreme-react/check-box';
 import service, { ProductItemType } from './data.ts';

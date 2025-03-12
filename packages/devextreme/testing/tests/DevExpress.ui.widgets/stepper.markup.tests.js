@@ -8,7 +8,13 @@ import {
     STEP_SELECTED_CLASS,
     STEPPER_VERTICAL_ORIENTATION_CLASS,
     STEPPER_HORIZONTAL_ORIENTATION_CLASS,
+    STEP_INDICATOR_CLASS,
+    STEP_TEXT_CLASS,
+    STEP_TITLE_CLASS,
 } from '__internal/ui/stepper/stepper';
+
+const STEP_CONTENT_CLASS = 'dx-step-content';
+const ICON_CLASS = 'dx-icon';
 
 QUnit.testStart(function() {
     const markup = '<div id="stepper"></div>';
@@ -96,6 +102,58 @@ QUnit.module('Stepper markup', moduleConfig, () => {
         assert.strictEqual(this.getStepByIndex(0).hasClass(STEP_SELECTED_CLASS), false);
         assert.strictEqual(this.getStepByIndex(1).hasClass(STEP_SELECTED_CLASS), false);
         assert.strictEqual(this.getStepByIndex(2).hasClass(STEP_SELECTED_CLASS), true);
+    });
+
+    QUnit.test(`Step content should contain indicator with ${STEP_INDICATOR_CLASS} class by default`, function(assert) {
+        this.reinit({
+            items: [{}],
+        });
+
+        const $stepContent = this.getStepByIndex(0).find(`.${STEP_CONTENT_CLASS}`);
+
+        assert.strictEqual($stepContent.children().length, 1);
+        assert.strictEqual($stepContent.children().eq(0).hasClass(STEP_INDICATOR_CLASS), true);
+    });
+
+    QUnit.test(`Step indicator should contain text icon with ${STEP_TEXT_CLASS} class by default`, function(assert) {
+        this.reinit({
+            items: [{}],
+        });
+
+        const $stepText = this.getStepByIndex(0).find(`.${STEP_CONTENT_CLASS}`).children().eq(0);
+
+        assert.strictEqual($stepText.children().length, 1);
+        assert.strictEqual($stepText.children().eq(0).hasClass(STEP_TEXT_CLASS), true);
+    });
+
+    QUnit.test(`Step indicator should contain icon with ${ICON_CLASS} class if icon option is set`, function(assert) {
+        const icon = 'test';
+        this.reinit({
+            items: [{
+                text: 'test',
+                icon,
+            }],
+        });
+
+        const $stepText = this.getStepByIndex(0).find(`.${STEP_CONTENT_CLASS}`).children().eq(0);
+
+        assert.strictEqual($stepText.children().length, 1);
+        assert.strictEqual($stepText.children().eq(0).hasClass(STEP_TEXT_CLASS), false);
+        assert.strictEqual($stepText.children().eq(0).hasClass(ICON_CLASS), true);
+        assert.strictEqual($stepText.children().eq(0).hasClass(`${ICON_CLASS}-${icon}`), true);
+    });
+
+    QUnit.test(`Step content should contain step title with ${STEP_TITLE_CLASS} class if title option is set`, function(assert) {
+        this.reinit({
+            items: [{
+                title: 'test',
+            }],
+        });
+
+        const $stepContent = this.getStepByIndex(0).find(`.${STEP_CONTENT_CLASS}`);
+
+        assert.strictEqual($stepContent.children().length, 2);
+        assert.strictEqual($stepContent.children().eq(1).hasClass(STEP_TITLE_CLASS), true);
     });
 
 });

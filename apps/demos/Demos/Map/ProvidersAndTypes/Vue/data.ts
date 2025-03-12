@@ -1,4 +1,9 @@
-export const mapTypes = [{
+import { type DxMapTypes } from "devextreme-vue/map";
+
+export const mapTypes: {
+  key: DxMapTypes.MapType,
+  name: string,
+}[] = [{
   key: 'roadmap',
   name: 'Road Map',
 }, {
@@ -9,7 +14,10 @@ export const mapTypes = [{
   name: 'Hybrid Map',
 }];
 
-export const mapProviders = [{
+export const mapProviders: {
+  key: DxMapTypes.MapProvider,
+  name: string,
+}[] = [{
   key: 'azure',
   name: 'Azure',
 }, {

@@ -29,7 +29,7 @@ export function pullConfigComponents(children: VNode[], nodes: VNode[], ownerCon
     if (!node) { return; }
 
     const componentInfo = getComponentInfo(node) as any as IConfigurationComponent;
-    if (!componentInfo || !componentInfo.$_optionName) { return; }
+    if (!componentInfo?.$_optionName) { return; }
 
     const componentChildren = configurationChildren(node);
     const initialValues = {

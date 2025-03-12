@@ -66,7 +66,7 @@ export function getOptionValue(options, optionPath) {
     const optionInfo = getOptionInfo(p);
     if (value) {
       value = optionInfo.isCollection
-        ? value[optionInfo.name] && value[optionInfo.name][optionInfo.index]
+        ? value[optionInfo.name]?.[optionInfo.index]
         : value[optionInfo.name];
     }
   });

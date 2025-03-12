@@ -4,7 +4,7 @@ import {
 } from 'react';
 
 import { IExpectedChild, IOptionDescriptor } from './configuration/react/element';
-import { IConfigNode } from './configuration/config-node';
+import { IConfigNode, ITemplate } from './configuration/config-node';
 
 export interface UpdateLocker {
   lock: () => void;
@@ -26,6 +26,10 @@ export interface NestedOptionContextContent {
     childUpdateToken: symbol,
     optionComponentKey: number
   ) => void;
+  onNamedTemplateReady: (
+    template: ITemplate | null,
+    childUpdateToken: symbol,
+  ) => void;
   getOptionComponentKey: () => number;
   treeUpdateToken: symbol;
 }
@@ -34,6 +38,7 @@ export const NestedOptionContext = createContext<NestedOptionContextContent>({
   parentExpectedChildren: {},
   parentFullName: '',
   onChildOptionsReady: () => undefined,
+  onNamedTemplateReady: () => undefined,
   getOptionComponentKey: () => 0,
   treeUpdateToken: Symbol('initial tree update token'),
   parentType: 'component',

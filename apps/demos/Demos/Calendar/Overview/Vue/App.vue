@@ -79,19 +79,19 @@
 </template>
 <script setup lang="ts">
 import { ref } from 'vue';
-import DxCheckBox from 'devextreme-vue/check-box';
+import DxCheckBox, { type DxCheckBoxTypes } from 'devextreme-vue/check-box';
 import DxSelectBox from 'devextreme-vue/select-box';
 import DxDateBox from 'devextreme-vue/date-box';
-import DxCalendar from 'devextreme-vue/calendar';
+import DxCalendar, { type DxCalendarTypes } from 'devextreme-vue/calendar';
 
-const zoomLevels = ['month', 'year', 'decade', 'century'];
-const zoomLevel = ref('month');
+const zoomLevels: DxCalendarTypes.CalendarZoomLevel[] = ['month', 'year', 'decade', 'century'];
+const zoomLevel = ref<DxCalendarTypes.CalendarZoomLevel>('month');
 const currentValue = ref(new Date());
 const cellTemplate = ref('cell');
 const disabled = ref(false);
 const showWeekNumbers = ref(false);
-const firstDay = ref(0);
-const weekNumberRule = ref('auto');
+const firstDay = ref<DxCalendarTypes.FirstDayOfWeek>(0);
+const weekNumberRule = ref<DxCalendarTypes.WeekNumberRule>('auto');
 const weekDays = [
   { id: 0, text: 'Sunday' },
   { id: 1, text: 'Monday' },
@@ -103,16 +103,16 @@ const weekDays = [
 ];
 const weekNumberRules = ['auto', 'firstDay', 'firstFourDays', 'fullWeek'];
 
-function isWeekend(date) {
+function isWeekend(date: Date) {
   const day = date.getDay();
   return day === 0 || day === 6;
 }
 
-function useCellTemplate({ value }) {
+function useCellTemplate({ value }: DxCheckBoxTypes.ValueChangedEvent) {
   cellTemplate.value = value ? 'custom' : 'cell';
 }
 
-function getCellCssClass({ date, view }) {
+function getCellCssClass({ date, view }: { date: Date, view: string }) {
   let cssClass = '';
   const holidays = [[1, 0], [4, 6], [25, 11]];
 

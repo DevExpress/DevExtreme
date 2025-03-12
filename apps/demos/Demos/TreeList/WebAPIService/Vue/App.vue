@@ -74,7 +74,7 @@ import {
   DxEditing,
   DxRequiredRule,
   DxLookup,
-  DxTreeListTypes,
+  type DxTreeListTypes,
 } from 'devextreme-vue/tree-list';
 import { createStore } from 'devextreme-aspnet-data-nojquery';
 

@@ -46,7 +46,7 @@
 <script setup lang="ts">
 import DxDataGrid, {
   DxColumn,
-  DxDataGridTypes,
+  type DxDataGridTypes,
   DxMasterDetail,
   DxSelection,
 } from 'devextreme-vue/data-grid';
@@ -54,7 +54,7 @@ import { employees } from './data.ts';
 
 const onContentReady = (e: DxDataGridTypes.ContentReadyEvent) => {
   if (!e.component.getSelectedRowKeys().length) {
-    e.component.selectRowsByIndexes(0);
+    e.component.selectRowsByIndexes([0]);
   }
 };
 

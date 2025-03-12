@@ -135,11 +135,12 @@
 </template>
 <script setup lang="ts">
 import { ref } from 'vue';
+import type { EditorStyle, LabelMode } from 'devextreme-vue/common';
 import DxSelectBox from 'devextreme-vue/select-box';
 import DxTextBox from 'devextreme-vue/text-box';
 import DxTextArea from 'devextreme-vue/text-area';
 import DxDateBox from 'devextreme-vue/date-box';
-import DxButton from 'devextreme-vue/button';
+import DxButton, { type DxButtonTypes } from 'devextreme-vue/button';
 import DxDateRangeBox from 'devextreme-vue/date-range-box';
 import {
   DxValidator,
@@ -149,14 +150,14 @@ import notify from 'devextreme/ui/notify';
 import { states } from './data.ts';
 
 const birthDate = ref(new Date(1981, 5, 3));
-const stylingMode = ref('outlined');
-const labelMode = ref('static');
+const stylingMode = ref<EditorStyle>('outlined');
+const labelMode = ref<LabelMode>('static');
 const text = ref('Olivia loves to sell. She has been selling DevAV products since 2012.');
 const phoneRules = {
   X: /[02-9]/,
 };
 
-function validateClick({ validationGroup }) {
+function validateClick({ validationGroup }: DxButtonTypes.ClickEvent) {
   const result = validationGroup.validate();
   if (result.isValid) {
     notify('The task was saved successfully.', 'success');

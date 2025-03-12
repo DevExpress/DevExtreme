@@ -48,8 +48,9 @@ import {
   DxPoint,
 } from 'devextreme-vue/chart';
 import { iceHockeyStatistics } from './data.ts';
+import { type ExportFormat } from "devextreme/common";
 
-const exportFormats = ['PNG', 'PDF', 'JPEG', 'GIF', 'SVG'];
+const exportFormats: ExportFormat[] = ['PNG', 'PDF', 'JPEG', 'GIF', 'SVG'];
 
 function customizePoint({ value }) {
   if (value === 1) {
