@@ -94,6 +94,7 @@ class Validator extends DOMComponent<Validator, Properties> {
     let { adapter } = this.option();
     if (!adapter) {
       if (dxStandardEditor) {
+        // @ts-expect-error ts-error
         adapter = new DefaultAdapter(dxStandardEditor, this);
         adapter?.validationRequestsCallbacks?.push((args) => {
           if (this._validationInfo?.skipValidation) {
@@ -207,14 +208,14 @@ class Validator extends DOMComponent<Validator, Properties> {
     // @ts-expect-error ts-error
     const currentError = adapter?.getCurrentValidationError?.();
     const rules = this._getValidationRules();
-    const currentResult = this._validationInfo && this._validationInfo.result;
+    const currentResult = this._validationInfo?.result;
     if (currentResult && currentResult.status === VALIDATION_STATUS_PENDING && currentResult.value === value) {
       return extend({}, currentResult);
     }
     let result;
     if (bypass) {
       result = { isValid: true, status: VALIDATION_STATUS_VALID };
-    } else if (currentError && currentError.editorSpecific) {
+    } else if (currentError?.editorSpecific) {
       currentError.validator = this;
       result = {
         isValid: false, status: VALIDATION_STATUS_INVALID, brokenRule: currentError, brokenRules: [currentError],
@@ -274,6 +275,7 @@ class Validator extends DOMComponent<Validator, Properties> {
     });
     result.validator = this;
     this._updateValidationResult(result);
+    // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
     adapter.applyValidationResults && adapter.applyValidationResults(this._validationInfo.result);
     this.option({
       validationStatus: this._validationInfo.result.status,

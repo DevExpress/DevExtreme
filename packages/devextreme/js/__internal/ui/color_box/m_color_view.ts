@@ -186,7 +186,7 @@ class ColorView extends Editor<ColorViewProperties> {
       that._currentColor.hsv.v = value;
       updatePaletteValue();
     };
-    function updatePaletteValue() {
+    function updatePaletteValue(): void {
       that._placePaletteHandle();
       that._updateColorFromHsv(
         that._currentColor.hsv.h,
@@ -852,7 +852,7 @@ class ColorView extends Editor<ColorViewProperties> {
     if (handlePosition >= (this._alphaChannelScaleWorkWidth + this._alphaChannelHandleWidth / 2)) {
       transparency = rtlEnabled ? 1 : 0;
     } else if (transparency < 1) {
-      // @ts-expect-error
+      // @ts-expect-error ts-error
       transparency = transparency.toFixed(2);
     }
 

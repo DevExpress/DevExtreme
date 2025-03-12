@@ -258,6 +258,7 @@ class Popup<
     ]);
   }
 
+  // eslint-disable-next-line class-methods-use-this
   _iosAnimation(): dxPopupAnimation {
     return {
       show: {
