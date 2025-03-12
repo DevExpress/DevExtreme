@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import DataGrid, { DataGridTypes } from 'devextreme-react/data-grid';
+import DataGrid, { type DataGridTypes } from 'devextreme-react/data-grid';
 
 import { createStore } from 'devextreme-aspnet-data-nojquery';
 

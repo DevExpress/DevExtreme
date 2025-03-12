@@ -9,7 +9,7 @@ withDefaults(defineProps<{
   data?: Record<string, any>
   icon?: string
 }>(), {
-  data: () => {},
+  data: () => ({} as Record<string, any>),
   icon: 'info',
 });
 </script>

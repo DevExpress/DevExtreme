@@ -50,12 +50,13 @@ import { computed, ref } from 'vue';
 import DxPieChart, {
   DxSeries,
   DxLegend,
+  type DxPieChartTypes,
 } from 'devextreme-vue/pie-chart';
 import DxSelectBox from 'devextreme-vue/select-box';
 import { getPalette } from 'devextreme/viz/palette';
 import { paletteCollection, paletteExtensionModes, dataSource } from './data.ts';
 
-const palette = ref(paletteCollection[0]);
+const palette = ref<DxPieChartTypes.Palette>(paletteCollection[0]);
 const paletteExtensionMode = ref(paletteExtensionModes[1]);
 const baseColors = computed(() => getPalette(palette.value).simpleSet);
 </script>

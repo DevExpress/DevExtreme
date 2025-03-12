@@ -17,7 +17,7 @@
   />
 </template>
 <script setup lang="ts">
-import DxScheduler, { DxSchedulerTypes } from 'devextreme-vue/scheduler';
+import DxScheduler, { type DxSchedulerTypes } from 'devextreme-vue/scheduler';
 import { createStore } from 'devextreme-aspnet-data-nojquery';
 
 const url = 'https://js.devexpress.com/Demos/Mvc/api/SchedulerData';

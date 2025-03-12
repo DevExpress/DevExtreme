@@ -69,10 +69,10 @@ import {
   DxButton,
   DxPaging,
   DxLookup,
-  DxDataGridTypes,
+  type DxDataGridTypes,
 } from 'devextreme-vue/data-grid';
 import {
-  employees as defaultEmployees, states, getMaxID, Employee,
+  employees as defaultEmployees, states, getMaxID, type Employee,
 } from './data.ts';
 
 const employees = ref(defaultEmployees);

@@ -2,12 +2,10 @@ import { createStore } from 'vuex';
 import 'whatwg-fetch';
 
 import applyChanges from 'devextreme/data/apply_changes';
-import { DataChange } from 'devextreme/ui/data_grid';
+import { type DataChange } from 'devextreme/ui/data_grid';
 
-// @ts-expect-error due to specific build options need to add .ts extension
 import { sendRequest } from './utils.ts';
-// @ts-expect-error due to specific build options need to add .ts extension
-import { Order } from './data.ts';
+import { type Order } from './data.ts';
 
 const URL = 'https://js.devexpress.com/Demos/Mvc/api/DataGridWebApi';
 

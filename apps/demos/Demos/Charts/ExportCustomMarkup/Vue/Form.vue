@@ -61,6 +61,7 @@
 
 defineExpose({
   getMarkup() {
+    // @ts-ignore
     return this.$el.innerHTML;
   },
 });

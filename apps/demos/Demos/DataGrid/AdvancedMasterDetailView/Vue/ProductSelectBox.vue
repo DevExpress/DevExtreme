@@ -16,7 +16,7 @@ import DxSelectBox from 'devextreme-vue/select-box';
 
 import { createStore } from 'devextreme-aspnet-data-nojquery';
 
-import { Product } from './data.ts';
+import { type Product } from './data.ts';
 
 defineEmits(['product-changed']);
 

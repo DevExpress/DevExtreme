@@ -16,7 +16,7 @@ import RangeSelector, {
   Behavior,
   CommonSeriesSettings as CommonSeriesSettingsOptions,
   Series as RsChartSeries,
-  RangeSelectorTypes,
+  type RangeSelectorTypes,
 } from 'devextreme-react/range-selector';
 import { VisualRange } from 'devextreme-react/common/charts';
 import { series, dataSource } from './data.ts';

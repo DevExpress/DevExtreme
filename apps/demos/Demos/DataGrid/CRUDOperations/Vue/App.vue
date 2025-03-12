@@ -92,6 +92,7 @@ import {
   DxSummary,
   DxLookup,
   DxTotalItem,
+  type DxDataGridTypes,
 } from 'devextreme-vue/data-grid';
 import { DxButton } from 'devextreme-vue/button';
 import { DxSelectBox } from 'devextreme-vue/select-box';
@@ -128,10 +129,9 @@ const shippersData = new CustomStore({
   load: () => sendRequest(`${URL}/ShippersLookup`),
 });
 
-const refreshModes = ['full', 'reshape', 'repaint'];
-
+const refreshModes: DxDataGridTypes.GridsEditRefreshMode[] = ['full', 'reshape', 'repaint'];
 const requests = ref<string[]>([]);
-const refreshMode = ref('reshape');
+const refreshMode = ref(refreshModes[1]);
 
 const sendRequest = async(url: string, method = 'GET', data: Record<string, string> = {}) => {
   logRequest(method, url, data);

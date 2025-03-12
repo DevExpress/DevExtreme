@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import FileManager, {
-  Permissions, ItemView, Details, Column, FileManagerTypes,
+  Permissions, ItemView, Details, Column, type FileManagerTypes,
 } from 'devextreme-react/file-manager';
 import RemoteFileSystemProvider from 'devextreme/file_management/remote_provider';
 

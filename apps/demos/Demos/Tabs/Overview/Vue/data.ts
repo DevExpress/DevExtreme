@@ -1,3 +1,6 @@
+import { type Orientation } from 'devextreme/common';
+import { type DxTabsTypes } from 'devextreme-vue/tabs';
+
 export const tabsWithText = [
   {
     id: 0,
@@ -85,14 +88,14 @@ export const tabsWithIcon = [
   },
 ];
 
-export const orientations = ['horizontal', 'vertical'];
+export const orientations: Orientation[] = ['horizontal', 'vertical'];
 
-export const stylingModes = [
+export const stylingModes: DxTabsTypes.TabsStyle[]  = [
   'primary',
   'secondary',
 ];
 
-export const iconPositions = [
+export const iconPositions: DxTabsTypes.TabsIconPosition[] = [
   'top',
   'start',
   'end',

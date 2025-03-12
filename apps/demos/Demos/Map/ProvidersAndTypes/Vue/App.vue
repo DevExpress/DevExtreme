@@ -36,7 +36,7 @@
 </template>
 <script setup lang="ts">
 import { ref } from 'vue';
-import DxMap from 'devextreme-vue/map';
+import DxMap, { type DxMapTypes } from 'devextreme-vue/map';
 import DxSelectBox from 'devextreme-vue/select-box';
 import { mapTypes, mapProviders } from './data.ts';
 

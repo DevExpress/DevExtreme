@@ -10,7 +10,7 @@
   />
 </template>
 <script setup lang="ts">
-import DxScheduler, { DxSchedulerTypes } from 'devextreme-vue/scheduler';
+import DxScheduler, { type DxSchedulerTypes } from 'devextreme-vue/scheduler';
 import { data } from './data.ts';
 
 const views: DxSchedulerTypes.ViewType[] = ['day', 'week', 'workWeek', 'month'];

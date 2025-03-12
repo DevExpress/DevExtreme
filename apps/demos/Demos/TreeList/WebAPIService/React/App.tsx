@@ -1,7 +1,7 @@
 import React from 'react';
 
 import TreeList, {
-  RemoteOperations, Column, SearchPanel, HeaderFilter, Editing, RequiredRule, Lookup, TreeListTypes,
+  RemoteOperations, Column, SearchPanel, HeaderFilter, Editing, RequiredRule, Lookup, type TreeListTypes,
 } from 'devextreme-react/tree-list';
 import AspNetData from 'devextreme-aspnet-data-nojquery';
 

@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react';
-import CheckBox, { CheckBoxTypes } from 'devextreme-react/check-box';
-import MultiView, { MultiViewTypes } from 'devextreme-react/multi-view';
+import CheckBox, { type CheckBoxTypes } from 'devextreme-react/check-box';
+import MultiView, { type MultiViewTypes } from 'devextreme-react/multi-view';
 import { multiViewItems as companies } from './data.ts';
 import CompanyItem from './CompanyItem.tsx';
 

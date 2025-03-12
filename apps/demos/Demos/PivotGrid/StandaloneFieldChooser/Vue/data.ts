@@ -1,4 +1,7 @@
-const sales = [{
+import { type DxPivotGridTypes } from "devextreme-vue/pivot-grid";
+
+const sales = [
+    {
   orderId: 1,
   region: 'North America',
   country: 'USA',
@@ -4487,7 +4490,10 @@ const sales = [{
   date: '2015/05/07',
 }];
 
-const layouts = [{
+const layouts: {
+  key: DxPivotGridTypes.FieldChooserLayout,
+  name: string,
+}[] = [{
   key: 0,
   name: 'Layout0',
 }, {

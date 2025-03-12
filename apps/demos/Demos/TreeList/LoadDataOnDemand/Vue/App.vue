@@ -35,7 +35,7 @@
 </template>
 <script setup lang="ts">
 import {
-  DxTreeList, DxRemoteOperations, DxColumn, DxTreeListTypes,
+  DxTreeList, DxRemoteOperations, DxColumn, type DxTreeListTypes,
 } from 'devextreme-vue/tree-list';
 import 'whatwg-fetch';
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import PieChart, {
-  PieChartTypes,
+  type PieChartTypes,
   Legend,
   Series,
   Export,
