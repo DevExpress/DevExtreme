@@ -13,6 +13,7 @@ import * as ColumnsControllerModule from './columns_controller/index';
 import * as DataControllerModule from './data_controller/index';
 import { EditingController } from './editing/controller';
 import { ErrorController } from './error_controller/error_controller';
+import { FilterController } from './filtering';
 import { FilterPanelView } from './filtering/filter_panel/view';
 import { MainView } from './main_view';
 import { defaultOptions, defaultOptionsRules, type Options } from './options';
@@ -47,6 +48,8 @@ export class GridCoreNewBase<
 
   private search!: Search;
 
+  private filterController!: FilterController;
+
   private filterPanelView!: FilterPanelView;
 
   protected _registerDIContext(): void {
@@ -61,6 +64,7 @@ export class GridCoreNewBase<
     this.diContext.register(PagerView);
     this.diContext.register(ColumnsChooserView);
     this.diContext.register(Search);
+    this.diContext.register(FilterController);
     this.diContext.register(FilterPanelView);
     this.diContext.register(ErrorController);
   }
@@ -83,6 +87,7 @@ export class GridCoreNewBase<
     this.pagerView = this.diContext.get(PagerView);
     this.search = this.diContext.get(Search);
     this.errorController = this.diContext.get(ErrorController);
+    this.filterController = this.diContext.get(FilterController);
     this.filterPanelView = this.diContext.get(FilterPanelView);
   }
 

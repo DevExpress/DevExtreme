@@ -2,14 +2,16 @@
 import { describe, expect, it } from '@jest/globals';
 
 import { DataController } from '../data_controller';
+import { FilterController } from '../filtering';
 import type { Options } from '../options';
 import { OptionsControllerMock } from '../options_controller/options_controller.mock';
 import { ColumnsController } from './columns_controller';
 
 const setup = (config: Options) => {
   const options = new OptionsControllerMock(config);
+  const filterController = new FilterController(options);
 
-  const dataController = new DataController(options);
+  const dataController = new DataController(options, filterController);
 
   const columnsController = new ColumnsController(options, dataController);
 

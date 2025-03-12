@@ -8,8 +8,6 @@ export interface Options {
   filterPanel?: FilterPanel<any>;
   filterBuilder?: FilterBuilderProperties;
   filterBuilderPopup?: PopupProperties;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  filterValue?: any;
 }
 
 export const defaultOptions = {

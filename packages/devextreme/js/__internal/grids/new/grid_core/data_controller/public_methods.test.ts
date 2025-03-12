@@ -4,6 +4,7 @@ import {
 } from '@jest/globals';
 import ArrayStore from '@ts/data/m_array_store';
 
+import { FilterController } from '../filtering';
 import type { Options } from '../options';
 import { OptionsControllerMock } from '../options_controller/options_controller.mock';
 import { DataController } from './data_controller';
@@ -11,7 +12,8 @@ import { PublicMethods } from './public_methods';
 
 const setup = (options: Options) => {
   const optionsController = new OptionsControllerMock(options);
-  const dataController = new DataController(optionsController);
+  const filterController = new FilterController(optionsController);
+  const dataController = new DataController(optionsController, filterController);
   // @ts-expect-error
   const gridCore = new (PublicMethods(class {
     protected dataController = dataController;
