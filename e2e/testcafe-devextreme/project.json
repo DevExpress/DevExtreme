@@ -34,7 +34,7 @@
       "options": {
         "cwd": "{projectRoot}",
         "command": "pnpm run test",
-        "args": "--browsers=chrome:devextreme-shr2 --componentFolder accessibility/common --indices 1/7 --concurrency=1"
+        "args": "--browsers=chrome:devextreme-shr2 --componentFolder accessibility/common --indices 1/7"
       }
     },
     "test--accessibility-common-2": {
@@ -44,7 +44,7 @@
       "options": {
         "cwd": "{projectRoot}",
         "command": "pnpm run test",
-        "args": "--browsers=chrome:devextreme-shr2 --componentFolder accessibility/common --indices 2/7 --concurrency=1"
+        "args": "--browsers=chrome:devextreme-shr2 --componentFolder accessibility/common --indices 2/7"
       }
     },
     "test--accessibility-common-3": {
@@ -54,7 +54,7 @@
       "options": {
         "cwd": "{projectRoot}",
         "command": "pnpm run test",
-        "args": "--browsers=chrome:devextreme-shr2 --componentFolder accessibility/common --indices 3/7 --concurrency=1"
+        "args": "--browsers=chrome:devextreme-shr2 --componentFolder accessibility/common --indices 3/7"
       }
     },
     "test--accessibility-common-4": {
@@ -64,7 +64,7 @@
       "options": {
         "cwd": "{projectRoot}",
         "command": "pnpm run test",
-        "args": "--browsers=chrome:devextreme-shr2 --componentFolder accessibility/common --indices 4/7 --concurrency=1"
+        "args": "--browsers=chrome:devextreme-shr2 --componentFolder accessibility/common --indices 4/7"
       }
     },
     "test--accessibility-common-5": {
@@ -74,7 +74,7 @@
       "options": {
         "cwd": "{projectRoot}",
         "command": "pnpm run test",
-        "args": "--browsers=chrome:devextreme-shr2 --componentFolder accessibility/common --indices 5/7 --concurrency=1"
+        "args": "--browsers=chrome:devextreme-shr2 --componentFolder accessibility/common --indices 5/7"
       }
     },
     "test--accessibility-common-6": {
@@ -84,7 +84,7 @@
       "options": {
         "cwd": "{projectRoot}",
         "command": "pnpm run test",
-        "args": "--browsers=chrome:devextreme-shr2 --componentFolder accessibility/common --indices 6/7 --concurrency=1"
+        "args": "--browsers=chrome:devextreme-shr2 --componentFolder accessibility/common --indices 6/7"
       }
     },
     "test--accessibility-common-7": {
@@ -94,7 +94,7 @@
       "options": {
         "cwd": "{projectRoot}",
         "command": "pnpm run test",
-        "args": "--browsers=chrome:devextreme-shr2 --componentFolder accessibility/common --indices 7/7 --concurrency=1"
+        "args": "--browsers=chrome:devextreme-shr2 --componentFolder accessibility/common --indices 7/7"
       }
     }
   },
