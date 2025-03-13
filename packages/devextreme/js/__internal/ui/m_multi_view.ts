@@ -45,7 +45,9 @@ export interface MultiViewProperties extends Properties {
 
   selectByClick?: boolean;
 }
-class MultiView extends CollectionWidget<MultiViewProperties> {
+class MultiView<
+  TProperties extends MultiViewProperties = MultiViewProperties,
+> extends CollectionWidget<TProperties> {
   _boundaryIndices!: {
     firstAvailableIndex: number;
     lastAvailableIndex: number;
@@ -71,7 +73,7 @@ class MultiView extends CollectionWidget<MultiViewProperties> {
     };
   }
 
-  _getDefaultOptions(): MultiViewProperties {
+  _getDefaultOptions(): TProperties {
     return {
       ...super._getDefaultOptions(),
       selectedIndex: 0,
@@ -87,12 +89,13 @@ class MultiView extends CollectionWidget<MultiViewProperties> {
     };
   }
 
-  _defaultOptionsRules(): DefaultOptionsRule<MultiViewProperties>[] {
+  _defaultOptionsRules(): DefaultOptionsRule<TProperties>[] {
     return super._defaultOptionsRules().concat([
       {
         device(): boolean {
           return devices.real().deviceType === 'desktop' && !devices.isSimulator();
         },
+        // @ts-expect-error ts-error
         options: {
           focusStateEnabled: true,
         },
@@ -272,7 +275,7 @@ class MultiView extends CollectionWidget<MultiViewProperties> {
     });
   }
 
-  _getElementAria() {
+  _getElementAria(): Record<string, unknown> {
     return {
       role: 'group',
       // eslint-disable-next-line spellcheck/spell-checker
@@ -298,7 +301,9 @@ class MultiView extends CollectionWidget<MultiViewProperties> {
     });
   }
 
-  _getItemAria({ itemIndex, itemsCount }) {
+  _getItemAria(args?): Record<string, unknown> {
+    const { itemIndex, itemsCount } = args;
+
     const aria = {
       role: 'group',
       // eslint-disable-next-line spellcheck/spell-checker
@@ -463,8 +468,9 @@ class MultiView extends CollectionWidget<MultiViewProperties> {
     const { firstAvailableIndex, lastAvailableIndex } = this._boundaryIndices;
 
     const rtl = this.option('rtlEnabled');
-
+    // @ts-expect-error ts-error
     e.maxLeftOffset = toNumber(loop || (rtl ? selectedIndex > firstAvailableIndex : selectedIndex < lastAvailableIndex));
+    // @ts-expect-error ts-error
     e.maxRightOffset = toNumber(loop || (rtl ? selectedIndex < lastAvailableIndex : selectedIndex > firstAvailableIndex));
   }
 
@@ -599,7 +605,7 @@ class MultiView extends CollectionWidget<MultiViewProperties> {
     }
   }
 
-  _optionChanged(args: OptionChanged<MultiViewProperties>): void {
+  _optionChanged(args: OptionChanged<TProperties>): void {
     const { value } = args;
 
     switch (args.name) {

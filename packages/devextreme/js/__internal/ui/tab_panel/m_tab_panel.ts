@@ -1,16 +1,22 @@
+import type {
+  Orientation, Position, TabsIconPosition, TabsStyle,
+} from '@js/common';
 import registerComponent from '@js/core/component_registrator';
 import devices from '@js/core/devices';
 import domAdapter from '@js/core/dom_adapter';
 import { getPublicElement } from '@js/core/element';
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { BindableTemplate } from '@js/core/templates/bindable_template';
-import { extend } from '@js/core/utils/extend';
 import { getImageContainer } from '@js/core/utils/icon';
 import { isDefined, isPlainObject } from '@js/core/utils/type';
-import MultiView from '@js/ui/multi_view';
-import Tabs from '@js/ui/tabs';
+import type { Properties } from '@js/ui/tab_panel';
 import { current as currentTheme, isFluent, isMaterialBased } from '@js/ui/themes';
 import supportUtils from '@ts/core/utils/m_support';
+import type { OptionChanged } from '@ts/core/widget/types';
+import MultiView from '@ts/ui/m_multi_view';
+import type { TabsProperties } from '@ts/ui/tabs/m_tabs';
+import Tabs from '@ts/ui/tabs/m_tabs';
 
 // eslint-disable-next-line import/no-named-default
 import { default as TabPanelItem } from './m_item';
@@ -24,49 +30,72 @@ const DISABLED_FOCUSED_TAB_CLASS = 'dx-disabled-focused-tab';
 const TABS_ITEM_TEXT_SPAN_CLASS = 'dx-tab-text-span';
 const TABS_ITEM_TEXT_SPAN_PSEUDO_CLASS = 'dx-tab-text-span-pseudo';
 
-const TABPANEL_TABS_POSITION_CLASS = {
+const TABPANEL_TABS_POSITION_CLASS: Record<Position, string> = {
   top: 'dx-tabpanel-tabs-position-top',
   right: 'dx-tabpanel-tabs-position-right',
   bottom: 'dx-tabpanel-tabs-position-bottom',
   left: 'dx-tabpanel-tabs-position-left',
 };
 
-const TABS_POSITION = {
+const TABS_POSITION: Record<Position, Position> = {
   top: 'top',
   right: 'right',
   bottom: 'bottom',
   left: 'left',
 };
 
-const TABS_INDICATOR_POSITION_BY_TABS_POSITION = {
+const TABS_INDICATOR_POSITION_BY_TABS_POSITION: Record<Position, Position> = {
   top: 'bottom',
   right: 'left',
   bottom: 'top',
   left: 'right',
 };
 
-const TABS_ORIENTATION = {
+const TABS_ORIENTATION: Record<Orientation, Orientation> = {
   horizontal: 'horizontal',
   vertical: 'vertical',
 };
 
-const ICON_POSITION = {
+const ICON_POSITION: Record<TabsIconPosition, TabsIconPosition> = {
   top: 'top',
   end: 'end',
   bottom: 'bottom',
   start: 'start',
 };
 
-const STYLING_MODE = {
+const STYLING_MODE: Record<TabsStyle, TabsStyle> = {
   primary: 'primary',
   secondary: 'secondary',
 };
 
-// @ts-expect-error
-const TabPanel = MultiView.inherit({
+export interface TabPanelProperties extends Properties {
+  _tabsIndicatorPosition?: Position | null;
 
-  _getDefaultOptions() {
-    return extend(this.callBase(), {
+  badgeExpr?: (data) => boolean | undefined;
+
+  focusedElement?: dxElementWrapper;
+}
+
+class TabPanel extends MultiView<TabPanelProperties> {
+  static ItemClass = TabPanelItem;
+
+  _titleHoldAction!: (event?: Record<string, unknown>) => void;
+
+  _titleRenderedAction!: (event?: Record<string, unknown>) => void;
+
+  _titleClickAction!: (event?: Record<string, unknown>) => void;
+
+  _tabs!: Tabs;
+
+  _isFocusOutHandlerExecuting?: boolean;
+
+  _$container!: dxElementWrapper;
+
+  _$tabContainer!: dxElementWrapper;
+
+  _getDefaultOptions(): TabPanelProperties {
+    return {
+      ...super._getDefaultOptions(),
       itemTitleTemplate: 'title',
       hoverStateEnabled: true,
       selectOnFocus: false,
@@ -76,19 +105,22 @@ const TabPanel = MultiView.inherit({
       tabsPosition: TABS_POSITION.top,
       iconPosition: ICON_POSITION.start,
       stylingMode: STYLING_MODE.primary,
+      // @ts-expect-error ts-error
       onTitleClick: null,
+      // @ts-expect-error ts-error
       onTitleHold: null,
+      // @ts-expect-error ts-error
       onTitleRendered: null,
       badgeExpr(data) { return data ? data.badge : undefined; },
 
       _tabsIndicatorPosition: null,
-    });
-  },
+    };
+  }
 
   _defaultOptionsRules() {
     const themeName = currentTheme();
 
-    return this.callBase().concat([
+    return super._defaultOptionsRules().concat([
       {
         device() {
           return devices.real().deviceType === 'desktop' && !devices.isSimulator();
@@ -128,29 +160,29 @@ const TabPanel = MultiView.inherit({
         },
       },
     ]);
-  },
+  }
 
-  _init() {
-    this.callBase();
+  _init(): void {
+    super._init();
 
     this.$element().addClass(TABPANEL_CLASS);
     this._toggleTabPanelTabsPositionClass();
-  },
+  }
 
   _getElementAria() {
     return { role: 'tabpanel' };
-  },
+  }
 
   _getItemAria() {
     return { role: 'tabpanel' };
-  },
+  }
 
   _initMarkup() {
-    this.callBase();
+    super._initMarkup();
 
     this._createTitleActions();
     this._renderLayout();
-  },
+  }
 
   _prepareTabsItemTemplate(data, $container) {
     const $iconElement = getImageContainer(data?.icon);
@@ -171,10 +203,10 @@ const TabPanel = MultiView.inherit({
 
       $tabTextSpan.appendTo($container);
     }
-  },
+  }
 
   _initTemplates() {
-    this.callBase();
+    super._initTemplates();
 
     this._templateManager.addDefaultTemplates({
       title: new BindableTemplate(($container, data) => {
@@ -185,27 +217,27 @@ const TabPanel = MultiView.inherit({
         $container.wrapInner($tabItem);
       }, ['title', 'icon'], this.option('integrationOptions.watchMethod')),
     });
-  },
+  }
 
-  _createTitleActions() {
+  _createTitleActions(): void {
     this._createTitleClickAction();
     this._createTitleHoldAction();
     this._createTitleRenderedAction();
-  },
+  }
 
-  _createTitleClickAction() {
+  _createTitleClickAction(): void {
     this._titleClickAction = this._createActionByOption('onTitleClick');
-  },
+  }
 
-  _createTitleHoldAction() {
+  _createTitleHoldAction(): void {
     this._titleHoldAction = this._createActionByOption('onTitleHold');
-  },
+  }
 
-  _createTitleRenderedAction() {
+  _createTitleRenderedAction(): void {
     this._titleRenderedAction = this._createActionByOption('onTitleRendered');
-  },
+  }
 
-  _renderLayout() {
+  _renderLayout(): void {
     if (this._tabs) {
       return;
     }
@@ -224,49 +256,67 @@ const TabPanel = MultiView.inherit({
       .addClass(TABPANEL_CONTAINER_CLASS)
       .appendTo($element);
     this._$container.append(this._$wrapper);
-  },
+  }
 
-  _refreshActiveDescendant() {
+  _refreshActiveDescendant(): void {
     if (!this._tabs) {
       return;
     }
 
     const tabs = this._tabs;
     const tabItems = tabs.itemElements();
+    // @ts-expect-error ts-error
     const $activeTab = $(tabItems[tabs.option('selectedIndex')]);
     const id = this.getFocusedItemId();
 
     this.setAria('controls', undefined, $(tabItems));
     this.setAria('controls', id, $activeTab);
-  },
+  }
 
   _getTabsIndicatorPosition() {
     // eslint-disable-next-line @typescript-eslint/naming-convention
     const { _tabsIndicatorPosition, tabsPosition } = this.option();
-
+    // @ts-expect-error ts-error
     return _tabsIndicatorPosition ?? TABS_INDICATOR_POSITION_BY_TABS_POSITION[tabsPosition];
-  },
+  }
 
-  _tabConfig() {
+  _tabConfig(): TabsProperties {
     const tabsIndicatorPosition = this._getTabsIndicatorPosition();
+
+    const {
+      focusStateEnabled,
+      hoverStateEnabled,
+      repaintChangesOnly,
+      tabIndex,
+      selectedIndex,
+      badgeExpr,
+      itemHoldTimeout,
+      items,
+      scrollingEnabled,
+      scrollByContent,
+      showNavButtons,
+      loop,
+      iconPosition,
+      stylingMode,
+    } = this.option();
 
     return {
       selectOnFocus: true,
-      focusStateEnabled: this.option('focusStateEnabled'),
-      hoverStateEnabled: this.option('hoverStateEnabled'),
-      repaintChangesOnly: this.option('repaintChangesOnly'),
-      tabIndex: this.option('tabIndex'),
-      selectedIndex: this.option('selectedIndex'),
-      badgeExpr: this.option('badgeExpr'),
+      focusStateEnabled,
+      hoverStateEnabled,
+      repaintChangesOnly,
+      tabIndex,
+      selectedIndex,
+      badgeExpr,
       onItemClick: this._titleClickAction.bind(this),
       onItemHold: this._titleHoldAction.bind(this),
-      itemHoldTimeout: this.option('itemHoldTimeout'),
+      itemHoldTimeout,
       onSelectionChanging: (e): void => {
         const newTabsSelectedItemData = e.addedItems[0];
         const newTabsSelectedIndex = this._getIndexByItemData(newTabsSelectedItemData);
 
         const selectingResult = this.selectItem(newTabsSelectedIndex);
-
+        // @ts-expect-error ts-error
         const promiseState = selectingResult.state();
         if (promiseState !== 'pending') {
           // NOTE: Keep selection change process synchronious if possible.
@@ -276,6 +326,7 @@ const TabPanel = MultiView.inherit({
 
         e.cancel = new Promise((resolve) => {
           selectingResult
+            // @ts-expect-error ts-error
             .done(() => {
               resolve(false);
             })
@@ -289,13 +340,14 @@ const TabPanel = MultiView.inherit({
       },
       onItemRendered: this._titleRenderedAction.bind(this),
       itemTemplate: this._getTemplateByOption('itemTitleTemplate'),
-      items: this.option('items'),
+      items,
+      // @ts-expect-error ts-error
       noDataText: null,
-      scrollingEnabled: this.option('scrollingEnabled'),
-      scrollByContent: this.option('scrollByContent'),
-      showNavButtons: this.option('showNavButtons'),
+      scrollingEnabled,
+      scrollByContent,
+      showNavButtons,
       itemTemplateProperty: 'tabTemplate',
-      loopItemFocus: this.option('loop'),
+      loopItemFocus: loop,
       selectionRequired: true,
       onOptionChanged: function (args) {
         if (args.name === 'focusedElement') {
@@ -315,28 +367,28 @@ const TabPanel = MultiView.inherit({
         }
       }.bind(this),
       orientation: this._getTabsOrientation(),
-      iconPosition: this.option('iconPosition'),
-      stylingMode: this.option('stylingMode'),
+      iconPosition,
+      stylingMode,
       _itemAttributes: { class: TABPANEL_TABS_ITEM_CLASS },
       _indicatorPosition: tabsIndicatorPosition,
     };
-  },
+  }
 
-  _renderFocusTarget() {
+  _renderFocusTarget(): void {
     this._focusTarget().attr('tabIndex', -1);
-  },
+  }
 
-  _getTabsOrientation() {
+  _getTabsOrientation(): Orientation {
     const { tabsPosition } = this.option();
-
+    // @ts-expect-error ts-error
     if ([TABS_POSITION.right, TABS_POSITION.left].includes(tabsPosition)) {
       return TABS_ORIENTATION.vertical;
     }
 
     return TABS_ORIENTATION.horizontal;
-  },
+  }
 
-  _getTabPanelTabsPositionClass() {
+  _getTabPanelTabsPositionClass(): string {
     const position = this.option('tabsPosition');
 
     switch (position) {
@@ -350,9 +402,9 @@ const TabPanel = MultiView.inherit({
       default:
         return TABPANEL_TABS_POSITION_CLASS.top;
     }
-  },
+  }
 
-  _toggleTabPanelTabsPositionClass() {
+  _toggleTabPanelTabsPositionClass(): void {
     // eslint-disable-next-line guard-for-in, no-restricted-syntax
     for (const key in TABPANEL_TABS_POSITION_CLASS) {
       this.$element().removeClass(TABPANEL_TABS_POSITION_CLASS[key]);
@@ -361,24 +413,24 @@ const TabPanel = MultiView.inherit({
     const newClass = this._getTabPanelTabsPositionClass();
 
     this.$element().addClass(newClass);
-  },
+  }
 
-  _updateTabsOrientation() {
+  _updateTabsOrientation(): void {
     const orientation = this._getTabsOrientation();
 
     this._setTabsOption('orientation', orientation);
-  },
+  }
 
-  _toggleWrapperFocusedClass(isFocused) {
+  _toggleWrapperFocusedClass(isFocused): void {
     this._toggleFocusClass(isFocused, this._$wrapper);
-  },
+  }
 
-  _toggleDisabledFocusedClass(isFocused) {
+  _toggleDisabledFocusedClass(isFocused): void {
     this._focusTarget().toggleClass(DISABLED_FOCUSED_TAB_CLASS, isFocused);
-  },
+  }
 
-  _updateFocusState(e, isFocused) {
-    this.callBase(e, isFocused);
+  _updateFocusState(e, isFocused): void {
+    super._updateFocusState(e, isFocused);
 
     const isTabsTarget = e.target === this._tabs._focusTarget().get(0);
     const isMultiViewTarget = e.target === this._focusTarget().get(0);
@@ -388,6 +440,7 @@ const TabPanel = MultiView.inherit({
     }
 
     if (isTabsTarget || isMultiViewTarget) {
+      // @ts-expect-error ts-error
       const isDisabled = this._isDisabled(this.option('focusedElement'));
 
       this._toggleWrapperFocusedClass(isFocused && !isDisabled);
@@ -396,79 +449,81 @@ const TabPanel = MultiView.inherit({
 
     if (isMultiViewTarget) {
       this._toggleFocusClass(isFocused, this._tabs.$element());
+      // @ts-expect-error ts-error
       this._toggleFocusClass(isFocused, this._tabs.option('focusedElement'));
     }
-  },
+  }
 
-  _focusOutHandler(e) {
+  _focusOutHandler(e): void {
     this._isFocusOutHandlerExecuting = true;
-
-    this.callBase.apply(this, arguments);
+    // @ts-expect-error ts-error
+    super._focusOutHandler.apply(this, arguments);
 
     this._tabs._focusOutHandler(e);
     this._isFocusOutHandlerExecuting = false;
-  },
+  }
 
-  _setTabsOption(name, value) {
+  _setTabsOption(name, value): void {
     if (this._tabs) {
       this._tabs.option(name, value);
     }
-  },
+  }
 
   _postprocessSwipe({ swipedTabsIndex }): void {
     this._setTabsOption('selectedIndex', swipedTabsIndex);
-  },
+  }
 
-  _visibilityChanged(visible) {
+  _visibilityChanged(visible): void {
     if (visible) {
       this._tabs._dimensionChanged();
     }
-  },
+  }
 
-  registerKeyHandler(key, handler) {
-    this.callBase(key, handler);
+  registerKeyHandler(key, handler): void {
+    super.registerKeyHandler(key, handler);
 
     if (this._tabs) {
       this._tabs.registerKeyHandler(key, handler);
     }
-  },
+  }
 
-  repaint() {
-    this.callBase();
+  repaint(): void {
+    super.repaint();
     this._tabs.repaint();
-  },
+  }
 
-  _updateTabsIndicatorPosition() {
+  _updateTabsIndicatorPosition(): void {
     const value = this._getTabsIndicatorPosition();
 
     this._setTabsOption('_indicatorPosition', value);
-  },
+  }
 
-  _optionChanged(args) {
+  _optionChanged(args: OptionChanged<TabPanelProperties>): void {
     const { name, value, fullName } = args;
 
     switch (name) {
       case 'dataSource':
-        this.callBase(args);
+        super._optionChanged(args);
         break;
       case 'items':
         this._setTabsOption(name, this.option(name));
         if (!this.option('repaintChangesOnly')) {
           this._tabs.repaint();
         }
-        this.callBase(args);
+        super._optionChanged(args);
         break;
       case 'width':
-        this.callBase(args);
+        super._optionChanged(args);
         this._tabs.repaint();
         break;
       case 'selectedIndex':
       case 'selectedItem': {
         this._setTabsOption(fullName, value);
-        this.callBase(args);
-
+        super._optionChanged(args);
+        // @ts-expect-error ts-error
         if (this.option('focusStateEnabled') === true) {
           const selectedIndex = this.option('selectedIndex');
+          // @ts-expect-error ts-error
           const selectedTabContent = this._itemElements().eq(selectedIndex);
           this.option('focusedElement', getPublicElement(selectedTabContent));
         }
@@ -478,7 +533,7 @@ const TabPanel = MultiView.inherit({
       case 'focusStateEnabled':
       case 'hoverStateEnabled':
         this._setTabsOption(fullName, value);
-        this.callBase(args);
+        super._optionChanged(args);
         break;
       case 'scrollingEnabled':
       case 'scrollByContent':
@@ -486,18 +541,22 @@ const TabPanel = MultiView.inherit({
         this._setTabsOption(fullName, value);
         break;
       case 'focusedElement': {
+        // @ts-expect-error ts-error
         const id = value ? $(value).index() : value;
+        // @ts-expect-error ts-error
         const newItem = value && this._tabs ? this._tabs._itemElements().eq(id) : value;
+        // @ts-expect-error ts-error
         this._setTabsOption('focusedElement', getPublicElement(newItem));
 
         if (value) {
+          // @ts-expect-error ts-error
           const isDisabled = this._isDisabled(value);
 
           this._toggleWrapperFocusedClass(!isDisabled);
           this._toggleDisabledFocusedClass(isDisabled);
         }
 
-        this.callBase(args);
+        super._optionChanged(args);
         break;
       }
       case 'itemTitleTemplate':
@@ -517,7 +576,7 @@ const TabPanel = MultiView.inherit({
         break;
       case 'loop':
         this._setTabsOption('loopItemFocus', value);
-        this.callBase(args);
+        super._optionChanged(args);
         break;
       case 'badgeExpr':
         this._invalidate();
@@ -537,12 +596,10 @@ const TabPanel = MultiView.inherit({
         this._setTabsOption('_indicatorPosition', value);
         break;
       default:
-        this.callBase(args);
+        super._optionChanged(args);
     }
-  },
-});
-
-TabPanel.ItemClass = TabPanelItem;
+  }
+}
 
 registerComponent('dxTabPanel', TabPanel);
 
