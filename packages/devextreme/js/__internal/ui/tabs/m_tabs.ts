@@ -31,6 +31,8 @@ import { getScrollLeftMax } from '@ts/ui/scroll_view/utils/get_scroll_left_max';
 import { TABS_EXPANDED_CLASS } from './constants';
 import TabsItem from './m_item';
 
+// STYLE tabs
+
 const TABS_CLASS = 'dx-tabs';
 const TABS_WRAPPER_CLASS = 'dx-tabs-wrapper';
 const TABS_STRETCHED_CLASS = 'dx-tabs-stretched';
