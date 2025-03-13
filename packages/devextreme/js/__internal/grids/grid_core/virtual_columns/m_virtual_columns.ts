@@ -48,6 +48,8 @@ const rowsView = (Base: ModuleType<RowsView>) => class VirtualColumnsRowsViewExt
     if (that.option('rtlEnabled') && scrollable) {
       left = getWidth(scrollable.$content()) - getWidth(scrollable.$element()) - left;
     }
+    // @ts-expect-error
+    that._columnsController._eventArgs = e.event;
 
     // @ts-expect-error
     that._columnsController.setScrollPosition(left);
@@ -113,12 +115,15 @@ const columns = (Base: ModuleType<ColumnsController>) => class VirtualColumnsCon
 
   private _resizingController!: ResizingController;
 
+  public _eventArgs: any;
+
   public init() {
     const that = this;
     // @ts-expect-error
     super.init.apply(this, arguments);
 
     this._resizingController = this.getController('resizing');
+    this._eventArgs = null;
 
     that._beginPageIndex = null;
     that._endPageIndex = null;
@@ -185,7 +190,9 @@ const columns = (Base: ModuleType<ColumnsController>) => class VirtualColumnsCon
     const date: any = new Date();
     this.columnsChanged.fire({
       optionNames: { all: true, length: 1 },
-      changeTypes: { columns: true, virtualColumnsScrolling: true, length: 2 },
+      changeTypes: {
+        columns: true, virtualColumnsScrolling: true, length: 2, event: this._eventArgs,
+      },
     });
     this._renderTime = (new Date()) as any - date;
   }
