@@ -152,7 +152,7 @@ export const TemplateManager: FC<TemplateManagerProps> = ({ init, onTemplatesRen
     }
 
     init({ createDXTemplates, clearInstantiationModels, updateTemplates });
-  }, [init, getRenderFunc, instantiationModels]);
+  }, [init, getRenderFunc]);
 
   useEffect(() => {
     if (updateContext) {
