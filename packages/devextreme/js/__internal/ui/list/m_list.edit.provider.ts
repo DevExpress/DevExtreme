@@ -73,21 +73,25 @@ const DECORATOR_AFTER_BAG_CREATE_METHOD = 'afterBag';
 const DECORATOR_MODIFY_ELEMENT_METHOD = 'modifyElement';
 const DECORATOR_AFTER_RENDER_METHOD = 'afterRender';
 const DECORATOR_GET_EXCLUDED_SELECTORS_METHOD = 'getExcludedSelectors';
+// @ts-expect-error dxClass inheritance issue
+// eslint-disable-next-line @typescript-eslint/ban-types
+class EditProvider extends (Class.inherit({}) as new() => {}) {
+  _list?: any;
 
-const EditProvider = Class.inherit({
+  _decorators?: any;
 
   ctor(list) {
     this._list = list;
     this._fetchRequiredDecorators();
-  },
+  }
 
   dispose() {
-    if (this._decorators && this._decorators.length) {
+    if (this._decorators?.length) {
       each(this._decorators, (_, decorator) => {
         decorator.dispose();
       });
     }
-  },
+  }
 
   _fetchRequiredDecorators() {
     this._decorators = [];
@@ -103,13 +107,13 @@ const EditProvider = Class.inherit({
         this._decorators.push(decorator);
       }
     });
-  },
+  }
 
   _createDecorator(type, subType) {
     const decoratorClass = this._findDecorator(type, subType);
     // eslint-disable-next-line new-cap
     return new decoratorClass(this._list);
-  },
+  }
 
   _findDecorator(type, subType) {
     const foundDecorator = registry[type]?.[subType];
@@ -119,7 +123,7 @@ const EditProvider = Class.inherit({
     }
 
     return foundDecorator;
-  },
+  }
 
   modifyItemElement(args) {
     const $itemElement = $(args.itemElement);
@@ -131,21 +135,21 @@ const EditProvider = Class.inherit({
     this._prependBeforeBags($itemElement, config);
     this._appendAfterBags($itemElement, config);
     this._applyDecorators(DECORATOR_MODIFY_ELEMENT_METHOD, config);
-  },
+  }
 
   afterItemsRendered() {
     this._applyDecorators(DECORATOR_AFTER_RENDER_METHOD);
-  },
+  }
 
   _prependBeforeBags($itemElement, config) {
     const $beforeBags = this._collectDecoratorsMarkup(DECORATOR_BEFORE_BAG_CREATE_METHOD, config, LIST_ITEM_BEFORE_BAG_CLASS);
     $itemElement.prepend($beforeBags);
-  },
+  }
 
   _appendAfterBags($itemElement, config) {
     const $afterBags = this._collectDecoratorsMarkup(DECORATOR_AFTER_BAG_CREATE_METHOD, config, LIST_ITEM_AFTER_BAG_CLASS);
     $itemElement.append($afterBags);
-  },
+  }
 
   _collectDecoratorsMarkup(method, config, containerClass) {
     const $collector = $('<div>');
@@ -161,13 +165,13 @@ const EditProvider = Class.inherit({
     });
 
     return $collector.children();
-  },
+  }
 
-  _applyDecorators(method, config) {
+  _applyDecorators(method, config?) {
     each(this._decorators, function () {
       this[method](config);
     });
-  },
+  }
 
   _handlerExists(name) {
     if (!this._decorators) {
@@ -183,9 +187,9 @@ const EditProvider = Class.inherit({
     }
 
     return false;
-  },
+  }
 
-  _eventHandler(name, $itemElement, e) {
+  _eventHandler(name, $itemElement, e?) {
     if (!this._decorators) {
       return false;
     }
@@ -201,27 +205,27 @@ const EditProvider = Class.inherit({
     }
 
     return response;
-  },
+  }
 
   handleClick($itemElement, e) {
     return this._eventHandler('handleClick', $itemElement, e);
-  },
+  }
 
   handleKeyboardEvents(currentFocusedIndex, moveFocusUp) {
     return this._eventHandler('handleKeyboardEvents', currentFocusedIndex, moveFocusUp);
-  },
+  }
 
   handleEnterPressing(e) {
     return this._eventHandler('handleEnterPressing', e);
-  },
+  }
 
   contextMenuHandlerExists() {
     return this._handlerExists('handleContextMenu');
-  },
+  }
 
   handleContextMenu($itemElement, e) {
     return this._eventHandler('handleContextMenu', $itemElement, e);
-  },
+  }
 
   getExcludedItemSelectors() {
     const excludedSelectors = [];
@@ -229,7 +233,7 @@ const EditProvider = Class.inherit({
     this._applyDecorators(DECORATOR_GET_EXCLUDED_SELECTORS_METHOD, excludedSelectors);
 
     return excludedSelectors.join(',');
-  },
-});
+  }
+}
 
 export default EditProvider;

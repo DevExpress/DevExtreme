@@ -9,6 +9,7 @@ import { register as registerDecorator } from './m_list.edit.decorator_registry'
 registerDecorator(
   'delete',
   'swipe',
+  // @ts-expect-error ts-error
   EditDecorator.inherit({
 
     _shouldHandleSwipe: true,

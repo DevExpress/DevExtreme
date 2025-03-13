@@ -7,7 +7,6 @@ import {
 import { addNamespace } from '@js/common/core/events/utils/index';
 import Class from '@js/core/class';
 import $ from '@js/core/renderer';
-import { noop } from '@js/core/utils/common';
 import { getWidth } from '@js/core/utils/size';
 
 const LIST_EDIT_DECORATOR = 'dxListEditDecorator';
@@ -15,19 +14,24 @@ const SWIPE_START_EVENT_NAME = addNamespace(swipeEventStart, LIST_EDIT_DECORATOR
 const SWIPE_UPDATE_EVENT_NAME = addNamespace(swipeEventSwipe, LIST_EDIT_DECORATOR);
 const SWIPE_END_EVENT_NAME = addNamespace(swipeEventEnd, LIST_EDIT_DECORATOR);
 
-const EditDecorator = Class.inherit({
+// @ts-expect-error dxClass inheritance issue
+// eslint-disable-next-line @typescript-eslint/ban-types
+class EditDecorator extends (Class.inherit({}) as new() => {}) {
+  _shouldHandleSwipe = false;
 
-  ctor(list) {
+  _clearSwipeCache?: boolean;
+
+  _list?: any;
+
+  ctor(list): void {
     this._list = list;
 
     this._init();
-  },
+  }
 
-  _init: noop,
+  _init(): void {}
 
-  _shouldHandleSwipe: false,
-
-  _attachSwipeEvent(config) {
+  _attachSwipeEvent(config): void {
     const swipeConfig = {
       itemSizeFunc: function () {
         if (this._clearSwipeCache) {
@@ -41,9 +45,9 @@ const EditDecorator = Class.inherit({
     eventsEngine.on(config.$itemElement, SWIPE_START_EVENT_NAME, swipeConfig, this._itemSwipeStartHandler.bind(this));
     eventsEngine.on(config.$itemElement, SWIPE_UPDATE_EVENT_NAME, this._itemSwipeUpdateHandler.bind(this));
     eventsEngine.on(config.$itemElement, SWIPE_END_EVENT_NAME, this._itemSwipeEndHandler.bind(this));
-  },
+  }
 
-  _itemSwipeStartHandler(e) {
+  _itemSwipeStartHandler(e): void {
     const $itemElement = $(e.currentTarget);
     if ($itemElement.is('.dx-state-disabled, .dx-state-disabled *')) {
       e.cancel = true;
@@ -53,25 +57,25 @@ const EditDecorator = Class.inherit({
     clearTimeout(this._list._inkRippleTimer);
 
     this._swipeStartHandler($itemElement, e);
-  },
+  }
 
-  _itemSwipeUpdateHandler(e) {
+  _itemSwipeUpdateHandler(e): void {
     const $itemElement = $(e.currentTarget);
 
     this._swipeUpdateHandler($itemElement, e);
-  },
+  }
 
-  _itemSwipeEndHandler(e) {
+  _itemSwipeEndHandler(e): void {
     const $itemElement = $(e.currentTarget);
 
     this._swipeEndHandler($itemElement, e);
 
     this._clearSwipeCache = true;
-  },
+  }
 
-  beforeBag: noop,
+  beforeBag(): void {}
 
-  afterBag: noop,
+  afterBag(): void {}
 
   _commonOptions() {
     return {
@@ -79,37 +83,41 @@ const EditDecorator = Class.inherit({
       hoverStateEnabled: this._list.option('hoverStateEnabled'),
       focusStateEnabled: this._list.option('focusStateEnabled'),
     };
-  },
+  }
 
-  modifyElement(config) {
+  modifyElement(config): void {
     if (this._shouldHandleSwipe) {
       this._attachSwipeEvent(config);
       this._clearSwipeCache = true;
     }
-  },
+  }
 
-  afterRender: noop,
+  afterRender(): void {}
 
-  handleClick: noop,
+  handleClick(): void {}
 
-  handleKeyboardEvents: noop,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  handleKeyboardEvents(currentFocusedIndex, moveFocusUp): void {}
 
-  handleEnterPressing: noop,
+  handleEnterPressing(): void {}
 
-  handleContextMenu: noop,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  handleContextMenu($itemElement): void {}
 
-  _swipeStartHandler: noop,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _swipeStartHandler($element, event): void {}
 
-  _swipeUpdateHandler: noop,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _swipeUpdateHandler($element, event): void {}
 
-  _swipeEndHandler: noop,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _swipeEndHandler($element, event): void {}
 
-  visibilityChange: noop,
+  visibilityChange(): void {}
 
-  getExcludedSelectors: noop,
+  getExcludedSelectors(): void {}
 
-  dispose: noop,
-
-});
+  dispose(): void {}
+}
 
 export default EditDecorator;
