@@ -155,7 +155,6 @@ QUnit.module('Stepper markup', moduleConfig, () => {
         assert.strictEqual($stepContent.children().length, 2);
         assert.strictEqual($stepContent.children().eq(1).hasClass(STEP_TITLE_CLASS), true);
     });
-
 });
 
 QUnit.module('Render', moduleConfig, () => {

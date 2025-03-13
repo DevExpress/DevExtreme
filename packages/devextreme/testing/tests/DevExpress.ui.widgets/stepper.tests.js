@@ -3,13 +3,17 @@ import 'ui/splitter';
 
 import Stepper from 'ui/stepper';
 
-import 'generic_light.css!';
+import Connector, {
+    STEPPER_CONNECTOR_CLASS,
+} from '__internal/ui/stepper/connector';
 
 import {
     STEP_CLASS,
     STEP_INDICATOR_CLASS,
     STEP_TITLE_CLASS,
 } from '__internal/ui/stepper/stepper';
+
+import 'generic_light.css!';
 
 QUnit.testStart(() => {
     const markup = '<div id="stepper"></div>';
@@ -21,6 +25,7 @@ const moduleConfig = {
     beforeEach: function() {
         const init = (options = { }, selector = '#stepper') => {
             this.$element = $(selector).dxStepper(options);
+            this.$connector = this.$element.find(`.${STEPPER_CONNECTOR_CLASS}`);
             this.instance = this.$element.dxStepper('instance');
         };
 
@@ -34,6 +39,10 @@ const moduleConfig = {
 
         this.getItems = () => {
             return this.$element.find(`.${STEP_CLASS}`);
+        };
+
+        this.getConnector = () => {
+            return Connector.getInstance(this.$connector);
         };
     }
 };
@@ -104,5 +113,19 @@ QUnit.module('Item data', moduleConfig, () => {
         assert.strictEqual(getStepTitle(0), 'Step 1');
         assert.strictEqual(getStepTitle(1), 'Step 2');
         assert.strictEqual(getStepTitle(2), 'Step 3');
+    });
+});
+
+QUnit.module('Connector integration', moduleConfig, () => {
+    QUnit.test('orientation should be passed to connector on initialization', function(assert) {
+        this.reinit({ orientation: 'vertical' });
+
+        assert.deepEqual(this.getConnector().option('orientation'), 'vertical', 'orientation value is passed');
+    });
+
+    QUnit.test('orientation should be passed to connector at runtime', function(assert) {
+        this.instance.option({ orientation: 'vertical' });
+
+        assert.deepEqual(this.getConnector().option('orientation'), 'vertical', 'orientation value is passed');
     });
 });
