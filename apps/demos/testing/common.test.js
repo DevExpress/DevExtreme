@@ -63,11 +63,6 @@ const getTestSpecificSkipRules = (testName) => {
 
 const SKIPPED_TESTS = {
   jQuery: {
-    Chat: [
-      // TODO Chrome133: skipped during chrome update
-      // error "ReferenceError: AzureOpenAI is not defined"
-      { demo: 'AIAndChatbotIntegration', themes: [THEME.generic, THEME.material, THEME.fluent] },
-    ],
     Charts: [
       { demo: 'ServerSideDataProcessing', themes: [THEME.material] },
     ],
@@ -83,11 +78,6 @@ const SKIPPED_TESTS = {
     ],
   },
   Angular: {
-    Chat: [
-      // TODO Chrome133: skipped during chrome update
-      // error "ReferenceError: AzureOpenAI is not defined"
-      { demo: 'AIAndChatbotIntegration', themes: [THEME.generic, THEME.material, THEME.fluent] },
-    ],
     DataGrid: [
       { demo: 'EditStateManagement', themes: [THEME.generic] },
       { demo: 'MultipleRecordSelectionModes', themes: [THEME.fluent] },
@@ -167,11 +157,6 @@ const SKIPPED_TESTS = {
     ],
   },
   React: {
-    Chat: [
-      // TODO Chrome133: skipped during chrome update
-      // error "ReferenceError: AzureOpenAI is not defined"
-      { demo: 'AIAndChatbotIntegration', themes: [THEME.generic, THEME.material, THEME.fluent] },
-    ],
     Charts: [
       { demo: 'PiesWithEqualSize', themes: [THEME.material] },
       { demo: 'CustomAnnotations', themes: [THEME.material] },
@@ -241,11 +226,6 @@ const SKIPPED_TESTS = {
   Vue: {
     Accordion: [
       { demo: 'Overview', themes: [THEME.generic, THEME.material, THEME.fluent] },
-    ],
-    Chat: [
-      // TODO Chrome133: skipped during chrome update
-      // error "ReferenceError: AzureOpenAI is not defined"
-      { demo: 'AIAndChatbotIntegration', themes: [THEME.generic, THEME.material, THEME.fluent] },
     ],
     Charts: [
       { demo: 'TilingAlgorithms', themes: [THEME.material] },
