@@ -7,7 +7,7 @@ import {
   fixSwatchCss, addBasePath, autoPrefix, cleanCss, removeExternalResources, addInfoHeader,
 } from './post-compiler';
 import BootstrapExtractor from './bootstrap-extractor';
-// eslint-disable-next-line import/extensions
+
 import { version, dependencies } from '../data/metadata/dx-theme-builder-metadata';
 
 export default class CompileManager {
