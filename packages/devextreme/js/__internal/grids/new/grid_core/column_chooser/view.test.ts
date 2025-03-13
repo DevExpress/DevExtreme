@@ -127,10 +127,6 @@ describe('render', () => {
 
     expect(element).toMatchSnapshot();
   });
-
-  it('matches title and close button with fluent theme', () => {
-
-  });
 });
 
 describe('applying options', () => {
