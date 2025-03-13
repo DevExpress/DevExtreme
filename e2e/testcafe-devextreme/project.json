@@ -12,10 +12,7 @@
       "cache": true
     },
     "test": {
-      "executor": "nx:run-script",
-      "options": {
-        "script": "test"
-      },
+      "executor": "nx:noop",
       "dependsOn": [
         "test--accessibility-common-1",
         "test--accessibility-common-2",
