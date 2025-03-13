@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable @typescript-eslint/no-floating-promises */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 /* eslint-disable @typescript-eslint/init-declarations */
@@ -6,7 +7,7 @@
 /* eslint-disable @stylistic/max-len */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
+
 /* eslint-disable max-classes-per-file */
 import messageLocalization from '@js/common/core/localization/message';
 import { isDefined } from '@js/core/utils/type';
@@ -66,6 +67,7 @@ export class FilterPanelView extends modules.View {
 
     render(
       <FilterPanel
+        component={this}
         hasFilterValue={hasFilterValue}
         addWidgetPrefix={this.addWidgetPrefix.bind(this)}
         tabIndex={tabIndex}
@@ -76,6 +78,7 @@ export class FilterPanelView extends modules.View {
         onFilterEnabledChange={(value: boolean) => this.option('filterPanel.filterEnabled', value)}
         clearFilter={(): void => this.option('filterValue', null as any)}
         clearFilterText={this.option('filterPanel.texts.clearFilter')!}
+        createFilterText={this.option('filterPanel.texts.createFilter')!}
       />,
       $element.get(0),
     );
@@ -208,6 +211,16 @@ export class FilterPanelView extends modules.View {
       groupOperationDescriptions: this.option('filterBuilder.groupOperationDescriptions'),
     };
     return isCondition(filterValue) ? this.getConditionText(filterValue, options) : this.getGroupText(filterValue, options);
+  }
+
+  // registerKeyboardAction contract
+
+  public element(): any {
+    return this._$element;
+  }
+
+  public _createActionByOption(): any {
+    return null;
   }
 }
 
