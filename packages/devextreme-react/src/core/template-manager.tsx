@@ -3,7 +3,7 @@ import * as events from 'devextreme/events';
 
 import {
   useState,
-  useLayoutEffect,
+  useMemo,
   useCallback,
   useEffect,
   useRef,
@@ -101,7 +101,7 @@ export const TemplateManager: FC<TemplateManagerProps> = ({ init, onTemplatesRen
     return containerElement;
   }, [collection]);
 
-  useLayoutEffect(() => {
+  useMemo(() => {
     function getTemplateFunction(template: ITemplate): TemplateFunc {
       switch (template.type) {
         case 'children': return () => template.content as JSX.Element;

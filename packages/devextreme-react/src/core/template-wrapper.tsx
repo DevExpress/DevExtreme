@@ -26,9 +26,9 @@ const createHiddenNode = (
   const style = { display: 'none' };
   switch (containerNodeName) {
     case 'TABLE':
-      return <tbody style={style} ref={ref}></tbody>;
+      return <tbody style={style} ref={ref} />;
     case 'TBODY':
-      return <tr style={style} ref={ref}></tr>;
+      return <tr style={style} ref={ref} />;
     default:
       return React.createElement(defaultElement, { style, ref });
   }
