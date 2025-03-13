@@ -21,6 +21,8 @@ import type { OptionChanged } from '@ts/core/widget/types';
 
 import { _translator, animation } from './multi_view/m_multi_view.animation';
 
+// STYLE multiView
+
 const MULTIVIEW_CLASS = 'dx-multiview';
 const MULTIVIEW_WRAPPER_CLASS = 'dx-multiview-wrapper';
 const MULTIVIEW_ITEM_CONTAINER_CLASS = 'dx-multiview-item-container';
