@@ -51,7 +51,4 @@ export type Column = Pick<Required<ColumnBase>, InheritedColumnProps> & {
   headerItemCssClass?: string;
   // header filter options for specific column.
   headerFilter?: HeaderFilterColumnOptions;
-
-  // TODO: move to column_chooser module
-  // showInColumnChooser?: boolean;
 };
