@@ -22,75 +22,70 @@ import SelectBoxExample from './selectbox-example';
 import TextBoxExample from './text-box-example';
 import ToolbarExample from './toolbar-example';
 import ValidationExample from './validation-example';
-import SelectorCustomExample from './selector-custom-example';
 // import DateBoxExample from './date-box-example';
 
 const Examples = () => {
     return (
         <div>
-            {/*<AccordionExample />*/}
+            <AccordionExample />
 
-            {/*<BoxExample />*/}
+            <BoxExample />
 
-            {/*<Example title="DxButton">*/}
-            {/*    <Button text="Example Button" />*/}
-            {/*</Example>*/}
-
-            {/*<Example title="Element attributes">*/}
-            {/*    <Button text="Button with style attr" style={{ backgroundColor: '#ffc' }} />*/}
-            {/*</Example>*/}
-
-            {/*<ChartExample />*/}
-
-            {/*<DataGridExample />*/}
-
-            {/*/!* <DateBoxExample /> *!/*/}
-
-            {/*/!* <DrawerExample /> *!/*/}
-
-            {/*<EditorExample />*/}
-
-            {/*/!* <FormExample /> *!/*/}
-
-            {/*<ListExample />*/}
-
-            {/*/!* <MapExample /> *!/*/}
-
-            {/*<Example title="DxNumberBox">*/}
-            {/*    <NumberBox*/}
-            {/*        defaultValue={102.453}*/}
-            {/*        step={10}*/}
-            {/*        min={50}*/}
-            {/*        format="$ #0.##"*/}
-            {/*        showSpinButtons*/}
-            {/*    />*/}
-            {/*</Example>*/}
-
-            {/*<PopupExample />*/}
-
-            {/*<RerenderedChartExample />*/}
-
-            {/*/!* <SlideOutViewExample /> *!/*/}
-
-            {/*<ScrollViewExample />*/}
-
-            {/*<TextBoxExample />*/}
-
-            {/*<ToolbarExample />*/}
-
-            {/*<ValidationExample />*/}
-
-            {/*/!* <SchedulerExample /> *!/*/}
-
-            {/*<Example title="SelectBox example">*/}
-            {/*    <SelectBoxExample />*/}
-            {/*</Example>*/}
-
-            <Example title="SelectBox example">
-                <SelectorCustomExample />
+            <Example title="DxButton">
+                <Button text="Example Button" />
             </Example>
 
-            {/* <StandaloneValidatorExample /> */}
+            <Example title="Element attributes">
+                <Button text="Button with style attr" style={{ backgroundColor: '#ffc' }} />
+            </Example>
+
+            <ChartExample />
+
+            <DataGridExample />
+
+            {/* <DateBoxExample /> */}
+
+            {/* <DrawerExample /> */}
+
+            <EditorExample />
+
+            {/* <FormExample /> */}
+
+            <ListExample />
+
+            {/* <MapExample /> */}
+
+            <Example title="DxNumberBox">
+                <NumberBox
+                    defaultValue={102.453}
+                    step={10}
+                    min={50}
+                    format="$ #0.##"
+                    showSpinButtons
+                />
+            </Example>
+
+            <PopupExample />
+
+            <RerenderedChartExample />
+
+            {/* <SlideOutViewExample /> */}
+
+            <ScrollViewExample />
+
+            <TextBoxExample />
+
+            <ToolbarExample />
+
+            <ValidationExample />
+
+            {/* <SchedulerExample /> */}
+
+            <Example title="SelectBox example">
+                <SelectBoxExample />
+            </Example>
+
+             {/*<StandaloneValidatorExample />*/}
 
         </div>
     );
