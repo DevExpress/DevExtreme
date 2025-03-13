@@ -62,6 +62,9 @@ const getTestSpecificSkipRules = (testName) => {
 
 const SKIPPED_TESTS = {
   jQuery: {
+    Chat: [
+      { demo: 'AIAndChatbotIntegration', themes: [THEME.material] },
+    ],
     Charts: [
       { demo: 'ServerSideDataProcessing', themes: [THEME.material] },
     ],
@@ -77,6 +80,9 @@ const SKIPPED_TESTS = {
     ],
   },
   Angular: {
+    Chat: [
+      { demo: 'AIAndChatbotIntegration', themes: [THEME.material] },
+    ],
     DataGrid: [
       { demo: 'EditStateManagement', themes: [THEME.generic] },
       { demo: 'MultipleRecordSelectionModes', themes: [THEME.fluent] },
@@ -164,6 +170,9 @@ const SKIPPED_TESTS = {
     ],
   },
   React: {
+    Chat: [
+      { demo: 'AIAndChatbotIntegration', themes: [THEME.material] },
+    ],
     Charts: [
       { demo: 'PiesWithEqualSize', themes: [THEME.material] },
       { demo: 'CustomAnnotations', themes: [THEME.material] },
@@ -241,6 +250,9 @@ const SKIPPED_TESTS = {
   Vue: {
     Accordion: [
       { demo: 'Overview', themes: [THEME.generic, THEME.material, THEME.fluent] },
+    ],
+    Chat: [
+      { demo: 'AIAndChatbotIntegration', themes: [THEME.material] },
     ],
     Charts: [
       { demo: 'TilingAlgorithms', themes: [THEME.material] },
