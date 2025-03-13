@@ -9,10 +9,6 @@
       "options": {
         "script": "lint"
       },
-      "inputs": [
-        "{projectRoot}/**/*.js",
-        "{projectRoot}/**/*.ts"
-      ],
       "cache": true
     },
     "test": {
@@ -20,15 +16,86 @@
       "options": {
         "script": "test"
       },
-      "inputs": [
-        "^default",
-        "{projectRoot}/helpers/**/*",
-        "{projectRoot}/tests/**/*",
-        "{projectRoot}/.testcaferc.json",
-        "{projectRoot}/runner.js",
-        "{projectRoot}/tsconfig.json"
+      "dependsOn": [
+        "test--accessibility-common-1",
+        "test--accessibility-common-2",
+        "test--accessibility-common-3",
+        "test--accessibility-common-4",
+        "test--accessibility-common-5",
+        "test--accessibility-common-6",
+        "test--accessibility-common-7"
       ],
       "cache": true
+    },
+    "test--accessibility-common-1": {
+      "dependsOn": ["^build"],
+      "executor": "nx:run-commands",
+      "cache": true,
+      "options": {
+        "cwd": "{projectRoot}",
+        "command": "pnpm run test",
+        "args": "--componentFolder accessibility/common --indices 1/7 --concurrency=1"
+      }
+    },
+    "test--accessibility-common-2": {
+      "dependsOn": ["^build"],
+      "executor": "nx:run-commands",
+      "cache": true,
+      "options": {
+        "cwd": "{projectRoot}",
+        "command": "pnpm run test",
+        "args": "--componentFolder accessibility/common --indices 2/7 --concurrency=1"
+      }
+    },
+    "test--accessibility-common-3": {
+      "dependsOn": ["^build"],
+      "executor": "nx:run-commands",
+      "cache": true,
+      "options": {
+        "cwd": "{projectRoot}",
+        "command": "pnpm run test",
+        "args": "--componentFolder accessibility/common --indices 3/7 --concurrency=1"
+      }
+    },
+    "test--accessibility-common-4": {
+      "dependsOn": ["^build"],
+      "executor": "nx:run-commands",
+      "cache": true,
+      "options": {
+        "cwd": "{projectRoot}",
+        "command": "pnpm run test",
+        "args": "--componentFolder accessibility/common --indices 4/7 --concurrency=1"
+      }
+    },
+    "test--accessibility-common-5": {
+      "dependsOn": ["^build"],
+      "executor": "nx:run-commands",
+      "cache": true,
+      "options": {
+        "cwd": "{projectRoot}",
+        "command": "pnpm run test",
+        "args": "--componentFolder accessibility/common --indices 5/7 --concurrency=1"
+      }
+    },
+    "test--accessibility-common-6": {
+      "dependsOn": ["^build"],
+      "executor": "nx:run-commands",
+      "cache": true,
+      "options": {
+        "cwd": "{projectRoot}",
+        "command": "pnpm run test",
+        "args": "--componentFolder accessibility/common --indices 6/7 --concurrency=1"
+      }
+    },
+    "test--accessibility-common-7": {
+      "dependsOn": ["^build"],
+      "executor": "nx:run-commands",
+      "cache": true,
+      "options": {
+        "cwd": "{projectRoot}",
+        "command": "pnpm run test",
+        "args": "--componentFolder accessibility/common --indices 7/7 --concurrency=1"
+      }
     }
   },
   "tags": []
