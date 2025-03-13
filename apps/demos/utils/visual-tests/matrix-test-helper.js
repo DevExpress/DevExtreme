@@ -228,9 +228,6 @@ const SKIPPED_TESTS = {
     TabPanel: [
       { demo: 'Overview', themes: [THEME.generic, THEME.material, THEME.fluent] },
     ],
-    SelectBox: [
-      { demo: 'GroupedItems', themes: [THEME.generic, THEME.material, THEME.fluent] },
-    ],
     Splitter: [
       { demo: 'Overview', themes: [THEME.generic, THEME.material, THEME.fluent] },
     ],
