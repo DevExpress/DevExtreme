@@ -19,7 +19,7 @@ import SimulatedStrategy from './m_scroll_view.simulated';
 import Scrollable from './m_scrollable';
 import type { RefreshStrategy, ScrollOffset } from './types';
 
-// STYLE loadPanel
+// STYLE scrollView
 
 const SCROLLVIEW_CLASS = 'dx-scrollview';
 const SCROLLVIEW_CONTENT_CLASS = `${SCROLLVIEW_CLASS}-content`;

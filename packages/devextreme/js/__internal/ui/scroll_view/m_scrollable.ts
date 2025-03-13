@@ -536,7 +536,7 @@ class Scrollable<
     this._strategy.scrollBy(distance);
   }
 
-  scrollToElement(element, offset): void {
+  scrollToElement(element, offset?): void {
     const $element = $(element);
     const elementInsideContent = this.$content().find(element).length;
     const elementIsInsideContent = ($element.parents(`.${SCROLLABLE_CLASS}`).length - $element.parents(`.${SCROLLABLE_CONTENT_CLASS}`).length) === 0;

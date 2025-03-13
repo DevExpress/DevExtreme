@@ -1,12 +1,13 @@
+import type { Position } from '@js/common';
 import eventsEngine from '@js/common/core/events/core/events_engine';
 import holdEvent from '@js/common/core/events/hold';
 import pointerEvents from '@js/common/core/events/pointer';
 import { addNamespace } from '@js/common/core/events/utils/index';
 import registerComponent from '@js/core/component_registrator';
 import devices from '@js/core/devices';
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { BindableTemplate } from '@js/core/templates/bindable_template';
-import { extend } from '@js/core/utils/extend';
 import { getImageContainer } from '@js/core/utils/icon';
 import { each } from '@js/core/utils/iterator';
 import { getHeight, getOuterWidth, getWidth } from '@js/core/utils/size';
@@ -15,9 +16,13 @@ import { hasWindow } from '@js/core/utils/window';
 import Button from '@js/ui/button';
 // eslint-disable-next-line import/no-named-default
 import { default as CollectionWidget } from '@js/ui/collection/ui.collection_widget.live_update';
-import Scrollable from '@js/ui/scroll_view/ui.scrollable';
+import type {
+  Orientation, Properties, TabsIconPosition, TabsStyle,
+} from '@js/ui/tabs';
 import { current as currentTheme, isFluent, isMaterial } from '@js/ui/themes';
 import { render } from '@js/ui/widget/utils.ink_ripple';
+import type { OptionChanged } from '@ts/core/widget/types';
+import Scrollable from '@ts/ui/scroll_view/m_scrollable';
 import {
   isReachedBottom, isReachedLeft, isReachedRight, isReachedTop,
 } from '@ts/ui/scroll_view/utils/get_boundary_props';
@@ -54,7 +59,7 @@ const TABS_ORIENTATION_CLASS = {
   horizontal: 'dx-tabs-horizontal',
 };
 
-const INDICATOR_POSITION_CLASS = {
+const INDICATOR_POSITION_CLASS: Record<Position, string> = {
   top: 'dx-tab-indicator-position-top',
   right: 'dx-tab-indicator-position-right',
   bottom: 'dx-tab-indicator-position-bottom',
@@ -84,38 +89,69 @@ const FEEDBACK_SCROLL_TIMEOUT = 300;
 
 const TAB_OFFSET = 30;
 
-const ORIENTATION = {
+const ORIENTATION: Record<Orientation, Orientation> = {
   horizontal: 'horizontal',
   vertical: 'vertical',
 };
 
-const INDICATOR_POSITION = {
+const INDICATOR_POSITION: Record<Position, Position> = {
   top: 'top',
   right: 'right',
   bottom: 'bottom',
   left: 'left',
 };
 
-const SCROLLABLE_DIRECTION = {
+const SCROLLABLE_DIRECTION: Record<Orientation, Orientation> = {
   horizontal: 'horizontal',
   vertical: 'vertical',
 };
 
-const ICON_POSITION = {
+const ICON_POSITION: Record<TabsIconPosition, TabsIconPosition> = {
   top: 'top',
   end: 'end',
   bottom: 'bottom',
   start: 'start',
 };
 
-const STYLING_MODE = {
+const STYLING_MODE: Record<TabsStyle, TabsStyle> = {
   primary: 'primary',
   secondary: 'secondary',
 };
-// @ts-expect-error
-const Tabs = CollectionWidget.inherit({
-  _getDefaultOptions() {
-    return extend(this.callBase(), {
+
+export interface TabsProperties extends Properties {
+  selectionRequired?: boolean;
+
+  selectOnFocus?: boolean;
+
+  loopItemFocus?: boolean;
+
+  useInkRipple?: boolean;
+
+  badgeExpr?: (data) => boolean | undefined;
+
+  _itemAttributes?: Record<string, unknown>;
+
+  _indicatorPosition?: Position | null;
+
+  focusedElement?: dxElementWrapper;
+}
+
+class Tabs extends CollectionWidget<TabsProperties> {
+  static ItemClass = TabsItem;
+
+  _scrollable?: Scrollable | null;
+
+  _holdInterval?: ReturnType<typeof setInterval>;
+
+  _leftButton?: Button | null;
+
+  _rightButton?: Button | null;
+
+  _$wrapper!: dxElementWrapper;
+
+  _getDefaultOptions(): TabsProperties {
+    return {
+      ...super._getDefaultOptions(),
       hoverStateEnabled: true,
       showNavButtons: true,
       scrollByContent: true,
@@ -132,13 +168,13 @@ const Tabs = CollectionWidget.inherit({
       badgeExpr(data) { return data ? data.badge : undefined; },
       _itemAttributes: { role: 'tab' },
       _indicatorPosition: null,
-    });
-  },
+    };
+  }
 
   _defaultOptionsRules() {
     const themeName = currentTheme();
 
-    return this.callBase().concat([
+    return super._defaultOptionsRules().concat([
       {
         device() {
           return devices.real().deviceType !== 'desktop';
@@ -181,13 +217,13 @@ const Tabs = CollectionWidget.inherit({
         },
       },
     ]);
-  },
+  }
 
-  _init() {
+  _init(): void {
     const { orientation, stylingMode, scrollingEnabled } = this.option();
     const indicatorPosition = this._getIndicatorPosition();
 
-    this.callBase();
+    super._init();
 
     this._activeStateUnit = `.${TABS_ITEM_CLASS}`;
     this.setAria('role', 'tablist');
@@ -201,7 +237,7 @@ const Tabs = CollectionWidget.inherit({
     this._renderMultiple();
 
     this._feedbackHideTimeout = FEEDBACK_HIDE_TIMEOUT;
-  },
+  }
 
   _prepareDefaultItemTemplate(data, $container) {
     const text = isPlainObject(data) ? data?.text : data;
@@ -222,10 +258,10 @@ const Tabs = CollectionWidget.inherit({
     if (isDefined(data.html)) {
       $container.html(data.html);
     }
-  },
+  }
 
   _initTemplates() {
-    this.callBase();
+    super._initTemplates();
 
     this._templateManager.addDefaultTemplates({
       item: new BindableTemplate(($container, data) => {
@@ -239,10 +275,9 @@ const Tabs = CollectionWidget.inherit({
         $container.wrapInner($tabItem);
       }, ['text', 'html', 'icon'], this.option('integrationOptions.watchMethod')),
     });
-  },
+  }
 
-  // eslint-disable-next-line @typescript-eslint/naming-convention
-  _createItemByTemplate: function _createItemByTemplate(itemTemplate, renderArgs) {
+  _createItemByTemplate(itemTemplate, renderArgs) {
     const { itemData, container, index } = renderArgs;
     return itemTemplate.render({
       model: itemData,
@@ -250,33 +285,35 @@ const Tabs = CollectionWidget.inherit({
       index,
       onRendered: this._onItemTemplateRendered(itemTemplate, renderArgs),
     });
-  },
+  }
 
-  _itemClass() {
+  // eslint-disable-next-line class-methods-use-this
+  _itemClass(): string {
     return TABS_ITEM_CLASS;
-  },
+  }
 
-  _selectedItemClass() {
+  // eslint-disable-next-line class-methods-use-this
+  _selectedItemClass(): string {
     return TABS_ITEM_SELECTED_CLASS;
-  },
+  }
 
   _itemDataKey() {
     return TABS_ITEM_DATA_KEY;
-  },
+  }
 
-  _initMarkup() {
-    this.callBase();
+  _initMarkup(): void {
+    super._initMarkup();
 
     this.option('useInkRipple') && this._renderInkRipple();
 
     this.$element().addClass(OVERFLOW_HIDDEN_CLASS);
-  },
+  }
 
-  _postProcessRenderItems() {
+  _postProcessRenderItems(): void {
     this._renderScrolling();
-  },
+  }
 
-  _renderScrolling() {
+  _renderScrolling(): void {
     const removeClasses = [TABS_STRETCHED_CLASS, TABS_EXPANDED_CLASS, OVERFLOW_HIDDEN_CLASS];
     this.$element().removeClass(removeClasses.join(' '));
 
@@ -287,12 +324,12 @@ const Tabs = CollectionWidget.inherit({
       }
 
       const scrollable = this.getScrollable();
-      scrollable.update();
+      scrollable?.update();
 
       if (this.option('rtlEnabled')) {
-        // @ts-expect-error
+        // @ts-expect-error ts-error
         const maxLeftOffset = getScrollLeftMax($(this.getScrollable().container()).get(0));
-        scrollable.scrollTo({ left: maxLeftOffset });
+        scrollable?.scrollTo({ left: maxLeftOffset });
       }
       this._updateNavButtonsState();
 
@@ -310,18 +347,19 @@ const Tabs = CollectionWidget.inherit({
         .removeClass(TABS_NAV_BUTTONS_CLASS)
         .addClass(TABS_EXPANDED_CLASS);
     }
-  },
+  }
 
-  _isVertical() {
-    return this.option('orientation') === ORIENTATION.vertical;
-  },
+  _isVertical(): boolean {
+    const { orientation } = this.option();
+    return orientation === ORIENTATION.vertical;
+  }
 
   _isItemsSizeExceeded() {
     const isVertical = this._isVertical();
     const isItemsSizeExceeded = isVertical ? this._isItemsHeightExceeded() : this._isItemsWidthExceeded();
 
     return isItemsSizeExceeded;
-  },
+  }
 
   _isItemsWidthExceeded() {
     const $visibleItems = this._getVisibleItems();
@@ -335,7 +373,7 @@ const Tabs = CollectionWidget.inherit({
     const isItemsWidthExceeded = tabItemTotalWidth > elementWidth - 1;
 
     return isItemsWidthExceeded;
-  },
+  }
 
   _isItemsHeightExceeded() {
     const $visibleItems = this._getVisibleItems();
@@ -344,7 +382,7 @@ const Tabs = CollectionWidget.inherit({
     const isItemsHeightExceeded = itemsHeight - 1 > elementHeight;
 
     return isItemsHeightExceeded;
-  },
+  }
 
   _needStretchItems() {
     const $visibleItems = this._getVisibleItems();
@@ -361,7 +399,7 @@ const Tabs = CollectionWidget.inherit({
     const needStretchItems = maxTabItemWidth > requireWidth + 1;
 
     return needStretchItems;
-  },
+  }
 
   _cleanNavButtons() {
     if (!this._leftButton || !this._rightButton) return;
@@ -370,9 +408,9 @@ const Tabs = CollectionWidget.inherit({
     this._rightButton.$element().remove();
     this._leftButton = null;
     this._rightButton = null;
-  },
+  }
 
-  _cleanScrolling() {
+  _cleanScrolling(): void {
     if (!this._scrollable) return;
 
     this._$wrapper.appendTo(this.$element());
@@ -381,18 +419,19 @@ const Tabs = CollectionWidget.inherit({
     this._scrollable = null;
 
     this._cleanNavButtons();
-  },
+  }
 
   _renderInkRipple() {
     this._inkRipple = render();
-  },
+  }
 
   _getPointerEvent() {
     return pointerEvents.up;
-  },
+  }
 
   _toggleActiveState($element, value, e) {
-    this.callBase.apply(this, arguments);
+    // @ts-expect-error ts-error
+    super._toggleActiveState.apply(this, arguments);
 
     if (!this._inkRipple) {
       return;
@@ -408,39 +447,41 @@ const Tabs = CollectionWidget.inherit({
     } else {
       this._inkRipple.hideWave(config);
     }
-  },
+  }
 
-  _renderMultiple() {
-    if (this.option('selectionMode') === 'multiple') {
+  _renderMultiple(): void {
+    const { selectionMode } = this.option();
+
+    if (selectionMode === 'multiple') {
       this.option('selectOnFocus', false);
     }
-  },
+  }
 
-  _renderWrapper() {
+  _renderWrapper(): void {
     this._$wrapper = $('<div>').addClass(TABS_WRAPPER_CLASS);
     this.$element().append(this._$wrapper);
-  },
+  }
 
-  _itemContainer() {
+  _itemContainer(): dxElementWrapper {
     return this._$wrapper;
-  },
+  }
 
   _getScrollableDirection() {
     const isVertical = this._isVertical();
     const scrollableDirection = isVertical ? SCROLLABLE_DIRECTION.vertical : SCROLLABLE_DIRECTION.horizontal;
 
     return scrollableDirection;
-  },
+  }
 
-  _updateScrollable() {
+  _updateScrollable(): void {
     if (this.getScrollable()) {
       this._cleanScrolling();
     }
 
     this._renderScrolling();
-  },
+  }
 
-  _renderScrollable() {
+  _renderScrollable(): void {
     const $itemContainer = this.$element().wrapInner($('<div>').addClass(TABS_SCROLLABLE_CLASS)).children();
 
     this._scrollable = this._createComponent($itemContainer, Scrollable, {
@@ -455,16 +496,16 @@ const Tabs = CollectionWidget.inherit({
     });
 
     this.$element().append(this._scrollable.$element());
-  },
+  }
 
-  _scrollToItem(itemData) {
+  _scrollToItem(itemData): void {
     if (!this._scrollable) return;
 
     const $item = this._editStrategy.getItemElement(itemData);
     this._scrollable.scrollToElement($item);
-  },
+  }
 
-  _renderNavButtons() {
+  _renderNavButtons(): void {
     const { showNavButtons, rtlEnabled } = this.option();
 
     this.$element().toggleClass(TABS_NAV_BUTTONS_CLASS, showNavButtons);
@@ -473,52 +514,61 @@ const Tabs = CollectionWidget.inherit({
       return;
     }
 
-    this._leftButton = this._createNavButton(-TAB_OFFSET, rtlEnabled ? BUTTON_NEXT_ICON : BUTTON_PREV_ICON);
+    this._leftButton = this._createNavButton(
+      -TAB_OFFSET,
+      rtlEnabled ? BUTTON_NEXT_ICON : BUTTON_PREV_ICON,
+    );
     const $leftButton = this._leftButton.$element();
 
     $leftButton.addClass(TABS_LEFT_NAV_BUTTON_CLASS);
 
     this.$element().prepend($leftButton);
 
-    this._rightButton = this._createNavButton(TAB_OFFSET, rtlEnabled ? BUTTON_PREV_ICON : BUTTON_NEXT_ICON);
+    this._rightButton = this._createNavButton(
+      TAB_OFFSET,
+      rtlEnabled ? BUTTON_PREV_ICON : BUTTON_NEXT_ICON,
+    );
     const $rightButton = this._rightButton.$element();
 
     $rightButton.addClass(TABS_RIGHT_NAV_BUTTON_CLASS);
 
     this.$element().append($rightButton);
-  },
+  }
 
-  _updateNavButtonsAriaDisabled() {
+  _updateNavButtonsAriaDisabled(): void {
     const buttons = [this._leftButton, this._rightButton];
 
     buttons.forEach((button) => {
+      // @ts-expect-error ts-error
       button?.$element().attr({ 'aria-disabled': null });
     });
-  },
+  }
 
-  _updateNavButtonsState() {
+  _updateNavButtonsState(): void {
     const isVertical = this._isVertical();
     const scrollable = this.getScrollable();
 
     if (isVertical) {
+      // @ts-expect-error ts-error
       this._leftButton?.option('disabled', isReachedTop(scrollable.scrollTop(), 1));
-      // @ts-expect-error
+      // @ts-expect-error ts-error
       this._rightButton?.option('disabled', isReachedBottom($(scrollable.container()).get(0), scrollable.scrollTop(), 0, 1));
     } else {
+      // @ts-expect-error ts-error
       this._leftButton?.option('disabled', isReachedLeft(scrollable.scrollLeft(), 1));
-      // @ts-expect-error
+      // @ts-expect-error ts-error
       this._rightButton?.option('disabled', isReachedRight($(scrollable.container()).get(0), scrollable.scrollLeft(), 1));
     }
 
     this._updateNavButtonsAriaDisabled();
-  },
+  }
 
   _updateScrollPosition(offset, duration) {
-    this._scrollable.update();
-    this._scrollable.scrollBy(offset / duration);
-  },
+    this._scrollable?.update();
+    this._scrollable?.scrollBy(offset / duration);
+  }
 
-  _createNavButton(offset, icon) {
+  _createNavButton(offset, icon): Button {
     const holdAction = this._createAction(() => {
       this._holdInterval = setInterval(() => {
         this._updateScrollPosition(offset, FEEDBACK_DURATION_INTERVAL);
@@ -556,50 +606,51 @@ const Tabs = CollectionWidget.inherit({
     });
 
     return navButton;
-  },
+  }
 
-  _clearInterval() {
+  _clearInterval(): void {
     if (this._holdInterval) clearInterval(this._holdInterval);
-  },
+  }
 
-  _updateSelection(addedSelection) {
+  _updateSelection(addedSelection): void {
     this._scrollable && this._scrollable.scrollToElement(this.itemElements().eq(addedSelection[0]));
-  },
+  }
 
-  _visibilityChanged(visible) {
+  _visibilityChanged(visible): void {
     if (visible) {
       this._dimensionChanged();
     }
-  },
+  }
 
-  _dimensionChanged() {
+  _dimensionChanged(): void {
     this._renderScrolling();
-  },
+  }
 
-  _itemSelectHandler(e) {
-    if (this.option('selectionMode') === 'single' && this.isItemSelected(e.currentTarget)) {
+  _itemSelectHandler(e): void {
+    const { selectionMode } = this.option();
+    if (selectionMode === 'single' && this.isItemSelected(e.currentTarget)) {
       return;
     }
 
-    this.callBase(e);
-  },
+    super._itemSelectHandler(e);
+  }
 
-  _clean() {
+  _clean(): void {
     this._cleanScrolling();
-    this.callBase();
-  },
+    super._clean();
+  }
 
-  _toggleTabsVerticalClass(value) {
+  _toggleTabsVerticalClass(value: boolean): void {
     this.$element().toggleClass(TABS_ORIENTATION_CLASS.vertical, value);
-  },
+  }
 
-  _toggleTabsHorizontalClass(value) {
+  _toggleTabsHorizontalClass(value: boolean): void {
     this.$element().toggleClass(TABS_ORIENTATION_CLASS.horizontal, value);
-  },
+  }
 
   _getIndicatorPositionClass(indicatorPosition) {
     return INDICATOR_POSITION_CLASS[indicatorPosition];
-  },
+  }
 
   _getIndicatorPosition() {
     // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -615,24 +666,24 @@ const Tabs = CollectionWidget.inherit({
       return isVertical ? INDICATOR_POSITION.left : INDICATOR_POSITION.bottom;
     }
     return isVertical ? INDICATOR_POSITION.right : INDICATOR_POSITION.bottom;
-  },
+  }
 
   _toggleIndicatorPositionClass(indicatorPosition) {
     const newClass = this._getIndicatorPositionClass(indicatorPosition);
 
     this._toggleElementClasses(INDICATOR_POSITION_CLASS, newClass);
-  },
+  }
 
   _toggleScrollingEnabledClass(scrollingEnabled) {
     this.$element().toggleClass(TABS_SCROLLING_ENABLED_CLASS, Boolean(scrollingEnabled));
-  },
+  }
 
   _toggleOrientationClass(orientation) {
     const isVertical = orientation === ORIENTATION.vertical;
 
     this._toggleTabsVerticalClass(isVertical);
     this._toggleTabsHorizontalClass(!isVertical);
-  },
+  }
 
   _getTabsIconPositionClass() {
     const position = this.option('iconPosition');
@@ -648,45 +699,50 @@ const Tabs = CollectionWidget.inherit({
       default:
         return TABS_ICON_POSITION_CLASS.start;
     }
-  },
+  }
 
-  _toggleIconPositionClass() {
+  _toggleIconPositionClass(): void {
     const newClass = this._getTabsIconPositionClass();
 
     this._toggleElementClasses(TABS_ICON_POSITION_CLASS, newClass);
-  },
+  }
 
-  _toggleStylingModeClass(value) {
+  _toggleStylingModeClass(value): void {
     const newClass = TABS_STYLING_MODE_CLASS[value] ?? TABS_STYLING_MODE_CLASS.primary;
 
     this._toggleElementClasses(TABS_STYLING_MODE_CLASS, newClass);
-  },
+  }
 
-  _toggleElementClasses(classMap, newClass) {
+  _toggleElementClasses(classMap, newClass): void {
     // eslint-disable-next-line no-restricted-syntax, guard-for-in
     for (const key in classMap) {
       this.$element().removeClass(classMap[key]);
     }
 
     this.$element().addClass(newClass);
-  },
+  }
 
-  _toggleFocusedDisabledNextClass(currentIndex, isNextDisabled) {
-    this._itemElements().eq(currentIndex).toggleClass(FOCUSED_DISABLED_NEXT_TAB_CLASS, isNextDisabled);
-  },
+  _toggleFocusedDisabledNextClass(currentIndex, isNextDisabled): void {
+    this._itemElements()
+      .eq(currentIndex)
+      .toggleClass(FOCUSED_DISABLED_NEXT_TAB_CLASS, isNextDisabled);
+  }
 
-  _toggleFocusedDisabledPrevClass(currentIndex, isPrevDisabled) {
-    this._itemElements().eq(currentIndex).toggleClass(FOCUSED_DISABLED_PREV_TAB_CLASS, isPrevDisabled);
-  },
+  _toggleFocusedDisabledPrevClass(currentIndex, isPrevDisabled): void {
+    this._itemElements()
+      .eq(currentIndex)
+      .toggleClass(FOCUSED_DISABLED_PREV_TAB_CLASS, isPrevDisabled);
+  }
 
-  _toggleFocusedDisabledClasses(value) {
+  _toggleFocusedDisabledClasses(value): void {
     const { selectedIndex: currentIndex } = this.option();
 
     this._itemElements()
       .removeClass(FOCUSED_DISABLED_NEXT_TAB_CLASS)
       .removeClass(FOCUSED_DISABLED_PREV_TAB_CLASS);
-
+    // @ts-expect-error ts-error
     const prevItemIndex = currentIndex - 1;
+    // @ts-expect-error ts-error
     const nextItemIndex = currentIndex + 1;
 
     const nextFocusedIndex = $(value).index();
@@ -699,20 +755,21 @@ const Tabs = CollectionWidget.inherit({
 
     this._toggleFocusedDisabledNextClass(currentIndex, shouldNextClassBeSetted);
     this._toggleFocusedDisabledPrevClass(currentIndex, shouldPrevClassBeSetted);
-  },
+  }
 
-  _updateFocusedElement() {
+  _updateFocusedElement(): void {
     const { focusStateEnabled, selectedIndex } = this.option();
     const itemElements = this._itemElements();
 
     if (focusStateEnabled && itemElements.length) {
+      // @ts-expect-error ts-error
       const selectedItem = itemElements.get(selectedIndex);
 
       this.option({ focusedElement: selectedItem });
     }
-  },
+  }
 
-  _optionChanged(args) {
+  _optionChanged(args: OptionChanged<TabsProperties>): void {
     switch (args.name) {
       case 'useInkRipple':
       case 'scrollingEnabled':
@@ -723,28 +780,28 @@ const Tabs = CollectionWidget.inherit({
         this._invalidate();
         break;
       case 'scrollByContent':
-        this._scrollable && this._scrollable.option(args.name, args.value);
+        this._scrollable?.option(args.name, args.value);
         break;
       case 'width':
       case 'height':
-        this.callBase(args);
+        super._optionChanged(args);
         this._dimensionChanged();
         break;
       case 'selectionMode':
         this._renderMultiple();
-        this.callBase(args);
+        super._optionChanged(args);
         break;
       case 'badgeExpr':
         this._invalidate();
         break;
       case 'focusedElement': {
         this._toggleFocusedDisabledClasses(args.value);
-        this.callBase(args);
+        super._optionChanged(args);
         this._scrollToItem(args.value);
         break;
       }
       case 'rtlEnabled': {
-        this.callBase(args);
+        super._optionChanged(args);
         const indicatorPosition = this._getIndicatorPosition();
         this._toggleIndicatorPositionClass(indicatorPosition);
         break;
@@ -779,30 +836,28 @@ const Tabs = CollectionWidget.inherit({
       case 'selectedIndex':
       case 'selectedItem':
       case 'selectedItems':
-        this.callBase(args);
+        super._optionChanged(args);
         this._updateFocusedElement();
         break;
       default:
-        this.callBase(args);
+        super._optionChanged(args);
     }
-  },
+  }
 
-  _afterItemElementInserted() {
-    this.callBase();
+  _afterItemElementInserted(): void {
+    super._afterItemElementInserted();
     this._planPostRenderActions();
-  },
+  }
 
-  _afterItemElementDeleted($item, deletedActionArgs) {
-    this.callBase($item, deletedActionArgs);
+  _afterItemElementDeleted($item, deletedActionArgs): void {
+    super._afterItemElementDeleted($item, deletedActionArgs);
     this._renderScrolling();
-  },
+  }
 
-  getScrollable() {
+  getScrollable(): Scrollable | undefined | null {
     return this._scrollable;
-  },
-});
-
-Tabs.ItemClass = TabsItem;
+  }
+}
 
 registerComponent('dxTabs', Tabs);
 
