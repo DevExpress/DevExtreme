@@ -201,9 +201,6 @@ const SKIPPED_TESTS = {
     DropDownButton: [
       { demo: 'Overview', themes: [THEME.generic, THEME.material, THEME.fluent] },
     ],
-    Chat: [
-      { demo: 'Customization', themes: [THEME.generic, THEME.material, THEME.fluent] },
-    ],
     Charts: [
       { demo: 'Overview', themes: [THEME.material] },
       { demo: 'Crosshair', themes: [THEME.generic, THEME.material, THEME.fluent] },
