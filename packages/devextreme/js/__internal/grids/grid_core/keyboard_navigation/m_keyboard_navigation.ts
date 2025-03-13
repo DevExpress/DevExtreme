@@ -303,7 +303,7 @@ export class KeyboardNavigationController extends modules.ViewController {
         ? !isAppend
         : this._isHiddenFocus && isFullUpdate && !e?.virtualColumnsScrolling;
       if (needUpdateFocus) {
-        const skipFocusEvent = !isFocusedElementCorrect;
+        const skipFocusEvent = !this._isColumnFixingEnabled() && e?.virtualColumnsScrolling;
         this._updateFocus(true, skipFocusEvent);
       }
     }
@@ -320,6 +320,10 @@ export class KeyboardNavigationController extends modules.ViewController {
     }
 
     return true;
+  }
+
+  private _isColumnFixingEnabled() {
+    return this.option('columnFixing.enabled') || this.option('columnFixing.legacyMode');
   }
 
   private initColumnHeadersViewHandler(): void {
