@@ -1,1 +1,1 @@
-export { dxCardViewOptions, Properties } from './card_view';
+export { ToolbarItem, dxCardViewOptions, Properties } from './card_view';

@@ -1,7 +1,8 @@
-import { DataErrorOccurredInfo } from '../common/grids';
+import { DataErrorOccurredInfo, Pager } from '../common/grids';
 import { DataSourceLike } from '../data/data_source';
 import Widget, { WidgetOptions } from './widget/ui.widget';
 import { EventInfo } from '../events';
+import { dxToolbarItem, ToolbarItemLocation } from './toolbar';
 
 // #region DataController
 
@@ -100,6 +101,72 @@ export type DataControllerOptions = {
 
 // #endregion
 
+// #region Pager
+
+/**
+ * @docid
+ * @hidden
+ * @namespace DevExpress.ui.dxCardView
+ */
+export type PagerOptions = {
+    /**
+     * @docid
+     * @public
+     */
+    pager?: Pager;
+};
+
+// #endregion
+
+// #region Toolbar
+
+export type PredefinedToolbarItem = 'columnChooserButton' | 'searchPanel' | 'addCardButton';
+
+/**
+ * @docid
+ * @inherits dxToolbarItem
+ * @public
+ */
+export type ToolbarItem = dxToolbarItem & {
+    /**
+     * @docid
+     * @public
+     */
+    name?: PredefinedToolbarItem | string;
+    /**
+     * @docid
+     * @default 'after'
+     * @public
+     */
+    location?: ToolbarItemLocation;
+  };
+
+export type ToolbarOptions = {
+    /**
+     * @docid
+     * @public
+     */
+    toolbar?: {
+        /**
+         * @docid
+         * @public
+         */
+        items?: Array<PredefinedToolbarItem | ToolbarItem>;
+        /**
+         * @default undefined
+         * @public
+         */
+        visible?: boolean | undefined;
+        /**
+         * @default false
+         * @public
+         */
+        disabled?: boolean;
+    };
+};
+
+// #endregion
+
 // #region ColumnsController
 
 // #endregion
@@ -109,10 +176,12 @@ export type DataControllerOptions = {
  * @public
  * @docid
  * @deprecated use Properties instead
- * @inherits DataControllerOptions
+ * @inherits DataControllerOptions,PagerOptions,ToolbarOptions
  */
 export interface dxCardViewOptions extends WidgetOptions<dxCardView>,
-DataControllerOptions {
+DataControllerOptions,
+PagerOptions,
+ToolbarOptions {
 
 }
 

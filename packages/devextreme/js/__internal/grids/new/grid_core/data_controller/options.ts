@@ -1,7 +1,7 @@
-import type { DataControllerOptions } from '@js/ui/card_view';
+import type { DataControllerOptions as Options } from '@js/ui/card_view';
 
 export type {
-  DataControllerOptions as Options,
+  Options,
 };
 
 export const defaultOptions = {
@@ -11,4 +11,4 @@ export const defaultOptions = {
     pageIndex: 0,
   },
   remoteOperations: 'auto',
-} satisfies DataControllerOptions;
+} satisfies Options;
