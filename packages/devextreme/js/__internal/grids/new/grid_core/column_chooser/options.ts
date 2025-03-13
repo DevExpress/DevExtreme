@@ -5,7 +5,7 @@ import { defaultOptions as columnChooserDefaultOptions } from '../../../grid_cor
 export interface Options {
   columnChooser?: Omit<ColumnChooser, 'selection'> & {
     // TODO: change d.ts files. Recursive selection isn't supported in CardView yet.
-    selection: Omit<ColumnChooserSelectionConfig, 'recursive'>;
+    selection?: Omit<ColumnChooserSelectionConfig, 'recursive'>;
   };
 }
 

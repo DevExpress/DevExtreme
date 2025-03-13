@@ -5,7 +5,6 @@ import type { Properties as TreeViewProperties } from '@js/ui/tree_view';
 import type dxTreeView from '@js/ui/tree_view';
 import type { RefObject } from 'inferno';
 
-import type { Column } from '../columns_controller/types';
 import { Popup } from '../inferno_wrappers/popup';
 import { TreeView } from '../inferno_wrappers/tree_view';
 
@@ -13,8 +12,6 @@ export interface ColumnChooserProps {
   popupRef: RefObject<dxPopup>;
 
   treeViewRef: RefObject<dxTreeView>;
-
-  columns: Column[];
 
   visible: boolean;
 

@@ -32,7 +32,7 @@ export class ColumnChooserView extends View<ColumnChooserProps> {
 
   private readonly popupVisible = state(false);
 
-  private readonly popupRef = createRef<dxPopup>();
+  public readonly popupRef = createRef<dxPopup>();
 
   private readonly mode: SubsGets<ColumnChooserMode>;
 
@@ -42,7 +42,6 @@ export class ColumnChooserView extends View<ColumnChooserProps> {
 
   constructor(
     private readonly toolbarController: ToolbarController,
-    private readonly columnsController: ColumnsController,
     private readonly columnChooserController: ColumnChooserController,
     private readonly options: OptionsController,
   ) {
@@ -76,11 +75,11 @@ export class ColumnChooserView extends View<ColumnChooserProps> {
     );
   }
 
-  public showColumnChooser(): void {
+  public show(): void {
     this.popupVisible.update(true);
   }
 
-  public hideColumnChooser(): void {
+  public hide(): void {
     // eslint-disable-next-line @typescript-eslint/no-floating-promises
     this.popupRef.current?.hide();
   }
@@ -98,8 +97,6 @@ export class ColumnChooserView extends View<ColumnChooserProps> {
       treeViewRef: this.columnChooserController.treeViewRef,
 
       visible: this.popupVisible,
-      columns: this.columnsController.columns,
-
       mode: this.mode,
 
       popupConfig: combined({

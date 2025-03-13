@@ -1,0 +1,1982 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`applying options hides/shows columnChooser toolbar button 1`] = `
+<div>
+  <div>
+    <div
+      class="dx-toolbar dx-widget dx-visibility-change-handler dx-collection"
+      role="toolbar"
+    >
+      <div
+        class="dx-toolbar-items-container"
+      >
+        <div
+          class="dx-toolbar-before"
+          role="presentation"
+        />
+        <div
+          class="dx-toolbar-center"
+          role="presentation"
+        />
+        <div
+          class="dx-toolbar-after"
+          role="presentation"
+        >
+          <div
+            class="dx-item dx-toolbar-item dx-toolbar-button dx-toolbar-item-auto-hide dx-toolbar-text-auto-hide dx-state-invisible"
+          >
+            <div
+              class="dx-item-content dx-toolbar-item-content"
+            >
+              <div
+                aria-haspopup="dialog"
+                aria-label="column-chooser"
+                class="dx-widget dx-button dx-button-mode-contained dx-button-normal dx-button-has-icon dx-cardview-column-chooser-button"
+                role="button"
+                tabindex="0"
+              >
+                <div
+                  class="dx-button-content"
+                >
+                  <i
+                    class="dx-icon dx-icon-column-chooser"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            class="dx-toolbar-button dx-toolbar-menu-container dx-state-invisible"
+          >
+            <div
+              aria-expanded="false"
+              aria-haspopup="true"
+              aria-label="overflow"
+              class="dx-widget dx-button dx-button-mode-contained dx-button-normal dx-button-has-icon dx-dropdownmenu dx-dropdownmenu-button"
+              role="button"
+              tabindex="0"
+            >
+              <div
+                class="dx-button-content"
+              >
+                <i
+                  class="dx-icon dx-icon-overflow"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div>
+    
+  </div>
+</div>
+`;
+
+exports[`applying options hides/shows columnChooser toolbar button 2`] = `
+<div>
+  <div>
+    <div
+      class="dx-toolbar dx-widget dx-visibility-change-handler dx-collection"
+      role="toolbar"
+    >
+      <div
+        class="dx-toolbar-items-container"
+      >
+        <div
+          class="dx-toolbar-before"
+          role="presentation"
+        />
+        <div
+          class="dx-toolbar-center"
+          role="presentation"
+        />
+        <div
+          class="dx-toolbar-after"
+          role="presentation"
+        >
+          <div
+            class="dx-item dx-toolbar-item dx-toolbar-button dx-toolbar-item-auto-hide dx-toolbar-text-auto-hide"
+          >
+            <div
+              class="dx-item-content dx-toolbar-item-content"
+            >
+              <div
+                aria-haspopup="dialog"
+                aria-label="column-chooser"
+                class="dx-widget dx-button dx-button-mode-contained dx-button-normal dx-button-has-icon dx-cardview-column-chooser-button"
+                role="button"
+                tabindex="0"
+              >
+                <div
+                  class="dx-button-content"
+                >
+                  <i
+                    class="dx-icon dx-icon-column-chooser"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            class="dx-toolbar-button dx-toolbar-menu-container dx-state-invisible"
+          >
+            <div
+              aria-expanded="false"
+              aria-haspopup="true"
+              aria-label="overflow"
+              class="dx-widget dx-button dx-button-mode-contained dx-button-normal dx-button-has-icon dx-dropdownmenu dx-dropdownmenu-button"
+              role="button"
+              tabindex="0"
+            >
+              <div
+                class="dx-button-content"
+              >
+                <i
+                  class="dx-icon dx-icon-overflow"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div>
+    
+  </div>
+</div>
+`;
+
+exports[`applying options updates markup 1`] = `
+<div>
+  <div
+    class="dx-overlay dx-popup dx-widget dx-visibility-change-handler"
+  >
+    <div
+      aria-label="Column Chooser"
+      class="dx-overlay-content dx-rtl dx-popup-normal"
+      role="dialog"
+      style="width: 300px; height: 300px;"
+      tabindex="0"
+    >
+      <div
+        class="dx-popup-content dx-popup-content-scrollable dx-cardview-column-chooser-list dx-cardview-column-chooser-plain"
+      >
+        <div
+          class="dx-empty-collection dx-widget dx-collection dx-treeview"
+          tabindex="0"
+        >
+          <div
+            class="dx-scrollable dx-visibility-change-handler dx-scrollable-vertical dx-scrollable-simulated"
+          >
+            <div
+              class="dx-scrollable-wrapper"
+            >
+              <div
+                class="dx-scrollable-container"
+              >
+                <div
+                  class="dx-scrollable-content"
+                  style="left: 0px; top: 0px; transform: none;"
+                >
+                  <div
+                    class="dx-empty-message"
+                  >
+                    No data to display
+                  </div>
+                  <ul
+                    class="dx-treeview-node-container"
+                    role="group"
+                  />
+                </div>
+                <div
+                  class="dx-scrollable-scrollbar dx-widget dx-scrollbar-vertical dx-scrollbar-hoverable"
+                >
+                  <div
+                    class="dx-scrollable-scroll dx-state-invisible"
+                    style="height: 15px; transform: translate(0px, 0px);"
+                  >
+                    <div
+                      class="dx-scrollable-scroll-content"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+</div>
+`;
+
+exports[`applying options updates markup 2`] = `
+<div>
+  <div
+    class="dx-overlay dx-popup dx-widget dx-visibility-change-handler"
+  >
+    <div
+      aria-label="Column Chooser"
+      class="dx-overlay-content dx-rtl dx-popup-normal dx-popup-draggable"
+      role="dialog"
+      style="width: 400px; height: 400px; left: 0px; top: 0px; transform: translate(-400px, 0px);"
+      tabindex="0"
+    >
+      <div
+        class="dx-toolbar dx-widget dx-visibility-change-handler dx-collection dx-popup-title"
+        role="toolbar"
+      >
+        <div
+          class="dx-toolbar-items-container"
+        >
+          <div
+            class="dx-toolbar-before"
+            role="presentation"
+          />
+          <div
+            class="dx-toolbar-center"
+            role="presentation"
+          >
+            <div
+              class="dx-item dx-toolbar-item dx-toolbar-label"
+            >
+              <div
+                class="dx-item-content dx-toolbar-item-content"
+              >
+                <div>
+                  new title
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            class="dx-toolbar-after"
+            role="presentation"
+          />
+        </div>
+      </div>
+      <div
+        class="dx-popup-content dx-popup-content-scrollable dx-cardview-column-chooser-list dx-cardview-column-chooser-plain"
+        style="height: 0px; min-height: auto; max-height: auto;"
+      >
+        <div
+          class="dx-empty-collection dx-widget dx-collection dx-treeview dx-treeview-with-search"
+        >
+          <div
+            class="dx-treeview-search dx-show-invalid-badge dx-textbox dx-texteditor dx-editor-outlined dx-searchbox dx-show-clear-button dx-texteditor-empty dx-widget"
+          >
+            <div
+              class="dx-texteditor-container"
+            >
+              <div
+                class="dx-texteditor-input-container"
+              >
+                <div
+                  class="dx-icon dx-icon-search"
+                />
+                <input
+                  aria-label="Search"
+                  autocomplete="off"
+                  class="dx-texteditor-input"
+                  placeholder="new placeholder"
+                  role="textbox"
+                  tabindex="0"
+                  type="text"
+                />
+                <div
+                  class="dx-placeholder"
+                  data-dx_placeholder="new placeholder"
+                />
+              </div>
+              <div
+                class="dx-texteditor-buttons-container"
+              >
+                <span
+                  class="dx-clear-button-area"
+                >
+                  <span
+                    class="dx-icon dx-icon-clear"
+                  />
+                </span>
+              </div>
+            </div>
+          </div>
+          <div
+            class="dx-scrollable dx-visibility-change-handler dx-scrollable-vertical dx-scrollable-simulated"
+          >
+            <div
+              class="dx-scrollable-wrapper"
+            >
+              <div
+                class="dx-scrollable-container"
+              >
+                <div
+                  class="dx-scrollable-content"
+                  style="left: 0px; top: 0px; transform: none;"
+                >
+                  <div
+                    class="dx-empty-message"
+                  >
+                    No data to display
+                  </div>
+                  <ul
+                    class="dx-treeview-node-container"
+                    role="group"
+                    tabindex="0"
+                  />
+                </div>
+                <div
+                  class="dx-scrollable-scrollbar dx-widget dx-scrollbar-vertical dx-scrollbar-hoverable"
+                >
+                  <div
+                    class="dx-scrollable-scroll dx-state-invisible"
+                    style="height: 15px; transform: translate(0px, 0px);"
+                  >
+                    <div
+                      class="dx-scrollable-scroll-content"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="dx-toolbar dx-widget dx-visibility-change-handler dx-collection dx-popup-bottom dx-popup-cancel"
+        role="toolbar"
+      >
+        <div
+          class="dx-toolbar-items-container"
+        >
+          <div
+            class="dx-toolbar-before"
+            role="presentation"
+          >
+            <div
+              class="dx-item dx-toolbar-item dx-toolbar-button"
+            >
+              <div
+                class="dx-item-content dx-toolbar-item-content"
+              >
+                <div
+                  aria-label="Cancel"
+                  class="dx-widget dx-button dx-button-mode-contained dx-button-normal dx-button-has-text dx-popup-cancel"
+                  role="button"
+                  tabindex="0"
+                >
+                  <div
+                    class="dx-button-content"
+                  >
+                    <span
+                      class="dx-button-text"
+                    >
+                      Cancel
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            class="dx-toolbar-center"
+            role="presentation"
+          />
+          <div
+            class="dx-toolbar-after"
+            role="presentation"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+  
+</div>
+`;
+
+exports[`applying options with select mode updates markup on columnOption changed: first column was hidden 1`] = `
+<ul
+  class="dx-treeview-node-container"
+  role="group"
+>
+  <li
+    aria-label="Column  1"
+    aria-level="1"
+    aria-selected="true"
+    class="dx-treeview-node dx-treeview-item-with-checkbox dx-state-invisible dx-state-selected dx-treeview-root-node"
+    data-item-id="0"
+    role="treeitem"
+  >
+    <div
+      class="dx-state-invisible dx-item dx-treeview-item"
+    >
+      <div
+        class="dx-item-content dx-treeview-item-content"
+      >
+        <span>
+          Column  1
+        </span>
+      </div>
+      <div
+        aria-checked="true"
+        aria-invalid="false"
+        aria-label="Check state"
+        aria-readonly="false"
+        class="dx-widget dx-checkbox dx-checkbox-checked"
+        role="checkbox"
+      >
+        <input
+          type="hidden"
+          value="true"
+        />
+        <div
+          class="dx-checkbox-container"
+        >
+          <span
+            class="dx-checkbox-icon"
+          />
+          
+        </div>
+      </div>
+    </div>
+  </li>
+  <li
+    aria-label="Column  2"
+    aria-level="1"
+    aria-selected="true"
+    class="dx-treeview-node dx-treeview-item-with-checkbox dx-state-selected dx-treeview-root-node dx-treeview-node-is-leaf"
+    data-item-id="1"
+    role="treeitem"
+  >
+    <div
+      class="dx-item dx-treeview-item"
+    >
+      <div
+        class="dx-item-content dx-treeview-item-content"
+      >
+        <span>
+          Column  2
+        </span>
+      </div>
+      <div
+        aria-checked="true"
+        aria-invalid="false"
+        aria-label="Check state"
+        aria-readonly="false"
+        class="dx-widget dx-checkbox dx-checkbox-checked"
+        role="checkbox"
+      >
+        <input
+          type="hidden"
+          value="true"
+        />
+        <div
+          class="dx-checkbox-container"
+        >
+          <span
+            class="dx-checkbox-icon"
+          />
+          
+        </div>
+      </div>
+      <div
+        class="dx-treeview-expander-icon-stub"
+      />
+    </div>
+  </li>
+  <li
+    aria-label="Column  3"
+    aria-level="1"
+    aria-selected="true"
+    class="dx-treeview-node dx-treeview-item-with-checkbox dx-state-selected dx-treeview-root-node dx-treeview-node-is-leaf"
+    data-item-id="2"
+    role="treeitem"
+  >
+    <div
+      class="dx-item dx-treeview-item"
+    >
+      <div
+        class="dx-item-content dx-treeview-item-content"
+      >
+        <span>
+          Column  3
+        </span>
+      </div>
+      <div
+        aria-checked="true"
+        aria-invalid="false"
+        aria-label="Check state"
+        aria-readonly="false"
+        class="dx-widget dx-checkbox dx-checkbox-checked"
+        role="checkbox"
+      >
+        <input
+          type="hidden"
+          value="true"
+        />
+        <div
+          class="dx-checkbox-container"
+        >
+          <span
+            class="dx-checkbox-icon"
+          />
+          
+        </div>
+      </div>
+      <div
+        class="dx-treeview-expander-icon-stub"
+      />
+    </div>
+  </li>
+  <li
+    aria-label="Column  4"
+    aria-level="1"
+    aria-selected="true"
+    class="dx-treeview-node dx-treeview-item-with-checkbox dx-state-selected dx-treeview-root-node dx-treeview-node-is-leaf"
+    data-item-id="3"
+    role="treeitem"
+  >
+    <div
+      class="dx-item dx-treeview-item"
+    >
+      <div
+        class="dx-item-content dx-treeview-item-content"
+      >
+        <span>
+          Column  4
+        </span>
+      </div>
+      <div
+        aria-checked="true"
+        aria-invalid="false"
+        aria-label="Check state"
+        aria-readonly="false"
+        class="dx-widget dx-checkbox dx-checkbox-checked"
+        role="checkbox"
+      >
+        <input
+          type="hidden"
+          value="true"
+        />
+        <div
+          class="dx-checkbox-container"
+        >
+          <span
+            class="dx-checkbox-icon"
+          />
+          
+        </div>
+      </div>
+      <div
+        class="dx-treeview-expander-icon-stub"
+      />
+    </div>
+  </li>
+</ul>
+`;
+
+exports[`applying options with select mode updates markup on columnOption changed: first column was shown 1`] = `
+<ul
+  class="dx-treeview-node-container"
+  role="group"
+>
+  <li
+    aria-label="Column  1"
+    aria-level="1"
+    aria-selected="true"
+    class="dx-treeview-node dx-treeview-item-with-checkbox dx-state-selected dx-treeview-root-node dx-treeview-node-is-leaf"
+    data-item-id="0"
+    role="treeitem"
+  >
+    <div
+      class="dx-item dx-treeview-item"
+    >
+      <div
+        class="dx-item-content dx-treeview-item-content"
+      >
+        <span>
+          Column  1
+        </span>
+      </div>
+      <div
+        aria-checked="true"
+        aria-invalid="false"
+        aria-label="Check state"
+        aria-readonly="false"
+        class="dx-widget dx-checkbox dx-checkbox-checked"
+        role="checkbox"
+      >
+        <input
+          type="hidden"
+          value="true"
+        />
+        <div
+          class="dx-checkbox-container"
+        >
+          <span
+            class="dx-checkbox-icon"
+          />
+          
+        </div>
+      </div>
+      <div
+        class="dx-treeview-expander-icon-stub"
+      />
+    </div>
+  </li>
+  <li
+    aria-label="Column  2"
+    aria-level="1"
+    aria-selected="true"
+    class="dx-treeview-node dx-treeview-item-with-checkbox dx-state-selected dx-treeview-root-node dx-treeview-node-is-leaf"
+    data-item-id="1"
+    role="treeitem"
+  >
+    <div
+      class="dx-item dx-treeview-item"
+    >
+      <div
+        class="dx-item-content dx-treeview-item-content"
+      >
+        <span>
+          Column  2
+        </span>
+      </div>
+      <div
+        aria-checked="true"
+        aria-invalid="false"
+        aria-label="Check state"
+        aria-readonly="false"
+        class="dx-widget dx-checkbox dx-checkbox-checked"
+        role="checkbox"
+      >
+        <input
+          type="hidden"
+          value="true"
+        />
+        <div
+          class="dx-checkbox-container"
+        >
+          <span
+            class="dx-checkbox-icon"
+          />
+          
+        </div>
+      </div>
+      <div
+        class="dx-treeview-expander-icon-stub"
+      />
+    </div>
+  </li>
+  <li
+    aria-label="Column  3"
+    aria-level="1"
+    aria-selected="true"
+    class="dx-treeview-node dx-treeview-item-with-checkbox dx-state-selected dx-treeview-root-node dx-treeview-node-is-leaf"
+    data-item-id="2"
+    role="treeitem"
+  >
+    <div
+      class="dx-item dx-treeview-item"
+    >
+      <div
+        class="dx-item-content dx-treeview-item-content"
+      >
+        <span>
+          Column  3
+        </span>
+      </div>
+      <div
+        aria-checked="true"
+        aria-invalid="false"
+        aria-label="Check state"
+        aria-readonly="false"
+        class="dx-widget dx-checkbox dx-checkbox-checked"
+        role="checkbox"
+      >
+        <input
+          type="hidden"
+          value="true"
+        />
+        <div
+          class="dx-checkbox-container"
+        >
+          <span
+            class="dx-checkbox-icon"
+          />
+          
+        </div>
+      </div>
+      <div
+        class="dx-treeview-expander-icon-stub"
+      />
+    </div>
+  </li>
+  <li
+    aria-label="Column  4"
+    aria-level="1"
+    aria-selected="true"
+    class="dx-treeview-node dx-treeview-item-with-checkbox dx-state-selected dx-treeview-root-node dx-treeview-node-is-leaf"
+    data-item-id="3"
+    role="treeitem"
+  >
+    <div
+      class="dx-item dx-treeview-item"
+    >
+      <div
+        class="dx-item-content dx-treeview-item-content"
+      >
+        <span>
+          Column  4
+        </span>
+      </div>
+      <div
+        aria-checked="true"
+        aria-invalid="false"
+        aria-label="Check state"
+        aria-readonly="false"
+        class="dx-widget dx-checkbox dx-checkbox-checked"
+        role="checkbox"
+      >
+        <input
+          type="hidden"
+          value="true"
+        />
+        <div
+          class="dx-checkbox-container"
+        >
+          <span
+            class="dx-checkbox-icon"
+          />
+          
+        </div>
+      </div>
+      <div
+        class="dx-treeview-expander-icon-stub"
+      />
+    </div>
+  </li>
+</ul>
+`;
+
+exports[`applying options with select mode updates markup on columnOption changed: fourth column was disabled 1`] = `
+<ul
+  class="dx-treeview-node-container"
+  role="group"
+>
+  <li
+    aria-label="Column  1"
+    aria-level="1"
+    aria-selected="true"
+    class="dx-treeview-node dx-treeview-item-with-checkbox dx-state-selected dx-treeview-root-node dx-treeview-node-is-leaf"
+    data-item-id="0"
+    role="treeitem"
+  >
+    <div
+      class="dx-item dx-treeview-item"
+    >
+      <div
+        class="dx-item-content dx-treeview-item-content"
+      >
+        <span>
+          Column  1
+        </span>
+      </div>
+      <div
+        aria-checked="true"
+        aria-invalid="false"
+        aria-label="Check state"
+        aria-readonly="false"
+        class="dx-widget dx-checkbox dx-checkbox-checked"
+        role="checkbox"
+      >
+        <input
+          type="hidden"
+          value="true"
+        />
+        <div
+          class="dx-checkbox-container"
+        >
+          <span
+            class="dx-checkbox-icon"
+          />
+          
+        </div>
+      </div>
+      <div
+        class="dx-treeview-expander-icon-stub"
+      />
+    </div>
+  </li>
+  <li
+    aria-label="Column  2"
+    aria-level="1"
+    aria-selected="true"
+    class="dx-treeview-node dx-treeview-item-with-checkbox dx-state-selected dx-treeview-root-node dx-treeview-node-is-leaf"
+    data-item-id="1"
+    role="treeitem"
+  >
+    <div
+      class="dx-item dx-treeview-item"
+    >
+      <div
+        class="dx-item-content dx-treeview-item-content"
+      >
+        <span>
+          Column  2
+        </span>
+      </div>
+      <div
+        aria-checked="true"
+        aria-invalid="false"
+        aria-label="Check state"
+        aria-readonly="false"
+        class="dx-widget dx-checkbox dx-checkbox-checked"
+        role="checkbox"
+      >
+        <input
+          type="hidden"
+          value="true"
+        />
+        <div
+          class="dx-checkbox-container"
+        >
+          <span
+            class="dx-checkbox-icon"
+          />
+          
+        </div>
+      </div>
+      <div
+        class="dx-treeview-expander-icon-stub"
+      />
+    </div>
+  </li>
+  <li
+    aria-label="new caption"
+    aria-level="1"
+    aria-selected="true"
+    class="dx-treeview-node dx-treeview-item-with-checkbox dx-state-selected dx-treeview-root-node dx-treeview-node-is-leaf"
+    data-item-id="2"
+    role="treeitem"
+  >
+    <div
+      class="dx-item dx-treeview-item"
+    >
+      <div
+        class="dx-item-content dx-treeview-item-content"
+      >
+        <span>
+          new caption
+        </span>
+      </div>
+      <div
+        aria-checked="true"
+        aria-invalid="false"
+        aria-label="Check state"
+        aria-readonly="false"
+        class="dx-widget dx-checkbox dx-checkbox-checked"
+        role="checkbox"
+      >
+        <input
+          type="hidden"
+          value="true"
+        />
+        <div
+          class="dx-checkbox-container"
+        >
+          <span
+            class="dx-checkbox-icon"
+          />
+          
+        </div>
+      </div>
+      <div
+        class="dx-treeview-expander-icon-stub"
+      />
+    </div>
+  </li>
+  <li
+    aria-disabled="true"
+    aria-label="Column  4"
+    aria-level="1"
+    aria-selected="true"
+    class="dx-treeview-node dx-treeview-item-with-checkbox dx-state-selected dx-treeview-root-node dx-treeview-node-is-leaf"
+    data-item-id="3"
+    role="treeitem"
+  >
+    <div
+      aria-disabled="true"
+      class="dx-state-disabled dx-item dx-treeview-item"
+    >
+      <div
+        class="dx-item-content dx-treeview-item-content"
+      >
+        <span>
+          Column  4
+        </span>
+      </div>
+      <div
+        aria-checked="true"
+        aria-disabled="true"
+        aria-invalid="false"
+        aria-label="Check state"
+        aria-readonly="false"
+        class="dx-widget dx-checkbox dx-checkbox-checked dx-state-disabled"
+        role="checkbox"
+      >
+        <input
+          type="hidden"
+          value="true"
+        />
+        <div
+          class="dx-checkbox-container"
+        >
+          <span
+            class="dx-checkbox-icon"
+          />
+          
+        </div>
+      </div>
+      <div
+        class="dx-treeview-expander-icon-stub"
+      />
+    </div>
+  </li>
+</ul>
+`;
+
+exports[`applying options with select mode updates markup on columnOption changed: intial markup 1`] = `
+<ul
+  class="dx-treeview-node-container"
+  role="group"
+>
+  <li
+    aria-label="Column  1"
+    aria-level="1"
+    aria-selected="true"
+    class="dx-treeview-node dx-treeview-item-with-checkbox dx-state-selected dx-treeview-root-node dx-treeview-node-is-leaf"
+    data-item-id="0"
+    role="treeitem"
+  >
+    <div
+      class="dx-item dx-treeview-item"
+    >
+      <div
+        class="dx-item-content dx-treeview-item-content"
+      >
+        <span>
+          Column  1
+        </span>
+      </div>
+      <div
+        aria-checked="true"
+        aria-invalid="false"
+        aria-label="Check state"
+        aria-readonly="false"
+        class="dx-widget dx-checkbox dx-checkbox-checked"
+        role="checkbox"
+      >
+        <input
+          type="hidden"
+          value="true"
+        />
+        <div
+          class="dx-checkbox-container"
+        >
+          <span
+            class="dx-checkbox-icon"
+          />
+          
+        </div>
+      </div>
+      <div
+        class="dx-treeview-expander-icon-stub"
+      />
+    </div>
+  </li>
+  <li
+    aria-label="Column  2"
+    aria-level="1"
+    aria-selected="true"
+    class="dx-treeview-node dx-treeview-item-with-checkbox dx-state-selected dx-treeview-root-node dx-treeview-node-is-leaf"
+    data-item-id="1"
+    role="treeitem"
+  >
+    <div
+      class="dx-item dx-treeview-item"
+    >
+      <div
+        class="dx-item-content dx-treeview-item-content"
+      >
+        <span>
+          Column  2
+        </span>
+      </div>
+      <div
+        aria-checked="true"
+        aria-invalid="false"
+        aria-label="Check state"
+        aria-readonly="false"
+        class="dx-widget dx-checkbox dx-checkbox-checked"
+        role="checkbox"
+      >
+        <input
+          type="hidden"
+          value="true"
+        />
+        <div
+          class="dx-checkbox-container"
+        >
+          <span
+            class="dx-checkbox-icon"
+          />
+          
+        </div>
+      </div>
+      <div
+        class="dx-treeview-expander-icon-stub"
+      />
+    </div>
+  </li>
+  <li
+    aria-label="Column  3"
+    aria-level="1"
+    aria-selected="true"
+    class="dx-treeview-node dx-treeview-item-with-checkbox dx-state-selected dx-treeview-root-node dx-treeview-node-is-leaf"
+    data-item-id="2"
+    role="treeitem"
+  >
+    <div
+      class="dx-item dx-treeview-item"
+    >
+      <div
+        class="dx-item-content dx-treeview-item-content"
+      >
+        <span>
+          Column  3
+        </span>
+      </div>
+      <div
+        aria-checked="true"
+        aria-invalid="false"
+        aria-label="Check state"
+        aria-readonly="false"
+        class="dx-widget dx-checkbox dx-checkbox-checked"
+        role="checkbox"
+      >
+        <input
+          type="hidden"
+          value="true"
+        />
+        <div
+          class="dx-checkbox-container"
+        >
+          <span
+            class="dx-checkbox-icon"
+          />
+          
+        </div>
+      </div>
+      <div
+        class="dx-treeview-expander-icon-stub"
+      />
+    </div>
+  </li>
+  <li
+    aria-label="Column  4"
+    aria-level="1"
+    aria-selected="true"
+    class="dx-treeview-node dx-treeview-item-with-checkbox dx-state-selected dx-treeview-root-node dx-treeview-node-is-leaf"
+    data-item-id="3"
+    role="treeitem"
+  >
+    <div
+      class="dx-item dx-treeview-item"
+    >
+      <div
+        class="dx-item-content dx-treeview-item-content"
+      >
+        <span>
+          Column  4
+        </span>
+      </div>
+      <div
+        aria-checked="true"
+        aria-invalid="false"
+        aria-label="Check state"
+        aria-readonly="false"
+        class="dx-widget dx-checkbox dx-checkbox-checked"
+        role="checkbox"
+      >
+        <input
+          type="hidden"
+          value="true"
+        />
+        <div
+          class="dx-checkbox-container"
+        >
+          <span
+            class="dx-checkbox-icon"
+          />
+          
+        </div>
+      </div>
+      <div
+        class="dx-treeview-expander-icon-stub"
+      />
+    </div>
+  </li>
+</ul>
+`;
+
+exports[`applying options with select mode updates markup on columnOption changed: second column was selected 1`] = `
+<ul
+  class="dx-treeview-node-container"
+  role="group"
+>
+  <li
+    aria-label="Column  1"
+    aria-level="1"
+    aria-selected="true"
+    class="dx-treeview-node dx-treeview-item-with-checkbox dx-state-selected dx-treeview-root-node dx-treeview-node-is-leaf"
+    data-item-id="0"
+    role="treeitem"
+  >
+    <div
+      class="dx-item dx-treeview-item"
+    >
+      <div
+        class="dx-item-content dx-treeview-item-content"
+      >
+        <span>
+          Column  1
+        </span>
+      </div>
+      <div
+        aria-checked="true"
+        aria-invalid="false"
+        aria-label="Check state"
+        aria-readonly="false"
+        class="dx-widget dx-checkbox dx-checkbox-checked"
+        role="checkbox"
+      >
+        <input
+          type="hidden"
+          value="true"
+        />
+        <div
+          class="dx-checkbox-container"
+        >
+          <span
+            class="dx-checkbox-icon"
+          />
+          
+        </div>
+      </div>
+      <div
+        class="dx-treeview-expander-icon-stub"
+      />
+    </div>
+  </li>
+  <li
+    aria-label="Column  2"
+    aria-level="1"
+    aria-selected="true"
+    class="dx-treeview-node dx-treeview-item-with-checkbox dx-treeview-root-node dx-treeview-node-is-leaf dx-state-selected"
+    data-item-id="1"
+    role="treeitem"
+  >
+    <div
+      class="dx-item dx-treeview-item"
+    >
+      <div
+        class="dx-item-content dx-treeview-item-content"
+      >
+        <span>
+          Column  2
+        </span>
+      </div>
+      <div
+        aria-checked="true"
+        aria-invalid="false"
+        aria-label="Check state"
+        aria-readonly="false"
+        class="dx-widget dx-checkbox dx-checkbox-checked"
+        role="checkbox"
+      >
+        <input
+          type="hidden"
+          value="true"
+        />
+        <div
+          class="dx-checkbox-container"
+        >
+          <span
+            class="dx-checkbox-icon"
+          />
+          
+        </div>
+      </div>
+      <div
+        class="dx-treeview-expander-icon-stub"
+      />
+    </div>
+  </li>
+  <li
+    aria-label="Column  3"
+    aria-level="1"
+    aria-selected="true"
+    class="dx-treeview-node dx-treeview-item-with-checkbox dx-state-selected dx-treeview-root-node dx-treeview-node-is-leaf"
+    data-item-id="2"
+    role="treeitem"
+  >
+    <div
+      class="dx-item dx-treeview-item"
+    >
+      <div
+        class="dx-item-content dx-treeview-item-content"
+      >
+        <span>
+          Column  3
+        </span>
+      </div>
+      <div
+        aria-checked="true"
+        aria-invalid="false"
+        aria-label="Check state"
+        aria-readonly="false"
+        class="dx-widget dx-checkbox dx-checkbox-checked"
+        role="checkbox"
+      >
+        <input
+          type="hidden"
+          value="true"
+        />
+        <div
+          class="dx-checkbox-container"
+        >
+          <span
+            class="dx-checkbox-icon"
+          />
+          
+        </div>
+      </div>
+      <div
+        class="dx-treeview-expander-icon-stub"
+      />
+    </div>
+  </li>
+  <li
+    aria-label="Column  4"
+    aria-level="1"
+    aria-selected="true"
+    class="dx-treeview-node dx-treeview-item-with-checkbox dx-state-selected dx-treeview-root-node dx-treeview-node-is-leaf"
+    data-item-id="3"
+    role="treeitem"
+  >
+    <div
+      class="dx-item dx-treeview-item"
+    >
+      <div
+        class="dx-item-content dx-treeview-item-content"
+      >
+        <span>
+          Column  4
+        </span>
+      </div>
+      <div
+        aria-checked="true"
+        aria-invalid="false"
+        aria-label="Check state"
+        aria-readonly="false"
+        class="dx-widget dx-checkbox dx-checkbox-checked"
+        role="checkbox"
+      >
+        <input
+          type="hidden"
+          value="true"
+        />
+        <div
+          class="dx-checkbox-container"
+        >
+          <span
+            class="dx-checkbox-icon"
+          />
+          
+        </div>
+      </div>
+      <div
+        class="dx-treeview-expander-icon-stub"
+      />
+    </div>
+  </li>
+</ul>
+`;
+
+exports[`applying options with select mode updates markup on columnOption changed: second column was unselected 1`] = `
+<ul
+  class="dx-treeview-node-container"
+  role="group"
+>
+  <li
+    aria-label="Column  1"
+    aria-level="1"
+    aria-selected="true"
+    class="dx-treeview-node dx-treeview-item-with-checkbox dx-state-selected dx-treeview-root-node dx-treeview-node-is-leaf"
+    data-item-id="0"
+    role="treeitem"
+  >
+    <div
+      class="dx-item dx-treeview-item"
+    >
+      <div
+        class="dx-item-content dx-treeview-item-content"
+      >
+        <span>
+          Column  1
+        </span>
+      </div>
+      <div
+        aria-checked="true"
+        aria-invalid="false"
+        aria-label="Check state"
+        aria-readonly="false"
+        class="dx-widget dx-checkbox dx-checkbox-checked"
+        role="checkbox"
+      >
+        <input
+          type="hidden"
+          value="true"
+        />
+        <div
+          class="dx-checkbox-container"
+        >
+          <span
+            class="dx-checkbox-icon"
+          />
+          
+        </div>
+      </div>
+      <div
+        class="dx-treeview-expander-icon-stub"
+      />
+    </div>
+  </li>
+  <li
+    aria-label="Column  2"
+    aria-level="1"
+    aria-selected="false"
+    class="dx-treeview-node dx-treeview-item-with-checkbox dx-treeview-root-node dx-treeview-node-is-leaf"
+    data-item-id="1"
+    role="treeitem"
+  >
+    <div
+      class="dx-item dx-treeview-item"
+    >
+      <div
+        class="dx-item-content dx-treeview-item-content"
+      >
+        <span>
+          Column  2
+        </span>
+      </div>
+      <div
+        aria-checked="false"
+        aria-invalid="false"
+        aria-label="Check state"
+        aria-readonly="false"
+        class="dx-widget dx-checkbox"
+        role="checkbox"
+      >
+        <input
+          type="hidden"
+          value="false"
+        />
+        <div
+          class="dx-checkbox-container"
+        >
+          <span
+            class="dx-checkbox-icon"
+          />
+          
+        </div>
+      </div>
+      <div
+        class="dx-treeview-expander-icon-stub"
+      />
+    </div>
+  </li>
+  <li
+    aria-label="Column  3"
+    aria-level="1"
+    aria-selected="true"
+    class="dx-treeview-node dx-treeview-item-with-checkbox dx-state-selected dx-treeview-root-node dx-treeview-node-is-leaf"
+    data-item-id="2"
+    role="treeitem"
+  >
+    <div
+      class="dx-item dx-treeview-item"
+    >
+      <div
+        class="dx-item-content dx-treeview-item-content"
+      >
+        <span>
+          Column  3
+        </span>
+      </div>
+      <div
+        aria-checked="true"
+        aria-invalid="false"
+        aria-label="Check state"
+        aria-readonly="false"
+        class="dx-widget dx-checkbox dx-checkbox-checked"
+        role="checkbox"
+      >
+        <input
+          type="hidden"
+          value="true"
+        />
+        <div
+          class="dx-checkbox-container"
+        >
+          <span
+            class="dx-checkbox-icon"
+          />
+          
+        </div>
+      </div>
+      <div
+        class="dx-treeview-expander-icon-stub"
+      />
+    </div>
+  </li>
+  <li
+    aria-label="Column  4"
+    aria-level="1"
+    aria-selected="true"
+    class="dx-treeview-node dx-treeview-item-with-checkbox dx-state-selected dx-treeview-root-node dx-treeview-node-is-leaf"
+    data-item-id="3"
+    role="treeitem"
+  >
+    <div
+      class="dx-item dx-treeview-item"
+    >
+      <div
+        class="dx-item-content dx-treeview-item-content"
+      >
+        <span>
+          Column  4
+        </span>
+      </div>
+      <div
+        aria-checked="true"
+        aria-invalid="false"
+        aria-label="Check state"
+        aria-readonly="false"
+        class="dx-widget dx-checkbox dx-checkbox-checked"
+        role="checkbox"
+      >
+        <input
+          type="hidden"
+          value="true"
+        />
+        <div
+          class="dx-checkbox-container"
+        >
+          <span
+            class="dx-checkbox-icon"
+          />
+          
+        </div>
+      </div>
+      <div
+        class="dx-treeview-expander-icon-stub"
+      />
+    </div>
+  </li>
+</ul>
+`;
+
+exports[`applying options with select mode updates markup on columnOption changed: third column caption was changed 1`] = `
+<ul
+  class="dx-treeview-node-container"
+  role="group"
+>
+  <li
+    aria-label="Column  1"
+    aria-level="1"
+    aria-selected="true"
+    class="dx-treeview-node dx-treeview-item-with-checkbox dx-state-selected dx-treeview-root-node dx-treeview-node-is-leaf"
+    data-item-id="0"
+    role="treeitem"
+  >
+    <div
+      class="dx-item dx-treeview-item"
+    >
+      <div
+        class="dx-item-content dx-treeview-item-content"
+      >
+        <span>
+          Column  1
+        </span>
+      </div>
+      <div
+        aria-checked="true"
+        aria-invalid="false"
+        aria-label="Check state"
+        aria-readonly="false"
+        class="dx-widget dx-checkbox dx-checkbox-checked"
+        role="checkbox"
+      >
+        <input
+          type="hidden"
+          value="true"
+        />
+        <div
+          class="dx-checkbox-container"
+        >
+          <span
+            class="dx-checkbox-icon"
+          />
+          
+        </div>
+      </div>
+      <div
+        class="dx-treeview-expander-icon-stub"
+      />
+    </div>
+  </li>
+  <li
+    aria-label="Column  2"
+    aria-level="1"
+    aria-selected="true"
+    class="dx-treeview-node dx-treeview-item-with-checkbox dx-state-selected dx-treeview-root-node dx-treeview-node-is-leaf"
+    data-item-id="1"
+    role="treeitem"
+  >
+    <div
+      class="dx-item dx-treeview-item"
+    >
+      <div
+        class="dx-item-content dx-treeview-item-content"
+      >
+        <span>
+          Column  2
+        </span>
+      </div>
+      <div
+        aria-checked="true"
+        aria-invalid="false"
+        aria-label="Check state"
+        aria-readonly="false"
+        class="dx-widget dx-checkbox dx-checkbox-checked"
+        role="checkbox"
+      >
+        <input
+          type="hidden"
+          value="true"
+        />
+        <div
+          class="dx-checkbox-container"
+        >
+          <span
+            class="dx-checkbox-icon"
+          />
+          
+        </div>
+      </div>
+      <div
+        class="dx-treeview-expander-icon-stub"
+      />
+    </div>
+  </li>
+  <li
+    aria-label="new caption"
+    aria-level="1"
+    aria-selected="true"
+    class="dx-treeview-node dx-treeview-item-with-checkbox dx-state-selected dx-treeview-root-node dx-treeview-node-is-leaf"
+    data-item-id="2"
+    role="treeitem"
+  >
+    <div
+      class="dx-item dx-treeview-item"
+    >
+      <div
+        class="dx-item-content dx-treeview-item-content"
+      >
+        <span>
+          new caption
+        </span>
+      </div>
+      <div
+        aria-checked="true"
+        aria-invalid="false"
+        aria-label="Check state"
+        aria-readonly="false"
+        class="dx-widget dx-checkbox dx-checkbox-checked"
+        role="checkbox"
+      >
+        <input
+          type="hidden"
+          value="true"
+        />
+        <div
+          class="dx-checkbox-container"
+        >
+          <span
+            class="dx-checkbox-icon"
+          />
+          
+        </div>
+      </div>
+      <div
+        class="dx-treeview-expander-icon-stub"
+      />
+    </div>
+  </li>
+  <li
+    aria-label="Column  4"
+    aria-level="1"
+    aria-selected="true"
+    class="dx-treeview-node dx-treeview-item-with-checkbox dx-state-selected dx-treeview-root-node dx-treeview-node-is-leaf"
+    data-item-id="3"
+    role="treeitem"
+  >
+    <div
+      class="dx-item dx-treeview-item"
+    >
+      <div
+        class="dx-item-content dx-treeview-item-content"
+      >
+        <span>
+          Column  4
+        </span>
+      </div>
+      <div
+        aria-checked="true"
+        aria-invalid="false"
+        aria-label="Check state"
+        aria-readonly="false"
+        class="dx-widget dx-checkbox dx-checkbox-checked"
+        role="checkbox"
+      >
+        <input
+          type="hidden"
+          value="true"
+        />
+        <div
+          class="dx-checkbox-container"
+        >
+          <span
+            class="dx-checkbox-icon"
+          />
+          
+        </div>
+      </div>
+      <div
+        class="dx-treeview-expander-icon-stub"
+      />
+    </div>
+  </li>
+</ul>
+`;
+
+exports[`render has columnChooser toolbar button 1`] = `
+<div>
+  <div>
+    <div
+      class="dx-toolbar dx-widget dx-visibility-change-handler dx-collection"
+      role="toolbar"
+    >
+      <div
+        class="dx-toolbar-items-container"
+      >
+        <div
+          class="dx-toolbar-before"
+          role="presentation"
+        />
+        <div
+          class="dx-toolbar-center"
+          role="presentation"
+        />
+        <div
+          class="dx-toolbar-after"
+          role="presentation"
+        >
+          <div
+            class="dx-item dx-toolbar-item dx-toolbar-button dx-toolbar-item-auto-hide dx-toolbar-text-auto-hide"
+          >
+            <div
+              class="dx-item-content dx-toolbar-item-content"
+            >
+              <div
+                aria-haspopup="dialog"
+                aria-label="column-chooser"
+                class="dx-widget dx-button dx-button-mode-contained dx-button-normal dx-button-has-icon dx-cardview-column-chooser-button"
+                role="button"
+                tabindex="0"
+              >
+                <div
+                  class="dx-button-content"
+                >
+                  <i
+                    class="dx-icon dx-icon-column-chooser"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            class="dx-toolbar-button dx-toolbar-menu-container dx-state-invisible"
+          >
+            <div
+              aria-expanded="false"
+              aria-haspopup="true"
+              aria-label="overflow"
+              class="dx-widget dx-button dx-button-mode-contained dx-button-normal dx-button-has-icon dx-dropdownmenu dx-dropdownmenu-button"
+              role="button"
+              tabindex="0"
+            >
+              <div
+                class="dx-button-content"
+              >
+                <i
+                  class="dx-icon dx-icon-overflow"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div>
+    
+  </div>
+</div>
+`;
+
+exports[`render matches markup in select mode 1`] = `
+<div>
+  <div
+    class="dx-overlay dx-popup dx-widget dx-visibility-change-handler"
+  >
+    <div
+      aria-label="Column Chooser"
+      class="dx-overlay-content dx-rtl dx-popup-normal"
+      role="dialog"
+      style="width: 250px; height: 260px;"
+      tabindex="0"
+    >
+      <div
+        class="dx-popup-content dx-popup-content-scrollable dx-cardview-column-chooser-list dx-cardview-column-chooser-plain"
+      >
+        <div
+          class="dx-widget dx-collection dx-treeview"
+        >
+          <div
+            class="dx-scrollable dx-visibility-change-handler dx-scrollable-vertical dx-scrollable-simulated"
+          >
+            <div
+              class="dx-scrollable-wrapper"
+            >
+              <div
+                class="dx-scrollable-container"
+              >
+                <div
+                  class="dx-scrollable-content"
+                  style="left: 0px; top: 0px; transform: none;"
+                >
+                  <div
+                    aria-checked="true"
+                    aria-invalid="false"
+                    aria-label="Select All"
+                    aria-readonly="false"
+                    class="dx-widget dx-checkbox dx-checkbox-checked dx-checkbox-has-text dx-treeview-select-all-item dx-state-selected"
+                    role="checkbox"
+                    tabindex="0"
+                  >
+                    <input
+                      type="hidden"
+                      value="true"
+                    />
+                    <div
+                      class="dx-checkbox-container"
+                    >
+                      <span
+                        class="dx-checkbox-icon"
+                      />
+                      <span
+                        class="dx-checkbox-text"
+                      >
+                        Select All
+                      </span>
+                    </div>
+                  </div>
+                  <ul
+                    class="dx-treeview-node-container"
+                    role="tree"
+                    tabindex="0"
+                  >
+                    <li
+                      aria-label="Column  1"
+                      aria-level="1"
+                      aria-selected="true"
+                      class="dx-treeview-node dx-treeview-item-with-checkbox dx-state-selected dx-treeview-root-node dx-treeview-node-is-leaf"
+                      data-item-id="0"
+                      role="treeitem"
+                    >
+                      <div
+                        class="dx-item dx-treeview-item"
+                      >
+                        <div
+                          class="dx-item-content dx-treeview-item-content"
+                        >
+                          <span>
+                            Column  1
+                          </span>
+                        </div>
+                        <div
+                          aria-checked="true"
+                          aria-invalid="false"
+                          aria-label="Check state"
+                          aria-readonly="false"
+                          class="dx-widget dx-checkbox dx-checkbox-checked"
+                          role="checkbox"
+                        >
+                          <input
+                            type="hidden"
+                            value="true"
+                          />
+                          <div
+                            class="dx-checkbox-container"
+                          >
+                            <span
+                              class="dx-checkbox-icon"
+                            />
+                            
+                          </div>
+                        </div>
+                        <div
+                          class="dx-treeview-expander-icon-stub"
+                        />
+                      </div>
+                    </li>
+                    <li
+                      aria-label="Column  2"
+                      aria-level="1"
+                      aria-selected="true"
+                      class="dx-treeview-node dx-treeview-item-with-checkbox dx-state-selected dx-treeview-root-node dx-treeview-node-is-leaf"
+                      data-item-id="1"
+                      role="treeitem"
+                    >
+                      <div
+                        class="dx-item dx-treeview-item"
+                      >
+                        <div
+                          class="dx-item-content dx-treeview-item-content"
+                        >
+                          <span>
+                            Column  2
+                          </span>
+                        </div>
+                        <div
+                          aria-checked="true"
+                          aria-invalid="false"
+                          aria-label="Check state"
+                          aria-readonly="false"
+                          class="dx-widget dx-checkbox dx-checkbox-checked"
+                          role="checkbox"
+                        >
+                          <input
+                            type="hidden"
+                            value="true"
+                          />
+                          <div
+                            class="dx-checkbox-container"
+                          >
+                            <span
+                              class="dx-checkbox-icon"
+                            />
+                            
+                          </div>
+                        </div>
+                        <div
+                          class="dx-treeview-expander-icon-stub"
+                        />
+                      </div>
+                    </li>
+                    <li
+                      aria-label="Column  3"
+                      aria-level="1"
+                      aria-selected="true"
+                      class="dx-treeview-node dx-treeview-item-with-checkbox dx-state-selected dx-treeview-root-node dx-treeview-node-is-leaf"
+                      data-item-id="2"
+                      role="treeitem"
+                    >
+                      <div
+                        class="dx-item dx-treeview-item"
+                      >
+                        <div
+                          class="dx-item-content dx-treeview-item-content"
+                        >
+                          <span>
+                            Column  3
+                          </span>
+                        </div>
+                        <div
+                          aria-checked="true"
+                          aria-invalid="false"
+                          aria-label="Check state"
+                          aria-readonly="false"
+                          class="dx-widget dx-checkbox dx-checkbox-checked"
+                          role="checkbox"
+                        >
+                          <input
+                            type="hidden"
+                            value="true"
+                          />
+                          <div
+                            class="dx-checkbox-container"
+                          >
+                            <span
+                              class="dx-checkbox-icon"
+                            />
+                            
+                          </div>
+                        </div>
+                        <div
+                          class="dx-treeview-expander-icon-stub"
+                        />
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+                <div
+                  class="dx-scrollable-scrollbar dx-widget dx-scrollbar-vertical dx-scrollbar-hoverable"
+                >
+                  <div
+                    class="dx-scrollable-scroll dx-state-invisible"
+                    style="height: 15px; transform: translate(0px, 0px);"
+                  >
+                    <div
+                      class="dx-scrollable-scroll-content"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+</div>
+`;
