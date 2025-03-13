@@ -1369,7 +1369,10 @@ QUnit.module('format: percent format', moduleConfig, () => {
     [
         { text: '14.55', value: 0.1455 },
         { text: '20.2', value: 0.202 },
-        { text: '1.0154', value: 0.010154, format: '#0.####%' }
+        { text: '1.0154', value: 0.010154, format: '#0.####%' },
+        { text: '0.123456789', value: 0.00123456789, format: '#0.###########%' },
+        { text: '0.123456789876', value: 0.00123456789876, format: '#0.##############%' },
+        { text: '0.12345678987654', value: 0.0012345678987654, format: '#0.################%' },
     ].forEach(({ text, value, format }) => {
         QUnit.test(`percent format should correctly handle float values, value is ${value}`, function(assert) {
             this.instance.option('format', format ? format : '#0.##%');
@@ -1378,6 +1381,14 @@ QUnit.module('format: percent format', moduleConfig, () => {
             assert.strictEqual(this.input.val(), `${text}%`, 'text is correct');
             assert.strictEqual(this.instance.option('value'), value, 'value is correct');
         });
+    });
+
+    QUnit.test('It should be possible to use percent format with more than 7 fractional digits (T1277123)', function(assert) {
+        this.instance.option('format', '#0.###########%');
+        this.keyboard.type('0.123456789').change();
+
+        assert.strictEqual(this.input.val(), '0.123456789%', 'text is correct');
+        assert.strictEqual(this.instance.option('value'), 0.00123456789, 'value is correct');
     });
 
     [

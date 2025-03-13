@@ -44,18 +44,31 @@ export interface IBaseComponent extends ComponentPublicInstance, IWidgetComponen
 }
 
 const includeAttrs = ['id', 'class', 'style'];
+const dxClassesPrefix = 'dx-';
 
 config({
   buyNowLink: 'https://go.devexpress.com/Licensing_Installer_Watermark_DevExtremeVue.aspx',
   licensingDocLink: 'https://go.devexpress.com/Licensing_Documentation_DevExtremeVue.aspx',
 });
 
-function getAttrs(attrs, dxClasses: string[]) {
+function parseClassList(classList: string): string[] {
+  return classList.trim().split(/\s+/);
+}
+
+function prepareAttrs(attrs, dxClassesSyncedWithClassAttr: string) {
   const attributes = {};
   includeAttrs.forEach((attr) => {
     const attrValue = attrs[attr];
     if (attrValue !== undefined && attrValue !== null) {
-      attributes[attr] = attr === 'class' && dxClasses.length ? `${attrValue} ${dxClasses.join(' ')}` : attrValue;
+      if (attr === 'class') {
+        const nonDXClassesFromAttr = attrValue.split(' ')
+          .filter((classFromAttr: string) => !classFromAttr.startsWith(dxClassesPrefix) && !dxClassesSyncedWithClassAttr.includes(classFromAttr))
+          .join(' ');
+
+        attributes[attr] = [nonDXClassesFromAttr, dxClassesSyncedWithClassAttr].filter((item) => item !== '').join(' ');
+      } else {
+        attributes[attr] = attrValue;
+      }
     }
   });
 
@@ -69,6 +82,7 @@ function initBaseComponent() {
     data() {
       return {
         eventBus: CreateCallback(),
+        prevClassAttr: '',
       };
     },
 
@@ -88,10 +102,11 @@ function initBaseComponent() {
       pullAllChildren(defaultSlots(this), children, thisComponent.$_config);
 
       this.$_processChildren(children);
+
       return h(
         'div',
         {
-          ...getAttrs(this.$attrs, dxClasses),
+          ...prepareAttrs(this.$attrs, dxClasses.join(' ')),
         },
         children,
       );
@@ -100,6 +115,8 @@ function initBaseComponent() {
     beforeUpdate() {
       const thisComponent = this as any as IBaseComponent;
       thisComponent.$_config.setPrevNestedOptions(thisComponent.$_config.getNestedOptionValues());
+
+      this.$_syncElementClassesWithClassAttr();
     },
 
     updated() {
@@ -175,6 +192,23 @@ function initBaseComponent() {
     },
 
     methods: {
+      $_syncElementClassesWithClassAttr(): void {
+        const newClassAttr = typeof this.$attrs?.class === 'string' ? this.$attrs?.class : '';
+
+        if (this.prevClassAttr === newClassAttr) {
+          return;
+        }
+
+        if (this.prevClassAttr.length) {
+          this.$el.classList.remove(...parseClassList(this.prevClassAttr));
+        }
+
+        if (newClassAttr.length) {
+          this.$el.classList.add(...parseClassList(newClassAttr));
+        }
+
+        this.prevClassAttr = newClassAttr;
+      },
       $_applyConfigurationChanges(): void {
         const thisComponent = this as any as IBaseComponent;
         thisComponent.$_config.componentsCountChanged.forEach(({ optionPath, isCollection, removed }) => {
@@ -300,7 +334,7 @@ function cleanWidgetNode(node: Node) {
 }
 
 function pickOutDxClasses(el: Element) {
-  return el && Array.from(el.classList).filter((item: string) => item.startsWith('dx-'));
+  return el && Array.from(el.classList).filter((item: string) => item.startsWith(dxClassesPrefix));
 }
 
 function restoreNodes(el: Element, nodes: Element[]) {
@@ -335,6 +369,9 @@ function initDxComponent() {
       const thisComponent = this as any as IBaseComponent;
 
       this.$_createWidget(this.$el);
+
+      this.$_syncElementClassesWithClassAttr();
+
       thisComponent.$_instance.endUpdate();
       restoreNodes(this.$el, nodes);
 

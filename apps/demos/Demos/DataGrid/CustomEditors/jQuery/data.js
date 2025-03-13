@@ -11,7 +11,7 @@ const statuses = [{
 },
 ];
 
-const url = 'https://js.devexpress.com/Demos/Mvc/api/CustomEditors';
+const url = 'https://js.devexpress.com/Demos/NetCore/api/DataGridCustomEditors';
 
 const employees = DevExpress.data.AspNet.createStore({
   key: 'ID',

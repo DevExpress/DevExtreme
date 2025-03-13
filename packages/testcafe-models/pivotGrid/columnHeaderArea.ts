@@ -13,7 +13,7 @@ const CLASSES = {
 };
 
 export default class ColumnHeaderArea {
-  private readonly element: Selector;
+  public readonly element: Selector;
 
   constructor(selector: Selector) {
     this.element = selector.find(`.${CLASSES.columnHeader}`);

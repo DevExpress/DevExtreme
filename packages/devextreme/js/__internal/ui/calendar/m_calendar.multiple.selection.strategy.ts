@@ -31,7 +31,7 @@ class CalendarMultiSelectionStrategy extends CalendarSelectionStrategy {
     this.dateValue(value, e);
   }
 
-  updateAriaSelected(value, previousValue) {
+  updateAriaSelected(value?, previousValue?) {
     value ??= this.dateOption('value');
     previousValue ??= [];
 

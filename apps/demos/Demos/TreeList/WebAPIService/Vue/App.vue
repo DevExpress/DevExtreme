@@ -78,7 +78,7 @@ import {
 } from 'devextreme-vue/tree-list';
 import { createStore } from 'devextreme-aspnet-data-nojquery';
 
-const url = 'https://js.devexpress.com/Demos/Mvc/api/TreeListTasks';
+const url = 'https://js.devexpress.com/Demos/NetCore/api/TreeListTasks';
 
 const tasksData = createStore({
   key: 'Task_ID',

@@ -258,6 +258,9 @@ const _componentItem = (props: IItemProps) => {
     elementDescriptor: {
       OptionName: "items",
       IsCollectionItem: true,
+      ExpectedChildren: {
+        item: { optionName: "items", isCollectionItem: true }
+      },
       TemplateProps: [{
         tmplOption: "template",
         render: "render",
@@ -400,6 +403,9 @@ const _componentTableContextMenuItem = (props: ITableContextMenuItemProps) => {
     elementDescriptor: {
       OptionName: "items",
       IsCollectionItem: true,
+      ExpectedChildren: {
+        item: { optionName: "items", isCollectionItem: true }
+      },
       TemplateProps: [{
         tmplOption: "template",
         render: "render",

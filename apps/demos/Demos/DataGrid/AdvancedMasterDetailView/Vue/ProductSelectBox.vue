@@ -24,7 +24,7 @@ const props = defineProps<{
   supplierId: number
 }>();
 
-const url = 'https://js.devexpress.com/Demos/Mvc/api/DataGridAdvancedMasterDetailView';
+const url = 'https://js.devexpress.com/Demos/NetCore/api/DataGridAdvancedMasterDetailView';
 
 const dataSource = createStore({
   key: 'ProductID',

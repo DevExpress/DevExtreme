@@ -97,7 +97,7 @@ interface RenderRWorkspaceOptions {
 
 const { tableCreator } = tableCreatorModule;
 
-// TODO: The constant is needed so that the dragging is not sharp. To prevent small twitches
+// The constant is needed so that the dragging is not sharp. To prevent small twitches
 const DRAGGING_MOUSE_FAULT = 10;
 
 // @ts-expect-error
@@ -1255,7 +1255,7 @@ class SchedulerWorkSpace extends WidgetObserver {
     return index * this._getRowCount();
   }
 
-  _getDroppableCell() {
+  getDroppableCell() {
     return this._getDateTables().find(`.${DATE_TABLE_DROPPABLE_CELL_CLASS}`);
   }
 
@@ -1277,7 +1277,6 @@ class SchedulerWorkSpace extends WidgetObserver {
     return this._dom_getDateCell(indexes);
   }
 
-  // TODO DOM adapter
   _dom_getDateCell(position) {
     return this._$dateTable
       .find(`tr:not(.${VIRTUAL_ROW_CLASS})`)
@@ -1491,16 +1490,8 @@ class SchedulerWorkSpace extends WidgetObserver {
     return index;
   }
 
-  getDroppableCellIndex() {
-    const $droppableCell = this._getDroppableCell();
-    const $row = $droppableCell.parent();
-    const rowIndex = $row.index();
-
-    return rowIndex * $row.find('td').length + $droppableCell.index();
-  }
-
   getDataByDroppableCell() {
-    const cellData = this.getCellData($(this._getDroppableCell()));
+    const cellData = this.getCellData($(this.getDroppableCell()));
     const { allDay } = cellData;
     const { startDate } = cellData;
     const { endDate } = cellData;
@@ -1676,12 +1667,17 @@ class SchedulerWorkSpace extends WidgetObserver {
     return this._isVerticalGroupedWorkSpace() && this.getScrollable().scrollTop() !== 0;
   }
 
+  getCellByCoordinates(coordinates, allDay) {
+    const $cells = this._getCells(allDay);
+    const cellIndex = this.getCellIndexByCoordinates(coordinates, allDay);
+
+    return $cells.eq(cellIndex);
+  }
+
   getCellDataByCoordinates(coordinates, allDay) {
     const key = JSON.stringify({ top: coordinates.top, left: coordinates.left });
     return this.cache.get(key, () => {
-      const $cells = this._getCells(allDay);
-      const cellIndex = this.getCellIndexByCoordinates(coordinates, allDay);
-      const $cell = $cells.eq(cellIndex);
+      const $cell = this.getCellByCoordinates(coordinates, allDay);
 
       return this.getCellData($cell);
     });
@@ -1759,7 +1755,7 @@ class SchedulerWorkSpace extends WidgetObserver {
       scrolledRowCount += 1;
     }
 
-    // TODO horizontal v-scrolling
+    // horizontal v-scrolling
     const fullScrolledColumnCount = scrollableScrollLeft / cellWidth;
     let scrolledColumnCount = Math.floor(fullScrolledColumnCount);
     if (scrollableScrollLeft % cellWidth !== 0) {
@@ -1861,7 +1857,7 @@ class SchedulerWorkSpace extends WidgetObserver {
   }
 
   removeDroppableCellClass($cellElement?: any) {
-    const $cell = $cellElement || this._getDroppableCell();
+    const $cell = $cellElement || this.getDroppableCell();
     $cell?.removeClass(DATE_TABLE_DROPPABLE_CELL_CLASS);
   }
 
@@ -2231,7 +2227,7 @@ class SchedulerWorkSpace extends WidgetObserver {
       this.dragBehavior,
       enableDefaultDragging,
       disableDefaultDragging,
-      () => this._getDroppableCell(),
+      () => this.getDroppableCell(),
       () => this._getDateTables(),
       () => this.removeDroppableCellClass(),
       () => this.getCellWidth(),
@@ -2824,8 +2820,8 @@ class SchedulerWorkSpace extends WidgetObserver {
   }
 
   _removeAllDayElements() {
-    this._$allDayTable && this._$allDayTable.remove();
-    this._$allDayTitle && this._$allDayTitle.remove();
+    this._$allDayTable?.remove();
+    this._$allDayTitle?.remove();
   }
 
   _cleanView(): void {
@@ -2858,7 +2854,7 @@ class SchedulerWorkSpace extends WidgetObserver {
   _cleanTableWidths() {
     this._$headerPanel.css('width', '');
     this._$dateTable.css('width', '');
-    this._$allDayTable && this._$allDayTable.css('width', '');
+    this._$allDayTable?.css('width', '');
   }
 
   _disposeRenovatedComponents() {

@@ -1,9 +1,9 @@
 <template>
   <div
     class="chat-container"
-    :class="{'dx-chat-disabled' : isDisabled == true }"
   >
     <DxChat
+      :class="{'dx-chat-disabled' : isDisabled == true }"
       ref="chatElement"
       :height="710"
       :data-source="dataSource"

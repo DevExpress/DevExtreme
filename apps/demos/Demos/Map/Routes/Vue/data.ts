@@ -5,7 +5,7 @@ export const markersData = [{
 }, {
   location: { lat: 40.753889, lng: -73.981389 },
 }, {
-  location: 'City Hall Park,New York,NY',
+  location: [40.713474, -74.005536],
 }];
 
 export const routesData = [{
@@ -17,6 +17,6 @@ export const routesData = [{
     [40.782500, -73.966111],
     [40.755833, -73.986389],
     [40.753889, -73.981389],
-    'City Hall Park,New York,NY',
+    [40.713474, -74.005536],
   ],
 }];

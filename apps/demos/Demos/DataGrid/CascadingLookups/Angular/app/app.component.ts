@@ -51,7 +51,7 @@ export class AppComponent {
 
   setStateValue(this: DxDataGridTypes.Column, newData: Employee, value: number, currentRowData: Employee) {
     newData.CityID = null;
-    this.defaultSetCellValue(newData, value, currentRowData);
+    this.defaultSetCellValue?.(newData, value, currentRowData);
   }
 }
 

@@ -21,7 +21,7 @@ const getFilteredCities = (options: { data?: Employee; }) => ({
 
 function setStateValue(rowData: Employee, value) {
   rowData.CityID = null;
-  this.defaultSetCellValue(rowData, value);
+  this.defaultSetCellValue?.(rowData, value);
 }
 
 const App = () => (

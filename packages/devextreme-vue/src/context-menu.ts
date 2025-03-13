@@ -418,6 +418,9 @@ const DxItem = defineComponent(DxItemConfig);
 
 (DxItem as any).$_optionName = "items";
 (DxItem as any).$_isCollectionItem = true;
+(DxItem as any).$_expectedChildren = {
+  item: { isCollectionItem: true, optionName: "items" }
+};
 
 const DxMyConfig = {
   emits: {
@@ -485,6 +488,13 @@ prepareConfigurationComponentConfig(DxPositionConfig);
 const DxPosition = defineComponent(DxPositionConfig);
 
 (DxPosition as any).$_optionName = "position";
+(DxPosition as any).$_expectedChildren = {
+  at: { isCollectionItem: false, optionName: "at" },
+  boundaryOffset: { isCollectionItem: false, optionName: "boundaryOffset" },
+  collision: { isCollectionItem: false, optionName: "collision" },
+  my: { isCollectionItem: false, optionName: "my" },
+  offset: { isCollectionItem: false, optionName: "offset" }
+};
 
 const DxShowConfig = {
   emits: {
@@ -520,6 +530,10 @@ prepareConfigurationComponentConfig(DxShowConfig);
 const DxShow = defineComponent(DxShowConfig);
 
 (DxShow as any).$_optionName = "show";
+(DxShow as any).$_expectedChildren = {
+  from: { isCollectionItem: false, optionName: "from" },
+  to: { isCollectionItem: false, optionName: "to" }
+};
 
 const DxShowEventConfig = {
   emits: {
@@ -586,6 +600,9 @@ prepareConfigurationComponentConfig(DxToConfig);
 const DxTo = defineComponent(DxToConfig);
 
 (DxTo as any).$_optionName = "to";
+(DxTo as any).$_expectedChildren = {
+  position: { isCollectionItem: false, optionName: "position" }
+};
 
 export default DxContextMenu;
 export {

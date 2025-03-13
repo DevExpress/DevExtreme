@@ -7,7 +7,7 @@ import { type DataChange } from 'devextreme/ui/data_grid';
 import { sendRequest } from './utils.ts';
 import { type Order } from './data.ts';
 
-const URL = 'https://js.devexpress.com/Demos/Mvc/api/DataGridWebApi';
+const URL = 'https://js.devexpress.com/Demos/NetCore/api/DataGridWebApi';
 
 export type State = {
   orders: Order[],

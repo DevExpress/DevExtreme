@@ -1,7 +1,7 @@
 import config from '@js/core/config';
 import { isWindow } from '@js/core/utils/type';
 
-const getDefaultAlignment = (isRtlEnabled) => {
+const getDefaultAlignment = (isRtlEnabled?: boolean): 'left' | 'right' => {
   const rtlEnabled = isRtlEnabled ?? config().rtlEnabled;
 
   return rtlEnabled ? 'right' : 'left';

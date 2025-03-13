@@ -42,7 +42,7 @@ import 'whatwg-fetch';
 const dataSource = {
   load(loadOptions) {
     const parentIdsParam = loadOptions.parentIds;
-    const url = new URL('https://js.devexpress.com/Demos/Mvc/api/treeListData');
+    const url = new URL('https://js.devexpress.com/Demos/NetCore/api/treeListData');
     if (parentIdsParam) {
       parentIdsParam.forEach((id) => {
         url.searchParams.append('parentIds', id);

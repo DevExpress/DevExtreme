@@ -96,7 +96,7 @@ export class AppService {
   }
 
   userChatOnTypingStart() {
-    this.supportChatTypingUsersSubject.next([this.supportAgent]);
+    this.supportChatTypingUsersSubject.next([this.currentUser]);
   }
 
   userChatOnTypingEnd() {
@@ -104,7 +104,7 @@ export class AppService {
   }
 
   supportChatOnTypingStart() {
-    this.userChatTypingUsersSubject.next([this.currentUser]);
+    this.userChatTypingUsersSubject.next([this.supportAgent]);
   }
 
   supportChatOnTypingEnd() {

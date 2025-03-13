@@ -1,4 +1,5 @@
 /* eslint-disable max-classes-per-file, no-restricted-syntax */
+import { IElementDescriptor } from './configuration/react/element';
 import { TemplateInstantiationModel } from './types';
 
 export function generateID(): string {
@@ -59,4 +60,8 @@ export function capitalizeFirstLetter(text: string): string {
     return `${text[0].toUpperCase()}${text.substr(1)}`;
   }
   return '';
+}
+
+export function hasExpectedChildren(elementDescriptor: IElementDescriptor): boolean {
+  return !!Object.keys(elementDescriptor.ExpectedChildren || {}).length;
 }

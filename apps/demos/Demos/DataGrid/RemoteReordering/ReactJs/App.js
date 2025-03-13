@@ -8,7 +8,7 @@ import DataGrid, {
 } from 'devextreme-react/data-grid';
 import { createStore } from 'devextreme-aspnet-data-nojquery';
 
-const url = 'https://js.devexpress.com/Demos/Mvc/api/RowReordering';
+const url = 'https://js.devexpress.com/Demos/NetCore/api/DataGridRowReordering';
 const tasksStore = createStore({
   key: 'ID',
   loadUrl: `${url}/Tasks`,
@@ -63,6 +63,7 @@ const App = () => (
     </Column>
     <Column
       dataField="AssignedEmployee"
+      dataType="number"
       caption="Assignee"
       width={150}
     >

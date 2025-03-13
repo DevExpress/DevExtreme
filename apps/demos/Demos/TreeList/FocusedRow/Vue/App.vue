@@ -83,7 +83,7 @@ import {
 import DxNumberBox from 'devextreme-vue/number-box';
 import { createStore } from 'devextreme-aspnet-data-nojquery';
 
-const url = 'https://js.devexpress.com/Demos/Mvc/api/TreeListTasks';
+const url = 'https://js.devexpress.com/Demos/NetCore/api/TreeListTasks';
 const taskSubject = ref('');
 const taskAssigned = ref('');
 const startDate = ref('');

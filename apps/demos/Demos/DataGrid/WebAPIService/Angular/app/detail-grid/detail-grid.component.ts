@@ -22,7 +22,7 @@ export class DetailGridComponent implements AfterViewInit {
   ngAfterViewInit() {
     this.dataSource = new DataSource({
       store: AspNetData.createStore({
-        loadUrl: 'https://js.devexpress.com/Demos/Mvc/api/DataGridWebApi/OrderDetails',
+        loadUrl: 'https://js.devexpress.com/Demos/NetCore/api/DataGridWebApi/OrderDetails',
         loadParams: { orderID: this.key },
         onBeforeSend(method, ajaxOptions) {
           ajaxOptions.xhrFields = { withCredentials: true };

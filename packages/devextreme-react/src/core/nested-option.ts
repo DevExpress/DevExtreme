@@ -15,7 +15,8 @@ import {
 } from './configuration/react/element';
 
 import { useOptionScanning } from './use-option-scanning';
-import { NestedOptionContext, TemplateDiscoveryContext } from './contexts';
+import { NestedOptionContext, TemplateRenderingContext } from './contexts';
+import { hasExpectedChildren } from './helpers';
 
 interface INestedOptionMeta {
   optionName: string;
@@ -29,10 +30,15 @@ const NestedOption = function NestedOption<P>(
 ): React.ReactElement | null {
   const { children } = props;
   const { elementDescriptor, ...restProps } = props;
+  const { isTemplateRendering } = useContext(TemplateRenderingContext);
 
-  if (!elementDescriptor || typeof document === 'undefined') {
+  if (!elementDescriptor || typeof document === 'undefined' || isTemplateRendering) {
     return null;
   }
+
+  const usesNamedTemplate = elementDescriptor.TemplateProps?.some(
+    (prop) => props[prop.tmplOption] && typeof props[prop.tmplOption] === 'string',
+  );
 
   const {
     parentExpectedChildren,
@@ -41,38 +47,27 @@ const NestedOption = function NestedOption<P>(
     treeUpdateToken,
   } = useContext(NestedOptionContext);
 
-  const { discoveryRendering } = useContext(TemplateDiscoveryContext);
   const [optionComponentKey] = useState(getOptionComponentKey());
   const optionElement = getOptionInfo(elementDescriptor, restProps, parentExpectedChildren);
-  const templateContainer = useMemo(() => document.createElement('div'), []);
   const mainContainer = useMemo(() => document.createElement('div'), []);
+  const renderChildren = hasExpectedChildren(elementDescriptor) || usesNamedTemplate;
+
+  const getHasTemplate = renderChildren
+    ? () => !!mainContainer.childNodes.length
+    : () => !!children;
 
   const [
     config,
     context,
-  ] = useOptionScanning(optionElement, children, templateContainer, treeUpdateToken);
+  ] = useOptionScanning(optionElement, getHasTemplate, treeUpdateToken, 'option');
 
   useLayoutEffect(() => {
-    if (!discoveryRendering) {
-      triggerParentOptionsReady(config, optionElement.descriptor, treeUpdateToken, optionComponentKey);
-    }
+    triggerParentOptionsReady(config, optionElement.descriptor, treeUpdateToken, optionComponentKey);
   }, [treeUpdateToken]);
 
-  return discoveryRendering ? null : React.createElement(
+  return renderChildren ? React.createElement(
     React.Fragment,
     {},
-    createPortal(
-      React.createElement(
-        TemplateDiscoveryContext.Provider,
-        {
-          value: {
-            discoveryRendering: true,
-          },
-        },
-        children,
-      ),
-      templateContainer,
-    ),
     createPortal(
       React.createElement(
         NestedOptionContext.Provider,
@@ -83,7 +78,7 @@ const NestedOption = function NestedOption<P>(
       ),
       mainContainer,
     ),
-  );
+  ) : null;
 };
 
 export default NestedOption;

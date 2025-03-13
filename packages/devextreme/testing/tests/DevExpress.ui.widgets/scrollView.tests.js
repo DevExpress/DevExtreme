@@ -242,16 +242,17 @@ QUnit.module('dimension', moduleConfig, () => {
 });
 
 QUnit.module('onReachBottom', () => {
-    [0.33, 0.5, 0.67, 0.75, 0.8, 0.9, 1, 1.1, 1.2, 1.25, 1.34, 1.5, 1.875, 2.25, 2.65].forEach((browserZoom) => {
-        [
-            { useNative: false, refreshStrategy: 'simulated' },
-            { useNative: true, refreshStrategy: 'pullDown' },
-            { useNative: true, refreshStrategy: 'swipeDown' },
-        ].forEach(({ useNative, refreshStrategy }) => {
+    [
+        { useNative: false, refreshStrategy: 'simulated' },
+        { useNative: true, refreshStrategy: 'pullDown' },
+        { useNative: true, refreshStrategy: 'swipeDown' },
+    ].forEach(({ useNative, refreshStrategy }) => {
+        [0.33, 0.5, 0.67, 0.75, 0.8, 0.9, 1, 1.1, 1.2, 1.25, 1.34, 1.5, 1.875, 2.25, 2.65].forEach((browserZoom) => {
             const cssStyles = {
                 transform: `scale(${browserZoom})`,
                 transformOrigin: '0 0',
             };
+
             // T1032842
             QUnit.test(`Start loading when reaching bottom boundary with wrapperStyles: ${JSON.stringify(cssStyles)}, useNative: ${useNative}, refreshStrategy: ${refreshStrategy}`, function(assert) {
                 assert.expect(1);
@@ -287,6 +288,51 @@ QUnit.module('onReachBottom', () => {
                 scrollView.scrollToElement($prevItem);
                 scrollView.scrollToElement($lastItem);
             });
+        });
+
+        QUnit.test(`ReachBottom should not be fired after change visibility if content is not overflowed, useNative: ${useNative}, refreshStrategy: ${refreshStrategy}`, function(assert) {
+            const onReachBottomHandler = sinon.spy();
+
+            const $scrollView = $('<div>').appendTo('#qunit-fixture');
+            const $contentWrapper = $('<div>').appendTo($scrollView);
+
+            for(let i = 0; i < 40; i++) {
+                $('<div>')
+                    .addClass('item')
+                    .text(`item${i}`)
+                    .css({ height: 20, width: '100%' })
+                    .appendTo($contentWrapper);
+            }
+
+            $scrollView.appendTo('#qunit-fixture');
+
+            const scrollView = $scrollView.dxScrollView({
+                useNative,
+                direction: 'vertical',
+                height: 355.5,
+                width: '100%',
+                showScrollbar: 'always',
+                refreshStrategy,
+                onReachBottom: onReachBottomHandler,
+                reachBottomText: 'Updating...'
+            }).dxScrollView('instance');
+
+            scrollView.scrollTo(100);
+
+            $(scrollView.element()).trigger('dxhiding');
+
+            $contentWrapper.empty();
+            for(let i = 0; i < 10; i++) {
+                $('<div>')
+                    .addClass('item')
+                    .text(`item${i}`)
+                    .css({ height: 20, width: '100%' })
+                    .appendTo($contentWrapper);
+            }
+
+            $(scrollView.element()).trigger('dxshown');
+
+            assert.strictEqual(onReachBottomHandler.callCount, 0, 'onReachBottom action should not have been triggered');
         });
     });
 });
