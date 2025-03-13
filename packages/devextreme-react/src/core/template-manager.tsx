@@ -3,7 +3,7 @@ import * as events from 'devextreme/events';
 
 import {
   useState,
-  useMemo,
+  useLayoutEffect,
   useCallback,
   useEffect,
   useRef,
@@ -36,6 +36,24 @@ function normalizeProps(props: ITemplateArgs): ITemplateArgs | ITemplateArgs['da
   return props;
 }
 
+const createMapKey = (key1: any, key2: HTMLElement) => ({ key1, key2 });
+
+const unsubscribeOnRemoval = (container: HTMLElement, onRemoved: () => void) => {
+  if (container.nodeType === Node.ELEMENT_NODE) {
+    events.off(container, DX_REMOVE_EVENT, onRemoved);
+  }
+};
+
+const subscribeOnRemoval = (container: HTMLElement, onRemoved: () => void) => {
+  if (container.nodeType === Node.ELEMENT_NODE) {
+    events.on(container, DX_REMOVE_EVENT, onRemoved);
+  }
+};
+
+const unwrapElement = (element: any): HTMLElement => (element.get ? element.get(0) : element);
+
+const getRandomId = () => `${generateID()}${generateID()}${generateID()}`;
+
 export const TemplateManager: FC<TemplateManagerProps> = ({ init, onTemplatesRendered }) => {
   const [instantiationModels, setInstantiationModels] = useState({
     collection: new TemplateInstantiationModels(),
@@ -43,24 +61,6 @@ export const TemplateManager: FC<TemplateManagerProps> = ({ init, onTemplatesRen
   const [updateContext, setUpdateContext] = useState<TemplateManagerUpdateContext>();
   const widgetId = useRef('');
   const templateFactories = useRef<Record<string, TemplateFunc>>({});
-
-  const subscribeOnRemoval = useCallback((container: HTMLElement, onRemoved: () => void) => {
-    if (container.nodeType === Node.ELEMENT_NODE) {
-      events.on(container, DX_REMOVE_EVENT, onRemoved);
-    }
-  }, []);
-
-  const unsubscribeOnRemoval = useCallback((container: HTMLElement, onRemoved: () => void) => {
-    if (container.nodeType === Node.ELEMENT_NODE) {
-      events.off(container, DX_REMOVE_EVENT, onRemoved);
-    }
-  }, []);
-
-  const unwrapElement = useCallback((element: any): HTMLElement => (element.get ? element.get(0) : element), []);
-
-  const createMapKey = useCallback((key1: any, key2: HTMLElement) => ({ key1, key2 }), []);
-
-  const getRandomId = useCallback(() => `${generateID()}${generateID()}${generateID()}`, []);
 
   const { collection } = instantiationModels;
 
@@ -99,9 +99,9 @@ export const TemplateManager: FC<TemplateManagerProps> = ({ init, onTemplatesRen
     setInstantiationModels({ collection });
 
     return containerElement;
-  }, [unsubscribeOnRemoval, createMapKey, collection]);
+  }, [collection]);
 
-  useMemo(() => {
+  useLayoutEffect(() => {
     function getTemplateFunction(template: ITemplate): TemplateFunc {
       switch (template.type) {
         case 'children': return () => template.content as JSX.Element;
@@ -152,7 +152,7 @@ export const TemplateManager: FC<TemplateManagerProps> = ({ init, onTemplatesRen
     }
 
     init({ createDXTemplates, clearInstantiationModels, updateTemplates });
-  }, [init, getRenderFunc]);
+  }, [init, getRenderFunc, instantiationModels]);
 
   useEffect(() => {
     if (updateContext) {
