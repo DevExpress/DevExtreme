@@ -1,9 +1,9 @@
 import registerComponent from '@js/core/component_registrator';
 import devices from '@js/core/devices';
 import { getPublicElement } from '@js/core/element';
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
-import { deferRender, noop } from '@js/core/utils/common';
-import { extend } from '@js/core/utils/extend';
+import { deferRender } from '@js/core/utils/common';
 import { each, map } from '@js/core/utils/iterator';
 import {
   getHeight,
@@ -15,8 +15,14 @@ import {
 } from '@js/core/utils/size';
 import { isDefined } from '@js/core/utils/type';
 import { hasWindow } from '@js/core/utils/window';
-import CollectionWidget from '@js/ui/collection/ui.collection_widget.edit';
-import ScrollView from '@js/ui/scroll_view';
+import type { Orientation, Properties } from '@js/ui/tile_view';
+import type { OptionChanged } from '@ts/core/widget/types';
+import CollectionWidget from '@ts/ui/collection/m_collection_widget.edit';
+import type {
+  ScrollView as ScrollViewType,
+  ScrollViewServerSide as ScrollViewServerSideType,
+} from '@ts/ui/scroll_view/m_scroll_view';
+import ScrollView from '@ts/ui/scroll_view/m_scroll_view';
 
 import supportUtils from '../core/utils/m_support';
 
@@ -27,7 +33,7 @@ const TILEVIEW_ITEM_SELECTOR = `.${TILEVIEW_ITEM_CLASS}`;
 
 const TILEVIEW_ITEM_DATA_KEY = 'dxTileData';
 
-const CONFIGS = {
+const CONFIGS: Record<Orientation, Record<string, string>> = {
   horizontal: {
     itemMainRatio: 'widthRatio',
     itemCrossRatio: 'heightRatio',
@@ -49,10 +55,30 @@ const CONFIGS = {
     crossPosition: 'left',
   },
 };
-// @ts-expect-error
-const TileView = CollectionWidget.inherit({
-  _getDefaultOptions() {
-    return extend(this.callBase(), {
+
+export interface TileViewProperties extends Properties {
+  focusedElement?: dxElementWrapper;
+
+  indicateLoading?: boolean;
+}
+
+class TileView extends CollectionWidget<TileViewProperties> {
+  _$container!: dxElementWrapper;
+
+  _scrollView!: ScrollViewType | ScrollViewServerSideType;
+
+  _cellsPerDimension!: number;
+
+  _itemsPositions!: Record<string, unknown>[];
+
+  _config!: Record<string, string>;
+
+  _cells!: number[];
+
+  _getDefaultOptions(): TileViewProperties {
+    return {
+      ...super._getDefaultOptions(),
+      // @ts-expect-error ts-error
       items: null,
       direction: 'horizontal',
       hoverStateEnabled: true,
@@ -63,11 +89,11 @@ const TileView = CollectionWidget.inherit({
       itemMargin: 20,
       activeStateEnabled: true,
       indicateLoading: true,
-    });
-  },
+    };
+  }
 
   _defaultOptionsRules() {
-    return this.callBase().concat([
+    return super._defaultOptionsRules().concat([
       {
         device() {
           return devices.real().deviceType === 'desktop' && !devices.isSimulator();
@@ -85,50 +111,53 @@ const TileView = CollectionWidget.inherit({
         },
       },
     ]);
-  },
+  }
 
-  _itemClass() {
+  // eslint-disable-next-line class-methods-use-this
+  _itemClass(): string {
     return TILEVIEW_ITEM_CLASS;
-  },
+  }
 
-  _itemDataKey() {
+  // eslint-disable-next-line class-methods-use-this
+  _itemDataKey(): string {
     return TILEVIEW_ITEM_DATA_KEY;
-  },
+  }
 
-  _itemContainer() {
+  _itemContainer(): dxElementWrapper {
     return this._$container;
-  },
+  }
 
-  _init() {
-    this.callBase();
+  _init(): void {
+    super._init();
 
     this._activeStateUnit = TILEVIEW_ITEM_SELECTOR;
 
     this.$element().addClass(TILEVIEW_CLASS);
     this._initScrollView();
-  },
+  }
 
-  _dataSourceLoadingChangedHandler(isLoading) {
+  _dataSourceLoadingChangedHandler(isLoading): void {
     const scrollView = this._scrollView;
-
-    if (!scrollView || !scrollView.startLoading) {
+    // @ts-expect-error ts-error
+    if (!scrollView?.startLoading) {
       return;
     }
 
     if (isLoading && this.option('indicateLoading')) {
+      // @ts-expect-error ts-error
       scrollView.startLoading();
     } else {
       scrollView.finishLoading();
     }
-  },
+  }
 
   _hideLoadingIfLoadIndicationOff() {
     if (!this.option('indicateLoading')) {
       this._dataSourceLoadingChangedHandler(false);
     }
-  },
+  }
 
-  _initScrollView() {
+  _initScrollView(): void {
     const {
       width, height, direction, showScrollbar,
     } = this.option();
@@ -146,10 +175,10 @@ const TileView = CollectionWidget.inherit({
     this._$container.addClass(TILEVIEW_CONTAINER_CLASS);
 
     this._scrollView.option('onUpdated', this._renderGeometry.bind(this));
-  },
+  }
 
-  _initMarkup() {
-    this.callBase();
+  _initMarkup(): void {
+    super._initMarkup();
 
     deferRender(() => {
       this._cellsPerDimension = 1;
@@ -158,22 +187,25 @@ const TileView = CollectionWidget.inherit({
       this._updateScrollView();
       this._fireContentReadyAction();
     });
-  },
+  }
 
-  _updateScrollView() {
+  _updateScrollView(): void {
     this._scrollView.option('direction', this.option('direction'));
     this._scrollView.update();
     this._indicateLoadingIfAlreadyStarted();
-  },
+  }
 
-  _indicateLoadingIfAlreadyStarted() {
+  _indicateLoadingIfAlreadyStarted(): void {
+    // @ts-expect-error ts-error
     if (this._isDataSourceLoading()) {
       this._dataSourceLoadingChangedHandler(true);
     }
-  },
+  }
 
-  _renderGeometry() {
-    this._config = CONFIGS[this.option('direction')];
+  _renderGeometry(): void {
+    const { direction } = this.option();
+    // @ts-expect-error ts-error
+    this._config = CONFIGS[direction];
 
     const items = this.option('items') || [];
     const config = this._config;
@@ -185,29 +217,34 @@ const TileView = CollectionWidget.inherit({
     if (hasWindow) {
       crossDimensionValue = (config.crossDimension === 'width' ? getWidth : getHeight)(this.$element());
     } else {
+      // @ts-expect-error ts-error
       // eslint-disable-next-line radix
       crossDimensionValue = parseInt(this.$element().get(0).style[config.crossDimension]);
     }
-
+    // @ts-expect-error ts-error
     this._cellsPerDimension = Math.floor(crossDimensionValue / (this.option(config.baseItemCrossDimension) + itemMargin));
     this._cellsPerDimension = Math.max(this._cellsPerDimension, maxItemCrossRatio);
     this._cells = [];
+    // @ts-expect-error ts-error
     this._cells.push(new Array(this._cellsPerDimension));
 
     this._arrangeItems(items);
     this._renderContentSize(config, itemMargin);
-  },
+  }
 
-  _renderContentSize({ mainDimension, baseItemMainDimension }, itemMargin) {
+  _renderContentSize(config, itemMargin): void {
+    const { mainDimension, baseItemMainDimension } = config;
+
     if (hasWindow()) {
+      // @ts-expect-error ts-error
       const actualContentSize = this._cells.length * this.option(baseItemMainDimension) + (this._cells.length + 1) * itemMargin;
       const elementSize = (mainDimension === 'width' ? getWidth : getHeight)(this.$element());
 
       (mainDimension === 'width' ? setWidth : setHeight)(this._$container, Math.max(actualContentSize, elementSize));
     }
-  },
+  }
 
-  _arrangeItems(items) {
+  _arrangeItems(items): void {
     const config = this._config;
     const { itemMainRatio } = config;
     const { itemCrossRatio } = config;
@@ -219,7 +256,7 @@ const TileView = CollectionWidget.inherit({
       const currentItem = {};
       currentItem[itemMainRatio] = item[itemMainRatio] || 1;
       currentItem[itemCrossRatio] = item[itemCrossRatio] || 1;
-      // @ts-expect-error
+      // @ts-expect-error ts-error
       currentItem.index = index;
 
       currentItem[itemMainRatio] = currentItem[itemMainRatio] <= 0 ? 0 : Math.round(currentItem[config.itemMainRatio]);
@@ -228,6 +265,7 @@ const TileView = CollectionWidget.inherit({
       const itemPosition = this._getItemPosition(currentItem);
 
       if (itemPosition[mainPosition] === -1) {
+        // @ts-expect-error ts-error
         itemPosition[mainPosition] = this._cells.push(new Array(this._cellsPerDimension)) - 1;
       }
 
@@ -237,9 +275,9 @@ const TileView = CollectionWidget.inherit({
 
       this._itemsPositions.push(itemPosition);
     });
-  },
+  }
 
-  _refreshActiveDescendant: noop,
+  _refreshActiveDescendant(): void {}
 
   _getItemPosition(item) {
     const config = this._config;
@@ -265,7 +303,7 @@ const TileView = CollectionWidget.inherit({
     }
 
     return position;
-  },
+  }
 
   _itemFit(mainPosition, crossPosition, item) {
     let result = true;
@@ -281,6 +319,7 @@ const TileView = CollectionWidget.inherit({
     for (let main = mainPosition; main < mainPosition + itemRatioMain; main++) {
       for (let cross = crossPosition; cross < crossPosition + itemRatioCross; cross++) {
         if (this._cells.length - 1 < main) {
+          // @ts-expect-error ts-error
           this._cells.push(new Array(this._cellsPerDimension));
         } else if (this._cells[main][cross] !== undefined) {
           result = false;
@@ -290,7 +329,7 @@ const TileView = CollectionWidget.inherit({
     }
 
     return result;
-  },
+  }
 
   _occupyCells(item, itemPosition) {
     const config = this._config;
@@ -304,7 +343,7 @@ const TileView = CollectionWidget.inherit({
         this._cells[main][cross] = item.index;
       }
     }
-  },
+  }
 
   _arrangeItem(item, itemPosition) {
     const config = this._config;
@@ -317,27 +356,34 @@ const TileView = CollectionWidget.inherit({
     const itemMargin = this.option('itemMargin');
 
     const cssProps = { display: itemRatioMain <= 0 || itemRatioCross <= 0 ? 'none' : '' };
+    // @ts-expect-error ts-error
     const mainDimension = itemRatioMain * baseItemMain + (itemRatioMain - 1) * itemMargin;
+    // @ts-expect-error ts-error
     const crossDimension = itemRatioCross * baseItemCross + (itemRatioCross - 1) * itemMargin;
     cssProps[config.mainDimension] = mainDimension < 0 ? 0 : mainDimension;
     cssProps[config.crossDimension] = crossDimension < 0 ? 0 : crossDimension;
+    // @ts-expect-error ts-error
     cssProps[config.mainPosition] = itemPositionMain * baseItemMain + (itemPositionMain + 1) * itemMargin;
+    // @ts-expect-error ts-error
     cssProps[config.crossPosition] = itemPositionCross * baseItemCross + (itemPositionCross + 1) * itemMargin;
 
     if (this.option('rtlEnabled')) {
       const offsetCorrection = getWidth(this._$container);
       const baseItemWidth = this.option('baseItemWidth');
       const itemPositionX = itemPosition.left;
+      // @ts-expect-error ts-error
       const offsetPosition = itemPositionX * baseItemWidth;
+      // @ts-expect-error ts-error
       const itemBaseOffset = baseItemWidth + itemMargin;
       const itemWidth = itemBaseOffset * item.widthRatio;
+      // @ts-expect-error ts-error
       const subItemMargins = itemPositionX * itemMargin;
       // @ts-expect-error
       cssProps.left = offsetCorrection - (offsetPosition + itemWidth + subItemMargins);
     }
 
     this._itemElements().eq(item.index).css(cssProps);
-  },
+  }
 
   _moveFocus(location) {
     const FOCUS_UP = 'up';
@@ -347,13 +393,16 @@ const TileView = CollectionWidget.inherit({
     const FOCUS_PAGE_UP = 'pageup';
     const FOCUS_PAGE_DOWN = 'pagedown';
 
-    const horizontalDirection = this.option('direction') === 'horizontal';
+    const { direction, focusedElement } = this.option();
+
+    const horizontalDirection = direction === 'horizontal';
     const cells = this._cells;
-    const index = $(this.option('focusedElement')).index();
+    const index = $(focusedElement).index();
     let targetCol = this._itemsPositions[index].left;
     let targetRow = this._itemsPositions[index].top;
-
+    // @ts-expect-error ts-error
     const colCount = (horizontalDirection ? cells : cells[0]).length;
+    // @ts-expect-error ts-error
     const rowCount = (horizontalDirection ? cells[0] : cells).length;
     const getCell = function (col, row) {
       if (horizontalDirection) {
@@ -365,17 +414,21 @@ const TileView = CollectionWidget.inherit({
     switch (location) {
       case FOCUS_PAGE_UP:
       case FOCUS_UP:
+        // @ts-expect-error ts-error
         while (targetRow > 0 && index === getCell(targetCol, targetRow)) {
+          // @ts-expect-error ts-error
           targetRow--;
         }
-
+        // @ts-expect-error ts-error
         if (targetRow < 0) {
           targetRow = 0;
         }
         break;
       case FOCUS_PAGE_DOWN:
       case FOCUS_DOWN:
+        // @ts-expect-error ts-error
         while (targetRow < rowCount && index === getCell(targetCol, targetRow)) {
+          // @ts-expect-error ts-error
           targetRow++;
         }
 
@@ -384,7 +437,9 @@ const TileView = CollectionWidget.inherit({
         }
         break;
       case FOCUS_RIGHT:
+        // @ts-expect-error ts-error
         while (targetCol < colCount && index === getCell(targetCol, targetRow)) {
+          // @ts-expect-error ts-error
           targetCol++;
         }
 
@@ -393,16 +448,19 @@ const TileView = CollectionWidget.inherit({
         }
         break;
       case FOCUS_LEFT:
+        // @ts-expect-error ts-error
         while (targetCol >= 0 && index === getCell(targetCol, targetRow)) {
+          // @ts-expect-error ts-error
           targetCol--;
         }
-
+        // @ts-expect-error ts-error
         if (targetCol < 0) {
           targetCol = 0;
         }
         break;
       default:
-        this.callBase.apply(this, arguments);
+        // @ts-expect-error ts-error
+        super._moveFocus.apply(this, arguments);
         return;
     }
 
@@ -414,9 +472,9 @@ const TileView = CollectionWidget.inherit({
     const $newTarget = this._itemElements().eq(newTargetIndex);
     this.option('focusedElement', getPublicElement($newTarget));
     this._scrollToItem($newTarget);
-  },
+  }
 
-  _scrollToItem($itemElement) {
+  _scrollToItem($itemElement): void {
     if (!$itemElement.length) {
       return;
     }
@@ -435,16 +493,18 @@ const TileView = CollectionWidget.inherit({
     }
 
     if (scrollPosition > itemPosition) {
+      // @ts-expect-error ts-error
       this._scrollView.scrollTo(itemPosition - itemMargin);
     } else {
+      // @ts-expect-error ts-error
       this._scrollView.scrollTo(itemPosition + itemDimension - clientWidth + itemMargin);
     }
-  },
+  }
 
-  _optionChanged(args) {
+  _optionChanged(args: OptionChanged<TileViewProperties>): void {
     switch (args.name) {
       case 'items':
-        this.callBase(args);
+        super._optionChanged(args);
         this._renderGeometry();
         this._updateScrollView();
         break;
@@ -453,7 +513,7 @@ const TileView = CollectionWidget.inherit({
         break;
       case 'disabled':
         this._scrollView.option('disabled', args.value);
-        this.callBase(args);
+        super._optionChanged(args);
         break;
       case 'baseItemWidth':
       case 'baseItemHeight':
@@ -462,7 +522,7 @@ const TileView = CollectionWidget.inherit({
         break;
       case 'width':
       case 'height':
-        this.callBase(args);
+        super._optionChanged(args);
         this._renderGeometry();
         this._scrollView.option(args.name, args.value);
         this._updateScrollView();
@@ -475,15 +535,14 @@ const TileView = CollectionWidget.inherit({
         this._hideLoadingIfLoadIndicationOff();
         break;
       default:
-        this.callBase(args);
+        super._optionChanged(args);
     }
-  },
+  }
 
-  scrollPosition() {
+  scrollPosition(): number {
     return this._scrollView.scrollOffset()[this._config.mainPosition];
-  },
-
-});
+  }
+}
 
 registerComponent('dxTileView', TileView);
 
