@@ -5,19 +5,22 @@ import {
 import messageLocalization from '@js/common/core/localization/message';
 import devices from '@js/core/devices';
 import domAdapter from '@js/core/dom_adapter';
+import type { DefaultOptionsRule } from '@js/core/options/utils';
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import browser from '@js/core/utils/browser';
 import {
-  // @ts-expect-error
+  // @ts-expect-error ts-error
   applyServerDecimalSeparator,
   ensureDefined,
 } from '@js/core/utils/common';
 import { Deferred } from '@js/core/utils/deferred';
-import { extend } from '@js/core/utils/extend';
 import { fitIntoRange, inRange } from '@js/core/utils/math';
 import { isDefined } from '@js/core/utils/type';
-import TextEditor from '@js/ui/text_box/ui.text_editor';
+import TextEditor from '@ts/ui/text_box/m_text_editor';
 
+import type { TextEditorBaseProperties } from '../text_box/m_text_editor.base';
+import type { TextEditorButtonInfo } from '../text_box/texteditor_button_collection/m_index';
 import SpinButtons from './m_number_box.spins';
 
 const math = Math;
@@ -27,31 +30,46 @@ const FIREFOX_CONTROL_KEYS = ['tab', 'del', 'backspace', 'leftArrow', 'rightArro
 
 const FORCE_VALUECHANGE_EVENT_NAMESPACE = 'NumberBoxForceValueChange';
 
-const NumberBoxBase = TextEditor.inherit({
+export interface NumberBoxBaseProperties extends TextEditorBaseProperties {
+  min?: number;
+  max?: number;
+  step?: number;
+  showSpinButtons?: boolean;
+  useLargeSpinButtons?: boolean;
+  invalidValueMessage?: string;
+}
 
-  _supportedKeys() {
-    return extend(this.callBase(), {
-      upArrow(e) {
+class NumberBoxBase<
+  TProperties extends NumberBoxBaseProperties = NumberBoxBaseProperties,
+> extends TextEditor<TProperties> {
+  _keyPressed?: boolean;
+
+  _$submitElement!: dxElementWrapper;
+
+  _supportedKeys(): Record<string, (e: KeyboardEvent) => void> {
+    return {
+      ...super._supportedKeys(),
+      upArrow(e): void {
         if (!isCommandKeyPressed(e)) {
           e.preventDefault();
           e.stopPropagation();
           this._spinUpChangeHandler(e);
         }
       },
-      downArrow(e) {
+      downArrow(e): void {
         if (!isCommandKeyPressed(e)) {
           e.preventDefault();
           e.stopPropagation();
           this._spinDownChangeHandler(e);
         }
       },
-      enter() {
-      },
-    });
-  },
+      enter(): void {},
+    };
+  }
 
-  _getDefaultOptions() {
-    return extend(this.callBase(), {
+  _getDefaultOptions(): TProperties {
+    return {
+      ...super._getDefaultOptions(),
       value: 0,
       min: undefined,
       max: undefined,
@@ -62,30 +80,33 @@ const NumberBoxBase = TextEditor.inherit({
       invalidValueMessage: messageLocalization.format('dxNumberBox-invalidValueMessage'),
       // eslint-disable-next-line no-void
       buttons: void 0,
-    });
-  },
+    };
+  }
 
-  _useTemplates() {
+  // eslint-disable-next-line class-methods-use-this
+  _useTemplates(): boolean {
     return false;
-  },
+  }
 
-  _getDefaultButtons() {
-    return this.callBase().concat([{ name: 'spins', Ctor: SpinButtons }]);
-  },
+  _getDefaultButtons(): TextEditorButtonInfo[] {
+    // @ts-expect-error ts-error
+    return super._getDefaultButtons().concat([{ name: 'spins', Ctor: SpinButtons }]);
+  }
 
   _isSupportInputMode() {
-    // @ts-expect-error
+    // @ts-expect-error ts-error
     const version = parseFloat(browser.version);
 
     return (
       browser.chrome && version >= 66
-            // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-            || browser.safari && version >= 12
+        // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+        || browser.safari && version >= 12
     );
-  },
+  }
 
-  _defaultOptionsRules() {
-    return this.callBase().concat([
+  _defaultOptionsRules(): DefaultOptionsRule<TProperties>[] {
+    // @ts-expect-error ts-error
+    return super._defaultOptionsRules().concat([
       {
         device() {
           return devices.real().generic && !devices.isSimulator();
@@ -103,45 +124,45 @@ const NumberBoxBase = TextEditor.inherit({
         },
       },
     ]);
-  },
+  }
 
-  _initMarkup() {
+  _initMarkup(): void {
     this._renderSubmitElement();
     this.$element().addClass(WIDGET_CLASS);
 
-    this.callBase();
+    super._initMarkup();
     this._toggleTabIndex();
-  },
+  }
 
   _getDefaultAttributes() {
-    const attributes = this.callBase();
+    const attributes = super._getDefaultAttributes();
     // eslint-disable-next-line spellcheck/spell-checker
     attributes.inputmode = 'decimal';
     return attributes;
-  },
+  }
 
-  _renderContentImpl() {
+  _renderContentImpl(): void {
     this.option('isValid') && this._validateValue(this.option('value'));
     this.setAria('role', 'spinbutton');
-  },
+  }
 
-  _renderSubmitElement() {
+  _renderSubmitElement(): void {
     this._$submitElement = $('<input>')
       .attr('type', 'hidden')
       .appendTo(this.$element());
     this._setSubmitValue(this.option('value'));
-  },
+  }
 
   _setSubmitValue(value) {
     this._getSubmitElement().val(applyServerDecimalSeparator(value));
-  },
+  }
 
-  _getSubmitElement() {
+  _getSubmitElement(): dxElementWrapper {
     return this._$submitElement;
-  },
-  // @ts-expect-error
+  }
+
   _keyPressHandler(e) {
-    this.callBase(e);
+    super._keyPressHandler();
 
     const char = getChar(e);
     const validCharRegExp = /[\d.,eE\-+]/;
@@ -155,20 +176,20 @@ const NumberBoxBase = TextEditor.inherit({
       }
 
       e.preventDefault();
-      return false;
+      return;
     }
 
     this._keyPressed = true;
-  },
+  }
 
-  _onMouseWheel(dxEvent) {
+  _onMouseWheel(dxEvent): void {
     dxEvent.delta > 0 ? this._spinValueChange(1, dxEvent) : this._spinValueChange(-1, dxEvent);
-  },
+  }
 
   _renderValue() {
     const inputValue = this._input().val();
     const value = this.option('value');
-
+    // @ts-expect-error ts-error
     if (!inputValue.length || Number(inputValue) !== value) {
       this._forceValueRender();
       this._toggleEmptinessEventHandler();
@@ -177,6 +198,7 @@ const NumberBoxBase = TextEditor.inherit({
     const valueText = isDefined(value) ? null : messageLocalization.format('dxNumberBox-noDataText');
 
     this.setAria({
+      // @ts-expect-error ts-error
       // eslint-disable-next-line spellcheck/spell-checker
       valuenow: ensureDefined(value, ''),
       // eslint-disable-next-line spellcheck/spell-checker
@@ -187,21 +209,24 @@ const NumberBoxBase = TextEditor.inherit({
     this._updateButtons();
 
     return Deferred().resolve();
-  },
+  }
 
-  _forceValueRender() {
+  _forceValueRender(): void {
     const value = this.option('value');
     const number = Number(value);
     const formattedValue = isNaN(number) ? '' : this._applyDisplayValueFormatter(value);
 
     this._renderDisplayText(formattedValue);
-  },
+  }
 
-  _applyDisplayValueFormatter(value) {
-    return this.option('displayValueFormatter')(value);
-  },
+  _applyDisplayValueFormatter(value): string | undefined {
+    const { displayValueFormatter } = this.option();
 
-  _renderProps() {
+    return displayValueFormatter?.(value);
+  }
+
+  _renderProps(): void {
+    // @ts-expect-error ts-error
     this._input().prop({
       min: this.option('min'),
       max: this.option('max'),
@@ -209,39 +234,42 @@ const NumberBoxBase = TextEditor.inherit({
     });
 
     this.setAria({
+      // @ts-expect-error ts-error
       // eslint-disable-next-line spellcheck/spell-checker
       valuemin: ensureDefined(this.option('min'), ''),
+      // @ts-expect-error ts-error
       // eslint-disable-next-line spellcheck/spell-checker
       valuemax: ensureDefined(this.option('max'), ''),
     });
-  },
+  }
 
-  _spinButtonsPointerDownHandler() {
+  _spinButtonsPointerDownHandler(): void {
     const $input = this._input();
     if (!this.option('useLargeSpinButtons') && domAdapter.getActiveElement() !== $input[0]) {
-      // @ts-expect-error
+      // @ts-expect-error ts-error
       eventsEngine.trigger($input, 'focus');
     }
-  },
+  }
 
-  _spinUpChangeHandler(e) {
+  _spinUpChangeHandler(e): void {
     if (!this.option('readOnly')) {
       this._spinValueChange(1, e.event || e);
     }
-  },
+  }
 
-  _spinDownChangeHandler(e) {
+  _spinDownChangeHandler(e): void {
     if (!this.option('readOnly')) {
       this._spinValueChange(-1, e.event || e);
     }
-  },
+  }
 
-  _spinValueChange(sign, dxEvent) {
+  _spinValueChange(sign, dxEvent): void {
+    // @ts-expect-error ts-error
     const step = parseFloat(this.option('step'));
     if (step === 0) {
       return;
     }
-
+    // @ts-expect-error ts-error
     let value = parseFloat(this._normalizeInputValue()) || 0;
 
     value = this._correctRounding(value, step * sign);
@@ -250,16 +278,18 @@ const NumberBoxBase = TextEditor.inherit({
     const max = this.option('max');
 
     if (isDefined(min)) {
+      // @ts-expect-error ts-error
       value = Math.max(min, value);
     }
 
     if (isDefined(max)) {
+      // @ts-expect-error ts-error
       value = Math.min(max, value);
     }
 
     this._saveValueChangeEvent(dxEvent);
     this.option('value', value);
-  },
+  }
 
   _correctRounding(value, step) {
     const regex = /[,.](.*)/;
@@ -279,7 +309,7 @@ const NumberBoxBase = TextEditor.inherit({
     }
 
     return value + step;
-  },
+  }
 
   _round(value, precision) {
     precision = precision || 0;
@@ -290,27 +320,28 @@ const NumberBoxBase = TextEditor.inherit({
     value = Math.round(value) / multiplier;
 
     return value;
-  },
+  }
 
-  _renderValueChangeEvent() {
-    this.callBase();
+  _renderValueChangeEvent(): void {
+    super._renderValueChangeEvent();
 
     const forceValueChangeEvent = addNamespace('focusout', FORCE_VALUECHANGE_EVENT_NAMESPACE);
     eventsEngine.off(this.element(), forceValueChangeEvent);
     eventsEngine.on(this.element(), forceValueChangeEvent, this._forceRefreshInputValue.bind(this));
-  },
+  }
 
   _forceRefreshInputValue() {
-    if (this.option('mode') === 'number') {
+    const { mode } = this.option();
+    if (mode === 'number') {
       return;
     }
 
     const $input = this._input();
     const formattedValue = this._applyDisplayValueFormatter(this.option('value'));
-
+    // @ts-expect-error ts-error
     $input.val(null);
     $input.val(formattedValue);
-  },
+  }
 
   _valueChangeEventHandler(e) {
     const $input = this._input();
@@ -324,7 +355,8 @@ const NumberBoxBase = TextEditor.inherit({
     }
 
     if (valueHasDigits) {
-      this.callBase(e, isNaN(value) ? null : value);
+      // @ts-expect-error ts-error
+      super._valueChangeEventHandler(e, isNaN(value) ? null : value);
     }
 
     this._applyValueBoundaries(inputValue, value);
@@ -333,7 +365,7 @@ const NumberBoxBase = TextEditor.inherit({
       value,
       editor: this,
     });
-  },
+  }
 
   _applyValueBoundaries(inputValue, parsedValue) {
     const isValueIncomplete = this._isValueIncomplete(inputValue);
@@ -344,41 +376,43 @@ const NumberBoxBase = TextEditor.inherit({
         this._input().val(this._applyDisplayValueFormatter(parsedValue));
       }
     }
-  },
+  }
 
-  _replaceCommaWithPoint(value) {
+  _replaceCommaWithPoint(value): string {
     return value.replace(',', '.');
-  },
+  }
 
-  _inputIsInvalid() {
-    const isNumberMode = this.option('mode') === 'number';
+  _inputIsInvalid(): boolean {
+    const { mode } = this.option();
+    const isNumberMode = mode === 'number';
+    // @ts-expect-error ts-error
     const validityState = this._input().get(0).validity;
 
-    return isNumberMode && validityState && validityState.badInput;
-  },
+    return isNumberMode && validityState?.badInput;
+  }
 
   _renderDisplayText(text) {
     if (this._inputIsInvalid()) {
       return;
     }
 
-    this.callBase(text);
-  },
+    super._renderDisplayText(text);
+  }
 
   _isValueIncomplete(value) {
     const incompleteRegex = /(^-$)|(^-?\d*\.$)|(\d+e-?$)/i;
     return incompleteRegex.test(value);
-  },
+  }
 
   _isValueInRange(value) {
     return inRange(value, this.option('min'), this.option('max'));
-  },
+  }
 
   _isNumber(value) {
     return this._parseValue(value) !== null;
-  },
+  }
 
-  _validateValue(value) {
+  _validateValue(value?) {
     const inputValue = this._normalizeText();
     const isValueValid = this._isValueValid();
     let isValid = true;
@@ -403,19 +437,19 @@ const NumberBoxBase = TextEditor.inherit({
     });
 
     return isValid;
-  },
+  }
 
-  _normalizeInputValue() {
+  _normalizeInputValue(): number | null {
     return this._parseValue(this._normalizeText());
-  },
+  }
 
   _normalizeText() {
     const value = this._input().val().trim();
 
     return this._replaceCommaWithPoint(value);
-  },
+  }
 
-  _parseValue(value) {
+  _parseValue(value): number | null {
     const number = parseFloat(value);
 
     if (isNaN(number)) {
@@ -423,17 +457,17 @@ const NumberBoxBase = TextEditor.inherit({
     }
 
     return fitIntoRange(number, this.option('min'), this.option('max'));
-  },
+  }
 
-  _clearValue() {
+  _clearValue(): void {
     if (this._inputIsInvalid()) {
       this._input().val('');
       this._validateValue();
     }
-    this.callBase();
-  },
+    super._clearValue();
+  }
 
-  clear() {
+  clear(): void {
     if (this.option('value') === null) {
       this.option('text', '');
       if (this._input().length) {
@@ -442,14 +476,14 @@ const NumberBoxBase = TextEditor.inherit({
     } else {
       this.option('value', null);
     }
-  },
+  }
 
   _optionChanged(args) {
     switch (args.name) {
       case 'value':
         this._validateValue(args.value);
         this._setSubmitValue(args.value);
-        this.callBase(args);
+        super._optionChanged(args);
         this._resumeValueChangeAction();
         break;
       case 'step':
@@ -467,9 +501,9 @@ const NumberBoxBase = TextEditor.inherit({
       case 'invalidValueMessage':
         break;
       default:
-        this.callBase(args);
+        super._optionChanged(args);
     }
-  },
-});
+  }
+}
 
 export default NumberBoxBase;

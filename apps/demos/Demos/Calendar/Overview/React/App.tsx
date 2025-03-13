@@ -2,7 +2,7 @@ import React, { useCallback, useState } from 'react';
 import CheckBox from 'devextreme-react/check-box';
 import SelectBox from 'devextreme-react/select-box';
 import DateBox from 'devextreme-react/date-box';
-import Calendar, { CalendarTypes } from 'devextreme-react/calendar';
+import Calendar, { type CalendarTypes } from 'devextreme-react/calendar';
 import CustomCell from './CustomCell.tsx';
 
 const zoomLevels = ['month', 'year', 'decade', 'century'];

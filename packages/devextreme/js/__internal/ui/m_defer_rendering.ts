@@ -3,24 +3,27 @@ import eventsEngine from '@js/common/core/events/core/events_engine';
 import { triggerShownEvent } from '@js/common/core/events/visibility_change';
 import registerComponent from '@js/core/component_registrator';
 import domAdapter from '@js/core/dom_adapter';
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import {
   // @ts-expect-error
   executeAsync,
   noop,
 } from '@js/core/utils/common';
+import type { DeferredObj } from '@js/core/utils/deferred';
 import {
   Deferred,
   // @ts-expect-error
   fromPromise,
 } from '@js/core/utils/deferred';
-import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import { getBoundingRect } from '@js/core/utils/position';
 import { isPromise } from '@js/core/utils/type';
 import { getWindow, hasWindow } from '@js/core/utils/window';
+import type { Properties } from '@js/ui/defer_rendering';
 import LoadIndicator from '@js/ui/load_indicator';
-import Widget from '@js/ui/widget/ui.widget';
+import type { OptionChanged } from '@ts/core/widget/types';
+import Widget from '@ts/core/widget/widget';
 
 const window = getWindow();
 
@@ -38,25 +41,38 @@ const DEFER_DEFER_RENDERING_LOAD_INDICATOR = 'dx-deferrendering-load-indicator';
 const ANONYMOUS_TEMPLATE_NAME = 'content';
 
 const ACTIONS = ['onRendered', 'onShown'];
-// @ts-expect-error
-const DeferRendering = Widget.inherit({
 
-  _getDefaultOptions() {
-    return extend(this.callBase(), {
+class DeferRendering extends Widget<Properties> {
+  _renderTask?: DeferredObj<unknown>;
+
+  transitionExecutor?: any;
+
+  _initContent?: () => void;
+
+  _actions!: Record<string, unknown>;
+
+  _$initialContent?: dxElementWrapper;
+
+  _$loadIndicator?: dxElementWrapper;
+
+  _isRendered?: boolean;
+
+  _getDefaultOptions(): Properties {
+    return {
+      ...super._getDefaultOptions(),
       showLoadIndicator: false,
-      renderWhen: undefined,
-      animation: undefined,
-      staggerItemSelector: undefined,
+      // @ts-expect-error ts-error
       onRendered: null,
+      // @ts-expect-error ts-error
       onShown: null,
-    });
-  },
+    };
+  }
 
-  _getAnonymousTemplateName() {
+  _getAnonymousTemplateName(): string {
     return ANONYMOUS_TEMPLATE_NAME;
-  },
+  }
 
-  _init() {
+  _init(): void {
     this.transitionExecutor = new TransitionExecutor();
 
     this._initElement();
@@ -65,15 +81,15 @@ const DeferRendering = Widget.inherit({
     this._$initialContent = this.$element().clone().contents();
 
     this._initActions();
-    this.callBase();
-  },
+    super._init();
+  }
 
-  _initElement() {
+  _initElement(): void {
     this.$element()
       .addClass(DEFER_RENDERING_CLASS);
-  },
+  }
 
-  _initRender() {
+  _initRender(): void {
     const that = this;
     const $element = this.$element();
     const renderWhen = this.option('renderWhen');
@@ -88,18 +104,18 @@ const DeferRendering = Widget.inherit({
         $element.addClass(PENDING_RENDERING_MANUAL_CLASS);
       }
     }
-  },
+  }
 
-  _initActions() {
+  _initActions(): void {
     this._actions = {};
 
     each(ACTIONS, (_, action) => {
       this._actions[action] = this._createActionByOption(action) || noop;
     });
-  },
+  }
 
-  _initMarkup() {
-    this.callBase();
+  _initMarkup(): void {
+    super._initMarkup();
 
     if (!this._initContent) {
       this._initContent = this._renderContent;
@@ -107,15 +123,16 @@ const DeferRendering = Widget.inherit({
     }
 
     this._initContent();
-  },
+  }
 
-  _renderContentImpl() {
+  _renderContentImpl(): void {
     this.$element().removeClass(WIDGET_CLASS);
+    // @ts-expect-error ts-error
     this.$element().append(this._$initialContent);
     this._setLoadingState();
-  },
+  }
 
-  _renderDeferredContent() {
+  _renderDeferredContent(): Promise<unknown> {
     const that = this;
     const $element = this.$element();
     const result = Deferred();
@@ -128,6 +145,7 @@ const DeferRendering = Widget.inherit({
       that._renderImpl()
         .done(() => {
           const shownArgs = { element: $element };
+          // @ts-expect-error ts-error
           that._actions.onShown([shownArgs]);
           result.resolve(shownArgs);
         })
@@ -138,18 +156,18 @@ const DeferRendering = Widget.inherit({
     });
 
     return result.promise();
-  },
+  }
 
   _isElementInViewport(element) {
     const rect = getBoundingRect(element);
 
     return rect.bottom >= 0
-            && rect.right >= 0
-            && rect.top <= (window.innerHeight || domAdapter.getDocumentElement().clientHeight)
-            && rect.left <= (window.innerWidth || domAdapter.getDocumentElement().clientWidth);
-  },
+      && rect.right >= 0
+      && rect.top <= (window.innerHeight || domAdapter.getDocumentElement().clientHeight)
+      && rect.left <= (window.innerWidth || domAdapter.getDocumentElement().clientWidth);
+  }
 
-  _animate() {
+  _animate(): DeferredObj<unknown> {
     const that = this;
     const $element = this.$element();
     const animation = hasWindow() && this.option('animation');
@@ -160,6 +178,7 @@ const DeferRendering = Widget.inherit({
 
     if (animation) {
       if (staggerItemSelector) {
+        // @ts-expect-error ts-error
         $element.find(staggerItemSelector).each(function () {
           if (that._isElementInViewport(this)) {
             that.transitionExecutor.enter($(this), animation);
@@ -174,9 +193,9 @@ const DeferRendering = Widget.inherit({
     }
 
     return animatePromise;
-  },
+  }
 
-  _renderImpl() {
+  _renderImpl(): DeferredObj<unknown> {
     const $element = this.$element();
     const renderedArgs = {
       element: $element,
@@ -191,14 +210,15 @@ const DeferRendering = Widget.inherit({
       });
     }
 
-    this._setRenderedState($element);
-    // @ts-expect-error
+    this._setRenderedState();
+    // @ts-expect-error ts-error
     eventsEngine.trigger($element, 'dxcontentrendered');
+    // @ts-expect-error ts-error
     this._actions.onRendered([renderedArgs]);
     this._isRendered = true;
 
     return this._animate();
-  },
+  }
 
   _setLoadingState() {
     const $element = this.$element();
@@ -212,7 +232,7 @@ const DeferRendering = Widget.inherit({
     if (this.option('showLoadIndicator')) {
       this._showLoadIndicator($element);
     }
-  },
+  }
 
   _showLoadIndicator($container) {
     // @ts-expect-error
@@ -225,9 +245,9 @@ const DeferRendering = Widget.inherit({
       .addClass(DEFER_RENDERING_LOADINDICATOR_CONTAINER_CLASS)
       .append(this._$loadIndicator)
       .appendTo($container);
-  },
+  }
 
-  _setRenderedState() {
+  _setRenderedState(): void {
     const $element = this.$element();
 
     if (this._$loadIndicator) {
@@ -238,9 +258,9 @@ const DeferRendering = Widget.inherit({
     $element.removeClass(PENDING_RENDERING_ACTIVE_CLASS);
 
     triggerShownEvent($element.children());
-  },
+  }
 
-  _optionChanged(args) {
+  _optionChanged(args: OptionChanged<Properties>): void {
     const { value } = args;
     const { previousValue } = args;
 
@@ -258,11 +278,11 @@ const DeferRendering = Widget.inherit({
       case 'onShown':
         break;
       default:
-        this.callBase(args);
+        super._optionChanged(args);
     }
-  },
+  }
 
-  _renderOrAnimate() {
+  _renderOrAnimate(): Promise<unknown> {
     let result;
 
     if (this._isRendered) {
@@ -273,28 +293,29 @@ const DeferRendering = Widget.inherit({
     }
 
     return result;
-  },
+  }
 
-  renderContent() {
+  renderContent(): Promise<unknown> {
     return this._renderOrAnimate();
-  },
+  }
 
-  _abortRenderTask() {
+  _abortRenderTask(): void {
     if (this._renderTask) {
+      // @ts-expect-error ts-error
       this._renderTask.abort();
       this._renderTask = undefined;
     }
-  },
+  }
 
-  _dispose() {
+  _dispose(): void {
     this.transitionExecutor.stop(true);
     this._abortRenderTask();
+    // @ts-expect-error ts-error
     this._actions = undefined;
     this._$initialContent = undefined;
-    this.callBase();
-  },
-
-});
+    super._dispose();
+  }
+}
 
 registerComponent('dxDeferRendering', DeferRendering);
 

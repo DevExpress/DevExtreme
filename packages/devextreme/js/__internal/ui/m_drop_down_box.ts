@@ -1,17 +1,22 @@
+import type { PositionConfig } from '@js/common/core/animation';
 import eventsEngine from '@js/common/core/events/core/events_engine';
 import { normalizeKeyName } from '@js/common/core/events/utils/index';
 import registerComponent from '@js/core/component_registrator';
 import devices from '@js/core/devices';
 import domAdapter from '@js/core/dom_adapter';
 import { getPublicElement } from '@js/core/element';
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
-// @ts-expect-error
-import { grep, noop } from '@js/core/utils/common';
+// @ts-expect-error ts-error
+import { grep } from '@js/core/utils/common';
+import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred, when } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { map } from '@js/core/utils/iterator';
 import { isDefined, isObject } from '@js/core/utils/type';
+import type { Properties } from '@js/ui/drop_down_box';
 import DataExpressionMixin from '@js/ui/editor/ui.data_expression';
+import type { Properties as PopupProperties } from '@js/ui/popup';
 import { tabbable } from '@js/ui/widget/selectors';
 import DropDownEditor from '@ts/ui/drop_down_editor/m_drop_down_editor';
 import { getElementMaxHeightByWindow } from '@ts/ui/overlay/m_utils';
@@ -21,12 +26,22 @@ const { getActiveElement } = domAdapter;
 const DROP_DOWN_BOX_CLASS = 'dx-dropdownbox';
 const ANONYMOUS_TEMPLATE_NAME = 'content';
 
-const realDevice = devices.real();
+export interface DropDownBoxProperties extends Omit<Properties,
+'onClosed' | 'onOpened' |
+'onCopy' | 'onCut' | 'onEnterKey' | 'onFocusIn' | 'onFocusOut' | 'onInput' | 'onKeyDown' | 'onKeyUp' | 'onPaste'
+| 'onValueChanged' | 'validationMessagePosition' | 'onContentReady' | 'onDisposing' | 'onOptionChanged' | 'onInitialized'> {
+}
 
-const DropDownBox = (DropDownEditor as any).inherit({
-  _supportedKeys() {
-    return extend({}, this.callBase(), {
-      tab(e) {
+class DropDownBox<
+  TProperties extends DropDownBoxProperties = DropDownBoxProperties,
+> extends DropDownEditor<TProperties> {
+  _popupPosition?: PositionConfig;
+
+  // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
+  _supportedKeys(): Record<string, (e: KeyboardEvent) => boolean | void> {
+    return {
+      ...super._supportedKeys(),
+      tab(e): void {
         if (!this.option('opened')) {
           return;
         }
@@ -34,83 +49,87 @@ const DropDownBox = (DropDownEditor as any).inherit({
         const $tabbableElements = this._getTabbableElements();
         const $focusableElement = e.shiftKey ? $tabbableElements.last() : $tabbableElements.first();
 
-        // @ts-expect-error
-        $focusableElement && eventsEngine.trigger($focusableElement, 'focus');
+        if ($focusableElement) {
+          // @ts-expect-error ts-error
+          eventsEngine.trigger($focusableElement, 'focus');
+        }
+
         e.preventDefault();
       },
-    });
-  },
-
-  /// #DEBUG
-  _realDevice: realDevice,
-  /// #ENDDEBUG
+    };
+  }
 
   _getTabbableElements() {
+    // @ts-expect-error ts-error
     return this._getElements().filter(tabbable);
-  },
+  }
 
-  _getElements() {
+  _getElements(): dxElementWrapper {
+    // @ts-expect-error ts-error
     return $(this.content()).find('*');
-  },
+  }
 
-  _getDefaultOptions() {
-    return extend(this.callBase(), {
-
+  _getDefaultOptions(): TProperties {
+    return {
+      ...super._getDefaultOptions(),
       acceptCustomValue: false,
-
       contentTemplate: ANONYMOUS_TEMPLATE_NAME,
-
       openOnFieldClick: true,
-
-      displayValueFormatter(value) {
+      displayValueFormatter(value): string {
         return Array.isArray(value) ? value.join(', ') : value;
       },
       useHiddenSubmitElement: true,
-    });
-  },
+    };
+  }
 
-  _getAnonymousTemplateName() {
+  _getAnonymousTemplateName(): string {
     return ANONYMOUS_TEMPLATE_NAME;
-  },
+  }
 
-  _initTemplates() {
-    this.callBase();
-  },
+  _initTemplates(): void {
+    super._initTemplates();
+  }
 
-  _initMarkup() {
+  _initMarkup(): void {
+    // @ts-expect-error ts-error
     this._initDataExpressions();
     this.$element().addClass(DROP_DOWN_BOX_CLASS);
 
-    this.callBase();
-  },
+    super._initMarkup();
+  }
 
-  _setSubmitValue() {
+  _setSubmitValue(): void {
     const value = this.option('value');
-    const submitValue = this._shouldUseDisplayValue(value) ? this._displayGetter(value) : value;
+    const submitValue = this._shouldUseDisplayValue(value)
+      // @ts-expect-error ts-error
+      ? this._displayGetter(value)
+      : value;
 
     this._getSubmitElement().val(submitValue);
-  },
+  }
 
-  _shouldUseDisplayValue(value) {
+  _shouldUseDisplayValue(value): boolean {
+    // @ts-expect-error ts-error
     return this.option('valueExpr') === 'this' && isObject(value);
-  },
+  }
 
   _sortValuesByKeysOrder(orderedKeys, values) {
     const sortedValues = values.sort((a, b) => orderedKeys.indexOf(a.itemKey) - orderedKeys.indexOf(b.itemKey));
 
     return sortedValues.map((x) => x.itemDisplayValue);
-  },
+  }
 
   _renderInputValue({ renderOnly }: { renderOnly?: boolean } = {}) {
+    // @ts-expect-error ts-error
     this._rejectValueLoading();
     const values = [];
-
+    // @ts-expect-error ts-error
     if (!this._dataSource) {
-      this.callBase({ renderOnly, value: values });
+      super._renderInputValue({ renderOnly, value: values });
 
       return Deferred().resolve();
     }
-
+    // @ts-expect-error ts-error
     const currentValue = this._getCurrentValue();
     let keys = currentValue ?? [];
 
@@ -121,6 +140,7 @@ const DropDownBox = (DropDownEditor as any).inherit({
       this
         ._loadItem(key)
         .always((item) => {
+          // @ts-expect-error ts-error
           const displayValue = this._displayGetter(item);
           if (isDefined(displayValue)) {
             values.push({ itemKey: key, itemDisplayValue: displayValue } as never);
@@ -132,7 +152,7 @@ const DropDownBox = (DropDownEditor as any).inherit({
       return deferred;
     });
 
-    const callBase = this.callBase.bind(this);
+    const callBase = super._renderInputValue.bind(this);
     return when
       .apply(this, itemLoadDeferreds)
       .always(() => {
@@ -143,17 +163,18 @@ const DropDownBox = (DropDownEditor as any).inherit({
           value: values.length && orderedValues,
         });
       });
-  },
+  }
 
-  _loadItem(value) {
+  _loadItem(value): DeferredObj<unknown> {
     const deferred = Deferred();
     const that = this;
-
+    // @ts-expect-error ts-error
     const selectedItem = grep(this.option('items') || [], (item) => this._isValueEquals(this._valueGetter(item), value))[0];
 
     if (selectedItem !== undefined) {
       deferred.resolve(selectedItem);
     } else {
+      // @ts-expect-error ts-error
       this._loadValue(value)
         .done((item) => {
           deferred.resolve(item);
@@ -170,11 +191,11 @@ const DropDownBox = (DropDownEditor as any).inherit({
           }
         });
     }
-
+    // @ts-expect-error
     return deferred.promise();
-  },
+  }
 
-  _popupTabHandler(e) {
+  _popupTabHandler(e): void {
     if (normalizeKeyName(e) !== 'tab') return;
 
     const $firstTabbable = this._getTabbableElements().first().get(0);
@@ -185,16 +206,17 @@ const DropDownBox = (DropDownEditor as any).inherit({
 
     if (moveBackward || moveForward) {
       this.close();
-      // @ts-expect-error
+      // @ts-expect-error ts-error
       eventsEngine.trigger(this._input(), 'focus');
 
       if (moveBackward) {
         e.preventDefault();
       }
     }
-  },
+  }
 
-  _renderPopupContent() {
+  _renderPopupContent(): void {
+    // @ts-expect-error ts-error
     if (this.option('contentTemplate') === ANONYMOUS_TEMPLATE_NAME) {
       return;
     }
@@ -204,7 +226,7 @@ const DropDownBox = (DropDownEditor as any).inherit({
     if (!(contentTemplate && this.option('contentTemplate'))) {
       return;
     }
-
+    // @ts-expect-error ts-error
     const $popupContent = this._popup.$content();
     const templateData = {
       value: this._fieldRenderData(),
@@ -217,51 +239,55 @@ const DropDownBox = (DropDownEditor as any).inherit({
       container: getPublicElement($popupContent),
       model: templateData,
     });
-  },
+  }
 
-  _canShowVirtualKeyboard() {
-    // @ts-expect-error
-    return realDevice.mac; // T845484
-  },
+  _canShowVirtualKeyboard(): boolean {
+    // @ts-expect-error ts-error
+    return devices.real().mac; // T845484
+  }
 
-  _isNestedElementActive() {
+  _isNestedElementActive(): boolean {
     const activeElement = getActiveElement();
+    // @ts-expect-error ts-error
     return activeElement && this._popup.$content().get(0).contains(activeElement);
-  },
+  }
 
-  _shouldHideOnParentScroll() {
-    return realDevice.deviceType === 'desktop' && this._canShowVirtualKeyboard() && this._isNestedElementActive();
-  },
+  _shouldHideOnParentScroll(): boolean {
+    return devices.real().deviceType === 'desktop' && this._canShowVirtualKeyboard() && this._isNestedElementActive();
+  }
 
-  _popupHiddenHandler() {
-    this.callBase();
+  _popupHiddenHandler(): void {
+    super._popupHiddenHandler();
     this._popupPosition = undefined;
-  },
+  }
 
-  _popupPositionedHandler(e) {
-    this.callBase(e);
+  _popupPositionedHandler(e): void {
+    super._popupPositionedHandler(e);
     this._popupPosition = e.position;
-  },
+  }
 
-  _getDefaultPopupPosition(isRtlEnabled) {
-    const { my, at } = this.callBase(isRtlEnabled);
+  _getDefaultPopupPosition(isRtlEnabled?: boolean): PositionConfig {
+    const { my, at } = super._getDefaultPopupPosition(isRtlEnabled);
 
     return {
       my,
       at,
+      // @ts-expect-error ts-error
       offset: { v: -1 },
       collision: 'flipfit',
     };
-  },
+  }
 
-  _popupConfig() {
+  _popupConfig(): PopupProperties {
     const { focusStateEnabled } = this.option();
 
-    return extend(this.callBase(), {
+    return {
+      ...super._popupConfig(),
       tabIndex: -1,
       dragEnabled: false,
       focusStateEnabled,
       contentTemplate: ANONYMOUS_TEMPLATE_NAME,
+      // @ts-expect-error ts-error
       hideOnParentScroll: this._shouldHideOnParentScroll.bind(this),
       position: extend(this.option('popupPosition'), {
         of: this.$element(),
@@ -272,19 +298,21 @@ const DropDownBox = (DropDownEditor as any).inherit({
 
         return getElementMaxHeightByWindow(this.$element(), popupLocation);
       }.bind(this),
-    });
-  },
+    };
+  }
 
-  _popupShownHandler() {
-    this.callBase();
+  _popupShownHandler(): void {
+    super._popupShownHandler();
     const $firstElement = this._getTabbableElements().first();
-    // @ts-expect-error
+    // @ts-expect-error ts-error
     eventsEngine.trigger($firstElement, 'focus');
-  },
+  }
 
-  _setCollectionWidgetOption: noop,
+  // eslint-disable-next-line class-methods-use-this
+  _setCollectionWidgetOption(): void {}
 
   _optionChanged(args) {
+    // @ts-expect-error ts-error
     this._dataExpressionOptionChanged(args);
     switch (args.name) {
       case 'dataSource':
@@ -300,10 +328,13 @@ const DropDownBox = (DropDownEditor as any).inherit({
         this._invalidate();
         break;
       default:
-        this.callBase(args);
+        super._optionChanged(args);
     }
-  },
-}).include(DataExpressionMixin);
+  }
+}
+
+// @ts-expect-error ts-error
+DropDownBox.include(DataExpressionMixin);
 
 registerComponent('dxDropDownBox', DropDownBox);
 

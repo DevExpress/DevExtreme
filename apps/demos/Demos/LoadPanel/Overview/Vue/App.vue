@@ -9,18 +9,18 @@
     </div>
     <div id="employee">
       <p>
-        Birth date: <b>{{ employeeInfo.Birth_Date }}</b>
+        Birth date: <b>{{ employeeInfo?.Birth_Date }}</b>
       </p>
       <p class="address">
         Address:<br>
-        <b>{{ employeeInfo.City }}</b><br>
-        <span>{{ employeeInfo.Zipcode }}</span>
-        <span>{{ employeeInfo.Address }}</span>
+        <b>{{ employeeInfo?.City }}</b><br>
+        <span>{{ employeeInfo?.Zipcode }}</span>
+        <span>{{ employeeInfo?.Address }}</span>
       </p>
       <p>
         Phone:
-        <b>{{ employeeInfo.Mobile_Phone }}</b><br>
-        Email: <b>{{ employeeInfo.Email }}</b>
+        <b>{{ employeeInfo?.Mobile_Phone }}</b><br>
+        Email: <b>{{ employeeInfo?.Email }}</b>
       </p>
     </div>
 
@@ -73,7 +73,7 @@ import { DxCheckBox } from 'devextreme-vue/check-box';
 import { DxLoadPanel } from 'devextreme-vue/load-panel';
 import { employee } from './data.ts';
 
-const employeeInfo = ref<typeof employee>({});
+const employeeInfo = ref<typeof employee>();
 const loadingVisible = ref(false);
 const position = { of: '#employee' };
 const showIndicator = ref(true);
@@ -82,7 +82,7 @@ const showPane = ref(true);
 const hideOnOutsideClick = ref(false);
 
 function showLoadPanel() {
-  employeeInfo.value = {};
+  employeeInfo.value = null;
   loadingVisible.value = true;
 }
 function onShown() {

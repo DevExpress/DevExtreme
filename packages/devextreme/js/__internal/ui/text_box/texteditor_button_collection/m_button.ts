@@ -1,89 +1,107 @@
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
+import type { Properties } from '@js/ui/button';
+import type Button from '@js/ui/button';
+
+import type TextEditorBase from '../m_text_editor.base';
 
 export default class TextEditorButton {
-  $container?: dxElementWrapper;
+  $container!: dxElementWrapper;
 
-  $placeMarker?: dxElementWrapper;
+  $placeMarker?: dxElementWrapper | null;
 
-  instance?: any;
+  instance?: Button | null;
 
-  editor?: any;
+  editor!: TextEditorBase;
 
-  name?: any;
+  name!: string;
 
-  options?: any;
+  options!: Properties;
 
-  constructor(name, editor, options) {
+  constructor(
+    name: string,
+    editor: TextEditorBase,
+    options: Properties,
+  ) {
     this.instance = null;
-
-    // @ts-expect-error
+    // @ts-expect-error ts-error
     this.$container = null;
-    // @ts-expect-error
     this.$placeMarker = null;
     this.editor = editor;
     this.name = name;
     this.options = options || {};
   }
 
-  _addPlaceMarker($container) {
+  _addPlaceMarker($container: dxElementWrapper): void {
     this.$placeMarker = $('<div>').appendTo($container);
   }
 
-  _addToContainer($element) {
+  _addToContainer($element: dxElementWrapper): void {
     const { $placeMarker, $container } = this;
 
-    $placeMarker ? $placeMarker.replaceWith($element) : $element.appendTo($container);
+    if ($placeMarker) {
+      $placeMarker.replaceWith($element);
+    } else {
+      $element.appendTo($container);
+    }
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _attachEvents(instance: any, $element: dxElementWrapper) {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars, class-methods-use-this
+  _attachEvents(instance: unknown, $element: dxElementWrapper): void {
     throw 'Not implemented';
   }
 
+  // eslint-disable-next-line class-methods-use-this
   _create(): {
-    instance: any;
+    instance: Button | dxElementWrapper;
     $element: dxElementWrapper;
   } {
     throw 'Not implemented';
   }
 
-  _isRendered() {
+  _isRendered(): boolean {
     return !!this.instance;
   }
 
-  _isVisible() {
+  _isVisible(): boolean {
     const { editor, options } = this;
 
+    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
     return options.visible || !editor.option('readOnly');
   }
 
-  _isDisabled() {
+  // eslint-disable-next-line class-methods-use-this
+  _isDisabled(): boolean | undefined {
     throw 'Not implemented';
   }
 
-  _shouldRender() {
+  _shouldRender(): boolean {
     return this._isVisible() && !this._isRendered();
   }
 
-  dispose() {
+  dispose(): void {
     const { instance, $placeMarker } = this;
 
     if (instance) {
       // TODO: instance.dispose()
-      instance.dispose ? instance.dispose() : instance.remove();
+      if (instance.dispose) {
+        instance.dispose();
+      } else {
+        // @ts-expect-error ts-error
+        instance.remove();
+      }
       this.instance = null;
     }
 
     $placeMarker?.remove();
   }
 
-  render($container = this.$container) {
+  render($container: dxElementWrapper = this.$container): void {
     this.$container = $container;
 
     if (this._isVisible()) {
       const { instance, $element } = this._create();
-
+      // @ts-expect-error ts-error
       this.instance = instance;
       this._attachEvents(instance, $element);
     } else {
@@ -91,7 +109,7 @@ export default class TextEditorButton {
     }
   }
 
-  update() {
+  update(): boolean {
     if (this._shouldRender()) {
       this.render();
     }

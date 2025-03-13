@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react';
-import SelectBox, { SelectBoxTypes } from 'devextreme-react/select-box';
+import SelectBox, { type SelectBoxTypes } from 'devextreme-react/select-box';
 import {
   Chart,
   Series,
@@ -8,7 +8,7 @@ import {
   Export,
   Legend,
   Margin,
-  ChartTypes,
+  type ChartTypes,
 } from 'devextreme-react/chart';
 
 import { dataSource, seriesTypeLabel } from './data.ts';

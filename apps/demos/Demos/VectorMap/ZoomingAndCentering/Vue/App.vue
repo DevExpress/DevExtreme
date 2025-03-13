@@ -30,7 +30,7 @@ import {
   DxVectorMap,
   DxLayer,
   DxTooltip,
-  DxVectorMapTypes,
+  type DxVectorMapTypes,
 } from 'devextreme-vue/vector-map';
 import {
   DxButton,

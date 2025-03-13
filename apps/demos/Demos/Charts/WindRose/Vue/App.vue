@@ -41,7 +41,7 @@
 import { ref, computed } from 'vue';
 import {
   DxPolarChart,
-  DxPolarChartTypes,
+  type DxPolarChartTypes,
   DxCommonSeriesSettings,
   DxSeries,
   DxArgumentAxis,

@@ -101,15 +101,18 @@ import {
   DxSearch,
   DxSearchPanel,
   DxFilterRow,
-  DxDataGridTypes,
   DxPager,
+  type DxDataGridTypes,
 } from 'devextreme-vue/data-grid';
 import DxSelectBox from 'devextreme-vue/select-box';
 import DxCheckBox from 'devextreme-vue/check-box';
-import { Options as DataSourceOptions } from 'devextreme/data/data_source';
-import { orders, Order } from './data.ts';
+import { type Options as DataSourceOptions } from 'devextreme/data/data_source';
+import { orders, type Order } from './data.ts';
 
-const applyFilterTypes = [
+const applyFilterTypes: {
+  key: DxDataGridTypes.ApplyFilterMode,
+  name: string,
+}[] = [
   {
     key: 'auto',
     name: 'Immediately',
@@ -126,12 +129,12 @@ const currentFilter = ref(applyFilterTypes[0].key);
 
 const dataGridRef = ref<DxDataGrid | null>(null);
 
-const saleAmountEditorOptions = { 
-  format: 'currency', 
-  showClearButton: true, 
+const saleAmountEditorOptions = {
+  format: 'currency',
+  showClearButton: true,
   inputAttr: {
     'aria-label': 'Filter cell',
-  }, 
+  },
 };
 const saleAmountHeaderFilter = [
   {

@@ -5,10 +5,11 @@ import {
   swipe as swipeEventSwipe,
 } from '@js/common/core/events/swipe';
 import { addNamespace } from '@js/common/core/events/utils/index';
-import DOMComponent from '@js/core/dom_component';
-import { extend } from '@js/core/utils/extend';
+import type { Properties as DOMComponentProperties } from '@js/core/dom_component';
 import { each } from '@js/core/utils/iterator';
 import { name } from '@js/core/utils/public_component';
+import DOMComponent from '@ts/core/widget/dom_component';
+import type { OptionChanged } from '@ts/core/widget/types';
 
 const DX_SWIPEABLE = 'dxSwipeable';
 const SWIPEABLE_CLASS = 'dx-swipeable';
@@ -21,11 +22,26 @@ const ACTION_TO_EVENT_MAP = {
 };
 
 const IMMEDIATE_TIMEOUT = 180;
-// @ts-expect-error
-const Swipeable = DOMComponent.inherit({
 
-  _getDefaultOptions() {
-    return extend(this.callBase(), {
+export interface SwipeableProperties extends DOMComponentProperties {
+  elastic?: boolean;
+  immediate?: boolean;
+  immediateTimeout?: number;
+  direction?: string;
+  itemSizeFunc?: (() => number) | null;
+  onStart?: ((e) => void) | null;
+  onUpdated?: ((e) => void) | null;
+  onEnd?: ((e) => void) | null;
+  onCancel?: ((e) => void) | null;
+  disabled?: boolean;
+}
+
+class Swipeable extends DOMComponent<Swipeable, SwipeableProperties> {
+  _eventData?: Record<string, unknown>;
+
+  _getDefaultOptions(): SwipeableProperties {
+    return {
+      ...super._getDefaultOptions(),
       elastic: true,
       immediate: false,
       immediateTimeout: IMMEDIATE_TIMEOUT,
@@ -35,17 +51,17 @@ const Swipeable = DOMComponent.inherit({
       onUpdated: null,
       onEnd: null,
       onCancel: null,
-    });
-  },
+    };
+  }
 
-  _render() {
-    this.callBase();
+  _render(): void {
+    super._render();
 
     this.$element().addClass(SWIPEABLE_CLASS);
     this._attachEventHandlers();
-  },
+  }
 
-  _attachEventHandlers() {
+  _attachEventHandlers(): void {
     this._detachEventHandlers();
 
     if (this.option('disabled')) {
@@ -57,15 +73,15 @@ const Swipeable = DOMComponent.inherit({
     this._createEventData();
 
     each(ACTION_TO_EVENT_MAP, (actionName, eventName) => {
+      // @ts-expect-error ts-error
       const action = this._createActionByOption(actionName, { context: this });
-
+      // @ts-expect-error ts-error
       eventName = addNamespace(eventName, NAME);
-
       eventsEngine.on(this.$element(), eventName, this._eventData, (e) => action({ event: e }));
     });
-  },
+  }
 
-  _createEventData() {
+  _createEventData(): void {
     this._eventData = {
       elastic: this.option('elastic'),
       itemSizeFunc: this.option('itemSizeFunc'),
@@ -73,13 +89,13 @@ const Swipeable = DOMComponent.inherit({
       immediate: this.option('immediate'),
       immediateTimeout: this.option('immediateTimeout'),
     };
-  },
+  }
 
-  _detachEventHandlers() {
+  _detachEventHandlers(): void {
     eventsEngine.off(this.$element(), `.${DX_SWIPEABLE}`);
-  },
+  }
 
-  _optionChanged(args) {
+  _optionChanged(args: OptionChanged<SwipeableProperties>): void {
     switch (args.name) {
       case 'disabled':
       case 'onStart':
@@ -96,14 +112,15 @@ const Swipeable = DOMComponent.inherit({
       case 'rtlEnabled':
         break;
       default:
-        this.callBase(args);
+        super._optionChanged(args);
     }
-  },
+  }
 
-  _useTemplates() {
+  // eslint-disable-next-line class-methods-use-this
+  _useTemplates(): boolean {
     return false;
-  },
-});
+  }
+}
 
 name(Swipeable, DX_SWIPEABLE);
 

@@ -3,72 +3,82 @@ import scrollEvents from '@js/common/core/events/gesture/emitter.gesture.scroll'
 import pointerEvents from '@js/common/core/events/pointer';
 import { addNamespace, eventData } from '@js/common/core/events/utils/index';
 import registerComponent from '@js/core/component_registrator';
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { ensureDefined, noop } from '@js/core/utils/common';
-import { extend } from '@js/core/utils/extend';
 import {
   getElementBoxParams, getOuterHeight, getVerticalOffsets, parseHeight,
 } from '@js/core/utils/size';
 import { isDefined } from '@js/core/utils/type';
 import { getWindow, hasWindow } from '@js/core/utils/window';
-import TextBox from '@js/ui/text_box';
+import type { Properties } from '@js/ui/text_area';
+import type { OptionChanged } from '@ts/core/widget/types';
+import TextBox from '@ts/ui/text_box/m_text_box';
 import { allowScroll, prepareScrollData } from '@ts/ui/text_box/m_utils.scroll';
 
 const TEXTAREA_CLASS = 'dx-textarea';
 const TEXTEDITOR_INPUT_CLASS_AUTO_RESIZE = 'dx-texteditor-input-auto-resize';
 
-// @ts-expect-error
-const TextArea = TextBox.inherit({
-  _getDefaultOptions() {
-    return extend(this.callBase(), {
+export interface TextAreaProperties extends Omit<Properties,
+'onChange' | 'onCopy' | 'onCut' | 'onEnterKey' | 'onFocusIn' | 'onFocusOut' | 'onInput' |
+'onKeyDown' | 'onKeyUp' | 'onPaste' | 'onValueChanged' | 'onContentReady' | 'onDisposing' |
+'onOptionChanged' | 'onInitialized'
+> {}
+class TextArea extends TextBox<TextAreaProperties> {
+  _eventY!: number;
+
+  _getDefaultOptions(): TextAreaProperties {
+    return {
+      ...super._getDefaultOptions(),
       spellcheck: true,
-      minHeight: undefined,
-      maxHeight: undefined,
       autoResizeEnabled: false,
-    });
-  },
+    };
+  }
 
-  _initMarkup() {
+  _initMarkup(): void {
     this.$element().addClass(TEXTAREA_CLASS);
-    this.callBase();
+    super._initMarkup();
     this.setAria('multiline', 'true');
-  },
+  }
 
-  _renderContentImpl() {
+  _renderContentImpl(): void {
     this._updateInputHeight();
-    this.callBase();
-  },
+    super._renderContentImpl();
+  }
 
-  _renderInput() {
-    this.callBase();
+  _renderInput(): void {
+    super._renderInput();
     this._renderScrollHandler();
-  },
+  }
 
-  _createInput() {
+  _createInput(): dxElementWrapper {
     const $input = $('<textarea>');
     this._applyInputAttributes($input, this.option('inputAttr'));
     this._updateInputAutoResizeAppearance($input);
 
     return $input;
-  },
+  }
 
-  _setInputMinHeight: noop,
+  _setInputMinHeight(): void {}
 
-  _renderScrollHandler() {
+  _renderScrollHandler(): void {
     this._eventY = 0;
     const $input = this._input();
     const initScrollData = prepareScrollData($input, true);
 
+    // @ts-expect-error ts-error
     eventsEngine.on($input, addNamespace(scrollEvents.init, this.NAME), initScrollData, noop);
+    // @ts-expect-error ts-error
     eventsEngine.on($input, addNamespace(pointerEvents.down, this.NAME), this._pointerDownHandler.bind(this));
+    // @ts-expect-error ts-error
     eventsEngine.on($input, addNamespace(pointerEvents.move, this.NAME), this._pointerMoveHandler.bind(this));
-  },
+  }
 
-  _pointerDownHandler(e) {
+  _pointerDownHandler(e): void {
     this._eventY = eventData(e).y;
-  },
+  }
 
-  _pointerMoveHandler(e) {
+  _pointerMoveHandler(e): void {
     const currentEventY = eventData(e).y;
     const delta = this._eventY - currentEventY;
 
@@ -78,9 +88,9 @@ const TextArea = TextBox.inherit({
     }
 
     this._eventY = currentEventY;
-  },
+  }
 
-  _renderDimensions() {
+  _renderDimensions(): void {
     const $element = this.$element();
     const element = $element.get(0);
     const width = this._getOptionValue('width', element);
@@ -89,42 +99,46 @@ const TextArea = TextBox.inherit({
     const maxHeight = this.option('maxHeight');
 
     $element.css({
+      // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
       minHeight: minHeight !== undefined ? minHeight : '',
+      // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
       maxHeight: maxHeight !== undefined ? maxHeight : '',
       width,
       height,
     });
-  },
+  }
 
-  _resetDimensions() {
+  _resetDimensions(): void {
     this.$element().css({
       height: '',
       minHeight: '',
       maxHeight: '',
     });
-  },
+  }
 
-  _renderEvents() {
+  _renderEvents(): void {
     if (this.option('autoResizeEnabled')) {
+      // @ts-expect-error ts-error
       eventsEngine.on(this._input(), addNamespace('input paste', this.NAME), this._updateInputHeight.bind(this));
     }
 
-    this.callBase();
-  },
+    super._renderEvents();
+  }
 
-  _refreshEvents() {
+  _refreshEvents(): void {
+    // @ts-expect-error ts-error
     eventsEngine.off(this._input(), addNamespace('input paste', this.NAME));
-    this.callBase();
-  },
+    super._refreshEvents();
+  }
 
-  _getHeightDifference($input) {
-    return getVerticalOffsets(this._$element.get(0), false)
-            + getVerticalOffsets(this._$textEditorContainer.get(0), false)
-            + getVerticalOffsets(this._$textEditorInputContainer.get(0), true)
-            + getElementBoxParams('height', getWindow().getComputedStyle($input.get(0))).margin;
-  },
+  _getHeightDifference($input: dxElementWrapper): number {
+    return getVerticalOffsets(this.$element().get(0), false)
+      + getVerticalOffsets(this._$textEditorContainer.get(0), false)
+      + getVerticalOffsets(this._$textEditorInputContainer.get(0), true)
+      + getElementBoxParams('height', getWindow().getComputedStyle($input.get(0))).margin;
+  }
 
-  _updateInputHeight() {
+  _updateInputHeight(): void {
     if (!hasWindow()) {
       return;
     }
@@ -140,7 +154,7 @@ const TextArea = TextBox.inherit({
     }
 
     this._resetDimensions();
-    this._$element.css('height', getOuterHeight(this._$element));
+    this.$element().css('height', getOuterHeight(this.$element()));
     $input.css('height', 0);
 
     const heightDifference = this._getHeightDifference($input);
@@ -166,50 +180,52 @@ const TextArea = TextBox.inherit({
     $input.css('height', inputHeight);
 
     if (autoHeightResizing) {
-      this._$element.css('height', 'auto');
+      this.$element().css('height', 'auto');
     }
-  },
+  }
 
   _getBoundaryHeight(optionName) {
     const boundaryValue = this.option(optionName);
 
     if (isDefined(boundaryValue)) {
-      return typeof boundaryValue === 'number' ? boundaryValue : parseHeight(boundaryValue, this.$element().get(0).parentElement, this._$element.get(0));
+      return typeof boundaryValue === 'number' ? boundaryValue : parseHeight(boundaryValue, this.$element().get(0).parentElement, this.$element().get(0));
     }
-  },
+  }
 
-  _renderInputType: noop,
+  _renderInputType(): void {}
 
-  _visibilityChanged(visible) {
+  _visibilityChanged(visible: boolean): void {
     if (visible) {
       this._updateInputHeight();
     }
-  },
+  }
 
-  _updateInputAutoResizeAppearance($input, isAutoResizeEnabled) {
+  _updateInputAutoResizeAppearance($input: dxElementWrapper, isAutoResizeEnabled?): void {
     if ($input) {
       const autoResizeEnabled = ensureDefined(isAutoResizeEnabled, this.option('autoResizeEnabled'));
 
       $input.toggleClass(TEXTEDITOR_INPUT_CLASS_AUTO_RESIZE, autoResizeEnabled);
     }
-  },
+  }
 
-  _dimensionChanged() {
+  _dimensionChanged(): void {
     if (this.option('visible')) {
       this._updateInputHeight();
     }
-  },
+  }
 
-  _optionChanged(args) {
-    switch (args.name) {
+  _optionChanged(args: OptionChanged<TextAreaProperties>): void {
+    const { name, value } = args;
+
+    switch (name) {
       case 'autoResizeEnabled':
-        this._updateInputAutoResizeAppearance(this._input(), args.value);
+        this._updateInputAutoResizeAppearance(this._input(), value);
         this._refreshEvents();
         this._updateInputHeight();
         break;
       case 'value':
       case 'height':
-        this.callBase(args);
+        super._optionChanged(args);
         this._updateInputHeight();
         break;
       case 'minHeight':
@@ -218,14 +234,16 @@ const TextArea = TextBox.inherit({
         this._updateInputHeight();
         break;
       case 'visible':
-        this.callBase(args);
-        args.value && this._updateInputHeight();
+        super._optionChanged(args);
+        if (value) {
+          this._updateInputHeight();
+        }
         break;
       default:
-        this.callBase(args);
+        super._optionChanged(args);
     }
-  },
-});
+  }
+}
 
 registerComponent('dxTextArea', TextArea);
 

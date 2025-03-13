@@ -44,11 +44,12 @@ import {
   DxCommonSeriesSettings,
   DxSeries,
   DxMargin,
+  type DxPolarChartTypes,
 } from 'devextreme-vue/polar-chart';
 import DxSelectBox from 'devextreme-vue/select-box';
 import { types, dataSource } from './data.ts';
 
-const currentType = ref(types[0]);
+const currentType = ref<DxPolarChartTypes.PolarChartSeriesType>(types[0]);
 </script>
 <style>
 #chart-demo {

@@ -1,3 +1,4 @@
+/* eslint-disable spellcheck/spell-checker */
 import noOnlyTests from 'eslint-plugin-no-only-tests';
 import i18N from 'eslint-plugin-i18n';
 import babelParser from '@babel/eslint-parser';
@@ -7,10 +8,10 @@ import { fileURLToPath } from 'node:url';
 import js from '@eslint/js';
 import { FlatCompat } from '@eslint/eslintrc';
 import stylistic from '@stylistic/eslint-plugin';
-import { rules as stylisticRules } from '@eslint-stylistic/metadata';
 import importPlugin from 'eslint-plugin-import';
 import globals from 'globals';
 import simpleImportSort from 'eslint-plugin-simple-import-sort';
+import { changeRulesToStylistic } from 'eslint-migration-utils';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -19,24 +20,6 @@ const compat = new FlatCompat({
     recommendedConfig: js.configs.recommended,
     allConfig: js.configs.all
 });
-
-const REMOVED_TYPESCRIPT_RULES = ['@typescript-eslint/no-throw-literal', '@typescript-eslint/ban-types'];
-
-// TODO Salimov: We need to remove this function after updating eslint-config-devextreme
-const processDevExtremeRules = devExtremeRules => (
-    {
-        ...Object.fromEntries(Object
-            .entries(devExtremeRules)
-            .filter(([key]) => !REMOVED_TYPESCRIPT_RULES.includes(key))
-            .map(([key, value]) => {
-                const rule = stylisticRules.find((r) => key.includes(r.name));
-                const newKey = rule ? `@stylistic/${rule.name}` : key;
-
-                return [newKey, value];
-            })
-        )
-    }
-);
 
 export default [
     {
@@ -195,7 +178,7 @@ export default [
         }
 
         if (config.rules) {
-            newConfig.rules = processDevExtremeRules(config.rules);
+            newConfig.rules = changeRulesToStylistic(config.rules);
         }
 
         return newConfig;
@@ -240,7 +223,7 @@ export default [
         };
 
         if (config.rules) {
-            newConfig.rules = processDevExtremeRules(config.rules);
+            newConfig.rules = changeRulesToStylistic(config.rules);
         }
 
         return newConfig;
@@ -556,7 +539,7 @@ export default [
         rules: {
             '@typescript-eslint/explicit-member-accessibility': ['error', {
                 accessibility: 'explicit',
-    
+
                 overrides: {
                     constructors: 'off',
                 },

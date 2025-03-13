@@ -66,7 +66,6 @@
           />
         </div>
       </div>
-
     </div>
   </div>
 </template>
@@ -133,7 +132,7 @@ const dataSource = new PivotGridDataSource({
 
 const state = ref(dataSource.state());
 const layouts = ref(service.getLayouts());
-const layout = ref(0);
+const layout = ref(layouts.value[0].key);
 const applyChangesModes = ['instantly', 'onDemand'];
 const applyChangesMode = ref('instantly');
 

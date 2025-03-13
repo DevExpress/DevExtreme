@@ -9,8 +9,8 @@ const TOOLBAR_MENU_SECTION_CLASS = 'dx-toolbar-menu-section';
 const TOOLBAR_MENU_CUSTOM_CLASS = 'dx-toolbar-menu-custom';
 const TOOLBAR_MENU_LAST_SECTION_CLASS = 'dx-toolbar-menu-last-section';
 const SCROLLVIEW_CONTENT_CLASS = 'dx-scrollview-content';
-
 export default class ToolbarMenuList extends ListBase {
+  // @ts-expect-error ts-error
   _activeStateUnit?: string;
 
   _init(): void {
@@ -26,17 +26,14 @@ export default class ToolbarMenuList extends ListBase {
   }
 
   _getSections() {
-    // @ts-expect-error
     return this._itemContainer().children();
   }
 
   _itemElements() {
-    // @ts-expect-error
     return this._getSections().children(this._itemSelector());
   }
 
   _renderSections(): void {
-    // @ts-expect-error
     const $container = this._itemContainer();
 
     each(['before', 'center', 'after', 'menu'], (_, section) => {
@@ -52,19 +49,18 @@ export default class ToolbarMenuList extends ListBase {
   }
 
   _renderItems(): void {
+    // @ts-expect-error ts-error
     super._renderItems.apply(this, arguments);
     this._updateSections();
   }
 
   _setMenuRole(): void {
-    // @ts-expect-error
     const $menuContainer = this.$element().find(`.${SCROLLVIEW_CONTENT_CLASS}`);
 
     $menuContainer.attr('role', 'menu');
   }
 
   _updateSections(): void {
-    // @ts-expect-error
     const $sections = this.$element().find(`.${TOOLBAR_MENU_SECTION_CLASS}`);
     $sections.removeClass(TOOLBAR_MENU_LAST_SECTION_CLASS);
     $sections.not(':empty').eq(-1).addClass(TOOLBAR_MENU_LAST_SECTION_CLASS);
@@ -100,7 +96,7 @@ export default class ToolbarMenuList extends ListBase {
     const template = super._getItemTemplateName(args);
 
     const data = args.itemData;
-    const menuTemplate = data && data.menuItemTemplate;
+    const menuTemplate = data?.menuItemTemplate;
 
     return menuTemplate || template;
   }

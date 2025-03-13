@@ -54,15 +54,14 @@ class Widget<
 
   private readonly _feedbackShowTimeout = 30;
 
-  private _contentReadyAction?: ((event?: Record<string, unknown>) => void) | null;
+  _contentReadyAction?: ((event?: Record<string, unknown>) => void) | null;
 
   private _keyboardListenerId?: string | null;
 
   private _isReady?: boolean;
 
-  // eslint-disable-next-line @stylistic/max-len
-  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types, @typescript-eslint/explicit-function-return-type
-  static getOptionsFromContainer({ name, fullName, value }) {
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+  static getOptionsFromContainer({ name, fullName, value }): Record<string, unknown> {
     let options = {};
 
     if (name === fullName) {
@@ -205,7 +204,7 @@ class Widget<
       .done(() => (!this._disposed ? this._fireContentReadyAction() : void 0));
   }
 
-  _renderContentImpl(): void {}
+  _renderContentImpl(): Promise<void> | void {}
 
   _fireContentReadyAction(): Promise<void> | DeferredObj<void> | void {
     return deferRender(() => this._contentReadyAction?.());
@@ -305,7 +304,6 @@ class Widget<
     return this._focusTarget();
   }
 
-  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   _focusInHandler(event: DxEvent): void {
     if (!event.isDefaultPrevented()) {
       this._createActionByOption('onFocusIn', {
@@ -315,7 +313,6 @@ class Widget<
     }
   }
 
-  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   _focusOutHandler(event: DxEvent): void {
     if (!event.isDefaultPrevented()) {
       this._createActionByOption('onFocusOut', {
@@ -679,7 +676,7 @@ class Widget<
     focus.trigger(this._focusTarget());
   }
 
-  registerKeyHandler(key: string, handler: () => void): void {
+  registerKeyHandler(key: string, handler: (event?) => void): void {
     const currentKeys = this._supportedKeys();
 
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @stylistic/max-len

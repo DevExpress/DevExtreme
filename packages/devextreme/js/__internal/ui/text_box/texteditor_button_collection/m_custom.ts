@@ -1,16 +1,20 @@
 import { name as clickEventName } from '@js/common/core/events/click';
 import eventsEngine from '@js/common/core/events/core/events_engine';
 import { end, start } from '@js/common/core/events/hover';
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
-import { extend } from '@js/core/utils/extend';
 import Button from '@js/ui/button';
 
+import type TextEditorBase from '../m_text_editor.base';
 import TextEditorButton from './m_button';
 
 const CUSTOM_BUTTON_HOVERED_CLASS = 'dx-custom-button-hovered';
 
 export default class CustomButton extends TextEditorButton {
-  _attachEvents(instance, $element) {
+  _attachEvents(
+    instance: unknown,
+    $element: dxElementWrapper,
+  ): void {
     const { editor } = this;
 
     eventsEngine.on($element, start, () => {
@@ -24,17 +28,21 @@ export default class CustomButton extends TextEditorButton {
     });
   }
 
-  _create() {
+  _create(): {
+    $element: dxElementWrapper;
+    instance: Button;
+  } {
     const { editor } = this;
     const $element = $('<div>');
 
     this._addToContainer($element);
 
-    const instance = editor._createComponent($element, Button, extend({}, this.options, {
+    const instance = editor._createComponent($element, Button, {
+      ...this.options,
       ignoreParentReadOnly: true,
       disabled: this._isDisabled(),
       integrationOptions: this._prepareIntegrationOptions(editor),
-    }));
+    });
 
     return {
       $element,
@@ -42,11 +50,15 @@ export default class CustomButton extends TextEditorButton {
     };
   }
 
-  _prepareIntegrationOptions(editor) {
-    return extend({}, editor.option('integrationOptions'), { skipTemplates: ['content'] });
+  // eslint-disable-next-line class-methods-use-this
+  _prepareIntegrationOptions(editor: TextEditorBase): Record<string, unknown> {
+    return {
+      ...editor.option('integrationOptions'),
+      skipTemplates: ['content'],
+    };
   }
 
-  update() {
+  update(): boolean {
     const isUpdated = super.update();
 
     if (this.instance) {
@@ -56,17 +68,23 @@ export default class CustomButton extends TextEditorButton {
     return isUpdated;
   }
 
-  _isVisible() {
-    const { editor } = this;
+  _isVisible(): boolean {
+    const { visible } = this.editor.option();
 
-    return editor.option('visible');
+    return !!visible;
   }
 
-  _isDisabled() {
+  _isDisabled(): boolean | undefined {
     const isDefinedByUser = this.options.disabled !== undefined;
     if (isDefinedByUser) {
-      return this.instance ? this.instance.option('disabled') : this.options.disabled;
+      if (this.instance) {
+        return this.instance.option('disabled');
+      }
+
+      return this.options.disabled;
     }
-    return this.editor.option('readOnly');
+    const { readOnly } = this.editor.option();
+
+    return readOnly;
   }
 }

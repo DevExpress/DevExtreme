@@ -13,8 +13,8 @@ import ajax from 'devextreme/core/utils/ajax';
 import { DxFileUploaderComponent, DxFileUploaderModule } from 'devextreme-angular';
 import { Observable } from 'rxjs';
 import createSpy = jasmine.createSpy;
-import RemoteFileSystemProvider from "devextreme/file_management/remote_provider";
-import FileSystemItem from "devextreme/file_management/file_system_item";
+import RemoteFileSystemProvider from 'devextreme/file_management/remote_provider';
+import FileSystemItem from 'devextreme/file_management/file_system_item';
 
 const interceptors: Record<string, () => void> = {};
 
@@ -46,34 +46,33 @@ const createBlobFile = function (name: string, size: number) {
 const createFileObject = (fileName, content) => {
   const result: any = new window.Blob([content], { type: 'application/octet-stream' });
   result.name = fileName;
-  result.lastModified = (new Date()).getTime();
+  result.lastModified = new Date().getTime();
   result._dxContent = content;
   return result;
 };
 
 const generateString = (size: number, content?) => {
-  if(!size) {
+  if (!size) {
     return '';
   }
 
   let result = content;
 
-  if(result === undefined) {
+  if (result === undefined) {
     result = 'A';
   }
 
-  if(result.length < size) {
+  if (result.length < size) {
     const count = Math.ceil(size / result.length);
     result = new Array(count + 1).join(result);
   }
 
-  if(result.length > size) {
+  if (result.length > size) {
     result = result.substr(0, size);
   }
 
   return result;
 };
-
 
 @Component({
   selector: 'test-container-component',
@@ -124,38 +123,38 @@ describe('Ajax request using DxHttpModule', () => {
   });
 
   it('remote provider should upload a file', (done) => {
-   const url = 'http://somefakedomain1221.com/json-url';
+    const url = 'http://somefakedomain1221.com/json-url';
 
-   const remoteProvider = new RemoteFileSystemProvider({
-     endpointUrl: url,
-   });
+    const remoteProvider = new RemoteFileSystemProvider({
+      endpointUrl: url,
+    });
 
-   const directory = new FileSystemItem('root', true,[]);
-   const fileData = createFileObject('New File 1.txt', generateString(100));
-   const chunkBlob = new window.Blob([generateString(20)], { type: 'application/octet-stream' });
-   const uploadInfo = {
-     bytesUploaded: 0,
-     chunkCount: 5,
-     customData: { },
-     chunkBlob,
-     chunkIndex: 0
-   };
+    const directory = new FileSystemItem('root', true, []);
+    const fileData = createFileObject('New File 1.txt', generateString(100));
+    const chunkBlob = new window.Blob([generateString(20)], { type: 'application/octet-stream' });
+    const uploadInfo = {
+      bytesUploaded: 0,
+      chunkCount: 5,
+      customData: { },
+      chunkBlob,
+      chunkIndex: 0,
+    };
 
-   let isUploadSuccess = false;
+    let isUploadSuccess = false;
 
-   remoteProvider.uploadFileChunk(fileData, uploadInfo, directory)
-   .then(() => {
-     isUploadSuccess = true;
-   })
-   // @ts-ignore
-   .always(() => {
-     expect(isUploadSuccess).toEqual(true);
-     done();
-   });
+    remoteProvider.uploadFileChunk(fileData, uploadInfo, directory)
+      .then(() => {
+        isUploadSuccess = true;
+      })
+    // @ts-expect-error
+      .always(() => {
+        expect(isUploadSuccess).toEqual(true);
+        done();
+      });
 
-   const req = httpTestingControllerMock.expectOne(url);
+    const req = httpTestingControllerMock.expectOne(url);
 
-   req.flush({success: true});
+    req.flush({ success: true });
   });
 
   it('should be aborted with correct status', (done) => {

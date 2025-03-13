@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import Chat, { ChatTypes } from 'devextreme-react/chat';
+import Chat, { type ChatTypes } from 'devextreme-react/chat';
 import { MessageEnteredEvent, TypingEndEvent, TypingStartEvent } from 'devextreme/ui/chat';
 
 import { currentUser, supportAgent, initialMessages } from './data.ts';
@@ -16,9 +16,9 @@ export default function App() {
 
   function typingStart({ user }: TypingStartEvent) {
     if (user.id === currentUser.id) {
-      setSupportChatTypingUsers([supportAgent]);
+      setSupportChatTypingUsers([currentUser]);
     } else {
-      setUserChatTypingUsers([currentUser]);
+      setUserChatTypingUsers([supportAgent]);
     }
   }
 

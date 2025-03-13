@@ -1,46 +1,52 @@
 $(() => {
-  $.connection.hub.url = 'https://js.devexpress.com/Demos/Mvc/signalr';
-  const hub = $.connection.liveUpdateSignalRHub;
+  const connection = new signalR.HubConnectionBuilder()
+    .withUrl('https://js.devexpress.com/Demos/NetCore/liveUpdateSignalRHub', {
+      skipNegotiation: true,
+      transport: signalR.HttpTransportType.WebSockets,
+    })
+    .configureLogging(signalR.LogLevel.Information)
+    .build();
+
   const store = new DevExpress.data.CustomStore({
     load() {
-      return hub.server.getAllStocks();
+      return connection.invoke("getAllStocks");
     },
-    key: 'Symbol',
+    key: 'symbol',
   });
 
-  hub.client.updateStockPrice = function (data) {
-    store.push([{ type: 'update', key: data.Symbol, data }]);
-  };
+  connection.on("updateStockPrice", (data) => {
+    store.push([{ type: 'update', key: data.symbol, data }]);
+  });
 
-  $.connection.hub.start({ waitForPageLoad: false }).done(() => {
+  connection.start().then(() => {
     $('#gridContainer').dxDataGrid({
       dataSource: store,
       showBorders: true,
       repaintChangesOnly: true,
       highlightChanges: true,
       columns: [{
-        dataField: 'LastUpdate',
+        dataField: 'lastUpdate',
         dataType: 'date',
         width: 115,
         format: 'longTime',
       }, {
-        dataField: 'Symbol',
+        dataField: 'symbol',
       }, {
-        dataField: 'Price',
+        dataField: 'price',
         dataType: 'number',
         format: '#0.####',
         cellTemplate(container, options) {
-          container.addClass((options.data.Change > 0) ? 'inc' : 'dec');
+          container.addClass((options.data.change > 0) ? 'inc' : 'dec');
           container.html(options.text);
         },
       }, {
-        dataField: 'Change',
+        dataField: 'change',
         dataType: 'number',
         width: 140,
         format: '#0.####',
         cellTemplate(container, options) {
           const fieldData = options.data;
-          container.addClass(fieldData.Change > 0 ? 'inc' : 'dec');
+          container.addClass(fieldData.change > 0 ? 'inc' : 'dec');
 
           $('<span>')
             .addClass('current-value')
@@ -53,19 +59,19 @@ $(() => {
 
           $('<span>')
             .addClass('diff')
-            .text(`${fieldData.PercentChange.toFixed(2)}%`)
+            .text(`${fieldData.percentChange.toFixed(2)}%`)
             .appendTo(container);
         },
       }, {
-        dataField: 'DayOpen',
+        dataField: 'dayOpen',
         dataType: 'number',
         format: '#0.####',
       }, {
-        dataField: 'DayMin',
+        dataField: 'dayMin',
         dataType: 'number',
         format: '#0.####',
       }, {
-        dataField: 'DayMax',
+        dataField: 'dayMax',
         dataType: 'number',
         format: '#0.####',
       }],
