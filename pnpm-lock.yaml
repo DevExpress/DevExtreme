@@ -946,14 +946,7 @@ importers:
     dependencies:
       '@babel/runtime':
         specifier: ^7.12.1
-<<<<<<< HEAD
         version: 7.26.0
-=======
-        version: 7.26.10
-      '@devextreme/runtime':
-        specifier: 3.0.13
-        version: 3.0.13
->>>>>>> 7d3174aac85d7b759842064ef5e659de3a17a739
       devexpress-diagram:
         specifier: 'catalog:'
         version: 2.2.15
@@ -1712,7 +1705,7 @@ importers:
         version: 15.11.0(typescript@5.4.5)
       stylelint-config-standard-scss:
         specifier: 9.0.0
-        version: 9.0.0(postcss@8.4.49)(stylelint@15.11.0(typescript@5.4.5))
+        version: 9.0.0(postcss@8.5.3)(stylelint@15.11.0(typescript@5.4.5))
       stylelint-scss:
         specifier: 6.10.0
         version: 6.10.0(stylelint@15.11.0(typescript@5.4.5))
@@ -20706,19 +20699,11 @@ snapshots:
       '@parcel/bundler-default': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.15))
       '@parcel/compressor-raw': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.15))
       '@parcel/core': 2.12.0(@swc/helpers@0.5.15)
-<<<<<<< HEAD
       '@parcel/namer-default': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.15))
       '@parcel/optimizer-css': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.15))
-      '@parcel/optimizer-htmlnano': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.15))(postcss@8.4.49)(relateurl@0.2.7)(terser@5.36.0)(typescript@5.4.5)
+      '@parcel/optimizer-htmlnano': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.15))(postcss@8.5.3)(relateurl@0.2.7)(terser@5.36.0)(typescript@5.4.5)
       '@parcel/optimizer-image': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.15))
       '@parcel/optimizer-svgo': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.15))
-=======
-      '@parcel/namer-default': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.15))(@swc/helpers@0.5.15)
-      '@parcel/optimizer-css': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.15))(@swc/helpers@0.5.15)
-      '@parcel/optimizer-htmlnano': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.15))(@swc/helpers@0.5.15)(postcss@8.5.3)(relateurl@0.2.7)(terser@5.36.0)(typescript@5.4.5)
-      '@parcel/optimizer-image': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.15))(@swc/helpers@0.5.15)
-      '@parcel/optimizer-svgo': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.15))(@swc/helpers@0.5.15)
->>>>>>> 7d3174aac85d7b759842064ef5e659de3a17a739
       '@parcel/optimizer-swc': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.15))(@swc/helpers@0.5.15)
       '@parcel/packager-css': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.15))
       '@parcel/packager-html': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.15))
@@ -20847,17 +20832,10 @@ snapshots:
     transitivePeerDependencies:
       - '@parcel/core'
 
-<<<<<<< HEAD
-  '@parcel/optimizer-htmlnano@2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.15))(postcss@8.4.49)(relateurl@0.2.7)(terser@5.36.0)(typescript@5.4.5)':
+  '@parcel/optimizer-htmlnano@2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.15))(postcss@8.5.3)(relateurl@0.2.7)(terser@5.36.0)(typescript@5.4.5)':
     dependencies:
       '@parcel/plugin': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.15))
-      htmlnano: 2.1.1(postcss@8.4.49)(relateurl@0.2.7)(svgo@2.8.0)(terser@5.36.0)(typescript@5.4.5)
-=======
-  '@parcel/optimizer-htmlnano@2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.15))(@swc/helpers@0.5.15)(postcss@8.5.3)(relateurl@0.2.7)(terser@5.36.0)(typescript@5.4.5)':
-    dependencies:
-      '@parcel/plugin': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.15))(@swc/helpers@0.5.15)
       htmlnano: 2.1.1(postcss@8.5.3)(relateurl@0.2.7)(svgo@2.8.0)(terser@5.36.0)(typescript@5.4.5)
->>>>>>> 7d3174aac85d7b759842064ef5e659de3a17a739
       nullthrows: 1.1.1
       posthtml: 0.16.6
       svgo: 2.8.0
@@ -33731,8 +33709,8 @@ snapshots:
     dependencies:
       htmlparser2: 8.0.2
       js-tokens: 9.0.1
-      postcss: 8.5.3
-      postcss-safe-parser: 6.0.0(postcss@8.5.3)
+      postcss: 8.4.38
+      postcss-safe-parser: 6.0.0(postcss@8.4.38)
 
   postcss-loader@8.1.1(postcss@8.4.35)(typescript@5.4.5)(webpack@5.94.0(@swc/core@1.9.2(@swc/helpers@0.5.15))(esbuild@0.20.1)):
     dependencies:
@@ -33774,17 +33752,13 @@ snapshots:
     dependencies:
       postcss: 8.4.38
 
-  postcss-safe-parser@6.0.0(postcss@8.5.3):
-    dependencies:
-      postcss: 8.5.3
-
   postcss-safe-parser@7.0.1(postcss@8.4.38):
     dependencies:
       postcss: 8.4.38
 
-  postcss-scss@4.0.9(postcss@8.4.49):
+  postcss-scss@4.0.9(postcss@8.5.3):
     dependencies:
-      postcss: 8.4.49
+      postcss: 8.5.3
 
   postcss-selector-parser@6.1.2:
     dependencies:
@@ -35684,14 +35658,14 @@ snapshots:
       postcss-html: 1.7.0
       stylelint: 16.5.0(typescript@5.4.5)
 
-  stylelint-config-recommended-scss@11.0.0(postcss@8.4.49)(stylelint@15.11.0(typescript@5.4.5)):
+  stylelint-config-recommended-scss@11.0.0(postcss@8.5.3)(stylelint@15.11.0(typescript@5.4.5)):
     dependencies:
-      postcss-scss: 4.0.9(postcss@8.4.49)
+      postcss-scss: 4.0.9(postcss@8.5.3)
       stylelint: 15.11.0(typescript@5.4.5)
       stylelint-config-recommended: 12.0.0(stylelint@15.11.0(typescript@5.4.5))
       stylelint-scss: 4.7.0(stylelint@15.11.0(typescript@5.4.5))
     optionalDependencies:
-      postcss: 8.4.49
+      postcss: 8.5.3
 
   stylelint-config-recommended-vue@1.5.0(postcss-html@1.7.0)(stylelint@16.5.0(typescript@5.4.5)):
     dependencies:
@@ -35717,13 +35691,13 @@ snapshots:
     dependencies:
       stylelint: 16.5.0(typescript@5.4.5)
 
-  stylelint-config-standard-scss@9.0.0(postcss@8.4.49)(stylelint@15.11.0(typescript@5.4.5)):
+  stylelint-config-standard-scss@9.0.0(postcss@8.5.3)(stylelint@15.11.0(typescript@5.4.5)):
     dependencies:
       stylelint: 15.11.0(typescript@5.4.5)
-      stylelint-config-recommended-scss: 11.0.0(postcss@8.4.49)(stylelint@15.11.0(typescript@5.4.5))
+      stylelint-config-recommended-scss: 11.0.0(postcss@8.5.3)(stylelint@15.11.0(typescript@5.4.5))
       stylelint-config-standard: 33.0.0(stylelint@15.11.0(typescript@5.4.5))
     optionalDependencies:
-      postcss: 8.4.49
+      postcss: 8.5.3
 
   stylelint-config-standard@33.0.0(stylelint@15.11.0(typescript@5.4.5)):
     dependencies:
