@@ -112,6 +112,8 @@ export interface CollectionWidgetBaseProperties<
   _itemAttributes?: Record<string, unknown>;
 
   selectOnFocus?: boolean;
+
+  loopItemFocus?: boolean;
 }
 
 class CollectionWidget<
