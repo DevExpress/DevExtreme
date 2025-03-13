@@ -205,9 +205,6 @@ const SKIPPED_TESTS = {
         DropDownButton: [
             { demo: 'Overview', themes: [THEME.generic, THEME.material, THEME.fluent] },
         ],
-        Chat: [
-            { demo: 'Customization', themes: [THEME.generic, THEME.material, THEME.fluent] },
-        ],
         Charts: [
             { demo: 'Overview', themes: [THEME.material] },
             { demo: 'Crosshair', themes: [THEME.generic, THEME.material, THEME.fluent] },
@@ -235,9 +232,6 @@ const SKIPPED_TESTS = {
         ],
         TabPanel: [
             { demo: 'Overview', themes: [THEME.generic, THEME.material, THEME.fluent] },
-        ],
-        SelectBox: [
-            { demo: 'GroupedItems', themes: [THEME.generic, THEME.material, THEME.fluent] },
         ],
         Splitter: [
             { demo: 'Overview', themes: [THEME.generic, THEME.material, THEME.fluent] },
