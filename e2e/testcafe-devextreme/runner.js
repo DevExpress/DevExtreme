@@ -14,8 +14,6 @@ const LAUNCH_RETRY_ATTEMPTS = 5;
 const LAUNCH_RETRY_TIMEOUT = 20000;
 const TESTCAFE_CONFIG = {
     hostname: 'localhost',
-    port1: 1437,
-    port2: 1438,
     // eslint-disable-next-line spellcheck/spell-checker
     experimentalProxyless: true,
 };
