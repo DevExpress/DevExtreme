@@ -2,6 +2,7 @@ import type { Orientation } from '@js/common';
 import registerComponent from '@js/core/component_registrator';
 import type { DxElement } from '@js/core/element';
 import $, { type dxElementWrapper } from '@js/core/renderer';
+import { Deferred } from '@js/core/utils/deferred';
 import { isDefined } from '@js/core/utils/type';
 import type { DxEvent } from '@js/events';
 import { BindableTemplate } from '@ts/core/templates/m_bindable_template';
@@ -19,9 +20,6 @@ import type { CollectionWidgetEditProperties } from '../collection/m_collection_
 
 export const STEPPER_CLASS = 'dx-stepper';
 export const STEP_LIST_CLASS = 'dx-step-list';
-export const STEPPER_PROGRESS_BAR_CLASS = 'dx-stepper-progressbar';
-export const STEPPER_PROGRESS_BAR_CONTAINER_CLASS = 'dx-stepper-progressbar-container';
-export const STEPPER_PROGRESS_BAR_STATUS_CLASS = 'dx-stepper-progressbar-status';
 export const STEP_CLASS = 'dx-step';
 export const STEP_SELECTED_CLASS = 'dx-step-selected';
 export const STEPPER_HORIZONTAL_ORIENTATION_CLASS = 'dx-stepper-horizontal';
@@ -229,6 +227,14 @@ class Stepper extends CollectionWidgetAsync<StepperProperties> {
     if (!this._shouldPreventItemEvent(e.currentTarget)) {
       super._itemSelectHandler(e);
     }
+  }
+
+  _syncSelectionOptions(byOption?: string): Promise<unknown> {
+    super._syncSelectionOptions(byOption).done(() => {
+      this._connector.option('value', this._getConnectorValue());
+    });
+
+    return Deferred().resolve().promise();
   }
 
   _itemOptionChanged(
