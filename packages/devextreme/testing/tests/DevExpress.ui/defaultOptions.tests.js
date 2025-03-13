@@ -1561,7 +1561,6 @@ testComponentDefaults(Stepper,
         selectOnFocus: true,
         activeStateEnabled: true,
         hoverStateEnabled: true,
-        focusStateEnabled: true,
     }
 );
 
