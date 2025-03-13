@@ -40,7 +40,6 @@
         },
         {
             "matchPackageNames": [
-                "@devextreme/runtime",
                 "devexpress-gantt",
                 "devexpress-diagram",
                 "rrule",
