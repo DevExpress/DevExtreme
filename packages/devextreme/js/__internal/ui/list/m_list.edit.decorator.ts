@@ -17,8 +17,6 @@ const SWIPE_END_EVENT_NAME = addNamespace(swipeEventEnd, LIST_EDIT_DECORATOR);
 // @ts-expect-error dxClass inheritance issue
 // eslint-disable-next-line @typescript-eslint/ban-types
 class EditDecorator extends (Class.inherit({}) as new() => {}) {
-  _shouldHandleSwipe = false;
-
   _clearSwipeCache?: boolean;
 
   _list?: any;
@@ -27,6 +25,11 @@ class EditDecorator extends (Class.inherit({}) as new() => {}) {
     this._list = list;
 
     this._init();
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  _shouldHandleSwipe(): boolean {
+    return false;
   }
 
   _init(): void {}
@@ -73,7 +76,8 @@ class EditDecorator extends (Class.inherit({}) as new() => {}) {
     this._clearSwipeCache = true;
   }
 
-  beforeBag(): void {}
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  beforeBag(config): void {}
 
   afterBag(): void {}
 
@@ -86,7 +90,7 @@ class EditDecorator extends (Class.inherit({}) as new() => {}) {
   }
 
   modifyElement(config): void {
-    if (this._shouldHandleSwipe) {
+    if (this._shouldHandleSwipe()) {
       this._attachSwipeEvent(config);
       this._clearSwipeCache = true;
     }
@@ -94,7 +98,8 @@ class EditDecorator extends (Class.inherit({}) as new() => {}) {
 
   afterRender(): void {}
 
-  handleClick(): void {}
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  handleClick($itemElement, e): void {}
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   handleKeyboardEvents(currentFocusedIndex, moveFocusUp): void {}

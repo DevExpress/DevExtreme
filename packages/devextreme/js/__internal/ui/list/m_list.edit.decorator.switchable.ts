@@ -56,7 +56,8 @@ class SwitchableEditDecorator extends EditDecorator {
       .append(this._$bottomShield.toggle(false));
   }
 
-  handleClick(): boolean {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  handleClick($itemElement, e): boolean {
     return this._cancelDeleteReadyItem();
   }
 
@@ -184,7 +185,8 @@ class SwitchableEditDecorator extends EditDecorator {
     Class.abstract();
   }
 
-  _animateForgetDeleteReady(): void {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _animateForgetDeleteReady($itemElement?): void {
     Class.abstract();
   }
 
@@ -194,7 +196,7 @@ class SwitchableEditDecorator extends EditDecorator {
     return $itemElement.children(`.${SWITCHABLE_DELETE_BUTTON_CONTAINER_CLASS}`);
   }
 
-  _deleteItem($itemElement) {
+  _deleteItem($itemElement?) {
     $itemElement = $itemElement || this._$readyToDeleteItem;
     this._getDeleteButtonContainer($itemElement).detach();
 

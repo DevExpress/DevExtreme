@@ -165,7 +165,6 @@ class Gallery extends CollectionWidget<GalleryProperties> {
       slideshowDelay: 0,
       showNavButtons: false,
       wrapAround: false,
-      initialItemWidth: undefined,
       stretchImages: false,
       _itemAttributes: {
         role: 'option',
