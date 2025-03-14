@@ -34,6 +34,7 @@
     "devextreme-quill": "1.7.2",
     "inferno": "^7.4.9",
     "inferno-hydrate": "^7.4.9",
+    "inferno-create-element": "^7.4.9",
     "jszip": "^3.10.1",
     "rrule": "^2.7.1"
   },
@@ -135,7 +136,6 @@
     "gulp-uglify-es": "3.0.0",
     "gulp-watch": "5.0.1",
     "ignore": "5.3.1",
-    "inferno-create-element": "7.4.11",
     "intl": "1.2.5",
     "jest-each": "29.7.0",
     "jest-environment-jsdom": "29.7.0",
