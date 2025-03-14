@@ -7,7 +7,10 @@ import { isFunction, isObject } from '@js/core/utils/type';
 import type { DateNavigatorTextInfo, Properties } from '@js/ui/scheduler';
 
 import { VIEWS } from '../m_constants';
+import type { ArrayElement } from '../utils/types';
 import type { Direction } from './constants';
+
+type RawViewType = ArrayElement<Required<Properties>['views']>;
 
 const DAY_FORMAT = 'd';
 
@@ -73,16 +76,6 @@ const getDateAfterWorkWeek = (workWeekStart: Date): Date => {
 
 const nextAgendaStart = (date: Date, agendaDuration: number): Date => addDateInterval(date, { days: agendaDuration }, 1);
 
-const getInterval = (options) => {
-  const startDate = getIntervalStartDate(options);
-  const endDate = getIntervalEndDate(startDate, options);
-
-  return {
-    startDate,
-    endDate,
-  };
-};
-
 const getIntervalStartDate = (options) => {
   const { date, step, firstDayOfWeek } = options;
 
@@ -117,6 +110,19 @@ const getIntervalEndDate = (startDate: Date, options) => {
   }
 
   return periodEndDate;
+};
+
+export const getCaptionInterval = (options): {
+  startDate: Date;
+  endDate: Date;
+} => {
+  const startDate = getIntervalStartDate(options);
+  const endDate = getIntervalEndDate(startDate, options);
+
+  return {
+    startDate,
+    endDate,
+  };
 };
 
 const getPeriodEndDate = (currentPeriodStartDate: Date, step, agendaDuration: number): Date => {
@@ -303,7 +309,7 @@ const getCaptionText = (startDate: Date, endDate: Date, isShort: boolean, step):
 };
 
 export const getCaption = (options, isShort: boolean, customizationFunction?: Properties['customizeDateNavigatorText']): DateNavigatorTextInfo => {
-  const { startDate, endDate } = getInterval(options);
+  const { startDate, endDate } = getCaptionInterval(options);
 
   let text = getCaptionText(startDate, endDate, isShort, options.step);
 
@@ -324,34 +330,35 @@ const STEP_MAP = {
   timelineWorkWeek: 'workWeek',
   timelineMonth: 'month',
   agenda: 'agenda',
+} as const;
+
+export const getViewType = (view: RawViewType): string | undefined => (isObject(view) ? view.type : view);
+
+export const getStep = (view: RawViewType): (typeof STEP_MAP)[keyof typeof STEP_MAP] | undefined => {
+  const type = getViewType(view);
+
+  return type ? STEP_MAP[type] : undefined;
 };
 
-export const getStep = (view) => STEP_MAP[getViewType(view)];
-
-export const getViewType = (view) => {
-  if (isObject(view) && (view as any).type) {
-    return (view as any).type;
-  }
-
-  return view;
-};
-
-export const getViewName = (view) => {
+export const getViewName = (view: RawViewType): string | undefined => {
   if (isObject(view)) {
-    return (view as any).name ? (view as any).name : (view as any).type;
+    return view.name ?? view.type;
   }
 
   return view;
 };
 
-export const getViewText = (view) => {
-  if (view.name) return view.name;
+export const getViewText = (view: RawViewType) => {
+  if (isObject(view) && view.name) {
+    return view.name;
+  }
 
-  const viewName = camelize(view.type || view, true);
+  const viewName = camelize(getViewType(view), true);
+
   return messageLocalization.format(`dxScheduler-switcher${viewName}`);
 };
 
-const isValidView = (view: string) => Object.values(VIEWS).includes(view);
+const isValidView = (view?: string): boolean => Boolean(view && Object.values(VIEWS).includes(view));
 
 export const validateViews = (views: Properties['views'] = []) => {
   views.forEach((view) => {

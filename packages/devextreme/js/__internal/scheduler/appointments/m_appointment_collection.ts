@@ -70,6 +70,12 @@ class SchedulerAppointments extends CollectionWidget {
     return this.option('getAppointmentDataProvider')();
   }
 
+  get appointmentsCount(): number {
+    return (this.option('items') ?? [])
+      .filter(({ needRemove }) => !needRemove)
+      .reduce((result, item) => result + item.settings.length, 0);
+  }
+
   constructor(element, options) {
     super(element, options);
     this._virtualAppointments = {};

@@ -31,20 +31,25 @@ import {
 import { hasWindow } from '@js/core/utils/window';
 import DataHelperMixin from '@js/data_helper';
 import { custom as customDialog } from '@js/ui/dialog';
-import type { AppointmentTooltipShowingEvent, ViewType } from '@js/ui/scheduler';
+import type { AppointmentTooltipShowingEvent } from '@js/ui/scheduler';
 import { isMaterial, isMaterialBased } from '@js/ui/themes';
 import errors from '@js/ui/widget/ui.errors';
 import Widget from '@js/ui/widget/ui.widget';
 import { dateUtilsTs } from '@ts/core/utils/date';
+import { createA11yStatusContainer } from '@ts/scheduler/a11y_status/a11y_status_render';
 import { createTimeZoneCalculator } from '@ts/scheduler/r1/timezone_calculator/index';
 import {
   excludeFromRecurrence,
   getAppointmentTakesAllDay,
   getPreparedDataItems,
-  isDateAndTimeView, isTimelineView, viewsUtils,
+  getToday,
+  isDateAndTimeView,
+  isTimelineView,
+  viewsUtils,
 } from '@ts/scheduler/r1/utils/index';
 import { macroTaskArray } from '@ts/scheduler/utils/index';
 
+import { getA11yStatusText } from './a11y_status/a11y_status_text';
 import { AppointmentForm } from './appointment_popup/m_form';
 import { ACTION_TO_APPOINTMENT, AppointmentPopup } from './appointment_popup/m_popup';
 import { AppointmentDataProvider } from './appointments/data_provider/m_appointment_data_provider';
@@ -164,6 +169,8 @@ class Scheduler extends Widget<any> {
   _timeZoneCalculator!: any;
 
   postponedOperations: any;
+
+  _a11yStatus!: dxElementWrapper;
 
   _workSpace: any;
 
@@ -581,7 +588,6 @@ class Scheduler extends Widget<any> {
         this._header?.option(name, value);
         break;
       case 'currentView':
-        this._renderAriaAttributes();
         this._appointments.option({
           items: [],
           allowDrag: this._allowDragging(),
@@ -1164,6 +1170,7 @@ class Scheduler extends Widget<any> {
       this._workSpaceRecalculation.done(() => {
         this._updatePreparedItems(result);
         this._renderAppointments();
+        this._updateA11yStatus();
         this.getWorkSpace().onDataSourceChanged(this.filteredItems);
       });
     }
@@ -1308,34 +1315,28 @@ class Scheduler extends Widget<any> {
 
   _renderFocusTarget() { return noop(); }
 
-  _renderAriaAttributes() {
-    const viewTypeLocalization: Record<ViewType, string> = {
-      agenda: 'dxScheduler-switcherAgenda',
-      day: 'dxScheduler-switcherDay',
-      month: 'dxScheduler-switcherMonth',
-      week: 'dxScheduler-switcherWeek',
-      workWeek: 'dxScheduler-switcherWorkWeek',
-      timelineDay: 'dxScheduler-switcherTimelineDay',
-      timelineMonth: 'dxScheduler-switcherTimelineMonth',
-      timelineWeek: 'dxScheduler-switcherTimelineWeek',
-      timelineWorkWeek: 'dxScheduler-switcherTimelineWorkWeek',
-    };
-
-    const viewTypeLabel = messageLocalization.format(
-      viewTypeLocalization[this.currentViewType],
-    );
-
-    const label = messageLocalization.format(
-      'dxScheduler-ariaLabel',
-      // @ts-expect-error
-      viewTypeLabel,
+  _updateA11yStatus() {
+    const { startDate, endDate } = this._header.visibleDateInterval;
+    const indicatorTime = this.option('showCurrentTimeIndicator')
+      ? getToday(this.option('indicatorTime') as Date, this.timeZoneCalculator)
+      : undefined;
+    const label = getA11yStatusText(
+      this._header.currentView,
+      startDate,
+      endDate,
+      this._appointments.appointmentsCount,
+      indicatorTime,
     );
 
     // @ts-expect-error
-    this.setAria({
-      label,
-      role: 'group',
-    });
+    this.setAria({ label, role: 'group' });
+    this._a11yStatus.text(label);
+  }
+
+  _renderA11yStatus() {
+    this._a11yStatus = createA11yStatusContainer();
+    this._a11yStatus.prependTo(this.$element());
+    this._updateA11yStatus();
   }
 
   _initMarkup() {
@@ -1343,8 +1344,6 @@ class Scheduler extends Widget<any> {
     super._initMarkup();
 
     this._renderMainContainer();
-    this._renderAriaAttributes();
-
     this._renderHeader();
 
     this._layoutManager = new AppointmentLayoutManager(this);
@@ -1358,6 +1357,7 @@ class Scheduler extends Widget<any> {
       : DesktopTooltipStrategy)(this._getAppointmentTooltipOptions());
 
     this._createAppointmentPopupForm();
+    this._renderA11yStatus();
 
     // @ts-expect-error
     if (this._isDataSourceLoaded() || this._isDataSourceLoading()) {
