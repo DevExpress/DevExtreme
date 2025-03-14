@@ -752,7 +752,7 @@ class CollectionWidget<
     super._invalidate();
   }
 
-  _loadNextPage(): Promise<unknown> {
+  _loadNextPage(): DeferredObj<unknown> {
     this._expectNextPageLoading();
     // @ts-expect-error ts-error
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
