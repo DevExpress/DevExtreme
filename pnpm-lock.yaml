@@ -850,6 +850,9 @@ importers:
       inferno:
         specifier: ^7.4.9
         version: 7.4.11
+      inferno-create-element:
+        specifier: ^7.4.9
+        version: 7.4.11
       inferno-hydrate:
         specifier: ^7.4.9
         version: 7.4.11
@@ -1136,9 +1139,6 @@ importers:
       ignore:
         specifier: 5.3.1
         version: 5.3.1
-      inferno-create-element:
-        specifier: 7.4.11
-        version: 7.4.11
       intl:
         specifier: 1.2.5
         version: 1.2.5
