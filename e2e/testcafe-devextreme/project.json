@@ -20,14 +20,24 @@
         "test--accessibility-common-4",
         "test--accessibility-common-5",
         "test--accessibility-common-6",
-        "test--accessibility-common-7"
+        "test--accessibility-common-7",
+        "test--datagrid-common-1",
+        "test--datagrid-common-2",
+        "test--datagrid-common-3",
+        "test--datagrid-common-4",
+        "test--datagrid-common-5"
       ],
       "cache": true
     },
     "test--accessibility-common-1": {
-      "dependsOn": ["^build"],
+      "dependsOn": [
+        "^build"
+      ],
       "executor": "nx:run-commands",
       "cache": true,
+      "outputs": [
+        "{projectRoot}/artifacts/**/*"
+      ],
       "options": {
         "cwd": "{projectRoot}",
         "command": "pnpm run test",
@@ -35,9 +45,14 @@
       }
     },
     "test--accessibility-common-2": {
-      "dependsOn": ["^build"],
+      "dependsOn": [
+        "^build"
+      ],
       "executor": "nx:run-commands",
       "cache": true,
+      "outputs": [
+        "{projectRoot}/artifacts/**/*"
+      ],
       "options": {
         "cwd": "{projectRoot}",
         "command": "pnpm run test",
@@ -45,9 +60,14 @@
       }
     },
     "test--accessibility-common-3": {
-      "dependsOn": ["^build"],
+      "dependsOn": [
+        "^build"
+      ],
       "executor": "nx:run-commands",
       "cache": true,
+      "outputs": [
+        "{projectRoot}/artifacts/**/*"
+      ],
       "options": {
         "cwd": "{projectRoot}",
         "command": "pnpm run test",
@@ -55,9 +75,14 @@
       }
     },
     "test--accessibility-common-4": {
-      "dependsOn": ["^build"],
+      "dependsOn": [
+        "^build"
+      ],
       "executor": "nx:run-commands",
       "cache": true,
+      "outputs": [
+        "{projectRoot}/artifacts/**/*"
+      ],
       "options": {
         "cwd": "{projectRoot}",
         "command": "pnpm run test",
@@ -65,9 +90,14 @@
       }
     },
     "test--accessibility-common-5": {
-      "dependsOn": ["^build"],
+      "dependsOn": [
+        "^build"
+      ],
       "executor": "nx:run-commands",
       "cache": true,
+      "outputs": [
+        "{projectRoot}/artifacts/**/*"
+      ],
       "options": {
         "cwd": "{projectRoot}",
         "command": "pnpm run test",
@@ -75,9 +105,14 @@
       }
     },
     "test--accessibility-common-6": {
-      "dependsOn": ["^build"],
+      "dependsOn": [
+        "^build"
+      ],
       "executor": "nx:run-commands",
       "cache": true,
+      "outputs": [
+        "{projectRoot}/artifacts/**/*"
+      ],
       "options": {
         "cwd": "{projectRoot}",
         "command": "pnpm run test",
@@ -85,13 +120,93 @@
       }
     },
     "test--accessibility-common-7": {
-      "dependsOn": ["^build"],
+      "dependsOn": [
+        "^build"
+      ],
       "executor": "nx:run-commands",
       "cache": true,
+      "outputs": [
+        "{projectRoot}/artifacts/**/*"
+      ],
       "options": {
         "cwd": "{projectRoot}",
         "command": "pnpm run test",
         "args": "--browsers=chrome:devextreme-shr2 --componentFolder accessibility/common --indices 7/7"
+      }
+    },
+    "test--datagrid-common-1": {
+      "dependsOn": [
+        "^build"
+      ],
+      "executor": "nx:run-commands",
+      "cache": true,
+      "outputs": [
+        "{projectRoot}/artifacts/**/*"
+      ],
+      "options": {
+        "cwd": "{projectRoot}",
+        "command": "pnpm run test",
+        "args": "--browsers=chrome:devextreme-shr2 --componentFolder dataGrid/common --indices 1/5"
+      }
+    },
+    "test--datagrid-common-2": {
+      "dependsOn": [
+        "^build"
+      ],
+      "executor": "nx:run-commands",
+      "cache": true,
+      "outputs": [
+        "{projectRoot}/artifacts/**/*"
+      ],
+      "options": {
+        "cwd": "{projectRoot}",
+        "command": "pnpm run test",
+        "args": "--browsers=chrome:devextreme-shr2 --componentFolder dataGrid/common --indices 2/5"
+      }
+    },
+    "test--datagrid-common-3": {
+      "dependsOn": [
+        "^build"
+      ],
+      "executor": "nx:run-commands",
+      "cache": true,
+      "outputs": [
+        "{projectRoot}/artifacts/**/*"
+      ],
+      "options": {
+        "cwd": "{projectRoot}",
+        "command": "pnpm run test",
+        "args": "--browsers=chrome:devextreme-shr2 --componentFolder dataGrid/common --indices 3/5"
+      }
+    },
+    "test--datagrid-common-4": {
+      "dependsOn": [
+        "^build"
+      ],
+      "executor": "nx:run-commands",
+      "cache": true,
+      "outputs": [
+        "{projectRoot}/artifacts/**/*"
+      ],
+      "options": {
+        "cwd": "{projectRoot}",
+        "command": "pnpm run test",
+        "args": "--browsers=chrome:devextreme-shr2 --componentFolder dataGrid/common --indices 4/5"
+      }
+    },
+    "test--datagrid-common-5": {
+      "dependsOn": [
+        "^build"
+      ],
+      "executor": "nx:run-commands",
+      "cache": true,
+      "outputs": [
+        "{projectRoot}/artifacts/**/*"
+      ],
+      "options": {
+        "cwd": "{projectRoot}",
+        "command": "pnpm run test",
+        "args": "--browsers=chrome:devextreme-shr2 --componentFolder dataGrid/common --indices 5/5"
       }
     }
   },
