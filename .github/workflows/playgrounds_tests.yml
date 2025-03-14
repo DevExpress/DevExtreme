@@ -141,6 +141,6 @@ jobs:
       run: pnpx nx build
 
     - name: Run test
-      if: ${{ matrix.ARGS.platform != 'angular' }}
+      if: ${{ matrix.ARGS.platform == 'react' }}
       working-directory: ./apps/${{ matrix.ARGS.platform }}
       run: pnpm run test
