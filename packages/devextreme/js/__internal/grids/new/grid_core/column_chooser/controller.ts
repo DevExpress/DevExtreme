@@ -25,22 +25,22 @@ export class ColumnChooserController {
   ) {
     this.items = computed(
       (columns, sortOrder) => {
-        const sortedColumns = sortColumns(columns, sortOrder) as Column[];
+        let chooserColumns = columns.filter((c) => c.showInColumnChooser);
+        chooserColumns = sortColumns(chooserColumns, sortOrder) as Column[];
 
-        const newItems = sortedColumns.map((c, index) => ({
+        const newItems = chooserColumns.map((c, index) => ({
           id: index,
           columnName: c.name,
           selected: c.visible,
           text: c.caption,
           disabled: !c.allowHiding,
-          visible: c.showInColumnChooser,
         }) as TreeViewItemProperties);
 
         const items = this.items?.unreactive_get();
 
-        if (items?.length === sortedColumns.length) {
-          for (let i = 0; i < sortedColumns.length; i += 1) {
-            items[i].selected = sortedColumns[i].visible;
+        if (items?.length === chooserColumns.length) {
+          for (let i = 0; i < chooserColumns.length; i += 1) {
+            items[i].selected = chooserColumns[i].visible;
           }
 
           // if only column visibility changed, then we don't
@@ -53,7 +53,10 @@ export class ColumnChooserController {
 
         return newItems;
       },
-      [this.columnsController.columns, this.options.oneWay('columnChooser.sortOrder')],
+      [
+        this.columnsController.columns,
+        this.options.oneWay('columnChooser.sortOrder'),
+      ],
     );
   }
 
@@ -63,7 +66,13 @@ export class ColumnChooserController {
     this.columnsController.updateColumns((columns) => {
       for (const node of nodes) {
         const columnIndex = getColumnIndexByName(columns, node.itemData?.columnName);
-        columns[columnIndex].visible = node.selected;
+        const canHide = columns[columnIndex].allowHiding ?? true;
+        // to handle case when allowHiding=false and node.selected=false
+        const skip = !canHide && !node.selected;
+
+        if (!skip) {
+          columns[columnIndex].visible = node.selected;
+        }
       }
 
       return [...columns];

@@ -90,6 +90,7 @@ const renderColumnChooserWithToolbar = (options?: Options) => {
   return {
     element,
     toolbar,
+    toolbarController,
     columnChooser,
     optionsController,
     columnChooserController,
@@ -98,7 +99,7 @@ const renderColumnChooserWithToolbar = (options?: Options) => {
 };
 
 describe('render', () => {
-  it('has columnChooser toolbar button', async () => {
+  it('has columnChooser toolbar button', () => {
     const { element } = renderColumnChooserWithToolbar({
       toolbar: {
         visible: true,
@@ -108,14 +109,19 @@ describe('render', () => {
       },
     });
 
-    await new Promise((resolve) => { setTimeout(resolve); });
-
     expect(element).toMatchSnapshot();
   });
 
   it('matches markup in select mode', async () => {
     const { element } = await renderColumnChooser({
-      columns: ['Column 1', 'Column 2', 'Column 3'],
+      columns: [
+        { dataField: 'Column 1' },
+        { dataField: 'Column 2', showInColumnChooser: false },
+        { dataField: 'Column 3', allowHiding: false },
+        { dataField: 'Column 4', caption: 'my caption' },
+        { dataField: 'Column 5', visible: false },
+        { dataField: 'Column 6' },
+      ],
       columnChooser: {
         enabled: true,
         mode: 'select',
@@ -131,7 +137,7 @@ describe('render', () => {
 
 describe('applying options', () => {
   it('hides/shows columnChooser toolbar button', () => {
-    const { element, optionsController } = renderColumnChooserWithToolbar({
+    const { optionsController, toolbarController } = renderColumnChooserWithToolbar({
       toolbar: {
         visible: true,
       },
@@ -139,17 +145,25 @@ describe('applying options', () => {
         enabled: true,
       },
     });
+    const getColumnChooserBtn = () => {
+      const toolbarItems = toolbarController.items.unreactive_get();
+
+      expect(toolbarItems).toHaveLength(1);
+      expect(toolbarItems[0].name).toBe('columnChooserButton');
+
+      return toolbarItems[0];
+    };
+
+    expect(getColumnChooserBtn().visible).toBeTruthy();
 
     optionsController.option('columnChooser.enabled', false);
-
-    expect(element).toMatchSnapshot();
+    expect(getColumnChooserBtn().visible).toBeFalsy();
 
     optionsController.option('columnChooser.enabled', true);
-
-    expect(element).toMatchSnapshot();
+    expect(getColumnChooserBtn().visible).toBeTruthy();
   });
 
-  it('updates markup', async () => {
+  it('updates the markup', async () => {
     const { element, optionsController } = await renderColumnChooser({
       columnChooser: {
         enabled: true,
@@ -191,14 +205,16 @@ describe('applying options', () => {
       },
     });
 
-    // random id is generated for placeholder, so removed before matching snapshot
+    // random id is generated for placeholder, so remove it before matching snapshot
     element.querySelector('.dx-placeholder')?.removeAttribute('id');
 
     expect(element).toMatchSnapshot();
   });
+});
 
-  describe('with select mode', () => {
-    it('updates markup on columnOption changed', async () => {
+describe('choosing columns', () => {
+  describe('in \'select\' mode', () => {
+    it('toggles column visibility on select/unselect', async () => {
       const {
         columnsController,
         columnChooserController,
@@ -209,83 +225,102 @@ describe('applying options', () => {
           mode: 'select',
         },
       });
-      const treeView = columnChooserController.treeViewRef;
-      const getListElement = () => treeView.current?.element().querySelector('ul');
-      const columnOption = (index: number, option, value) => {
-        const column = columnsController.columns.unreactive_get()[index];
-        columnsController.columnOption(column, option, value);
-      };
+      const treeView = columnChooserController.treeViewRef.current;
 
-      expect(getListElement()).toMatchSnapshot('intial markup');
+      treeView?.unselectItem(0);
+      expect(columnsController.columns.unreactive_get()[0].visible).toBe(false);
 
-      // test column.showInColumnChooser
-      columnOption(0, 'showInColumnChooser', false);
-      expect(getListElement()).toMatchSnapshot('first column was hidden');
-
-      columnOption(0, 'showInColumnChooser', true);
-      expect(getListElement()).toMatchSnapshot('first column was shown');
-
-      // test column.visible
-      columnOption(1, 'visible', false);
-      expect(getListElement()).toMatchSnapshot('second column was unselected');
-
-      columnOption(1, 'visible', true);
-      expect(getListElement()).toMatchSnapshot('second column was selected');
-
-      // test column.caption
-      columnOption(2, 'caption', 'new caption');
-      expect(getListElement()).toMatchSnapshot('third column caption was changed');
-
-      // test column.allowHiding
-      columnOption(3, 'allowHiding', false);
-      expect(getListElement()).toMatchSnapshot('fourth column was disabled');
+      treeView?.selectItem(0);
+      expect(columnsController.columns.unreactive_get()[1].visible).toBe(true);
     });
-  });
-});
 
-describe('choosing columns', () => {
-  it('toggles column visibility on select/unselect', async () => {
-    const {
-      columnsController,
-      columnChooserController,
-    } = await renderColumnChooser({
-      columns: ['Column 1', 'Column 2', 'Column 3', 'Column 4'],
-      columnChooser: {
-        enabled: true,
-        mode: 'select',
-      },
+    it('toggles column visibility on selectAll/unselectAll', async () => {
+      const {
+        columnsController,
+        columnChooserController,
+      } = await renderColumnChooser({
+        columns: [
+          { name: 'Column 1', visible: false },
+          { name: 'Column 2', visible: true },
+        ],
+        columnChooser: {
+          enabled: true,
+          mode: 'select',
+        },
+      });
+      const treeView = columnChooserController.treeViewRef.current;
+
+      treeView?.selectAll();
+      expect(columnsController.columns.unreactive_get()[0].visible).toBe(true);
+      expect(columnsController.columns.unreactive_get()[1].visible).toBe(true);
+
+      treeView?.unselectAll();
+      expect(columnsController.columns.unreactive_get()[0].visible).toBe(false);
+      expect(columnsController.columns.unreactive_get()[1].visible).toBe(false);
     });
-    const treeView = columnChooserController.treeViewRef.current;
 
-    treeView?.unselectItem(0);
-    expect(columnsController.columns.unreactive_get()[0].visible).toBe(false);
+    it('toggles column visibility on selectAll/unselectAll when some column have showInColumnChooser=false', async () => {
+      const {
+        columnsController,
+        columnChooserController,
+      } = await renderColumnChooser({
+        columns: [
+          { name: 'Column 1' },
+          { name: 'Column 2', showInColumnChooser: false },
+        ],
+        columnChooser: {
+          enabled: true,
+          mode: 'select',
+        },
+      });
+      const treeView = columnChooserController.treeViewRef.current;
 
-    treeView?.selectItem(0);
-    expect(columnsController.columns.unreactive_get()[1].visible).toBe(true);
-  });
+      treeView?.unselectAll();
+      expect(columnsController.columns.unreactive_get()[0].visible).toBe(false);
+      expect(columnsController.columns.unreactive_get()[1].visible).toBe(true);
 
-  it('toggles column visibility on selectAll/unselectAll', async () => {
-    const {
-      columnsController,
-      columnChooserController,
-    } = await renderColumnChooser({
-      columns: [
-        { name: 'Column 1', visible: false },
-        { name: 'Column 2', visible: true },
-      ],
-      columnChooser: {
-        enabled: true,
-        mode: 'select',
-      },
+      // make second column invisible
+      columnsController.columnOption(
+        columnsController.columns.unreactive_get()[1],
+        'visible',
+        false,
+      );
+
+      treeView?.selectAll();
+      expect(columnsController.columns.unreactive_get()[0].visible).toBe(true);
+      expect(columnsController.columns.unreactive_get()[1].visible).toBe(false);
     });
-    const treeView = columnChooserController.treeViewRef.current;
 
-    treeView?.selectAll();
-    expect(columnsController.columns.unreactive_get()[0].visible).toBe(true);
-    expect(columnsController.columns.unreactive_get()[1].visible).toBe(true);
+    it('does not toggle columns with allowHiding=false on selectAll/unselectAll', async () => {
+      const {
+        columnsController,
+        columnChooserController,
+      } = await renderColumnChooser({
+        columns: [
+          { name: 'Column 1' },
+          { name: 'Column 2', allowHiding: false },
+        ],
+        columnChooser: {
+          enabled: true,
+          mode: 'select',
+        },
+      });
+      const treeView = columnChooserController.treeViewRef.current;
 
-    treeView?.unselectAll();
-    expect(columnsController.columns.unreactive_get()[0].visible).toBe(false);
-    expect(columnsController.columns.unreactive_get()[1].visible).toBe(false);
+      treeView?.unselectAll();
+      expect(columnsController.columns.unreactive_get()[0].visible).toBe(false);
+      expect(columnsController.columns.unreactive_get()[1].visible).toBe(true);
+
+      // make second column invisible
+      columnsController.columnOption(
+        columnsController.columns.unreactive_get()[1],
+        'visible',
+        false,
+      );
+
+      treeView?.selectAll();
+      expect(columnsController.columns.unreactive_get()[0].visible).toBe(true);
+      expect(columnsController.columns.unreactive_get()[1].visible).toBe(true);
+    });
   });
 });
