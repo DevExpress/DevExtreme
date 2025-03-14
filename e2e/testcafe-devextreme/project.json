@@ -36,7 +36,7 @@
       "executor": "nx:run-commands",
       "cache": true,
       "outputs": [
-        "{projectRoot}/artifacts/**/*"
+        "{projectRoot}/artifacts/compared-screenshots/**/*"
       ],
       "options": {
         "cwd": "{projectRoot}",
@@ -51,7 +51,7 @@
       "executor": "nx:run-commands",
       "cache": true,
       "outputs": [
-        "{projectRoot}/artifacts/**/*"
+        "{projectRoot}/artifacts/compared-screenshots/**/*"
       ],
       "options": {
         "cwd": "{projectRoot}",
@@ -66,7 +66,7 @@
       "executor": "nx:run-commands",
       "cache": true,
       "outputs": [
-        "{projectRoot}/artifacts/**/*"
+        "{projectRoot}/artifacts/compared-screenshots/**/*"
       ],
       "options": {
         "cwd": "{projectRoot}",
@@ -81,7 +81,7 @@
       "executor": "nx:run-commands",
       "cache": true,
       "outputs": [
-        "{projectRoot}/artifacts/**/*"
+        "{projectRoot}/artifacts/compared-screenshots/**/*"
       ],
       "options": {
         "cwd": "{projectRoot}",
@@ -96,7 +96,7 @@
       "executor": "nx:run-commands",
       "cache": true,
       "outputs": [
-        "{projectRoot}/artifacts/**/*"
+        "{projectRoot}/artifacts/compared-screenshots/**/*"
       ],
       "options": {
         "cwd": "{projectRoot}",
@@ -111,7 +111,7 @@
       "executor": "nx:run-commands",
       "cache": true,
       "outputs": [
-        "{projectRoot}/artifacts/**/*"
+        "{projectRoot}/artifacts/compared-screenshots/**/*"
       ],
       "options": {
         "cwd": "{projectRoot}",
@@ -126,7 +126,7 @@
       "executor": "nx:run-commands",
       "cache": true,
       "outputs": [
-        "{projectRoot}/artifacts/**/*"
+        "{projectRoot}/artifacts/compared-screenshots/**/*"
       ],
       "options": {
         "cwd": "{projectRoot}",
@@ -141,7 +141,7 @@
       "executor": "nx:run-commands",
       "cache": true,
       "outputs": [
-        "{projectRoot}/artifacts/**/*"
+        "{projectRoot}/artifacts/compared-screenshots/**/*"
       ],
       "options": {
         "cwd": "{projectRoot}",
@@ -156,7 +156,7 @@
       "executor": "nx:run-commands",
       "cache": true,
       "outputs": [
-        "{projectRoot}/artifacts/**/*"
+        "{projectRoot}/artifacts/compared-screenshots/**/*"
       ],
       "options": {
         "cwd": "{projectRoot}",
@@ -171,7 +171,7 @@
       "executor": "nx:run-commands",
       "cache": true,
       "outputs": [
-        "{projectRoot}/artifacts/**/*"
+        "{projectRoot}/artifacts/compared-screenshots/**/*"
       ],
       "options": {
         "cwd": "{projectRoot}",
@@ -186,7 +186,7 @@
       "executor": "nx:run-commands",
       "cache": true,
       "outputs": [
-        "{projectRoot}/artifacts/**/*"
+        "{projectRoot}/artifacts/compared-screenshots/**/*"
       ],
       "options": {
         "cwd": "{projectRoot}",
@@ -201,7 +201,7 @@
       "executor": "nx:run-commands",
       "cache": true,
       "outputs": [
-        "{projectRoot}/artifacts/**/*"
+        "{projectRoot}/artifacts/compared-screenshots/**/*"
       ],
       "options": {
         "cwd": "{projectRoot}",
