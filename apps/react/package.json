@@ -20,7 +20,6 @@
     "css-loader": "6.10.0",
     "source-map-loader": "4.0.2",
     "style-loader": "3.3.4",
-    "testcafe": "^3.7.2",
     "ts-loader": "9.5.1",
     "tsconfig-paths-webpack-plugin": "4.1.0",
     "webpack": "5.94.0",
