@@ -1,6 +1,9 @@
 import dateLocalization from '@js/common/core/localization/date';
 import messageLocalization from '@js/common/core/localization/message';
+import { isObject } from '@js/core/utils/type';
 import type { ViewType } from '@js/ui/scheduler';
+
+import type { RawViewType } from '../header/types';
 
 const KEYS = {
   label: 'dxScheduler-ariaLabel',
@@ -20,6 +23,7 @@ const viewTypeLocalization: Record<ViewType, string> = {
   timelineWorkWeek: 'dxScheduler-switcherTimelineWorkWeek',
 };
 
+const localizeMonth = (date: Date): string => String(dateLocalization.format(date, 'monthAndYear'));
 const localizeDate = (date: Date): string => `${dateLocalization.format(date, 'monthAndDay')}, ${dateLocalization.format(date, 'year')}`;
 const localizeCurrentIndicator = (
   date: Date,
@@ -35,20 +39,31 @@ const localizeCurrentIndicator = (
       return messageLocalization.format(KEYS.indicatorPresent);
   }
 };
+const localizeName = (viewName?: string, viewType?: string): string => {
+  if (viewName) {
+    return viewName;
+  }
+  if (viewType) {
+    return messageLocalization.format(viewTypeLocalization[viewType]);
+  }
+
+  return '';
+};
 
 export const getA11yStatusText = (
-  view: ViewType,
+  view: RawViewType,
   startDate: Date,
   endDate: Date,
   appointmentCount: number,
   indicatorTime?: Date,
 ): string => {
-  const viewTypeLabel = messageLocalization.format(
-    viewTypeLocalization[view],
-  );
+  const viewType = isObject(view) ? view.type : view;
+  const viewName = isObject(view) ? view.name : undefined;
+  const viewTypeLabel = localizeName(viewName, viewType);
 
-  const startDateText = localizeDate(startDate);
-  const endDateText = localizeDate(endDate);
+  const isMonth = viewType === 'month' || viewType === 'timelineMonth';
+  const startDateText = isMonth ? localizeMonth(startDate) : localizeDate(startDate);
+  const endDateText = isMonth ? localizeMonth(endDate) : localizeDate(endDate);
   const intervalText = startDateText === endDateText
     ? `${startDateText}`
     : `from ${startDateText} to ${endDateText}`;

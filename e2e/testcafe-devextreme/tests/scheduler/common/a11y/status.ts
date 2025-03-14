@@ -44,6 +44,7 @@ const options = [
   ['timelineWorkWeek', 'Timeline Work Week view from April 28, 2025 to May 2, 2025', [0, 9, 18]],
   ['week', 'Week view from April 27, 2025 to May 3, 2025', [0, 13, 27]],
   ['workWeek', 'Work Week view from April 28, 2025 to May 2, 2025', [0, 10, 20]],
+  ['Two Weeks', 'Two Weeks view from April 27, 2025 to May 10, 2025', [0, 14, 29]],
 ] as const;
 
 options.forEach(([currentView, title, counts]) => {
@@ -69,7 +70,11 @@ options.forEach(([currentView, title, counts]) => {
         await createWidget('dxScheduler', {
           timeZone: 'America/Los_Angeles',
           dataSource: appointments.slice(0, 2 * index),
-          views: [currentView],
+          views: [{
+            name: 'Two Weeks',
+            type: 'week',
+            intervalCount: 2,
+          }, 'agenda', 'day', 'month', 'timelineDay', 'timelineMonth', 'timelineWeek', 'timelineWorkWeek', 'week', 'workWeek'],
           currentView,
           indicatorTime: today,
           currentDate: today,

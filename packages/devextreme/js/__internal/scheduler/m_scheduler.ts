@@ -36,7 +36,6 @@ import { isMaterial, isMaterialBased } from '@js/ui/themes';
 import errors from '@js/ui/widget/ui.errors';
 import Widget from '@js/ui/widget/ui.widget';
 import { dateUtilsTs } from '@ts/core/utils/date';
-import { createA11yStatusContainer } from '@ts/scheduler/a11y_status/a11y_status_render';
 import { createTimeZoneCalculator } from '@ts/scheduler/r1/timezone_calculator/index';
 import {
   excludeFromRecurrence,
@@ -49,6 +48,7 @@ import {
 } from '@ts/scheduler/r1/utils/index';
 import { macroTaskArray } from '@ts/scheduler/utils/index';
 
+import { createA11yStatusContainer } from './a11y_status/a11y_status_render';
 import { getA11yStatusText } from './a11y_status/a11y_status_text';
 import { AppointmentForm } from './appointment_popup/m_form';
 import { ACTION_TO_APPOINTMENT, AppointmentPopup } from './appointment_popup/m_popup';
