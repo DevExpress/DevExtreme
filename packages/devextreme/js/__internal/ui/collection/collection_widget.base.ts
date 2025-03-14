@@ -845,7 +845,9 @@ class CollectionWidget<
     super._refresh();
   }
 
-  _itemContainer(): dxElementWrapper {
+  // eslint-disable-next-line max-len
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types, @typescript-eslint/no-unused-vars
+  _itemContainer(searchEnabled?, previousSelectAllEnabled?): dxElementWrapper {
     return this.$element();
   }
 
