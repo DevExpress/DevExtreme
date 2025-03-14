@@ -67,6 +67,13 @@
       }
     }
 
+    &.dx-step-completed.dx-state-hover {
+      .dx-step-content::before {
+        border-color: $background-color-selected-hover;
+        background-color: $background-color-selected-hover;
+      }
+    }
+
     &.dx-step-selected.dx-state-hover {
       .dx-step-content::before {
         border-color: $background-color-selected-hover;
@@ -81,6 +88,34 @@
 
       .dx-step-title {
         color: $invalid-color;
+      }
+    }
+
+    &.dx-step-completed {
+      .dx-step-indicator {
+        color: $color-selected;
+      }
+
+      .dx-step-title {
+        color: $background-color-selected;
+      }
+
+      .dx-step-content::before {
+        border-color: $border-color-selected;
+        background-color: $background-color-selected;
+        box-shadow: 0 0 0 8px $background-color;
+      }
+
+      &.dx-state-invalid {
+        .dx-step-title {
+          color: $invalid-color;
+        }
+
+        .dx-step-content::before {
+          border-color: $invalid-color;
+          background-color: $invalid-color;
+          box-shadow: 0 0 0 8px $background-color;
+        }
       }
     }
 
