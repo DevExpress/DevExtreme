@@ -1,6 +1,6 @@
 const vueLoader = System.import("vue-loader");
 
-module.exports.translate = function (data) {
+export const translate = function (data) {
   const vueSrc = data.source.replace(/\bimport[^;]+;$/gm, function (match) {
     return match.replace(/\s+type\s+/g,' ');
   })
