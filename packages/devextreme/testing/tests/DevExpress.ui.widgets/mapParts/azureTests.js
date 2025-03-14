@@ -10,6 +10,10 @@ import 'ui/map';
 
 const MARKER_CLASS = 'dx-map-marker';
 
+const getMovementMode = (map, type) => {
+    return map._provider._movementMode(type);
+};
+
 const prepareTestingAzureProvider = () => {
     atlas.mapResized = false;
     atlas.mapDisposed = false;
@@ -971,5 +975,67 @@ QUnit.module('Routes', moduleConfig, () => {
                 done();
             }
         });
+    });
+
+    [
+        {
+            routeMode: 'driving',
+            expectedTravelMode: 'car',
+        },
+        {
+            routeMode: 'walking',
+            expectedTravelMode: 'pedestrian',
+        }
+    ].forEach(({ routeMode, expectedTravelMode }) => {
+        QUnit.test(`Provider should use ${expectedTravelMode} travelMode if route mode=${routeMode}`, function(assert) {
+            const done = assert.async();
+
+            const map = $('#map').dxMap({
+                provider: 'azure',
+                onReady: () => {
+                    const travelMode = getMovementMode(map, routeMode);
+
+                    assert.strictEqual(travelMode, expectedTravelMode);
+
+                    done();
+                }
+            }).dxMap('instance');
+        });
+    });
+
+    [
+        { mode: undefined, scenario: 'undefined' },
+        { mode: '', scenario: 'empty string' },
+    ].forEach(({ mode, scenario }) => {
+        QUnit.test(`Provider should use car travelMode if route mode is ${scenario}`, function(assert) {
+            const done = assert.async();
+
+            const map = $('#map').dxMap({
+                provider: 'azure',
+                onReady: () => {
+                    const travelMode = getMovementMode(map, mode);
+
+                    assert.strictEqual(travelMode, 'car');
+
+                    done();
+                }
+            }).dxMap('instance');
+        });
+    });
+
+    QUnit.test('Provider should use route mode as a travelMode without changes if it is not driving or walking mode', function(assert) {
+        const done = assert.async();
+        const customRouteMode = 'truck';
+
+        const map = $('#map').dxMap({
+            provider: 'azure',
+            onReady: () => {
+                const travelMode = getMovementMode(map, customRouteMode);
+
+                assert.strictEqual(travelMode, customRouteMode);
+
+                done();
+            }
+        }).dxMap('instance');
     });
 });

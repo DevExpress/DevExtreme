@@ -50,7 +50,8 @@ Microsoft.Maps = {
         },
         RouteMode: {
             driving: 1,
-            walking: 2
+            walking: 2,
+            transit: 'transit',
         },
         Waypoint: function(options) {
             this.clear = function() {};// ()

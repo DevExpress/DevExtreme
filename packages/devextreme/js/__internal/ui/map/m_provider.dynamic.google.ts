@@ -100,7 +100,12 @@ class GoogleProvider extends DynamicProvider {
       driving: google.maps.TravelMode.DRIVING,
       walking: google.maps.TravelMode.WALKING,
     };
-    return movementTypes[type] || movementTypes.driving;
+
+    if (!type) {
+      return movementTypes.driving;
+    }
+
+    return movementTypes[type] ?? type;
   }
 
   _resolveLocation(location) {

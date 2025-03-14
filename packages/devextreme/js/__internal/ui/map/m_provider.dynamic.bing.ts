@@ -47,11 +47,11 @@ class BingProvider extends DynamicProvider {
   }
 
   _movementMode(type) {
-    const movementTypes = {
-      driving: Microsoft.Maps.Directions.RouteMode.driving,
-      walking: Microsoft.Maps.Directions.RouteMode.walking,
-    };
-    return movementTypes[type] || movementTypes.driving;
+    if (!type) {
+      return Microsoft.Maps.Directions.RouteMode.driving;
+    }
+
+    return Microsoft.Maps.Directions.RouteMode[type];
   }
 
   _resolveLocation(location) {
