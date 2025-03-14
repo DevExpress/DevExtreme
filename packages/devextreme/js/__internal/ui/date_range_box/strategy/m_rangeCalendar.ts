@@ -10,7 +10,7 @@ import type DateRangeBox from '../m_date_range_box';
 import type MultiselectDateBox from '../m_multiselect_date_box';
 
 class RangeCalendarStrategy extends CalendarStrategy {
-  private dateBox: DateBox;
+  dateBox: DateBox;
 
   private readonly dateRangeBox: DateRangeBox;
 
@@ -43,7 +43,8 @@ class RangeCalendarStrategy extends CalendarStrategy {
     return super._getPopup() || this.getDateRangeBox().getStartDateBox()._popup;
   }
 
-  supportedKeys() {
+  // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
+  supportedKeys(): Record<string, (e: KeyboardEvent) => boolean | void> {
     const dateRangeBox = this.getDateRangeBox();
 
     return {

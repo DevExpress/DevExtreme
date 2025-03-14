@@ -1,4 +1,5 @@
 import $ from '@js/core/renderer';
+import type { Item } from '@js/ui/list';
 import CollectionWidgetItem from '@ts/ui/collection/m_item';
 
 const LIST_ITEM_BADGE_CONTAINER_CLASS = 'dx-list-item-badge-container';
@@ -8,17 +9,15 @@ const BADGE_CLASS = 'dx-badge';
 const LIST_ITEM_CHEVRON_CONTAINER_CLASS = 'dx-list-item-chevron-container';
 const LIST_ITEM_CHEVRON_CLASS = 'dx-list-item-chevron';
 
-// @ts-expect-error
-const ListItem = CollectionWidgetItem.inherit({
-
-  _renderWatchers() {
-    this.callBase();
+class ListItem extends CollectionWidgetItem<Item> {
+  _renderWatchers(): void {
+    super._renderWatchers();
 
     this._startWatcher('badge', this._renderBadge.bind(this));
     this._startWatcher('showChevron', this._renderShowChevron.bind(this));
-  },
+  }
 
-  _renderBadge(badge) {
+  _renderBadge(badge): void {
     this._$element.children(`.${LIST_ITEM_BADGE_CONTAINER_CLASS}`).remove();
 
     if (!badge) {
@@ -34,9 +33,9 @@ const ListItem = CollectionWidgetItem.inherit({
 
     const $chevron = this._$element.children(`.${LIST_ITEM_CHEVRON_CONTAINER_CLASS}`).first();
     $chevron.length > 0 ? $badge.insertBefore($chevron) : $badge.appendTo(this._$element);
-  },
+  }
 
-  _renderShowChevron(showChevron) {
+  _renderShowChevron(showChevron): void {
     this._$element.children(`.${LIST_ITEM_CHEVRON_CONTAINER_CLASS}`).remove();
 
     if (!showChevron) {
@@ -47,8 +46,7 @@ const ListItem = CollectionWidgetItem.inherit({
     const $chevron = $('<div>').addClass(LIST_ITEM_CHEVRON_CLASS);
 
     $chevronContainer.append($chevron).appendTo(this._$element);
-  },
-
-});
+  }
+}
 
 export default ListItem;

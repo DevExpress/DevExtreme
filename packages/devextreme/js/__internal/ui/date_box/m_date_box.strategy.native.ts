@@ -1,19 +1,25 @@
 import devices from '@js/core/devices';
-import { noop } from '@js/core/utils/common';
 import dateSerialization from '@js/core/utils/date_serialization';
-import { extend } from '@js/core/utils/extend';
 import { inputType } from '@js/core/utils/support';
 
+import type { PopupProperties } from '../popup/m_popup';
 import DateBoxStrategy from './m_date_box.strategy';
 import dateUtils from './m_date_utils';
 
-const NativeStrategy = DateBoxStrategy.inherit({
+class NativeStrategy extends DateBoxStrategy {
+  ctor(dateBox): void {
+    super.ctor(dateBox);
 
-  NAME: 'Native',
+    this.NAME = 'Native';
+  }
 
-  popupConfig(popupConfig) {
-    return extend({}, popupConfig, { width: 'auto' });
-  },
+  // eslint-disable-next-line class-methods-use-this
+  popupConfig(popupConfig: PopupProperties): PopupProperties {
+    return {
+      ...popupConfig,
+      width: 'auto',
+    };
+  }
 
   getParsedText(text) {
     if (!text) {
@@ -26,16 +32,16 @@ const NativeStrategy = DateBoxStrategy.inherit({
     }
 
     return dateUtils.fromStandardDateFormat(text);
-  },
+  }
 
-  renderPopupContent: noop,
+  renderPopupContent(): void {}
 
-  _getWidgetName: noop,
+  _getWidgetName(): void {}
 
-  _getWidgetOptions: noop,
+  _getWidgetOptions(): void {}
 
   _getDateBoxType() {
-    let type = this.dateBox.option('type');
+    let { type } = this.dateBox.option();
 
     if (!dateUtils.SUPPORTED_FORMATS.includes(type)) {
       type = 'date';
@@ -44,7 +50,7 @@ const NativeStrategy = DateBoxStrategy.inherit({
     }
 
     return type;
-  },
+  }
 
   customizeButtons() {
     const dropDownButton = this.dateBox.getButton('dropDown');
@@ -53,20 +59,20 @@ const NativeStrategy = DateBoxStrategy.inherit({
         this.dateBox._input().get(0).click();
       });
     }
-  },
+  }
 
   getDefaultOptions() {
     return {
       mode: this._getDateBoxType(),
     };
-  },
+  }
 
-  getDisplayFormat(displayFormat) {
+  getDisplayFormat(displayFormat?) {
     const type = this._getDateBoxType();
     return displayFormat || dateUtils.FORMATS_MAP[type];
-  },
+  }
 
-  renderInputMinMax($input) {
+  renderInputMinMax($input?): void {
     const type = this.dateBox.option('type');
     const defaultFormat = 'yyyy-MM-dd';
     const format = {
@@ -79,7 +85,7 @@ const NativeStrategy = DateBoxStrategy.inherit({
       min: dateSerialization.serializeDate(this.dateBox.dateOption('min'), format),
       max: dateSerialization.serializeDate(this.dateBox.dateOption('max'), format),
     });
-  },
-});
+  }
+}
 
 export default NativeStrategy;

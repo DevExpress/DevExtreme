@@ -1,4 +1,4 @@
-import type { SingleMultipleOrNone } from '@js/common';
+import type { SingleMultipleAllOrNone, SingleMultipleOrNone } from '@js/common';
 import type { ItemInfo } from '@js/common/core/events';
 import eventsEngine from '@js/common/core/events/core/events_engine';
 import { DataSource } from '@js/common/data/data_source/data_source';
@@ -28,6 +28,7 @@ import PlainEditStrategy from '@ts/ui/collection/m_collection_widget.edit.strate
 import Selection from '@ts/ui/selection/m_selection';
 
 import type MenuBaseEditStrategy from '../context_menu/m_menu_base.edit.strategy';
+import type GroupedEditStrategy from '../list/m_list.edit.strategy.grouped';
 
 const ITEM_DELETING_DATA_KEY = 'dxItemDeleting';
 const NOT_EXISTING_INDEX = -1;
@@ -42,7 +43,7 @@ export interface CollectionWidgetEditProperties<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   TKey = any,
 > extends CollectionWidgetBaseProperties<TComponent, TItem, TKey> {
-  selectionMode?: SingleMultipleOrNone;
+  selectionMode?: SingleMultipleOrNone | SingleMultipleAllOrNone;
 }
 
 class CollectionWidget<
@@ -57,7 +58,7 @@ class CollectionWidget<
 
   _selection!: Selection;
 
-  _editStrategy!: PlainEditStrategy<this> | MenuBaseEditStrategy;
+  _editStrategy!: PlainEditStrategy<this> | MenuBaseEditStrategy | GroupedEditStrategy;
 
   _actions!: Record<string, (args: Record<string, unknown>) => void>;
 
@@ -492,7 +493,7 @@ class CollectionWidget<
 
   _itemSelectHandler(
     e: DxEvent,
-    shouldIgnoreSelectByClick?: boolean,
+    shouldIgnoreSelectByClick?: boolean | number,
   // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
   ): DeferredObj<unknown> | void {
     if (!shouldIgnoreSelectByClick && !this.option('selectByClick')) {
@@ -585,7 +586,7 @@ class CollectionWidget<
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars, class-methods-use-this
-  _updateSelection(addedSelection: unknown[], removedSelection: unknown[]): void {}
+  _updateSelection(addedSelection?: unknown[], removedSelection?: unknown[]): void {}
 
   _setAriaSelectionAttribute(
     $target: dxElementWrapper,

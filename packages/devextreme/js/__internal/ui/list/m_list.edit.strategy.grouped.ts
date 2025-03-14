@@ -36,7 +36,7 @@ class GroupedEditStrategy extends EditStrategy {
 
     if (!itemData) return false;
 
-    if (itemData.items && itemData.items.length) {
+    if (itemData.items?.length) {
       // eslint-disable-next-line prefer-destructuring
       itemData = itemData.items[0];
     }
@@ -71,7 +71,7 @@ class GroupedEditStrategy extends EditStrategy {
     if (isNumeric(index)) {
       return this.itemsGetter()[index];
     }
-    return (index && items[index.group] && items[index.group].items[index.item]) || null;
+    return (index && items[index.group]?.items[index.item]) || null;
   }
 
   itemsGetter() {
@@ -79,7 +79,7 @@ class GroupedEditStrategy extends EditStrategy {
     const { items } = this._collectionWidget.option();
 
     for (let i = 0; i < items.length; i++) {
-      if (items[i] && items[i].items) {
+      if (items[i]?.items) {
         resultItems = resultItems.concat(items[i].items);
       } else {
         // @ts-expect-error
@@ -100,7 +100,7 @@ class GroupedEditStrategy extends EditStrategy {
     let plainItems = [];
     let i;
     for (i = 0; i < items.length; i++) {
-      if (items[i] && items[i].items) {
+      if (items[i]?.items) {
         plainItems = plainItems.concat(items[i].items);
       } else {
         // @ts-expect-error
@@ -118,8 +118,7 @@ class GroupedEditStrategy extends EditStrategy {
     return result;
   }
 
-  // @ts-expect-error
-  getIndexByKey(key, items) {
+  getIndexByKey(key, items?) {
     const groups = items || this._collectionWidget.option('items');
     let index = -1;
     const that = this;
