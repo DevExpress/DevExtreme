@@ -10,7 +10,7 @@ import DataGridExample from './data-grid-example';
 import EditorExample from './editor-example';
 import Example from './example-block';
 // import FormExample from './form-example';
-import ListExample from './list-example';
+// import ListExample from './list-example';
 // import MapExample from './map-example';
 import PopupExample from './popup-example';
 import RerenderedChartExample from './rerendered-chart-example';
@@ -23,6 +23,7 @@ import TextBoxExample from './text-box-example';
 import ToolbarExample from './toolbar-example';
 import ValidationExample from './validation-example';
 // import DateBoxExample from './date-box-example';
+import SelectBoxCustomExample from './selector-custom-example';
 
 const Examples = () => {
     return (
@@ -51,7 +52,7 @@ const Examples = () => {
 
             {/* <FormExample /> */}
 
-            <ListExample />
+            {/*<ListExample />*/}
 
             {/* <MapExample /> */}
 
@@ -83,6 +84,10 @@ const Examples = () => {
 
             <Example title="SelectBox example">
                 <SelectBoxExample />
+            </Example>
+
+            <Example title="SelectBox example with custom components" id="customSelectBox">
+                <SelectBoxCustomExample />
             </Example>
 
              {/*<StandaloneValidatorExample />*/}

@@ -1,20 +1,21 @@
 import * as React from 'react';
 
 interface IProps {
-  state?: Record<string, unknown>;
   title: string;
   children: any;
+  state?: Record<string, unknown>;
+  id?: string;
 }
 
 const Example = (props: IProps): JSX.Element => {
-  const { state, title, children } = props;
+  const { state, title, children, id } = props;
   let stateBlock: JSX.Element | null = null;
   if (state) {
     stateBlock = <pre className="example-state">{JSON.stringify(state, null, '  ')}</pre>;
   }
 
   return (
-    <div className="example-block">
+    <div className="example-block" id={id}>
       <div className="example-header">
         <h4 className="bg-primary example-title">{title || 'example'}</h4>
         {stateBlock}
