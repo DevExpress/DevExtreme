@@ -10,7 +10,6 @@ import type { MapMaybeSubscribable, SubsGets } from '@ts/core/reactive/index';
 import { combined, computed, state } from '@ts/core/reactive/index';
 import { createRef } from 'inferno';
 
-import { ColumnsController } from '../columns_controller/columns_controller';
 import { CLASSES as ContentViewClasses } from '../content_view/content_view';
 import { View } from '../core/view';
 import { OptionsController } from '../options_controller/options_controller';
@@ -37,7 +36,7 @@ export class ColumnChooserView extends View<ColumnChooserProps> {
   private readonly mode: SubsGets<ColumnChooserMode>;
 
   public static dependencies = [
-    ToolbarController, ColumnsController, ColumnChooserController, OptionsController,
+    ToolbarController, ColumnChooserController, OptionsController,
   ] as const;
 
   constructor(
