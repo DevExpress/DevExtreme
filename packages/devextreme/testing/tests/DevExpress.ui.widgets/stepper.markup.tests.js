@@ -12,6 +12,7 @@ import {
     STEP_TEXT_CLASS,
     STEP_TITLE_CLASS,
 } from '__internal/ui/stepper/stepper';
+import { STEP_COMPLETED_CLASS } from '__internal/ui/stepper/stepper_item';
 
 import {
     STEP_INVALID_CLASS,
@@ -106,6 +107,60 @@ QUnit.module('Stepper markup', moduleConfig, () => {
         assert.strictEqual(this.getStepByIndex(0).hasClass(STEP_SELECTED_CLASS), false);
         assert.strictEqual(this.getStepByIndex(1).hasClass(STEP_SELECTED_CLASS), false);
         assert.strictEqual(this.getStepByIndex(2).hasClass(STEP_SELECTED_CLASS), true);
+    });
+
+    QUnit.test(`Steps before selected should have ${STEP_COMPLETED_CLASS} class by default`, function(assert) {
+        this.reinit({
+            items: [{}, {}, {}],
+            selectedIndex: 1
+        });
+
+        assert.strictEqual(this.getStepByIndex(0).hasClass(STEP_COMPLETED_CLASS), true);
+        assert.strictEqual(this.getStepByIndex(1).hasClass(STEP_COMPLETED_CLASS), false);
+        assert.strictEqual(this.getStepByIndex(2).hasClass(STEP_COMPLETED_CLASS), false);
+    });
+
+    QUnit.test(`Steps before selected should have ${STEP_COMPLETED_CLASS} class after selection changed`, function(assert) {
+        this.reinit({
+            items: [{}, {}, {}],
+            selectedIndex: 0,
+            linear: false,
+        });
+
+        this.getStepByIndex(2).trigger('dxclick');
+
+        assert.strictEqual(this.getStepByIndex(0).hasClass(STEP_COMPLETED_CLASS), true);
+        assert.strictEqual(this.getStepByIndex(1).hasClass(STEP_COMPLETED_CLASS), true);
+        assert.strictEqual(this.getStepByIndex(2).hasClass(STEP_COMPLETED_CLASS), false);
+    });
+
+
+    QUnit.test(`Steps before selected should have ${STEP_COMPLETED_CLASS} class after change selectedIndex at runtime`, function(assert) {
+        this.reinit({
+            items: [{}, {}, {}],
+            selectedIndex: 0
+        });
+
+        this.instance.option('selectedIndex', 2);
+
+        assert.strictEqual(this.getStepByIndex(0).hasClass(STEP_COMPLETED_CLASS), true);
+        assert.strictEqual(this.getStepByIndex(1).hasClass(STEP_COMPLETED_CLASS), true);
+        assert.strictEqual(this.getStepByIndex(2).hasClass(STEP_COMPLETED_CLASS), false);
+    });
+
+    QUnit.test(`Steps before selected should have ${STEP_COMPLETED_CLASS} class after change selectedItem at runtime`, function(assert) {
+        const items = [{}, {}, {}];
+
+        this.reinit({
+            items,
+            selectedIndex: 0
+        });
+
+        this.instance.option('selectedItem', items[2]);
+
+        assert.strictEqual(this.getStepByIndex(0).hasClass(STEP_COMPLETED_CLASS), true);
+        assert.strictEqual(this.getStepByIndex(1).hasClass(STEP_COMPLETED_CLASS), true);
+        assert.strictEqual(this.getStepByIndex(2).hasClass(STEP_COMPLETED_CLASS), false);
     });
 
     QUnit.test(`Step content should contain indicator with ${STEP_INDICATOR_CLASS} class by default`, function(assert) {

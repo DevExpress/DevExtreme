@@ -3,6 +3,8 @@ import type {
 } from '@js/ui/collection/ui.collection_widget.base';
 import CollectionWidgetItem from '@ts/ui/collection/m_item';
 
+export const STEP_COMPLETED_CLASS = 'dx-step-completed';
+
 export const STEP_INVALID_CLASS = 'dx-step-invalid';
 
 export interface StepperItemProperties extends CollectionWidgetItemProperties {
@@ -25,6 +27,9 @@ class StepperItem extends CollectionWidgetItem<StepperItemProperties> {
   ): void {
     this._$element.toggleClass(STEP_INVALID_CLASS, value !== undefined && !value);
   }
-}
+
+  changeCompleted(isCompleted: boolean): void {
+    this._$element.toggleClass(STEP_COMPLETED_CLASS, isCompleted);
+  }}
 
 export default StepperItem;
