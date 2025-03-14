@@ -3,7 +3,7 @@ import * as accessibility from '@js/ui/shared/accessibility';
 import { Component, createRef } from 'inferno';
 
 import { CheckBox } from '../../new/grid_core/inferno_wrappers/checkbox';
-import { ClearFilterButton } from './clear_filter_button';
+import { ClearFilterButton } from './filter_panel_clear_filter_button';
 
 type AddWidgetPrefix = (className: string) => string;
 
@@ -98,6 +98,7 @@ export class FilterPanel extends Component<Props> {
             className={classes.text}
             onClick={this.showFilterBuilder}
             tabIndex={this.props.tabIndex}
+            role='button'
           >
             {this.props.text}
           </div>

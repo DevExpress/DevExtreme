@@ -33,8 +33,8 @@ export class ClearFilterButton extends Component<Props> {
         <>
             <div ref={this.ref}
               className={this.props.className}
-              onClick={(): void => this.props.clearFilter()}
               tabIndex={this.props.tabIndex}
+              onClick={(): void => this.props.clearFilter()}
               role='button'
             >
               {this.props.text}
