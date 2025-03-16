@@ -2359,13 +2359,12 @@ QUnit.module('showSelectionControls', moduleSetup, () => {
     });
 
     QUnit.test('Should not throw an error on selectAll click when hideSelectedItems is enabled (T1278816)', function(assert) {
-        const items = [1, 2, 3, 4];
-        const tagBox = $('#tagBox').dxTagBox({
-            items,
+        $('#tagBox').dxTagBox({
+            items: [1, 2, 3, 4],
             showSelectionControls: true,
             hideSelectedItems: true,
             opened: true,
-        }).dxTagBox('instance');
+        });
 
         this.clock.tick(TIME_TO_WAIT);
 
