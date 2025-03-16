@@ -2357,6 +2357,26 @@ QUnit.module('showSelectionControls', moduleSetup, () => {
 
         assert.strictEqual(loadSpy.callCount, 1, 'selected items are correct');
     });
+
+    QUnit.test('Should not throw an error on selectAll click when hideSelectedItems is enabled (T1278816)', function(assert) {
+        const items = [1, 2, 3, 4];
+        const tagBox = $('#tagBox').dxTagBox({
+            items,
+            showSelectionControls: true,
+            hideSelectedItems: true,
+            opened: true,
+        }).dxTagBox('instance');
+
+        this.clock.tick(TIME_TO_WAIT);
+
+        try {
+            $(`.${SELECT_ALL_CHECKBOX_CLASS}`).trigger('dxclick');
+
+            assert.ok(true, 'no error is thrown');
+        } catch(error) {
+            assert.ok(false, `error is thrown: ${error}`);
+        }
+    });
 });
 
 QUnit.module('keyboard navigation', {
