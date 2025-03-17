@@ -32,9 +32,9 @@
     "devexpress-diagram": "catalog:",
     "devexpress-gantt": "catalog:",
     "devextreme-quill": "1.7.2",
-    "inferno": "^7.4.9",
-    "inferno-hydrate": "^7.4.9",
-    "inferno-create-element": "^7.4.9",
+    "inferno": "catalog:",
+    "inferno-hydrate": "catalog:",
+    "inferno-create-element": "catalog:",
     "jszip": "^3.10.1",
     "rrule": "^2.7.1"
   },
