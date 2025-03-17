@@ -31616,7 +31616,7 @@ declare module DevExpress.ui.dxCardView {
     /**
      * [descr:DataControllerOptions.remoteOperations]
      */
-    remoteOperations?: RemoteOperations | boolean | 'auto';
+    remoteOperations?: RemoteOperations | boolean | DevExpress.common.Mode;
   };
   /**
    * [descr:DataRow]
