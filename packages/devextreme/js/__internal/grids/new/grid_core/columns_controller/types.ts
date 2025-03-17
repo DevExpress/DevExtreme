@@ -1,5 +1,6 @@
 import type { Format, SortOrder } from '@js/common';
 import type { ColumnBase } from '@js/common/grids';
+import type { HeaderFilterColumnOptions } from '@ts/grids/new/grid_core/filtering/header_filter';
 import type { ComponentType } from 'inferno';
 
 import type { DataObject } from '../data_controller/types';
@@ -13,6 +14,8 @@ type InheritedColumnProps =
   | 'visibleIndex'
   | 'allowReordering'
   | 'allowHiding'
+  | 'allowFiltering'
+  | 'allowHeaderFiltering'
   | 'trueText'
   | 'falseText'
   | 'caption';
@@ -42,4 +45,6 @@ export type Column = Pick<Required<ColumnBase>, InheritedColumnProps> & {
   headerItemTemplate?: ComponentType<{ column: Column }>;
 
   headerItemCssClass?: string;
+  // header filter options for specific column.
+  headerFilter?: HeaderFilterColumnOptions;
 };
