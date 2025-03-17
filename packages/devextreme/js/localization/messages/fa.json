@@ -250,10 +250,9 @@
         "dxPivotGrid-rowFieldArea": "فیلدهای مربوط به سطر را به اینجا انتقال دهید (درگ نمایید)",
         "dxPivotGrid-filterFieldArea": "فیلدهای مربوط به فیلتر را به اینجا انتقال دهید (درگ نمایید)",
 
-        "dxScheduler-ariaLabel": "Scheduler. {0} view",
-        "dxScheduler-ariaLabel-currentIndicator-present": "Current time on the view",
-        "dxScheduler-ariaLabel-currentIndicator-future": "Current time at the future",
-        "dxScheduler-ariaLabel-currentIndicator-past": "Current time at the past",
+        "dxScheduler-ariaLabel": "Scheduler. {0} view {1} with {2} appointments",
+        "dxScheduler-ariaLabel-currentIndicator-present": "The current time indicator is visible in the view",
+        "dxScheduler-ariaLabel-currentIndicator-not-present": "The current time indicator is not visible on the screen",
 
         "dxScheduler-appointmentAriaLabel-group": "Group: {0}",
         "dxScheduler-appointmentAriaLabel-recurring": "Recurring appointment",

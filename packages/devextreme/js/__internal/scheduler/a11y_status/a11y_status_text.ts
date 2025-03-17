@@ -8,8 +8,7 @@ import type { RawViewType } from '../header/types';
 const KEYS = {
   label: 'dxScheduler-ariaLabel',
   indicatorPresent: 'dxScheduler-ariaLabel-currentIndicator-present',
-  indicatorFuture: 'dxScheduler-ariaLabel-currentIndicator-future',
-  indicatorPast: 'dxScheduler-ariaLabel-currentIndicator-past',
+  indicatorNotPresent: 'dxScheduler-ariaLabel-currentIndicator-not-present',
 };
 const viewTypeLocalization: Record<ViewType, string> = {
   agenda: 'dxScheduler-switcherAgenda',
@@ -30,14 +29,11 @@ const localizeCurrentIndicator = (
   startDate: Date,
   endDate: Date,
 ): string => {
-  switch (true) {
-    case date < startDate:
-      return messageLocalization.format(KEYS.indicatorPast);
-    case date > endDate:
-      return messageLocalization.format(KEYS.indicatorFuture);
-    default:
-      return messageLocalization.format(KEYS.indicatorPresent);
+  if (date >= startDate && date < endDate) {
+    return messageLocalization.format(KEYS.indicatorPresent);
   }
+
+  return messageLocalization.format(KEYS.indicatorNotPresent);
 };
 const localizeName = (viewName?: string, viewType?: string): string => {
   if (viewName) {

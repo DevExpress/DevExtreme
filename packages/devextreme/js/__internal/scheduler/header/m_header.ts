@@ -19,7 +19,6 @@ import {
 } from './m_date_navigator';
 import {
   getCaption,
-  getCaptionInterval,
   getNextIntervalDate,
   getStep,
   getViewName,
@@ -66,13 +65,6 @@ export class SchedulerHeader extends Widget<dxSchedulerOptions> {
     return {
       step, intervalCount, firstDayOfWeek, agendaDuration,
     };
-  }
-
-  get visibleDateInterval(): {
-    startDate: Date;
-    endDate: Date;
-  } {
-    return getCaptionInterval(this._getCaptionOptions());
   }
 
   _getDefaultOptions() {
