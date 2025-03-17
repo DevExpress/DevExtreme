@@ -93,3 +93,43 @@ QUnit[isRenovatedScheduler ? 'skip' : 'test']('Appointment DnD with disabled pro
     assert.equal($('.dx-scheduler-appointment-title').length, 1, 'title should be render once');
     assert.equal($('.dx-scheduler-appointment-content-details').length, 1, 'details should be render once');
 });
+
+QUnit.test('T1282055: appointment collector renders correct', function(assert) {
+    const markupText = `<div class='dx-viewport demo-container'>
+        <div id='scheduler-demo'>
+            <div data-bind='dxScheduler: schedulerOptions'></div>
+        </div>
+    </div>`;
+
+    const $element = $(markupText).appendTo('#qunit-fixture');
+
+    function PageViewModel() {
+        this.schedulerOptions = {
+            dataSource: [
+                {
+                    text: 'Website Re-Design Plan',
+                    startDate: ko.observable('2021-06-01T16:30:00.000Z'),
+                    endDate: ko.observable('2021-06-01T18:30:00.000Z')
+                },
+                {
+                    text: 'Install New Router in Dev Room',
+                    startDate: ko.observable('2021-06-01T16:30:00.000Z'),
+                    endDate: ko.observable('2021-06-01T18:30:00.000Z')
+                }
+            ],
+            views: ['month'],
+            currentView: 'month',
+            currentDate: new Date('2021-06-01T16:30:00'),
+            height: 300
+        };
+    }
+
+    ko.applyBindings(new PageViewModel(), $element.get(0));
+
+    assert.equal($('.dx-scheduler-appointment-collector').length, 1, 'appointment collector has rendered');
+    assert.equal(
+        $('.dx-scheduler-appointment-collector').attr('aria-roledescription'),
+        'June 1, 2021',
+        'appointment collector has correct a11y description'
+    );
+});
