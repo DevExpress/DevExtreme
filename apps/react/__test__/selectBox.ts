@@ -21,13 +21,15 @@ const check = async (t: TestController) => {
     await t.expect(valueAfterDown).eql(focusedValueAfterDown);
 };
 
+const duration = 500;
+
 test('SelectBox keyboard navigation test', async (t) => {
     await t.click(slectboxContainer);
     await t.expect(dropDownContainer.exists).ok();
 
-    await t.pressKey('down').wait(200);
+    await t.pressKey('down').wait(duration);
     await check(t);
 
-    await t.pressKey('up').wait(200);
+    await t.pressKey('up').wait(duration);
     await check(t);
 });
