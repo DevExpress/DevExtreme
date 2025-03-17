@@ -238,7 +238,14 @@ exports[`common initial render should be successfull 1`] = `
       class="dx-gridcore-error-row"
     />
   </div>
-  
+  <div>
+    <div
+      class="dx-hidden"
+    />
+  </div>
+  <div>
+    <div />
+  </div>
   <div>
     
   </div>
