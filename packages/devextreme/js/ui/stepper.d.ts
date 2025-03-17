@@ -188,7 +188,12 @@ export interface dxStepperItem extends CollectionWidgetItem {
    * @docid
    * @public
    */
-  optional?: string;
+  optional?: boolean;
+  /**
+   * @docid
+   * @public
+   */
+  isValid?: boolean;
 }
 
 /** @public */

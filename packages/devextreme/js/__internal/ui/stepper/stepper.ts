@@ -67,8 +67,6 @@ class Stepper extends CollectionWidgetAsync<StepperProperties> {
       loopItemFocus: false,
       selectionRequired: true,
       isValidExpr(data): boolean | undefined {
-        // @ts-expect-error ts-error
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
         return data ? data.isValid : undefined;
       },
     };
