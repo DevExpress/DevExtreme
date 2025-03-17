@@ -8,9 +8,7 @@ import {
     OnDestroy,
     NgModule,
     Host,
-    SkipSelf,
-    Output,
-    EventEmitter
+    SkipSelf
 } from '@angular/core';
 
 
@@ -20,49 +18,29 @@ import {
 import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
-import { DxoPaging } from './base/paging';
+import { DxoCardCover } from './base/card-cover';
 
 
 @Component({
-    selector: 'dxo-paging',
+    selector: 'dxo-card-cover',
     template: '',
     styles: [''],
     providers: [NestedOptionHost],
     inputs: [
-        'enabled',
-        'pageIndex',
-        'pageSize'
+        'altExpr',
+        'imageExpr'
     ]
 })
-export class DxoPagingComponent extends DxoPaging implements OnDestroy, OnInit  {
+export class DxoCardCoverComponent extends DxoCardCover implements OnDestroy, OnInit  {
 
-    /**
-    
-     * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
-     */
-    @Output() pageIndexChange: EventEmitter<number>;
-
-    /**
-    
-     * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
-     */
-    @Output() pageSizeChange: EventEmitter<number>;
     protected get _optionPath() {
-        return 'paging';
+        return 'cardCover';
     }
 
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
-
-        this._createEventEmitters([
-            { emit: 'pageIndexChange' },
-            { emit: 'pageSizeChange' }
-        ]);
-
         parentOptionHost.setNestedOption(this);
         optionHost.setHost(this, this._fullOptionPath.bind(this));
     }
@@ -81,10 +59,10 @@ export class DxoPagingComponent extends DxoPaging implements OnDestroy, OnInit  
 
 @NgModule({
   declarations: [
-    DxoPagingComponent
+    DxoCardCoverComponent
   ],
   exports: [
-    DxoPagingComponent
+    DxoCardCoverComponent
   ],
 })
-export class DxoPagingModule { }
+export class DxoCardCoverModule { }

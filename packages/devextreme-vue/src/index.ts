@@ -7,6 +7,7 @@ export { DxBullet } from "./bullet";
 export { DxButton } from "./button";
 export { DxButtonGroup } from "./button-group";
 export { DxCalendar } from "./calendar";
+export { DxCardView } from "./card-view";
 export { DxChart } from "./chart";
 export { DxChat } from "./chat";
 export { DxCheckBox } from "./check-box";
