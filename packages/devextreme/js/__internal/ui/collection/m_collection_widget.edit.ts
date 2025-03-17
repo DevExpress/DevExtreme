@@ -44,6 +44,8 @@ export interface CollectionWidgetEditProperties<
   TKey = any,
 > extends CollectionWidgetBaseProperties<TComponent, TItem, TKey> {
   selectionMode?: SingleMultipleOrNone | SingleMultipleAllOrNone;
+
+  selectionRequired?: boolean;
 }
 
 class CollectionWidget<
@@ -502,7 +504,6 @@ class CollectionWidget<
 
     const $itemElement = e.currentTarget;
 
-    // @ts-expect-error ts-error
     if (this.isItemSelected($itemElement)) {
       this.unselectItem(e.currentTarget);
     } else {
@@ -785,8 +786,7 @@ class CollectionWidget<
     this._optionChangedAction?.({ name: optionName, fullName: optionName, value: optionValue });
   }
 
-  isItemSelected(itemElement: dxElementWrapper | number): boolean {
-    // @ts-expect-error ts-error
+  isItemSelected(itemElement: Element | number): boolean {
     return this._isItemSelected(this._editStrategy.getNormalizedIndex(itemElement));
   }
 

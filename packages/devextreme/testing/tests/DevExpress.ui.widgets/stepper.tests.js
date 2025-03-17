@@ -1,15 +1,18 @@
 import $ from 'jquery';
-import 'ui/splitter';
-
 import Stepper from 'ui/stepper';
 
-import 'generic_light.css!';
+import keyboardMock from '../../helpers/keyboardMock.js';
+import Connector, {
+    STEPPER_CONNECTOR_CLASS,
+} from '__internal/ui/stepper/connector';
 
 import {
     STEP_CLASS,
     STEP_INDICATOR_CLASS,
     STEP_TITLE_CLASS,
 } from '__internal/ui/stepper/stepper';
+
+import 'generic_light.css!';
 
 QUnit.testStart(() => {
     const markup = '<div id="stepper"></div>';
@@ -21,6 +24,7 @@ const moduleConfig = {
     beforeEach: function() {
         const init = (options = { }, selector = '#stepper') => {
             this.$element = $(selector).dxStepper(options);
+            this.$connector = this.$element.find(`.${STEPPER_CONNECTOR_CLASS}`);
             this.instance = this.$element.dxStepper('instance');
         };
 
@@ -34,6 +38,10 @@ const moduleConfig = {
 
         this.getItems = () => {
             return this.$element.find(`.${STEP_CLASS}`);
+        };
+
+        this.getConnector = () => {
+            return Connector.getInstance(this.$connector);
         };
     }
 };
@@ -59,6 +67,131 @@ QUnit.module('Initialization', moduleConfig, () => {
         });
 
         assert.strictEqual(this.getItems().length, 3);
+    });
+});
+
+QUnit.module('Navigation', moduleConfig, () => {
+    QUnit.test('In linear mode only next or previous steps can be selected on click', function(assert) {
+        this.reinit({
+            items: [{}, {}, {}, {}],
+            selectedIndex: 1,
+            linear: true,
+        });
+
+        this.getItems().eq(3).trigger('dxclick');
+
+        assert.equal(this.instance.option('selectedIndex'), 1, 'selectedIndex not changed');
+
+        this.getItems().eq(2).trigger('dxclick');
+
+        assert.equal(this.instance.option('selectedIndex'), 2, 'selectedIndex changed');
+    });
+
+    [true, false].forEach((linear) => {
+        QUnit.test(`selectionChanged callback should not be triggered when is already selected, linear=${linear}`, function(assert) {
+            let count = 0;
+
+            this.reinit({
+                items: [{}, {}, {}, {}],
+                selectedIndex: 1,
+                linear,
+                onSelectionChanged: function(e) {
+                    count += 1;
+                },
+            });
+
+            this.getItems().eq(2)
+                .trigger('dxclick')
+                .trigger('dxclick');
+
+            assert.equal(count, 1, 'action triggered only once');
+            assert.equal(this.instance.option('selectedIndex'), 2, 'selectedIndex changed');
+        });
+    });
+
+    QUnit.test('In linear mode only next or previous steps can be selected by keyboard (selectOnFocus=false)', function(assert) {
+        this.reinit({
+            items: [{}, {}, {}, {}],
+            selectedIndex: 1,
+            linear: true,
+            selectOnFocus: false,
+        });
+
+        const keyboard = keyboardMock(this.$element);
+
+        keyboard
+            .keyDown('right')
+            .keyDown('right')
+            .keyDown('enter');
+
+        assert.equal(this.instance.option('selectedIndex'), 1, 'selectedIndex not changed');
+
+        keyboard
+            .keyDown('left')
+            .keyDown('enter');
+
+        assert.equal(this.instance.option('selectedIndex'), 2, 'selectedIndex changed');
+    });
+
+    QUnit.test('In linear mode Home/End keys should select previous/next item', function(assert) {
+        this.reinit({
+            items: [{}, {}, {}, {}],
+            selectedIndex: 1,
+            linear: true,
+        });
+
+        const keyboard = keyboardMock(this.$element);
+
+        keyboard.keyDown('end');
+
+        assert.equal(this.instance.option('selectedIndex'), 2, 'selected next item');
+
+        keyboard.keyDown('home');
+
+        assert.equal(this.instance.option('selectedIndex'), 1, 'selected previous item');
+    });
+
+    QUnit.test('Connector value should change on selection changed', function(assert) {
+        this.reinit({
+            items: [{}, {}, {}, {}, {}],
+            selectedIndex: 1,
+            linear: false,
+        });
+
+        assert.equal(this.getConnector().option('value'), '25%', 'initial connector value is correct');
+
+        this.getItems().eq(3).trigger('dxclick');
+
+        assert.equal(this.getConnector().option('value'), '75%', 'connector value changed');
+    });
+
+    QUnit.test('Connector value should change if selectedIndex changed in runtime', function(assert) {
+        this.reinit({
+            items: [{}, {}, {}, {}, {}],
+            selectedIndex: 1,
+            linear: false,
+        });
+
+        assert.equal(this.getConnector().option('value'), '25%', 'initial connector value is correct');
+
+        this.instance.option('selectedIndex', 3);
+
+        assert.equal(this.getConnector().option('value'), '75%', 'connector value changed');
+    });
+
+    QUnit.test('Connector value should change if selectedItem changed in runtime', function(assert) {
+        const items = [{}, {}, {}, {}, {}];
+        this.reinit({
+            items,
+            selectedIndex: 1,
+            linear: false,
+        });
+
+        assert.equal(this.getConnector().option('value'), '25%', 'initial connector value is correct');
+
+        this.instance.option('selectedItem', items[3]);
+
+        assert.equal(this.getConnector().option('value'), '75%', 'connector value changed');
     });
 });
 
@@ -104,5 +237,19 @@ QUnit.module('Item data', moduleConfig, () => {
         assert.strictEqual(getStepTitle(0), 'Step 1');
         assert.strictEqual(getStepTitle(1), 'Step 2');
         assert.strictEqual(getStepTitle(2), 'Step 3');
+    });
+});
+
+QUnit.module('Connector integration', moduleConfig, () => {
+    QUnit.test('orientation should be passed to connector on initialization', function(assert) {
+        this.reinit({ orientation: 'vertical' });
+
+        assert.deepEqual(this.getConnector().option('orientation'), 'vertical', 'orientation value is passed');
+    });
+
+    QUnit.test('orientation should be passed to connector at runtime', function(assert) {
+        this.instance.option({ orientation: 'vertical' });
+
+        assert.deepEqual(this.getConnector().option('orientation'), 'vertical', 'orientation value is passed');
     });
 });

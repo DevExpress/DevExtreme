@@ -30,8 +30,6 @@ const azureMapsLoaded = function () {
 
 let azureMapsLoader;
 class AzureProvider extends DynamicProvider {
-  _geocodedLocations!: {};
-
   _preventZoomChangeEvent?: boolean;
 
   _mapType(type) {
@@ -48,7 +46,12 @@ class AzureProvider extends DynamicProvider {
       driving: 'car',
       walking: 'pedestrian',
     };
-    return movementTypes[type] || movementTypes.driving;
+
+    if (!type) {
+      return movementTypes.driving;
+    }
+
+    return movementTypes[type] ?? type;
   }
 
   _resolveLocation(location) {

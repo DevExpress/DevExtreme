@@ -19,7 +19,7 @@ import SimulatedStrategy from './m_scroll_view.simulated';
 import Scrollable from './m_scrollable';
 import type { RefreshStrategy, ScrollOffset } from './types';
 
-// STYLE loadPanel
+// STYLE scrollView
 
 const SCROLLVIEW_CLASS = 'dx-scrollview';
 const SCROLLVIEW_CONTENT_CLASS = `${SCROLLVIEW_CLASS}-content`;
@@ -45,7 +45,7 @@ export interface ScrollViewProperties extends Omit<Properties, 'onScroll' | 'onU
   refreshStrategy: RefreshStrategy;
 }
 
-class ScrollViewServerSide extends Scrollable<ScrollViewProperties> {
+export class ScrollViewServerSide extends Scrollable<ScrollViewProperties> {
   finishLoading(): void {}
 
   release(): void {}
@@ -70,7 +70,7 @@ class ScrollViewServerSide extends Scrollable<ScrollViewProperties> {
   }
 }
 
-class ScrollView extends Scrollable<ScrollViewProperties> {
+export class ScrollView extends Scrollable<ScrollViewProperties> {
   _strategy!: PullDownStrategy | SwipeDownStrategy | SimulatedStrategy;
 
   _loadPanel!: LoadPanel;
@@ -337,7 +337,7 @@ class ScrollView extends Scrollable<ScrollViewProperties> {
     return getPublicElement(this._$content.children().eq(1));
   }
 
-  release(preventReachBottom) {
+  release(preventReachBottom?) {
     if (preventReachBottom !== undefined) {
       this.toggleLoading(!preventReachBottom);
     }

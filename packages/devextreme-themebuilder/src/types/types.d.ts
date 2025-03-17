@@ -19,6 +19,7 @@ interface ConfigMetaItem {
 }
 
 interface LessCompilerInterface {
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
   render: Function;
 }
 

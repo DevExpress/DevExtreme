@@ -11,17 +11,24 @@ import DateBoxStrategy from './m_date_box.strategy';
 
 const TODAY_BUTTON_CLASS = 'dx-button-today';
 
-const CalendarStrategy = DateBoxStrategy.inherit({
+class CalendarStrategy extends DateBoxStrategy {
+  _lastActionElement?: string;
 
-  NAME: 'Calendar',
+  ctor(dateBox): void {
+    super.ctor(dateBox);
+
+    this.NAME = 'Calendar';
+  }
 
   getDefaultOptions() {
-    return extend(this.callBase(), {
+    return {
+      ...super.getDefaultOptions(),
       todayButtonText: messageLocalization.format('dxCalendar-todayButtonText'),
-    });
-  },
+    };
+  }
 
-  supportedKeys() {
+  // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
+  supportedKeys(): Record<string, (e: KeyboardEvent) => boolean | void> {
     const homeEndHandler = function (e) {
       if (this.option('opened')) {
         e.preventDefault();
@@ -69,25 +76,27 @@ const CalendarStrategy = DateBoxStrategy.inherit({
       home: homeEndHandler,
       end: homeEndHandler,
     };
-  },
+  }
 
   getDisplayFormat(displayFormat) {
     return displayFormat || 'shortdate';
-  },
+  }
 
-  _closeDropDownByEnter: () => true,
+  _closeDropDownByEnter() {
+    return true;
+  }
 
   _getWidgetName() {
     return Calendar;
-  },
+  }
 
   _getContouredValue() {
     return this._widget._view.option('contouredDate');
-  },
+  }
 
   getKeyboardListener() {
     return this._widget;
-  },
+  }
 
   _getWidgetOptions() {
     const disabledDates = this.dateBox.option('disabledDates');
@@ -104,7 +113,7 @@ const CalendarStrategy = DateBoxStrategy.inherit({
       onContouredChanged: this._refreshActiveDescendant.bind(this),
       skipFocusCheck: true,
     });
-  },
+  }
 
   _injectComponent(func) {
     const that = this;
@@ -112,12 +121,12 @@ const CalendarStrategy = DateBoxStrategy.inherit({
       extend(params, { component: that.dateBox });
       return func(params);
     };
-  },
+  }
 
   _refreshActiveDescendant(e) {
     this._lastActionElement = 'calendar';
     this.dateBox.setAria('activedescendant', e.actionValue);
-  },
+  }
 
   _getTodayButtonConfig() {
     const buttonsLocation = this.dateBox.option('buttonsLocation');
@@ -137,13 +146,13 @@ const CalendarStrategy = DateBoxStrategy.inherit({
         stylingMode,
       },
     };
-  },
+  }
 
   _isCalendarVisible() {
     const { calendarOptions } = this.dateBox.option();
 
     return isEmptyObject(calendarOptions) || calendarOptions.visible !== false;
-  },
+  }
 
   _getPopupToolbarItems(toolbarItems) {
     const useButtons = this.dateBox.option('applyValueMode') === 'useButtons';
@@ -159,14 +168,14 @@ const CalendarStrategy = DateBoxStrategy.inherit({
     }
 
     return toolbarItems;
-  },
+  }
 
   popupConfig(popupConfig) {
     return extend(true, popupConfig, {
       position: { collision: 'flipfit flip' },
       width: 'auto',
     });
-  },
+  }
 
   _valueChangedHandler(e) {
     const { value } = e;
@@ -179,15 +188,16 @@ const CalendarStrategy = DateBoxStrategy.inherit({
     if (this.dateBox.option('applyValueMode') === 'instantly') {
       this.dateBoxValue(this.getValue(), e.event);
     }
-  },
+  }
 
-  _updateValue() {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _updateValue(preventDefaultValue?: boolean) {
     if (!this._widget) {
       return;
     }
 
     this._widget.option('value', this.dateBoxValue());
-  },
+  }
 
   textChangedHandler() {
     this._lastActionElement = 'input';
@@ -195,7 +205,7 @@ const CalendarStrategy = DateBoxStrategy.inherit({
     if (this.dateBox.option('opened') && this._widget) {
       this._updateValue(true);
     }
-  },
+  }
 
   _cellClickHandler(e) {
     const { dateBox } = this;
@@ -204,7 +214,7 @@ const CalendarStrategy = DateBoxStrategy.inherit({
       dateBox.option('opened', false);
       this.dateBoxValue(this.getValue(), e.event);
     }
-  },
-});
+  }
+}
 
 export default CalendarStrategy;

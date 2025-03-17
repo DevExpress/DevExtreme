@@ -1,3 +1,4 @@
+/* eslint-disable max-classes-per-file */
 import { fx } from '@js/common/core/animation';
 import messageLocalization from '@js/common/core/localization/message';
 import type { dxElementWrapper } from '@js/core/renderer';
@@ -119,57 +120,59 @@ class SwitchableButtonEditDecorator extends SwitchableEditDecorator {
 const TOGGLE_DELETE_SWITCH_CONTAINER_CLASS = 'dx-list-toggle-delete-switch-container';
 const TOGGLE_DELETE_SWITCH_CLASS = 'dx-list-toggle-delete-switch';
 
+class SwitchableButtonToggleEditDecorator extends SwitchableButtonEditDecorator {
+  beforeBag(config) {
+    const { $itemElement } = config;
+    const { $container } = config;
+
+    const $toggle = $('<div>').addClass(TOGGLE_DELETE_SWITCH_CLASS);
+    this._list._createComponent($toggle, Button, {
+      icon: 'toggle-delete',
+      onClick: function (e) {
+        fx.stop(this._$buttonContainer, false);
+        this._toggleDeleteReady($itemElement);
+        e.event.stopPropagation();
+      }.bind(this),
+      integrationOptions: {},
+      elementAttr: {
+        role: null,
+        'aria-label': null,
+      },
+      tabIndex: -1,
+    });
+
+    $container.addClass(TOGGLE_DELETE_SWITCH_CONTAINER_CLASS);
+    $container.append($toggle);
+  }
+}
+
 registerDecorator(
   'delete',
   'toggle',
-  // @ts-expect-error ts-error
-  SwitchableButtonEditDecorator.inherit({
-
-    beforeBag(config) {
-      const { $itemElement } = config;
-      const { $container } = config;
-
-      const $toggle = $('<div>').addClass(TOGGLE_DELETE_SWITCH_CLASS);
-      this._list._createComponent($toggle, Button, {
-        icon: 'toggle-delete',
-        onClick: function (e) {
-          fx.stop(this._$buttonContainer, false);
-          this._toggleDeleteReady($itemElement);
-          e.event.stopPropagation();
-        }.bind(this),
-        integrationOptions: {},
-        elementAttr: {
-          role: null,
-          'aria-label': null,
-        },
-        tabIndex: -1,
-      });
-
-      $container.addClass(TOGGLE_DELETE_SWITCH_CONTAINER_CLASS);
-      $container.append($toggle);
-    },
-
-  }),
+  SwitchableButtonToggleEditDecorator,
 );
+
+class SwitchableButtonSlideEditDecorator extends SwitchableButtonEditDecorator {
+  // eslint-disable-next-line class-methods-use-this
+  _shouldHandleSwipe(): boolean {
+    return true;
+  }
+
+  _swipeEndHandler($itemElement, args) {
+    if (args.targetOffset !== 0) {
+      // @ts-expect-error ts-error
+      fx.stop(this._$buttonContainer, false);
+      this._toggleDeleteReady($itemElement);
+    }
+
+    return true;
+  }
+}
 
 registerDecorator(
   'delete',
   'slideButton',
-  // @ts-expect-error
-  SwitchableButtonEditDecorator.inherit({
-
-    _shouldHandleSwipe: true,
-
-    _swipeEndHandler($itemElement, args) {
-      if (args.targetOffset !== 0) {
-        fx.stop(this._$buttonContainer, false);
-        this._toggleDeleteReady($itemElement);
-      }
-
-      return true;
-    },
-
-  }),
+  SwitchableButtonSlideEditDecorator,
 );
 
 export default SwitchableButtonEditDecorator;

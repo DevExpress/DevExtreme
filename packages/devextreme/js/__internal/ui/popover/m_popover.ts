@@ -24,6 +24,8 @@ import Popup from '@ts/ui/popup/m_popup';
 
 import { POPOVER_POSITION_ALIASES, PopoverPositionController } from './m_popover_position_controller';
 
+// STYLE popover
+
 const POPOVER_CLASS = 'dx-popover';
 const POPOVER_WRAPPER_CLASS = 'dx-popover-wrapper';
 const POPOVER_ARROW_CLASS = 'dx-popover-arrow';

@@ -11,6 +11,8 @@ import { isFluent, isMaterial } from '@js/ui/themes';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Overlay from '@ts/ui/overlay/m_overlay';
 
+// STYLE loadPanel
+
 const LOADPANEL_CLASS = 'dx-loadpanel';
 const LOADPANEL_WRAPPER_CLASS = 'dx-loadpanel-wrapper';
 const LOADPANEL_INDICATOR_CLASS = 'dx-loadpanel-indicator';

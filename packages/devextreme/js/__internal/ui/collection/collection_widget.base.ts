@@ -112,6 +112,8 @@ export interface CollectionWidgetBaseProperties<
   _itemAttributes?: Record<string, unknown>;
 
   selectOnFocus?: boolean;
+
+  loopItemFocus?: boolean;
 }
 
 class CollectionWidget<
@@ -750,7 +752,7 @@ class CollectionWidget<
     super._invalidate();
   }
 
-  _loadNextPage(): Promise<unknown> {
+  _loadNextPage(): DeferredObj<unknown> {
     this._expectNextPageLoading();
     // @ts-expect-error ts-error
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
@@ -836,7 +838,9 @@ class CollectionWidget<
     super._refresh();
   }
 
-  _itemContainer(): dxElementWrapper {
+  // eslint-disable-next-line @stylistic/max-len
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/explicit-module-boundary-types
+  _itemContainer(searchEnabled?, previousSelectAllEnabled?): dxElementWrapper {
     return this.$element();
   }
 

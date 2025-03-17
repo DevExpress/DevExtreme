@@ -1,19 +1,21 @@
 $(() => {
-  $.connection.hub.url = 'https://js.devexpress.com/Demos/Mvc/signalr';
-  const hub = $.connection.stockTickDataHub;
+  const hubConnection = new signalR.HubConnectionBuilder()
+    .withUrl('https://js.devexpress.com/Demos/NetCore/stockTickDataHub', {
+      skipNegotiation: true,
+      transport: signalR.HttpTransportType.WebSockets,
+    })
+    .build();
 
   const store = new DevExpress.data.CustomStore({
-    load() {
-      return hub.server.getAllData();
-    },
-    key: 'Date',
+    load: () => hubConnection.invoke('getAllData'),
+    key: 'date',
   });
 
-  hub.client.updateStockPrice = function (data) {
-    store.push([{ type: 'insert', key: data.Date, data }]);
-  };
+  hubConnection.on('updateStockPrice', (data) => {
+    store.push([{ type: 'insert', key: data.date, data }]);
+  });
 
-  $.connection.hub.start({ waitForPageLoad: false }).done(() => {
+  hubConnection.start().then(() => {
     $('#chart').dxChart({
       dataSource: store,
       margin: {
@@ -25,16 +27,16 @@ $(() => {
       title: 'Stock Price',
       series: [{
         pane: 'Price',
-        argumentField: 'Date',
+        argumentField: 'date',
         type: 'candlestick',
         aggregation: {
           enabled: true,
           method: 'custom',
           calculate(e) {
-            const prices = e.data.map((i) => i.Price);
+            const prices = e.data.map((i) => i.price);
             if (prices.length) {
               return {
-                Date: new Date((e.intervalStart.valueOf() + e.intervalEnd.valueOf()) / 2),
+                date: new Date((e.intervalStart.valueOf() + e.intervalEnd.valueOf()) / 2),
                 open: prices[0],
                 high: Math.max.apply(null, prices),
                 low: Math.min.apply(null, prices),
@@ -47,9 +49,9 @@ $(() => {
       }, {
         pane: 'Volume',
         name: 'Volume',
-        argumentField: 'Date',
+        argumentField: 'date',
         type: 'bar',
-        valueField: 'Volume',
+        valueField: 'volume',
         color: 'red',
         aggregation: {
           enabled: true,

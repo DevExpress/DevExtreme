@@ -1,7 +1,7 @@
-import { hydrate, InfernoEffectHost } from '@devextreme/runtime/inferno';
 import domAdapter from '@js/core/dom_adapter';
 import { cleanDataRecursive } from '@js/core/element_data';
 import injector from '@js/core/utils/dependency_injector';
+import { hydrate, InfernoEffectHost } from '@ts/core/r1/runtime/inferno/index';
 import { render } from 'inferno';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { createElement } from 'inferno-create-element';

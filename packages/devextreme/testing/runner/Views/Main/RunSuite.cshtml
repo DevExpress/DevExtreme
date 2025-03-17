@@ -201,12 +201,7 @@
                     'cldr-core': '@Url.Content("~/packages/devextreme/node_modules/cldr-core")'
                 };
 
-            const cspPackages = '@Model.NoCsp' !== 'True' ? {
-                '@@devextreme/runtime/inferno': {
-                    main: '../../../../artifacts/transpiled-systemjs/runtime/inferno/index.js',
-                    defaultExtension: 'js'
-                },
-            } : {};
+            const cspPackages = {};
 
             SystemJS.config({
                 baseURL: "@Url.Content("~/packages/devextreme/artifacts/" + npmModule)",
@@ -221,12 +216,6 @@
                     'jszip': '@Url.Content("~/packages/devextreme/artifacts/js/jszip.js")',
                     'underscore': '@Url.Content("~/packages/devextreme/node_modules/underscore/underscore-min.js")',
                     '@@devextreme/vdom': '@Url.Content("~/packages/devextreme/node_modules/@devextreme/vdom")',
-                    '@@devextreme/runtime/common': '@Url.Content("~/packages/devextreme/node_modules/@devextreme/runtime/common")',
-                    '@@devextreme/runtime/inferno': '@Url.Content("~/packages/devextreme/node_modules/@devextreme/runtime/inferno")',
-                    '@@devextreme/runtime/declarations': '@Url.Content("~/packages/devextreme/node_modules/@devextreme/runtime/declarations")',
-                    '@@devextreme/runtime/angular': '@Url.Content("~/packages/devextreme/node_modules/@devextreme/runtime/angular")',
-                    '@@devextreme/runtime/vue': '@Url.Content("~/packages/devextreme/node_modules/@devextreme/runtime/vue")',
-                    '@@devextreme/runtime/react': '@Url.Content("~/packages/devextreme/node_modules/@devextreme/runtime/react")',
                     'devextreme-quill': '@Url.Content("~/packages/devextreme/node_modules/devextreme-quill/dist/dx-quill.js")',
                     'devexpress-diagram': '@Url.Content("~/packages/devextreme/artifacts/js/dx-diagram.js")',
                     'devexpress-gantt': '@Url.Content("~/packages/devextreme/artifacts/js/dx-gantt.js")',
@@ -259,36 +248,6 @@
                     ...cspMap,
                 },
                 packages: {
-                    '@@devextreme/runtime/common': {
-                        main: '../cjs/common/index.js',
-                        defaultExtension: 'js',
-                        format: 'cjs'
-                    },
-                    '@@devextreme/runtime/inferno': {
-                        main: '../cjs/inferno/index.js',
-                        defaultExtension: 'js',
-                        format: 'cjs'
-                    },
-                    '@@devextreme/runtime/angular': {
-                        main: '../cjs/angular/index.js',
-                        defaultExtension: 'js',
-                        format: 'cjs'
-                    },
-                    '@@devextreme/runtime/react': {
-                        main: '../cjs/react/index.js',
-                        defaultExtension: 'js',
-                        format: 'cjs'
-                    },
-                    '@@devextreme/runtime/vue': {
-                        main: '../cjs/vue/index.js',
-                        defaultExtension: 'js',
-                        format: 'cjs'
-                    },
-                    '@@devextreme/runtime/declarations': {
-                        main: '../cjs/declarations/index.js',
-                        defaultExtension: 'js',
-                        format: 'cjs'
-                    },
                     '': {
                         defaultExtension: 'js'
                     },
