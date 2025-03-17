@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-invalid-void-type */
-/* eslint-disable no-param-reassign */
+
 /* eslint-disable spellcheck/spell-checker */
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
+
 import type { DataSource } from '@js/common/data';
 import ArrayStore from '@js/common/data/array_store';
 import type { SubsGets } from '@ts/core/reactive/index';
@@ -62,7 +62,6 @@ export class DataController {
 
   public readonly isLoading = state(false);
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public readonly filter = this.options.twoWay('filterValue');
 
   // public itemsWithChanges = computed(
@@ -106,7 +105,7 @@ export class DataController {
         const loadingChangedCallback = (): void => {
           this.isLoading.update(dataSource.isLoading());
         };
-        const loadErrorCallback = (error: string): void => {
+        const loadErrorCallback = (error: Error): void => {
           const callback = this.onDataErrorOccurred.unreactive_get();
           callback({ error });
           changedCallback();

@@ -46,7 +46,7 @@ TKey = any,
   _defaultOptionsRules(): DefaultOptionsRule<TProperties>[] {
     return super._defaultOptionsRules().concat([
       {
-        device() {
+        device(): boolean {
           return devices.real().deviceType === 'desktop' && !devices.isSimulator();
         },
         // @ts-expect-error ts-error
@@ -57,7 +57,7 @@ TKey = any,
     ]);
   }
 
-  _init() {
+  _init(): void {
     super._init();
 
     this._initAccessors();
@@ -65,14 +65,14 @@ TKey = any,
     this._initDynamicTemplates();
   }
 
-  _initDataSource() {
+  _initDataSource(): void {
     // @ts-expect-error ts-error
     super._initDataSource();
     // @ts-expect-error ts-error
-    this._dataSource && this._dataSource.paginate(false);
+    this._dataSource?.paginate(false);
   }
 
-  _initDataAdapter() {
+  _initDataAdapter(): void {
     const accessors = this._createDataAdapterAccessors();
 
     this._dataAdapter = new HierarchicalDataAdapter(
@@ -86,9 +86,9 @@ TKey = any,
     );
   }
 
-  _getDataAdapterOptions() {}
+  _getDataAdapterOptions(): void {}
 
-  // @ts-expect-error
+  // @ts-expect-error ts-error
   _getItemExtraPropNames(): string[] {}
 
   _initDynamicTemplates() {
@@ -97,7 +97,7 @@ TKey = any,
     this._templateManager.addDefaultTemplates({
       item: new BindableTemplate(this._addContent.bind(this), fields, this.option('integrationOptions.watchMethod'), {
         text: this._displayGetter,
-        // @ts-expect-error
+        // @ts-expect-error ts-error
         items: this._itemsGetter,
       }),
     });
@@ -105,43 +105,44 @@ TKey = any,
 
   _addContent($container: dxElementWrapper, itemData: TItem): void {
     $container
-      // @ts-expect-error
+      // @ts-expect-error ts-error
       .html(itemData.html)
-      // @ts-expect-error
+      // @ts-expect-error ts-error
       .append(this._getIconContainer(itemData))
       .append(this._getTextContainer(itemData));
   }
 
   _getLinkContainer(
-    iconContainer: dxElementWrapper,
+    iconContainer: dxElementWrapper | undefined | null,
     textContainer: dxElementWrapper,
     itemData: TItem,
   ): dxElementWrapper {
-    // @ts-expect-error
+    // @ts-expect-error ts-error
     const { linkAttr, url } = itemData;
 
     const linkAttributes = isObject(linkAttr) ? linkAttr : {};
     return $('<a>')
       .addClass(ITEM_URL_CLASS)
-      // @ts-expect-error
+      // @ts-expect-error ts-error
       .attr({ ...linkAttributes, href: url })
+      // @ts-expect-error ts-error
       .append(iconContainer)
       .append(textContainer);
   }
 
   _getIconContainer(itemData: TItem): dxElementWrapper | undefined | null {
-    // @ts-expect-error
+    // @ts-expect-error ts-error
     if (!itemData.icon) {
       return undefined;
     }
-    // @ts-expect-error
+    // @ts-expect-error ts-error
     const $imageContainer = getImageContainer(itemData.icon);
-    // @ts-expect-error
+    // @ts-expect-error ts-error
     if ($imageContainer.is('img')) {
       const componentName = this.NAME?.startsWith('dxPrivateComponent')
         ? ''
         : `${this.NAME} `;
-      // @ts-expect-error
+      // @ts-expect-error ts-error
       $imageContainer.attr('alt', `${componentName}item icon`);
     }
 
@@ -149,7 +150,7 @@ TKey = any,
   }
 
   _getTextContainer(itemData: TItem): dxElementWrapper {
-    // @ts-expect-error
+    // @ts-expect-error ts-error
     return $('<span>').text(itemData.text);
   }
 
@@ -162,7 +163,7 @@ TKey = any,
     this._compileDisplayGetter();
   }
 
-  _getAccessors() {
+  _getAccessors(): string[] {
     return ['key', 'selected', 'items', 'disabled', 'parentId', 'expanded'];
   }
 
@@ -178,12 +179,12 @@ TKey = any,
     return arr;
   }
 
-  _hasChildren(node: TItem): number | undefined {
-    // @ts-expect-error
+  _hasChildren(node: TItem): number | boolean | undefined {
+    // @ts-expect-error ts-error
     return node && node.internalFields.childrenKeys.length;
   }
 
-  _compileAccessor(optionName) {
+  _compileAccessor(optionName): void {
     const getter = `_${optionName}Getter`;
     const setter = `_${optionName}Setter`;
     const optionExpr = this.option(`${optionName}Expr`);
@@ -197,9 +198,9 @@ TKey = any,
       this[getter] = function (obj) { return obj[optionExpr()]; };
       return;
     }
-    // @ts-expect-error
+    // @ts-expect-error ts-error
     this[getter] = compileGetter(optionExpr);
-    // @ts-expect-error
+    // @ts-expect-error ts-error
     this[setter] = compileSetter(optionExpr);
   }
 
@@ -234,6 +235,7 @@ TKey = any,
   }
 
   // @ts-expect-error ts-error
+  // eslint-disable-next-line class-methods-use-this
   _widgetClass(): string {}
 
   _renderItemFrame(

@@ -36,7 +36,6 @@ QUnit.module('google provider', {
         const fakeURL = '/fakeGoogleUrl';
 
         GoogleProvider.remapConstant(fakeURL);
-        GoogleProvider.prototype._geocodedLocations = {};
 
         ajaxMock.setup({
             url: fakeURL,
@@ -1360,6 +1359,89 @@ QUnit.test('routes', function(assert) {
     });
 });
 
+[
+    {
+        mode: 'driving',
+        actualMode: 1,
+    },
+    {
+        mode: 'walking',
+        actualMode: 2,
+    },
+].forEach(({ mode, actualMode }) => {
+    QUnit.test(`Route mode should be converted correctly if ${mode} mode is passed`, function(assert) {
+        const done = assert.async();
+
+        $('#map').dxMap({
+            provider: 'google',
+            routes: [
+                {
+                    mode,
+                    locations: [
+                        [40.737102, -73.990318],
+                        [40.749825, -73.987963],
+                    ]
+                },
+            ],
+            onReady: function() {
+                assert.strictEqual(window.google.directionTravelMode, actualMode, 'direction mode specified correctly');
+
+                done();
+            }
+        });
+    });
+});
+
+QUnit.test('Route mode should be passed without changes if it is not driving or walking mode', function(assert) {
+    const done = assert.async();
+    const customRouteMode = 'swiming';
+
+    $('#map').dxMap({
+        provider: 'google',
+        routes: [
+            {
+                mode: customRouteMode,
+                locations: [
+                    [40.737102, -73.990318],
+                    [40.749825, -73.987963],
+                ]
+            },
+        ],
+        onReady: function() {
+            assert.strictEqual(window.google.directionTravelMode, customRouteMode, 'direction mode passes as it is');
+
+            done();
+        }
+    });
+});
+
+[
+    { mode: undefined, scenario: 'undefined' },
+    { mode: '', scenario: 'empty string' },
+].forEach(({ mode, scenario }) => {
+    QUnit.test(`Driving route mode should be used by default if route mode is ${scenario}`, function(assert) {
+        const done = assert.async();
+
+        $('#map').dxMap({
+            provider: 'google',
+            routes: [
+                {
+                    mode,
+                    locations: [
+                        [40.737102, -73.990318],
+                        [40.749825, -73.987963],
+                    ]
+                },
+            ],
+            onReady: function() {
+                assert.strictEqual(window.google.directionTravelMode, google.maps.TravelMode.DRIVING, 'default driving direction mode is used');
+
+                done();
+            }
+        });
+    });
+});
+
 QUnit.test('add route', function(assert) {
     const done = assert.async();
     const d = $.Deferred();
@@ -1525,6 +1607,8 @@ QUnit.test('click', function(assert) {
     let clicked = 0;
     let eventFired = 0;
 
+    let mouseEvent;
+
     const $map = $('#map').dxMap({
         provider: 'google',
         width: 400,
@@ -1534,6 +1618,7 @@ QUnit.test('click', function(assert) {
                 lat: 2,
                 lng: 10
             }, 'correct location passed');
+            assert.strictEqual(e.event, mouseEvent.domEvent, 'click event is equal to the original event');
             clicked++;
         },
         onReady: function() {
@@ -1546,7 +1631,8 @@ QUnit.test('click', function(assert) {
     });
 
     d.done(function() {
-        window.google.clickActionCallback(new google.maps.MouseEvent(new google.maps.LatLng(2, 10)));
+        mouseEvent = new google.maps.MouseEvent(new google.maps.LatLng(2, 10));
+        window.google.clickActionCallback(mouseEvent);
         assert.equal(clicked, 1);
         assert.equal(eventFired, 1);
         done();

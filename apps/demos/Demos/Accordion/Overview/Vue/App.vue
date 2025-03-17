@@ -66,7 +66,7 @@ import DxCheckBox from 'devextreme-vue/check-box';
 import DxSlider, { DxTooltip, DxLabel } from 'devextreme-vue/slider';
 import CustomTitle from './CustomTitle.vue';
 import CustomItem from './CustomItem.vue';
-import service from './data.js';
+import service from './data.ts';
 
 const companies = service.getCompanies();
 const selectedItems = ref([companies[0]]);

@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-import { InfernoComponent, InfernoEffect } from '@devextreme/runtime/inferno';
 import type { DisplayMode } from '@js/common';
+import { InfernoComponent, InfernoEffect } from '@ts/core/r1/runtime/inferno/index';
 import type { RefObject } from '@ts/core/r1/types';
 import { Widget } from '@ts/core/r1/widget';
 import { createRef as infernoCreateRef } from 'inferno';
@@ -46,10 +46,10 @@ export class PaginationContent extends InfernoComponent<PaginationContentProps> 
 
   public refs: any = null;
 
-  // eslint-disable-next-line max-len
+  // eslint-disable-next-line @stylistic/max-len
   public widgetElementRef?: RefObject<HTMLDivElement> = infernoCreateRef() as RefObject<HTMLDivElement>;
 
-  // eslint-disable-next-line max-len
+  // eslint-disable-next-line @stylistic/max-len
   public widgetRootElementRef?: RefObject<HTMLDivElement> = infernoCreateRef() as RefObject<HTMLDivElement>;
 
   public pagesRef?: RefObject<HTMLDivElement> = infernoCreateRef() as RefObject<HTMLDivElement>;
@@ -94,7 +94,7 @@ export class PaginationContent extends InfernoComponent<PaginationContentProps> 
     return {
       option: (): boolean => false,
       element: (): HTMLElement | null => this.widgetRootElementRef?.current as HTMLElement,
-      // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+
       _createActionByOption: () => (e: any) => {
         this.props.onKeyDown?.(e);
       },

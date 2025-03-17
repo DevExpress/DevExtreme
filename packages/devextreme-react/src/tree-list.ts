@@ -11,7 +11,7 @@ import NestedOption from "./core/nested-option";
 
 import type { dxTreeListColumn, AdaptiveDetailRowPreparingEvent, CellClickEvent, CellDblClickEvent, CellPreparedEvent, ContentReadyEvent, ContextMenuPreparingEvent, DataErrorOccurredEvent, DisposingEvent, EditCanceledEvent, EditCancelingEvent, EditingStartEvent, EditorPreparedEvent, EditorPreparingEvent, FocusedCellChangingEvent, FocusedRowChangingEvent, InitializedEvent, InitNewRowEvent, KeyDownEvent, NodesInitializedEvent, RowClickEvent, RowCollapsedEvent, RowCollapsingEvent, RowDblClickEvent, RowExpandedEvent, RowExpandingEvent, RowInsertedEvent, RowInsertingEvent, RowPreparedEvent, RowRemovedEvent, RowRemovingEvent, RowUpdatedEvent, RowUpdatingEvent, RowValidatingEvent, SavedEvent, SavingEvent, ToolbarPreparingEvent, dxTreeListRowObject, TreeListPredefinedColumnButton, dxTreeListColumnButton, TreeListCommandColumnType, TreeListPredefinedToolbarItem, dxTreeListToolbarItem } from "devextreme/ui/tree_list";
 import type { DataChange, DataChangeType, FilterOperation, FilterType, FixedPosition, HeaderFilterGroupInterval, ColumnHeaderFilterSearchConfig, SelectedFilterOperation, ColumnChooserMode, ColumnChooserSearchConfig, ColumnChooserSelectionConfig, GridsEditMode, GridsEditRefreshMode, StartEditAction, GridBase, ApplyFilterMode, HeaderFilterSearchConfig, EnterKeyAction, EnterKeyDirection, PagerPageSize, DataRenderMode, StateStoreType } from "devextreme/common/grids";
-import type { ContentReadyEvent as FilterBuilderContentReadyEvent, DisposingEvent as FilterBuilderDisposingEvent, EditorPreparedEvent as FilterBuilderEditorPreparedEvent, EditorPreparingEvent as FilterBuilderEditorPreparingEvent, InitializedEvent as FilterBuilderInitializedEvent, dxFilterBuilderField, FilterBuilderOperation, dxFilterBuilderCustomOperation, GroupOperation, OptionChangedEvent, ValueChangedEvent } from "devextreme/ui/filter_builder";
+import type { ContentReadyEvent as FilterBuilderContentReadyEvent, DisposingEvent as FilterBuilderDisposingEvent, EditorPreparedEvent as FilterBuilderEditorPreparedEvent, EditorPreparingEvent as FilterBuilderEditorPreparingEvent, InitializedEvent as FilterBuilderInitializedEvent, dxFilterBuilderField, FieldInfo, FilterBuilderOperation, dxFilterBuilderCustomOperation, GroupOperation, OptionChangedEvent, ValueChangedEvent } from "devextreme/ui/filter_builder";
 import type { ContentReadyEvent as FormContentReadyEvent, DisposingEvent as FormDisposingEvent, InitializedEvent as FormInitializedEvent, dxFormSimpleItem, dxFormOptions, OptionChangedEvent as FormOptionChangedEvent, dxFormGroupItem, dxFormTabbedItem, dxFormEmptyItem, dxFormButtonItem, LabelLocation, FormLabelMode, EditorEnterKeyEvent, FieldDataChangedEvent, FormItemComponent, FormItemType } from "devextreme/ui/form";
 import type { AnimationConfig, CollisionResolution, PositionConfig, AnimationState, AnimationType, CollisionResolutionCombination } from "devextreme/common/core/animation";
 import type { ValidationRuleType, HorizontalAlignment, VerticalAlignment, template, DataType, Format as CommonFormat, SearchMode, SortOrder, ComparisonOperator, PositionAlignment, Mode, Direction, ToolbarItemLocation, ToolbarItemComponent, DisplayMode, DragDirection, DragHighlight, ScrollMode, ScrollbarMode, SingleMultipleOrNone } from "devextreme/common";
@@ -181,6 +181,7 @@ const TreeList = memo(
 
 // owners:
 // Popup
+// FilterBuilderPopup
 type IAnimationProps = React.PropsWithChildren<{
   hide?: AnimationConfig;
   show?: AnimationConfig;
@@ -774,7 +775,7 @@ const CursorOffset = Object.assign<typeof _componentCursorOffset, NestedComponen
 type ICustomOperationProps = React.PropsWithChildren<{
   calculateFilterExpression?: ((filterValue: any, field: dxFilterBuilderField) => string | (() => any) | Array<any>);
   caption?: string | undefined;
-  customizeText?: ((fieldInfo: { field: dxFilterBuilderField, value: string | number | Date, valueText: string }) => string);
+  customizeText?: ((fieldInfo: FieldInfo) => string);
   dataTypes?: Array<DataType> | undefined;
   editorTemplate?: ((conditionInfo: { field: dxFilterBuilderField, setValue: (() => void), value: string | number | Date }, container: any) => string | any) | template;
   hasValue?: boolean;
@@ -951,7 +952,7 @@ const EmailRule = Object.assign<typeof _componentEmailRule, NestedComponentMeta>
 type IFieldProps = React.PropsWithChildren<{
   calculateFilterExpression?: ((filterValue: any, selectedFilterOperation: string) => string | (() => any) | Array<any>);
   caption?: string | undefined;
-  customizeText?: ((fieldInfo: { value: string | number | Date, valueText: string }) => string);
+  customizeText?: ((fieldInfo: FieldInfo) => string);
   dataField?: string | undefined;
   dataType?: DataType;
   editorOptions?: any;
@@ -1169,6 +1170,11 @@ const _componentFilterBuilderPopup = (props: IFilterBuilderPopupProps) => {
         defaultPosition: "position",
         defaultVisible: "visible",
         defaultWidth: "width"
+      },
+      ExpectedChildren: {
+        animation: { optionName: "animation", isCollectionItem: false },
+        position: { optionName: "position", isCollectionItem: false },
+        toolbarItem: { optionName: "toolbarItems", isCollectionItem: true }
       },
       TemplateProps: [{
         tmplOption: "contentTemplate",
@@ -1467,6 +1473,7 @@ const FormItem = Object.assign<typeof _componentFormItem, NestedComponentMeta>(_
 
 // owners:
 // Hide
+// Show
 type IFromProps = React.PropsWithChildren<{
   left?: number;
   opacity?: number;
@@ -2020,8 +2027,10 @@ const Popup = Object.assign<typeof _componentPopup, NestedComponentMeta>(_compon
 
 // owners:
 // From
+// To
 // Popup
 // ColumnChooser
+// FilterBuilderPopup
 type IPositionProps = React.PropsWithChildren<{
   at?: Record<string, any> | PositionAlignment | {
     x?: HorizontalAlignment;
@@ -2051,6 +2060,13 @@ const _componentPosition = (props: IPositionProps) => {
     ...props,
     elementDescriptor: {
       OptionName: "position",
+      ExpectedChildren: {
+        at: { optionName: "at", isCollectionItem: false },
+        boundaryOffset: { optionName: "boundaryOffset", isCollectionItem: false },
+        collision: { optionName: "collision", isCollectionItem: false },
+        my: { optionName: "my", isCollectionItem: false },
+        offset: { optionName: "offset", isCollectionItem: false }
+      },
     },
   });
 };
@@ -2305,6 +2321,10 @@ const _componentShow = (props: IShowProps) => {
     ...props,
     elementDescriptor: {
       OptionName: "show",
+      ExpectedChildren: {
+        from: { optionName: "from", isCollectionItem: false },
+        to: { optionName: "to", isCollectionItem: false }
+      },
     },
   });
 };
@@ -2431,6 +2451,7 @@ const Texts = Object.assign<typeof _componentTexts, NestedComponentMeta>(_compon
 
 // owners:
 // Hide
+// Show
 type IToProps = React.PropsWithChildren<{
   left?: number;
   opacity?: number;
@@ -2443,6 +2464,9 @@ const _componentTo = (props: IToProps) => {
     ...props,
     elementDescriptor: {
       OptionName: "to",
+      ExpectedChildren: {
+        position: { optionName: "position", isCollectionItem: false }
+      },
     },
   });
 };
@@ -2476,6 +2500,7 @@ const Toolbar = Object.assign<typeof _componentToolbar, NestedComponentMeta>(_co
 
 // owners:
 // Popup
+// FilterBuilderPopup
 type IToolbarItemProps = React.PropsWithChildren<{
   cssClass?: string | undefined;
   disabled?: boolean;

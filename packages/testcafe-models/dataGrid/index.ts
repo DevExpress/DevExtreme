@@ -68,6 +68,7 @@ export const CLASS = {
   dialogWrapper: 'dx-dialog-wrapper',
   summaryTotal: 'dx-datagrid-summary-item',
   scrollableContainer: 'dx-scrollable-container',
+  columnsSeparator: 'dx-datagrid-columns-separator',
 };
 
 const E2E_ATTRIBUTES = {
@@ -230,6 +231,10 @@ export default class DataGrid extends GridCore {
 
   getSearchBox(): TextBox {
     return new TextBox(this.element.find(`.${CLASS.searchBox}`));
+  }
+
+  getColumnsSeparator(): TextBox {
+    return new TextBox(this.element.find(`.${CLASS.columnsSeparator}`));
   }
 
   getOverlay(): Overlay {
@@ -634,6 +639,20 @@ export default class DataGrid extends GridCore {
       },
     )();
   }
+
+  apiSearchByText(text: string): Promise<void> {
+    const { getInstance } = this;
+
+    return ClientFunction(
+      () => (getInstance() as DataGridInstance).searchByText(text),
+      {
+        dependencies: {
+          getInstance, text
+        },
+      },
+    )();
+  }
+
   moveRow(rowIndex: number, x: number, y: number, isStart = false): Promise<void> {
     const { getInstance } = this;
 

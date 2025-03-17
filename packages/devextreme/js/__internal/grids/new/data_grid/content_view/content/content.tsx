@@ -1,6 +1,5 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import type { DataRow } from '@ts/grids/new/grid_core/columns_controller/types';
-import { PureComponent } from '@ts/grids/new/grid_core/core/pure_component';
+import { Component } from 'inferno';
 
 import { Row } from './row';
 
@@ -12,7 +11,7 @@ export const CLASSES = {
   content: 'dx-datagridnew-content',
 };
 
-export class Content extends PureComponent<ContentProps> {
+export class Content extends Component<ContentProps> {
   public render(): JSX.Element {
     return (
       <div

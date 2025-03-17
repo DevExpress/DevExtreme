@@ -17,7 +17,6 @@ export default class Editor extends ComponentWrapper {
 
   validationRequest!: ReturnType<typeof Callbacks>;
 
-  // eslint-disable-next-line @typescript-eslint/ban-types
   _valueChangeAction!: Function;
 
   _initialValue: unknown;

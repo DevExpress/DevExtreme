@@ -71,10 +71,8 @@ export type EventObject = {
  */
 export function eventsHandler(event: DxEvent, extraParameters: any): boolean;
 
-/* eslint-disable @typescript-eslint/no-empty-interface */
 export interface EventExtension { }
 export interface EventType { }
-/* eslint-enable @typescript-eslint/no-empty-interface */
 
 /**
  * @docid

@@ -28,6 +28,7 @@
     <DxColumn
       :width="150"
       data-field="AssignedEmployee"
+      data-type="number"
       caption="Assignee"
     >
       <DxLookup
@@ -41,15 +42,15 @@
 </template>
 <script setup lang="ts">
 import {
-  DxDataGrid, DxColumn, DxLookup, DxScrolling, DxRowDragging, DxSorting, DxDataGridTypes,
+  DxDataGrid, DxColumn, DxLookup, DxScrolling, DxRowDragging, DxSorting, type DxDataGridTypes,
 } from 'devextreme-vue/data-grid';
 
 import { createStore } from 'devextreme-aspnet-data-nojquery';
 import CustomStore from 'devextreme/data/custom_store';
 
-import { Task, Employee } from './data.ts';
+import type { Task, Employee } from './data.ts';
 
-const url = 'https://js.devexpress.com/Demos/Mvc/api/RowReordering';
+const url = 'https://js.devexpress.com/Demos/NetCore/api/DataGridRowReordering';
 
 const tasksStore: CustomStore<Task, number> = createStore({
   key: 'ID',
@@ -68,7 +69,7 @@ const employeesStore: CustomStore<Employee, number> = createStore({
   },
 });
 
-const onReorder = (e: DxDataGridTypes.RowDraggingReorderEvent<Task>) => {
+const onReorder = (e: any) => {
   e.promise = processReorder(e);
 };
 

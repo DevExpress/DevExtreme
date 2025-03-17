@@ -509,6 +509,34 @@ QUnit.test('background is moved properly when container is resized', function(as
     });
 });
 
+QUnit.test('_animateBars should be called after resize (animation enabled) (T1242436)', function(assert) {
+    const gauge = this.$container.dxBarGauge({
+        animation: true,
+        size: { width: 200 },
+    }).dxBarGauge('instance');
+    const animateBarsSpy = sinon.spy(gauge, '_animateBars');
+    const updateBarsSpy = sinon.spy(gauge, '_updateBars');
+
+    gauge.option('size.width', 300);
+
+    assert.strictEqual(animateBarsSpy.callCount, 1);
+    assert.strictEqual(updateBarsSpy.callCount, 0);
+});
+
+QUnit.test('_updateBars should be called after resize (animation disabled) (T1242436)', function(assert) {
+    const gauge = this.$container.dxBarGauge({
+        animation: false,
+        size: { width: 200 },
+    }).dxBarGauge('instance');
+    const animateBarsSpy = sinon.spy(gauge, '_animateBars');
+    const updateBarsSpy = sinon.spy(gauge, '_updateBars');
+
+    gauge.option('size.width', 300);
+
+    assert.strictEqual(animateBarsSpy.callCount, 0);
+    assert.strictEqual(updateBarsSpy.callCount, 1);
+});
+
 QUnit.test('Values are changed', function(assert) {
     const done = assert.async();
     const gauge = this.$container.dxBarGauge({

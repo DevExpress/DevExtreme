@@ -15,7 +15,6 @@ const getBootstrapConfig = (fileName: string, configVersion: number): ConfigSett
   return { isBootstrap, bootstrapVersion: isBootstrap ? configVersion : 0 };
 };
 
-
 const getOutParameters = (
   command: string,
   themeName: string,

@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react';
-import RangeSlider, { Tooltip, Label, RangeSliderTypes } from 'devextreme-react/range-slider';
-import NumberBox, { NumberBoxTypes } from 'devextreme-react/number-box';
+import RangeSlider, { Tooltip, Label, type RangeSliderTypes } from 'devextreme-react/range-slider';
+import NumberBox, { type NumberBoxTypes } from 'devextreme-react/number-box';
 
 const defaultValues = {
   defaultMode: [20, 60],

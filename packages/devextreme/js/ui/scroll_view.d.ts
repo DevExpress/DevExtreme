@@ -153,7 +153,7 @@ export type Properties = dxScrollViewOptions;
 /** @deprecated use Properties instead */
 export type Options = dxScrollViewOptions;
 
-///#DEBUG
+/// #DEBUG
 // eslint-disable-next-line import/first
 import { CheckedEvents } from '../core';
 
@@ -189,4 +189,4 @@ onScroll?: ((e: ScrollEvent) => void);
  */
 onUpdated?: ((e: UpdatedEvent) => void);
 };
-///#ENDDEBUG
+/// #ENDDEBUG

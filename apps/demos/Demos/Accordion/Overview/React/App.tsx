@@ -1,8 +1,8 @@
 import React, { useCallback, useState } from 'react';
-import Accordion, { AccordionTypes } from 'devextreme-react/accordion';
-import CheckBox, { CheckBoxTypes } from 'devextreme-react/check-box';
-import TagBox, { TagBoxTypes } from 'devextreme-react/tag-box';
-import Slider, { Tooltip, Label, SliderTypes } from 'devextreme-react/slider';
+import Accordion, { type AccordionTypes } from 'devextreme-react/accordion';
+import CheckBox, { type CheckBoxTypes } from 'devextreme-react/check-box';
+import TagBox, { type TagBoxTypes } from 'devextreme-react/tag-box';
+import Slider, { Tooltip, Label, type SliderTypes } from 'devextreme-react/slider';
 
 import service from './data.ts';
 import CustomTitle from './CustomTitle.tsx';

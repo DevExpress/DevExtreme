@@ -1,4 +1,4 @@
-export type Framework = 'React' | 'Vue';
+export type Framework = 'Angular' | 'React' | 'Vue';
 
 export type Args = {
   framework: Framework,

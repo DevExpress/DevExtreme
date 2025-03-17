@@ -13,10 +13,13 @@ import devices from '@js/core/devices';
 import domAdapter from '@js/core/dom_adapter';
 import { getPublicElement } from '@js/core/element';
 import errors from '@js/core/errors';
+import type { DefaultOptionsRule } from '@js/core/options/utils';
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { EmptyTemplate } from '@js/core/templates/empty_template';
 import browser from '@js/core/utils/browser';
 import { noop } from '@js/core/utils/common';
+import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
@@ -26,11 +29,12 @@ import {
   isFunction, isObject, isPromise, isWindow,
 } from '@js/core/utils/type';
 import { changeCallback } from '@js/core/utils/view_port';
-import type OverlayInstance from '@js/ui/overlay';
+import type { Properties } from '@js/ui/overlay';
 import { tabbable } from '@js/ui/widget/selectors';
 import uiErrors from '@js/ui/widget/ui.errors';
-import Widget from '@js/ui/widget/ui.widget';
 import domUtils from '@ts/core/utils/m_dom';
+import type { OptionChanged } from '@ts/core/widget/types';
+import Widget from '@ts/core/widget/widget';
 
 import windowUtils from '../../core/utils/m_window';
 import { OVERLAY_POSITION_ALIASES, OverlayPositionController } from './m_overlay_position_controller';
@@ -51,7 +55,7 @@ const ANONYMOUS_TEMPLATE_NAME = 'content';
 
 const RTL_DIRECTION_CLASS = 'dx-rtl';
 
-const OVERLAY_STACK = [];
+const OVERLAY_STACK: Overlay[] = [];
 
 const PREVENT_SAFARI_SCROLLING_CLASS = 'dx-prevent-safari-scrolling';
 
@@ -69,44 +73,114 @@ ready(() => {
   });
 });
 
-// @ts-expect-error
-const Overlay: typeof OverlayInstance = Widget.inherit({
-  _supportedKeys() {
-    return extend(this.callBase(), {
-      escape() {
+interface OverlayProperties extends Properties {
+  _loopFocus?: boolean;
+
+  _ignorePreventScrollEventsDeprecation?: boolean;
+
+  hideTopOverlayHandler?: () => void;
+
+  _hideOnParentScrollTarget?: boolean;
+
+  enableBodyScroll?: boolean;
+
+  innerOverlay?: boolean;
+
+  propagateOutsideClick?: boolean;
+
+  restorePosition?: boolean;
+
+  _fixWrapperPosition?: boolean;
+
+  _skipContentPositioning?: boolean;
+
+  visualContainer?: string | Element | null;
+
+  container?: string | dxElementWrapper | Element;
+
+  preventScrollEvents?: boolean;
+
+  isRenovated?: boolean;
+}
+
+class Overlay<
+  TProperties extends OverlayProperties = OverlayProperties,
+> extends Widget<TProperties> {
+  _$wrapper!: dxElementWrapper;
+
+  _$content!: dxElementWrapper;
+
+  _contentAlreadyRendered?: boolean;
+
+  _positionController!: OverlayPositionController;
+
+  _animateDeferred?: DeferredObj<unknown>;
+
+  _hidingDeferred!: DeferredObj<unknown>;
+
+  _showingDeferred!: DeferredObj<unknown>;
+
+  _customWrapperClass?: string | null;
+
+  _isHidden?: boolean;
+
+  _currentVisible?: boolean;
+
+  _cachedBodyScrollTop?: number;
+
+  _parentHidden?: boolean;
+
+  _parentsScrollSubscriptionInfo?: any;
+
+  _proxiedTabTerminatorHandler?: any;
+
+  _zIndex!: number;
+
+  _asyncShowTimeout?: ReturnType<typeof setTimeout> | null;
+
+  _actions?: any;
+
+  _isHidingActionCanceled?: boolean;
+
+  _isShowingActionCanceled?: boolean;
+
+  _isAnimationPaused?: boolean;
+
+  _hideTopOverlayHandler!: () => void;
+
+  _hideAnimationProcessing?: boolean;
+
+  _showAnimationProcessing?: boolean;
+
+  _keyboardListenerId?: string;
+
+  _viewPortChangeHandle?: any;
+
+  _supportedKeys(): Record<string, (e: KeyboardEvent, options?: Record<string, unknown>) => void> {
+    return {
+      ...super._supportedKeys(),
+      escape(): void {
         this.hide();
       },
-    });
-  },
+    };
+  }
 
-  _getDefaultOptions() {
-    return extend(this.callBase(), {
+  _getDefaultOptions(): TProperties {
+    return {
+      ...super._getDefaultOptions(),
       activeStateEnabled: false,
-
       visible: false,
-
       deferRendering: true,
-
       shading: true,
-
       shadingColor: '',
-
       wrapperAttr: {},
-
       position: extend({}, OVERLAY_POSITION_ALIASES.center),
-
       width: '80vw',
-
       minWidth: null,
-
       maxWidth: null,
-
       height: '80vh',
-
       minHeight: null,
-
       maxHeight: null,
-
       animation: {
         show: {
           type: 'pop',
@@ -128,51 +202,36 @@ const Overlay: typeof OverlayInstance = Widget.inherit({
           },
         },
       },
-
       closeOnOutsideClick: false,
       hideOnOutsideClick: false,
-
       _ignorePreventScrollEventsDeprecation: false,
-
       onShowing: null,
-
       onShown: null,
-
       onHiding: null,
-
       onHidden: null,
-
       contentTemplate: 'content',
-
       innerOverlay: false,
-
       restorePosition: true,
-
-      container: undefined,
-
-      visualContainer: undefined,
 
       // NOTE: private options
       hideTopOverlayHandler: () => { this.hide(); },
       hideOnParentScroll: false,
-
       preventScrollEvents: true,
-
       onPositioned: null,
       propagateOutsideClick: false,
       ignoreChildEvents: true,
       _checkParentVisibility: true,
-      _hideOnParentScrollTarget: undefined,
       _fixWrapperPosition: false,
       _loopFocus: false,
-    });
-  },
+    };
+  }
 
-  _defaultOptionsRules() {
-    return this.callBase().concat([{
-      device() {
+  _defaultOptionsRules(): DefaultOptionsRule<TProperties>[] {
+    return super._defaultOptionsRules().concat([{
+      device(): boolean {
         return !windowUtils.hasWindow();
       },
+      // @ts-expect-error ts-error
       options: {
         width: null,
         height: null,
@@ -180,50 +239,50 @@ const Overlay: typeof OverlayInstance = Widget.inherit({
         _checkParentVisibility: false,
       },
     }]);
-  },
+  }
 
-  _setOptionsByReference() {
-    this.callBase();
+  _setOptionsByReference(): void {
+    super._setOptionsByReference();
 
     extend(this._optionsByReference, {
       animation: true,
     });
-  },
+  }
 
-  $wrapper() {
+  $wrapper(): dxElementWrapper {
     return this._$wrapper;
-  },
+  }
 
-  _eventBindingTarget() {
+  _eventBindingTarget(): dxElementWrapper {
     return this._$content;
-  },
+  }
 
-  _setDeprecatedOptions() {
-    this.callBase();
+  _setDeprecatedOptions(): void {
+    super._setDeprecatedOptions();
     extend(this._deprecatedOptions, {
       closeOnOutsideClick: { since: '22.1', alias: 'hideOnOutsideClick' },
     });
-  },
+  }
 
-  ctor(element, options) {
-    this.callBase(element, options);
+  ctor(element: Element, options: TProperties): void {
+    super.ctor(element, options);
 
     if (options) {
       if ('preventScrollEvents' in options && !options._ignorePreventScrollEventsDeprecation) {
         this._logDeprecatedPreventScrollEventsInfo();
       }
     }
-  },
+  }
 
-  _logDeprecatedPreventScrollEventsInfo() {
+  _logDeprecatedPreventScrollEventsInfo(): void {
     this._logDeprecatedOptionWarning('preventScrollEvents', {
       since: '23.1',
       message: 'If you enable this option, end-users may experience scrolling issues.',
     });
-  },
+  }
 
-  _init() {
-    this.callBase();
+  _init(): void {
+    super._init();
     this._initActions();
     this._initHideOnOutsideClickHandler();
     this._initTabTerminatorHandler();
@@ -239,33 +298,39 @@ const Overlay: typeof OverlayInstance = Widget.inherit({
     this._$wrapper.attr('data-bind', 'dxControlsDescendantBindings: true');
 
     this._toggleViewPortSubscription(true);
-    this._initHideTopOverlayHandler(this.option('hideTopOverlayHandler'));
+
+    const { hideTopOverlayHandler } = this.option();
+    // @ts-expect-error ts-error
+    this._initHideTopOverlayHandler(hideTopOverlayHandler);
     this._parentsScrollSubscriptionInfo = {
       handler: (e) => { this._hideOnParentsScrollHandler(e); },
     };
 
     this.warnPositionAsFunction();
-  },
+  }
 
-  warnPositionAsFunction() {
+  warnPositionAsFunction(): void {
     if (isFunction(this.option('position'))) { // position as function deprecated in 21.2
       errors.log('W0018');
     }
-  },
+  }
 
-  _initInnerOverlayClass() {
-    this._$content.toggleClass(INNER_OVERLAY_CLASS, this.option('innerOverlay'));
-  },
+  _initInnerOverlayClass(): void {
+    const { innerOverlay } = this.option();
 
-  _initHideTopOverlayHandler(handler) {
+    this._$content.toggleClass(INNER_OVERLAY_CLASS, innerOverlay);
+  }
+
+  _initHideTopOverlayHandler(handler: () => void): void {
     this._hideTopOverlayHandler = handler;
-  },
+  }
 
-  _getActionsList() {
+  // eslint-disable-next-line class-methods-use-this
+  _getActionsList(): string[] {
     return ['onShowing', 'onShown', 'onHiding', 'onHidden', 'onPositioned', 'onVisualPositionChanged'];
-  },
+  }
 
-  _initActions() {
+  _initActions(): void {
     this._actions = {};
     const actions = this._getActionsList();
 
@@ -274,19 +339,20 @@ const Overlay: typeof OverlayInstance = Widget.inherit({
         excludeValidators: ['disabled', 'readOnly'],
       }) || noop;
     });
-  },
+  }
 
-  _initHideOnOutsideClickHandler() {
+  _initHideOnOutsideClickHandler(): void {
+    // @ts-expect-error ts-error
     this._proxiedDocumentDownHandler = (...args) => this._documentDownHandler(...args);
-  },
+  }
 
-  _initMarkup() {
-    this.callBase();
+  _initMarkup(): void {
+    super._initMarkup();
     this._renderWrapperAttributes();
     this._initPositionController();
-  },
+  }
 
-  _documentDownHandler(e) {
+  _documentDownHandler(e): boolean | undefined {
     if (this._showAnimationProcessing) {
       this._stopAnimation();
     }
@@ -299,10 +365,12 @@ const Overlay: typeof OverlayInstance = Widget.inherit({
       this._outsideClickHandler(e);
     }
 
-    return this.option('propagateOutsideClick');
-  },
+    const { propagateOutsideClick } = this.option();
 
-  _shouldHideOnOutsideClick(e) {
+    return propagateOutsideClick;
+  }
+
+  _shouldHideOnOutsideClick(e): boolean | undefined {
     const { hideOnOutsideClick } = this.option();
 
     if (isFunction(hideOnOutsideClick)) {
@@ -310,28 +378,28 @@ const Overlay: typeof OverlayInstance = Widget.inherit({
     }
 
     return hideOnOutsideClick;
-  },
+  }
 
-  _outsideClickHandler(e) {
+  _outsideClickHandler(e): void {
     if (this.option('shading')) {
       e.preventDefault();
     }
 
     this.hide();
-  },
+  }
 
-  _getAnonymousTemplateName() {
+  _getAnonymousTemplateName(): string {
     return ANONYMOUS_TEMPLATE_NAME;
-  },
+  }
 
-  _initTemplates() {
+  _initTemplates(): void {
     this._templateManager.addDefaultTemplates({
       content: new EmptyTemplate(),
     });
-    this.callBase();
-  },
+    super._initTemplates();
+  }
 
-  _isTopOverlay() {
+  _isTopOverlay(): boolean {
     const overlayStack = this._overlayStack();
 
     for (let i = overlayStack.length - 1; i >= 0; i--) {
@@ -343,59 +411,66 @@ const Overlay: typeof OverlayInstance = Widget.inherit({
     }
 
     return false;
-  },
+  }
 
-  _overlayStack() {
+  // eslint-disable-next-line class-methods-use-this
+  _overlayStack(): Overlay[] {
     return OVERLAY_STACK;
-  },
+  }
 
-  _zIndexInitValue() {
-    // @ts-expect-error
+  // eslint-disable-next-line class-methods-use-this
+  _zIndexInitValue(): number {
+    // @ts-expect-error ts-error
     return Overlay.baseZIndex();
-  },
+  }
 
-  _toggleViewPortSubscription(toggle) {
+  _toggleViewPortSubscription(toggle: boolean): void {
     viewPortChanged.remove(this._viewPortChangeHandle);
 
     if (toggle) {
-      this._viewPortChangeHandle = (...args) => { this._viewPortChangeHandler(...args); };
+      this._viewPortChangeHandle = (...args) => {
+        // @ts-expect-error ts-error
+        this._viewPortChangeHandler(...args);
+      };
       viewPortChanged.add(this._viewPortChangeHandle);
     }
-  },
+  }
 
-  _viewPortChangeHandler() {
+  _viewPortChangeHandler(): void {
     this._positionController.updateContainer(this.option('container'));
     this._refresh();
-  },
+  }
 
-  _renderWrapperAttributes() {
+  _renderWrapperAttributes(): void {
     const { wrapperAttr } = this.option();
     const attributes = extend({}, wrapperAttr);
     const classNames = attributes.class;
 
     delete attributes.class;
-
+    // @ts-expect-error ts-error
     this.$wrapper()
       .attr(attributes)
+      // @ts-expect-error ts-error
       .removeClass(this._customWrapperClass)
       .addClass(classNames);
 
     this._customWrapperClass = classNames;
-  },
+  }
 
   _renderVisibilityAnimate(visible) {
     this._stopAnimation();
 
     return visible ? this._show() : this._hide();
-  },
+  }
 
   _getAnimationConfig() {
     return this._getOptionValue('animation', this);
-  },
+  }
 
-  _toggleBodyScroll: noop,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars, class-methods-use-this
+  _toggleBodyScroll(enabled?: boolean): void {}
 
-  _animateShowing() {
+  _animateShowing(): void {
     const animation = this._getAnimationConfig() ?? {};
     const showAnimation = this._normalizeAnimation(animation.show, 'to');
     const startShowAnimation = showAnimation?.start ?? noop;
@@ -427,7 +502,7 @@ const Overlay: typeof OverlayInstance = Widget.inherit({
         this._showAnimationProcessing = true;
       },
     );
-  },
+  }
 
   _processShowingHidingCancel(cancelArg, applyFunction, cancelFunction) {
     if (isPromise(cancelArg)) {
@@ -443,9 +518,9 @@ const Overlay: typeof OverlayInstance = Widget.inherit({
     } else {
       cancelArg ? cancelFunction() : applyFunction();
     }
-  },
+  }
 
-  _show() {
+  _show(): DeferredObj<unknown> | Promise<unknown> {
     this._showingDeferred = Deferred();
 
     this._parentHidden = this._isParentHidden();
@@ -469,7 +544,9 @@ const Overlay: typeof OverlayInstance = Widget.inherit({
     } else {
       const show = () => {
         this._stopAnimation();
-        this._toggleBodyScroll(this.option('enableBodyScroll'));
+        const { enableBodyScroll } = this.option();
+
+        this._toggleBodyScroll(enableBodyScroll);
         this._toggleVisibility(true);
         this._$content.css('visibility', 'hidden');
         this._$content.toggleClass(INVISIBLE_STATE_CLASS, false);
@@ -510,7 +587,7 @@ const Overlay: typeof OverlayInstance = Widget.inherit({
     }
 
     return this._showingDeferred.promise();
-  },
+  }
 
   _normalizeAnimation(showHideConfig, direction) {
     if (showHideConfig) {
@@ -527,7 +604,7 @@ const Overlay: typeof OverlayInstance = Widget.inherit({
     }
 
     return showHideConfig;
-  },
+  }
 
   _animateHiding() {
     const animation = this._getAnimationConfig() ?? {};
@@ -553,7 +630,7 @@ const Overlay: typeof OverlayInstance = Widget.inherit({
         this._hideAnimationProcessing = true;
       },
     );
-  },
+  }
 
   _hide() {
     if (!this._currentVisible) {
@@ -575,7 +652,9 @@ const Overlay: typeof OverlayInstance = Widget.inherit({
 
       const cancelHide = () => {
         this._isHidingActionCanceled = true;
-        this._toggleBodyScroll(this.option('enableBodyScroll'));
+        const { enableBodyScroll } = this.option();
+
+        this._toggleBodyScroll(enableBodyScroll);
         this.option('visible', true);
         this._hidingDeferred.resolve();
       };
@@ -591,21 +670,21 @@ const Overlay: typeof OverlayInstance = Widget.inherit({
       this._processShowingHidingCancel(hidingArgs.cancel, applyHide, cancelHide);
     }
     return this._hidingDeferred.promise();
-  },
+  }
 
-  _forceFocusLost() {
+  _forceFocusLost(): void {
     const activeElement = domAdapter.getActiveElement();
     const shouldResetActiveElement = !!this._$content.find(activeElement).length;
 
     if (shouldResetActiveElement) {
       domUtils.resetActiveElement();
     }
-  },
+  }
 
-  _animate(animation, completeCallback, startCallback) {
+  _animate(animation, completeCallback, startCallback): void {
     if (animation) {
       startCallback = startCallback || animation.start || noop;
-
+      // @ts-expect-error ts-error
       fx.animate(this._$content, extend({}, animation, {
         start: startCallback,
         complete: completeCallback,
@@ -613,13 +692,14 @@ const Overlay: typeof OverlayInstance = Widget.inherit({
     } else {
       completeCallback();
     }
-  },
+  }
 
-  _stopAnimation() {
+  _stopAnimation(): void {
+    // @ts-expect-error ts-error
     fx.stop(this._$content, true);
-  },
+  }
 
-  _renderVisibility(visible) {
+  _renderVisibility(visible: boolean): void {
     if (visible && this._isParentHidden()) {
       return;
     }
@@ -648,16 +728,17 @@ const Overlay: typeof OverlayInstance = Widget.inherit({
     this._toggleShading(visible);
 
     this._toggleSubscriptions(visible);
-  },
+  }
 
-  _updateZIndexStackPosition(pushToStack) {
+  _updateZIndexStackPosition(pushToStack: boolean): void {
     const overlayStack = this._overlayStack();
+    // @ts-expect-error ts-error
     const index = overlayStack.indexOf(this);
 
     if (pushToStack) {
       if (index === -1) {
         this._zIndex = zIndexPool.create(this._zIndexInitValue());
-
+        // @ts-expect-error ts-error
         overlayStack.push(this);
       }
 
@@ -667,26 +748,29 @@ const Overlay: typeof OverlayInstance = Widget.inherit({
       overlayStack.splice(index, 1);
       zIndexPool.remove(this._zIndex);
     }
-  },
+  }
 
-  _toggleShading(visible) {
-    this._$wrapper.toggleClass(OVERLAY_SHADER_CLASS, visible && this.option('shading'));
+  _toggleShading(visible?: boolean): void {
+    const { shading, shadingColor } = this.option();
 
-    this._$wrapper.css('backgroundColor', this.option('shading') ? this.option('shadingColor') : '');
+    this._$wrapper.toggleClass(OVERLAY_SHADER_CLASS, visible && shading);
+    // @ts-expect-error ts-error
+    this._$wrapper.css('backgroundColor', shading ? shadingColor : '');
+    // @ts-expect-error ts-error
+    this._toggleTabTerminator(visible && shading);
+  }
 
-    this._toggleTabTerminator(visible && this.option('shading'));
-  },
-
-  _initTabTerminatorHandler() {
+  _initTabTerminatorHandler(): void {
     this._proxiedTabTerminatorHandler = (...args) => {
+      // @ts-expect-error ts-error
       this._tabKeyHandler(...args);
     };
-  },
+  }
 
-  _toggleTabTerminator(enabled) {
+  _toggleTabTerminator(enabled: boolean): void {
     // eslint-disable-next-line @typescript-eslint/naming-convention
     const { _loopFocus } = this.option();
-
+    // @ts-expect-error ts-error
     const eventName = addNamespace('keydown', this.NAME);
 
     if (_loopFocus || enabled) {
@@ -694,19 +778,22 @@ const Overlay: typeof OverlayInstance = Widget.inherit({
     } else {
       eventsEngine.off(domAdapter.getDocument(), eventName, this._proxiedTabTerminatorHandler);
     }
-  },
+  }
 
-  _findTabbableBounds() {
+  _findTabbableBounds(): { first: dxElementWrapper | null; last: dxElementWrapper | null } {
     const $elements = this._$wrapper.find('*');
     const elementsCount = $elements.length - 1;
     const result = { first: null, last: null };
 
     for (let i = 0; i <= elementsCount; i++) {
+      // @ts-expect-error ts-error
       if (!result.first && $elements.eq(i).is(tabbable)) {
+        // @ts-expect-error ts-error
         result.first = $elements.eq(i);
       }
-
+      // @ts-expect-error ts-error
       if (!result.last && $elements.eq(elementsCount - i).is(tabbable)) {
+        // @ts-expect-error ts-error
         result.last = $elements.eq(elementsCount - i);
       }
 
@@ -716,9 +803,9 @@ const Overlay: typeof OverlayInstance = Widget.inherit({
     }
 
     return result;
-  },
+  }
 
-  _tabKeyHandler(e) {
+  _tabKeyHandler(e): void {
     if (normalizeKeyName(e) !== TAB_KEY || !this._isTopOverlay()) {
       return;
     }
@@ -727,9 +814,11 @@ const Overlay: typeof OverlayInstance = Widget.inherit({
 
     const $firstTabbable = tabbableElements.first;
     const $lastTabbable = tabbableElements.last;
-
+    // @ts-expect-error ts-error
     const isTabOnLast = !e.shiftKey && e.target === $lastTabbable.get(0);
+    // @ts-expect-error ts-error
     const isShiftTabOnFirst = e.shiftKey && e.target === $firstTabbable.get(0);
+    // @ts-expect-error ts-error
     const isEmptyTabList = tabbableElements.length === 0;
     const isOutsideTarget = !domUtils.contains(this._$wrapper.get(0), e.target);
 
@@ -738,21 +827,21 @@ const Overlay: typeof OverlayInstance = Widget.inherit({
       e.preventDefault();
 
       const $focusElement = e.shiftKey ? $lastTabbable : $firstTabbable;
-      // @ts-expect-error
+      // @ts-expect-error ts-error
       eventsEngine.trigger($focusElement, 'focusin');
-      // @ts-expect-error
+      // @ts-expect-error ts-error
       eventsEngine.trigger($focusElement, 'focus');
     }
-  },
+  }
 
-  _toggleSubscriptions(enabled) {
+  _toggleSubscriptions(enabled: boolean): void {
     if (windowUtils.hasWindow()) {
       this._toggleHideTopOverlayCallback(enabled);
       this._toggleHideOnParentsScrollSubscription(enabled);
     }
-  },
+  }
 
-  _toggleHideTopOverlayCallback(subscribe) {
+  _toggleHideTopOverlayCallback(subscribe): void {
     if (!this._hideTopOverlayHandler) {
       return;
     }
@@ -762,9 +851,10 @@ const Overlay: typeof OverlayInstance = Widget.inherit({
     } else {
       hideTopOverlayCallback.remove(this._hideTopOverlayHandler);
     }
-  },
+  }
 
-  _toggleHideOnParentsScrollSubscription(needSubscribe) {
+  _toggleHideOnParentsScrollSubscription(needSubscribe?: boolean): void {
+    // @ts-expect-error ts-error
     const scrollEvent = addNamespace('scroll', this.NAME);
     const { prevTargets, handler } = this._parentsScrollSubscriptionInfo ?? {};
 
@@ -780,9 +870,9 @@ const Overlay: typeof OverlayInstance = Widget.inherit({
       eventsEngine.on($parents, scrollEvent, handler);
       this._parentsScrollSubscriptionInfo.prevTargets = $parents;
     }
-  },
+  }
 
-  _hideOnParentsScrollHandler(e) {
+  _hideOnParentsScrollHandler(e): void {
     let hideHandled = false;
     const hideOnScroll = this.option('hideOnParentScroll');
     if (isFunction(hideOnScroll)) {
@@ -792,32 +882,35 @@ const Overlay: typeof OverlayInstance = Widget.inherit({
     if (!hideHandled && !this._showAnimationProcessing) {
       this.hide();
     }
-  },
+  }
 
-  _getHideOnParentScrollTarget() {
-    const $hideOnParentScrollTarget = $(this.option('_hideOnParentScrollTarget'));
+  _getHideOnParentScrollTarget(): dxElementWrapper {
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    const { _hideOnParentScrollTarget } = this.option();
+    // @ts-expect-error ts-error
+    const $hideOnParentScrollTarget = $(_hideOnParentScrollTarget);
 
     if ($hideOnParentScrollTarget.length) {
       return $hideOnParentScrollTarget;
     }
 
     return this._$wrapper;
-  },
+  }
 
-  _render() {
-    this.callBase();
+  _render(): void {
+    super._render();
 
     this._appendContentToElement();
     this._renderVisibilityAnimate(this.option('visible'));
-  },
+  }
 
-  _appendContentToElement() {
+  _appendContentToElement(): void {
     if (!this._$content.parent().is(this.$element())) {
       this._$content.appendTo(this.$element());
     }
-  },
+  }
 
-  _renderContent() {
+  _renderContent(): void {
     const shouldDeferRendering = !this._currentVisible && this.option('deferRendering');
     const isParentHidden = this.option('visible') && this._isParentHidden();
 
@@ -833,10 +926,10 @@ const Overlay: typeof OverlayInstance = Widget.inherit({
     this._contentAlreadyRendered = true;
     this._appendContentToElement();
 
-    this.callBase();
-  },
+    super._renderContent();
+  }
 
-  _isParentHidden() {
+  _isParentHidden(): boolean {
     if (!this.option('_checkParentVisibility')) {
       return false;
     }
@@ -852,10 +945,10 @@ const Overlay: typeof OverlayInstance = Widget.inherit({
     }
 
     let isHidden = false;
-    // @ts-expect-error
+    // @ts-expect-error ts-error
     $parent.add($parent.parents()).each((index, element) => {
       const $element = $(element);
-      // @ts-expect-error
+      // @ts-expect-error ts-error
       if ($element.css('display') === 'none') {
         isHidden = true;
         return false;
@@ -863,15 +956,15 @@ const Overlay: typeof OverlayInstance = Widget.inherit({
     });
 
     return isHidden || !domAdapter.getBody().contains($parent.get(0));
-  },
+  }
 
-  _renderContentImpl() {
+  _renderContentImpl(): Promise<void> {
     const whenContentRendered = Deferred();
 
     const contentTemplateOption = this.option('contentTemplate');
     const contentTemplate = this._getTemplate(contentTemplateOption);
     const transclude = this._templateManager.anonymousTemplateName === contentTemplateOption;
-    contentTemplate && contentTemplate.render({
+    contentTemplate?.render({
       container: getPublicElement(this.$content()),
       noModel: true,
       transclude,
@@ -884,22 +977,28 @@ const Overlay: typeof OverlayInstance = Widget.inherit({
         }
       },
     });
+    const { preventScrollEvents } = this.option();
 
-    this._toggleWrapperScrollEventsSubscription(this.option('preventScrollEvents'));
+    this._toggleWrapperScrollEventsSubscription(preventScrollEvents);
 
     whenContentRendered.done(() => {
       if (this.option('visible')) {
         this._moveToContainer();
       }
     });
-
+    // @ts-expect-error ts-error
     return whenContentRendered.promise();
-  },
+  }
 
   _getPositionControllerConfig() {
     const {
+      container,
+      visualContainer,
       // eslint-disable-next-line @typescript-eslint/naming-convention
-      container, visualContainer, _fixWrapperPosition, restorePosition, _skipContentPositioning,
+      _fixWrapperPosition,
+      restorePosition,
+      // eslint-disable-next-line @typescript-eslint/naming-convention
+      _skipContentPositioning,
     } = this.option();
     // NOTE: position is passed to controller in renderGeometry to prevent window field using in server side mode
 
@@ -915,15 +1014,17 @@ const Overlay: typeof OverlayInstance = Widget.inherit({
       _fixWrapperPosition,
       _skipContentPositioning,
     };
-  },
+  }
 
-  _initPositionController() {
+  _initPositionController(): void {
     this._positionController = new OverlayPositionController(
+      // @ts-expect-error ts-error
       this._getPositionControllerConfig(),
     );
-  },
+  }
 
-  _toggleWrapperScrollEventsSubscription(enabled) {
+  _toggleWrapperScrollEventsSubscription(enabled?: boolean): void {
+    // @ts-expect-error ts-error
     const eventName = addNamespace(dragEventMove, this.NAME);
 
     eventsEngine.off(this._$wrapper, eventName);
@@ -956,12 +1057,12 @@ const Overlay: typeof OverlayInstance = Widget.inherit({
         }
       });
     }
-  },
+  }
 
   _moveFromContainer() {
     this._$content.appendTo(this.$element());
     this._$wrapper.detach();
-  },
+  }
 
   _checkContainerExists() {
     const $wrapperContainer = this._positionController.$container;
@@ -976,42 +1077,44 @@ const Overlay: typeof OverlayInstance = Widget.inherit({
     if (!containerExists) {
       uiErrors.log('W1021', this.NAME);
     }
-  },
+  }
 
-  _moveToContainer() {
+  _moveToContainer(): void {
     const $wrapperContainer = this._positionController.$container;
 
     this._$wrapper.appendTo($wrapperContainer);
     this._$content.appendTo(this._$wrapper);
-  },
+  }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _renderGeometry(options) {
+  _renderGeometry(options?): void {
     const { visible } = this.option();
 
     if (visible && windowUtils.hasWindow()) {
       this._stopAnimation();
       this._renderGeometryImpl();
     }
-  },
+  }
 
-  _renderGeometryImpl() {
+  _renderGeometryImpl(): void {
     // NOTE: position can be specified as a function which needs to be called strict on render start
     this._positionController.updatePosition(this._getOptionValue('position'));
     this._renderWrapper();
     this._renderDimensions();
     this._renderPosition();
-  },
+  }
 
-  _renderPosition() {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _renderPosition(state?): void {
     this._positionController.positionContent();
-  },
+  }
 
-  _isAllWindowCovered() {
-    return isWindow(this._positionController.$visualContainer.get(0)) && this.option('shading');
-  },
+  _isAllWindowCovered(): boolean | undefined {
+    const { shading } = this.option();
+    return isWindow(this._positionController.$visualContainer.get(0)) && shading;
+  }
 
-  _toggleSafariScrolling() {
+  _toggleSafariScrolling(): void {
     const visible = this.option('visible');
     const $body = $(domAdapter.getBody());
     const isIosSafari = devices.real().platform === 'ios' && browser.safari;
@@ -1034,29 +1137,33 @@ const Overlay: typeof OverlayInstance = Widget.inherit({
         $body.addClass(PREVENT_SAFARI_SCROLLING_CLASS);
       }
     }
-  },
+  }
 
-  _renderWrapper() {
+  _renderWrapper(): void {
     this._positionController.styleWrapperPosition();
     this._renderWrapperDimensions();
     this._positionController.positionWrapper();
-  },
+  }
 
-  _renderWrapperDimensions() {
+  _renderWrapperDimensions(): void {
     const { $visualContainer } = this._positionController;
     const documentElement = domAdapter.getDocumentElement();
     const isVisualContainerWindow = isWindow($visualContainer.get(0));
 
-    const wrapperWidth = isVisualContainerWindow ? documentElement.clientWidth : getOuterWidth($visualContainer);
-    const wrapperHeight = isVisualContainerWindow ? window.innerHeight : getOuterHeight($visualContainer);
+    const wrapperWidth = isVisualContainerWindow
+      ? documentElement.clientWidth
+      : getOuterWidth($visualContainer);
+    const wrapperHeight = isVisualContainerWindow
+      ? window.innerHeight
+      : getOuterHeight($visualContainer);
 
     this._$wrapper.css({
       width: wrapperWidth,
       height: wrapperHeight,
     });
-  },
+  }
 
-  _renderDimensions() {
+  _renderDimensions(): void {
     const content = this._$content.get(0);
 
     this._$content.css({
@@ -1067,34 +1174,38 @@ const Overlay: typeof OverlayInstance = Widget.inherit({
       width: this._getOptionValue('width', content),
       height: this._getOptionValue('height', content),
     });
-  },
+  }
 
-  _focusTarget() {
+  _focusTarget(): dxElementWrapper {
     return this._$content;
-  },
+  }
 
-  _attachKeyboardEvents() {
+  _attachKeyboardEvents(): void {
     this._keyboardListenerId = keyboard.on(
       this._$content,
       null,
       (opts) => this._keyboardHandler(opts),
     );
-  },
+  }
 
-  _keyboardHandler(options) {
+  // @ts-expect-error ts-error
+  _keyboardHandler(options): void {
     const e = options.originalEvent;
     const $target = $(e.target);
 
     if ($target.is(this._$content) || !this.option('ignoreChildEvents')) {
-      this.callBase(...arguments);
+      // @ts-expect-error ts-error
+      super._keyboardHandler(...arguments);
     }
-  },
+  }
 
-  _isVisible() {
-    return this.option('visible');
-  },
+  _isVisible(): boolean {
+    const { visible } = this.option();
+    // @ts-expect-error ts-error
+    return visible;
+  }
 
-  _visibilityChanged(visible) {
+  _visibilityChanged(visible: boolean): void {
     if (visible) {
       if (this.option('visible')) {
         this._renderVisibilityAnimate(visible);
@@ -1102,34 +1213,34 @@ const Overlay: typeof OverlayInstance = Widget.inherit({
     } else {
       this._renderVisibilityAnimate(visible);
     }
-  },
+  }
 
-  _dimensionChanged() {
+  _dimensionChanged(): void {
     this._renderGeometry();
-  },
+  }
 
-  _clean() {
-    const options = this.option();
-    if (!this._contentAlreadyRendered && !options.isRenovated) {
+  _clean(): void {
+    const { isRenovated } = this.option();
+    if (!this._contentAlreadyRendered && !isRenovated) {
       this.$content().empty();
     }
 
     this._renderVisibility(false);
     this._stopShowTimer();
     this._cleanFocusState();
-  },
+  }
 
-  _stopShowTimer() {
+  _stopShowTimer(): void {
     if (this._asyncShowTimeout) {
       clearTimeout(this._asyncShowTimeout);
     }
 
     this._asyncShowTimeout = null;
-  },
+  }
 
-  _dispose() {
+  _dispose(): void {
+    // @ts-expect-error
     fx.stop(this._$content, false);
-    clearTimeout(this._deferShowTimer);
 
     this._toggleViewPortSubscription(false);
     this._toggleSubscriptions(false);
@@ -1139,19 +1250,19 @@ const Overlay: typeof OverlayInstance = Widget.inherit({
     this._actions = null;
     this._parentsScrollSubscriptionInfo = null;
 
-    this.callBase();
+    super._dispose();
 
     this._toggleSafariScrolling();
     this.option('visible') && zIndexPool.remove(this._zIndex);
     this._$wrapper.remove();
     this._$content.remove();
-  },
+  }
 
   _toggleRTLDirection(rtl) {
     this._$content.toggleClass(RTL_DIRECTION_CLASS, rtl);
-  },
+  }
 
-  _optionChanged(args) {
+  _optionChanged(args: OptionChanged<TProperties>): void {
     const { value, name } = args;
 
     if (this._getActionsList().includes(name)) {
@@ -1163,13 +1274,19 @@ const Overlay: typeof OverlayInstance = Widget.inherit({
       case 'animation':
         break;
       case '_loopFocus':
-      case 'shading':
-        this._toggleShading(this.option('visible'));
+      case 'shading': {
+        const { visible } = this.option();
+
+        this._toggleShading(visible);
         this._toggleSafariScrolling();
         break;
-      case 'shadingColor':
-        this._toggleShading(this.option('visible'));
+      }
+      case 'shadingColor': {
+        const { visible } = this.option();
+
+        this._toggleShading(visible);
         break;
+      }
       case 'width':
       case 'height':
         this._renderGeometry();
@@ -1188,6 +1305,7 @@ const Overlay: typeof OverlayInstance = Widget.inherit({
         break;
       case 'visible':
         this._renderVisibilityAnimate(value)
+          // @ts-expect-error ts-error
           .done(() => this._animateDeferred?.resolveWith(this))
           .fail(() => this._animateDeferred?.reject());
         break;
@@ -1212,20 +1330,24 @@ const Overlay: typeof OverlayInstance = Widget.inherit({
         break;
       case 'hideTopOverlayHandler':
         this._toggleHideTopOverlayCallback(false);
+        // @ts-expect-error ts-error
         this._initHideTopOverlayHandler(value);
         this._toggleHideTopOverlayCallback(this.option('visible'));
         break;
       case 'hideOnParentScroll':
-      case '_hideOnParentScrollTarget':
-        this._toggleHideOnParentsScrollSubscription(this.option('visible'));
+      case '_hideOnParentScrollTarget': {
+        const { visible } = this.option();
+
+        this._toggleHideOnParentsScrollSubscription(visible);
         break;
+      }
       case 'closeOnOutsideClick':
       case 'hideOnOutsideClick':
       case 'propagateOutsideClick':
         break;
       case 'rtlEnabled':
         this._contentAlreadyRendered = false;
-        this.callBase(args);
+        super._optionChanged(args);
         break;
       case '_fixWrapperPosition':
         this._positionController.fixWrapperPosition = value;
@@ -1238,18 +1360,20 @@ const Overlay: typeof OverlayInstance = Widget.inherit({
         break;
       case 'preventScrollEvents':
         this._logDeprecatedPreventScrollEventsInfo();
+        // @ts-expect-error ts-error
         this._toggleWrapperScrollEventsSubscription(value);
         break;
       default:
-        this.callBase(args);
+        super._optionChanged(args);
     }
-  },
+  }
 
-  toggle(showing) {
+  toggle(showing?): Promise<unknown> {
     showing = showing === undefined ? !this.option('visible') : showing;
     const result = Deferred();
 
     if (showing === this.option('visible')) {
+      // @ts-expect-error ts-error
       return result.resolveWith(this, [showing]).promise();
     }
 
@@ -1258,9 +1382,10 @@ const Overlay: typeof OverlayInstance = Widget.inherit({
     this.option('visible', showing);
 
     animateDeferred.promise()
-      // @ts-expect-error
+      // @ts-expect-error ts-error
       .done(() => {
         delete this._animateDeferred;
+        // @ts-expect-error ts-error
         result.resolveWith(this, [this.option('visible')]);
       })
       .fail(() => {
@@ -1269,34 +1394,34 @@ const Overlay: typeof OverlayInstance = Widget.inherit({
       });
 
     return result.promise();
-  },
+  }
 
-  $content() {
+  $content(): dxElementWrapper {
     return this._$content;
-  },
+  }
 
-  show() {
+  show(): Promise<unknown> {
     return this.toggle(true);
-  },
+  }
 
   hide() {
     return this.toggle(false);
-  },
+  }
 
   content() {
     return getPublicElement(this._$content);
-  },
+  }
 
-  repaint() {
+  repaint(): void {
     if (this._contentAlreadyRendered) {
       this._positionController.restorePositionOnNextRender(true);
       this._renderGeometry({ forceStopAnimation: true });
       triggerResizeEvent(this._$content);
     } else {
-      this.callBase();
+      super.repaint();
     }
-  },
-});
+  }
+}
 // @ts-expect-error
 Overlay.baseZIndex = (zIndex) => zIndexPool.base(zIndex);
 

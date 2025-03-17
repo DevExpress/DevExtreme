@@ -1,0 +1,28 @@
+@use "sass:color";
+@use "../sizes" as *;
+@use "../colors" as *;
+@use "../button/colors" as *;
+
+// adduse
+
+$stepper-step-bg: $typography-bg !default;
+$stepper-step-hover-bg: $button-normal-contained-bg-hover !default;
+
+$stepper-step-color-selected: $base-inverted-text-color !default;
+$stepper-step-selected-bg: $button-default-bg !default;
+$stepper-step-selected-hover-bg: $button-default-contained-bg-hover !default;
+
+$stepper-step-invalid-bg: $button-danger-bg !default;
+$stepper-step-invalid-hover-bg: $button-danger-contained-bg-hover !default;
+
+$stepper-step-border-color: $base-border-color !default;
+$stepper-step-hover-border-color: $base-border-color !default;
+
+$stepper-step-focused-border-color: $base-text-color !default;
+$stepper-step-selected-border-color: $base-accent !default;
+
+$stepper-connector-bg: $base-border-color !default;
+$stepper-connector-value-bg: $base-accent !default;
+
+$stepper-step-disabled-text-color: color.change($base-text-color, $alpha: $base-disabled-opacity) !default;
+$stepper-step-disabled-bg: $base-border-color !default;

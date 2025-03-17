@@ -86,7 +86,7 @@ import {
   DxToolbar,
   DxItem,
 } from 'devextreme-vue/data-grid';
-import { DxSelectBox, DxSelectBoxTypes } from 'devextreme-vue/select-box';
+import { DxSelectBox, type DxSelectBoxTypes } from 'devextreme-vue/select-box';
 import query from 'devextreme/data/query';
 import { orders } from './data.ts';
 
@@ -131,7 +131,7 @@ const refreshButtonOptions = {
   },
 };
 </script>
-<style scoped>
+<style>
 
 #gridContainer .informer {
   display: grid;

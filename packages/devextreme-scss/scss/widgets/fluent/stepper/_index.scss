@@ -1,0 +1,32 @@
+@use "../../base/stepper";
+@use "colors" as *;
+@use "../colors" as *;
+@use "sizes" as *;
+@use "../sizes" as *;
+@use "../../base/stepper/mixins" as *;
+
+// adduse
+
+@include progressbar(
+  $stepper-connector-bg,
+  $stepper-connector-value-bg
+);
+@include step(
+  $stepper-step-size,
+  $stepper-step-size
+);
+@include step-states(
+  $stepper-step-bg,
+  $stepper-step-hover-bg,
+  $stepper-step-color-selected,
+  $stepper-step-selected-bg,
+  $stepper-step-selected-hover-bg,
+  $stepper-step-border-color,
+  $stepper-step-hover-border-color,
+  $stepper-step-focused-border-color,
+  $stepper-step-selected-border-color,
+  $stepper-step-invalid-bg,
+  $stepper-step-invalid-hover-bg,
+  $stepper-step-disabled-text-color,
+  $stepper-step-disabled-bg,
+);

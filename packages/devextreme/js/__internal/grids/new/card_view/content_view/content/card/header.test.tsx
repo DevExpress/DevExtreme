@@ -12,7 +12,7 @@ describe('CardHeader', () => {
     render(<CardHeader visible items={[{ location: 'before', text: 'Test Header' }]} />, container);
 
     // Verify the rendered element
-    const header = container.querySelector(CLASSES.cardHeader);
+    const header = container.querySelector(`.${CLASSES.cardHeader}`);
     expect(header).not.toBeNull();
 
     // Verify the item text

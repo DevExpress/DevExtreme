@@ -1,11 +1,10 @@
 /* eslint-disable @typescript-eslint/prefer-nullish-coalescing */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import type { DataRow } from '@ts/grids/new/grid_core/columns_controller/types';
-import { PureComponent } from '@ts/grids/new/grid_core/core/pure_component';
 import type { DataObject } from '@ts/grids/new/grid_core/data_controller/types';
 import { CollectionController } from '@ts/grids/new/grid_core/keyboard_navigation/collection_controller';
-import type { ComponentType, InfernoNode, RefObject } from 'inferno';
-import { createRef } from 'inferno';
+import type { InfernoNode, RefObject } from 'inferno';
+import { Component, createRef } from 'inferno';
 
 import { Cover } from './cover';
 import { Field } from './field';
@@ -60,7 +59,7 @@ export interface CardProps {
 
   width?: number;
 
-  template?: ComponentType<{ row: DataRow }>;
+  template?: (row: DataRow) => JSX.Element;
 
   onClick?: (e: CardClickEvent) => void;
 
@@ -71,7 +70,7 @@ export interface CardProps {
   onPrepared?: (e: CardPreparedEvent) => void;
 }
 
-export class Card extends PureComponent<CardProps> {
+export class Card extends Component<CardProps> {
   private containerRef = createRef<HTMLDivElement>();
 
   private fieldRefs: RefObject<HTMLDivElement>[] = [];
@@ -92,8 +91,6 @@ export class Card extends PureComponent<CardProps> {
       maxWidth,
       hoverStateEnabled,
       cover,
-      header,
-      template: Template,
     } = this.props;
 
     const style = {
@@ -109,31 +106,6 @@ export class Card extends PureComponent<CardProps> {
 
     const imageSrc = cover?.imageExpr?.(this.props.row.data);
     const alt = cover?.altExpr?.(this.props.row.data);
-    const headerCaption = header?.captionExpr?.(this.props.row.data);
-
-    const content = Template ? <Template row={this.props.row}/> : <>
-      <CardHeader
-        items={this.props.toolbar || []}
-        caption={headerCaption}
-      />
-      {imageSrc && (
-        <Cover
-          imageSrc={imageSrc}
-          alt={alt}
-        />
-      )}
-      <div className={CLASSES.content}>
-        {this.props.row.cells.map((cell, index) => (
-          <FieldTemplate
-            elementRef={this.fieldRefs[index]}
-            // eslint-disable-next-line max-len, @typescript-eslint/explicit-function-return-type
-            alignment={cell.column.alignment}
-            title={cell.column.caption || cell.column.name}
-            value={cell.text}
-          />
-        ))}
-      </div>
-    </>;
 
     return (
       <div
@@ -148,7 +120,25 @@ export class Card extends PureComponent<CardProps> {
         // TODO: move to scss
         style={style}
       >
-        {content}
+        <CardHeader
+          items={this.props.toolbar || []}
+        />
+        {imageSrc && (
+          <Cover
+            imageSrc={imageSrc}
+            alt={alt}
+          />
+        )}
+        <div className={CLASSES.content}>
+          {this.props.row.cells.map((cell, index) => (
+            <FieldTemplate
+              elementRef={this.fieldRefs[index]}
+              alignment={cell.column.alignment}
+              title={cell.column.caption || cell.column.name}
+              value={cell.text}
+            />
+          ))}
+        </div>
       </div>
     );
   }
@@ -171,19 +161,13 @@ export class Card extends PureComponent<CardProps> {
   }
 
   handleMouseEnter = (): void => {
-    const { onHoverChanged, hoverStateEnabled, row } = this.props;
-    if (!hoverStateEnabled) {
-      return;
-    }
+    const { onHoverChanged, row } = this.props;
 
     onHoverChanged?.({ isHovered: true, row });
   };
 
   handleMouseLeave = (): void => {
-    const { onHoverChanged, hoverStateEnabled, row } = this.props;
-    if (!hoverStateEnabled) {
-      return;
-    }
+    const { onHoverChanged, row } = this.props;
 
     onHoverChanged?.({ isHovered: false, row });
   };

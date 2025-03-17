@@ -8,7 +8,7 @@ exports[`Rendering should be rendered correctly 1`] = `
     tabindex="0"
   >
     <div
-      class="dx-cardheader"
+      class="dx-cardview-card-header"
     >
       <div
         class="dx-toolbar dx-widget dx-visibility-change-handler dx-collection"
@@ -125,25 +125,27 @@ exports[`Rendering should be rendered correctly 1`] = `
         alt="Card Cover"
         class="dx-card-cover-image"
         src="https://www.devexpress.com/support/demos/i/demo-thumbs/aspnetcore-grid.png"
-        style="width: 100%; height: auto;"
       />
     </div>
     <div
-      class="dx-cardview-field"
-      tabindex="0"
+      class="dx-cardview-card-content"
     >
-      <span
-        class="dx-cardview-field-name"
+      <div
+        class="dx-cardview-field"
+        tabindex="0"
       >
-        Field
-        :
-      </span>
-      <span
-        class="dx-cardview-field-value"
-        style="overflow: hidden;"
-      >
-        devextreme
-      </span>
+        <span
+          class="dx-cardview-field-name"
+        >
+          Field
+          :
+        </span>
+        <span
+          class="dx-cardview-field-value"
+        >
+          devextreme
+        </span>
+      </div>
     </div>
   </div>
 </div>

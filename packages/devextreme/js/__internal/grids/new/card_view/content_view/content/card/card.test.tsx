@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { describe, expect, it } from '@jest/globals';
+import { compileGetter } from '@js/common/data';
 import { render } from 'inferno';
 
 import { Card } from './card';
@@ -13,6 +14,7 @@ const props = {
           name: 'Field',
         },
         value: 'devextreme',
+        text: 'devextreme',
       },
     ],
     key: 0,
@@ -49,8 +51,8 @@ const props = {
     },
   ],
   cover: {
-    imageExpr: 'img',
-    altExpr: 'alt',
+    imageExpr: compileGetter('img'),
+    altExpr: compileGetter('alt'),
   },
 };
 
@@ -82,14 +84,14 @@ describe('Card Header', () => {
     const cardHeaderText = container.querySelector('.dx-toolbar-label .dx-toolbar-item-content > div');
     expect(cardHeaderText?.textContent).toBe('Card Header');
 
-    const checkbox = container.querySelector('.dx-checkbox');
-    expect(checkbox).not.toBeNull();
+    const checkbox = container.querySelectorAll('.dx-checkbox');
+    expect(checkbox).toHaveLength(1);
 
-    const editButton = container.querySelector('.dx-icon-edit');
-    expect(editButton).not.toBeNull();
+    const editButton = container.querySelectorAll('.dx-icon-edit');
+    expect(editButton).toHaveLength(1);
 
-    const trashButton = container.querySelector('.dx-icon-trash');
-    expect(trashButton).not.toBeNull();
+    const trashButton = container.querySelectorAll('.dx-icon-trash');
+    expect(trashButton).toHaveLength(1);
   });
 });
 

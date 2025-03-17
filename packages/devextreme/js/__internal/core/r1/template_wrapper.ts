@@ -1,5 +1,3 @@
-/* eslint-disable class-methods-use-this */
-import { InfernoComponent, InfernoEffect } from '@devextreme/runtime/inferno';
 import domAdapter from '@js/core/dom_adapter';
 import type { DxElement } from '@js/core/element';
 import { getPublicElement } from '@js/core/element';
@@ -8,7 +6,7 @@ import $ from '@js/core/renderer';
 import type { FunctionTemplate } from '@js/core/templates/function_template';
 import { replaceWith } from '@js/core/utils/dom';
 import { isDefined } from '@js/core/utils/type';
-// eslint-disable-next-line spellcheck/spell-checker
+import { InfernoComponent, InfernoEffect } from '@ts/core/r1/runtime/inferno/index';
 import { findDOMFromVNode } from 'inferno';
 
 import { shallowEquals } from './utils/shallow_equals';
@@ -33,9 +31,9 @@ export interface TemplateWrapperProps {
 }
 
 type TemplateModelArgs =
-// eslint-disable-next-line @typescript-eslint/no-type-alias
+
   Required<Pick<TemplateWrapperProps, 'model'>>
-  // eslint-disable-next-line @typescript-eslint/no-type-alias
+
   & Omit<TemplateWrapperProps, 'model'>;
 
 const isDxElementWrapper = (
@@ -114,7 +112,6 @@ export class TemplateWrapper extends InfernoComponent<TemplateWrapperProps> {
   }
 
   renderTemplate(): () => void {
-    // eslint-disable-next-line spellcheck/spell-checker
     const node = findDOMFromVNode(this.$LI, true);
 
     /* istanbul ignore next */

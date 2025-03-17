@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { createReRenderEffect, InfernoEffect, InfernoWrapperComponent } from '@devextreme/runtime/inferno';
 import Guid from '@js/core/guid';
 import { convertRulesToOptions } from '@js/core/options/utils';
+import { createReRenderEffect, InfernoEffect, InfernoWrapperComponent } from '@ts/core/r1/runtime/inferno/index';
 import type { WidgetProps } from '@ts/core/r1/widget';
 import { Widget, WidgetDefaultProps } from '@ts/core/r1/widget';
 import { combineClasses } from '@ts/core/utils/combine_classes';
@@ -193,7 +193,7 @@ export class Editor extends InfernoWrapperComponent<EditorProps> {
 
   get restAttributes(): Record<string, unknown> {
     const {
-      // eslint-disable-next-line max-len
+      // eslint-disable-next-line @stylistic/max-len
       accessKey, activeStateEnabled, aria, children, className, classes, defaultValue, disabled, focusStateEnabled, height, hint, hoverStateEnabled, inputAttr, isDirty, isValid, name, onClick, onFocusIn, onKeyDown, readOnly, rtlEnabled, tabIndex, validationError, validationErrors, validationMessageMode, validationMessagePosition, validationStatus, value, valueChange, visible, width,
       ...restProps
     } = this.props;

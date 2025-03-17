@@ -20,7 +20,7 @@
 import DxPivotGrid, {
   DxExport,
   DxFieldChooser,
-  DxPivotGridTypes,
+  type DxPivotGridTypes,
 } from 'devextreme-vue/pivot-grid';
 import PivotGridDataSource from 'devextreme/ui/pivot_grid/data_source';
 import { Workbook } from 'exceljs';

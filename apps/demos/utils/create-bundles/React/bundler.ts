@@ -1,5 +1,5 @@
 import { BuildOptions } from 'esbuild';
-import { join } from 'path';
+import { join, resolve } from 'path';
 import ignoreMissingCss from '../plugins/ignore-missing-css';
 import {
   getDestinationPathByDemo, getSourcePathByDemo,
@@ -26,6 +26,10 @@ export default class ReactBundler extends ESBundler {
       },
       entryNames: '[dir]/bundle.[hash]',
       outdir: destinationDemoPath,
+      alias: {
+        react: resolve(__dirname, '../../../node_modules/react'),
+        'react-dom': resolve(__dirname, '../../../node_modules/react-dom'),
+      },
       entryPoints: this.#getEntryPoints(sourceDemoPath),
       plugins: [ignoreMissingCss],
     };

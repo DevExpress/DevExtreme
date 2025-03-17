@@ -1,4 +1,5 @@
 import $ from '@js/core/renderer';
+import type * as SortableTypes from '@js/ui/sortable_types';
 import type { ComponentType, InfernoNode } from 'inferno';
 import { Component, render } from 'inferno';
 
@@ -33,7 +34,7 @@ export class ColumnSortable extends Component<Props, State> {
     props: any;
   };
 
-  private readonly onDragStart = (e): void => {
+  private readonly onDragStart = (e: SortableTypes.DragStartEvent): void => {
     const column = this.props.visibleColumns[e.fromIndex];
 
     if (!column.allowReordering) {
@@ -47,10 +48,12 @@ export class ColumnSortable extends Component<Props, State> {
     };
   };
 
-  private readonly onDragMove = (e): void => {
+  private readonly onDragMove = (e: SortableTypes.DragMoveEvent): void => {
     const containerCoords = $(e.element).get(0).getBoundingClientRect();
     const dragCoords = {
+      // @ts-expect-error
       x: e.event.clientX,
+      // @ts-expect-error
       y: e.event.clientY,
     };
 
@@ -59,22 +62,21 @@ export class ColumnSortable extends Component<Props, State> {
       Math.abs(dragCoords.y - containerCoords.y + containerCoords.height),
     );
 
-    if (yDistance <= 64) {
-      this.status = 'moving';
-    } else {
-      this.status = 'forbid';
-    }
+    // TODO: move to scss variable
+    this.status = yDistance <= 64
+      ? 'moving'
+      : 'forbid';
 
     this.renderDragTemplate();
   };
 
-  private readonly onDragChange = (e): void => {
+  private readonly onDragChange = (e: SortableTypes.DragChangeEvent): void => {
     if (this.status === 'forbid') {
       e.cancel = true;
     }
   };
 
-  private readonly onMove = (e): void => {
+  private readonly onMove = (e: SortableTypes.AddEvent | SortableTypes.ReorderEvent): void => {
     this.props.onMove(
       e.itemData.column,
       e.toIndex,
@@ -84,17 +86,19 @@ export class ColumnSortable extends Component<Props, State> {
 
   // TODO: move all none-native approaches to sortable wrapper
   private readonly renderDragTemplate = (): void => {
-    if (this.dragItemProps) {
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      const DragTemplate = this.props.dragTemplate!;
-      render(
+    if (!this.dragItemProps) {
+      return;
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const DragTemplate = this.props.dragTemplate!;
+    render(
         <DragTemplate
           column={this.dragItemProps.props.itemData.column}
           status={this.status}
         />,
         this.dragItemProps.container,
-      );
-    }
+    );
   };
 
   render(): InfernoNode {

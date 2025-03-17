@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import type { DataType } from '@js/common';
 import messageLocalization from '@js/localization/message';
 
@@ -23,7 +22,8 @@ export type ColumnProperties = ColumnSettings | string;
 export const defaultColumnProperties = {
   dataType: 'string',
   calculateCellValue(data): unknown {
-    return data[this.dataField!];
+    // @ts-expect-error
+    return data[this.dataField];
   },
   calculateDisplayValue(data): unknown {
     return this.calculateCellValue(data);

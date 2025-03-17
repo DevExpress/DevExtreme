@@ -1,4 +1,4 @@
-import { TreeListTypes } from 'devextreme-react/tree-list';
+import { type TreeListTypes } from 'devextreme-react/tree-list';
 import React from 'react';
 
 const EmployeeCell = (props: TreeListTypes.ColumnCellTemplateData) => {

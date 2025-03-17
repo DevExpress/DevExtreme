@@ -49,6 +49,7 @@ import dxScrollView, { Properties as ScrollViewProperties } from '../ui/scroll_v
 import dxSelectBox, { Properties as SelectBoxProperties } from '../ui/select_box';
 import dxSlider, { Properties as SliderProperties } from '../ui/slider';
 import dxSplitter, { Properties as SplitterProperties } from '../ui/splitter';
+import dxStepper, { Properties as StepperProperties } from '../ui/stepper';
 import dxSortable, { Properties as SortableProperties } from '../ui/sortable';
 import dxSpeedDialAction, { Properties as SpeedDialActionProperties } from '../ui/speed_dial_action';
 import dxSwitch, { Properties as SwitchProperties } from '../ui/switch';
@@ -92,7 +93,7 @@ declare module '../core/utils/deferred' {
     interface PromiseType<T> extends JQueryPromise<T> { }
 }
 
-declare module '../common/core/events' {
+declare module '../events/events.types' {
     interface EventType extends JQueryEventObject {
         cancel?: boolean;
     }
@@ -101,7 +102,7 @@ declare module '../common/core/events' {
     }
 }
 
-/* eslint-disable @typescript-eslint/no-empty-interface, @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 declare global {
     interface JQueryPromise<T> { }
     interface JQueryEventObject { }
@@ -474,6 +475,12 @@ declare global {
         dxSplitter(options: string): any;
         dxSplitter(options: string, ...params: any[]): any;
 
+        dxStepper(): JQuery;
+        dxStepper(options: 'instance'): dxStepper;
+        dxStepper(options: StepperProperties): JQuery;
+        dxStepper(options: string): any;
+        dxStepper(options: string, ...params: any[]): any;
+
         dxSortable(): JQuery;
         dxSortable(options: 'instance'): dxSortable;
         dxSortable(options: SortableProperties): JQuery;
@@ -601,7 +608,7 @@ declare global {
         dxVectorMap(options: string, ...params: any[]): any;
     }
 }
-/* eslint-enable @typescript-eslint/no-empty-interface, @typescript-eslint/no-unused-vars */
+/* eslint-enable @typescript-eslint/no-unused-vars */
 
 // eslint-disable-next-line no-empty-pattern
 export const { };

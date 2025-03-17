@@ -2,7 +2,7 @@ import React, { useCallback, useState } from 'react';
 
 import { SimplifiedSearchMode } from 'devextreme-react/common';
 
-import { SelectBox, SelectBoxTypes } from 'devextreme-react/select-box';
+import { SelectBox, type SelectBoxTypes } from 'devextreme-react/select-box';
 import { NumberBox } from 'devextreme-react/number-box';
 import { CheckBox } from 'devextreme-react/check-box';
 

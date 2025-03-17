@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo, useState } from 'react';
-import DateBox, { DateBoxTypes } from 'devextreme-react/date-box';
+import DateBox, { type DateBoxTypes } from 'devextreme-react/date-box';
 
 import service from './data.ts';
 

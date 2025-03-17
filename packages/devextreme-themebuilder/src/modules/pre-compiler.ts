@@ -1,8 +1,6 @@
 const SWATCH_SELECTOR_PREFIX = '.dx-swatch-';
 
-export function createSassForSwatch(
-  outColorScheme: string, sass: string | Buffer,
-): SwatchSass {
+export function createSassForSwatch(outColorScheme: string, sass: string | Buffer): SwatchSass {
   const unchangedParts: string[] = [];
   const importRegex = /@import .*?;\n/g;
   const fontFaceRegex = /@font-face\s*{.*?}\n/gs;

@@ -1,5 +1,3 @@
-/* eslint-disable max-len */
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import type { Column } from '@ts/grids/new/grid_core/columns_controller/types';
 import { Scrollable } from '@ts/grids/new/grid_core/inferno_wrappers/scrollable';
 import type { ComponentType } from 'inferno';
@@ -34,9 +32,6 @@ export interface HeaderPanelProps {
   draggingOptions?: DraggingOptions;
 }
 
-/**
- * <img src="../../../../../../../../e2e/testcafe-devextreme/tests/cardView/etalons/headers.png"></img>
- */
 export class HeaderPanel extends Component<HeaderPanelProps> {
   public render(): JSX.Element {
     if (!this.props.visible) {

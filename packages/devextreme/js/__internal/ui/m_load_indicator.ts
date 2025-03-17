@@ -1,14 +1,14 @@
 import messageLocalization from '@js/common/core/localization/message';
 import registerComponent from '@js/core/component_registrator';
 import devices from '@js/core/devices';
+import type { DefaultOptionsRule } from '@js/core/options/utils';
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
-import { extend } from '@js/core/utils/extend';
 import { getHeight, getWidth } from '@js/core/utils/size';
 import { getNavigator } from '@js/core/utils/window';
-import type { Properties as PublicProps } from '@js/ui/load_indicator';
-
-// @ts-expect-error
+import type { Properties } from '@js/ui/load_indicator';
 import { current, isGeneric, isMaterialBased } from '@js/ui/themes';
+import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
 
 import supportUtils from '../core/utils/m_support';
@@ -23,32 +23,35 @@ const LOADINDICATOR_SEGMENT_CLASS = 'dx-loadindicator-segment';
 const LOADINDICATOR_SEGMENT_INNER_CLASS = 'dx-loadindicator-segment-inner';
 const LOADINDICATOR_IMAGE_CLASS = 'dx-loadindicator-image';
 
-interface Properties extends PublicProps {
-  viaImage?: any;
+export interface LoadIndicatorProperties extends Properties {
+  viaImage?: boolean;
+
+  _animatingSegmentCount?: number;
+
+  _animatingSegmentInner?: boolean;
 }
 
-class LoadIndicator extends Widget<Properties> {
-  private _$wrapper: any;
+class LoadIndicator extends Widget<LoadIndicatorProperties> {
+  _$wrapper!: dxElementWrapper;
 
-  private _$content: any;
+  _$content!: dxElementWrapper;
 
-  private _$indicator: any;
+  _$indicator?: dxElementWrapper;
 
-  _getDefaultOptions() {
-    return extend(super._getDefaultOptions(), {
+  _getDefaultOptions(): LoadIndicatorProperties {
+    return {
+      ...super._getDefaultOptions(),
       indicatorSrc: '',
       activeStateEnabled: false,
       hoverStateEnabled: false,
       _animatingSegmentCount: 1,
       _animatingSegmentInner: false,
-
-    });
+    };
   }
 
-  _defaultOptionsRules() {
+  _defaultOptionsRules(): DefaultOptionsRule<LoadIndicatorProperties>[] {
     const themeName = current();
 
-    // @ts-expect-error
     return super._defaultOptionsRules().concat([
       {
         device() {
@@ -61,7 +64,7 @@ class LoadIndicator extends Widget<Properties> {
         },
       },
       {
-        device() {
+        device(): boolean {
           return isMaterialBased(themeName);
         },
         options: {
@@ -70,7 +73,7 @@ class LoadIndicator extends Widget<Properties> {
         },
       },
       {
-        device() {
+        device(): boolean {
           return isGeneric(themeName);
         },
         options: {
@@ -80,11 +83,12 @@ class LoadIndicator extends Widget<Properties> {
     ]);
   }
 
-  _useTemplates() {
+  // eslint-disable-next-line class-methods-use-this
+  _useTemplates(): boolean {
     return false;
   }
 
-  _init() {
+  _init(): void {
     super._init();
 
     this.$element().addClass(LOADINDICATOR_CLASS);
@@ -98,24 +102,24 @@ class LoadIndicator extends Widget<Properties> {
     this.setAria(aria);
   }
 
-  _initMarkup() {
+  _initMarkup(): void {
     super._initMarkup();
     this._renderWrapper();
     this._renderIndicatorContent();
     this._renderMarkup();
   }
 
-  _renderWrapper() {
+  _renderWrapper(): void {
     this._$wrapper = $('<div>').addClass(LOADINDICATOR_WRAPPER_CLASS);
     this.$element().append(this._$wrapper);
   }
 
-  _renderIndicatorContent() {
+  _renderIndicatorContent(): void {
     this._$content = $('<div>').addClass(LOADINDICATOR_CONTENT_CLASS);
     this._$wrapper.append(this._$content);
   }
 
-  _renderMarkup() {
+  _renderMarkup(): void {
     const { viaImage, indicatorSrc } = this.option();
 
     if (supportUtils.animation() && !viaImage && !indicatorSrc) { // B236922
@@ -125,16 +129,18 @@ class LoadIndicator extends Widget<Properties> {
     }
   }
 
-  _renderMarkupForAnimation() {
+  _renderMarkupForAnimation(): void {
     const animatingSegmentInner = this.option('_animatingSegmentInner');
 
     this._$indicator = $('<div>').addClass(LOADINDICATOR_ICON_CLASS);
     this._$content.append(this._$indicator);
 
     // Indicator markup
-    for (let i = this.option('_animatingSegmentCount') as any; i >= 0; --i) {
+    // @ts-expect-error ts-error
+    for (let i = this.option('_animatingSegmentCount'); i >= 0; --i) {
       const $segment = $('<div>')
         .addClass(LOADINDICATOR_SEGMENT_CLASS)
+        // eslint-disable-next-line @typescript-eslint/restrict-plus-operands, @typescript-eslint/no-base-to-string
         .addClass(LOADINDICATOR_SEGMENT_CLASS + i);
 
       if (animatingSegmentInner) {
@@ -145,7 +151,7 @@ class LoadIndicator extends Widget<Properties> {
     }
   }
 
-  _renderMarkupForImage() {
+  _renderMarkupForImage(): void {
     const { indicatorSrc } = this.option();
 
     if (indicatorSrc) {
@@ -156,22 +162,23 @@ class LoadIndicator extends Widget<Properties> {
     }
   }
 
-  _renderDimensions() {
+  _renderDimensions(): void {
     super._renderDimensions();
     this._updateContentSizeForAnimation();
   }
 
-  _updateContentSizeForAnimation() {
+  _updateContentSizeForAnimation(): void {
     if (!this._$indicator) {
       return;
     }
 
-    let width = this.option('width') as any;
-    let height = this.option('height') as any;
+    let width = this.option('width');
+    let height = this.option('height');
 
     if (width || height) {
       width = getWidth(this.$element());
       height = getHeight(this.$element());
+      // @ts-expect-error ts-error
       const minDimension = Math.min(height, width);
 
       this._$wrapper.css({
@@ -182,14 +189,14 @@ class LoadIndicator extends Widget<Properties> {
     }
   }
 
-  _clean() {
+  _clean(): void {
     super._clean();
 
     this._removeMarkupForAnimation();
     this._removeMarkupForImage();
   }
 
-  _removeMarkupForAnimation() {
+  _removeMarkupForAnimation(): void {
     if (!this._$indicator) {
       return;
     }
@@ -198,11 +205,11 @@ class LoadIndicator extends Widget<Properties> {
     delete this._$indicator;
   }
 
-  _removeMarkupForImage() {
+  _removeMarkupForImage(): void {
     this._$wrapper.css('backgroundImage', 'none');
   }
 
-  _optionChanged(args) {
+  _optionChanged(args: OptionChanged<LoadIndicatorProperties>): void {
     switch (args.name) {
       case '_animatingSegmentCount':
       case '_animatingSegmentInner':

@@ -3,7 +3,7 @@
 exports[`Item should render sort icons 1`] = `
 <div>
   <div
-    class="dx-cardview-header-item undefined undefined"
+    class="dx-cardview-header-item  "
     tabindex="0"
   >
     Column 1
@@ -21,7 +21,7 @@ exports[`Item should render sort icons 1`] = `
 exports[`Item should use column caption as text 1`] = `
 <div>
   <div
-    class="dx-cardview-header-item undefined undefined"
+    class="dx-cardview-header-item  "
     tabindex="0"
   >
     my column caption

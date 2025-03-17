@@ -7,16 +7,16 @@ import DataGrid, {
   Column,
   Lookup,
   RequiredRule,
-  DataGridTypes,
+  type DataGridTypes,
   Pager,
 } from 'devextreme-react/data-grid';
 import { createStore } from 'devextreme-aspnet-data-nojquery';
-import SelectBox, { SelectBoxTypes } from 'devextreme-react/select-box';
+import SelectBox, { type SelectBoxTypes } from 'devextreme-react/select-box';
 import { statuses } from './data.ts';
 import EmployeeDropDownBoxComponent from './EmployeeDropDownBoxComponent.tsx';
 import EmployeeTagBoxComponent from './EmployeeTagBoxComponent.tsx';
 
-const url = 'https://js.devexpress.com/Demos/Mvc/api/CustomEditors';
+const url = 'https://js.devexpress.com/Demos/NetCore/api/DataGridCustomEditors';
 const statusLabel = { 'aria-label': 'Status' };
 
 const employees = createStore({

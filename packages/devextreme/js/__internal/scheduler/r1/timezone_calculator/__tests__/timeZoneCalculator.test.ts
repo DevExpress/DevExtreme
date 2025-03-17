@@ -1,7 +1,7 @@
 import {
   beforeEach, describe, expect, it, jest,
 } from '@jest/globals';
-import dateUtils from '@js/core/utils/date';
+import { createTimeZoneCalculator } from '@ts/scheduler/r1/timezone_calculator';
 
 import { TimeZoneCalculator } from '../calculator';
 import type { PathTimeZoneConversion } from '../const';
@@ -46,94 +46,48 @@ describe('TimeZoneCalculator', () => {
     });
 
     [
-      'America/Los_Angeles',
-      undefined,
-    ].forEach((appointmentTimezone) => {
-      ['toGrid', 'fromGrid'].forEach((path) => {
-        it(`should use common time zone [path: ${path}
-        if converting to common timezone, appointmentTimezone: ${appointmentTimezone}]`, () => {
-          const calculator = new TimeZoneCalculator(mock);
+      { path: 'toGrid' as PathTimeZoneConversion, appointmentTimezone: 'America/Los_Angeles', timezone: 'common' },
+      { path: 'toGrid' as PathTimeZoneConversion, appointmentTimezone: undefined, timezone: 'common' },
+      { path: 'fromGrid' as PathTimeZoneConversion, appointmentTimezone: 'America/Los_Angeles', timezone: 'common' },
+      { path: 'fromGrid' as PathTimeZoneConversion, appointmentTimezone: undefined, timezone: 'common' },
+      { path: 'toAppointment' as PathTimeZoneConversion, appointmentTimezone: 'America/Los_Angeles', timezone: 'appointment' },
+      { path: 'toAppointment' as PathTimeZoneConversion, appointmentTimezone: undefined, timezone: 'common' },
+      { path: 'fromAppointment' as PathTimeZoneConversion, appointmentTimezone: 'America/Los_Angeles', timezone: 'appointment' },
+      { path: 'fromAppointment' as PathTimeZoneConversion, appointmentTimezone: undefined, timezone: 'common' },
+    ].forEach(({ path, appointmentTimezone, timezone }) => {
+      it(`should use ${timezone} timezone [path: ${path}, appointmentTimezone: ${appointmentTimezone}]`, () => {
+        const calculator = createTimeZoneCalculator('America/Los_Angeles');
+        const clientMock = jest.fn().mockReturnValue(0);
+        const commonMock = jest.fn().mockReturnValue(0);
+        const appointmentMock = jest.fn().mockReturnValue(0);
 
-          const spy = jest.spyOn(calculator, 'getConvertedDateByOffsets');
+        jest.spyOn(calculator, 'getOffsets').mockImplementation(() => ({
+          get client(): number { return clientMock() as number; },
+          get common(): number { return commonMock() as number; },
+          get appointment(): number { return appointmentMock() as number; },
+        }));
 
-          calculator.createDate(
-            sourceDate,
-            {
-              path: path as PathTimeZoneConversion,
-              appointmentTimeZone: appointmentTimezone,
-            },
-          );
+        calculator.createDate(sourceDate, { path, appointmentTimeZone: appointmentTimezone });
 
-          expect(spy)
-            .toBeCalledTimes(1);
-
-          const isBackDirection = path === 'fromGrid';
-
-          expect(spy)
-            .toBeCalledWith(
-              sourceDate,
-              -localOffset / dateUtils.dateToMilliseconds('hour'),
-              commonOffset,
-              isBackDirection,
-            );
-        });
+        expect(clientMock).toHaveBeenCalledTimes(1);
+        expect(commonMock).toHaveBeenCalledTimes(timezone === 'common' ? 1 : 0);
+        expect(appointmentMock).toHaveBeenCalledTimes(timezone === 'appointment' ? 1 : 0);
       });
     });
 
-    [
-      'America/Los_Angeles',
-      undefined,
-    ].forEach((appointmentTimezone) => {
-      [
-        'toAppointment',
-        'fromAppointment',
-      ].forEach((path) => {
-        it(`if converting to appointment timezone, should use appointment time zone
-              [path: ${path}, appointmentTimezone: ${appointmentTimezone}]`, () => {
-          const calculator = new TimeZoneCalculator(mock);
+    it('createDate should throw error if wrong path', () => {
+      const calculator = new TimeZoneCalculator(mock);
 
-          const spy = jest.spyOn(calculator, 'getConvertedDateByOffsets');
-
-          calculator.createDate(
-            sourceDate,
-            {
-              path: path as PathTimeZoneConversion,
-              appointmentTimeZone: appointmentTimezone,
-            },
-          );
-
-          expect(spy)
-            .toBeCalledTimes(1);
-
-          const isBackDirectionArg = path === 'fromAppointment';
-          const commonOffsetArg = appointmentTimezone === undefined
-            ? commonOffset
-            : appointmentOffset;
-
-          expect(spy)
-            .toBeCalledWith(
-              sourceDate,
-              -localOffset / dateUtils.dateToMilliseconds('hour'),
-              commonOffsetArg,
-              isBackDirectionArg,
-            );
-        });
-      });
-
-      it('createDate should throw error if wrong path', () => {
-        const calculator = new TimeZoneCalculator(mock);
-
-        expect(() => {
-          calculator.createDate(
-            sourceDate,
-            {
-              path: 'WrongPath' as PathTimeZoneConversion,
-              appointmentTimeZone: appointmentTimezone,
-            },
-          );
-        })
-          .toThrow('not specified pathTimeZoneConversion');
-      });
+      expect(() => {
+        calculator.createDate(
+          sourceDate,
+          {
+            path: 'WrongPath' as PathTimeZoneConversion,
+            appointmentTimeZone: 'America/Los_Angeles',
+          },
+        );
+      })
+        .toThrow('not specified pathTimeZoneConversion');
     });
   });
 

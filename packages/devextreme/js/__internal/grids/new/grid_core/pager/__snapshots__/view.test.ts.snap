@@ -37,7 +37,6 @@ exports[`Applying options when allowedPageSizes = 'auto' calculates pageSizes by
     </div>
     <div
       class="dx-pages"
-      style="visibility: hidden;"
     >
       <div
         class="dx-page-indexes"
@@ -178,7 +177,6 @@ exports[`Applying options when changing a visible to 'true' at runtime Pager sho
     </div>
     <div
       class="dx-pages"
-      style="visibility: hidden;"
     >
       <div
         class="dx-page-indexes"

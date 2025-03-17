@@ -17,18 +17,18 @@
   />
 </template>
 <script setup lang="ts">
-import DxScheduler, { DxSchedulerTypes } from 'devextreme-vue/scheduler';
+import DxScheduler, { type DxSchedulerTypes } from 'devextreme-vue/scheduler';
 import { createStore } from 'devextreme-aspnet-data-nojquery';
 
-const url = 'https://js.devexpress.com/Demos/Mvc/api/SchedulerData';
+const url = 'https://js.devexpress.com/Demos/NetCore/api/SchedulerData';
 const views: DxSchedulerTypes.ViewType[] = ['day', 'workWeek', 'month'];
 const currentDate = new Date(2021, 3, 27);
 const dataSource = createStore({
   key: 'AppointmentId',
-  loadUrl: `${url}/Get`,
-  insertUrl: `${url}/Post`,
-  updateUrl: `${url}/Put`,
-  deleteUrl: `${url}/Delete`,
+  loadUrl: url,
+  insertUrl: url,
+  updateUrl: url,
+  deleteUrl: url,
   onBeforeSend(_, ajaxOptions) {
     ajaxOptions.xhrFields = { withCredentials: true };
   },

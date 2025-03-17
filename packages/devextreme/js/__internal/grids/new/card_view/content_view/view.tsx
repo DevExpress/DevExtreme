@@ -10,6 +10,7 @@ import { ContentView as ContentViewBase } from '../../grid_core/content_view/vie
 import type { DataObject } from '../../grid_core/data_controller/types';
 import type { ContentViewProps } from './content_view';
 import { ContentView as ContentViewComponent } from './content_view';
+import { factors } from './utils';
 
 export class ContentView extends ContentViewBase<ContentViewProps> {
   // @ts-expect-error
@@ -23,12 +24,6 @@ export class ContentView extends ContentViewBase<ContentViewProps> {
     (width, cardMinWidth, pageSize, cardsPerRowProp) => {
       if (cardsPerRowProp !== 'auto') {
         return cardsPerRowProp;
-      }
-
-      function factors(n) {
-        const res: number[] = [];
-        for (let i = 1; i <= n; i += 1) if (n % i === 0) res.push(i);
-        return res;
       }
 
       const result = factors(pageSize).reverse().find((cardsPerRow) => {

@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import DataGrid, { Column } from 'devextreme-react/data-grid';
-import CheckBox, { CheckBoxTypes } from 'devextreme-react/check-box';
+import CheckBox, { type CheckBoxTypes } from 'devextreme-react/check-box';
 
 import { employees } from './data.ts';
 

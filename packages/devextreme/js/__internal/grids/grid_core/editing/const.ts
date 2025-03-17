@@ -32,7 +32,7 @@ export const PAGE_TOP_NEW_ROW_POSITION = 'pageTop';
 export const VIEWPORT_BOTTOM_NEW_ROW_POSITION = 'viewportBottom';
 export const VIEWPORT_TOP_NEW_ROW_POSITION = 'viewportTop';
 
-// eslint-disable-next-line max-len
+// eslint-disable-next-line @stylistic/max-len
 export const EDIT_MODES = [EDIT_MODE_BATCH, EDIT_MODE_ROW, EDIT_MODE_CELL, EDIT_MODE_FORM, EDIT_MODE_POPUP];
 export const ROW_BASED_MODES = [EDIT_MODE_ROW, EDIT_MODE_FORM, EDIT_MODE_POPUP];
 export const CELL_BASED_MODES = [EDIT_MODE_BATCH, EDIT_MODE_CELL];

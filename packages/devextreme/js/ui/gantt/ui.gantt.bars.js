@@ -144,23 +144,10 @@ export class GanttToolbar extends Bar {
             onItemClick: (e) => {
                 const commandId = e.itemData.commandId;
                 if(commandId !== undefined) {
-                    this._executeCommand(e.itemData.commandId);
+                    this._owner._executeCoreCommand(commandId);
                 }
             }
         });
-    }
-
-    _executeCommand(commandId) {
-        switch(commandId) {
-            case COMMANDS.toggleResources:
-                this._owner.option('showResources', !this._owner.option('showResources'));
-                break;
-            case COMMANDS.toggleDependencies:
-                this._owner.option('showDependencies', !this._owner.option('showDependencies'));
-                break;
-            default:
-                this._owner._executeCoreCommand(commandId);
-        }
     }
 
     _createDefaultItem(commandId, hint, icon) {

@@ -9,9 +9,10 @@ import messageLocalization from '@js/common/core/localization/message';
 import registerComponent from '@js/core/component_registrator';
 import devices from '@js/core/devices';
 import Guid from '@js/core/guid';
+import type { DefaultOptionsRule } from '@js/core/options/utils';
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { FunctionTemplate } from '@js/core/templates/function_template';
-import { noop } from '@js/core/utils/common';
 import dateUtils from '@js/core/utils/date';
 import dateSerialization from '@js/core/utils/date_serialization';
 import { extend } from '@js/core/utils/extend';
@@ -22,13 +23,17 @@ import {
 } from '@js/core/utils/type';
 import { hasWindow } from '@js/core/utils/window';
 import Button from '@js/ui/button';
-import Editor from '@js/ui/editor/editor';
+import type { Properties } from '@js/ui/calendar';
 import { isFluent } from '@js/ui/themes';
+import Editor from '@ts/ui/editor/editor';
 
 import CalendarMultipleSelectionStrategy from './m_calendar.multiple.selection.strategy';
 import Navigator from './m_calendar.navigator';
 import CalendarRangeSelectionStrategy from './m_calendar.range.selection.strategy';
 import CalendarSingleSelectionStrategy from './m_calendar.single.selection.strategy';
+import type {
+  CenturyView, DecadeView, MonthView, YearView,
+} from './m_calendar.views';
 import Views from './m_calendar.views';
 
 const CALENDAR_CLASS = 'dx-calendar';
@@ -72,73 +77,105 @@ const SELECTION_STRATEGIES = {
   RangeSelection: CalendarRangeSelectionStrategy,
 };
 
-// @ts-expect-error
-const Calendar = Editor.inherit({
-  _getDefaultOptions() {
-    return extend(this.callBase(), {
+export interface CalendarProperties extends Properties {
+  viewsCount: number;
 
+  currentDate?: Date;
+}
+
+class Calendar<
+  TProperties extends CalendarProperties = CalendarProperties,
+> extends Editor<TProperties> {
+  _swipeable?: Swipeable;
+
+  _$viewsWrapper!: dxElementWrapper;
+
+  $body?: dxElementWrapper;
+
+  _skipNavigate?: boolean;
+
+  _onContouredChanged?: (arg) => void;
+
+  _cellClickAction?: (e) => void;
+
+  _view!: MonthView | YearView | DecadeView | CenturyView;
+
+  _additionalView!: MonthView | YearView | DecadeView | CenturyView;
+
+  _beforeView?: MonthView | YearView | DecadeView | CenturyView;
+
+  _afterView?: MonthView | YearView | DecadeView | CenturyView;
+
+  _selectionStrategy!: CalendarSingleSelectionStrategy | CalendarMultipleSelectionStrategy | CalendarRangeSelectionStrategy;
+
+  _suppressNavigation?: true;
+
+  max?: Date;
+
+  min?: Date;
+
+  _navigator!: Navigator;
+
+  _alreadyViewRender?: boolean;
+
+  _waitRenderViewTimeout?: ReturnType<typeof setTimeout>;
+
+  _$footer?: dxElementWrapper;
+
+  _viewWidthValue?: number;
+
+  _preventViewChangeAnimation?: boolean;
+
+  _$submitElement!: dxElementWrapper;
+
+  _isOtherViewCellClicked?: boolean;
+
+  _getDefaultOptions(): TProperties {
+    return {
+      ...super._getDefaultOptions(),
       hoverStateEnabled: true,
-
       activeStateEnabled: true,
-
       currentDate: new Date(),
-
       value: null,
-
-      dateSerializationFormat: undefined,
-
       min: new Date(1000, 0),
-
       max: new Date(3000, 0),
-
-      firstDayOfWeek: undefined,
-
       viewsCount: 1,
-
       zoomLevel: ZOOM_LEVEL.MONTH,
-
       maxZoomLevel: ZOOM_LEVEL.MONTH,
-
       minZoomLevel: ZOOM_LEVEL.CENTURY,
-
       selectionMode: 'single',
-
       selectWeekOnClick: true,
-
       showTodayButton: false,
-
       showWeekNumbers: false,
-
       weekNumberRule: 'auto',
-
       cellTemplate: 'cell',
-
       disabledDates: null,
-
       onCellClick: null,
       onContouredChanged: null,
       skipFocusCheck: false,
 
       _todayDate: () => new Date(),
-    });
-  },
+    };
+  }
 
-  _defaultOptionsRules() {
-    return this.callBase().concat([
+  _defaultOptionsRules(): DefaultOptionsRule<TProperties>[] {
+    return super._defaultOptionsRules().concat([
       {
-        device() {
+        device(): boolean {
           return devices.real().deviceType === 'desktop' && !devices.isSimulator();
         },
+        // @ts-expect-error ts-error
         options: {
           focusStateEnabled: true,
         },
       },
     ]);
-  },
+  }
 
-  _supportedKeys() {
-    return extend(this.callBase(), {
-      rightArrow(e) {
+  _supportedKeys(): Record<string, (e: KeyboardEvent, options?: Record<string, unknown>) => void> {
+    return {
+      ...super._supportedKeys(),
+      rightArrow(e): void {
         e.preventDefault();
         if (isCommandKeyPressed(e)) {
           this._waitRenderView(1);
@@ -146,7 +183,7 @@ const Calendar = Editor.inherit({
           this._moveCurrentDateByOffset(1 * this._getRtlCorrection());
         }
       },
-      leftArrow(e) {
+      leftArrow(e): void {
         e.preventDefault();
         if (isCommandKeyPressed(e)) {
           this._waitRenderView(-1);
@@ -154,7 +191,7 @@ const Calendar = Editor.inherit({
           this._moveCurrentDateByOffset(-1 * this._getRtlCorrection());
         }
       },
-      upArrow(e) {
+      upArrow(e): void {
         e.preventDefault();
         if (isCommandKeyPressed(e)) {
           this._navigateUp();
@@ -165,7 +202,7 @@ const Calendar = Editor.inherit({
           this._moveCurrentDateByOffset(-1 * this._view.option('colCount'));
         }
       },
-      downArrow(e) {
+      downArrow(e): void {
         e.preventDefault();
         if (isCommandKeyPressed(e)) {
           this._navigateDown();
@@ -176,7 +213,7 @@ const Calendar = Editor.inherit({
           this._moveCurrentDateByOffset(1 * this._view.option('colCount'));
         }
       },
-      home(e) {
+      home(e): void {
         e.preventDefault();
 
         const zoomLevel = this.option('zoomLevel');
@@ -193,7 +230,7 @@ const Calendar = Editor.inherit({
 
         this._moveToClosestAvailableDate(date);
       },
-      end(e) {
+      end(e): void {
         e.preventDefault();
 
         const zoomLevel = this.option('zoomLevel');
@@ -210,27 +247,27 @@ const Calendar = Editor.inherit({
 
         this._moveToClosestAvailableDate(date);
       },
-      pageUp(e) {
+      pageUp(e): void {
         e.preventDefault();
         this._waitRenderView(-1 * this._getRtlCorrection());
       },
-      pageDown(e) {
+      pageDown(e): void {
         e.preventDefault();
         this._waitRenderView(1 * this._getRtlCorrection());
       },
-      tab: noop,
+      tab() {},
       enter: this._enterKeyHandler,
-    });
-  },
+    };
+  }
 
-  _enterKeyHandler(e) {
+  _enterKeyHandler(e): void {
     if (!this._isMaxZoomLevel()) {
       this._navigateDown();
     } else if (!this._view.isDateDisabled(this.option('currentDate'))) {
       const value = this._updateTimeComponent(this.option('currentDate'));
       this._selectionStrategy.selectValue(value, e);
     }
-  },
+  }
 
   _getSerializationFormat(optionName) {
     const value = this.option(optionName || 'value');
@@ -248,11 +285,11 @@ const Calendar = Editor.inherit({
     }
 
     return dateSerialization.getDateSerializationFormat(value);
-  },
+  }
 
   _convertToDate(value) {
     return dateSerialization.deserializeDate(value);
-  },
+  }
 
   _dateValue(value, event) {
     if (event) {
@@ -263,7 +300,7 @@ const Calendar = Editor.inherit({
       this._saveValueChangeEvent(event);
     }
     this._dateOption('value', value);
-  },
+  }
 
   _dateOption(optionName, optionValue) {
     const isArray = optionName === 'value' && !this._isSingleMode();
@@ -271,6 +308,7 @@ const Calendar = Editor.inherit({
 
     if (arguments.length === 1) {
       return isArray
+        // @ts-expect-error ts-error
         ? (value ?? []).map((value) => this._convertToDate(value))
         : this._convertToDate(this.option(optionName));
     }
@@ -281,11 +319,13 @@ const Calendar = Editor.inherit({
       : dateSerialization.serializeDate(optionValue, serializationFormat);
 
     this.option(optionName, serializedValue);
-  },
+  }
 
-  _isSingleMode() {
-    return this.option('selectionMode') === 'single';
-  },
+  _isSingleMode(): boolean {
+    const { selectionMode } = this.option();
+
+    return selectionMode === 'single';
+  }
 
   _shiftDate(zoomLevel, date, offset, reverse) {
     // eslint-disable-next-line default-case
@@ -303,10 +343,11 @@ const Calendar = Editor.inherit({
         date.setFullYear(date.getFullYear() + 10 * offset * reverse);
         break;
     }
-  },
+  }
 
   _moveCurrentDateByOffset(offset) {
     const baseDate = this.option('currentDate');
+    // @ts-expect-error ts-error
     let currentDate = new Date(baseDate);
     const zoomLevel = this.option('zoomLevel');
     this._shiftDate(zoomLevel, currentDate, offset, 1);
@@ -337,21 +378,22 @@ const Calendar = Editor.inherit({
       if (!isViewDisabled) {
         this._waitRenderView(direction);
       } else {
+        // @ts-expect-error ts-error
         this._moveToClosestAvailableDate(currentDate);
       }
     } else {
       this._skipNavigate = true;
       this.option('currentDate', currentDate);
     }
-  },
+  }
 
   _isNextViewDisabled() {
     return this._navigator._nextButton.option('disabled');
-  },
+  }
 
   _isPrevViewDisabled() {
     return this._navigator._prevButton.option('disabled');
-  },
+  }
 
   // @ts-expect-error
   _areDatesInSameView(zoomLevel, date1, date2) {
@@ -370,7 +412,7 @@ const Calendar = Editor.inherit({
       // eslint-disable-next-line radix
         return parseInt(date1.getYear() / 100) === parseInt(date2.getYear() / 100);
     }
-  },
+  }
 
   // @ts-expect-error
   _areDatesInNeighborView(zoomLevel, date1, date2) {
@@ -390,9 +432,10 @@ const Calendar = Editor.inherit({
       case ZOOM_LEVEL.CENTURY:
         return Math.abs(date1.getYear() - date2.getYear()) <= 100;
     }
-  },
+  }
 
   _moveToClosestAvailableDate(baseDate = this.option('currentDate')) {
+    // @ts-expect-error ts-error
     let currentDate = new Date(baseDate);
     const zoomLevel = this.option('zoomLevel');
 
@@ -429,24 +472,24 @@ const Calendar = Editor.inherit({
     } while (isDateForwardInStartView || isDateBackwardInStartView);
 
     this.option('currentDate', currentDate);
-  },
+  }
 
   _isDateNotAvailable(date) {
     const maxDate = this._getMaxDate();
     const minDate = this._getMinDate();
 
     return !inRange(date, minDate, maxDate) || this._view.isDateDisabled(date);
-  },
+  }
 
-  _init() {
-    this.callBase();
+  _init(): void {
+    super._init();
 
     this._activeStateUnit = `.${CALENDAR_CELL_CLASS}`;
     this._initSelectionStrategy();
     this._correctZoomLevel();
     this._initCurrentDate();
     this._initActions();
-  },
+  }
 
   _initSelectionStrategy() {
     const strategyName = this._getSelectionStrategyName();
@@ -456,16 +499,16 @@ const Calendar = Editor.inherit({
       // eslint-disable-next-line new-cap
       this._selectionStrategy = new strategy(this);
     }
-  },
+  }
 
   _refreshSelectionStrategy() {
     this._initSelectionStrategy();
     this._selectionStrategy.restoreValue();
     this._refresh();
-  },
+  }
 
   _getSelectionStrategyName() {
-    const selectionMode = this.option('selectionMode');
+    const { selectionMode } = this.option();
 
     switch (selectionMode) {
       case 'multiple':
@@ -475,60 +518,61 @@ const Calendar = Editor.inherit({
       default:
         return 'SingleSelection';
     }
-  },
+  }
 
-  _correctZoomLevel() {
-    const minZoomLevel = this.option('minZoomLevel');
-    const maxZoomLevel = this.option('maxZoomLevel');
-    const zoomLevel = this.option('zoomLevel');
-
+  _correctZoomLevel(): void {
+    const { minZoomLevel, maxZoomLevel, zoomLevel } = this.option();
+    // @ts-expect-error ts-error
     if (LEVEL_COMPARE_MAP[maxZoomLevel] < LEVEL_COMPARE_MAP[minZoomLevel]) {
       return;
     }
-
+    // @ts-expect-error ts-error
     if (LEVEL_COMPARE_MAP[zoomLevel] > LEVEL_COMPARE_MAP[maxZoomLevel]) {
       this.option('zoomLevel', maxZoomLevel);
+      // @ts-expect-error ts-error
     } else if (LEVEL_COMPARE_MAP[zoomLevel] < LEVEL_COMPARE_MAP[minZoomLevel]) {
       this.option('zoomLevel', minZoomLevel);
     }
-  },
+  }
 
   _initCurrentDate() {
     const currentDate = this._getNormalizedDate(this._selectionStrategy.getDefaultCurrentDate())
     ?? this._getNormalizedDate(this.option('currentDate'));
 
     this.option('currentDate', currentDate);
-  },
+  }
 
   _getNormalizedDate(date) {
     date = dateUtils.normalizeDate(date, this._getMinDate(), this._getMaxDate());
     return isDefined(date) ? this._getDate(date) : date;
-  },
+  }
 
   _initActions() {
     this._cellClickAction = this._createActionByOption('onCellClick');
     this._onContouredChanged = this._createActionByOption('onContouredChanged');
-  },
+  }
 
   _initTemplates() {
     this._templateManager.addDefaultTemplates({
-      // @ts-expect-error
+      // @ts-expect-error ts-error
       cell: new FunctionTemplate((options) => {
         const data = options.model;
-        $(options.container).append($('<span>').text(data && data.text || String(data)));
+        $(options.container).append($('<span>').text(data?.text || String(data)));
       }),
     });
-    this.callBase();
-  },
+    super._initTemplates();
+  }
 
   _updateCurrentDate(date) {
+    // @ts-expect-error ts-error
     if (fx.isAnimating(this._$viewsWrapper)) {
+      // @ts-expect-error ts-error
       fx.stop(this._$viewsWrapper, true);
     }
 
     const min = this._getMinDate();
     const max = this._getMaxDate();
-
+    // @ts-expect-error ts-error
     if (min > max) {
       this.option('currentDate', new Date());
       return;
@@ -567,7 +611,7 @@ const Calendar = Editor.inherit({
       this._updateAriaId(normalizedDate);
     }
     this._skipNavigate = false;
-  },
+  }
 
   _isAdditionalViewDate(date) {
     if (!this._additionalView) {
@@ -575,11 +619,11 @@ const Calendar = Editor.inherit({
     }
 
     return date >= this._additionalView._getFirstAvailableDate();
-  },
+  }
 
   _getActiveView(date) {
     return this._isAdditionalViewDate(date) ? this._additionalView : this._view;
-  },
+  }
 
   _setViewContoured(date) {
     if (this.option('skipFocusCheck') || $(this._$viewsWrapper).is(':focus')) {
@@ -590,7 +634,7 @@ const Calendar = Editor.inherit({
 
       view.option('contouredDate', date);
     }
-  },
+  }
 
   _getMinDate() {
     // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -602,10 +646,10 @@ const Calendar = Editor.inherit({
     if (this.min) {
       return this.min;
     }
-
+    // @ts-expect-error ts-error
     this.min = this._dateOption('min') || new Date(1000, 0);
     return this.min;
-  },
+  }
 
   _getMaxDate() {
     // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -617,13 +661,13 @@ const Calendar = Editor.inherit({
     if (this.max) {
       return this.max;
     }
-
+    // @ts-expect-error ts-error
     this.max = this._dateOption('max') || new Date(3000, 0);
     return this.max;
-  },
+  }
 
   _getViewsOffset(startDate, endDate) {
-    const zoomLevel = this.option('zoomLevel');
+    const { zoomLevel } = this.option();
 
     if (zoomLevel === ZOOM_LEVEL.MONTH) {
       return this._getMonthsOffset(startDate, endDate);
@@ -644,16 +688,16 @@ const Calendar = Editor.inherit({
     }
 
     // @ts-expect-error
-    // eslint-disable-next-line @typescript-eslint/space-infix-ops, radix
+    // eslint-disable-next-line @stylistic/space-infix-ops, radix
     return parseInt(endDate.getFullYear() / zoomCorrection)- parseInt(startDate.getFullYear() / zoomCorrection);
-  },
+  }
 
   _getMonthsOffset(startDate, endDate) {
     const yearOffset = endDate.getFullYear() - startDate.getFullYear();
     const monthOffset = endDate.getMonth() - startDate.getMonth();
 
     return yearOffset * 12 + monthOffset;
-  },
+  }
 
   _waitRenderView(offset) {
     if (this._alreadyViewRender) {
@@ -669,13 +713,13 @@ const Calendar = Editor.inherit({
     this._waitRenderViewTimeout = setTimeout(() => {
       this._alreadyViewRender = false;
     });
-  },
+  }
 
   _getRtlCorrection() {
     return this.option('rtlEnabled') ? -1 : 1;
-  },
+  }
 
-  _getDateByOffset(offset, date) {
+  _getDateByOffset(offset, date?) {
     date = this._getDate(date ?? this.option('currentDate'));
 
     const currentDay = date.getDate();
@@ -689,30 +733,32 @@ const Calendar = Editor.inherit({
     date.setDate(currentDay > lastDay ? lastDay : currentDay);
 
     return date;
-  },
+  }
 
   _focusTarget() {
     return this._$viewsWrapper;
-  },
+  }
 
   _focusEventTarget() {
     return this.$element();
-  },
+  }
 
-  _initMarkup() {
+  _initMarkup(): void {
     this._renderSubmitElement();
 
     const $element = this.$element();
     $element.addClass(CALENDAR_CLASS);
-    $element.toggleClass(CALENDAR_RANGE_CLASS, this.option('selectionMode') === 'range');
+    const { selectionMode } = this.option();
+    $element.toggleClass(CALENDAR_RANGE_CLASS, selectionMode === 'range');
 
     this._renderBody();
+    // @ts-expect-error ts-error
     $element.append(this.$body);
 
     this._renderViews();
     this._renderNavigator();
 
-    this.callBase();
+    super._initMarkup();
 
     this._renderEvents();
 
@@ -729,21 +775,21 @@ const Calendar = Editor.inherit({
     this._updateAriaLabelAndRole();
 
     this._moveToClosestAvailableDate();
-  },
+  }
 
-  _render() {
-    this.callBase();
+  _render(): void {
+    super._render();
 
     this._setViewContoured(this.option('currentDate'));
-  },
+  }
 
-  _renderBody() {
+  _renderBody(): void {
     if (!this._$viewsWrapper) {
       this.$body = $('<div>').addClass(CALENDAR_BODY_CLASS);
       this._$viewsWrapper = $('<div>').addClass(CALENDAR_VIEWS_WRAPPER_CLASS);
       this.$body.append(this._$viewsWrapper);
     }
-  },
+  }
 
   _updateAriaLabelAndRole() {
     const readOnly = this.option('readOnly');
@@ -755,16 +801,18 @@ const Calendar = Editor.inherit({
     };
 
     this.setAria(aria, $element);
-  },
+  }
 
-  _setAriaReadonly: noop,
+  _setAriaReadonly() {}
 
   _getKeyboardListeners() {
-    return this.callBase().concat([this._view]);
-  },
+    return super._getKeyboardListeners().concat([this._view]);
+  }
 
-  _renderViews() {
-    this.$element().addClass(`${CALENDAR_VIEW_CLASS}-${this.option('zoomLevel')}`);
+  _renderViews(): void {
+    const { zoomLevel } = this.option();
+
+    this.$element().addClass(`${CALENDAR_VIEW_CLASS}-${zoomLevel}`);
 
     const { currentDate, viewsCount } = this.option();
 
@@ -774,11 +822,12 @@ const Calendar = Editor.inherit({
 
     if (hasWindow()) {
       const beforeDate = this._getDateByOffset(-1, currentDate);
+      // @ts-expect-error ts-error
       this._beforeView = this._isViewAvailable(beforeDate) ? this._renderSpecificView(beforeDate) : null;
 
       const afterDate = this._getDateByOffset(viewsCount, currentDate);
       afterDate.setDate(1);
-
+      // @ts-expect-error ts-error
       this._afterView = this._isViewAvailable(afterDate) ? this._renderSpecificView(afterDate) : null;
     }
 
@@ -787,22 +836,23 @@ const Calendar = Editor.inherit({
     }
 
     this._translateViews();
-  },
+  }
 
-  _renderSpecificView(date) {
+  _renderSpecificView(date): MonthView | YearView | DecadeView | CenturyView {
     const { zoomLevel } = this.option();
+    // @ts-expect-error ts-error
     const specificView = Views[zoomLevel];
     const $view = $('<div>').appendTo(this._$viewsWrapper);
     const config = this._viewConfig(date);
 
     const view = this._createComponent($view, specificView, config);
-
+    // @ts-expect-error ts-error
     return view;
-  },
+  }
 
   _viewConfig(date) {
     let disabledDates = this.option('disabledDates');
-
+    // @ts-expect-error ts-error
     disabledDates = isFunction(disabledDates) ? this._injectComponent(disabledDates.bind(this)) : disabledDates;
 
     return {
@@ -824,17 +874,19 @@ const Calendar = Editor.inherit({
       allowValueSelection: this._isMaxZoomLevel(),
       _todayDate: this.option('_todayDate'),
     };
-  },
+  }
 
-  _renderEvents() {
+  _renderEvents(): void {
     eventsEngine.off(this._$viewsWrapper, CALENDAR_DXHOVEREND_EVENT_NAME);
 
-    if (this.option('selectionMode') === 'range') {
+    const { selectionMode } = this.option();
+
+    if (selectionMode === 'range') {
       eventsEngine.on(this._$viewsWrapper, CALENDAR_DXHOVEREND_EVENT_NAME, null, () => {
         this._updateViewsOption('hoveredRange', []);
       });
     }
-  },
+  }
 
   _injectComponent(func) {
     const that = this;
@@ -842,7 +894,7 @@ const Calendar = Editor.inherit({
       extend(params, { component: that });
       return func(params);
     };
-  },
+  }
 
   _isViewAvailable(date) {
     const zoomLevel = this.option('zoomLevel');
@@ -850,7 +902,7 @@ const Calendar = Editor.inherit({
     const max = dateUtils.getViewMaxBoundaryDate(zoomLevel, this._getMaxDate());
 
     return dateUtils.dateInRange(date, min, max);
-  },
+  }
 
   _translateViews() {
     const { viewsCount } = this.option();
@@ -859,19 +911,19 @@ const Calendar = Editor.inherit({
     this._moveViewElement(this._beforeView, -1);
     this._moveViewElement(this._afterView, viewsCount);
     this._moveViewElement(this._additionalView, 1);
-  },
+  }
 
   _moveViewElement(view, coefficient) {
     view && move(view.$element(), {
       left: this._getViewPosition(coefficient),
       top: 0,
     });
-  },
+  }
 
   _getViewPosition(coefficient) {
     const rtlCorrection = this.option('rtlEnabled') ? -1 : 1;
     return `${coefficient * 100 * rtlCorrection}%`;
-  },
+  }
 
   _cellClickHandler(e) {
     const zoomLevel = this.option('zoomLevel');
@@ -884,12 +936,13 @@ const Calendar = Editor.inherit({
     } else {
       const newValue = this._updateTimeComponent(e.value);
       this._selectionStrategy.selectValue(newValue, e.event);
-      this._cellClickAction(e);
+      this._cellClickAction?.(e);
     }
-  },
+  }
 
   _updateTimeComponent(date) {
     const result = new Date(date);
+    // @ts-expect-error ts-error
     const currentValue = this._dateOption('value');
 
     if (currentValue && this._isSingleMode()) {
@@ -900,13 +953,13 @@ const Calendar = Editor.inherit({
     }
 
     return result;
-  },
+  }
 
   _isMaxZoomLevel() {
     return this.option('zoomLevel') === this.option('maxZoomLevel');
-  },
+  }
 
-  _navigateDown(cell) {
+  _navigateDown(cell?) {
     const zoomLevel = this.option('zoomLevel');
 
     if (this._isMaxZoomLevel()) {
@@ -922,6 +975,7 @@ const Calendar = Editor.inherit({
     let newCurrentDate = this._view.option('contouredDate') || this._view.option('date');
 
     if (cell) {
+      // @ts-expect-error ts-error
       newCurrentDate = $(cell).data(CALENDAR_DATE_VALUE_KEY);
     }
 
@@ -937,7 +991,7 @@ const Calendar = Editor.inherit({
 
     this._moveToClosestAvailableDate();
     this._setViewContoured(this._getNormalizedDate(this.option('currentDate')));
-  },
+  }
 
   _renderNavigator() {
     if (!this._navigator) {
@@ -947,7 +1001,7 @@ const Calendar = Editor.inherit({
 
     this._navigator.option('text', this._getViewsCaption(this._view, this._additionalView));
     this._updateButtonsVisibility();
-  },
+  }
 
   _navigatorConfig() {
     const { focusStateEnabled, rtlEnabled } = this.option();
@@ -960,7 +1014,7 @@ const Calendar = Editor.inherit({
       rtlEnabled,
       tabIndex: undefined,
     };
-  },
+  }
 
   _navigatorClickHandler(e) {
     const { currentDate, viewsCount } = this.option();
@@ -977,7 +1031,7 @@ const Calendar = Editor.inherit({
 
     const newCurrentDate = this._getDateByOffset(offset, currentDate);
     this._moveToClosestAvailableDate(newCurrentDate);
-  },
+  }
 
   _navigateUp() {
     const zoomLevel = this.option('zoomLevel');
@@ -995,19 +1049,19 @@ const Calendar = Editor.inherit({
 
     this._moveToClosestAvailableDate();
     this._setViewContoured(this._getNormalizedDate(this.option('currentDate')));
-  },
+  }
 
   _isMinZoomLevel(zoomLevel) {
     const min = this._getMinDate();
     const max = this._getMaxDate();
 
     return dateUtils.sameView(zoomLevel, min, max) || this.option('minZoomLevel') === zoomLevel;
-  },
+  }
 
   _updateButtonsVisibility() {
     this._navigator.toggleButton('next', !isDefined(this._afterView));
     this._navigator.toggleButton('prev', !isDefined(this._beforeView));
-  },
+  }
 
   _renderSwipeable() {
     if (!this._swipeable) {
@@ -1018,9 +1072,10 @@ const Calendar = Editor.inherit({
         itemSizeFunc: this._viewWidth.bind(this),
       });
     }
-  },
+  }
 
-  _swipeStartHandler(e) {
+  _swipeStartHandler(e): void {
+    // @ts-expect-error ts-error
     fx.stop(this._$viewsWrapper, true);
     const { viewsCount } = this.option();
 
@@ -1028,11 +1083,11 @@ const Calendar = Editor.inherit({
 
     e.event.maxLeftOffset = this._getRequiredView('next') ? 1 / viewsCount : 0;
     e.event.maxRightOffset = this._getRequiredView('prev') ? 1 / viewsCount : 0;
-  },
+  }
 
-  _toggleGestureCoverCursor(cursor) {
+  _toggleGestureCoverCursor(cursor): void {
     $(`.${GESTURE_COVER_CLASS}`).css('cursor', cursor);
-  },
+  }
 
   _getRequiredView(name) {
     let view;
@@ -1045,14 +1100,14 @@ const Calendar = Editor.inherit({
     }
 
     return view;
-  },
+  }
 
   _swipeUpdateHandler(e) {
     const { offset } = e.event;
 
     move(this._$viewsWrapper, { left: offset * this._viewWidth(), top: 0 });
     this._updateNavigatorCaption(offset);
-  },
+  }
 
   _swipeEndHandler(e) {
     this._toggleGestureCoverCursor('auto');
@@ -1074,25 +1129,31 @@ const Calendar = Editor.inherit({
 
     if (this._isDateInInvalidRange(date)) {
       if (moveOffset >= 0) {
+        // @ts-expect-error ts-error
         date = new Date(this._getMinDate());
       } else {
+        // @ts-expect-error ts-error
         date = new Date(this._getMaxDate());
       }
     }
     this.option('currentDate', date);
-  },
+  }
 
   _viewWidth() {
     if (!this._viewWidthValue) {
-      this._viewWidthValue = getWidth(this.$element()) / this.option('viewsCount');
+      const { viewsCount } = this.option();
+
+      this._viewWidthValue = getWidth(this.$element()) / viewsCount;
     }
 
     return this._viewWidthValue;
-  },
+  }
 
   _updateNavigatorCaption(offset) {
     offset *= this._getRtlCorrection();
-    const isMultiView = this.option('viewsCount') > 1;
+    const { viewsCount } = this.option();
+
+    const isMultiView = viewsCount > 1;
 
     let view;
     let additionalView;
@@ -1109,7 +1170,7 @@ const Calendar = Editor.inherit({
     }
 
     this._navigator.option('text', this._getViewsCaption(view, additionalView));
-  },
+  }
 
   _getViewsCaption(view, additionalView) {
     let caption = view.getNavigatorCaption();
@@ -1121,7 +1182,7 @@ const Calendar = Editor.inherit({
     }
 
     return caption;
-  },
+  }
 
   _isDateInInvalidRange(date) {
     if (this._view.isBoundary(date)) {
@@ -1133,7 +1194,7 @@ const Calendar = Editor.inherit({
     const normalizedDate = dateUtils.normalizeDate(date, min, max);
 
     return normalizedDate === min || normalizedDate === max;
-  },
+  }
 
   _renderFooter() {
     const showTodayButton = this.option('showTodayButton');
@@ -1163,35 +1224,39 @@ const Calendar = Editor.inherit({
 
       this.$element().append(this._$footer);
     }
-
+    // @ts-expect-error ts-error
     this.$element().toggleClass(CALENDAR_HAS_FOOTER_CLASS, showTodayButton);
-  },
+  }
 
-  _renderSubmitElement() {
+  _renderSubmitElement(): void {
     this._$submitElement = $('<input>')
       .attr('type', 'hidden')
       .appendTo(this.$element());
     this._setSubmitValue(this.option('value'));
-  },
+  }
 
-  _setSubmitValue(value) {
+  _setSubmitValue(value): void {
     const dateValue = this._convertToDate(value);
     this._getSubmitElement().val(dateSerialization.serializeDate(dateValue, CALENDAR_INPUT_STANDARD_PATTERN));
-  },
+  }
 
-  _getSubmitElement() {
+  _getSubmitElement(): dxElementWrapper {
     return this._$submitElement;
-  },
+  }
 
-  _animateShowView() {
+  _animateShowView(): void {
+    // @ts-expect-error ts-error
     fx.stop(this._view.$element(), true);
     this._popAnimationView(this._view, POP_ANIMATION_FROM, POP_ANIMATION_TO, ANIMATION_DURATION_SHOW_VIEW);
 
-    if (this.option('viewsCount') > 1) {
+    const { viewsCount } = this.option();
+
+    if (viewsCount > 1) {
+      // @ts-expect-error ts-error
       fx.stop(this._additionalView.$element(), true);
       this._popAnimationView(this._additionalView, POP_ANIMATION_FROM, POP_ANIMATION_TO, ANIMATION_DURATION_SHOW_VIEW);
     }
-  },
+  }
 
   _popAnimationView(view, from, to, duration) {
     return fx.animate(view.$element(), {
@@ -1206,17 +1271,17 @@ const Calendar = Editor.inherit({
       },
       duration,
     });
-  },
+  }
 
   _navigate(offset, value) {
     if (offset !== 0 && Math.abs(offset) !== 1 && this._isViewAvailable(value)) {
       const newView = this._renderSpecificView(value);
 
       if (offset > 0) {
-        this._afterView && this._afterView.$element().remove();
+        this._afterView?.$element().remove();
         this._afterView = newView;
       } else {
-        this._beforeView && this._beforeView.$element().remove();
+        this._beforeView?.$element().remove();
         this._beforeView = newView;
       }
 
@@ -1226,7 +1291,7 @@ const Calendar = Editor.inherit({
     const rtlCorrection = this._getRtlCorrection();
     const offsetSign = offset > 0 ? 1 : offset < 0 ? -1 : 0;
     const endPosition = -rtlCorrection * offsetSign * this._viewWidth();
-
+    // @ts-expect-error ts-error
     const viewsWrapperPosition = this._$viewsWrapper.position().left;
 
     if (viewsWrapperPosition !== endPosition) {
@@ -1234,23 +1299,26 @@ const Calendar = Editor.inherit({
         this._wrapperAnimationEndHandler(offset, value);
       } else {
         this._animateWrapper(endPosition, ANIMATION_DURATION_SHOW_VIEW)
+          // @ts-expect-error ts-error
           .done(this._wrapperAnimationEndHandler.bind(this, offset, value));
       }
     }
-  },
+  }
 
   _animateWrapper(to, duration) {
+    // @ts-expect-error ts-error
     return fx.animate(this._$viewsWrapper, {
       type: 'slide',
+      // @ts-expect-error ts-error
       from: { left: this._$viewsWrapper.position().left },
       to: { left: to },
       duration,
     });
-  },
+  }
 
   _getDate(value) {
     return new Date(value);
-  },
+  }
 
   _toTodayView(args) {
     const today = new Date();
@@ -1268,7 +1336,7 @@ const Calendar = Editor.inherit({
     this._animateShowView();
 
     this._preventViewChangeAnimation = false;
-  },
+  }
 
   _wrapperAnimationEndHandler(offset, newDate) {
     this._rearrangeViews(offset);
@@ -1278,7 +1346,7 @@ const Calendar = Editor.inherit({
     this._setViewContoured(newDate);
     this._updateAriaId(newDate);
     this._selectionStrategy.updateAriaSelected();
-  },
+  }
 
   _rearrangeViews(offset) {
     if (offset === 0) {
@@ -1325,59 +1393,62 @@ const Calendar = Editor.inherit({
 
     const dateByOffset = this._getDateByOffset(-viewOffset, destinationDate);
     this[viewToCreateKey] = this._isViewAvailable(dateByOffset) ? this._renderSpecificView(dateByOffset) : null;
-  },
+  }
 
   _resetLocation() {
     move(this._$viewsWrapper, { left: 0, top: 0 });
-  },
+  }
 
-  _clean() {
-    this.callBase();
+  _clean(): void {
+    super._clean();
     this._clearViewWidthCache();
-
+    // @ts-expect-error ts-error
     delete this._$viewsWrapper;
+    // @ts-expect-error ts-error
     delete this._navigator;
     delete this._$footer;
-  },
+  }
 
-  _clearViewWidthCache() {
+  _clearViewWidthCache(): void {
     delete this._viewWidthValue;
-  },
+  }
 
-  _disposeViews() {
+  _disposeViews(): void {
     this._view.$element().remove();
-    this._beforeView && this._beforeView.$element().remove();
-    this._additionalView && this._additionalView.$element().remove();
-    this._afterView && this._afterView.$element().remove();
+    this._beforeView?.$element().remove();
+    this._additionalView?.$element().remove();
+    this._afterView?.$element().remove();
+    // @ts-expect-error ts-error
     delete this._view;
+    // @ts-expect-error ts-error
     delete this._additionalView;
     delete this._beforeView;
     delete this._afterView;
     delete this._skipNavigate;
-  },
+  }
 
-  _dispose() {
+  _dispose(): void {
     clearTimeout(this._waitRenderViewTimeout);
-    this.callBase();
-  },
+    super._dispose();
+  }
 
-  _refreshViews() {
+  _refreshViews(): void {
     this._resetActiveState();
     this._disposeViews();
     this._renderViews();
-  },
+  }
 
-  _visibilityChanged() {
+  _visibilityChanged(): void {
     this._translateViews();
-  },
+  }
 
   _shouldSkipFocusEvent(event) {
     const { target, relatedTarget } = event;
 
     return $(target).parents(`.${CALENDAR_CLASS}`).length && $(relatedTarget).parents(`.${CALENDAR_CLASS}`).length;
-  },
+  }
 
-  _focusInHandler(event) {
+  _focusInHandler(event): void {
     if ($(event.target).is(this._$viewsWrapper)) {
       this._setViewContoured(this.option('currentDate'));
     }
@@ -1385,12 +1456,12 @@ const Calendar = Editor.inherit({
     if (this._shouldSkipFocusEvent(event)) {
       return;
     }
-
-    this.callBase.apply(this, arguments);
+    // @ts-expect-error ts-error
+    super._focusInHandler.apply(this, arguments);
     this._toggleFocusClass(true, this.$element());
-  },
+  }
 
-  _focusOutHandler(event) {
+  _focusOutHandler(event): void {
     if ($(event.target).is(this._$viewsWrapper)) {
       this._view.option('contouredDate', null);
       this._additionalView?.option('contouredDate', null);
@@ -1399,31 +1470,31 @@ const Calendar = Editor.inherit({
     if (this._shouldSkipFocusEvent(event)) {
       return;
     }
-
-    this.callBase.apply(this, arguments);
+    // @ts-expect-error ts-error
+    super._focusOutHandler.apply(this, arguments);
     this._toggleFocusClass(false, this.$element());
-  },
+  }
 
-  _updateViewsOption(optionName, newValue) {
+  _updateViewsOption(optionName, newValue): void {
     this._view.option(optionName, newValue);
     this._additionalView?.option(optionName, newValue);
     this._beforeView?.option(optionName, newValue);
     this._afterView?.option(optionName, newValue);
-  },
+  }
 
-  _setViewsMinOption(min) {
+  _setViewsMinOption(min): void {
     this._restoreViewsMinMaxOptions();
     this.option('_rangeMin', this._convertToDate(min));
     this._updateViewsOption('min', this._getMinDate());
-  },
+  }
 
-  _setViewsMaxOption(max) {
+  _setViewsMaxOption(max): void {
     this._restoreViewsMinMaxOptions();
     this.option('_rangeMax', this._convertToDate(max));
     this._updateViewsOption('max', this._getMaxDate());
-  },
+  }
 
-  _restoreViewsMinMaxOptions() {
+  _restoreViewsMinMaxOptions(): void {
     this._resetActiveState();
     this.option({
       _rangeMin: null,
@@ -1432,10 +1503,11 @@ const Calendar = Editor.inherit({
 
     this._updateViewsOption('min', this._getMinDate());
     this._updateViewsOption('max', this._getMaxDate());
-  },
+  }
 
   _updateNavigatorLabels() {
-    let zoomLevel = this.option('zoomLevel');
+    let { zoomLevel } = this.option();
+    // @ts-expect-error ts-error
     zoomLevel = zoomLevel.charAt(0).toUpperCase() + zoomLevel.slice(1);
 
     const captionButtonText = this._navigator._caption.option('text');
@@ -1446,7 +1518,7 @@ const Calendar = Editor.inherit({
     this.setAria('label', localizedPrevButtonLabel, this._navigator._prevButton.$element());
     this.setAria('label', `${captionButtonText}. ${localizedCaptionLabel}`, this._navigator._caption.$element());
     this.setAria('label', localizedNextButtonLabel, this._navigator._nextButton.$element());
-  },
+  }
 
   _updateAriaSelected(value, previousValue) {
     previousValue.forEach((item) => {
@@ -1457,7 +1529,9 @@ const Calendar = Editor.inherit({
       this.setAria('selected', true, this._view._getCellByDate(item));
     });
 
-    if (this.option('viewsCount') > 1) {
+    const { viewsCount } = this.option();
+
+    if (viewsCount > 1) {
       previousValue.forEach((item) => {
         this.setAria('selected', false, this._additionalView._getCellByDate(item));
       });
@@ -1466,9 +1540,9 @@ const Calendar = Editor.inherit({
         this.setAria('selected', true, this._additionalView._getCellByDate(item));
       });
     }
-  },
+  }
 
-  _updateAriaId(value) {
+  _updateAriaId(value?) {
     value = value ?? this.option('currentDate');
 
     const ariaId = `dx-${new Guid()}`;
@@ -1478,21 +1552,21 @@ const Calendar = Editor.inherit({
     this.setAria('id', ariaId, $newCell);
     this.setAria('activedescendant', ariaId);
 
-    this._onContouredChanged(ariaId);
-  },
+    this._onContouredChanged?.(ariaId);
+  }
 
   _suppressingNavigation(callback, args) {
     this._suppressNavigation = true;
     callback.apply(this, args);
     delete this._suppressNavigation;
-  },
+  }
 
   _optionChanged(args) {
     const { value, previousValue } = args;
 
     switch (args.name) {
       case 'width':
-        this.callBase(args);
+        super._optionChanged(args);
         this._clearViewWidthCache();
         break;
       case 'min':
@@ -1537,7 +1611,7 @@ const Calendar = Editor.inherit({
       case 'value':
         this._selectionStrategy.processValueChanged(value, previousValue);
         this._setSubmitValue(value);
-        this.callBase(args);
+        super._optionChanged(args);
         break;
       case 'viewsCount':
         this._refreshViews();
@@ -1556,7 +1630,7 @@ const Calendar = Editor.inherit({
         this._invalidate();
         break;
       case 'readOnly':
-        this.callBase(args);
+        super._optionChanged(args);
         this._updateAriaLabelAndRole();
         break;
       case 'skipFocusCheck':
@@ -1567,14 +1641,16 @@ const Calendar = Editor.inherit({
         this._refreshViews();
         break;
       default:
-        this.callBase(args);
+        super._optionChanged(args);
     }
-  },
+  }
 
   getContouredDate() {
-    return this._view.option('contouredDate');
-  },
-});
+    const { contouredDate } = this._view.option();
+
+    return contouredDate;
+  }
+}
 
 registerComponent('dxCalendar', Calendar);
 

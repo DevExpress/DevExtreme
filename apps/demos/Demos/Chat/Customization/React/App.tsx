@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react';
-import Chat, { ChatTypes } from 'devextreme-react/chat';
+import Chat, { type ChatTypes } from 'devextreme-react/chat';
 import { MessageEnteredEvent } from 'devextreme/ui/chat';
 import SelectBox from 'devextreme-react/select-box';
 import CheckBox from 'devextreme-react/check-box';

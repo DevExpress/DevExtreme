@@ -2,7 +2,9 @@ import type { Format, SortOrder } from '@js/common';
 import type { ColumnBase } from '@js/common/grids';
 import type { ComponentType } from 'inferno';
 
-import type { DataObject, Key } from '../data_controller/types';
+import type { DataObject } from '../data_controller/types';
+
+export type { DataRow } from '@js/ui/card_view';
 
 type InheritedColumnProps =
   | 'alignment'
@@ -38,32 +40,9 @@ export type Column = Pick<Required<ColumnBase>, InheritedColumnProps> & {
     valueText: string;
   }) => string;
 
-  editorTemplate?: unknown;
-
   fieldTemplate?: unknown;
 
-  // TODO: move to cardview/headerpanel
   headerItemTemplate?: ComponentType<{ column: Column }>;
 
   headerItemCssClass?: string;
 };
-
-export type VisibleColumn = Column & { visible: true };
-
-export interface Cell {
-  value: unknown;
-
-  displayValue: unknown;
-
-  text: string;
-
-  column: Column;
-}
-
-export interface DataRow {
-  cells: Cell[];
-
-  key: Key;
-
-  data: DataObject;
-}

@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import type { RefObject } from '@devextreme/runtime/inferno';
-import { InfernoComponent, InfernoEffect } from '@devextreme/runtime/inferno';
+import type { RefObject } from '@ts/core/r1/runtime/inferno/index';
+import { InfernoComponent, InfernoEffect } from '@ts/core/r1/runtime/inferno/index';
 
 import { PaginationDefaultProps, type PaginationProps } from '../common/pagination_props';
 import type { FullPageSize } from '../common/types';
@@ -67,8 +67,9 @@ export class PageSizeSmall extends InfernoComponent<PageSizeSmallPropsType> {
   }
 
   updateWidth(): void {
+    const minWidth = getElementMinWidth(this.props.parentRef?.current);
     this.setState((state) => ({
-      minWidth: getElementMinWidth(this.props.parentRef?.current) || state.minWidth,
+      minWidth: minWidth > 0 ? minWidth : state.minWidth,
     }));
   }
 

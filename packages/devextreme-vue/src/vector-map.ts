@@ -447,6 +447,13 @@ prepareConfigurationComponentConfig(DxCommonAnnotationSettingsConfig);
 const DxCommonAnnotationSettings = defineComponent(DxCommonAnnotationSettingsConfig);
 
 (DxCommonAnnotationSettings as any).$_optionName = "commonAnnotationSettings";
+(DxCommonAnnotationSettings as any).$_expectedChildren = {
+  annotationBorder: { isCollectionItem: false, optionName: "border" },
+  border: { isCollectionItem: false, optionName: "border" },
+  font: { isCollectionItem: false, optionName: "font" },
+  image: { isCollectionItem: false, optionName: "image" },
+  shadow: { isCollectionItem: false, optionName: "shadow" }
+};
 
 const DxControlBarConfig = {
   emits: {

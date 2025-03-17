@@ -10,11 +10,11 @@ if (!/localhost/.test(document.location.host)) {
   enableProdMode();
 }
 
-const URL = 'https://js.devexpress.com/Demos/Mvc/api/DataGridBatchUpdateWebApi';
+const URL = 'https://js.devexpress.com/Demos/NetCore/api/DataGridBatchUpdateWebApi';
 
 let modulePrefix = '';
 // @ts-ignore
-if (window && window.config.packageConfigPaths) {
+if (window && window.config?.packageConfigPaths) {
   modulePrefix = '/app';
 }
 
@@ -40,13 +40,14 @@ export class AppComponent {
     e.cancel = true;
 
     if (e.changes.length) {
-      e.promise = this.processBatchRequest(`${URL}/Batch`, e.changes, e.component);
+      const changes = this.normalizeChanges(e.changes);
+      e.promise = this.processBatchRequest(`${URL}/Batch`, changes, e.component);
     }
   }
 
   async processBatchRequest(
     url: string,
-    changes: Array<DxDataGridTypes.DataChange>,
+    changes: DxDataGridTypes.DataChange[],
     component: DxDataGridComponent['instance'],
   ): Promise<void> {
     await lastValueFrom(
@@ -59,6 +60,29 @@ export class AppComponent {
     );
     await component.refresh(true);
     component.cancelEditData();
+  }
+
+  normalizeChanges(changes: DxDataGridTypes.DataChange[]): DxDataGridTypes.DataChange[] {
+    return changes.map(c => {
+      switch (c.type) {
+        case 'insert':
+          return {
+            type: c.type,
+            data: c.data,
+          };
+        case 'update':
+          return {
+            type: c.type,
+            key: c.key,
+            data: c.data,
+          };
+        case 'remove':
+          return {
+            type: c.type,
+            key: c.key,
+          };
+      }
+    }) as DxDataGridTypes.DataChange[];
   }
 }
 

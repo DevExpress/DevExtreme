@@ -16,7 +16,7 @@ import DxSelectBox from 'devextreme-vue/select-box';
 
 import { createStore } from 'devextreme-aspnet-data-nojquery';
 
-import { Product } from './data.ts';
+import { type Product } from './data.ts';
 
 defineEmits(['product-changed']);
 
@@ -24,7 +24,7 @@ const props = defineProps<{
   supplierId: number
 }>();
 
-const url = 'https://js.devexpress.com/Demos/Mvc/api/DataGridAdvancedMasterDetailView';
+const url = 'https://js.devexpress.com/Demos/NetCore/api/DataGridAdvancedMasterDetailView';
 
 const dataSource = createStore({
   key: 'ProductID',

@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-import { createReRenderEffect, InfernoEffect, InfernoWrapperComponent } from '@devextreme/runtime/inferno';
 import { click } from '@js/common/core/events/short';
 import messageLocalization from '@js/common/core/localization/message';
 import devices from '@js/core/devices';
@@ -9,6 +8,7 @@ import { convertRulesToOptions, createDefaultOptionRules } from '@js/core/option
 import { getImageSourceType } from '@js/core/utils/icon';
 import { camelize } from '@js/core/utils/inflector';
 import { current, isMaterial } from '@js/ui/themes';
+import { createReRenderEffect, InfernoEffect, InfernoWrapperComponent } from '@ts/core/r1/runtime/inferno/index';
 import type { EffectReturn } from '@ts/core/r1/utils/effect_return';
 import { getTemplate } from '@ts/core/r1/utils/index';
 import { Widget } from '@ts/core/r1/widget';
@@ -107,7 +107,7 @@ export class Button extends InfernoWrapperComponent<ButtonProps> {
       }), {
         namespace,
       });
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+
       return () => click.off(this.submitInputRef.current, {
         namespace,
       });
@@ -152,7 +152,6 @@ export class Button extends InfernoWrapperComponent<ButtonProps> {
     }
   }
 
-  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   keyDown(e): unknown {
     const {
       onKeyDown,
@@ -361,6 +360,6 @@ const __defaultOptionRules: any = [];
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export function defaultOptions(rule) {
   __defaultOptionRules.push(rule);
-  // eslint-disable-next-line max-len
+  // eslint-disable-next-line @stylistic/max-len
   Button.defaultProps = Object.create(Object.prototype, Object.assign(Object.getOwnPropertyDescriptors(Button.defaultProps), Object.getOwnPropertyDescriptors(convertRulesToOptions(defaultOptionRules)), Object.getOwnPropertyDescriptors(convertRulesToOptions(__defaultOptionRules))));
 }

@@ -52,11 +52,12 @@ import {
   DxExport,
   DxLegend,
   DxMargin,
+  type DxChartTypes,
 } from 'devextreme-vue/chart';
 import DxSelectBox from 'devextreme-vue/select-box';
 import { dataSource } from './data.ts';
 
-const types = ['area', 'stackedarea', 'fullstackedarea'];
+const types: DxChartTypes.SeriesType[] = ['area', 'stackedarea', 'fullstackedarea'];
 const type = ref(types[0]);
 </script>
 <style>

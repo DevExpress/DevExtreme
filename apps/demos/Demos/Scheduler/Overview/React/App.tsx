@@ -1,6 +1,6 @@
 import React from 'react';
 
-import Scheduler, { Resource, SchedulerTypes } from 'devextreme-react/scheduler';
+import Scheduler, { Resource, type SchedulerTypes } from 'devextreme-react/scheduler';
 
 import { employees, data } from './data.ts';
 import DataCell from './DataCell.tsx';

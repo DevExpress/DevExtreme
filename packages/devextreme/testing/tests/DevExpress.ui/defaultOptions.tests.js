@@ -53,6 +53,7 @@ import ScrollView from 'ui/scroll_view';
 import SelectBox from 'ui/select_box';
 import SliderHandle from '__internal/ui/slider/m_slider_handle';
 import Splitter from 'ui/splitter';
+import Stepper from 'ui/stepper';
 import Tabs from 'ui/tabs';
 import TabPanel from 'ui/tab_panel';
 import TagBox from 'ui/tag_box';
@@ -1539,6 +1540,20 @@ testComponentDefaults(SliderHandle, {},
             position: 'top',
             showMode: 'onHover'
         }
+    }
+);
+
+testComponentDefaults(Stepper,
+    {},
+    {
+        orientation: 'horizontal',
+        linear: true,
+        selectionMode: 'single',
+        selectOnFocus: true,
+        activeStateEnabled: true,
+        hoverStateEnabled: true,
+        focusStateEnabled: true,
+        loopItemFocus: false,
     }
 );
 

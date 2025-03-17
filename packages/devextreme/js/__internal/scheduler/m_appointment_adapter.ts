@@ -145,7 +145,7 @@ class AppointmentAdapter {
     });
   }
 
-  clone(options: any = undefined) {
+  clone(options?: { pathTimeZone: string }) {
     const result = new AppointmentAdapter(
       deepExtendArraySafe({}, this.rawAppointment, false, false, false, true),
       this.dataAccessors,
@@ -154,16 +154,22 @@ class AppointmentAdapter {
     );
 
     if (options?.pathTimeZone) {
-      result.startDate = result.calculateStartDate(options.pathTimeZone);
-      result.endDate = result.calculateEndDate(options.pathTimeZone);
+      result.calculateDates(options.pathTimeZone);
     }
 
     return result;
   }
 
+  calculateDates(pathTimeZoneConversion) {
+    this.startDate = this.calculateStartDate(pathTimeZoneConversion);
+    this.endDate = this.calculateEndDate(pathTimeZoneConversion);
+
+    return this;
+  }
+
   source(serializeDate = false) {
     if (serializeDate) {
-      // TODO: hack for use dateSerializationFormat
+      // hack for use dateSerializationFormat
       const clonedAdapter = this.clone();
       clonedAdapter.startDate = this.startDate;
       clonedAdapter.endDate = this.endDate;

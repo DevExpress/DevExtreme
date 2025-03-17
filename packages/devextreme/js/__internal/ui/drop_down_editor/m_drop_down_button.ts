@@ -1,5 +1,6 @@
 import eventsEngine from '@js/common/core/events/core/events_engine';
 import messageLocalization from '@js/common/core/localization/message';
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { extend } from '@js/core/utils/extend';
 import Button from '@js/ui/button';
@@ -24,11 +25,13 @@ export default class DropDownButton extends TextEditorButton {
     const { editor } = this;
 
     instance.option('onClick', (e) => {
+      // @ts-expect-error
       if (editor._shouldCallOpenHandler?.()) {
+        // @ts-expect-error
         editor._openHandler(e);
         return;
       }
-
+      // @ts-expect-error
       !editor.option('openOnFieldClick') && editor._openHandler(e);
     });
 
@@ -39,7 +42,10 @@ export default class DropDownButton extends TextEditorButton {
     });
   }
 
-  _create() {
+  _create(): {
+    $element: dxElementWrapper;
+    instance: Button;
+  } {
     const { editor } = this;
     const $element = $('<div>');
     const options = this._getOptions();
@@ -75,7 +81,7 @@ export default class DropDownButton extends TextEditorButton {
 
   _isVisible(): boolean {
     const { editor } = this;
-
+    // @ts-expect-error
     return super._isVisible() && editor.option('showDropDownButton');
   }
 
@@ -110,7 +116,7 @@ export default class DropDownButton extends TextEditorButton {
       const { editor, instance } = this;
       const $editor = editor.$element();
       const options = this._getOptions();
-
+      // @ts-expect-error
       instance?.option(options);
       this._legacyRender($editor, instance?.$element(), options.visible);
     }

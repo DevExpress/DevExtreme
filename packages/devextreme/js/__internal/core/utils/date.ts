@@ -7,7 +7,10 @@ const addOffsets = (date: Date, offsets: number[]): Date => {
 
   return new Date(newDateMs);
 };
+// eslint-disable-next-line @stylistic/max-len
+const isValidDate = (date: unknown): date is Date | string | number => Boolean(date && !isNaN(new Date(date as Date).valueOf()));
 
 export const dateUtilsTs = {
   addOffsets,
+  isValidDate,
 };
