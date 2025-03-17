@@ -134,9 +134,9 @@ class Stepper extends CollectionWidgetAsync<StepperProperties> {
     super._postprocessRenderItem(args);
 
     const { selectedIndex = 0 } = this.option();
-    const itemIndex = this._editStrategy.getIndex($(args.itemElement));
+    const itemInstance = this._getItemInstance($(args.itemElement));
 
-    this._getItemInstance($(args.itemElement)).changeCompleted(itemIndex < selectedIndex);
+    itemInstance.changeCompleted(args.itemIndex < selectedIndex);
   }
 
   _itemClass(): string {
@@ -268,7 +268,9 @@ class Stepper extends CollectionWidgetAsync<StepperProperties> {
     const isCompleted = lastCompletedIndex < selectedIndex;
 
     for (let i = startIndex; i < endIndex; i += 1) {
-      this._getItemInstance($(itemElements[i])).changeCompleted(isCompleted);
+      const itemInstance = this._getItemInstance($(itemElements[i]));
+
+      itemInstance.changeCompleted(isCompleted);
     }
   }
 

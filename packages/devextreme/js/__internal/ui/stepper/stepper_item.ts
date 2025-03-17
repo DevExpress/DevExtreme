@@ -30,6 +30,7 @@ class StepperItem extends CollectionWidgetItem<StepperItemProperties> {
 
   changeCompleted(isCompleted: boolean): void {
     this._$element.toggleClass(STEP_COMPLETED_CLASS, isCompleted);
-  }}
+  }
+}
 
 export default StepperItem;
