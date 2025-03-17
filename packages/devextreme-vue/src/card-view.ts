@@ -112,7 +112,7 @@ const componentConfig = {
     onOptionChanged: Function as PropType<((e: { component: DOMComponent, element: any, fullName: string, model: any, name: string, previousValue: any, value: any }) => void)>,
     pager: Object as PropType<Pager | Record<string, any> | PagerBase>,
     paging: Object as PropType<Paging>,
-    remoteOperations: [Boolean, Object, String] as PropType<boolean | RemoteOperations | "auto">,
+    remoteOperations: [Boolean, String, Object] as PropType<boolean | Mode | RemoteOperations>,
     rtlEnabled: Boolean,
     tabIndex: Number,
     toolbar: Object as PropType<Record<string, any>>,
