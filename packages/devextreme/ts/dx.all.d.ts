@@ -31983,7 +31983,7 @@ declare module DevExpress.ui.dxCardView {
     /**
      * [descr:ContentViewOptions.cardsPerRow]
      */
-    cardsPerRow?: number | 'auto';
+    cardsPerRow?: number | DevExpress.common.Mode;
     /**
      * [descr:ContentViewOptions.cardMinWidth]
      */

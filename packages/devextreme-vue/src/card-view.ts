@@ -16,6 +16,12 @@ import {
  ToolbarItem,
 } from "devextreme/ui/card_view";
 import {
+ Mode,
+ ToolbarItemLocation,
+ ToolbarItemComponent,
+ DisplayMode,
+} from "devextreme/common";
+import {
  DataSourceOptions,
 } from "devextreme/common/data";
 import {
@@ -39,12 +45,6 @@ import {
  LocateInMenuMode,
  ShowTextMode,
 } from "devextreme/ui/toolbar";
-import {
- ToolbarItemLocation,
- ToolbarItemComponent,
- Mode,
- DisplayMode,
-} from "devextreme/common";
 import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
@@ -93,7 +93,7 @@ const componentConfig = {
     cardHeader: Object as PropType<CardHeader>,
     cardMaxWidth: Number,
     cardMinWidth: Number,
-    cardsPerRow: [Number, String] as PropType<number | "auto">,
+    cardsPerRow: [String, Number] as PropType<Mode | number>,
     cardTemplate: {},
     columns: Array as PropType<Array<ColumnProperties | string>>,
     dataSource: [Array, Object, String] as PropType<Array<any> | DataSource | DataSourceOptions | Store | string | Record<string, any>>,
