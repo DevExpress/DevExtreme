@@ -1,1 +1,9 @@
-export { dxCardViewOptions, Properties } from './card_view';
+export {
+  ToolbarItem,
+  Cell,
+  DataRow,
+  ColumnProperties,
+  Column,
+  dxCardViewOptions,
+  Properties,
+} from './card_view';

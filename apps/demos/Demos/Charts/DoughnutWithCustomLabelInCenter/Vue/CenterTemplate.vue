@@ -32,7 +32,7 @@
 const props = withDefaults(defineProps<{
   pieChart?: Record<string, any>
 }>(), {
-  pieChart: () => ({}),
+  pieChart: () => ({} as Record<string, any>),
 });
 
 const country = props.pieChart

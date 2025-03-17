@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import TagBox, { TagBoxTypes } from 'devextreme-react/tag-box';
+import TagBox, { type TagBoxTypes } from 'devextreme-react/tag-box';
 
 const nameLabel = { 'aria-label': 'Name' };
 

@@ -73,12 +73,12 @@
 </template>
 <script setup lang="ts">
 import { ref } from 'vue';
-import { DxTextBox, DxButton as DxTextBoxButton } from 'devextreme-vue/text-box';
+import { DxTextBox, DxButton as DxTextBoxButton, type DxTextBoxTypes } from 'devextreme-vue/text-box';
 import { DxNumberBox, DxButton as DxNumberBoxButton } from 'devextreme-vue/number-box';
 import { DxDateBox, DxButton as DxDateBoxButton } from 'devextreme-vue/date-box';
 
 const millisecondsInDay = 24 * 60 * 60 * 1000;
-const passwordMode = ref('password');
+const passwordMode = ref<DxTextBoxTypes.TextBoxType>('password');
 const passwordButton = {
   icon: 'eyeopen',
   stylingMode: 'text',

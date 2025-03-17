@@ -2,7 +2,7 @@ import React, { useCallback, useState } from 'react';
 import {
   LinearGauge, Title, Font, Geometry, Scale, RangeContainer, Range, ValueIndicator, Label,
 } from 'devextreme-react/linear-gauge';
-import { SelectBox, SelectBoxTypes } from 'devextreme-react/select-box';
+import { SelectBox, type SelectBoxTypes } from 'devextreme-react/select-box';
 import { cities, cityLabel } from './data.ts';
 
 const customTicks = [900, 1000, 1020, 1100];

@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import DataGrid, {
-  Column, Editing, ValidationRule, Button, IButtonProps, Toolbar, Item, Scrolling, DataGridTypes, Pager,
+  Column, Editing, ValidationRule, Button, IButtonProps, Toolbar, Item, Scrolling, type DataGridTypes, Pager,
 } from 'devextreme-react/data-grid';
 import SelectBox from 'devextreme-react/select-box';
 import Guid from 'devextreme/core/guid';

@@ -1,14 +1,31 @@
+/* eslint-disable @typescript-eslint/no-misused-promises */
+import Class from '@js/core/class';
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { extend } from '@js/core/utils/extend';
 import { each, map } from '@js/core/utils/iterator';
 
 import Provider from './m_provider';
 
-const { abstract } = Provider;
-
 const MAP_MARKER_CLASS = 'dx-map-marker';
 
-const DynamicProvider = Provider.inherit({
+class DynamicProvider extends Provider {
+  _bounds?: any;
+
+  _markers!: any[];
+
+  _routes!: any[];
+
+  _geocodedLocations?: any;
+
+  _mapsLoader?: any;
+
+  ctor(map, $container: dxElementWrapper): void {
+    this._geocodedLocations = {};
+
+    super.ctor(map, $container);
+  }
+
   _geocodeLocation(location) {
     return new Promise((resolve) => {
       const cache = this._geocodedLocations;
@@ -16,13 +33,14 @@ const DynamicProvider = Provider.inherit({
       if (cachedLocation) {
         resolve(cachedLocation);
       } else {
+        // @ts-expect-error ts-error
         this._geocodeLocationImpl(location).then((geocodedLocation) => {
           cache[location] = geocodedLocation;
           resolve(geocodedLocation);
         });
       }
     });
-  },
+  }
 
   _renderImpl() {
     return this._load().then(() => this._init()).then(() => Promise.all([
@@ -40,7 +58,7 @@ const DynamicProvider = Provider.inherit({
         });
       });
     });
-  },
+  }
 
   _load() {
     if (!this._mapsLoader) {
@@ -51,13 +69,19 @@ const DynamicProvider = Provider.inherit({
     this._routes = [];
 
     return this._mapsLoader;
-  },
+  }
 
-  _loadImpl: abstract,
+  _loadImpl() {
+    Class.abstract();
+  }
 
-  _init: abstract,
+  _init() {
+    Class.abstract();
+  }
 
-  _attachHandlers: abstract,
+  _attachHandlers() {
+    Class.abstract();
+  }
 
   addMarkers(options) {
     return Promise.all(map(options, (options) => this._addMarker(options))).then((markerObjects) => {
@@ -65,24 +89,29 @@ const DynamicProvider = Provider.inherit({
 
       return [false, map(markerObjects, (markerObject) => markerObject.marker)];
     });
-  },
+  }
 
   _addMarker(options) {
-    return this._renderMarker(options).then((markerObject) => {
-      this._markers.push(extend({
-        options,
-      }, markerObject));
+    return this._renderMarker(options)
+      // @ts-expect-error ts-error
+      .then((markerObject) => {
+        this._markers.push(extend({
+          options,
+        }, markerObject));
 
-      this._fireMarkerAddedAction({
-        options,
-        originalMarker: markerObject.marker,
+        this._fireMarkerAddedAction({
+          options,
+          originalMarker: markerObject.marker,
+        });
+
+        return markerObject;
       });
+  }
 
-      return markerObject;
-    });
-  },
-
-  _renderMarker: abstract,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _renderMarker(options) {
+    Class.abstract();
+  }
 
   _createIconTemplate(iconSrc: string) {
     const $img = $('<img>');
@@ -92,7 +121,7 @@ const DynamicProvider = Provider.inherit({
     $img.addClass(MAP_MARKER_CLASS);
 
     return $img[0];
-  },
+  }
 
   removeMarkers(markersOptionsToRemove) {
     const that = this;
@@ -102,7 +131,7 @@ const DynamicProvider = Provider.inherit({
     });
 
     return Promise.resolve();
-  },
+  }
 
   _removeMarker(markersOptionToRemove) {
     const that = this;
@@ -122,15 +151,18 @@ const DynamicProvider = Provider.inherit({
 
       return false;
     });
-  },
+  }
 
-  _destroyMarker: abstract,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _destroyMarker(marker) {
+    Class.abstract();
+  }
 
   _clearMarkers() {
     while (this._markers.length > 0) {
       this._removeMarker(this._markers[0].options);
     }
-  },
+  }
 
   addRoutes(options) {
     return Promise.all(map(options, (options) => this._addRoute(options))).then((routeObjects) => {
@@ -138,9 +170,10 @@ const DynamicProvider = Provider.inherit({
 
       return [false, map(routeObjects, (routeObject) => routeObject.instance)];
     });
-  },
+  }
 
   _addRoute(options) {
+    // @ts-expect-error ts-error
     return this._renderRoute(options).then((routeObject) => {
       this._routes.push(extend({
         options,
@@ -153,9 +186,12 @@ const DynamicProvider = Provider.inherit({
 
       return routeObject;
     });
-  },
+  }
 
-  _renderRoute: abstract,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _renderRoute(options) {
+    Class.abstract();
+  }
 
   removeRoutes(options) {
     const that = this;
@@ -165,7 +201,7 @@ const DynamicProvider = Provider.inherit({
     });
 
     return Promise.resolve();
-  },
+  }
 
   _removeRoute(options) {
     const that = this;
@@ -185,25 +221,36 @@ const DynamicProvider = Provider.inherit({
 
       return false;
     });
-  },
+  }
 
-  _destroyRoute: abstract,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _destroyRoute(routeObject) {
+    Class.abstract();
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _geocodeLocationImpl(location) {
+    Class.abstract();
+  }
 
   _clearRoutes() {
     while (this._routes.length > 0) {
       this._removeRoute(this._routes[0].options);
     }
-  },
+  }
 
   adjustViewport() {
     return this._fitBounds();
-  },
+  }
 
-  isEventsCanceled() {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  isEventsCanceled(e): boolean {
     return true;
-  },
+  }
 
-  _fitBounds: abstract,
+  _fitBounds() {
+    Class.abstract();
+  }
 
   _updateBounds() {
     const that = this;
@@ -222,14 +269,16 @@ const DynamicProvider = Provider.inherit({
       routeObject.northEast && that._extendBounds(routeObject.northEast);
       routeObject.southWest && that._extendBounds(routeObject.southWest);
     });
-  },
+  }
 
-  _clearBounds() {
+  _clearBounds(): void {
     this._bounds = null;
-  },
+  }
 
-  _extendBounds: abstract,
-
-});
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _extendBounds(location): void {
+    Class.abstract();
+  }
+}
 
 export default DynamicProvider;

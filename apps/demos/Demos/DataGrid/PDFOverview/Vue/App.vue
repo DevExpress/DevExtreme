@@ -36,7 +36,7 @@ import {
   DxExport,
   DxSelection,
   DxPaging,
-  DxDataGridTypes,
+  type DxDataGridTypes,
   DxPager,
 } from 'devextreme-vue/data-grid';
 import { jsPDF } from 'jspdf';

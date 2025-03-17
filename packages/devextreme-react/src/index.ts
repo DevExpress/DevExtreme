@@ -64,6 +64,7 @@ export { Sortable } from "./sortable";
 export { Sparkline } from "./sparkline";
 export { SpeedDialAction } from "./speed-dial-action";
 export { Splitter } from "./splitter";
+export { Stepper } from "./stepper";
 export { Switch } from "./switch";
 export { TabPanel } from "./tab-panel";
 export { Tabs } from "./tabs";

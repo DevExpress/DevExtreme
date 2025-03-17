@@ -1,5 +1,5 @@
 import React from 'react';
-import DataGrid, { Column, DataGridTypes, Export } from 'devextreme-react/data-grid';
+import DataGrid, { Column, type DataGridTypes, Export } from 'devextreme-react/data-grid';
 import { jsPDF } from 'jspdf';
 import { exportDataGrid } from 'devextreme/pdf_exporter';
 import { countries } from './data.ts';

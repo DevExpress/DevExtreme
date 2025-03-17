@@ -72,8 +72,8 @@ describe('template rendering', () => {
       props: {
         templateName: {
           type: String,
-          value: 'tpl1'
-        }
+          value: 'tpl1',
+        },
       },
       template:
           `<dx-button id="component" :template="templateName">
@@ -91,9 +91,8 @@ describe('template rendering', () => {
       },
     });
 
+    const wrapper = mount(appView, { props: { templateName: 'tpl1' } });
 
-    const wrapper = mount(appView, {props: {templateName: 'tpl1'}});
-
-    expect(() => wrapper.setProps({templateName: 'tpl2'})).not.toThrow();
-  })
+    expect(() => wrapper.setProps({ templateName: 'tpl2' })).not.toThrow();
+  });
 });

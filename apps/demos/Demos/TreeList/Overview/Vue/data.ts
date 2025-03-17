@@ -1,4 +1,24 @@
-export const tasks = [{
+export type Employee = {
+  ID: number,
+  Name: string,
+  Picture: string,
+};
+
+export type Task = {
+  Task_ID: number,
+  Task_Assigned_Employee_ID: number,
+  Task_Subject: string,
+  Task_Start_Date: string,
+  Task_Due_Date: string,
+  Task_Status: string,
+  Task_Priority: number,
+  Task_Completion: number,
+  Task_Parent_ID: number,
+  Task_Assigned_Employee?: Employee
+};
+
+export const tasks: Task[] = [
+    {
   Task_ID: 1,
   Task_Assigned_Employee_ID: 1,
   Task_Subject: 'Plans 2015',
@@ -1810,7 +1830,7 @@ export const tasks = [{
   Task_Parent_ID: 27,
 }];
 
-export const employees = [{
+export const employees: Employee[] = [{
   ID: 1,
   Name: 'John Heart',
   Picture: '../../../../images/employees/01.png',
@@ -2010,10 +2030,8 @@ export const employees = [{
   ID: 50,
   Name: 'Dallas Lou',
   Picture: '../../../../images/employees/41.png',
-}, {
-  ID: 51,
-  Name: 'Stu Pizaro',
-}];
+}
+];
 
 export const priorities = [
   { id: 1, value: 'Low' },

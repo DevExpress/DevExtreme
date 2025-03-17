@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-shadow */
 /* eslint-disable spellcheck/spell-checker */
 import formatHelper from '@js/format_helper';
 import type { Subscribable, SubsGets, SubsGetsUpd } from '@ts/core/reactive/index';
@@ -10,13 +9,14 @@ import { DataController } from '../data_controller/index';
 import type { DataObject } from '../data_controller/types';
 import { OptionsController } from '../options_controller/options_controller';
 import type { ColumnProperties, ColumnSettings, PreNormalizedColumn } from './options';
-import type { Column, DataRow, VisibleColumn } from './types';
+import type { Column, DataRow } from './types';
 import {
   getColumnIndexByName, normalizeColumns, normalizeVisibleIndexes, preNormalizeColumns,
 } from './utils';
 
 export class ColumnsController {
   private readonly columnsConfiguration: Subscribable<ColumnProperties[] | undefined>;
+
   private readonly columnsSettings: SubsGetsUpd<PreNormalizedColumn[]>;
 
   public readonly columns: SubsGets<Column[]>;
@@ -72,7 +72,7 @@ export class ColumnsController {
 
     this.visibleColumns = computed(
       (columns) => columns
-        .filter((column): column is VisibleColumn => column.visible)
+        .filter((column) => column.visible)
         .sort((a, b) => a.visibleIndex - b.visibleIndex),
       [this.columns],
     );
@@ -88,6 +88,7 @@ export class ColumnsController {
 
   public createDataRow(data: DataObject, columns: Column[]): DataRow {
     return {
+      // @ts-expect-error
       cells: columns.map((c) => {
         const displayValue = c.calculateDisplayValue(data);
         // eslint-disable-next-line @typescript-eslint/no-explicit-any

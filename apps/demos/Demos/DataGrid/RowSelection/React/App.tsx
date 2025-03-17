@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react';
-import DataGrid, { Column, DataGridTypes, Selection } from 'devextreme-react/data-grid';
+import DataGrid, { Column, type DataGridTypes, Selection } from 'devextreme-react/data-grid';
 import { employees } from './data.ts';
 
 const App = () => {

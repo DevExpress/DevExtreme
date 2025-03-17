@@ -23,7 +23,7 @@ import { SelectedFilterOperation } from 'devextreme/common/grids';
 import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
-import { DxiDataGridColumn } from './base/data-grid-column-dxi';
+import { DxiColumnProperties } from './base/column-properties-dxi';
 import { DxiButtonComponent } from './button-dxi';
 import { DxiValidationRuleComponent } from './validation-rule-dxi';
 
@@ -34,6 +34,11 @@ import { DxiValidationRuleComponent } from './validation-rule-dxi';
     styles: [''],
     providers: [NestedOptionHost],
     inputs: [
+        'fieldCaptionTemplate',
+        'fieldTemplate',
+        'fieldValueTemplate',
+        'headerItemCssClass',
+        'headerItemTemplate',
         'alignment',
         'allowEditing',
         'allowExporting',
@@ -99,7 +104,7 @@ import { DxiValidationRuleComponent } from './validation-rule-dxi';
         'width'
     ]
 })
-export class DxiColumnComponent extends DxiDataGridColumn {
+export class DxiColumnComponent extends DxiColumnProperties {
 
     /**
     

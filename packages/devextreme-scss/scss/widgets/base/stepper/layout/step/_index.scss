@@ -1,0 +1,58 @@
+.dx-step {
+  position: relative;
+  cursor: pointer;
+}
+
+.dx-step-indicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition-property: color, background-color, border-color;
+  transition-duration: .4s;
+  transition-timing-function: ease-in-out;
+}
+
+.dx-step-content {
+  gap: 10px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+
+  &::before {
+    content: '';
+    position: absolute;
+    border-width: 1px;
+    border-style: solid;
+    border-radius: 999em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition-property: color, background-color, border-color;
+    transition-duration: .4s;
+    transition-timing-function: ease-in-out;
+  }
+}
+
+.dx-step-title {
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-align: center;
+}
+
+.dx-stepper-vertical {
+  .dx-step {
+    display: flex;
+    align-items: center;
+  }
+
+  .dx-step-content {
+    flex-direction: row;
+  }
+
+  .dx-step-title {
+    text-align: start;
+  }
+}

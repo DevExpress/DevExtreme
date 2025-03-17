@@ -65,6 +65,7 @@ import {
   DxColumn,
   DxEditing,
   DxContextMenu,
+  type DxGanttTypes
 } from 'devextreme-vue/gantt';
 import DxCheckBox from 'devextreme-vue/check-box';
 import {
@@ -78,13 +79,13 @@ const showResources = ref(true);
 const disableContextMenu = ref(false);
 const contextMenuItems = [
   'addTask',
-  'taskdetails',
+  'taskDetails',
   'deleteTask',
   {
     name: 'ToggleDisplayOfResources',
     text: 'Toggle Display of Resources',
   },
-];
+] as DxGanttTypes.GanttPredefinedContextMenuItem[];
 const contextMenuActualItems = ref(contextMenuItems);
 
 function onContextMenuPreparing(e) {
