@@ -1,4 +1,3 @@
-/* eslint-disable spellcheck/spell-checker */
 import type { SubsGets } from '@ts/core/reactive/index';
 import { combined, computed } from '@ts/core/reactive/index';
 import { ColumnsController } from '@ts/grids/new/grid_core/columns_controller/columns_controller';
@@ -39,7 +38,8 @@ export class HeaderPanelView extends View<HeaderPanelProps> {
         [this.columnsController.columns],
       ),
       onSortClick: this.onSortClick.bind(this),
-      itemTemplate: this.options.template('headerPanel.itemTemplate'),
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      itemTemplate: this.options.template('headerPanel.itemTemplate') as any,
       itemCssClass: this.options.oneWay('headerPanel.itemCssClass'),
       visible: this.options.oneWay('headerPanel.visible'),
       draggingOptions: this.options.oneWay('headerPanel.dragging'),

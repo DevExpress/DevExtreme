@@ -1,3 +1,4 @@
+export * from './column-dxi';
 export * from './item-dxi';
 export * from './pager';
 export * from './paging';

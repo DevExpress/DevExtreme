@@ -1,4 +1,3 @@
-/* eslint-disable spellcheck/spell-checker */
 import type { SubsGets } from '@ts/core/reactive/index';
 import { combined, state } from '@ts/core/reactive/index';
 
@@ -22,6 +21,7 @@ export class ColumnsChooserView extends View<ColumnChooserProps> {
   ) {
     super();
     this.headerPanel.addDefaultItem({
+      // @ts-expect-error
       name: 'columnsChooserButton',
       widget: 'dxButton',
       options: {

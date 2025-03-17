@@ -1,9 +1,17 @@
+export { ExplicitTypes } from "devextreme/ui/card_view";
 import { PropType } from "vue";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 import CardView, { Properties } from "devextreme/ui/card_view";
 import  DataSource from "devextreme/data/data_source";
 import  DOMComponent from "devextreme/core/dom_component";
+import {
+ ColumnProperties,
+ Paging,
+ RemoteOperations,
+ PredefinedToolbarItem,
+ ToolbarItem,
+} from "devextreme/ui/card_view";
 import {
  DataSourceOptions,
 } from "devextreme/common/data";
@@ -25,12 +33,6 @@ import {
  PagerBase,
 } from "devextreme/ui/pagination";
 import {
- Paging,
- RemoteOperations,
- PredefinedToolbarItem,
- ToolbarItem,
-} from "devextreme/ui/card_view";
-import {
  LocateInMenuMode,
  ShowTextMode,
 } from "devextreme/ui/toolbar";
@@ -45,6 +47,7 @@ import { prepareConfigurationComponentConfig } from "./core/index";
 type AccessibleOptions = Pick<Properties,
   "accessKey" |
   "activeStateEnabled" |
+  "columns" |
   "dataSource" |
   "disabled" |
   "elementAttr" |
@@ -76,6 +79,7 @@ const componentConfig = {
   props: {
     accessKey: String,
     activeStateEnabled: Boolean,
+    columns: Array as PropType<Array<ColumnProperties | string>>,
     dataSource: [Array, Object, String] as PropType<Array<any> | DataSource | DataSourceOptions | Store | string | Record<string, any>>,
     disabled: Boolean,
     elementAttr: Object as PropType<Record<string, any>>,
@@ -103,6 +107,7 @@ const componentConfig = {
     "update:hoveredElement": null,
     "update:accessKey": null,
     "update:activeStateEnabled": null,
+    "update:columns": null,
     "update:dataSource": null,
     "update:disabled": null,
     "update:elementAttr": null,
@@ -134,6 +139,7 @@ const componentConfig = {
     (this as any).$_WidgetClass = CardView;
     (this as any).$_hasAsyncTemplate = true;
     (this as any).$_expectedChildren = {
+      column: { isCollectionItem: true, optionName: "columns" },
       pager: { isCollectionItem: false, optionName: "pager" },
       paging: { isCollectionItem: false, optionName: "paging" },
       remoteOperations: { isCollectionItem: false, optionName: "remoteOperations" },
@@ -146,6 +152,32 @@ prepareComponentConfig(componentConfig);
 
 const DxCardView = defineComponent(componentConfig);
 
+
+const DxColumnConfig = {
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:fieldCaptionTemplate": null,
+    "update:fieldTemplate": null,
+    "update:fieldValueTemplate": null,
+    "update:headerItemCssClass": null,
+    "update:headerItemTemplate": null,
+  },
+  props: {
+    fieldCaptionTemplate: {},
+    fieldTemplate: {},
+    fieldValueTemplate: {},
+    headerItemCssClass: String,
+    headerItemTemplate: {}
+  }
+};
+
+prepareConfigurationComponentConfig(DxColumnConfig);
+
+const DxColumn = defineComponent(DxColumnConfig);
+
+(DxColumn as any).$_optionName = "columns";
+(DxColumn as any).$_isCollectionItem = true;
 
 const DxItemConfig = {
   emits: {
@@ -287,6 +319,7 @@ const DxToolbar = defineComponent(DxToolbarConfig);
 export default DxCardView;
 export {
   DxCardView,
+  DxColumn,
   DxItem,
   DxPager,
   DxPaging,

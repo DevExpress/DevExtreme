@@ -16,16 +16,19 @@ import {
     EventEmitter,
     OnChanges,
     DoCheck,
-    SimpleChanges
+    SimpleChanges,
+    ContentChildren,
+    QueryList
 } from '@angular/core';
 
+export { ExplicitTypes } from 'devextreme/ui/card_view';
 
 import DataSource from 'devextreme/data/data_source';
+import { ColumnProperties, Paging, RemoteOperations, PredefinedToolbarItem, ToolbarItem } from 'devextreme/ui/card_view';
 import { DataSourceOptions } from 'devextreme/data/data_source';
 import { Store } from 'devextreme/data/store';
 import { EventInfo } from 'devextreme/common/core/events';
 import { DataErrorOccurredInfo, Pager } from 'devextreme/common/grids';
-import { Paging, RemoteOperations, PredefinedToolbarItem, ToolbarItem } from 'devextreme/ui/card_view';
 
 import DxCardView from 'devextreme/ui/card_view';
 
@@ -40,19 +43,23 @@ import {
     WatcherHelper
 } from 'devextreme-angular/core';
 
+import { DxiColumnModule } from 'devextreme-angular/ui/nested';
 import { DxoPagerModule } from 'devextreme-angular/ui/nested';
 import { DxoPagingModule } from 'devextreme-angular/ui/nested';
 import { DxoRemoteOperationsModule } from 'devextreme-angular/ui/nested';
 import { DxoToolbarModule } from 'devextreme-angular/ui/nested';
 import { DxiItemModule } from 'devextreme-angular/ui/nested';
 
+import { DxiCardViewColumnModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxiCardViewItemModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxoCardViewPagerModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxoCardViewPagingModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxoCardViewRemoteOperationsModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxoCardViewToolbarModule } from 'devextreme-angular/ui/card-view/nested';
 
+import { DxiColumnComponent } from 'devextreme-angular/ui/nested';
 
+import { DxiCardViewColumnComponent } from 'devextreme-angular/ui/card-view/nested';
 
 
 /**
@@ -70,8 +77,8 @@ import { DxoCardViewToolbarModule } from 'devextreme-angular/ui/card-view/nested
         IterableDifferHelper
     ]
 })
-export class DxCardViewComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
-    instance: DxCardView = null;
+export class DxCardViewComponent<TRowData = any, TKey = any> extends DxComponent implements OnDestroy, OnChanges, DoCheck {
+    instance: DxCardView<TRowData, TKey> = null;
 
     /**
      * [descr:WidgetOptions.accessKey]
@@ -96,6 +103,19 @@ export class DxCardViewComponent extends DxComponent implements OnDestroy, OnCha
     }
     set activeStateEnabled(value: boolean) {
         this._setOption('activeStateEnabled', value);
+    }
+
+
+    /**
+     * [descr:ColumnsControllerOptions.columns]
+    
+     */
+    @Input()
+    get columns(): Array<ColumnProperties | string> {
+        return this._getOption('columns');
+    }
+    set columns(value: Array<ColumnProperties | string>) {
+        this._setOption('columns', value);
     }
 
 
@@ -365,6 +385,13 @@ export class DxCardViewComponent extends DxComponent implements OnDestroy, OnCha
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
+    @Output() columnsChange: EventEmitter<Array<ColumnProperties | string>>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
     @Output() dataSourceChange: EventEmitter<Array<any> | DataSource | DataSourceOptions | Store | string>;
 
     /**
@@ -475,6 +502,22 @@ export class DxCardViewComponent extends DxComponent implements OnDestroy, OnCha
 
 
 
+    @ContentChildren(DxiCardViewColumnComponent)
+    get columnsChildren(): QueryList<DxiCardViewColumnComponent> {
+        return this._getOption('columns');
+    }
+    set columnsChildren(value) {
+        this._setChildren('columns', value, 'DxiCardViewColumnComponent');
+    }
+
+
+    @ContentChildren(DxiColumnComponent)
+    get columnsLegacyChildren(): QueryList<DxiColumnComponent> {
+        return this._getOption('columns');
+    }
+    set columnsLegacyChildren(value) {
+        this._setChildren('columns', value, 'DxiColumnComponent');
+    }
 
 
 
@@ -496,6 +539,7 @@ export class DxCardViewComponent extends DxComponent implements OnDestroy, OnCha
             { subscribe: 'optionChanged', emit: 'onOptionChanged' },
             { emit: 'accessKeyChange' },
             { emit: 'activeStateEnabledChange' },
+            { emit: 'columnsChange' },
             { emit: 'dataSourceChange' },
             { emit: 'disabledChange' },
             { emit: 'elementAttrChange' },
@@ -530,6 +574,7 @@ export class DxCardViewComponent extends DxComponent implements OnDestroy, OnCha
 
     ngOnChanges(changes: SimpleChanges) {
         super.ngOnChanges(changes);
+        this.setupChanges('columns', changes);
         this.setupChanges('dataSource', changes);
         this.setupChanges('keyExpr', changes);
     }
@@ -541,6 +586,7 @@ export class DxCardViewComponent extends DxComponent implements OnDestroy, OnCha
     }
 
     ngDoCheck() {
+        this._idh.doCheck('columns');
         this._idh.doCheck('dataSource');
         this._idh.doCheck('keyExpr');
         this._watcherHelper.checkWatchers();
@@ -560,11 +606,13 @@ export class DxCardViewComponent extends DxComponent implements OnDestroy, OnCha
 
 @NgModule({
   imports: [
+    DxiColumnModule,
     DxoPagerModule,
     DxoPagingModule,
     DxoRemoteOperationsModule,
     DxoToolbarModule,
     DxiItemModule,
+    DxiCardViewColumnModule,
     DxiCardViewItemModule,
     DxoCardViewPagerModule,
     DxoCardViewPagingModule,
@@ -578,11 +626,13 @@ export class DxCardViewComponent extends DxComponent implements OnDestroy, OnCha
   ],
   exports: [
     DxCardViewComponent,
+    DxiColumnModule,
     DxoPagerModule,
     DxoPagingModule,
     DxoRemoteOperationsModule,
     DxoToolbarModule,
     DxiItemModule,
+    DxiCardViewColumnModule,
     DxiCardViewItemModule,
     DxoCardViewPagerModule,
     DxoCardViewPagingModule,

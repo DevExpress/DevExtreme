@@ -1,4 +1,5 @@
 "use client"
+export { ExplicitTypes } from "devextreme/ui/card_view";
 import * as React from "react";
 import { memo, forwardRef, useImperativeHandle, useRef, useMemo, ForwardedRef, Ref, ReactElement } from "react";
 import dxCardView, {
@@ -8,21 +9,23 @@ import dxCardView, {
 import { Component as BaseComponent, IHtmlOptions, ComponentRef, NestedComponentMeta } from "./core/component";
 import NestedOption from "./core/nested-option";
 
+import type { DataRow, Column as CardViewColumn, PredefinedToolbarItem, ToolbarItem } from "devextreme/ui/card_view";
+import type { template, ToolbarItemLocation, ToolbarItemComponent, Mode, DisplayMode } from "devextreme/common";
 import type { LocateInMenuMode, ShowTextMode } from "devextreme/ui/toolbar";
-import type { ToolbarItemLocation, template, ToolbarItemComponent, Mode, DisplayMode } from "devextreme/common";
-import type { PredefinedToolbarItem, ToolbarItem } from "devextreme/ui/card_view";
 import type { CollectionWidgetItem } from "devextreme/ui/collection/ui.collection_widget.base";
 import type { PagerPageSize } from "devextreme/common/grids";
 
-type ICardViewOptions = React.PropsWithChildren<Properties & IHtmlOptions>
+type ICardViewOptions<TRowData = any, TKey = any> = React.PropsWithChildren<Properties<TRowData, TKey> & IHtmlOptions & {
+  dataSource?: Properties<TRowData, TKey>["dataSource"];
+}>
 
-interface CardViewRef {
-  instance: () => dxCardView;
+interface CardViewRef<TRowData = any, TKey = any> {
+  instance: () => dxCardView<TRowData, TKey>;
 }
 
 const CardView = memo(
   forwardRef(
-    (props: React.PropsWithChildren<ICardViewOptions>, ref: ForwardedRef<CardViewRef>) => {
+    <TRowData = any, TKey = any>(props: React.PropsWithChildren<ICardViewOptions<TRowData, TKey>>, ref: ForwardedRef<CardViewRef<TRowData, TKey>>) => {
       const baseRef = useRef<ComponentRef>(null);
 
       useImperativeHandle(ref, () => (
@@ -36,6 +39,7 @@ const CardView = memo(
       const independentEvents = useMemo(() => (["onContentReady","onDataErrorOccurred","onDisposing","onInitialized"]), []);
 
       const expectedChildren = useMemo(() => ({
+        column: { optionName: "columns", isCollectionItem: true },
         pager: { optionName: "pager", isCollectionItem: false },
         paging: { optionName: "paging", isCollectionItem: false },
         remoteOperations: { optionName: "remoteOperations", isCollectionItem: false },
@@ -43,7 +47,7 @@ const CardView = memo(
       }), []);
 
       return (
-        React.createElement(BaseComponent<React.PropsWithChildren<ICardViewOptions>>, {
+        React.createElement(BaseComponent<React.PropsWithChildren<ICardViewOptions<TRowData, TKey>>>, {
           WidgetClass: dxCardView,
           ref: baseRef,
           independentEvents,
@@ -53,8 +57,56 @@ const CardView = memo(
       );
     },
   ),
-) as (props: React.PropsWithChildren<ICardViewOptions> & { ref?: Ref<CardViewRef> }) => ReactElement | null;
+) as <TRowData = any, TKey = any>(props: React.PropsWithChildren<ICardViewOptions<TRowData, TKey>> & { ref?: Ref<CardViewRef<TRowData, TKey>> }) => ReactElement | null;
 
+
+// owners:
+// CardView
+type IColumnProps = React.PropsWithChildren<{
+  fieldCaptionTemplate?: ((dataRow: DataRow) => string | any) | template;
+  fieldTemplate?: ((dataRow: DataRow) => string | any) | template;
+  fieldValueTemplate?: ((dataRow: DataRow) => string | any) | template;
+  headerItemCssClass?: string;
+  headerItemTemplate?: ((column: CardViewColumn) => string | any) | template;
+  fieldCaptionRender?: (...params: any) => React.ReactNode;
+  fieldCaptionComponent?: React.ComponentType<any>;
+  fieldRender?: (...params: any) => React.ReactNode;
+  fieldComponent?: React.ComponentType<any>;
+  fieldValueRender?: (...params: any) => React.ReactNode;
+  fieldValueComponent?: React.ComponentType<any>;
+  headerItemRender?: (...params: any) => React.ReactNode;
+  headerItemComponent?: React.ComponentType<any>;
+}>
+const _componentColumn = (props: IColumnProps) => {
+  return React.createElement(NestedOption<IColumnProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "columns",
+      IsCollectionItem: true,
+      TemplateProps: [{
+        tmplOption: "fieldCaptionTemplate",
+        render: "fieldCaptionRender",
+        component: "fieldCaptionComponent"
+      }, {
+        tmplOption: "fieldTemplate",
+        render: "fieldRender",
+        component: "fieldComponent"
+      }, {
+        tmplOption: "fieldValueTemplate",
+        render: "fieldValueRender",
+        component: "fieldValueComponent"
+      }, {
+        tmplOption: "headerItemTemplate",
+        render: "headerItemRender",
+        component: "headerItemComponent"
+      }],
+    },
+  });
+};
+
+const Column = Object.assign<typeof _componentColumn, NestedComponentMeta>(_componentColumn, {
+  componentType: "option",
+});
 
 // owners:
 // Toolbar
@@ -200,6 +252,8 @@ export {
   CardView,
   ICardViewOptions,
   CardViewRef,
+  Column,
+  IColumnProps,
   Item,
   IItemProps,
   Pager,
