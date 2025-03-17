@@ -23,6 +23,12 @@ export interface HeaderPanelProps {
 
   onSortClick: (column: Column) => void;
 
+  onFilterClick?: (
+    element: Element,
+    column: Column,
+    onFilterCloseCallback?: () => void,
+  ) => void;
+
   itemTemplate?: ComponentType<{ column: Column }>;
 
   itemCssClass?: string;
@@ -32,6 +38,9 @@ export interface HeaderPanelProps {
   draggingOptions?: DraggingOptions;
 }
 
+// eslint-disable-next-line @stylistic/max-len
+/** <img src="../../../../../../../../e2e/testcafe-devextreme/tests/cardView/etalons/headers.png"></img>
+ */
 export class HeaderPanel extends Component<HeaderPanelProps> {
   public render(): JSX.Element {
     if (!this.props.visible) {
@@ -61,9 +70,13 @@ export class HeaderPanel extends Component<HeaderPanelProps> {
                 <Item
                   showSortIndexes={this.props.showSortIndexes}
                   column={column}
-                  onSortClick={(): void => { this.props.onSortClick(column); }}
                   template={this.props.itemTemplate}
                   cssClass={this.props.itemCssClass}
+                  onSortClick={(): void => { this.props.onSortClick(column); }}
+                  onFilterClick={(
+                    element: Element,
+                    callback?: () => void,
+                  ) => this.props.onFilterClick?.(element, column, callback)}
                 />
               ))}
             </div>

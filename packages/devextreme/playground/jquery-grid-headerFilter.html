@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>DevExtreme jQuery Example</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script type="text/javascript">
+        const currentThemeId = localStorage.getItem("currentThemeId") || "light";
+
+        const link = document.createElement("link");
+        link.href = `../artifacts/css/dx.${currentThemeId}.css`;
+        link.type = "text/css";
+        link.rel = "stylesheet";
+
+        document.getElementsByTagName("head")[0].appendChild(link);
+    </script>
+
+    <script type="text/javascript" src="../artifacts/js/jquery.js"></script>
+    <!-- HtmlEditor -->
+    <!-- <script type="text/javascript" src="../artifacts/js/dx-quill.min.js"></script> -->
+
+    <!--<script type="text/javascript" src="../artifacts/js/cldr.js"></script>
+    <script type="text/javascript" src="../artifacts/js/cldr/event.js"></script>
+    <script type="text/javascript" src="../artifacts/js/cldr/supplemental.js"></script>
+    <script type="text/javascript" src="../artifacts/js/cldr/unresolved.js"></script>
+    <script type="text/javascript" src="../artifacts/js/globalize.js"></script>
+    <script type="text/javascript" src="../artifacts/js/globalize/message.js"></script>
+    <script type="text/javascript" src="../artifacts/js/globalize/number.js"></script>
+    <script type="text/javascript" src="../artifacts/js/globalize/currency.js"></script>
+    <script type="text/javascript" src="../artifacts/js/globalize/date.js"></script>-->
+
+    <!--
+    <script type="text/javascript" src="../artifacts/js/exceljs.min.js"></script>
+    <script type="text/javascript" src="../artifacts/js/FileSaver.min.js"></script>
+    <script type="text/javascript" src="../artifacts/js/jszip.min.js"></script>
+    <script type="text/javascript" src="../artifacts/js/jspdf.umd.min.js"></script>
+    <script type="text/javascript" src="../artifacts/js/jspdf.plugin.autotable.min.js"></script>
+    -->
+
+    <script type="text/javascript" src="../artifacts/js/dx.all.debug.js" charset="utf-8"></script>
+    <script type="text/javascript" src="./themeSelector.js"></script>
+    <script type="text/javascript" src="../../../node_modules/axe-core/axe.min.js"></script>
+</head>
+
+<body class="dx-surface">
+    <div role="main">
+        <h1 style="position: fixed; left: 0; top: 0; clip: rect(1px, 1px, 1px, 1px);">Test header</h1>
+        <style>
+        </style>
+        <select id="theme-selector" style="display: block;">
+        </select>
+        <br />
+        <div id="gridContainer"></div>
+
+        <style>
+            .dx-card-cover {
+                overflow: hidden;
+                height: 180px;
+                width: 100%;
+                display: flex;
+                justify-content: center;
+            }
+
+            .dx-card-cover-image {
+                height: 207px;
+                width: auto;
+            }
+        </style>
+
+        <script>
+            $(() => {
+                const dataGrid = $('#gridContainer').dxDataGrid({
+                    dataSource: orders,
+                    keyExpr: 'ID',
+                    columnsAutoWidth: true,
+                    showBorders: true,
+                    filterRow: {
+                        visible: true,
+                        applyFilter: 'auto',
+                    },
+                    searchPanel: {
+                        visible: true,
+                        width: 240,
+                        placeholder: 'Search...',
+                    },
+                    headerFilter: {
+                        visible: true,
+                    },
+                    pager: {
+                        visible: true,
+                    },
+                    paging: {
+                        pageSize: 2,
+                    },
+                    columns: [{
+                        dataField: 'OrderNumber',
+                        caption: 'Invoice Number',
+                        width: 140,
+                        headerFilter: {
+                            groupInterval: 10000,
+                        },
+                    }, {
+                        dataField: 'OrderDate',
+                        alignment: 'right',
+                        dataType: 'date',
+                        width: 120,
+                        calculateFilterExpression(value, selectedFilterOperations, target) {
+                            if (target === 'headerFilter' && value === 'weekends') {
+                                return [[getOrderDay, '=', 0], 'or', [getOrderDay, '=', 6]];
+                            }
+                            return this.defaultCalculateFilterExpression(value, selectedFilterOperations, target);
+                        },
+                        headerFilter: {
+                            dataSource(data) {
+                                data.dataSource.postProcess = function (results) {
+                                    results.push({
+                                        text: 'Weekends',
+                                        value: 'weekends',
+                                    });
+                                    return results;
+                                };
+                            },
+                        },
+                    }, {
+                        dataField: 'DeliveryDate',
+                        alignment: 'right',
+                        dataType: 'datetime',
+                        width: 180,
+                        format: 'M/d/yyyy, HH:mm',
+                    }, {
+                        dataField: 'SaleAmount',
+                        alignment: 'right',
+                        format: 'currency',
+                        editorOptions: {
+                            format: 'currency',
+                            showClearButton: true,
+                            inputAttr: {
+                                'aria-label': 'Filter cell',
+                            },
+                        },
+                        // filterValues: [['SaleAmount', '<', 3000]],
+                        headerFilter: {
+                            dataSource: [{
+                                text: 'Less than $3000',
+                                value: ['SaleAmount', '<', 3000],
+                            }, {
+
+                                text: '$3000 - $5000',
+                                value: [['SaleAmount', '>=', 3000], ['SaleAmount', '<', 5000]],
+                            }, {
+
+                                text: '$5000 - $10000',
+                                value: [['SaleAmount', '>=', 5000], ['SaleAmount', '<', 10000]],
+                            }, {
+
+                                text: '$10000 - $20000',
+                                value: [['SaleAmount', '>=', 10000], ['SaleAmount', '<', 20000]],
+                            }, {
+                                text: 'Greater than $20000',
+                                value: ['SaleAmount', '>=', 20000],
+                            }],
+                        },
+                    }, 'Employee', {
+                        caption: 'City',
+                        dataField: 'CustomerStoreCity',
+                        headerFilter: {
+                            search: {
+                                enabled: true,
+                            },
+                        },
+                    }],
+                }).dxDataGrid('instance');
+
+                const applyFilterTypes = [{
+                    key: 'auto',
+                    name: 'Immediately',
+                }, {
+                    key: 'onClick',
+                    name: 'On Button Click',
+                }];
+
+                const applyFilterModeEditor = $('#useFilterApplyButton').dxSelectBox({
+                    items: applyFilterTypes,
+                    value: applyFilterTypes[0].key,
+                    valueExpr: 'key',
+                    inputAttr: { 'aria-label': 'Apply Filter' },
+                    displayExpr: 'name',
+                    onValueChanged(data) {
+                        dataGrid.option('filterRow.applyFilter', data.value);
+                    },
+                }).dxSelectBox('instance');
+
+                $('#filterRow').dxCheckBox({
+                    text: 'Filter Row',
+                    value: true,
+                    onValueChanged(data) {
+                        dataGrid.clearFilter();
+                        dataGrid.option('filterRow.visible', data.value);
+                        applyFilterModeEditor.option('disabled', !data.value);
+                    },
+                });
+
+                $('#headerFilter').dxCheckBox({
+                    text: 'Header Filter',
+                    value: true,
+                    onValueChanged(data) {
+                        dataGrid.clearFilter();
+                        dataGrid.option('headerFilter.visible', data.value);
+                    },
+                });
+
+                function getOrderDay(rowData) {
+                    return (new Date(rowData.OrderDate)).getDay();
+                }
+            });
+
+            const orders = [{
+                ID: 1,
+                OrderNumber: 35703,
+                OrderDate: '2017/04/10',
+                DeliveryDate: '2017/04/13 9:00',
+                SaleAmount: 11800,
+                Terms: '15 Days',
+                CustomerStoreCity: 'Los Angeles, CA',
+                Employee: 'Harv Mudd',
+            }, {
+                ID: 4,
+                OrderNumber: 35711,
+                OrderDate: '2017/01/12',
+                DeliveryDate: '2017/01/13 9:00',
+                SaleAmount: 16050,
+                Terms: '15 Days',
+                CustomerStoreCity: 'San Jose, CA',
+                Employee: 'Jim Packard',
+            }, {
+                ID: 5,
+                OrderNumber: 35714,
+                OrderDate: '2017/01/22',
+                DeliveryDate: '2017/01/27 9:00',
+                SaleAmount: 14750,
+                Terms: '15 Days',
+                CustomerStoreCity: 'Las Vegas, NV',
+                Employee: 'Harv Mudd',
+            }, {
+                ID: 7,
+                OrderNumber: 35983,
+                OrderDate: '2017/02/07',
+                DeliveryDate: '2017/02/10 13:00',
+                SaleAmount: 3725,
+                Terms: '15 Days',
+                CustomerStoreCity: 'Denver, CO',
+                Employee: 'Todd Hoffman',
+            }, {
+                ID: 11,
+                OrderNumber: 38466,
+                OrderDate: '2017/03/01',
+                DeliveryDate: '2017/03/03 17:45',
+                SaleAmount: 7800,
+                Terms: '15 Days',
+                CustomerStoreCity: 'Los Angeles, CA',
+                Employee: 'Harv Mudd',
+            }, {
+                ID: 14,
+                OrderNumber: 39420,
+                OrderDate: '2017/02/15',
+                DeliveryDate: '2017/02/17 11:45',
+                SaleAmount: 20500,
+                Terms: '15 Days',
+                CustomerStoreCity: 'San Jose, CA',
+                Employee: 'Jim Packard',
+            }, {
+                ID: 15,
+                OrderNumber: 39874,
+                OrderDate: '2017/02/04',
+                DeliveryDate: '2017/02/10 15:00',
+                SaleAmount: 9050,
+                Terms: '30 Days',
+                CustomerStoreCity: 'Las Vegas, NV',
+                Employee: 'Harv Mudd',
+            }, {
+                ID: 18,
+                OrderNumber: 42847,
+                OrderDate: '2017/02/15',
+                DeliveryDate: '2017/02/17 8:30',
+                SaleAmount: 20400,
+                Terms: '30 Days',
+                CustomerStoreCity: 'Casper, WY',
+                Employee: 'Todd Hoffman',
+            }, {
+                ID: 30,
+                OrderNumber: 57429,
+                OrderDate: '2017/05/16',
+                DeliveryDate: '2017/05/19 11:45',
+                SaleAmount: 11050,
+                Terms: '30 Days',
+                CustomerStoreCity: 'Phoenix, AZ',
+                Employee: 'Clark Morgan',
+            }, {
+                ID: 32,
+                OrderNumber: 58292,
+                OrderDate: '2017/05/13',
+                DeliveryDate: '2017/05/19 14:30',
+                SaleAmount: 13500,
+                Terms: '15 Days',
+                CustomerStoreCity: 'Los Angeles, CA',
+                Employee: 'Harv Mudd',
+            }, {
+                ID: 36,
+                OrderNumber: 62427,
+                OrderDate: '2017/01/27',
+                DeliveryDate: '2017/02/03 18:00',
+                SaleAmount: 23500,
+                Terms: '15 Days',
+                CustomerStoreCity: 'Las Vegas, NV',
+                Employee: 'Harv Mudd',
+            }, {
+                ID: 39,
+                OrderNumber: 65977,
+                OrderDate: '2017/02/05',
+                DeliveryDate: '2017/02/10 13:15',
+                SaleAmount: 2550,
+                Terms: '15 Days',
+                CustomerStoreCity: 'Casper, WY',
+                Employee: 'Todd Hoffman',
+            }, {
+                ID: 42,
+                OrderNumber: 68428,
+                OrderDate: '2017/04/10',
+                DeliveryDate: '2017/04/14 11:30',
+                SaleAmount: 10500,
+                Terms: '15 Days',
+                CustomerStoreCity: 'Los Angeles, CA',
+                Employee: 'Harv Mudd',
+            }, {
+                ID: 43,
+                OrderNumber: 69477,
+                OrderDate: '2017/03/09',
+                DeliveryDate: '2017/03/10 12:00',
+                SaleAmount: 14200,
+                Terms: '15 Days',
+                CustomerStoreCity: 'Anaheim, CA',
+                Employee: 'Harv Mudd',
+            }, {
+                ID: 46,
+                OrderNumber: 72947,
+                OrderDate: '2017/01/14',
+                DeliveryDate: '2017/01/20 9:00',
+                SaleAmount: 13350,
+                Terms: '30 Days',
+                CustomerStoreCity: 'Las Vegas, NV',
+                Employee: 'Harv Mudd',
+            }, {
+                ID: 47,
+                OrderNumber: 73088,
+                OrderDate: '2017/03/25',
+                DeliveryDate: '2017/03/31 17:15',
+                SaleAmount: 8600,
+                Terms: '30 Days',
+                CustomerStoreCity: 'Reno, NV',
+                Employee: 'Clark Morgan',
+            }, {
+                ID: 51,
+                OrderNumber: 77297,
+                OrderDate: '2017/04/30',
+                DeliveryDate: '2017/05/05 18:00',
+                SaleAmount: 10850,
+                Terms: '30 Days',
+                CustomerStoreCity: 'Phoenix, AZ',
+                Employee: 'Clark Morgan',
+            }, {
+                ID: 56,
+                OrderNumber: 84744,
+                OrderDate: '2017/02/10',
+                DeliveryDate: '2017/02/17 14:00',
+                SaleAmount: 4650,
+                Terms: '30 Days',
+                CustomerStoreCity: 'Las Vegas, NV',
+                Employee: 'Harv Mudd',
+            }, {
+                ID: 57,
+                OrderNumber: 85028,
+                OrderDate: '2017/05/17',
+                DeliveryDate: '2017/05/19 12:00',
+                SaleAmount: 2575,
+                Terms: '30 Days',
+                CustomerStoreCity: 'Reno, NV',
+                Employee: 'Clark Morgan',
+            }, {
+                ID: 59,
+                OrderNumber: 87297,
+                OrderDate: '2017/04/21',
+                DeliveryDate: '2017/04/28 9:00',
+                SaleAmount: 14200,
+                Terms: '30 Days',
+                CustomerStoreCity: 'Casper, WY',
+                Employee: 'Todd Hoffman',
+            }, {
+                ID: 65,
+                OrderNumber: 94726,
+                OrderDate: '2017/05/22',
+                DeliveryDate: '2017/05/26 13:30',
+                SaleAmount: 20500,
+                Terms: '15 Days',
+                CustomerStoreCity: 'San Jose, CA',
+                Employee: 'Jim Packard',
+            }, {
+                ID: 66,
+                OrderNumber: 95266,
+                OrderDate: '2017/03/10',
+                DeliveryDate: '2017/03/17 11:45',
+                SaleAmount: 9050,
+                Terms: '15 Days',
+                CustomerStoreCity: 'Las Vegas, NV',
+                Employee: 'Harv Mudd',
+            }, {
+                ID: 69,
+                OrderNumber: 98477,
+                OrderDate: '2017/01/01',
+                DeliveryDate: '2017/01/06 9:00',
+                SaleAmount: 23500,
+                Terms: '15 Days',
+                CustomerStoreCity: 'Casper, WY',
+                Employee: 'Todd Hoffman',
+            }, {
+                ID: 78,
+                OrderNumber: 174884,
+                OrderDate: '2017/04/10',
+                DeliveryDate: '2017/04/14 8:30',
+                SaleAmount: 7200,
+                Terms: '30 Days',
+                CustomerStoreCity: 'Denver, CO',
+                Employee: 'Todd Hoffman',
+            }, {
+                ID: 81,
+                OrderNumber: 188877,
+                OrderDate: '2017/02/11',
+                DeliveryDate: '2017/02/17 16:00',
+                SaleAmount: 8750,
+                Terms: '30 Days',
+                CustomerStoreCity: 'Phoenix, AZ',
+                Employee: 'Clark Morgan',
+            }, {
+                ID: 82,
+                OrderNumber: 191883,
+                OrderDate: '2017/02/05',
+                DeliveryDate: '2017/02/10 18:30',
+                SaleAmount: 9900,
+                Terms: '30 Days',
+                CustomerStoreCity: 'Los Angeles, CA',
+                Employee: 'Harv Mudd',
+            }, {
+                ID: 83,
+                OrderNumber: 192474,
+                OrderDate: '2017/01/21',
+                DeliveryDate: '2017/01/27 12:45',
+                SaleAmount: 12800,
+                Terms: '30 Days',
+                CustomerStoreCity: 'Anaheim, CA',
+                Employee: 'Harv Mudd',
+            }, {
+                ID: 84,
+                OrderNumber: 193847,
+                OrderDate: '2017/03/21',
+                DeliveryDate: '2017/03/24 9:00',
+                SaleAmount: 14100,
+                Terms: '30 Days',
+                CustomerStoreCity: 'San Diego, CA',
+                Employee: 'Harv Mudd',
+            }, {
+                ID: 85,
+                OrderNumber: 194877,
+                OrderDate: '2017/03/06',
+                DeliveryDate: '2017/03/10 18:15',
+                SaleAmount: 4750,
+                Terms: '30 Days',
+                CustomerStoreCity: 'San Jose, CA',
+                Employee: 'Jim Packard',
+            }, {
+                ID: 86,
+                OrderNumber: 195746,
+                OrderDate: '2017/05/26',
+                DeliveryDate: '2017/06/02 17:00',
+                SaleAmount: 9050,
+                Terms: '30 Days',
+                CustomerStoreCity: 'Las Vegas, NV',
+                Employee: 'Harv Mudd',
+            }, {
+                ID: 87,
+                OrderNumber: 197474,
+                OrderDate: '2017/03/02',
+                DeliveryDate: '2017/03/03 11:00',
+                SaleAmount: 6400,
+                Terms: '30 Days',
+                CustomerStoreCity: 'Reno, NV',
+                Employee: 'Clark Morgan',
+            }, {
+                ID: 88,
+                OrderNumber: 198746,
+                OrderDate: '2017/05/09',
+                DeliveryDate: '2017/05/12 15:45',
+                SaleAmount: 15700,
+                Terms: '30 Days',
+                CustomerStoreCity: 'Denver, CO',
+                Employee: 'Todd Hoffman',
+            }, {
+                ID: 91,
+                OrderNumber: 214222,
+                OrderDate: '2017/02/08',
+                DeliveryDate: '2017/02/10 9:45',
+                SaleAmount: 11050,
+                Terms: '30 Days',
+                CustomerStoreCity: 'Phoenix, AZ',
+                Employee: 'Clark Morgan',
+            }];
+        </script>
+    </div>
+</body>
+
+</html>

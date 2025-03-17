@@ -2,6 +2,7 @@
 import {
   describe, expect, it, jest,
 } from '@jest/globals';
+import { HeaderFilterController } from '@ts/grids/new/grid_core/filtering/header_filter';
 import { rerender } from 'inferno';
 
 import { ColumnsController } from '../../grid_core/columns_controller';
@@ -20,7 +21,16 @@ const setup = (options: Options) => {
   const filterController = new FilterController(optionsController);
   const dataController = new DataController(optionsController, filterController);
   const columnsController = new ColumnsController(optionsController, dataController);
-  const headerPanelView = new HeaderPanelView(columnsController, optionsController);
+  const headerFilterController = new HeaderFilterController(
+    optionsController,
+    dataController,
+    columnsController,
+  );
+  const headerPanelView = new HeaderPanelView(
+    columnsController,
+    optionsController,
+    headerFilterController,
+  );
 
   headerPanelView.render(rootElement);
   rerender();
