@@ -385,7 +385,6 @@ const SKIPPED_TESTS = {
     }
 
     const isGitHubDemos = process.env.ISGITHUBDEMOS;
-
     let pageURL = '';
     const theme = process.env.THEME.replace('generic.', '');
     if (isGitHubDemos) {
