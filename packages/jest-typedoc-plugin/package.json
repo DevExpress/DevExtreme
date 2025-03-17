@@ -1,6 +1,0 @@
-{
-  "name": "jest-typedoc-plugin",
-  "peerDependencies": {
-    "typedoc": "*"
-  }
-}

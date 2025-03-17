@@ -126,9 +126,6 @@ importers:
       devextreme-internal-tools:
         specifier: 16.4.2
         version: 16.4.2
-      devextreme-nx-plugin:
-        specifier: workspace:*
-        version: link:packages/devextreme-nx-plugin
       http-server:
         specifier: 14.1.1
         version: 14.1.1
@@ -648,40 +645,6 @@ importers:
         specifier: ^2.2.2
         version: 2.2.8(typescript@5.4.5)
 
-  apps/inferno:
-    dependencies:
-      devextreme:
-        specifier: ^24.2.0
-        version: 24.2.3
-      inferno:
-        specifier: ^7.4.9
-        version: 7.4.11
-    devDependencies:
-      '@babel/core':
-        specifier: 7.23.9
-        version: 7.23.9
-      '@babel/preset-env':
-        specifier: 7.23.9
-        version: 7.23.9(@babel/core@7.23.9)
-      '@babel/preset-typescript':
-        specifier: ^7.24.7
-        version: 7.24.7(@babel/core@7.23.9)
-      babel-loader:
-        specifier: ^9.1.3
-        version: 9.1.3(@babel/core@7.23.9)(webpack@5.94.0(@swc/core@1.4.17(@swc/helpers@0.5.11)))
-      babel-plugin-inferno:
-        specifier: 6.7.1
-        version: 6.7.1(@babel/core@7.23.9)
-      css-loader:
-        specifier: 6.10.0
-        version: 6.10.0(webpack@5.94.0(@swc/core@1.4.17(@swc/helpers@0.5.11))(esbuild@0.20.1))
-      style-loader:
-        specifier: 3.3.4
-        version: 3.3.4(webpack@5.94.0(@swc/core@1.4.17(@swc/helpers@0.5.11)))
-      webpack:
-        specifier: 5.94.0
-        version: 5.94.0(@swc/core@1.4.17(@swc/helpers@0.5.11))(esbuild@0.20.1)
-
   apps/react:
     dependencies:
       devextreme:
@@ -972,39 +935,6 @@ importers:
       mockdate:
         specifier: 3.0.5
         version: 3.0.5
-      nconf:
-        specifier: 0.12.1
-        version: 0.12.1
-      testcafe:
-        specifier: 2.5.0
-        version: 2.5.0(encoding@0.1.13)
-
-  e2e/testcafe-storybook:
-    devDependencies:
-      '@babel/plugin-transform-runtime':
-        specifier: 7.19.6
-        version: 7.19.6(@babel/core@7.24.5)
-      '@testcafe-community/axe':
-        specifier: 3.5.0
-        version: 3.5.0(axe-core@4.10.0)(testcafe@2.5.0(encoding@0.1.13))
-      '@types/jquery':
-        specifier: 3.5.29
-        version: 3.5.29
-      axe-core:
-        specifier: 4.10.0
-        version: 4.10.0
-      devextreme:
-        specifier: workspace:*
-        version: link:../../packages/devextreme/artifacts/npm/devextreme
-      devextreme-screenshot-comparer:
-        specifier: 2.0.17
-        version: 2.0.17(testcafe@2.5.0(encoding@0.1.13))
-      devextreme-testcafe-models:
-        specifier: workspace:*
-        version: link:../../packages/testcafe-models
-      minimist:
-        specifier: 1.2.8
-        version: 1.2.8
       nconf:
         specifier: 0.12.1
         version: 0.12.1
@@ -1351,9 +1281,6 @@ importers:
       jest-environment-node:
         specifier: 29.7.0
         version: 29.7.0
-      jest-json-reporter:
-        specifier: workspace:*
-        version: link:../jest-json-reporter
       jquery:
         specifier: 3.7.1
         version: 3.7.1
@@ -1673,12 +1600,6 @@ importers:
         specifier: 29.1.3
         version: 29.1.3(@babel/core@7.24.5)(@jest/transform@29.7.0)(@jest/types@29.6.3)(babel-jest@29.7.0(@babel/core@7.24.5))(jest@29.7.0(@types/node@20.12.8)(node-notifier@9.0.1)(ts-node@10.9.2(@swc/core@1.4.17(@swc/helpers@0.5.11))(@types/node@20.12.8)(typescript@5.4.5)))(typescript@5.4.5)
 
-  packages/devextreme-nx-plugin:
-    devDependencies:
-      '@nx/devkit':
-        specifier: 18.3.4
-        version: 18.3.4(nx@19.4.2(@swc/core@1.4.17(@swc/helpers@0.5.11)))
-
   packages/devextreme-react:
     dependencies:
       devextreme:
@@ -1976,14 +1897,6 @@ importers:
       '@eslint-stylistic/metadata':
         specifier: 'catalog:'
         version: 2.13.0
-
-  packages/jest-json-reporter: {}
-
-  packages/jest-typedoc-plugin:
-    dependencies:
-      typedoc:
-        specifier: '*'
-        version: 0.26.11(typescript@5.4.5)
 
   packages/testcafe-models:
     dependencies:
@@ -3230,9 +3143,6 @@ packages:
 
   '@devextreme-generator/vue@3.0.12':
     resolution: {integrity: sha512-OtShTCCqnzfGmhbRz8g28CKlC92MCiMPt9f2UlW1HeFf6T7ob/dhRHvPDiBKezi7o9aQt9aCFHeQY27czfIfbw==}
-
-  '@devextreme/runtime@3.0.13':
-    resolution: {integrity: sha512-//24I6vo5a+XG/Ul3+vOGqU4M22IWyldpECxLY8iyGJWA5fiNaYzAedrMV2Ixo5oRj8DawiHTZKy5iKKF9ks5g==}
 
   '@discoveryjs/json-ext@0.5.7':
     resolution: {integrity: sha512-dBVuXR082gk3jsFp7Rd/JI4kytwGHecnCoTtXFb7DB6CNHp4rg5k1bhg0nWdLGLnOV71lmDzGQaLMy8iPLY0pw==}
@@ -7265,10 +7175,6 @@ packages:
   aws4@1.12.0:
     resolution: {integrity: sha512-NmWvPnx0F1SfrQbYwOi7OeaNGokp9XhzNioJ/CSBs8Qa4vxug81mhJEAVZwxXuBmYB5KDRfMq/F3RR0BIU7sWg==}
 
-  axe-core@4.10.0:
-    resolution: {integrity: sha512-Mr2ZakwQ7XUAjp7pAwQWRhhK8mQQ6JAaNWSjmjxil0R8BPioMtQsTLOolGYkji1rcL++3dCqZA3zWqpT+9Ew6g==}
-    engines: {node: '>=4'}
-
   axe-core@4.10.2:
     resolution: {integrity: sha512-RE3mdQ7P3FRSe7eqCWoeQ/Z9QXrtniSjp1wUjt5nRC3WIpz5rSCve6o3fsZ2aCpJtrZjSZgjwXAoTO5k4tEI0w==}
     engines: {node: '>=4'}
@@ -8798,14 +8704,8 @@ packages:
     engines: {node: '>=0.8.0'}
     hasBin: true
 
-  devexpress-diagram@2.2.13:
-    resolution: {integrity: sha512-OfAcfcFWJYlU/1kMtqrSSQUY3GQWKPHqU27A9e+TzFEhxI8XDyIPOCOnslRxnzYkfhB/RZ7hbGv9U0aHmtVbRg==}
-
   devexpress-diagram@2.2.15:
     resolution: {integrity: sha512-Ky/lnC32odQvn9m61USN3lg2GLkJGAeeui5dScdtKXHJXxIm+b8FCflyye+ALyinqgbFug7JCdQdLZm243FHYg==}
-
-  devexpress-gantt@4.1.56:
-    resolution: {integrity: sha512-jnnvDYDDzjqr8pnWYsAM96mug6yXEQ1H26QLLBRbwLC72ckb1yv0Rk6DUae9ZwewIFNzIKHt1klQMF/KD9Mb8A==}
 
   devexpress-gantt@4.1.60:
     resolution: {integrity: sha512-EreGiSrxOk9kSkBsslPr3oFCxxhRRev6dmzgR/7dEzNxgZPE0KRnW8hYwZqu8tmx9o5m5Z59nv7CQ5kEczNlrA==}
@@ -8842,9 +8742,6 @@ packages:
     engines: {node: '>=12.0.0'}
     peerDependencies:
       testcafe: ^1.14.0 || ^2.0.0 || ^3.0.0
-
-  devextreme@24.2.3:
-    resolution: {integrity: sha512-5KdXaZWLOhlncS26U8G9q5QpoO7gTluJfoUjgB74NN2Pe0S8yX0YAXylx5CqbEh1w2MjNfIU36fuFn2zwGP/nQ==}
 
   device-specs@1.0.1:
     resolution: {integrity: sha512-rxns/NDZfbdYumnn801z9uo8kWIz3Eld7Bk/F0V9zw4sZemSoD93+gxHEonLdxYulkws4iCMt7ZP8zuM8EzUSg==}
@@ -11182,14 +11079,8 @@ packages:
     resolution: {integrity: sha512-m6FAo/spmsW2Ab2fU35JTYwtOKa2yAwXSwgjSv1TJzh4Mh7mC3lzAOVLBprb72XsTrgkEIsl7YrFNAiDiRhIGg==}
     engines: {node: '>=12'}
 
-  inferno-create-element@7.4.11:
-    resolution: {integrity: sha512-kE6XIx2hPAd5qpDli2iGjNXgubvuyxdLvoiW71WnSzIIxA+Uxa/s8lY8m03VyHHVypFV3n329ZY5dFvKc7UQMg==}
-
   inferno-create-element@8.2.3:
     resolution: {integrity: sha512-YEwX4OiFlgeTutvE16uCGxkaSVwZ1DklpAPX8okjVsGaLIWQrM8QIQFxn3mTLWSu70Uea+afQfKL5wE4hxn39Q==}
-
-  inferno-hydrate@7.4.11:
-    resolution: {integrity: sha512-hF9Ke4GHAkj8GQrMXBZPfsUqhq6WjkoDCAfXhPBuF1Wiceqyy8KerOOXEnuocHky77fuEXq0AzVnQcC064Bkfw==}
 
   inferno-hydrate@8.2.3:
     resolution: {integrity: sha512-AyCiswnjYg7D9veJdjiQg06Npp0/iXKhwOm2hjoY3cjadT3fIdz2XtDElLB7imU4icuJ3xOmXA8FgIfnSJfHrQ==}
@@ -11198,20 +11089,11 @@ packages:
     resolution: {integrity: sha512-swaDCaTYPplKwcBDbveu7xKIAooLXOOdfRoETTCIZwKyfKBGR3JnqsrwcL6miFR8TG6CNibvYKG8eSYHzkoA4Q==}
     engines: {node: '>=8'}
 
-  inferno-shared@7.4.11:
-    resolution: {integrity: sha512-pN725bDSTxkQmRS3e/3H02/xAqgHl+xgddCMjPm8M0etRdRcVCisi3NGPhzSbDDmiftrxhY31exs7+dwsngcDA==}
-
   inferno-test-utils@8.2.3:
     resolution: {integrity: sha512-ctx+AWEOCrF7ZS80XaCvnglEankSDJbMuJmzd4ybxrD/3h0l7kYwjfLmV5ymyc+97sYquV6AaFMYbmaoFQ2XdA==}
 
-  inferno-vnode-flags@7.4.11:
-    resolution: {integrity: sha512-L7lslEQCq3IfwgT/b9zhuMf8fv6KXCNXXHZevk/WYxnqJsOWGDcKpJn0zkzXfvmj0otbB149iLUQVBq3oe2sfA==}
-
   inferno-vnode-flags@8.2.3:
     resolution: {integrity: sha512-dfC0MIwFv9PCbZCUsuk9ISejFS3fKJODC0rZ/LjxxzE+OrCk+PMwPLsUnGU6O9/jbBnPACVz1BkACDf5LWgU5Q==}
-
-  inferno@7.4.11:
-    resolution: {integrity: sha512-N+cs33ESWI8fdToCd98yMRYl7jkLnCkJskxov3FKKlaKOvk3PRlAttbhmUaYdWXlRvt2WeXi+J4MbzNj3V6G0w==}
 
   inferno@8.2.3:
     resolution: {integrity: sha512-LMeRlCe+RlXw8kHCLyOWRk2PsZ3Fo4jkESyAR1g4FfPT48N78i11YhTVXW2ukCx5MFjv+qrfa73JzJWU9sg4CQ==}
@@ -18031,18 +17913,6 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@babel/helper-define-polyfill-provider@0.3.3(@babel/core@7.24.5)':
-    dependencies:
-      '@babel/core': 7.24.5
-      '@babel/helper-compilation-targets': 7.23.6
-      '@babel/helper-plugin-utils': 7.24.8
-      debug: 4.3.7
-      lodash.debounce: 4.0.8
-      resolve: 1.22.8
-      semver: 6.3.1
-    transitivePeerDependencies:
-      - supports-color
-
   '@babel/helper-define-polyfill-provider@0.4.4(@babel/core@7.23.9)':
     dependencies:
       '@babel/core': 7.23.9
@@ -19260,18 +19130,6 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@babel/plugin-transform-runtime@7.19.6(@babel/core@7.24.5)':
-    dependencies:
-      '@babel/core': 7.24.5
-      '@babel/helper-module-imports': 7.24.7
-      '@babel/helper-plugin-utils': 7.24.8
-      babel-plugin-polyfill-corejs2: 0.3.3(@babel/core@7.24.5)
-      babel-plugin-polyfill-corejs3: 0.6.0(@babel/core@7.24.5)
-      babel-plugin-polyfill-regenerator: 0.4.1(@babel/core@7.24.5)
-      semver: 6.3.1
-    transitivePeerDependencies:
-      - supports-color
-
   '@babel/plugin-transform-runtime@7.23.3(@babel/core@7.23.9)':
     dependencies:
       '@babel/core': 7.23.9
@@ -19918,12 +19776,6 @@ snapshots:
       - eslint-plugin-rulesdir
       - eslint-plugin-spellcheck
       - supports-color
-
-  '@devextreme/runtime@3.0.13':
-    dependencies:
-      inferno: 7.4.11
-      inferno-create-element: 7.4.11
-      inferno-hydrate: 7.4.11
 
   '@discoveryjs/json-ext@0.5.7': {}
 
@@ -21204,13 +21056,15 @@ snapshots:
     transitivePeerDependencies:
       - '@parcel/core'
 
-  '@parcel/cache@2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.11))':
+  '@parcel/cache@2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.11))(@swc/helpers@0.5.11)':
     dependencies:
       '@parcel/core': 2.12.0(@swc/helpers@0.5.11)
       '@parcel/fs': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.11))(@swc/helpers@0.5.11)
       '@parcel/logger': 2.12.0
       '@parcel/utils': 2.12.0
       lmdb: 2.8.5
+    transitivePeerDependencies:
+      - '@swc/helpers'
 
   '@parcel/codeframe@2.12.0':
     dependencies:
@@ -21270,7 +21124,7 @@ snapshots:
   '@parcel/core@2.12.0(@swc/helpers@0.5.11)':
     dependencies:
       '@mischnic/json-sourcemap': 0.1.1
-      '@parcel/cache': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.11))
+      '@parcel/cache': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.11))(@swc/helpers@0.5.11)
       '@parcel/diagnostic': 2.12.0
       '@parcel/events': 2.12.0
       '@parcel/fs': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.11))(@swc/helpers@0.5.11)
@@ -21685,7 +21539,7 @@ snapshots:
 
   '@parcel/types@2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.11))(@swc/helpers@0.5.11)':
     dependencies:
-      '@parcel/cache': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.11))
+      '@parcel/cache': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.11))(@swc/helpers@0.5.11)
       '@parcel/diagnostic': 2.12.0
       '@parcel/fs': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.11))(@swc/helpers@0.5.11)
       '@parcel/package-manager': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.11))(@swc/helpers@0.5.11)
@@ -23122,12 +22976,6 @@ snapshots:
   '@swc/types@0.1.6':
     dependencies:
       '@swc/counter': 0.1.3
-
-  '@testcafe-community/axe@3.5.0(axe-core@4.10.0)(testcafe@2.5.0(encoding@0.1.13))':
-    dependencies:
-      axe-core: 4.10.0
-      chalk: 2.4.2
-      testcafe: 2.5.0(encoding@0.1.13)
 
   '@testcafe-community/axe@3.5.0(axe-core@4.10.2)(testcafe@2.5.0(encoding@0.1.13))':
     dependencies:
@@ -25123,8 +24971,6 @@ snapshots:
 
   aws4@1.12.0: {}
 
-  axe-core@4.10.0: {}
-
   axe-core@4.10.2: {}
 
   axe-core@4.7.0: {}
@@ -25237,13 +25083,6 @@ snapshots:
       - supports-color
     optional: true
 
-  babel-loader@9.1.3(@babel/core@7.23.9)(webpack@5.94.0(@swc/core@1.4.17(@swc/helpers@0.5.11))):
-    dependencies:
-      '@babel/core': 7.23.9
-      find-cache-dir: 4.0.0
-      schema-utils: 4.2.0
-      webpack: 5.94.0(@swc/core@1.4.17(@swc/helpers@0.5.11))(esbuild@0.20.1)
-
   babel-loader@9.1.3(@babel/core@7.24.0)(webpack@5.94.0(@swc/core@1.4.17(@swc/helpers@0.5.11))(esbuild@0.20.1)):
     dependencies:
       '@babel/core': 7.24.0
@@ -25322,15 +25161,6 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  babel-plugin-polyfill-corejs2@0.3.3(@babel/core@7.24.5):
-    dependencies:
-      '@babel/compat-data': 7.24.4
-      '@babel/core': 7.24.5
-      '@babel/helper-define-polyfill-provider': 0.3.3(@babel/core@7.24.5)
-      semver: 6.3.1
-    transitivePeerDependencies:
-      - supports-color
-
   babel-plugin-polyfill-corejs2@0.4.11(@babel/core@7.23.9):
     dependencies:
       '@babel/compat-data': 7.24.4
@@ -25353,14 +25183,6 @@ snapshots:
     dependencies:
       '@babel/core': 7.23.9
       '@babel/helper-define-polyfill-provider': 0.3.3(@babel/core@7.23.9)
-      core-js-compat: 3.37.0
-    transitivePeerDependencies:
-      - supports-color
-
-  babel-plugin-polyfill-corejs3@0.6.0(@babel/core@7.24.5):
-    dependencies:
-      '@babel/core': 7.24.5
-      '@babel/helper-define-polyfill-provider': 0.3.3(@babel/core@7.24.5)
       core-js-compat: 3.37.0
     transitivePeerDependencies:
       - supports-color
@@ -25393,13 +25215,6 @@ snapshots:
     dependencies:
       '@babel/core': 7.23.9
       '@babel/helper-define-polyfill-provider': 0.3.3(@babel/core@7.23.9)
-    transitivePeerDependencies:
-      - supports-color
-
-  babel-plugin-polyfill-regenerator@0.4.1(@babel/core@7.24.5):
-    dependencies:
-      '@babel/core': 7.24.5
-      '@babel/helper-define-polyfill-provider': 0.3.3(@babel/core@7.24.5)
     transitivePeerDependencies:
       - supports-color
 
@@ -27221,20 +27036,10 @@ snapshots:
       defined: 1.0.1
       minimist: 1.2.8
 
-  devexpress-diagram@2.2.13:
-    dependencies:
-      '@devexpress/utils': 1.4.3
-      es6-object-assign: 1.1.0
-
   devexpress-diagram@2.2.15:
     dependencies:
       '@devexpress/utils': 1.4.3
       es6-object-assign: 1.1.0
-
-  devexpress-gantt@4.1.56:
-    dependencies:
-      '@devexpress/utils': 1.4.3
-      tslib: 2.3.1
 
   devexpress-gantt@4.1.60:
     dependencies:
@@ -27313,18 +27118,6 @@ snapshots:
       pngjs: 6.0.0
       testcafe: 3.6.0
       tslib: 2.6.3
-
-  devextreme@24.2.3:
-    dependencies:
-      '@babel/runtime': 7.24.5
-      '@devextreme/runtime': 3.0.13
-      devexpress-diagram: 2.2.13
-      devexpress-gantt: 4.1.56
-      devextreme-quill: 1.7.1
-      inferno: 7.4.11
-      inferno-hydrate: 7.4.11
-      jszip: 3.10.1
-      rrule: 2.8.1
 
   device-specs@1.0.1: {}
 
@@ -30850,17 +30643,9 @@ snapshots:
 
   indent-string@5.0.0: {}
 
-  inferno-create-element@7.4.11:
-    dependencies:
-      inferno: 7.4.11
-
   inferno-create-element@8.2.3:
     dependencies:
       inferno: 8.2.3
-
-  inferno-hydrate@7.4.11:
-    dependencies:
-      inferno: 7.4.11
 
   inferno-hydrate@8.2.3:
     dependencies:
@@ -30870,21 +30655,11 @@ snapshots:
     dependencies:
       inferno: 8.2.3
 
-  inferno-shared@7.4.11: {}
-
   inferno-test-utils@8.2.3:
     dependencies:
       inferno: 8.2.3
 
-  inferno-vnode-flags@7.4.11: {}
-
   inferno-vnode-flags@8.2.3: {}
-
-  inferno@7.4.11:
-    dependencies:
-      inferno-shared: 7.4.11
-      inferno-vnode-flags: 7.4.11
-      opencollective-postinstall: 2.0.3
 
   inferno@8.2.3:
     dependencies:
@@ -36372,10 +36147,6 @@ snapshots:
       minimist: 1.2.8
       through: 2.3.8
 
-  style-loader@3.3.4(webpack@5.94.0(@swc/core@1.4.17(@swc/helpers@0.5.11))):
-    dependencies:
-      webpack: 5.94.0(@swc/core@1.4.17(@swc/helpers@0.5.11))(esbuild@0.20.1)
-
   style-loader@3.3.4(webpack@5.94.0):
     dependencies:
       webpack: 5.94.0(@swc/core@1.4.17(@swc/helpers@0.5.11))(webpack-cli@5.1.4)
@@ -38064,15 +37835,6 @@ snapshots:
       minimatch: 9.0.5
       shiki: 1.23.1
       typescript: 4.9.5
-      yaml: 2.6.1
-
-  typedoc@0.26.11(typescript@5.4.5):
-    dependencies:
-      lunr: 2.3.9
-      markdown-it: 14.1.0
-      minimatch: 9.0.5
-      shiki: 1.23.1
-      typescript: 5.4.5
       yaml: 2.6.1
 
   typescript@3.9.10: {}
