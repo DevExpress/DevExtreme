@@ -12,10 +12,10 @@ import {
     STEP_TEXT_CLASS,
     STEP_TITLE_CLASS,
 } from '__internal/ui/stepper/stepper';
-import { STEP_COMPLETED_CLASS,
+import {
+    STEP_COMPLETED_CLASS,
     STEP_INVALID_CLASS,
 } from '__internal/ui/stepper/stepper_item';
-
 
 const STEP_CONTENT_CLASS = 'dx-step-content';
 const ICON_CLASS = 'dx-icon';

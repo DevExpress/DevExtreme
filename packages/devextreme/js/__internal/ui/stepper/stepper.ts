@@ -134,9 +134,9 @@ class Stepper extends CollectionWidgetAsync<StepperProperties> {
     super._postprocessRenderItem(args);
 
     const { selectedIndex = 0 } = this.option();
-    const itemInstance = this._getItemInstance($(args.itemElement));
+    const $itemInstance = this._getItemInstance(args.itemElement);
 
-    itemInstance.changeCompleted(args.itemIndex < selectedIndex);
+    $itemInstance.changeCompleted(args.itemIndex < selectedIndex);
   }
 
   _itemClass(): string {
@@ -259,8 +259,8 @@ class Stepper extends CollectionWidgetAsync<StepperProperties> {
       return;
     }
 
-    const lastCompletedElement = itemElements.filter(`.${STEP_COMPLETED_CLASS}`).last();
-    const lastCompletedIndex = this._editStrategy.getIndex($(lastCompletedElement));
+    const $lastCompletedElement = itemElements.filter(`.${STEP_COMPLETED_CLASS}`).last();
+    const lastCompletedIndex = this._editStrategy.getIndex($lastCompletedElement);
     const { selectedIndex = 0 } = this.option();
 
     const startIndex = Math.min(lastCompletedIndex + 1, selectedIndex);
@@ -268,9 +268,9 @@ class Stepper extends CollectionWidgetAsync<StepperProperties> {
     const isCompleted = lastCompletedIndex < selectedIndex;
 
     for (let i = startIndex; i < endIndex; i += 1) {
-      const itemInstance = this._getItemInstance($(itemElements[i]));
+      const $itemInstance = this._getItemInstance($(itemElements[i]));
 
-      itemInstance.changeCompleted(isCompleted);
+      $itemInstance.changeCompleted(isCompleted);
     }
   }
 
