@@ -44,7 +44,7 @@
         background-color: $background-color-hover;
       }
 
-      &.dx-state-invalid {
+      &.dx-step-invalid {
         .dx-step-indicator {
           color: $invalid-color-hover;
         }
@@ -53,7 +53,7 @@
           color: $invalid-color-hover;
         }
 
-        &.dx-state-selected {
+        &.dx-step-selected {
           .dx-step-indicator {
             color: $color-selected;
           }
@@ -74,7 +74,7 @@
       }
     }
 
-    &.dx-state-invalid {
+    &.dx-step-invalid {
       .dx-step-indicator {
         color: $invalid-color;
       }
@@ -100,7 +100,7 @@
         box-shadow: 0 0 0 2px $background-color, 0 0 0 4px $border-color-selected, 0 0 0 8px $background-color;
       }
 
-      &.dx-state-invalid {
+      &.dx-step-invalid {
         .dx-step-title {
           color: $invalid-color;
         }
@@ -118,7 +118,7 @@
         box-shadow: 0 0 0 2px $background-color, 0 0 0 4px $border-color-focused, 0 0 0 8px $background-color;
       }
 
-      &.dx-state-invalid {
+      &.dx-step-invalid {
         .dx-step-content::before {
           box-shadow: 0 0 0 2px $background-color, 0 0 0 4px $border-color-focused, 0 0 0 8px $background-color;
         }
