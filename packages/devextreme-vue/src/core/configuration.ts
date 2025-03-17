@@ -306,12 +306,12 @@ function setEmitOptionChangedFunc(
   config.emitOptionChanged = (name: string, value: string) => {
     const props = vueInstance.$props;
     const vnode = vueInstance?.$?.vnode;
-    if (hasProp(vueInstance, name) && !isEqual(value, props[name]) && vueInstance.$emit) {
-      innerChanges[name] = toRaw(value);
-      const eventName = name === 'value' && hasVModelValue(vueInstance.$options, props, vnode)
-        ? `update:${VMODEL_NAME}`
-        : `update:${name}`;
 
+    const propsName = name === 'value' && hasVModelValue(vueInstance.$options, props, vnode) ? VMODEL_NAME : name;
+    const eventName = `update:${propsName}`;
+
+    if (hasProp(vueInstance, name) && !isEqual(value, props[propsName]) && vueInstance.$emit) {
+      innerChanges[propsName] = toRaw(value);
       vueInstance.$emit(eventName, value);
     }
   };
