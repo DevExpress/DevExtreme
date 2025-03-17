@@ -42,7 +42,8 @@ export class HeaderPanelView extends View<HeaderPanelProps> {
       itemTemplate: this.options.template('headerPanel.itemTemplate') as any,
       itemCssClass: this.options.oneWay('headerPanel.itemCssClass'),
       visible: this.options.oneWay('headerPanel.visible'),
-      draggingOptions: this.options.oneWay('headerPanel.dragging'),
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      draggingOptions: this.options.oneWay('headerPanel.dragging') as any,
     });
   }
 

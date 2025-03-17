@@ -66,17 +66,5 @@
     "lint-staged",
     "pre-commit"
   ],
-  "packageManager": "pnpm@9.15.4",
-  "pnpm": {
-    "patchedDependencies": {
-      "@devextreme/runtime@3.0.13": "patches/@devextreme__runtime@3.0.13.patch"
-    },
-    "overrides": {
-      "inferno": "^8.2.3",
-      "inferno-create-element": "8.2.3",
-      "inferno-hydrate": "^8.2.3",
-      "inferno-test-utils": "8.2.3",
-      "inferno-server": "8.2.3"
-    }
-  }
+  "packageManager": "pnpm@9.15.4"
 }
