@@ -213,28 +213,15 @@ export class DxStepperComponent<TItem = any, TKey = any> extends DxComponent imp
 
 
     /**
-     * [descr:CollectionWidgetOptions.keyExpr]
+     * [descr:dxStepperOptions.linear]
     
      */
     @Input()
-    get keyExpr(): Function | string {
-        return this._getOption('keyExpr');
+    get linear(): boolean {
+        return this._getOption('linear');
     }
-    set keyExpr(value: Function | string) {
-        this._setOption('keyExpr', value);
-    }
-
-
-    /**
-     * [descr:CollectionWidgetOptions.noDataText]
-    
-     */
-    @Input()
-    get noDataText(): string {
-        return this._getOption('noDataText');
-    }
-    set noDataText(value: string) {
-        this._setOption('noDataText', value);
+    set linear(value: boolean) {
+        this._setOption('linear', value);
     }
 
 
@@ -287,19 +274,6 @@ export class DxStepperComponent<TItem = any, TKey = any> extends DxComponent imp
     }
     set selectedItem(value: any) {
         this._setOption('selectedItem', value);
-    }
-
-
-    /**
-     * [descr:CollectionWidgetOptions.selectedItemKeys]
-    
-     */
-    @Input()
-    get selectedItemKeys(): Array<any> {
-        return this._getOption('selectedItemKeys');
-    }
-    set selectedItemKeys(value: Array<any>) {
-        this._setOption('selectedItemKeys', value);
     }
 
 
@@ -500,14 +474,7 @@ export class DxStepperComponent<TItem = any, TKey = any> extends DxComponent imp
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() keyExprChange: EventEmitter<Function | string>;
-
-    /**
-    
-     * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
-     */
-    @Output() noDataTextChange: EventEmitter<string>;
+    @Output() linearChange: EventEmitter<boolean>;
 
     /**
     
@@ -536,13 +503,6 @@ export class DxStepperComponent<TItem = any, TKey = any> extends DxComponent imp
     
      */
     @Output() selectedItemChange: EventEmitter<any>;
-
-    /**
-    
-     * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
-     */
-    @Output() selectedItemKeysChange: EventEmitter<Array<any>>;
 
     /**
     
@@ -624,13 +584,11 @@ export class DxStepperComponent<TItem = any, TKey = any> extends DxComponent imp
             { emit: 'hoverStateEnabledChange' },
             { emit: 'itemsChange' },
             { emit: 'itemTemplateChange' },
-            { emit: 'keyExprChange' },
-            { emit: 'noDataTextChange' },
+            { emit: 'linearChange' },
             { emit: 'orientationChange' },
             { emit: 'rtlEnabledChange' },
             { emit: 'selectedIndexChange' },
             { emit: 'selectedItemChange' },
-            { emit: 'selectedItemKeysChange' },
             { emit: 'selectOnFocusChange' },
             { emit: 'tabIndexChange' },
             { emit: 'visibleChange' },
@@ -655,7 +613,6 @@ export class DxStepperComponent<TItem = any, TKey = any> extends DxComponent imp
         super.ngOnChanges(changes);
         this.setupChanges('dataSource', changes);
         this.setupChanges('items', changes);
-        this.setupChanges('selectedItemKeys', changes);
     }
 
     setupChanges(prop: string, changes: SimpleChanges) {
@@ -667,7 +624,6 @@ export class DxStepperComponent<TItem = any, TKey = any> extends DxComponent imp
     ngDoCheck() {
         this._idh.doCheck('dataSource');
         this._idh.doCheck('items');
-        this._idh.doCheck('selectedItemKeys');
         this._watcherHelper.checkWatchers();
         super.ngDoCheck();
         super.clearChangedOptions();
