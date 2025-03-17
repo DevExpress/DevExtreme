@@ -102,7 +102,7 @@ export type DataControllerOptions<TRowData = unknown, TKey = unknown> = {
      * @default "auto"
      * @public
      */
-    remoteOperations?: RemoteOperations | boolean | 'auto';
+    remoteOperations?: RemoteOperations | boolean | Mode;
 };
 
 // #endregion
