@@ -35,9 +35,9 @@ const statusCheckEql = async (t: TestController, scheduler: Scheduler, status: s
 };
 
 const options = [
-  ['agenda', 'Agenda view from April 30, 2025 to May 6, 2025', [0, 9, 19]],
+  ['agenda', 'Agenda view from April 30, 2025 to May 6, 2025', [0, 9, 18]],
   ['day', 'Day view April 30, 2025', [0, 3, 5]],
-  ['month', 'Month view April 2025', [0, 17, 35]],
+  ['month', 'Month view from March 2025 to May 2025', [0, 17, 35]],
   ['timelineDay', 'Timeline Day view April 30, 2025', [0, 3, 5]],
   ['timelineMonth', 'Timeline Month view April 2025', [0, 11, 21]],
   ['timelineWeek', 'Timeline Week view from April 27, 2025 to May 3, 2025', [0, 12, 25]],
@@ -46,6 +46,7 @@ const options = [
   ['workWeek', 'Work Week view from April 28, 2025 to May 2, 2025', [0, 10, 20]],
   ['Two Weeks', 'Two Weeks view from April 27, 2025 to May 10, 2025', [0, 14, 29]],
 ] as const;
+const indicatorOnView = 'Current time indicator is on the view';
 
 options.forEach(([currentView, title, counts]) => {
   counts.forEach((appointmentsCount, index) => {
@@ -56,13 +57,13 @@ options.forEach(([currentView, title, counts]) => {
 
         if (hasIndicator) {
           await t.click(scheduler.toolbar.navigator.nextButton);
-          await statusCheck(t, scheduler, 'Current time at the past');
+          await statusCheck(t, scheduler, currentView === 'month' ? indicatorOnView : 'Current time indicator is in the past');
 
           await t.click(scheduler.toolbar.navigator.prevButton);
-          await statusCheckEql(t, scheduler, `${generalStatus}. Current time on the view`);
+          await statusCheckEql(t, scheduler, `${generalStatus}. ${indicatorOnView}`);
 
           await t.click(scheduler.toolbar.navigator.prevButton);
-          await statusCheck(t, scheduler, 'Current time at the future');
+          await statusCheck(t, scheduler, 'Current time indicator is in the future');
         } else {
           await statusCheckEql(t, scheduler, generalStatus);
         }

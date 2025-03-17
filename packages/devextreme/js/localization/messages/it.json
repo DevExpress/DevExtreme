@@ -251,7 +251,9 @@
         "dxPivotGrid-filterFieldArea": "Trascina qui i campi filtro",
 
         "dxScheduler-ariaLabel": "Scheduler. {0} view",
-
+        "dxScheduler-ariaLabel-currentIndicator-present": "Current time on the view",
+        "dxScheduler-ariaLabel-currentIndicator-future": "Current time at the future",
+        "dxScheduler-ariaLabel-currentIndicator-past": "Current time at the past",
 
         "dxScheduler-appointmentAriaLabel-group": "Group: {0}",
         "dxScheduler-appointmentAriaLabel-recurring": "Recurring appointment",

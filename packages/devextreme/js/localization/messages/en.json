@@ -251,9 +251,9 @@
         "dxPivotGrid-filterFieldArea": "Drop Filter Fields Here",
 
         "dxScheduler-ariaLabel": "Scheduler. {0} view {1} with {2} appointments",
-        "dxScheduler-ariaLabel-currentIndicator-present": "Current time on the view",
-        "dxScheduler-ariaLabel-currentIndicator-future": "Current time at the future",
-        "dxScheduler-ariaLabel-currentIndicator-past": "Current time at the past",
+        "dxScheduler-ariaLabel-currentIndicator-present": "Current time indicator is on the view",
+        "dxScheduler-ariaLabel-currentIndicator-future": "Current time indicator is in the future",
+        "dxScheduler-ariaLabel-currentIndicator-past": "Current time indicator is in the past",
 
         "dxScheduler-appointmentAriaLabel-group": "Group: {0}",
         "dxScheduler-appointmentAriaLabel-recurring": "Recurring appointment",

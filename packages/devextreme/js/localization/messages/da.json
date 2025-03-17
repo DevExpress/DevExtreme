@@ -251,7 +251,9 @@
         "dxPivotGrid-filterFieldArea": "Slip filterfelter her",
 
         "dxScheduler-ariaLabel": "Planlægger. {0} visning",
-
+        "dxScheduler-ariaLabel-currentIndicator-present": "Current time on the view",
+        "dxScheduler-ariaLabel-currentIndicator-future": "Current time at the future",
+        "dxScheduler-ariaLabel-currentIndicator-past": "Current time at the past",
 
         "dxScheduler-appointmentAriaLabel-group": "Gruppe: {0}",
         "dxScheduler-appointmentAriaLabel-recurring": "Tilbagevendende aftale",
