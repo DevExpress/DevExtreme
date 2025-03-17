@@ -44,6 +44,10 @@ export default class FilterPanel extends FocusableElement {
     return new FocusableElement(this.element.find(`.${Widget.addClassPrefix(this.widgetName, CLASS.clearFilter)}`));
   }
 
+  getFilterBuilderPopup(): FilterBuilderPopup {
+    return new FilterBuilderPopup();
+  }
+
   async openFilterBuilderPopup(t: TestController): Promise<FilterBuilderPopup> {
     await t.click(this.getIconFilter().element);
 

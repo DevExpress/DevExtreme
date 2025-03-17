@@ -1,31 +1,10 @@
 import CardView from 'devextreme-testcafe-models/cardView';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
-import { data } from '../helpers/simpleArrayData';
+import { baseConfig } from './helpers/baseConfig';
 
 fixture.disablePageReloads`CardView - FilterPanel API`
   .page(url(__dirname, '../../container.html'));
-
-const baseConfig = {
-  dataSource: data,
-  columns: [
-    {
-      dataField: 'id',
-    },
-    {
-      dataField: 'title',
-    },
-    {
-      dataField: 'name',
-    },
-    {
-      dataField: 'lastName',
-    },
-  ],
-  filterPanel: {
-    visible: true,
-  },
-};
 
 test('filterPanel.customizeText API', async (t) => {
   const cardView = new CardView('#container');
