@@ -25,6 +25,7 @@ export { ExplicitTypes } from 'devextreme/ui/card_view';
 
 import DataSource from 'devextreme/data/data_source';
 import { CardCover, CardHeader, ColumnProperties, HeaderPanel, Paging, RemoteOperations, PredefinedToolbarItem, ToolbarItem } from 'devextreme/ui/card_view';
+import { Mode } from 'devextreme/common';
 import { DataSourceOptions } from 'devextreme/data/data_source';
 import { Store } from 'devextreme/data/store';
 import { EventInfo } from 'devextreme/common/core/events';
@@ -169,10 +170,10 @@ export class DxCardViewComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get cardsPerRow(): number | "auto" {
+    get cardsPerRow(): Mode | number {
         return this._getOption('cardsPerRow');
     }
-    set cardsPerRow(value: number | "auto") {
+    set cardsPerRow(value: Mode | number) {
         this._setOption('cardsPerRow', value);
     }
 
@@ -510,7 +511,7 @@ export class DxCardViewComponent<TRowData = any, TKey = any> extends DxComponent
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() cardsPerRowChange: EventEmitter<number | "auto">;
+    @Output() cardsPerRowChange: EventEmitter<Mode | number>;
 
     /**
     

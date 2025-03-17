@@ -1,4 +1,4 @@
-import { template } from '../common';
+import { Mode, template } from '../common';
 import { UserDefinedElement } from '../core/element';
 import {
  ColumnBase, DataErrorOccurredInfo, Pager, ScrollingBase,
@@ -443,7 +443,7 @@ export interface ContentViewOptions<TRowData = unknown> extends BaseContentViewO
      * @docid
      * @public
      */
-    cardsPerRow?: number | 'auto';
+    cardsPerRow?: number | Mode;
     /**
      * @docid
      * @public
