@@ -17,7 +17,42 @@ import { dxTreeListColumn, dxTreeListColumnButton, TreeListCommandColumnType, Tr
 @Component({
     template: ''
 })
-export abstract class DxiDataGridColumn extends CollectionNestedOption {
+export abstract class DxiColumnProperties extends CollectionNestedOption {
+    get fieldCaptionTemplate(): any {
+        return this._getOption('fieldCaptionTemplate');
+    }
+    set fieldCaptionTemplate(value: any) {
+        this._setOption('fieldCaptionTemplate', value);
+    }
+
+    get fieldTemplate(): any {
+        return this._getOption('fieldTemplate');
+    }
+    set fieldTemplate(value: any) {
+        this._setOption('fieldTemplate', value);
+    }
+
+    get fieldValueTemplate(): any {
+        return this._getOption('fieldValueTemplate');
+    }
+    set fieldValueTemplate(value: any) {
+        this._setOption('fieldValueTemplate', value);
+    }
+
+    get headerItemCssClass(): string {
+        return this._getOption('headerItemCssClass');
+    }
+    set headerItemCssClass(value: string) {
+        this._setOption('headerItemCssClass', value);
+    }
+
+    get headerItemTemplate(): any {
+        return this._getOption('headerItemTemplate');
+    }
+    set headerItemTemplate(value: any) {
+        this._setOption('headerItemTemplate', value);
+    }
+
     get alignment(): HorizontalAlignment | string | undefined {
         return this._getOption('alignment');
     }

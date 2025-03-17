@@ -8,9 +8,7 @@ import {
     OnDestroy,
     NgModule,
     Host,
-    SkipSelf,
-    Output,
-    EventEmitter
+    SkipSelf
 } from '@angular/core';
 
 
@@ -20,49 +18,29 @@ import {
 import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
-import { DxoPaging } from './base/paging';
+import { DxoCardHeader } from './base/card-header';
 
 
 @Component({
-    selector: 'dxo-paging',
+    selector: 'dxo-card-header',
     template: '',
     styles: [''],
     providers: [NestedOptionHost],
     inputs: [
-        'enabled',
-        'pageIndex',
-        'pageSize'
+        'captionExpr',
+        'visible'
     ]
 })
-export class DxoPagingComponent extends DxoPaging implements OnDestroy, OnInit  {
+export class DxoCardHeaderComponent extends DxoCardHeader implements OnDestroy, OnInit  {
 
-    /**
-    
-     * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
-     */
-    @Output() pageIndexChange: EventEmitter<number>;
-
-    /**
-    
-     * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
-     */
-    @Output() pageSizeChange: EventEmitter<number>;
     protected get _optionPath() {
-        return 'paging';
+        return 'cardHeader';
     }
 
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
-
-        this._createEventEmitters([
-            { emit: 'pageIndexChange' },
-            { emit: 'pageSizeChange' }
-        ]);
-
         parentOptionHost.setNestedOption(this);
         optionHost.setHost(this, this._fullOptionPath.bind(this));
     }
@@ -81,10 +59,10 @@ export class DxoPagingComponent extends DxoPaging implements OnDestroy, OnInit  
 
 @NgModule({
   declarations: [
-    DxoPagingComponent
+    DxoCardHeaderComponent
   ],
   exports: [
-    DxoPagingComponent
+    DxoCardHeaderComponent
   ],
 })
-export class DxoPagingModule { }
+export class DxoCardHeaderModule { }
