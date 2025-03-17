@@ -35,16 +35,16 @@ const statusCheckEql = async (t: TestController, scheduler: Scheduler, status: s
 };
 
 const options = [
-  ['agenda', 'Agenda view from April 30, 2025 to May 6, 2025', [0, 9, 19]],
-  ['day', 'Day view April 30, 2025', [0, 3, 5]],
-  ['month', 'Month view from March 2025 to May 2025', [0, 17, 35]],
-  ['timelineDay', 'Timeline Day view April 30, 2025', [0, 3, 5]],
-  ['timelineMonth', 'Timeline Month view April 2025', [0, 11, 21]],
-  ['timelineWeek', 'Timeline Week view from April 27, 2025 to May 3, 2025', [0, 12, 25]],
-  ['timelineWorkWeek', 'Timeline Work Week view from April 28, 2025 to May 2, 2025', [0, 9, 18]],
-  ['week', 'Week view from April 27, 2025 to May 3, 2025', [0, 13, 27]],
-  ['workWeek', 'Work Week view from April 28, 2025 to May 2, 2025', [0, 10, 20]],
-  ['Two Weeks', 'Two Weeks view from April 27, 2025 to May 10, 2025', [0, 14, 29]],
+  ['agenda', 'Agenda view: from April 30, 2025 to May 6, 2025', [0, 9, 19]],
+  ['day', 'Day view: April 30, 2025', [0, 3, 5]],
+  ['month', 'Month view: from March 2025 to May 2025', [0, 17, 35]],
+  ['timelineDay', 'Timeline Day view: April 30, 2025', [0, 3, 5]],
+  ['timelineMonth', 'Timeline Month view: April 2025', [0, 11, 21]],
+  ['timelineWeek', 'Timeline Week view: from April 27, 2025 to May 3, 2025', [0, 12, 25]],
+  ['timelineWorkWeek', 'Timeline Work Week view: from April 28, 2025 to May 2, 2025', [0, 9, 18]],
+  ['week', 'Week view: from April 27, 2025 to May 3, 2025', [0, 13, 27]],
+  ['workWeek', 'Work Week view: from April 28, 2025 to May 2, 2025', [0, 10, 20]],
+  ['Two Weeks', 'Two Weeks view: from April 27, 2025 to May 10, 2025', [0, 14, 29]],
 ] as const;
 const indicatorOnView = 'The current time indicator is visible in the view';
 const indicatorNotOnView = 'The current time indicator is not visible on the screen';

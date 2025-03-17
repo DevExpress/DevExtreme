@@ -250,7 +250,7 @@
         "dxPivotGrid-rowFieldArea": "Plasați câmpurile rândului aici",
         "dxPivotGrid-filterFieldArea": "Plasați câmpurile de filtrare aici",
 
-        "dxScheduler-ariaLabel": "Scheduler. {0} view {1} with {2} appointments",
+        "dxScheduler-ariaLabel": "Scheduler. {0} view: {1} with {2} appointments",
         "dxScheduler-ariaLabel-currentIndicator-present": "The current time indicator is visible in the view",
         "dxScheduler-ariaLabel-currentIndicator-not-present": "The current time indicator is not visible on the screen",
 
