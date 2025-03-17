@@ -13,7 +13,7 @@
   "dependencies": {
     "devextreme": "workspace:~",
     "devextreme-react": "workspace:~",
-    "inferno": "^8.2.3",
+    "inferno": "catalog:",
     "html-react-parser": "^5.2.2"
   },
   "devDependencies": {
