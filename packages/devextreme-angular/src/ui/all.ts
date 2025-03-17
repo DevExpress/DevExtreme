@@ -8,6 +8,7 @@ import { DxBulletModule } from 'devextreme-angular/ui/bullet';
 import { DxButtonModule } from 'devextreme-angular/ui/button';
 import { DxButtonGroupModule } from 'devextreme-angular/ui/button-group';
 import { DxCalendarModule } from 'devextreme-angular/ui/calendar';
+import { DxCardViewModule } from 'devextreme-angular/ui/card-view';
 import { DxChartModule } from 'devextreme-angular/ui/chart';
 import { DxChatModule } from 'devextreme-angular/ui/chat';
 import { DxCheckBoxModule } from 'devextreme-angular/ui/check-box';
@@ -93,6 +94,7 @@ import { DxTemplateModule } from 'devextreme-angular/core';
     DxButtonModule,
     DxButtonGroupModule,
     DxCalendarModule,
+    DxCardViewModule,
     DxChartModule,
     DxChatModule,
     DxCheckBoxModule,
@@ -177,6 +179,7 @@ import { DxTemplateModule } from 'devextreme-angular/core';
     DxButtonModule,
     DxButtonGroupModule,
     DxCalendarModule,
+    DxCardViewModule,
     DxChartModule,
     DxChatModule,
     DxCheckBoxModule,

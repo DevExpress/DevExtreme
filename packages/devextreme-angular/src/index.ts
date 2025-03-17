@@ -12,6 +12,7 @@ export { DxBulletComponent, DxBulletModule } from 'devextreme-angular/ui/bullet'
 export { DxButtonComponent, DxButtonModule } from 'devextreme-angular/ui/button';
 export { DxButtonGroupComponent, DxButtonGroupModule } from 'devextreme-angular/ui/button-group';
 export { DxCalendarComponent, DxCalendarModule } from 'devextreme-angular/ui/calendar';
+export { DxCardViewComponent, DxCardViewModule } from 'devextreme-angular/ui/card-view';
 export { DxChartComponent, DxChartModule } from 'devextreme-angular/ui/chart';
 export { DxChatComponent, DxChatModule } from 'devextreme-angular/ui/chat';
 export { DxCheckBoxComponent, DxCheckBoxModule } from 'devextreme-angular/ui/check-box';
