@@ -37,9 +37,9 @@ const statusCheckEql = async (t: TestController, scheduler: Scheduler, status: s
 const options = [
   ['agenda', 'Agenda view from April 30, 2025 to May 6, 2025', [0, 9, 19]],
   ['day', 'Day view April 30, 2025', [0, 3, 5]],
-  ['month', 'Month view from April 1, 2025 to April 30, 2025', [0, 17, 35]],
+  ['month', 'Month view April 2025', [0, 17, 35]],
   ['timelineDay', 'Timeline Day view April 30, 2025', [0, 3, 5]],
-  ['timelineMonth', 'Timeline Month view from April 1, 2025 to April 30, 2025', [0, 11, 21]],
+  ['timelineMonth', 'Timeline Month view April 2025', [0, 11, 21]],
   ['timelineWeek', 'Timeline Week view from April 27, 2025 to May 3, 2025', [0, 12, 25]],
   ['timelineWorkWeek', 'Timeline Work Week view from April 28, 2025 to May 2, 2025', [0, 9, 18]],
   ['week', 'Week view from April 27, 2025 to May 3, 2025', [0, 13, 27]],
@@ -70,11 +70,13 @@ options.forEach(([currentView, title, counts]) => {
         await createWidget('dxScheduler', {
           timeZone: 'America/Los_Angeles',
           dataSource: appointments.slice(0, 2 * index),
-          views: [{
-            name: 'Two Weeks',
-            type: 'week',
-            intervalCount: 2,
-          }, 'agenda', 'day', 'month', 'timelineDay', 'timelineMonth', 'timelineWeek', 'timelineWorkWeek', 'week', 'workWeek'],
+          views: [
+            'agenda', 'day', 'month', 'timelineDay', 'timelineMonth', 'timelineWeek', 'timelineWorkWeek', 'week', 'workWeek', {
+              name: 'Two Weeks',
+              type: 'week',
+              intervalCount: 2,
+            },
+          ],
           currentView,
           indicatorTime: today,
           currentDate: today,

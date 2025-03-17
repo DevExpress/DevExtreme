@@ -174,7 +174,7 @@ class Scheduler extends Widget<any> {
 
   _workSpace: any;
 
-  _header: any;
+  _header?: SchedulerHeader;
 
   _appointments: any;
 
@@ -1316,33 +1316,35 @@ class Scheduler extends Widget<any> {
   _renderFocusTarget() { return noop(); }
 
   _updateA11yStatus() {
-    const { startDate, endDate } = this._header.visibleDateInterval;
+    const dateRange = this._workSpace.getDateRange();
     const indicatorTime = this.option('showCurrentTimeIndicator')
       ? getToday(this.option('indicatorTime') as Date, this.timeZoneCalculator)
       : undefined;
     const label = getA11yStatusText(
-      this._header.currentView,
-      startDate,
-      endDate,
+      this.currentView,
+      dateRange[0],
+      dateRange[1],
       this._appointments.appointmentsCount,
       indicatorTime,
     );
 
     // @ts-expect-error
-    this.setAria({ label, role: 'group' });
+    this.setAria({ label });
     this._a11yStatus.text(label);
   }
 
   _renderA11yStatus() {
     this._a11yStatus = createA11yStatusContainer();
     this._a11yStatus.prependTo(this.$element());
-    this._updateA11yStatus();
+    // @ts-expect-error
+    this.setAria({ role: 'group' });
   }
 
   _initMarkup() {
     // @ts-expect-error
     super._initMarkup();
 
+    this._renderA11yStatus();
     this._renderMainContainer();
     this._renderHeader();
 
@@ -1357,7 +1359,6 @@ class Scheduler extends Widget<any> {
       : DesktopTooltipStrategy)(this._getAppointmentTooltipOptions());
 
     this._createAppointmentPopupForm();
-    this._renderA11yStatus();
 
     // @ts-expect-error
     if (this._isDataSourceLoaded() || this._isDataSourceLoading()) {
@@ -1521,10 +1522,9 @@ class Scheduler extends Widget<any> {
     this._waitAsyncTemplate(() => this._workSpaceRecalculation?.resolve());
 
     this.createAppointmentDataProvider();
-
     this._filterAppointmentsByDate();
-
     this._validateKeyFieldIfAgendaExist();
+    this._updateA11yStatus();
   }
 
   _isDataSourceLoaded() {
