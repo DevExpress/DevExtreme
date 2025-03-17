@@ -408,6 +408,7 @@ class DateRangeBox extends Editor<Properties> {
   }
 
   _renderButtonsContainer(): void {
+    // @ts-expect-error
     this._buttonCollection = new TextEditorButtonCollection(this, this._getDefaultButtons());
 
     this._$beforeButtonsContainer = undefined;
@@ -738,9 +739,9 @@ class DateRangeBox extends Editor<Properties> {
     return this.$element();
   }
 
-  _toggleFocusClass(isFocused, $element: dxElementWrapper): void {
+  _toggleFocusClass(isFocused: boolean): void {
     // @ts-expect-error
-    super._toggleFocusClass(isFocused, this._focusClassTarget($element));
+    super._toggleFocusClass(isFocused, this._focusClassTarget());
   }
 
   _hasActiveElement(): boolean {

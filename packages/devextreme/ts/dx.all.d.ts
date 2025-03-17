@@ -7659,6 +7659,12 @@ declare module DevExpress.events {
    */
   export interface EventType {}
   /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  interface EventType extends JQueryEventObject {
+    cancel?: boolean;
+  }
+  /**
    * [descr:events.triggerHandler(element, event)]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
@@ -16816,6 +16822,23 @@ declare module DevExpress.ui {
       readonly setValue: Function;
     };
     /**
+     * [descr:FieldInfo]
+     */
+    export type FieldInfo = {
+      /**
+       * [descr:FieldInfo.value]
+       */
+      value?: string | number | Date;
+      /**
+       * [descr:FieldInfo.valueText]
+       */
+      valueText?: string;
+      /**
+       * [descr:FieldInfo.field]
+       */
+      field?: Field;
+    };
+    /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
      */
     export type FilterBuilderOperation =
@@ -16886,11 +16909,9 @@ declare module DevExpress.ui {
     /**
      * [descr:dxFilterBuilderCustomOperation.customizeText]
      */
-    customizeText?: (fieldInfo: {
-      value?: string | number | Date;
-      valueText?: string;
-      field?: Field;
-    }) => string;
+    customizeText?: (
+      fieldInfo: DevExpress.ui.dxFilterBuilder.FieldInfo
+    ) => string;
     /**
      * [descr:dxFilterBuilderCustomOperation.dataTypes]
      */
@@ -16936,10 +16957,9 @@ declare module DevExpress.ui {
     /**
      * [descr:dxFilterBuilderField.customizeText]
      */
-    customizeText?: (fieldInfo: {
-      value?: string | number | Date;
-      valueText?: string;
-    }) => string;
+    customizeText?: (
+      fieldInfo: DevExpress.ui.dxFilterBuilder.FieldInfo
+    ) => string;
     /**
      * [descr:dxFilterBuilderField.dataField]
      */

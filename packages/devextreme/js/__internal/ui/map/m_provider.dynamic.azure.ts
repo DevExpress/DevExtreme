@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-misused-promises */
 import Color from '@js/color';
 import $ from '@js/core/renderer';
 import ajax from '@js/core/utils/ajax';
@@ -24,12 +25,13 @@ const CAMERA_PADDING = 50;
 
 const azureMapsLoaded = function () {
   // @ts-expect-error
-  return window.atlas && window.atlas.Map;
+  return window.atlas?.Map;
 };
 
 let azureMapsLoader;
+class AzureProvider extends DynamicProvider {
+  _preventZoomChangeEvent?: boolean;
 
-const AzureProvider = DynamicProvider.inherit({
   _mapType(type) {
     const mapTypes = {
       roadmap: 'road',
@@ -37,7 +39,7 @@ const AzureProvider = DynamicProvider.inherit({
       hybrid: 'satellite_road_labels',
     };
     return mapTypes[type] || mapTypes.roadmap;
-  },
+  }
 
   _movementMode(type) {
     const movementTypes = {
@@ -45,7 +47,7 @@ const AzureProvider = DynamicProvider.inherit({
       walking: 'pedestrian',
     };
     return movementTypes[type] || movementTypes.driving;
-  },
+  }
 
   _resolveLocation(location) {
     return new Promise((resolve) => {
@@ -58,9 +60,8 @@ const AzureProvider = DynamicProvider.inherit({
         });
       }
     });
-  },
+  }
 
-  _geocodedLocations: {},
   _geocodeLocationImpl(location) {
     return new Promise((resolve) => {
       if (!isDefined(location)) {
@@ -83,14 +84,14 @@ const AzureProvider = DynamicProvider.inherit({
         }
       });
     });
-  },
+  }
 
   _normalizeLocation(location) {
     return {
       lat: location[1],
       lng: location[0],
     };
-  },
+  }
 
   _normalizeLocationRect(locationRect) {
     return {
@@ -103,7 +104,7 @@ const AzureProvider = DynamicProvider.inherit({
         lng: locationRect[0],
       },
     };
-  },
+  }
 
   _loadImpl() {
     return new Promise<void>((resolve) => {
@@ -120,18 +121,18 @@ const AzureProvider = DynamicProvider.inherit({
           resolve();
           return;
         }
-
+        // @ts-expect-error ts-error
         this._loadMapResources().then(resolve);
       });
     });
-  },
+  }
 
   _loadMapResources() {
     return Promise.all([
       this._loadMapScript(),
       this._loadMapStyles(),
     ]);
-  },
+  }
 
   _loadMapScript() {
     return new Promise<void>((resolve) => {
@@ -142,7 +143,7 @@ const AzureProvider = DynamicProvider.inherit({
         resolve();
       });
     });
-  },
+  }
 
   _loadMapStyles() {
     return new Promise<void>((resolve) => {
@@ -154,13 +155,13 @@ const AzureProvider = DynamicProvider.inherit({
         resolve();
       });
     });
-  },
+  }
 
   _init() {
     this._createMap();
 
     return Promise.resolve();
-  },
+  }
 
   _createMap() {
     this._map = new atlas.Map(this._$container[0], {
@@ -174,12 +175,12 @@ const AzureProvider = DynamicProvider.inherit({
     });
 
     this.updateControls();
-  },
+  }
 
   _attachHandlers() {
     this._map.events.add('move', this._viewChangeHandler.bind(this));
     this._map.events.add('click', this._clickActionHandler.bind(this));
-  },
+  }
 
   _viewChangeHandler() {
     const { bounds } = this._map.getCamera();
@@ -191,19 +192,19 @@ const AzureProvider = DynamicProvider.inherit({
     if (!this._preventZoomChangeEvent) {
       this._option('zoom', this._map.getCamera().zoom);
     }
-  },
+  }
 
   _clickActionHandler(e) {
     if (e.type === 'click') {
       this._fireClickAction({ location: this._normalizeLocation(e.position) });
     }
-  },
+  }
 
   updateDimensions() {
     this._map.resize();
 
     return Promise.resolve();
-  },
+  }
 
   updateDisabled() {
     const disabled = this._option('disabled');
@@ -213,7 +214,7 @@ const AzureProvider = DynamicProvider.inherit({
     });
 
     return Promise.resolve();
-  },
+  }
 
   updateMapType() {
     const newType = this._mapType(this._option('type'));
@@ -226,7 +227,7 @@ const AzureProvider = DynamicProvider.inherit({
     }
 
     return Promise.resolve();
-  },
+  }
 
   updateBounds() {
     return Promise.all([
@@ -235,12 +236,13 @@ const AzureProvider = DynamicProvider.inherit({
     ]).then((result) => {
       this._map.setCamera({
         bounds: [
+          // @ts-expect-error ts-error
           result[1][0], result[1][1], result[0][0], result[0][1],
         ],
         padding: 50,
       });
     });
-  },
+  }
 
   updateCenter() {
     return this._resolveLocation(this._option('center')).then((center) => {
@@ -248,7 +250,7 @@ const AzureProvider = DynamicProvider.inherit({
         center,
       });
     });
-  },
+  }
 
   updateZoom() {
     this._map.setCamera({
@@ -256,7 +258,7 @@ const AzureProvider = DynamicProvider.inherit({
     });
 
     return Promise.resolve();
-  },
+  }
 
   updateControls() {
     const { controls } = this._option();
@@ -279,7 +281,7 @@ const AzureProvider = DynamicProvider.inherit({
     }
 
     return Promise.resolve();
-  },
+  }
 
   _renderMarker(options) {
     return this._resolveLocation(options.location).then((location) => {
@@ -321,7 +323,7 @@ const AzureProvider = DynamicProvider.inherit({
         handler,
       };
     });
-  },
+  }
 
   _renderTooltip(location, options) {
     if (!options) {
@@ -344,7 +346,7 @@ const AzureProvider = DynamicProvider.inherit({
     }
 
     return popup;
-  },
+  }
 
   _destroyMarker(marker) {
     this._map.markers.remove(marker.marker);
@@ -354,7 +356,7 @@ const AzureProvider = DynamicProvider.inherit({
     if (marker.handler) {
       this._map.events.remove(marker.handler);
     }
-  },
+  }
 
   _renderRoute(options) {
     return Promise.all(
@@ -414,12 +416,12 @@ const AzureProvider = DynamicProvider.inherit({
         });
       });
     }));
-  },
+  }
 
   _destroyRoute(routeObject) {
     this._map.layers.remove(routeObject.instance.lineLayer);
     this._map.sources.remove(routeObject.instance.dataSource);
-  },
+  }
 
   _fitBounds() {
     this._updateBounds();
@@ -445,7 +447,7 @@ const AzureProvider = DynamicProvider.inherit({
     }
 
     return Promise.resolve();
-  },
+  }
 
   _extendBounds(location) {
     const [longitude, latitude] = location;
@@ -461,7 +463,7 @@ const AzureProvider = DynamicProvider.inherit({
         latitude + delta,
       ]);
     }
-  },
+  }
 
   clean() {
     if (this._map) {
@@ -475,10 +477,11 @@ const AzureProvider = DynamicProvider.inherit({
     }
 
     return Promise.resolve();
-  },
-});
+  }
+}
 
 /// #DEBUG
+// @ts-expect-error ts-error
 AzureProvider.remapConstant = (newValue: string): void => {
   AZURE_JS_URL = newValue;
   AZURE_CSS_URL = newValue;

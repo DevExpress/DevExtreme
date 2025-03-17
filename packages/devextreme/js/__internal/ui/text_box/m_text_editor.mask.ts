@@ -4,18 +4,25 @@ import {
   addNamespace, createEvent, isCommandKeyPressed, normalizeKeyName,
 } from '@js/common/core/events/utils/index';
 import messageLocalization from '@js/common/core/localization/message';
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { noop } from '@js/core/utils/common';
+import type { DeferredObj } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import { isEmpty } from '@js/core/utils/string';
 import { isDefined } from '@js/core/utils/type';
 import { focused } from '@js/ui/widget/selectors';
+import type { OptionChanged } from '@ts/core/widget/types';
 
+import type { TextEditorBaseProperties } from './m_text_editor.base';
 import TextEditorBase from './m_text_editor.base';
 import { EmptyMaskRule, MaskRule, StubMaskRule } from './m_text_editor.mask.rule';
 import MaskStrategy from './m_text_editor.mask.strategy';
+import type { CaretRange } from './m_utils.caret';
 import caretUtils from './m_utils.caret';
+
+type MaskRules = Record<string, RegExp | ((char: string) => boolean)>;
 
 const caret = caretUtils;
 
@@ -28,7 +35,7 @@ const BACKWARD_DIRECTION = 'backward';
 
 const DROP_EVENT_NAME = 'drop';
 
-const buildInMaskRules = {
+const buildInMaskRules: MaskRules = {
   0: /[0-9]/,
   9: /[0-9\s]/,
   '#': /[-+0-9\s]/,
@@ -48,23 +55,41 @@ const buildInMaskRules = {
   },
 };
 
-function isNumericChar(char) {
+function isNumericChar(char): boolean {
   return /[0-9]/.test(char);
 }
 
-function isLiteralChar(char) {
+function isLiteralChar(char): boolean {
   const code = char.charCodeAt();
   return code > 64 && code < 91 || code > 96 && code < 123 || code > 127;
 }
 
-function isSpaceChar(char) {
+function isSpaceChar(char): boolean {
   return char === ' ';
 }
 
-const TextEditorMask = TextEditorBase.inherit({
+class TextEditorMask<
+  TProperties extends TextEditorBaseProperties= TextEditorBaseProperties,
+> extends TextEditorBase<TProperties> {
+  _changedValue?: any;
 
-  _getDefaultOptions() {
-    return extend(this.callBase(), {
+  _maskStrategy!: MaskStrategy;
+
+  _$hiddenElement!: dxElementWrapper;
+
+  _typingDirection?: 'forward' | 'backward';
+
+  _maskRulesChain?: any;
+
+  _maskRules?: MaskRules;
+
+  _textValue?: any;
+
+  _value?: any;
+
+  _getDefaultOptions(): TProperties {
+    return {
+      ...super._getDefaultOptions(),
       mask: '',
 
       maskChar: '_',
@@ -76,10 +101,10 @@ const TextEditorMask = TextEditorBase.inherit({
       useMaskedValue: false,
 
       showMaskMode: 'always',
-    });
-  },
+    };
+  }
 
-  _supportedKeys() {
+  _supportedKeys(): Record<string, (e: KeyboardEvent) => void> {
     const that = this;
 
     const keyHandlerMap = {
@@ -87,7 +112,7 @@ const TextEditorMask = TextEditorBase.inherit({
       enter: that._changeHandler,
     };
 
-    const result = that.callBase();
+    const result = super._supportedKeys();
     each(keyHandlerMap, (key, callback) => {
       const parentHandler = result[key];
       result[key] = function (e) {
@@ -97,28 +122,28 @@ const TextEditorMask = TextEditorBase.inherit({
     });
 
     return result;
-  },
+  }
 
-  _getSubmitElement() {
-    return !this.option('mask') ? this.callBase() : this._$hiddenElement;
-  },
+  _getSubmitElement(): dxElementWrapper {
+    return !this.option('mask') ? super._getSubmitElement() : this._$hiddenElement;
+  }
 
-  _init() {
-    this.callBase();
+  _init(): void {
+    super._init();
 
     this._initMaskStrategy();
-  },
+  }
 
-  _initMaskStrategy() {
+  _initMaskStrategy(): void {
     this._maskStrategy = new MaskStrategy(this);
-  },
+  }
 
-  _initMarkup() {
+  _initMarkup(): void {
     this._renderHiddenElement();
-    this.callBase();
-  },
+    super._initMarkup();
+  }
 
-  _attachMouseWheelEventHandlers() {
+  _attachMouseWheelEventHandlers(): void {
     const hasMouseWheelHandler = this._onMouseWheel !== noop;
 
     if (!hasMouseWheelHandler) {
@@ -126,6 +151,7 @@ const TextEditorMask = TextEditorBase.inherit({
     }
 
     const input = this._input();
+    // @ts-expect-error ts-error
     const eventName = addNamespace(wheelEventName, this.NAME);
     const mouseWheelAction = this._createAction((e) => {
       const { event } = e;
@@ -141,48 +167,49 @@ const TextEditorMask = TextEditorBase.inherit({
     eventsEngine.on(input, eventName, (e) => {
       mouseWheelAction({ event: e });
     });
-  },
+  }
 
-  _onMouseWheel: noop,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _onMouseWheel(e?): void {}
 
-  _useMaskBehavior() {
+  _useMaskBehavior(): boolean {
     return Boolean(this.option('mask'));
-  },
+  }
 
-  _attachDropEventHandler() {
+  _attachDropEventHandler(): void {
     const useMaskBehavior = this._useMaskBehavior();
 
     if (!useMaskBehavior) {
       return;
     }
-
+    // @ts-expect-error
     const eventName = addNamespace(DROP_EVENT_NAME, this.NAME);
     const input = this._input();
 
     eventsEngine.off(input, eventName);
     eventsEngine.on(input, eventName, (e) => e.preventDefault());
-  },
+  }
 
-  _render() {
+  _render(): void {
     this._attachMouseWheelEventHandlers();
     this._renderMask();
-    this.callBase();
+    super._render();
     this._attachDropEventHandler();
-  },
+  }
 
-  _renderHiddenElement() {
+  _renderHiddenElement(): void {
     if (this.option('mask')) {
       this._$hiddenElement = $('<input>')
         .attr('type', 'hidden')
         .appendTo(this._inputWrapper());
     }
-  },
+  }
 
-  _removeHiddenElement() {
+  _removeHiddenElement(): void {
     this._$hiddenElement && this._$hiddenElement.remove();
-  },
+  }
 
-  _renderMask() {
+  _renderMask(): void {
     this.$element().removeClass(TEXTEDITOR_MASKED_CLASS);
     this._maskRulesChain = null;
 
@@ -197,9 +224,9 @@ const TextEditorMask = TextEditorBase.inherit({
     this._maskStrategy.attachEvents();
     this._parseMask();
     this._renderMaskedValue();
-  },
+  }
 
-  _changeHandler(e) {
+  _changeHandler(e): void {
     const $input = this._input();
     const inputValue = $input.val();
 
@@ -211,29 +238,31 @@ const TextEditorMask = TextEditorBase.inherit({
     const changeEvent = createEvent(e, { type: 'change' });
     // @ts-expect-error
     eventsEngine.trigger($input, changeEvent);
-  },
+  }
 
-  _parseMask() {
+  _parseMask(): void {
     this._maskRules = extend({}, buildInMaskRules, this.option('maskRules'));
     this._maskRulesChain = this._parseMaskRule(0);
-  },
+  }
 
-  _parseMaskRule(index) {
-    const mask = this.option('mask');
+  _parseMaskRule(index: number): EmptyMaskRule | StubMaskRule | MaskRule {
+    const { mask } = this.option();
+    // @ts-expect-error ts-error
     if (index >= mask.length) {
-      // @ts-expect-error
+      // @ts-expect-error ts-error
       return new EmptyMaskRule();
     }
-
+    // @ts-expect-error
     const currentMaskChar = mask[index];
     const isEscapedChar = currentMaskChar === ESCAPED_CHAR;
     const result = isEscapedChar
+      // @ts-expect-error
       ? new StubMaskRule({ maskChar: mask[index + 1] })
       : this._getMaskRule(currentMaskChar);
-
+    // @ts-expect-error
     result.next(this._parseMaskRule(index + 1 + isEscapedChar));
     return result;
-  },
+  }
 
   _getMaskRule(pattern) {
     let ruleConfig;
@@ -251,22 +280,22 @@ const TextEditorMask = TextEditorBase.inherit({
     return isDefined(ruleConfig)
       ? new MaskRule(extend({ maskChar: this.option('maskChar') || ' ' }, ruleConfig))
       : new StubMaskRule({ maskChar: pattern });
-  },
+  }
 
-  _renderMaskedValue() {
+  _renderMaskedValue(): void {
     if (!this._maskRulesChain) {
       return;
     }
 
     const value = this.option('value') || '';
     this._maskRulesChain.clear(this._normalizeChainArguments());
-
+    // @ts-expect-error ts-error
     const chainArgs = { length: value.length };
     chainArgs[this._isMaskedValueMode() ? 'text' : 'value'] = value;
 
     this._handleChain(chainArgs);
     this._displayMask();
-  },
+  }
 
   _replaceSelectedText(text, selection, char) {
     if (char === undefined) {
@@ -278,43 +307,46 @@ const TextEditorMask = TextEditorBase.inherit({
     const edited = textBefore + char + textAfter;
 
     return edited;
-  },
+  }
 
   _isMaskedValueMode() {
     return this.option('useMaskedValue');
-  },
+  }
 
-  _displayMask(caret) {
+  _displayMask(caret?): void {
     caret = caret || this._caret();
     this._renderValue();
     this._caret(caret);
-  },
+  }
 
   _isValueEmpty() {
     return isEmpty(this._value);
-  },
+  }
 
-  _shouldShowMask() {
-    const showMaskMode = this.option('showMaskMode');
+  _shouldShowMask(): boolean {
+    const { showMaskMode } = this.option();
 
     if (showMaskMode === 'onFocus') {
       return focused(this._input()) || !this._isValueEmpty();
     }
 
     return true;
-  },
+  }
 
-  _showMaskPlaceholder() {
+  _showMaskPlaceholder(): void {
     if (this._shouldShowMask()) {
       const text = this._maskRulesChain.text();
       this.option('text', text);
-      if (this.option('showMaskMode') === 'onFocus') {
+
+      const { showMaskMode } = this.option();
+
+      if (showMaskMode === 'onFocus') {
         this._renderDisplayText(text);
       }
     }
-  },
+  }
 
-  _renderValue() {
+  _renderValue(): DeferredObj<unknown> {
     if (this._maskRulesChain) {
       this._showMaskPlaceholder();
 
@@ -327,42 +359,45 @@ const TextEditorMask = TextEditorBase.inherit({
         this._$hiddenElement.val(submitElementValue);
       }
     }
-    return this.callBase();
-  },
+    return super._renderValue();
+  }
 
   _getPreparedValue() {
     return this._convertToValue().replace(/\s+$/, '');
-  },
+  }
 
-  _valueChangeEventHandler(e) {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _valueChangeEventHandler(e, value?): void {
     if (!this._maskRulesChain) {
-      this.callBase.apply(this, arguments);
+      // @ts-expect-error
+      super._valueChangeEventHandler.apply(this, arguments);
       return;
     }
 
     this._saveValueChangeEvent(e);
 
     this.option('value', this._getPreparedValue());
-  },
+  }
 
   _isControlKeyFired(e) {
+    // @ts-expect-error
     return this._isControlKey(normalizeKeyName(e)) || isCommandKeyPressed(e);
-  },
+  }
 
   _handleChain(args) {
     const handledCount = this._maskRulesChain.handle(this._normalizeChainArguments(args));
     this._updateMaskInfo();
     return handledCount;
-  },
+  }
 
-  _normalizeChainArguments(args) {
+  _normalizeChainArguments(args?) {
     args = args || {};
     args.index = 0;
     args.fullText = this._maskRulesChain.text();
     return args;
-  },
+  }
 
-  _convertToValue(text) {
+  _convertToValue(text?) {
     if (this._isMaskedValueMode()) {
       text = this._replaceMaskCharWithEmpty(text || this._textValue || '');
     } else {
@@ -370,13 +405,15 @@ const TextEditorMask = TextEditorBase.inherit({
     }
 
     return text;
-  },
+  }
 
   _replaceMaskCharWithEmpty(text) {
-    return text.replace(new RegExp(this.option('maskChar'), 'g'), EMPTY_CHAR);
-  },
+    const { maskChar } = this.option();
+    // @ts-expect-error ts-error
+    return text.replace(new RegExp(maskChar, 'g'), EMPTY_CHAR);
+  }
 
-  _maskKeyHandler(e, keyHandler) {
+  _maskKeyHandler(e, keyHandler): void {
     if (this.option('readOnly')) {
       return;
     }
@@ -405,16 +442,16 @@ const TextEditorMask = TextEditorBase.inherit({
       this._maskRulesChain.reset();
       raiseInputEvent();
     }
-  },
+  }
 
-  _handleKey(key, direction) {
+  _handleKey(key, direction): void {
     this._direction(direction || FORWARD_DIRECTION);
     this._adjustCaret(key);
     this._handleKeyChain(key);
     this._moveCaret();
-  },
+  }
 
-  _handleSelection() {
+  _handleSelection(): void {
     if (!this._hasSelection()) {
       return;
     }
@@ -422,33 +459,33 @@ const TextEditorMask = TextEditorBase.inherit({
     const caret = this._caret();
     const emptyChars = new Array(caret.end - caret.start + 1).join(EMPTY_CHAR);
     this._handleKeyChain(emptyChars);
-  },
+  }
 
-  _handleKeyChain(chars) {
+  _handleKeyChain(chars): void {
     const caret = this._caret();
     const start = this.isForwardDirection() ? caret.start : caret.start - 1;
     const end = this.isForwardDirection() ? caret.end : caret.end - 1;
     const length = start === end ? 1 : end - start;
 
     this._handleChain({ text: chars, start, length });
-  },
+  }
 
-  _tryMoveCaretBackward() {
+  _tryMoveCaretBackward(): boolean {
     this.setBackwardDirection();
     const currentCaret = this._caret().start;
     this._adjustCaret();
     return !currentCaret || currentCaret !== this._caret().start;
-  },
+  }
 
-  _adjustCaret(char) {
+  _adjustCaret(char?): void {
     const caretStart = this._caret().start;
     const isForwardDirection = this.isForwardDirection();
 
     const caret = this._maskRulesChain.adjustedCaret(caretStart, isForwardDirection, char);
     this._caret({ start: caret, end: caret });
-  },
+  }
 
-  _moveCaret() {
+  _moveCaret(): void {
     const currentCaret = this._caret().start;
     const maskRuleIndex = currentCaret + (this.isForwardDirection() ? 0 : -1);
 
@@ -457,57 +494,65 @@ const TextEditorMask = TextEditorBase.inherit({
       : currentCaret;
 
     this._caret({ start: caret, end: caret });
-  },
+  }
 
-  _caret(position, force) {
+  _caret(
+    position?: { start: number; end: number },
+    force?,
+    // @ts-expect-error
+  ): CaretRange {
     const $input = this._input();
 
     if (!$input.length) {
+      // @ts-expect-error
       return;
     }
 
     if (!arguments.length) {
+      // @ts-expect-error
       return caret($input);
     }
     caret($input, position, force);
-  },
+  }
 
-  _hasSelection() {
+  _hasSelection(): boolean {
     const caret = this._caret();
-    return caret.start !== caret.end;
-  },
 
-  _direction(direction) {
+    return caret.start !== caret.end;
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-invalid-void-type, consistent-return
+  _direction(direction?: 'forward' | 'backward'): 'forward' | 'backward' | void {
     if (!arguments.length) {
       return this._typingDirection;
     }
 
     this._typingDirection = direction;
-  },
+  }
 
-  setForwardDirection() {
+  setForwardDirection(): void {
     this._direction(FORWARD_DIRECTION);
-  },
+  }
 
-  setBackwardDirection() {
+  setBackwardDirection(): void {
     this._direction(BACKWARD_DIRECTION);
-  },
+  }
 
-  isForwardDirection() {
+  isForwardDirection(): boolean {
     return this._direction() === FORWARD_DIRECTION;
-  },
+  }
 
-  _updateMaskInfo() {
+  _updateMaskInfo(): void {
     this._textValue = this._maskRulesChain.text();
     this._value = this._maskRulesChain.value();
-  },
+  }
 
-  _clean() {
+  _clean(): void {
     this._maskStrategy && this._maskStrategy.clean();
-    this.callBase();
-  },
+    super._clean();
+  }
 
-  _validateMask() {
+  _validateMask(): void {
     if (!this._maskRulesChain) {
       return;
     }
@@ -517,9 +562,9 @@ const TextEditorMask = TextEditorBase.inherit({
       isValid,
       validationError: isValid ? null : { editorSpecific: true, message: this.option('maskInvalidMessage') },
     });
-  },
+  }
 
-  _updateHiddenElement() {
+  _updateHiddenElement(): void {
     this._removeHiddenElement();
 
     if (this.option('mask')) {
@@ -527,17 +572,19 @@ const TextEditorMask = TextEditorBase.inherit({
       this._renderHiddenElement();
     }
 
-    this._setSubmitElementName(this.option('name'));
-  },
+    const { name } = this.option();
 
-  _updateMaskOption() {
+    this._setSubmitElementName(name);
+  }
+
+  _updateMaskOption(): void {
     this._updateHiddenElement();
     this._renderMask();
     this._validateMask();
     this._refreshValueChangeEvent();
-  },
+  }
 
-  _processEmptyMask(mask) {
+  _processEmptyMask(mask): void {
     if (mask) return;
 
     const value = this.option('value');
@@ -554,9 +601,9 @@ const TextEditorMask = TextEditorBase.inherit({
     });
 
     this._renderValue();
-  },
+  }
 
-  _optionChanged(args) {
+  _optionChanged(args: OptionChanged<TProperties>): void {
     switch (args.name) {
       case 'mask':
         this._updateMaskOption();
@@ -570,7 +617,7 @@ const TextEditorMask = TextEditorBase.inherit({
       case 'value':
         this._renderMaskedValue();
         this._validateMask();
-        this.callBase(args);
+        super._optionChanged(args);
 
         this._changedValue = this._input().val();
         break;
@@ -581,17 +628,17 @@ const TextEditorMask = TextEditorBase.inherit({
         this._renderValue();
         break;
       default:
-        this.callBase(args);
+        super._optionChanged(args);
     }
-  },
+  }
 
-  clear() {
+  clear(): void {
     const { value: defaultValue } = this._getDefaultOptions();
     if (this.option('value') === defaultValue) {
       this._renderMaskedValue();
     }
-    this.callBase();
-  },
-});
+    super.clear();
+  }
+}
 
 export default TextEditorMask;

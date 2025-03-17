@@ -1,3 +1,4 @@
+/* eslint-disable max-classes-per-file */
 import positionUtils from '@js/common/core/animation/position';
 import { locate, move } from '@js/common/core/animation/translator';
 import eventsEngine from '@js/common/core/events/core/events_engine';
@@ -12,13 +13,13 @@ import pointerEvents from '@js/common/core/events/pointer';
 import { addNamespace, needSkipEvent } from '@js/common/core/events/utils/index';
 import registerComponent from '@js/core/component_registrator';
 import domAdapter from '@js/core/dom_adapter';
-import DOMComponent from '@js/core/dom_component';
 import { getPublicElement } from '@js/core/element';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { EmptyTemplate } from '@js/core/templates/empty_template';
 // @ts-expect-error
-import { noop, splitPair } from '@js/core/utils/common';
+import { splitPair } from '@js/core/utils/common';
+import type { DeferredObj } from '@js/core/utils/deferred';
 // @ts-expect-error
 import { Deferred, fromPromise, when } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
@@ -32,6 +33,8 @@ import { quadToObject } from '@js/core/utils/string';
 import { isFunction, isNumeric, isObject } from '@js/core/utils/type';
 import { value as viewPort } from '@js/core/utils/view_port';
 import { getWindow } from '@js/core/utils/window';
+import type { Properties } from '@js/ui/draggable';
+import DOMComponent from '@ts/core/widget/dom_component';
 
 import Animator from './ui/scroll_view/m_animator';
 
@@ -250,46 +253,73 @@ class ScrollHelper {
   }
 }
 
-const ScrollAnimator = Animator.inherit({
+class ScrollAnimator extends Animator {
+  _strategy: any;
 
-  ctor(strategy) {
-    this.callBase();
+  ctor(strategy): void {
+    super.ctor();
 
     this._strategy = strategy;
-  },
+  }
 
-  _step() {
+  _step(): void {
     const horizontalScrollHelper = this._strategy._horizontalScrollHelper;
     const verticalScrollHelper = this._strategy._verticalScrollHelper;
 
-    horizontalScrollHelper && horizontalScrollHelper.scrollByStep();
-    verticalScrollHelper && verticalScrollHelper.scrollByStep();
-  },
-});
+    horizontalScrollHelper?.scrollByStep();
+    verticalScrollHelper?.scrollByStep();
+  }
+}
 
-const Draggable = (DOMComponent as any).inherit({
-  reset: noop,
+class Draggable extends DOMComponent<Draggable, Properties> {
+  _$sourceElement?: dxElementWrapper | null;
 
-  dragMove: noop,
+  _initScrollTop!: number;
 
-  dragEnter: noop,
+  _initScrollLeft!: number;
 
-  dragLeave: noop,
+  _verticalScrollHelper!: ScrollHelper;
 
-  dragEnd(sourceEvent) {
+  _horizontalScrollHelper!: ScrollHelper;
+
+  _$dragElement?: dxElementWrapper | null;
+
+  dragInProgress?: boolean;
+
+  _scrollAnimator!: ScrollAnimator;
+
+  _initialLocate?: { left: number; top: number };
+
+  _startPosition?: { left: number; top: number };
+
+  reset(): void {}
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  dragMove(e): void {}
+
+  dragEnter(): void {}
+
+  dragLeave(): void {}
+
+  dragEnd(sourceEvent): DeferredObj<unknown> {
     const sourceDraggable = this._getSourceDraggable();
 
     sourceDraggable._fireRemoveEvent(sourceEvent);
 
     return Deferred().resolve();
-  },
+  }
 
-  _fireRemoveEvent: noop,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _fireRemoveEvent(sourceEvent?) {}
 
-  _getDefaultOptions() {
-    return extend(this.callBase(), {
+  _getDefaultOptions(): Properties {
+    return {
+      ...super._getDefaultOptions(),
+      // @ts-expect-error
       onDragStart: null,
+      // @ts-expect-error
       onDragMove: null,
+      // @ts-expect-error
       onDragEnd: null,
       onDragEnter: null,
       onDragLeave: null,
@@ -298,12 +328,9 @@ const Draggable = (DOMComponent as any).inherit({
       onDrop: null,
       immediate: true,
       dragDirection: 'both',
-      boundary: undefined,
       boundOffset: 0,
       allowMoveByClick: false,
       itemData: null,
-      container: undefined,
-      dragTemplate: undefined,
       contentTemplate: 'content',
       handle: '',
       filter: '',
@@ -311,13 +338,12 @@ const Draggable = (DOMComponent as any).inherit({
       autoScroll: true,
       scrollSpeed: 30,
       scrollSensitivity: 60,
-      group: undefined,
-      data: undefined,
-    });
-  },
+    };
+  }
 
   _setOptionsByReference() {
-    this.callBase.apply(this, arguments);
+    // @ts-expect-error ts-error
+    super._setOptionsByReference.apply(this, arguments);
 
     extend(this._optionsByReference, {
       component: true,
@@ -325,12 +351,12 @@ const Draggable = (DOMComponent as any).inherit({
       itemData: true,
       data: true,
     });
-  },
+  }
 
   _init() {
-    this.callBase();
+    super._init();
     this._attachEventHandlers();
-
+    // @ts-expect-error ts-error
     this._scrollAnimator = new ScrollAnimator(this);
 
     this._horizontalScrollHelper = new ScrollHelper('horizontal', this);
@@ -338,7 +364,7 @@ const Draggable = (DOMComponent as any).inherit({
 
     this._initScrollTop = 0;
     this._initScrollLeft = 0;
-  },
+  }
 
   _normalizeCursorOffset(offset) {
     if (isObject(offset)) {
@@ -353,7 +379,7 @@ const Draggable = (DOMComponent as any).inherit({
       left: offset[0],
       top: offset.length === 1 ? offset[0] : offset[1],
     };
-  },
+  }
 
   _getNormalizedCursorOffset(offset, options) {
     if (isFunction(offset)) {
@@ -361,7 +387,7 @@ const Draggable = (DOMComponent as any).inherit({
     }
 
     return this._normalizeCursorOffset(offset);
-  },
+  }
 
   _calculateElementOffset(options) {
     let elementOffset;
@@ -395,7 +421,7 @@ const Draggable = (DOMComponent as any).inherit({
     }
 
     return elementOffset;
-  },
+  }
 
   _initPosition(options) {
     const $dragElement = $(options.dragElement);
@@ -406,34 +432,34 @@ const Draggable = (DOMComponent as any).inherit({
     }
 
     this._startPosition = locate($dragElement);
-  },
+  }
 
   _startAnimator() {
     if (!this._scrollAnimator.inProgress()) {
       this._scrollAnimator.start();
     }
-  },
+  }
 
   _stopAnimator() {
     this._scrollAnimator.stop();
-  },
+  }
 
-  _addWidgetPrefix(className) {
+  _addWidgetPrefix(className?) {
     const componentName = this.NAME;
 
     return dasherize(componentName) + (className ? `-${className}` : '');
-  },
+  }
 
   _getItemsSelector() {
     return this.option('filter') || '';
-  },
+  }
 
   _$content() {
     const $element = this.$element();
     const $wrapper = $element.children('.dx-template-wrapper');
 
     return $wrapper.length ? $wrapper : $element;
-  },
+  }
 
   _attachEventHandlers() {
     if (this.option('disabled')) {
@@ -465,6 +491,7 @@ const Draggable = (DOMComponent as any).inherit({
     }
 
     if (itemsSelector[0] === '>') {
+      // @ts-expect-error ts-error
       itemsSelector = itemsSelector.slice(1);
     }
     // @ts-expect-error
@@ -477,11 +504,11 @@ const Draggable = (DOMComponent as any).inherit({
     if (this.option('onCancelByEsc')) {
       eventsEngine.on($element, KEYDOWN_EVENT_NAME, this._keydownHandler.bind(this));
     }
-  },
+  }
 
   _dragElementIsCloned() {
-    return this._$dragElement && this._$dragElement.hasClass(this._addWidgetPrefix(CLONE_CLASS));
-  },
+    return this._$dragElement?.hasClass(this._addWidgetPrefix(CLONE_CLASS));
+  }
 
   _getDragTemplateArgs($element, $container) {
     return {
@@ -491,7 +518,7 @@ const Draggable = (DOMComponent as any).inherit({
         itemElement: getPublicElement($element),
       },
     };
-  },
+  }
 
   _createDragElement($element) {
     let result = $element;
@@ -502,6 +529,7 @@ const Draggable = (DOMComponent as any).inherit({
     if (template) {
       template = this._getTemplate(template);
       result = $('<div>').appendTo($container);
+      // @ts-expect-error ts-error
       template.render(this._getDragTemplateArgs($element, result));
     } else if (clone) {
       result = $('<div>').appendTo($container);
@@ -514,32 +542,32 @@ const Draggable = (DOMComponent as any).inherit({
     return result
       .toggleClass(this._addWidgetPrefix(CLONE_CLASS), result.get(0) !== $element.get(0))
       .toggleClass('dx-rtl', this.option('rtlEnabled'));
-  },
+  }
 
-  _resetDragElement() {
+  _resetDragElement(): void {
     if (this._dragElementIsCloned()) {
-      this._$dragElement.remove();
+      this._$dragElement?.remove();
     } else {
       this._toggleDraggingClass(false);
     }
     this._$dragElement = null;
-  },
+  }
 
   _resetSourceElement() {
     this._toggleDragSourceClass(false);
     this._$sourceElement = null;
-  },
+  }
 
   _detachEventHandlers() {
     eventsEngine.off(this._$content(), `.${DRAGGABLE}`);
     eventsEngine.off(this._getArea(), `.${DRAGGABLE}`);
-  },
+  }
 
-  _move(position, $element) {
+  _move(position, $element?) {
     move($element || this._$dragElement, position);
-  },
+  }
 
-  _getDraggableElement(e) {
+  _getDraggableElement(e?): dxElementWrapper {
     const $sourceElement = this._getSourceElement();
 
     if ($sourceElement) {
@@ -551,23 +579,24 @@ const Draggable = (DOMComponent as any).inherit({
       return this.$element();
     }
 
-    let $target = $(e && e.target);
+    let $target = $(e?.target);
     const itemsSelector = this._getItemsSelector();
 
     if (itemsSelector[0] === '>') {
+      // @ts-expect-error ts-error
       const $items = this._$content().find(itemsSelector);
       if (!$items.is($target)) {
         $target = $target.closest($items);
       }
     }
     return $target;
-  },
+  }
 
   _getSourceElement() {
     const draggable = this._getSourceDraggable();
 
     return draggable._$sourceElement;
-  },
+  }
 
   _pointerDownHandler(e) {
     if (needSkipEvent(e)) {
@@ -576,23 +605,25 @@ const Draggable = (DOMComponent as any).inherit({
 
     const position: any = {};
     const $element = this.$element();
-    const dragDirection = this.option('dragDirection');
+    const { dragDirection } = this.option();
 
     if (dragDirection === 'horizontal' || dragDirection === 'both') {
+      // @ts-expect-error ts-error
       position.left = e.pageX - $element.offset().left + locate($element).left - getWidth($element) / 2;
     }
 
     if (dragDirection === 'vertical' || dragDirection === 'both') {
+      // @ts-expect-error ts-error
       position.top = e.pageY - $element.offset().top + locate($element).top - getHeight($element) / 2;
     }
 
     this._move(position, $element);
     this._getAction('onDragMove')(this._getEventArgs(e));
-  },
+  }
 
-  _isValidElement(event, $element) {
-    const handle = this.option('handle');
-    const $target = $(event.originalEvent && event.originalEvent.target);
+  _isValidElement(event, $element): boolean {
+    const { handle } = this.option();
+    const $target = $(event.originalEvent?.target);
 
     if (handle && !$target.closest(handle).length) {
       return false;
@@ -603,7 +634,7 @@ const Draggable = (DOMComponent as any).inherit({
     }
 
     return !$element.is('.dx-state-disabled, .dx-state-disabled *');
-  },
+  }
 
   _dragStartHandler(e) {
     const $element = this._getDraggableElement(e);
@@ -619,7 +650,7 @@ const Draggable = (DOMComponent as any).inherit({
 
     const dragStartArgs = this._getDragStartArgs(e, $element);
     this._getAction('onDragStart')(dragStartArgs);
-
+    // @ts-expect-error ts-error
     if (dragStartArgs.cancel) {
       e.cancel = true;
       return;
@@ -634,6 +665,7 @@ const Draggable = (DOMComponent as any).inherit({
     if (!this._hasClonedDraggable() && this.option('autoScroll')) {
       this._initScrollTop = this._getScrollableScrollTop();
       this._initScrollLeft = this._getScrollableScrollLeft();
+      // @ts-expect-error ts-error
       initialOffset = this._getDraggableElementOffset(initialOffset.left, initialOffset.top);
     }
 
@@ -676,25 +708,25 @@ const Draggable = (DOMComponent as any).inherit({
     if (this.option('autoScroll')) {
       this._startAnimator();
     }
-  },
+  }
 
   _getAreaOffset($area) {
     const offset = $area && (positionUtils as any).offset($area);
     return offset || { left: 0, top: 0 };
-  },
+  }
 
   _toggleDraggingClass(value) {
-    this._$dragElement && this._$dragElement.toggleClass(this._addWidgetPrefix('dragging'), value);
-  },
+    this._$dragElement?.toggleClass(this._addWidgetPrefix('dragging'), value);
+  }
 
-  _toggleDragSourceClass(value, $element) {
+  _toggleDragSourceClass(value, $element?) {
     const $sourceElement = $element || this._$sourceElement;
-    $sourceElement && $sourceElement.toggleClass(this._addWidgetPrefix('source'), value);
-  },
+    $sourceElement?.toggleClass(this._addWidgetPrefix('source'), value);
+  }
 
   _setGestureCoverCursor($element) {
     $(`.${GESTURE_COVER_CLASS}`).css('cursor', $element.css('cursor'));
-  },
+  }
 
   _getBoundOffset() {
     let boundOffset = this.option('boundOffset');
@@ -704,26 +736,27 @@ const Draggable = (DOMComponent as any).inherit({
     }
 
     return quadToObject(boundOffset);
-  },
+  }
 
-  _getArea() {
+  _getArea(): dxElementWrapper {
     let area = this.option('boundary');
 
     if (isFunction(area)) {
       area = area.call(this);
     }
+    // @ts-expect-error ts-error
     return $(area);
-  },
+  }
 
-  _getContainer() {
-    let container = this.option('container');
+  _getContainer(): dxElementWrapper {
+    let { container } = this.option();
 
     if (container === undefined) {
       container = viewPort();
     }
 
     return $(container);
-  },
+  }
 
   _getDraggableElementOffset(initialOffsetX: number, initialOffsetY: number): Offset {
     const initScrollTop = this._initScrollTop;
@@ -752,13 +785,14 @@ const Draggable = (DOMComponent as any).inherit({
         ? result.top + scrollTop - initScrollTop
         : result.top,
     };
-  },
+  }
 
   _hasClonedDraggable() {
     return this.option('clone') || this.option('dragTemplate');
-  },
+  }
 
   _dragMoveHandler(e) {
+    // @ts-expect-error ts-error
     this._dragMoveArgs = e;
     if (!this._$dragElement) {
       e.cancel = true;
@@ -779,7 +813,7 @@ const Draggable = (DOMComponent as any).inherit({
 
     const targetDraggable = this._getTargetDraggable();
     targetDraggable.dragMove(e, scrollBy);
-  },
+  }
 
   _updateScrollable(e) {
     const that = this;
@@ -791,7 +825,7 @@ const Draggable = (DOMComponent as any).inherit({
       that._verticalScrollHelper.updateScrollable(allObjects, mousePosition);
       that._horizontalScrollHelper.updateScrollable(allObjects, mousePosition);
     }
-  },
+  }
 
   _getScrollable($element) {
     let $scrollable;
@@ -809,29 +843,32 @@ const Draggable = (DOMComponent as any).inherit({
     });
 
     return $scrollable;
-  },
+  }
 
   _getScrollableScrollTop() {
     return this._getScrollable($(this.element()))?.scrollTop() ?? 0;
-  },
+  }
 
   _getScrollableScrollLeft() {
     return this._getScrollable($(this.element()))?.scrollLeft() ?? 0;
-  },
+  }
 
   _defaultActionArgs() {
-    const args = this.callBase.apply(this, arguments);
+    // @ts-expect-error ts-error
+    const args = super._defaultActionArgs.apply(this, arguments);
     const component = this.option('component');
 
     if (component) {
+      // @ts-expect-error ts-error
       args.component = component;
+      // @ts-expect-error ts-error
       args.element = component.element();
     }
 
     return args;
-  },
+  }
 
-  _getEventArgs(e) {
+  _getEventArgs(e): Record<string, unknown> {
     const sourceDraggable = this._getSourceDraggable();
     const targetDraggable = this._getTargetDraggable();
 
@@ -844,7 +881,7 @@ const Draggable = (DOMComponent as any).inherit({
       fromData: sourceDraggable.option('data'),
       toData: targetDraggable.option('data'),
     };
-  },
+  }
 
   _getDragStartArgs(e, $itemElement) {
     const args = this._getEventArgs(e);
@@ -855,11 +892,11 @@ const Draggable = (DOMComponent as any).inherit({
       itemElement: $itemElement,
       fromData: args.fromData,
     };
-  },
+  }
 
-  _revertItemToInitialPosition() {
+  _revertItemToInitialPosition(): void {
     !this._dragElementIsCloned() && this._move(this._initialLocate, this._$sourceElement);
-  },
+  }
 
   _dragEndHandler(e) {
     const d = Deferred();
@@ -899,7 +936,7 @@ const Draggable = (DOMComponent as any).inherit({
         this._resetDragOptions(targetDraggable);
       });
     }
-  },
+  }
 
   _isTargetOverAnotherDraggable(e) {
     const sourceDraggable = this._getSourceDraggable();
@@ -929,9 +966,9 @@ const Draggable = (DOMComponent as any).inherit({
     const isTargetOverNestedDraggable = $(firstWidgetElement).closest($sourceElement).length;
 
     return !firstWidgetElement || firstWidgetElement === $targetDraggableElement.get(0) && !isTargetOverItself && !isTargetOverNestedDraggable;
-  },
+  }
 
-  _dragEnterHandler(e) {
+  _dragEnterHandler(e): void {
     this._fireDragEnterEvent(e);
 
     if (this._isTargetOverAnotherDraggable(e)) {
@@ -940,9 +977,9 @@ const Draggable = (DOMComponent as any).inherit({
 
     const sourceDraggable = this._getSourceDraggable();
     sourceDraggable.dragEnter(e);
-  },
+  }
 
-  _dragLeaveHandler(e) {
+  _dragLeaveHandler(e): void {
     this._fireDragLeaveEvent(e);
 
     this._resetTargetDraggable();
@@ -953,15 +990,15 @@ const Draggable = (DOMComponent as any).inherit({
 
     const sourceDraggable = this._getSourceDraggable();
     sourceDraggable.dragLeave(e);
-  },
+  }
 
-  _keydownHandler(e) {
+  _keydownHandler(e?): void {
     if (this.dragInProgress && e.key === 'Escape') {
       this._keydownEscapeHandler(e);
     }
-  },
+  }
 
-  _keydownEscapeHandler(e) {
+  _keydownEscapeHandler(e): void {
     const $sourceElement = this._getSourceElement();
     if (!$sourceElement) {
       return;
@@ -981,15 +1018,15 @@ const Draggable = (DOMComponent as any).inherit({
     const targetDraggable = this._getTargetDraggable();
     this._resetDragOptions(targetDraggable);
     this._attachEventHandlers();
-  },
+  }
 
   _getAction(name) {
     return this[`_${name}Action`] || this._createActionByOption(name);
-  },
+  }
 
-  _getAnonymousTemplateName() {
+  _getAnonymousTemplateName(): string {
     return ANONYMOUS_TEMPLATE_NAME;
-  },
+  }
 
   _initTemplates() {
     if (!this.option('contentTemplate')) return;
@@ -997,11 +1034,12 @@ const Draggable = (DOMComponent as any).inherit({
     this._templateManager.addDefaultTemplates({
       content: new EmptyTemplate(),
     });
-    this.callBase.apply(this, arguments);
-  },
+    // @ts-expect-error ts-error
+    super._initTemplates.apply(this, arguments);
+  }
 
   _render() {
-    this.callBase();
+    super._render();
     this.$element().addClass(this._addWidgetPrefix());
 
     const transclude = this._templateManager.anonymousTemplateName === this.option('contentTemplate');
@@ -1013,7 +1051,7 @@ const Draggable = (DOMComponent as any).inherit({
         transclude,
       }));
     }
-  },
+  }
 
   _optionChanged(args) {
     const { name } = args;
@@ -1060,40 +1098,40 @@ const Draggable = (DOMComponent as any).inherit({
       case 'itemData':
         break;
       default:
-        this.callBase(args);
+        super._optionChanged(args);
     }
-  },
+  }
 
   _getTargetDraggable() {
     return targetDraggable || this;
-  },
+  }
 
   _getSourceDraggable() {
     return sourceDraggable || this;
-  },
+  }
 
-  _setTargetDraggable() {
+  _setTargetDraggable(): void {
     const currentGroup = this.option('group');
     const sourceDraggable = this._getSourceDraggable();
 
     if (currentGroup && currentGroup === sourceDraggable.option('group')) {
       targetDraggable = this;
     }
-  },
+  }
 
-  _setSourceDraggable() {
+  _setSourceDraggable(): void {
     sourceDraggable = this;
-  },
+  }
 
-  _resetSourceDraggable() {
+  _resetSourceDraggable(): void {
     sourceDraggable = null;
-  },
+  }
 
-  _resetTargetDraggable() {
+  _resetTargetDraggable(): void {
     targetDraggable = null;
-  },
+  }
 
-  _resetDragOptions(targetDraggable) {
+  _resetDragOptions(targetDraggable): void {
     this.reset();
     targetDraggable.reset();
     this._stopAnimator();
@@ -1105,30 +1143,30 @@ const Draggable = (DOMComponent as any).inherit({
 
     this._resetTargetDraggable();
     this._resetSourceDraggable();
-  },
+  }
 
-  _dispose() {
-    this.callBase();
+  _dispose(): void {
+    super._dispose();
     this._detachEventHandlers();
     this._resetDragElement();
     this._resetTargetDraggable();
     this._resetSourceDraggable();
     this._$sourceElement = null;
     this._stopAnimator();
-  },
+  }
 
-  _fireDragEnterEvent(sourceEvent) {
+  _fireDragEnterEvent(sourceEvent): void {
     const args = this._getEventArgs(sourceEvent);
 
     this._getAction('onDragEnter')(args);
-  },
+  }
 
-  _fireDragLeaveEvent(sourceEvent) {
+  _fireDragLeaveEvent(sourceEvent): void {
     const args = this._getEventArgs(sourceEvent);
 
     this._getAction('onDragLeave')(args);
-  },
-});
+  }
+}
 
 registerComponent(DRAGGABLE, Draggable);
 

@@ -1,5 +1,6 @@
 import eventsEngine from '@js/common/core/events/core/events_engine';
 import config from '@js/core/config';
+import type { DefaultOptionsRule } from '@js/core/options/utils';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { extend } from '@js/core/utils/extend';
@@ -8,7 +9,7 @@ import { isCompact, isFluent, isMaterial } from '@js/ui/themes';
 import swatchContainer from '@js/ui/widget/swatch_container';
 import errors from '@js/ui/widget/ui.errors';
 
-import type { Properties as SpeedDialItemProperties } from './m_speed_dial_item';
+import type { SpeedDialItemProperties } from './m_speed_dial_item';
 import SpeedDialItem from './m_speed_dial_item';
 
 const { getSwatchContainer } = swatchContainer;
@@ -70,8 +71,10 @@ const modifyActionOptions = (action) => {
   });
 };
 
-export interface Properties extends SpeedDialItemProperties {
+export interface SpeedDialMainItemProperties extends SpeedDialItemProperties {
   maxSpeedDialActionCount: number;
+
+  closeOnOutsideClick?: boolean;
 }
 
 class SpeedDialMainItem extends SpeedDialItem {
@@ -83,7 +86,7 @@ class SpeedDialMainItem extends SpeedDialItem {
 
   _actionItems?: any;
 
-  _getDefaultOptions() {
+  _getDefaultOptions(): SpeedDialMainItemProperties {
     const defaultOptions = {
       icon: 'add',
       closeIcon: 'close',
@@ -102,26 +105,29 @@ class SpeedDialMainItem extends SpeedDialItem {
       actions: [],
       activeStateEnabled: true,
       hoverStateEnabled: true,
-      // @ts-expect-error
+      // @ts-expect-error ts-error
       indent: isCompact() ? 49 : 55,
       childIndent: 40,
-      // @ts-expect-error
+      // @ts-expect-error ts-error
       childOffset: isCompact() ? 2 : 9,
       callOverlayRenderShading: true,
       hideOnOutsideClick: true,
     };
 
-    return extend(
-      super._getDefaultOptions(),
-      extend(defaultOptions, config().floatingActionButtonConfig, { shading: false }),
-    );
+    return {
+      ...super._getDefaultOptions(),
+      ...defaultOptions,
+      ...config().floatingActionButtonConfig,
+      shading: false,
+    };
   }
 
-  _defaultOptionsRules() {
+  _defaultOptionsRules(): DefaultOptionsRule<SpeedDialItemProperties>[] {
+    // @ts-expect-error ts-error
     return super._defaultOptionsRules().concat([
       {
-        device() {
-          // @ts-expect-error
+        device(): boolean {
+          // @ts-expect-error ts-error
           return isFluent() && !isCompact();
         },
         options: {
@@ -131,8 +137,8 @@ class SpeedDialMainItem extends SpeedDialItem {
         },
       },
       {
-        device() {
-          // @ts-expect-error
+        device(): boolean {
+          // @ts-expect-error ts-error
           return isFluent() && isCompact();
         },
         options: {
@@ -142,8 +148,8 @@ class SpeedDialMainItem extends SpeedDialItem {
         },
       },
       {
-        device() {
-          // @ts-expect-error
+        device(): boolean {
+          // @ts-expect-error ts-error
           return isMaterial() && !isCompact();
         },
         options: {
@@ -153,8 +159,8 @@ class SpeedDialMainItem extends SpeedDialItem {
         },
       },
       {
-        device() {
-          // @ts-expect-error
+        device(): boolean {
+          // @ts-expect-error ts-error
           return isMaterial() && isCompact();
         },
         options: {
@@ -166,7 +172,7 @@ class SpeedDialMainItem extends SpeedDialItem {
     ]);
   }
 
-  _render() {
+  _render(): void {
     this.$element().addClass(FAB_MAIN_CLASS);
     super._render();
     this._moveToContainer();
@@ -174,17 +180,17 @@ class SpeedDialMainItem extends SpeedDialItem {
     this._renderClick();
   }
 
-  _renderLabel() {
+  _renderLabel(): void {
     super._renderLabel();
     this.$element().toggleClass(FAB_MAIN_CLASS_WITH_LABEL, !!this._$label);
   }
 
-  _renderIcon() {
+  _renderIcon(): void {
     super._renderIcon();
     this.$element().toggleClass(FAB_MAIN_CLASS_WITHOUT_ICON, !this.option('icon'));
   }
 
-  _renderCloseIcon() {
+  _renderCloseIcon(): void {
     this._$closeIcon = this._renderButtonIcon(
       this._$closeIcon,
       this._options.silent('closeIcon'),
@@ -194,10 +200,9 @@ class SpeedDialMainItem extends SpeedDialItem {
     this._$closeIcon.addClass(INVISIBLE_STATE_CLASS);
   }
 
-  _renderClick() {
+  _renderClick(): void {
     this._clickAction = this._getVisibleActions().length === 1
       ? this._getActionComponent()._createActionByOption('onClick')
-      // @ts-expect-error
       : this._createAction(this._clickHandler.bind(this));
 
     this._setClickAction();
@@ -247,19 +252,19 @@ class SpeedDialMainItem extends SpeedDialItem {
     this._$closeIcon.toggleClass(INVISIBLE_STATE_CLASS);
   }
 
-  _updateZIndexStackPosition() {
+  _updateZIndexStackPosition(): void {
     super._updateZIndexStackPosition();
-    // @ts-expect-error
-    const overlayStack = this._overlayStack();
 
+    const overlayStack = this._overlayStack();
+    // @ts-expect-error ts-error
     overlayStack.push(this);
   }
 
-  _renderActions() {
-    const actions = this.option('actions');
+  _renderActions(): void {
+    const { actions = [] } = this.option();
     const minActionButtonCount = 1;
 
-    if (this._actionItems && this._actionItems.length) {
+    if (this._actionItems?.length) {
       this._actionItems.forEach((actionItem) => {
         actionItem.dispose();
         actionItem.$element().remove();
@@ -284,7 +289,7 @@ class SpeedDialMainItem extends SpeedDialItem {
       action._options.silent('actionComponent', action);
       action._options.silent('parentPosition', this._getPosition());
       action._options.silent('actionVisible', action._options.silent('visible'));
-      // @ts-expect-error
+
       this._actionItems.push(this._createComponent($actionElement, SpeedDialItem, extend({}, modifyActionOptions(action), { visible: false })));
     }
   }
@@ -302,17 +307,16 @@ class SpeedDialMainItem extends SpeedDialItem {
     const directionIndex = 1;
 
     if (direction === 'auto') {
-      // @ts-expect-error
       const contentHeight = getHeight(this.$content());
-      // @ts-expect-error
+      // @ts-expect-error ts-error
       const actionsHeight = this.initialOption('indent') + this.initialOption('childIndent') * actions.length - contentHeight;
-      // @ts-expect-error
+      // @ts-expect-error ts-error
       const offsetTop = this.$content().offset().top;
 
       if (actionsHeight < offsetTop) {
         return -directionIndex;
       }
-      // @ts-expect-error
+      // @ts-expect-error ts-error
       const offsetBottom = getHeight(this._positionController._$wrapperCoveredElement) - contentHeight - offsetTop;
 
       return offsetTop >= offsetBottom ? -directionIndex : directionIndex;
@@ -323,7 +327,7 @@ class SpeedDialMainItem extends SpeedDialItem {
 
   _getActionPosition(actions, index) {
     const action = actions[index];
-    // @ts-expect-error
+
     const actionOffsetXValue = this.initialOption('childOffset');
     const actionOffsetX = action._options.silent('label') && !this._$label
       ? this._isPositionLeft(this._getPosition()) ? actionOffsetXValue : -actionOffsetXValue
@@ -337,7 +341,6 @@ class SpeedDialMainItem extends SpeedDialItem {
       : 'center';
 
     return {
-      // @ts-expect-error
       of: this.$content(),
       at: actionPositionAtMy,
       my: actionPositionAtMy,
@@ -348,7 +351,7 @@ class SpeedDialMainItem extends SpeedDialItem {
     };
   }
 
-  _outsideClickHandler(e) {
+  _outsideClickHandler(e): void {
     if (this._isShadingShown) {
       const isShadingClick = $(e.target)[0] === this._$wrapper[0];
 
@@ -359,28 +362,25 @@ class SpeedDialMainItem extends SpeedDialItem {
     }
   }
 
-  _setPosition() {
+  _setPosition(): void {
     if (this.option('visible')) {
-      // @ts-expect-error
       this._hide();
-      // @ts-expect-error
       this._show();
     }
   }
 
   _getPosition() {
+    // @ts-expect-error ts-error
     return this._getDefaultOptions().position;
   }
 
   _getInkRippleContainer() {
-    // @ts-expect-error
     return this.$content();
   }
 
   _optionChanged(args) {
     switch (args.name) {
       case 'actions':
-        // @ts-expect-error
         if (this._isVisible()) {
           this._renderIcon();
           this._renderLabel();
@@ -400,12 +400,10 @@ class SpeedDialMainItem extends SpeedDialItem {
         this._setPosition();
         break;
       case 'label':
-        // @ts-expect-error
         if (this._isVisible()) this._renderLabel();
         this._setPosition();
         break;
       case 'icon':
-        // @ts-expect-error
         if (this._isVisible()) this._renderIcon();
         break;
       default:
@@ -414,7 +412,7 @@ class SpeedDialMainItem extends SpeedDialItem {
   }
 }
 
-export function initAction(newAction) {
+export function initAction(newAction): void {
   // TODO: workaround for Angular/React/Vue
   newAction._options.silent('onInitializing', null);
 
@@ -431,7 +429,7 @@ export function initAction(newAction) {
       }),
     );
   } else {
-    const savedActions = speedDialMainItem.option('actions');
+    const { actions: savedActions = [] } = speedDialMainItem.option();
 
     savedActions.forEach((action) => {
       if (action._options.silent('id') === newAction._options.silent('id')) {
@@ -439,11 +437,10 @@ export function initAction(newAction) {
         return newAction;
       }
     });
-
+    // @ts-expect-error ts-error
     delete speedDialMainItem._options.position;
 
     if (!isActionExist) {
-      // @ts-expect-error
       if (speedDialMainItem._getVisibleActions(savedActions).length >= speedDialMainItem.option('maxSpeedDialActionCount')) {
         newAction.dispose();
         errors.log('W1014');
@@ -468,10 +465,12 @@ export function initAction(newAction) {
   }
 }
 
-export function disposeAction(actionId) {
+export function disposeAction(actionId): void {
   if (!speedDialMainItem) return;
 
-  let savedActions = speedDialMainItem.option('actions');
+  const { actions = [] } = speedDialMainItem.option();
+
+  let savedActions = actions;
   const savedActionsCount = savedActions.length;
 
   savedActions = savedActions.filter((action) => action._options.silent('id') !== actionId);
@@ -493,7 +492,7 @@ export function disposeAction(actionId) {
   }
 }
 
-export function repaint() {
+export function repaint(): void {
   if (!speedDialMainItem) return;
 
   const visibleActions = speedDialMainItem._getVisibleActions();
@@ -505,14 +504,16 @@ export function repaint() {
   const label = visibleActions.length === 1
     ? visibleActions[0].option('label')
     : speedDialMainItem._getDefaultOptions().label;
-  // @ts-expect-error
+
   speedDialMainItem.option({
     actions: speedDialMainItem.option('actions'),
     icon,
+    // @ts-expect-error ts-error
     closeIcon: speedDialMainItem._getDefaultOptions().closeIcon,
     position: speedDialMainItem._getPosition(),
     label,
     maxSpeedDialActionCount: speedDialMainItem._getDefaultOptions().maxSpeedDialActionCount,
+    // @ts-expect-error ts-error
     direction: speedDialMainItem._getDefaultOptions().direction,
   });
 }

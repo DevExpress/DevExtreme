@@ -48,7 +48,7 @@ export default class AppointmentDragBehavior {
   }
 
   getAppointmentElement(e) {
-    const itemElement = e.event.data && e.event.data.itemElement || e.itemElement;
+    const itemElement = e.event.data?.itemElement || e.itemElement;
 
     return $(itemElement);
   }
@@ -56,19 +56,20 @@ export default class AppointmentDragBehavior {
   onDragEnd(event) {
     const element = this.getAppointmentElement(event);
 
+    const isAllDay = this.isAllDay(element);
     const rawAppointment = this.appointments._getItemData(element);
-    const container = this.appointments._getAppointmentContainer(this.isAllDay(element));
+    const container = this.appointments._getAppointmentContainer(isAllDay);
     container.append(element);
 
-    const newCellIndex = this.workspace.getDroppableCellIndex();
-    const oldCellIndex = this.workspace.getCellIndexByCoordinates(this.initialPosition);
+    const $targetCell = this.workspace.getDroppableCell();
+    const $dragCell = this.workspace.getCellByCoordinates(this.initialPosition, isAllDay);
 
     this.appointments.notifyObserver('updateAppointmentAfterDrag', {
       event,
       element,
       rawAppointment,
-      newCellIndex,
-      oldCellIndex,
+      isDropToTheSameCell: $targetCell.is($dragCell),
+      isDropToSelfScheduler: $targetCell.length > 0,
     });
   }
 
@@ -86,7 +87,7 @@ export default class AppointmentDragBehavior {
 
   getItemSettings(appointment) {
     const itemData: any = $(appointment).data(LIST_ITEM_DATA_KEY);
-    return itemData && itemData.settings || [];
+    return itemData?.settings || [];
   }
 
   createDragStartHandler(options, appointmentDragging) {
@@ -94,7 +95,7 @@ export default class AppointmentDragBehavior {
       e.itemData = this.getItemData(e.itemElement);
       e.itemSettings = this.getItemSettings(e.itemElement);
 
-      appointmentDragging.onDragStart && appointmentDragging.onDragStart(e);
+      appointmentDragging.onDragStart?.(e);
 
       if (!e.cancel) {
         options.onDragStart(e);
@@ -104,7 +105,7 @@ export default class AppointmentDragBehavior {
 
   createDragMoveHandler(options, appointmentDragging) {
     return (e) => {
-      appointmentDragging.onDragMove && appointmentDragging.onDragMove(e);
+      appointmentDragging.onDragMove?.(e);
 
       if (!e.cancel) {
         options.onDragMove(e);
@@ -119,12 +120,12 @@ export default class AppointmentDragBehavior {
       this.appointmentInfo = null;
       e.toItemData = extend({}, e.itemData, updatedData);
 
-      appointmentDragging.onDragEnd && appointmentDragging.onDragEnd(e);
+      appointmentDragging.onDragEnd?.(e);
 
       if (!e.cancel) {
         options.onDragEnd(e);
         if (e.fromComponent !== e.toComponent) {
-          appointmentDragging.onRemove && appointmentDragging.onRemove(e);
+          appointmentDragging.onRemove?.(e);
         }
       }
 
@@ -147,7 +148,7 @@ export default class AppointmentDragBehavior {
       e.itemData = extend({}, e.itemData, updatedData);
 
       if (e.fromComponent !== e.toComponent) {
-        appointmentDragging.onAdd && appointmentDragging.onAdd(e);
+        appointmentDragging.onAdd?.(e);
       }
 
       if (this.dragBetweenComponentsPromise) {

@@ -1,5 +1,7 @@
 import { move } from '@js/common/core/animation/translator';
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
+import type { Callback } from '@js/core/utils/callbacks';
 import Callbacks from '@js/core/utils/callbacks';
 import { Deferred } from '@js/core/utils/deferred';
 import { each } from '@js/core/utils/iterator';
@@ -19,11 +21,45 @@ const STATE_READY = 1;
 const STATE_REFRESHING = 2;
 const STATE_LOADING = 3;
 const PULLDOWN_RELEASE_TIME = 400;
+class PullDownNativeScrollViewStrategy extends NativeStrategy {
+  pullDownCallbacks!: Callback;
 
-const PullDownNativeScrollViewStrategy = NativeStrategy.inherit({
+  releaseCallbacks!: Callback;
 
-  _init(scrollView) {
-    this.callBase(scrollView);
+  reachBottomCallbacks!: Callback;
+
+  _$topPocket!: dxElementWrapper;
+
+  _$pullDown!: dxElementWrapper;
+
+  _$refreshingText?: dxElementWrapper;
+
+  _$scrollViewContent!: dxElementWrapper;
+
+  _$pullingDownText!: dxElementWrapper;
+
+  _$pulledDownText!: dxElementWrapper;
+
+  _$pullDownText!: dxElementWrapper;
+
+  _state?: number;
+
+  _topPocketSize!: number;
+
+  _releaseTimeout?: ReturnType<typeof setTimeout>;
+
+  _pullDownRefreshTimeout?: ReturnType<typeof setTimeout>;
+
+  _reachBottomEnabled?: boolean;
+
+  _pullDownEnabled!: boolean;
+
+  _bottomBoundary!: number;
+
+  _location!: number;
+
+  _init(scrollView): void {
+    super._init(scrollView);
     this._$topPocket = scrollView._$topPocket;
     this._$pullDown = scrollView._$pullDown;
     this._$refreshingText = scrollView._$refreshingText;
@@ -31,24 +67,24 @@ const PullDownNativeScrollViewStrategy = NativeStrategy.inherit({
     this._$container = $(scrollView.container());
 
     this._initCallbacks();
-  },
+  }
 
-  _initCallbacks() {
+  _initCallbacks(): void {
     this.pullDownCallbacks = Callbacks();
     this.releaseCallbacks = Callbacks();
     this.reachBottomCallbacks = Callbacks();
-  },
+  }
 
-  render() {
-    this.callBase();
+  render(): void {
+    super.render();
     this._renderPullDown();
     this._releaseState();
-  },
+  }
 
-  _renderPullDown() {
+  _renderPullDown(): void {
     const $image = $('<div>').addClass(SCROLLVIEW_PULLDOWN_IMAGE_CLASS);
     const $loadContainer = $('<div>').addClass(SCROLLVIEW_PULLDOWN_INDICATOR_CLASS);
-    // @ts-expect-error
+    // @ts-expect-error ts-error
     const $loadIndicator = new LoadIndicator($('<div>')).$element();
     const $text = this._$pullDownText = $('<div>').addClass(SCROLLVIEW_PULLDOWN_TEXT_CLASS);
 
@@ -61,14 +97,14 @@ const PullDownNativeScrollViewStrategy = NativeStrategy.inherit({
       .append($image)
       .append($loadContainer.append($loadIndicator))
       .append($text);
-  },
+  }
 
-  _releaseState() {
+  _releaseState(): void {
     this._state = STATE_RELEASED;
     this._refreshPullDownText();
-  },
+  }
 
-  _refreshPullDownText() {
+  _refreshPullDownText(): void {
     const that = this;
     const pullDownTextItems = [{
       element: this._$pullingDownText,
@@ -85,45 +121,45 @@ const PullDownNativeScrollViewStrategy = NativeStrategy.inherit({
       const action = that._state === item.visibleState ? 'addClass' : 'removeClass';
       item.element[action](SCROLLVIEW_PULLDOWN_VISIBLE_TEXT_CLASS);
     });
-  },
+  }
 
-  update() {
-    this.callBase();
+  update(): void {
+    super.update();
     this._setTopPocketOffset();
-  },
+  }
 
-  _updateDimensions() {
-    this.callBase();
+  _updateDimensions(): void {
+    super._updateDimensions();
     this._topPocketSize = this._$topPocket.get(0).clientHeight;
 
     const contentEl = this._$scrollViewContent.get(0);
     const containerEl = this._$container.get(0);
     this._bottomBoundary = Math.max(contentEl.clientHeight - containerEl.clientHeight, 0);
-  },
+  }
 
   _allowedDirections() {
-    const allowedDirections = this.callBase();
+    const allowedDirections = super._allowedDirections();
     allowedDirections.vertical = allowedDirections.vertical || this._pullDownEnabled;
     return allowedDirections;
-  },
+  }
 
-  _setTopPocketOffset() {
+  _setTopPocketOffset(): void {
     this._$topPocket.css({
       top: -this._topPocketSize,
     });
-  },
+  }
 
-  handleEnd() {
-    this.callBase();
+  handleEnd(): void {
+    super.handleEnd();
     this._complete();
-  },
+  }
 
-  handleStop() {
-    this.callBase();
+  handleStop(): void {
+    super.handleStop();
     this._complete();
-  },
+  }
 
-  _complete() {
+  _complete(): void {
     if (this._state === STATE_READY) {
       this._setPullDownOffset(this._topPocketSize);
       clearTimeout(this._pullDownRefreshTimeout);
@@ -131,15 +167,15 @@ const PullDownNativeScrollViewStrategy = NativeStrategy.inherit({
         this._pullDownRefreshing();
       }, 400);
     }
-  },
+  }
 
-  _setPullDownOffset(offset) {
+  _setPullDownOffset(offset): void {
     move(this._$topPocket, { top: offset });
     move(this._$scrollViewContent, { top: offset });
-  },
+  }
 
-  handleScroll(e) {
-    this.callBase(e);
+  handleScroll(e): void {
+    super.handleScroll(e);
 
     // TODO: replace with disabled check
     if (this._state === STATE_REFRESHING) {
@@ -158,19 +194,19 @@ const PullDownNativeScrollViewStrategy = NativeStrategy.inherit({
     } else {
       this._stateReleased();
     }
-  },
+  }
 
   _isPullDown() {
     return this._pullDownEnabled && this._location >= this._topPocketSize;
-  },
+  }
 
   _isReachBottom() {
     return this._reachBottomEnabled && this.isBottomReached();
-  },
+  }
 
   isBottomReached() {
     return Math.round(this._bottomBoundary + Math.floor(this._location)) <= 1;
-  },
+  }
 
   _reachBottom() {
     if (this._state === STATE_LOADING) {
@@ -178,7 +214,7 @@ const PullDownNativeScrollViewStrategy = NativeStrategy.inherit({
     }
     this._state = STATE_LOADING;
     this.reachBottomCallbacks.fire();
-  },
+  }
 
   _pullDownReady() {
     if (this._state === STATE_READY) {
@@ -187,7 +223,7 @@ const PullDownNativeScrollViewStrategy = NativeStrategy.inherit({
     this._state = STATE_READY;
     this._$pullDown.addClass(SCROLLVIEW_PULLDOWN_READY_CLASS);
     this._refreshPullDownText();
-  },
+  }
 
   _stateReleased() {
     if (this._state === STATE_RELEASED) {
@@ -199,9 +235,9 @@ const PullDownNativeScrollViewStrategy = NativeStrategy.inherit({
       .removeClass(SCROLLVIEW_PULLDOWN_READY_CLASS);
 
     this._releaseState();
-  },
+  }
 
-  _pullDownRefreshing() {
+  _pullDownRefreshing(): void {
     if (this._state === STATE_REFRESHING) {
       return;
     }
@@ -213,23 +249,23 @@ const PullDownNativeScrollViewStrategy = NativeStrategy.inherit({
 
     this._refreshPullDownText();
     this.pullDownCallbacks.fire();
-  },
+  }
 
-  pullDownEnable(enabled) {
+  pullDownEnable(enabled): void {
     if (enabled) {
       this._updateDimensions();
       this._setTopPocketOffset();
     }
     this._pullDownEnabled = enabled;
-  },
+  }
 
-  reachBottomEnable(enabled) {
+  reachBottomEnable(enabled): void {
     this._reachBottomEnabled = enabled;
-  },
+  }
 
-  pendingRelease() {
+  pendingRelease(): void {
     this._state = STATE_READY;
-  },
+  }
 
   release() {
     const deferred = Deferred();
@@ -250,13 +286,13 @@ const PullDownNativeScrollViewStrategy = NativeStrategy.inherit({
     }, PULLDOWN_RELEASE_TIME);
 
     return deferred.promise();
-  },
+  }
 
-  dispose() {
+  dispose(): void {
     clearTimeout(this._pullDownRefreshTimeout);
     clearTimeout(this._releaseTimeout);
-    this.callBase();
-  },
-});
+    super.dispose();
+  }
+}
 
 export default PullDownNativeScrollViewStrategy;
