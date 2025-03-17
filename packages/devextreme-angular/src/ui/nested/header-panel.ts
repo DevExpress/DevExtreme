@@ -8,9 +8,7 @@ import {
     OnDestroy,
     NgModule,
     Host,
-    SkipSelf,
-    Output,
-    EventEmitter
+    SkipSelf
 } from '@angular/core';
 
 
@@ -20,49 +18,30 @@ import {
 import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
-import { DxoPaging } from './base/paging';
+import { DxoHeaderPanel } from './base/header-panel';
 
 
 @Component({
-    selector: 'dxo-paging',
+    selector: 'dxo-header-panel',
     template: '',
     styles: [''],
     providers: [NestedOptionHost],
     inputs: [
-        'enabled',
-        'pageIndex',
-        'pageSize'
+        'itemCssClass',
+        'itemTemplate',
+        'visible'
     ]
 })
-export class DxoPagingComponent extends DxoPaging implements OnDestroy, OnInit  {
+export class DxoHeaderPanelComponent extends DxoHeaderPanel implements OnDestroy, OnInit  {
 
-    /**
-    
-     * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
-     */
-    @Output() pageIndexChange: EventEmitter<number>;
-
-    /**
-    
-     * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
-     */
-    @Output() pageSizeChange: EventEmitter<number>;
     protected get _optionPath() {
-        return 'paging';
+        return 'headerPanel';
     }
 
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
-
-        this._createEventEmitters([
-            { emit: 'pageIndexChange' },
-            { emit: 'pageSizeChange' }
-        ]);
-
         parentOptionHost.setNestedOption(this);
         optionHost.setHost(this, this._fullOptionPath.bind(this));
     }
@@ -81,10 +60,10 @@ export class DxoPagingComponent extends DxoPaging implements OnDestroy, OnInit  
 
 @NgModule({
   declarations: [
-    DxoPagingComponent
+    DxoHeaderPanelComponent
   ],
   exports: [
-    DxoPagingComponent
+    DxoHeaderPanelComponent
   ],
 })
-export class DxoPagingModule { }
+export class DxoHeaderPanelModule { }
