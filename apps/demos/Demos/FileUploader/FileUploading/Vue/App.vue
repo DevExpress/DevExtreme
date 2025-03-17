@@ -60,13 +60,13 @@
 </template>
 <script setup lang="ts">
 import { ref } from 'vue';
-import { DxFileUploader } from 'devextreme-vue/file-uploader';
+import { DxFileUploader, type DxFileUploaderTypes } from 'devextreme-vue/file-uploader';
 import { DxCheckBox } from 'devextreme-vue/check-box';
 import { DxSelectBox } from 'devextreme-vue/select-box';
 
 const multiple = ref(false);
 const accept = ref('*');
-const uploadMode = ref('instantly');
+const uploadMode = ref<DxFileUploaderTypes.FileUploadMode>('instantly');
 const fileTypesSource = [
   { name: 'All types', value: '*' },
   { name: 'Images', value: 'image/*' },

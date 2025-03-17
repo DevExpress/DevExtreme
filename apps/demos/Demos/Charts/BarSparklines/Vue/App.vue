@@ -38,7 +38,7 @@
 </template>
 
 <script setup lang="ts">
-import DxSelectBox from 'devextreme-vue/select-box';
+import DxSelectBox, { type DxSelectBoxTypes } from 'devextreme-vue/select-box';
 import DataSource from 'devextreme/data/data_source';
 import CustomStore from 'devextreme/data/custom_store';
 import RowTemplate from './RowTemplate.vue';
@@ -57,7 +57,7 @@ const source = new DataSource({
   paginate: false,
 });
 
-function onValueChanged({ value }) {
+function onValueChanged({ value }: DxSelectBoxTypes.ValueChangedEvent) {
   source.filter(['month', '<=', value]);
   source.load();
 }

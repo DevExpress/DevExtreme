@@ -42,9 +42,9 @@ import {
   DxSelection,
   DxScrolling,
   DxColumn,
-  DxDataGridTypes,
+  type DxDataGridTypes,
 } from 'devextreme-vue/data-grid';
-import DxDropDownBox, { DxDropDownBoxTypes } from 'devextreme-vue/drop-down-box';
+import DxDropDownBox, { type DxDropDownBoxTypes } from 'devextreme-vue/drop-down-box';
 import CustomStore from 'devextreme/data/custom_store';
 
 const props = defineProps<{
@@ -62,7 +62,7 @@ function getSelectedRowKeys<T>(value: T | null): T[] {
   return value !== null && value !== undefined ? [value] : [];
 }
 
-const onContextMenuPreparing = (e: DxDataGridTypes.ContextMenuPreparing) => {
+const onContextMenuPreparing = (e: DxDataGridTypes.ContextMenuPreparingEvent) => {
   e.items = [];
 };
 const onSelectionChanged = (e: DxDataGridTypes.SelectionChangedEvent) => {

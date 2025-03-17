@@ -21,7 +21,7 @@
 </template>
 <script setup lang="ts">
 import { ref } from 'vue';
-import DxMenu from 'devextreme-vue/menu';
+import DxMenu, { type DxMenuTypes } from 'devextreme-vue/menu';
 import DxCheckBox from 'devextreme-vue/check-box';
 import notify from 'devextreme/ui/notify';
 import service from './data.ts';
@@ -30,13 +30,13 @@ const SUBMENU_HEIGHT = 200;
 const products = ref(service.getProducts());
 const limitSubmenuHeight = ref(false);
 
-function itemClick(e: ItemClickEvent) {
+function itemClick(e: DxMenuTypes.ItemClickEvent) {
   if (!e.itemData.items) {
     notify(`The "${e.itemData.text}" item was clicked`, 'success', 1500);
   }
 }
 
-function onSubmenuShowing({ submenuContainer }: HTMLElement) {
+function onSubmenuShowing({ submenuContainer }: DxMenuTypes.SubmenuShowingEvent) {
   submenuContainer.style.maxHeight = limitSubmenuHeight.value ? `${SUBMENU_HEIGHT}px` : '';
 }
 </script>

@@ -1,24 +1,28 @@
 import { isCommandKeyPressed } from '@js/common/core/events/utils/index';
 import registerComponent from '@js/core/component_registrator';
 import $ from '@js/core/renderer';
-import { noop } from '@js/core/utils/common';
 import { Deferred } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
-import DropDownList from '@js/ui/drop_down_editor/ui.drop_down_list';
+import type { Properties } from '@js/ui/autocomplete';
+import type { OptionChanged } from '@ts/core/widget/types';
+import DropDownList from '@ts/ui/drop_down_editor/m_drop_down_list';
 
 const AUTOCOMPLETE_CLASS = 'dx-autocomplete';
 const AUTOCOMPLETE_POPUP_WRAPPER_CLASS = 'dx-autocomplete-popup-wrapper';
 
-const Autocomplete = (DropDownList as any).inherit({
+export interface AutocompleteProperties extends Omit<Properties, 'onItemClick' | 'onSelectionChanged'> {}
 
-  _supportedKeys() {
+class Autocomplete extends DropDownList<AutocompleteProperties> {
+  _supportedKeys(): Record<string, (e: KeyboardEvent) => boolean> {
     let item = this._list ? this._list.option('focusedElement') : null;
-    const parent = this.callBase();
-
+    const parent = super._supportedKeys();
+    // @ts-expect-error ts-error
     item = item && $(item);
 
-    return extend({}, parent, {
-      upArrow(e) {
+    return {
+      ...parent,
+      upArrow(e): boolean {
+        // @ts-expect-error ts-error
         if (parent.upArrow.apply(this, arguments) && !isCommandKeyPressed(e)) {
           e.preventDefault();
           e.stopPropagation();
@@ -29,7 +33,8 @@ const Autocomplete = (DropDownList as any).inherit({
         }
         return true;
       },
-      downArrow(e) {
+      downArrow(e): boolean {
+        // @ts-expect-error ts-error
         if (parent.downArrow.apply(this, arguments) && !isCommandKeyPressed(e)) {
           e.preventDefault();
           e.stopPropagation();
@@ -40,169 +45,169 @@ const Autocomplete = (DropDownList as any).inherit({
         }
         return true;
       },
-      enter(e) {
+      enter(e): boolean {
         if (!item) {
           this.close();
         }
-        const opened = this.option('opened');
+        const { opened } = this.option();
         if (opened) {
           e.preventDefault();
         }
         return opened;
       },
-    });
-  },
+    };
+  }
 
-  _getDefaultOptions() {
-    return extend(this.callBase(), {
-
+  _getDefaultOptions(): AutocompleteProperties {
+    return {
+      ...super._getDefaultOptions(),
       minSearchLength: 1,
-
       maxItemCount: 10,
-
       noDataText: '',
-
       showDropDownButton: false,
-
       searchEnabled: true,
+    };
+  }
 
-    });
-  },
-
-  _initMarkup() {
-    this.callBase();
+  _initMarkup(): void {
+    super._initMarkup();
     this.$element().addClass(AUTOCOMPLETE_CLASS);
-  },
+  }
 
-  _getAriaAutocomplete() {
+  _getAriaAutocomplete(): string {
     const { disabled, readOnly } = this.option();
 
+    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
     const isInputEditable = !(readOnly || disabled);
 
     return isInputEditable ? 'list' : 'none';
-  },
+  }
 
   _displayGetterExpr() {
     return this.option('valueExpr');
-  },
+  }
 
-  _closeOutsideDropDownHandler({ target }) {
+  _closeOutsideDropDownHandler({ target }): boolean {
     return !$(target).closest(this.$element()).length;
-  },
+  }
 
-  _renderDimensions() {
-    this.callBase();
+  _renderDimensions(): void {
+    super._renderDimensions();
 
     this._updatePopupWidth();
     this._updateListDimensions();
-  },
+  }
 
-  _popupWrapperClass() {
-    return `${this.callBase()} ${AUTOCOMPLETE_POPUP_WRAPPER_CLASS}`;
-  },
+  _popupWrapperClass(): string {
+    return `${super._popupWrapperClass()} ${AUTOCOMPLETE_POPUP_WRAPPER_CLASS}`;
+  }
 
   _listConfig() {
-    return extend(this.callBase(), {
+    return extend(super._listConfig(), {
       pageLoadMode: 'none',
       onSelectionChanged: (e) => {
         this._setSelectedItem(e.addedItems[0]);
       },
     });
-  },
+  }
 
   _listItemClickHandler(e) {
     this._saveValueChangeEvent(e.event);
+    // @ts-expect-error ts-error
     const value = this._displayGetter(e.itemData);
     this.option('value', value);
     this.close();
-  },
+  }
 
-  _setListDataSource() {
+  _setListDataSource(): void {
     if (!this._list) {
       return;
     }
 
     this._list.option('selectedItems', []);
-    this.callBase();
-  },
+    super._setListDataSource();
+  }
 
-  _refreshSelected: noop,
+  _refreshSelected(): void {}
 
-  _searchCanceled() {
-    this.callBase();
+  _searchCanceled(): void {
+    super._searchCanceled();
     this.close();
-  },
+  }
 
   _loadItem(value, cache) {
     const selectedItem = this._getItemFromPlain(value, cache);
 
     return Deferred().resolve(selectedItem).promise();
-  },
+  }
 
   _dataSourceOptions() {
     return {
       paginate: true,
       pageSize: this.option('maxItemCount'),
     };
-  },
+  }
 
-  _searchDataSource(searchValue) {
+  _searchDataSource(searchValue): void {
     this._dataSource.pageSize(this.option('maxItemCount'));
-    this.callBase(searchValue);
+    super._searchDataSource(searchValue);
     this._clearFocusedItem();
-  },
+  }
 
-  _clearFocusedItem() {
+  _clearFocusedItem(): void {
     if (this._list) {
       this._list.option('focusedElement', null);
       this._list.option('selectedIndex', -1);
     }
-  },
+  }
 
-  _renderValueEventName() {
+  // eslint-disable-next-line class-methods-use-this
+  _renderValueEventName(): string {
     return 'input keyup';
-  },
+  }
 
-  _valueChangeEventHandler(e) {
+  _valueChangeEventHandler(e): void {
     const value = this._input().val() || null;
-    return this.callBase(e, value);
-  },
+    return super._valueChangeEventHandler(e, value);
+  }
 
-  _optionChanged(args) {
+  _optionChanged(args: OptionChanged<AutocompleteProperties>): void {
     switch (args.name) {
       case 'readOnly':
       case 'disabled':
-        this.callBase(args);
+        super._optionChanged(args);
         this._setDefaultAria();
         break;
       case 'maxItemCount':
+        // @ts-expect-error ts-error
         this._searchDataSource();
         break;
       case 'valueExpr':
+        // @ts-expect-error ts-error
         this._compileDisplayGetter();
         this._setListOption('displayExpr', this._displayGetterExpr());
-        this.callBase(args);
+        super._optionChanged(args);
         break;
       default:
-        this.callBase(args);
+        super._optionChanged(args);
     }
-  },
+  }
 
-  clear() {
-    this.callBase();
+  clear(): void {
+    super.clear();
     this.close();
-  },
+  }
 
-  reset(value = undefined) {
+  reset(value = undefined): void {
     if (arguments.length) {
-      this.callBase(value);
+      super.reset(value);
     } else {
-      this.callBase();
+      super.reset();
     }
 
     this.close();
-  },
-});
+  }
+}
 
 registerComponent('dxAutocomplete', Autocomplete);
 

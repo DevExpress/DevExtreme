@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react';
-import TreeView, { TreeViewTypes } from 'devextreme-react/tree-view';
-import TabPanel, { TabPanelTypes } from 'devextreme-react/tab-panel';
+import TreeView, { type TreeViewTypes } from 'devextreme-react/tree-view';
+import TabPanel, { type TabPanelTypes } from 'devextreme-react/tab-panel';
 import { continents } from './data.ts';
 
 const renderPanelItemTitle = (item) => <span className="tab-panel-title">{item.text}</span>;

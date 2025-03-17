@@ -1,7 +1,7 @@
 import React from 'react';
 
 import {
-  Chart, ChartTypes, Series, CommonSeriesSettings, Point, Legend,
+  Chart, type ChartTypes, Series, CommonSeriesSettings, Point, Legend,
 } from 'devextreme-react/chart';
 import { dataSource } from './data.ts';
 import markerTemplate from './MarkerTemplate.tsx';

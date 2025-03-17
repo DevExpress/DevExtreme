@@ -47,29 +47,6 @@ exports[`common initial render should be successfull 1`] = `
           </div>
         </div>
         <div
-          class="dx-item dx-toolbar-item dx-toolbar-button dx-toolbar-item-auto-hide dx-toolbar-text-auto-hide"
-        >
-          <div
-            class="dx-item-content dx-toolbar-item-content"
-          >
-            <div
-              aria-label="add"
-              class="dx-widget dx-button dx-button-mode-contained dx-button-normal dx-button-has-icon"
-              role="button"
-              tabindex="0"
-              title=""
-            >
-              <div
-                class="dx-button-content"
-              >
-                <i
-                  class="dx-icon dx-icon-add"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-        <div
           class="dx-item dx-toolbar-item dx-toolbar-button dx-toolbar-item-auto-hide"
         >
           <div

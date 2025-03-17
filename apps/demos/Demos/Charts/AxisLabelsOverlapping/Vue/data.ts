@@ -1,4 +1,6 @@
-export const overlappingModes = ['stagger', 'rotate', 'hide', 'none'];
+import { type DxChartTypes } from 'devextreme-vue/chart';
+
+export const overlappingModes: DxChartTypes.ChartsAxisLabelOverlap[] = ['stagger', 'rotate', 'hide', 'none'];
 
 export const population = [
   { country: 'China', val: 1382500000 },

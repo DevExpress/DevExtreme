@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react';
-import FilterBuilder, { CustomOperation, FilterBuilderTypes, ICustomOperationProps } from 'devextreme-react/filter-builder';
+import FilterBuilder, { CustomOperation, type FilterBuilderTypes, ICustomOperationProps } from 'devextreme-react/filter-builder';
 import { filter, fields, groupOperations } from './data.ts';
 import { formatValue } from './helpers.ts';
 import { EditorComponent } from './EditorComponent.tsx';

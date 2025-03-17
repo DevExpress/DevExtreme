@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  Chart, ChartTypes, Series, CommonSeriesSettings, Label, Format, Legend, Export,
+  Chart, type ChartTypes, Series, CommonSeriesSettings, Label, Format, Legend, Export,
 } from 'devextreme-react/chart';
 import { grossProductData } from './data.ts';
 

@@ -2,7 +2,7 @@ import React, {
   useCallback, useEffect, useMemo, useReducer,
 } from 'react';
 import DataGrid, {
-  Column, DataGridTypes, Editing, Pager,
+  Column, type DataGridTypes, Editing, Pager,
 } from 'devextreme-react/data-grid';
 import { LoadPanel } from 'devextreme-react/load-panel';
 import 'whatwg-fetch';

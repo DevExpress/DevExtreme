@@ -321,11 +321,11 @@ export type HeaderPanelDraggingOptions = Pick<dxSortableOptions, SortablePropert
  * @docid
  */
 type HeaderPanel<TRowData = unknown, TKey = unknown> = {
-    /**
-     * @docid
-     * @public
-     */
-    dragging?: HeaderPanelDraggingOptions;
+    // /**
+    //  * @docid
+    //  * @public
+    //  */
+    // dragging?: HeaderPanelDraggingOptions;
     /**
      * @docid
      * @public

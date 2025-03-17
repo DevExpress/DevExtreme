@@ -46,13 +46,12 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 
-const props = withDefaults(defineProps<{
-  annotation?: Record<string, any>
-}>(), {
-  annotation: () => ({}),
-});
+interface Props {
+  annotation?: Record<string, any>;
+};
 
-const data = ref(props.annotation.data);
+const { annotation = {} as Record<string, any> } = defineProps<Props>();
+const data = ref<Record<string, any>>(annotation.data);
 const getImagePath = () => `../../../../images/flags/${data.value.name.replace(/\s/, '')}.svg`;
 const formatNumber = new Intl.NumberFormat('en-US', { minimumFractionDigits: 0 }).format;
 </script>

@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from 'react';
-import Scheduler, { Resource, SchedulerTypes } from 'devextreme-react/scheduler';
-import { Switch, SwitchTypes } from 'devextreme-react/switch';
-import { NumberBox, NumberBoxTypes } from 'devextreme-react/number-box';
+import Scheduler, { Resource, type SchedulerTypes } from 'devextreme-react/scheduler';
+import { Switch, type SwitchTypes } from 'devextreme-react/switch';
+import { NumberBox, type NumberBoxTypes } from 'devextreme-react/number-box';
 
 import { data, moviesData } from './data.ts';
 import AppointmentTemplate from './AppointmentTemplate.tsx';

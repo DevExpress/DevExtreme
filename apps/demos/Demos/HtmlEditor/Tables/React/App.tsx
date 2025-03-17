@@ -5,7 +5,7 @@ import HtmlEditor, {
   Toolbar,
   Item,
 } from 'devextreme-react/html-editor';
-import { CheckBox, CheckBoxTypes } from 'devextreme-react/check-box';
+import { CheckBox, type CheckBoxTypes } from 'devextreme-react/check-box';
 import { markup } from './data.ts';
 
 export default function App() {

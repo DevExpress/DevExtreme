@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import TreeMap, { Tooltip, ITooltipProps } from 'devextreme-react/tree-map';
-import SelectBox, { SelectBoxTypes } from 'devextreme-react/select-box';
+import SelectBox, { type SelectBoxTypes } from 'devextreme-react/select-box';
 import { salesAmount, colorizationOptions, colorizationTypeLabel } from './data.ts';
 
 const customizeTooltip: ITooltipProps['customizeTooltip'] = (arg) => {

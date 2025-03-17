@@ -26,7 +26,7 @@ const createConfig = function(outputFile, mode) {
         alias: {
             'devextreme': sourcesDir,
             '../../events/index': path.resolve(sourcesDir, 'cjs/events/index.js'),
-            '../../common/core/events/utils/index': path.resolve(sourcesDir, 'cjs/common/core/events.js')
+            '../../common/core/events/utils/index': path.resolve(sourcesDir, 'cjs/common/core/events/utils/index.js')
         },
         mainFields: ['main']
     };

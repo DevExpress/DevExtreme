@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react';
-import Switch, { SwitchTypes } from 'devextreme-react/switch';
+import Switch, { type SwitchTypes } from 'devextreme-react/switch';
 
 function App() {
   const [value, setValue] = useState(false);

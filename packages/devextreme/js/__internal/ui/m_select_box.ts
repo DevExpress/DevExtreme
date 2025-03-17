@@ -669,7 +669,6 @@ class SelectBox<
             && !isOverlayTarget;
 
     if (shouldCancelSearch) {
-      // @ts-expect-error ts-error
       const isPopupVisible = this._popup?._hideAnimationProcessing;
       this._clearSearchTimer();
       if (isPopupVisible) {

@@ -1,8 +1,6 @@
-import LoadIndicator from '../__internal/ui/m_load_panel';
+import LoadPanel from '../__internal/ui/m_load_panel';
 
-export default LoadIndicator;
-
-// STYLE loadPanel
+export default LoadPanel;
 
 /**
  * @name dxLoadPanelOptions.disabled

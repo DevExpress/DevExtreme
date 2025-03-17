@@ -1,5 +1,5 @@
-import { BaseInfernoComponent, normalizeStyles } from '@devextreme/runtime/inferno';
 import type { PropsWithChildren, PropsWithClassName, PropsWithStyles } from '@ts/core/r1/index';
+import { BaseInfernoComponent, normalizeStyles } from '@ts/core/r1/runtime/inferno/index';
 
 import { splitNumber } from '../../utils/index';
 import { VirtualCell, VirtualCellDefaultProps } from './virtual_cell';

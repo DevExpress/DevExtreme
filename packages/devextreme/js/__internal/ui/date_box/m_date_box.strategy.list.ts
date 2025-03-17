@@ -3,7 +3,6 @@ import '@ts/ui/list/modules/m_selection';
 import dateLocalization from '@js/common/core/localization/date';
 import { ensureDefined, noop } from '@js/core/utils/common';
 import dateSerialization from '@js/core/utils/date_serialization';
-import { extend } from '@js/core/utils/extend';
 import { getHeight, getOuterHeight } from '@js/core/utils/size';
 import { isDate } from '@js/core/utils/type';
 import { getWindow } from '@js/core/utils/window';
@@ -22,9 +21,16 @@ const BOUNDARY_VALUES = {
   max: new Date(0, 0, 0, 23, 59),
 };
 
-const ListStrategy = DateBoxStrategy.inherit({
+class ListStrategy extends DateBoxStrategy {
+  _asyncScrollTimeout?: ReturnType<typeof setTimeout>;
 
-  NAME: 'List',
+  _widgetItems!: Date[];
+
+  ctor(dateBox): void {
+    super.ctor(dateBox);
+
+    this.NAME = 'List';
+  }
 
   supportedKeys() {
     return {
@@ -32,21 +38,22 @@ const ListStrategy = DateBoxStrategy.inherit({
       home: noop,
       end: noop,
     };
-  },
+  }
 
   getDefaultOptions() {
-    return extend(this.callBase(), {
+    return {
+      ...super.getDefaultOptions(),
       applyValueMode: 'instantly',
-    });
-  },
+    };
+  }
 
   getDisplayFormat(displayFormat) {
     return displayFormat || 'shorttime';
-  },
+  }
 
   popupConfig(popupConfig) {
     return popupConfig;
-  },
+  }
 
   getValue() {
     const selectedIndex = this._widget.option('selectedIndex');
@@ -57,29 +64,29 @@ const ListStrategy = DateBoxStrategy.inherit({
 
     const itemData = this._widgetItems[selectedIndex];
     return this._getDateByItemData(itemData);
-  },
+  }
 
-  useCurrentDateByDefault() {
+  useCurrentDateByDefault(): boolean {
     return true;
-  },
+  }
 
   getDefaultDate() {
-    // @ts-expect-error
+    // @ts-expect-error ts-error
     return new Date(null);
-  },
+  }
 
-  popupShowingHandler() {
+  popupShowingHandler(): void {
     this.dateBox._dimensionChanged();
-  },
+  }
 
-  _renderWidget() {
-    this.callBase();
+  _renderWidget(): void {
+    super._renderWidget();
     this._refreshItems();
-  },
+  }
 
   _getWidgetName() {
     return List;
-  },
+  }
 
   _getWidgetOptions() {
     return {
@@ -89,19 +96,19 @@ const ListStrategy = DateBoxStrategy.inherit({
       onFocusedItemChanged: this._refreshActiveDescendant.bind(this),
       selectionMode: 'single',
     };
-  },
+  }
 
-  _refreshActiveDescendant(e) {
+  _refreshActiveDescendant(e): void {
     this.dateBox.setAria('activedescendant', '');
     this.dateBox.setAria('activedescendant', e.actionValue);
-  },
+  }
 
-  _refreshItems() {
+  _refreshItems(): void {
     this._widgetItems = this._getTimeListItems();
     this._widget.option('items', this._widgetItems);
-  },
+  }
 
-  renderOpenedState() {
+  renderOpenedState(): void {
     if (!this._widget) {
       return;
     }
@@ -114,14 +121,14 @@ const ListStrategy = DateBoxStrategy.inherit({
     } else {
       this._scrollToSelectedItem();
     }
-  },
+  }
 
-  dispose() {
-    this.callBase();
+  dispose(): void {
+    super.dispose();
     clearTimeout(this._asyncScrollTimeout);
-  },
+  }
 
-  _updateValue() {
+  _updateValue(): void {
     if (!this._widget) {
       return;
     }
@@ -130,9 +137,9 @@ const ListStrategy = DateBoxStrategy.inherit({
 
     this._setSelectedItemsByValue();
     this._scrollToSelectedItem();
-  },
+  }
 
-  _setSelectedItemsByValue() {
+  _setSelectedItemsByValue(): void {
     const value = this.dateBoxValue();
     const dateIndex = this._getDateIndex(value);
 
@@ -141,11 +148,11 @@ const ListStrategy = DateBoxStrategy.inherit({
     } else {
       this._widget.option('selectedIndex', dateIndex);
     }
-  },
+  }
 
-  _scrollToSelectedItem() {
+  _scrollToSelectedItem(): void {
     this._widget.scrollToItem(this._widget.option('selectedIndex'));
-  },
+  }
 
   _getDateIndex(date) {
     let result = -1;
@@ -158,13 +165,13 @@ const ListStrategy = DateBoxStrategy.inherit({
     }
 
     return result;
-  },
+  }
 
   _areDatesEqual(first, second) {
     return isDate(first) && isDate(second)
     && first.getHours() === second.getHours()
     && first.getMinutes() === second.getMinutes();
-  },
+  }
 
   _getTimeListItems() {
     let min = this.dateBox.dateOption('min') || this._getBoundaryDate('min');
@@ -193,7 +200,7 @@ const ListStrategy = DateBoxStrategy.inherit({
     }
 
     return this._getRangeItems(min, new Date(min), delta);
-  },
+  }
 
   _getRangeItems(startValue, currentValue, rangeDuration) {
     const rangeItems = [];
@@ -206,7 +213,7 @@ const ListStrategy = DateBoxStrategy.inherit({
     }
 
     return rangeItems;
-  },
+  }
 
   _getBoundaryDate(boundary) {
     const boundaryValue = BOUNDARY_VALUES[boundary];
@@ -219,14 +226,14 @@ const ListStrategy = DateBoxStrategy.inherit({
       boundaryValue.getHours(),
       boundaryValue.getMinutes(),
     );
-  },
+  }
 
   _timeListItemTemplate(itemData) {
     const displayFormat = this.dateBox.option('displayFormat');
     return dateLocalization.format(itemData, this.getDisplayFormat(displayFormat));
-  },
+  }
 
-  _listItemClickHandler(e) {
+  _listItemClickHandler(e): void {
     if (this.dateBox.option('applyValueMode') === 'useButtons') {
       return;
     }
@@ -235,7 +242,7 @@ const ListStrategy = DateBoxStrategy.inherit({
 
     this.dateBox.option('opened', false);
     this.dateBoxValue(date, e.event);
-  },
+  }
 
   _getDateByItemData(itemData) {
     let date = this.dateBox.option('value');
@@ -264,13 +271,13 @@ const ListStrategy = DateBoxStrategy.inherit({
     }
 
     return date;
-  },
+  }
 
   getKeyboardListener() {
     return this._widget;
-  },
+  }
 
-  _updatePopupHeight() {
+  _updatePopupHeight(): void {
     const dropDownOptionsHeight = getSizeValue(this.dateBox.option('dropDownOptions.height'));
     if (dropDownOptionsHeight === undefined || dropDownOptionsHeight === 'auto') {
       this.dateBox._setPopupOption('height', 'auto');
@@ -279,19 +286,19 @@ const ListStrategy = DateBoxStrategy.inherit({
       this.dateBox._setPopupOption('height', Math.min(popupHeight, maxHeight));
     }
 
-    this.dateBox._timeList && this.dateBox._timeList.updateDimensions();
-  },
+    this.dateBox._timeList?.updateDimensions();
+  }
 
   getParsedText(text, format) {
-    let value = this.callBase(text, format);
+    let value = super.getParsedText(text, format);
 
     if (value) {
-      // @ts-expect-error
+      // @ts-expect-error ts-error
       value = dateUtils.mergeDates(value, new Date(null), DATE_FORMAT);
     }
 
     return value;
-  },
-});
+  }
+}
 
 export default ListStrategy;
