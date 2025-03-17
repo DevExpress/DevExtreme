@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/prefer-nullish-coalescing */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import type { DataRow } from '@ts/grids/new/grid_core/columns_controller/types';
-import { CollectionController } from '@ts/grids/new/grid_core/keyboard_navigation/collection_controller';
 import type { DataObject } from '@ts/grids/new/grid_core/data_controller/types';
+import { CollectionController } from '@ts/grids/new/grid_core/keyboard_navigation/collection_controller';
 import type { InfernoNode, RefObject } from 'inferno';
 import { Component, createRef } from 'inferno';
 
@@ -133,7 +133,6 @@ export class Card extends Component<CardProps> {
           {this.props.row.cells.map((cell, index) => (
             <FieldTemplate
               elementRef={this.fieldRefs[index]}
-              // eslint-disable-next-line max-len, @typescript-eslint/explicit-function-return-type
               alignment={cell.column.alignment}
               title={cell.column.caption || cell.column.name}
               value={cell.text}

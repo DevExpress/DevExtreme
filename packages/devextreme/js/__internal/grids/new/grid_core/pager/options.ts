@@ -1,6 +1,6 @@
 import type { Mode } from '@js/common';
 import messageLocalization from '@js/localization/message';
-import type { PagerBase } from '@js/ui/pagination';
+import type { PagerOptions as Options } from '@js/ui/card_view';
 
 export type PageSize = number | 'all';
 
@@ -8,14 +8,7 @@ export type PageSizes = PageSize[] | Mode;
 
 export type PagerVisible = boolean | Mode;
 
-export interface PagerOptions extends PagerBase {
-  allowedPageSizes?: PageSizes;
-  visible?: PagerVisible;
-}
-
-export interface Options {
-  pager?: PagerOptions;
-}
+export type { Options };
 
 export const defaultOptions = {
   pager: {

@@ -5,6 +5,7 @@ import type { WidgetOptions } from '@js/ui/widget/ui.widget';
 import * as columnsController from './columns_controller/index';
 import * as contentView from './content_view/index';
 import * as dataController from './data_controller/index';
+import * as editing from './editing/index';
 import { filterPanel } from './filtering/index';
 import * as pager from './pager/index';
 import type { SearchProperties } from './search/types';
@@ -22,6 +23,7 @@ export type Options =
   & columnsController.Options
   & filterPanel.Options
   & contentView.Options
+  & editing.Options
   & SearchProperties
   & {
     noDataText?: string;
@@ -33,6 +35,7 @@ export const defaultOptions = {
   ...pager.defaultOptions,
   ...filterPanel.defaultOptions,
   ...contentView.defaultOptions,
+  ...editing.defaultOptions,
   searchText: '',
 } satisfies Options;
 

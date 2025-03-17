@@ -20,8 +20,12 @@ import {
 } from '@angular/core';
 
 
-import { Store } from 'devextreme/data';
-import DataSource, { Options as DataSourceOptions } from 'devextreme/data/data_source';
+import DataSource from 'devextreme/data/data_source';
+import { DataSourceOptions } from 'devextreme/data/data_source';
+import { Store } from 'devextreme/data/store';
+import { EventInfo } from 'devextreme/common/core/events';
+import { DataErrorOccurredInfo, Pager } from 'devextreme/common/grids';
+import { Paging, RemoteOperations, PredefinedToolbarItem, ToolbarItem } from 'devextreme/ui/card_view';
 
 import DxCardView from 'devextreme/ui/card_view';
 
@@ -36,9 +40,17 @@ import {
     WatcherHelper
 } from 'devextreme-angular/core';
 
+import { DxoPagerModule } from 'devextreme-angular/ui/nested';
 import { DxoPagingModule } from 'devextreme-angular/ui/nested';
+import { DxoRemoteOperationsModule } from 'devextreme-angular/ui/nested';
+import { DxoToolbarModule } from 'devextreme-angular/ui/nested';
+import { DxiItemModule } from 'devextreme-angular/ui/nested';
 
+import { DxiCardViewItemModule } from 'devextreme-angular/ui/card-view/nested';
+import { DxoCardViewPagerModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxoCardViewPagingModule } from 'devextreme-angular/ui/card-view/nested';
+import { DxoCardViewRemoteOperationsModule } from 'devextreme-angular/ui/card-view/nested';
+import { DxoCardViewToolbarModule } from 'devextreme-angular/ui/card-view/nested';
 
 
 
@@ -50,6 +62,7 @@ import { DxoCardViewPagingModule } from 'devextreme-angular/ui/card-view/nested'
 @Component({
     selector: 'dx-card-view',
     template: '',
+    host: { ngSkipHydration: 'true' },
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -87,14 +100,14 @@ export class DxCardViewComponent extends DxComponent implements OnDestroy, OnCha
 
 
     /**
-     * [descr:DataControllerProperties.dataSource]
+     * [descr:DataControllerOptions.dataSource]
     
      */
     @Input()
-    get dataSource(): Store | DataSource | DataSourceOptions | string | undefined | Array<any> {
+    get dataSource(): Array<any> | DataSource | DataSourceOptions | Store | string {
         return this._getOption('dataSource');
     }
-    set dataSource(value: Store | DataSource | DataSourceOptions | string | undefined | Array<any>) {
+    set dataSource(value: Array<any> | DataSource | DataSourceOptions | Store | string) {
         this._setOption('dataSource', value);
     }
 
@@ -117,10 +130,10 @@ export class DxCardViewComponent extends DxComponent implements OnDestroy, OnCha
     
      */
     @Input()
-    get elementAttr(): any {
+    get elementAttr(): Record<string, any> {
         return this._getOption('elementAttr');
     }
-    set elementAttr(value: any) {
+    set elementAttr(value: Record<string, any>) {
         this._setOption('elementAttr', value);
     }
 
@@ -143,10 +156,10 @@ export class DxCardViewComponent extends DxComponent implements OnDestroy, OnCha
     
      */
     @Input()
-    get height(): number | Function | string | undefined {
+    get height(): (() => number | string) | number | string | undefined {
         return this._getOption('height');
     }
-    set height(value: number | Function | string | undefined) {
+    set height(value: (() => number | string) | number | string | undefined) {
         this._setOption('height', value);
     }
 
@@ -178,15 +191,54 @@ export class DxCardViewComponent extends DxComponent implements OnDestroy, OnCha
 
 
     /**
-     * [descr:DataControllerProperties.paging]
+     * [descr:DataControllerOptions.keyExpr]
     
      */
     @Input()
-    get paging(): { pageIndex?: number, pageSize?: number } {
+    get keyExpr(): Array<string> | string {
+        return this._getOption('keyExpr');
+    }
+    set keyExpr(value: Array<string> | string) {
+        this._setOption('keyExpr', value);
+    }
+
+
+    /**
+     * [descr:PagerOptions.pager]
+    
+     */
+    @Input()
+    get pager(): Pager {
+        return this._getOption('pager');
+    }
+    set pager(value: Pager) {
+        this._setOption('pager', value);
+    }
+
+
+    /**
+     * [descr:DataControllerOptions.paging]
+    
+     */
+    @Input()
+    get paging(): Paging {
         return this._getOption('paging');
     }
-    set paging(value: { pageIndex?: number, pageSize?: number }) {
+    set paging(value: Paging) {
         this._setOption('paging', value);
+    }
+
+
+    /**
+     * [descr:DataControllerOptions.remoteOperations]
+    
+     */
+    @Input()
+    get remoteOperations(): boolean | RemoteOperations | "auto" {
+        return this._getOption('remoteOperations');
+    }
+    set remoteOperations(value: boolean | RemoteOperations | "auto") {
+        this._setOption('remoteOperations', value);
     }
 
 
@@ -217,6 +269,19 @@ export class DxCardViewComponent extends DxComponent implements OnDestroy, OnCha
 
 
     /**
+     * [descr:ToolbarOptions.toolbar]
+    
+     */
+    @Input()
+    get toolbar(): { items?: Array<PredefinedToolbarItem | ToolbarItem> } {
+        return this._getOption('toolbar');
+    }
+    set toolbar(value: { items?: Array<PredefinedToolbarItem | ToolbarItem> }) {
+        this._setOption('toolbar', value);
+    }
+
+
+    /**
      * [descr:WidgetOptions.visible]
     
      */
@@ -234,10 +299,10 @@ export class DxCardViewComponent extends DxComponent implements OnDestroy, OnCha
     
      */
     @Input()
-    get width(): number | Function | string | undefined {
+    get width(): (() => number | string) | number | string | undefined {
         return this._getOption('width');
     }
-    set width(value: number | Function | string | undefined) {
+    set width(value: (() => number | string) | number | string | undefined) {
         this._setOption('width', value);
     }
 
@@ -247,7 +312,15 @@ export class DxCardViewComponent extends DxComponent implements OnDestroy, OnCha
     
     
      */
-    @Output() onContentReady: EventEmitter<any>;
+    @Output() onContentReady: EventEmitter<EventInfo<any>>;
+
+    /**
+    
+     * [descr:DataControllerOptions.onDataErrorOccurred]
+    
+    
+     */
+    @Output() onDataErrorOccurred: EventEmitter<DataErrorOccurredInfo>;
 
     /**
     
@@ -255,7 +328,7 @@ export class DxCardViewComponent extends DxComponent implements OnDestroy, OnCha
     
     
      */
-    @Output() onDisposing: EventEmitter<any>;
+    @Output() onDisposing: EventEmitter<EventInfo<any>>;
 
     /**
     
@@ -263,7 +336,7 @@ export class DxCardViewComponent extends DxComponent implements OnDestroy, OnCha
     
     
      */
-    @Output() onInitialized: EventEmitter<any>;
+    @Output() onInitialized: EventEmitter<Object>;
 
     /**
     
@@ -271,7 +344,7 @@ export class DxCardViewComponent extends DxComponent implements OnDestroy, OnCha
     
     
      */
-    @Output() onOptionChanged: EventEmitter<any>;
+    @Output() onOptionChanged: EventEmitter<Object>;
 
     /**
     
@@ -292,7 +365,7 @@ export class DxCardViewComponent extends DxComponent implements OnDestroy, OnCha
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() dataSourceChange: EventEmitter<Store | DataSource | DataSourceOptions | string | undefined | Array<any>>;
+    @Output() dataSourceChange: EventEmitter<Array<any> | DataSource | DataSourceOptions | Store | string>;
 
     /**
     
@@ -306,7 +379,7 @@ export class DxCardViewComponent extends DxComponent implements OnDestroy, OnCha
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() elementAttrChange: EventEmitter<any>;
+    @Output() elementAttrChange: EventEmitter<Record<string, any>>;
 
     /**
     
@@ -320,7 +393,7 @@ export class DxCardViewComponent extends DxComponent implements OnDestroy, OnCha
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() heightChange: EventEmitter<number | Function | string | undefined>;
+    @Output() heightChange: EventEmitter<(() => number | string) | number | string | undefined>;
 
     /**
     
@@ -341,7 +414,28 @@ export class DxCardViewComponent extends DxComponent implements OnDestroy, OnCha
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() pagingChange: EventEmitter<{ pageIndex?: number, pageSize?: number }>;
+    @Output() keyExprChange: EventEmitter<Array<string> | string>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
+    @Output() pagerChange: EventEmitter<Pager>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
+    @Output() pagingChange: EventEmitter<Paging>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
+    @Output() remoteOperationsChange: EventEmitter<boolean | RemoteOperations | "auto">;
 
     /**
     
@@ -362,6 +456,13 @@ export class DxCardViewComponent extends DxComponent implements OnDestroy, OnCha
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
+    @Output() toolbarChange: EventEmitter<{ items?: Array<PredefinedToolbarItem | ToolbarItem> }>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
     @Output() visibleChange: EventEmitter<boolean>;
 
     /**
@@ -369,7 +470,7 @@ export class DxCardViewComponent extends DxComponent implements OnDestroy, OnCha
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() widthChange: EventEmitter<number | Function | string | undefined>;
+    @Output() widthChange: EventEmitter<(() => number | string) | number | string | undefined>;
 
 
 
@@ -389,6 +490,7 @@ export class DxCardViewComponent extends DxComponent implements OnDestroy, OnCha
 
         this._createEventEmitters([
             { subscribe: 'contentReady', emit: 'onContentReady' },
+            { subscribe: 'dataErrorOccurred', emit: 'onDataErrorOccurred' },
             { subscribe: 'disposing', emit: 'onDisposing' },
             { subscribe: 'initialized', emit: 'onInitialized' },
             { subscribe: 'optionChanged', emit: 'onOptionChanged' },
@@ -401,9 +503,13 @@ export class DxCardViewComponent extends DxComponent implements OnDestroy, OnCha
             { emit: 'heightChange' },
             { emit: 'hintChange' },
             { emit: 'hoverStateEnabledChange' },
+            { emit: 'keyExprChange' },
+            { emit: 'pagerChange' },
             { emit: 'pagingChange' },
+            { emit: 'remoteOperationsChange' },
             { emit: 'rtlEnabledChange' },
             { emit: 'tabIndexChange' },
+            { emit: 'toolbarChange' },
             { emit: 'visibleChange' },
             { emit: 'widthChange' }
         ]);
@@ -425,6 +531,7 @@ export class DxCardViewComponent extends DxComponent implements OnDestroy, OnCha
     ngOnChanges(changes: SimpleChanges) {
         super.ngOnChanges(changes);
         this.setupChanges('dataSource', changes);
+        this.setupChanges('keyExpr', changes);
     }
 
     setupChanges(prop: string, changes: SimpleChanges) {
@@ -435,6 +542,7 @@ export class DxCardViewComponent extends DxComponent implements OnDestroy, OnCha
 
     ngDoCheck() {
         this._idh.doCheck('dataSource');
+        this._idh.doCheck('keyExpr');
         this._watcherHelper.checkWatchers();
         super.ngDoCheck();
         super.clearChangedOptions();
@@ -452,8 +560,16 @@ export class DxCardViewComponent extends DxComponent implements OnDestroy, OnCha
 
 @NgModule({
   imports: [
+    DxoPagerModule,
     DxoPagingModule,
+    DxoRemoteOperationsModule,
+    DxoToolbarModule,
+    DxiItemModule,
+    DxiCardViewItemModule,
+    DxoCardViewPagerModule,
     DxoCardViewPagingModule,
+    DxoCardViewRemoteOperationsModule,
+    DxoCardViewToolbarModule,
     DxIntegrationModule,
     DxTemplateModule
   ],
@@ -462,8 +578,16 @@ export class DxCardViewComponent extends DxComponent implements OnDestroy, OnCha
   ],
   exports: [
     DxCardViewComponent,
+    DxoPagerModule,
     DxoPagingModule,
+    DxoRemoteOperationsModule,
+    DxoToolbarModule,
+    DxiItemModule,
+    DxiCardViewItemModule,
+    DxoCardViewPagerModule,
     DxoCardViewPagingModule,
+    DxoCardViewRemoteOperationsModule,
+    DxoCardViewToolbarModule,
     DxTemplateModule
   ]
 })

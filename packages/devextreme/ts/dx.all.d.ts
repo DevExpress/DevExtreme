@@ -9749,15 +9749,54 @@ declare module DevExpress.ui {
    */
   export class dxCardView extends Widget<DevExpress.ui.dxCardView.Properties> {}
   module dxCardView {
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+     */
+    export type PredefinedToolbarItem =
+      | 'columnChooserButton'
+      | 'searchPanel'
+      | 'addCardButton';
     export type Properties = dxCardViewOptions;
+    /**
+     * [descr:ToolbarItem]
+     */
+    export type ToolbarItem = dxToolbarItem & {
+      /**
+       * [descr:ToolbarItem.name]
+       */
+      name?: PredefinedToolbarItem | string;
+      /**
+       * [descr:ToolbarItem.location]
+       */
+      location?: DevExpress.common.ToolbarItemLocation;
+    };
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+     */
+    export type ToolbarOptions = {
+      /**
+       * [descr:ToolbarOptions.toolbar]
+       */
+      toolbar?: {
+        /**
+         * [descr:ToolbarOptions.toolbar.items]
+         */
+        items?: Array<PredefinedToolbarItem | ToolbarItem>;
+        visible?: boolean | undefined;
+        disabled?: boolean;
+      };
+    };
   }
+
   /**
    * [descr:dxCardViewOptions]
    * @deprecated [depNote:dxCardViewOptions]
    */
   export interface dxCardViewOptions
     extends WidgetOptions<dxCardView>,
-      DevExpress.ui.dxCardView.DataControllerProperties {}
+      DevExpress.ui.dxCardView.DataControllerOptions,
+      DevExpress.ui.dxCardView.PagerOptions,
+      DevExpress.ui.dxCardView.ToolbarOptions {}
   /**
    * [descr:dxChat]
    */
@@ -31339,24 +31378,86 @@ declare module DevExpress.ui.dxButtonGroup {
 }
 declare module DevExpress.ui.dxCardView {
   /**
-   * [descr:DataControllerProperties]
+   * [descr:DataControllerOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export type DataControllerProperties = {
+  export type DataControllerOptions = {
     /**
-     * [descr:DataControllerProperties.paging]
+     * [descr:DataControllerOptions.dataSource]
      */
-    paging?: {
-      /**
-       * [descr:DataControllerProperties.paging.pageSize]
-       */
-      pageSize?: number;
-      /**
-       * [descr:DataControllerProperties.paging.pageIndex]
-       */
-      pageIndex?: number;
-    };
+    dataSource?: DevExpress.data.DataSourceLike<any, any>;
+    /**
+     * [descr:DataControllerOptions.paging]
+     */
+    paging?: Paging;
+    /**
+     * [descr:DataControllerOptions.keyExpr]
+     */
+    keyExpr?: string | string[];
+    /**
+     * [descr:DataControllerOptions.onDataErrorOccurred]
+     */
+    onDataErrorOccurred?: (
+      args: DevExpress.common.grids.DataErrorOccurredInfo &
+        DevExpress.common.core.events.EventInfo<dxCardView>
+    ) => void;
+    /**
+     * [descr:DataControllerOptions.remoteOperations]
+     */
+    remoteOperations?: RemoteOperations | boolean | 'auto';
   };
+
+  /**
+   * [descr:PagerOptions]
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  export type PagerOptions = {
+    /**
+     * [descr:PagerOptions.pager]
+     */
+    pager?: DevExpress.common.grids.Pager;
+  };
+
+  /**
+   * [descr:Paging]
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  interface Paging {
+    /**
+     * [descr:Paging.enabled]
+     */
+    enabled?: boolean;
+    /**
+     * [descr:Paging.pageIndex]
+     */
+    pageIndex?: number;
+    /**
+     * [descr:Paging.pageSize]
+     */
+    pageSize?: number;
+  }
+  /**
+   * [descr:RemoteOperations]
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  interface RemoteOperations {
+    /**
+     * [descr:RemoteOperations.filtering]
+     */
+    filtering?: boolean;
+    /**
+     * [descr:RemoteOperations.paging]
+     */
+    paging?: boolean;
+    /**
+     * [descr:RemoteOperations.sorting]
+     */
+    sorting?: boolean;
+    /**
+     * [descr:RemoteOperations.summary]
+     */
+    summary?: boolean;
+  }
 }
 declare module DevExpress.ui.dxChat {
   /**

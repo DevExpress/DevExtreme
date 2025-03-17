@@ -1,7 +1,5 @@
-/* eslint-disable @typescript-eslint/ban-types */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable spellcheck/spell-checker */
 // eslint-disable-next-line max-classes-per-file
 import Widget from '@js/ui/widget/ui.widget';
@@ -35,6 +33,7 @@ export class GridCoreNewBase<
 
   protected columnsController!: ColumnsControllerModule.ColumnsController;
 
+  // eslint-disable-next-line @typescript-eslint/prefer-readonly
   private editingController!: EditingController;
 
   private pagerView!: PagerView;
@@ -79,7 +78,7 @@ export class GridCoreNewBase<
     this.columnsController = this.diContext.get(ColumnsControllerModule.ColumnsController);
     this.toolbarController = this.diContext.get(ToolbarController);
     this.toolbarView = this.diContext.get(ToolbarView);
-    this.editingController = this.diContext.get(EditingController);
+    // this.editingController = this.diContext.get(EditingController);
     this.pagerView = this.diContext.get(PagerView);
     this.search = this.diContext.get(Search);
     this.errorController = this.diContext.get(ErrorController);
@@ -93,8 +92,6 @@ export class GridCoreNewBase<
     this._initDIContext();
   }
 
-  // eslint-disable-next-line max-len
-  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type, @typescript-eslint/explicit-module-boundary-types
   protected _getDefaultOptions() {
     return {
       // @ts-expect-error

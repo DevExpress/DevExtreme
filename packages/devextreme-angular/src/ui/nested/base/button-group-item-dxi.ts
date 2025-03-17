@@ -8,6 +8,7 @@ import {
 import { AsyncRule, ButtonStyle, ButtonType, CompareRule, CustomRule, EmailRule, HorizontalAlignment, NumericRule, PatternRule, RangeRule, RequiredRule, StringLengthRule, ToolbarItemComponent, ToolbarItemLocation, VerticalAlignment } from 'devextreme/common';
 import { Properties as dxBoxOptions } from 'devextreme/ui/box';
 import { Properties as dxButtonOptions } from 'devextreme/ui/button';
+import { PredefinedToolbarItem } from 'devextreme/ui/card_view';
 import { User } from 'devextreme/ui/chat';
 import { dxContextMenuItem } from 'devextreme/ui/context_menu';
 import { DataGridPredefinedToolbarItem } from 'devextreme/ui/data_grid';
@@ -147,6 +148,62 @@ export abstract class DxiButtonGroupItem extends CollectionNestedOption {
         this._setOption('hint', value);
     }
 
+    get cssClass(): string | undefined {
+        return this._getOption('cssClass');
+    }
+    set cssClass(value: string | undefined) {
+        this._setOption('cssClass', value);
+    }
+
+    get locateInMenu(): LocateInMenuMode {
+        return this._getOption('locateInMenu');
+    }
+    set locateInMenu(value: LocateInMenuMode) {
+        this._setOption('locateInMenu', value);
+    }
+
+    get location(): ToolbarItemLocation | Array<any | { col?: number, colspan?: number | undefined, row?: number, rowspan?: number | undefined, screen?: string | undefined }> {
+        return this._getOption('location');
+    }
+    set location(value: ToolbarItemLocation | Array<any | { col?: number, colspan?: number | undefined, row?: number, rowspan?: number | undefined, screen?: string | undefined }>) {
+        this._setOption('location', value);
+    }
+
+    get menuItemTemplate(): any {
+        return this._getOption('menuItemTemplate');
+    }
+    set menuItemTemplate(value: any) {
+        this._setOption('menuItemTemplate', value);
+    }
+
+    get name(): PredefinedToolbarItem | string | undefined | DataGridPredefinedToolbarItem | Command | FileManagerPredefinedContextMenuItem | FileManagerPredefinedToolbarItem | GanttPredefinedContextMenuItem | GanttPredefinedToolbarItem | HtmlEditorPredefinedContextMenuItem | HtmlEditorPredefinedToolbarItem | TreeListPredefinedToolbarItem {
+        return this._getOption('name');
+    }
+    set name(value: PredefinedToolbarItem | string | undefined | DataGridPredefinedToolbarItem | Command | FileManagerPredefinedContextMenuItem | FileManagerPredefinedToolbarItem | GanttPredefinedContextMenuItem | GanttPredefinedToolbarItem | HtmlEditorPredefinedContextMenuItem | HtmlEditorPredefinedToolbarItem | TreeListPredefinedToolbarItem) {
+        this._setOption('name', value);
+    }
+
+    get options(): any {
+        return this._getOption('options');
+    }
+    set options(value: any) {
+        this._setOption('options', value);
+    }
+
+    get showText(): ShowTextMode {
+        return this._getOption('showText');
+    }
+    set showText(value: ShowTextMode) {
+        this._setOption('showText', value);
+    }
+
+    get widget(): ToolbarItemComponent {
+        return this._getOption('widget');
+    }
+    set widget(value: ToolbarItemComponent) {
+        this._setOption('widget', value);
+    }
+
     get author(): User {
         return this._getOption('author');
     }
@@ -210,13 +267,6 @@ export abstract class DxiButtonGroupItem extends CollectionNestedOption {
         this._setOption('colSpan', value);
     }
 
-    get cssClass(): string | undefined {
-        return this._getOption('cssClass');
-    }
-    set cssClass(value: string | undefined) {
-        this._setOption('cssClass', value);
-    }
-
     get dataField(): string | undefined {
         return this._getOption('dataField');
     }
@@ -264,13 +314,6 @@ export abstract class DxiButtonGroupItem extends CollectionNestedOption {
     }
     set label(value: { alignment?: HorizontalAlignment, location?: LabelLocation, showColon?: boolean, template?: any, text?: string | undefined, visible?: boolean }) {
         this._setOption('label', value);
-    }
-
-    get name(): string | undefined | DataGridPredefinedToolbarItem | Command | FileManagerPredefinedContextMenuItem | FileManagerPredefinedToolbarItem | GanttPredefinedContextMenuItem | GanttPredefinedToolbarItem | HtmlEditorPredefinedContextMenuItem | HtmlEditorPredefinedToolbarItem | TreeListPredefinedToolbarItem {
-        return this._getOption('name');
-    }
-    set name(value: string | undefined | DataGridPredefinedToolbarItem | Command | FileManagerPredefinedContextMenuItem | FileManagerPredefinedToolbarItem | GanttPredefinedContextMenuItem | GanttPredefinedToolbarItem | HtmlEditorPredefinedContextMenuItem | HtmlEditorPredefinedToolbarItem | TreeListPredefinedToolbarItem) {
-        this._setOption('name', value);
     }
 
     get validationRules(): Array<RequiredRule | NumericRule | RangeRule | StringLengthRule | CustomRule | CompareRule | PatternRule | EmailRule | AsyncRule> {
@@ -369,48 +412,6 @@ export abstract class DxiButtonGroupItem extends CollectionNestedOption {
     }
     set verticalAlignment(value: VerticalAlignment) {
         this._setOption('verticalAlignment', value);
-    }
-
-    get locateInMenu(): LocateInMenuMode {
-        return this._getOption('locateInMenu');
-    }
-    set locateInMenu(value: LocateInMenuMode) {
-        this._setOption('locateInMenu', value);
-    }
-
-    get location(): ToolbarItemLocation | Array<any | { col?: number, colspan?: number | undefined, row?: number, rowspan?: number | undefined, screen?: string | undefined }> {
-        return this._getOption('location');
-    }
-    set location(value: ToolbarItemLocation | Array<any | { col?: number, colspan?: number | undefined, row?: number, rowspan?: number | undefined, screen?: string | undefined }>) {
-        this._setOption('location', value);
-    }
-
-    get menuItemTemplate(): any {
-        return this._getOption('menuItemTemplate');
-    }
-    set menuItemTemplate(value: any) {
-        this._setOption('menuItemTemplate', value);
-    }
-
-    get options(): any {
-        return this._getOption('options');
-    }
-    set options(value: any) {
-        this._setOption('options', value);
-    }
-
-    get showText(): ShowTextMode {
-        return this._getOption('showText');
-    }
-    set showText(value: ShowTextMode) {
-        this._setOption('showText', value);
-    }
-
-    get widget(): ToolbarItemComponent {
-        return this._getOption('widget');
-    }
-    set widget(value: ToolbarItemComponent) {
-        this._setOption('widget', value);
     }
 
     get height(): number {
