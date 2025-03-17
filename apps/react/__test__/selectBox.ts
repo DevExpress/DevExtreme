@@ -21,7 +21,7 @@ const check = async (t: TestController) => {
     await t.expect(valueAfterDown).eql(focusedValueAfterDown);
 };
 
-const duration = 500;
+const duration = 1000;
 
 test('SelectBox keyboard navigation test', async (t) => {
     await t.click(slectboxContainer);
