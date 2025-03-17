@@ -2,8 +2,6 @@ import ActionSheet from '../__internal/ui/m_action_sheet';
 
 export default ActionSheet;
 
-// STYLE actionSheet
-
 /**
  * @name dxActionSheetOptions.noDataText
  * @hidden

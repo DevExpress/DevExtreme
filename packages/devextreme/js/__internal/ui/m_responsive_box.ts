@@ -16,6 +16,8 @@ import type { Properties } from '@js/ui/responsive_box';
 import errors from '@js/ui/widget/ui.errors';
 import type { OptionChanged } from '@ts/core/widget/types';
 
+// STYLE responsiveBox
+
 const RESPONSIVE_BOX_CLASS = 'dx-responsivebox';
 const SCREEN_SIZE_CLASS_PREFIX = `${RESPONSIVE_BOX_CLASS}-screen-`;
 const BOX_ITEM_CLASS = 'dx-box-item';
