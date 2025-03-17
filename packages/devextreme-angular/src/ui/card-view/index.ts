@@ -352,10 +352,10 @@ export class DxCardViewComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get remoteOperations(): boolean | RemoteOperations | "auto" {
+    get remoteOperations(): boolean | Mode | RemoteOperations {
         return this._getOption('remoteOperations');
     }
-    set remoteOperations(value: boolean | RemoteOperations | "auto") {
+    set remoteOperations(value: boolean | Mode | RemoteOperations) {
         this._setOption('remoteOperations', value);
     }
 
@@ -609,7 +609,7 @@ export class DxCardViewComponent<TRowData = any, TKey = any> extends DxComponent
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() remoteOperationsChange: EventEmitter<boolean | RemoteOperations | "auto">;
+    @Output() remoteOperationsChange: EventEmitter<boolean | Mode | RemoteOperations>;
 
     /**
     
