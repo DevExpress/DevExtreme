@@ -267,6 +267,9 @@ class Stepper extends CollectionWidgetAsync<StepperProperties> {
         break;
       case 'linear':
         break;
+      case 'isValidExpr':
+        this._invalidate();
+        break;
       default:
         super._optionChanged(args);
     }
