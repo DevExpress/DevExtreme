@@ -1,5 +1,143 @@
-@mixin step() {
+@mixin step(
+  $width,
+  $height,
+) {
+  .dx-step-content {
+    &::before {
+      width: $width;
+      height: $height;
+    }
+  }
+
+  .dx-step-indicator {
+    z-index: 0;
+    width: $width;
+    height: $height;
+  }
+}
+
+@mixin step-states(
+  $background-color,
+  $background-color-hover,
+  $color-selected,
+  $background-color-selected,
+  $background-color-selected-hover,
+  $border-color,
+  $border-color-hover,
+  $border-color-focused,
+  $border-color-selected,
+  $invalid-color,
+  $invalid-color-hover,
+  $disabled-color,
+  $disable-background-color,
+) {
+  .dx-step-content::before {
+    background-color: $background-color;
+    border-color: $border-color;
+    box-shadow: 0 0 0 8px $background-color;
+  }
+
   .dx-step {
-    border: 1px solid black;
+    &.dx-state-hover {
+      .dx-step-content::before {
+        border-color: $border-color-hover;
+        background-color: $background-color-hover;
+      }
+
+      &.dx-state-invalid {
+        .dx-step-indicator {
+          color: $invalid-color-hover;
+        }
+
+        .dx-step-title {
+          color: $invalid-color-hover;
+        }
+
+        &.dx-state-selected {
+          .dx-step-indicator {
+            color: $color-selected;
+          }
+        }
+      }
+    }
+
+    &.dx-state-active {
+      .dx-step-content::before {
+        background-color: $background-color-hover;
+      }
+    }
+
+    &.dx-step-selected.dx-state-hover {
+      .dx-step-content::before {
+        border-color: $background-color-selected-hover;
+        background-color: $background-color-selected-hover;
+      }
+    }
+
+    &.dx-state-invalid {
+      .dx-step-indicator {
+        color: $invalid-color;
+      }
+
+      .dx-step-title {
+        color: $invalid-color;
+      }
+    }
+
+    &.dx-step-selected {
+      .dx-step-indicator {
+        color: $color-selected;
+      }
+
+      .dx-step-title {
+        color: $background-color-selected;
+        font-weight: 600;
+      }
+
+      .dx-step-content::before {
+        border-color: $border-color-selected;
+        background-color: $background-color-selected;
+        box-shadow: 0 0 0 2px $background-color, 0 0 0 4px $border-color-selected, 0 0 0 8px $background-color;
+      }
+
+      &.dx-state-invalid {
+        .dx-step-title {
+          color: $invalid-color;
+        }
+
+        .dx-step-content::before {
+          border-color: $invalid-color;
+          background-color: $invalid-color;
+          box-shadow: 0 0 0 2px $background-color, 0 0 0 4px $invalid-color, 0 0 0 8px $background-color;
+        }
+      }
+    }
+
+    &.dx-state-focused {
+      .dx-step-content::before {
+        box-shadow: 0 0 0 2px $background-color, 0 0 0 4px $border-color-focused, 0 0 0 8px $background-color;
+      }
+
+      &.dx-state-invalid {
+        .dx-step-content::before {
+          box-shadow: 0 0 0 2px $background-color, 0 0 0 4px $border-color-focused, 0 0 0 8px $background-color;
+        }
+      }
+    }
+
+    &.dx-state-disabled {
+      .dx-step-indicator {
+        color: $disabled-color;
+      }
+
+      .dx-step-title {
+        color: $disabled-color;
+      }
+
+      .dx-step-content::before {
+        border-color: $disable-background-color;
+        background-color: $disable-background-color;
+      }
+    }
   }
 }

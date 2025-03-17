@@ -2,8 +2,6 @@ import Popover from '../../__internal/ui/popover/m_popover';
 
 export default Popover;
 
-// STYLE popover
-
 /**
  * @name dxPopoverOptions.dragEnabled
  * @hidden

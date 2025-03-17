@@ -544,6 +544,12 @@
     }
   },
   {
+    "name": "ui/stepper",
+    "exports": {
+      "default": { "path": "ui.dxStepper", "isWidget": true }
+    }
+  },
+  {
     "name": "ui/sortable",
     "exports": {
       "default": { "path": "ui.dxSortable", "isWidget": true }

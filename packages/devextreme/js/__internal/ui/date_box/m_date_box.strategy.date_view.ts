@@ -1,6 +1,5 @@
 import messageLocalization from '@js/common/core/localization/message';
 import $ from '@js/core/renderer';
-import { extend } from '@js/core/utils/extend';
 import { inputType } from '@js/core/utils/support';
 import { getWindow } from '@js/core/utils/window';
 
@@ -10,21 +9,25 @@ import DateView from './m_date_view';
 
 const window = getWindow();
 
-const DateViewStrategy = DateBoxStrategy.inherit({
+class DateViewStrategy extends DateBoxStrategy {
+  ctor(dateBox): void {
+    super.ctor(dateBox);
 
-  NAME: 'DateView',
+    this.NAME = 'DateView';
+  }
 
   getDefaultOptions() {
-    return extend(this.callBase(), {
+    return {
+      ...super.getDefaultOptions(),
       openOnFieldClick: true,
       applyButtonText: messageLocalization.format('OK'),
       'dropDownOptions.showTitle': true,
-    });
-  },
+    };
+  }
 
   getDisplayFormat(displayFormat) {
     return displayFormat || dateUtils.FORMATS_MAP[this.dateBox.option('type')];
-  },
+  }
 
   popupConfig(config) {
     return {
@@ -79,7 +82,7 @@ const DateViewStrategy = DateBoxStrategy.inherit({
         },
       ],
     };
-  },
+  }
 
   _renderWidget() {
     if (inputType(this.dateBox.option('mode')) && this.dateBox._isNativeType() || this.dateBox.option('readOnly')) {
@@ -101,19 +104,19 @@ const DateViewStrategy = DateBoxStrategy.inherit({
     }
 
     this._widget.$element().appendTo(this._getWidgetContainer());
-  },
+  }
 
   _getWidgetName() {
     return DateView;
-  },
+  }
 
-  renderOpenedState() {
-    this.callBase();
+  renderOpenedState(): void {
+    super.renderOpenedState();
 
     if (this._widget) {
       this._widget.option('value', this._widget._getCurrentDate());
     }
-  },
+  }
 
   _getWidgetOptions() {
     return {
@@ -125,7 +128,7 @@ const DateViewStrategy = DateBoxStrategy.inherit({
         this._widget = null;
       }.bind(this),
     };
-  },
-});
+  }
+}
 
 export default DateViewStrategy;

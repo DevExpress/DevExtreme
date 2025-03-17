@@ -15,6 +15,8 @@ import type { Item, Properties } from '@js/ui/box';
 import type { ItemExtraOption } from '@ts/ui/collection/m_item';
 import CollectionWidgetItem from '@ts/ui/collection/m_item';
 
+// STYLE box
+
 const BOX_CLASS = 'dx-box';
 const BOX_FLEX_CLASS = 'dx-box-flex';
 const BOX_ITEM_CLASS = 'dx-box-item';
@@ -263,6 +265,7 @@ class Box extends CollectionWidget<Properties> {
   }
 
   _renderItemContent(args) {
+    // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
     const $itemNode = args.itemData && args.itemData.node;
     if ($itemNode) {
       return this._renderItemContentByNode(args, $itemNode);

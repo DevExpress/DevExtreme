@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 import Class from '@js/core/class';
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { extend } from '@js/core/utils/extend';
 import { each, map } from '@js/core/utils/iterator';
@@ -18,6 +19,12 @@ class DynamicProvider extends Provider {
   _geocodedLocations?: any;
 
   _mapsLoader?: any;
+
+  ctor(map, $container: dxElementWrapper): void {
+    this._geocodedLocations = {};
+
+    super.ctor(map, $container);
+  }
 
   _geocodeLocation(location) {
     return new Promise((resolve) => {
