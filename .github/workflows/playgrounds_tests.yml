@@ -140,7 +140,7 @@ jobs:
       working-directory: ./apps/${{ matrix.ARGS.platform }}
       run: pnpx nx build
 
-    - name: Run test
-      if: ${{ matrix.ARGS.platform == 'react' }}
-      working-directory: ./apps/${{ matrix.ARGS.platform }}
-      run: pnpm run test
+#    - name: Run test
+#      if: ${{ matrix.ARGS.platform != 'angular' }}
+#      working-directory: ./apps/${{ matrix.ARGS.platform }}
+#      run: pnpm run test

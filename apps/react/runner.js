@@ -11,7 +11,7 @@ createTestCafe('127.0.0.1')
 
         return runner
             .src(path.join(__dirname, './__test__/*.ts'))
-            .browsers('chrome:headless --disable-gpu --window-size=1200,800')
+            .browsers('chrome --disable-gpu --window-size=1200,800')
             .run();
     })
     .then(failedCount => {
