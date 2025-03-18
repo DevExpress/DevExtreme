@@ -4,33 +4,39 @@ import { PagerView } from '@ts/grids/new/grid_core/pager/view';
 import { ToolbarView } from '@ts/grids/new/grid_core/toolbar/view';
 import type { ComponentType } from 'inferno';
 
+import type { Config } from '../grid_core/core/config_context';
+import { ConfigContext } from '../grid_core/core/config_context';
 import { ContentView } from './content_view/view';
 import { HeaderPanelView } from './header_panel/view';
+import { OptionsController } from './options_controller';
 
 interface MainViewProps {
   Toolbar: ComponentType;
   Content: ComponentType;
   Pager: ComponentType;
   HeaderPanel: ComponentType;
+  config: Config;
 }
 
 function MainViewComponent({
-  Toolbar, Content, Pager, HeaderPanel,
+  Toolbar, Content, Pager, HeaderPanel, config,
 }: MainViewProps): JSX.Element {
   return (<>
-    <Toolbar/>
-    <HeaderPanel/>
-    <Content/>
-    <div>
-      {/*
-        Pager, as renovated component, has strange disposing.
-        See `inferno_renderer.remove` method.
-        It somehow mutates $V prop of parent element.
-        Without this div, CardView would be parent of Pager.
-        In this case all `componentWillUnmount`s aren't called
-      */}
-      <Pager/>
-    </div>
+    <ConfigContext.Provider value={config}>
+      <Toolbar/>
+      <HeaderPanel/>
+      <Content/>
+      <div>
+        {/*
+          Pager, as renovated component, has strange disposing.
+          See `inferno_renderer.remove` method.
+          It somehow mutates $V prop of parent element.
+          Without this div, CardView would be parent of Pager.
+          In this case all `componentWillUnmount`s aren't called
+        */}
+        <Pager/>
+      </div>
+    </ConfigContext.Provider>
   </>);
 }
 
@@ -38,7 +44,7 @@ export class MainView extends View<MainViewProps> {
   protected override component = MainViewComponent;
 
   public static dependencies = [
-    ContentView, PagerView, ToolbarView, HeaderPanelView,
+    ContentView, PagerView, ToolbarView, HeaderPanelView, OptionsController,
   ] as const;
 
   constructor(
@@ -46,6 +52,7 @@ export class MainView extends View<MainViewProps> {
     private readonly pager: PagerView,
     private readonly toolbar: ToolbarView,
     private readonly headerPanel: HeaderPanelView,
+    private readonly options: OptionsController,
   ) {
     super();
   }
@@ -58,6 +65,11 @@ export class MainView extends View<MainViewProps> {
       Content: this.content.asInferno(),
       Pager: this.pager.asInferno(),
       HeaderPanel: this.headerPanel.asInferno(),
+      config: combined({
+        rtlEnabled: this.options.oneWay('rtlEnabled'),
+        disabled: this.options.oneWay('disabled'),
+        templatesRenderAsynchronously: this.options.oneWay('templatesRenderAsynchronously'),
+      }),
     });
   }
 }
