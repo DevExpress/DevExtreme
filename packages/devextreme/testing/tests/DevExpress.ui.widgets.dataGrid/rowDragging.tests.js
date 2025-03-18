@@ -197,6 +197,7 @@ QUnit.module('Drag and Drop rows', moduleConfig, () => {
             pager: {
                 visible: false
             },
+            rootElementHeight: undefined,
             scrolling: {
                 useNative: false,
                 showScrollbar: 'never'
