@@ -1,15 +1,13 @@
 /* eslint-disable spellcheck/spell-checker */
-import formatHelper from '@js/format_helper';
 import type { Subscribable, SubsGets, SubsGetsUpd } from '@ts/core/reactive/index';
 import {
   computed, iif, interruptableComputed,
 } from '@ts/core/reactive/index';
 
 import { DataController } from '../data_controller/index';
-import type { DataObject } from '../data_controller/types';
 import { OptionsController } from '../options_controller/options_controller';
 import type { ColumnProperties, ColumnSettings, PreNormalizedColumn } from './options';
-import type { Column, DataRow } from './types';
+import type { Column } from './types';
 import {
   getColumnIndexByName, normalizeColumns, normalizeVisibleIndexes, preNormalizeColumns,
 } from './utils';
@@ -84,33 +82,6 @@ export class ColumnsController {
 
     this.allowColumnReordering = this.options.oneWay('allowColumnReordering');
     this.dateSerializationFormat = this.options.oneWay('dateSerializationFormat');
-  }
-
-  public createDataRow(data: DataObject, columns: Column[]): DataRow {
-    return {
-      // @ts-expect-error
-      cells: columns.map((c) => {
-        const displayValue = c.calculateDisplayValue(data);
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        let text = formatHelper.format(displayValue as any, c.format);
-
-        if (c.customizeText) {
-          text = c.customizeText({
-            value: displayValue,
-            valueText: text,
-          });
-        }
-
-        return {
-          column: c,
-          value: c.calculateCellValue(data),
-          displayValue,
-          text,
-        };
-      }),
-      key: this.dataController.getDataKey(data),
-      data,
-    };
   }
 
   public addColumn(columnProps: ColumnProperties): void {

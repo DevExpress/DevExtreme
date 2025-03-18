@@ -2,6 +2,8 @@ import type DOMComponent from '@js/core/dom_component';
 import type { InfernoNode, RefObject } from 'inferno';
 import { Component, createRef } from 'inferno';
 
+import { ConfigContext } from '../core/config_context';
+
 interface WithRef<TComponent> {
   componentRef?: RefObject<TComponent>;
   elementRef?: RefObject<HTMLDivElement>;
@@ -26,6 +28,14 @@ export abstract class InfernoWrapper<
     return <div ref={this.ref}></div>;
   }
 
+  private getComponentOptions(): TProperties {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+    return {
+      ...this.context[ConfigContext.id],
+      ...this.props,
+    };
+  }
+
   private updateComponentRef(): void {
     if (this.props.componentRef) {
       // @ts-expect-error
@@ -42,17 +52,17 @@ export abstract class InfernoWrapper<
   }
 
   protected createComponent(ref: RefObject<HTMLDivElement>, props: TProperties): TComponent {
-    // eslint-disable-next-line no-new, @typescript-eslint/no-non-null-assertion
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     return new (this.getComponentFabric())(ref.current!, props);
   }
 
   public componentDidMount(): void {
-    this.component = this.createComponent(this.ref, this.props);
+    this.component = this.createComponent(this.ref, this.getComponentOptions());
     this.updateComponentRef();
   }
 
   public componentDidUpdate(prevProps: TProperties): void {
-    this.updateComponentOptions(prevProps, this.props);
+    this.updateComponentOptions(prevProps, this.getComponentOptions());
     this.updateComponentRef();
   }
 

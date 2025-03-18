@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-/* eslint-disable spellcheck/spell-checker */
 import { compileGetter } from '@js/core/utils/data';
 import { isDefined } from '@js/core/utils/type';
 import { combined, computed, state } from '@ts/core/reactive/index';
@@ -60,7 +59,13 @@ export class ContentView extends ContentViewBase<ContentViewProps> {
         virtualItems,
       };
     },
-    [this.items, this.scrollTop, this.viewportHeight, this.rowHeight, this.cardsPerRow],
+    [
+      this.itemsController.items,
+      this.scrollTop,
+      this.viewportHeight,
+      this.rowHeight,
+      this.cardsPerRow,
+    ],
   );
 
   protected override component = ContentViewComponent;
@@ -69,7 +74,7 @@ export class ContentView extends ContentViewBase<ContentViewProps> {
     return combined({
       ...this.getBaseProps(),
       contentProps: combined({
-        items: this.items,
+        items: this.itemsController.items,
         // items: computed((virtualState) => virtualState.virtualItems, [this.virtualState]),
         fieldTemplate: this.options.template('fieldTemplate'),
         cardsPerRow: this.cardsPerRow,
