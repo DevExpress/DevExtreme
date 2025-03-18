@@ -189,7 +189,7 @@ export class ValidatingController extends modules.Controller {
     each(brokenRules, (_, brokenRule) => {
       const { column } = brokenRule;
       const isGroupExpandColumn = column && column.groupIndex !== undefined && !column.showWhenGrouped;
-      const isVisibleColumn = column && column.visible;
+      const isVisibleColumn = column?.visible;
 
       if (!brokenRule.validator.$element().parent().length && (!isVisibleColumn || isGroupExpandColumn)) {
         brokenRulesMessages.push(brokenRule.message);
@@ -285,7 +285,7 @@ export class ValidatingController extends modules.Controller {
           validationData.isValid = validationResult.isValid;
           validationData.brokenRules = validationResult.brokenRules;
         });
-      } else if (!validationData.brokenRules || !validationData.brokenRules.length) {
+      } else if (!validationData.brokenRules?.length) {
         validationData.isValid = true;
       }
       this.setDisableApplyValidationResults(false);
@@ -360,7 +360,7 @@ export class ValidatingController extends modules.Controller {
     const validationGroup = validator.option('validationGroup');
     const { column } = validator.option('dataGetter')();
 
-    result.brokenRules && result.brokenRules.forEach((rule) => {
+    result.brokenRules?.forEach((rule) => {
       rule.columnIndex = column.index;
       rule.column = column;
     });
@@ -453,8 +453,8 @@ export class ValidatingController extends modules.Controller {
         return value !== undefined ? value : parameters.value;
       };
 
-      const useDefaultValidator = $container && $container.hasClass('dx-widget');
-      $container && $container.addClass(this.addWidgetPrefix(VALIDATOR_CLASS));
+      const useDefaultValidator = $container?.hasClass('dx-widget');
+      $container?.addClass(this.addWidgetPrefix(VALIDATOR_CLASS));
       const validator = new Validator($container || $('<div>'), {
         name: column.caption,
         validationRules: extend(true, [], column.validationRules),
@@ -570,7 +570,7 @@ export class ValidatingController extends modules.Controller {
     } else {
       result = validationData.validationResults[columnIndex];
     }
-    if (result && result.disabledPendingId) {
+    if (result?.disabledPendingId) {
       delete result.disabledPendingId;
     }
   }
@@ -583,7 +583,7 @@ export class ValidatingController extends modules.Controller {
   public removeCellValidationResult({ change, columnIndex }) {
     const validationData = this._getValidationData(change?.key);
 
-    if (validationData && validationData.validationResults) {
+    if (validationData?.validationResults) {
       this.cancelCellValidationResult({ change, columnIndex });
       // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
       delete validationData.validationResults[columnIndex];
@@ -596,7 +596,7 @@ export class ValidatingController extends modules.Controller {
     if (change && validationData.validationResults) {
       const result = validationData.validationResults[columnIndex];
       if (result) {
-        result.deferred && result.deferred.reject(VALIDATION_CANCELLED);
+        result.deferred?.reject(VALIDATION_CANCELLED);
         validationData.validationResults[columnIndex] = VALIDATION_CANCELLED;
       }
     }
@@ -620,8 +620,8 @@ export class ValidatingController extends modules.Controller {
   public getCellValidator({ rowKey, columnIndex }) {
     const validationData = this._getValidationData(rowKey);
     const groupConfig = validationData && ValidationEngine.getGroupConfig(validationData);
-    const validators = groupConfig && groupConfig.validators;
-    return validators && validators.filter((v) => {
+    const validators = groupConfig?.validators;
+    return validators?.filter((v) => {
       const { column } = v.option('dataGetter')();
       return column ? column.index === columnIndex : false;
     })[0];
@@ -839,7 +839,6 @@ export const validatingEditingExtender = (Base: ModuleType<EditingController>) =
     };
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   protected _beforeSaveEditData(change, editIndex?) {
     let result: any = super._beforeSaveEditData.apply(this, arguments as any);
     const validationData = this._validatingController._getValidationData(change?.key, true);
@@ -890,10 +889,10 @@ export const validatingEditingExtender = (Base: ModuleType<EditingController>) =
 
     if (this.getEditMode() === EDIT_MODE_CELL) {
       const $cell = this._rowsView._getCellElement(rowIndex, columnIndex);
-      const validator = $cell && $cell.data('dxValidator');
-      const rowOptions = $cell && $cell.closest('.dx-row').data('options');
+      const validator = $cell?.data('dxValidator');
+      const rowOptions = $cell?.closest('.dx-row').data('options');
       // @ts-expect-error
-      const value = validator && validator.option('adapter').getValue();
+      const value = validator?.option('adapter').getValue();
       if (validator && cellValueShouldBeValidated(value, rowOptions)) {
         // @ts-expect-error
         const deferred = new Deferred();
@@ -989,7 +988,7 @@ export const validatingEditingExtender = (Base: ModuleType<EditingController>) =
 
     if (!validationData?.isValid && validationData?.errorText && rowIndex >= 0) {
       $popupContent = this.getPopupContent();
-      return this._errorHandlingController && this._errorHandlingController.renderErrorRow(validationData?.errorText, rowIndex, $popupContent);
+      return this._errorHandlingController?.renderErrorRow(validationData?.errorText, rowIndex, $popupContent);
     }
   }
 
@@ -1061,7 +1060,6 @@ const getBoundaryNonFixedColumnsInfo = function (fixedColumns) {
   let firstNonFixedColumnIndex;
   let lastNonFixedColumnIndex;
 
-  // eslint-disable-next-line array-callback-return
   fixedColumns.some((column, index) => {
     if (column.command === COMMAND_TRANSPARENT) {
       firstNonFixedColumnIndex = index === 0 ? -1 : index;
@@ -1084,7 +1082,7 @@ export const validatingEditorFactoryExtender = (Base: ModuleType<EditorFactory>)
   private _showRevertButton($container) {
     let $tooltipElement = this._revertTooltip?.$element();
 
-    if (!$container || !$container.length) {
+    if (!$container?.length) {
       $tooltipElement?.remove();
       this._revertTooltip = undefined;
       return;
@@ -1174,14 +1172,14 @@ export const validatingEditorFactoryExtender = (Base: ModuleType<EditorFactory>)
 
   private _showValidationMessage($cell, messages, alignment) {
     const editorPopup = $cell.find('.dx-dropdowneditor-overlay').data('dxPopup');
-    const isOverlayVisible = editorPopup && editorPopup.option('visible');
+    const isOverlayVisible = editorPopup?.option('visible');
     const myPosition = isOverlayVisible ? 'top right' : `top ${alignment}`;
     const atPosition = isOverlayVisible ? 'top left' : `bottom ${alignment}`;
 
     const $overlayContainer = this.getValidationMessageContainer($cell);
 
     let errorMessageText = '';
-    messages && messages.forEach((message) => {
+    messages?.forEach((message) => {
       errorMessageText += (errorMessageText.length ? '<br/>' : '') + encodeHtml(message);
     });
 
@@ -1251,7 +1249,7 @@ export const validatingEditorFactoryExtender = (Base: ModuleType<EditorFactory>)
   private _normalizeValidationMessagePositionAndMaxWidth(options, isRevertButton, isOverlayVisible) {
     const fixedColumns = this._columnsController.getFixedColumns();
 
-    if (!fixedColumns || !fixedColumns.length) {
+    if (!fixedColumns?.length) {
       return;
     }
 
@@ -1285,7 +1283,7 @@ export const validatingEditorFactoryExtender = (Base: ModuleType<EditorFactory>)
   }
 
   private _shiftValidationMessageIfNeed($content, $cell) {
-    const $revertContent = this._revertTooltip && this._revertTooltip.$content();
+    const $revertContent = this._revertTooltip?.$content();
 
     if (!$revertContent) return;
 
@@ -1354,13 +1352,13 @@ export const validatingEditorFactoryExtender = (Base: ModuleType<EditorFactory>)
         this._showRevertButton($focus);
         validationDescriptionValues.push(REVERT_BUTTON_ID);
       } else {
-        this._revertTooltip && this._revertTooltip.$element().remove();
+        this._revertTooltip?.$element().remove();
       }
     }
 
     const showValidationMessage = validationResult && validationResult.status === VALIDATION_STATUS.invalid;
 
-    if (showValidationMessage && $cell && column && validationResult && validationResult.brokenRules) {
+    if (showValidationMessage && $cell && column && validationResult?.brokenRules) {
       const errorMessages: any[] = [];
       validationResult.brokenRules.forEach((rule) => {
         if (rule.message) {
@@ -1412,7 +1410,7 @@ export const validatingEditorFactoryExtender = (Base: ModuleType<EditorFactory>)
 
     const $focus = $element?.closest(this._getFocusCellSelector());
     const validator = $focus && ($focus.data('dxValidator') || $element.find(`.${this.addWidgetPrefix(VALIDATOR_CLASS)}`).eq(0).data('dxValidator'));
-    const rowOptions = $focus && $focus.closest('.dx-row').data('options');
+    const rowOptions = $focus?.closest('.dx-row').data('options');
     // @ts-expect-error
     const change = rowOptions ? this._editingController.getChangeByKey(rowOptions.key) : null;
     let validationResult;
@@ -1477,7 +1475,6 @@ export const validatingDataControllerExtender = (Base: ModuleType<DataController
     return validationStatus || VALIDATION_STATUS.valid;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   protected _isCellChanged(oldRow, newRow, visibleRowIndex, columnIndex, isLiveUpdate) {
     const cell = oldRow.cells?.[columnIndex];
     const oldValidationStatus = this._getValidationStatus({ status: cell?.validationStatus });
@@ -1509,11 +1506,11 @@ export const validatingRowsViewExtender = (Base: ModuleType<RowsView>) => class 
     let $freeSpaceRowElement;
     let $freeSpaceRowElements;
     const $element = that.element();
-    const $tooltipContent = $element && $element.find(`.${that.addWidgetPrefix(WIDGET_INVALID_MESSAGE_CLASS)} .dx-overlay-content`);
+    const $tooltipContent = $element?.find(`.${that.addWidgetPrefix(WIDGET_INVALID_MESSAGE_CLASS)} .dx-overlay-content`);
 
     super.updateFreeSpaceRowHeight($table);
 
-    if ($tooltipContent && $tooltipContent.length) {
+    if ($tooltipContent?.length) {
       $rowElements = that._getRowElements();
       $freeSpaceRowElements = that._getFreeSpaceRowElements($table);
       $freeSpaceRowElement = $freeSpaceRowElements.first();
