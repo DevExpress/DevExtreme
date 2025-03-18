@@ -1312,7 +1312,8 @@ export class DataController extends DataHelperMixin(modules.Controller) {
 
   private filter(filterExpr) {
     const dataSource = this._dataSource;
-    const filter = dataSource && dataSource.filter();
+    const filter = dataSource?.filter();
+    const langParams = dataSource?.loadOptions?.()?.langParams;
 
     if (arguments.length === 0) {
       return filter;
@@ -1320,7 +1321,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
 
     filterExpr = arguments.length > 1 ? Array.prototype.slice.call(arguments, 0) : filterExpr;
 
-    if (gridCoreUtils.equalFilterParameters(filter, filterExpr)) {
+    if (gridCoreUtils.equalFilterParameters(filter, filterExpr, langParams)) {
       return;
     }
     if (dataSource) {

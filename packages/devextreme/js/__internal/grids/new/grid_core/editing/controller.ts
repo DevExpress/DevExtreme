@@ -6,7 +6,7 @@ import type { DataController } from '../data_controller';
 import type { Key } from '../data_controller/types';
 import { OptionsController } from '../options_controller/options_controller';
 import { ToolbarController } from '../toolbar/controller';
-import * as modes from './modes';
+import * as modes from './modes/index';
 
 export class EditingController {
   public static dependencies = [ToolbarController, OptionsController] as const;

@@ -206,7 +206,7 @@ type IRouteProps = React.PropsWithChildren<{
     lat?: number;
     lng?: number;
   }[];
-  mode?: RouteMode;
+  mode?: RouteMode | string;
   opacity?: number;
   weight?: number;
 }>
