@@ -26,6 +26,10 @@ export interface ResponseParams {
   abort: () => void;
 }
 
+export interface AIProvider {
+  sendRequest: (params: RequestParams) => ResponseParams;
+}
+
 export interface AI {
   translate: (params: TranslateCommandParams, callbacks: RequestCallbacks) => string;
 }
