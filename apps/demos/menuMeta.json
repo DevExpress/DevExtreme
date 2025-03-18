@@ -1621,6 +1621,28 @@
     ]
   },
   {
+    "Name": "Card View",
+    "Equivalents": "dxCardView, dx-cardview, cardview",
+    "Badge": "Roadmap",
+    "Groups": [
+      {
+        "Name": "Overview",
+        "Equivalents": "",
+        "Badge": "Roadmap",
+        "Demos": [
+          {
+            "Title": "Overview",
+            "Name": "Overview",
+            "Widget": "CardView",
+            "DemoType": "Web",
+            "Badge": "Roadmap",
+            "RoadmapSurveyUrl": "https://www.devexpress.com/support/surveys/devextreme-roadmap-cardview.xml"
+          }
+        ]
+      }
+    ]
+  },
+  {
     "Name": "Scheduler",
     "Equivalents": "dxScheduler, dx-scheduler",
     "Groups": [
@@ -1895,6 +1917,14 @@
             "DemoType": "Web"
           },
           {
+            "Title": "Toolbar Customization",
+            "Name": "ToolbarCustomization",
+            "Widget": "Scheduler",
+            "DemoType": "Web",
+            "Badge": "Roadmap",
+            "RoadmapSurveyUrl": "https://www.devexpress.com/support/surveys/devextreme-roadmap-toolbar-customization.xml"
+          },
+          {
             "Title": "Disabled Date/Time Ranges",
             "Name": "CellTemplates",
             "Widget": "Scheduler",
@@ -2024,6 +2054,20 @@
         ]
       },
       {
+        "Name": "AI-powered Text Editing",
+        "Equivalents": "AI, text editing, text editor",
+        "Demos": [
+          {
+            "Title": "AI-powered Text Editing",
+            "Name": "AITextEditing",
+            "Widget": "HtmlEditor",
+            "DemoType": "Web",
+            "Badge": "Roadmap",
+            "RoadmapSurveyUrl": "https://www.devexpress.com/support/surveys/devextreme-roadmap-ai.xml"
+          }
+        ]
+      },
+      {
         "Name": "Markdown Support",
         "Equivalents": "",
         "Demos": [
@@ -2074,6 +2118,34 @@
               "/Models/Chat/Message.cs",
               "/ViewModels/ChatViewModel.cs"
             ]
+          }
+        ]
+      },
+      {
+        "Name": "Message Editing",
+        "Equivalents": "Editing",
+        "Demos": [
+          {
+            "Title": "Message Editing",
+            "Name": "MessageEditing",
+            "Widget": "Chat",
+            "DemoType": "Web",
+            "Badge": "Roadmap",
+            "RoadmapSurveyUrl": "https://www.devexpress.com/support/surveys/devextreme-roadmap-messages.xml"
+          }
+        ]
+      },
+      {
+        "Name": "Image Rendering",
+        "Equivalents": "",
+        "Demos": [
+          {
+            "Title": "Image Rendering",
+            "Name": "ImageRendering",
+            "Widget": "Chat",
+            "DemoType": "Web",
+            "Badge": "Roadmap",
+            "RoadmapSurveyUrl": "https://www.devexpress.com/support/surveys/devextreme-roadmap-image-rendering.xml"
           }
         ]
       },
@@ -4026,6 +4098,20 @@
               "/Models/SimpleData.cs",
               "/Models/SampleData/ToolbarData.cs"
             ]
+          }
+        ]
+      },
+      {
+        "Name": "Stepper",
+        "Equivalents": "dxStepper, dx-stepper",
+        "Demos": [
+          {
+            "Title": "Overview",
+            "Name": "Overview",
+            "Widget": "Stepper",
+            "DemoType": "Web",
+            "Badge": "Roadmap",
+            "RoadmapSurveyUrl": "https://www.devexpress.com/support/surveys/devextreme-roadmap-stepper.xml"
           }
         ]
       },

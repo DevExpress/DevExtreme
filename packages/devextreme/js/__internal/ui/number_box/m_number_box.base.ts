@@ -161,7 +161,6 @@ class NumberBoxBase<
     return this._$submitElement;
   }
 
-  // @ts-expect-error
   _keyPressHandler(e) {
     super._keyPressHandler();
 
@@ -189,8 +188,8 @@ class NumberBoxBase<
 
   _renderValue() {
     const inputValue = this._input().val();
-    const { value } = this.option();
-
+    const value = this.option('value');
+    // @ts-expect-error ts-error
     if (!inputValue.length || Number(inputValue) !== value) {
       this._forceValueRender();
       this._toggleEmptinessEventHandler();
@@ -199,6 +198,7 @@ class NumberBoxBase<
     const valueText = isDefined(value) ? null : messageLocalization.format('dxNumberBox-noDataText');
 
     this.setAria({
+      // @ts-expect-error ts-error
       // eslint-disable-next-line spellcheck/spell-checker
       valuenow: ensureDefined(value, ''),
       // eslint-disable-next-line spellcheck/spell-checker
@@ -226,17 +226,20 @@ class NumberBoxBase<
   }
 
   _renderProps(): void {
-    const { min, max, step } = this.option();
     // @ts-expect-error ts-error
-    this._input().prop({ min, max, step });
+    this._input().prop({
+      min: this.option('min'),
+      max: this.option('max'),
+      step: this.option('step'),
+    });
 
     this.setAria({
       // @ts-expect-error ts-error
       // eslint-disable-next-line spellcheck/spell-checker
-      valuemin: ensureDefined(min, ''),
+      valuemin: ensureDefined(this.option('min'), ''),
       // @ts-expect-error ts-error
       // eslint-disable-next-line spellcheck/spell-checker
-      valuemax: ensureDefined(max, ''),
+      valuemax: ensureDefined(this.option('max'), ''),
     });
   }
 
@@ -271,13 +274,16 @@ class NumberBoxBase<
 
     value = this._correctRounding(value, step * sign);
 
-    const { min, max } = this.option();
+    const min = this.option('min');
+    const max = this.option('max');
 
     if (isDefined(min)) {
+      // @ts-expect-error ts-error
       value = Math.max(min, value);
     }
 
     if (isDefined(max)) {
+      // @ts-expect-error ts-error
       value = Math.min(max, value);
     }
 

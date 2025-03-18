@@ -19,7 +19,12 @@
       displayExpr="FullName"
     ></dxo-lookup>
   </dxi-column>
-  <dxi-column dataField="AssignedEmployee" [width]="150" caption="Assignee">
+  <dxi-column
+    dataField="AssignedEmployee"
+    dataType="number"
+    [width]="150"
+    caption="Assignee"
+  >
     <dxo-lookup
       [dataSource]="employeesStore"
       valueExpr="ID"

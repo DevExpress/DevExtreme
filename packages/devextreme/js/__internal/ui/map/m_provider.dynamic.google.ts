@@ -82,8 +82,6 @@ let googleMapsLoader;
 class GoogleProvider extends DynamicProvider {
   _clickListener?: any;
 
-  _geocodedLocations!: Record<string, unknown>;
-
   _preventZoomChangeEvent?: any;
 
   _boundsChangeListener?: any;

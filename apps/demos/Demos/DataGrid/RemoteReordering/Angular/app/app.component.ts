@@ -8,7 +8,7 @@ if (!/localhost/.test(document.location.host)) {
   enableProdMode();
 }
 
-const url = 'https://js.devexpress.com/Demos/Mvc/api/RowReordering';
+const url = 'https://js.devexpress.com/Demos/NetCore/api/DataGridRowReordering';
 
 let modulePrefix = '';
 // @ts-ignore

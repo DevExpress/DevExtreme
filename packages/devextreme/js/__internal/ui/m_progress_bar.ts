@@ -1,8 +1,11 @@
 import registerComponent from '@js/core/component_registrator';
+import type { DefaultOptionsRule } from '@js/core/options/utils';
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
-import { extend } from '@js/core/utils/extend';
 import { isFunction } from '@js/core/utils/type';
-import TrackBar from '@js/ui/track_bar';
+import type { Properties } from '@js/ui/progress_bar';
+import type { OptionChanged } from '@ts/core/widget/types';
+import TrackBar from '@ts/ui/m_track_bar';
 
 const PROGRESSBAR_CLASS = 'dx-progressbar';
 const PROGRESSBAR_CONTAINER_CLASS = 'dx-progressbar-container';
@@ -13,26 +16,45 @@ const PROGRESSBAR_STATUS_CLASS = 'dx-progressbar-status';
 const PROGRESSBAR_INDETERMINATE_SEGMENT_CONTAINER = 'dx-progressbar-animating-container';
 const PROGRESSBAR_INDETERMINATE_SEGMENT = 'dx-progressbar-animating-segment';
 
-// @ts-expect-error
-const ProgressBar = TrackBar.inherit({
-  _getDefaultOptions() {
-    return extend(this.callBase(), {
+export interface ProgressBarProperties extends Omit<Properties,
+'onValueChanged' | 'onContentReady' | 'onDisposing' | 'onOptionChanged' | 'onInitialized'
+> {
+  _animatingSegmentCount: number;
+
+  statusPosition: string;
+
+  statusFormat?: (ratio: number) => string;
+
+  showStatus: boolean;
+}
+
+class ProgressBar extends TrackBar<ProgressBarProperties> {
+  _completeAction!: (event?: Record<string, unknown>) => void;
+
+  _$status!: dxElementWrapper;
+
+  _$segmentContainer?: dxElementWrapper;
+
+  _getDefaultOptions(): ProgressBarProperties {
+    return {
+      ...super._getDefaultOptions(),
       value: 0,
-      statusFormat(ratio) {
+      statusFormat(ratio): string {
         return `Progress: ${Math.round(ratio * 100)}%`;
       },
       showStatus: true,
+      // @ts-expect-error ts-error
       onComplete: null,
       activeStateEnabled: false,
       statusPosition: 'bottom left',
       _animatingSegmentCount: 0,
-    });
-  },
+    };
+  }
 
-  _defaultOptionsRules() {
-    return this.callBase().concat([
+  _defaultOptionsRules(): DefaultOptionsRule<ProgressBarProperties>[] {
+    return super._defaultOptionsRules().concat([
       {
-        device(device) {
+        device(device): boolean {
           return device.platform === 'android';
         },
         options: {
@@ -40,17 +62,17 @@ const ProgressBar = TrackBar.inherit({
         },
       },
     ]);
-  },
+  }
 
-  _toggleReadOnlyState() {
+  _toggleReadOnlyState(): void {
     this.setAria('readonly', undefined);
-  },
+  }
 
-  _initMarkup() {
+  _initMarkup(): void {
     this._renderStatus();
     this._createCompleteAction();
 
-    this.callBase();
+    super._initMarkup();
 
     this.$element().addClass(PROGRESSBAR_CLASS);
     this._$wrapper.addClass(PROGRESSBAR_WRAPPER_CLASS);
@@ -61,29 +83,32 @@ const ProgressBar = TrackBar.inherit({
     $('<div>').addClass(PROGRESSBAR_RANGE_CONTAINER_CLASS).appendTo(this._$wrapper).append(this._$bar);
     this._$range.addClass(PROGRESSBAR_RANGE_CLASS);
 
-    this._toggleStatus(this.option('showStatus'));
-  },
+    const { showStatus } = this.option();
 
-  _useTemplates() {
+    this._toggleStatus(showStatus);
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  _useTemplates(): boolean {
     return false;
-  },
+  }
 
-  _createCompleteAction() {
+  _createCompleteAction(): void {
     this._completeAction = this._createActionByOption('onComplete');
-  },
+  }
 
-  _renderStatus() {
+  _renderStatus(): void {
     this._$status = $('<div>')
       .addClass(PROGRESSBAR_STATUS_CLASS);
-  },
+  }
 
-  _renderIndeterminateState() {
+  _renderIndeterminateState(): void {
     this._$segmentContainer = $('<div>')
       .addClass(PROGRESSBAR_INDETERMINATE_SEGMENT_CONTAINER);
 
-    const segments = this.option('_animatingSegmentCount');
+    const { _animatingSegmentCount: segments } = this.option();
 
-    for (let i = 0; i < segments; i++) {
+    for (let i = 0; i < segments; i += 1) {
       $('<div>')
         .addClass(PROGRESSBAR_INDETERMINATE_SEGMENT)
         .addClass(`${PROGRESSBAR_INDETERMINATE_SEGMENT}-${i + 1}`)
@@ -91,10 +116,11 @@ const ProgressBar = TrackBar.inherit({
     }
 
     this._$segmentContainer.appendTo(this._$wrapper);
-  },
+  }
 
-  _toggleStatus(value) {
-    const splitPosition = this.option('statusPosition').split(' ');
+  _toggleStatus(value: boolean): void {
+    const { statusPosition } = this.option();
+    const splitPosition = statusPosition.split(' ');
 
     if (value) {
       if (splitPosition[0] === 'top' || splitPosition[0] === 'left') {
@@ -107,11 +133,11 @@ const ProgressBar = TrackBar.inherit({
     }
 
     this._togglePositionClass();
-  },
+  }
 
-  _togglePositionClass() {
-    const position = this.option('statusPosition');
-    const splitPosition = position.split(' ');
+  _togglePositionClass(): void {
+    const { statusPosition } = this.option();
+    const splitPosition = statusPosition.split(' ');
 
     this._$wrapper.removeClass('dx-position-top-left dx-position-top-right dx-position-bottom-left dx-position-bottom-right dx-position-left dx-position-right');
 
@@ -122,24 +148,25 @@ const ProgressBar = TrackBar.inherit({
     }
 
     this._$wrapper.addClass(positionClass);
-  },
+  }
 
-  _toggleIndeterminateState(value) {
+  _toggleIndeterminateState(value: boolean): void {
     if (value) {
       this._renderIndeterminateState();
+      // @ts-expect-error ts-error
       this._$bar.toggle(false);
     } else {
+      // @ts-expect-error ts-error
       this._$bar.toggle(true);
-      this._$segmentContainer.remove();
+      this._$segmentContainer?.remove();
       delete this._$segmentContainer;
     }
-  },
+  }
 
-  _renderValue() {
-    const val = this.option('value');
-    const max = this.option('max');
+  _renderValue(): void {
+    const { value, max } = this.option();
 
-    if (!val && val !== 0) {
+    if (!value && value !== 0) {
       this._toggleIndeterminateState(true);
       return;
     }
@@ -148,56 +175,63 @@ const ProgressBar = TrackBar.inherit({
       this._toggleIndeterminateState(false);
     }
 
-    if (val === max) {
+    if (value === max) {
       this._completeAction();
     }
 
-    this.callBase();
+    super._renderValue();
 
     this._setStatus();
-  },
+  }
 
-  _setStatus() {
-    let format = this.option('statusFormat');
+  _setStatus(): void {
+    const { statusFormat } = this.option();
+
+    let format = statusFormat;
 
     if (isFunction(format)) {
       format = format.bind(this);
     } else {
+      // @ts-expect-error ts-error
       format = function (value) {
         return value;
       };
     }
-
+    // @ts-expect-error ts-error
     const statusText = format(this._currentRatio, this.option('value'));
     this._$status.text(statusText);
-  },
+  }
 
-  _dispose() {
+  _dispose(): void {
     this._$status.remove();
-    this.callBase();
-  },
+    super._dispose();
+  }
 
-  _optionChanged(args) {
-    switch (args.name) {
+  _optionChanged(args: OptionChanged<ProgressBarProperties>): void {
+    const { name, value } = args;
+    switch (name) {
       case 'statusFormat':
         this._setStatus();
         break;
       case 'showStatus':
-        this._toggleStatus(args.value);
+        this._toggleStatus(value as ProgressBarProperties[typeof name]);
         break;
-      case 'statusPosition':
-        this._toggleStatus(this.option('showStatus'));
+      case 'statusPosition': {
+        const { showStatus } = this.option();
+
+        this._toggleStatus(showStatus);
         break;
+      }
       case 'onComplete':
         this._createCompleteAction();
         break;
       case '_animatingSegmentCount':
         break;
       default:
-        this.callBase(args);
+        super._optionChanged(args);
     }
-  },
-});
+  }
+}
 
 registerComponent('dxProgressBar', ProgressBar);
 

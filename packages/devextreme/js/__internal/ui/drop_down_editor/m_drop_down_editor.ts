@@ -34,6 +34,7 @@ import Widget from '@js/ui/widget/ui.widget';
 import type { OptionChanged } from '@ts/core/widget/types';
 import TextBox from '@ts/ui/text_box/m_text_box';
 
+import type Popover from '../popover/m_popover';
 import type { TextEditorButtonInfo } from '../text_box/texteditor_button_collection/m_index';
 import DropDownButton from './m_drop_down_button';
 import { getElementWidth, getSizeValue } from './m_utils';
@@ -70,7 +71,7 @@ class DropDownEditor<
 
   _$popup?: dxElementWrapper;
 
-  _popup?: Popup;
+  _popup?: Popup | Popover;
 
   _$templateWrapper?: dxElementWrapper;
 
@@ -649,7 +650,6 @@ class DropDownEditor<
     this._attachPopupKeyHandler();
 
     this._contentReadyHandler();
-
     this._setPopupContentId(this._popup.$content());
 
     this._bindInnerWidgetOptions(this._popup, 'dropDownOptions');
@@ -776,7 +776,6 @@ class DropDownEditor<
     if (!this._popup) {
       return;
     }
-
     const $popupOverlayContent = this._popup.$overlayContent();
     const isOverlayFlipped = e.position?.v?.flip;
     const shouldIndentForLabel = labelMode !== 'hidden' && labelMode !== 'outside' && stylingMode === 'outlined';
@@ -826,7 +825,6 @@ class DropDownEditor<
 
     if (this._popup?.option('visible')) {
       const { top: myTop } = animationPosition.setup(this.$element());
-
       const { top: popupTop } = animationPosition.setup(this._popup.$content());
       // @ts-expect-error ts-error
       positionSide = (myTop + this.option('popupPosition').offset.v) > popupTop ? 'bottom' : 'top';

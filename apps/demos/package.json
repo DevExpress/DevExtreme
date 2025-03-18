@@ -1,6 +1,6 @@
 {
     "name": "devextreme-demos",
-    "version": "24.2.5",
+    "version": "24.2.6",
     "description": "",
     "repository": {
         "type": "git",
@@ -145,9 +145,9 @@
         "link-repos": "node utils/interactive/link-repos.js",
         "create-config": "node utils/internal/create-config.js",
         "launch-demo": "node utils/shell/server.js",
-        "generate-ng-umd": "rollup -c ./rollup.ng.umd.config.mjs",
-        "generate-devextreme-angular-umd": "rollup -c ./rollup.devextreme-angular.umd.config.mjs",
-        "generate-external-bundles": "rollup -c ./rollup.external.bundles.config.mjs",
+        "generate-ng-umd": "rollup -c ./rollup.ng.umd.config.mjs --silent",
+        "generate-devextreme-angular-umd": "rollup -c ./rollup.devextreme-angular.umd.config.mjs --silent",
+        "generate-external-bundles": "rollup -c ./rollup.external.bundles.config.mjs --silent",
         "prepare-js": "gulp js && pnpm run generate-ng-umd && pnpm run generate-devextreme-angular-umd && pnpm run generate-external-bundles",
         "prepare-shared": "pnpm run prepare-ts && gulp shared",
         "lint-html": "prettier --check .",

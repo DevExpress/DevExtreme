@@ -1,8 +1,12 @@
 import { isTouchEvent } from '@js/common/core/events/utils/index';
 import localizationMessage from '@js/common/core/localization/message';
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { extend } from '@js/core/utils/extend';
+import type { Item } from '@js/ui/list';
+import type { OptionChanged } from '@ts/core/widget/types';
 
+import type { ListBaseProperties } from './m_list.base';
 import { ListBase } from './m_list.base';
 import EditProvider from './m_list.edit.provider';
 import GroupedEditStrategy from './m_list.edit.strategy.grouped';
@@ -10,10 +14,12 @@ import GroupedEditStrategy from './m_list.edit.strategy.grouped';
 const LIST_ITEM_SELECTED_CLASS = 'dx-list-item-selected';
 const LIST_ITEM_RESPONSE_WAIT_CLASS = 'dx-list-item-response-wait';
 
-const ListEdit = ListBase.inherit({
-  _supportedKeys() {
+class ListEdit extends ListBase {
+  _editProvider!: EditProvider;
+
+  _supportedKeys(): Record<string, (e: KeyboardEvent, options?: Record<string, unknown>) => void> {
     const that = this;
-    const parent = this.callBase();
+    const parent = super._supportedKeys();
 
     const deleteFocusedItem = (e) => {
       if (that.option('allowItemDeleting')) {
@@ -24,10 +30,11 @@ const ListEdit = ListBase.inherit({
 
     const moveFocusedItem = (e, moveUp?: boolean) => {
       const editStrategy = this._editStrategy;
-      const focusedElement = this.option('focusedElement');
+      const { focusedElement } = this.option();
+      // @ts-expect-error ts-error
       const focusedItemIndex = editStrategy.getNormalizedIndex(focusedElement);
       const isLastIndexFocused = focusedItemIndex === this._getLastItemIndex();
-
+      // @ts-expect-error ts-error
       if (isLastIndexFocused && this._dataController.isLoading()) {
         return;
       }
@@ -51,55 +58,58 @@ const ListEdit = ListBase.inherit({
 
     const enter = function (e) {
       if (!this._editProvider.handleEnterPressing(e)) {
+        // @ts-expect-error ts-error
         parent.enter.apply(this, arguments);
       }
     };
 
     const space = function (e) {
       if (!this._editProvider.handleEnterPressing(e)) {
+        // @ts-expect-error ts-error
         parent.space.apply(this, arguments);
       }
     };
 
-    return extend({}, parent, {
+    return {
+      ...parent,
       del: deleteFocusedItem,
       upArrow: (e) => moveFocusedItem(e, true),
       downArrow: (e) => moveFocusedItem(e),
       enter,
       space,
-    });
-  },
+    };
+  }
 
-  _updateSelection() {
+  _updateSelection(): void {
     this._editProvider.afterItemsRendered();
-    this.callBase();
-  },
+    super._updateSelection();
+  }
 
   _getLastItemIndex() {
     return this._itemElements().length - 1;
-  },
+  }
 
   _refreshItemElements() {
-    this.callBase();
+    super._refreshItemElements();
 
     const excludedSelectors = this._editProvider.getExcludedItemSelectors();
 
     if (excludedSelectors.length) {
       this._itemElementsCache = this._itemElementsCache.not(excludedSelectors);
     }
-  },
+  }
 
   _isItemStrictEquals(item1, item2) {
-    const privateKey = item1 && item1.__dx_key__;
+    const privateKey = item1?.__dx_key__;
     if (privateKey && !this.key() && this._selection.isItemSelected(privateKey)) {
       return false;
     }
 
-    return this.callBase(item1, item2);
-  },
+    return super._isItemStrictEquals(item1, item2);
+  }
 
   _getDefaultOptions() {
-    return extend(this.callBase(), {
+    return extend(super._getDefaultOptions(), {
       showSelectionControls: false,
 
       selectionMode: 'none',
@@ -120,10 +130,10 @@ const ListEdit = ListBase.inherit({
 
       itemDragging: {},
     });
-  },
+  }
 
   _defaultOptionsRules() {
-    return this.callBase().concat([
+    return super._defaultOptionsRules().concat([
       {
         device: (device) => device.platform === 'ios',
         options: {
@@ -139,82 +149,95 @@ const ListEdit = ListBase.inherit({
         },
       },
     ]);
-  },
+  }
 
   _init() {
-    this.callBase();
+    super._init();
     this._initEditProvider();
-  },
+  }
 
-  _initDataSource() {
-    this.callBase();
+  _initDataSource(): void {
+    // @ts-expect-error ts-error
+    super._initDataSource();
 
     if (!this._isPageSelectAll()) {
-      this._dataSource && this._dataSource.requireTotalCount(true);
+      // @ts-expect-error ts-error
+      this._dataSource?.requireTotalCount(true);
     }
-  },
+  }
 
-  _isPageSelectAll() {
-    return this.option('selectAllMode') === 'page';
-  },
+  _isPageSelectAll(): boolean {
+    const { selectAllMode } = this.option();
 
-  _initEditProvider() {
+    return selectAllMode === 'page';
+  }
+
+  _initEditProvider(): void {
+    // @ts-expect-error ts-error
     this._editProvider = new EditProvider(this);
-  },
+  }
 
-  _disposeEditProvider() {
+  _disposeEditProvider(): void {
     if (this._editProvider) {
       this._editProvider.dispose();
     }
-  },
+  }
 
-  _refreshEditProvider() {
+  _refreshEditProvider(): void {
     this._disposeEditProvider();
     this._initEditProvider();
-  },
+  }
 
-  _initEditStrategy() {
+  _initEditStrategy(): void {
     if (this.option('grouped')) {
+      // @ts-expect-error ts-error
       this._editStrategy = new GroupedEditStrategy(this);
     } else {
-      this.callBase();
+      super._initEditStrategy();
     }
-  },
+  }
 
-  _initMarkup() {
+  _initMarkup(): void {
     this._refreshEditProvider();
-    this.callBase();
-  },
+    super._initMarkup();
+  }
 
-  _renderItems(...args) {
-    this.callBase(...args);
+  _renderItems(...args): void {
+    // @ts-expect-error ts-error
+    super._renderItems(...args);
     this._editProvider.afterItemsRendered();
-  },
+  }
 
-  _renderItem(index, itemData, $container, $itemToReplace) {
+  _renderItem(
+    index: number,
+    itemData: Item,
+    $container?: dxElementWrapper | null,
+    $itemToReplace?: dxElementWrapper,
+  ): dxElementWrapper {
     const { showSelectionControls, selectionMode } = this.option();
-    const $itemFrame = this.callBase(index, itemData, $container, $itemToReplace);
+    const $itemFrame = super._renderItem(index, itemData, $container, $itemToReplace);
 
     if (showSelectionControls && selectionMode !== 'none') {
       this._updateItemAriaLabel($itemFrame, itemData);
     }
 
     return $itemFrame;
-  },
+  }
 
   _updateItemAriaLabel($itemFrame, itemData) {
+    // @ts-expect-error ts-error
     const label = this._displayGetter?.(itemData) ?? itemData?.text ?? itemData;
 
     this.setAria('label', label, $itemFrame);
-  },
+  }
 
   _selectedItemClass() {
     return LIST_ITEM_SELECTED_CLASS;
-  },
+  }
 
   _itemResponseWaitClass() {
     return LIST_ITEM_RESPONSE_WAIT_CLASS;
-  },
+  }
 
   _itemClickHandler(e) {
     const $itemElement = $(e.currentTarget);
@@ -227,12 +250,14 @@ const ListEdit = ListBase.inherit({
       return;
     }
     this._saveSelectionChangeEvent(e);
-    this.callBase(...arguments);
-  },
+    // @ts-expect-error ts-error
+    super._itemClickHandler(...arguments);
+  }
 
   _shouldFireContextMenuEvent(...args) {
-    return this.callBase(...args) || this._editProvider.contextMenuHandlerExists();
-  },
+    // @ts-expect-error ts-error
+    return super._shouldFireContextMenuEvent(...args) || this._editProvider.contextMenuHandlerExists();
+  }
 
   _itemHoldHandler(e) {
     const $itemElement = $(e.currentTarget);
@@ -245,19 +270,20 @@ const ListEdit = ListBase.inherit({
       e.handledByEditProvider = true;
       return;
     }
-
-    this.callBase(...arguments);
-  },
+    // @ts-expect-error ts-error
+    super._itemHoldHandler(...arguments);
+  }
 
   _getItemContainer(changeData) {
     if (this.option('grouped')) {
       const groupIndex = this._editStrategy.getIndexByItemData(changeData)?.group;
       return this._getGroupContainerByIndex(groupIndex);
     }
-    return this.callBase(changeData);
-  },
+    // @ts-expect-error ts-error
+    return super._getItemContainer(changeData);
+  }
 
-  _itemContextMenuHandler(e) {
+  _itemContextMenuHandler(e): void {
     const $itemElement = $(e.currentTarget);
     if ($itemElement.is('.dx-state-disabled, .dx-state-disabled *')) {
       return;
@@ -268,40 +294,43 @@ const ListEdit = ListBase.inherit({
       e.preventDefault();
       return;
     }
+    // @ts-expect-error ts-error
+    super._itemContextMenuHandler(...arguments);
+  }
 
-    this.callBase(...arguments);
-  },
-
-  _postprocessRenderItem(args) {
-    this.callBase(...arguments);
+  _postprocessRenderItem(args): void {
+    // @ts-expect-error ts-error
+    super._postprocessRenderItem(...arguments);
     this._editProvider.modifyItemElement(args);
-  },
+  }
 
-  _clean() {
+  _clean(): void {
     this._disposeEditProvider();
-    this.callBase();
-  },
+    super._clean();
+  }
 
-  focusListItem(index) {
+  focusListItem(index): void {
     const $item = this._editStrategy.getItemElement(index);
 
     this.option('focusedElement', $item);
     this.focus();
     this.scrollToItem(this.option('focusedElement'));
-  },
+  }
 
-  _optionChanged(args) {
+  _optionChanged(args: OptionChanged<ListBaseProperties>): void {
     switch (args.name) {
       case 'selectAllMode':
         this._initDataSource();
+        // @ts-expect-error ts-error
         this._dataController.pageIndex(0);
+        // @ts-expect-error ts-error
         this._dataController.load();
         break;
       case 'grouped':
         this._clearSelectedItems();
         delete this._renderingGroupIndex;
         this._initEditStrategy();
-        this.callBase(args);
+        super._optionChanged(args);
         break;
       case 'showSelectionControls':
       case 'menuItems':
@@ -315,25 +344,25 @@ const ListEdit = ListBase.inherit({
       case 'onSelectAllValueChanged':
         break;
       default:
-        this.callBase(args);
+        super._optionChanged(args);
     }
-  },
+  }
 
   selectAll() {
     return this._selection.selectAll(this._isPageSelectAll());
-  },
+  }
 
   unselectAll() {
     return this._selection.deselectAll(this._isPageSelectAll());
-  },
+  }
 
   isSelectAll() {
     return this._selection.getSelectAllState(this._isPageSelectAll());
-  },
+  }
 
   getFlatIndexByItemElement(itemElement) {
     return this._itemElements().index(itemElement);
-  },
+  }
 
   getItemElementByFlatIndex(flatIndex) {
     const $itemElements = this._itemElements();
@@ -343,30 +372,30 @@ const ListEdit = ListBase.inherit({
     }
 
     return $itemElements.eq(flatIndex);
-  },
+  }
 
   getItemByIndex(index) {
     return this._editStrategy.getItemDataByIndex(index);
-  },
+  }
 
   deleteItem(itemElement) {
     const editStrategy = this._editStrategy;
     const deletingElementIndex = editStrategy.getNormalizedIndex(itemElement);
-    const focusedElement = this.option('focusedElement');
-    const focusStateEnabled = this.option('focusStateEnabled');
+    const { focusedElement, focusStateEnabled } = this.option();
+    // @ts-expect-error ts-error
     const focusedItemIndex = focusedElement ? editStrategy.getNormalizedIndex(focusedElement) : deletingElementIndex;
     const isLastIndexFocused = focusedItemIndex === this._getLastItemIndex();
     const nextFocusedItem = isLastIndexFocused || deletingElementIndex < focusedItemIndex
       ? focusedItemIndex - 1
       : focusedItemIndex;
-    const promise = this.callBase(itemElement);
+    const promise = super.deleteItem(itemElement);
 
     return promise.done(function () {
       if (focusStateEnabled) {
         this.focusListItem(nextFocusedItem);
       }
     });
-  },
-});
+  }
+}
 
 export default ListEdit;
