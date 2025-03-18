@@ -46,7 +46,7 @@ runManualTest('Sortable', 'Kanban', ['jQuery', 'React', 'Vue', 'Angular'], (test
   test('Drag-n-drop card to a different column', async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-    await t.wait(1000);
+    await t.wait(2000);
 
     await t.drag(Selector(CLASSES.card).nth(3), 300, 150, { speed: 0.5 });
     await testScreenshot(t, takeScreenshot, 'kanban_card_drag-n-drop_different-column.png');

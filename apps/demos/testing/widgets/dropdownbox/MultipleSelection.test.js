@@ -14,7 +14,7 @@ runManualTest('DropDownBox', 'MultipleSelection', ['jQuery', 'React', 'Vue', 'An
     const DROP_DOWN_BOX_CLASS = 'dx-dropdownbox';
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-    await t.wait(1000);
+    await t.wait(2000);
 
     await t
       .click($(`.${DROP_DOWN_BOX_CLASS}`).nth(0))
