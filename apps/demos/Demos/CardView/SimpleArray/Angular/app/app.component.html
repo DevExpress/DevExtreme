@@ -1,0 +1,13 @@
+<dx-card-view 
+  id="cardview"
+  [dataSource]="employees"
+  keyExpr="ID">
+  
+  <dxi-column *ngFor="let column of columns" [dataField]="column.dataField"></dxi-column>
+  
+  <dxo-card-cover
+    [imageExpr]="imageExpr"
+    altExpr="FirstName">
+  </dxo-card-cover>
+
+</dx-card-view>
