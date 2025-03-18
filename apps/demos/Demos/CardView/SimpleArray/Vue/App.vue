@@ -1,19 +1,8 @@
 <template>
-  <DxCardView 
-    id="cardview"
-    :data-source="employees"
-    key-expr="ID"
-  >
-    <DxColumn 
-      v-for="column in columns" 
-      :key="column.dataField" 
-      :data-field="column.dataField" 
-    />
-    
-    <DxCardCover
-      :image-expr="imageExpr"
-      alt-expr="'FirstName'"
-    />
+  <DxCardView id="cardview" :data-source="employees" key-expr="ID">
+    <DxColumn v-for="column in columns" :key="column.dataField" :data-field="column.dataField" />
+
+    <DxCardCover :image-expr="imageExpr" alt-expr="'FirstName'" />
   </DxCardView>
 </template>
 
@@ -31,7 +20,17 @@ export default defineComponent({
   data() {
     return {
       employees,
-      columns: ['ID', 'FirstName', 'LastName', 'Prefix', 'Position', 'Picture', 'BirthDate', 'HireDate', 'Address']
+      columns: [
+        { dataField: 'ID' },
+        { dataField: 'FirstName' },
+        { dataField: 'LastName' },
+        { dataField: 'Prefix' },
+        { dataField: 'Position' },
+        { dataField: 'Picture' },
+        { dataField: 'BirthDate' },
+        { dataField: 'HireDate' },
+        { dataField: 'Address' },
+      ]
     };
   },
   methods: {
