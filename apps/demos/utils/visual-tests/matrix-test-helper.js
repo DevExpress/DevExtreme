@@ -41,8 +41,8 @@ export const waitForAngularLoading = ClientFunction(() => new Promise((resolve) 
   let demoAppCounter = 0;
   const demoAppIntervalHandle = setInterval(() => {
     const demoApp = document.querySelector('demo-app');
-    if ((demoApp && demoApp.innerText !== 'Loading...') || demoAppCounter === 160) {
-      setTimeout(resolve, 1000);
+    if ((demoApp && demoApp.innerText !== 'Loading...') || demoAppCounter === 120) {
+      setTimeout(resolve, 3000);
       clearInterval(demoAppIntervalHandle);
     }
     demoAppCounter += 1;
@@ -236,49 +236,49 @@ const SKIPPED_TESTS = {
       { demo: 'SimpleArray', themes: [THEME.generic, THEME.material, THEME.fluent] },
       { demo: 'ToolbarCustomization', themes: [THEME.generic, THEME.material, THEME.fluent] },
     ],
-    DropDownBox: [
-      { demo: 'MultipleSelection', themes: [THEME.generic, THEME.material, THEME.fluent] },
-    ],
-    DropDownButton: [
-      { demo: 'Overview', themes: [THEME.generic, THEME.material, THEME.fluent] },
-    ],
+    // DropDownBox: [
+    //   { demo: 'MultipleSelection', themes: [THEME.generic, THEME.material, THEME.fluent] },
+    // ],
+    // DropDownButton: [
+    //   { demo: 'Overview', themes: [THEME.generic, THEME.material, THEME.fluent] },
+    // ],
     Form: [
       'CustomizeItem',
       { demo: 'Validation', themes: [THEME.material] },
     ],
-    Gauges: [
-      { demo: 'VariableNumberOfBars', themes: [THEME.generic, THEME.material, THEME.fluent] },
-    ],
-    List: [
-      { demo: 'ItemDragging', themes: [THEME.generic, THEME.material, THEME.fluent] },
-    ],
-    Lookup: [
-      { demo: 'Basics', themes: [THEME.generic, THEME.material, THEME.fluent] },
-    ],
+    // Gauges: [
+    //   { demo: 'VariableNumberOfBars', themes: [THEME.generic, THEME.material, THEME.fluent] },
+    // ],
+    // List: [
+    //   { demo: 'ItemDragging', themes: [THEME.generic, THEME.material, THEME.fluent] },
+    // ],
+    // Lookup: [
+    //   { demo: 'Basics', themes: [THEME.generic, THEME.material, THEME.fluent] },
+    // ],
     PivotGrid: [
       { demo: 'IntegratedFieldChooser', themes: [THEME.generic, THEME.material, THEME.fluent] },
     ],
-    Popup: [
-      { demo: 'Scrolling', themes: [THEME.generic, THEME.material, THEME.fluent] },
-    ],
+    // Popup: [
+    //   { demo: 'Scrolling', themes: [THEME.generic, THEME.material, THEME.fluent] },
+    // ],
     Scheduler: [
       'CustomDragAndDrop',
       { demo: 'CellTemplates', themes: [THEME.generic, THEME.material, THEME.fluent] },
       { demo: 'Resources', themes: [THEME.fluent] },
       { demo: 'Resources', themes: [THEME.generic, THEME.material, THEME.fluent] },
     ],
-    SelectBox: [
-      { demo: 'GroupedItems', themes: [THEME.generic, THEME.material, THEME.fluent] },
-    ],
-    Sortable: [
-      { demo: 'Kanban', themes: [THEME.generic, THEME.material, THEME.fluent] },
-    ],
-    Splitter: [
-      { demo: 'Overview', themes: [THEME.generic, THEME.material, THEME.fluent] },
-    ],
-    TabPanel: [
-      { demo: 'Overview', themes: [THEME.generic, THEME.material, THEME.fluent] },
-    ],
+    // SelectBox: [
+    //   { demo: 'GroupedItems', themes: [THEME.generic, THEME.material, THEME.fluent] },
+    // ],
+    // Sortable: [
+    //   { demo: 'Kanban', themes: [THEME.generic, THEME.material, THEME.fluent] },
+    // ],
+    // Splitter: [
+    //   { demo: 'Overview', themes: [THEME.generic, THEME.material, THEME.fluent] },
+    // ],
+    // TabPanel: [
+    //   { demo: 'Overview', themes: [THEME.generic, THEME.material, THEME.fluent] },
+    // ],
     Toolbar: [
       { demo: 'Adaptability', themes: [THEME.generic, THEME.material, THEME.fluent] },
     ],
