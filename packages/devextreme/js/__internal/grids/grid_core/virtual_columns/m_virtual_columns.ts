@@ -48,11 +48,9 @@ const rowsView = (Base: ModuleType<RowsView>) => class VirtualColumnsRowsViewExt
     if (that.option('rtlEnabled') && scrollable) {
       left = getWidth(scrollable.$content()) - getWidth(scrollable.$element()) - left;
     }
-    // @ts-expect-error
-    that._columnsController._eventArgs = e.event;
 
     // @ts-expect-error
-    that._columnsController.setScrollPosition(left);
+    that._columnsController.setScrollPosition(left, e.event);
   }
 
   protected _renderCore(e) {
@@ -186,12 +184,12 @@ const columns = (Base: ModuleType<ColumnsController>) => class VirtualColumnsCon
     return this.option('scrolling.columnPageSize');
   }
 
-  private _fireColumnsChanged() {
+  private _fireColumnsChanged(event?) {
     const date: any = new Date();
     this.columnsChanged.fire({
       optionNames: { all: true, length: 1 },
       changeTypes: {
-        columns: true, virtualColumnsScrolling: true, length: 2, event: this._eventArgs,
+        columns: true, virtualColumnsScrolling: true, length: 2, event,
       },
     });
     this._renderTime = (new Date()) as any - date;
@@ -209,17 +207,17 @@ const columns = (Base: ModuleType<ColumnsController>) => class VirtualColumnsCon
     return scrollingTimeout;
   }
 
-  private setScrollPosition(position) {
+  private setScrollPosition(position, event?: unknown) {
     const scrollingTimeout = this.getScrollingTimeout();
 
     if (scrollingTimeout > 0) {
       clearTimeout(this._changedTimeout);
 
       this._changedTimeout = setTimeout(() => {
-        this._setScrollPositionCore(position);
+        this._setScrollPositionCore(position, event);
       }, scrollingTimeout);
     } else {
-      this._setScrollPositionCore(position);
+      this._setScrollPositionCore(position, event);
     }
   }
 
@@ -227,7 +225,7 @@ const columns = (Base: ModuleType<ColumnsController>) => class VirtualColumnsCon
     this._setScrollPositionCore(this._position);
   }
 
-  private _setScrollPositionCore(position) {
+  private _setScrollPositionCore(position, event?) {
     const that = this;
 
     if (that.isVirtualMode()) {
@@ -239,7 +237,7 @@ const columns = (Base: ModuleType<ColumnsController>) => class VirtualColumnsCon
       if (needColumnsChanged) {
         that._beginPageIndex = beginPageIndex;
         that._endPageIndex = endPageIndex;
-        that._fireColumnsChanged();
+        that._fireColumnsChanged(event);
       }
     }
   }
