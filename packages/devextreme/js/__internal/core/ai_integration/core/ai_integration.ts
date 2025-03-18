@@ -2,30 +2,74 @@ import type {
   AIIntegration as IAIIntegration,
   AIProvider,
   BaseCommandResult,
+  ChangeStyleCommandParams,
+  ChangeStyleCommandResult,
+  ChangeToneCommandParams,
+  ChangeToneCommandResult,
+  ExecuteCommandParams,
+  ExecuteCommandResult,
+  ExpandCommandParams,
+  ExpandCommandResult,
+  ProofreadCommandParams,
+  ProofreadCommandResult,
   RequestCallbacks,
+  ShortenCommandParams,
+  ShortenCommandResult,
+  SummarizeCommandParams,
+  SummarizeCommandResult,
   TranslateCommandParams,
   TranslateCommandResult,
 } from '@js/common/ai-integration';
-import type { BaseCommand } from '@ts/core/ai_integration/commands/base';
-import { TranslateCommand } from '@ts/core/ai_integration/commands/translate';
+import type { BaseCommand } from '@ts/core/ai_integration/commands';
+import {
+  ChangeStyleCommand,
+  ChangeToneCommand,
+  ExecuteCommand,
+  ExpandCommand,
+  ProofreadCommand,
+  ShortenCommand,
+  SummarizeCommand,
+  TranslateCommand,
+} from '@ts/core/ai_integration/commands';
 import { PromptManager } from '@ts/core/ai_integration/core/prompt_manager';
 import { RequestManager } from '@ts/core/ai_integration/core/request_manager';
 
 export const enum CommandNames {
+  ChangeStyle = 'changeStyle',
+  ChangeTone = 'changeTone',
+  Execute = 'execute',
+  Expand = 'expand',
+  Proofread = 'proofread',
+  Shorten = 'shorten',
+  Summarize = 'summarize',
   Translate = 'translate',
 }
 
 export const COMMANDS = {
+  [CommandNames.ChangeStyle]: ChangeStyleCommand,
+  [CommandNames.ChangeTone]: ChangeToneCommand,
+  [CommandNames.Execute]: ExecuteCommand,
+  [CommandNames.Expand]: ExpandCommand,
+  [CommandNames.Proofread]: ProofreadCommand,
+  [CommandNames.Shorten]: ShortenCommand,
+  [CommandNames.Summarize]: SummarizeCommand,
   [CommandNames.Translate]: TranslateCommand,
 } as const;
 
 export interface CommandDefinition<TParams, TResult extends BaseCommandResult> {
+  command: BaseCommand<TParams, TResult>;
   params: TParams;
   result: TResult;
-  command: BaseCommand<TParams, TResult>;
 }
 
 export interface Commands {
+  [CommandNames.ChangeStyle]: CommandDefinition<ChangeStyleCommandParams, ChangeStyleCommandResult>;
+  [CommandNames.ChangeTone]: CommandDefinition<ChangeToneCommandParams, ChangeToneCommandResult>;
+  [CommandNames.Execute]: CommandDefinition<ExecuteCommandParams, ExecuteCommandResult>;
+  [CommandNames.Expand]: CommandDefinition<ExpandCommandParams, ExpandCommandResult>;
+  [CommandNames.Proofread]: CommandDefinition<ProofreadCommandParams, ProofreadCommandResult>;
+  [CommandNames.Shorten]: CommandDefinition<ShortenCommandParams, ShortenCommandResult>;
+  [CommandNames.Summarize]: CommandDefinition<SummarizeCommandParams, SummarizeCommandResult>;
   [CommandNames.Translate]: CommandDefinition<TranslateCommandParams, TranslateCommandResult>;
 }
 
@@ -42,7 +86,7 @@ export class AIIntegration implements IAIIntegration {
     this.commands = new Map();
   }
 
-  private execute<K extends CommandNames>(
+  private executeCommand<K extends CommandNames>(
     commandName: K,
     params: Commands[K]['params'],
     callbacks: RequestCallbacks,
@@ -62,8 +106,64 @@ export class AIIntegration implements IAIIntegration {
     return command.execute(params, callbacks);
   }
 
+  public changeStyle(params: ChangeStyleCommandParams, callbacks: RequestCallbacks): () => void {
+    return this.executeCommand(
+      CommandNames.ChangeStyle,
+      params,
+      callbacks,
+    );
+  }
+
+  public changeTone(params: ChangeToneCommandParams, callbacks: RequestCallbacks): () => void {
+    return this.executeCommand(
+      CommandNames.ChangeTone,
+      params,
+      callbacks,
+    );
+  }
+
+  public execute(params: ExecuteCommandParams, callbacks: RequestCallbacks): () => void {
+    return this.executeCommand(
+      CommandNames.Execute,
+      params,
+      callbacks,
+    );
+  }
+
+  public expand(params: ExpandCommandParams, callbacks: RequestCallbacks): () => void {
+    return this.executeCommand(
+      CommandNames.Expand,
+      params,
+      callbacks,
+    );
+  }
+
+  public proofread(params: ProofreadCommandParams, callbacks: RequestCallbacks): () => void {
+    return this.executeCommand(
+      CommandNames.Proofread,
+      params,
+      callbacks,
+    );
+  }
+
+  public shorten(params: SummarizeCommandParams, callbacks: RequestCallbacks): () => void {
+    return this.executeCommand(
+      CommandNames.Shorten,
+      params,
+      callbacks,
+    );
+  }
+
+  public summarize(params: SummarizeCommandParams, callbacks: RequestCallbacks): () => void {
+    return this.executeCommand(
+      CommandNames.Summarize,
+      params,
+      callbacks,
+    );
+  }
+
   public translate(params: TranslateCommandParams, callbacks: RequestCallbacks): () => void {
-    return this.execute(
+    return this.executeCommand(
       CommandNames.Translate,
       params,
       callbacks,

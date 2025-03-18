@@ -55,7 +55,64 @@ export type Response = {
 /**
  * @namespace DevExpress.aiIntegration
  */
+export type ChangeStyleCommandParams = {
+  text: string;
+  writingStyle: string;
+};
+
+/**
+ * @namespace DevExpress.aiIntegration
+ */
+export type ChangeToneCommandParams = {
+  text: string;
+  tone: string;
+};
+
+/**
+ * @namespace DevExpress.aiIntegration
+ */
+export type ExecuteCommandParams = {
+  text: string;
+};
+
+/**
+ * @namespace DevExpress.aiIntegration
+ */
+export type ExpandCommandParams = {
+  text: string;
+};
+
+/**
+ * @namespace DevExpress.aiIntegration
+ */
+export type ProofreadCommandParams = {
+  text: string;
+};
+
+/**
+* @namespace DevExpress.aiIntegration
+*/
+export type ShortenCommandParams = {
+ text: string;
+};
+
+/**
+ * @namespace DevExpress.aiIntegration
+ */
+export type SummarizeCommandParams = {
+  text: string;
+};
+
+/**
+ * @docid
+ * @namespace DevExpress.aiIntegration
+ * @public
+ */
 export type TranslateCommandParams = {
+  /**
+   * @docid
+   * @public
+   */
   text: string;
   lang: string;
 };
@@ -63,12 +120,69 @@ export type TranslateCommandParams = {
 /**
  * @namespace DevExpress.aiIntegration
  */
-export type TranslateCommandResult = string;
+export type ChangeStyleCommandResult = string;
+
+/**
+ * @docid
+ * @namespace DevExpress.aiIntegration
+ * @public
+ */
+export type ChangeToneCommandResult = string;
+
+/**
+ * @docid
+ * @namespace DevExpress.aiIntegration
+ * @public
+ */
+export type ExecuteCommandResult = string;
+
+/**
+ * @docid
+ * @namespace DevExpress.aiIntegration
+ * @public
+ */
+export type ExpandCommandResult = string;
+
+/**
+ * @docid
+ * @namespace DevExpress.aiIntegration
+ * @public
+ */
+export type ProofreadCommandResult = string;
 
 /**
  * @namespace DevExpress.aiIntegration
  */
-export type BaseCommandResult = TranslateCommandResult;
+export type ShortenCommandResult = string;
+
+/**
+ * @docid
+ * @namespace DevExpress.aiIntegration
+ * @public
+ */
+export type SummarizeCommandResult = string;
+
+/**
+ * @docid
+ * @namespace DevExpress.aiIntegration
+ * @public
+ */
+export type TranslateCommandResult = string;
+
+/**
+ * @docid
+ * @namespace DevExpress.aiIntegration
+ * @public
+ */
+export type BaseCommandResult =
+  | ExecuteCommandResult
+  | ChangeStyleCommandResult
+  | ChangeToneCommandResult
+  | TranslateCommandResult
+  | ProofreadCommandResult
+  | ShortenCommandResult
+  | SummarizeCommandResult
+  | ExpandCommandResult;
 
 /**
  * @namespace DevExpress.aiIntegration
@@ -103,6 +217,34 @@ export class AIIntegration {
    * @param provider
    */
   constructor(provider: AIProvider);
+  /**
+   * @publicName changeStyle(params, callbacks)
+   */
+  changeStyle(params: ChangeStyleCommandParams, callbacks: RequestCallbacks): () => void;
+  /**
+   * @publicName changeTone(params, callbacks)
+   */
+  changeTone(params: ChangeToneCommandParams, callbacks: RequestCallbacks): () => void;
+  /**
+   * @publicName execute(params, callbacks)
+   */
+  execute(params: ExecuteCommandParams, callbacks: RequestCallbacks): () => void;
+  /**
+   * @publicName expand(params, callbacks)
+   */
+  expand(params: ExpandCommandParams, callbacks: RequestCallbacks): () => void;
+  /**
+   * @publicName proofread(params, callbacks)
+   */
+  proofread(params: ProofreadCommandParams, callbacks: RequestCallbacks): () => void;
+  /**
+   * @publicName shorten(params, callbacks)
+   */
+  shorten(params: ShortenCommandParams, callbacks: RequestCallbacks): () => void;
+  /**
+   * @publicName summarize(params, callbacks)
+   */
+  summarize(params: SummarizeCommandParams, callbacks: RequestCallbacks): () => void;
   /**
    * @publicName translate(params, callbacks)
    */

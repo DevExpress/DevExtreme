@@ -873,6 +873,34 @@ declare module DevExpress.aiIntegration {
      * @param provider
      */
     constructor(provider: AIProvider);
+    changeStyle(
+      params: ChangeStyleCommandParams,
+      callbacks: RequestCallbacks
+    ): () => void;
+    changeTone(
+      params: ChangeToneCommandParams,
+      callbacks: RequestCallbacks
+    ): () => void;
+    execute(
+      params: ExecuteCommandParams,
+      callbacks: RequestCallbacks
+    ): () => void;
+    expand(
+      params: ExpandCommandParams,
+      callbacks: RequestCallbacks
+    ): () => void;
+    proofread(
+      params: ProofreadCommandParams,
+      callbacks: RequestCallbacks
+    ): () => void;
+    shorten(
+      params: ShortenCommandParams,
+      callbacks: RequestCallbacks
+    ): () => void;
+    summarize(
+      params: SummarizeCommandParams,
+      callbacks: RequestCallbacks
+    ): () => void;
     translate(
       params: TranslateCommandParams,
       callbacks: RequestCallbacks
@@ -888,9 +916,59 @@ declare module DevExpress.aiIntegration {
     sendRequest: (params: RequestParams) => Response;
   };
   /**
+   * [descr:BaseCommandResult]
+   */
+  export type BaseCommandResult =
+    | ExecuteCommandResult
+    | ChangeStyleCommandResult
+    | ChangeToneCommandResult
+    | TranslateCommandResult
+    | ProofreadCommandResult
+    | ShortenCommandResult
+    | SummarizeCommandResult
+    | ExpandCommandResult;
+  /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export type BaseCommandResult = TranslateCommandResult;
+  export type ChangeStyleCommandParams = {
+    text: string;
+    writingStyle: string;
+  };
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  export type ChangeStyleCommandResult = string;
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  export type ChangeToneCommandParams = {
+    text: string;
+    tone: string;
+  };
+  /**
+   * [descr:ChangeToneCommandResult]
+   */
+  export type ChangeToneCommandResult = string;
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  export type ExecuteCommandParams = {
+    text: string;
+  };
+  /**
+   * [descr:ExecuteCommandResult]
+   */
+  export type ExecuteCommandResult = string;
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  export type ExpandCommandParams = {
+    text: string;
+  };
+  /**
+   * [descr:ExpandCommandResult]
+   */
+  export type ExpandCommandResult = string;
   /**
    * [descr:Prompt]
    */
@@ -904,6 +982,16 @@ declare module DevExpress.aiIntegration {
      */
     user?: string;
   };
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  export type ProofreadCommandParams = {
+    text: string;
+  };
+  /**
+   * [descr:ProofreadCommandResult]
+   */
+  export type ProofreadCommandResult = string;
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
@@ -941,12 +1029,35 @@ declare module DevExpress.aiIntegration {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
+  export type ShortenCommandParams = {
+    text: string;
+  };
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  export type ShortenCommandResult = string;
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  export type SummarizeCommandParams = {
+    text: string;
+  };
+  /**
+   * [descr:SummarizeCommandResult]
+   */
+  export type SummarizeCommandResult = string;
+  /**
+   * [descr:TranslateCommandParams]
+   */
   export type TranslateCommandParams = {
+    /**
+     * [descr:TranslateCommandParams.text]
+     */
     text: string;
     lang: string;
   };
   /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   * [descr:TranslateCommandResult]
    */
   export type TranslateCommandResult = string;
 }

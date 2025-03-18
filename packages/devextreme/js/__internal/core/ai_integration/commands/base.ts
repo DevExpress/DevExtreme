@@ -1,6 +1,6 @@
 import type { BaseCommandResult, RequestCallbacks } from '@js/common/ai-integration';
 import type { PromptData, PromptManager, PromptTemplateName } from '@ts/core/ai_integration/core/prompt_manager';
-import type { RequestManager } from '@ts/core/ai_integration/core/request_manager';
+import type { RequestManager, RequestManagerCallbacks } from '@ts/core/ai_integration/core/request_manager';
 
 export abstract class BaseCommand<TParams, TResult extends BaseCommandResult> {
   constructor(
@@ -14,7 +14,7 @@ export abstract class BaseCommand<TParams, TResult extends BaseCommandResult> {
 
     const prompt = this.promptManager.buildPrompt(templateName, data);
 
-    const abort = this.requestManager.sendRequest(prompt, {
+    const requestManagerCallbacks: RequestManagerCallbacks = {
       onChunk: (chunk) => { callbacks?.onChunk?.(chunk); },
       onComplete: (result) => {
         const finalResponse = this.parseResult(result);
@@ -22,7 +22,9 @@ export abstract class BaseCommand<TParams, TResult extends BaseCommandResult> {
         callbacks?.onComplete?.(finalResponse);
       },
       onError: (error) => { callbacks?.onError?.(error); },
-    });
+    };
+
+    const abort = this.requestManager.sendRequest(prompt, requestManagerCallbacks);
 
     return abort;
   }

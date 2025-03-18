@@ -7,13 +7,23 @@ export interface PromptData {
 }
 
 export interface PromptTemplate {
-  system: string;
-  user: string;
+  system?: string;
+  user?: string;
 }
 
-export type PromptTemplateName = 'translate';
+export type PromptTemplateName =
+  | 'changeStyle'
+  | 'changeTone'
+  | 'execute'
+  | 'expand'
+  | 'proofread'
+  | 'shorten'
+  | 'summarize'
+  | 'translate';
 
 export type PromptTemplates = Map<PromptTemplateName, PromptTemplate>;
+
+export type PromptPlaceholders = Record<string, string>;
 
 export const ERROR_MESSAGES = {
   TEMPLATE_NOT_FOUND: 'Template not found',
@@ -33,22 +43,45 @@ export class PromptManager {
       throw new Error(ERROR_MESSAGES.TEMPLATE_NOT_FOUND);
     }
 
-    const system = this.replacePlaceholders(template.system, data.system);
-    const user = this.replacePlaceholders(template.user, data.user);
+    const system = this.generateMessage(template.system, data.system);
+    const user = this.generateMessage(template.user, data.user);
 
     const prompt = { system, user };
 
     return prompt;
   }
 
-  private replacePlaceholders(prompt: string, placeholders?: Record<string, string>): string {
-    if (!placeholders) {
-      return prompt;
+  private generateMessage(
+    promptTemplate?: string,
+    placeholders?: PromptPlaceholders,
+  ): string | undefined {
+    if (!placeholders && !promptTemplate) {
+      return undefined;
     }
 
+    if (!promptTemplate && placeholders) {
+      return Object.keys(placeholders)
+        .reduce((acc, key) => `${acc} ${placeholders[key]}`, '')
+        .trim();
+    }
+
+    if (!placeholders && promptTemplate) {
+      return promptTemplate;
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const result = this.replacePlaceholders(promptTemplate!, placeholders!);
+
+    return result;
+  }
+
+  private replacePlaceholders(
+    promptTemplate: string,
+    placeholders: Record<string, string>,
+  ): string {
     const result = Object.entries(placeholders).reduce(
       (acc, [key, value]) => acc.split(`{{${key}}}`).join(value),
-      prompt,
+      promptTemplate,
     );
 
     return result;

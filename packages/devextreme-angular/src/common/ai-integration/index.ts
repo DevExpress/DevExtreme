@@ -1,7 +1,15 @@
 export {
     AIIntegration,
     AIProvider,
+    BaseCommandResult,
+    ChangeToneCommandResult,
+    ExecuteCommandResult,
+    ExpandCommandResult,
     Prompt,
+    ProofreadCommandResult,
     RequestParams,
     Response,
+    SummarizeCommandResult,
+    TranslateCommandParams,
+    TranslateCommandResult,
 } from 'devextreme/common/ai-integration';
