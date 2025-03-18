@@ -10,7 +10,7 @@ import DataGridExample from './data-grid-example';
 import EditorExample from './editor-example';
 import Example from './example-block';
 // import FormExample from './form-example';
-// import ListExample from './list-example';
+import ListExample from './list-example';
 // import MapExample from './map-example';
 import PopupExample from './popup-example';
 import RerenderedChartExample from './rerendered-chart-example';
@@ -52,7 +52,7 @@ const Examples = () => {
 
             {/* <FormExample /> */}
 
-            {/*<ListExample />*/}
+            <ListExample />
 
             {/* <MapExample /> */}
 
