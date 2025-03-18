@@ -24,11 +24,9 @@ export class ColumnChooserController {
     private readonly options: OptionsController,
   ) {
     this.items = computed(
-      (columns, sortOrder) => {
-        let chooserColumns = columns.filter((c) => c.showInColumnChooser);
-        chooserColumns = sortColumns(chooserColumns, sortOrder) as Column[];
-
-        const newItems = chooserColumns.map((c, index) => ({
+      () => {
+        const columns = this.getChooserColumns();
+        const newItems = columns.map((c, index) => ({
           id: index,
           columnName: c.name,
           selected: c.visible,
@@ -38,9 +36,9 @@ export class ColumnChooserController {
 
         const items = this.items?.unreactive_get();
 
-        if (items?.length === chooserColumns.length) {
-          for (let i = 0; i < chooserColumns.length; i += 1) {
-            items[i].selected = chooserColumns[i].visible;
+        if (items?.length === columns.length) {
+          for (let i = 0; i < columns.length; i += 1) {
+            items[i].selected = columns[i].visible;
           }
 
           // if only column visibility changed, then we don't
@@ -67,7 +65,7 @@ export class ColumnChooserController {
       for (const node of nodes) {
         const columnIndex = getColumnIndexByName(columns, node.itemData?.columnName);
         const canHide = columns[columnIndex].allowHiding ?? true;
-        // to handle case when allowHiding=false and node.selected=false
+        // in case when allowHiding=false and node.selected=false, we do not hide column
         const skip = !canHide && !node.selected;
 
         if (!skip) {
@@ -86,7 +84,7 @@ export class ColumnChooserController {
       return;
     }
 
-    const columns = this.columnsController.columns.unreactive_get();
+    const columns = this.getChooserColumns();
     const selectedKeys = treeView.getSelectedNodeKeys();
 
     treeView.beginUpdate();
@@ -103,5 +101,15 @@ export class ColumnChooserController {
     });
 
     treeView.endUpdate();
+  }
+
+  private getChooserColumns(): Column[] {
+    const sortOrder = this.options.oneWay('columnChooser.sortOrder').unreactive_get();
+    const columns = this.columnsController.columns.unreactive_get();
+
+    let chooserColumns = columns.filter((c) => c.showInColumnChooser);
+    chooserColumns = sortColumns(chooserColumns, sortOrder);
+
+    return chooserColumns;
   }
 }

@@ -267,6 +267,7 @@ describe('choosing columns', () => {
         columns: [
           { name: 'Column 1' },
           { name: 'Column 2', showInColumnChooser: false },
+          { name: 'Column 3' },
         ],
         columnChooser: {
           enabled: true,
@@ -278,6 +279,7 @@ describe('choosing columns', () => {
       treeView?.unselectAll();
       expect(columnsController.columns.unreactive_get()[0].visible).toBe(false);
       expect(columnsController.columns.unreactive_get()[1].visible).toBe(true);
+      expect(columnsController.columns.unreactive_get()[2].visible).toBe(false);
 
       // make second column invisible
       columnsController.columnOption(
@@ -289,6 +291,7 @@ describe('choosing columns', () => {
       treeView?.selectAll();
       expect(columnsController.columns.unreactive_get()[0].visible).toBe(true);
       expect(columnsController.columns.unreactive_get()[1].visible).toBe(false);
+      expect(columnsController.columns.unreactive_get()[2].visible).toBe(true);
     });
 
     it('does not toggle columns with allowHiding=false on selectAll/unselectAll', async () => {
