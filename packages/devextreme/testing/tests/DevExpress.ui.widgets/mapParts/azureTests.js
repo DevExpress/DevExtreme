@@ -28,18 +28,23 @@ const prepareTestingAzureProvider = () => {
 const moduleConfig = {
     beforeEach: function() {
         const fakeURL = '/fakeAzureUrl';
+        let azureMockCreated = false;
 
         AzureProvider.remapConstant(fakeURL);
 
         ajaxMock.setup({
             url: fakeURL,
             callback: () => {
-                $.getScript({
-                    url: '../../packages/devextreme/testing/helpers/forMap/azureMock.js',
-                    scriptAttrs: { nonce: 'qunit-test' }
-                }).done(() => {
-                    prepareTestingAzureProvider();
-                });
+                if(!azureMockCreated) {
+                    azureMockCreated = true;
+
+                    $.getScript({
+                        url: '../../packages/devextreme/testing/helpers/forMap/azureMock.js',
+                        scriptAttrs: { nonce: 'qunit-test' },
+                    }).done(() => {
+                        prepareTestingAzureProvider();
+                    });
+                }
             },
             responseText: {
                 success: true,
@@ -280,8 +285,7 @@ QUnit.module('basic options', moduleConfig, () => {
         });
     });
 
-    // TODO Chrome133: skipped during chrome update
-    QUnit.test.skip('center should be geocoded if adress is passed as a string', function(assert) {
+    QUnit.test('center should be geocoded if adress is passed as a string', function(assert) {
         const done = assert.async();
         const center = 'Cedar Park, Texas';
 
