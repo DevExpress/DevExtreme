@@ -3,6 +3,7 @@ import CardView from 'devextreme-testcafe-models/cardView';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 import { data } from '../helpers/simpleArrayData';
+import { testScreenshot } from '../../../helpers/themeUtils';
 
 fixture.disablePageReloads`CardView - Sorting Behavior - Themes`
   .page(url(__dirname, '../../container.html'));
@@ -11,7 +12,7 @@ test('Default render', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const cardView = new CardView('#container');
 
-  await takeScreenshot('cardview_headers_default_render.png', cardView.element);
+  await testScreenshot(t, takeScreenshot, 'cardview_headers_default_render.png', { element: cardView.element });
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
@@ -38,7 +39,7 @@ test('Default render', async (t) => {
 test('Default multiple sorting render', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const cardView = new CardView('#container');
-  await takeScreenshot('cardview_headers_with_multiple_sorting_render.png', cardView.element);
+  await testScreenshot(t, takeScreenshot, 'cardview_headers_with_multiple_sorting_render.png', { element: cardView.element });
 
   await t
     .expect(compareResults.isValid())

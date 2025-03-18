@@ -3,6 +3,7 @@ import CardView from 'devextreme-testcafe-models/cardView';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 import { data } from '../helpers/simpleArrayData';
+import { testScreenshot } from '../../../helpers/themeUtils';
 
 fixture.disablePageReloads`CardView - Sorting Behavior`
   .page(url(__dirname, '../../container.html'));
@@ -11,7 +12,7 @@ test('Sort index API', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const cardView = new CardView('#container');
 
-  await takeScreenshot('cardview_sort_index_api.png', cardView.element);
+  await testScreenshot(t, takeScreenshot, 'cardview_sort_index_api.png', { element: cardView.element });
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
@@ -43,7 +44,7 @@ test('ShowSortIndexes API', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const cardView = new CardView('#container');
 
-  await takeScreenshot('cardview_show_sort_indexes_api.png', cardView.element);
+  await testScreenshot(t, takeScreenshot, 'cardview_show_sort_indexes_api.png', { element: cardView.element });
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
@@ -81,7 +82,7 @@ test('AllowSorting API', async (t) => {
   await t
     .click(cardView.getHeaders().getHeaderItemByText('Title').element);
 
-  await takeScreenshot('cardview_allow_sorting_api.png', cardView.element);
+  await testScreenshot(t, takeScreenshot, 'cardview_allow_sorting_api.png', { element: cardView.element });
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
@@ -123,7 +124,7 @@ test('AllowSorting API', async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
     const cardView = new CardView('#container');
 
-    await takeScreenshot(`cardview_calculate_sort_value_is_${calculateSortValue === 'name' ? 'filed' : 'function'}_api.png`, cardView.element);
+    await testScreenshot(t, takeScreenshot, `cardview_calculate_sort_value_is_${calculateSortValue === 'name' ? 'filed' : 'function'}_api.png`, { element: cardView.element });
     await t
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
@@ -157,7 +158,7 @@ test('SortingMethod API', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const cardView = new CardView('#container');
 
-  await takeScreenshot('cardview_sorting_method_api.png', cardView.element);
+  await testScreenshot(t, takeScreenshot, 'cardview_sorting_method_api.png', { element: cardView.element });
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
