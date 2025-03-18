@@ -207,7 +207,7 @@ const columns = (Base: ModuleType<ColumnsController>) => class VirtualColumnsCon
     return scrollingTimeout;
   }
 
-  private setScrollPosition(position, event?: unknown) {
+  private setScrollPosition(position, event?) {
     const scrollingTimeout = this.getScrollingTimeout();
 
     if (scrollingTimeout > 0) {
