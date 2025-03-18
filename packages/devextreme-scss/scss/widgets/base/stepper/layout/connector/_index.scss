@@ -5,7 +5,6 @@
   &.dx-stepper-connector-horizontal {
     height: 2px;
     width: 100%;
-    margin-block-start: 15px;
 
     .dx-stepper-connector-value {
       width: 0;
@@ -17,7 +16,6 @@
   &.dx-stepper-connector-vertical {
     width: 2px;
     height: 100%;
-    margin-inline-start: 15px;
 
     .dx-stepper-connector-value {
       height: 0;
