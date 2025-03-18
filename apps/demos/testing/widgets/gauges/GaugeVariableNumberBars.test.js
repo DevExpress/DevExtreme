@@ -13,6 +13,8 @@ runManualTest('Gauges', 'VariableNumberOfBars', ['jQuery', 'React', 'Vue', 'Angu
   test('Bars visibility changing', async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
+    await t.wait(1000);
+
     const checkBoxes = $('.dx-checkbox-icon');
 
     await t.click(checkBoxes.nth(2));

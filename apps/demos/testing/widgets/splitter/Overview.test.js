@@ -15,6 +15,8 @@ runManualTest('Splitter', 'Overview', ['jQuery', 'React', 'Vue', 'Angular'], (te
   test('Correct Focus styles on every Item Panes', async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
+    await t.wait(1000);
+
     await t
       .click($(`.${PANE_CONTENT_CLASS}`).nth(0));
 
