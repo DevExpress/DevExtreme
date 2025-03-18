@@ -252,6 +252,16 @@ class Stepper extends CollectionWidgetAsync<StepperProperties> {
     }
   }
 
+  _focusOutHandler(e: DxEvent): void {
+    this._clearFocusedItem();
+
+    super._focusOutHandler(e);
+  }
+
+  _clearFocusedItem(): void {
+    this.option('focusedElement', null);
+  }
+
   _processChangeCompletedItems(): void {
     const itemElements = this._itemElements();
 
