@@ -26,7 +26,7 @@ import dxScheduler from 'devextreme/ui/scheduler';
 import dxSortable from 'devextreme/ui/sortable';
 import dxDraggable from 'devextreme/ui/draggable';
 import DataSource from 'devextreme/data/data_source';
-import { AllDayPanelMode, ViewType, dxSchedulerAppointment, CellAppointmentsLimit, AppointmentAddedEvent, AppointmentAddingEvent, AppointmentClickEvent, AppointmentContextMenuEvent, AppointmentDblClickEvent, AppointmentDeletedEvent, AppointmentDeletingEvent, AppointmentFormOpeningEvent, AppointmentRenderedEvent, AppointmentTooltipShowingEvent, AppointmentUpdatedEvent, AppointmentUpdatingEvent, CellClickEvent, CellContextMenuEvent, ContentReadyEvent, DisposingEvent, InitializedEvent, OptionChangedEvent, RecurrenceEditMode, dxSchedulerScrolling } from 'devextreme/ui/scheduler';
+import { AllDayPanelMode, ViewType, dxSchedulerAppointment, CellAppointmentsLimit, AppointmentAddedEvent, AppointmentAddingEvent, AppointmentClickEvent, AppointmentContextMenuEvent, AppointmentDblClickEvent, AppointmentDeletedEvent, AppointmentDeletingEvent, AppointmentFormOpeningEvent, AppointmentRenderedEvent, AppointmentTooltipShowingEvent, AppointmentUpdatedEvent, AppointmentUpdatingEvent, CellClickEvent, CellContextMenuEvent, ContentReadyEvent, DisposingEvent, InitializedEvent, OptionChangedEvent, RecurrenceEditMode, dxSchedulerScrolling, Toolbar } from 'devextreme/ui/scheduler';
 import { event } from 'devextreme/events/events.types';
 import { DataSourceOptions } from 'devextreme/data/data_source';
 import { Store } from 'devextreme/data/store';
@@ -53,8 +53,13 @@ import { DxiViewModule } from 'devextreme-angular/ui/nested';
 
 import { DxoSchedulerAppointmentDraggingModule } from 'devextreme-angular/ui/scheduler/nested';
 import { DxoSchedulerEditingModule } from 'devextreme-angular/ui/scheduler/nested';
+import { DxiSchedulerItemModule } from 'devextreme-angular/ui/scheduler/nested';
+import { DxoSchedulerOptionsModule } from 'devextreme-angular/ui/scheduler/nested';
+import { DxiSchedulerOptionsItemModule } from 'devextreme-angular/ui/scheduler/nested';
 import { DxiSchedulerResourceModule } from 'devextreme-angular/ui/scheduler/nested';
 import { DxoSchedulerScrollingModule } from 'devextreme-angular/ui/scheduler/nested';
+import { DxoSchedulerToolbarModule } from 'devextreme-angular/ui/scheduler/nested';
+import { DxiSchedulerToolbarItemModule } from 'devextreme-angular/ui/scheduler/nested';
 import { DxiSchedulerViewModule } from 'devextreme-angular/ui/scheduler/nested';
 
 import { DxiResourceComponent } from 'devextreme-angular/ui/nested';
@@ -813,6 +818,19 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
 
 
     /**
+     * [descr:undefined]
+    
+     */
+    @Input()
+    get toolbar(): Toolbar | undefined {
+        return this._getOption('toolbar');
+    }
+    set toolbar(value: Toolbar | undefined) {
+        this._setOption('toolbar', value);
+    }
+
+
+    /**
      * [descr:dxSchedulerOptions.useDropDownViewSwitcher]
     
      */
@@ -1404,6 +1422,13 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
+    @Output() toolbarChange: EventEmitter<Toolbar | undefined>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
     @Output() useDropDownViewSwitcherChange: EventEmitter<boolean>;
 
     /**
@@ -1550,6 +1575,7 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
             { emit: 'textExprChange' },
             { emit: 'timeCellTemplateChange' },
             { emit: 'timeZoneChange' },
+            { emit: 'toolbarChange' },
             { emit: 'useDropDownViewSwitcherChange' },
             { emit: 'viewsChange' },
             { emit: 'visibleChange' },
@@ -1615,8 +1641,13 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
     DxiViewModule,
     DxoSchedulerAppointmentDraggingModule,
     DxoSchedulerEditingModule,
+    DxiSchedulerItemModule,
+    DxoSchedulerOptionsModule,
+    DxiSchedulerOptionsItemModule,
     DxiSchedulerResourceModule,
     DxoSchedulerScrollingModule,
+    DxoSchedulerToolbarModule,
+    DxiSchedulerToolbarItemModule,
     DxiSchedulerViewModule,
     DxIntegrationModule,
     DxTemplateModule
@@ -1633,8 +1664,13 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
     DxiViewModule,
     DxoSchedulerAppointmentDraggingModule,
     DxoSchedulerEditingModule,
+    DxiSchedulerItemModule,
+    DxoSchedulerOptionsModule,
+    DxiSchedulerOptionsItemModule,
     DxiSchedulerResourceModule,
     DxoSchedulerScrollingModule,
+    DxoSchedulerToolbarModule,
+    DxiSchedulerToolbarItemModule,
     DxiSchedulerViewModule,
     DxTemplateModule
   ]
