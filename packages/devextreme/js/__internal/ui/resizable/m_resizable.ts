@@ -4,9 +4,9 @@ import { end as dragEventEnd, move as dragEventMove, start as dragEventStart } f
 import { addNamespace } from '@js/common/core/events/utils/index';
 import { triggerResizeEvent } from '@js/common/core/events/visibility_change';
 import registerComponent from '@js/core/component_registrator';
-import DOMComponent from '@js/core/dom_component';
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
-// @ts-expect-error
+// @ts-expect-error ts-error
 import { pairToObject } from '@js/core/utils/common';
 import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
@@ -16,6 +16,11 @@ import {
 } from '@js/core/utils/size';
 import { isFunction, isPlainObject, isWindow } from '@js/core/utils/type';
 import { hasWindow } from '@js/core/utils/window';
+import type {
+  Properties,
+} from '@js/ui/resizable';
+import DOMComponent from '@ts/core/widget/dom_component';
+import type { OptionChanged } from '@ts/core/widget/types';
 
 const RESIZABLE = 'dxResizable';
 const RESIZABLE_CLASS = 'dx-resizable';
@@ -40,52 +45,88 @@ const SIDE_BORDER_WIDTH_STYLES = {
   bottom: 'borderBottomWidth',
 };
 
-// @ts-expect-error
-const Resizable = DOMComponent.inherit({
+export interface ResizableProperties extends Properties {
+  stepPrecision?: string;
 
-  _getDefaultOptions() {
-    return extend(this.callBase(), {
+  disabled?: boolean;
+
+  step?: string;
+
+  roundStepValue?: boolean;
+}
+
+class Resizable extends DOMComponent<Resizable, ResizableProperties> {
+  _movingSides!: {
+    top: boolean;
+    left: boolean;
+    bottom: boolean;
+    right: boolean;
+  };
+
+  _elementLocation!: {
+    top: number;
+    left: number;
+  };
+
+  _elementSize!: {
+    width: number;
+    height: number;
+  };
+
+  _handles!: dxElementWrapper[];
+
+  _resizeStartAction?: (e: Record<string, unknown>) => void;
+
+  _resizeEndAction?: (e: Record<string, unknown>) => void;
+
+  _resizeAction?: (e: Record<string, unknown>) => void;
+
+  _getDefaultOptions(): ResizableProperties {
+    return {
+      ...super._getDefaultOptions(),
       handles: 'all',
       // NOTE: does not affect proportional resize
       step: '1',
       stepPrecision: 'simple',
-      area: undefined,
       minWidth: 30,
       maxWidth: Infinity,
       minHeight: 30,
       maxHeight: Infinity,
+      // @ts-expect-error ts-error
       onResizeStart: null,
+      // @ts-expect-error ts-error
       onResize: null,
+      // @ts-expect-error ts-error
       onResizeEnd: null,
       roundStepValue: true,
       keepAspectRatio: true,
-    });
-  },
+    };
+  }
 
-  _init() {
-    this.callBase();
+  _init(): void {
+    super._init();
     this.$element().addClass(RESIZABLE_CLASS);
-  },
+  }
 
-  _initMarkup() {
-    this.callBase();
+  _initMarkup(): void {
+    super._initMarkup();
     this._renderHandles();
-  },
+  }
 
-  _render() {
-    this.callBase();
+  _render(): void {
+    super._render();
     this._renderActions();
-  },
+  }
 
-  _renderActions() {
+  _renderActions(): void {
     this._resizeStartAction = this._createActionByOption('onResizeStart');
     this._resizeEndAction = this._createActionByOption('onResizeEnd');
     this._resizeAction = this._createActionByOption('onResize');
-  },
+  }
 
-  _renderHandles() {
+  _renderHandles(): void {
     this._handles = [];
-    const handles = this.option('handles');
+    const { handles } = this.option();
 
     if (handles === 'none' || !handles) {
       return;
@@ -99,27 +140,27 @@ const Resizable = DOMComponent.inherit({
       this._renderHandle(handleName);
     });
 
-    // @ts-expect-error
+    // @ts-expect-error ts-error
     activeHandlesMap.bottom && activeHandlesMap.right && this._renderHandle('corner-bottom-right');
-    // @ts-expect-error
+    // @ts-expect-error ts-error
     activeHandlesMap.bottom && activeHandlesMap.left && this._renderHandle('corner-bottom-left');
-    // @ts-expect-error
+    // @ts-expect-error ts-error
     activeHandlesMap.top && activeHandlesMap.right && this._renderHandle('corner-top-right');
-    // @ts-expect-error
+    // @ts-expect-error ts-error
     activeHandlesMap.top && activeHandlesMap.left && this._renderHandle('corner-top-left');
     this._attachEventHandlers();
-  },
+  }
 
-  _renderHandle(handleName) {
+  _renderHandle(handleName: string): void {
     const $handle = $('<div>')
       .addClass(RESIZABLE_HANDLE_CLASS)
       .addClass(`${RESIZABLE_HANDLE_CLASS}-${handleName}`)
       .appendTo(this.$element());
 
     this._handles.push($handle);
-  },
+  }
 
-  _attachEventHandlers() {
+  _attachEventHandlers(): void {
     if (this.option('disabled')) {
       return;
     }
@@ -135,21 +176,21 @@ const Resizable = DOMComponent.inherit({
         immediate: true,
       });
     });
-  },
+  }
 
-  _detachEventHandlers() {
+  _detachEventHandlers(): void {
     this._handles.forEach((handleElement) => {
       eventsEngine.off(handleElement);
     });
-  },
+  }
 
-  _toggleEventHandlers(shouldAttachEvents) {
+  _toggleEventHandlers(shouldAttachEvents): void {
     shouldAttachEvents ? this._attachEventHandlers() : this._detachEventHandlers();
-  },
+  }
 
   _getElementSize() {
     const $element = this.$element();
-
+    // @ts-expect-error ts-error
     return $element.css('boxSizing') === 'border-box'
       ? {
         width: getOuterWidth($element),
@@ -159,7 +200,7 @@ const Resizable = DOMComponent.inherit({
         width: getWidth($element),
         height: getHeight($element),
       };
-  },
+  }
 
   _dragStartHandler(e) {
     const $element = this.$element();
@@ -177,7 +218,7 @@ const Resizable = DOMComponent.inherit({
 
     this._renderDragOffsets(e);
 
-    this._resizeStartAction({
+    this._resizeStartAction?.({
       event: e,
       width: this._elementSize.width,
       height: this._elementSize.height,
@@ -185,13 +226,13 @@ const Resizable = DOMComponent.inherit({
     });
 
     e.targetElements = null;
-  },
+  }
 
-  _toggleResizingClass(value) {
+  _toggleResizingClass(value): void {
     this.$element().toggleClass(RESIZABLE_RESIZING_CLASS, value);
-  },
+  }
 
-  _renderDragOffsets(e) {
+  _renderDragOffsets(e): void {
     const area = this._getArea();
 
     if (!area) {
@@ -204,22 +245,22 @@ const Resizable = DOMComponent.inherit({
     const handleOffset = $handle.offset();
     const areaOffset = area.offset;
     const scrollOffset = this._getAreaScrollOffset();
-    // @ts-expect-error
+    // @ts-expect-error ts-error
     e.maxLeftOffset = this._leftMaxOffset = handleOffset.left - areaOffset.left - scrollOffset.scrollX;
-    // @ts-expect-error
+    // @ts-expect-error ts-error
     e.maxRightOffset = this._rightMaxOffset = areaOffset.left + area.width - handleOffset.left - handleWidth + scrollOffset.scrollX;
-    // @ts-expect-error
+    // @ts-expect-error ts-error
     e.maxTopOffset = this._topMaxOffset = handleOffset.top - areaOffset.top - scrollOffset.scrollY;
-    // @ts-expect-error
+    // @ts-expect-error ts-error
     e.maxBottomOffset = this._bottomMaxOffset = areaOffset.top + area.height - handleOffset.top - handleHeight + scrollOffset.scrollY;
-  },
+  }
 
   _getBorderWidth($element, direction) {
     if (isWindow($element.get(0))) return 0;
     const borderWidth = $element.css(SIDE_BORDER_WIDTH_STYLES[direction]);
     // eslint-disable-next-line radix
     return parseInt(borderWidth) || 0;
-  },
+  }
 
   _proportionate(direction, value) {
     const size = this._elementSize;
@@ -228,7 +269,7 @@ const Resizable = DOMComponent.inherit({
       : size.height / size.width;
 
     return value * factor;
-  },
+  }
 
   _getProportionalDelta({ x, y }) {
     const proportionalY = this._proportionate('y', x);
@@ -251,7 +292,7 @@ const Resizable = DOMComponent.inherit({
       x: 0,
       y: 0,
     };
-  },
+  }
 
   _getDirectionName(axis) {
     const sides = this._movingSides;
@@ -260,12 +301,12 @@ const Resizable = DOMComponent.inherit({
       return sides.left ? 'left' : 'right';
     }
     return sides.top ? 'top' : 'bottom';
-  },
+  }
 
   _fitIntoArea(axis, value) {
     const directionName = this._getDirectionName(axis);
     return Math.min(value, this[`_${directionName}MaxOffset`] ?? Infinity);
-  },
+  }
 
   _fitDeltaProportionally(delta) {
     let fittedDelta = { ...delta };
@@ -294,7 +335,7 @@ const Resizable = DOMComponent.inherit({
     return isFittedX() && isFittedY()
       ? fittedDelta
       : { x: 0, y: 0 };
-  },
+  }
 
   _fitDelta({ x, y }) {
     const size = this._elementSize;
@@ -306,7 +347,7 @@ const Resizable = DOMComponent.inherit({
       x: fitIntoRange(size.width + x, minWidth, maxWidth) - size.width,
       y: fitIntoRange(size.height + y, minHeight, maxHeight) - size.height,
     };
-  },
+  }
 
   _getDeltaByOffset(offset) {
     const sides = this._movingSides;
@@ -330,9 +371,9 @@ const Resizable = DOMComponent.inherit({
     }
 
     return delta;
-  },
+  }
 
-  _updatePosition(delta, { width, height }) {
+  _updatePosition(delta, { width, height }): void {
     const location = this._elementLocation;
     const sides = this._movingSides;
     const $element = this.$element();
@@ -345,7 +386,7 @@ const Resizable = DOMComponent.inherit({
       top: location.top + (sides.top ? offsetTop : 0),
       left: location.left + (sides.left ? offsetLeft : 0),
     });
-  },
+  }
 
   _dragHandler(e) {
     const offset = this._getOffset(e);
@@ -355,16 +396,19 @@ const Resizable = DOMComponent.inherit({
 
     this._updatePosition(delta, dimensions);
     this._triggerResizeAction(e, dimensions);
-  },
+  }
 
   _updateDimensions(delta) {
     const isAbsoluteSize = (size) => size.substring(size.length - 2) === 'px';
 
-    const isStepPrecisionStrict = this.option('stepPrecision') === 'strict';
+    const { stepPrecision } = this.option();
+
+    const isStepPrecisionStrict = stepPrecision === 'strict';
     const size = this._elementSize;
 
     const width = size.width + delta.x;
     const height = size.height + delta.y;
+    // @ts-expect-error ts-error
     const elementStyle = this.$element().get(0).style;
     const shouldRenderWidth = delta.x || isStepPrecisionStrict || isAbsoluteSize(elementStyle.width);
     const shouldRenderHeight = delta.y || isStepPrecisionStrict || isAbsoluteSize(elementStyle.height);
@@ -376,10 +420,10 @@ const Resizable = DOMComponent.inherit({
       width: shouldRenderWidth ? width : size.width,
       height: shouldRenderHeight ? height : size.height,
     };
-  },
+  }
 
-  _triggerResizeAction(e, { width, height }) {
-    this._resizeAction({
+  _triggerResizeAction(e, { width, height }): void {
+    this._resizeAction?.({
       event: e,
       width: this.option('width') || width,
       height: this.option('height') || height,
@@ -387,13 +431,13 @@ const Resizable = DOMComponent.inherit({
     });
 
     triggerResizeEvent(this.$element());
-  },
+  }
 
   _isCornerHandler(sides) {
     // @ts-expect-error
 
     return Object.values(sides).reduce((xor, value) => xor ^ value, 0) === 0;
-  },
+  }
 
   _getOffset(e) {
     const { offset } = e;
@@ -403,17 +447,19 @@ const Resizable = DOMComponent.inherit({
     if (!sides.top && !sides.bottom) offset.y = 0;
 
     return offset;
-  },
+  }
 
   _roundByStep(delta) {
-    return this.option('stepPrecision') === 'strict'
+    const { stepPrecision } = this.option();
+
+    return stepPrecision === 'strict'
       ? this._roundStrict(delta)
       : this._roundNotStrict(delta);
-  },
+  }
 
   _getSteps() {
     return pairToObject(this.option('step'), !this.option('roundStepValue'));
-  },
+  }
 
   _roundNotStrict(delta) {
     const steps = this._getSteps();
@@ -422,7 +468,7 @@ const Resizable = DOMComponent.inherit({
       x: delta.x - delta.x % steps.h,
       y: delta.y - delta.y % steps.v,
     };
-  },
+  }
 
   _roundStrict(delta) {
     const sides = this._movingSides;
@@ -467,7 +513,7 @@ const Resizable = DOMComponent.inherit({
       x: roundedOffset.x * (sides.left ? -1 : 1),
       y: roundedOffset.y * (sides.top ? -1 : 1),
     };
-  },
+  }
 
   _getMovingSides(e) {
     const $target = $(e.target);
@@ -482,7 +528,7 @@ const Resizable = DOMComponent.inherit({
       bottom: $target.hasClass(RESIZABLE_HANDLE_BOTTOM_CLASS) || hasCornerBottomLeftClass || hasCornerBottomRightClass,
       right: $target.hasClass(RESIZABLE_HANDLE_RIGHT_CLASS) || hasCornerTopRightClass || hasCornerBottomRightClass,
     };
-  },
+  }
 
   _getArea() {
     let area = this.option('area');
@@ -496,7 +542,7 @@ const Resizable = DOMComponent.inherit({
     }
 
     return this._getAreaFromElement(area);
-  },
+  }
 
   _getAreaScrollOffset() {
     const area = this.option('area');
@@ -511,7 +557,7 @@ const Resizable = DOMComponent.inherit({
     }
 
     return scrollOffset;
-  },
+  }
 
   _getAreaFromObject(area) {
     const result = {
@@ -526,7 +572,7 @@ const Resizable = DOMComponent.inherit({
     this._correctAreaGeometry(result);
 
     return result;
-  },
+  }
 
   _getAreaFromElement(area) {
     const $area = $(area);
@@ -546,9 +592,9 @@ const Resizable = DOMComponent.inherit({
     }
 
     return result;
-  },
+  }
 
-  _correctAreaGeometry(result, $area) {
+  _correctAreaGeometry(result, $area?): void {
     const areaBorderLeft = $area ? this._getBorderWidth($area, 'left') : 0;
     const areaBorderTop = $area ? this._getBorderWidth($area, 'top') : 0;
 
@@ -557,12 +603,12 @@ const Resizable = DOMComponent.inherit({
 
     result.width -= getOuterWidth(this.$element()) - getInnerWidth(this.$element());
     result.height -= getOuterHeight(this.$element()) - getInnerHeight(this.$element());
-  },
+  }
 
-  _dragEndHandler(e) {
+  _dragEndHandler(e): void {
     const $element = this.$element();
 
-    this._resizeEndAction({
+    this._resizeEndAction?.({
       event: e,
       width: getOuterWidth($element),
       height: getOuterHeight($element),
@@ -570,21 +616,21 @@ const Resizable = DOMComponent.inherit({
     });
 
     this._toggleResizingClass(false);
-  },
+  }
 
-  _renderWidth(width) {
+  _renderWidth(width): void {
     this.option('width', fitIntoRange(width, this.option('minWidth'), this.option('maxWidth')));
-  },
+  }
 
-  _renderHeight(height) {
+  _renderHeight(height): void {
     this.option('height', fitIntoRange(height, this.option('minHeight'), this.option('maxHeight')));
-  },
+  }
 
-  _optionChanged(args) {
+  _optionChanged(args: OptionChanged<ResizableProperties>): void {
     switch (args.name) {
       case 'disabled':
         this._toggleEventHandlers(!args.value);
-        this.callBase(args);
+        super._optionChanged(args);
         break;
       case 'handles':
         this._invalidate();
@@ -609,19 +655,19 @@ const Resizable = DOMComponent.inherit({
       case 'keepAspectRatio':
         break;
       default:
-        this.callBase(args);
+        super._optionChanged(args);
         break;
     }
-  },
+  }
 
-  _clean() {
+  _clean(): void {
     this.$element().find(`.${RESIZABLE_HANDLE_CLASS}`).remove();
-  },
+  }
 
-  _useTemplates() {
+  _useTemplates(): boolean {
     return false;
-  },
-});
+  }
+}
 
 registerComponent(RESIZABLE, Resizable);
 

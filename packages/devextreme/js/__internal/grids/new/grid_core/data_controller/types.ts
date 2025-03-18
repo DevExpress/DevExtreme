@@ -1,5 +1,5 @@
-export type DataObject = Record<string, unknown>;
 export type Key = unknown;
+export type DataObject = unknown;
 export type KeyExpr = unknown;
 export interface OperationOptions {
   filtering?: boolean;

@@ -25,7 +25,7 @@ import {
   DxTooltip,
 } from 'devextreme-vue/sparkline';
 
-import { DayClose } from './data.ts';
+import { type DayClose } from './data.ts';
 
 defineProps<{
   dayClose: DayClose[]

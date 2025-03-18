@@ -56,7 +56,7 @@ export function computed<T1, T2, T3, T4, T5, TValue>(
 ): SubsGets<TValue>;
 export function computed<T1, T2, T3, T4, T5, T6, TValue>(
   compute: (t1: T1, t2: T2, t3: T3, t4: T4, t5: T5, t6: T6) => TValue,
-  // eslint-disable-next-line max-len
+  // eslint-disable-next-line @stylistic/max-len
   deps: [Subscribable<T1>, Subscribable<T2>, Subscribable<T3>, Subscribable<T4>, Subscribable<T5>, Subscribable<T6>]
 ): SubsGets<TValue>;
 export function computed<TArgs extends readonly any[], TValue>(

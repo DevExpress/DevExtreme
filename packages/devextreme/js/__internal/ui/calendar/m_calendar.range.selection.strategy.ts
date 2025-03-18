@@ -51,7 +51,7 @@ class CalendarRangeSelectionStrategy extends CalendarSelectionStrategy {
     }
   }
 
-  updateAriaSelected(value, previousValue) {
+  updateAriaSelected(value?, previousValue?) {
     value ??= this._getValue();
     previousValue ??= [];
 

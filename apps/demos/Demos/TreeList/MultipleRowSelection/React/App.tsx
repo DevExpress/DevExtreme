@@ -1,9 +1,9 @@
 import React, { useCallback, useState } from 'react';
 import {
-  TreeList, Selection, Column, TreeListTypes,
+  TreeList, Selection, Column, type TreeListTypes,
 } from 'devextreme-react/tree-list';
-import { CheckBox, CheckBoxTypes } from 'devextreme-react/check-box';
-import { SelectBox, SelectBoxTypes } from 'devextreme-react/select-box';
+import { CheckBox, type CheckBoxTypes } from 'devextreme-react/check-box';
+import { SelectBox, type SelectBoxTypes } from 'devextreme-react/select-box';
 import { employees, selectionModeLabel } from './data.ts';
 
 const expandedRowKeys = [1, 2, 10];

@@ -17,7 +17,7 @@
 <script setup lang="ts">
 import {
   DxPivotGrid,
-  DxPivotGridTypes,
+  type DxPivotGridTypes,
   DxScrolling,
 } from 'devextreme-vue/pivot-grid';
 import { createStore } from 'devextreme-aspnet-data-nojquery';

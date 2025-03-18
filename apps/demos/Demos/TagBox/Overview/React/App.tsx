@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react';
 
-import TagBox, { TagBoxTypes } from 'devextreme-react/tag-box';
+import TagBox, { type TagBoxTypes } from 'devextreme-react/tag-box';
 import Popover from 'devextreme-react/popover';
 import ArrayStore from 'devextreme/data/array_store';
 

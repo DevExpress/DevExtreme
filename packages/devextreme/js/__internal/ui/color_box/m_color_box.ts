@@ -1,9 +1,14 @@
 import Color from '@js/color';
 import registerComponent from '@js/core/component_registrator';
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
-import { extend } from '@js/core/utils/extend';
+import type { Properties } from '@js/ui/color_box';
+import type { OptionChanged } from '@ts/core/widget/types';
 import DropDownEditor from '@ts/ui/drop_down_editor/m_drop_down_editor';
 
+import type { PopupProperties } from '../popup/m_popup';
+import type Popup from '../popup/m_popup';
+import type { ColorViewProperties } from './m_color_view';
 import ColorView from './m_color_view';
 
 const COLOR_BOX_CLASS = 'dx-colorbox';
@@ -25,10 +30,27 @@ const colorUtils = {
   makeRgba: colorEditorPrototype._makeRgba.bind(colorEditorPrototype),
 };
 
-const ColorBox = (DropDownEditor as any).inherit({
+export interface ColorBoxProperties extends Omit<Properties,
+'onClosed' | 'onOpened' |
+'onCopy' | 'onCut' | 'onEnterKey' | 'onFocusIn' | 'onFocusOut' | 'onInput' | 'onKeyDown' | 'onKeyUp' | 'onPaste'
+| 'onValueChanged' | 'validationMessagePosition' | 'onContentReady' | 'onDisposing' | 'onOptionChanged' | 'onInitialized'> {
+}
 
-  _supportedKeys() {
-    // @ts-expect-error
+class ColorBox extends DropDownEditor<ColorBoxProperties> {
+  _popup!: Popup;
+
+  _colorView!: ColorView;
+
+  _colorViewEnterKeyPressed?: boolean;
+
+  _shouldSaveEmptyValue?: boolean;
+
+  _$colorResultPreview!: dxElementWrapper;
+
+  _$colorBoxInputContainer!: dxElementWrapper;
+
+  _supportedKeys(): Record<string, (e: KeyboardEvent) => boolean | undefined> {
+    // @ts-expect-error ts-error
     const arrowHandler = function (e) {
       e.stopPropagation();
       if (this.option('opened')) {
@@ -61,48 +83,50 @@ const ColorBox = (DropDownEditor as any).inherit({
       return true;
     };
 
-    return extend(this.callBase(), {
+    return {
+      ...super._supportedKeys(),
       enter: this._enterKeyHandler,
       leftArrow: arrowHandler,
       rightArrow: arrowHandler,
       upArrow: upArrowHandler,
       downArrow: downArrowHandler,
-    });
-  },
+    };
+  }
 
-  _getDefaultOptions() {
-    return extend(this.callBase(), {
+  _getDefaultOptions(): ColorBoxProperties {
+    return {
+      ...super._getDefaultOptions(),
       editAlphaChannel: false,
-
       applyValueMode: 'useButtons',
-
       keyStep: 1,
-
+      // @ts-expect-error ts-error
       fieldTemplate: null,
-
       buttonsLocation: 'bottom after',
-    });
-  },
+    };
+  }
 
-  _popupHidingHandler() {
-    this.callBase();
-    if (this.option('applyValueMode') === 'useButtons') {
+  _popupHidingHandler(): void {
+    super._popupHidingHandler();
+    const { applyValueMode } = this.option();
+
+    if (applyValueMode === 'useButtons') {
       this._updateColorViewValue(this.option('value'));
     }
-  },
+  }
 
-  _popupConfig() {
-    return extend(this.callBase(), {
+  _popupConfig(): PopupProperties {
+    return {
+      ...super._popupConfig(),
       width: '',
-    });
-  },
+    };
+  }
 
-  _contentReadyHandler() {
+  _contentReadyHandler(): void {
     this._createColorView();
     this._addPopupBottomClasses();
-  },
+  }
 
-  _addPopupBottomClasses() {
+  _addPopupBottomClasses(): void {
     const $popupBottom = this._popup.bottomToolbar();
     if ($popupBottom) {
       $popupBottom
@@ -119,17 +143,17 @@ const ColorBox = (DropDownEditor as any).inherit({
         .find('.dx-popup-cancel')
         .addClass(COLOR_BOX_CANCEL_BUTTON_CLASS);
     }
-  },
+  }
 
-  _createColorView() {
+  _createColorView(): void {
     this._popup.$overlayContent().addClass(COLOR_BOX_OVERLAY_CLASS);
 
     const $colorView = $('<div>').appendTo(this._popup.$content());
 
     this._colorView = this._createComponent($colorView, ColorView, this._colorViewConfig());
-  },
+  }
 
-  _applyNewColor(value) {
+  _applyNewColor(value): void {
     this.option('value', value);
 
     if (value) {
@@ -140,18 +164,26 @@ const ColorBox = (DropDownEditor as any).inherit({
       this.close();
       this._colorViewEnterKeyPressed = false;
     }
-  },
+  }
 
-  _colorViewConfig() {
+  _colorViewConfig(): ColorViewProperties {
+    const {
+      editAlphaChannel,
+      value,
+      applyValueMode,
+      focusStateEnabled,
+      stylingMode,
+    } = this.option();
+
     const that = this;
 
     return {
-      value: that.option('value'),
-      matchValue: that.option('value'),
-      editAlphaChannel: that.option('editAlphaChannel'),
-      applyValueMode: that.option('applyValueMode'),
-      focusStateEnabled: that.option('focusStateEnabled'),
-      stylingMode: this.option('stylingMode'),
+      value,
+      matchValue: value,
+      editAlphaChannel,
+      applyValueMode,
+      focusStateEnabled,
+      stylingMode,
       target: this._input(),
       onEnterKeyPressed({ event }) {
         that._colorViewEnterKeyPressed = true;
@@ -163,6 +195,7 @@ const ColorBox = (DropDownEditor as any).inherit({
       },
 
       onValueChanged({ event, value, previousValue }) {
+        // @ts-expect-error ts-error
         const instantlyMode = that.option('applyValueMode') === 'instantly';
         const isOldValue = colorUtils.makeRgba(value) === previousValue;
         const changesApplied = instantlyMode || that._colorViewEnterKeyPressed;
@@ -173,12 +206,13 @@ const ColorBox = (DropDownEditor as any).inherit({
         }
 
         if (event) {
+          // @ts-expect-error ts-error
           that._saveValueChangeEvent(event);
         }
         that._applyNewColor(value);
       },
     };
-  },
+  }
 
   _enterKeyHandler(e) {
     const newValue = this._input().val();
@@ -193,7 +227,7 @@ const ColorBox = (DropDownEditor as any).inherit({
       this._input().val(oldValue);
       return;
     }
-
+    // @ts-expect-error ts-error
     if (newValue !== oldValue) {
       this._applyColorFromInput(newValue);
       this._saveValueChangeEvent(e);
@@ -202,6 +236,7 @@ const ColorBox = (DropDownEditor as any).inherit({
 
     if (this._colorView) {
       const colorViewValue = this._colorView.option('value');
+
       if (value !== colorViewValue) {
         this._saveValueChangeEvent(e);
         this.option('value', colorViewValue);
@@ -210,42 +245,42 @@ const ColorBox = (DropDownEditor as any).inherit({
 
     this.close();
     return false;
-  },
+  }
 
-  _applyButtonHandler(e) {
+  _applyButtonHandler(e): void {
     this._saveValueChangeEvent(e.event);
     this._applyNewColor(this._colorView.option('value'));
 
-    this.callBase();
-  },
+    super._applyButtonHandler();
+  }
 
-  _cancelButtonHandler() {
+  _cancelButtonHandler(): void {
     this._resetInputValue();
 
-    this.callBase();
-  },
+    super._cancelButtonHandler();
+  }
 
   _getKeyboardListeners() {
-    return this.callBase().concat([this._colorView]);
-  },
+    return super._getKeyboardListeners().concat([this._colorView]);
+  }
 
-  _init() {
-    this.callBase();
-  },
+  _init(): void {
+    super._init();
+  }
 
-  _initMarkup() {
+  _initMarkup(): void {
     this.$element().addClass(COLOR_BOX_CLASS);
-    this.callBase();
-  },
+    super._initMarkup();
+  }
 
-  _renderInput() {
-    this.callBase();
+  _renderInput(): void {
+    super._renderInput();
 
     this._input().addClass(COLOR_BOX_INPUT_CLASS);
     this._renderColorPreview();
-  },
+  }
 
-  _renderColorPreview() {
+  _renderColorPreview(): void {
     this.$element().wrapInner($('<div>').addClass(COLOR_BOX_INPUT_CONTAINER_CLASS));
     this._$colorBoxInputContainer = this.$element().children().eq(0);
 
@@ -258,7 +293,7 @@ const ColorBox = (DropDownEditor as any).inherit({
     } else {
       colorUtils.makeTransparentBackground(this._$colorResultPreview, this.option('value'));
     }
-  },
+  }
 
   _renderValue() {
     const { value, editAlphaChannel } = this.option();
@@ -267,27 +302,27 @@ const ColorBox = (DropDownEditor as any).inherit({
 
     this.option('text', text);
 
-    return this.callBase();
-  },
+    return super._renderValue();
+  }
 
-  _resetInputValue() {
+  _resetInputValue(): void {
     const $input = this._input();
     const value = this.option('value');
-
+    // @ts-expect-error ts-error
     $input.val(value);
     this._updateColorViewValue(value);
-  },
+  }
 
-  _updateColorViewValue(value) {
+  _updateColorViewValue(value): void {
     if (this._colorView) {
       this._colorView.option({
         value,
         matchValue: value,
       });
     }
-  },
+  }
 
-  _valueChangeEventHandler(e) {
+  _valueChangeEventHandler(e): void {
     let value = this._input().val();
 
     if (value) {
@@ -295,8 +330,8 @@ const ColorBox = (DropDownEditor as any).inherit({
 
       this._updateColorViewValue(value);
     }
-    this.callBase(e, value);
-  },
+    super._valueChangeEventHandler(e, value);
+  }
 
   _applyColorFromInput(value) {
     const { editAlphaChannel } = this.option();
@@ -312,14 +347,14 @@ const ColorBox = (DropDownEditor as any).inherit({
     }
 
     return value;
-  },
+  }
 
-  _clean() {
-    this.callBase();
+  _clean(): void {
+    super._clean();
     delete this._shouldSaveEmptyValue;
-  },
+  }
 
-  _optionChanged(args) {
+  _optionChanged(args: OptionChanged<ColorBoxProperties>): void {
     const { name, value } = args;
 
     switch (name) {
@@ -338,11 +373,11 @@ const ColorBox = (DropDownEditor as any).inherit({
         this._updateColorViewValue(value);
         this._shouldSaveEmptyValue = false;
 
-        this.callBase(args);
+        super._optionChanged(args);
         break;
       case 'applyButtonText':
       case 'cancelButtonText':
-        this.callBase(args);
+        super._optionChanged(args);
         this._popup && this._addPopupBottomClasses();
         break;
       case 'editAlphaChannel':
@@ -352,10 +387,10 @@ const ColorBox = (DropDownEditor as any).inherit({
         }
         break;
       default:
-        this.callBase(args);
+        super._optionChanged(args);
     }
-  },
-});
+  }
+}
 
 registerComponent('dxColorBox', ColorBox);
 

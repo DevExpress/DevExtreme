@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { createReRenderEffect, InfernoEffect, InfernoWrapperComponent } from '@devextreme/runtime/inferno';
 import Guid from '@js/core/guid';
 import { convertRulesToOptions } from '@js/core/options/utils';
+import { createReRenderEffect, InfernoEffect, InfernoWrapperComponent } from '@ts/core/r1/runtime/inferno/index';
 import type { WidgetProps } from '@ts/core/r1/widget';
 import { Widget, WidgetDefaultProps } from '@ts/core/r1/widget';
 import { combineClasses } from '@ts/core/utils/combine_classes';

@@ -65,7 +65,6 @@ export class NewDataController implements DataController {
     this.isLoading = isLoading;
 
     const items = state(this.oldDataController.items());
-    // @ts-expect-error
     this.items = items;
 
     this.oldDataController.loadingChanged.add(() => {

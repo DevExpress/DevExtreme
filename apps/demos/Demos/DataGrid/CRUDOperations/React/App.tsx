@@ -2,10 +2,10 @@
 /* global RequestInit */
 import React, { useCallback, useState } from 'react';
 import {
-  DataGrid, Column, Editing, Scrolling, Lookup, Summary, TotalItem, DataGridTypes,
+  DataGrid, Column, Editing, Scrolling, Lookup, Summary, TotalItem, type DataGridTypes,
 } from 'devextreme-react/data-grid';
 import { Button } from 'devextreme-react/button';
-import { SelectBox, SelectBoxTypes } from 'devextreme-react/select-box';
+import { SelectBox, type SelectBoxTypes } from 'devextreme-react/select-box';
 
 import CustomStore from 'devextreme/data/custom_store';
 import { formatDate } from 'devextreme/localization';

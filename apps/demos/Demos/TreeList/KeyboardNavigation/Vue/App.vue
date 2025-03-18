@@ -39,12 +39,12 @@ import {
   DxScrolling,
   DxPager,
   DxPaging,
-  DxTreeListTypes,
+  type DxTreeListTypes,
 } from 'devextreme-vue/tree-list';
 import { employees } from './data.ts';
 
 const dataSource = employees;
-const columns: DxTreeListTypes.Column[] = [
+const columns: (DxTreeListTypes.Column | string)[] = [
   'Full_Name',
   {
     dataField: 'Title',

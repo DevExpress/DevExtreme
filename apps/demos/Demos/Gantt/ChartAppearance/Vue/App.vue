@@ -140,7 +140,9 @@ import {
   DxResourceAssignments,
   DxColumn,
   DxEditing,
+  type DxGanttTypes,
 } from 'devextreme-vue/gantt';
+import { type GanttScaleType} from 'devextreme/ui/gantt';
 import DxCheckBox from 'devextreme-vue/check-box';
 import DxSelectBox from 'devextreme-vue/select-box';
 import DxDateBox from 'devextreme-vue/date-box';
@@ -151,7 +153,7 @@ import {
   resourceAssignments,
 } from './data.ts';
 
-const scaleType = ref('months');
+const scaleType = ref<GanttScaleType>('months');
 const taskTitlePosition = ref('outside');
 const showResources = ref(true);
 const showDependencies = ref(true);

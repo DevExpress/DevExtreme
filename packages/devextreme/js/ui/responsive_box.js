@@ -2,8 +2,6 @@ import ResponsiveBox from '../__internal/ui/m_responsive_box';
 
 export default ResponsiveBox;
 
-// STYLE responsiveBox
-
 /**
  * @name dxResponsiveBoxOptions.activeStateEnabled
  * @hidden

@@ -56,7 +56,7 @@ const decorateTestCafeAfter = (
 const safeSizeTest = (
   name: string,
   testFunction: TestCafeFn,
-  size: BrowserSizeType = DEFAULT_BROWSER_SIZE,
+  size: BrowserSizeType = DEFAULT_BROWSER_SIZE as BrowserSizeType,
 ): TestFn => {
   const testCafeTest = test(name, testFunction);
 

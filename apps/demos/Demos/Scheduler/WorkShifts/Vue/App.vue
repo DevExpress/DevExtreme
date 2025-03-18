@@ -29,7 +29,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import DxScheduler from 'devextreme-vue/scheduler';
-import DxRadioGroup, { DxRadioGroupTypes } from 'devextreme-vue/radio-group';
+import DxRadioGroup, { type DxRadioGroupTypes } from 'devextreme-vue/radio-group';
 import { appointments, shifts } from './data.ts';
 
 const views = ['day', 'workWeek'];

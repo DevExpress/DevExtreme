@@ -57,7 +57,7 @@ import {
   DxColumn,
   DxSelection,
   DxSummary,
-  DxTotalItem, DxDataGridTypes,
+  DxTotalItem, type DxDataGridTypes,
   DxPager,
 } from 'devextreme-vue/data-grid';
 import { formatDate } from 'devextreme/localization';

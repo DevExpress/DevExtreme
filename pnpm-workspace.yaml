@@ -5,8 +5,12 @@ packages:
   - 'packages/devextreme/artifacts/npm/devextreme-dist'
 
 catalog:
+  inferno: ^8.2.3
+  inferno-hydrate: ^8.2.3
+  inferno-create-element: ^8.2.3
+  inferno-server: ^8.2.3
   devexpress-diagram: 2.2.15
-  devexpress-gantt: 4.1.59
+  devexpress-gantt: 4.1.60
   eslint: 9.18.0
   eslint-config-airbnb-typescript: 18.0.0
   eslint-plugin-i18n: 2.4.0

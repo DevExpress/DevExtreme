@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from 'react';
-import FileUploader, { FileUploaderTypes } from 'devextreme-react/file-uploader';
-import SelectBox, { SelectBoxTypes } from 'devextreme-react/select-box';
-import CheckBox, { CheckBoxTypes } from 'devextreme-react/check-box';
+import FileUploader, { type FileUploaderTypes } from 'devextreme-react/file-uploader';
+import SelectBox, { type SelectBoxTypes } from 'devextreme-react/select-box';
+import CheckBox, { type CheckBoxTypes } from 'devextreme-react/check-box';
 
 const uploadModes = ['instantly', 'useButtons'];
 const fileTypeLabel = { 'aria-label': 'File Type' };

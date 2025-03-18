@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/ban-types */
 import type { defaultOptions, Options } from '../options';
 import { OptionsController as OptionsControllerBase } from './options_controller_base';
 

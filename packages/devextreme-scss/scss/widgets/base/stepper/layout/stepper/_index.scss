@@ -1,11 +1,12 @@
 .dx-stepper {
   display: flex;
-  justify-content: space-between;
+  position: relative;
 }
 
-.dx-stepper-item {
-  width: 32px;
-  height: 32px;
-  border: 1px solid #D6D6D6;
-  border-radius: 999em;
+.dx-stepper-vertical {
+  align-items: center;
+}
+
+.dx-stepper-horizontal {
+  justify-content: center;
 }

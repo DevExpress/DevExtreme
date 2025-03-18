@@ -377,6 +377,12 @@ declare global {
     dxSplitter(options: string): any;
     dxSplitter(options: string, ...params: any[]): any;
 
+    dxStepper(): JQuery;
+    dxStepper(options: 'instance'): DevExpress.ui.dxStepper;
+    dxStepper(options: DevExpress.ui.dxStepper.Properties): JQuery;
+    dxStepper(options: string): any;
+    dxStepper(options: string, ...params: any[]): any;
+
     dxSortable(): JQuery;
     dxSortable(options: 'instance'): DevExpress.ui.dxSortable;
     dxSortable(options: DevExpress.ui.dxSortable.Properties): JQuery;
@@ -9747,8 +9753,54 @@ declare module DevExpress.ui {
   /**
    * [descr:dxCardView]
    */
-  export class dxCardView extends Widget<DevExpress.ui.dxCardView.Properties> {}
+  export class dxCardView<
+    TRowData = unknown,
+    TKey = unknown
+  > extends Widget<DevExpress.ui.dxCardView.Properties> {}
   module dxCardView {
+    /**
+     * [descr:HeaderPanel]
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+     */
+    type HeaderPanel<TRowData = unknown, TKey = unknown> = {
+      /**
+       * [descr:HeaderPanel.visible]
+       */
+      visible?: boolean;
+      /**
+       * [descr:HeaderPanel.itemTemplate]
+       */
+      itemTemplate?:
+        | template
+        | ((e: {
+            column: Column<TRowData, TKey>;
+          }) => string | DevExpress.core.UserDefinedElement);
+      /**
+       * [descr:HeaderPanel.itemCssClass]
+       */
+      itemCssClass?: string;
+    };
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+     */
+    type InheritedColumnProps =
+      | 'alignment'
+      | 'dataType'
+      | 'visible'
+      | 'visibleIndex'
+      | 'allowReordering'
+      | 'allowHiding'
+      | 'trueText'
+      | 'falseText'
+      | 'caption'
+      | 'dataField'
+      | 'sortOrder'
+      | 'sortIndex'
+      | 'name'
+      | 'calculateCellValue'
+      | 'calculateDisplayValue'
+      | 'customizeText';
+
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
      */
@@ -9756,46 +9808,36 @@ declare module DevExpress.ui {
       | 'columnChooserButton'
       | 'searchPanel'
       | 'addCardButton';
-    export type Properties = dxCardViewOptions;
-    /**
-     * [descr:ToolbarItem]
-     */
-    export type ToolbarItem = dxToolbarItem & {
-      /**
-       * [descr:ToolbarItem.name]
-       */
-      name?: PredefinedToolbarItem | string;
-      /**
-       * [descr:ToolbarItem.location]
-       */
-      location?: DevExpress.common.ToolbarItemLocation;
-    };
+    export type Properties<
+      TRowData = unknown,
+      TKey = unknown
+    > = dxCardViewOptions<TRowData, TKey>;
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
      */
-    export type ToolbarOptions = {
-      /**
-       * [descr:ToolbarOptions.toolbar]
-       */
-      toolbar?: {
-        /**
-         * [descr:ToolbarOptions.toolbar.items]
-         */
-        items?: Array<PredefinedToolbarItem | ToolbarItem>;
-        visible?: boolean | undefined;
-        disabled?: boolean;
-      };
-    };
+    type RequiredColumnProps =
+      | 'alignment'
+      | 'dataType'
+      | 'visible'
+      | 'visibleIndex'
+      | 'allowReordering'
+      | 'allowHiding'
+      | 'trueText'
+      | 'falseText'
+      | 'caption';
   }
 
   /**
    * [descr:dxCardViewOptions]
    * @deprecated [depNote:dxCardViewOptions]
    */
-  export interface dxCardViewOptions
+  export interface dxCardViewOptions<TRowData = unknown, TKey = unknown>
     extends WidgetOptions<dxCardView>,
-      DevExpress.ui.dxCardView.DataControllerOptions,
+      DevExpress.ui.dxCardView.DataControllerOptions<TRowData, TKey>,
       DevExpress.ui.dxCardView.PagerOptions,
+      DevExpress.ui.dxCardView.ColumnsControllerOptions<TRowData, TKey>,
+      DevExpress.ui.dxCardView.HeaderPanelOptions<TRowData, TKey>,
+      DevExpress.ui.dxCardView.ContentViewOptions<TRowData>,
       DevExpress.ui.dxCardView.ToolbarOptions {}
   /**
    * [descr:dxChat]
@@ -26589,6 +26631,151 @@ declare module DevExpress.ui {
     onItemCollapsed?: (e: DevExpress.ui.dxSplitter.ItemCollapsedEvent) => void;
   }
   /**
+   * [descr:dxStepper]
+   */
+  export class dxStepper<
+    TItem extends DevExpress.ui.dxStepper.ItemLike<TKey> = any,
+    TKey = any
+  > extends CollectionWidget<
+    DevExpress.ui.dxStepper.Properties<TItem, TKey>,
+    TItem,
+    TKey
+  > {}
+  module dxStepper {
+    /**
+     * [descr:_ui_stepper_DisposingEvent]
+     */
+    export type DisposingEvent<
+      TItem extends ItemLike<TKey> = any,
+      TKey = any
+    > = DevExpress.common.core.events.EventInfo<dxStepper<TItem, TKey>>;
+    export type ExplicitTypes<TItem extends ItemLike<TKey>, TKey> = {
+      Properties: Properties<TItem, TKey>;
+      DisposingEvent: DisposingEvent<TItem, TKey>;
+      InitializedEvent: InitializedEvent<TItem, TKey>;
+      ItemClickEvent: ItemClickEvent<TItem, TKey>;
+      ItemContextMenuEvent: ItemContextMenuEvent<TItem, TKey>;
+      ItemRenderedEvent: ItemRenderedEvent<TItem, TKey>;
+      OptionChangedEvent: OptionChangedEvent<TItem, TKey>;
+      SelectionChangedEvent: SelectionChangedEvent<TItem, TKey>;
+      SelectionChangingEvent: SelectionChangingEvent<TItem, TKey>;
+    };
+    /**
+     * [descr:_ui_stepper_InitializedEvent]
+     */
+    export type InitializedEvent<
+      TItem extends ItemLike<TKey> = any,
+      TKey = any
+    > = DevExpress.common.core.events.InitializedEventInfo<
+      dxStepper<TItem, TKey>
+    >;
+    /**
+     * [descr:_ui_stepper_ItemClickEvent]
+     */
+    export type ItemClickEvent<
+      TItem extends ItemLike<TKey> = any,
+      TKey = any
+    > = DevExpress.common.core.events.NativeEventInfo<
+      dxStepper<TItem, TKey>,
+      MouseEvent | PointerEvent
+    > &
+      DevExpress.common.core.events.ItemInfo<TItem>;
+    /**
+     * [descr:_ui_stepper_ItemContextMenuEvent]
+     */
+    export type ItemContextMenuEvent<
+      TItem extends ItemLike<TKey> = any,
+      TKey = any
+    > = DevExpress.common.core.events.NativeEventInfo<
+      dxStepper<TItem, TKey>,
+      MouseEvent | PointerEvent | TouchEvent
+    > &
+      DevExpress.common.core.events.ItemInfo<TItem>;
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+     */
+    type ItemLike<TKey> = string | Item<TKey> | any;
+    /**
+     * [descr:_ui_stepper_ItemRenderedEvent]
+     */
+    export type ItemRenderedEvent<
+      TItem extends ItemLike<TKey> = any,
+      TKey = any
+    > = DevExpress.common.core.events.EventInfo<dxStepper<TItem, TKey>> &
+      DevExpress.common.core.events.ItemInfo<TItem>;
+    /**
+     * [descr:_ui_stepper_OptionChangedEvent]
+     */
+    export type OptionChangedEvent<
+      TItem extends ItemLike<TKey> = any,
+      TKey = any
+    > = DevExpress.common.core.events.EventInfo<dxStepper<TItem, TKey>> &
+      DevExpress.common.core.events.ChangedOptionInfo;
+    export type Properties<
+      TItem extends ItemLike<TKey> = any,
+      TKey = any
+    > = dxStepperOptions<TItem, TKey>;
+    /**
+     * [descr:_ui_stepper_SelectionChangedEvent]
+     */
+    export type SelectionChangedEvent<
+      TItem extends ItemLike<TKey> = any,
+      TKey = any
+    > = DevExpress.common.core.events.EventInfo<dxStepper<TItem, TKey>> &
+      DevExpress.ui.CollectionWidget.SelectionChangeInfo<TItem>;
+    /**
+     * [descr:_ui_stepper_SelectionChangingEvent]
+     */
+    export type SelectionChangingEvent<
+      TItem extends ItemLike<TKey> = any,
+      TKey = any
+    > = DevExpress.ui.CollectionWidget.SelectionChangingEventBase<
+      dxStepper<TItem, TKey>
+    >;
+  }
+  /**
+   * @deprecated Use Item instead
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  export interface dxStepperItem<TKey = any> extends CollectionWidgetItem {}
+  /**
+   * [descr:dxStepperOptions]
+   * @deprecated [depNote:dxStepperOptions]
+   */
+  export interface dxStepperOptions<
+    TItem extends DevExpress.ui.dxStepper.ItemLike<TKey> = any,
+    TKey = any
+  > extends CollectionWidgetOptions<dxStepper<TItem, TKey>, TItem, TKey> {
+    /**
+     * [descr:dxStepperOptions.activeStateEnabled]
+     */
+    activeStateEnabled?: boolean;
+    /**
+     * [descr:dxStepperOptions.focusStateEnabled]
+     */
+    focusStateEnabled?: boolean;
+    /**
+     * [descr:dxStepperOptions.hoverStateEnabled]
+     */
+    hoverStateEnabled?: boolean;
+    /**
+     * [descr:dxStepperOptions.selectOnFocus]
+     */
+    selectOnFocus?: boolean;
+    /**
+     * [descr:dxStepperOptions.dataSource]
+     */
+    dataSource?: DevExpress.data.DataSourceLike<TItem, TKey> | null;
+    /**
+     * [descr:dxStepperOptions.orientation]
+     */
+    orientation?: DevExpress.common.Orientation;
+    /**
+     * [descr:dxStepperOptions.items]
+     */
+    items?: Array<TItem>;
+  }
+  /**
    * [descr:dxSwitch]
    */
   export class dxSwitch extends Editor<dxSwitchOptions> {
@@ -31378,14 +31565,190 @@ declare module DevExpress.ui.dxButtonGroup {
 }
 declare module DevExpress.ui.dxCardView {
   /**
+   * [descr:BaseContentViewOptions]
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  export interface BaseContentViewOptions {
+    /**
+     * [descr:BaseContentViewOptions.scrolling]
+     */
+    scrolling?: Pick<
+      DevExpress.common.grids.ScrollingBase,
+      'scrollByContent' | 'scrollByThumb' | 'showScrollbar' | 'useNative'
+    >;
+    /**
+     * [descr:BaseContentViewOptions.errorRowEnabled]
+     */
+    errorRowEnabled?: boolean;
+    /**
+     * [descr:BaseContentViewOptions.loadPanel]
+     */
+    loadPanel?: dxLoadPanelOptions;
+    /**
+     * [descr:BaseContentViewOptions.noDataText]
+     */
+    noDataText?: string;
+    /**
+     * [descr:BaseContentViewOptions.noDataTemplate]
+     */
+    noDataTemplate?:
+      | template
+      | ((e: { text: string }) => string | DevExpress.core.UserDefinedElement);
+  }
+  /**
+   * [descr:CardCover]
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  interface CardCover<TRowData = unknown> {
+    /**
+     * [descr:CardCover.imageExpr]
+     */
+    imageExpr: string | ((data: TRowData) => string);
+    /**
+     * [descr:CardCover.altExpr]
+     */
+    altExpr: string | ((data: TRowData) => string);
+  }
+  /**
+   * [descr:CardHeader]
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  interface CardHeader<TRowData = unknown> {
+    /**
+     * [descr:CardHeader.captionExpr]
+     */
+    captionExpr?: string | ((data: TRowData) => string);
+    /**
+     * [descr:CardHeader.visible]
+     */
+    visible?: boolean;
+  }
+
+  /**
+   * [descr:Cell]
+   */
+  export interface Cell {
+    /**
+     * [descr:Cell.value]
+     */
+    value: unknown;
+    /**
+     * [descr:Cell.displayValue]
+     */
+    displayValue: unknown;
+    /**
+     * [descr:Cell.text]
+     */
+    text: string;
+    /**
+     * [descr:Cell.column]
+     */
+    column: Column;
+  }
+  /**
+   * [descr:Column]
+   */
+  export type Column<TRowData = unknown, TKey = unknown> = Pick<
+    Required<ColumnProperties<TRowData, TKey>>,
+    RequiredColumnProps
+  > &
+    Omit<ColumnProperties, RequiredColumnProps>;
+  /**
+   * [descr:ColumnProperties]
+   */
+  export type ColumnProperties<TRowData = unknown, TKey = unknown> = Pick<
+    DevExpress.common.grids.ColumnBase<TRowData>,
+    InheritedColumnProps
+  > & {
+    /**
+     * [descr:ColumnProperties.fieldTemplate]
+     */
+    fieldTemplate?:
+      | template
+      | ((
+          dataRow: DataRow<TRowData, TKey>
+        ) => string | DevExpress.core.UserDefinedElement);
+    /**
+     * [descr:ColumnProperties.fieldCaptionTemplate]
+     */
+    fieldCaptionTemplate?:
+      | template
+      | ((
+          dataRow: DataRow<TRowData, TKey>
+        ) => string | DevExpress.core.UserDefinedElement);
+    /**
+     * [descr:ColumnProperties.fieldValueTemplate]
+     */
+    fieldValueTemplate?:
+      | template
+      | ((
+          dataRow: DataRow<TRowData, TKey>
+        ) => string | DevExpress.core.UserDefinedElement);
+    /**
+     * [descr:ColumnProperties.headerItemTemplate]
+     */
+    headerItemTemplate?:
+      | template
+      | ((
+          column: Column<TRowData, TKey>
+        ) => string | DevExpress.core.UserDefinedElement);
+    /**
+     * [descr:ColumnProperties.headerItemCssClass]
+     */
+    headerItemCssClass?: string;
+  };
+  /**
+   * [descr:ColumnsControllerOptions]
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  export type ColumnsControllerOptions<TRowData = unknown, TKey = unknown> = {
+    /**
+     * [descr:ColumnsControllerOptions.columns]
+     */
+    columns?: (ColumnProperties<TRowData, TKey> | string)[];
+  };
+  /**
+   * [descr:ContentViewOptions]
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  export interface ContentViewOptions<TRowData = unknown>
+    extends BaseContentViewOptions {
+    /**
+     * [descr:ContentViewOptions.cardsPerRow]
+     */
+    cardsPerRow?: number | 'auto';
+    /**
+     * [descr:ContentViewOptions.cardMinWidth]
+     */
+    cardMinWidth?: number;
+    /**
+     * [descr:ContentViewOptions.cardMaxWidth]
+     */
+    cardMaxWidth?: number;
+    /**
+     * [descr:ContentViewOptions.cardCover]
+     */
+    cardCover?: CardCover<TRowData>;
+    /**
+     * [descr:ContentViewOptions.cardTemplate]
+     */
+    cardTemplate?:
+      | template
+      | ((row: DataRow) => string | DevExpress.core.UserDefinedElement);
+    /**
+     * [descr:ContentViewOptions.cardHeader]
+     */
+    cardHeader?: CardHeader<TRowData>;
+  }
+  /**
    * [descr:DataControllerOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export type DataControllerOptions = {
+  export type DataControllerOptions<TRowData = unknown, TKey = unknown> = {
     /**
      * [descr:DataControllerOptions.dataSource]
      */
-    dataSource?: DevExpress.data.DataSourceLike<any, any>;
+    dataSource?: DevExpress.data.DataSourceLike<TRowData, TKey>;
     /**
      * [descr:DataControllerOptions.paging]
      */
@@ -31405,6 +31768,33 @@ declare module DevExpress.ui.dxCardView {
      * [descr:DataControllerOptions.remoteOperations]
      */
     remoteOperations?: RemoteOperations | boolean | 'auto';
+  };
+  /**
+   * [descr:DataRow]
+   */
+  export interface DataRow<TRowData = unknown, TKey = unknown> {
+    /**
+     * [descr:DataRow.cells]
+     */
+    cells: Cell[];
+    /**
+     * [descr:DataRow.key]
+     */
+    key: TKey;
+    /**
+     * [descr:DataRow.data]
+     */
+    data: TRowData;
+  }
+  /**
+   * [descr:HeaderPanelOptions]
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  export type HeaderPanelOptions<TRowData = unknown, TKey = unknown> = {
+    /**
+     * [descr:HeaderPanelOptions.headerPanel]
+     */
+    headerPanel?: HeaderPanel<TRowData, TKey>;
   };
 
   /**
@@ -31458,6 +31848,36 @@ declare module DevExpress.ui.dxCardView {
      */
     summary?: boolean;
   }
+  /**
+   * [descr:ToolbarItem]
+   */
+  export type ToolbarItem = dxToolbarItem & {
+    /**
+     * [descr:ToolbarItem.name]
+     */
+    name?: PredefinedToolbarItem | string;
+    /**
+     * [descr:ToolbarItem.location]
+     */
+    location?: DevExpress.common.ToolbarItemLocation;
+  };
+  /**
+   * [descr:ToolbarOptions]
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  export type ToolbarOptions = {
+    /**
+     * [descr:ToolbarOptions.toolbar]
+     */
+    toolbar?: {
+      /**
+       * [descr:ToolbarOptions.toolbar.items]
+       */
+      items?: Array<PredefinedToolbarItem | ToolbarItem>;
+      visible?: boolean | undefined;
+      disabled?: boolean;
+    };
+  };
 }
 declare module DevExpress.ui.dxChat {
   /**
@@ -31800,6 +32220,9 @@ declare module DevExpress.ui.dxResponsiveBox {
 }
 declare module DevExpress.ui.dxSplitter {
   export type Item<TKey = any> = dxSplitterItem<TKey>;
+}
+declare module DevExpress.ui.dxStepper {
+  export type Item<TKey = any> = dxStepperItem<TKey>;
 }
 declare module DevExpress.ui.dxTabPanel {
   export type Item = dxTabPanelItem;

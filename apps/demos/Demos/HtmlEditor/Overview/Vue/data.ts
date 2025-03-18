@@ -1,4 +1,9 @@
-export const tabs = [
+import { type DxHtmlEditorTypes } from 'devextreme-vue/html-editor';
+
+export const tabs: {
+  name: string,
+  value: DxHtmlEditorTypes.HtmlEditorImageUploadTab[]
+}[] = [
   { name: 'From This Device', value: ['file'] },
   { name: 'From the Web', value: ['url'] },
   { name: 'Both', value: ['file', 'url'] },
