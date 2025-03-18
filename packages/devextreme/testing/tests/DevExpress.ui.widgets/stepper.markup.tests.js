@@ -13,6 +13,10 @@ import {
     STEP_TITLE_CLASS,
 } from '__internal/ui/stepper/stepper';
 
+import {
+    STEP_INVALID_CLASS,
+} from '__internal/ui/stepper/stepper_item';
+
 const STEP_CONTENT_CLASS = 'dx-step-content';
 const ICON_CLASS = 'dx-icon';
 
@@ -198,5 +202,38 @@ QUnit.module('Render', moduleConfig, () => {
         });
 
         assert.strictEqual(this.getStepList().children().length, 5, 'steps are rendered in the list container');
+    });
+});
+
+QUnit.module('Step.isValid', moduleConfig, () => {
+    QUnit.test(`step should have the ${STEP_INVALID_CLASS} class in invalid state`, function(assert) {
+        this.reinit({
+            items: [{}, { isValid: true }, { isValid: false }, { isValid: undefined }]
+        });
+
+        assert.strictEqual(this.getItems().eq(0).hasClass(STEP_INVALID_CLASS), false, 'isValid is not declared');
+        assert.strictEqual(this.getItems().eq(1).hasClass(STEP_INVALID_CLASS), false, 'isValid has true value');
+        assert.strictEqual(this.getItems().eq(2).hasClass(STEP_INVALID_CLASS), true, 'isValid has false value');
+        assert.strictEqual(this.getItems().eq(3).hasClass(STEP_INVALID_CLASS), false, 'isValid has undefined value');
+    });
+
+    QUnit.test(`step should update the ${STEP_INVALID_CLASS} class after change isValid option at runtime`, function(assert) {
+        this.reinit({
+            items: [{ isValid: false }]
+        });
+
+        assert.strictEqual(this.getItems().eq(0).hasClass(STEP_INVALID_CLASS), true, `${STEP_INVALID_CLASS} is added`);
+
+        this.instance.option('items[0].isValid', true);
+
+        assert.strictEqual(this.getItems().eq(0).hasClass(STEP_INVALID_CLASS), false, `${STEP_INVALID_CLASS} is removed`);
+
+        this.instance.option('items[0].isValid', false);
+
+        assert.strictEqual(this.getItems().eq(0).hasClass(STEP_INVALID_CLASS), true, `${STEP_INVALID_CLASS} is added`);
+
+        this.instance.option('items[0].isValid', undefined);
+
+        assert.strictEqual(this.getItems().eq(0).hasClass(STEP_INVALID_CLASS), false, `${STEP_INVALID_CLASS} is removed`);
     });
 });
