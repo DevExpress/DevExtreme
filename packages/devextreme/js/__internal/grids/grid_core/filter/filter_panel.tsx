@@ -1,10 +1,16 @@
-import { Component } from 'inferno';
+import $ from '@js/core/renderer';
+import * as accessibility from '@js/ui/shared/accessibility';
+import { Component, createRef } from 'inferno';
 
 import { CheckBox } from '../../new/grid_core/inferno_wrappers/checkbox';
+import { ClearFilterButton } from './filter_panel_clear_filter_button';
 
 type AddWidgetPrefix = (className: string) => string;
 
 export interface Props {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  component: any;
+
   hasFilterValue: boolean;
 
   addWidgetPrefix: AddWidgetPrefix;
@@ -18,6 +24,8 @@ export interface Props {
   filterEnabledHint: string;
 
   clearFilterText: string;
+
+  createFilterText: string;
 
   filterEnabled: boolean;
 
@@ -33,6 +41,10 @@ const UNPREFIXED_CLASSES = {
   leftContainer: 'filter-panel-left',
 };
 
+const CLASSES = {
+  filterIcon: 'dx-icon-filter',
+};
+
 function getClasses(
   addWidgetPrefix: AddWidgetPrefix,
 ): typeof UNPREFIXED_CLASSES {
@@ -45,6 +57,20 @@ function getClasses(
 }
 
 export class FilterPanel extends Component<Props> {
+  private readonly filterIconRef = createRef<HTMLDivElement>();
+
+  private readonly filterTextRef = createRef<HTMLDivElement>();
+
+  protected readonly showFilterBuilder = (): void => this.props.showFilterBuilder();
+
+  private readonly onShowFilterKeyPressHandler = (event: KeyboardEvent): void => {
+    if (event.key !== 'Enter' && event.key !== ' ') {
+      return;
+    }
+
+    this.showFilterBuilder();
+  };
+
   public render(): JSX.Element {
     const classes = getClasses(this.props.addWidgetPrefix);
 
@@ -61,29 +87,52 @@ export class FilterPanel extends Component<Props> {
               onValueChanged={(e): void => { this.props.onFilterEnabledChange(e.value); }}
             />
           )}
-          <div
-            onClick={(): void => this.props.showFilterBuilder()}
+          <div ref={this.filterIconRef}
+            onClick={this.showFilterBuilder}
             tabIndex={this.props.tabIndex}
-            className="dx-icon-filter"
+            className={CLASSES.filterIcon}
+            aria-label={this.props.createFilterText}
+            role='button'
           />
-          <div
+          <div ref={this.filterTextRef}
             className={classes.text}
-            onClick={(): void => this.props.showFilterBuilder()}
+            onClick={this.showFilterBuilder}
             tabIndex={this.props.tabIndex}
+            role='button'
           >
             {this.props.text}
           </div>
         </div>
-        {this.props.hasFilterValue && (
-          <div
+        {this.props.hasFilterValue
+           && <ClearFilterButton
+            component={this.props.component}
             className={classes.clearFilter}
-            onClick={(): void => this.props.clearFilter()}
+            clearFilter={(): void => this.props.clearFilter()}
             tabIndex={this.props.tabIndex}
-          >
-            {this.props.clearFilterText}
-          </div>
-        )}
+            text={this.props.clearFilterText}
+          />
+        }
       </>
+    );
+  }
+
+  public componentDidMount(): void {
+    accessibility.registerKeyboardAction(
+      'filterPanel',
+      this.props.component,
+      $(this.filterIconRef.current as Element),
+      undefined,
+      this.showFilterBuilder,
+      this.onShowFilterKeyPressHandler,
+    );
+
+    accessibility.registerKeyboardAction(
+      'filterPanel',
+      this.props.component,
+      $(this.filterTextRef.current as Element),
+      undefined,
+      this.showFilterBuilder,
+      this.onShowFilterKeyPressHandler,
     );
   }
 }
