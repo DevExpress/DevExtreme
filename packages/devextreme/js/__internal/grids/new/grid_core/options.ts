@@ -13,6 +13,7 @@ import { filterPanel } from './filtering/index';
 import * as pager from './pager/index';
 import * as searchPanel from './search/index';
 import type { SearchProperties } from './search/types';
+import * as selection from './selection/index';
 import * as sortingController from './sorting_controller/index';
 import type * as toolbar from './toolbar/index';
 import type { GridCoreNew } from './widget';
@@ -33,6 +34,7 @@ export type Options =
   & contentView.Options
   & editing.Options
   & searchPanel.Options
+  & selection.Options
   // TODO: Remove this mock search options during search implementation
   & SearchProperties
   & columnChooser.Options
@@ -51,6 +53,7 @@ export const defaultOptions = {
   ...editing.defaultOptions,
   ...searchPanel.defaultOptions,
   ...columnChooser.defaultOptions,
+  ...selection.defaultOptions,
   searchText: '',
 } satisfies Options;
 

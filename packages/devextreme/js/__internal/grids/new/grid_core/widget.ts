@@ -27,6 +27,7 @@ import { MainView } from './main_view';
 import { defaultOptions, defaultOptionsRules, type Options } from './options';
 import { PagerView } from './pager/view';
 import { SearchController } from './search/controller';
+import * as SelectionControllerModule from './selection';
 import * as SortingControllerModule from './sorting_controller/index';
 import type { SortingController } from './sorting_controller/sorting_controller';
 import { ToolbarController } from './toolbar/controller';
@@ -47,6 +48,8 @@ export class GridCoreNewBase<
   protected columnsController!: ColumnsControllerModule.ColumnsController;
 
   protected sortingController!: SortingController;
+
+  protected selectionController!: SelectionControllerModule.Controller;
 
   // eslint-disable-next-line @typescript-eslint/prefer-readonly
   private editingController!: EditingController;
@@ -77,6 +80,7 @@ export class GridCoreNewBase<
     this.diContext.register(DataControllerModule.CompatibilityDataController);
     this.diContext.register(ItemsController);
     this.diContext.register(ColumnsControllerModule.ColumnsController);
+    this.diContext.register(SelectionControllerModule.Controller);
     this.diContext.register(ColumnsControllerModule.CompatibilityColumnsController);
     this.diContext.register(SortingControllerModule.SortingController);
     this.diContext.register(ToolbarController);
@@ -107,6 +111,7 @@ export class GridCoreNewBase<
     this.dataController = this.diContext.get(DataControllerModule.DataController);
     this.columnsController = this.diContext.get(ColumnsControllerModule.ColumnsController);
     this.sortingController = this.diContext.get(SortingControllerModule.SortingController);
+    this.selectionController = this.diContext.get(SelectionControllerModule.Controller);
     this.itemsController = this.diContext.get(ItemsController);
     this.toolbarController = this.diContext.get(ToolbarController);
     this.toolbarView = this.diContext.get(ToolbarView);
@@ -180,7 +185,9 @@ export class GridCoreNew extends ColumnsControllerModule.PublicMethods(
     SortingControllerModule.PublicMethods(
       FilterControllerModule.PublicMethods(
         ColumnChooserModule.PublicMethods(
-          GridCoreNewBase,
+          SelectionControllerModule.PublicMethods(
+            GridCoreNewBase,
+          ),
         ),
       ),
     ),

@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable @typescript-eslint/prefer-nullish-coalescing */
-
+import { combineClasses } from '@ts/core/utils/combine_classes';
 import type { DataRow } from '@ts/grids/new/grid_core/columns_controller/types';
 import type { DataObject } from '@ts/grids/new/grid_core/data_controller/types';
 import { CollectionController } from '@ts/grids/new/grid_core/keyboard_navigation/collection_controller';
@@ -16,6 +16,7 @@ export const CLASSES = {
   card: 'dx-cardview-card',
   cardHover: 'dx-cardview-card-hoverable',
   content: 'dx-cardview-card-content',
+  selectCard: 'dx-cardview-card-selection',
 };
 
 export interface CardClickEvent {
@@ -58,6 +59,8 @@ export interface CardProps {
 
   onClick?: (e: CardClickEvent) => void;
 
+  onSelectClick?: (e: CardClickEvent) => void;
+
   onDblClick?: (e: CardClickEvent) => void;
 
   onHoverChanged?: (e: CardHoverEvent) => void;
@@ -83,12 +86,14 @@ export class Card extends Component<CardProps> {
       fieldTemplate: FieldTemplate = Field,
       hoverStateEnabled,
       cover,
+      row,
     } = this.props;
 
-    const className = [
-      CLASSES.card,
-      hoverStateEnabled ? CLASSES.cardHover : '',
-    ].filter(Boolean).join(' ');
+    const className = combineClasses({
+      [CLASSES.card]: true,
+      [CLASSES.cardHover]: !!hoverStateEnabled,
+      [CLASSES.selectCard]: !!row.isSelected,
+    });
 
     const imageSrc = cover?.imageExpr?.(this.props.row.data);
     const alt = cover?.altExpr?.(this.props.row.data);
@@ -158,8 +163,9 @@ export class Card extends Component<CardProps> {
   };
 
   handleClick = (event: MouseEvent): void => {
-    const { onClick, row } = this.props;
+    const { onClick, onSelectClick, row } = this.props;
     onClick?.({ event, row });
+    onSelectClick?.({ event, row });
   };
 
   handleDoubleClick = (event: MouseEvent): void => {

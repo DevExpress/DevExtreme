@@ -7,6 +7,7 @@ import { ColumnsController } from '@ts/grids/new/grid_core/columns_controller/co
 import { View } from '@ts/grids/new/grid_core/core/view';
 import { DataController } from '@ts/grids/new/grid_core/data_controller/index';
 import { ErrorController } from '@ts/grids/new/grid_core/error_controller/error_controller';
+import { SelectionController } from '@ts/grids/new/grid_core/selection/controller';
 import { createRef } from 'inferno';
 
 import { ItemsController } from '../items_controller/items_controller';
@@ -33,6 +34,7 @@ export abstract class ContentView<TProps extends {}> extends View<TProps> {
     OptionsController,
     ErrorController,
     ColumnsController,
+    SelectionController,
     ItemsController,
   ] as const;
 
@@ -41,6 +43,7 @@ export abstract class ContentView<TProps extends {}> extends View<TProps> {
     protected readonly options: OptionsController,
     protected readonly errorController: ErrorController,
     protected readonly columnsController: ColumnsController,
+    protected readonly selectionController: SelectionController,
     protected readonly itemsController: ItemsController,
   ) {
     super();

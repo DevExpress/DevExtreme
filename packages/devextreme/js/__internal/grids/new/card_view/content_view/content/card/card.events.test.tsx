@@ -5,21 +5,18 @@
 import { describe, expect, it } from '@jest/globals';
 import { render } from 'inferno';
 
-import { Card } from './card';
+import { Card, CLASSES } from './card';
 
-const mockOnDblClick = {
+const createMockEvent = () => ({
   called: false,
   call() {
     this.called = true;
   },
-};
+});
 
-const mockOnClick = {
-  called: false,
-  call() {
-    this.called = true;
-  },
-};
+const mockOnDblClick = createMockEvent();
+const mockOnClick = createMockEvent();
+const mockOnSelectClick = createMockEvent();
 
 const props = {
   row: {
@@ -72,10 +69,7 @@ const props = {
   minWidth: 300,
   onDblClick: mockOnDblClick.call(),
   onClick: mockOnClick.call(),
-};
-
-const CLASSES = {
-  card: 'dx-cardview-card',
+  onSelectClick: mockOnSelectClick.call(),
 };
 
 describe('Events', () => {
@@ -95,6 +89,16 @@ describe('Events', () => {
     cardElement?.dispatchEvent(new MouseEvent('click'));
 
     expect(mockOnClick.called).toBe(true);
+  });
+
+  it('should trigger onSelectClick event', () => {
+    // @ts-expect-error
+    render(<Card {...props} />, container);
+
+    const cardElement = container.querySelector(`.${CLASSES.card}`);
+    cardElement?.dispatchEvent(new MouseEvent('click'));
+
+    expect(mockOnSelectClick.called).toBe(true);
   });
 
   it('should trigger onDblClick event', () => {

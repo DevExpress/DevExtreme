@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
+import { isCommandKeyPressed } from '@js/common/core/events/utils/index';
 import { compileGetter } from '@js/core/utils/data';
 import { isDefined } from '@js/core/utils/type';
 import { combined, computed, state } from '@ts/core/reactive/index';
@@ -7,6 +8,7 @@ import type { OptionsController } from '@ts/grids/new/card_view/options_controll
 
 import { ContentView as ContentViewBase } from '../../grid_core/content_view/view';
 import type { DataObject } from '../../grid_core/data_controller/types';
+import type { CardClickEvent } from './content/card/card';
 import type { ContentViewProps } from './content_view';
 import { ContentView as ContentViewComponent } from './content_view';
 import { factors } from './utils';
@@ -83,6 +85,7 @@ export class ContentView extends ContentViewBase<ContentViewProps> {
           minWidth: this.cardMinWidth,
           maxWidth: this.options.oneWay('cardMaxWidth'),
           onClick: this.options.action('onCardClick'),
+          onSelectClick: this.onSelectClick.bind(this),
           onDblClick: this.options.action('onCardDblClick'),
           onHoverChanged: this.options.action('onCardHoverChanged'),
           onPrepared: this.options.action('onCardPrepared'),
@@ -126,5 +129,11 @@ export class ContentView extends ContentViewBase<ContentViewProps> {
     }
     // @ts-expect-error
     return compileGetter(expr);
+  }
+
+  private onSelectClick(e: CardClickEvent) {
+    this.selectionController.changeCardSelection(e.row.index, {
+      control: isCommandKeyPressed(e.event),
+    });
   }
 }
