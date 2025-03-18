@@ -15,7 +15,8 @@
 @include step(
   $stepper-step-indicator-size,
   $stepper-step-indicator-size,
-  $stepper-step-content-gap,
+  $stepper-step-content-row-gap,
+  $stepper-step-content-column-gap,
 );
 @include step-states(
   $stepper-step-bg,

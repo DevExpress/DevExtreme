@@ -1,10 +1,12 @@
 @mixin step(
   $width,
   $height,
-  $content-gap,
+  $content-row-gap,
+  $content-column-gap,
 ) {
   .dx-step-content {
-    gap: $content-gap;
+    row-gap: $content-row-gap;
+    column-gap: $content-column-gap;
 
     &::before {
       width: $width;
@@ -136,18 +138,6 @@
         border-color: $border-color-selected;
         background-color: $background-color-selected;
         box-shadow: 0 0 0 2px $background-color, 0 0 0 4px $border-color-selected, 0 0 0 8px $background-color;
-      }
-
-      .dx-state-focused & {
-        .dx-step-content::before {
-          box-shadow: 0 0 0 8px $background-color;
-        }
-
-        &.dx-state-focused {
-          .dx-step-content::before {
-            box-shadow: 0 0 0 2px $background-color, 0 0 0 4px $border-color-focused, 0 0 0 8px $background-color;
-          }
-        }
       }
 
       &.dx-step-invalid {
