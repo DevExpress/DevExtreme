@@ -35,6 +35,27 @@ const columns = {
       dataField: 'column2'
     }
   ],
+  sortedRemote: [
+    {
+      dataField: "OrderNumber",
+      alignment: 'right',
+      dataType: "number",
+      sortOrder: 'asc',
+      sortIndex: 1,
+    },
+    {
+      dataField: "OrderDate",
+      visible: false,
+    },
+    {
+      dataField: "StoreCity",
+      sortOrder: 'desc',
+      sortIndex: 0,
+    },
+    "StoreState",
+    "Employee",
+    "SaleAmount",
+  ],
 }
 
 const meta: Meta<typeof CardView> = {
@@ -127,6 +148,15 @@ export const EmptyCardView: Story = {
   args: {
     ...DefaultMode.args,
     dataSource: 'empty',
+  },
+};
+
+export const SortedCardView: Story = {
+  ...DefaultMode,
+  args: {
+    ...DefaultMode.args,
+    dataSource: 'remote',
+    columns: 'sortedRemote',
   },
 };
 
