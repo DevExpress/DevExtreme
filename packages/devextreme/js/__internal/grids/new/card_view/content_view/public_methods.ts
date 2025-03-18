@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable spellcheck/spell-checker */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
@@ -10,9 +9,9 @@ import type { Constructor } from '@ts/grids/new/grid_core/types';
 
 import * as Base from '../../grid_core/content_view/public_methods';
 import type { Key } from '../../grid_core/data_controller/types';
+import { ItemsController } from '../../grid_core/items_controller/items_controller';
 import type { CardViewBase } from '../widget';
 import * as cardModule from './content/card/card';
-import { ContentView } from './view';
 
 export function PublicMethods<T extends Constructor<CardViewBase>>(GridCore: T) {
   return class CardViewWithContentView extends Base.PublicMethods(GridCore) {
@@ -23,13 +22,13 @@ export function PublicMethods<T extends Constructor<CardViewBase>>(GridCore: T) 
     }
 
     public getVisibleCards(): DataRow[] {
-      const contentView = this.diContext.get(ContentView);
-      return contentView.items.unreactive_get();
+      const itemsController = this.diContext.get(ItemsController);
+      return itemsController.items.unreactive_get();
     }
 
     public getCardIndexByKey(key: Key): number {
-      const contentView = this.diContext.get(ContentView);
-      const cards = contentView.items.unreactive_get();
+      const itemsController = this.diContext.get(ItemsController);
+      const cards = itemsController.items.unreactive_get();
 
       return cards.findIndex((card) => card.key === key);
     }

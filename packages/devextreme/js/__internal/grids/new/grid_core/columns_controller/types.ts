@@ -59,4 +59,6 @@ export interface DataRow {
   key: unknown;
 
   data: unknown;
+
+  index: number;
 }
