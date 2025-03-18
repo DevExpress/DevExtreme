@@ -2,6 +2,7 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 /* eslint-disable spellcheck/spell-checker */
 // eslint-disable-next-line max-classes-per-file
+import { extend } from '@js/core/utils/extend';
 import Widget from '@js/ui/widget/ui.widget';
 import { DIContext } from '@ts/core/di/index';
 import type { Subscription } from '@ts/core/reactive/index';
@@ -65,7 +66,7 @@ export class GridCoreNewBase<
     return {
       // @ts-expect-error
       ...super._getDefaultOptions() as {},
-      ...defaultOptions,
+      ...extend(true, {}, defaultOptions) as typeof defaultOptions,
     };
   }
 
