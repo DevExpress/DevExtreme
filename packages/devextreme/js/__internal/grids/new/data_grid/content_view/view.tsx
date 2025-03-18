@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-/* eslint-disable spellcheck/spell-checker */
 import { combined } from '@ts/core/reactive/index';
 import type { OptionsController } from '@ts/grids/new/card_view/options_controller';
 
@@ -18,7 +17,7 @@ export class ContentView extends ContentViewBase<ContentViewProps> {
     return combined({
       ...this.getBaseProps(),
       contentProps: combined({
-        items: this.items,
+        items: this.itemsController.items,
       }),
       virtualScrollingProps: combined({
         heightUp: 0,
