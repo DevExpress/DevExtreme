@@ -1,4 +1,4 @@
-import { createContext } from '@ts/core/r1/runtime/inferno';
+import { createContext } from '@ts/core/r1/runtime/inferno/index';
 import type { Properties } from '@ts/core/widget/widget';
 
 export interface Config {
