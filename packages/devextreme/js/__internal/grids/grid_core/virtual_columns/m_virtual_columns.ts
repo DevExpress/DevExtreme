@@ -113,15 +113,12 @@ const columns = (Base: ModuleType<ColumnsController>) => class VirtualColumnsCon
 
   private _resizingController!: ResizingController;
 
-  public _eventArgs: any;
-
   public init() {
     const that = this;
     // @ts-expect-error
     super.init.apply(this, arguments);
 
     this._resizingController = this.getController('resizing');
-    this._eventArgs = null;
 
     that._beginPageIndex = null;
     that._endPageIndex = null;
