@@ -28,7 +28,7 @@ export class AppComponent {
     { dataField: 'Address' },
   ];
 
-  imageExpr = (data: any) => `https://js.devexpress.com/jQuery/Demos/WidgetsGallery/JSDemos/${data.Picture}`;
+  imageExpr = (data: Employee) => `https://js.devexpress.com/jQuery/Demos/WidgetsGallery/JSDemos/${data.Picture}`;
 
   constructor(service: Service) {
     this.employees = service.getEmployees();
