@@ -32,18 +32,23 @@ const prepareTestingAzureProvider = () => {
 const moduleConfig = {
     beforeEach: function() {
         const fakeURL = '/fakeAzureUrl';
+        let azureMockCreated = false;
 
         AzureProvider.remapConstant(fakeURL);
 
         ajaxMock.setup({
             url: fakeURL,
             callback: () => {
-                $.getScript({
-                    url: '../../packages/devextreme/testing/helpers/forMap/azureMock.js',
-                    scriptAttrs: { nonce: 'qunit-test' }
-                }).done(() => {
-                    prepareTestingAzureProvider();
-                });
+                if(!azureMockCreated) {
+                    azureMockCreated = true;
+
+                    $.getScript({
+                        url: '../../packages/devextreme/testing/helpers/forMap/azureMock.js',
+                        scriptAttrs: { nonce: 'qunit-test' },
+                    }).done(() => {
+                        prepareTestingAzureProvider();
+                    });
+                }
             },
             responseText: {
                 success: true,
