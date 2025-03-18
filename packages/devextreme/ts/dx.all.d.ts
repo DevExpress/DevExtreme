@@ -21326,7 +21326,7 @@ declare module DevExpress.ui {
       /**
        * [descr:dxMapOptions.routes.mode]
        */
-      mode?: DevExpress.ui.dxMap.RouteMode;
+      mode?: DevExpress.ui.dxMap.RouteMode | string;
       /**
        * [descr:dxMapOptions.routes.opacity]
        */

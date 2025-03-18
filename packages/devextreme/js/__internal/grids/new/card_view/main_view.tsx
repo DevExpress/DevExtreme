@@ -23,11 +23,8 @@ function MainViewComponent({
 }: MainViewProps): JSX.Element {
   return (<>
     <ConfigContext.Provider value={config}>
-      {/* @ts-expect-error */}
       <Toolbar/>
-      {/* @ts-expect-error */}
       <HeaderPanel/>
-      {/* @ts-expect-error */}
       <Content/>
       <div>
         {/*
@@ -37,7 +34,6 @@ function MainViewComponent({
           Without this div, CardView would be parent of Pager.
           In this case all `componentWillUnmount`s aren't called
         */}
-        {/* @ts-expect-error */}
         <Pager/>
       </div>
     </ConfigContext.Provider>

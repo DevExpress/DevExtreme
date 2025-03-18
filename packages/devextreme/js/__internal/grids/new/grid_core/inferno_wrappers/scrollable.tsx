@@ -34,6 +34,7 @@ export class Scrollable extends InfernoWrapper<Props, dxScrollable> {
 
   public componentDidMount(): void {
     if (this.props.useNative === undefined) {
+      // @ts-expect-error
       delete this.props.useNative;
     }
     super.componentDidMount();
