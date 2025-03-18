@@ -417,6 +417,15 @@ export default class DataGrid extends Widget {
     return this.element.find(`.${this.addWidgetPrefix(CLASS.columnChooserButton)}`);
   }
 
+  apiFilter(filter: any[]): Promise<void> {
+    const { getInstance } = this;
+
+    return ClientFunction(
+      () => (getInstance() as any).filter(filter),
+      { dependencies: { getInstance, filter } },
+    )();
+  }
+
   apiClearFilter(): Promise<void> {
     const { getInstance } = this;
 
