@@ -17,13 +17,11 @@ export abstract class View<T extends {}> {
   public render(root: Element): Subscription {
     const ViewComponent = this.component;
     return toSubscribable(this.getProps()).subscribe((props: T) => {
-      // @ts-expect-error
       render(<ViewComponent {...props}/>, root);
     });
   }
 
   public asInferno(): ComponentType {
-    // @ts-expect-error fixed in inferno v8
     // eslint-disable-next-line no-return-assign
     return this.inferno ??= this._asInferno();
   }
@@ -53,7 +51,6 @@ export abstract class View<T extends {}> {
 
       public render(): JSX.Element | undefined {
         const ViewComponent = view.component;
-        // @ts-expect-error
         return <ViewComponent {...this.state!.props}/>;
       }
     };

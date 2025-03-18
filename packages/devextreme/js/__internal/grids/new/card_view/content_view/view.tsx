@@ -36,7 +36,6 @@ export class ContentView extends ContentViewBase<ContentViewProps> {
     [this.width, this.cardMinWidth, this.dataController.pageSize, this.options.oneWay('cardsPerRow')],
   );
 
-  // @ts-expect-error
   protected override component = ContentViewComponent;
 
   protected override getProps() {
