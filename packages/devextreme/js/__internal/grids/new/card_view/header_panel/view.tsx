@@ -47,7 +47,6 @@ export class HeaderPanelView extends View<HeaderPanelProps> {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       itemTemplate: this.options.template('headerPanel.itemTemplate') as any,
       onFilterClick: this.onFilterClick.bind(this),
-      itemTemplate: this.options.template('headerPanel.itemTemplate'),
       itemCssClass: this.options.oneWay('headerPanel.itemCssClass'),
       visible: this.options.oneWay('headerPanel.visible'),
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
