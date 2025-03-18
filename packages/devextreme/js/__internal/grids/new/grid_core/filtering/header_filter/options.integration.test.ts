@@ -61,8 +61,7 @@ const getPopupList = (popupContentElement: Element | null) => {
   return { element: listElement, instance };
 };
 
-// TODO: Unskip this test after ref options issue will be fixed
-describe.skip('Options', () => {
+describe('Options', () => {
   afterEach(() => {
     const cardView = rootQuerySelector(SELECTORS.cardView);
     // @ts-expect-error bad typed renderer
