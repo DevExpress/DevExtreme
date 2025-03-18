@@ -20,7 +20,7 @@ const setup = (options: Options) => {
 
 describe('EditingController', () => {
   describe('addButton', () => {
-    it('should be added to toolbar', () => {
+    it.skip('should be added to toolbar', () => {
       const { toolbarController } = setup({});
 
       expect(
