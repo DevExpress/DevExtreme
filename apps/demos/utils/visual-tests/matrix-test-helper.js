@@ -192,9 +192,9 @@ const SKIPPED_TESTS = {
     ],
   },
   Angular: {
-    Accordion: [
-      { demo: 'Overview', themes: [THEME.generic, THEME.material, THEME.fluent] },
-    ],
+    // Accordion: [
+    //   { demo: 'Overview', themes: [THEME.generic, THEME.material, THEME.fluent] },
+    // ],
     Charts: [
       { demo: 'Crosshair', themes: [THEME.generic, THEME.material, THEME.fluent] },
       { demo: 'CustomAnnotations', themes: [THEME.generic, THEME.material, THEME.fluent] },
