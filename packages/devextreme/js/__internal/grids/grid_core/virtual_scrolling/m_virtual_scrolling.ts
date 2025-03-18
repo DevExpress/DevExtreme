@@ -1796,7 +1796,8 @@ export const rowsView = (Base: ModuleType<RowsView>) => class VirtualScrollingRo
       return;
     }
 
-    const needToThrow = !this._hasHeight && isVirtualPaging(this);
+    const rootElementHeight = !!this.component.option('rootElementHeight');
+    const needToThrow = !this._hasHeight && isVirtualPaging(this) && !rootElementHeight;
     if (needToThrow && !this._heightWarningIsThrown) {
       this._heightWarningIsThrown = true;
       errors.log('W1025');

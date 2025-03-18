@@ -208,6 +208,7 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewRowDraggingExtend
       columnFixing: gridOptions.columnFixing,
       columnAutoWidth: gridOptions.columnAutoWidth,
       showColumnLines: gridOptions.showColumnLines,
+      rootElementHeight: gridOptions.height,
       columns: columns.map((column) => ({
         width: column.width || column.visibleWidth,
         fixed: column.fixed,
