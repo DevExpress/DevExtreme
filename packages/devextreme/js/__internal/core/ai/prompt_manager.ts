@@ -2,8 +2,8 @@ import type { Prompt } from '../ai-types';
 import { templates } from './templates';
 
 export interface PromptData {
-  system: Record<string, string>;
-  user: Record<string, string>;
+  system?: Record<string, string>;
+  user?: Record<string, string>;
 }
 
 export interface PromptTemplate {
@@ -27,8 +27,8 @@ export class PromptManager {
       throw new Error('Template not found');
     }
 
-    const system = this.replacePlaceholders(template.system, data.system);
-    const user = this.replacePlaceholders(template.user, data.user);
+    const system = data.system ? this.replacePlaceholders(template.system, data.system) : undefined;
+    const user = data.user ? this.replacePlaceholders(template.user, data.user) : undefined;
 
     const prompt = { system, user };
 

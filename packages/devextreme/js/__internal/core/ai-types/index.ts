@@ -12,8 +12,8 @@ export interface RequestCallbacks {
 }
 
 export interface Prompt {
-  system: string;
-  user: string;
+  system?: string;
+  user?: string;
 }
 
 export interface RequestParams {
