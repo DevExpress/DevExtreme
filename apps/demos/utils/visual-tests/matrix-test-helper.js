@@ -284,6 +284,7 @@ const SKIPPED_TESTS = {
     ],
     VectorMap: [
       { demo: 'TooltipHTMLSupport', themes: [THEME.material] },
+      { demo: 'DynamicViewport', themes: [THEME.generic, THEME.material, THEME.fluent] },
     ],
   },
   Vue: {
@@ -298,7 +299,6 @@ const SKIPPED_TESTS = {
     ],
     VectorMap: [
       { demo: 'TooltipHTMLSupport', themes: [THEME.material] },
-      { demo: 'DynamicViewport', themes: [THEME.generic, THEME.material, THEME.fluent] },
     ],
     DataGrid: [
       { demo: 'BatchEditing', themes: [THEME.fluent] },
