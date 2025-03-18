@@ -26,7 +26,7 @@ export const calculateOperationTypes = function (loadOptions, lastLoadOptions, i
       sorting: !gridCoreUtils.equalSortParameters(loadOptions.sort, lastLoadOptions.sort),
       grouping: !gridCoreUtils.equalSortParameters(loadOptions.group, lastLoadOptions.group, true),
       groupExpanding: !gridCoreUtils.equalSortParameters(loadOptions.group, lastLoadOptions.group) || lastLoadOptions.groupExpand,
-      filtering: !gridCoreUtils.equalFilterParameters(loadOptions.filter, lastLoadOptions.filter),
+      filtering: !gridCoreUtils.equalFilterParameters(loadOptions.filter, lastLoadOptions.filter, loadOptions.langParams),
       pageIndex: loadOptions.pageIndex !== lastLoadOptions.pageIndex,
       skip: loadOptions.skip !== lastLoadOptions.skip,
       take: loadOptions.take !== lastLoadOptions.take,
