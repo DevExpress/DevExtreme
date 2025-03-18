@@ -10,12 +10,7 @@ export class FilterController {
   public static dependencies = [OptionsController] as const;
 
   public readonly displayFilter = computed(
-    (filter, filterEnabled) => {
-      if (!filterEnabled) {
-        return null;
-      }
-      return filter;
-    },
+    (filter, filterEnabled) => (filterEnabled ? filter : null),
     [this.filter, this.filterEnabled],
   );
 
