@@ -1,5 +1,4 @@
 /* eslint-disable spellcheck/spell-checker */
-import formatHelper from '@js/format_helper';
 import type { Subscribable, SubsGets, SubsGetsUpd } from '@ts/core/reactive/index';
 import {
   computed, interruptableComputed,
@@ -7,7 +6,7 @@ import {
 
 import { OptionsController } from '../options_controller/options_controller';
 import type { ColumnProperties, ColumnSettings, PreNormalizedColumn } from './options';
-import type { Column, DataRow, VisibleColumn } from './types';
+import type { Column, VisibleColumn } from './types';
 import {
   getColumnIndexByName, normalizeColumns, normalizeVisibleIndexes, preNormalizeColumns,
 } from './utils';
@@ -62,32 +61,6 @@ export class ColumnsController {
     );
 
     this.allowColumnReordering = this.options.oneWay('allowColumnReordering');
-  }
-
-  public createDataRow(data: unknown, columns: Column[]): DataRow {
-    return {
-      cells: columns.map((c) => {
-        const displayValue = c.calculateDisplayValue(data);
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        let text = formatHelper.format(displayValue as any, c.format);
-
-        if (c.customizeText) {
-          text = c.customizeText({
-            value: displayValue,
-            valueText: text,
-          });
-        }
-
-        return {
-          column: c,
-          value: c.calculateCellValue(data),
-          displayValue,
-          text,
-        };
-      }),
-      key: undefined,
-      data,
-    };
   }
 
   public addColumn(columnProps: ColumnProperties): void {
