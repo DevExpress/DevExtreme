@@ -234,7 +234,7 @@ export class ComponentWrapper extends DOMComponent<ComponentWrapperProps> {
     super._dispose();
   }
 
-  get elementAttr(): HTMLAttributes<unknown> {
+  get elementAttr(): Record<string, unknown> {
     const element = this.$element()[0];
     if (!this._elementAttr) {
       const { attributes } = element;
@@ -356,7 +356,7 @@ export class ComponentWrapper extends DOMComponent<ComponentWrapperProps> {
       ...this.elementAttr,
       ...elementAttr,
       className: [
-        ...(this.elementAttr.class ?? '').split(' '),
+        ...(this.elementAttr.class as string ?? '').split(' '),
         ...(elementAttr?.class ?? '').split(' '),
       ]
         .filter((c, i, a) => c && a.indexOf(c) === i)
