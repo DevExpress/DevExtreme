@@ -1,6 +1,19 @@
 .dx-step {
   position: relative;
   cursor: pointer;
+
+  &.dx-step-completed,
+  &.dx-step-selected {
+    .dx-step-text {
+      font-weight: 600;
+    }
+  }
+
+  &.dx-step-selected {
+    .dx-step-title {
+      font-weight: 600;
+    }
+  }
 }
 
 .dx-step-indicator {
