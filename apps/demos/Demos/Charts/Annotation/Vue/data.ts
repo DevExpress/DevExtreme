@@ -1,4 +1,14 @@
-export const annotationSources = [{
+import { type AnnotationType } from 'devextreme/common/charts';
+
+export const annotationSources: {
+  date: Date,
+  type?: AnnotationType,
+  description: string,
+  image?: string,
+  text?: string,
+  offset?: number,
+  padding?: number,
+}[] = [{
   date: new Date(2016, 2, 31),
   description: 'The iPhone SE (Special Edition) is a smartphone that was designed and marketed by Apple Inc. It is part of the ninth generation of the iPhone alongside the iPhone 6S. It was announced on March 21, 2016 at the Town Hall auditorium in the Apple Campus by Apple executive Greg Joswiak, with pre-orders beginning on March 24, and official release on March 31, 2016. It was re-released almost a year later on March 24, 2017 with larger storage capacities. The iPhone SE shares the same physical design and dimensions as the iPhone 5S, but has upgraded internal hardware, including the newer Apple A9 system-on-chip, greater battery capacity, and a 12-megapixel rear camera that can record 4K video. Along with the iPhone 6S and the iPhone X, the iPhone SE was discontinued by Apple on September 12, 2018',
   image: '../../../../images/Charts/Annotation/iphone-se.png',

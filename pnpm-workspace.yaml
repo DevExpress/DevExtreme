@@ -6,7 +6,7 @@ packages:
 
 catalog:
   devexpress-diagram: 2.2.15
-  devexpress-gantt: 4.1.59
+  devexpress-gantt: 4.1.60
   eslint: 9.18.0
   eslint-config-airbnb-typescript: 18.0.0
   eslint-plugin-i18n: 2.4.0

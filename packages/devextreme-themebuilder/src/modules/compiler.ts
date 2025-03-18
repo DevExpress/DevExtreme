@@ -1,5 +1,5 @@
 import * as sass from 'sass-embedded';
-// eslint-disable-next-line import/extensions
+
 import { metadata } from '../data/metadata/dx-theme-builder-metadata';
 import { parse, parseString } from './parse-value';
 import { optimizeCss } from './post-compiler';
@@ -44,7 +44,6 @@ export default class Compiler {
 
     let compilerOptions: sass.Options<'async'> = {
       importers: [{
-        // eslint-disable-next-line spellcheck/spell-checker
         canonicalize: this.canonicalize,
         load: this.load,
       }],
@@ -71,7 +70,6 @@ export default class Compiler {
     });
   };
 
-  // eslint-disable-next-line spellcheck/spell-checker
   canonicalize = (url: string): URL => (url.includes('tb_index') ? new URL(`db:${url}`) : null);
 
   load = (): sass.ImporterResult => ({

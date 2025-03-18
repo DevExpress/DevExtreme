@@ -8,7 +8,7 @@ export const base = (ZIndex?: number) => {
   return baseZIndex;
 };
 
-export const create = (baseIndex = baseZIndex) => {
+export const create = (baseIndex = baseZIndex): number => {
   const { length } = zIndexStack;
   const index: number = (length ? zIndexStack[length - 1] : baseIndex) + 1;
 

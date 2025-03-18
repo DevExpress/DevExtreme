@@ -1,4 +1,6 @@
-export const paletteCollection = ['Material', 'Soft Pastel', 'Harmony Light', 'Pastel', 'Bright', 'Soft', 'Ocean', 'Office', 'Vintage', 'Violet', 'Carmine', 'Dark Moon', 'Soft Blue', 'Dark Violet', 'Green Mist'];
+import { type DxPieChartTypes } from 'devextreme-vue/pie-chart';
+
+export const paletteCollection: DxPieChartTypes.Palette[] = ['Material', 'Soft Pastel', 'Harmony Light', 'Pastel', 'Bright', 'Soft', 'Ocean', 'Office', 'Vintage', 'Violet', 'Carmine', 'Dark Moon', 'Soft Blue', 'Dark Violet', 'Green Mist'];
 export const paletteExtensionModes = ['alternate', 'blend', 'extrapolate'];
 
 const data = [];

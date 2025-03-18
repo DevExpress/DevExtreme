@@ -38,7 +38,6 @@ QUnit.module('bing provider', {
         this.abortDirectionsUpdate = false;
 
         BingProvider.remapConstant(fakeURL);
-        BingProvider.prototype._geocodedLocations = {};
 
         $.ajaxSetup({ jsonp: false });
 
@@ -1101,6 +1100,89 @@ QUnit.test('routes', function(assert) {
         });
 
         map.addRoute(ROUTES[1]);
+    });
+});
+
+[
+    {
+        mode: 'driving',
+        actualMode: 1,
+    },
+    {
+        mode: 'walking',
+        actualMode: 2,
+    },
+].forEach(({ mode, actualMode }) => {
+    QUnit.test(`Route mode should be converted correctly if ${mode} mode is passed`, function(assert) {
+        const done = assert.async();
+
+        $('#map').dxMap({
+            provider: 'bing',
+            routes: [
+                {
+                    mode,
+                    locations: [
+                        [40.737102, -73.990318],
+                        [40.749825, -73.987963],
+                    ]
+                },
+            ],
+            onReady: function() {
+                assert.strictEqual(window.Microsoft.directionsOptions.routeMode, actualMode, 'direction mode specified correctly');
+
+                done();
+            }
+        });
+    });
+});
+
+QUnit.test('Route mode should be passed without changes if it is not driving or walking mode', function(assert) {
+    const done = assert.async();
+    const customRouteMode = 'transit';
+
+    $('#map').dxMap({
+        provider: 'bing',
+        routes: [
+            {
+                mode: customRouteMode,
+                locations: [
+                    [40.737102, -73.990318],
+                    [40.749825, -73.987963],
+                ]
+            },
+        ],
+        onReady: function() {
+            assert.strictEqual(window.Microsoft.directionsOptions.routeMode, customRouteMode, 'custom route mode is passed as it is');
+
+            done();
+        }
+    });
+});
+
+[
+    { mode: undefined, scenario: 'undefined' },
+    { mode: '', scenario: 'empty string' },
+].forEach(({ mode, scenario }) => {
+    QUnit.test(`Driving route mode should be used by default if route mode is ${scenario}`, function(assert) {
+        const done = assert.async();
+
+        $('#map').dxMap({
+            provider: 'bing',
+            routes: [
+                {
+                    mode,
+                    locations: [
+                        [40.737102, -73.990318],
+                        [40.749825, -73.987963],
+                    ]
+                },
+            ],
+            onReady: function() {
+                assert.strictEqual(window.Microsoft.directionsOptions.routeMode, Microsoft.Maps.Directions.RouteMode.driving, 'default driving direction mode is used');
+
+                done();
+            }
+        });
     });
 });
 

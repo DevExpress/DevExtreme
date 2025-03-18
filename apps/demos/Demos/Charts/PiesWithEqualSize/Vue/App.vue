@@ -33,10 +33,15 @@ import DxPieChart, {
   DxSeries,
   DxLabel,
   DxLegend,
+  type DxPieChartTypes,
 } from 'devextreme-vue/pie-chart';
 import { countries, waterLandRatio } from './data.ts';
 
-const pieCharts = [{
+const pieCharts: {
+  title: string,
+  palette: DxPieChartTypes.Palette,
+  dataSource: { name: string, area: number }[],
+}[] = [{
   title: 'Area of Countries',
   palette: 'Soft',
   dataSource: countries,

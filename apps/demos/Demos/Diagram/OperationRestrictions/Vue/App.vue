@@ -40,14 +40,14 @@
     <DxContextToolbox
       :shape-icons-per-row="2"
       :width="100"
-      :shapes="['team', 'employee']"
+      :shapes="shapes"
     />
     <DxToolbox
       :shape-icons-per-row="2"
     >
       <DxGroup
         :title="'Items'"
-        :shapes="['team', 'employee']"
+        :shapes="shapes"
       />
     </DxToolbox>
     <DxPropertiesPanel
@@ -66,6 +66,7 @@ import {
   DxToolbox,
   DxPropertiesPanel,
   DxGroup,
+  type DxDiagramTypes,
 } from 'devextreme-vue/diagram';
 import notify from 'devextreme/ui/notify';
 import ArrayStore from 'devextreme/data/array_store';
@@ -76,6 +77,7 @@ const orgItemsDataSource = new ArrayStore({
   data: service.getOrgItems(),
 });
 const diagram = ref();
+const shapes = ['team', 'employee'] as unknown as DxDiagramTypes.ShapeType[];
 
 const itemStyleExpr = ({ Type }) => ({
   fill: {

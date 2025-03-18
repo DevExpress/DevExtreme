@@ -164,6 +164,7 @@ import DxSelectBox from 'devextreme-vue/select-box';
 import { jsPDF } from 'jspdf';
 import 'jspdf-autotable';
 import { exportGantt as exportGanttToPdf } from 'devextreme/pdf_exporter';
+import { type GanttPdfExportMode } from 'devextreme/ui/gantt';
 import {
   tasks,
   dependencies,
@@ -197,7 +198,9 @@ const customRangeDisabled = ref(true);
 async function exportGantt() {
   const format = formatBoxValue.value.toLowerCase();
   const isLandscape = landscapeCheckBoxValue.value;
-  const exportMode = exportModeBoxValue.value === 'Tree List' ? 'treeList' : exportModeBoxValue.value.toLowerCase();
+  const exportMode: GanttPdfExportMode = exportModeBoxValue.value === 'Tree List'
+      ? 'treeList'
+      : exportModeBoxValue.value.toLowerCase() as GanttPdfExportMode;
   const dataRangeMode = dateRangeBoxValue.value.toLowerCase();
   let dataRange;
   if (dataRangeMode === 'custom') {

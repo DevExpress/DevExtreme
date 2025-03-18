@@ -87,7 +87,7 @@ class Configuration {
   }
 
   public get fullPath(): string | null {
-    return this._ownerConfig && this._ownerConfig.fullPath
+    return this._ownerConfig?.fullPath
       ? `${this._ownerConfig.fullPath}.${this.fullName}`
       : this.fullName;
   }
@@ -289,7 +289,7 @@ function bindOptionWatchers(
 
 function hasProp(vueInstance: Pick<IVue, '$options'>, propName: string) {
   const { props } = vueInstance.$options;
-  return props && props.hasOwnProperty(propName);
+  return props?.hasOwnProperty(propName);
 }
 
 function hasVModelValue(options: Record<string, any>, props: VNodeProps, vnode: VNode) {

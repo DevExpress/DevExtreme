@@ -23,7 +23,7 @@ export default class BootstrapExtractor {
 
   async getRootVariablesSass(): Promise<ConfigMetaItem[]> {
     const result: ConfigMetaItem[] = [];
-    const path = require.resolve(`bootstrap/dist/css/bootstrap.css`);
+    const path = require.resolve('bootstrap/dist/css/bootstrap.css');
     const content = await fs.readFile(path, 'utf8');
     const rootVariables = new RegExp(':root(,.+?])? {.+?}', 's').exec(content)[0];
 
@@ -72,8 +72,8 @@ export default class BootstrapExtractor {
 
     let variablesDark = '';
 
-    if(existsSync(this.getFilePath(variablesDarkFile))) {
-      variablesDark = await this.readSassFile(variablesDarkFile)
+    if (existsSync(this.getFilePath(variablesDarkFile))) {
+      variablesDark = await this.readSassFile(variablesDarkFile);
     }
 
     const result = `${functions}

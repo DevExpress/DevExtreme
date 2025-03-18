@@ -38,7 +38,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import DxScheduler, { DxResource, DxSchedulerTypes } from 'devextreme-vue/scheduler';
+import DxScheduler, { DxResource, type DxSchedulerTypes } from 'devextreme-vue/scheduler';
 import DxContextMenu from 'devextreme-vue/context-menu';
 import ItemTemplate from './ItemTemplate.vue';
 import { resourcesData, data } from './data.ts';

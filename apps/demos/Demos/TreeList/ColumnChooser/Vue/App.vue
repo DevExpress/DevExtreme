@@ -117,7 +117,7 @@ import { ref } from 'vue';
 import {
   DxTreeList, DxColumn, DxColumnChooser, DxColumnChooserSearch, DxColumnChooserSelection,
   DxPosition,
-  DxTreeListTypes,
+  type DxTreeListTypes,
 } from 'devextreme-vue/tree-list';
 import { DxSelectBox } from 'devextreme-vue/select-box';
 import { DxCheckBox } from 'devextreme-vue/check-box';

@@ -1,5 +1,6 @@
 import { isFluent } from '@js/ui/themes';
 
+import type { SchedulerHeader } from './m_header';
 import {
   formatViews,
   getViewName,
@@ -10,7 +11,7 @@ const VIEW_SWITCHER_CLASS = 'dx-scheduler-view-switcher';
 const VIEW_SWITCHER_DROP_DOWN_BUTTON_CLASS = 'dx-scheduler-view-switcher-dropdown-button';
 const VIEW_SWITCHER_DROP_DOWN_BUTTON_CONTENT_CLASS = 'dx-scheduler-view-switcher-dropdown-button-content';
 
-const getViewsAndSelectedView = (header) => {
+const getViewsAndSelectedView = (header: SchedulerHeader) => {
   const views = formatViews(header.views);
   let selectedView = getViewName(header.currentView);
 
@@ -21,7 +22,7 @@ const getViewsAndSelectedView = (header) => {
   return { selectedView, views };
 };
 
-export const getViewSwitcher = (header, item) => {
+export const getTabViewSwitcher = (header: SchedulerHeader, item) => {
   const { selectedView, views } = getViewsAndSelectedView(header);
 
   // @ts-expect-error
@@ -53,7 +54,7 @@ export const getViewSwitcher = (header, item) => {
   };
 };
 
-export const getDropDownViewSwitcher = (header, item) => {
+export const getDropDownViewSwitcher = (header: SchedulerHeader, item) => {
   const { selectedView, views } = getViewsAndSelectedView(header);
 
   const oneView = isOneView(views, selectedView);

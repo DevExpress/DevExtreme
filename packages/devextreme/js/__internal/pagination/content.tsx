@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-import { InfernoComponent, InfernoEffect } from '@devextreme/runtime/inferno';
 import type { DisplayMode } from '@js/common';
+import { InfernoComponent, InfernoEffect } from '@ts/core/r1/runtime/inferno/index';
 import type { RefObject } from '@ts/core/r1/types';
 import { Widget } from '@ts/core/r1/widget';
 import { createRef as infernoCreateRef } from 'inferno';

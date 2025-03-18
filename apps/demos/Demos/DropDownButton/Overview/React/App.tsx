@@ -1,8 +1,8 @@
 import React, { useCallback, useMemo, useState } from 'react';
-import DropDownButton, { DropDownButtonTypes } from 'devextreme-react/drop-down-button';
+import DropDownButton, { type DropDownButtonTypes } from 'devextreme-react/drop-down-button';
 import Toolbar from 'devextreme-react/toolbar';
 import { Template } from 'devextreme-react/core/template';
-import { ButtonTypes } from 'devextreme-react/button';
+import { type ButtonTypes } from 'devextreme-react/button';
 import notify from 'devextreme/ui/notify';
 import service from './data.ts';
 import ColorIcon from './ColorIcon.tsx';

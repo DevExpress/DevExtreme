@@ -63,7 +63,7 @@
 </template>
 <script setup lang="ts">
 import { ref } from 'vue';
-import { DxScrollView } from 'devextreme-vue/scroll-view';
+import { DxScrollView, type DxScrollViewTypes } from 'devextreme-vue/scroll-view';
 import { DxSelectBox } from 'devextreme-vue/select-box';
 import { DxCheckBox } from 'devextreme-vue/check-box';
 import { longText } from './data.ts';
@@ -88,7 +88,7 @@ const showScrollbarModes = ref([
     value: 'never',
   },
 ]);
-const showScrollbar = ref('onScroll');
+const showScrollbar = ref<DxScrollViewTypes.Properties["showScrollbar"]>('onScroll');
 const scrollByContent = ref(true);
 const scrollByThumb = ref(true);
 const scrollViewWidget = ref();

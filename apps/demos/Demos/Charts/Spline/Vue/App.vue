@@ -63,12 +63,13 @@ import {
   DxTooltip,
   DxLabel,
   DxFormat,
+  type DxChartTypes,
 } from 'devextreme-vue/chart';
 import DxSelectBox from 'devextreme-vue/select-box';
 import { architectureSources, sharingStatisticsInfo } from './data.ts';
 
-const types = ['spline', 'stackedspline', 'fullstackedspline'];
-const type = ref('spline');
+const types: DxChartTypes.SeriesType[] = ['spline', 'stackedspline', 'fullstackedspline'];
+const type = ref(types[0]);
 </script>
 <style>
 .options {

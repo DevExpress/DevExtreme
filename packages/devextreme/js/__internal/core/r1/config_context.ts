@@ -1,4 +1,4 @@
-import { createContext } from '@devextreme/runtime/inferno';
+import { createContext } from '@ts/core/r1/runtime/inferno/index';
 
 export interface ConfigContextValue { rtlEnabled?: boolean }
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

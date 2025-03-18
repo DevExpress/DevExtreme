@@ -43,11 +43,11 @@ export const parseString = (str: string): sass.Value => {
         '___($value)': ([listValue]) => {
           if (listValue.asList.size > 1) {
             result = new sass.SassList(
-                listValue.asList,
-                {
-                  brackets: false,
-                  separator: listValue.separator,
-                }
+              listValue.asList,
+              {
+                brackets: false,
+                separator: listValue.separator,
+              },
             );
           } else {
             result = listValue.get(0);
@@ -57,6 +57,7 @@ export const parseString = (str: string): sass.Value => {
         },
       },
     });
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (e) {
     // debugger;
     return new sass.SassString(str);

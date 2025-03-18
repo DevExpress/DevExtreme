@@ -20,6 +20,7 @@ import TagBox from 'ui/tag_box';
 import { normalizeKeyName } from 'common/core/events/utils/index';
 import { getWidth, getHeight } from 'core/utils/size';
 import Guid from 'core/guid';
+import browser from 'core/utils/browser';
 
 import { TextEditorLabel } from '__internal/ui/text_box/m_text_editor.label';
 
@@ -2355,6 +2356,25 @@ QUnit.module('showSelectionControls', moduleSetup, () => {
         pointerMock($('.dx-list-item').eq(2)).start().click();
 
         assert.strictEqual(loadSpy.callCount, 1, 'selected items are correct');
+    });
+
+    QUnit.test('Should not throw an error on selectAll click when hideSelectedItems is enabled (T1278816)', function(assert) {
+        $('#tagBox').dxTagBox({
+            items: [1, 2, 3, 4],
+            showSelectionControls: true,
+            hideSelectedItems: true,
+            opened: true,
+        });
+
+        this.clock.tick(TIME_TO_WAIT);
+
+        try {
+            $(`.${SELECT_ALL_CHECKBOX_CLASS}`).trigger('dxclick');
+
+            assert.ok(true, 'no error is thrown');
+        } catch(error) {
+            assert.ok(false, `error is thrown: ${error}`);
+        }
     });
 });
 
@@ -5425,10 +5445,37 @@ QUnit.module('the \'fieldTemplate\' option', moduleSetup, () => {
             fieldTemplate: () => $('<div>').dxTextBox()
         }).dxTagBox('instance');
 
-        $tagBox.find(`.${TAGBOX_TAG_REMOVE_BUTTON_CLASS }`).trigger('dxclick');
+        $tagBox.find(`.${TAGBOX_TAG_REMOVE_BUTTON_CLASS}`).trigger('dxclick');
 
         assert.strictEqual(tagBox.option('value').length, 0);
         assert.strictEqual(tagBoxWithFieldTemplate.option('value').length, 1);
+    });
+
+    QUnit.test('calls focus() with preventScroll: true when deleting a tag in Firefox (T1259996)', function(assert) {
+        if(!browser.mozilla) {
+            assert.ok(true, 'Only for Firefox');
+            return;
+        }
+
+        const items = Array.from({ length: 200 }, (_, i) => i + 1);
+
+        const focusSpy = sinon.spy(HTMLElement.prototype, 'focus');
+
+        const $tagBox = $('#tagBox').dxTagBox({
+            items,
+            value: items,
+            fieldTemplate: () => $('<div>').dxTextBox()
+        });
+
+        const $inputWrapper = $tagBox.find(`.${DROP_DOWN_EDITOR_INPUT_WRAPPER}`);
+
+        $inputWrapper.trigger('dxclick');
+        $tagBox.find(`.${TAGBOX_TAG_REMOVE_BUTTON_CLASS }`).trigger('dxclick');
+
+        assert.ok(focusSpy.calledTwice, 'focus() was called twice after click & deleting');
+        assert.deepEqual(focusSpy.args[1][0], { preventScroll: true }, 'focus() was called with preventScroll: true');
+
+        focusSpy.restore();
     });
 });
 
@@ -8330,7 +8377,7 @@ QUnit.module('accessibility', () => {
     });
 
     QUnit.test('input should not have aria-labelledby attr if label is not specified', function(assert) {
-        const $tagBox = $('#tagBox').dxTagBox({ });
+        const $tagBox = $('#tagBox').dxTagBox({});
         const $input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
         assert.strictEqual($input.attr('aria-labelledby'), undefined, 'aria-labelledby was set correctly');

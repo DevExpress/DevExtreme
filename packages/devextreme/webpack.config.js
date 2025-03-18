@@ -31,15 +31,4 @@ module.exports = {
         'devexpress-gantt': 'window.DevExpress.Gantt',
         'luxon': 'window.luxon'
     },
-    resolve: {
-        alias: {
-            // '@devextreme/vdom': require.resolve('@devextreme/vdom/dist/cjs/index.js'),
-            '@devextreme/runtime/common': require.resolve('@devextreme/runtime/cjs/common/index.js'),
-            '@devextreme/runtime/inferno': require.resolve('@devextreme/runtime/cjs/inferno/index.js'),
-            '@devextreme/runtime/declarations': require.resolve('@devextreme/runtime/cjs/declarations/index.js'),
-            '@devextreme/runtime/angular': require.resolve('@devextreme/runtime/cjs/angular/index.js'),
-            '@devextreme/runtime/vue': require.resolve('@devextreme/runtime/cjs/vue/index.js'),
-            '@devextreme/runtime/react': require.resolve('@devextreme/runtime/cjs/react/index.js')
-        }
-    },
 };

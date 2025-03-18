@@ -48,11 +48,12 @@ import {
   DxMargin,
   DxExport,
   DxLegend,
+  type DxChartTypes,
 } from 'devextreme-vue/chart';
 import DxSelectBox from 'devextreme-vue/select-box';
 import { dataSource } from './data.ts';
 
-const types = ['splinearea', 'stackedsplinearea', 'fullstackedsplinearea'];
+const types: DxChartTypes.SeriesType[] = ['splinearea', 'stackedsplinearea', 'fullstackedsplinearea'];
 const type = ref(types[0]);
 </script>
 <style>

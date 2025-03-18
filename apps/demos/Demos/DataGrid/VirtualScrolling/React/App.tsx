@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import DataGrid, {
-  Scrolling, Sorting, LoadPanel, DataGridTypes,
+  Scrolling, Sorting, LoadPanel, type DataGridTypes,
 } from 'devextreme-react/data-grid';
 import { generateData } from './data.ts';
 
