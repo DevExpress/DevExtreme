@@ -233,11 +233,11 @@ const SKIPPED_TESTS = {
     ],
   },
   Vue: {
-    Chat: [
-      { demo: 'AIAndChatbotIntegration', themes: [THEME.material] },
-    ],
     Accordion: [
       { demo: 'Overview', themes: [THEME.generic, THEME.material, THEME.fluent] },
+    ],
+    Chat: [
+      { demo: 'AIAndChatbotIntegration', themes: [THEME.material] },
     ],
     Charts: [
       { demo: 'TilingAlgorithms', themes: [THEME.material] },
