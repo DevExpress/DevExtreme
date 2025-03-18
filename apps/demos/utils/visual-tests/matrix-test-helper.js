@@ -195,6 +195,18 @@ const SKIPPED_TESTS = {
     Accordion: [
       { demo: 'Overview', themes: [THEME.generic, THEME.material, THEME.fluent] },
     ],
+    DropDownButton: [
+      { demo: 'Overview', themes: [THEME.generic, THEME.material, THEME.fluent] },
+    ],
+    SelectBox: [
+      { demo: 'GroupedItems', themes: [THEME.generic, THEME.material, THEME.fluent] },
+    ],
+    Splitter: [
+      { demo: 'Overview', themes: [THEME.generic, THEME.material, THEME.fluent] },
+    ],
+    Gauges: [
+      { demo: 'VariableNumberOfBars', themes: [THEME.generic, THEME.material, THEME.fluent] },
+    ],
     Charts: [
       { demo: 'Overview', themes: [THEME.material] },
       { demo: 'Crosshair', themes: [THEME.generic, THEME.material, THEME.fluent] },
@@ -252,6 +264,9 @@ const SKIPPED_TESTS = {
     ],
     Popup: [
       { demo: 'Scrolling', themes: [THEME.generic, THEME.material, THEME.fluent] },
+    ],
+    Sortable: [
+      { demo: 'Kanban', themes: [THEME.generic, THEME.material, THEME.fluent] },
     ],
     PivotGrid: [
       { demo: 'IntegratedFieldChooser', themes: [THEME.generic, THEME.material, THEME.fluent] },
