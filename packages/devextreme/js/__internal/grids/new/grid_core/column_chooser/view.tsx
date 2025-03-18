@@ -46,10 +46,7 @@ export class ColumnChooserView extends View<ColumnChooserProps> {
   ) {
     super();
 
-    this.mode = computed(
-      (v) => (v ?? 'select') as ColumnChooserMode,
-      [this.options.oneWay('columnChooser.mode')],
-    );
+    this.mode = this.options.oneWay('columnChooser.mode');
 
     this.toolbarController.addDefaultItem(
       computed(
@@ -103,7 +100,9 @@ export class ColumnChooserView extends View<ColumnChooserProps> {
         showCloseButton: this.isMaterialOrGeneric(),
         dragEnabled: true,
         resizeEnabled: true,
-        wrapperAttr: { class: this.addWidgetPrefix(COLUMN_CHOOSER_CLASS) },
+        wrapperAttr: {
+          class: this.getPopupWrapperClass(),
+        },
         _loopFocus: true,
 
         width: this.options.oneWay('columnChooser.width'),
@@ -194,8 +193,15 @@ export class ColumnChooserView extends View<ColumnChooserProps> {
     return isMaterial(theme) || isGeneric(theme);
   }
 
+  private getPopupWrapperClass(): string {
+    const modeSpecificClass = this.isSelectMode()
+      ? COLUMN_CHOOSER_SELECT_CLASS
+      : COLUMN_CHOOSER_DRAG_CLASS;
+
+    return [this.addWidgetPrefix(COLUMN_CHOOSER_CLASS), this.addWidgetPrefix(modeSpecificClass)].join(' ');
+  }
+
   private setPopupAttributes(): void {
-    const isSelectMode = this.mode.unreactive_get() === 'select';
     const isBandColumnsUsed = false; // TODO: band columns aren't yet implemented in cardview
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const popup = this.popupRef.current as any;
@@ -205,14 +211,14 @@ export class ColumnChooserView extends View<ColumnChooserProps> {
       label: messageLocalization.format('dxDataGrid-columnChooserTitle'),
     });
 
-    popup.$wrapper()
-      .toggleClass(this.addWidgetPrefix(COLUMN_CHOOSER_DRAG_CLASS), !isSelectMode)
-      .toggleClass(this.addWidgetPrefix(COLUMN_CHOOSER_SELECT_CLASS), isSelectMode);
-
     popup.$content().addClass(this.addWidgetPrefix(COLUMN_CHOOSER_LIST_CLASS));
 
-    if (isSelectMode && !isBandColumnsUsed) {
+    if (this.isSelectMode() && !isBandColumnsUsed) {
       popup.$content().addClass(this.addWidgetPrefix(COLUMN_CHOOSER_PLAIN_CLASS));
     }
+  }
+
+  private isSelectMode(): boolean {
+    return this.mode.unreactive_get() === 'select';
   }
 }
