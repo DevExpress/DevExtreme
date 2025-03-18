@@ -53,8 +53,7 @@
           color: $invalid-color-hover;
         }
 
-        &.dx-step-selected,
-        &.dx-step-completed {
+        &.dx-step-selected {
           .dx-step-indicator {
             color: $color-selected;
           }
