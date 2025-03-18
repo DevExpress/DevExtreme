@@ -195,6 +195,9 @@ const SKIPPED_TESTS = {
     Accordion: [
       { demo: 'Overview', themes: [THEME.generic, THEME.material, THEME.fluent] },
     ],
+    DropDownButton: [
+      { demo: 'Overview', themes: [THEME.generic, THEME.material, THEME.fluent] },
+    ],
     Charts: [
       { demo: 'Overview', themes: [THEME.material] },
       { demo: 'Crosshair', themes: [THEME.generic, THEME.material, THEME.fluent] },
@@ -249,6 +252,12 @@ const SKIPPED_TESTS = {
       { demo: 'CellTemplates', themes: [THEME.generic, THEME.material, THEME.fluent] },
       { demo: 'Resources', themes: [THEME.generic, THEME.material, THEME.fluent] },
     ],
+    Popup: [
+      { demo: 'Scrolling', themes: [THEME.generic, THEME.material, THEME.fluent] },
+    ],
+    Sortable: [
+      { demo: 'Kanban', themes: [THEME.generic, THEME.material, THEME.fluent] },
+    ],
     PivotGrid: [
       { demo: 'IntegratedFieldChooser', themes: [THEME.generic, THEME.material, THEME.fluent] },
     ],
@@ -268,6 +277,13 @@ const SKIPPED_TESTS = {
     ],
     VectorMap: [
       { demo: 'TooltipHTMLSupport', themes: [THEME.material] },
+      { demo: 'DynamicViewport', themes: [THEME.generic, THEME.material, THEME.fluent] },
+    ],
+    DropDownBox: [
+      { demo: 'MultipleSelection', themes: [THEME.generic, THEME.material, THEME.fluent] },
+    ],
+    Gauges: [
+      { demo: 'VariableNumberOfBars', themes: [THEME.generic, THEME.material, THEME.fluent] },
     ],
     DataGrid: [
       { demo: 'BatchEditing', themes: [THEME.fluent] },
