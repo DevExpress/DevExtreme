@@ -11,11 +11,14 @@ import type { Template } from '@ts/core/templates/m_template';
 import { getImageContainer } from '@ts/core/utils/m_icon';
 import type { ActionConfig } from '@ts/core/widget/component';
 import type { OptionChanged } from '@ts/core/widget/types';
-import type { ItemRenderInfo } from '@ts/ui/collection/collection_widget.base';
+import type {
+  ItemRenderInfo,
+  PostprocessRenderItemInfo,
+} from '@ts/ui/collection/collection_widget.base';
 import CollectionWidgetAsync from '@ts/ui/collection/m_collection_widget.async';
 import Connector from '@ts/ui/stepper/connector';
 import type { StepperItemProperties } from '@ts/ui/stepper/stepper_item';
-import StepperItem from '@ts/ui/stepper/stepper_item';
+import StepperItem, { STEP_COMPLETED_CLASS } from '@ts/ui/stepper/stepper_item';
 
 import type { CollectionWidgetEditProperties } from '../collection/m_collection_widget.edit';
 
@@ -50,6 +53,26 @@ class Stepper extends CollectionWidgetAsync<StepperProperties> {
   _connector!: Connector;
 
   _$stepsContainer!: dxElementWrapper;
+
+  _getDefaultOptions(): StepperProperties {
+    return {
+      ...super._getDefaultOptions(),
+      orientation: 'horizontal',
+      linear: true,
+      selectionMode: 'single',
+      selectOnFocus: true,
+      activeStateEnabled: true,
+      hoverStateEnabled: true,
+      focusStateEnabled: true,
+      loopItemFocus: false,
+      selectionRequired: true,
+      isValidExpr(data): boolean | undefined {
+        // @ts-expect-error ts-error
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+        return data ? data.isValid : undefined;
+      },
+    };
+  }
 
   _supportedKeys(): Record<string, (e: KeyboardEvent, options?: Record<string, unknown>) => void> {
     const defaultHandlers = super._supportedKeys();
@@ -103,24 +126,17 @@ class Stepper extends CollectionWidgetAsync<StepperProperties> {
     }) as DxElement;
   }
 
-  _getDefaultOptions(): StepperProperties {
-    return {
-      ...super._getDefaultOptions(),
-      orientation: 'horizontal',
-      linear: true,
-      selectionMode: 'single',
-      selectOnFocus: true,
-      activeStateEnabled: true,
-      hoverStateEnabled: true,
-      focusStateEnabled: true,
-      loopItemFocus: false,
-      selectionRequired: true,
-      isValidExpr(data): boolean | undefined {
-        // @ts-expect-error ts-error
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-        return data ? data.isValid : undefined;
-      },
-    };
+  _getItemInstance($item: dxElementWrapper): StepperItem {
+    return StepperItem.getInstance<StepperItem>($item);
+  }
+
+  _postprocessRenderItem(args: PostprocessRenderItemInfo<StepperItem>): void {
+    super._postprocessRenderItem(args);
+
+    const { selectedIndex = 0 } = this.option();
+    const $itemInstance = this._getItemInstance(args.itemElement);
+
+    $itemInstance.changeCompleted(args.itemIndex < selectedIndex);
   }
 
   _itemClass(): string {
@@ -208,7 +224,7 @@ class Stepper extends CollectionWidgetAsync<StepperProperties> {
   }
 
   _shouldPreventItemEvent(itemElement: Element): boolean {
-    const itemIndex = this._editStrategy.getNormalizedIndex(itemElement);
+    const itemIndex = this._editStrategy.getIndex(itemElement);
     const { linear, selectedIndex = 0 } = this.option();
 
     return !!linear && Math.abs(selectedIndex - itemIndex) > 1;
@@ -236,9 +252,36 @@ class Stepper extends CollectionWidgetAsync<StepperProperties> {
     }
   }
 
+  _processChangeCompletedItems(): void {
+    const itemElements = this._itemElements();
+
+    if (!itemElements.length) {
+      return;
+    }
+
+    const $lastCompletedElement = itemElements.filter(`.${STEP_COMPLETED_CLASS}`).last();
+    const lastCompletedIndex = this._editStrategy.getIndex($lastCompletedElement);
+    const { selectedIndex = 0 } = this.option();
+
+    const startIndex = Math.min(lastCompletedIndex + 1, selectedIndex);
+    const endIndex = Math.max(lastCompletedIndex + 1, selectedIndex);
+    const isCompleted = lastCompletedIndex < selectedIndex;
+
+    for (let i = startIndex; i < endIndex; i += 1) {
+      const $itemInstance = this._getItemInstance($(itemElements[i]));
+
+      $itemInstance.changeCompleted(isCompleted);
+    }
+  }
+
+  _postProcessSyncSelection(): void {
+    this._connector.option('value', this._getConnectorValue());
+    this._processChangeCompletedItems();
+  }
+
   _syncSelectionOptions(byOption?: string): Promise<unknown> {
     super._syncSelectionOptions(byOption).done(() => {
-      this._connector.option('value', this._getConnectorValue());
+      this._postProcessSyncSelection();
     });
 
     return Deferred().resolve().promise();
