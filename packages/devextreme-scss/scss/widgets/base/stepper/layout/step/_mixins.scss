@@ -138,18 +138,6 @@
         box-shadow: 0 0 0 2px $background-color, 0 0 0 4px $border-color-selected, 0 0 0 8px $background-color;
       }
 
-      .dx-state-focused & {
-        .dx-step-content::before {
-          box-shadow: 0 0 0 8px $background-color;
-        }
-
-        &.dx-state-focused {
-          .dx-step-content::before {
-            box-shadow: 0 0 0 2px $background-color, 0 0 0 4px $border-color-focused, 0 0 0 8px $background-color;
-          }
-        }
-      }
-
       &.dx-step-invalid {
         .dx-step-title {
           color: $invalid-color;
