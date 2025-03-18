@@ -27,6 +27,11 @@ export class WidgetMock {
     return this.widget.option(...args);
   }
 
+  public _createActionByOption(...args: unknown[]): unknown {
+    // @ts-expect-error
+    return this.widget._createActionByOption(...args);
+  }
+
   public _createComponent(...args: unknown[]): unknown {
     // @ts-expect-error
     return this.widget._createComponent(...args);

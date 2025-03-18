@@ -5,6 +5,7 @@ import $, { type dxElementWrapper } from '@js/core/renderer';
 import { Deferred } from '@js/core/utils/deferred';
 import { isDefined } from '@js/core/utils/type';
 import type { DxEvent } from '@js/events';
+import type { Item } from '@js/ui/stepper';
 import { BindableTemplate } from '@ts/core/templates/m_bindable_template';
 import type { Template } from '@ts/core/templates/m_template';
 import { getImageContainer } from '@ts/core/utils/m_icon';
@@ -40,6 +41,7 @@ export const ORIENTATION: Record<string, Orientation> = {
 export interface StepperProperties extends CollectionWidgetEditProperties<Stepper> {
   orientation?: Orientation;
   linear?: boolean;
+  isValidExpr?: (data: Item) => boolean | undefined;
 }
 
 class Stepper extends CollectionWidgetAsync<StepperProperties> {
@@ -82,7 +84,7 @@ class Stepper extends CollectionWidgetAsync<StepperProperties> {
     this._templateManager.addDefaultTemplates({
       item: new BindableTemplate(($container: dxElementWrapper, data: StepperItemProperties) => {
         this._prepareDefaultItemTemplate(data, $container);
-      }, ['text', 'icon', 'title'], this.option('integrationOptions.watchMethod')),
+      }, ['text', 'icon', 'title', 'isValid'], this.option('integrationOptions.watchMethod')),
     });
   }
 
@@ -113,6 +115,11 @@ class Stepper extends CollectionWidgetAsync<StepperProperties> {
       focusStateEnabled: true,
       loopItemFocus: false,
       selectionRequired: true,
+      isValidExpr(data): boolean | undefined {
+        // @ts-expect-error ts-error
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+        return data ? data.isValid : undefined;
+      },
     };
   }
 
@@ -259,6 +266,9 @@ class Stepper extends CollectionWidgetAsync<StepperProperties> {
         this._connector.option(name, value);
         break;
       case 'linear':
+        break;
+      case 'isValidExpr':
+        this._invalidate();
         break;
       default:
         super._optionChanged(args);

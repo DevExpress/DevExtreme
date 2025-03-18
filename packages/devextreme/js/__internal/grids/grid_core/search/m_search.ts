@@ -134,13 +134,6 @@ const dataController = (
 const headerPanel = (
   Base: ModuleType<HeaderPanel>,
 ) => class SearchHeaderPanelExtender extends Base {
-  public override init() {
-    super.init();
-    this.newToolbarController.addDefaultItem(
-      this._prepareSearchItem() as any,
-    );
-  }
-
   public optionChanged(args) {
     if (args.name === 'searchPanel') {
       if (args.fullName === 'searchPanel.text') {
@@ -160,53 +153,51 @@ const headerPanel = (
 
   protected _getToolbarItems() {
     const items = super._getToolbarItems();
-    const item = this._prepareSearchItem();
-    const searchPanelOptions = this.option('searchPanel');
 
-    if (searchPanelOptions?.visible) {
-      items.push(item);
-    }
-
-    return items;
+    return this._prepareSearchItem(items);
   }
 
-  private _prepareSearchItem() {
+  private _prepareSearchItem(items) {
     const that = this;
     const dataController = this._dataController;
     const searchPanelOptions = this.option('searchPanel');
 
-    const toolbarItem = {
-      template(data, index, container) {
-        const $search = $('<div>')
-          .addClass(that.addWidgetPrefix(SEARCH_PANEL_CLASS))
-          .appendTo(container);
+    if (searchPanelOptions && searchPanelOptions.visible) {
+      const toolbarItem = {
+        template(data, index, container) {
+          const $search = $('<div>')
+            .addClass(that.addWidgetPrefix(SEARCH_PANEL_CLASS))
+            .appendTo(container);
 
-        that._editorFactoryController.createEditor($search, {
-          width: searchPanelOptions?.width,
-          placeholder: searchPanelOptions?.placeholder,
-          parentType: 'searchPanel',
-          value: that.option('searchPanel.text'),
-          updateValueTimeout: FILTERING_TIMEOUT,
-          setValue(value) {
-            // @ts-expect-error
-            dataController.searchByText(value);
-          },
-          editorOptions: {
-            inputAttr: {
-              'aria-label': messageLocalization.format(`${that.component.NAME}-ariaSearchInGrid`),
+          that._editorFactoryController.createEditor($search, {
+            width: searchPanelOptions.width,
+            placeholder: searchPanelOptions.placeholder,
+            parentType: 'searchPanel',
+            value: that.option('searchPanel.text'),
+            updateValueTimeout: FILTERING_TIMEOUT,
+            setValue(value) {
+              // @ts-expect-error
+              dataController.searchByText(value);
             },
-          },
-        });
+            editorOptions: {
+              inputAttr: {
+                'aria-label': messageLocalization.format(`${that.component.NAME}-ariaSearchInGrid`),
+              },
+            },
+          });
 
-        that.resize();
-      },
-      name: 'searchPanel',
-      location: 'after',
-      locateInMenu: 'never',
-      sortIndex: 40,
-    };
+          that.resize();
+        },
+        name: 'searchPanel',
+        location: 'after',
+        locateInMenu: 'never',
+        sortIndex: 40,
+      };
 
-    return toolbarItem;
+      items.push(toolbarItem);
+    }
+
+    return items;
   }
 
   private getSearchTextEditor() {
