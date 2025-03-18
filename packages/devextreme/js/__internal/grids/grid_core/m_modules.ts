@@ -1,4 +1,3 @@
-/* eslint-disable spellcheck/spell-checker */
 /* eslint-disable @typescript-eslint/prefer-nullish-coalescing */
 /* eslint-disable max-classes-per-file */
 /* eslint-disable @typescript-eslint/method-signature-style */
@@ -13,12 +12,7 @@ import { each } from '@js/core/utils/iterator';
 import { isFunction } from '@js/core/utils/type';
 import { hasWindow } from '@js/core/utils/window';
 import errors from '@js/ui/widget/ui.errors';
-import { DIContext } from '@ts/core/di/index';
-import { fromPromise } from '@ts/core/utils/m_deferred';
 
-import { DataController } from '../new/grid_core/data_controller/index';
-import { OptionsController } from '../new/grid_core/options_controller/options_controller';
-import { NewDataController } from './data_controller/new_data_controller';
 import type {
   Controllers, GridPropertyType, InternalGrid, InternalGridOptions, Module,
   OptionChanged,
@@ -30,11 +24,6 @@ import { updateViewsBorders } from './views/utils/update_views_borders';
 const WIDGET_WITH_LEGACY_CONTAINER_NAME = 'dxDataGrid';
 
 export class ModuleItem {
-  // We don't have type for GridBase widget
-  // There's no such class, DataGrid and TreeList don't have common ancestor
-  // so I just added 'component' id as string
-  public static dependencies: unknown[] = ['component'];
-
   public _updateLockCount: any;
 
   public component!: InternalGrid;
@@ -353,7 +342,7 @@ export class View extends ModuleItem {
 
     if (isVisible) {
       this.component._optionCache = {};
-      const deferred = fromPromise(this._renderCore(options));
+      const deferred = this._renderCore(options);
       this.component._optionCache = undefined;
       if (deferred) {
         deferred.done(() => {
@@ -421,19 +410,8 @@ export function processModules(
   componentInstance: ComponentInstanceType,
   componentClass: { modules: [Module & { name: string }]; modulesOrder: any },
 ): void {
-  const diContext = new DIContext();
-  diContext.registerInstance('component' as any, componentInstance);
-  diContext.registerInstance(OptionsController, new OptionsController(componentInstance as any));
-
   const { modules } = componentClass;
   const { modulesOrder } = componentClass;
-
-  modules.forEach((module) => {
-    module?.newModules?.forEach((newModule) => {
-      // @ts-expect-error
-      diContext.register(newModule);
-    });
-  });
 
   function createModuleItems(
     moduleTypes: Record<string, ModuleItemTypeCore>,
@@ -442,8 +420,7 @@ export function processModules(
 
     each(moduleTypes, (name, moduleType) => {
       // eslint-disable-next-line new-cap
-      const moduleItem = diContext.get(moduleType);
-      // @ts-expect-error
+      const moduleItem = new moduleType(componentInstance);
       moduleItem.name = name;
       registerPublicMethods(componentInstance, name, moduleItem);
 
@@ -508,28 +485,13 @@ export function processModules(
     rootViewTypes,
   );
 
-  Object.keys(controllerTypes).forEach((name) => {
-    const id = rootControllerTypes[name];
-    const fabric = controllerTypes[name];
-    diContext.register(id, fabric);
-  });
-  Object.keys(viewTypes).forEach((name) => {
-    const id = rootViewTypes[name];
-    const fabric = viewTypes[name];
-    diContext.register(id, fabric);
-  });
-
-  componentInstance._controllers = createModuleItems(rootControllerTypes);
-  componentInstance._views = createModuleItems(rootViewTypes);
-  componentInstance.diContext = diContext;
-
-  const newDataController = diContext.tryGet(NewDataController);
-  if (newDataController) {
-    diContext.registerInstance(DataController, newDataController);
-  }
+  // eslint-disable-next-line no-param-reassign
+  componentInstance._controllers = createModuleItems(controllerTypes);
+  // eslint-disable-next-line no-param-reassign
+  componentInstance._views = createModuleItems(viewTypes);
 }
 
-export const callModuleItemsMethod = function (that, methodName, args?) {
+const callModuleItemsMethod = function (that, methodName, args?) {
   args = args || [];
   if (that._controllers) {
     each(that._controllers, function () {
@@ -573,4 +535,6 @@ export default {
   },
 
   processModules,
+
+  callModuleItemsMethod,
 };

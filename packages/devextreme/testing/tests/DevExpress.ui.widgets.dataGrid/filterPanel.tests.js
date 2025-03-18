@@ -101,7 +101,7 @@ QUnit.module('Filter Panel', {
         assert.deepEqual(this.getCombinedFilter(true), undefined, 'check filterValue');
     });
 
-    QUnit.test('createFilter', async function(assert) {
+    QUnit.test('createFilter', function(assert) {
         // arrange, act
         this.initFilterPanelView({
             filterPanel: {
@@ -113,13 +113,11 @@ QUnit.module('Filter Panel', {
             filterValue: null
         });
 
-        await this.clock.tickAsync();
-
         // assert
         assert.equal(this.filterPanelView.element().find('.' + FILTER_PANEL_TEXT_CLASS).text(), 'test', 'check createFilter');
     });
 
-    QUnit.test('Can customize text', async function(assert) {
+    QUnit.test('Can customize text', function(assert) {
         // arrange
         let assertFilterValue;
         let assertFilterText;
@@ -137,49 +135,41 @@ QUnit.module('Filter Panel', {
             filterValue: filterValue
         });
 
-        await this.clock.tickAsync();
-
         // assert
         assert.equal(this.filterPanelView.element().find('.' + FILTER_PANEL_TEXT_CLASS).text(), assertFilterText, 'check customizeText');
         assert.equal(assertFilterValue, filterValue, 'check filter value in customizeText function');
     });
 
-    QUnit.test('Filter text', async function(assert) {
+    QUnit.test('Filter text', function(assert) {
         // arrange
         this.initFilterPanelView();
-
-        await this.clock.tickAsync();
 
         // assert
         assert.equal(this.filterPanelView.element().find('.' + FILTER_PANEL_TEXT_CLASS).text(), '[Field] Equals \'1\'', 'check filter text');
     });
 
     // T651579
-    QUnit.test('filter value with name in identifier shows in panel', async function(assert) {
+    QUnit.test('filter value with name in identifier shows in panel', function(assert) {
         // arrange
         this.initFilterPanelView({
             columns: [{ name: 'field', caption: 'Field', allowFiltering: true }]
         });
 
-        await this.clock.tickAsync();
-
         // assert
         assert.equal(this.filterPanelView.element().find('.' + FILTER_PANEL_TEXT_CLASS).text(), '[Field] Equals \'1\'', 'check filter text');
     });
 
-    QUnit.test('filter value with column witout caption contains empty string', async function(assert) {
+    QUnit.test('filter value with column witout caption contains empty string', function(assert) {
         // arrange
         this.initFilterPanelView({
             columns: [{ name: 'field', allowFiltering: true }]
         });
 
-        await this.clock.tickAsync();
-
         // assert
         assert.equal(this.filterPanelView.element().find('.' + FILTER_PANEL_TEXT_CLASS).text(), '[] Equals \'1\'', 'check filter text');
     });
 
-    QUnit.test('can customize hints', async function(assert) {
+    QUnit.test('can customize hints', function(assert) {
         // arrange, act
         this.initFilterPanelView({
             filterPanel: {
@@ -190,13 +180,11 @@ QUnit.module('Filter Panel', {
             }
         });
 
-        await this.clock.tickAsync();
-
         // assert
         assert.equal(this.filterPanelView.element().find('.' + FILTER_PANEL_CHECKBOX_CLASS).attr('title'), 'test0', 'check hint for applyFilter');
     });
 
-    QUnit.test('clearFilter', async function(assert) {
+    QUnit.test('clearFilter', function(assert) {
         // arrange, act
         this.initFilterPanelView({
             filterPanel: {
@@ -207,13 +195,11 @@ QUnit.module('Filter Panel', {
             }
         });
 
-        await this.clock.tickAsync();
-
         // assert
         assert.equal(this.filterPanelView.element().find('.' + FILTER_PANEL_CLEAR_FILTER_CLASS).text(), 'test0', 'check clearFilter');
     });
 
-    QUnit.test('from condition', async function(assert) {
+    QUnit.test('from condition', function(assert) {
         // arrange
         const filter = ['field', '=', '1'];
         this.initFilterPanelView({
@@ -222,11 +208,12 @@ QUnit.module('Filter Panel', {
 
         // act
         assert.expect(1);
-        const result = await this.filterPanelView.getFilterText(filter, []);
-        assert.deepEqual(result, '[Field] Equals \'1\'');
+        this.filterPanelView.getFilterText(filter, []).done(function(result) {
+            assert.deepEqual(result, '[Field] Equals \'1\'');
+        });
     });
 
-    QUnit.test('from custom operation', async function(assert) {
+    QUnit.test('from custom operation', function(assert) {
         // arrange
         const filter = ['field', 'anyof', [1, 2]];
         this.initFilterPanelView({
@@ -235,12 +222,13 @@ QUnit.module('Filter Panel', {
 
         // act
         assert.expect(1);
-        const result = await this.filterPanelView.getFilterText(filter, [{ name: 'anyof', caption: 'Any of' }]);
-        assert.equal(result, '[Field] Any of(\'1\', \'2\')');
+        this.filterPanelView.getFilterText(filter, [{ name: 'anyof', caption: 'Any of' }]).done(function(result) {
+            assert.equal(result, '[Field] Any of(\'1\', \'2\')');
+        });
     });
 
     // T876959
-    QUnit.test('not load all items from headerFilte.dataSource for anyof operation', async function(assert) {
+    QUnit.test('not load all items from headerFilte.dataSource for anyof operation', function(assert) {
         // arrange
         const filter = ['field', 'anyof', [1, 2]];
         const lookupDataStore = new ArrayStore({
@@ -271,14 +259,15 @@ QUnit.module('Filter Panel', {
 
         // act
         assert.expect(3);
-        const result = await this.filterPanelView.getFilterText(filter, this.filterSyncController.getCustomFilterOperations());
-        assert.equal(result, '[Field] Is any of(\'Text 1\', \'Text 2\')');
-        assert.equal(loadingSpy.callCount, 1, 'loadingSpy.callCount');
-        const loadingFilters = loadingSpy.getCalls().map(i => i.args[0].filter);
-        assert.deepEqual(loadingFilters, [[['key', '=', 1], 'or', ['key', '=', 2]]]);
+        this.filterPanelView.getFilterText(filter, this.filterSyncController.getCustomFilterOperations()).done(function(result) {
+            assert.equal(result, '[Field] Is any of(\'Text 1\', \'Text 2\')');
+            assert.equal(loadingSpy.callCount, 1, 'loadingSpy.callCount');
+            const loadingFilters = loadingSpy.getCalls().map(i => i.args[0].filter);
+            assert.deepEqual(loadingFilters, [[['key', '=', 1], 'or', ['key', '=', 2]]]);
+        });
     });
 
-    QUnit.test('load all items once from headerFilte.dataSource for anyof operation and key is not defined (T1030763)', async function(assert) {
+    QUnit.test('load all items once from headerFilte.dataSource for anyof operation and key is not defined (T1030763)', function(assert) {
         // arrange
         const filter = ['field', 'anyof', [1, 2]];
         const lookupDataStore = new ArrayStore({
@@ -308,15 +297,16 @@ QUnit.module('Filter Panel', {
 
         // act
         assert.expect(3);
-        const result = await this.filterPanelView.getFilterText(filter, this.filterSyncController.getCustomFilterOperations());
-        assert.equal(result, '[Field] Is any of(\'Text 1\', \'Text 2\')');
-        assert.equal(loadingSpy.callCount, 1, 'loadingSpy.callCount');
-        const loadingFilters = loadingSpy.getCalls().map(i => i.args[0].filter);
-        assert.deepEqual(loadingFilters, [undefined]);
+        this.filterPanelView.getFilterText(filter, this.filterSyncController.getCustomFilterOperations()).done(function(result) {
+            assert.equal(result, '[Field] Is any of(\'Text 1\', \'Text 2\')');
+            assert.equal(loadingSpy.callCount, 1, 'loadingSpy.callCount');
+            const loadingFilters = loadingSpy.getCalls().map(i => i.args[0].filter);
+            assert.deepEqual(loadingFilters, [undefined]);
+        });
     });
 
     ['key', undefined].forEach(key => {
-        QUnit.test(`W1017 warning: key = '${key}' and no calculateDisplayValue`, async function(assert) {
+        QUnit.test(`W1017 warning: key = '${key}' and no calculateDisplayValue`, function(assert) {
             // arrange
             sinon.spy(errors, 'log');
             const filter = ['field', 'anyof', [1, 2]];
@@ -349,16 +339,15 @@ QUnit.module('Filter Panel', {
 
             // act
             assert.expect(2);
-            try {
-                const result = await this.filterPanelView.getFilterText(filter, this.filterSyncController.getCustomFilterOperations());
+            this.filterPanelView.getFilterText(filter, this.filterSyncController.getCustomFilterOperations()).done(function(result) {
                 assert.equal(result, '[Field] Is any of(\'Text 1\', \'Text 2\')');
                 assert.equal(errors.log.callCount, 0, 'no warnings');
-            } finally {
+            }).always(() => {
                 errors.log.restore();
-            }
+            });
         });
 
-        QUnit.test(`W1017 warning: key = '${key}' and calculateDisplayValue = 'text'`, async function(assert) {
+        QUnit.test(`W1017 warning: key = '${key}' and calculateDisplayValue = 'text'`, function(assert) {
             // arrange
             sinon.spy(errors, 'log');
             const filter = ['field', 'anyof', [1, 2]];
@@ -392,8 +381,7 @@ QUnit.module('Filter Panel', {
 
             // act
             assert.expect(key ? 2 : 4);
-            try {
-                const result = await this.filterPanelView.getFilterText(filter, this.filterSyncController.getCustomFilterOperations());
+            this.filterPanelView.getFilterText(filter, this.filterSyncController.getCustomFilterOperations()).done(function(result) {
                 assert.equal(result, '[Field] Is any of(\'Text 1\', \'Text 2\')');
                 if(!key) {
                     assert.equal(errors.log.callCount, 2, 'four warnings');
@@ -403,14 +391,14 @@ QUnit.module('Filter Panel', {
                 } else {
                     assert.equal(errors.log.callCount, 0, 'no warnings');
                 }
-            } finally {
+            }).always(() => {
                 errors.log.restore();
-            }
+            });
         });
     });
 
     // T663205, T813868
-    QUnit.test('from anyof build-in operation and lookup', async function(assert) {
+    QUnit.test('from anyof build-in operation and lookup', function(assert) {
         // arrange
         const filter = ['field', 'anyof', [1, 2]];
         const lookupDataSource = [
@@ -434,13 +422,14 @@ QUnit.module('Filter Panel', {
 
         // act
         assert.expect(2);
-        const result = await this.filterPanelView.getFilterText(filter, this.filterSyncController.getCustomFilterOperations());
-        assert.equal(result, '[Field] Is any of(\'Text 1\', \'Text 2\')');
-        assert.deepEqual(lookupDataSource[0], { key: 1, text: 'Text 1' }, 'lookup dataSource item is not changed');
+        this.filterPanelView.getFilterText(filter, this.filterSyncController.getCustomFilterOperations()).done(function(result) {
+            assert.equal(result, '[Field] Is any of(\'Text 1\', \'Text 2\')');
+            assert.deepEqual(lookupDataSource[0], { key: 1, text: 'Text 1' }, 'lookup dataSource item is not changed');
+        });
     });
 
     // T703158
-    QUnit.test('skip additional load in anyof', async function(assert) {
+    QUnit.test('skip additional load in anyof', function(assert) {
         const spy = sinon.spy();
         // arrange
         const filter = ['field', 'anyof', [1, 2]];
@@ -471,12 +460,13 @@ QUnit.module('Filter Panel', {
 
         // act
         assert.expect(2);
-        const result = await this.filterPanelView.getFilterText(filter, this.filterSyncController.getCustomFilterOperations());
-        assert.equal(result, '[Field] Is any of(\'Text 1\', \'Text 2\')');
-        assert.equal(spy.callCount, 1);
+        this.filterPanelView.getFilterText(filter, this.filterSyncController.getCustomFilterOperations()).done(function(result) {
+            assert.equal(result, '[Field] Is any of(\'Text 1\', \'Text 2\')');
+            assert.equal(spy.callCount, 1);
+        });
     });
 
-    QUnit.test('from custom operation with value = array', async function(assert) {
+    QUnit.test('from custom operation with value = array', function(assert) {
         // arrange
         const filter = [
             ['field', 'anyof', [200]]
@@ -488,16 +478,17 @@ QUnit.module('Filter Panel', {
 
         // act
         assert.expect(1);
-        const result = await this.filterPanelView.getFilterText(filter, [{
+        this.filterPanelView.getFilterText(filter, [{
             name: 'anyof',
             caption: 'Any of',
             customizeText: function(fieldInfo) { return 'CustomText'; }
-        }]);
-        // assert
-        assert.equal(result, '[Field] Any of(\'CustomText\')');
+        }]).done(function(result) {
+            // assert
+            assert.equal(result, '[Field] Any of(\'CustomText\')');
+        });
     });
 
-    QUnit.test('from custom operation with async customizeText', async function(assert) {
+    QUnit.test('from custom operation with async customizeText', function(assert) {
         // arrange
         const deferred = $.Deferred();
         const filter = [
@@ -519,22 +510,19 @@ QUnit.module('Filter Panel', {
         });
 
         // assert
-        await this.clock.tickAsync();
         assert.equal(this.filterPanelView.element().find('.' + FILTER_PANEL_TEXT_CLASS).text(), '');
-
         deferred.resolve('Two hundred');
-        await this.clock.tickAsync();
         assert.equal(this.filterPanelView.element().find('.' + FILTER_PANEL_TEXT_CLASS).text(), '[Field] Custom(\'Two hundred\')');
     });
 
-    QUnit.test('custom operation target = \'filterPanel\'', async function(assert) {
+    QUnit.test('custom operation target = \'filterPanel\'', function(assert) {
         // arrange
         const filter = ['field', 'customOperation', 2];
         this.initFilterPanelView();
 
         // act
         assert.expect(2);
-        const result = await this.filterPanelView.getFilterText(filter, [{
+        this.filterPanelView.getFilterText(filter, [{
             name: 'customOperation',
             caption: 'Custom',
             calculateFilterExpression: function() { return null; },
@@ -542,22 +530,24 @@ QUnit.module('Filter Panel', {
                 assert.equal(fieldInfo.target, 'filterPanel');
                 return 'two';
             }
-        }]);
-        assert.equal(result, '[Field] Custom \'two\'');
+        }]).done(function(result) {
+            assert.equal(result, '[Field] Custom \'two\'');
+        });
     });
 
-    QUnit.test('from between', async function(assert) {
+    QUnit.test('from between', function(assert) {
         const filter = ['field', 'between', [1, 2]];
         this.initFilterPanelView({
             filterValue: filter
         });
 
         assert.expect(1);
-        const result = await this.filterPanelView.getFilterText(filter, []);
-        assert.equal(result, '[Field] Is between(\'1\', \'2\')');
+        this.filterPanelView.getFilterText(filter, []).done(function(result) {
+            assert.equal(result, '[Field] Is between(\'1\', \'2\')');
+        });
     });
 
-    QUnit.test('from between with dates', async function(assert) {
+    QUnit.test('from between with dates', function(assert) {
         const filter = ['field', 'between', [new Date(2012, 10, 12), new Date(2013, 2, 23)]];
         this.initFilterPanelView({
             columns: [{ dataField: 'field', dataType: 'date', format: 'MM/dd/yyyy' }],
@@ -565,11 +555,12 @@ QUnit.module('Filter Panel', {
         });
 
         assert.expect(1);
-        const result = await this.filterPanelView.getFilterText(filter, []);
-        assert.equal(result, '[Field] Is between(\'11/12/2012\', \'03/23/2013\')');
+        this.filterPanelView.getFilterText(filter, []).done(function(result) {
+            assert.equal(result, '[Field] Is between(\'11/12/2012\', \'03/23/2013\')');
+        });
     });
 
-    QUnit.test('from isBlank / isNotBlank', async function(assert) {
+    QUnit.test('from isBlank / isNotBlank', function(assert) {
         const filter = [['field', '=', null], 'and', ['field', '<>', null]];
 
         this.initFilterPanelView({
@@ -577,33 +568,36 @@ QUnit.module('Filter Panel', {
         });
 
         assert.expect(1);
-        const result = await this.filterPanelView.getFilterText(filter, []);
-        assert.equal(result, '[Field] Is Blank And [Field] Is Not Blank');
+        this.filterPanelView.getFilterText(filter, []).done(function(result) {
+            assert.equal(result, '[Field] Is Blank And [Field] Is Not Blank');
+        });
     });
 
-    QUnit.test('from group', async function(assert) {
+    QUnit.test('from group', function(assert) {
         const filter = [['field', '=', '1'], 'and', ['field', '=', '2']];
         this.initFilterPanelView({
             filterValue: filter
         });
 
         assert.expect(1);
-        const result = await this.filterPanelView.getFilterText(filter, []);
-        assert.equal(result, '[Field] Equals \'1\' And [Field] Equals \'2\'');
+        this.filterPanelView.getFilterText(filter, []).done(function(result) {
+            assert.equal(result, '[Field] Equals \'1\' And [Field] Equals \'2\'');
+        });
     });
 
-    QUnit.test('from group with inner group', async function(assert) {
+    QUnit.test('from group with inner group', function(assert) {
         const filter = [['field', '=', '1'], 'and', ['field', '=', '2'], 'and', [['field', '=', '3'], 'or', ['field', '=', '4']]];
         this.initFilterPanelView({
             filterValue: filter
         });
 
         assert.expect(1);
-        const result = await this.filterPanelView.getFilterText(filter, []);
-        assert.equal(result, '[Field] Equals \'1\' And [Field] Equals \'2\' And ([Field] Equals \'3\' Or [Field] Equals \'4\')');
+        this.filterPanelView.getFilterText(filter, []).done(function(result) {
+            assert.equal(result, '[Field] Equals \'1\' And [Field] Equals \'2\' And ([Field] Equals \'3\' Or [Field] Equals \'4\')');
+        });
     });
 
-    QUnit.test('from group with inner group with Not', async function(assert) {
+    QUnit.test('from group with inner group with Not', function(assert) {
         const filter = ['!', [['field', '=', '1'], 'and', ['field', '=', '2']]];
 
         this.initFilterPanelView({
@@ -611,11 +605,12 @@ QUnit.module('Filter Panel', {
         });
 
         assert.expect(1);
-        const result = await this.filterPanelView.getFilterText(filter, []);
-        assert.deepEqual(result, 'Not ([Field] Equals \'1\' And [Field] Equals \'2\')');
+        this.filterPanelView.getFilterText(filter, []).done(function(result) {
+            assert.deepEqual(result, 'Not ([Field] Equals \'1\' And [Field] Equals \'2\')');
+        });
     });
 
-    QUnit.test('filterBuilder customOperation', async function(assert) {
+    QUnit.test('filterBuilder customOperation', function(assert) {
         // arrange
         const filter = ['dateField', 'testOperation'];
         const customFilter = ['dateField', '=', '10/10/2010'];
@@ -645,8 +640,6 @@ QUnit.module('Filter Panel', {
                 { dataField: 'dateField', caption: 'Date', dataType: 'date' },
             ]
         });
-
-        await this.clock.tickAsync();
 
         // assert
         assert.equal(this.filterPanelView.element().find('.' + FILTER_PANEL_TEXT_CLASS).text(), '[Date] TestOperation', 'filterPanel text');
@@ -733,7 +726,7 @@ QUnit.module('Filter Panel', {
     });
 
     // T698723
-    QUnit.test('Has correct value when calculateDisplayValue is defined && column has lookup', async function(assert) {
+    QUnit.test('Has correct value when calculateDisplayValue is defined && column has lookup', function(assert) {
         this.initFilterPanelView({
             filterPanel: {
                 visible: true
@@ -753,8 +746,6 @@ QUnit.module('Filter Panel', {
                 }
             }]
         });
-
-        await this.clock.tickAsync();
 
         // assert
         assert.equal(this.filterPanelView.element().find('.' + FILTER_PANEL_TEXT_CLASS).text(), '[State ID] Equals \'Tuscaloosa\'', 'filterPanel text');

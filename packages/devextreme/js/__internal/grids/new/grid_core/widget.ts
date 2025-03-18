@@ -2,6 +2,7 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 /* eslint-disable spellcheck/spell-checker */
 // eslint-disable-next-line max-classes-per-file
+import { extend } from '@js/core/utils/extend';
 import Widget from '@js/ui/widget/ui.widget';
 import { DIContext } from '@ts/core/di/index';
 import type { Subscription } from '@ts/core/reactive/index';
@@ -14,6 +15,7 @@ import * as DataControllerModule from './data_controller/index';
 import { EditingController } from './editing/controller';
 import { ErrorController } from './error_controller/error_controller';
 import { FilterPanelView } from './filtering/filter_panel/filter_panel';
+import { ItemsController } from './items_controller/items_controller';
 import { MainView } from './main_view';
 import { defaultOptions, defaultOptionsRules, type Options } from './options';
 import { PagerView } from './pager/view';
@@ -30,6 +32,8 @@ export class GridCoreNewBase<
   protected diContext!: DIContext;
 
   protected dataController!: DataControllerModule.DataController;
+
+  protected itemsController!: ItemsController;
 
   protected columnsController!: ColumnsControllerModule.ColumnsController;
 
@@ -52,6 +56,7 @@ export class GridCoreNewBase<
     this.diContext = new DIContext();
     this.diContext.register(DataControllerModule.DataController);
     this.diContext.register(DataControllerModule.CompatibilityDataController);
+    this.diContext.register(ItemsController);
     this.diContext.register(ColumnsControllerModule.ColumnsController);
     this.diContext.register(ColumnsControllerModule.CompatibilityColumnsController);
     this.diContext.register(ToolbarController);
@@ -76,6 +81,7 @@ export class GridCoreNewBase<
     this.columnsChooser = this.diContext.get(ColumnsChooserView);
     this.dataController = this.diContext.get(DataControllerModule.DataController);
     this.columnsController = this.diContext.get(ColumnsControllerModule.ColumnsController);
+    this.itemsController = this.diContext.get(ItemsController);
     this.toolbarController = this.diContext.get(ToolbarController);
     this.toolbarView = this.diContext.get(ToolbarView);
     // this.editingController = this.diContext.get(EditingController);
@@ -96,7 +102,7 @@ export class GridCoreNewBase<
     return {
       // @ts-expect-error
       ...super._getDefaultOptions() as {},
-      ...defaultOptions,
+      ...extend(true, {}, defaultOptions) as typeof defaultOptions,
     };
   }
 
