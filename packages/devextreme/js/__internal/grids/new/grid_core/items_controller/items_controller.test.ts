@@ -11,9 +11,7 @@ const setup = (config: Options = {}) => {
   const options = new OptionsControllerMock(config);
 
   const dataController = new DataController(options);
-
   const columnsController = new ColumnsController(options, dataController);
-
   const itemsController = new ItemsController(dataController, columnsController);
 
   return {
