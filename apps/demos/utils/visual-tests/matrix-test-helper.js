@@ -195,75 +195,96 @@ const SKIPPED_TESTS = {
     Accordion: [
       { demo: 'Overview', themes: [THEME.generic, THEME.material, THEME.fluent] },
     ],
-    DropDownButton: [
-      { demo: 'Overview', themes: [THEME.generic, THEME.material, THEME.fluent] },
-    ],
     Charts: [
-      { demo: 'Overview', themes: [THEME.material] },
       { demo: 'Crosshair', themes: [THEME.generic, THEME.material, THEME.fluent] },
       { demo: 'CustomAnnotations', themes: [THEME.generic, THEME.material, THEME.fluent] },
-      { demo: 'LoadDataOnDemand', themes: [THEME.generic, THEME.material, THEME.fluent] },
       { demo: 'CustomLegendMarkers', themes: [THEME.generic, THEME.material, THEME.fluent] },
-      { demo: 'PieWithResolvedLabelOverlapping', themes: [THEME.generic, THEME.material, THEME.fluent] },
-      { demo: 'ZoomingAndScrollingAPI', themes: [THEME.generic, THEME.material, THEME.fluent] },
-      { demo: 'ZoomingOnAreaSelection', themes: [THEME.generic, THEME.material, THEME.fluent] },
-      { demo: 'TooltipHTMLSupport', themes: [THEME.material] },
       { demo: 'Export', themes: [THEME.generic, THEME.material, THEME.fluent] },
       { demo: 'ExportCustomMarkup', themes: [THEME.generic, THEME.material, THEME.fluent] },
+      { demo: 'LoadDataOnDemand', themes: [THEME.generic, THEME.material, THEME.fluent] },
+      { demo: 'Overview', themes: [THEME.material] },
+      { demo: 'PieWithResolvedLabelOverlapping', themes: [THEME.generic, THEME.material, THEME.fluent] },
       { demo: 'PopupEditing', themes: [THEME.generic, THEME.material, THEME.fluent] },
-    ],
-    VectorMap: [
       { demo: 'TooltipHTMLSupport', themes: [THEME.material] },
+      { demo: 'ZoomingAndScrollingAPI', themes: [THEME.generic, THEME.material, THEME.fluent] },
+      { demo: 'ZoomingOnAreaSelection', themes: [THEME.generic, THEME.material, THEME.fluent] },
     ],
     DataGrid: [
-      { demo: 'Appearance', themes: [THEME.generic, THEME.material, THEME.fluent] },
       { demo: 'AdvancedMasterDetailView', themes: [THEME.generic, THEME.material, THEME.fluent] },
-      { demo: 'BatchEditing', themes: [THEME.generic, THEME.material, THEME.fluent] },
       { demo: 'AjaxRequest', themes: [THEME.generic, THEME.material, THEME.fluent] },
-      { demo: 'InfiniteScrolling', themes: [THEME.generic, THEME.material, THEME.fluent] },
-      { demo: 'MasterDetailView', themes: [THEME.generic, THEME.material, THEME.fluent] },
-      { demo: 'SimpleArray', themes: [THEME.generic, THEME.material, THEME.fluent] },
-      { demo: 'MasterDetailAPI', themes: [THEME.generic, THEME.material, THEME.fluent] },
-      { demo: 'DataValidation', themes: [THEME.generic, THEME.material, THEME.fluent] },
-      { demo: 'MultipleSorting', themes: [THEME.generic, THEME.material, THEME.fluent] },
-      { demo: 'OdataService', themes: [THEME.generic, THEME.material, THEME.fluent] },
+      { demo: 'Appearance', themes: [THEME.generic, THEME.material, THEME.fluent] },
+      { demo: 'BatchEditing', themes: [THEME.generic, THEME.material, THEME.fluent] },
+      { demo: 'CellEditingAndEditingAPI', themes: [THEME.generic, THEME.fluent, THEME.material] },
       { demo: 'CustomNewRecordPosition', themes: [THEME.generic, THEME.material, THEME.fluent] },
+      { demo: 'DataValidation', themes: [THEME.generic, THEME.material, THEME.fluent] },
+      { demo: 'EditStateManagement', themes: [THEME.generic, THEME.fluent, THEME.material] },
       { demo: 'Filtering', themes: [THEME.generic, THEME.material, THEME.fluent] },
       { demo: 'FilteringAPI', themes: [THEME.generic, THEME.material, THEME.fluent] },
       { demo: 'GroupSummaries', themes: [THEME.generic, THEME.material, THEME.fluent] },
-      { demo: 'RecordPaging', themes: [THEME.generic, THEME.material, THEME.fluent] },
-      { demo: 'RowSelection', themes: [THEME.generic, THEME.material, THEME.fluent] },
-      { demo: 'MultipleSelection', themes: [THEME.material, THEME.fluent] },
-      { demo: 'CellEditingAndEditingAPI', themes: [THEME.generic, THEME.fluent, THEME.material] },
+      { demo: 'InfiniteScrolling', themes: [THEME.generic, THEME.material, THEME.fluent] },
+      { demo: 'MasterDetailAPI', themes: [THEME.generic, THEME.material, THEME.fluent] },
+      { demo: 'MasterDetailView', themes: [THEME.generic, THEME.material, THEME.fluent] },
       { demo: 'MultipleRecordSelectionAPI', themes: [THEME.generic, THEME.fluent, THEME.material] },
+      { demo: 'MultipleSelection', themes: [THEME.material, THEME.fluent] },
+      { demo: 'MultipleSorting', themes: [THEME.generic, THEME.material, THEME.fluent] },
+      { demo: 'OdataService', themes: [THEME.generic, THEME.material, THEME.fluent] },
+      { demo: 'RecordGrouping', themes: [THEME.generic, THEME.material, THEME.fluent] },
+      { demo: 'RecordPaging', themes: [THEME.generic, THEME.material, THEME.fluent] },
       { demo: 'RemoteGrouping', themes: [THEME.generic, THEME.fluent, THEME.material] },
       { demo: 'RowEditingAndEditingEvents', themes: [THEME.generic, THEME.fluent, THEME.material] },
-      { demo: 'EditStateManagement', themes: [THEME.generic, THEME.fluent, THEME.material] },
-      { demo: 'RecordGrouping', themes: [THEME.generic, THEME.material, THEME.fluent] },
+      { demo: 'RowSelection', themes: [THEME.generic, THEME.material, THEME.fluent] },
+      { demo: 'SimpleArray', themes: [THEME.generic, THEME.material, THEME.fluent] },
       { demo: 'ToolbarCustomization', themes: [THEME.generic, THEME.material, THEME.fluent] },
+    ],
+    DropDownBox: [
+      { demo: 'MultipleSelection', themes: [THEME.generic, THEME.material, THEME.fluent] },
+    ],
+    DropDownButton: [
+      { demo: 'Overview', themes: [THEME.generic, THEME.material, THEME.fluent] },
     ],
     Form: [
       'CustomizeItem',
       { demo: 'Validation', themes: [THEME.material] },
     ],
-    Scheduler: [
-      'CustomDragAndDrop',
-      { demo: 'Resources', themes: [THEME.fluent] },
-      { demo: 'CellTemplates', themes: [THEME.generic, THEME.material, THEME.fluent] },
-      { demo: 'Resources', themes: [THEME.generic, THEME.material, THEME.fluent] },
+    Gauges: [
+      { demo: 'VariableNumberOfBars', themes: [THEME.generic, THEME.material, THEME.fluent] },
     ],
-    Popup: [
-      { demo: 'Scrolling', themes: [THEME.generic, THEME.material, THEME.fluent] },
+    List: [
+      { demo: 'ItemDragging', themes: [THEME.generic, THEME.material, THEME.fluent] },
     ],
-    Sortable: [
-      { demo: 'Kanban', themes: [THEME.generic, THEME.material, THEME.fluent] },
+    Lookup: [
+      { demo: 'Basics', themes: [THEME.generic, THEME.material, THEME.fluent] },
     ],
     PivotGrid: [
       { demo: 'IntegratedFieldChooser', themes: [THEME.generic, THEME.material, THEME.fluent] },
     ],
+    Popup: [
+      { demo: 'Scrolling', themes: [THEME.generic, THEME.material, THEME.fluent] },
+    ],
+    Scheduler: [
+      'CustomDragAndDrop',
+      { demo: 'CellTemplates', themes: [THEME.generic, THEME.material, THEME.fluent] },
+      { demo: 'Resources', themes: [THEME.fluent] },
+      { demo: 'Resources', themes: [THEME.generic, THEME.material, THEME.fluent] },
+    ],
+    SelectBox: [
+      { demo: 'GroupedItems', themes: [THEME.generic, THEME.material, THEME.fluent] },
+    ],
+    Sortable: [
+      { demo: 'Kanban', themes: [THEME.generic, THEME.material, THEME.fluent] },
+    ],
+    Splitter: [
+      { demo: 'Overview', themes: [THEME.generic, THEME.material, THEME.fluent] },
+    ],
+    TabPanel: [
+      { demo: 'Overview', themes: [THEME.generic, THEME.material, THEME.fluent] },
+    ],
     Toolbar: [
       { demo: 'Adaptability', themes: [THEME.generic, THEME.material, THEME.fluent] },
-    ]
+    ],
+    VectorMap: [
+      { demo: 'TooltipHTMLSupport', themes: [THEME.material] },
+    ],
   },
   Vue: {
     Charts: [
@@ -278,12 +299,6 @@ const SKIPPED_TESTS = {
     VectorMap: [
       { demo: 'TooltipHTMLSupport', themes: [THEME.material] },
       { demo: 'DynamicViewport', themes: [THEME.generic, THEME.material, THEME.fluent] },
-    ],
-    DropDownBox: [
-      { demo: 'MultipleSelection', themes: [THEME.generic, THEME.material, THEME.fluent] },
-    ],
-    Gauges: [
-      { demo: 'VariableNumberOfBars', themes: [THEME.generic, THEME.material, THEME.fluent] },
     ],
     DataGrid: [
       { demo: 'BatchEditing', themes: [THEME.fluent] },
