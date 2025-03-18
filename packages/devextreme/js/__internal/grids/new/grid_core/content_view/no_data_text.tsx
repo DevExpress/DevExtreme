@@ -14,7 +14,6 @@ export class NoDataText extends Component<NoDataTextProperties> {
   public render(): InfernoNode {
     if (this.props.template) {
       const Template = this.props.template;
-      // @ts-expect-error
       return <Template text={this.props.text} />;
     }
 
