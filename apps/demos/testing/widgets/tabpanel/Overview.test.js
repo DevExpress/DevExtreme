@@ -18,7 +18,7 @@ runManualTest('TabPanel', 'Overview', ['jQuery', 'React', 'Vue', 'Angular'], (te
   test('Overview', async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-    await t.wait(1000);
+    await t.wait(2000);
 
     await t
       .click($(`.${OPTION_CLASS} .${SELECTBOX_CLASS}`).nth(0))

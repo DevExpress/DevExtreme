@@ -16,7 +16,7 @@ runManualTest('Accordion', 'Overview', ['jQuery', 'React', 'Angular', 'Vue'], (t
   test('Custom Overview Appearance', async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-    await t.wait(1000);
+    await t.wait(2000);
 
     await t
       .click($(`.${ITEM_TITLE_CLASS}`).nth(1))
