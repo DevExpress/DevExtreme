@@ -10,6 +10,7 @@ import { render } from 'inferno';
 import * as ColumnsControllerModule from './columns_controller/index';
 import * as DataControllerModule from './data_controller/index';
 import { ErrorController } from './error_controller/error_controller';
+import { ItemsController } from './items_controller/items_controller';
 import { MainView } from './main_view';
 import { defaultOptions, defaultOptionsRules, type Options } from './options';
 import { PagerView } from './pager/view';
@@ -25,6 +26,8 @@ export class GridCoreNewBase<
 
   protected dataController!: DataControllerModule.DataController;
 
+  protected itemsController!: ItemsController;
+
   protected columnsController!: ColumnsControllerModule.ColumnsController;
 
   private pagerView!: PagerView;
@@ -38,6 +41,7 @@ export class GridCoreNewBase<
   protected _registerDIContext(): void {
     this.diContext = new DIContext();
     this.diContext.register(DataControllerModule.DataController);
+    this.diContext.register(ItemsController);
     this.diContext.register(ColumnsControllerModule.ColumnsController);
     this.diContext.register(ToolbarController);
     this.diContext.register(ToolbarView);
@@ -48,6 +52,7 @@ export class GridCoreNewBase<
   protected _initDIContext(): void {
     this.dataController = this.diContext.get(DataControllerModule.DataController);
     this.columnsController = this.diContext.get(ColumnsControllerModule.ColumnsController);
+    this.itemsController = this.diContext.get(ItemsController);
     this.toolbarController = this.diContext.get(ToolbarController);
     this.toolbarView = this.diContext.get(ToolbarView);
     this.pagerView = this.diContext.get(PagerView);

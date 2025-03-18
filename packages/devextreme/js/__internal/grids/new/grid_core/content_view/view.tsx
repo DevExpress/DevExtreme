@@ -4,28 +4,18 @@ import type dxScrollable from '@js/ui/scroll_view/ui.scrollable';
 import type { ScrollEventInfo } from '@js/ui/scroll_view/ui.scrollable';
 import { combined, computed, state } from '@ts/core/reactive/index';
 import { ColumnsController } from '@ts/grids/new/grid_core/columns_controller/columns_controller';
-import type { Column } from '@ts/grids/new/grid_core/columns_controller/types';
 import { View } from '@ts/grids/new/grid_core/core/view';
 import { DataController } from '@ts/grids/new/grid_core/data_controller/index';
 import { ErrorController } from '@ts/grids/new/grid_core/error_controller/error_controller';
 import { createRef } from 'inferno';
 
+import { ItemsController } from '../items_controller/items_controller';
 import { OptionsController } from '../options_controller/options_controller';
 
 export abstract class ContentView<TProps extends {}> extends View<TProps> {
   private readonly isNoData = computed(
     (isLoading, items) => !isLoading && items.length === 0,
     [this.dataController.isLoading, this.dataController.items],
-  );
-
-  public readonly items = computed(
-    (dataItems, columns: Column[]) => dataItems.map(
-      (item) => this.columnsController.createDataRow(
-        item,
-        columns,
-      ),
-    ),
-    [this.dataController.items, this.columnsController.visibleColumns],
   );
 
   public readonly scrollableRef = createRef<dxScrollable>();
@@ -39,7 +29,11 @@ export abstract class ContentView<TProps extends {}> extends View<TProps> {
   protected readonly width = state(0);
 
   public static dependencies = [
-    DataController, OptionsController, ErrorController, ColumnsController,
+    DataController,
+    OptionsController,
+    ErrorController,
+    ColumnsController,
+    ItemsController,
   ] as const;
 
   constructor(
@@ -47,7 +41,7 @@ export abstract class ContentView<TProps extends {}> extends View<TProps> {
     protected readonly options: OptionsController,
     protected readonly errorController: ErrorController,
     protected readonly columnsController: ColumnsController,
-
+    protected readonly itemsController: ItemsController,
   ) {
     super();
   }
