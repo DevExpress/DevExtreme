@@ -42,7 +42,7 @@ export const waitForAngularLoading = ClientFunction(() => new Promise((resolve) 
   const demoAppIntervalHandle = setInterval(() => {
     const demoApp = document.querySelector('demo-app');
     if ((demoApp && demoApp.innerText !== 'Loading...') || demoAppCounter === 120) {
-      setTimeout(resolve, 3000);
+      setTimeout(resolve, 1000);
       clearInterval(demoAppIntervalHandle);
     }
     demoAppCounter += 1;
@@ -192,9 +192,9 @@ const SKIPPED_TESTS = {
     ],
   },
   Angular: {
-    Accordion: [
-      { demo: 'Overview', themes: [THEME.generic, THEME.material, THEME.fluent] },
-    ],
+    // Accordion: [
+    //   { demo: 'Overview', themes: [THEME.generic, THEME.material, THEME.fluent] },
+    // ],
     Charts: [
       { demo: 'Crosshair', themes: [THEME.generic, THEME.material, THEME.fluent] },
       { demo: 'CustomAnnotations', themes: [THEME.generic, THEME.material, THEME.fluent] },
@@ -279,9 +279,9 @@ const SKIPPED_TESTS = {
     // TabPanel: [
     //   { demo: 'Overview', themes: [THEME.generic, THEME.material, THEME.fluent] },
     // ],
-    Toolbar: [
-      { demo: 'Adaptability', themes: [THEME.generic, THEME.material, THEME.fluent] },
-    ],
+    // Toolbar: [
+    //   { demo: 'Adaptability', themes: [THEME.generic, THEME.material, THEME.fluent] },
+    // ],
     VectorMap: [
       { demo: 'TooltipHTMLSupport', themes: [THEME.material] },
       { demo: 'DynamicViewport', themes: [THEME.generic, THEME.material, THEME.fluent] },

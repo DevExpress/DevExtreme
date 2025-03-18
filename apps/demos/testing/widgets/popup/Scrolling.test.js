@@ -18,6 +18,8 @@ runManualTest('Popup', 'Scrolling', ['jQuery', 'React', 'Vue', 'Angular'], (test
   test('Scrolling', async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
+    await t.wait(1000);
+
     await t.click(Selector(`.${BUTTON_CLASS}`).nth(0));
     await testScreenshot(t, takeScreenshot, 'popup with scrollable container.png');
 
