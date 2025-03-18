@@ -695,42 +695,43 @@ const Overlay: typeof OverlayInstance = Widget.inherit({
   _findTabbableBounds() {
     const $elements = this._$wrapper.find('*');
     const elementsCount = $elements.length - 1;
-    const result = { first: null, last: null };
 
-    for (let i = 0; i <= elementsCount; i++) {
-      if (!result.first && $elements.eq(i).is(tabbable)) {
-        result.first = $elements.eq(i);
+    let first = null;
+    let last = null;
+
+    for (let i = 0; i <= elementsCount; i += 1) {
+      if (!first && $elements.eq(i).is(tabbable)) {
+        first = $elements.eq(i);
+      }
+      if (!last && $elements.eq(elementsCount - i).is(tabbable)) {
+        last = $elements.eq(elementsCount - i);
       }
 
-      if (!result.last && $elements.eq(elementsCount - i).is(tabbable)) {
-        result.last = $elements.eq(elementsCount - i);
-      }
-
-      if (result.first && result.last) {
+      if (first && last) {
         break;
       }
     }
 
-    return result;
+    return { first, last };
   },
 
-  _tabKeyHandler(e) {
+  _tabKeyHandler(e: KeyboardEvent): void {
     if (normalizeKeyName(e) !== TAB_KEY || !this._isTopOverlay()) {
       return;
     }
 
-    const tabbableElements = this._findTabbableBounds();
+    const wrapper = this._$wrapper.get(0) as HTMLElement;
+    const activeElement = domAdapter.getActiveElement(wrapper);
 
-    const $firstTabbable = tabbableElements.first;
-    const $lastTabbable = tabbableElements.last;
+    const { first: $firstTabbable, last: $lastTabbable } = this._findTabbableBounds();
 
-    const isTabOnLast = !e.shiftKey && e.target === $lastTabbable.get(0);
-    const isShiftTabOnFirst = e.shiftKey && e.target === $firstTabbable.get(0);
-    const isEmptyTabList = tabbableElements.length === 0;
-    const isOutsideTarget = !contains(this._$wrapper.get(0), e.target);
+    const isTabOnLast = !e.shiftKey && activeElement === $lastTabbable?.get(0);
+    const isShiftTabOnFirst = e.shiftKey && activeElement === $firstTabbable?.get(0);
+    const isOutsideTarget = !wrapper.contains(activeElement);
 
-    if (isTabOnLast || isShiftTabOnFirst
-            || isEmptyTabList || isOutsideTarget) {
+    const shouldPreventDefault = isTabOnLast || isShiftTabOnFirst || isOutsideTarget;
+
+    if (shouldPreventDefault) {
       e.preventDefault();
 
       const $focusElement = e.shiftKey ? $lastTabbable : $firstTabbable;
