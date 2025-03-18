@@ -8,9 +8,6 @@ import type { Subscription, SubsGets } from '@ts/core/reactive/index';
 import { toSubscribable } from '@ts/core/reactive/index';
 import { Component, type ComponentType, render } from 'inferno';
 
-import type { TemplateStore } from './template_context';
-import { templateContext } from './template_context';
-
 // import { renderToString } from 'inferno-server';
 
 export abstract class View<T extends {}> {
@@ -19,8 +16,6 @@ export abstract class View<T extends {}> {
   private props?: T;
 
   private firstRender = true;
-
-  private readonly templateStore: TemplateStore = { nodes: [] };
 
   protected abstract component: ComponentType<T>;
 
@@ -31,9 +26,7 @@ export abstract class View<T extends {}> {
     return toSubscribable(this.getProps()).subscribe((props: T) => {
       this.props = props;
       const content = (
-        <templateContext.Provider value={this.templateStore}>
-          <ViewComponent {...props}/>
-        </templateContext.Provider>
+        <ViewComponent {...props}/>
       );
 
       // // @ts-expect-error
@@ -85,9 +78,7 @@ export abstract class View<T extends {}> {
       public render(): JSX.Element | undefined {
         const ViewComponent = view.component;
         return (
-          <templateContext.Provider value={view.templateStore}>
-            <ViewComponent {...this.state!.props}/>
-          </templateContext.Provider>
+          <ViewComponent {...this.state!.props}/>
         );
       }
 

@@ -6,8 +6,11 @@ import { PagerView } from '@ts/grids/new/grid_core/pager/view';
 import { ToolbarView } from '@ts/grids/new/grid_core/toolbar/view';
 import type { ComponentType } from 'inferno';
 
+import type { Config } from '../grid_core/core/config_context';
+import { ConfigContext } from '../grid_core/core/config_context';
 import { ContentView } from './content_view/view';
 import { HeaderPanelView } from './header_panel/view';
+import { OptionsController } from './options_controller';
 
 interface MainViewProps {
   Toolbar: ComponentType;
@@ -16,27 +19,30 @@ interface MainViewProps {
   HeaderPanel: ComponentType;
   FilterPanel: ComponentType;
   ColumnsChooser: ComponentType;
+  config: Config;
 }
 
 function MainViewComponent({
-  Toolbar, Content, Pager, HeaderPanel, FilterPanel, ColumnsChooser,
+  Toolbar, Content, Pager, HeaderPanel, FilterPanel, ColumnsChooser, config,
 }: MainViewProps): JSX.Element {
   return (<>
-    <Toolbar/>
-    <HeaderPanel/>
-    <Content/>
-    <FilterPanel/>
-    <div>
-      {/*
-        Pager, as renovated component, has strange disposing.
-        See `inferno_renderer.remove` method.
-        It somehow mutates $V prop of parent element.
-        Without this div, CardView would be parent of Pager.
-        In this case all `componentWillUnmount`s aren't called
-      */}
-        <Pager/>
-    </div>
-    <ColumnsChooser/>
+    <ConfigContext.Provider value={config}>
+      <Toolbar/>
+      <HeaderPanel/>
+      <Content/>
+      <FilterPanel/>
+      <div>
+        {/*
+          Pager, as renovated component, has strange disposing.
+          See `inferno_renderer.remove` method.
+          It somehow mutates $V prop of parent element.
+          Without this div, CardView would be parent of Pager.
+          In this case all `componentWillUnmount`s aren't called
+        */}
+          <Pager/>
+      </div>
+      <ColumnsChooser/>
+    </ConfigContext.Provider>
   </>);
 }
 
@@ -44,7 +50,9 @@ export class MainView extends View<MainViewProps> {
   protected override component = MainViewComponent;
 
   public static dependencies = [
-    ContentView, PagerView, ToolbarView, HeaderPanelView, FilterPanelView, ColumnsChooserView,
+    ContentView, PagerView, ToolbarView,
+    HeaderPanelView, FilterPanelView, ColumnsChooserView,
+    OptionsController,
   ] as const;
 
   constructor(
@@ -54,6 +62,7 @@ export class MainView extends View<MainViewProps> {
     private readonly headerPanel: HeaderPanelView,
     private readonly filterPanel: FilterPanelView,
     private readonly columnsChooser: ColumnsChooserView,
+    private readonly options: OptionsController,
   ) {
     super();
   }
@@ -68,6 +77,11 @@ export class MainView extends View<MainViewProps> {
       HeaderPanel: this.headerPanel.asInferno(),
       FilterPanel: this.filterPanel.asInferno(),
       ColumnsChooser: this.columnsChooser.asInferno(),
+      config: combined({
+        rtlEnabled: this.options.oneWay('rtlEnabled'),
+        disabled: this.options.oneWay('disabled'),
+        templatesRenderAsynchronously: this.options.oneWay('templatesRenderAsynchronously'),
+      }),
     });
   }
 }
