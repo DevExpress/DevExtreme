@@ -1,10 +1,9 @@
 /* eslint-disable spellcheck/spell-checker */
 import type { Subscribable, SubsGets, SubsGetsUpd } from '@ts/core/reactive/index';
 import {
-  computed, iif, interruptableComputed,
+  computed, interruptableComputed,
 } from '@ts/core/reactive/index';
 
-import { DataController } from '../data_controller/index';
 import { OptionsController } from '../options_controller/options_controller';
 import type { ColumnProperties, ColumnSettings, PreNormalizedColumn } from './options';
 import type { Column } from './types';
@@ -27,34 +26,17 @@ export class ColumnsController {
 
   private readonly dateSerializationFormat: Subscribable<string | undefined>;
 
-  public static dependencies = [OptionsController, DataController] as const;
+  public static dependencies = [OptionsController] as const;
 
   constructor(
     private readonly options: OptionsController,
-    private readonly dataController: DataController,
   ) {
     this.columnsConfiguration = this.options.oneWay('columns');
-
-    const columnsFromDataSource = computed(
-      (items: unknown[]) => {
-        if (!items.length) {
-          return [];
-        }
-
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        return Object.keys(items[0] as any);
-      },
-      [this.dataController.items],
-    );
 
     this.columnsSettings = interruptableComputed(
       (columnsConfiguration) => preNormalizeColumns(columnsConfiguration ?? []),
       [
-        iif(
-          computed((columnsConfiguration) => !!columnsConfiguration, [this.columnsConfiguration]),
-          this.columnsConfiguration,
-          columnsFromDataSource,
-        ),
+        this.columnsConfiguration,
       ],
     );
 
@@ -97,7 +79,7 @@ export class ColumnsController {
     );
   }
 
-  // eslint-disable-next-line max-len
+  // eslint-disable-next-line @stylistic/max-len
   public updateColumns(updateFunc: (oldValue: PreNormalizedColumn[]) => PreNormalizedColumn[]): void {
     this.columnsSettings.updateFunc(updateFunc);
   }

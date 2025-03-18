@@ -5,14 +5,17 @@ import { DataController } from '../data_controller';
 import { ItemsController } from '../items_controller/items_controller';
 import type { Options } from '../options';
 import { OptionsControllerMock } from '../options_controller/options_controller.mock';
+import { SortingController } from '../sorting_controller';
 import { ColumnsController } from './columns_controller';
 
 const setup = (config: Options) => {
   const options = new OptionsControllerMock(config);
 
-  const dataController = new DataController(options);
+  const columnsController = new ColumnsController(options);
 
-  const columnsController = new ColumnsController(options, dataController);
+  const sortingController = new SortingController(options, columnsController);
+
+  const dataController = new DataController(options, sortingController);
 
   const itemsController = new ItemsController(dataController, columnsController);
 

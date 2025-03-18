@@ -6,7 +6,7 @@ import type {
   SubsGetsUpd,
 } from '@ts/core/reactive/index';
 import {
-  computed, effect, interruptableComputed,
+  computed, interruptableComputed,
 } from '@ts/core/reactive/index';
 
 import { ColumnsController } from '../columns_controller';
@@ -18,17 +18,22 @@ import { getNextSortOrder, sortOrderDelegate } from './utils';
 
 export class SortingController {
   public readonly ascendingText = this.options.oneWay('sorting.ascendingText');
+
   public readonly clearText = this.options.oneWay('sorting.clearText');
+
   public readonly descendingText = this.options.oneWay('sorting.descendingText');
+
   public readonly mode = this.options.oneWay('sorting.mode');
+
   private readonly _showSortIndexes = this.options.oneWay('sorting.showSortIndexes');
 
   public readonly sortedColumns: SubsGets<Column[]>;
+
   public readonly orderedSortedColumns: SubsGetsUpd<Column[]>;
 
   public readonly showSortIndexes: SubsGets<boolean>;
 
-  // eslint-disable-next-line max-len
+  // eslint-disable-next-line @stylistic/max-len
   public readonly sortParameters: SubsGets<SortDescriptor<unknown> | SortDescriptor<unknown>[] | undefined>;
 
   public static dependencies = [OptionsController, ColumnsController] as const;
@@ -120,13 +125,6 @@ export class SortingController {
     //   updateOrderedSortedColumns,
     //   [this.orderedSortedColumns, this.mode],
     // );
-
-    effect(
-      (params) => {
-        this.options.sortParameters.update(params);
-      },
-      [this.sortParameters],
-    );
   }
 
   public clearSorting(): void {

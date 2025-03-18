@@ -17,9 +17,13 @@ const setup = (options: Options) => {
   rootElement.classList.add('test-container');
 
   const optionsController = new OptionsControllerMock(options);
-  const dataController = new DataController(optionsController);
-  const columnsController = new ColumnsController(optionsController, dataController);
+
+  const columnsController = new ColumnsController(optionsController);
+
   const sortingController = new SortingController(optionsController, columnsController);
+
+  const dataController = new DataController(optionsController, sortingController);
+
   const headerPanelView = new HeaderPanelView(
     sortingController,
     columnsController,

@@ -13,6 +13,7 @@ import { createPromise } from '@ts/core/utils/promise';
 // import { EditingController } from '../editing/controller';
 // import type { Change } from '../editing/types';
 import { OptionsController } from '../options_controller/options_controller';
+import { SortingController } from '../sorting_controller/sorting_controller';
 import type { DataObject, Key } from './types';
 import {
   getLocalLoadOptions,
@@ -92,10 +93,11 @@ export class DataController {
     [this.normalizedRemoteOptions],
   );
 
-  public static dependencies = [OptionsController] as const;
+  public static dependencies = [OptionsController, SortingController] as const;
 
   constructor(
     private readonly options: OptionsController,
+    private readonly sortingController: SortingController,
   ) {
     effect(
       (dataSource) => {
@@ -212,7 +214,7 @@ export class DataController {
         this.pageSize,
         this.filter,
         this.pagingEnabled,
-        this.options.sortParameters,
+        this.sortingController.sortParameters,
       ],
     );
   }
