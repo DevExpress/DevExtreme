@@ -1,5 +1,5 @@
-import type { Prompt } from '../ai-types';
-import { templates } from './templates';
+import type { Prompt } from '../../ai-types';
+import { templates } from '../templates';
 
 export interface PromptData {
   system?: Record<string, string>;

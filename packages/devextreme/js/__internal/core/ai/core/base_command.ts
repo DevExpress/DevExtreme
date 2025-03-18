@@ -1,4 +1,4 @@
-import type { RequestCallbacks } from '../ai-types';
+import type { RequestCallbacks } from '../../ai-types';
 import type { PromptData, PromptManager, TemplateName } from './prompt_manager';
 import type { RequestManager } from './request_manager';
 

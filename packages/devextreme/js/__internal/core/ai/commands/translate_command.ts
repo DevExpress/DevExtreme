@@ -1,5 +1,5 @@
-import { BaseCommand } from './base_command';
-import type { PromptData, TemplateName } from './prompt_manager';
+import { BaseCommand } from '../core/base_command';
+import type { PromptData, TemplateName } from '../core/prompt_manager';
 
 export interface TranslateCommandParams {
   text: string;
