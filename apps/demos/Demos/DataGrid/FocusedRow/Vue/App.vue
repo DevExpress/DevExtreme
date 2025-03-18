@@ -85,7 +85,7 @@ import {
 } from 'devextreme-vue/data-grid';
 import DxNumberBox from 'devextreme-vue/number-box';
 import DxCheckBox from 'devextreme-vue/check-box';
-import { Options as DataSourceOptions } from 'devextreme/data/data_source';
+import { DataSourceOptions } from 'devextreme-vue/common/data';
 import 'devextreme/data/odata/store';
 import { Task } from './data.ts';
 

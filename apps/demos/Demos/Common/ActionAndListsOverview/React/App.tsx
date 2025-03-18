@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react';
-import ArrayStore from 'devextreme/data/array_store';
+import { ArrayStore } from 'devextreme-react/common/data';
 import List, { ListTypes } from 'devextreme-react/list';
 import TileView from 'devextreme-react/tile-view';
 import { data } from './data.ts';

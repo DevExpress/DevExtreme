@@ -7,7 +7,7 @@ import {
 import { Button } from 'devextreme-react/button';
 import { SelectBox, SelectBoxTypes } from 'devextreme-react/select-box';
 
-import CustomStore from 'devextreme-react/common/data/custom-store';
+import { CustomStore } from 'devextreme-react/common/data';
 import { formatDate } from 'devextreme/localization';
 import 'whatwg-fetch';
 

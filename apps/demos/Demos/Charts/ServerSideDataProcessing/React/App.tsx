@@ -1,5 +1,5 @@
 import React from 'react';
-import DataSource from 'devextreme/data/data_source';
+import { DataSource } from 'devextreme-react/common/data';
 import 'devextreme/data/odata/store';
 import Chart, {
   ValueAxis,

@@ -4,7 +4,7 @@ import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { HttpClient, HttpClientModule, HttpParams } from '@angular/common/http';
 import { lastValueFrom } from 'rxjs';
 import { DxTreeListModule } from 'devextreme-angular';
-import DataSource from 'devextreme/data/data_source';
+import { DataSource } from 'devextreme-angular/common/data';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();

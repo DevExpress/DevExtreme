@@ -1,7 +1,7 @@
 import React from 'react';
 import { DataGrid, Column, DataGridTypes } from 'devextreme-react/data-grid';
-import ArrayStore from 'devextreme/data/array_store';
-import DataSource from 'devextreme/data/data_source';
+import { ArrayStore } from 'devextreme-react/common/data';
+import { DataSource } from 'devextreme-react/common/data';
 import { tasks } from './data.ts';
 
 const getTasks = (key) => new DataSource({

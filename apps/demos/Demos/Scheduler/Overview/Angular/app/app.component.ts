@@ -4,7 +4,7 @@ import {
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { DxSchedulerModule, DxTemplateModule } from 'devextreme-angular';
-import DataSource from 'devextreme/data/data_source';
+import { DataSource } from 'devextreme-angular/common/data';
 import { Service, Employee, Data } from './app.service';
 
 @Pipe({ name: 'apply' })

@@ -9,7 +9,7 @@ import {
 import { Workbook } from 'exceljs';
 import { saveAs } from 'file-saver-es';
 // Our demo infrastructure requires us to use 'file-saver-es'. We recommend that you use the official 'file-saver' package in your applications.
-import { exportDataGrid } from 'devextreme/excel_exporter';
+import { exportDataGrid } from 'devextreme-angular/common/export/excel';
 import 'devextreme/data/odata/store';
 
 if (!/localhost/.test(document.location.host)) {

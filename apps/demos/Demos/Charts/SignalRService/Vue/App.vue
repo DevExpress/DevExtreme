@@ -82,7 +82,7 @@ import {
   DxTooltip,
   DxCrosshair,
 } from 'devextreme-vue/chart';
-import CustomStore from 'devextreme-vue/common/data/custom-store';
+import { CustomStore } from 'devextreme-vue/common/data';
 import { HubConnectionBuilder, HttpTransportType } from '@aspnet/signalr';
 import TooltipTemplate from './TooltipTemplate.vue';
 

@@ -10,7 +10,7 @@ import {
   Alert,
   MessageEnteredEvent
 } from 'devextreme/ui/chat';
-import DataSource from 'devextreme/data/data_source';
+import { DataSource } from 'devextreme-angular/common/data';
 import { CustomStore } from 'devextreme-angular/common/data';
 
 @Injectable({

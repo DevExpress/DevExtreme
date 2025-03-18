@@ -6,7 +6,7 @@ import {
 } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { DxNumberBoxComponent, DxNumberBoxModule, DxCheckBoxModule } from 'devextreme-angular';
-import { Options as DataSourceOptions } from 'devextreme/data/data_source';
+import { DataSourceOptions } from 'devextreme-angular/common/data';
 import 'devextreme/data/odata/store';
 import { DxDataGridComponent, DxDataGridModule, DxDataGridTypes } from 'devextreme-angular/ui/data-grid';
 

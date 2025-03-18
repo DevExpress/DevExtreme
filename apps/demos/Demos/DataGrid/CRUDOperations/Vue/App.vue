@@ -95,7 +95,7 @@ import {
 } from 'devextreme-vue/data-grid';
 import { DxButton } from 'devextreme-vue/button';
 import { DxSelectBox } from 'devextreme-vue/select-box';
-import CustomStore from 'devextreme-vue/common/data/custom-store';
+import { CustomStore } from 'devextreme-vue/common/data';
 import { formatDate } from 'devextreme/localization';
 import 'whatwg-fetch';
 

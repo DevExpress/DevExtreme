@@ -1,6 +1,6 @@
 import React from 'react';
 import List from 'devextreme-react/list';
-import DataSource from 'devextreme/data/data_source';
+import { DataSource } from 'devextreme-react/common/data';
 import { createStore } from 'devextreme-aspnet-data-nojquery';
 import ProductInfo from './ProductInfo.tsx';
 

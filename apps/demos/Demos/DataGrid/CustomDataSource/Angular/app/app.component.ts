@@ -5,7 +5,7 @@ import { HttpClient, HttpClientModule, HttpParams } from '@angular/common/http';
 import { lastValueFrom } from 'rxjs';
 import { DxDataGridModule } from 'devextreme-angular';
 import { CustomStore } from 'devextreme-angular/common/data';
-import { LoadOptions } from 'devextreme/data';
+import { LoadOptions } from 'devextreme-angular/common/data';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();

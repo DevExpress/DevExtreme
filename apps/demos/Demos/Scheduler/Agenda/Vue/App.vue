@@ -24,7 +24,7 @@
 </template>
 <script setup lang="ts">
 import DxScheduler, { DxResource } from 'devextreme-vue/scheduler';
-import ArrayStore from 'devextreme/data/array_store';
+import { ArrayStore } from 'devextreme-vue/common/data';
 import { data, assignees, priorities } from './data.ts';
 
 const views = ['agenda'];

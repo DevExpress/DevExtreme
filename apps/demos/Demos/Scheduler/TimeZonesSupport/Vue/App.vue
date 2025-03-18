@@ -33,7 +33,7 @@ import { ref } from 'vue';
 import DxScheduler, { DxEditing, DxSchedulerTypes } from 'devextreme-vue/scheduler';
 import DxSelectBox from 'devextreme-vue/select-box';
 import { getTimeZones as getTimeZonesUtility } from 'devextreme/time_zone_utils';
-import DataSource from 'devextreme/data/data_source';
+import { DataSource } from 'devextreme-vue/common/data';
 import { data, locations } from './data.ts';
 
 const views = ['workWeek'];

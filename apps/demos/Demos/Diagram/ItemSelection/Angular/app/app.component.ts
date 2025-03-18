@@ -4,7 +4,7 @@ import {
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { HttpClientModule } from '@angular/common/http';
-import ArrayStore from 'devextreme/data/array_store';
+import { ArrayStore } from 'devextreme-angular/common/data';
 import { DxDiagramModule, DxDiagramTypes } from 'devextreme-angular/ui/diagram';
 import { Service } from './app.service';
 

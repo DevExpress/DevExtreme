@@ -32,7 +32,7 @@ import { ref } from 'vue';
 import {
   DxDiagram, DxNodes, DxAutoLayout, DxToolbox, DxPropertiesPanel, DxDiagramTypes,
 } from 'devextreme-vue/diagram';
-import ArrayStore from 'devextreme/data/array_store';
+import { ArrayStore } from 'devextreme-vue/common/data';
 import service from './data.ts';
 
 const dataSource = new ArrayStore({

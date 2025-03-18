@@ -2,8 +2,8 @@ import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { DxTreeViewModule } from 'devextreme-angular';
-import DataSource from 'devextreme/data/data_source';
-import ODataStore from 'devextreme/data/odata/store';
+import { DataSource } from 'devextreme-angular/common/data';
+import { ODataStore } from 'devextreme-angular/common/data';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();

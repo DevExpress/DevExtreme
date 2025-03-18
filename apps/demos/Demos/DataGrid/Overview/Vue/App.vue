@@ -79,7 +79,7 @@ import {
   DxSearchPanel,
   DxDataGridTypes,
 } from 'devextreme-vue/data-grid';
-import DataSource from 'devextreme/data/data_source';
+import { DataSource } from 'devextreme-vue/common/data';
 import 'devextreme/data/odata/store';
 import DiscountCell from './DiscountCell.vue';
 

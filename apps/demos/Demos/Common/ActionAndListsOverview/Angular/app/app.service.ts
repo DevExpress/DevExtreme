@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import ArrayStore from 'devextreme/data/array_store';
-import DataSource from 'devextreme/data/data_source';
+import { ArrayStore } from 'devextreme-angular/common/data';
+import { DataSource } from 'devextreme-angular/common/data';
 
 export class Hotel {
   Id: number;

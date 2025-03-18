@@ -61,7 +61,7 @@
 <script setup lang="ts">
 import DxDataGrid, { DxColumn, DxExport, DxDataGridTypes } from 'devextreme-vue/data-grid';
 import { jsPDF } from 'jspdf';
-import { exportDataGrid } from 'devextreme/pdf_exporter';
+import { exportDataGrid } from 'devextreme-vue/common/export/pdf';
 import { countries } from './data.ts';
 
 const gdpFormat = {

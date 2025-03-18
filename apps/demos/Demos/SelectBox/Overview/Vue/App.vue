@@ -101,7 +101,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import DxSelectBox from 'devextreme-vue/select-box';
-import ArrayStore from 'devextreme/data/array_store';
+import { ArrayStore } from 'devextreme-vue/common/data';
 import notify from 'devextreme/ui/notify';
 import Field from './Field.vue';
 import Item from './Item.vue';

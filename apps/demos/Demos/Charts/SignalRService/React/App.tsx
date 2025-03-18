@@ -18,7 +18,7 @@ import Chart, {
   IAggregationProps,
 } from 'devextreme-react/chart';
 import { VisualRange } from 'devextreme-react/common/charts';
-import CustomStore from 'devextreme-react/common/data/custom-store';
+import { CustomStore } from 'devextreme-react/common/data';
 import { HubConnectionBuilder, HttpTransportType } from '@aspnet/signalr';
 import TooltipTemplate from './TooltipTemplate.tsx';
 

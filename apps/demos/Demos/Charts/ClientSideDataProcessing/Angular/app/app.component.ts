@@ -7,7 +7,7 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { lastValueFrom } from 'rxjs';
 
 import { DxChartModule, DxSelectBoxModule } from 'devextreme-angular';
-import DataSource from 'devextreme/data/data_source';
+import { DataSource } from 'devextreme-angular/common/data';
 import { CustomStore } from 'devextreme-angular/common/data';
 import query from 'devextreme/data/query';
 

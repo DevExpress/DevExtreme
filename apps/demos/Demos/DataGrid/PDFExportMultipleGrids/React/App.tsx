@@ -2,7 +2,7 @@ import React, { useCallback, useRef } from 'react';
 import Button from 'devextreme-react/button';
 import TabPanel, { Item } from 'devextreme-react/tab-panel';
 import DataGrid, { Column, DataGridRef } from 'devextreme-react/data-grid';
-import { exportDataGrid } from 'devextreme/pdf_exporter';
+import { exportDataGrid } from 'devextreme-react/common/export/pdf';
 import { jsPDF } from 'jspdf';
 
 import 'devextreme/data/odata/store';

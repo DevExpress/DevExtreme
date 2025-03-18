@@ -4,7 +4,7 @@ import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { DxSchedulerModule, DxSelectBoxModule, DxTemplateModule } from 'devextreme-angular';
 import { getTimeZones, dxSchedulerTimeZone } from 'devextreme/time_zone_utils';
 import { DxSchedulerTypes } from 'devextreme-angular/ui/scheduler';
-import DataSource from 'devextreme/data/data_source';
+import { DataSource } from 'devextreme-angular/common/data';
 import { Service, Data } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {

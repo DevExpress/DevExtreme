@@ -2,7 +2,7 @@ import React, { useCallback, useState } from 'react';
 import Diagram, {
   Nodes, AutoLayout, Toolbox, PropertiesPanel, DiagramTypes,
 } from 'devextreme-react/diagram';
-import ArrayStore from 'devextreme/data/array_store';
+import { ArrayStore } from 'devextreme-react/common/data';
 import service from './data.ts';
 
 const dataSource = new ArrayStore({

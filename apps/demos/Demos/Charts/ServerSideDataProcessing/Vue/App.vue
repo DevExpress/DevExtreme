@@ -69,7 +69,7 @@ import DxChart, {
   DxLoadingIndicator,
 } from 'devextreme-vue/chart';
 import DxSelectBox from 'devextreme-vue/select-box';
-import DataSource from 'devextreme/data/data_source';
+import { DataSource } from 'devextreme-vue/common/data';
 import 'devextreme/data/odata/store';
 import { months } from './data.ts';
 

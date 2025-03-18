@@ -59,7 +59,7 @@ import {
   DxFilterBuilderPopup,
   DxScrolling,
 } from 'devextreme-vue/data-grid';
-import { PositionConfig } from 'devextreme/animation/position';
+import { PositionConfig } from 'devextreme-vue/common/core/animation';
 import { orders, Order } from './data.ts';
 
 const saleAmountEditorOptions = { 

@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from 'react';
-import ODataStore from 'devextreme/data/odata/store';
+import { ODataStore } from 'devextreme-react/common/data';
 import { Autocomplete, AutocompleteTypes } from 'devextreme-react/autocomplete';
-import CustomStore from 'devextreme-react/common/data/custom-store';
+import { CustomStore } from 'devextreme-react/common/data';
 import 'whatwg-fetch';
 import { names, surnames, positions } from './data.ts';
 

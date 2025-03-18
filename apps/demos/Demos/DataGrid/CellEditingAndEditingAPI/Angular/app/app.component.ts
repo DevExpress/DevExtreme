@@ -4,7 +4,7 @@ import {
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { DxButtonModule } from 'devextreme-angular';
-import ArrayStore from 'devextreme/data/array_store';
+import { ArrayStore } from 'devextreme-angular/common/data';
 import { DxDataGridModule, DxDataGridComponent, DxDataGridTypes } from 'devextreme-angular/ui/data-grid';
 import { Service, State } from './app.service';
 

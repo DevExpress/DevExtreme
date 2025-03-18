@@ -59,7 +59,7 @@ import {
   DxDataGrid,
   DxColumn,
 } from 'devextreme-vue/data-grid';
-import CustomStore from 'devextreme-vue/common/data/custom-store';
+import { CustomStore } from 'devextreme-vue/common/data';
 import { HubConnectionBuilder, HttpTransportType } from '@aspnet/signalr';
 
 import PriceCell from './PriceCell.vue';
