@@ -1,4 +1,3 @@
-/* eslint-disable spellcheck/spell-checker */
 import type { SubsGets } from '@ts/core/reactive/index';
 import { combined, computed } from '@ts/core/reactive/index';
 import { ColumnsController } from '@ts/grids/new/grid_core/columns_controller/columns_controller';
@@ -10,7 +9,6 @@ import type { HeaderPanelProps } from './header_panel';
 import { HeaderPanel } from './header_panel';
 
 export class HeaderPanelView extends View<HeaderPanelProps> {
-  // @ts-expect-error
   protected component = HeaderPanel;
 
   public static dependencies = [ColumnsController, OptionsController] as const;
