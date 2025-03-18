@@ -359,7 +359,7 @@ export interface dxMapOptions extends WidgetOptions<dxMap> {
        * @docid
        * @default 'driving'
        */
-      mode?: RouteMode;
+      mode?: RouteMode | string;
       /**
        * @docid
        * @default 0.5

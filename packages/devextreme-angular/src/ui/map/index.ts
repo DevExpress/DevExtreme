@@ -293,10 +293,10 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
     
      */
     @Input()
-    get routes(): { color?: string, locations?: { lat?: number, lng?: number }[], mode?: RouteMode, opacity?: number, weight?: number }[] {
+    get routes(): { color?: string, locations?: { lat?: number, lng?: number }[], mode?: RouteMode | string, opacity?: number, weight?: number }[] {
         return this._getOption('routes');
     }
-    set routes(value: { color?: string, locations?: { lat?: number, lng?: number }[], mode?: RouteMode, opacity?: number, weight?: number }[]) {
+    set routes(value: { color?: string, locations?: { lat?: number, lng?: number }[], mode?: RouteMode | string, opacity?: number, weight?: number }[]) {
         this._setOption('routes', value);
     }
 
@@ -567,7 +567,7 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() routesChange: EventEmitter<{ color?: string, locations?: { lat?: number, lng?: number }[], mode?: RouteMode, opacity?: number, weight?: number }[]>;
+    @Output() routesChange: EventEmitter<{ color?: string, locations?: { lat?: number, lng?: number }[], mode?: RouteMode | string, opacity?: number, weight?: number }[]>;
 
     /**
     
