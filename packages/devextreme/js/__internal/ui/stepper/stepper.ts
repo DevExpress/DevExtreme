@@ -18,7 +18,11 @@ import type {
 import CollectionWidgetAsync from '@ts/ui/collection/m_collection_widget.async';
 import Connector from '@ts/ui/stepper/connector';
 import type { StepperItemProperties } from '@ts/ui/stepper/stepper_item';
-import StepperItem, { STEP_COMPLETED_CLASS } from '@ts/ui/stepper/stepper_item';
+import StepperItem, {
+  STEP_COMPLETED_CLASS,
+  STEP_INVALID_ICON,
+  STEP_VALID_ICON,
+} from '@ts/ui/stepper/stepper_item';
 
 import type { CollectionWidgetEditProperties } from '../collection/m_collection_widget.edit';
 
@@ -44,7 +48,6 @@ export const ORIENTATION: Record<string, Orientation> = {
 export interface StepperProperties extends CollectionWidgetEditProperties<Stepper> {
   orientation?: Orientation;
   linear?: boolean;
-  isValidExpr?: (data: Item) => boolean | undefined;
 }
 
 class Stepper extends CollectionWidgetAsync<StepperProperties> {
@@ -66,11 +69,6 @@ class Stepper extends CollectionWidgetAsync<StepperProperties> {
       focusStateEnabled: true,
       loopItemFocus: false,
       selectionRequired: true,
-      isValidExpr(data): boolean | undefined {
-        // @ts-expect-error ts-error
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-        return data ? data.isValid : undefined;
-      },
     };
   }
 
@@ -85,17 +83,38 @@ class Stepper extends CollectionWidgetAsync<StepperProperties> {
     };
   }
 
+  _getStepIcon(data: StepperItemProperties): string | undefined {
+    const { isValid, icon } = data;
+
+    if (isValid === false) {
+      return STEP_INVALID_ICON;
+    }
+
+    if (isValid === true) {
+      return STEP_VALID_ICON;
+    }
+
+    return icon;
+  }
+
   _prepareDefaultItemTemplate(data: StepperItemProperties, $container: dxElementWrapper): void {
+    const {
+      text, title,
+    } = data;
+
     const $indicatorElement = $('<div>').addClass(STEP_INDICATOR_CLASS);
-    const $iconElement = getImageContainer(data.icon) ?? $('<div>').addClass(STEP_TEXT_CLASS).text(data.text ?? '');
+
+    const iconName = this._getStepIcon(data);
+    const $iconElement = getImageContainer(iconName) ?? $('<div>').addClass(STEP_TEXT_CLASS).text(text ?? '');
 
     $iconElement.appendTo($indicatorElement);
+
     $indicatorElement.prependTo($container);
 
-    if (isDefined(data.title)) {
+    if (isDefined(title)) {
       const $stepTitleDiv = $('<div>').addClass(STEP_TITLE_CLASS);
 
-      $stepTitleDiv.text(data.title);
+      $stepTitleDiv.text(title);
 
       $stepTitleDiv.appendTo($container);
     }
@@ -105,7 +124,10 @@ class Stepper extends CollectionWidgetAsync<StepperProperties> {
     super._initTemplates();
 
     this._templateManager.addDefaultTemplates({
-      item: new BindableTemplate(($container: dxElementWrapper, data: StepperItemProperties) => {
+      item: new BindableTemplate((
+        $container: dxElementWrapper,
+        data: StepperItemProperties,
+      ) => {
         this._prepareDefaultItemTemplate(data, $container);
       }, ['text', 'icon', 'title', 'isValid'], this.option('integrationOptions.watchMethod')),
     });
@@ -130,13 +152,26 @@ class Stepper extends CollectionWidgetAsync<StepperProperties> {
     return StepperItem.getInstance<StepperItem>($item);
   }
 
+  _renderItem(
+    index: number,
+    itemData: Item,
+    $container: dxElementWrapper,
+    $itemToReplace: dxElementWrapper,
+  ): dxElementWrapper {
+    const $itemFrame = super._renderItem(index, itemData, $container, $itemToReplace);
+    // @ts-expect-error ts-error
+    this._getItemInstance($itemFrame).updateInvalidClass(itemData.isValid);
+
+    return $itemFrame;
+  }
+
   _postprocessRenderItem(args: PostprocessRenderItemInfo<StepperItem>): void {
     super._postprocessRenderItem(args);
 
     const { selectedIndex = 0 } = this.option();
-    const $itemInstance = this._getItemInstance(args.itemElement);
+    const itemInstance = this._getItemInstance(args.itemElement);
 
-    $itemInstance.changeCompleted(args.itemIndex < selectedIndex);
+    itemInstance.changeCompleted(args.itemIndex < selectedIndex);
   }
 
   _itemClass(): string {
@@ -278,9 +313,9 @@ class Stepper extends CollectionWidgetAsync<StepperProperties> {
     const isCompleted = lastCompletedIndex < selectedIndex;
 
     for (let i = startIndex; i < endIndex; i += 1) {
-      const $itemInstance = this._getItemInstance($(itemElements[i]));
+      const itemInstance = this._getItemInstance($(itemElements[i]));
 
-      $itemInstance.changeCompleted(isCompleted);
+      itemInstance.changeCompleted(isCompleted);
     }
   }
 
@@ -304,6 +339,20 @@ class Stepper extends CollectionWidgetAsync<StepperProperties> {
     prevValue: unknown,
   ): void {
     switch (property) {
+      case 'isValid': {
+        // @ts-expect-error ts-error
+        type PropertyType = Item[typeof property];
+
+        const itemIndex = this._getIndexByItem(item);
+        const $item = $(this._itemElements()[itemIndex]);
+
+        const itemInstance = this._getItemInstance($item);
+
+        itemInstance.updateInvalidClass(value as PropertyType);
+
+        super._itemOptionChanged(item, property, value, prevValue);
+        break;
+      }
       default:
         super._itemOptionChanged(item, property, value, prevValue);
     }
@@ -319,9 +368,6 @@ class Stepper extends CollectionWidgetAsync<StepperProperties> {
         this._connector.option(name, value);
         break;
       case 'linear':
-        break;
-      case 'isValidExpr':
-        this._invalidate();
         break;
       default:
         super._optionChanged(args);
