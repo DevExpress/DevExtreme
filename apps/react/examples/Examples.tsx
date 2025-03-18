@@ -86,7 +86,7 @@ const Examples = () => {
                 <SelectBoxExample />
             </Example>
 
-            <Example title="SelectBox example with custom components" id="customSelectBox">
+            <Example title="SelectBox example with custom components">
                 <SelectBoxCustomExample />
             </Example>
 

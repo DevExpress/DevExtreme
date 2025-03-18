@@ -1,10 +1,9 @@
 import * as React from 'react';
 
 interface IProps {
+  state?: Record<string, unknown>;
   title: string;
   children: any;
-  state?: Record<string, unknown>;
-  id?: string;
 }
 
 const Example = (props: IProps): JSX.Element => {
