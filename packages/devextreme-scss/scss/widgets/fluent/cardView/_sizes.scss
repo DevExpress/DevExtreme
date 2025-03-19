@@ -1,5 +1,4 @@
 @use "../sizes" as *;
-
 @use '../../base/cardView/variables' as *;
 @use '../../base/cardView/header_panel/variables' as *;
 @use '../../base/cardView/content_view/content/card/variables' as *;
@@ -50,9 +49,13 @@ $cardview-card-content-cell-padding-horizontal: $cardview-paddings-12 !default;
 $cardview-card-header-text-size: $cardview-text-size-16 !default;
 $cardview-card-header-border-radius: 8px !default;
 
+$cardview-header-filter-icon-size: 20px !default;
 
+
+/**
 @if $size == "default" {
 }
 
 @else if $size == "compact" {
 }
+*/

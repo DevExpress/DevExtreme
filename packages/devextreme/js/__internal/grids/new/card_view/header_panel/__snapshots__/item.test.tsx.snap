@@ -1,5 +1,20 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`Item should render headerFilter icons if enabled 1`] = `
+<div>
+  <div
+    class="dx-cardview-header-item  "
+    tabindex="0"
+  >
+    Column 1
+    <span
+      class="dx-header-filter-icon "
+      tabindex="0"
+    />
+  </div>
+</div>
+`;
+
 exports[`Item should render sort icons 1`] = `
 <div>
   <div

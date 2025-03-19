@@ -1,5 +1,6 @@
 /* eslint-disable max-classes-per-file */
 /* eslint-disable spellcheck/spell-checker */
+
 import registerComponent from '@js/core/component_registrator';
 import $ from '@js/core/renderer';
 import { extend } from '@js/core/utils/extend';

@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
+
 /* eslint-disable spellcheck/spell-checker */
 // eslint-disable-next-line max-classes-per-file
 import { extend } from '@js/core/utils/extend';
@@ -15,6 +16,11 @@ import * as DataControllerModule from './data_controller/index';
 import { EditingController } from './editing/controller';
 import { ErrorController } from './error_controller/error_controller';
 import * as FilterControllerModule from './filtering';
+import { FilterPanelView } from './filtering/filter_panel/view';
+import {
+  HeaderFilterController,
+  HeaderFilterPopupView,
+} from './filtering/header_filter';
 import { ItemsController } from './items_controller/items_controller';
 import { MainView } from './main_view';
 import { defaultOptions, defaultOptionsRules, type Options } from './options';
@@ -71,6 +77,9 @@ export class GridCoreNewBase<
     this.diContext.register(Search);
     this.diContext.register(FilterControllerModule.FilterController);
     this.diContext.register(FilterControllerModule.FilterPanelView);
+    this.diContext.register(FilterPanelView);
+    this.diContext.register(HeaderFilterController);
+    this.diContext.register(HeaderFilterPopupView);
     this.diContext.register(ErrorController);
   }
 

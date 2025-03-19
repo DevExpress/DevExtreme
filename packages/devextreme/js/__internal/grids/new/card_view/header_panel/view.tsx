@@ -2,6 +2,7 @@ import type { SubsGets } from '@ts/core/reactive/index';
 import { combined, computed } from '@ts/core/reactive/index';
 import { ColumnsController } from '@ts/grids/new/grid_core/columns_controller/columns_controller';
 import { View } from '@ts/grids/new/grid_core/core/view';
+import { HeaderFilterController } from '@ts/grids/new/grid_core/filtering/header_filter';
 
 import type { Column } from '../../grid_core/columns_controller/types';
 import { OptionsController } from '../options_controller';
@@ -11,11 +12,16 @@ import { HeaderPanel } from './header_panel';
 export class HeaderPanelView extends View<HeaderPanelProps> {
   protected component = HeaderPanel;
 
-  public static dependencies = [ColumnsController, OptionsController] as const;
+  public static dependencies = [
+    ColumnsController,
+    OptionsController,
+    HeaderFilterController,
+  ] as const;
 
   constructor(
     private readonly columnsController: ColumnsController,
     private readonly options: OptionsController,
+    private readonly headerFilterController: HeaderFilterController,
   ) {
     super();
   }
@@ -40,6 +46,7 @@ export class HeaderPanelView extends View<HeaderPanelProps> {
       onSortClick: this.onSortClick.bind(this),
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       itemTemplate: this.options.template('headerPanel.itemTemplate') as any,
+      onFilterClick: this.onFilterClick.bind(this),
       itemCssClass: this.options.oneWay('headerPanel.itemCssClass'),
       visible: this.options.oneWay('headerPanel.visible'),
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -59,5 +66,13 @@ export class HeaderPanelView extends View<HeaderPanelProps> {
   public onSortClick(column: Column): void {
     this.columnsController.columnOption(column, 'sortOrder', 'asc');
     this.columnsController.columnOption(column, 'sortIndex', 0);
+  }
+
+  private onFilterClick(
+    element: Element,
+    column: Column,
+    onFilterCloseCallback?: () => void,
+  ): void {
+    this.headerFilterController.openPopup(element, column, onFilterCloseCallback);
   }
 }
