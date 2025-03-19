@@ -123,7 +123,6 @@ $base-border-color-disabled: null !default;
 
 $scrollview-pulldown-path: null !default;
 
-$colors-grey-10: null !default;
 
 @if $color == "blue" {
   $fluent-color-accent-modificator: "blue" !default;
@@ -134,8 +133,6 @@ $colors-grey-10: null !default;
 }
 
 @if $mode == "light" {
-  $colors-grey-10: #F0F0F0 !default;
-
   $fluent-color-theme-modificator: "light" !default;
 
   $base-bg: rgba(255, 255, 255, 1) !default;
@@ -202,8 +199,6 @@ $colors-grey-10: null !default;
 }
 
 @if $mode == "dark" {
-  $colors-grey-10: #0A0A0A !default;
-
   $fluent-color-theme-modificator: "dark" !default;
 
   @if $color == "blue" {

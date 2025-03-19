@@ -108,8 +108,6 @@ $base-invalid-color: $base-danger !default;
 $base-invalid-faded-border-color: color.change($base-invalid-color, $alpha: 0.4) !default;
 $scrollview-pulldown-path: null !default;
 
-$colors-neutral-300: null !default;
-
 
 @if $color == "blue" {
   $material-color-accent-modificator: "blue" !default;
@@ -144,8 +142,6 @@ $colors-neutral-300: null !default;
 $base-link-color: $base-accent !default;
 
 @if $mode == "light" {
-  $colors-neutral-300: #E0E0E0 !default;
-
   $material-color-theme-modificator: "light" !default;
   $base-text-color: rgba(0, 0, 0, 0.87) !default;
   $base-label-color: rgba(0, 0, 0, 0.6) !default;
@@ -153,9 +149,7 @@ $base-link-color: $base-accent !default;
   $base-icon-color: color.change($base-text-color, $alpha: 0.54) !default;
   $base-spin-icon-color: color.change($base-text-color, $alpha: 0.54) !default;
   $base-bg: #fff !default;
-
-  // getFigmaVariable('Colors/Neutral/300', 'Material (Colors)', 'Material', 'Light', 'null')
-  $base-border-color: #E0E0E0 !default;
+  $base-border-color: #e0e0e0 !default;
   $base-inverted-bg: darken($base-bg, 100%) !default;
   $base-element-bg: $base-bg !default;
   $base-shadow-color: $base-inverted-bg !default;
@@ -171,8 +165,6 @@ $base-link-color: $base-accent !default;
 }
 
 @if $mode == "dark" {
-  $colors-neutral-300: #515159 !default;
-
   $material-color-theme-modificator: "dark" !default;
   $base-text-color: #fff !default;
   $base-label-color: rgba(255, 255, 255, 0.6) !default;
