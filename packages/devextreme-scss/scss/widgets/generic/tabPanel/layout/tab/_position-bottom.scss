@@ -13,8 +13,8 @@
 // adduse
 
 .dx-tabpanel-tabs-position-bottom {
-  .dx-tabpanel-tab {
-    &.dx-tab-selected {
+  > .dx-tabpanel-tabs {
+    .dx-tab-selected {
       @include dx-tabs-border-mixin(
         $generic-tabpanel-tab-border-transparent,
         null,
