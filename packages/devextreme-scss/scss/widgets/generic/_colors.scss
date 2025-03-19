@@ -339,7 +339,7 @@ $colors-neutral-grey-0: null !default;
 }
 
 @if $color == "light" {
-  $colors-neutral-grey-0: #FFFFFF !default;
+  $colors-neutral-grey-0: #FFF !default;
 
   $generic-color-postfix: ".light" !default;
   $base-accent: #337ab7 !default;
