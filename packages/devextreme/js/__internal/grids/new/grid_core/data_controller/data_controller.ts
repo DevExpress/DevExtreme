@@ -10,6 +10,7 @@ import {
 } from '@ts/core/reactive/index';
 import { createPromise } from '@ts/core/utils/promise';
 
+import { FilterController } from '../filtering/filter_controller';
 // import { EditingController } from '../editing/controller';
 // import type { Change } from '../editing/types';
 import { OptionsController } from '../options_controller/options_controller';
@@ -62,8 +63,6 @@ export class DataController {
 
   public readonly isLoading = state(false);
 
-  public readonly filter = this.options.twoWay('filterValue');
-
   // public itemsWithChanges = computed(
   //   (items, changes: Change[] | undefined) => items.map((item) => (changes ?? []).filter(
   //     (change) => change.key === this.getDataKey(item),
@@ -92,10 +91,11 @@ export class DataController {
     [this.normalizedRemoteOptions],
   );
 
-  public static dependencies = [OptionsController] as const;
+  public static dependencies = [OptionsController, FilterController] as const;
 
   constructor(
     private readonly options: OptionsController,
+    private readonly filterController: FilterController,
   ) {
     effect(
       (dataSource) => {
@@ -173,7 +173,7 @@ export class DataController {
     );
 
     effect(
-      (dataSource, pageIndex, pageSize, filter, pagingEnabled) => {
+      (dataSource, pageIndex, pageSize, displayFilter, pagingEnabled) => {
         let someParamChanged = false;
         if (dataSource.pageIndex() !== pageIndex) {
           dataSource.pageIndex(pageIndex);
@@ -188,8 +188,8 @@ export class DataController {
           dataSource.requireTotalCount(true);
           someParamChanged ||= true;
         }
-        if (dataSource.filter() !== filter) {
-          dataSource.filter(filter);
+        if (dataSource.filter() !== displayFilter) {
+          dataSource.filter(displayFilter);
           someParamChanged ||= true;
         }
         if (dataSource.paginate() !== pagingEnabled) {
@@ -202,7 +202,13 @@ export class DataController {
           dataSource.load();
         }
       },
-      [this.dataSource, this.pageIndex, this.pageSize, this.filter, this.pagingEnabled],
+      [
+        this.dataSource,
+        this.pageIndex,
+        this.pageSize,
+        this.filterController.displayFilter,
+        this.pagingEnabled,
+      ],
     );
   }
 

@@ -1,8 +1,7 @@
-/* eslint-disable spellcheck/spell-checker */
-/* eslint-disable @typescript-eslint/dot-notation */
 import { describe, expect, it } from '@jest/globals';
 
 import { DataController } from '../data_controller/data_controller';
+import { FilterController } from '../filtering';
 import type { Options } from '../options';
 import { OptionsControllerMock } from '../options_controller/options_controller.mock';
 import { PagerView } from './view';
@@ -15,8 +14,8 @@ const createPagerView = (options?: Options) => {
       visible: true,
     },
   });
-
-  const dataController = new DataController(optionsController);
+  const filterController = new FilterController(optionsController);
+  const dataController = new DataController(optionsController, filterController);
   const pager = new PagerView(dataController, optionsController);
 
   pager.render(rootElement);
