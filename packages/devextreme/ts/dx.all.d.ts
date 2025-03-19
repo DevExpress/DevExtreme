@@ -864,8 +864,38 @@ declare module DevExpress {
   }
 }
 declare module DevExpress.ai {
-  export type AI = AIInternal;
-  export type AIProvider = AIProviderInternal;
+  export interface AI {
+    translate: (
+      params: TranslateCommandParams,
+      callbacks: RequestCallbacks
+    ) => string;
+  }
+  export interface AIProvider {
+    sendRequest: (params: RequestParams) => ResponseParams;
+  }
+  export type BaseResult = TranslateResult;
+  export interface Prompt {
+    system?: string;
+    user?: string;
+  }
+  export interface RequestCallbacks {
+    onChunk?: (chunk: string) => void;
+    onComplete?: (finalResponse: BaseResult) => void;
+    onError?: (error: Error) => void;
+  }
+  export interface RequestParams {
+    prompt: Prompt;
+    onChunk: (chunk: string) => void;
+  }
+  export interface ResponseParams {
+    promise: Promise<void>;
+    abort: () => void;
+  }
+  export interface TranslateCommandParams {
+    text: string;
+    lang: string;
+  }
+  export type TranslateResult = string;
 }
 declare module DevExpress.animation {
   /**

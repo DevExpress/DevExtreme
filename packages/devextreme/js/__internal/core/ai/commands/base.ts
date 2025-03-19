@@ -1,6 +1,6 @@
+import type { BaseResult, RequestCallbacks } from '@js/ai/ai';
 import type { PromptData, PromptManager, PromptTemplateName } from '@ts/core/ai/core/prompt_manager';
 import type { RequestManager } from '@ts/core/ai/core/request_manager';
-import type { BaseResult, RequestCallbacks } from '@ts/core/ai-types';
 
 export abstract class BaseCommand {
   constructor(

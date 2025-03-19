@@ -1,6 +1,6 @@
+import type { TranslateResult } from '@js/ai/ai';
 import { BaseCommand } from '@ts/core/ai/commands/base';
 import type { PromptData, PromptTemplateName } from '@ts/core/ai/core/prompt_manager';
-import type { TranslateResult } from '@ts/core/ai-types';
 
 export interface TranslateCommandParams {
   text: string;
