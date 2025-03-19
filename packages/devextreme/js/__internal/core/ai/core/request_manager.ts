@@ -1,4 +1,4 @@
-import type { AIProvider, Prompt, RequestCallbacks } from '../../ai-types';
+import type { AIProvider, Prompt, RequestCallbacks } from '@ts/core/ai-types';
 
 export class RequestManager {
   private readonly provider: AIProvider;

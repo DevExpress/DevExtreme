@@ -1,5 +1,6 @@
-import { BaseCommand } from '../core/base_command';
-import type { PromptData, TemplateName } from '../core/prompt_manager';
+import { BaseCommand } from '@ts/core/ai/commands/base';
+import type { PromptData, TemplateName } from '@ts/core/ai/core/prompt_manager';
+import type { TranslateResult } from '@ts/core/ai-types';
 
 export interface TranslateCommandParams {
   text: string;
@@ -20,7 +21,7 @@ export class TranslateCommand extends BaseCommand {
     };
   }
 
-  protected parseResult(response: string): string {
+  protected parseResult(response: string): TranslateResult {
     return response;
   }
 }

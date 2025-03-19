@@ -1,6 +1,6 @@
-import type { RequestCallbacks } from '../../ai-types';
-import type { PromptData, PromptManager, TemplateName } from './prompt_manager';
-import type { RequestManager } from './request_manager';
+import type { PromptData, PromptManager, TemplateName } from '@ts/core/ai/core/prompt_manager';
+import type { RequestManager } from '@ts/core/ai/core/request_manager';
+import type { BaseResult, RequestCallbacks } from '@ts/core/ai-types';
 
 export abstract class BaseCommand {
   constructor(
@@ -16,10 +16,10 @@ export abstract class BaseCommand {
 
     const abort = this.requestManager.sendRequest(prompt, {
       onChunk: callbacks.onChunk,
-      onComplete: (finalResponse) => {
-        const result = this.parseResult(finalResponse);
+      onComplete: (result) => {
+        const finalResponse = this.parseResult(result);
 
-        callbacks.onComplete?.(result);
+        callbacks.onComplete?.(finalResponse);
       },
       onError: callbacks.onError,
     });
@@ -29,6 +29,5 @@ export abstract class BaseCommand {
 
   protected abstract getTemplateName(): TemplateName;
   protected abstract buildPromptData(params: unknown): PromptData;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  protected abstract parseResult(raw: string): any;
+  protected abstract parseResult(response: string): BaseResult;
 }

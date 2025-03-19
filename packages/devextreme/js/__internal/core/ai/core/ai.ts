@@ -1,9 +1,9 @@
-import type { AIProvider, RequestCallbacks } from '../../ai-types';
-import type { TranslateCommandParams } from '../commands/translate_command';
-import { TranslateCommand } from '../commands/translate_command';
-import type { BaseCommand } from './base_command';
-import { PromptManager } from './prompt_manager';
-import { RequestManager } from './request_manager';
+import type { BaseCommand } from '@ts/core/ai/commands/base';
+import type { TranslateCommandParams } from '@ts/core/ai/commands/translate';
+import { TranslateCommand } from '@ts/core/ai/commands/translate';
+import { PromptManager } from '@ts/core/ai/core/prompt_manager';
+import { RequestManager } from '@ts/core/ai/core/request_manager';
+import type { AIProvider, RequestCallbacks } from '@ts/core/ai-types';
 
 export class AI {
   private readonly promptManager: PromptManager;
