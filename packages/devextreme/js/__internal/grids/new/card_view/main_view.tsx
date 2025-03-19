@@ -39,7 +39,7 @@ function MainViewComponent({
           Without this div, CardView would be parent of Pager.
           In this case all `componentWillUnmount`s aren't called
         */}
-          <Pager/>
+        <Pager/>
       </div>
       <ColumnsChooser/>
     </ConfigContext.Provider>
