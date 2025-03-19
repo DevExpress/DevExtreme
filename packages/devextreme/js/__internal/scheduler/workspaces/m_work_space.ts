@@ -1422,8 +1422,8 @@ class SchedulerWorkSpace extends WidgetObserver {
     return extend(true, {}, {
       startDate: cellData.startDate,
       endDate: cellData.endDate,
-      startDateUTC: cellData.startDate && this.timeZoneCalculator.createDate(cellData.startDate, { path: 'fromGrid' }),
-      endDateUTC: cellData.endDate && this.timeZoneCalculator.createDate(cellData.endDate, { path: 'fromGrid' }),
+      startDateUTC: cellData.startDate && this.timeZoneCalculator?.createDate(cellData.startDate, { path: 'fromGrid' }),
+      endDateUTC: cellData.endDate && this.timeZoneCalculator?.createDate(cellData.endDate, { path: 'fromGrid' }),
       groups: cellData.groups,
       groupIndex: cellData.groupIndex,
       allDay: cellData.allDay,
