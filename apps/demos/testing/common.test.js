@@ -38,7 +38,7 @@ const execCode = ClientFunction((code) => {
 });
 
 const injectStyle = (style) => `
-    var style = document.createElement('style'); 
+    var style = document.createElement('style');
     style.innerHTML = \`${style}\`;
     document.getElementsByTagName('head')[0].appendChild(style);
   `;
@@ -365,7 +365,7 @@ const SKIPPED_TESTS = {
       {
         content: `
           window.addEventListener('error', function (e) {
-              console.error(e.message); 
+              console.error(e.message);
           });`,
       },
     ]);

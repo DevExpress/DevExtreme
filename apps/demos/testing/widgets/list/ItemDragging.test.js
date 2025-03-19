@@ -4,7 +4,6 @@ import { runManualTest } from '../../../utils/visual-tests/matrix-test-helper';
 const WINDOW_WIDTH = 600;
 
 fixture('List.ItemDragging')
-  .page('http://localhost:8080/')
   .before(async (ctx) => {
     ctx.initialWindowSize = [900, WINDOW_WIDTH];
   });

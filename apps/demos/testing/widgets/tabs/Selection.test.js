@@ -11,12 +11,11 @@ const SELECTBOX_POPUP_WRAPPER_CLASS = 'dx-selectbox-popup-wrapper';
 const LIST_ITEM_CLASS = 'dx-list-item';
 
 fixture('Tabs.Selection')
-  .page('http://localhost:8080/')
   .before(async (ctx) => {
     ctx.initialWindowSize = [900, 1200];
   });
 
-runManualTest('Tabs', 'Selection', ['jQuery'/* , 'React', 'Vue' */], (test) => {
+runManualTest('Tabs', 'Selection', ['jQuery', 'React', 'Vue', 'Angular'], (test) => {
   test('Selection', async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 

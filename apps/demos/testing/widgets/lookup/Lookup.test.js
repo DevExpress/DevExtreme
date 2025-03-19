@@ -6,7 +6,6 @@ import { testScreenshot } from '../../../utils/visual-tests/helpers/theme-utils'
 const LOOKUP_CLASS = 'dx-lookup';
 
 fixture('Lookup.Basics')
-  .page('http://localhost:8080/')
   .before(async (ctx) => {
     ctx.initialWindowSize = [900, 600];
   });
