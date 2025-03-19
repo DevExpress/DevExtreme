@@ -102,7 +102,6 @@ const licenseValidator = env.BUILD_INTERNAL_PACKAGE || env.BUILD_TEST_INTERNAL_P
         .pipe(() => gulpFilter(['**', '!**/license/license_validation_internal.js']));
 
 const sources = (src, dist, distGlob, aiSrc) => (() => merge(
-// const sources = (src, dist, distGlob) => (() => merge(
     gulp
         .src(src)
         .pipe(licenseValidator())
@@ -176,7 +175,6 @@ gulp.task('npm-sources', gulp.series(
         .pipe(overwriteInternalPackageName())
         .pipe(gulpIf(env.BUILD_INTERNAL_PACKAGE, gulp.dest(distPath))),
     sources(srcGlobs, packagePath, distGlobs, aiEsmSrcGlobs))
-    // sources(srcGlobs, packagePath, distGlobs))
 );
 
 gulp.task('npm-dist', () => gulp
