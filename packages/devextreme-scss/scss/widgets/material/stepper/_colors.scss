@@ -18,7 +18,7 @@ $stepper-step-invalid-hover-bg: $button-danger-hover-bg !default;
 $stepper-step-border-color: $base-border-color !default;
 $stepper-step-hover-border-color: null !default;
 
-$stepper-step-focused-border-color: $base-accent !default;
+$stepper-step-focused-border-color: $stepper-step-selected-hover-bg !default;
 $stepper-step-selected-border-color: $base-accent !default;
 
 $stepper-connector-bg: $base-border-color !default;

@@ -1,6 +1,7 @@
-@mixin progressbar(
+@mixin connector(
   $connector-background-color,
   $background-color,
+  $margin-start,
 ) {
   .dx-stepper-connector {
     background-color: $connector-background-color;
@@ -8,5 +9,13 @@
 
   .dx-stepper-connector-value {
     background-color: $background-color;
+  }
+
+  .dx-stepper-connector-horizontal {
+    margin-block-start: $margin-start;
+  }
+
+  .dx-stepper-connector-vertical {
+    margin-inline-start: $margin-start;
   }
 }

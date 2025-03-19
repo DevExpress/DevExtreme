@@ -98,9 +98,7 @@ class Stepper extends CollectionWidgetAsync<StepperProperties> {
   }
 
   _prepareDefaultItemTemplate(data: StepperItemProperties, $container: dxElementWrapper): void {
-    const {
-      text, title,
-    } = data;
+    const { text, title } = data;
 
     const $indicatorElement = $('<div>').addClass(STEP_INDICATOR_CLASS);
 
@@ -159,7 +157,7 @@ class Stepper extends CollectionWidgetAsync<StepperProperties> {
     $itemToReplace: dxElementWrapper,
   ): dxElementWrapper {
     const $itemFrame = super._renderItem(index, itemData, $container, $itemToReplace);
-    // @ts-expect-error ts-error
+
     this._getItemInstance($itemFrame).updateInvalidClass(itemData.isValid);
 
     return $itemFrame;
@@ -340,7 +338,6 @@ class Stepper extends CollectionWidgetAsync<StepperProperties> {
   ): void {
     switch (property) {
       case 'isValid': {
-        // @ts-expect-error ts-error
         type PropertyType = Item[typeof property];
 
         const itemIndex = this._getIndexByItem(item);
