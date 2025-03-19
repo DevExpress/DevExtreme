@@ -69,5 +69,5 @@ export interface AIProvider {
  * @public
  */
 export interface AI {
-  translate: (params: TranslateCommandParams, callbacks: RequestCallbacks) => string;
+  translate: (params: TranslateCommandParams, callbacks: RequestCallbacks) => () => void;
 }

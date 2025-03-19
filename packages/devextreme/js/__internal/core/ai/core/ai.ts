@@ -1,11 +1,11 @@
-import type { AIProvider, RequestCallbacks } from '@js/ai/ai';
+import type { AI as IAI, AIProvider, RequestCallbacks } from '@js/ai/ai';
 import type { BaseCommand } from '@ts/core/ai/commands/base';
 import type { TranslateCommandParams } from '@ts/core/ai/commands/translate';
 import { TranslateCommand } from '@ts/core/ai/commands/translate';
 import { PromptManager } from '@ts/core/ai/core/prompt_manager';
 import { RequestManager } from '@ts/core/ai/core/request_manager';
 
-export class AI {
+export class AI implements IAI {
   private readonly promptManager: PromptManager;
 
   private readonly requestManager: RequestManager;

@@ -868,7 +868,7 @@ declare module DevExpress.ai {
     translate: (
       params: TranslateCommandParams,
       callbacks: RequestCallbacks
-    ) => string;
+    ) => () => void;
   }
   export interface AIProvider {
     sendRequest: (params: RequestParams) => ResponseParams;
