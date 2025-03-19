@@ -1,7 +1,6 @@
 @use './content_view';
 @use './header_panel';
 @use './variables' as *;
-@use '../gridCore/error_row';
 
 .dx-cardview {
   display: flex;
