@@ -1,0 +1,7 @@
+@mixin stepper(
+  $margin,
+) {
+  .dx-stepper {
+    margin: $margin;
+  }
+}

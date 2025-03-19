@@ -1,8 +1,13 @@
 @mixin step(
   $width,
   $height,
+  $content-row-gap,
+  $content-column-gap,
 ) {
   .dx-step-content {
+    row-gap: $content-row-gap;
+    column-gap: $content-column-gap;
+
     &::before {
       width: $width;
       height: $height;
@@ -29,7 +34,7 @@
   $invalid-color,
   $invalid-color-hover,
   $disabled-color,
-  $disable-background-color,
+  $disabled-bg,
 ) {
   .dx-step-content::before {
     background-color: $background-color;
@@ -44,6 +49,25 @@
         background-color: $background-color-hover;
       }
 
+      &.dx-step-completed,
+      &.dx-step-selected {
+        .dx-step-content::before {
+          border-color: $border-color-focused;
+          background-color: $background-color-selected-hover;
+        }
+
+        &.dx-step-invalid {
+          .dx-step-indicator {
+            color: $color-selected;
+          }
+
+          .dx-step-content::before {
+            border-color: $invalid-color-hover;
+            background-color: $invalid-color-hover;
+          }
+        }
+      }
+
       &.dx-step-invalid {
         .dx-step-indicator {
           color: $invalid-color-hover;
@@ -52,32 +76,12 @@
         .dx-step-title {
           color: $invalid-color-hover;
         }
-
-        &.dx-step-selected {
-          .dx-step-indicator {
-            color: $color-selected;
-          }
-        }
       }
     }
 
     &.dx-state-active {
       .dx-step-content::before {
         background-color: $background-color-hover;
-      }
-    }
-
-    &.dx-step-completed.dx-state-hover {
-      .dx-step-content::before {
-        border-color: $background-color-selected-hover;
-        background-color: $background-color-selected-hover;
-      }
-    }
-
-    &.dx-step-selected.dx-state-hover {
-      .dx-step-content::before {
-        border-color: $background-color-selected-hover;
-        background-color: $background-color-selected-hover;
       }
     }
 
@@ -116,6 +120,13 @@
           background-color: $invalid-color;
           box-shadow: 0 0 0 8px $background-color;
         }
+
+        &.dx-state-focused {
+          .dx-step-content::before {
+            border-color: $invalid-color-hover;
+            background-color: $invalid-color-hover;
+          }
+        }
       }
     }
 
@@ -126,7 +137,6 @@
 
       .dx-step-title {
         color: $background-color-selected;
-        font-weight: 600;
       }
 
       .dx-step-content::before {
@@ -153,9 +163,16 @@
         box-shadow: 0 0 0 2px $background-color, 0 0 0 4px $border-color-focused, 0 0 0 8px $background-color;
       }
 
+      &.dx-step-selected,
+      &.dx-step-completed {
+        .dx-step-content::before {
+          background-color: $background-color-selected-hover;
+        }
+      }
+
       &.dx-step-invalid {
         .dx-step-content::before {
-          box-shadow: 0 0 0 2px $background-color, 0 0 0 4px $border-color-focused, 0 0 0 8px $background-color;
+          box-shadow: 0 0 0 2px $background-color, 0 0 0 4px $invalid-color-hover, 0 0 0 8px $background-color;
         }
       }
     }
@@ -170,8 +187,32 @@
       }
 
       .dx-step-content::before {
-        border-color: $disable-background-color;
-        background-color: $disable-background-color;
+        border-color: $disabled-bg;
+        background-color: $disabled-bg;
+      }
+    }
+  }
+
+  .dx-stepper {
+    &.dx-state-focused {
+      .dx-step-selected {
+        .dx-step-content::before {
+          box-shadow: 0 0 0 8px $background-color;
+        }
+
+        &.dx-state-focused {
+          .dx-step-content::before {
+            box-shadow: 0 0 0 2px $background-color, 0 0 0 4px $border-color-focused, 0 0 0 8px $background-color;
+          }
+
+          &.dx-step-invalid {
+            .dx-step-content::before {
+              border-color: $invalid-color-hover;
+              background-color: $invalid-color-hover;
+              box-shadow: 0 0 0 2px $background-color, 0 0 0 4px $invalid-color-hover, 0 0 0 8px $background-color;
+            }
+          }
+        }
       }
     }
   }
