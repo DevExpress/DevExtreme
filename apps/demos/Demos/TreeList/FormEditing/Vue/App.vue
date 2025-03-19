@@ -81,7 +81,7 @@
 </template>
 <script setup lang="ts">
 import {
-  DxTreeList, DxEditing, DxColumn, DxValidationRule, DxLookup, DxButton, DxTreeListTypes,
+  DxTreeList, DxEditing, DxColumn, DxValidationRule, DxLookup, DxButton, type DxTreeListTypes,
 } from 'devextreme-vue/tree-list';
 import { employees } from './data.ts';
 

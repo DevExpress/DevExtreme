@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-/* eslint-disable spellcheck/spell-checker */
 import { compileGetter } from '@js/core/utils/data';
 import { isDefined } from '@js/core/utils/type';
 import { combined, computed, state } from '@ts/core/reactive/index';
@@ -37,14 +36,13 @@ export class ContentView extends ContentViewBase<ContentViewProps> {
     [this.width, this.cardMinWidth, this.dataController.pageSize, this.options.oneWay('cardsPerRow')],
   );
 
-  // @ts-expect-error
   protected override component = ContentViewComponent;
 
   protected override getProps() {
     return combined({
       ...this.getBaseProps(),
       contentProps: combined({
-        items: this.items,
+        items: this.itemsController.items,
         // items: computed((virtualState) => virtualState.virtualItems, [this.virtualState]),
         fieldTemplate: this.options.template('fieldTemplate'),
         cardsPerRow: this.cardsPerRow,

@@ -7,6 +7,8 @@ import messageLocalization from '@js/common/core/localization/message';
 import devices from '@js/core/devices';
 import { getPublicElement } from '@js/core/element';
 import Guid from '@js/core/guid';
+import type { DefaultOptionsRule } from '@js/core/options/utils';
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { BindableTemplate } from '@js/core/templates/bindable_template';
 import { ensureDefined, noop } from '@js/core/utils/common';
@@ -19,11 +21,13 @@ import { getHeight, getOuterHeight, setHeight } from '@js/core/utils/size';
 import { isDefined, isPlainObject } from '@js/core/utils/type';
 import { hasWindow } from '@js/core/utils/window';
 import Button from '@js/ui/button';
-import CollectionWidget from '@js/ui/collection/ui.collection_widget.live_update';
+import type { Properties } from '@js/ui/list';
 import ScrollView from '@js/ui/scroll_view';
 import { current, isMaterial, isMaterialBased } from '@js/ui/themes';
 import { render } from '@js/ui/widget/utils.ink_ripple';
 import supportUtils from '@ts/core/utils/m_support';
+import type { OptionChanged } from '@ts/core/widget/types';
+import CollectionWidget from '@ts/ui/collection/m_collection_widget.live_update';
 import { deviceDependentOptions } from '@ts/ui/scroll_view/m_scrollable.device';
 import { getElementMargin } from '@ts/ui/scroll_view/utils/get_element_style';
 import DataConverterMixin from '@ts/ui/shared/m_grouped_data_converter_mixin';
@@ -56,14 +60,73 @@ const groupItemsGetter = compileGetter('items');
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
 let _scrollView;
-// @ts-expect-error
-export const ListBase = CollectionWidget.inherit({
-  _supportedKeys() {
+
+export interface ListBaseProperties extends Properties<ListBase> {
+  validationGroup?: string;
+
+  _onItemsRendered?: () => void;
+
+  _swipeEnabled?: boolean;
+
+  showChevronExpr?: (data) => boolean | undefined;
+
+  badgeExpr?: (data) => boolean | undefined;
+
+  wrapItemText?: boolean;
+
+  useInkRipple?: boolean;
+
+  focusedElement?: dxElementWrapper;
+}
+
+export class ListBase extends CollectionWidget<ListBaseProperties> {
+  _$listContainer!: dxElementWrapper;
+
+  _$container!: dxElementWrapper;
+
+  _scrollView?: any;
+
+  _$nextButton!: dxElementWrapper | null;
+
+  _holdTimer?: ReturnType<typeof setTimeout>;
+
+  _loadNextPageTimer?: ReturnType<typeof setTimeout>;
+
+  _showLoadingIndicatorTimer?: ReturnType<typeof setTimeout>;
+
+  _inkRippleTimer?: ReturnType<typeof setTimeout>;
+
+  _isFirstLoadCompleted?: boolean;
+
+  _groupRenderAction?: () => void;
+
+  _renderingGroupIndex?: unknown;
+
+  _itemElementsCache!: dxElementWrapper;
+
+  _isLoadIndicationSuppressed?: boolean;
+
+  _scrollAction?: (e) => void;
+
+  _pullRefreshAction?: (e) => void;
+
+  _pageLoadingAction?: (e) => void;
+
+  _upInkRippleHandler?: (e) => void;
+
+  _downInkRippleHandler?: (e) => void;
+
+  _selectionChangeEventInstance?: any;
+
+  _supportedKeys(): Record<string, (e: KeyboardEvent, options?: Record<string, unknown>) => void> {
     const that = this;
 
     const moveFocusPerPage = function (direction) {
       let $item = getEdgeVisibleItem(direction);
-      const isFocusedItem = $item.is(that.option('focusedElement'));
+
+      const { focusedElement } = that.option();
+      // @ts-expect-error ts-error
+      const isFocusedItem = $item.is(focusedElement);
 
       if (isFocusedItem) {
         scrollListTo($item, direction);
@@ -78,7 +141,9 @@ export const ListBase = CollectionWidget.inherit({
       const scrollTop = that.scrollTop();
       const containerHeight = getHeight(that.$element());
 
-      let $item = $(that.option('focusedElement'));
+      const { focusedElement } = that.option();
+
+      let $item = $(focusedElement);
       let isItemVisible = true;
 
       if (!$item.length) {
@@ -113,7 +178,8 @@ export const ListBase = CollectionWidget.inherit({
       that.scrollTo(resultPosition);
     }
 
-    return extend(this.callBase(), {
+    return {
+      ...super._supportedKeys(),
       leftArrow: noop,
       rightArrow: noop,
       pageUp() {
@@ -124,81 +190,58 @@ export const ListBase = CollectionWidget.inherit({
         moveFocusPerPage('next');
         return false;
       },
-    });
-  },
+    };
+  }
 
-  _getDefaultOptions() {
-    return extend(this.callBase(), {
-
+  _getDefaultOptions(): ListBaseProperties {
+    return {
+      ...super._getDefaultOptions(),
       hoverStateEnabled: true,
-
       pullRefreshEnabled: false,
-
       scrollingEnabled: true,
-
       selectByClick: true,
-
       showScrollbar: 'onScroll',
-
       useNativeScrolling: true,
-
       bounceEnabled: true,
-
       scrollByContent: true,
-
       scrollByThumb: false,
-
       pullingDownText: messageLocalization.format('dxList-pullingDownText'),
-
       pulledDownText: messageLocalization.format('dxList-pulledDownText'),
-
       refreshingText: messageLocalization.format('dxList-refreshingText'),
-
       pageLoadingText: messageLocalization.format('dxList-pageLoadingText'),
-
+      // @ts-expect-error ts-error
       onScroll: null,
-
+      // @ts-expect-error ts-error
       onPullRefresh: null,
-
+      // @ts-expect-error ts-error
       onPageLoading: null,
-
       pageLoadMode: 'scrollBottom',
-
       nextButtonText: messageLocalization.format('dxList-nextButtonText'),
-
+      // @ts-expect-error ts-error
       onItemSwipe: null,
-
       grouped: false,
-
+      // @ts-expect-error ts-error
       onGroupRendered: null,
-
       collapsibleGroups: false,
-
       groupTemplate: 'group',
-
       indicateLoading: true,
-
       activeStateEnabled: true,
-
       _itemAttributes: { role: 'option' },
-
       useInkRipple: false,
-
       wrapItemText: false,
-
       _swipeEnabled: true,
 
       showChevronExpr(data) { return data ? data.showChevron : undefined; },
       badgeExpr(data) { return data ? data.badge : undefined; },
 
       _onItemsRendered: () => {},
-    });
-  },
+    };
+  }
 
-  _defaultOptionsRules() {
+  _defaultOptionsRules(): DefaultOptionsRule<ListBaseProperties>[] {
     const themeName = current();
-
-    return this.callBase().concat(deviceDependentOptions(), [
+    // @ts-expect-error ts-error
+    return super._defaultOptionsRules().concat(deviceDependentOptions(), [
       {
         device() {
           return !supportUtils.nativeScrolling;
@@ -245,44 +288,44 @@ export const ListBase = CollectionWidget.inherit({
         },
       },
     ]);
-  },
+  }
 
   _visibilityChanged(visible) {
     if (visible) {
       this._updateLoadingState(true);
     }
-  },
+  }
 
-  _itemClass() {
+  _itemClass(): string {
     return LIST_ITEM_CLASS;
-  },
+  }
 
-  _itemDataKey() {
+  _itemDataKey(): string {
     return LIST_ITEM_DATA_KEY;
-  },
+  }
 
   _itemContainer() {
     return this._$container;
-  },
+  }
 
-  _getItemsContainer() {
+  _getItemsContainer(): dxElementWrapper {
     return this._$listContainer;
-  },
+  }
 
-  _cleanItemContainer() {
-    this.callBase();
+  _cleanItemContainer(): void {
+    super._cleanItemContainer();
     const listContainer = this._getItemsContainer();
     $(listContainer).empty();
     listContainer.appendTo(this._$container);
-  },
+  }
 
   _saveSelectionChangeEvent(e) {
     this._selectionChangeEventInstance = e;
-  },
+  }
 
   _getSelectionChangeEvent() {
     return this._selectionChangeEventInstance;
-  },
+  }
 
   _refreshItemElements() {
     const { grouped } = this.option();
@@ -296,7 +339,7 @@ export const ListBase = CollectionWidget.inherit({
     } else {
       this._itemElementsCache = $itemsContainer.children(this._itemSelector());
     }
-  },
+  }
 
   _getItemAndHeaderElements() {
     const itemSelector = `> .${LIST_GROUP_BODY_CLASS} > ${this._itemSelector()}`;
@@ -307,13 +350,14 @@ export const ListBase = CollectionWidget.inherit({
     const $items = $listGroup.find(itemAndHeaderSelector);
 
     return $items;
-  },
+  }
 
   _getAvailableItems($itemElements) {
     const { collapsibleGroups } = this.option();
 
     if (collapsibleGroups) {
       const $elements = this._getItemAndHeaderElements();
+      // @ts-expect-error ts-error
       const $visibleItems = $elements.filter((_, element) => {
         if ($(element).hasClass(LIST_GROUP_HEADER_CLASS)) {
           return true;
@@ -325,38 +369,41 @@ export const ListBase = CollectionWidget.inherit({
       return $visibleItems;
     }
 
-    return this.callBase($itemElements);
-  },
+    return super._getAvailableItems($itemElements);
+  }
 
-  _modifyByChanges() {
-    this.callBase.apply(this, arguments);
+  _modifyByChanges(): void {
+    // @ts-expect-error ts-error
+    super._modifyByChanges.apply(this, arguments);
 
     this._refreshItemElements();
     this._updateLoadingState(true);
-  },
+  }
 
   reorderItem(itemElement, toItemElement) {
-    const promise = this.callBase(itemElement, toItemElement);
+    const promise = super.reorderItem(itemElement, toItemElement);
 
     return promise.done(function () {
       this._refreshItemElements();
     });
-  },
+  }
 
   deleteItem(itemElement) {
-    const promise = this.callBase(itemElement);
-
+    const promise = super.deleteItem(itemElement);
+    // @ts-expect-error ts-error
     return promise.done(function () {
       this._refreshItemElements();
     });
-  },
+  }
 
-  _itemElements() {
+  _itemElements(): dxElementWrapper {
     return this._itemElementsCache;
-  },
+  }
 
   _itemSelectHandler(e) {
-    const isSingleSelectedItemClicked = this.option('selectionMode') === 'single'
+    const { selectionMode } = this.option();
+
+    const isSingleSelectedItemClicked = selectionMode === 'single'
       && this.isItemSelected(e.currentTarget);
     if (isSingleSelectedItemClicked) {
       return;
@@ -369,12 +416,12 @@ export const ListBase = CollectionWidget.inherit({
       this.option('focusedElement', e.currentTarget);
     }
 
-    return this.callBase(e, isSelectionControlClicked);
-  },
+    return super._itemSelectHandler(e, isSelectionControlClicked);
+  }
 
   _allowDynamicItemsAppend() {
     return true;
-  },
+  }
 
   _updateActiveStateUnit(): void {
     const { collapsibleGroups } = this.option();
@@ -389,55 +436,60 @@ export const ListBase = CollectionWidget.inherit({
     }
 
     this._activeStateUnit = selectors.join(',');
-  },
+  }
 
-  _init() {
-    this.callBase();
+  _init(): void {
+    super._init();
 
     this._updateActiveStateUnit();
-
+    // @ts-expect-error ts-error
     this._dataController.resetDataSourcePageIndex();
     this._$container = this.$element();
 
     this._$listContainer = $('<div>').addClass(LIST_ITEMS_CLASS);
     this._initScrollView();
-
+    // @ts-expect-error ts-error
     this._feedbackShowTimeout = LIST_FEEDBACK_SHOW_TIMEOUT;
     this._createGroupRenderAction();
-  },
+  }
 
-  _scrollBottomMode() {
-    return this.option('pageLoadMode') === 'scrollBottom';
-  },
+  _scrollBottomMode(): boolean {
+    const { pageLoadMode } = this.option();
 
-  _nextButtonMode() {
-    return this.option('pageLoadMode') === 'nextButton';
-  },
+    return pageLoadMode === 'scrollBottom';
+  }
+
+  _nextButtonMode(): boolean {
+    const { pageLoadMode } = this.option();
+
+    return pageLoadMode === 'nextButton';
+  }
 
   _dataSourceOptions() {
     const scrollBottom = this._scrollBottomMode();
     const nextButton = this._nextButtonMode();
 
-    return extend(this.callBase(), {
+    return extend(super._dataSourceOptions(), {
       paginate: ensureDefined(scrollBottom || nextButton, true),
     });
-  },
+  }
 
   _getGroupedOption() {
     return this.option('grouped');
-  },
+  }
 
   _getGroupContainerByIndex(groupIndex) {
     return this._getItemsContainer().find(`.${LIST_GROUP_CLASS}`).eq(groupIndex).find(`.${LIST_GROUP_BODY_CLASS}`);
-  },
+  }
 
-  _dataSourceFromUrlLoadMode() {
+  _dataSourceFromUrlLoadMode(): string {
     return 'raw';
-  },
+  }
 
-  _initScrollView() {
+  _initScrollView(): void {
     const scrollingEnabled = this.option('scrollingEnabled');
     const pullRefreshEnabled = scrollingEnabled && this.option('pullRefreshEnabled');
+    // @ts-expect-error ts-error
     const autoPagingEnabled = scrollingEnabled && this._scrollBottomMode() && !!this._dataController.getDataSource();
 
     this._scrollView = this._createComponent(this.$element(), getScrollView(), {
@@ -466,23 +518,23 @@ export const ListBase = CollectionWidget.inherit({
     this._toggleWrapItemText(this.option('wrapItemText'));
 
     this._createScrollViewActions();
-  },
+  }
 
-  _toggleWrapItemText(value) {
+  _toggleWrapItemText(value): void {
     this._$listContainer.toggleClass(WRAP_ITEM_TEXT_CLASS, value);
-  },
+  }
 
-  _createScrollViewActions() {
+  _createScrollViewActions(): void {
     this._scrollAction = this._createActionByOption('onScroll');
     this._pullRefreshAction = this._createActionByOption('onPullRefresh');
     this._pageLoadingAction = this._createActionByOption('onPageLoading');
-  },
+  }
 
-  _scrollHandler(e) {
-    this._scrollAction && this._scrollAction(e);
-  },
+  _scrollHandler(e): void {
+    this._scrollAction?.(e);
+  }
 
-  _initTemplates() {
+  _initTemplates(): void {
     this._templateManager.addDefaultTemplates({
       group: new BindableTemplate(($container, data) => {
         if (isPlainObject(data)) {
@@ -494,11 +546,11 @@ export const ListBase = CollectionWidget.inherit({
         }
       }, ['key'], this.option('integrationOptions.watchMethod')),
     });
-    this.callBase();
-  },
+    super._initTemplates();
+  }
 
   _prepareDefaultItemTemplate(data, $container) {
-    this.callBase(data, $container);
+    super._prepareDefaultItemTemplate(data, $container);
 
     if (data.icon) {
       // @ts-expect-error
@@ -509,36 +561,40 @@ export const ListBase = CollectionWidget.inherit({
 
       $container.prepend($iconContainer);
     }
-  },
+  }
 
-  _getBindableFields() {
+  _getBindableFields(): string[] {
     return ['text', 'html', 'icon'];
-  },
+  }
 
-  _updateLoadingState(tryLoadMore) {
+  _updateLoadingState(tryLoadMore?): void {
+    // @ts-expect-error ts-error
     const dataController = this._dataController;
+    // @ts-expect-error ts-error
     const shouldLoadNextPage = this._scrollBottomMode() && tryLoadMore && !dataController.isLoading() && !this._isLastPage();
 
     if (this._shouldContinueLoading(shouldLoadNextPage)) {
       this._infiniteDataLoading();
     } else {
       this._scrollView.release(!shouldLoadNextPage && !dataController.isLoading());
+      // @ts-expect-error ts-error
       this._toggleNextButton(this._shouldRenderNextButton() && !this._isLastPage());
       this._loadIndicationSuppressed(false);
     }
-  },
+  }
 
-  _shouldRenderNextButton() {
+  _shouldRenderNextButton(): boolean {
+    // @ts-expect-error ts-error
     return this._nextButtonMode() && this._dataController.isLoaded();
-  },
+  }
 
-  _isDataSourceFirstLoadCompleted(newValue) {
+  _isDataSourceFirstLoadCompleted(newValue?) {
     if (isDefined(newValue)) {
       this._isFirstLoadCompleted = newValue;
     }
 
     return this._isFirstLoadCompleted;
-  },
+  }
 
   _dataSourceLoadingChangedHandler(isLoading) {
     if (this._loadIndicationSuppressed()) {
@@ -555,48 +611,50 @@ export const ListBase = CollectionWidget.inherit({
       });
     } else {
       clearTimeout(this._showLoadingIndicatorTimer);
-      this._scrollView && this._scrollView.finishLoading();
+      this._scrollView?.finishLoading();
     }
     if (!isLoading) {
       this._isDataSourceFirstLoadCompleted(false);
     }
-  },
+  }
 
-  _dataSourceChangedHandler() {
+  _dataSourceChangedHandler(): void {
     if (!this._shouldAppendItems() && hasWindow()) {
-      this._scrollView && this._scrollView.scrollTo(0);
+      this._scrollView?.scrollTo(0);
     }
-
-    this.callBase.apply(this, arguments);
+    // @ts-expect-error ts-error
+    super._dataSourceChangedHandler.apply(this, arguments);
 
     this._isDataSourceFirstLoadCompleted(true);
-  },
+  }
 
-  _refreshContent() {
+  _refreshContent(): void {
     this._prepareContent();
     this._fireContentReadyAction();
-  },
+  }
 
-  _hideLoadingIfLoadIndicationOff() {
+  _hideLoadingIfLoadIndicationOff(): void {
     if (!this.option('indicateLoading')) {
       this._dataSourceLoadingChangedHandler(false);
     }
-  },
+  }
 
-  _loadIndicationSuppressed(value) {
+  // @ts-expect-error ts-error
+  _loadIndicationSuppressed(value?) {
     if (!arguments.length) {
       return this._isLoadIndicationSuppressed;
     }
     this._isLoadIndicationSuppressed = value;
-  },
+  }
 
   _scrollViewIsFull() {
     const scrollView = this._scrollView;
     return !scrollView || getHeight(scrollView.content()) > getHeight(scrollView.container());
-  },
+  }
 
-  _pullDownHandler(e) {
-    this._pullRefreshAction(e);
+  _pullDownHandler(e?): void {
+    this._pullRefreshAction?.(e);
+    // @ts-expect-error ts-error
     const dataController = this._dataController;
 
     if (dataController.getDataSource() && !dataController.isLoading()) {
@@ -606,13 +664,13 @@ export const ListBase = CollectionWidget.inherit({
     } else {
       this._updateLoadingState();
     }
-  },
+  }
 
   _shouldContinueLoading(shouldLoadNextPage) {
     const isBottomReached = getHeight(this._scrollView.content()) - getHeight(this._scrollView.container()) < (this._scrollView.scrollOffset()?.top ?? 0);
 
     return shouldLoadNextPage && (!this._scrollViewIsFull() || isBottomReached);
-  },
+  }
 
   _infiniteDataLoading() {
     const isElementVisible = this.$element().is(':visible');
@@ -624,43 +682,46 @@ export const ListBase = CollectionWidget.inherit({
         this._loadNextPage();
       });
     }
-  },
+  }
 
-  _scrollBottomHandler(e) {
-    this._pageLoadingAction(e);
+  _scrollBottomHandler(e): void {
+    this._pageLoadingAction?.(e);
+    // @ts-expect-error ts-error
     const dataController = this._dataController;
-
+    // @ts-expect-error ts-error
     if (!dataController.isLoading() && !this._isLastPage()) {
       this._loadNextPage();
     } else {
       this._updateLoadingState();
     }
-  },
+  }
 
   _renderItems(items) {
     if (this.option('grouped')) {
       each(items, this._renderGroup.bind(this));
       this._attachGroupCollapseEvent();
       this._renderEmptyMessage();
-      // @ts-expect-error
+      // @ts-expect-error ts-error
       if (isMaterial()) {
         this.attachGroupHeaderInkRippleEvents();
       }
     } else {
-      this.callBase.apply(this, arguments);
+      // @ts-expect-error ts-error
+      super._renderItems.apply(this, arguments);
     }
 
     this._refreshItemElements();
     this._updateLoadingState(true);
-  },
+  }
 
-  _postProcessRenderItems() {
-    this.option('_onItemsRendered')();
-  },
+  _postProcessRenderItems(): void {
+    const { _onItemsRendered: onItemsRendered } = this.option();
+    onItemsRendered?.();
+  }
 
-  _attachGroupCollapseEvent() {
+  _attachGroupCollapseEvent(): void {
     const { collapsibleGroups } = this.option();
-
+    // @ts-expect-error ts-error
     const eventNameClick = addNamespace(clickEventName, this.NAME);
     const headerSelector = `.${LIST_GROUP_HEADER_CLASS}`;
 
@@ -675,7 +736,7 @@ export const ListBase = CollectionWidget.inherit({
         this._processGroupCollapse(e);
       });
     }
-  },
+  }
 
   _processGroupCollapse(e): void {
     const actionCallback = (e) => {
@@ -698,7 +759,7 @@ export const ListBase = CollectionWidget.inherit({
     const action = this._createAction(actionCallback, actionParams);
 
     action({ event: e });
-  },
+  }
 
   _enterKeyHandler(e): void {
     const { collapsibleGroups, focusedElement } = this.option();
@@ -712,10 +773,10 @@ export const ListBase = CollectionWidget.inherit({
       return;
     }
 
-    this.callBase(e);
-  },
+    super._enterKeyHandler(e);
+  }
 
-  _collapseGroupHandler($group, toggle) {
+  _collapseGroupHandler($group, toggle?) {
     const deferred = Deferred();
 
     const $groupHeader = $group.children(`.${LIST_GROUP_HEADER_CLASS}`);
@@ -755,7 +816,7 @@ export const ListBase = CollectionWidget.inherit({
     });
 
     return deferred.promise();
-  },
+  }
 
   _dataSourceLoadErrorHandler() {
     this._forgetNextPageLoading();
@@ -764,13 +825,13 @@ export const ListBase = CollectionWidget.inherit({
       this._renderEmptyMessage();
       this._updateLoadingState();
     }
-  },
+  }
 
   _initMarkup() {
     this._itemElementsCache = $();
 
     this.$element().addClass(LIST_CLASS);
-    this.callBase();
+    super._initMarkup();
     this.option('useInkRipple') && this._renderInkRipple();
 
     const elementAria = {
@@ -783,9 +844,9 @@ export const ListBase = CollectionWidget.inherit({
     this.setAria({ role: 'application' }, this._focusTarget());
 
     this._setListAria();
-  },
+  }
 
-  _setListAria() {
+  _setListAria(): void {
     const { items, allowItemDeleting, collapsibleGroups } = this.option();
 
     const label = allowItemDeleting
@@ -800,18 +861,19 @@ export const ListBase = CollectionWidget.inherit({
     };
 
     this.setAria(listArea, this._$listContainer);
-  },
+  }
 
   _focusTarget() {
     return this._itemContainer();
-  },
+  }
 
-  _renderInkRipple() {
+  _renderInkRipple(): void {
     this._inkRipple = render();
-  },
+  }
 
-  _toggleActiveState($element, value, e) {
-    this.callBase.apply(this, arguments);
+  _toggleActiveState($element, value, e?) {
+    // @ts-expect-error ts-error
+    super._toggleActiveState.apply(this, arguments);
     const that = this;
 
     if (!this._inkRipple) {
@@ -824,56 +886,58 @@ export const ListBase = CollectionWidget.inherit({
     };
 
     if (value) {
-      // @ts-expect-error
+      // @ts-expect-error ts-error
       if (isMaterial()) {
         this._inkRippleTimer = setTimeout(() => {
-          that._inkRipple.showWave(config);
+          that._inkRipple?.showWave(config);
         }, LIST_FEEDBACK_SHOW_TIMEOUT / 2);
       } else {
-        that._inkRipple.showWave(config);
+        that._inkRipple?.showWave(config);
       }
     } else {
       clearTimeout(this._inkRippleTimer);
       this._inkRipple.hideWave(config);
     }
-  },
+  }
 
-  _postprocessRenderItem(args) {
+  _postprocessRenderItem(args): void {
     this._refreshItemElements();
-    this.callBase.apply(this, arguments);
+    // @ts-expect-error ts-error
+    super._postprocessRenderItem.apply(this, arguments);
 
     if (this.option('_swipeEnabled')) {
       this._attachSwipeEvent($(args.itemElement));
     }
-  },
+  }
 
-  _getElementClassToSkipRefreshId() {
+  _getElementClassToSkipRefreshId(): string {
     return LIST_GROUP_HEADER_CLASS;
-  },
+  }
 
-  _attachSwipeEvent($itemElement) {
+  _attachSwipeEvent($itemElement): void {
+    // @ts-expect-error ts-error
     const endEventName = addNamespace(swipeEventEnd, this.NAME);
 
     eventsEngine.on($itemElement, endEventName, this._itemSwipeEndHandler.bind(this));
-  },
+  }
 
-  _itemSwipeEndHandler(e) {
+  _itemSwipeEndHandler(e): void {
     this._itemDXEventHandler(e, 'onItemSwipe', {
       direction: e.offset < 0 ? 'left' : 'right',
     });
-  },
+  }
 
-  _nextButtonHandler(e) {
-    this._pageLoadingAction(e);
-
+  _nextButtonHandler(e): void {
+    this._pageLoadingAction?.(e);
+    // @ts-expect-error ts-error
     const dataController = this._dataController;
     if (dataController.getDataSource() && !dataController.isLoading()) {
       this._scrollView.toggleLoading(true);
-      this._$nextButton.detach();
+      this._$nextButton?.detach();
       this._loadIndicationSuppressed(true);
       this._loadNextPage();
     }
-  },
+  }
 
   _setGroupAria($group, groupHeaderId): void {
     const { collapsibleGroups } = this.option();
@@ -885,11 +949,11 @@ export const ListBase = CollectionWidget.inherit({
     };
 
     this.setAria(groupAria, $group);
-  },
+  }
 
   _updateGroupHeaderAriaExpanded($groupHeader, expanded): void {
     this.setAria({ expanded }, $groupHeader);
-  },
+  }
 
   _setGroupHeaderAria($groupHeader, listGroupBodyId): void {
     const { collapsibleGroups } = this.option();
@@ -901,7 +965,7 @@ export const ListBase = CollectionWidget.inherit({
     };
 
     this.setAria(groupHeaderAria, $groupHeader);
-  },
+  }
 
   _setGroupBodyAria($groupBody, groupHeaderId): void {
     const { collapsibleGroups } = this.option();
@@ -913,7 +977,7 @@ export const ListBase = CollectionWidget.inherit({
     };
 
     this.setAria(groupHeaderAria, $groupBody);
-  },
+  }
 
   _renderGroup(index, group) {
     const $groupElement = $('<div>')
@@ -931,6 +995,7 @@ export const ListBase = CollectionWidget.inherit({
 
     const groupTemplate = this._getTemplate(
       group.template || templateName,
+      // @ts-expect-error ts-error
       group,
       index,
       $groupHeaderElement,
@@ -941,7 +1006,7 @@ export const ListBase = CollectionWidget.inherit({
       itemData: group,
       container: getPublicElement($groupHeaderElement),
     };
-
+    // @ts-expect-error ts-error
     this._createItemByTemplate(groupTemplate, renderArgs);
 
     $('<div>')
@@ -957,11 +1022,11 @@ export const ListBase = CollectionWidget.inherit({
       .attr('id', groupBodyId)
       .appendTo($groupElement);
 
-    // @ts-expect-error
+    // @ts-expect-error ts-error
     each(groupItemsGetter(group) || [], (itemIndex, item) => {
       this._renderItem({ group: index, item: itemIndex }, item, $groupBody);
     });
-
+    // @ts-expect-error ts-error
     this._groupRenderAction({
       groupElement: getPublicElement($groupElement),
       groupIndex: index,
@@ -971,21 +1036,23 @@ export const ListBase = CollectionWidget.inherit({
     this._setGroupAria($groupElement, groupHeaderId);
     this._setGroupHeaderAria($groupHeaderElement, groupBodyId);
     this._setGroupBodyAria($groupBody, groupHeaderId);
-  },
+  }
 
-  downInkRippleHandler(e) {
+  downInkRippleHandler(e): void {
     this._toggleActiveState($(e.currentTarget), true, e);
-  },
+  }
 
-  upInkRippleHandler(e) {
+  upInkRippleHandler(e): void {
     this._toggleActiveState($(e.currentTarget), false);
-  },
+  }
 
-  attachGroupHeaderInkRippleEvents() {
+  attachGroupHeaderInkRippleEvents(): void {
     const selector = `.${LIST_GROUP_HEADER_CLASS}`;
     const $element = this.$element();
 
+    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
     this._downInkRippleHandler = this._downInkRippleHandler || this.downInkRippleHandler.bind(this);
+    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
     this._upInkRippleHandler = this._upInkRippleHandler || this.upInkRippleHandler.bind(this);
 
     const downArguments = [$element, 'dxpointerdown', selector, this._downInkRippleHandler];
@@ -998,35 +1065,37 @@ export const ListBase = CollectionWidget.inherit({
     eventsEngine.off(...upArguments);
     // @ts-expect-error
     eventsEngine.on(...upArguments);
-  },
+  }
 
-  _createGroupRenderAction() {
+  _createGroupRenderAction(): void {
     this._groupRenderAction = this._createActionByOption('onGroupRendered');
-  },
+  }
 
-  _clean() {
+  _clean(): void {
     clearTimeout(this._inkRippleTimer);
     if (this._$nextButton) {
       this._$nextButton.remove();
       this._$nextButton = null;
     }
-    this.callBase.apply(this, arguments);
-  },
+    // @ts-expect-error ts-error
+    super._clean.apply(this, arguments);
+  }
 
-  _dispose() {
+  _dispose(): void {
     this._isDataSourceFirstLoadCompleted(false);
     clearTimeout(this._holdTimer);
     clearTimeout(this._loadNextPageTimer);
     clearTimeout(this._showLoadingIndicatorTimer);
-    this.callBase();
-  },
+    super._dispose();
+  }
 
-  _toggleDisabledState(value) {
-    this.callBase(value);
+  _toggleDisabledState(value): void {
+    super._toggleDisabledState(value);
     this._scrollView.option('disabled', value || !this.option('scrollingEnabled'));
-  },
+  }
 
-  _toggleNextButton(value) {
+  _toggleNextButton(value): void {
+    // @ts-expect-error ts-error
     const dataController = this._dataController;
     const $nextButton = this._getNextButton();
 
@@ -1039,16 +1108,16 @@ export const ListBase = CollectionWidget.inherit({
     if (!value) {
       $nextButton.detach();
     }
-  },
+  }
 
-  _getNextButton() {
+  _getNextButton(): dxElementWrapper {
     if (!this._$nextButton) {
       this._$nextButton = this._createNextButton();
     }
     return this._$nextButton;
-  },
+  }
 
-  _createNextButton() {
+  _createNextButton(): dxElementWrapper {
     const $result = $('<div>').addClass(LIST_NEXT_BUTTON_CLASS);
 
     const $button = $('<div>').appendTo($result);
@@ -1056,44 +1125,45 @@ export const ListBase = CollectionWidget.inherit({
     this._createComponent($button, Button, {
       text: this.option('nextButtonText'),
       onClick: this._nextButtonHandler.bind(this),
-      // @ts-expect-error
+      // @ts-expect-error ts-error
       type: isMaterialBased() ? 'default' : undefined,
       integrationOptions: {},
     });
 
     return $result;
-  },
+  }
 
-  _moveFocus() {
-    this.callBase.apply(this, arguments);
+  _moveFocus(): void {
+    // @ts-expect-error ts-error
+    super._moveFocus.apply(this, arguments);
 
     this.scrollToItem(this.option('focusedElement'));
-  },
+  }
 
-  _refresh() {
+  _refresh(): void {
     if (!hasWindow()) {
-      this.callBase();
+      super._refresh();
     } else {
       const scrollTop = this._scrollView.scrollTop();
-      this.callBase();
+      super._refresh();
       scrollTop && this._scrollView.scrollTo(scrollTop);
     }
-  },
+  }
 
-  _optionChanged(args) {
+  _optionChanged(args: OptionChanged<ListBaseProperties>): void {
     switch (args.name) {
       case 'pageLoadMode':
         this._toggleNextButton(args.value);
         this._initScrollView();
         break;
       case 'dataSource':
-        this.callBase(args);
+        super._optionChanged(args);
         this._initScrollView();
         this._updateLoadingState(true);
         this._isDataSourceFirstLoadCompleted(false);
         break;
       case 'items':
-        this.callBase(args);
+        super._optionChanged(args);
         this._isDataSourceFirstLoadCompleted(false);
         break;
       case 'pullingDownText':
@@ -1136,7 +1206,7 @@ export const ListBase = CollectionWidget.inherit({
         break;
       case 'width':
       case 'height':
-        this.callBase(args);
+        super._optionChanged(args);
         this._scrollView.option(args.name, args.value);
         this._scrollView.update();
         break;
@@ -1144,12 +1214,12 @@ export const ListBase = CollectionWidget.inherit({
         this._hideLoadingIfLoadIndicationOff();
         break;
       case 'visible':
-        this.callBase(args);
+        super._optionChanged(args);
         this._scrollView.update();
         break;
       case 'rtlEnabled':
         this._initScrollView();
-        this.callBase(args);
+        super._optionChanged(args);
         break;
       case 'showChevronExpr':
       case 'badgeExpr':
@@ -1160,46 +1230,48 @@ export const ListBase = CollectionWidget.inherit({
       case 'selectByClick':
         break;
       default:
-        this.callBase(args);
+        super._optionChanged(args);
     }
-  },
+  }
 
   _extendActionArgs($itemElement) {
     if (!this.option('grouped')) {
-      return this.callBase($itemElement);
+      return super._extendActionArgs($itemElement);
     }
 
     const $group = $itemElement.closest(`.${LIST_GROUP_CLASS}`);
     const $item = $group.find(`.${LIST_ITEM_CLASS}`);
-    return extend(this.callBase($itemElement), {
+    return extend(super._extendActionArgs($itemElement), {
       itemIndex: {
         group: $group.index(),
         item: $item.index($itemElement),
       },
     });
-  },
+  }
 
   expandGroup(groupIndex) {
     const deferred = Deferred();
     const $group = this._getItemsContainer().find(`.${LIST_GROUP_CLASS}`).eq(groupIndex);
-
+    // @ts-expect-error ts-error
     this._collapseGroupHandler($group, false).done(() => {
+      // @ts-expect-error ts-error
       deferred.resolveWith(this);
     });
 
     return deferred.promise();
-  },
+  }
 
   collapseGroup(groupIndex) {
     const deferred = Deferred();
     const $group = this._getItemsContainer().find(`.${LIST_GROUP_CLASS}`).eq(groupIndex);
-
+    // @ts-expect-error ts-error
     this._collapseGroupHandler($group, true).done(() => {
+      // @ts-expect-error ts-error
       deferred.resolveWith(this);
     });
 
     return deferred;
-  },
+  }
 
   updateDimensions() {
     const that = this;
@@ -1208,59 +1280,62 @@ export const ListBase = CollectionWidget.inherit({
     if (that._scrollView) {
       that._scrollView.update().done(() => {
         !that._scrollViewIsFull() && that._updateLoadingState(true);
+        // @ts-expect-error ts-error
         deferred.resolveWith(that);
       });
     } else {
+      // @ts-expect-error ts-error
       deferred.resolveWith(that);
     }
 
     return deferred.promise();
-  },
+  }
 
   reload() {
-    this.callBase();
+    super.reload();
     this.scrollTo(0);
     this._pullDownHandler();
-  },
+  }
 
   repaint() {
     this.scrollTo(0);
-    this.callBase();
-  },
+    super.repaint();
+  }
 
   scrollTop() {
     return this._scrollView.scrollOffset().top;
-  },
+  }
 
   clientHeight() {
     return this._scrollView.clientHeight();
-  },
+  }
 
   scrollHeight() {
     return this._scrollView.scrollHeight();
-  },
+  }
 
   scrollBy(distance) {
     this._scrollView.scrollBy(distance);
-  },
+  }
 
   scrollTo(location) {
     this._scrollView.scrollTo(location);
-  },
+  }
 
   scrollToItem(itemElement) {
     const $item = this._editStrategy.getItemElement(itemElement);
 
     const item = $item?.get(0);
     this._scrollView.scrollToElement(item, { bottom: getElementMargin(item, 'bottom') });
-  },
+  }
 
   _dimensionChanged() {
     this.updateDimensions();
-  },
-
-}).include(DataConverterMixin);
-
+  }
+}
+// @ts-expect-error ts-error
+ListBase.include(DataConverterMixin);
+// @ts-expect-error ts-error
 ListBase.ItemClass = ListItem;
 
 function getScrollView() {

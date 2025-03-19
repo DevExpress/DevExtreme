@@ -19,6 +19,6 @@ import DxTextBox from 'devextreme-vue/text-box';
 withDefaults(defineProps<{
   fieldData?: Record<string, any>
 }>(), {
-  fieldData: () => {},
+  fieldData: () => ({} as Record<string, any>),
 });
 </script>

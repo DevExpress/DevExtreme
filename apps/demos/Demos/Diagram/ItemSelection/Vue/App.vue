@@ -30,7 +30,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import {
-  DxDiagram, DxNodes, DxAutoLayout, DxToolbox, DxPropertiesPanel, DxDiagramTypes,
+  DxDiagram, DxNodes, DxAutoLayout, DxToolbox, DxPropertiesPanel, type DxDiagramTypes,
 } from 'devextreme-vue/diagram';
 import ArrayStore from 'devextreme/data/array_store';
 import service from './data.ts';

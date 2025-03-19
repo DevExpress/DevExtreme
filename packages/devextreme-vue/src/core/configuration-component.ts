@@ -59,7 +59,7 @@ function initOptionChangedFunc(
 }
 
 function getComponentInfo({ name, isCollectionItem, ownerConfig }: Configuration, removed?: boolean): IComponentInfo {
-  const parentPath = ownerConfig && ownerConfig.fullPath;
+  const parentPath = ownerConfig?.fullPath;
   const optionPath = name && parentPath ? `${parentPath}.${name}` : name || '';
 
   return {

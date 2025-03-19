@@ -1947,6 +1947,18 @@
               "/Models/SampleData/RecurringAppointmentsResources.cs"
             ],
             "DemoType": "Web"
+          },
+          {
+            "Title": "Toolbar Customization",
+            "Name": "ToolbarCustomization",
+            "Widget": "Scheduler",
+            "MvcAdditionalFiles": [
+              "/Models/AppointmentWithResources.cs",
+              "/Models/AssigneeResource.cs",
+              "/Models/SampleData/AppointmentsWithResources.cs",
+              "/Models/SampleData/AssigneeResources.cs"
+            ],
+            "DemoType": "Web"
           }
         ]
       },

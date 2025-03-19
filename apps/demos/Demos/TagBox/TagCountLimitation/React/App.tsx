@@ -1,5 +1,5 @@
 import React from 'react';
-import { TagBox, TagBoxTypes } from 'devextreme-react/tag-box';
+import { TagBox, type TagBoxTypes } from 'devextreme-react/tag-box';
 import { products, productLabel } from './data.ts';
 
 const defaultValues = {

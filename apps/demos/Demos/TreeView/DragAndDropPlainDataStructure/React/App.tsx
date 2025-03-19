@@ -1,6 +1,6 @@
 import React, { useCallback, useRef, useState } from 'react';
-import TreeView, { TreeViewRef } from 'devextreme-react/tree-view';
-import Sortable, { SortableTypes } from 'devextreme-react/sortable';
+import TreeView, { type TreeViewRef } from 'devextreme-react/tree-view';
+import Sortable, { type SortableTypes } from 'devextreme-react/sortable';
 
 import service from './data.ts';
 

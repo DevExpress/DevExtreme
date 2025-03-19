@@ -13,7 +13,7 @@
 </template>
 <script setup lang="ts">
 import {
-  DxDataGrid, DxScrolling, DxSorting, DxLoadPanel, DxDataGridTypes,
+  DxDataGrid, DxScrolling, DxSorting, DxLoadPanel, type DxDataGridTypes,
 } from 'devextreme-vue/data-grid';
 import { generateData } from './data.ts';
 

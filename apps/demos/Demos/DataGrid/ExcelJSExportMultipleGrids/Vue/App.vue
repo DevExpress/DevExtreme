@@ -88,8 +88,8 @@ import { Workbook } from 'exceljs';
 // Our demo infrastructure requires us to use 'file-saver-es'.
 // We recommend that you use the official 'file-saver' package in your applications.
 import { saveAs } from 'file-saver-es';
-import { DataGridCell, exportDataGrid } from 'devextreme/excel_exporter';
-import { Options as DataSourceOptions } from 'devextreme/data/data_source';
+import { type DataGridCell, exportDataGrid } from 'devextreme/excel_exporter';
+import { type Options as DataSourceOptions } from 'devextreme/data/data_source';
 import 'devextreme/data/odata/store';
 
 const priceGridRef = ref<DxDataGrid | null>(null);

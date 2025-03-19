@@ -1,19 +1,25 @@
+/* eslint-disable max-classes-per-file */
 import messageLocalization from '@js/common/core/localization/message';
 import registerComponent from '@js/core/component_registrator';
 import devices from '@js/core/devices';
 import { getPublicElement } from '@js/core/element';
+import type { DefaultOptionsRule } from '@js/core/options/utils';
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
-import { noop } from '@js/core/utils/common';
-import { extend } from '@js/core/utils/extend';
 import { hasWindow } from '@js/core/utils/window';
 import LoadIndicator from '@js/ui/load_indicator';
-import LoadPanel from '@js/ui/load_panel';
+import type { Properties } from '@js/ui/scroll_view';
 import { isMaterialBased } from '@js/ui/themes';
+import type { OptionChanged } from '@ts/core/widget/types';
+import LoadPanel from '@ts/ui/m_load_panel';
 
 import PullDownStrategy from './m_scroll_view.native.pull_down';
 import SwipeDownStrategy from './m_scroll_view.native.swipe_down';
 import SimulatedStrategy from './m_scroll_view.simulated';
 import Scrollable from './m_scrollable';
+import type { RefreshStrategy, ScrollOffset } from './types';
+
+// STYLE scrollView
 
 const SCROLLVIEW_CLASS = 'dx-scrollview';
 const SCROLLVIEW_CONTENT_CLASS = `${SCROLLVIEW_CLASS}-content`;
@@ -35,43 +41,79 @@ const refreshStrategies = {
 
 const isServerSide = !hasWindow();
 
-const scrollViewServerConfig = {
-  finishLoading: noop,
-  release: noop,
-  refresh: noop,
-  scrollOffset: () => ({ top: 0, left: 0 }),
-  isBottomReached: () => false,
-  _optionChanged(args) {
-    if (args.name !== 'onUpdated') {
-      return this.callBase.apply(this, arguments);
+export interface ScrollViewProperties extends Omit<Properties, 'onScroll' | 'onUpdated' | 'onDisposing' | 'onOptionChanged' | 'onInitialized'> {
+  refreshStrategy: RefreshStrategy;
+}
+
+export class ScrollViewServerSide extends Scrollable<ScrollViewProperties> {
+  finishLoading(): void {}
+
+  release(): void {}
+
+  refresh(): void {}
+
+  scrollOffset(): ScrollOffset {
+    return { top: 0, left: 0 };
+  }
+
+  isBottomReached(): boolean {
+    return false;
+  }
+
+  _optionChanged(args: OptionChanged<ScrollViewProperties>): void {
+    const { name } = args;
+    // @ts-expect-error ts-error
+    if (name !== 'onUpdated') {
+      // @ts-expect-error ts-error
+      return super._optionChanged.apply(this, arguments);
     }
-  },
-};
-// @ts-expect-error ts-error
-const ScrollView = Scrollable.inherit(isServerSide ? scrollViewServerConfig : {
+  }
+}
 
-  _getDefaultOptions() {
-    return extend(this.callBase(), {
+export class ScrollView extends Scrollable<ScrollViewProperties> {
+  _strategy!: PullDownStrategy | SwipeDownStrategy | SimulatedStrategy;
+
+  _loadPanel!: LoadPanel;
+
+  _pullDownEnabled?: boolean;
+
+  _loadingIndicatorEnabled?: boolean;
+
+  _$topPocket?: dxElementWrapper;
+
+  _$pullDown?: dxElementWrapper;
+
+  _$bottomPocket?: dxElementWrapper;
+
+  _$reachBottom?: dxElementWrapper;
+
+  _$reachBottomText?: dxElementWrapper;
+
+  _pullDownAction?: () => void;
+
+  _reachBottomAction?: () => void;
+
+  _reachBottomEnabled?: boolean;
+
+  _getDefaultOptions(): ScrollViewProperties {
+    return {
+      ...super._getDefaultOptions(),
       pullingDownText: messageLocalization.format('dxScrollView-pullingDownText'),
-
       pulledDownText: messageLocalization.format('dxScrollView-pulledDownText'),
-
       refreshingText: messageLocalization.format('dxScrollView-refreshingText'),
-
       reachBottomText: messageLocalization.format('dxScrollView-reachBottomText'),
-
+      // @ts-expect-error ts-error
       onPullDown: null,
-
+      // @ts-expect-error ts-error
       onReachBottom: null,
-
       refreshStrategy: 'pullDown',
-    });
-  },
+    };
+  }
 
-  _defaultOptionsRules() {
-    return this.callBase().concat([
+  _defaultOptionsRules(): DefaultOptionsRule<ScrollViewProperties>[] {
+    return super._defaultOptionsRules().concat([
       {
-        device() {
+        device(): boolean {
           const realDevice = devices.real();
           return realDevice.platform === 'android';
         },
@@ -80,8 +122,8 @@ const ScrollView = Scrollable.inherit(isServerSide ? scrollViewServerConfig : {
         },
       },
       {
-        device() {
-          // @ts-expect-error
+        device(): boolean {
+          // @ts-expect-error ts-error
           return isMaterialBased();
         },
         options: {
@@ -95,109 +137,125 @@ const ScrollView = Scrollable.inherit(isServerSide ? scrollViewServerConfig : {
         },
       },
     ]);
-  },
+  }
 
-  _init() {
-    this.callBase();
+  _init(): void {
+    super._init();
     this._loadingIndicatorEnabled = true;
-  },
+  }
 
-  _initScrollableMarkup() {
-    this.callBase();
+  _initScrollableMarkup(): void {
+    super._initScrollableMarkup();
     this.$element().addClass(SCROLLVIEW_CLASS);
 
     this._initContent();
     this._initTopPocket();
     this._initBottomPocket();
     this._initLoadPanel();
-  },
+  }
 
-  _initContent() {
+  _initContent(): void {
     const $content = $('<div>').addClass(SCROLLVIEW_CONTENT_CLASS);
     this._$content.wrapInner($content);
-  },
+  }
 
-  _initTopPocket() {
-    const $topPocket = this._$topPocket = $('<div>').addClass(SCROLLVIEW_TOP_POCKET_CLASS);
-    const $pullDown = this._$pullDown = $('<div>').addClass(SCROLLVIEW_PULLDOWN_CLASS);
-    $topPocket.append($pullDown);
-    this._$content.prepend($topPocket);
-  },
+  _initTopPocket(): void {
+    this._$topPocket = $('<div>')
+      .addClass(SCROLLVIEW_TOP_POCKET_CLASS);
+    this._$pullDown = $('<div>')
+      .addClass(SCROLLVIEW_PULLDOWN_CLASS);
 
-  _initBottomPocket() {
-    const $bottomPocket = this._$bottomPocket = $('<div>').addClass(SCROLLVIEW_BOTTOM_POCKET_CLASS);
-    const $reachBottom = this._$reachBottom = $('<div>').addClass(SCROLLVIEW_REACHBOTTOM_CLASS);
-    const $loadContainer = $('<div>').addClass(SCROLLVIEW_REACHBOTTOM_INDICATOR_CLASS);
-    // @ts-expect-error
+    this._$topPocket.append(this._$pullDown);
+    this._$content.prepend(this._$topPocket);
+  }
+
+  _initBottomPocket(): void {
+    this._$bottomPocket = $('<div>')
+      .addClass(SCROLLVIEW_BOTTOM_POCKET_CLASS);
+    this._$reachBottom = $('<div>')
+      .addClass(SCROLLVIEW_REACHBOTTOM_CLASS);
+    const $loadContainer = $('<div>')
+      .addClass(SCROLLVIEW_REACHBOTTOM_INDICATOR_CLASS);
+    // @ts-expect-error ts-error
     const $loadIndicator = new LoadIndicator($('<div>')).$element();
-    const $text = this._$reachBottomText = $('<div>').addClass(SCROLLVIEW_REACHBOTTOM_TEXT_CLASS);
+    this._$reachBottomText = $('<div>')
+      .addClass(SCROLLVIEW_REACHBOTTOM_TEXT_CLASS);
 
     this._updateReachBottomText();
 
-    $reachBottom
+    this._$reachBottom
       .append($loadContainer.append($loadIndicator))
-      .append($text);
+      .append(this._$reachBottomText);
 
-    $bottomPocket.append($reachBottom);
+    this._$bottomPocket.append(this._$reachBottom);
 
-    this._$content.append($bottomPocket);
-  },
+    this._$content.append(this._$bottomPocket);
+  }
 
-  _initLoadPanel() {
+  _initLoadPanel(): void {
     const $loadPanelElement = $('<div>')
       .addClass(SCROLLVIEW_LOADPANEL)
       .appendTo(this.$element());
 
-    const loadPanelOptions = {
+    const { refreshingText } = this.option();
+
+    this._loadPanel = this._createComponent($loadPanelElement, LoadPanel, {
       shading: false,
       delay: 400,
-      message: this.option('refreshingText'),
+      message: refreshingText,
       position: {
+        // @ts-expect-error ts-error
         of: this.$element(),
       },
-    };
+    });
+  }
 
-    this._loadPanel = this._createComponent($loadPanelElement, LoadPanel, loadPanelOptions);
-  },
+  _updateReachBottomText(): void {
+    const { reachBottomText } = this.option();
 
-  _updateReachBottomText() {
-    this._$reachBottomText.text(this.option('reachBottomText'));
-  },
+    // @ts-expect-error ts-error
+    this._$reachBottomText.text(reachBottomText);
+  }
 
-  _createStrategy() {
-    const strategyName = this.option('useNative') ? this.option('refreshStrategy') : 'simulated';
+  _createStrategy(): void {
+    const { useNative, refreshStrategy } = this.option();
+
+    const strategyName = useNative ? refreshStrategy : 'simulated';
     const strategyClass = refreshStrategies[strategyName];
 
+    // @ts-expect-error ts-error
     // eslint-disable-next-line new-cap
     this._strategy = new strategyClass(this);
     this._strategy.pullDownCallbacks.add(this._pullDownHandler.bind(this));
     this._strategy.releaseCallbacks.add(this._releaseHandler.bind(this));
     this._strategy.reachBottomCallbacks.add(this._reachBottomHandler.bind(this));
-  },
+  }
 
-  _createActions() {
-    this.callBase();
+  _createActions(): void {
+    super._createActions();
     this._pullDownAction = this._createActionByOption('onPullDown');
     this._reachBottomAction = this._createActionByOption('onReachBottom');
     this._tryRefreshPocketState();
-  },
+  }
 
-  _tryRefreshPocketState() {
+  _tryRefreshPocketState(): void {
     this._pullDownEnable(this.hasActionSubscription('onPullDown'));
     this._reachBottomEnable(this.hasActionSubscription('onReachBottom'));
-  },
+  }
 
-  on(eventName) {
-    const result = this.callBase.apply(this, arguments);
+  on(eventName): this {
+    // @ts-expect-error ts-error
+    const result = super.on.apply(this, arguments);
 
     if (eventName === 'pullDown' || eventName === 'reachBottom') {
       this._tryRefreshPocketState();
     }
 
     return result;
-  },
+  }
 
-  _pullDownEnable(enabled) {
+  // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
+  _pullDownEnable(enabled): boolean | void {
     if (arguments.length === 0) {
       return this._pullDownEnabled;
     }
@@ -207,9 +265,10 @@ const ScrollView = Scrollable.inherit(isServerSide ? scrollViewServerConfig : {
       this._strategy.pullDownEnable(enabled);
       this._pullDownEnabled = enabled;
     }
-  },
+  }
 
-  _reachBottomEnable(enabled) {
+  // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
+  _reachBottomEnable(enabled): boolean | void {
     if (arguments.length === 0) {
       return this._reachBottomEnabled;
     }
@@ -219,41 +278,42 @@ const ScrollView = Scrollable.inherit(isServerSide ? scrollViewServerConfig : {
       this._strategy.reachBottomEnable(enabled);
       this._reachBottomEnabled = enabled;
     }
-  },
+  }
 
-  _pullDownHandler() {
+  _pullDownHandler(): void {
     this._loadingIndicator(false);
     this._pullDownLoading();
-  },
+  }
 
-  _loadingIndicator(value) {
+  // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
+  _loadingIndicator(value?: boolean): boolean | void {
     if (arguments.length < 1) {
       return this._loadingIndicatorEnabled;
     }
     this._loadingIndicatorEnabled = value;
-  },
+  }
 
-  _pullDownLoading() {
+  _pullDownLoading(): void {
     this.startLoading();
-    this._pullDownAction();
-  },
+    this._pullDownAction?.();
+  }
 
-  _reachBottomHandler() {
+  _reachBottomHandler(): void {
     this._loadingIndicator(false);
     this._reachBottomLoading();
-  },
+  }
 
-  _reachBottomLoading() {
+  _reachBottomLoading(): void {
     this.startLoading();
-    this._reachBottomAction();
-  },
+    this._reachBottomAction?.();
+  }
 
-  _releaseHandler() {
+  _releaseHandler(): void {
     this.finishLoading();
     this._loadingIndicator(true);
-  },
+  }
 
-  _optionChanged(args) {
+  _optionChanged(args: OptionChanged<ScrollViewProperties>): void {
     switch (args.name) {
       case 'onPullDown':
       case 'onReachBottom':
@@ -269,24 +329,24 @@ const ScrollView = Scrollable.inherit(isServerSide ? scrollViewServerConfig : {
         this._updateReachBottomText();
         break;
       default:
-        this.callBase(args);
+        super._optionChanged(args);
     }
-  },
+  }
 
   content() {
     return getPublicElement(this._$content.children().eq(1));
-  },
+  }
 
-  release(preventReachBottom) {
+  release(preventReachBottom?) {
     if (preventReachBottom !== undefined) {
       this.toggleLoading(!preventReachBottom);
     }
     return this._strategy.release();
-  },
+  }
 
   toggleLoading(showOrHide): void {
     this._reachBottomEnable(showOrHide);
-  },
+  }
 
   refresh(): void {
     if (!this.hasActionSubscription('onPullDown')) {
@@ -295,34 +355,34 @@ const ScrollView = Scrollable.inherit(isServerSide ? scrollViewServerConfig : {
 
     this._strategy.pendingRelease();
     this._pullDownLoading();
-  },
+  }
 
   startLoading(): void {
     if (this._loadingIndicator() && this.$element().is(':visible')) {
       this._loadPanel.show();
     }
     this._lock();
-  },
+  }
 
   finishLoading(): void {
     this._loadPanel.hide();
     this._unlock();
-  },
+  }
 
   isBottomReached() {
     return this._strategy.isBottomReached();
-  },
+  }
 
   _dispose(): void {
     this._strategy.dispose();
-    this.callBase();
+    super._dispose();
 
     if (this._loadPanel) {
       this._loadPanel.$element().remove();
     }
-  },
-});
+  }
+}
 
-registerComponent('dxScrollView', ScrollView);
+registerComponent('dxScrollView', isServerSide ? ScrollViewServerSide : ScrollView);
 
-export default ScrollView;
+export default isServerSide ? ScrollViewServerSide : ScrollView;

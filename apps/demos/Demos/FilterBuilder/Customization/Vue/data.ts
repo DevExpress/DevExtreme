@@ -1,3 +1,5 @@
+import { type DxFilterBuilderTypes } from 'devextreme-vue/filter-builder';
+
 export const filter = [
   ['Category', 'anyof', ['Automation', 'Monitors']],
   'or',
@@ -14,7 +16,7 @@ export const categories = [
   'Projectors',
   'Automation',
 ];
-export const fields = [{
+export const fields: DxFilterBuilderTypes.Field[] = [{
   dataField: 'Name',
 }, {
   dataField: 'Price',

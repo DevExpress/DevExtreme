@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from 'react';
 
-import TreeList, { Column, Lookup, TreeListTypes } from 'devextreme-react/tree-list';
-import { NumberBox, NumberBoxTypes } from 'devextreme-react/number-box';
+import TreeList, { Column, Lookup, type TreeListTypes } from 'devextreme-react/tree-list';
+import { NumberBox, type NumberBoxTypes } from 'devextreme-react/number-box';
 import * as AspNetData from 'devextreme-aspnet-data-nojquery';
 
 const url = 'https://js.devexpress.com/Demos/NetCore/api/TreeListTasks';

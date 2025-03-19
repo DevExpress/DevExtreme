@@ -62,7 +62,7 @@
 </template>
 <script setup lang="ts">
 import { ref } from 'vue';
-import DxScheduler, { DxEditing, DxSchedulerTypes } from 'devextreme-vue/scheduler';
+import DxScheduler, { DxEditing, type DxSchedulerTypes } from 'devextreme-vue/scheduler';
 import DxCheckBox from 'devextreme-vue/check-box';
 import notify from 'devextreme/ui/notify';
 import { data } from './data.ts';

@@ -36,12 +36,14 @@ const HORIZONTAL = 'horizontal';
 const BOTH = 'both';
 
 export interface ScrollableProperties extends Properties {
-  _onVisibilityChanged?: (data: Scrollable) => void;
+  _onVisibilityChanged?: (data: unknown) => void;
 
   useSimulatedScrollbar?: boolean;
 }
 
-class Scrollable extends DOMComponent<Scrollable, ScrollableProperties> {
+class Scrollable<
+  TProperties extends ScrollableProperties = ScrollableProperties,
+> extends DOMComponent<Scrollable<TProperties>, TProperties> {
   _locked?: boolean;
 
   _$container!: dxElementWrapper;
@@ -52,18 +54,17 @@ class Scrollable extends DOMComponent<Scrollable, ScrollableProperties> {
 
   _allowedDirectionValue!: string | null;
 
-  _strategy?: any;
+  _strategy!: NativeStrategy | SimulatedStrategy;
 
   _savedScrollOffset?: {
     top?: number;
     left?: number;
   };
 
-  _getDefaultOptions(): ScrollableProperties {
+  _getDefaultOptions(): TProperties {
     return {
       ...super._getDefaultOptions(),
       disabled: false,
-      // @ts-expect-error ts-error
       onScroll: null,
       direction: VERTICAL,
       showScrollbar: 'onScroll',
@@ -71,7 +72,6 @@ class Scrollable extends DOMComponent<Scrollable, ScrollableProperties> {
       bounceEnabled: true,
       scrollByContent: true,
       scrollByThumb: false,
-      // @ts-expect-error ts-error
       onUpdated: null,
       onStart: null,
       onEnd: null,
@@ -84,12 +84,14 @@ class Scrollable extends DOMComponent<Scrollable, ScrollableProperties> {
     };
   }
 
-  _defaultOptionsRules(): DefaultOptionsRule<ScrollableProperties>[] {
+  _defaultOptionsRules(): DefaultOptionsRule<TProperties>[] {
     // @ts-expect-error ts-error
     return super._defaultOptionsRules().concat(deviceDependentOptions(), [
       {
-        device() {
-          return supportUtils.nativeScrolling && devices.real().platform === 'android' && !browser.mozilla;
+        device(): boolean {
+          return supportUtils.nativeScrolling
+            && devices.real().platform === 'android'
+            && !browser.mozilla;
         },
         options: {
           useSimulatedScrollbar: true,
@@ -131,11 +133,18 @@ class Scrollable extends DOMComponent<Scrollable, ScrollableProperties> {
     }
   }
 
-  _initScrollableMarkup() {
+  _initScrollableMarkup(): void {
     const $element = this.$element().addClass(SCROLLABLE_CLASS);
-    const $container = this._$container = $('<div>').addClass(SCROLLABLE_CONTAINER_CLASS);
-    const $wrapper = this._$wrapper = $('<div>').addClass(SCROLLABLE_WRAPPER_CLASS);
-    const $content = this._$content = $('<div>').addClass(SCROLLABLE_CONTENT_CLASS);
+    const $container = $('<div>')
+      .addClass(SCROLLABLE_CONTAINER_CLASS);
+    const $wrapper = $('<div>')
+      .addClass(SCROLLABLE_WRAPPER_CLASS);
+    const $content = $('<div>')
+      .addClass(SCROLLABLE_CONTENT_CLASS);
+
+    this._$container = $container;
+    this._$wrapper = $wrapper;
+    this._$content = $content;
 
     $content.append($element.contents()).appendTo($container);
     $container.appendTo($wrapper);
@@ -191,12 +200,37 @@ class Scrollable extends DOMComponent<Scrollable, ScrollableProperties> {
     };
 
     eventsEngine.off(this._$wrapper, `.${SCROLLABLE}`);
-    eventsEngine.on(this._$wrapper, addNamespace(scrollEvents.init, SCROLLABLE), initEventData, this._initHandler.bind(this));
-    eventsEngine.on(this._$wrapper, addNamespace(scrollEvents.start, SCROLLABLE), strategy.handleStart.bind(strategy));
-    eventsEngine.on(this._$wrapper, addNamespace(scrollEvents.move, SCROLLABLE), strategy.handleMove.bind(strategy));
-    eventsEngine.on(this._$wrapper, addNamespace(scrollEvents.end, SCROLLABLE), strategy.handleEnd.bind(strategy));
-    eventsEngine.on(this._$wrapper, addNamespace(scrollEvents.cancel, SCROLLABLE), strategy.handleCancel.bind(strategy));
-    eventsEngine.on(this._$wrapper, addNamespace(scrollEvents.stop, SCROLLABLE), strategy.handleStop.bind(strategy));
+    eventsEngine.on(
+      this._$wrapper,
+      addNamespace(scrollEvents.init, SCROLLABLE),
+      initEventData,
+      this._initHandler.bind(this),
+    );
+    eventsEngine.on(
+      this._$wrapper,
+      addNamespace(scrollEvents.start, SCROLLABLE),
+      strategy.handleStart.bind(strategy),
+    );
+    eventsEngine.on(
+      this._$wrapper,
+      addNamespace(scrollEvents.move, SCROLLABLE),
+      strategy.handleMove.bind(strategy),
+    );
+    eventsEngine.on(
+      this._$wrapper,
+      addNamespace(scrollEvents.end, SCROLLABLE),
+      strategy.handleEnd.bind(strategy),
+    );
+    eventsEngine.on(
+      this._$wrapper,
+      addNamespace(scrollEvents.cancel, SCROLLABLE),
+      strategy.handleCancel.bind(strategy),
+    );
+    eventsEngine.on(
+      this._$wrapper,
+      addNamespace(scrollEvents.stop, SCROLLABLE),
+      strategy.handleStop.bind(strategy),
+    );
 
     eventsEngine.off(this._$container, `.${SCROLLABLE}`);
     eventsEngine.on(this._$container, addNamespace('scroll', SCROLLABLE), strategy.handleScroll.bind(strategy));
@@ -221,11 +255,13 @@ class Scrollable extends DOMComponent<Scrollable, ScrollableProperties> {
   }
 
   _prepareDirections(value): void {
+    // @ts-expect-error ts-error
     this._strategy._prepareDirections(value);
   }
 
   _initHandler(): void {
     const strategy = this._strategy;
+    // @ts-expect-error ts-error
     strategy.handleInit.apply(strategy, arguments);
   }
 
@@ -476,9 +512,12 @@ class Scrollable extends DOMComponent<Scrollable, ScrollableProperties> {
 
     let location = this._location();
 
-    if (!this.option('useNative')) {
-      targetLocation = this._strategy._applyScaleRatio(targetLocation);
-      location = this._strategy._applyScaleRatio(location);
+    const { useNative } = this.option();
+    if (!useNative) {
+      const strategy = this._strategy as SimulatedStrategy;
+
+      targetLocation = strategy._applyScaleRatio(targetLocation);
+      location = strategy._applyScaleRatio(location);
     }
 
     if (this._isRtlNativeStrategy()) {
@@ -497,7 +536,7 @@ class Scrollable extends DOMComponent<Scrollable, ScrollableProperties> {
     this._strategy.scrollBy(distance);
   }
 
-  scrollToElement(element, offset): void {
+  scrollToElement(element, offset?): void {
     const $element = $(element);
     const elementInsideContent = this.$content().find(element).length;
     const elementIsInsideContent = ($element.parents(`.${SCROLLABLE_CLASS}`).length - $element.parents(`.${SCROLLABLE_CONTENT_CLASS}`).length) === 0;

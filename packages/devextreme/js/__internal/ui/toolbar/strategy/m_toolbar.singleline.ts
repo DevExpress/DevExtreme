@@ -2,7 +2,7 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import {
   deferRender,
-  // @ts-expect-error
+  // @ts-expect-error ts-error
   grep,
 } from '@js/core/utils/common';
 import { compileGetter } from '@js/core/utils/data';
@@ -56,13 +56,17 @@ export class SingleLineStrategy {
     const itemClickAction = this._toolbar._createActionByOption('onItemClick');
     const menuItemTemplate = this._toolbar._getTemplateByOption('menuItemTemplate');
 
-    this._menu = this._toolbar._createComponent($menu, DropDownMenu, {
+    const {
+      disabled,
       // @ts-expect-error
-      disabled: this._toolbar.option('disabled'),
+      menuContainer,
+    } = this._toolbar.option();
+
+    this._menu = this._toolbar._createComponent($menu, DropDownMenu, {
+      disabled,
       itemTemplate: () => menuItemTemplate,
       onItemClick: (e) => { itemClickAction(e); },
-      // @ts-expect-error
-      container: this._toolbar.option('menuContainer'),
+      container: menuContainer,
       onOptionChanged: ({ name, value }) => {
         if (name === 'opened') {
           this._toolbar.option('overflowMenuVisible', value);
@@ -79,7 +83,7 @@ export class SingleLineStrategy {
       this._renderOverflowMenu();
     }
 
-    this._menu && this._menu.option('items', this._getMenuItems());
+    this._menu?.option('items', this._getMenuItems());
     // @ts-expect-error
     if (this._menu && !this._menu.option('items').length) {
       this._menu.option('opened', false);

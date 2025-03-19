@@ -375,7 +375,7 @@ function initDxComponent() {
       thisComponent.$_instance.endUpdate();
       restoreNodes(this.$el, nodes);
 
-      if (this.$slots && this.$slots.default) {
+      if (this.$slots?.default) {
         getChildren(thisComponent).forEach((child: VNode) => {
           const childExtenton = child as any as IExtension;
           if (childExtenton && (childExtenton as any as IExtension).$_isExtension) {

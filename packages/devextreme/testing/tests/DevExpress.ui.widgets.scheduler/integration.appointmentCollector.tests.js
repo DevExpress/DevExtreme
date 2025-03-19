@@ -89,6 +89,12 @@ module('Integration: Appointments Collector Base Tests', baseConfig, () => {
             _getAppointmentTemplate(template) {
                 return this._getTemplateByOption(template);
             },
+            _dataAccessors: {
+                getter: {
+                    startDate: (obj) => obj.startDate,
+                    endDate: (obj) => obj.endDate,
+                },
+            },
             createAppointmentAdapter(date) {
                 const schedulerMock = {
                     fire: (methodName, fieldName, appointment) => appointment[fieldName]

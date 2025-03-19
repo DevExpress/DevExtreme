@@ -23,8 +23,8 @@ const props = withDefaults(defineProps<{
   employee?: Employee,
   showInfo?: Function
 }>(), {
-  employee: () => ({}),
-  showInfo: () => {},
+  employee: () => ({} as Employee),
+  showInfo: () => (() => {}),
 });
 
 function showEmployeeInfo() {

@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from 'react';
-import { Lookup, DropDownOptions, LookupTypes } from 'devextreme-react/lookup';
+import { Lookup, DropDownOptions, type LookupTypes } from 'devextreme-react/lookup';
 import { SelectBox } from 'devextreme-react';
-import { SelectBoxTypes } from 'devextreme-react/select-box';
+import { type SelectBoxTypes } from 'devextreme-react/select-box';
 import { employees, applyValueModeLabel, lookupLabel } from './data.ts';
 
 const applyValueModes = ['instantly', 'useButtons'];

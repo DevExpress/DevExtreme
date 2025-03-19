@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react';
-import RadioGroup, { RadioGroupTypes } from 'devextreme-react/radio-group';
+import RadioGroup, { type RadioGroupTypes } from 'devextreme-react/radio-group';
 import { priorities, priorityEntities, tasks } from './data.ts';
 
 const renderCustomItem = (data) => <div>{data}</div>;

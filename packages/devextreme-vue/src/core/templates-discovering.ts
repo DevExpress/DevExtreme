@@ -28,7 +28,7 @@ function asConfigurable(component: VNode): IConfigurable | undefined {
   if (!componentOptions) {
     return;
   }
-  if (!componentOptions.$_config || !componentOptions.$_config.name) {
+  if (!componentOptions.$_config?.name) {
     return undefined;
   }
 
@@ -77,7 +77,7 @@ function clearConfiguration(content: VNode[]) {
   const newContent: VNode[] = [];
   content.forEach((item) => {
     const configurable = getConfigurationOptions(item);
-    if (!configurable || !configurable.$_optionName) {
+    if (!configurable?.$_optionName) {
       newContent.push(item);
     }
   });

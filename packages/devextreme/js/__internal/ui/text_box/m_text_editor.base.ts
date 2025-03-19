@@ -708,7 +708,8 @@ class TextEditorBase<
     this._renderEvents();
   }
 
-  _keyPressHandler(): void {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _keyPressHandler(e?): void {
     this.option('text', this._input().val());
   }
 

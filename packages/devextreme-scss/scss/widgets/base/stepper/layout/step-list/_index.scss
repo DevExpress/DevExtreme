@@ -5,7 +5,8 @@
 .dx-stepper-horizontal {
   .dx-step-list {
     width: 100%;
-    grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
+    grid-auto-flow: column;
+    grid-template-columns: repeat(auto-fit, minmax(48px, 1fr));
   }
 }
 
@@ -13,6 +14,6 @@
   .dx-step-list {
     height: 100%;
     grid-template-columns: 1fr;
-    grid-auto-rows: minmax(0, 1fr);
+    grid-auto-rows: minmax(48px, 1fr);
   }
 }

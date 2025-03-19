@@ -27,7 +27,7 @@ import { DxTabPanel, DxItem } from 'devextreme-vue/tab-panel';
 import OrdersTab from './OrdersTab.vue';
 import AddressTab from './AddressTab.vue';
 
-import { Supplier } from './data.ts';
+import { type Supplier } from './data.ts';
 
 defineProps<{
   masterDetailData: {

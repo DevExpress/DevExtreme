@@ -44,7 +44,7 @@ import DxChart, {
   DxTick,
 } from 'devextreme-vue/chart';
 
-const customizeLabelText = ({ valueText }) => `Day ${valueText}`;
+const customizeLabelText = ({ valueText }: { value: Date | number | string; valueText: string }) => `Day ${valueText}`;
 </script>
 <style>
 #chart {

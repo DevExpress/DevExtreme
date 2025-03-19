@@ -1,0 +1,12 @@
+@mixin progressbar(
+  $connector-background-color,
+  $background-color,
+) {
+  .dx-stepper-connector {
+    background-color: $connector-background-color;
+  }
+
+  .dx-stepper-connector-value {
+    background-color: $background-color;
+  }
+}
