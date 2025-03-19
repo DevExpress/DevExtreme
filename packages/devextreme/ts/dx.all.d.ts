@@ -863,6 +863,10 @@ declare module DevExpress {
     static validateModel(model: any): any;
   }
 }
+declare module DevExpress.ai {
+  export type AI = AIInternal;
+  export type AIProvider = AIProviderInternal;
+}
 declare module DevExpress.animation {
   /**
    * @deprecated Use the DevExpress.common.core.animation.AnimationConfig type from common/core/animation instead
