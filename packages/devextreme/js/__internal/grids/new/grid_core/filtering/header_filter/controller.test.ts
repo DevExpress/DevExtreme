@@ -3,6 +3,7 @@ import { describe, expect, it } from '@jest/globals';
 import { ColumnsController } from '@ts/grids/new/grid_core/columns_controller';
 import type { Column } from '@ts/grids/new/grid_core/columns_controller/types';
 import { DataController } from '@ts/grids/new/grid_core/data_controller';
+import { FilterController } from '@ts/grids/new/grid_core/filtering';
 import { HeaderFilterController } from '@ts/grids/new/grid_core/filtering/header_filter/controller';
 import type { HeaderFilterColumnOptions } from '@ts/grids/new/grid_core/filtering/header_filter/types';
 import type { Options } from '@ts/grids/new/grid_core/options';
@@ -10,7 +11,8 @@ import { OptionsControllerMock } from '@ts/grids/new/grid_core/options_controlle
 
 const setup = (config: Options = {}) => {
   const options = new OptionsControllerMock(config);
-  const dataController = new DataController(options);
+  const filterController = new FilterController(options);
+  const dataController = new DataController(options, filterController);
   const columnsController = new ColumnsController(options, dataController);
   const headerFilterController = new HeaderFilterController(
     options,

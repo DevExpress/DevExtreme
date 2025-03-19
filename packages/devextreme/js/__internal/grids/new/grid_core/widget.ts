@@ -16,7 +16,7 @@ import * as DataControllerModule from './data_controller/index';
 import { EditingController } from './editing/controller';
 import { ErrorController } from './error_controller/error_controller';
 import * as FilterControllerModule from './filtering';
-import { FilterPanelView } from './filtering/filter_panel/filter_panel';
+import { FilterPanelView } from './filtering/filter_panel/view';
 import {
   HeaderFilterController,
   HeaderFilterPopupView,
