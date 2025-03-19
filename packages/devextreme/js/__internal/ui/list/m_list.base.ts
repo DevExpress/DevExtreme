@@ -1133,21 +1133,6 @@ export class ListBase extends CollectionWidget<ListBaseProperties> {
     return $result;
   }
 
-  _getFlatIndex(): number | undefined {
-    const { selectedIndex } = this.option();
-
-    const selectedItem = this._editStrategy.getItemDataByIndex(selectedIndex);
-
-    if (!selectedItem) {
-      return selectedIndex;
-    }
-
-    const $item = this._editStrategy.getItemElement(selectedItem);
-    const index = this._itemElements().index($item);
-
-    return index;
-  }
-
   _moveFocus(): void {
     // @ts-expect-error ts-error
     super._moveFocus.apply(this, arguments);
