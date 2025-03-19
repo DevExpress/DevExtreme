@@ -11,16 +11,18 @@ export interface PromptTemplate {
   user: string;
 }
 
-export type TemplateName = 'translate';
+export type PromptTemplateName = 'translate';
+
+export type PromptTemplates = Map<PromptTemplateName, PromptTemplate>;
 
 export class PromptManager {
-  private readonly templates: Map<TemplateName, PromptTemplate>;
+  private readonly templates: PromptTemplates;
 
   constructor() {
-    this.templates = new Map(Object.entries(templates) as [TemplateName, PromptTemplate][]);
+    this.templates = new Map(Object.entries(templates) as [PromptTemplateName, PromptTemplate][]);
   }
 
-  public buildPrompt(templateName: TemplateName, data: PromptData): Prompt {
+  public buildPrompt(templateName: PromptTemplateName, data: PromptData): Prompt {
     const template = this.templates.get(templateName);
 
     if (!template) {
