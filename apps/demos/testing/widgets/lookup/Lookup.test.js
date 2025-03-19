@@ -15,7 +15,7 @@ runManualTest('Lookup', 'Basics', ['jQuery', 'React', 'Vue', 'Angular'], (test) 
   test('Custom Lookup Appearance', async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-    await t.wait(2000);
+    await t.wait(3000);
 
     await t
       .click($(`.${LOOKUP_CLASS}`).nth(0))
