@@ -31,13 +31,12 @@ import {
  EventInfo,
 } from "devextreme/common/core/events";
 import {
- DataErrorOccurredInfo,
+ Component,
+} from "devextreme/core/component";
+import {
  Pager,
  PagerPageSize,
 } from "devextreme/common/grids";
-import {
- Component,
-} from "devextreme/core/component";
 import {
  PagerBase,
 } from "devextreme/ui/pagination";
@@ -106,7 +105,7 @@ const componentConfig = {
     hoverStateEnabled: Boolean,
     keyExpr: [Array, String] as PropType<Array<string> | string>,
     onContentReady: Function as PropType<((e: EventInfo<any>) => void)>,
-    onDataErrorOccurred: Function as PropType<((args: DataErrorOccurredInfo | EventInfo<any> | { component: any, element: any, error: any, model: any }) => void)>,
+    onDataErrorOccurred: Function as PropType<((e: { component: Object, element: any, error: any, model: any }) => void)>,
     onDisposing: Function as PropType<((e: EventInfo<any>) => void)>,
     onInitialized: Function as PropType<((e: { component: Component<any>, element: any }) => void)>,
     onOptionChanged: Function as PropType<((e: { component: DOMComponent, element: any, fullName: string, model: any, name: string, previousValue: any, value: any }) => void)>,

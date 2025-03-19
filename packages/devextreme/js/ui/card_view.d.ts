@@ -93,6 +93,8 @@ export type DataControllerOptions<TRowData = unknown, TKey = unknown> = {
     /**
      * @docid
      * @default undefined
+     * @type_function_param1 e:object
+     * @type_function_param1_field component:this
      * @action
      * @public
      */
@@ -190,11 +192,13 @@ export interface Cell {
     /**
      * @public
      * @docid
+     * @type object
      */
     value: unknown;
     /**
      * @public
      * @docid
+     * @type object
      */
     displayValue: unknown;
     /**
@@ -290,6 +294,7 @@ type RequiredColumnProps = 'alignment' | 'dataType' | 'visible' | 'visibleIndex'
 /**
  * @docid
  * @public
+ * @type object
  * @namespace DevExpress.ui.dxCardView
  */
 export type Column<TRowData = unknown, TKey = unknown> =
@@ -373,6 +378,7 @@ export interface BaseContentViewOptions {
     /**
      * @docid
      * @public
+     * @type object
      */
     scrolling?: Pick<ScrollingBase, 'scrollByContent' | 'scrollByThumb' | 'showScrollbar' | 'useNative'>;
     /**
