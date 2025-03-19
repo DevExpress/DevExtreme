@@ -29,7 +29,7 @@ import { Mode } from 'devextreme/common';
 import { DataSourceOptions } from 'devextreme/data/data_source';
 import { Store } from 'devextreme/data/store';
 import { EventInfo } from 'devextreme/common/core/events';
-import { DataErrorOccurredInfo, Pager } from 'devextreme/common/grids';
+import { Pager } from 'devextreme/common/grids';
 
 import DxCardView from 'devextreme/ui/card_view';
 
@@ -438,7 +438,7 @@ export class DxCardViewComponent<TRowData = any, TKey = any> extends DxComponent
     
     
      */
-    @Output() onDataErrorOccurred: EventEmitter<DataErrorOccurredInfo>;
+    @Output() onDataErrorOccurred: EventEmitter<Object>;
 
     /**
     
