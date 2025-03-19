@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable spellcheck/spell-checker */
+
 import $ from '@js/core/renderer';
 import { render } from 'inferno';
 
@@ -7,10 +7,10 @@ import { OptionsController } from '../options_controller/options_controller';
 import { ToolbarController } from '../toolbar/controller';
 import { SearchField } from './search_field';
 
-export class Search {
+export class SearchController {
   public static dependencies = [ToolbarController, OptionsController] as const;
 
-  public readonly searchText = this.options.twoWay('searchText');
+  public readonly searchText = this.options.twoWay('searchPanel.text');
 
   constructor(
     private readonly headerPanel: ToolbarController,

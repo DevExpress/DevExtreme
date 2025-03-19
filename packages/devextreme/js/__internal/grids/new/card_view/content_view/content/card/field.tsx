@@ -1,18 +1,22 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable @typescript-eslint/prefer-nullish-coalescing */
+import type { HighlightedTextItem } from '@ts/grids/new/grid_core/search/types';
 import type { RefObject } from 'inferno';
 import { Component, createRef } from 'inferno';
 
+import { Caption } from './caption';
+import { ValueText } from './value_text';
+
 export const CLASSES = {
   field: 'dx-cardview-field',
-  fieldName: 'dx-cardview-field-name',
   fieldValue: 'dx-cardview-field-value',
   overflowHint: 'dx-cardview-overflow-hint',
 };
 
 export interface FieldProps {
   title: string | undefined;
-  value: unknown;
+  text: string;
+  highlightedText: HighlightedTextItem[] | null;
   alignment: 'right' | 'center' | 'left';
   wordWrapEnabled?: boolean;
   cellHintEnabled?: boolean;
@@ -38,52 +42,26 @@ export class Field extends Component<FieldProps> {
     this.props.onPrepared?.(this.containerRef.current!);
   }
 
-  renderCaption(): JSX.Element {
-    const { title, captionTemplate } = this.props;
-    if (captionTemplate && title) {
-      return captionTemplate(title);
-    }
-    return <span className={CLASSES.fieldName}>{title}:</span>;
-  }
-
-  renderValue(): JSX.Element {
-    const {
-      value, valueTemplate, wordWrapEnabled, alignment, cellHintEnabled,
-    } = this.props;
-
-    if (valueTemplate && value) {
-      return valueTemplate(value);
-    }
-
-    const valueStyle = {
-      textAlign: alignment,
-      whiteSpace: wordWrapEnabled ? 'normal' : 'nowrap',
-    };
-
-    return (
-      <span
-        className={CLASSES.fieldValue}
-        style={valueStyle}
-        title={cellHintEnabled && typeof value === 'string' ? value : undefined}
-      >
-        {value}
-      </span>
-    );
-  }
-
   render(): JSX.Element {
     return (
       <div
+        ref={this.containerRef}
+        tabIndex={0}
+        className={CLASSES.field}
         onMouseEnter={(): void => this.props.onHoverChanged?.(true)}
         onMouseLeave={(): void => this.props.onHoverChanged?.(false)}
         onClick={this.props.onClick}
         onDblClick={this.props.onDblClick}
-        ref={this.containerRef}
-        tabIndex={0}
-        className={CLASSES.field}
       >
-        {this.renderCaption()}
-        {this.renderValue()}
+        <Caption title={this.props.title} template={this.props.captionTemplate} />
+        <ValueText
+          text={this.props.text}
+          highlightedText={this.props.highlightedText}
+          valueTemplate={this.props.valueTemplate}
+          alignment={this.props.alignment}
+          wordWrapEnabled={this.props.wordWrapEnabled}
+          cellHintEnabled={this.props.cellHintEnabled}
+        />
       </div>
     );
   }

@@ -9,6 +9,7 @@ import { EventInfo } from '../events';
 import { dxToolbarItem, ToolbarItemLocation } from './toolbar';
 import { dxSortableOptions } from './sortable';
 import { dxLoadPanelOptions } from './load_panel';
+import { HighlightedTextItem } from '../__internal/grids/new/grid_core/search/types';
 
 // #region DataController
 
@@ -202,6 +203,11 @@ export interface Cell {
      * @docid
      */
     text: string;
+    /**
+     * @public
+     * @docid
+     */
+    highlightedText: HighlightedTextItem[] | null;
     /**
      * @public
      * @docid
@@ -495,6 +501,7 @@ export type Properties<TRowData = unknown, TKey = unknown> = dxCardViewOptions<T
 * @namespace DevExpress.ui
 * @public
 */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export default class dxCardView<TRowData = unknown, TKey = unknown> extends Widget<Properties> {
 
 }
