@@ -6,6 +6,7 @@ import * as columnsController from './columns_controller/index';
 import * as contentView from './content_view/index';
 import * as dataController from './data_controller/index';
 import * as editing from './editing/index';
+import type * as filterController from './filtering/index';
 import { filterPanel } from './filtering/index';
 import * as pager from './pager/index';
 import type { SearchProperties } from './search/types';
@@ -23,7 +24,7 @@ export type Options =
   & toolbar.Options
   & pager.Options
   & columnsController.Options
-  & filterPanel.Options
+  & filterController.Options
   & contentView.Options
   & editing.Options
   & SearchProperties

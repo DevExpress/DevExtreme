@@ -14,7 +14,7 @@ import * as ColumnsControllerModule from './columns_controller/index';
 import * as DataControllerModule from './data_controller/index';
 import { EditingController } from './editing/controller';
 import { ErrorController } from './error_controller/error_controller';
-import { FilterPanelView } from './filtering/filter_panel/filter_panel';
+import * as FilterControllerModule from './filtering';
 import { ItemsController } from './items_controller/items_controller';
 import { MainView } from './main_view';
 import { defaultOptions, defaultOptionsRules, type Options } from './options';
@@ -56,6 +56,10 @@ export class GridCoreNewBase<
 
   private search!: Search;
 
+  public filterController!: FilterControllerModule.FilterController;
+
+  private filterPanelView!: FilterControllerModule.FilterPanelView;
+
   protected _registerDIContext(): void {
     this.diContext = new DIContext();
     this.diContext.register(DataControllerModule.DataController);
@@ -70,7 +74,8 @@ export class GridCoreNewBase<
     this.diContext.register(PagerView);
     this.diContext.register(ColumnsChooserView);
     this.diContext.register(Search);
-    this.diContext.register(FilterPanelView);
+    this.diContext.register(FilterControllerModule.FilterController);
+    this.diContext.register(FilterControllerModule.FilterPanelView);
     this.diContext.register(ErrorController);
   }
 
@@ -94,6 +99,8 @@ export class GridCoreNewBase<
     this.pagerView = this.diContext.get(PagerView);
     this.search = this.diContext.get(Search);
     this.errorController = this.diContext.get(ErrorController);
+    this.filterController = this.diContext.get(FilterControllerModule.FilterController);
+    this.filterPanelView = this.diContext.get(FilterControllerModule.FilterPanelView);
   }
 
   protected _init(): void {
@@ -124,6 +131,24 @@ export class GridCoreNewBase<
     this.renderSubscription = this.diContext.get(MainView).render(this.$element().get(0));
   }
 
+  private _optionChanged(args) {
+    [
+      this.pagerView,
+      this.toolbarView,
+      this.columnsChooser,
+      this.filterPanelView,
+    ].forEach((c) => {
+      if (c.isCompatibilityMode()) {
+        c.optionChanged(args);
+      }
+    });
+
+    if (!args.handled) {
+      // @ts-expect-error
+      super._optionChanged(args);
+    }
+  }
+
   protected _clean(): void {
     this.renderSubscription?.unsubscribe();
     render(null, this.$element().get(0));
@@ -135,7 +160,9 @@ export class GridCoreNewBase<
 export class GridCoreNew extends ColumnsControllerModule.PublicMethods(
   DataControllerModule.PublicMethods(
     SortingControllerModule.PublicMethods(
-      GridCoreNewBase,
+      FilterControllerModule.PublicMethods(
+        GridCoreNewBase,
+      ),
     ),
   ),
 ) {}

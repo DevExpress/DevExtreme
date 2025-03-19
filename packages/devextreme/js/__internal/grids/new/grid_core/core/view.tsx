@@ -45,6 +45,20 @@ export abstract class View<T extends {}> {
     return this.inferno ??= this._asInferno();
   }
 
+  public isCompatibilityMode(): boolean {
+    return false;
+  }
+
+  /*
+   * NOTE: We need this method to be able to call the correct optionChanged overloads
+   * for those Views that reuse existing Views from DataGrid.
+   */
+  // eslint-disable-next-line @stylistic/max-len
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unused-vars, @typescript-eslint/explicit-module-boundary-types
+  public optionChanged(_args: any): void {
+
+  }
+
   private _asInferno() {
     const view = this;
 

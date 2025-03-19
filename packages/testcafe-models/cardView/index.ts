@@ -19,13 +19,18 @@ export default class CardView extends GridCore {
 
   getName(): WidgetName { return 'dxCardView'; }
 
+  getCompatibilityName(): WidgetName { return 'dxDataGrid'; }
+
   getContainer(): Selector {
     return this.element.find(`.${CLASS.cardView}`);
   }
 
+  getCards(): Selector {
+    return this.element.find(`.${this.addWidgetPrefix(CLASS.card)}`);
+  }
+
   getCard(nth = 0): Card {
-    const cards = this.element.find(`.${this.addWidgetPrefix(CLASS.card)}`);
-    return new Card(cards.nth(nth));
+    return new Card(this.getCards().nth(nth));
   }
 
   getHeaders(): HeadersElement {

@@ -1,10 +1,13 @@
 import { ClientFunction, Selector } from 'testcafe';
 import Widget from '../internal/widget';
 import Pager from '../pagination';
+import FilterPanel from './filter/panel';
+import type { WidgetName } from '../types';
 
 export const CLASS = {
     pager: 'pager',
     pagination: 'pagination',
+    filterPanel: 'filter-panel',
 }
 
 export default abstract class GridCore extends Widget {
@@ -16,12 +19,25 @@ export default abstract class GridCore extends Widget {
     this.body = Selector('body');
   }
 
-  addWidgetPrefix(className = ''): string {
-    return Widget.addClassPrefix(this.getName(), className);
+  addWidgetPrefix(className = '', isCompatibilityMode = false): string {
+    const name = isCompatibilityMode ? this.getCompatibilityName() : this.getName();
+    return Widget.addClassPrefix(name, className);
   }
 
-  getPager(): Pager {
-    return new Pager(this.element.find(`.${this.addWidgetPrefix(CLASS.pager)}, .dx-${CLASS.pagination}`));
+  apiOption(name: string, value: any = 'empty'): Promise<any> {
+    const { getInstance } = this;
+
+    return ClientFunction(
+      () => {
+        const dataGrid = getInstance() as any;
+        return value !== 'empty' ? dataGrid.option(name, value === 'undefined' ? undefined : value) : dataGrid.option(name);
+      },
+      {
+        dependencies: {
+          getInstance, name, value,
+        },
+      },
+    )();
   }
 
   apiColumnOption(id: string, name: string, value: any = 'empty'): Promise<any> {
@@ -39,4 +55,35 @@ export default abstract class GridCore extends Widget {
       },
     )();
   }
+
+  getPager(): Pager {
+    return new Pager(this.element.find(`.${this.addWidgetPrefix(CLASS.pager)}, .dx-${CLASS.pagination}`));
+  }
+
+  getCompatibilityName(): WidgetName {
+    return this.getName();
+  }
+
+  getFilterPanel(): FilterPanel {
+    return new FilterPanel(this.element.find(`.${this.addWidgetPrefix(CLASS.filterPanel, true)}`), this.getCompatibilityName());
+  }
+
+  apiFilter(filter: any[]): Promise<void> {
+    const { getInstance } = this;
+
+    return ClientFunction(
+      () => (getInstance() as any).filter(filter),
+      { dependencies: { getInstance, filter } },
+    )();
+  }
+
+  apiClearFilter(): Promise<void> {
+    const { getInstance } = this;
+
+    return ClientFunction(
+      () => (getInstance() as any).clearFilter(),
+      { dependencies: { getInstance } },
+    )();
+  }
 }
+

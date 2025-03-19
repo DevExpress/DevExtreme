@@ -2,6 +2,7 @@ import { describe, expect, it } from '@jest/globals';
 
 import { ColumnsController } from '../columns_controller';
 import { DataController } from '../data_controller/data_controller';
+import { FilterController } from '../filtering';
 import type { Options } from '../options';
 import { OptionsControllerMock } from '../options_controller/options_controller.mock';
 import { SortingController } from '../sorting_controller';
@@ -16,11 +17,10 @@ const createPagerView = (options?: Options) => {
     },
   });
 
+  const filterController = new FilterController(optionsController);
   const columnsController = new ColumnsController(optionsController);
-
   const sortingController = new SortingController(optionsController, columnsController);
-
-  const dataController = new DataController(optionsController, sortingController);
+  const dataController = new DataController(optionsController, sortingController, filterController);
 
   const pager = new PagerView(dataController, optionsController);
 
