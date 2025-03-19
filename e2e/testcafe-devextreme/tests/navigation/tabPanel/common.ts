@@ -8,7 +8,7 @@ import { Item } from 'devextreme/ui/tab_panel.d';
 import { testScreenshot } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
-import { setAttribute, appendElementTo } from '../../../helpers/domUtils';
+import { setAttribute, appendElementTo, insertStylesheetRulesToPage } from '../../../helpers/domUtils';
 
 // const TABS_RIGHT_NAV_BUTTON_CLASS = 'dx-tabs-nav-button-right';
 // const TABS_LEFT_NAV_BUTTON_CLASS = 'dx-tabs-nav-button-left';
@@ -592,6 +592,60 @@ test('TabPanel borders without scrolling', async (t) => {
     };
 
     return createWidget('dxTabPanel', tabPanelOptions);
+  });
+});
+
+const positions = ['top', 'left', 'right', 'bottom'];
+
+positions.forEach((tabsPosition) => {
+  test(`TabPanel border appearance when it placed inside the content of TabPanel with=${tabsPosition}`, async (t) => {
+    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+    await testScreenshot(t, takeScreenshot, `Nested TabPanel borders appearance,tabsPos=${tabsPosition}.png`, { element: '#container' });
+
+    await t
+      .expect(compareResults.isValid())
+      .ok(compareResults.errorMessages());
+  }).before(async () => {
+    await insertStylesheetRulesToPage('.dx-tabpanel { margin: 10px }');
+
+    const dataSource = [
+      {
+        title: 'John Heart',
+        text: 'John Heart',
+      }, {
+        title: 'Olivia Peyton',
+        text: 'Olivia Peyton',
+      },
+    ] as Item[];
+
+    return createWidget('dxTabPanel', {
+      dataSource,
+      height: 700,
+      width: 500,
+      tabsPosition,
+      selectedIndex: 1,
+      deferRendering: true,
+      itemTemplate: ClientFunction(() => {
+        const $container = $('<div>');
+
+        positions.forEach((position) => {
+          const $tabPanel = ($('<div>') as any).dxTabPanel({
+            height: 120,
+            tabsPosition: position,
+            dataSource,
+          });
+
+          $container.append($tabPanel);
+
+          $container.append($('<hr>'));
+        });
+
+        return $container;
+      }, {
+        dependencies: { dataSource, positions },
+      }),
+    });
   });
 });
 
