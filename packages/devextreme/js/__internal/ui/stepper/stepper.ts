@@ -1,11 +1,11 @@
-import type { Orientation } from '@js/common';
+import type { Orientation, SingleOrNone } from '@js/common';
 import registerComponent from '@js/core/component_registrator';
 import type { DxElement } from '@js/core/element';
 import $, { type dxElementWrapper } from '@js/core/renderer';
 import { Deferred } from '@js/core/utils/deferred';
 import { isDefined } from '@js/core/utils/type';
 import type { DxEvent } from '@js/events';
-import type { Item } from '@js/ui/stepper';
+import type { Item, Properties } from '@js/ui/stepper';
 import { BindableTemplate } from '@ts/core/templates/m_bindable_template';
 import type { Template } from '@ts/core/templates/m_template';
 import { getImageContainer } from '@ts/core/utils/m_icon';
@@ -17,14 +17,11 @@ import type {
 } from '@ts/ui/collection/collection_widget.base';
 import CollectionWidgetAsync from '@ts/ui/collection/m_collection_widget.async';
 import Connector from '@ts/ui/stepper/connector';
-import type { StepperItemProperties } from '@ts/ui/stepper/stepper_item';
 import StepperItem, {
   STEP_COMPLETED_CLASS,
   STEP_INVALID_ICON,
   STEP_VALID_ICON,
 } from '@ts/ui/stepper/stepper_item';
-
-import type { CollectionWidgetEditProperties } from '../collection/m_collection_widget.edit';
 
 export const STEPPER_CLASS = 'dx-stepper';
 export const STEP_LIST_CLASS = 'dx-step-list';
@@ -45,9 +42,12 @@ export const ORIENTATION: Record<string, Orientation> = {
   vertical: 'vertical',
 };
 
-export interface StepperProperties extends CollectionWidgetEditProperties<Stepper> {
-  orientation?: Orientation;
-  linear?: boolean;
+export interface StepperProperties extends Properties {
+  selectionMode?: SingleOrNone;
+
+  loopItemFocus?: boolean;
+
+  selectionRequired?: boolean;
 }
 
 class Stepper extends CollectionWidgetAsync<StepperProperties> {
@@ -83,7 +83,7 @@ class Stepper extends CollectionWidgetAsync<StepperProperties> {
     };
   }
 
-  _getStepIcon(data: StepperItemProperties): string | undefined {
+  _getStepIcon(data: Item): string | undefined {
     const { isValid, icon } = data;
 
     if (isValid === false) {
@@ -97,7 +97,7 @@ class Stepper extends CollectionWidgetAsync<StepperProperties> {
     return icon;
   }
 
-  _prepareDefaultItemTemplate(data: StepperItemProperties, $container: dxElementWrapper): void {
+  _prepareDefaultItemTemplate(data: Item, $container: dxElementWrapper): void {
     const { text, title } = data;
 
     const $indicatorElement = $('<div>').addClass(STEP_INDICATOR_CLASS);
@@ -124,7 +124,7 @@ class Stepper extends CollectionWidgetAsync<StepperProperties> {
     this._templateManager.addDefaultTemplates({
       item: new BindableTemplate((
         $container: dxElementWrapper,
-        data: StepperItemProperties,
+        data: Item,
       ) => {
         this._prepareDefaultItemTemplate(data, $container);
       }, ['text', 'icon', 'title', 'isValid'], this.option('integrationOptions.watchMethod')),
@@ -133,7 +133,7 @@ class Stepper extends CollectionWidgetAsync<StepperProperties> {
 
   _createItemByTemplate(
     itemTemplate: Template,
-    renderArgs: ItemRenderInfo<StepperItemProperties>,
+    renderArgs: ItemRenderInfo<Item>,
   ): DxElement {
     const { itemData, index } = renderArgs;
 
@@ -331,8 +331,8 @@ class Stepper extends CollectionWidgetAsync<StepperProperties> {
   }
 
   _itemOptionChanged(
-    item: StepperItemProperties,
-    property: keyof StepperItemProperties,
+    item: Item,
+    property: keyof Item,
     value: unknown,
     prevValue: unknown,
   ): void {
