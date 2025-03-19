@@ -11,7 +11,7 @@ fixture('List.ItemDragging')
 
 runManualTest('List', 'ItemDragging', ['jQuery', 'React', 'Vue', 'Angular'], (test) => {
   test('ItemDragging', async (t) => {
-    await t.wait(2000);
+    await t.wait(3000);
 
     const REORDER_HANDLE_CLASS = 'dx-list-reorder-handle';
     const LIST_CLASS = 'dx-list';

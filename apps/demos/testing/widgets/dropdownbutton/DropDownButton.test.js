@@ -16,7 +16,7 @@ runManualTest('DropDownButton', 'Overview', ['jQuery', 'React', 'Vue', 'Angular'
   test('Custom Overview Appearance', async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-    await t.wait(2000);
+    await t.wait(3000);
 
     await t
       .click($(`.${DROP_DOWN_BUTTON_CLASS}`).nth(0))

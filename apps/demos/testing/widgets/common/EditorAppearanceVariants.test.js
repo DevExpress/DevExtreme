@@ -14,7 +14,7 @@ runManualTest('Common', 'EditorAppearanceVariants', ['React', 'Vue', 'Angular', 
   test('EditorAppearanceVariants', async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-    await t.wait(2000);
+    await t.wait(3000);
 
     const SELECTBOX_CLASS = 'dx-selectbox';
     const stylingModes = ['outlined', 'filled', 'underlined'];
