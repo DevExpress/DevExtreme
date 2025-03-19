@@ -276,6 +276,7 @@ const iconSet = {
   fixcolumnleft: '\f17b',
   stickcolumn: '\f17c',
   fixcolumnright: '\f17d',
+  csv: '\f181',
   packagebox: '\f182',
   checkmarkcircle: '\f183',
   clipboardtasklist: '\f184',
