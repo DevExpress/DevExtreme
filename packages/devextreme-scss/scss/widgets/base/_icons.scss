@@ -135,7 +135,10 @@
 .dx-icon-fixcolumnleft,
 .dx-icon-fixcolumnright,
 .dx-icon-stickcolumn,
-.dx-icon-unfixcolumn {
+.dx-icon-unfixcolumn,
+.dx-icon-packagebox,
+.dx-icon-checkmarkcircle,
+.dx-icon-clipboardtasklist {
   background-position: 0 0;
   background-repeat: no-repeat;
 }
@@ -481,6 +484,9 @@ $icons: (
     "datausage": "\f177",
     "datapie": "\f178",
     "pinmap": "\f179",
+    "packagebox": "\f182",
+    "checkmarkcircle": "\f183",
+    "clipboardtasklist": "\f184",
     "unfixcolumn":"\f17a",
     "fixcolumnleft":"\f17b",
     "stickcolumn":"\f17c",
