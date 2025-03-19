@@ -1,3 +1,5 @@
-// 1. Add all imports here
+/* global DevExpress */
+/* eslint-disable import/no-commonjs */
+import { AI } from '../ai/ai';
 
-import './modules/parts/widgets-web';
+module.exports = DevExpress.ai = AI;
