@@ -27,6 +27,21 @@ export default Stepper;
  */
 
 /**
+ * @name dxStepperOptions.selectedItemKeys
+ * @hidden
+ */
+
+/**
+ * @name dxStepperOptions.noDataText
+ * @hidden
+ */
+
+/**
+ * @name dxStepperOptions.keyExpr
+ * @hidden
+ */
+
+/**
  * @name dxStepperOptions.selectionMode
  * @hidden
  */

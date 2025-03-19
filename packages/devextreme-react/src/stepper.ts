@@ -33,11 +33,9 @@ type IStepperOptions<TItem = any, TKey = any> = React.PropsWithChildren<ReplaceF
   defaultItems?: Array<dxStepperItem>;
   defaultSelectedIndex?: number;
   defaultSelectedItem?: any;
-  defaultSelectedItemKeys?: Array<any>;
   onItemsChange?: (value: Array<dxStepperItem>) => void;
   onSelectedIndexChange?: (value: number) => void;
   onSelectedItemChange?: (value: any) => void;
-  onSelectedItemKeysChange?: (value: Array<any>) => void;
 }>
 
 interface StepperRef<TItem = any, TKey = any> {
@@ -57,14 +55,13 @@ const Stepper = memo(
         }
       ), [baseRef.current]);
 
-      const subscribableOptions = useMemo(() => (["items","selectedIndex","selectedItem","selectedItemKeys"]), []);
+      const subscribableOptions = useMemo(() => (["items","selectedIndex","selectedItem"]), []);
       const independentEvents = useMemo(() => (["onDisposing","onInitialized","onItemClick","onItemContextMenu","onItemRendered","onSelectionChanging"]), []);
 
       const defaults = useMemo(() => ({
         defaultItems: "items",
         defaultSelectedIndex: "selectedIndex",
         defaultSelectedItem: "selectedItem",
-        defaultSelectedItemKeys: "selectedItemKeys",
       }), []);
 
       const expectedChildren = useMemo(() => ({
@@ -100,8 +97,13 @@ const Stepper = memo(
 // Stepper
 type IItemProps = React.PropsWithChildren<{
   disabled?: boolean;
+  hint?: string;
+  icon?: string;
+  isValid?: boolean;
+  optional?: boolean;
   template?: ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string | any) | template;
   text?: string;
+  title?: string;
   render?: (...params: any) => React.ReactNode;
   component?: React.ComponentType<any>;
 }>
