@@ -802,7 +802,7 @@ class SchedulerWorkSpace extends WidgetObserver {
       groups: this.option('groups'),
       isProvideVirtualCellsWidth,
       isAllDayPanelVisible: this.isAllDayPanelVisible,
-      selectedCells: this._getSelectedCellsData(),
+      selectedCells: this.cellsSelectionState.getSelectedCells(),
       focusedCell: this.cellsSelectionState.focusedCell,
       headerCellTextFormat: this._getFormat(),
       getDateForHeaderText: (_, date) => date,
@@ -1418,7 +1418,7 @@ class SchedulerWorkSpace extends WidgetObserver {
     return false;
   }
 
-  protected _filterCellDataFields(cellData) {
+  protected _normalizeCellData(cellData) {
     return extend(true, {}, {
       startDate: cellData.startDate,
       endDate: cellData.endDate,
@@ -1433,13 +1433,13 @@ class SchedulerWorkSpace extends WidgetObserver {
   protected _getSelectedCellsData() {
     const selected = this.cellsSelectionState.getSelectedCells();
 
-    return selected?.map(this._filterCellDataFields.bind(this));
+    return selected?.map(this._normalizeCellData.bind(this));
   }
 
   getCellData($cell) {
     const cellData = this._getFullCellData($cell) || {};
 
-    return this._filterCellDataFields(cellData);
+    return this._normalizeCellData(cellData);
   }
 
   _getFullCellData($cell) {
@@ -3204,7 +3204,7 @@ class SchedulerWorkSpace extends WidgetObserver {
         const { cellData } = this.viewDataProvider.viewDataMap.dateTableMap[validRowIndex][columnIndex];
 
         return {
-          value: this._filterCellDataFields(cellData),
+          value: this._normalizeCellData(cellData),
           fullValue: cellData,
           key: CELL_DATA,
         };
