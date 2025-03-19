@@ -23,6 +23,7 @@ const resultPath = ctx.RESULT_NPM_PATH;
 
 const srcGlobsPattern = (path, exclude) => [
     `${path}/**/*.js`,
+    // `!${path}/ai/**/*`,
     `!${exclude}/**/*.*`,
     `!${path}/bundles/*.js`,
     `!${path}/cjs/bundles/**/*`,
@@ -31,6 +32,11 @@ const srcGlobsPattern = (path, exclude) => [
     `!${path}/viz/vector_map.utils/*.js`,
     `!${path}/viz/docs/*.js`
 ];
+
+// const aiSrcGlobsPattern = (path, exclude) => [
+//     `${path}/ai/*.js`,
+//     `!${exclude}/**/*.*`,
+// ];
 
 const esmPackageJsonGlobs = [
     `${ctx.TRANSPILED_PROD_ESM_PATH}/**/*.json`,
@@ -41,6 +47,11 @@ const esmSrcGlobs = srcGlobsPattern(
     ctx.TRANSPILED_PROD_ESM_PATH,
     ctx.TRANSPILED_PROD_RENOVATION_PATH
 );
+
+// const aiEsmSrcGlobs = aiSrcGlobsPattern(
+//     ctx.TRANSPILED_PROD_ESM_PATH,
+//     ctx.TRANSPILED_PROD_RENOVATION_PATH,
+// );
 
 const distGlobsPattern = (jsFolder, exclude) => [
     'artifacts/**/*.*',
@@ -90,6 +101,7 @@ const licenseValidator = env.BUILD_INTERNAL_PACKAGE || env.BUILD_TEST_INTERNAL_P
     lazyPipe()
         .pipe(() => gulpFilter(['**', '!**/license/license_validation_internal.js']));
 
+// const sources = (src, dist, distGlob, aiSrc) => (() => merge(
 const sources = (src, dist, distGlob) => (() => merge(
     gulp
         .src(src)
@@ -97,6 +109,13 @@ const sources = (src, dist, distGlob) => (() => merge(
         .pipe(headerPipes.starLicense())
         .pipe(compressionPipes.beautify())
         .pipe(gulp.dest(dist)),
+
+    // gulp
+    //     .src(aiSrc)
+    //     .pipe(licenseValidator())
+    //     .pipe(headerPipes.starLicense())
+    //     .pipe(compressionPipes.beautify())
+    //     .pipe(gulp.dest(dist)),
 
     gulp
         .src(esmPackageJsonGlobs)
@@ -156,6 +175,7 @@ gulp.task('npm-sources', gulp.series(
         .src(`${resultPath}/${devextremeDistDir}/package.json`)
         .pipe(overwriteInternalPackageName())
         .pipe(gulpIf(env.BUILD_INTERNAL_PACKAGE, gulp.dest(distPath))),
+    // sources(srcGlobs, packagePath, distGlobs, aiEsmSrcGlobs))
     sources(srcGlobs, packagePath, distGlobs))
 );
 
