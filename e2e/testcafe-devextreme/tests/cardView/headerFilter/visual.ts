@@ -2,6 +2,7 @@ import CardView from 'devextreme-testcafe-models/cardView';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
+import { testScreenshot } from '../../../helpers/themeUtils';
 
 // TODO: Unskip this fixture after markup will be stabilized
 fixture.skip`HeaderFilter.Visual`
@@ -19,7 +20,7 @@ test('popup with list', async (t) => {
     .getFilterIcon();
   await t.click(filterIcon);
 
-  await takeScreenshot('card-view_header-filter_popup-with-list.png', cardView.element);
+  await testScreenshot(t, takeScreenshot, 'card-view_header-filter_popup-with-list.png', { element: cardView.element });
 
   await t
     .expect(compareResults.isValid())
@@ -48,7 +49,7 @@ test('popup with search', async (t) => {
     .getFilterIcon();
   await t.click(filterIcon);
 
-  await takeScreenshot('card-view_header-filter_popup-with-search.png', cardView.element);
+  await testScreenshot(t, takeScreenshot, 'card-view_header-filter_popup-with-search.png', { element: cardView.element });
 
   await t
     .expect(compareResults.isValid())
@@ -80,7 +81,7 @@ test('popup with tree', async (t) => {
     .getFilterIcon();
   await t.click(filterIcon);
 
-  await takeScreenshot('card-view_header-filter_popup-with-tree.png', cardView.element);
+  await testScreenshot(t, takeScreenshot, 'card-view_header-filter_popup-with-tree.png', { element: cardView.element });
 
   await t
     .expect(compareResults.isValid())

@@ -40,7 +40,7 @@ export default class CardView extends GridCore {
 
   getHeaderPanel(): HeaderPanel {
       const panelElement = this.element.find(`.${this.addWidgetPrefix(CLASS.headers)}`);
-      return new HeaderPanel(panelElement);
+      return new HeaderPanel(panelElement, this.getName());
   }
 
   getHeaderFilterPopup(): Popup {

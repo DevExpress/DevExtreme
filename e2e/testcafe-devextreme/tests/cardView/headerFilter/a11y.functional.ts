@@ -14,8 +14,7 @@ test('should open popup by enter if filter icon in the focused state', async (t)
     .getHeaderPanel()
     .getHeaderItem();
   await t.click(firstHeaderItem.element)
-    .pressKey('tab')
-    .pressKey('enter');
+    .pressKey('alt+down');
 
   // NOTE: We check list here, because this list rendered inside popup
   const list = cardView.getHeaderFilterList();
@@ -41,8 +40,7 @@ test('should return focus on the same icon after the popup closing', async (t) =
     .getHeaderPanel()
     .getHeaderItem();
   await t.click(firstHeaderItem.element)
-    .pressKey('tab')
-    .pressKey('enter');
+    .pressKey('alt+down');
 
   // NOTE: We check list here, because this list rendered inside popup
   const list = cardView.getHeaderFilterList();
@@ -53,12 +51,7 @@ test('should return focus on the same icon after the popup closing', async (t) =
     .pressKey('tab')
     .pressKey('enter');
 
-  const firstFilterIcon = cardView
-    .getHeaderPanel()
-    .getHeaderItem()
-    .getFilterIcon();
-
-  await t.expect(firstFilterIcon.focused).ok();
+  await t.expect(firstHeaderItem.element.focused).ok();
 }).before(async () => createWidget('dxCardView', {
   dataSource: [
     { A: 'A_0' },
