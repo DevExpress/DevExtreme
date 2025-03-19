@@ -29,15 +29,19 @@ export class PromptManager {
       throw new Error('Template not found');
     }
 
-    const system = data.system ? this.replacePlaceholders(template.system, data.system) : undefined;
-    const user = data.user ? this.replacePlaceholders(template.user, data.user) : undefined;
+    const system = this.replacePlaceholders(template.system, data.system);
+    const user = this.replacePlaceholders(template.user, data.user);
 
     const prompt = { system, user };
 
     return prompt;
   }
 
-  private replacePlaceholders(prompt: string, placeholders: Record<string, string>): string {
+  private replacePlaceholders(prompt: string, placeholders?: Record<string, string>): string {
+    if (!placeholders) {
+      return prompt;
+    }
+
     const result = Object.entries(placeholders).reduce(
       (acc, [key, value]) => acc.split(`{{${key}}}`).join(value),
       prompt,

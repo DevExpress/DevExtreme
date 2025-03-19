@@ -8,7 +8,7 @@ QUnit.module('AI', function() {
         const ai = new AI({
             sendRequest: (params) => {
                 assert.deepEqual(params.prompt, {
-                    system: undefined,
+                    system: 'You are a translation assistant.',
                     user: 'Translate text to fr language.',
                 }, 'prompt parameter is correct');
                 assert.strictEqual(typeof params.onChunk, 'function', 'onChunk parameter is correct');
