@@ -1,10 +1,8 @@
-// Should we store this interface here
 export interface TranslateCommandParams {
   text: string;
   lang: string;
 }
 
-// Should we store this interface here
 export interface RequestCallbacks {
   onChunk?: (chunk: string) => void;
   onComplete?: (finalResponse: string) => void;
