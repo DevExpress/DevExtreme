@@ -3,6 +3,8 @@ import type { Subscribable, SubsGets, SubsGetsUpd } from '@ts/core/reactive/inde
 import {
   computed, interruptableComputed,
 } from '@ts/core/reactive/index';
+import type { HeaderFilterRootOptions } from '@ts/grids/new/grid_core/filtering/header_filter/index';
+import headerFilterUtils from '@ts/grids/new/grid_core/filtering/header_filter/utils';
 
 import { OptionsController } from '../options_controller/options_controller';
 import type { ColumnProperties, ColumnSettings, PreNormalizedColumn } from './options';
@@ -13,6 +15,8 @@ import {
 
 export class ColumnsController {
   private readonly columnsConfiguration: Subscribable<ColumnProperties[] | undefined>;
+
+  private readonly headerFilterConfiguration: Subscribable<HeaderFilterRootOptions | undefined>;
 
   private readonly columnsSettings: SubsGetsUpd<PreNormalizedColumn[]>;
 
@@ -32,6 +36,7 @@ export class ColumnsController {
     private readonly options: OptionsController,
   ) {
     this.columnsConfiguration = this.options.oneWay('columns');
+    this.headerFilterConfiguration = this.options.oneWay('headerFilter');
 
     this.columnsSettings = interruptableComputed(
       (columnsConfiguration) => preNormalizeColumns(columnsConfiguration ?? []),
@@ -41,12 +46,17 @@ export class ColumnsController {
     );
 
     this.columns = computed(
-      (columnsSettings) => normalizeColumns(
+      (
+        columnsSettings,
+        headerFilterRootOptions,
+      ) => normalizeColumns(
         columnsSettings ?? [],
         this.options.normalizeTemplate.bind(this.options),
-      ),
+      ).map((column) => headerFilterUtils
+        .mergeColumnHeaderFilterOptions(column, headerFilterRootOptions)),
       [
         this.columnsSettings,
+        this.headerFilterConfiguration,
       ],
     );
 

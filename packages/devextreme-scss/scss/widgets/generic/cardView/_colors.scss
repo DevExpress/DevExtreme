@@ -2,5 +2,8 @@
 @use '../colors' as *;
 
 $cardview-header-item-background-color: $colors-neutral-grey-0 !default;
-$cardview-header-item-border-color: #DDDDDD !default;
+$cardview-header-item-border-color: #ddd !default;
+
+$cardview-header-filter-icon-empty-color: $base-text-color !default;
+$cardview-header-filter-icon-selected-color: $base-accent !default;
 

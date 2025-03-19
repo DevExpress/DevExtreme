@@ -7,6 +7,7 @@ import * as contentView from './content_view/index';
 import * as dataController from './data_controller/index';
 import * as editing from './editing/index';
 import type * as filterController from './filtering/index';
+import * as headerFilter from './filtering/header_filter/index';
 import { filterPanel } from './filtering/index';
 import * as pager from './pager/index';
 import type { SearchProperties } from './search/types';
@@ -25,6 +26,8 @@ export type Options =
   & pager.Options
   & columnsController.Options
   & filterController.Options
+  & filterPanel.Options
+  & headerFilter.Options
   & contentView.Options
   & editing.Options
   & SearchProperties
@@ -38,6 +41,7 @@ export const defaultOptions = {
   ...columnsController.defaultOptions,
   ...pager.defaultOptions,
   ...filterPanel.defaultOptions,
+  ...headerFilter.defaultOptions,
   ...contentView.defaultOptions,
   ...editing.defaultOptions,
   searchText: '',

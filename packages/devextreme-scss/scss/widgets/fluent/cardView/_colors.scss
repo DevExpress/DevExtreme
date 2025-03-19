@@ -1,5 +1,4 @@
 @use '../colors' as *;
-
 @use '../../base/cardView/variables' as *;
 @use '../../base/cardView/header_panel/variables' as *;
 @use '../../base/cardView/content_view/content/card/variables' as *;
@@ -14,3 +13,6 @@ $cardview-header-item-hovered-border-color: #BDBDBD !default;
 
 $cardview-card-border-color: $base-border-color !default;
 $cardview-card-background-color: $base-bg !default;
+
+$cardview-header-filter-icon-empty-color: $base-text-color !default;
+$cardview-header-filter-icon-selected-color: $base-accent !default;

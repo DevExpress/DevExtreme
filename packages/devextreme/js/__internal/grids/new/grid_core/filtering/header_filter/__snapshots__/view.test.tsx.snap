@@ -1,0 +1,17 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`HeaderFilter HeaderFilterPopupComponent should render 1`] = `
+<div>
+  <div />
+</div>
+`;
+
+exports[`HeaderFilter View test 1`] = `
+<div>
+  <div>
+    <div
+      class="dx-header-filter-menu"
+    />
+  </div>
+</div>
+`;

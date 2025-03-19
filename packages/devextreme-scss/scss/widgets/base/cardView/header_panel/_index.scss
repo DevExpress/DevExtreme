@@ -1,5 +1,6 @@
 
 @use './variables' as *;
+@use './item';
 
 .dx-cardview-headers-content {
   display: flex;
@@ -7,14 +8,16 @@
 }
 
 .dx-cardview-header-item {
-  background-color: $cardview-header-item-background-color;
-  border: solid $cardview-header-item-border-width $cardview-header-item-border-color;
-  border-radius: $cardview-header-item-border-radius;
+  display: flex;
+  align-items: center;
   padding: ($cardview-header-item-padding-vertical - $cardview-header-item-border-width) $cardview-header-item-padding-horizontal;
   min-width: fit-content;
   user-select: none;
-  display: flex;
   gap: $cardview-header-item-content-gap;
+  border: solid $cardview-header-item-border-width $cardview-header-item-border-color;
+  border-radius: $cardview-header-item-border-radius;
+  background-color: $cardview-header-item-background-color;
+  cursor: pointer;
 
   &:hover {
     background-color: $cardview-header-item-hovered-background-color;
