@@ -193,7 +193,7 @@ const SKIPPED_TESTS = {
   },
   Angular: {
     Accordion: [
-      { demo: 'Overview', themes: [THEME.generic, THEME.material, THEME.fluent] },
+      { demo: 'Overview', themes: [THEME.material, THEME.fluent] },
     ],
     Common: [
       { demo: 'EditorAppearanceVariants', themes: [THEME.generic, THEME.material, THEME.fluent] },
@@ -229,13 +229,13 @@ const SKIPPED_TESTS = {
       { demo: 'ItemDragging', themes: [THEME.generic, THEME.material, THEME.fluent] },
     ],
     TabPanel: [
-      { demo: 'Overview', themes: [THEME.generic, THEME.material, THEME.fluent] },
+      { demo: 'Overview', themes: [THEME.material, THEME.fluent] },
     ],
     SelectBox: [
       { demo: 'GroupedItems', themes: [THEME.generic, THEME.material, THEME.fluent] },
     ],
     Splitter: [
-      { demo: 'Overview', themes: [THEME.generic, THEME.material, THEME.fluent] },
+      { demo: 'Overview', themes: [THEME.material, THEME.fluent] },
     ],
     Gauges: [
       { demo: 'VariableNumberOfBars', themes: [THEME.generic, THEME.material, THEME.fluent] },
@@ -287,7 +287,7 @@ const SKIPPED_TESTS = {
       { demo: 'IntegratedFieldChooser', themes: [THEME.generic, THEME.material, THEME.fluent] },
     ],
     Toolbar: [
-      { demo: 'Adaptability', themes: [THEME.generic, THEME.material, THEME.fluent] },
+      { demo: 'Adaptability', themes: [THEME.material, THEME.fluent] },
     ]
   },
   Vue: {
