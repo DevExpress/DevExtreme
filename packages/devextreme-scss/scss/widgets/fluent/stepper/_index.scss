@@ -7,6 +7,9 @@
 
 // adduse
 
+@include stepper(
+  $stepper-margin,
+);
 @include connector(
   $stepper-connector-bg,
   $stepper-connector-value-bg,
