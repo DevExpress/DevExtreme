@@ -11,11 +11,8 @@ import { ColumnsController } from './columns_controller';
 const setup = (config: Options) => {
   const options = new OptionsControllerMock(config);
   const filterController = new FilterController(options);
-
   const dataController = new DataController(options, filterController);
-
   const columnsController = new ColumnsController(options, dataController);
-
   const itemsController = new ItemsController(dataController, columnsController);
 
   return {

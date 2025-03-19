@@ -52,6 +52,15 @@ export default abstract class GridCore extends Widget {
     return new FilterPanel(this.element.find(`.${this.addWidgetPrefix(CLASS.filterPanel, true)}`), this.getCompatibilityName());
   }
 
+  apiFilter(filter: any[]): Promise<void> {
+    const { getInstance } = this;
+
+    return ClientFunction(
+      () => (getInstance() as any).filter(filter),
+      { dependencies: { getInstance, filter } },
+    )();
+  }
+
   apiClearFilter(): Promise<void> {
     const { getInstance } = this;
 
