@@ -1,9 +1,22 @@
 @mixin step(
+  $min-size,
   $width,
   $height,
   $content-row-gap,
   $content-column-gap,
 ) {
+  .dx-stepper-horizontal {
+    .dx-step {
+      min-width: $min-size;
+    }
+  }
+
+  .dx-stepper-vertical {
+    .dx-step {
+      min-height: $min-size;
+    }
+  }
+
   .dx-step-content {
     row-gap: $content-row-gap;
     column-gap: $content-column-gap;
