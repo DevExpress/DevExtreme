@@ -1000,5 +1000,36 @@ export default function() {
             $('.dx-suggestion-list .dx-list-item').trigger('dxclick');
             this.clock.tick(10);
         });
+
+        test('Click on variable toolbar format button before popup is hidden after variable select should not add a undefined variable (T1278577)', function(assert) {
+            fx.off = false;
+            const done = assert.async();
+            const expectedValue = '<p><span class="dx-variable" data-var-start-esc-char="%" data-var-end-esc-char="%" data-var-value="test"><span contenteditable="false">%test%</span></span></p>';
+
+            const editor = $('#htmlEditor').dxHtmlEditor({
+                toolbar: { items: ['variable'] },
+                variables: {
+                    dataSource: ['test'],
+                    escapeChar: '%'
+                },
+            }).dxHtmlEditor('instance');
+
+            $('#htmlEditor')
+                .find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`)
+                .trigger('dxclick');
+
+            $('.dx-suggestion-list .dx-list-item').trigger('dxclick');
+
+            $('#htmlEditor')
+                .find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`)
+                .trigger('dxclick');
+
+            this.clock.tick(10);
+
+            const value = editor.option('value');
+
+            assert.strictEqual(prepareEmbedValue(value), expectedValue);
+            done();
+        });
     });
 }
