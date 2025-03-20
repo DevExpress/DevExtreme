@@ -32,6 +32,8 @@ let azureMapsLoader;
 class AzureProvider extends DynamicProvider {
   _preventZoomChangeEvent?: boolean;
 
+  _mapReadyPromise?: Promise<void>;
+
   _mapType(type) {
     const mapTypes = {
       roadmap: 'road',
@@ -165,7 +167,7 @@ class AzureProvider extends DynamicProvider {
   _init() {
     this._createMap();
 
-    return Promise.resolve();
+    return this._mapReadyPromise;
   }
 
   _createMap() {
@@ -177,6 +179,12 @@ class AzureProvider extends DynamicProvider {
       zoom: this._option('zoom'),
       style: this._mapType(this._option('type')),
       interactive: !this._option('disabled'),
+    });
+
+    this._mapReadyPromise = new Promise<void>((resolve) => {
+      this._map.events.add('ready', () => {
+        resolve();
+      });
     });
 
     this.updateControls();
@@ -413,11 +421,10 @@ class AzureProvider extends DynamicProvider {
           });
         }
       }).catch((e) => {
-        const errorMessage = e.responseJSON.error.message;
         const dataSource = new atlas.source.DataSource();
         const lineLayer = new atlas.layer.LineLayer(dataSource, null, {});
 
-        errors.log('W1006', errorMessage);
+        errors.log('W1006', e);
 
         resolve({
           instance: { dataSource, lineLayer },
