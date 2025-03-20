@@ -10,7 +10,9 @@ const mergeColumnHeaderFilterOptions = (
 
   return {
     ...column,
-    allowHeaderFiltering: !!rootOptions?.visible && !!column?.allowFiltering,
+    allowHeaderFiltering: !!rootOptions?.visible
+      && !!column?.allowFiltering
+      && !!column?.allowHeaderFiltering,
     headerFilter: {
       ...restRootOptions,
       ...column?.headerFilter,
