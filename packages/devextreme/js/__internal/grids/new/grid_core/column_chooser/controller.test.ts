@@ -30,7 +30,7 @@ const createColumnChooserController = (options?: Options): {
 };
 
 describe('select mode: ', () => {
-  it('updates treeView items on applyingColumnOptions', () => {
+  it('updates treeView items on applying column options', () => {
     const {
       columnsController,
       columnChooserController,

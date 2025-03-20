@@ -112,19 +112,7 @@ export class ColumnsController {
         [option]: value,
       };
 
-      const visibleIndexes = normalizeVisibleIndexes(
-        newColumns.map((c) => c.visibleIndex),
-        index,
-      );
-
-      visibleIndexes.forEach((visibleIndex, i) => {
-        if (newColumns[i].visibleIndex !== visibleIndex) {
-          newColumns[i] = {
-            ...newColumns[i],
-            visibleIndex,
-          };
-        }
-      });
+      this.normalizeColumnsVisibleIndexes(newColumns);
 
       return newColumns;
     });
@@ -134,20 +122,24 @@ export class ColumnsController {
     this.columnsSettings.updateFunc((columns) => {
       const newColumns = func(columns);
 
-      const visibleIndexes = normalizeVisibleIndexes(
-        newColumns.map((c) => c.visibleIndex),
-      );
-
-      visibleIndexes.forEach((visibleIndex, i) => {
-        if (newColumns[i].visibleIndex !== visibleIndex) {
-          newColumns[i] = {
-            ...newColumns[i],
-            visibleIndex,
-          };
-        }
-      });
+      this.normalizeColumnsVisibleIndexes(newColumns);
 
       return newColumns;
+    });
+  }
+
+  private normalizeColumnsVisibleIndexes(columns: PreNormalizedColumn[]): void {
+    const visibleIndexes = normalizeVisibleIndexes(
+      columns.map((c) => c.visibleIndex),
+    );
+
+    visibleIndexes.forEach((visibleIndex, i) => {
+      if (columns[i].visibleIndex !== visibleIndex) {
+        columns[i] = {
+          ...columns[i],
+          visibleIndex,
+        };
+      }
     });
   }
 }

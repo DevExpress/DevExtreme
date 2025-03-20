@@ -207,7 +207,6 @@ export class ColumnChooserView extends View<ColumnChooserProps> {
     const popup = this.popupRef.current as any;
 
     popup.setAria({
-      role: 'dialog',
       label: messageLocalization.format('dxDataGrid-columnChooserTitle'),
     });
 
