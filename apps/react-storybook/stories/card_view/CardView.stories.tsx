@@ -2,13 +2,14 @@ import type { Meta, StoryObj } from "@storybook/react";
 
 import dxCardView from "devextreme/ui/card_view";
 import { wrapDxWithReact } from "../utils";
-import { items, store } from "./data";
+import { store } from "./data";
+import { generatedData } from "./generatedData";
 
 const CardView = wrapDxWithReact(dxCardView);
 
 const dataSources = {
   empty: [],
-  local: items,
+  local: generatedData,
   remote: store,
 }
 
@@ -29,12 +30,11 @@ const columns = {
     "SaleAmount",
   ],
   local: [
-    {
-      dataField: 'column1'
-    }, {
-      dataField: 'column2'
-    }
-  ],
+      'firstName',
+      'lastName',
+      'gender',
+      'birthDate'
+  ]
 }
 
 const meta: Meta<typeof CardView> = {
@@ -69,7 +69,10 @@ const meta: Meta<typeof CardView> = {
       options: Object.keys(columns),
       mapping: columns,
       control: { type: 'radio' },
-    }
+    },
+    searchPanel: {
+      control: 'object',
+    },
   }
 };
 
@@ -129,4 +132,18 @@ export const EmptyCardView: Story = {
     dataSource: 'empty',
   },
 };
+
+export const SearchCardView: Story = {
+  ...DefaultMode,
+  args: {
+    ...DefaultMode.args,
+    dataSource: 'local',
+    columns: 'local',
+    searchPanel: {
+      highlightCaseSensitive: false,
+      highlightSearchText: true,
+      text: '',
+    }
+  }
+}
 
