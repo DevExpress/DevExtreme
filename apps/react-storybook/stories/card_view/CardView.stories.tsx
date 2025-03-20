@@ -34,6 +34,39 @@ const columns = {
       'lastName',
       'gender',
       'birthDate'
+  ],
+  localHeaderFilter: [
+    {
+      dataField: 'firstName',
+      headerFilter: {
+        allowSelectAll: false,
+        search: {
+          enabled: true,
+        },
+        values: ['Anet', 'Annabela'],
+      },
+    },
+    {
+        dataField: 'lastName',
+        headerFilter: {
+          filterType: 'exclude',
+          values: ['Abbey'],
+        }
+    },
+    {
+      dataField: 'gender',
+      allowHeaderFiltering: false,
+    },
+    {
+      dataField: 'birthDate',
+      dataType: 'date',
+      calculateCellValue: (data) => {
+        return new Date(data.birthDate);
+      },
+      calculateDisplayValue: (data) => {
+        return new Date(data.birthDate).toDateString();
+      }
+    },
   ]
 }
 
@@ -70,6 +103,9 @@ const meta: Meta<typeof CardView> = {
       mapping: columns,
       control: { type: 'radio' },
     },
+    headerFilter: {
+      control: 'object',
+    },
     searchPanel: {
       control: 'object',
     },
@@ -84,7 +120,8 @@ export const DefaultMode: Story = {
   args: {
     dataSource: 'local',
     width: "100%",
-    height: '500px',
+    // TODO: Fix height limit
+    // height: '500px',
     keyExpr: "OrderNumber",
     cardsPerRow: "auto",
     paging: {
@@ -143,6 +180,30 @@ export const SearchCardView: Story = {
       highlightCaseSensitive: false,
       highlightSearchText: true,
       text: '',
+    }
+  }
+}
+
+export const HeaderFilterStory: Story = {
+  ...DefaultMode,
+  args: {
+    ...DefaultMode.args,
+    headerFilter: {
+      visible: true,
+      width: 252,
+      height: 325,
+      allowSelectAll: true,
+      search: {
+        enabled: false,
+        timeout: 500,
+        mode: 'contains',
+        editorOptions: {},
+      },
+      texts: {
+        emptyValue: 'empty',
+        ok: 'ok',
+        cancel: 'cancel',
+      },
     }
   }
 }
