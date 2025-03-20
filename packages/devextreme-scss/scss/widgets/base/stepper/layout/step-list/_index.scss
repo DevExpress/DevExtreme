@@ -1,10 +1,8 @@
 .dx-step-list {
   display: flex;
   width: 100%;
-}
 
-.dx-stepper-vertical {
-  .dx-step-list {
+  .dx-stepper-vertical & {
     height: 100%;
     flex-direction: column;
   }

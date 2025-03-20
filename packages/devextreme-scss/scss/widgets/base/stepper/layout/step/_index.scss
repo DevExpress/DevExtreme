@@ -49,11 +49,13 @@
 
 .dx-step-label {
   width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .dx-step-title,
 .dx-step-optional-mark {
-  width: 100%;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -63,8 +65,6 @@
 .dx-stepper-vertical {
   .dx-step {
     display: flex;
-    align-items: center;
-    width: 100%;
   }
 
   .dx-step-content {
