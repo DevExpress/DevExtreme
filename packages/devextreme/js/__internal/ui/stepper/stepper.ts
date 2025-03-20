@@ -48,6 +48,8 @@ export interface StepperProperties extends Properties {
   loopItemFocus?: boolean;
 
   selectionRequired?: boolean;
+
+  hintExpr?: (data: Item) => string | undefined;
 }
 
 class Stepper extends CollectionWidgetAsync<StepperProperties> {
@@ -69,6 +71,7 @@ class Stepper extends CollectionWidgetAsync<StepperProperties> {
       focusStateEnabled: true,
       loopItemFocus: false,
       selectionRequired: true,
+      hintExpr(data): string | undefined { return data ? data.hint : undefined; },
     };
   }
 
@@ -365,6 +368,9 @@ class Stepper extends CollectionWidgetAsync<StepperProperties> {
         this._connector.option(name, value);
         break;
       case 'linear':
+        break;
+      case 'hintExpr':
+        this._invalidate();
         break;
       default:
         super._optionChanged(args);
