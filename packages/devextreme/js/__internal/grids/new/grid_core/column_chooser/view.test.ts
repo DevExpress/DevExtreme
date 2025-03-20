@@ -3,6 +3,7 @@ import { describe, expect, it } from '@jest/globals';
 
 import { ColumnsController } from '../columns_controller';
 import { DataController } from '../data_controller';
+import { FilterController } from '../filtering';
 import type { Options } from '../options';
 import { OptionsControllerMock } from '../options_controller/options_controller.mock';
 import { ToolbarController } from '../toolbar/controller';
@@ -24,7 +25,8 @@ const createColumnChooserView = (
 ) => {
   const columnChooserElement = document.createElement('div');
 
-  const dataController = new DataController(optionsController);
+  const filterController = new FilterController(optionsController);
+  const dataController = new DataController(optionsController, filterController);
   const columnsController = new ColumnsController(optionsController, dataController);
   const columnChooserController = new ColumnChooserController(columnsController, optionsController);
 
@@ -145,22 +147,17 @@ describe('applying options', () => {
         enabled: true,
       },
     });
-    const getColumnChooserBtn = () => {
-      const toolbarItems = toolbarController.items.unreactive_get();
+    const getToolbarItems = () => toolbarController.items.unreactive_get();
 
-      expect(toolbarItems).toHaveLength(1);
-      expect(toolbarItems[0].name).toBe('columnChooserButton');
-
-      return toolbarItems[0];
-    };
-
-    expect(getColumnChooserBtn().visible).toBeTruthy();
+    expect(getToolbarItems()).toHaveLength(1);
+    expect(getToolbarItems()[0].name).toBe('columnChooserButton');
 
     optionsController.option('columnChooser.enabled', false);
-    expect(getColumnChooserBtn().visible).toBeFalsy();
+    expect(getToolbarItems()).toHaveLength(0);
 
     optionsController.option('columnChooser.enabled', true);
-    expect(getColumnChooserBtn().visible).toBeTruthy();
+    expect(getToolbarItems()).toHaveLength(1);
+    expect(getToolbarItems()[0].name).toBe('columnChooserButton');
   });
 
   it('updates the markup', async () => {

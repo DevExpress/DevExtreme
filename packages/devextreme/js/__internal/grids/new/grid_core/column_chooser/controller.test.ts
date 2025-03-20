@@ -3,6 +3,7 @@ import { describe, expect, it } from '@jest/globals';
 
 import { ColumnsController } from '../columns_controller';
 import { DataController } from '../data_controller';
+import { FilterController } from '../filtering';
 import type { Options } from '../options';
 import { OptionsControllerMock } from '../options_controller/options_controller.mock';
 import { ColumnChooserController } from './controller';
@@ -17,7 +18,8 @@ const createColumnChooserController = (options?: Options): {
       enabled: true,
     },
   });
-  const dataController = new DataController(optionsController);
+  const filterController = new FilterController(optionsController);
+  const dataController = new DataController(optionsController, filterController);
   const columnsController = new ColumnsController(optionsController, dataController);
 
   const columnChooserController = new ColumnChooserController(columnsController, optionsController);

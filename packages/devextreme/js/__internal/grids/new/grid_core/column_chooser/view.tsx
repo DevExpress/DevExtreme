@@ -49,25 +49,23 @@ export class ColumnChooserView extends View<ColumnChooserProps> {
     this.mode = this.options.oneWay('columnChooser.mode');
 
     this.toolbarController.addDefaultItem(
-      computed(
-        (enabled) => ({
-          name: 'columnChooserButton',
-          widget: 'dxButton',
-          options: {
-            icon: 'column-chooser',
-            onClick: () => { this.popupVisible.update(true); },
-            elementAttr: {
-              'aria-haspopup': 'dialog',
-              class: this.addWidgetPrefix(COLUMN_CHOOSER_BUTTON_CLASS),
-            },
-          } as ButtonProperties,
-          showText: 'inMenu',
-          location: 'after',
-          locateInMenu: 'auto',
-          visible: enabled,
-        } as PredefinedToolbarItem),
-        [this.options.oneWay('columnChooser.enabled')],
-      ),
+      {
+        name: 'columnChooserButton',
+        widget: 'dxButton',
+        options: {
+          icon: 'column-chooser',
+          onClick: () => { this.popupVisible.update(true); },
+          elementAttr: {
+            'aria-haspopup': 'dialog',
+            class: this.addWidgetPrefix(COLUMN_CHOOSER_BUTTON_CLASS),
+          },
+        } as ButtonProperties,
+        showText: 'inMenu',
+        location: 'after',
+        locateInMenu: 'auto',
+        visible: true,
+      } as PredefinedToolbarItem,
+      this.options.oneWay('columnChooser.enabled'),
     );
   }
 
