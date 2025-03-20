@@ -16,6 +16,7 @@
   $stepper-connector-margin-start,
 );
 @include step(
+  $stepper-step-min-size,
   $stepper-step-indicator-size,
   $stepper-step-indicator-size,
   $stepper-step-content-row-gap,
