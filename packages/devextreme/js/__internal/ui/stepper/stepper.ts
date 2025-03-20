@@ -112,26 +112,23 @@ class Stepper extends CollectionWidgetAsync<StepperProperties> {
 
     $indicatorElement.prependTo($container);
 
-    if (isDefined(title) || optional) {
-      const $stepLabelDiv = $('<div>').addClass(STEP_LABEL_CLASS);
+    const hasTitle = isDefined(title);
+    const hasLabel = hasTitle || optional;
 
-      if (isDefined(title)) {
-        const $stepTitleDiv = $('<div>').addClass(STEP_TITLE_CLASS);
+    if (hasLabel) {
+      const $stepLabel = $('<div>').addClass(STEP_LABEL_CLASS);
+      const $stepTitle = hasTitle ? $('<div>').addClass(STEP_TITLE_CLASS).text(title) : null;
+      const $stepOptionalMark = optional
+        ? $('<div>').addClass(STEP_OPTIONAL_MARK_CLASS).text(messageLocalization.format('dxStepper-optionalMark'))
+        : null;
 
-        $stepTitleDiv.text(title);
+      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+      $stepTitle && $stepLabel.prepend($stepTitle);
 
-        $stepTitleDiv.appendTo($stepLabelDiv);
-      }
+      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+      $stepOptionalMark && $stepTitle && $stepLabel.append($stepOptionalMark);
 
-      if (optional) {
-        const $stepOptionalMarkDiv = $('<div>').addClass(STEP_OPTIONAL_MARK_CLASS);
-
-        $stepOptionalMarkDiv.text(messageLocalization.format('dxStepper-optionalMark'));
-
-        $stepOptionalMarkDiv.appendTo($stepLabelDiv);
-      }
-
-      $stepLabelDiv.appendTo($container);
+      $stepLabel.appendTo($container);
     }
   }
 
