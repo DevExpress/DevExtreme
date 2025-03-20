@@ -11,7 +11,7 @@ import type { DraggingOptions } from './options';
 
 export const CLASSES = {
   headers: 'dx-cardview-headers',
-  content: 'dx-cardview-headers-content',
+  content: 'dx-cardview-headerpanel-content',
 };
 
 export interface HeaderPanelProps {

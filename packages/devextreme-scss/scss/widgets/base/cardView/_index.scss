@@ -7,4 +7,6 @@
   flex-direction: column;
   gap: $cardview-gap;
   padding: $cardview-padding;
+  background-color: $cardview-background-color;
+  border-radius: $cardview-border-radius;
 }
