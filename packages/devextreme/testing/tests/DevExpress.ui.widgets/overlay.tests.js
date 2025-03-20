@@ -3446,6 +3446,57 @@ testModule('focus policy', {
 
         assert.strictEqual(contentFocusHandler.callCount, 1, 'focus has been triggered once from keyboardMock');
     });
+
+    test('tab behavior should remain default when event.target is removed from DOM (T1248343)', function(assert) {
+        const overlay = new Overlay($('<div>').appendTo('#qunit-fixture'), {
+            visible: true,
+            shading: true,
+            contentTemplate: $('<div>')
+                .append('<input class="templateField">')
+                .append('<input class="anotherField">')
+                .append('<input class="thirdField">'),
+        });
+
+        const $content = $(overlay.$content());
+        const $templateField = $content.find('.templateField');
+        const $anotherField = $content.find('.anotherField');
+
+        $templateField.trigger('focus');
+
+        assert.strictEqual(getActiveElement(), $templateField.get(0), 'templatedField is focused');
+
+        $templateField.remove();
+
+        $anotherField.trigger('focus');
+
+        const tabEvent = $.Event('keydown', { key: 'Tab', shiftKey: false, target: $templateField.get(0) });
+
+        $(document).trigger(tabEvent);
+        assert.strictEqual(tabEvent.isDefaultPrevented(), false, 'event is not prevented');
+    });
+
+    test('tab event is prevented when removed target was outside overlay', function(assert) {
+        const overlay = new Overlay($('<div>').appendTo('#qunit-fixture'), {
+            visible: true,
+            shading: true,
+            contentTemplate: $('<div>')
+                .append('<input class="templateField">')
+        });
+
+        const $content = $(overlay.$content());
+        const $templateField = $content.find('.templateField');
+        const $outerField = $('<input class="outerField">').appendTo('#qunit-fixture');
+        $outerField.trigger('focus');
+        assert.strictEqual(getActiveElement(), $outerField.get(0), 'outerField is focused');
+
+        $outerField.remove();
+
+        const tabEventOutside = $.Event('keydown', { key: 'Tab', shiftKey: false, target: $outerField.get(0) });
+        $(document).trigger(tabEventOutside);
+
+        assert.strictEqual(tabEventOutside.isDefaultPrevented(), true, 'event is prevented when target removed outside overlay');
+        assert.strictEqual(getActiveElement(), $templateField.get(0), 'focus is returned to Popup');
+    });
 });
 
 testModule('preventScrollEvents', () => {

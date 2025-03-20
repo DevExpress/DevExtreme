@@ -13,28 +13,32 @@
 // adduse
 
 .dx-tabpanel-tabs-position-left {
-  .dx-tabs-wrapper {
-    border-inline-start: $generic-tabs-border;
-    border-inline-end: $generic-tabs-border;
-  }
+  > .dx-tabpanel-tabs {
+    .dx-tabs-wrapper {
+      border-inline-start: $generic-tabs-border;
+      border-inline-end: $generic-tabs-border;
+    }
 
-  .dx-tabs .dx-tabs-scrollable {
-    @include dx-tabs-border-mixin(
-      $generic-tabs-border-width solid,
-      none,
-      $generic-tabs-border-width solid,
-      none,
-    );
+    .dx-tabs-scrollable {
+      @include dx-tabs-border-mixin(
+        $generic-tabs-border-width solid,
+        none,
+        $generic-tabs-border-width solid,
+        none,
+      );
 
-    &::after {
-      left: 0;
-      right: $generic-tabs-border-width;
+      &::after {
+        left: 0;
+        right: $generic-tabs-border-width;
+      }
     }
   }
 
   &:not(.dx-empty-collection) {
-    .dx-multiview-wrapper {
-      border-inline-start: none;
+    > .dx-tabpanel-container {
+      > .dx-multiview-wrapper {
+        border-inline-start: none;
+      }
     }
   }
 }

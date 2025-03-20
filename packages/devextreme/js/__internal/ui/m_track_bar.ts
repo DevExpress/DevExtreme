@@ -108,7 +108,7 @@ class TrackBar<
     this._currentRatio = ratio;
   }
 
-  _rangeStylesConfig(): CSSProperties {
+  _rangeStylesConfig(): Record<string, unknown> {
     return { width: `${this._currentRatio * 100}%` };
   }
 

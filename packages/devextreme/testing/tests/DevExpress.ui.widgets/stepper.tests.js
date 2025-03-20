@@ -253,3 +253,31 @@ QUnit.module('Connector integration', moduleConfig, () => {
         assert.deepEqual(this.getConnector().option('orientation'), 'vertical', 'orientation value is passed');
     });
 });
+
+QUnit.module('Focus', moduleConfig, () => {
+    QUnit.test('focusedElement should be cleared after focusout, and the selected step should have focus class after focusing', function(assert) {
+        this.reinit({
+            items: [{}, {}, {}, {}],
+            selectedIndex: 1,
+            linear: false,
+            selectOnFocus: false,
+        });
+
+        const keyboard = keyboardMock(this.$element);
+
+        keyboard
+            .keyDown('right')
+            .keyDown('right');
+
+        assert.equal(this.getItems().eq(3).hasClass('dx-state-focused'), true, 'focused class is added');
+
+        this.$element.focusout();
+
+        assert.equal(this.getItems().eq(3).hasClass('dx-state-focused'), false, 'focused class is removed after focusout');
+        assert.equal(this.instance.option('focusedElement'), null, 'focusedElement is cleared after focusout');
+
+        this.$element.focus();
+
+        assert.equal(this.getItems().eq(1).hasClass('dx-state-focused'), true, 'focused class is applied to the selected element after focusing');
+    });
+});

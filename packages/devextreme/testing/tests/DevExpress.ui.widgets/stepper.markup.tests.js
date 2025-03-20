@@ -15,6 +15,8 @@ import {
 import {
     STEP_COMPLETED_CLASS,
     STEP_INVALID_CLASS,
+    STEP_VALID_ICON,
+    STEP_INVALID_ICON,
 } from '__internal/ui/stepper/stepper_item';
 
 const STEP_CONTENT_CLASS = 'dx-step-content';
@@ -292,4 +294,43 @@ QUnit.module('Step.isValid', moduleConfig, () => {
 
         assert.strictEqual(this.getItems().eq(0).hasClass(STEP_INVALID_CLASS), false, `${STEP_INVALID_CLASS} is removed`);
     });
+
+    [
+        { options: { isValid: true, icon: 'test', text: 'test' }, expectedIcon: STEP_VALID_ICON },
+        { options: { isValid: false, icon: 'test', text: 'test' }, expectedIcon: STEP_INVALID_ICON },
+        { options: { isValid: undefined, icon: 'test', text: 'test' }, expectedIcon: 'test' },
+    ].forEach(({ options, expectedIcon }) => {
+        QUnit.test(`Step indicator should contain '${expectedIcon}' icon, step options: ${JSON.stringify(options)}`, function(assert) {
+            this.reinit({
+                items: [options],
+            });
+
+            const $stepText = this.getStepByIndex(0).find(`.${STEP_CONTENT_CLASS}`).children().eq(0);
+
+            assert.strictEqual($stepText.children().length, 1);
+            assert.strictEqual($stepText.children().eq(0).hasClass(STEP_TEXT_CLASS), false);
+            assert.strictEqual($stepText.children().eq(0).hasClass(ICON_CLASS), true);
+            assert.strictEqual($stepText.children().eq(0).hasClass(`${ICON_CLASS}-${expectedIcon}`), true);
+        });
+
+        QUnit.test(`Step indicator should be updated to '${expectedIcon}' icon after update step.isValid option at runtime`, function(assert) {
+            this.reinit({
+                items: [{
+                    icon: 'test',
+                    text: 'Step 1',
+                    title: 'Step title',
+                }],
+            });
+
+            this.instance.option('items[0].isValid', options.isValid);
+
+            const $stepText = this.getStepByIndex(0).find(`.${STEP_CONTENT_CLASS}`).children().eq(0);
+
+            assert.strictEqual($stepText.children().length, 1);
+            assert.strictEqual($stepText.children().eq(0).hasClass(STEP_TEXT_CLASS), false);
+            assert.strictEqual($stepText.children().eq(0).hasClass(ICON_CLASS), true);
+            assert.strictEqual($stepText.children().eq(0).hasClass(`${ICON_CLASS}-${expectedIcon}`), true);
+        });
+    });
+
 });
