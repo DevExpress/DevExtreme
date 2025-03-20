@@ -1,5 +1,18 @@
 @use '../colors' as *;
 @use '../../base/cardView/variables' as *;
 @use '../../base/cardView/header_panel/variables' as *;
+@use '../../base/cardView/header_panel/item/variables' as *;
 @use '../../base/cardView/content_view/content/card/variables' as *;
+@use '../../base/cardView/content_view/content/card/header/variables' as *;
+@use '../../base/cardView/content_view/content/card/content/variables' as *;
 @use '../../base/cardView/content_view/content/variables' as *;
+
+$cardview-background-color: $typography-bg !default;
+
+$cardview-header-item-background-color: #F0F0F0 !default;
+$cardview-header-item-border-color: #E0E0E0 !default;
+$cardview-header-item-hovered-background-color: #EBEBEB !default;
+$cardview-header-item-hovered-border-color: #BDBDBD !default;
+
+$cardview-card-border-color: $base-border-color !default;
+$cardview-card-background-color: $base-bg !default;
