@@ -332,5 +332,61 @@ QUnit.module('Step.isValid', moduleConfig, () => {
             assert.strictEqual($stepText.children().eq(0).hasClass(`${ICON_CLASS}-${expectedIcon}`), true);
         });
     });
+});
 
+QUnit.module('Step.hint', moduleConfig, () => {
+    QUnit.test('Step should not have a title attribute if the hint is not defined', function(assert) {
+        this.reinit({
+            items: [{}, { hint: undefined }, { hint: null }]
+        });
+
+        const items = this.getItems();
+        assert.notOk(items.eq(0).attr('title'), 'Title is not set when hint is missing');
+        assert.notOk(items.eq(1).attr('title'), 'Title is not set when hint is undefined');
+        assert.notOk(items.eq(2).attr('title'), 'Title is not set when hint is null');
+    });
+
+    QUnit.test('Step should have a title attribute with the correct value when hint is defined', function(assert) {
+        this.reinit({
+            items: [{ hint: '' }, { hint: 'hint text' }, { hint: 0 }, { hint: false }, { hint: NaN }]
+        });
+
+        const items = this.getItems();
+        assert.strictEqual(items.eq(0).attr('title'), '', 'Title is correctly set for an empty string hint');
+        assert.strictEqual(items.eq(1).attr('title'), 'hint text', 'Title is correctly set for a text hint');
+        assert.strictEqual(items.eq(2).attr('title'), '0', 'Title is correctly set for a numeric hint');
+        assert.strictEqual(items.eq(3).attr('title'), undefined, 'Title is not added when hint is false');
+        assert.strictEqual(items.eq(4).attr('title'), 'NaN', 'Title is not added when hint is NaN');
+    });
+
+    QUnit.test('Step title should update when the hint option value changes at runtime', function(assert) {
+        this.reinit({
+            items: [{ hint: 'Hint value' }]
+        });
+
+        const items = this.getItems();
+        assert.strictEqual(items.eq(0).attr('title'), 'Hint value', 'Initial title is set correctly');
+
+        this.instance.option('items[0].hint', 'New hint value');
+
+        assert.strictEqual(items.eq(0).attr('title'), 'New hint value', 'Title is updated when hint changes');
+    });
+
+    QUnit.test('Step title should be removed when hint is set to undefined or null', function(assert) {
+        this.reinit({
+            items: [{ hint: 'Initial hint' }]
+        });
+
+        const items = this.getItems();
+        assert.strictEqual(items.eq(0).attr('title'), 'Initial hint', 'Initial title is set correctly');
+
+        this.instance.option('items[0].hint', undefined);
+        assert.notOk(items.eq(0).attr('title'), 'Title is removed when hint is set to undefined');
+
+        this.instance.option('items[0].hint', 'New hint');
+        assert.strictEqual(items.eq(0).attr('title'), 'New hint', 'Title is set correctly after hint update');
+
+        this.instance.option('items[0].hint', null);
+        assert.notOk(items.eq(0).attr('title'), 'Title is removed when hint is set to null');
+    });
 });
