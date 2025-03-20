@@ -20,6 +20,7 @@ const INPUT_CLASS = 'dx-texteditor-input';
 const DIALOG_CLASS = 'dx-formdialog';
 const DIALOG_FORM_CLASS = 'dx-formdialog-form';
 const BUTTON_CLASS = 'dx-button';
+const SUGGESTION_LIST_CLASS = 'dx-suggestion-list';
 const LIST_ITEM_CLASS = 'dx-list-item';
 
 const BLACK_PIXEL = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQYGWNgYmL6DwABFgEGpP/tHAAAAABJRU5ErkJggg==';
@@ -1003,7 +1004,6 @@ export default function() {
 
         test('Click on variable toolbar format button before popup is hidden after variable select should not add a undefined variable (T1278577)', function(assert) {
             fx.off = false;
-            const done = assert.async();
             const expectedValue = '<p><span class="dx-variable" data-var-start-esc-char="%" data-var-end-esc-char="%" data-var-value="test"><span contenteditable="false">%test%</span></span></p>';
 
             const editor = $('#htmlEditor').dxHtmlEditor({
@@ -1018,7 +1018,7 @@ export default function() {
                 .find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`)
                 .trigger('dxclick');
 
-            $('.dx-suggestion-list .dx-list-item').trigger('dxclick');
+            $(`.${SUGGESTION_LIST_CLASS} .${LIST_ITEM_CLASS}`).trigger('dxclick');
 
             $('#htmlEditor')
                 .find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`)
@@ -1029,7 +1029,6 @@ export default function() {
             const value = editor.option('value');
 
             assert.strictEqual(prepareEmbedValue(value), expectedValue);
-            done();
         });
     });
 }
