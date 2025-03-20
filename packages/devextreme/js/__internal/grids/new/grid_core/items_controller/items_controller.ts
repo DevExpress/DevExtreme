@@ -2,7 +2,7 @@ import formatHelper from '@js/format_helper';
 import { computed } from '@ts/core/reactive/index';
 import { ColumnsController } from '@ts/grids/new/grid_core/columns_controller/columns_controller';
 import { DataController } from '@ts/grids/new/grid_core/data_controller/data_controller';
-import { SearchHighlightTextProcessor } from '@ts/grids/new/grid_core/search/search_highlight_text_processor';
+import { SearchController } from '@ts/grids/new/grid_core/search';
 
 import type { Column, DataRow } from '../columns_controller/types';
 import type { DataObject } from '../data_controller/types';
@@ -11,7 +11,7 @@ export class ItemsController {
   public static dependencies = [
     DataController,
     ColumnsController,
-    SearchHighlightTextProcessor,
+    SearchController,
   ] as const;
 
   public readonly items = computed(
@@ -32,14 +32,14 @@ export class ItemsController {
     [
       this.dataController.items,
       this.columnsController.visibleColumns,
-      this.searchHighlightTextProcessor.highlightTextOptions$,
+      this.searchController.highlightTextOptions,
     ],
   );
 
   constructor(
     protected readonly dataController: DataController,
     protected readonly columnsController: ColumnsController,
-    private readonly searchHighlightTextProcessor: SearchHighlightTextProcessor,
+    private readonly searchController: SearchController,
   ) {}
 
   public createDataRow(
@@ -59,7 +59,7 @@ export class ItemsController {
         const text = column.customizeText
           ? column.customizeText({ value: displayValue, valueText: formattedText })
           : formattedText;
-        const highlightedText = this.searchHighlightTextProcessor
+        const highlightedText = this.searchController
           .getHighlightedText(text);
 
         return {

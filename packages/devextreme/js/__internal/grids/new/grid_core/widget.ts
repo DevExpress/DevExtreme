@@ -7,7 +7,7 @@ import { extend } from '@js/core/utils/extend';
 import Widget from '@js/ui/widget/ui.widget';
 import { DIContext } from '@ts/core/di/index';
 import type { Subscription } from '@ts/core/reactive/index';
-import { SearchHighlightTextProcessor } from '@ts/grids/new/grid_core/search/search_highlight_text_processor';
+import { SearchView } from '@ts/grids/new/grid_core/search/view';
 import { render } from 'inferno';
 
 import { ColumnsChooserView } from './columns_chooser/view';
@@ -59,6 +59,8 @@ export class GridCoreNewBase<
 
   private searchController!: SearchController;
 
+  private searchView!: SearchView;
+
   public filterController!: FilterControllerModule.FilterController;
 
   private filterPanelView!: FilterControllerModule.FilterPanelView;
@@ -76,7 +78,7 @@ export class GridCoreNewBase<
     this.diContext.register(PagerView);
     this.diContext.register(ColumnsChooserView);
     this.diContext.register(SearchController);
-    this.diContext.register(SearchHighlightTextProcessor);
+    this.diContext.register(SearchView);
     this.diContext.register(FilterControllerModule.FilterController);
     this.diContext.register(FilterControllerModule.FilterPanelView);
     this.diContext.register(FilterPanelView);
@@ -103,6 +105,7 @@ export class GridCoreNewBase<
     // this.editingController = this.diContext.get(EditingController);
     this.pagerView = this.diContext.get(PagerView);
     this.searchController = this.diContext.get(SearchController);
+    this.searchView = this.diContext.get(SearchView);
     this.errorController = this.diContext.get(ErrorController);
     this.filterController = this.diContext.get(FilterControllerModule.FilterController);
     this.filterPanelView = this.diContext.get(FilterControllerModule.FilterPanelView);

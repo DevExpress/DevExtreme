@@ -7,7 +7,7 @@ import { OptionsControllerMock } from '@ts/grids/new/card_view/options_controlle
 import type { Options } from '@ts/grids/new/grid_core/options';
 import { splitHighlightedText } from '@ts/grids/new/grid_core/search/utils';
 
-import { SearchHighlightTextProcessor } from './search_highlight_text_processor';
+import { SearchController } from './controller';
 
 jest.mock('@ts/grids/new/grid_core/search/utils', () => ({
   splitHighlightedText: jest.fn(),
@@ -15,19 +15,19 @@ jest.mock('@ts/grids/new/grid_core/search/utils', () => ({
 
 const setup = (config: Options = {}) => {
   const options = new OptionsControllerMock(config);
-  const processor = new SearchHighlightTextProcessor(options);
+  const controller = new SearchController(options);
 
-  return { options, processor };
+  return { options, controller };
 };
 
 describe('Search', () => {
-  describe('SearchHighlightTextProcessor', () => {
+  describe('Controller', () => {
     afterEach(() => {
       jest.clearAllMocks();
     });
 
     it('should have highlightTextOptions$ from widget options', () => {
-      const { processor } = setup({
+      const { controller } = setup({
         searchPanel: {
           highlightSearchText: true,
           highlightCaseSensitive: false,
@@ -35,7 +35,7 @@ describe('Search', () => {
         },
       });
 
-      const stateSlice = processor.highlightTextOptions$.unreactive_get();
+      const stateSlice = controller.highlightTextOptions.unreactive_get();
 
       expect(stateSlice).toStrictEqual({
         enabled: true,
@@ -45,7 +45,7 @@ describe('Search', () => {
     });
 
     it('getHighlightText should call util function', () => {
-      const { processor } = setup({
+      const { controller } = setup({
         searchPanel: {
           highlightSearchText: true,
           highlightCaseSensitive: false,
@@ -53,7 +53,7 @@ describe('Search', () => {
         },
       });
 
-      processor.getHighlightedText('SOURCE_TEXT');
+      controller.getHighlightedText('SOURCE_TEXT');
 
       expect(splitHighlightedText).toHaveBeenCalledTimes(1);
       expect(splitHighlightedText).toHaveBeenCalledWith('SOURCE_TEXT', {

@@ -1,6 +1,6 @@
 /* eslint-disable spellcheck/spell-checker */
 import { describe, expect, it } from '@jest/globals';
-import { SearchHighlightTextProcessor } from '@ts/grids/new/grid_core/search/search_highlight_text_processor';
+import { SearchController } from '@ts/grids/new/grid_core/search';
 
 import { DataController } from '../data_controller';
 import { FilterController } from '../filtering';
@@ -12,13 +12,13 @@ import { ColumnsController } from './columns_controller';
 const setup = (config: Options) => {
   const options = new OptionsControllerMock(config);
   const filterController = new FilterController(options);
-  const searchHighlightTextProcessor = new SearchHighlightTextProcessor(options);
+  const searchController = new SearchController(options);
   const dataController = new DataController(options, filterController);
   const columnsController = new ColumnsController(options, dataController);
   const itemsController = new ItemsController(
     dataController,
     columnsController,
-    searchHighlightTextProcessor,
+    searchController,
   );
 
   return {
