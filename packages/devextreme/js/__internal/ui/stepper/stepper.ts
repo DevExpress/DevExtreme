@@ -126,7 +126,7 @@ class Stepper extends CollectionWidgetAsync<StepperProperties> {
       $stepTitle && $stepLabel.prepend($stepTitle);
 
       // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-      $stepOptionalMark && $stepTitle && $stepLabel.append($stepOptionalMark);
+      $stepOptionalMark && $stepLabel.append($stepOptionalMark);
 
       $stepLabel.appendTo($container);
     }
