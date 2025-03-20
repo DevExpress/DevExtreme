@@ -688,7 +688,7 @@ if((new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezoneOffset) {
                     const selectedCell = scheduler.workSpace.getCell(cell);
                     const selectedCells = scheduler.workSpace.getSelectedCells();
 
-                    assert.equal(selectedCells.length, 1, 'selected exacly one cell');
+                    assert.equal(selectedCells.length, 1, 'selected exactly one cell');
                     assert.ok(selectedCell.hasClass(SELECTED_CELL_CLASS), 'the cell is selected');
                     assert.ok(selectedCell.hasClass(FOCUSED_CELL_CLASS), 'the cell is focused');
                 });

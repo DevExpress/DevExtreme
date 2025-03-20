@@ -679,8 +679,8 @@ export class SchedulerTestWrapper extends ElementWrapper {
                 const firstCell = this.workSpace.getCell(firstCellIndex);
                 const secondCell = this.workSpace.getCell(lastCellIndex);
 
-                const { x: firstCellLeft, y: firstCellTop } = firstCell.offset();
-                const { x: secondCellLeft, y: secondCellTop } = secondCell.offset();
+                const { left: firstCellLeft, top: firstCellTop } = firstCell.offset();
+                const { left: secondCellLeft, top: secondCellTop } = secondCell.offset();
 
                 pointerMock(firstCell)
                     .start()

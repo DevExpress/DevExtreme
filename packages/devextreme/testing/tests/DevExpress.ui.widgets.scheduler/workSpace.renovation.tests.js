@@ -923,6 +923,8 @@ module('Renovated Render', {
             allDay: false,
             startDate: new Date(2020, 6, 29, 0, 0),
             endDate: new Date(2020, 6, 29, 0, 30),
+            startDateUTC: undefined,
+            endDateUTC: undefined,
         }, 'onSelectedCellsClick has been called with correct parameters');
     });
 
