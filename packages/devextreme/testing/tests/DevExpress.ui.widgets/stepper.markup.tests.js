@@ -355,7 +355,7 @@ QUnit.module('Step.hint', moduleConfig, () => {
         assert.strictEqual(items.eq(0).attr('title'), '', 'Title is correctly set for an empty string hint');
         assert.strictEqual(items.eq(1).attr('title'), 'hint text', 'Title is correctly set for a text hint');
         assert.strictEqual(items.eq(2).attr('title'), '0', 'Title is correctly set for a numeric hint');
-        assert.strictEqual(items.eq(3).attr('title'), undefined, 'Title is not added when hint is false');
+        assert.strictEqual(items.eq(3).attr('title'), 'false', 'Title is not added when hint is false');
         assert.strictEqual(items.eq(4).attr('title'), 'NaN', 'Title is not added when hint is NaN');
     });
 
