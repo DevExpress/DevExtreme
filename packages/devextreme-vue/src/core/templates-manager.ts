@@ -9,14 +9,20 @@ import {
 import { DX_REMOVE_EVENT, DX_TEMPLATE_WRAPPER_CLASS } from './constants';
 import { allKeysAreEqual } from './helpers';
 
+interface SlotWithId extends Slot {
+  templateId?: string;
+}
+
 class TemplatesManager {
   private readonly _component: ComponentPublicInstance;
 
-  private _slots: Record<string, Slot> = {};
+  private _slots: Record<string, SlotWithId> = {};
 
   private _templates: Record<string, object> = {};
 
   private _isDirty = false;
+
+  private _templateCache = new Map();
 
   constructor(component: ComponentPublicInstance) {
     this._component = component;
@@ -58,6 +64,17 @@ class TemplatesManager {
   private createDxTemplate(name: string) {
     return {
       render: (data: any) => {
+        // const cacheKey = this._slots[name].templateId;
+        const cacheKey = JSON.stringify(data);
+
+        if (this._templateCache.has(cacheKey)) {
+          const cached = this._templateCache.get(cacheKey);
+          if (data.onRendered) {
+            data.onRendered();
+          }
+          return cached;
+        }
+
         const rendered = ((onRendered, counter = 0) => () => {
           if (counter === 1 && onRendered) {
             onRendered();
@@ -97,16 +114,22 @@ class TemplatesManager {
             () => {
               mountedTemplate.$.appContext.app.unmount.bind(mountedTemplate)();
               removalListener.remove();
+              this._templateCache.delete(cacheKey);
             },
           );
         } else {
           one(
             element,
             DX_REMOVE_EVENT,
-            mountedTemplate.$.appContext.app.unmount.bind(mountedTemplate),
+            () => {
+              mountedTemplate.$.appContext.app.unmount.bind(mountedTemplate)();
+              this._templateCache.delete(cacheKey);
+            },
           );
         }
+
         rendered();
+        this._templateCache.set(cacheKey, element);
         return element;
       },
     };

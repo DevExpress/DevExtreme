@@ -1,4 +1,5 @@
 <template>
+  <scheduler-custom-template-example />
   <accessing-instance-example />
   <br/>
   <button-example />
@@ -50,6 +51,7 @@ import TabPanelExample from "./tab-panel-example";
 import TextBoxExample from "./text-box-example";
 import ValidatorExample from "./validation-example";
 import CheckBoxExample from "./check-box-example";
+import SchedulerCustomTemplateExample from "./scheduler-custom-template-example";
 
 export default {
   components: {
@@ -68,7 +70,8 @@ export default {
     TabPanelExample,
     TextBoxExample,
     ValidatorExample,
-    CheckBoxExample
+    CheckBoxExample,
+    SchedulerCustomTemplateExample
   }
 };
 </script>

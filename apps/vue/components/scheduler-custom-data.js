@@ -85,6 +85,46 @@ export const theatreData = [
   {
     text: "Cinema Hall 6",
     id: 5,
+  },
+  {
+    text: "Cinema Hall 7",
+    id: 6,
+  },
+  {
+    text: "Cinema Hall 8",
+    id: 7,
+  },
+  {
+    text: "Cinema Hall 9",
+    id: 8,
+  },
+  {
+    text: "Cinema Hall 10",
+    id: 9,
+  },
+  {
+    text: "Cinema Hall 11",
+    id: 10,
+  },
+  {
+    text: "Cinema Hall 12",
+    id: 11,
+  },
+  {
+    text: "Cinema Hall 13",
+    id: 12,
+  },
+  {
+    text: "Cinema Hall 14",
+    id: 13,
+  },
+  {
+    text: "Cinema Hall 15",
+    id: 14,
+  },
+  {
+    text: "Cinema Hall 16",
+    id: 15,
   }
 ];
 
