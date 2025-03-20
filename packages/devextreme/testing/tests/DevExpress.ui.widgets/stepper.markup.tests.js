@@ -256,6 +256,48 @@ QUnit.module('Stepper markup', moduleConfig, () => {
         assert.strictEqual($stepLabel.children().eq(0).hasClass(STEP_TITLE_CLASS), true);
         assert.strictEqual($stepLabel.children().eq(1).hasClass(STEP_OPTIONAL_MARK_CLASS), true);
     });
+
+    QUnit.test(`Step content should update ${STEP_TITLE_CLASS} class after change title option at runtime`, function(assert) {
+        this.reinit({
+            items: [{}],
+        });
+
+        const $stepContentBeforeChange = this.getStepByIndex(0).find(`.${STEP_CONTENT_CLASS}`);
+
+        assert.strictEqual($stepContentBeforeChange.children().length, 1);
+
+        this.instance.option('items[0].title', 'Test title');
+
+        const $stepContent = this.getStepByIndex(0).find(`.${STEP_CONTENT_CLASS}`);
+        const $stepLabel = $stepContent.children().eq(1);
+
+        assert.strictEqual($stepContent.children().length, 2);
+        assert.strictEqual($stepLabel.hasClass(STEP_LABEL_CLASS), true);
+        assert.strictEqual($stepLabel.children().length, 1);
+        assert.strictEqual($stepLabel.children().eq(0).hasClass(STEP_TITLE_CLASS), true);
+    });
+
+    QUnit.test(`Step content should update ${STEP_OPTIONAL_MARK_CLASS} class after change optional option at runtime`, function(assert) {
+        this.reinit({
+            items: [{
+                title: 'Test',
+            }],
+        });
+
+        const $stepContentBeforeChange = this.getStepByIndex(0).find(`.${STEP_CONTENT_CLASS}`);
+        const $stepLabelBeforeChange = $stepContentBeforeChange.children().eq(1);
+
+        assert.strictEqual($stepContentBeforeChange.children().length, 2);
+        assert.strictEqual($stepLabelBeforeChange.hasClass(STEP_LABEL_CLASS), true);
+        assert.strictEqual($stepLabelBeforeChange.children().length, 1);
+
+        this.instance.option('items[0].optional', true);
+
+        const $stepLabel = this.getStepByIndex(0).find(`.${STEP_CONTENT_CLASS}`).children().eq(1);
+
+        assert.strictEqual($stepLabel.children().length, 2);
+        assert.strictEqual($stepLabel.children().eq(1).hasClass(STEP_OPTIONAL_MARK_CLASS), true);
+    });
 });
 
 QUnit.module('Render', moduleConfig, () => {
