@@ -10,6 +10,7 @@ $stepper-step-min-size: null !default;
 $stepper-step-indicator-size: null !default;
 $stepper-step-content-row-gap: null !default;
 $stepper-step-content-column-gap: null !default;
+$stepper-step-optional-mark-font-size: 12px !default;
 
 @if $size == "default" {
   $stepper-margin: 12px !default;

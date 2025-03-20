@@ -11,7 +11,7 @@
   }
 
   &.dx-step-selected {
-    .dx-step-title {
+    .dx-step-label {
       font-weight: 600;
     }
   }
@@ -47,7 +47,12 @@
   }
 }
 
-.dx-step-title {
+.dx-step-label {
+  width: 100%;
+}
+
+.dx-step-title,
+.dx-step-optional-mark {
   width: 100%;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -59,13 +64,16 @@
   .dx-step {
     display: flex;
     align-items: center;
+    width: 100%;
   }
 
   .dx-step-content {
     flex-direction: row;
+    width: 100%;
   }
 
-  .dx-step-title {
+  .dx-step-title,
+  .dx-step-optional-mark {
     text-align: start;
   }
 }

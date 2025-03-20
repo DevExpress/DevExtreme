@@ -796,6 +796,8 @@
         "dxMultiView-itemAriaLabel": "{0} of {1}",
 
         "dxSplitter-resizeHandleAriaLabel": "Split bar",
-        "dxSplitter-resizeHandleAriaRoleDescription": "Separator"
+        "dxSplitter-resizeHandleAriaRoleDescription": "Separator",
+
+        "dxStepper-optionalMark": "(Optional)"
     }
 }

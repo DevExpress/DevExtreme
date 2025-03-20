@@ -1,4 +1,5 @@
 import type { Orientation, SingleOrNone } from '@js/common';
+import messageLocalization from '@js/common/core/localization/message';
 import registerComponent from '@js/core/component_registrator';
 import type { DxElement } from '@js/core/element';
 import $, { type dxElementWrapper } from '@js/core/renderer';
@@ -31,7 +32,9 @@ export const STEPPER_HORIZONTAL_ORIENTATION_CLASS = 'dx-stepper-horizontal';
 export const STEPPER_VERTICAL_ORIENTATION_CLASS = 'dx-stepper-vertical';
 export const STEP_INDICATOR_CLASS = 'dx-step-indicator';
 export const STEP_TEXT_CLASS = 'dx-step-text';
+export const STEP_LABEL_CLASS = 'dx-step-label';
 export const STEP_TITLE_CLASS = 'dx-step-title';
+export const STEP_OPTIONAL_MARK_CLASS = 'dx-step-optional-mark';
 
 const PERCENT_UNIT = '%';
 
@@ -98,7 +101,7 @@ class Stepper extends CollectionWidgetAsync<StepperProperties> {
   }
 
   _prepareDefaultItemTemplate(data: Item, $container: dxElementWrapper): void {
-    const { text, title } = data;
+    const { text, title, optional } = data;
 
     const $indicatorElement = $('<div>').addClass(STEP_INDICATOR_CLASS);
 
@@ -109,12 +112,26 @@ class Stepper extends CollectionWidgetAsync<StepperProperties> {
 
     $indicatorElement.prependTo($container);
 
-    if (isDefined(title)) {
-      const $stepTitleDiv = $('<div>').addClass(STEP_TITLE_CLASS);
+    if (isDefined(title) || optional) {
+      const $stepLabelDiv = $('<div>').addClass(STEP_LABEL_CLASS);
 
-      $stepTitleDiv.text(title);
+      if (isDefined(title)) {
+        const $stepTitleDiv = $('<div>').addClass(STEP_TITLE_CLASS);
 
-      $stepTitleDiv.appendTo($container);
+        $stepTitleDiv.text(title);
+
+        $stepTitleDiv.appendTo($stepLabelDiv);
+      }
+
+      if (optional) {
+        const $stepOptionalMarkDiv = $('<div>').addClass(STEP_OPTIONAL_MARK_CLASS);
+
+        $stepOptionalMarkDiv.text(messageLocalization.format('dxStepper-optionalMark'));
+
+        $stepOptionalMarkDiv.appendTo($stepLabelDiv);
+      }
+
+      $stepLabelDiv.appendTo($container);
     }
   }
 
@@ -127,7 +144,7 @@ class Stepper extends CollectionWidgetAsync<StepperProperties> {
         data: Item,
       ) => {
         this._prepareDefaultItemTemplate(data, $container);
-      }, ['text', 'icon', 'title', 'isValid'], this.option('integrationOptions.watchMethod')),
+      }, ['text', 'icon', 'title', 'isValid', 'optional'], this.option('integrationOptions.watchMethod')),
     });
   }
 

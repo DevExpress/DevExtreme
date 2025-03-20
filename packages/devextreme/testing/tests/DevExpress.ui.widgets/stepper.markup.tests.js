@@ -10,7 +10,9 @@ import {
     STEPPER_HORIZONTAL_ORIENTATION_CLASS,
     STEP_INDICATOR_CLASS,
     STEP_TEXT_CLASS,
+    STEP_LABEL_CLASS,
     STEP_TITLE_CLASS,
+    STEP_OPTIONAL_MARK_CLASS,
 } from '__internal/ui/stepper/stepper';
 import {
     STEP_COMPLETED_CLASS,
@@ -213,9 +215,46 @@ QUnit.module('Stepper markup', moduleConfig, () => {
         });
 
         const $stepContent = this.getStepByIndex(0).find(`.${STEP_CONTENT_CLASS}`);
+        const $stepLabel = $stepContent.children().eq(1);
 
         assert.strictEqual($stepContent.children().length, 2);
-        assert.strictEqual($stepContent.children().eq(1).hasClass(STEP_TITLE_CLASS), true);
+        assert.strictEqual($stepLabel.hasClass(STEP_LABEL_CLASS), true);
+        assert.strictEqual($stepLabel.children().length, 1);
+        assert.strictEqual($stepLabel.children().eq(0).hasClass(STEP_TITLE_CLASS), true);
+    });
+
+    QUnit.test(`Step content should contain step optional mark with ${STEP_OPTIONAL_MARK_CLASS} class if optional=true`, function(assert) {
+        this.reinit({
+            items: [{
+                optional: true,
+            }],
+        });
+
+        const $stepContent = this.getStepByIndex(0).find(`.${STEP_CONTENT_CLASS}`);
+        const $stepLabel = $stepContent.children().eq(1);
+
+        assert.strictEqual($stepContent.children().length, 2);
+        assert.strictEqual($stepLabel.hasClass(STEP_LABEL_CLASS), true);
+        assert.strictEqual($stepLabel.children().length, 1);
+        assert.strictEqual($stepLabel.children().eq(0).hasClass(STEP_OPTIONAL_MARK_CLASS), true);
+    });
+
+    QUnit.test('Step content should contain step title and optional mark if both set', function(assert) {
+        this.reinit({
+            items: [{
+                title: 'test',
+                optional: true,
+            }],
+        });
+
+        const $stepContent = this.getStepByIndex(0).find(`.${STEP_CONTENT_CLASS}`);
+        const $stepLabel = $stepContent.children().eq(1);
+
+        assert.strictEqual($stepContent.children().length, 2);
+        assert.strictEqual($stepLabel.hasClass(STEP_LABEL_CLASS), true);
+        assert.strictEqual($stepLabel.children().length, 2);
+        assert.strictEqual($stepLabel.children().eq(0).hasClass(STEP_TITLE_CLASS), true);
+        assert.strictEqual($stepLabel.children().eq(1).hasClass(STEP_OPTIONAL_MARK_CLASS), true);
     });
 });
 
