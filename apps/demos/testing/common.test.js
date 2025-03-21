@@ -14,6 +14,7 @@ import {
   changeTheme,
   waitForAngularLoading,
   shouldSkipDemo,
+  FRAMEWORKS,
 } from '../utils/visual-tests/matrix-test-helper';
 import {
   getThemePostfix,
@@ -313,7 +314,7 @@ const SKIPPED_TESTS = {
   },
 };
 
-['jQuery', 'React', 'Vue', 'Angular'].forEach((approach) => {
+FRAMEWORKS.forEach((approach) => {
   if (!shouldRunFramework(approach)) { return; }
   fixture(approach)
     .beforeEach(async (t) => {

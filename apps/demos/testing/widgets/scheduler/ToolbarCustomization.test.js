@@ -14,7 +14,7 @@ fixture('Scheduler.ToolbarCustomization')
     ctx.initialWindowSize = SCREEN_SIZES.wide;
   });
 
-runManualTest('Scheduler', 'ToolbarCustomization', ['jQuery'], (test) => {
+runManualTest('Scheduler', 'ToolbarCustomization', (test) => {
   test('ToolbarCustomization', async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
     const scheduler = $('#scheduler');
