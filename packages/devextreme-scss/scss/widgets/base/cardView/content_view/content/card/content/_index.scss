@@ -29,3 +29,32 @@
 .dx-cardview-field-name {
   font-weight: bold;
 }
+
+.dx-cardview-field-value {
+  &--text-align-right {
+    text-align: right;
+  }
+
+  &--text-align-left {
+    text-align: left;
+  }
+
+  &--text-align-center {
+    text-align: center;
+  }
+
+  &--white-space-normal {
+    white-space: normal;
+  }
+
+  &--white-space-nowrap {
+    white-space: nowrap;
+  }
+
+  &__text-part {
+    &--highlighted {
+      color: $cardview-card-content-field-value-highlight-color;
+      background: $cardview-card-content-field-value-highlight-background;
+    }
+  }
+}

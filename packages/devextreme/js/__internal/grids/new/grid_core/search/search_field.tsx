@@ -14,7 +14,7 @@ export class SearchField extends Component<SearchFieldProps> {
   public render(): InfernoNode {
     return (
       <input
-        value={this.props.value}
+        defaultValue={this.props.value}
         onChange={this.onChange.bind(this)}
       />
     );
