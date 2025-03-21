@@ -406,6 +406,7 @@ class Overlay<
       const tabbableElements = overlayStack[i]._findTabbableBounds();
 
       if (tabbableElements.first || tabbableElements.last) {
+        // @ts-ignore
         return overlayStack[i] === this;
       }
     }

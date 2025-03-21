@@ -38,8 +38,7 @@ type AccessibleOptions = Pick<Properties,
   "hoverStateEnabled" |
   "items" |
   "itemTemplate" |
-  "keyExpr" |
-  "noDataText" |
+  "linear" |
   "onDisposing" |
   "onInitialized" |
   "onItemClick" |
@@ -52,7 +51,6 @@ type AccessibleOptions = Pick<Properties,
   "rtlEnabled" |
   "selectedIndex" |
   "selectedItem" |
-  "selectedItemKeys" |
   "selectOnFocus" |
   "tabIndex" |
   "visible" |
@@ -76,8 +74,7 @@ const componentConfig = {
     hoverStateEnabled: Boolean,
     items: Array as PropType<Array<dxStepperItem>>,
     itemTemplate: {},
-    keyExpr: [Function, String] as PropType<((() => void)) | string>,
-    noDataText: String,
+    linear: Boolean,
     onDisposing: Function as PropType<((e: DisposingEvent) => void)>,
     onInitialized: Function as PropType<((e: InitializedEvent) => void)>,
     onItemClick: Function as PropType<((e: ItemClickEvent) => void)>,
@@ -90,7 +87,6 @@ const componentConfig = {
     rtlEnabled: Boolean,
     selectedIndex: Number,
     selectedItem: {},
-    selectedItemKeys: Array as PropType<Array<any>>,
     selectOnFocus: Boolean,
     tabIndex: Number,
     visible: Boolean,
@@ -110,8 +106,7 @@ const componentConfig = {
     "update:hoverStateEnabled": null,
     "update:items": null,
     "update:itemTemplate": null,
-    "update:keyExpr": null,
-    "update:noDataText": null,
+    "update:linear": null,
     "update:onDisposing": null,
     "update:onInitialized": null,
     "update:onItemClick": null,
@@ -124,7 +119,6 @@ const componentConfig = {
     "update:rtlEnabled": null,
     "update:selectedIndex": null,
     "update:selectedItem": null,
-    "update:selectedItemKeys": null,
     "update:selectOnFocus": null,
     "update:tabIndex": null,
     "update:visible": null,
@@ -154,13 +148,23 @@ const DxItemConfig = {
     "update:isActive": null,
     "update:hoveredElement": null,
     "update:disabled": null,
+    "update:hint": null,
+    "update:icon": null,
+    "update:isValid": null,
+    "update:optional": null,
     "update:template": null,
     "update:text": null,
+    "update:title": null,
   },
   props: {
     disabled: Boolean,
+    hint: String,
+    icon: String,
+    isValid: Boolean,
+    optional: Boolean,
     template: {},
-    text: String
+    text: String,
+    title: String
   }
 };
 

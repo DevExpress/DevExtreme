@@ -2356,8 +2356,8 @@ class Scheduler extends Widget<any> {
     );
 
     appointmentAdapter.allDay = cellData.allDay;
-    appointmentAdapter.startDate = this.timeZoneCalculator.createDate(cellData.startDate, { path: 'fromGrid' });
-    appointmentAdapter.endDate = this.timeZoneCalculator.createDate(cellData.endDate, { path: 'fromGrid' });
+    appointmentAdapter.startDate = cellData.startDateUTC;
+    appointmentAdapter.endDate = cellData.endDateUTC;
 
     const resultAppointment = extend(appointmentAdapter.source(), cellGroups);
     this.showAppointmentPopup(resultAppointment, true);

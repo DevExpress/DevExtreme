@@ -7,13 +7,21 @@
 
 // adduse
 
-@include progressbar(
+@include stepper(
+  $stepper-margin,
+);
+@include connector(
   $stepper-connector-bg,
-  $stepper-connector-value-bg
+  $stepper-connector-value-bg,
+  $stepper-connector-margin-start,
 );
 @include step(
-  $stepper-step-size,
-  $stepper-step-size
+  $stepper-step-min-size,
+  $stepper-step-indicator-size,
+  $stepper-step-indicator-size,
+  $stepper-step-content-row-gap,
+  $stepper-step-content-column-gap,
+  $stepper-step-optional-mark-font-size,
 );
 @include step-states(
   $stepper-step-bg,

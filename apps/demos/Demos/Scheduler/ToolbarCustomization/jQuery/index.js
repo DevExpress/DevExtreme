@@ -35,10 +35,25 @@ $(() => {
             icon: 'plus',
             text: 'New Event',
             onClick() {
-              scheduler.showAppointmentPopup({
-                startDate: new Date().setUTCHours(17, 0, 0, 0),
-                endDate: new Date().setUTCHours(17, 30, 0, 0),
-              }, true);
+              const selected = scheduler.option('selectedCellData');
+
+              if (selected.length) {
+                scheduler.showAppointmentPopup({
+                  ...selected[0].groups,
+                  allDay: selected[0].allDay,
+                  startDate: new Date(selected[0].startDateUTC),
+                  endDate: new Date(selected.at(-1).endDateUTC),
+                }, true);
+              } else {
+                const cellDuration = scheduler.option('cellDuration') * 60 * 1000; // ms
+                const currentTime = new Date().getTime();
+                const roundTime = Math.round(currentTime / cellDuration) * cellDuration;
+
+                scheduler.showAppointmentPopup({
+                  startDate: new Date(roundTime),
+                  endDate: new Date(roundTime + cellDuration),
+                }, true);
+              }
             },
           },
         },
@@ -58,12 +73,11 @@ $(() => {
             },
             width: 200,
             onValueChanged({ value }) {
-              scheduler.option(
-                  'dataSource',
-                  value.length
-                      ? data.filter((item) => value.some((id) => item.assigneeId.includes(id)))
-                      : data
-              );
+              const nextDataSource = value.length
+                ? data.filter((item) => value.some((id) => item.assigneeId?.includes(id)))
+                : data;
+
+              scheduler.option('dataSource', nextDataSource);
             },
           },
         },
@@ -71,8 +85,8 @@ $(() => {
           location: 'after',
           locateInMenu: 'auto',
           name: 'viewSwitcher',
-        }
-      ]
+        },
+      ],
     },
     height: 600,
   }).dxScheduler('instance');
