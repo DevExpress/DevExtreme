@@ -1004,6 +1004,31 @@ module('Events', setupModule, () => {
 
         assert.strictEqual(event.isDefaultPrevented(), true, `the ${DROP_EVENT_NAME} event is prevented`);
     });
+
+    QUnit.test('should clear search value on active part change on click (T1246215)', function(assert) {
+        this.instance.option({
+            displayFormat: 'dd/MM/yyyy HH:mm',
+            useMaskBehavior: true
+        });
+
+        const $input = this.$input;
+        this.keyboard.caret(0);
+        this.$input.trigger('dxclick');
+
+        this.keyboard.type('1');
+
+        const textVal = $input.val();
+        const minutesIndex = textVal.length - 2;
+        this.keyboard.caret({ start: minutesIndex, end: minutesIndex });
+        this.$input.trigger('dxclick');
+        this.keyboard.type('1');
+
+        const finalText = $input.val();
+
+        const minutesPart = finalText.slice(-2);
+
+        assert.strictEqual(minutesPart, '01', 'minutes should be "01"');
+    });
 });
 
 module('Search', setupModule, () => {
