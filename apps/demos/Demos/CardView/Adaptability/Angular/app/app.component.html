@@ -1,4 +1,12 @@
-<dx-card-view id="cardview" [dataSource]="employees" keyExpr="ID">
+
+<dx-select-box
+  [items]="[1, 2, 3, 4, 8]"
+  [value]="cardsPerRow"
+  (onValueChanged)="updateCardsPerRow($event)"
+>
+</dx-select-box>
+
+<dx-card-view id="cardview" [dataSource]="employees" keyExpr="ID" [cardsPerRow]="cardsPerRow">
   <dxo-card-cover [imageExpr]="imageExpr" altExpr="FullName"> </dxo-card-cover>
 
   <dxi-column [calculateCellValue]="calculateFullName" caption="Full Name"></dxi-column>

@@ -15,6 +15,7 @@ if (!document.location.host.includes("localhost")) {
 })
 export class AppComponent {
   employees: Employee[];
+  cardsPerRow = 3;
 
   calculateFullName(data: any): string {
     return `${data.FirstName} ${data.LastName}`;
@@ -24,6 +25,10 @@ export class AppComponent {
 
   constructor(service: Service) {
     this.employees = service.getEmployees();
+  }
+
+  updateCardsPerRow(event: any) {
+    this.cardsPerRow = event.value;
   }
 }
 

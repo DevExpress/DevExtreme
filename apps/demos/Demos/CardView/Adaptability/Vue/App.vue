@@ -1,9 +1,14 @@
 <template>
+  <DxSelectBox
+    :items="[1, 2, 3, 4, 8]"
+    v-model="cardsPerRow"
+  />
   <DxCardView
     id="cardview"
     :data-source="employees"
     key-expr="ID"
     width="100%"
+    :cards-per-row="cardsPerRow"
   >
     <DxPaging :page-size="8"/>
     <DxPager
@@ -37,6 +42,7 @@ import {
   DxColumn,
   DxCardCover,
 } from 'devextreme-vue/card-view';
+import { DxSelectBox } from 'devextreme-vue';
 import { employees } from './data';
 
 export default {
@@ -46,10 +52,12 @@ export default {
     DxPager,
     DxColumn,
     DxCardCover,
+    DxSelectBox,
   },
   data() {
     return {
       employees,
+      cardsPerRow: 3,
     };
   },
   methods: {
