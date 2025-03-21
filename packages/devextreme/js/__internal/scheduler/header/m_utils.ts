@@ -117,10 +117,7 @@ export const getCaptionInterval = (options): {
   const startDate = getIntervalStartDate(options);
   const endDate = getIntervalEndDate(startDate, options);
 
-  return {
-    startDate,
-    endDate,
-  };
+  return { startDate, endDate };
 };
 
 const getPeriodEndDate = (currentPeriodStartDate: Date, step, agendaDuration: number): Date => {

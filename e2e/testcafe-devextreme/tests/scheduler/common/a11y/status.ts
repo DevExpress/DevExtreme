@@ -5,23 +5,22 @@ import url from '../../../../helpers/getPageUrl';
 fixture.disablePageReloads`a11y - appointment`
   .page(url(__dirname, '../../../container.html'));
 
-const today = new Date(Date.UTC(2025, 3, 29, 15));
-today.setDate(today.getDate() - today.getDay() + 3);
+const today = '2025-04-30T15:00:00.000Z';
 const appointments = [
   {
-    startDate: new Date(today.getTime() - 113.5 * 3600000),
-    endDate: new Date(today.getTime() - 111.5 * 3600000),
+    startDate: '2025-04-25T21:30:00.000Z',
+    endDate: '2025-04-25T23:30:00.000Z',
     recurrenceRule: 'FREQ=HOURLY;INTERVAL=15;COUNT=15',
   }, {
-    startDate: new Date(today.getTime()),
-    endDate: new Date(today.getTime() + 3600000),
+    startDate: '2025-04-30T15:00:00.000Z',
+    endDate: '2025-04-30T16:00:00.000Z',
   }, {
-    startDate: new Date(today.getTime() - 110.5 * 3600000),
-    endDate: new Date(today.getTime() - 108.5 * 3600000),
+    startDate: '2025-04-26T00:30:00.000Z',
+    endDate: '2025-04-26T02:30:00.000Z',
     recurrenceRule: 'FREQ=HOURLY;INTERVAL=15;COUNT=15',
   }, {
-    startDate: new Date(today.getTime() + 48 * 3600000),
-    endDate: new Date(today.getTime() + 49 * 3600000),
+    startDate: '2025-05-02T15:00:00.000Z',
+    endDate: '2025-05-02T16:00:00.000Z',
   },
 ];
 
@@ -51,41 +50,44 @@ const indicatorNotOnView = 'The current time indicator is not visible on the scr
 
 options.forEach(([currentView, title, counts]) => {
   counts.forEach((appointmentsCount, index) => {
-    [true, false].forEach((hasIndicator) => {
-      test(`Scheduler should have correct status message [view=${currentView}, count=${appointmentsCount}, indicator=${hasIndicator}]`, async (t) => {
-        const scheduler = new Scheduler('#container');
-        // TODO(2): use `appointmentsCount` here
-        const generalStatus = `Scheduler. ${title} with ${index === 0 ? 0 : '\\d*'} appointments`;
+    const schedulerConfig = {
+      timeZone: 'America/Los_Angeles',
+      dataSource: appointments.slice(0, 2 * index),
+      views: [
+        'agenda', 'day', 'month', 'timelineDay', 'timelineMonth', 'timelineWeek', 'timelineWorkWeek', 'week', 'workWeek', {
+          name: 'Two Weeks',
+          type: 'week',
+          intervalCount: 2,
+        },
+      ],
+      currentView,
+      indicatorTime: today,
+      currentDate: today,
+    };
+    // TODO(2): use `appointmentsCount` here
+    const generalStatus = `Scheduler. ${title} with ${index === 0 ? 0 : '\\d*'} appointments`;
 
-        if (hasIndicator) {
-          await t.click(scheduler.toolbar.navigator.nextButton);
-          await statusCheck(t, scheduler, currentView === 'month' ? indicatorOnView : indicatorNotOnView);
+    test(`Scheduler should have correct status message [view=${currentView}, count=${appointmentsCount}, indicator=false]`, async (t) => {
+      const scheduler = new Scheduler('#container');
 
-          await t.click(scheduler.toolbar.navigator.prevButton);
-          await statusCheckEql(t, scheduler, `${generalStatus}. ${indicatorOnView}`);
+      await statusCheckEql(t, scheduler, generalStatus);
+    }).before(async () => {
+      await createWidget('dxScheduler', { ...schedulerConfig, showCurrentTimeIndicator: false });
+    });
 
-          await t.click(scheduler.toolbar.navigator.prevButton);
-          await statusCheck(t, scheduler, indicatorNotOnView);
-        } else {
-          await statusCheckEql(t, scheduler, generalStatus);
-        }
-      }).before(async () => {
-        await createWidget('dxScheduler', {
-          timeZone: 'America/Los_Angeles',
-          dataSource: appointments.slice(0, 2 * index),
-          views: [
-            'agenda', 'day', 'month', 'timelineDay', 'timelineMonth', 'timelineWeek', 'timelineWorkWeek', 'week', 'workWeek', {
-              name: 'Two Weeks',
-              type: 'week',
-              intervalCount: 2,
-            },
-          ],
-          currentView,
-          indicatorTime: today,
-          currentDate: today,
-          showCurrentTimeIndicator: hasIndicator,
-        });
-      });
+    test(`Scheduler should have correct status message [view=${currentView}, count=${appointmentsCount}, indicator=true]`, async (t) => {
+      const scheduler = new Scheduler('#container');
+
+      await t.click(scheduler.toolbar.navigator.nextButton);
+      await statusCheck(t, scheduler, currentView === 'month' ? indicatorOnView : indicatorNotOnView);
+
+      await t.click(scheduler.toolbar.navigator.prevButton);
+      await statusCheckEql(t, scheduler, `${generalStatus}. ${indicatorOnView}`);
+
+      await t.click(scheduler.toolbar.navigator.prevButton);
+      await statusCheck(t, scheduler, indicatorNotOnView);
+    }).before(async () => {
+      await createWidget('dxScheduler', { ...schedulerConfig, showCurrentTimeIndicator: true });
     });
   });
 });

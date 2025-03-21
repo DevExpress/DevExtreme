@@ -6,6 +6,7 @@ import type { ViewType } from '@js/ui/scheduler';
 import type { RawViewType } from '../header/types';
 
 const KEYS = {
+  dateRange: 'dxScheduler-dateRange',
   label: 'dxScheduler-ariaLabel',
   indicatorPresent: 'dxScheduler-ariaLabel-currentIndicator-present',
   indicatorNotPresent: 'dxScheduler-ariaLabel-currentIndicator-not-present',
@@ -28,13 +29,11 @@ const localizeCurrentIndicator = (
   date: Date,
   startDate: Date,
   endDate: Date,
-): string => {
-  if (date >= startDate && date < endDate) {
-    return messageLocalization.format(KEYS.indicatorPresent);
-  }
-
-  return messageLocalization.format(KEYS.indicatorNotPresent);
-};
+): string => messageLocalization.format(
+  date >= startDate && date < endDate
+    ? KEYS.indicatorPresent
+    : KEYS.indicatorNotPresent,
+);
 const localizeName = (viewName?: string, viewType?: string): string => {
   if (viewName) {
     return viewName;
@@ -62,16 +61,18 @@ export const getA11yStatusText = (
   const endDateText = isMonth ? localizeMonth(endDate) : localizeDate(endDate);
   const intervalText = startDateText === endDateText
     ? `${startDateText}`
-    : `from ${startDateText} to ${endDateText}`;
+    // @ts-expect-error ts-error
+    : messageLocalization.format(KEYS.dateRange, startDateText, endDateText);
 
   const statusText = messageLocalization
     // @ts-expect-error
     .format(KEYS.label, viewTypeLabel, intervalText, appointmentCount);
-  const labelParts = [statusText];
 
   if (indicatorTime) {
-    labelParts.push(localizeCurrentIndicator(indicatorTime, startDate, endDate));
+    const indicatorStatus = localizeCurrentIndicator(indicatorTime, startDate, endDate);
+
+    return `${statusText}. ${indicatorStatus}`;
   }
 
-  return labelParts.join('. ');
+  return statusText;
 };

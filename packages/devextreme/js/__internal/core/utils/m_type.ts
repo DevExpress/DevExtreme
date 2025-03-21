@@ -28,7 +28,7 @@ const isDate = function (object) {
   return type(object) === 'date';
 };
 
-const isDefined = function (object) {
+const isDefined = function <T>(object: T | null | undefined): object is T {
   return (object !== null) && (object !== undefined);
 };
 
