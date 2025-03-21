@@ -34,7 +34,7 @@ jobs:
       run: |
         RESULT=''
         for file in ${{ steps.changed-files.outputs.files }}; do
-          if (( ${#file} > $MAX_LENGTH )); then RESULT+="$file\n"; fi;
+          if (( ${#file} > $MAX_LENGTH )); then RESULT+="$file\n"; echo "::error file=$file::filename longer than $MAX_LENGTH"; fi;
         done
         if (( ${#RESULT} )); then printf "The following filenames are longer than $MAX_LENGTH characters:\n${RESULT}" && exit 1; fi;
 
