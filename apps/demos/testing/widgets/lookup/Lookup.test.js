@@ -29,4 +29,4 @@ runManualTest('Lookup', 'Basics', ['jQuery', 'React', 'Vue', 'Angular'], (test) 
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
   });
-});
+}, false);

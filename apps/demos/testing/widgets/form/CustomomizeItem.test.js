@@ -9,12 +9,15 @@ fixture('Form.CustomizeItem')
     ctx.initialWindowSize = [900, 600];
   });
 
-runManualTest('Form', 'CustomizeItem', ['jQuery', /* 'Vue', */ 'Angular'], (test) => {
+runManualTest('Form', 'CustomizeItem', ['jQuery', 'React', 'Vue', 'Angular'], (test) => {
   test('CustomizeItem', async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-    await t.hover($('#helpedInfo'));
-    await testScreenshot(t, takeScreenshot, 'form_customize_item_label_tooltip.png', '.dx-form');
+    await t.hover($('#helpedInfo'), {
+      offsetX: -1,
+      offsetY: -1,
+    });
+    await testScreenshot(t, takeScreenshot, 'form_customize_item_label_tooltip.png');
 
     await t
       .expect(compareResults.isValid())

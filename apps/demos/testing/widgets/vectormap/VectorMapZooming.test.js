@@ -6,7 +6,7 @@ import { testScreenshot } from '../../../utils/visual-tests/helpers/theme-utils'
 fixture('VectorMap.DynamicViewport')
   .page('http://localhost:8080/')
   .before(async (ctx) => {
-    ctx.initialWindowSize = [900, 600];
+    ctx.initialWindowSize = [900, 900];
   });
 
 runManualTest('VectorMap', 'DynamicViewport', ['jQuery', 'React', 'Vue', 'Angular'], (test) => {
