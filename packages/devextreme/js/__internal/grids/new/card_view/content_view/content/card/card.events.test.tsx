@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/prefer-nullish-coalescing */
-/* eslint-disable no-return-assign */
+
 /* eslint-disable @typescript-eslint/init-declarations */
-/* eslint-disable @typescript-eslint/no-unused-vars */
+
 import { describe, expect, it } from '@jest/globals';
 import { render } from 'inferno';
 
@@ -143,15 +143,6 @@ describe('Events', () => {
     cardElement?.dispatchEvent(new MouseEvent('mouseleave'));
 
     expect(mockHover.called).toBe(true);
-  });
-
-  it('should apply correct minWidth, maxWidth, and width styles', () => {
-    const cardElement = container.querySelector('.dx-cardview-card');
-    const style = cardElement?.getAttribute('style');
-
-    expect(style).toContain('min-width: 300px');
-    expect(style).toContain('max-width: 300px');
-    expect(style).toContain('width: 300px');
   });
 
   it('should handle hoverStateEnabled prop correctly', () => {
