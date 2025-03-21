@@ -5852,5 +5852,25 @@
         ]
       }
     ]
+  },
+  {
+    "Name": "CardView",
+    "Equivalents": "dxCardView, dx-card-view",
+    "Groups": [
+      {
+        "Name": "Adaptability",
+        "Equivalents": "adaptive",
+        "Demos": [
+          {
+            "Title": "Adaptability",
+            "Name": "Adaptability",
+            "Widget": "CardView",
+            "MvcAdditionalFiles": [],
+            "DemoType": "Adaptivity",
+            "Badge": "New"
+          }
+        ]
+      }
+    ]
   }
 ]
