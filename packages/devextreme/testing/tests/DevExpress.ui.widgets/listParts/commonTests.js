@@ -4315,6 +4315,46 @@ QUnit.module('keyboard navigation', {
         assert.ok(secondItemIsFocused, 'focused item change to last visible item on new page');
     });
 
+    QUnit.test('focus should be moved to selectedItem after focusing of grouped list (T1278005)', function(assert) {
+        const list = $('#list').dxList({
+            selectedItemKeys: [5],
+            keyExpr: 'id',
+            items: [{
+                key: 'a',
+                items: [
+                    { id: 1, text: '1' },
+                    { id: 2, text: '2' },
+                    { id: 3, text: '3' },
+                ] }, {
+                key: 'b',
+                items: [
+                    { id: 4, text: '4' },
+                    { id: 5, text: '5' },
+                    { id: 6, text: '6' },
+                ] },
+            ],
+            grouped: true,
+            focusStateEnabled: true,
+            collapsibleGroups: false,
+            selectionMode: 'multiple',
+            showSelectionControls: false,
+        }).dxList('instance');
+
+        const $element = $(list.element());
+
+        const keyboard = getListKeyboard($element);
+        list.focus();
+
+        const $items = $element.find(`.${LIST_ITEM_CLASS}`);
+
+        assert.strictEqual($items.eq(4).hasClass(FOCUSED_STATE_CLASS), true, 'focused class is added to selected item');
+
+        keyboard.keyDown('down');
+
+        assert.strictEqual($items.eq(4).hasClass(FOCUSED_STATE_CLASS), false, 'focused class is removed');
+        assert.strictEqual($items.eq(5).hasClass(FOCUSED_STATE_CLASS), true, 'next item is focused');
+    });
+
     QUnit.test('list should attach keyboard events even if focusStateEnabled is false when the widget\'s onKeyboardHandled is defined', function(assert) {
         const handler = sinon.stub();
         const $element = $('#list');
