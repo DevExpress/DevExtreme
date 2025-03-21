@@ -6,12 +6,17 @@ export interface Options extends Base.Options {
   cardMinWidth?: number;
   cardMaxWidth?: number;
   cardCover?: {
-    imageExpr: string | ((data: DataObject) => string);
-    altExpr: string | ((data: DataObject) => string);
+    imageExpr?: string | ((data: DataObject) => string);
+    altExpr?: string | ((data: DataObject) => string);
+    maxHeight?: number;
+    ratio?: string;
   };
 }
 
 export const defaultOptions = {
   cardsPerRow: 3,
+  cardCover: {
+    ratio: '1 / 1',
+  },
   ...Base.defaultOptions,
 } satisfies Options;

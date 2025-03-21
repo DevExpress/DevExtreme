@@ -1,0 +1,14 @@
+@use './variables' as *;
+
+.dx-cardview-header-item {
+  background-color: $cardview-header-item-background-color;
+  border: solid $cardview-header-item-border-width $cardview-header-item-border-color;
+  border-radius: $cardview-header-item-border-radius;
+  padding: ($cardview-header-item-padding-vertical - $cardview-header-item-border-width) $cardview-header-item-padding-horizontal;
+  min-width: fit-content;
+
+  &:hover {
+    background-color: $cardview-header-item-hovered-background-color;
+    border: solid $cardview-header-item-border-width $cardview-header-item-hovered-border-color;
+  }
+}

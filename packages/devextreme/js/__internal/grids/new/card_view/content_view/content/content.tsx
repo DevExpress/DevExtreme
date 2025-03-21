@@ -41,15 +41,43 @@ export class Content extends Component<ContentProps> {
 
   private cardRefs: RefObject<HTMLDivElement>[] = [];
 
+  private getCssVariables(): Record<string, unknown> {
+    const variables = {};
+
+    if (this.props.cardsPerRow) {
+      variables['--dx-cardview-cardsperrow'] = this.props.cardsPerRow;
+    }
+
+    if (this.props.cardProps?.minWidth) {
+      variables['--dx-cardview-card-min-width'] = `${this.props.cardProps?.minWidth}px`;
+    }
+
+    if (this.props.cardProps?.maxWidth) {
+      variables['--dx-cardview-card-max-width'] = `${this.props.cardProps?.maxWidth}px`;
+    }
+
+    // @ts-expect-error
+    if (this.props.cardProps?.cover?.maxHeight) {
+      // @ts-expect-error
+      variables['--dx-cardview-card-cover-max-height'] = `${this.props.cardProps?.cover?.maxHeight}px`;
+    }
+
+    // @ts-expect-error
+    if (this.props.cardProps?.cover?.ratio) {
+      // @ts-expect-error
+      variables['--dx-cardview-card-cover-ratio'] = `${this.props.cardProps?.cover?.ratio}`;
+    }
+
+    return variables;
+  }
+
   render(): JSX.Element {
     this.cardRefs = new Array(this.props.items.length).fill(undefined).map(() => createRef());
     return (
       <div
         tabIndex={0}
         className={`${CLASSES.content} ${CLASSES.grid}`}
-        style={{
-          '--dx-cardview-cardsperrow': `${this.props.cardsPerRow}`,
-        }}
+        style={this.getCssVariables()}
         ref={this.containerRef}
       >
         {this.props.items.map((item, i) => (
