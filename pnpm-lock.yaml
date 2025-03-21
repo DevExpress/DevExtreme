@@ -277,8 +277,8 @@ importers:
         specifier: workspace:~
         version: link:../../packages/devextreme-vue/npm
       dx-systemjs-vue-browser:
-        specifier: 1.1.1
-        version: 1.1.1
+        specifier: 1.1.2
+        version: 1.1.2
       esbuild:
         specifier: 0.19.3
         version: 0.19.3
@@ -8338,8 +8338,8 @@ packages:
   duplexify@4.1.3:
     resolution: {integrity: sha512-M3BmBhwJRZsSx38lZyhE53Csddgzl5R7xGJNk7CVddZD6CcmwMCH8J+7AprIrQKH7TonKxaCjcv27Qmf+sQ+oA==}
 
-  dx-systemjs-vue-browser@1.1.1:
-    resolution: {integrity: sha512-o24r6a0Q2dsXDoDpvLww2cTtFUXt7Z0zDR/dgw1g6XiEn2aBgRWnwWRn5WdioGF4am12+dAejqCYNQXXbm4VYQ==}
+  dx-systemjs-vue-browser@1.1.2:
+    resolution: {integrity: sha512-Z6ibEOrWKd0ta/rZqDMVax3gScK3C4w5GzzeAor4GNaUJfhV6SjLRmpgdecYRtZTPvCvjlFHxF2Br6cXqa0Jig==}
 
   each-props@1.3.2:
     resolution: {integrity: sha512-vV0Hem3zAGkJAyU7JSjixeU66rwdynTAa1vofCrSA5fEln+m67Az9CcnkVD776/fsN/UjIWmBDoNRS6t6G9RfA==}
@@ -25837,7 +25837,7 @@ snapshots:
       readable-stream: 3.6.2
       stream-shift: 1.0.3
 
-  dx-systemjs-vue-browser@1.1.1: {}
+  dx-systemjs-vue-browser@1.1.2: {}
 
   each-props@1.3.2:
     dependencies:
