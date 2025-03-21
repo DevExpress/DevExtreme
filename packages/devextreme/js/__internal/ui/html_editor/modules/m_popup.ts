@@ -113,7 +113,7 @@ if (Quill) {
     }
 
     selectionChangedHandler(e) {
-      if (this._popup.option('visible')) {
+      if (this._popup.option('visible') && e.addedItems.length) {
         this._popup.hide();
 
         this.insertEmbedContent(e);
