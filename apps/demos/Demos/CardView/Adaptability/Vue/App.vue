@@ -3,6 +3,7 @@
     :items="[1, 2, 3, 4, 8]"
     v-model="cardsPerRow"
     label="Cards per row"
+    :width="150"
   />
   <DxCardView
     id="cardview"

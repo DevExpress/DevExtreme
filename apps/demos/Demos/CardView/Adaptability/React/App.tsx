@@ -16,6 +16,7 @@ const App = () => {
         items={[1, 2, 3, 4, 8]}
         value={cardsPerRow}
         label="Cards per row"
+        width={150}
         onValueChanged={(e) => setCardsPerRow(e.value)}
       />
       <CardView 

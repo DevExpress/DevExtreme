@@ -1,7 +1,7 @@
 import { NgModule, Component, enableProdMode } from "@angular/core";
 import { BrowserModule } from "@angular/platform-browser";
 import { platformBrowserDynamic } from "@angular/platform-browser-dynamic";
-import { DxCardViewModule } from "devextreme-angular";
+import { DxCardViewModule, DxSelectBoxModule } from "devextreme-angular";
 import { Employee, Service } from "./app.service";
 
 if (!document.location.host.includes("localhost")) {
@@ -33,7 +33,7 @@ export class AppComponent {
 }
 
 @NgModule({
-  imports: [BrowserModule, DxCardViewModule],
+  imports: [BrowserModule, DxCardViewModule, DxSelectBoxModule],
   declarations: [AppComponent],
   bootstrap: [AppComponent],
 })

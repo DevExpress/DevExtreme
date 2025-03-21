@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "devextreme/dist/css/dx.fluent.blue.light.css";
 import { CardView, Paging } from "devextreme-react/card-view";
+import { SelectBox } from "devextreme-react/select-box";
 import { employees } from "./data";
 
 const App = () => {
@@ -11,7 +12,7 @@ const App = () => {
 
   return (
     <div>
-      <SelectBox items={[1, 2, 3, 4, 8]} value={cardsPerRow} onValueChanged={(e) => setCardsPerRow(e.value)} label="Cards per row" />
+      <SelectBox items={[1, 2, 3, 4, 8]} value={cardsPerRow} width={150} onValueChanged={(e) => setCardsPerRow(e.value)} label="Cards per row" />
       <CardView
         id="cardview"
         dataSource={employees}
