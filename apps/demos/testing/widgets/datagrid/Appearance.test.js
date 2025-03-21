@@ -8,7 +8,7 @@ fixture('DataGrid.Appearance')
     ctx.initialWindowSize = [900, 600];
   });
 
-runManualTest('DataGrid', 'Appearance', ['jQuery', 'React', 'Vue', 'Angular'], (test) => {
+runManualTest('DataGrid', 'Appearance', (test) => {
   test('Appearance', async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 

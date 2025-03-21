@@ -8,7 +8,7 @@ fixture('DataGrid.ToolbarCustomization')
     ctx.initialWindowSize = [900, 600];
   });
 
-runManualTest('DataGrid', 'ToolbarCustomization', ['jQuery', 'React', 'Vue', 'Angular'], (test) => {
+runManualTest('DataGrid', 'ToolbarCustomization', (test) => {
   test('ToolbarCustomization', async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
     const menuButtonSelector = $('.dx-toolbar').find('.dx-toolbar-menu-container').find('.dx-button');

@@ -4,6 +4,8 @@ import { ClientFunction, Selector } from 'testcafe';
 import { THEME } from './helpers/theme-utils';
 import { gitHubIgnored } from './github-ignored-list';
 
+export const FRAMEWORKS = ['jQuery', 'React', 'Vue', 'Angular'];
+
 const settings = {
   concurrency: undefined,
   targetFramework: undefined,
@@ -190,8 +192,15 @@ const SKIPPED_TESTS = {
       { demo: 'TaskTemplate', themes: [THEME.generic, THEME.material, THEME.fluent] },
       { demo: 'Validation', themes: [THEME.generic, THEME.material, THEME.fluent] },
     ],
+    VectorMap: [
+      { demo: 'Tooltip', themes: [THEME.material] },
+      { demo: 'TooltipHTMLSupport', themes: [THEME.material] },
+    ]
   },
   Angular: {
+    Common: [
+      { demo: 'DialogsAndNotificationsOverview', themes: [THEME.generic, THEME.material, THEME.fluent] },
+    ],
     Charts: [
       { demo: 'Overview', themes: [THEME.material] },
       { demo: 'Crosshair', themes: [THEME.material] },
@@ -231,13 +240,16 @@ const SKIPPED_TESTS = {
       { demo: 'EditStateManagement', themes: [THEME.generic, THEME.fluent, THEME.material] },
       { demo: 'RecordGrouping', themes: [THEME.generic, THEME.material, THEME.fluent] },
       { demo: 'ToolbarCustomization', themes: [THEME.generic, THEME.material, THEME.fluent] },
-      { demo: 'PopupEditing', themes: [THEME.generic] },
+      { demo: 'StatePersistence', themes: [THEME.generic, THEME.fluent, THEME.material] },
     ],
     Scheduler: [
       'CustomDragAndDrop',
+      { demo: 'Overview', themes: [THEME.generic, THEME.fluent, THEME.material] },
       { demo: 'Resources', themes: [THEME.fluent] },
       { demo: 'CellTemplates', themes: [THEME.generic, THEME.material, THEME.fluent] },
       { demo: 'Resources', themes: [THEME.generic, THEME.material, THEME.fluent] },
+      { demo: 'ContextMenuIntegration', themes: [THEME.generic, THEME.fluent, THEME.material] },
+      { demo: 'ToolbarCustomization', themes: [THEME.generic, THEME.fluent, THEME.material] },
     ],
     Sortable: [
       { demo: 'Kanban', themes: [THEME.generic, THEME.material, THEME.fluent] },
@@ -245,8 +257,17 @@ const SKIPPED_TESTS = {
     PivotGrid: [
       { demo: 'IntegratedFieldChooser', themes: [THEME.generic, THEME.material, THEME.fluent] },
     ],
+    FileUploader: [
+      { demo: 'CustomDropzone', themes: [THEME.generic, THEME.material, THEME.fluent] },
+    ],
+    VectorMap: [
+      { demo: 'TooltipHTMLSupport', themes: [THEME.material] },
+    ]
   },
   Vue: {
+    Common: [
+      { demo: 'DialogsAndNotificationsOverview', themes: [THEME.generic, THEME.material, THEME.fluent] },
+    ],
     Accordion: [
       { demo: 'Overview', themes: [THEME.generic, THEME.material, THEME.fluent] },
     ],
@@ -257,6 +278,7 @@ const SKIPPED_TESTS = {
       { demo: 'CustomLegendMarkers', themes: [THEME.material] },
       { demo: 'CustomAnnotations', themes: [THEME.material] },
       { demo: 'DialogsAndNotificationsOverview', themes: [THEME.material] },
+      { demo: 'PieWithResolvedLabelOverlapping', themes: [THEME.material] },
       { demo: 'Crosshair', themes: [THEME.material] },
       { demo: 'LoadDataOnDemand', themes: [THEME.material] },
     ],
@@ -275,17 +297,28 @@ const SKIPPED_TESTS = {
       { demo: 'ToolbarCustomization', themes: [THEME.generic, THEME.fluent, THEME.material] },
       { demo: 'InfiniteScrolling', themes: [THEME.generic, THEME.material, THEME.fluent] },
       { demo: 'PopupEditing', themes: [THEME.generic] },
-      'StatePersistence',
+      { demo: 'StatePersistence', themes: [THEME.generic, THEME.fluent, THEME.material] },
+    ],
+    FileUploader: [
+      { demo: 'CustomDropzone', themes: [THEME.generic, THEME.material, THEME.fluent] },
+    ],
+    Scheduler: [
+      { demo: 'Overview', themes: [THEME.generic, THEME.fluent, THEME.material] },
+      { demo: 'ContextMenuIntegration', themes: [THEME.generic, THEME.fluent, THEME.material] },
+      { demo: 'ToolbarCustomization', themes: [THEME.generic, THEME.fluent, THEME.material] },
     ],
   },
   React: {
+    Common: [
+      { demo: 'DialogsAndNotificationsOverview', themes: [THEME.generic, THEME.material, THEME.fluent] },
+    ],
     Charts: [
       { demo: 'Overview', themes: [THEME.material] },
       { demo: 'PieWithResolvedLabelOverlapping', themes: [THEME.material] },
       { demo: 'ZoomingAndScrollingAPI', themes: [THEME.material] },
       { demo: 'Crosshair', themes: [THEME.material] },
       { demo: 'CustomAnnotations', themes: [THEME.material] },
-      { demo: 'CustomLegendMarkers', themes: [THEME.generic, THEME.material, THEME.fluent] },
+      { demo: 'CustomLegendMarkers', themes: [THEME.material] },
     ],
     DataGrid: [
       { demo: 'BatchEditing', themes: [THEME.fluent] },
@@ -299,15 +332,24 @@ const SKIPPED_TESTS = {
       { demo: 'RecordGrouping', themes: [THEME.material] },
       { demo: 'ToolbarCustomization', themes: [THEME.generic, THEME.fluent, THEME.material] },
       { demo: 'InfiniteScrolling', themes: [THEME.generic, THEME.material, THEME.fluent] },
+      { demo: 'StatePersistence', themes: [THEME.generic, THEME.fluent, THEME.material] },
     ],
     Scheduler: [
       { demo: 'Overview', themes: [THEME.fluent, THEME.material] },
       { demo: 'Templates', themes: [THEME.fluent, THEME.material] },
+      { demo: 'ContextMenuIntegration', themes: [THEME.generic, THEME.fluent, THEME.material] },
+      { demo: 'ToolbarCustomization', themes: [THEME.generic, THEME.fluent, THEME.material] },
+    ],
+    FileUploader: [
+      { demo: 'CustomDropzone', themes: [THEME.generic, THEME.material, THEME.fluent] },
     ],
     Form: [
       // Flaky issue: Source image size does not match target size
       { demo: 'CustomizeItem', themes: [THEME.generic] },
     ],
+    VectorMap: [
+      { demo: 'TooltipHTMLSupport', themes: [THEME.material] },
+    ]
   },
 };
 
@@ -411,8 +453,7 @@ export function runManualTestCore(
 
     await t.resizeWindow(width, height);
 
-    const isAngular = framework === 'Angular';
-    if (isAngular) {
+    if (framework === 'Angular') {
       await waitForAngularLoading();
     }
   });
@@ -427,18 +468,14 @@ export function runManualTestCore(
   callback(test);
 }
 
-export function runManualTest(widget, demo, framework, callback) {
+export function runManualTest(widget, demo, callback) {
   if (process.env.STRATEGY === 'accessibility') {
     return;
   }
 
-  if (Array.isArray(framework)) {
-    framework.forEach((i) => {
-      runManualTestCore(test, widget, demo, i, callback);
-    });
-  } else {
+  FRAMEWORKS.forEach((framework) => {
     runManualTestCore(test, widget, demo, framework, callback);
-  }
+  });
 }
 
 export function getPortByIndex(testIndex) {

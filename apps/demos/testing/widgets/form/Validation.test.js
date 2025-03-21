@@ -11,7 +11,7 @@ fixture('Form.Validation')
     ctx.initialWindowSize = [900, 1200];
   });
 
-runManualTest('Form', 'Validation', ['jQuery'], (test) => {
+runManualTest('Form', 'Validation', (test) => {
   test('Validation', async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 

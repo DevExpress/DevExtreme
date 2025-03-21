@@ -8,7 +8,7 @@ fixture('DataGrid.OdataService')
     ctx.initialWindowSize = [900, 600];
   });
 
-runManualTest('DataGrid', 'OdataService', ['jQuery', 'React', 'Vue', 'Angular'], (test) => {
+runManualTest('DataGrid', 'OdataService', (test) => {
   test('OdataService', async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 

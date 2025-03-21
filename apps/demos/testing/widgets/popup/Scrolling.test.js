@@ -13,7 +13,7 @@ fixture('Popup.Scrolling')
     ctx.initialWindowSize = [900, 600];
   });
 
-runManualTest('Popup', 'Scrolling', ['jQuery', 'React', 'Vue', 'Angular'], (test) => {
+runManualTest('Popup', 'Scrolling', (test) => {
   test('Scrolling', async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 

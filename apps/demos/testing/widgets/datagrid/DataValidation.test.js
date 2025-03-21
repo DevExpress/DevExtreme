@@ -8,7 +8,7 @@ fixture('DataGrid.DataValidation')
     ctx.initialWindowSize = [900, 600];
   });
 
-runManualTest('DataGrid', 'DataValidation', ['jQuery', 'React', 'Vue', 'Angular'], (test) => {
+runManualTest('DataGrid', 'DataValidation', (test) => {
   test('DataValidation', async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 

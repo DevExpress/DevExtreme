@@ -10,7 +10,7 @@ fixture('Lookup.Basics')
     ctx.initialWindowSize = [900, 600];
   });
 
-runManualTest('Lookup', 'Basics', ['jQuery', 'React', 'Vue', 'Angular'], (test) => {
+runManualTest('Lookup', 'Basics', (test) => {
   test('Custom Lookup Appearance', async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
