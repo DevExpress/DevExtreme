@@ -8,22 +8,18 @@ import { checkOptions } from './axe_options';
 fixture.disablePageReloads`a11y - appointment`
   .page(url(__dirname, '../../../container.html'));
 
-test('Scheduler should have right aria attributes', async (t) => {
+test('Scheduler should have right aria attributes after view changed', async (t) => {
   const scheduler = new Scheduler('#container');
 
-  await t.expect(
-    scheduler.element.getAttribute('aria-label'),
-  ).eql('Scheduler. Month view');
+  await t.expect(scheduler.element.getAttribute('aria-label')).contains('Scheduler. Month view');
+  await t.expect(scheduler.getGeneralStatusContainer().textContent).contains('Scheduler. Month view');
 
-  await t.expect(
-    scheduler.element.getAttribute('role'),
-  ).eql('group');
+  await t.expect(scheduler.element.getAttribute('role')).eql('group');
 
   await scheduler.option('currentView', 'week');
 
-  await t.expect(
-    scheduler.element.getAttribute('aria-label'),
-  ).eql('Scheduler. Week view');
+  await t.expect(scheduler.element.getAttribute('aria-label')).contains('Scheduler. Week view');
+  await t.expect(scheduler.getGeneralStatusContainer().textContent).contains('Scheduler. Week view');
 
   await a11yCheck(t, checkOptions, '#container');
 }).before(async () => {

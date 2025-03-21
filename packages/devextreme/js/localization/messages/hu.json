@@ -250,8 +250,10 @@
         "dxPivotGrid-rowFieldArea": "Húzza a sormezőket ide",
         "dxPivotGrid-filterFieldArea": "Húzza a szűrőmezőket ide",
 
-        "dxScheduler-ariaLabel": "Scheduler. {0} view",
-
+        "dxScheduler-dateRange": "from {0} to {1}",
+        "dxScheduler-ariaLabel": "Scheduler. {0} view: {1} with {2} appointments",
+        "dxScheduler-ariaLabel-currentIndicator-present": "The current time indicator is visible in the view",
+        "dxScheduler-ariaLabel-currentIndicator-not-present": "The current time indicator is not visible on the screen",
 
         "dxScheduler-appointmentAriaLabel-group": "Group: {0}",
         "dxScheduler-appointmentAriaLabel-recurring": "Recurring appointment",
