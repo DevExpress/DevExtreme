@@ -4,6 +4,7 @@
   $height,
   $content-row-gap,
   $content-column-gap,
+  $stepper-step-optional-mark-font-size,
 ) {
   .dx-stepper-horizontal {
     .dx-step {
@@ -24,6 +25,10 @@
     &::before {
       width: $width;
       height: $height;
+    }
+
+    .dx-step-optional-mark {
+      font-size: $stepper-step-optional-mark-font-size;
     }
   }
 
@@ -86,7 +91,7 @@
           color: $invalid-color-hover;
         }
 
-        .dx-step-title {
+        .dx-step-label {
           color: $invalid-color-hover;
         }
       }
@@ -103,7 +108,7 @@
         color: $invalid-color;
       }
 
-      .dx-step-title {
+      .dx-step-label {
         color: $invalid-color;
       }
     }
@@ -113,7 +118,7 @@
         color: $color-selected;
       }
 
-      .dx-step-title {
+      .dx-step-label {
         color: $background-color-selected;
       }
 
@@ -124,7 +129,7 @@
       }
 
       &.dx-step-invalid {
-        .dx-step-title {
+        .dx-step-label {
           color: $invalid-color;
         }
 
@@ -148,7 +153,7 @@
         color: $color-selected;
       }
 
-      .dx-step-title {
+      .dx-step-label {
         color: $background-color-selected;
       }
 
@@ -159,7 +164,7 @@
       }
 
       &.dx-step-invalid {
-        .dx-step-title {
+        .dx-step-label {
           color: $invalid-color;
         }
 
@@ -195,7 +200,7 @@
         color: $disabled-color;
       }
 
-      .dx-step-title {
+      .dx-step-label {
         color: $disabled-color;
       }
 

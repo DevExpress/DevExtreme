@@ -2,6 +2,7 @@
 @use "colors" as *;
 @use "../colors" as *;
 @use "../sizes" as *;
+@use "../typography/sizes" as *;
 
 // adduse
 
@@ -10,6 +11,7 @@ $stepper-step-min-size: null !default;
 $stepper-step-indicator-size: null !default;
 $stepper-step-content-row-gap: null !default;
 $stepper-step-content-column-gap: null !default;
+$stepper-step-optional-mark-font-size: $generic-xs-font-size !default;
 
 @if $size == "default" {
   $stepper-margin: 12px !default;

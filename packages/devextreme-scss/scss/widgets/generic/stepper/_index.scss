@@ -21,6 +21,7 @@
   $stepper-step-indicator-size,
   $stepper-step-content-row-gap,
   $stepper-step-content-column-gap,
+  $stepper-step-optional-mark-font-size,
 );
 @include step-states(
   $stepper-step-bg,
