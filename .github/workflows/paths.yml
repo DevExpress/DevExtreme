@@ -29,12 +29,11 @@ jobs:
       uses: DevExpress/github-actions/get-changed-files@v1
       with:
         gh-token: ${{ secrets.GITHUB_TOKEN }}
-        output: changed-files.json
 
     - name: Check all changed files
       run: |
         RESULT=''
-        for file in $(jq -r '.[].filename' changed-files.json); do
+        for file in ${{ steps.changed-files.outputs.files }}; do
           if (( ${#file} > $MAX_LENGTH )); then RESULT+="$file\n"; fi;
         done
         if (( ${#RESULT} )); then printf "The following filenames are longer than $MAX_LENGTH characters:\n${RESULT}" && exit 1; fi;
