@@ -22,7 +22,7 @@ exports[`ColumnProperties headerItemCssClass should override content of headerPa
             style="left: 0px; top: 0px; transform: none;"
           >
             <div
-              class="dx-cardview-headers-content"
+              class="dx-cardview-headerpanel-content"
             >
               <div
                 class="dx-cardview-header-item my-css-class "
@@ -68,7 +68,7 @@ exports[`Options headerPanel itemCssClass should add css class to headerPanel it
         style="left: 0px; top: 0px; transform: none;"
       >
         <div
-          class="dx-cardview-headers-content"
+          class="dx-cardview-headerpanel-content"
         >
           <div
             class="dx-cardview-header-item  my-class"
@@ -125,7 +125,7 @@ exports[`Options headerPanel visible when it is true should show headerPanel 1`]
             style="left: 0px; top: 0px; transform: none;"
           >
             <div
-              class="dx-cardview-headers-content"
+              class="dx-cardview-headerpanel-content"
             >
               <div
                 class="dx-cardview-header-item  "
