@@ -51,7 +51,10 @@ const getDefaultBuilderConfig = (framework, additionPaths, map) => ({
     'devextreme/common/core/events/utils': {
       main: 'index',
     },
-    'devextreme/common/core/events': {
+    'devextreme/events/utils': {
+      main: 'index',
+    },
+    'devextreme/events': {
       main: 'index',
     },
   },
