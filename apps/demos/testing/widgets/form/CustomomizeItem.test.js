@@ -6,7 +6,7 @@ import { testScreenshot } from '../../../utils/visual-tests/helpers/theme-utils'
 fixture('Form.CustomizeItem')
   .page('http://localhost:8080/')
   .before(async (ctx) => {
-    ctx.initialWindowSize = [900, 600];
+    ctx.initialWindowSize = [900, 800];
   });
 
 runManualTest('Form', 'CustomizeItem', ['jQuery', 'React', 'Vue', 'Angular'], (test) => {
@@ -17,7 +17,8 @@ runManualTest('Form', 'CustomizeItem', ['jQuery', 'React', 'Vue', 'Angular'], (t
       offsetX: -1,
       offsetY: -1,
     });
-    await testScreenshot(t, takeScreenshot, 'form_customize_item_label_tooltip.png');
+
+    await testScreenshot(t, takeScreenshot, 'form_customize_item_label_tooltip.png', '.dx-form');
 
     await t
       .expect(compareResults.isValid())

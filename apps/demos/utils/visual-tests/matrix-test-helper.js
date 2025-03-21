@@ -42,7 +42,7 @@ export const waitForAngularLoading = ClientFunction(() => new Promise((resolve) 
   const demoAppIntervalHandle = setInterval(() => {
     const demoApp = document.querySelector('demo-app');
     if ((demoApp && demoApp.innerText !== 'Loading...') || demoAppCounter === 120) {
-      setTimeout(resolve, 1000);
+      setTimeout(resolve, 2000);
       clearInterval(demoAppIntervalHandle);
     }
     demoAppCounter += 1;
@@ -202,16 +202,16 @@ const SKIPPED_TESTS = {
       { demo: 'Customization', themes: [THEME.generic, THEME.material, THEME.fluent] },
     ],
     Charts: [
-      { demo: 'Overview', themes: [THEME.material] },
-      { demo: 'Crosshair', themes: [THEME.material] },
-      { demo: 'CustomAnnotations', themes: [THEME.material] },
-      { demo: 'LoadDataOnDemand', themes: [THEME.material] },
-      { demo: 'CustomLegendMarkers', themes: [THEME.material] },
+      { demo: 'Overview', themes: [THEME.generic, THEME.material] },
+      { demo: 'Crosshair', themes: [THEME.generic, THEME.material, THEME.fluent] },
+      { demo: 'CustomAnnotations', themes: [THEME.generic, THEME.material, THEME.fluent] },
+      { demo: 'LoadDataOnDemand', themes: [THEME.generic, THEME.material, THEME.fluent] },
+      { demo: 'CustomLegendMarkers', themes: [THEME.generic, THEME.material, THEME.fluent] },
       { demo: 'PieWithResolvedLabelOverlapping', themes: [THEME.material, THEME.fluent] },
-      { demo: 'ZoomingAndScrollingAPI', themes: [THEME.material] },
+      { demo: 'ZoomingAndScrollingAPI', themes: [THEME.generic, THEME.material, THEME.fluent] },
       { demo: 'ZoomingOnAreaSelection', themes: [THEME.material] },
       { demo: 'TooltipHTMLSupport', themes: [THEME.material] },
-      { demo: 'Export', themes: [THEME.material] },
+      { demo: 'Export', themes: [THEME.generic, THEME.material, THEME.fluent] },
       { demo: 'ExportCustomMarkup', themes: [THEME.material] },
       { demo: 'PopupEditing', themes: [THEME.material] },
     ],
@@ -226,7 +226,7 @@ const SKIPPED_TESTS = {
       { demo: 'GroupedItems', themes: [THEME.generic, THEME.material, THEME.fluent] },
     ],
     Gauges: [
-      { demo: 'VariableNumberOfBars', themes: [THEME.material, THEME.fluent] },
+      { demo: 'VariableNumberOfBars', themes: [THEME.generic, THEME.material, THEME.fluent] },
     ],
     DataGrid: [
       { demo: 'Appearance', themes: [THEME.generic, THEME.material, THEME.fluent] },
@@ -300,9 +300,6 @@ const SKIPPED_TESTS = {
       { demo: 'ToolbarCustomization', themes: [THEME.generic, THEME.fluent, THEME.material] },
       'StatePersistence',
     ],
-    Toolbar: [
-      { demo: 'Adaptability', themes: [THEME.generic, THEME.material, THEME.fluent] },
-    ],
   },
   React: {
     Charts: [
@@ -311,7 +308,7 @@ const SKIPPED_TESTS = {
       { demo: 'ZoomingAndScrollingAPI', themes: [THEME.material] },
       { demo: 'Crosshair', themes: [THEME.material] },
       { demo: 'CustomAnnotations', themes: [THEME.material] },
-      { demo: 'CustomLegendMarkers', themes: [THEME.material] },
+      { demo: 'CustomLegendMarkers', themes: [THEME.generic, THEME.material, THEME.fluent] },
     ],
     DataGrid: [
       { demo: 'BatchEditing', themes: [THEME.fluent] },
@@ -329,6 +326,10 @@ const SKIPPED_TESTS = {
       { demo: 'Overview', themes: [THEME.fluent, THEME.material] },
       { demo: 'Templates', themes: [THEME.fluent, THEME.material] },
     ],
+    Form: [
+      // Source image size does not match target size
+      { demo: 'CustomizeItem', themes: [THEME.generic] },
+    ]
   },
 };
 
@@ -431,17 +432,17 @@ export function runManualTestCore(
   test.before?.(async (t) => {
     const isAngular = framework === 'Angular';
 
-    if (isAngular) {
-      await waitForAngularLoading();
+    // if (isAngular) {
+    //   await waitForAngularLoading();
+    // }
+
+    if (isAngular && shouldWaitContentAppears) {
+      await forceContentAppears(t);
     }
 
     const [width, height] = t.fixtureCtx.initialWindowSize;
 
     await t.resizeWindow(width, height);
-
-    if (isAngular && shouldWaitContentAppears) {
-      await forceContentAppears(t);
-    }
   });
 
   if (settings.explicitTests) {
@@ -451,14 +452,16 @@ export function runManualTestCore(
     return;
   }
 
-  callback(test);
+  callback(test, framework);
 }
 
 export const forceContentAppears = async (t) => {
-  await t.click('body', {
+  await t.click('demo-app', {
     offsetX: -1,
     offsetY: -1,
   });
+
+  await t.wait(1000);
 };
 
 

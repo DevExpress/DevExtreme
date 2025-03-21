@@ -16,6 +16,11 @@ fixture('List.ListSelection')
 
 runManualTest('List', 'ListSelection', ['jQuery', 'React', 'Vue', 'Angular'], (test) => {
   test('List Selection', async (t) => {
+    // await t.click('demo-app', {
+    //   offsetX: 0,
+    //   offsetY: 0,
+    // });
+
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     const optionsContainer = await Selector('.options');

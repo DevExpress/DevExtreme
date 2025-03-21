@@ -20,6 +20,11 @@ runManualTest('Tabs', 'Selection', ['jQuery', 'React', 'Vue', 'Angular'], (test)
   test('Selection', async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
+    // await t.click('demo-app', {
+    //   offsetX: 0,
+    //   offsetY: 0,
+    // });
+
     await t
       .click($(`.${TABS_WRAPPER_CLASS} .${TAB_CLASS}`).nth(1))
       .wait(200);

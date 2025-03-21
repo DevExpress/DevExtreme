@@ -18,6 +18,11 @@ runManualTest('TabPanel', 'Overview', ['jQuery', 'React', 'Vue', 'Angular'], (te
   test('Overview', async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
+    // await t.click('demo-app', {
+    //   offsetX: 0,
+    //   offsetY: 0,
+    // });
+
     const $selectBox = $(`.${OPTION_CLASS} .${SELECTBOX_CLASS}`);
 
     await t
