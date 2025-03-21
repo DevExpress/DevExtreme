@@ -91,3 +91,30 @@ options.forEach(([currentView, title, counts]) => {
     });
   });
 });
+
+[
+  ['timelineWeek', 'Scheduler. Timeline Week view: from April 27, 2025 to May 3, 2025 with 5 appointments'],
+  ['week', 'Scheduler. Week view: from April 27, 2025 to May 3, 2025 with 5 appointments'],
+].forEach(([currentView, title]) => {
+  test(`Scheduler should have correct status message if the appointments are partial [view=${currentView}]`, async (t) => {
+    const scheduler = new Scheduler('#container');
+
+    await statusCheckEql(t, scheduler, title);
+  }).before(async () => {
+    await createWidget('dxScheduler', {
+      timeZone: 'America/Los_Angeles',
+      dataSource: [{
+        startDate: '2025-04-29T23:18:00.000Z',
+        endDate: '2025-04-30T16:12:00.000Z',
+      }, {
+        startDate: '2025-04-26T23:18:00.000Z',
+        endDate: '2025-04-27T12:12:00.000Z',
+        recurrenceRule: 'FREQ=DAILY;INTERVAL=2;COUNT=5',
+      }],
+      views: ['timelineWeek', 'week'],
+      currentView,
+      indicatorTime: today,
+      currentDate: today,
+    });
+  });
+});
