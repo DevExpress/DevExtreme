@@ -35,8 +35,9 @@ $(() => {
   $("#cardsPerRowSelector").dxSelectBox({
     items: [1, 2, 3, 4, 8],
     value: 3,
+    label: 'Cards per row',
     onValueChanged: function (e) {
-      $("#cardview").dxCardView("option", "cardsPerRow", e.value); // Update dynamically
+      $("#cardview").dxCardView("option", "cardsPerRow", e.value);
     },
   });
 });

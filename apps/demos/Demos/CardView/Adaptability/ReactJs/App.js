@@ -11,7 +11,7 @@ const App = () => {
 
   return (
     <div>
-      <SelectBox items={[1, 2, 3, 4, 8]} value={cardsPerRow} onValueChanged={(e) => setCardsPerRow(e.value)} />
+      <SelectBox items={[1, 2, 3, 4, 8]} value={cardsPerRow} onValueChanged={(e) => setCardsPerRow(e.value)} label="Cards per row" />
       <CardView
         id="cardview"
         dataSource={employees}
