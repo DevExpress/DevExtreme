@@ -1,7 +1,7 @@
 import sh from 'shelljs';
 import path from 'node:path';
 import yargs from 'yargs';
-import { ARTIFACTS_DIR, INTERNAL_TOOLS_ARTIFACTS, ROOT_DIR, NPM_DIR, JS_ARTIFACTS, CSS_ARTIFACTS } from './common/paths';
+import { ARTIFACTS_DIR, ROOT_DIR, NPM_DIR, JS_ARTIFACTS, CSS_ARTIFACTS } from './common/paths';
 import { version as devextremeNpmVersion } from '../../packages/devextreme/package.json';
 
 const argv = yargs
@@ -13,7 +13,7 @@ const devMode = argv.dev;
 console.log(`Dev mode: ${devMode}`);
 
 const DEVEXTREME_NPM_DIR = path.join(ROOT_DIR, 'packages/devextreme/artifacts/npm');
-
+/*
 const injectDescriptions = () => {
     sh.pushd(ROOT_DIR);
 
@@ -30,7 +30,7 @@ const injectDescriptions = () => {
     sh.exec('pnpm run devextreme:inject-descriptions');
     sh.popd();
 }
-
+*/
 sh.set('-e');
 
 sh.mkdir('-p', NPM_DIR);
@@ -50,7 +50,7 @@ if (!devMode) {
     // aspnet metadata will be used in Build custom-tasks to inject aspnet descriptions
     sh.exec(`pnpm run tools make-aspnet-metadata --version ${MAJOR_VERSION}`);
 
-    injectDescriptions();
+    //injectDescriptions();
 }
 
 if (devMode) {
