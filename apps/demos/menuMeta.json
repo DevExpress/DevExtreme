@@ -1920,9 +1920,14 @@
             "Title": "Toolbar Customization",
             "Name": "ToolbarCustomization",
             "Widget": "Scheduler",
+            "MvcAdditionalFiles": [
+              "/Models/AppointmentWithResources.cs",
+              "/Models/AssigneeResource.cs",
+              "/Models/SampleData/AppointmentsWithResources.cs",
+              "/Models/SampleData/AssigneeResources.cs"
+            ],
             "DemoType": "Web",
-            "Badge": "Roadmap",
-            "RoadmapSurveyUrl": "https://www.devexpress.com/support/surveys/devextreme-roadmap-toolbar-customization.xml"
+            "Badge": "Updated"
           },
           {
             "Title": "Disabled Date/Time Ranges",
@@ -1979,18 +1984,6 @@
               "/Models/ContextMenuItem.cs",
               "/Models/SampleData/RecurringAppointments.cs",
               "/Models/SampleData/RecurringAppointmentsResources.cs"
-            ],
-            "DemoType": "Web"
-          },
-          {
-            "Title": "Toolbar Customization",
-            "Name": "ToolbarCustomization",
-            "Widget": "Scheduler",
-            "MvcAdditionalFiles": [
-              "/Models/AppointmentWithResources.cs",
-              "/Models/AssigneeResource.cs",
-              "/Models/SampleData/AppointmentsWithResources.cs",
-              "/Models/SampleData/AssigneeResources.cs"
             ],
             "DemoType": "Web"
           }
