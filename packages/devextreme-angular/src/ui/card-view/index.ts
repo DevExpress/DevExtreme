@@ -434,7 +434,7 @@ export class DxCardViewComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
     
-     * [descr:DataControllerOptions.onDataErrorOccurred]
+     * [descr:dxCardViewOptions.onDataErrorOccurred]
     
     
      */
