@@ -92,15 +92,6 @@ export type DataControllerOptions<TRowData = unknown, TKey = unknown> = {
     keyExpr?: string | string[];
     /**
      * @docid
-     * @default undefined
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:this
-     * @action
-     * @public
-     */
-    onDataErrorOccurred?: (args: DataErrorOccurredInfo & EventInfo<dxCardView>) => void;
-    /**
-     * @docid
      * @default "auto"
      * @public
      */
@@ -493,7 +484,15 @@ ColumnsControllerOptions<TRowData, TKey>,
 HeaderPanelOptions<TRowData, TKey>,
 ContentViewOptions<TRowData>,
 ToolbarOptions {
-
+    /**
+     * @docid
+     * @default undefined
+     * @type_function_param1 e:object
+     * @type_function_param1_field component:this
+     * @action
+     * @public
+     */
+    onDataErrorOccurred?: (e: EventInfo<dxCardView> & DataErrorOccurredInfo) => void;
 }
 
 /** @public */
