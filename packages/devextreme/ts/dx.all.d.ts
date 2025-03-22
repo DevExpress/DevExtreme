@@ -9838,7 +9838,15 @@ declare module DevExpress.ui {
       DevExpress.ui.dxCardView.ColumnsControllerOptions<TRowData, TKey>,
       DevExpress.ui.dxCardView.HeaderPanelOptions<TRowData, TKey>,
       DevExpress.ui.dxCardView.ContentViewOptions<TRowData>,
-      DevExpress.ui.dxCardView.ToolbarOptions {}
+      DevExpress.ui.dxCardView.ToolbarOptions {
+    /**
+     * [descr:dxCardViewOptions.onDataErrorOccurred]
+     */
+    onDataErrorOccurred?: (
+      e: DevExpress.common.core.events.EventInfo<dxCardView> &
+        DevExpress.common.grids.DataErrorOccurredInfo
+    ) => void;
+  }
   /**
    * [descr:dxChat]
    */
@@ -31757,13 +31765,6 @@ declare module DevExpress.ui.dxCardView {
      * [descr:DataControllerOptions.keyExpr]
      */
     keyExpr?: string | string[];
-    /**
-     * [descr:DataControllerOptions.onDataErrorOccurred]
-     */
-    onDataErrorOccurred?: (
-      args: DevExpress.common.grids.DataErrorOccurredInfo &
-        DevExpress.common.core.events.EventInfo<dxCardView>
-    ) => void;
     /**
      * [descr:DataControllerOptions.remoteOperations]
      */
