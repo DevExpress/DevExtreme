@@ -14,7 +14,6 @@ import {
 import * as FilterControllerModule from './filtering/index';
 import { ItemsController } from './items_controller/items_controller';
 import { PagerView } from './pager/view';
-import { SearchController } from './search/controller';
 import * as SelectionControllerModule from './selection/index';
 import * as SortingControllerModule from './sorting_controller/index';
 import { ToolbarController } from './toolbar/controller';
