@@ -60,6 +60,7 @@ jobs:
           DOTNET_SKIP_FIRST_TIME_EXPERIENCE: "true"
         working-directory: ./packages/devextreme
         run: |
+          node ./performance_log.js &
           pnpx nx build:dev
           pnpx nx build:systemjs
 
