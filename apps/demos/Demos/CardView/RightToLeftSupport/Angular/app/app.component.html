@@ -1,0 +1,21 @@
+<dx-card-view
+  id="cardViewContainer"
+  [dataSource]="unions"
+  [columns]="columns"
+  [cardsPerRow]="3"
+  [rtlEnabled]="rtlEnabled"
+>
+</dx-card-view>
+<div class="options">
+  <div class="caption">Options</div>
+  <div class="option">
+    <span>Language:</span>
+    <dx-select-box
+      [items]="languages"
+      [(value)]="selectedLanguage"
+      [width]="250"
+      [inputAttr]="{ 'aria-label': 'Language' }"
+      (onValueChanged)="onLanguageChange($event)"
+    ></dx-select-box>
+  </div>
+</div>
