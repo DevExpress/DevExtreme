@@ -15,13 +15,13 @@ export abstract class BaseCommand {
     const prompt = this.promptManager.buildPrompt(templateName, data);
 
     const abort = this.requestManager.sendRequest(prompt, {
-      onChunk: callbacks.onChunk,
+      onChunk: (chunk) => { callbacks?.onChunk?.(chunk); },
       onComplete: (result) => {
         const finalResponse = this.parseResult(result);
 
-        callbacks.onComplete?.(finalResponse);
+        callbacks?.onComplete?.(finalResponse);
       },
-      onError: callbacks.onError,
+      onError: (error) => { callbacks?.onError?.(error); },
     });
 
     return abort;

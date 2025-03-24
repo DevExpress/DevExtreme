@@ -1,6 +1,6 @@
 import { AI } from 'ai/ai';
 
-QUnit.module('AI', function() {
+QUnit.module('AI Integration', function() {
     QUnit.test('sendRequest is called with correct parameters', function(assert) {
         assert.expect(2);
         const done = assert.async();
