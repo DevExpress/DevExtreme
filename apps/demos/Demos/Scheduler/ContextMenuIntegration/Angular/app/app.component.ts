@@ -93,7 +93,7 @@ export class AppComponent {
       {
         text: 'New Appointment',
         onItemClick: () => scheduler.showAppointmentPopup(
-          { startDate: cellData.startDate },
+          { startDate: cellData.startDateUTC },
           true,
         ),
       },
@@ -101,7 +101,7 @@ export class AppComponent {
         text: 'New Recurring Appointment',
         onItemClick: () => scheduler.showAppointmentPopup(
           {
-            startDate: cellData.startDate,
+            startDate: cellData.startDateUTC,
             recurrenceRule: 'FREQ=DAILY',
           },
           true,

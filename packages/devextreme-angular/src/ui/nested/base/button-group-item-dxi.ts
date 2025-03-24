@@ -547,6 +547,20 @@ export abstract class DxiButtonGroupItem extends CollectionNestedOption {
         this._setOption('splitter', value);
     }
 
+    get isValid(): boolean {
+        return this._getOption('isValid');
+    }
+    set isValid(value: boolean) {
+        this._setOption('isValid', value);
+    }
+
+    get optional(): boolean {
+        return this._getOption('optional');
+    }
+    set optional(value: boolean) {
+        this._setOption('optional', value);
+    }
+
     get heightRatio(): number {
         return this._getOption('heightRatio');
     }

@@ -250,8 +250,10 @@
         "dxPivotGrid-rowFieldArea": "Arraste os campos de linha até aqui",
         "dxPivotGrid-filterFieldArea": "Arraste os campos de filtro até aqui",
 
-        "dxScheduler-ariaLabel": "Agendador. Vista {0}",
-
+        "dxScheduler-dateRange": "from {0} to {1}",
+        "dxScheduler-ariaLabel": "Scheduler. {0} view: {1} with {2} appointments",
+        "dxScheduler-ariaLabel-currentIndicator-present": "The current time indicator is visible in the view",
+        "dxScheduler-ariaLabel-currentIndicator-not-present": "The current time indicator is not visible on the screen",
 
         "dxScheduler-appointmentAriaLabel-group": "Grupo: {0}",
         "dxScheduler-appointmentAriaLabel-recurring": "Compromisso recorrente",
@@ -796,6 +798,8 @@
         "dxMultiView-itemAriaLabel": "{0} de {1}",
 
         "dxSplitter-resizeHandleAriaLabel": "Barra de divisão",
-        "dxSplitter-resizeHandleAriaRoleDescription": "Separator"
+        "dxSplitter-resizeHandleAriaRoleDescription": "Separator",
+
+        "dxStepper-optionalMark": "(Optional)"
     }
 }

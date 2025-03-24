@@ -7,7 +7,7 @@ import errors from '@js/core/errors';
 import $ from '@js/core/renderer';
 import dateUtils from '@js/core/utils/date';
 import { extend } from '@js/core/utils/extend';
-import type { dxSchedulerOptions } from '@js/ui/scheduler';
+import type { dxSchedulerOptions, ViewType } from '@js/ui/scheduler';
 import Toolbar from '@js/ui/toolbar';
 import Widget from '@js/ui/widget/ui.widget';
 import { viewsUtils } from '@ts/scheduler/r1/utils/index';
@@ -79,9 +79,8 @@ export class SchedulerHeader extends Widget<dxSchedulerOptions> {
       [
         ['currentView', [(view) => {
           this.currentView = viewsUtils.getCurrentView(
-            getViewName(view),
-            // @ts-expect-error
-            this.option('views'),
+            getViewName(view) as string,
+            this.option('views') as ViewType[],
           );
         }]],
         ['toolbar', [this.repaint.bind(this)]],
@@ -124,9 +123,8 @@ export class SchedulerHeader extends Widget<dxSchedulerOptions> {
     this.$element().addClass(COMPONENT_CLASS);
 
     this.currentView = viewsUtils.getCurrentView(
-      getViewName(this.option('currentView')),
-      // @ts-expect-error
-      this.option('views'),
+      getViewName(this.option('currentView') as ViewType) as string,
+      this.option('views') as ViewType[],
     );
   }
 
@@ -249,7 +247,7 @@ export class SchedulerHeader extends Widget<dxSchedulerOptions> {
     return this._isMonth() ? nextWeek(startViewDate) : startViewDate;
   }
 
-  _getCaption() {
+  _getCaptionOptions() {
     let date = this.option('currentDate');
 
     if (this.option('startViewDate')) {
@@ -257,7 +255,12 @@ export class SchedulerHeader extends Widget<dxSchedulerOptions> {
     }
 
     date = dateUtils.trimTime(date);
-    const options = { ...this.intervalOptions, date };
+
+    return { ...this.intervalOptions, date };
+  }
+
+  _getCaption() {
+    const options = this._getCaptionOptions();
     const customizationFunction = this.option('customizeDateNavigatorText');
     const useShortDateFormat = this.option('_useShortDateFormat');
 

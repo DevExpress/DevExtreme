@@ -1,5 +1,6 @@
-/* eslint-disable @typescript-eslint/prefer-nullish-coalescing */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
+/* eslint-disable @typescript-eslint/prefer-nullish-coalescing */
+
 import type { DataRow } from '@ts/grids/new/grid_core/columns_controller/types';
 import type { DataObject } from '@ts/grids/new/grid_core/data_controller/types';
 import { CollectionController } from '@ts/grids/new/grid_core/keyboard_navigation/collection_controller';
@@ -51,13 +52,7 @@ export interface CardProps {
 
   hoverStateEnabled?: boolean;
 
-  maxWidth?: number;
-
-  minWidth?: number;
-
   toolbar?: CardHeaderItem[];
-
-  width?: number;
 
   template?: (row: DataRow) => JSX.Element;
 
@@ -86,18 +81,9 @@ export class Card extends Component<CardProps> {
 
     const {
       fieldTemplate: FieldTemplate = Field,
-      width,
-      minWidth,
-      maxWidth,
       hoverStateEnabled,
       cover,
     } = this.props;
-
-    const style = {
-      width: `${width}px`,
-      'min-width': `${minWidth}px`,
-      'max-width': `${maxWidth}px`,
-    };
 
     const className = [
       CLASSES.card,
@@ -117,8 +103,6 @@ export class Card extends Component<CardProps> {
         onDblClick={this.handleDoubleClick}
         onMouseEnter={this.handleMouseEnter}
         onMouseLeave={this.handleMouseLeave}
-        // TODO: move to scss
-        style={style}
       >
         <CardHeader
           items={this.props.toolbar || []}

@@ -250,8 +250,10 @@
         "dxPivotGrid-rowFieldArea": "Slip rækkefelter her",
         "dxPivotGrid-filterFieldArea": "Slip filterfelter her",
 
-        "dxScheduler-ariaLabel": "Planlægger. {0} visning",
-
+        "dxScheduler-dateRange": "from {0} to {1}",
+        "dxScheduler-ariaLabel": "Scheduler. {0} view: {1} with {2} appointments",
+        "dxScheduler-ariaLabel-currentIndicator-present": "The current time indicator is visible in the view",
+        "dxScheduler-ariaLabel-currentIndicator-not-present": "The current time indicator is not visible on the screen",
 
         "dxScheduler-appointmentAriaLabel-group": "Gruppe: {0}",
         "dxScheduler-appointmentAriaLabel-recurring": "Tilbagevendende aftale",
@@ -796,6 +798,8 @@
         "dxMultiView-itemAriaLabel": "{0} af {1}",
 
         "dxSplitter-resizeHandleAriaLabel": "Split bar",
-        "dxSplitter-resizeHandleAriaRoleDescription": "Separator"
+        "dxSplitter-resizeHandleAriaRoleDescription": "Separator",
+
+        "dxStepper-optionalMark": "(Optional)"
     }
 }

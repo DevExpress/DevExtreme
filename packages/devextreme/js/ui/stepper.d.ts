@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { DataSourceLike } from '../data/data_source';
 
 import {
@@ -20,7 +19,7 @@ import {
   Orientation,
 } from '../common';
 
-type ItemLike<TKey> = string | Item<TKey> | any;
+type ItemLike = string | Item | any;
 
 /**
  * @docid _ui_stepper_DisposingEvent
@@ -28,7 +27,7 @@ type ItemLike<TKey> = string | Item<TKey> | any;
  * @type object
  * @inherits EventInfo
  */
-export type DisposingEvent<TItem extends ItemLike<TKey> = any, TKey = any> = EventInfo<dxStepper<TItem, TKey>>;
+export type DisposingEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxStepper<TItem, TKey>>;
 
 /**
  * @docid _ui_stepper_InitializedEvent
@@ -36,7 +35,7 @@ export type DisposingEvent<TItem extends ItemLike<TKey> = any, TKey = any> = Eve
  * @type object
  * @inherits InitializedEventInfo
  */
-export type InitializedEvent<TItem extends ItemLike<TKey> = any, TKey = any> = InitializedEventInfo<dxStepper<TItem, TKey>>;
+export type InitializedEvent<TItem extends ItemLike = any, TKey = any> = InitializedEventInfo<dxStepper<TItem, TKey>>;
 
 /**
  * @docid _ui_stepper_ItemClickEvent
@@ -44,7 +43,7 @@ export type InitializedEvent<TItem extends ItemLike<TKey> = any, TKey = any> = I
  * @type object
  * @inherits NativeEventInfo,ItemInfo
  */
-export type ItemClickEvent<TItem extends ItemLike<TKey> = any, TKey = any> = NativeEventInfo<dxStepper<TItem, TKey>, MouseEvent | PointerEvent> & ItemInfo<TItem>;
+export type ItemClickEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<dxStepper<TItem, TKey>, MouseEvent | PointerEvent> & ItemInfo<TItem>;
 
 /**
  * @docid _ui_stepper_ItemContextMenuEvent
@@ -52,7 +51,7 @@ export type ItemClickEvent<TItem extends ItemLike<TKey> = any, TKey = any> = Nat
  * @type object
  * @inherits NativeEventInfo,ItemInfo
  */
-export type ItemContextMenuEvent<TItem extends ItemLike<TKey> = any, TKey = any> = NativeEventInfo<dxStepper<TItem, TKey>, MouseEvent | PointerEvent | TouchEvent> & ItemInfo<TItem>;
+export type ItemContextMenuEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<dxStepper<TItem, TKey>, MouseEvent | PointerEvent | TouchEvent> & ItemInfo<TItem>;
 
 /**
  * @docid _ui_stepper_ItemRenderedEvent
@@ -60,7 +59,7 @@ export type ItemContextMenuEvent<TItem extends ItemLike<TKey> = any, TKey = any>
  * @type object
  * @inherits EventInfo,ItemInfo
  */
-export type ItemRenderedEvent<TItem extends ItemLike<TKey> = any, TKey = any> = EventInfo<dxStepper<TItem, TKey>> & ItemInfo<TItem>;
+export type ItemRenderedEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxStepper<TItem, TKey>> & ItemInfo<TItem>;
 
 /**
  * @docid _ui_stepper_OptionChangedEvent
@@ -68,7 +67,7 @@ export type ItemRenderedEvent<TItem extends ItemLike<TKey> = any, TKey = any> = 
  * @type object
  * @inherits EventInfo,ChangedOptionInfo
  */
-export type OptionChangedEvent<TItem extends ItemLike<TKey> = any, TKey = any> = EventInfo<dxStepper<TItem, TKey>> & ChangedOptionInfo;
+export type OptionChangedEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxStepper<TItem, TKey>> & ChangedOptionInfo;
 
 /**
  * @docid _ui_stepper_SelectionChangingEvent
@@ -76,7 +75,7 @@ export type OptionChangedEvent<TItem extends ItemLike<TKey> = any, TKey = any> =
  * @type object
  * @inherits AsyncCancelable,EventInfo,SelectionChangeInfo
  */
-export type SelectionChangingEvent<TItem extends ItemLike<TKey> = any, TKey = any> = SelectionChangingEventBase<dxStepper<TItem, TKey>>;
+export type SelectionChangingEvent<TItem extends ItemLike = any, TKey = any> = SelectionChangingEventBase<dxStepper<TItem, TKey>>;
 
 /**
  * @docid _ui_stepper_SelectionChangedEvent
@@ -84,7 +83,7 @@ export type SelectionChangingEvent<TItem extends ItemLike<TKey> = any, TKey = an
  * @type object
  * @inherits EventInfo,SelectionChangeInfo
  */
-export type SelectionChangedEvent<TItem extends ItemLike<TKey> = any, TKey = any> = EventInfo<dxStepper<TItem, TKey>> & SelectionChangeInfo<TItem>;
+export type SelectionChangedEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxStepper<TItem, TKey>> & SelectionChangeInfo<TItem>;
 
 /**
  * @deprecated use Properties instead
@@ -93,7 +92,7 @@ export type SelectionChangedEvent<TItem extends ItemLike<TKey> = any, TKey = any
  * @docid
  */
 export interface dxStepperOptions<
-  TItem extends ItemLike<TKey> = any,
+  TItem extends ItemLike = any,
   TKey = any,
 > extends CollectionWidgetOptions<dxStepper<TItem, TKey>, TItem, TKey> {
   /**
@@ -135,6 +134,12 @@ export interface dxStepperOptions<
   orientation?: Orientation;
   /**
    * @docid
+   * @default true
+   * @public
+   */
+  linear?: boolean;
+  /**
+   * @docid
    * @type Array<dxStepperItem>
    * @fires dxStepperOptions.onOptionChanged
    * @public
@@ -149,7 +154,7 @@ export interface dxStepperOptions<
  * @public
  */
 export default class dxStepper<
-  TItem extends ItemLike<TKey> = any,
+  TItem extends ItemLike = any,
   TKey = any,
 > extends CollectionWidget<Properties<TItem, TKey>, TItem, TKey> { }
 
@@ -157,18 +162,43 @@ export default class dxStepper<
  * @public
  * @namespace DevExpress.ui.dxStepper
  */
-export type Item<TKey = any> = dxStepperItem<TKey>;
+export type Item = dxStepperItem;
 
 /**
  * @deprecated Use Item instead
  * @namespace DevExpress.ui
  */
-export interface dxStepperItem<TKey = any> extends CollectionWidgetItem {
+export interface dxStepperItem extends CollectionWidgetItem {
+  /**
+   * @docid
+   * @public
+   */
+  icon?: string;
+  /**
+   * @docid
+   * @public
+   */
+  title?: string;
+  /**
+   * @docid
+   * @public
+   */
+  hint?: string;
+  /**
+   * @docid
+   * @public
+   */
+  optional?: boolean;
+  /**
+   * @docid
+   * @public
+   */
+  isValid?: boolean;
 }
 
 /** @public */
 export type ExplicitTypes<
-  TItem extends ItemLike<TKey>,
+  TItem extends ItemLike,
   TKey,
 > = {
   Properties: Properties<TItem, TKey>;
@@ -184,7 +214,7 @@ export type ExplicitTypes<
 
 /** @public */
 export type Properties<
-  TItem extends ItemLike<TKey> = any,
+  TItem extends ItemLike = any,
   TKey = any,
 > = dxStepperOptions<TItem, TKey>;
 

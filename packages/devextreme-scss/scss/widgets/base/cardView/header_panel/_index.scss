@@ -1,25 +1,8 @@
 
-@use './variables' as *;
 @use './item';
+@use './variables' as *;
 
-.dx-cardview-headers-content {
+.dx-cardview-headerpanel-content {
   display: flex;
-  gap: 5px;
-}
-
-.dx-cardview-header-item {
-  display: flex;
-  align-items: center;
-  gap: 2px;
-  padding: ($cardview-header-item-padding-vertical - $cardview-header-item-border-width) $cardview-header-item-padding-horizontal;
-  min-width: fit-content;
-  border: solid $cardview-header-item-border-width $cardview-header-item-border-color;
-  border-radius: $cardview-header-item-border-radius;
-  background-color: $cardview-header-item-background-color;
-  cursor: pointer;
-
-  &:hover {
-    background-color: $cardview-header-item-hovered-background-color;
-    border: solid $cardview-header-item-border-width $cardview-header-item-hovered-border-color;
-  }
+  gap: $cardview-headerpanel-content-gap;
 }

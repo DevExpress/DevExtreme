@@ -499,6 +499,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
       that._columnsController.columnsChanged.remove(updateItemsHandler);
       that.updateItems({
         repaintChangesOnly: false,
+        event: change?.changeTypes?.event,
         virtualColumnsScrolling: change?.changeTypes?.virtualColumnsScrolling,
       });
     };

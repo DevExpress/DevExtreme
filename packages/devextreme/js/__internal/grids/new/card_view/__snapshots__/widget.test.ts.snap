@@ -96,7 +96,7 @@ exports[`common initial render should be successfull 1`] = `
             style="left: 0px; top: 0px; transform: none;"
           >
             <div
-              class="dx-cardview-headers-content"
+              class="dx-cardview-headerpanel-content"
             >
               <div
                 class="dx-cardview-header-item  "
@@ -122,6 +122,11 @@ exports[`common initial render should be successfull 1`] = `
       </div>
     </div>
     
+  </div>
+  <div>
+    <div
+      class="dx-header-filter-menu"
+    />
   </div>
   <div
     class="dx-gridcore-contentview"
@@ -150,12 +155,11 @@ exports[`common initial render should be successfull 1`] = `
           >
             <div
               class="dx-cardview-content dx-cardview-content-grid"
-              style="--dx-cardview-cardsperrow: 3;"
+              style="--dx-cardview-cardsperrow: 3; --dx-cardview-card-cover-ratio: 1 / 1;"
               tabindex="0"
             >
               <div
                 class="dx-cardview-card"
-                style="min-width: undefinedpx; max-width: undefinedpx;"
                 tabindex="0"
               >
                 <div
@@ -197,7 +201,7 @@ exports[`common initial render should be successfull 1`] = `
                       :
                     </span>
                     <span
-                      class="dx-cardview-field-value"
+                      class="dx-cardview-field-value dx-cardview-field-value--text-align-left dx-cardview-field-value--white-space-nowrap"
                     >
                       a
                     </span>
