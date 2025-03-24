@@ -36,4 +36,8 @@ export default class Card {
     getFieldValueCell(fieldCaption: String): Selector {
         return this.getFieldCaptionCell(fieldCaption).nextSibling();
     }
+
+    getToolbarItem(index: number): Selector {
+        return this.element.find(`.${CLASS.header}`).find('.dx-toolbar-item').nth(index);
+    }
 }

@@ -14,6 +14,8 @@ import { CompatibilityColumnsController } from './columns_controller/compatibili
 import * as ColumnsControllerModule from './columns_controller/index';
 import * as DataControllerModule from './data_controller/index';
 import * as di from './di';
+import { EditingController } from './editing/controller';
+import { EditPopupView } from './editing/popup/view';
 import { ErrorController } from './error_controller/error_controller';
 import * as FilterControllerModule from './filtering/index';
 import { ItemsController } from './items_controller/items_controller';
@@ -44,6 +46,10 @@ export class GridCoreNewBase<
   protected sortingController!: SortingController;
 
   protected selectionController!: SelectionControllerModule.Controller;
+
+  private editingController!: EditingController;
+
+  private editPopupView!: EditPopupView;
 
   private pagerView!: PagerView;
 
@@ -86,6 +92,8 @@ export class GridCoreNewBase<
     this.itemsController = this.diContext.get(ItemsController);
     this.toolbarController = this.diContext.get(ToolbarController);
     this.toolbarView = this.diContext.get(ToolbarView);
+    this.editingController = this.diContext.get(EditingController);
+    this.editPopupView = this.diContext.get(EditPopupView);
     this.pagerView = this.diContext.get(PagerView);
     this.searchController = this.diContext.get(SearchController);
     this.searchView = this.diContext.get(SearchView);

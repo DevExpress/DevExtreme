@@ -7,7 +7,7 @@ import type { OptionsController } from '@ts/grids/new/card_view/options_controll
 import type { DataRow } from '@ts/grids/new/grid_core/columns_controller/types';
 
 import { ContentView as ContentViewBase } from '../../grid_core/content_view/view';
-import type { DataObject } from '../../grid_core/data_controller/types';
+import type { DataObject, Key } from '../../grid_core/data_controller/types';
 import type { ContentViewProps } from './content_view';
 import { ContentView as ContentViewComponent } from './content_view';
 import type { CardHoldEvent, SelectCardOptions } from './types';
@@ -59,6 +59,11 @@ export class ContentView extends ContentViewBase<ContentViewProps> {
           onDblClick: this.options.action('onCardDblClick'),
           onHoverChanged: this.options.action('onCardHoverChanged'),
           onPrepared: this.options.action('onCardPrepared'),
+          onEdit: (key: Key) => { this.editingController.editRow(key); },
+
+          onDelete: (key: Key) => { this.editingController.deleteRow(key); },
+          allowUpdating: this.editingController.allowUpdating,
+          allowDeleting: this.editingController.allowDeleting,
           cover: combined({
             imageExpr: computed(
               (imageExpr) => this.processExpr(imageExpr),

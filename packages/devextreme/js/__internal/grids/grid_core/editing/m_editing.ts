@@ -396,7 +396,7 @@ class EditingControllerImpl extends modules.ViewController {
         event.stopPropagation();
         event.preventDefault();
         setTimeout(() => {
-          options.row && allowAction && this[methodName] && this[methodName](options.row.rowIndex);
+          options.row && allowAction && this[methodName]?.(options.row.rowIndex);
         });
       }),
     }, config);
@@ -1006,7 +1006,7 @@ class EditingControllerImpl extends modules.ViewController {
   protected _addRow(parentKey) {
     const dataController = this._dataController;
     const store = dataController.store();
-    const key = store && store.key();
+    const key = store?.key();
     const param: any = { data: {} };
     const oldEditRowIndex = this._getVisibleEditRowIndex();
     // @ts-expect-error
@@ -1235,7 +1235,7 @@ class EditingControllerImpl extends modules.ViewController {
     const dataController = this._dataController;
     const items = dataController.items();
     const item: any = items[rowIndex];
-    const params: any = { data: item && item.data, cancel: false };
+    const params: any = { data: item?.data, cancel: false };
     const oldRowIndex = this._getVisibleEditRowIndex();
 
     if (!item) {
@@ -1368,7 +1368,7 @@ class EditingControllerImpl extends modules.ViewController {
   }
 
   protected executeOperation(deferred, func) {
-    this._lastOperation && this._lastOperation.reject();
+    this._lastOperation?.reject();
     this._lastOperation = deferred;
 
     this.waitForDeferredOperations().done(() => {
@@ -1394,7 +1394,7 @@ class EditingControllerImpl extends modules.ViewController {
   protected _processCanceledEditingCell(): any {}
 
   protected _repaintEditCell(column, oldColumn, oldEditRowIndex) {
-    if (!column || !column.showEditorAlways || oldColumn && !oldColumn.showEditorAlways) {
+    if (!column?.showEditorAlways || oldColumn && !oldColumn.showEditorAlways) {
       this._editCellInProgress = true;
       this._needFocusEditor = true;
 
@@ -1450,7 +1450,7 @@ class EditingControllerImpl extends modules.ViewController {
   public _focusEditingCell(beforeFocusCallback?, $editCell?, callBeforeFocusCallbackAlways?) {
     const editColumnIndex = this._getVisibleEditColumnIndex();
 
-    $editCell = $editCell || this._rowsView && this._rowsView._getCellElement(this._getVisibleEditRowIndex(), editColumnIndex);
+    $editCell = $editCell || this._rowsView?._getCellElement(this._getVisibleEditRowIndex(), editColumnIndex);
 
     if ($editCell) {
       this._delayedInputFocus($editCell, beforeFocusCallback, callBeforeFocusCallbackAlways);
@@ -1476,7 +1476,7 @@ class EditingControllerImpl extends modules.ViewController {
       if (!confirmDelete || !confirmDeleteMessage) {
         this._deleteRowCore(rowIndex);
       } else {
-        const confirmDeleteTitle = editingTexts && editingTexts.confirmDeleteTitle;
+        const confirmDeleteTitle = editingTexts?.confirmDeleteTitle;
         const showDialogTitle = isDefined(confirmDeleteTitle) && confirmDeleteTitle.length > 0;
         // @ts-expect-error
         confirm(confirmDeleteMessage, confirmDeleteTitle, showDialogTitle).done((confirmResult) => {
@@ -1494,7 +1494,7 @@ class EditingControllerImpl extends modules.ViewController {
   protected _deleteRowCore(rowIndex) {
     const dataController = this._dataController;
     const item = dataController.items()[rowIndex];
-    const key = item && item.key;
+    const key = item?.key;
     const oldEditRowIndex = this._getVisibleEditRowIndex();
 
     this.refresh();
@@ -1522,7 +1522,7 @@ class EditingControllerImpl extends modules.ViewController {
     const dataController = this._dataController;
     const item = dataController.items()[rowIndex];
     const oldEditRowIndex = this._getVisibleEditRowIndex();
-    const key = item && item.key;
+    const key = item?.key;
     const changes = this.getChanges();
 
     if (item) {
@@ -1918,7 +1918,7 @@ class EditingControllerImpl extends modules.ViewController {
   }
 
   protected _applyModified($element, options) {
-    $element && $element.addClass(CELL_MODIFIED);
+    $element?.addClass(CELL_MODIFIED);
   }
 
   /**
@@ -2243,7 +2243,7 @@ class EditingControllerImpl extends modules.ViewController {
 
   public getColumnTemplate(options) {
     const { column } = options;
-    const rowIndex = options.row && options.row.rowIndex;
+    const rowIndex = options.row?.rowIndex;
     let template;
     const isRowMode = this.isRowBasedEditMode();
     const isRowEditing = this.isEditRow(rowIndex);
@@ -2263,7 +2263,7 @@ class EditingControllerImpl extends modules.ViewController {
           };
           this._isEditingStart(editingStartOptions);
         }
-        if (!editingStartOptions || !editingStartOptions.cancel) {
+        if (!editingStartOptions?.cancel) {
           options.setValue = (value, text) => {
             this.updateFieldValue(options, value, text);
           };
@@ -2559,14 +2559,14 @@ export const dataControllerEditingExtenderMixin = (Base: ModuleType<DataControll
   }
 
   protected _isCellChanged(oldRow, newRow, visibleRowIndex, columnIndex, isLiveUpdate) {
-    const cell = oldRow.cells && oldRow.cells[columnIndex];
+    const cell = oldRow.cells?.[columnIndex];
     const isEditing = this._editingController && this._editingController.isEditCell(visibleRowIndex, columnIndex);
 
     if (isLiveUpdate && isEditing) {
       return false;
     }
 
-    if (cell && cell.column && !cell.column.showEditorAlways && cell.isEditing !== isEditing) {
+    if (cell?.column && !cell.column.showEditorAlways && cell.isEditing !== isEditing) {
       return true;
     }
 
@@ -2673,13 +2673,13 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewEditingExtender e
     const $targetElement = $(e.event.target);
     const columnIndex = this._getColumnIndexByElement($targetElement);
     const row: any = this._dataController.items()[e.rowIndex];
-    const allowUpdating = editingController.allowUpdating({ row }, eventName) || row && row.isNewRow;
+    const allowUpdating = editingController.allowUpdating({ row }, eventName) || row?.isNewRow;
     const column = this._columnsController.getVisibleColumns()[columnIndex];
     const isEditedCell = editingController.isEditCell(e.rowIndex, columnIndex);
     const allowEditing = allowUpdating && column && (column.allowEditing || isEditedCell);
     // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
     const startEditAction = this.option('editing.startEditAction') || 'click';
-    const isShowEditorAlways = column && column.showEditorAlways;
+    const isShowEditorAlways = column?.showEditorAlways;
 
     if (isEditedCell) {
       return true;

@@ -27,12 +27,16 @@ export interface CardHeaderItem {
 
 export interface CardHeaderProps {
   items?: CardHeaderItem[];
+  allowUpdating?: boolean;
+  allowDeleting?: boolean;
   visible?: boolean;
   captionExpr?: string;
   template?: (items: CardHeaderItem[]) => JSX.Element;
   row?: DataRow;
   isCheckBoxesRendered?: boolean;
   selectCard?: (row: DataRow, options: SelectCardOptions) => void;
+  onEdit?: () => void;
+  onDelete?: () => void;
 }
 
 export class CardHeader extends Component<CardHeaderProps> {
@@ -70,6 +74,9 @@ export class CardHeader extends Component<CardHeaderProps> {
       captionExpr,
       template,
       row,
+      allowUpdating,
+      onEdit,
+      onDelete,
     } = this.props;
 
     if (!visible) {
@@ -82,7 +89,15 @@ export class CardHeader extends Component<CardHeaderProps> {
       ? { location: 'before', text: row[captionExpr] }
       : null;
 
-    const finalItems = [checkBoxItem, captionItem, ...items]
+    const updateButton: CardHeaderItem | null = allowUpdating
+      ? { location: 'after', widget: 'dxButton', options: { icon: 'edit', onClick: onEdit } }
+      : null;
+
+    const deleteButton: CardHeaderItem | null = allowUpdating
+      ? { location: 'after', widget: 'dxButton', options: { icon: 'remove', onClick: onDelete } }
+      : null;
+
+    const finalItems = [checkBoxItem, captionItem, updateButton, deleteButton, ...items]
       .filter((item): item is CardHeaderItem => !!item);
 
     if (template) {

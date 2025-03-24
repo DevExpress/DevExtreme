@@ -2,6 +2,7 @@
 import type { DataType } from '@js/common';
 import messageLocalization from '@js/localization/message';
 
+import { defaultSetCellValue } from '../editing/utils';
 import type { Template, WithRequired } from '../types';
 import type { Column } from './types';
 
@@ -38,6 +39,11 @@ export const defaultColumnProperties = {
   trueText: messageLocalization.format('dxDataGrid-trueText'),
   falseText: messageLocalization.format('dxDataGrid-falseText'),
   showInColumnChooser: true,
+  validationRules: [],
+  allowEditing: true,
+  editorOptions: {},
+  setCellValue: defaultSetCellValue,
+  defaultSetCellValue,
 } satisfies Partial<Column>;
 
 export const defaultColumnPropertiesByDataType: Record<

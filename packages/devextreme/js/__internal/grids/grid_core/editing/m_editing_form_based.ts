@@ -135,7 +135,6 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
     }
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   protected _updateEditRowCore(row, skipCurrentRow, isCustomSetCellValue) {
     const editForm = this._editForm;
 

@@ -10,6 +10,7 @@ import type { ComponentType, RefObject } from 'inferno';
 
 import type { Config } from '../grid_core/core/config_context';
 import { ConfigContext } from '../grid_core/core/config_context';
+import { EditPopupView } from '../grid_core/editing/popup/view';
 import { RootElementUpdater } from '../grid_core/inferno_wrappers/root_element_updater';
 import { ContentView } from './content_view/view';
 import { HeaderPanelView } from './header_panel/view';
@@ -27,13 +28,15 @@ interface MainViewProps {
   HeaderFilterPopup: ComponentType;
   FilterPanel: ComponentType;
   ColumnChooser: ComponentType;
+  EditPopup: ComponentType;
   config: Config;
   rootElementRef: RefObject<HTMLDivElement>;
 }
 
 function MainViewComponent({
   Toolbar, Content, Pager, HeaderPanel, HeaderFilterPopup,
-  FilterPanel, ColumnChooser, config, rootElementRef,
+  FilterPanel, ColumnChooser, EditPopup,
+  config, rootElementRef,
 }: MainViewProps): JSX.Element {
   return (<>
     <ConfigContext.Provider value={config}>
@@ -57,6 +60,7 @@ function MainViewComponent({
           <Pager/>
         </div>
         <ColumnChooser/>
+        <EditPopup/>
       </RootElementUpdater>
     </ConfigContext.Provider>
   </>);
@@ -73,6 +77,7 @@ export class MainView extends View<MainViewProps> {
     HeaderFilterPopupView,
     FilterPanelView,
     ColumnChooserView,
+    EditPopupView,
     OptionsController,
   ] as const;
 
@@ -84,6 +89,7 @@ export class MainView extends View<MainViewProps> {
     private readonly headerFilterPopup: HeaderFilterPopupView,
     private readonly filterPanel: FilterPanelView,
     private readonly columnsChooser: ColumnChooserView,
+    private readonly editPopup: EditPopupView,
     private readonly options: OptionsController,
   ) {
     super();
@@ -100,6 +106,7 @@ export class MainView extends View<MainViewProps> {
       HeaderFilterPopup: this.headerFilterPopup.asInferno(),
       FilterPanel: this.filterPanel.asInferno(),
       ColumnChooser: this.columnsChooser.asInferno(),
+      EditPopup: this.editPopup.asInferno(),
       config: combined({
         rtlEnabled: this.options.oneWay('rtlEnabled'),
         disabled: this.options.oneWay('disabled'),

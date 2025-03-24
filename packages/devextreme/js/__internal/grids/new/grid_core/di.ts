@@ -5,6 +5,8 @@ import { SearchView } from '@ts/grids/new/grid_core/search/view';
 import * as ColumnChooserModule from './column_chooser/index';
 import * as ColumnsControllerModule from './columns_controller/index';
 import * as DataControllerModule from './data_controller/index';
+import { EditingController } from './editing/controller';
+import { EditPopupView } from './editing/popup/view';
 import { ErrorController } from './error_controller/error_controller';
 import { FilterPanelView } from './filtering/filter_panel/view';
 import {
@@ -41,4 +43,6 @@ export function register(diContext: DIContext): void {
   diContext.register(HeaderFilterController);
   diContext.register(HeaderFilterPopupView);
   diContext.register(ErrorController);
+  diContext.register(EditingController);
+  diContext.register(EditPopupView);
 }
