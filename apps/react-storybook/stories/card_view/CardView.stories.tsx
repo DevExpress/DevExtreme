@@ -27,7 +27,10 @@ const columns = {
     "StoreCity",
     "StoreState",
     "Employee",
-    "SaleAmount",
+    {
+      dataField: "SaleAmount",
+      dataType: "number",
+    },
   ],
   local: [
       'firstName',
@@ -188,6 +191,18 @@ export const EmptyCardView: Story = {
   args: {
     ...DefaultMode.args,
     dataSource: 'empty',
+  },
+};
+
+export const CardViewWithCover  : Story = {
+  ...DefaultMode,
+  args: {
+    ...DefaultMode.args,
+    cardCover: {
+      imageExpr: (data) => `https://js.devexpress.com/jQuery/Demos/WidgetsGallery/JSDemos/${data.picture}`,
+      altExpr: 'FirstName',
+      // ratio: '2 / 1',
+    },
   },
 };
 
