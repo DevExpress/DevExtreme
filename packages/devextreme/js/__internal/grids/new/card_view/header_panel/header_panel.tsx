@@ -21,7 +21,7 @@ export interface HeaderPanelProps {
 
   showSortIndexes: boolean;
 
-  onSortClick: (column: Column) => void;
+  onSortClick: (column: Column, e: MouseEvent) => void;
 
   onFilterClick?: (
     element: Element,
@@ -70,9 +70,9 @@ export class HeaderPanel extends Component<HeaderPanelProps> {
                 <Item
                   showSortIndexes={this.props.showSortIndexes}
                   column={column}
+                  onSortClick={(e): void => { this.props.onSortClick(column, e); }}
                   template={this.props.itemTemplate}
                   cssClass={this.props.itemCssClass}
-                  onSortClick={(): void => { this.props.onSortClick(column); }}
                   onFilterClick={(
                     element: Element,
                     callback?: () => void,

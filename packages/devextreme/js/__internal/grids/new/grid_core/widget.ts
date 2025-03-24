@@ -27,6 +27,8 @@ import { MainView } from './main_view';
 import { defaultOptions, defaultOptionsRules, type Options } from './options';
 import { PagerView } from './pager/view';
 import { SearchController } from './search/controller';
+import * as SortingControllerModule from './sorting_controller/index';
+import type { SortingController } from './sorting_controller/sorting_controller';
 import { ToolbarController } from './toolbar/controller';
 import { ToolbarView } from './toolbar/view';
 import { WidgetMock } from './widget_mock';
@@ -43,6 +45,8 @@ export class GridCoreNewBase<
   protected itemsController!: ItemsController;
 
   protected columnsController!: ColumnsControllerModule.ColumnsController;
+
+  protected sortingController!: SortingController;
 
   // eslint-disable-next-line @typescript-eslint/prefer-readonly
   private editingController!: EditingController;
@@ -72,6 +76,7 @@ export class GridCoreNewBase<
     this.diContext.register(ItemsController);
     this.diContext.register(ColumnsControllerModule.ColumnsController);
     this.diContext.register(ColumnsControllerModule.CompatibilityColumnsController);
+    this.diContext.register(SortingControllerModule.SortingController);
     this.diContext.register(ToolbarController);
     this.diContext.register(ToolbarView);
     this.diContext.register(EditingController);
@@ -99,6 +104,7 @@ export class GridCoreNewBase<
     this.columnsChooser = this.diContext.get(ColumnsChooserView);
     this.dataController = this.diContext.get(DataControllerModule.DataController);
     this.columnsController = this.diContext.get(ColumnsControllerModule.ColumnsController);
+    this.sortingController = this.diContext.get(SortingControllerModule.SortingController);
     this.itemsController = this.diContext.get(ItemsController);
     this.toolbarController = this.diContext.get(ToolbarController);
     this.toolbarView = this.diContext.get(ToolbarView);
@@ -167,8 +173,10 @@ export class GridCoreNewBase<
 
 export class GridCoreNew extends ColumnsControllerModule.PublicMethods(
   DataControllerModule.PublicMethods(
-    FilterControllerModule.PublicMethods(
-      GridCoreNewBase,
+    SortingControllerModule.PublicMethods(
+      FilterControllerModule.PublicMethods(
+        GridCoreNewBase,
+      ),
     ),
   ),
 ) {}

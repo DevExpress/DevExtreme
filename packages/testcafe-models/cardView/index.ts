@@ -2,6 +2,7 @@ import type { WidgetName } from '../types';
 import GridCore from '../gridCore';
 import { CLASS as CLASS_BASE } from '../gridCore';
 import Card from './card';
+import HeadersElement from './headers/headers';
 import HeaderPanel from './headerPanel';
 import Popup from "../popup";
 import List from "../list";
@@ -36,6 +37,11 @@ export default class CardView extends GridCore {
 
   getCard(nth = 0): Card {
     return new Card(this.getCards().nth(nth));
+  }
+
+  getHeaders(): HeadersElement {
+    const selector = this.element.find(`.${this.addWidgetPrefix(CLASS.headers)}`)
+    return new HeadersElement(selector, this.getName());
   }
 
   getHeaderPanel(): HeaderPanel {

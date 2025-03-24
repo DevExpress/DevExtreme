@@ -12,6 +12,7 @@ import { filterPanel } from './filtering/index';
 import * as pager from './pager/index';
 import * as searchPanel from './search/index';
 import type { SearchProperties } from './search/types';
+import * as sortingController from './sorting_controller/index';
 import type * as toolbar from './toolbar/index';
 import type { GridCoreNew } from './widget';
 
@@ -21,6 +22,7 @@ import type { GridCoreNew } from './widget';
 export type Options =
   & WidgetOptions<GridCoreNew>
   & dataController.Options
+  & sortingController.Options
   & toolbar.Options
   & pager.Options
   & columnsController.Options
@@ -38,6 +40,7 @@ export type Options =
 
 export const defaultOptions = {
   ...dataController.defaultOptions,
+  ...sortingController.defaultOptions,
   ...columnsController.defaultOptions,
   ...pager.defaultOptions,
   ...filterPanel.defaultOptions,

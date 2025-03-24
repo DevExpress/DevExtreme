@@ -16,6 +16,7 @@ export const CLASSES = {
     iconEmpty: 'dx-header-filter-icon',
     iconFilled: 'dx-header-filter-icon--selected',
   },
+  icon: 'dx-icon',
 };
 
 // TODO: extract icons to separate component
@@ -36,8 +37,8 @@ const ICONS = {
         fill="#242424"/>
     </svg>
   ),
-  sortUp: <i className='dx-icon dx-icon-sortup'/>,
-  sortDown: <i className='dx-icon dx-icon-sortdown'/>,
+  sortUp: <div className={`${CLASSES.icon} dx-icon-sortup`}/>,
+  sortDown: <div className={`${CLASSES.icon} dx-icon-sortdown`}/>,
 };
 
 interface SortIconProps {
@@ -48,17 +49,17 @@ interface SortIconProps {
 
 function SortIcon(props: SortIconProps): JSX.Element {
   return (
-    <span className={CLASSES.sorting.container}>
+    <div className={CLASSES.sorting.container}>
       {props.sortOrder === 'asc' && ICONS.sortUp}
       {props.sortOrder === 'desc' && ICONS.sortDown}
       {
         props.showSortIndex && (
-          <span className={CLASSES.sorting.order}>
+          <div className={CLASSES.sorting.order}>
             {props.sortIndex}
-          </span>
+          </div>
         )
       }
-    </span>
+    </div>
   );
 }
 
@@ -68,7 +69,7 @@ export interface ItemProps {
   showSortIndexes?: boolean;
   template?: ComponentType<{ column: Column }>;
   cssClass?: string;
-  onSortClick?: () => void;
+  onSortClick?: (e: MouseEvent) => void;
   onFilterClick?: (
     element: Element,
     onFilterCloseCallback?: () => void,
@@ -112,7 +113,7 @@ export class Item extends Component<ItemProps> {
           this.props.column.sortOrder !== undefined && (
             <SortIcon
               // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-              sortIndex={this.props.column.sortIndex!}
+              sortIndex={this.props.column.sortIndex! + 1}
               sortOrder={this.props.column.sortOrder}
               showSortIndex={this.props.showSortIndexes ?? false}
             />
