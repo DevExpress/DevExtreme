@@ -42,11 +42,6 @@ const esmSrcGlobs = srcGlobsPattern(
     ctx.TRANSPILED_PROD_RENOVATION_PATH
 );
 
-const aiEsmSrcGlobs = aiSrcGlobsPattern(
-    ctx.TRANSPILED_PROD_ESM_PATH,
-    ctx.TRANSPILED_PROD_RENOVATION_PATH,
-);
-
 const distGlobsPattern = (jsFolder, exclude) => [
     'artifacts/**/*.*',
     '!artifacts/transpiled**/**/*',
