@@ -20,6 +20,7 @@ import {
     STEP_VALID_ICON,
     STEP_INVALID_ICON,
 } from '__internal/ui/stepper/stepper_item';
+import { HOVER_STATE_CLASS } from '__internal/core/widget/widget';
 
 const STEP_CONTENT_CLASS = 'dx-step-content';
 const ICON_CLASS = 'dx-icon';
@@ -297,6 +298,35 @@ QUnit.module('Stepper markup', moduleConfig, () => {
 
         assert.strictEqual($stepLabel.children().length, 2);
         assert.strictEqual($stepLabel.children().eq(1).hasClass(STEP_OPTIONAL_MARK_CLASS), true);
+    });
+
+    QUnit.test(`In linear mode only selected, next and previous items may have ${HOVER_STATE_CLASS} on hover`, function(assert) {
+        this.reinit({
+            items: [{}, {}, {}, {}],
+            linear: true,
+        });
+
+        const $selectedStep = this.getStepByIndex(0);
+
+        $selectedStep.trigger('mouseenter');
+
+        assert.strictEqual($selectedStep.hasClass(HOVER_STATE_CLASS), true);
+
+        const $nextStep = this.getStepByIndex(1);
+
+        $selectedStep.trigger('mouseleave');
+        $nextStep.trigger('mouseenter');
+
+        assert.strictEqual($selectedStep.hasClass(HOVER_STATE_CLASS), false);
+        assert.strictEqual($nextStep.hasClass(HOVER_STATE_CLASS), true);
+
+        const $restrictedStep = this.getStepByIndex(2);
+
+        $nextStep.trigger('mouseleave');
+        $restrictedStep.trigger('mouseenter');
+
+        assert.strictEqual($nextStep.hasClass(HOVER_STATE_CLASS), false);
+        assert.strictEqual($restrictedStep.hasClass(HOVER_STATE_CLASS), false);
     });
 });
 

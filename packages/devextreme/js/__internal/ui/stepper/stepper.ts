@@ -302,6 +302,16 @@ class Stepper extends CollectionWidgetAsync<StepperProperties> {
     }
   }
 
+  _hover($el?: dxElementWrapper, $previous?: dxElementWrapper): void {
+    const $hoveredStep = this._findHoverTarget($el)?.get(0);
+
+    if ($hoveredStep && this._shouldPreventItemEvent($hoveredStep)) {
+      return;
+    }
+
+    super._hover($el, $previous);
+  }
+
   _focusOutHandler(e: DxEvent): void {
     this._clearFocusedItem();
 
