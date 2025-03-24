@@ -78,12 +78,12 @@ class Stepper extends CollectionWidgetAsync<StepperProperties> {
 
   _supportedKeys(): Record<string, (e: KeyboardEvent, options?: Record<string, unknown>) => void> {
     const defaultHandlers = super._supportedKeys();
-    const { linear } = this.option();
+    const { linear, selectOnFocus } = this.option();
 
     return {
       ...defaultHandlers,
-      home: linear ? defaultHandlers.leftArrow : defaultHandlers.home,
-      end: linear ? defaultHandlers.rightArrow : defaultHandlers.end,
+      home: linear && selectOnFocus ? defaultHandlers.leftArrow : defaultHandlers.home,
+      end: linear && selectOnFocus ? defaultHandlers.rightArrow : defaultHandlers.end,
     };
   }
 

@@ -12,6 +12,10 @@ import {
     STEP_TITLE_CLASS,
 } from '__internal/ui/stepper/stepper';
 
+import {
+    FOCUSED_STATE_CLASS,
+} from '__internal/core/widget/widget';
+
 import 'generic_light.css!';
 
 QUnit.testStart(() => {
@@ -145,10 +149,54 @@ QUnit.module('Navigation', moduleConfig, () => {
         keyboard.keyDown('end');
 
         assert.equal(this.instance.option('selectedIndex'), 2, 'selected next item');
+        assert.equal(this.getItems().eq(2).hasClass(FOCUSED_STATE_CLASS), true, 'next item is focused');
 
         keyboard.keyDown('home');
 
         assert.equal(this.instance.option('selectedIndex'), 1, 'selected previous item');
+        assert.equal(this.getItems().eq(1).hasClass(FOCUSED_STATE_CLASS), true, 'previous item is focused');
+    });
+
+    QUnit.test('In linear mode Home/End keys should focus first/last item, selectOnFocus: false', function(assert) {
+        this.reinit({
+            items: [{}, {}, {}, {}, {}],
+            selectedIndex: 2,
+            linear: true,
+            selectOnFocus: false,
+            focusStateEnabled: true,
+        });
+
+        const keyboard = keyboardMock(this.$element);
+
+        keyboard.keyDown('end');
+
+        assert.equal(this.getItems().eq(4).hasClass(FOCUSED_STATE_CLASS), true, 'last item is focused');
+
+        keyboard.keyDown('home');
+
+        assert.equal(this.getItems().eq(0).hasClass(FOCUSED_STATE_CLASS), true, 'first item is focused');
+    });
+
+    [true, false].forEach((selectOnFocus) => {
+        QUnit.test(`In non-linear mode Home/End keys should focus first/last item, selectOnFocus: ${selectOnFocus}`, function(assert) {
+            this.reinit({
+                items: [{}, {}, {}, {}, {}],
+                selectedIndex: 2,
+                linear: false,
+                selectOnFocus,
+                focusStateEnabled: true,
+            });
+
+            const keyboard = keyboardMock(this.$element);
+
+            keyboard.keyDown('end');
+
+            assert.equal(this.getItems().eq(4).hasClass(FOCUSED_STATE_CLASS), true, 'last item is focused');
+
+            keyboard.keyDown('home');
+
+            assert.equal(this.getItems().eq(0).hasClass(FOCUSED_STATE_CLASS), true, 'first item is focused');
+        });
     });
 
     QUnit.test('Connector value should change on selection changed', function(assert) {
@@ -269,15 +317,15 @@ QUnit.module('Focus', moduleConfig, () => {
             .keyDown('right')
             .keyDown('right');
 
-        assert.equal(this.getItems().eq(3).hasClass('dx-state-focused'), true, 'focused class is added');
+        assert.equal(this.getItems().eq(3).hasClass(FOCUSED_STATE_CLASS), true, 'focused class is added');
 
         this.$element.focusout();
 
-        assert.equal(this.getItems().eq(3).hasClass('dx-state-focused'), false, 'focused class is removed after focusout');
+        assert.equal(this.getItems().eq(3).hasClass(FOCUSED_STATE_CLASS), false, 'focused class is removed after focusout');
         assert.equal(this.instance.option('focusedElement'), null, 'focusedElement is cleared after focusout');
 
         this.$element.focus();
 
-        assert.equal(this.getItems().eq(1).hasClass('dx-state-focused'), true, 'focused class is applied to the selected element after focusing');
+        assert.equal(this.getItems().eq(1).hasClass(FOCUSED_STATE_CLASS), true, 'focused class is applied to the selected element after focusing');
     });
 });
