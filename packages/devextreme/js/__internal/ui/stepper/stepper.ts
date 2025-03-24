@@ -273,7 +273,7 @@ class Stepper extends CollectionWidgetAsync<StepperProperties> {
     return orientation === ORIENTATION.horizontal;
   }
 
-  _shouldPreventItemEvent(itemElement: Element): boolean {
+  _shouldPreventItemEvent(itemElement: Element | dxElementWrapper): boolean {
     const itemIndex = this._editStrategy.getIndex(itemElement);
     const { linear, selectedIndex = 0 } = this.option();
 
@@ -302,10 +302,10 @@ class Stepper extends CollectionWidgetAsync<StepperProperties> {
     }
   }
 
-  _hover($el?: dxElementWrapper, $previous?: dxElementWrapper): void {
-    const $hoveredStep = this._findHoverTarget($el)?.get(0);
+  _hover($el: dxElementWrapper | undefined, $previous: dxElementWrapper | undefined): void {
+    const $hoverTarget = this._findHoverTarget($el);
 
-    if ($hoveredStep && this._shouldPreventItemEvent($hoveredStep)) {
+    if ($hoverTarget && this._shouldPreventItemEvent($hoverTarget)) {
       return;
     }
 

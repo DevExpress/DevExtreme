@@ -300,33 +300,89 @@ QUnit.module('Stepper markup', moduleConfig, () => {
         assert.strictEqual($stepLabel.children().eq(1).hasClass(STEP_OPTIONAL_MARK_CLASS), true);
     });
 
-    QUnit.test(`In linear mode only selected, next and previous items may have ${HOVER_STATE_CLASS} on hover`, function(assert) {
+    QUnit.test(`Selected and neighbor items have ${HOVER_STATE_CLASS} on hover`, function(assert) {
         this.reinit({
-            items: [{}, {}, {}, {}],
-            linear: true,
+            items: [{}, {}, {}, {}, {}],
+            selectedIndex: 2,
         });
 
-        const $selectedStep = this.getStepByIndex(0);
+        const $selectedStep = this.getStepByIndex(3);
 
         $selectedStep.trigger('mouseenter');
 
-        assert.strictEqual($selectedStep.hasClass(HOVER_STATE_CLASS), true);
+        assert.strictEqual($selectedStep.hasClass(HOVER_STATE_CLASS), true, `Selected step has ${HOVER_STATE_CLASS} class`);
 
-        const $nextStep = this.getStepByIndex(1);
+        const $prevStep = this.getStepByIndex(1);
 
         $selectedStep.trigger('mouseleave');
+        $prevStep.trigger('mouseenter');
+
+        assert.strictEqual($selectedStep.hasClass(HOVER_STATE_CLASS), false, `Selected step has not ${HOVER_STATE_CLASS} class`);
+        assert.strictEqual($prevStep.hasClass(HOVER_STATE_CLASS), true, `Previous step has ${HOVER_STATE_CLASS} class`);
+
+        const $nextStep = this.getStepByIndex(3);
+
+        $prevStep.trigger('mouseleave');
         $nextStep.trigger('mouseenter');
 
-        assert.strictEqual($selectedStep.hasClass(HOVER_STATE_CLASS), false);
-        assert.strictEqual($nextStep.hasClass(HOVER_STATE_CLASS), true);
+        assert.strictEqual($prevStep.hasClass(HOVER_STATE_CLASS), false, `Previous step has not ${HOVER_STATE_CLASS} class`);
+        assert.strictEqual($nextStep.hasClass(HOVER_STATE_CLASS), true, `Next step has ${HOVER_STATE_CLASS} class`);
+    });
 
-        const $restrictedStep = this.getStepByIndex(2);
+    QUnit.test(`In linear mode non-neighbor steps not have ${HOVER_STATE_CLASS} on hover`, function(assert) {
+        this.reinit({
+            items: [{}, {}, {}, {}, {}, {}, {}],
+            selectedIndex: 2,
+            linear: true,
+        });
 
-        $nextStep.trigger('mouseleave');
-        $restrictedStep.trigger('mouseenter');
+        const $stepBeforePrev = this.getStepByIndex(0);
 
-        assert.strictEqual($nextStep.hasClass(HOVER_STATE_CLASS), false);
-        assert.strictEqual($restrictedStep.hasClass(HOVER_STATE_CLASS), false);
+        $stepBeforePrev.trigger('mouseenter');
+
+        assert.strictEqual($stepBeforePrev.hasClass(HOVER_STATE_CLASS), false, `Step before previous has not ${HOVER_STATE_CLASS} class`);
+
+        const $stepAfterNext = this.getStepByIndex(4);
+
+        $stepAfterNext.trigger('mouseenter');
+
+        assert.strictEqual($stepAfterNext.hasClass(HOVER_STATE_CLASS), false, `Step after next has not ${HOVER_STATE_CLASS} class`);
+
+        const $lastStep = this.getStepByIndex(-1);
+
+        $lastStep.trigger('mouseenter');
+
+        assert.strictEqual($lastStep.hasClass(HOVER_STATE_CLASS), false, `Last step has not ${HOVER_STATE_CLASS} class`);
+    });
+
+    QUnit.test(`In non-linear mode non-neighbor steps have ${HOVER_STATE_CLASS} on hover`, function(assert) {
+        this.reinit({
+            items: [{}, {}, {}, {}, {}, {}, {}],
+            selectedIndex: 2,
+            linear: false,
+        });
+
+        const $stepBeforePrev = this.getStepByIndex(0);
+
+        $stepBeforePrev.trigger('mouseenter');
+
+        assert.strictEqual($stepBeforePrev.hasClass(HOVER_STATE_CLASS), true, `Step before previous has ${HOVER_STATE_CLASS} class`);
+
+        const $stepAfterNext = this.getStepByIndex(4);
+
+        $stepBeforePrev.trigger('mouseleave');
+        $stepAfterNext.trigger('mouseenter');
+
+        assert.strictEqual($stepBeforePrev.hasClass(HOVER_STATE_CLASS), false, `Step before previous has not ${HOVER_STATE_CLASS} class`);
+        assert.strictEqual($stepAfterNext.hasClass(HOVER_STATE_CLASS), true, `Step after next has ${HOVER_STATE_CLASS} class`);
+
+        const $lastStep = this.getStepByIndex(-1);
+
+        $stepAfterNext.trigger('mouseleave');
+        $lastStep.trigger('mouseenter');
+
+        assert.strictEqual($stepAfterNext.hasClass(HOVER_STATE_CLASS), false, `Step after next has not ${HOVER_STATE_CLASS} class`);
+        assert.strictEqual($lastStep.hasClass(HOVER_STATE_CLASS), true, `Last step has ${HOVER_STATE_CLASS} class`);
     });
 });
 
