@@ -13,6 +13,7 @@ import { FilterController } from '../filtering/filter_controller';
 import { OptionsController } from '../options_controller/options_controller';
 import { SortingController } from '../sorting_controller/sorting_controller';
 import { StoreLoadAdapter } from './store_load_adapter/index';
+import { SearchController } from '../search';
 import type { DataObject, Key } from './types';
 import {
   getLocalLoadOptions,
@@ -82,12 +83,13 @@ export class DataController {
     [this.normalizedRemoteOptions],
   );
 
-  public static dependencies = [OptionsController, SortingController, FilterController] as const;
+  public static dependencies = [OptionsController, SortingController, FilterController, SearchController] as const;
 
   constructor(
     private readonly options: OptionsController,
     private readonly sortingController: SortingController,
     private readonly filterController: FilterController,
+    private readonly searchController: SearchController,
   ) {
     effect(
       (dataSource) => {
@@ -166,7 +168,16 @@ export class DataController {
     );
 
     effect(
-      (dataSource, pageIndex, pageSize, displayFilter, pagingEnabled, sortParameters) => {
+      (
+        dataSource,
+        pageIndex,
+        pageSize,
+        displayFilter,
+        pagingEnabled,
+        sortParameters
+        searchColumnList,
+        searchText,
+      ) => {
         let someParamChanged = false;
         if (dataSource.pageIndex() !== pageIndex) {
           dataSource.pageIndex(pageIndex);
@@ -176,8 +187,8 @@ export class DataController {
           dataSource.pageSize(pageSize);
           someParamChanged ||= true;
         }
-        // eslint-disable-next-line @typescript-eslint/no-unnecessary-boolean-literal-compare
-        if (dataSource.requireTotalCount() !== true) {
+
+        if (!dataSource.requireTotalCount()) {
           dataSource.requireTotalCount(true);
           someParamChanged ||= true;
         }
@@ -194,6 +205,16 @@ export class DataController {
           someParamChanged ||= true;
         }
 
+        if (dataSource.searchExpr() !== searchColumnList) {
+          dataSource.searchExpr(searchColumnList);
+          someParamChanged ||= true;
+        }
+
+        if (dataSource.searchValue() !== searchText) {
+          dataSource.searchValue(searchText);
+          someParamChanged ||= true;
+        }
+
         if (someParamChanged || !dataSource.isLoaded()) {
           // eslint-disable-next-line @typescript-eslint/no-floating-promises
           dataSource.load();
@@ -206,6 +227,8 @@ export class DataController {
         this.filterController.displayFilter,
         this.pagingEnabled,
         this.sortingController.sortParameters,
+        this.searchController.searchColumnList,
+        this.searchController.searchTextOption,
       ],
     );
   }

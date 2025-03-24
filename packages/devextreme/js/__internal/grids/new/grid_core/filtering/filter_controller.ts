@@ -11,6 +11,7 @@ export class FilterController {
 
   public readonly displayFilter = computed(
     (filter, filterEnabled) => (filterEnabled ? filter : null),
+    // return gridCoreUtils.combineFilters([filter, searchFilter]);
     [this.filter, this.filterEnabled],
   );
 

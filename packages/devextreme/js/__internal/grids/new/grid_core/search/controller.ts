@@ -5,6 +5,7 @@ import type { Options as SearchOptions } from '@ts/grids/new/grid_core/search/op
 import type { HighlightedTextItem, HighlightTextOptions } from '@ts/grids/new/grid_core/search/types';
 import { splitHighlightedText } from '@ts/grids/new/grid_core/search/utils';
 
+import { ColumnsController } from '../columns_controller';
 import { OptionsController } from '../options_controller/options_controller';
 
 type DefinedSearchOptions = Required<Required<SearchOptions>['searchPanel']>;
@@ -12,6 +13,7 @@ type DefinedSearchOptions = Required<Required<SearchOptions>['searchPanel']>;
 export class SearchController {
   public static dependencies = [
     OptionsController,
+    ColumnsController,
   ] as const;
 
   public readonly highlightTextOptions: SubsGets<HighlightTextOptions> = computed((
@@ -24,9 +26,35 @@ export class SearchController {
 
   private readonly _searchTextOption = this.options.twoWay('searchPanel.text');
 
+  private readonly _searchVisibleColumnsOnly = this.options.oneWay('searchPanel.searchVisibleColumnsOnly');
+
   public readonly searchTextOption: SubsGets<string> = this._searchTextOption;
 
-  constructor(private readonly options: OptionsController) {}
+  public readonly searchColumnList = computed(
+    (columns, searchVisibleColumnsOnly) => columns
+      .filter((c) => {
+        const searchAllowed = c.allowSearch ?? c.allowFiltering;
+        if (!searchAllowed) {
+          return false;
+        }
+
+        if (searchVisibleColumnsOnly && !c.visible) {
+          return false;
+        }
+
+        return true;
+      })
+      .map((c) => c.dataField ?? c.name),
+    [
+      this.columnsController.columns,
+      this._searchVisibleColumnsOnly,
+    ],
+  );
+
+  constructor(
+    private readonly options: OptionsController,
+    private readonly columnsController: ColumnsController,
+  ) { }
 
   public readonly getHighlightedText = (
     text: string,

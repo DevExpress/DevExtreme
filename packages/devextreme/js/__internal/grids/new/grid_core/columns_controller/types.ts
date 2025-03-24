@@ -15,6 +15,7 @@ type InheritedColumnProps =
   | 'allowHiding'
   | 'allowFiltering'
   | 'allowHeaderFiltering'
+  | 'allowSearch'
   | 'trueText'
   | 'falseText'
   | 'caption'
