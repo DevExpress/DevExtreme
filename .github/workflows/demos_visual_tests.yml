@@ -41,7 +41,10 @@ jobs:
         run: npm install --no-audit --no-fund
 
       - name: DevExtreme - Build
-        run: npx nx build devextreme-main
+        shell: bash
+        run: |
+          node ./packages/devextreme/performance_log.js &
+          npx nx build devextreme-main
 
   testcafe:
     needs:
@@ -111,7 +114,9 @@ jobs:
         # DISABLE_DEMO_TEST_SETTINGS: ignore # Uncomment to ignore the `ignore` field
         # DISABLE_DEMO_TEST_SETTINGS: comparison-options # Uncomment to ignore the `comparison-options` field
         CI_ENV: true # The `ignore` field in the visualtestrc.json should be disabled when running test locally
-      run: npx nx test-testcafe
+      run: |
+        node ../../packages/devextreme/performance_log.js &
+        npx nx test-testcafe
 
     - name: Show accessibility warnings
       if: matrix.STRATEGY == 'accessibility'
