@@ -271,7 +271,7 @@ class Stepper extends CollectionWidgetAsync<StepperProperties> {
     return orientation === ORIENTATION.horizontal;
   }
 
-  _shouldPreventItemEvent(itemElement: Element): boolean {
+  _shouldPreventItemEvent(itemElement: Element | dxElementWrapper): boolean {
     const itemIndex = this._editStrategy.getIndex(itemElement);
     const { linear, selectedIndex = 0 } = this.option();
 
@@ -298,6 +298,16 @@ class Stepper extends CollectionWidgetAsync<StepperProperties> {
     if (!this._shouldPreventItemEvent(e.currentTarget)) {
       super._itemSelectHandler(e);
     }
+  }
+
+  _hover($el: dxElementWrapper | undefined, $previous: dxElementWrapper | undefined): void {
+    const $hoverTarget = this._findHoverTarget($el);
+
+    if ($hoverTarget && this._shouldPreventItemEvent($hoverTarget)) {
+      return;
+    }
+
+    super._hover($el, $previous);
   }
 
   _focusOutHandler(e: DxEvent): void {
