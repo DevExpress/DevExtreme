@@ -158,11 +158,11 @@ QUnit.module('Navigation', moduleConfig, () => {
             linear: false,
         });
 
-        assert.equal(this.getConnector().option('value'), '25%', 'initial connector value is correct');
+        assert.equal(this.getConnector().option('value'), 25, 'initial connector value is correct');
 
         this.getItems().eq(3).trigger('dxclick');
 
-        assert.equal(this.getConnector().option('value'), '75%', 'connector value changed');
+        assert.equal(this.getConnector().option('value'), 75, 'connector value changed');
     });
 
     QUnit.test('Connector value should change if selectedIndex changed in runtime', function(assert) {
@@ -172,11 +172,11 @@ QUnit.module('Navigation', moduleConfig, () => {
             linear: false,
         });
 
-        assert.equal(this.getConnector().option('value'), '25%', 'initial connector value is correct');
+        assert.equal(this.getConnector().option('value'), 25, 'initial connector value is correct');
 
         this.instance.option('selectedIndex', 3);
 
-        assert.equal(this.getConnector().option('value'), '75%', 'connector value changed');
+        assert.equal(this.getConnector().option('value'), 75, 'connector value changed');
     });
 
     QUnit.test('Connector value should change if selectedItem changed in runtime', function(assert) {
@@ -187,11 +187,11 @@ QUnit.module('Navigation', moduleConfig, () => {
             linear: false,
         });
 
-        assert.equal(this.getConnector().option('value'), '25%', 'initial connector value is correct');
+        assert.equal(this.getConnector().option('value'), 25, 'initial connector value is correct');
 
         this.instance.option('selectedItem', items[3]);
 
-        assert.equal(this.getConnector().option('value'), '75%', 'connector value changed');
+        assert.equal(this.getConnector().option('value'), 75, 'connector value changed');
     });
 });
 
