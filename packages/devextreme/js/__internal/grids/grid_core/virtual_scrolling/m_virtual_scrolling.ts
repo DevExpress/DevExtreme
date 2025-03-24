@@ -1789,15 +1789,19 @@ export const rowsView = (Base: ModuleType<RowsView>) => class VirtualScrollingRo
     super.setLoading.call(this, isLoading, messageText);
   }
 
+  private isRowDragging() {
+    return this.component.option('isDragging');
+  }
+
   // NOTE: warning won't be thrown if height was specified and then removed,
   // because for some reason `_hasHeight` is not updated properly in this case
   private throwHeightWarningIfNeed() {
-    if (this._hasHeight === undefined) {
+    const isRowDragging = this.isRowDragging();
+    if (this._hasHeight === undefined || isRowDragging) {
       return;
     }
 
-    const rootElementHeight = !!this.component.option('rootElementHeight');
-    const needToThrow = !this._hasHeight && isVirtualPaging(this) && !rootElementHeight;
+    const needToThrow = !this._hasHeight && isVirtualPaging(this);
     if (needToThrow && !this._heightWarningIsThrown) {
       this._heightWarningIsThrown = true;
       errors.log('W1025');

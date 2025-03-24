@@ -12,6 +12,8 @@ import { ATTRIBUTES, CLASSES } from './const';
 import { GridCoreRowDraggingDom } from './dom';
 
 const rowsView = (Base: ModuleType<RowsView>) => class RowsViewRowDraggingExtender extends Base {
+  private _isRowDragging;
+
   public init() {
     super.init.apply(this, arguments as any);
     this._updateHandleColumn();
@@ -106,7 +108,7 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewRowDraggingExtend
         onDragStart: (e) => {
           // TODO getController
           this.getController('keyboardNavigation')?._resetFocusedCell();
-
+          this._isRowDragging = e.event.type === 'dxdragstart';
           const row = e.component.getVisibleRows()[e.fromIndex];
           e.itemData = row?.data;
 
@@ -125,6 +127,7 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewRowDraggingExtend
           togglePointerEventsStyle(false);
         },
         onDragEnd: (e) => {
+          this._isRowDragging = false;
           togglePointerEventsStyle(false);
           rowDragging.onDragEnd?.(e);
         },
@@ -192,6 +195,7 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewRowDraggingExtend
     const gridOptions = this.option();
     const columns = this.getColumns();
     const $rowElement = $(this.getRowElement(options.rowIndex));
+    const isDragging = this._isRowDragging;
 
     return {
       dataSource: [{ id: 1, parentId: 0 }],
@@ -208,12 +212,12 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewRowDraggingExtend
       columnFixing: gridOptions.columnFixing,
       columnAutoWidth: gridOptions.columnAutoWidth,
       showColumnLines: gridOptions.showColumnLines,
-      rootElementHeight: gridOptions.height,
       columns: columns.map((column) => ({
         width: column.width || column.visibleWidth,
         fixed: column.fixed,
         fixedPosition: column.fixedPosition,
       })),
+      isDragging,
       onRowPrepared: (e) => {
         const rowsView = e.component.getView('rowsView');
         $(e.rowElement).replaceWith($rowElement.eq(rowsView._isFixedTableRendering ? 1 : 0).clone());
