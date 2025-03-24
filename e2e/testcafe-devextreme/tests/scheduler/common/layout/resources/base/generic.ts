@@ -35,10 +35,11 @@ const resources = [{
 }];
 
 [undefined, resources].forEach((resourcesValue) => {
-  ['day', 'week', 'workWeek', 'month'].forEach((view) => {
+  ['day', 'week', 'month', 'workWeek'].forEach((view) => {
     test(`Base views layout test in generic theme with resources(view='${view})', resource=${!!resourcesValue}`, async (t) => {
       const scheduler = new Scheduler('#container');
 
+      await t.click(scheduler.toolbar.viewSwitcher.element);
       await t.click(scheduler.getAppointment('1 appointment', 0).element);
       await t.expect(scheduler.appointmentTooltip.isVisible()).ok();
 
@@ -48,10 +49,16 @@ const resources = [{
 });
 
 [undefined, resources].forEach((resourcesValue) => {
-  ['timelineDay', 'timelineWeek', 'timelineWorkWeek', 'timelineMonth'].forEach((view) => {
+  ['timelineDay', 'timelineWeek', 'timelineMonth', 'timelineWorkWeek'].forEach((view) => {
     test(`Timeline views layout test in generic theme with resources(view='${view})', resource=${!!resourcesValue}`, async (t) => {
       const scheduler = new Scheduler('#container');
 
+      /*
+       * If appointment position is the same in the next view,then mouse doesn't change
+       * their position and doesn't trigger hover effect. This is the reason for the instability
+       * of the tests. The following operation ensures that the mouse position is changed.
+       */
+      await t.click(scheduler.toolbar.viewSwitcher.element);
       await t.click(scheduler.getAppointment('1 appointment', 0).element);
       await t.expect(scheduler.appointmentTooltip.isVisible()).ok();
 
