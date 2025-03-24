@@ -1789,15 +1789,15 @@ export const rowsView = (Base: ModuleType<RowsView>) => class VirtualScrollingRo
     super.setLoading.call(this, isLoading, messageText);
   }
 
-  private isRowDragging() {
+  private isGridDragging() {
     return this.component.option('isDragging');
   }
 
   // NOTE: warning won't be thrown if height was specified and then removed,
   // because for some reason `_hasHeight` is not updated properly in this case
   private throwHeightWarningIfNeed() {
-    const isRowDragging = this.isRowDragging();
-    if (this._hasHeight === undefined || isRowDragging) {
+    const isGridDragging = this.isGridDragging();
+    if (this._hasHeight === undefined || isGridDragging) {
       return;
     }
 
