@@ -1,5 +1,6 @@
 /* eslint-disable spellcheck/spell-checker */
 import { describe, expect, it } from '@jest/globals';
+import { SearchController } from '@ts/grids/new/grid_core/search';
 
 import { DataController } from '../data_controller';
 import { FilterController } from '../filtering';
@@ -15,7 +16,12 @@ const setup = (config: Options = {}) => {
   const columnsController = new ColumnsController(options);
   const sortingController = new SortingController(options, columnsController);
   const dataController = new DataController(options, sortingController, filterController);
-  const itemsController = new ItemsController(dataController, columnsController);
+  const searchController = new SearchController(options);
+  const itemsController = new ItemsController(
+    dataController,
+    columnsController,
+    searchController,
+  );
 
   return {
     options,

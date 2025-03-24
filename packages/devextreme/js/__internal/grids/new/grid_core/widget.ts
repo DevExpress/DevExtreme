@@ -7,6 +7,7 @@ import { extend } from '@js/core/utils/extend';
 import Widget from '@js/ui/widget/ui.widget';
 import { DIContext } from '@ts/core/di/index';
 import type { Subscription } from '@ts/core/reactive/index';
+import { SearchView } from '@ts/grids/new/grid_core/search/view';
 import { render } from 'inferno';
 
 import { ColumnsChooserView } from './columns_chooser/view';
@@ -25,7 +26,7 @@ import { ItemsController } from './items_controller/items_controller';
 import { MainView } from './main_view';
 import { defaultOptions, defaultOptionsRules, type Options } from './options';
 import { PagerView } from './pager/view';
-import { Search } from './search/controller';
+import { SearchController } from './search/controller';
 import * as SortingControllerModule from './sorting_controller/index';
 import type { SortingController } from './sorting_controller/sorting_controller';
 import { ToolbarController } from './toolbar/controller';
@@ -60,7 +61,9 @@ export class GridCoreNewBase<
 
   private errorController!: ErrorController;
 
-  private search!: Search;
+  private searchController!: SearchController;
+
+  private searchView!: SearchView;
 
   public filterController!: FilterControllerModule.FilterController;
 
@@ -79,7 +82,8 @@ export class GridCoreNewBase<
     this.diContext.register(EditingController);
     this.diContext.register(PagerView);
     this.diContext.register(ColumnsChooserView);
-    this.diContext.register(Search);
+    this.diContext.register(SearchController);
+    this.diContext.register(SearchView);
     this.diContext.register(FilterControllerModule.FilterController);
     this.diContext.register(FilterControllerModule.FilterPanelView);
     this.diContext.register(FilterPanelView);
@@ -106,7 +110,8 @@ export class GridCoreNewBase<
     this.toolbarView = this.diContext.get(ToolbarView);
     // this.editingController = this.diContext.get(EditingController);
     this.pagerView = this.diContext.get(PagerView);
-    this.search = this.diContext.get(Search);
+    this.searchController = this.diContext.get(SearchController);
+    this.searchView = this.diContext.get(SearchView);
     this.errorController = this.diContext.get(ErrorController);
     this.filterController = this.diContext.get(FilterControllerModule.FilterController);
     this.filterPanelView = this.diContext.get(FilterControllerModule.FilterPanelView);

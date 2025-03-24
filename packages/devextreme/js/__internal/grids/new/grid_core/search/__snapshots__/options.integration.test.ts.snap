@@ -1,0 +1,31 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Options searchPanel.highlightCaseSensitive = false 1`] = `
+<div
+  class="dx-cardview-card-content"
+/>
+`;
+
+exports[`Options searchPanel.highlightCaseSensitive = true 1`] = `
+<div
+  class="dx-cardview-card-content"
+/>
+`;
+
+exports[`Options searchPanel.highlightSearchText = false 1`] = `
+<div
+  class="dx-cardview-card-content"
+/>
+`;
+
+exports[`Options searchPanel.text (match) 1`] = `
+<div
+  class="dx-cardview-card-content"
+/>
+`;
+
+exports[`Options searchPanel.text (mismatch) 1`] = `
+<div
+  class="dx-cardview-card-content"
+/>
+`;

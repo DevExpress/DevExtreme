@@ -3590,7 +3590,6 @@ exports[`Options HeaderFilter visible: false 1`] = `
               A
               <span
                 class="dx-header-filter-icon "
-                tabindex="0"
               />
             </div>
           </div>
@@ -3642,7 +3641,6 @@ exports[`Options HeaderFilter visible: true 1`] = `
               A
               <span
                 class="dx-header-filter-icon "
-                tabindex="0"
               />
             </div>
           </div>
@@ -3694,7 +3692,6 @@ exports[`Options HeaderFilter visible: undefined 1`] = `
               A
               <span
                 class="dx-header-filter-icon "
-                tabindex="0"
               />
             </div>
           </div>
