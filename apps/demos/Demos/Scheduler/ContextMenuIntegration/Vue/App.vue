@@ -97,7 +97,7 @@ function onCellContextMenu({ cellData }: DxSchedulerTypes.CellContextMenuEvent) 
     {
       text: 'New Appointment',
       onItemClick: () => scheduler.showAppointmentPopup(
-        { startDate: cellData.startDate },
+        { startDate: cellData.startDateUTC },
         true,
       ),
     },
@@ -105,7 +105,7 @@ function onCellContextMenu({ cellData }: DxSchedulerTypes.CellContextMenuEvent) 
       text: 'New Recurring Appointment',
       onItemClick: () => scheduler.showAppointmentPopup(
         {
-          startDate: cellData.startDate,
+          startDate: cellData.startDateUTC,
           recurrenceRule: 'FREQ=DAILY',
         },
         true,

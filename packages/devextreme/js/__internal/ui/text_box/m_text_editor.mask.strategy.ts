@@ -109,7 +109,7 @@ export default class MaskStrategy {
   }
 
   _handleBackwardDeleteInputEvent() {
-    this._clearSelectedText();
+    this._clearSelectedText(true);
 
     const caret = this._editorCaret();
     this.editor.setForwardDirection();
@@ -122,9 +122,10 @@ export default class MaskStrategy {
     }
   }
 
-  _clearSelectedText() {
-    // eslint-disable-next-line no-unsafe-optional-chaining
-    const length = (this._prevCaret?.end - this._prevCaret?.start) || 1;
+  _clearSelectedText(isDeleteInputEvent?: boolean): void {
+    const selectionLength = this._prevCaret && (this._prevCaret.end - this._prevCaret.start);
+    const length = selectionLength || Number(isDeleteInputEvent);
+
     const caret = this._editorCaret();
 
     if (!this._isAutoFill()) {

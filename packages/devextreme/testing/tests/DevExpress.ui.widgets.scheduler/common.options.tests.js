@@ -732,14 +732,16 @@ QUnit.module('Options', {
             assert.deepEqual(scheduler.instance.option('selectedCellData'), [{
                 startDate: new Date(2018, 4, 6, 0, 30),
                 endDate: new Date(2018, 4, 6, 1),
+                startDateUTC: new Date(2018, 4, 6, 0, 30),
+                endDateUTC: new Date(2018, 4, 6, 1),
                 allDay: false,
-                groups: undefined,
                 groupIndex: 0,
             }, {
                 startDate: new Date(2018, 4, 6, 1),
                 endDate: new Date(2018, 4, 6, 1, 30),
+                startDateUTC: new Date(2018, 4, 6, 1),
+                endDateUTC: new Date(2018, 4, 6, 1, 30),
                 allDay: false,
-                groups: undefined,
                 groupIndex: 0,
             }], 'correct cell data');
 
@@ -766,14 +768,16 @@ QUnit.module('Options', {
             assert.deepEqual(scheduler.instance.option('selectedCellData'), [{
                 startDate: new Date(2018, 4, 6, 0, 30),
                 endDate: new Date(2018, 4, 6, 1),
+                startDateUTC: new Date(2018, 4, 6, 0, 30),
+                endDateUTC: new Date(2018, 4, 6, 1),
                 allDay: false,
-                groups: undefined,
                 groupIndex: 0,
             }, {
                 startDate: new Date(2018, 4, 6, 1),
                 endDate: new Date(2018, 4, 6, 1, 30),
+                startDateUTC: new Date(2018, 4, 6, 1),
+                endDateUTC: new Date(2018, 4, 6, 1, 30),
                 allDay: false,
-                groups: undefined,
                 groupIndex: 0,
             }], 'correct cell data');
 

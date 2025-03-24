@@ -375,7 +375,7 @@ class SchedulerWorkSpace extends WidgetObserver {
       e.preventDefault();
       e.stopPropagation();
 
-      const selectedCells = this.cellsSelectionState.getSelectedCells();
+      const selectedCells = this._getSelectedCellsData();
 
       if (selectedCells?.length) {
         const selectedCellsElement = selectedCells.map((cellData) => this._getCellByData(cellData)).filter((cell) => !!cell);
@@ -519,7 +519,7 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     this.updateCellsSelection();
-    this._updateSelectedCellDataOption(this.cellsSelectionState.getSelectedCells(), $nextFocusedCell);
+    this._updateSelectedCellDataOption(this._getSelectedCellsData(), $nextFocusedCell);
   }
 
   _hasAllDayClass($cell) {
@@ -550,7 +550,7 @@ class SchedulerWorkSpace extends WidgetObserver {
       }
 
       this.updateCellsSelection();
-      this._updateSelectedCellDataOption(this.cellsSelectionState.getSelectedCells());
+      this._updateSelectedCellDataOption(this._getSelectedCellsData());
     }
   }
 
@@ -965,7 +965,7 @@ class SchedulerWorkSpace extends WidgetObserver {
   }
 
   _handleSelectedCellsClick() {
-    const selectedCells = this.cellsSelectionState.getSelectedCells();
+    const selectedCells = this._getSelectedCellsData();
 
     const firstCellData = selectedCells[0];
     const lastCellData = selectedCells[selectedCells.length - 1];
@@ -973,6 +973,8 @@ class SchedulerWorkSpace extends WidgetObserver {
     const result: any = {
       startDate: firstCellData.startDate,
       endDate: lastCellData.endDate,
+      startDateUTC: firstCellData.startDateUTC,
+      endDateUTC: lastCellData.endDateUTC,
     };
 
     if (lastCellData.allDay !== undefined) {
@@ -1416,20 +1418,28 @@ class SchedulerWorkSpace extends WidgetObserver {
     return false;
   }
 
-  _filterCellDataFields(cellData) {
+  protected _normalizeCellData(cellData) {
     return extend(true, {}, {
       startDate: cellData.startDate,
       endDate: cellData.endDate,
+      startDateUTC: cellData.startDate && this.timeZoneCalculator?.createDate(cellData.startDate, { path: 'fromGrid' }),
+      endDateUTC: cellData.endDate && this.timeZoneCalculator?.createDate(cellData.endDate, { path: 'fromGrid' }),
       groups: cellData.groups,
       groupIndex: cellData.groupIndex,
       allDay: cellData.allDay,
     });
   }
 
+  protected _getSelectedCellsData() {
+    const selected = this.cellsSelectionState.getSelectedCells();
+
+    return selected?.map(this._normalizeCellData.bind(this));
+  }
+
   getCellData($cell) {
     const cellData = this._getFullCellData($cell) || {};
 
-    return this._filterCellDataFields(cellData);
+    return this._normalizeCellData(cellData);
   }
 
   _getFullCellData($cell) {
@@ -1904,22 +1914,8 @@ class SchedulerWorkSpace extends WidgetObserver {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   _updateSelectedCellDataOption(selectedCellData, $nextFocusedCell?: any) {
-    const correctedSelectedCellData = selectedCellData.map(({
-      startDate,
-      endDate,
-      allDay,
-      groupIndex,
-      groups,
-    }) => ({
-      startDate,
-      endDate,
-      allDay,
-      groupIndex,
-      groups,
-    }));
-
-    this.option('selectedCellData', correctedSelectedCellData);
-    this._selectionChangedAction({ selectedCellData: correctedSelectedCellData });
+    this.option('selectedCellData', selectedCellData);
+    this._selectionChangedAction({ selectedCellData });
   }
 
   _getCellByData(cellData) {
@@ -3208,7 +3204,7 @@ class SchedulerWorkSpace extends WidgetObserver {
         const { cellData } = this.viewDataProvider.viewDataMap.dateTableMap[validRowIndex][columnIndex];
 
         return {
-          value: this._filterCellDataFields(cellData),
+          value: this._normalizeCellData(cellData),
           fullValue: cellData,
           key: CELL_DATA,
         };

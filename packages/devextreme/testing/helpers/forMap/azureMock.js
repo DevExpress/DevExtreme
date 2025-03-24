@@ -20,6 +20,10 @@
                     if(eventName === 'move') {
                         atlas.moveActionCallback = callbackFun;
                     }
+
+                    if(eventName === 'ready') {
+                        targetOrCallback();
+                    }
                 },
                 remove: (eventName) => {
                     atlas.removedEvents = atlas.removedEvents || [];

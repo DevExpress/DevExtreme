@@ -244,12 +244,12 @@ const iconSet = {
   taskinprogress: '\f15d',
   taskstop: '\f15e',
   clearcircle: '\f15f',
-  send: '\f160', // material only
+  send: '\f160',
   pinmap: '\f179',
   photooutline: '\f162',
   panelright: '\f163',
   panelleft: '\f164',
-  optionsgear: '\f165', // material only
+  optionsgear: '\f165',
   moon: '\f166',
   login: '\f167',
   eyeopen: '\f168',
@@ -276,6 +276,10 @@ const iconSet = {
   fixcolumnleft: '\f17b',
   stickcolumn: '\f17c',
   fixcolumnright: '\f17d',
+  csv: '\f181',
+  packagebox: '\f182',
+  checkmarkcircle: '\f183',
+  clipboardtasklist: '\f184',
 };
 
 fixture.disablePageReloads`Icons`

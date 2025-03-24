@@ -163,14 +163,18 @@ module('Workspace navigation', () => {
 
                     assert.deepEqual(onSelectedCellsClick.getCall(0).args[0], {
                         startDate: new Date(2015, 2, 30),
-                        endDate: new Date(2015, 2, 31)
+                        endDate: new Date(2015, 2, 31),
+                        startDateUTC: undefined,
+                        endDateUTC: undefined,
                     }, 'Arguments are OK');
 
                     keyboard.keyDown('right');
                     keyboard.keyDown('space');
                     assert.deepEqual(onSelectedCellsClick.getCall(1).args[0], {
                         startDate: new Date(2015, 2, 31),
-                        endDate: new Date(2015, 3, 1)
+                        endDate: new Date(2015, 3, 1),
+                        startDateUTC: undefined,
+                        endDateUTC: undefined,
                     }, 'Arguments are OK');
                 });
 
@@ -480,7 +484,9 @@ module('Workspace navigation', () => {
 
                     assert.deepEqual(onSelectedCellsClick.getCall(0).args[0], {
                         startDate: new Date(2015, 2, 30),
-                        endDate: new Date(2015, 3, 7)
+                        endDate: new Date(2015, 3, 7),
+                        startDateUTC: undefined,
+                        endDateUTC: undefined,
                     }, 'Arguments are OK');
 
                     keyboard.keyDown('right', { shiftKey: true });
@@ -488,7 +494,9 @@ module('Workspace navigation', () => {
 
                     assert.deepEqual(onSelectedCellsClick.getCall(1).args[0], {
                         startDate: new Date(2015, 2, 30),
-                        endDate: new Date(2015, 3, 8)
+                        endDate: new Date(2015, 3, 8),
+                        startDateUTC: undefined,
+                        endDateUTC: undefined,
                     }, 'Arguments are OK');
                 });
 

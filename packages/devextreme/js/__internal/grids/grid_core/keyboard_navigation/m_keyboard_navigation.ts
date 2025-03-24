@@ -303,7 +303,9 @@ export class KeyboardNavigationController extends modules.ViewController {
         ? !isAppend
         : this._isHiddenFocus && isFullUpdate && !e?.virtualColumnsScrolling;
       if (needUpdateFocus) {
-        this._updateFocus(true);
+        const isScrollEvent = !!e?.event?.type;
+        const skipFocusEvent = e?.virtualColumnsScrolling && isScrollEvent;
+        this._updateFocus(true, skipFocusEvent);
       }
     }
   }
@@ -315,9 +317,7 @@ export class KeyboardNavigationController extends modules.ViewController {
 
     if (!$focusedElement.length && e?.virtualColumnsScrolling) {
       const focusedColumnIndex = this._focusedCellPosition?.columnIndex ?? -1;
-      const focusedColumnIndexWithoutOffset = focusedColumnIndex - this._getFocusedColumnIndexOffset(focusedColumnIndex);
-
-      return focusedColumnIndexWithoutOffset >= 0;
+      return this._isColumnRendered(focusedColumnIndex);
     }
 
     return true;
@@ -1567,7 +1567,7 @@ export class KeyboardNavigationController extends modules.ViewController {
     }
   }
 
-  public _updateFocus(isRenderView?) {
+  public _updateFocus(isRenderView?, skipFocusEvent = false) {
     this._updateFocusTimeout = setTimeout(() => {
       if (this._needFocusEditingCell()) {
         this._editingController._focusEditingCell();
@@ -1606,12 +1606,12 @@ export class KeyboardNavigationController extends modules.ViewController {
                 );
                 return;
               }
-              !isFocusedElementDefined && this._focus($cell);
+              !isFocusedElementDefined && this._focus($cell, false, skipFocusEvent);
             } else if (
               !isFocusedElementDefined
               && (this._isNeedFocus || this._isHiddenFocus)
             ) {
-              this._focus($cell, this._isHiddenFocus);
+              this._focus($cell, this._isHiddenFocus, skipFocusEvent);
             }
             if (isEditing && !column?.showEditorAlways) {
               this._focusInteractiveElement.bind(this)($cell);
@@ -2007,7 +2007,6 @@ export class KeyboardNavigationController extends modules.ViewController {
       const isShowWhenGrouped = column && column.showWhenGrouped;
       const isDataCell = column && !$cell.hasClass(COMMAND_EXPAND_CLASS) && isDataRow($row);
       const isValidGroupSpaceColumn = function () {
-        // eslint-disable-next-line radix
         return (
           (!isMasterDetailRow
             && column
