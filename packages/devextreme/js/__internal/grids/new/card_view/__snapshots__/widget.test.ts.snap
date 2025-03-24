@@ -97,14 +97,7 @@ exports[`common initial render should be successfull 1`] = `
           >
             <div
               class="dx-cardview-headerpanel-content"
-            >
-              <div
-                class="dx-cardview-header-item  "
-                tabindex="0"
-              >
-                A
-              </div>
-            </div>
+            />
           </div>
           <div
             class="dx-scrollable-scrollbar dx-widget dx-scrollbar-horizontal"
@@ -189,24 +182,7 @@ exports[`common initial render should be successfull 1`] = `
                 </div>
                 <div
                   class="dx-cardview-card-content"
-                >
-                  <div
-                    class="dx-cardview-field"
-                    tabindex="0"
-                  >
-                    <span
-                      class="dx-cardview-field-name"
-                    >
-                      A
-                      :
-                    </span>
-                    <span
-                      class="dx-cardview-field-value dx-cardview-field-value--text-align-left dx-cardview-field-value--white-space-nowrap"
-                    >
-                      a
-                    </span>
-                  </div>
-                </div>
+                />
               </div>
             </div>
           </div>

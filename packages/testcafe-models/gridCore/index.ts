@@ -40,6 +40,22 @@ export default abstract class GridCore extends Widget {
     )();
   }
 
+  apiColumnOption(id: string, name: string, value: any = 'empty'): Promise<any> {
+    const { getInstance } = this;
+
+    return ClientFunction(
+      () => {
+        const grid = getInstance() as any;
+        return value !== 'empty' ? grid.columnOption(id, name, value === 'undefined' ? undefined : value) : grid.columnOption(id, name);
+      },
+      {
+        dependencies: {
+          getInstance, id, name, value,
+        },
+      },
+    )();
+  }
+
   getPager(): Pager {
     return new Pager(this.element.find(`.${this.addWidgetPrefix(CLASS.pager)}, .dx-${CLASS.pagination}`));
   }
@@ -70,3 +86,4 @@ export default abstract class GridCore extends Widget {
     )();
   }
 }
+
