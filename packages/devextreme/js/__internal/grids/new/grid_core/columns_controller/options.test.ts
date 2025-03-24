@@ -16,8 +16,13 @@ const setup = (config: Options) => {
   const columnsController = new ColumnsController(options);
   const filterController = new FilterController(options);
   const sortingController = new SortingController(options, columnsController);
-  const searchController = new SearchController(options);
-  const dataController = new DataController(options, sortingController, filterController);
+  const searchController = new SearchController(options, columnsController);
+  const dataController = new DataController(
+    options,
+    sortingController,
+    filterController,
+    searchController,
+  );
   const itemsController = new ItemsController(
     dataController,
     columnsController,
