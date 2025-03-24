@@ -1,3 +1,4 @@
+import { equalByValue } from '@js/core/utils/common';
 import formatHelper from '@js/format_helper';
 import { computed, state } from '@ts/core/reactive';
 import { ColumnsController } from '@ts/grids/new/grid_core/columns_controller/columns_controller';
@@ -85,5 +86,12 @@ export class ItemsController {
       isSelected: !!selectedCardKeys?.includes(itemKey),
       data,
     };
+  }
+
+  public getRowByKey(key: Key): DataRow | undefined {
+    // eslint-disable-next-line spellcheck/spell-checker
+    const items = this.items.unreactive_get();
+
+    return items.find((item) => equalByValue(item.key, key));
   }
 }

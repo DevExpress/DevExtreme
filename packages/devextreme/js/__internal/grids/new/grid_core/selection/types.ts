@@ -1,4 +1,5 @@
 import type { SingleMultipleOrNone } from '@js/common';
+import type { SelectionColumnDisplayMode } from '@js/common/grids';
 
 import type { DataObject, Key } from '../data_controller/types';
 
@@ -18,6 +19,10 @@ export interface SelectionChangedEvent {
   removedItems: DataObject[];
 }
 
+export type { SelectionColumnDisplayMode as ShowCheckBoxesMode };
+
 export interface SelectionOptions {
   mode: SingleMultipleOrNone;
+
+  showCheckBoxesMode?: SelectionColumnDisplayMode;
 }

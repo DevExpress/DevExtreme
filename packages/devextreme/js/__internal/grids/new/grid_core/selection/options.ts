@@ -9,5 +9,6 @@ export const defaultOptions: Options = {
   selectedCardKeys: [],
   selection: {
     mode: 'none',
+    showCheckBoxesMode: 'always',
   },
 };
