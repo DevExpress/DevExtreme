@@ -420,9 +420,9 @@ class CollectionWidget<
       return $focusedElement;
     }
 
-    const { focusOnSelectedItem, selectedIndex } = this.option();
+    const { focusOnSelectedItem } = this.option();
 
-    let index = focusOnSelectedItem ? selectedIndex : 0;
+    let index = focusOnSelectedItem ? this._getFlatIndex() : 0;
 
     const activeElements = this._getActiveElement();
     const lastIndex = activeElements.length - 1;
@@ -433,6 +433,12 @@ class CollectionWidget<
     }
     // @ts-expect-error ts-error
     return activeElements.eq(index);
+  }
+
+  _getFlatIndex(): number | undefined {
+    const { selectedIndex } = this.option();
+
+    return selectedIndex;
   }
 
   // eslint-disable-next-line consistent-return

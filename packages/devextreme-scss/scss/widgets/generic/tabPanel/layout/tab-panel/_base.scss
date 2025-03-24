@@ -14,18 +14,20 @@
 
 
 .dx-tabpanel {
-  .dx-tabs-wrapper {
-    border: none;
+  > .dx-tabpanel-tabs {
+    .dx-tabs-wrapper {
+      border: none;
 
-    &::after {
-      top: 0;
-      bottom: 0;
+      &::after {
+        top: 0;
+        bottom: 0;
+      }
     }
-  }
 
-  .dx-tabs .dx-tabs-scrollable {
-    .dx-tabs-wrapper::after {
-      content: none;
+    .dx-tabs-scrollable {
+      .dx-tabs-wrapper::after {
+        content: none;
+      }
     }
   }
 

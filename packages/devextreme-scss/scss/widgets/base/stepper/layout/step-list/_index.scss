@@ -1,19 +1,9 @@
 .dx-step-list {
-  display: grid;
-}
+  display: flex;
+  width: 100%;
 
-.dx-stepper-horizontal {
-  .dx-step-list {
-    width: 100%;
-    grid-auto-flow: column;
-    grid-template-columns: repeat(auto-fit, minmax(48px, 1fr));
-  }
-}
-
-.dx-stepper-vertical {
-  .dx-step-list {
+  .dx-stepper-vertical & {
     height: 100%;
-    grid-template-columns: 1fr;
-    grid-auto-rows: minmax(48px, 1fr);
+    flex-direction: column;
   }
 }

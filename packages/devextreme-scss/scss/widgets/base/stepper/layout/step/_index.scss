@@ -1,6 +1,20 @@
 .dx-step {
   position: relative;
+  flex: 1;
   cursor: pointer;
+
+  &.dx-step-completed,
+  &.dx-step-selected {
+    .dx-step-text {
+      font-weight: 600;
+    }
+  }
+
+  &.dx-step-selected {
+    .dx-step-label {
+      font-weight: 600;
+    }
+  }
 }
 
 .dx-step-indicator {
@@ -14,7 +28,6 @@
 }
 
 .dx-step-content {
-  gap: 10px;
   display: flex;
   align-items: center;
   flex-direction: column;
@@ -22,7 +35,6 @@
   &::before {
     content: '';
     position: absolute;
-    z-index: -1;
     border-width: 1px;
     border-style: solid;
     border-radius: 999em;
@@ -35,8 +47,15 @@
   }
 }
 
-.dx-step-title {
+.dx-step-label {
   width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dx-step-title,
+.dx-step-optional-mark {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -46,14 +65,15 @@
 .dx-stepper-vertical {
   .dx-step {
     display: flex;
-    align-items: center;
   }
 
   .dx-step-content {
     flex-direction: row;
+    width: 100%;
   }
 
-  .dx-step-title {
+  .dx-step-title,
+  .dx-step-optional-mark {
     text-align: start;
   }
 }

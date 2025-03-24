@@ -44,6 +44,38 @@ export class DxiStepperItemComponent extends CollectionNestedOption implements A
     }
 
     @Input()
+    get hint(): string {
+        return this._getOption('hint');
+    }
+    set hint(value: string) {
+        this._setOption('hint', value);
+    }
+
+    @Input()
+    get icon(): string {
+        return this._getOption('icon');
+    }
+    set icon(value: string) {
+        this._setOption('icon', value);
+    }
+
+    @Input()
+    get isValid(): boolean {
+        return this._getOption('isValid');
+    }
+    set isValid(value: boolean) {
+        this._setOption('isValid', value);
+    }
+
+    @Input()
+    get optional(): boolean {
+        return this._getOption('optional');
+    }
+    set optional(value: boolean) {
+        this._setOption('optional', value);
+    }
+
+    @Input()
     get template(): any {
         return this._getOption('template');
     }
@@ -57,6 +89,14 @@ export class DxiStepperItemComponent extends CollectionNestedOption implements A
     }
     set text(value: string) {
         this._setOption('text', value);
+    }
+
+    @Input()
+    get title(): string {
+        return this._getOption('title');
+    }
+    set title(value: string) {
+        this._setOption('title', value);
     }
 
 

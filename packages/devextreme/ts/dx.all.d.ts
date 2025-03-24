@@ -21326,7 +21326,7 @@ declare module DevExpress.ui {
       /**
        * [descr:dxMapOptions.routes.mode]
        */
-      mode?: DevExpress.ui.dxMap.RouteMode;
+      mode?: DevExpress.ui.dxMap.RouteMode | string;
       /**
        * [descr:dxMapOptions.routes.opacity]
        */
@@ -26545,7 +26545,7 @@ declare module DevExpress.ui {
    * [descr:dxStepper]
    */
   export class dxStepper<
-    TItem extends DevExpress.ui.dxStepper.ItemLike<TKey> = any,
+    TItem extends DevExpress.ui.dxStepper.ItemLike = any,
     TKey = any
   > extends CollectionWidget<
     DevExpress.ui.dxStepper.Properties<TItem, TKey>,
@@ -26557,10 +26557,10 @@ declare module DevExpress.ui {
      * [descr:_ui_stepper_DisposingEvent]
      */
     export type DisposingEvent<
-      TItem extends ItemLike<TKey> = any,
+      TItem extends ItemLike = any,
       TKey = any
     > = DevExpress.common.core.events.EventInfo<dxStepper<TItem, TKey>>;
-    export type ExplicitTypes<TItem extends ItemLike<TKey>, TKey> = {
+    export type ExplicitTypes<TItem extends ItemLike, TKey> = {
       Properties: Properties<TItem, TKey>;
       DisposingEvent: DisposingEvent<TItem, TKey>;
       InitializedEvent: InitializedEvent<TItem, TKey>;
@@ -26575,7 +26575,7 @@ declare module DevExpress.ui {
      * [descr:_ui_stepper_InitializedEvent]
      */
     export type InitializedEvent<
-      TItem extends ItemLike<TKey> = any,
+      TItem extends ItemLike = any,
       TKey = any
     > = DevExpress.common.core.events.InitializedEventInfo<
       dxStepper<TItem, TKey>
@@ -26584,7 +26584,7 @@ declare module DevExpress.ui {
      * [descr:_ui_stepper_ItemClickEvent]
      */
     export type ItemClickEvent<
-      TItem extends ItemLike<TKey> = any,
+      TItem extends ItemLike = any,
       TKey = any
     > = DevExpress.common.core.events.NativeEventInfo<
       dxStepper<TItem, TKey>,
@@ -26595,7 +26595,7 @@ declare module DevExpress.ui {
      * [descr:_ui_stepper_ItemContextMenuEvent]
      */
     export type ItemContextMenuEvent<
-      TItem extends ItemLike<TKey> = any,
+      TItem extends ItemLike = any,
       TKey = any
     > = DevExpress.common.core.events.NativeEventInfo<
       dxStepper<TItem, TKey>,
@@ -26605,12 +26605,12 @@ declare module DevExpress.ui {
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
      */
-    type ItemLike<TKey> = string | Item<TKey> | any;
+    type ItemLike = string | Item | any;
     /**
      * [descr:_ui_stepper_ItemRenderedEvent]
      */
     export type ItemRenderedEvent<
-      TItem extends ItemLike<TKey> = any,
+      TItem extends ItemLike = any,
       TKey = any
     > = DevExpress.common.core.events.EventInfo<dxStepper<TItem, TKey>> &
       DevExpress.common.core.events.ItemInfo<TItem>;
@@ -26618,19 +26618,19 @@ declare module DevExpress.ui {
      * [descr:_ui_stepper_OptionChangedEvent]
      */
     export type OptionChangedEvent<
-      TItem extends ItemLike<TKey> = any,
+      TItem extends ItemLike = any,
       TKey = any
     > = DevExpress.common.core.events.EventInfo<dxStepper<TItem, TKey>> &
       DevExpress.common.core.events.ChangedOptionInfo;
     export type Properties<
-      TItem extends ItemLike<TKey> = any,
+      TItem extends ItemLike = any,
       TKey = any
     > = dxStepperOptions<TItem, TKey>;
     /**
      * [descr:_ui_stepper_SelectionChangedEvent]
      */
     export type SelectionChangedEvent<
-      TItem extends ItemLike<TKey> = any,
+      TItem extends ItemLike = any,
       TKey = any
     > = DevExpress.common.core.events.EventInfo<dxStepper<TItem, TKey>> &
       DevExpress.ui.CollectionWidget.SelectionChangeInfo<TItem>;
@@ -26638,7 +26638,7 @@ declare module DevExpress.ui {
      * [descr:_ui_stepper_SelectionChangingEvent]
      */
     export type SelectionChangingEvent<
-      TItem extends ItemLike<TKey> = any,
+      TItem extends ItemLike = any,
       TKey = any
     > = DevExpress.ui.CollectionWidget.SelectionChangingEventBase<
       dxStepper<TItem, TKey>
@@ -26648,13 +26648,34 @@ declare module DevExpress.ui {
    * @deprecated Use Item instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface dxStepperItem<TKey = any> extends CollectionWidgetItem {}
+  export interface dxStepperItem extends CollectionWidgetItem {
+    /**
+     * [descr:dxStepperItem.icon]
+     */
+    icon?: string;
+    /**
+     * [descr:dxStepperItem.title]
+     */
+    title?: string;
+    /**
+     * [descr:dxStepperItem.hint]
+     */
+    hint?: string;
+    /**
+     * [descr:dxStepperItem.optional]
+     */
+    optional?: boolean;
+    /**
+     * [descr:dxStepperItem.isValid]
+     */
+    isValid?: boolean;
+  }
   /**
    * [descr:dxStepperOptions]
    * @deprecated [depNote:dxStepperOptions]
    */
   export interface dxStepperOptions<
-    TItem extends DevExpress.ui.dxStepper.ItemLike<TKey> = any,
+    TItem extends DevExpress.ui.dxStepper.ItemLike = any,
     TKey = any
   > extends CollectionWidgetOptions<dxStepper<TItem, TKey>, TItem, TKey> {
     /**
@@ -26681,6 +26702,10 @@ declare module DevExpress.ui {
      * [descr:dxStepperOptions.orientation]
      */
     orientation?: DevExpress.common.Orientation;
+    /**
+     * [descr:dxStepperOptions.linear]
+     */
+    linear?: boolean;
     /**
      * [descr:dxStepperOptions.items]
      */
@@ -31817,7 +31842,7 @@ declare module DevExpress.ui.dxSplitter {
   export type Item<TKey = any> = dxSplitterItem<TKey>;
 }
 declare module DevExpress.ui.dxStepper {
-  export type Item<TKey = any> = dxStepperItem<TKey>;
+  export type Item = dxStepperItem;
 }
 declare module DevExpress.ui.dxTabPanel {
   export type Item = dxTabPanelItem;

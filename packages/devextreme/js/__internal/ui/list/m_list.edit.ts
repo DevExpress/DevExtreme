@@ -4,6 +4,7 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { extend } from '@js/core/utils/extend';
 import type { Item } from '@js/ui/list';
+import { isNumeric } from '@ts/core/utils/m_type';
 import type { OptionChanged } from '@ts/core/widget/types';
 
 import type { ListBaseProperties } from './m_list.base';
@@ -315,6 +316,19 @@ class ListEdit extends ListBase {
     this.option('focusedElement', $item);
     this.focus();
     this.scrollToItem(this.option('focusedElement'));
+  }
+
+  _getFlatIndex(): number | undefined {
+    const { selectedIndex } = this.option();
+
+    if (isNumeric(selectedIndex) || !selectedIndex) {
+      return selectedIndex;
+    }
+
+    const $item = this._editStrategy.getItemElement(selectedIndex);
+    const index = this.getFlatIndexByItemElement($item);
+
+    return index;
   }
 
   _optionChanged(args: OptionChanged<ListBaseProperties>): void {
