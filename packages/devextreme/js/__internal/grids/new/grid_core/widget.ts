@@ -14,6 +14,7 @@ import { CompatibilityColumnsController } from './columns_controller/compatibili
 import * as ColumnsControllerModule from './columns_controller/index';
 import * as DataControllerModule from './data_controller/index';
 import { EditingController } from './editing/controller';
+import { EditPopupView } from './editing/popup/view';
 import { ErrorController } from './error_controller/error_controller';
 import * as FilterControllerModule from './filtering';
 import { FilterPanelView } from './filtering/filter_panel/view';
@@ -43,8 +44,9 @@ export class GridCoreNewBase<
 
   protected columnsController!: ColumnsControllerModule.ColumnsController;
 
-  // eslint-disable-next-line @typescript-eslint/prefer-readonly
   private editingController!: EditingController;
+
+  private editPopupView!: EditPopupView;
 
   private pagerView!: PagerView;
 
@@ -81,6 +83,7 @@ export class GridCoreNewBase<
     this.diContext.register(HeaderFilterController);
     this.diContext.register(HeaderFilterPopupView);
     this.diContext.register(ErrorController);
+    this.diContext.register(EditPopupView);
   }
 
   protected _initWidgetMock() {
@@ -98,7 +101,8 @@ export class GridCoreNewBase<
     this.itemsController = this.diContext.get(ItemsController);
     this.toolbarController = this.diContext.get(ToolbarController);
     this.toolbarView = this.diContext.get(ToolbarView);
-    // this.editingController = this.diContext.get(EditingController);
+    this.editingController = this.diContext.get(EditingController);
+    this.editPopupView = this.diContext.get(EditPopupView);
     this.pagerView = this.diContext.get(PagerView);
     this.search = this.diContext.get(Search);
     this.errorController = this.diContext.get(ErrorController);

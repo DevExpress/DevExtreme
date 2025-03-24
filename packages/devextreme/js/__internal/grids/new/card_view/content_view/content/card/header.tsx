@@ -11,15 +11,20 @@ export interface CardHeaderItem {
   location: 'before' | 'after';
   widget?: string;
   text?: string;
-  options?: dxToolbarItem;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  options?: any;
 }
 
 export interface CardHeaderProps {
   items?: CardHeaderItem[];
+
+  allowUpdating?: boolean;
   visible?: boolean;
   captionExpr?: string;
   template?: (items: CardHeaderItem[]) => JSX.Element;
   row?: DataRow;
+
+  onEdit?: () => void;
 }
 
 export class CardHeader extends Component<CardHeaderProps> {
@@ -30,6 +35,8 @@ export class CardHeader extends Component<CardHeaderProps> {
       captionExpr,
       template,
       row,
+      allowUpdating,
+      onEdit,
     } = this.props;
 
     if (!visible) {
@@ -40,7 +47,12 @@ export class CardHeader extends Component<CardHeaderProps> {
       ? { location: 'before', text: row[captionExpr] }
       : null;
 
-    const finalItems = captionItem ? [captionItem, ...items] : items;
+    const updateButton: CardHeaderItem | null = allowUpdating
+      ? { location: 'after', widget: 'dxButton', options: { icon: 'edit', onClick: onEdit } }
+      : null;
+
+    const finalItems = [captionItem, updateButton, ...items]
+      .filter((item): item is CardHeaderItem => !!item);
 
     if (template) {
       return template(finalItems);

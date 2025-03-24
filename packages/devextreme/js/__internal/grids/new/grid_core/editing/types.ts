@@ -1,5 +1,5 @@
 export interface Change {
-  type: 'update';
+  type: 'update' | 'insert' | 'remove';
   key: unknown;
   data: unknown;
 }

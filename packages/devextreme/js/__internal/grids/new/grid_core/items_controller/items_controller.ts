@@ -4,7 +4,7 @@ import { ColumnsController } from '@ts/grids/new/grid_core/columns_controller/co
 import { DataController } from '@ts/grids/new/grid_core/data_controller/data_controller';
 
 import type { Column, DataRow } from '../columns_controller/types';
-import type { DataObject } from '../data_controller/types';
+import type { DataObject, Key } from '../data_controller/types';
 
 export class ItemsController {
   public static dependencies = [
@@ -26,6 +26,10 @@ export class ItemsController {
     protected readonly dataController: DataController,
     protected readonly columnsController: ColumnsController,
   ) {}
+
+  public findItemByKey(items: DataRow[], key: Key): DataRow | null {
+    return items.find((item) => item.key === key) ?? null;
+  }
 
   public createDataRow(
     data: DataObject,

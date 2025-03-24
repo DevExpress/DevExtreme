@@ -1,46 +1,66 @@
 /* eslint-disable spellcheck/spell-checker */
-import type { SubsGets } from '@ts/core/reactive/index';
-import { computed, toSubscribable } from '@ts/core/reactive/index';
+import { computed } from '@ts/core/reactive/index';
 
-import type { DataController } from '../data_controller';
-import type { Key } from '../data_controller/types';
+import { DataController } from '../data_controller/data_controller';
+import { ItemsController } from '../items_controller/items_controller';
 import { OptionsController } from '../options_controller/options_controller';
-import { ToolbarController } from '../toolbar/controller';
-import * as modes from './modes/index';
+import type { Change } from './types';
 
 export class EditingController {
-  public static dependencies = [ToolbarController, OptionsController] as const;
+  public readonly changes = this.options.twoWay('editing.changes');
 
-  public readonly changes = this.options.twoWay('editingChanges');
-
-  private readonly _editRowKey = this.options.twoWay('editCardKey');
-
-  public readonly editRowKey: SubsGets<Key> = this._editRowKey;
+  public readonly editRowKey = this.options.twoWay('editing.editCardKey');
 
   public readonly editRow = computed(
-    (editRowKey) => { throw new Error('todo'); },
-    [this.editRowKey],
+    (editRowKey, items) => {
+      if (!editRowKey) {
+        return null;
+      }
+
+      return this.itemsController.findItemByKey(items, editRowKey);
+    },
+    [this.editRowKey, this.itemsController.items],
   );
 
-  private readonly mode = computed(
-    (mode) => new modes.MODES[mode](
-      this.options,
-      this,
-      this.toolbar,
-    ),
-    [
-      // this.options.oneWay('editing.mode'),
-      toSubscribable('popup' as const),
-    ],
-  );
+  public static dependencies = [OptionsController, ItemsController, DataController] as const;
 
   constructor(
-    private readonly toolbar: ToolbarController,
     private readonly options: OptionsController,
+    private readonly itemsController: ItemsController,
+    private readonly dataController: DataController,
   ) {}
 
-  public addNewCard(): Promise<void> {
-    return this.mode.unreactive_get().addNewCardImpl();
+  public cancel(): void {
+    this.changes.update([]);
+    this.editRowKey.update(null);
+  }
+
+  public async save(): Promise<void> {
+    await this.processChanges(this.changes.unreactive_get());
+    this.changes.update([]);
+    this.editRowKey.update(null);
+  }
+
+  private async processChanges(changes: Change[]): Promise<void> {
+    const promises: Promise<void>[] = [];
+
+    for (const change of changes) {
+      // eslint-disable-next-line default-case
+      switch (change.type) {
+        case 'update':
+          promises.push(
+            this.dataController.update(change.key, change.data),
+          );
+          break;
+        case 'remove':
+          break;
+        case 'insert':
+          break;
+      }
+    }
+
+    await Promise.all(promises);
+    await this.dataController.reload();
   }
 
   // public onChanged(key: unknown, columnName: string, value: unknown): void {

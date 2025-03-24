@@ -6,7 +6,7 @@ import { combined, computed, state } from '@ts/core/reactive/index';
 import type { OptionsController } from '@ts/grids/new/card_view/options_controller';
 
 import { ContentView as ContentViewBase } from '../../grid_core/content_view/view';
-import type { DataObject } from '../../grid_core/data_controller/types';
+import type { DataObject, Key } from '../../grid_core/data_controller/types';
 import type { ContentViewProps } from './content_view';
 import { ContentView as ContentViewComponent } from './content_view';
 import { factors } from './utils';
@@ -87,6 +87,8 @@ export class ContentView extends ContentViewBase<ContentViewProps> {
           onHoverChanged: this.options.action('onCardHoverChanged'),
           onPrepared: this.options.action('onCardPrepared'),
           template: this.options.template('cardTemplate'),
+          onEdit: (key: Key) => { this.editingController.editRowKey.update(key); },
+          allowUpdating: true,
           cover: combined({
             imageExpr: computed(
               (imageExpr) => this.processExpr(imageExpr),

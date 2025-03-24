@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-invalid-void-type */
-
 /* eslint-disable spellcheck/spell-checker */
 
 import type { DataSource } from '@js/common/data';
@@ -8,6 +6,7 @@ import type { SubsGets } from '@ts/core/reactive/index';
 import {
   computed, effect, state,
 } from '@ts/core/reactive/index';
+import type { PromiseWithResolvers } from '@ts/core/utils/promise';
 import { createPromise } from '@ts/core/utils/promise';
 
 import { FilterController } from '../filtering/filter_controller';
@@ -29,7 +28,7 @@ import {
 export class DataController {
   private readonly pendingLocalOperations = {};
 
-  private readonly loadedPromise = createPromise<void>();
+  private loadedPromise?: PromiseWithResolvers<void>;
 
   private readonly dataSourceConfiguration = this.options.oneWay('dataSource');
 
@@ -224,7 +223,8 @@ export class DataController {
     this.pageIndex.update(dataSource.pageIndex());
     this.pageSize.update(dataSource.pageSize());
     this._totalCount.update(dataSource.totalCount());
-    this.loadedPromise.resolve();
+    this.loadedPromise?.resolve();
+    this.loadedPromise = undefined;
   }
 
   public getDataKey(data: DataObject): Key {
@@ -232,6 +232,17 @@ export class DataController {
   }
 
   public waitLoaded(): Promise<void> {
+    if (!this.loadedPromise) {
+      this.loadedPromise = createPromise();
+    }
     return this.loadedPromise.promise;
+  }
+
+  public async update(key: Key, data: DataObject): Promise<void> {
+    await this.dataSource.unreactive_get().store().update(key, data);
+  }
+
+  public async reload(): Promise<void> {
+    await this.dataSource.unreactive_get().load();
   }
 }

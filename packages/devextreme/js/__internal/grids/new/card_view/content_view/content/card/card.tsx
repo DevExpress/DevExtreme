@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/prefer-nullish-coalescing */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import type { DataRow } from '@ts/grids/new/grid_core/columns_controller/types';
-import type { DataObject } from '@ts/grids/new/grid_core/data_controller/types';
+import type { DataObject, Key } from '@ts/grids/new/grid_core/data_controller/types';
 import { CollectionController } from '@ts/grids/new/grid_core/keyboard_navigation/collection_controller';
 import type { InfernoNode, RefObject } from 'inferno';
 import { Component, createRef } from 'inferno';
@@ -68,6 +68,10 @@ export interface CardProps {
   onHoverChanged?: (e: CardHoverEvent) => void;
 
   onPrepared?: (e: CardPreparedEvent) => void;
+
+  allowUpdating?: boolean;
+
+  onEdit?: (key: Key) => void;
 }
 
 export class Card extends Component<CardProps> {
@@ -121,7 +125,9 @@ export class Card extends Component<CardProps> {
         style={style}
       >
         <CardHeader
+          onEdit={() => { this.props.onEdit?.(this.props.row.key); }}
           items={this.props.toolbar || []}
+          allowUpdating={this.props.allowUpdating}
         />
         {imageSrc && (
           <Cover
