@@ -5852,5 +5852,25 @@
         ]
       }
     ]
+  },
+  {
+    "Name": "CardView",
+    "Equivalents": "dxCardView, dx-card-view",
+    "Groups": [
+      {
+        "Name": "Appearance",
+        "Equivalents": "",
+        "Demos": [
+          {
+            "Title": "Right-To-Left Support",
+            "Name": "Right-To-Left Support",
+            "Widget": "CardView",
+            "MvcAdditionalFiles": [],
+            "DemoType": "Web",
+            "Badge": "New"
+          }
+        ]
+      }
+    ]
   }
 ]
