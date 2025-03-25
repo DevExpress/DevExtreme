@@ -101,26 +101,31 @@ class Stepper extends CollectionWidgetAsync<StepperProperties> {
     return icon;
   }
 
-  _getStepLabel(data: Item): dxElementWrapper | null {
+  _getStepLabel(data: Item): dxElementWrapper {
     const { title, optional } = data;
     const hasTitle = isDefined(title);
 
     if (!hasTitle && !optional) {
-      return null;
+      return $();
     }
 
     const $stepLabel = $('<div>').addClass(STEP_LABEL_CLASS);
 
     if (hasTitle) {
-      const $stepTitle = $('<div>').addClass(STEP_TITLE_CLASS).text(title);
+      const $stepTitle = $('<div>')
+        .addClass(STEP_TITLE_CLASS)
+        .text(title);
 
-      $stepTitle.prependTo($stepLabel);
+      $stepLabel.append($stepTitle);
     }
 
     if (optional) {
-      const $stepOptionalMark = $('<div>').addClass(STEP_OPTIONAL_MARK_CLASS).text(messageLocalization.format('dxStepper-optionalMark'));
+      const optionalMarkText = messageLocalization.format('dxStepper-optionalMark');
+      const $stepOptionalMark = $('<div>')
+        .addClass(STEP_OPTIONAL_MARK_CLASS)
+        .text(optionalMarkText);
 
-      $stepOptionalMark.appendTo($stepLabel);
+      $stepLabel.append($stepOptionalMark);
     }
 
     return $stepLabel;
@@ -134,14 +139,13 @@ class Stepper extends CollectionWidgetAsync<StepperProperties> {
     const iconName = this._getStepIcon(data);
     const $iconElement = getImageContainer(iconName) ?? $('<div>').addClass(STEP_TEXT_CLASS).text(text ?? '');
 
-    $iconElement.appendTo($indicatorElement);
-    $indicatorElement.prependTo($container);
+    $indicatorElement.append($iconElement);
+
+    $container.prepend($indicatorElement);
 
     const $stepLabel = this._getStepLabel(data);
 
-    if ($stepLabel) {
-      $stepLabel.appendTo($container);
-    }
+    $container.append($stepLabel);
   }
 
   _initTemplates(): void {
