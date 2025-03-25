@@ -101,18 +101,19 @@ export class ColumnsController {
   ): void {
     this.columnsSettings.updateFunc((columns) => {
       const index = getColumnIndexByName(columns, column.name);
-      const newColumns = [...columns];
 
       if (columns[index][option] === value) {
         return columns;
       }
+
+      let newColumns = [...columns];
 
       newColumns[index] = {
         ...newColumns[index],
         [option]: value,
       };
 
-      this.normalizeColumnsVisibleIndexes(newColumns);
+      newColumns = this.normalizeColumnsVisibleIndexes(newColumns);
 
       return newColumns;
     });
@@ -120,26 +121,27 @@ export class ColumnsController {
 
   public updateColumns(func: (columns: PreNormalizedColumn[]) => PreNormalizedColumn[]): void {
     this.columnsSettings.updateFunc((columns) => {
-      const newColumns = func(columns);
+      let newColumns = func(columns);
 
-      this.normalizeColumnsVisibleIndexes(newColumns);
+      newColumns = this.normalizeColumnsVisibleIndexes(newColumns);
 
       return newColumns;
     });
   }
 
-  private normalizeColumnsVisibleIndexes(columns: PreNormalizedColumn[]): void {
+  private normalizeColumnsVisibleIndexes(columns: PreNormalizedColumn[]): PreNormalizedColumn[] {
+    const result = [...columns];
+
     const visibleIndexes = normalizeVisibleIndexes(
       columns.map((c) => c.visibleIndex),
     );
 
     visibleIndexes.forEach((visibleIndex, i) => {
       if (columns[i].visibleIndex !== visibleIndex) {
-        columns[i] = {
-          ...columns[i],
-          visibleIndex,
-        };
+        result[i].visibleIndex = visibleIndex;
       }
     });
+
+    return result;
   }
 }

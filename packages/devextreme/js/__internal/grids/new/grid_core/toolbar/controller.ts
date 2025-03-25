@@ -50,14 +50,16 @@ export class ToolbarController {
     this.itemSubscriptions[name] = effect(
       (item, needRender) => {
         this.defaultItems.updateFunc((oldDefaultItems) => {
+          const newDefaultItems = { ...oldDefaultItems };
+
           if (needRender) {
-            oldDefaultItems[item.name] = item;
+            newDefaultItems[item.name] = item;
           } else {
             // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
-            delete oldDefaultItems[item.name];
+            delete newDefaultItems[item.name];
           }
 
-          return { ...oldDefaultItems };
+          return newDefaultItems;
         });
       },
       [itemObs, needRenderObs],

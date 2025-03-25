@@ -1,8 +1,7 @@
-import { equalByValue } from '@js/core/utils/common';
 import type dxTreeView from '@js/ui/tree_view';
 import type { Item as TreeViewItemProperties, SelectionChangedEvent } from '@js/ui/tree_view';
 import type { SubsGets } from '@ts/core/reactive/index';
-import { computed, state } from '@ts/core/reactive/index';
+import { computed } from '@ts/core/reactive/index';
 import { sortColumns } from '@ts/grids/grid_core/columns_controller/m_columns_controller_utils';
 import { createRef } from 'inferno';
 
@@ -16,7 +15,7 @@ export class ColumnChooserController {
 
   public readonly chooserColumns: SubsGets<Column[]>;
 
-  public readonly items = state<TreeViewItemProperties[]>([]);
+  public readonly items: SubsGets<TreeViewItemProperties[]>;
 
   public readonly treeViewRef = createRef<dxTreeView>();
 
@@ -26,7 +25,7 @@ export class ColumnChooserController {
   ) {
     this.chooserColumns = computed(
       (columns, sortOrder) => {
-        let chooserColumns = columns.filter((c) => c.showInColumnChooser);
+        let chooserColumns = columns.filter((column) => column.showInColumnChooser);
         chooserColumns = sortColumns(chooserColumns, sortOrder);
 
         return chooserColumns;
@@ -37,38 +36,16 @@ export class ColumnChooserController {
       ],
     );
 
-    this.chooserColumns.subscribe((columns) => {
-      let onlyVisibleChanged = false;
-
-      this.items.updateFunc((oldItems) => {
-        const newItems = columns.map((c, index) => ({
-          id: index,
-          columnName: c.name,
-          selected: c.visible,
-          text: c.caption,
-          disabled: !c.allowHiding,
-        }) as TreeViewItemProperties);
-
-        if (oldItems.length === columns.length) {
-          for (let i = 0; i < columns.length; i += 1) {
-            oldItems[i].selected = columns[i].visible;
-          }
-
-          if (equalByValue(oldItems, newItems)) {
-            onlyVisibleChanged = true;
-            return oldItems;
-          }
-        }
-
-        return newItems;
-      });
-
-      // if only column visibility changed, then we don't
-      // create new items, but just update selection
-      if (onlyVisibleChanged) {
-        this.updateSelection(columns);
-      }
-    });
+    this.items = computed(
+      (chooserColumns) => chooserColumns.map((column, index) => ({
+        id: index,
+        columnName: column.name,
+        selected: column.visible,
+        text: column.caption,
+        disabled: !column.allowHiding,
+      }) as TreeViewItemProperties),
+      [this.chooserColumns],
+    );
   }
 
   public onSelectionChanged(e: SelectionChangedEvent): void {
@@ -88,30 +65,5 @@ export class ColumnChooserController {
 
       return [...columns];
     });
-  }
-
-  private updateSelection(chooserColumns: Column[]): void {
-    const treeView = this.treeViewRef.current;
-
-    if (!treeView) {
-      return;
-    }
-
-    const selectedKeys = treeView.getSelectedNodeKeys();
-
-    treeView.beginUpdate();
-
-    chooserColumns.forEach((column, index) => {
-      const isSelected = selectedKeys.includes(index);
-
-      if (column.visible && !isSelected) {
-        treeView.selectItem(index);
-      }
-      if (!column.visible && isSelected) {
-        treeView.unselectItem(index);
-      }
-    });
-
-    treeView.endUpdate();
   }
 }
