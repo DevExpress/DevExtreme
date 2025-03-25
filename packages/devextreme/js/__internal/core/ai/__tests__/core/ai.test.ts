@@ -1,17 +1,16 @@
 import {
   describe,
   expect,
-  jest,
   test,
 } from '@jest/globals';
-
-import { AI } from '../../core/ai';
+import type { ResponseParams } from '@js/ai/ai';
+import { AI } from '@ts/core/ai/core/ai';
 
 describe('AI Integration', () => {
   test('sendRequest is called with correct parameters', (done) => {
     expect.assertions(2);
 
-    const mockSendRequest = jest.fn(({ prompt, onChunk }) => {
+    const sendRequest = ({ prompt, onChunk }): ResponseParams => {
       expect(prompt).toEqual({
         system: 'You are a translation assistant.',
         user: 'Translate text to fr language.',
@@ -21,11 +20,11 @@ describe('AI Integration', () => {
 
       return {
         promise: Promise.resolve(),
-        abort: jest.fn(),
+        abort: (): void => {},
       };
-    });
+    };
 
-    const ai = new AI({ sendRequest: mockSendRequest });
+    const ai = new AI({ sendRequest });
 
     ai.translate(
       { text: 'text', lang: 'fr' },
