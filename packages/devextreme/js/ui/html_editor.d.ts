@@ -49,8 +49,9 @@ export type HtmlEditorPredefinedContextMenuItem = 'background' | 'bold' | 'color
 export type HtmlEditorPredefinedToolbarItem = 'background' | 'bold' | 'color' | 'font' | 'italic' | 'link' | 'image' | 'size' | 'strike' | 'subscript' | 'superscript' | 'underline' | 'blockquote' | 'header' | 'increaseIndent' | 'decreaseIndent' | 'orderedList' | 'bulletList' | 'alignLeft' | 'alignCenter' | 'alignRight' | 'alignJustify' | 'codeBlock' | 'variable' | 'separator' | 'undo' | 'redo' | 'clear' | 'cellProperties' | 'tableProperties' | 'insertTable' | 'insertHeaderRow' | 'insertRowAbove' | 'insertRowBelow' | 'insertColumnLeft' | 'insertColumnRight' | 'deleteColumn' | 'deleteRow' | 'deleteTable' | 'ai';
 /** @public */
 export type HtmlEditorAICommandName = 'summarize' | 'proofread' | 'expand' | 'shorten' | 'changeStyle' | 'changeTone' | 'translate' | 'askAI';
+export type HtmlEditorAICommandNameAll = HtmlEditorAICommandName | 'custom';
 /** @public */
-export type HtmlEditorAISimpleCommandName = Extract<HtmlEditorAICommandName, 'summarize' | 'proofread' | 'expand' | 'shorten' | 'askAI'>;
+export type HtmlEditorAIBasicCommandName = Extract<HtmlEditorAICommandName, 'summarize' | 'proofread' | 'expand' | 'shorten' | 'askAI'>;
 /** @public */
 export type HtmlEditorAIChangeStyleOption =
     | 'formal'
@@ -85,48 +86,37 @@ export type HtmlEditorAITranslateOption =
 /**
  * @namespace DevExpress.ui.dxHtmlEditor
  */
-export interface HtmlEditorAICommandBase {
-    name: HtmlEditorAICommandName | 'custom';
+export interface HtmlEditorAICommandBase<CommandName extends HtmlEditorAICommandNameAll, CommandOptions = undefined> {
+    name: CommandName;
     text?: string;
+    options?: CommandOptions;
 }
 
 /**
  * @namespace DevExpress.ui.dxHtmlEditor
  */
-export interface HtmlEditorAISimpleCommand extends HtmlEditorAICommandBase {
-    name: HtmlEditorAISimpleCommandName;
-}
+export type HtmlEditorAIBasicCommand = HtmlEditorAICommandBase<HtmlEditorAIBasicCommandName>;
 
 /**
  * @namespace DevExpress.ui.dxHtmlEditor
  */
-export interface HtmlEditorAIChangeStyleCommand extends HtmlEditorAICommandBase {
-    name: 'changeStyle';
-    options?: HtmlEditorAIChangeStyleOption[];
-}
+export type HtmlEditorAIChangeStyleCommand = HtmlEditorAICommandBase<'changeStyle', HtmlEditorAIChangeStyleOption[]>;
 
 /**
  * @namespace DevExpress.ui.dxHtmlEditor
  */
-export interface HtmlEditorAIChangeToneCommand extends HtmlEditorAICommandBase {
-    name: 'changeTone';
-    options?: HtmlEditorAIChangeToneOption[];
-}
+export type HtmlEditorAIChangeToneCommand = HtmlEditorAICommandBase<'changeTone', HtmlEditorAIChangeToneOption[]>;
 
 /**
  * @namespace DevExpress.ui.dxHtmlEditor
  */
-export interface HtmlEditorAITranslateCommand extends HtmlEditorAICommandBase {
-    name: 'translate';
-    options?: HtmlEditorAITranslateOption[];
-}
+export type HtmlEditorAITranslateCommand = HtmlEditorAICommandBase<'translate', HtmlEditorAITranslateOption[]>;
 
 /**
  * @namespace DevExpress.ui.dxHtmlEditor
  */
-export interface HtmlEditorAICustomCommand extends HtmlEditorAICommandBase {
-    name: 'custom';
-    options?: string[];
+export interface HtmlEditorAICustomCommand
+    extends HtmlEditorAICommandBase<'custom', string[]> {
     prompt: (param: string) => string;
 }
 
@@ -135,7 +125,7 @@ export interface HtmlEditorAICustomCommand extends HtmlEditorAICommandBase {
  * @namespace DevExpress.ui.dxHtmlEditor
  */
 export type HtmlEditorAICommand =
-    | HtmlEditorAISimpleCommand
+    | HtmlEditorAIBasicCommand
     | HtmlEditorAIChangeStyleCommand
     | HtmlEditorAIChangeToneCommand
     | HtmlEditorAITranslateCommand

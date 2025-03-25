@@ -19608,6 +19608,10 @@ declare module DevExpress.ui {
       dxHtmlEditor,
       FocusEvent
     >;
+    export type HtmlEditorAIBasicCommandName = Extract<
+      HtmlEditorAICommandName,
+      'summarize' | 'proofread' | 'expand' | 'shorten' | 'askAI'
+    >;
     export type HtmlEditorAIChangeStyleOption =
       | 'formal'
       | 'informal'
@@ -19636,10 +19640,10 @@ declare module DevExpress.ui {
       | 'changeTone'
       | 'translate'
       | 'askAI';
-    export type HtmlEditorAISimpleCommandName = Extract<
-      HtmlEditorAICommandName,
-      'summarize' | 'proofread' | 'expand' | 'shorten' | 'askAI'
-    >;
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+     */
+    export type HtmlEditorAICommandNameAll = HtmlEditorAICommandName | 'custom';
     export type HtmlEditorAITranslateOption =
       | 'arabic'
       | 'chinese'
@@ -31842,21 +31846,24 @@ declare module DevExpress.ui.dxHtmlEditor {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface HtmlEditorAIChangeStyleCommand
-    extends HtmlEditorAICommandBase {
-    name: 'changeStyle';
-    options?: HtmlEditorAIChangeStyleOption[];
-  }
+  export type HtmlEditorAIBasicCommand =
+    HtmlEditorAICommandBase<HtmlEditorAIBasicCommandName>;
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface HtmlEditorAIChangeToneCommand
-    extends HtmlEditorAICommandBase {
-    name: 'changeTone';
-    options?: HtmlEditorAIChangeToneOption[];
-  }
+  export type HtmlEditorAIChangeStyleCommand = HtmlEditorAICommandBase<
+    'changeStyle',
+    HtmlEditorAIChangeStyleOption[]
+  >;
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  export type HtmlEditorAIChangeToneCommand = HtmlEditorAICommandBase<
+    'changeTone',
+    HtmlEditorAIChangeToneOption[]
+  >;
   export type HtmlEditorAICommand =
-    | HtmlEditorAISimpleCommand
+    | HtmlEditorAIBasicCommand
     | HtmlEditorAIChangeStyleCommand
     | HtmlEditorAIChangeToneCommand
     | HtmlEditorAITranslateCommand
@@ -31864,23 +31871,20 @@ declare module DevExpress.ui.dxHtmlEditor {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface HtmlEditorAICommandBase {
-    name: HtmlEditorAICommandName | 'custom';
+  export interface HtmlEditorAICommandBase<
+    CommandName extends HtmlEditorAICommandNameAll,
+    CommandOptions = undefined
+  > {
+    name: CommandName;
     text?: string;
+    options?: CommandOptions;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface HtmlEditorAICustomCommand extends HtmlEditorAICommandBase {
-    name: 'custom';
-    options?: string[];
+  export interface HtmlEditorAICustomCommand
+    extends HtmlEditorAICommandBase<'custom', string[]> {
     prompt: (param: string) => string;
-  }
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface HtmlEditorAISimpleCommand extends HtmlEditorAICommandBase {
-    name: HtmlEditorAISimpleCommandName;
   }
   export interface HtmlEditorAIToolbarItem {
     name: 'ai';
@@ -31889,11 +31893,10 @@ declare module DevExpress.ui.dxHtmlEditor {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface HtmlEditorAITranslateCommand
-    extends HtmlEditorAICommandBase {
-    name: 'translate';
-    options?: HtmlEditorAITranslateOption[];
-  }
+  export type HtmlEditorAITranslateCommand = HtmlEditorAICommandBase<
+    'translate',
+    HtmlEditorAITranslateOption[]
+  >;
   export type ImageUploadTab = dxHtmlEditorImageUploadTabItem;
   export type ToolbarItem = dxHtmlEditorToolbarItem | HtmlEditorAIToolbarItem;
 }
