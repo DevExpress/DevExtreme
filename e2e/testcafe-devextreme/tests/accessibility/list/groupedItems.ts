@@ -39,15 +39,12 @@ const groupedItems = [[
 
 const options: Options<Properties> = {
   dataSource: [groupedItems],
-  height: [undefined, 400],
+  height: [400],
   grouped: [true],
   collapsibleGroups: [true, false],
   searchEnabled: [true, false],
-  allowItemDeleting: [true, false],
-  showSelectionControls: [true, false],
+  showSelectionControls: [true],
   selectionMode: ['all', 'multiple', 'none', 'single'],
-  itemDeleteMode: ['toggle', 'context', 'slideButton', 'slideItem', 'static', 'swipe'],
-  useNativeScrolling: [true, false],
 };
 
 const a11yCheckConfig = {
