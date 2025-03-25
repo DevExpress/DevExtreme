@@ -25,7 +25,6 @@ export const GroupPanelDefaultProps: DefaultProps<GroupPanelProps> = {
 };
 
 export class GroupPanel extends InfernoWrapperComponent<GroupPanelProps> {
-  // eslint-disable-next-line class-methods-use-this
   createEffects(): InfernoEffect[] {
     return [createReRenderEffect()];
   }
@@ -50,7 +49,6 @@ export class GroupPanel extends InfernoWrapperComponent<GroupPanelProps> {
     const Layout = isVerticalLayout ? GroupPanelVertical : GroupPanelHorizontal;
 
     return (
-    // @ts-ignore
      <Layout
        viewContext={viewContext}
        height={height}

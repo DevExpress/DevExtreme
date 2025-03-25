@@ -107,7 +107,6 @@ export class DateTableCellBase extends BaseInfernoComponent<DateTableCellBasePro
     const DataCellTemplateComponent = getTemplate(dataCellTemplate);
 
     return (
-      // @ts-ignore
       <CellBase
         className={classes}
         viewContext={viewContext}
