@@ -9,6 +9,8 @@ import { Sortable } from '../../grid_core/inferno_wrappers/sortable';
 
 export type Status = 'forbid' | 'show' | 'moving' | 'none';
 
+const ALLOWED_DRAGGING_DISTANCE = 64;
+
 export interface Props extends Omit<SortableProps, 'onAdd' | 'onReorder' | 'dragTemplate'> {
   source: string;
 
@@ -18,7 +20,7 @@ export interface Props extends Omit<SortableProps, 'onAdd' | 'onReorder' | 'drag
 
   onMove: (column: Column, toIndex: number, source: string) => void;
 
-  dragTemplate?: ComponentType<{ column: Column; status: Status }>;
+  dragTemplate?: ComponentType<{ column: Column; status?: Status }>;
 }
 
 interface State {
@@ -62,8 +64,7 @@ export class ColumnSortable extends Component<Props, State> {
       Math.abs(dragCoords.y - containerCoords.y + containerCoords.height),
     );
 
-    // TODO: move to scss variable
-    this.status = yDistance <= 64
+    this.status = yDistance <= ALLOWED_DRAGGING_DISTANCE
       ? 'moving'
       : 'forbid';
 

@@ -150,6 +150,7 @@ QUnit.module('Drag and Drop rows', moduleConfig, () => {
             pager: {
                 visible: true
             },
+            isDragging: true,
             scrolling: {
                 useNative: true,
                 showScrollbar: 'onScroll'
@@ -190,6 +191,7 @@ QUnit.module('Drag and Drop rows', moduleConfig, () => {
                     fixedPosition: 'right'
                 }
             ],
+            isDragging: true,
             columnAutoWidth: true,
             showColumnHeaders: false,
             showBorders: true,

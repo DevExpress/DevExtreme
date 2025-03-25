@@ -54,21 +54,6 @@
         <br />
         <div id="cardview"></div>
 
-        <style>
-            .dx-card-cover {
-                overflow: hidden;
-                height: 180px;
-                width: 100%;
-                display: flex;
-                justify-content: center;
-            }
-
-            .dx-card-cover-image {
-                height: 207px;
-                width: auto;
-            }
-        </style>
-
         <script>
             const render = () => {
                 const employees = [{
@@ -309,6 +294,7 @@
                     cardCover: {
                         imageExpr: (data) => `https://js.devexpress.com/jQuery/Demos/WidgetsGallery/JSDemos/${data.Picture}`,
                         altExpr: 'FirstName',
+                        ratio: '2 / 1'
                     },
                     filterPanel: { visible: true },
                     onInitialized(e) {

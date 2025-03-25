@@ -321,8 +321,8 @@ module('Subscribes', {
         });
 
         this.instance.showAddAppointmentPopup({
-            startDate: new Date(2015, 1, 1),
-            endDate: new Date(2015, 1, 1, 1),
+            startDateUTC: new Date(2015, 1, 1),
+            endDateUTC: new Date(2015, 1, 1, 1),
             allDay: true
         });
 

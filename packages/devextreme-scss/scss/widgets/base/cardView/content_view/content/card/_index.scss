@@ -1,11 +1,14 @@
 @use './header';
 @use './content';
+@use './cover';
 @use './variables' as *;
 
 .dx-cardview-card {
-  min-width: $cardview-card-min-width;
+  width: 100%;
+  min-width: var(--dx-cardview-card-min-width, $cardview-card-min-width);
+  max-width: var(--dx-cardview-card-max-width);
   border: $cardview-card-border-size solid $cardview-card-border-color;
   border-radius: $cardview-card-border-radius;
-  width: 100%;
   background-color: $cardview-card-background-color;
+  overflow: hidden;
 }

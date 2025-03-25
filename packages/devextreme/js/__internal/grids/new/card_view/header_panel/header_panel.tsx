@@ -9,7 +9,7 @@ import type { DraggingOptions } from './options';
 
 export const CLASSES = {
   headers: 'dx-cardview-headers',
-  content: 'dx-cardview-headers-content',
+  content: 'dx-cardview-headerpanel-content',
 };
 
 export interface HeaderPanelProps {
@@ -21,7 +21,13 @@ export interface HeaderPanelProps {
 
   showSortIndexes: boolean;
 
-  onSortClick: (column: Column) => void;
+  onSortClick: (column: Column, e: MouseEvent) => void;
+
+  onFilterClick?: (
+    element: Element,
+    column: Column,
+    onFilterCloseCallback?: () => void,
+  ) => void;
 
   itemTemplate?: ComponentType<{ column: Column }>;
 
@@ -32,6 +38,9 @@ export interface HeaderPanelProps {
   draggingOptions?: DraggingOptions;
 }
 
+// eslint-disable-next-line @stylistic/max-len
+/** <img src="../../../../../../../../e2e/testcafe-devextreme/tests/cardView/etalons/headers.png"></img>
+ */
 export class HeaderPanel extends Component<HeaderPanelProps> {
   public render(): JSX.Element {
     if (!this.props.visible) {
@@ -61,9 +70,13 @@ export class HeaderPanel extends Component<HeaderPanelProps> {
                 <Item
                   showSortIndexes={this.props.showSortIndexes}
                   column={column}
-                  onSortClick={(): void => { this.props.onSortClick(column); }}
+                  onSortClick={(e): void => { this.props.onSortClick(column, e); }}
                   template={this.props.itemTemplate}
                   cssClass={this.props.itemCssClass}
+                  onFilterClick={(
+                    element: Element,
+                    callback?: () => void,
+                  ) => this.props.onFilterClick?.(element, column, callback)}
                 />
               ))}
             </div>

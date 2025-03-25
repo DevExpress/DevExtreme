@@ -593,6 +593,8 @@ class DateBoxMask extends DateBoxBase {
       this._activePartIndex = getDatePartIndexByPosition(this._dateParts, this._caret().start);
 
       if (!this._isAllSelected()) {
+        this._clearSearchValue();
+
         if (isDefined(this._activePartIndex)) {
           this._caret(this._getActivePartProp('caret'));
         } else {

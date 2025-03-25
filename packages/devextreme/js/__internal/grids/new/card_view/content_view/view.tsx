@@ -96,6 +96,8 @@ export class ContentView extends ContentViewBase<ContentViewProps> {
               (altExpr) => this.processExpr(altExpr),
               [this.options.oneWay('cardCover.altExpr')],
             ),
+            maxHeight: this.options.oneWay('cardCover.maxHeight'),
+            ratio: this.options.oneWay('cardCover.ratio'),
           }),
           header: combined({
             captionExpr: computed(

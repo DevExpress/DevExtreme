@@ -589,6 +589,15 @@
             "DemoType": "Web"
           },
           {
+            "Title": "Column Reordering",
+            "Name": "ColumnReordering",
+            "Widget": "DataGrid",
+            "MvcAdditionalFiles": [
+              "/Scripts/data/employeeData.js"
+            ],
+            "DemoType": "Web"
+          },
+          {
             "Title": "Column Resizing",
             "Name": "ColumnResizing",
             "Widget": "DataGrid",
@@ -612,15 +621,6 @@
             "Name": "CommandColumnCustomization",
             "Widget": "DataGrid",
             "Equivalents": "button column",
-            "MvcAdditionalFiles": [
-              "/Scripts/data/employeeData.js"
-            ],
-            "DemoType": "Web"
-          },
-          {
-            "Title": "Column Reordering",
-            "Name": "ColumnReordering",
-            "Widget": "DataGrid",
             "MvcAdditionalFiles": [
               "/Scripts/data/employeeData.js"
             ],
@@ -1526,16 +1526,6 @@
         "Equivalents": "",
         "Demos": [
           {
-            "Title": "Column Chooser",
-            "Name": "ColumnChooser",
-            "Widget": "TreeList",
-            "MvcAdditionalFiles": [
-              "/Models/TreeList/Employee.cs",
-              "/Models/SampleData/TreeListEmployees.cs"
-            ],
-            "DemoType": "Web"
-          },
-          {
             "Title": "Column Reordering",
             "Name": "Reordering",
             "Widget": "TreeList",
@@ -1559,6 +1549,16 @@
             "Title": "Fixed and Sticky Columns",
             "Name": "ColumnFixing",
             "Equivalents": "fixed column, frozen column, pinned column",
+            "Widget": "TreeList",
+            "MvcAdditionalFiles": [
+              "/Models/TreeList/Employee.cs",
+              "/Models/SampleData/TreeListEmployees.cs"
+            ],
+            "DemoType": "Web"
+          },
+          {
+            "Title": "Column Chooser",
+            "Name": "ColumnChooser",
             "Widget": "TreeList",
             "MvcAdditionalFiles": [
               "/Models/TreeList/Employee.cs",
@@ -1611,6 +1611,28 @@
             "DocUrl": "Guide/UI_Components/TreeList/Keyboard_Support/",
             "Widget": "TreeList",
             "DemoType": "Web"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "Name": "Card View",
+    "Equivalents": "dxCardView, dx-cardview, cardview",
+    "Badge": "Roadmap",
+    "Groups": [
+      {
+        "Name": "Overview",
+        "Equivalents": "",
+        "Badge": "Roadmap",
+        "Demos": [
+          {
+            "Title": "Overview",
+            "Name": "Overview",
+            "Widget": "CardView",
+            "DemoType": "Web",
+            "Badge": "Roadmap",
+            "RoadmapSurveyUrl": "https://www.devexpress.com/support/surveys/devextreme-roadmap-cardview.xml"
           }
         ]
       }
@@ -1891,6 +1913,19 @@
             "DemoType": "Web"
           },
           {
+            "Title": "Toolbar Customization",
+            "Name": "ToolbarCustomization",
+            "Widget": "Scheduler",
+            "MvcAdditionalFiles": [
+              "/Models/AppointmentWithResources.cs",
+              "/Models/AssigneeResource.cs",
+              "/Models/SampleData/AppointmentsWithResources.cs",
+              "/Models/SampleData/AssigneeResources.cs"
+            ],
+            "DemoType": "Web",
+            "Badge": "Updated"
+          },
+          {
             "Title": "Disabled Date/Time Ranges",
             "Name": "CellTemplates",
             "Widget": "Scheduler",
@@ -1945,18 +1980,6 @@
               "/Models/ContextMenuItem.cs",
               "/Models/SampleData/RecurringAppointments.cs",
               "/Models/SampleData/RecurringAppointmentsResources.cs"
-            ],
-            "DemoType": "Web"
-          },
-          {
-            "Title": "Toolbar Customization",
-            "Name": "ToolbarCustomization",
-            "Widget": "Scheduler",
-            "MvcAdditionalFiles": [
-              "/Models/AppointmentWithResources.cs",
-              "/Models/AssigneeResource.cs",
-              "/Models/SampleData/AppointmentsWithResources.cs",
-              "/Models/SampleData/AssigneeResources.cs"
             ],
             "DemoType": "Web"
           }
@@ -2032,6 +2055,20 @@
         ]
       },
       {
+        "Name": "AI-powered Text Editing",
+        "Equivalents": "AI, text editing, text editor",
+        "Demos": [
+          {
+            "Title": "AI-powered Text Editing",
+            "Name": "AITextEditing",
+            "Widget": "HtmlEditor",
+            "DemoType": "Web",
+            "Badge": "Roadmap",
+            "RoadmapSurveyUrl": "https://www.devexpress.com/support/surveys/devextreme-roadmap-ai.xml"
+          }
+        ]
+      },
+      {
         "Name": "Markdown Support",
         "Equivalents": "",
         "Demos": [
@@ -2063,6 +2100,7 @@
     "Name": "Chat",
     "Breadcrumb": true,
     "Equivalents": "dxChat, dx-chat, chat",
+    "Badge": "Updated",
     "Groups": [
       {
         "Name": "Overview",
@@ -2080,6 +2118,34 @@
               "/Models/Chat/Message.cs",
               "/ViewModels/ChatViewModel.cs"
             ]
+          }
+        ]
+      },
+      {
+        "Name": "Message Editing",
+        "Equivalents": "Editing",
+        "Demos": [
+          {
+            "Title": "Message Editing",
+            "Name": "MessageEditing",
+            "Widget": "Chat",
+            "DemoType": "Web",
+            "Badge": "Roadmap",
+            "RoadmapSurveyUrl": "https://www.devexpress.com/support/surveys/devextreme-roadmap-messages.xml"
+          }
+        ]
+      },
+      {
+        "Name": "Image Rendering",
+        "Equivalents": "",
+        "Demos": [
+          {
+            "Title": "Image Rendering",
+            "Name": "ImageRendering",
+            "Widget": "Chat",
+            "DemoType": "Web",
+            "Badge": "Roadmap",
+            "RoadmapSurveyUrl": "https://www.devexpress.com/support/surveys/devextreme-roadmap-image-rendering.xml"
           }
         ]
       },
@@ -3841,6 +3907,7 @@
   {
     "Name": "Navigation",
     "Equivalents": "",
+    "Badge": "Updated",
     "Groups": [
       {
         "Name": "Overview",
@@ -4036,6 +4103,36 @@
         ]
       },
       {
+        "Name": "Stepper",
+        "Equivalents": "dxStepper, dx-stepper",
+        "Demos": [
+          {
+            "Title": "Overview",
+            "Name": "Overview",
+            "Widget": "Stepper",
+            "DemoType": "Web",
+            "Badge": "Roadmap",
+            "RoadmapSurveyUrl": "https://www.devexpress.com/support/surveys/devextreme-roadmap-stepper.xml"
+          }
+        ]
+      },
+      {
+        "Name": "Pagination",
+        "Equivalents": "",
+        "Demos": [
+          {
+            "Title": "Overview",
+            "Name": "Overview",
+            "DocUrl": "",
+            "Widget": "Pagination",
+            "MvcDescription": "",
+            "NetCoreDescription": "",
+            "MvcAdditionalFiles": [],
+            "DemoType": "Web"
+          }
+        ]
+      },
+      {
         "Name": "Tree View",
         "Breadcrumb": true,
         "Equivalents": "TreeView, TreeList, dxTreeView, dx-tree-view",
@@ -4187,22 +4284,6 @@
               "/Models/SampleData/EuropeanCountries.cs",
               "/ViewModels/RtlViewModel.cs"
             ]
-          }
-        ]
-      },
-      {
-        "Name": "Pagination",
-        "Equivalents": "",
-        "Demos": [
-          {
-            "Title": "Overview",
-            "Name": "Overview",
-            "DocUrl": "",
-            "Widget": "Pagination",
-            "MvcDescription": "",
-            "NetCoreDescription": "",
-            "MvcAdditionalFiles": [],
-            "DemoType": "Web"
           }
         ]
       }

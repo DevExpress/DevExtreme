@@ -1,10 +1,11 @@
 /* eslint-disable spellcheck/spell-checker */
 import type { Subscribable, SubsGets, SubsGetsUpd } from '@ts/core/reactive/index';
 import {
-  computed, iif, interruptableComputed,
+  computed, interruptableComputed,
 } from '@ts/core/reactive/index';
+import type { HeaderFilterRootOptions } from '@ts/grids/new/grid_core/filtering/header_filter/index';
+import headerFilterUtils from '@ts/grids/new/grid_core/filtering/header_filter/utils';
 
-import { DataController } from '../data_controller/index';
 import { OptionsController } from '../options_controller/options_controller';
 import type { ColumnProperties, ColumnSettings, PreNormalizedColumn } from './options';
 import type { Column } from './types';
@@ -14,6 +15,8 @@ import {
 
 export class ColumnsController {
   private readonly columnsConfiguration: Subscribable<ColumnProperties[] | undefined>;
+
+  private readonly headerFilterConfiguration: Subscribable<HeaderFilterRootOptions | undefined>;
 
   private readonly columnsSettings: SubsGetsUpd<PreNormalizedColumn[]>;
 
@@ -27,44 +30,33 @@ export class ColumnsController {
 
   private readonly dateSerializationFormat: Subscribable<string | undefined>;
 
-  public static dependencies = [OptionsController, DataController] as const;
+  public static dependencies = [OptionsController] as const;
 
   constructor(
     private readonly options: OptionsController,
-    private readonly dataController: DataController,
   ) {
     this.columnsConfiguration = this.options.oneWay('columns');
-
-    const columnsFromDataSource = computed(
-      (items: unknown[]) => {
-        if (!items.length) {
-          return [];
-        }
-
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        return Object.keys(items[0] as any);
-      },
-      [this.dataController.items],
-    );
+    this.headerFilterConfiguration = this.options.oneWay('headerFilter');
 
     this.columnsSettings = interruptableComputed(
       (columnsConfiguration) => preNormalizeColumns(columnsConfiguration ?? []),
       [
-        iif(
-          computed((columnsConfiguration) => !!columnsConfiguration, [this.columnsConfiguration]),
-          this.columnsConfiguration,
-          columnsFromDataSource,
-        ),
+        this.columnsConfiguration,
       ],
     );
 
     this.columns = computed(
-      (columnsSettings) => normalizeColumns(
+      (
+        columnsSettings,
+        headerFilterRootOptions,
+      ) => normalizeColumns(
         columnsSettings ?? [],
         this.options.normalizeTemplate.bind(this.options),
-      ),
+      ).map((column) => headerFilterUtils
+        .mergeColumnHeaderFilterOptions(column, headerFilterRootOptions)),
       [
         this.columnsSettings,
+        this.headerFilterConfiguration,
       ],
     );
 
@@ -95,6 +87,11 @@ export class ColumnsController {
     this.columnsSettings.updateFunc(
       (columns) => columns.filter((c) => c.name !== column.name),
     );
+  }
+
+  // eslint-disable-next-line @stylistic/max-len
+  public updateColumns(updateFunc: (oldValue: PreNormalizedColumn[]) => PreNormalizedColumn[]): void {
+    this.columnsSettings.updateFunc(updateFunc);
   }
 
   public columnOption<TProp extends keyof ColumnSettings>(

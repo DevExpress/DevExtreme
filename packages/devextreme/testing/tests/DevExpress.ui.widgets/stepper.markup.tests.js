@@ -10,12 +10,18 @@ import {
     STEPPER_HORIZONTAL_ORIENTATION_CLASS,
     STEP_INDICATOR_CLASS,
     STEP_TEXT_CLASS,
+    STEP_LABEL_CLASS,
     STEP_TITLE_CLASS,
+    STEP_OPTIONAL_MARK_CLASS,
 } from '__internal/ui/stepper/stepper';
 import {
     STEP_COMPLETED_CLASS,
     STEP_INVALID_CLASS,
+    STEP_VALID_ICON,
+    STEP_INVALID_ICON,
 } from '__internal/ui/stepper/stepper_item';
+import { HOVER_STATE_CLASS } from '__internal/core/widget/widget';
+import devices from '__internal/core/m_devices';
 
 const STEP_CONTENT_CLASS = 'dx-step-content';
 const ICON_CLASS = 'dx-icon';
@@ -211,9 +217,190 @@ QUnit.module('Stepper markup', moduleConfig, () => {
         });
 
         const $stepContent = this.getStepByIndex(0).find(`.${STEP_CONTENT_CLASS}`);
+        const $stepLabel = $stepContent.children().eq(1);
 
         assert.strictEqual($stepContent.children().length, 2);
-        assert.strictEqual($stepContent.children().eq(1).hasClass(STEP_TITLE_CLASS), true);
+        assert.strictEqual($stepLabel.hasClass(STEP_LABEL_CLASS), true);
+        assert.strictEqual($stepLabel.children().length, 1);
+        assert.strictEqual($stepLabel.children().eq(0).hasClass(STEP_TITLE_CLASS), true);
+    });
+
+    QUnit.test(`Step content should contain step optional mark with ${STEP_OPTIONAL_MARK_CLASS} class if optional=true`, function(assert) {
+        this.reinit({
+            items: [{
+                optional: true,
+            }],
+        });
+
+        const $stepContent = this.getStepByIndex(0).find(`.${STEP_CONTENT_CLASS}`);
+        const $stepLabel = $stepContent.children().eq(1);
+
+        assert.strictEqual($stepContent.children().length, 2);
+        assert.strictEqual($stepLabel.hasClass(STEP_LABEL_CLASS), true);
+        assert.strictEqual($stepLabel.children().length, 1);
+        assert.strictEqual($stepLabel.children().eq(0).hasClass(STEP_OPTIONAL_MARK_CLASS), true);
+    });
+
+    QUnit.test('Step content should contain step title and optional mark if both set', function(assert) {
+        this.reinit({
+            items: [{
+                title: 'test',
+                optional: true,
+            }],
+        });
+
+        const $stepContent = this.getStepByIndex(0).find(`.${STEP_CONTENT_CLASS}`);
+        const $stepLabel = $stepContent.children().eq(1);
+
+        assert.strictEqual($stepContent.children().length, 2);
+        assert.strictEqual($stepLabel.hasClass(STEP_LABEL_CLASS), true);
+        assert.strictEqual($stepLabel.children().length, 2);
+        assert.strictEqual($stepLabel.children().eq(0).hasClass(STEP_TITLE_CLASS), true);
+        assert.strictEqual($stepLabel.children().eq(1).hasClass(STEP_OPTIONAL_MARK_CLASS), true);
+    });
+
+    QUnit.test(`Step content should update ${STEP_TITLE_CLASS} class after change title option at runtime`, function(assert) {
+        this.reinit({
+            items: [{}],
+        });
+
+        const $stepContentBeforeChange = this.getStepByIndex(0).find(`.${STEP_CONTENT_CLASS}`);
+
+        assert.strictEqual($stepContentBeforeChange.children().length, 1);
+
+        this.instance.option('items[0].title', 'Test title');
+
+        const $stepContent = this.getStepByIndex(0).find(`.${STEP_CONTENT_CLASS}`);
+        const $stepLabel = $stepContent.children().eq(1);
+
+        assert.strictEqual($stepContent.children().length, 2);
+        assert.strictEqual($stepLabel.hasClass(STEP_LABEL_CLASS), true);
+        assert.strictEqual($stepLabel.children().length, 1);
+        assert.strictEqual($stepLabel.children().eq(0).hasClass(STEP_TITLE_CLASS), true);
+    });
+
+    QUnit.test(`Step content should update ${STEP_OPTIONAL_MARK_CLASS} class after change optional option at runtime`, function(assert) {
+        this.reinit({
+            items: [{
+                title: 'Test',
+            }],
+        });
+
+        const $stepContentBeforeChange = this.getStepByIndex(0).find(`.${STEP_CONTENT_CLASS}`);
+        const $stepLabelBeforeChange = $stepContentBeforeChange.children().eq(1);
+
+        assert.strictEqual($stepContentBeforeChange.children().length, 2);
+        assert.strictEqual($stepLabelBeforeChange.hasClass(STEP_LABEL_CLASS), true);
+        assert.strictEqual($stepLabelBeforeChange.children().length, 1);
+
+        this.instance.option('items[0].optional', true);
+
+        const $stepLabel = this.getStepByIndex(0).find(`.${STEP_CONTENT_CLASS}`).children().eq(1);
+
+        assert.strictEqual($stepLabel.children().length, 2);
+        assert.strictEqual($stepLabel.children().eq(1).hasClass(STEP_OPTIONAL_MARK_CLASS), true);
+    });
+
+    QUnit.module('Hover steps', () => {
+        QUnit.test(`Selected and neighbor items have ${HOVER_STATE_CLASS} on hover`, function(assert) {
+            if(devices.real().deviceType !== 'desktop') {
+                assert.ok(true, 'desktop specific test');
+                return;
+            }
+
+            this.reinit({
+                items: [{}, {}, {}, {}, {}],
+                selectedIndex: 2,
+            });
+
+            const $selectedStep = this.getStepByIndex(3);
+
+            $selectedStep.trigger('mouseenter');
+
+            assert.strictEqual($selectedStep.hasClass(HOVER_STATE_CLASS), true, `Selected step has ${HOVER_STATE_CLASS} class`);
+
+            const $prevStep = this.getStepByIndex(1);
+
+            $selectedStep.trigger('mouseleave');
+            $prevStep.trigger('mouseenter');
+
+            assert.strictEqual($selectedStep.hasClass(HOVER_STATE_CLASS), false, `Selected step has not ${HOVER_STATE_CLASS} class`);
+            assert.strictEqual($prevStep.hasClass(HOVER_STATE_CLASS), true, `Previous step has ${HOVER_STATE_CLASS} class`);
+
+            const $nextStep = this.getStepByIndex(3);
+
+            $prevStep.trigger('mouseleave');
+            $nextStep.trigger('mouseenter');
+
+            assert.strictEqual($prevStep.hasClass(HOVER_STATE_CLASS), false, `Previous step has not ${HOVER_STATE_CLASS} class`);
+            assert.strictEqual($nextStep.hasClass(HOVER_STATE_CLASS), true, `Next step has ${HOVER_STATE_CLASS} class`);
+        });
+
+        QUnit.test(`In linear mode non-neighbor steps not have ${HOVER_STATE_CLASS} on hover`, function(assert) {
+            if(devices.real().deviceType !== 'desktop') {
+                assert.ok(true, 'desktop specific test');
+                return;
+            }
+
+            this.reinit({
+                items: [{}, {}, {}, {}, {}, {}, {}],
+                selectedIndex: 2,
+                linear: true,
+            });
+
+            const $stepBeforePrev = this.getStepByIndex(0);
+
+            $stepBeforePrev.trigger('mouseenter');
+
+            assert.strictEqual($stepBeforePrev.hasClass(HOVER_STATE_CLASS), false, `Step before previous has not ${HOVER_STATE_CLASS} class`);
+
+            const $stepAfterNext = this.getStepByIndex(4);
+
+            $stepAfterNext.trigger('mouseenter');
+
+            assert.strictEqual($stepAfterNext.hasClass(HOVER_STATE_CLASS), false, `Step after next has not ${HOVER_STATE_CLASS} class`);
+
+            const $lastStep = this.getStepByIndex(-1);
+
+            $lastStep.trigger('mouseenter');
+
+            assert.strictEqual($lastStep.hasClass(HOVER_STATE_CLASS), false, `Last step has not ${HOVER_STATE_CLASS} class`);
+        });
+
+        QUnit.test(`In non-linear mode non-neighbor steps have ${HOVER_STATE_CLASS} on hover`, function(assert) {
+            if(devices.real().deviceType !== 'desktop') {
+                assert.ok(true, 'desktop specific test');
+                return;
+            }
+
+            this.reinit({
+                items: [{}, {}, {}, {}, {}, {}, {}],
+                selectedIndex: 2,
+                linear: false,
+            });
+
+            const $stepBeforePrev = this.getStepByIndex(0);
+
+            $stepBeforePrev.trigger('mouseenter');
+
+            assert.strictEqual($stepBeforePrev.hasClass(HOVER_STATE_CLASS), true, `Step before previous has ${HOVER_STATE_CLASS} class`);
+
+            const $stepAfterNext = this.getStepByIndex(4);
+
+            $stepBeforePrev.trigger('mouseleave');
+            $stepAfterNext.trigger('mouseenter');
+
+            assert.strictEqual($stepBeforePrev.hasClass(HOVER_STATE_CLASS), false, `Step before previous has not ${HOVER_STATE_CLASS} class`);
+            assert.strictEqual($stepAfterNext.hasClass(HOVER_STATE_CLASS), true, `Step after next has ${HOVER_STATE_CLASS} class`);
+
+            const $lastStep = this.getStepByIndex(-1);
+
+            $stepAfterNext.trigger('mouseleave');
+            $lastStep.trigger('mouseenter');
+
+            assert.strictEqual($stepAfterNext.hasClass(HOVER_STATE_CLASS), false, `Step after next has not ${HOVER_STATE_CLASS} class`);
+            assert.strictEqual($lastStep.hasClass(HOVER_STATE_CLASS), true, `Last step has ${HOVER_STATE_CLASS} class`);
+        });
     });
 });
 
@@ -291,5 +478,100 @@ QUnit.module('Step.isValid', moduleConfig, () => {
         this.instance.option('items[0].isValid', undefined);
 
         assert.strictEqual(this.getItems().eq(0).hasClass(STEP_INVALID_CLASS), false, `${STEP_INVALID_CLASS} is removed`);
+    });
+
+    [
+        { options: { isValid: true, icon: 'test', text: 'test' }, expectedIcon: STEP_VALID_ICON },
+        { options: { isValid: false, icon: 'test', text: 'test' }, expectedIcon: STEP_INVALID_ICON },
+        { options: { isValid: undefined, icon: 'test', text: 'test' }, expectedIcon: 'test' },
+    ].forEach(({ options, expectedIcon }) => {
+        QUnit.test(`Step indicator should contain '${expectedIcon}' icon, step options: ${JSON.stringify(options)}`, function(assert) {
+            this.reinit({
+                items: [options],
+            });
+
+            const $stepText = this.getStepByIndex(0).find(`.${STEP_CONTENT_CLASS}`).children().eq(0);
+
+            assert.strictEqual($stepText.children().length, 1);
+            assert.strictEqual($stepText.children().eq(0).hasClass(STEP_TEXT_CLASS), false);
+            assert.strictEqual($stepText.children().eq(0).hasClass(ICON_CLASS), true);
+            assert.strictEqual($stepText.children().eq(0).hasClass(`${ICON_CLASS}-${expectedIcon}`), true);
+        });
+
+        QUnit.test(`Step indicator should be updated to '${expectedIcon}' icon after update step.isValid option at runtime`, function(assert) {
+            this.reinit({
+                items: [{
+                    icon: 'test',
+                    text: 'Step 1',
+                    title: 'Step title',
+                }],
+            });
+
+            this.instance.option('items[0].isValid', options.isValid);
+
+            const $stepText = this.getStepByIndex(0).find(`.${STEP_CONTENT_CLASS}`).children().eq(0);
+
+            assert.strictEqual($stepText.children().length, 1);
+            assert.strictEqual($stepText.children().eq(0).hasClass(STEP_TEXT_CLASS), false);
+            assert.strictEqual($stepText.children().eq(0).hasClass(ICON_CLASS), true);
+            assert.strictEqual($stepText.children().eq(0).hasClass(`${ICON_CLASS}-${expectedIcon}`), true);
+        });
+    });
+});
+
+QUnit.module('Step.hint', moduleConfig, () => {
+    QUnit.test('Step should not have a title attribute if the hint is not defined', function(assert) {
+        this.reinit({
+            items: [{}, { hint: undefined }, { hint: null }]
+        });
+
+        const items = this.getItems();
+        assert.strictEqual(items.eq(0).attr('title'), undefined, 'Title is not set when hint is missing');
+        assert.strictEqual(items.eq(1).attr('title'), undefined, 'Title is not set when hint is undefined');
+        assert.strictEqual(items.eq(2).attr('title'), undefined, 'Title is not set when hint is null');
+    });
+
+    QUnit.test('Step should have a title attribute with the correct value when hint is defined', function(assert) {
+        this.reinit({
+            items: [{ hint: '' }, { hint: 'hint text' }, { hint: 0 }, { hint: true }, { hint: NaN }]
+        });
+
+        const items = this.getItems();
+        assert.strictEqual(items.eq(0).attr('title'), '', 'Title is correctly set for an empty string hint');
+        assert.strictEqual(items.eq(1).attr('title'), 'hint text', 'Title is correctly set for a text hint');
+        assert.strictEqual(items.eq(2).attr('title'), '0', 'Title is correctly set for a numeric hint');
+        assert.strictEqual(items.eq(3).attr('title'), 'true', 'Title is correctly set when hint is boolean');
+        assert.strictEqual(items.eq(4).attr('title'), 'NaN', 'Title is correctly set when hint is NaN');
+    });
+
+    QUnit.test('Step title should update when the hint option value changes at runtime', function(assert) {
+        this.reinit({
+            items: [{ hint: 'Hint value' }]
+        });
+
+        const items = this.getItems();
+        assert.strictEqual(items.eq(0).attr('title'), 'Hint value', 'Initial title is set correctly');
+
+        this.instance.option('items[0].hint', 'New hint value');
+
+        assert.strictEqual(items.eq(0).attr('title'), 'New hint value', 'Title is updated when hint changes');
+    });
+
+    QUnit.test('Step title should be removed when hint is set to undefined or null', function(assert) {
+        this.reinit({
+            items: [{ hint: 'Initial hint' }]
+        });
+
+        const items = this.getItems();
+        assert.strictEqual(items.eq(0).attr('title'), 'Initial hint', 'Initial title is set correctly');
+
+        this.instance.option('items[0].hint', undefined);
+        assert.strictEqual(items.eq(0).attr('title'), undefined, 'Title is removed when hint is set to undefined');
+
+        this.instance.option('items[0].hint', 'New hint');
+        assert.strictEqual(items.eq(0).attr('title'), 'New hint', 'Title is set correctly after hint update');
+
+        this.instance.option('items[0].hint', null);
+        assert.strictEqual(items.eq(0).attr('title'), undefined, 'Title is removed when hint is set to null');
     });
 });
