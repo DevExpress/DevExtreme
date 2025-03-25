@@ -49,7 +49,6 @@ export class AllDayPanelTableBody extends BaseInfernoComponent<AllDayPanelTableB
     const DataCellTemplateComponent = getTemplate(dataCellTemplate);
 
     return (
-      // @ts-ignore
       <Row
         leftVirtualCellWidth={leftVirtualCellWidth}
         rightVirtualCellWidth={rightVirtualCellWidth}
@@ -70,7 +69,6 @@ export class AllDayPanelTableBody extends BaseInfernoComponent<AllDayPanelTableB
             key,
             startDate,
           }) => (
-            // @ts-ignore
             <AllDayPanelCell
               key={key}
               viewContext={viewContext}

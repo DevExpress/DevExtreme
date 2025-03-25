@@ -48,7 +48,6 @@ export class DateTableBody extends BaseInfernoComponent<DateTableBodyProps> {
           }) => (
               <Fragment key={fragmentKey}>
                 {
-                  // @ts-ignore
                   isGroupedAllDayPanel && <AllDayPanelTableBody
                     viewData={allDayPanel ?? AllDayPanelTableBodyDefaultProps.viewData}
                     viewContext={viewContext}
@@ -67,7 +66,6 @@ export class DateTableBody extends BaseInfernoComponent<DateTableBodyProps> {
                     cells,
                     key: rowKey,
                   }) => (
-                    // @ts-ignore
                       <Row
                         key={rowKey}
                         className={rowClasses}
@@ -77,7 +75,6 @@ export class DateTableBody extends BaseInfernoComponent<DateTableBodyProps> {
                           ?? RowDefaultProps.rightVirtualCellWidth}
                         leftVirtualCellCount={viewData.leftVirtualCellCount}
                         rightVirtualCellCount={viewData.rightVirtualCellCount}
-
                       >
                         {
                           cells.map(({
@@ -112,8 +109,7 @@ export class DateTableBody extends BaseInfernoComponent<DateTableBodyProps> {
                             firstDayOfMonth,
                             isSelected,
                             isFocused,
-                          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                          })) as any
+                          }))
                         }
                       </Row>
                   ))
