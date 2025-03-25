@@ -9,12 +9,12 @@ fixture.disablePageReloads`Accessibility`
 const simpleItems = ['Item_1', 'Item_2', 'Item_3'];
 
 const optionsWithSimpleItems: Options<Properties> = {
-  dataSource: [[], simpleItems],
+  dataSource: [simpleItems],
   height: [400],
   grouped: [false],
-  searchEnabled: [true, false],
-  showSelectionControls: [true, false],
-  selectionMode: ['all', 'multiple', 'none', 'single'],
+  searchEnabled: [true],
+  allowItemDeleting: [true, false],
+  itemDeleteMode: ['toggle', 'context', 'slideButton', 'slideItem', 'static', 'swipe'],
 };
 
 const a11yCheckConfig = {
