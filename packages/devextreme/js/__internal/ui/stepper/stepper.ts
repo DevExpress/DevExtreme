@@ -101,47 +101,66 @@ class Stepper extends CollectionWidgetAsync<StepperProperties> {
     return icon;
   }
 
-  _getStepLabel(data: Item): dxElementWrapper {
-    const { title, optional } = data;
-    const hasTitle = isDefined(title);
-
-    if (!hasTitle && !optional) {
-      return $();
-    }
-
-    const $stepLabel = $('<div>').addClass(STEP_LABEL_CLASS);
-
-    if (hasTitle) {
-      const $stepTitle = $('<div>')
-        .addClass(STEP_TITLE_CLASS)
-        .text(title);
-
-      $stepLabel.append($stepTitle);
-    }
-
-    if (optional) {
-      const optionalMarkText = messageLocalization.format('dxStepper-optionalMark');
-      const $stepOptionalMark = $('<div>')
-        .addClass(STEP_OPTIONAL_MARK_CLASS)
-        .text(optionalMarkText);
-
-      $stepLabel.append($stepOptionalMark);
-    }
-
-    return $stepLabel;
-  }
-
-  _prepareDefaultItemTemplate(data: Item, $container: dxElementWrapper): void {
+  _getStepIndicator(data: Item): dxElementWrapper {
     const { text } = data;
 
     const $indicatorElement = $('<div>').addClass(STEP_INDICATOR_CLASS);
 
     const iconName = this._getStepIcon(data);
-    const $iconElement = getImageContainer(iconName) ?? $('<div>').addClass(STEP_TEXT_CLASS).text(text ?? '');
+    const $indicatorContent = getImageContainer(iconName) ?? $('<div>').addClass(STEP_TEXT_CLASS).text(text ?? '');
 
-    $indicatorElement.append($iconElement);
+    $indicatorElement.append($indicatorContent);
 
-    $container.prepend($indicatorElement);
+    return $indicatorElement;
+  }
+
+  _getStepTitle(data: Item): dxElementWrapper {
+    const { title } = data;
+
+    if (isDefined(title)) {
+      return $('<div>')
+        .addClass(STEP_TITLE_CLASS)
+        .text(title);
+    }
+
+    return $();
+  }
+
+  _getStepOptionalMark(data: Item): dxElementWrapper {
+    const { optional } = data;
+
+    if (optional) {
+      const optionalMarkText = messageLocalization.format('dxStepper-optionalMark');
+
+      return $('<div>')
+        .addClass(STEP_OPTIONAL_MARK_CLASS)
+        .text(optionalMarkText);
+    }
+
+    return $();
+  }
+
+  _getStepLabel(data: Item): dxElementWrapper {
+    const { title, optional } = data;
+
+    if (!isDefined(title) && !optional) {
+      return $();
+    }
+
+    const $stepLabel = $('<div>').addClass(STEP_LABEL_CLASS);
+    const $stepTitle = this._getStepTitle(data);
+    const $stepOptionalMark = this._getStepOptionalMark(data);
+
+    $stepLabel.append($stepTitle);
+    $stepLabel.append($stepOptionalMark);
+
+    return $stepLabel;
+  }
+
+  _prepareDefaultItemTemplate(data: Item, $container: dxElementWrapper): void {
+    const $stepIndicator = this._getStepIndicator(data);
+
+    $container.append($stepIndicator);
 
     const $stepLabel = this._getStepLabel(data);
 
