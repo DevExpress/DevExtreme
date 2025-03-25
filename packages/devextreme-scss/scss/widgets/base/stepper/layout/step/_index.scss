@@ -1,7 +1,11 @@
 .dx-step {
   position: relative;
   flex: 1;
-  cursor: pointer;
+  cursor: default;
+
+  &.dx-state-hover {
+    cursor: pointer;
+  }
 
   &.dx-step-completed,
   &.dx-step-selected {

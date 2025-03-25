@@ -69,7 +69,7 @@ QUnit.module('Size option', moduleConfig, () => {
         QUnit.test(`connector should correctly set ${dimension} on init (orientation=${orientation})`, function(assert) {
             this.reinit({
                 orientation,
-                size: '50%',
+                size: 50,
             });
 
             assert.strictEqual(this.$element.css(dimension), '200px');
@@ -78,7 +78,7 @@ QUnit.module('Size option', moduleConfig, () => {
         QUnit.test(`connector should correctly update styles on runtime orientation change from ${orientation} to ${newOrientation}`, function(assert) {
             this.reinit({
                 orientation,
-                size: '75%',
+                size: 75,
             });
 
             assert.strictEqual(this.$element.css(dimension), '300px');
@@ -100,7 +100,7 @@ QUnit.module('Value option', moduleConfig, () => {
         QUnit.test(`connector should correctly set ${dimension} on init (orientation=${orientation})`, function(assert) {
             this.reinit({
                 orientation,
-                value: '50%',
+                value: 50,
             });
 
             assert.strictEqual(this.getConnectorValue().css(dimension), '200px');
@@ -109,7 +109,7 @@ QUnit.module('Value option', moduleConfig, () => {
         QUnit.test(`connector should correctly update styles on runtime orientation change from ${orientation} to ${newOrientation}`, function(assert) {
             this.reinit({
                 orientation,
-                value: '75%',
+                value: 75,
             });
 
             assert.strictEqual(this.getConnectorValue().css(dimension), '300px');
@@ -124,13 +124,13 @@ QUnit.module('Value option', moduleConfig, () => {
         QUnit.test('connector value should correctly update styles on runtime value change', function(assert) {
             this.reinit({
                 orientation,
-                value: '20%',
+                value: 20,
             });
 
             assert.strictEqual(this.getConnectorValue().css(dimension), '80px');
             assert.strictEqual(this.getConnectorValue().css(newDimension), '2px');
 
-            this.instance.option('value', '50%');
+            this.instance.option('value', 50);
 
             assert.strictEqual(this.getConnectorValue().css(dimension), '200px');
             assert.strictEqual(this.getConnectorValue().css(newDimension), '2px');
