@@ -35,7 +35,7 @@ const CLOSE_BUTTON_SELECTOR = '.dx-closebutton';
           await bottomToolbar.option('overflowMenuVisible', true);
         }
 
-        await t.hover(Selector(CLOSE_BUTTON_SELECTOR));
+        await t.hover(Selector(CLOSE_BUTTON_SELECTOR)).wait(1000);
 
         await testScreenshot(t, takeScreenshot, `${name.replace('dx', '')}_${toolbar}_toolbar_menu,rtlEnabled=${rtlEnabled}.png`);
 
