@@ -19,7 +19,7 @@ fixture.disablePageReloads`HtmlEditor`
 
   // TODO Chrome133: skipped during chrome update
   // Unstable screenshot size in this test
-  test.skip(`T1025549 - ${baseScreenName}`, async (t) => {
+  test(`T1025549 - ${baseScreenName}`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     await testScreenshot(t, takeScreenshot, `${baseScreenName}.png`, { element: selector });

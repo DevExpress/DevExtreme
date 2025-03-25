@@ -3,18 +3,15 @@ import Popup from 'devextreme-testcafe-models/popup';
 import Popover from 'devextreme-testcafe-models/popover';
 import Toolbar from 'devextreme-testcafe-models/toolbar/toolbar';
 import { Selector } from 'testcafe';
-import { testScreenshot, isMaterialBased } from '../../../helpers/themeUtils';
+import { testScreenshot } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 import { safeSizeTest } from '../../../helpers/safeSizeTest';
 
 // TODO Chrome133: skipped during chrome update
 // In material theme borders and shadows always renders different way
-const dynamicFixture = isMaterialBased()
-  ? fixture.skip
-  : fixture;
 
-dynamicFixture`Popup_toolbar`
+fixture`Popup_toolbar`
   .page(url(__dirname, '../../container.html'));
 
 const COMPONENT_SELECTOR = '#container';
