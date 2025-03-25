@@ -18,11 +18,9 @@ const { AngularModuleFacadeGenerator } = require('devextreme-internal-tools');
 const { AngularCommonReexportsGenerator } = require('devextreme-internal-tools');
 const { AngularComponentNamesGenerator } = require('devextreme-internal-tools');
 
-/*
 const argv = require('yargs')
   .option('with-descriptions', { type: 'boolean', default: false })
   .parseSync();
-*/
 
 const buildConfig = require('./build.config');
 
@@ -229,10 +227,7 @@ gulp.task('npm.pack', gulp.series(
   'npm.content',
   'npm.package-json',
   (cb) => {
-    // argv.withDescriptions
-    // ? exec('pnpm run angular:inject-descriptions', { cwd: '../..' }, (err) => cb(err))
-    // : cb();
-    cb();
+    argv.withDescriptions ? exec('pnpm run angular:inject-descriptions', { cwd: '../..' }, (err) => cb(err)) : cb();
   },
   (cb) => { exec('pnpm pack', { }, (err) => cb(err)); },
   () => gulp.src(buildConfig.npm.distPath)
