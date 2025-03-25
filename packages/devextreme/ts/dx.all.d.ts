@@ -31844,24 +31844,27 @@ declare module DevExpress.ui.dxHtmlEditor {
     fromHtml?: (value: string) => string;
   };
   /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   * [descr:HtmlEditorAIBasicCommand]
    */
   export type HtmlEditorAIBasicCommand =
     HtmlEditorAICommandBase<HtmlEditorAIBasicCommandName>;
   /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   * [descr:HtmlEditorAIChangeStyleCommand]
    */
   export type HtmlEditorAIChangeStyleCommand = HtmlEditorAICommandBase<
     'changeStyle',
     HtmlEditorAIChangeStyleOption[]
   >;
   /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   * [descr:HtmlEditorAIChangeToneCommand]
    */
   export type HtmlEditorAIChangeToneCommand = HtmlEditorAICommandBase<
     'changeTone',
     HtmlEditorAIChangeToneOption[]
   >;
+  /**
+   * [descr:HtmlEditorAICommand]
+   */
   export type HtmlEditorAICommand =
     | HtmlEditorAIBasicCommand
     | HtmlEditorAIChangeStyleCommand
@@ -31869,6 +31872,7 @@ declare module DevExpress.ui.dxHtmlEditor {
     | HtmlEditorAITranslateCommand
     | HtmlEditorAICustomCommand;
   /**
+   * [descr:HtmlEditorAICommandBase]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface HtmlEditorAICommandBase<
@@ -31880,18 +31884,30 @@ declare module DevExpress.ui.dxHtmlEditor {
     options?: CommandOptions;
   }
   /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   * [descr:HtmlEditorAICustomCommand]
    */
   export interface HtmlEditorAICustomCommand
     extends HtmlEditorAICommandBase<'custom', string[]> {
+    /**
+     * [descr:HtmlEditorAICustomCommand.prompt]
+     */
     prompt: (param: string) => string;
   }
+  /**
+   * [descr:HtmlEditorAIToolbarItem]
+   */
   export interface HtmlEditorAIToolbarItem {
+    /**
+     * [descr:HtmlEditorAIToolbarItem.name]
+     */
     name: 'ai';
+    /**
+     * [descr:HtmlEditorAIToolbarItem.commands]
+     */
     commands?: Array<HtmlEditorAICommandName | HtmlEditorAICommand>;
   }
   /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   * [descr:HtmlEditorAITranslateCommand]
    */
   export type HtmlEditorAITranslateCommand = HtmlEditorAICommandBase<
     'translate',
