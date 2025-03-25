@@ -721,6 +721,33 @@ moduleWithoutCsp(
             assert.strictEqual(observableValue(), true);
         });
 
+        QUnit.test('should correctly destructurize this.option', function(assert) {
+            const ComponentClass = this.TestComponent.inherit({
+                _render: function() {
+                    this.callBase();
+                    this.option('a', 2);
+                }
+            });
+
+            registerComponent('DestructComponent', ComponentClass);
+
+            const vm = {
+                a: ko.observable(1)
+            };
+
+            const $component = $('<div id="destructuring" data-bind=\'DestructComponent: {\
+                a: a\
+            }\'></div>').appendTo(FIXTURE_ELEMENT);
+            const instance = $("#destructuring").dxDestructComponent('instance');
+
+            ko.applyBindings(vm, $component.get(0));
+
+            assert.equal(vm.a(), 2);
+            const { a } = instance.option();
+            assert.equal(a, 2);
+            assert.equal(this.option('a'), a);
+        })
+
     }
 );
 
