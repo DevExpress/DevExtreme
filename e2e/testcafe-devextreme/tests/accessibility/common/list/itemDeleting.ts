@@ -1,7 +1,7 @@
 import { Properties } from 'devextreme/ui/list.d';
-import { Options } from '../../../helpers/generateOptionMatrix';
-import url from '../../../helpers/getPageUrl';
-import { Configuration, testAccessibility } from '../../../helpers/accessibility/test';
+import { Options } from '../../../../helpers/generateOptionMatrix';
+import url from '../../../../helpers/getPageUrl';
+import { Configuration, testAccessibility } from '../../../../helpers/accessibility/test';
 
 fixture.disablePageReloads`Accessibility`
   .page(url(__dirname, '../../container.html'));
