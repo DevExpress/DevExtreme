@@ -1069,8 +1069,8 @@ importers:
         specifier: 1.0.4
         version: 1.0.4
       babel-plugin-inferno:
-        specifier: 6.7.1
-        version: 6.7.1(@babel/core@7.23.9)
+        specifier: 6.8.3
+        version: 6.8.3(@babel/core@7.23.9)
       cldr-core:
         specifier: 41.0.0
         version: 41.0.0
@@ -7236,9 +7236,9 @@ packages:
     peerDependencies:
       '@babel/core': ^7.0.0-0
 
-  babel-plugin-inferno@6.7.1:
-    resolution: {integrity: sha512-PE21ZL2ABgQUKdOehlrSrmT/pPSUqp1ASzwKmAzvB2gg7gLHdhJbCh4cKmjF2w1nwKcil+lGr5WutTpbLDt+YA==}
-    engines: {node: '>=6'}
+  babel-plugin-inferno@6.8.3:
+    resolution: {integrity: sha512-o3iAiGRSsWVGJNpYe6kanNbp+3psnlMrazH5T/CaBH0qF3spqMVnx4DgEw6tuVm86o8u+O6mTps3rHvH3zlhHA==}
+    engines: {node: '>=18'}
 
   babel-plugin-istanbul@6.1.1:
     resolution: {integrity: sha512-Y1IQok9821cC9onCx5otgFfRm7Lm+I+wwxOx738M/WLPZ9Q42m4IG5W0FNX8WLL2gYMZo3JkuXIH2DOpWM+qwA==}
@@ -24782,7 +24782,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  babel-plugin-inferno@6.7.1(@babel/core@7.23.9):
+  babel-plugin-inferno@6.8.3(@babel/core@7.23.9):
     dependencies:
       '@babel/plugin-syntax-jsx': 7.25.9(@babel/core@7.23.9)
       '@babel/types': 7.26.0
