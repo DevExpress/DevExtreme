@@ -141,30 +141,30 @@ class Stepper extends CollectionWidgetAsync<StepperProperties> {
   }
 
   _getStepLabel(data: Item): dxElementWrapper {
-    const { title, optional } = data;
-
-    if (!isDefined(title) && !optional) {
-      return $();
-    }
-
-    const $stepLabel = $('<div>').addClass(STEP_LABEL_CLASS);
     const $stepTitle = this._getStepTitle(data);
     const $stepOptionalMark = this._getStepOptionalMark(data);
 
-    $stepLabel.append($stepTitle);
-    $stepLabel.append($stepOptionalMark);
+    if ($stepTitle.length || $stepOptionalMark.length) {
+      const $stepLabel = $('<div>')
+        .addClass(STEP_LABEL_CLASS);
 
-    return $stepLabel;
+      $stepLabel
+        .append($stepTitle)
+        .append($stepOptionalMark);
+
+      return $stepLabel;
+    }
+
+    return $();
   }
 
   _prepareDefaultItemTemplate(data: Item, $container: dxElementWrapper): void {
     const $stepIndicator = this._getStepIndicator(data);
-
-    $container.append($stepIndicator);
-
     const $stepLabel = this._getStepLabel(data);
 
-    $container.append($stepLabel);
+    $container
+      .append($stepIndicator)
+      .append($stepLabel);
   }
 
   _initTemplates(): void {
