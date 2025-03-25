@@ -59,3 +59,27 @@ test('TreeList - Expand/collapse mechanism breaks after dragging action in the s
     },
   });
 });
+
+[undefined, 200].forEach((height) => {
+  test(`TreeList - The W1025 warning occurs when dragging a row (height: ${height ?? 'not set'}). (T1280519)`, async (t) => {
+    const treeList = new TreeList('#container');
+
+    await treeList.isReady();
+
+    await treeList.moveRow(0, 10, 10, true);
+
+    const consoleMessages = await t.getBrowserConsoleMessages();
+    const warningExists = !!consoleMessages?.warn.find((message) => message.startsWith('W1025'));
+
+    await t.expect(warningExists).eql(height === undefined);
+  }).before(async () => createWidget('dxDataGrid', {
+    height,
+    scrolling: {
+      mode: 'virtual',
+    },
+    dataSource: tasksT1228650,
+    rowDragging: {
+      allowReordering: true,
+    },
+  }));
+});
