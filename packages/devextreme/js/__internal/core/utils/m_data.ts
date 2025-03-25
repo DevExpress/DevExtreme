@@ -59,8 +59,8 @@ export const compileGetter = function (expr) {
   }
 
   if (!expr || expr === 'this') {
-    return function (obj) { 
-      return unwrap(obj, prepareOptions({})); 
+    return function (obj) {
+      return unwrap(obj, prepareOptions({}));
     };
   }
 
