@@ -46,7 +46,109 @@ export type HtmlEditorImageUploadTab = 'url' | 'file';
 /** @public */
 export type HtmlEditorPredefinedContextMenuItem = 'background' | 'bold' | 'color' | 'font' | 'italic' | 'link' | 'image' | 'strike' | 'subscript' | 'superscript' | 'underline' | 'blockquote' | 'increaseIndent' | 'decreaseIndent' | 'orderedList' | 'bulletList' | 'alignLeft' | 'alignCenter' | 'alignRight' | 'alignJustify' | 'codeBlock' | 'variable' | 'undo' | 'redo' | 'clear' | 'insertTable' | 'insertHeaderRow' | 'insertRowAbove' | 'insertRowBelow' | 'insertColumnLeft' | 'insertColumnRight' | 'deleteColumn' | 'deleteRow' | 'deleteTable' | 'cellProperties' | 'tableProperties';
 /** @public */
-export type HtmlEditorPredefinedToolbarItem = 'background' | 'bold' | 'color' | 'font' | 'italic' | 'link' | 'image' | 'size' | 'strike' | 'subscript' | 'superscript' | 'underline' | 'blockquote' | 'header' | 'increaseIndent' | 'decreaseIndent' | 'orderedList' | 'bulletList' | 'alignLeft' | 'alignCenter' | 'alignRight' | 'alignJustify' | 'codeBlock' | 'variable' | 'separator' | 'undo' | 'redo' | 'clear' | 'cellProperties' | 'tableProperties' | 'insertTable' | 'insertHeaderRow' | 'insertRowAbove' | 'insertRowBelow' | 'insertColumnLeft' | 'insertColumnRight' | 'deleteColumn' | 'deleteRow' | 'deleteTable';
+export type HtmlEditorPredefinedToolbarItem = 'background' | 'bold' | 'color' | 'font' | 'italic' | 'link' | 'image' | 'size' | 'strike' | 'subscript' | 'superscript' | 'underline' | 'blockquote' | 'header' | 'increaseIndent' | 'decreaseIndent' | 'orderedList' | 'bulletList' | 'alignLeft' | 'alignCenter' | 'alignRight' | 'alignJustify' | 'codeBlock' | 'variable' | 'separator' | 'undo' | 'redo' | 'clear' | 'cellProperties' | 'tableProperties' | 'insertTable' | 'insertHeaderRow' | 'insertRowAbove' | 'insertRowBelow' | 'insertColumnLeft' | 'insertColumnRight' | 'deleteColumn' | 'deleteRow' | 'deleteTable' | 'ai';
+/** @public */
+export type HtmlEditorAICommandName = 'summarize' | 'proofread' | 'expand' | 'shorten' | 'changeStyle' | 'changeTone' | 'translate' | 'askAI';
+/** @public */
+export type HtmlEditorAISimpleCommandName = Extract<HtmlEditorAICommandName, 'summarize' | 'proofread' | 'expand' | 'shorten' | 'askAI'>;
+/** @public */
+export type HtmlEditorAIChangeStyleOption =
+    | 'formal'
+    | 'informal'
+    | 'technical'
+    | 'business'
+    | 'creative'
+    | 'journalistic'
+    | 'academic'
+    | 'persuasive'
+    | 'narrative'
+    | 'expository'
+    | 'descriptive'
+    | 'conversational';
+/** @public */
+export type HtmlEditorAIChangeToneOption =
+    | 'professional'
+    | 'casual'
+    | 'straightforward'
+    | 'confident'
+    | 'friendly';
+/** @public */
+export type HtmlEditorAITranslateOption =
+    | 'arabic'
+    | 'chinese'
+    | 'english'
+    | 'french'
+    | 'german'
+    | 'japanese'
+    | 'spanish';
+
+/**
+ * @namespace DevExpress.ui.dxHtmlEditor
+ */
+export interface HtmlEditorAICommandBase {
+    name: HtmlEditorAICommandName | 'custom';
+    text?: string;
+}
+
+/**
+ * @namespace DevExpress.ui.dxHtmlEditor
+ */
+export interface HtmlEditorAISimpleCommand extends HtmlEditorAICommandBase {
+    name: HtmlEditorAISimpleCommandName;
+}
+
+/**
+ * @namespace DevExpress.ui.dxHtmlEditor
+ */
+export interface HtmlEditorAIChangeStyleCommand extends HtmlEditorAICommandBase {
+    name: 'changeStyle';
+    options?: HtmlEditorAIChangeStyleOption[];
+}
+
+/**
+ * @namespace DevExpress.ui.dxHtmlEditor
+ */
+export interface HtmlEditorAIChangeToneCommand extends HtmlEditorAICommandBase {
+    name: 'changeTone';
+    options?: HtmlEditorAIChangeToneOption[];
+}
+
+/**
+ * @namespace DevExpress.ui.dxHtmlEditor
+ */
+export interface HtmlEditorAITranslateCommand extends HtmlEditorAICommandBase {
+    name: 'translate';
+    options?: HtmlEditorAITranslateOption[];
+}
+
+/**
+ * @namespace DevExpress.ui.dxHtmlEditor
+ */
+export interface HtmlEditorAICustomCommand extends HtmlEditorAICommandBase {
+    name: 'custom';
+    options?: string[];
+    prompt: (param: string) => string;
+}
+
+/**
+ * @public
+ * @namespace DevExpress.ui.dxHtmlEditor
+ */
+export type HtmlEditorAICommand =
+    | HtmlEditorAISimpleCommand
+    | HtmlEditorAIChangeStyleCommand
+    | HtmlEditorAIChangeToneCommand
+    | HtmlEditorAITranslateCommand
+    | HtmlEditorAICustomCommand;
+
+/**
+ * @public
+ * @namespace DevExpress.ui.dxHtmlEditor
+ */
+export interface HtmlEditorAIToolbarItem {
+    name: 'ai';
+    commands?: Array<HtmlEditorAICommandName | HtmlEditorAICommand>;
+}
 
 /**
  * @docid _ui_html_editor_ContentReadyEvent
@@ -660,7 +762,7 @@ export interface dxHtmlEditorToolbar {
  * @public
  * @namespace DevExpress.ui.dxHtmlEditor
  */
-export type ToolbarItem = dxHtmlEditorToolbarItem;
+export type ToolbarItem = dxHtmlEditorToolbarItem | HtmlEditorAIToolbarItem;
 
 /**
  * @deprecated Use ToolbarItem instead
