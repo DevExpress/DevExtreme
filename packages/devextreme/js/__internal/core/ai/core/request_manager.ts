@@ -1,4 +1,11 @@
-import type { AIProvider, Prompt, RequestCallbacks } from '@js/ai/ai';
+import type { AIProvider, Prompt } from '@js/ai/ai';
+import type { BaseResult } from '@ts/core/ai/commands/base';
+
+export interface RequestCallbacks {
+  onChunk?: (chunk: string) => void;
+  onComplete?: (finalResponse: BaseResult) => void;
+  onError?: (error: Error) => void;
+}
 
 export class RequestManager {
   private readonly provider: AIProvider;
