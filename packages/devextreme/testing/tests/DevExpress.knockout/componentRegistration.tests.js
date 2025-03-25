@@ -729,23 +729,24 @@ moduleWithoutCsp(
                 }
             });
 
-            registerComponent('DestructComponent', ComponentClass);
+            registerComponent('dxDestructComponent', ComponentClass);
 
             const vm = {
                 a: ko.observable(1)
             };
 
-            const $component = $('<div id="destructuring" data-bind=\'DestructComponent: {\
+            const $component = $('<div data-bind=\'dxDestructComponent: {\
                 a: a\
             }\'></div>').appendTo(FIXTURE_ELEMENT);
-            const instance = $("#destructuring").dxDestructComponent('instance');
-
+            
             ko.applyBindings(vm, $component.get(0));
+
+            const instance = $component.dxDestructComponent('instance');
 
             assert.equal(vm.a(), 2);
             const { a } = instance.option();
             assert.equal(a, 2);
-            assert.equal(this.option('a'), a);
+            assert.equal(instance.option('a'), a);
         })
 
     }
