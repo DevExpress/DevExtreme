@@ -14,10 +14,8 @@ QUnit.module('AI Integration', function() {
                 assert.strictEqual(typeof params.onChunk, 'function', 'onChunk parameter is correct');
 
                 const promise = new Promise((resolve) => {
-                    setTimeout(() => {
-                        resolve();
-                        done();
-                    });
+                    resolve();
+                    done();
                 });
 
                 return { promise, abort: () => {} };
