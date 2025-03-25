@@ -9,10 +9,10 @@ const SELECTBOX_POPUP_WRAPPER_CLASS = 'dx-selectbox-popup-wrapper';
 const LIST_ITEM_CLASS = 'dx-list-item';
 
 fixture('TabPanel.Overview')
-  .page('http://localhost:8080/')
-  .before(async (ctx) => {
-    ctx.initialWindowSize = [900, 1200];
-  });
+  .page('http://localhost:8080/');
+// .before(async (ctx) => {
+//   ctx.initialWindowSize = [900, 1200];
+// });
 
 runManualTest('TabPanel', 'Overview', ['jQuery', 'React', 'Vue', 'Angular'], (test) => {
   test('Overview', async (t) => {
@@ -22,6 +22,12 @@ runManualTest('TabPanel', 'Overview', ['jQuery', 'React', 'Vue', 'Angular'], (te
     //   offsetX: 0,
     //   offsetY: 0,
     // });
+
+    await testScreenshot(t, takeScreenshot, 'TabPanel Overview.png');
+
+    await t
+      .expect(compareResults.isValid())
+      .ok(compareResults.errorMessages());
 
     const $selectBox = $(`.${OPTION_CLASS} .${SELECTBOX_CLASS}`);
 

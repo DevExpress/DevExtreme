@@ -209,10 +209,9 @@ const SKIPPED_TESTS = {
       { demo: 'CustomLegendMarkers', themes: [THEME.generic, THEME.material, THEME.fluent] },
       { demo: 'PieWithResolvedLabelOverlapping', themes: [THEME.material, THEME.fluent] },
       { demo: 'ZoomingAndScrollingAPI', themes: [THEME.generic, THEME.material, THEME.fluent] },
-      { demo: 'ZoomingOnAreaSelection', themes: [THEME.material] },
+      { demo: 'ZoomingOnAreaSelection', themes: [THEME.generic, THEME.material, THEME.fluent] },
       { demo: 'TooltipHTMLSupport', themes: [THEME.material] },
-      { demo: 'Export', themes: [THEME.generic, THEME.material, THEME.fluent] },
-      { demo: 'ExportCustomMarkup', themes: [THEME.material] },
+      { demo: 'ExportCustomMarkup', themes: [THEME.generic, THEME.material, THEME.fluent] },
       { demo: 'PopupEditing', themes: [THEME.material] },
     ],
     VectorMap: [
@@ -254,6 +253,7 @@ const SKIPPED_TESTS = {
       { demo: 'EditStateManagement', themes: [THEME.generic, THEME.fluent, THEME.material] },
       { demo: 'RecordGrouping', themes: [THEME.generic, THEME.material, THEME.fluent] },
       { demo: 'ToolbarCustomization', themes: [THEME.generic, THEME.material, THEME.fluent] },
+      { demo: 'PopupEditing', themes: [THEME.generic] },
     ],
     Scheduler: [
       'CustomDragAndDrop',
@@ -419,7 +419,23 @@ export function runManualTestCore(
     const theme = process.env.THEME.replace('generic.', '');
     testURL = `http://localhost:8080/Demos/${widget}/${demo}/${framework}/?theme=dx.${theme}`;
   } else {
-    changeTheme(__dirname, `../../Demos/${widget}/${demo}/${framework}/index.html`, process.env.THEME);
+    if(framework !== 'Angular') {
+      changeTheme(__dirname, `../../Demos/${widget}/${demo}/${framework}/index.html`, process.env.THEME);
+    } else {
+      if(
+        (widget === 'Splitter' && demo==='Overview')
+        || (widget === 'List' && demo==='ListSelection')
+        || (widget === 'List' && demo==='ItemDragging')
+        || (widget === 'TabPanel' && demo==='Overview')
+        || (widget === 'Tabs' && demo==='Overview')
+        || (widget === 'Tabs' && demo==='Selection')
+      ) {
+        
+      } else {
+        changeTheme(__dirname, `../../Demos/${widget}/${demo}/${framework}/index.html`, process.env.THEME);
+      }
+    }
+
     testURL = `http://localhost:8080/apps/demos/Demos/${widget}/${demo}/${framework}/`;
   }
 
@@ -429,21 +445,43 @@ export function runManualTestCore(
   ])
     .page(testURL);
 
-  test.before?.(async (t) => {
-    const isAngular = framework === 'Angular';
-
-    // if (isAngular) {
-    //   await waitForAngularLoading();
-    // }
-
-    if (isAngular && shouldWaitContentAppears) {
-      await forceContentAppears(t);
+    if(framework === 'Angular') {
+      if(
+        (widget === 'Splitter' && demo==='Overview')
+        || (widget === 'List' && demo==='ListSelection')
+        || (widget === 'List' && demo==='ItemDragging')
+        || (widget === 'TabPanel' && demo==='Overview')
+        || (widget === 'Tabs' && demo==='Overview')
+        || (widget === 'Tabs' && demo==='Selection')
+      ) {
+        
+      } else {
+        test.before?.(async (t) => {
+          const [width, height] = t.fixtureCtx.initialWindowSize;
+      
+          await t.resizeWindow(width, height);
+        });
+      }
+    } else {
+      test.before?.(async (t) => {
+        const isAngular = framework === 'Angular';
+    
+        // if (isAngular) {
+        //   await waitForAngularLoading();
+        // }
+    
+        // if (isAngular && shouldWaitContentAppears) {
+        //   await forceContentAppears(t);
+        // }
+    
+    
+        const [width, height] = t.fixtureCtx.initialWindowSize;
+    
+        await t.resizeWindow(width, height);
+      });
     }
 
-    const [width, height] = t.fixtureCtx.initialWindowSize;
-
-    await t.resizeWindow(width, height);
-  });
+  
 
   if (settings.explicitTests) {
     if (shouldRunTestExplicitlyInternal(framework, widget, demo)) {

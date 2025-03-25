@@ -1,13 +1,15 @@
 import { Selector as $ } from 'testcafe';
+import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { runManualTest } from '../../../utils/visual-tests/matrix-test-helper';
+import { testScreenshot } from '../../../utils/visual-tests/helpers/theme-utils';
 
 const WINDOW_WIDTH = 600;
 
 fixture('List.ItemDragging')
-  .page('http://localhost:8080/')
-  .before(async (ctx) => {
-    ctx.initialWindowSize = [900, WINDOW_WIDTH];
-  });
+  .page('http://localhost:8080/');
+// .before(async (ctx) => {
+//   ctx.initialWindowSize = [900, WINDOW_WIDTH];
+// });
 
 runManualTest('List', 'ItemDragging', ['jQuery', 'React', 'Vue', 'Angular'], (test) => {
   test('ItemDragging', async (t) => {
@@ -24,6 +26,14 @@ runManualTest('List', 'ItemDragging', ['jQuery', 'React', 'Vue', 'Angular'], (te
 
     const itemToDrag = await $(`.${LIST_ITEM_CLASS}`).withText(LIST_ITEM_TEXT);
     const dragHandle = await itemToDrag.find(`.${REORDER_HANDLE_CLASS}`);
+
+    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+    await testScreenshot(t, takeScreenshot, 'List ItemDragging.png');
+
+    await t
+      .expect(compareResults.isValid())
+      .ok(compareResults.errorMessages());
 
     await t
       .drag(dragHandle, 0, -LIST_ITEM_HEIGHT - 10);
