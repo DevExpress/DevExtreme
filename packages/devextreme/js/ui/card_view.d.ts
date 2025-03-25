@@ -364,6 +364,7 @@ export type HeaderPanelOptions<TRowData = unknown, TKey = unknown> = {
  * @docid
  * @hidden
  * @namespace DevExpress.ui.dxCardView
+ * @type object
  */
 export interface BaseContentViewOptions {
     /**
@@ -434,6 +435,7 @@ interface CardHeader<TRowData = unknown> {
  * @docid
  * @hidden
  * @namespace DevExpress.ui.dxCardView
+ * @type object
  */
 export interface ContentViewOptions<TRowData = unknown> extends BaseContentViewOptions {
     /**
