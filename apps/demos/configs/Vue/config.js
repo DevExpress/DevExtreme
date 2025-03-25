@@ -63,12 +63,6 @@ window.config = {
     'devextreme-aspnet-data-nojquery': 'npm:devextreme-aspnet-data-nojquery/index.js',
     /**/
 
-    /** globalize--vue&react */
-    'globalize': 'npm:globalize/dist/globalize',
-    'json': 'npm:systemjs-plugin-json/json.js',
-    'cldr': 'npm:cldrjs/dist/cldr',
-    /**/
-
     /** globalize */
     'globalize': 'npm:globalize/dist/globalize',
     'json': 'npm:systemjs-plugin-json/json.js',
@@ -166,14 +160,6 @@ window.config = {
     },
     'devextreme/events': {
       main: 'index',
-    }/** globalize--vue&react */,
-    'globalize': {
-      main: '../globalize.js',
-      defaultExtension: 'js',
-    },
-    'cldr': {
-      main: '../cldr.js',
-      defaultExtension: 'js',
     }/**//** globalize */,
     'globalize': {
       main: '../globalize.js',
