@@ -1238,6 +1238,8 @@ export class ColumnsController extends modules.Controller {
   }
 
   private _updateChanges(dataSource, parameters) {
+    const langParams = dataSource?.loadOptions?.()?.langParams;
+
     if (dataSource) {
       this.updateColumnDataTypes(dataSource);
       this._dataSourceApplied = true;
@@ -1251,7 +1253,7 @@ export class ColumnsController extends modules.Controller {
     }
 
     if (this._dataController
-      && !gridCoreUtils.equalFilterParameters(parameters.filtering, this._dataController.getCombinedFilter())) {
+      && !gridCoreUtils.equalFilterParameters(parameters.filtering, this._dataController.getCombinedFilter(), langParams)) {
       updateColumnChanges(this, 'filtering');
     }
     updateColumnChanges(this, 'columns');
