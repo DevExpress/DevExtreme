@@ -317,30 +317,6 @@ export default class ViewDataProvider {
       : date >= cellStartDate && date < cellEndDate;
   }
 
-  getSkippedDaysCount(groupIndex, startDate, endDate, daysCount) {
-    const { dateTableGroupedMap } = this._groupedDataMapProvider.groupedDataMap;
-    const groupedData = dateTableGroupedMap[groupIndex];
-    let includedDays = 0;
-
-    for (let rowIndex = 0; rowIndex < groupedData.length; rowIndex += 1) {
-      for (let columnIndex = 0; columnIndex < groupedData[rowIndex].length; columnIndex += 1) {
-        const cell = groupedData[rowIndex][columnIndex].cellData;
-        if (startDate.getTime() < cell.endDate.getTime()
-                    && endDate.getTime() > cell.startDate.getTime()) {
-          includedDays += 1;
-        }
-      }
-    }
-
-    const lastCell = groupedData[groupedData.length - 1][groupedData[0].length - 1].cellData;
-    const lastCellStart = dateUtils.trimTime(lastCell.startDate);
-    const daysAfterView = Math.floor((endDate.getTime() - lastCellStart.getTime()) / dateUtils.dateToMilliseconds('day'));
-
-    const deltaDays = daysAfterView > 0 ? daysAfterView : 0;
-
-    return daysCount - includedDays - deltaDays;
-  }
-
   getColumnsCount() {
     const { dateTableMap } = this.viewDataMap;
     return dateTableMap
