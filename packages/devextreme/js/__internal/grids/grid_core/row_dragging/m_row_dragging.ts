@@ -105,7 +105,6 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewRowDraggingExtend
         onDragStart: (e) => {
           // TODO getController
           this.getController('keyboardNavigation')?._resetFocusedCell();
-
           const row = e.component.getVisibleRows()[e.fromIndex];
           e.itemData = row && row.data;
 
@@ -212,6 +211,7 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewRowDraggingExtend
         fixed: column.fixed,
         fixedPosition: column.fixedPosition,
       })),
+      isDragging: true,
       onRowPrepared: (e) => {
         const rowsView = e.component.getView('rowsView');
         $(e.rowElement).replaceWith($rowElement.eq(rowsView._isFixedTableRendering ? 1 : 0).clone());
