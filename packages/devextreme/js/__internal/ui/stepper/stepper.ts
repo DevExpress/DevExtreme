@@ -36,8 +36,6 @@ export const STEP_LABEL_CLASS = 'dx-step-label';
 export const STEP_TITLE_CLASS = 'dx-step-title';
 export const STEP_OPTIONAL_MARK_CLASS = 'dx-step-optional-mark';
 
-const PERCENT_UNIT = '%';
-
 export const STEPPER_ITEM_DATA_KEY = 'dxStepperItemData';
 
 export const ORIENTATION: Record<string, Orientation> = {
@@ -80,12 +78,12 @@ class Stepper extends CollectionWidgetAsync<StepperProperties> {
 
   _supportedKeys(): Record<string, (e: KeyboardEvent, options?: Record<string, unknown>) => void> {
     const defaultHandlers = super._supportedKeys();
-    const { linear } = this.option();
+    const { linear, selectOnFocus } = this.option();
 
     return {
       ...defaultHandlers,
-      home: linear ? defaultHandlers.leftArrow : defaultHandlers.home,
-      end: linear ? defaultHandlers.rightArrow : defaultHandlers.end,
+      home: linear && selectOnFocus ? defaultHandlers.leftArrow : defaultHandlers.home,
+      end: linear && selectOnFocus ? defaultHandlers.rightArrow : defaultHandlers.end,
     };
   }
 
@@ -237,21 +235,21 @@ class Stepper extends CollectionWidgetAsync<StepperProperties> {
       .prepend(this._connector.$element());
   }
 
-  _getConnectorSize(): string {
+  _getConnectorSize(): number {
     const { items = [] } = this.option();
 
     const itemRatio = 100 / (items.length || 1);
 
-    return `${100 - itemRatio}${PERCENT_UNIT}`;
+    return 100 - itemRatio;
   }
 
-  _getConnectorValue(): string {
+  _getConnectorValue(): number {
     const { items = [], selectedIndex = 0 } = this.option();
 
     const segmentsCount = (items.length || 1) - 1;
     const itemRatio = 100 / (segmentsCount || 1);
 
-    return `${selectedIndex * itemRatio}${PERCENT_UNIT}`;
+    return selectedIndex * itemRatio;
   }
 
   _appendStepsContainer(): void {
@@ -273,7 +271,7 @@ class Stepper extends CollectionWidgetAsync<StepperProperties> {
     return orientation === ORIENTATION.horizontal;
   }
 
-  _shouldPreventItemEvent(itemElement: Element): boolean {
+  _shouldPreventItemEvent(itemElement: Element | dxElementWrapper): boolean {
     const itemIndex = this._editStrategy.getIndex(itemElement);
     const { linear, selectedIndex = 0 } = this.option();
 
@@ -300,6 +298,16 @@ class Stepper extends CollectionWidgetAsync<StepperProperties> {
     if (!this._shouldPreventItemEvent(e.currentTarget)) {
       super._itemSelectHandler(e);
     }
+  }
+
+  _hover($el: dxElementWrapper | undefined, $previous: dxElementWrapper | undefined): void {
+    const $hoverTarget = this._findHoverTarget($el);
+
+    if ($hoverTarget && this._shouldPreventItemEvent($hoverTarget)) {
+      return;
+    }
+
+    super._hover($el, $previous);
   }
 
   _focusOutHandler(e: DxEvent): void {
