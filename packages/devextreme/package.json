@@ -137,7 +137,6 @@
     "gulp-uglify-es": "3.0.0",
     "gulp-watch": "5.0.1",
     "ignore": "5.3.1",
-    "inferno-test-utils": "8.2.3",
     "intl": "1.2.5",
     "jest-each": "29.7.0",
     "jest-environment-jsdom": "29.7.0",
@@ -178,7 +177,6 @@
     "through2": "2.0.5",
     "ts-jest": "29.1.2",
     "tsc-alias": "1.8.10",
-    "typedoc": "^0.26.6",
     "typescript": "4.9.5",
     "typescript-min": "npm:typescript@4.9.5",
     "uuid": "9.0.1",
@@ -225,9 +223,7 @@
     "test-jest": "jest --no-coverage --runInBand",
     "test-jest:watch": "jest --watch",
     "qunit-in-docker": "gulp qunit-in-docker --constel",
-    "tcd-update": "tcd-update",
-    "gen-doc": "typedoc 'js/__internal/**/*.ts' 'js/__internal/**/*.tsx' --tsconfig js/__internal/tsconfig.json --excludePrivate false",
-    "gen-spec": "jest --json > artifacts/specs.json"
+    "tcd-update": "tcd-update"
   },
   "bin": {
     "devextreme-bundler-init": "bin/bundler-init.js",
