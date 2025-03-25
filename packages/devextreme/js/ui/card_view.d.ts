@@ -365,7 +365,7 @@ export type HeaderPanelOptions<TRowData = unknown, TKey = unknown> = {
  * @hidden
  * @namespace DevExpress.ui.dxCardView
  */
-export type BaseContentViewOptions = {
+export interface BaseContentViewOptions {
     /**
      * @docid
      * @public
@@ -394,7 +394,7 @@ export type BaseContentViewOptions = {
      * @public
      */
     noDataTemplate?: template | ((e: { text: string }) => string | UserDefinedElement);
-};
+}
 
 /**
  * @docid
@@ -435,7 +435,7 @@ interface CardHeader<TRowData = unknown> {
  * @hidden
  * @namespace DevExpress.ui.dxCardView
  */
-export type ContentViewOptions<TRowData = unknown> = BaseContentViewOptions & {
+export interface ContentViewOptions<TRowData = unknown> extends BaseContentViewOptions {
     /**
      * @docid
      * @public
@@ -466,7 +466,7 @@ export type ContentViewOptions<TRowData = unknown> = BaseContentViewOptions & {
      * @public
      */
     cardHeader?: CardHeader<TRowData>;
-};
+}
 
 // #endregion
 
