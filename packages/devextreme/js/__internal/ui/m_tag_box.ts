@@ -39,7 +39,6 @@ const TAGBOX_CLASS = 'dx-tagbox';
 const TAGBOX_TAG_CONTAINER_CLASS = 'dx-tag-container';
 const TAGBOX_TAG_CLASS = 'dx-tag';
 const TAGBOX_MULTI_TAG_CLASS = 'dx-tagbox-multi-tag';
-const TAGBOX_CUSTOM_TAG_CLASS = 'dx-tag-custom';
 const TAGBOX_TAG_REMOVE_BUTTON_CLASS = 'dx-tag-remove-button';
 const TAGBOX_ONLY_SELECT_CLASS = 'dx-tagbox-only-select';
 const TAGBOX_SINGLE_LINE_CLASS = 'dx-tagbox-single-line';
@@ -1249,12 +1248,6 @@ class TagBox<
     const itemModel = this._getItemModel(item, displayValue);
 
     if ($tag) {
-      if (isDefined(displayValue)) {
-        $tag.empty();
-        this._applyTagTemplate(itemModel, $tag);
-      }
-
-      $tag.removeClass(TAGBOX_CUSTOM_TAG_CLASS);
       this._updateElementAria($tag.attr('id'));
     } else {
       const tagId = `dx-${new Guid()}`;
@@ -1266,7 +1259,6 @@ class TagBox<
       if (isDefined(item)) {
         this._applyTagTemplate(itemModel, $tag);
       } else {
-        $tag.addClass(TAGBOX_CUSTOM_TAG_CLASS);
         this._applyTagTemplate(value, $tag);
       }
 

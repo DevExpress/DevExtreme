@@ -878,6 +878,25 @@ QUnit.module('tags', moduleSetup, () => {
                 assert.strictEqual($tags.length, expectedSelectedItems.length, 'tags are updated');
             });
         });
+
+        QUnit.test('Should not rerender previously rendered tags on value change (T1246066)', function(assert) {
+            let tagRenderCount = 0;
+            const tagBox = $('#tagBox').dxTagBox({
+                items: [{ name: 'one', value: 1 }, { name: 'two', value: 2 }],
+                displayExpr: 'name',
+                valueExpr: 'value',
+                value: [1],
+                tagTemplate(item) {
+                    tagRenderCount += 1;
+
+                    return $('<div>').text(item);
+                },
+            }).dxTagBox('instance');
+
+            tagBox.option('value', [1]);
+
+            assert.strictEqual(tagRenderCount, 1, 'tag was only rendred once');
+        });
     });
 });
 
