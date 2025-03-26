@@ -15,6 +15,10 @@ export type PromptTemplateName = 'translate';
 
 export type PromptTemplates = Map<PromptTemplateName, PromptTemplate>;
 
+export const ERROR_MESSAGE = {
+  TEMPLATE_NOT_FOUND: 'Template not found',
+};
+
 export class PromptManager {
   private readonly templates: PromptTemplates;
 
@@ -26,7 +30,7 @@ export class PromptManager {
     const template = this.templates.get(templateName);
 
     if (!template) {
-      throw new Error('Template not found');
+      throw new Error(ERROR_MESSAGE.TEMPLATE_NOT_FOUND);
     }
 
     const system = this.replacePlaceholders(template.system, data.system);

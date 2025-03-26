@@ -34,7 +34,7 @@ class TestCommand extends BaseCommand {
   }
 }
 
-describe('BaseCommand Unit', () => {
+describe('BaseCommand', () => {
   // eslint-disable-next-line @typescript-eslint/init-declarations
   let promptManager: PromptManager;
   // eslint-disable-next-line @typescript-eslint/init-declarations
@@ -62,11 +62,11 @@ describe('BaseCommand Unit', () => {
   });
 
   describe('constructor', () => {
-    it('Stores PromptManager and RequestManager correctly', () => {
-      // @ts-ignore
-      expect(command.promptManager).toBe(promptManager);
-      // @ts-ignore
-      expect(command.requestManager).toBe(requestManager);
+    it('stores PromptManager and RequestManager correctly', () => {
+      // @ts-expect-error
+      expect(command.promptManager).toBeInstanceOf(promptManager);
+      // @ts-expect-error
+      expect(command.requestManager).toBeInstanceOf(requestManager);
     });
   });
 
