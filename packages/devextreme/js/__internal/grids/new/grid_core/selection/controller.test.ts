@@ -81,6 +81,37 @@ describe('SelectionController', () => {
     });
   });
 
+  describe('selectCardsByIndexes', () => {
+    it('should select item', () => {
+      const {
+        selectionController,
+        itemsController,
+      } = setup({
+        keyExpr: 'id',
+        dataSource: [{ id: 1, value: 'test' }],
+      });
+
+      selectionController.selectCardsByIndexes([0]);
+      expect(itemsController.items).toMatchSnapshot();
+    });
+  });
+
+  describe('deselectCardsByIndexes', () => {
+    it('should deselect item', () => {
+      const {
+        selectionController,
+        itemsController,
+      } = setup({
+        keyExpr: 'id',
+        dataSource: [{ id: 1, value: 'test' }],
+        selectedCardKeys: [1],
+      });
+
+      selectionController.deselectCardsByIndexes([0]);
+      expect(itemsController.items).toMatchSnapshot();
+    });
+  });
+
   describe('changeCardSelection', () => {
     describe('when the control arg equal to false', () => {
       it('should update the select state of the item', () => {

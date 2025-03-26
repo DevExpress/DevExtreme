@@ -170,6 +170,62 @@ InterruptableComputed {
 }
 `;
 
+exports[`SelectionController deselectCardsByIndexes should deselect item 1`] = `
+InterruptableComputed {
+  "callbacks": Set {},
+  "depInitialized": [
+    true,
+    true,
+    true,
+    true,
+  ],
+  "depValues": [
+    [
+      {
+        "id": 1,
+        "value": "test",
+      },
+    ],
+    [],
+    [],
+    {
+      "caseSensitive": false,
+      "enabled": true,
+      "searchStr": "",
+    },
+  ],
+  "isInitialized": true,
+  "subscriptions": SubscriptionBag {
+    "subscriptions": [
+      {
+        "unsubscribe": [Function],
+      },
+      {
+        "unsubscribe": [Function],
+      },
+      {
+        "unsubscribe": [Function],
+      },
+      {
+        "unsubscribe": [Function],
+      },
+    ],
+  },
+  "value": [
+    {
+      "cells": [],
+      "data": {
+        "id": 1,
+        "value": "test",
+      },
+      "index": 0,
+      "isSelected": false,
+      "key": 1,
+    },
+  ],
+}
+`;
+
 exports[`SelectionController public methods changeCardSelection when the control arg equal to false should update the select state of the item 1`] = `
 InterruptableComputed {
   "callbacks": Set {},
@@ -399,6 +455,64 @@ InterruptableComputed {
 `;
 
 exports[`SelectionController selectCards should select item 1`] = `
+InterruptableComputed {
+  "callbacks": Set {},
+  "depInitialized": [
+    true,
+    true,
+    true,
+    true,
+  ],
+  "depValues": [
+    [
+      {
+        "id": 1,
+        "value": "test",
+      },
+    ],
+    [],
+    [
+      1,
+    ],
+    {
+      "caseSensitive": false,
+      "enabled": true,
+      "searchStr": "",
+    },
+  ],
+  "isInitialized": true,
+  "subscriptions": SubscriptionBag {
+    "subscriptions": [
+      {
+        "unsubscribe": [Function],
+      },
+      {
+        "unsubscribe": [Function],
+      },
+      {
+        "unsubscribe": [Function],
+      },
+      {
+        "unsubscribe": [Function],
+      },
+    ],
+  },
+  "value": [
+    {
+      "cells": [],
+      "data": {
+        "id": 1,
+        "value": "test",
+      },
+      "index": 0,
+      "isSelected": true,
+      "key": 1,
+    },
+  ],
+}
+`;
+
+exports[`SelectionController selectCardsByIndexes should select item 1`] = `
 InterruptableComputed {
   "callbacks": Set {},
   "depInitialized": [

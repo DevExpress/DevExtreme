@@ -272,6 +272,14 @@ export class SelectionController {
     }
   }
 
+  private getItemKeysByIndexes(indexes: number[]): Key[] {
+    const items = this.itemsController.items.unreactive_get();
+
+    return indexes
+      .map((index) => items[index]?.key)
+      .filter((key) => key !== undefined);
+  }
+
   public changeCardSelection(
     cardIndex: number,
     options?: { control?: boolean; shift?: boolean },
@@ -293,10 +301,22 @@ export class SelectionController {
     return selectionHelper?.selectedItemKeys(keys, preserve);
   }
 
+  public selectCardsByIndexes(indexes: number[]): DeferredObj<unknown> | undefined {
+    const keys = this.getItemKeysByIndexes(indexes);
+
+    return this.selectCards(keys);
+  }
+
   public deselectCards(keys: Key[]): DeferredObj<unknown> | undefined {
     const selectionHelper = this.selectionHelper?.unreactive_get();
 
     return selectionHelper?.selectedItemKeys(keys, true, true);
+  }
+
+  public deselectCardsByIndexes(indexes: number[]): DeferredObj<unknown> | undefined {
+    const keys = this.getItemKeysByIndexes(indexes);
+
+    return this.deselectCards(keys);
   }
 
   public isCardSelected(key: Key): boolean {
