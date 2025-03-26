@@ -24,7 +24,6 @@ export class AllDayPanelCell extends BaseInfernoComponent<DateTableCellBaseProps
     const DataCellTemplateComponent = getTemplate(dataCellTemplate);
 
     return (
-      // @ts-ignore
       <DateTableCellBase
         className={`${ALL_DAY_PANEL_CELL_CLASS} ${className}`}
         viewContext={viewContext}
