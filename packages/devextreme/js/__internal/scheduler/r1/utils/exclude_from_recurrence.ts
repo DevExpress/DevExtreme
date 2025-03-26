@@ -13,7 +13,7 @@ const getSerializedDate = (
   date: Date,
   startDate: Date,
   isAllDay: boolean,
-): Date => {
+): string => {
   if (isAllDay) {
     date.setHours(
       startDate.getHours(),
@@ -26,17 +26,17 @@ const getSerializedDate = (
   return dateSerialization.serializeDate(
     date,
     UTC_FULL_DATE_FORMAT,
-  ) as Date;
+  ) as string;
 };
 
 const createRecurrenceException = (
   appointmentAdapter: AppointmentAdapter,
   exceptionDate: Date,
 ): string => {
-  const result: Date[] = [];
+  const result: string[] = [];
 
   if (appointmentAdapter.recurrenceException) {
-    result.push(new Date(appointmentAdapter.recurrenceException));
+    result.push(appointmentAdapter.recurrenceException);
   }
 
   result.push(

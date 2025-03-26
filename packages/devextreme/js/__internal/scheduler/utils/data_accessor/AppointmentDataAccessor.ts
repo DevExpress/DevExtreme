@@ -35,6 +35,7 @@ export class AppointmentDataAccessor extends DataAccessor<Appointment, KnownFiel
     dateSerializationFormat?: string,
   ) {
     super();
+    this.expr = { ...fields };
     this.forceIsoDateParsing = forceIsoDateParsing;
     this.dateSerializationFormat = dateSerializationFormat;
     this.updateExpressions<IFieldExpr>(fields);

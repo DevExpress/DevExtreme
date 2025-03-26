@@ -30,28 +30,31 @@ class AppointmentAdapter {
   }
 
   get duration(): number {
-    return this.endDate ? this.endDate.getTime() - this.startDate.getTime() : 0;
+    return this.endDate && this.startDate
+      ? this.endDate.getTime() - this.startDate.getTime()
+      : 0;
   }
 
   get startDate() {
-    return new Date(this.getField<Date | string | number>(PROPERTY_NAMES.startDate));
+    const result = this.getField<any>(PROPERTY_NAMES.startDate);
+    return result === undefined ? result : new Date(result);
   }
 
-  set startDate(value: Date) {
+  set startDate(value) {
     this.setField(PROPERTY_NAMES.startDate, value);
   }
 
   get endDate() {
-    const result = this.getField<Date | undefined>(PROPERTY_NAMES.endDate);
+    const result = this.getField<any>(PROPERTY_NAMES.endDate);
     return result === undefined ? result : new Date(result);
   }
 
-  set endDate(value: Date | undefined) {
+  set endDate(value) {
     this.setField(PROPERTY_NAMES.endDate, value);
   }
 
   get allDay(): boolean {
-    return this.getField<boolean>(PROPERTY_NAMES.allDay);
+    return Boolean(this.getField<boolean>(PROPERTY_NAMES.allDay));
   }
 
   set allDay(value: boolean) {
@@ -127,10 +130,6 @@ class AppointmentAdapter {
   }
 
   calculateDate(date, appointmentTimeZone, pathTimeZoneConversion: ConversionNames) {
-    if (!date) { // TODO: E1032 should be thrown only for startDate above
-      return undefined;
-    }
-
     return this.timeZoneCalculator.createDate(date, {
       appointmentTimeZone,
       path: pathTimeZoneConversion as PathTimeZoneConversion,

@@ -1,27 +1,15 @@
 import { describe, expect, it } from '@jest/globals';
-import { compileGetter, compileSetter } from '@js/core/utils/data';
+import { AppointmentDataAccessor } from '@ts/scheduler/utils';
 
 import { createTimeZoneCalculator } from '../../timezone_calculator';
 import { excludeFromRecurrence } from '../index';
 
 describe('excludeFromRecurrence', () => {
-  const dataAccessors = {
-    getter: {
-      allDay: compileGetter('allDay') as any,
-      startDate: compileGetter('startDate') as any,
-      recurrenceException: compileGetter('recurrenceException') as any,
-    },
-    setter: {
-      allDay: compileSetter('allDay') as any,
-      startDate: compileSetter('startDate') as any,
-      recurrenceException: compileSetter('recurrenceException') as any,
-    },
-    expr: {
-      allDay: 'allDay',
-      startDate: 'startDate',
-      recurrenceException: 'recurrenceException',
-    },
-  };
+  const dataAccessors = new AppointmentDataAccessor({
+    allDayExpr: 'allDay',
+    startDateExpr: 'startDate',
+    recurrenceExceptionExpr: 'recurrenceException',
+  } as any, false);
 
   [
     {
@@ -56,7 +44,7 @@ describe('excludeFromRecurrence', () => {
           recurrenceException,
         },
         exceptionDate,
-        dataAccessors as any,
+        dataAccessors,
         createTimeZoneCalculator(''),
       );
 
