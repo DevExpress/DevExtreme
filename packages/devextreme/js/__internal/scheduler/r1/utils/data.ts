@@ -3,22 +3,23 @@ import type { Appointment } from '@js/ui/scheduler';
 
 import { replaceWrongEndDate } from '../../appointments/data_provider/m_utils';
 import { createAppointmentAdapter } from '../../m_appointment_adapter';
+import type { AppointmentDataAccessor } from '../../utils/data_accessor/AppointmentDataAccessor';
 import type { TimeZoneCalculator } from '../timezone_calculator';
-import type { AppointmentDataItem, DataAccessorType, LoadDataType } from '../types';
+import type { AppointmentDataItem, LoadDataType } from '../types';
 
 const RECURRENCE_FREQ = 'freq';
 
 export const getPreparedDataItems = (
   dataItems: Appointment[] | undefined,
-  dataAccessors: DataAccessorType,
+  dataAccessors: AppointmentDataAccessor,
   cellDurationInMinutes: number,
   timeZoneCalculator: TimeZoneCalculator,
 ): AppointmentDataItem[] => {
   const result: AppointmentDataItem[] = [];
 
   dataItems?.forEach((rawAppointment) => {
-    const startDate = new Date(dataAccessors.getter.startDate(rawAppointment));
-    const endDate = new Date(dataAccessors.getter.endDate(rawAppointment));
+    const startDate = new Date(dataAccessors.get('startDate', rawAppointment));
+    const endDate = new Date(dataAccessors.get('endDate', rawAppointment));
 
     replaceWrongEndDate(rawAppointment, startDate, endDate, cellDurationInMinutes, dataAccessors);
 
@@ -40,7 +41,7 @@ export const getPreparedDataItems = (
         startDateTimeZone: rawAppointment.startDateTimeZone,
         endDate: comparableEndDate,
         endDateTimeZone: rawAppointment.endDateTimeZone,
-        recurrenceRule: adapter.recurrenceRule,
+        recurrenceRule,
         recurrenceException: adapter.recurrenceException,
         hasRecurrenceRule,
         visible,
