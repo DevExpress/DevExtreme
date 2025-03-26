@@ -7,6 +7,10 @@ export interface RequestCallbacks {
   onError?: (error: Error) => void;
 }
 
+export const ERROR_MESSAGE = {
+  METHOD_NOT_IMPLEMENTED: 'No method for queries has been implemented',
+};
+
 export class RequestManager {
   private readonly provider: AIProvider;
 
@@ -23,19 +27,19 @@ export class RequestManager {
         onChunk: (chunk: string): void => {
           accumulator += chunk;
 
-          callbacks.onChunk?.(chunk);
+          callbacks?.onChunk?.(chunk);
         },
       };
 
       const { promise, abort } = this.provider.sendRequest(params);
 
       promise
-        .then(() => { callbacks.onComplete?.(accumulator); })
-        .catch((e) => { callbacks.onError?.(e); });
+        .then(() => { callbacks?.onComplete?.(accumulator); })
+        .catch((e) => { callbacks?.onError?.(e); });
 
       return abort;
     }
 
-    throw new Error('No method for queries has been implemented');
+    throw new Error(ERROR_MESSAGE.METHOD_NOT_IMPLEMENTED);
   }
 }

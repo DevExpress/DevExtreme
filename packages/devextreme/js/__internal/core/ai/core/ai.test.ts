@@ -12,8 +12,8 @@ describe('AI Integration', () => {
 
     const sendRequest = ({ prompt, onChunk }): ResponseParams => {
       expect(prompt).toEqual({
-        system: 'You are a translation assistant.',
-        user: 'Translate text to fr language.',
+        system: 'You are a translation assistant, who speaks {{lang}} at a native level.',
+        user: 'Translate "text" to French language.',
       });
 
       expect(typeof onChunk).toBe('function');
@@ -27,7 +27,7 @@ describe('AI Integration', () => {
     const ai = new AI({ sendRequest });
 
     ai.translate(
-      { text: 'text', lang: 'fr' },
+      { text: 'text', lang: 'French' },
       {
         onComplete: () => done(),
         onChunk: () => {},
