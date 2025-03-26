@@ -66,14 +66,14 @@ const App = () => {
         {
           text: 'New Appointment',
           onItemClick: () =>
-            scheduler?.showAppointmentPopup({ startDate: e.cellData.startDate }, true),
+            scheduler?.showAppointmentPopup({ startDate: e.cellData.startDateUTC }, true),
         },
         {
           text: 'New Recurring Appointment',
           onItemClick: () =>
             scheduler?.showAppointmentPopup(
               {
-                startDate: e.cellData.startDate,
+                startDate: e.cellData.startDateUTC,
                 recurrenceRule: 'FREQ=DAILY',
               },
               true,

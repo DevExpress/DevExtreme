@@ -36,6 +36,7 @@ import { getAppointmentTakesSeveralDays, sortAppointmentsByStartDate } from './d
 import { AgendaAppointment, Appointment } from './m_appointment';
 import { createAgendaAppointmentLayout, createAppointmentLayout } from './m_appointment_layout';
 import { getAppointmentDateRange } from './resizing/m_core';
+import { countVisibleAppointments } from './utils/countVisibleAppointments';
 
 const COMPONENT_CLASS = 'dx-scheduler-scrollable-appointments';
 
@@ -68,6 +69,10 @@ class SchedulerAppointments extends CollectionWidget {
 
   get appointmentDataProvider() {
     return this.option('getAppointmentDataProvider')();
+  }
+
+  get appointmentsCount(): number {
+    return countVisibleAppointments(this.option('items') ?? []);
   }
 
   constructor(element, options) {

@@ -59,13 +59,13 @@ $(() => {
 
   const createAppointment = function (e) {
     e.component.showAppointmentPopup({
-      startDate: e.cellData.startDate,
+      startDate: e.cellData.startDateUTC,
     }, true);
   };
 
   const createRecurringAppointment = function (e) {
     e.component.showAppointmentPopup({
-      startDate: e.cellData.startDate,
+      startDate: e.cellData.startDateUTC,
       recurrenceRule: 'FREQ=DAILY',
     }, true);
   };

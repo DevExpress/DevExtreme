@@ -1,6 +1,11 @@
 .dx-step {
   position: relative;
-  cursor: pointer;
+  flex: 1;
+  cursor: default;
+
+  &.dx-state-hover {
+    cursor: pointer;
+  }
 
   &.dx-step-completed,
   &.dx-step-selected {
@@ -10,7 +15,7 @@
   }
 
   &.dx-step-selected {
-    .dx-step-title {
+    .dx-step-label {
       font-weight: 600;
     }
   }
@@ -46,8 +51,15 @@
   }
 }
 
-.dx-step-title {
+.dx-step-label {
   width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dx-step-title,
+.dx-step-optional-mark {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -57,14 +69,15 @@
 .dx-stepper-vertical {
   .dx-step {
     display: flex;
-    align-items: center;
   }
 
   .dx-step-content {
     flex-direction: row;
+    width: 100%;
   }
 
-  .dx-step-title {
+  .dx-step-title,
+  .dx-step-optional-mark {
     text-align: start;
   }
 }

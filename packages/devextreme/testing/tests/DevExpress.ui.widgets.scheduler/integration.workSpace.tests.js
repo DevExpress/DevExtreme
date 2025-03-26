@@ -674,8 +674,34 @@ module('Integration: Work space', { ...moduleConfig }, () => {
             allDay: false,
             startDate: new Date(2016, 8, 4),
             endDate: new Date(2016, 8, 4, 0, 30),
+            startDateUTC: new Date(2016, 8, 4),
+            endDateUTC: new Date(2016, 8, 4, 0, 30),
             groupIndex: 0,
         }, 'Cell data is OK!');
+    });
+
+    test('Cell data should contain dates in scheduler timezone', function(assert) {
+        const scheduler = createWrapper({
+            timeZone: 'UTC',
+            views: ['day', 'week'],
+            currentView: 'week',
+            dataSource: [],
+            currentDate: new Date(2016, 8, 5),
+            firstDayOfWeek: 0
+        });
+
+        const workSpace = scheduler.instance.getWorkSpace();
+        assert.deepEqual(workSpace.getCellDataByCoordinates({
+            top: 10,
+            left: 100,
+        }), {
+            allDay: false,
+            startDate: new Date(2016, 8, 4),
+            endDate: new Date(2016, 8, 4, 0, 30),
+            startDateUTC: new Date(Date.UTC(2016, 8, 4)),
+            endDateUTC: new Date(Date.UTC(2016, 8, 4, 0, 30)),
+            groupIndex: 0,
+        }, 'Cell data has UTC dates');
     });
 
     test('Appointments in month view should be sorted same as in all-day section', function(assert) {
@@ -909,8 +935,9 @@ module('Integration: Work space', { ...moduleConfig }, () => {
 
             assert.deepEqual(scheduler.instance.option('selectedCellData'), [{
                 ...baseData,
+                startDateUTC: baseData.startDate,
+                endDateUTC: baseData.endDate,
                 groupIndex: 0,
-                groups: undefined,
             }], 'option has right value');
         });
 
@@ -1118,23 +1145,26 @@ module('Integration: Work space', { ...moduleConfig }, () => {
         const firstCell = {
             allDay: false,
             endDate: new Date(2020, 8, 20, 0, 30),
+            endDateUTC: new Date(2020, 8, 20, 0, 30),
             groupIndex: 0,
             startDate: new Date(2020, 8, 20, 0, 0),
-            groups: undefined,
+            startDateUTC: new Date(2020, 8, 20, 0, 0),
         };
         const bottomCell = {
             allDay: false,
             endDate: new Date(2020, 8, 21, 0, 0),
+            endDateUTC: new Date(2020, 8, 21, 0, 0),
             groupIndex: 0,
             startDate: new Date(2020, 8, 20, 23, 30),
-            groups: undefined,
+            startDateUTC: new Date(2020, 8, 20, 23, 30),
         };
         const lastCell = {
             allDay: false,
             endDate: new Date(2020, 8, 21, 0, 30),
+            endDateUTC: new Date(2020, 8, 21, 0, 30),
             groupIndex: 0,
             startDate: new Date(2020, 8, 21, 0, 0),
-            groups: undefined,
+            startDateUTC: new Date(2020, 8, 21, 0, 0),
         };
 
         const selectedCellData = instance.option('selectedCellData');
@@ -1168,9 +1198,10 @@ module('Integration: Work space', { ...moduleConfig }, () => {
         const selectedCells = [{
             allDay: false,
             endDate: new Date(2020, 8, 20, 0, 30),
+            endDateUTC: new Date(2020, 8, 20, 0, 30),
             groupIndex: 0,
             startDate: new Date(2020, 8, 20, 0, 0),
-            groups: undefined,
+            startDateUTC: new Date(2020, 8, 20, 0, 0),
         }];
 
         assert.deepEqual(scheduler.option('selectedCellData'), selectedCells, 'Correct selected cells');
@@ -1340,8 +1371,9 @@ isDesktopEnvironment() && module('Cells selection', { ...moduleConfig }, () => {
                 cellData: {
                     startDate: new Date(2018, 3, 8, 0, 0),
                     endDate: new Date(2018, 3, 8, 0, 30),
+                    startDateUTC: new Date(2018, 3, 8, 0, 0),
+                    endDateUTC: new Date(2018, 3, 8, 0, 30),
                     allDay: false,
-                    groups: undefined,
                     groupIndex: 0,
                 },
             },
@@ -1350,8 +1382,9 @@ isDesktopEnvironment() && module('Cells selection', { ...moduleConfig }, () => {
                 cellData: {
                     startDate: new Date(2018, 3, 8, 0, 30),
                     endDate: new Date(2018, 3, 8, 1, 0),
+                    startDateUTC: new Date(2018, 3, 8, 0, 30),
+                    endDateUTC: new Date(2018, 3, 8, 1, 0),
                     allDay: false,
-                    groups: undefined,
                     groupIndex: 0,
                 },
             },
@@ -1362,8 +1395,9 @@ isDesktopEnvironment() && module('Cells selection', { ...moduleConfig }, () => {
                 cellData: {
                     startDate: new Date(2018, 3, 8, 0, 0),
                     endDate: new Date(2018, 3, 8, 0, 30),
+                    startDateUTC: new Date(2018, 3, 8, 0, 0),
+                    endDateUTC: new Date(2018, 3, 8, 0, 30),
                     allDay: false,
-                    groups: undefined,
                     groupIndex: 0,
                 },
             },
@@ -1372,8 +1406,9 @@ isDesktopEnvironment() && module('Cells selection', { ...moduleConfig }, () => {
                 cellData: {
                     startDate: new Date(2018, 3, 8, 0, 30),
                     endDate: new Date(2018, 3, 8, 1, 0),
+                    startDateUTC: new Date(2018, 3, 8, 0, 30),
+                    endDateUTC: new Date(2018, 3, 8, 1, 0),
                     allDay: false,
-                    groups: undefined,
                     groupIndex: 0,
                 },
             },
@@ -1384,9 +1419,9 @@ isDesktopEnvironment() && module('Cells selection', { ...moduleConfig }, () => {
                 cellData: {
                     startDate: new Date(2018, 3, 1),
                     endDate: new Date(2018, 3, 2),
-                    groups: undefined,
+                    startDateUTC: new Date(2018, 3, 1),
+                    endDateUTC: new Date(2018, 3, 2),
                     groupIndex: 0,
-                    allDay: undefined,
                 },
             },
             endCell: {
@@ -1394,9 +1429,9 @@ isDesktopEnvironment() && module('Cells selection', { ...moduleConfig }, () => {
                 cellData: {
                     startDate: new Date(2018, 3, 2),
                     endDate: new Date(2018, 3, 3),
-                    groups: undefined,
+                    startDateUTC: new Date(2018, 3, 2),
+                    endDateUTC: new Date(2018, 3, 3),
                     groupIndex: 0,
-                    allDay: undefined,
                 },
             },
         }].forEach((config) => {
@@ -1585,16 +1620,16 @@ isDesktopEnvironment() && module('Cells selection', { ...moduleConfig }, () => {
         assert.deepEqual(selectedCellData[0], {
             startDate: new Date(2020, 10, 29, 0, 0),
             endDate: new Date(2020, 10, 30, 0, 0),
-            allDay: undefined,
+            startDateUTC: new Date(2020, 10, 29, 0, 0),
+            endDateUTC: new Date(2020, 10, 30, 0, 0),
             groupIndex: 0,
-            groups: undefined,
         }, 'Correct first cell');
         assert.deepEqual(selectedCellData[5], {
             startDate: new Date(2020, 11, 4, 0, 0),
             endDate: new Date(2020, 11, 5, 0, 0),
-            allDay: undefined,
+            startDateUTC: new Date(2020, 11, 4, 0, 0),
+            endDateUTC: new Date(2020, 11, 5, 0, 0),
             groupIndex: 0,
-            groups: undefined,
         }, 'Correct last cell');
     });
 });
