@@ -146,6 +146,28 @@
           }
         }
       }
+
+      &.dx-state-disabled {
+        .dx-step-indicator {
+          color: $disabled-color;
+        }
+
+        .dx-step-label {
+          color: $disabled-color;
+        }
+
+        .dx-step-content::before {
+          border-color: $disabled-bg;
+          background-color: $disabled-bg;
+        }
+
+        &.dx-state-focused {
+          .dx-step-content::before {
+            border-color: $disabled-bg;
+            background-color: $disabled-bg;
+          }
+        }
+      }
     }
 
     &.dx-step-selected {
@@ -172,6 +194,28 @@
           border-color: $invalid-color;
           background-color: $invalid-color;
           box-shadow: 0 0 0 2px $background-color, 0 0 0 4px $invalid-color, 0 0 0 8px $background-color;
+        }
+      }
+
+      &.dx-state-disabled {
+        .dx-step-indicator {
+          color: $disabled-color;
+        }
+
+        .dx-step-label {
+          color: $disabled-color;
+        }
+
+        .dx-step-content::before {
+          border-color: $disabled-bg;
+          background-color: $disabled-bg;
+        }
+
+        &.dx-state-focused {
+          .dx-step-content::before {
+            border-color: $disabled-bg;
+            background-color: $disabled-bg;
+          }
         }
       }
     }
