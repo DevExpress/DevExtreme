@@ -7,7 +7,6 @@ export {
   HtmlEditorPredefinedContextMenuItem,
   HtmlEditorPredefinedToolbarItem,
   HtmlEditorAICommandName,
-  HtmlEditorAIBasicCommandName,
   HtmlEditorAIChangeStyleOption,
   HtmlEditorAIChangeToneOption,
   HtmlEditorAITranslateOption,

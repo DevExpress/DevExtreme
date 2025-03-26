@@ -47,10 +47,10 @@ export type HtmlEditorImageUploadTab = 'url' | 'file';
 export type HtmlEditorPredefinedContextMenuItem = 'background' | 'bold' | 'color' | 'font' | 'italic' | 'link' | 'image' | 'strike' | 'subscript' | 'superscript' | 'underline' | 'blockquote' | 'increaseIndent' | 'decreaseIndent' | 'orderedList' | 'bulletList' | 'alignLeft' | 'alignCenter' | 'alignRight' | 'alignJustify' | 'codeBlock' | 'variable' | 'undo' | 'redo' | 'clear' | 'insertTable' | 'insertHeaderRow' | 'insertRowAbove' | 'insertRowBelow' | 'insertColumnLeft' | 'insertColumnRight' | 'deleteColumn' | 'deleteRow' | 'deleteTable' | 'cellProperties' | 'tableProperties';
 /** @public */
 export type HtmlEditorPredefinedToolbarItem = 'background' | 'bold' | 'color' | 'font' | 'italic' | 'link' | 'image' | 'size' | 'strike' | 'subscript' | 'superscript' | 'underline' | 'blockquote' | 'header' | 'increaseIndent' | 'decreaseIndent' | 'orderedList' | 'bulletList' | 'alignLeft' | 'alignCenter' | 'alignRight' | 'alignJustify' | 'codeBlock' | 'variable' | 'separator' | 'undo' | 'redo' | 'clear' | 'cellProperties' | 'tableProperties' | 'insertTable' | 'insertHeaderRow' | 'insertRowAbove' | 'insertRowBelow' | 'insertColumnLeft' | 'insertColumnRight' | 'deleteColumn' | 'deleteRow' | 'deleteTable' | 'ai';
+
 /** @public */
 export type HtmlEditorAICommandName = 'summarize' | 'proofread' | 'expand' | 'shorten' | 'changeStyle' | 'changeTone' | 'translate' | 'askAI';
-/** @public */
-export type HtmlEditorAIBasicCommandName = Extract<HtmlEditorAICommandName, 'summarize' | 'proofread' | 'expand' | 'shorten' | 'askAI'>;
+
 /** @public */
 export type HtmlEditorAIChangeStyleOption =
     | 'formal'
@@ -65,6 +65,7 @@ export type HtmlEditorAIChangeStyleOption =
     | 'expository'
     | 'descriptive'
     | 'conversational';
+
 /** @public */
 export type HtmlEditorAIChangeToneOption =
     | 'professional'
@@ -72,6 +73,7 @@ export type HtmlEditorAIChangeToneOption =
     | 'straightforward'
     | 'confident'
     | 'friendly';
+
 /** @public */
 export type HtmlEditorAITranslateOption =
     | 'arabic'
@@ -102,7 +104,12 @@ export interface HtmlEditorAICommandBase<CommandName extends HtmlEditorAICommand
  * @inherits HtmlEditorAICommandBase
  * @namespace DevExpress.ui.dxHtmlEditor
  */
-export type HtmlEditorAIBasicCommand = HtmlEditorAICommandBase<HtmlEditorAIBasicCommandName>;
+export type HtmlEditorAIBasicCommand =
+    | HtmlEditorAICommandBase<'summarize', never>
+    | HtmlEditorAICommandBase<'proofread', never>
+    | HtmlEditorAICommandBase<'expand', never>
+    | HtmlEditorAICommandBase<'shorten', never>
+    | HtmlEditorAICommandBase<'askAI', never>;
 
 /**
  * @docid
@@ -144,7 +151,12 @@ export interface HtmlEditorAICustomCommand extends HtmlEditorAICommandBase<'cust
      * @type_function_param1 param:string
      * @public
      */
-    prompt: (param: string) => string;
+    prompt: (param?: string) => string;
+    /**
+     * @docid
+     * @public
+     */
+    text: string;
 }
 
 /**

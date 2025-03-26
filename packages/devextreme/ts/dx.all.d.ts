@@ -19608,10 +19608,6 @@ declare module DevExpress.ui {
       dxHtmlEditor,
       FocusEvent
     >;
-    export type HtmlEditorAIBasicCommandName = Extract<
-      HtmlEditorAICommandName,
-      'summarize' | 'proofread' | 'expand' | 'shorten' | 'askAI'
-    >;
     export type HtmlEditorAIChangeStyleOption =
       | 'formal'
       | 'informal'
@@ -31847,7 +31843,11 @@ declare module DevExpress.ui.dxHtmlEditor {
    * [descr:HtmlEditorAIBasicCommand]
    */
   export type HtmlEditorAIBasicCommand =
-    HtmlEditorAICommandBase<HtmlEditorAIBasicCommandName>;
+    | HtmlEditorAICommandBase<'summarize', never>
+    | HtmlEditorAICommandBase<'proofread', never>
+    | HtmlEditorAICommandBase<'expand', never>
+    | HtmlEditorAICommandBase<'shorten', never>
+    | HtmlEditorAICommandBase<'askAI', never>;
   /**
    * [descr:HtmlEditorAIChangeStyleCommand]
    */
@@ -31891,7 +31891,11 @@ declare module DevExpress.ui.dxHtmlEditor {
     /**
      * [descr:HtmlEditorAICustomCommand.prompt]
      */
-    prompt: (param: string) => string;
+    prompt: (param?: string) => string;
+    /**
+     * [descr:HtmlEditorAICustomCommand.text]
+     */
+    text: string;
   }
   /**
    * [descr:HtmlEditorAIToolbarItem]
