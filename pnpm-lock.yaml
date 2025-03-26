@@ -347,8 +347,8 @@ importers:
         specifier: workspace:~
         version: link:../../packages/devextreme/artifacts/npm/devextreme-dist
       devextreme-quill:
-        specifier: 1.7.1
-        version: 1.7.1
+        specifier: 1.7.2
+        version: 1.7.2
       devextreme-react:
         specifier: workspace:~
         version: link:../../packages/devextreme-react/npm
@@ -8692,9 +8692,6 @@ packages:
     resolution: {integrity: sha512-Eg54Mwlre8UItUbdqByrtqr2+tOvNFii1mkgITOJP98JyQmzmuTFOxeoBjcI0JsqARdMYj5cbdXn8YGNSJrNPQ==}
     engines: {node: '>=12.0.0'}
     hasBin: true
-
-  devextreme-quill@1.7.1:
-    resolution: {integrity: sha512-0smNE/Br+m9gQDxSPaJxwmrX5ZFubnBHWdbBtY8p6L3ATrF00mFqNQIflVi1tUAr8ndYeHY6Oih46Z1EWDGSQA==}
 
   devextreme-quill@1.7.2:
     resolution: {integrity: sha512-Ng+3ULPwGhLnCqstLRqnDF8Jj2P40sgjTjWzwgCYzH9G9E1n5IvzRl6weFzDWeytRM1WfsxX8Xdr2Oumf/2CDA==}
@@ -26730,16 +26727,6 @@ snapshots:
       typescript: 5.1.6
       winston: 3.10.0
       yargs: 17.7.2
-
-  devextreme-quill@1.7.1:
-    dependencies:
-      core-js: 3.39.0
-      eventemitter3: 4.0.7
-      lodash.clonedeep: 4.5.0
-      lodash.isequal: 4.5.0
-      lodash.merge: 4.6.2
-      parchment: 2.0.1
-      quill-delta: 5.1.0
 
   devextreme-quill@1.7.2:
     dependencies:
