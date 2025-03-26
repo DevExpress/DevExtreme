@@ -1,9 +1,7 @@
-import type dxTreeView from '@js/ui/tree_view';
 import type { Item as TreeViewItemProperties, SelectionChangedEvent } from '@js/ui/tree_view';
 import type { SubsGets } from '@ts/core/reactive/index';
 import { computed } from '@ts/core/reactive/index';
 import { sortColumns } from '@ts/grids/grid_core/columns_controller/m_columns_controller_utils';
-import { createRef } from 'inferno';
 
 import { ColumnsController } from '../columns_controller/columns_controller';
 import type { Column } from '../columns_controller/types';
@@ -16,8 +14,6 @@ export class ColumnChooserController {
   public readonly chooserColumns: SubsGets<Column[]>;
 
   public readonly items: SubsGets<TreeViewItemProperties[]>;
-
-  public readonly treeViewRef = createRef<dxTreeView>();
 
   constructor(
     private readonly columnsController: ColumnsController,

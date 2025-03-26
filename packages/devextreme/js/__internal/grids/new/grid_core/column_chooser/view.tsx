@@ -6,6 +6,7 @@ import type { Properties as PopupProperties } from '@js/ui/popup';
 import type dxPopup from '@js/ui/popup';
 import { current, isGeneric, isMaterial } from '@js/ui/themes';
 import type { Properties as TreeViewProperties } from '@js/ui/tree_view';
+import type dxTreeView from '@js/ui/tree_view';
 import type { MapMaybeSubscribable, SubsGets } from '@ts/core/reactive/index';
 import { combined, computed, state } from '@ts/core/reactive/index';
 import { createRef } from 'inferno';
@@ -34,6 +35,8 @@ export class ColumnChooserView extends View<ColumnChooserProps> {
   private readonly popupVisible = state(false);
 
   public readonly popupRef = createRef<dxPopup>();
+
+  public readonly treeViewRef = createRef<dxTreeView>();
 
   private readonly mode: SubsGets<ColumnChooserMode>;
 
@@ -88,7 +91,7 @@ export class ColumnChooserView extends View<ColumnChooserProps> {
   protected override getProps(): SubsGets<ColumnChooserProps> {
     return combined({
       popupRef: this.popupRef,
-      treeViewRef: this.columnChooserController.treeViewRef,
+      treeViewRef: this.treeViewRef,
 
       visible: this.popupVisible,
       mode: this.mode,

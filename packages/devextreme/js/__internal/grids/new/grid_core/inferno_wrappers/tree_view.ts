@@ -11,16 +11,16 @@ export class TreeView extends InfernoWrapper<TreeViewProperties, dxTreeView> {
 
   protected updateComponentOptions(prevProps: TreeViewProperties, props: TreeViewProperties): void {
     const itemsOnlySelectionChanged = this.isItemsOnlySelectionChanged(prevProps, props);
-    const updatedPrevProps = { ...prevProps };
+    const propsToUpdate = { ...props };
 
     if (itemsOnlySelectionChanged) {
       this.updateSelection(props.items ?? []);
-      updatedPrevProps.items = props.items;
+      delete propsToUpdate.items;
     }
 
     const scrollTop = this.component?.getScrollable()?.scrollTop();
 
-    super.updateComponentOptions(updatedPrevProps, props);
+    super.updateComponentOptions(prevProps, propsToUpdate);
 
     this.component?.getScrollable()?.scrollTo({ top: scrollTop });
   }

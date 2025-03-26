@@ -647,7 +647,7 @@ const DATA_GRID_SELECTOR = '#container';
 
     // assert
     await t
-      .expect(columnChooser.isOpened)
+      .expect(columnChooser.isOpen)
       .ok();
 
     // act, assert
@@ -703,7 +703,7 @@ const DATA_GRID_SELECTOR = '#container';
 
     // assert
     await t
-      .expect(columnChooser.isOpened)
+      .expect(columnChooser.isOpen)
       .ok();
 
     // act, assert
@@ -765,7 +765,7 @@ const DATA_GRID_SELECTOR = '#container';
 
     // assert
     await t
-      .expect(columnChooser.isOpened)
+      .expect(columnChooser.isOpen)
       .ok();
 
     // act, assert
