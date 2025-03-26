@@ -71,7 +71,7 @@ interface RemoteOperations {
  * @hidden
  * @namespace DevExpress.ui.dxCardView
  */
-export type DataControllerOptions<TRowData = unknown, TKey = unknown> = {
+export type DataControllerConfiguration<TRowData = unknown, TKey = unknown> = {
     /**
      * @docid
      * @default undefined
@@ -107,7 +107,7 @@ export type DataControllerOptions<TRowData = unknown, TKey = unknown> = {
  * @hidden
  * @namespace DevExpress.ui.dxCardView
  */
-export type PagerOptions = {
+export type PagerConfiguration = {
     /**
      * @docid
      * @public
@@ -146,7 +146,7 @@ export type ToolbarItem = dxToolbarItem & {
  * @hidden
  * @namespace DevExpress.ui.dxCardView
  */
-export type ToolbarOptions = {
+export type ToolbarConfiguration = {
     /**
      * @docid
      * @public
@@ -297,7 +297,7 @@ export type Column<TRowData = unknown, TKey = unknown> =
  * @hidden
  * @namespace DevExpress.ui.dxCardView
  */
-export type ColumnsControllerOptions<TRowData = unknown, TKey = unknown> = {
+export type ColumnsControllerConfiguration<TRowData = unknown, TKey = unknown> = {
     /**
      * @public
      * @docid
@@ -349,7 +349,7 @@ type HeaderPanel<TRowData = unknown, TKey = unknown> = {
  * @hidden
  * @namespace DevExpress.ui.dxCardView
  */
-export type HeaderPanelOptions<TRowData = unknown, TKey = unknown> = {
+export type HeaderPanelConfiguration<TRowData = unknown, TKey = unknown> = {
     /**
      * @docid
      */
@@ -366,7 +366,7 @@ export type HeaderPanelOptions<TRowData = unknown, TKey = unknown> = {
  * @namespace DevExpress.ui.dxCardView
  * @type object
  */
-export interface BaseContentViewOptions {
+export interface BaseContentViewConfiguration {
     /**
      * @docid
      * @public
@@ -437,7 +437,7 @@ interface CardHeader<TRowData = unknown> {
  * @namespace DevExpress.ui.dxCardView
  * @type object
  */
-export interface ContentViewOptions<TRowData = unknown> extends BaseContentViewOptions {
+export interface ContentViewConfiguration<TRowData = unknown> extends BaseContentViewConfiguration {
     /**
      * @docid
      * @public
@@ -477,15 +477,15 @@ export interface ContentViewOptions<TRowData = unknown> extends BaseContentViewO
  * @public
  * @docid
  * @deprecated use Properties instead
- * @inherits DataControllerOptions,PagerOptions,ToolbarOptions,ColumnsControllerOptions,HeaderPanelOptions,ContentViewOptions
+ * @inherits DataControllerConfiguration,PagerConfiguration,ToolbarConfiguration,ColumnsControllerConfiguration,HeaderPanelConfiguration,ContentViewConfiguration
  */
 export interface dxCardViewOptions<TRowData = unknown, TKey = unknown> extends WidgetOptions<dxCardView>,
-DataControllerOptions<TRowData, TKey>,
-PagerOptions,
-ColumnsControllerOptions<TRowData, TKey>,
-HeaderPanelOptions<TRowData, TKey>,
-ContentViewOptions<TRowData>,
-ToolbarOptions {
+DataControllerConfiguration<TRowData, TKey>,
+PagerConfiguration,
+ColumnsControllerConfiguration<TRowData, TKey>,
+HeaderPanelConfiguration<TRowData, TKey>,
+ContentViewConfiguration<TRowData>,
+ToolbarConfiguration {
     /**
      * @docid
      * @default undefined
