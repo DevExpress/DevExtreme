@@ -4,9 +4,15 @@ import { ClientFunction } from 'testcafe';
 import { createWidget } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
 
-fixture.disablePageReloads`Scheduler header nested options change`
+fixture.disablePageReloads`Scheduler: Toolbar options change`
   .page(url(__dirname, '../../../container.html'));
 
+const updateWholeToolbar = ClientFunction(() => {
+  ($('#container') as any).dxScheduler('instance').option('toolbar', { items: [{ template: 'Custom text' }] });
+});
+const turnOffMultiline = ClientFunction(() => {
+  ($('#container') as any).dxScheduler('instance').option('toolbar', { multiline: false });
+});
 const turnOnMultiline = ClientFunction(() => {
   ($('#container') as any).dxScheduler('instance').option('toolbar.multiline', true);
 });
@@ -36,6 +42,11 @@ test('Scheduler should change nested toolbar options', async (t) => {
     .expect(await takeScreenshot('scheduler-toolbar-location-changed.png', scheduler.toolbar.element))
     .ok();
 
+  await updateWholeToolbar();
+  await t
+    .expect(await takeScreenshot('scheduler-toolbar-changed.png', scheduler.toolbar.element))
+    .ok();
+
   await setupToolbar();
   await t
     .expect(await takeScreenshot('scheduler-toolbar-items-changed.png', scheduler.toolbar.element))
@@ -51,12 +62,17 @@ test('Scheduler should change nested toolbar options', async (t) => {
     .expect(await takeScreenshot('scheduler-toolbar-item-option-changed.png', scheduler.toolbar.element))
     .ok();
 
+  await turnOffMultiline();
+  await t
+    .expect(await takeScreenshot('scheduler-toolbar-changed-2.png', scheduler.toolbar.element))
+    .ok();
+
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => createWidget('dxScheduler', {
-  views: ['day', 'week', 'workWeek', 'month'],
-  currentView: 'week',
+  views: ['day'],
+  currentView: 'day',
   currentDate: new Date(2021, 3, 27),
   height: 200,
   width: 500,

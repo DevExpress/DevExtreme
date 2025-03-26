@@ -1,7 +1,6 @@
 import '@js/ui/button_group';
 import '@js/ui/drop_down_button';
 
-import type { ChangedOptionInfo } from '@js/common/core/events';
 import registerComponent from '@js/core/component_registrator';
 import devices from '@js/core/devices';
 import errors from '@js/core/errors';
@@ -46,7 +45,7 @@ export class SchedulerHeader extends Widget<dxSchedulerOptions> {
 
   eventMap: any;
 
-  _toolbar: any;
+  _toolbar!: Toolbar;
 
   _calendar: any;
 
@@ -116,28 +115,29 @@ export class SchedulerHeader extends Widget<dxSchedulerOptions> {
     }
   }
 
-  onToolbarOptionChanged(args: ChangedOptionInfo) {
-    if (args.name === 'toolbar') {
-      const parts = getPathParts(args.fullName);
-      const optionName = args.fullName.replace(/^toolbar\./, '');
+  onToolbarOptionChanged(fullName: string, value: unknown): void {
+    const parts = getPathParts(fullName);
+    const optionName = fullName.replace(/^toolbar\./, '');
 
-      switch (true) {
-        case parts[1] === 'items' && parts.length === 2:
-          // `toolbar.items` case
-          this._toolbar?.option(
-            optionName,
-            args.value.map((item) => this._parseItem(item)),
-          );
-          break;
-        case parts[1] === 'items' && parts.length === 3:
-          // `toolbar.items[i]` case
-          this._toolbar?.option(optionName, this._parseItem(args.value));
-          break;
-        default:
-          // `toolbar.prop` case
-          // `toolbar.items[i].prop` case
-          this._toolbar?.option(optionName, args.value);
-      }
+    this.option(fullName, value);
+    switch (true) {
+      case fullName === 'toolbar':
+        this.repaint();
+        break;
+      case fullName === 'toolbar.items':
+        this._toolbar.option(
+          'items',
+          (value as []).map((item) => this._parseItem(item)),
+        );
+        break;
+      case parts[1] === 'items' && parts.length === 3:
+        // `toolbar.items[i]` case
+        this._toolbar.option(optionName, this._parseItem(value));
+        break;
+      default:
+        // `toolbar.prop` case
+        // `toolbar.items[i].prop` case
+        this._toolbar.option(optionName, value);
     }
   }
 

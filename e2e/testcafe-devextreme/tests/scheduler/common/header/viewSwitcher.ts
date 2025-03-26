@@ -52,21 +52,15 @@ test('Changing view does not reset toolbar items state', async (t) => {
 
   await t.expect(selectBox.value).eql(defaultSelectBoxValue);
 }).before(async () => createWidget('dxScheduler', {
-  views: ['day', 'week', 'workWeek', 'month'],
+  views: ['week', 'month'],
   currentView: 'week',
   currentDate: new Date(2021, 3, 27),
-  height: 200,
-  useDropDownViewSwitcher: false,
   toolbar: {
     items: [
       {
         location: 'before',
-        locateInMenu: 'auto',
         widget: 'dxSelectBox',
-        options: {
-          items: [defaultSelectBoxValue],
-          width: 200,
-        },
+        options: { items: [defaultSelectBoxValue] },
       },
       'viewSwitcher',
     ],

@@ -816,7 +816,7 @@ class Scheduler extends Widget<any> {
         break;
       case 'toolbar':
         this._header
-          ? this._header.onToolbarOptionChanged(args)
+          ? this._header.onToolbarOptionChanged(args.fullName, value)
           : this.repaint();
         break;
       case 'loadedResources':
