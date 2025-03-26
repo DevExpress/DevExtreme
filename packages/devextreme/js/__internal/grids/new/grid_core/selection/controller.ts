@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 /* eslint-disable spellcheck/spell-checker */
 import type { DeferredObj } from '@js/core/utils/deferred';
-import { isDefined } from '@js/core/utils/type';
+import messageLocalization from '@js/localization/message';
 import type { SubsGets } from '@ts/core/reactive/index';
 import { computed, effect, state } from '@ts/core/reactive/index';
 import { DataController } from '@ts/grids/new/grid_core/data_controller';
@@ -13,11 +13,19 @@ import type { DataRow } from '../columns_controller/types';
 import type { Key } from '../data_controller/types';
 import { ItemsController } from '../items_controller/items_controller';
 import { OptionsController } from '../options_controller/options_controller';
+import { ToolbarController } from '../toolbar/controller';
 import { SelectionMode } from './const';
-import type { SelectionChangedEvent, SelectionOptions } from './types';
+import type {
+  SelectedCardKeys, SelectionEventInfo, SelectionOptions,
+} from './types';
 
 export class SelectionController {
-  public static dependencies = [OptionsController, DataController, ItemsController] as const;
+  public static dependencies = [
+    OptionsController,
+    DataController,
+    ItemsController,
+    ToolbarController,
+  ] as const;
 
   private readonly selectedCardKeys = this.options.twoWay('selectedCardKeys');
 
@@ -26,6 +34,10 @@ export class SelectionController {
   private readonly selectionHelper: SubsGets<Selection | undefined>;
 
   private readonly _isCheckBoxesRendered = state<boolean>(false);
+
+  private readonly onSelectionChanging = this.options.action('onSelectionChanging');
+
+  private readonly onSelectionChanged = this.options.action('onSelectionChanged');
 
   public readonly isCheckBoxesRendered = computed(
     (selectionMode, showCheckBoxesMode, _isCheckBoxesRendered) => {
@@ -88,6 +100,7 @@ export class SelectionController {
     private readonly options: OptionsController,
     private readonly dataController: DataController,
     private readonly itemsController: ItemsController,
+    private readonly toolbarController: ToolbarController,
   ) {
     this.selectionHelper = computed(
       (
@@ -122,18 +135,28 @@ export class SelectionController {
         }
       }
     }, [this.selectedCardKeys, this.selectionOption]);
+
+    effect((selectedCardKeys, selectionOption) => {
+      this.updateSelectionToolbarButtons(selectedCardKeys, selectionOption);
+    }, [this.selectedCardKeys, this.selectionOption, this.dataController.items]);
+
+    effect((isLoaded) => {
+      if (isLoaded) {
+        const selectedCardKeys = this.selectedCardKeys.unreactive_get();
+
+        this.selectCards(selectedCardKeys);
+      }
+    }, [this.dataController.isLoaded]);
   }
 
   private getSelectionConfig(dataSource, selectionOption): object {
     const selectedCardKeys = this.selectedCardKeys.unreactive_get();
-    const { itemsController } = this;
 
     return {
       selectedKeys: selectedCardKeys,
       mode: selectionOption.mode,
       maxFilterLengthInRequest: selectionOption.maxFilterLengthInRequest,
       ignoreDisabledItems: true,
-      alwaysSelectByShift: false,
       key() {
         return dataSource.key();
       },
@@ -144,50 +167,109 @@ export class SelectionController {
         return dataSource.select();
       },
       load(options) {
-        return dataSource.load(options);
+        return dataSource.store().load(options);
       },
       plainItems() {
-        return itemsController.items.unreactive_get();
-      },
-      isItemSelected(item) {
-        return item.isSelected;
-      },
-      isSelectableItem(item) {
-        return !!item?.data;
-      },
-      getItemData(item) {
-        return item?.data ?? item;
+        return dataSource.items();
       },
       filter() {
         // TODO Salimov: Need to take combined filter
         return dataSource.filter();
       },
       totalCount: () => dataSource.totalCount(),
-      getLoadOptions(loadItemIndex, focusedItemIndex, shiftItemIndex) {
-        const { sort, filter } = dataSource.loadOptions();
-        let minIndex = Math.min(loadItemIndex, focusedItemIndex);
-        let maxIndex = Math.max(loadItemIndex, focusedItemIndex);
-
-        if (isDefined(shiftItemIndex)) {
-          minIndex = Math.min(shiftItemIndex, minIndex);
-          maxIndex = Math.max(shiftItemIndex, maxIndex);
-        }
-
-        const take = maxIndex - minIndex + 1;
-
-        return {
-          skip: minIndex,
-          take,
-          filter,
-          sort,
-        };
-      },
-      onSelectionChanged: this.onSelectionChanged.bind(this),
+      onSelectionChanging: this.selectionChanging.bind(this),
+      onSelectionChanged: this.selectionChanged.bind(this),
     };
   }
 
-  private onSelectionChanged(e: SelectionChangedEvent): void {
-    this.selectedCardKeys.update([...e.selectedItemKeys]);
+  private getSelectionEventArgs(e): SelectionEventInfo {
+    return {
+      currentSelectedCardKeys: [...e.addedItemKeys],
+      currentDeselectedCardKeys: [...e.removedItemKeys],
+      selectedCardKeys: [...e.selectedItemKeys],
+      selectedCardsData: [...e.selectedItems],
+      isSelectAll: false,
+      isDeselectAll: false,
+    };
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  private selectionChanging(e: any): void {
+    if (e.addedItemKeys.length || e.removedItemKeys.length) {
+      const onSelectionChanging = this.onSelectionChanging.unreactive_get();
+      const eventArgs = {
+        ...this.getSelectionEventArgs(e),
+        cancel: false,
+      };
+
+      onSelectionChanging?.(eventArgs);
+      e.cancel = eventArgs.cancel;
+    }
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  private selectionChanged(e: any): void {
+    if (e.addedItemKeys.length || e.removedItemKeys.length) {
+      const onSelectionChanged = this.onSelectionChanged.unreactive_get();
+      const eventArgs = this.getSelectionEventArgs(e);
+
+      this.selectedCardKeys.update([...e.selectedItemKeys]);
+      onSelectionChanged?.(eventArgs);
+    }
+  }
+
+  private isOnePageSelectAll(): boolean {
+    const selectionOption = this.selectionOption.unreactive_get();
+
+    return selectionOption?.selectAllMode === 'page';
+  }
+
+  private isSelectAll(): boolean | undefined {
+    const selectionHelper = this.selectionHelper.unreactive_get();
+
+    return selectionHelper?.getSelectAllState(this.isOnePageSelectAll());
+  }
+
+  private updateSelectionToolbarButtons(
+    selectedCardKeys: SelectedCardKeys,
+    selectionOption: SelectionOptions,
+  ) {
+    if (selectionOption.mode === SelectionMode.Multiple && selectionOption.allowSelectAll) {
+      const isSelectAll = this.isSelectAll();
+      const isOnePageSelectAll = this.isOnePageSelectAll();
+
+      this.toolbarController.addDefaultItem({
+        name: 'selectAllButton',
+        widget: 'dxButton',
+        options: {
+          icon: 'selectall',
+          onClick: () => {
+            this.selectAll();
+          },
+          disabled: !!isSelectAll,
+          text: messageLocalization.format('dxCardView-selectAll'),
+        },
+        location: 'before',
+        locateInMenu: 'auto',
+      });
+      this.toolbarController.addDefaultItem({
+        name: 'clearSelectionButton',
+        widget: 'dxButton',
+        options: {
+          icon: 'close',
+          onClick: () => {
+            this.deselectAll();
+          },
+          disabled: isOnePageSelectAll ? isSelectAll === false : selectedCardKeys.length === 0,
+          text: messageLocalization.format('dxCardView-clearSelection'),
+        },
+        location: 'before',
+        locateInMenu: 'auto',
+      });
+    } else {
+      this.toolbarController.removeDefaultItem('selectAllButton');
+      this.toolbarController.removeDefaultItem('clearSelectionButton');
+    }
   }
 
   public changeCardSelection(
@@ -223,8 +305,22 @@ export class SelectionController {
     return selectedCardKeys.includes(key);
   }
 
-  public clearSelection(): void {
-    this.selectedCardKeys.update([]);
+  public selectAll(): DeferredObj<unknown> | undefined {
+    const selectionHelper = this.selectionHelper.unreactive_get();
+
+    return selectionHelper?.selectAll(this.isOnePageSelectAll());
+  }
+
+  public deselectAll(): DeferredObj<unknown> | undefined {
+    const selectionHelper = this.selectionHelper.unreactive_get();
+
+    return selectionHelper?.deselectAll(this.isOnePageSelectAll());
+  }
+
+  public clearSelection(): DeferredObj<unknown> | undefined {
+    const selectionHelper = this.selectionHelper.unreactive_get();
+
+    return selectionHelper?.clearSelection();
   }
 
   public getSelectedCards(): DataRow[] {

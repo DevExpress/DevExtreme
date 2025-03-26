@@ -58,6 +58,39 @@ InterruptableComputed {
 }
 `;
 
+exports[`Options selection allowSelectAll when it is false and selection mode is 'multiple' selection should not work 1`] = `[]`;
+
+exports[`Options selection allowSelectAll when it is true and selection mode is 'multiple' selection should not work 1`] = `
+[
+  {
+    "locateInMenu": "auto",
+    "location": "before",
+    "name": "selectAllButton",
+    "options": {
+      "disabled": false,
+      "icon": "selectall",
+      "onClick": [Function],
+      "text": "Select All",
+    },
+    "widget": "dxButton",
+  },
+  {
+    "locateInMenu": "auto",
+    "location": "before",
+    "name": "clearSelectionButton",
+    "options": {
+      "disabled": true,
+      "icon": "close",
+      "onClick": [Function],
+      "text": "Clear selection",
+    },
+    "widget": "dxButton",
+  },
+]
+`;
+
+exports[`Options selection allowSelectAll when it is true and selection mode isn't 'multiple' selection should not work 1`] = `[]`;
+
 exports[`Options selection mode when it is 'none' and the selectedCardKeys is specified selection should not apply 1`] = `
 InterruptableComputed {
   "callbacks": Set {},

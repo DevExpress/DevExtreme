@@ -1,3 +1,4 @@
+/* eslint-disable spellcheck/spell-checker */
 import { describe, expect, it } from '@jest/globals';
 
 import { ColumnsController } from '../columns_controller/columns_controller';
@@ -8,6 +9,7 @@ import type { Options } from '../options';
 import { OptionsControllerMock } from '../options_controller/options_controller.mock';
 import { SearchController } from '../search/controller';
 import { SortingController } from '../sorting_controller/sorting_controller';
+import { ToolbarController } from '../toolbar/controller';
 import { SelectionController } from './controller';
 
 const setup = (config: Options = {}) => {
@@ -26,16 +28,19 @@ const setup = (config: Options = {}) => {
 
   const searchController = new SearchController(optionsController);
   const itemsController = new ItemsController(dataController, columnsController, searchController);
+  const toolbarController = new ToolbarController(optionsController);
 
   const selectionController = new SelectionController(
     optionsController,
     dataController,
     itemsController,
+    toolbarController,
   );
 
   return {
     selectionController,
     itemsController,
+    toolbarController,
   };
 };
 
@@ -89,6 +94,59 @@ describe('Options', () => {
           });
 
           expect(itemsController.items).toMatchSnapshot();
+        });
+      });
+    });
+
+    describe('allowSelectAll', () => {
+      describe('when it is true and selection mode is \'multiple\'', () => {
+        it('selection should not work', () => {
+          const {
+            toolbarController,
+          } = setup({
+            keyExpr: 'id',
+            dataSource: [{ id: 1, value: 'test' }],
+            selection: {
+              mode: 'multiple',
+              allowSelectAll: true,
+            },
+          });
+
+          expect(toolbarController.items.unreactive_get()).toMatchSnapshot();
+        });
+      });
+
+      describe('when it is false and selection mode is \'multiple\'', () => {
+        it('selection should not work', () => {
+          const {
+            toolbarController,
+          } = setup({
+            keyExpr: 'id',
+            dataSource: [{ id: 1, value: 'test' }],
+            selection: {
+              mode: 'multiple',
+              allowSelectAll: false,
+            },
+          });
+
+          expect(toolbarController.items.unreactive_get()).toMatchSnapshot();
+        });
+      });
+
+      describe('when it is true and selection mode isn\'t \'multiple\'', () => {
+        it('selection should not work', () => {
+          const {
+            toolbarController,
+          } = setup({
+            keyExpr: 'id',
+            dataSource: [{ id: 1, value: 'test' }],
+            selection: {
+              mode: 'single',
+              allowSelectAll: true,
+            },
+          });
+
+          expect(toolbarController.items.unreactive_get()).toMatchSnapshot();
         });
       });
     });

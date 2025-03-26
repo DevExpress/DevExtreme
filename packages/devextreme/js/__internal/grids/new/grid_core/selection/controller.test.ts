@@ -1,5 +1,7 @@
 /* eslint-disable spellcheck/spell-checker */
-import { describe, expect, it } from '@jest/globals';
+import {
+  describe, expect, it, jest,
+} from '@jest/globals';
 
 import { ColumnsController } from '../columns_controller/columns_controller';
 import { DataController } from '../data_controller';
@@ -9,6 +11,7 @@ import type { Options } from '../options';
 import { OptionsControllerMock } from '../options_controller/options_controller.mock';
 import { SearchController } from '../search/controller';
 import { SortingController } from '../sorting_controller/sorting_controller';
+import { ToolbarController } from '../toolbar/controller';
 import { SelectionController } from './controller';
 
 const setup = (config: Options = {}) => {
@@ -28,11 +31,13 @@ const setup = (config: Options = {}) => {
 
   const searchController = new SearchController(optionsController);
   const itemsController = new ItemsController(dataController, columnsController, searchController);
+  const toolbarController = new ToolbarController(optionsController);
 
   const selectionController = new SelectionController(
     optionsController,
     dataController,
     itemsController,
+    toolbarController,
   );
 
   return {
@@ -43,6 +48,8 @@ const setup = (config: Options = {}) => {
 };
 
 describe('SelectionController', () => {
+  // Public methods
+
   describe('selectCards', () => {
     it('should select item', () => {
       const {
@@ -59,7 +66,7 @@ describe('SelectionController', () => {
   });
 
   describe('deselectCards', () => {
-    it('should select item', () => {
+    it('should deselect item', () => {
       const {
         selectionController,
         itemsController,
@@ -200,6 +207,121 @@ describe('SelectionController', () => {
     });
   });
 
+  describe('updateSelectionCheckBoxesVisible', () => {
+    describe('when the selection mode is equal to \'multiple\' and the showCheckBoxesMode is equal to \'onClick\'', () => {
+      it('should show the selection checkboxes', () => {
+        const {
+          selectionController,
+        } = setup({
+          keyExpr: 'id',
+          dataSource: [{ id: 1, value: 'test' }],
+          selection: {
+            mode: 'multiple',
+            showCheckBoxesMode: 'onClick',
+          },
+        });
+
+        selectionController.updateSelectionCheckBoxesVisible(true);
+        expect(selectionController.isCheckBoxesVisible.unreactive_get()).toBe(true);
+      });
+
+      it('should hide the selection checkboxes', () => {
+        const {
+          selectionController,
+        } = setup({
+          keyExpr: 'id',
+          dataSource: [{ id: 1, value: 'test' }],
+          selection: {
+            mode: 'multiple',
+            showCheckBoxesMode: 'onClick',
+          },
+        });
+
+        selectionController.updateSelectionCheckBoxesVisible(false);
+        expect(selectionController.isCheckBoxesVisible.unreactive_get()).toBe(false);
+      });
+    });
+  });
+
+  describe('processLongTap', () => {
+    describe('when the selection mode is equal to \'multiple\' and the showCheckBoxesMode is equal to \'onLongTap\'', () => {
+      it('should render the selection checkbox', () => {
+        const {
+          selectionController,
+        } = setup({
+          keyExpr: 'id',
+          dataSource: [{ id: 1, value: 'test' }],
+          selection: {
+            mode: 'multiple',
+            showCheckBoxesMode: 'onLongTap',
+          },
+        });
+
+        // @ts-expect-error
+        selectionController.processLongTap({ index: 0 });
+        expect(selectionController.isCheckBoxesRendered.unreactive_get()).toBe(true);
+      });
+    });
+
+    describe('when the selection mode is equal to \'multiple\' and the showCheckBoxesMode is equal to \'onClick\'', () => {
+      it('should show the selection checkbox', () => {
+        const {
+          selectionController,
+        } = setup({
+          keyExpr: 'id',
+          dataSource: [{ id: 1, value: 'test' }],
+          selection: {
+            mode: 'multiple',
+            showCheckBoxesMode: 'onClick',
+          },
+        });
+
+        // @ts-expect-error
+        selectionController.processLongTap({ index: 0 });
+        expect(selectionController.isCheckBoxesVisible.unreactive_get()).toBe(true);
+      });
+    });
+
+    describe('when the selection mode is equal to \'multiple\' and the showCheckBoxesMode is equal to \'none\'', () => {
+      it('should select a first item', () => {
+        const {
+          selectionController,
+        } = setup({
+          keyExpr: 'id',
+          dataSource: [{ id: 1, value: 'test' }],
+          selection: {
+            mode: 'multiple',
+            showCheckBoxesMode: 'none',
+          },
+        });
+
+        // @ts-expect-error
+        selectionController.processLongTap({ index: 0 });
+        expect(selectionController.getSelectedCardKeys()).toEqual([1]);
+      });
+    });
+
+    describe('when the selection mode is equal to \'multiple\' and the showCheckBoxesMode is equal to \'none\'', () => {
+      it('should not select a first item', () => {
+        const {
+          selectionController,
+        } = setup({
+          keyExpr: 'id',
+          dataSource: [{ id: 1, value: 'test' }],
+          selection: {
+            mode: 'multiple',
+            showCheckBoxesMode: 'always',
+          },
+        });
+
+        // @ts-expect-error
+        selectionController.processLongTap({ index: 0 });
+        expect(selectionController.getSelectedCardKeys()).toEqual([]);
+      });
+    });
+  });
+
+  // Public properties
   describe('isCheckBoxesRendered', () => {
     describe('when the selection mode is equal to \'none\'', () => {
       it('should return false', () => {
@@ -379,116 +501,315 @@ describe('SelectionController', () => {
     });
   });
 
-  describe('updateSelectionCheckBoxesVisible', () => {
-    describe('when the selection mode is equal to \'multiple\' and the showCheckBoxesMode is equal to \'onClick\'', () => {
-      it('should show the selection checkboxes', () => {
+  // Events
+
+  describe('onSelectionChanging', () => {
+    describe('when selecting a card', () => {
+      it('should be called', () => {
+        const selectionChangingMockFn = jest.fn();
+        const cardData = { id: 1, value: 'test' };
         const {
           selectionController,
         } = setup({
           keyExpr: 'id',
-          dataSource: [{ id: 1, value: 'test' }],
+          dataSource: [cardData],
           selection: {
             mode: 'multiple',
-            showCheckBoxesMode: 'onClick',
           },
+          onSelectionChanging: selectionChangingMockFn,
         });
 
-        selectionController.updateSelectionCheckBoxesVisible(true);
-        expect(selectionController.isCheckBoxesVisible.unreactive_get()).toBe(true);
+        selectionController.selectCards([1]);
+
+        expect(selectionChangingMockFn.mock.calls).toHaveLength(1);
+        expect(selectionChangingMockFn.mock.lastCall).toMatchObject([{
+          cancel: false,
+          currentDeselectedCardKeys: [],
+          currentSelectedCardKeys: [1],
+          isDeselectAll: false,
+          isSelectAll: false,
+          selectedCardKeys: [1],
+          selectedCardsData: [cardData],
+        }]);
       });
+    });
 
-      it('should hide the selection checkboxes', () => {
+    describe('when deselecting a card', () => {
+      it('should be called', () => {
+        const selectionChangingMockFn = jest.fn();
+        const cardData = { id: 1, value: 'test' };
         const {
           selectionController,
         } = setup({
           keyExpr: 'id',
-          dataSource: [{ id: 1, value: 'test' }],
+          dataSource: [cardData],
           selection: {
             mode: 'multiple',
-            showCheckBoxesMode: 'onClick',
           },
+          selectedCardKeys: [1],
+          onSelectionChanging: selectionChangingMockFn,
         });
 
-        selectionController.updateSelectionCheckBoxesVisible(false);
-        expect(selectionController.isCheckBoxesVisible.unreactive_get()).toBe(false);
+        selectionController.deselectCards([1]);
+
+        expect(selectionChangingMockFn.mock.calls).toHaveLength(1);
+        expect(selectionChangingMockFn.mock.lastCall).toMatchObject([{
+          cancel: false,
+          currentDeselectedCardKeys: [1],
+          currentSelectedCardKeys: [],
+          isDeselectAll: false,
+          isSelectAll: false,
+          selectedCardKeys: [],
+          selectedCardsData: [],
+        }]);
+      });
+    });
+
+    describe('when selecting all cards', () => {
+      it('should be called', () => {
+        const selectionChangingMockFn = jest.fn();
+        const data = [{ id: 1, value: 'test1' }, { id: 2, value: 'test2' }];
+        const {
+          selectionController,
+        } = setup({
+          keyExpr: 'id',
+          dataSource: data,
+          selection: {
+            mode: 'multiple',
+            allowSelectAll: true,
+          },
+          onSelectionChanging: selectionChangingMockFn,
+        });
+
+        selectionController.selectAll();
+
+        expect(selectionChangingMockFn.mock.calls).toHaveLength(1);
+        expect(selectionChangingMockFn.mock.lastCall).toMatchObject([{
+          cancel: false,
+          currentDeselectedCardKeys: [],
+          currentSelectedCardKeys: [1, 2],
+          isDeselectAll: false,
+          isSelectAll: false,
+          selectedCardKeys: [1, 2],
+          selectedCardsData: data,
+        }]);
+      });
+    });
+
+    describe('when deselecting all cards', () => {
+      it('should be called', () => {
+        const selectionChangingMockFn = jest.fn();
+        const data = [{ id: 1, value: 'test1' }, { id: 2, value: 'test2' }];
+        const {
+          selectionController,
+        } = setup({
+          keyExpr: 'id',
+          dataSource: data,
+          selection: {
+            mode: 'multiple',
+            allowSelectAll: true,
+          },
+          selectedCardKeys: [1, 2],
+          onSelectionChanging: selectionChangingMockFn,
+        });
+
+        selectionController.deselectAll();
+
+        expect(selectionChangingMockFn.mock.calls).toHaveLength(1);
+        expect(selectionChangingMockFn.mock.lastCall).toMatchObject([{
+          cancel: false,
+          currentDeselectedCardKeys: [1, 2],
+          currentSelectedCardKeys: [],
+          isDeselectAll: false,
+          isSelectAll: false,
+          selectedCardKeys: [],
+          selectedCardsData: [],
+        }]);
+      });
+    });
+
+    describe('when a cancel arg is specified as true', () => {
+      it('should be called', () => {
+        const selectionChangingMockFn = jest.fn((e: any) => { e.cancel = true; });
+        const cardData = { id: 1, value: 'test' };
+        const {
+          selectionController,
+        } = setup({
+          keyExpr: 'id',
+          dataSource: [cardData],
+          selection: {
+            mode: 'multiple',
+          },
+          onSelectionChanging: selectionChangingMockFn,
+        });
+
+        selectionController.selectCards([1]);
+
+        expect(selectionChangingMockFn.mock.calls).toHaveLength(1);
+        expect(selectionChangingMockFn.mock.lastCall).toMatchObject([{
+          cancel: true,
+          currentDeselectedCardKeys: [],
+          currentSelectedCardKeys: [1],
+          isDeselectAll: false,
+          isSelectAll: false,
+          selectedCardKeys: [1],
+          selectedCardsData: [cardData],
+        }]);
+        expect(selectionController.getSelectedCardKeys()).toEqual([]);
+      });
+    });
+
+    describe('when a cancel arg is specified as Promise', () => {
+      it('should be called', () => {
+        const cancel = Promise.resolve(true);
+        const selectionChangingMockFn = jest.fn((e: any) => { e.cancel = cancel; });
+        const cardData = { id: 1, value: 'test' };
+        const {
+          selectionController,
+        } = setup({
+          keyExpr: 'id',
+          dataSource: [cardData],
+          selection: {
+            mode: 'multiple',
+          },
+          onSelectionChanging: selectionChangingMockFn,
+        });
+
+        selectionController.selectCards([1]);
+
+        expect(selectionChangingMockFn.mock.calls).toHaveLength(1);
+        expect(selectionChangingMockFn.mock.lastCall).toMatchObject([{
+          cancel,
+          currentDeselectedCardKeys: [],
+          currentSelectedCardKeys: [1],
+          isDeselectAll: false,
+          isSelectAll: false,
+          selectedCardKeys: [1],
+          selectedCardsData: [cardData],
+        }]);
+        expect(selectionController.getSelectedCardKeys()).toEqual([]);
       });
     });
   });
 
-  describe('processLongTap', () => {
-    describe('when the selection mode is equal to \'multiple\' and the showCheckBoxesMode is equal to \'onLongTap\'', () => {
-      it('should render the selection checkbox', () => {
+  describe('onSelectionChanged', () => {
+    describe('when selecting a card', () => {
+      it('should be called', () => {
+        const selectionChangedMockFn = jest.fn();
+        const cardData = { id: 1, value: 'test' };
         const {
           selectionController,
         } = setup({
           keyExpr: 'id',
-          dataSource: [{ id: 1, value: 'test' }],
+          dataSource: [cardData],
           selection: {
             mode: 'multiple',
-            showCheckBoxesMode: 'onLongTap',
           },
+          onSelectionChanged: selectionChangedMockFn,
         });
 
-        // @ts-expect-error
-        selectionController.processLongTap({ index: 0 });
-        expect(selectionController.isCheckBoxesRendered.unreactive_get()).toBe(true);
+        selectionController.selectCards([1]);
+
+        expect(selectionChangedMockFn.mock.calls).toHaveLength(1);
+        expect(selectionChangedMockFn.mock.lastCall).toMatchObject([{
+          currentDeselectedCardKeys: [],
+          currentSelectedCardKeys: [1],
+          isDeselectAll: false,
+          isSelectAll: false,
+          selectedCardKeys: [1],
+          selectedCardsData: [cardData],
+        }]);
       });
     });
 
-    describe('when the selection mode is equal to \'multiple\' and the showCheckBoxesMode is equal to \'onClick\'', () => {
-      it('should show the selection checkbox', () => {
+    describe('when deselecting a card', () => {
+      it('should be called', () => {
+        const selectionChangedMockFn = jest.fn();
+        const cardData = { id: 1, value: 'test' };
         const {
           selectionController,
         } = setup({
           keyExpr: 'id',
-          dataSource: [{ id: 1, value: 'test' }],
+          dataSource: [cardData],
           selection: {
             mode: 'multiple',
-            showCheckBoxesMode: 'onClick',
           },
+          selectedCardKeys: [1],
+          onSelectionChanged: selectionChangedMockFn,
         });
 
-        // @ts-expect-error
-        selectionController.processLongTap({ index: 0 });
-        expect(selectionController.isCheckBoxesVisible.unreactive_get()).toBe(true);
+        selectionController.deselectCards([1]);
+
+        expect(selectionChangedMockFn.mock.calls).toHaveLength(1);
+        expect(selectionChangedMockFn.mock.lastCall).toMatchObject([{
+          currentDeselectedCardKeys: [1],
+          currentSelectedCardKeys: [],
+          isDeselectAll: false,
+          isSelectAll: false,
+          selectedCardKeys: [],
+          selectedCardsData: [],
+        }]);
       });
     });
 
-    describe('when the selection mode is equal to \'multiple\' and the showCheckBoxesMode is equal to \'none\'', () => {
-      it('should select a first item', () => {
+    describe('when selecting all cards', () => {
+      it('should be called', () => {
+        const selectionChangedMockFn = jest.fn();
+        const data = [{ id: 1, value: 'test1' }, { id: 2, value: 'test2' }];
         const {
           selectionController,
         } = setup({
           keyExpr: 'id',
-          dataSource: [{ id: 1, value: 'test' }],
+          dataSource: data,
           selection: {
             mode: 'multiple',
-            showCheckBoxesMode: 'none',
+            allowSelectAll: true,
           },
+          onSelectionChanged: selectionChangedMockFn,
         });
 
-        // @ts-expect-error
-        selectionController.processLongTap({ index: 0 });
-        expect(selectionController.getSelectedCardKeys()).toEqual([1]);
+        selectionController.selectAll();
+
+        expect(selectionChangedMockFn.mock.calls).toHaveLength(1);
+        expect(selectionChangedMockFn.mock.lastCall).toMatchObject([{
+          currentDeselectedCardKeys: [],
+          currentSelectedCardKeys: [1, 2],
+          isDeselectAll: false,
+          isSelectAll: false,
+          selectedCardKeys: [1, 2],
+          selectedCardsData: data,
+        }]);
       });
     });
 
-    describe('when the selection mode is equal to \'multiple\' and the showCheckBoxesMode is equal to \'none\'', () => {
-      it('should not select a first item', () => {
+    describe('when deselecting all cards', () => {
+      it('should be called', () => {
+        const selectionChangedMockFn = jest.fn();
+        const data = [{ id: 1, value: 'test1' }, { id: 2, value: 'test2' }];
         const {
           selectionController,
         } = setup({
           keyExpr: 'id',
-          dataSource: [{ id: 1, value: 'test' }],
+          dataSource: data,
           selection: {
             mode: 'multiple',
-            showCheckBoxesMode: 'always',
+            allowSelectAll: true,
           },
+          selectedCardKeys: [1, 2],
+          onSelectionChanged: selectionChangedMockFn,
         });
 
-        // @ts-expect-error
-        selectionController.processLongTap({ index: 0 });
-        expect(selectionController.getSelectedCardKeys()).toEqual([]);
+        selectionController.deselectAll();
+
+        expect(selectionChangedMockFn.mock.calls).toHaveLength(1);
+        expect(selectionChangedMockFn.mock.lastCall).toMatchObject([{
+          currentDeselectedCardKeys: [1, 2],
+          currentSelectedCardKeys: [],
+          isDeselectAll: false,
+          isSelectAll: false,
+          selectedCardKeys: [],
+          selectedCardsData: [],
+        }]);
       });
     });
   });

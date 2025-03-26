@@ -1,23 +1,33 @@
-import type { SingleMultipleOrNone } from '@js/common';
+import type { SelectAllMode, SingleMultipleOrNone } from '@js/common';
+import type { EventInfo } from '@js/common/core/events';
 import type { SelectionColumnDisplayMode } from '@js/common/grids';
+import type dxCardView from '@js/ui/card_view';
 
-import type { DataObject, Key } from '../data_controller/types';
+import type { Key } from '../data_controller/types';
 
-export type SelectedCardKeys = any[];
+export type SelectedCardKeys = Key[];
 
-export interface SelectionChangedEvent {
-  selectedItems: DataObject[];
+export interface SelectionEventInfo<TCardData = unknown, TKey = unknown> {
+  readonly currentSelectedCardKeys: TKey[];
 
-  selectedItemKeys: Key[];
+  readonly currentDeselectedCardKeys: TKey[];
 
-  addedItemKeys: Key[];
+  readonly selectedCardKeys: TKey[];
 
-  removedItemKeys: Key[];
+  readonly selectedCardsData: TCardData[];
 
-  addedItems: DataObject[];
+  readonly isSelectAll: boolean;
 
-  removedItems: DataObject[];
+  readonly isDeselectAll: boolean;
 }
+
+export type SelectionChangingEvent<TCardData = unknown, TKey = unknown> =
+  EventInfo<dxCardView<TCardData, TKey>> & SelectionEventInfo<TCardData, TKey> & {
+    cancel: boolean | PromiseLike<boolean> | PromiseLike<void>;
+  };
+
+export type SelectionChangedEvent<TCardData = unknown, TKey = unknown> =
+  EventInfo<dxCardView<TCardData, TKey>> & SelectionEventInfo<TCardData, TKey>;
 
 export type { SelectionColumnDisplayMode as ShowCheckBoxesMode };
 
@@ -25,4 +35,8 @@ export interface SelectionOptions {
   mode: SingleMultipleOrNone;
 
   showCheckBoxesMode?: SelectionColumnDisplayMode;
+
+  allowSelectAll?: boolean;
+
+  selectAllMode?: SelectAllMode;
 }

@@ -114,10 +114,11 @@ InterruptableComputed {
 }
 `;
 
-exports[`SelectionController deselectCards should select item 1`] = `
+exports[`SelectionController deselectCards should deselect item 1`] = `
 InterruptableComputed {
   "callbacks": Set {},
   "depInitialized": [
+    true,
     true,
     true,
     true,
@@ -129,41 +130,13 @@ InterruptableComputed {
         "value": "test",
       },
     ],
-    [
-      {
-        "alignment": "left",
-        "allowHiding": true,
-        "allowReordering": true,
-        "calculateCellValue": [Function],
-        "calculateDisplayValue": [Function],
-        "caption": "Id",
-        "dataField": "id",
-        "dataType": "string",
-        "falseText": "false",
-        "headerItemTemplate": undefined,
-        "name": "id",
-        "trueText": "true",
-        "visible": true,
-        "visibleIndex": 0,
-      },
-      {
-        "alignment": "left",
-        "allowHiding": true,
-        "allowReordering": true,
-        "calculateCellValue": [Function],
-        "calculateDisplayValue": [Function],
-        "caption": "Value",
-        "dataField": "value",
-        "dataType": "string",
-        "falseText": "false",
-        "headerItemTemplate": undefined,
-        "name": "value",
-        "trueText": "true",
-        "visible": true,
-        "visibleIndex": 1,
-      },
-    ],
     [],
+    [],
+    {
+      "caseSensitive": false,
+      "enabled": true,
+      "searchStr": "",
+    },
   ],
   "isInitialized": true,
   "subscriptions": SubscriptionBag {
@@ -177,60 +150,248 @@ InterruptableComputed {
       {
         "unsubscribe": [Function],
       },
+      {
+        "unsubscribe": [Function],
+      },
     ],
   },
   "value": [
     {
-      "cells": [
-        {
-          "column": {
-            "alignment": "left",
-            "allowHiding": true,
-            "allowReordering": true,
-            "calculateCellValue": [Function],
-            "calculateDisplayValue": [Function],
-            "caption": "Id",
-            "dataField": "id",
-            "dataType": "string",
-            "falseText": "false",
-            "headerItemTemplate": undefined,
-            "name": "id",
-            "trueText": "true",
-            "visible": true,
-            "visibleIndex": 0,
-          },
-          "displayValue": 1,
-          "text": "1",
-          "value": 1,
-        },
-        {
-          "column": {
-            "alignment": "left",
-            "allowHiding": true,
-            "allowReordering": true,
-            "calculateCellValue": [Function],
-            "calculateDisplayValue": [Function],
-            "caption": "Value",
-            "dataField": "value",
-            "dataType": "string",
-            "falseText": "false",
-            "headerItemTemplate": undefined,
-            "name": "value",
-            "trueText": "true",
-            "visible": true,
-            "visibleIndex": 1,
-          },
-          "displayValue": "test",
-          "text": "test",
-          "value": "test",
-        },
-      ],
+      "cells": [],
       "data": {
         "id": 1,
         "value": "test",
       },
       "index": 0,
       "isSelected": false,
+      "key": 1,
+    },
+  ],
+}
+`;
+
+exports[`SelectionController public methods changeCardSelection when the control arg equal to false should update the select state of the item 1`] = `
+InterruptableComputed {
+  "callbacks": Set {},
+  "depInitialized": [
+    true,
+    true,
+    true,
+    true,
+  ],
+  "depValues": [
+    [
+      {
+        "id": 1,
+        "value": "test",
+      },
+    ],
+    [],
+    [
+      1,
+    ],
+    {
+      "caseSensitive": false,
+      "enabled": true,
+      "searchStr": "",
+    },
+  ],
+  "isInitialized": true,
+  "subscriptions": SubscriptionBag {
+    "subscriptions": [
+      {
+        "unsubscribe": [Function],
+      },
+      {
+        "unsubscribe": [Function],
+      },
+      {
+        "unsubscribe": [Function],
+      },
+      {
+        "unsubscribe": [Function],
+      },
+    ],
+  },
+  "value": [
+    {
+      "cells": [],
+      "data": {
+        "id": 1,
+        "value": "test",
+      },
+      "index": 0,
+      "isSelected": true,
+      "key": 1,
+    },
+  ],
+}
+`;
+
+exports[`SelectionController public methods changeCardSelection when the control arg equal to true should update the select state of the item 1`] = `
+InterruptableComputed {
+  "callbacks": Set {},
+  "depInitialized": [
+    true,
+    true,
+    true,
+    true,
+  ],
+  "depValues": [
+    [
+      {
+        "id": 1,
+        "value": "test",
+      },
+    ],
+    [],
+    [],
+    {
+      "caseSensitive": false,
+      "enabled": true,
+      "searchStr": "",
+    },
+  ],
+  "isInitialized": true,
+  "subscriptions": SubscriptionBag {
+    "subscriptions": [
+      {
+        "unsubscribe": [Function],
+      },
+      {
+        "unsubscribe": [Function],
+      },
+      {
+        "unsubscribe": [Function],
+      },
+      {
+        "unsubscribe": [Function],
+      },
+    ],
+  },
+  "value": [
+    {
+      "cells": [],
+      "data": {
+        "id": 1,
+        "value": "test",
+      },
+      "index": 0,
+      "isSelected": false,
+      "key": 1,
+    },
+  ],
+}
+`;
+
+exports[`SelectionController public methods deselectCards should deselect item 1`] = `
+InterruptableComputed {
+  "callbacks": Set {},
+  "depInitialized": [
+    true,
+    true,
+    true,
+    true,
+  ],
+  "depValues": [
+    [
+      {
+        "id": 1,
+        "value": "test",
+      },
+    ],
+    [],
+    [],
+    {
+      "caseSensitive": false,
+      "enabled": true,
+      "searchStr": "",
+    },
+  ],
+  "isInitialized": true,
+  "subscriptions": SubscriptionBag {
+    "subscriptions": [
+      {
+        "unsubscribe": [Function],
+      },
+      {
+        "unsubscribe": [Function],
+      },
+      {
+        "unsubscribe": [Function],
+      },
+      {
+        "unsubscribe": [Function],
+      },
+    ],
+  },
+  "value": [
+    {
+      "cells": [],
+      "data": {
+        "id": 1,
+        "value": "test",
+      },
+      "index": 0,
+      "isSelected": false,
+      "key": 1,
+    },
+  ],
+}
+`;
+
+exports[`SelectionController public methods selectCards should select item 1`] = `
+InterruptableComputed {
+  "callbacks": Set {},
+  "depInitialized": [
+    true,
+    true,
+    true,
+    true,
+  ],
+  "depValues": [
+    [
+      {
+        "id": 1,
+        "value": "test",
+      },
+    ],
+    [],
+    [
+      1,
+    ],
+    {
+      "caseSensitive": false,
+      "enabled": true,
+      "searchStr": "",
+    },
+  ],
+  "isInitialized": true,
+  "subscriptions": SubscriptionBag {
+    "subscriptions": [
+      {
+        "unsubscribe": [Function],
+      },
+      {
+        "unsubscribe": [Function],
+      },
+      {
+        "unsubscribe": [Function],
+      },
+      {
+        "unsubscribe": [Function],
+      },
+    ],
+  },
+  "value": [
+    {
+      "cells": [],
+      "data": {
+        "id": 1,
+        "value": "test",
+      },
+      "index": 0,
+      "isSelected": true,
       "key": 1,
     },
   ],
