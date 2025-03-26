@@ -2,8 +2,6 @@
 import { expect } from '@jest/globals';
 
 import { ColumnsController } from '../columns_controller';
-import { DataController } from '../data_controller';
-import { FilterController } from '../filtering';
 import type { Options } from '../options';
 import { OptionsControllerMock } from '../options_controller/options_controller.mock';
 import { ToolbarController } from '../toolbar/controller';
@@ -30,9 +28,7 @@ const createColumnChooserView = (
 } => {
   const columnChooserElement = document.createElement('div');
 
-  const filterController = new FilterController(optionsController);
-  const dataController = new DataController(optionsController, filterController);
-  const columnsController = new ColumnsController(optionsController, dataController);
+  const columnsController = new ColumnsController(optionsController);
   const columnChooserController = new ColumnChooserController(columnsController, optionsController);
 
   const columnChooser = new ColumnChooserView(

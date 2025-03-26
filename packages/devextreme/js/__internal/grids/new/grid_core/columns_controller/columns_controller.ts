@@ -89,11 +89,6 @@ export class ColumnsController {
     );
   }
 
-  // eslint-disable-next-line @stylistic/max-len
-  public updateColumns(updateFunc: (oldValue: PreNormalizedColumn[]) => PreNormalizedColumn[]): void {
-    this.columnsSettings.updateFunc(updateFunc);
-  }
-
   public columnOption<TProp extends keyof ColumnSettings>(
     column: Column,
     option: TProp,
