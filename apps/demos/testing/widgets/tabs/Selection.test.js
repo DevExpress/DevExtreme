@@ -11,25 +11,13 @@ const SELECTBOX_POPUP_WRAPPER_CLASS = 'dx-selectbox-popup-wrapper';
 const LIST_ITEM_CLASS = 'dx-list-item';
 
 fixture('Tabs.Selection')
-  .page('http://localhost:8080/');
-// .before(async (ctx) => {
-//   ctx.initialWindowSize = [900, 1200];
-// });
+  .before(async (ctx) => {
+    ctx.initialWindowSize = [900, 1200];
+  });
 
 runManualTest('Tabs', 'Selection', ['jQuery', 'React', 'Vue', 'Angular'], (test) => {
   test('Selection', async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-
-    // await t.click('demo-app', {
-    //   offsetX: 0,
-    //   offsetY: 0,
-    // });
-
-    await testScreenshot(t, takeScreenshot, 'Tabs Selection.png');
-
-    await t
-      .expect(compareResults.isValid())
-      .ok(compareResults.errorMessages());
 
     await t
       .click($(`.${TABS_WRAPPER_CLASS} .${TAB_CLASS}`).nth(1))

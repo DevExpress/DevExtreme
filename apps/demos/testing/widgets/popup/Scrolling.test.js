@@ -9,7 +9,6 @@ const TOOLBAR_CLASS = 'dx-toolbar';
 const BOTTOM_TOOLBAR_CLASS = 'dx-popup-bottom';
 
 fixture('Popup.Scrolling')
-  .page('http://localhost:8080/')
   .before(async (ctx) => {
     ctx.initialWindowSize = [900, 600];
   });

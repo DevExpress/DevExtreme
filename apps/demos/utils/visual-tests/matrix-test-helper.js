@@ -1,6 +1,6 @@
 import { readFileSync, existsSync, writeFileSync } from 'fs';
 import { join } from 'path';
-import { ClientFunction } from 'testcafe';
+import { ClientFunction, Selector } from 'testcafe';
 import { THEME } from './helpers/theme-utils';
 import { gitHubIgnored } from './github-ignored-list';
 
@@ -42,7 +42,7 @@ export const waitForAngularLoading = ClientFunction(() => new Promise((resolve) 
   const demoAppIntervalHandle = setInterval(() => {
     const demoApp = document.querySelector('demo-app');
     if ((demoApp && demoApp.innerText !== 'Loading...') || demoAppCounter === 120) {
-      setTimeout(resolve, 2000);
+      setTimeout(resolve, 500);
       clearInterval(demoAppIntervalHandle);
     }
     demoAppCounter += 1;
@@ -192,40 +192,18 @@ const SKIPPED_TESTS = {
     ],
   },
   Angular: {
-    Common: [
-      { demo: 'EditorAppearanceVariants', themes: [THEME.generic, THEME.material, THEME.fluent] },
-    ],
-    DropDownButton: [
-      { demo: 'Overview', themes: [THEME.generic, THEME.material, THEME.fluent] },
-    ],
-    Chat: [
-      { demo: 'Customization', themes: [THEME.generic, THEME.material, THEME.fluent] },
-    ],
     Charts: [
-      { demo: 'Overview', themes: [THEME.generic, THEME.material] },
-      { demo: 'Crosshair', themes: [THEME.generic, THEME.material, THEME.fluent] },
-      { demo: 'CustomAnnotations', themes: [THEME.generic, THEME.material, THEME.fluent] },
-      { demo: 'LoadDataOnDemand', themes: [THEME.generic, THEME.material, THEME.fluent] },
-      { demo: 'CustomLegendMarkers', themes: [THEME.generic, THEME.material, THEME.fluent] },
-      { demo: 'PieWithResolvedLabelOverlapping', themes: [THEME.material, THEME.fluent] },
-      { demo: 'ZoomingAndScrollingAPI', themes: [THEME.generic, THEME.material, THEME.fluent] },
-      { demo: 'ZoomingOnAreaSelection', themes: [THEME.generic, THEME.material, THEME.fluent] },
+      { demo: 'Overview', themes: [THEME.material] },
+      { demo: 'Crosshair', themes: [THEME.material] },
+      { demo: 'CustomAnnotations', themes: [THEME.material] },
+      { demo: 'LoadDataOnDemand', themes: [THEME.material] },
+      { demo: 'CustomLegendMarkers', themes: [THEME.material] },
+      { demo: 'PieWithResolvedLabelOverlapping', themes: [THEME.material] },
+      { demo: 'ZoomingAndScrollingAPI', themes: [THEME.material] },
+      { demo: 'ZoomingOnAreaSelection', themes: [THEME.material] },
       { demo: 'TooltipHTMLSupport', themes: [THEME.material] },
-      { demo: 'ExportCustomMarkup', themes: [THEME.generic, THEME.material, THEME.fluent] },
+      { demo: 'ExportCustomMarkup', themes: [THEME.material] },
       { demo: 'PopupEditing', themes: [THEME.material] },
-    ],
-    VectorMap: [
-      { demo: 'TooltipHTMLSupport', themes: [THEME.material] },
-      { demo: 'DynamicViewport', themes: [THEME.material] },
-    ],
-    DropDownBox: [
-      { demo: 'MultipleSelection', themes: [THEME.generic, THEME.material, THEME.fluent] },
-    ],
-    SelectBox: [
-      { demo: 'GroupedItems', themes: [THEME.generic, THEME.material, THEME.fluent] },
-    ],
-    Gauges: [
-      { demo: 'VariableNumberOfBars', themes: [THEME.generic, THEME.material, THEME.fluent] },
     ],
     DataGrid: [
       { demo: 'Appearance', themes: [THEME.generic, THEME.material, THEME.fluent] },
@@ -266,9 +244,6 @@ const SKIPPED_TESTS = {
     ],
     PivotGrid: [
       { demo: 'IntegratedFieldChooser', themes: [THEME.generic, THEME.material, THEME.fluent] },
-    ],
-    Splitter: [
-      { demo: 'Overview', themes: [THEME.material] },
     ],
   },
   Vue: {
@@ -327,7 +302,7 @@ const SKIPPED_TESTS = {
       { demo: 'Templates', themes: [THEME.fluent, THEME.material] },
     ],
     Form: [
-      // Source image size does not match target size
+      // Flaky issue: Source image size does not match target size
       { demo: 'CustomizeItem', themes: [THEME.generic] },
     ],
   },
@@ -390,13 +365,25 @@ export function runTestAtPage(test, demoUrl, shouldSkipJsError) {
   return executor.page(demoUrl);
 }
 
+export function getPortByFramework(framework) {
+  switch (framework) {
+    case 'Angular':
+      return '8081'
+    case 'Vue':
+      return '8082'
+    case 'React':
+      return '8083'
+    default:
+      return '8080'
+  }
+}
+
 export function runManualTestCore(
   testObject,
   widget,
   demo,
   framework,
   callback,
-  shouldWaitContentAppears = true,
 ) {
   const isGitHubDemos = process.env.ISGITHUBDEMOS;
 
@@ -417,26 +404,11 @@ export function runManualTestCore(
     }
 
     const theme = process.env.THEME.replace('generic.', '');
-    testURL = `http://localhost:8080/Demos/${widget}/${demo}/${framework}/?theme=dx.${theme}`;
+    testURL = `http://127.0.0.1:8080/Demos/${widget}/${demo}/${framework}/?theme=dx.${theme}`;
   } else {
-    // if(framework !== 'Angular') {
-    //   changeTheme(__dirname, `../../Demos/${widget}/${demo}/${framework}/index.html`, process.env.THEME);
-    // } else {
-    //   if(
-    //     (widget === 'Splitter' && demo==='Overview')
-    //     || (widget === 'List' && demo==='ListSelection')
-    //     || (widget === 'List' && demo==='ItemDragging')
-    //     || (widget === 'TabPanel' && demo==='Overview')
-    //     || (widget === 'Tabs' && demo==='Overview')
-    //     || (widget === 'Tabs' && demo==='Selection')
-    //   ) {
-
-    //   } else {
-    //     changeTheme(__dirname, `../../Demos/${widget}/${demo}/${framework}/index.html`, process.env.THEME);
-    //   }
-    // }
-
-    testURL = `http://localhost:8080/apps/demos/Demos/${widget}/${demo}/${framework}/`;
+    changeTheme(__dirname, `../../Demos/${widget}/${demo}/${framework}/index.html`, process.env.THEME);
+    
+    testURL = `http://127.0.0.1:${getPortByFramework(framework)}/apps/demos/Demos/${widget}/${demo}/${framework}/`;
   }
 
   const test = testObject.clientScripts([
@@ -445,50 +417,16 @@ export function runManualTestCore(
   ])
     .page(testURL);
 
-  // if(framework === 'Angular') {
-  //   if(
-  //     (widget === 'Splitter' && demo==='Overview')
-  //     || (widget === 'List' && demo==='ListSelection')
-  //     || (widget === 'List' && demo==='ItemDragging')
-  //     || (widget === 'TabPanel' && demo==='Overview')
-  //     || (widget === 'Tabs' && demo==='Overview')
-  //     || (widget === 'Tabs' && demo==='Selection')
-  //   ) {
+  test.before?.(async (t) => {
+    const [width, height] = t.fixtureCtx.initialWindowSize;
 
-  //   } else {
-  //     test.before?.(async (t) => {
-  //       const [width, height] = t.fixtureCtx.initialWindowSize;
+    await t.resizeWindow(width, height);
 
-  //       await t.resizeWindow(width, height);
-  //     });
-  //   }
-  // } else {
-  //   test.before?.(async (t) => {
-  //     const isAngular = framework === 'Angular';
-
-  //     // if (isAngular) {
-  //     //   await waitForAngularLoading();
-  //     // }
-
-  //     // if (isAngular && shouldWaitContentAppears) {
-  //     //   await forceContentAppears(t);
-  //     // }
-
-  //     const [width, height] = t.fixtureCtx.initialWindowSize;
-
-  //     await t.resizeWindow(width, height);
-  //   });
-  // }
-
-  // test.before?.(async (t) => {
-  //   const [width, height] = t.fixtureCtx.initialWindowSize;
-
-  //   await t.resizeWindow(width, height);
-
-  //   if (framework === 'Angular') {
-  //     await waitForAngularLoading();
-  //   }
-  // });
+    const isAngular = framework === 'Angular';
+    if (isAngular) {
+      await waitForAngularLoading();
+    }
+  });
 
   if (settings.explicitTests) {
     if (shouldRunTestExplicitlyInternal(framework, widget, demo)) {
@@ -497,26 +435,17 @@ export function runManualTestCore(
     return;
   }
 
-  callback(test, framework);
+  callback(test);
 }
 
-export const forceContentAppears = async (t) => {
-  await t.click('demo-app', {
-    offsetX: -1,
-    offsetY: -1,
-  });
-
-  await t.wait(1000);
-};
-
-export function runManualTest(widget, demo, framework, callback, shouldWaitContentAppears) {
+export function runManualTest(widget, demo, framework, callback) {
   if (process.env.STRATEGY === 'accessibility') {
     return;
   }
 
   if (Array.isArray(framework)) {
     framework.forEach((i) => {
-      runManualTestCore(test, widget, demo, i, callback, shouldWaitContentAppears);
+      runManualTestCore(test, widget, demo, i, callback);
     });
   } else {
     runManualTestCore(test, widget, demo, framework, callback);

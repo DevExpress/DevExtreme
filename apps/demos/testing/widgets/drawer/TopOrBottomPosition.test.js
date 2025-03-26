@@ -9,7 +9,6 @@ const TOOLBAR_CLASS = 'dx-toolbar';
 const BUTTON_CLASS = 'dx-button';
 
 fixture('Drawer.TopOrBottomPosition')
-  .page('http://localhost:8080/')
   .before(async (ctx) => {
     ctx.initialWindowSize = [900, 1200];
   });

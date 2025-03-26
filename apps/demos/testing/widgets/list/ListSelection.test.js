@@ -9,25 +9,13 @@ const SELECTBOX_CLASS = 'dx-selectbox';
 const POPUP_WRAPPER_CLASS = 'dx-popup-wrapper';
 
 fixture('List.ListSelection')
-  .page('http://localhost:8080/');
-// .before(async (ctx) => {
-//   ctx.initialWindowSize = [900, 1200];
-// });
+  .before(async (ctx) => {
+    ctx.initialWindowSize = [900, 1200];
+  });
 
 runManualTest('List', 'ListSelection', ['jQuery', 'React', 'Vue', 'Angular'], (test) => {
   test('List Selection', async (t) => {
-    // await t.click('demo-app', {
-    //   offsetX: 0,
-    //   offsetY: 0,
-    // });
-
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-
-    await testScreenshot(t, takeScreenshot, 'List selection.png');
-
-    await t
-      .expect(compareResults.isValid())
-      .ok(compareResults.errorMessages());
 
     const optionsContainer = await Selector('.options');
     const selectAllCheckbox = optionsContainer.find(`.${CHECKBOX_ICON_CLASS}`);
