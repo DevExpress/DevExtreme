@@ -34,7 +34,7 @@ export default class SelectionStrategy {
     this.options[name] = value;
   }
 
-  onSelectionChanging(): boolean | Promise<boolean> {
+  onSelectionChanging(eventArgs = {}): boolean | Promise<boolean> {
     const {
       selectedItems,
       selectedItemKeys,
@@ -53,14 +53,15 @@ export default class SelectionStrategy {
       addedItems,
       removedItems,
       cancel: false,
+      ...eventArgs,
     };
 
     onSelectionChanging(selectionChangingArgs);
     return selectionChangingArgs.cancel;
   }
 
-  _callCallbackIfNotCanceled(callback: () => void, cancelCallback: () => void): void {
-    const cancelResult = this.onSelectionChanging();
+  _callCallbackIfNotCanceled(eventArgs, callback: () => void, cancelCallback: () => void): void {
+    const cancelResult = this.onSelectionChanging(eventArgs);
 
     if (isPromise(cancelResult)) {
       cancelResult
@@ -81,7 +82,7 @@ export default class SelectionStrategy {
     }
   }
 
-  onSelectionChanged() {
+  onSelectionChanged(eventArgs = {}) {
     const {
       selectedItems,
       selectedItemKeys,
@@ -100,6 +101,7 @@ export default class SelectionStrategy {
       removedItemKeys,
       addedItems,
       removedItems,
+      ...eventArgs,
     });
   }
 

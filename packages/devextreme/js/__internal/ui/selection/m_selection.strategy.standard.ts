@@ -271,6 +271,12 @@ export default class StandardStrategy extends SelectionStrategy {
     const selectionDeferred = Deferred();
 
     loadingDeferred.done((items) => {
+      const eventArgs = {};
+
+      if (isSelectAll) {
+        eventArgs[isDeselect ? 'isDeselectAll' : 'isSelectAll'] = true;
+      }
+
       this._storeSelectionState();
 
       if (preserve) {
@@ -285,9 +291,9 @@ export default class StandardStrategy extends SelectionStrategy {
       /// #ENDDEBUG
 
       this._isCancelingInProgress = true;
-      this._callCallbackIfNotCanceled(() => {
+      this._callCallbackIfNotCanceled(eventArgs, () => {
         this._isCancelingInProgress = false;
-        this.onSelectionChanged();
+        this.onSelectionChanged(eventArgs);
         selectionDeferred.resolve(items);
       }, () => {
         this._isCancelingInProgress = false;
@@ -325,7 +331,7 @@ export default class StandardStrategy extends SelectionStrategy {
     const { selectedItemKeys } = this.options;
 
     for (let index = 0; index < selectedItemKeys.length; index++) {
-      if ((!ignoreIndicesMap || !ignoreIndicesMap[index]) && this.equalKeys(selectedItemKeys[index], key)) {
+      if (!ignoreIndicesMap?.[index] && this.equalKeys(selectedItemKeys[index], key)) {
         return index;
       }
     }
@@ -532,14 +538,16 @@ export default class StandardStrategy extends SelectionStrategy {
       return Deferred().reject();
     }
 
+    const eventArgs = isDeselect ? { isDeselectAll: true } : { isSelectAll: true };
+
     this._storeSelectionState();
 
     this._selectAllPlainItems(isDeselect);
 
     this._lastSelectAllPageDeferred = Deferred();
 
-    this._callCallbackIfNotCanceled(() => {
-      this.onSelectionChanged();
+    this._callCallbackIfNotCanceled(eventArgs, () => {
+      this.onSelectionChanged(eventArgs);
       this._lastSelectAllPageDeferred.resolve();
     }, () => {
       this._restoreSelectionState();

@@ -2442,6 +2442,58 @@ QUnit.module('onSelectionChanging', {
         assert.strictEqual(selection.isItemSelected(this.data[0]), true, 'isItemSelected returns true');
     });
 
+    QUnit.test('should be called with correct parameters when select all ', function(assert) {
+        const selectionChangingHandler = sinon.spy();
+        const dataKeys = this.data.map((item) => item.id);
+
+        this.dataSource = createDataSource(this.data, { key: 'id' }, {});
+
+        const selection = new Selection({
+            ...this.basicSelectionConfig,
+            load: () => this.dataSource.load(),
+            onSelectionChanging: selectionChangingHandler,
+        });
+
+        selection.selectAll();
+
+        assert.strictEqual(selectionChangingHandler.callCount, 1, 'selectionChanging is called once');
+        assert.deepEqual(selectionChangingHandler.getCall(0).args[0].selectedItems, this.data, 'selectedItems is correct');
+        assert.deepEqual(selectionChangingHandler.getCall(0).args[0].selectedItemKeys, dataKeys, 'selectedItemsKeys is correct');
+        assert.deepEqual(selectionChangingHandler.getCall(0).args[0].addedItemKeys, dataKeys, 'addedItemKeys is correct');
+        assert.deepEqual(selectionChangingHandler.getCall(0).args[0].addedItems, this.data, 'addedItems is correct');
+        assert.deepEqual(selectionChangingHandler.getCall(0).args[0].removedItemKeys, [], 'removedItemKeys is correct');
+        assert.deepEqual(selectionChangingHandler.getCall(0).args[0].removedItems, [], 'removedItems is correct');
+        assert.strictEqual(selectionChangingHandler.getCall(0).args[0].cancel, false, 'cancel is correct');
+        assert.ok(selectionChangingHandler.getCall(0).args[0].isSelectAll, 'isSelectAll is correct');
+    });
+
+    QUnit.test('should be called with correct parameters when deselect all ', function(assert) {
+        const selectionChangingHandler = sinon.spy();
+        const dataKeys = this.data.map((item) => item.id);
+
+        this.dataSource = createDataSource(this.data, { key: 'id' }, {});
+
+        const selection = new Selection({
+            ...this.basicSelectionConfig,
+            load: () => this.dataSource.load(),
+            onSelectionChanging: selectionChangingHandler,
+        });
+
+        selection.selectAll();
+        selectionChangingHandler.resetHistory();
+        selection.deselectAll();
+
+        assert.strictEqual(selectionChangingHandler.callCount, 1, 'selectionChanging is called once');
+        assert.deepEqual(selectionChangingHandler.getCall(0).args[0].selectedItems, [], 'selectedItems is correct');
+        assert.deepEqual(selectionChangingHandler.getCall(0).args[0].selectedItemKeys, [], 'selectedItemsKeys is correct');
+        assert.deepEqual(selectionChangingHandler.getCall(0).args[0].addedItemKeys, [], 'addedItemKeys is correct');
+        assert.deepEqual(selectionChangingHandler.getCall(0).args[0].addedItems, [], 'addedItems is correct');
+        assert.deepEqual(selectionChangingHandler.getCall(0).args[0].removedItemKeys, dataKeys, 'removedItemKeys is correct');
+        assert.deepEqual(selectionChangingHandler.getCall(0).args[0].removedItems, this.data, 'removedItems is correct');
+        assert.strictEqual(selectionChangingHandler.getCall(0).args[0].cancel, false, 'cancel is correct');
+        assert.ok(selectionChangingHandler.getCall(0).args[0].isDeselectAll, 'isDeselectAll is correct');
+    });
+
     QUnit.test('cancelling should prevent selectedItems change and selectionChanged raise', function(assert) {
         const selectionChangingHandler = sinon.spy(function(e) {
             e.cancel = true;
@@ -2796,5 +2848,88 @@ QUnit.module('onSelectionChanging', {
                 }, delay / 2);
             }, delay / 2);
         });
+    });
+});
+
+QUnit.module('onSelectionChanged', {
+    beforeEach: function() {
+        this.data = [
+            { id: 1, name: 'Alex', age: 15 },
+            { id: 2, name: 'Dan', age: 16 },
+            { id: 3, name: 'Vadim', age: 17 },
+            { id: 4, name: 'Dmitry', age: 18 },
+            { id: 5, name: 'Sergey', age: 18 },
+            { id: 6, name: 'Kate', age: 20 },
+            { id: 7, name: 'Dan', age: 21 }
+        ];
+
+        this.dataSource = createDataSource(this.data, {}, {});
+        this.firstThreeItems = this.data.slice(0, 3);
+        this.basicSelectionConfig = {
+            key: () => {
+                const store = this.dataSource.store();
+                return store && store.key();
+            },
+            keyOf: (item) => {
+                const store = this.dataSource.store();
+                return store && store.keyOf(item);
+            },
+            dataFields: () => {
+                return this.dataSource.select();
+            },
+            plainItems: () => {
+                return this.dataSource.items();
+            },
+        };
+    }
+}, () => {
+    QUnit.test('should be called with correct parameters when select all ', function(assert) {
+        const selectionChangedHandler = sinon.spy();
+        const dataKeys = this.data.map((item) => item.id);
+
+        this.dataSource = createDataSource(this.data, { key: 'id' }, {});
+
+        const selection = new Selection({
+            ...this.basicSelectionConfig,
+            load: () => this.dataSource.load(),
+            onSelectionChanged: selectionChangedHandler,
+        });
+
+        selection.selectAll();
+
+        assert.strictEqual(selectionChangedHandler.callCount, 1, 'selectionChanging is called once');
+        assert.deepEqual(selectionChangedHandler.getCall(0).args[0].selectedItems, this.data, 'selectedItems is correct');
+        assert.deepEqual(selectionChangedHandler.getCall(0).args[0].selectedItemKeys, dataKeys, 'selectedItemsKeys is correct');
+        assert.deepEqual(selectionChangedHandler.getCall(0).args[0].addedItemKeys, dataKeys, 'addedItemKeys is correct');
+        assert.deepEqual(selectionChangedHandler.getCall(0).args[0].addedItems, this.data, 'addedItems is correct');
+        assert.deepEqual(selectionChangedHandler.getCall(0).args[0].removedItemKeys, [], 'removedItemKeys is correct');
+        assert.deepEqual(selectionChangedHandler.getCall(0).args[0].removedItems, [], 'removedItems is correct');
+        assert.ok(selectionChangedHandler.getCall(0).args[0].isSelectAll, 'isSelectAll is correct');
+    });
+
+    QUnit.test('should be called with correct parameters when deselect all ', function(assert) {
+        const selectionChangedHandler = sinon.spy();
+        const dataKeys = this.data.map((item) => item.id);
+
+        this.dataSource = createDataSource(this.data, { key: 'id' }, {});
+
+        const selection = new Selection({
+            ...this.basicSelectionConfig,
+            load: () => this.dataSource.load(),
+            onSelectionChanged: selectionChangedHandler,
+        });
+
+        selection.selectAll();
+        selectionChangedHandler.resetHistory();
+        selection.deselectAll();
+
+        assert.strictEqual(selectionChangedHandler.callCount, 1, 'selectionChanging is called once');
+        assert.deepEqual(selectionChangedHandler.getCall(0).args[0].selectedItems, [], 'selectedItems is correct');
+        assert.deepEqual(selectionChangedHandler.getCall(0).args[0].selectedItemKeys, [], 'selectedItemsKeys is correct');
+        assert.deepEqual(selectionChangedHandler.getCall(0).args[0].addedItemKeys, [], 'addedItemKeys is correct');
+        assert.deepEqual(selectionChangedHandler.getCall(0).args[0].addedItems, [], 'addedItems is correct');
+        assert.deepEqual(selectionChangedHandler.getCall(0).args[0].removedItemKeys, dataKeys, 'removedItemKeys is correct');
+        assert.deepEqual(selectionChangedHandler.getCall(0).args[0].removedItems, this.data, 'removedItems is correct');
+        assert.ok(selectionChangedHandler.getCall(0).args[0].isDeselectAll, 'isDeselectAll is correct');
     });
 });
