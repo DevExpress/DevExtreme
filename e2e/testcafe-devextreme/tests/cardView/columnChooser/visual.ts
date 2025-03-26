@@ -24,7 +24,8 @@ test('column chooser in select mode', async (t) => {
   columnChooser: {
     enabled: true,
     mode: 'select',
-    height: 600,
+    height: 400,
+    width: 400,
     search: {
       enabled: true,
     },

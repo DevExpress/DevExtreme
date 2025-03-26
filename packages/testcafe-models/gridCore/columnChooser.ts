@@ -1,7 +1,7 @@
 import { ClientFunction } from "testcafe";
-import FocusableElement from "testcafe-models/internal/focusable";
-import Popup from "testcafe-models/popup";
-import TreeView from "testcafe-models/treeView";
+import FocusableElement from "../internal/focusable";
+import Popup from "../popup";
+import TreeView from "../treeView";
 
 const CLASS = {
     overlayContent: 'dx-overlay-content',
@@ -35,7 +35,7 @@ export default class ColumnChooser extends FocusableElement {
                     treeView: this.treeView,
                 }
             }
-        )(this.treeView);
+        )(this.treeView.element);
     }
 
     getColumn(index = 0): Selector {

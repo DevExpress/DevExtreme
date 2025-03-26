@@ -2,7 +2,7 @@
 import type { ColumnChooserMode } from '@js/common/grids';
 import messageLocalization from '@js/localization/message';
 import type { Properties as ButtonProperties } from '@js/ui/button';
-import type { Properties as PopupProperties } from '@js/ui/popup';
+import type { Properties as PopupProperties, ShownEvent } from '@js/ui/popup';
 import type dxPopup from '@js/ui/popup';
 import { current, isGeneric, isMaterial } from '@js/ui/themes';
 import type { Properties as TreeViewProperties } from '@js/ui/tree_view';
@@ -139,7 +139,7 @@ export class ColumnChooserView extends View<ColumnChooserProps> {
           [this.options.oneWay('columnChooser.title')],
         ),
 
-        onShown: () => { this.setPopupAttributes(); },
+        onShown: (e: ShownEvent) => { this.setPopupAttributes(e.component); },
         onHidden: () => { this.popupVisible.update(false); },
       } as MapMaybeSubscribable<PopupProperties>),
 
@@ -191,18 +191,20 @@ export class ColumnChooserView extends View<ColumnChooserProps> {
     return [this.addWidgetPrefix(CLASS.root), this.addWidgetPrefix(modeSpecificClass)].join(' ');
   }
 
-  private setPopupAttributes(): void {
-    const isBandColumnsUsed = false; // TODO: band columns aren't yet implemented in cardview
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const popup = this.popupRef.current as any;
+  private setPopupAttributes(popup: dxPopup): void {
+    // TODO: band columns aren't yet implemented in cardview
+    const isBandColumnsUsed = false;
 
+    // @ts-expect-error
     popup.setAria({
       label: messageLocalization.format('dxDataGrid-columnChooserTitle'),
     });
 
+    // @ts-expect-error
     popup.$content().addClass(this.addWidgetPrefix(CLASS.list));
 
     if (this.isSelectMode() && !isBandColumnsUsed) {
+      // @ts-expect-error
       popup.$content().addClass(this.addWidgetPrefix(CLASS.plain));
     }
   }
