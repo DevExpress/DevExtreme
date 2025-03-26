@@ -11,9 +11,9 @@ import { createPromise } from '@ts/core/utils/promise';
 
 import { FilterController } from '../filtering/filter_controller';
 import { OptionsController } from '../options_controller/options_controller';
+import { SearchController } from '../search';
 import { SortingController } from '../sorting_controller/sorting_controller';
 import { StoreLoadAdapter } from './store_load_adapter/index';
-import { SearchController } from '../search';
 import type { DataObject, Key } from './types';
 import {
   getLocalLoadOptions,
@@ -174,7 +174,7 @@ export class DataController {
         pageSize,
         displayFilter,
         pagingEnabled,
-        sortParameters
+        sortParameters,
         searchColumnList,
         searchText,
       ) => {
@@ -216,7 +216,6 @@ export class DataController {
         }
 
         if (someParamChanged || !dataSource.isLoaded()) {
-          // eslint-disable-next-line @typescript-eslint/no-floating-promises
           dataSource.load();
         }
       },
