@@ -64,9 +64,9 @@ describe('BaseCommand', () => {
   describe('constructor', () => {
     it('stores PromptManager and RequestManager correctly', () => {
       // @ts-expect-error
-      expect(command.promptManager).toBeInstanceOf(promptManager);
+      expect(command.promptManager).toBe(promptManager);
       // @ts-expect-error
-      expect(command.requestManager).toBeInstanceOf(requestManager);
+      expect(command.requestManager).toBe(requestManager);
     });
   });
 
@@ -177,6 +177,37 @@ describe('BaseCommand', () => {
       } finally {
         requestManager.sendRequest = originalSendRequest;
       }
+    });
+
+    it('executes with undefined params without errors', () => {
+      const sendRequestSpy = jest.spyOn(requestManager, 'sendRequest');
+      const onError = jest.fn();
+
+      expect(command.execute(undefined, { onError })).not.toThrow();
+      expect(onError).toHaveBeenCalledTimes(0);
+
+      expect(sendRequestSpy).toHaveBeenCalledTimes(1);
+    });
+
+    it('executes with partial callbacks without errors', () => {
+      const sendRequestSpy = jest.spyOn(requestManager, 'sendRequest');
+      const callbacks = { onChunk: jest.fn() };
+
+      expect(command.execute({ first: 'first', second: 'second' }, callbacks)).not.toThrow();
+
+      expect(callbacks.onChunk).toHaveBeenCalledTimes(0);
+      expect(sendRequestSpy).toHaveBeenCalledTimes(1);
+    });
+
+    it('executes with undefined callbacks without errors', () => {
+      const sendRequestSpy = jest.spyOn(requestManager, 'sendRequest');
+
+      expect(command.execute(
+        { first: 'first', second: 'second' },
+        (undefined as unknown as RequestCallbacks),
+      )).not.toThrow();
+
+      expect(sendRequestSpy).toHaveBeenCalledTimes(1);
     });
   });
 });
