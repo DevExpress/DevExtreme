@@ -1,8 +1,8 @@
 import React from 'react';
-import {Stepper, Item, IStepperOptions, IItemProps} from 'devextreme-react/stepper'
-import type {Meta, StoryObj} from '@storybook/react';
+import { Stepper, Item, IStepperOptions, IItemProps } from 'devextreme-react/stepper'
+import type { Meta, StoryObj } from '@storybook/react';
 
-import {defaultItems, itemsWithTitle, itemsWithIcon, itemsWithIconAndTitle} from './data';
+import { defaultItems, itemsWithTitle, itemsWithIcon, itemsWithIconAndTitle } from './data';
 
 const meta: Meta<typeof Stepper> = {
     title: 'Navigation/Stepper',
@@ -11,17 +11,12 @@ const meta: Meta<typeof Stepper> = {
 
 export default meta;
 
-type StepperRenderArgs = IStepperOptions & { items: IItemProps[] };
+type StepperRenderArgs = IStepperOptions & {
+    items: IItemProps[],
+};
 
 export const Overview: StoryObj<typeof Stepper> = {
     argTypes: {
-        orientation: {
-            options: ['horizontal', 'vertical'],
-            control: {type: 'select'},
-        },
-        linear: {
-            control: 'boolean',
-        },
         items: {
             options: [
                 'default',
@@ -45,16 +40,29 @@ export const Overview: StoryObj<typeof Stepper> = {
                 }
             },
         },
+        orientation: {
+            options: ['horizontal', 'vertical'],
+            control: { type: 'select' },
+        },
+        linear: { control: 'boolean' },
+        selectOnFocus: { control: 'boolean' },
+        rtlEnabled: { control: 'boolean' },
+        disabled: { control: 'boolean' },
+        height: { control: 'text' },
+        width: { control: 'text' },
     },
     args: {
+        items: defaultItems,
         orientation: 'horizontal',
         linear: true,
-        items: defaultItems,
+        selectOnFocus: true,
+        rtlEnabled: false,
+        disabled: false,
     },
-    render: ({orientation, linear, items = []}: StepperRenderArgs) => {
+    render: ({ items = [], ...stepperProps }: StepperRenderArgs) => {
         return (
             <div style={{height: 500, width: '100%'}}>
-                <Stepper orientation={orientation} linear={linear}>
+                <Stepper {...stepperProps}>
                     {items.map((item, index) => <Item key={index} {...item} />)}
                 </Stepper>
             </div>
@@ -64,22 +72,30 @@ export const Overview: StoryObj<typeof Stepper> = {
 
 export const Step: StoryObj<typeof Item> = {
     argTypes: {
-        text: {control: 'text'},
+        text: { control: 'text' },
         icon: {
-            options: ['cart', 'clipboardtasklist', 'gift', 'packagebox'],
+            options: ['numeric', 'cart', 'clipboardtasklist', 'gift', 'packagebox'],
+            mapping: {
+                numeric: undefined,
+            },
             control: 'select',
         },
-        title: {control: 'text'},
-        hint: {control: 'text'},
-        isValid: {control: 'boolean'},
-        optional: {control: 'boolean'},
-        disabled: {control: 'boolean'},
+        title: { control: 'text' },
+        hint: { control: 'text' },
+        isValid: {
+            options: [undefined, true, false],
+            control: 'inline-radio',
+        },
+        optional: { control: 'boolean' },
+        disabled: { control: 'boolean' },
     },
     args: {},
     render: (itemProps) => {
         return (
-            <Stepper>
-                <Item {...itemProps} />
+            <Stepper width={300} selectedIndex={1}>
+                <Item title={'Completed'} {...itemProps} />
+                <Item title={'Selected'} {...itemProps} />
+                <Item title={'Default'} {...itemProps} />
             </Stepper>
         );
     }
