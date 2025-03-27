@@ -21,7 +21,7 @@ export interface RequestParams {
  * @public
  */
 export interface ResponseParams {
-  promise: Promise<void>;
+  promise: Promise<string>;
   abort: () => void;
 }
 

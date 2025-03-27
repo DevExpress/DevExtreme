@@ -5,10 +5,25 @@ import {
   it,
   jest,
 } from '@jest/globals';
-import type { Prompt, RequestCallbacks } from '@js/ai/ai';
+import type {
+  AIProvider,
+  RequestCallbacks,
+  RequestParams,
+  ResponseParams,
+} from '@js/ai/ai';
 import { BaseCommand } from '@ts/core/ai/commands/base';
-import type { RequestManager } from '@ts/core/ai/core//request_manager';
-import type { PromptData, PromptManager, PromptTemplateName } from '@ts/core/ai/core/prompt_manager';
+import { RequestManager } from '@ts/core/ai/core//request_manager';
+import type { PromptData, PromptTemplateName } from '@ts/core/ai/core/prompt_manager';
+import { PromptManager } from '@ts/core/ai/core/prompt_manager';
+
+jest.mock('@ts/core/ai/templates/index', () => ({
+  templates: {
+    'test-template-name': {
+      system: 'System test template with {{first}}',
+      user: 'User test template with {{second}}',
+    },
+  },
+}));
 
 interface TestCommandParams {
   first: string;
@@ -17,13 +32,13 @@ interface TestCommandParams {
 
 class TestCommand extends BaseCommand {
   getTemplateName(): PromptTemplateName {
-    return 'test' as PromptTemplateName;
+    return 'test-template-name' as PromptTemplateName;
   }
 
   buildPromptData(params: TestCommandParams): PromptData {
     const data = {
-      user: { first: params?.first },
-      system: { second: params?.second },
+      system: { first: params?.first },
+      user: { second: params?.second },
     };
 
     return data;
@@ -43,20 +58,25 @@ describe('BaseCommand', () => {
   let command: TestCommand;
 
   beforeEach(() => {
-    promptManager = {
-      buildPrompt: (): Prompt => ({
-        system: 'systemMessage',
-        user: 'userMessage',
-      }),
-    } as unknown as PromptManager;
+    const provider: AIProvider = {
+      sendRequest: (params: RequestParams): ResponseParams => {
+        const { onChunk } = params;
 
-    requestManager = {
-      sendRequest: (_: Prompt, callbacks: RequestCallbacks) => {
-        callbacks?.onComplete?.('AI response');
+        const promise = new Promise<string>((resolve) => {
+          onChunk('AI');
+          onChunk(' response');
 
-        return (): void => {};
+          resolve('AI response');
+        });
+
+        const abort = (): void => {};
+
+        return { promise, abort };
       },
-    } as unknown as RequestManager;
+    };
+
+    requestManager = new RequestManager(provider);
+    promptManager = new PromptManager();
 
     command = new TestCommand(promptManager, requestManager);
   });
@@ -77,7 +97,7 @@ describe('BaseCommand', () => {
       command.execute({}, {});
 
       expect(spy).toHaveBeenCalledTimes(1);
-      expect(spy).toHaveReturnedWith('test');
+      expect(spy).toHaveReturnedWith('test-template-name');
     });
 
     it('buildPromptData receives and returns correct data', () => {
@@ -89,22 +109,25 @@ describe('BaseCommand', () => {
       expect(spy).toHaveBeenCalledTimes(1);
       expect(spy).toHaveBeenCalledWith(params);
       expect(spy).toHaveReturnedWith({
-        user: { first: params.first },
-        system: { second: params.second },
+        system: { first: params.first },
+        user: { second: params.second },
       });
     });
 
-    it('parseResult receives correct value and returns expected result', () => {
+    it('parseResult receives correct value and returns expected result', async () => {
+      const params: TestCommandParams = { first: 'first', second: 'second' };
       const spy = jest.spyOn(command, 'parseResult');
 
-      command.execute({}, {});
+      command.execute(params, {});
+
+      await new Promise(process.nextTick);
 
       expect(spy).toHaveBeenCalledTimes(1);
       expect(spy).toHaveBeenCalledWith('AI response');
       expect(spy).toHaveReturnedWith('Parsed result: AI response');
     });
 
-    it('callbacks are called correctly', () => {
+    it('callbacks are called correctly', async () => {
       const callbacks = {
         onComplete: jest.fn(),
         onError: jest.fn(),
@@ -113,22 +136,24 @@ describe('BaseCommand', () => {
 
       command.execute({}, callbacks as RequestCallbacks);
 
+      await new Promise(process.nextTick);
+
       expect(callbacks.onComplete).toHaveBeenCalledTimes(1);
       expect(callbacks.onError).toHaveBeenCalledTimes(0);
-      expect(callbacks.onChunk).toHaveBeenCalledTimes(0);
+      expect(callbacks.onChunk).toHaveBeenCalledTimes(2);
     });
 
-    it('onComplete is called with parseResult output', () => {
-      const callbacks = {
-        onComplete: jest.fn(),
-      };
+    it('onComplete is called with parseResult output', async () => {
+      const callbacks = { onComplete: jest.fn() };
 
       command.execute({}, callbacks as RequestCallbacks);
+
+      await new Promise(process.nextTick);
 
       expect(callbacks.onComplete).toHaveBeenCalledWith('Parsed result: AI response');
     });
 
-    it('calls onError if request fails', () => {
+    it('calls onError if request fails', async () => {
       const originalSendRequest = requestManager.sendRequest;
 
       requestManager.sendRequest = (_, callbacks) => {
@@ -145,6 +170,8 @@ describe('BaseCommand', () => {
 
         command.execute({}, callbacks as RequestCallbacks);
 
+        await new Promise(process.nextTick);
+
         expect(callbacks.onError).toHaveBeenCalledTimes(1);
         expect(callbacks.onError).toHaveBeenCalledWith(new Error('Test error'));
         expect(callbacks.onComplete).toHaveBeenCalledTimes(0);
@@ -153,7 +180,7 @@ describe('BaseCommand', () => {
       }
     });
 
-    it('calls onChunk for each chunk', () => {
+    it('calls onChunk for each chunk and onComplete correctly', () => {
       const originalSendRequest = requestManager.sendRequest;
 
       requestManager.sendRequest = (_, callbacks) => {
@@ -174,28 +201,33 @@ describe('BaseCommand', () => {
         expect(onChunk).toHaveBeenNthCalledWith(1, 'first');
         expect(onChunk).toHaveBeenNthCalledWith(2, 'second');
         expect(onComplete).toHaveBeenCalledTimes(1);
+        expect(onComplete).toHaveBeenNthCalledWith(1, 'Parsed result: first second');
       } finally {
         requestManager.sendRequest = originalSendRequest;
       }
     });
 
-    it('executes with undefined params without errors', () => {
+    it('executes with undefined params without errors', async () => {
       const sendRequestSpy = jest.spyOn(requestManager, 'sendRequest');
       const onError = jest.fn();
 
       expect(command.execute(undefined, { onError })).not.toThrow();
-      expect(onError).toHaveBeenCalledTimes(0);
 
+      await new Promise(process.nextTick);
+
+      expect(onError).toHaveBeenCalledTimes(0);
       expect(sendRequestSpy).toHaveBeenCalledTimes(1);
     });
 
-    it('executes with partial callbacks without errors', () => {
+    it('executes with partial callbacks without errors', async () => {
       const sendRequestSpy = jest.spyOn(requestManager, 'sendRequest');
       const callbacks = { onChunk: jest.fn() };
 
       expect(command.execute({ first: 'first', second: 'second' }, callbacks)).not.toThrow();
 
-      expect(callbacks.onChunk).toHaveBeenCalledTimes(0);
+      await new Promise(process.nextTick);
+
+      expect(callbacks.onChunk).toHaveBeenCalledTimes(2);
       expect(sendRequestSpy).toHaveBeenCalledTimes(1);
     });
 

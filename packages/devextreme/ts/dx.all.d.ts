@@ -876,7 +876,7 @@ declare module DevExpress.ai {
     onChunk: (chunk: string) => void;
   }
   export interface ResponseParams {
-    promise: Promise<void>;
+    promise: Promise<string>;
     abort: () => void;
   }
 }

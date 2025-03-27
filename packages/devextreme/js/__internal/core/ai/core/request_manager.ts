@@ -13,21 +13,15 @@ export class RequestManager {
 
   public sendRequest(prompt: Prompt, callbacks: RequestCallbacks): () => void {
     if (typeof this.provider.sendRequest === 'function') {
-      let accumulator = '';
-
       const params = {
         prompt,
-        onChunk: (chunk: string): void => {
-          accumulator += chunk;
-
-          callbacks?.onChunk?.(chunk);
-        },
+        onChunk: (chunk: string): void => { callbacks?.onChunk?.(chunk); },
       };
 
       const { promise, abort } = this.provider.sendRequest(params);
 
       promise
-        .then(() => { callbacks?.onComplete?.(accumulator); })
+        .then((response) => { callbacks?.onComplete?.(response); })
         .catch((e) => { callbacks?.onError?.(e); });
 
       return abort;
