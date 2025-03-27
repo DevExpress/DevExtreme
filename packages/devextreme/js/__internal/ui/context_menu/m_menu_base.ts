@@ -319,11 +319,11 @@ class MenuBase extends HierarchicalCollectionWidget<Properties> {
     if (this._getShowSubmenuMode() === 'onHover') {
       const submenuDelay = this._getSubmenuDelay('show');
 
-      if (submenuDelay) {
+      if (submenuDelay === 0) {
+        this._showSubmenu($itemElement);
+      } else {
         clearTimeout(this._showSubmenusTimeout);
         this._showSubmenusTimeout = setTimeout(this._showSubmenu.bind(this, $itemElement), submenuDelay);
-      } else {
-        this._showSubmenu($itemElement);
       }
     }
   }
