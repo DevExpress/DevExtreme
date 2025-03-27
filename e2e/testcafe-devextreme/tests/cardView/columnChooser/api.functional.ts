@@ -5,7 +5,7 @@ import { createWidget } from '../../../helpers/createWidget';
 fixture.disablePageReloads`CardView - ColumnChooser.Functional`
   .page(url(__dirname, '../../container.html'));
 
-test('public methods showColumnChooser and hideColumnChooser', async (t) => {
+test('public method showColumnChooser', async (t) => {
   const cardView = new CardView('#container');
   const columnChooser = cardView.getColumnChooser();
 
@@ -13,6 +13,20 @@ test('public methods showColumnChooser and hideColumnChooser', async (t) => {
 
   await cardView.apiShowColumnChooser();
   await t.expect(columnChooser.isOpen).ok();
+}).before(async () => {
+  await createWidget('dxCardView', {
+    columns: ['Column 1'],
+    columnChooser: {
+      enabled: true,
+    },
+  });
+});
+
+test('public method hideColumnChooser', async (t) => {
+  const cardView = new CardView('#container');
+  const columnChooser = cardView.getColumnChooser();
+
+  await t.click(cardView.getColumnChooserButton());
 
   await cardView.apiHideColumnChooser();
   await t.expect(columnChooser.isOpen).notOk();

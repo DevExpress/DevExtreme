@@ -29,16 +29,8 @@ export class TreeView extends InfernoWrapper<TreeViewProperties, dxTreeView> {
     prevProps: TreeViewProperties,
     props: TreeViewProperties,
   ): boolean {
-    const oldItems = prevProps.items ?? [];
-    const newItems = props.items ?? [];
-
-    if (oldItems.length !== newItems.length) {
-      return false;
-    }
-
-    for (let i = 0; i < newItems.length; i += 1) {
-      oldItems[i].selected = newItems[i].selected;
-    }
+    const oldItems = (prevProps.items ?? []).map(({ selected, ...restProps }) => restProps);
+    const newItems = (props.items ?? []).map(({ selected, ...restProps }) => restProps);
 
     const onlySelectionChanged = equalByValue(oldItems, newItems);
 

@@ -139,7 +139,7 @@ export class ColumnChooserView extends View<ColumnChooserProps> {
           [this.options.oneWay('columnChooser.title')],
         ),
 
-        onShown: (e: ShownEvent) => { this.setPopupAttributes(e.component); },
+        onShown: (e: ShownEvent) => { this.setPopupAttributes(e?.component); },
         onHidden: () => { this.popupVisible.update(false); },
       } as MapMaybeSubscribable<PopupProperties>),
 

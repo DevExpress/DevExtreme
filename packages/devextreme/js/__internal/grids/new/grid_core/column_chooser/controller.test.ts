@@ -6,7 +6,7 @@ import { ColumnsController } from '../columns_controller';
 import type { Options } from '../options';
 import { OptionsControllerMock } from '../options_controller/options_controller.mock';
 import { ColumnChooserController } from './controller';
-import { expectColumnVisibility } from './utils.test';
+import { expectColumnVisibility } from './test-utils.test';
 
 const createColumnChooserController = (options?: Options): {
   controller: ColumnChooserController;

@@ -2,7 +2,7 @@ import CardView from 'devextreme-testcafe-models/cardView';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 
-fixture.disablePageReloads`HeaderFilter.A11y.Functional`
+fixture.disablePageReloads`CardView - ColumnChooser.A11y.Functional`
   .page(url(__dirname, '../../container.html'));
 
 const CARD_VIEW_SELECTOR = '#container';

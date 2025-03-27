@@ -63,9 +63,11 @@ export const renderColumnChooser = async (options?: Options): Promise<{
 
   await new Promise((resolve) => { setTimeout(resolve); });
 
-  // we need to fire 'onShown' event by ourselves, so that setPopupAttributes() is called
+  // we need to fire 'onShown' event manually, so that setPopupAttributes() is called
   // @ts-expect-error
-  columnChooser.popupRef.current?.option('onShown')();
+  columnChooser.popupRef.current?.option('onShown')({
+    component: columnChooser.popupRef.current,
+  });
 
   return {
     element: columnChooserElement,
