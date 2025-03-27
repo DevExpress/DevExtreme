@@ -163,6 +163,7 @@ const Column = Object.assign<typeof _componentColumn, NestedComponentMeta>(_comp
 // owners:
 // CardView
 type IHeaderPanelProps = React.PropsWithChildren<{
+  dragging?: Record<string, any>;
   itemCssClass?: string;
   itemTemplate?: ((e: { column: CardViewColumn }) => string | any) | template;
   visible?: boolean;
