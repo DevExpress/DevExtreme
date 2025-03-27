@@ -247,11 +247,13 @@ const DxHeaderPanelConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
+    "update:dragging": null,
     "update:itemCssClass": null,
     "update:itemTemplate": null,
     "update:visible": null,
   },
   props: {
+    dragging: Object as PropType<Record<string, any>>,
     itemCssClass: String,
     itemTemplate: {},
     visible: Boolean

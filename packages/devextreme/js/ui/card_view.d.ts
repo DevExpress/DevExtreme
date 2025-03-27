@@ -7,7 +7,7 @@ import { DataSourceLike } from '../data/data_source';
 import Widget, { WidgetOptions } from './widget/ui.widget';
 import { EventInfo } from '../events';
 import { dxToolbarItem, ToolbarItemLocation } from './toolbar';
-// import { dxSortableOptions } from './sortable';
+import { dxSortableOptions } from './sortable';
 import { dxLoadPanelOptions } from './load_panel';
 
 // #region DataController
@@ -309,23 +309,16 @@ export type ColumnsControllerConfiguration<TRowData = unknown, TKey = unknown> =
 
 // #region HeaderPanel
 
-type SortableProperties = 'dropFeedbackMode' | 'scrollSpeed' | 'scrollSensitivity' | 'onDragChange' | 'onDragEnd' | 'onDragMove' | 'onDragStart' | 'onRemove' | 'onReorder';
-
-// /**
-//  * @docid
-//  * @namespace DevExpress.ui.dxCardView
-//  */
-// export type HeaderPanelDraggingOptions = Pick<dxSortableOptions, SortableProperties>;
-
 /**
  * @docid
  */
 type HeaderPanel<TRowData = unknown, TKey = unknown> = {
-    // /**
-    //  * @docid
-    //  * @public
-    //  */
-    // dragging?: HeaderPanelDraggingOptions;
+    /**
+     * @docid
+     * @public
+     * @type object
+     */
+    dragging?: Pick<dxSortableOptions, 'dropFeedbackMode' | 'scrollSpeed' | 'scrollSensitivity' | 'onDragChange' | 'onDragEnd' | 'onDragMove' | 'onDragStart' | 'onRemove' | 'onReorder'>;
     /**
      * @docid
      * @public
