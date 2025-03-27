@@ -38,9 +38,6 @@ jobs:
               working-directory: gh-pages
               run: |
                 python -m http.server 8080 &
-                python -m http.server 8081 &
-                python -m http.server 8082 &
-                python -m http.server 8083 &
 
             - name: Checkout main branch
               uses: actions/checkout@v4
