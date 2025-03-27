@@ -1,6 +1,7 @@
 import CardView from 'devextreme-testcafe-models/cardView';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../../helpers/getPageUrl';
+import { testScreenshot } from '../../../helpers/themeUtils';
 import { createWidget } from '../../../helpers/createWidget';
 
 fixture`CardView - ColumnChooser.Visual`
@@ -15,7 +16,7 @@ test('column chooser in select mode', async (t) => {
 
   await cardView.apiShowColumnChooser();
 
-  await takeScreenshot('card-view_column-chooser.png', columnChooser.content);
+  await testScreenshot(t, takeScreenshot, 'card-view_column-chooser.png', { element: columnChooser.content });
 
   await t
     .expect(compareResults.isValid())
