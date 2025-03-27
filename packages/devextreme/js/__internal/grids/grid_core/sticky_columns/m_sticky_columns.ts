@@ -137,7 +137,7 @@ const baseStickyColumns = <T extends ModuleType<ColumnsView>>(Base: T) => class 
       this.addWidgetPrefix.bind(this),
     );
     if (hasStickyColumns) {
-      return deferred?.done(() => {
+      return deferred.done(() => {
         this.setStickyOffsets();
       });
     }

@@ -3,6 +3,7 @@ import messageLocalization from '@js/common/core/localization/message';
 import domAdapter from '@js/core/dom_adapter';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
+import { Deferred } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import { getHeight } from '@js/core/utils/size';
@@ -294,7 +295,8 @@ export class ColumnHeadersView extends ColumnsView {
     const change = {};
 
     if (that._tableElement && !that._dataController.isLoaded() && !that._hasRowElements) {
-      return;
+      // @ts-expect-error
+      return new Deferred().resolve();
     }
 
     $container
