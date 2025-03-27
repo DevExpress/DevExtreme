@@ -52,6 +52,9 @@ export class AppointmentDataAccessor extends DataAccessor<Appointment, KnownFiel
       let setter: AppointmentSetter = commonSetter;
 
       if (isDateField(name)) {
+        // eslint-disable-next-line @typescript-eslint/init-declarations
+        let serializationFormatCache: string | undefined;
+
         getter = (object): unknown => {
           let value = commonGetter(object);
           if (this.forceIsoDateParsing) {
@@ -61,12 +64,17 @@ export class AppointmentDataAccessor extends DataAccessor<Appointment, KnownFiel
           return value;
         };
         setter = (object, value): void => {
-          const serializationFormat = this.dateSerializationFormat
-            ?? dateSerialization.getDateSerializationFormat(commonGetter(object));
+          if (this.dateSerializationFormat) {
+            serializationFormatCache = this.dateSerializationFormat;
+          } else if (this.forceIsoDateParsing && !serializationFormatCache) {
+            const oldValue = commonGetter(object);
+
+            serializationFormatCache = dateSerialization.getDateSerializationFormat(oldValue);
+          }
 
           const newValue = dateSerialization.serializeDate(
             value,
-            serializationFormat,
+            serializationFormatCache,
           );
 
           commonSetter(object, newValue);
