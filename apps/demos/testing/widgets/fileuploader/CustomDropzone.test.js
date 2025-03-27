@@ -7,7 +7,6 @@ const DROPZONE_EXTERNAL_ID = 'dropzone-external';
 const DROPZONE_ACTIVE_CLASS = 'dropzone-active';
 
 fixture('FileUploader.CustomDropzone')
-  .page('http://localhost:8080/')
   .before(async (ctx) => {
     ctx.initialWindowSize = [900, 600];
   });

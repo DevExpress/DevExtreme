@@ -9,12 +9,11 @@ const TOOLBAR_CLASS = 'dx-toolbar';
 const BUTTON_CLASS = 'dx-button';
 
 fixture('Drawer.TopOrBottomPosition')
-  .page('http://localhost:8080/')
   .before(async (ctx) => {
     ctx.initialWindowSize = [900, 1200];
   });
 
-runManualTest('Drawer', 'TopOrBottomPosition', ['jQuery', /* 'React', */ 'Vue'/* , 'Angular' */], (test) => {
+runManualTest('Drawer', 'TopOrBottomPosition', ['jQuery', 'React', 'Vue', 'Angular'], (test) => {
   test('TopOrBottomPosition -> position: bottom -> openedStateMode: overlap -> open -> resize -> close', async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 

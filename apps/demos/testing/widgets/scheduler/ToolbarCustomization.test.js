@@ -10,7 +10,6 @@ const SCREEN_SIZES = {
 };
 
 fixture('Scheduler.ToolbarCustomization')
-  .page('http://localhost:8080/')
   .before(async (ctx) => {
     ctx.initialWindowSize = SCREEN_SIZES.wide;
   });

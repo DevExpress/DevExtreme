@@ -9,7 +9,6 @@ const SELECTBOX_POPUP_WRAPPER_CLASS = 'dx-selectbox-popup-wrapper';
 const LIST_ITEM_CLASS = 'dx-list-item';
 
 fixture('TabPanel.Overview')
-  .page('http://localhost:8080/')
   .before(async (ctx) => {
     ctx.initialWindowSize = [900, 1200];
   });
@@ -18,22 +17,24 @@ runManualTest('TabPanel', 'Overview', ['jQuery', 'React', 'Vue', 'Angular'], (te
   test('Overview', async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
+    const $selectBox = $(`.${OPTION_CLASS} .${SELECTBOX_CLASS}`);
+
     await t
-      .click($(`.${OPTION_CLASS} .${SELECTBOX_CLASS}`).nth(0))
+      .click($selectBox.nth(0))
       .click($(`.${SELECTBOX_POPUP_WRAPPER_CLASS} .${LIST_ITEM_CLASS}`).nth(1))
       .wait(200);
 
     await testScreenshot(t, takeScreenshot, 'tabpanel_tabsposition_top.png');
 
     await t
-      .click($(`.${OPTION_CLASS} .${SELECTBOX_CLASS}`).nth(1))
+      .click($selectBox.nth(1))
       .click($(`.${SELECTBOX_POPUP_WRAPPER_CLASS} .${LIST_ITEM_CLASS}`).nth(1))
       .wait(200);
 
     await testScreenshot(t, takeScreenshot, 'tabpanel_stylingmode_primary.png');
 
     await t
-      .click($(`.${OPTION_CLASS} .${SELECTBOX_CLASS}`).nth(2))
+      .click($selectBox.nth(2))
       .click($(`.${SELECTBOX_POPUP_WRAPPER_CLASS} .${LIST_ITEM_CLASS}`).nth(1))
       .wait(200);
 
