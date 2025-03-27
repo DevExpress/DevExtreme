@@ -4,8 +4,10 @@ export abstract class DataAccessor<
   T,
   KnownFields extends Record<string, unknown>,
 > {
+  /** @deprecated instead of `getter` property use `get` function. getter will be private */
   public getter: Record<string, DataAccessorGetter<T>> = {};
 
+  /** @deprecated instead of `setter` property use `set` function. setter will be private */
   public setter: Record<string, DataAccessorSetter<T>> = {};
 
   protected updateExpressions<Fields extends Record<string, string>>(fields: Fields): void {
