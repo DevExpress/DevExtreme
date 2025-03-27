@@ -19620,13 +19620,15 @@ declare module DevExpress.ui {
       | 'narrative'
       | 'expository'
       | 'descriptive'
-      | 'conversational';
+      | 'conversational'
+      | string;
     export type HtmlEditorAIChangeToneOption =
       | 'professional'
       | 'casual'
       | 'straightforward'
       | 'confident'
-      | 'friendly';
+      | 'friendly'
+      | string;
     export type HtmlEditorAICommandName =
       | 'summarize'
       | 'proofread'
@@ -19647,7 +19649,8 @@ declare module DevExpress.ui {
       | 'french'
       | 'german'
       | 'japanese'
-      | 'spanish';
+      | 'spanish'
+      | string;
     export type HtmlEditorFormat =
       | 'background'
       | 'bold'
@@ -31900,7 +31903,16 @@ declare module DevExpress.ui.dxHtmlEditor {
   /**
    * [descr:HtmlEditorAIToolbarItem]
    */
-  export interface HtmlEditorAIToolbarItem {
+  export interface HtmlEditorAIToolbarItem
+    extends Omit<
+      DevExpress.ui.dxToolbar.Item,
+      | 'menuItemTemplate'
+      | 'showText'
+      | 'widget'
+      | 'options'
+      | 'template'
+      | 'html'
+    > {
     /**
      * [descr:HtmlEditorAIToolbarItem.name]
      */

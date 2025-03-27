@@ -64,7 +64,8 @@ export type HtmlEditorAIChangeStyleOption =
     | 'narrative'
     | 'expository'
     | 'descriptive'
-    | 'conversational';
+    | 'conversational'
+    | string;
 
 /** @public */
 export type HtmlEditorAIChangeToneOption =
@@ -72,7 +73,8 @@ export type HtmlEditorAIChangeToneOption =
     | 'casual'
     | 'straightforward'
     | 'confident'
-    | 'friendly';
+    | 'friendly'
+    | string;
 
 /** @public */
 export type HtmlEditorAITranslateOption =
@@ -82,7 +84,8 @@ export type HtmlEditorAITranslateOption =
     | 'french'
     | 'german'
     | 'japanese'
-    | 'spanish';
+    | 'spanish'
+    | string;
 
 export type HtmlEditorAICommandNameAll = HtmlEditorAICommandName | 'custom';
 
@@ -178,7 +181,7 @@ export type HtmlEditorAICommand =
  * @type object
  * @namespace DevExpress.ui.dxHtmlEditor
  */
-export interface HtmlEditorAIToolbarItem {
+export interface HtmlEditorAIToolbarItem extends Omit<dxToolbarItem, 'menuItemTemplate' | 'showText' | 'widget' | 'options' | 'template' | 'html'> {
     /**
      * @docid
      * @public
