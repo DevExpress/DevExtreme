@@ -5,7 +5,7 @@ import { normalizeColumns, preNormalizeColumns } from './utils';
 export function normalizeColumn(column: ColumnProperties): Column {
   return normalizeColumns(
     preNormalizeColumns([column]),
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+    // @ts-expect-error
     (v) => v,
   )[0];
 }

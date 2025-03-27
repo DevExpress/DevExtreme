@@ -1,0 +1,10 @@
+@use './variables' as *;
+@use './card';
+
+.dx-cardview-content {
+  display: grid;
+  justify-items: center;
+  column-gap: $cardview-content-column-gap;
+  row-gap: $cardview-content-row-gap;
+  grid-template-columns: repeat(var(--dx-cardview-cardsperrow), 1fr);
+}

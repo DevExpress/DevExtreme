@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable spellcheck/spell-checker */
+
 /* eslint-disable max-classes-per-file */
-import { Component, findDOMfromVNode } from 'inferno';
+import { Component, findDOMFromVNode } from 'inferno';
 
 import type { InfernoEffect } from './effect';
 import { InfernoEffectHost } from './effect_host';
@@ -62,7 +62,7 @@ export class InfernoComponent<
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  componentWillUpdate(_nextProps?: P, _nextState?: S, _context?: any): void {
+  componentWillUpdate(_nextProps?: Readonly<P>, _nextState?: S, _context?: any): void {
     InfernoEffectHost.lock();
   }
 
@@ -134,7 +134,7 @@ export class InfernoWrapperComponent<
   }
 
   componentDidMount(): void {
-    const el = findDOMfromVNode(this.$LI, true) as ElementWithCustomClassesData;
+    const el = findDOMFromVNode(this.$LI, true) as ElementWithCustomClassesData;
     this.vDomElement = el;
     super.componentDidMount();
     el.dxClasses = el.dxClasses || {

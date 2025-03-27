@@ -68,7 +68,6 @@ export function Item(props: ItemProps): JSX.Element {
   return (
     <div className={cssClass} tabIndex={0} onClick={props.onSortClick}>
       { props.status && ICONS[props.status]}
-      {/* @ts-expect-error */}
       { Template && <Template column={props.column}/>}
       { !Template && props.column.caption }
       {

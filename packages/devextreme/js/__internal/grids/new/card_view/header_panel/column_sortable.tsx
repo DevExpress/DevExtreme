@@ -9,6 +9,8 @@ import { Sortable } from '../../grid_core/inferno_wrappers/sortable';
 
 export type Status = 'forbid' | 'show' | 'moving' | 'none';
 
+const ALLOWED_DRAGGING_DISTANCE = 64;
+
 export interface Props extends Omit<SortableProps, 'onAdd' | 'onReorder' | 'dragTemplate'> {
   source: string;
 
@@ -62,8 +64,7 @@ export class ColumnSortable extends Component<Props, State> {
       Math.abs(dragCoords.y - containerCoords.y + containerCoords.height),
     );
 
-    // TODO: move to scss variable
-    this.status = yDistance <= 64
+    this.status = yDistance <= ALLOWED_DRAGGING_DISTANCE
       ? 'moving'
       : 'forbid';
 
@@ -93,7 +94,6 @@ export class ColumnSortable extends Component<Props, State> {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const DragTemplate = this.props.dragTemplate!;
     render(
-        // @ts-expect-error
         <DragTemplate
           column={this.dragItemProps.props.itemData.column}
           status={this.status}
@@ -104,7 +104,6 @@ export class ColumnSortable extends Component<Props, State> {
 
   render(): InfernoNode {
     if (!this.props.allowColumnReordering) {
-      // @ts-expect-error
       return this.props.children;
     }
 

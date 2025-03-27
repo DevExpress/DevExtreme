@@ -1,22 +1,28 @@
-import type { Orientation } from '@js/common';
+import type { Orientation, SingleOrNone } from '@js/common';
+import messageLocalization from '@js/common/core/localization/message';
 import registerComponent from '@js/core/component_registrator';
 import type { DxElement } from '@js/core/element';
 import $, { type dxElementWrapper } from '@js/core/renderer';
 import { Deferred } from '@js/core/utils/deferred';
 import { isDefined } from '@js/core/utils/type';
 import type { DxEvent } from '@js/events';
+import type { Item, Properties } from '@js/ui/stepper';
 import { BindableTemplate } from '@ts/core/templates/m_bindable_template';
 import type { Template } from '@ts/core/templates/m_template';
 import { getImageContainer } from '@ts/core/utils/m_icon';
 import type { ActionConfig } from '@ts/core/widget/component';
 import type { OptionChanged } from '@ts/core/widget/types';
-import type { ItemRenderInfo } from '@ts/ui/collection/collection_widget.base';
+import type {
+  ItemRenderInfo,
+  PostprocessRenderItemInfo,
+} from '@ts/ui/collection/collection_widget.base';
 import CollectionWidgetAsync from '@ts/ui/collection/m_collection_widget.async';
 import Connector from '@ts/ui/stepper/connector';
-import type { StepperItemProperties } from '@ts/ui/stepper/stepper_item';
-import StepperItem from '@ts/ui/stepper/stepper_item';
-
-import type { CollectionWidgetEditProperties } from '../collection/m_collection_widget.edit';
+import StepperItem, {
+  STEP_COMPLETED_CLASS,
+  STEP_INVALID_ICON,
+  STEP_VALID_ICON,
+} from '@ts/ui/stepper/stepper_item';
 
 export const STEPPER_CLASS = 'dx-stepper';
 export const STEP_LIST_CLASS = 'dx-step-list';
@@ -26,9 +32,9 @@ export const STEPPER_HORIZONTAL_ORIENTATION_CLASS = 'dx-stepper-horizontal';
 export const STEPPER_VERTICAL_ORIENTATION_CLASS = 'dx-stepper-vertical';
 export const STEP_INDICATOR_CLASS = 'dx-step-indicator';
 export const STEP_TEXT_CLASS = 'dx-step-text';
+export const STEP_LABEL_CLASS = 'dx-step-label';
 export const STEP_TITLE_CLASS = 'dx-step-title';
-
-const PERCENT_UNIT = '%';
+export const STEP_OPTIONAL_MARK_CLASS = 'dx-step-optional-mark';
 
 export const STEPPER_ITEM_DATA_KEY = 'dxStepperItemData';
 
@@ -37,9 +43,14 @@ export const ORIENTATION: Record<string, Orientation> = {
   vertical: 'vertical',
 };
 
-export interface StepperProperties extends CollectionWidgetEditProperties<Stepper> {
-  orientation?: Orientation;
-  linear?: boolean;
+export interface StepperProperties extends Properties {
+  selectionMode?: SingleOrNone;
+
+  loopItemFocus?: boolean;
+
+  selectionRequired?: boolean;
+
+  hintExpr?: (data: Item) => string | undefined;
 }
 
 class Stepper extends CollectionWidgetAsync<StepperProperties> {
@@ -48,58 +59,6 @@ class Stepper extends CollectionWidgetAsync<StepperProperties> {
   _connector!: Connector;
 
   _$stepsContainer!: dxElementWrapper;
-
-  _supportedKeys(): Record<string, (e: KeyboardEvent, options?: Record<string, unknown>) => void> {
-    const defaultHandlers = super._supportedKeys();
-    const { linear } = this.option();
-
-    return {
-      ...defaultHandlers,
-      home: linear ? defaultHandlers.leftArrow : defaultHandlers.home,
-      end: linear ? defaultHandlers.rightArrow : defaultHandlers.end,
-    };
-  }
-
-  _prepareDefaultItemTemplate(data: StepperItemProperties, $container: dxElementWrapper): void {
-    const $indicatorElement = $('<div>').addClass(STEP_INDICATOR_CLASS);
-    const $iconElement = getImageContainer(data.icon) ?? $('<div>').addClass(STEP_TEXT_CLASS).text(data.text ?? '');
-
-    $iconElement.appendTo($indicatorElement);
-    $indicatorElement.prependTo($container);
-
-    if (isDefined(data.title)) {
-      const $stepTitleDiv = $('<div>').addClass(STEP_TITLE_CLASS);
-
-      $stepTitleDiv.text(data.title);
-
-      $stepTitleDiv.appendTo($container);
-    }
-  }
-
-  _initTemplates(): void {
-    super._initTemplates();
-
-    this._templateManager.addDefaultTemplates({
-      item: new BindableTemplate(($container: dxElementWrapper, data: StepperItemProperties) => {
-        this._prepareDefaultItemTemplate(data, $container);
-      }, ['text', 'icon', 'title'], this.option('integrationOptions.watchMethod')),
-    });
-  }
-
-  _createItemByTemplate(
-    itemTemplate: Template,
-    renderArgs: ItemRenderInfo<StepperItemProperties>,
-  ): DxElement {
-    const { itemData, index } = renderArgs;
-
-    return super._createItemByTemplate(itemTemplate, {
-      ...renderArgs,
-      itemData: {
-        text: `${index + 1}`,
-        ...itemData,
-      },
-    }) as DxElement;
-  }
 
   _getDefaultOptions(): StepperProperties {
     return {
@@ -113,7 +72,153 @@ class Stepper extends CollectionWidgetAsync<StepperProperties> {
       focusStateEnabled: true,
       loopItemFocus: false,
       selectionRequired: true,
+      hintExpr(data): string | undefined { return data ? data.hint : undefined; },
     };
+  }
+
+  _supportedKeys(): Record<string, (e: KeyboardEvent, options?: Record<string, unknown>) => void> {
+    const defaultHandlers = super._supportedKeys();
+    const { linear, selectOnFocus } = this.option();
+
+    return {
+      ...defaultHandlers,
+      home: linear && selectOnFocus ? defaultHandlers.leftArrow : defaultHandlers.home,
+      end: linear && selectOnFocus ? defaultHandlers.rightArrow : defaultHandlers.end,
+    };
+  }
+
+  _getStepIcon(data: Item): string | undefined {
+    const { isValid, icon } = data;
+
+    if (isValid === false) {
+      return STEP_INVALID_ICON;
+    }
+
+    if (isValid === true) {
+      return STEP_VALID_ICON;
+    }
+
+    return icon;
+  }
+
+  _getStepIndicator(data: Item): dxElementWrapper {
+    const { text } = data;
+
+    const $indicatorElement = $('<div>').addClass(STEP_INDICATOR_CLASS);
+
+    const iconName = this._getStepIcon(data);
+    const $indicatorContent = getImageContainer(iconName) ?? $('<div>').addClass(STEP_TEXT_CLASS).text(text ?? '');
+
+    $indicatorElement.append($indicatorContent);
+
+    return $indicatorElement;
+  }
+
+  _getStepTitle(data: Item): dxElementWrapper {
+    const { title } = data;
+
+    if (isDefined(title)) {
+      return $('<div>')
+        .addClass(STEP_TITLE_CLASS)
+        .text(title);
+    }
+
+    return $();
+  }
+
+  _getStepOptionalMark(data: Item): dxElementWrapper {
+    const { optional } = data;
+
+    if (optional) {
+      const optionalMarkText = messageLocalization.format('dxStepper-optionalMark');
+
+      return $('<div>')
+        .addClass(STEP_OPTIONAL_MARK_CLASS)
+        .text(optionalMarkText);
+    }
+
+    return $();
+  }
+
+  _getStepLabel(data: Item): dxElementWrapper {
+    const $stepTitle = this._getStepTitle(data);
+    const $stepOptionalMark = this._getStepOptionalMark(data);
+
+    if ($stepTitle.length || $stepOptionalMark.length) {
+      const $stepLabel = $('<div>')
+        .addClass(STEP_LABEL_CLASS);
+
+      $stepLabel
+        .append($stepTitle)
+        .append($stepOptionalMark);
+
+      return $stepLabel;
+    }
+
+    return $();
+  }
+
+  _prepareDefaultItemTemplate(data: Item, $container: dxElementWrapper): void {
+    const $stepIndicator = this._getStepIndicator(data);
+    const $stepLabel = this._getStepLabel(data);
+
+    $container
+      .append($stepIndicator)
+      .append($stepLabel);
+  }
+
+  _initTemplates(): void {
+    super._initTemplates();
+
+    this._templateManager.addDefaultTemplates({
+      item: new BindableTemplate((
+        $container: dxElementWrapper,
+        data: Item,
+      ) => {
+        this._prepareDefaultItemTemplate(data, $container);
+      }, ['text', 'icon', 'title', 'isValid', 'optional'], this.option('integrationOptions.watchMethod')),
+    });
+  }
+
+  _createItemByTemplate(
+    itemTemplate: Template,
+    renderArgs: ItemRenderInfo<Item>,
+  ): DxElement {
+    const { itemData, index } = renderArgs;
+
+    return super._createItemByTemplate(itemTemplate, {
+      ...renderArgs,
+      itemData: {
+        text: `${index + 1}`,
+        ...itemData,
+      },
+    }) as DxElement;
+  }
+
+  _getItemInstance($item: dxElementWrapper): StepperItem {
+    return StepperItem.getInstance<StepperItem>($item);
+  }
+
+  _renderItem(
+    index: number,
+    itemData: Item,
+    $container: dxElementWrapper,
+    $itemToReplace: dxElementWrapper,
+  ): dxElementWrapper {
+    const $itemFrame = super._renderItem(index, itemData, $container, $itemToReplace);
+
+    this._getItemInstance($itemFrame).updateInvalidClass(itemData.isValid);
+
+    return $itemFrame;
+  }
+
+  _postprocessRenderItem(args: PostprocessRenderItemInfo<StepperItem>): void {
+    super._postprocessRenderItem(args);
+
+    const { selectedIndex = 0 } = this.option();
+    const itemInstance = this._getItemInstance(args.itemElement);
+
+    itemInstance.changeCompleted(args.itemIndex < selectedIndex);
   }
 
   _itemClass(): string {
@@ -164,21 +269,21 @@ class Stepper extends CollectionWidgetAsync<StepperProperties> {
       .prepend(this._connector.$element());
   }
 
-  _getConnectorSize(): string {
+  _getConnectorSize(): number {
     const { items = [] } = this.option();
 
     const itemRatio = 100 / (items.length || 1);
 
-    return `${100 - itemRatio}${PERCENT_UNIT}`;
+    return 100 - itemRatio;
   }
 
-  _getConnectorValue(): string {
+  _getConnectorValue(): number {
     const { items = [], selectedIndex = 0 } = this.option();
 
-    const segmentsCount = (items.length || 1) - 1;
-    const itemRatio = 100 / (segmentsCount || 1);
+    const segmentsCount = items.length - 1;
+    const itemRatio = 100 / Math.max(segmentsCount, 1);
 
-    return `${selectedIndex * itemRatio}${PERCENT_UNIT}`;
+    return selectedIndex * itemRatio;
   }
 
   _appendStepsContainer(): void {
@@ -200,8 +305,8 @@ class Stepper extends CollectionWidgetAsync<StepperProperties> {
     return orientation === ORIENTATION.horizontal;
   }
 
-  _shouldPreventItemEvent(itemElement: Element): boolean {
-    const itemIndex = this._editStrategy.getNormalizedIndex(itemElement);
+  _shouldPreventItemEvent(itemElement: Element | dxElementWrapper): boolean {
+    const itemIndex = this._editStrategy.getIndex(itemElement);
     const { linear, selectedIndex = 0 } = this.option();
 
     return !!linear && Math.abs(selectedIndex - itemIndex) > 1;
@@ -229,21 +334,81 @@ class Stepper extends CollectionWidgetAsync<StepperProperties> {
     }
   }
 
+  _hover($el: dxElementWrapper | undefined, $previous: dxElementWrapper | undefined): void {
+    const $hoverTarget = this._findHoverTarget($el);
+
+    if ($hoverTarget && this._shouldPreventItemEvent($hoverTarget)) {
+      return;
+    }
+
+    super._hover($el, $previous);
+  }
+
+  _focusOutHandler(e: DxEvent): void {
+    this._clearFocusedItem();
+
+    super._focusOutHandler(e);
+  }
+
+  _clearFocusedItem(): void {
+    this.option('focusedElement', null);
+  }
+
+  _processChangeCompletedItems(): void {
+    const itemElements = this._itemElements();
+
+    if (!itemElements.length) {
+      return;
+    }
+
+    const $lastCompletedElement = itemElements.filter(`.${STEP_COMPLETED_CLASS}`).last();
+    const lastCompletedIndex = this._editStrategy.getIndex($lastCompletedElement);
+    const { selectedIndex = 0 } = this.option();
+
+    const startIndex = Math.min(lastCompletedIndex + 1, selectedIndex);
+    const endIndex = Math.max(lastCompletedIndex + 1, selectedIndex);
+    const isCompleted = lastCompletedIndex < selectedIndex;
+
+    for (let i = startIndex; i < endIndex; i += 1) {
+      const itemInstance = this._getItemInstance($(itemElements[i]));
+
+      itemInstance.changeCompleted(isCompleted);
+    }
+  }
+
+  _postProcessSyncSelection(): void {
+    this._connector.option('value', this._getConnectorValue());
+    this._processChangeCompletedItems();
+  }
+
   _syncSelectionOptions(byOption?: string): Promise<unknown> {
     super._syncSelectionOptions(byOption).done(() => {
-      this._connector.option('value', this._getConnectorValue());
+      this._postProcessSyncSelection();
     });
 
     return Deferred().resolve().promise();
   }
 
   _itemOptionChanged(
-    item: StepperItemProperties,
-    property: keyof StepperItemProperties,
+    item: Item,
+    property: keyof Item,
     value: unknown,
     prevValue: unknown,
   ): void {
     switch (property) {
+      case 'isValid': {
+        type PropertyType = Item[typeof property];
+
+        const itemIndex = this._getIndexByItem(item);
+        const $item = $(this._itemElements()[itemIndex]);
+
+        const itemInstance = this._getItemInstance($item);
+
+        itemInstance.updateInvalidClass(value as PropertyType);
+
+        super._itemOptionChanged(item, property, value, prevValue);
+        break;
+      }
       default:
         super._itemOptionChanged(item, property, value, prevValue);
     }
@@ -259,6 +424,9 @@ class Stepper extends CollectionWidgetAsync<StepperProperties> {
         this._connector.option(name, value);
         break;
       case 'linear':
+        break;
+      case 'hintExpr':
+        this._invalidate();
         break;
       default:
         super._optionChanged(args);

@@ -125,6 +125,10 @@ $fluent-scheduler-agenda-time-panel-cell-padding: 8px;
   text-align: right;
   padding-right: $fluent-scheduler-agenda-time-panel-cell-padding;
 
+  .dx-rtl & {
+    justify-content: start;
+  }
+
   .dx-scheduler-small & {
     font-size: $fluent-scheduler-all-day-title-font-size * 0.8;
     padding-right: 2px;

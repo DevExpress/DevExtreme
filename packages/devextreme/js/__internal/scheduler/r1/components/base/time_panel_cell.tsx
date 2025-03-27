@@ -74,7 +74,6 @@ export class TimePanelCell extends BaseInfernoComponent<TimePanelCellProps> {
     const TimeCellTemplateComponent = getTemplate(timeCellTemplate);
 
     return (
-      // @ts-ignore
       <CellBase
         className={classes}
         viewContext={viewContext}

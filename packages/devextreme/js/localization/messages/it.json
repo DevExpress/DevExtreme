@@ -250,8 +250,10 @@
         "dxPivotGrid-rowFieldArea": "Trascina qui i campi riga",
         "dxPivotGrid-filterFieldArea": "Trascina qui i campi filtro",
 
-        "dxScheduler-ariaLabel": "Scheduler. {0} view",
-
+        "dxScheduler-dateRange": "from {0} to {1}",
+        "dxScheduler-ariaLabel": "Scheduler. {0} view: {1} with {2} appointments",
+        "dxScheduler-ariaLabel-currentIndicator-present": "The current time indicator is visible in the view",
+        "dxScheduler-ariaLabel-currentIndicator-not-present": "The current time indicator is not visible on the screen",
 
         "dxScheduler-appointmentAriaLabel-group": "Group: {0}",
         "dxScheduler-appointmentAriaLabel-recurring": "Recurring appointment",
@@ -796,6 +798,8 @@
         "dxMultiView-itemAriaLabel": "{0} of {1}",
 
         "dxSplitter-resizeHandleAriaLabel": "Split bar",
-        "dxSplitter-resizeHandleAriaRoleDescription": "Separator"
+        "dxSplitter-resizeHandleAriaRoleDescription": "Separator",
+
+        "dxStepper-optionalMark": "(Optional)"
     }
 }

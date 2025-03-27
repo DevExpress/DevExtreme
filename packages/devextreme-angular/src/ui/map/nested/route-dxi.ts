@@ -48,10 +48,10 @@ export class DxiMapRouteComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get mode(): RouteMode {
+    get mode(): RouteMode | string {
         return this._getOption('mode');
     }
-    set mode(value: RouteMode) {
+    set mode(value: RouteMode | string) {
         this._setOption('mode', value);
     }
 

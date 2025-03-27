@@ -272,7 +272,7 @@ const DxRouteConfig = {
   props: {
     color: String,
     locations: Array as PropType<Array<Record<string, any>>>,
-    mode: String as PropType<RouteMode>,
+    mode: String as PropType<RouteMode | string>,
     opacity: Number,
     weight: Number
   }

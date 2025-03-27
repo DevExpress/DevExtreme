@@ -424,15 +424,17 @@ if(devices.real().deviceType === 'desktop') {
                         {
                             startDate: startCell.startDate,
                             endDate: startCell.endDate,
+                            startDateUTC: startCell.startDate,
+                            endDateUTC: startCell.endDate,
                             allDay: startCell.allDay,
-                            groups: undefined,
                             groupIndex: 0,
                         },
                         {
                             startDate: endCell.startDate,
                             endDate: endCell.endDate,
+                            startDateUTC: endCell.startDate,
+                            endDateUTC: endCell.endDate,
                             allDay: endCell.allDay,
-                            groups: undefined,
                             groupIndex: 0,
                         },
                     ], 'correct cells have been selected');

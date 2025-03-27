@@ -1,0 +1,8 @@
+<svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+<title>clipboardtasklist</title>
+<path d="M6 8L9 5L8 4L6 6L5 5L4 6L6 8Z" fill="#333333"/>
+<path d="M10 7H13V5H10V7Z" fill="#333333"/>
+<path d="M13 13H10V11H13V13Z" fill="#333333"/>
+<path d="M9 11L6 14L4 12L5 11L6 12L8 10L9 11Z" fill="#333333"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M16 1C16.5523 1 17 1.44772 17 2V16C17 16.5523 16.5523 17 16 17H2C1.44772 17 1 16.5523 1 16V2C1 1.44772 1.44772 1 2 1H16ZM15 3H3V15H15V3Z" fill="#333333"/>
+</svg>

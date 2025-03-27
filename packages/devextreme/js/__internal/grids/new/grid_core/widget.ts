@@ -2,6 +2,7 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 /* eslint-disable spellcheck/spell-checker */
 // eslint-disable-next-line max-classes-per-file
+import { extend } from '@js/core/utils/extend';
 import Widget from '@js/ui/widget/ui.widget';
 import { DIContext } from '@ts/core/di/index';
 import type { Subscription } from '@ts/core/reactive/index';
@@ -10,6 +11,7 @@ import { render } from 'inferno';
 import * as ColumnsControllerModule from './columns_controller/index';
 import * as DataControllerModule from './data_controller/index';
 import { ErrorController } from './error_controller/error_controller';
+import { ItemsController } from './items_controller/items_controller';
 import { MainView } from './main_view';
 import { defaultOptions, defaultOptionsRules, type Options } from './options';
 import { PagerView } from './pager/view';
@@ -25,6 +27,8 @@ export class GridCoreNewBase<
 
   protected dataController!: DataControllerModule.DataController;
 
+  protected itemsController!: ItemsController;
+
   protected columnsController!: ColumnsControllerModule.ColumnsController;
 
   private pagerView!: PagerView;
@@ -38,6 +42,7 @@ export class GridCoreNewBase<
   protected _registerDIContext(): void {
     this.diContext = new DIContext();
     this.diContext.register(DataControllerModule.DataController);
+    this.diContext.register(ItemsController);
     this.diContext.register(ColumnsControllerModule.ColumnsController);
     this.diContext.register(ToolbarController);
     this.diContext.register(ToolbarView);
@@ -48,6 +53,7 @@ export class GridCoreNewBase<
   protected _initDIContext(): void {
     this.dataController = this.diContext.get(DataControllerModule.DataController);
     this.columnsController = this.diContext.get(ColumnsControllerModule.ColumnsController);
+    this.itemsController = this.diContext.get(ItemsController);
     this.toolbarController = this.diContext.get(ToolbarController);
     this.toolbarView = this.diContext.get(ToolbarView);
     this.pagerView = this.diContext.get(PagerView);
@@ -65,7 +71,7 @@ export class GridCoreNewBase<
     return {
       // @ts-expect-error
       ...super._getDefaultOptions() as {},
-      ...defaultOptions,
+      ...extend(true, {}, defaultOptions) as typeof defaultOptions,
     };
   }
 

@@ -12,6 +12,10 @@ import {
     STEP_TITLE_CLASS,
 } from '__internal/ui/stepper/stepper';
 
+import {
+    FOCUSED_STATE_CLASS,
+} from '__internal/core/widget/widget';
+
 import 'generic_light.css!';
 
 QUnit.testStart(() => {
@@ -80,11 +84,11 @@ QUnit.module('Navigation', moduleConfig, () => {
 
         this.getItems().eq(3).trigger('dxclick');
 
-        assert.equal(this.instance.option('selectedIndex'), 1, 'selectedIndex not changed');
+        assert.strictEqual(this.instance.option('selectedIndex'), 1, 'selectedIndex not changed');
 
         this.getItems().eq(2).trigger('dxclick');
 
-        assert.equal(this.instance.option('selectedIndex'), 2, 'selectedIndex changed');
+        assert.strictEqual(this.instance.option('selectedIndex'), 2, 'selectedIndex changed');
     });
 
     [true, false].forEach((linear) => {
@@ -104,8 +108,8 @@ QUnit.module('Navigation', moduleConfig, () => {
                 .trigger('dxclick')
                 .trigger('dxclick');
 
-            assert.equal(count, 1, 'action triggered only once');
-            assert.equal(this.instance.option('selectedIndex'), 2, 'selectedIndex changed');
+            assert.strictEqual(count, 1, 'action triggered only once');
+            assert.strictEqual(this.instance.option('selectedIndex'), 2, 'selectedIndex changed');
         });
     });
 
@@ -124,13 +128,13 @@ QUnit.module('Navigation', moduleConfig, () => {
             .keyDown('right')
             .keyDown('enter');
 
-        assert.equal(this.instance.option('selectedIndex'), 1, 'selectedIndex not changed');
+        assert.strictEqual(this.instance.option('selectedIndex'), 1, 'selectedIndex not changed');
 
         keyboard
             .keyDown('left')
             .keyDown('enter');
 
-        assert.equal(this.instance.option('selectedIndex'), 2, 'selectedIndex changed');
+        assert.strictEqual(this.instance.option('selectedIndex'), 2, 'selectedIndex changed');
     });
 
     QUnit.test('In linear mode Home/End keys should select previous/next item', function(assert) {
@@ -144,11 +148,59 @@ QUnit.module('Navigation', moduleConfig, () => {
 
         keyboard.keyDown('end');
 
-        assert.equal(this.instance.option('selectedIndex'), 2, 'selected next item');
+        assert.strictEqual(this.instance.option('selectedIndex'), 2, 'selected next item');
+        assert.strictEqual(this.getItems().eq(2).hasClass(FOCUSED_STATE_CLASS), true, 'next item is focused');
 
         keyboard.keyDown('home');
 
-        assert.equal(this.instance.option('selectedIndex'), 1, 'selected previous item');
+        assert.strictEqual(this.instance.option('selectedIndex'), 1, 'selected previous item');
+        assert.strictEqual(this.getItems().eq(1).hasClass(FOCUSED_STATE_CLASS), true, 'previous item is focused');
+    });
+
+    QUnit.test('In linear mode Home/End keys should focus first/last item, selectOnFocus: false', function(assert) {
+        this.reinit({
+            items: [{}, {}, {}, {}, {}],
+            selectedIndex: 2,
+            linear: true,
+            selectOnFocus: false,
+            focusStateEnabled: true,
+        });
+
+        const keyboard = keyboardMock(this.$element);
+
+        keyboard.keyDown('end');
+
+        assert.strictEqual(this.instance.option('selectedIndex'), 2, 'selected index is not changed');
+        assert.strictEqual(this.getItems().eq(4).hasClass(FOCUSED_STATE_CLASS), true, 'last item is focused');
+
+        keyboard.keyDown('home');
+
+        assert.strictEqual(this.instance.option('selectedIndex'), 2, 'selected index is not changed');
+        assert.strictEqual(this.getItems().eq(0).hasClass(FOCUSED_STATE_CLASS), true, 'first item is focused');
+    });
+
+    [true, false].forEach((selectOnFocus) => {
+        QUnit.test(`In non-linear mode Home/End keys should focus first/last item, selectOnFocus: ${selectOnFocus}`, function(assert) {
+            this.reinit({
+                items: [{}, {}, {}, {}, {}],
+                selectedIndex: 2,
+                linear: false,
+                selectOnFocus,
+                focusStateEnabled: true,
+            });
+
+            const keyboard = keyboardMock(this.$element);
+
+            keyboard.keyDown('end');
+
+            assert.strictEqual(this.instance.option('selectedIndex'), selectOnFocus ? 4 : 2, 'selected index is set correctly');
+            assert.strictEqual(this.getItems().eq(4).hasClass(FOCUSED_STATE_CLASS), true, 'last item is focused');
+
+            keyboard.keyDown('home');
+
+            assert.strictEqual(this.instance.option('selectedIndex'), selectOnFocus ? 0 : 2, 'selected index is set correctly');
+            assert.strictEqual(this.getItems().eq(0).hasClass(FOCUSED_STATE_CLASS), true, 'first item is focused');
+        });
     });
 
     QUnit.test('Connector value should change on selection changed', function(assert) {
@@ -158,11 +210,11 @@ QUnit.module('Navigation', moduleConfig, () => {
             linear: false,
         });
 
-        assert.equal(this.getConnector().option('value'), '25%', 'initial connector value is correct');
+        assert.equal(this.getConnector().option('value'), 25, 'initial connector value is correct');
 
         this.getItems().eq(3).trigger('dxclick');
 
-        assert.equal(this.getConnector().option('value'), '75%', 'connector value changed');
+        assert.equal(this.getConnector().option('value'), 75, 'connector value is changed');
     });
 
     QUnit.test('Connector value should change if selectedIndex changed in runtime', function(assert) {
@@ -172,11 +224,11 @@ QUnit.module('Navigation', moduleConfig, () => {
             linear: false,
         });
 
-        assert.equal(this.getConnector().option('value'), '25%', 'initial connector value is correct');
+        assert.equal(this.getConnector().option('value'), 25, 'initial connector value is correct');
 
         this.instance.option('selectedIndex', 3);
 
-        assert.equal(this.getConnector().option('value'), '75%', 'connector value changed');
+        assert.equal(this.getConnector().option('value'), 75, 'connector value is changed');
     });
 
     QUnit.test('Connector value should change if selectedItem changed in runtime', function(assert) {
@@ -187,11 +239,11 @@ QUnit.module('Navigation', moduleConfig, () => {
             linear: false,
         });
 
-        assert.equal(this.getConnector().option('value'), '25%', 'initial connector value is correct');
+        assert.equal(this.getConnector().option('value'), 25, 'initial connector value is correct');
 
         this.instance.option('selectedItem', items[3]);
 
-        assert.equal(this.getConnector().option('value'), '75%', 'connector value changed');
+        assert.equal(this.getConnector().option('value'), 75, 'connector value is changed');
     });
 });
 
@@ -251,5 +303,33 @@ QUnit.module('Connector integration', moduleConfig, () => {
         this.instance.option({ orientation: 'vertical' });
 
         assert.deepEqual(this.getConnector().option('orientation'), 'vertical', 'orientation value is passed');
+    });
+});
+
+QUnit.module('Focus', moduleConfig, () => {
+    QUnit.test('focusedElement should be cleared after focusout, and the selected step should have focus class after focusing', function(assert) {
+        this.reinit({
+            items: [{}, {}, {}, {}],
+            selectedIndex: 1,
+            linear: false,
+            selectOnFocus: false,
+        });
+
+        const keyboard = keyboardMock(this.$element);
+
+        keyboard
+            .keyDown('right')
+            .keyDown('right');
+
+        assert.strictEqual(this.getItems().eq(3).hasClass(FOCUSED_STATE_CLASS), true, 'focused class is added');
+
+        this.$element.focusout();
+
+        assert.strictEqual(this.getItems().eq(3).hasClass(FOCUSED_STATE_CLASS), false, 'focused class is removed after focusout');
+        assert.strictEqual(this.instance.option('focusedElement'), null, 'focusedElement is cleared after focusout');
+
+        this.$element.focus();
+
+        assert.strictEqual(this.getItems().eq(1).hasClass(FOCUSED_STATE_CLASS), true, 'focused class is applied to the selected element after focusing');
     });
 });

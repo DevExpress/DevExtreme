@@ -2,6 +2,7 @@
 /* eslint-disable spellcheck/spell-checker */
 import registerComponent from '@js/core/component_registrator';
 import $ from '@js/core/renderer';
+import { extend } from '@js/core/utils/extend';
 import { MainView as MainViewBase } from '@ts/grids/new/grid_core/main_view';
 import { OptionsController as OptionsControllerBase } from '@ts/grids/new/grid_core/options_controller/options_controller';
 import { GridCoreNew } from '@ts/grids/new/grid_core/widget';
@@ -46,7 +47,7 @@ export class CardViewBase extends GridCoreNew {
   protected _getDefaultOptions() {
     return {
       ...super._getDefaultOptions(),
-      ...defaultOptions,
+      ...extend(true, {}, defaultOptions) as typeof defaultOptions,
     };
   }
 }
