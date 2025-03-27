@@ -5,9 +5,9 @@ import {
   it,
   jest,
 } from '@jest/globals';
-import type { Prompt } from '@js/ai/ai';
+import type { Prompt, RequestCallbacks } from '@js/ai/ai';
 import { BaseCommand } from '@ts/core/ai/commands/base';
-import type { RequestCallbacks, RequestManager } from '@ts/core/ai/core//request_manager';
+import type { RequestManager } from '@ts/core/ai/core//request_manager';
 import type { PromptData, PromptManager, PromptTemplateName } from '@ts/core/ai/core/prompt_manager';
 
 interface TestCommandParams {

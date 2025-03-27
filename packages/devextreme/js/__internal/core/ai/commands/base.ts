@@ -1,8 +1,6 @@
-import type { TranslateResult } from '@ts/core/ai/commands/translate';
+import type { BaseResult, RequestCallbacks } from '@js/ai/ai';
 import type { PromptData, PromptManager, PromptTemplateName } from '@ts/core/ai/core/prompt_manager';
-import type { RequestCallbacks, RequestManager } from '@ts/core/ai/core/request_manager';
-
-export type BaseResult = TranslateResult;
+import type { RequestManager } from '@ts/core/ai/core/request_manager';
 
 export abstract class BaseCommand {
   constructor(

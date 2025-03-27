@@ -1,11 +1,4 @@
-import type { AIProvider, Prompt } from '@js/ai/ai';
-import type { BaseResult } from '@ts/core/ai/commands/base';
-
-export interface RequestCallbacks {
-  onChunk?: (chunk: string) => void;
-  onComplete?: (finalResponse: BaseResult) => void;
-  onError?: (error: Error) => void;
-}
+import type { AIProvider, Prompt, RequestCallbacks } from '@js/ai/ai';
 
 export const ERROR_MESSAGE = {
   METHOD_NOT_IMPLEMENTED: 'No method for queries has been implemented',
