@@ -368,19 +368,6 @@ export function runTestAtPage(test, demoUrl, shouldSkipJsError) {
   return executor.page(demoUrl);
 }
 
-export function getPortByFramework(framework) {
-  switch (framework) {
-    case 'Angular':
-      return '8081'
-    case 'Vue':
-      return '8082'
-    case 'React':
-      return '8083'
-    default:
-      return '8080'
-  }
-}
-
 export function runManualTestCore(
   testObject,
   widget,
@@ -407,11 +394,10 @@ export function runManualTestCore(
     }
 
     const theme = process.env.THEME.replace('generic.', '');
-    testURL = `http://127.0.0.1:8080/Demos/${widget}/${demo}/${framework}/?theme=dx.${theme}`;
+    testURL = `http://127.0.0.1:808${getPortByIndex(index)}/${widget}/${demo}/${framework}/?theme=dx.${theme}`;
   } else {
     changeTheme(__dirname, `../../Demos/${widget}/${demo}/${framework}/index.html`, process.env.THEME);
-    
-    testURL = `http://127.0.0.1:${getPortByFramework(framework)}/apps/demos/Demos/${widget}/${demo}/${framework}/`;
+    testURL = `http://127.0.0.1:808${getPortByIndex(index)}/apps/demos/Demos/${widget}/${demo}/${framework}/`;
   }
 
   const test = testObject.clientScripts([
