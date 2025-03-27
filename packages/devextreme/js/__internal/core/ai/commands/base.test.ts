@@ -1,5 +1,4 @@
 import {
-  // afterEach,
   beforeEach,
   describe,
   expect,
@@ -13,7 +12,7 @@ import { PromptManager } from '@ts/core/ai/core/prompt_manager';
 import { RequestManager } from '@ts/core/ai/core/request_manager';
 import { Provider } from '@ts/core/ai/testUtils/provider_mock';
 
-jest.doMock('@ts/core/ai/templates/index', () => ({
+jest.mock('@ts/core/ai/templates/index', () => ({
   templates: {
     'test-template-name': {
       system: 'System test template with {{first}}',
@@ -54,36 +53,14 @@ describe('BaseCommand', () => {
   // eslint-disable-next-line @typescript-eslint/init-declarations
   let command: TestCommand;
 
-  // let templatesOriginal = null;
-
-  // const setTestTemplates = (): void => {
-  //   // @ts-expect-error
-  //   templatesOriginal = promptManager.templates;
-
-  //   // @ts-expect-error
-  //   promptManager.templates = new Map(Object.entries({
-  //     'test-template-name': {
-  //       system: 'System test template with {{first}}',
-  //       user: 'User test template with {{second}}',
-  //     },
-  //   }));
-  // };
-
   beforeEach(() => {
     const provider: AIProvider = new Provider();
 
     requestManager = new RequestManager(provider);
     promptManager = new PromptManager();
 
-    // setTestTemplates();
-
     command = new TestCommand(promptManager, requestManager);
   });
-
-  // afterEach(() => {
-  //   // @ts-expect-error
-  //   promptManager.templates = templatesOriginal;
-  // });
 
   describe('constructor', () => {
     it('stores PromptManager and RequestManager correctly', () => {

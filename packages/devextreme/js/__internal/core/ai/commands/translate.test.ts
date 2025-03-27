@@ -7,7 +7,7 @@ import {
 } from '@jest/globals';
 import type { AIProvider, RequestCallbacks, TranslateCommandParams } from '@js/ai/ai';
 import { TranslateCommand } from '@ts/core/ai/commands/translate';
-import type { PromptData } from '@ts/core/ai/core/prompt_manager';
+// import type { PromptData } from '@ts/core/ai/core/prompt_manager';
 import { PromptManager } from '@ts/core/ai/core/prompt_manager';
 import { RequestManager } from '@ts/core/ai/core/request_manager';
 import { Provider } from '@ts/core/ai/testUtils/provider_mock';
@@ -74,25 +74,25 @@ describe('TranslateCommand', () => {
     it('correctly calls promptManager.buildPrompt and returns the abort function', () => {
       const params: TranslateCommandParams = { text: 'text to translate', lang: 'French' };
       const callbacks: RequestCallbacks = { onComplete: () => {} };
+      const buildPromptSpy = jest.spyOn(promptManager, 'buildPrompt');
+      const sendRequestSpy = jest.spyOn(requestManager, 'sendRequest');
 
       const abort = command.execute(params, callbacks);
 
-      const buildPromptSpy = jest.spyOn(promptManager, 'buildPrompt');
+      expect(buildPromptSpy).toHaveBeenCalledTimes(1);
 
-      // expect(buildPromptSpy).toHaveBeenCalledTimes(1);
+      expect(promptManager.buildPrompt).toHaveBeenCalledWith('translate', {
+        system: { lang: 'French' },
+        user: { text: 'text to translate', lang: 'French' },
+      });
 
-      // expect(promptManager.buildPrompt).toHaveBeenCalledWith('translate', {
-      //   user: { text: 'text to translate', lang: 'French' },
-      //   system: { lang: 'French' },
-      // });
+      expect(promptManager.buildPrompt).toHaveReturnedWith({
+        system: 'You are a translation assistant, who speaks French at a native level.',
+        user: 'Translate "text to translate" to French language.',
+      });
 
-      // expect(promptManager.buildPrompt).toHaveReturnedWith({
-      //   user: 'user prompt',
-      //   system: 'system prompt',
-      // });
-
-      // expect(typeof abort).toBe('function');
-      // expect(requestManager.sendRequest).toHaveBeenCalledTimes(1);
+      expect(typeof abort).toBe('function');
+      expect(sendRequestSpy).toHaveBeenCalledTimes(1);
     });
 
     // it('pulls onChunk callback when getting a chunk', () => {
