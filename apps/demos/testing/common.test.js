@@ -6,7 +6,7 @@ import { existsSync } from 'fs';
 import { compareScreenshot } from 'devextreme-screenshot-comparer';
 import { axeCheck, createReport } from '@testcafe-community/axe';
 import {
-  localServerUrl,
+  getPortByIndex,
   runTestAtPage,
   shouldRunFramework,
   shouldRunTestAtIndex,
@@ -388,10 +388,10 @@ const SKIPPED_TESTS = {
     let pageURL = '';
     const theme = process.env.THEME.replace('generic.', '');
     if (isGitHubDemos) {
-      pageURL = `${localServerUrl}Demos/${widgetName}/${demoName}/${approach}/?theme=dx.${theme}`;
+      pageURL = `http://127.0.0.1:808${getPortByIndex(index)}/Demos/${widgetName}/${demoName}/${approach}/?theme=dx.${theme}`;
     } else {
       changeTheme(__dirname, `../${demoPath}/index.html`, process.env.THEME);
-      pageURL = `${localServerUrl}apps/demos/Demos/${widgetName}/${demoName}/${approach}/`;
+      pageURL = `http://127.0.0.1:808${getPortByIndex(index)}/apps/demos/Demos/${widgetName}/${demoName}/${approach}/`;
     }
     // remove when tests enabled not only for datagrid
     if (isGitHubDemos && (widgetName !== 'DataGrid' || gitHubIgnored.includes(demoName))) {

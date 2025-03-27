@@ -4,8 +4,6 @@ import { ClientFunction, Selector } from 'testcafe';
 import { THEME } from './helpers/theme-utils';
 import { gitHubIgnored } from './github-ignored-list';
 
-export const localServerUrl = 'http://localhost:8080/'
-
 const settings = {
   concurrency: undefined,
   targetFramework: undefined,
@@ -367,6 +365,19 @@ export function runTestAtPage(test, demoUrl, shouldSkipJsError) {
   return executor.page(demoUrl);
 }
 
+export function getPortByFramework(framework) {
+  switch (framework) {
+    case 'Angular':
+      return '8081'
+    case 'Vue':
+      return '8082'
+    case 'React':
+      return '8083'
+    default:
+      return '8080'
+  }
+}
+
 export function runManualTestCore(
   testObject,
   widget,
@@ -393,11 +404,11 @@ export function runManualTestCore(
     }
 
     const theme = process.env.THEME.replace('generic.', '');
-    testURL = `${localServerUrl}Demos/${widget}/${demo}/${framework}/?theme=dx.${theme}`;
+    testURL = `http://127.0.0.1:8080/Demos/${widget}/${demo}/${framework}/?theme=dx.${theme}`;
   } else {
     changeTheme(__dirname, `../../Demos/${widget}/${demo}/${framework}/index.html`, process.env.THEME);
     
-    testURL = `${localServerUrl}apps/demos/Demos/${widget}/${demo}/${framework}/`;
+    testURL = `http://127.0.0.1:${getPortByFramework(framework)}/apps/demos/Demos/${widget}/${demo}/${framework}/`;
   }
 
   const test = testObject.clientScripts([
@@ -439,6 +450,10 @@ export function runManualTest(widget, demo, framework, callback) {
   } else {
     runManualTestCore(test, widget, demo, framework, callback);
   }
+}
+
+export function getPortByIndex(testIndex) {
+  return (settings.total && (Math.floor(testIndex / settings.total) % settings.concurrency)) || 0;
 }
 
 export function updateConfig(customSettings) {
