@@ -1,37 +1,75 @@
 import {
+  beforeEach,
   describe,
   expect,
-  test,
+  it,
+  jest,
 } from '@jest/globals';
-import type { ResponseParams } from '@js/ai/ai';
+import type {
+  AI as IAI,
+  AIProvider,
+  RequestCallbacks,
+  TranslateCommandParams,
+} from '@js/ai/ai';
+import { TranslateCommand } from '@ts/core/ai/commands/translate';
 import { AI } from '@ts/core/ai/core/ai';
+import { PromptManager } from '@ts/core/ai/core/prompt_manager';
+import { RequestManager } from '@ts/core/ai/core/request_manager';
 
 describe('AI Integration', () => {
-  test('sendRequest is called with correct parameters', (done) => {
-    expect.assertions(2);
+  // eslint-disable-next-line @typescript-eslint/init-declarations
+  let provider: AIProvider;
+  // eslint-disable-next-line @typescript-eslint/init-declarations
+  let ai: IAI;
 
-    const sendRequest = ({ prompt, onChunk }): ResponseParams => {
-      expect(prompt).toEqual({
-        system: 'You are a translation assistant, who speaks {{lang}} at a native level.',
-        user: 'Translate "text" to French language.',
-      });
-
-      expect(typeof onChunk).toBe('function');
-
-      return {
+  beforeEach(() => {
+    provider = {
+      sendRequest: jest.fn(() => ({
         promise: Promise.resolve(),
-        abort: (): void => {},
-      };
+        abort: jest.fn(),
+      })),
     };
 
-    const ai = new AI({ sendRequest });
+    ai = new AI(provider);
+  });
 
-    ai.translate(
-      { text: 'text', lang: 'French' },
-      {
-        onComplete: () => done(),
+  describe('constructor', () => {
+    it('creates and stores PromptManager and RequestManager', () => {
+      // @ts-expect-error
+      expect(ai.promptManager).toBeInstanceOf(PromptManager);
+      // @ts-expect-error
+      expect(ai.requestManager).toBeInstanceOf(RequestManager);
+    });
+  });
+
+  describe('translate', () => {
+    it('calls execute with TranslateCommand correctly', () => {
+      const params: TranslateCommandParams = { text: 'Hello', lang: 'French' };
+      const callbacks: RequestCallbacks = {
+        onComplete: () => {},
         onChunk: () => {},
-      },
-    );
+        onError: () => {},
+      };
+
+      const executeSpy = jest.spyOn(TranslateCommand.prototype, 'execute');
+
+      ai.translate(params, callbacks);
+
+      expect(executeSpy).toHaveBeenCalledTimes(1);
+      expect(executeSpy).toHaveBeenCalledWith(params, callbacks);
+    });
+
+    it('returns the abort function received from the command', () => {
+      const abort = (): void => {};
+
+      jest
+        // @ts-expect-error
+        .spyOn(ai.requestManager, 'sendRequest')
+        .mockImplementation(() => abort);
+
+      const abortRequest = ai.translate({} as TranslateCommandParams, {});
+
+      expect(abortRequest).toBe(abort);
+    });
   });
 });
