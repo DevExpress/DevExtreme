@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-return */
 import { computed } from '@ts/core/reactive/index';
 import gridCoreUtils from '@ts/grids/grid_core/m_utils';
 
@@ -14,9 +15,8 @@ export class FilterController {
   public readonly displayFilter = computed(
     (filterEnabled, filter, searchFilter) => {
       if (!filterEnabled) {
-        return null;
+        return searchFilter;
       }
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
       return gridCoreUtils.combineFilters([filter, searchFilter]);
     },
     [
