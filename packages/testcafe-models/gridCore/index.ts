@@ -2,8 +2,8 @@ import { ClientFunction, Selector } from 'testcafe';
 import Widget from '../internal/widget';
 import Pager from '../pagination';
 import FilterPanel from './filter/panel';
+import ColumnChooser from '../dataGrid/columnChooser';
 import type { WidgetName } from '../types';
-import ColumnChooser from './columnChooser';
 
 export const CLASS = {
     pager: 'pager',

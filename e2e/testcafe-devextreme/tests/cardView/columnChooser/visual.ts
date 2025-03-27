@@ -11,11 +11,11 @@ const CARD_VIEW_SELECTOR = '#container';
 test('column chooser in select mode', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const cardView = new CardView(CARD_VIEW_SELECTOR);
-  const { popup } = cardView.getColumnChooser();
+  const columnChooser = cardView.getColumnChooser();
 
   await cardView.apiShowColumnChooser();
 
-  await takeScreenshot('card-view_column-chooser.png', popup.element);
+  await takeScreenshot('card-view_column-chooser.png', columnChooser.content);
 
   await t
     .expect(compareResults.isValid())

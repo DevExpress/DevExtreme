@@ -9,10 +9,10 @@ test('public method showColumnChooser', async (t) => {
   const cardView = new CardView('#container');
   const columnChooser = cardView.getColumnChooser();
 
-  await t.expect(columnChooser.isOpen).notOk();
+  await t.expect(columnChooser.isOpened).notOk();
 
   await cardView.apiShowColumnChooser();
-  await t.expect(columnChooser.isOpen).ok();
+  await t.expect(columnChooser.isOpened).ok();
 }).before(async () => {
   await createWidget('dxCardView', {
     columns: ['Column 1'],
@@ -29,7 +29,7 @@ test('public method hideColumnChooser', async (t) => {
   await t.click(cardView.getColumnChooserButton());
 
   await cardView.apiHideColumnChooser();
-  await t.expect(columnChooser.isOpen).notOk();
+  await t.expect(columnChooser.isOpened).notOk();
 }).before(async () => {
   await createWidget('dxCardView', {
     columns: ['Column 1'],

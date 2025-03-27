@@ -9,11 +9,11 @@ const CARD_VIEW_SELECTOR = '#container';
 
 test('column chooser popup should have aria-label attribute', async (t) => {
   const cardView = new CardView(CARD_VIEW_SELECTOR);
-  const { popup } = cardView.getColumnChooser();
+  const columnChooser = cardView.getColumnChooser();
 
   await cardView.apiShowColumnChooser();
 
-  await t.expect(popup.element.getAttribute('aria-label')).ok();
+  await t.expect(columnChooser.content.getAttribute('aria-label')).ok();
 }).before(async () => createWidget('dxCardView', {
   columnChooser: {
     enabled: true,

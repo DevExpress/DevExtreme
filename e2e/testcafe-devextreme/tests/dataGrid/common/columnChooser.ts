@@ -54,7 +54,7 @@ test('Column chooser checkboxes should be aligned correctly with plain structure
   const columnChooser = dataGrid.getColumnChooser();
 
   await t
-    .expect(await takeScreenshot('column-chooser-checkbox-alignment-plain-structure.png', columnChooser.popup.element))
+    .expect(await takeScreenshot('column-chooser-checkbox-alignment-plain-structure.png', columnChooser.content))
     .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
@@ -85,7 +85,7 @@ test('Column chooser checkboxes should be aligned correctly with tree structure'
   const columnChooser = dataGrid.getColumnChooser();
 
   await t
-    .expect(await takeScreenshot('column-chooser-checkbox-alignment-tree-structure.png', columnChooser.popup.element))
+    .expect(await takeScreenshot('column-chooser-checkbox-alignment-tree-structure.png', columnChooser.content))
     .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
@@ -117,12 +117,12 @@ test('Column chooser should support string height and width', async (t) => {
   await t
     .click(dataGrid.getHeaderPanel().getColumnChooserButton());
 
-  const columnChooserPopup = dataGrid.getColumnChooser().popup.element;
+  const columnChooserContent = dataGrid.getColumnChooser().content;
 
   await t
-    .expect(columnChooserPopup.getStyleProperty('height'))
+    .expect(columnChooserContent.getStyleProperty('height'))
     .eql('400px')
-    .expect(columnChooserPopup.getStyleProperty('width'))
+    .expect(columnChooserContent.getStyleProperty('width'))
     .eql('330px');
 }).before(async () => createWidget('dxDataGrid', {
   dataSource: [],
