@@ -9764,6 +9764,21 @@ declare module DevExpress.ui {
      */
     type HeaderPanel<TRowData = unknown, TKey = unknown> = {
       /**
+       * [descr:HeaderPanel.dragging]
+       */
+      dragging?: Pick<
+        dxSortableOptions,
+        | 'dropFeedbackMode'
+        | 'scrollSpeed'
+        | 'scrollSensitivity'
+        | 'onDragChange'
+        | 'onDragEnd'
+        | 'onDragMove'
+        | 'onDragStart'
+        | 'onRemove'
+        | 'onReorder'
+      >;
+      /**
        * [descr:HeaderPanel.visible]
        */
       visible?: boolean;
