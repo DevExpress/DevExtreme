@@ -6,6 +6,7 @@ import { asyncNoop, noop } from '@js/core/utils/common';
 import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import { isDefined, isObject, isPlainObject } from '@js/core/utils/type';
+import type { DxEvent } from '@js/events';
 import type { dxMenuBaseOptions } from '@js/ui/context_menu/ui.menu_base';
 import type { Item } from '@js/ui/menu';
 import { render } from '@js/ui/widget/utils.ink_ripple';
@@ -202,7 +203,7 @@ class MenuBase extends HierarchicalCollectionWidget<Properties> {
     const { items } = itemData;
     let $popOutContainer;
 
-    if (items && items.length) {
+    if (items?.length) {
       const $popOutImage = $('<div>').addClass(DX_MENU_ITEM_POPOUT_CLASS);
       $popOutContainer = $('<span>').addClass(DX_MENU_ITEM_POPOUT_CONTAINER_CLASS).append($popOutImage);
     }
@@ -312,7 +313,7 @@ class MenuBase extends HierarchicalCollectionWidget<Properties> {
     return `.${DX_MENU_ITEM_WRAPPER_CLASS}`;
   }
 
-  _hoverStartHandler(e) {
+  _hoverStartHandler(e: DxEvent): void {
     const $itemElement = this._getItemElementByEventArgs(e);
 
     if (!$itemElement || this._isItemDisabled($itemElement)) return;
@@ -320,8 +321,14 @@ class MenuBase extends HierarchicalCollectionWidget<Properties> {
     e.stopPropagation();
 
     if (this._getShowSubmenuMode() === 'onHover') {
-      clearTimeout(this._showSubmenusTimeout);
-      this._showSubmenusTimeout = setTimeout(this._showSubmenu.bind(this, $itemElement), this._getSubmenuDelay('show'));
+      const submenuDelay = this._getSubmenuDelay('show');
+
+      if (submenuDelay === 0) {
+        this._showSubmenu($itemElement);
+      } else {
+        clearTimeout(this._showSubmenusTimeout);
+        this._showSubmenusTimeout = setTimeout(this._showSubmenu.bind(this, $itemElement), submenuDelay);
+      }
     }
   }
 
@@ -382,7 +389,7 @@ class MenuBase extends HierarchicalCollectionWidget<Properties> {
   }
 
   _hasSubmenu(node) {
-    return node && node.internalFields.childrenKeys.length;
+    return node?.internalFields.childrenKeys.length;
   }
 
   _renderContentImpl() {
@@ -459,7 +466,7 @@ class MenuBase extends HierarchicalCollectionWidget<Properties> {
 
     const $node = $nodeElement ?? this._createDOMElement($nodeContainer);
 
-    if (items[index + 1] && items[index + 1].beginGroup) {
+    if (items[index + 1]?.beginGroup) {
       $node.addClass(DX_MENU_ITEM_LAST_GROUP_ITEM);
     }
 
