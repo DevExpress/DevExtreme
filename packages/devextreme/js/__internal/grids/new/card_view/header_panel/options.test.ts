@@ -57,7 +57,6 @@ describe('Options', () => {
           columns: ['column1'],
           allowColumnReordering: true,
           headerPanel: {
-            // @ts-expect-error ignored as dragging is tmp commented in .d.ts
             dragging: {
               dropFeedbackMode: 'push',
               scrollSpeed: 555,

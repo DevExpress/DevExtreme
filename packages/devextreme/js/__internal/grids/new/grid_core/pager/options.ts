@@ -1,6 +1,6 @@
 import type { Mode } from '@js/common';
 import messageLocalization from '@js/localization/message';
-import type { PagerOptions as Options } from '@js/ui/card_view';
+import type { PagerConfiguration as Options } from '@js/ui/card_view';
 
 export type PageSize = number | 'all';
 

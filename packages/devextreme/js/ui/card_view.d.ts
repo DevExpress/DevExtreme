@@ -1,4 +1,4 @@
-import { template } from '../common';
+import { Mode, template } from '../common';
 import { UserDefinedElement } from '../core/element';
 import {
  ColumnBase, DataErrorOccurredInfo, Pager, ScrollingBase,
@@ -9,7 +9,6 @@ import { EventInfo } from '../events';
 import { dxToolbarItem, ToolbarItemLocation } from './toolbar';
 import { dxSortableOptions } from './sortable';
 import { dxLoadPanelOptions } from './load_panel';
-import { HighlightedTextItem } from '../__internal/grids/new/grid_core/search/types';
 
 // #region DataController
 
@@ -72,7 +71,7 @@ interface RemoteOperations {
  * @hidden
  * @namespace DevExpress.ui.dxCardView
  */
-export type DataControllerOptions<TRowData = unknown, TKey = unknown> = {
+export type DataControllerConfiguration<TRowData = unknown, TKey = unknown> = {
     /**
      * @docid
      * @default undefined
@@ -93,17 +92,10 @@ export type DataControllerOptions<TRowData = unknown, TKey = unknown> = {
     keyExpr?: string | string[];
     /**
      * @docid
-     * @default undefined
-     * @action
-     * @public
-     */
-    onDataErrorOccurred?: (args: DataErrorOccurredInfo & EventInfo<dxCardView>) => void;
-    /**
-     * @docid
      * @default "auto"
      * @public
      */
-    remoteOperations?: RemoteOperations | boolean | 'auto';
+    remoteOperations?: RemoteOperations | boolean | Mode;
 };
 
 // #endregion
@@ -115,7 +107,7 @@ export type DataControllerOptions<TRowData = unknown, TKey = unknown> = {
  * @hidden
  * @namespace DevExpress.ui.dxCardView
  */
-export type PagerOptions = {
+export type PagerConfiguration = {
     /**
      * @docid
      * @public
@@ -154,7 +146,7 @@ export type ToolbarItem = dxToolbarItem & {
  * @hidden
  * @namespace DevExpress.ui.dxCardView
  */
-export type ToolbarOptions = {
+export type ToolbarConfiguration = {
     /**
      * @docid
      * @public
@@ -191,11 +183,13 @@ export interface Cell {
     /**
      * @public
      * @docid
+     * @type object
      */
     value: unknown;
     /**
      * @public
      * @docid
+     * @type object
      */
     displayValue: unknown;
     /**
@@ -203,11 +197,6 @@ export interface Cell {
      * @docid
      */
     text: string;
-    /**
-     * @public
-     * @docid
-     */
-    highlightedText: HighlightedTextItem[] | null;
     /**
      * @public
      * @docid
@@ -296,6 +285,7 @@ type RequiredColumnProps = 'alignment' | 'dataType' | 'visible' | 'visibleIndex'
 /**
  * @docid
  * @public
+ * @type object
  * @namespace DevExpress.ui.dxCardView
  */
 export type Column<TRowData = unknown, TKey = unknown> =
@@ -307,7 +297,7 @@ export type Column<TRowData = unknown, TKey = unknown> =
  * @hidden
  * @namespace DevExpress.ui.dxCardView
  */
-export type ColumnsControllerOptions<TRowData = unknown, TKey = unknown> = {
+export type ColumnsControllerConfiguration<TRowData = unknown, TKey = unknown> = {
     /**
      * @public
      * @docid
@@ -319,19 +309,16 @@ export type ColumnsControllerOptions<TRowData = unknown, TKey = unknown> = {
 
 // #region HeaderPanel
 
-type SortableProperties = 'dropFeedbackMode' | 'scrollSpeed' | 'scrollSensitivity' | 'onDragChange' | 'onDragEnd' | 'onDragMove' | 'onDragStart' | 'onRemove' | 'onReorder';
-
-export type HeaderPanelDraggingOptions = Pick<dxSortableOptions, SortableProperties>;
-
 /**
  * @docid
  */
 type HeaderPanel<TRowData = unknown, TKey = unknown> = {
-    // /**
-    //  * @docid
-    //  * @public
-    //  */
-    // dragging?: HeaderPanelDraggingOptions;
+    /**
+     * @docid
+     * @public
+     * @type object
+     */
+    dragging?: Pick<dxSortableOptions, 'dropFeedbackMode' | 'scrollSpeed' | 'scrollSensitivity' | 'onDragChange' | 'onDragEnd' | 'onDragMove' | 'onDragStart' | 'onRemove' | 'onReorder'>;
     /**
      * @docid
      * @public
@@ -355,7 +342,7 @@ type HeaderPanel<TRowData = unknown, TKey = unknown> = {
  * @hidden
  * @namespace DevExpress.ui.dxCardView
  */
-export type HeaderPanelOptions<TRowData = unknown, TKey = unknown> = {
+export type HeaderPanelConfiguration<TRowData = unknown, TKey = unknown> = {
     /**
      * @docid
      */
@@ -370,11 +357,13 @@ export type HeaderPanelOptions<TRowData = unknown, TKey = unknown> = {
  * @docid
  * @hidden
  * @namespace DevExpress.ui.dxCardView
+ * @type object
  */
-export interface BaseContentViewOptions {
+export interface BaseContentViewConfiguration {
     /**
      * @docid
      * @public
+     * @type object
      */
     scrolling?: Pick<ScrollingBase, 'scrollByContent' | 'scrollByThumb' | 'showScrollbar' | 'useNative'>;
     /**
@@ -439,13 +428,14 @@ interface CardHeader<TRowData = unknown> {
  * @docid
  * @hidden
  * @namespace DevExpress.ui.dxCardView
+ * @type object
  */
-export interface ContentViewOptions<TRowData = unknown> extends BaseContentViewOptions {
+export interface ContentViewConfiguration<TRowData = unknown> extends BaseContentViewConfiguration {
     /**
      * @docid
      * @public
      */
-    cardsPerRow?: number | 'auto';
+    cardsPerRow?: number | Mode;
     /**
      * @docid
      * @public
@@ -480,16 +470,24 @@ export interface ContentViewOptions<TRowData = unknown> extends BaseContentViewO
  * @public
  * @docid
  * @deprecated use Properties instead
- * @inherits DataControllerOptions,PagerOptions,ToolbarOptions,ColumnsControllerOptions,HeaderPanelOptions,ContentViewOptions
+ * @inherits DataControllerConfiguration,PagerConfiguration,ToolbarConfiguration,ColumnsControllerConfiguration,HeaderPanelConfiguration,ContentViewConfiguration
  */
 export interface dxCardViewOptions<TRowData = unknown, TKey = unknown> extends WidgetOptions<dxCardView>,
-DataControllerOptions<TRowData, TKey>,
-PagerOptions,
-ColumnsControllerOptions<TRowData, TKey>,
-HeaderPanelOptions<TRowData, TKey>,
-ContentViewOptions<TRowData>,
-ToolbarOptions {
-
+DataControllerConfiguration<TRowData, TKey>,
+PagerConfiguration,
+ColumnsControllerConfiguration<TRowData, TKey>,
+HeaderPanelConfiguration<TRowData, TKey>,
+ContentViewConfiguration<TRowData>,
+ToolbarConfiguration {
+    /**
+     * @docid
+     * @default undefined
+     * @type_function_param1 e:object
+     * @type_function_param1_field component:this
+     * @action
+     * @public
+     */
+    onDataErrorOccurred?: (e: EventInfo<dxCardView> & DataErrorOccurredInfo) => void;
 }
 
 /** @public */

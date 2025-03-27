@@ -1,8 +1,6 @@
-import type { DataControllerOptions as Options } from '@js/ui/card_view';
+import type { DataControllerConfiguration as PublicOptions, dxCardViewOptions } from '@js/ui/card_view';
 
-export type {
-  Options,
-};
+export type Options = PublicOptions & Pick<dxCardViewOptions, 'onDataErrorOccurred'>;
 
 export const defaultOptions = {
   paging: {

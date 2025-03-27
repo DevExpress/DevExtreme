@@ -25,10 +25,11 @@ export { ExplicitTypes } from 'devextreme/ui/card_view';
 
 import DataSource from 'devextreme/data/data_source';
 import { CardCover, CardHeader, ColumnProperties, HeaderPanel, Paging, RemoteOperations, PredefinedToolbarItem, ToolbarItem } from 'devextreme/ui/card_view';
+import { Mode } from 'devextreme/common';
 import { DataSourceOptions } from 'devextreme/data/data_source';
 import { Store } from 'devextreme/data/store';
 import { EventInfo } from 'devextreme/common/core/events';
-import { DataErrorOccurredInfo, Pager } from 'devextreme/common/grids';
+import { Pager } from 'devextreme/common/grids';
 
 import DxCardView from 'devextreme/ui/card_view';
 
@@ -113,7 +114,7 @@ export class DxCardViewComponent<TRowData = any, TKey = any> extends DxComponent
 
 
     /**
-     * [descr:ContentViewOptions.cardCover]
+     * [descr:ContentViewConfiguration.cardCover]
     
      */
     @Input()
@@ -126,7 +127,7 @@ export class DxCardViewComponent<TRowData = any, TKey = any> extends DxComponent
 
 
     /**
-     * [descr:ContentViewOptions.cardHeader]
+     * [descr:ContentViewConfiguration.cardHeader]
     
      */
     @Input()
@@ -139,7 +140,7 @@ export class DxCardViewComponent<TRowData = any, TKey = any> extends DxComponent
 
 
     /**
-     * [descr:ContentViewOptions.cardMaxWidth]
+     * [descr:ContentViewConfiguration.cardMaxWidth]
     
      */
     @Input()
@@ -152,7 +153,7 @@ export class DxCardViewComponent<TRowData = any, TKey = any> extends DxComponent
 
 
     /**
-     * [descr:ContentViewOptions.cardMinWidth]
+     * [descr:ContentViewConfiguration.cardMinWidth]
     
      */
     @Input()
@@ -165,20 +166,20 @@ export class DxCardViewComponent<TRowData = any, TKey = any> extends DxComponent
 
 
     /**
-     * [descr:ContentViewOptions.cardsPerRow]
+     * [descr:ContentViewConfiguration.cardsPerRow]
     
      */
     @Input()
-    get cardsPerRow(): number | "auto" {
+    get cardsPerRow(): Mode | number {
         return this._getOption('cardsPerRow');
     }
-    set cardsPerRow(value: number | "auto") {
+    set cardsPerRow(value: Mode | number) {
         this._setOption('cardsPerRow', value);
     }
 
 
     /**
-     * [descr:ContentViewOptions.cardTemplate]
+     * [descr:ContentViewConfiguration.cardTemplate]
     
      */
     @Input()
@@ -191,7 +192,7 @@ export class DxCardViewComponent<TRowData = any, TKey = any> extends DxComponent
 
 
     /**
-     * [descr:ColumnsControllerOptions.columns]
+     * [descr:ColumnsControllerConfiguration.columns]
     
      */
     @Input()
@@ -204,7 +205,7 @@ export class DxCardViewComponent<TRowData = any, TKey = any> extends DxComponent
 
 
     /**
-     * [descr:DataControllerOptions.dataSource]
+     * [descr:DataControllerConfiguration.dataSource]
     
      */
     @Input()
@@ -256,7 +257,7 @@ export class DxCardViewComponent<TRowData = any, TKey = any> extends DxComponent
 
 
     /**
-     * [descr:HeaderPanelOptions.headerPanel]
+     * [descr:HeaderPanelConfiguration.headerPanel]
     
      */
     @Input()
@@ -308,7 +309,7 @@ export class DxCardViewComponent<TRowData = any, TKey = any> extends DxComponent
 
 
     /**
-     * [descr:DataControllerOptions.keyExpr]
+     * [descr:DataControllerConfiguration.keyExpr]
     
      */
     @Input()
@@ -321,7 +322,7 @@ export class DxCardViewComponent<TRowData = any, TKey = any> extends DxComponent
 
 
     /**
-     * [descr:PagerOptions.pager]
+     * [descr:PagerConfiguration.pager]
     
      */
     @Input()
@@ -334,7 +335,7 @@ export class DxCardViewComponent<TRowData = any, TKey = any> extends DxComponent
 
 
     /**
-     * [descr:DataControllerOptions.paging]
+     * [descr:DataControllerConfiguration.paging]
     
      */
     @Input()
@@ -347,14 +348,14 @@ export class DxCardViewComponent<TRowData = any, TKey = any> extends DxComponent
 
 
     /**
-     * [descr:DataControllerOptions.remoteOperations]
+     * [descr:DataControllerConfiguration.remoteOperations]
     
      */
     @Input()
-    get remoteOperations(): boolean | RemoteOperations | "auto" {
+    get remoteOperations(): boolean | Mode | RemoteOperations {
         return this._getOption('remoteOperations');
     }
-    set remoteOperations(value: boolean | RemoteOperations | "auto") {
+    set remoteOperations(value: boolean | Mode | RemoteOperations) {
         this._setOption('remoteOperations', value);
     }
 
@@ -386,7 +387,7 @@ export class DxCardViewComponent<TRowData = any, TKey = any> extends DxComponent
 
 
     /**
-     * [descr:ToolbarOptions.toolbar]
+     * [descr:ToolbarConfiguration.toolbar]
     
      */
     @Input()
@@ -433,11 +434,11 @@ export class DxCardViewComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
     
-     * [descr:DataControllerOptions.onDataErrorOccurred]
+     * [descr:dxCardViewOptions.onDataErrorOccurred]
     
     
      */
-    @Output() onDataErrorOccurred: EventEmitter<DataErrorOccurredInfo>;
+    @Output() onDataErrorOccurred: EventEmitter<Object>;
 
     /**
     
@@ -510,7 +511,7 @@ export class DxCardViewComponent<TRowData = any, TKey = any> extends DxComponent
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() cardsPerRowChange: EventEmitter<number | "auto">;
+    @Output() cardsPerRowChange: EventEmitter<Mode | number>;
 
     /**
     
@@ -608,7 +609,7 @@ export class DxCardViewComponent<TRowData = any, TKey = any> extends DxComponent
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() remoteOperationsChange: EventEmitter<boolean | RemoteOperations | "auto">;
+    @Output() remoteOperationsChange: EventEmitter<boolean | Mode | RemoteOperations>;
 
     /**
     

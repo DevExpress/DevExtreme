@@ -1,5 +1,5 @@
 import messageLocalization from '@js/localization/message';
-import type { BaseContentViewOptions as Options } from '@js/ui/card_view';
+import type { BaseContentViewConfiguration as Options } from '@js/ui/card_view';
 
 export type { Options };
 

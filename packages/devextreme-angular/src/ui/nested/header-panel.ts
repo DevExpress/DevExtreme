@@ -27,6 +27,7 @@ import { DxoHeaderPanel } from './base/header-panel';
     styles: [''],
     providers: [NestedOptionHost],
     inputs: [
+        'dragging',
         'itemCssClass',
         'itemTemplate',
         'visible'
