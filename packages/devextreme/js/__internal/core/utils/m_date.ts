@@ -460,6 +460,26 @@ const sameCentury = function (date1, date2) {
   return date1 && date2 && startCenturyDate1 === startCenturyDate2;
 };
 
+const sameDatesArrays = (arr1: Date[], arr2: Date[]): boolean => {
+  if (!Array.isArray(arr1) || !Array.isArray(arr2) || arr1.length !== arr2.length) {
+    return false;
+  }
+
+  return arr1.every((date1, index) => {
+    const date2 = arr2[index];
+
+    if ([date1, date2].some((date) => date !== null && !(date instanceof Date))) {
+      return false;
+    }
+
+    if (date1 instanceof Date && date2 instanceof Date) {
+      return sameDate(date1, date2);
+    }
+
+    return date1 === date2;
+  });
+};
+
 function getFirstDecadeInCentury(date) {
   return date && date.getFullYear() - date.getFullYear() % 100;
 }
@@ -769,6 +789,7 @@ const dateUtils = {
   sameDecade,
   sameCentury,
   sameView,
+  sameDatesArrays,
   getDifferenceInMonth,
   getDifferenceInMonthForCells,
   getFirstYearInDecade,
