@@ -15,6 +15,7 @@ import { Overlay } from './overlay';
 // eslint-disable-next-line import/no-cycle
 import MasterRow from './masterRow';
 import AdaptiveDetailRow from './adaptiveDetailRow';
+import ColumnChooser from './columnChooser';
 import TextBox from '../textBox';
 import { GroupPanel } from './groupPanel';
 import GridCore from '../gridCore';
@@ -29,6 +30,7 @@ export const CLASS = {
   dataRow: 'dx-data-row',
   groupRow: 'dx-group-row',
   groupPanel: 'group-panel',
+  columnChooser: 'column-chooser',
   focusedRow: 'dx-row-focused',
   filterRow: 'filter-row',
   filterRangeOverlay: 'filter-range-overlay',
@@ -57,6 +59,7 @@ export const CLASS = {
   fixedGridView: 'content-fixed',
   rowsView: 'rowsview',
   revertButton: 'dx-revert-button',
+  columnChooserButton: 'column-chooser-button',
   fieldItemContent: 'dx-field-item-content',
   textEditorInput: 'dx-texteditor-input',
   commandDrag: 'dx-command-drag',
@@ -268,6 +271,10 @@ export default class DataGrid extends GridCore {
     return this.element.find(`.${CLASS.freeSpaceRow}`);
   }
 
+  getColumnChooser(): ColumnChooser {
+    return new ColumnChooser(this.body.find(`.${this.addWidgetPrefix(CLASS.columnChooser)}`));
+  }
+
   getGroupPanel(): GroupPanel {
     return new GroupPanel(this.body.find(`.${this.addWidgetPrefix(CLASS.groupPanel)}`));
   }
@@ -387,6 +394,10 @@ export default class DataGrid extends GridCore {
 
   getRevertButton(): Selector {
     return this.element.find(`.${CLASS.revertButton}`);
+  }
+
+  getColumnChooserButton(): Selector {
+    return this.element.find(`.${this.addWidgetPrefix(CLASS.columnChooserButton)}`);
   }
 
   apiAddRow(): Promise<void> {
