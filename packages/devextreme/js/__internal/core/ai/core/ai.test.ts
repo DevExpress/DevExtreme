@@ -16,7 +16,7 @@ import { AI } from '@ts/core/ai/core/ai';
 import { PromptManager } from '@ts/core/ai/core/prompt_manager';
 import { RequestManager } from '@ts/core/ai/core/request_manager';
 
-describe('AI Integration', () => {
+describe('AI', () => {
   // eslint-disable-next-line @typescript-eslint/init-declarations
   let provider: AIProvider;
   // eslint-disable-next-line @typescript-eslint/init-declarations
