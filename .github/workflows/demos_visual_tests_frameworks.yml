@@ -223,7 +223,7 @@ jobs:
 
       - name: Run check TS for Vue
         working-directory: apps/demos
-        run: pnpm list vue-tsc; pnpm run ts-check-vue
+        run: pnpm run ts-check-vue
 
       # - name: Run check TS for Angular
       #   working-directory: apps/demos
