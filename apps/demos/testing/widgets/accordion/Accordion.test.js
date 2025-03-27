@@ -7,9 +7,8 @@ const ITEM_TITLE_CLASS = 'dx-accordion-item-title';
 const CHECKBOX_CLASS = 'dx-checkbox';
 
 fixture('Accordion.Overview')
-  .page('http://localhost:8080/')
   .before(async (ctx) => {
-    ctx.initialWindowSize = [900, 600];
+    ctx.initialWindowSize = [900, 900];
   });
 
 runManualTest('Accordion', 'Overview', ['jQuery', 'React', 'Angular', 'Vue'], (test) => {

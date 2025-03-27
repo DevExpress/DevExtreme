@@ -7,7 +7,6 @@ const FIELD_BUTTON_ITEM_CLASS = '.dx-field-button-item';
 const CHECKBOX_CLASS = '.dx-checkbox';
 
 fixture('Form.Validation')
-  .page('http://localhost:8080/')
   .before(async (ctx) => {
     ctx.initialWindowSize = [900, 1200];
   });

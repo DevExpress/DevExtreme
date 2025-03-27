@@ -11,7 +11,6 @@ const ITEM_CONTENT_CLASS = 'item-content';
 // transform="translate(207,272.87511500032093)" fill="#ffffff" stroke="#f5564a"></circle>
 // element because another element obstructs it.
 fixture.skip('Common.DialogsAndNotificationsOverview')
-  .page('http://localhost:8080/')
   .before(async (ctx) => {
     ctx.initialWindowSize = [900, 600];
   });

@@ -6,7 +6,6 @@ import { testScreenshot } from '../../../utils/visual-tests/helpers/theme-utils'
 const PANE_CONTENT_CLASS = 'dx-splitter-item-content';
 
 fixture('Splitter.Overview')
-  .page('http://localhost:8080/')
   .before(async (ctx) => {
     ctx.initialWindowSize = [900, 800];
   });

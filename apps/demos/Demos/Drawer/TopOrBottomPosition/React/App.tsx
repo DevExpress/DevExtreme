@@ -62,37 +62,37 @@ const App = () => {
       </Drawer>
       <div className="options">
         <div className="caption">Options</div>
-        <div className="option">
-          <label>Opened state mode</label>
-          <RadioGroup
-            items={RadioGroupOpenedOptions}
-            layout="horizontal"
-            value={openedStateMode}
-            onValueChanged={onOpenedStateModeChanged}
-          />
-        </div>
-        {' '}
-        <div className="option">
-          <label>Position</label>
-          <RadioGroup
-            items={RadioGroupPositionOptions}
-            layout="horizontal"
-            value={position}
-            onValueChanged={onPositionChanged}
-          />
-        </div>
-        {' '}
-        {openedStateMode !== 'push' && (
+        <div className="options-container">
           <div className="option">
-            <label>Reveal mode</label>
+            <label>Opened state mode</label>
             <RadioGroup
-              items={RadioGroupRevealOptions}
+              items={RadioGroupOpenedOptions}
               layout="horizontal"
-              value={revealMode}
-              onValueChanged={onRevealModeChanged}
+              value={openedStateMode}
+              onValueChanged={onOpenedStateModeChanged}
             />
           </div>
-        )}
+          <div className="option">
+            <label>Position</label>
+            <RadioGroup
+              items={RadioGroupPositionOptions}
+              layout="horizontal"
+              value={position}
+              onValueChanged={onPositionChanged}
+            />
+          </div>
+          {openedStateMode !== 'push' && (
+            <div className="option">
+              <label>Reveal mode</label>
+              <RadioGroup
+                items={RadioGroupRevealOptions}
+                layout="horizontal"
+                value={revealMode}
+                onValueChanged={onRevealModeChanged}
+              />
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

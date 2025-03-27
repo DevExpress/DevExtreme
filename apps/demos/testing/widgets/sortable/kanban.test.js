@@ -9,7 +9,6 @@ const CLASSES = {
 };
 
 fixture('Sortable.Kanban')
-  .page('http://localhost:8080/')
   .before(async (ctx) => {
     ctx.initialWindowSize = [900, 600];
   });

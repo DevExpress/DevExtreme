@@ -10,7 +10,6 @@ const LIST_ITEM_CLASS = 'dx-list-item';
 const CHECKBOX_CLASS = 'dx-checkbox';
 
 fixture('Tabs.Overview')
-  .page('http://localhost:8080/')
   .before(async (ctx) => {
     ctx.initialWindowSize = [900, 1200];
   });

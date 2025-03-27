@@ -12,7 +12,6 @@ const ALL_DAY_PANEL_APPOINTMENT_SELECTOR = '.dx-scheduler-all-day-panel .dx-sche
 const DRAG_MOUSE_OPTIONS = { speed: 0.5 };
 
 fixture('Scheduler.CustomDragAndDrop')
-  .page('http://localhost:8080/')
   .before(async (ctx) => {
     ctx.initialWindowSize = [900, 600];
   });

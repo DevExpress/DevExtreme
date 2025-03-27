@@ -9,7 +9,6 @@ const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 const LIST_ITEM_CLASS = 'dx-list-item';
 
 fixture('Chat.Customization')
-  .page('http://localhost:8080/')
   .before(async (ctx) => {
     ctx.initialWindowSize = [900, 800];
   });
