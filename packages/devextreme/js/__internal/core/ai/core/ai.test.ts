@@ -9,6 +9,7 @@ import type {
   AI as IAI,
   AIProvider,
   RequestCallbacks,
+  RequestParams,
   ResponseParams,
   TranslateCommandParams,
 } from '@js/ai/ai';
@@ -16,6 +17,23 @@ import { TranslateCommand } from '@ts/core/ai/commands/translate';
 import { AI } from '@ts/core/ai/core/ai';
 import { PromptManager } from '@ts/core/ai/core/prompt_manager';
 import { RequestManager } from '@ts/core/ai/core/request_manager';
+
+export class Provider implements AIProvider {
+  sendRequest(params: RequestParams): ResponseParams {
+    const { onChunk } = params;
+
+    const promise = new Promise<string>((resolve) => {
+      onChunk('AI');
+      onChunk(' response');
+
+      resolve('AI response');
+    });
+
+    const abort = (): void => {};
+
+    return { promise, abort };
+  }
+}
 
 describe('AI', () => {
   // eslint-disable-next-line @typescript-eslint/init-declarations
@@ -26,7 +44,7 @@ describe('AI', () => {
   beforeEach(() => {
     provider = {
       sendRequest: (): ResponseParams => ({
-        promise: Promise.resolve(),
+        promise: Promise.resolve(''),
         abort: (): void => {},
       }),
     };
