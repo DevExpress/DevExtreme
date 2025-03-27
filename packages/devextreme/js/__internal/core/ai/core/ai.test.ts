@@ -9,6 +9,7 @@ import type {
   AI as IAI,
   AIProvider,
   RequestCallbacks,
+  ResponseParams,
   TranslateCommandParams,
 } from '@js/ai/ai';
 import { TranslateCommand } from '@ts/core/ai/commands/translate';
@@ -24,10 +25,10 @@ describe('AI', () => {
 
   beforeEach(() => {
     provider = {
-      sendRequest: jest.fn(() => ({
+      sendRequest: (): ResponseParams => ({
         promise: Promise.resolve(),
-        abort: jest.fn(),
-      })),
+        abort: (): void => {},
+      }),
     };
 
     ai = new AI(provider);
