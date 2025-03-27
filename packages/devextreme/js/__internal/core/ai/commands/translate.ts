@@ -13,6 +13,9 @@ export class TranslateCommand extends BaseCommand {
         text: params.text,
         lang: params.lang,
       },
+      system: {
+        lang: params.lang,
+      },
     };
   }
 

@@ -45,7 +45,7 @@ describe('AI', () => {
 
   describe('translate', () => {
     it('calls execute with TranslateCommand correctly', () => {
-      const params: TranslateCommandParams = { text: 'Hello', lang: 'French' };
+      const params: TranslateCommandParams = { text: 'text for translation', lang: 'French' };
       const callbacks: RequestCallbacks = {
         onComplete: () => {},
         onChunk: () => {},
