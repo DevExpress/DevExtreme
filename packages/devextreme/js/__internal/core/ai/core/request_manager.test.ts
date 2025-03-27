@@ -9,7 +9,7 @@ import type {
   AIProvider,
   Prompt,
   RequestParams,
-  // ResponseParams,
+  ResponseParams,
 } from '@js/ai/ai';
 import { ERROR_MESSAGE, RequestManager } from '@ts/core/ai/core/request_manager';
 
@@ -132,40 +132,33 @@ describe('RequestManager', () => {
 
       rejectPromise(error);
 
-      await Promise.resolve();
-
-      // try {
-      //   await promise;
-      // } catch { /* ignore */ }
+      await new Promise(process.nextTick);
 
       expect(onErrorSpy).toHaveBeenCalledTimes(1);
       expect(onErrorSpy).toHaveBeenCalledWith(error);
     });
 
-    // it('test', () => {
-    //   const abortMock = jest.fn();
-    //   (provider.sendRequest as jest.Mock).mockReturnValue({
-    //     promise: Promise.resolve(),
-    //     abort: abortMock,
-    //   } as ResponseParams);
+    it('returns the abort function that returned from sendRequest', () => {
+      const abort = (): void => {};
 
-    //   const abort = requestManager.sendRequest({ user: 'test' }, {});
-    //   expect(abort).toBe(abortMock);
-    // });
+      (provider.sendRequest as jest.Mock).mockReturnValue({
+        promise: Promise.resolve(),
+        abort,
+      } as ResponseParams);
 
-    // it('test', async () => {
-    //   (provider.sendRequest as jest.Mock).mockReturnValue({
-    //     promise: Promise.resolve(),
-    //     abort: jest.fn(),
-    //   } as ResponseParams);
+      const abortRequest = requestManager.sendRequest({ user: 'user' }, {});
 
-    //   expect(() => {
-    //     requestManager.sendRequest({ user: 'test' }, {});
-    //   }).not.toThrow();
+      expect(abortRequest).toBe(abort);
+    });
 
-    //   expect(() => {
-    //     requestManager.sendRequest({ user: 'test' }, { onChunk: jest.fn() });
-    //   }).not.toThrow();
-    // });
+    it('works correctly with no or partial definition of callbacks', () => {
+      expect(() => {
+        requestManager.sendRequest({ user: 'test' }, {});
+      }).not.toThrow();
+
+      expect(() => {
+        requestManager.sendRequest({ user: 'test' }, { onChunk: () => {} });
+      }).not.toThrow();
+    });
   });
 });
