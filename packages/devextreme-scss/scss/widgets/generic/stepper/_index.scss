@@ -25,6 +25,7 @@
 );
 @include step-states(
   $stepper-step-bg,
+  $stepper-step-shadow,
   $stepper-step-hover-bg,
   $stepper-step-color-selected,
   $stepper-step-selected-bg,

@@ -36,6 +36,7 @@
 
 @mixin step-states(
   $background-color,
+  $shadow-color,
   $background-color-hover,
   $color-selected,
   $background-color-selected,
@@ -52,10 +53,160 @@
   .dx-step-indicator {
     background-color: $background-color;
     border-color: $border-color;
-    box-shadow: 0 0 0 8px $background-color;
+    box-shadow: 0 0 0 8px $shadow-color;
   }
 
   .dx-step {
+    &.dx-state-active {
+      .dx-step-indicator {
+        background-color: $background-color-hover;
+      }
+    }
+
+    &.dx-step-invalid {
+      .dx-step-indicator {
+        color: $invalid-color;
+      }
+
+      .dx-step-label {
+        color: $invalid-color;
+      }
+    }
+
+    &.dx-step-completed {
+      .dx-step-indicator {
+        color: $color-selected;
+        border-color: $border-color-selected;
+        background-color: $background-color-selected;
+        box-shadow: 0 0 0 8px $shadow-color;
+      }
+
+      .dx-step-label {
+        color: $background-color-selected;
+      }
+
+      &.dx-step-invalid {
+        .dx-step-label {
+          color: $invalid-color;
+        }
+
+        .dx-step-indicator {
+          border-color: $invalid-color;
+          background-color: $invalid-color;
+          box-shadow: 0 0 0 8px $shadow-color;
+        }
+
+        &.dx-state-focused {
+          .dx-step-indicator {
+            border-color: $invalid-color;
+            background-color: $invalid-color;
+          }
+        }
+      }
+
+      &.dx-state-disabled {
+        .dx-step-indicator {
+          color: $disabled-color;
+          border-color: $disabled-bg;
+          background-color: $disabled-bg;
+        }
+
+        .dx-step-label {
+          color: $disabled-color;
+        }
+
+        &.dx-state-focused {
+          .dx-step-indicator {
+            border-color: $disabled-bg;
+            background-color: $disabled-bg;
+          }
+        }
+      }
+    }
+
+    &.dx-step-selected {
+      .dx-step-indicator {
+        color: $color-selected;
+        border-color: $border-color-selected;
+        background-color: $background-color-selected;
+        box-shadow: 0 0 0 2px $shadow-color, 0 0 0 4px $border-color-selected, 0 0 0 8px $shadow-color;
+      }
+
+      .dx-step-label {
+        color: $background-color-selected;
+      }
+
+      &.dx-step-invalid {
+        .dx-step-label {
+          color: $invalid-color;
+        }
+
+        .dx-step-indicator {
+          border-color: $invalid-color;
+          background-color: $invalid-color;
+          box-shadow: 0 0 0 2px $shadow-color, 0 0 0 4px $invalid-color, 0 0 0 8px $shadow-color;
+        }
+      }
+
+      &.dx-state-disabled {
+        .dx-step-indicator {
+          color: $disabled-color;
+          border-color: $disabled-bg;
+          background-color: $disabled-bg;
+        }
+
+        .dx-step-label {
+          color: $disabled-color;
+        }
+
+        &.dx-state-focused {
+          .dx-step-indicator {
+            border-color: $disabled-bg;
+            background-color: $disabled-bg;
+          }
+        }
+      }
+    }
+
+    &.dx-state-focused {
+      .dx-step-indicator {
+        box-shadow: 0 0 0 2px $shadow-color, 0 0 0 4px $border-color-focused, 0 0 0 8px $shadow-color;
+      }
+
+      &.dx-step-selected,
+      &.dx-step-completed {
+        &.dx-state-hover {
+          .dx-step-indicator {
+            box-shadow: 0 0 0 2px $shadow-color, 0 0 0 4px $border-color-focused, 0 0 0 8px $shadow-color;
+          }
+        }
+      }
+
+      &.dx-step-invalid {
+        .dx-step-indicator {
+          box-shadow: 0 0 0 2px $shadow-color, 0 0 0 4px $invalid-color, 0 0 0 8px $shadow-color;
+        }
+
+        &.dx-state-hover {
+          .dx-step-indicator {
+            box-shadow: 0 0 0 2px $shadow-color, 0 0 0 4px $invalid-color-hover, 0 0 0 8px $shadow-color;
+          }
+        }
+      }
+
+      &.dx-state-disabled {
+        .dx-step-indicator {
+          box-shadow: 0 0 0 2px $background-color, 0 0 0 4px $border-color-focused, 0 0 0 8px $background-color;
+        }
+
+        &.dx-step-invalid {
+          .dx-step-indicator {
+            box-shadow: 0 0 0 2px $background-color, 0 0 0 4px $invalid-color, 0 0 0 8px $background-color;
+          }
+        }
+      }
+    }
+
     &.dx-state-hover {
       .dx-step-indicator {
         border-color: $border-color-hover;
@@ -89,136 +240,6 @@
       }
     }
 
-    &.dx-state-active {
-      .dx-step-indicator {
-        background-color: $background-color-hover;
-      }
-    }
-
-    &.dx-step-invalid {
-      .dx-step-indicator {
-        color: $invalid-color;
-      }
-
-      .dx-step-label {
-        color: $invalid-color;
-      }
-    }
-
-    &.dx-step-completed {
-      .dx-step-indicator {
-        color: $color-selected;
-        border-color: $border-color-selected;
-        background-color: $background-color-selected;
-        box-shadow: 0 0 0 8px $background-color;
-      }
-
-      .dx-step-label {
-        color: $background-color-selected;
-      }
-
-      &.dx-step-invalid {
-        .dx-step-label {
-          color: $invalid-color;
-        }
-
-        .dx-step-indicator {
-          border-color: $invalid-color;
-          background-color: $invalid-color;
-          box-shadow: 0 0 0 8px $background-color;
-        }
-
-        &.dx-state-focused {
-          .dx-step-indicator {
-            border-color: $invalid-color-hover;
-            background-color: $invalid-color-hover;
-          }
-        }
-      }
-
-      &.dx-state-disabled {
-        .dx-step-indicator {
-          color: $disabled-color;
-          border-color: $disabled-bg;
-          background-color: $disabled-bg;
-        }
-
-        .dx-step-label {
-          color: $disabled-color;
-        }
-
-        &.dx-state-focused {
-          .dx-step-indicator {
-            border-color: $disabled-bg;
-            background-color: $disabled-bg;
-          }
-        }
-      }
-    }
-
-    &.dx-step-selected {
-      .dx-step-indicator {
-        color: $color-selected;
-        border-color: $border-color-selected;
-        background-color: $background-color-selected;
-        box-shadow: 0 0 0 2px $background-color, 0 0 0 4px $border-color-selected, 0 0 0 8px $background-color;
-      }
-
-      .dx-step-label {
-        color: $background-color-selected;
-      }
-
-      &.dx-step-invalid {
-        .dx-step-label {
-          color: $invalid-color;
-        }
-
-        .dx-step-indicator {
-          border-color: $invalid-color;
-          background-color: $invalid-color;
-          box-shadow: 0 0 0 2px $background-color, 0 0 0 4px $invalid-color, 0 0 0 8px $background-color;
-        }
-      }
-
-      &.dx-state-disabled {
-        .dx-step-indicator {
-          color: $disabled-color;
-          border-color: $disabled-bg;
-          background-color: $disabled-bg;
-        }
-
-        .dx-step-label {
-          color: $disabled-color;
-        }
-
-        &.dx-state-focused {
-          .dx-step-indicator {
-            border-color: $disabled-bg;
-            background-color: $disabled-bg;
-          }
-        }
-      }
-    }
-
-    &.dx-state-focused {
-      .dx-step-indicator {
-        box-shadow: 0 0 0 2px $background-color, 0 0 0 4px $border-color-focused, 0 0 0 8px $background-color;
-      }
-
-      &.dx-step-selected,
-      &.dx-step-completed {
-        .dx-step-indicator {
-          background-color: $background-color-selected-hover;
-        }
-      }
-
-      &.dx-step-invalid {
-        .dx-step-indicator {
-          box-shadow: 0 0 0 2px $background-color, 0 0 0 4px $invalid-color-hover, 0 0 0 8px $background-color;
-        }
-      }
-    }
-
     &.dx-state-disabled {
       .dx-step-indicator {
         color: $disabled-color;
@@ -236,19 +257,19 @@
     &.dx-state-focused {
       .dx-step-selected {
         .dx-step-indicator {
-          box-shadow: 0 0 0 8px $background-color;
+          box-shadow: 0 0 0 8px $shadow-color;
         }
 
         &.dx-state-focused {
           .dx-step-indicator {
-            box-shadow: 0 0 0 2px $background-color, 0 0 0 4px $border-color-focused, 0 0 0 8px $background-color;
+            box-shadow: 0 0 0 2px $shadow-color, 0 0 0 4px $border-color-focused, 0 0 0 8px $shadow-color;
           }
 
           &.dx-step-invalid {
             .dx-step-indicator {
               border-color: $invalid-color-hover;
               background-color: $invalid-color-hover;
-              box-shadow: 0 0 0 2px $background-color, 0 0 0 4px $invalid-color-hover, 0 0 0 8px $background-color;
+              box-shadow: 0 0 0 2px $shadow-color, 0 0 0 4px $invalid-color-hover, 0 0 0 8px $shadow-color;
             }
           }
         }
