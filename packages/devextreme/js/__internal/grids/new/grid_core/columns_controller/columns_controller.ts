@@ -89,11 +89,6 @@ export class ColumnsController {
     );
   }
 
-  // eslint-disable-next-line @stylistic/max-len
-  public updateColumns(updateFunc: (oldValue: PreNormalizedColumn[]) => PreNormalizedColumn[]): void {
-    this.columnsSettings.updateFunc(updateFunc);
-  }
-
   public columnOption<TProp extends keyof ColumnSettings>(
     column: Column,
     option: TProp,
@@ -101,32 +96,47 @@ export class ColumnsController {
   ): void {
     this.columnsSettings.updateFunc((columns) => {
       const index = getColumnIndexByName(columns, column.name);
-      const newColumns = [...columns];
 
       if (columns[index][option] === value) {
         return columns;
       }
+
+      let newColumns = [...columns];
 
       newColumns[index] = {
         ...newColumns[index],
         [option]: value,
       };
 
-      const visibleIndexes = normalizeVisibleIndexes(
-        newColumns.map((c) => c.visibleIndex),
-        index,
-      );
-
-      visibleIndexes.forEach((visibleIndex, i) => {
-        if (newColumns[i].visibleIndex !== visibleIndex) {
-          newColumns[i] = {
-            ...newColumns[i],
-            visibleIndex,
-          };
-        }
-      });
+      newColumns = this.normalizeColumnsVisibleIndexes(newColumns);
 
       return newColumns;
     });
+  }
+
+  public updateColumns(func: (columns: PreNormalizedColumn[]) => PreNormalizedColumn[]): void {
+    this.columnsSettings.updateFunc((columns) => {
+      let newColumns = func(columns);
+
+      newColumns = this.normalizeColumnsVisibleIndexes(newColumns);
+
+      return newColumns;
+    });
+  }
+
+  private normalizeColumnsVisibleIndexes(columns: PreNormalizedColumn[]): PreNormalizedColumn[] {
+    const result = [...columns];
+
+    const visibleIndexes = normalizeVisibleIndexes(
+      columns.map((c) => c.visibleIndex),
+    );
+
+    visibleIndexes.forEach((visibleIndex, i) => {
+      if (columns[i].visibleIndex !== visibleIndex) {
+        result[i].visibleIndex = visibleIndex;
+      }
+    });
+
+    return result;
   }
 }

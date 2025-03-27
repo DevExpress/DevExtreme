@@ -2,12 +2,15 @@ import { ClientFunction, Selector } from 'testcafe';
 import Widget from '../internal/widget';
 import Pager from '../pagination';
 import FilterPanel from './filter/panel';
+import ColumnChooser from '../dataGrid/columnChooser';
 import type { WidgetName } from '../types';
 
 export const CLASS = {
     pager: 'pager',
     pagination: 'pagination',
     filterPanel: 'filter-panel',
+    columnChooser: 'column-chooser',
+    columnChooserButton: 'column-chooser-button',
 }
 
 export default abstract class GridCore extends Widget {
@@ -60,6 +63,14 @@ export default abstract class GridCore extends Widget {
     return new Pager(this.element.find(`.${this.addWidgetPrefix(CLASS.pager)}, .dx-${CLASS.pagination}`));
   }
 
+  getColumnChooser(): ColumnChooser {
+    return new ColumnChooser(this.body.find(`.${this.addWidgetPrefix(CLASS.columnChooser)}`));
+  }
+
+  getColumnChooserButton(): Selector {
+    return this.element.find(`.${this.addWidgetPrefix(CLASS.columnChooserButton)}`);
+  }
+
   getCompatibilityName(): WidgetName {
     return this.getName();
   }
@@ -82,6 +93,24 @@ export default abstract class GridCore extends Widget {
 
     return ClientFunction(
       () => (getInstance() as any).clearFilter(),
+      { dependencies: { getInstance } },
+    )();
+  }
+
+  apiShowColumnChooser(): Promise<void> {
+    const { getInstance } = this;
+
+    return ClientFunction(
+      () => (getInstance() as any).showColumnChooser(),
+      { dependencies: { getInstance } },
+    )();
+  }
+
+  apiHideColumnChooser(): Promise<void> {
+    const { getInstance } = this;
+
+    return ClientFunction(
+      () => (getInstance() as any).hideColumnChooser(),
       { dependencies: { getInstance } },
     )();
   }
