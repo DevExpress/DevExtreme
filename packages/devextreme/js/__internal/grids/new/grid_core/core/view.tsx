@@ -3,21 +3,31 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 /* eslint-disable max-classes-per-file */
 /* eslint-disable spellcheck/spell-checker */
-import type { Subscribable, Subscription } from '@ts/core/reactive/index';
+import { infernoRenderer } from '@ts/core/m_inferno_renderer';
+import type { Subscription, SubsGets } from '@ts/core/reactive/index';
 import { toSubscribable } from '@ts/core/reactive/index';
-import { Component, type ComponentType, render } from 'inferno';
+import { Component, type ComponentType } from 'inferno';
 
 export abstract class View<T extends {}> {
   private inferno: undefined | ComponentType;
 
+  private props?: T;
+
+  private readonly firstRender = true;
+
   protected abstract component: ComponentType<T>;
 
-  protected abstract getProps(): Subscribable<T>;
+  protected abstract getProps(): SubsGets<T>;
 
   public render(root: Element): Subscription {
     const ViewComponent = this.component;
     return toSubscribable(this.getProps()).subscribe((props: T) => {
-      render(<ViewComponent {...props}/>, root);
+      this.props = props;
+      const content = (
+        <ViewComponent {...props}/>
+      );
+
+      infernoRenderer.renderIntoContainer(content, root, !this.firstRender);
     });
   }
 
