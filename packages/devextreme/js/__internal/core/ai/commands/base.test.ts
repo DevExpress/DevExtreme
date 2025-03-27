@@ -1,20 +1,26 @@
 import {
-  afterEach,
+  // afterEach,
   beforeEach,
   describe,
   expect,
   it,
   jest,
 } from '@jest/globals';
-import type {
-  AIProvider,
-  RequestCallbacks,
-} from '@js/ai/ai';
+import type { AIProvider, RequestCallbacks } from '@js/ai/ai';
 import { BaseCommand } from '@ts/core/ai/commands/base';
-import { Provider } from '@ts/core/ai/core/ai.test';
 import type { PromptData, PromptTemplateName } from '@ts/core/ai/core/prompt_manager';
 import { PromptManager } from '@ts/core/ai/core/prompt_manager';
 import { RequestManager } from '@ts/core/ai/core/request_manager';
+import { Provider } from '@ts/core/ai/testUtils/provider_mock';
+
+jest.doMock('@ts/core/ai/templates/index', () => ({
+  templates: {
+    'test-template-name': {
+      system: 'System test template with {{first}}',
+      user: 'User test template with {{second}}',
+    },
+  },
+}));
 
 interface TestCommandParams {
   first: string;
@@ -48,20 +54,20 @@ describe('BaseCommand', () => {
   // eslint-disable-next-line @typescript-eslint/init-declarations
   let command: TestCommand;
 
-  let templatesOriginal = null;
+  // let templatesOriginal = null;
 
-  const setTestTemplates = (): void => {
-    // @ts-expect-error
-    templatesOriginal = promptManager.templates;
+  // const setTestTemplates = (): void => {
+  //   // @ts-expect-error
+  //   templatesOriginal = promptManager.templates;
 
-    // @ts-expect-error
-    promptManager.templates = new Map(Object.entries({
-      'test-template-name': {
-        system: 'System test template with {{first}}',
-        user: 'User test template with {{second}}',
-      },
-    }));
-  };
+  //   // @ts-expect-error
+  //   promptManager.templates = new Map(Object.entries({
+  //     'test-template-name': {
+  //       system: 'System test template with {{first}}',
+  //       user: 'User test template with {{second}}',
+  //     },
+  //   }));
+  // };
 
   beforeEach(() => {
     const provider: AIProvider = new Provider();
@@ -69,15 +75,15 @@ describe('BaseCommand', () => {
     requestManager = new RequestManager(provider);
     promptManager = new PromptManager();
 
-    setTestTemplates();
+    // setTestTemplates();
 
     command = new TestCommand(promptManager, requestManager);
   });
 
-  afterEach(() => {
-    // @ts-expect-error
-    promptManager.templates = templatesOriginal;
-  });
+  // afterEach(() => {
+  //   // @ts-expect-error
+  //   promptManager.templates = templatesOriginal;
+  // });
 
   describe('constructor', () => {
     it('stores PromptManager and RequestManager correctly', () => {
