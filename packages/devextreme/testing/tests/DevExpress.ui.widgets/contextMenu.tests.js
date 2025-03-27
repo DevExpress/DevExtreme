@@ -1161,6 +1161,30 @@ QUnit.module('Showing and hiding submenus', moduleConfig, () => {
         assert.ok($rootItem.hasClass(DX_MENU_ITEM_EXPANDED_CLASS), 'expanded class was not removed');
     });
 
+    [0, { show: 0 }].forEach((delay) => {
+        QUnit.test(`submenu should be shown synchronously if showSubmenuMode.delay=${JSON.stringify(delay)} (T1247739)`, function(assert) {
+            if(!isDeviceDesktop(assert)) {
+                return;
+            }
+
+            const instance = new ContextMenu(this.$element, {
+                items: [{ text: 1, items: [{ text: 11 }] }],
+                visible: true,
+                showSubmenuMode: { name: 'onHover', delay },
+            });
+
+            const $itemsContainer = instance.itemsContainer();
+            const $rootItem = $itemsContainer.find(`.${DX_MENU_ITEM_CLASS}`).eq(0);
+
+            $($itemsContainer).trigger($.Event('dxhoverstart', { target: $rootItem.get(0) }));
+
+            const $submenus = $rootItem.find(`.${DX_SUBMENU_CLASS}`);
+
+            assert.strictEqual($submenus.length, 1, 'submenu was rendered');
+            assert.strictEqual($submenus.eq(0).is(':visible'), true, 'submenu was expanded');
+        });
+    });
+
     QUnit.test('context menu should not blink after second hover on root item', function(assert) {
         if(!isDeviceDesktop(assert)) {
             return;
