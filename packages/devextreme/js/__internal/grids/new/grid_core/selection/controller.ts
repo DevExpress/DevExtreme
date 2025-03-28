@@ -105,6 +105,14 @@ export class SelectionController {
     [this.selectionOption],
   );
 
+  public readonly needToAddSelectionButtons = computed(
+    (selectionMode, allowSelectAll) => selectionMode === SelectionMode.Multiple && allowSelectAll,
+    [
+      this.options.oneWay('selection.mode'),
+      this.options.oneWay('selection.allowSelectAll'),
+    ],
+  );
+
   constructor(
     private readonly options: OptionsController,
     private readonly dataController: DataController,
@@ -153,9 +161,9 @@ export class SelectionController {
       }
     }, [this.dataController.isLoaded]);
 
-    effect((selectedCardKeys, selectionOption) => {
-      this.updateSelectionToolbarButtons(selectedCardKeys, selectionOption);
-    }, [this.selectedCardKeys, this.selectionOption, this.dataController.items]);
+    effect((selectedCardKeys) => {
+      this.updateSelectionToolbarButtons(selectedCardKeys);
+    }, [this.selectedCardKeys, this.dataController.items]);
   }
 
   private getSelectionConfig(dataSource, selectionOption): object {
@@ -241,44 +249,38 @@ export class SelectionController {
 
   private updateSelectionToolbarButtons(
     selectedCardKeys: SelectedCardKeys,
-    selectionOption: SelectionOptions,
   ) {
-    if (selectionOption.mode === SelectionMode.Multiple && selectionOption.allowSelectAll) {
-      const isSelectAll = this.isSelectAll();
-      const isOnePageSelectAll = this.isOnePageSelectAll();
+    const isSelectAll = this.isSelectAll();
+    const isOnePageSelectAll = this.isOnePageSelectAll();
 
-      this.toolbarController.addDefaultItem({
-        name: 'selectAllButton',
-        widget: 'dxButton',
-        options: {
-          icon: 'selectall',
-          onClick: () => {
-            this.selectAll();
-          },
-          disabled: !!isSelectAll,
-          text: messageLocalization.format('dxCardView-selectAll'),
+    this.toolbarController.addDefaultItem({
+      name: 'selectAllButton',
+      widget: 'dxButton',
+      options: {
+        icon: 'selectall',
+        onClick: () => {
+          this.selectAll();
         },
-        location: 'before',
-        locateInMenu: 'auto',
-      });
-      this.toolbarController.addDefaultItem({
-        name: 'clearSelectionButton',
-        widget: 'dxButton',
-        options: {
-          icon: 'close',
-          onClick: () => {
-            this.deselectAll();
-          },
-          disabled: isOnePageSelectAll ? isSelectAll === false : selectedCardKeys.length === 0,
-          text: messageLocalization.format('dxCardView-clearSelection'),
+        disabled: !!isSelectAll,
+        text: messageLocalization.format('dxCardView-selectAll'),
+      },
+      location: 'before',
+      locateInMenu: 'auto',
+    }, this.needToAddSelectionButtons);
+    this.toolbarController.addDefaultItem({
+      name: 'clearSelectionButton',
+      widget: 'dxButton',
+      options: {
+        icon: 'close',
+        onClick: () => {
+          this.deselectAll();
         },
-        location: 'before',
-        locateInMenu: 'auto',
-      });
-    } else {
-      this.toolbarController.removeDefaultItem('selectAllButton');
-      this.toolbarController.removeDefaultItem('clearSelectionButton');
-    }
+        disabled: isOnePageSelectAll ? isSelectAll === false : selectedCardKeys.length === 0,
+        text: messageLocalization.format('dxCardView-clearSelection'),
+      },
+      location: 'before',
+      locateInMenu: 'auto',
+    }, this.needToAddSelectionButtons);
   }
 
   private getItemKeysByIndexes(indexes: number[]): Key[] {
