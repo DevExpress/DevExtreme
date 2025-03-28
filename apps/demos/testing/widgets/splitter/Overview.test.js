@@ -10,7 +10,7 @@ fixture('Splitter.Overview')
     ctx.initialWindowSize = [900, 800];
   });
 
-runManualTest('Splitter', 'Overview', ['jQuery', 'React', 'Vue', 'Angular'], (test) => {
+runManualTest('Splitter', 'Overview', (test) => {
   test('Correct Focus styles on every Item Panes', async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 

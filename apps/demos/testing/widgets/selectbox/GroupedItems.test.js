@@ -8,7 +8,7 @@ fixture('SelectBox.GroupedItems')
     ctx.initialWindowSize = [900, 600];
   });
 
-runManualTest('SelectBox', 'GroupedItems', ['jQuery', 'React', 'Vue', 'Angular'], (test) => {
+runManualTest('SelectBox', 'GroupedItems', (test) => {
   test('GroupedItems', async (t) => {
     const SELECT_BOX_CLASS = 'dx-selectbox';
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);

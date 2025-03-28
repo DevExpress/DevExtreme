@@ -8,7 +8,7 @@ fixture('List.ItemDragging')
     ctx.initialWindowSize = [900, WINDOW_WIDTH];
   });
 
-runManualTest('List', 'ItemDragging', ['jQuery', 'React', 'Vue', 'Angular'], (test) => {
+runManualTest('List', 'ItemDragging', (test) => {
   test('ItemDragging', async (t) => {
     const REORDER_HANDLE_CLASS = 'dx-list-reorder-handle';
     const LIST_CLASS = 'dx-list';

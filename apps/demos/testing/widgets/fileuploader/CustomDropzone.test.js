@@ -11,7 +11,7 @@ fixture('FileUploader.CustomDropzone')
     ctx.initialWindowSize = [900, 600];
   });
 
-runManualTest('FileUploader', 'CustomDropzone', ['jQuery'], (test) => {
+runManualTest('FileUploader', 'CustomDropzone', (test) => {
   const triggerDragEnter = async (dropZoneSelector, items) => {
     await ClientFunction(() => {
       const $dropZone = $(dropZoneSelector);

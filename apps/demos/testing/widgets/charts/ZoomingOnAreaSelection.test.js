@@ -8,7 +8,7 @@ fixture('Charts.ZoomingOnAreaSelection')
     ctx.initialWindowSize = [900, 600];
   });
 
-runManualTest('Charts', 'ZoomingOnAreaSelection', ['jQuery', 'React', 'Vue', 'Angular'], (test) => {
+runManualTest('Charts', 'ZoomingOnAreaSelection', (test) => {
   test('ZoomingOnAreaSelection. Drag', async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 

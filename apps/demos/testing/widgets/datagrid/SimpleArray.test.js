@@ -8,7 +8,7 @@ fixture('DataGrid.SimpleArray')
     ctx.initialWindowSize = [900, 600];
   });
 
-runManualTest('DataGrid', 'SimpleArray', ['jQuery', 'React', 'Vue', 'Angular'], (test) => {
+runManualTest('DataGrid', 'SimpleArray', (test) => {
   test('SimpleArray', async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 

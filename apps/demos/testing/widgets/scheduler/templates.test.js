@@ -10,7 +10,7 @@ fixture('Scheduler.Overview')
     ctx.initialWindowSize = [900, 600];
   });
 
-runManualTest('Scheduler', 'Overview', ['jQuery', 'React'], (test) => {
+runManualTest('Scheduler', 'Overview', (test) => {
   test('Overview cell selection (T1041269)', async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
