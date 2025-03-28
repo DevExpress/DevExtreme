@@ -88,12 +88,12 @@ export class GridCoreNewBase<
     this.toolbarView = this.diContext.get(ToolbarView);
     this.pagerView = this.diContext.get(PagerView);
     this.searchController = this.diContext.get(SearchControllerModule.SearchController);
-    this.searchView = this.diContext.get(SearchView);
     this.columnChooserController = this.diContext.get(ColumnChooserModule.ColumnChooserController);
     this.columnChooserView = this.diContext.get(ColumnChooserModule.ColumnChooserView);
     this.errorController = this.diContext.get(ErrorController);
     this.filterController = this.diContext.get(FilterControllerModule.FilterController);
     this.filterPanelView = this.diContext.get(FilterControllerModule.FilterPanelView);
+    this.searchView = this.diContext.get(SearchView);
   }
 
   protected _init(): void {

@@ -11,6 +11,7 @@ import type { ComponentType, RefObject } from 'inferno';
 import type { Config } from '../grid_core/core/config_context';
 import { ConfigContext } from '../grid_core/core/config_context';
 import { RootElementUpdater } from '../grid_core/inferno_wrappers/root_element_updater';
+import { SearchView } from '../grid_core/search';
 import { ContentView } from './content_view/view';
 import { HeaderPanelView } from './header_panel/view';
 import { OptionsController } from './options_controller';
@@ -73,6 +74,7 @@ export class MainView extends View<MainViewProps> {
     HeaderFilterPopupView,
     FilterPanelView,
     ColumnChooserView,
+    SearchView,
     OptionsController,
   ] as const;
 
@@ -84,6 +86,7 @@ export class MainView extends View<MainViewProps> {
     private readonly headerFilterPopup: HeaderFilterPopupView,
     private readonly filterPanel: FilterPanelView,
     private readonly columnsChooser: ColumnChooserView,
+    private readonly searchView: SearchView,
     private readonly options: OptionsController,
   ) {
     super();
@@ -100,6 +103,7 @@ export class MainView extends View<MainViewProps> {
       HeaderFilterPopup: this.headerFilterPopup.asInferno(),
       FilterPanel: this.filterPanel.asInferno(),
       ColumnChooser: this.columnsChooser.asInferno(),
+      SearchView: this.searchView.asInferno(),
       config: combined({
         rtlEnabled: this.options.oneWay('rtlEnabled'),
         disabled: this.options.oneWay('disabled'),

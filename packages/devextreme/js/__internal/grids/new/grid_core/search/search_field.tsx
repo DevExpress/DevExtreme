@@ -1,22 +1,41 @@
-import type { ChangeEvent, InfernoNode } from 'inferno';
-import { Component } from 'inferno';
+import type { NativeEventInfo } from '@js/events';
+import type { TextBoxInstance } from '@js/ui/text_box';
 
+import { TextBox } from '../inferno_wrappers/textbox';
+import { addWidgetPrefix } from '../utils';
+
+const FILTERING_TIMEOUT = 700;
+
+const CLASS = {
+  searchPanel: 'search-panel',
+};
 export interface SearchFieldProps {
   value?: string;
-  onChange?: (v: string) => void;
+  placeholder?: string;
+  width?: string | number;
+  onValueChanged?: (v: string) => void;
 }
 
-export class SearchField extends Component<SearchFieldProps> {
-  private onChange(e: ChangeEvent<HTMLInputElement>): void {
-    this.props.onChange?.(e.target.value);
-  }
+export function SearchField(props: SearchFieldProps): JSX.Element | null {
+  const {
+    value, placeholder, width,
+  } = props;
+  const onInput = (e: NativeEventInfo<TextBoxInstance, UIEvent>): void => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const component = e.component as any;
+    const newValue = component._input().val();
+    props.onValueChanged?.(newValue);
+  };
 
-  public render(): InfernoNode {
-    return (
-      <input
-        defaultValue={this.props.value}
-        onChange={this.onChange.bind(this)}
+  return (
+    <div class={addWidgetPrefix(CLASS.searchPanel)}>
+      <TextBox
+        value={value}
+        placeholder={placeholder}
+        width={width}
+        onInput={onInput}
+        updateValueTimeout={FILTERING_TIMEOUT}
       />
-    );
-  }
+    </div>
+  );
 }
