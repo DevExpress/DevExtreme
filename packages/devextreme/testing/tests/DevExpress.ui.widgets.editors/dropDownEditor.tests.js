@@ -943,9 +943,16 @@ if(devices.real().deviceType === 'desktop') {
 }
 
 QUnit.module('Templates', () => {
-    QUnit.module('async', () => {
+    QUnit.module('async', {
+        beforeEach: function() {
+            this.clock = sinon.useFakeTimers();
+            this.timeToWait = 500;
+        },
+        afterEach: function() {
+            this.clock.restore();
+        }
+    }, () => {
         QUnit.test('should not raise error if template finished its render after new template starts render (T1059261)', function(assert) {
-            const clock = sinon.useFakeTimers();
             const dropDownEditor = $('#dropDownEditorLazy').dxDropDownEditor({
                 fieldTemplate: 'field',
                 templatesRenderAsynchronously: true,
@@ -958,7 +965,7 @@ QUnit.module('Templates', () => {
                                 setTimeout(() => {
                                     $input.dxTextBox();
                                     onRendered();
-                                });
+                                }, this.timeToWait);
                             }
                         }
                     }
@@ -967,18 +974,16 @@ QUnit.module('Templates', () => {
 
             try {
                 dropDownEditor.repaint();
-                clock.tick(10);
+                this.clock.tick(this.timeToWait);
             } catch(e) {
                 assert.ok(false, `error is raised: ${e.message}`);
             } finally {
-                clock.tick(10);
-                clock.restore();
+                this.clock.tick(this.timeToWait);
                 assert.ok(true);
             }
         });
 
         QUnit.test('should not raise E1010 error if onRendered is received for a previous render function call (T1247338)', function(assert) {
-            const clock = sinon.useFakeTimers();
             let renderCounter = 0;
             const items = [{ id: 1, text: 'Item_1' }, { id: 12, text: 'Item_2' }];
 
@@ -1003,7 +1008,7 @@ QUnit.module('Templates', () => {
                                         domAdapter.removeElement(dropDownEditor.$element().find(`.${TEXT_EDITOR_INPUT_CLASS}`).get(0));
                                         onRendered();
                                     }
-                                });
+                                }, this.timeToWait);
                             }
                         }
                     }
@@ -1014,18 +1019,15 @@ QUnit.module('Templates', () => {
                 dropDownEditor.option('value', 2);
                 dropDownEditor.option('value', 1);
 
-                clock.tick(110);
+                this.clock.tick(this.timeToWait);
             } catch(e) {
                 assert.ok(false, `Error E1010 is raised: ${e.message}`);
             } finally {
-                clock.restore();
                 assert.ok(true);
             }
         });
 
         QUnit.test('should not raise error if onRendered is received for a removed template (T1178295, T1059261)', function(assert) {
-            const clock = sinon.useFakeTimers();
-
             const dropDownEditor = $('#dropDownEditorLazy').dxDropDownEditor({
                 fieldTemplate: 'field',
                 templatesRenderAsynchronously: true,
@@ -1042,7 +1044,7 @@ QUnit.module('Templates', () => {
                                     domAdapter.removeElement($input);
                                     dropDownEditor.repaint();
                                     onRendered();
-                                }, 100);
+                                }, this.timeToWait);
                             }
                         }
                     }
@@ -1050,18 +1052,15 @@ QUnit.module('Templates', () => {
             }).dxDropDownEditor('instance');
 
             try {
-                clock.tick(110);
+                this.clock.tick(this.timeToWait);
             } catch(e) {
                 assert.ok(false, `error is raised: ${e.message}`);
             } finally {
-                clock.restore();
                 assert.ok(true);
             }
         });
 
         QUnit.test('should render only one last value on re-render (T1262587)', function(assert) {
-            const clock = sinon.useFakeTimers();
-
             const $dropDownEditor = $('#dropDownEditorLazy').dxDropDownEditor({
                 items: [1, 2, 3],
                 fieldTemplate: 'custom',
@@ -1078,7 +1077,7 @@ QUnit.module('Templates', () => {
 
                                     result.appendTo(args.container);
                                     args.onRendered();
-                                }, 500);
+                                }, this.timeToWait);
 
                                 return result;
                             }
@@ -1092,14 +1091,12 @@ QUnit.module('Templates', () => {
             instance.option({ value: 1 });
             instance.option({ value: null });
 
-            clock.tick(500);
+            this.clock.tick(this.timeToWait);
 
             const $wrapper = $dropDownEditor.find(`.${DROP_DOWN_EDITOR_FIELD_TEMPLATE_WRAPPER}`);
             const $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
             assert.strictEqual($wrapper.children().length, 1, 'only 1 element is rendered');
             assert.strictEqual($input.val(), '', 'last value is applied');
-
-            clock.restore();
         });
 
         QUnit.module('aria-invalid', {}, () => {
@@ -1108,8 +1105,6 @@ QUnit.module('Templates', () => {
                 { valueRequired: false, emptyValue: undefined, nonEmptyValue: undefined }
             ].forEach(({ valueRequired, emptyValue, nonEmptyValue }) => {
                 QUnit.test(`component with fieldTemplate should have proper aria-invalid attribute when validator is used and value is ${!valueRequired ? 'not' : ''} required (T1230706)`, function(assert) {
-                    const clock = sinon.useFakeTimers();
-
                     const $dropDownEditor = $('#dropDownEditorSecond').dxDropDownEditor({
                         dataSource: ['one', 'two', 'three'],
                         searchEnabled: true,
@@ -1124,7 +1119,7 @@ QUnit.module('Templates', () => {
                                         setTimeout(() => {
                                             $input.dxTextBox({ value: model });
                                             onRendered();
-                                        }, 0);
+                                        }, this.timeToWait);
                                     }
                                 }
                             }
@@ -1134,7 +1129,7 @@ QUnit.module('Templates', () => {
                         validationRules: valueRequired ? [{ type: 'required', message: 'required' }] : [],
                     });
 
-                    clock.tick(500);
+                    this.clock.tick(this.timeToWait);
 
                     let $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
 
@@ -1143,7 +1138,7 @@ QUnit.module('Templates', () => {
                     keyboardMock($input)
                         .type('a');
 
-                    clock.tick(500);
+                    this.clock.tick(this.timeToWait);
 
                     $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
                     assert.equal($input.val(), 'a', 'input value is not empty');
@@ -1153,19 +1148,16 @@ QUnit.module('Templates', () => {
                         .caret(1)
                         .press('backspace');
 
-                    clock.tick(500);
+                    this.clock.tick(this.timeToWait);
 
                     $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
                     assert.equal($input.val(), '', 'input value is empty');
                     assert.strictEqual($input.attr('aria-invalid'), emptyValue, `input should set 'aria-invalid' to ${emptyValue} after deleting`);
 
-                    clock.restore();
                 });
             });
 
             QUnit.test('component with fieldTemplate should not have aria-invalid attribute when validator is not used (T1230706)', function(assert) {
-                const clock = sinon.useFakeTimers();
-
                 const $dropDownEditor = $('#dropDownEditorSecond').dxDropDownEditor({
                     dataSource: ['one', 'two', 'three'],
                     searchEnabled: true,
@@ -1180,7 +1172,7 @@ QUnit.module('Templates', () => {
                                     setTimeout(() => {
                                         $input.dxTextBox({ value: model });
                                         onRendered();
-                                    }, 0);
+                                    }, this.timeToWait);
                                 }
                             }
                         }
@@ -1188,7 +1180,7 @@ QUnit.module('Templates', () => {
                     valueChangeEvent: 'keyup',
                 });
 
-                clock.tick(500);
+                this.clock.tick(this.timeToWait);
 
                 let $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
 
@@ -1197,7 +1189,7 @@ QUnit.module('Templates', () => {
                 keyboardMock($input)
                     .type('a');
 
-                clock.tick(500);
+                this.clock.tick(this.timeToWait);
 
                 $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
                 assert.equal($input.val(), 'a', 'input value is not empty');
@@ -1207,13 +1199,11 @@ QUnit.module('Templates', () => {
                     .caret(1)
                     .press('backspace');
 
-                clock.tick(500);
+                this.clock.tick(this.timeToWait);
 
                 $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
                 assert.equal($input.val(), '', 'input value is empty');
                 assert.strictEqual($input.attr('aria-invalid'), undefined, 'input should set \'aria-invalid\' to undefined after deleting');
-
-                clock.restore();
             });
         });
     });
