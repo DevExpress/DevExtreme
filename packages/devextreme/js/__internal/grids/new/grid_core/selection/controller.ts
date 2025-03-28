@@ -65,27 +65,26 @@ export class SelectionController {
   public readonly _isCheckBoxesVisible = state<boolean>(false);
 
   public readonly isCheckBoxesVisible = computed(
-    (isCheckBoxesRendered, _isCheckBoxesVisible) => {
-      if (isCheckBoxesRendered) {
-        const { showCheckBoxesMode } = this.selectionOption.unreactive_get();
+    (selectionOption, _isCheckBoxesVisible) => {
+      const { mode, showCheckBoxesMode } = selectionOption;
 
+      if (mode === SelectionMode.Multiple) {
         return showCheckBoxesMode !== ShowCheckBoxesMode.OnClick || _isCheckBoxesVisible;
       }
 
       return false;
     },
     [
-      this.isCheckBoxesRendered,
+      this.selectionOption,
       this._isCheckBoxesVisible,
     ],
   );
 
   public readonly needToHiddenCheckBoxes = computed(
-    (isCheckBoxesVisible) => {
-      const { showCheckBoxesMode } = this.selectionOption.unreactive_get();
-      const isCheckBoxesRendered = this.isCheckBoxesRendered.unreactive_get();
+    (isCheckBoxesVisible, selectionOption) => {
+      const { mode, showCheckBoxesMode } = selectionOption;
 
-      if (isCheckBoxesRendered && showCheckBoxesMode === ShowCheckBoxesMode.OnClick) {
+      if (mode === SelectionMode.Multiple && showCheckBoxesMode === ShowCheckBoxesMode.OnClick) {
         return !isCheckBoxesVisible;
       }
 
@@ -93,7 +92,17 @@ export class SelectionController {
     },
     [
       this.isCheckBoxesVisible,
+      this.selectionOption,
     ],
+  );
+
+  public readonly allowSelectOnClick = computed(
+    (selectionOption) => {
+      const { mode, showCheckBoxesMode } = selectionOption;
+
+      return mode !== SelectionMode.Multiple || showCheckBoxesMode !== ShowCheckBoxesMode.Always;
+    },
+    [this.selectionOption],
   );
 
   constructor(
@@ -136,10 +145,6 @@ export class SelectionController {
       }
     }, [this.selectedCardKeys, this.selectionOption]);
 
-    effect((selectedCardKeys, selectionOption) => {
-      this.updateSelectionToolbarButtons(selectedCardKeys, selectionOption);
-    }, [this.selectedCardKeys, this.selectionOption, this.dataController.items]);
-
     effect((isLoaded) => {
       if (isLoaded) {
         const selectedCardKeys = this.selectedCardKeys.unreactive_get();
@@ -147,6 +152,10 @@ export class SelectionController {
         this.selectCards(selectedCardKeys);
       }
     }, [this.dataController.isLoaded]);
+
+    effect((selectedCardKeys, selectionOption) => {
+      this.updateSelectionToolbarButtons(selectedCardKeys, selectionOption);
+    }, [this.selectedCardKeys, this.selectionOption, this.dataController.items]);
   }
 
   private getSelectionConfig(dataSource, selectionOption): object {
@@ -363,12 +372,6 @@ export class SelectionController {
 
   public updateSelectionCheckBoxesVisible(value: boolean): void {
     this._isCheckBoxesVisible.update(value);
-  }
-
-  public allowSelectOnClick(): boolean {
-    const { mode, showCheckBoxesMode } = this.selectionOption.unreactive_get();
-
-    return mode !== SelectionMode.Multiple || showCheckBoxesMode !== ShowCheckBoxesMode.Always;
   }
 
   public processLongTap(row: DataRow): void {

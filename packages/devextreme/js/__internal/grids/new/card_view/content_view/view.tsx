@@ -73,8 +73,6 @@ export class ContentView extends ContentViewBase<ContentViewProps> {
   protected override component = ContentViewComponent;
 
   protected override getProps() {
-    const allowSelectOnClick = this.selectionController.allowSelectOnClick();
-
     return combined({
       ...this.getBaseProps(),
       contentProps: combined({
@@ -88,7 +86,7 @@ export class ContentView extends ContentViewBase<ContentViewProps> {
           minWidth: this.cardMinWidth,
           maxWidth: this.options.oneWay('cardMaxWidth'),
           isCheckBoxesRendered: this.selectionController.isCheckBoxesRendered,
-          allowSelectOnClick,
+          allowSelectOnClick: this.selectionController.allowSelectOnClick,
           onHold: this.onCardHold.bind(this),
           onClick: this.options.action('onCardClick'),
           onDblClick: this.options.action('onCardDblClick'),
