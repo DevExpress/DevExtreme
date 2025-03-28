@@ -39,7 +39,7 @@ class CalendarMultiSelectionStrategy extends CalendarSelectionStrategy {
   }
 
   getDefaultCurrentDate() {
-    const dates = this.dateOption('value').filter((value) => value);
+    const dates = this.dateOption('value').filter(Boolean);
     return this._getLowestDateInArray(dates);
   }
 
