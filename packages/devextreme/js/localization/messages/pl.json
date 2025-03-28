@@ -208,6 +208,8 @@
         "dxTreeList-ariaToolbar": "Pasek narzędzi listy strukturalnej",
         "dxTreeList-editingAddRowToNode": "Dodaj",
 
+        "dxCardView-ariaSearchInGrid": "Search in the card view",
+
         "dxPager-infoText": "Strona {0} z {1} ({2} elementy)",
         "dxPager-pagesCountText": "od",
         "dxPager-pageSize": "Elementy na stronie: {0}",

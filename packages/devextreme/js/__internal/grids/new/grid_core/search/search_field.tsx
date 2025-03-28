@@ -1,8 +1,9 @@
 import type { NativeEventInfo } from '@js/events';
+import messageLocalization from '@js/localization/message';
 import type { TextBoxInstance } from '@js/ui/text_box';
 
 import { TextBox } from '../inferno_wrappers/textbox';
-import { addWidgetPrefix } from '../utils';
+import { addWidgetPrefix, getName } from '../utils';
 
 const FILTERING_TIMEOUT = 700;
 
@@ -39,6 +40,9 @@ export function SearchField(props: SearchFieldProps): JSX.Element | null {
         placeholder={placeholder}
         width={width}
         onInput={onInput}
+        inputAttr={{
+          'aria-label': messageLocalization.format(`${getName()}-ariaSearchInGrid`),
+        }}
       />
     </div>
   );

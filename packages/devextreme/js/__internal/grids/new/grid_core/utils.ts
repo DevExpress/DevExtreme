@@ -1,1 +1,2 @@
-export const addWidgetPrefix = (cssClass: string): string => `dx-cardview-${cssClass}`;
+export const getName = (): string => 'dxCardView';
+export const addWidgetPrefix = (className: string): string => `dx-${getName().slice(2).toLowerCase()}${className ? `-${className}` : ''}`;
