@@ -49872,6 +49872,30 @@
               ],
               "DocID": "CollectionWidgetItem.disabled"
             },
+            "hint": {
+              "PrimitiveTypes": [
+                "string"
+              ],
+              "DocID": "dxStepperItem.hint"
+            },
+            "icon": {
+              "PrimitiveTypes": [
+                "string"
+              ],
+              "DocID": "dxStepperItem.icon"
+            },
+            "isValid": {
+              "PrimitiveTypes": [
+                "boolean"
+              ],
+              "DocID": "dxStepperItem.isValid"
+            },
+            "optional": {
+              "PrimitiveTypes": [
+                "boolean"
+              ],
+              "DocID": "dxStepperItem.optional"
+            },
             "template": {
               "PrimitiveTypes": [
                 "any"
@@ -49884,6 +49908,12 @@
                 "string"
               ],
               "DocID": "CollectionWidgetItem.text"
+            },
+            "title": {
+              "PrimitiveTypes": [
+                "string"
+              ],
+              "DocID": "dxStepperItem.title"
             }
           }
         },
@@ -49894,19 +49924,11 @@
           "IsTemplate": true,
           "DocID": "CollectionWidgetOptions.itemTemplate"
         },
-        "keyExpr": {
+        "linear": {
           "PrimitiveTypes": [
-            "Function",
-            "string"
+            "boolean"
           ],
-          "IsFunc": true,
-          "DocID": "CollectionWidgetOptions.keyExpr"
-        },
-        "noDataText": {
-          "PrimitiveTypes": [
-            "string"
-          ],
-          "DocID": "CollectionWidgetOptions.noDataText"
+          "DocID": "dxStepperOptions.linear"
         },
         "onDisposing": {
           "PrimitiveTypes": [
@@ -50059,15 +50081,6 @@
           ],
           "IsChangeable": true,
           "DocID": "CollectionWidgetOptions.selectedItem"
-        },
-        "selectedItemKeys": {
-          "ItemPrimitiveTypes": [
-            "any"
-          ],
-          "IsCollection": true,
-          "IsChangeable": true,
-          "SingularName": "selectedItemKey",
-          "DocID": "CollectionWidgetOptions.selectedItemKeys"
         },
         "selectOnFocus": {
           "PrimitiveTypes": [
@@ -71791,6 +71804,30 @@
           ],
           "DocID": "CollectionWidgetItem.disabled"
         },
+        "hint": {
+          "PrimitiveTypes": [
+            "string"
+          ],
+          "DocID": "dxStepperItem.hint"
+        },
+        "icon": {
+          "PrimitiveTypes": [
+            "string"
+          ],
+          "DocID": "dxStepperItem.icon"
+        },
+        "isValid": {
+          "PrimitiveTypes": [
+            "boolean"
+          ],
+          "DocID": "dxStepperItem.isValid"
+        },
+        "optional": {
+          "PrimitiveTypes": [
+            "boolean"
+          ],
+          "DocID": "dxStepperItem.optional"
+        },
         "template": {
           "PrimitiveTypes": [
             "any"
@@ -71803,6 +71840,12 @@
             "string"
           ],
           "DocID": "CollectionWidgetItem.text"
+        },
+        "title": {
+          "PrimitiveTypes": [
+            "string"
+          ],
+          "DocID": "dxStepperItem.title"
         }
       }
     },
