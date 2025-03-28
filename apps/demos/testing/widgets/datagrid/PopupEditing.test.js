@@ -8,7 +8,7 @@ fixture('DataGrid.PopupEditing')
     ctx.initialWindowSize = [900, 600];
   });
 
-runManualTest('DataGrid', 'PopupEditing', ['jQuery', 'React', 'Vue', 'Angular'], (test) => {
+runManualTest('DataGrid', 'PopupEditing', (test) => {
   test('PopupEditing', async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 

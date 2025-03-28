@@ -8,7 +8,7 @@ fixture('Charts.ZoomingAndScrollingAPI')
     ctx.initialWindowSize = [900, 600];
   });
 
-runManualTest('Charts', 'ZoomingAndScrollingAPI', ['jQuery', 'React', 'Vue', 'Angular'], (test) => {
+runManualTest('Charts', 'ZoomingAndScrollingAPI', (test) => {
   test('ZoomingAndScrollingAPI. RangeSelector drag', async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 

@@ -8,7 +8,7 @@ fixture('DataGrid.AjaxRequest')
     ctx.initialWindowSize = [900, 600];
   });
 
-runManualTest('DataGrid', 'AjaxRequest', ['jQuery', 'React', 'Vue', 'Angular'], (test) => {
+runManualTest('DataGrid', 'AjaxRequest', (test) => {
   test('AjaxRequest', async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 

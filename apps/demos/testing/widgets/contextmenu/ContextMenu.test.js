@@ -9,7 +9,7 @@ fixture('ContextMenu.Templates')
 
 const IMAGE_ID = 'image';
 
-runManualTest('ContextMenu', 'Templates', ['jQuery', 'React', 'Vue', 'Angular'], (test) => {
+runManualTest('ContextMenu', 'Templates', (test) => {
   test('Custom Template Appearance', async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 

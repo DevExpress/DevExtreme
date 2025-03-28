@@ -11,7 +11,7 @@ fixture('Accordion.Overview')
     ctx.initialWindowSize = [900, 900];
   });
 
-runManualTest('Accordion', 'Overview', ['jQuery', 'React', 'Angular', 'Vue'], (test) => {
+runManualTest('Accordion', 'Overview', (test) => {
   test('Custom Overview Appearance', async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 

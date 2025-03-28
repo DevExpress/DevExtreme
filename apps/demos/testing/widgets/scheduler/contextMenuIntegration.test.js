@@ -8,7 +8,7 @@ fixture('Scheduler.ContextMenuIntegration')
     ctx.initialWindowSize = [900, 600];
   });
 
-runManualTest('Scheduler', 'ContextMenuIntegration', 'jQuery', (test) => {
+runManualTest('Scheduler', 'ContextMenuIntegration', (test) => {
   test('ContextMenuIntegration', async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 

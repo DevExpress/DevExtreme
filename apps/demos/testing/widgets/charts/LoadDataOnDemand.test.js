@@ -8,7 +8,7 @@ fixture('Charts.LoadDataOnDemand')
     ctx.initialWindowSize = [900, 600];
   });
 
-runManualTest('Charts', 'LoadDataOnDemand', ['jQuery', 'React', 'Vue', 'Angular'], (test) => {
+runManualTest('Charts', 'LoadDataOnDemand', (test) => {
   test('LoadDataOnDemand', async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 

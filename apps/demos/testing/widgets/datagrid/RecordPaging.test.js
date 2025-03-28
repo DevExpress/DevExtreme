@@ -8,7 +8,7 @@ fixture('DataGrid.RecordPaging')
     ctx.initialWindowSize = [900, 600];
   });
 
-runManualTest('DataGrid', 'RecordPaging', ['jQuery', 'React', 'Vue', 'Angular'], (test) => {
+runManualTest('DataGrid', 'RecordPaging', (test) => {
   test('RecordPaging', async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 

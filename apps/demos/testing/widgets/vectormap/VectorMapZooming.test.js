@@ -8,7 +8,7 @@ fixture('VectorMap.DynamicViewport')
     ctx.initialWindowSize = [900, 900];
   });
 
-runManualTest('VectorMap', 'DynamicViewport', ['jQuery', 'React', 'Vue', 'Angular'], (test) => {
+runManualTest('VectorMap', 'DynamicViewport', (test) => {
   test('VectorMap.DynamicViewport', async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
     const zoomButton = $($('#vector-map .dxm-control-bar g').nth(1)).find('circle').nth(0);

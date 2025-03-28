@@ -12,7 +12,7 @@ const scroll = ClientFunction((pixels) => {
   document.querySelector('.dx-scrollable-container').scrollTop = pixels;
 });
 
-runManualTest('DataGrid', 'RemoteGrouping', ['jQuery', 'React', 'Vue', 'Angular'], (test) => {
+runManualTest('DataGrid', 'RemoteGrouping', (test) => {
   test('RemoteGrouping', async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 

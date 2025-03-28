@@ -6,7 +6,7 @@ fixture('Charts.Export')
     ctx.initialWindowSize = [900, 600];
   });
 
-runManualTest('Charts', 'ExportCustomMarkup', ['jQuery', 'React', 'Vue', 'Angular'], (test) => {
+runManualTest('Charts', 'ExportCustomMarkup', (test) => {
   test('Export', async (t) => {
     let isFileCreateForDownload = false;
 
