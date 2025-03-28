@@ -9,29 +9,23 @@ import type {
   AI as IAI,
   AIProvider,
   RequestCallbacks,
-  ResponseParams,
   TranslateCommandParams,
 } from '@js/ai/ai';
 import { TranslateCommand } from '@ts/core/ai/commands/translate';
 import { AI } from '@ts/core/ai/core/ai';
 import { PromptManager } from '@ts/core/ai/core/prompt_manager';
 import { RequestManager } from '@ts/core/ai/core/request_manager';
-// import { Provider } from '@ts/core/ai/testUtils/provider_mock';
+import { Provider } from '@ts/core/ai/testUtils/provider_mock';
 
 describe('AI', () => {
+  const params: TranslateCommandParams = { text: 'text for translation', lang: 'French' };
   // eslint-disable-next-line @typescript-eslint/init-declarations
   let provider: AIProvider;
   // eslint-disable-next-line @typescript-eslint/init-declarations
   let ai: IAI;
 
   beforeEach(() => {
-    provider = {
-      sendRequest: (): ResponseParams => ({
-        promise: Promise.resolve(''),
-        abort: (): void => {},
-      }),
-    };
-
+    provider = new Provider();
     ai = new AI(provider);
   });
 
@@ -46,7 +40,6 @@ describe('AI', () => {
 
   describe('translate', () => {
     it('calls execute with TranslateCommand correctly', () => {
-      const params: TranslateCommandParams = { text: 'text for translation', lang: 'French' };
       const callbacks: RequestCallbacks = {
         onComplete: () => {},
         onChunk: () => {},
@@ -69,7 +62,7 @@ describe('AI', () => {
         .spyOn(ai.requestManager, 'sendRequest')
         .mockImplementation(() => abort);
 
-      const abortRequest = ai.translate({} as TranslateCommandParams, {});
+      const abortRequest = ai.translate(params, {});
 
       expect(abortRequest).toBe(abort);
     });
