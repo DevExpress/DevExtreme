@@ -8,31 +8,18 @@ import {
 import type {
   AIProvider,
   Prompt,
-  RequestParams,
-  ResponseParams,
 } from '@js/ai/ai';
 import { ERROR_MESSAGE, RequestManager } from '@ts/core/ai/core/request_manager';
+import { Provider } from '@ts/core/ai/testUtils/provider_mock';
 
 describe('RequestManager', () => {
-  // eslint-disable-next-line @typescript-eslint/init-declarations
-  let onChunkCallback: RequestParams['onChunk'];
   // eslint-disable-next-line @typescript-eslint/init-declarations
   let provider: AIProvider;
   // eslint-disable-next-line @typescript-eslint/init-declarations
   let requestManager: RequestManager;
 
   beforeEach(() => {
-    provider = {
-      sendRequest: jest.fn((params: RequestParams) => {
-        onChunkCallback = params.onChunk;
-
-        return {
-          promise: Promise.resolve(),
-          abort: (): void => {},
-        };
-      }),
-    };
-
+    provider = new Provider();
     requestManager = new RequestManager(provider);
   });
 
@@ -58,10 +45,12 @@ describe('RequestManager', () => {
       const prompt: Prompt = { user: 'User', system: 'System' };
       const onChunk = jest.fn();
 
+      const sendRequestSpy = jest.spyOn(provider, 'sendRequest');
+
       requestManager.sendRequest(prompt, { onChunk });
 
-      expect(provider.sendRequest).toHaveBeenCalledTimes(1);
-      expect(provider.sendRequest).toHaveBeenCalledWith({
+      expect(sendRequestSpy).toHaveBeenCalledTimes(1);
+      expect(sendRequestSpy).toHaveBeenCalledWith({
         prompt,
         onChunk: expect.any(Function),
       });
@@ -72,37 +61,26 @@ describe('RequestManager', () => {
 
       requestManager.sendRequest({ user: 'test' }, { onChunk: onChunkSpy });
 
-      onChunkCallback?.('First');
-      onChunkCallback?.('Second');
-
       expect(onChunkSpy).toHaveBeenCalledTimes(2);
-      expect(onChunkSpy).toHaveBeenNthCalledWith(1, 'First');
-      expect(onChunkSpy).toHaveBeenNthCalledWith(2, 'Second');
+      expect(onChunkSpy).toHaveBeenNthCalledWith(1, 'AI');
+      expect(onChunkSpy).toHaveBeenNthCalledWith(2, ' response');
     });
 
     it('after completion of the promis calls onComplete with accumulated data', async () => {
-      let resolvePromise: () => void = () => {};
+      let resolvePromise: (result: string) => void = () => {};
 
-      const promise = new Promise<void>((resolve) => { resolvePromise = resolve; });
-
-      (provider.sendRequest as jest.MockedFunction<typeof provider.sendRequest>)
-        .mockImplementation((params: RequestParams) => {
-          onChunkCallback = params.onChunk;
-
-          return {
-            promise,
-            abort: (): void => {},
-          };
-        });
-
+      const promise = new Promise<string>((resolve) => { resolvePromise = resolve; });
+      const sendRequestSpy = jest.spyOn(provider, 'sendRequest');
       const onCompleteSpy = jest.fn();
+
+      sendRequestSpy.mockImplementation(() => ({
+        promise,
+        abort: (): void => {},
+      }));
 
       requestManager.sendRequest({ user: 'test' }, { onComplete: onCompleteSpy });
 
-      onChunkCallback?.('First');
-      onChunkCallback?.('Second');
-
-      resolvePromise();
+      resolvePromise('FirstSecond');
 
       await promise;
 
@@ -111,22 +89,18 @@ describe('RequestManager', () => {
     });
 
     it('calls onError if the promise was rejected', async () => {
-      let rejectPromise: (reason?: unknown) => void = () => {};
+      let rejectPromise: (error: Error) => void = () => {};
 
-      const error = new Error('Test error');
+      const promise = new Promise<string>((_, reject) => { rejectPromise = reject; });
+      const sendRequestSpy = jest.spyOn(provider, 'sendRequest');
+
       const onErrorSpy = jest.fn();
+      const error = new Error('Test error');
 
-      const promise = new Promise<void>((_, reject) => { rejectPromise = reject; });
-
-      (provider.sendRequest as jest.MockedFunction<typeof provider.sendRequest>)
-        .mockImplementation((params: RequestParams) => {
-          onChunkCallback = params.onChunk;
-
-          return {
-            promise,
-            abort: (): void => {},
-          };
-        });
+      sendRequestSpy.mockImplementation(() => ({
+        promise,
+        abort: (): void => {},
+      }));
 
       requestManager.sendRequest({ user: 'user prompt' }, { onError: onErrorSpy });
 
@@ -141,10 +115,12 @@ describe('RequestManager', () => {
     it('returns the abort function that returned from sendRequest', () => {
       const abort = (): void => {};
 
-      (provider.sendRequest as jest.Mock).mockReturnValue({
-        promise: Promise.resolve(),
+      const sendRequestSpy = jest.spyOn(provider, 'sendRequest');
+
+      sendRequestSpy.mockReturnValue({
+        promise: Promise.resolve(''),
         abort,
-      } as ResponseParams);
+      });
 
       const abortRequest = requestManager.sendRequest({ user: 'user' }, {});
 
