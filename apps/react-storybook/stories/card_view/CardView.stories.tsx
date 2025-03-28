@@ -253,3 +253,17 @@ export const HeaderFilterStory: Story = {
   }
 }
 
+export const SelectionStory: Story = {
+  ...DefaultMode,
+  args: {
+    ...DefaultMode.args,
+    keyExpr: 'id',
+    selection: {
+      mode: 'multiple',
+      showCheckBoxesMode: 'onClick',
+      allowSelectAll: true,
+      selectAllMode: 'allPages',
+    }
+  }
+}
+

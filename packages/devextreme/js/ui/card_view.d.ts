@@ -225,6 +225,16 @@ export interface DataRow<TRowData = unknown, TKey = unknown> {
      * @docid
      */
     data: TRowData;
+    /**
+     * @public
+     * @docid
+     */
+    index: number;
+    /**
+     * @public
+     * @docid
+     */
+    isSelected: boolean;
 }
 
 type InheritedColumnProps =
