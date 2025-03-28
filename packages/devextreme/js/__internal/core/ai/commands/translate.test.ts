@@ -10,7 +10,7 @@ import { TranslateCommand } from '@ts/core/ai/commands/translate';
 import type { PromptData } from '@ts/core/ai/core/prompt_manager';
 import { PromptManager } from '@ts/core/ai/core/prompt_manager';
 import { RequestManager } from '@ts/core/ai/core/request_manager';
-import { Provider } from '@ts/core/ai/testUtils/provider_mock';
+import { Provider } from '@ts/core/ai/test_utils/provider_mock';
 
 describe('TranslateCommand', () => {
   const params: TranslateCommandParams = { text: 'text to translate', lang: 'French' };

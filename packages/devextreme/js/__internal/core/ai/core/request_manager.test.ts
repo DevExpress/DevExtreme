@@ -10,7 +10,7 @@ import type {
   Prompt,
 } from '@js/ai/ai';
 import { ERROR_MESSAGE, RequestManager } from '@ts/core/ai/core/request_manager';
-import { Provider } from '@ts/core/ai/testUtils/provider_mock';
+import { Provider } from '@ts/core/ai/test_utils/provider_mock';
 
 describe('RequestManager', () => {
   // eslint-disable-next-line @typescript-eslint/init-declarations
