@@ -943,6 +943,238 @@ if(devices.real().deviceType === 'desktop') {
 }
 
 QUnit.module('Templates', () => {
+    QUnit.module('async', () => {
+        QUnit.test('should not raise error if template finished its render after new template starts render (T1059261)', function(assert) {
+            const clock = sinon.useFakeTimers();
+            const dropDownEditor = $('#dropDownEditorLazy').dxDropDownEditor({
+                fieldTemplate: 'field',
+                templatesRenderAsynchronously: true,
+                integrationOptions: {
+                    templates: {
+                        field: {
+                            render: function({ container, onRendered }) {
+                                const $input = $('<div>').appendTo(container);
+
+                                setTimeout(() => {
+                                    $input.dxTextBox();
+                                    onRendered();
+                                });
+                            }
+                        }
+                    }
+                },
+            }).dxDropDownEditor('instance');
+
+            try {
+                dropDownEditor.repaint();
+                clock.tick(10);
+            } catch(e) {
+                assert.ok(false, `error is raised: ${e.message}`);
+            } finally {
+                clock.tick(10);
+                clock.restore();
+                assert.ok(true);
+            }
+        });
+
+        QUnit.test('should not raise E1010 error if onRendered is received for a previous render function call (T1247338)', function(assert) {
+            const clock = sinon.useFakeTimers();
+            let renderCounter = 0;
+            const items = [{ id: 1, text: 'Item_1' }, { id: 12, text: 'Item_2' }];
+
+            const dropDownEditor = $('#dropDownEditorLazy').dxDropDownEditor({
+                dataSource: items,
+                value: 1,
+                valueExpr: 'id',
+                fieldTemplate: 'field',
+                templatesRenderAsynchronously: true,
+                integrationOptions: {
+                    templates: {
+                        field: {
+                            render: function({ container, model, onRendered }) {
+                                const $textBox = $('<div>').dxTextBox({ text: model });
+
+                                $textBox.appendTo(container);
+
+                                setTimeout(() => {
+                                    renderCounter++;
+
+                                    if(renderCounter === 1) {
+                                        domAdapter.removeElement(dropDownEditor.$element().find(`.${TEXT_EDITOR_INPUT_CLASS}`).get(0));
+                                        onRendered();
+                                    }
+                                });
+                            }
+                        }
+                    }
+                },
+            }).dxDropDownEditor('instance');
+
+            try {
+                dropDownEditor.option('value', 2);
+                dropDownEditor.option('value', 1);
+
+                clock.tick(110);
+            } catch(e) {
+                assert.ok(false, `Error E1010 is raised: ${e.message}`);
+            } finally {
+                clock.restore();
+                assert.ok(true);
+            }
+        });
+
+        QUnit.test('should not raise error if onRendered is received for a removed template (T1178295, T1059261)', function(assert) {
+            const clock = sinon.useFakeTimers();
+
+            const dropDownEditor = $('#dropDownEditorLazy').dxDropDownEditor({
+                fieldTemplate: 'field',
+                templatesRenderAsynchronously: true,
+                integrationOptions: {
+                    templates: {
+                        field: {
+                            render: function({ container, onRendered }) {
+                                const $input = $('<div>').appendTo(container);
+
+                                setTimeout(() => {
+                                    $input.dxTextBox();
+                                    onRendered();
+                                    domAdapter.removeElement(container);
+                                    domAdapter.removeElement($input);
+                                    dropDownEditor.repaint();
+                                    onRendered();
+                                }, 100);
+                            }
+                        }
+                    }
+                },
+            }).dxDropDownEditor('instance');
+
+            try {
+                clock.tick(110);
+            } catch(e) {
+                assert.ok(false, `error is raised: ${e.message}`);
+            } finally {
+                clock.restore();
+                assert.ok(true);
+            }
+        });
+
+        QUnit.module('aria-invalid', {}, () => {
+            [
+                { valueRequired: true, emptyValue: 'true', nonEmptyValue: undefined },
+                { valueRequired: false, emptyValue: undefined, nonEmptyValue: undefined }
+            ].forEach(({ valueRequired, emptyValue, nonEmptyValue }) => {
+                QUnit.test(`component with fieldTemplate should have proper aria-invalid attribute when validator is used and value is ${!valueRequired ? 'not' : ''} required (T1230706)`, function(assert) {
+                    const clock = sinon.useFakeTimers();
+
+                    const $dropDownEditor = $('#dropDownEditorSecond').dxDropDownEditor({
+                        dataSource: ['one', 'two', 'three'],
+                        searchEnabled: true,
+                        fieldTemplate: 'field',
+                        templatesRenderAsynchronously: true,
+                        integrationOptions: {
+                            templates: {
+                                field: {
+                                    render: function({ model, container, onRendered }) {
+                                        const $input = $('<div>').appendTo(container);
+
+                                        setTimeout(() => {
+                                            $input.dxTextBox({ value: model });
+                                            onRendered();
+                                        }, 0);
+                                    }
+                                }
+                            }
+                        },
+                        valueChangeEvent: 'keyup',
+                    }).dxValidator({
+                        validationRules: valueRequired ? [{ type: 'required', message: 'required' }] : [],
+                    });
+
+                    clock.tick(500);
+
+                    let $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
+
+                    assert.strictEqual($input.attr('aria-invalid'), nonEmptyValue, `initial render should set aria-invalid to ${nonEmptyValue}`);
+
+                    keyboardMock($input)
+                        .type('a');
+
+                    clock.tick(500);
+
+                    $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
+                    assert.equal($input.val(), 'a', 'input value is not empty');
+                    assert.strictEqual($input.attr('aria-invalid'), nonEmptyValue, `input should set 'aria-invalid' to ${nonEmptyValue} after typing`);
+
+                    keyboardMock($input)
+                        .caret(1)
+                        .press('backspace');
+
+                    clock.tick(500);
+
+                    $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
+                    assert.equal($input.val(), '', 'input value is empty');
+                    assert.strictEqual($input.attr('aria-invalid'), emptyValue, `input should set 'aria-invalid' to ${emptyValue} after deleting`);
+
+                    clock.restore();
+                });
+            });
+
+            QUnit.test('component with fieldTemplate should not have aria-invalid attribute when validator is not used (T1230706)', function(assert) {
+                const clock = sinon.useFakeTimers();
+
+                const $dropDownEditor = $('#dropDownEditorSecond').dxDropDownEditor({
+                    dataSource: ['one', 'two', 'three'],
+                    searchEnabled: true,
+                    fieldTemplate: 'field',
+                    templatesRenderAsynchronously: true,
+                    integrationOptions: {
+                        templates: {
+                            field: {
+                                render: function({ model, container, onRendered }) {
+                                    const $input = $('<div>').appendTo(container);
+
+                                    setTimeout(() => {
+                                        $input.dxTextBox({ value: model });
+                                        onRendered();
+                                    }, 0);
+                                }
+                            }
+                        }
+                    },
+                    valueChangeEvent: 'keyup',
+                });
+
+                clock.tick(500);
+
+                let $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
+
+                assert.strictEqual($input.attr('aria-invalid'), undefined, 'initial render should set aria-invalid to undefined');
+
+                keyboardMock($input)
+                    .type('a');
+
+                clock.tick(500);
+
+                $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
+                assert.equal($input.val(), 'a', 'input value is not empty');
+                assert.strictEqual($input.attr('aria-invalid'), undefined, 'input should set \'aria-invalid\' to undefined after typing');
+
+                keyboardMock($input)
+                    .caret(1)
+                    .press('backspace');
+
+                clock.tick(500);
+
+                $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
+                assert.equal($input.val(), '', 'input value is empty');
+                assert.strictEqual($input.attr('aria-invalid'), undefined, 'input should set \'aria-invalid\' to undefined after deleting');
+
+                clock.restore();
+            });
+        });
+    });
+
     QUnit.test('should not render placeholder if the fieldTemplate is used', function(assert) {
         const $dropDownEditor = $('#dropDownEditorLazy').dxDropDownEditor({
             items: [0, 1, 2, 3, 4, 5],
@@ -953,121 +1185,6 @@ QUnit.module('Templates', () => {
 
         assert.strictEqual($placeholder.length, 1, 'has only one placeholder');
         assert.strictEqual($placeholder.closest('.dx-textbox').length, 1, 'is textbox\'s placeholder');
-    });
-
-    QUnit.test('should not raise error if template finished its render after new template starts render (T1059261)', function(assert) {
-        const clock = sinon.useFakeTimers();
-        const dropDownEditor = $('#dropDownEditorLazy').dxDropDownEditor({
-            fieldTemplate: 'field',
-            templatesRenderAsynchronously: true,
-            integrationOptions: {
-                templates: {
-                    field: {
-                        render: function({ container, onRendered }) {
-                            const $input = $('<div>').appendTo(container);
-
-                            setTimeout(() => {
-                                $input.dxTextBox();
-                                onRendered();
-                            });
-                        }
-                    }
-                }
-            },
-        }).dxDropDownEditor('instance');
-
-        try {
-            dropDownEditor.repaint();
-            clock.tick(10);
-        } catch(e) {
-            assert.ok(false, `error is raised: ${e.message}`);
-        } finally {
-            clock.tick(10);
-            clock.restore();
-            assert.ok(true);
-        }
-    });
-
-    QUnit.test('should not raise E1010 error if onRendered is received for a previous render function call (T1247338)', function(assert) {
-        const clock = sinon.useFakeTimers();
-        let renderCounter = 0;
-        const items = [{ id: 1, text: 'Item_1' }, { id: 12, text: 'Item_2' }];
-
-        const dropDownEditor = $('#dropDownEditorLazy').dxDropDownEditor({
-            dataSource: items,
-            value: 1,
-            valueExpr: 'id',
-            fieldTemplate: 'field',
-            templatesRenderAsynchronously: true,
-            integrationOptions: {
-                templates: {
-                    field: {
-                        render: function({ container, model, onRendered }) {
-                            const $textBox = $('<div>').dxTextBox({ text: model });
-
-                            $textBox.appendTo(container);
-
-                            setTimeout(() => {
-                                renderCounter++;
-
-                                if(renderCounter === 1) {
-                                    domAdapter.removeElement(dropDownEditor.$element().find(`.${TEXT_EDITOR_INPUT_CLASS}`).get(0));
-                                    onRendered();
-                                }
-                            });
-                        }
-                    }
-                }
-            },
-        }).dxDropDownEditor('instance');
-
-        try {
-            dropDownEditor.option('value', 2);
-            dropDownEditor.option('value', 1);
-
-            clock.tick(110);
-        } catch(e) {
-            assert.ok(false, `Error E1010 is raised: ${e.message}`);
-        } finally {
-            clock.restore();
-            assert.ok(true);
-        }
-    });
-
-    QUnit.test('should not raise error if onRendered is received for a removed template (T1178295, T1059261)', function(assert) {
-        const clock = sinon.useFakeTimers();
-
-        const dropDownEditor = $('#dropDownEditorLazy').dxDropDownEditor({
-            fieldTemplate: 'field',
-            templatesRenderAsynchronously: true,
-            integrationOptions: {
-                templates: {
-                    field: {
-                        render: function({ container, onRendered }) {
-                            const $input = $('<div>').appendTo(container);
-
-                            setTimeout(() => {
-                                $input.dxTextBox();
-                                onRendered();
-                                domAdapter.removeElement(container);
-                                domAdapter.removeElement($input);
-                                dropDownEditor.repaint();
-                                onRendered();
-                            }, 100);
-                        }
-                    }
-                }
-            },
-        }).dxDropDownEditor('instance');
-
-        try {
-            clock.tick(110);
-        } catch(e) {
-            assert.ok(false, `error is raised: ${e.message}`);
-        } finally {
-            clock.restore();
-            assert.ok(true);
-        }
     });
 
     QUnit.test('onValueChanged should be fired for each change by keyboard when fieldTemplate is used', function(assert) {
@@ -2348,121 +2465,6 @@ QUnit.module('aria accessibility', () => {
 
             $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
             assert.strictEqual($input.attr(attribute), value, `${attribute} attribute should remain ${value} after deleting`);
-        });
-    });
-
-    QUnit.module('aria-invalid', {}, () => {
-        [
-            { valueRequired: true, emptyValue: 'true', nonEmptyValue: undefined },
-            { valueRequired: false, emptyValue: undefined, nonEmptyValue: undefined }
-        ].forEach(({ valueRequired, emptyValue, nonEmptyValue }) => {
-            QUnit.test(`component with fieldTemplate should have proper aria-invalid attribute when validator is used and value is ${!valueRequired ? 'not' : ''} required (T1230706)`, function(assert) {
-                const clock = sinon.useFakeTimers();
-
-                const $dropDownEditor = $('#dropDownEditorSecond').dxDropDownEditor({
-                    dataSource: ['one', 'two', 'three'],
-                    searchEnabled: true,
-                    fieldTemplate: 'field',
-                    templatesRenderAsynchronously: true,
-                    integrationOptions: {
-                        templates: {
-                            field: {
-                                render: function({ model, container, onRendered }) {
-                                    const $input = $('<div>').appendTo(container);
-
-                                    setTimeout(() => {
-                                        $input.dxTextBox({ value: model });
-                                        onRendered();
-                                    }, 0);
-                                }
-                            }
-                        }
-                    },
-                    valueChangeEvent: 'keyup',
-                }).dxValidator({
-                    validationRules: valueRequired ? [{ type: 'required', message: 'required' }] : [],
-                });
-
-                clock.tick(500);
-
-                let $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
-
-                assert.strictEqual($input.attr('aria-invalid'), nonEmptyValue, `initial render should set aria-invalid to ${nonEmptyValue}`);
-
-                keyboardMock($input)
-                    .type('a');
-
-                clock.tick(500);
-
-                $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
-                assert.equal($input.val(), 'a', 'input value is not empty');
-                assert.strictEqual($input.attr('aria-invalid'), nonEmptyValue, `input should set 'aria-invalid' to ${nonEmptyValue} after typing`);
-
-                keyboardMock($input)
-                    .caret(1)
-                    .press('backspace');
-
-                clock.tick(500);
-
-                $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
-                assert.equal($input.val(), '', 'input value is empty');
-                assert.strictEqual($input.attr('aria-invalid'), emptyValue, `input should set 'aria-invalid' to ${emptyValue} after deleting`);
-
-                clock.restore();
-            });
-        });
-
-        QUnit.test('component with fieldTemplate should not have aria-invalid attribute when validator is not used (T1230706)', function(assert) {
-            const clock = sinon.useFakeTimers();
-
-            const $dropDownEditor = $('#dropDownEditorSecond').dxDropDownEditor({
-                dataSource: ['one', 'two', 'three'],
-                searchEnabled: true,
-                fieldTemplate: 'field',
-                templatesRenderAsynchronously: true,
-                integrationOptions: {
-                    templates: {
-                        field: {
-                            render: function({ model, container, onRendered }) {
-                                const $input = $('<div>').appendTo(container);
-
-                                setTimeout(() => {
-                                    $input.dxTextBox({ value: model });
-                                    onRendered();
-                                }, 0);
-                            }
-                        }
-                    }
-                },
-                valueChangeEvent: 'keyup',
-            });
-
-            clock.tick(500);
-
-            let $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
-
-            assert.strictEqual($input.attr('aria-invalid'), undefined, 'initial render should set aria-invalid to undefined');
-
-            keyboardMock($input)
-                .type('a');
-
-            clock.tick(500);
-
-            $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
-            assert.equal($input.val(), 'a', 'input value is not empty');
-            assert.strictEqual($input.attr('aria-invalid'), undefined, 'input should set \'aria-invalid\' to undefined after typing');
-
-            keyboardMock($input)
-                .caret(1)
-                .press('backspace');
-
-            clock.tick(500);
-
-            $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
-            assert.equal($input.val(), '', 'input value is empty');
-            assert.strictEqual($input.attr('aria-invalid'), undefined, 'input should set \'aria-invalid\' to undefined after deleting');
-
-            clock.restore();
         });
     });
 
