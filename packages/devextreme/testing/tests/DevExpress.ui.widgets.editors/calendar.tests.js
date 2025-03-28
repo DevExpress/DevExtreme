@@ -873,6 +873,46 @@ QUnit.module('Views integration', {
 
         assert.strictEqual($contouredCell.length, 0, 'there is no contoured date cell');
     });
+
+    QUnit.test('should not navigate view after new date UI select, even in React controlled mode (T1279950)', function(assert) {
+        this.calendar.option({
+            selectionMode: 'multiple',
+            value: [new Date(2025, 1, 10), new Date(2025, 2, 10)],
+        });
+
+        const calendar = this.calendar;
+        const $nextMonthButton = this.$element.find(toSelector(CALENDAR_NAVIGATOR_NEXT_MONTH_CLASS));
+
+        assert.ok(
+            dateUtils.sameMonth(calendar.option('currentDate'), new Date(2025, 1, 10)),
+            'initially navigated to the earliest date'
+        );
+
+        $($nextMonthButton).trigger('dxclick');
+
+        assert.ok(
+            dateUtils.sameMonth(calendar.option('currentDate'), new Date(2025, 2, 10)),
+            'navigated to the next month'
+        );
+
+        calendar.option('value', [new Date(2025, 1, 10), new Date(2025, 2, 10)]);
+
+        assert.ok(
+            dateUtils.sameMonth(calendar.option('currentDate'), new Date(2025, 2, 10)),
+            'did not navigate back to the earliest date'
+        );
+
+        const $cell = this.$element.find('*[data-value="2025/03/10"]');
+
+        $cell.trigger('dxclick');
+
+        assert.strictEqual(this.calendar.option('value').length, 1, 'deselected correctly');
+
+        assert.ok(
+            dateUtils.sameMonth(calendar.option('currentDate'), new Date(2025, 2, 10)),
+            'did not navigate back to the earliest date after deseleting'
+        );
+    });
 });
 
 

@@ -1521,11 +1521,17 @@ const Calendar = Editor.inherit({
         this._correctZoomLevel();
         this._updateButtonsVisibility();
         break;
-      case 'value':
-        this._selectionStrategy.processValueChanged(value, previousValue);
+      case 'value': {
+        const isSameValue = dateUtils.sameDatesArrays(value, previousValue);
+
+        if (!isSameValue) {
+          this._selectionStrategy.processValueChanged(value, previousValue);
+        }
+
         this._setSubmitValue(value);
         this.callBase(args);
         break;
+      }
       case 'viewsCount':
         this._refreshViews();
         this._renderNavigator();
