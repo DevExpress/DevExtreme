@@ -3,15 +3,16 @@ import {
 } from '@jest/globals';
 
 import {
-  CALENDAR_BUTTON_NAME, DATE_NAVIGATOR_CLASS, DEFAULT_ITEMS, NEXT_BUTTON_NAME,
-} from './constants';
-import { getDateNavigator } from './m_date_navigator';
+  CLASS, DEFAULT_ITEMS, getDateNavigator, ITEMS_NAME,
+} from './m_date_navigator';
 
 describe('getDateNavigator', () => {
   it('should return default options in case of item is empty', () => {
     expect(getDateNavigator({} as any, {})).toEqual({
+      location: 'before',
+      name: 'dateNavigator',
       widget: 'dxButtonGroup',
-      cssClass: DATE_NAVIGATOR_CLASS,
+      cssClass: CLASS.container,
       options: {
         stylingMode: 'contained',
         selectionMode: 'none',
@@ -31,17 +32,19 @@ describe('getDateNavigator', () => {
         customOption: 'customOption',
         items: ['dateInterval', 'next', { key: 'customButton' }],
       },
-    })).toEqual({
+    } as any)).toEqual({
+      location: 'before',
+      name: 'dateNavigator',
       widget: 'dxButtonGroup',
-      cssClass: DATE_NAVIGATOR_CLASS,
+      cssClass: CLASS.container,
       customField: 'customField',
       options: {
         stylingMode: 'contained',
         selectionMode: 'none',
         customOption: 'customOption',
         items: [
-          expect.objectContaining({ key: CALENDAR_BUTTON_NAME }),
-          expect.objectContaining({ key: NEXT_BUTTON_NAME }),
+          expect.objectContaining({ key: ITEMS_NAME.calendarButton }),
+          expect.objectContaining({ key: ITEMS_NAME.nextButton }),
           expect.objectContaining({ key: 'customButton' }),
         ],
         onItemClick: expect.any(Function),
@@ -60,8 +63,10 @@ describe('getDateNavigator', () => {
     expect(customClick).toHaveBeenCalledWith(event);
     expect(event.itemData.clickHandler).toHaveBeenCalledWith(event);
     expect(config).toEqual({
+      location: 'before',
+      name: 'dateNavigator',
       widget: 'dxButtonGroup',
-      cssClass: DATE_NAVIGATOR_CLASS,
+      cssClass: CLASS.container,
       options: {
         stylingMode: 'contained',
         selectionMode: 'none',
