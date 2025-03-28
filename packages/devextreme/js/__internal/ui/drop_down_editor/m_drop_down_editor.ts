@@ -401,20 +401,22 @@ class DropDownEditor<
     this._detachFocusEvents();
 
     this._$textEditorContainer.remove();
-    $templateWrapper.empty();
 
     const currentRenderContext = Symbol('renderContext');
     this._activeRenderContext = currentRenderContext;
 
+    const $detachedTemplateWrapper = $('<div>');
     fieldTemplate.render({
       model: data,
-      container: getPublicElement($templateWrapper),
+      container: getPublicElement($detachedTemplateWrapper),
       onRendered: () => {
         if (this._activeRenderContext !== currentRenderContext) {
-          $templateWrapper?.empty();
-
           return;
         }
+
+        $templateWrapper.empty();
+        const $renderedContent = $detachedTemplateWrapper.children();
+        $templateWrapper.append($renderedContent);
 
         const $input = this._input();
 
