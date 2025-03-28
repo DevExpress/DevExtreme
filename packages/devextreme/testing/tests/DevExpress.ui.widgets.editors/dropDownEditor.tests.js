@@ -1059,6 +1059,49 @@ QUnit.module('Templates', () => {
             }
         });
 
+        QUnit.test('should render only one last value on re-render (T1262587)', function(assert) {
+            const clock = sinon.useFakeTimers();
+
+            const $dropDownEditor = $('#dropDownEditorLazy').dxDropDownEditor({
+                items: [1, 2, 3],
+                fieldTemplate: 'custom',
+                templatesRenderAsynchronously: true,
+                integrationOptions: {
+                    templates: {
+                        custom: {
+                            render: function(args) {
+                                const result = $('<div>');
+                                setTimeout(() => {
+                                    result.dxTextBox({
+                                        value: args.model ? args.model.text : '',
+                                    });
+
+                                    result.appendTo(args.container);
+                                    args.onRendered();
+                                }, 500);
+
+                                return result;
+                            }
+                        }
+                    }
+                },
+            });
+
+            const instance = $dropDownEditor.dxDropDownEditor('instance');
+
+            instance.option({ value: 1 });
+            instance.option({ value: null });
+
+            clock.tick(500);
+
+            const $wrapper = $dropDownEditor.find(`.${DROP_DOWN_EDITOR_FIELD_TEMPLATE_WRAPPER}`);
+            const $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
+            assert.strictEqual($wrapper.children().length, 1, 'only 1 element is rendered');
+            assert.strictEqual($input.val(), '', 'last value is applied');
+
+            clock.restore();
+        });
+
         QUnit.module('aria-invalid', {}, () => {
             [
                 { valueRequired: true, emptyValue: 'true', nonEmptyValue: undefined },
