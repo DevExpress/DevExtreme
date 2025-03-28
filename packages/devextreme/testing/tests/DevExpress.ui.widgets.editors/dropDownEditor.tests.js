@@ -959,7 +959,7 @@ QUnit.module('Templates', () => {
                 integrationOptions: {
                     templates: {
                         field: {
-                            render: function({ container, onRendered }) {
+                            render: ({ container, onRendered }) => {
                                 const $input = $('<div>').appendTo(container);
 
                                 setTimeout(() => {
@@ -996,7 +996,7 @@ QUnit.module('Templates', () => {
                 integrationOptions: {
                     templates: {
                         field: {
-                            render: function({ container, model, onRendered }) {
+                            render: ({ container, model, onRendered }) => {
                                 const $textBox = $('<div>').dxTextBox({ text: model });
 
                                 $textBox.appendTo(container);
@@ -1034,7 +1034,7 @@ QUnit.module('Templates', () => {
                 integrationOptions: {
                     templates: {
                         field: {
-                            render: function({ container, onRendered }) {
+                            render: ({ container, onRendered }) => {
                                 const $input = $('<div>').appendTo(container);
 
                                 setTimeout(() => {
@@ -1068,7 +1068,7 @@ QUnit.module('Templates', () => {
                 integrationOptions: {
                     templates: {
                         custom: {
-                            render: function(args) {
+                            render: (args) => {
                                 const result = $('<div>');
                                 setTimeout(() => {
                                     result.dxTextBox({
@@ -1099,6 +1099,53 @@ QUnit.module('Templates', () => {
             assert.strictEqual($input.val(), '', 'last value is applied');
         });
 
+        QUnit.test('should not raise error but keep last template rendered if 2 async renders are fast but onRendered calls are postponed (T1262587)', function(assert) {
+            const $dropDownEditor = $('#dropDownEditorLazy').dxDropDownEditor({
+                items: [1, 2, 3],
+                fieldTemplate: 'custom',
+                templatesRenderAsynchronously: true,
+                value: 1,
+                integrationOptions: {
+                    templates: {
+                        custom: {
+                            render: (args) => {
+                                const result = $('<div>');
+                                setTimeout(() => {
+                                    result.dxTextBox({
+                                        value: args.model ? args.model.text : '',
+                                    });
+
+                                    result.appendTo(args.container);
+                                    setTimeout(() => {
+                                        args.onRendered();
+                                    }, this.timeToWait);
+                                }, this.timeToWait);
+
+                                return result;
+                            }
+                        }
+                    }
+                },
+            });
+
+            const instance = $dropDownEditor.dxDropDownEditor('instance');
+
+            instance.option({ items: [1, 2, 3] });
+            instance.option({ value: null });
+
+            try {
+                this.clock.tick(this.timeToWait); // both templated are added to markup
+                this.clock.tick(this.timeToWait); // both onRendered are called
+            } catch(e) {
+                assert.ok(false, `Error E1010 is raised: ${e.message}`);
+            }
+
+            const $wrapper = $dropDownEditor.find(`.${DROP_DOWN_EDITOR_FIELD_TEMPLATE_WRAPPER}`);
+            const $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
+            assert.strictEqual($wrapper.children().length, 1, 'only 1 element is rendered');
+            assert.strictEqual($input.val(), '', 'last value is applied');
+        });
+
         QUnit.module('aria-invalid', {}, () => {
             [
                 { valueRequired: true, emptyValue: 'true', nonEmptyValue: undefined },
@@ -1113,7 +1160,7 @@ QUnit.module('Templates', () => {
                         integrationOptions: {
                             templates: {
                                 field: {
-                                    render: function({ model, container, onRendered }) {
+                                    render: ({ model, container, onRendered }) => {
                                         const $input = $('<div>').appendTo(container);
 
                                         setTimeout(() => {
@@ -1166,7 +1213,7 @@ QUnit.module('Templates', () => {
                     integrationOptions: {
                         templates: {
                             field: {
-                                render: function({ model, container, onRendered }) {
+                                render: ({ model, container, onRendered }) => {
                                     const $input = $('<div>').appendTo(container);
 
                                     setTimeout(() => {
