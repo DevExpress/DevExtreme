@@ -394,23 +394,20 @@ class DropDownEditor<
   }
 
   _renderTemplatedField(fieldTemplate, data): void {
+    const $templateWrapper = this._$templateWrapper as dxElementWrapper;
     const isFocused = focused(this._input());
 
     this._detachKeyboardEvents();
     this._detachFocusEvents();
 
     this._$textEditorContainer.remove();
-    // @ts-expect-error ts-error
-    this._$templateWrapper.empty();
-
-    const $templateWrapper = this._$templateWrapper;
+    $templateWrapper.empty();
 
     const currentRenderContext = Symbol('renderContext');
     this._activeRenderContext = currentRenderContext;
 
     fieldTemplate.render({
       model: data,
-      // @ts-expect-error ts-error
       container: getPublicElement($templateWrapper),
       onRendered: () => {
         if (this._activeRenderContext !== currentRenderContext) {
