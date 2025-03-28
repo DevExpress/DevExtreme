@@ -10,6 +10,7 @@ export {
   HtmlEditorAIChangeStyleOption,
   HtmlEditorAIChangeToneOption,
   HtmlEditorAITranslateOption,
+  HtmlEditorAICommandNameAll,
   HtmlEditorAIBasicCommand,
   HtmlEditorAIChangeStyleCommand,
   HtmlEditorAIChangeToneCommand,

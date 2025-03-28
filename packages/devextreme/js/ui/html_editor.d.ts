@@ -87,37 +87,52 @@ export type HtmlEditorAITranslateOption =
     | 'spanish'
     | string;
 
+/**
+ * @docid
+ * @public
+ */
 export type HtmlEditorAICommandNameAll = HtmlEditorAICommandName | 'custom';
 
 /**
  * @docid
- * @type object
  * @namespace DevExpress.ui.dxHtmlEditor
  */
-export interface HtmlEditorAICommandBase<CommandName extends HtmlEditorAICommandNameAll, CommandOptions = undefined> {
-    name: CommandName;
+export interface HtmlEditorAICommandBase<
+    CommandName extends HtmlEditorAICommandNameAll, // eslint-disable-line @typescript-eslint/no-unused-vars
+    CommandOptions = undefined> {
+    /**
+     * @docid
+     * @public
+     */
+    name: HtmlEditorAICommandNameAll;
+    /**
+     * @docid
+     * @public
+     */
     text?: string;
+    /**
+     * @docid
+     * @public
+     */
     options?: CommandOptions;
 }
 
 /**
  * @docid
  * @public
- * @type object
  * @inherits HtmlEditorAICommandBase
  * @namespace DevExpress.ui.dxHtmlEditor
  */
 export type HtmlEditorAIBasicCommand =
-    | HtmlEditorAICommandBase<'summarize', never>
-    | HtmlEditorAICommandBase<'proofread', never>
-    | HtmlEditorAICommandBase<'expand', never>
-    | HtmlEditorAICommandBase<'shorten', never>
-    | HtmlEditorAICommandBase<'askAI', never>;
+    | HtmlEditorAICommandBase<'summarize', any>
+    | HtmlEditorAICommandBase<'proofread', any>
+    | HtmlEditorAICommandBase<'expand', any>
+    | HtmlEditorAICommandBase<'shorten', any>
+    | HtmlEditorAICommandBase<'askAI', any>;
 
 /**
  * @docid
  * @public
- * @type object
  * @inherits HtmlEditorAICommandBase
  * @namespace DevExpress.ui.dxHtmlEditor
  */
@@ -126,7 +141,6 @@ export type HtmlEditorAIChangeStyleCommand = HtmlEditorAICommandBase<'changeStyl
 /**
  * @docid
  * @public
- * @type object
  * @inherits HtmlEditorAICommandBase
  * @namespace DevExpress.ui.dxHtmlEditor
  */
@@ -135,7 +149,6 @@ export type HtmlEditorAIChangeToneCommand = HtmlEditorAICommandBase<'changeTone'
 /**
  * @docid
  * @public
- * @type object
  * @inherits HtmlEditorAICommandBase
  * @namespace DevExpress.ui.dxHtmlEditor
  */
@@ -144,14 +157,12 @@ export type HtmlEditorAITranslateCommand = HtmlEditorAICommandBase<'translate', 
 /**
  * @docid
  * @public
- * @type object
  * @inherits HtmlEditorAICommandBase
  * @namespace DevExpress.ui.dxHtmlEditor
  */
 export interface HtmlEditorAICustomCommand extends HtmlEditorAICommandBase<'custom', string[]> {
     /**
      * @docid
-     * @type_function_param1 param:string
      * @public
      */
     prompt: (param?: string) => string;
@@ -165,7 +176,6 @@ export interface HtmlEditorAICustomCommand extends HtmlEditorAICommandBase<'cust
 /**
  * @docid
  * @public
- * @type object
  * @namespace DevExpress.ui.dxHtmlEditor
  */
 export type HtmlEditorAICommand =
@@ -178,7 +188,6 @@ export type HtmlEditorAICommand =
 /**
  * @docid
  * @public
- * @type object
  * @namespace DevExpress.ui.dxHtmlEditor
  */
 export interface HtmlEditorAIToolbarItem extends Omit<dxToolbarItem, 'menuItemTemplate' | 'showText' | 'widget' | 'options' | 'template' | 'html'> {

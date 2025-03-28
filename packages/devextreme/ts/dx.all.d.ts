@@ -19639,7 +19639,7 @@ declare module DevExpress.ui {
       | 'translate'
       | 'askAI';
     /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+     * [descr:HtmlEditorAICommandNameAll]
      */
     export type HtmlEditorAICommandNameAll = HtmlEditorAICommandName | 'custom';
     export type HtmlEditorAITranslateOption =
@@ -31846,11 +31846,11 @@ declare module DevExpress.ui.dxHtmlEditor {
    * [descr:HtmlEditorAIBasicCommand]
    */
   export type HtmlEditorAIBasicCommand =
-    | HtmlEditorAICommandBase<'summarize', never>
-    | HtmlEditorAICommandBase<'proofread', never>
-    | HtmlEditorAICommandBase<'expand', never>
-    | HtmlEditorAICommandBase<'shorten', never>
-    | HtmlEditorAICommandBase<'askAI', never>;
+    | HtmlEditorAICommandBase<'summarize', any>
+    | HtmlEditorAICommandBase<'proofread', any>
+    | HtmlEditorAICommandBase<'expand', any>
+    | HtmlEditorAICommandBase<'shorten', any>
+    | HtmlEditorAICommandBase<'askAI', any>;
   /**
    * [descr:HtmlEditorAIChangeStyleCommand]
    */
@@ -31882,8 +31882,17 @@ declare module DevExpress.ui.dxHtmlEditor {
     CommandName extends HtmlEditorAICommandNameAll,
     CommandOptions = undefined
   > {
-    name: CommandName;
+    /**
+     * [descr:HtmlEditorAICommandBase.name]
+     */
+    name: HtmlEditorAICommandNameAll;
+    /**
+     * [descr:HtmlEditorAICommandBase.text]
+     */
     text?: string;
+    /**
+     * [descr:HtmlEditorAICommandBase.options]
+     */
     options?: CommandOptions;
   }
   /**
