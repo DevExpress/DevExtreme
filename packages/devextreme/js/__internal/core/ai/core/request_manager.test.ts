@@ -38,7 +38,7 @@ describe('RequestManager', () => {
 
   describe('constructor', () => {
     it('stores the provider in a private field', () => {
-      // @ts-expect-error
+      // @ts-expect-error Access to protected property for a test
       expect(requestManager.provider).toBe(provider);
     });
   });

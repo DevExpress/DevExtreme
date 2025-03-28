@@ -12,7 +12,7 @@ describe('PromptManager', () => {
 
   describe('constructor', () => {
     it('initializes Map with templates from templates', () => {
-      // @ts-expect-error
+      // @ts-expect-error Access to protected property for a test
       const { templates: templatesMap } = promptManager;
 
       expect(templatesMap).toBeInstanceOf(Map);

@@ -16,7 +16,7 @@ import { TranslateCommand } from '@ts/core/ai/commands/translate';
 import { AI } from '@ts/core/ai/core/ai';
 import { PromptManager } from '@ts/core/ai/core/prompt_manager';
 import { RequestManager } from '@ts/core/ai/core/request_manager';
-import { Provider } from '@ts/core/ai/testUtils/provider_mock';
+// import { Provider } from '@ts/core/ai/testUtils/provider_mock';
 
 describe('AI', () => {
   // eslint-disable-next-line @typescript-eslint/init-declarations
@@ -37,9 +37,9 @@ describe('AI', () => {
 
   describe('constructor', () => {
     it('creates and stores PromptManager and RequestManager', () => {
-      // @ts-expect-error
+      // @ts-expect-error Access to protected property for a test
       expect(ai.promptManager).toBeInstanceOf(PromptManager);
-      // @ts-expect-error
+      // @ts-expect-error Access to protected property for a test
       expect(ai.requestManager).toBeInstanceOf(RequestManager);
     });
   });
@@ -65,7 +65,7 @@ describe('AI', () => {
       const abort = (): void => {};
 
       jest
-        // @ts-expect-error
+        // @ts-expect-error Access to protected property for a test
         .spyOn(ai.requestManager, 'sendRequest')
         .mockImplementation(() => abort);
 

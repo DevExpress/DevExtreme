@@ -32,7 +32,7 @@ describe('TranslateCommand', () => {
 
   describe('getTemplateName', () => {
     it('returns name of template correctly', () => {
-      // @ts-expect-error
+      // @ts-expect-error Access to protected property for a test
       const templateName = command.getTemplateName();
 
       expect(templateName).toBe('translate');
@@ -41,7 +41,7 @@ describe('TranslateCommand', () => {
 
   describe('buildPromptData', () => {
     it('forms PromptData with text and lang in user-section', () => {
-      // @ts-expect-error
+      // @ts-expect-error Access to protected property for a test
       const promptData: PromptData = command.buildPromptData(params);
 
       expect(promptData).toEqual({
@@ -59,7 +59,7 @@ describe('TranslateCommand', () => {
   describe('parseResult', () => {
     it('returns the string without changes', () => {
       const response = 'Translated text';
-      // @ts-expect-error
+      // @ts-expect-error Access to protected property for a test
       const result = command.parseResult(response);
 
       expect(result).toBe(response);
@@ -108,7 +108,7 @@ describe('TranslateCommand', () => {
       const callbacks: RequestCallbacks = { onComplete: jest.fn() };
 
       const sendRequestSpy = jest.spyOn(requestManager, 'sendRequest');
-      // @ts-expect-error
+      // @ts-expect-error Access to protected property for a test
       const parseResultSpy = jest.spyOn(command, 'parseResult');
 
       command.execute(params, callbacks);

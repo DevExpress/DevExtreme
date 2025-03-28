@@ -64,9 +64,9 @@ describe('BaseCommand', () => {
 
   describe('constructor', () => {
     it('stores PromptManager and RequestManager correctly', () => {
-      // @ts-expect-error
+      // @ts-expect-error Access to protected property for a test
       expect(command.promptManager).toBe(promptManager);
-      // @ts-expect-error
+      // @ts-expect-error Access to protected property for a test
       expect(command.requestManager).toBe(requestManager);
     });
   });
