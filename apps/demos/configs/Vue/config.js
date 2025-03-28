@@ -158,6 +158,9 @@ window.config = {
     'devextreme/events/utils': {
       main: 'index',
     },
+    'devextreme/common/core/events/utils': {
+      main: 'index',
+    },
     'devextreme/events': {
       main: 'index',
     }/**//** globalize */,
