@@ -20,11 +20,16 @@ export function SearchField(props: SearchFieldProps): JSX.Element | null {
   const {
     value, placeholder, width,
   } = props;
+  // eslint-disable-next-line @typescript-eslint/init-declarations
+  let timer;
   const onInput = (e: NativeEventInfo<TextBoxInstance, UIEvent>): void => {
+    clearTimeout(timer);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const component = e.component as any;
     const newValue = component._input().val();
-    props.onValueChanged?.(newValue);
+    timer = setTimeout(() => {
+      props.onValueChanged?.(newValue);
+    }, FILTERING_TIMEOUT);
   };
 
   return (
@@ -34,7 +39,6 @@ export function SearchField(props: SearchFieldProps): JSX.Element | null {
         placeholder={placeholder}
         width={width}
         onInput={onInput}
-        updateValueTimeout={FILTERING_TIMEOUT}
       />
     </div>
   );
