@@ -27,6 +27,7 @@ export interface ResponseParams {
 
 /**
  * @namespace DevExpress.ai
+ * @public
  */
 export interface TranslateCommandParams {
   text: string;
@@ -35,16 +36,19 @@ export interface TranslateCommandParams {
 
 /**
  * @namespace DevExpress.ai
+ * @public
  */
 export type TranslateResult = string;
 
 /**
  * @namespace DevExpress.ai
+ * @public
  */
 export type BaseResult = TranslateResult;
 
 /**
  * @namespace DevExpress.ai
+ * @public
  */
 export interface RequestCallbacks {
   onChunk?: (chunk: string) => void;
@@ -62,6 +66,7 @@ export interface AIProvider {
 
 /**
  * @namespace DevExpress.ai
+ * @public
  */
 export interface AI {
   translate: (params: TranslateCommandParams, callbacks: RequestCallbacks) => () => void;
