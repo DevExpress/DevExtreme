@@ -7,7 +7,6 @@
   }
 
   &.dx-stepper-connector-horizontal {
-    height: 2px;
     width: 100%;
 
     .dx-stepper-connector-value {
@@ -17,7 +16,6 @@
   }
 
   &.dx-stepper-connector-vertical {
-    width: 2px;
     height: 100%;
     flex-direction: column;
 

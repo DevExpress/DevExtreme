@@ -5,33 +5,60 @@
 
 // adduse
 
-$stepper-step-bg: $typography-bg !default;
-$stepper-step-shadow: $typography-bg !default;
-$stepper-step-hover-bg: $button-normal-hover-bg !default;
+$stepper-step-bg: null !default;
+$stepper-step-shadow: $base-bg !default;
+$stepper-step-text-color: $base-inverted-text-color !default;
+$stepper-step-label-color: $base-label-color !default;
 
-$stepper-step-color-selected: $base-inverted-text-color !default;
-$stepper-step-selected-bg: $button-default-bg !default;
-$stepper-step-selected-hover-bg: $button-default-hover-bg !default;
+$stepper-step-hover-bg: null !default;
 
-$stepper-step-invalid-bg: $button-danger-bg !default;
-$stepper-step-invalid-hover-bg: $button-danger-hover-bg !default;
+$stepper-step-selected-text-color: $base-inverted-text-color !default;
+$stepper-step-selected-bg: $base-accent !default;
+$stepper-step-selected-hover-bg: null !default;
+$stepper-step-selected-label-color: $base-text-color !default;
+$stepper-step-selected-hover-label-color: $base-text-color !default;
 
-$stepper-step-border-color: $base-border-color !default;
-$stepper-step-hover-border-color: null !default;
+$stepper-step-selected-invalid-bg: $base-danger !default;
+$stepper-step-selected-invalid-hover-bg: null !default;
 
-$stepper-step-focused-border-color: $stepper-step-selected-hover-bg !default;
-$stepper-step-selected-border-color: $base-accent !default;
+$stepper-step-invalid-bg: $stepper-step-selected-invalid-bg !default;
+$stepper-step-invalid-border-color: $stepper-step-selected-invalid-bg !default;
+$stepper-step-invalid-text-color: $stepper-step-selected-text-color !default;
+$stepper-step-invalid-hover-text-color: $stepper-step-selected-text-color !default;
+$stepper-step-invalid-label-color: $base-text-color !default;
+$stepper-step-invalid-hover-label-color: $base-text-color !default;
+
+$stepper-step-disabled-text-color: $base-disabled-color !default;
+$stepper-step-disabled-bg: null !default;
+$stepper-step-disabled-shadow: $base-bg !default;
 
 $stepper-connector-bg: $base-border-color !default;
-$stepper-connector-value-bg: $base-accent !default;
-
-$stepper-step-disabled-text-color: color.change($base-text-color, $alpha: 0.38) !default;
-$stepper-step-disabled-bg: $base-border-color !default;
+$stepper-connector-value-bg: $base-label-color !default;
 
 @if $mode == 'light' {
-  $stepper-step-hover-border-color: darken($base-border-color, 6%) !default;
+  $stepper-step-bg: darken($base-bg, 38%) !default;
+  $stepper-step-hover-bg: darken($base-bg, 42%) !default;
+
+  $stepper-step-selected-hover-bg: darken($base-accent, 8.5%) !default;
+  $stepper-step-selected-invalid-hover-bg: darken($base-danger, 8.5%) !default;
+
+  $stepper-step-disabled-bg: darken($base-bg, 12%) !default;
 }
 
 @if $mode == 'dark' {
-  $stepper-step-hover-border-color: lighten($base-border-color, 6%) !default;
+  $stepper-step-bg: lighten(desaturate($base-bg, 5.59), 29.22%) !default;
+  $stepper-step-hover-bg: lighten(desaturate($base-bg, 5.84), 32.16) !default;
+
+  $stepper-step-selected-hover-bg: lighten($base-accent, 8.5%) !default;
+  $stepper-step-selected-invalid-hover-bg: lighten($base-danger, 8.5%) !default;
+
+  $stepper-step-disabled-bg: lighten(desaturate($base-bg, 3.02), 9.22) !default;
 }
+
+$stepper-step-border-color: $stepper-step-bg !default;
+$stepper-step-hover-border-color: $stepper-step-hover-bg !default;
+
+$stepper-step-focused-border-color: $stepper-step-selected-hover-bg !default;
+
+$stepper-step-invalid-hover-bg: $stepper-step-selected-invalid-hover-bg !default;
+$stepper-step-invalid-hover-border-color: $stepper-step-selected-invalid-hover-bg !default;
