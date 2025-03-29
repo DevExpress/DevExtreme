@@ -103,7 +103,7 @@ export class MainView extends View<MainViewProps> {
       HeaderFilterPopup: this.headerFilterPopup.asInferno(),
       FilterPanel: this.filterPanel.asInferno(),
       ColumnChooser: this.columnsChooser.asInferno(),
-      SearchView: this.searchView.asInferno(),
+      SearchView: this.searchView,
       config: combined({
         rtlEnabled: this.options.oneWay('rtlEnabled'),
         disabled: this.options.oneWay('disabled'),
