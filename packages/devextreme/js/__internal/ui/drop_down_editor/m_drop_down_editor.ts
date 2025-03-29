@@ -62,6 +62,10 @@ export interface DropDownEditorProperties extends Omit<Properties,
   _onMarkupRendered?: () => void;
 }
 
+function createTemplateWrapperElement(): dxElementWrapper {
+  return $('<div>').addClass(DROP_DOWN_EDITOR_FIELD_TEMPLATE_WRAPPER);
+}
+
 class DropDownEditor<
   TProperties extends DropDownEditorProperties = DropDownEditorProperties,
 > extends TextBox<TProperties> {
@@ -387,14 +391,12 @@ class DropDownEditor<
     }
 
     if (!this._$templateWrapper) {
-      this._$templateWrapper = $('<div>')
-        .addClass(DROP_DOWN_EDITOR_FIELD_TEMPLATE_WRAPPER)
+      this._$templateWrapper = createTemplateWrapperElement()
         .prependTo(this.$element());
     }
   }
 
   _renderTemplatedField(fieldTemplate, data): void {
-    const $templateWrapper = this._$templateWrapper as dxElementWrapper;
     const isFocused = focused(this._input());
 
     this._detachKeyboardEvents();
@@ -402,21 +404,20 @@ class DropDownEditor<
 
     this._$textEditorContainer.remove();
 
+    const $newTemplateWrapper = createTemplateWrapperElement();
+    this._$templateWrapper!.replaceWith($newTemplateWrapper);
+    this._$templateWrapper = $newTemplateWrapper;
+
     const currentRenderContext = Symbol('renderContext');
     this._activeRenderContext = currentRenderContext;
 
-    const $detachedTemplateWrapper = $('<div>');
     fieldTemplate.render({
       model: data,
-      container: getPublicElement($detachedTemplateWrapper),
+      container: getPublicElement(this._$templateWrapper),
       onRendered: () => {
         if (this._activeRenderContext !== currentRenderContext) {
           return;
         }
-
-        $templateWrapper.empty();
-        const $renderedContent = $detachedTemplateWrapper.children();
-        $templateWrapper.append($renderedContent);
 
         const $input = this._input();
 
