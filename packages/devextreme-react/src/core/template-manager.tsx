@@ -60,14 +60,9 @@ export const TemplateManager: FC<TemplateManagerProps> = ({ init, onTemplatesRen
   });
   const [updateContext, setUpdateContext] = useState<TemplateManagerUpdateContext>();
   const widgetId = useRef('');
-  const isMounted = useRef(true);
   const templateFactories = useRef<Record<string, TemplateFunc>>({});
 
   const { collection } = instantiationModels;
-
-  useEffect(() => () => {
-    isMounted.current = false;
-  }, []);
 
   const getRenderFunc: GetRenderFuncFn = useCallback((templateKey) => ({
     model: data,
@@ -153,8 +148,6 @@ export const TemplateManager: FC<TemplateManagerProps> = ({ init, onTemplatesRen
     }
 
     function updateTemplates(onUpdated: () => void): void {
-      if (!isMounted.current) return;
-
       setUpdateContext({ onUpdated });
     }
 
