@@ -1134,7 +1134,7 @@ QUnit.module('Templates', () => {
             instance.option({ value: null });
 
             try {
-                this.clock.tick(this.timeToWait); // both templated are added to markup
+                this.clock.tick(this.timeToWait); // both templates are added to markup
                 this.clock.tick(this.timeToWait); // both onRendered are called
             } catch(e) {
                 assert.ok(false, `Error E1010 is raised: ${e.message}`);
