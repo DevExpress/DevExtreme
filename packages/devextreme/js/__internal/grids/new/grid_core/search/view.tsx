@@ -30,9 +30,9 @@ export class SearchView {
   protected getProps(): SubsGets<SearchFieldProps> {
     return combined({
       placeholder: this.options.oneWay('searchPanel.placeholder'),
-      value: this.searchController.searchTextOption,
       // TODO: resolve update cycle: editor - option - editor
-      // width: this.options.oneWay('searchPanel.width'),
+      // value: this.searchController.searchTextOption,
+      width: this.options.oneWay('searchPanel.width'),
       onValueChanged: (text) => {
         this.searchController.updateSearchText(text);
       },
