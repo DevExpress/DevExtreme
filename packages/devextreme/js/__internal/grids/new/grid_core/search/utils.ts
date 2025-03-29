@@ -4,11 +4,17 @@ import dateLocalization from '@js/common/core/localization/date';
 import {
   isDefined, isFunction, isNumeric, isString,
 } from '@js/core/utils/type';
+import type { NativeEventInfo } from '@js/events';
+import messageLocalization from '@js/localization/message';
+import type { TextBoxInstance } from '@js/ui/text_box';
 import { strictParseNumber } from '@ts/grids/grid_core/columns_controller/m_columns_controller_utils';
 import gridCoreUtils from '@ts/grids/grid_core/m_utils';
+import type { TextBoxProperties } from '@ts/ui/text_box/m_text_box';
 
 import type { Column } from '../columns_controller/types';
-import type { HighlightedTextItem, HighlightTextOptions } from './types';
+import type { PredefinedToolbarItem } from '../toolbar/types';
+import { addWidgetPrefix, getName } from '../utils';
+import type { HighlightedTextItem, HighlightTextOptions, SearchFieldProps } from './types';
 
 const HIGHLIGHT_SPLIT_SEPARATOR = '<--|-->';
 
@@ -110,3 +116,40 @@ export const createFilterExpression = (
   // }
   return result;
 };
+
+const FILTERING_TIMEOUT = 700;
+
+const CLASS = {
+  searchPanel: 'search-panel',
+};
+
+export const addSearchTextBox = (props: SearchFieldProps): PredefinedToolbarItem => ({
+  name: 'searchPanel',
+  showText: 'inMenu',
+  location: 'after',
+  locateInMenu: 'auto',
+
+  widget: 'dxTextBox',
+  options: {
+    onInput: (e: NativeEventInfo<TextBoxInstance, UIEvent>): void => {
+      // eslint-disable-next-line @typescript-eslint/init-declarations
+      let timer;
+      clearTimeout(timer);
+
+      const component = e.component as any;
+      const newValue = component._input().val();
+      timer = setTimeout(() => {
+        props.onValueChanged?.(newValue);
+      }, FILTERING_TIMEOUT);
+    },
+    value: props.value,
+    placeholder: props.placeholder,
+    width: props.width,
+    inputAttr: {
+      'aria-label': messageLocalization.format(`${getName()}-ariaSearchInGrid`),
+    },
+    elementAttr: {
+      class: addWidgetPrefix(CLASS.searchPanel),
+    },
+  } as TextBoxProperties,
+});

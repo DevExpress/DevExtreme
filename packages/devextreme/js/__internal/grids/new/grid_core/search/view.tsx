@@ -1,14 +1,14 @@
-import $ from '@js/core/renderer';
-import { combined, type SubsGets } from '@ts/core/reactive';
+import { combined, computed, type SubsGets } from '@ts/core/reactive';
 import { SearchController } from '@ts/grids/new/grid_core/search/controller';
-import { SearchField } from '@ts/grids/new/grid_core/search/search_field';
 import { ToolbarController } from '@ts/grids/new/grid_core/toolbar/controller';
-import { render } from 'inferno';
 
 import { OptionsController } from '../options_controller/options_controller';
-import type { SearchFieldProps } from './search_field';
+import type { SearchFieldProps } from './types';
+import { addSearchTextBox } from './utils';
 
 export class SearchView {
+  private readonly visible = this.options.oneWay('searchPanel.visible');
+
   public static dependencies = [
     OptionsController,
     ToolbarController,
@@ -21,28 +21,17 @@ export class SearchView {
     private readonly searchController: SearchController,
   ) {
     this.toolbarController.addDefaultItem(
-      {
-        name: 'searchPanel',
-        showText: 'inMenu',
-        location: 'after',
-        locateInMenu: 'auto',
-
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        template: (data, index, element: any) => {
-          render(
-            // eslint-disable-next-line spellcheck/spell-checker
-            <SearchField {...this.getProps().unreactive_get()} />,
-            $(element).get(0),
-          );
-        },
-      },
-      this.options.oneWay('searchPanel.visible'),
+      computed(
+        addSearchTextBox,
+        [this.getProps()],
+      ),
+      this.visible,
     );
   }
 
   protected getProps(): SubsGets<SearchFieldProps> {
     return combined({
-      visible: this.options.oneWay('searchPanel.visible'),
+      visible: this.visible,
       placeholder: this.options.oneWay('searchPanel.placeholder'),
       text: this.searchController.searchTextOption,
       width: this.options.oneWay('searchPanel.width'),
