@@ -16,6 +16,12 @@ import {
  ToolbarItem,
 } from "devextreme/ui/card_view";
 import {
+ Mode,
+ ToolbarItemLocation,
+ ToolbarItemComponent,
+ DisplayMode,
+} from "devextreme/common";
+import {
  DataSourceOptions,
 } from "devextreme/common/data";
 import {
@@ -25,13 +31,12 @@ import {
  EventInfo,
 } from "devextreme/common/core/events";
 import {
- DataErrorOccurredInfo,
+ Component,
+} from "devextreme/core/component";
+import {
  Pager,
  PagerPageSize,
 } from "devextreme/common/grids";
-import {
- Component,
-} from "devextreme/core/component";
 import {
  PagerBase,
 } from "devextreme/ui/pagination";
@@ -39,12 +44,6 @@ import {
  LocateInMenuMode,
  ShowTextMode,
 } from "devextreme/ui/toolbar";
-import {
- ToolbarItemLocation,
- ToolbarItemComponent,
- Mode,
- DisplayMode,
-} from "devextreme/common";
 import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
@@ -93,7 +92,7 @@ const componentConfig = {
     cardHeader: Object as PropType<CardHeader>,
     cardMaxWidth: Number,
     cardMinWidth: Number,
-    cardsPerRow: [Number, String] as PropType<number | "auto">,
+    cardsPerRow: [String, Number] as PropType<Mode | number>,
     cardTemplate: {},
     columns: Array as PropType<Array<ColumnProperties | string>>,
     dataSource: [Array, Object, String] as PropType<Array<any> | DataSource | DataSourceOptions | Store | string | Record<string, any>>,
@@ -106,13 +105,13 @@ const componentConfig = {
     hoverStateEnabled: Boolean,
     keyExpr: [Array, String] as PropType<Array<string> | string>,
     onContentReady: Function as PropType<((e: EventInfo<any>) => void)>,
-    onDataErrorOccurred: Function as PropType<((args: DataErrorOccurredInfo | EventInfo<any> | { component: any, element: any, error: any, model: any }) => void)>,
+    onDataErrorOccurred: Function as PropType<((e: { component: Object, element: any, error: any, model: any }) => void)>,
     onDisposing: Function as PropType<((e: EventInfo<any>) => void)>,
     onInitialized: Function as PropType<((e: { component: Component<any>, element: any }) => void)>,
     onOptionChanged: Function as PropType<((e: { component: DOMComponent, element: any, fullName: string, model: any, name: string, previousValue: any, value: any }) => void)>,
     pager: Object as PropType<Pager | Record<string, any> | PagerBase>,
     paging: Object as PropType<Paging>,
-    remoteOperations: [Boolean, Object, String] as PropType<boolean | RemoteOperations | "auto">,
+    remoteOperations: [Boolean, String, Object] as PropType<boolean | Mode | RemoteOperations>,
     rtlEnabled: Boolean,
     tabIndex: Number,
     toolbar: Object as PropType<Record<string, any>>,
@@ -248,11 +247,13 @@ const DxHeaderPanelConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
+    "update:dragging": null,
     "update:itemCssClass": null,
     "update:itemTemplate": null,
     "update:visible": null,
   },
   props: {
+    dragging: Object as PropType<Record<string, any>>,
     itemCssClass: String,
     itemTemplate: {},
     visible: Boolean

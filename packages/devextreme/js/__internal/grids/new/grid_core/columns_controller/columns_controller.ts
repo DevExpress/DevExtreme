@@ -1,12 +1,11 @@
 /* eslint-disable spellcheck/spell-checker */
 import type { Subscribable, SubsGets, SubsGetsUpd } from '@ts/core/reactive/index';
 import {
-  computed, iif, interruptableComputed,
+  computed, interruptableComputed,
 } from '@ts/core/reactive/index';
 import type { HeaderFilterRootOptions } from '@ts/grids/new/grid_core/filtering/header_filter/index';
 import headerFilterUtils from '@ts/grids/new/grid_core/filtering/header_filter/utils';
 
-import { DataController } from '../data_controller/index';
 import { OptionsController } from '../options_controller/options_controller';
 import type { ColumnProperties, ColumnSettings, PreNormalizedColumn } from './options';
 import type { Column } from './types';
@@ -31,35 +30,18 @@ export class ColumnsController {
 
   private readonly dateSerializationFormat: Subscribable<string | undefined>;
 
-  public static dependencies = [OptionsController, DataController] as const;
+  public static dependencies = [OptionsController] as const;
 
   constructor(
     private readonly options: OptionsController,
-    private readonly dataController: DataController,
   ) {
     this.columnsConfiguration = this.options.oneWay('columns');
     this.headerFilterConfiguration = this.options.oneWay('headerFilter');
 
-    const columnsFromDataSource = computed(
-      (items: unknown[]) => {
-        if (!items.length) {
-          return [];
-        }
-
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        return Object.keys(items[0] as any);
-      },
-      [this.dataController.items],
-    );
-
     this.columnsSettings = interruptableComputed(
       (columnsConfiguration) => preNormalizeColumns(columnsConfiguration ?? []),
       [
-        iif(
-          computed((columnsConfiguration) => !!columnsConfiguration, [this.columnsConfiguration]),
-          this.columnsConfiguration,
-          columnsFromDataSource,
-        ),
+        this.columnsConfiguration,
       ],
     );
 
@@ -114,32 +96,47 @@ export class ColumnsController {
   ): void {
     this.columnsSettings.updateFunc((columns) => {
       const index = getColumnIndexByName(columns, column.name);
-      const newColumns = [...columns];
 
       if (columns[index][option] === value) {
         return columns;
       }
+
+      let newColumns = [...columns];
 
       newColumns[index] = {
         ...newColumns[index],
         [option]: value,
       };
 
-      const visibleIndexes = normalizeVisibleIndexes(
-        newColumns.map((c) => c.visibleIndex),
-        index,
-      );
-
-      visibleIndexes.forEach((visibleIndex, i) => {
-        if (newColumns[i].visibleIndex !== visibleIndex) {
-          newColumns[i] = {
-            ...newColumns[i],
-            visibleIndex,
-          };
-        }
-      });
+      newColumns = this.normalizeColumnsVisibleIndexes(newColumns);
 
       return newColumns;
     });
+  }
+
+  public updateColumns(func: (columns: PreNormalizedColumn[]) => PreNormalizedColumn[]): void {
+    this.columnsSettings.updateFunc((columns) => {
+      let newColumns = func(columns);
+
+      newColumns = this.normalizeColumnsVisibleIndexes(newColumns);
+
+      return newColumns;
+    });
+  }
+
+  private normalizeColumnsVisibleIndexes(columns: PreNormalizedColumn[]): PreNormalizedColumn[] {
+    const result = [...columns];
+
+    const visibleIndexes = normalizeVisibleIndexes(
+      columns.map((c) => c.visibleIndex),
+    );
+
+    visibleIndexes.forEach((visibleIndex, i) => {
+      if (columns[i].visibleIndex !== visibleIndex) {
+        result[i].visibleIndex = visibleIndex;
+      }
+    });
+
+    return result;
   }
 }

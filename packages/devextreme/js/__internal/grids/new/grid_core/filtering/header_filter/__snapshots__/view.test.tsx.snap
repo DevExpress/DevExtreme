@@ -5,13 +5,3 @@ exports[`HeaderFilter HeaderFilterPopupComponent should render 1`] = `
   <div />
 </div>
 `;
-
-exports[`HeaderFilter View test 1`] = `
-<div>
-  <div>
-    <div
-      class="dx-header-filter-menu"
-    />
-  </div>
-</div>
-`;

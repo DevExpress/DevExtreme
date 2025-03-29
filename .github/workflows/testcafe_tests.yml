@@ -58,7 +58,10 @@ jobs:
       run: pnpm install
 
     - name: Build
-      run: pnpx nx build devextreme
+      shell: bash
+      run: |
+        node ./tools/scripts/performance_log.js &
+        pnpx nx build devextreme
 
     - name: Zip artifacts
       working-directory: ./packages/devextreme
@@ -100,12 +103,6 @@ jobs:
           { componentFolder: "accessibility/common", name: "accessibility - fluent (5/7)", theme: "fluent.blue.light", indices: "5/7" },
           { componentFolder: "accessibility/common", name: "accessibility - fluent (6/7)", theme: "fluent.blue.light", indices: "6/7" },
           { componentFolder: "accessibility/common", name: "accessibility - fluent (7/7)", theme: "fluent.blue.light", indices: "7/7" },
-          { componentFolder: "accessibility/list", name: "accessibility - list (1/2)", indices: "1/2" },
-          { componentFolder: "accessibility/list", name: "accessibility - list (1/2)", indices: "2/2" },
-          { componentFolder: "accessibility/list", name: "accessibility - list - material (1/2)", theme: "material.blue.light", indices: "1/2" },
-          { componentFolder: "accessibility/list", name: "accessibility - list - material (1/2)", theme: "material.blue.light", indices: "2/2" },
-          { componentFolder: "accessibility/list", name: "accessibility - list - fluent (1/2)", theme: "fluent.blue.light", indices: "1/2" },
-          { componentFolder: "accessibility/list", name: "accessibility - list - fluent (1/2)", theme: "fluent.blue.light", indices: "2/2" },
           { componentFolder: "common", name: "common" },
           { componentFolder: "common", name: "common - material", theme: 'material.blue.light' },
           { componentFolder: "common", name: "common - fluent", theme: 'fluent.blue.light' },
@@ -235,6 +232,7 @@ jobs:
         [ "${{ matrix.ARGS.platform }}" != "" ] && PLATFORM="--platform ${{ matrix.ARGS.platform }}"
         all_args="--browsers=chrome:devextreme-shr2 --componentFolder ${{ matrix.ARGS.componentFolder }} $CONCURRENCY $INDICES $PLATFORM $THEME"
         echo "$all_args"
+        node ../../tools/scripts/performance_log.js &
         pnpm run test $all_args
 
     - name: Sanitize job name

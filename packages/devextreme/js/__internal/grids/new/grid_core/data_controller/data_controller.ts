@@ -14,6 +14,7 @@ import { FilterController } from '../filtering/filter_controller';
 // import { EditingController } from '../editing/controller';
 // import type { Change } from '../editing/types';
 import { OptionsController } from '../options_controller/options_controller';
+import { SortingController } from '../sorting_controller/sorting_controller';
 import type { DataObject, Key } from './types';
 import {
   getLocalLoadOptions,
@@ -78,6 +79,8 @@ export class DataController {
     [this.totalCount, this.pageSize],
   );
 
+  public readonly isLoaded = state(false);
+
   private readonly normalizedRemoteOptions = computed(
     (remoteOperations, dataSource) => {
       const store = dataSource.store();
@@ -91,15 +94,17 @@ export class DataController {
     [this.normalizedRemoteOptions],
   );
 
-  public static dependencies = [OptionsController, FilterController] as const;
+  public static dependencies = [OptionsController, SortingController, FilterController] as const;
 
   constructor(
     private readonly options: OptionsController,
+    private readonly sortingController: SortingController,
     private readonly filterController: FilterController,
   ) {
     effect(
       (dataSource) => {
         const changedCallback = (e?): void => {
+          this.isLoaded.update(true);
           this.onChanged(dataSource, e);
         };
         const loadingChangedCallback = (): void => {
@@ -173,7 +178,7 @@ export class DataController {
     );
 
     effect(
-      (dataSource, pageIndex, pageSize, displayFilter, pagingEnabled) => {
+      (dataSource, pageIndex, pageSize, displayFilter, pagingEnabled, sortParameters) => {
         let someParamChanged = false;
         if (dataSource.pageIndex() !== pageIndex) {
           dataSource.pageIndex(pageIndex);
@@ -196,6 +201,10 @@ export class DataController {
           dataSource.paginate(pagingEnabled);
           someParamChanged ||= true;
         }
+        if (sortParameters && dataSource.sort() !== sortParameters) {
+          dataSource.sort(sortParameters);
+          someParamChanged ||= true;
+        }
 
         if (someParamChanged || !dataSource.isLoaded()) {
           // eslint-disable-next-line @typescript-eslint/no-floating-promises
@@ -208,6 +217,7 @@ export class DataController {
         this.pageSize,
         this.filterController.displayFilter,
         this.pagingEnabled,
+        this.sortingController.sortParameters,
       ],
     );
   }

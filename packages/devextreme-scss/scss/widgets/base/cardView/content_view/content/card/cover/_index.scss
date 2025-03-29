@@ -1,0 +1,16 @@
+@use '../variables' as *;
+
+.dx-card-cover {
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  border-top: $cardview-card-border-size solid $cardview-card-border-color;
+  border-bottom: $cardview-card-border-size solid $cardview-card-border-color;
+  max-height: var(--dx-cardview-card-cover-max-height);
+  aspect-ratio: var(--dx-cardview-card-cover-ratio);
+}
+
+.dx-card-cover-image {
+  object-fit: contain;
+  width: 100%;
+}

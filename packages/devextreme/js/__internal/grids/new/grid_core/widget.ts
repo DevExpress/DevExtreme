@@ -10,7 +10,7 @@ import type { Subscription } from '@ts/core/reactive/index';
 import { SearchView } from '@ts/grids/new/grid_core/search/view';
 import { render } from 'inferno';
 
-import { ColumnsChooserView } from './columns_chooser/view';
+import * as ColumnChooserModule from './column_chooser';
 import { CompatibilityColumnsController } from './columns_controller/compatibility';
 import * as ColumnsControllerModule from './columns_controller/index';
 import * as DataControllerModule from './data_controller/index';
@@ -27,6 +27,9 @@ import { MainView } from './main_view';
 import { defaultOptions, defaultOptionsRules, type Options } from './options';
 import { PagerView } from './pager/view';
 import { SearchController } from './search/controller';
+import * as SelectionControllerModule from './selection';
+import * as SortingControllerModule from './sorting_controller/index';
+import type { SortingController } from './sorting_controller/sorting_controller';
 import { ToolbarController } from './toolbar/controller';
 import { ToolbarView } from './toolbar/view';
 import { WidgetMock } from './widget_mock';
@@ -44,12 +47,18 @@ export class GridCoreNewBase<
 
   protected columnsController!: ColumnsControllerModule.ColumnsController;
 
+  protected sortingController!: SortingController;
+
+  protected selectionController!: SelectionControllerModule.Controller;
+
   // eslint-disable-next-line @typescript-eslint/prefer-readonly
   private editingController!: EditingController;
 
   private pagerView!: PagerView;
 
-  private columnsChooser!: ColumnsChooserView;
+  private columnChooserController!: ColumnChooserModule.ColumnChooserController;
+
+  protected columnChooserView!: ColumnChooserModule.ColumnChooserView;
 
   private toolbarController!: ToolbarController;
 
@@ -71,14 +80,17 @@ export class GridCoreNewBase<
     this.diContext.register(DataControllerModule.CompatibilityDataController);
     this.diContext.register(ItemsController);
     this.diContext.register(ColumnsControllerModule.ColumnsController);
+    this.diContext.register(SelectionControllerModule.Controller);
     this.diContext.register(ColumnsControllerModule.CompatibilityColumnsController);
+    this.diContext.register(SortingControllerModule.SortingController);
     this.diContext.register(ToolbarController);
     this.diContext.register(ToolbarView);
     this.diContext.register(EditingController);
     this.diContext.register(PagerView);
-    this.diContext.register(ColumnsChooserView);
     this.diContext.register(SearchController);
     this.diContext.register(SearchView);
+    this.diContext.register(ColumnChooserModule.ColumnChooserController);
+    this.diContext.register(ColumnChooserModule.ColumnChooserView);
     this.diContext.register(FilterControllerModule.FilterController);
     this.diContext.register(FilterControllerModule.FilterPanelView);
     this.diContext.register(FilterPanelView);
@@ -96,9 +108,10 @@ export class GridCoreNewBase<
   }
 
   protected _initDIContext(): void {
-    this.columnsChooser = this.diContext.get(ColumnsChooserView);
     this.dataController = this.diContext.get(DataControllerModule.DataController);
     this.columnsController = this.diContext.get(ColumnsControllerModule.ColumnsController);
+    this.sortingController = this.diContext.get(SortingControllerModule.SortingController);
+    this.selectionController = this.diContext.get(SelectionControllerModule.Controller);
     this.itemsController = this.diContext.get(ItemsController);
     this.toolbarController = this.diContext.get(ToolbarController);
     this.toolbarView = this.diContext.get(ToolbarView);
@@ -106,6 +119,8 @@ export class GridCoreNewBase<
     this.pagerView = this.diContext.get(PagerView);
     this.searchController = this.diContext.get(SearchController);
     this.searchView = this.diContext.get(SearchView);
+    this.columnChooserController = this.diContext.get(ColumnChooserModule.ColumnChooserController);
+    this.columnChooserView = this.diContext.get(ColumnChooserModule.ColumnChooserView);
     this.errorController = this.diContext.get(ErrorController);
     this.filterController = this.diContext.get(FilterControllerModule.FilterController);
     this.filterPanelView = this.diContext.get(FilterControllerModule.FilterPanelView);
@@ -143,7 +158,7 @@ export class GridCoreNewBase<
     [
       this.pagerView,
       this.toolbarView,
-      this.columnsChooser,
+      this.columnChooserView,
       this.filterPanelView,
     ].forEach((c) => {
       if (c.isCompatibilityMode()) {
@@ -167,8 +182,14 @@ export class GridCoreNewBase<
 
 export class GridCoreNew extends ColumnsControllerModule.PublicMethods(
   DataControllerModule.PublicMethods(
-    FilterControllerModule.PublicMethods(
-      GridCoreNewBase,
+    SortingControllerModule.PublicMethods(
+      FilterControllerModule.PublicMethods(
+        ColumnChooserModule.PublicMethods(
+          SelectionControllerModule.PublicMethods(
+            GridCoreNewBase,
+          ),
+        ),
+      ),
     ),
   ),
 ) {}

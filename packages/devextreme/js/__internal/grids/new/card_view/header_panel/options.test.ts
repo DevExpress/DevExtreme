@@ -9,6 +9,7 @@ import { ColumnsController } from '../../grid_core/columns_controller';
 import { DataController } from '../../grid_core/data_controller';
 import { FilterController } from '../../grid_core/filtering';
 import { Sortable } from '../../grid_core/inferno_wrappers/sortable';
+import { SortingController } from '../../grid_core/sorting_controller';
 import type { Options } from '../options';
 import { OptionsControllerMock } from '../options_controller.mock';
 import { HeaderPanelView } from './view';
@@ -19,14 +20,16 @@ const setup = (options: Options) => {
 
   const optionsController = new OptionsControllerMock(options);
   const filterController = new FilterController(optionsController);
-  const dataController = new DataController(optionsController, filterController);
-  const columnsController = new ColumnsController(optionsController, dataController);
+  const columnsController = new ColumnsController(optionsController);
+  const sortingController = new SortingController(optionsController, columnsController);
+  const dataController = new DataController(optionsController, sortingController, filterController);
   const headerFilterController = new HeaderFilterController(
     optionsController,
     dataController,
     columnsController,
   );
   const headerPanelView = new HeaderPanelView(
+    sortingController,
     columnsController,
     optionsController,
     headerFilterController,
@@ -54,7 +57,6 @@ describe('Options', () => {
           columns: ['column1'],
           allowColumnReordering: true,
           headerPanel: {
-            // @ts-expect-error ignored as dragging is tmp commented in .d.ts
             dragging: {
               dropFeedbackMode: 'push',
               scrollSpeed: 555,

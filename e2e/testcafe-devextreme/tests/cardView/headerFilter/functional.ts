@@ -4,7 +4,7 @@ import { createWidget } from '../../../helpers/createWidget';
 
 // TODO: Write test with remote DataSource after remote grouping will be supported
 // TODO: Write integration test with filtering after filtering will be implemented
-fixture.only.disablePageReloads`HeaderFilter.Functional`
+fixture.disablePageReloads`HeaderFilter.Functional`
   .page(url(__dirname, '../../container.html'));
 
 const CARD_VIEW_SELECTOR = '#container';

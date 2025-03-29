@@ -29,7 +29,6 @@ export class HeaderPanelTimeline extends InfernoWrapperComponent<HeaderPanelProp
     const TimeCellTemplateComponent = getTemplate(timeCellTemplate);
 
     return (
-      // @ts-expect-error
       <HeaderPanel
         viewContext={viewContext}
         dateHeaderData={dateHeaderData}

@@ -2,12 +2,15 @@ import { ClientFunction, Selector } from 'testcafe';
 import Widget from '../internal/widget';
 import Pager from '../pagination';
 import FilterPanel from './filter/panel';
+import ColumnChooser from '../dataGrid/columnChooser';
 import type { WidgetName } from '../types';
 
 export const CLASS = {
     pager: 'pager',
     pagination: 'pagination',
     filterPanel: 'filter-panel',
+    columnChooser: 'column-chooser',
+    columnChooserButton: 'column-chooser-button',
 }
 
 export default abstract class GridCore extends Widget {
@@ -40,8 +43,32 @@ export default abstract class GridCore extends Widget {
     )();
   }
 
+  apiColumnOption(id: string, name: string, value: any = 'empty'): Promise<any> {
+    const { getInstance } = this;
+
+    return ClientFunction(
+      () => {
+        const grid = getInstance() as any;
+        return value !== 'empty' ? grid.columnOption(id, name, value === 'undefined' ? undefined : value) : grid.columnOption(id, name);
+      },
+      {
+        dependencies: {
+          getInstance, id, name, value,
+        },
+      },
+    )();
+  }
+
   getPager(): Pager {
     return new Pager(this.element.find(`.${this.addWidgetPrefix(CLASS.pager)}, .dx-${CLASS.pagination}`));
+  }
+
+  getColumnChooser(): ColumnChooser {
+    return new ColumnChooser(this.body.find(`.${this.addWidgetPrefix(CLASS.columnChooser)}`));
+  }
+
+  getColumnChooserButton(): Selector {
+    return this.element.find(`.${this.addWidgetPrefix(CLASS.columnChooserButton)}`);
   }
 
   getCompatibilityName(): WidgetName {
@@ -69,4 +96,23 @@ export default abstract class GridCore extends Widget {
       { dependencies: { getInstance } },
     )();
   }
+
+  apiShowColumnChooser(): Promise<void> {
+    const { getInstance } = this;
+
+    return ClientFunction(
+      () => (getInstance() as any).showColumnChooser(),
+      { dependencies: { getInstance } },
+    )();
+  }
+
+  apiHideColumnChooser(): Promise<void> {
+    const { getInstance } = this;
+
+    return ClientFunction(
+      () => (getInstance() as any).hideColumnChooser(),
+      { dependencies: { getInstance } },
+    )();
+  }
 }
+

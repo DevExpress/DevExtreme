@@ -3,19 +3,17 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 /* eslint-disable max-classes-per-file */
 /* eslint-disable spellcheck/spell-checker */
-import { hydrate } from '@ts/core/r1/runtime/inferno/index';
+import { infernoRenderer } from '@ts/core/m_inferno_renderer';
 import type { Subscription, SubsGets } from '@ts/core/reactive/index';
 import { toSubscribable } from '@ts/core/reactive/index';
-import { Component, type ComponentType, render } from 'inferno';
-
-// import { renderToString } from 'inferno-server';
+import { Component, type ComponentType } from 'inferno';
 
 export abstract class View<T extends {}> {
   private inferno: undefined | ComponentType;
 
   private props?: T;
 
-  private firstRender = true;
+  private readonly firstRender = true;
 
   protected abstract component: ComponentType<T>;
 
@@ -29,14 +27,7 @@ export abstract class View<T extends {}> {
         <ViewComponent {...props}/>
       );
 
-      // // @ts-expect-error
-      // root.innerHTML = renderToString(content);
-      if (this.firstRender) {
-        this.firstRender = false;
-        hydrate(content, root);
-      } else {
-        render(content, root);
-      }
+      infernoRenderer.renderIntoContainer(content, root, !this.firstRender);
     });
   }
 

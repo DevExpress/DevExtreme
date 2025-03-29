@@ -25,6 +25,7 @@ import type { OptionChanged } from './types';
 
 const DISABLED_STATE_CLASS = 'dx-state-disabled';
 export const FOCUSED_STATE_CLASS = 'dx-state-focused';
+export const HOVER_STATE_CLASS = 'dx-state-hover';
 const INVISIBLE_STATE_CLASS = 'dx-state-invisible';
 
 function setAttribute(name, value, target): void {
@@ -519,14 +520,14 @@ class Widget<
     $previous = this._findHoverTarget($previous);
     // eslint-disable-next-line @stylistic/max-len
     // eslint-disable-next-line @typescript-eslint/no-unused-expressions, @typescript-eslint/prefer-optional-chain
-    $previous && $previous.toggleClass('dx-state-hover', false);
+    $previous && $previous.toggleClass(HOVER_STATE_CLASS, false);
 
     if ($el && hoverStateEnabled && !disabled && !isActive) {
       const newHoveredElement = this._findHoverTarget($el);
 
       // eslint-disable-next-line @stylistic/max-len
       // eslint-disable-next-line @typescript-eslint/no-unused-expressions, @typescript-eslint/prefer-optional-chain
-      newHoveredElement && newHoveredElement.toggleClass('dx-state-hover', true);
+      newHoveredElement && newHoveredElement.toggleClass(HOVER_STATE_CLASS, true);
     }
   }
 

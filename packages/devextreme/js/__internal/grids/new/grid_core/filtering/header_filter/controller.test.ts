@@ -9,11 +9,14 @@ import type { HeaderFilterColumnOptions } from '@ts/grids/new/grid_core/filterin
 import type { Options } from '@ts/grids/new/grid_core/options';
 import { OptionsControllerMock } from '@ts/grids/new/grid_core/options_controller/options_controller.mock';
 
+import { SortingController } from '../../sorting_controller/sorting_controller';
+
 const setup = (config: Options = {}) => {
   const options = new OptionsControllerMock(config);
   const filterController = new FilterController(options);
-  const dataController = new DataController(options, filterController);
-  const columnsController = new ColumnsController(options, dataController);
+  const columnsController = new ColumnsController(options);
+  const sortingController = new SortingController(options, columnsController);
+  const dataController = new DataController(options, sortingController, filterController);
   const headerFilterController = new HeaderFilterController(
     options,
     dataController,

@@ -3,9 +3,16 @@ import url from '../../helpers/getPageUrl';
 import { createWidget } from '../../helpers/createWidget';
 
 async function createCardViewWithPager(): Promise<any> {
-  const dataSource = Array.from({ length: 20 }, (_, i) => ({ text: i.toString(), value: i}));
+  const dataSource = Array.from({ length: 20 }, (_, i) => ({ text: i.toString(), value: i }));
   return createWidget('dxCardView', {
     dataSource,
+
+    // TODO: resolve the situation when colums are not set in config
+    // There is the 'Maximum call stack size exceeded' error in this case
+    columns: [
+      'text',
+      'value',
+    ],
     paging: {
       pageSize: 2,
       pageIndex: 5,
@@ -32,7 +39,7 @@ test('Page index interaction', async (t) => {
     .expect(pager.getInfoText().textContent)
     .eql('Page 6 of 10 (20 items)')
     .expect(cardView.getCard(1).getFieldValueCell('Text').innerText)
-    .eql('11')
+    .eql('11');
 
   // set page index 7
   await t

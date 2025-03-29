@@ -5,4 +5,6 @@ export const DEFAULT_TOOLBAR_ITEMS = [
   'columnChooserButton',
   'searchPanel',
   'addCardButton',
+  'selectAllButton',
+  'clearSelectionButton',
 ] as const;

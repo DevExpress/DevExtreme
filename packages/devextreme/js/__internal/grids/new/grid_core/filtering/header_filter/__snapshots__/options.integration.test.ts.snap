@@ -3581,7 +3581,7 @@ exports[`Options HeaderFilter visible: false 1`] = `
           style="left: 0px; top: 0px; transform: none;"
         >
           <div
-            class="dx-cardview-headers-content"
+            class="dx-cardview-headerpanel-content"
           >
             <div
               class="dx-cardview-header-item  "
@@ -3590,7 +3590,6 @@ exports[`Options HeaderFilter visible: false 1`] = `
               A
               <span
                 class="dx-header-filter-icon "
-                tabindex="0"
               />
             </div>
           </div>
@@ -3633,7 +3632,7 @@ exports[`Options HeaderFilter visible: true 1`] = `
           style="left: 0px; top: 0px; transform: none;"
         >
           <div
-            class="dx-cardview-headers-content"
+            class="dx-cardview-headerpanel-content"
           >
             <div
               class="dx-cardview-header-item  "
@@ -3642,7 +3641,6 @@ exports[`Options HeaderFilter visible: true 1`] = `
               A
               <span
                 class="dx-header-filter-icon "
-                tabindex="0"
               />
             </div>
           </div>
@@ -3685,7 +3683,7 @@ exports[`Options HeaderFilter visible: undefined 1`] = `
           style="left: 0px; top: 0px; transform: none;"
         >
           <div
-            class="dx-cardview-headers-content"
+            class="dx-cardview-headerpanel-content"
           >
             <div
               class="dx-cardview-header-item  "
@@ -3694,7 +3692,6 @@ exports[`Options HeaderFilter visible: undefined 1`] = `
               A
               <span
                 class="dx-header-filter-icon "
-                tabindex="0"
               />
             </div>
           </div>

@@ -87,7 +87,6 @@ export class TimelineDateHeaderLayout extends BaseInfernoComponent<DateHeaderPro
                     text,
                     today,
                   }) => (
-                    // @ts-ignore
                     <DateHeaderCell
                       key={key}
                       viewContext={viewContext}

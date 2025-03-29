@@ -37,6 +37,12 @@ export class DxServerModule {
 
           container.innerHTML = childString;
         },
+        renderIntoContainer: (
+          jsx,
+          container,
+        ) => {
+          container.innerHTML = renderToString(jsx);
+        },
       });
     }
   }

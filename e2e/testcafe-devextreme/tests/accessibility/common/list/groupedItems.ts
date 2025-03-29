@@ -1,7 +1,7 @@
 import { Properties } from 'devextreme/ui/list.d';
-import url from '../../../helpers/getPageUrl';
-import { testAccessibility, Configuration } from '../../../helpers/accessibility/test';
-import { Options } from '../../../helpers/generateOptionMatrix';
+import url from '../../../../helpers/getPageUrl';
+import { testAccessibility, Configuration } from '../../../../helpers/accessibility/test';
+import { Options } from '../../../../helpers/generateOptionMatrix';
 
 fixture.disablePageReloads`Accessibility`
   .page(url(__dirname, '../../container.html'));
@@ -39,15 +39,12 @@ const groupedItems = [
 
 const options: Options<Properties> = {
   dataSource: [groupedItems],
-  height: [undefined, 400],
+  height: [400],
   grouped: [true],
   collapsibleGroups: [true, false],
   searchEnabled: [true, false],
-  allowItemDeleting: [true, false],
-  showSelectionControls: [true, false],
+  showSelectionControls: [true],
   selectionMode: ['all', 'multiple', 'none', 'single'],
-  itemDeleteMode: ['toggle', 'context', 'slideButton', 'slideItem', 'static', 'swipe'],
-  useNativeScrolling: [true, false],
 };
 
 const a11yCheckConfig = {

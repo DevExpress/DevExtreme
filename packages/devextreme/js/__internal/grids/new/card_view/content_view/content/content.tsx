@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
+import { combineClasses } from '@ts/core/utils/combine_classes';
 import type { DataRow } from '@ts/grids/new/grid_core/columns_controller/types';
 import { CollectionController } from '@ts/grids/new/grid_core/keyboard_navigation/collection_controller';
 import type { RefObject } from 'inferno';
@@ -17,6 +18,8 @@ export interface ContentProps {
 
   cardsPerRow?: number;
 
+  needToHiddenCheckBoxes?: boolean;
+
   cardProps?: {
     toolbar?: CardHeaderItem[];
     minWidth?: number;
@@ -27,6 +30,7 @@ export interface ContentProps {
 export const CLASSES = {
   content: 'dx-cardview-content',
   grid: 'dx-cardview-content-grid',
+  selectCheckBoxesHidden: 'dx-cardview-select-checkboxes-hidden',
 };
 
 function getInfernoCardKey(card: DataRow): undefined | string | number {
@@ -44,15 +48,48 @@ export class Content extends Component<ContentProps> {
 
   private readonly keyboardController = new CollectionController();
 
+  private getCssVariables(): Record<string, unknown> {
+    const variables = {};
+
+    if (this.props.cardsPerRow) {
+      variables['--dx-cardview-cardsperrow'] = this.props.cardsPerRow;
+    }
+
+    if (this.props.cardProps?.minWidth) {
+      variables['--dx-cardview-card-min-width'] = `${this.props.cardProps?.minWidth}px`;
+    }
+
+    if (this.props.cardProps?.maxWidth) {
+      variables['--dx-cardview-card-max-width'] = `${this.props.cardProps?.maxWidth}px`;
+    }
+
+    // @ts-expect-error
+    if (this.props.cardProps?.cover?.maxHeight) {
+      // @ts-expect-error
+      variables['--dx-cardview-card-cover-max-height'] = `${this.props.cardProps?.cover?.maxHeight}px`;
+    }
+
+    // @ts-expect-error
+    if (this.props.cardProps?.cover?.ratio) {
+      // @ts-expect-error
+      variables['--dx-cardview-card-cover-ratio'] = `${this.props.cardProps?.cover?.ratio}`;
+    }
+
+    return variables;
+  }
+
   render(): JSX.Element {
     this.cardRefs = new Array(this.props.items.length).fill(undefined).map(() => createRef());
+    const className = combineClasses({
+      [CLASSES.content]: true,
+      [CLASSES.grid]: true,
+      [CLASSES.selectCheckBoxesHidden]: !!this.props.needToHiddenCheckBoxes,
+    });
     return (
       <div
         tabIndex={0}
-        className={`${CLASSES.content} ${CLASSES.grid}`}
-        style={{
-          '--dx-cardview-cardsperrow': `${this.props.cardsPerRow}`,
-        }}
+        className={className}
+        style={this.getCssVariables()}
         ref={this.containerRef}
         onKeyDown={(e): void => this.keyboardController.onKeyDown(e)}
       >

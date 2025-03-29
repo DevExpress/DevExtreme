@@ -5,8 +5,6 @@ interface AbstractType<T> extends Function {
   prototype: T;
 }
 
-type PublicInterface<T> = { [P in keyof T]: T[P] };
-
 type Constructor<T, TDeps extends readonly any[]> = new(...deps: TDeps) => T;
 
 interface DIItem<T, TDeps extends readonly any[]> extends Constructor<T, TDeps> {
@@ -38,7 +36,7 @@ export class DIContext {
 
   public registerInstance<T>(
     id: AbstractType<T>,
-    instance: PublicInterface<T>,
+    instance: T,
   ): void {
     this.instances.set(id, instance);
   }

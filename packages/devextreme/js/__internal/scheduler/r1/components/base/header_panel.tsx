@@ -26,7 +26,6 @@ export const HeaderPanelDefaultProps = {
 };
 
 export class HeaderPanel extends InfernoWrapperComponent<HeaderPanelProps> {
-  // eslint-disable-next-line class-methods-use-this
   createEffects(): InfernoEffect[] {
     return [createReRenderEffect()];
   }
@@ -55,7 +54,6 @@ export class HeaderPanel extends InfernoWrapperComponent<HeaderPanelProps> {
       <thead>
       {
         isHorizontalGrouping && !groupByDate && (
-          // @ts-ignore
           <GroupPanel
             viewContext={viewContext}
             groupPanelData={groupPanelData}
@@ -79,7 +77,6 @@ export class HeaderPanel extends InfernoWrapperComponent<HeaderPanelProps> {
       }
       {
         groupByDate && (
-          // @ts-ignore
           <GroupPanel
             viewContext={viewContext}
             groupPanelData={groupPanelData}
