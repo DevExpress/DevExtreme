@@ -65,10 +65,8 @@ export const TemplateManager: FC<TemplateManagerProps> = ({ init, onTemplatesRen
 
   const { collection } = instantiationModels;
 
-  useEffect(() => {
-    return () => {
-      isMounted.current = false;
-    };
+  useEffect(() => () => {
+    isMounted.current = false;
   }, []);
 
   const getRenderFunc: GetRenderFuncFn = useCallback((templateKey) => ({
