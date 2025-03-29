@@ -7,8 +7,6 @@ import type { SearchFieldProps } from './types';
 import { addSearchTextBox } from './utils';
 
 export class SearchView {
-  private readonly visible = this.options.oneWay('searchPanel.visible');
-
   public static dependencies = [
     OptionsController,
     ToolbarController,
@@ -25,16 +23,16 @@ export class SearchView {
         addSearchTextBox,
         [this.getProps()],
       ),
-      this.visible,
+      this.options.oneWay('searchPanel.visible'),
     );
   }
 
   protected getProps(): SubsGets<SearchFieldProps> {
     return combined({
-      visible: this.visible,
       placeholder: this.options.oneWay('searchPanel.placeholder'),
-      text: this.searchController.searchTextOption,
-      width: this.options.oneWay('searchPanel.width'),
+      value: this.searchController.searchTextOption,
+      // TODO: resolve update cycle: editor - option - editor
+      // width: this.options.oneWay('searchPanel.width'),
       onValueChanged: (text) => {
         this.searchController.updateSearchText(text);
       },

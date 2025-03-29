@@ -123,6 +123,9 @@ const CLASS = {
   searchPanel: 'search-panel',
 };
 
+// eslint-disable-next-line @typescript-eslint/init-declarations
+let timer;
+
 export const addSearchTextBox = (props: SearchFieldProps): PredefinedToolbarItem => ({
   name: 'searchPanel',
   showText: 'inMenu',
@@ -132,10 +135,7 @@ export const addSearchTextBox = (props: SearchFieldProps): PredefinedToolbarItem
   widget: 'dxTextBox',
   options: {
     onInput: (e: NativeEventInfo<TextBoxInstance, UIEvent>): void => {
-      // eslint-disable-next-line @typescript-eslint/init-declarations
-      let timer;
       clearTimeout(timer);
-
       const component = e.component as any;
       const newValue = component._input().val();
       timer = setTimeout(() => {
