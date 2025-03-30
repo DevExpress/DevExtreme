@@ -151,5 +151,6 @@ export const addSearchTextBox = (props: SearchFieldProps): PredefinedToolbarItem
     elementAttr: {
       class: addWidgetPrefix(CLASS.searchPanel),
     },
+    mode: 'search',
   } as TextBoxProperties,
 });
