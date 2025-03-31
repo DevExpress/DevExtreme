@@ -7,7 +7,6 @@ import {
 } from '@jest/globals';
 import type {
   AIProvider,
-  IAI,
   RequestCallbacks,
   TranslateCommandParams,
 } from '@js/ai';
@@ -21,7 +20,7 @@ describe('AI', () => {
   const params: TranslateCommandParams = { text: 'text for translation', lang: 'French' };
 
   let provider = null as unknown as AIProvider;
-  let ai = null as unknown as IAI;
+  let ai = null as unknown as AI;
 
   beforeEach(() => {
     provider = new Provider();

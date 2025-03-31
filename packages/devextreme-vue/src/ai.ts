@@ -1,7 +1,8 @@
 export {
+    AI,
     AIProvider,
     BaseCommandResult,
-    IAI,
+    default,
     Prompt,
     RequestCallbacks,
     RequestParams,

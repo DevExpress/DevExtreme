@@ -1,6 +1,6 @@
 import type {
+  AI as IAI,
   AIProvider,
-  IAI,
   RequestCallbacks,
   TranslateCommandParams,
 } from '@js/ai';

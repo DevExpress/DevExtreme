@@ -39,6 +39,7 @@
     -->
 
     <script type="text/javascript" src="../artifacts/js/dx.all.debug.js" charset="utf-8"></script>
+    <script type="text/javascript" src="../artifacts/js/dx.ai.debug.js" charset="utf-8"></script>
     <script type="text/javascript" src="./themeSelector.js"></script>
     <script type="text/javascript" src="../../../node_modules/axe-core/axe.min.js"></script>
 </head>
@@ -52,10 +53,13 @@
         <div id="button"></div>
         <script>
             $(function() {
-                $("#button").dxButton({
-                    text: 'Click me!',
-                    onClick: function() { alert("clicked"); }
-                });
+                const dx = DevExpress;
+
+                debugger;
+                // $("#button").dxButton({
+                //     text: 'Click me!',
+                //     onClick: function() { alert("clicked"); }
+                // });
             });
         </script>
     </div>

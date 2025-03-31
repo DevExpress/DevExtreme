@@ -1,8 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import Chat, { type ChatTypes } from 'devextreme-react/chat';
 import { MessageEnteredEvent } from 'devextreme/ui/chat';
-// import type { AI } from 'devextreme-react/ai';
-import { AI } from 'devextreme/ai';
 import { loadMessages } from 'devextreme/localization';
 import {
   user,
