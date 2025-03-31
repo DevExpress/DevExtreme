@@ -330,12 +330,13 @@ describe('Button', () => {
               originalEvent,
             };
             const button = new Button({ onClick });
-            const stub = jest.fn();
 
-            button.contentRef = { current: { click: stub } } as any;
             button.keyDown(options);
             expect(options.originalEvent.preventDefault).toHaveBeenCalled();
-            expect(stub).toHaveBeenCalledTimes(1);
+            expect(onClick).toHaveBeenCalledTimes(1);
+            expect(onClick).toHaveBeenCalledWith({
+              event: options.originalEvent,
+            });
           });
 
           it('should not simulate click by common keys down', () => {
