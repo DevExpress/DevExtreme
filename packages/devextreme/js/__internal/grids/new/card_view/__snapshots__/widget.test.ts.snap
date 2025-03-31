@@ -24,29 +24,6 @@ exports[`common initial render should be successfull 1`] = `
         role="presentation"
       >
         <div
-          class="dx-item dx-toolbar-item dx-toolbar-button dx-toolbar-item-auto-hide dx-toolbar-text-auto-hide"
-        >
-          <div
-            class="dx-item-content dx-toolbar-item-content"
-          >
-            <div
-              aria-haspopup="dialog"
-              aria-label="column-chooser"
-              class="dx-widget dx-button dx-button-mode-contained dx-button-normal dx-button-has-icon"
-              role="button"
-              tabindex="0"
-            >
-              <div
-                class="dx-button-content"
-              >
-                <i
-                  class="dx-icon dx-icon-column-chooser"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-        <div
           class="dx-item dx-toolbar-item dx-toolbar-button dx-toolbar-item-auto-hide"
         >
           <div
