@@ -545,6 +545,7 @@ class Splitter extends CollectionWidget<Properties> {
           event,
           handleElement: getPublicElement<HTMLElement>($resizeHandle),
         };
+
         // eslint-disable-next-line @typescript-eslint/no-floating-promises
         this._feedbackDeferred?.resolve();
         this._toggleActiveState($resizeHandle, false);
@@ -683,6 +684,12 @@ class Splitter extends CollectionWidget<Properties> {
         this._itemVisibleOptionChanged(item, value as PropertyType, prevValue as PropertyType);
         break;
       }
+      case 'template':
+        super._itemOptionChanged(item, property, value, prevValue);
+
+        this._applyStylesFromLayout(this.getLayout());
+        this._updateResizeHandles();
+        break;
       default:
         super._itemOptionChanged(item, property, value, prevValue);
     }
