@@ -4,11 +4,13 @@ import { compileGetter } from '@js/core/utils/data';
 import { isDefined } from '@js/core/utils/type';
 import { combined, computed, state } from '@ts/core/reactive/index';
 import type { OptionsController } from '@ts/grids/new/card_view/options_controller';
+import type { DataRow } from '@ts/grids/new/grid_core/columns_controller/types';
 
 import { ContentView as ContentViewBase } from '../../grid_core/content_view/view';
 import type { DataObject } from '../../grid_core/data_controller/types';
 import type { ContentViewProps } from './content_view';
 import { ContentView as ContentViewComponent } from './content_view';
+import type { CardHoldEvent, SelectCardOptions } from './types';
 import { factors } from './utils';
 
 export class ContentView extends ContentViewBase<ContentViewProps> {
@@ -43,17 +45,21 @@ export class ContentView extends ContentViewBase<ContentViewProps> {
       ...this.getBaseProps(),
       contentProps: combined({
         items: this.itemsController.items,
-        // items: computed((virtualState) => virtualState.virtualItems, [this.virtualState]),
+        needToHiddenCheckBoxes: this.selectionController.needToHiddenCheckBoxes,
         fieldTemplate: this.options.template('fieldTemplate'),
         cardsPerRow: this.cardsPerRow,
         onRowHeightChange: this.rowHeight.update.bind(this.rowHeight),
         cardProps: combined({
           minWidth: this.cardMinWidth,
           maxWidth: this.options.oneWay('cardMaxWidth'),
+          isCheckBoxesRendered: this.selectionController.isCheckBoxesRendered,
+          allowSelectOnClick: this.selectionController.allowSelectOnClick,
+          onHold: this.onCardHold.bind(this),
           onClick: this.options.action('onCardClick'),
           onDblClick: this.options.action('onCardDblClick'),
           onHoverChanged: this.options.action('onCardHoverChanged'),
           onPrepared: this.options.action('onCardPrepared'),
+          template: this.options.template('cardTemplate'),
           cover: combined({
             imageExpr: computed(
               (imageExpr) => this.processExpr(imageExpr),
@@ -66,8 +72,15 @@ export class ContentView extends ContentViewBase<ContentViewProps> {
             maxHeight: this.options.oneWay('cardCover.maxHeight'),
             ratio: this.options.oneWay('cardCover.ratio'),
           }),
+          header: combined({
+            captionExpr: computed(
+              (captionExpr) => this.processExpr(captionExpr),
+              [this.options.oneWay('cardHeader.captionExpr')],
+            ),
+          }),
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           toolbar: this.options.oneWay('cardHeader.items') as any,
+          selectCard: this.selectCard.bind(this),
         }),
       }),
     });
@@ -81,5 +94,17 @@ export class ContentView extends ContentViewBase<ContentViewProps> {
     }
     // @ts-expect-error
     return compileGetter(expr);
+  }
+
+  private selectCard(row: DataRow, options: SelectCardOptions) {
+    if (options.needToUpdateCheckboxes) {
+      this.selectionController.updateSelectionCheckBoxesVisible(true);
+    }
+
+    this.selectionController.changeCardSelection(row.index, options);
+  }
+
+  private onCardHold(e: CardHoldEvent) {
+    this.selectionController.processLongTap(e.row);
   }
 }
