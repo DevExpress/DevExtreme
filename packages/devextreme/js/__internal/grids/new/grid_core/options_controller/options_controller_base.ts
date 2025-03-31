@@ -8,6 +8,8 @@ import type {
   SubsGets, SubsGetsUpd,
 } from '@ts/core/reactive/index';
 import { computed, state } from '@ts/core/reactive/index';
+import { extend } from '@ts/core/utils/m_extend';
+import { isPlainObject } from '@ts/core/utils/m_type';
 import type { ComponentType } from 'inferno';
 
 import { TemplateWrapper } from '../inferno_wrappers/template_wrapper';
@@ -58,12 +60,18 @@ function updateImmutable<T extends Record<string, unknown> | unknown[]>(
   const [pathPart, ...restPathParts] = pathParts;
   const ret = cloneObjectValue(value);
 
+  // eslint-disable-next-line no-nested-ternary
   ret[pathPart] = restPathParts.length
     ? updateImmutable(value[pathPart], newValue[pathPart], restPathParts)
-    : newValue[pathPart];
+    : isPlainObject(newValue[pathPart])
+      ? extend(true, {}, newValue[pathPart])
+      : newValue[pathPart];
 
   return ret;
 }
+
+// @ts-expect-error
+window.updateImmutable = updateImmutable;
 
 function getValue<T>(obj: unknown, path: string): T {
   let v: any = obj;
