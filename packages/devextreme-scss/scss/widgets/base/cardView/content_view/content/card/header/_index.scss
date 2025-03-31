@@ -11,3 +11,27 @@
     }
   }
 }
+
+.dx-cardview-select-checkboxes-hidden .dx-cardview-card:not(.dx-cardview-card-selection) .dx-cardview-select-checkbox {
+  .dx-checkbox {
+    display: none;
+  }
+
+  .dx-toolbar-item-content::before {
+    content: '';
+    width: 20px;
+    height: 20px;
+    display: inline-block;
+    pointer-events: none;
+  }
+
+  .dx-toolbar-item-content:hover {
+    &::before {
+      display: none;
+    }
+
+    .dx-checkbox {
+      display: inline-block;
+    }
+  }
+}
