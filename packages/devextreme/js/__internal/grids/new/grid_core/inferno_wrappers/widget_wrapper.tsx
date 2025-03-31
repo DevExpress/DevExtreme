@@ -6,13 +6,14 @@ import { ConfigContext } from '../core/config_context';
 
 interface WithRef<TComponent> {
   componentRef?: RefObject<TComponent>;
+  elementRef?: RefObject<HTMLDivElement>;
 }
 
 export abstract class InfernoWrapper<
   TProperties,
   TComponent extends DOMComponent<TProperties>,
 > extends Component<TProperties & WithRef<TComponent>> {
-  protected readonly ref = createRef<HTMLDivElement>();
+  protected ref = createRef<HTMLDivElement>();
 
   protected component?: TComponent;
 
@@ -21,6 +22,9 @@ export abstract class InfernoWrapper<
   ) => TComponent;
 
   public render(): InfernoNode {
+    if (this.props.elementRef) {
+      this.ref = this.props.elementRef;
+    }
     return <div ref={this.ref}></div>;
   }
 
