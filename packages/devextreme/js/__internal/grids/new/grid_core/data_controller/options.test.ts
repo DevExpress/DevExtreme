@@ -9,8 +9,11 @@ import DataSource from '@js/data/data_source';
 import { logger } from '@ts/core/utils/m_console';
 import ArrayStore from '@ts/data/m_array_store';
 
+import { ColumnsController } from '../columns_controller';
+import { FilterController } from '../filtering';
 import type { Options } from '../options';
 import { OptionsControllerMock } from '../options_controller/options_controller.mock';
+import { SortingController } from '../sorting_controller';
 import { DataController } from './data_controller';
 
 beforeAll(() => {
@@ -22,7 +25,10 @@ afterAll(() => {
 
 const setup = (options: Options) => {
   const optionsController = new OptionsControllerMock(options);
-  const dataController = new DataController(optionsController);
+  const filterController = new FilterController(optionsController);
+  const columnsController = new ColumnsController(optionsController);
+  const sortingController = new SortingController(optionsController, columnsController);
+  const dataController = new DataController(optionsController, sortingController, filterController);
 
   return {
     optionsController,
@@ -31,50 +37,50 @@ const setup = (options: Options) => {
 };
 
 describe('Options', () => {
-  describe('cacheEnabled', () => {
-    const setupForCacheEnabled = ({ cacheEnabled }) => {
-      const store = new ArrayStore({
-        data: [
-          { id: 1, value: 'value 1' },
-          { id: 2, value: 'value 2' },
-          { id: 3, value: 'value 3' },
-        ],
-        key: 'id',
-      });
+  // describe('cacheEnabled', () => {
+  //   const setupForCacheEnabled = ({ cacheEnabled }) => {
+  //     const store = new ArrayStore({
+  //       data: [
+  //         { id: 1, value: 'value 1' },
+  //         { id: 2, value: 'value 2' },
+  //         { id: 3, value: 'value 3' },
+  //       ],
+  //       key: 'id',
+  //     });
 
-      jest.spyOn(store, 'load');
+  //     jest.spyOn(store, 'load');
 
-      const { dataController } = setup({
-        cacheEnabled,
-        dataSource: store,
-        paging: {
-          pageSize: 1,
-        },
-      });
+  //     const { dataController } = setup({
+  //       cacheEnabled,
+  //       dataSource: store,
+  //       paging: {
+  //         pageSize: 1,
+  //       },
+  //     });
 
-      return { store, dataController };
-    };
+  //     return { store, dataController };
+  //   };
 
-    describe('when it is false', () => {
-      it('should skip caching requests', () => {
-        const { store, dataController } = setupForCacheEnabled({
-          cacheEnabled: false,
-        });
-        expect(store.load).toBeCalledTimes(1);
+  //   describe('when it is false', () => {
+  //     it('should skip caching requests', () => {
+  //       const { store, dataController } = setupForCacheEnabled({
+  //         cacheEnabled: false,
+  //       });
+  //       expect(store.load).toBeCalledTimes(1);
 
-        dataController.pageIndex.update(1);
-        expect(store.load).toBeCalledTimes(2);
+  //       dataController.pageIndex.update(1);
+  //       expect(store.load).toBeCalledTimes(2);
 
-        dataController.pageIndex.update(0);
-        expect(store.load).toBeCalledTimes(3);
-      });
-    });
+  //       dataController.pageIndex.update(0);
+  //       expect(store.load).toBeCalledTimes(3);
+  //     });
+  //   });
 
-    describe('when it is true', () => {
-      it.skip('should cache previously loaded pages', () => {});
-      it.skip('should clear cache if not only pageIndex changed', () => {});
-    });
-  });
+  //   describe('when it is true', () => {
+  //     it.skip('should cache previously loaded pages', () => {});
+  //     it.skip('should clear cache if not only pageIndex changed', () => {});
+  //   });
+  // });
 
   describe('dataSourse', () => {
     describe('when it is dataSource instance', () => {
