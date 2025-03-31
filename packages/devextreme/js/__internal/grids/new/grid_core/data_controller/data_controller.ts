@@ -11,8 +11,6 @@ import {
 import { createPromise } from '@ts/core/utils/promise';
 
 import { FilterController } from '../filtering/filter_controller';
-// import { EditingController } from '../editing/controller';
-// import type { Change } from '../editing/types';
 import { OptionsController } from '../options_controller/options_controller';
 import { SortingController } from '../sorting_controller/sorting_controller';
 import type { DataObject, Key } from './types';
@@ -63,16 +61,6 @@ export class DataController {
   public readonly totalCount: SubsGets<number> = this._totalCount;
 
   public readonly isLoading = state(false);
-
-  // public itemsWithChanges = computed(
-  //   (items, changes: Change[] | undefined) => items.map((item) => (changes ?? []).filter(
-  //     (change) => change.key === this.getDataKey(item),
-  //   ).reduce((p, v) => ({
-  //     // @ts-expect-error
-  //     ...item, ...v.data,
-  //   }), item)),
-  //   [this.items, this.editing.changes],
-  // );
 
   public readonly pageCount = computed(
     (totalCount, pageSize) => Math.ceil(totalCount / pageSize),
