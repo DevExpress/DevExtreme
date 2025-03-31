@@ -91,6 +91,7 @@ export class SchedulerHeader extends Widget<dxSchedulerOptions> {
         ['tabIndex', [this.repaint.bind(this)]],
         ['focusStateEnabled', [this.repaint.bind(this)]],
         ['useDropDownViewSwitcher', [this.repaint.bind(this)]],
+        ['indicatorTime', []],
       ],
     );
   }

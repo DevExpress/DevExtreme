@@ -4,9 +4,6 @@ import { extend } from '@ts/core/utils/m_extend';
 
 import type { SchedulerHeader } from './m_header';
 
-const TODAY_BUTTON_CLASS = 'dx-scheduler-today';
-const TODAY_BUTTON_KEY = 'dxScheduler-navigationToday';
-
 export const getTodayButtonOptions = (
   header: SchedulerHeader,
   item: ToolbarItem,
@@ -14,14 +11,14 @@ export const getTodayButtonOptions = (
   location: 'before',
   locateInMenu: 'auto',
   widget: 'dxButton',
-  cssClass: TODAY_BUTTON_CLASS,
+  cssClass: 'dx-scheduler-today',
   options: {
-    text: messageLocalization.format(TODAY_BUTTON_KEY),
+    text: messageLocalization.format('dxScheduler-navigationToday'),
     icon: 'today',
     stylingMode: 'outlined',
     type: 'normal',
     onClick() {
-      header._updateCurrentDate(new Date());
+      header._updateCurrentDate(header.option('indicatorTime') ?? new Date());
     },
   },
 }, item) as ToolbarItem;
