@@ -41,9 +41,9 @@ export type Column = Pick<Required<ColumnBase>, InheritedColumnProps> & {
 
   name: string;
 
-  calculateCellValue: (this: Column, data: unknown) => unknown;
+  calculateCellValue: (this: Column, data: DataObject) => unknown;
 
-  calculateDisplayValue: (this: Column, data: unknown) => unknown;
+  calculateDisplayValue: (this: Column, data: DataObject) => unknown;
 
   format?: Format;
 

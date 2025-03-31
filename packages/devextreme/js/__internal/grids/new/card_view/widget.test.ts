@@ -8,7 +8,10 @@ describe('common', () => {
   describe('initial render', () => {
     it('should be successfull', () => {
       const container = document.createElement('div');
-      const cardView = new CardView(container, {});
+      const cardView = new CardView(container, {
+        keyExpr: 'a',
+        dataSource: [{ a: 'a' }],
+      });
 
       expect(container).toMatchSnapshot();
     });
@@ -16,6 +19,17 @@ describe('common', () => {
 });
 
 describe('options', () => {
+  describe('disabled', () => {
+    it('should add dx-state-disabled class to container div', () => {
+      const container = document.createElement('div');
+      const cardView = new CardView(container, {
+        disabled: true,
+      });
+
+      expect(container.classList).toContain('dx-state-disabled');
+    });
+  });
+
   describe('rtlEnabled', () => {
     const container = document.createElement('div');
     const cardView = new CardView(container, {
