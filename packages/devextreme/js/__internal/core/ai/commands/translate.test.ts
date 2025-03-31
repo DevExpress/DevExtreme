@@ -14,12 +14,9 @@ import { Provider } from '@ts/core/ai/test_utils/provider_mock';
 
 describe('TranslateCommand', () => {
   const params: TranslateCommandParams = { text: 'text to translate', lang: 'French' };
-  // eslint-disable-next-line @typescript-eslint/init-declarations
-  let promptManager: PromptManager;
-  // eslint-disable-next-line @typescript-eslint/init-declarations
-  let requestManager: RequestManager;
-  // eslint-disable-next-line @typescript-eslint/init-declarations
-  let command: TranslateCommand;
+  let promptManager = null as unknown as PromptManager;
+  let requestManager = null as unknown as RequestManager;
+  let command = null as unknown as TranslateCommand;
 
   beforeEach(() => {
     const provider: AIProvider = new Provider();

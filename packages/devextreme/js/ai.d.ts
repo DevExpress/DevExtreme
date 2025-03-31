@@ -68,6 +68,6 @@ export interface AIProvider {
  * @namespace DevExpress.ai
  * @public
  */
-export interface AI {
+export interface IAI {
   translate: (params: TranslateCommandParams, callbacks: RequestCallbacks) => () => void;
 }

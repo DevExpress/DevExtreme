@@ -6,8 +6,8 @@ import {
   jest,
 } from '@jest/globals';
 import type {
-  AI as IAI,
   AIProvider,
+  IAI,
   RequestCallbacks,
   TranslateCommandParams,
 } from '@js/ai';
@@ -19,10 +19,9 @@ import { Provider } from '@ts/core/ai/test_utils/provider_mock';
 
 describe('AI', () => {
   const params: TranslateCommandParams = { text: 'text for translation', lang: 'French' };
-  // eslint-disable-next-line @typescript-eslint/init-declarations
-  let provider: AIProvider;
-  // eslint-disable-next-line @typescript-eslint/init-declarations
-  let ai: IAI;
+
+  let provider = null as unknown as AIProvider;
+  let ai = null as unknown as IAI;
 
   beforeEach(() => {
     provider = new Provider();

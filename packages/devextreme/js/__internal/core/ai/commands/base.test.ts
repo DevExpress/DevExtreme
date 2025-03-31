@@ -46,12 +46,9 @@ class TestCommand extends BaseCommand {
 }
 
 describe('BaseCommand', () => {
-  // eslint-disable-next-line @typescript-eslint/init-declarations
-  let promptManager: PromptManager;
-  // eslint-disable-next-line @typescript-eslint/init-declarations
-  let requestManager: RequestManager;
-  // eslint-disable-next-line @typescript-eslint/init-declarations
-  let command: TestCommand;
+  let promptManager = null as unknown as PromptManager;
+  let requestManager = null as unknown as RequestManager;
+  let command = null as unknown as TestCommand;
 
   beforeEach(() => {
     const provider: AIProvider = new Provider();

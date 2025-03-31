@@ -13,10 +13,8 @@ import { ERROR_MESSAGE, RequestManager } from '@ts/core/ai/core/request_manager'
 import { Provider } from '@ts/core/ai/test_utils/provider_mock';
 
 describe('RequestManager', () => {
-  // eslint-disable-next-line @typescript-eslint/init-declarations
-  let provider: AIProvider;
-  // eslint-disable-next-line @typescript-eslint/init-declarations
-  let requestManager: RequestManager;
+  let provider = null as unknown as AIProvider;
+  let requestManager = null as unknown as RequestManager;
 
   beforeEach(() => {
     provider = new Provider();

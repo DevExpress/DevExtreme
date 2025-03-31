@@ -864,16 +864,16 @@ declare module DevExpress {
   }
 }
 declare module DevExpress.ai {
-  export interface AI {
+  export interface AIProvider {
+    sendRequest: (params: RequestParams) => ResponseParams;
+  }
+  export type BaseCommandResult = TranslateCommandResult;
+  export interface IAI {
     translate: (
       params: TranslateCommandParams,
       callbacks: RequestCallbacks
     ) => () => void;
   }
-  export interface AIProvider {
-    sendRequest: (params: RequestParams) => ResponseParams;
-  }
-  export type BaseCommandResult = TranslateCommandResult;
   export interface Prompt {
     system?: string;
     user?: string;
