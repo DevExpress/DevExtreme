@@ -1,4 +1,4 @@
-import type { AIProvider, Prompt, RequestCallbacks } from '@js/ai/ai';
+import type { AIProvider, Prompt, RequestCallbacks } from '@js/ai';
 
 export const ERROR_MESSAGE = {
   METHOD_NOT_IMPLEMENTED: 'No method for queries has been implemented',

@@ -1,1 +1,11 @@
-export * as Ai from './ai';
+export {
+    AI,
+    AIProvider,
+    BaseCommandResult,
+    Prompt,
+    RequestCallbacks,
+    RequestParams,
+    ResponseParams,
+    TranslateCommandParams,
+    TranslateCommandResult,
+} from 'devextreme/ai';

@@ -38,13 +38,13 @@ export interface TranslateCommandParams {
  * @namespace DevExpress.ai
  * @public
  */
-export type TranslateResult = string;
+export type TranslateCommandResult = string;
 
 /**
  * @namespace DevExpress.ai
  * @public
  */
-export type BaseResult = TranslateResult;
+export type BaseCommandResult = TranslateCommandResult;
 
 /**
  * @namespace DevExpress.ai
@@ -52,7 +52,7 @@ export type BaseResult = TranslateResult;
  */
 export interface RequestCallbacks {
   onChunk?: (chunk: string) => void;
-  onComplete?: (finalResponse: BaseResult) => void;
+  onComplete?: (finalResponse: BaseCommandResult) => void;
   onError?: (error: Error) => void;
 }
 

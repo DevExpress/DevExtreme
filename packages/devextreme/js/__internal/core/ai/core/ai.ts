@@ -3,7 +3,7 @@ import type {
   AIProvider,
   RequestCallbacks,
   TranslateCommandParams,
-} from '@js/ai/ai';
+} from '@js/ai';
 import type { BaseCommand } from '@ts/core/ai/commands/base';
 import { TranslateCommand } from '@ts/core/ai/commands/translate';
 import { PromptManager } from '@ts/core/ai/core/prompt_manager';

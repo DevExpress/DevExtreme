@@ -1,4 +1,4 @@
-import type { BaseResult, RequestCallbacks } from '@js/ai/ai';
+import type { BaseCommandResult, RequestCallbacks } from '@js/ai';
 import type { PromptData, PromptManager, PromptTemplateName } from '@ts/core/ai/core/prompt_manager';
 import type { RequestManager } from '@ts/core/ai/core/request_manager';
 
@@ -29,5 +29,5 @@ export abstract class BaseCommand {
 
   protected abstract getTemplateName(): PromptTemplateName;
   protected abstract buildPromptData(params: unknown): PromptData;
-  protected abstract parseResult(response: string): BaseResult;
+  protected abstract parseResult(response: string): BaseCommandResult;
 }

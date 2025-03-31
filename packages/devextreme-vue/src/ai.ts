@@ -1,11 +1,11 @@
 export {
     AI,
     AIProvider,
-    BaseResult,
+    BaseCommandResult,
     Prompt,
     RequestCallbacks,
     RequestParams,
     ResponseParams,
     TranslateCommandParams,
-    TranslateResult,
-} from "devextreme/ai/ai";
+    TranslateCommandResult,
+} from "devextreme/ai";

@@ -8,7 +8,7 @@ import {
 import type {
   AIProvider,
   Prompt,
-} from '@js/ai/ai';
+} from '@js/ai';
 import { ERROR_MESSAGE, RequestManager } from '@ts/core/ai/core/request_manager';
 import { Provider } from '@ts/core/ai/test_utils/provider_mock';
 

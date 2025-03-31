@@ -873,14 +873,14 @@ declare module DevExpress.ai {
   export interface AIProvider {
     sendRequest: (params: RequestParams) => ResponseParams;
   }
-  export type BaseResult = TranslateResult;
+  export type BaseCommandResult = TranslateCommandResult;
   export interface Prompt {
     system?: string;
     user?: string;
   }
   export interface RequestCallbacks {
     onChunk?: (chunk: string) => void;
-    onComplete?: (finalResponse: BaseResult) => void;
+    onComplete?: (finalResponse: BaseCommandResult) => void;
     onError?: (error: Error) => void;
   }
   export interface RequestParams {
@@ -895,7 +895,7 @@ declare module DevExpress.ai {
     text: string;
     lang: string;
   }
-  export type TranslateResult = string;
+  export type TranslateCommandResult = string;
 }
 declare module DevExpress.animation {
   /**
