@@ -9,7 +9,6 @@
    no-param-reassign,
    prefer-destructuring,
    @typescript-eslint/explicit-module-boundary-types,
-   @typescript-eslint/no-shadow,
    @typescript-eslint/no-explicit-any,
 */
 import { Deferred } from '@js/core/utils/deferred';
@@ -137,16 +136,16 @@ const _processGroupItems = (
 };
 
 export const getDataSourceOptions = (
-  dataSource,
+  storeLoadAdapter,
   column,
   headerFilterOptions,
 ) => {
-  if (!dataSource) {
+  if (!storeLoadAdapter) {
     return undefined;
   }
 
-  // TODO: Support remote grouping
-  const remoteGrouping = false;
+  const { grouping: localGrouping } = storeLoadAdapter.getLocalLoadOperations();
+  const remoteGrouping = !localGrouping;
   const group = gridCoreUtils.getHeaderFilterGroupParameters(column, remoteGrouping);
   const headerFilterDataSource = column.headerFilter?.dataSource;
   const options: any = {};
@@ -158,18 +157,19 @@ export const getDataSourceOptions = (
   }
 
   const cutoffLevel = Array.isArray(group) ? group.length - 1 : 0;
+  // TODO FilterSync: Support combined filter here
   // const filter = this._dataController.getCombinedFilter();
 
   options.dataSource = {
     // filter,
     group,
     useDefaultSearch: true,
-    load: (options) => {
+    load: (loadOptions) => {
       // @ts-expect-error Deferred ctor.
       const d = new Deferred();
       // NOTE: this marked as deprecated in original code
-      options.dataField = column.dataField || column.name;
-      dataSource.store().load(options).done((data) => {
+      loadOptions.dataField = column.dataField || column.name;
+      storeLoadAdapter.load(loadOptions).done((data) => {
         const convertUTCDates = remoteGrouping
             && isUTCFormat(column.serializationFormat)
             && cutoffLevel > 3;
