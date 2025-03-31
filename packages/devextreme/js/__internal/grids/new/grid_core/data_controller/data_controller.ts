@@ -8,6 +8,7 @@ import {
 } from '@ts/core/reactive/index';
 import { createPromise } from '@ts/core/utils/promise';
 
+import { FilterController } from '../filtering/filter_controller';
 import { OptionsController } from '../options_controller/options_controller';
 import { SortingController } from '../sorting_controller/sorting_controller';
 import type { DataObject, Key } from './types';
@@ -77,11 +78,12 @@ export class DataController {
     [this.normalizedRemoteOptions],
   );
 
-  public static dependencies = [OptionsController, SortingController] as const;
+  public static dependencies = [OptionsController, SortingController, FilterController] as const;
 
   constructor(
     private readonly options: OptionsController,
     private readonly sortingController: SortingController,
+    private readonly filterController: FilterController,
   ) {
     effect(
       (dataSource) => {
@@ -159,7 +161,7 @@ export class DataController {
     );
 
     effect(
-      (dataSource, pageIndex, pageSize, pagingEnabled, sortParameters) => {
+      (dataSource, pageIndex, pageSize, displayFilter, pagingEnabled, sortParameters) => {
         let someParamChanged = false;
         if (dataSource.pageIndex() !== pageIndex) {
           dataSource.pageIndex(pageIndex);
@@ -172,6 +174,10 @@ export class DataController {
         // eslint-disable-next-line @typescript-eslint/no-unnecessary-boolean-literal-compare
         if (dataSource.requireTotalCount() !== true) {
           dataSource.requireTotalCount(true);
+          someParamChanged ||= true;
+        }
+        if (dataSource.filter() !== displayFilter) {
+          dataSource.filter(displayFilter);
           someParamChanged ||= true;
         }
         if (dataSource.paginate() !== pagingEnabled) {
@@ -192,6 +198,7 @@ export class DataController {
         this.dataSource,
         this.pageIndex,
         this.pageSize,
+        this.filterController.displayFilter,
         this.pagingEnabled,
         this.sortingController.sortParameters,
       ],
