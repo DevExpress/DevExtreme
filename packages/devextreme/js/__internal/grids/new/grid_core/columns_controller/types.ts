@@ -2,6 +2,8 @@ import type { Format, SortOrder } from '@js/common';
 import type { ColumnBase } from '@js/common/grids';
 import type { ComponentType } from 'inferno';
 
+import type { HighlightedTextItem } from '../search/types';
+
 type InheritedColumnProps =
   | 'alignment'
   | 'dataType'
@@ -51,6 +53,8 @@ export interface Cell {
   text: string;
 
   column: Column;
+
+  highlightedText: HighlightedTextItem[] | null;
 }
 
 export interface DataRow {

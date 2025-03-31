@@ -1,5 +1,6 @@
 /* eslint-disable spellcheck/spell-checker */
 import { describe, expect, it } from '@jest/globals';
+import { SearchController } from '@ts/grids/new/grid_core/search';
 
 import { ColumnsController } from '../columns_controller/columns_controller';
 import { DataController } from '../data_controller';
@@ -9,12 +10,14 @@ import { ItemsController } from './items_controller';
 
 const setup = (config: Options = {}) => {
   const options = new OptionsControllerMock(config);
-
-  const dataController = new DataController(options);
-
   const columnsController = new ColumnsController(options);
-
-  const itemsController = new ItemsController(dataController, columnsController);
+  const searchController = new SearchController(options);
+  const dataController = new DataController(options);
+  const itemsController = new ItemsController(
+    dataController,
+    columnsController,
+    searchController,
+  );
 
   return {
     options,

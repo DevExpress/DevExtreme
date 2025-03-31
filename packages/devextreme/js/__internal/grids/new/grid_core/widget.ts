@@ -6,6 +6,7 @@ import { extend } from '@js/core/utils/extend';
 import Widget from '@js/ui/widget/ui.widget';
 import { DIContext } from '@ts/core/di/index';
 import type { Subscription } from '@ts/core/reactive/index';
+import { SearchView } from '@ts/grids/new/grid_core/search/view';
 import { render } from 'inferno';
 
 import * as ColumnsControllerModule from './columns_controller/index';
@@ -15,6 +16,7 @@ import { ItemsController } from './items_controller/items_controller';
 import { MainView } from './main_view';
 import { defaultOptions, defaultOptionsRules, type Options } from './options';
 import { PagerView } from './pager/view';
+import { SearchController } from './search/controller';
 import { ToolbarController } from './toolbar/controller';
 import { ToolbarView } from './toolbar/view';
 
@@ -39,6 +41,10 @@ export class GridCoreNewBase<
 
   private errorController!: ErrorController;
 
+  private searchController!: SearchController;
+
+  private searchView!: SearchView;
+
   protected _registerDIContext(): void {
     this.diContext = new DIContext();
     this.diContext.register(DataControllerModule.DataController);
@@ -47,6 +53,8 @@ export class GridCoreNewBase<
     this.diContext.register(ToolbarController);
     this.diContext.register(ToolbarView);
     this.diContext.register(PagerView);
+    this.diContext.register(SearchController);
+    this.diContext.register(SearchView);
     this.diContext.register(ErrorController);
   }
 
@@ -57,6 +65,8 @@ export class GridCoreNewBase<
     this.toolbarController = this.diContext.get(ToolbarController);
     this.toolbarView = this.diContext.get(ToolbarView);
     this.pagerView = this.diContext.get(PagerView);
+    this.searchController = this.diContext.get(SearchController);
+    this.searchView = this.diContext.get(SearchView);
     this.errorController = this.diContext.get(ErrorController);
   }
 
