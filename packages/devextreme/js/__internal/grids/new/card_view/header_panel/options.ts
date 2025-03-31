@@ -1,19 +1,8 @@
-import type * as Sortable from '@js/ui/sortable';
+import type { HeaderPanelConfiguration as Options } from '@js/ui/card_view';
 
-import type { Column } from '../../grid_core/columns_controller/types';
-import type { Template } from '../../grid_core/types';
+export type { Options };
 
-type SortableProperties = 'dropFeedbackMode' | 'scrollSpeed' | 'scrollSensitivity' | 'onDragChange' | 'onDragEnd' | 'onDragMove' | 'onDragStart' | 'onRemove' | 'onReorder';
-
-export type DraggingOptions = Pick<Sortable.Properties, SortableProperties>;
-export interface Options {
-  headerPanel?: {
-    dragging?: DraggingOptions;
-    visible?: boolean;
-    itemTemplate?: Template<{ column: Column }>;
-    itemCssClass?: string;
-  };
-}
+export type DraggingOptions = Required<Required<Options>['headerPanel']['dragging']>;
 
 export const defaultOptions = {
   headerPanel: {
