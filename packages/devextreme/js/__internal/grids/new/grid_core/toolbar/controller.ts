@@ -1,10 +1,11 @@
-/* eslint-disable @typescript-eslint/no-dynamic-delete */
 /* eslint-disable @typescript-eslint/no-shadow */
 /* eslint-disable spellcheck/spell-checker */
 import type {
   MaybeSubscribable, Subscribable, Subscription, SubsGets,
 } from '@ts/core/reactive/index';
-import { computed, state, toSubscribable } from '@ts/core/reactive/index';
+import {
+  computed, effect, state, toSubscribable,
+} from '@ts/core/reactive/index';
 
 import { OptionsController } from '../options_controller/options_controller';
 import { DEFAULT_TOOLBAR_ITEMS } from './defaults';
@@ -26,6 +27,7 @@ export class ToolbarController {
     private readonly options: OptionsController,
   ) {
     this.userItems = this.options.oneWay('toolbar.items');
+
     this.items = computed(
       (defaultItems, userItems) => normalizeToolbarItems(
         Object.values(defaultItems),
@@ -38,25 +40,29 @@ export class ToolbarController {
 
   public addDefaultItem(
     item: MaybeSubscribable<PredefinedToolbarItem>,
+    needRender: MaybeSubscribable<boolean> = true,
   ): void {
     const itemObs = toSubscribable(item);
+    const needRenderObs = toSubscribable(needRender);
     // @ts-expect-error
     const { name } = itemObs.unreactive_get();
 
-    this.itemSubscriptions[name] = itemObs.subscribe((item) => {
-      this.defaultItems.updateFunc((oldDefaultItems) => ({
-        ...oldDefaultItems,
-        [item.name]: item,
-      }));
-    });
-  }
+    this.itemSubscriptions[name] = effect(
+      (item, needRender) => {
+        this.defaultItems.updateFunc((oldDefaultItems) => {
+          const newDefaultItems = { ...oldDefaultItems };
 
-  public removeDefaultItem(name: typeof DEFAULT_TOOLBAR_ITEMS[number]): void {
-    this.defaultItems.updateFunc((oldDefaultItems) => {
-      const defaultItems = { ...oldDefaultItems };
-      delete defaultItems[name];
-      return defaultItems;
-    });
-    this.itemSubscriptions[name].unsubscribe();
+          if (needRender) {
+            newDefaultItems[item.name] = item;
+          } else {
+            // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
+            delete newDefaultItems[item.name];
+          }
+
+          return newDefaultItems;
+        });
+      },
+      [itemObs, needRenderObs],
+    );
   }
 }

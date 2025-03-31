@@ -3,6 +3,6 @@ import type { ToolbarProps } from './types';
 
 export function ToolbarView(props: ToolbarProps): JSX.Element {
   return (
-    props.visible ? <Toolbar {...props}></Toolbar> : <></>
+    props.visible ? <Toolbar {...props}/> : <></>
   );
 }
