@@ -19,6 +19,7 @@ export class PagerView extends View<PagerProps> {
   private readonly allowedPageSizes = computed(
     (pageSizesConfig, pageSize) => calculatePageSizes(
       this.allowedPageSizes?.unreactive_get(),
+      // @ts-expect-error TODO
       pageSizesConfig,
       pageSize,
     ),
@@ -58,6 +59,7 @@ export class PagerView extends View<PagerProps> {
       tabIndex: 0,
       showInfo: this.options.oneWay('pager.showInfo'),
       showNavigationButtons: this.options.oneWay('pager.showNavigationButtons'),
+      pagesNavigatorVisible: this.visibleConfig,
     });
   }
 }
