@@ -3,6 +3,11 @@ import { describe, expect, it } from '@jest/globals';
 
 import { expectColumnVisibility, renderColumnChooser, renderColumnChooserWithToolbar } from './test-utils';
 
+const CLASSES = {
+  list: 'dx-cardview-column-chooser-list',
+  plain: 'dx-cardview-column-chooser-plain',
+};
+
 describe('ColumnChooser', () => {
   describe('View', () => {
     it('toolbar button', () => {
@@ -29,6 +34,20 @@ describe('ColumnChooser', () => {
   });
 
   describe('Select mode', () => {
+    it('popup has correct classes', async () => {
+      const { columnChooser } = await renderColumnChooser({
+        columns: ['Column 1', 'Column 2'],
+        columnChooser: {
+          enabled: true,
+          mode: 'select',
+        },
+      });
+      const popup = columnChooser.popupRef.current;
+
+      expect(popup?.content().classList).toContain(CLASSES.list);
+      expect(popup?.content().classList).toContain(CLASSES.plain);
+    });
+
     it('toggles column visibility on select/unselect', async () => {
       const { columnChooser, columnsController } = await renderColumnChooser({
         columns: ['Column 1', 'Column 2', 'Column 3', 'Column 4'],
