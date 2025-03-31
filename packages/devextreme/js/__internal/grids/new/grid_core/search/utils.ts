@@ -109,11 +109,6 @@ export const createFilterExpression = (
   if (isFunction(result)) {
     result = [result, '=', true];
   }
-  // if (result) {
-  //   result.columnIndex = column.index;
-  //   result.filterValue = filterValue;
-  //   result.selectedFilterOperation = selectedFilterOperation;
-  // }
   return result;
 };
 
