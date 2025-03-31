@@ -5,6 +5,7 @@ import type { WidgetOptions } from '@js/ui/widget/ui.widget';
 import * as columnsController from './columns_controller/index';
 import * as contentView from './content_view/index';
 import * as dataController from './data_controller/index';
+import { filterPanel } from './filtering/index';
 import * as pager from './pager/index';
 import * as searchPanel from './search/index';
 import type { SearchProperties } from './search/types';
@@ -21,6 +22,7 @@ export type Options =
   & sortingController.Options
   & pager.Options
   & columnsController.Options
+  & filterPanel.Options
   & contentView.Options
   & searchPanel.Options
   // TODO: Remove this mock search options during search implementation
@@ -32,6 +34,7 @@ export const defaultOptions = {
   ...sortingController.defaultOptions,
   ...columnsController.defaultOptions,
   ...pager.defaultOptions,
+  ...filterPanel.defaultOptions,
   ...contentView.defaultOptions,
   ...searchPanel.defaultOptions,
   searchText: '',
