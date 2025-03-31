@@ -24,6 +24,7 @@ export type Options =
   & WidgetOptions<GridCoreNew>
   & dataController.Options
   & sortingController.Options
+  & toolbar.Options
   & pager.Options
   & columnsController.Options
   & filterController.Options
@@ -35,7 +36,9 @@ export type Options =
   // TODO: Remove this mock search options during search implementation
   & SearchProperties
   & columnChooser.Options
-  & toolbar.Options;
+  & {
+    noDataText?: string;
+  };
 
 export const defaultOptions = {
   ...dataController.defaultOptions,

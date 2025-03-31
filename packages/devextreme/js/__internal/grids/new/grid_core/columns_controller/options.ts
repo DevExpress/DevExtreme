@@ -2,11 +2,12 @@
 import type { DataType } from '@js/common';
 import messageLocalization from '@js/localization/message';
 
+import type { DataObject } from '../data_controller/types';
 import type { Template, WithRequired } from '../types';
 import type { Column } from './types';
 
 interface NonNormalizedColumnOptions {
-  calculateDisplayValue: string | ((this: Column, data: unknown) => unknown);
+  calculateDisplayValue: string | ((this: Column, data: DataObject) => unknown);
   headerItemTemplate?: Template<{ column: Column }>;
 }
 
@@ -23,7 +24,7 @@ export const defaultColumnProperties = {
   dataType: 'string',
   calculateCellValue(data): unknown {
     // @ts-expect-error
-    return data[this.dataField!];
+    return data[this.dataField];
   },
   calculateDisplayValue(data): unknown {
     return this.calculateCellValue(data);

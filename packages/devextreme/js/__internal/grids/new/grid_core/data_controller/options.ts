@@ -9,5 +9,4 @@ export const defaultOptions = {
     pageIndex: 0,
   },
   remoteOperations: 'auto',
-  cacheEnabled: true,
 } satisfies Options;

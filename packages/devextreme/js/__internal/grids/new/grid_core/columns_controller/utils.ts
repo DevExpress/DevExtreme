@@ -3,6 +3,7 @@ import { captionize } from '@js/core/utils/inflector';
 import { isDefined, isString } from '@js/core/utils/type';
 import type { ComponentType } from 'inferno';
 
+import type { DataObject } from '../data_controller/types';
 import type { Template } from '../types';
 import type { ColumnProperties, ColumnSettings, PreNormalizedColumn } from './options';
 import { defaultColumnProperties, defaultColumnPropertiesByDataType } from './options';
@@ -30,7 +31,7 @@ function normalizeColumn(
   return {
     ...colWithDefaults,
     calculateDisplayValue: isString(colWithDefaults.calculateDisplayValue)
-      ? compileGetter(colWithDefaults.calculateDisplayValue) as (data: unknown) => string
+      ? compileGetter(colWithDefaults.calculateDisplayValue) as (data: DataObject) => string
       : colWithDefaults.calculateDisplayValue,
     headerItemTemplate: colWithDefaults.headerItemTemplate
       ? templateNormalizationFunc(colWithDefaults.headerItemTemplate)

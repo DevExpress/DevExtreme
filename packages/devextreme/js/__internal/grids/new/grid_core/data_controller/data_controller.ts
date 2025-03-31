@@ -96,7 +96,7 @@ export class DataController {
         const loadingChangedCallback = (): void => {
           this.isLoading.update(dataSource.isLoading());
         };
-        const loadErrorCallback = (error: string): void => {
+        const loadErrorCallback = (error: Error): void => {
           const callback = this.onDataErrorOccurred.unreactive_get();
           callback({ error });
           changedCallback();

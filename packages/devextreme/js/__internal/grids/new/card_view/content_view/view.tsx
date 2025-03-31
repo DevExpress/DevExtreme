@@ -59,6 +59,7 @@ export class ContentView extends ContentViewBase<ContentViewProps> {
           onDblClick: this.options.action('onCardDblClick'),
           onHoverChanged: this.options.action('onCardHoverChanged'),
           onPrepared: this.options.action('onCardPrepared'),
+          template: this.options.template('cardTemplate'),
           cover: combined({
             imageExpr: computed(
               (imageExpr) => this.processExpr(imageExpr),
@@ -70,6 +71,12 @@ export class ContentView extends ContentViewBase<ContentViewProps> {
             ),
             maxHeight: this.options.oneWay('cardCover.maxHeight'),
             ratio: this.options.oneWay('cardCover.ratio'),
+          }),
+          header: combined({
+            captionExpr: computed(
+              (captionExpr) => this.processExpr(captionExpr),
+              [this.options.oneWay('cardHeader.captionExpr')],
+            ),
           }),
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           toolbar: this.options.oneWay('cardHeader.items') as any,
