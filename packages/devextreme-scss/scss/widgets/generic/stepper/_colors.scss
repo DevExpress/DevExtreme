@@ -5,34 +5,32 @@
 
 // adduse
 
-$stepper-step-bg: $typography-bg !default;
-$stepper-step-shadow: $typography-bg !default;
-$stepper-step-border-color: $base-border-color !default;
-$stepper-step-text-color: $base-text-color !default;
-$stepper-step-label-color: $base-text-color !default;
+$stepper-step-base-bg: $typography-bg !default;
+$stepper-step-shadow-color: $typography-bg !default;
+$stepper-step-base-border-color: $base-border-color !default;
+$stepper-step-base-text-color: $base-text-color !default;
+$stepper-step-base-label-color: $base-text-color !default;
 
-$stepper-step-hover-bg: $button-normal-contained-bg-hover !default;
-$stepper-step-hover-border-color: $base-border-color !default;
+$stepper-step-base-hover-bg: $button-normal-contained-bg-hover !default;
+$stepper-step-base-hover-border-color: $base-border-color !default;
 
 $stepper-step-selected-text-color: $base-inverted-text-color !default;
-$stepper-step-selected-bg: $button-default-bg !default;
-$stepper-step-selected-hover-bg: $button-default-contained-bg-hover !default;
-$stepper-step-selected-label-color: $stepper-step-selected-bg !default;
-$stepper-step-selected-hover-label-color: $stepper-step-selected-hover-bg !default;
+$stepper-step-accent-bg: $button-default-bg !default;
+$stepper-step-accent-hover-bg: $button-default-contained-bg-hover !default;
+$stepper-step-selected-label-color: $stepper-step-accent-bg !default;
 
+$stepper-step-selected-bg: $stepper-step-accent-bg !default;
+$stepper-step-selected-hover-bg: $stepper-step-accent-hover-bg !default;
 $stepper-step-selected-invalid-bg: $button-danger-bg !default;
 $stepper-step-selected-invalid-hover-bg: $button-danger-contained-bg-hover !default;
 
-$stepper-step-invalid-bg: $stepper-step-bg !default;
-$stepper-step-invalid-border-color: $stepper-step-border-color !default;
-$stepper-step-invalid-text-color: $stepper-step-text-color !default;
-$stepper-step-invalid-hover-text-color: $stepper-step-text-color !default;
-$stepper-step-invalid-hover-bg: $stepper-step-hover-bg !default;
-$stepper-step-invalid-hover-border-color: $stepper-step-hover-border-color !default;
+$stepper-step-invalid-bg: $stepper-step-base-bg !default;
+$stepper-step-invalid-border-color: $stepper-step-base-border-color !default;
+$stepper-step-invalid-text-color: $stepper-step-base-text-color !default;
+$stepper-step-invalid-hover-text-color: $stepper-step-base-text-color !default;
+$stepper-step-invalid-hover-bg: $stepper-step-base-hover-bg !default;
+$stepper-step-invalid-hover-border-color: $stepper-step-base-hover-border-color !default;
 $stepper-step-invalid-label-color: $stepper-step-selected-invalid-bg !default;
-$stepper-step-invalid-hover-label-color: $stepper-step-selected-invalid-hover-bg !default;
-
-$stepper-step-focused-border-color: $stepper-step-selected-hover-bg !default;
 
 $stepper-step-disabled-text-color: color.change($base-text-color, $alpha: $base-disabled-opacity) !default;
 $stepper-step-disabled-bg: $base-border-color !default;

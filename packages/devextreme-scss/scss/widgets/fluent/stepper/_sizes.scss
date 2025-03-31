@@ -31,4 +31,4 @@ $stepper-step-icon-size: $fluent-button-icon-size !default;
 }
 
 $stepper-connector-margin-start: math.div($stepper-step-indicator-size - $fluent-base-border-width * 2, 2);
-$stepper-connector-thickness: 1px !default;
+$stepper-connector-thickness: 2px !default;
