@@ -2,10 +2,18 @@ import browser from '@js/core/utils/browser';
 import { isMaterialBased } from '@js/ui/themes';
 import type { WidgetOptions } from '@js/ui/widget/ui.widget';
 
+import * as columnChooser from './column_chooser/index';
 import * as columnsController from './columns_controller/index';
 import * as contentView from './content_view/index';
 import * as dataController from './data_controller/index';
+import * as headerFilter from './filtering/header_filter/index';
+import type * as filterController from './filtering/index';
+import { filterPanel } from './filtering/index';
 import * as pager from './pager/index';
+import * as searchPanel from './search/index';
+import type { SearchProperties } from './search/types';
+import * as selection from './selection/index';
+import * as sortingController from './sorting_controller/index';
 import type * as toolbar from './toolbar/index';
 import type { GridCoreNew } from './widget';
 
@@ -15,16 +23,35 @@ import type { GridCoreNew } from './widget';
 export type Options =
   & WidgetOptions<GridCoreNew>
   & dataController.Options
+  & sortingController.Options
+  & toolbar.Options
   & pager.Options
   & columnsController.Options
+  & filterController.Options
+  & filterPanel.Options
+  & headerFilter.Options
   & contentView.Options
-  & toolbar.Options;
+  & searchPanel.Options
+  & selection.Options
+  // TODO: Remove this mock search options during search implementation
+  & SearchProperties
+  & columnChooser.Options
+  & {
+    noDataText?: string;
+  };
 
 export const defaultOptions = {
   ...dataController.defaultOptions,
+  ...sortingController.defaultOptions,
   ...columnsController.defaultOptions,
   ...pager.defaultOptions,
+  ...filterPanel.defaultOptions,
+  ...headerFilter.defaultOptions,
   ...contentView.defaultOptions,
+  ...searchPanel.defaultOptions,
+  ...columnChooser.defaultOptions,
+  ...selection.defaultOptions,
+  searchText: '',
 } satisfies Options;
 
 // TODO: separate by modules
