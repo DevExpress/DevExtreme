@@ -1,7 +1,5 @@
 /* eslint-disable @typescript-eslint/no-invalid-void-type */
-/* eslint-disable no-param-reassign */
 /* eslint-disable spellcheck/spell-checker */
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import type { DataSource } from '@js/common/data';
 import ArrayStore from '@js/common/data/array_store';
 import type { SubsGets } from '@ts/core/reactive/index';
@@ -11,6 +9,7 @@ import {
 import { createPromise } from '@ts/core/utils/promise';
 
 import { OptionsController } from '../options_controller/options_controller';
+import { SortingController } from '../sorting_controller/sorting_controller';
 import type { DataObject, Key } from './types';
 import {
   getLocalLoadOptions,
@@ -78,10 +77,11 @@ export class DataController {
     [this.normalizedRemoteOptions],
   );
 
-  public static dependencies = [OptionsController] as const;
+  public static dependencies = [OptionsController, SortingController] as const;
 
   constructor(
     private readonly options: OptionsController,
+    private readonly sortingController: SortingController,
   ) {
     effect(
       (dataSource) => {
@@ -91,7 +91,7 @@ export class DataController {
         const loadingChangedCallback = (): void => {
           this.isLoading.update(dataSource.isLoading());
         };
-        const loadErrorCallback = (error: string): void => {
+        const loadErrorCallback = (error: Error): void => {
           const callback = this.onDataErrorOccurred.unreactive_get();
           callback({ error });
           changedCallback();
@@ -159,7 +159,7 @@ export class DataController {
     );
 
     effect(
-      (dataSource, pageIndex, pageSize, pagingEnabled) => {
+      (dataSource, pageIndex, pageSize, pagingEnabled, sortParameters) => {
         let someParamChanged = false;
         if (dataSource.pageIndex() !== pageIndex) {
           dataSource.pageIndex(pageIndex);
@@ -178,13 +178,23 @@ export class DataController {
           dataSource.paginate(pagingEnabled);
           someParamChanged ||= true;
         }
+        if (sortParameters && dataSource.sort() !== sortParameters) {
+          dataSource.sort(sortParameters);
+          someParamChanged ||= true;
+        }
 
         if (someParamChanged || !dataSource.isLoaded()) {
           // eslint-disable-next-line @typescript-eslint/no-floating-promises
           dataSource.load();
         }
       },
-      [this.dataSource, this.pageIndex, this.pageSize, this.pagingEnabled],
+      [
+        this.dataSource,
+        this.pageIndex,
+        this.pageSize,
+        this.pagingEnabled,
+        this.sortingController.sortParameters,
+      ],
     );
   }
 

@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import type { DataType } from '@js/common';
 import messageLocalization from '@js/localization/message';
 
@@ -31,6 +30,7 @@ export const defaultColumnProperties = {
   alignment: 'left',
   visible: true,
   allowReordering: true,
+  allowSorting: true,
   trueText: messageLocalization.format('dxDataGrid-trueText'),
   falseText: messageLocalization.format('dxDataGrid-falseText'),
 } satisfies Partial<Column>;
