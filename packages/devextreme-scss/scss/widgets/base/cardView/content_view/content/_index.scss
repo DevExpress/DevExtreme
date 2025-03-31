@@ -8,3 +8,7 @@
   row-gap: $cardview-content-row-gap;
   grid-template-columns: repeat(var(--dx-cardview-cardsperrow), 1fr);
 }
+
+.dx-gridcore-contentview {
+  overflow: hidden;
+}

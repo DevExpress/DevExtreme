@@ -32,32 +32,26 @@ interface MainViewProps {
 }
 
 function MainViewComponent({
-  Toolbar, Content, Pager, HeaderPanel, HeaderFilterPopup,
-  FilterPanel, ColumnChooser, config, rootElementRef,
+  Toolbar, Content, Pager, HeaderPanel, HeaderFilterPopup, FilterPanel, ColumnChooser, config,
 }: MainViewProps): JSX.Element {
   return (<>
     <ConfigContext.Provider value={config}>
-      <RootElementUpdater
-        rootElementRef={rootElementRef}
-        className={CLASSES.cardView}
-      >
-        <Toolbar/>
-        <HeaderPanel/>
-        <HeaderFilterPopup />
-        <Content/>
-        <FilterPanel/>
-        <div>
-          {/*
-            Pager, as renovated component, has strange disposing.
-            See `inferno_renderer.remove` method.
-            It somehow mutates $V prop of parent element.
-            Without this div, CardView would be parent of Pager.
-            In this case all `componentWillUnmount`s aren't called
-          */}
-          <Pager/>
-        </div>
-        <ColumnChooser/>
-      </RootElementUpdater>
+      <Toolbar/>
+      <HeaderPanel/>
+      <HeaderFilterPopup />
+      <Content/>
+      <FilterPanel/>
+      <div>
+        {/*
+          Pager, as renovated component, has strange disposing.
+          See `inferno_renderer.remove` method.
+          It somehow mutates $V prop of parent element.
+          Without this div, CardView would be parent of Pager.
+          In this case all `componentWillUnmount`s aren't called
+        */}
+        <Pager/>
+      </div>
+      <ColumnChooser/>
     </ConfigContext.Provider>
   </>);
 }

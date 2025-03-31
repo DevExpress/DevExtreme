@@ -39,6 +39,9 @@ function normalizeColumn(
   };
 }
 
+/**
+ * @jestspec
+ */
 export function getVisibleIndexes(
   indexes: (number | undefined)[],
 ): number[] {

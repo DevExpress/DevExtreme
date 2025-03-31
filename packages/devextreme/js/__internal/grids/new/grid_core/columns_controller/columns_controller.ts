@@ -8,7 +8,7 @@ import headerFilterUtils from '@ts/grids/new/grid_core/filtering/header_filter/u
 
 import { OptionsController } from '../options_controller/options_controller';
 import type { ColumnProperties, ColumnSettings, PreNormalizedColumn } from './options';
-import type { Column, VisibleColumn } from './types';
+import type { Column } from './types';
 import {
   getColumnIndexByName, normalizeColumns, normalizeVisibleIndexes, preNormalizeColumns,
 } from './utils';
@@ -27,6 +27,8 @@ export class ColumnsController {
   public readonly nonVisibleColumns: SubsGets<Column[]>;
 
   public readonly allowColumnReordering: Subscribable<boolean>;
+
+  private readonly dateSerializationFormat: Subscribable<string | undefined>;
 
   public static dependencies = [OptionsController] as const;
 
@@ -60,7 +62,7 @@ export class ColumnsController {
 
     this.visibleColumns = computed(
       (columns) => columns
-        .filter((column): column is VisibleColumn => column.visible)
+        .filter((column) => column.visible)
         .sort((a, b) => a.visibleIndex - b.visibleIndex),
       [this.columns],
     );
@@ -71,6 +73,7 @@ export class ColumnsController {
     );
 
     this.allowColumnReordering = this.options.oneWay('allowColumnReordering');
+    this.dateSerializationFormat = this.options.oneWay('dateSerializationFormat');
   }
 
   public addColumn(columnProps: ColumnProperties): void {

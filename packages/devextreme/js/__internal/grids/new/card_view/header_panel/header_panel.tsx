@@ -38,6 +38,9 @@ export interface HeaderPanelProps {
   draggingOptions?: DraggingOptions;
 }
 
+// eslint-disable-next-line @stylistic/max-len
+/** <img src="../../../../../../../../e2e/testcafe-devextreme/tests/cardView/etalons/headers.png"></img>
+ */
 export class HeaderPanel extends Component<HeaderPanelProps> {
   public render(): JSX.Element {
     if (!this.props.visible) {

@@ -52,17 +52,11 @@ export type Column = Pick<Required<ColumnBase>, InheritedColumnProps> & {
     valueText: string;
   }) => string;
 
-  editorTemplate?: unknown;
-
   fieldTemplate?: unknown;
 
-  // TODO: move to cardview/headerpanel
   headerItemTemplate?: ComponentType<{ column: Column }>;
 
   headerItemCssClass?: string;
-
   // header filter options for specific column.
   headerFilter?: HeaderFilterColumnOptions;
 };
-
-export type VisibleColumn = Column & { visible: true };
