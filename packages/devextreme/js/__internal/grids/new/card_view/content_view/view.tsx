@@ -38,38 +38,6 @@ export class ContentView extends ContentViewBase<ContentViewProps> {
     [this.width, this.cardMinWidth, this.dataController.pageSize, this.options.oneWay('cardsPerRow')],
   );
 
-  private readonly virtualState = computed(
-    (items, scrollTop, viewportHeight, rowHeight, cardsPerRow) => {
-      const scrollHeight = (items.length / cardsPerRow) * rowHeight;
-
-      const scrollBottom = scrollHeight - viewportHeight - scrollTop;
-
-      const nonVisibleRowCountUp = Math.floor(scrollTop / rowHeight);
-      const nonVisibleRowCountBottom = Math.floor(scrollBottom / rowHeight);
-
-      const virtualTop = nonVisibleRowCountUp * rowHeight;
-      const virtualBottom = nonVisibleRowCountBottom * rowHeight;
-
-      const virtualItems = items.slice(
-        nonVisibleRowCountUp * cardsPerRow,
-        items.length - nonVisibleRowCountBottom * cardsPerRow,
-      );
-
-      return {
-        virtualTop,
-        virtualBottom,
-        virtualItems,
-      };
-    },
-    [
-      this.itemsController.items,
-      this.scrollTop,
-      this.viewportHeight,
-      this.rowHeight,
-      this.cardsPerRow,
-    ],
-  );
-
   protected override component = ContentViewComponent;
 
   protected override getProps() {
@@ -78,7 +46,6 @@ export class ContentView extends ContentViewBase<ContentViewProps> {
       contentProps: combined({
         items: this.itemsController.items,
         needToHiddenCheckBoxes: this.selectionController.needToHiddenCheckBoxes,
-        // items: computed((virtualState) => virtualState.virtualItems, [this.virtualState]),
         fieldTemplate: this.options.template('fieldTemplate'),
         cardsPerRow: this.cardsPerRow,
         onRowHeightChange: this.rowHeight.update.bind(this.rowHeight),
@@ -115,12 +82,6 @@ export class ContentView extends ContentViewBase<ContentViewProps> {
           toolbar: this.options.oneWay('cardHeader.items') as any,
           selectCard: this.selectCard.bind(this),
         }),
-      }),
-      virtualScrollingProps: combined({
-        heightUp: 0,
-        heightDown: 0,
-        // heightUp: computed((virtualState) => virtualState.virtualTop, [this.virtualState]),
-        // heightDown: computed((virtualState) => virtualState.virtualBottom, [this.virtualState]),
       }),
     });
   }

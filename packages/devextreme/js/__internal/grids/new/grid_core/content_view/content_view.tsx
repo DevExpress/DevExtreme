@@ -11,8 +11,6 @@ import { Scrollable } from '@ts/grids/new/grid_core/inferno_wrappers/scrollable'
 import type { RefObject } from 'inferno';
 import { Component, createRef } from 'inferno';
 
-import { VirtualRow } from './virtual_scrolling/virtual_row';
-
 export const CLASSES = {
   contentView: 'dx-gridcore-contentview',
 };
@@ -23,11 +21,6 @@ export interface ContentViewProps {
   noDataTextProps: NoDataTextProperties & { visible: boolean };
 
   scrollableProps: ScrollableProps;
-
-  virtualScrollingProps?: {
-    heightUp?: number;
-    heightDown?: number;
-  };
 
   onViewportHeightChange?: (value: number) => void;
 
@@ -55,17 +48,7 @@ export class ContentView extends Component<ContentViewProps> {
           {...this.props.scrollableProps}
         >
           {this.props.noDataTextProps.visible && <NoDataText {...this.props.noDataTextProps} />}
-          {
-            this.props.virtualScrollingProps?.heightUp
-              ? <VirtualRow height={this.props.virtualScrollingProps?.heightUp}/>
-              : undefined
-          }
-          { this.props.children }
-          {
-            this.props.virtualScrollingProps?.heightDown
-              ? <VirtualRow height={this.props.virtualScrollingProps?.heightDown}/>
-              : undefined
-          }
+          {this.props.children!}
         </Scrollable>
         <ErrorRow {...this.props.errorRowProps} />
       </div>
