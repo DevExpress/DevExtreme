@@ -4,6 +4,7 @@ import { CLASS as CLASS_BASE } from '../gridCore';
 import Card from './card';
 import HeadersElement from './headers/headers';
 import HeaderPanel from './headerPanel';
+import Toolbar from './toolbar';
 import Popup from "../popup";
 import List from "../list";
 import {ClientFunction} from "testcafe";
@@ -11,10 +12,13 @@ import {ClientFunction} from "testcafe";
 export const CLASS = {
     ...CLASS_BASE,
     cardView: 'dx-cardview',
+    cardViewContent: 'dx-cardview-content',
+    selectCheckBoxesHidden: 'dx-cardview-select-checkboxes-hidden',
     headers: 'headers',
     headerItem: 'header-item',
     headerFilterMenu: 'dx-header-filter-menu',
     card: 'card',
+    toolbar: 'dx-toolbar',
 }
 
 export default class CardView extends GridCore {
@@ -67,5 +71,31 @@ export default class CardView extends GridCore {
           () => (getInstance() as any).columnOption(columnName),
           { dependencies: { getInstance, columnName } },
       )();
+  }
+
+  getSelectedCardKeys(): Promise<Record<string, any>> {
+    const { getInstance } = this;
+
+    return ClientFunction(
+        () => (getInstance() as any).getSelectedCardKeys(),
+        { dependencies: { getInstance } },
+    )();
+  }
+
+  getToolbar(): Toolbar {
+    return new Toolbar(this.element.child(`.${CLASS.toolbar}`));
+  }
+
+  isCheckBoxesHidden(): Promise<boolean> {
+    return this.element.find(`.${CLASS.cardViewContent}`).hasClass(`${CLASS.selectCheckBoxesHidden}`);
+  }
+
+  apiPageIndex(pageIndex: number): Promise<void> {
+    const { getInstance } = this;
+
+    return ClientFunction(
+        () => (getInstance() as any).pageIndex(pageIndex),
+        { dependencies: { getInstance, pageIndex } },
+    )();
   }
 }

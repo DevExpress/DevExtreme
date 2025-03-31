@@ -29,6 +29,14 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoCardViewHeaderPanelComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
+    get dragging(): Record<string, any> {
+        return this._getOption('dragging');
+    }
+    set dragging(value: Record<string, any>) {
+        this._setOption('dragging', value);
+    }
+
+    @Input()
     get itemCssClass(): string {
         return this._getOption('itemCssClass');
     }

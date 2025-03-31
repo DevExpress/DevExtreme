@@ -12,7 +12,6 @@ import { ItemsController } from './items_controller';
 
 const setup = (config: Options = {}) => {
   const options = new OptionsControllerMock(config);
-
   const columnsController = new ColumnsController(options);
   const filterController = new FilterController(options);
   const sortingController = new SortingController(options, columnsController);
@@ -62,8 +61,21 @@ describe('ItemsController', () => {
       });
 
       const columns = columnsController.columns.unreactive_get();
-      const dataRow = itemsController.createDataRow(dataObject, columns, 0);
+      const dataRow = itemsController.createDataRow(dataObject, columns, 0, [1]);
       expect(dataRow).toMatchSnapshot();
+    });
+  });
+
+  describe('setSelectionState', () => {
+    it('should update the select state of the item', () => {
+      const { itemsController } = setup({
+        keyExpr: 'id',
+        dataSource: [{ id: 1, a: 'my a value' }],
+      });
+
+      itemsController.setSelectionState([1]);
+
+      expect(itemsController.items).toMatchSnapshot();
     });
   });
 });

@@ -101,36 +101,70 @@ class Stepper extends CollectionWidgetAsync<StepperProperties> {
     return icon;
   }
 
-  _prepareDefaultItemTemplate(data: Item, $container: dxElementWrapper): void {
-    const { text, title, optional } = data;
+  _getStepIndicator(data: Item): dxElementWrapper {
+    const { text } = data;
 
     const $indicatorElement = $('<div>').addClass(STEP_INDICATOR_CLASS);
 
     const iconName = this._getStepIcon(data);
-    const $iconElement = getImageContainer(iconName) ?? $('<div>').addClass(STEP_TEXT_CLASS).text(text ?? '');
+    const $indicatorContent = getImageContainer(iconName) ?? $('<div>').addClass(STEP_TEXT_CLASS).text(text ?? '');
 
-    $iconElement.appendTo($indicatorElement);
+    $indicatorElement.append($indicatorContent);
 
-    $indicatorElement.prependTo($container);
+    return $indicatorElement;
+  }
 
-    const hasTitle = isDefined(title);
-    const hasLabel = hasTitle || optional;
+  _getStepTitle(data: Item): dxElementWrapper {
+    const { title } = data;
 
-    if (hasLabel) {
-      const $stepLabel = $('<div>').addClass(STEP_LABEL_CLASS);
-      const $stepTitle = hasTitle ? $('<div>').addClass(STEP_TITLE_CLASS).text(title) : null;
-      const $stepOptionalMark = optional
-        ? $('<div>').addClass(STEP_OPTIONAL_MARK_CLASS).text(messageLocalization.format('dxStepper-optionalMark'))
-        : null;
-
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-      $stepTitle && $stepLabel.prepend($stepTitle);
-
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-      $stepOptionalMark && $stepLabel.append($stepOptionalMark);
-
-      $stepLabel.appendTo($container);
+    if (isDefined(title)) {
+      return $('<div>')
+        .addClass(STEP_TITLE_CLASS)
+        .text(title);
     }
+
+    return $();
+  }
+
+  _getStepOptionalMark(data: Item): dxElementWrapper {
+    const { optional } = data;
+
+    if (optional) {
+      const optionalMarkText = messageLocalization.format('dxStepper-optionalMark');
+
+      return $('<div>')
+        .addClass(STEP_OPTIONAL_MARK_CLASS)
+        .text(optionalMarkText);
+    }
+
+    return $();
+  }
+
+  _getStepLabel(data: Item): dxElementWrapper {
+    const $stepTitle = this._getStepTitle(data);
+    const $stepOptionalMark = this._getStepOptionalMark(data);
+
+    if ($stepTitle.length || $stepOptionalMark.length) {
+      const $stepLabel = $('<div>')
+        .addClass(STEP_LABEL_CLASS);
+
+      $stepLabel
+        .append($stepTitle)
+        .append($stepOptionalMark);
+
+      return $stepLabel;
+    }
+
+    return $();
+  }
+
+  _prepareDefaultItemTemplate(data: Item, $container: dxElementWrapper): void {
+    const $stepIndicator = this._getStepIndicator(data);
+    const $stepLabel = this._getStepLabel(data);
+
+    $container
+      .append($stepIndicator)
+      .append($stepLabel);
   }
 
   _initTemplates(): void {
@@ -246,8 +280,8 @@ class Stepper extends CollectionWidgetAsync<StepperProperties> {
   _getConnectorValue(): number {
     const { items = [], selectedIndex = 0 } = this.option();
 
-    const segmentsCount = (items.length || 1) - 1;
-    const itemRatio = 100 / (segmentsCount || 1);
+    const segmentsCount = items.length - 1;
+    const itemRatio = 100 / Math.max(segmentsCount, 1);
 
     return selectedIndex * itemRatio;
   }

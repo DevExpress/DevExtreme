@@ -1,6 +1,8 @@
-import type { HeaderPanelDraggingOptions as DraggingOptions, HeaderPanelOptions as Options } from '@js/ui/card_view';
+import type { HeaderPanelConfiguration as Options } from '@js/ui/card_view';
 
-export type { DraggingOptions, Options };
+export type { Options };
+
+export type DraggingOptions = Required<Required<Options>['headerPanel']['dragging']>;
 
 export const defaultOptions = {
   headerPanel: {

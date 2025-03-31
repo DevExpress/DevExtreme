@@ -10,6 +10,13 @@ import {
     template: ''
 })
 export abstract class DxoHeaderPanel extends NestedOption {
+    get dragging(): any {
+        return this._getOption('dragging');
+    }
+    set dragging(value: any) {
+        this._setOption('dragging', value);
+    }
+
     get itemCssClass(): string {
         return this._getOption('itemCssClass');
     }

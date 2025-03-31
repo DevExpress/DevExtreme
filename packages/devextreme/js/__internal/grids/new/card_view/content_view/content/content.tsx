@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
+import { combineClasses } from '@ts/core/utils/combine_classes';
 import type { DataRow } from '@ts/grids/new/grid_core/columns_controller/types';
 import { CollectionController } from '@ts/grids/new/grid_core/keyboard_navigation/collection_controller';
 import type { RefObject } from 'inferno';
@@ -17,6 +18,8 @@ export interface ContentProps {
 
   cardsPerRow?: number;
 
+  needToHiddenCheckBoxes?: boolean;
+
   cardProps?: {
     toolbar?: CardHeaderItem[];
     minWidth?: number;
@@ -27,6 +30,7 @@ export interface ContentProps {
 export const CLASSES = {
   content: 'dx-cardview-content',
   grid: 'dx-cardview-content-grid',
+  selectCheckBoxesHidden: 'dx-cardview-select-checkboxes-hidden',
 };
 
 function getInfernoCardKey(card: DataRow): undefined | string | number {
@@ -76,10 +80,15 @@ export class Content extends Component<ContentProps> {
 
   render(): JSX.Element {
     this.cardRefs = new Array(this.props.items.length).fill(undefined).map(() => createRef());
+    const className = combineClasses({
+      [CLASSES.content]: true,
+      [CLASSES.grid]: true,
+      [CLASSES.selectCheckBoxesHidden]: !!this.props.needToHiddenCheckBoxes,
+    });
     return (
       <div
         tabIndex={0}
-        className={`${CLASSES.content} ${CLASSES.grid}`}
+        className={className}
         style={this.getCssVariables()}
         ref={this.containerRef}
         onKeyDown={(e): void => this.keyboardController.onKeyDown(e)}
