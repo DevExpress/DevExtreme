@@ -1,4 +1,5 @@
 import { Selector } from 'testcafe';
+import Popup from '../../popup';
 import FilterBuilder from '../../filterBuilder';
 
 const CLASSES = {
@@ -16,5 +17,9 @@ export class FilterBuilderPopup {
   // eslint-disable-next-line class-methods-use-this
   getFilterBuilder(): FilterBuilder {
     return new FilterBuilder(Selector(`.${CLASSES.filterBuilder}`));
+  }
+
+  asPopup(): Popup {
+    return new Popup(this.element);
   }
 }
