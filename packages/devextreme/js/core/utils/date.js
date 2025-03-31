@@ -699,6 +699,26 @@ const getMachineTimezoneName = () => {
         : null;
 };
 
+const sameDatesArrays = (arr1, arr2) => {
+    if(!Array.isArray(arr1) || !Array.isArray(arr2) || arr1.length !== arr2.length) {
+        return false;
+    }
+
+    return arr1.every((date1, index) => {
+        const date2 = arr2[index];
+
+        if([date1, date2].some((date) => date !== null && !(date instanceof Date))) {
+            return false;
+        }
+
+        if(date1 instanceof Date && date2 instanceof Date) {
+            return sameDate(date1, date2);
+        }
+
+        return date1 === date2;
+    });
+};
+
 const dateUtils = {
     dateUnitIntervals: dateUnitIntervals,
 
@@ -762,6 +782,7 @@ const dateUtils = {
     createDateWithFullYear: createDateWithFullYear,
 
     getMachineTimezoneName: getMachineTimezoneName,
+    sameDatesArrays
 };
 
 dateUtils.sameView = function(view, date1, date2) {

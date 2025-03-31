@@ -1773,3 +1773,50 @@ QUnit.module('intervalsOverlap', () => {
         }), 'Intervals overlaps');
     });
 });
+
+QUnit.module('sameDatesArrays', () => {
+    QUnit.test('Empty arrays', function(assert) {
+        assert.ok(dateUtils.sameDatesArrays([], []), 'empty arrays are equal');
+    });
+
+    QUnit.test('Arrays of different length', function(assert) {
+        assert.notOk(dateUtils.sameDatesArrays([], [new Date(2025, 1, 1)]), 'arrays of different length are not equal');
+    });
+
+    QUnit.test('Non-arrays', function(assert) {
+        assert.notOk(dateUtils.sameDatesArrays(null, null), 'both null arguments are not array');
+        assert.notOk(dateUtils.sameDatesArrays(null, new Date(2025, 1, 1)), 'first null is not an array');
+        assert.notOk(dateUtils.sameDatesArrays(new Date(2025, 1, 1), null), 'second null is not an array');
+        assert.notOk(dateUtils.sameDatesArrays('string', 'string'), 'strings are not arrays');
+    });
+
+    QUnit.test('Same arrays with valid dates', function(assert) {
+        const arr1 = [new Date(2025, 1, 1), new Date(2025, 2, 1)];
+        const arr2 = [new Date(2025, 1, 1), new Date(2025, 2, 1)];
+        assert.ok(dateUtils.sameDatesArrays(arr1, arr2), 'arrays with same dates are equal');
+    });
+
+    QUnit.test('Same arrays with null dates', function(assert) {
+        const arr1 = [new Date(2025, 1, 1), null];
+        const arr2 = [new Date(2025, 1, 1), null];
+        assert.ok(dateUtils.sameDatesArrays(arr1, arr2), 'arrays with same empty dates are equal');
+    });
+
+    QUnit.test('Different arrays with valid dates', function(assert) {
+        const arr1 = [new Date(2025, 1, 1), new Date(2025, 2, 1)];
+        const arr2 = [new Date(2025, 1, 1), new Date(2025, 3, 1)];
+        assert.notOk(dateUtils.sameDatesArrays(arr1, arr2), 'arrays with different dates are not equal');
+    });
+
+    QUnit.test('Different arrays with null dates', function(assert) {
+        const arr1 = [null, new Date(2025, 2, 1)];
+        const arr2 = [new Date(2025, 2, 1), null];
+        assert.notOk(dateUtils.sameDatesArrays(arr1, arr2), 'arrays with different empty dates are not equal');
+    });
+
+    QUnit.test('Arrays with non-null and non-Date values', function(assert) {
+        const arr1 = ['string'];
+        const arr2 = ['string'];
+        assert.notOk(dateUtils.sameDatesArrays(arr1, arr2), 'arrays with strings are not equal dates');
+    });
+});
