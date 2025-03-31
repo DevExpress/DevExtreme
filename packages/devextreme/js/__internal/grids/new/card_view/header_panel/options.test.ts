@@ -2,10 +2,12 @@
 import {
   describe, expect, it, jest,
 } from '@jest/globals';
+import { HeaderFilterController } from '@ts/grids/new/grid_core/filtering/header_filter/index';
 import { rerender } from 'inferno';
 
 import { ColumnsController } from '../../grid_core/columns_controller';
 import { DataController } from '../../grid_core/data_controller';
+import { FilterController } from '../../grid_core/filtering';
 import { Sortable } from '../../grid_core/inferno_wrappers/sortable';
 import { SortingController } from '../../grid_core/sorting_controller';
 import type { Options } from '../options';
@@ -17,13 +19,20 @@ const setup = (options: Options) => {
   rootElement.classList.add('test-container');
 
   const optionsController = new OptionsControllerMock(options);
+  const filterController = new FilterController(optionsController);
   const columnsController = new ColumnsController(optionsController);
   const sortingController = new SortingController(optionsController, columnsController);
   const dataController = new DataController(optionsController, sortingController, filterController);
+  const headerFilterController = new HeaderFilterController(
+    optionsController,
+    dataController,
+    columnsController,
+  );
   const headerPanelView = new HeaderPanelView(
     sortingController,
     columnsController,
     optionsController,
+    headerFilterController,
   );
 
   headerPanelView.render(rootElement);
