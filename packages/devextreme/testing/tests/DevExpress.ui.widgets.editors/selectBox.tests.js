@@ -77,7 +77,6 @@ const OVERLAY_CONTENT_CLASS = 'dx-overlay-content';
 const CLEAR_BUTTON_AREA = 'dx-clear-button-area';
 const SCROLLVIEW_CONTENT_CLASS = 'dx-scrollview-content';
 const LIST_ITEMS_CLASS = 'dx-list-items';
-const DROP_DOWN_EDITOR_FIELD_TEMPLATE_WRAPPER = 'dx-dropdowneditor-field-template-wrapper';
 
 const KEY_DOWN = 'ArrowDown';
 const KEY_ENTER = 'Enter';
@@ -4403,45 +4402,37 @@ QUnit.module('Async tests', {}, () => {
         }
     });
 
-    QUnit.test('component with async fieldTemplate render only one value on re-render (T1262587)', function(assert) {
+    QUnit.test('List should have correct size when async templates are used (T1216113)', function(assert) {
         const clock = sinon.useFakeTimers();
+        const templateRenderingTimeout = 10;
 
-        const $selectBox = $('#selectBox').dxSelectBox({
-            items: [1, 2, 3],
-            fieldTemplate: 'custom',
+        $('#selectBox').dxSelectBox({
+            items: [1, 2],
             templatesRenderAsynchronously: true,
+            opened: true,
             integrationOptions: {
                 templates: {
-                    custom: {
-                        render: function(args) {
-                            const result = $('<div>');
+                    'item': {
+                        render({ model, container, onRendered }) {
                             setTimeout(() => {
-                                result.dxTextBox({
-                                    value: args.model ? args.model.text : '',
-                                });
+                                const $item = $(`<div>${model}</div>`);
+                                $item.css('height', 50);
+                                $item.appendTo(container);
 
-                                result.appendTo(args.container);
-                                args.onRendered();
-                            }, TIME_TO_WAIT);
-
-                            return result;
+                                onRendered();
+                            }, templateRenderingTimeout);
                         }
                     }
                 }
             },
         });
 
-        const instance = $selectBox.dxSelectBox('instance');
+        clock.tick(templateRenderingTimeout);
 
-        instance.option({ value: 1 });
-        instance.option({ value: null });
+        const overlayContentHeight = $(`.${OVERLAY_CONTENT_CLASS}`).height();
+        const listItemsHeight = $(`.${LIST_ITEMS_CLASS}`).height();
 
-        clock.tick(TIME_TO_WAIT);
-
-        const $wrapper = $selectBox.find(toSelector(DROP_DOWN_EDITOR_FIELD_TEMPLATE_WRAPPER));
-        const $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
-        assert.strictEqual($wrapper.children().length, 1, 'only 1 element is rendered');
-        assert.strictEqual($input.val(), '', 'last value is applied');
+        assert.roughEqual(overlayContentHeight, listItemsHeight, 5, 'popup height is more than rendered list items height');
 
         clock.restore();
     });
