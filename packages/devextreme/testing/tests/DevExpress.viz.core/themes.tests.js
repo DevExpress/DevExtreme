@@ -343,6 +343,24 @@ QUnit.test('Invalid input data (with color scheme)', function(assert) {
     assert.strictEqual(themeModule.currentTheme(), 'generic.light');
 });
 
+[
+    'fluent.blue.light',
+    'fluent.blue.light.compact',
+    'fluent.blue.dark',
+    'fluent.blue.dark.compact',
+    'fluent.saas.light',
+    'fluent.saas.light.compact',
+    'fluent.saas.dark',
+    'fluent.saas.dark.compact',
+].forEach((theme) => {
+    QUnit.test(`Fluent theme should be registered: ${theme}`, function(assert) {
+        themeModule.currentTheme(theme);
+
+        assert.strictEqual(themeModule.currentTheme(), theme);
+    });
+});
+
+
 QUnit.module('refresh all', {
     createItem: function() {
         return {
