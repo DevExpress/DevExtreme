@@ -1,5 +1,5 @@
 import { Mode, template } from '../common';
-import { UserDefinedElement } from '../core/element';
+import { DxElement, UserDefinedElement } from '../core/element';
 import {
  ColumnBase, DataErrorOccurredInfo, Pager, ScrollingBase,
 } from '../common/grids';
@@ -116,6 +116,67 @@ export type PagerConfiguration = {
 };
 
 // #endregion
+
+// #region ContextMenu
+
+/** @public */
+export type ContextMenuTarget = 'toolbar' | 'headerPanel' | 'content';
+
+/**
+ * @docid _ui_card_view_ContextMenuPreparingEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
+export type ContextMenuPreparingEvent<TRowData = any, TKey = any> = EventInfo<dxCardView> & {
+  /**
+   * @docid _ui_card_view_ContextMenuPreparingEvent.items
+   * @type Array<Object>
+   */
+  items?: Array<any>;
+
+  /**
+   * @docid _ui_card_view_ContextMenuPreparingEvent.target
+   */
+  readonly target: ContextMenuTarget;
+
+  /**
+   * @docid _ui_card_view_ContextMenuPreparingEvent.targetElement
+   */
+  readonly targetElement: DxElement;
+
+  /**
+   * @docid _ui_card_view_ContextMenuPreparingEvent.columnIndex
+   */
+  readonly columnIndex?: number;
+
+  /**
+   * @docid _ui_card_view_ContextMenuPreparingEvent.column
+   */
+  readonly column?: Column<TRowData, TKey>;
+
+  /**
+   * @docid _ui_card_view_ContextMenuPreparingEvent.cardIndex
+   */
+  readonly cardIndex?: number;
+
+  /**
+   * @docid _ui_card_view_ContextMenuPreparingEvent.card
+   */
+  readonly card?: DataRow<TRowData, TKey>;
+};
+
+export type ContextMenuOptions<TRowData = unknown, TKey = unknown> = {
+    /**
+     * @docid
+     * @default undefined
+     * @action
+     * @public
+     */
+    onContextMenuPreparing?: (args: ContextMenuPreparingEvent<TRowData, TKey>) => void;
+};
+
+// #end region
 
 // #region Toolbar
 

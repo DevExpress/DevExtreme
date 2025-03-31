@@ -21,6 +21,8 @@ export abstract class ContentView<TProps extends {}> extends View<TProps> {
 
   public readonly scrollableRef = createRef<dxScrollable>();
 
+  public readonly containerRef = createRef<HTMLDivElement>();
+
   public loadingText = this.options.twoWay('loadPanel.message');
 
   protected readonly viewportHeight = state(0);
@@ -79,6 +81,7 @@ export abstract class ContentView<TProps extends {}> extends View<TProps> {
       }),
       onViewportHeightChange: this.viewportHeight.update.bind(this.viewportHeight),
       scrollableRef: this.scrollableRef,
+      containerRef: this.containerRef,
       scrollableProps: combined({
         onScroll: this.onScroll.bind(this),
         direction: 'both' as const,

@@ -38,16 +38,16 @@ export interface ContentViewProps {
   onWidthChange?: (value: number) => void;
 
   scrollableRef?: RefObject<dxScrollable>;
+
+  containerRef?: RefObject<HTMLDivElement>;
 }
 
 export class ContentView extends Component<ContentViewProps> {
   private readonly scrollableRef = createRef<Scrollable>();
 
-  private readonly containerRef = createRef<HTMLDivElement>();
-
   public render(): JSX.Element {
     return (
-      <div className={CLASSES.contentView} ref={this.containerRef}>
+      <div className={CLASSES.contentView} ref={this.props.containerRef}>
         <LoadPanel {...this.props.loadPanelProps} />
         <Scrollable
           ref={this.scrollableRef}
@@ -80,7 +80,7 @@ export class ContentView extends Component<ContentViewProps> {
   public componentDidMount(): void {
     this.updateSizesInfo();
     resizeObserverSingleton.observe(
-      this.containerRef.current!,
+      this.props.containerRef!.current!,
       (entry: ResizeObserverEntry) => {
         this.props.onWidthChange?.(entry.contentRect.width);
       },
@@ -93,7 +93,7 @@ export class ContentView extends Component<ContentViewProps> {
 
   public componentWillUnmount(): void {
     resizeObserverSingleton.unobserve(
-      this.containerRef.current!,
+      this.props.containerRef!.current!,
     );
   }
 }

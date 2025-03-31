@@ -1,6 +1,6 @@
 import type { Column } from '@ts/grids/new/grid_core/columns_controller/types';
 import { Scrollable } from '@ts/grids/new/grid_core/inferno_wrappers/scrollable';
-import type { ComponentType } from 'inferno';
+import type { ComponentType, RefObject } from 'inferno';
 import { Component } from 'inferno';
 
 import { ColumnSortable } from './column_sortable';
@@ -13,6 +13,8 @@ export const CLASSES = {
 };
 
 export interface HeaderPanelProps {
+  containerRef: RefObject<HTMLDivElement>;
+
   columns: Column[];
 
   onMove: (column: Column, toIndex: number) => void;
@@ -48,7 +50,7 @@ export class HeaderPanel extends Component<HeaderPanelProps> {
     }
 
     return (
-      <div className={CLASSES.headers}>
+      <div className={CLASSES.headers} ref={this.props.containerRef}>
         <ColumnSortable
           {...this.props.draggingOptions}
           allowColumnReordering={this.props.allowColumnReordering}

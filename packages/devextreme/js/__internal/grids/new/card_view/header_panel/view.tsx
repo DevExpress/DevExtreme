@@ -3,6 +3,7 @@ import { combined, computed } from '@ts/core/reactive/index';
 import { ColumnsController } from '@ts/grids/new/grid_core/columns_controller/columns_controller';
 import { View } from '@ts/grids/new/grid_core/core/view';
 import { HeaderFilterController } from '@ts/grids/new/grid_core/filtering/header_filter';
+import { createRef } from 'inferno';
 
 import type { Column } from '../../grid_core/columns_controller/types';
 import { SortingController } from '../../grid_core/sorting_controller/sorting_controller';
@@ -20,6 +21,8 @@ export class HeaderPanelView extends View<HeaderPanelProps> {
     HeaderFilterController,
   ] as const;
 
+  public readonly containerRef = createRef<HTMLDivElement>();
+
   constructor(
     private readonly sortingController: SortingController,
     private readonly columnsController: ColumnsController,
@@ -31,6 +34,7 @@ export class HeaderPanelView extends View<HeaderPanelProps> {
 
   protected override getProps(): SubsGets<HeaderPanelProps> {
     return combined({
+      containerRef: this.containerRef,
       columns: computed(
         (columns) => [...columns].sort((a, b) => a.visibleIndex - b.visibleIndex),
         [this.columnsController.columns],
@@ -60,6 +64,7 @@ export class HeaderPanelView extends View<HeaderPanelProps> {
   }
 
   public onSortClick(column: Column, e: MouseEvent): void {
+    // eslint-disable-next-line spellcheck/spell-checker
     const mode = this.sortingController.mode.unreactive_get();
     switch (mode) {
       case 'none':
