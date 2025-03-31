@@ -1,38 +1,14 @@
-/* eslint-disable spellcheck/spell-checker */
-// ignored because they have import of localization package and fail during bundling
-// 2 for Grid (RowTemplate, CellCustomization)
-const ignoredLocalization = ['Localization', 'RowTemplate', 'CellCustomization', 'TimeZonesSupport', 'ExportToPDF'];
-// ignored becuse react and vue fail to max callstack exceeded
+import menuMeta from '../../menuMeta.json';
 
-const ignoredCallstack = [
-  'AdvancedMasterDetailView',
-  'BatchUpdateRequest',
-  'CollaborativeEditing',
-  'CustomEditors',
-  'CustomNewRecordPosition',
-  'DataValidation',
-  'EditStateManagement', // fail only in vue
-  'RemoteGrouping',
-  'RemoteReordering',
-  'RemoteVirtualScrolling',
-  'WebAPIService',
-];
+const gridMeta = menuMeta[0].Groups;
 
-// ignored, because test uses DevExtreme which is not defined
-// (probably something with path on CI, need to research)
-const ignoredDevextreme = ['SignalRService'];
-
-// ignored vue some problems with template + 1 miss style
-const ignoredVue = [
-  'FilteringAPI',
-  'MultiRowHeadersBands',
-  'RightToLeftSupport',
-  'EditStateManagement',
-];
-
-export const gitHubIgnored = [
-  ...ignoredLocalization,
-  ...ignoredCallstack,
-  ...ignoredDevextreme,
-  ...ignoredVue,
-];
+export const gitHubIgnored = gridMeta.reduce((result, Group) => {
+  if (Group.Demos) {
+    Group.Demos.forEach(demo => {
+      if (!!demo.GHPIgnored) {
+        result.push(demo.Name);
+      }
+    });
+  }
+  return result
+}, []).sort()
