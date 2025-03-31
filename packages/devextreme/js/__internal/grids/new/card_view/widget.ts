@@ -1,6 +1,5 @@
 /* eslint-disable max-classes-per-file */
 /* eslint-disable spellcheck/spell-checker */
-
 import registerComponent from '@js/core/component_registrator';
 import $ from '@js/core/renderer';
 import { extend } from '@js/core/utils/extend';
@@ -21,9 +20,9 @@ export class CardViewBase extends GridCoreNew {
 
   protected _registerDIContext(): void {
     super._registerDIContext();
-    this.diContext.register(HeaderPanelView);
 
     this.diContext.register(ContentViewModule.View);
+    this.diContext.register(HeaderPanelView);
     this.diContext.register(MainViewBase, MainView);
 
     const optionsController = new OptionsController(this);

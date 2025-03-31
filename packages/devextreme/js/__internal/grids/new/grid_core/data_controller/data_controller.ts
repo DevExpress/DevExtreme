@@ -1,7 +1,5 @@
 /* eslint-disable @typescript-eslint/no-invalid-void-type */
-
 /* eslint-disable spellcheck/spell-checker */
-
 import type { DataSource } from '@js/common/data';
 import ArrayStore from '@js/common/data/array_store';
 import type { SubsGets } from '@ts/core/reactive/index';
