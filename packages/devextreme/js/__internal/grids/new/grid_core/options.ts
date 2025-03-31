@@ -2,6 +2,7 @@ import browser from '@js/core/utils/browser';
 import { isMaterialBased } from '@js/ui/themes';
 import type { WidgetOptions } from '@js/ui/widget/ui.widget';
 
+import * as columnChooser from './column_chooser/index';
 import * as columnsController from './columns_controller/index';
 import * as contentView from './content_view/index';
 import * as dataController from './data_controller/index';
@@ -18,13 +19,15 @@ export type Options =
   & pager.Options
   & columnsController.Options
   & contentView.Options
-  & toolbar.Options;
+  & toolbar.Options
+  & columnChooser.Options;
 
 export const defaultOptions = {
   ...dataController.defaultOptions,
   ...columnsController.defaultOptions,
   ...pager.defaultOptions,
   ...contentView.defaultOptions,
+  ...columnChooser.defaultOptions,
 } satisfies Options;
 
 // TODO: separate by modules

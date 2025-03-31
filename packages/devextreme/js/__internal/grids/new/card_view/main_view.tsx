@@ -1,4 +1,5 @@
 import { combined } from '@ts/core/reactive/index';
+import { ColumnChooserView } from '@ts/grids/new/grid_core/column_chooser';
 import { View } from '@ts/grids/new/grid_core/core/view';
 import { PagerView } from '@ts/grids/new/grid_core/pager/view';
 import { ToolbarView } from '@ts/grids/new/grid_core/toolbar/view';
@@ -15,11 +16,12 @@ interface MainViewProps {
   Content: ComponentType;
   Pager: ComponentType;
   HeaderPanel: ComponentType;
+  ColumnChooser: ComponentType;
   config: Config;
 }
 
 function MainViewComponent({
-  Toolbar, Content, Pager, HeaderPanel, config,
+  Toolbar, Content, Pager, HeaderPanel, ColumnChooser, config,
 }: MainViewProps): JSX.Element {
   return (<>
     <ConfigContext.Provider value={config}>
@@ -36,6 +38,7 @@ function MainViewComponent({
         */}
         <Pager/>
       </div>
+      <ColumnChooser/>
     </ConfigContext.Provider>
   </>);
 }
@@ -44,7 +47,12 @@ export class MainView extends View<MainViewProps> {
   protected override component = MainViewComponent;
 
   public static dependencies = [
-    ContentView, PagerView, ToolbarView, HeaderPanelView, OptionsController,
+    ContentView,
+    PagerView,
+    ToolbarView,
+    HeaderPanelView,
+    ColumnChooserView,
+    OptionsController,
   ] as const;
 
   constructor(
@@ -52,6 +60,7 @@ export class MainView extends View<MainViewProps> {
     private readonly pager: PagerView,
     private readonly toolbar: ToolbarView,
     private readonly headerPanel: HeaderPanelView,
+    private readonly columnsChooser: ColumnChooserView,
     private readonly options: OptionsController,
   ) {
     super();
@@ -65,6 +74,7 @@ export class MainView extends View<MainViewProps> {
       Content: this.content.asInferno(),
       Pager: this.pager.asInferno(),
       HeaderPanel: this.headerPanel.asInferno(),
+      ColumnChooser: this.columnsChooser.asInferno(),
       config: combined({
         rtlEnabled: this.options.oneWay('rtlEnabled'),
         disabled: this.options.oneWay('disabled'),

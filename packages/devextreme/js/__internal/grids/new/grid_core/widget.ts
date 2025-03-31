@@ -8,6 +8,7 @@ import { DIContext } from '@ts/core/di/index';
 import type { Subscription } from '@ts/core/reactive/index';
 import { render } from 'inferno';
 
+import * as ColumnChooserModule from './column_chooser';
 import * as ColumnsControllerModule from './columns_controller/index';
 import * as DataControllerModule from './data_controller/index';
 import { ErrorController } from './error_controller/error_controller';
@@ -33,6 +34,10 @@ export class GridCoreNewBase<
 
   private pagerView!: PagerView;
 
+  private columnChooserController!: ColumnChooserModule.ColumnChooserController;
+
+  protected columnChooserView!: ColumnChooserModule.ColumnChooserView;
+
   private toolbarController!: ToolbarController;
 
   private toolbarView!: ToolbarView;
@@ -47,6 +52,8 @@ export class GridCoreNewBase<
     this.diContext.register(ToolbarController);
     this.diContext.register(ToolbarView);
     this.diContext.register(PagerView);
+    this.diContext.register(ColumnChooserModule.ColumnChooserController);
+    this.diContext.register(ColumnChooserModule.ColumnChooserView);
     this.diContext.register(ErrorController);
   }
 
@@ -57,6 +64,8 @@ export class GridCoreNewBase<
     this.toolbarController = this.diContext.get(ToolbarController);
     this.toolbarView = this.diContext.get(ToolbarView);
     this.pagerView = this.diContext.get(PagerView);
+    this.columnChooserController = this.diContext.get(ColumnChooserModule.ColumnChooserController);
+    this.columnChooserView = this.diContext.get(ColumnChooserModule.ColumnChooserView);
     this.errorController = this.diContext.get(ErrorController);
   }
 
@@ -97,6 +106,8 @@ export class GridCoreNewBase<
 
 export class GridCoreNew extends ColumnsControllerModule.PublicMethods(
   DataControllerModule.PublicMethods(
-    GridCoreNewBase,
+    ColumnChooserModule.PublicMethods(
+      GridCoreNewBase,
+    ),
   ),
 ) {}
