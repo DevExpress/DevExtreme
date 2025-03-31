@@ -9,7 +9,7 @@ import dxCardView, {
 import { Component as BaseComponent, IHtmlOptions, ComponentRef, NestedComponentMeta } from "./core/component";
 import NestedOption from "./core/nested-option";
 
-import type { DataRow, Column as CardViewColumn, PredefinedToolbarItem, ToolbarItem } from "devextreme/ui/card_view";
+import type { DataRow, Column as CardViewColumn, PredefinedToolbarItem, dxCardViewToolbarItem } from "devextreme/ui/card_view";
 import type { template, ToolbarItemLocation, ToolbarItemComponent, Mode, DisplayMode } from "devextreme/common";
 import type { LocateInMenuMode, ShowTextMode } from "devextreme/ui/toolbar";
 import type { CollectionWidgetItem } from "devextreme/ui/collection/ui.collection_widget.base";
@@ -309,7 +309,9 @@ const RemoteOperations = Object.assign<typeof _componentRemoteOperations, Nested
 // owners:
 // CardView
 type IToolbarProps = React.PropsWithChildren<{
-  items?: Array<PredefinedToolbarItem | ToolbarItem>;
+  disabled?: boolean;
+  items?: Array<dxCardViewToolbarItem | PredefinedToolbarItem>;
+  visible?: boolean | undefined;
 }>
 const _componentToolbar = (props: IToolbarProps) => {
   return React.createElement(NestedOption<IToolbarProps>, {

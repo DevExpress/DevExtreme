@@ -17,7 +17,7 @@ import {
 
 
 
-import { PredefinedToolbarItem, ToolbarItem } from 'devextreme/ui/card_view';
+import { dxCardViewToolbarItem, PredefinedToolbarItem } from 'devextreme/ui/card_view';
 
 import {
     NestedOptionHost,
@@ -34,11 +34,27 @@ import { DxiCardViewItemComponent } from './item-dxi';
 })
 export class DxoCardViewToolbarComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get items(): Array<PredefinedToolbarItem | ToolbarItem> {
+    get disabled(): boolean {
+        return this._getOption('disabled');
+    }
+    set disabled(value: boolean) {
+        this._setOption('disabled', value);
+    }
+
+    @Input()
+    get items(): Array<dxCardViewToolbarItem | PredefinedToolbarItem> {
         return this._getOption('items');
     }
-    set items(value: Array<PredefinedToolbarItem | ToolbarItem>) {
+    set items(value: Array<dxCardViewToolbarItem | PredefinedToolbarItem>) {
         this._setOption('items', value);
+    }
+
+    @Input()
+    get visible(): boolean | undefined {
+        return this._getOption('visible');
+    }
+    set visible(value: boolean | undefined) {
+        this._setOption('visible', value);
     }
 
 

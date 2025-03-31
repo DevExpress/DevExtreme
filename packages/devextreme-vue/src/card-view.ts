@@ -12,8 +12,9 @@ import {
  HeaderPanel,
  Paging,
  RemoteOperations,
+ dxCardViewToolbar,
  PredefinedToolbarItem,
- ToolbarItem,
+ dxCardViewToolbarItem,
 } from "devextreme/ui/card_view";
 import {
  Mode,
@@ -114,7 +115,7 @@ const componentConfig = {
     remoteOperations: [Boolean, String, Object] as PropType<boolean | Mode | RemoteOperations>,
     rtlEnabled: Boolean,
     tabIndex: Number,
-    toolbar: Object as PropType<Record<string, any>>,
+    toolbar: Object as PropType<dxCardViewToolbar | Record<string, any>>,
     visible: Boolean,
     width: [Function, Number, String] as PropType<((() => number | string)) | number | string>
   },
@@ -387,10 +388,14 @@ const DxToolbarConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
+    "update:disabled": null,
     "update:items": null,
+    "update:visible": null,
   },
   props: {
-    items: Array as PropType<Array<PredefinedToolbarItem | ToolbarItem>>
+    disabled: Boolean,
+    items: Array as PropType<Array<dxCardViewToolbarItem | PredefinedToolbarItem>>,
+    visible: Boolean
   }
 };
 

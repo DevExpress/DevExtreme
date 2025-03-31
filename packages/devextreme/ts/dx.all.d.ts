@@ -9759,6 +9759,15 @@ declare module DevExpress.ui {
   > extends Widget<DevExpress.ui.dxCardView.Properties> {}
   module dxCardView {
     /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+     */
+    export type dxCardViewToolbar = Toolbar;
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+     */
+    export type dxCardViewToolbarItem = ToolbarItem;
+
+    /**
      * [descr:HeaderPanel]
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
      */
@@ -9852,8 +9861,7 @@ declare module DevExpress.ui {
       DevExpress.ui.dxCardView.PagerConfiguration,
       DevExpress.ui.dxCardView.ColumnsControllerConfiguration<TRowData, TKey>,
       DevExpress.ui.dxCardView.HeaderPanelConfiguration<TRowData, TKey>,
-      DevExpress.ui.dxCardView.ContentViewConfiguration<TRowData>,
-      DevExpress.ui.dxCardView.ToolbarConfiguration {
+      DevExpress.ui.dxCardView.ContentViewConfiguration<TRowData> {
     /**
      * [descr:dxCardViewOptions.onDataErrorOccurred]
      */
@@ -9861,6 +9869,10 @@ declare module DevExpress.ui {
       e: DevExpress.common.core.events.EventInfo<dxCardView> &
         DevExpress.common.grids.DataErrorOccurredInfo
     ) => void;
+    /**
+     * [descr:dxCardViewOptions.toolbar]
+     */
+    toolbar?: DevExpress.ui.dxCardView.Toolbar | undefined;
   }
   /**
    * [descr:dxChat]
@@ -31896,32 +31908,32 @@ declare module DevExpress.ui.dxCardView {
     summary?: boolean;
   }
   /**
-   * [descr:ToolbarConfiguration]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   * [descr:dxCardViewToolbar]
    */
-  export type ToolbarConfiguration = {
+  export type Toolbar = {
     /**
-     * [descr:ToolbarConfiguration.toolbar]
+     * [descr:dxCardViewToolbar.items]
      */
-    toolbar?: {
-      /**
-       * [descr:ToolbarConfiguration.toolbar.items]
-       */
-      items?: Array<PredefinedToolbarItem | ToolbarItem>;
-      visible?: boolean | undefined;
-      disabled?: boolean;
-    };
+    items?: Array<PredefinedToolbarItem | ToolbarItem>;
+    /**
+     * [descr:dxCardViewToolbar.visible]
+     */
+    visible?: boolean | undefined;
+    /**
+     * [descr:dxCardViewToolbar.disabled]
+     */
+    disabled?: boolean;
   };
   /**
-   * [descr:ToolbarItem]
+   * [descr:dxCardViewToolbarItem]
    */
   export type ToolbarItem = dxToolbarItem & {
     /**
-     * [descr:ToolbarItem.name]
+     * [descr:dxCardViewToolbarItem.name]
      */
     name?: PredefinedToolbarItem | string;
     /**
-     * [descr:ToolbarItem.location]
+     * [descr:dxCardViewToolbarItem.location]
      */
     location?: DevExpress.common.ToolbarItemLocation;
   };

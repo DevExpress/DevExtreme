@@ -1,5 +1,6 @@
 export {
   ToolbarItem,
+  Toolbar,
   Cell,
   DataRow,
   ColumnProperties,

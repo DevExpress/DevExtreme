@@ -18,19 +18,19 @@ import { dxTreeListToolbarItem, TreeListPredefinedToolbarItem } from 'devextreme
 @Component({
     template: ''
 })
-export abstract class DxoDataGridToolbar extends NestedOption {
-    get items(): Array<PredefinedToolbarItem | any | { cssClass?: string | undefined, disabled?: boolean, html?: string, locateInMenu?: LocateInMenuMode, location?: ToolbarItemLocation, menuItemTemplate?: any, name?: PredefinedToolbarItem | string, options?: any, showText?: ShowTextMode, template?: any, text?: string, visible?: boolean, widget?: ToolbarItemComponent } | dxDataGridToolbarItem | DataGridPredefinedToolbarItem | dxFileManagerToolbarItem | FileManagerPredefinedToolbarItem | dxGanttToolbarItem | GanttPredefinedToolbarItem | dxHtmlEditorToolbarItem | HtmlEditorPredefinedToolbarItem | dxTreeListToolbarItem | TreeListPredefinedToolbarItem> {
-        return this._getOption('items');
-    }
-    set items(value: Array<PredefinedToolbarItem | any | { cssClass?: string | undefined, disabled?: boolean, html?: string, locateInMenu?: LocateInMenuMode, location?: ToolbarItemLocation, menuItemTemplate?: any, name?: PredefinedToolbarItem | string, options?: any, showText?: ShowTextMode, template?: any, text?: string, visible?: boolean, widget?: ToolbarItemComponent } | dxDataGridToolbarItem | DataGridPredefinedToolbarItem | dxFileManagerToolbarItem | FileManagerPredefinedToolbarItem | dxGanttToolbarItem | GanttPredefinedToolbarItem | dxHtmlEditorToolbarItem | HtmlEditorPredefinedToolbarItem | dxTreeListToolbarItem | TreeListPredefinedToolbarItem>) {
-        this._setOption('items', value);
-    }
-
+export abstract class DxoCardViewToolbar extends NestedOption {
     get disabled(): boolean {
         return this._getOption('disabled');
     }
     set disabled(value: boolean) {
         this._setOption('disabled', value);
+    }
+
+    get items(): Array<PredefinedToolbarItem | any | { cssClass?: string | undefined, disabled?: boolean, html?: string, locateInMenu?: LocateInMenuMode, location?: ToolbarItemLocation, menuItemTemplate?: any, name?: PredefinedToolbarItem | string, options?: any, showText?: ShowTextMode, template?: any, text?: string, visible?: boolean, widget?: ToolbarItemComponent } | dxDataGridToolbarItem | DataGridPredefinedToolbarItem | dxFileManagerToolbarItem | FileManagerPredefinedToolbarItem | dxGanttToolbarItem | GanttPredefinedToolbarItem | dxHtmlEditorToolbarItem | HtmlEditorPredefinedToolbarItem | dxTreeListToolbarItem | TreeListPredefinedToolbarItem> {
+        return this._getOption('items');
+    }
+    set items(value: Array<PredefinedToolbarItem | any | { cssClass?: string | undefined, disabled?: boolean, html?: string, locateInMenu?: LocateInMenuMode, location?: ToolbarItemLocation, menuItemTemplate?: any, name?: PredefinedToolbarItem | string, options?: any, showText?: ShowTextMode, template?: any, text?: string, visible?: boolean, widget?: ToolbarItemComponent } | dxDataGridToolbarItem | DataGridPredefinedToolbarItem | dxFileManagerToolbarItem | FileManagerPredefinedToolbarItem | dxGanttToolbarItem | GanttPredefinedToolbarItem | dxHtmlEditorToolbarItem | HtmlEditorPredefinedToolbarItem | dxTreeListToolbarItem | TreeListPredefinedToolbarItem>) {
+        this._setOption('items', value);
     }
 
     get visible(): boolean | undefined {

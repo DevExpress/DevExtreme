@@ -120,54 +120,53 @@ export type PagerConfiguration = {
 // #region Toolbar
 
 export type PredefinedToolbarItem = 'columnChooserButton' | 'searchPanel' | 'addCardButton';
+export type dxCardViewToolbar = Toolbar;
+export type dxCardViewToolbarItem = ToolbarItem;
 
 /**
- * @docid
+ * @docid dxCardViewToolbarItem
  * @inherits dxToolbarItem
+ * @namespace DevExpress.ui.dxCardView 
  * @public
- * @namespace DevExpress.ui.dxCardView
  */
 export type ToolbarItem = dxToolbarItem & {
     /**
-     * @docid
+     * @docid dxCardViewToolbarItem.name
      * @public
      */
     name?: PredefinedToolbarItem | string;
     /**
-     * @docid
+     * @docid dxCardViewToolbarItem.location
      * @default 'after'
      * @public
      */
     location?: ToolbarItemLocation;
-  };
+};
 
 /**
- * @docid
- * @hidden
+ * @docid dxCardViewToolbar
+ * @public
  * @namespace DevExpress.ui.dxCardView
  */
-export type ToolbarConfiguration = {
+export type Toolbar = {
     /**
-     * @docid
+     * @docid dxCardViewToolbar.items
+     * @type Array<dxCardViewToolbarItem,Enums.PredefinedToolbarItem>
      * @public
      */
-    toolbar?: {
-        /**
-         * @docid
-         * @public
-         */
-        items?: Array<PredefinedToolbarItem | ToolbarItem>;
-        /**
-         * @default undefined
-         * @public
-         */
-        visible?: boolean | undefined;
-        /**
-         * @default false
-         * @public
-         */
-        disabled?: boolean;
-    };
+    items?: Array<PredefinedToolbarItem | ToolbarItem>;
+    /**
+     * @docid dxCardViewToolbar.visible
+     * @default undefined
+     * @public
+     */
+    visible?: boolean | undefined;
+    /**
+     * @docid dxCardViewToolbar.disabled
+     * @default false
+     * @public
+     */
+    disabled?: boolean;
 };
 
 // #endregion
@@ -470,15 +469,14 @@ export interface ContentViewConfiguration<TRowData = unknown> extends BaseConten
  * @public
  * @docid
  * @deprecated use Properties instead
- * @inherits DataControllerConfiguration,PagerConfiguration,ToolbarConfiguration,ColumnsControllerConfiguration,HeaderPanelConfiguration,ContentViewConfiguration
+ * @inherits DataControllerConfiguration,PagerConfiguration,ColumnsControllerConfiguration,HeaderPanelConfiguration,ContentViewConfiguration
  */
 export interface dxCardViewOptions<TRowData = unknown, TKey = unknown> extends WidgetOptions<dxCardView>,
 DataControllerConfiguration<TRowData, TKey>,
 PagerConfiguration,
 ColumnsControllerConfiguration<TRowData, TKey>,
 HeaderPanelConfiguration<TRowData, TKey>,
-ContentViewConfiguration<TRowData>,
-ToolbarConfiguration {
+ContentViewConfiguration<TRowData> {
     /**
      * @docid
      * @default undefined
@@ -488,6 +486,12 @@ ToolbarConfiguration {
      * @public
      */
     onDataErrorOccurred?: (e: EventInfo<dxCardView> & DataErrorOccurredInfo) => void;
+    /**
+     * @docid
+     * @type dxCardViewToolbar | undefined
+     * @public
+     */
+    toolbar?: Toolbar | undefined;
 }
 
 /** @public */
