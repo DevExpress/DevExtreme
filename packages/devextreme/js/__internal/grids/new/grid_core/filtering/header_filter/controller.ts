@@ -1,9 +1,9 @@
 /* eslint-disable spellcheck/spell-checker */
 import type { SubsGets } from '@ts/core/reactive/index';
 import { state } from '@ts/core/reactive/index';
-import { ColumnsController } from '@ts/grids/new/grid_core/columns_controller';
+import { ColumnsController } from '@ts/grids/new/grid_core/columns_controller/index';
 import type { Column } from '@ts/grids/new/grid_core/columns_controller/types';
-import { DataController } from '@ts/grids/new/grid_core/data_controller';
+import { DataController } from '@ts/grids/new/grid_core/data_controller/index';
 import {
   getDataSourceOptions,
   getFilterType,

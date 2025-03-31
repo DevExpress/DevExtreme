@@ -1,9 +1,9 @@
 import { equalByValue } from '@js/core/utils/common';
 import formatHelper from '@js/format_helper';
-import { computed, state } from '@ts/core/reactive';
+import { computed, state } from '@ts/core/reactive/index';
 import { ColumnsController } from '@ts/grids/new/grid_core/columns_controller/columns_controller';
 import { DataController } from '@ts/grids/new/grid_core/data_controller/data_controller';
-import { SearchController } from '@ts/grids/new/grid_core/search';
+import { SearchController } from '@ts/grids/new/grid_core/search/index';
 
 import type { Column, DataRow } from '../columns_controller/types';
 import type { DataObject, Key } from '../data_controller/types';

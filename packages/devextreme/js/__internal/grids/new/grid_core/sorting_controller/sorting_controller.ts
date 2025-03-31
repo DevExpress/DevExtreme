@@ -9,7 +9,7 @@ import {
   computed, interruptableComputed,
 } from '@ts/core/reactive/index';
 
-import { ColumnsController } from '../columns_controller';
+import { ColumnsController } from '../columns_controller/index';
 import type { Column } from '../columns_controller/types';
 import { getColumnIndexByName } from '../columns_controller/utils';
 import { OptionsController } from '../options_controller/options_controller';

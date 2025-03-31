@@ -1,6 +1,6 @@
 /* eslint-disable spellcheck/spell-checker */
-import type { SubsGets } from '@ts/core/reactive';
-import { computed } from '@ts/core/reactive';
+import type { SubsGets } from '@ts/core/reactive/index';
+import { computed } from '@ts/core/reactive/index';
 import type { Options as SearchOptions } from '@ts/grids/new/grid_core/search/options';
 import type { HighlightedTextItem, HighlightTextOptions } from '@ts/grids/new/grid_core/search/types';
 import { splitHighlightedText } from '@ts/grids/new/grid_core/search/utils';

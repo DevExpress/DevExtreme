@@ -1,7 +1,7 @@
 import type { Format, SortOrder } from '@js/common';
 import type { ColumnBase } from '@js/common/grids';
 import type { Cell as PublicCell, DataRow as PublicDataRow } from '@js/ui/card_view';
-import type { HeaderFilterColumnOptions } from '@ts/grids/new/grid_core/filtering/header_filter';
+import type { HeaderFilterColumnOptions } from '@ts/grids/new/grid_core/filtering/header_filter/index';
 import type { ComponentType } from 'inferno';
 
 import type { DataObject } from '../data_controller/types';

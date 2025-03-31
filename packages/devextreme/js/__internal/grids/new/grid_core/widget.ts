@@ -10,23 +10,23 @@ import type { Subscription } from '@ts/core/reactive/index';
 import { SearchView } from '@ts/grids/new/grid_core/search/view';
 import { render } from 'inferno';
 
-import * as ColumnChooserModule from './column_chooser';
+import * as ColumnChooserModule from './column_chooser/index';
 import { CompatibilityColumnsController } from './columns_controller/compatibility';
 import * as ColumnsControllerModule from './columns_controller/index';
 import * as DataControllerModule from './data_controller/index';
 import { ErrorController } from './error_controller/error_controller';
-import * as FilterControllerModule from './filtering';
 import { FilterPanelView } from './filtering/filter_panel/view';
 import {
   HeaderFilterController,
   HeaderFilterPopupView,
-} from './filtering/header_filter';
+} from './filtering/header_filter/index';
+import * as FilterControllerModule from './filtering/index';
 import { ItemsController } from './items_controller/items_controller';
 import { MainView } from './main_view';
 import { defaultOptions, defaultOptionsRules, type Options } from './options';
 import { PagerView } from './pager/view';
 import { SearchController } from './search/controller';
-import * as SelectionControllerModule from './selection';
+import * as SelectionControllerModule from './selection/index';
 import * as SortingControllerModule from './sorting_controller/index';
 import type { SortingController } from './sorting_controller/sorting_controller';
 import { ToolbarController } from './toolbar/controller';

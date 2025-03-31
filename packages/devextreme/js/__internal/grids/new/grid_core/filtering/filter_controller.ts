@@ -1,4 +1,4 @@
-import { computed } from '@ts/core/reactive';
+import { computed } from '@ts/core/reactive/index';
 
 import { OptionsController } from '../options_controller/options_controller';
 

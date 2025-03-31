@@ -3,7 +3,7 @@ import type { SubsGets } from '@ts/core/reactive/index';
 import { combined, computed } from '@ts/core/reactive/index';
 import { ColumnsController } from '@ts/grids/new/grid_core/columns_controller/columns_controller';
 import { View } from '@ts/grids/new/grid_core/core/view';
-import { HeaderFilterController } from '@ts/grids/new/grid_core/filtering/header_filter';
+import { HeaderFilterController } from '@ts/grids/new/grid_core/filtering/header_filter/index';
 
 import type { Column } from '../../grid_core/columns_controller/types';
 import { SortingController } from '../../grid_core/sorting_controller/sorting_controller';

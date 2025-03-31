@@ -1,8 +1,8 @@
 import { combined } from '@ts/core/reactive/index';
-import { ColumnChooserView } from '@ts/grids/new/grid_core/column_chooser';
+import { ColumnChooserView } from '@ts/grids/new/grid_core/column_chooser/index';
 import { View } from '@ts/grids/new/grid_core/core/view';
 import { FilterPanelView } from '@ts/grids/new/grid_core/filtering/filter_panel/view';
-import { HeaderFilterPopupView } from '@ts/grids/new/grid_core/filtering/header_filter';
+import { HeaderFilterPopupView } from '@ts/grids/new/grid_core/filtering/header_filter/index';
 import { PagerView } from '@ts/grids/new/grid_core/pager/view';
 import { ToolbarView } from '@ts/grids/new/grid_core/toolbar/view';
 import type { ComponentType } from 'inferno';

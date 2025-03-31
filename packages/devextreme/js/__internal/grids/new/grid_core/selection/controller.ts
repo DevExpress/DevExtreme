@@ -5,7 +5,7 @@ import type { DeferredObj } from '@js/core/utils/deferred';
 import messageLocalization from '@js/localization/message';
 import type { SubsGets } from '@ts/core/reactive/index';
 import { computed, effect, state } from '@ts/core/reactive/index';
-import { DataController } from '@ts/grids/new/grid_core/data_controller';
+import { DataController } from '@ts/grids/new/grid_core/data_controller/index';
 import { ShowCheckBoxesMode } from '@ts/grids/new/grid_core/selection/const';
 import Selection from '@ts/ui/selection/m_selection';
 

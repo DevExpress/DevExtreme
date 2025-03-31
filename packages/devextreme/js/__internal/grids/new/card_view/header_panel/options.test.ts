@@ -2,7 +2,7 @@
 import {
   describe, expect, it, jest,
 } from '@jest/globals';
-import { HeaderFilterController } from '@ts/grids/new/grid_core/filtering/header_filter';
+import { HeaderFilterController } from '@ts/grids/new/grid_core/filtering/header_filter/index';
 import { rerender } from 'inferno';
 
 import { ColumnsController } from '../../grid_core/columns_controller';

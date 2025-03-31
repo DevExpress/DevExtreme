@@ -1,5 +1,5 @@
 import type { Column } from '@ts/grids/new/grid_core/columns_controller/types';
-import { MultipleKeyDownHandler } from '@ts/grids/new/grid_core/keyboard_navigation';
+import { MultipleKeyDownHandler } from '@ts/grids/new/grid_core/keyboard_navigation/index';
 import type { ComponentType } from 'inferno';
 import { Component, createRef } from 'inferno';
 
