@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { describe, expect, it } from '@jest/globals';
 import { render } from 'inferno';
 
@@ -34,6 +33,17 @@ describe('Item', () => {
         dataField: 'column1',
         sortIndex: 0,
         sortOrder: 'asc',
+      }),
+    });
+
+    expect(el).toMatchSnapshot();
+  });
+
+  it('should render headerFilter icons if enabled', () => {
+    const el = setup({
+      column: normalizeColumn({
+        dataField: 'column1',
+        allowHeaderFiltering: true,
       }),
     });
 

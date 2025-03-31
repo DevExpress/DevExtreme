@@ -213,6 +213,7 @@ export class HeaderFilterView extends Modules.View {
     const $element = that.element();
 
     const headerFilterOptions = this._normalizeHeaderFilterOptions(options);
+    const { hidePopupCallback } = options;
     const { height, width } = headerFilterOptions;
 
     const dxPopupOptions = {
@@ -247,6 +248,7 @@ export class HeaderFilterView extends Modules.View {
             text: headerFilterOptions.texts.cancel,
             onClick() {
               that.hideHeaderFilterMenu();
+              hidePopupCallback?.();
             },
           },
         },

@@ -14,6 +14,10 @@ import * as ColumnsControllerModule from './columns_controller/index';
 import * as DataControllerModule from './data_controller/index';
 import { ErrorController } from './error_controller/error_controller';
 import { FilterPanelView } from './filtering/filter_panel/view';
+import {
+  HeaderFilterController,
+  HeaderFilterPopupView,
+} from './filtering/header_filter/index';
 import { ItemsController } from './items_controller/items_controller';
 import { MainView } from './main_view';
 import { defaultOptions, defaultOptionsRules, type Options } from './options';
@@ -68,6 +72,8 @@ export class GridCoreNewBase<
     this.diContext.register(SearchController);
     this.diContext.register(SearchView);
     this.diContext.register(FilterPanelView);
+    this.diContext.register(HeaderFilterController);
+    this.diContext.register(HeaderFilterPopupView);
     this.diContext.register(ErrorController);
   }
 
