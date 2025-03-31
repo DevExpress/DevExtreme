@@ -18,6 +18,7 @@ import {
   HeaderFilterController,
   HeaderFilterPopupView,
 } from './filtering/header_filter/index';
+import * as FilterControllerModule from './filtering/index';
 import { ItemsController } from './items_controller/items_controller';
 import { MainView } from './main_view';
 import { defaultOptions, defaultOptionsRules, type Options } from './options';
@@ -56,7 +57,9 @@ export class GridCoreNewBase<
 
   private searchView!: SearchView;
 
-  private filterPanelView!: FilterPanelView;
+  public filterController!: FilterControllerModule.FilterController;
+
+  private filterPanelView!: FilterControllerModule.FilterPanelView;
 
   protected _registerDIContext(): void {
     this.diContext = new DIContext();
@@ -71,6 +74,8 @@ export class GridCoreNewBase<
     this.diContext.register(PagerView);
     this.diContext.register(SearchController);
     this.diContext.register(SearchView);
+    this.diContext.register(FilterControllerModule.FilterController);
+    this.diContext.register(FilterControllerModule.FilterPanelView);
     this.diContext.register(FilterPanelView);
     this.diContext.register(HeaderFilterController);
     this.diContext.register(HeaderFilterPopupView);
@@ -96,7 +101,8 @@ export class GridCoreNewBase<
     this.searchController = this.diContext.get(SearchController);
     this.searchView = this.diContext.get(SearchView);
     this.errorController = this.diContext.get(ErrorController);
-    this.filterPanelView = this.diContext.get(FilterPanelView);
+    this.filterController = this.diContext.get(FilterControllerModule.FilterController);
+    this.filterPanelView = this.diContext.get(FilterControllerModule.FilterPanelView);
   }
 
   protected _init(): void {
@@ -155,7 +161,9 @@ export class GridCoreNewBase<
 export class GridCoreNew extends ColumnsControllerModule.PublicMethods(
   DataControllerModule.PublicMethods(
     SortingControllerModule.PublicMethods(
-      GridCoreNewBase,
+      FilterControllerModule.PublicMethods(
+        GridCoreNewBase,
+      ),
     ),
   ),
 ) {}
