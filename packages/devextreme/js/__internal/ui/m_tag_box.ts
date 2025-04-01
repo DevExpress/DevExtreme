@@ -71,7 +71,7 @@ class TagBox<
 
   _filteredGroupedItemsLoadPromise?: DeferredObj<unknown>;
 
-  _isInputReady?: DeferredObj<unknown>;
+  _fieldReadyDeferred?: DeferredObj<void>;
 
   _selectAllValueChangeAction?: (event?: Record<string, unknown>) => void;
 
@@ -1070,12 +1070,14 @@ class TagBox<
   }
 
   _renderTagsImpl(items): void {
-    this._renderTagsCore(items);
-    this._renderEmptyState();
+    this._renderTagsCore(items)
+      .done(() => {
+        this._renderEmptyState();
 
-    if (!this._preserveFocusedTag) {
-      this._clearTagFocus();
-    }
+        if (!this._preserveFocusedTag) {
+          this._clearTagFocus();
+        }
+      });
   }
 
   _shouldGetItemsFromPlain(values): boolean {
@@ -1135,7 +1137,7 @@ class TagBox<
 
   _integrateInput(): void {
     // @ts-expect-error ts-error
-    this._isInputReady.resolve();
+    this._fieldReadyDeferred.resolve();
     super._integrateInput();
 
     const tagsContainer = this.$element().find(`.${TEXTEDITOR_INPUT_CONTAINER_CLASS}`);
@@ -1144,22 +1146,24 @@ class TagBox<
     this._renderTagRemoveAction();
   }
 
-  _renderTagsCore(items): void {
-    this._isInputReady?.reject();
+  _renderTagsCore(items): DeferredObj<void> {
+    this._fieldReadyDeferred?.reject();
 
-    this._isInputReady = Deferred();
+    this._fieldReadyDeferred = Deferred();
     this._renderField();
     // @ts-expect-error ts-error
     this.option('selectedItems', this._selectedItems.slice());
     this._cleanTags();
 
     if (this._input().length > 0) {
-      this._isInputReady.resolve();
+      this._fieldReadyDeferred.resolve();
     }
 
-    when(this._isInputReady).done(() => {
+    when(this._fieldReadyDeferred).done(() => {
       this._renderTagsElements(items);
     });
+
+    return this._fieldReadyDeferred;
   }
 
   _renderTagsElements(items): void {
