@@ -6,6 +6,7 @@ import { getRecurrenceProcessor } from './m_recurrence';
 import type { PathTimeZoneConversion, TimeZoneCalculator } from './r1/timezone_calculator';
 import type { AppointmentDataAccessor } from './utils';
 
+// TODO: express the type from PathTimeZoneConversion
 type ConversionNames = 'toAppointment' | 'fromAppointment' | 'toGrid' | 'fromGrid';
 
 // TODO Vinogradov refactoring: add types to this module.

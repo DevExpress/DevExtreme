@@ -3,7 +3,7 @@ import type { Appointment } from '@js/ui/scheduler';
 
 import { replaceWrongEndDate } from '../../appointments/data_provider/m_utils';
 import { createAppointmentAdapter } from '../../m_appointment_adapter';
-import type { AppointmentDataAccessor } from '../../utils/data_accessor/AppointmentDataAccessor';
+import type { AppointmentDataAccessor } from '../../utils/data_accessor/appointment_data_accessor';
 import type { TimeZoneCalculator } from '../timezone_calculator';
 import type { AppointmentDataItem, LoadDataType } from '../types';
 

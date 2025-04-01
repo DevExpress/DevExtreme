@@ -5,7 +5,7 @@ import fx from 'common/core/animation/fx';
 import '__internal/scheduler/m_scheduler';
 import { createExpressions } from '__internal/scheduler/resources/m_utils';
 
-import { mockDataAccessor } from '../../helpers/scheduler/helpers.js';
+import { mockDataAccessor } from '../../helpers/scheduler/mockDataAccessor.js';
 
 const { module, test, testStart } = QUnit;
 

@@ -15,15 +15,6 @@ export const TOOLBAR_BOTTOM_LOCATION = 'bottom';
 const SCHEDULER_ID = 'scheduler';
 const TEST_ROOT_ELEMENT_ID = 'qunit-fixture';
 
-export const mockDataAccessor = {
-    get(prop, obj) {
-        return obj[prop];
-    },
-    set(prop, obj, value) {
-        obj[prop] = value;
-    }
-};
-
 export const CLASSES = {
     root: '.dx-scheduler',
 

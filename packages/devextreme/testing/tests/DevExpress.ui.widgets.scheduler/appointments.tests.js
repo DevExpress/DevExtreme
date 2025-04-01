@@ -3,7 +3,7 @@ import 'generic_light.css!';
 
 import pointerMock from '../../helpers/pointerMock.js';
 import keyboardMock from '../../helpers/keyboardMock.js';
-import { mockDataAccessor } from '../../helpers/scheduler/helpers.js';
+import { mockDataAccessor } from '../../helpers/scheduler/mockDataAccessor.js';
 
 import $ from 'jquery';
 import '__internal/scheduler/workspaces/m_work_space_week';

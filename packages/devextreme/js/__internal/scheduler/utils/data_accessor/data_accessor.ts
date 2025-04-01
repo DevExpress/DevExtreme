@@ -1,3 +1,5 @@
+import { isDefined } from '@ts/core/utils/m_type';
+
 import type { DataAccessorGetter, DataAccessorSetter } from './types';
 
 export abstract class DataAccessor<
@@ -10,8 +12,10 @@ export abstract class DataAccessor<
   /** @deprecated instead of `setter` property use `set` function. setter will be private */
   public setter: Record<string, DataAccessorSetter<T>> = {};
 
-  protected updateExpressions<Fields extends Record<string, string>>(fields: Fields): void {
-    Object.entries(fields).forEach(([key, value]) => this.updateExpression(key, value));
+  protected updateExpressions<Fields>(fields: Fields): void {
+    Object
+      .entries(fields as Record<string, string>)
+      .forEach(([key, value]) => this.updateExpression(key, value));
   }
 
   public abstract updateExpression(field: string, expr: string | undefined): void;
@@ -32,5 +36,9 @@ export abstract class DataAccessor<
     }
 
     return this;
+  }
+
+  public has(field: string): boolean {
+    return isDefined(this.getter[field]);
   }
 }

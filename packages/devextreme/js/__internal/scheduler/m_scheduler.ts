@@ -78,7 +78,7 @@ import {
 } from './resources/m_utils';
 import { DesktopTooltipStrategy } from './tooltip_strategies/m_desktop_tooltip_strategy';
 import { MobileTooltipStrategy } from './tooltip_strategies/m_mobile_tooltip_strategy';
-import { AppointmentDataAccessor } from './utils/data_accessor/AppointmentDataAccessor';
+import { AppointmentDataAccessor } from './utils';
 import SchedulerAgenda from './workspaces/m_agenda';
 import SchedulerTimelineDay from './workspaces/m_timeline_day';
 import SchedulerTimelineMonth from './workspaces/m_timeline_month';

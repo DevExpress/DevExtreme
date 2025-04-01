@@ -161,7 +161,7 @@ export class AppointmentFilterBaseStrategy {
     } = filterOptions;
 
     const [trimMin, trimMax] = getDatesWithoutTime(min, max);
-    const useRecurrence = isDefined(this.dataAccessors.getter.recurrenceRule);
+    const useRecurrence = this.dataAccessors.has('recurrenceRule');
 
     return [[(appointment) => {
       const appointmentVisible = appointment.visible ?? true;

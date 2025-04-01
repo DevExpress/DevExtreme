@@ -5,7 +5,7 @@ import fx from 'common/core/animation/fx';
 import '__internal/scheduler/m_scheduler';
 import { createExpressions } from '__internal/scheduler/resources/m_utils';
 
-import { mockDataAccessor } from '../../helpers/scheduler/helpers.js';
+import { mockDataAccessor } from '../../helpers/scheduler/mockDataAccessor.js';
 
 const { testStart, module, test } = QUnit;
 
@@ -198,7 +198,7 @@ module('Horizontal Strategy', moduleOptions, () => {
                 endDate: new Date(2015, 1, 9, 2),
                 allDay: true
             },
-            settings: [{ width: 6 }]
+            settings: [{ width: 2 }]
         }];
 
         const instance = createInstance({
@@ -208,7 +208,7 @@ module('Horizontal Strategy', moduleOptions, () => {
 
         const $appointment = instance.$element().find('.dx-scheduler-appointment');
 
-        assert.equal(getOuterWidth($appointment), 6, 'Min width is OK');
+        assert.equal(getOuterWidth($appointment), 2, 'Min width is OK');
     });
 
 });

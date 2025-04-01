@@ -1,4 +1,4 @@
-export interface IFieldExpr extends Record<string, string> {
+export interface IFieldExpr {
   startDateExpr: string;
   endDateExpr: string;
   startDateTimeZoneExpr: string;
