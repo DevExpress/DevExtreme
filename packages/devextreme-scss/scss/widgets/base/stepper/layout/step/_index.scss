@@ -6,19 +6,6 @@
   &.dx-state-hover {
     cursor: pointer;
   }
-
-  &.dx-step-completed,
-  &.dx-step-selected {
-    .dx-step-text {
-      font-weight: 600;
-    }
-  }
-
-  &.dx-step-selected {
-    .dx-step-label {
-      font-weight: 600;
-    }
-  }
 }
 
 .dx-step-indicator {
@@ -27,7 +14,7 @@
   justify-content: center;
   flex-shrink: 0;
   transition-property: color, background-color, border-color;
-  transition-duration: .4s;
+  transition-duration: .2s;
   transition-timing-function: ease-in-out;
   border-style: solid;
   border-radius: 999em;

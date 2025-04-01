@@ -51,6 +51,7 @@
   $selected-hover-bg,
   $selected-text-color,
   $selected-label-color,
+  $selected-font-weight,
   $invalid-bg,
   $invalid-hover-bg,
   $invalid-border-color,
@@ -95,6 +96,10 @@
     }
 
     &.dx-step-completed {
+      .dx-step-text {
+        font-weight: $selected-font-weight;
+      }
+
       .dx-step-indicator {
         color: $selected-text-color;
         border-color: $selected-bg;
@@ -120,6 +125,11 @@
     }
 
     &.dx-step-selected {
+      .dx-step-text,
+      .dx-step-label {
+        font-weight: $selected-font-weight;
+      }
+
       .dx-step-indicator {
         color: $selected-text-color;
         border-color: $selected-bg;
