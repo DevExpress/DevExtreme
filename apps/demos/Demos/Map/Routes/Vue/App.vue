@@ -36,7 +36,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import DxMap from 'devextreme-vue/map';
-import DxSelectBox from 'devextreme-vue/select-box';
+import DxSelectBox, { type DxSelectBoxTypes } from 'devextreme-vue/select-box';
 import { markersData, routesData } from './data.ts';
 
 const routes = ref(routesData);
@@ -46,13 +46,13 @@ const apiKey = {
   azure: '6N8zuPkBsnfwniNAJkldM3cUgm3lXg3y9gkIKy59benICnnepK4DJQQJ99AIACYeBjFllM6LAAAgAZMPGFXE',
 };
 
-function updateRoutesMode({ value: mode }) {
+function updateRoutesMode({ value: mode }: DxSelectBoxTypes.ValueChangedEvent) {
   routes.value = routesData.map((item) => {
     item.mode = mode;
     return item;
   });
 }
-function updateRoutesColor({ value: color }) {
+function updateRoutesColor({ value: color }: DxSelectBoxTypes.ValueChangedEvent) {
   routes.value = routesData.map((item) => {
     item.color = color;
     return item;
