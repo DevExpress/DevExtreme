@@ -71,8 +71,6 @@ class TagBox<
 
   _filteredGroupedItemsLoadPromise?: DeferredObj<unknown>;
 
-  _fieldReadyDeferred?: DeferredObj<void>;
-
   _selectAllValueChangeAction?: (event?: Record<string, unknown>) => void;
 
   _multiTagPreparingAction?: (event?: Record<string, unknown>) => void;
@@ -94,6 +92,8 @@ class TagBox<
   _tagElementsCache?: dxElementWrapper;
 
   _selectedItems?: any[];
+
+  _tagsToRender?: any[];
 
   _supportedKeys(): Record<
   // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
@@ -731,10 +731,7 @@ class TagBox<
     this._renderInputSize();
     this._renderTags()
     // @ts-expect-error ts-error
-      .done(() => {
-        this._popup?.refreshPosition();
-        d.resolve();
-      })
+      .done(d.resolve)
       .fail(d.reject);
     // @ts-expect-error ts-error
     return d.promise();
@@ -1045,8 +1042,9 @@ class TagBox<
       this._selectedItems = this._getItemsFromPlain(this._valuesToUpdate);
 
       if (this._selectedItems.length === this._valuesToUpdate.length) {
-        this._renderTagsImpl(this._selectedItems)
-          .done(() => { d.resolve(); });
+        this._tagsToRender = this._selectedItems;
+        this._renderTagsImpl();
+        d.resolve();
         isPlainDataUsed = true;
       }
     }
@@ -1060,8 +1058,9 @@ class TagBox<
             return;
           }
 
-          this._renderTagsImpl(items)
-            .done(() => { d.resolve(); });
+          this._tagsToRender = items;
+          this._renderTagsImpl();
+          d.resolve();
         })
         .fail(d.reject);
     }
@@ -1069,29 +1068,27 @@ class TagBox<
     return d.promise();
   }
 
-  _renderTagsImpl(items): DeferredObj<void> {
-    this._fieldReadyDeferred?.reject();
+  _renderTagsCore(): void {
+    this._renderTagsElements(this._tagsToRender);
+    this._renderEmptyState();
 
-    this._fieldReadyDeferred = Deferred();
+    if (!this._preserveFocusedTag) {
+      this._clearTagFocus();
+    }
+
+    this._popup?.refreshPosition();
+  }
+
+  _renderTagsImpl(): void {
     this._renderField();
     // @ts-expect-error ts-error
     this.option('selectedItems', this._selectedItems.slice());
     this._cleanTags();
 
-    if (this._input().length > 0) {
-      this._fieldReadyDeferred.resolve();
+    const fieldTemplate = this._getFieldTemplate();
+    if (!fieldTemplate) {
+      this._renderTagsCore();
     }
-
-    when(this._fieldReadyDeferred).done(() => {
-      this._renderTagsElements(items);
-      this._renderEmptyState();
-
-      if (!this._preserveFocusedTag) {
-        this._clearTagFocus();
-      }
-    });
-
-    return this._fieldReadyDeferred;
   }
 
   _shouldGetItemsFromPlain(values): boolean {
@@ -1150,14 +1147,13 @@ class TagBox<
   }
 
   _integrateInput(): void {
-    // @ts-expect-error ts-error
-    this._fieldReadyDeferred.resolve();
     super._integrateInput();
 
     const tagsContainer = this.$element().find(`.${TEXTEDITOR_INPUT_CONTAINER_CLASS}`);
 
     this._updateTagsContainer(tagsContainer);
     this._renderTagRemoveAction();
+    this._renderTagsCore();
   }
 
   _renderTagsElements(items): void {
