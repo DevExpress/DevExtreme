@@ -90,4 +90,4 @@ export class AI {
   translate(params: TranslateCommandParams, callbacks: RequestCallbacks): () => void;
 }
 
-export default AI;
+// export default AI;
