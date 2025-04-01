@@ -243,7 +243,17 @@ class OptionsManager {
   }
 
   private resetOption(name: string) {
-    this.instance.resetOption(name);
+    this.instance.resetOption(name)
+    if (this.isCollectionOption(name)) {
+      this.setValue(name, []);
+    } else {
+      this.instance.resetOption(name);
+    }
+  }
+
+  private isCollectionOption(name: string): boolean {
+    const valueDescriptor = findValue(this.currentConfig, name.split('.'));
+    return valueDescriptor?.type === ValueType.Array;
   }
 
   private setValue(name: string, value: unknown) {
