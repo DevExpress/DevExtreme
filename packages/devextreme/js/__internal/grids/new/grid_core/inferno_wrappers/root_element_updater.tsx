@@ -59,6 +59,13 @@ export class RootElementUpdater extends Component<Properties> {
 
     currentAttributeKeys.forEach((attrName) => {
       if (attrName.startsWith('on')) {
+        if (previousAttributeKeys.includes(attrName)) {
+          element.removeEventListener(
+            normalizeEventName(attrName),
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            this.previousAttributes[attrName] as any,
+          );
+        }
         element.addEventListener(normalizeEventName(attrName), currentAttributes[attrName]);
       } else {
         element[attrName] = currentAttributes[attrName];
@@ -70,10 +77,13 @@ export class RootElementUpdater extends Component<Properties> {
 
     removedAttrKeys.forEach((attrName) => {
       if (attrName.startsWith('on')) {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        element.removeEventListener(attrName, this.previousAttributes[attrName] as any);
+        element.removeEventListener(
+          normalizeEventName(attrName),
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          this.previousAttributes[attrName] as any,
+        );
       } else {
-        element.removeAttribute(normalizeEventName(attrName));
+        element.removeAttribute(attrName);
       }
     });
 
