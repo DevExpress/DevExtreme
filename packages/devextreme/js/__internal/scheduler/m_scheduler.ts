@@ -37,11 +37,12 @@ import errors from '@js/ui/widget/ui.errors';
 import Widget from '@js/ui/widget/ui.widget';
 import { dateUtilsTs } from '@ts/core/utils/date';
 import { createTimeZoneCalculator } from '@ts/scheduler/r1/timezone_calculator/index';
+import type { AppointmentDataItem } from '@ts/scheduler/r1/types';
 import {
   excludeFromRecurrence,
-  getAppointmentTakesAllDay,
   getPreparedDataItems,
   getToday,
+  isAppointmentTakesAllDay,
   isDateAndTimeView,
   isTimelineView,
   viewsUtils,
@@ -165,7 +166,7 @@ const RECURRENCE_EDITING_MODE = {
 class Scheduler extends Widget<any> {
   _filteredItems!: any[];
 
-  _preparedItems!: any[];
+  _preparedItems!: AppointmentDataItem[];
 
   _timeZoneCalculator!: any;
 
@@ -179,7 +180,7 @@ class Scheduler extends Widget<any> {
 
   _appointments: any;
 
-  appointmentDataProvider: any;
+  appointmentDataProvider!: AppointmentDataProvider;
 
   _dataSource: any;
 
@@ -409,14 +410,14 @@ class Scheduler extends Widget<any> {
     this._filteredItems = value;
   }
 
-  get preparedItems() {
+  get preparedItems(): AppointmentDataItem[] {
     if (!this._preparedItems) {
       this._preparedItems = [];
     }
     return this._preparedItems;
   }
 
-  set preparedItems(value) {
+  set preparedItems(value: AppointmentDataItem[]) {
     this._preparedItems = value;
   }
 
@@ -1205,11 +1206,10 @@ class Scheduler extends Widget<any> {
 
     workspace.option('allDayExpanded', this._isAllDayExpanded());
 
-    let viewModel = [];
     // @ts-expect-error
-    if (this._isVisible()) {
-      viewModel = this._getAppointmentsToRepaint();
-    }
+    const viewModel = this._isVisible()
+      ? this._getAppointmentsToRepaint()
+      : [];
 
     this._appointments.option('items', viewModel);
     this.appointmentDataProvider.cleanState();
@@ -1733,7 +1733,6 @@ class Scheduler extends Widget<any> {
       indicatorTime: this.option('indicatorTime'),
       indicatorUpdateInterval: this.option('indicatorUpdateInterval'),
       shadeUntilCurrentTime: this.option('shadeUntilCurrentTime'),
-      allDayExpanded: this._appointments.option('items'),
       crossScrollingEnabled,
       dataCellTemplate: this.option('dataCellTemplate'),
       timeCellTemplate: this.option('timeCellTemplate'),
@@ -2267,7 +2266,7 @@ class Scheduler extends Widget<any> {
       this.timeZoneCalculator,
     );
 
-    return getAppointmentTakesAllDay(
+    return isAppointmentTakesAllDay(
       appointment,
       this._getCurrentViewOption('allDayPanelMode'),
     );
