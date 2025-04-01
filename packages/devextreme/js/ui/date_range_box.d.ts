@@ -25,6 +25,11 @@ import {
   ValueChangedInfo,
 } from './editor/editor';
 
+export {
+  DateLike,
+  DateRange,
+};
+
 /**
  * @docid _ui_date_range_box_ChangeEvent
  * @public

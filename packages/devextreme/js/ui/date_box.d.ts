@@ -1,4 +1,8 @@
-/* eslint-disable max-classes-per-file */
+// eslint-disable-next-line max-classes-per-file
+import {
+    DateLike,
+} from '../common';
+
 import {
     EventInfo,
     NativeEventInfo,
@@ -8,7 +12,6 @@ import {
 
 import {
     ComponentDisabledDate,
-    DateLike,
     dxCalendarOptions,
 } from './calendar';
 
@@ -28,6 +31,10 @@ import {
 import {
     Properties as PopupProperties,
 } from './popup';
+
+export {
+    DateLike,
+};
 
 /** @public */
 export type DateType = 'date' | 'datetime' | 'time';
