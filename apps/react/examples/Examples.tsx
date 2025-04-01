@@ -25,6 +25,7 @@ import ValidationExample from './validation-example';
 // import DateBoxExample from './date-box-example';
 import FormWithNestedExample from './form-with-nested';
 
+import SelectBoxCustomExample from './selector-custom-example';
 
 const Examples = () => {
     return (
@@ -89,7 +90,11 @@ const Examples = () => {
                 <SelectBoxExample />
             </Example>
 
-            {/* <StandaloneValidatorExample /> */}
+            <Example title="SelectBox example with custom components">
+                <SelectBoxCustomExample />
+            </Example>
+
+             {/*<StandaloneValidatorExample />*/}
 
         </div>
     );

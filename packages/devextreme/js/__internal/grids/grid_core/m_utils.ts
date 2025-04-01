@@ -137,13 +137,13 @@ const getWidgetInstance = function ($element) {
   return widgetName && editorData[widgetName];
 };
 
-const equalFilterParameters = function (filter1, filter2) {
+const equalFilterParameters = function (filter1, filter2, langParams?) {
   if (Array.isArray(filter1) && Array.isArray(filter2)) {
     if (filter1.length !== filter2.length) {
       return false;
     }
     for (let i = 0; i < filter1.length; i++) {
-      if (!equalFilterParameters(filter1[i], filter2[i])) {
+      if (!equalFilterParameters(filter1[i], filter2[i], langParams)) {
         return false;
       }
     }
@@ -151,10 +151,10 @@ const equalFilterParameters = function (filter1, filter2) {
     return true;
   } if (isFunction(filter1) && filter1.columnIndex >= 0 && isFunction(filter2) && filter2.columnIndex >= 0) {
     return filter1.columnIndex === filter2.columnIndex
-            && toComparable(filter1.filterValue) === toComparable(filter2.filterValue)
-            && toComparable(filter1.selectedFilterOperation) === toComparable(filter2.selectedFilterOperation);
+      && toComparable(filter1.filterValue, undefined, langParams) === toComparable(filter2.filterValue, undefined, langParams)
+      && toComparable(filter1.selectedFilterOperation, undefined, langParams) === toComparable(filter2.selectedFilterOperation, undefined, langParams);
   }
-  return toComparable(filter1) == toComparable(filter2); // eslint-disable-line eqeqeq
+  return toComparable(filter1, undefined, langParams) == toComparable(filter2, undefined, langParams); // eslint-disable-line eqeqeq
 };
 
 const createPoint = <T extends ColumnPoint>(options: T): ColumnPoint => ({

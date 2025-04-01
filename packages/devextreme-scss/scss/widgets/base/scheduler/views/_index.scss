@@ -491,11 +491,13 @@ $scheduler-month-date-text-padding: 6px;
 }
 
 .dx-scheduler-all-day-title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   color: $scheduler-panel-text-color;
   width: $scheduler-left-column-width;
   height: $scheduler-all-day-table-cell-height;
   position: relative;
-  line-height: $scheduler-all-day-table-cell-height;
   text-align: center;
   border-bottom: 2px solid $scheduler-base-border-color;
 
@@ -507,12 +509,10 @@ $scheduler-month-date-text-padding: 6px;
 
   .dx-scheduler-work-space-all-day-collapsed & {
     height: $scheduler-collapsed-all-day-table-cell-height;
-    line-height: $scheduler-collapsed-all-day-table-cell-height;
   }
 
   .dx-scheduler-work-space-vertical-grouped & {
     height: $scheduler-vertical-grouped-all-day-table-cell-height;
-    line-height: $scheduler-vertical-grouped-all-day-table-cell-height;
   }
 }
 
@@ -712,7 +712,6 @@ $scheduler-month-date-text-padding: 6px;
     .dx-scheduler-all-day-title {
       top: 0;
       height: 50px !important; // stylelint-disable-line declaration-no-important
-      line-height: 50px !important; // stylelint-disable-line declaration-no-important
       border-bottom: none;
     }
   }

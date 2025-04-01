@@ -369,6 +369,7 @@ jobs:
 
     - name: Run TestCafe tests
       working-directory: apps/demos
+      shell: bash
       env:
         CHANGEDFILEINFOSPATH: changed-files.json
         BROWSERS: chrome:headless --disable-partial-raster --disable-skia-runtime-opts --run-all-compositor-stages-before-draw --disable-new-content-rendering-timeout --disable-threaded-animation --disable-threaded-scrolling --disable-checker-imaging --disable-image-animation-resync --use-gl="swiftshader" --disable-features=PaintHolding --js-flags=--random-seed=2147483647 --font-render-hinting=none --disable-font-subpixel-positioning
@@ -381,7 +382,9 @@ jobs:
         # DISABLE_DEMO_TEST_SETTINGS: ignore # Uncomment to ignore the `ignore` field
         # DISABLE_DEMO_TEST_SETTINGS: comparison-options # Uncomment to ignore the `comparison-options` field
         CI_ENV: true # The `ignore` field in the visualtestrc.json should be disabled when running test locally
-      run: npx nx test-testcafe
+      run: |
+        node ../../tools/scripts/performance_log.js &
+        npx nx test-testcafe
 
     - name: Sanitize job name
       if: ${{ failure() }}

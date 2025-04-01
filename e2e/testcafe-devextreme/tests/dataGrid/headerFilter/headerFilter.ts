@@ -234,3 +234,52 @@ test('DataGrid - Column Header filter does not properly work if the column capti
     'FirstName',
   ],
 }));
+
+test('Data should be filtered if True is selected in the header filter when case sensitive is enabled (T1273020)', async (t) => {
+  // arrange
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const dataGrid = new DataGrid(GRID_CONTAINER);
+  const headerCell = dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(1);
+  const filterIconElement = headerCell.getFilterIcon();
+  const headerFilter = new HeaderFilter();
+  const buttons = headerFilter.getButtons();
+  const list = headerFilter.getList();
+
+  // act
+  await t
+    .click(filterIconElement)
+    .click(list.getItem(0).element) // Select first item with value 'true'
+    .click(buttons.nth(0)); // Click OK
+
+  await takeScreenshot('T1273020-header-filter-with-case-sensitive-1.png', dataGrid.element);
+
+  // act
+  await t
+    .click(filterIconElement)
+    .click(list.getItem(0).element) // Deselect first item with value 'true'
+    .click(list.getItem(1).element) // Select second item with value 'True'
+    .click(buttons.nth(0)); // Click OK
+
+  await takeScreenshot('T1273020-header-filter-with-case-sensitive-2.png', dataGrid.element);
+
+  // assert
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: {
+    store: [
+      { ID: 1, text: 'true' },
+      { ID: 2, text: 'True' },
+    ],
+    langParams: {
+      locale: 'en-US',
+      collatorOptions: {
+        sensitivity: 'case',
+      },
+    },
+  },
+  keyExpr: 'ID',
+  showBorders: true,
+  headerFilter: { visible: true },
+}));
