@@ -1044,8 +1044,8 @@ class TagBox<
       if (this._selectedItems.length === this._valuesToUpdate.length) {
         this._tagsToRender = this._selectedItems;
         this._renderTagsImpl();
-        d.resolve();
         isPlainDataUsed = true;
+        d.resolve();
       }
     }
 
@@ -1066,17 +1066,6 @@ class TagBox<
     }
 
     return d.promise();
-  }
-
-  _renderTagsCore(): void {
-    this._renderTagsElements(this._tagsToRender);
-    this._renderEmptyState();
-
-    if (!this._preserveFocusedTag) {
-      this._clearTagFocus();
-    }
-
-    this._popup?.refreshPosition();
   }
 
   _renderTagsImpl(): void {
@@ -1154,6 +1143,17 @@ class TagBox<
     this._updateTagsContainer(tagsContainer);
     this._renderTagRemoveAction();
     this._renderTagsCore();
+  }
+
+  _renderTagsCore(): void {
+    this._renderTagsElements(this._tagsToRender);
+    this._renderEmptyState();
+
+    if (!this._preserveFocusedTag) {
+      this._clearTagFocus();
+    }
+
+    this._popup?.refreshPosition();
   }
 
   _renderTagsElements(items): void {
@@ -1655,6 +1655,7 @@ class TagBox<
     super._clean();
     delete this._valuesToUpdate;
     delete this._tagTemplate;
+    delete this._tagsToRender;
   }
 
   _getSelectedItemsDifference(newItems, previousItems) {
