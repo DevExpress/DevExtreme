@@ -988,7 +988,6 @@ declare module DevExpress.common {
     | 'object'
     | 'datetime';
   export type DateLike = Date | number | string | null;
-  export type DateRange = [DateLike, DateLike];
   export type Direction = 'bottom' | 'left' | 'right' | 'top';
   export type DisplayMode = 'adaptive' | 'compact' | 'full';
   export type DragDirection = 'both' | 'horizontal' | 'vertical';
@@ -9604,10 +9603,7 @@ declare module DevExpress.ui {
      * [descr:dxCalendar.reset(value)]
      */
     reset(
-      value?:
-        | DevExpress.common.DateLike
-        | DevExpress.common.DateRange
-        | NonNullable<DevExpress.common.DateLike>[]
+      value?: DevExpress.common.DateLike | DevExpress.common.DateLike[]
     ): void;
   }
   module dxCalendar {
@@ -9749,10 +9745,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxCalendarOptions.value]
      */
-    value?:
-      | DevExpress.common.DateLike
-      | DevExpress.common.DateRange
-      | NonNullable<DevExpress.common.DateLike>[];
+    value?: DevExpress.common.DateLike | DevExpress.common.DateLike[];
     /**
      * [descr:dxCalendarOptions.zoomLevel]
      */
@@ -12909,7 +12902,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxDateRangeBox.reset(value)]
      */
-    reset(value?: DevExpress.common.DateRange): void;
+    reset(value?: DevExpress.common.DateLike[]): void;
   }
   module dxDateRangeBox {
     /**
@@ -13103,7 +13096,7 @@ declare module DevExpress.ui {
       /**
        * [descr:dxDateRangeBoxOptions.value]
        */
-      value?: DevExpress.common.DateRange;
+      value?: DevExpress.common.DateLike[];
     };
     /**
      * [descr:_ui_date_range_box_ValueChangedEvent]

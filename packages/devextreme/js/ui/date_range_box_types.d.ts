@@ -1,6 +1,5 @@
 export {
   DateLike,
-  DateRange,
   ChangeEvent,
   ClosedEvent,
   ContentReadyEvent,

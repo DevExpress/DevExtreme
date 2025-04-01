@@ -193,12 +193,6 @@ export type DateLike = Date | number | string | null;
  * @public
  * @namespace DevExpress.common
  */
-export type DateRange = [DateLike, DateLike];
-
-/**
- * @public
- * @namespace DevExpress.common
- */
 export type Direction = 'bottom' | 'left' | 'right' | 'top';
 
 /**

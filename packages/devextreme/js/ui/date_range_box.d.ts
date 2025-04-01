@@ -1,6 +1,5 @@
 import {
   DateLike,
-  DateRange,
 } from '../common';
 
 import {
@@ -27,7 +26,6 @@ import {
 
 export {
   DateLike,
-  DateRange,
 };
 
 /**
@@ -301,7 +299,7 @@ export type Properties = Omit<DateBoxBaseOptions<dxDateRangeBox>, 'inputAttr' | 
      * @default [null,null]
      * @public
      */
-    value?: DateRange;
+    value?: DateLike[];
 };
 
 /**
@@ -335,7 +333,7 @@ export default class dxDateRangeBox extends DateRangeBoxBase {
    * @publicName reset(value)
    * @public
    */
-  reset(value?: DateRange): void;
+  reset(value?: DateLike[]): void;
 }
 
 /// #DEBUG
