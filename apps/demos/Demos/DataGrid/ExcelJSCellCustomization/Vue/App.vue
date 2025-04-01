@@ -68,7 +68,7 @@ import {
   DxGrouping,
   DxSortByGroupSummaryInfo,
   DxTotalItem,
-  DxDataGridTypes,
+  type DxDataGridTypes,
 } from 'devextreme-vue/data-grid';
 import { Workbook } from 'exceljs';
 // Our demo infrastructure requires us to use 'file-saver-es'.

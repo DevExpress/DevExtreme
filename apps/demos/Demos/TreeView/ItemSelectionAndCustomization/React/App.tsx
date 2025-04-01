@@ -1,8 +1,8 @@
 import React, { useCallback, useRef, useState } from 'react';
-import TreeView, { TreeViewTypes } from 'devextreme-react/tree-view';
+import TreeView, { type TreeViewTypes } from 'devextreme-react/tree-view';
 import List from 'devextreme-react/list';
-import SelectBox, { SelectBoxTypes } from 'devextreme-react/select-box';
-import CheckBox, { CheckBoxTypes } from 'devextreme-react/check-box';
+import SelectBox, { type SelectBoxTypes } from 'devextreme-react/select-box';
+import CheckBox, { type CheckBoxTypes } from 'devextreme-react/check-box';
 
 import { employees, showCheckboxesModeLabel, selectionModeLabel } from './data.ts';
 

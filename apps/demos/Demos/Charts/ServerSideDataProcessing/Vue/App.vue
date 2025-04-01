@@ -68,7 +68,7 @@ import DxChart, {
   DxExport,
   DxLoadingIndicator,
 } from 'devextreme-vue/chart';
-import DxSelectBox from 'devextreme-vue/select-box';
+import DxSelectBox, { type DxSelectBoxTypes } from 'devextreme-vue/select-box';
 import DataSource from 'devextreme/data/data_source';
 import 'devextreme/data/odata/store';
 import { months } from './data.ts';
@@ -90,7 +90,7 @@ const customizeLabelText = ({ valueText }) => `${valueText}${'&#176C'}`;
 const customizeTooltip = ({ valueText }) => ({
   text: `${valueText}${'&#176C'}`,
 });
-function onValueChanged({ value }) {
+function onValueChanged({ value }: DxSelectBoxTypes.ValueChangedEvent) {
   chartDataSource.filter(['Id', '=', value]);
   chartDataSource.load();
 }

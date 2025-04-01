@@ -57,7 +57,7 @@
 </template>
 <script setup lang="ts">
 import { ref } from 'vue';
-import DxDrawer from 'devextreme-vue/drawer';
+import DxDrawer, { type DxDrawerTypes } from 'devextreme-vue/drawer';
 import DxRadioGroup from 'devextreme-vue/radio-group';
 import DxToolbar from 'devextreme-vue/toolbar';
 import NavigationList from './NavigationList.vue';
@@ -66,9 +66,9 @@ import { text } from './data.ts';
 const showModes = ['push', 'shrink', 'overlap'];
 const positionModes = ['top', 'bottom'];
 const showSubmenuModes = ['slide', 'expand'];
-const selectedOpenMode = ref('shrink');
-const selectedPosition = ref('top');
-const selectedRevealMode = ref('expand');
+const selectedOpenMode = ref<DxDrawerTypes.OpenedStateMode>('shrink');
+const selectedPosition = ref<DxDrawerTypes.PanelLocation>('top');
+const selectedRevealMode = ref<DxDrawerTypes.RevealMode>('expand');
 const openState = ref(false);
 const toolbarContent = [{
   widget: 'dxButton',

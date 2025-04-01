@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from 'react';
-import ActionSheet, { ActionSheetTypes } from 'devextreme-react/action-sheet';
+import ActionSheet, { type ActionSheetTypes } from 'devextreme-react/action-sheet';
 import Button from 'devextreme-react/button';
-import Switch, { SwitchTypes } from 'devextreme-react/switch';
+import Switch, { type SwitchTypes } from 'devextreme-react/switch';
 import notify from 'devextreme/ui/notify';
 import { actionSheetItems } from './data.ts';
 

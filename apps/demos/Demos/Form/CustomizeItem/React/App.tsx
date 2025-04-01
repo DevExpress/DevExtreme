@@ -5,7 +5,7 @@ import { ValidationRule } from 'devextreme-react/common';
 import {
   Form,
   Item, GroupItem, Label,
-  FormTypes,
+  type FormTypes,
 } from 'devextreme-react/form';
 import 'devextreme-react/text-area';
 
