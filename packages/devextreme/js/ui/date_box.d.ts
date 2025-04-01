@@ -277,7 +277,7 @@ export interface dxDateBoxOptions extends DateBoxBaseOptions<dxDateBox> {
      * @default null
      * @public
      */
-    value?: Date | number | string;
+    value?: Date | number | string | null;
 }
 
 /**

@@ -12884,7 +12884,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxDateBoxOptions.value]
      */
-    value?: Date | number | string;
+    value?: Date | number | string | null;
   }
   /**
    * [descr:dxDateRangeBox]
