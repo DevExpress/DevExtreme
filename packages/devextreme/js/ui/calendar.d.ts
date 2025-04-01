@@ -13,6 +13,8 @@ import {
 import {
     template,
     FirstDayOfWeek,
+    DateLike,
+    DateRange,
 } from '../common';
 
 import Editor, {
@@ -22,6 +24,8 @@ import Editor, {
 
 export {
     FirstDayOfWeek,
+    DateLike,
+    DateRange,
 };
 
 export interface ComponentDisabledDate<T> {
@@ -144,7 +148,7 @@ export interface dxCalendarOptions extends EditorOptions<dxCalendar> {
      * @default new Date(3000, 0)
      * @public
      */
-    max?: Date | number | string;
+    max?: DateLike;
     /**
      * @docid
      * @default 'month'
@@ -156,7 +160,7 @@ export interface dxCalendarOptions extends EditorOptions<dxCalendar> {
      * @default new Date(1000, 0)
      * @public
      */
-    min?: Date | number | string;
+    min?: DateLike;
     /**
      * @docid
      * @default 'century'
@@ -204,7 +208,7 @@ export interface dxCalendarOptions extends EditorOptions<dxCalendar> {
      * @default null
      * @public
      */
-    value?: Date | number | string | Array<Date | number | string>;
+    value?: DateLike | DateRange | NonNullable<DateLike>[];
     /**
      * @docid
      * @default 'month'
@@ -226,7 +230,7 @@ export default class dxCalendar extends Editor<dxCalendarOptions> {
      * @publicName reset(value)
      * @public
      */
-    reset(value?: Date | number | string | Array<Date | number | string> | null): void;
+    reset(value?: DateLike | DateRange | NonNullable<DateLike>[]): void;
 }
 
 /** @public */

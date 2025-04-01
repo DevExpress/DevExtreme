@@ -987,6 +987,8 @@ declare module DevExpress.common {
     | 'boolean'
     | 'object'
     | 'datetime';
+  export type DateLike = Date | number | string | null;
+  export type DateRange = [DateLike, DateLike];
   export type Direction = 'bottom' | 'left' | 'right' | 'top';
   export type DisplayMode = 'adaptive' | 'compact' | 'full';
   export type DragDirection = 'both' | 'horizontal' | 'vertical';
@@ -9602,7 +9604,10 @@ declare module DevExpress.ui {
      * [descr:dxCalendar.reset(value)]
      */
     reset(
-      value?: Date | number | string | Array<Date | number | string> | null
+      value?:
+        | DevExpress.common.DateLike
+        | DevExpress.common.DateRange
+        | NonNullable<DevExpress.common.DateLike>[]
     ): void;
   }
   module dxCalendar {
@@ -9704,7 +9709,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxCalendarOptions.max]
      */
-    max?: Date | number | string;
+    max?: DevExpress.common.DateLike;
     /**
      * [descr:dxCalendarOptions.maxZoomLevel]
      */
@@ -9712,7 +9717,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxCalendarOptions.min]
      */
-    min?: Date | number | string;
+    min?: DevExpress.common.DateLike;
     /**
      * [descr:dxCalendarOptions.minZoomLevel]
      */
@@ -9744,7 +9749,10 @@ declare module DevExpress.ui {
     /**
      * [descr:dxCalendarOptions.value]
      */
-    value?: Date | number | string | Array<Date | number | string>;
+    value?:
+      | DevExpress.common.DateLike
+      | DevExpress.common.DateRange
+      | NonNullable<DevExpress.common.DateLike>[];
     /**
      * [descr:dxCalendarOptions.zoomLevel]
      */
