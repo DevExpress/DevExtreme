@@ -1070,14 +1070,28 @@ class TagBox<
   }
 
   _renderTagsImpl(items): DeferredObj<void> {
-    return this._renderTagsCore(items)
-      .done(() => {
-        this._renderEmptyState();
+    this._fieldReadyDeferred?.reject();
 
-        if (!this._preserveFocusedTag) {
-          this._clearTagFocus();
-        }
-      });
+    this._fieldReadyDeferred = Deferred();
+    this._renderField();
+    // @ts-expect-error ts-error
+    this.option('selectedItems', this._selectedItems.slice());
+    this._cleanTags();
+
+    if (this._input().length > 0) {
+      this._fieldReadyDeferred.resolve();
+    }
+
+    when(this._fieldReadyDeferred).done(() => {
+      this._renderTagsElements(items);
+      this._renderEmptyState();
+
+      if (!this._preserveFocusedTag) {
+        this._clearTagFocus();
+      }
+    });
+
+    return this._fieldReadyDeferred;
   }
 
   _shouldGetItemsFromPlain(values): boolean {
@@ -1144,26 +1158,6 @@ class TagBox<
 
     this._updateTagsContainer(tagsContainer);
     this._renderTagRemoveAction();
-  }
-
-  _renderTagsCore(items): DeferredObj<void> {
-    this._fieldReadyDeferred?.reject();
-
-    this._fieldReadyDeferred = Deferred();
-    this._renderField();
-    // @ts-expect-error ts-error
-    this.option('selectedItems', this._selectedItems.slice());
-    this._cleanTags();
-
-    if (this._input().length > 0) {
-      this._fieldReadyDeferred.resolve();
-    }
-
-    when(this._fieldReadyDeferred).done(() => {
-      this._renderTagsElements(items);
-    });
-
-    return this._fieldReadyDeferred;
   }
 
   _renderTagsElements(items): void {
