@@ -1,4 +1,9 @@
 import {
+  DateLike,
+  DateRange,
+} from '../common';
+
+import {
   EventInfo,
   NativeEventInfo,
   InitializedEventInfo,
@@ -180,7 +185,7 @@ export type Properties = Omit<DateBoxBaseOptions<dxDateRangeBox>, 'inputAttr' | 
      * @public
      * @fires dxDateRangeBoxOptions.onOptionChanged
      */
-    endDate?: Date | number | string;
+    endDate?: DateLike;
     /**
      * @docid dxDateRangeBoxOptions.endDateInputAttr
      * @default {}
@@ -249,7 +254,7 @@ export type Properties = Omit<DateBoxBaseOptions<dxDateRangeBox>, 'inputAttr' | 
      * @public
      * @fires dxDateRangeBoxOptions.onOptionChanged
      */
-    startDate?: Date | number | string;
+    startDate?: DateLike;
     /**
      * @docid dxDateRangeBoxOptions.startDateInputAttr
      * @default {}
@@ -291,7 +296,7 @@ export type Properties = Omit<DateBoxBaseOptions<dxDateRangeBox>, 'inputAttr' | 
      * @default [null,null]
      * @public
      */
-    value?: Array<Date | number | string | null>;
+    value?: DateRange;
 };
 
 /**
@@ -325,7 +330,7 @@ export default class dxDateRangeBox extends DateRangeBoxBase {
    * @publicName reset(value)
    * @public
    */
-  reset(value?: Array<Date | number | string | null>): void;
+  reset(value?: DateRange): void;
 }
 
 /// #DEBUG

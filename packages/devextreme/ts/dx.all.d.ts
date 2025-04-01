@@ -12909,7 +12909,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxDateRangeBox.reset(value)]
      */
-    reset(value?: Array<Date | number | string | null>): void;
+    reset(value?: DevExpress.common.DateRange): void;
   }
   module dxDateRangeBox {
     /**
@@ -13031,7 +13031,7 @@ declare module DevExpress.ui {
       /**
        * [descr:dxDateRangeBoxOptions.endDate]
        */
-      endDate?: Date | number | string;
+      endDate?: DevExpress.common.DateLike;
       /**
        * [descr:dxDateRangeBoxOptions.endDateInputAttr]
        */
@@ -13075,7 +13075,7 @@ declare module DevExpress.ui {
       /**
        * [descr:dxDateRangeBoxOptions.startDate]
        */
-      startDate?: Date | number | string;
+      startDate?: DevExpress.common.DateLike;
       /**
        * [descr:dxDateRangeBoxOptions.startDateInputAttr]
        */
@@ -13103,7 +13103,7 @@ declare module DevExpress.ui {
       /**
        * [descr:dxDateRangeBoxOptions.value]
        */
-      value?: Array<Date | number | string | null>;
+      value?: DevExpress.common.DateRange;
     };
     /**
      * [descr:_ui_date_range_box_ValueChangedEvent]
