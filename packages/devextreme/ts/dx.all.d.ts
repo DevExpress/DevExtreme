@@ -8516,11 +8516,11 @@ declare module DevExpress.ui {
     /**
      * [descr:DateBoxBaseOptions.max]
      */
-    max?: Date | number | string | undefined;
+    max?: DevExpress.common.DateLike | undefined;
     /**
      * [descr:DateBoxBaseOptions.min]
      */
-    min?: Date | number | string | undefined;
+    min?: DevExpress.common.DateLike | undefined;
     /**
      * [descr:DateBoxBaseOptions.todayButtonText]
      */
@@ -12700,7 +12700,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxDateBox.reset(value)]
      */
-    reset(value?: Date | number | string | null): void;
+    reset(value?: DevExpress.common.DateLike): void;
   }
   module dxDateBox {
     /**
@@ -12892,7 +12892,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxDateBoxOptions.value]
      */
-    value?: Date | number | string | null;
+    value?: DevExpress.common.DateLike;
   }
   /**
    * [descr:dxDateRangeBox]

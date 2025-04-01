@@ -8,6 +8,7 @@ import {
 
 import {
     ComponentDisabledDate,
+    DateLike,
     dxCalendarOptions,
 } from './calendar';
 
@@ -277,7 +278,7 @@ export interface dxDateBoxOptions extends DateBoxBaseOptions<dxDateBox> {
      * @default null
      * @public
      */
-    value?: Date | number | string | null;
+    value?: DateLike;
 }
 
 /**
@@ -321,13 +322,13 @@ export interface DateBoxBaseOptions<TComponent> extends dxDropDownEditorOptions<
      * @default undefined
      * @public
      */
-    max?: Date | number | string | undefined;
+    max?: DateLike | undefined;
     /**
      * @docid
      * @default undefined
      * @public
      */
-    min?: Date | number | string | undefined;
+    min?: DateLike | undefined;
     /**
      * @docid
      * @default "Today"
@@ -383,7 +384,7 @@ export default class dxDateBox extends DateBoxBase<Properties> {
      * @publicName reset(value)
      * @public
      */
-    reset(value?: Date | number | string | null): void;
+    reset(value?: DateLike): void;
 }
 
 /**
