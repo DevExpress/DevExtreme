@@ -281,6 +281,15 @@ const iconSet = {
   checkmarkcircle: '\f183',
   clipboardtasklist: '\f184',
   today: '\f185',
+  daterange: '\f186',
+  cardcontent: '\f187',
+  cursormove: '\f188',
+  cursorprohibition: '\f189',
+  arrowsortup: '\f190',
+  arrowsortdown: '\f191',
+  imagethumbnail: '\f192',
+  sparkle: '\f193',
+  servicebell: '\f194',
 };
 
 fixture.disablePageReloads`Icons`
