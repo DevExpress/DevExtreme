@@ -139,7 +139,16 @@
 .dx-icon-unfixcolumn,
 .dx-icon-packagebox,
 .dx-icon-checkmarkcircle,
-.dx-icon-clipboardtasklist {
+.dx-icon-clipboardtasklist,
+.dx-icon-daterange,
+.dx-icon-cardcontent,
+.dx-icon-cursormove,
+.dx-icon-cursorprohibition,
+.dx-icon-arrowsortup,
+.dx-icon-arrowsortdown,
+.dx-icon-imagethumbnail,
+.dx-icon-sparkle,
+.dx-icon-servicebell {
   background-position: 0 0;
   background-repeat: no-repeat;
 }
@@ -490,6 +499,15 @@ $icons: (
     "checkmarkcircle": "\f183",
     "clipboardtasklist": "\f184",
     "today": "\f185",
+    "daterange": "\f186",
+    "cardcontent": "\f187",
+    "cursormove": "\f188",
+    "cursorprohibition": "\f189",
+    "arrowsortup": "\f190",
+    "arrowsortdown": "\f191",
+    "imagethumbnail": "\f192",
+    "sparkle": "\f193",
+    "servicebell": "\f194",
     "unfixcolumn":"\f17a",
     "fixcolumnleft":"\f17b",
     "stickcolumn":"\f17c",
