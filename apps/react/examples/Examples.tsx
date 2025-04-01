@@ -23,10 +23,14 @@ import TextBoxExample from './text-box-example';
 import ToolbarExample from './toolbar-example';
 import ValidationExample from './validation-example';
 // import DateBoxExample from './date-box-example';
+import FormWithNestedExample from './form-with-nested';
+
 
 const Examples = () => {
     return (
         <div>
+            <FormWithNestedExample />
+            
             <AccordionExample />
 
             <BoxExample />
