@@ -65,6 +65,10 @@ import {
   ALERT_TIMEOUT,
 } from './data.ts';
 
+
+// import { AI } from 'devextreme-vue/ai';
+// import type { AIProvider, AI as AIClass } from 'devextreme-vue/ai';
+
 const chatService = new AzureOpenAI(AzureOpenAIConfig);
 
 const typingUsers = ref([]);
@@ -74,6 +78,21 @@ const copyButtonIcon = ref('copy');
 
 onBeforeMount(() => {
   loadMessages(dictionary);
+
+  // const provider: AIProvider = {
+  //   sendRequest(params) {
+  //     return {
+  //       abort: () => {},
+  //       promise: Promise.resolve('AI response'),
+  //     }
+  //   },
+  // };
+  // const ai: AIClass = new AI(provider);
+
+  // ai.translate(
+  //   { text: 'text', lang: 'lang' },
+  //   { onComplete: (result) => { console.log(result) } },
+  // );
 });
 
 async function getAIResponse(messages) {

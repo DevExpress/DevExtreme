@@ -82,3 +82,4 @@ export { DxValidator } from "./validator";
 export { DxVectorMap } from "./vector-map";
 
 export * as Common from "./common/index";
+export * from "./ai";

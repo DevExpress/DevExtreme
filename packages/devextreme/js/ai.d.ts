@@ -1,4 +1,5 @@
 /**
+ * @docid
  * @namespace DevExpress.ai
  * @public
  */
@@ -8,6 +9,7 @@ export interface Prompt {
 }
 
 /**
+ * @docid
  * @namespace DevExpress.ai
  * @public
  */
@@ -17,6 +19,7 @@ export interface RequestParams {
 }
 
 /**
+ * @docid
  * @namespace DevExpress.ai
  * @public
  */
@@ -26,6 +29,7 @@ export interface ResponseParams {
 }
 
 /**
+ * @docid
  * @namespace DevExpress.ai
  * @public
  */
@@ -35,18 +39,21 @@ export interface TranslateCommandParams {
 }
 
 /**
+ * @docid
  * @namespace DevExpress.ai
  * @public
  */
 export type TranslateCommandResult = string;
 
 /**
+ * @docid
  * @namespace DevExpress.ai
  * @public
  */
 export type BaseCommandResult = TranslateCommandResult;
 
 /**
+ * @docid
  * @namespace DevExpress.ai
  * @public
  */
@@ -57,6 +64,7 @@ export interface RequestCallbacks {
 }
 
 /**
+ * @docid
  * @namespace DevExpress.ai
  * @public
  */
@@ -65,10 +73,15 @@ export interface AIProvider {
 }
 
 /**
+ * @docid
  * @namespace DevExpress.ai
  * @public
  */
 export class AI {
+  /**
+   * @param provider
+   */
+  constructor(provider: AIProvider);
   /**
    * @docid
    * @publicName translate(params, callbacks)
