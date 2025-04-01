@@ -9,6 +9,7 @@ import { OptionsController as OptionsControllerBase } from '@ts/grids/new/grid_c
 import { GridCoreNew } from '@ts/grids/new/grid_core/widget';
 
 import * as ContentViewModule from './content_view/index';
+import { ContextMenuController } from './context_menu/controller';
 import { ContextMenuView } from './context_menu/view';
 import { HeaderPanelView } from './header_panel/view';
 import { MainView } from './main_view';
@@ -22,6 +23,8 @@ export class CardViewBase extends GridCoreNew {
 
   contextMenu!: ContextMenuView;
 
+  contextMenuController!: ContextMenuController;
+
   protected _registerDIContext(): void {
     super._registerDIContext();
     this.diContext.register(HeaderPanelView);
@@ -29,6 +32,7 @@ export class CardViewBase extends GridCoreNew {
     this.diContext.register(ContentViewModule.View);
     this.diContext.register(MainViewBase, MainView);
     this.diContext.register(ContextMenuView);
+    this.diContext.register(ContextMenuController);
 
     const optionsController = new OptionsController(this);
     this.diContext.registerInstance(OptionsController, optionsController);
@@ -46,12 +50,7 @@ export class CardViewBase extends GridCoreNew {
     this.contentView = this.diContext.get(ContentViewModule.View);
     this.headerPanel = this.diContext.get(HeaderPanelView);
     this.contextMenu = this.diContext.get(ContextMenuView);
-  }
-
-  protected _init(): void {
-    super._init();
-
-    this.contextMenu.setRootElement(this.element());
+    this.contextMenuController = this.diContext.get(ContextMenuController);
   }
 
   // eslint-disable-next-line @stylistic/max-len

@@ -1,5 +1,5 @@
 import type {
-  InitializedEvent, Item as ContextMenuItem, ItemClickEvent, PositioningEvent,
+  InitializedEvent, Item as ItemClickEvent,
 } from '@js/ui/context_menu';
 import type { SubsGets } from '@ts/core/reactive/index';
 import { combined } from '@ts/core/reactive/index';
@@ -7,33 +7,25 @@ import { combined } from '@ts/core/reactive/index';
 import { View } from '../core/view';
 import type { ContextMenuProps } from './context_menu';
 import { ContextMenu } from './context_menu';
+import type { BaseContextMenuController } from './controller';
 
 const CLASS = {
   contextMenu: 'dx-context-menu',
 };
 
 export abstract class BaseContextMenuView extends View<ContextMenuProps> {
-  private rootElement?: HTMLElement;
-
   protected override component = ContextMenu;
 
-  protected abstract getItems(e: PositioningEvent): ContextMenuItem[] | undefined;
+  constructor(
+    protected readonly controller: BaseContextMenuController<{}, {}>,
+  ) {
+    super();
+  }
 
   protected override getProps(): SubsGets<ContextMenuProps> {
     return combined({
-      target: this.rootElement,
+      componentRef: this.controller.contextMenuRef,
       cssClass: this.getWidgetContainerClass(),
-      onPositioning: (e: PositioningEvent) => {
-        const items = this.getItems(e);
-
-        if (items) {
-          e.component.option('items', items);
-          e.event?.stopPropagation();
-        } else {
-          // @ts-expect-error
-          e.cancel = true;
-        }
-      },
       onInitialized: (e: InitializedEvent) => {
         // @ts-expect-error
         e.component?.setAria('role', 'presentation');
@@ -42,11 +34,8 @@ export abstract class BaseContextMenuView extends View<ContextMenuProps> {
       onItemClick: (e: ItemClickEvent) => {
         e.itemData?.onItemClick?.(e);
       },
+      onPositioning: this.controller.onPositioning,
     } as ContextMenuProps);
-  }
-
-  public setRootElement(element: HTMLElement): void {
-    this.rootElement = element;
   }
 
   // TODO: move this to another place

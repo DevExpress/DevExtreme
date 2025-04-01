@@ -10,6 +10,7 @@ import { DataController } from '../../grid_core/data_controller';
 import { FilterController } from '../../grid_core/filtering';
 import { Sortable } from '../../grid_core/inferno_wrappers/sortable';
 import { SortingController } from '../../grid_core/sorting_controller';
+import { ContextMenuController } from '../context_menu';
 import type { Options } from '../options';
 import { OptionsControllerMock } from '../options_controller.mock';
 import { HeaderPanelView } from './view';
@@ -28,11 +29,14 @@ const setup = (options: Options) => {
     dataController,
     columnsController,
   );
+  const contextMenuController = new ContextMenuController(columnsController, optionsController);
+
   const headerPanelView = new HeaderPanelView(
     sortingController,
     columnsController,
     optionsController,
     headerFilterController,
+    contextMenuController,
   );
 
   headerPanelView.render(rootElement);

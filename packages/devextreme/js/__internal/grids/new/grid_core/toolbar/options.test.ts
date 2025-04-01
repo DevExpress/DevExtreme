@@ -1,7 +1,7 @@
-/* eslint-disable spellcheck/spell-checker */
-/* eslint-disable @typescript-eslint/dot-notation */
 import { describe, expect, it } from '@jest/globals';
 
+import { ContextMenuController } from '../../card_view/context_menu';
+import { ColumnsController } from '../columns_controller';
 import type { Options } from '../options';
 import { OptionsControllerMock } from '../options_controller/options_controller.mock';
 import { ToolbarController } from './controller';
@@ -17,9 +17,12 @@ const createToolbarView = (options?: Options): {
       visible: true,
     },
   });
+  const columnsController = new ColumnsController(optionsController);
+  // @ts-expect-error
+  const contextMenuController = new ContextMenuController(columnsController, optionsController);
 
   const toolbarController = new ToolbarController(optionsController);
-  const toolbar = new ToolbarView(toolbarController, optionsController);
+  const toolbar = new ToolbarView(toolbarController, contextMenuController, optionsController);
 
   toolbar.render(rootElement);
 
