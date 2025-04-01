@@ -5546,6 +5546,47 @@ QUnit.module('the fieldTemplate\ option', moduleSetup, () => {
                 assert.strictEqual($tag.length, 1, 'tag is rendered');
             });
         });
+
+        QUnit.test('new tags should be rendered in React 18 strict mode', function(assert) {
+            const $tagBox = $('#tagBox').dxTagBox({
+                items: [{ name: 'one', value: 1 }, { name: 'two', value: 2 }],
+                displayExpr: 'name',
+                valueExpr: 'value',
+                value: [],
+                fieldTemplate: 'fieldTemplate',
+                templatesRenderAsynchronously: true,
+                integrationOptions: {
+                    templates: {
+                        fieldTemplate: {
+                            render: (data) => {
+                                const createTextBox = () => {
+                                    const $textBox = $('<div>');
+                                    $textBox.dxTextBox({ placeholder: 'text' });
+                                    return $textBox.get(0);
+                                };
+                                setTimeout(() => {
+                                    data.container.append(createTextBox());
+                                    data.onRendered();
+                                    $(data.container).empty();
+                                    data.container.append(createTextBox());
+                                    data.onRendered();
+                                }, TIME_TO_WAIT);
+                            }
+                        }
+                    }
+                },
+            });
+            const tagBox = $tagBox.dxTagBox('instance');
+
+            tagBox.option('value', [1]);
+
+            this.clock.tick(TIME_TO_WAIT);
+
+            const $tag = $tagBox.find(`.${TAGBOX_TAG_CLASS}`);
+            assert.strictEqual($tag.length, 1, 'tag is rendered');
+            const $placeholder = $tagBox.find(`.${PLACEHOLDER_CLASS}`);
+            assert.notOk($placeholder.is(':visible'), 'placeholder is hidden');
+        });
     });
 });
 
