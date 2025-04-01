@@ -291,7 +291,7 @@ export type Properties = Omit<DateBoxBaseOptions<dxDateRangeBox>, 'inputAttr' | 
      * @default [null,null]
      * @public
      */
-    value?: Array<Date | number | string>;
+    value?: Array<Date | number | string | null>;
 };
 
 /**

@@ -13095,7 +13095,7 @@ declare module DevExpress.ui {
       /**
        * [descr:dxDateRangeBoxOptions.value]
        */
-      value?: Array<Date | number | string>;
+      value?: Array<Date | number | string | null>;
     };
     /**
      * [descr:_ui_date_range_box_ValueChangedEvent]
