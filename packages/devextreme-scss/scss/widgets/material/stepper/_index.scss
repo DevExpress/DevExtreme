@@ -7,21 +7,6 @@
 
 // adduse
 
-/*.dx-step {
-  &.dx-step-completed,
-  &.dx-step-selected {
-    .dx-step-text {
-      font-weight: 500;
-    }
-  }
-
-  &.dx-step-selected {
-    .dx-step-label {
-      font-weight: 500;
-    }
-  }
-}*/
-
 @include stepper(
   $stepper-margin,
 );
@@ -39,6 +24,7 @@
   $stepper-step-content-column-gap,
   $stepper-step-optional-mark-font-size,
   $stepper-step-icon-size,
+  $stepper-step-transition-duration,
 );
 @include step-states(
   $stepper-step-shadow-color,

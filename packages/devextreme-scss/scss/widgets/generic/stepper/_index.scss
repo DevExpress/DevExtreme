@@ -24,6 +24,7 @@
   $stepper-step-content-column-gap,
   $stepper-step-optional-mark-font-size,
   $stepper-step-icon-size,
+  $stepper-step-transition-duration,
 );
 @include step-states(
   $stepper-step-shadow-color,

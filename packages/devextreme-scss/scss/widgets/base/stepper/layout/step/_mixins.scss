@@ -6,6 +6,7 @@
   $content-column-gap,
   $stepper-step-optional-mark-font-size,
   $stepper-step-icon-size,
+  $stepper-step-transition-duration,
 ) {
   .dx-stepper-horizontal {
     .dx-step {
@@ -36,6 +37,7 @@
     z-index: 0;
     width: $width;
     height: $height;
+    transition-duration: $stepper-step-transition-duration;
   }
 }
 
@@ -199,11 +201,11 @@
       }
 
       &.dx-step-selected {
-          .dx-step-indicator {
-            border-color: $selected-hover-bg;
-            background-color:$selected-hover-bg;
-            box-shadow: 0 0 0 2px $shadow-color, 0 0 0 4px $selected-hover-bg, 0 0 0 8px $shadow-color;
-          }
+        .dx-step-indicator {
+          border-color: $selected-hover-bg;
+          background-color:$selected-hover-bg;
+          box-shadow: 0 0 0 2px $shadow-color, 0 0 0 4px $selected-hover-bg, 0 0 0 8px $shadow-color;
+        }
       }
 
       &.dx-state-hover {

@@ -17,7 +17,7 @@ $stepper-step-accent-hover-bg: null !default;
 $stepper-step-danger-bg: $base-danger !default;
 $stepper-step-danger-hover-bg: null !default;
 
-$stepper-step-disabled-text-color:  color.change($base-text-color, $alpha: $base-disabled-opacity) !default;
+$stepper-step-disabled-text-color: color.change($base-text-color, $alpha: $base-disabled-opacity) !default;
 $stepper-step-disabled-bg: null !default;
 $stepper-step-disabled-shadow: $base-bg !default;
 
