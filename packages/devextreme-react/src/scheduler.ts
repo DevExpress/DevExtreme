@@ -8,11 +8,14 @@ import dxScheduler, {
 import { Component as BaseComponent, IHtmlOptions, ComponentRef, NestedComponentMeta } from "./core/component";
 import NestedOption from "./core/nested-option";
 
-import type { ViewType, AppointmentAddedEvent, AppointmentAddingEvent, AppointmentClickEvent, AppointmentContextMenuEvent, AppointmentDblClickEvent, AppointmentDeletedEvent, AppointmentDeletingEvent, AppointmentFormOpeningEvent, AppointmentRenderedEvent, AppointmentTooltipShowingEvent, AppointmentUpdatedEvent, AppointmentUpdatingEvent, CellClickEvent, CellContextMenuEvent, ContentReadyEvent, DisposingEvent, InitializedEvent, AllDayPanelMode, AppointmentTemplateData, AppointmentTooltipTemplateData, CellAppointmentsLimit, dxSchedulerScrolling } from "devextreme/ui/scheduler";
+import type { ViewType, AppointmentAddedEvent, AppointmentAddingEvent, AppointmentClickEvent, AppointmentContextMenuEvent, AppointmentDblClickEvent, AppointmentDeletedEvent, AppointmentDeletingEvent, AppointmentFormOpeningEvent, AppointmentRenderedEvent, AppointmentTooltipShowingEvent, AppointmentUpdatedEvent, AppointmentUpdatingEvent, CellClickEvent, CellContextMenuEvent, ContentReadyEvent, DisposingEvent, InitializedEvent, SchedulerPredefinedToolbarItem, DateNavigatorItemProperties, SchedulerPredefinedDateNavigatorItem, ToolbarItem as SchedulerToolbarItem, AllDayPanelMode, AppointmentTemplateData, AppointmentTooltipTemplateData, CellAppointmentsLimit, dxSchedulerScrolling } from "devextreme/ui/scheduler";
+import type { ContentReadyEvent as ButtonGroupContentReadyEvent, DisposingEvent as ButtonGroupDisposingEvent, InitializedEvent as ButtonGroupInitializedEvent, dxButtonGroupItem, ItemClickEvent, OptionChangedEvent, SelectionChangedEvent } from "devextreme/ui/button_group";
 import type { event } from "devextreme/events/events.types";
+import type { LocateInMenuMode, ShowTextMode } from "devextreme/ui/toolbar";
+import type { ToolbarItemLocation, template, ToolbarItemComponent, ButtonType, SingleMultipleOrNone, ButtonStyle, ScrollMode, FirstDayOfWeek, Orientation } from "devextreme/common";
+import type { CollectionWidgetItem } from "devextreme/ui/collection/ui.collection_widget.base";
 import type { DataSourceOptions } from "devextreme/data/data_source";
 import type { Store } from "devextreme/data/store";
-import type { ScrollMode, template, FirstDayOfWeek, Orientation } from "devextreme/common";
 
 import type dxSortable from "devextreme/ui/sortable";
 import type dxDraggable from "devextreme/ui/draggable";
@@ -95,6 +98,7 @@ const Scheduler = memo(
         editing: { optionName: "editing", isCollectionItem: false },
         resource: { optionName: "resources", isCollectionItem: true },
         scrolling: { optionName: "scrolling", isCollectionItem: false },
+        toolbar: { optionName: "toolbar", isCollectionItem: false },
         view: { optionName: "views", isCollectionItem: true }
       }), []);
 
@@ -209,6 +213,153 @@ const Editing = Object.assign<typeof _componentEditing, NestedComponentMeta>(_co
 });
 
 // owners:
+// Toolbar
+// Options
+type IItemProps = React.PropsWithChildren<{
+  cssClass?: string | undefined;
+  disabled?: boolean;
+  html?: string;
+  locateInMenu?: LocateInMenuMode;
+  location?: ToolbarItemLocation;
+  menuItemTemplate?: (() => string | any) | template;
+  name?: SchedulerPredefinedToolbarItem;
+  options?: DateNavigatorItemProperties | Record<string, any>;
+  showText?: ShowTextMode;
+  template?: ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string | any) | template;
+  text?: string;
+  visible?: boolean;
+  widget?: ToolbarItemComponent;
+  elementAttr?: Record<string, any>;
+  hint?: string;
+  icon?: string;
+  type?: ButtonType;
+  menuItemRender?: (...params: any) => React.ReactNode;
+  menuItemComponent?: React.ComponentType<any>;
+  render?: (...params: any) => React.ReactNode;
+  component?: React.ComponentType<any>;
+}>
+const _componentItem = (props: IItemProps) => {
+  return React.createElement(NestedOption<IItemProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "items",
+      IsCollectionItem: true,
+      ExpectedChildren: {
+        options: { optionName: "options", isCollectionItem: false }
+      },
+      TemplateProps: [{
+        tmplOption: "menuItemTemplate",
+        render: "menuItemRender",
+        component: "menuItemComponent"
+      }, {
+        tmplOption: "template",
+        render: "render",
+        component: "component"
+      }],
+    },
+  });
+};
+
+const Item = Object.assign<typeof _componentItem, NestedComponentMeta>(_componentItem, {
+  componentType: "option",
+});
+
+// owners:
+// ToolbarItem
+type IOptionsProps = React.PropsWithChildren<{
+  accessKey?: string | undefined;
+  activeStateEnabled?: boolean;
+  bindingOptions?: Record<string, any>;
+  buttonTemplate?: ((buttonData: any, buttonContent: any) => string | any) | template;
+  disabled?: boolean;
+  elementAttr?: Record<string, any>;
+  focusStateEnabled?: boolean;
+  height?: (() => number | string) | number | string | undefined;
+  hint?: string | undefined;
+  hoverStateEnabled?: boolean;
+  items?: Array<dxButtonGroupItem | SchedulerPredefinedDateNavigatorItem>;
+  keyExpr?: (() => void) | string;
+  onContentReady?: ((e: ButtonGroupContentReadyEvent) => void);
+  onDisposing?: ((e: ButtonGroupDisposingEvent) => void);
+  onInitialized?: ((e: ButtonGroupInitializedEvent) => void);
+  onItemClick?: ((e: ItemClickEvent) => void);
+  onOptionChanged?: ((e: OptionChangedEvent) => void);
+  onSelectionChanged?: ((e: SelectionChangedEvent) => void);
+  rtlEnabled?: boolean;
+  selectedItemKeys?: Array<any>;
+  selectedItems?: Array<any>;
+  selectionMode?: SingleMultipleOrNone;
+  stylingMode?: ButtonStyle;
+  tabIndex?: number;
+  visible?: boolean;
+  width?: (() => number | string) | number | string | undefined;
+  defaultSelectedItemKeys?: Array<any>;
+  onSelectedItemKeysChange?: (value: Array<any>) => void;
+  defaultSelectedItems?: Array<any>;
+  onSelectedItemsChange?: (value: Array<any>) => void;
+  buttonRender?: (...params: any) => React.ReactNode;
+  buttonComponent?: React.ComponentType<any>;
+}>
+const _componentOptions = (props: IOptionsProps) => {
+  return React.createElement(NestedOption<IOptionsProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "options",
+      DefaultsProps: {
+        defaultSelectedItemKeys: "selectedItemKeys",
+        defaultSelectedItems: "selectedItems"
+      },
+      ExpectedChildren: {
+        item: { optionName: "items", isCollectionItem: true },
+        optionsItem: { optionName: "items", isCollectionItem: true }
+      },
+      TemplateProps: [{
+        tmplOption: "buttonTemplate",
+        render: "buttonRender",
+        component: "buttonComponent"
+      }],
+    },
+  });
+};
+
+const Options = Object.assign<typeof _componentOptions, NestedComponentMeta>(_componentOptions, {
+  componentType: "option",
+});
+
+// owners:
+// Options
+type IOptionsItemProps = React.PropsWithChildren<{
+  disabled?: boolean;
+  elementAttr?: Record<string, any>;
+  hint?: string;
+  icon?: string;
+  template?: ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string | any) | template;
+  text?: string;
+  type?: ButtonType;
+  visible?: boolean;
+  render?: (...params: any) => React.ReactNode;
+  component?: React.ComponentType<any>;
+}>
+const _componentOptionsItem = (props: IOptionsItemProps) => {
+  return React.createElement(NestedOption<IOptionsItemProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "items",
+      IsCollectionItem: true,
+      TemplateProps: [{
+        tmplOption: "template",
+        render: "render",
+        component: "component"
+      }],
+    },
+  });
+};
+
+const OptionsItem = Object.assign<typeof _componentOptionsItem, NestedComponentMeta>(_componentOptionsItem, {
+  componentType: "option",
+});
+
+// owners:
 // Scheduler
 type IResourceProps = React.PropsWithChildren<{
   allowMultiple?: boolean;
@@ -250,6 +401,78 @@ const _componentScrolling = (props: IScrollingProps) => {
 };
 
 const Scrolling = Object.assign<typeof _componentScrolling, NestedComponentMeta>(_componentScrolling, {
+  componentType: "option",
+});
+
+// owners:
+// Scheduler
+type IToolbarProps = React.PropsWithChildren<{
+  disabled?: boolean;
+  items?: Array<SchedulerPredefinedToolbarItem | SchedulerToolbarItem>;
+  multiline?: boolean;
+  visible?: boolean | undefined;
+}>
+const _componentToolbar = (props: IToolbarProps) => {
+  return React.createElement(NestedOption<IToolbarProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "toolbar",
+      ExpectedChildren: {
+        item: { optionName: "items", isCollectionItem: true },
+        toolbarItem: { optionName: "items", isCollectionItem: true }
+      },
+    },
+  });
+};
+
+const Toolbar = Object.assign<typeof _componentToolbar, NestedComponentMeta>(_componentToolbar, {
+  componentType: "option",
+});
+
+// owners:
+// Toolbar
+type IToolbarItemProps = React.PropsWithChildren<{
+  cssClass?: string | undefined;
+  disabled?: boolean;
+  html?: string;
+  locateInMenu?: LocateInMenuMode;
+  location?: ToolbarItemLocation;
+  menuItemTemplate?: (() => string | any) | template;
+  name?: SchedulerPredefinedToolbarItem;
+  options?: DateNavigatorItemProperties | Record<string, any>;
+  showText?: ShowTextMode;
+  template?: ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string | any) | template;
+  text?: string;
+  visible?: boolean;
+  widget?: ToolbarItemComponent;
+  menuItemRender?: (...params: any) => React.ReactNode;
+  menuItemComponent?: React.ComponentType<any>;
+  render?: (...params: any) => React.ReactNode;
+  component?: React.ComponentType<any>;
+}>
+const _componentToolbarItem = (props: IToolbarItemProps) => {
+  return React.createElement(NestedOption<IToolbarItemProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "items",
+      IsCollectionItem: true,
+      ExpectedChildren: {
+        options: { optionName: "options", isCollectionItem: false }
+      },
+      TemplateProps: [{
+        tmplOption: "menuItemTemplate",
+        render: "menuItemRender",
+        component: "menuItemComponent"
+      }, {
+        tmplOption: "template",
+        render: "render",
+        component: "component"
+      }],
+    },
+  });
+};
+
+const ToolbarItem = Object.assign<typeof _componentToolbarItem, NestedComponentMeta>(_componentToolbarItem, {
   componentType: "option",
 });
 
@@ -356,10 +579,20 @@ export {
   IAppointmentDraggingProps,
   Editing,
   IEditingProps,
+  Item,
+  IItemProps,
+  Options,
+  IOptionsProps,
+  OptionsItem,
+  IOptionsItemProps,
   Resource,
   IResourceProps,
   Scrolling,
   IScrollingProps,
+  Toolbar,
+  IToolbarProps,
+  ToolbarItem,
+  IToolbarItemProps,
   View,
   IViewProps
 };
