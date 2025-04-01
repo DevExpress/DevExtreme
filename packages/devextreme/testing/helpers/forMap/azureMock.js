@@ -22,7 +22,8 @@
                     }
 
                     if(eventName === 'ready') {
-                        targetOrCallback();
+                        callbackFun();
+                        atlas.readyCallbackCalled = true;
                     }
                 },
                 remove: (eventName) => {

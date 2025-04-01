@@ -4,6 +4,7 @@ import $ from 'jquery';
 import { MARKERS, ROUTES } from './utils.js';
 import AzureProvider from '__internal/ui/map/m_provider.dynamic.azure';
 import ajaxMock from '../../../helpers/ajaxMock.js';
+import errors from 'ui/widget/ui.errors';
 
 import 'ui/map';
 
@@ -150,6 +151,19 @@ QUnit.module('map loading', moduleConfig, () => {
                 done();
             }
         });
+    });
+
+    QUnit.test('map should add ready event handler to call map ready callback', function(assert) {
+        const done = assert.async();
+
+        $('#map').dxMap({
+            provider: 'azure',
+            onReady: () => {
+                assert.strictEqual(atlas.readyCallbackCalled, true, 'map ready callback was called');
+
+                done();
+            }
+        }).dxMap('instance');
     });
 });
 
@@ -1042,5 +1056,43 @@ QUnit.module('Routes', moduleConfig, () => {
                 done();
             }
         }).dxMap('instance');
+    });
+
+    QUnit.test('Should log an error if get route request failed', function(assert) {
+        const done = assert.async();
+        const mapReadyDeferred = $.Deferred();
+
+        const map = $('#map').dxMap({
+            provider: 'azure',
+            onReady: () => {
+                mapReadyDeferred.resolve();
+            },
+        }).dxMap('instance');
+
+        const errorStub = sinon.stub(errors, 'log');
+
+        mapReadyDeferred.done(() => {
+            ajaxMock.clear();
+            ajaxMock.setup({
+                url: '/fakeAzureUrl',
+                responseText: {
+                    routes: [{
+                        legs: {
+                            length: 1,
+                        },
+                    }],
+                },
+            });
+
+            map.addRoute(ROUTES[0]).done(() => {
+                const message = errorStub.args[0][1].message;
+
+                assert.ok(errorStub.withArgs('W1006').calledOnce, 'warning is logged');
+                assert.strictEqual(message, 'route.legs.flatMap is not a function', 'warning message text is correct');
+
+                errorStub.restore();
+                done();
+            });
+        });
     });
 });
