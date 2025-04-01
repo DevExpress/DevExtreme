@@ -22,7 +22,7 @@
     "@angular/common": ">=17.0.0",
     "@angular/core": ">=17.0.0",
     "@angular/forms": ">=17.0.0",
-    "devextreme": "workspace:~"
+    "devextreme": "workspace:*"
   },
   "devDependencies": {
     "@angular-devkit/architect": "0.1900.2",
@@ -54,7 +54,7 @@
     "eslint": "catalog:",
     "eslint-config-devextreme": "1.1.5",
     "eslint-plugin-import": "catalog:",
-    "eslint-migration-utils": "workspace:~",
+    "eslint-migration-utils": "workspace:*",
     "gulp": "4.0.2",
     "gulp-header": "2.0.9",
     "gulp-replace": "0.6.1",

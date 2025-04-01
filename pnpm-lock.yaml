@@ -217,10 +217,10 @@ importers:
         specifier: ^2.6.12
         version: 2.6.12
       devextreme:
-        specifier: workspace:~
+        specifier: workspace:*
         version: link:../../packages/devextreme/artifacts/npm/devextreme
       devextreme-angular:
-        specifier: workspace:~
+        specifier: workspace:*
         version: link:../../packages/devextreme-angular/npm/dist
       rxjs:
         specifier: 7.8.1
@@ -329,10 +329,10 @@ importers:
         specifier: 'catalog:'
         version: 4.1.60
       devextreme:
-        specifier: workspace:~
+        specifier: workspace:*
         version: link:../../packages/devextreme/artifacts/npm/devextreme
       devextreme-angular:
-        specifier: workspace:~
+        specifier: workspace:*
         version: link:../../packages/devextreme-angular/npm/dist
       devextreme-aspnet-data:
         specifier: 5.0.0
@@ -344,16 +344,16 @@ importers:
         specifier: 1.0.3
         version: 1.0.3
       devextreme-dist:
-        specifier: workspace:~
+        specifier: workspace:*
         version: link:../../packages/devextreme/artifacts/npm/devextreme-dist
       devextreme-quill:
         specifier: 1.7.2
         version: 1.7.2
       devextreme-react:
-        specifier: workspace:~
+        specifier: workspace:*
         version: link:../../packages/devextreme-react/npm
       devextreme-vue:
-        specifier: workspace:~
+        specifier: workspace:*
         version: link:../../packages/devextreme-vue/npm
       dx-systemjs-vue-browser:
         specifier: 1.1.1
@@ -660,10 +660,10 @@ importers:
   apps/react:
     dependencies:
       devextreme:
-        specifier: workspace:~
+        specifier: workspace:*
         version: link:../../packages/devextreme/artifacts/npm/devextreme
       devextreme-react:
-        specifier: workspace:~
+        specifier: workspace:*
         version: link:../../packages/devextreme-react/npm
       react:
         specifier: ~18.0.0
@@ -706,10 +706,10 @@ importers:
   apps/react-storybook:
     dependencies:
       devextreme:
-        specifier: workspace:~
+        specifier: workspace:*
         version: link:../../packages/devextreme/artifacts/npm/devextreme
       devextreme-react:
-        specifier: workspace:~
+        specifier: workspace:*
         version: link:../../packages/devextreme-react/npm
       html-react-parser:
         specifier: ^5.2.2
@@ -758,10 +758,10 @@ importers:
   apps/vue:
     dependencies:
       devextreme:
-        specifier: workspace:~
+        specifier: workspace:*
         version: link:../../packages/devextreme/artifacts/npm/devextreme
       devextreme-vue:
-        specifier: workspace:~
+        specifier: workspace:*
         version: link:../../packages/devextreme-vue/npm
       vue:
         specifier: 3.2.47
@@ -912,7 +912,7 @@ importers:
         specifier: 4.10.3
         version: 4.10.3
       devextreme:
-        specifier: workspace:~
+        specifier: workspace:*
         version: link:../../packages/devextreme/artifacts/npm/devextreme
       devextreme-screenshot-comparer:
         specifier: 2.0.17
@@ -1123,7 +1123,7 @@ importers:
         specifier: 1.1.5
         version: 1.1.5(exvrhn6g4m6aerk4xgkmwi4j24)
       eslint-migration-utils:
-        specifier: workspace:~
+        specifier: workspace:*
         version: link:../eslint-migration-utils
       eslint-plugin-i18n:
         specifier: 'catalog:'
@@ -1430,7 +1430,7 @@ importers:
         specifier: 17.3.11
         version: 17.3.11(chokidar@3.6.0)
       devextreme:
-        specifier: workspace:~
+        specifier: workspace:*
         version: link:../devextreme/artifacts/npm/devextreme
       devextreme-schematics:
         specifier: '*'
@@ -1521,7 +1521,7 @@ importers:
         specifier: 1.1.5
         version: 1.1.5(en434vihwhylys55dfvcrqcrya)
       eslint-migration-utils:
-        specifier: workspace:~
+        specifier: workspace:*
         version: link:../eslint-migration-utils
       eslint-plugin-import:
         specifier: 'catalog:'
@@ -1606,7 +1606,7 @@ importers:
   packages/devextreme-react:
     dependencies:
       devextreme:
-        specifier: workspace:~
+        specifier: workspace:*
         version: link:../devextreme/artifacts/npm/devextreme
       prop-types:
         specifier: ^15.8.1
@@ -1816,7 +1816,7 @@ importers:
   packages/devextreme-vue:
     dependencies:
       devextreme:
-        specifier: workspace:~
+        specifier: workspace:*
         version: link:../devextreme/artifacts/npm/devextreme
     devDependencies:
       '@babel/eslint-parser':
@@ -1908,7 +1908,7 @@ importers:
         version: 2.6.2
     devDependencies:
       devextreme:
-        specifier: workspace:~
+        specifier: workspace:*
         version: link:../devextreme/artifacts/npm/devextreme
 
 packages:

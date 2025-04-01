@@ -11,8 +11,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "devextreme": "workspace:~",
-    "devextreme-react": "workspace:~",
+    "devextreme": "workspace:*",
+    "devextreme-react": "workspace:*",
     "inferno": "catalog:",
     "html-react-parser": "^5.2.2"
   },
