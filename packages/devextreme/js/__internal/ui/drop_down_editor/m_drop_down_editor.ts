@@ -42,6 +42,11 @@ const DROP_DOWN_EDITOR_FIELD_TEMPLATE_WRAPPER = 'dx-dropdowneditor-field-templat
 const OVERLAY_CONTENT_LABEL = 'Dropdown';
 
 const isIOs = devices.current().platform === 'ios';
+
+function createTemplateWrapperElement() {
+  return $('<div>').addClass(DROP_DOWN_EDITOR_FIELD_TEMPLATE_WRAPPER);
+}
+
 // @ts-expect-error
 const DropDownEditor = TextBox.inherit({
 
@@ -329,8 +334,7 @@ const DropDownEditor = TextBox.inherit({
     }
 
     if (!this._$templateWrapper) {
-      this._$templateWrapper = $('<div>')
-        .addClass(DROP_DOWN_EDITOR_FIELD_TEMPLATE_WRAPPER)
+      this._$templateWrapper = createTemplateWrapperElement()
         .prependTo(this.$element());
     }
   },
@@ -342,20 +346,19 @@ const DropDownEditor = TextBox.inherit({
     this._detachFocusEvents();
 
     this._$textEditorContainer.remove();
-    this._$templateWrapper.empty();
 
-    const $templateWrapper = this._$templateWrapper;
+    const $newTemplateWrapper = createTemplateWrapperElement();
+    this._$templateWrapper!.replaceWith($newTemplateWrapper);
+    this._$templateWrapper = $newTemplateWrapper;
 
     const currentRenderContext = Symbol('renderContext');
     this._activeRenderContext = currentRenderContext;
 
     fieldTemplate.render({
       model: data,
-      container: getPublicElement($templateWrapper),
+      container: getPublicElement(this._$templateWrapper),
       onRendered: () => {
         if (this._activeRenderContext !== currentRenderContext) {
-          $templateWrapper.empty();
-
           return;
         }
 
