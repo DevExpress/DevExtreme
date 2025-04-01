@@ -5262,7 +5262,7 @@ QUnit.module('the \'onSelectionChanged\' option', moduleSetup, () => {
     });
 });
 
-QUnit.module('the fieldTemplate\ option', moduleSetup, () => {
+QUnit.module('the fieldTemplate option', moduleSetup, () => {
     QUnit.test('the fieldTemplate function should be called only once on init and value change', function(assert) {
         let callCount = 0;
 
