@@ -2,7 +2,7 @@ import { compileGetter } from 'core/utils/data';
 import config from 'core/config';
 import { DataSource } from 'common/data/data_source/data_source';
 import { AppointmentDataProvider } from '__internal/scheduler/appointments/data_provider/m_appointment_data_provider';
-import { AppointmentDataAccessor } from '__internal/scheduler/utils/data_accessor/AppointmentDataAccessor';
+import { AppointmentDataAccessor } from '__internal/scheduler/utils/data_accessor/appointment_data_accessor';
 import { getPreparedDataItems } from '__internal/scheduler/r1/utils/index.js';
 
 const {
