@@ -314,7 +314,7 @@ export class ColumnsController extends modules.Controller {
   }
 
   public publicMethods() {
-    return ['addColumn', 'deleteColumn', 'columnOption', 'columnCount', 'clearSorting', 'clearGrouping', 'getVisibleColumns', 'getVisibleColumnIndex'];
+    return ['addColumn', 'deleteColumn', 'columnOption', 'columnCount', 'clearSorting', 'clearGrouping', 'getVisibleColumns', 'getVisibleColumnIndex', 'getColumns'];
   }
 
   public applyDataSource(dataSource, forceApplying?, isApplyingUserState?) {
