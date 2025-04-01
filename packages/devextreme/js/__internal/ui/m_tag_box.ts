@@ -1045,9 +1045,9 @@ class TagBox<
       this._selectedItems = this._getItemsFromPlain(this._valuesToUpdate);
 
       if (this._selectedItems.length === this._valuesToUpdate.length) {
-        this._renderTagsImpl(this._selectedItems);
+        this._renderTagsImpl(this._selectedItems)
+          .done(() => { d.resolve(); });
         isPlainDataUsed = true;
-        d.resolve();
       }
     }
 
@@ -1060,8 +1060,8 @@ class TagBox<
             return;
           }
 
-          this._renderTagsImpl(items);
-          d.resolve();
+          this._renderTagsImpl(items)
+            .done(() => { d.resolve(); });
         })
         .fail(d.reject);
     }
@@ -1069,8 +1069,8 @@ class TagBox<
     return d.promise();
   }
 
-  _renderTagsImpl(items): void {
-    this._renderTagsCore(items)
+  _renderTagsImpl(items): DeferredObj<void> {
+    return this._renderTagsCore(items)
       .done(() => {
         this._renderEmptyState();
 
