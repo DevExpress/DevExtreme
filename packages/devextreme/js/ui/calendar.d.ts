@@ -143,6 +143,7 @@ export interface dxCalendarOptions extends EditorOptions<dxCalendar> {
     hoverStateEnabled?: boolean;
     /**
      * @docid
+     * @type Date|number|string|null
      * @default new Date(3000, 0)
      * @public
      */
@@ -155,6 +156,7 @@ export interface dxCalendarOptions extends EditorOptions<dxCalendar> {
     maxZoomLevel?: CalendarZoomLevel;
     /**
      * @docid
+     * @type Date|number|string|null
      * @default new Date(1000, 0)
      * @public
      */
@@ -203,6 +205,7 @@ export interface dxCalendarOptions extends EditorOptions<dxCalendar> {
     weekNumberRule?: WeekNumberRule;
     /**
      * @docid
+     * @type Date|number|string|null|Array<Date|number|string|null>
      * @default null
      * @public
      */

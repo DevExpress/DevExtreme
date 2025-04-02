@@ -496,10 +496,10 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
     
      */
     @Input()
-    get max(): Date | number | string | undefined {
+    get max(): Date | null | number | string {
         return this._getOption('max');
     }
-    set max(value: Date | number | string | undefined) {
+    set max(value: Date | null | number | string) {
         this._setOption('max', value);
     }
 
@@ -522,10 +522,10 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
     
      */
     @Input()
-    get min(): Date | number | string | undefined {
+    get min(): Date | null | number | string {
         return this._getOption('min');
     }
-    set min(value: Date | number | string | undefined) {
+    set min(value: Date | null | number | string) {
         this._setOption('min', value);
     }
 
@@ -821,10 +821,10 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
     
      */
     @Input()
-    get value(): Date | number | string {
+    get value(): Date | null | number | string {
         return this._getOption('value');
     }
-    set value(value: Date | number | string) {
+    set value(value: Date | null | number | string) {
         this._setOption('value', value);
     }
 
@@ -1211,7 +1211,7 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() maxChange: EventEmitter<Date | number | string | undefined>;
+    @Output() maxChange: EventEmitter<Date | null | number | string>;
 
     /**
     
@@ -1225,7 +1225,7 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() minChange: EventEmitter<Date | number | string | undefined>;
+    @Output() minChange: EventEmitter<Date | null | number | string>;
 
     /**
     
@@ -1386,7 +1386,7 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() valueChange: EventEmitter<Date | number | string>;
+    @Output() valueChange: EventEmitter<Date | null | number | string>;
 
     /**
     

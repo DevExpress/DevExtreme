@@ -1,4 +1,4 @@
-// eslint-disable-next-line max-classes-per-file
+/* eslint-disable max-classes-per-file */
 import {
     DateLike,
 } from '../common';
@@ -283,6 +283,7 @@ export interface dxDateBoxOptions extends DateBoxBaseOptions<dxDateBox> {
     /**
      * @docid
      * @default null
+     * @type Date|number|string|null
      * @public
      */
     value?: DateLike;
@@ -326,12 +327,14 @@ export interface DateBoxBaseOptions<TComponent> extends dxDropDownEditorOptions<
     displayFormat?: Format;
     /**
      * @docid
+     * @type Date|number|string|null
      * @default undefined
      * @public
      */
     max?: DateLike | undefined;
     /**
      * @docid
+     * @type Date|number|string|null
      * @default undefined
      * @public
      */

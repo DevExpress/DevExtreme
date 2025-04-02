@@ -184,6 +184,7 @@ export type Properties = Omit<DateBoxBaseOptions<dxDateRangeBox>, 'inputAttr' | 
     disableOutOfRangeSelection?: boolean;
     /**
      * @docid dxDateRangeBoxOptions.endDate
+     * @type Date|number|string|null
      * @default null
      * @public
      * @fires dxDateRangeBoxOptions.onOptionChanged
@@ -253,6 +254,7 @@ export type Properties = Omit<DateBoxBaseOptions<dxDateRangeBox>, 'inputAttr' | 
     openOnFieldClick?: boolean;
     /**
      * @docid dxDateRangeBoxOptions.startDate
+     * @type Date|number|string|null
      * @default null
      * @public
      * @fires dxDateRangeBoxOptions.onOptionChanged
@@ -296,6 +298,7 @@ export type Properties = Omit<DateBoxBaseOptions<dxDateRangeBox>, 'inputAttr' | 
     startDateText?: string;
     /**
      * @docid dxDateRangeBoxOptions.value
+     * @type Array<Date|number|string|null>
      * @default [null,null]
      * @public
      */
