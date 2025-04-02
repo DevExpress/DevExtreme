@@ -88,7 +88,7 @@ export class RootElementUpdater extends Component<Properties> {
     const element = this.props.rootElementRef.current;
 
     if (!element) {
-      throw new Error('root element is not providen');
+      throw new Error('root element is not provided');
     }
 
     this.updateClasses(element);
