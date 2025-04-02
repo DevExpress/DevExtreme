@@ -31,12 +31,12 @@ function xor(a: boolean, b: boolean): boolean {
 }
 
 const TAGBOX_TAG_DATA_KEY = 'dxTagData';
+const TAGBOX_TAG_DISPLAY_VALUE = 'dxTagDisplayValue';
 
 const TAGBOX_CLASS = 'dx-tagbox';
 const TAGBOX_TAG_CONTAINER_CLASS = 'dx-tag-container';
 const TAGBOX_TAG_CLASS = 'dx-tag';
 const TAGBOX_MULTI_TAG_CLASS = 'dx-tagbox-multi-tag';
-const TAGBOX_CUSTOM_TAG_CLASS = 'dx-tag-custom';
 const TAGBOX_TAG_REMOVE_BUTTON_CLASS = 'dx-tag-remove-button';
 const TAGBOX_ONLY_SELECT_CLASS = 'dx-tagbox-only-select';
 const TAGBOX_SINGLE_LINE_CLASS = 'dx-tagbox-single-line';
@@ -1143,24 +1143,23 @@ const TagBox = (SelectBox as any).inherit({
     const itemModel = this._getItemModel(item, displayValue);
 
     if ($tag) {
-      if (isDefined(displayValue)) {
+      const tagDisplayValue = $tag.data(TAGBOX_TAG_DISPLAY_VALUE);
+
+      if (isDefined(displayValue) && !equalByValue(tagDisplayValue, displayValue)) {
         $tag.empty();
         this._applyTagTemplate(itemModel, $tag);
       }
-
-      $tag.removeClass(TAGBOX_CUSTOM_TAG_CLASS);
       this._updateElementAria($tag.attr('id'));
     } else {
       const tagId = `dx-${new Guid()}`;
 
-      $tag = this._createTag(value, $input, tagId);
+      $tag = this._createTag(value, $input, tagId, displayValue);
 
       this._setTagAria($tag, isDefined(displayValue) ? displayValue : value);
 
       if (isDefined(item)) {
         this._applyTagTemplate(itemModel, $tag);
       } else {
-        $tag.addClass(TAGBOX_CUSTOM_TAG_CLASS);
         this._applyTagTemplate(value, $tag);
       }
 
@@ -1203,11 +1202,12 @@ const TagBox = (SelectBox as any).inherit({
     return result;
   },
 
-  _createTag(value, $input, tagId) {
+  _createTag(value, $input, tagId, displayValue): dxElementWrapper {
     return $('<div>')
       .attr('id', tagId)
       .addClass(TAGBOX_TAG_CLASS)
       .data(TAGBOX_TAG_DATA_KEY, value)
+      .data(TAGBOX_TAG_DISPLAY_VALUE, displayValue)
       .insertBefore($input);
   },
 
