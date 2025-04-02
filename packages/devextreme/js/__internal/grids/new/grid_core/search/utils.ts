@@ -18,6 +18,12 @@ import type { HighlightedTextItem, HighlightTextOptions, SearchFieldProps } from
 
 const HIGHLIGHT_SPLIT_SEPARATOR = '<--|-->';
 
+const FILTERING_TIMEOUT = 700;
+
+const CLASS = {
+  searchPanel: 'search-panel',
+};
+
 export const compareTextPart = (
   textPart: string,
   searchStr: string,
@@ -112,12 +118,6 @@ export const createFilterExpression = (
   return result;
 };
 
-const FILTERING_TIMEOUT = 700;
-
-const CLASS = {
-  searchPanel: 'search-panel',
-};
-
 // eslint-disable-next-line @typescript-eslint/init-declarations
 let timer;
 
@@ -147,5 +147,8 @@ export const addSearchTextBox = (props: SearchFieldProps): PredefinedToolbarItem
       class: addWidgetPrefix(CLASS.searchPanel),
     },
     mode: 'search',
+    onDisposing: () => {
+      clearTimeout(timer);
+    },
   } as TextBoxProperties,
 });
