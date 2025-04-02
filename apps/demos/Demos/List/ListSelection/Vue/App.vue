@@ -49,9 +49,9 @@
 </template>
 <script setup lang="ts">
 import { ref } from 'vue';
-import { type SingleMultipleAllOrNone } from 'devextreme-vue/common';
+import type { SingleMultipleAllOrNone } from 'devextreme-vue/common';
 import DxSelectBox from 'devextreme-vue/select-box';
-import DxList from 'devextreme-vue/list';
+import DxList, { type DxListTypes } from 'devextreme-vue/list';
 import DxCheckBox from 'devextreme-vue/check-box';
 import ArrayStore from 'devextreme/data/array_store';
 import { tasks } from './data.ts';
@@ -62,7 +62,7 @@ const dataSource = new ArrayStore({
 });
 const selectedItemKeys = ref([]);
 const selectionMode = ref<SingleMultipleAllOrNone>('all');
-const selectAllMode = ref('page');
+const selectAllMode = ref<DxListTypes.SelectAllMode>('page');
 const selectByClick = ref(false);
 </script>
 <style>

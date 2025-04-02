@@ -7,12 +7,11 @@ const IMAGE_ID = 'image';
 const MENU_ITEM_TEXT_CLASS = 'dx-menu-item-text';
 
 fixture('ContextMenu.Templates')
-  .page('http://localhost:8080/')
   .before(async (ctx) => {
     ctx.initialWindowSize = [900, 600];
   });
 
-runManualTest('ContextMenu', 'Templates', ['jQuery', 'React', 'Vue', 'Angular'], (test) => {
+runManualTest('ContextMenu', 'Templates', (test) => {
   test('Custom Template Share Appearance', async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 

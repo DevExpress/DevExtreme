@@ -280,6 +280,7 @@ const iconSet = {
   packagebox: '\f182',
   checkmarkcircle: '\f183',
   clipboardtasklist: '\f184',
+  today: '\f185',
 };
 
 fixture.disablePageReloads`Icons`

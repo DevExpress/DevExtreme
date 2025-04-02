@@ -145,7 +145,9 @@ export class GridCoreNewBase<
   protected _initMarkup(): void {
     // @ts-expect-error
     super._initMarkup();
-    this.renderSubscription = this.diContext.get(MainView).render(this.$element().get(0));
+    this.renderSubscription = this.diContext.get(MainView).render(
+      this.$element().get(0) as HTMLDivElement,
+    );
   }
 
   private _optionChanged(args) {

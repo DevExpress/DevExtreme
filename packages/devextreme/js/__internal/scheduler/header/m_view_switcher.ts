@@ -82,12 +82,9 @@ export const getDropDownViewSwitcher = (header: SchedulerHeader, item) => {
         const viewSwitcher = e.component;
 
         header._addEvent('currentView', (view) => {
-          const views = formatViews(header.views);
+          const currentViews = formatViews(header.views);
 
-          if (isOneView(views, view)) {
-            header.repaint();
-          }
-
+          viewSwitcher.option('showArrowIcon', !isOneView(currentViews, view));
           viewSwitcher.option('selectedItemKey', getViewName(view));
         });
       },

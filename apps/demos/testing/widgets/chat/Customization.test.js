@@ -9,16 +9,13 @@ const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 const LIST_ITEM_CLASS = 'dx-list-item';
 
 fixture('Chat.Customization')
-  .page('http://localhost:8080/')
   .before(async (ctx) => {
     ctx.initialWindowSize = [900, 800];
   });
 
-runManualTest('Chat', 'Customization', ['jQuery', 'React', 'Vue', 'Angular'], (test) => {
+runManualTest('Chat', 'Customization', (test) => {
   test('Customization', async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-
-    await t.wait(500);
 
     await t
       .click(Selector(`.${SELECTBOX_CLASS}`).nth(0))

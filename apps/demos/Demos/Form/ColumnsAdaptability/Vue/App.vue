@@ -35,7 +35,7 @@ const colCountByScreen = computed(() => (calculateColCountAutomatically.value
     md: 4,
   }));
 
-const screenByWidth = (width) => (width < 720 ? 'sm' : 'md');
+const screenByWidth: any = (width) => (width < 720 ? 'sm' : 'md');
 </script>
 <style scoped>
 #form {

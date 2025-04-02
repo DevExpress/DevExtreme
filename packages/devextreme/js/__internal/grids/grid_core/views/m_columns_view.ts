@@ -825,18 +825,33 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
   /**
    * @extended: editing
    */
-  protected _setCellAriaAttributes($cell, cellOptions, options?) {
-    if (cellOptions.rowType !== 'freeSpace') {
-      this.setAria('role', 'gridcell', $cell);
-      if (options?.row?.node?.hasChildren) {
-        const { row } = options;
-        this.setAria('expanded', row.isExpanded, $cell);
-      }
+  protected _setCellAriaAttributes(
+    $cell: dxElementWrapper,
+    cellOptions: { rowType: 'freeSpace' | 'group'; columnIndex: number },
+    options?: any,
+  ): void {
+    const { row } = options;
+    const isFreeSpaceRow = cellOptions.rowType === 'freeSpace';
+    const isGroupRow = cellOptions.rowType === 'group';
+    const rowHasChildren = row?.node?.hasChildren;
 
-      const columnIndexOffset = this._columnsController.getColumnIndexOffset();
-      const ariaColIndex = cellOptions.columnIndex + columnIndexOffset + 1;
-      this.setAria('colindex', ariaColIndex, $cell);
+    if (isFreeSpaceRow) {
+      return;
     }
+
+    this.setAria('role', 'gridcell', $cell);
+
+    if (rowHasChildren) {
+      this.setAria('expanded', row.isExpanded, $cell);
+    }
+
+    const columnIndexOffset = this._columnsController.getColumnIndexOffset();
+    // NOTE: Group rows always visible and their aria column idx shouldn't be shifted
+    const ariaColIndex = isGroupRow
+      ? cellOptions.columnIndex + 1
+      : cellOptions.columnIndex + columnIndexOffset + 1;
+
+    this.setAria('colindex', ariaColIndex, $cell);
   }
 
   protected _renderCell($row, options) {

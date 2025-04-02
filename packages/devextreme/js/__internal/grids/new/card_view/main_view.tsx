@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { combined } from '@ts/core/reactive/index';
 import { ColumnChooserView } from '@ts/grids/new/grid_core/column_chooser/index';
 import { View } from '@ts/grids/new/grid_core/core/view';
@@ -5,13 +6,18 @@ import { FilterPanelView } from '@ts/grids/new/grid_core/filtering/filter_panel/
 import { HeaderFilterPopupView } from '@ts/grids/new/grid_core/filtering/header_filter/index';
 import { PagerView } from '@ts/grids/new/grid_core/pager/view';
 import { ToolbarView } from '@ts/grids/new/grid_core/toolbar/view';
-import type { ComponentType } from 'inferno';
+import type { ComponentType, RefObject } from 'inferno';
 
 import type { Config } from '../grid_core/core/config_context';
 import { ConfigContext } from '../grid_core/core/config_context';
+import { RootElementUpdater } from '../grid_core/inferno_wrappers/root_element_updater';
 import { ContentView } from './content_view/view';
 import { HeaderPanelView } from './header_panel/view';
 import { OptionsController } from './options_controller';
+
+const CLASSES = {
+  cardView: 'dx-cardview',
+};
 
 interface MainViewProps {
   Toolbar: ComponentType;
@@ -22,6 +28,7 @@ interface MainViewProps {
   FilterPanel: ComponentType;
   ColumnChooser: ComponentType;
   config: Config;
+  rootElementRef: RefObject<HTMLDivElement>;
 }
 
 function MainViewComponent({
@@ -92,6 +99,7 @@ export class MainView extends View<MainViewProps> {
         disabled: this.options.oneWay('disabled'),
         templatesRenderAsynchronously: this.options.oneWay('templatesRenderAsynchronously'),
       }),
+      rootElementRef: { current: this.root! },
     });
   }
 }

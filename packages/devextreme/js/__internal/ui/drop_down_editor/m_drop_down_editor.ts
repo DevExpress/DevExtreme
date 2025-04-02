@@ -62,6 +62,10 @@ export interface DropDownEditorProperties extends Omit<Properties,
   _onMarkupRendered?: () => void;
 }
 
+function createTemplateWrapperElement(): dxElementWrapper {
+  return $('<div>').addClass(DROP_DOWN_EDITOR_FIELD_TEMPLATE_WRAPPER);
+}
+
 class DropDownEditor<
   TProperties extends DropDownEditorProperties = DropDownEditorProperties,
 > extends TextBox<TProperties> {
@@ -387,8 +391,7 @@ class DropDownEditor<
     }
 
     if (!this._$templateWrapper) {
-      this._$templateWrapper = $('<div>')
-        .addClass(DROP_DOWN_EDITOR_FIELD_TEMPLATE_WRAPPER)
+      this._$templateWrapper = createTemplateWrapperElement()
         .prependTo(this.$element());
     }
   }
@@ -400,22 +403,19 @@ class DropDownEditor<
     this._detachFocusEvents();
 
     this._$textEditorContainer.remove();
-    // @ts-expect-error ts-error
-    this._$templateWrapper.empty();
 
-    const $templateWrapper = this._$templateWrapper;
+    const $newTemplateWrapper = createTemplateWrapperElement();
+    this._$templateWrapper!.replaceWith($newTemplateWrapper);
+    this._$templateWrapper = $newTemplateWrapper;
 
     const currentRenderContext = Symbol('renderContext');
     this._activeRenderContext = currentRenderContext;
 
     fieldTemplate.render({
       model: data,
-      // @ts-expect-error ts-error
-      container: getPublicElement($templateWrapper),
+      container: getPublicElement(this._$templateWrapper),
       onRendered: () => {
         if (this._activeRenderContext !== currentRenderContext) {
-          $templateWrapper?.empty();
-
           return;
         }
 
