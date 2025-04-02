@@ -49,6 +49,23 @@ describe('ColumnsController', () => {
       expect(visibleColumns[0].name).toBe('a');
       expect(visibleColumns[1].name).toBe('b');
     });
+
+    it('should have headerPanelIndex property', () => {
+      const { columnsController } = setup({
+        columns: [
+          { dataField: 'a', visibleIndex: 2 },
+          { dataField: 'b', visibleIndex: 0 },
+          { dataField: 'c', visibleIndex: 1, visible: false },
+        ],
+      });
+
+      const visibleColumns = columnsController.visibleColumns.unreactive_get();
+
+      expect(visibleColumns).toMatchObject([
+        { name: 'b', headerPanelIndex: 0, visibleIndex: 0 },
+        { name: 'a', headerPanelIndex: 1, visibleIndex: 2 },
+      ]);
+    });
   });
   describe('nonVisibleColumns', () => {
     it('should contain non visible columns', () => {

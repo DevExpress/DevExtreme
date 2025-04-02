@@ -20,8 +20,14 @@ export class ColumnChooserController {
     private readonly options: OptionsController,
   ) {
     this.chooserColumns = computed(
-      (columns, sortOrder) => {
-        let chooserColumns = columns.filter((column) => column.showInColumnChooser);
+      (columns, sortOrder, mode) => {
+        let chooserColumns = columns;
+
+        if (mode === 'dragAndDrop') {
+          chooserColumns = chooserColumns.filter((column) => !column.visible);
+        }
+
+        chooserColumns = chooserColumns.filter((column) => column.showInColumnChooser);
         chooserColumns = sortColumns(chooserColumns, sortOrder);
 
         return chooserColumns;
@@ -29,6 +35,7 @@ export class ColumnChooserController {
       [
         this.columnsController.columns,
         this.options.oneWay('columnChooser.sortOrder'),
+        this.options.oneWay('columnChooser.mode'),
       ],
     );
 
@@ -39,6 +46,7 @@ export class ColumnChooserController {
         selected: column.visible,
         text: column.caption,
         disabled: !column.allowHiding,
+        column,
       }) as TreeViewItemProperties),
       [this.chooserColumns],
     );
@@ -62,4 +70,8 @@ export class ColumnChooserController {
       return [...columns];
     });
   }
+
+  public onColumnMove = (column: Column): void => {
+    this.columnsController.columnOption(column, 'visible', false);
+  };
 }

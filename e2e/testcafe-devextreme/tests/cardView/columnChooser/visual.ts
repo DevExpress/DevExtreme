@@ -9,14 +9,14 @@ fixture`CardView - ColumnChooser.Visual`
 
 const CARD_VIEW_SELECTOR = '#container';
 
-test('column chooser in select mode', async (t) => {
+test('column chooser in \'select\' mode', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const cardView = new CardView(CARD_VIEW_SELECTOR);
   const columnChooser = cardView.getColumnChooser();
 
   await cardView.apiShowColumnChooser();
 
-  await testScreenshot(t, takeScreenshot, 'card-view_column-chooser.png', { element: columnChooser.content });
+  await testScreenshot(t, takeScreenshot, 'card-view_column-chooser_select_mode.png', { element: columnChooser.content });
 
   await t
     .expect(compareResults.isValid())
@@ -39,5 +39,35 @@ test('column chooser in select mode', async (t) => {
     { dataField: 'Column 2', allowHiding: false },
     { dataField: 'Column 3', showInColumnChooser: false },
     { dataField: 'Column 4' },
+  ],
+}));
+
+test('column chooser in \'dragAndDrop\' mode', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const cardView = new CardView(CARD_VIEW_SELECTOR);
+  const columnChooser = cardView.getColumnChooser();
+
+  await cardView.apiShowColumnChooser();
+
+  await testScreenshot(t, takeScreenshot, 'card-view_column-chooser_drag_mode.png', { element: columnChooser.content });
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => createWidget('dxCardView', {
+  columnChooser: {
+    enabled: true,
+    mode: 'dragAndDrop',
+    height: 400,
+    width: 400,
+    search: {
+      enabled: true,
+    },
+  },
+  columns: [
+    { dataField: 'Column 1', visible: false },
+    { dataField: 'Column 2', visible: false, allowHiding: false },
+    { dataField: 'Column 3', visible: false, showInColumnChooser: false },
+    { dataField: 'Column 4', visible: false },
   ],
 }));

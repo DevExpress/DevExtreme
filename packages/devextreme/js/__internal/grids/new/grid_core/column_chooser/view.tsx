@@ -1,8 +1,9 @@
 /* eslint-disable spellcheck/spell-checker */
 import type { ColumnChooserMode } from '@js/common/grids';
 import type { Properties as ButtonProperties } from '@js/ui/button';
-import type { Properties as PopupProperties } from '@js/ui/popup';
+import type { Properties as PopupProperties, ToolbarItem } from '@js/ui/popup';
 import type dxPopup from '@js/ui/popup';
+import { current, isGeneric, isMaterial } from '@js/ui/themes';
 import type { Properties as TreeViewProperties } from '@js/ui/tree_view';
 import type dxTreeView from '@js/ui/tree_view';
 import type { MapMaybeSubscribable, SubsGets } from '@ts/core/reactive/index';
@@ -11,7 +12,7 @@ import {
 } from '@ts/core/reactive/index';
 import { createRef } from 'inferno';
 
-import { CLASSES as ContentViewClasses } from '../content_view/content_view';
+import { ColumnsController } from '../columns_controller/index';
 import { View } from '../core/view';
 import { OptionsController } from '../options_controller/options_controller';
 import { ToolbarController } from '../toolbar/controller';
@@ -31,22 +32,30 @@ export class ColumnChooserView extends View<ColumnChooserProps> {
 
   public readonly treeViewRef = createRef<dxTreeView>();
 
-  private readonly mode: SubsGets<ColumnChooserMode>;
+  public readonly mode: SubsGets<ColumnChooserMode>;
+
+  public dragModeOpened: SubsGets<boolean>;
 
   private toolbarButtonElement: DxElement | undefined = undefined;
 
   public static dependencies = [
-    ToolbarController, ColumnChooserController, OptionsController,
+    ToolbarController, ColumnChooserController, ColumnsController, OptionsController,
   ] as const;
 
   constructor(
     private readonly toolbarController: ToolbarController,
     private readonly columnChooserController: ColumnChooserController,
+    private readonly columnsController: ColumnsController,
     private readonly options: OptionsController,
   ) {
     super();
 
     this.mode = this.options.oneWay('columnChooser.mode');
+
+    this.dragModeOpened = computed(
+      (opened, mode) => opened && mode === 'dragAndDrop',
+      [this.popupVisible, this.mode],
+    );
 
     this.toolbarController.addDefaultItem(
       {
@@ -89,24 +98,20 @@ export class ColumnChooserView extends View<ColumnChooserProps> {
       visible: this.popupVisible,
       mode: this.mode,
       title: this.options.oneWay('columnChooser.title'),
+      chooserColumns: this.columnChooserController.chooserColumns,
+      visibleColumns: this.columnsController.visibleColumns,
+      // TODO: band columns aren't yet implemented in cardview
+      isBandColumnsUsed: false,
+
+      onColumnMove: this.columnChooserController.onColumnMove,
 
       popupConfig: combined({
         width: this.options.oneWay('columnChooser.width'),
         height: this.options.oneWay('columnChooser.height'),
         container: this.options.oneWay('columnChooser.container'),
-        rtlEnabled: this.options.oneWay('rtlEnabled'),
-
-        position: computed(
-          (v) => v ?? {
-            my: 'right bottom',
-            at: 'right bottom',
-            of: ContentViewClasses.contentView,
-            collision: 'fit',
-            offset: '-2 -2',
-            boundaryOffset: '2 2',
-          },
-          [this.options.oneWay('columnChooser.position')],
-        ),
+        position: this.options.oneWay('columnChooser.position'),
+        toolbarItems: this.getPopupToolbarItems(),
+        showCloseButton: this.isMaterialOrGeneric(),
 
         onHidden: () => {
           this.popupVisible.update(false);
@@ -115,11 +120,11 @@ export class ColumnChooserView extends View<ColumnChooserProps> {
       } as MapMaybeSubscribable<PopupProperties>),
 
       treeViewConfig: combined({
-        rtlEnabled: this.options.oneWay('rtlEnabled'),
-
         searchEditorOptions: this.options.oneWay('columnChooser.search.editorOptions'),
         searchEnabled: this.options.oneWay('columnChooser.search.enabled'),
         searchTimeout: this.options.oneWay('columnChooser.search.timeout'),
+
+        items: this.columnChooserController.items,
       } as MapMaybeSubscribable<TreeViewProperties>),
 
       treeViewSelectModeConfig: this.getSelectModeConfig(),
@@ -131,7 +136,6 @@ export class ColumnChooserView extends View<ColumnChooserProps> {
     const controller = this.columnChooserController;
 
     return combined({
-      items: controller.items,
       showCheckBoxesMode: computed(
         (v) => (v ? 'selectAll' : 'normal'),
         [this.options.oneWay('columnChooser.selection.allowSelectAll')],
@@ -142,6 +146,31 @@ export class ColumnChooserView extends View<ColumnChooserProps> {
   }
 
   private getDragAndDropModeConfig(): SubsGets<TreeViewProperties> {
-    return combined({});
+    return combined({
+      noDataText: this.options.oneWay('columnChooser.emptyPanelText'),
+      activeStateEnabled: false,
+    });
+  }
+
+  private getPopupToolbarItems(): SubsGets<ToolbarItem[]> {
+    return computed(
+      (title) => {
+        const items = [
+          { text: title, toolbar: 'top', location: this.isMaterialOrGeneric() ? 'before' : 'center' },
+        ] as ToolbarItem[];
+
+        if (!this.isMaterialOrGeneric()) {
+          // @ts-expect-error
+          items.push({ shortcut: 'cancel' });
+        }
+
+        return items;
+      },
+      [this.options.oneWay('columnChooser.title')],
+    );
+  }
+
+  private isMaterialOrGeneric(): boolean {
+    return isMaterial(current()) || isGeneric(current());
   }
 }
