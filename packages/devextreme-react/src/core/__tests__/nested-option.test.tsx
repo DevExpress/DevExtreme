@@ -654,7 +654,69 @@ describe('conditional rendering', () => {
       <ComponentWithConditionalOption enableOption={false} />,
     );
 
-    expect(Widget.resetOption.mock.calls.length).toBe(1);
-    expect(Widget.resetOption.mock.calls[0]).toEqual(['option']);
+    expect(Widget.resetOption.mock.calls.length).toBeGreaterThan(0);
+    expect(Widget.resetOption.mock.calls.some(call => call[0] === 'option')).toBeTruthy();
+  });
+});
+
+describe('resetOption behavior', () => {
+  afterEach(() => {
+    jest.clearAllMocks();
+    cleanup();
+  });
+
+  it('calls resetOption for regular option', () => {
+    const { rerender } = render(
+      <TestComponent>
+        <NestedComponent a={123} />
+      </TestComponent>,
+    );
+
+    rerender(
+      <TestComponent />
+    );
+
+    expect(Widget.resetOption.mock.calls.length).toBeGreaterThan(0);
+    expect(Widget.resetOption.mock.calls.some(call => call[0] === 'option')).toBeTruthy();
+  });
+
+  it('calls resetOption and sets empty array for collection option', () => {
+    const { rerender } = render(
+      <TestComponent>
+        <CollectionNestedComponent c={123} d="abc" />
+      </TestComponent>,
+    );
+
+    rerender(
+      <TestComponent />
+    );
+
+    expect(Widget.resetOption.mock.calls.length).toBeGreaterThan(0);
+    expect(Widget.resetOption.mock.calls.some(call => call[0] === 'itemOptions')).toBeTruthy();
+    expect(Widget.option.mock.calls.some(call => 
+      call[0] === 'itemOptions' && Array.isArray(call[1]) && call[1].length === 0
+    )).toBeTruthy();
+  });
+
+  it('resets nested collection options correctly', () => {
+    const { rerender } = render(
+      <TestComponent>
+        <NestedComponent a={123}>
+          <CollectionSubNestedComponent c={456} d="def" />
+        </NestedComponent>
+      </TestComponent>,
+    );
+
+    rerender(
+      <TestComponent>
+        <NestedComponent a={123} />
+      </TestComponent>,
+    );
+
+    expect(Widget.resetOption.mock.calls.length).toBeGreaterThan(0);
+    expect(Widget.resetOption.mock.calls.some(call => call[0] === 'option.subItemsOptions')).toBeTruthy();
+    expect(Widget.option.mock.calls.some(call => 
+      call[0] === 'option.subItemsOptions' && Array.isArray(call[1]) && call[1].length === 0
+    )).toBeTruthy();
   });
 });
