@@ -2,13 +2,13 @@ import type { BaseCommandResult, RequestCallbacks } from '@js/ai';
 import type { PromptData, PromptManager, PromptTemplateName } from '@ts/core/ai/core/prompt_manager';
 import type { RequestManager } from '@ts/core/ai/core/request_manager';
 
-export abstract class BaseCommand {
+export abstract class BaseCommand<TParams, TResult extends BaseCommandResult> {
   constructor(
     protected promptManager: PromptManager,
     protected requestManager: RequestManager,
   ) {}
 
-  public execute(params: unknown, callbacks: RequestCallbacks): () => void {
+  public execute(params: TParams, callbacks: RequestCallbacks): () => void {
     const templateName = this.getTemplateName();
     const data = this.buildPromptData(params);
 
@@ -28,6 +28,6 @@ export abstract class BaseCommand {
   }
 
   protected abstract getTemplateName(): PromptTemplateName;
-  protected abstract buildPromptData(params: unknown): PromptData;
-  protected abstract parseResult(response: string): BaseCommandResult;
+  protected abstract buildPromptData(params: TParams): PromptData;
+  protected abstract parseResult(response: string): TResult;
 }

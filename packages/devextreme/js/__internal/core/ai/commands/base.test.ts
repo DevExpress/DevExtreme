@@ -26,7 +26,7 @@ interface TestCommandParams {
   second: string;
 }
 
-class TestCommand extends BaseCommand {
+class TestCommand extends BaseCommand<TestCommandParams, string> {
   getTemplateName(): PromptTemplateName {
     return 'test-template-name' as PromptTemplateName;
   }
@@ -50,6 +50,8 @@ describe('BaseCommand', () => {
   let requestManager = null as unknown as RequestManager;
   let command = null as unknown as TestCommand;
 
+  const params: TestCommandParams = { first: 'first', second: 'second' };
+
   beforeEach(() => {
     const provider: AIProvider = new Provider();
 
@@ -72,14 +74,13 @@ describe('BaseCommand', () => {
     it('getTemplateName returns value correctly', () => {
       const spy = jest.spyOn(command, 'getTemplateName');
 
-      command.execute({}, {});
+      command.execute(params, {});
 
       expect(spy).toHaveBeenCalledTimes(1);
       expect(spy).toHaveReturnedWith('test-template-name');
     });
 
     it('buildPromptData receives and returns correct data', () => {
-      const params: TestCommandParams = { first: 'first', second: 'second' };
       const spy = jest.spyOn(command, 'buildPromptData');
 
       command.execute(params, {});
@@ -93,7 +94,6 @@ describe('BaseCommand', () => {
     });
 
     it('parseResult receives correct value and returns expected result', async () => {
-      const params: TestCommandParams = { first: 'first', second: 'second' };
       const spy = jest.spyOn(command, 'parseResult');
 
       command.execute(params, {});
@@ -112,7 +112,7 @@ describe('BaseCommand', () => {
         onChunk: jest.fn(),
       };
 
-      command.execute({}, callbacks as RequestCallbacks);
+      command.execute(params, callbacks as RequestCallbacks);
 
       await new Promise(process.nextTick);
 
@@ -124,7 +124,7 @@ describe('BaseCommand', () => {
     it('onComplete is called with parseResult output', async () => {
       const callbacks = { onComplete: jest.fn() };
 
-      command.execute({}, callbacks as RequestCallbacks);
+      command.execute(params, callbacks as RequestCallbacks);
 
       await new Promise(process.nextTick);
 
@@ -146,7 +146,7 @@ describe('BaseCommand', () => {
           onComplete: jest.fn(),
         };
 
-        command.execute({}, callbacks as RequestCallbacks);
+        command.execute(params, callbacks as RequestCallbacks);
 
         await new Promise(process.nextTick);
 
@@ -173,7 +173,7 @@ describe('BaseCommand', () => {
         const onChunk = jest.fn();
         const onComplete = jest.fn();
 
-        command.execute({}, { onChunk, onComplete });
+        command.execute(params, { onChunk, onComplete });
 
         expect(onChunk).toHaveBeenCalledTimes(2);
         expect(onChunk).toHaveBeenNthCalledWith(1, 'first');
@@ -189,7 +189,7 @@ describe('BaseCommand', () => {
       const sendRequestSpy = jest.spyOn(requestManager, 'sendRequest');
       const onError = jest.fn();
 
-      expect(command.execute(undefined, { onError })).not.toThrow();
+      expect(command.execute(undefined as unknown as TestCommandParams, { onError })).not.toThrow();
 
       await new Promise(process.nextTick);
 
@@ -201,7 +201,7 @@ describe('BaseCommand', () => {
       const sendRequestSpy = jest.spyOn(requestManager, 'sendRequest');
       const callbacks = { onChunk: jest.fn() };
 
-      expect(command.execute({ first: 'first', second: 'second' }, callbacks)).not.toThrow();
+      expect(command.execute(params, callbacks)).not.toThrow();
 
       await new Promise(process.nextTick);
 
@@ -213,7 +213,7 @@ describe('BaseCommand', () => {
       const sendRequestSpy = jest.spyOn(requestManager, 'sendRequest');
 
       expect(command.execute(
-        { first: 'first', second: 'second' },
+        params,
         (undefined as unknown as RequestCallbacks),
       )).not.toThrow();
 

@@ -2,7 +2,7 @@ import type { TranslateCommandParams, TranslateCommandResult } from '@js/ai';
 import { BaseCommand } from '@ts/core/ai/commands/base';
 import type { PromptData, PromptTemplateName } from '@ts/core/ai/core/prompt_manager';
 
-export class TranslateCommand extends BaseCommand {
+export class TranslateCommand extends BaseCommand<TranslateCommandParams, TranslateCommandResult> {
   protected getTemplateName(): PromptTemplateName {
     return 'translate';
   }

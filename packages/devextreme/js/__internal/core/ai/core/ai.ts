@@ -1,8 +1,10 @@
 import type {
   AI as IAI,
   AIProvider,
+  BaseCommandResult,
   RequestCallbacks,
   TranslateCommandParams,
+  TranslateCommandResult,
 } from '@js/ai';
 import type { BaseCommand } from '@ts/core/ai/commands/base';
 import { TranslateCommand } from '@ts/core/ai/commands/translate';
@@ -19,12 +21,16 @@ export class AI implements IAI {
     this.requestManager = new RequestManager(provider);
   }
 
-  private execute<F extends BaseCommand>(
+  private execute<
+    TParams,
+    TResult extends BaseCommandResult,
+    F extends BaseCommand<TParams, TResult>,
+  >(
     Command: new (
       promptManager: PromptManager,
       requestManager: RequestManager,
     ) => F,
-    params: unknown,
+    params: TParams,
     callbacks: RequestCallbacks,
   ): () => void {
     const command = new Command(this.promptManager, this.requestManager);
@@ -33,6 +39,10 @@ export class AI implements IAI {
   }
 
   public translate(params: TranslateCommandParams, callbacks: RequestCallbacks): () => void {
-    return this.execute(TranslateCommand, params, callbacks);
+    return this.execute<TranslateCommandParams, TranslateCommandResult, TranslateCommand>(
+      TranslateCommand,
+      params,
+      callbacks,
+    );
   }
 }
