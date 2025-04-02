@@ -36,7 +36,6 @@ const moduleConfig = {
         let azureMockCreated = false;
 
         AzureProvider.remapConstant(fakeURL);
-        window.postponeMapReadyPromise = false;
 
         ajaxMock.setup({
             url: fakeURL,
@@ -96,12 +95,13 @@ QUnit.module('map loading', moduleConfig, () => {
             setTimeout(function() {
                 $('#map').dxMap({
                     provider: 'azure',
-                    onReady: $.proxy(() => {
-                        assert.ok(window.atlas.Map.customFlag, 'map loaded without getting script');
-
-                        done();
-                    }, this)
                 });
+
+                setTimeout(() => {
+                    assert.ok(window.atlas.Map.customFlag, 'map loaded without getting script');
+
+                    done();
+                }, 50);
             });
         });
     });
@@ -1059,54 +1059,6 @@ QUnit.module('Routes', moduleConfig, () => {
         }).dxMap('instance');
     });
 
-    QUnit.test('Route should not be added on init before map ready promise is resolved', function(assert) {
-        const done = assert.async();
-        const onRouteAdded = sinon.stub();
-        window.postponeMapReadyPromise = true;
-
-        $('#map').dxMap({
-            provider: 'azure',
-            onReady: () => {
-                assert.strictEqual(onRouteAdded.callCount, 1, 'route was added after map is ready');
-
-                done();
-            },
-            onRouteAdded,
-            routes: [ROUTES[0]],
-        });
-
-        setTimeout(() => {
-            assert.strictEqual(onRouteAdded.callCount, 0, 'route was not added before map is ready');
-
-            atlas.mapReadyResolve();
-        }, 100);
-    });
-
-    QUnit.test('Add route method should not be called before map ready promise is resolved', function(assert) {
-        const done = assert.async();
-        const onRouteAdded = sinon.stub();
-        window.postponeMapReadyPromise = true;
-
-        const map = $('#map').dxMap({
-            provider: 'azure',
-            onReady: () => {
-                assert.strictEqual(onRouteAdded.callCount, 1, 'route was added after map is ready');
-
-                done();
-            },
-            onRouteAdded,
-            routes: [ROUTES[0]],
-        }).dxMap('instance');
-
-        map.addRoute(ROUTES[0]);
-
-        setTimeout(() => {
-            assert.strictEqual(onRouteAdded.callCount, 0, 'route was not added before map is ready');
-
-            atlas.mapReadyResolve();
-        }, 100);
-    });
-
     QUnit.test('Should log an error if get route request failed', function(assert) {
         const done = assert.async();
         const mapReadyDeferred = $.Deferred();
@@ -1142,6 +1094,61 @@ QUnit.module('Routes', moduleConfig, () => {
                 errorStub.restore();
                 done();
             });
+        });
+    });
+
+    QUnit.module('Postponed map ready', {
+        beforeEach: function() {
+            window.postponeMapReadyPromise = true;
+        },
+        afterEach: function() {
+            delete window.postponeMapReadyPromise;
+        }
+    }, () => {
+        QUnit.test('Route should not be added on init before map ready promise is resolved', function(assert) {
+            const done = assert.async();
+            const onRouteAdded = sinon.stub();
+
+            $('#map').dxMap({
+                provider: 'azure',
+                onReady: () => {
+                    assert.strictEqual(onRouteAdded.callCount, 1, 'route was added after map is ready');
+
+                    done();
+                },
+                onRouteAdded,
+                routes: [ROUTES[0]],
+            });
+
+            setTimeout(() => {
+                assert.strictEqual(onRouteAdded.callCount, 0, 'route was not added before map is ready');
+
+                atlas.mapReadyResolve();
+            }, 100);
+        });
+
+        QUnit.test('Add route method should not be called before map ready promise is resolved', function(assert) {
+            const done = assert.async();
+            const onRouteAdded = sinon.stub();
+
+            const map = $('#map').dxMap({
+                provider: 'azure',
+                onReady: () => {
+                    assert.strictEqual(onRouteAdded.callCount, 1, 'route was added after map is ready');
+
+                    done();
+                },
+                onRouteAdded,
+                routes: [ROUTES[0]],
+            }).dxMap('instance');
+
+            map.addRoute(ROUTES[0]);
+
+            setTimeout(() => {
+                assert.strictEqual(onRouteAdded.callCount, 0, 'route was not added before map is ready');
+
+                atlas.mapReadyResolve();
+            }, 100);
         });
     });
 });
