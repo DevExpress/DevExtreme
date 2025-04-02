@@ -10,11 +10,14 @@ import { Component, type ComponentType, render } from 'inferno';
 export abstract class View<T extends {}> {
   private inferno: undefined | ComponentType;
 
+  protected root?: HTMLDivElement;
+
   protected abstract component: ComponentType<T>;
 
   protected abstract getProps(): Subscribable<T>;
 
-  public render(root: Element): Subscription {
+  public render(root: HTMLDivElement): Subscription {
+    this.root = root;
     const ViewComponent = this.component;
     return toSubscribable(this.getProps()).subscribe((props: T) => {
       render(<ViewComponent {...props}/>, root);
