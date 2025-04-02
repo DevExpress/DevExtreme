@@ -139,6 +139,33 @@ export const createFilterExpression = (
   return result;
 };
 
+export const calculateSearchFilter = (
+  text: string | undefined,
+  columns: Column[],
+  searchVisibleColumnsOnly: boolean,
+): unknown => {
+  const filters: any[] = [];
+
+  if (!text) return null;
+
+  for (const column of columns) {
+    if (allowSearch(column, searchVisibleColumnsOnly)) {
+      const filterValue = parseValue(column, text);
+
+      if (filterValue !== undefined) {
+        const expression = createFilterExpression(column, filterValue, undefined, 'search');
+        filters.push(expression);
+      }
+    }
+  }
+
+  if (filters.length === 0) {
+    return ['!'];
+  }
+
+  return gridCoreUtils.combineFilters(filters, 'or');
+};
+
 // eslint-disable-next-line @typescript-eslint/init-declarations
 let timer;
 

@@ -1,18 +1,14 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable spellcheck/spell-checker */
 import type { SubsGets } from '@ts/core/reactive/index';
 import { computed } from '@ts/core/reactive/index';
-import gridCoreUtils from '@ts/grids/grid_core/m_utils';
 import type { Options as SearchOptions } from '@ts/grids/new/grid_core/search/options';
 import type { HighlightedTextItem, HighlightTextOptions } from '@ts/grids/new/grid_core/search/types';
-import {
-  allowSearch, createFilterExpression, parseValue, splitHighlightedText,
-} from '@ts/grids/new/grid_core/search/utils';
 
 import { ColumnsController } from '../columns_controller';
-import type { Column } from '../columns_controller/types';
 import { OptionsController } from '../options_controller/options_controller';
+import {
+  calculateSearchFilter, splitHighlightedText,
+} from './utils';
 
 type DefinedSearchOptions = Required<Required<SearchOptions>['searchPanel']>;
 
@@ -39,7 +35,7 @@ export class SearchController {
       searchText,
       columns,
       searchVisibleColumnsOnly,
-    ) => this.calculateSearchFilter(searchText, columns, searchVisibleColumnsOnly),
+    ) => calculateSearchFilter(searchText, columns, searchVisibleColumnsOnly),
     [
       this.searchTextOption,
       this.columnsController.columns,
@@ -62,31 +58,4 @@ export class SearchController {
   public readonly updateSearchText = (text: string): void => {
     this.searchTextOption.update(text);
   };
-
-  private calculateSearchFilter(
-    text: string | undefined,
-    columns: Column[],
-    searchVisibleColumnsOnly: boolean,
-  ): any {
-    const filters: any[] = [];
-
-    if (!text) return null;
-
-    for (const column of columns) {
-      if (allowSearch(column, searchVisibleColumnsOnly)) {
-        const filterValue = parseValue(column, text);
-
-        if (filterValue !== undefined) {
-          const expression = createFilterExpression(column, filterValue, undefined, 'search');
-          filters.push(expression);
-        }
-      }
-    }
-
-    if (filters.length === 0) {
-      return ['!'];
-    }
-
-    return gridCoreUtils.combineFilters(filters, 'or');
-  }
 }
