@@ -4,6 +4,7 @@ import { safeSizeTest } from '../../../../helpers/safeSizeTest';
 import { createWidget } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
 import { getData } from '../../helpers/generateDataSourceData';
+import { groupingDataSource, groupingDataSourceFields } from '../helpers/data';
 
 const DATA_GRID_SELECTOR = '#container';
 
@@ -74,4 +75,131 @@ safeSizeTest('There should be no way to set a sticky fixed position for columns 
     columns[0].fixed = true;
     columns[1].fixed = true;
   },
+}));
+
+safeSizeTest('should render group row in scroll right max position', async (t) => {
+  const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  await t.expect(dataGrid.isReady()).ok();
+
+  // NOTE: Scroll to max right position
+  await dataGrid.scrollTo(t, { x: 9999999 });
+
+  await t.expect(dataGrid.isReady()).ok();
+  await takeScreenshot('virtual_columns_with_grouping_scroll_right.png', dataGrid.element);
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: groupingDataSource,
+  columns: [
+    {
+      dataField: 'groupFieldA',
+      groupIndex: 0,
+      fixed: true,
+    },
+    ...groupingDataSourceFields.map((dataField) => ({
+      dataField,
+      width: 100,
+    })),
+  ],
+  groupPanel: {
+    visible: true,
+  },
+  grouping: {
+    autoExpandAll: true,
+  },
+  scrolling: {
+    columnRenderingMode: 'virtual',
+  },
+  // NOTE: 3x columns (by 100px each) + 30px command column
+  width: 330,
+}));
+
+safeSizeTest('should render nested group row in scroll right max position', async (t) => {
+  const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  await t.expect(dataGrid.isReady()).ok();
+
+  // NOTE: Scroll to max right position
+  await dataGrid.scrollTo(t, { x: 9999999 });
+
+  await t.expect(dataGrid.isReady()).ok();
+  await takeScreenshot('virtual_columns_with_nested_grouping_scroll_right.png', dataGrid.element);
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: groupingDataSource,
+  columns: [
+    {
+      dataField: 'groupFieldA',
+      groupIndex: 0,
+      fixed: true,
+    },
+    {
+      dataField: 'groupFieldB',
+      groupIndex: 1,
+      fixed: true,
+    },
+    ...groupingDataSourceFields.map((dataField) => ({
+      dataField,
+      width: 100,
+    })),
+  ],
+  groupPanel: {
+    visible: true,
+  },
+  grouping: {
+    autoExpandAll: true,
+  },
+  scrolling: {
+    columnRenderingMode: 'virtual',
+  },
+  // NOTE: 3x columns (by 100px each) + 30px command column
+  width: 330,
+}));
+
+safeSizeTest('expand group icon should be clickable in scroll right max position', async (t) => {
+  const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  await t.expect(dataGrid.isReady()).ok();
+
+  // NOTE: Scroll to max right position
+  await dataGrid.scrollTo(t, { x: 9999999 });
+  const expandCell = dataGrid.getGroupRow(1).getCell(0);
+  await t.click(expandCell.element);
+
+  await t.expect(dataGrid.isReady()).ok();
+  await takeScreenshot('virtual_columns_with_grouping_expand_scroll_right.png', dataGrid.element);
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: groupingDataSource,
+  columns: [
+    {
+      dataField: 'groupFieldA',
+      groupIndex: 0,
+      fixed: true,
+    },
+    ...groupingDataSourceFields.map((dataField) => ({
+      dataField,
+      width: 100,
+    })),
+  ],
+  groupPanel: {
+    visible: true,
+  },
+  grouping: {
+    autoExpandAll: false,
+  },
+  scrolling: {
+    columnRenderingMode: 'virtual',
+  },
+  // NOTE: 3x columns (by 100px each) + 30px command column
+  width: 330,
 }));

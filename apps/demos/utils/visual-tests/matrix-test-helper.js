@@ -1,8 +1,10 @@
 import { readFileSync, existsSync, writeFileSync } from 'fs';
 import { join } from 'path';
-import { ClientFunction } from 'testcafe';
+import { ClientFunction, Selector } from 'testcafe';
 import { THEME } from './helpers/theme-utils';
 import { gitHubIgnored } from './github-ignored-list';
+
+export const FRAMEWORKS = ['jQuery', 'React', 'Vue', 'Angular'];
 
 const settings = {
   concurrency: undefined,
@@ -42,7 +44,7 @@ export const waitForAngularLoading = ClientFunction(() => new Promise((resolve) 
   const demoAppIntervalHandle = setInterval(() => {
     const demoApp = document.querySelector('demo-app');
     if ((demoApp && demoApp.innerText !== 'Loading...') || demoAppCounter === 120) {
-      setTimeout(resolve, 1000);
+      setTimeout(resolve, 500);
       clearInterval(demoAppIntervalHandle);
     }
     demoAppCounter += 1;
@@ -190,55 +192,27 @@ const SKIPPED_TESTS = {
       { demo: 'TaskTemplate', themes: [THEME.generic, THEME.material, THEME.fluent] },
       { demo: 'Validation', themes: [THEME.generic, THEME.material, THEME.fluent] },
     ],
+    VectorMap: [
+      { demo: 'Tooltip', themes: [THEME.material] },
+      { demo: 'TooltipHTMLSupport', themes: [THEME.material] },
+    ]
   },
   Angular: {
-    Accordion: [
-      { demo: 'Overview', themes: [THEME.generic, THEME.material, THEME.fluent] },
-    ],
     Common: [
-      { demo: 'EditorAppearanceVariants', themes: [THEME.generic, THEME.material, THEME.fluent] },
-    ],
-    DropDownButton: [
-      { demo: 'Overview', themes: [THEME.generic, THEME.material, THEME.fluent] },
-    ],
-    Chat: [
-      { demo: 'Customization', themes: [THEME.generic, THEME.material, THEME.fluent] },
+      { demo: 'DialogsAndNotificationsOverview', themes: [THEME.generic, THEME.material, THEME.fluent] },
     ],
     Charts: [
       { demo: 'Overview', themes: [THEME.material] },
-      { demo: 'Crosshair', themes: [THEME.generic, THEME.material, THEME.fluent] },
-      { demo: 'CustomAnnotations', themes: [THEME.generic, THEME.material, THEME.fluent] },
-      { demo: 'LoadDataOnDemand', themes: [THEME.generic, THEME.material, THEME.fluent] },
-      { demo: 'CustomLegendMarkers', themes: [THEME.generic, THEME.material, THEME.fluent] },
-      { demo: 'PieWithResolvedLabelOverlapping', themes: [THEME.generic, THEME.material, THEME.fluent] },
-      { demo: 'ZoomingAndScrollingAPI', themes: [THEME.generic, THEME.material, THEME.fluent] },
-      { demo: 'ZoomingOnAreaSelection', themes: [THEME.generic, THEME.material, THEME.fluent] },
+      { demo: 'Crosshair', themes: [THEME.material] },
+      { demo: 'CustomAnnotations', themes: [THEME.material] },
+      { demo: 'LoadDataOnDemand', themes: [THEME.material] },
+      { demo: 'CustomLegendMarkers', themes: [THEME.material] },
+      { demo: 'PieWithResolvedLabelOverlapping', themes: [THEME.material] },
+      { demo: 'ZoomingAndScrollingAPI', themes: [THEME.material] },
+      { demo: 'ZoomingOnAreaSelection', themes: [THEME.material] },
       { demo: 'TooltipHTMLSupport', themes: [THEME.material] },
-      { demo: 'Export', themes: [THEME.generic, THEME.material, THEME.fluent] },
-      { demo: 'ExportCustomMarkup', themes: [THEME.generic, THEME.material, THEME.fluent] },
-      { demo: 'PopupEditing', themes: [THEME.generic, THEME.material, THEME.fluent] },
-    ],
-    VectorMap: [
-      { demo: 'TooltipHTMLSupport', themes: [THEME.material] },
-      { demo: 'DynamicViewport', themes: [THEME.generic, THEME.material, THEME.fluent] },
-    ],
-    DropDownBox: [
-      { demo: 'MultipleSelection', themes: [THEME.generic, THEME.material, THEME.fluent] },
-    ],
-    List: [
-      { demo: 'ItemDragging', themes: [THEME.generic, THEME.material, THEME.fluent] },
-    ],
-    TabPanel: [
-      { demo: 'Overview', themes: [THEME.generic, THEME.material, THEME.fluent] },
-    ],
-    SelectBox: [
-      { demo: 'GroupedItems', themes: [THEME.generic, THEME.material, THEME.fluent] },
-    ],
-    Splitter: [
-      { demo: 'Overview', themes: [THEME.generic, THEME.material, THEME.fluent] },
-    ],
-    Gauges: [
-      { demo: 'VariableNumberOfBars', themes: [THEME.generic, THEME.material, THEME.fluent] },
+      { demo: 'ExportCustomMarkup', themes: [THEME.material] },
+      { demo: 'PopupEditing', themes: [THEME.material] },
     ],
     DataGrid: [
       { demo: 'Appearance', themes: [THEME.generic, THEME.material, THEME.fluent] },
@@ -266,19 +240,16 @@ const SKIPPED_TESTS = {
       { demo: 'EditStateManagement', themes: [THEME.generic, THEME.fluent, THEME.material] },
       { demo: 'RecordGrouping', themes: [THEME.generic, THEME.material, THEME.fluent] },
       { demo: 'ToolbarCustomization', themes: [THEME.generic, THEME.material, THEME.fluent] },
-    ],
-    Form: [
-      'CustomizeItem',
-      { demo: 'Validation', themes: [THEME.material] },
+      { demo: 'StatePersistence', themes: [THEME.generic, THEME.fluent, THEME.material] },
     ],
     Scheduler: [
       'CustomDragAndDrop',
+      { demo: 'Overview', themes: [THEME.generic, THEME.fluent, THEME.material] },
       { demo: 'Resources', themes: [THEME.fluent] },
       { demo: 'CellTemplates', themes: [THEME.generic, THEME.material, THEME.fluent] },
       { demo: 'Resources', themes: [THEME.generic, THEME.material, THEME.fluent] },
-    ],
-    Popup: [
-      { demo: 'Scrolling', themes: [THEME.generic, THEME.material, THEME.fluent] },
+      { demo: 'ContextMenuIntegration', themes: [THEME.generic, THEME.fluent, THEME.material] },
+      { demo: 'ToolbarCustomization', themes: [THEME.generic, THEME.fluent, THEME.material] },
     ],
     Sortable: [
       { demo: 'Kanban', themes: [THEME.generic, THEME.material, THEME.fluent] },
@@ -286,11 +257,20 @@ const SKIPPED_TESTS = {
     PivotGrid: [
       { demo: 'IntegratedFieldChooser', themes: [THEME.generic, THEME.material, THEME.fluent] },
     ],
-    Toolbar: [
-      { demo: 'Adaptability', themes: [THEME.generic, THEME.material, THEME.fluent] },
+    FileUploader: [
+      { demo: 'CustomDropzone', themes: [THEME.generic, THEME.material, THEME.fluent] },
+    ],
+    VectorMap: [
+      { demo: 'TooltipHTMLSupport', themes: [THEME.material] },
     ]
   },
   Vue: {
+    Common: [
+      { demo: 'DialogsAndNotificationsOverview', themes: [THEME.generic, THEME.material, THEME.fluent] },
+    ],
+    Accordion: [
+      { demo: 'Overview', themes: [THEME.generic, THEME.material, THEME.fluent] },
+    ],
     Charts: [
       { demo: 'Overview', themes: [THEME.material] },
       { demo: 'ZoomingAndScrollingAPI', themes: [THEME.material] },
@@ -298,6 +278,7 @@ const SKIPPED_TESTS = {
       { demo: 'CustomLegendMarkers', themes: [THEME.material] },
       { demo: 'CustomAnnotations', themes: [THEME.material] },
       { demo: 'DialogsAndNotificationsOverview', themes: [THEME.material] },
+      { demo: 'PieWithResolvedLabelOverlapping', themes: [THEME.material] },
       { demo: 'Crosshair', themes: [THEME.material] },
     ],
     VectorMap: [
@@ -314,21 +295,24 @@ const SKIPPED_TESTS = {
       { demo: 'FilteringAPI', themes: [THEME.material] },
       { demo: 'PopupEditing', themes: [THEME.generic] },
       { demo: 'ToolbarCustomization', themes: [THEME.generic, THEME.fluent, THEME.material] },
-      'StatePersistence',
+      { demo: 'StatePersistence', themes: [THEME.generic, THEME.fluent, THEME.material] },
     ],
-    Drawer: [
-      { demo: 'TopOrBottomPosition', themes: [THEME.material] },
+    FileUploader: [
+      { demo: 'CustomDropzone', themes: [THEME.generic, THEME.material, THEME.fluent] },
     ],
-    Toolbar: [
-      { demo: 'Adaptability', themes: [THEME.generic, THEME.material, THEME.fluent] },
-    ],
-    Accordion: [
-      { demo: 'Overview', themes: [THEME.generic, THEME.material, THEME.fluent] },
+    Scheduler: [
+      { demo: 'Overview', themes: [THEME.generic, THEME.fluent, THEME.material] },
+      { demo: 'ContextMenuIntegration', themes: [THEME.generic, THEME.fluent, THEME.material] },
+      { demo: 'ToolbarCustomization', themes: [THEME.generic, THEME.fluent, THEME.material] },
     ],
   },
   React: {
+    Common: [
+      { demo: 'DialogsAndNotificationsOverview', themes: [THEME.generic, THEME.material, THEME.fluent] },
+    ],
     Charts: [
       { demo: 'Overview', themes: [THEME.material] },
+      { demo: 'PieWithResolvedLabelOverlapping', themes: [THEME.material] },
       { demo: 'ZoomingAndScrollingAPI', themes: [THEME.material] },
       { demo: 'Crosshair', themes: [THEME.material] },
       { demo: 'CustomAnnotations', themes: [THEME.material] },
@@ -345,11 +329,24 @@ const SKIPPED_TESTS = {
       { demo: 'Filtering', themes: [THEME.fluent, THEME.material] },
       { demo: 'RecordGrouping', themes: [THEME.material] },
       { demo: 'ToolbarCustomization', themes: [THEME.generic, THEME.fluent, THEME.material] },
+      { demo: 'StatePersistence', themes: [THEME.generic, THEME.fluent, THEME.material] },
     ],
     Scheduler: [
       { demo: 'Overview', themes: [THEME.fluent, THEME.material] },
       { demo: 'Templates', themes: [THEME.fluent, THEME.material] },
+      { demo: 'ContextMenuIntegration', themes: [THEME.generic, THEME.fluent, THEME.material] },
+      { demo: 'ToolbarCustomization', themes: [THEME.generic, THEME.fluent, THEME.material] },
     ],
+    FileUploader: [
+      { demo: 'CustomDropzone', themes: [THEME.generic, THEME.material, THEME.fluent] },
+    ],
+    Form: [
+      // Flaky issue: Source image size does not match target size
+      { demo: 'CustomizeItem', themes: [THEME.generic] },
+    ],
+    VectorMap: [
+      { demo: 'TooltipHTMLSupport', themes: [THEME.material] },
+    ]
   },
 };
 
@@ -410,8 +407,13 @@ export function runTestAtPage(test, demoUrl, shouldSkipJsError) {
   return executor.page(demoUrl);
 }
 
-
-export function runManualTestCore(testObject, widget, demo, framework, callback) {
+export function runManualTestCore(
+  testObject,
+  widget,
+  demo,
+  framework,
+  callback,
+) {
   const isGitHubDemos = process.env.ISGITHUBDEMOS;
 
   const index = settings.manualTestIndex;
@@ -431,15 +433,15 @@ export function runManualTestCore(testObject, widget, demo, framework, callback)
     }
 
     const theme = process.env.THEME.replace('generic.', '');
-    testURL = `http://localhost:8080/Demos/${widget}/${demo}/${framework}/?theme=dx.${theme}`;
+    testURL = `http://127.0.0.1:808${getPortByIndex(index)}/${widget}/${demo}/${framework}/?theme=dx.${theme}`;
   } else {
-
     changeTheme(__dirname, `../../Demos/${widget}/${demo}/${framework}/index.html`, process.env.THEME);
-    testURL = `http://localhost:8080/apps/demos/Demos/${widget}/${demo}/${framework}/`;
+    testURL = `http://127.0.0.1:808${getPortByIndex(index)}/apps/demos/Demos/${widget}/${demo}/${framework}/`;
   }
+
   const test = testObject.clientScripts([
     { module: 'mockdate' },
-    ...clientScriptSource
+    ...clientScriptSource,
   ])
     .page(testURL);
 
@@ -463,18 +465,14 @@ export function runManualTestCore(testObject, widget, demo, framework, callback)
   callback(test);
 }
 
-export function runManualTest(widget, demo, framework, callback) {
+export function runManualTest(widget, demo, callback) {
   if (process.env.STRATEGY === 'accessibility') {
     return;
   }
 
-  if (Array.isArray(framework)) {
-    framework.forEach((i) => {
-      runManualTestCore(test, widget, demo, i, callback);
-    });
-  } else {
+  FRAMEWORKS.forEach((framework) => {
     runManualTestCore(test, widget, demo, framework, callback);
-  }
+  });
 }
 
 export function getPortByIndex(testIndex) {

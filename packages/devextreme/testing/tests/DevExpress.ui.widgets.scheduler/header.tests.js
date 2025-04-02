@@ -69,21 +69,6 @@ module('Material-based themes', {
 });
 
 module('Toolbar config', () => {
-    test('should rerender after items configuration changes', function(assert) {
-        const scheduler = createWrapper({
-            currentView: 'month',
-            views: ['month'],
-        });
-
-        const headerInstance = scheduler.instance._header;
-
-        const stub = sinon.stub(headerInstance, '_render');
-
-        scheduler.option('toolbar', []);
-
-        assert.ok(stub.calledOnce, 'Render method is called');
-    });
-
     test('should render default items with swapped positions', function(assert) {
         const scheduler = createWrapper({
             currentView: 'month',

@@ -2,12 +2,11 @@ import { ClientFunction } from 'testcafe';
 import { runManualTest } from '../../../utils/visual-tests/matrix-test-helper';
 
 fixture('Charts.Export')
-  .page('http://localhost:8080/')
   .before(async (ctx) => {
     ctx.initialWindowSize = [900, 600];
   });
 
-runManualTest('Charts', 'ExportCustomMarkup', ['jQuery', 'React', 'Vue', 'Angular'], (test) => {
+runManualTest('Charts', 'ExportCustomMarkup', (test) => {
   test('Export', async (t) => {
     let isFileCreateForDownload = false;
 

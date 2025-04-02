@@ -71,8 +71,6 @@ class TagBox<
 
   _filteredGroupedItemsLoadPromise?: DeferredObj<unknown>;
 
-  _isInputReady?: DeferredObj<unknown>;
-
   _selectAllValueChangeAction?: (event?: Record<string, unknown>) => void;
 
   _multiTagPreparingAction?: (event?: Record<string, unknown>) => void;
@@ -94,6 +92,8 @@ class TagBox<
   _tagElementsCache?: dxElementWrapper;
 
   _selectedItems?: any[];
+
+  _tagsToRender?: any[];
 
   _supportedKeys(): Record<
   // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
@@ -731,10 +731,7 @@ class TagBox<
     this._renderInputSize();
     this._renderTags()
     // @ts-expect-error ts-error
-      .done(() => {
-        this._popup?.refreshPosition();
-        d.resolve();
-      })
+      .done(d.resolve)
       .fail(d.reject);
     // @ts-expect-error ts-error
     return d.promise();
@@ -1045,7 +1042,8 @@ class TagBox<
       this._selectedItems = this._getItemsFromPlain(this._valuesToUpdate);
 
       if (this._selectedItems.length === this._valuesToUpdate.length) {
-        this._renderTagsImpl(this._selectedItems);
+        this._tagsToRender = this._selectedItems;
+        this._renderTagsImpl();
         isPlainDataUsed = true;
         d.resolve();
       }
@@ -1060,7 +1058,8 @@ class TagBox<
             return;
           }
 
-          this._renderTagsImpl(items);
+          this._tagsToRender = items;
+          this._renderTagsImpl();
           d.resolve();
         })
         .fail(d.reject);
@@ -1069,12 +1068,15 @@ class TagBox<
     return d.promise();
   }
 
-  _renderTagsImpl(items): void {
-    this._renderTagsCore(items);
-    this._renderEmptyState();
+  _renderTagsImpl(): void {
+    this._renderField();
+    // @ts-expect-error ts-error
+    this.option('selectedItems', this._selectedItems.slice());
+    this._cleanTags();
 
-    if (!this._preserveFocusedTag) {
-      this._clearTagFocus();
+    const fieldTemplate = this._getFieldTemplate();
+    if (!fieldTemplate) {
+      this._renderTagsCore();
     }
   }
 
@@ -1134,32 +1136,24 @@ class TagBox<
   }
 
   _integrateInput(): void {
-    // @ts-expect-error ts-error
-    this._isInputReady.resolve();
     super._integrateInput();
 
     const tagsContainer = this.$element().find(`.${TEXTEDITOR_INPUT_CONTAINER_CLASS}`);
 
     this._updateTagsContainer(tagsContainer);
     this._renderTagRemoveAction();
+    this._renderTagsCore();
   }
 
-  _renderTagsCore(items): void {
-    this._isInputReady?.reject();
+  _renderTagsCore(): void {
+    this._renderTagsElements(this._tagsToRender);
+    this._renderEmptyState();
 
-    this._isInputReady = Deferred();
-    this._renderField();
-    // @ts-expect-error ts-error
-    this.option('selectedItems', this._selectedItems.slice());
-    this._cleanTags();
-
-    if (this._input().length > 0) {
-      this._isInputReady.resolve();
+    if (!this._preserveFocusedTag) {
+      this._clearTagFocus();
     }
 
-    when(this._isInputReady).done(() => {
-      this._renderTagsElements(items);
-    });
+    this._popup?.refreshPosition();
   }
 
   _renderTagsElements(items): void {
@@ -1661,6 +1655,7 @@ class TagBox<
     super._clean();
     delete this._valuesToUpdate;
     delete this._tagTemplate;
+    delete this._tagsToRender;
   }
 
   _getSelectedItemsDifference(newItems, previousItems) {

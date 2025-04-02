@@ -73,7 +73,7 @@ import {
 } from 'devextreme-vue/vector-map';
 
 import DxTextBox from 'devextreme-vue/text-box';
-import DxSelectBox from 'devextreme-vue/select-box';
+import DxSelectBox, { type DxSelectBoxTypes } from 'devextreme-vue/select-box';
 import DxSwitch from 'devextreme-vue/switch';
 import * as mapsData from 'devextreme-dist/js/vectormap-data/world.js';
 import { viewportCoordinates } from './data.ts';
@@ -86,7 +86,7 @@ const panVisible = ref(true);
 const zoomVisible = ref(true);
 const map = ref();
 
-function continentChanged({ value }) {
+function continentChanged({ value }: DxSelectBoxTypes.ValueChangedEvent) {
   map.value.instance.viewport(value);
 }
 function centerChanged({ center }) {

@@ -5,6 +5,7 @@ import registerComponent from '@js/core/component_registrator';
 import devices from '@js/core/devices';
 import errors from '@js/core/errors';
 import $ from '@js/core/renderer';
+import { getPathParts } from '@js/core/utils/data';
 import dateUtils from '@js/core/utils/date';
 import { extend } from '@js/core/utils/extend';
 import type { dxSchedulerOptions, ViewType } from '@js/ui/scheduler';
@@ -44,7 +45,7 @@ export class SchedulerHeader extends Widget<dxSchedulerOptions> {
 
   eventMap: any;
 
-  _toolbar: any;
+  _toolbar!: Toolbar;
 
   _calendar: any;
 
@@ -83,7 +84,6 @@ export class SchedulerHeader extends Widget<dxSchedulerOptions> {
             this.option('views') as ViewType[],
           );
         }]],
-        ['toolbar', [this.repaint.bind(this)]],
         ['views', [validateViews]],
         ['currentDate', [this._getCalendarOptionUpdater('value')]],
         ['min', [this._getCalendarOptionUpdater('min')]],
@@ -112,6 +112,32 @@ export class SchedulerHeader extends Widget<dxSchedulerOptions> {
       events.forEach((event) => {
         event(value);
       });
+    }
+  }
+
+  onToolbarOptionChanged(fullName: string, value: unknown): void {
+    const parts = getPathParts(fullName);
+    const optionName = fullName.replace(/^toolbar\./, '');
+
+    this.option(fullName, value);
+    switch (true) {
+      case fullName === 'toolbar':
+        this.repaint();
+        break;
+      case fullName === 'toolbar.items':
+        this._toolbar.option(
+          'items',
+          (value as []).map((item) => this._parseItem(item)),
+        );
+        break;
+      case parts[1] === 'items' && parts.length === 3:
+        // `toolbar.items[i]` case
+        this._toolbar.option(optionName, this._parseItem(value));
+        break;
+      default:
+        // `toolbar.prop` case
+        // `toolbar.items[i].prop` case
+        this._toolbar.option(optionName, value);
     }
   }
 
@@ -175,7 +201,7 @@ export class SchedulerHeader extends Widget<dxSchedulerOptions> {
       }
     }
 
-    return item;
+    return extend(true, {}, item);
   }
 
   _callEvent(event, arg) {
