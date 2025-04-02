@@ -9603,7 +9603,7 @@ declare module DevExpress.ui {
      * [descr:dxCalendar.reset(value)]
      */
     reset(
-      value?: DevExpress.common.DateLike | DevExpress.common.DateLike[]
+      value?: DevExpress.common.DateLike | Array<Date | number | string | null>
     ): void;
   }
   module dxCalendar {
@@ -12902,7 +12902,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxDateRangeBox.reset(value)]
      */
-    reset(value?: DevExpress.common.DateLike[]): void;
+    reset(value?: Array<Date | number | string | null>): void;
   }
   module dxDateRangeBox {
     /**

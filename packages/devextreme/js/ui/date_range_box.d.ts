@@ -336,7 +336,7 @@ export default class dxDateRangeBox extends DateRangeBoxBase {
    * @publicName reset(value)
    * @public
    */
-  reset(value?: DateLike[]): void;
+  reset(value?: Array< Date | number | string | null >): void;
 }
 
 /// #DEBUG
