@@ -281,7 +281,7 @@ const iconSet = {
   checkmarkcircle: '\f183',
   clipboardtasklist: '\f184',
   today: '\f185',
-  daterange: '\f186',
+  daterangepicker: '\f186',
   cardcontent: '\f187',
   cursormove: '\f188',
   cursorprohibition: '\f189',
