@@ -32,10 +32,7 @@ const getGroupInterval = function(column) {
 };
 
 const getNormalizedCalculateDisplayValue = function(column) {
-    if(column.calculateDisplayValue?.context) {
-        return column.calculateDisplayValue;
-    }
-    return null;
+    return column.calculateDisplayValue?.context ? column.calculateDisplayValue : null;
 };
 
 export default (function() {

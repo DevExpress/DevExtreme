@@ -6,6 +6,8 @@ import type { Options as GridCoreOptions } from '@ts/grids/new/grid_core/options
 
 const SELECTORS = {
   cardContent: 'dx-cardview-card-content',
+  searchPanel: 'dx-cardview-search-panel',
+  editorInput: 'dx-texteditor-input',
 };
 
 const setup = (options: GridCoreOptions = {}) => {
@@ -100,5 +102,73 @@ describe('Options', () => {
     const content = getCardContent(container);
 
     expect(content).toMatchSnapshot();
+  });
+
+  it('searchPanel.width', () => {
+    const { container } = setup({
+      searchPanel: {
+        visible: true,
+        width: 333,
+      },
+    });
+
+    rerender();
+
+    const searchPanel = container.querySelector(`.${SELECTORS.searchPanel}`);
+    expect(searchPanel).not.toBeNull();
+    expect(searchPanel?.getAttribute('style')).toContain('width: 333px');
+  });
+
+  it('searchPanel.placeholder', () => {
+    const { container } = setup({
+      searchPanel: {
+        visible: true,
+        placeholder: 'Search here',
+      },
+    });
+
+    rerender();
+
+    const searchPanel = container.querySelector(`.${SELECTORS.searchPanel}`);
+    const searchInput = searchPanel?.querySelector(`.${SELECTORS.editorInput}`);
+    expect(searchInput?.getAttribute('placeholder')).toContain('Search here');
+  });
+
+  it('searchPanel.visible = false', () => {
+    const { container } = setup({
+      searchPanel: {
+        visible: false,
+      },
+    });
+
+    rerender();
+
+    const searchPanel = container.querySelector(`.${SELECTORS.searchPanel}`);
+    expect(searchPanel).toBeNull();
+  });
+
+  it('searchPanel.searchVisibleColumnsOnly = true', () => {
+    const { container } = setup({
+      dataSource: [
+        { name: 'John Doe john', lastName: 'last name' },
+      ],
+      columns: [
+        'name',
+        {
+          dataField: 'lastName',
+          visible: false,
+        },
+      ],
+      searchPanel: {
+        visible: true,
+        text: 'last',
+        searchVisibleColumnsOnly: true,
+      },
+    });
+
+    rerender();
+
+    const content = container.querySelector(`.${SELECTORS.cardContent}`);
+    expect(content).toBeNull();
   });
 });
