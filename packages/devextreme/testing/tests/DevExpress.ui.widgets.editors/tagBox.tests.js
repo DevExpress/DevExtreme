@@ -695,51 +695,6 @@ QUnit.module('tags', moduleSetup, () => {
         });
     });
 
-    QUnit.test('Tags should be rendered on start if fieldTemplate is async (T1056792)', function(assert) {
-        const done = assert.async();
-        assert.expect(1);
-        this.clock.restore();
-
-        let rendered = false;
-        const $tagBox = $('#tagBox').dxTagBox({
-            items: [{ name: 'one', value: 1 }, { name: 'two', value: 2 }],
-            displayExpr: 'name',
-            valueExpr: 'value',
-            value: [1],
-            fieldTemplate: 'fieldTemplate',
-            templatesRenderAsynchronously: true,
-            integrationOptions: {
-                templates: {
-                    fieldTemplate: {
-                        render: (data) => {
-                            const text = $('<div>');
-                            if(!rendered) {
-                                setTimeout(() => {
-                                    text.dxTextBox({});
-                                    data.container.append(text.get(0));
-                                    data.onRendered();
-                                    rendered = true;
-                                }, TIME_TO_WAIT / 2);
-                            } else {
-                                text.dxTextBox({});
-                                data.container.append(text);
-                                data.onRendered();
-                            }
-
-                            return text;
-                        }
-                    }
-                }
-            },
-        });
-
-        setTimeout(() => {
-            const $tag = $tagBox.find(`.${TAGBOX_TAG_CLASS}`);
-            assert.equal($tag.length, 1, 'tag was rendered');
-            done();
-        }, TIME_TO_WAIT);
-    });
-
     ['items', 'dataSource'].forEach((optionName) => {
         QUnit.test('TagBox should not have unexpected selected tags when value includes item that doesn\'t exist in items', function(assert) {
             const options = { value: [1, 11] };
@@ -1783,7 +1738,7 @@ QUnit.module('placeholder', () => {
 
         $($clearButton).trigger('dxclick');
 
-        const $placeholder = $tagBox.find('.dx-placeholder');
+        const $placeholder = $tagBox.find(`.${PLACEHOLDER_CLASS}`);
 
         assert.notEqual($placeholder.css('display'), 'none', 'placeholder was appear');
         assert.equal($placeholder.is(':visible'), true, 'placeholder was appear');
@@ -1796,7 +1751,7 @@ QUnit.module('placeholder', () => {
             searchEnabled: true
         });
 
-        const $placeholder = $tagBox.find('.dx-placeholder');
+        const $placeholder = $tagBox.find(`.${PLACEHOLDER_CLASS}`);
         const $input = $tagBox.find('.dx-texteditor-input');
 
         keyboardMock($input).type('123');
@@ -1810,7 +1765,7 @@ QUnit.module('placeholder', () => {
             searchEnabled: true
         });
 
-        const $placeholder = $tagBox.find('.dx-placeholder');
+        const $placeholder = $tagBox.find(`.${PLACEHOLDER_CLASS}`);
         const $input = $tagBox.find('.dx-texteditor-input');
 
         keyboardMock($input).type('5');
@@ -1851,7 +1806,7 @@ QUnit.module('placeholder', () => {
         $input = $tagBox.find('.dx-texteditor-input');
         $input.trigger('blur');
 
-        const $placeholder = $tagBox.find('.dx-placeholder');
+        const $placeholder = $tagBox.find(`.${PLACEHOLDER_CLASS}`);
         assert.notOk($placeholder.is(':visible'), 'placeholder is not visible');
     });
 });
@@ -3749,7 +3704,7 @@ QUnit.module('searchEnabled', moduleSetup, () => {
 
         keyboardMock($tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`)).type('test');
 
-        const $placeholder = $tagBox.find('.dx-placeholder');
+        const $placeholder = $tagBox.find(`.${PLACEHOLDER_CLASS}`);
 
         assert.ok($placeholder.is(':hidden'), 'placeholder is hidden');
     });
@@ -5288,8 +5243,8 @@ QUnit.module('the \'onSelectionChanged\' option', moduleSetup, () => {
     });
 });
 
-QUnit.module('the \'fieldTemplate\' option', moduleSetup, () => {
-    QUnit.test('the \'fieldTemplate\' function should be called only once on init and value change', function(assert) {
+QUnit.module('the fieldTemplate option', moduleSetup, () => {
+    QUnit.test('the fieldTemplate function should be called only once on init and value change', function(assert) {
         let callCount = 0;
 
         const tagBox = $('#tagBox').dxTagBox({
@@ -5308,7 +5263,7 @@ QUnit.module('the \'fieldTemplate\' option', moduleSetup, () => {
         assert.equal(callCount, 1, 'the \'fieldTemplate\' was called once on value change');
     });
 
-    QUnit.test('the \'fieldTemplate\' has correct arguments', function(assert) {
+    QUnit.test('the fieldTemplate has correct arguments', function(assert) {
         const args = [];
 
         const tagBox = $('#tagBox').dxTagBox({
@@ -5457,6 +5412,162 @@ QUnit.module('the \'fieldTemplate\' option', moduleSetup, () => {
         assert.deepEqual(focusSpy.args[1][0], { preventScroll: true }, 'focus() was called with preventScroll: true');
 
         focusSpy.restore();
+    });
+
+    QUnit.module('async', () => {
+        QUnit.test('Tags should be rendered on start if fieldTemplate is async (T1056792)', function(assert) {
+            const done = assert.async();
+            assert.expect(1);
+            this.clock.restore();
+
+            let rendered = false;
+            const $tagBox = $('#tagBox').dxTagBox({
+                items: [{ name: 'one', value: 1 }, { name: 'two', value: 2 }],
+                displayExpr: 'name',
+                valueExpr: 'value',
+                value: [1],
+                fieldTemplate: 'fieldTemplate',
+                templatesRenderAsynchronously: true,
+                integrationOptions: {
+                    templates: {
+                        fieldTemplate: {
+                            render: (data) => {
+                                const text = $('<div>');
+                                if(!rendered) {
+                                    setTimeout(() => {
+                                        text.dxTextBox({});
+                                        data.container.append(text.get(0));
+                                        data.onRendered();
+                                        rendered = true;
+                                    }, TIME_TO_WAIT / 2);
+                                } else {
+                                    text.dxTextBox({});
+                                    data.container.append(text);
+                                    data.onRendered();
+                                }
+
+                                return text;
+                            }
+                        }
+                    }
+                },
+            });
+
+            setTimeout(() => {
+                const $tag = $tagBox.find(`.${TAGBOX_TAG_CLASS}`);
+                assert.equal($tag.length, 1, 'tag was rendered');
+                done();
+            }, TIME_TO_WAIT);
+        });
+
+        QUnit.module('showSelectionControls=true', {
+            beforeEach: function() {
+                this.$tagBox = $('#tagBox').dxTagBox({
+                    items: [{ name: 'one', value: 1 }, { name: 'two', value: 2 }],
+                    displayExpr: 'name',
+                    valueExpr: 'value',
+                    value: [],
+                    showSelectionControls: true,
+                    fieldTemplate: 'fieldTemplate',
+                    templatesRenderAsynchronously: true,
+                    integrationOptions: {
+                        templates: {
+                            fieldTemplate: {
+                                render: (data) => {
+                                    const $textBox = $('<div>');
+                                    setTimeout(() => {
+                                        $textBox.dxTextBox({ placeholder: 'text' });
+                                        data.container.append($textBox.get(0));
+                                        data.onRendered();
+                                    }, TIME_TO_WAIT);
+
+                                    return $textBox;
+                                }
+                            }
+                        }
+                    },
+                });
+                this.tagBox = this.$tagBox.dxTagBox('instance');
+
+                this.clock.tick(TIME_TO_WAIT);
+            }
+        }, () => {
+            QUnit.test('popup should be repositioned correctly on selection change when popup is opened (T1283948)', function(assert) {
+                this.tagBox.open();
+
+                const $popupContent = $(this.tagBox.content());
+                const $listItems = $popupContent.find(`.${LIST_ITEM_CLASS}`);
+                const $firstItem = $listItems.eq(0);
+
+                const { top: initialTop } = $popupContent.offset();
+
+                $firstItem.trigger('dxclick');
+
+                this.clock.tick(TIME_TO_WAIT);
+
+                const { top: updatedTop } = $popupContent.offset();
+
+                assert.roughEqual(updatedTop, initialTop, 1, 'popup is positioned under the input');
+            });
+
+            QUnit.test('placeholder should be hidden after item is selected', function(assert) {
+                this.tagBox.open();
+
+                const $popupContent = $(this.tagBox.content());
+                const $listItems = $popupContent.find(`.${LIST_ITEM_CLASS}`);
+                const $firstItem = $listItems.eq(0);
+
+                $firstItem.trigger('dxclick');
+
+                this.clock.tick(TIME_TO_WAIT);
+
+                const $placeholder = this.$tagBox.find(`.${PLACEHOLDER_CLASS}`);
+                assert.notOk($placeholder.is(':visible'), 'placeholder is hidden');
+                const $tag = this.$tagBox.find(`.${TAGBOX_TAG_CLASS}`);
+                assert.strictEqual($tag.length, 1, 'tag is rendered');
+            });
+        });
+
+        QUnit.test('new tags should be rendered in React 18 strict mode', function(assert) {
+            const $tagBox = $('#tagBox').dxTagBox({
+                items: [{ name: 'one', value: 1 }, { name: 'two', value: 2 }],
+                displayExpr: 'name',
+                valueExpr: 'value',
+                value: [],
+                fieldTemplate: 'fieldTemplate',
+                templatesRenderAsynchronously: true,
+                integrationOptions: {
+                    templates: {
+                        fieldTemplate: {
+                            render: (data) => {
+                                const createTextBox = () => {
+                                    const $textBox = $('<div>');
+                                    $textBox.dxTextBox({ placeholder: 'text' });
+                                    return $textBox.get(0);
+                                };
+                                setTimeout(() => {
+                                    data.container.append(createTextBox());
+                                    data.onRendered();
+                                    $(data.container).empty();
+                                    data.container.append(createTextBox());
+                                    data.onRendered();
+                                }, TIME_TO_WAIT);
+                            }
+                        }
+                    }
+                },
+            });
+            const tagBox = $tagBox.dxTagBox('instance');
+
+            tagBox.option('value', [1]);
+
+            this.clock.tick(TIME_TO_WAIT);
+
+            const $tag = $tagBox.find(`.${TAGBOX_TAG_CLASS}`);
+            assert.strictEqual($tag.length, 1, 'tag is rendered');
+            const $placeholder = $tagBox.find(`.${PLACEHOLDER_CLASS}`);
+            assert.notOk($placeholder.is(':visible'), 'placeholder is hidden');
+        });
     });
 });
 

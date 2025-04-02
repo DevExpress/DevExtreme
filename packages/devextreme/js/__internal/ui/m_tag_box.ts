@@ -657,10 +657,7 @@ const TagBox = (SelectBox as any).inherit({
     this._updateTagsContainer(this._$textEditorInputContainer);
     this._renderInputSize();
     this._renderTags()
-      .done(() => {
-        this._popup && this._popup.refreshPosition();
-        d.resolve();
-      })
+      .done(d.resolve)
       .fail(d.reject);
 
     return d.promise();
@@ -956,7 +953,8 @@ const TagBox = (SelectBox as any).inherit({
       this._selectedItems = this._getItemsFromPlain(this._valuesToUpdate);
 
       if (this._selectedItems.length === this._valuesToUpdate.length) {
-        this._renderTagsImpl(this._selectedItems);
+        this._tagsToRender = this._selectedItems;
+        this._renderTagsImpl();
         isPlainDataUsed = true;
         d.resolve();
       }
@@ -970,7 +968,8 @@ const TagBox = (SelectBox as any).inherit({
             return;
           }
 
-          this._renderTagsImpl(items);
+          this._tagsToRender = items;
+          this._renderTagsImpl();
           d.resolve();
         })
         .fail(d.reject);
@@ -979,12 +978,15 @@ const TagBox = (SelectBox as any).inherit({
     return d.promise();
   },
 
-  _renderTagsImpl(items) {
-    this._renderTagsCore(items);
-    this._renderEmptyState();
+  _renderTagsImpl(): void {
+    this._renderField();
 
-    if (!this._preserveFocusedTag) {
-      this._clearTagFocus();
+    this.option('selectedItems', this._selectedItems.slice());
+    this._cleanTags();
+
+    const fieldTemplate = this._getFieldTemplate();
+    if (!fieldTemplate) {
+      this._renderTagsCore();
     }
   },
 
@@ -1042,31 +1044,24 @@ const TagBox = (SelectBox as any).inherit({
   },
 
   _integrateInput() {
-    this._isInputReady.resolve();
     this.callBase();
 
     const tagsContainer = this.$element().find(`.${TEXTEDITOR_INPUT_CONTAINER_CLASS}`);
 
     this._updateTagsContainer(tagsContainer);
     this._renderTagRemoveAction();
+    this._renderTagsCore();
   },
 
-  _renderTagsCore(items) {
-    this._isInputReady?.reject();
+  _renderTagsCore() {
+    this._renderTagsElements(this._tagsToRender);
+    this._renderEmptyState();
 
-    this._isInputReady = Deferred();
-    this._renderField();
-
-    this.option('selectedItems', this._selectedItems.slice());
-    this._cleanTags();
-
-    if (this._input().length > 0) {
-      this._isInputReady.resolve();
+    if (!this._preserveFocusedTag) {
+      this._clearTagFocus();
     }
 
-    when(this._isInputReady).done(() => {
-      this._renderTagsElements(items);
-    });
+    this._popup?.refreshPosition();
   },
 
   _renderTagsElements(items) {
@@ -1534,6 +1529,7 @@ const TagBox = (SelectBox as any).inherit({
     delete this._defaultTagTemplate;
     delete this._valuesToUpdate;
     delete this._tagTemplate;
+    delete this._tagsToRender;
   },
 
   _getSelectedItemsDifference(newItems, previousItems) {
