@@ -15,6 +15,7 @@ export function TemplateWrapper<TProps = {}>(template: TemplateType<TProps>) {
 
     private renderTemplate(): void {
       $(this.ref.current!).empty();
+
       template.render({
         container: $(this.ref.current!),
         model: this.props,

@@ -2,9 +2,9 @@
 import '@js/ui/button';
 import '@js/ui/check_box';
 
+import type { Properties as ToolbarProps } from '@js/ui/toolbar';
 import dxToolbar from '@js/ui/toolbar';
 
-import type { ToolbarProps } from '../toolbar/types';
 import { InfernoWrapper } from './widget_wrapper';
 
 export class Toolbar extends InfernoWrapper<ToolbarProps, dxToolbar> {
