@@ -14,8 +14,11 @@ import { ColumnChooserView } from './view';
 const createToolbarView = (
   columnsController: ColumnsController,
   optionsController: OptionsControllerMock,
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-) => {
+): {
+  toolbarElement: HTMLDivElement;
+  toolbar: ToolbarView;
+  toolbarController: ToolbarController;
+} => {
   const toolbarElement = document.createElement('div');
   const toolbarController = new ToolbarController(optionsController);
   // @ts-expect-error

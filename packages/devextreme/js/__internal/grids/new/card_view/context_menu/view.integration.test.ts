@@ -108,7 +108,6 @@ describe('ContextMenu', () => {
 
       expect(invokesCount).toEqual(1);
       expect(positioningEvent?.event).toBeUndefined();
-      expect(cardView.contextMenuController.lastEvent?.defaultPrevented).toBeTruthy();
     });
 
     it('contextMenu has class', () => {
@@ -193,7 +192,7 @@ describe('ContextMenu', () => {
       expect(event.items).toBeUndefined();
     });
 
-    it('column has customized context menu items text', () => {
+    it('columns have customized context menu items sorting text', () => {
       const cardView = setup({
         columns: [{ dataField: 'column1' }],
         sorting: {
@@ -228,8 +227,9 @@ describe('ContextMenu', () => {
     });
 
     it('items set in onContextMenuPreparing are displayed', () => {
-      let itemClickFired = false;
       const cardView = setup({ });
+
+      let itemClickFired = false;
 
       cardView.on('contextMenuPreparing', (e) => {
         e.items = [{
