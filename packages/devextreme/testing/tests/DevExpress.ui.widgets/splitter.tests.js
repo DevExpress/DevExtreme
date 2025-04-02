@@ -1605,6 +1605,47 @@ QUnit.module('Pane visibility', moduleConfig, () => {
     });
 });
 
+QUnit.module('Pane.template', moduleConfig, () => {
+    QUnit.test('ResizeHandle should not be duplicated when changing the template option at runtime (T1279224)', function(assert) {
+        const firstPaneTemplate = () => $('<div>').text('Pane 1');
+        const secondPaneTemplate = () => $('<div>').text('Pane 2');
+
+        this.reinit({
+            dataSource: [{
+                template: firstPaneTemplate
+            }, {
+                template: secondPaneTemplate
+            }]
+        });
+
+        this.instance.option({
+            'items[0].template': secondPaneTemplate,
+            'items[1].template': firstPaneTemplate,
+        });
+
+        assert.strictEqual(this.getResizeHandles().length, 1);
+    });
+
+    QUnit.test('Layout should restore the distribution when changing the template option at runtime (T1279224)', function(assert) {
+        const firstPaneTemplate = () => $('<div>').text('Pane 1');
+        const secondPaneTemplate = () => $('<div>').text('Pane 2');
+
+        this.reinit({
+            dataSource: [{
+                size: '300px',
+                template: firstPaneTemplate
+            }, {
+                template: secondPaneTemplate
+            }]
+        });
+
+        this.instance.option('items[0].template', secondPaneTemplate);
+
+        this.checkItemSizes([300, 692]);
+        this.assertLayout(['30.2419', '69.7581']);
+    });
+});
+
 QUnit.module('Resizing', moduleConfig, () => {
     ['horizontal', 'vertical'].forEach(orientation => {
         QUnit.test(`collapsed pane should move its neighboring pane on expansion to left, orientation ${orientation}`, function(assert) {
@@ -2928,6 +2969,24 @@ QUnit.module('Visibility of control elements', {
                 this.checkIconsVisibility(expectedVisibleIcons);
             });
         });
+    });
+
+    QUnit.test('ResizeHandle control elements visibility should be updated when changing the template option at runtime (T1279224)', function(assert) {
+        const firstPaneTemplate = () => $('<div>').text('Pane 1');
+        const secondPaneTemplate = () => $('<div>').text('Pane 2');
+
+        this.reinit({
+            dataSource: [{
+                template: firstPaneTemplate
+            }, {
+                template: secondPaneTemplate,
+                collapsible: true,
+            }]
+        });
+
+        this.instance.option('items[0].template', secondPaneTemplate);
+
+        this.checkIconsVisibility([{ prev: false, resize: true, next: true }]);
     });
 });
 
