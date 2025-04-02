@@ -8,11 +8,11 @@
     },
     "author": "Developer Express Inc.",
     "peerDependencies": {
-        "devextreme": "workspace:~",
-        "devextreme-angular": "workspace:~",
-        "devextreme-dist": "workspace:~",
-        "devextreme-react": "workspace:~",
-        "devextreme-vue": "workspace:~"
+        "devextreme": "workspace:*",
+        "devextreme-angular": "workspace:*",
+        "devextreme-dist": "workspace:*",
+        "devextreme-react": "workspace:*",
+        "devextreme-vue": "workspace:*"
     },
     "dependencies": {
         "@angular-devkit/build-angular": "17.3.11",
