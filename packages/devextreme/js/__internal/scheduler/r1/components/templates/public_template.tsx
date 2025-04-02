@@ -1,5 +1,5 @@
 import { equalByValue } from '@js/core/utils/common';
-import { getTemplate } from '@ts/core/r1/utils';
+import { getTemplate } from '@ts/core/r1/utils/index';
 import type { ComponentType } from 'inferno';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
