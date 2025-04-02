@@ -5,7 +5,7 @@ import { createRef } from 'inferno';
 export abstract class BaseContextMenuController<TTargetView, TContextInfo> {
   public readonly contextMenuRef = createRef<dxContextMenu>();
 
-  public lastEvent?: MouseEvent;
+  private lastEvent?: MouseEvent;
 
   public onPositioning = (e: PositioningEvent): void => {
     // @ts-expect-error

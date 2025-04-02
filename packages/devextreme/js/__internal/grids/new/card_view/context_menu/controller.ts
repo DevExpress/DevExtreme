@@ -9,7 +9,7 @@ import type { Column } from '../../grid_core/columns_controller/types';
 import { BaseContextMenuController } from '../../grid_core/context_menu/controller';
 import { OptionsController } from '../options_controller';
 
-interface ContextInfo {
+export interface ContextInfo {
   column?: Column;
   columnIndex?: number;
   card?: DataRow;
@@ -47,7 +47,7 @@ export class ContextMenuController
     }
 
     const event: ContextMenuPreparingEvent = {
-      items: items.length ? items : undefined,
+      items: Array.isArray(items) ? items : undefined,
       target: view,
       targetElement: targetElement as HTMLElement,
       columnIndex: undefined,

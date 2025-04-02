@@ -1,7 +1,7 @@
 /* eslint-disable spellcheck/spell-checker */
 import { describe, expect, it } from '@jest/globals';
 
-import { expectColumnVisibility, renderColumnChooser, renderColumnChooserWithToolbar } from './test-utils.test';
+import { expectColumnVisibility, renderColumnChooser, renderColumnChooserWithToolbar } from './test-utils';
 
 describe('ColumnChooser', () => {
   describe('View', () => {
@@ -40,10 +40,10 @@ describe('ColumnChooser', () => {
       const treeView = columnChooser.treeViewRef.current;
 
       treeView?.unselectItem(0);
-      expectColumnVisibility(columnsController, [false, true, true, true]);
+      expectColumnVisibility(expect, columnsController, [false, true, true, true]);
 
       treeView?.selectItem(0);
-      expectColumnVisibility(columnsController, [true, true, true, true]);
+      expectColumnVisibility(expect, columnsController, [true, true, true, true]);
     });
 
     it('toggles column visibility on selectAll/unselectAll', async () => {
@@ -60,10 +60,10 @@ describe('ColumnChooser', () => {
       const treeView = columnChooser.treeViewRef.current;
 
       treeView?.selectAll();
-      expectColumnVisibility(columnsController, [true, true]);
+      expectColumnVisibility(expect, columnsController, [true, true]);
 
       treeView?.unselectAll();
-      expectColumnVisibility(columnsController, [false, false]);
+      expectColumnVisibility(expect, columnsController, [false, false]);
     });
 
     it('toggles column visibility on selectAll/unselectAll when some column have showInColumnChooser=false', async () => {
@@ -81,7 +81,7 @@ describe('ColumnChooser', () => {
       const treeView = columnChooser.treeViewRef.current;
 
       treeView?.unselectAll();
-      expectColumnVisibility(columnsController, [false, true, false]);
+      expectColumnVisibility(expect, columnsController, [false, true, false]);
 
       // make second column invisible
       columnsController.columnOption(
@@ -91,7 +91,7 @@ describe('ColumnChooser', () => {
       );
 
       treeView?.selectAll();
-      expectColumnVisibility(columnsController, [true, false, true]);
+      expectColumnVisibility(expect, columnsController, [true, false, true]);
     });
 
     it('does not toggle columns with allowHiding=false on selectAll/unselectAll', async () => {
@@ -108,7 +108,7 @@ describe('ColumnChooser', () => {
       const treeView = columnChooser.treeViewRef.current;
 
       treeView?.unselectAll();
-      expectColumnVisibility(columnsController, [false, true]);
+      expectColumnVisibility(expect, columnsController, [false, true]);
 
       // make second column invisible
       columnsController.columnOption(
@@ -118,7 +118,7 @@ describe('ColumnChooser', () => {
       );
 
       treeView?.selectAll();
-      expectColumnVisibility(columnsController, [true, true]);
+      expectColumnVisibility(expect, columnsController, [true, true]);
     });
   });
 });
