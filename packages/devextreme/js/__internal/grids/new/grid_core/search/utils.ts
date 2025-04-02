@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import type { Format } from '@js/common';
 import dateLocalization from '@js/common/core/localization/date';
 import {
   isDefined, isFunction, isNumeric, isString,
@@ -74,31 +75,55 @@ export const allowSearch = (column: Column, searchVisibleColumnsOnly: boolean): 
   return allowSearchByDataField && allowSearchByVisibility && allowSearchByConfig;
 };
 
-export const parseValue = (column: Column, text: string): unknown => {
-  let result = null as any;
-
-  if (column.dataType === 'number') {
-    if (isString(text) && column.format) {
-      result = strictParseNumber(text.trim(), column.format);
-    } else if (isDefined(text) && isNumeric(text)) {
-      result = Number(text);
-    }
-  } else if (column.dataType === 'boolean') {
-    if (text === column.trueText) {
-      result = true;
-    } else if (text === column.falseText) {
-      result = false;
-    }
-  } else if (gridCoreUtils.isDateType(column.dataType)) {
-    // @ts-expect-error
-    const parsedValue = dateLocalization.parse(text, column.format);
-    if (parsedValue) {
-      result = parsedValue;
-    }
-  } else {
-    result = text;
+const parseNumberValue = (
+  text: string,
+  format?: Format,
+): unknown => {
+  switch (true) {
+    case isString(text) && !!format:
+      return strictParseNumber(text.trim(), format);
+    case isDefined(text) && isNumeric(text):
+      return Number(text);
+    default:
+      return null;
   }
-  return result;
+};
+
+const parseBooleanValue = (
+  text: string,
+  trueText?: string,
+  falseText?: string,
+): unknown => {
+  switch (true) {
+    case text === trueText:
+      return true;
+    case text === falseText:
+      return false;
+    default:
+      return null;
+  }
+};
+
+const parseDateValue = (
+  text: string,
+  format?: Format,
+): unknown => {
+  // @ts-expect-error
+  const parsedValue = dateLocalization.parse(text, format);
+  return parsedValue ?? null;
+};
+
+export const parseValue = (column: Column, text: string): unknown => {
+  switch (true) {
+    case column.dataType === 'number':
+      return parseNumberValue(text, column.format);
+    case column.dataType === 'boolean':
+      return parseBooleanValue(text, column.trueText, column.falseText);
+    case gridCoreUtils.isDateType(column.dataType):
+      return parseDateValue(text, column.format);
+    default:
+      return text;
+  }
 };
 
 export const createFilterExpression = (
