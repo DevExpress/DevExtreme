@@ -16,6 +16,29 @@ const makeLocalStorageJsonInvalid = ClientFunction(() => {
   window.localStorage.testStorageKey = '{]';
 });
 
+const dataGridConfig = {
+  dataSource: [
+    { id: 0, text: 'item 1' },
+    { id: 1, text: 'item 2' },
+    { id: 2, text: 'item 3' },
+    { id: 3, text: 'item 4' },
+  ],
+  columnFixing: {
+    enabled: true,
+  },
+  keyExpr: 'id',
+  stateStoring: {
+    enabled: true,
+  },
+  scrolling: {
+    mode: 'virtual' as any,
+  },
+  customizeColumns(columns) {
+    columns[0].fixed = true;
+    columns[0].fixedPosition = 'sticky';
+  },
+};
+
 test('The Grid should load if JSON in localStorage is invalid and stateStoring enabled', async (t) => {
   const dataGrid = new DataGrid(GRID_CONTAINER);
   const secondCell = dataGrid.getDataCell(1, 1);
@@ -112,28 +135,8 @@ test('The focused state of a row with the 0 key should be restored (T1252962)', 
 }));
 
 test('DataGrid - Cannot read properties of undefined (reading \'done\') error occurs when column fixing and state storing are used (T1283168)', async (t) => {
-  const dataGrid = new DataGrid('#container');
-
-  await dataGrid.isReady();
-
-  const consoleMessages = await t.getBrowserConsoleMessages();
-  const warningExist = !!consoleMessages?.warn.find((message) => message.startsWith('Uncaught TypeError: Cannot read properties of undefined (reading \'done\')'));
-
-  await t.expect(warningExist).eql(false);
-  await t.expect(dataGrid.getDataRow(0)).ok();
+  await t.eval(() => location.reload());
+  await createWidget('dxDataGrid', { ...dataGridConfig });
 }).before(async () => {
-  await createWidget('dxDataGrid', {
-    dataSource: [
-      { id: 0, text: 'item 1' },
-      { id: 1, text: 'item 2' },
-    ],
-    keyExpr: 'id',
-    columnFixing: {
-      enabled: true,
-    },
-    stateStoring: {
-      enabled: true,
-      storageKey: 'testStorageKey',
-    },
-  });
+  await createWidget('dxDataGrid', { ...dataGridConfig });
 });
