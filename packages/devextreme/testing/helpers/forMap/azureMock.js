@@ -22,8 +22,13 @@
                     }
 
                     if(eventName === 'ready') {
-                        callbackFun();
                         atlas.readyCallbackCalled = true;
+
+                        if(!window.postponeMapReadyPromise) {
+                            callbackFun();
+                        } else {
+                            atlas.mapReadyResolve = callbackFun;
+                        }
                     }
                 },
                 remove: (eventName) => {
