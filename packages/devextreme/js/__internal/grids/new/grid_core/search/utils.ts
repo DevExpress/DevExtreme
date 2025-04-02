@@ -107,11 +107,7 @@ export const createFilterExpression = (
   selectedFilterOperation: string | undefined,
   target: string,
 ): unknown => {
-  // eslint-disable-next-line @typescript-eslint/init-declarations
-  let result;
-  if (column.calculateFilterExpression) {
-    result = column.calculateFilterExpression(filterValue, selectedFilterOperation, target);
-  }
+  let result = column.calculateFilterExpression(filterValue, selectedFilterOperation, target);
   if (isFunction(result)) {
     result = [result, '=', true];
   }
