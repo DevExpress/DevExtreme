@@ -13,11 +13,15 @@ import { each } from '@js/core/utils/iterator';
 import {
   isDefined, isEmptyObject, isObject, isString,
 } from '@js/core/utils/type';
+import type { HtmlEditorAICommandName, HtmlEditorAIToolbarItem } from '@js/ui/html_editor';
 import type { Item } from '@js/ui/toolbar';
 import Toolbar from '@js/ui/toolbar';
 import errors from '@js/ui/widget/ui.errors';
 import Quill from 'devextreme-quill';
 
+import {
+  buildCommandsMap, capitalize, defaultCommandNames, getAICommandDefaultOptions,
+} from '../utils/m_ai';
 import { getTableFormats, TABLE_OPERATIONS } from '../utils/m_table_helper';
 import {
   applyFormat, getDefaultClickHandler, getFormatHandlers, ICON_MAP,
@@ -301,6 +305,10 @@ if (Quill) {
     }
 
     _handleObjectItem(item) {
+      if (item.name === 'ai') {
+        return this._getToolbarItem(this._prepareAIMenuItemConfig(item));
+      }
+
       if (item.name && item.acceptedValues && this._isAcceptableItem(item.widget, 'dxSelectBox')) {
         const selectItemConfig = this._prepareSelectItemConfig(item);
 
@@ -355,6 +363,81 @@ if (Quill) {
             }
           },
         },
+      }, item);
+    }
+
+    private _prepareAIOptions(parentCommand: string, options?: string[]) {
+      return options?.map((option) => ({
+        id: option,
+        text: option,
+        parentId: parentCommand,
+        options: options.map(capitalize),
+      }));
+    }
+
+    private _createCommandMenuItem(id: string, text?: string, options?: string[]) {
+      return {
+        id,
+        text: text ?? defaultCommandNames[id as HtmlEditorAICommandName],
+        items: this._prepareAIOptions(
+          id,
+          options ?? getAICommandDefaultOptions(id as HtmlEditorAICommandName)?.map(capitalize),
+        ),
+      };
+    }
+
+    private _buildMenuItems(commands: HtmlEditorAIToolbarItem['commands']) {
+      return commands?.map((command) => {
+        if (typeof command === 'object') {
+          if (command.name === 'custom') {
+            return;
+          }
+
+          return this._createCommandMenuItem(command.name, command.text, command.options);
+        }
+
+        return this._createCommandMenuItem(command);
+      });
+    }
+
+    _prepareAIMenuItemConfig(item: HtmlEditorAIToolbarItem) {
+      const {
+        name,
+        commands = Object.keys(defaultCommandNames) as HtmlEditorAICommandName[],
+      } = item;
+
+      const commandsMap = buildCommandsMap(commands);
+      const menuItems = this._buildMenuItems(commands);
+
+      const dataSource = [{
+        id: 'root',
+        icon: 'sparkle',
+        items: menuItems,
+      }];
+
+      const options = {
+        dataSource,
+        onItemClick: (e): void => {
+          const { itemData } = e;
+
+          if (itemData.items?.length) {
+            return;
+          }
+
+          const dialogAIOptions = {
+            command: itemData.id,
+            parentCommand: itemData.parentId,
+            commandsMap,
+          };
+
+          this._formatHandlers[name](this, dialogAIOptions);
+        },
+      };
+
+      return extend(true, {
+        widget: 'dxMenu',
+        name,
+        options,
       }, item);
     }
 

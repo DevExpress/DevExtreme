@@ -11,6 +11,7 @@ import Form from '@js/ui/form';
 import ScrollView from '@js/ui/scroll_view';
 
 import { getQuill } from '../m_quill_importer';
+import type { AIDialogShowPayload } from '../ui/m_aiDialog';
 import { ImageUploader } from './m_image_uploader_helper';
 import {
   getAutoSizedElements,
@@ -102,7 +103,43 @@ function getFormatHandlers(module) {
     deleteTable: getTableOperationHandler(module.quill, 'deleteTable'),
     cellProperties: prepareShowFormProperties(module, 'cell'),
     tableProperties: prepareShowFormProperties(module, 'table'),
+    ai: handleAIDropDownSelection,
   };
+}
+
+function handleAIDropDownSelection(module, { command, parentCommand, commandsMap }): void {
+  if (command === 'root') {
+    return;
+  }
+
+  const { quill } = module;
+  const selection = quill.getSelection();
+  const hasSelection = selection?.length > 0;
+  const text = hasSelection ? quill.getText(selection) : quill.getText();
+
+  const dialogAIConfig: AIDialogShowPayload = {
+    currentCommand: parentCommand ?? command,
+    currentOption: parentCommand ? command : undefined,
+    text,
+    commandsMap,
+  };
+
+  module.editorInstance.showAIDialog(dialogAIConfig).done((data, event) => {
+    const insertIndex = hasSelection ? selection.index : 0;
+
+    quill.focus();
+    quill.deleteText(
+      insertIndex,
+      hasSelection ? selection.length : text.length,
+      SILENT_ACTION,
+    );
+
+    // insert text
+
+    module.saveValueChangeEvent(event);
+  }).always(() => {
+    quill.focus();
+  });
 }
 
 function resetFormDialogOptions(editorInstance, {
