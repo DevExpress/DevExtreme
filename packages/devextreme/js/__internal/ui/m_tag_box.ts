@@ -34,6 +34,7 @@ function xor(a: boolean, b: boolean): boolean {
 }
 
 const TAGBOX_TAG_DATA_KEY = 'dxTagData';
+const TAGBOX_TAG_DISPLAY_VALUE = 'dxTagDisplayValue';
 
 const TAGBOX_CLASS = 'dx-tagbox';
 const TAGBOX_TAG_CONTAINER_CLASS = 'dx-tag-container';
@@ -1248,11 +1249,17 @@ class TagBox<
     const itemModel = this._getItemModel(item, displayValue);
 
     if ($tag) {
+      const tagDisplayValue = $tag.data(TAGBOX_TAG_DISPLAY_VALUE);
+
+      if (isDefined(displayValue) && !equalByValue(tagDisplayValue, displayValue)) {
+        $tag.empty();
+        this._applyTagTemplate(itemModel, $tag);
+      }
       this._updateElementAria($tag.attr('id'));
     } else {
       const tagId = `dx-${new Guid()}`;
 
-      $tag = this._createTag(value, $input, tagId);
+      $tag = this._createTag(value, $input, tagId, displayValue);
 
       this._setTagAria($tag, isDefined(displayValue) ? displayValue : value);
 
@@ -1301,11 +1308,12 @@ class TagBox<
     return result;
   }
 
-  _createTag(value, $input, tagId): dxElementWrapper {
+  _createTag(value, $input, tagId, displayValue): dxElementWrapper {
     return $('<div>')
       .attr('id', tagId)
       .addClass(TAGBOX_TAG_CLASS)
       .data(TAGBOX_TAG_DATA_KEY, value)
+      .data(TAGBOX_TAG_DISPLAY_VALUE, displayValue)
       .insertBefore($input);
   }
 

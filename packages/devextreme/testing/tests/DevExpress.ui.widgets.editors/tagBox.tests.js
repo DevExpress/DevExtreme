@@ -878,25 +878,63 @@ QUnit.module('tags', moduleSetup, () => {
                 assert.strictEqual($tags.length, expectedSelectedItems.length, 'tags are updated');
             });
         });
+    });
 
-        QUnit.test('Should not rerender previously rendered tags on value change (T1246066)', function(assert) {
-            let tagRenderCount = 0;
-            const tagBox = $('#tagBox').dxTagBox({
-                items: [{ name: 'one', value: 1 }, { name: 'two', value: 2 }],
-                displayExpr: 'name',
-                valueExpr: 'value',
-                value: [1],
-                tagTemplate(item) {
-                    tagRenderCount += 1;
+    QUnit.test('Should not rerender previously rendered tags on value change (T1246066)', function(assert) {
+        let tagRenderCount = 0;
+        const tagBox = $('#tagBox').dxTagBox({
+            items: [{ name: 'one', value: 1 }, { name: 'two', value: 2 }],
+            displayExpr: 'name',
+            valueExpr: 'value',
+            value: [1],
+            tagTemplate(item) {
+                tagRenderCount += 1;
 
-                    return $('<div>').text(item);
-                },
-            }).dxTagBox('instance');
+                return $('<div>').text(item);
+            },
+        }).dxTagBox('instance');
 
-            tagBox.option('value', [1]);
+        tagBox.option('value', [1]);
 
-            assert.strictEqual(tagRenderCount, 1, 'tag was only rendred once');
+        assert.strictEqual(tagRenderCount, 1, 'tag was only rendred once');
+    });
+
+    QUnit.test('Should not rerender previously rendered tags on items change (T1246066)', function(assert) {
+        let tagRenderCount = 0;
+        const tagBox = $('#tagBox').dxTagBox({
+            items: [{ name: 'one', value: 1 }, { name: 'two', value: 2 }],
+            displayExpr: 'name',
+            valueExpr: 'value',
+            value: [1],
+            tagTemplate(item) {
+                tagRenderCount += 1;
+
+                return $('<div>').text(item);
+            },
+        }).dxTagBox('instance');
+
+        tagBox.option('items', [{ name: 'one', value: 1 }]);
+
+        assert.strictEqual(tagRenderCount, 1, 'tag was only rendred once');
+    });
+
+    QUnit.test('Should rerender tag on update item field that is used as displayExpr', function(assert) {
+        const $tagBox = $('#tagBox').dxTagBox({
+            items: [{ name: 'one', value: 1 }, { name: 'two', value: 2 }],
+            displayExpr: 'name',
+            valueExpr: 'value',
+            value: [1],
         });
+        const tagBox = $tagBox.dxTagBox('instance');
+
+        let tagText = $tagBox.find(`.${TAGBOX_TAG_CLASS}`).text();
+
+        assert.equal(tagText, 'one', 'tag is correct on init');
+
+        tagBox.option('items[0].name', 'zero');
+
+        tagText = $tagBox.find(`.${TAGBOX_TAG_CLASS}`).text();
+        assert.equal(tagText, 'zero', 'tag text is updated');
     });
 });
 
