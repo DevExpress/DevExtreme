@@ -1,9 +1,5 @@
 import React, { useCallback, useState } from 'react';
 import Chat, { type ChatTypes } from 'devextreme-react/chat';
-import { AI } from 'devextreme-react/ai';
-// import { AI } from 'devextreme/ai';
-import type { AIProvider, AI as AIClass } from 'devextreme-react/ai';
-// import type { AIProvider, AI as AIClass } from 'devextreme/ai';
 import { MessageEnteredEvent } from 'devextreme/ui/chat';
 import { loadMessages } from 'devextreme/localization';
 import {
@@ -23,21 +19,6 @@ loadMessages({
 });
 
 export default function App() {
-  const provider: AIProvider = {
-    sendRequest(params) {
-      return {
-        abort: () => {},
-        promise: Promise.resolve('AI response'),
-      }
-    },
-  };
-  const ai: AIClass = new AI(provider);
-
-  ai.translate(
-    { text: 'text', lang: 'lang' },
-    { onComplete: (result) => { console.log(result) } },
-  );
-
   const {
     alerts, insertMessage, fetchAIResponse, regenerateLastAIResponse,
   } = useApi();

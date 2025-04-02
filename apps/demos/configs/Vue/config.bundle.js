@@ -2,6 +2,7 @@ const bundleConfig = {
   bundles: {
     'devextreme.vue.systemjs.js': [
       'devextreme/*',
+      'devextreme/ai/*',
       'devextreme/data/*',
       'devextreme/data/odata/*',
       'devextreme/animation/*',
@@ -34,6 +35,7 @@ const bundleConfig = {
       'devextreme/common/core/events/*',
       'devextreme/common/core/localization/*',
       'devextreme-vue/*',
+      'devextreme-vue/ai/*',
       'devextreme-vue/core/*',
       'devextreme-vue/common/*',
       'devextreme-vue/common/core/*',

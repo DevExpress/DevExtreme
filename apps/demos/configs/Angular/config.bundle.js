@@ -2,6 +2,7 @@ const bundleConfig = {
   bundles: {
     'devextreme.angular.systemjs.js': [
       'devextreme/*',
+      'devextreme/ai/*',
       'devextreme/data/*',
       'devextreme/data/odata/*',
       'devextreme/animation/*',
@@ -35,6 +36,7 @@ const bundleConfig = {
       'devextreme/common/core/localization/*',
       'devextreme-angular',
       'devextreme-angular/*',
+      'devextreme-angular/ai/*',
       'devextreme-angular/core/*',
       'devextreme-angular/common/*',
       'devextreme-angular/common/core/*',
