@@ -6,7 +6,7 @@ import {
   jest,
 } from '@jest/globals';
 import type { AIProvider, Prompt } from '@js/ai';
-import { ERROR_MESSAGE, RequestManager } from '@ts/core/ai/core/request_manager';
+import { ERROR_MESSAGES, RequestManager } from '@ts/core/ai/core/request_manager';
 import { Provider } from '@ts/core/ai/test_utils/provider_mock';
 
 describe('RequestManager', () => {
@@ -33,7 +33,7 @@ describe('RequestManager', () => {
 
       expect(() => {
         requestManager.sendRequest({ user: 'test' }, {});
-      }).toThrow(ERROR_MESSAGE.METHOD_NOT_IMPLEMENTED);
+      }).toThrow(ERROR_MESSAGES.METHOD_NOT_IMPLEMENTED);
     });
 
     it('calls provider.sendRequest with the correct parameters', () => {
@@ -61,7 +61,7 @@ describe('RequestManager', () => {
       expect(onChunkSpy).toHaveBeenNthCalledWith(2, ' response');
     });
 
-    it('after completion of the promis calls onComplete with accumulated data', async () => {
+    it('after completion of the promise calls onComplete with accumulated data', async () => {
       let resolvePromise: (result: string) => void = () => {};
 
       const promise = new Promise<string>((resolve) => { resolvePromise = resolve; });

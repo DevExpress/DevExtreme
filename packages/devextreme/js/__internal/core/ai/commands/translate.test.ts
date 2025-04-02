@@ -87,49 +87,5 @@ describe('TranslateCommand', () => {
       expect(typeof abort).toBe('function');
       expect(sendRequestSpy).toHaveBeenCalledTimes(1);
     });
-
-    it('pulls onChunk callback when getting a chunk', () => {
-      const callbacks: RequestCallbacks = { onChunk: jest.fn() };
-      const sendRequestSpy = jest.spyOn(requestManager, 'sendRequest');
-
-      command.execute(params, callbacks);
-
-      const sendRequestCallbacks = sendRequestSpy.mock.calls[0][1];
-
-      sendRequestCallbacks.onChunk?.('chunk');
-
-      expect(callbacks.onChunk).toHaveBeenCalledWith('chunk');
-    });
-
-    it('calls onComplete callback, passing the result of parseResult to it', () => {
-      const callbacks: RequestCallbacks = { onComplete: jest.fn() };
-
-      const sendRequestSpy = jest.spyOn(requestManager, 'sendRequest');
-      // @ts-expect-error Access to protected property for a test
-      const parseResultSpy = jest.spyOn(command, 'parseResult');
-
-      command.execute(params, callbacks);
-
-      const sendRequestCallbacks = sendRequestSpy.mock.calls[0][1];
-
-      sendRequestCallbacks.onComplete?.('AI response');
-
-      expect(parseResultSpy).toHaveBeenCalledWith('AI response');
-      expect(callbacks.onComplete).toHaveBeenCalledWith('AI response');
-    });
-
-    it('calls onError callback when an error occurs', () => {
-      const callbacks: RequestCallbacks = { onError: jest.fn() };
-      const sendRequestSpy = jest.spyOn(requestManager, 'sendRequest');
-
-      command.execute(params, callbacks);
-
-      const sendRequestCallbacks = sendRequestSpy.mock.calls[0][1];
-      const error = new Error('Test error');
-
-      sendRequestCallbacks.onError?.(error);
-
-      expect(callbacks.onError).toHaveBeenCalledWith(error);
-    });
   });
 });

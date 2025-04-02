@@ -1,6 +1,6 @@
 import type { AIProvider, Prompt, RequestCallbacks } from '@js/ai';
 
-export const ERROR_MESSAGE = {
+export const ERROR_MESSAGES = {
   METHOD_NOT_IMPLEMENTED: 'No method for queries has been implemented',
 };
 
@@ -27,6 +27,6 @@ export class RequestManager {
       return abort;
     }
 
-    throw new Error(ERROR_MESSAGE.METHOD_NOT_IMPLEMENTED);
+    throw new Error(ERROR_MESSAGES.METHOD_NOT_IMPLEMENTED);
   }
 }
