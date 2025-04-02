@@ -8,17 +8,24 @@ import { dateUtilsTs } from '@ts/core/utils/date';
 import { extend } from '@ts/core/utils/m_extend';
 import type { SchedulerHeader } from '@ts/scheduler/header/m_header';
 
-import {
-  CALENDAR_BUTTON_CLASS,
-  CALENDAR_BUTTON_NAME,
-  DATE_NAVIGATOR_CLASS,
-  DEFAULT_ITEMS,
-  Direction,
-  NEXT_BUTTON_CLASS,
-  NEXT_BUTTON_NAME,
-  PREVIOUS_BUTTON_CLASS,
-  PREVIOUS_BUTTON_NAME,
-} from './constants';
+import { Direction } from './constants';
+
+export const CLASS = {
+  container: 'dx-scheduler-navigator',
+  previousButton: 'dx-scheduler-navigator-previous',
+  calendarButton: 'dx-scheduler-navigator-caption',
+  nextButton: 'dx-scheduler-navigator-next',
+};
+export const ITEMS_NAME = {
+  previousButton: 'prev',
+  nextButton: 'next',
+  calendarButton: 'dateInterval',
+};
+export const DEFAULT_ITEMS = [
+  ITEMS_NAME.previousButton,
+  ITEMS_NAME.nextButton,
+  ITEMS_NAME.calendarButton,
+];
 
 const { trimTime } = dateUtils;
 
@@ -60,10 +67,10 @@ const getPreviousButtonOptions = (header: SchedulerHeader): DateNavigatorItem =>
   const ariaMessage = messageLocalization.format('dxScheduler-navigationPrevious');
 
   return {
-    key: PREVIOUS_BUTTON_NAME,
+    key: ITEMS_NAME.previousButton,
     icon: 'chevronprev',
     elementAttr: {
-      class: PREVIOUS_BUTTON_CLASS,
+      class: CLASS.previousButton,
       'aria-label': ariaMessage,
     },
     clickHandler: () => header._updateDateByDirection(Direction.Left),
@@ -87,9 +94,9 @@ const getPreviousButtonOptions = (header: SchedulerHeader): DateNavigatorItem =>
 };
 
 const getCalendarButtonOptions = (header: SchedulerHeader): DateNavigatorItem => ({
-  key: CALENDAR_BUTTON_NAME,
+  key: ITEMS_NAME.calendarButton,
   text: header.captionText,
-  elementAttr: { class: CALENDAR_BUTTON_CLASS },
+  elementAttr: { class: CLASS.calendarButton },
   clickHandler: (event) => header._showCalendar(event),
   onContentReady: (event): void => {
     const calendarButton = event.component;
@@ -120,10 +127,10 @@ const getNextButtonOptions = (header: SchedulerHeader): DateNavigatorItem => {
   const ariaMessage = messageLocalization.format('dxScheduler-navigationNext');
 
   return {
-    key: NEXT_BUTTON_NAME,
+    key: ITEMS_NAME.nextButton,
     icon: 'chevronnext',
     elementAttr: {
-      class: NEXT_BUTTON_CLASS,
+      class: CLASS.nextButton,
       'aria-label': ariaMessage,
     },
     clickHandler: () => header._updateDateByDirection(Direction.Right),
@@ -147,12 +154,14 @@ const getNextButtonOptions = (header: SchedulerHeader): DateNavigatorItem => {
   };
 };
 
-export const getDateNavigator = (header: SchedulerHeader, item): ToolbarItem => {
-  // @ts-expect-error
+export const getDateNavigator = (header: SchedulerHeader, item: ToolbarItem): ToolbarItem => {
+  // @ts-expect-error current theme used
   const stylingMode = isMaterialBased() ? 'text' : 'contained';
   const config: ToolbarItem = extend(true, {}, {
+    location: 'before',
+    name: 'dateNavigator',
     widget: 'dxButtonGroup',
-    cssClass: DATE_NAVIGATOR_CLASS,
+    cssClass: CLASS.container,
     options: {
       stylingMode,
       selectionMode: 'none',
@@ -163,11 +172,11 @@ export const getDateNavigator = (header: SchedulerHeader, item): ToolbarItem => 
 
   options.items = (options.items ?? DEFAULT_ITEMS).map((groupItem) => {
     switch (groupItem) {
-      case PREVIOUS_BUTTON_NAME:
+      case ITEMS_NAME.previousButton:
         return getPreviousButtonOptions(header);
-      case NEXT_BUTTON_NAME:
+      case ITEMS_NAME.nextButton:
         return getNextButtonOptions(header);
-      case CALENDAR_BUTTON_NAME:
+      case ITEMS_NAME.calendarButton:
         return getCalendarButtonOptions(header);
       default:
         return groupItem;
