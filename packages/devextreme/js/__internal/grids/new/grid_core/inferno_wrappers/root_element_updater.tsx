@@ -6,7 +6,7 @@ export function normalizeEventName(name: string): string {
   return name.substring(2).toLowerCase();
 }
 export type Properties = JSX.IntrinsicElements['div'] & {
-  rootElementRef?: RefObject<HTMLDivElement>;
+  rootElementRef: RefObject<HTMLDivElement>;
 };
 
 export class RootElementUpdater extends Component<Properties> {
@@ -15,12 +15,6 @@ export class RootElementUpdater extends Component<Properties> {
   private previousAttributes: Record<string, unknown> = {};
 
   public render(): JSX.Element {
-    if (!this.props.rootElementRef?.current) {
-      return <div {...this.props}>
-        {this.props.children}
-      </div>;
-    }
-
     return <>
       {this.props.children}
     </>;
@@ -91,10 +85,10 @@ export class RootElementUpdater extends Component<Properties> {
   }
 
   private updateClassesAndAttributes(): void {
-    const element = this.props.rootElementRef?.current;
+    const element = this.props.rootElementRef.current;
 
     if (!element) {
-      return;
+      throw new Error('root element is not providen');
     }
 
     this.updateClasses(element);
