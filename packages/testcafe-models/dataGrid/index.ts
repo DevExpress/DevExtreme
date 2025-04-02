@@ -16,6 +16,7 @@ import { Overlay } from './overlay';
 import MasterRow from './masterRow';
 import AdaptiveDetailRow from './adaptiveDetailRow';
 import ColumnChooser from './columnChooser';
+import TextBox from '../textBox';
 import { GroupPanel } from './groupPanel';
 import GridCore from '../gridCore';
 import { CLASS as CLASS_BASE } from '../gridCore';
@@ -25,6 +26,7 @@ export const CLASS = {
   dataGrid: 'dx-datagrid',
   headers: 'headers',
   headerPanel: 'header-panel',
+  searchBox: 'dx-searchbox',
   dataRow: 'dx-data-row',
   groupRow: 'dx-group-row',
   groupPanel: 'group-panel',
@@ -64,6 +66,7 @@ export const CLASS = {
   dialogWrapper: 'dx-dialog-wrapper',
   summaryTotal: 'dx-datagrid-summary-item',
   scrollableContainer: 'dx-scrollable-container',
+  columnsSeparator: 'dx-datagrid-columns-separator',
 };
 
 const E2E_ATTRIBUTES = {
@@ -218,6 +221,14 @@ export default class DataGrid extends GridCore {
     EditorType: new(mainElement: Selector) => T,
   ): T {
     return new EditorType(this.getHeaders().getFilterRow().getFilterCell(columnIndex).getEditor());
+  }
+
+  getSearchBox(): TextBox {
+    return new TextBox(this.element.find(`.${CLASS.searchBox}`));
+  }
+
+  getColumnsSeparator(): TextBox {
+    return new TextBox(this.element.find(`.${CLASS.columnsSeparator}`));
   }
 
   getOverlay(): Overlay {
@@ -609,6 +620,19 @@ export default class DataGrid extends GridCore {
       {
         dependencies: {
           getInstance, values
+        },
+      },
+    )();
+  }
+
+  apiSearchByText(text: string): Promise<void> {
+    const { getInstance } = this;
+
+    return ClientFunction(
+      () => (getInstance() as DataGridInstance).searchByText(text),
+      {
+        dependencies: {
+          getInstance, text
         },
       },
     )();
