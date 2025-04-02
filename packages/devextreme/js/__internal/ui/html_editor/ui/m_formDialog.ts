@@ -1,21 +1,12 @@
 import localizationMessage from '@js/common/core/localization/message';
-import devices from '@js/core/devices';
 import $ from '@js/core/renderer';
-import type { DeferredObj } from '@js/core/utils/deferred';
-import { Deferred } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
-import {
-  // @ts-expect-error
-  getCurrentScreenFactor,
-  hasWindow,
-} from '@js/core/utils/window';
 import Form from '@js/ui/form';
-import Popup from '@js/ui/popup';
 import { isFluent, isMaterialBased } from '@js/ui/themes';
 
-const DIALOG_CLASS = 'dx-formdialog';
+import DialogBase from './m_baseDialog';
+
 const FORM_CLASS = 'dx-formdialog-form';
-const DROPDOWN_EDITOR_OVERLAY_CLASS = 'dx-dropdowneditor-overlay';
 
 const getApplyButtonConfig = () => {
   // @ts-expect-error
@@ -41,86 +32,24 @@ const getCancelButtonConfig = () => {
   return {};
 };
 
-class FormDialog {
-  _editorInstance?: any;
-
-  _popupUserConfig?: any;
-
-  _popup!: Popup;
-
-  beforeAddButtonAction?: any;
-
-  deferred?: DeferredObj<unknown>;
-
+export default class FormDialog extends DialogBase {
   _form!: Form;
 
-  constructor(editorInstance, popupConfig) {
-    this._editorInstance = editorInstance;
-    this._popupUserConfig = popupConfig;
+  beforeAddButtonAction?: () => boolean;
 
-    this._renderPopup();
-    this._attachOptionChangedHandler();
-  }
+  protected _getPopupConfig() {
+    const baseConfig = super._getPopupConfig();
 
-  _renderPopup() {
-    const editorInstance = this._editorInstance;
-    const $container = $('<div>')
-      .addClass(DIALOG_CLASS)
-      .appendTo(editorInstance.$element());
-    const popupConfig = this._getPopupConfig();
-
-    return editorInstance._createComponent($container, Popup, popupConfig);
-  }
-
-  _attachOptionChangedHandler() {
-    this._popup
-      ?.on(
-        'optionChanged',
-        ({ name, value }) => {
-          if (name === 'title') {
-            this._updateFormLabel(value);
-          }
-        },
-      );
-  }
-
-  _escKeyHandler() {
-    this._popup.hide();
-  }
-
-  _addEscapeHandler(e) {
-    e.component.registerKeyHandler('escape', this._escKeyHandler.bind(this));
-  }
-
-  _isSmallScreen() {
-    const screenFactor = hasWindow() ? getCurrentScreenFactor() : null;
-    return devices.real().deviceType === 'phone' || screenFactor === 'xs';
-  }
-
-  _getPopupConfig() {
-    return extend({
-      onInitialized: (e) => {
-        this._popup = e.component;
-        this._popup.on('hiding', () => this.onHiding());
-        this._popup.on('shown', () => { this._form.focus(); });
-      },
-      deferRendering: false,
-      focusStateEnabled: false,
-      showCloseButton: false,
-      fullScreen: this._isSmallScreen(),
+    return extend(true, {}, baseConfig, {
       contentTemplate: (contentElem) => {
         const $formContainer = $('<div>').appendTo(contentElem);
-
         this._renderForm($formContainer, {
           onEditorEnterKey: (e) => this.callAddButtonAction(e.event),
           customizeItem: (item) => {
             if (item.itemType === 'simple') {
-              item.editorOptions = extend(
-                true,
-                {},
-                item.editorOptions,
-                { onInitialized: this._addEscapeHandler.bind(this) },
-              );
+              item.editorOptions = extend(true, {}, item.editorOptions, {
+                onInitialized: this._addEscapeHandler.bind(this),
+              });
             }
           },
         });
@@ -131,53 +60,56 @@ class FormDialog {
           location: 'after',
           widget: 'dxButton',
           options: {
-            onInitialized: this._addEscapeHandler.bind(this),
             text: localizationMessage.format('OK'),
             onClick: (e) => this.callAddButtonAction(e.event),
             ...getApplyButtonConfig(),
           },
-        }, {
+        },
+        {
           toolbar: 'bottom',
           location: 'after',
           widget: 'dxButton',
           options: {
-            onInitialized: this._addEscapeHandler.bind(this),
             text: localizationMessage.format('Cancel'),
-            onClick: () => {
-              this._popup.hide();
-            },
+            onClick: () => this._popup.hide(),
             ...getCancelButtonConfig(),
           },
         },
       ],
-      _wrapperClassExternal: `${DIALOG_CLASS} ${DROPDOWN_EDITOR_OVERLAY_CLASS}`,
-    }, this._popupUserConfig);
+    });
   }
 
-  onHiding() {
-    this.beforeAddButtonAction = undefined;
-    // @ts-expect-error
-    this.deferred.reject();
+  protected _renderContent($container) {
+    $container.addClass(FORM_CLASS);
+
+    this._form = this._editorInstance._createComponent($container, Form, {
+      ...this._getDefaultFormOptions(),
+      onEditorEnterKey: (e) => this.callAddButtonAction(e.event),
+      customizeItem: (item) => {
+        if (item.itemType === 'simple') {
+          item.editorOptions = extend(true, {}, item.editorOptions, {
+            onInitialized: this._addEscapeHandler.bind(this),
+          });
+        }
+      },
+    });
+
+    this._updateFormLabel();
   }
 
-  callAddButtonAction(event) {
-    if (this.beforeAddButtonAction && !this.beforeAddButtonAction()) {
-      return;
-    }
-
-    this.hide(this._form.option('formData'), event);
+  protected _onTitleChanged(value: string) {
+    this._updateFormLabel(value);
   }
 
   _renderForm($container, options) {
     $container.addClass(FORM_CLASS);
     this._form = this._editorInstance._createComponent($container, Form, options);
-    // @ts-expect-error
     this._updateFormLabel();
   }
 
-  _updateFormLabel(text) {
+  _updateFormLabel(text?: string) {
     // @ts-expect-error
-    const label = text ?? this.popupOption('title');
+    const label = text ?? this.popupOption('title') as string;
     this._form
       ?.$element()
       .attr('aria-label', label);
@@ -192,38 +124,43 @@ class FormDialog {
     };
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  formOption(optionName, optionValue) {
-    // @ts-expect-error
-    return this._form.option.apply(this._form, arguments);
+  _attachOptionChangedHandler() {
+    this._popup?.on(
+      'optionChanged',
+      ({ name, value }) => {
+        if (name === 'title') {
+          this._updateFormLabel(value);
+        }
+      },
+    );
   }
 
-  show(formUserConfig) {
-    if (this._popup.option('visible')) {
+  callAddButtonAction(event) {
+    if (this.beforeAddButtonAction && !this.beforeAddButtonAction()) {
       return;
     }
 
-    this.deferred = Deferred();
+    const formData = this._form.option('formData');
+    this.hide(event, { formData });
+  }
+
+  show(formUserConfig) {
     const formConfig = extend(this._getDefaultFormOptions(), formUserConfig);
 
     this._form.option(formConfig);
 
-    this._popup.show();
-
-    return this.deferred.promise();
+    return super.show();
   }
 
-  hide(formData, event) {
-    // @ts-expect-error
-    this.deferred.resolve(formData, event);
+  hide(event, options) {
+    const { formData } = options;
+
+    this.deferred?.resolve(formData, event);
     this._popup.hide();
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  popupOption(optionName, optionValue) {
+  formOption(...args) {
     // @ts-expect-error
-    return this._popup.option.apply(this._popup, arguments);
+    return this._form.option.apply(this._form, args);
   }
 }
-
-export default FormDialog;

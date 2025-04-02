@@ -352,6 +352,17 @@ $transparent-border: 1px solid transparent;
   min-width: 360px;
 }
 
+.dx-aidialog-controls {
+  display: flex;
+  gap: 8px;
+}
+
+.dx-aidialog-content {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
 .dx-overlay-content {
   &.dx-popup-fullscreen {
     .dx-formdialog-form {

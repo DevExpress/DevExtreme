@@ -35,6 +35,9 @@ import getWordMatcher from '@ts/ui/html_editor/matchers/m_wordLists';
 import FormDialog from '@ts/ui/html_editor/ui/m_formDialog';
 import { prepareScrollData } from '@ts/ui/text_box/m_utils.scroll';
 
+import type { AIDialogShowPayload } from './ui/m_aiDialog';
+import AIDialog from './ui/m_aiDialog';
+
 const HTML_EDITOR_CLASS = 'dx-htmleditor';
 const QUILL_CONTAINER_CLASS = 'dx-quill-container';
 const QUILL_CLIPBOARD_CLASS = 'ql-clipboard';
@@ -51,6 +54,8 @@ class HtmlEditor extends Editor<Properties> {
   _mentionKeyInTemplateStorage?: number;
 
   _formDialog!: FormDialog;
+
+  _dialogAI?: AIDialog;
 
   _quillInstance?: any;
 
@@ -349,6 +354,7 @@ class HtmlEditor extends Editor<Properties> {
     super._renderContentImpl();
     this._renderHtmlEditor();
     this._renderFormDialog();
+    this._renderAIDialog();
     this._addKeyPressHandler();
 
     return renderContentPromise;
@@ -548,6 +554,18 @@ class HtmlEditor extends Editor<Properties> {
     }, this.option('formDialogOptions'));
 
     this._formDialog = new FormDialog(this, userOptions);
+  }
+
+  _renderAIDialog() {
+    const userOptions = extend(true, {
+      width: 'auto',
+      height: 'auto',
+      hideOnOutsideClick: true,
+    });
+
+    const AIService = this.option('ai');
+
+    this._dialogAI = new AIDialog(this, userOptions, AIService);
   }
 
   _getStylingModePrefix(): string {
@@ -813,6 +831,10 @@ class HtmlEditor extends Editor<Properties> {
 
   showFormDialog(formConfig) {
     return this._formDialog.show(formConfig);
+  }
+
+  showAIDialog(payload: AIDialogShowPayload) {
+    return this._dialogAI?.show(payload);
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
