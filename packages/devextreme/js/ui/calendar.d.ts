@@ -231,7 +231,7 @@ export default class dxCalendar extends Editor<dxCalendarOptions> {
      * @publicName reset(value)
      * @public
      */
-    reset(value?: DateLike | Array< Date | number | string | null >): void;
+    reset(value?: DateLike | Array<Date | number | string | null>): void;
 }
 
 /** @public */
