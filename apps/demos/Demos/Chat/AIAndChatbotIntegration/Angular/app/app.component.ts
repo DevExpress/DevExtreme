@@ -15,9 +15,6 @@ import { AppService } from './app.service';
 import { loadMessages } from 'devextreme/localization';
 import DataSource from 'devextreme/data/data_source';
 
-import { AI } from 'devextreme-angular/ai';
-import type { AIProvider, AI as AIClass } from 'devextreme-angular/ai';
-
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
 }
@@ -58,21 +55,6 @@ export class AppComponent {
     this.regenerationText = this.appService.REGENERATION_TEXT;
     this.copyButtonIcon = 'copy';
     this.isDisabled = false;
-
-    const provider: AIProvider = {
-      sendRequest(params) {
-        return {
-          abort: () => {},
-          promise: Promise.resolve('AI response'),
-        }
-      },
-    };
-    const ai: AIClass = new AI(provider);
-
-    ai.translate(
-      { text: 'text', lang: 'lang' },
-      { onComplete: (result) => { console.log(result) } },
-    );
   }
 
   convertToHtml(message: Message): string {
