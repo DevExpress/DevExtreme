@@ -29,26 +29,14 @@
   transition-property: color, background-color, border-color;
   transition-duration: .4s;
   transition-timing-function: ease-in-out;
+  border-style: solid;
+  border-radius: 999em;
 }
 
 .dx-step-content {
   display: flex;
   align-items: center;
   flex-direction: column;
-
-  &::before {
-    content: '';
-    position: absolute;
-    border-width: 1px;
-    border-style: solid;
-    border-radius: 999em;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition-property: color, background-color, border-color;
-    transition-duration: .4s;
-    transition-timing-function: ease-in-out;
-  }
 }
 
 .dx-step-label {

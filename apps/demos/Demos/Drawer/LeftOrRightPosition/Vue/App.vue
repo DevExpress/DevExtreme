@@ -63,12 +63,12 @@ import DxToolbar from 'devextreme-vue/toolbar';
 import NavigationList from './NavigationList.vue';
 import { text } from './data.ts';
 
-const showModes = ['push', 'shrink', 'overlap'];
-const positionModes = ['left', 'right'];
-const showSubmenuModes = ['slide', 'expand'];
-const selectedOpenMode = ref('shrink');
-const selectedPosition = ref<DxDrawerTypes.PanelLocation>('left');
-const selectedRevealMode = ref<DxDrawerTypes.RevealMode>('slide');
+const showModes: DxDrawerTypes.OpenedStateMode[] = ['push', 'shrink', 'overlap'];
+const positionModes: DxDrawerTypes.PanelLocation[] = ['left', 'right'];
+const showSubmenuModes: DxDrawerTypes.RevealMode[] = ['slide', 'expand'];
+const selectedOpenMode = ref(showModes[1]);
+const selectedPosition = ref(positionModes[0]);
+const selectedRevealMode = ref(showSubmenuModes[0]);
 const openState = ref(true);
 const toolbarContent = [{
   widget: 'dxButton',

@@ -6,12 +6,11 @@ import { testScreenshot } from '../../../utils/visual-tests/helpers/theme-utils'
 const resetScroll = ClientFunction(() => window.scrollTo(0, 0));
 
 fixture('Scheduler.Overview')
-  .page('http://localhost:8080/')
   .before(async (ctx) => {
     ctx.initialWindowSize = [900, 600];
   });
 
-runManualTest('Scheduler', 'Overview', ['jQuery', 'React'], (test) => {
+runManualTest('Scheduler', 'Overview', (test) => {
   test('Overview cell selection (T1041269)', async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 

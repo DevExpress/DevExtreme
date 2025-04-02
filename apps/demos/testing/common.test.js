@@ -14,6 +14,7 @@ import {
   changeTheme,
   waitForAngularLoading,
   shouldSkipDemo,
+  FRAMEWORKS,
 } from '../utils/visual-tests/matrix-test-helper';
 import {
   getThemePostfix,
@@ -38,7 +39,7 @@ const execCode = ClientFunction((code) => {
 });
 
 const injectStyle = (style) => `
-    var style = document.createElement('style'); 
+    var style = document.createElement('style');
     style.innerHTML = \`${style}\`;
     document.getElementsByTagName('head')[0].appendChild(style);
   `;
@@ -313,7 +314,7 @@ const SKIPPED_TESTS = {
   },
 };
 
-['jQuery', 'React', 'Vue', 'Angular'].forEach((approach) => {
+FRAMEWORKS.forEach((approach) => {
   if (!shouldRunFramework(approach)) { return; }
   fixture(approach)
     .beforeEach(async (t) => {
@@ -331,7 +332,7 @@ const SKIPPED_TESTS = {
       {
         content: `
           window.addEventListener('error', function (e) {
-              console.error(e.message); 
+              console.error(e.message);
           });`,
       },
     ]);

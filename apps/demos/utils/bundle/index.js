@@ -48,6 +48,9 @@ const getDefaultBuilderConfig = (framework, additionPaths, map) => ({
   defaultExtension: false,
   defaultJSExtensions: 'js',
   packages: {
+    'devextreme/common/core/events/utils': {
+      main: 'index',
+    },
     'devextreme/events/utils': {
       main: 'index',
     },

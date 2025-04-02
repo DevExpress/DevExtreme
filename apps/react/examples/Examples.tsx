@@ -23,7 +23,10 @@ import TextBoxExample from './text-box-example';
 import ToolbarExample from './toolbar-example';
 import ValidationExample from './validation-example';
 // import DateBoxExample from './date-box-example';
-import SelectBoxCustomExample from './selector-custom-example';
+import SelectBoxTemplatesExample from './selectbox-templates-example';
+import SelectBoxFieldTemplateExample from './selectbox-fieldtemplate-example';
+import SelectBoxParallelTemplateRenderExample from './selectbox-parallel-template-render-example';
+import TagBoxFieldTemplateCheckBoxesExample from './tagbox-fieldtemplate-checkboxes-example';
 
 const Examples = () => {
     return (
@@ -86,8 +89,20 @@ const Examples = () => {
                 <SelectBoxExample />
             </Example>
 
-            <Example title="SelectBox example with custom components">
-                <SelectBoxCustomExample />
+            <Example title="SelectBox example with templates for item and field">
+                <SelectBoxTemplatesExample />
+            </Example>
+
+            <Example title="TagBox with field template and showSelectionControls=true">
+                <TagBoxFieldTemplateCheckBoxesExample />
+            </Example>
+
+            <Example title="SelectBox example with field template (controlled mode)">
+                <SelectBoxFieldTemplateExample />
+            </Example>
+
+            <Example title="SelectBox example with field template (parallel render)">
+                <SelectBoxParallelTemplateRenderExample />
             </Example>
 
              {/*<StandaloneValidatorExample />*/}
