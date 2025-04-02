@@ -36,7 +36,7 @@ const getItems = (): Record<string, unknown>[] => {
 
       // assert
       await t
-        .expect(treeList.getDataCell(0, 0).element.textContent)
+        .expect(treeList.getDataCell(131, 0).element.textContent)
         .contains('item_');
 
       await takeScreenshot(`T1275775-navigateToRow-with-async-cell-templates_(renderAsync=${renderAsync}_useNativeScrolling=${useNativeScrolling})`, treeList.element);
