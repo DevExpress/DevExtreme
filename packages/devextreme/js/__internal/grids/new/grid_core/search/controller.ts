@@ -30,11 +30,9 @@ export class SearchController {
     searchStr: searchOptions.text,
   }), [this.options.oneWay('searchPanel') as SubsGets<DefinedSearchOptions>]);
 
-  private readonly _searchTextOption = this.options.twoWay('searchPanel.text');
+  private readonly searchTextOption = this.options.twoWay('searchPanel.text');
 
-  private readonly _searchVisibleColumnsOnly = this.options.oneWay('searchPanel.searchVisibleColumnsOnly');
-
-  public readonly searchTextOption: SubsGets<string> = this._searchTextOption;
+  private readonly searchVisibleColumnsOnly = this.options.oneWay('searchPanel.searchVisibleColumnsOnly');
 
   public readonly searchFilter = computed(
     (
@@ -43,9 +41,9 @@ export class SearchController {
       searchVisibleColumnsOnly,
     ) => this.calculateSearchFilter(searchText, columns, searchVisibleColumnsOnly),
     [
-      this._searchTextOption,
+      this.searchTextOption,
       this.columnsController.columns,
-      this._searchVisibleColumnsOnly,
+      this.searchVisibleColumnsOnly,
     ],
   );
 
@@ -62,7 +60,7 @@ export class SearchController {
   );
 
   public readonly updateSearchText = (text: string): void => {
-    this._searchTextOption.update(text);
+    this.searchTextOption.update(text);
   };
 
   private calculateSearchFilter(
