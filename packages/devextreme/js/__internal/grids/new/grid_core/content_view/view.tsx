@@ -68,12 +68,6 @@ export abstract class ContentView<TProps extends {}> extends View<TProps> {
         errors: this.errorController.errors,
       }),
       onWidthChange: this.width.update.bind(this.width),
-      virtualScrollingProps: combined({
-        heightUp: 0,
-        heightDown: 0,
-        // heightUp: computed((virtualState) => virtualState.virtualTop, [this.virtualState]),
-        // heightDown: computed((virtualState) => virtualState.virtualBottom, [this.virtualState]),
-      }),
       onViewportHeightChange: this.viewportHeight.update.bind(this.viewportHeight),
       scrollableRef: this.scrollableRef,
       scrollableProps: combined({
