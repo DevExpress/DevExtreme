@@ -295,7 +295,7 @@ Point.prototype = {
             }
             that._setType(mixins[newPointTypeMixin]);
         } else {
-            that._needDeletingOnDraw = that._checkSymbol(oldOptions, newOptions);
+            that._needDeletingOnDraw = that._needDeletingOnDraw || that._checkSymbol(oldOptions, newOptions);
             that._needClearingOnDraw = that._checkCustomize(oldOptions, newOptions);
         }
 
