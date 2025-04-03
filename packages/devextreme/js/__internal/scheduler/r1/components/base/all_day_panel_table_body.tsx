@@ -1,7 +1,6 @@
 import type { PropsWithClassName } from '__internal/core/r1';
 import { BaseInfernoComponent } from '@devextreme/runtime/inferno';
 import type { JSXTemplate } from '@devextreme-generator/declarations';
-import { getTemplate } from '@ts/core/r1/utils/index';
 
 import { combineClasses } from '../../../../core/r1/utils/render_utils';
 import type { ViewCellData } from '../../types';
@@ -46,7 +45,6 @@ export class AllDayPanelTableBody extends BaseInfernoComponent<AllDayPanelTableB
       'dx-scheduler-all-day-table-row': true,
       [className ?? '']: !!className,
     });
-    const DataCellTemplateComponent = getTemplate(dataCellTemplate);
 
     return (
       // @ts-ignore
@@ -81,7 +79,7 @@ export class AllDayPanelTableBody extends BaseInfernoComponent<AllDayPanelTableB
               groups={groups}
               groupIndex={cellGroupIndex}
               index={cellIndex}
-              dataCellTemplate={DataCellTemplateComponent}
+              dataCellTemplate={dataCellTemplate}
               isSelected={isSelected ?? false}
               isFocused={isFocused ?? false}
             />
