@@ -725,7 +725,6 @@ moduleWithoutCsp(
             const ComponentClass = this.TestComponent.inherit({
                 _render: function() {
                     this.callBase();
-                    this.option('a', 2);
                 }
             });
 
@@ -738,16 +737,22 @@ moduleWithoutCsp(
             const $component = $('<div data-bind=\'dxDestructComponent: {\
                 a: a\
             }\'></div>').appendTo(FIXTURE_ELEMENT);
-            
-            ko.applyBindings(vm, $component.get(0));
 
+            ko.applyBindings(vm, $component.get(0));
             const instance = $component.dxDestructComponent('instance');
 
-            assert.equal(vm.a(), 2);
+            assert.equal(vm.a(), 1);
             const { a } = instance.option();
-            assert.equal(a, 2);
+            assert.equal(a, 1);
             assert.equal(instance.option('a'), a);
-        })
+
+            vm.a(2);
+            assert.equal(vm.a(), 2);
+            const { a: a2 } = instance.option();
+            assert.equal(a2, 2);
+            assert.equal(instance.option('a'), a2);
+
+        });
 
     }
 );
