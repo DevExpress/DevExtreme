@@ -36,8 +36,12 @@ const ListEdit = ListBase.inherit({
         const nextItemIndex = focusedItemIndex + (moveUp ? -1 : 1);
         const $nextItem = editStrategy.getItemElement(nextItemIndex);
 
-        this.reorderItem(focusedElement, $nextItem);
-        this.scrollToItem(focusedElement);
+        const isMoveFromGroup = this.option('grouped')
+          && $(focusedElement).parent().get(0) !== $nextItem.parent().get(0);
+        if (!isMoveFromGroup) {
+          this.reorderItem(focusedElement, $nextItem);
+          this.scrollToItem(focusedElement);
+        }
         e.preventDefault();
       } else {
         const editProvider = this._editProvider;

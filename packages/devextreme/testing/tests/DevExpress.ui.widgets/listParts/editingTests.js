@@ -8,6 +8,8 @@ import ArrayStore from 'data/array_store';
 import 'ui/list';
 
 const LIST_ITEM_CLASS = 'dx-list-item';
+const LIST_ITEMS_CLASS = 'dx-list-items';
+const LIST_GROUP_HEADER_CLASS = 'dx-list-group-header';
 
 const toSelector = function(cssClass) {
     return '.' + cssClass;
@@ -254,70 +256,141 @@ QUnit.module('keyboard navigation', {
     afterEach: function() {
         this.clock.restore();
     }
-});
+}, () => {
+    QUnit.test('item deletion by keyboard', function(assert) {
+        const items = ['1', '2', '3'];
 
-QUnit.test('item deletion by keyboard', function(assert) {
-    const items = ['1', '2', '3'];
+        const $list = $('#list').dxList({
+            items: items,
+            editEnabled: true,
+            allowItemDeleting: false,
+            focusStateEnabled: true
+        });
+        const list = $list.dxList('instance');
 
-    const $list = $('#list').dxList({
-        items: items,
-        editEnabled: true,
-        allowItemDeleting: false,
-        focusStateEnabled: true
+        const keyboard = keyboardMock($list.find('[tabindex=0]'));
+
+        $list.focusin();
+        keyboard.keyDown('del');
+
+        assert.deepEqual(list.option('items'), items, 'deletion by keyboard is impossible if \'allowItemDeleting\' = false ');
+
+        list.option('allowItemDeleting', true);
+        list.option('focusedElement', $list.find('.' + LIST_ITEM_CLASS).eq(1));
+
+        keyboard.keyDown('del');
+
+        assert.deepEqual(list.option('items'), ['1', '3'], 'item was deleted');
     });
-    const list = $list.dxList('instance');
 
-    const keyboard = keyboardMock($list.find('[tabindex=0]'));
+    QUnit.test('items reordering by keyboard', function(assert) {
+        const items = ['1', '2', '3'];
 
-    $list.focusin();
-    keyboard.keyDown('del');
+        const $list = $('#list').dxList({
+            items: items,
+            editEnabled: true,
+            itemDragging: {
+                allowReordering: false
+            },
+            focusStateEnabled: true
+        });
+        const list = $list.dxList('instance');
+        const keyboard = keyboardMock($list.find('[tabindex=0]'));
 
-    assert.deepEqual(list.option('items'), items, 'deletion by keyboard is impossible if \'allowItemDeleting\' = false ');
+        let $lastItem = $list.find('.' + LIST_ITEM_CLASS).eq(2);
 
-    list.option('allowItemDeleting', true);
-    list.option('focusedElement', $list.find('.' + LIST_ITEM_CLASS).eq(1));
+        $lastItem.trigger('dxpointerdown');
+        this.clock.tick(10);
+        keyboard.keyDown('arrowUp', { shiftKey: true });
 
-    keyboard.keyDown('del');
+        assert.deepEqual(list.option('items'), items, 'reordering by keyboard is impossible if \'itemDragging.allowReordering\' = false ');
 
-    assert.deepEqual(list.option('items'), ['1', '3'], 'item was deleted');
-});
+        list.option('itemDragging.allowReordering', true);
 
-QUnit.test('items reordering by keyboard', function(assert) {
-    const items = ['1', '2', '3'];
+        $lastItem = $list.find('.' + LIST_ITEM_CLASS).eq(2);
+        $lastItem.trigger('dxpointerdown');
+        this.clock.tick(10);
+        keyboard.keyDown('arrowUp', { shiftKey: true });
 
-    const $list = $('#list').dxList({
-        items: items,
-        editEnabled: true,
-        itemDragging: {
-            allowReordering: false
-        },
-        focusStateEnabled: true
+        assert.deepEqual(list.option('items'), ['1', '3', '2'], 'items were reordered');
+
+        keyboard.keyDown('arrowDown', { shiftKey: true });
+
+        assert.deepEqual(list.option('items'), items, 'items were reordered');
     });
-    const list = $list.dxList('instance');
-    const keyboard = keyboardMock($list.find('[tabindex=0]'));
 
-    let $lastItem = $list.find('.' + LIST_ITEM_CLASS).eq(2);
+    QUnit.module('grouped', {
+        beforeEach: function() {
+            this.getInitialItems = () => {
+                return [{
+                    items: ['1-1', '1-2'],
+                }, {
+                    items: ['2-1', '2-2'],
+                }];
+            };
+            this.items = this.getInitialItems();
+            this.$list = $('#list').dxList({
+                items: this.getInitialItems(),
+                grouped: true,
+                collapsibleGroups: true,
+                itemDragging: {
+                    allowReordering: true
+                },
+                focusStateEnabled: true
+            });
+            this.list = this.$list.dxList('instance');
+            this.keyboard = keyboardMock(this.$list.find('[tabindex=0]'));
+        }
+    }, () => {
+        QUnit.test('shift+arrowDown on first group last item should not move item out of group (T1281674)', function(assert) {
+            const $firstGroupLastItem = this.$list
+                .find(`.${LIST_GROUP_CLASS}`).eq(0)
+                .find(`.${LIST_ITEM_CLASS}`).last();
 
-    $lastItem.trigger('dxpointerdown');
-    this.clock.tick(10);
-    keyboard.keyDown('arrowUp', { shiftKey: true });
+            $firstGroupLastItem.trigger('dxpointerdown');
+            this.clock.tick(10);
+            this.keyboard.keyDown('arrowDown', { shiftKey: true });
 
-    assert.deepEqual(list.option('items'), items, 'reordering by keyboard is impossible if \'itemDragging.allowReordering\' = false ');
+            assert.deepEqual(this.list.option('items'), this.items, 'items are not reordered');
+        });
 
-    list.option('itemDragging.allowReordering', true);
+        QUnit.test('shift+arrowDown on a last group last item should not move item out of group (T1281674)', function(assert) {
+            const $lastGroupLastItem = this.$list
+                .find(`.${LIST_GROUP_CLASS}`).last()
+                .find(`.${LIST_ITEM_CLASS}`).last();
 
-    $lastItem = $list.find('.' + LIST_ITEM_CLASS).eq(2);
-    $lastItem.trigger('dxpointerdown');
-    this.clock.tick(10);
-    keyboard.keyDown('arrowUp', { shiftKey: true });
+            $lastGroupLastItem.trigger('dxpointerdown');
+            this.clock.tick(10);
+            this.keyboard.keyDown('arrowDown', { shiftKey: true });
 
-    assert.deepEqual(list.option('items'), ['1', '3', '2'], 'items were reordered');
+            assert.deepEqual(this.list.option('items'), this.items, 'items are not reordered');
+        });
 
-    keyboard.keyDown('arrowDown', { shiftKey: true });
+        QUnit.test('shift+arrowUp on first group first item should not move item out of group (T1281674)', function(assert) {
+            const $firstGroupFirstItem = this.$list
+                .find(`.${LIST_GROUP_CLASS}`).eq(0)
+                .find(`.${LIST_ITEM_CLASS}`).eq(0);
 
-    assert.deepEqual(list.option('items'), items, 'items were reordered');
+            $firstGroupFirstItem.trigger('dxpointerdown');
+            this.clock.tick(10);
+            this.keyboard.keyDown('arrowUp', { shiftKey: true });
+
+            assert.deepEqual(this.list.option('items'), this.items, 'items are not reordered');
+        });
+
+        QUnit.test('shift+arrowUp on last group first item should not move item out of group (T1281674)', function(assert) {
+            const $lastGroupFirstItem = this.$list
+                .find(`.${LIST_GROUP_CLASS}`).last()
+                .find(`.${LIST_ITEM_CLASS}`).eq(0);
+
+            $lastGroupFirstItem.trigger('dxpointerdown');
+            this.clock.tick(10);
+            this.keyboard.keyDown('arrowUp', { shiftKey: true });
+
+            assert.deepEqual(this.list.option('items'), this.items, 'items are not reordered');
+        });
+    });
 });
-
 
 QUnit.module('deleting in grouped list with dataSource', {
     beforeEach: function() {
