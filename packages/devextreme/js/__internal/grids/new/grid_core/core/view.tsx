@@ -31,6 +31,7 @@ export abstract class View<T extends {}> {
       );
 
       infernoRenderer.renderIntoContainer(content, root, !this.firstRender);
+      this.firstRender = false;
     });
   }
 
