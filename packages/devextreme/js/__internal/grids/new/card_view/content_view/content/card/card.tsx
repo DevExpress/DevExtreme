@@ -4,6 +4,7 @@ import { off, on } from '@js/events/index';
 import { combineClasses } from '@ts/core/utils/combine_classes';
 import type { DataRow } from '@ts/grids/new/grid_core/columns_controller/types';
 import type { DataObject } from '@ts/grids/new/grid_core/data_controller/types';
+import { CollectionController } from '@ts/grids/new/grid_core/keyboard_navigation/collection_controller';
 import type { InfernoNode, RefObject } from 'inferno';
 import { Component, createRef } from 'inferno';
 
@@ -80,6 +81,8 @@ export class Card extends Component<CardProps> {
 
   private fieldRefs: RefObject<HTMLDivElement>[] = [];
 
+  private readonly keyboardController = new CollectionController();
+
   render(): InfernoNode {
     if (this.props.elementRef) {
       this.containerRef = this.props.elementRef;
@@ -108,6 +111,7 @@ export class Card extends Component<CardProps> {
         className={className}
         tabIndex={0}
         ref={this.props.elementRef}
+        onKeyDown={(e): void => this.keyboardController.onKeyDown(e)}
         onDblClick={this.handleDoubleClick}
         onMouseEnter={this.handleMouseEnter}
         onMouseLeave={this.handleMouseLeave}
@@ -139,7 +143,13 @@ export class Card extends Component<CardProps> {
     );
   }
 
+  updateKeyboardController(): void {
+    this.keyboardController.container = this.containerRef.current!;
+    this.keyboardController.items = this.fieldRefs.map((ref) => ref.current!);
+  }
+
   componentDidMount(): void {
+    this.updateKeyboardController();
     const { onPrepared } = this.props;
 
     if (onPrepared) {
@@ -159,6 +169,10 @@ export class Card extends Component<CardProps> {
     if (this.props.onHold) {
       off(this.containerRef.current!, 'dxhold', this.handleHold);
     }
+  }
+
+  componentDidUpdate(): void {
+    this.updateKeyboardController();
   }
 
   handleMouseEnter = (): void => {
