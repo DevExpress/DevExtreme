@@ -93,6 +93,11 @@ exports[`common initial render should be successfull 1`] = `
     </div>
     
   </div>
+  <div>
+    <div
+      class="dx-header-filter-menu"
+    />
+  </div>
   <div
     class="dx-gridcore-contentview"
   >
@@ -160,6 +165,14 @@ exports[`common initial render should be successfull 1`] = `
     <div
       class="dx-gridcore-error-row"
     />
+  </div>
+  <div>
+    <div
+      class="dx-hidden"
+    />
+  </div>
+  <div>
+    <div />
   </div>
   <div>
     
