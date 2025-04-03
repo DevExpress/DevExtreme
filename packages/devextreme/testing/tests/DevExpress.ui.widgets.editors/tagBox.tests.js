@@ -397,15 +397,17 @@ QUnit.module('list selection', moduleSetup, () => {
         }).dxTagBox('instance');
 
         let $item = getListItems(tagBox).eq(0);
-
+        debugger;
         $item.trigger('dxclick');
-        assert.deepEqual(spy.args[1][0].addedItems, [1], 'added items is correct');
-        assert.deepEqual(spy.args[1][0].removedItems, [], 'removed items is empty');
+        debugger;
+        assert.deepEqual(spy.args[0][0].addedItems, [1], 'added items is correct');
+        assert.deepEqual(spy.args[0][0].removedItems, [], 'removed items is empty');
 
         $item = getListItems(tagBox).eq(1);
         $item.trigger('dxclick');
-        assert.deepEqual(spy.args[2][0].addedItems, [3], 'added items is correct');
-        assert.deepEqual(spy.args[2][0].removedItems, [], 'removed items is empty');
+        debugger;
+        assert.deepEqual(spy.args[1][0].addedItems, [3], 'added items is correct');
+        assert.deepEqual(spy.args[1][0].removedItems, [], 'removed items is empty');
     });
 
     QUnit.test('selected items should be correct after item click with hideSelecterdItems option (T606462)', function(assert) {
@@ -5077,6 +5079,77 @@ QUnit.module('the \'selectedItems\' option', moduleSetup, () => {
         assert.strictEqual(selectionChangedHandler.callCount, callCountOnInit + 1, 'onSelectionChanged handler was called');
     });
 
+    QUnit.test('onSelectionChanged should be called if value is specified on init', function(assert) {
+        const selectionChangedHandler = sinon.spy();
+
+        $('#tagBox').dxTagBox({
+            items: [1, 2, 3],
+            value: [1],
+            onSelectionChanged: selectionChangedHandler
+        });
+
+        assert.strictEqual(selectionChangedHandler.callCount, 1, 'onSelectionChanged handler was called on init');
+    });
+
+    QUnit.test('onSelectionChanged should not be called if value is not specified on init (T1259823)', function(assert) {
+        const selectionChangedHandler = sinon.spy();
+
+        $('#tagBox').dxTagBox({
+            items: [1, 2, 3],
+            onSelectionChanged: selectionChangedHandler
+        });
+
+        assert.strictEqual(selectionChangedHandler.callCount, 0, 'onSelectionChanged handler was not called on init');
+    });
+
+    QUnit.test('onSelectionChanged should not be called on runtime items change if new items include selected items (T1259823)', function(assert) {
+        const selectionChangedHandler = sinon.spy();
+
+        const tagBox = $('#tagBox').dxTagBox({
+            items: [1, 2, 3],
+            value: [1],
+            onSelectionChanged: selectionChangedHandler
+        }).dxTagBox('instance');
+
+        assert.strictEqual(selectionChangedHandler.callCount, 1, 'onSelectionChanged handler was called on init');
+
+        tagBox.option('items', [1, 2]);
+
+        assert.strictEqual(selectionChangedHandler.callCount, 1, 'onSelectionChanged handler was not called on items change');
+    });
+
+    QUnit.test('onSelectionChanged should be called on runtime items change if new items do not include selected items', function(assert) {
+        const selectionChangedHandler = sinon.spy();
+
+        const tagBox = $('#tagBox').dxTagBox({
+            items: [1, 2, 3],
+            value: [1],
+            onSelectionChanged: selectionChangedHandler
+        }).dxTagBox('instance');
+
+        assert.strictEqual(selectionChangedHandler.callCount, 1, 'onSelectionChanged handler was called on init');
+
+        tagBox.option('items', [2, 3]);
+
+        assert.strictEqual(selectionChangedHandler.callCount, 2, 'onSelectionChanged handler was called on items change');
+    });
+
+    QUnit.test('onSelectionChanged should not be called on runtime value change on the same value (T1259823)', function(assert) {
+        const selectionChangedHandler = sinon.spy();
+
+        const tagBox = $('#tagBox').dxTagBox({
+            items: [1, 2, 3],
+            value: [1],
+            onSelectionChanged: selectionChangedHandler
+        }).dxTagBox('instance');
+
+        assert.strictEqual(selectionChangedHandler.callCount, 1, 'onSelectionChanged handler was called on init');
+
+        tagBox.option('value', [1]);
+
+        assert.strictEqual(selectionChangedHandler.callCount, 1, 'onSelectionChanged handler was not called on value change');
+    });
+
     QUnit.test('The \'selectedItems\' option changes after the \'value\' option', function(assert) {
         const items = [1, 2, 3];
 
@@ -5169,13 +5242,13 @@ QUnit.module('the \'onSelectionChanged\' option', moduleSetup, () => {
         const $listItems = tagBox._list.$element().find('.dx-list-item');
 
         $($listItems.eq(0)).trigger('dxclick');
-        assert.deepEqual(spy.args[1][0].addedItems, [items[0]], 'first item is in the \'addedItems\' argument');
+        assert.deepEqual(spy.args[0][0].addedItems, [items[0]], 'first item is in the \'addedItems\' argument');
 
         $($listItems.eq(1)).trigger('dxclick');
-        assert.deepEqual(spy.args[2][0].addedItems, [items[1]], 'second item is in the \'addedItems\' argument');
+        assert.deepEqual(spy.args[1][0].addedItems, [items[1]], 'second item is in the \'addedItems\' argument');
 
         $($listItems.eq(1)).trigger('dxclick');
-        assert.deepEqual(spy.args[3][0].addedItems, [], 'no items in the \'addedItems\' argument after item is unselected');
+        assert.deepEqual(spy.args[2][0].addedItems, [], 'no items in the \'addedItems\' argument after item is unselected');
     });
 
     QUnit.test('the \'onSelectionChanged\' action should contain correct \'removedItems\' argument', function(assert) {
