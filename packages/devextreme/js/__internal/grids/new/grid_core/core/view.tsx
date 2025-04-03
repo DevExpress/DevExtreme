@@ -13,7 +13,7 @@ export abstract class View<T extends {}> {
 
   private props?: T;
 
-  private readonly firstRender = true;
+  private firstRender = true;
 
   protected root?: HTMLDivElement;
 
