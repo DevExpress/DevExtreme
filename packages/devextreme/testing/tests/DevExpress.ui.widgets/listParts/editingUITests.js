@@ -15,7 +15,6 @@ import SwitchableButtonEditDecorator from '__internal/ui/list/m_list.edit.decora
 import themes from 'ui/themes';
 import { DataSource } from 'common/data/data_source/data_source';
 import ArrayStore from 'common/data/array_store';
-import { reorderingPointerMock } from './utils.js';
 
 import 'ui/action_sheet';
 import 'ui/list';
@@ -65,6 +64,7 @@ const SELECT_CHECKBOX_CLASS = 'dx-list-select-checkbox';
 
 const REORDERING_ITEM_CLASS = 'dx-sortable-source-hidden';
 const REORDERING_ITEM_GHOST_CLASS = 'dx-list-item-ghost-reordering';
+const REORDER_HANDLE_CLASS = 'dx-list-reorder-handle';
 
 const topTranslation = ($item) => {
     return translator.locate($item).top;
@@ -72,6 +72,40 @@ const topTranslation = ($item) => {
 
 const position = ($element) => {
     return translator.locate($element).left;
+};
+
+const reorderingPointerMock = ($item, clock, usePixel) => {
+    const itemOffset = $item.offset().top;
+    const itemHeight = $item.outerHeight();
+    const scale = usePixel ? 1 : itemHeight;
+    const $handle = $item.find(`.${REORDER_HANDLE_CLASS}`);
+    const pointer = pointerMock($handle);
+
+    return {
+        dragStart: function(offset) {
+            offset = offset || 0;
+
+            pointer.start().down(0, itemOffset + scale * offset);
+
+            if(clock) {
+                clock.tick(30);
+            }
+
+            return this;
+        },
+        drag: function(offset) {
+            offset = offset || 0;
+
+            pointer.move(0, scale * offset);
+
+            return this;
+        },
+        dragEnd: function() {
+            pointer.up();
+
+            return this;
+        }
+    };
 };
 
 QUnit.module('switchable menu decorator', {
@@ -2156,20 +2190,15 @@ QUnit.module('selectAll for all pages', () => {
 
         sinon.spy(errors, 'log');
 
-        // act
         $selectAll.trigger('dxclick');
 
-        // assert
         assert.strictEqual(errors.log.callCount, 1);
         assert.strictEqual(errors.log.lastCall.args[0], 'W1010', 'Warning about selectAllMode allPages and grouped data');
         assert.strictEqual($selectAll.dxCheckBox('option', 'value'), false, 'selectAll checkbox value is not changed');
         assert.strictEqual($list.dxList('option', 'selectedItems').length, 0, 'items are not selected');
 
-
-        // act
         $selectAll.trigger('dxclick');
 
-        // assert
         assert.strictEqual(errors.log.callCount, 2);
         assert.strictEqual(errors.log.lastCall.args[0], 'W1010', 'Warning about selectAllMode allPages and grouped data');
         assert.strictEqual($selectAll.dxCheckBox('option', 'value'), false, 'selectAll checkbox value is not changed');
@@ -3059,3 +3088,57 @@ QUnit.module('reordering decorator', {
         assert.deepEqual(onItemRenderedSpy.callCount, 4, 'rendered item count');
     });
 });
+
+if(QUnit.urlParams['nojquery'] && QUnit.urlParams['shadowDom']) {
+    QUnit.module('ShadowDOM', {
+        beforeEach: function() {
+            this.clock = sinon.useFakeTimers();
+
+            this.$list = $('#list').dxList({
+                items: ['One', 'Two', 'Three'],
+                itemDragging: { allowReordering: true },
+                focusStateEnabled: true,
+            });
+
+            this.root = $('#list')[0].getRootNode();
+        },
+
+        afterEach: function() {
+            this.clock.restore();
+        },
+
+        getItems: function() {
+            return this.$list.find(`.${LIST_ITEM_CLASS}`);
+        },
+
+        createEvent: function(eventName) {
+            return $.Event(eventName, {
+                originalEvent: {
+                    type: eventName,
+                    target: { shadowRoot: this.root },
+                    path: [ this.getItems().eq(1)[0] ],
+                    changedTouches: [{}]
+                }
+            });
+        },
+    }, () => {
+        QUnit.test('drag item', function(assert) {
+            const pointer = reorderingPointerMock(this.getItems().first());
+
+            pointer.dragStart().drag(34).dragEnd();
+
+            const orderedItems = this.getItems().toArray().map(e => e.innerText.trim());
+
+            assert.deepEqual(orderedItems, ['Two', 'Three', 'One']);
+        });
+
+        QUnit.test('focus item', function(assert) {
+            $(this.root).trigger(this.createEvent('mousedown'));
+            $(this.root).trigger(this.createEvent('touchstart'));
+
+            this.clock.tick(10);
+
+            assert.ok(this.getItems().eq(1).hasClass(FOCUSED_STATE_CLASS));
+        });
+    });
+}

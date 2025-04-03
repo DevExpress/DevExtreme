@@ -516,10 +516,8 @@ QUnit.module('selection', () => {
         const instance = $element.dxList('instance');
         assert.equal(loading.callCount, 1, 'one load during creation');
 
-        // act
         instance.unselectItem(0);
 
-        // assert
         assert.equal(loading.callCount, 1, 'no load during unselect last item');
         assert.deepEqual(instance.option('selectedItems'), [], 'selected items is empty');
     });
@@ -547,10 +545,8 @@ QUnit.module('selection', () => {
         loading = sinon.spy();
         ds.store().on('loading', loading);
 
-        // act
         instance.option('selectedItemKeys', [4]);
 
-        // assert
         assert.equal(loading.callCount, 1, 'one load during change selectedRowKeys');
         assert.deepEqual(loading.lastCall.args[0].filter, ['this', '=', 4], 'load during change selectedRowKeys');
         assert.deepEqual(instance.option('selectedItems'), [4], 'selected items is empty');
@@ -654,7 +650,6 @@ QUnit.module('selection', () => {
     });
 
     QUnit.test('Selecting all filtered items when selectAllMode is \'allPages\' (T567757)', function(assert) {
-        // arrange
         const items = [1, 2, 3, 4, 5];
         let $selectAll;
 
@@ -670,18 +665,14 @@ QUnit.module('selection', () => {
             searchValue: '1'
         }).dxList('instance');
 
-        // act
         instance.selectItem(0);
 
-        // assert
         $selectAll = $('#list').find('.dx-list-select-all-checkbox');
         assert.ok($selectAll.hasClass('dx-checkbox-checked'), 'selectAll checkbox is checked');
         assert.deepEqual(instance.option('selectedItems'), [1], 'selected items');
 
-        // act
         instance.option('searchValue', '');
 
-        // assert
         $selectAll = $('#list').find('.dx-list-select-all-checkbox');
         assert.ok($selectAll.hasClass('dx-checkbox-indeterminate'), 'selectAll checkbox is indeterminate');
     });
