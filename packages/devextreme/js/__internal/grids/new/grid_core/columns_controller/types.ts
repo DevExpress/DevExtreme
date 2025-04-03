@@ -1,10 +1,19 @@
 import type { Format, SortOrder } from '@js/common';
 import type { ColumnBase } from '@js/common/grids';
+import type { Cell as PublicCell, DataRow as PublicDataRow } from '@js/ui/card_view';
 import type { HeaderFilterColumnOptions } from '@ts/grids/new/grid_core/filtering/header_filter/index';
 import type { ComponentType } from 'inferno';
 
-import type { DataObject, Key } from '../data_controller/types';
+import type { DataObject } from '../data_controller/types';
 import type { HighlightedTextItem } from '../search/types';
+
+export type Cell = PublicCell & {
+  highlightedText: HighlightedTextItem[] | null;
+};
+
+export type DataRow = Omit<PublicDataRow, 'cells'> & {
+  cells: Cell[];
+};
 
 type InheritedColumnProps =
   | 'alignment'
@@ -57,27 +66,3 @@ export type Column = Pick<Required<ColumnBase>, InheritedColumnProps> & {
 };
 
 export type VisibleColumn = Column & { visible: true };
-
-export interface Cell {
-  value: unknown;
-
-  displayValue: unknown;
-
-  text: string;
-
-  column: Column;
-
-  highlightedText: HighlightedTextItem[] | null;
-}
-
-export interface DataRow {
-  cells: Cell[];
-
-  key: Key;
-
-  data: DataObject;
-
-  isSelected?: boolean;
-
-  index: number;
-}

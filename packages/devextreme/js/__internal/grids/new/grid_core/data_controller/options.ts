@@ -1,28 +1,6 @@
-import type { DataSourceLike } from '@js/data/data_source';
+import type { DataControllerConfiguration as PublicOptions, dxCardViewOptions } from '@js/ui/card_view';
 
-import type { Action } from '../types';
-
-interface PagingOptions {
-  enabled?: boolean;
-  pageSize?: number;
-  pageIndex?: number;
-}
-
-interface RemoteOperationsOptions {
-  filtering?: boolean;
-  paging?: boolean;
-  sorting?: boolean;
-  summary?: boolean;
-}
-
-export interface Options {
-  cacheEnabled?: boolean;
-  dataSource?: DataSourceLike<unknown>;
-  keyExpr?: string | string[];
-  onDataErrorOccurred?: Action<{ error: string }>;
-  paging?: PagingOptions;
-  remoteOperations?: RemoteOperationsOptions | boolean | 'auto';
-}
+export type Options = PublicOptions & Pick<dxCardViewOptions, 'onDataErrorOccurred'>;
 
 export const defaultOptions = {
   paging: {
