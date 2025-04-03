@@ -86,14 +86,14 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { type SingleOrMultiple } from 'devextreme-vue/common';
-import DxTreeView from 'devextreme-vue/tree-view';
+import DxTreeView, { type DxTreeViewTypes } from 'devextreme-vue/tree-view';
 import DxList from 'devextreme-vue/list';
 import DxSelectBox from 'devextreme-vue/select-box';
 import DxCheckBox from 'devextreme-vue/check-box';
 import { employees } from './data.ts';
 
 const selectionModes: SingleOrMultiple[] = ['multiple', 'single'];
-const showCheckBoxesModes = ['normal', 'selectAll', 'none'];
+const showCheckBoxesModes: DxTreeViewTypes.TreeViewCheckBoxMode[] = ['normal', 'selectAll', 'none'];
 const selectedEmployees = ref([]);
 const showCheckBoxesModeValue = ref(showCheckBoxesModes[0]);
 const selectionModeValue = ref(selectionModes[0]);

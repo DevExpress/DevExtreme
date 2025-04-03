@@ -169,7 +169,7 @@ const clearFilter = () => dataGridRef.value?.instance?.clearFilter();
 const getOrderDay = (rowData: Order) => (new Date(rowData.OrderDate)).getDay();
 
 function calculateFilterExpression(
-  this: DxDataGridTypes.Column, value: any, selectedFilterOperations: string | null, target: string,
+  this: DxDataGridTypes.Column, value: any, selectedFilterOperations: string, target: string,
 ) {
   const column = this;
 
@@ -177,7 +177,11 @@ function calculateFilterExpression(
     return [[getOrderDay, '=', 0], 'or', [getOrderDay, '=', 6]];
   }
 
-  return column.defaultCalculateFilterExpression!(value, selectedFilterOperations, target);
+  return column.defaultCalculateFilterExpression!(
+    value,
+    selectedFilterOperations,
+    target,
+  ) as (string | any[] | (() => any));
 }
 
 const orderDateHeaderFilter = (options: { dataSource: DataSourceOptions }) => {

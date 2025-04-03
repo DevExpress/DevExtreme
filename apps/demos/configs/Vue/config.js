@@ -3,7 +3,7 @@ window.config = {
   transpiler: 'plugin-babel',
   meta: {
     '*.vue': {
-      loader: 'demo-vue-loader',
+      loader: 'vue-loader',
     },
     '*.ts': {
       loader: 'demo-ts-loader',
@@ -50,7 +50,6 @@ window.config = {
     '@vue/shared': 'npm:@vue/shared/dist/shared.cjs.prod.js',
     'vue-loader': 'npm:dx-systemjs-vue-browser/index.js',
     'demo-ts-loader': 'project:utils/demo-ts-loader.js',
-    'demo-vue-loader': 'project:utils/demo-vue-loader.js',
     'jszip': 'npm:jszip/dist/jszip.min.js',
     'svg-loader': 'project:utils/svg-loader.js',
 
@@ -61,12 +60,6 @@ window.config = {
 
     /** devextreme-aspnet-data-nojquery */
     'devextreme-aspnet-data-nojquery': 'npm:devextreme-aspnet-data-nojquery/index.js',
-    /**/
-
-    /** globalize--vue&react */
-    'globalize': 'npm:globalize/dist/globalize',
-    'json': 'npm:systemjs-plugin-json/json.js',
-    'cldr': 'npm:cldrjs/dist/cldr',
     /**/
 
     /** globalize */
@@ -164,16 +157,11 @@ window.config = {
     'devextreme/events/utils': {
       main: 'index',
     },
+    'devextreme/common/core/events/utils': {
+      main: 'index',
+    },
     'devextreme/events': {
       main: 'index',
-    }/** globalize--vue&react */,
-    'globalize': {
-      main: '../globalize.js',
-      defaultExtension: 'js',
-    },
-    'cldr': {
-      main: '../cldr.js',
-      defaultExtension: 'js',
     }/**//** globalize */,
     'globalize': {
       main: '../globalize.js',

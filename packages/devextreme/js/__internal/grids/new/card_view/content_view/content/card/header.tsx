@@ -48,7 +48,6 @@ export class CardHeader extends Component<CardHeaderProps> {
 
     return (
       <div className={CLASSES.cardHeader}>
-        {/* @ts-expect-error */}
         <Toolbar items={finalItems} />
       </div>
     );

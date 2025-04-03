@@ -22,11 +22,6 @@ export interface ContentViewProps {
 
   scrollableProps: ScrollableProps;
 
-  virtualScrollingProps?: {
-    heightUp?: number;
-    heightDown?: number;
-  };
-
   onViewportHeightChange?: (value: number) => void;
 
   scrollTop?: number;
@@ -48,8 +43,7 @@ export class ContentView extends Component<ContentViewProps> {
       <div className={CLASSES.contentView} ref={this.containerRef}>
         <LoadPanel {...this.props.loadPanelProps} />
         <Scrollable
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          ref={this.scrollableRef as any}
+          ref={this.scrollableRef}
           componentRef={this.props.scrollableRef}
           {...this.props.scrollableProps}
         >

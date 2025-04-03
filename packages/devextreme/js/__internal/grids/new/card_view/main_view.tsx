@@ -1,14 +1,20 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { combined } from '@ts/core/reactive/index';
 import { View } from '@ts/grids/new/grid_core/core/view';
 import { PagerView } from '@ts/grids/new/grid_core/pager/view';
 import { ToolbarView } from '@ts/grids/new/grid_core/toolbar/view';
-import type { ComponentType } from 'inferno';
+import type { ComponentType, RefObject } from 'inferno';
 
 import type { Config } from '../grid_core/core/config_context';
 import { ConfigContext } from '../grid_core/core/config_context';
+import { RootElementUpdater } from '../grid_core/inferno_wrappers/root_element_updater';
 import { ContentView } from './content_view/view';
 import { HeaderPanelView } from './header_panel/view';
 import { OptionsController } from './options_controller';
+
+const CLASSES = {
+  cardView: 'dx-cardview',
+};
 
 interface MainViewProps {
   Toolbar: ComponentType;
@@ -16,26 +22,32 @@ interface MainViewProps {
   Pager: ComponentType;
   HeaderPanel: ComponentType;
   config: Config;
+  rootElementRef: RefObject<HTMLDivElement>;
 }
 
 function MainViewComponent({
-  Toolbar, Content, Pager, HeaderPanel, config,
+  Toolbar, Content, Pager, HeaderPanel, config, rootElementRef,
 }: MainViewProps): JSX.Element {
   return (<>
     <ConfigContext.Provider value={config}>
-      <Toolbar/>
-      <HeaderPanel/>
-      <Content/>
-      <div>
-        {/*
-          Pager, as renovated component, has strange disposing.
-          See `inferno_renderer.remove` method.
-          It somehow mutates $V prop of parent element.
-          Without this div, CardView would be parent of Pager.
-          In this case all `componentWillUnmount`s aren't called
-        */}
-        <Pager/>
-      </div>
+      <RootElementUpdater
+        rootElementRef={rootElementRef}
+        className={CLASSES.cardView}
+      >
+        <Toolbar/>
+        <HeaderPanel/>
+        <Content/>
+        <div>
+          {/*
+            Pager, as renovated component, has strange disposing.
+            See `inferno_renderer.remove` method.
+            It somehow mutates $V prop of parent element.
+            Without this div, CardView would be parent of Pager.
+            In this case all `componentWillUnmount`s aren't called
+          */}
+          <Pager/>
+        </div>
+      </RootElementUpdater>
     </ConfigContext.Provider>
   </>);
 }
@@ -70,6 +82,7 @@ export class MainView extends View<MainViewProps> {
         disabled: this.options.oneWay('disabled'),
         templatesRenderAsynchronously: this.options.oneWay('templatesRenderAsynchronously'),
       }),
+      rootElementRef: { current: this.root! },
     });
   }
 }
