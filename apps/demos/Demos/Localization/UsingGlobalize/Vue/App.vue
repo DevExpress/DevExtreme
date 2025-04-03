@@ -63,10 +63,10 @@ import {
   DxDataGrid, DxColumn, DxEditing, DxFilterRow,
 } from 'devextreme-vue/data-grid';
 import DxSelectBox, { DxSelectBoxTypes } from 'devextreme-vue/select-box';
-import 'devextreme/localization/globalize/number';
-import 'devextreme/localization/globalize/date';
-import 'devextreme/localization/globalize/currency';
-import 'devextreme/localization/globalize/message';
+import 'devextreme/common/core/localization/globalize/number';
+import 'devextreme/common/core/localization/globalize/date';
+import 'devextreme/common/core/localization/globalize/currency';
+import 'devextreme/common/core/localization/globalize/message';
 /* eslint-disable import/no-unresolved */
 /* eslint-disable import/no-webpack-loader-syntax */
 import * as deMessages from 'npm:devextreme/localization/messages/de.json!json';

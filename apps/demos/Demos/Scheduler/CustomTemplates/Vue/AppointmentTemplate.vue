@@ -12,7 +12,7 @@
 </template>
 <script setup lang="ts">
 import { formatDate } from 'devextreme/localization';
-import Query from 'devextreme/data/query';
+import { query as Query } from 'devextreme-vue/common/data';
 
 import DxScheduler, { DxSchedulerTypes } from 'devextreme-vue/scheduler';
 import { moviesData } from './data.ts';

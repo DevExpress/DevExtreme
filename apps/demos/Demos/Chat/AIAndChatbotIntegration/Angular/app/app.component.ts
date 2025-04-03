@@ -4,12 +4,7 @@ import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 
 import { DxChatModule } from 'devextreme-angular';
 import { DxButtonModule } from 'devextreme-angular';
-import { 
-  User,
-  Alert,
-  Message,
-  MessageEnteredEvent
-} from 'devextreme/ui/chat';
+import { DxChatTypes } from 'devextreme-angular/ui/chat';
 import { Observable } from 'rxjs';
 import { AppService } from './app.service';
 import { loadMessages } from 'devextreme/localization';
@@ -33,11 +28,11 @@ if (window && window.config?.packageConfigPaths) {
 export class AppComponent {
   dataSource: DataSource;
 
-  user: User;
+  user: DxChatTypes.User;
 
-  typingUsers$: Observable<User[]>;
+  typingUsers$: Observable<DxChatTypes.User[]>;
 
-  alerts$: Observable<Alert[]>;
+  alerts$: Observable<DxChatTypes.Alert[]>;
 
   regenerationText: string;
 
@@ -57,7 +52,7 @@ export class AppComponent {
     this.isDisabled = false;
   }
 
-  convertToHtml(message: Message): string {
+  convertToHtml(message: DxChatTypes.Message): string {
     return this.appService.convertToHtml(message.text);
   }
 
@@ -71,7 +66,7 @@ export class AppComponent {
     }
   };
 
-  async onMessageEntered(e: MessageEnteredEvent) {
+  async onMessageEntered(e: DxChatTypes.MessageEnteredEvent) {
     if (!this.appService.alerts.length) {
       this.toggleDisabledState(true, e.event);
     }
@@ -83,7 +78,7 @@ export class AppComponent {
     }
   }
 
-  onCopyButtonClick(message: Message) {
+  onCopyButtonClick(message: DxChatTypes.Message) {
     navigator.clipboard?.writeText(message.text);
 
     this.copyButtonIcon = 'check';

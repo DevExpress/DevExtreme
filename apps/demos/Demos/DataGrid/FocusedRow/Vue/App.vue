@@ -86,7 +86,8 @@ import {
 import DxNumberBox from 'devextreme-vue/number-box';
 import DxCheckBox from 'devextreme-vue/check-box';
 import { DataSourceOptions } from 'devextreme-vue/common/data';
-import 'devextreme/data/odata/store';
+import 'devextreme-vue/common/data';
+
 import { Task } from './data.ts';
 
 const taskSubject = ref('');

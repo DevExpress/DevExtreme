@@ -9,6 +9,7 @@ import {
 } from 'devextreme-angular';
 import { exportDataGrid } from 'devextreme-angular/common/export/pdf';
 import {DataSourceOptions as DataSourceConfig} from 'devextreme-angular/common/data';
+
 import 'devextreme/data/odata/store';
 
 if (!/localhost/.test(document.location.host)) {

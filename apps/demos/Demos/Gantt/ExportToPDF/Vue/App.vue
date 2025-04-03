@@ -163,7 +163,7 @@ import DxDateBox from 'devextreme-vue/date-box';
 import DxSelectBox from 'devextreme-vue/select-box';
 import { jsPDF } from 'jspdf';
 import 'jspdf-autotable';
-import { exportGantt as exportGanttToPdf } from 'devextreme/pdf_exporter';
+import { exportGantt as exportGanttToPdf } from 'devextreme-vue/common/export/pdf';
 import {
   tasks,
   dependencies,

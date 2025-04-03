@@ -9,7 +9,7 @@ import { lastValueFrom } from 'rxjs';
 import { DxChartModule, DxSelectBoxModule } from 'devextreme-angular';
 import { DataSource } from 'devextreme-angular/common/data';
 import { CustomStore } from 'devextreme-angular/common/data';
-import query from 'devextreme/data/query';
+import { query } from 'devextreme-angular/common/data';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();

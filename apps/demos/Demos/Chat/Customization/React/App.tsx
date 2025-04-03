@@ -1,6 +1,5 @@
 import React, { useState, useCallback } from 'react';
 import Chat, { ChatTypes } from 'devextreme-react/chat';
-import { MessageEnteredEvent } from 'devextreme/ui/chat';
 import SelectBox from 'devextreme-react/select-box';
 import CheckBox from 'devextreme-react/check-box';
 
@@ -23,7 +22,7 @@ export default function App() {
   const [messageTimestampFormat, setMessageTimestampFormat] = useState(messageTimestamps[0]);
   const [isDisabled, setDisabled] = useState(false);
 
-  const onMessageEntered = useCallback(({ message }: MessageEnteredEvent) => {
+  const onMessageEntered = useCallback(({ message }: ChatTypes.MessageEnteredEvent) => {
     setMessages((prevMessages) => [...prevMessages, message]);
   }, []);
 

@@ -1,6 +1,5 @@
 import React, { useCallback, useState } from 'react';
 import Chat, { ChatTypes } from 'devextreme-react/chat';
-import { MessageEnteredEvent } from 'devextreme/ui/chat';
 import { loadMessages } from 'devextreme/localization';
 import {
   user,
@@ -36,7 +35,7 @@ export default function App() {
     setIsProcessing(false);
   }, [fetchAIResponse]);
 
-  const onMessageEntered = useCallback(async ({ message, event }: MessageEnteredEvent): Promise<void> => {
+  const onMessageEntered = useCallback(async ({ message, event }: ChatTypes.MessageEnteredEvent): Promise<void> => {
     insertMessage({ id: Date.now(), ...message });
 
     if (!alerts.length) {

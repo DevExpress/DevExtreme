@@ -1,6 +1,6 @@
 import React from 'react';
 import Scheduler, { Editing, Resource, SchedulerTypes } from 'devextreme-react/scheduler';
-import Query from 'devextreme/data/query';
+import { query as Query } from 'devextreme-react/common/data';
 import { SelectBoxTypes } from 'devextreme-react/select-box';
 import { DateBoxTypes } from 'devextreme-react/date-box';
 import Appointment from './Appointment.tsx';

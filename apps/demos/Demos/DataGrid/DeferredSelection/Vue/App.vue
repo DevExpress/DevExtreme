@@ -72,8 +72,8 @@ import {
 } from 'devextreme-vue/data-grid';
 import DxButton from 'devextreme-vue/button';
 import { DataSourceOptions } from 'devextreme-vue/common/data';
-import query from 'devextreme/data/query';
-import 'devextreme/data/odata/store';
+import { query } from 'devextreme-vue/common/data';
+
 
 const MILLISECONDS_IN_DAY = 1000 * 60 * 60 * 24;
 

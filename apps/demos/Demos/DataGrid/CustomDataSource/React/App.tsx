@@ -1,5 +1,5 @@
 import React from 'react';
-import 'devextreme/data/odata/store';
+
 import DataGrid, { Column, Paging, Pager } from 'devextreme-react/data-grid';
 import { CustomStore } from 'devextreme-react/common/data';
 import 'whatwg-fetch';

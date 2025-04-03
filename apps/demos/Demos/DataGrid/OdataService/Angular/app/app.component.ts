@@ -2,7 +2,7 @@ import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import {DataSourceOptions as DataSourceConfig} from 'devextreme-angular/common/data';
-import 'devextreme/data/odata/store';
+
 import { DxDataGridModule } from 'devextreme-angular';
 
 if (!/localhost/.test(document.location.host)) {

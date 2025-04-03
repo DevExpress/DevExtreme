@@ -10,7 +10,7 @@ import {
   DxButtonModule,
 } from 'devextreme-angular';
 import { DxButtonTypes } from 'devextreme-angular/ui/button';
-import query from 'devextreme/data/query';
+import { query } from 'devextreme-angular/common/data';
 import { DxSelectBoxModule, DxSelectBoxTypes } from 'devextreme-angular/ui/select-box';
 import { Service, Order } from './app.service';
 

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import 'devextreme/data/odata/store';
+
 import { DataSource } from 'devextreme-angular/common/data';
 
 @Injectable()

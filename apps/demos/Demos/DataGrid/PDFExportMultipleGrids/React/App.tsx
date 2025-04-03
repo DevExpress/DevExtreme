@@ -5,7 +5,7 @@ import DataGrid, { Column, DataGridRef } from 'devextreme-react/data-grid';
 import { exportDataGrid } from 'devextreme-react/common/export/pdf';
 import { jsPDF } from 'jspdf';
 
-import 'devextreme/data/odata/store';
+import 'devextreme-react/common/data';
 
 const priceDataSource = {
   store: {
