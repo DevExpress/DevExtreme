@@ -2776,10 +2776,10 @@ module('Appointment dragging', {
 
                         const dataSourceItem = this.instance.option('dataSource').items()[0];
 
-                        assert.equal(dataSourceItem.text, updatedItem.text, 'New data is correct');
-                        assert.equal(dataSourceItem.AllDay, updatedItem.AllDay, 'New data is correct');
-                        assert.deepEqual(dataSourceItem.startDate, updatedItem.startDate, 'New data is correct');
-                        assert.deepEqual(dataSourceItem.endDate, updatedItem.endDate, 'New data is correct');
+                        assert.equal(dataSourceItem.text, updatedItem.text, 'New data (text) is correct');
+                        assert.equal(dataSourceItem.AllDay, updatedItem.AllDay, 'New data (AllDay) is correct');
+                        assert.deepEqual(dataSourceItem.startDate, updatedItem.startDate, 'New data (startDate) is correct');
+                        assert.deepEqual(dataSourceItem.endDate, updatedItem.endDate, 'New data (endDate) is correct');
                     } finally {
                         config().forceIsoDateParsing = defaultForceIsoDateParsing;
                     }
