@@ -397,15 +397,15 @@ QUnit.module('list selection', moduleSetup, () => {
         }).dxTagBox('instance');
 
         let $item = getListItems(tagBox).eq(0);
-        debugger;
+
         $item.trigger('dxclick');
-        debugger;
+
         assert.deepEqual(spy.args[0][0].addedItems, [1], 'added items is correct');
         assert.deepEqual(spy.args[0][0].removedItems, [], 'removed items is empty');
 
         $item = getListItems(tagBox).eq(1);
         $item.trigger('dxclick');
-        debugger;
+
         assert.deepEqual(spy.args[1][0].addedItems, [3], 'added items is correct');
         assert.deepEqual(spy.args[1][0].removedItems, [], 'removed items is empty');
     });
