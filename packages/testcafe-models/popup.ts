@@ -49,6 +49,10 @@ export default class Popup extends Overlay {
     return Selector(`.${CLASS.viewsWrapper}`);
   }
 
+  getButton(idx = 0): Button {
+    return new Button(this.getWrapper().find(`.${CLASS.button}`).nth(idx));
+  }
+
   getCloseButton(): Button {
     return new Button(this.getWrapper().find(`.${CLASS.closeButton}`));
   }
