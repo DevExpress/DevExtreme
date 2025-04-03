@@ -1,5 +1,5 @@
 import { describe, expect, it } from '@jest/globals';
-import { mockAppointmentDataAccessor } from '@ts/scheduler/__mock__/appointmentDataAcessor.mock';
+import { mockAppointmentDataAccessor } from '@ts/scheduler/__mock__/appointment_data_accessor.mock';
 
 import { createTimeZoneCalculator } from '../../timezone_calculator';
 import { excludeFromRecurrence } from '../index';
