@@ -12,11 +12,13 @@ type InheritedColumnProps =
   | 'visible'
   | 'visibleIndex'
   | 'allowReordering'
+  | 'allowHiding'
   | 'allowFiltering'
   | 'allowHeaderFiltering'
   | 'trueText'
   | 'falseText'
-  | 'caption';
+  | 'caption'
+  | 'showInColumnChooser';
 
 export type Column = Pick<Required<ColumnBase>, InheritedColumnProps> & {
   dataField?: string;
