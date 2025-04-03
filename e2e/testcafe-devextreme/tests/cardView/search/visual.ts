@@ -9,6 +9,9 @@ fixture`Search.Visual`
   .page(url(__dirname, '../../container.html'));
 
 const CARD_VIEW_SELECTOR = '#container';
+
+const COLUMNS = ['id', 'firstName', 'lastName', 'email', 'gender'];
+
 const DATA = [{
   id: 1,
   firstName: 'Darin',
@@ -53,6 +56,7 @@ test('highlighted search text', async (t) => {
     .ok(compareResults.errorMessages());
 }).before(async () => createWidget('dxCardView', {
   dataSource: DATA,
+  columns: COLUMNS,
   searchPanel: {
     text: 'Female',
   },
