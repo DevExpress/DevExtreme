@@ -1,7 +1,8 @@
-import { compileGetter, compileSetter } from 'core/utils/data';
+import { compileGetter } from 'core/utils/data';
 import config from 'core/config';
 import { DataSource } from 'data/data_source/data_source';
 import { AppointmentDataProvider } from '__internal/scheduler/appointments/data_provider/m_appointment_data_provider';
+import { AppointmentDataAccessor } from '__internal/scheduler/utils/data_accessor/appointment_data_accessor';
 import { getPreparedDataItems } from '__internal/scheduler/r1/utils/index.js';
 
 const {
@@ -9,25 +10,17 @@ const {
     test
 } = QUnit;
 
-const defaultDataAccessors = {
-    getter: {
-        startDate: compileGetter('startDate'),
-        endDate: compileGetter('endDate'),
-    },
-    setter: {
-        startDate: compileSetter('startDate'),
-        endDate: compileSetter('endDate'),
-    },
-    expr: {
-        startDateExpr: 'startDate',
-        endDateExpr: 'endDate'
-    },
-};
+const defaultDataAccessors = new AppointmentDataAccessor({
+    startDateExpr: 'startDate',
+    endDateExpr: 'endDate',
+    allDayExpr: 'allDay',
+}, true);
 
 const createAppointmentDataProvider = (options) => {
     return {
         appointmentDataProvider: new AppointmentDataProvider({
             allDayPanelMode: 'all',
+            dataAccessors: options.dataAccessors,
             timeZoneCalculator: ({
                 createDate: date => date
             }),
@@ -150,31 +143,15 @@ module('Server side filtering', () => {
             key: 0,
             dataSource,
             isVirtualScrolling: false,
-            dataAccessors: {
-                getter: {
-                    startDate: compileGetter('StartDate'),
-                    endDate: compileGetter('EndDate'),
-                    recurrenceRule: compileGetter('RecurrenceRule'),
-                    recurrenceException: compileGetter('Exception'),
-                    allDay: compileGetter('AllDay'),
-                    startDateTimeZone: compileGetter('StartDateTimeZone'),
-                    endDateTimeZone: compileGetter('EndDateTimeZone')
-                },
-                setter: {
-                    startDate: compileSetter('StartDate'),
-                    endDate: compileSetter('EndDate'),
-                    recurrenceRule: compileSetter('RecurrenceRule'),
-                    recurrenceException: compileSetter('Exception'),
-                    allDay: compileSetter('AllDay')
-                },
-                expr: {
-                    startDateExpr: 'StartDate',
-                    endDateExpr: 'EndDate',
-                    allDayExpr: 'AllDay',
-                    recurrenceRuleExpr: 'RecurrenceRule',
-                    recurrenceExceptionExpr: 'Exception'
-                }
-            }
+            dataAccessors: new AppointmentDataAccessor({
+                startDateExpr: 'StartDate',
+                endDateExpr: 'EndDate',
+                allDayExpr: 'AllDay',
+                recurrenceRuleExpr: 'RecurrenceRule',
+                recurrenceExceptionExpr: 'Exception',
+                startDateTimeZoneExpr: 'StartDateTimeZone',
+                endDateTimeZoneExpr: 'EndDateTimeZone',
+            }, true),
         });
 
         appointmentDataProvider.filterByDate(new Date(2015, 0, 1, 1), new Date(2015, 0, 2));
@@ -255,12 +232,7 @@ module('Server side filtering', () => {
                 key: 0,
                 dataSource,
                 isVirtualScrolling: false,
-                dataAccessors: {
-                    expr: {
-                        startDateExpr: 'startDate',
-                        endDateExpr: 'endDate'
-                    }
-                }
+                dataAccessors: defaultDataAccessors,
             });
 
             appointmentDataProvider.filterByDate(new Date(2015, 1, 10, 10), new Date(2015, 1, 10, 13), true, 'yyyy-MM-ddTHH:mm:ss');
@@ -305,12 +277,7 @@ module('Server side filtering', () => {
                 key: 0,
                 dataSource,
                 isVirtualScrolling: false,
-                dataAccessors: {
-                    expr: {
-                        startDateExpr: 'startDate',
-                        endDateExpr: 'endDate'
-                    }
-                }
+                dataAccessors: defaultDataAccessors,
             });
 
             appointmentDataProvider.filterByDate(new Date(2015, 1, 10, 10), new Date(2015, 1, 10, 13), true, 'yyyy-MM-ddTHH:mm:ss');
@@ -375,20 +342,7 @@ module('Server side filtering', () => {
             key: 0,
             dataSource,
             isVirtualScrolling: false,
-            dataAccessors: {
-                getter: {
-                    startDate: compileGetter('Start'),
-                    endDate: compileGetter('End'),
-                },
-                setter: {
-                    startDate: compileSetter('Start'),
-                    endDate: compileSetter('End'),
-                },
-                expr: {
-                    startDateExpr: 'Start',
-                    endDateExpr: 'End'
-                }
-            }
+            dataAccessors: defaultDataAccessors
         });
 
         appointmentDataProvider.filterByDate(new Date(2015, 1, 9), new Date(2015, 1, 20));
@@ -413,23 +367,12 @@ module('Server side filtering', () => {
             key: 0,
             dataSource,
             isVirtualScrolling: false,
-            dataAccessors: {
-                getter: {
-                    startDate: compileGetter('startDate'),
-                    endDate: compileGetter('endDate'),
-                    allDay: compileGetter('AllDay'),
-                },
-                setter: {
-                    startDate: compileSetter('startDate'),
-                    endDate: compileSetter('endDate'),
-                    allDay: compileSetter('AllDay'),
-                },
-                expr: {
-                    startDateExpr: 'startDate',
-                    endDateExpr: 'endDate',
-                    allDayExpr: 'AllDay'
-                }
-            }
+            dataAccessors: new AppointmentDataAccessor({
+                startDateExpr: 'startDate',
+                endDateExpr: 'endDate',
+                textExpr: 'text',
+                allDayExpr: 'AllDay',
+            }, true),
         });
 
         appointmentDataProvider.filterByDate(new Date(2015, 1, 10, 12), new Date(2015, 1, 11), true);
@@ -453,23 +396,12 @@ module('Server side filtering', () => {
             key: 0,
             dataSource,
             isVirtualScrolling: false,
-            dataAccessors: {
-                getter: {
-                    startDate: compileGetter('startDate'),
-                    endDate: compileGetter('endDate'),
-                    allDay: compileGetter('AllDay'),
-                },
-                setter: {
-                    startDate: compileSetter('startDate'),
-                    endDate: compileSetter('endDate'),
-                    allDay: compileSetter('AllDay'),
-                },
-                expr: {
-                    startDateExpr: 'startDate',
-                    endDateExpr: 'endDate',
-                    allDayExpr: 'AllDay'
-                }
-            }
+            dataAccessors: new AppointmentDataAccessor({
+                startDateExpr: 'startDate',
+                endDateExpr: 'endDate',
+                textExpr: 'text',
+                allDayExpr: 'AllDay',
+            }, true),
         });
 
         appointmentDataProvider.filterByDate(new Date(2015, 1, 11), new Date(2015, 1, 11, 11), true);
@@ -500,26 +432,12 @@ module('Server side filtering', () => {
             key: 0,
             dataSource,
             isVirtualScrolling: false,
-            dataAccessors: {
-                getter: {
-                    startDate: compileGetter('startDate'),
-                    endDate: compileGetter('endDate'),
-                    allDay: compileGetter('AllDay'),
-                    recurrenceRule: compileGetter('_recurrenceRule'),
-                },
-                setter: {
-                    startDate: compileSetter('startDate'),
-                    endDate: compileSetter('endDate'),
-                    allDay: compileSetter('AllDay'),
-                    recurrenceRule: compileSetter('_recurrenceRule'),
-                },
-                expr: {
-                    startDateExpr: 'startDate',
-                    endDateExpr: 'endDate',
-                    allDayExpr: 'AllDay',
-                    recurrenceRuleExpr: '_recurrenceRule'
-                }
-            }
+            dataAccessors: new AppointmentDataAccessor({
+                startDateExpr: 'startDate',
+                endDateExpr: 'endDate',
+                allDayExpr: 'AllDay',
+                recurrenceRuleExpr: '_recurrenceRule'
+            }, true),
         });
 
         appointmentDataProvider.filterByDate(new Date(2015, 1, 10), new Date(2015, 1, 10, 13), true);
@@ -549,24 +467,12 @@ module('Server side filtering', () => {
             key: 0,
             dataSource,
             isVirtualScrolling: false,
-            dataAccessors: {
-                getter: {
-                    startDate: compileGetter('startDate'),
-                    endDate: compileGetter('endDate'),
-                    allDay: compileGetter('allDay'),
-                },
-                setter: {
-                    startDate: compileSetter('startDate'),
-                    endDate: compileSetter('endDate'),
-                    allDay: compileSetter('allDay'),
-                },
-                expr: {
-                    startDateExpr: 'startDate',
-                    endDateExpr: 'endDate',
-                    allDayExpr: 'allDay',
-                    recurrenceRuleExpr: null
-                }
-            }
+            dataAccessors: new AppointmentDataAccessor({
+                startDateExpr: 'startDate',
+                endDateExpr: 'endDate',
+                allDayExpr: 'allDay',
+                recurrenceRuleExpr: null
+            }, true),
         });
 
         appointmentDataProvider.filterByDate(new Date(2015, 1, 10), new Date(2015, 1, 10, 13), true);
@@ -597,24 +503,12 @@ module('Server side filtering', () => {
             key: 0,
             dataSource,
             isVirtualScrolling: false,
-            dataAccessors: {
-                getter: {
-                    startDate: compileGetter('startDate'),
-                    endDate: compileGetter('endDate'),
-                    allDay: compileGetter('allDay'),
-                },
-                setter: {
-                    startDate: compileSetter('startDate'),
-                    endDate: compileSetter('endDate'),
-                    allDay: compileSetter('allDay'),
-                },
-                expr: {
-                    startDateExpr: 'startDate',
-                    endDateExpr: 'endDate',
-                    allDayExpr: 'allDay',
-                    recurrenceRuleExpr: ''
-                }
-            }
+            dataAccessors: new AppointmentDataAccessor({
+                startDateExpr: 'startDate',
+                endDateExpr: 'endDate',
+                allDayExpr: 'allDay',
+                recurrenceRuleExpr: ''
+            }, true),
         });
 
         appointmentDataProvider.filterByDate(new Date(2015, 1, 10), new Date(2015, 1, 10, 13), true);
@@ -638,24 +532,12 @@ module('Server side filtering', () => {
             key: 0,
             dataSource,
             isVirtualScrolling: false,
-            dataAccessors: {
-                getter: {
-                    startDate: compileGetter('startDate'),
-                    endDate: compileGetter('endDate'),
-                    allDay: compileGetter('allDay'),
-                },
-                setter: {
-                    startDate: compileSetter('startDate'),
-                    endDate: compileSetter('endDate'),
-                    allDay: compileSetter('allDay'),
-                },
-                expr: {
-                    startDateExpr: 'startDate',
-                    endDateExpr: 'endDate',
-                    allDayExpr: 'allDay',
-                    recurrenceRuleExpr: ''
-                }
-            }
+            dataAccessors: new AppointmentDataAccessor({
+                startDateExpr: 'startDate',
+                endDateExpr: 'endDate',
+                allDayExpr: 'allDay',
+                recurrenceRuleExpr: ''
+            }, true),
         });
 
         appointmentDataProvider.filterByDate(new Date(2015, 1, 9, 0), new Date(2015, 1, 9, 23, 59));
@@ -680,31 +562,15 @@ module('Server side filtering', () => {
             prepareDataItems
         } = createAppointmentDataProvider({
             dataSource,
-            dataAccessors: {
-                getter: {
-                    startDate: compileGetter('StartDate'),
-                    endDate: compileGetter('EndDate'),
-                    recurrenceRule: compileGetter('RecurrenceRule'),
-                    recurrenceException: compileGetter('Exception'),
-                    allDay: compileGetter('AllDay'),
-                    startDateTimeZone: compileGetter('StartDateTimeZone'),
-                    endDateTimeZone: compileGetter('EndDateTimeZone')
-                },
-                setter: {
-                    startDate: compileSetter('StartDate'),
-                    endDate: compileSetter('EndDate'),
-                    recurrenceRule: compileSetter('RecurrenceRule'),
-                    recurrenceException: compileSetter('Exception'),
-                    allDay: compileSetter('AllDay')
-                },
-                expr: {
-                    startDateExpr: 'StartDate',
-                    endDateExpr: 'EndDate',
-                    allDayExpr: 'AllDay',
-                    recurrenceRuleExpr: 'RecurrenceRule',
-                    recurrenceExceptionExpr: 'Exception'
-                }
-            },
+            dataAccessors: new AppointmentDataAccessor({
+                startDateExpr: 'StartDate',
+                endDateExpr: 'EndDate',
+                allDayExpr: 'AllDay',
+                recurrenceRuleExpr: 'RecurrenceRule',
+                recurrenceExceptionExpr: 'Exception',
+                startDateTimeZoneExpr: 'startDateTimeZone',
+                endDateTimeZoneExpr: 'endDateTimeZone',
+            }, true),
             getIsVirtualScrolling: () => false,
         });
 
@@ -741,22 +607,14 @@ module('Server side filtering', () => {
             key: 0,
             dataSource,
             isVirtualScrolling: false,
-            dataAccessors: {
-                getter: {
-                    startDate: compileGetter('StartDate'),
-                    endDate: compileGetter('EndDate'),
-                    recurrenceRule: compileGetter('RecurrenceRule'),
-                    recurrenceException: compileGetter('Exception'),
-                    allDay: compileGetter('AllDay')
-                },
-                expr: {
-                    startDateExpr: 'StartDate',
-                    endDateExpr: 'EndDate',
-                    allDayExpr: 'AllDay',
-                    recurrenceRuleExpr: 'RecurrenceRule',
-                    recurrenceExceptionExpr: 'Exception'
-                }
-            }
+            dataAccessors: new AppointmentDataAccessor({
+                textExpr: 'text',
+                startDateExpr: 'StartDate',
+                endDateExpr: 'EndDate',
+                allDayExpr: 'AllDay',
+                recurrenceRuleExpr: 'RecurrenceRule',
+                recurrenceExceptionExpr: 'Exception',
+            }, true),
         });
 
         appointmentDataProvider.filterByDate(new Date(2015, 0, 1, 0), new Date(2015, 0, 3), true);
@@ -782,28 +640,13 @@ module('Client side after filtering', () => {
             key: 0,
             dataSource,
             isVirtualScrolling: false,
-            dataAccessors: {
-                getter: {
-                    startDate: compileGetter('StartDate'),
-                    endDate: compileGetter('EndDate'),
-                    recurrenceRule: compileGetter('RecurrenceRule'),
-                    recurrenceException: compileGetter('Exception'),
-                    allDay: compileGetter('AllDay'),
-                    startDateTimeZone: compileGetter('StartDateTimeZone'),
-                    endDateTimeZone: compileGetter('EndDateTimeZone')
-                },
-                setter: {
-                    startDate: compileSetter('StartDate'),
-                    endDate: compileSetter('EndDate')
-                },
-                expr: {
-                    startDateExpr: 'StartDate',
-                    endDateExpr: 'EndDate',
-                    allDayExpr: 'AllDay',
-                    recurrenceRuleExpr: 'RecurrenceRule',
-                    recurrenceExceptionExpr: 'Exception'
-                }
-            }
+            dataAccessors: new AppointmentDataAccessor({
+                startDateExpr: 'StartDate',
+                endDateExpr: 'EndDate',
+                allDayExpr: 'AllDay',
+                recurrenceRuleExpr: 'RecurrenceRule',
+                recurrenceExceptionExpr: 'Exception'
+            }, true),
         });
 
         appointmentDataProvider.add({ text: 'a', StartDate: new Date(2015, 0, 1, 1).toString(), EndDate: new Date(2015, 0, 1, 2).toString() });
@@ -827,28 +670,13 @@ module('Client side after filtering', () => {
             key: 0,
             dataSource,
             isVirtualScrolling: false,
-            dataAccessors: {
-                getter: {
-                    startDate: compileGetter('StartDate'),
-                    endDate: compileGetter('EndDate'),
-                    recurrenceRule: compileGetter('RecurrenceRule'),
-                    recurrenceException: compileGetter('Exception'),
-                    allDay: compileGetter('AllDay'),
-                    startDateTimeZone: compileGetter('StartDateTimeZone'),
-                    endDateTimeZone: compileGetter('EndDateTimeZone')
-                },
-                setter: {
-                    startDate: compileSetter('StartDate'),
-                    endDate: compileSetter('EndDate')
-                },
-                expr: {
-                    startDateExpr: 'StartDate',
-                    endDateExpr: 'EndDate',
-                    allDayExpr: 'AllDay',
-                    recurrenceRuleExpr: 'RecurrenceRule',
-                    recurrenceExceptionExpr: 'Exception'
-                }
-            }
+            dataAccessors: new AppointmentDataAccessor({
+                startDateExpr: 'StartDate',
+                endDateExpr: 'EndDate',
+                allDayExpr: 'AllDay',
+                recurrenceRuleExpr: 'RecurrenceRule',
+                recurrenceExceptionExpr: 'Exception'
+            }, true),
         });
 
         appointmentDataProvider.add({ text: 'a', StartDate: new Date(2015, 0, 1, 1).toString(), EndDate: new Date(2015, 0, 1, 3).toString() });
@@ -871,28 +699,13 @@ module('Client side after filtering', () => {
             key: 0,
             dataSource,
             isVirtualScrolling: false,
-            dataAccessors: {
-                getter: {
-                    startDate: compileGetter('StartDate'),
-                    endDate: compileGetter('EndDate'),
-                    recurrenceRule: compileGetter('RecurrenceRule'),
-                    recurrenceException: compileGetter('Exception'),
-                    allDay: compileGetter('AllDay'),
-                    startDateTimeZone: compileGetter('StartDateTimeZone'),
-                    endDateTimeZone: compileGetter('EndDateTimeZone')
-                },
-                setter: {
-                    startDate: compileSetter('StartDate'),
-                    endDate: compileSetter('EndDate')
-                },
-                expr: {
-                    startDateExpr: 'StartDate',
-                    endDateExpr: 'EndDate',
-                    allDayExpr: 'AllDay',
-                    recurrenceRuleExpr: 'RecurrenceRule',
-                    recurrenceExceptionExpr: 'Exception'
-                }
-            }
+            dataAccessors: new AppointmentDataAccessor({
+                startDateExpr: 'StartDate',
+                endDateExpr: 'EndDate',
+                allDayExpr: 'AllDay',
+                recurrenceRuleExpr: 'RecurrenceRule',
+                recurrenceExceptionExpr: 'Exception'
+            }, true),
         });
 
         appointmentDataProvider.add({ text: 'a', StartDate: new Date(2015, 0, 1, 3).toString(), EndDate: new Date(2015, 0, 1, 3, 10).toString() });
@@ -916,28 +729,13 @@ module('Client side after filtering', () => {
             key: 0,
             dataSource,
             isVirtualScrolling: false,
-            dataAccessors: {
-                getter: {
-                    startDate: compileGetter('StartDate'),
-                    endDate: compileGetter('EndDate'),
-                    recurrenceRule: compileGetter('RecRule'),
-                    recurrenceException: compileGetter('RecException'),
-                    allDay: compileGetter('AllDay'),
-                    startDateTimeZone: compileGetter('StartDateTimeZone'),
-                    endDateTimeZone: compileGetter('EndDateTimeZone')
-                },
-                setter: {
-                    startDate: compileSetter('StartDate'),
-                    endDate: compileSetter('EndDate')
-                },
-                expr: {
-                    startDateExpr: 'StartDate',
-                    endDateExpr: 'EndDate',
-                    allDayExpr: 'AllDay',
-                    recurrenceRuleExpr: 'RecRule',
-                    recurrenceExceptionExpr: 'RecException'
-                }
-            },
+            dataAccessors: new AppointmentDataAccessor({
+                startDateExpr: 'StartDate',
+                endDateExpr: 'EndDate',
+                allDayExpr: 'AllDay',
+                recurrenceRuleExpr: 'RecRule',
+                recurrenceExceptionExpr: 'RecException'
+            }, true),
             timeZoneCalculator: {
                 getOriginStartDateOffsetInMs: () => 0,
             },
@@ -969,28 +767,13 @@ module('Client side after filtering', () => {
             key: 0,
             dataSource,
             isVirtualScrolling: false,
-            dataAccessors: {
-                getter: {
-                    startDate: compileGetter('StartDate'),
-                    endDate: compileGetter('EndDate'),
-                    recurrenceRule: compileGetter('RecRule'),
-                    recurrenceException: compileGetter('RecException'),
-                    allDay: compileGetter('AllDay'),
-                    startDateTimeZone: compileGetter('StartDateTimeZone'),
-                    endDateTimeZone: compileGetter('EndDateTimeZone')
-                },
-                setter: {
-                    startDate: compileSetter('StartDate'),
-                    endDate: compileSetter('EndDate')
-                },
-                expr: {
-                    startDateExpr: 'StartDate',
-                    endDateExpr: 'EndDate',
-                    allDayExpr: 'AllDay',
-                    recurrenceRuleExpr: 'RecRule',
-                    recurrenceExceptionExpr: 'RecException'
-                }
-            },
+            dataAccessors: new AppointmentDataAccessor({
+                startDateExpr: 'StartDate',
+                endDateExpr: 'EndDate',
+                allDayExpr: 'AllDay',
+                recurrenceRuleExpr: 'RecRule',
+                recurrenceExceptionExpr: 'RecException'
+            }, true),
             timeZoneCalculator: {
                 getOriginStartDateOffsetInMs: () => 0,
             },
@@ -1019,28 +802,13 @@ module('Client side after filtering', () => {
             key: 0,
             dataSource,
             isVirtualScrolling: false,
-            dataAccessors: {
-                getter: {
-                    startDate: compileGetter('StartDate'),
-                    endDate: compileGetter('EndDate'),
-                    recurrenceRule: compileGetter('RecRule'),
-                    recurrenceException: compileGetter('RecException'),
-                    allDay: compileGetter('AllDay'),
-                    startDateTimeZone: compileGetter('StartDateTimeZone'),
-                    endDateTimeZone: compileGetter('EndDateTimeZone')
-                },
-                setter: {
-                    startDate: compileSetter('StartDate'),
-                    endDate: compileSetter('EndDate')
-                },
-                expr: {
-                    startDateExpr: 'StartDate',
-                    endDateExpr: 'EndDate',
-                    allDayExpr: 'AllDay',
-                    recurrenceRuleExpr: 'RecRule',
-                    recurrenceExceptionExpr: 'RecException'
-                }
-            },
+            dataAccessors: new AppointmentDataAccessor({
+                startDateExpr: 'StartDate',
+                endDateExpr: 'EndDate',
+                allDayExpr: 'AllDay',
+                recurrenceRuleExpr: 'RecRule',
+                recurrenceExceptionExpr: 'RecException'
+            }, true),
             timeZoneCalculator: {
                 getOriginStartDateOffsetInMs: () => 0,
             },
@@ -1069,25 +837,12 @@ module('Client side after filtering', () => {
             key: 0,
             dataSource,
             isVirtualScrolling: false,
-            dataAccessors: {
-                getter: {
-                    startDate: compileGetter('StartDate'),
-                    endDate: compileGetter('EndDate'),
-                    allDay: compileGetter('AllDay'),
-                    startDateTimeZone: compileGetter('StartDateTimeZone'),
-                    endDateTimeZone: compileGetter('EndDateTimeZone')
-                },
-                setter: {
-                    startDate: compileSetter('StartDate'),
-                    endDate: compileSetter('EndDate')
-                },
-                expr: {
-                    startDateExpr: 'StartDate',
-                    endDateExpr: 'EndDate',
-                    allDayExpr: 'AllDay',
-                    recurrenceRuleExpr: null
-                }
-            }
+            dataAccessors: new AppointmentDataAccessor({
+                startDateExpr: 'StartDate',
+                endDateExpr: 'EndDate',
+                allDayExpr: 'AllDay',
+                recurrenceRuleExpr: null
+            }, true),
         });
 
         appointmentDataProvider.add({ text: 'a', StartDate: new Date(2015, 0, 1, 1).toString(), EndDate: new Date(2015, 0, 1, 2).toString() });
@@ -1117,25 +872,12 @@ module('Client side after filtering', () => {
             key: 0,
             dataSource,
             isVirtualScrolling: false,
-            dataAccessors: {
-                getter: {
-                    startDate: compileGetter('StartDate'),
-                    endDate: compileGetter('EndDate'),
-                    allDay: compileGetter('AllDay'),
-                    startDateTimeZone: compileGetter('StartDateTimeZone'),
-                    endDateTimeZone: compileGetter('EndDateTimeZone')
-                },
-                setter: {
-                    startDate: compileSetter('StartDate'),
-                    endDate: compileSetter('EndDate')
-                },
-                expr: {
-                    startDateExpr: 'StartDate',
-                    endDateExpr: 'EndDate',
-                    allDayExpr: 'AllDay',
-                    recurrenceRuleExpr: ''
-                }
-            }
+            dataAccessors: new AppointmentDataAccessor({
+                startDateExpr: 'StartDate',
+                endDateExpr: 'EndDate',
+                allDayExpr: 'AllDay',
+                recurrenceRuleExpr: ''
+            }, true),
         });
 
         appointmentDataProvider.add({ text: 'a', StartDate: new Date(2015, 0, 1, 1).toString(), EndDate: new Date(2015, 0, 1, 2).toString() });
@@ -1161,34 +903,22 @@ module('Client side after filtering', () => {
 
     test('Loaded appointments should be filtered by resources', function(assert) {
         const dataSource = new DataSource({ store: [] });
+        const dataAccessors = new AppointmentDataAccessor({
+            startDateExpr: 'StartDate',
+            endDateExpr: 'EndDate',
+            recurrenceRuleExpr: 'recurrenceRule',
+        }, true);
+        dataAccessors.resources = {
+            getter: {
+                ownerId: compileGetter('ownerId'),
+                roomId: compileGetter('roomId')
+            }
+        };
         const { appointmentDataProvider, prepareDataItems } = createAppointmentDataProvider({
             key: 0,
             dataSource,
             isVirtualScrolling: false,
-            dataAccessors: {
-                getter: {
-                    startDate: compileGetter('StartDate'),
-                    endDate: compileGetter('EndDate'),
-                    recurrenceRule: compileGetter('RecRule'),
-                    recurrenceException: compileGetter('RecException'),
-                    allDay: compileGetter('AllDay'),
-                    startDateTimeZone: compileGetter('StartDateTimeZone'),
-                    endDateTimeZone: compileGetter('EndDateTimeZone'),
-                },
-                expr: {
-                    startDateExpr: 'StartDate',
-                    endDateExpr: 'EndDate',
-                    allDayExpr: 'AllDay',
-                    recurrenceRuleExpr: 'RecRule',
-                    recurrenceExceptionExpr: 'RecException'
-                },
-                resources: {
-                    getter: {
-                        ownerId: compileGetter('ownerId'),
-                        roomId: compileGetter('roomId')
-                    }
-                }
-            }
+            dataAccessors,
         });
 
         appointmentDataProvider.add({ text: 'a', StartDate: new Date(2015, 2, 16, 2), EndDate: new Date(2015, 2, 16, 2, 30), ownerId: [1, 2] });
@@ -1226,24 +956,13 @@ module('Client side after filtering', () => {
             key: 0,
             dataSource,
             isVirtualScrolling: false,
-            dataAccessors: {
-                getter: {
-                    startDate: compileGetter('StartDate'),
-                    endDate: compileGetter('EndDate'),
-                    recurrenceRule: compileGetter('RecurrenceRule'),
-                    recurrenceException: compileGetter('Exception'),
-                    allDay: compileGetter('AllDay'),
-                    startDateTimeZone: compileGetter('StartDateTimeZone'),
-                    endDateTimeZone: compileGetter('EndDateTimeZone')
-                },
-                expr: {
-                    startDateExpr: 'StartDate',
-                    endDateExpr: 'EndDate',
-                    allDayExpr: 'AllDay',
-                    recurrenceRuleExpr: 'RecurrenceRule',
-                    recurrenceExceptionExpr: 'Exception'
-                }
-            }
+            dataAccessors: new AppointmentDataAccessor({
+                startDateExpr: 'StartDate',
+                endDateExpr: 'EndDate',
+                allDayExpr: 'AllDay',
+                recurrenceRuleExpr: 'RecurrenceRule',
+                recurrenceExceptionExpr: 'Exception'
+            }, true),
         });
 
         appointmentDataProvider.add({ text: 'a', StartDate: new Date(2015, 0, 1, 4).toString(), EndDate: new Date(2015, 0, 1, 6).toString(), AllDay: true });
@@ -1269,28 +988,13 @@ module('Client side after filtering', () => {
             key: 0,
             dataSource,
             isVirtualScrolling: false,
-            dataAccessors: {
-                getter: {
-                    startDate: compileGetter('StartDate'),
-                    endDate: compileGetter('EndDate'),
-                    recurrenceRule: compileGetter('RecurrenceRule'),
-                    recurrenceException: compileGetter('Exception'),
-                    allDay: compileGetter('AllDay'),
-                    startDateTimeZone: compileGetter('StartDateTimeZone'),
-                    endDateTimeZone: compileGetter('EndDateTimeZone')
-                },
-                setter: {
-                    startDate: compileSetter('StartDate'),
-                    endDate: compileSetter('EndDate')
-                },
-                expr: {
-                    startDateExpr: 'StartDate',
-                    endDateExpr: 'EndDate',
-                    allDayExpr: 'AllDay',
-                    recurrenceRuleExpr: 'RecurrenceRule',
-                    recurrenceExceptionExpr: 'Exception'
-                }
-            },
+            dataAccessors: new AppointmentDataAccessor({
+                startDateExpr: 'StartDate',
+                endDateExpr: 'EndDate',
+                allDayExpr: 'AllDay',
+                recurrenceRuleExpr: 'RecurrenceRule',
+                recurrenceExceptionExpr: 'Exception'
+            }, true),
             timeZoneCalculator: {
                 getOriginStartDateOffsetInMs: () => 0,
             },
@@ -1320,28 +1024,13 @@ module('Client side after filtering', () => {
             const { appointmentDataProvider, prepareDataItems } = createAppointmentDataProvider({
                 dataSource,
                 isVirtualScrolling: false,
-                dataAccessors: {
-                    getter: {
-                        startDate: compileGetter('StartDate'),
-                        endDate: compileGetter('EndDate'),
-                        recurrenceRule: compileGetter('RecurrenceRule'),
-                        recurrenceException: compileGetter('Exception'),
-                        allDay: compileGetter('AllDay'),
-                        startDateTimeZone: compileGetter('StartDateTimeZone'),
-                        endDateTimeZone: compileGetter('EndDateTimeZone')
-                    },
-                    setter: {
-                        startDate: compileSetter('StartDate'),
-                        endDate: compileSetter('EndDate')
-                    },
-                    expr: {
-                        startDateExpr: 'StartDate',
-                        endDateExpr: 'EndDate',
-                        allDayExpr: 'AllDay',
-                        recurrenceRuleExpr: 'RecurrenceRule',
-                        recurrenceExceptionExpr: 'Exception'
-                    }
-                },
+                dataAccessors: new AppointmentDataAccessor({
+                    startDateExpr: 'StartDate',
+                    endDateExpr: 'EndDate',
+                    allDayExpr: 'AllDay',
+                    recurrenceRuleExpr: 'RecurrenceRule',
+                    recurrenceExceptionExpr: 'Exception'
+                }, true),
                 timeZoneCalculator: {
                     getOriginStartDateOffsetInMs: () => 0,
                 },
@@ -1400,24 +1089,13 @@ module('Client side after filtering', () => {
             key: 0,
             dataSource,
             isVirtualScrolling: false,
-            dataAccessors: {
-                getter: {
-                    startDate: compileGetter('StartDate'),
-                    endDate: compileGetter('EndDate'),
-                    recurrenceRule: compileGetter('RecurrenceRule'),
-                    recurrenceException: compileGetter('Exception'),
-                    allDay: compileGetter('AllDay'),
-                    startDateTimeZone: compileGetter('StartDateTimeZone'),
-                    endDateTimeZone: compileGetter('EndDateTimeZone')
-                },
-                expr: {
-                    startDateExpr: 'StartDate',
-                    endDateExpr: 'EndDate',
-                    allDayExpr: 'AllDay',
-                    recurrenceRuleExpr: 'RecurrenceRule',
-                    recurrenceExceptionExpr: 'Exception'
-                }
-            }
+            dataAccessors: new AppointmentDataAccessor({
+                startDateExpr: 'StartDate',
+                endDateExpr: 'EndDate',
+                allDayExpr: 'AllDay',
+                recurrenceRuleExpr: 'RecurrenceRule',
+                recurrenceExceptionExpr: 'Exception'
+            }, true),
         });
 
         appointmentDataProvider.add({
@@ -1445,24 +1123,13 @@ module('Client side after filtering', () => {
             key: 0,
             dataSource,
             isVirtualScrolling: false,
-            dataAccessors: {
-                getter: {
-                    startDate: compileGetter('StartDate'),
-                    endDate: compileGetter('EndDate'),
-                    recurrenceRule: compileGetter('RecurrenceRule'),
-                    recurrenceException: compileGetter('Exception'),
-                    allDay: compileGetter('AllDay'),
-                    startDateTimeZone: compileGetter('StartDateTimeZone'),
-                    endDateTimeZone: compileGetter('EndDateTimeZone')
-                },
-                expr: {
-                    startDateExpr: 'StartDate',
-                    endDateExpr: 'EndDate',
-                    allDayExpr: 'AllDay',
-                    recurrenceRuleExpr: 'RecurrenceRule',
-                    recurrenceExceptionExpr: 'Exception'
-                }
-            }
+            dataAccessors: new AppointmentDataAccessor({
+                startDateExpr: 'StartDate',
+                endDateExpr: 'EndDate',
+                allDayExpr: 'AllDay',
+                recurrenceRuleExpr: 'RecurrenceRule',
+                recurrenceExceptionExpr: 'Exception'
+            }, true),
         });
 
         appointmentDataProvider.add({
@@ -1489,24 +1156,13 @@ module('Client side after filtering', () => {
             key: 0,
             dataSource,
             isVirtualScrolling: false,
-            dataAccessors: {
-                getter: {
-                    startDate: compileGetter('StartDate'),
-                    endDate: compileGetter('EndDate'),
-                    recurrenceRule: compileGetter('RecurrenceRule'),
-                    recurrenceException: compileGetter('Exception'),
-                    allDay: compileGetter('AllDay'),
-                    startDateTimeZone: compileGetter('StartDateTimeZone'),
-                    endDateTimeZone: compileGetter('EndDateTimeZone')
-                },
-                expr: {
-                    startDateExpr: 'StartDate',
-                    endDateExpr: 'EndDate',
-                    allDayExpr: 'AllDay',
-                    recurrenceRuleExpr: 'RecurrenceRule',
-                    recurrenceExceptionExpr: 'Exception'
-                }
-            }
+            dataAccessors: new AppointmentDataAccessor({
+                startDateExpr: 'StartDate',
+                endDateExpr: 'EndDate',
+                allDayExpr: 'AllDay',
+                recurrenceRuleExpr: 'RecurrenceRule',
+                recurrenceExceptionExpr: 'Exception'
+            }, true),
         });
 
         appointmentDataProvider.add({
@@ -1532,28 +1188,13 @@ module('Client side after filtering', () => {
             key: 0,
             dataSource,
             isVirtualScrolling: false,
-            dataAccessors: {
-                getter: {
-                    startDate: compileGetter('StartDate'),
-                    endDate: compileGetter('EndDate'),
-                    recurrenceRule: compileGetter('RecurrenceRule'),
-                    recurrenceException: compileGetter('Exception'),
-                    allDay: compileGetter('AllDay'),
-                    startDateTimeZone: compileGetter('StartDateTimeZone'),
-                    endDateTimeZone: compileGetter('EndDateTimeZone')
-                },
-                setter: {
-                    startDate: compileSetter('StartDate'),
-                    endDate: compileSetter('EndDate')
-                },
-                expr: {
-                    startDateExpr: 'StartDate',
-                    endDateExpr: 'EndDate',
-                    allDayExpr: 'AllDay',
-                    recurrenceRuleExpr: 'RecurrenceRule',
-                    recurrenceExceptionExpr: 'Exception'
-                }
-            },
+            dataAccessors: new AppointmentDataAccessor({
+                startDateExpr: 'StartDate',
+                endDateExpr: 'EndDate',
+                allDayExpr: 'AllDay',
+                recurrenceRuleExpr: 'RecurrenceRule',
+                recurrenceExceptionExpr: 'Exception'
+            }, true),
             appointmentDuration: 60
         });
 
@@ -1607,22 +1248,11 @@ module('API', () => {
                 key: 0,
                 dataSource,
                 isVirtualScrolling: false,
-                dataAccessors: {
-                    getter: {
-                        startDate: compileGetter('StartDate'),
-                        endDate: compileGetter('EndDate'),
-                        allDay: compileGetter('AllDay123'),
-                    },
-                    setter: {
-                        startDate: compileSetter('StartDate'),
-                        endDate: compileSetter('EndDate')
-                    },
-                    expr: {
-                        startDateExpr: 'StartDate',
-                        endDateExpr: 'EndDate',
-                        allDayExpr: 'AllDay123',
-                    }
-                },
+                dataAccessors: new AppointmentDataAccessor({
+                    startDateExpr: 'StartDate',
+                    endDateExpr: 'EndDate',
+                    allDayExpr: 'AllDay123',
+                }, true),
                 appointmentDuration: 60
             });
 
@@ -1653,31 +1283,13 @@ module('Virtual Scrolling', () => {
             key: 0,
             dataSource,
             isVirtualScrolling: false,
-            dataAccessors: {
-                getter: {
-                    startDate: compileGetter('StartDate'),
-                    endDate: compileGetter('EndDate'),
-                    recurrenceRule: compileGetter('RecurrenceRule'),
-                    recurrenceException: compileGetter('Exception'),
-                    allDay: compileGetter('AllDay'),
-                    startDateTimeZone: compileGetter('StartDateTimeZone'),
-                    endDateTimeZone: compileGetter('EndDateTimeZone')
-                },
-                setter: {
-                    startDate: compileSetter('StartDate'),
-                    endDate: compileSetter('EndDate'),
-                    recurrenceRule: compileSetter('RecurrenceRule'),
-                    recurrenceException: compileSetter('Exception'),
-                    allDay: compileSetter('AllDay')
-                },
-                expr: {
-                    startDateExpr: 'StartDate',
-                    endDateExpr: 'EndDate',
-                    allDayExpr: 'AllDay',
-                    recurrenceRuleExpr: 'RecurrenceRule',
-                    recurrenceExceptionExpr: 'Exception'
-                }
-            }
+            dataAccessors: new AppointmentDataAccessor({
+                startDateExpr: 'StartDate',
+                endDateExpr: 'EndDate',
+                allDayExpr: 'AllDay',
+                recurrenceRuleExpr: 'RecurrenceRule',
+                recurrenceExceptionExpr: 'Exception'
+            }, true),
         });
 
         appointmentDataProvider.filterByDate(new Date(2021, 8, 6, 9), new Date(2021, 8, 6, 12));

@@ -2,7 +2,6 @@ import dateUtils from '@js/core/utils/date';
 import { each } from '@js/core/utils/iterator';
 
 import { createAppointmentAdapter } from '../../m_appointment_adapter';
-import { ExpressionUtils } from '../../m_expression_utils';
 import { groupAppointmentsByResources } from '../../resources/m_utils';
 import { getAppointmentTakesSeveralDays, replaceWrongEndDate } from '../data_provider/m_utils';
 import BaseRenderingStrategy from './m_strategy_base';
@@ -212,8 +211,8 @@ class AgendaRenderingStrategy extends BaseRenderingStrategy {
       }
 
       each(currentAppointments, (index, appointment) => {
-        const startDate = ExpressionUtils.getField(this.dataAccessors, 'startDate', appointment);
-        const endDate = ExpressionUtils.getField(this.dataAccessors, 'endDate', appointment);
+        const startDate = this.dataAccessors.get('startDate', appointment);
+        const endDate = this.dataAccessors.get('endDate', appointment);
 
         this.replaceWrongAppointmentEndDate(appointment, startDate, endDate);
 
@@ -240,7 +239,7 @@ class AgendaRenderingStrategy extends BaseRenderingStrategy {
 
           const adapter = createAppointmentAdapter(currentAppointments[j], this.dataAccessors, this.timeZoneCalculator);
           const appointmentIsLong = getAppointmentTakesSeveralDays(adapter);
-          const appointmentIsRecurrence = ExpressionUtils.getField(this.dataAccessors, 'recurrenceRule', currentAppointments[j]);
+          const appointmentIsRecurrence = this.dataAccessors.get('recurrenceRule', currentAppointments[j]);
 
           if (this.instance.fire('dayHasAppointment', day, appointmentData, true) || (!appointmentIsRecurrence && appointmentIsLong && this.instance.fire('dayHasAppointment', day, currentAppointments[j], true))) {
             groupResult[i] += 1;

@@ -25,8 +25,8 @@ import {
   REDUCED_APPOINTMENT_ICON,
   REDUCED_APPOINTMENT_PARTS_CLASSES,
 } from '../m_classes';
-import { ExpressionUtils } from '../m_expression_utils';
 import { getRecurrenceProcessor } from '../m_recurrence';
+import type { AppointmentDataAccessor } from '../utils';
 
 const DEFAULT_HORIZONTAL_HANDLES = 'left right';
 const DEFAULT_VERTICAL_HANDLES = 'top bottom';
@@ -39,8 +39,12 @@ export class Appointment extends DOMComponent {
     return this.$element();
   }
 
-  get rawAppointment() {
+  get rawAppointment(): any {
     return this.option('data');
+  }
+
+  get dataAccessors(): AppointmentDataAccessor {
+    return this.option('dataAccessors') as AppointmentDataAccessor;
   }
 
   _getDefaultOptions() {
@@ -234,7 +238,7 @@ export class Appointment extends DOMComponent {
   }
 
   _getEndDate() {
-    const result = ExpressionUtils.getField(this.option('dataAccessors'), 'endDate', this.rawAppointment);
+    const result = this.dataAccessors.get('endDate', this.rawAppointment);
     if (result) {
       return new Date(result);
     }
@@ -250,7 +254,7 @@ export class Appointment extends DOMComponent {
   }
 
   _renderRecurrenceClass() {
-    const rule = ExpressionUtils.getField(this.option('dataAccessors'), 'recurrenceRule', this.rawAppointment);
+    const rule = this.dataAccessors.get('recurrenceRule', this.rawAppointment);
 
     if (getRecurrenceProcessor().isValidRecurrenceRule(rule)) {
       (this.$element() as any).addClass(RECURRENCE_APPOINTMENT_CLASS);

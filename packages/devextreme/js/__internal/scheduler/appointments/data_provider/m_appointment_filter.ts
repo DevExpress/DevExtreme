@@ -9,6 +9,7 @@ import {
   getAppointmentTakesAllDay, getDatesWithoutTime, hasResourceValue, isDateAndTimeView,
   isTimelineView,
 } from '@ts/scheduler/r1/utils/index';
+import type { AppointmentDataAccessor } from '@ts/scheduler/utils';
 
 import { createAppointmentAdapter } from '../../m_appointment_adapter';
 import { getRecurrenceProcessor } from '../../m_recurrence';
@@ -35,7 +36,7 @@ const FilterStrategies = {
 export class AppointmentFilterBaseStrategy {
   options: any;
 
-  dataAccessors: any;
+  dataAccessors: AppointmentDataAccessor;
 
   constructor(options) {
     this.options = options;
@@ -160,7 +161,7 @@ export class AppointmentFilterBaseStrategy {
     } = filterOptions;
 
     const [trimMin, trimMax] = getDatesWithoutTime(min, max);
-    const useRecurrence = isDefined(this.dataAccessors.getter.recurrenceRule);
+    const useRecurrence = this.dataAccessors.has('recurrenceRule');
 
     return [[(appointment) => {
       const appointmentVisible = appointment.visible ?? true;
@@ -452,7 +453,6 @@ export class AppointmentFilterVirtualStrategy extends AppointmentFilterBaseStrat
       .toArray();
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   hasAllDayAppointments(filteredItems, preparedItems) {
     return this.filterAllDayAppointments(preparedItems).length > 0;
   }

@@ -1,17 +1,13 @@
 import { getOuterWidth } from 'core/utils/size';
 import $ from 'jquery';
-import dataCoreUtils from 'core/utils/data';
-import typeUtils from 'core/utils/type';
 import { Deferred } from 'core/utils/deferred';
 import fx from 'animation/fx';
 import '__internal/scheduler/m_scheduler';
-import { ExpressionUtils } from '__internal/scheduler/m_expression_utils';
 import { createExpressions } from '__internal/scheduler/resources/m_utils';
 
-const { testStart, module, test } = QUnit;
+import { mockDataAccessor } from '../../helpers/scheduler/mockDataAccessor.js';
 
-const compileGetter = dataCoreUtils.compileGetter;
-const compileSetter = dataCoreUtils.compileSetter;
+const { testStart, module, test } = QUnit;
 
 const BASE_WIDTH = 20;
 
@@ -20,33 +16,6 @@ testStart(function() {
         <div id="allDayContainer"></div>\
         <div id="fixedContainer"></div>');
 });
-
-const dataAccessors = {
-    getter: {
-        startDate: compileGetter('startDate'),
-        endDate: compileGetter('endDate'),
-        allDay: compileGetter('allDay'),
-        text: compileGetter('text'),
-        recurrenceRule: compileGetter('recurrenceRule')
-    },
-    setter: {
-        startDate: compileSetter('startDate'),
-        endDate: compileSetter('endDate'),
-        allDay: compileSetter('allDay'),
-        text: compileSetter('text'),
-        recurrenceRule: compileSetter('recurrenceRule')
-    }
-};
-
-ExpressionUtils.getField = (_, field, obj) => {
-    if(typeUtils.isDefined(dataAccessors.getter[field])) {
-        return dataAccessors.getter[field](obj);
-    }
-};
-
-ExpressionUtils.setField = (_, field, obj, value) => {
-    return dataAccessors.setter[field](obj, value);
-};
 
 const createInstance = (options = {}) => {
     const createObserver = (renderingStrategy) => ({
@@ -81,6 +50,7 @@ const createInstance = (options = {}) => {
     return $('#scheduler-appointments').dxSchedulerAppointments({
         observer: createObserver(options.renderingStrategy),
         ...options,
+        dataAccessors: mockDataAccessor,
         getResources: () => [],
         getAppointmentColor: () => new Deferred(),
         getResourceDataAccessors: () => createExpressions([])

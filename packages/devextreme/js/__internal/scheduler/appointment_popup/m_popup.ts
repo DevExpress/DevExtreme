@@ -4,7 +4,6 @@ import dateUtils from '@js/core/utils/date';
 import { Deferred, when } from '@js/core/utils/deferred';
 import { triggerResizeEvent } from '@js/events/visibility_change';
 import Popup from '@js/ui/popup/ui.popup';
-import { ExpressionUtils } from '@ts/scheduler/m_expression_utils';
 import {
   getMaxWidth,
   getPopupToolbarItems,
@@ -226,7 +225,7 @@ export class AppointmentPopup {
     if (this.form.dxForm && this.visible) { // TODO
       const { formData } = this.form;
       const dataAccessors = this.scheduler.getDataAccessors();
-      const isRecurrence = ExpressionUtils.getField(dataAccessors, 'recurrenceRule', formData);
+      const isRecurrence = dataAccessors.get('recurrenceRule', formData);
 
       this.changeSize(isRecurrence);
     }
@@ -239,7 +238,7 @@ export class AppointmentPopup {
 
     isShowLoadPanel && this._showLoadPanel();
 
-    when(validation && validation.complete || validation).done((validation) => {
+    when(validation?.complete || validation).done((validation) => {
       if (validation && !validation.isValid) {
         hideLoading();
         deferred.resolve(false);
