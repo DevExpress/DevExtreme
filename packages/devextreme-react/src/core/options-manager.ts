@@ -243,7 +243,7 @@ class OptionsManager {
   }
 
   private resetOption(name: string) {
-    this.instance.resetOption(name)
+    this.instance.resetOption(name);
     if (this.isCollectionOption(name)) {
       this.setValue(name, []);
     } else {
