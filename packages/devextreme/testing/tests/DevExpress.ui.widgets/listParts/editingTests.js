@@ -46,10 +46,6 @@ const groupedListData = {
     ]
 };
 
-const toSelector = function(cssClass) {
-    return '.' + cssClass;
-};
-
 QUnit.module('flat index', () => {
     QUnit.test('index should be correct for plain list', function(assert) {
         const items = [{ a: 0 }, { a: 1 }];
@@ -59,7 +55,7 @@ QUnit.module('flat index', () => {
         });
         const list = $list.dxList('instance');
 
-        const $items = $list.find(toSelector(LIST_ITEM_CLASS));
+        const $items = $list.find(`.${LIST_ITEM_CLASS}`);
         const $item = $items.eq(1);
 
         assert.equal(list.getFlatIndexByItemElement($item.get(0)), 1, 'index correct');
@@ -84,7 +80,7 @@ QUnit.module('flat index', () => {
         });
         const list = $list.dxList('instance');
 
-        const $items = $list.find(toSelector(LIST_ITEM_CLASS));
+        const $items = $list.find(`.${LIST_ITEM_CLASS}`);
         const $item = $items.eq(5);
 
         assert.equal(list.getFlatIndexByItemElement($item.get(0)), 5, 'index correct');
@@ -111,7 +107,7 @@ QUnit.module('flat index', () => {
         });
         const list = $list.dxList('instance');
 
-        const $items = $list.find(toSelector(LIST_ITEM_CLASS));
+        const $items = $list.find(`.${LIST_ITEM_CLASS}`);
 
         assert.ok($items.eq(2).hasClass(LIST_ITEM_SELECTED_CLASS), 'correct item is selected');
         assert.deepEqual(list.option('selectedItem'), { key: 'second', items: [{ a: 2 }] }, 'selectedItem is correct');
@@ -131,7 +127,7 @@ QUnit.module('flat index', () => {
         });
         const list = $list.dxList('instance');
 
-        const $items = $list.find(toSelector(LIST_ITEM_CLASS));
+        const $items = $list.find(`.${LIST_ITEM_CLASS}`);
         const $item = $items.eq(1);
 
         assert.equal(list.getItemElementByFlatIndex(1).get(0), $item.get(0), 'item correct');
@@ -155,7 +151,7 @@ QUnit.module('flat index', () => {
         });
         const list = $list.dxList('instance');
 
-        const $items = $list.find(toSelector(LIST_ITEM_CLASS));
+        const $items = $list.find(`.${LIST_ITEM_CLASS}`);
         const $item = $items.eq(5);
 
         assert.equal(list.getItemElementByFlatIndex(5).get(0), $item.get(0), 'item correct');
@@ -186,14 +182,14 @@ QUnit.module('flat index', () => {
             allowItemDeleting: true
         });
         const list = $list.dxList('instance');
-        const $items = $list.find(toSelector(LIST_ITEM_CLASS));
+        const $items = $list.find(`.${LIST_ITEM_CLASS}`);
 
         list.deleteItem($items.eq(0).get(0));
         assert.deepEqual(list.option('items'), [2, 3, 4], 'delete item by node');
 
         list.deleteItem(0);
         assert.deepEqual(list.option('items'), [3, 4], 'delete item by index');
-        assert.equal($list.find(toSelector(LIST_ITEM_CLASS)).length, 2, 'items were removed from the dom');
+        assert.equal($list.find(`.${LIST_ITEM_CLASS}`).length, 2, 'items were removed from the dom');
     });
 
     QUnit.test('deferred deleteItem should correctly update cached items after item removing', function(assert) {
@@ -207,7 +203,7 @@ QUnit.module('flat index', () => {
             allowItemDeleting: true
         });
         const list = $list.dxList('instance');
-        const $items = $list.find(toSelector(LIST_ITEM_CLASS));
+        const $items = $list.find(`.${LIST_ITEM_CLASS}`);
 
         list.deleteItem($items.eq(0).get(0));
         deferred.resolve();
@@ -230,9 +226,9 @@ QUnit.module('deleting in grouped list', () => {
         });
         const list = $list.dxList('instance');
 
-        const $groups = $list.find(toSelector(LIST_GROUP_CLASS));
+        const $groups = $list.find(`.${LIST_GROUP_CLASS}`);
 
-        list.deleteItem($groups.eq(1).find(toSelector(LIST_ITEM_CLASS)).eq(2));
+        list.deleteItem($groups.eq(1).find(`.${LIST_ITEM_CLASS}`).eq(2));
 
         assert.deepEqual(list.option('items'), groupedListData.itemsAfterDelete, 'item deleted');
     });
@@ -611,8 +607,8 @@ QUnit.module('selection', () => {
 
         listInstance.selectItem(0);
 
-        const item0 = $('#list').find(toSelector(LIST_ITEM_CLASS)).eq(0).get(0);
-        const item1 = $('#list').find(toSelector(LIST_ITEM_CLASS)).eq(1).get(0);
+        const item0 = $('#list').find(`.${LIST_ITEM_CLASS}`).eq(0).get(0);
+        const item1 = $('#list').find(`.${LIST_ITEM_CLASS}`).eq(1).get(0);
 
         listInstance.reorderItem(item0, item1);
         assert.equal(listInstance.option('selectedItems')[0], items[0], 'first item is selected');
@@ -626,7 +622,7 @@ QUnit.module('selection', () => {
         listInstance.selectItem(0);
 
         const promise = listInstance.reorderItem(0, 1);
-        const $items = $('#list').find(toSelector(LIST_ITEM_CLASS));
+        const $items = $('#list').find(`.${LIST_ITEM_CLASS}`);
         const firstItemText = $items.eq(0).text();
         const secondItemText = $items.eq(1).text();
 
@@ -738,10 +734,10 @@ QUnit.module('selecting in grouped list', {
         });
         const list = $list.dxList('instance');
 
-        const $groups = $list.find(toSelector(LIST_GROUP_CLASS));
+        const $groups = $list.find(`.${LIST_GROUP_CLASS}`);
 
         const selectItem = function(group, item) {
-            list.selectItem($groups.eq(group).find(toSelector(LIST_ITEM_CLASS)).eq(item));
+            list.selectItem($groups.eq(group).find(`.${LIST_ITEM_CLASS}`).eq(item));
         };
 
         $.each(this.selection, function(index, value) {
@@ -857,7 +853,7 @@ QUnit.module('selecting in grouped list', {
         });
         const list = $list.dxList('instance');
 
-        const $items = $list.find(toSelector(LIST_ITEM_CLASS));
+        const $items = $list.find(`.${LIST_ITEM_CLASS}`);
 
         list.selectItem($items.eq(1));
         assert.equal(list.isItemSelected($items.eq(1)), true, 'isItemSelected return proper state');
@@ -876,7 +872,7 @@ QUnit.module('selecting in grouped list', {
         const list = $list.dxList('instance');
 
         const groupItem = function(group, item) {
-            return $list.find(toSelector(LIST_GROUP_CLASS)).eq(group).find(toSelector(LIST_ITEM_CLASS)).eq(item);
+            return $list.find(`.${LIST_GROUP_CLASS}`).eq(group).find(`.${LIST_ITEM_CLASS}`).eq(item);
         };
         const selectItem = function(group, item) {
             list.selectItem(groupItem(group, item));
@@ -902,10 +898,10 @@ QUnit.module('selecting in grouped list', {
         });
         const list = $list.dxList('instance');
 
-        const $groups = $list.find(toSelector(LIST_GROUP_CLASS));
+        const $groups = $list.find(`.${LIST_GROUP_CLASS}`);
 
         const selectItem = function(group, item) {
-            list.selectItem($groups.eq(group).find(toSelector(LIST_ITEM_CLASS)).eq(item));
+            list.selectItem($groups.eq(group).find(`.${LIST_ITEM_CLASS}`).eq(item));
         };
 
         $.each(this.selection, function(index, value) {
@@ -915,7 +911,7 @@ QUnit.module('selecting in grouped list', {
         list.option('grouped', false);
 
         assert.equal(list.option('selectedItems').length, 0, 'should not be items in selectedItems');
-        assert.equal($list.find(toSelector(LIST_ITEM_SELECTED_CLASS)).length, 0, 'should not be selected elements');
+        assert.equal($list.find(`.${LIST_ITEM_SELECTED_CLASS}`).length, 0, 'should not be selected elements');
     });
 
     QUnit.test('deleteItem should change selected items', function(assert) {
@@ -945,13 +941,13 @@ QUnit.module('selecting in grouped list', {
         const list = $list.dxList('instance');
 
         const groups = function() {
-            return $list.find(toSelector(LIST_GROUP_CLASS));
+            return $list.find(`.${LIST_GROUP_CLASS}`);
         };
         const selectItem = function(group, item) {
-            list.selectItem(groups().eq(group).find(toSelector(LIST_ITEM_CLASS)).eq(item));
+            list.selectItem(groups().eq(group).find(`.${LIST_ITEM_CLASS}`).eq(item));
         };
         const deleteItem = function(group, item) {
-            list.deleteItem(groups().eq(group).find(toSelector(LIST_ITEM_CLASS)).eq(item));
+            list.deleteItem(groups().eq(group).find(`.${LIST_ITEM_CLASS}`).eq(item));
         };
 
         $.each(this.selection, function(_, value) {
@@ -1036,10 +1032,10 @@ QUnit.module('selecting in grouped list with single mode', {
         const list = $list.dxList('instance');
 
         const groups = function() {
-            return $list.find(toSelector(LIST_GROUP_CLASS));
+            return $list.find(`.${LIST_GROUP_CLASS}`);
         };
         const selectItem = function(group, item) {
-            list.selectItem(groups().eq(group).find(toSelector(LIST_ITEM_CLASS)).eq(item));
+            list.selectItem(groups().eq(group).find(`.${LIST_ITEM_CLASS}`).eq(item));
         };
 
         $.each(this.selection, function(_, value) {
@@ -1099,10 +1095,10 @@ QUnit.module('selecting in grouped list with dataSource', () => {
         dataSource.load();
 
         const groups = function() {
-            return $list.find(toSelector(LIST_GROUP_CLASS));
+            return $list.find(`.${LIST_GROUP_CLASS}`);
         };
         const selectItem = function(group, item) {
-            list.selectItem(groups().eq(group).find(toSelector(LIST_ITEM_CLASS)).eq(item));
+            list.selectItem(groups().eq(group).find(`.${LIST_ITEM_CLASS}`).eq(item));
         };
 
         selectItem(0, 0);
@@ -1146,10 +1142,10 @@ QUnit.module('reordering in grouped items', {
         const list = $list.dxList('instance');
 
         const groups = function() {
-            return $list.find(toSelector(LIST_GROUP_CLASS));
+            return $list.find(`.${LIST_GROUP_CLASS}`);
         };
         const item = function(group, item) {
-            return groups().eq(group).find(toSelector(LIST_ITEM_CLASS)).eq(item).get(0);
+            return groups().eq(group).find(`.${LIST_ITEM_CLASS}`).eq(item).get(0);
         };
 
         const item01 = item(0, 1);
@@ -1170,10 +1166,10 @@ QUnit.module('reordering in grouped items', {
         const refreshItemsSpy = sinon.spy(list, '_refreshItemElements');
 
         const groups = function() {
-            return $list.find(toSelector(LIST_GROUP_CLASS));
+            return $list.find(`.${LIST_GROUP_CLASS}`);
         };
         const item = function(group, item) {
-            return groups().eq(group).find(toSelector(LIST_ITEM_CLASS)).eq(item).get(0);
+            return groups().eq(group).find(`.${LIST_ITEM_CLASS}`).eq(item).get(0);
         };
 
         const item01 = item(0, 1);
@@ -1194,10 +1190,10 @@ QUnit.module('reordering in grouped items', {
         const list = $list.dxList('instance');
 
         const groups = function() {
-            return $list.find(toSelector(LIST_GROUP_CLASS));
+            return $list.find(`.${LIST_GROUP_CLASS}`);
         };
         const item = function(group, item) {
-            return groups().eq(group).find(toSelector(LIST_ITEM_CLASS)).eq(item).get(0);
+            return groups().eq(group).find(`.${LIST_ITEM_CLASS}`).eq(item).get(0);
         };
 
         const item11 = item(1, 1);
@@ -1233,8 +1229,8 @@ QUnit.module('reordering in grouped items', {
         const list = $list.dxList('instance');
 
         const item = function(group, item) {
-            return $list.find(toSelector(LIST_GROUP_CLASS)).eq(group)
-                .find(toSelector(LIST_ITEM_CLASS)).eq(item)
+            return $list.find(`.${LIST_GROUP_CLASS}`).eq(group)
+                .find(`.${LIST_ITEM_CLASS}`).eq(item)
                 .get(0);
         };
 

@@ -2,10 +2,6 @@ const pointerMock = require('../../../helpers/pointerMock.js');
 
 const REORDER_HANDLE_CLASS = 'dx-list-reorder-handle';
 
-const toSelector = (cssClass) => `.${cssClass}`;
-
-exports.toSelector = toSelector;
-
 exports.reorderingPointerMock = ($item, clock, usePixel) => {
     const itemOffset = $item.offset().top;
     const itemHeight = $item.outerHeight();

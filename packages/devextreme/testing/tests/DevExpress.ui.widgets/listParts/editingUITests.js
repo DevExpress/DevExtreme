@@ -15,7 +15,7 @@ import SwitchableButtonEditDecorator from '__internal/ui/list/m_list.edit.decora
 import themes from 'ui/themes';
 import { DataSource } from 'common/data/data_source/data_source';
 import ArrayStore from 'common/data/array_store';
-import { reorderingPointerMock, toSelector } from './utils.js';
+import { reorderingPointerMock } from './utils.js';
 
 import 'ui/action_sheet';
 import 'ui/list';
@@ -111,7 +111,7 @@ QUnit.module('switchable menu decorator', {
             itemDeleteMode: 'test'
         });
 
-        const $items = $list.find(toSelector(LIST_ITEM_CLASS));
+        const $items = $list.find(`.${LIST_ITEM_CLASS}`);
         const $item = $items.eq(0);
 
         $item.trigger('dxpreparetodelete');
@@ -132,7 +132,7 @@ QUnit.module('switchable menu decorator', {
                 itemDeleteMode: 'test'
             });
 
-            const $items = $list.find(toSelector(LIST_ITEM_CLASS));
+            const $items = $list.find(`.${LIST_ITEM_CLASS}`);
             const $item = $items.eq(0);
             const pointer = pointerMock($item);
 
@@ -158,7 +158,7 @@ QUnit.module('switchable menu decorator', {
             allowItemDeleting: true,
             itemDeleteMode: 'test'
         });
-        const $items = $list.find(toSelector(LIST_ITEM_CLASS));
+        const $items = $list.find(`.${LIST_ITEM_CLASS}`);
         const $item = $items.eq(0);
 
         $item.trigger('dxpreparetodelete');
@@ -180,7 +180,7 @@ QUnit.module('switchable menu decorator', {
 
         $('#templated-list').dxList('instance');
 
-        const $items = $list.find(toSelector(LIST_ITEM_CLASS));
+        const $items = $list.find(`.${LIST_ITEM_CLASS}`);
         const $item = $items.eq(0);
 
         $item.trigger('dxpreparetodelete');
@@ -196,8 +196,8 @@ QUnit.module('switchable menu decorator', {
             itemDeleteMode: 'test'
         });
 
-        const $topShield = $list.find(toSelector(SWITCHABLE_DELETE_TOP_SHIELD_CLASS));
-        const $bottomShield = $list.find(toSelector(SWITCHABLE_DELETE_BOTTOM_SHIELD_CLASS));
+        const $topShield = $list.find(`.${SWITCHABLE_DELETE_TOP_SHIELD_CLASS}`);
+        const $bottomShield = $list.find(`.${SWITCHABLE_DELETE_BOTTOM_SHIELD_CLASS}`);
 
         assert.ok($topShield.length, 'top shield generated');
         assert.ok($bottomShield.length, 'bottom shield generated');
@@ -212,10 +212,10 @@ QUnit.module('switchable menu decorator', {
             itemDeleteMode: 'test'
         });
 
-        const $items = $list.find(toSelector(LIST_ITEM_CLASS));
+        const $items = $list.find(`.${LIST_ITEM_CLASS}`);
         const $item = $items.eq(1);
-        const $topShield = $list.find(toSelector(SWITCHABLE_DELETE_TOP_SHIELD_CLASS));
-        const $bottomShield = $list.find(toSelector(SWITCHABLE_DELETE_BOTTOM_SHIELD_CLASS));
+        const $topShield = $list.find(`.${SWITCHABLE_DELETE_TOP_SHIELD_CLASS}`);
+        const $bottomShield = $list.find(`.${SWITCHABLE_DELETE_BOTTOM_SHIELD_CLASS}`);
 
         $item.trigger('dxpreparetodelete');
         assert.ok($topShield.is(':visible'), 'top shield enabled');
@@ -231,10 +231,10 @@ QUnit.module('switchable menu decorator', {
             itemDeleteMode: 'test'
         });
 
-        const $items = $list.find(toSelector(LIST_ITEM_CLASS));
+        const $items = $list.find(`.${LIST_ITEM_CLASS}`);
         const $item = $items.eq(1);
-        const $topShield = $list.find(toSelector(SWITCHABLE_DELETE_TOP_SHIELD_CLASS));
-        const $bottomShield = $list.find(toSelector(SWITCHABLE_DELETE_BOTTOM_SHIELD_CLASS));
+        const $topShield = $list.find(`.${SWITCHABLE_DELETE_TOP_SHIELD_CLASS}`);
+        const $bottomShield = $list.find(`.${SWITCHABLE_DELETE_BOTTOM_SHIELD_CLASS}`);
 
         $item.trigger('dxpreparetodelete');
         pointerMock($topShield).start().down();
@@ -255,9 +255,9 @@ QUnit.module('switchable menu decorator', {
             }
         });
 
-        const $items = $list.find(toSelector(LIST_ITEM_CLASS));
+        const $items = $list.find(`.${LIST_ITEM_CLASS}`);
         const $item = $items.eq(0);
-        const itemContentShield = () => { return $list.find(toSelector(LIST_ITEM_CONTENT_CLASS)).find(toSelector(SWITCHABLE_DELETE_ITEM_CONTENT_SHIELD_CLASS)); };
+        const itemContentShield = () => { return $list.find(`.${LIST_ITEM_CONTENT_CLASS}`).find(`.${SWITCHABLE_DELETE_ITEM_CONTENT_SHIELD_CLASS}`); };
 
         assert.ok(!itemContentShield().length, 'shield not added');
         $item.trigger('dxpreparetodelete');
@@ -274,7 +274,7 @@ QUnit.module('switchable menu decorator', {
             useNativeScrolling: false
         });
 
-        const $items = $list.find(toSelector(LIST_ITEM_CLASS));
+        const $items = $list.find(`.${LIST_ITEM_CLASS}`);
         const $item = $items.eq(0);
 
         $item.trigger('dxpreparetodelete');
@@ -294,7 +294,7 @@ QUnit.module('switchable menu decorator', {
             itemDeleteMode: 'test'
         });
 
-        const $items = $list.find(toSelector(LIST_ITEM_CLASS));
+        const $items = $list.find(`.${LIST_ITEM_CLASS}`);
         const $item = $items.eq(0);
         const scrollView = $list.dxScrollView('instance');
 
@@ -338,10 +338,10 @@ QUnit.module('switchable button delete decorator', {
             itemDeleteMode: 'test'
         });
 
-        const $items = $list.find(toSelector(LIST_ITEM_CLASS));
+        const $items = $list.find(`.${LIST_ITEM_CLASS}`);
         const $item = $items.eq(0);
 
-        assert.strictEqual($item.children(toSelector(SWITCHABLE_DELETE_BUTTON_CONTAINER_CLASS)).length, 0, 'delete button won\'t rendered');
+        assert.strictEqual($item.children(`.${SWITCHABLE_DELETE_BUTTON_CONTAINER_CLASS}`).length, 0, 'delete button won\'t rendered');
     });
 
     QUnit.test('button should be added only when item is ready to delete', function(assert) {
@@ -351,15 +351,15 @@ QUnit.module('switchable button delete decorator', {
             itemDeleteMode: 'test'
         });
 
-        const $items = $list.find(toSelector(LIST_ITEM_CLASS));
+        const $items = $list.find(`.${LIST_ITEM_CLASS}`);
         const $item = $items.eq(0);
 
         $item.trigger('dxpreparetodelete');
         const $deleteButton = $item
-            .children(toSelector(SWITCHABLE_DELETE_BUTTON_CONTAINER_CLASS))
-            .children(toSelector(SWITCHABLE_DELETE_BUTTON_WRAPPER_CLASS))
-            .children(toSelector(SWITCHABLE_DELETE_BUTTON_INNER_WRAPPER_CLASS))
-            .children(toSelector(SWITCHABLE_DELETE_BUTTON_CLASS));
+            .children(`.${SWITCHABLE_DELETE_BUTTON_CONTAINER_CLASS}`)
+            .children(`.${SWITCHABLE_DELETE_BUTTON_WRAPPER_CLASS}`)
+            .children(`.${SWITCHABLE_DELETE_BUTTON_INNER_WRAPPER_CLASS}`)
+            .children(`.${SWITCHABLE_DELETE_BUTTON_CLASS}`);
         assert.ok($deleteButton.hasClass('dx-button'), 'button generated');
 
         $item.trigger('dxpreparetodelete');
@@ -375,7 +375,7 @@ QUnit.module('switchable button delete decorator', {
             itemDeleteMode: 'test'
         });
         const list = $list.dxList('instance');
-        const $items = $list.find(toSelector(LIST_ITEM_CLASS));
+        const $items = $list.find(`.${LIST_ITEM_CLASS}`);
         const $item = $items.eq(0);
 
         $item.trigger('dxpreparetodelete');
@@ -384,7 +384,7 @@ QUnit.module('switchable button delete decorator', {
             return $.Deferred().resolve().promise();
         };
 
-        const $deleteButton = $item.find(toSelector(SWITCHABLE_DELETE_BUTTON_CLASS));
+        const $deleteButton = $item.find(`.${SWITCHABLE_DELETE_BUTTON_CLASS}`);
         $deleteButton.trigger('dxclick');
     });
 
@@ -395,18 +395,18 @@ QUnit.module('switchable button delete decorator', {
             itemDeleteMode: 'toggle'
         });
 
-        let $item = $list.find(toSelector(LIST_ITEM_CLASS)).eq(0);
-        let $deleteToggle = $item.children(toSelector(LIST_ITEM_BEFORE_BAG_CLASS)).children(toSelector(TOGGLE_DELETE_SWITCH_CLASS));
+        let $item = $list.find(`.${LIST_ITEM_CLASS}`).eq(0);
+        let $deleteToggle = $item.children(`.${LIST_ITEM_BEFORE_BAG_CLASS}`).children(`.${TOGGLE_DELETE_SWITCH_CLASS}`);
 
         $deleteToggle.trigger('dxclick');
 
-        let $deleteButton = $item.find(toSelector(SWITCHABLE_DELETE_BUTTON_CLASS));
+        let $deleteButton = $item.find(`.${SWITCHABLE_DELETE_BUTTON_CLASS}`);
 
         $deleteButton.trigger('dxclick');
-        $item = $list.find(toSelector(LIST_ITEM_CLASS)).eq(0);
-        $deleteToggle = $item.children(toSelector(LIST_ITEM_BEFORE_BAG_CLASS)).children(toSelector(TOGGLE_DELETE_SWITCH_CLASS));
+        $item = $list.find(`.${LIST_ITEM_CLASS}`).eq(0);
+        $deleteToggle = $item.children(`.${LIST_ITEM_BEFORE_BAG_CLASS}`).children(`.${TOGGLE_DELETE_SWITCH_CLASS}`);
         $deleteToggle.trigger('dxclick');
-        $deleteButton = $item.find(toSelector(SWITCHABLE_DELETE_BUTTON_CLASS));
+        $deleteButton = $item.find(`.${SWITCHABLE_DELETE_BUTTON_CLASS}`);
 
         assert.strictEqual($deleteButton.children('.dx-button-content').length, 1, 'button container has content');
     });
@@ -420,9 +420,9 @@ QUnit.module('toggle delete decorator', () => {
             itemDeleteMode: 'toggle'
         });
 
-        const $items = $list.find(toSelector(LIST_ITEM_CLASS));
+        const $items = $list.find(`.${LIST_ITEM_CLASS}`);
         const $item = $items.eq(0);
-        const $deleteToggle = $item.children(toSelector(LIST_ITEM_BEFORE_BAG_CLASS)).children(toSelector(TOGGLE_DELETE_SWITCH_CLASS));
+        const $deleteToggle = $item.children(`.${LIST_ITEM_BEFORE_BAG_CLASS}`).children(`.${TOGGLE_DELETE_SWITCH_CLASS}`);
 
         $deleteToggle.trigger('dxclick');
         assert.ok($item.hasClass(SWITCHABLE_DELETE_READY_CLASS), 'delete ready class added if toggle pressed');
@@ -435,12 +435,12 @@ QUnit.module('toggle delete decorator', () => {
             allowItemDeleting: true,
             itemDeleteMode: 'toggle'
         });
-        const $items = $list.find(toSelector(LIST_ITEM_CLASS));
+        const $items = $list.find(`.${LIST_ITEM_CLASS}`);
         const $item = $items.eq(0);
-        const $deleteToggle = $item.children(toSelector(LIST_ITEM_BEFORE_BAG_CLASS)).children(toSelector(TOGGLE_DELETE_SWITCH_CLASS));
+        const $deleteToggle = $item.children(`.${LIST_ITEM_BEFORE_BAG_CLASS}`).children(`.${TOGGLE_DELETE_SWITCH_CLASS}`);
 
         $deleteToggle.trigger('dxclick');
-        const $buttonContainer = $item.find(toSelector(SWITCHABLE_DELETE_BUTTON_CONTAINER_CLASS));
+        const $buttonContainer = $item.find(`.${SWITCHABLE_DELETE_BUTTON_CONTAINER_CLASS}`);
 
         assert.strictEqual(fxStopSpy.callCount, 3);
         assert.strictEqual(fxStopSpy.getCall(1).args[0][0], $buttonContainer[0], 'stop is called on button container');
@@ -459,7 +459,7 @@ QUnit.module('static delete decorator', () => {
             itemDeleteMode: 'static'
         });
         const list = $list.dxList('instance');
-        const $items = $list.find(toSelector(LIST_ITEM_CLASS));
+        const $items = $list.find(`.${LIST_ITEM_CLASS}`);
         const $item = $items.eq(0);
 
         list.deleteItem = ($itemElement) => {
@@ -467,7 +467,7 @@ QUnit.module('static delete decorator', () => {
             return $.Deferred().resolve().promise();
         };
 
-        const $deleteButton = $item.find(toSelector(STATIC_DELETE_BUTTON_CLASS));
+        const $deleteButton = $item.find(`.${STATIC_DELETE_BUTTON_CLASS}`);
         $deleteButton.trigger('dxclick');
     });
 
@@ -483,9 +483,9 @@ QUnit.module('static delete decorator', () => {
             onItemClick: clickHandledStub
         });
 
-        const $items = $list.find(toSelector(LIST_ITEM_CLASS));
+        const $items = $list.find(`.${LIST_ITEM_CLASS}`);
         const $item = $items.eq(0);
-        const $deleteButton = $item.find(toSelector(STATIC_DELETE_BUTTON_CLASS));
+        const $deleteButton = $item.find(`.${STATIC_DELETE_BUTTON_CLASS}`);
 
         $deleteButton.trigger('dxclick');
         assert.strictEqual(clickHandledStub.callCount, 0, 'click action is not triggered');
@@ -499,7 +499,7 @@ QUnit.module('slideButton delete decorator', () => {
             allowItemDeleting: true,
             itemDeleteMode: 'slideButton'
         });
-        const $items = $list.find(toSelector(LIST_ITEM_CLASS));
+        const $items = $list.find(`.${LIST_ITEM_CLASS}`);
         const $item = $items.eq(0);
 
         pointerMock($item).start().swipeEnd(1);
@@ -514,7 +514,7 @@ QUnit.module('slideButton delete decorator', () => {
             allowItemDeleting: true,
             itemDeleteMode: 'slideButton'
         });
-        const $items = $list.find(toSelector(LIST_ITEM_CLASS));
+        const $items = $list.find(`.${LIST_ITEM_CLASS}`);
         const $item = $items.eq(0);
         const startEvent = pointerMock($item).start().swipeStart().lastEvent();
 
@@ -528,10 +528,10 @@ QUnit.module('slideButton delete decorator', () => {
             allowItemDeleting: true,
             itemDeleteMode: 'slideButton'
         });
-        const $items = $list.find(toSelector(LIST_ITEM_CLASS));
+        const $items = $list.find(`.${LIST_ITEM_CLASS}`);
         const $item = $items.eq(0);
         pointerMock($item).start().swipeEnd(1);
-        const $buttonContainer = $item.find(toSelector(SWITCHABLE_DELETE_BUTTON_CONTAINER_CLASS));
+        const $buttonContainer = $item.find(`.${SWITCHABLE_DELETE_BUTTON_CONTAINER_CLASS}`);
 
         assert.strictEqual(fxStopSpy.callCount, 3);
         assert.strictEqual(fxStopSpy.getCall(1).args[0][0], $buttonContainer[0], 'stop is called on button container');
@@ -554,19 +554,19 @@ QUnit.module('slideItem delete decorator', {
             allowItemDeleting: true,
             itemDeleteMode: 'slideItem'
         });
-        const $items = $list.find(toSelector(LIST_ITEM_CLASS));
+        const $items = $list.find(`.${LIST_ITEM_CLASS}`);
         const $item = $items.eq(0);
 
         assert.ok($item.hasClass(SLIDE_MENU_WRAPPER_CLASS), 'class added to list item');
-        const $itemContent = $item.children(toSelector(SLIDE_MENU_CONTENT_CLASS));
+        const $itemContent = $item.children(`.${SLIDE_MENU_CONTENT_CLASS}`);
         assert.strictEqual($itemContent.length, 1, 'content generated');
         assert.strictEqual($itemContent.text(), 'Item Template', 'content moved in inner div');
 
         const deleteButtonContent = () => {
             return $item
-                .children(toSelector(SLIDE_MENU_BUTTONS_CONTAINER_CLASS))
-                .children(toSelector(SLIDE_MENU_BUTTONS_CLASS))
-                .children(toSelector(SLIDE_MENU_BUTTON_CLASS));
+                .children(`.${SLIDE_MENU_BUTTONS_CONTAINER_CLASS}`)
+                .children(`.${SLIDE_MENU_BUTTONS_CLASS}`)
+                .children(`.${SLIDE_MENU_BUTTON_CLASS}`);
         };
         assert.strictEqual(deleteButtonContent().length, 0, 'button is not generated');
     });
@@ -598,15 +598,15 @@ QUnit.module('slideItem delete decorator', {
             allowItemDeleting: true,
             itemDeleteMode: 'slideItem'
         });
-        const $items = $list.find(toSelector(LIST_ITEM_CLASS));
+        const $items = $list.find(`.${LIST_ITEM_CLASS}`);
         const $item = $items.eq(0);
         const pointer = pointerMock($item);
 
         pointer.start().swipeStart().swipe(-0.01);
 
-        const $itemContent = $item.find(toSelector(SLIDE_MENU_CONTENT_CLASS));
-        const $deleteButtonContainer = $item.find(toSelector(SLIDE_MENU_BUTTONS_CONTAINER_CLASS));
-        const $deleteButton = $item.find(toSelector(SLIDE_MENU_BUTTONS_CLASS));
+        const $itemContent = $item.find(`.${SLIDE_MENU_CONTENT_CLASS}`);
+        const $deleteButtonContainer = $item.find(`.${SLIDE_MENU_BUTTONS_CONTAINER_CLASS}`);
+        const $deleteButton = $item.find(`.${SLIDE_MENU_BUTTONS_CLASS}`);
 
         assert.ok(position($itemContent) < 0, 'item moved');
 
@@ -634,7 +634,7 @@ QUnit.module('slideItem delete decorator', {
             allowItemDeleting: true,
             itemDeleteMode: 'slideItem'
         });
-        const $items = $list.find(toSelector(LIST_ITEM_CLASS));
+        const $items = $list.find(`.${LIST_ITEM_CLASS}`);
         const $item = $items.eq(0);
         const startEvent = pointerMock($item).start().swipeStart().lastEvent();
 
@@ -647,7 +647,7 @@ QUnit.module('slideItem delete decorator', {
             allowItemDeleting: true,
             itemDeleteMode: 'slideItem'
         });
-        const $items = $list.find(toSelector(LIST_ITEM_CLASS));
+        const $items = $list.find(`.${LIST_ITEM_CLASS}`);
         const $item = $items.eq(0);
         const startEvent = pointerMock($item).start().swipeStart().swipe(0.1).lastEvent();
 
@@ -660,7 +660,7 @@ QUnit.module('slideItem delete decorator', {
             allowItemDeleting: true,
             itemDeleteMode: 'slideItem'
         });
-        const $items = $list.find(toSelector(LIST_ITEM_CLASS));
+        const $items = $list.find(`.${LIST_ITEM_CLASS}`);
         const $item = $items.eq(0);
 
         pointerMock($item).start().swipeStart().swipe(-0.5).swipeEnd(-1, -0.5);
@@ -674,9 +674,9 @@ QUnit.module('slideItem delete decorator', {
             allowItemDeleting: true,
             itemDeleteMode: 'slideItem'
         });
-        const $items = $list.find(toSelector(LIST_ITEM_CLASS));
+        const $items = $list.find(`.${LIST_ITEM_CLASS}`);
         const $item = $items.eq(0);
-        const $itemContent = $item.find(toSelector(SLIDE_MENU_CONTENT_CLASS));
+        const $itemContent = $item.find(`.${SLIDE_MENU_CONTENT_CLASS}`);
 
         pointerMock($item).start().swipeStart().swipe(0.5);
         assert.strictEqual(position($itemContent), 0, 'item not moved');
@@ -688,7 +688,7 @@ QUnit.module('slideItem delete decorator', {
             allowItemDeleting: true,
             itemDeleteMode: 'slideItem'
         });
-        const $items = $list.find(toSelector(LIST_ITEM_CLASS));
+        const $items = $list.find(`.${LIST_ITEM_CLASS}`);
         const $item = $items.eq(0);
         const startEvent = pointerMock($item).start().swipeStart().swipe(-0.5).swipe(0.5).lastEvent();
 
@@ -701,10 +701,10 @@ QUnit.module('slideItem delete decorator', {
             allowItemDeleting: true,
             itemDeleteMode: 'slideItem'
         });
-        const $items = $list.find(toSelector(LIST_ITEM_CLASS));
+        const $items = $list.find(`.${LIST_ITEM_CLASS}`);
         const $item = $items.eq(0);
-        const $itemContent = $item.find(toSelector(SLIDE_MENU_CONTENT_CLASS));
-        const $deleteButton = $item.find(toSelector(SLIDE_MENU_BUTTONS_CLASS));
+        const $itemContent = $item.find(`.${SLIDE_MENU_CONTENT_CLASS}`);
+        const $deleteButton = $item.find(`.${SLIDE_MENU_BUTTONS_CLASS}`);
 
         pointerMock($item).start().swipeStart().swipe(-0.5).swipeEnd(-1);
         $itemContent.trigger('dxclick');
@@ -720,7 +720,7 @@ QUnit.module('slideItem delete decorator', {
             itemDeleteMode: 'slideItem'
         });
         const list = $list.dxList('instance');
-        const $items = $list.find(toSelector(LIST_ITEM_CLASS));
+        const $items = $list.find(`.${LIST_ITEM_CLASS}`);
         const $item = $items.eq(0);
 
         list.deleteItem = ($itemElement) => {
@@ -729,7 +729,7 @@ QUnit.module('slideItem delete decorator', {
         };
 
         pointerMock($item).start().swipeStart().swipe(-0.5).swipeEnd(-1, -0.5);
-        const $deleteButton = $item.find(toSelector(SLIDE_MENU_BUTTON_CLASS));
+        const $deleteButton = $item.find(`.${SLIDE_MENU_BUTTON_CLASS}`);
         $deleteButton.trigger('dxclick');
     });
 
@@ -744,11 +744,11 @@ QUnit.module('slideItem delete decorator', {
             },
             onItemClick: clickHandledStub
         });
-        const $items = $list.find(toSelector(LIST_ITEM_CLASS));
+        const $items = $list.find(`.${LIST_ITEM_CLASS}`);
         const $item = $items.eq(0);
 
         pointerMock($item).start().swipeStart().swipe(-0.5).swipeEnd(-1);
-        const $deleteButton = $item.find(toSelector(SLIDE_MENU_BUTTON_CLASS));
+        const $deleteButton = $item.find(`.${SLIDE_MENU_BUTTON_CLASS}`);
         $deleteButton.trigger('dxclick');
 
         assert.strictEqual(clickHandledStub.callCount, 0, 'item click action not fired');
@@ -766,9 +766,9 @@ QUnit.module('slideItem delete decorator', {
             }
         });
         const list = $list.dxList('instance');
-        const $items = $list.find(toSelector(LIST_ITEM_CLASS));
+        const $items = $list.find(`.${LIST_ITEM_CLASS}`);
         const $item = $items.eq(0);
-        const $deleteButton = $item.find(toSelector(SLIDE_MENU_BUTTONS_CLASS));
+        const $deleteButton = $item.find(`.${SLIDE_MENU_BUTTONS_CLASS}`);
 
         pointerMock($item).start().swipeStart().swipe(-0.5).swipeEnd(-1);
         list.option('disabled', true);
@@ -784,12 +784,12 @@ QUnit.module('slideItem delete decorator', {
             allowItemDeleting: true,
             itemDeleteMode: 'slideItem'
         });
-        const $items = $list.find(toSelector(LIST_ITEM_CLASS));
+        const $items = $list.find(`.${LIST_ITEM_CLASS}`);
         const $item = $items.eq(0);
 
         pointerMock($item).start().swipeStart().swipe(-0.5).swipeEnd(-1, -0.5);
 
-        const $deleteButton = $item.find(toSelector(SLIDE_MENU_BUTTON_CLASS));
+        const $deleteButton = $item.find(`.${SLIDE_MENU_BUTTON_CLASS}`);
 
         assert.strictEqual($deleteButton.text(), '', 'button has no text for Material theme');
 
@@ -802,12 +802,12 @@ QUnit.module('slideItem delete decorator', {
             allowItemDeleting: true,
             itemDeleteMode: 'slideItem'
         });
-        const $items = $list.find(toSelector(LIST_ITEM_CLASS));
+        const $items = $list.find(`.${LIST_ITEM_CLASS}`);
         const $item = $items.eq(0);
 
         pointerMock($item).start().swipeStart().swipe(-0.5).swipeEnd(-1, -0.5);
 
-        const $deleteButton = $item.find(toSelector(SLIDE_MENU_BUTTON_CLASS));
+        const $deleteButton = $item.find(`.${SLIDE_MENU_BUTTON_CLASS}`);
 
         assert.ok($deleteButton.text().length > 0, 'button has a text for Generic theme');
     });
@@ -825,7 +825,7 @@ QUnit.module('slideItem delete decorator', {
             allowItemDeleting: true,
             itemDeleteMode: 'slideItem'
         });
-        const $item = $list.find(toSelector(LIST_ITEM_CLASS)).eq(0);
+        const $item = $list.find(`.${LIST_ITEM_CLASS}`).eq(0);
         const pointer = pointerMock($item);
         let args;
         let inkRippleShowingWave;
@@ -848,7 +848,7 @@ QUnit.module('slideItem delete decorator', {
             clock.tick(args.afterTouchTimeout);
             pointer.start().swipeStart().swipe(-0.5).swipeEnd(-1);
             clock.tick(args.afterSwipeTimeout);
-            inkRippleShowingWave = $item.find(toSelector(INKRIPPLE_WAVE_SHOWING_CLASS));
+            inkRippleShowingWave = $item.find(`.${INKRIPPLE_WAVE_SHOWING_CLASS}`);
             assert.strictEqual(inkRippleShowingWave.length, args.result, args.message);
             pointer.start('touch').up();
             clock.tick(400);
@@ -866,7 +866,7 @@ QUnit.module('slideItem delete decorator', {
             itemDeleteMode: 'slideItem',
             useInkRipple: true
         });
-        const $items = $list.find(toSelector(LIST_ITEM_CLASS));
+        const $items = $list.find(`.${LIST_ITEM_CLASS}`);
         const $item = $items.eq(0);
         const clock = sinon.useFakeTimers();
         const pointer = pointerMock($item);
@@ -877,7 +877,7 @@ QUnit.module('slideItem delete decorator', {
         clock.tick(50);
         pointer.start('touch').down();
         clock.tick(100);
-        const inkRippleShowingWave = $item.find(toSelector(INKRIPPLE_WAVE_SHOWING_CLASS));
+        const inkRippleShowingWave = $item.find(`.${INKRIPPLE_WAVE_SHOWING_CLASS}`);
 
         assert.strictEqual(inkRippleShowingWave.length, 1, 'inkripple feedback works right after swipe in opposite direction');
 
@@ -892,15 +892,15 @@ QUnit.module('slideItem delete decorator', {
             allowItemDeleting: true,
             itemDeleteMode: 'slideItem'
         });
-        const $items = $list.find(toSelector(LIST_ITEM_CLASS));
+        const $items = $list.find(`.${LIST_ITEM_CLASS}`);
         const $item = $items.eq(0);
         const pointer = pointerMock($item);
 
         pointer.start().swipeStart().swipe(0.01);
 
-        const $itemContent = $item.find(toSelector(SLIDE_MENU_CONTENT_CLASS));
-        const $deleteButtonContainer = $item.find(toSelector(SLIDE_MENU_BUTTONS_CONTAINER_CLASS));
-        const $deleteButton = $item.find(toSelector(SLIDE_MENU_BUTTONS_CLASS));
+        const $itemContent = $item.find(`.${SLIDE_MENU_CONTENT_CLASS}`);
+        const $deleteButtonContainer = $item.find(`.${SLIDE_MENU_BUTTONS_CONTAINER_CLASS}`);
+        const $deleteButton = $item.find(`.${SLIDE_MENU_BUTTONS_CLASS}`);
 
         assert.ok(position($itemContent) > 0, 'item moved');
         const containerPositionDifference = position($deleteButtonContainer);
@@ -927,9 +927,9 @@ QUnit.module('slideItem delete decorator', {
             allowItemDeleting: true,
             itemDeleteMode: 'slideItem'
         });
-        const $items = $list.find(toSelector(LIST_ITEM_CLASS));
+        const $items = $list.find(`.${LIST_ITEM_CLASS}`);
         const $item = $items.eq(0);
-        const $itemContent = $item.find(toSelector(SLIDE_MENU_CONTENT_CLASS));
+        const $itemContent = $item.find(`.${SLIDE_MENU_CONTENT_CLASS}`);
 
         pointerMock($item).start().swipeStart().swipe(-0.5);
         assert.strictEqual(position($itemContent), 0, 'item not moved');
@@ -947,7 +947,7 @@ QUnit.module('slideItem delete decorator', {
                 allowItemDeleting: true,
                 itemDeleteMode: 'slideItem'
             });
-            const $items = $list.find(toSelector(LIST_ITEM_CLASS));
+            const $items = $list.find(`.${LIST_ITEM_CLASS}`);
             const $item = $items.eq(0);
             const pointer = pointerMock($item).start();
 
@@ -960,7 +960,7 @@ QUnit.module('slideItem delete decorator', {
             pointer.swipeEnd(-1);
             clock.tick(300);
 
-            const $deleteButtonContainer = $item.find(toSelector(SLIDE_MENU_BUTTONS_CONTAINER_CLASS));
+            const $deleteButtonContainer = $item.find(`.${SLIDE_MENU_BUTTONS_CONTAINER_CLASS}`);
             assert.ok($deleteButtonContainer.length, 'delete button present');
         } finally {
             fx.off = origFxOff;
@@ -980,7 +980,7 @@ QUnit.module('slideItem delete decorator', {
                 itemDeleteMode: 'slideItem'
             });
 
-            const $items = $list.find(toSelector(LIST_ITEM_CLASS));
+            const $items = $list.find(`.${LIST_ITEM_CLASS}`);
             const $item = $items.eq(0);
             const pointer = pointerMock($item);
 
@@ -1017,14 +1017,14 @@ QUnit.module('slide menu decorator', {
             menuMode: 'slide',
             menuItems: [{ text: 'menu' }, { text: 'menu' }]
         });
-        const $items = $list.find(toSelector(LIST_ITEM_CLASS));
+        const $items = $list.find(`.${LIST_ITEM_CLASS}`);
         const $item = $items.eq(0);
         const pointer = pointerMock($item);
         const deleteButtonContent = () => {
             return $item
-                .children(toSelector(SLIDE_MENU_BUTTONS_CONTAINER_CLASS))
-                .children(toSelector(SLIDE_MENU_BUTTONS_CLASS))
-                .children(toSelector(SLIDE_MENU_BUTTON_CLASS));
+                .children(`.${SLIDE_MENU_BUTTONS_CONTAINER_CLASS}`)
+                .children(`.${SLIDE_MENU_BUTTONS_CLASS}`)
+                .children(`.${SLIDE_MENU_BUTTON_CLASS}`);
         };
 
         pointer.start().swipeStart().swipe(-0.5).swipeEnd(-1, -0.5);
@@ -1039,14 +1039,14 @@ QUnit.module('slide menu decorator', {
             menuMode: 'slide',
             menuItems: [{ text: 'menu' }]
         });
-        const $items = $list.find(toSelector(LIST_ITEM_CLASS));
+        const $items = $list.find(`.${LIST_ITEM_CLASS}`);
         const $item = $items.eq(0);
         const pointer = pointerMock($item);
         const deleteButtonContent = () => {
             return $item
-                .children(toSelector(SLIDE_MENU_BUTTONS_CONTAINER_CLASS))
-                .children(toSelector(SLIDE_MENU_BUTTONS_CLASS))
-                .children(toSelector(SLIDE_MENU_BUTTON_CLASS));
+                .children(`.${SLIDE_MENU_BUTTONS_CONTAINER_CLASS}`)
+                .children(`.${SLIDE_MENU_BUTTONS_CLASS}`)
+                .children(`.${SLIDE_MENU_BUTTON_CLASS}`);
         };
 
         pointer.start().swipeStart().swipe(-0.5).swipeEnd(-1, -0.5);
@@ -1061,20 +1061,20 @@ QUnit.module('slide menu decorator', {
             menuMode: 'slide',
             menuItems: [{ text: 'menu' }, { text: 'menu' }]
         });
-        const $items = $list.find(toSelector(LIST_ITEM_CLASS));
+        const $items = $list.find(`.${LIST_ITEM_CLASS}`);
         const $item = $items.eq(0);
         const pointer = pointerMock($item);
         const deleteButtonContent = () => {
             return $item
-                .children(toSelector(SLIDE_MENU_BUTTONS_CONTAINER_CLASS))
-                .children(toSelector(SLIDE_MENU_BUTTONS_CLASS))
-                .children(toSelector(SLIDE_MENU_BUTTON_CLASS));
+                .children(`.${SLIDE_MENU_BUTTONS_CONTAINER_CLASS}`)
+                .children(`.${SLIDE_MENU_BUTTONS_CLASS}`)
+                .children(`.${SLIDE_MENU_BUTTON_CLASS}`);
         };
 
         pointer.start().swipeStart().swipe(-0.5).swipeEnd(-1, -0.5);
         deleteButtonContent().trigger('dxclick');
 
-        const $menu = $list.find(toSelector(SLIDE_MENU_CLASS));
+        const $menu = $list.find(`.${SLIDE_MENU_CLASS}`);
         const menu = $menu.dxActionSheet('instance');
         const $menuItems = $(menu.itemElements());
 
@@ -1089,14 +1089,14 @@ QUnit.module('slide menu decorator', {
             menuMode: 'slide',
             menuItems: [{ text: 'menu' }, { text: 'menu' }]
         });
-        const $items = $list.find(toSelector(LIST_ITEM_CLASS));
+        const $items = $list.find(`.${LIST_ITEM_CLASS}`);
         const $item = $items.eq(0);
         const pointer = pointerMock($item);
         const deleteButtonContent = () => {
             return $item
-                .children(toSelector(SLIDE_MENU_BUTTONS_CONTAINER_CLASS))
-                .children(toSelector(SLIDE_MENU_BUTTONS_CLASS))
-                .children(toSelector(SLIDE_MENU_BUTTON_CLASS));
+                .children(`.${SLIDE_MENU_BUTTONS_CONTAINER_CLASS}`)
+                .children(`.${SLIDE_MENU_BUTTONS_CLASS}`)
+                .children(`.${SLIDE_MENU_BUTTON_CLASS}`);
         };
 
         pointer.start().swipeStart().swipe(-0.5).swipeEnd(-1, -0.5);
@@ -1123,20 +1123,20 @@ QUnit.module('slide menu decorator', {
                 }
             ]
         });
-        const $items = $list.find(toSelector(LIST_ITEM_CLASS));
+        const $items = $list.find(`.${LIST_ITEM_CLASS}`);
         const $item = $items.eq(0);
         const pointer = pointerMock($item);
         const deleteButtonContent = () => {
             return $item
-                .children(toSelector(SLIDE_MENU_BUTTONS_CONTAINER_CLASS))
-                .children(toSelector(SLIDE_MENU_BUTTONS_CLASS))
-                .children(toSelector(SLIDE_MENU_BUTTON_CLASS));
+                .children(`.${SLIDE_MENU_BUTTONS_CONTAINER_CLASS}`)
+                .children(`.${SLIDE_MENU_BUTTONS_CLASS}`)
+                .children(`.${SLIDE_MENU_BUTTON_CLASS}`);
         };
 
         pointer.start().swipeStart().swipe(-0.5).swipeEnd(-1, -0.5);
         deleteButtonContent().trigger('dxclick');
 
-        const $menu = $list.find(toSelector(SLIDE_MENU_CLASS));
+        const $menu = $list.find(`.${SLIDE_MENU_CLASS}`);
         const menu = $menu.dxActionSheet('instance');
         const $menuItems = $(menu.itemElements());
 
@@ -1160,14 +1160,14 @@ QUnit.module('slide menu decorator', {
                 }
             ]
         });
-        const $items = $list.find(toSelector(LIST_ITEM_CLASS));
+        const $items = $list.find(`.${LIST_ITEM_CLASS}`);
         const $item = $items.eq(0);
         const pointer = pointerMock($item);
         const deleteButtonContent = () => {
             return $item
-                .children(toSelector(SLIDE_MENU_BUTTONS_CONTAINER_CLASS))
-                .children(toSelector(SLIDE_MENU_BUTTONS_CLASS))
-                .children(toSelector(SLIDE_MENU_BUTTON_CLASS));
+                .children(`.${SLIDE_MENU_BUTTONS_CONTAINER_CLASS}`)
+                .children(`.${SLIDE_MENU_BUTTONS_CLASS}`)
+                .children(`.${SLIDE_MENU_BUTTON_CLASS}`);
         };
 
         pointer.start().swipeStart().swipe(-0.5).swipeEnd(-1, -0.5);
@@ -1191,14 +1191,14 @@ QUnit.module('slide menu decorator', {
                 ],
                 onItemClick: clickHandledStub
             });
-            const $items = $list.find(toSelector(LIST_ITEM_CLASS));
+            const $items = $list.find(`.${LIST_ITEM_CLASS}`);
             const $item = $items.eq(0);
             const pointer = pointerMock($item);
             const deleteButtonContent = () => {
                 return $item
-                    .children(toSelector(SLIDE_MENU_BUTTONS_CONTAINER_CLASS))
-                    .children(toSelector(SLIDE_MENU_BUTTONS_CLASS))
-                    .children(toSelector(SLIDE_MENU_BUTTON_CLASS));
+                    .children(`.${SLIDE_MENU_BUTTONS_CONTAINER_CLASS}`)
+                    .children(`.${SLIDE_MENU_BUTTONS_CLASS}`)
+                    .children(`.${SLIDE_MENU_BUTTON_CLASS}`);
             };
 
             pointer.start().swipeStart().swipe(-0.5).swipeEnd(-1, -0.5);
@@ -1228,14 +1228,14 @@ QUnit.module('slide menu decorator', {
                 ],
                 onItemClick: clickHandledStub
             });
-            const $items = $list.find(toSelector(LIST_ITEM_CLASS));
+            const $items = $list.find(`.${LIST_ITEM_CLASS}`);
             const $item = $items.eq(0);
             const pointer = pointerMock($item);
             const deleteButtonContent = () => {
                 return $item
-                    .children(toSelector(SLIDE_MENU_BUTTONS_CONTAINER_CLASS))
-                    .children(toSelector(SLIDE_MENU_BUTTONS_CLASS))
-                    .children(toSelector(SLIDE_MENU_BUTTON_CLASS));
+                    .children(`.${SLIDE_MENU_BUTTONS_CONTAINER_CLASS}`)
+                    .children(`.${SLIDE_MENU_BUTTONS_CLASS}`)
+                    .children(`.${SLIDE_MENU_BUTTON_CLASS}`);
             };
 
             pointer.start().swipeStart().swipe(-0.5).swipeEnd(-1, -0.5);
@@ -1325,9 +1325,9 @@ QUnit.module('context delete decorator', {
 
         $(list.itemElements()).eq(0).trigger('dxcontextmenu');
 
-        const $menu = $list.find(toSelector(CONTEXTMENU_CLASS));
+        const $menu = $list.find(`.${CONTEXTMENU_CLASS}`);
         const menu = $menu.dxOverlay('instance');
-        const $deleteMenuItem = $(menu.content()).find(toSelector(CONTEXTMENU_MENUITEM));
+        const $deleteMenuItem = $(menu.content()).find(`.${CONTEXTMENU_MENUITEM}`);
 
         assert.ok($deleteMenuItem.length, 'delete menu item generated');
         assert.strictEqual($deleteMenuItem.text(), 'Delete', 'delete menu item text set');
@@ -1344,9 +1344,9 @@ QUnit.module('context delete decorator', {
 
         $(list.itemElements()).eq(0).trigger('dxcontextmenu');
 
-        const $menu = $list.find(toSelector(CONTEXTMENU_CLASS));
+        const $menu = $list.find(`.${CONTEXTMENU_CLASS}`);
         const menu = $menu.dxOverlay('instance');
-        const $deleteMenuItem = $(menu.content()).find(toSelector(CONTEXTMENU_MENUITEM));
+        const $deleteMenuItem = $(menu.content()).find(`.${CONTEXTMENU_MENUITEM}`);
 
         list.deleteItem = ($itemElement) => {
             assert.ok(true, 'item is deleted');
@@ -1374,10 +1374,10 @@ QUnit.module('context menu decorator', {
 
         $(list.itemElements()).eq(0).trigger('dxcontextmenu');
 
-        const $menu = $list.find(toSelector(CONTEXTMENU_CLASS));
+        const $menu = $list.find(`.${CONTEXTMENU_CLASS}`);
         const menu = $menu.dxOverlay('instance');
         const $menuContent = $(menu.content());
-        const $contextMenuItem = $menuContent.find(toSelector(CONTEXTMENU_MENUITEM));
+        const $contextMenuItem = $menuContent.find(`.${CONTEXTMENU_MENUITEM}`);
 
         assert.ok($menuContent.hasClass(CONTEXTMENU_MENUCONTENT_CLASS), 'menu content class set');
         assert.strictEqual($contextMenuItem.length, 1, 'context menu item generated');
@@ -1395,10 +1395,10 @@ QUnit.module('context menu decorator', {
 
         $(list.itemElements()).eq(0).trigger('dxcontextmenu');
 
-        const $menu = $list.find(toSelector(CONTEXTMENU_CLASS));
+        const $menu = $list.find(`.${CONTEXTMENU_CLASS}`);
         const menu = $menu.dxOverlay('instance');
         const $menuContent = $(menu.content());
-        const $contextMenuItems = $menuContent.find(toSelector(CONTEXTMENU_MENUITEM));
+        const $contextMenuItems = $menuContent.find(`.${CONTEXTMENU_MENUITEM}`);
 
         assert.strictEqual($contextMenuItems.length, 2, 'context menu item and delete item menu generated');
         assert.strictEqual($contextMenuItems.eq(1).text(), 'Delete', 'delete item text set');
@@ -1416,9 +1416,9 @@ QUnit.module('context menu decorator', {
 
         $(list.itemElements()).eq(0).trigger('dxcontextmenu');
 
-        const $items = $list.find(toSelector(LIST_ITEM_CLASS));
+        const $items = $list.find(`.${LIST_ITEM_CLASS}`);
         const $item = $items.eq(0);
-        const $menu = $list.find(toSelector(CONTEXTMENU_CLASS));
+        const $menu = $list.find(`.${CONTEXTMENU_CLASS}`);
         const menu = $menu.dxOverlay('instance');
 
         $item.trigger(contextMenuEvent.name);
@@ -1437,7 +1437,7 @@ QUnit.module('context menu decorator', {
 
         list.option('allowItemDeleting', false);
 
-        const $menu = list.$element().find(toSelector(CONTEXTMENU_CLASS));
+        const $menu = list.$element().find(`.${CONTEXTMENU_CLASS}`);
         assert.ok(!$menu.length, 'overlay won\'t created');
     });
 
@@ -1452,9 +1452,9 @@ QUnit.module('context menu decorator', {
 
         $(list.itemElements()).eq(0).trigger('dxcontextmenu');
 
-        const $items = $list.find(toSelector(LIST_ITEM_CLASS));
+        const $items = $list.find(`.${LIST_ITEM_CLASS}`);
         const $item = $items.eq(0);
-        const $menu = list.$element().find(toSelector(CONTEXTMENU_CLASS));
+        const $menu = list.$element().find(`.${CONTEXTMENU_CLASS}`);
         const menu = $menu.dxOverlay('instance');
 
         $item.trigger(contextMenuEvent.name);
@@ -1478,12 +1478,12 @@ QUnit.module('context menu decorator', {
 
         $(list.itemElements()).eq(0).trigger('dxcontextmenu');
 
-        const $items = $list.find(toSelector(LIST_ITEM_CLASS));
+        const $items = $list.find(`.${LIST_ITEM_CLASS}`);
         const $item = $items.eq(0);
-        const $menu = $list.find(toSelector(CONTEXTMENU_CLASS));
+        const $menu = $list.find(`.${CONTEXTMENU_CLASS}`);
         const menu = $menu.dxOverlay('instance');
         const $menuContent = $(menu.content());
-        const $menuItem = $menuContent.find(toSelector(CONTEXTMENU_MENUITEM));
+        const $menuItem = $menuContent.find(`.${CONTEXTMENU_MENUITEM}`);
 
         $item.trigger(contextMenuEvent.name);
         $menuItem.trigger('dxclick');
@@ -1509,12 +1509,12 @@ QUnit.module('context menu decorator', {
             assert.ok($(itemElement).hasClass(LIST_ITEM_CLASS));
         };
 
-        const $items = $list.find(toSelector(LIST_ITEM_CLASS));
+        const $items = $list.find(`.${LIST_ITEM_CLASS}`);
         const $item = $items.eq(0);
-        const $menu = list.$element().find(toSelector(CONTEXTMENU_CLASS));
+        const $menu = list.$element().find(`.${CONTEXTMENU_CLASS}`);
         const menu = $menu.dxOverlay('instance');
         const $menuContent = $(menu.content());
-        const $deleteMenuItem = $menuContent.find(toSelector(CONTEXTMENU_MENUITEM));
+        const $deleteMenuItem = $menuContent.find(`.${CONTEXTMENU_MENUITEM}`);
 
         $item.trigger(contextMenuEvent.name);
         $deleteMenuItem.trigger('dxclick');
@@ -1531,12 +1531,12 @@ QUnit.module('context menu decorator', {
 
         $(list.itemElements()).eq(0).trigger('dxcontextmenu');
 
-        const $items = $list.find(toSelector(LIST_ITEM_CLASS));
+        const $items = $list.find(`.${LIST_ITEM_CLASS}`);
         const $item = $items.eq(0);
-        const $menu = $list.find(toSelector(CONTEXTMENU_CLASS));
+        const $menu = $list.find(`.${CONTEXTMENU_CLASS}`);
         const menu = $menu.dxOverlay('instance');
         const $menuContent = $(menu.content());
-        const $menuItem = $menuContent.find(toSelector(CONTEXTMENU_MENUITEM));
+        const $menuItem = $menuContent.find(`.${CONTEXTMENU_MENUITEM}`);
 
         $item.trigger(contextMenuEvent.name);
         $menuItem.trigger('dxclick');
@@ -1555,7 +1555,7 @@ QUnit.module('context menu decorator', {
                 assert.ok(false);
             }
         });
-        const $items = $list.find(toSelector(LIST_ITEM_CLASS));
+        const $items = $list.find(`.${LIST_ITEM_CLASS}`);
         const $item = $items.eq(0);
 
         $item.trigger({
@@ -1573,7 +1573,7 @@ QUnit.module('context menu decorator', {
                 assert.ok(true);
             }
         });
-        const $items = $list.find(toSelector(LIST_ITEM_CLASS));
+        const $items = $list.find(`.${LIST_ITEM_CLASS}`);
         const $item = $items.eq(0);
 
         $item.trigger({
@@ -1591,7 +1591,7 @@ QUnit.module('context menu decorator', {
             itemDeleteMode: 'context',
             rtlEnabled: true
         });
-        const menu = $list.find(toSelector(CONTEXTMENU_CLASS)).dxOverlay('instance');
+        const menu = $list.find(`.${CONTEXTMENU_CLASS}`).dxOverlay('instance');
 
         assert.ok(menu.option('rtlEnabled'), 'rtl option is true');
     });
@@ -1611,10 +1611,10 @@ QUnit.module('item select decorator', {
             showSelectionControls: true,
             selectionMode: 'multiple'
         });
-        const $items = $list.find(toSelector(LIST_ITEM_CLASS));
+        const $items = $list.find(`.${LIST_ITEM_CLASS}`);
         const $item = $items.eq(0);
-        const $checkboxContainer = $item.children(toSelector(LIST_ITEM_BEFORE_BAG_CLASS));
-        const checkbox = $checkboxContainer.children(toSelector(SELECT_CHECKBOX_CLASS)).dxCheckBox('instance');
+        const $checkboxContainer = $item.children(`.${LIST_ITEM_BEFORE_BAG_CLASS}`);
+        const checkbox = $checkboxContainer.children(`.${SELECT_CHECKBOX_CLASS}`).dxCheckBox('instance');
 
         assert.ok(!checkbox.option('focusStateEnabled'), 'focused state is turned off for the control');
         assert.ok(!checkbox.option('hoverStateEnabled'), 'hover state is turned off for the control');
@@ -1635,7 +1635,7 @@ QUnit.module('item select decorator', {
             assert.ok(true, 'item selected');
         };
 
-        const $checkbox = $list.find(toSelector(LIST_ITEM_CLASS)).eq(0).find(toSelector(SELECT_CHECKBOX_CLASS));
+        const $checkbox = $list.find(`.${LIST_ITEM_CLASS}`).eq(0).find(`.${SELECT_CHECKBOX_CLASS}`);
 
         $checkbox.trigger('dxclick');
     });
@@ -1655,7 +1655,7 @@ QUnit.module('item select decorator', {
             assert.ok(true, 'item unselected');
         };
 
-        const $checkbox = $list.find(toSelector(LIST_ITEM_CLASS)).eq(0).find(toSelector(SELECT_CHECKBOX_CLASS));
+        const $checkbox = $list.find(`.${LIST_ITEM_CLASS}`).eq(0).find(`.${SELECT_CHECKBOX_CLASS}`);
 
         $checkbox.trigger('dxclick');
         $checkbox.trigger('dxclick');
@@ -1667,9 +1667,9 @@ QUnit.module('item select decorator', {
             showSelectionControls: true,
             selectionMode: 'none'
         });
-        const $items = $list.find(toSelector(LIST_ITEM_CLASS));
+        const $items = $list.find(`.${LIST_ITEM_CLASS}`);
         const $item = $items.eq(0);
-        const $checkbox = $item.children(toSelector(LIST_ITEM_BEFORE_BAG_CLASS)).children(toSelector(SELECT_CHECKBOX_CLASS));
+        const $checkbox = $item.children(`.${LIST_ITEM_BEFORE_BAG_CLASS}`).children(`.${SELECT_CHECKBOX_CLASS}`);
 
         assert.strictEqual($checkbox.hasClass('dx-checkbox'), false, 'select not generated');
     });
@@ -1684,7 +1684,7 @@ QUnit.module('item select decorator', {
         });
         const list = $list.dxList('instance');
         const checkbox = () => {
-            return $list.find(toSelector(LIST_ITEM_CLASS)).eq(0).find(toSelector(SELECT_CHECKBOX_CLASS));
+            return $list.find(`.${LIST_ITEM_CLASS}`).eq(0).find(`.${SELECT_CHECKBOX_CLASS}`);
         };
 
         checkbox().trigger('dxclick');
@@ -1701,10 +1701,10 @@ QUnit.module('item select decorator', {
         });
         const list = $list.dxList('instance');
         const item = () => {
-            return $list.find(toSelector(LIST_ITEM_CLASS)).eq(0);
+            return $list.find(`.${LIST_ITEM_CLASS}`).eq(0);
         };
         const checkbox = () => {
-            return item().find(toSelector(SELECT_CHECKBOX_CLASS));
+            return item().find(`.${SELECT_CHECKBOX_CLASS}`);
         };
 
         list.selectItem(item());
@@ -1720,10 +1720,10 @@ QUnit.module('item select decorator', {
         });
         const list = $list.dxList('instance');
         const item = () => {
-            return $list.find(toSelector(LIST_ITEM_CLASS)).eq(0);
+            return $list.find(`.${LIST_ITEM_CLASS}`).eq(0);
         };
         const checkbox = () => {
-            return item().find(toSelector(SELECT_CHECKBOX_CLASS));
+            return item().find(`.${SELECT_CHECKBOX_CLASS}`);
         };
 
         checkbox().trigger('dxclick');
@@ -1751,12 +1751,12 @@ QUnit.module('item select decorator', {
             showSelectionControls: true,
             selectionMode: 'multiple'
         });
-        const $items = $list.find(toSelector(LIST_ITEM_CLASS));
+        const $items = $list.find(`.${LIST_ITEM_CLASS}`);
         const $item = $items.eq(0);
 
         $item.trigger('dxclick');
 
-        const checkbox = $item.children(toSelector(LIST_ITEM_BEFORE_BAG_CLASS)).children(toSelector(SELECT_CHECKBOX_CLASS)).dxCheckBox('instance');
+        const checkbox = $item.children(`.${LIST_ITEM_BEFORE_BAG_CLASS}`).children(`.${SELECT_CHECKBOX_CLASS}`).dxCheckBox('instance');
 
         assert.strictEqual(checkbox.option('value'), true, 'state changed');
     });
@@ -1778,7 +1778,7 @@ QUnit.module('item select decorator', {
                 }
             }
         });
-        const $items = $list.find(toSelector(LIST_ITEM_CLASS));
+        const $items = $list.find(`.${LIST_ITEM_CLASS}`);
         const $item = $items.eq(0);
 
         $item.trigger('dxclick');
@@ -1806,9 +1806,9 @@ QUnit.module('item select decorator', {
             }
         });
 
-        const $items = $list.find(toSelector(LIST_ITEM_CLASS));
+        const $items = $list.find(`.${LIST_ITEM_CLASS}`);
         const $item = $items.eq(0);
-        const $checkbox = $item.find(toSelector(SELECT_CHECKBOX_CLASS));
+        const $checkbox = $item.find(`.${SELECT_CHECKBOX_CLASS}`);
 
         $checkbox.trigger('dxclick');
         $checkbox.trigger('dxclick');
@@ -1825,7 +1825,7 @@ QUnit.module('item select decorator', {
             selectionMode: 'multiple'
         });
         const list = $('#templated-list').dxList('instance');
-        const $items = $list.find(toSelector(LIST_ITEM_CLASS));
+        const $items = $list.find(`.${LIST_ITEM_CLASS}`);
         const $item = $items.eq(0);
 
         $item.trigger('dxclick');
@@ -1842,15 +1842,15 @@ QUnit.module('item select decorator', {
             selectionMode: 'multiple'
         });
 
-        const $items = $list.find(toSelector(LIST_ITEM_CLASS));
+        const $items = $list.find(`.${LIST_ITEM_CLASS}`);
         const $item = $items.eq(0);
-        const checkbox = $item.children(toSelector(LIST_ITEM_BEFORE_BAG_CLASS)).children(toSelector(SELECT_CHECKBOX_CLASS)).dxCheckBox('instance');
+        const checkbox = $item.children(`.${LIST_ITEM_BEFORE_BAG_CLASS}`).children(`.${SELECT_CHECKBOX_CLASS}`).dxCheckBox('instance');
 
-        $item.find(toSelector(TOGGLE_DELETE_SWITCH_CLASS)).trigger('dxpointerup');
+        $item.find(`.${TOGGLE_DELETE_SWITCH_CLASS}`).trigger('dxpointerup');
         this.clock.tick(10);
         assert.strictEqual(checkbox.option('value'), false, 'click action is not pass to item');
 
-        $item.find(toSelector(TOGGLE_DELETE_SWITCH_CLASS)).trigger('dxpointerup');
+        $item.find(`.${TOGGLE_DELETE_SWITCH_CLASS}`).trigger('dxpointerup');
         this.clock.tick(10);
         assert.strictEqual(checkbox.option('value'), false, 'click action is not pass to item');
     });
@@ -1863,17 +1863,17 @@ QUnit.module('item select decorator', {
             showSelectionControls: true,
             selectionMode: 'multiple'
         });
-        const $items = $list.find(toSelector(LIST_ITEM_CLASS));
+        const $items = $list.find(`.${LIST_ITEM_CLASS}`);
         const $item = $items.eq(0);
         const $item1 = $items.eq(1);
-        const checkbox = $item.find(toSelector(SELECT_CHECKBOX_CLASS)).dxCheckBox('instance');
+        const checkbox = $item.find(`.${SELECT_CHECKBOX_CLASS}`).dxCheckBox('instance');
 
-        $item.find(toSelector(TOGGLE_DELETE_SWITCH_CLASS)).trigger('dxpointerup');
+        $item.find(`.${TOGGLE_DELETE_SWITCH_CLASS}`).trigger('dxpointerup');
         this.clock.tick(10);
         $item.find($item).trigger('dxclick');
         assert.strictEqual(checkbox.option('value'), false, 'click action is not pass to item');
 
-        $item.find(toSelector(TOGGLE_DELETE_SWITCH_CLASS)).trigger('dxpointerup');
+        $item.find(`.${TOGGLE_DELETE_SWITCH_CLASS}`).trigger('dxpointerup');
         this.clock.tick(10);
         $item.find($item1).trigger('dxclick');
         assert.strictEqual(checkbox.option('value'), false, 'click action is not pass to item');
@@ -1887,10 +1887,10 @@ QUnit.module('item select decorator', {
             showSelectionControls: true,
             selectionMode: 'multiple'
         });
-        const $items = $list.find(toSelector(LIST_ITEM_CLASS));
+        const $items = $list.find(`.${LIST_ITEM_CLASS}`);
         const $item = $items.eq(0);
         const $item1 = $items.eq(1);
-        const checkbox = $item.find(toSelector(SELECT_CHECKBOX_CLASS)).dxCheckBox('instance');
+        const checkbox = $item.find(`.${SELECT_CHECKBOX_CLASS}`).dxCheckBox('instance');
         const pointer = pointerMock($item);
 
         pointer.start().swipeStart().swipe(0.5).swipeEnd(1);
@@ -1910,7 +1910,7 @@ QUnit.module('item select decorator', {
             selectionMode: 'all',
             onItemClick: itemClickHandler
         });
-        const $items = $list.find(toSelector(LIST_ITEM_CLASS));
+        const $items = $list.find(`.${LIST_ITEM_CLASS}`);
         const $item = $items.eq(0);
 
         $item.trigger('dxclick');
@@ -1936,7 +1936,7 @@ QUnit.module('item select decorator', {
             grouped: true,
             showSelectionControls: true
         });
-        const $items = $list.find(toSelector(LIST_ITEM_CLASS));
+        const $items = $list.find(`.${LIST_ITEM_CLASS}`);
         const $item = $items.eq(0);
 
         $item.trigger('dxclick');
@@ -2553,13 +2553,13 @@ QUnit.module('item select decorator with single selection mode', () => {
             selectionMode: 'single'
         });
 
-        const $items = $list.find(toSelector(LIST_ITEM_CLASS));
+        const $items = $list.find(`.${LIST_ITEM_CLASS}`);
         const $item = $items.eq(0);
 
         $item.trigger('dxclick');
         $item.trigger('dxclick');
 
-        const radioButton = $item.children(toSelector(LIST_ITEM_BEFORE_BAG_CLASS)).children(toSelector(SELECT_RADIO_BUTTON_CLASS)).dxRadioButton('instance');
+        const radioButton = $item.children(`.${LIST_ITEM_BEFORE_BAG_CLASS}`).children(`.${SELECT_RADIO_BUTTON_CLASS}`).dxRadioButton('instance');
 
         assert.strictEqual(radioButton.option('value'), true, 'item selected');
     });
@@ -2716,7 +2716,7 @@ QUnit.module('reordering decorator', {
             items: ['0'],
             itemDragging: { allowReordering: true }
         });
-        const $items = $list.find(toSelector(LIST_ITEM_CLASS));
+        const $items = $list.find(`.${LIST_ITEM_CLASS}`);
         const $item = $items.eq(0);
         const pointer = reorderingPointerMock($item, this.clock, true);
 
@@ -2732,7 +2732,7 @@ QUnit.module('reordering decorator', {
             items: [{ text: '0', disabled: true }],
             itemDragging: { allowReordering: true }
         });
-        const $items = $list.find(toSelector(LIST_ITEM_CLASS));
+        const $items = $list.find(`.${LIST_ITEM_CLASS}`);
         const $item = $items.eq(0);
         const pointer = reorderingPointerMock($item, this.clock, true);
 
@@ -2745,20 +2745,20 @@ QUnit.module('reordering decorator', {
             items: ['0'],
             itemDragging: { allowReordering: true }
         });
-        const $items = $list.find(toSelector(LIST_ITEM_CLASS));
+        const $items = $list.find(`.${LIST_ITEM_CLASS}`);
         const $item = $items.eq(0);
         const pointer = reorderingPointerMock($item, this.clock, true);
 
         pointer.dragStart().drag(10);
 
         this.clock.tick(10);
-        let $ghostItem = $list.find(toSelector(REORDERING_ITEM_GHOST_CLASS));
+        let $ghostItem = $list.find(`.${REORDERING_ITEM_GHOST_CLASS}`);
         assert.strictEqual($ghostItem.text(), $item.text(), 'correct item was duplicated');
         assert.strictEqual($ghostItem.offset().top, $item.offset().top + 10, 'correct ghost position');
         assert.ok(!$ghostItem.hasClass(REORDERING_ITEM_CLASS), 'reordering class is not present');
 
         pointer.dragEnd();
-        $ghostItem = $list.find(toSelector(REORDERING_ITEM_GHOST_CLASS));
+        $ghostItem = $list.find(`.${REORDERING_ITEM_GHOST_CLASS}`);
         assert.strictEqual($items.length, 1, 'duplicate item was removed');
     });
 
@@ -2769,14 +2769,14 @@ QUnit.module('reordering decorator', {
             rtlEnabled: true
         });
 
-        const $items = $list.find(toSelector(LIST_ITEM_CLASS));
+        const $items = $list.find(`.${LIST_ITEM_CLASS}`);
         const $item = $items.eq(0);
         const pointer = reorderingPointerMock($item, this.clock, true);
 
         pointer.dragStart().drag(10);
 
         this.clock.tick(10);
-        let $ghostItem = $list.find(toSelector(REORDERING_ITEM_GHOST_CLASS));
+        let $ghostItem = $list.find(`.${REORDERING_ITEM_GHOST_CLASS}`);
         assert.strictEqual($ghostItem.text(), $item.text(), 'correct item was duplicated');
         assert.strictEqual($ghostItem.offset().top, $item.offset().top + 10, 'correct ghost position');
         assert.ok(!$ghostItem.hasClass(REORDERING_ITEM_CLASS), 'reordering class is not present');
@@ -2785,7 +2785,7 @@ QUnit.module('reordering decorator', {
         assert.ok($ghostItem.parent().hasClass('dx-rtl'), 'ghost\'s parent has dx-rtl class');
 
         pointer.dragEnd();
-        $ghostItem = $list.find(toSelector(REORDERING_ITEM_GHOST_CLASS));
+        $ghostItem = $list.find(`.${REORDERING_ITEM_GHOST_CLASS}`);
         assert.strictEqual($items.length, 1, 'duplicate item was removed');
     });
 
@@ -2795,7 +2795,7 @@ QUnit.module('reordering decorator', {
             itemDragging: { allowReordering: true }
         });
         const list = $list.dxList('instance');
-        const $items = $list.find(toSelector(LIST_ITEM_CLASS));
+        const $items = $list.find(`.${LIST_ITEM_CLASS}`);
         const pointer = reorderingPointerMock($items.first(), this.clock);
 
         pointer.dragStart(0.5).drag(0.6);
@@ -2813,14 +2813,14 @@ QUnit.module('reordering decorator', {
             items: ['0'],
             itemDragging: { allowReordering: true }
         });
-        const $items = $list.find(toSelector(LIST_ITEM_CLASS));
+        const $items = $list.find(`.${LIST_ITEM_CLASS}`);
         const $item = $items.eq(0);
         const pointer = reorderingPointerMock($item, this.clock, true);
 
         pointer.dragStart().drag(10);
 
         this.clock.tick(10);
-        const $ghostItem = $list.find(toSelector(REORDERING_ITEM_GHOST_CLASS));
+        const $ghostItem = $list.find(`.${REORDERING_ITEM_GHOST_CLASS}`);
         const startPosition = topTranslation($ghostItem.parent());
 
         pointer.drag(20);
@@ -2834,7 +2834,7 @@ QUnit.module('reordering decorator', {
             items: ['0'],
             itemDragging: { allowReordering: true }
         });
-        const $items = $list.find(toSelector(LIST_ITEM_CLASS));
+        const $items = $list.find(`.${LIST_ITEM_CLASS}`);
         const $item = $items.eq(0);
         const pointer = reorderingPointerMock($item, this.clock, true);
 
@@ -2847,7 +2847,7 @@ QUnit.module('reordering decorator', {
             items: ['0', '1', '2'],
             itemDragging: { allowReordering: true }
         });
-        const $items = $list.find(toSelector(LIST_ITEM_CLASS));
+        const $items = $list.find(`.${LIST_ITEM_CLASS}`);
         const $item0 = $items.eq(0);
         const $item1 = $items.eq(1);
         const $item2 = $items.eq(2);
@@ -2870,7 +2870,7 @@ QUnit.module('reordering decorator', {
             items: ['0', '1', '2'],
             itemDragging: { allowReordering: true }
         });
-        const $items = $list.find(toSelector(LIST_ITEM_CLASS));
+        const $items = $list.find(`.${LIST_ITEM_CLASS}`);
         const $item0 = $items.eq(0);
         const $item1 = $items.eq(1);
         const $item2 = $items.eq(2);
@@ -2893,7 +2893,7 @@ QUnit.module('reordering decorator', {
             items: ['0', '1', '2'],
             itemDragging: { allowReordering: true }
         });
-        const $items = $list.find(toSelector(LIST_ITEM_CLASS));
+        const $items = $list.find(`.${LIST_ITEM_CLASS}`);
         const $item0 = $items.eq(0);
         const $item1 = $items.eq(1);
         const $item2 = $items.eq(2);
@@ -2911,7 +2911,7 @@ QUnit.module('reordering decorator', {
             items: ['0', '1', '2'],
             itemDragging: { allowReordering: true }
         });
-        const $items = $list.find(toSelector(LIST_ITEM_CLASS));
+        const $items = $list.find(`.${LIST_ITEM_CLASS}`);
         const $item0 = $items.eq(0);
         const $item1 = $items.eq(1);
         const $item2 = $items.eq(2);
@@ -2931,7 +2931,7 @@ QUnit.module('reordering decorator', {
             items: ['0', '1', '2'],
             itemDragging: { allowReordering: true }
         });
-        const $items = $list.find(toSelector(LIST_ITEM_CLASS));
+        const $items = $list.find(`.${LIST_ITEM_CLASS}`);
         const $item1 = $items.eq(1);
         const pointer = reorderingPointerMock($item1, this.clock);
 
@@ -2951,7 +2951,7 @@ QUnit.module('reordering decorator', {
             assert.strictEqual(toItemElement.text(), $item2.text());
         };
 
-        const $items = $list.find(toSelector(LIST_ITEM_CLASS));
+        const $items = $list.find(`.${LIST_ITEM_CLASS}`);
         const $item1 = $items.eq(1);
         const $item2 = $items.eq(2);
         const pointer = reorderingPointerMock($item1, this.clock);
@@ -2982,7 +2982,7 @@ QUnit.module('reordering decorator', {
             assert.strictEqual(toItemElement.text(), $item2.text());
         };
 
-        const $items = $list.find(toSelector(LIST_ITEM_CLASS));
+        const $items = $list.find(`.${LIST_ITEM_CLASS}`);
         const $item1 = $items.eq(1);
         const $item2 = $items.eq(2);
         const pointer = reorderingPointerMock($item1, this.clock);
@@ -2997,7 +2997,7 @@ QUnit.module('reordering decorator', {
             items: ['0', '1', '2'],
             itemDragging: { allowReordering: true }
         });
-        const $items = $list.find(toSelector(LIST_ITEM_CLASS));
+        const $items = $list.find(`.${LIST_ITEM_CLASS}`);
         const $item1 = $items.eq(1);
         const pointer = reorderingPointerMock($item1, this.clock);
 
@@ -3019,13 +3019,13 @@ QUnit.module('reordering decorator', {
             }
         });
 
-        let $items = $list.find(toSelector(LIST_ITEM_CLASS));
+        let $items = $list.find(`.${LIST_ITEM_CLASS}`);
         const $item3 = $items.eq(2);
         const pointer = reorderingPointerMock($item3, this.clock);
 
         pointer.dragStart(0.5).drag(-1).drag(-1.5).dragEnd();
 
-        $items = $list.find(toSelector(LIST_ITEM_CLASS));
+        $items = $list.find(`.${LIST_ITEM_CLASS}`);
         $.each($items, (index, item) => {
             const $item = $(item);
 
