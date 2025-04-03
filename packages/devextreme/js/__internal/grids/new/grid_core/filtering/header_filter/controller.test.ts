@@ -209,7 +209,7 @@ describe('HeaderFilter', () => {
           ])('$caseName: dataSource options should contains correct group', ({ column, checkFn }) => {
             const { headerFilterController } = setup({
               headerFilter: { visible: true },
-              columns: [column],
+              columns: [column as any],
             });
 
             headerFilterController.openPopup(
