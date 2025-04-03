@@ -1,5 +1,5 @@
 /* eslint-disable spellcheck/spell-checker */
-import type { Subscribable } from '@ts/core/reactive/index';
+import type { SubsGets } from '@ts/core/reactive/index';
 import { combined, computed } from '@ts/core/reactive/index';
 
 import { View } from '../core/view';
@@ -15,7 +15,7 @@ export class ToolbarView extends View<ToolbarProps> {
   private readonly visibleConfig = this.options.oneWay('toolbar.visible');
 
   private readonly visible = computed(
-    (visibleConfig, pageCount) => isVisible(visibleConfig, pageCount),
+    (visibleConfig, items) => isVisible(visibleConfig, items),
     [this.visibleConfig, this.controller.items],
   );
 
@@ -28,7 +28,7 @@ export class ToolbarView extends View<ToolbarProps> {
     super();
   }
 
-  protected override getProps(): Subscribable<ToolbarProps> {
+  protected override getProps(): SubsGets<ToolbarProps> {
     return combined({
       visible: this.visible,
       items: this.controller.items,
