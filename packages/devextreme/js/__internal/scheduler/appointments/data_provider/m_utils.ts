@@ -1,7 +1,7 @@
 import dateUtils from '@js/core/utils/date';
 import dateSerialization from '@js/core/utils/date_serialization';
+import type { AppointmentDataAccessor } from '@ts/scheduler/utils';
 
-import { ExpressionUtils } from '../../m_expression_utils';
 import timeZoneUtils from '../../m_utils_time_zone';
 
 const toMs = dateUtils.dateToMilliseconds;
@@ -124,7 +124,13 @@ export const _convertRecurrenceException = (exceptionString, startDate, timeZone
   return exceptionString;
 };
 
-export const replaceWrongEndDate = (rawAppointment, startDate, endDate, appointmentDuration, dataAccessors) => {
+export const replaceWrongEndDate = (
+  rawAppointment,
+  startDate,
+  endDate,
+  appointmentDuration,
+  dataAccessors: AppointmentDataAccessor,
+) => {
   const calculateAppointmentEndDate = (isAllDay, startDate) => {
     if (isAllDay) {
       return dateUtils.setToDayEnd(new Date(startDate));
@@ -134,17 +140,20 @@ export const replaceWrongEndDate = (rawAppointment, startDate, endDate, appointm
   };
 
   if (_isEndDateWrong(startDate, endDate)) {
-    const isAllDay = ExpressionUtils.getField(dataAccessors, 'allDay', rawAppointment);
+    const isAllDay = Boolean(dataAccessors.get('allDay', rawAppointment));
 
     const calculatedEndDate = calculateAppointmentEndDate(isAllDay, startDate);
-    dataAccessors.setter.endDate(rawAppointment, calculatedEndDate);
+    dataAccessors.set('endDate', rawAppointment, calculatedEndDate);
   }
 };
 
-export const sortAppointmentsByStartDate = (appointments, dataAccessors) => {
+export const sortAppointmentsByStartDate = (
+  appointments,
+  dataAccessors: AppointmentDataAccessor,
+) => {
   appointments.sort((a, b) => {
-    const firstDate = new Date(ExpressionUtils.getField(dataAccessors, 'startDate', a.settings || a));
-    const secondDate = new Date(ExpressionUtils.getField(dataAccessors, 'startDate', b.settings || b));
+    const firstDate = new Date(dataAccessors.get('startDate', a.settings || a));
+    const secondDate = new Date(dataAccessors.get('startDate', b.settings || b));
 
     return Math.sign(firstDate.getTime() - secondDate.getTime());
   });

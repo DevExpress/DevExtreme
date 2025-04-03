@@ -14,7 +14,6 @@ import { extend } from '@js/core/utils/extend';
 import type AbstractStore from '@js/data/abstract_store';
 import Form from '@js/ui/form';
 import { current, isFluent } from '@js/ui/themes';
-import { ExpressionUtils } from '@ts/scheduler/m_expression_utils';
 
 import { createAppointmentAdapter } from '../m_appointment_adapter';
 import type { TimezoneLabel } from '../m_utils_time_zone';
@@ -102,7 +101,7 @@ export class AppointmentForm {
     const dataAccessors = this.scheduler.getDataAccessors();
     const { expr } = dataAccessors;
 
-    const isRecurrence = !!ExpressionUtils.getField(dataAccessors, 'recurrenceRule', formData);
+    const isRecurrence = Boolean(dataAccessors.get('recurrenceRule', formData));
     const colSpan = isRecurrence ? 1 : 2;
 
     const mainItems = [
@@ -489,12 +488,12 @@ export class AppointmentForm {
     const dataAccessors = this.scheduler.getDataAccessors();
     const { expr } = dataAccessors;
 
-    const rawStartDate = ExpressionUtils.getField(dataAccessors, 'startDate', formData);
-    const rawEndDate = ExpressionUtils.getField(dataAccessors, 'endDate', formData);
-    const startDateTimezone = ExpressionUtils.getField(dataAccessors, 'startDateTimeZone', formData) ?? null;
-    const endDateTimezone = ExpressionUtils.getField(dataAccessors, 'endDateTimeZone', formData) ?? null;
+    const rawStartDate = dataAccessors.get('startDate', formData);
+    const rawEndDate = dataAccessors.get('endDate', formData);
+    const startDateTimezone = dataAccessors.get('startDateTimeZone', formData) ?? null;
+    const endDateTimezone = dataAccessors.get('endDateTimeZone', formData) ?? null;
 
-    const allDay = ExpressionUtils.getField(dataAccessors, 'allDay', formData);
+    const allDay = dataAccessors.get('allDay', formData);
     const startDate = new Date(rawStartDate);
     const endDate = new Date(rawEndDate);
 
