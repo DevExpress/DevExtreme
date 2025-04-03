@@ -1,5 +1,4 @@
 import { BaseInfernoComponent } from '@devextreme/runtime/inferno';
-import { getTemplate } from '@ts/core/r1/utils/index';
 import { getThemeType } from '@ts/scheduler/r1/utils/themes';
 
 import { isHorizontalGroupingApplied } from '../../utils/index';
@@ -37,8 +36,6 @@ export class TimelineDateHeaderLayout extends BaseInfernoComponent<DateHeaderPro
     } = dateHeaderData;
     const isHorizontalGrouping = isHorizontalGroupingApplied(groups, groupOrientation)
       && !groupByDate;
-    const DateCellTemplateComponent = getTemplate(dateCellTemplate);
-    const TimeCellTemplateComponent = getTemplate(timeCellTemplate);
 
     return (
       <>
@@ -101,8 +98,8 @@ export class TimelineDateHeaderLayout extends BaseInfernoComponent<DateHeaderPro
                       isWeekDayCell={isWeekDayRow}
                       colSpan={colSpan}
                       splitText={splitText}
-                      dateCellTemplate={DateCellTemplateComponent}
-                      timeCellTemplate={TimeCellTemplateComponent}
+                      dateCellTemplate={dateCellTemplate}
+                      timeCellTemplate={timeCellTemplate}
                       isTimeCellTemplate={isTimeCellTemplate}
                     />
                   ))

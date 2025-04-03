@@ -1,6 +1,6 @@
 import { BaseInfernoComponent } from '@devextreme/runtime/inferno';
 import type { JSXTemplate } from '@devextreme-generator/declarations';
-import { getTemplate } from '@ts/core/r1/utils/index';
+import { PublicTemplate } from '@ts/scheduler/r1/components/templates/index';
 
 import { renderUtils } from '../../utils/index';
 import type { DateTimeCellTemplateProps } from '../types';
@@ -70,7 +70,6 @@ export class TimePanelCell extends BaseInfernoComponent<TimePanelCellProps> {
       [className ?? '']: true,
     });
     const timeCellTemplateProps = this.getTimeCellTemplateProps();
-    const TimeCellTemplateComponent = getTemplate(timeCellTemplate);
 
     return (
       <CellBase
@@ -83,11 +82,14 @@ export class TimePanelCell extends BaseInfernoComponent<TimePanelCellProps> {
         index={CellBaseDefaultProps.index}
       >
         {
-          TimeCellTemplateComponent
-            ? TimeCellTemplateComponent({
-              index: timeCellTemplateProps.index,
-              data: timeCellTemplateProps.data,
-            })
+          timeCellTemplate
+            ? <PublicTemplate
+              template={timeCellTemplate}
+              templateProps={{
+                index: timeCellTemplateProps.index,
+                data: timeCellTemplateProps.data,
+              }}
+              />
             : (
               <div>
                 {text}

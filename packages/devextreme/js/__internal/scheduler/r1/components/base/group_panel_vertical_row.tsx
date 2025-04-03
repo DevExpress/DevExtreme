@@ -1,5 +1,4 @@
 import { BaseInfernoComponent } from '@devextreme/runtime/inferno';
-import { getTemplate } from '@ts/core/r1/utils/index';
 
 import type { GroupPanelRowProps } from './group_panel_props';
 import { GroupPanelRowDefaultProps } from './group_panel_props';
@@ -12,7 +11,6 @@ export class GroupPanelVerticalRow extends BaseInfernoComponent<GroupPanelRowPro
       groupItems,
       cellTemplate,
     } = this.props;
-    const CellTemplateComponent = getTemplate(cellTemplate);
 
     return (
       <div className={`dx-scheduler-group-row ${className}`}>
@@ -30,7 +28,7 @@ export class GroupPanelVerticalRow extends BaseInfernoComponent<GroupPanelRowPro
             data={data}
             index={index}
             color={color}
-            cellTemplate={CellTemplateComponent}
+            cellTemplate={cellTemplate}
           />)
         }
       </div>
