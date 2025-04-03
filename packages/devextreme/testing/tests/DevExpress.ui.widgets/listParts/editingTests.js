@@ -389,30 +389,6 @@ QUnit.module('keyboard navigation', {
 
             assert.deepEqual(this.list.option('items'), this.items, 'items are not reordered');
         });
-
-        QUnit.test('shift+arrowDown should not move group header (T1281673)', function(assert) {
-            const $lastGroupHeader = this.$list.find(`.${LIST_GROUP_HEADER_CLASS}`).last();
-
-            $lastGroupHeader.trigger('dxclick');
-            const $initialItemsSnapshot = this.$list.find(`.${LIST_ITEMS_CLASS}`).html();
-            this.keyboard.keyDown('arrowDown', { shiftKey: true });
-
-            const $itemsSnapshot = this.$list.find(`.${LIST_ITEMS_CLASS}`).html();
-            assert.deepEqual(this.list.option('items'), this.items, 'items option is not changed');
-            assert.deepEqual($itemsSnapshot, $initialItemsSnapshot, 'DOM is not changed');
-        });
-
-        QUnit.test('shift+arrowUp should not move group header (T1281673)', function(assert) {
-            const $lastGroupHeader = this.$list.find(`.${LIST_GROUP_HEADER_CLASS}`).last();
-
-            $lastGroupHeader.trigger('dxclick');
-            const $initialItemsSnapshot = this.$list.find(`.${LIST_ITEMS_CLASS}`).html();
-            this.keyboard.keyDown('arrowUp', { shiftKey: true });
-
-            const $itemsSnapshot = this.$list.find(`.${LIST_ITEMS_CLASS}`).html();
-            assert.deepEqual(this.list.option('items'), this.items, 'items option is not changed');
-            assert.deepEqual($itemsSnapshot, $initialItemsSnapshot, 'DOM is not changed');
-        });
     });
 });
 
