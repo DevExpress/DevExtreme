@@ -1,4 +1,4 @@
-import { isDefined } from '@ts/core/utils/m_type';
+import { isDefined } from '@js/core/utils/type';
 
 import type { DataAccessorGetter, DataAccessorSetter } from './types';
 
