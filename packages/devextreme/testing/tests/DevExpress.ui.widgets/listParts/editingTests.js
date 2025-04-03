@@ -8,8 +8,10 @@ import ArrayStore from 'common/data/array_store';
 import 'ui/list';
 
 const LIST_ITEM_CLASS = 'dx-list-item';
+const LIST_ITEMS_CLASS = 'dx-list-items';
 const LIST_ITEM_SELECTED_CLASS = 'dx-list-item-selected';
 const LIST_GROUP_CLASS = 'dx-list-group';
+const LIST_GROUP_HEADER_CLASS = 'dx-list-group-header';
 const LIST_SELECT_ALL_CHECKBOX_CLASS = 'dx-list-select-all-checkbox';
 const LIST_SELECT_ALL_CLASS = 'dx-list-select-all';
 const SELECT_CHECKBOX_CLASS = 'dx-list-select-checkbox';
@@ -330,6 +332,7 @@ QUnit.module('keyboard navigation', {
             this.$list = $('#list').dxList({
                 items: this.getInitialItems(),
                 grouped: true,
+                collapsibleGroups: true,
                 itemDragging: {
                     allowReordering: true
                 },
@@ -385,6 +388,30 @@ QUnit.module('keyboard navigation', {
             this.keyboard.keyDown('arrowUp', { shiftKey: true });
 
             assert.deepEqual(this.list.option('items'), this.items, 'items are not reordered');
+        });
+
+        QUnit.test('shift+arrowDown should not move group header (T1281673)', function(assert) {
+            const $lastGroupHeader = this.$list.find(`.${LIST_GROUP_HEADER_CLASS}`).last();
+
+            $lastGroupHeader.trigger('dxclick');
+            const $initialItemsSnapshot = this.$list.find(`.${LIST_ITEMS_CLASS}`).html();
+            this.keyboard.keyDown('arrowDown', { shiftKey: true });
+
+            const $itemsSnapshot = this.$list.find(`.${LIST_ITEMS_CLASS}`).html();
+            assert.deepEqual(this.list.option('items'), this.items, 'items are not reordered');
+            assert.deepEqual($itemsSnapshot, $initialItemsSnapshot, 'items are not reordered');
+        });
+
+        QUnit.test('shift+arrowUp should not move group header (T1281673)', function(assert) {
+            const $lastGroupHeader = this.$list.find(`.${LIST_GROUP_HEADER_CLASS}`).last();
+
+            $lastGroupHeader.trigger('dxclick');
+            const $initialItemsSnapshot = this.$list.find(`.${LIST_ITEMS_CLASS}`).html();
+            this.keyboard.keyDown('arrowUp', { shiftKey: true });
+
+            const $itemsSnapshot = this.$list.find(`.${LIST_ITEMS_CLASS}`).html();
+            assert.deepEqual(this.list.option('items'), this.items, 'items are not reordered');
+            assert.deepEqual($itemsSnapshot, $initialItemsSnapshot, 'items are not reordered');
         });
     });
 });
