@@ -75,7 +75,7 @@ export const allowSearch = (column: Column, searchVisibleColumnsOnly: boolean): 
   return allowSearchByDataField && allowSearchByVisibility && allowSearchByConfig;
 };
 
-const parseNumberValue = (
+export const parseNumberValue = (
   text: string,
   format?: Format,
 ): unknown => {
@@ -85,11 +85,11 @@ const parseNumberValue = (
     case isDefined(text) && isNumeric(text):
       return Number(text);
     default:
-      return null;
+      return undefined;
   }
 };
 
-const parseBooleanValue = (
+export const parseBooleanValue = (
   text: string,
   trueText?: string,
   falseText?: string,
@@ -100,17 +100,17 @@ const parseBooleanValue = (
     case text === falseText:
       return false;
     default:
-      return null;
+      return undefined;
   }
 };
 
-const parseDateValue = (
+export const parseDateValue = (
   text: string,
   format?: Format,
 ): unknown => {
   // @ts-expect-error
   const parsedValue = dateLocalization.parse(text, format);
-  return parsedValue ?? null;
+  return parsedValue ?? undefined;
 };
 
 export const parseValue = (column: Column, text: string): unknown => {
