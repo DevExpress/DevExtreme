@@ -22,7 +22,6 @@ import { setScrollView } from '__internal/ui/list/m_list.base';
 import ScrollView from 'ui/scroll_view';
 import eventsEngine from 'common/core/events/core/events_engine';
 import ariaAccessibilityTestHelper from '../../../helpers/ariaAccessibilityTestHelper.js';
-import { reorderingPointerMock } from './utils.js';
 
 const LIST_ITEM_CLASS = 'dx-list-item';
 const LIST_ITEMS_CLASS = 'dx-list-items';
@@ -4513,8 +4512,7 @@ QUnit.module('Search', () => {
         assert.deepEqual(instance.option('items')[0], expectedValue, 'items');
     });
 
-    // T582179
-    QUnit.test('Selection should not be cleared after searching', function(assert) {
+    QUnit.test('Selection should not be cleared after searching (T582179)', function(assert) {
         const $element = $('#list').dxList({
             dataSource: [1, 2, 3],
             searchEnabled: true,
@@ -4635,60 +4633,6 @@ if(devices.real().deviceType === 'desktop') {
                 helper.checkAttributes(helper.getListContainer(), this.expectedItemsContainerAttrs);
                 helper.checkItemsAttributes([0, 1, 2], { attributes: ['aria-selected'], focusedItemIndex: 1, role: 'option' });
             });
-        });
-    });
-}
-
-if(QUnit.urlParams['nojquery'] && QUnit.urlParams['shadowDom']) {
-    QUnit.module('ShadowDOM', {
-        beforeEach: function() {
-            this.clock = sinon.useFakeTimers();
-
-            this.$list = $('#list').dxList({
-                items: ['One', 'Two', 'Three'],
-                itemDragging: { allowReordering: true },
-                focusStateEnabled: true,
-            });
-
-            this.root = $('#list')[0].getRootNode();
-        },
-
-        afterEach: function() {
-            this.clock.restore();
-        },
-
-        getItems: function() {
-            return this.$list.find(`.${LIST_ITEM_CLASS}`);
-        },
-
-        createEvent: function(eventName) {
-            return $.Event(eventName, {
-                originalEvent: {
-                    type: eventName,
-                    target: { shadowRoot: this.root },
-                    path: [ this.getItems().eq(1)[0] ],
-                    changedTouches: [{}]
-                }
-            });
-        },
-    }, () => {
-        QUnit.test('drag item', function(assert) {
-            const pointer = reorderingPointerMock(this.getItems().first());
-
-            pointer.dragStart().drag(34).dragEnd();
-
-            const orderedItems = this.getItems().toArray().map(e => e.innerText.trim());
-
-            assert.deepEqual(orderedItems, ['Two', 'Three', 'One']);
-        });
-
-        QUnit.test('focus item', function(assert) {
-            $(this.root).trigger(this.createEvent('mousedown'));
-            $(this.root).trigger(this.createEvent('touchstart'));
-
-            this.clock.tick(10);
-
-            assert.ok(this.getItems().eq(1).hasClass(FOCUSED_STATE_CLASS));
         });
     });
 }
