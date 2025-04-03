@@ -113,7 +113,8 @@ export class Card extends Component<CardProps> {
 
               alignment={cell.column.alignment}
               title={cell.column.caption || cell.column.name}
-              value={cell.text}
+              text={cell.text}
+              highlightedText={cell.highlightedText}
             />
           ))}
         </div>
