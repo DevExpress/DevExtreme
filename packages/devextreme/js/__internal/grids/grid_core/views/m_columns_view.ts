@@ -1117,7 +1117,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     const result = new Deferred();
     const needWaitAsyncTemplates = forceWaiting || this.needWaitAsyncTemplates();
 
-    if (!needWaitAsyncTemplates) {
+    if (!needWaitAsyncTemplates || !isDefined(this._templateDeferreds)) {
       return result.resolve();
     }
 
