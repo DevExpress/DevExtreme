@@ -390,7 +390,11 @@ if (Quill) {
       return commands?.map((command) => {
         if (typeof command === 'object') {
           if (command.name === 'custom') {
-            return;
+            return {
+              id: command.name,
+              text: command.text,
+              items: this._prepareAIOptions(command.name, command.options),
+            };
           }
 
           return this._createCommandMenuItem(command.name, command.text, command.options);
