@@ -19,11 +19,12 @@ const getCardContent = (container: Element) => container
   .querySelector(`.${SELECTORS.cardContent}`);
 
 describe('Options', () => {
-  it('searchPanel.text (match)', () => {
+  it('searchPanel.text (card contains match)', () => {
     const { container } = setup({
       dataSource: [
         { Name: 'John Doe' },
       ],
+      columns: ['Name'],
       searchPanel: {
         text: 'John',
       },
@@ -34,11 +35,12 @@ describe('Options', () => {
     expect(content).toMatchSnapshot();
   });
 
-  it('searchPanel.text (mismatch)', () => {
+  it('searchPanel.text (card not contains match)', () => {
     const { container } = setup({
       dataSource: [
         { Name: 'John Doe' },
       ],
+      columns: ['Name'],
       searchPanel: {
         text: 'ABC',
       },
@@ -54,6 +56,7 @@ describe('Options', () => {
       dataSource: [
         { Name: 'John Doe john' },
       ],
+      columns: ['Name'],
       searchPanel: {
         text: 'john',
         highlightCaseSensitive: true,
@@ -70,6 +73,7 @@ describe('Options', () => {
       dataSource: [
         { Name: 'John Doe john' },
       ],
+      columns: ['Name'],
       searchPanel: {
         text: 'john',
         highlightCaseSensitive: false,
@@ -86,6 +90,7 @@ describe('Options', () => {
       dataSource: [
         { Name: 'John Doe john' },
       ],
+      columns: ['Name'],
       searchPanel: {
         text: 'john',
         highlightSearchText: false,

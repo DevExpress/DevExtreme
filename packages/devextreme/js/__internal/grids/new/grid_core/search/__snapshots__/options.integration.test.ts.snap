@@ -3,29 +3,140 @@
 exports[`Options searchPanel.highlightCaseSensitive = false 1`] = `
 <div
   class="dx-cardview-card-content"
-/>
+>
+  <div
+    class="dx-cardview-field"
+    tabindex="0"
+  >
+    <span
+      class="dx-cardview-field-name"
+    >
+      Name
+      :
+    </span>
+    <span
+      class="dx-cardview-field-value dx-cardview-field-value--text-align-left dx-cardview-field-value--white-space-nowrap"
+    >
+      <span
+        class="dx-cardview-field-value__text-part--highlighted"
+      >
+        John
+      </span>
+      <span>
+         Doe 
+      </span>
+      <span
+        class="dx-cardview-field-value__text-part--highlighted"
+      >
+        john
+      </span>
+    </span>
+  </div>
+</div>
 `;
 
 exports[`Options searchPanel.highlightCaseSensitive = true 1`] = `
 <div
   class="dx-cardview-card-content"
-/>
+>
+  <div
+    class="dx-cardview-field"
+    tabindex="0"
+  >
+    <span
+      class="dx-cardview-field-name"
+    >
+      Name
+      :
+    </span>
+    <span
+      class="dx-cardview-field-value dx-cardview-field-value--text-align-left dx-cardview-field-value--white-space-nowrap"
+    >
+      <span>
+        John Doe 
+      </span>
+      <span
+        class="dx-cardview-field-value__text-part--highlighted"
+      >
+        john
+      </span>
+    </span>
+  </div>
+</div>
 `;
 
 exports[`Options searchPanel.highlightSearchText = false 1`] = `
 <div
   class="dx-cardview-card-content"
-/>
+>
+  <div
+    class="dx-cardview-field"
+    tabindex="0"
+  >
+    <span
+      class="dx-cardview-field-name"
+    >
+      Name
+      :
+    </span>
+    <span
+      class="dx-cardview-field-value dx-cardview-field-value--text-align-left dx-cardview-field-value--white-space-nowrap"
+    >
+      John Doe john
+    </span>
+  </div>
+</div>
 `;
 
-exports[`Options searchPanel.text (match) 1`] = `
+exports[`Options searchPanel.text (card contains match) 1`] = `
 <div
   class="dx-cardview-card-content"
-/>
+>
+  <div
+    class="dx-cardview-field"
+    tabindex="0"
+  >
+    <span
+      class="dx-cardview-field-name"
+    >
+      Name
+      :
+    </span>
+    <span
+      class="dx-cardview-field-value dx-cardview-field-value--text-align-left dx-cardview-field-value--white-space-nowrap"
+    >
+      <span
+        class="dx-cardview-field-value__text-part--highlighted"
+      >
+        John
+      </span>
+      <span>
+         Doe
+      </span>
+    </span>
+  </div>
+</div>
 `;
 
-exports[`Options searchPanel.text (mismatch) 1`] = `
+exports[`Options searchPanel.text (card not contains match) 1`] = `
 <div
   class="dx-cardview-card-content"
-/>
+>
+  <div
+    class="dx-cardview-field"
+    tabindex="0"
+  >
+    <span
+      class="dx-cardview-field-name"
+    >
+      Name
+      :
+    </span>
+    <span
+      class="dx-cardview-field-value dx-cardview-field-value--text-align-left dx-cardview-field-value--white-space-nowrap"
+    >
+      John Doe
+    </span>
+  </div>
+</div>
 `;
