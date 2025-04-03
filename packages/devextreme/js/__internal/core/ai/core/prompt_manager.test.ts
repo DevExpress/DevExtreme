@@ -4,7 +4,7 @@ import {
   it,
 } from '@jest/globals';
 import type { PromptData, PromptTemplateName } from '@ts/core/ai/core/prompt_manager';
-import { ERROR_MESSAGE, PromptManager } from '@ts/core/ai/core/prompt_manager';
+import { ERROR_MESSAGES, PromptManager } from '@ts/core/ai/core/prompt_manager';
 import { templates } from '@ts/core/ai/templates/index';
 
 describe('PromptManager', () => {
@@ -27,7 +27,7 @@ describe('PromptManager', () => {
     it('throws an error if no template is found', () => {
       expect(() => {
         promptManager.buildPrompt('unknown-template' as PromptTemplateName, {});
-      }).toThrow(ERROR_MESSAGE.TEMPLATE_NOT_FOUND);
+      }).toThrow(ERROR_MESSAGES.TEMPLATE_NOT_FOUND);
     });
 
     it('returns correct system/user without placeholders if data is empty', () => {
