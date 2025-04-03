@@ -11,7 +11,7 @@ test('default render', async (t) => {
   const cardView = new CardView('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  await testScreenshot(t, takeScreenshot, 'card-view_search_text-highlighting.png', { element: cardView.element });
+  await testScreenshot(t, takeScreenshot, 'header-panel.png', { element: cardView.element });
 
   await t
     .expect(compareResults.isValid())
