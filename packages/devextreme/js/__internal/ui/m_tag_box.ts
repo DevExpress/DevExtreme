@@ -980,8 +980,10 @@ const TagBox = (SelectBox as any).inherit({
 
   _renderTagsImpl(): void {
     this._renderField();
-
-    this.option('selectedItems', this._selectedItems.slice());
+    if (this._shouldUpdateSelectedItems()) {
+      // @ts-expect-error ts-error
+      this.option('selectedItems', this._selectedItems.slice());
+    }
     this._cleanTags();
 
     const fieldTemplate = this._getFieldTemplate();
@@ -1064,7 +1066,23 @@ const TagBox = (SelectBox as any).inherit({
     this._popup?.refreshPosition();
   },
 
-  _renderTagsElements(items) {
+  _shouldUpdateSelectedItems(): boolean {
+    const { selectedItems } = this.option();
+
+    if (isDefined(selectedItems) && selectedItems.length !== this._selectedItems?.length) {
+      return true;
+    }
+
+    const intersection = getIntersection(selectedItems, this._selectedItems);
+
+    if (intersection.length !== this._selectedItems?.length) {
+      return true;
+    }
+
+    return false;
+  },
+
+  _renderTagsElements(items): void {
     const $multiTag = this._multiTagRequired() && this._renderMultiTag(this._input());
     const showMultiTagOnly = this.option('showMultiTagOnly');
     const maxDisplayedTags = this.option('maxDisplayedTags');
