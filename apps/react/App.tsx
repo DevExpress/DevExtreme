@@ -1,8 +1,32 @@
+import { CardView } from 'devextreme-react/card-view';
 import React from 'react';
-import Examples from './examples/Examples';
+
+const data = [
+    {
+        id: 1,
+        name: 'asd',
+    },
+    {
+        id: 2,
+        name: 'asd',
+    },
+    {
+        id: 3,
+        name: 'asd',
+    },
+    {
+        id: 4,
+        name: 'asd',
+    },
+]
 
 const App = () => (
-    <Examples />
+    <CardView
+        keyExpr='id'
+        dataSource={data}
+    >
+        
+    </CardView>
 );
 
 export default App;

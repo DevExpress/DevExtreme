@@ -61,6 +61,7 @@ export class ItemsController {
     const itemKey = this.dataController.getDataKey(data);
 
     return {
+      // @ts-expect-error
       cells: columns.map((column) => {
         const value = column.calculateCellValue(data);
         const displayValue = column.calculateDisplayValue(data);

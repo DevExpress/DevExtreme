@@ -14030,7 +14030,6 @@ packages:
     engines: {node: '>=0.6.0', teleport: '>=0.2.0'}
     deprecated: |-
       You or someone you depend on is using Q, the JavaScript Promise library that gave JavaScript developers strong feelings about promises. They can almost certainly migrate to the native JavaScript promise now. Thank you literally everyone for joining me in this bet against the odds. Be excellent to each other.
-
       (For a CapTP with native promises, see @endo/eventual-send and @endo/captp)
 
   qjobs@1.2.0:
@@ -23612,7 +23611,7 @@ snapshots:
       '@typescript-eslint/types': 6.21.0
       '@typescript-eslint/typescript-estree': 6.21.0(typescript@5.4.5)
       eslint: 8.56.0
-      semver: 7.6.3
+      semver: 7.7.1
     transitivePeerDependencies:
       - supports-color
       - typescript
@@ -28966,7 +28965,7 @@ snapshots:
   fs-mkdirp-stream@2.0.1:
     dependencies:
       graceful-fs: 4.2.11
-      streamx: 2.20.2
+      streamx: 2.22.0
 
   fs-monkey@1.0.6: {}
 
@@ -29139,7 +29138,7 @@ snapshots:
       is-glob: 4.0.3
       is-negated-glob: 1.0.0
       normalize-path: 3.0.0
-      streamx: 2.20.2
+      streamx: 2.22.0
 
   glob-to-regexp@0.4.1: {}
 
@@ -32957,7 +32956,7 @@ snapshots:
   normalize-package-data@3.0.3:
     dependencies:
       hosted-git-info: 4.1.0
-      is-core-module: 2.15.1
+      is-core-module: 2.16.1
       semver: 7.7.1
       validate-npm-package-license: 3.0.4
 
@@ -32997,7 +32996,7 @@ snapshots:
     dependencies:
       hosted-git-info: 7.0.2
       proc-log: 3.0.0
-      semver: 7.6.3
+      semver: 7.7.1
       validate-npm-package-name: 5.0.1
 
   npm-packlist@8.0.2:
@@ -33009,7 +33008,7 @@ snapshots:
       npm-install-checks: 6.3.0
       npm-normalize-package-bin: 3.0.1
       npm-package-arg: 11.0.1
-      semver: 7.6.3
+      semver: 7.7.1
 
   npm-registry-fetch@16.2.1:
     dependencies:
@@ -33764,7 +33763,7 @@ snapshots:
       cosmiconfig: 9.0.0(typescript@5.4.5)
       jiti: 1.21.6
       postcss: 8.4.35
-      semver: 7.6.3
+      semver: 7.7.1
     optionalDependencies:
       webpack: 5.94.0(@swc/core@1.9.2(@swc/helpers@0.5.15))(esbuild@0.20.1)
     transitivePeerDependencies:
@@ -35491,7 +35490,7 @@ snapshots:
 
   stream-composer@1.0.2:
     dependencies:
-      streamx: 2.20.2
+      streamx: 2.22.0
 
   stream-exhaust@1.0.2: {}
 
@@ -35535,7 +35534,6 @@ snapshots:
       text-decoder: 1.2.1
     optionalDependencies:
       bare-events: 2.5.4
-    optional: true
 
   string-argv@0.3.2: {}
 
@@ -36137,7 +36135,7 @@ snapshots:
 
   teex@1.0.1:
     dependencies:
-      streamx: 2.20.2
+      streamx: 2.22.0
 
   telejson@7.2.0:
     dependencies:
@@ -36765,7 +36763,7 @@ snapshots:
 
   to-through@3.0.0:
     dependencies:
-      streamx: 2.20.2
+      streamx: 2.22.0
 
   tocbot@4.32.2: {}
 
@@ -37559,7 +37557,7 @@ snapshots:
       normalize-path: 3.0.0
       resolve-options: 2.0.0
       stream-composer: 1.0.2
-      streamx: 2.20.2
+      streamx: 2.22.0
       to-through: 3.0.0
       value-or-function: 4.0.0
       vinyl: 3.0.0
@@ -37584,7 +37582,7 @@ snapshots:
       convert-source-map: 2.0.0
       graceful-fs: 4.2.11
       now-and-later: 3.0.0
-      streamx: 2.20.2
+      streamx: 2.22.0
       vinyl: 3.0.0
       vinyl-contents: 2.0.0
 

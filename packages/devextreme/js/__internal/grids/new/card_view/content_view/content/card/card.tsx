@@ -131,11 +131,11 @@ export class Card extends Component<CardProps> {
         <div className={CLASSES.content}>
           {this.props.row.cells.map((cell, index) => (
             <FieldTemplate
-              alignment={cell.column.alignment}
               elementRef={this.fieldRefs[index]}
               title={cell.column.caption || cell.column.name}
               text={cell.text}
               highlightedText={cell.highlightedText}
+              alignment={cell.column.alignment}
             />
           ))}
         </div>

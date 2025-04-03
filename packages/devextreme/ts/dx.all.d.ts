@@ -9751,6 +9751,118 @@ declare module DevExpress.ui {
     zoomLevel?: DevExpress.ui.dxCalendar.CalendarZoomLevel;
   }
   /**
+   * [descr:dxCardView]
+   */
+  export class dxCardView<
+    TRowData = unknown,
+    TKey = unknown
+  > extends Widget<DevExpress.ui.dxCardView.Properties> {}
+  module dxCardView {
+    /**
+     * [descr:HeaderPanel]
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+     */
+    type HeaderPanel<TRowData = unknown, TKey = unknown> = {
+      /**
+       * [descr:HeaderPanel.dragging]
+       */
+      dragging?: Pick<
+        dxSortableOptions,
+        | 'dropFeedbackMode'
+        | 'scrollSpeed'
+        | 'scrollSensitivity'
+        | 'onDragChange'
+        | 'onDragEnd'
+        | 'onDragMove'
+        | 'onDragStart'
+        | 'onRemove'
+        | 'onReorder'
+      >;
+      /**
+       * [descr:HeaderPanel.visible]
+       */
+      visible?: boolean;
+      /**
+       * [descr:HeaderPanel.itemTemplate]
+       */
+      itemTemplate?:
+        | template
+        | ((e: {
+            column: Column<TRowData, TKey>;
+          }) => string | DevExpress.core.UserDefinedElement);
+      /**
+       * [descr:HeaderPanel.itemCssClass]
+       */
+      itemCssClass?: string;
+    };
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+     */
+    type InheritedColumnProps =
+      | 'alignment'
+      | 'dataType'
+      | 'visible'
+      | 'visibleIndex'
+      | 'allowReordering'
+      | 'allowHiding'
+      | 'trueText'
+      | 'falseText'
+      | 'caption'
+      | 'dataField'
+      | 'sortOrder'
+      | 'sortIndex'
+      | 'name'
+      | 'calculateCellValue'
+      | 'calculateDisplayValue'
+      | 'customizeText';
+
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+     */
+    export type PredefinedToolbarItem =
+      | 'columnChooserButton'
+      | 'searchPanel'
+      | 'addCardButton';
+    export type Properties<
+      TRowData = unknown,
+      TKey = unknown
+    > = dxCardViewOptions<TRowData, TKey>;
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+     */
+    type RequiredColumnProps =
+      | 'alignment'
+      | 'dataType'
+      | 'visible'
+      | 'visibleIndex'
+      | 'allowReordering'
+      | 'allowHiding'
+      | 'trueText'
+      | 'falseText'
+      | 'caption';
+  }
+
+  /**
+   * [descr:dxCardViewOptions]
+   * @deprecated [depNote:dxCardViewOptions]
+   */
+  export interface dxCardViewOptions<TRowData = unknown, TKey = unknown>
+    extends WidgetOptions<dxCardView>,
+      DevExpress.ui.dxCardView.DataControllerConfiguration<TRowData, TKey>,
+      DevExpress.ui.dxCardView.PagerConfiguration,
+      DevExpress.ui.dxCardView.ColumnsControllerConfiguration<TRowData, TKey>,
+      DevExpress.ui.dxCardView.HeaderPanelConfiguration<TRowData, TKey>,
+      DevExpress.ui.dxCardView.ContentViewConfiguration<TRowData>,
+      DevExpress.ui.dxCardView.ToolbarConfiguration {
+    /**
+     * [descr:dxCardViewOptions.onDataErrorOccurred]
+     */
+    onDataErrorOccurred?: (
+      e: DevExpress.common.core.events.EventInfo<dxCardView> &
+        DevExpress.common.grids.DataErrorOccurredInfo
+    ) => void;
+  }
+  /**
    * [descr:dxChat]
    */
   export class dxChat extends Widget<DevExpress.ui.dxChat.Properties> {
@@ -31498,6 +31610,321 @@ declare module DevExpress.ui.dxBox {
 }
 declare module DevExpress.ui.dxButtonGroup {
   export type Item = dxButtonGroupItem;
+}
+declare module DevExpress.ui.dxCardView {
+  /**
+   * [descr:BaseContentViewConfiguration]
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  export interface BaseContentViewConfiguration {
+    /**
+     * [descr:BaseContentViewConfiguration.scrolling]
+     */
+    scrolling?: Pick<
+      DevExpress.common.grids.ScrollingBase,
+      'scrollByContent' | 'scrollByThumb' | 'showScrollbar' | 'useNative'
+    >;
+    /**
+     * [descr:BaseContentViewConfiguration.errorRowEnabled]
+     */
+    errorRowEnabled?: boolean;
+    /**
+     * [descr:BaseContentViewConfiguration.loadPanel]
+     */
+    loadPanel?: dxLoadPanelOptions;
+    /**
+     * [descr:BaseContentViewConfiguration.noDataText]
+     */
+    noDataText?: string;
+    /**
+     * [descr:BaseContentViewConfiguration.noDataTemplate]
+     */
+    noDataTemplate?:
+      | template
+      | ((e: { text: string }) => string | DevExpress.core.UserDefinedElement);
+  }
+  /**
+   * [descr:CardCover]
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  interface CardCover<TRowData = unknown> {
+    /**
+     * [descr:CardCover.imageExpr]
+     */
+    imageExpr: string | ((data: TRowData) => string);
+    /**
+     * [descr:CardCover.altExpr]
+     */
+    altExpr: string | ((data: TRowData) => string);
+  }
+  /**
+   * [descr:CardHeader]
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  interface CardHeader<TRowData = unknown> {
+    /**
+     * [descr:CardHeader.captionExpr]
+     */
+    captionExpr?: string | ((data: TRowData) => string);
+    /**
+     * [descr:CardHeader.visible]
+     */
+    visible?: boolean;
+  }
+
+  /**
+   * [descr:Cell]
+   */
+  export interface Cell {
+    /**
+     * [descr:Cell.value]
+     */
+    value: unknown;
+    /**
+     * [descr:Cell.displayValue]
+     */
+    displayValue: unknown;
+    /**
+     * [descr:Cell.text]
+     */
+    text: string;
+    /**
+     * [descr:Cell.column]
+     */
+    column: Column;
+  }
+  /**
+   * [descr:Column]
+   */
+  export type Column<TRowData = unknown, TKey = unknown> = Pick<
+    Required<ColumnProperties<TRowData, TKey>>,
+    RequiredColumnProps
+  > &
+    Omit<ColumnProperties, RequiredColumnProps>;
+  /**
+   * [descr:ColumnProperties]
+   */
+  export type ColumnProperties<TRowData = unknown, TKey = unknown> = Pick<
+    DevExpress.common.grids.ColumnBase<TRowData>,
+    InheritedColumnProps
+  > & {
+    /**
+     * [descr:ColumnProperties.fieldTemplate]
+     */
+    fieldTemplate?:
+      | template
+      | ((
+          dataRow: DataRow<TRowData, TKey>
+        ) => string | DevExpress.core.UserDefinedElement);
+    /**
+     * [descr:ColumnProperties.fieldCaptionTemplate]
+     */
+    fieldCaptionTemplate?:
+      | template
+      | ((
+          dataRow: DataRow<TRowData, TKey>
+        ) => string | DevExpress.core.UserDefinedElement);
+    /**
+     * [descr:ColumnProperties.fieldValueTemplate]
+     */
+    fieldValueTemplate?:
+      | template
+      | ((
+          dataRow: DataRow<TRowData, TKey>
+        ) => string | DevExpress.core.UserDefinedElement);
+    /**
+     * [descr:ColumnProperties.headerItemTemplate]
+     */
+    headerItemTemplate?:
+      | template
+      | ((
+          column: Column<TRowData, TKey>
+        ) => string | DevExpress.core.UserDefinedElement);
+    /**
+     * [descr:ColumnProperties.headerItemCssClass]
+     */
+    headerItemCssClass?: string;
+  };
+  /**
+   * [descr:ColumnsControllerConfiguration]
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  export type ColumnsControllerConfiguration<
+    TRowData = unknown,
+    TKey = unknown
+  > = {
+    /**
+     * [descr:ColumnsControllerConfiguration.columns]
+     */
+    columns?: (ColumnProperties<TRowData, TKey> | string)[];
+  };
+  /**
+   * [descr:ContentViewConfiguration]
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  export interface ContentViewConfiguration<TRowData = unknown>
+    extends BaseContentViewConfiguration {
+    /**
+     * [descr:ContentViewConfiguration.cardsPerRow]
+     */
+    cardsPerRow?: number | DevExpress.common.Mode;
+    /**
+     * [descr:ContentViewConfiguration.cardMinWidth]
+     */
+    cardMinWidth?: number;
+    /**
+     * [descr:ContentViewConfiguration.cardMaxWidth]
+     */
+    cardMaxWidth?: number;
+    /**
+     * [descr:ContentViewConfiguration.cardCover]
+     */
+    cardCover?: CardCover<TRowData>;
+    /**
+     * [descr:ContentViewConfiguration.cardTemplate]
+     */
+    cardTemplate?:
+      | template
+      | ((row: DataRow) => string | DevExpress.core.UserDefinedElement);
+    /**
+     * [descr:ContentViewConfiguration.cardHeader]
+     */
+    cardHeader?: CardHeader<TRowData>;
+  }
+  /**
+   * [descr:DataControllerConfiguration]
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  export type DataControllerConfiguration<
+    TRowData = unknown,
+    TKey = unknown
+  > = {
+    /**
+     * [descr:DataControllerConfiguration.dataSource]
+     */
+    dataSource?: DevExpress.data.DataSourceLike<TRowData, TKey>;
+    /**
+     * [descr:DataControllerConfiguration.paging]
+     */
+    paging?: Paging;
+    /**
+     * [descr:DataControllerConfiguration.keyExpr]
+     */
+    keyExpr?: string | string[];
+    /**
+     * [descr:DataControllerConfiguration.remoteOperations]
+     */
+    remoteOperations?: RemoteOperations | boolean | DevExpress.common.Mode;
+  };
+  /**
+   * [descr:DataRow]
+   */
+  export interface DataRow<TRowData = unknown, TKey = unknown> {
+    /**
+     * [descr:DataRow.cells]
+     */
+    cells: Cell[];
+    /**
+     * [descr:DataRow.key]
+     */
+    key: TKey;
+    /**
+     * [descr:DataRow.data]
+     */
+    data: TRowData;
+  }
+  /**
+   * [descr:HeaderPanelConfiguration]
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  export type HeaderPanelConfiguration<TRowData = unknown, TKey = unknown> = {
+    /**
+     * [descr:HeaderPanelConfiguration.headerPanel]
+     */
+    headerPanel?: HeaderPanel<TRowData, TKey>;
+  };
+
+  /**
+   * [descr:PagerConfiguration]
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  export type PagerConfiguration = {
+    /**
+     * [descr:PagerConfiguration.pager]
+     */
+    pager?: DevExpress.common.grids.Pager;
+  };
+
+  /**
+   * [descr:Paging]
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  interface Paging {
+    /**
+     * [descr:Paging.enabled]
+     */
+    enabled?: boolean;
+    /**
+     * [descr:Paging.pageIndex]
+     */
+    pageIndex?: number;
+    /**
+     * [descr:Paging.pageSize]
+     */
+    pageSize?: number;
+  }
+  /**
+   * [descr:RemoteOperations]
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  interface RemoteOperations {
+    /**
+     * [descr:RemoteOperations.filtering]
+     */
+    filtering?: boolean;
+    /**
+     * [descr:RemoteOperations.paging]
+     */
+    paging?: boolean;
+    /**
+     * [descr:RemoteOperations.sorting]
+     */
+    sorting?: boolean;
+    /**
+     * [descr:RemoteOperations.summary]
+     */
+    summary?: boolean;
+  }
+  /**
+   * [descr:ToolbarConfiguration]
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  export type ToolbarConfiguration = {
+    /**
+     * [descr:ToolbarConfiguration.toolbar]
+     */
+    toolbar?: {
+      /**
+       * [descr:ToolbarConfiguration.toolbar.items]
+       */
+      items?: Array<PredefinedToolbarItem | ToolbarItem>;
+      visible?: boolean | undefined;
+      disabled?: boolean;
+    };
+  };
+  /**
+   * [descr:ToolbarItem]
+   */
+  export type ToolbarItem = dxToolbarItem & {
+    /**
+     * [descr:ToolbarItem.name]
+     */
+    name?: PredefinedToolbarItem | string;
+    /**
+     * [descr:ToolbarItem.location]
+     */
+    location?: DevExpress.common.ToolbarItemLocation;
+  };
 }
 declare module DevExpress.ui.dxChat {
   /**

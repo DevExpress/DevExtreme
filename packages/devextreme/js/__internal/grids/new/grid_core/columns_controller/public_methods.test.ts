@@ -1,14 +1,19 @@
-/* eslint-disable spellcheck/spell-checker */
 import { describe, expect, it } from '@jest/globals';
 
+import { DataController } from '../data_controller';
+import { FilterController } from '../filtering';
 import { OptionsControllerMock } from '../options_controller/options_controller.mock';
+import { SortingController } from '../sorting_controller';
 import { ColumnsController } from './columns_controller';
 import type { Options } from './options';
 import { PublicMethods } from './public_methods';
 
 const setup = (config: Options = {}) => {
   const options = new OptionsControllerMock(config);
+  const filterController = new FilterController(options);
   const columnsController = new ColumnsController(options);
+  const sortingController = new SortingController(options, columnsController);
+  const dataController = new DataController(options, sortingController, filterController);
 
   // @ts-expect-error
   const gridCore = new (PublicMethods(class {
@@ -17,6 +22,7 @@ const setup = (config: Options = {}) => {
 
   return {
     options,
+    dataController,
     columnsController,
     gridCore,
   };

@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
+
 /* eslint-disable spellcheck/spell-checker */
 // eslint-disable-next-line max-classes-per-file
 import { extend } from '@js/core/utils/extend';
@@ -151,6 +152,9 @@ export class GridCoreNewBase<
 
   private _optionChanged(args) {
     [
+      this.pagerView,
+      this.toolbarView,
+      this.columnChooserView,
       this.filterPanelView,
     ].forEach((c) => {
       if (c.isCompatibilityMode()) {

@@ -22,12 +22,12 @@ export interface SelectionEventInfo<TCardData = unknown, TKey = unknown> {
 }
 
 export type SelectionChangingEvent<TCardData = unknown, TKey = unknown> =
-  EventInfo<dxCardView> & SelectionEventInfo<TCardData, TKey> & {
+  EventInfo<dxCardView<TCardData, TKey>> & SelectionEventInfo<TCardData, TKey> & {
     cancel: boolean | PromiseLike<boolean> | PromiseLike<void>;
   };
 
 export type SelectionChangedEvent<TCardData = unknown, TKey = unknown> =
-  EventInfo<dxCardView> & SelectionEventInfo<TCardData, TKey>;
+  EventInfo<dxCardView<TCardData, TKey>> & SelectionEventInfo<TCardData, TKey>;
 
 export type { SelectionColumnDisplayMode as ShowCheckBoxesMode };
 

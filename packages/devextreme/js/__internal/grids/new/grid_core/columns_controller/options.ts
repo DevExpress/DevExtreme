@@ -74,6 +74,8 @@ export interface Options {
   columns?: ColumnProperties[];
 
   allowColumnReordering?: boolean;
+
+  dateSerializationFormat?: string;
 }
 
 export const defaultOptions = {

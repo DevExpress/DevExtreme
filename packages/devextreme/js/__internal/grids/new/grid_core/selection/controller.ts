@@ -219,7 +219,6 @@ export class SelectionController {
         cancel: false,
       };
 
-      // @ts-expect-error
       onSelectionChanging?.(eventArgs);
       e.cancel = eventArgs.cancel;
     }
@@ -232,7 +231,6 @@ export class SelectionController {
       const eventArgs = this.getSelectionEventArgs(e);
 
       this.selectedCardKeys.update([...e.selectedItemKeys]);
-      // @ts-expect-error
       onSelectionChanged?.(eventArgs);
     }
   }
