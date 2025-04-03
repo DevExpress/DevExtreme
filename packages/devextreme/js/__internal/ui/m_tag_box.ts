@@ -1070,8 +1070,10 @@ class TagBox<
 
   _renderTagsImpl(): void {
     this._renderField();
-    // @ts-expect-error ts-error
-    this.option('selectedItems', this._selectedItems.slice());
+    if (this._shouldUpdateSelectedItems()) {
+      // @ts-expect-error ts-error
+      this.option('selectedItems', this._selectedItems.slice());
+    }
     this._cleanTags();
 
     const fieldTemplate = this._getFieldTemplate();
@@ -1154,6 +1156,22 @@ class TagBox<
     }
 
     this._popup?.refreshPosition();
+  }
+
+  _shouldUpdateSelectedItems(): boolean {
+    const { selectedItems } = this.option();
+
+    if (isDefined(selectedItems) && selectedItems.length !== this._selectedItems?.length) {
+      return true;
+    }
+
+    const intersection = getIntersection(selectedItems, this._selectedItems);
+
+    if (intersection.length !== this._selectedItems?.length) {
+      return true;
+    }
+
+    return false;
   }
 
   _renderTagsElements(items): void {
