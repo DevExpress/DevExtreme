@@ -10,7 +10,7 @@ import { deferredCache } from './deferred_cache';
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const createDeferred = (): any => new Deferred();
 
-describe('Utils', () => {
+describe('DataController', () => {
   describe('DeferredCache', () => {
     it('should call origin fn on the first call', async () => {
       const originFn = jest

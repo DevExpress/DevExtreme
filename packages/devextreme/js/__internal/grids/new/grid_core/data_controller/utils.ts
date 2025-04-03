@@ -52,23 +52,28 @@ export function normalizeRemoteOptions(
   localStore: boolean,
   customStore: boolean,
 ): OperationOptions {
+  const allOperationsEnabled = {
+    filtering: true,
+    sorting: true,
+    paging: true,
+    grouping: true,
+  };
+  const allOperationDisabled = {
+    filtering: false,
+    sorting: false,
+    paging: false,
+    grouping: false,
+  };
+
   switch (true) {
-    case remoteOperations === false:
-    case remoteOperations === 'auto' && (localStore || customStore):
-      return {
-        filtering: false,
-        sorting: false,
-        paging: false,
-        grouping: false,
-      };
-    case remoteOperations === true:
     case remoteOperations === 'auto':
-      return {
-        filtering: true,
-        sorting: true,
-        paging: true,
-        grouping: true,
-      };
+      return localStore || customStore
+        ? allOperationDisabled
+        : allOperationsEnabled;
+    case remoteOperations === false:
+      return allOperationDisabled;
+    case remoteOperations === true:
+      return allOperationsEnabled;
     default:
       return remoteOperations as OperationOptions;
   }

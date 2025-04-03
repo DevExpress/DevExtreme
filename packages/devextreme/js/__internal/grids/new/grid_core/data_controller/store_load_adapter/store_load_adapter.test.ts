@@ -8,15 +8,11 @@ import { StoreLoadAdapter } from '@ts/grids/new/grid_core/data_controller/store_
 import type { LocalStoreFabric } from '@ts/grids/new/grid_core/data_controller/store_load_adapter/types';
 import type { InternalLoadOptions, OperationOptions } from '@ts/grids/new/grid_core/data_controller/types';
 
-// @ts-expect-error bad deferred ctor type
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const createDeferred = (): any => new Deferred();
-
 const setup = (localOperations: OperationOptions) => {
   const remoteStoreLoadFnMock = jest.fn()
-    .mockImplementation(() => createDeferred().resolve());
+    .mockImplementation(() => Deferred().resolve());
   const localStoreLoadFnMock = jest.fn()
-    .mockImplementation(() => createDeferred().resolve());
+    .mockImplementation(() => Deferred().resolve());
 
   const dataSourceMock = state({
     store() {
@@ -57,7 +53,7 @@ describe('DataController', () => {
         expectedLocalLoadOptions: InternalLoadOptions;
       }>([
         {
-          caseName: 'local: all',
+          caseName: 'all operations local',
           localOperations: {
             paging: true,
             filtering: true,
@@ -78,7 +74,7 @@ describe('DataController', () => {
           },
         },
         {
-          caseName: 'local: paging',
+          caseName: 'only paging local',
           localOperations: {
             paging: true,
             filtering: false,
@@ -100,7 +96,7 @@ describe('DataController', () => {
           },
         },
         {
-          caseName: 'local: paging & filtering',
+          caseName: 'paging & filtering local',
           localOperations: {
             paging: true,
             filtering: true,
@@ -122,7 +118,7 @@ describe('DataController', () => {
           },
         },
         {
-          caseName: 'local: paging & grouping',
+          caseName: 'paging & grouping local',
           localOperations: {
             paging: true,
             filtering: false,
@@ -144,7 +140,7 @@ describe('DataController', () => {
           },
         },
         {
-          caseName: 'local: filtering',
+          caseName: 'only filtering local',
           localOperations: {
             paging: false,
             filtering: true,
@@ -166,7 +162,7 @@ describe('DataController', () => {
           },
         },
         {
-          caseName: 'local: filtering & grouping',
+          caseName: 'filtering & grouping local',
           localOperations: {
             paging: false,
             filtering: true,
@@ -188,7 +184,7 @@ describe('DataController', () => {
           },
         },
         {
-          caseName: 'local: grouping',
+          caseName: 'only grouping local',
           localOperations: {
             paging: false,
             filtering: false,
@@ -210,7 +206,7 @@ describe('DataController', () => {
           },
         },
         {
-          caseName: 'remote: all',
+          caseName: 'all operations remote',
           localOperations: {
             paging: false,
             filtering: false,
@@ -230,7 +226,7 @@ describe('DataController', () => {
           },
           expectedLocalLoadOptions: {},
         },
-      ])('$caseName', async ({
+      ])('should split local and remote operations: $caseName', async ({
         localOperations,
         originLoadOptions,
         expectedLocalLoadOptions,
@@ -260,9 +256,9 @@ describe('DataController', () => {
         } = setup({ paging: false, filtering: false, grouping: false });
 
         remoteStoreLoadFnMock
-          .mockImplementation(() => createDeferred().resolve(loadedData));
+          .mockImplementation(() => Deferred().resolve(loadedData));
         localStoreLoadFnMock
-          .mockImplementation(() => createDeferred().resolve(expectedData));
+          .mockImplementation(() => Deferred().resolve(expectedData));
 
         const loadResult = await storeLoadAdapter.load();
 
@@ -278,9 +274,9 @@ describe('DataController', () => {
         } = setup({ paging: false, filtering: false, grouping: false });
 
         remoteStoreLoadFnMock
-          .mockImplementation(() => createDeferred().reject('REMOTE_FAILED'));
+          .mockImplementation(() => Deferred().reject('REMOTE_FAILED'));
         localStoreLoadFnMock
-          .mockImplementation(() => createDeferred().resolve(expectedData));
+          .mockImplementation(() => Deferred().resolve(expectedData));
 
         const result = await storeLoadAdapter.load().catch((data) => data);
 
@@ -296,9 +292,9 @@ describe('DataController', () => {
         } = setup({ paging: false, filtering: false, grouping: false });
 
         remoteStoreLoadFnMock
-          .mockImplementation(() => createDeferred().resolve(loadedData));
+          .mockImplementation(() => Deferred().resolve(loadedData));
         localStoreLoadFnMock
-          .mockImplementation(() => createDeferred().reject('LOCAL_FAILED'));
+          .mockImplementation(() => Deferred().reject('LOCAL_FAILED'));
 
         const result = await storeLoadAdapter.load().catch((data) => data);
 

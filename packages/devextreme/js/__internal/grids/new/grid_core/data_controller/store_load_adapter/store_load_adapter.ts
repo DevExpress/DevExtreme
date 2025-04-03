@@ -3,15 +3,11 @@ import type { DataSource, LoadResult } from '@js/common/data';
 import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred } from '@js/core/utils/deferred';
 import type { SubsGets } from '@ts/core/reactive';
-import { deferredCache } from '@ts/grids/new/grid_core/utils';
 
+import { deferredCache } from '../deferred_cache';
 import type { InternalLoadOptions, OperationOptions } from '../types';
 import { getLocalLoadOptions, getStoreLoadOptions } from '../utils';
 import type { LocalStoreFabric } from './types';
-
-// @ts-expect-error bad deferred ctor type
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const createDeferred = (): any => new Deferred();
 
 export class StoreLoadAdapter<TData> {
   private readonly loadFromStore: (
@@ -33,7 +29,7 @@ export class StoreLoadAdapter<TData> {
   }
 
   public load(loadOptions: InternalLoadOptions = {}): DeferredObj<LoadResult<TData>> {
-    const result = createDeferred();
+    const result = Deferred();
     const { localOptions, remoteOptions } = this.getLoadOptions(loadOptions);
 
     this.loadFromStore(remoteOptions)
@@ -45,8 +41,10 @@ export class StoreLoadAdapter<TData> {
           .done((processedData) => {
             result.resolve(processedData);
           })
+          // eslint-disable-next-line @typescript-eslint/no-misused-promises
           .fail(result.reject);
       })
+      // eslint-disable-next-line @typescript-eslint/no-misused-promises
       .fail(result.reject);
 
     return result as DeferredObj<LoadResult<TData>>;
