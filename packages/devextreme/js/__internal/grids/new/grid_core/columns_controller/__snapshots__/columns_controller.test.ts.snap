@@ -5,6 +5,7 @@ exports[`ColumnsController columns should contain processed column configs 1`] =
   {
     "alignment": "left",
     "allowReordering": true,
+    "allowSorting": true,
     "calculateCellValue": [Function],
     "calculateDisplayValue": [Function],
     "caption": "A",
@@ -20,6 +21,7 @@ exports[`ColumnsController columns should contain processed column configs 1`] =
   {
     "alignment": "left",
     "allowReordering": true,
+    "allowSorting": true,
     "calculateCellValue": [Function],
     "calculateDisplayValue": [Function],
     "caption": "B",
@@ -35,6 +37,7 @@ exports[`ColumnsController columns should contain processed column configs 1`] =
   {
     "alignment": "left",
     "allowReordering": true,
+    "allowSorting": true,
     "calculateCellValue": [Function],
     "calculateDisplayValue": [Function],
     "caption": "C",

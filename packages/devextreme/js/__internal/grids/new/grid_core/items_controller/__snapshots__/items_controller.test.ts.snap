@@ -7,6 +7,7 @@ exports[`ItemsController createDataRow should process data object to data row us
       "column": {
         "alignment": "left",
         "allowReordering": true,
+        "allowSorting": true,
         "calculateCellValue": [Function],
         "calculateDisplayValue": [Function],
         "caption": "A",
@@ -28,6 +29,7 @@ exports[`ItemsController createDataRow should process data object to data row us
       "column": {
         "alignment": "left",
         "allowReordering": true,
+        "allowSorting": true,
         "calculateCellValue": [Function],
         "calculateDisplayValue": [Function],
         "caption": "B",
@@ -63,6 +65,7 @@ exports[`ItemsController createDataRow should process data object to data row us
       "column": {
         "alignment": "left",
         "allowReordering": true,
+        "allowSorting": true,
         "calculateCellValue": [Function],
         "calculateDisplayValue": [Function],
         "caption": "A",
@@ -84,6 +87,7 @@ exports[`ItemsController createDataRow should process data object to data row us
       "column": {
         "alignment": "left",
         "allowReordering": true,
+        "allowSorting": true,
         "calculateCellValue": [Function],
         "calculateDisplayValue": [Function],
         "caption": "B",
