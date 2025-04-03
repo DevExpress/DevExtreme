@@ -8,39 +8,34 @@ import {
   getCurrentScreenFactor,
   hasWindow,
 } from '@js/core/utils/window';
+import type HtmlEditor from '@js/ui/html_editor';
+import type { Properties as PopupProperties } from '@js/ui/popup';
 import Popup from '@js/ui/popup';
 
 const DIALOG_CLASS = 'dx-formdialog';
+const DROPDOWN_EDITOR_OVERLAY_CLASS = 'dx-dropdowneditor-overlay';
 
+const isSmallScreen = (): boolean => {
+  const screenFactor = hasWindow() ? getCurrentScreenFactor() : null;
+  return devices.real().deviceType === 'phone' || screenFactor === 'xs';
+};
 abstract class BaseDialog {
-  _editorInstance?: any;
+  _editorInstance: any;
 
-  _popupUserConfig?: any;
+  _popupUserConfig?: PopupProperties;
 
   _popup!: Popup;
 
   deferred?: DeferredObj<unknown>;
 
-  constructor(editorInstance, popupConfig) {
+  constructor(editorInstance: HtmlEditor, popupConfig: PopupProperties) {
     this._editorInstance = editorInstance;
     this._popupUserConfig = popupConfig;
 
     this._renderPopup();
-    this._attachOptionChangedHandler();
   }
 
-  protected _attachOptionChangedHandler() {
-    this._popup?.on('optionChanged', ({ name, value }) => {
-      if (name === 'title') {
-        this._onTitleChanged(value);
-      }
-    });
-  }
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  protected _onTitleChanged(_value?: unknown): void {}
-
-  _renderPopup() {
+  protected _renderPopup() {
     const editorInstance = this._editorInstance;
     const $container = $('<div>')
       .addClass(DIALOG_CLASS)
@@ -50,44 +45,40 @@ abstract class BaseDialog {
     return editorInstance._createComponent($container, Popup, popupConfig);
   }
 
-  _escKeyHandler() {
+  protected _escKeyHandler(): void {
     this._popup.hide();
   }
 
-  _addEscapeHandler(e) {
+  protected _addEscapeHandler(e): void {
     e.component.registerKeyHandler('escape', this._escKeyHandler.bind(this));
   }
 
-  _isSmallScreen() {
-    const screenFactor = hasWindow() ? getCurrentScreenFactor() : null;
-    return devices.real().deviceType === 'phone' || screenFactor === 'xs';
-  }
-
-  protected _getPopupConfig(): object {
+  protected _getPopupConfig(): PopupProperties {
     return extend({
       onInitialized: (e) => {
         this._popup = e.component;
         this._popup.on('hiding', () => this.onHiding());
+        this._addEscapeHandler(e);
       },
       deferRendering: false,
       focusStateEnabled: false,
-      fullScreen: this._isSmallScreen(),
-      _wrapperClassExternal: DIALOG_CLASS,
+      showCloseButton: false,
+      fullScreen: isSmallScreen(),
+      _wrapperClassExternal: `${DIALOG_CLASS} ${DROPDOWN_EDITOR_OVERLAY_CLASS}`,
       contentTemplate: (contentElem) => {
-        this._renderContent($(contentElem));
+        this._renderContent(contentElem);
       },
-    }, this._popupUserConfig);
+    }, this._popupUserConfig) as PopupProperties;
   }
 
-  protected abstract _renderContent($container): void;
+  protected abstract _renderContent(contentElem: HTMLElement): void;
 
-  onHiding() {
-    // @ts-expect-error
-    this.deferred.reject();
+  onHiding(): void {
+    this.deferred?.reject();
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  show(_options?: unknown) {
+  show(_options?: unknown): Promise<unknown> | undefined {
     if (this._popup.option('visible')) {
       return;
     }
@@ -100,14 +91,13 @@ abstract class BaseDialog {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  hide(_event?: unknown, options?: unknown) {
+  hide(_options: unknown, _event?: unknown): void {
     this._popup.hide();
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  popupOption(optionName, optionValue) {
+  popupOption(...args) {
     // @ts-expect-error
-    return this._popup.option.apply(this._popup, arguments);
+    return this._popup.option.apply(this._popup, args);
   }
 }
 
