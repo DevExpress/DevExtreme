@@ -140,7 +140,7 @@ exports[`Rendering should be rendered correctly 1`] = `
           :
         </span>
         <span
-          class="dx-cardview-field-value"
+          class="dx-cardview-field-value dx-cardview-field-value--text-align-undefined dx-cardview-field-value--white-space-nowrap"
         >
           devextreme
         </span>
