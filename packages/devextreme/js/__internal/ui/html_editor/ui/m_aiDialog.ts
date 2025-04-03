@@ -1,7 +1,7 @@
 import localizationMessage from '@js/common/core/localization/message';
 import $ from '@js/core/renderer';
 import { extend } from '@js/core/utils/extend';
-import type { ToolbarItem } from '@js/ui/popup';
+import type { Properties as PopupProperties, ToolbarItem } from '@js/ui/popup';
 import SelectBox from '@js/ui/select_box';
 import TextArea from '@js/ui/text_area';
 
@@ -42,27 +42,39 @@ export default class AIDialog extends DialogBase {
   private _textAreaInstance?: TextArea;
 
   // eslint-disable-next-line spellcheck/spell-checker
-  constructor(editorInstance, popupConfig?, aiService?) {
+  constructor(editorInstance, popupConfig: PopupProperties, aiService?) {
     super(editorInstance, popupConfig);
 
     // eslint-disable-next-line spellcheck/spell-checker
     this._serviceAI = aiService;
   }
 
-  protected _getPopupConfig() {
+  protected _getPopupConfig(): PopupProperties {
     const baseConfig = super._getPopupConfig();
 
     return extend(true, {}, baseConfig, {
-      title: localizationMessage.format('dxHtmlEditor-aiDialogTitle'),
+      titleTemplate: (titleElement) => {
+        const $titleContainer = $('<div>').addClass('dx-aidialog-title');
+        const $icon = $('<i>').addClass('dx-icon dx-icon-sparkle');
+        const $text = $('<span>')
+          .addClass('ai-dialog-title-text')
+          .text(localizationMessage.format('dxHtmlEditor-aiDialogTitle'));
+        $titleContainer
+          .append($icon)
+          .append($text);
+        $(titleElement).append($titleContainer);
+      },
       width: 460,
       shading: false,
       dragEnabled: true,
       dragAndResizeArea: this._editorInstance?.$element(),
       toolbarItems: this._getToolbarItems(),
-    });
+      showCloseButton: true,
+    }) as PopupProperties;
   }
 
-  protected _renderContent($container): void {
+  protected _renderContent(contentElem: HTMLElement): void {
+    const $container = $(contentElem);
     $container.addClass(AI_DIALOG_CONTENT_CLASS);
 
     const $controls = $('<div>')
@@ -124,13 +136,13 @@ export default class AIDialog extends DialogBase {
         location: 'before',
         widget: 'dxDropDownButton',
         options: {
-          text: 'Replace',
+          text: localizationMessage.format('dxHtmlEditor-aiReplace'),
           stylingMode: 'contained',
           type: 'default',
           items: [
-            { id: 'replace', text: 'Replace' },
-            { id: 'replaceAbove', text: 'Insert Above' },
-            { id: 'replaceBelow', text: 'Insert Below' },
+            { id: 'replace', text: localizationMessage.format('dxHtmlEditor-aiReplace') },
+            { id: 'insertAbove', text: localizationMessage.format('dxHtmlEditor-aiInsertAbove') },
+            { id: 'insertBelow', text: localizationMessage.format('dxHtmlEditor-aiInsertBelow') },
           ],
           dropDownOptions: {
             width: 'auto',
@@ -143,7 +155,7 @@ export default class AIDialog extends DialogBase {
         location: 'after',
         widget: 'dxButton',
         options: {
-          text: 'Copy',
+          text: localizationMessage.format('dxHtmlEditor-aiCopy'),
           onClick: () => navigator?.clipboard?.writeText(this._resultText),
         },
       },
@@ -152,7 +164,7 @@ export default class AIDialog extends DialogBase {
         location: 'after',
         widget: 'dxButton',
         options: {
-          text: 'Try again',
+          text: localizationMessage.format('dxHtmlEditor-aiTryAgain'),
           onClick: () => this._retryAIRequest(),
         },
       },

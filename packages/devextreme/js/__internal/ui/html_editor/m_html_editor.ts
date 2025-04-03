@@ -354,7 +354,10 @@ class HtmlEditor extends Editor<Properties> {
     super._renderContentImpl();
     this._renderHtmlEditor();
     this._renderFormDialog();
-    this._renderAIDialog();
+
+    if (this.option('ai')) {
+      this._renderAIDialog();
+    }
     this._addKeyPressHandler();
 
     return renderContentPromise;

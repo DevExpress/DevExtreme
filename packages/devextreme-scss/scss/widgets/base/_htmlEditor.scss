@@ -363,6 +363,13 @@ $transparent-border: 1px solid transparent;
   gap: 12px;
 }
 
+.dx-aidialog-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 600;
+}
+
 .dx-overlay-content {
   &.dx-popup-fullscreen {
     .dx-formdialog-form {

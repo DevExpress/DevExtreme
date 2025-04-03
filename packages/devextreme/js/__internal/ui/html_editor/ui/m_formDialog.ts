@@ -37,22 +37,28 @@ export default class FormDialog extends DialogBase {
 
   beforeAddButtonAction?: () => boolean;
 
+  constructor(editorInstance, popupConfig) {
+    super(editorInstance, popupConfig);
+
+    this._attachOptionChangedHandler();
+  }
+
+  protected _attachOptionChangedHandler() {
+    this._popup?.on('optionChanged', ({ name, value }) => {
+      if (name === 'title') {
+        this._onTitleChanged(value);
+      }
+    });
+  }
+
   protected _getPopupConfig() {
     const baseConfig = super._getPopupConfig();
 
     return extend(true, {}, baseConfig, {
-      contentTemplate: (contentElem) => {
-        const $formContainer = $('<div>').appendTo(contentElem);
-        this._renderForm($formContainer, {
-          onEditorEnterKey: (e) => this.callAddButtonAction(e.event),
-          customizeItem: (item) => {
-            if (item.itemType === 'simple') {
-              item.editorOptions = extend(true, {}, item.editorOptions, {
-                onInitialized: this._addEscapeHandler.bind(this),
-              });
-            }
-          },
-        });
+      onInitialized: (e) => {
+        this._popup = e.component;
+        this._popup.on('hiding', () => this.onHiding());
+        this._popup.on('shown', () => { this._form.focus(); });
       },
       toolbarItems: [
         {
@@ -60,8 +66,11 @@ export default class FormDialog extends DialogBase {
           location: 'after',
           widget: 'dxButton',
           options: {
+            onInitialized: this._addEscapeHandler.bind(this),
             text: localizationMessage.format('OK'),
-            onClick: (e) => this.callAddButtonAction(e.event),
+            onClick: (e) => {
+              this.callAddButtonAction(e.event);
+            },
             ...getApplyButtonConfig(),
           },
         },
@@ -70,8 +79,11 @@ export default class FormDialog extends DialogBase {
           location: 'after',
           widget: 'dxButton',
           options: {
+            onInitialized: this._addEscapeHandler.bind(this),
             text: localizationMessage.format('Cancel'),
-            onClick: () => this._popup.hide(),
+            onClick: () => {
+              this._popup.hide();
+            },
             ...getCancelButtonConfig(),
           },
         },
@@ -79,17 +91,19 @@ export default class FormDialog extends DialogBase {
     });
   }
 
-  protected _renderContent($container) {
-    $container.addClass(FORM_CLASS);
+  protected _renderContent(container) {
+    const $formContainer = $('<div>').appendTo(container);
 
-    this._form = this._editorInstance._createComponent($container, Form, {
-      ...this._getDefaultFormOptions(),
+    this._renderForm($formContainer, {
       onEditorEnterKey: (e) => this.callAddButtonAction(e.event),
       customizeItem: (item) => {
         if (item.itemType === 'simple') {
-          item.editorOptions = extend(true, {}, item.editorOptions, {
-            onInitialized: this._addEscapeHandler.bind(this),
-          });
+          item.editorOptions = extend(
+            true,
+            {},
+            item.editorOptions,
+            { onInitialized: this._addEscapeHandler.bind(this) },
+          );
         }
       },
     });
@@ -124,24 +138,14 @@ export default class FormDialog extends DialogBase {
     };
   }
 
-  _attachOptionChangedHandler() {
-    this._popup?.on(
-      'optionChanged',
-      ({ name, value }) => {
-        if (name === 'title') {
-          this._updateFormLabel(value);
-        }
-      },
-    );
-  }
-
   callAddButtonAction(event) {
     if (this.beforeAddButtonAction && !this.beforeAddButtonAction()) {
       return;
     }
 
     const formData = this._form.option('formData');
-    this.hide(event, { formData });
+
+    this.hide(formData, event);
   }
 
   show(formUserConfig) {
@@ -152,11 +156,15 @@ export default class FormDialog extends DialogBase {
     return super.show();
   }
 
-  hide(event, options) {
-    const { formData } = options;
-
+  hide(formData, event) {
     this.deferred?.resolve(formData, event);
     this._popup.hide();
+  }
+
+  onHiding() {
+    this.beforeAddButtonAction = undefined;
+
+    super.onHiding();
   }
 
   formOption(...args) {
