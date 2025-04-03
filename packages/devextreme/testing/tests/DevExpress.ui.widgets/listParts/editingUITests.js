@@ -20,6 +20,8 @@ import 'ui/action_sheet';
 import 'ui/list';
 import { implementationsMap } from 'core/utils/size';
 
+const FOCUSED_STATE_CLASS = 'dx-state-focused';
+
 const LIST_ITEM_CLASS = 'dx-list-item';
 const LIST_ITEM_ICON_CONTAINER_CLASS = 'dx-list-item-icon-container';
 const LIST_ITEM_ICON_CLASS = 'dx-list-item-icon';
