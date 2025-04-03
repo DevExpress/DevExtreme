@@ -4,7 +4,57 @@ exports[`common initial render should be successfull 1`] = `
 <div
   class="dx-widget dx-cardview"
 >
-  
+  <div
+    class="dx-toolbar dx-widget dx-visibility-change-handler dx-collection"
+    role="toolbar"
+  >
+    <div
+      class="dx-toolbar-items-container"
+    >
+      <div
+        class="dx-toolbar-before"
+        role="presentation"
+      />
+      <div
+        class="dx-toolbar-center"
+        role="presentation"
+      />
+      <div
+        class="dx-toolbar-after"
+        role="presentation"
+      >
+        <div
+          class="dx-item dx-toolbar-item dx-toolbar-button dx-toolbar-item-auto-hide"
+        >
+          <div
+            class="dx-item-content dx-toolbar-item-content"
+          >
+            <input />
+          </div>
+        </div>
+        <div
+          class="dx-toolbar-button dx-toolbar-menu-container dx-state-invisible"
+        >
+          <div
+            aria-expanded="false"
+            aria-haspopup="true"
+            aria-label="overflow"
+            class="dx-widget dx-button dx-button-mode-contained dx-button-normal dx-button-has-icon dx-dropdownmenu dx-dropdownmenu-button"
+            role="button"
+            tabindex="0"
+          >
+            <div
+              class="dx-button-content"
+            >
+              <i
+                class="dx-icon dx-icon-overflow"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
   <div
     class="dx-cardview-headers"
   >
@@ -21,7 +71,11 @@ exports[`common initial render should be successfull 1`] = `
           <div
             class="dx-scrollable-content"
             style="left: 0px; top: 0px; transform: none;"
-          />
+          >
+            <div
+              class="dx-cardview-headerpanel-content"
+            />
+          </div>
           <div
             class="dx-scrollable-scrollbar dx-widget dx-scrollbar-horizontal"
             style="display: none;"
@@ -37,6 +91,7 @@ exports[`common initial render should be successfull 1`] = `
         </div>
       </div>
     </div>
+    
   </div>
   <div
     class="dx-gridcore-contentview"
@@ -62,7 +117,18 @@ exports[`common initial render should be successfull 1`] = `
           <div
             class="dx-scrollable-content"
             style="left: 0px; top: 0px; transform: none;"
-          />
+          >
+            <span
+              class="dx-gridcore-nodata"
+            >
+              No data
+            </span>
+            <div
+              class="dx-cardview-content dx-cardview-content-grid"
+              style="--dx-cardview-cardsperrow: 3; --dx-cardview-card-cover-ratio: 1 / 1;"
+              tabindex="0"
+            />
+          </div>
           <div
             class="dx-scrollable-scrollbar dx-widget dx-scrollbar-horizontal"
           >
@@ -90,6 +156,7 @@ exports[`common initial render should be successfull 1`] = `
         </div>
       </div>
     </div>
+    
     <div
       class="dx-gridcore-error-row"
     />

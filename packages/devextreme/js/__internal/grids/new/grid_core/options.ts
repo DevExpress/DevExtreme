@@ -6,6 +6,8 @@ import * as columnsController from './columns_controller/index';
 import * as contentView from './content_view/index';
 import * as dataController from './data_controller/index';
 import * as pager from './pager/index';
+import * as searchPanel from './search/index';
+import type { SearchProperties } from './search/types';
 import type * as toolbar from './toolbar/index';
 import type { GridCoreNew } from './widget';
 
@@ -18,6 +20,9 @@ export type Options =
   & pager.Options
   & columnsController.Options
   & contentView.Options
+  & searchPanel.Options
+  // TODO: Remove this mock search options during search implementation
+  & SearchProperties
   & toolbar.Options;
 
 export const defaultOptions = {
@@ -25,6 +30,8 @@ export const defaultOptions = {
   ...columnsController.defaultOptions,
   ...pager.defaultOptions,
   ...contentView.defaultOptions,
+  ...searchPanel.defaultOptions,
+  searchText: '',
 } satisfies Options;
 
 // TODO: separate by modules
