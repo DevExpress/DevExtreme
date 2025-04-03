@@ -8,7 +8,7 @@ import TextArea from '@js/ui/text_area';
 import type { CommandDefinition, CommandsMap } from '../utils/m_ai';
 import DialogBase from './m_baseDialog';
 
-const AI_DIALOG_COMMANDS_WITH_OPTIONS = ['translate', 'changeStyle', 'changeTone'];
+const AI_DIALOG_COMMANDS_WITH_OPTIONS = ['translate', 'changeStyle', 'changeTone', 'custom'];
 
 export interface AIDialogShowPayload {
   currentCommand: string;
