@@ -117,6 +117,7 @@ class AzureProvider extends DynamicProvider {
     return new Promise<void>((resolve) => {
       if (azureMapsLoaded()) {
         resolve();
+        return;
       }
 
       if (!azureMapsLoader) {
