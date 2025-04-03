@@ -981,7 +981,6 @@ const TagBox = (SelectBox as any).inherit({
   _renderTagsImpl(): void {
     this._renderField();
     if (this._shouldUpdateSelectedItems()) {
-      // @ts-expect-error ts-error
       this.option('selectedItems', this._selectedItems.slice());
     }
     this._cleanTags();
