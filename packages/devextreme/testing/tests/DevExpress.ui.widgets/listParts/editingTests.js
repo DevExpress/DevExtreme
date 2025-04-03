@@ -319,13 +319,16 @@ QUnit.module('keyboard navigation', {
 
     QUnit.module('grouped', {
         beforeEach: function() {
-            this.items = [{
-                items: ['1-1', '1-2'],
-            }, {
-                items: ['2-1', '2-2'],
-            }];
+            this.getInitialItems = () => {
+                return [{
+                    items: ['1-1', '1-2'],
+                }, {
+                    items: ['2-1', '2-2'],
+                }];
+            };
+            this.items = this.getInitialItems();
             this.$list = $('#list').dxList({
-                items: this.items,
+                items: this.getInitialItems(),
                 grouped: true,
                 itemDragging: {
                     allowReordering: true
@@ -336,7 +339,7 @@ QUnit.module('keyboard navigation', {
             this.keyboard = keyboardMock(this.$list.find('[tabindex=0]'));
         }
     }, () => {
-        QUnit.test('shift+arrowDown on first group last item should loop reordering in the group (T1281674)', function(assert) {
+        QUnit.test('shift+arrowDown on first group last item should not move item out of group (T1281674)', function(assert) {
             const $firstGroupLastItem = this.$list
                 .find(`.${LIST_GROUP_CLASS}`).eq(0)
                 .find(`.${LIST_ITEM_CLASS}`).last();
@@ -345,16 +348,10 @@ QUnit.module('keyboard navigation', {
             this.clock.tick(10);
             this.keyboard.keyDown('arrowDown', { shiftKey: true });
 
-            const expectedItems = [{
-                items: ['1-2', '1-1'],
-            }, {
-                items: ['2-1', '2-2'],
-            }];
-
-            assert.deepEqual(this.list.option('items'), expectedItems, 'items were reordered within the group');
+            assert.deepEqual(this.list.option('items'), this.items, 'items are not reordered');
         });
 
-        QUnit.test('shift+arrowDown on a last group last item should loop reordering in the group (T1281674)', function(assert) {
+        QUnit.test('shift+arrowDown on a last group last item should not move item out of group (T1281674)', function(assert) {
             const $lastGroupLastItem = this.$list
                 .find(`.${LIST_GROUP_CLASS}`).last()
                 .find(`.${LIST_ITEM_CLASS}`).last();
@@ -363,16 +360,10 @@ QUnit.module('keyboard navigation', {
             this.clock.tick(10);
             this.keyboard.keyDown('arrowDown', { shiftKey: true });
 
-            const expectedItems = [{
-                items: ['1-1', '1-2'],
-            }, {
-                items: ['2-2', '2-1'],
-            }];
-
-            assert.deepEqual(this.list.option('items'), expectedItems, 'items were reordered within the group');
+            assert.deepEqual(this.list.option('items'), this.items, 'items are not reordered');
         });
 
-        QUnit.test('shift+arrowUp on first group first item should loop reordering in the group (T1281674)', function(assert) {
+        QUnit.test('shift+arrowUp on first group first item should not move item out of group (T1281674)', function(assert) {
             const $firstGroupFirstItem = this.$list
                 .find(`.${LIST_GROUP_CLASS}`).eq(0)
                 .find(`.${LIST_ITEM_CLASS}`).eq(0);
@@ -381,16 +372,10 @@ QUnit.module('keyboard navigation', {
             this.clock.tick(10);
             this.keyboard.keyDown('arrowUp', { shiftKey: true });
 
-            const expectedItems = [{
-                items: ['1-2', '1-1'],
-            }, {
-                items: ['2-1', '2-2'],
-            }];
-
-            assert.deepEqual(this.list.option('items'), expectedItems, 'items were reordered within the group');
+            assert.deepEqual(this.list.option('items'), this.items, 'items are not reordered');
         });
 
-        QUnit.test('shift+arrowUp on last group first item should loop reordering in the group (T1281674)', function(assert) {
+        QUnit.test('shift+arrowUp on last group first item should not move item out of group (T1281674)', function(assert) {
             const $lastGroupFirstItem = this.$list
                 .find(`.${LIST_GROUP_CLASS}`).last()
                 .find(`.${LIST_ITEM_CLASS}`).eq(0);
@@ -399,13 +384,7 @@ QUnit.module('keyboard navigation', {
             this.clock.tick(10);
             this.keyboard.keyDown('arrowUp', { shiftKey: true });
 
-            const expectedItems = [{
-                items: ['1-1', '1-2'],
-            }, {
-                items: ['2-2', '2-1'],
-            }];
-
-            assert.deepEqual(this.list.option('items'), expectedItems, 'items were reordered within the group');
+            assert.deepEqual(this.list.option('items'), this.items, 'items are not reordered');
         });
     });
 });
