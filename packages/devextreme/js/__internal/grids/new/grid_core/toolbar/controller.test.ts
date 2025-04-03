@@ -1,6 +1,7 @@
 /* eslint-disable spellcheck/spell-checker */
-/* eslint-disable @typescript-eslint/dot-notation */
+
 import { describe, expect, it } from '@jest/globals';
+import { state } from '@ts/core/reactive';
 
 import type { Options } from '../options';
 import { OptionsControllerMock } from '../options_controller/options_controller.mock';
@@ -66,21 +67,24 @@ describe('ToolbarController', () => {
         { name: 'searchPanel', location: 'after' },
       ]);
     });
-  });
 
-  describe('removeDefaultItem', () => {
-    it('should remove given default item from items', () => {
+    it('item should toggle default item when needUpdate changes', () => {
       const { toolbarController } = createToolbarController();
+      const needRender = state(true);
 
-      toolbarController.addDefaultItem({ name: 'searchPanel', location: 'after' });
+      toolbarController.addDefaultItem({ name: 'searchPanel', location: 'after' }, needRender);
 
       expect(toolbarController.items.unreactive_get()).toStrictEqual([
         { name: 'searchPanel', location: 'after' },
       ]);
 
-      toolbarController.removeDefaultItem('searchPanel');
-
+      needRender.update(false);
       expect(toolbarController.items.unreactive_get()).toStrictEqual([]);
+
+      needRender.update(true);
+      expect(toolbarController.items.unreactive_get()).toStrictEqual([
+        { name: 'searchPanel', location: 'after' },
+      ]);
     });
   });
 });
