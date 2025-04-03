@@ -749,11 +749,15 @@ class Scheduler extends Widget<any> {
         this.repaint();
         break;
       case 'showCurrentTimeIndicator':
-      case 'indicatorTime':
       case 'indicatorUpdateInterval':
       case 'shadeUntilCurrentTime':
       case 'groupByDate':
         this._updateOption('workSpace', name, value);
+        this.repaint();
+        break;
+      case 'indicatorTime':
+        this._updateOption('workSpace', name, value);
+        this._header?.option(name, value);
         this.repaint();
         break;
       case 'appointmentDragging':
@@ -816,7 +820,7 @@ class Scheduler extends Widget<any> {
         break;
       case 'toolbar':
         this._header
-          ? this._header.option('toolbar', value)
+          ? this._header.onToolbarOptionChanged(args.fullName, value)
           : this.repaint();
         break;
       case 'loadedResources':
@@ -1568,6 +1572,7 @@ class Scheduler extends Widget<any> {
       rtlEnabled: this.option('rtlEnabled'),
       useDropDownViewSwitcher: this.option('useDropDownViewSwitcher'),
       customizeDateNavigatorText: this.option('customizeDateNavigatorText'),
+      indicatorTime: this.option('indicatorTime'),
       agendaDuration: currentViewOptions.agendaDuration || DEFAULT_AGENDA_DURATION,
     }, currentViewOptions);
 

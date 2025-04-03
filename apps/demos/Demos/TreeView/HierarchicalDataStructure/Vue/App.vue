@@ -18,13 +18,13 @@
 </template>
 <script setup lang="ts">
 import { ref } from 'vue';
-import DxTreeView from 'devextreme-vue/tree-view';
+import DxTreeView, { type DxTreeViewTypes } from 'devextreme-vue/tree-view';
 import service from './data.ts';
 
 const products: Record<string, any>[] = service.getProducts();
 const currentItem = ref(products[0]);
 
-function selectItem({ itemData }) {
+function selectItem({ itemData }: DxTreeViewTypes.ItemClickEvent) {
   currentItem.value = itemData;
 }
 

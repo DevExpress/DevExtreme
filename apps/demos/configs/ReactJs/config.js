@@ -69,12 +69,6 @@ window.config = {
     'html-react-parser': 'npm:html-react-parser/dist/html-react-parser.min.js',
     /**/
 
-    /** globalize--vue&react */
-    'globalize': 'npm:globalize/dist/globalize',
-    'json': 'npm:systemjs-plugin-json/json.js',
-    'cldr': 'npm:cldrjs/dist/cldr',
-    /**/
-
     /** globalize */
     'globalize': 'npm:globalize/dist/globalize',
     'json': 'npm:systemjs-plugin-json/json.js',
@@ -170,6 +164,9 @@ window.config = {
     'devextreme/events/utils': {
       main: 'index',
     },
+    'devextreme/common/core/events/utils': {
+      main: 'index',
+    },
     'devextreme/localization/messages': {
       format: 'json',
       defaultExtension: '',
@@ -180,14 +177,6 @@ window.config = {
     'devextreme-cldr-data': {
       format: 'json',
       defaultExtension: '',
-    }/**//** globalize--vue&react */,
-    'globalize': {
-      main: '../globalize.js',
-      defaultExtension: 'js',
-    },
-    'cldr': {
-      main: '../cldr.js',
-      defaultExtension: 'js',
     }/**//** globalize */,
     'globalize': {
       main: '../globalize.js',

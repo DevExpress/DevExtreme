@@ -5,6 +5,7 @@ import registerComponent from '@js/core/component_registrator';
 import devices from '@js/core/devices';
 import errors from '@js/core/errors';
 import $ from '@js/core/renderer';
+import { getPathParts } from '@js/core/utils/data';
 import dateUtils from '@js/core/utils/date';
 import { extend } from '@js/core/utils/extend';
 import type { dxSchedulerOptions, ViewType } from '@js/ui/scheduler';
@@ -30,13 +31,13 @@ import {
   getDropDownViewSwitcher,
   getTabViewSwitcher,
 } from './m_view_switcher';
+import { getTodayButtonOptions } from './today';
 
 const COMPONENT_CLASS = 'dx-scheduler-header';
-const DATE_NAVIGATOR_NAME = 'dateNavigator';
-const VIEW_SWITCHER_NAME = 'viewSwitcher';
-const TOOLBAR_ITEMS_MAP = {
-  [DATE_NAVIGATOR_NAME]: { location: 'before', name: 'dateNavigator' },
-  [VIEW_SWITCHER_NAME]: { location: 'after', name: 'viewSwitcher' },
+const ITEM_NAMES = {
+  today: 'today',
+  dateNavigator: 'dateNavigator',
+  viewSwitcher: 'viewSwitcher',
 };
 
 export class SchedulerHeader extends Widget<dxSchedulerOptions> {
@@ -44,7 +45,7 @@ export class SchedulerHeader extends Widget<dxSchedulerOptions> {
 
   eventMap: any;
 
-  _toolbar: any;
+  _toolbar!: Toolbar;
 
   _calendar: any;
 
@@ -83,7 +84,6 @@ export class SchedulerHeader extends Widget<dxSchedulerOptions> {
             this.option('views') as ViewType[],
           );
         }]],
-        ['toolbar', [this.repaint.bind(this)]],
         ['views', [validateViews]],
         ['currentDate', [this._getCalendarOptionUpdater('value')]],
         ['min', [this._getCalendarOptionUpdater('min')]],
@@ -91,6 +91,7 @@ export class SchedulerHeader extends Widget<dxSchedulerOptions> {
         ['tabIndex', [this.repaint.bind(this)]],
         ['focusStateEnabled', [this.repaint.bind(this)]],
         ['useDropDownViewSwitcher', [this.repaint.bind(this)]],
+        ['indicatorTime', []],
       ],
     );
   }
@@ -112,6 +113,32 @@ export class SchedulerHeader extends Widget<dxSchedulerOptions> {
       events.forEach((event) => {
         event(value);
       });
+    }
+  }
+
+  onToolbarOptionChanged(fullName: string, value: unknown): void {
+    const parts = getPathParts(fullName);
+    const optionName = fullName.replace(/^toolbar\./, '');
+
+    this.option(fullName, value);
+    switch (true) {
+      case fullName === 'toolbar':
+        this.repaint();
+        break;
+      case fullName === 'toolbar.items':
+        this._toolbar.option(
+          'items',
+          (value as []).map((item) => this._parseItem(item)),
+        );
+        break;
+      case parts[1] === 'items' && parts.length === 3:
+        // `toolbar.items[i]` case
+        this._toolbar.option(optionName, this._parseItem(value));
+        break;
+      default:
+        // `toolbar.prop` case
+        // `toolbar.items[i].prop` case
+        this._toolbar.option(optionName, value);
     }
   }
 
@@ -158,15 +185,17 @@ export class SchedulerHeader extends Widget<dxSchedulerOptions> {
 
   _parseItem(item) {
     const itemName = typeof item === 'string' ? item : item.name;
-    const itemOptions = { ...TOOLBAR_ITEMS_MAP[itemName], ...item };
+    const itemOptions = typeof item === 'string' ? {} : item;
 
     if (itemName) {
       switch (itemName) {
-        case VIEW_SWITCHER_NAME:
+        case ITEM_NAMES.today:
+          return getTodayButtonOptions(this, itemOptions);
+        case ITEM_NAMES.viewSwitcher:
           return this.option('useDropDownViewSwitcher')
             ? getDropDownViewSwitcher(this, itemOptions)
             : getTabViewSwitcher(this, itemOptions);
-        case DATE_NAVIGATOR_NAME:
+        case ITEM_NAMES.dateNavigator:
           this._renderCalendar();
 
           return getDateNavigator(this, itemOptions);
@@ -175,7 +204,7 @@ export class SchedulerHeader extends Widget<dxSchedulerOptions> {
       }
     }
 
-    return item;
+    return extend(true, {}, item);
   }
 
   _callEvent(event, arg) {

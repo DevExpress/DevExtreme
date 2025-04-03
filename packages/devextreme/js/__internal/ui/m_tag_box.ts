@@ -34,12 +34,12 @@ function xor(a: boolean, b: boolean): boolean {
 }
 
 const TAGBOX_TAG_DATA_KEY = 'dxTagData';
+const TAGBOX_TAG_DISPLAY_VALUE = 'dxTagDisplayValue';
 
 const TAGBOX_CLASS = 'dx-tagbox';
 const TAGBOX_TAG_CONTAINER_CLASS = 'dx-tag-container';
 const TAGBOX_TAG_CLASS = 'dx-tag';
 const TAGBOX_MULTI_TAG_CLASS = 'dx-tagbox-multi-tag';
-const TAGBOX_CUSTOM_TAG_CLASS = 'dx-tag-custom';
 const TAGBOX_TAG_REMOVE_BUTTON_CLASS = 'dx-tag-remove-button';
 const TAGBOX_ONLY_SELECT_CLASS = 'dx-tagbox-only-select';
 const TAGBOX_SINGLE_LINE_CLASS = 'dx-tagbox-single-line';
@@ -71,8 +71,6 @@ class TagBox<
 
   _filteredGroupedItemsLoadPromise?: DeferredObj<unknown>;
 
-  _isInputReady?: DeferredObj<unknown>;
-
   _selectAllValueChangeAction?: (event?: Record<string, unknown>) => void;
 
   _multiTagPreparingAction?: (event?: Record<string, unknown>) => void;
@@ -94,6 +92,8 @@ class TagBox<
   _tagElementsCache?: dxElementWrapper;
 
   _selectedItems?: any[];
+
+  _tagsToRender?: any[];
 
   _supportedKeys(): Record<
   // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
@@ -731,10 +731,7 @@ class TagBox<
     this._renderInputSize();
     this._renderTags()
     // @ts-expect-error ts-error
-      .done(() => {
-        this._popup?.refreshPosition();
-        d.resolve();
-      })
+      .done(d.resolve)
       .fail(d.reject);
     // @ts-expect-error ts-error
     return d.promise();
@@ -1045,7 +1042,8 @@ class TagBox<
       this._selectedItems = this._getItemsFromPlain(this._valuesToUpdate);
 
       if (this._selectedItems.length === this._valuesToUpdate.length) {
-        this._renderTagsImpl(this._selectedItems);
+        this._tagsToRender = this._selectedItems;
+        this._renderTagsImpl();
         isPlainDataUsed = true;
         d.resolve();
       }
@@ -1060,7 +1058,8 @@ class TagBox<
             return;
           }
 
-          this._renderTagsImpl(items);
+          this._tagsToRender = items;
+          this._renderTagsImpl();
           d.resolve();
         })
         .fail(d.reject);
@@ -1069,12 +1068,17 @@ class TagBox<
     return d.promise();
   }
 
-  _renderTagsImpl(items): void {
-    this._renderTagsCore(items);
-    this._renderEmptyState();
+  _renderTagsImpl(): void {
+    this._renderField();
+    if (this._shouldUpdateSelectedItems()) {
+      // @ts-expect-error ts-error
+      this.option('selectedItems', this._selectedItems.slice());
+    }
+    this._cleanTags();
 
-    if (!this._preserveFocusedTag) {
-      this._clearTagFocus();
+    const fieldTemplate = this._getFieldTemplate();
+    if (!fieldTemplate) {
+      this._renderTagsCore();
     }
   }
 
@@ -1134,36 +1138,24 @@ class TagBox<
   }
 
   _integrateInput(): void {
-    // @ts-expect-error ts-error
-    this._isInputReady.resolve();
     super._integrateInput();
 
     const tagsContainer = this.$element().find(`.${TEXTEDITOR_INPUT_CONTAINER_CLASS}`);
 
     this._updateTagsContainer(tagsContainer);
     this._renderTagRemoveAction();
+    this._renderTagsCore();
   }
 
-  _renderTagsCore(items): void {
-    this._isInputReady?.reject();
+  _renderTagsCore(): void {
+    this._renderTagsElements(this._tagsToRender);
+    this._renderEmptyState();
 
-    this._isInputReady = Deferred();
-    this._renderField();
-
-    if (this._shouldUpdateSelectedItems()) {
-      // @ts-expect-error ts-error
-      this.option('selectedItems', this._selectedItems.slice());
+    if (!this._preserveFocusedTag) {
+      this._clearTagFocus();
     }
 
-    this._cleanTags();
-
-    if (this._input().length > 0) {
-      this._isInputReady.resolve();
-    }
-
-    when(this._isInputReady).done(() => {
-      this._renderTagsElements(items);
-    });
+    this._popup?.refreshPosition();
   }
 
   _shouldUpdateSelectedItems(): boolean {
@@ -1269,24 +1261,23 @@ class TagBox<
     const itemModel = this._getItemModel(item, displayValue);
 
     if ($tag) {
-      if (isDefined(displayValue)) {
+      const tagDisplayValue = $tag.data(TAGBOX_TAG_DISPLAY_VALUE);
+
+      if (isDefined(displayValue) && !equalByValue(tagDisplayValue, displayValue)) {
         $tag.empty();
         this._applyTagTemplate(itemModel, $tag);
       }
-
-      $tag.removeClass(TAGBOX_CUSTOM_TAG_CLASS);
       this._updateElementAria($tag.attr('id'));
     } else {
       const tagId = `dx-${new Guid()}`;
 
-      $tag = this._createTag(value, $input, tagId);
+      $tag = this._createTag(value, $input, tagId, displayValue);
 
       this._setTagAria($tag, isDefined(displayValue) ? displayValue : value);
 
       if (isDefined(item)) {
         this._applyTagTemplate(itemModel, $tag);
       } else {
-        $tag.addClass(TAGBOX_CUSTOM_TAG_CLASS);
         this._applyTagTemplate(value, $tag);
       }
 
@@ -1329,11 +1320,12 @@ class TagBox<
     return result;
   }
 
-  _createTag(value, $input, tagId): dxElementWrapper {
+  _createTag(value, $input, tagId, displayValue): dxElementWrapper {
     return $('<div>')
       .attr('id', tagId)
       .addClass(TAGBOX_TAG_CLASS)
       .data(TAGBOX_TAG_DATA_KEY, value)
+      .data(TAGBOX_TAG_DISPLAY_VALUE, displayValue)
       .insertBefore($input);
   }
 
@@ -1681,6 +1673,7 @@ class TagBox<
     super._clean();
     delete this._valuesToUpdate;
     delete this._tagTemplate;
+    delete this._tagsToRender;
   }
 
   _getSelectedItemsDifference(newItems, previousItems) {

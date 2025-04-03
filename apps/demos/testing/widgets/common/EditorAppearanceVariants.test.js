@@ -5,12 +5,11 @@ import { runManualTest } from '../../../utils/visual-tests/matrix-test-helper';
 import { testScreenshot } from '../../../utils/visual-tests/helpers/theme-utils';
 
 fixture('Common.EditorAppearanceVariants')
-  .page('http://localhost:8080/')
   .before(async (ctx) => {
     ctx.initialWindowSize = [900, 800];
   });
 
-runManualTest('Common', 'EditorAppearanceVariants', ['jQuery', 'React', 'Vue', 'Angular'], (test) => {
+runManualTest('Common', 'EditorAppearanceVariants', (test) => {
   test('EditorAppearanceVariants', async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
@@ -37,6 +36,7 @@ runManualTest('Common', 'EditorAppearanceVariants', ['jQuery', 'React', 'Vue', '
         await changeStylingMode(stylingMode);
         await changeLabelMode(labelMode);
         await clickSaveButton();
+
         await testScreenshot(t, takeScreenshot, `common_editor_appearance_variants_${stylingMode}_${labelMode}_desktop.png`);
       });
     });

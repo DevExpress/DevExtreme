@@ -4,12 +4,11 @@ import { runManualTest } from '../../../utils/visual-tests/matrix-test-helper';
 import { testScreenshot } from '../../../utils/visual-tests/helpers/theme-utils';
 
 fixture('DropDownBox.MultipleSelection')
-  .page('http://localhost:8080/')
   .before(async (ctx) => {
     ctx.initialWindowSize = [900, 600];
   });
 
-runManualTest('DropDownBox', 'MultipleSelection', ['jQuery', 'React', 'Vue', 'Angular'], (test) => {
+runManualTest('DropDownBox', 'MultipleSelection', (test) => {
   test('MultipleSelection', async (t) => {
     const DROP_DOWN_BOX_CLASS = 'dx-dropdownbox';
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);

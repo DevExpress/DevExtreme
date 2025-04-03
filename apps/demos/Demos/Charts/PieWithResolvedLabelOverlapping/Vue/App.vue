@@ -43,12 +43,13 @@ import DxPieChart, {
   DxExport,
   DxLegend,
   DxAnimation,
+  type DxPieChartTypes,
 } from 'devextreme-vue/pie-chart';
 import DxSelectBox from 'devextreme-vue/select-box';
 import { dataSource } from './data.ts';
 
-const resolveModes = ['shift', 'hide', 'none'];
-const resolveMode = ref('shift');
+const resolveModes: DxPieChartTypes.ShiftLabelOverlap[] = ['shift', 'hide', 'none'];
+const resolveMode = ref(resolveModes[0]);
 const formatText = ({ argumentText, percentText }) => `${argumentText} (${percentText})`;
 </script>
 

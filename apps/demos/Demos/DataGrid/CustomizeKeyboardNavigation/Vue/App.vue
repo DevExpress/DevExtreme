@@ -94,12 +94,12 @@ import DxSelectBox from 'devextreme-vue/select-box';
 import DxCheckBox from 'devextreme-vue/check-box';
 import { employees, states } from './data.ts';
 
-const enterKeyActions = ['startEdit', 'moveFocus'];
-const enterKeyDirections = ['none', 'column', 'row'];
+const enterKeyActions: DxDataGridTypes.EnterKeyAction[] = ['startEdit', 'moveFocus'];
+const enterKeyDirections: DxDataGridTypes.EnterKeyDirection[] = ['none', 'column', 'row'];
 
 const editOnKeyPress = ref(true);
-const enterKeyDirection = ref('column');
-const enterKeyAction = ref('moveFocus');
+const enterKeyDirection = ref(enterKeyDirections[1]);
+const enterKeyAction = ref(enterKeyActions[1]);
 
 const onFocusedCellChanging = (e: DxDataGridTypes.FocusedCellChangingEvent) => {
   e.isHighlighted = true;
