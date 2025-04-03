@@ -62,7 +62,7 @@ export class AppointmentDataAccessor extends DataAccessor<Appointment, KnownFiel
       } else if (this.forceIsoDateParsing && !serializationFormatCache) {
         const oldValue = commonGetter(object);
 
-        serializationFormatCache = dateSerialization.getDateSerializationFormat(oldValue);
+        serializationFormatCache = dateSerialization.getDateSerializationFormat(oldValue) as string;
       }
 
       const newValue = dateSerialization.serializeDate(

@@ -1,5 +1,3 @@
-import { describe, expect, it } from '@jest/globals';
-
 import { AppointmentDataAccessor } from './appointment_data_accessor';
 
 describe('AppointmentDataAccessor', () => {
