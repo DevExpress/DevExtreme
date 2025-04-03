@@ -1,6 +1,5 @@
 import { BaseInfernoComponent } from '@ts/core/r1/runtime/inferno/index';
 import type { JSXTemplate } from '@ts/core/r1/types';
-import { getTemplate } from '@ts/core/r1/utils/index';
 
 import type { DateHeaderData, Group, GroupOrientation } from '../../types';
 import { isHorizontalGroupingApplied, themeUtils } from '../../utils/index';
@@ -46,7 +45,6 @@ export class DateHeader extends BaseInfernoComponent<DateHeaderProps> {
     } = this.props;
     const isHorizontalGrouping = isHorizontalGroupingApplied(groups, groupOrientation)
       && !groupByDate;
-    const DateCellTemplateComponent = getTemplate(dateCellTemplate);
 
     return (
       <>
@@ -89,7 +87,7 @@ export class DateHeader extends BaseInfernoComponent<DateHeaderProps> {
                     text={text}
                     isFirstGroupCell={isFirstGroupCell}
                     isLastGroupCell={isLastGroupCell}
-                    dateCellTemplate={DateCellTemplateComponent}
+                    dateCellTemplate={dateCellTemplate}
                     colSpan={colSpan}
                     splitText={isMaterialBased}
                   />

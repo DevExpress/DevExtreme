@@ -1,6 +1,6 @@
 import { BaseInfernoComponent } from '@ts/core/r1/runtime/inferno/index';
 import type { JSXTemplate } from '@ts/core/r1/types';
-import { getTemplate } from '@ts/core/r1/utils/index';
+import { PublicTemplate } from '@ts/scheduler/r1/components/templates/index';
 
 import { combineClasses } from '../../../../core/r1/utils/render_utils';
 import { renderUtils } from '../../utils/index';
@@ -104,7 +104,6 @@ export class DateTableCellBase extends BaseInfernoComponent<DateTableCellBasePro
     });
     const ariaLabel = isSelected ? ADD_APPOINTMENT_LABEL : undefined;
     const dataCellTemplateProps = this.getDataCellTemplateProps();
-    const DataCellTemplateComponent = getTemplate(dataCellTemplate);
 
     return (
       <CellBase
@@ -119,13 +118,14 @@ export class DateTableCellBase extends BaseInfernoComponent<DateTableCellBasePro
       >
         <>
           {
-            !DataCellTemplateComponent && children
-          }
-          {
-            !!DataCellTemplateComponent && DataCellTemplateComponent({
-              index: dataCellTemplateProps.index,
-              data: dataCellTemplateProps.data,
-            })
+            dataCellTemplate
+              ? <PublicTemplate
+                template={dataCellTemplate}
+                templateProps={{
+                  index: dataCellTemplateProps.index,
+                  data: dataCellTemplateProps.data,
+                }} />
+              : children
           }
         </>
       </CellBase>

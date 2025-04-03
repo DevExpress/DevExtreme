@@ -1,7 +1,6 @@
 import type { InfernoEffect } from '@ts/core/r1/runtime/inferno/index';
 import { createReRenderEffect, InfernoWrapperComponent } from '@ts/core/r1/runtime/inferno/index';
 import type { JSXTemplate, RefObject } from '@ts/core/r1/types';
-import { getTemplate } from '@ts/core/r1/utils/index';
 import { Fragment } from 'inferno';
 
 import type { GroupOrientation, TimePanelData } from '../../types';
@@ -46,7 +45,6 @@ export class TimePanelTable extends InfernoWrapperComponent<TimePanelTableProps>
       topVirtualRowHeight,
       bottomVirtualRowHeight,
     } = timePanelData;
-    const TimeCellTemplateComponent = getTemplate(timeCellTemplate);
 
     return (
       <Table
@@ -110,7 +108,7 @@ export class TimePanelTable extends InfernoWrapperComponent<TimePanelTableProps>
                       isFirstGroupCell={isFirstGroupCell}
                       isLastGroupCell={isLastGroupCell}
                       index={cellIndex}
-                      timeCellTemplate={TimeCellTemplateComponent}
+                      timeCellTemplate={timeCellTemplate}
                       highlighted={highlighted}
                     />
                   </Row>
