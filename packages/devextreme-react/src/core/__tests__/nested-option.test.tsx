@@ -654,8 +654,8 @@ describe('conditional rendering', () => {
       <ComponentWithConditionalOption enableOption={false} />,
     );
 
-    expect(Widget.resetOption.mock.calls.length).toBeGreaterThan(0);
-    expect(Widget.resetOption.mock.calls.some(call => call[0] === 'option')).toBeTruthy();
+    expect(Widget.resetOption.mock.calls.length).toBe(1);
+    expect(Widget.resetOption.mock.calls[0]).toEqual(['option']);
   });
 });
 
@@ -680,7 +680,7 @@ describe('resetOption behavior', () => {
     expect(Widget.resetOption.mock.calls.some(call => call[0] === 'option')).toBeTruthy();
   });
 
-  it('calls resetOption and sets empty array for collection option', () => {
+  it('sets empty array for collection option without calling resetOption', () => {
     const { rerender } = render(
       <TestComponent>
         <CollectionNestedComponent c={123} d="abc" />
@@ -691,8 +691,8 @@ describe('resetOption behavior', () => {
       <TestComponent />
     );
 
-    expect(Widget.resetOption.mock.calls.length).toBeGreaterThan(0);
-    expect(Widget.resetOption.mock.calls.some(call => call[0] === 'itemOptions')).toBeTruthy();
+    expect(Widget.resetOption.mock.calls.some(call => call[0] === 'itemOptions')).toBeFalsy();
+    
     expect(Widget.option.mock.calls.some(call => 
       call[0] === 'itemOptions' && Array.isArray(call[1]) && call[1].length === 0
     )).toBeTruthy();
@@ -713,8 +713,8 @@ describe('resetOption behavior', () => {
       </TestComponent>,
     );
 
-    expect(Widget.resetOption.mock.calls.length).toBeGreaterThan(0);
-    expect(Widget.resetOption.mock.calls.some(call => call[0] === 'option.subItemsOptions')).toBeTruthy();
+    expect(Widget.resetOption.mock.calls.some(call => call[0] === 'option.subItemsOptions')).toBeFalsy();
+    
     expect(Widget.option.mock.calls.some(call => 
       call[0] === 'option.subItemsOptions' && Array.isArray(call[1]) && call[1].length === 0
     )).toBeTruthy();
