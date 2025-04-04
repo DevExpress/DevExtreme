@@ -4,7 +4,15 @@
  * @public
  */
 export interface Prompt {
+  /**
+   * @docid
+   * @public
+   */
   system?: string;
+  /**
+   * @docid
+   * @public
+   */
   user?: string;
 }
 
@@ -14,7 +22,15 @@ export interface Prompt {
  * @public
  */
 export interface RequestParams {
+  /**
+   * @docid
+   * @public
+   */
   prompt: Prompt;
+  /**
+   * @docid
+   * @public
+   */
   onChunk: (chunk: string) => void;
 }
 
@@ -24,7 +40,15 @@ export interface RequestParams {
  * @public
  */
 export interface ResponseParams {
+  /**
+   * @docid
+   * @public
+   */
   promise: Promise<string>;
+  /**
+   * @docid
+   * @public
+   */
   abort: () => void;
 }
 
@@ -34,7 +58,15 @@ export interface ResponseParams {
  * @public
  */
 export interface TranslateCommandParams {
+  /**
+   * @docid
+   * @public
+   */
   text: string;
+  /**
+   * @docid
+   * @public
+   */
   lang: string;
 }
 
@@ -58,8 +90,20 @@ export type BaseCommandResult = TranslateCommandResult;
  * @public
  */
 export interface RequestCallbacks {
+  /**
+   * @docid
+   * @public
+   */
   onChunk?: (chunk: string) => void;
+  /**
+   * @docid
+   * @public
+   */
   onComplete?: (finalResponse: BaseCommandResult) => void;
+  /**
+   * @docid
+   * @public
+   */
   onError?: (error: Error) => void;
 }
 
@@ -69,6 +113,10 @@ export interface RequestCallbacks {
  * @public
  */
 export interface AIProvider {
+  /**
+   * @docid
+   * @public
+   */
   sendRequest: (params: RequestParams) => ResponseParams;
 }
 
@@ -79,6 +127,7 @@ export interface AIProvider {
  */
 export class AI {
   /**
+   * @docid
    * @param provider
    */
   constructor(provider: AIProvider);
