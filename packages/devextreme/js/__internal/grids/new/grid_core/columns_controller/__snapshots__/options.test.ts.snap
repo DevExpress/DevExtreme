@@ -5,6 +5,7 @@ exports[`Options columns when given as object should be normalized 1`] = `
   {
     "alignment": "left",
     "allowReordering": true,
+    "allowSorting": true,
     "calculateCellValue": [Function],
     "calculateDisplayValue": [Function],
     "caption": "A",
@@ -20,6 +21,7 @@ exports[`Options columns when given as object should be normalized 1`] = `
   {
     "alignment": "left",
     "allowReordering": true,
+    "allowSorting": true,
     "calculateCellValue": [Function],
     "calculateDisplayValue": [Function],
     "caption": "B",
@@ -35,6 +37,7 @@ exports[`Options columns when given as object should be normalized 1`] = `
   {
     "alignment": "left",
     "allowReordering": true,
+    "allowSorting": true,
     "calculateCellValue": [Function],
     "calculateDisplayValue": [Function],
     "caption": "C",
@@ -55,6 +58,7 @@ exports[`Options columns when given as string should be normalized 1`] = `
   {
     "alignment": "left",
     "allowReordering": true,
+    "allowSorting": true,
     "calculateCellValue": [Function],
     "calculateDisplayValue": [Function],
     "caption": "A",
@@ -70,6 +74,7 @@ exports[`Options columns when given as string should be normalized 1`] = `
   {
     "alignment": "left",
     "allowReordering": true,
+    "allowSorting": true,
     "calculateCellValue": [Function],
     "calculateDisplayValue": [Function],
     "caption": "B",
@@ -85,6 +90,7 @@ exports[`Options columns when given as string should be normalized 1`] = `
   {
     "alignment": "left",
     "allowReordering": true,
+    "allowSorting": true,
     "calculateCellValue": [Function],
     "calculateDisplayValue": [Function],
     "caption": "C",
