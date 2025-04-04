@@ -26,7 +26,7 @@ describe('Search', () => {
       jest.clearAllMocks();
     });
 
-    it('should have highlightTextOptions$ from widget options', () => {
+    it('should have highlightTextOptions observable from widget options', () => {
       const { controller } = setup({
         searchPanel: {
           highlightSearchText: true,
