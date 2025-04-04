@@ -8,12 +8,13 @@
 // adduse
 
 @include stepper(
-  $stepper-margin,
+  $stepper-padding,
 );
 @include connector(
   $stepper-connector-bg,
   $stepper-connector-value-bg,
-  $stepper-connector-margin-start,
+  $stepper-connector-size,
+  $stepper-connector-padding,
   $stepper-connector-thickness,
 );
 @include step(
