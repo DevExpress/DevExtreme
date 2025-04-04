@@ -6,7 +6,7 @@ import { FunctionTemplate } from '@js/core/templates/function_template';
 import Button from '@js/ui/button';
 
 import { createAppointmentAdapter } from './m_appointment_adapter';
-import { LIST_ITEM_CLASS, LIST_ITEM_DATA_KEY } from './m_constants';
+import { APPOINTMENT_SETTINGS_KEY, LIST_ITEM_CLASS, LIST_ITEM_DATA_KEY } from './m_constants';
 import { AppointmentTooltipInfo } from './m_data_structures';
 
 const APPOINTMENT_COLLECTOR_CLASS = 'dx-scheduler-appointment-collector';
@@ -148,7 +148,7 @@ export class CompactAppointmentsHelper {
       .toggleClass(COMPACT_APPOINTMENT_COLLECTOR_CLASS, isCompact)
       .appendTo($container);
 
-    result.data('dxAppointmentSettings', { sortedIndex });
+    result.data(APPOINTMENT_SETTINGS_KEY, { sortedIndex });
 
     this._setPosition(result, coordinates);
 

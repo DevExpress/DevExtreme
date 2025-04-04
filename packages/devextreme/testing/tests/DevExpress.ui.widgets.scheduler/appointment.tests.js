@@ -14,10 +14,6 @@ testStart(function() {
 });
 
 const createInstance = () => {
-    const dataAccessorsMock = {
-        getter: {},
-        setter: {}
-    };
     const observer = {
         fire: (command) => {
             switch(command) {
@@ -36,7 +32,11 @@ const createInstance = () => {
     return $('#scheduler-appointment').dxSchedulerAppointment({
         observer,
         getAppointmentColor: () => new Deferred(),
-        dataAccessors: dataAccessorsMock
+        dataAccessors: {
+            get(prop, obj) {
+                return obj[prop];
+            },
+        },
     }).dxSchedulerAppointment('instance');
 };
 

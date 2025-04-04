@@ -2,8 +2,12 @@ import { extend } from '@js/core/utils/extend';
 import { deepExtendArraySafe } from '@js/core/utils/object';
 import errors from '@js/ui/widget/ui.errors';
 
-import { ExpressionUtils } from './m_expression_utils';
 import { getRecurrenceProcessor } from './m_recurrence';
+import type { PathTimeZoneConversion, TimeZoneCalculator } from './r1/timezone_calculator';
+import type { AppointmentDataAccessor } from './utils';
+
+// TODO: express the type from PathTimeZoneConversion
+type ConversionNames = 'toAppointment' | 'fromAppointment' | 'toGrid' | 'fromGrid';
 
 // TODO Vinogradov refactoring: add types to this module.
 const PROPERTY_NAMES = {
@@ -21,18 +25,19 @@ const PROPERTY_NAMES = {
 class AppointmentAdapter {
   constructor(
     public rawAppointment: any,
-    public dataAccessors: any,
-    public timeZoneCalculator: any,
-    public options: any,
+    public dataAccessors: AppointmentDataAccessor,
+    public timeZoneCalculator: TimeZoneCalculator,
   ) {
   }
 
-  get duration() {
-    return this.endDate ? this.endDate - this.startDate : 0;
+  get duration(): number {
+    return this.endDate && this.startDate
+      ? this.endDate.getTime() - this.startDate.getTime()
+      : 0;
   }
 
   get startDate() {
-    const result = this.getField(PROPERTY_NAMES.startDate);
+    const result = this.getField<any>(PROPERTY_NAMES.startDate);
     return result === undefined ? result : new Date(result);
   }
 
@@ -41,7 +46,7 @@ class AppointmentAdapter {
   }
 
   get endDate() {
-    const result = this.getField(PROPERTY_NAMES.endDate);
+    const result = this.getField<any>(PROPERTY_NAMES.endDate);
     return result === undefined ? result : new Date(result);
   }
 
@@ -49,27 +54,27 @@ class AppointmentAdapter {
     this.setField(PROPERTY_NAMES.endDate, value);
   }
 
-  get allDay() {
-    return this.getField(PROPERTY_NAMES.allDay) as boolean;
+  get allDay(): boolean {
+    return Boolean(this.getField<boolean>(PROPERTY_NAMES.allDay));
   }
 
-  set allDay(value) {
+  set allDay(value: boolean) {
     this.setField(PROPERTY_NAMES.allDay, value);
   }
 
   get text() {
-    return this.getField(PROPERTY_NAMES.text);
+    return this.getField<string>(PROPERTY_NAMES.text);
   }
 
-  set text(value) {
+  set text(value: string) {
     this.setField(PROPERTY_NAMES.text, value);
   }
 
   get description() {
-    return this.getField(PROPERTY_NAMES.description);
+    return this.getField<string>(PROPERTY_NAMES.description);
   }
 
-  set description(value) {
+  set description(value: string) {
     this.setField(PROPERTY_NAMES.description, value);
   }
 
@@ -82,7 +87,7 @@ class AppointmentAdapter {
   }
 
   get recurrenceRule() {
-    return this.getField(PROPERTY_NAMES.recurrenceRule);
+    return this.getField<string | undefined>(PROPERTY_NAMES.recurrenceRule);
   }
 
   set recurrenceRule(value) {
@@ -90,7 +95,7 @@ class AppointmentAdapter {
   }
 
   get recurrenceException() {
-    return this.getField(PROPERTY_NAMES.recurrenceException);
+    return this.getField<string | undefined>(PROPERTY_NAMES.recurrenceException);
   }
 
   set recurrenceException(value) {
@@ -105,24 +110,15 @@ class AppointmentAdapter {
     return getRecurrenceProcessor().isValidRecurrenceRule(this.recurrenceRule);
   }
 
-  getField(property) {
-    return ExpressionUtils.getField(
-      this.dataAccessors,
-      property,
-      this.rawAppointment,
-    );
+  private getField<T>(property: string): T {
+    return this.dataAccessors.get(property, this.rawAppointment) as T;
   }
 
-  setField(property, value) {
-    return ExpressionUtils.setField(
-      this.dataAccessors,
-      property,
-      this.rawAppointment,
-      value,
-    );
+  private setField<T>(property: string, value: T): T {
+    return this.dataAccessors.set(property, this.rawAppointment, value) as T;
   }
 
-  calculateStartDate(pathTimeZoneConversion) {
+  calculateStartDate(pathTimeZoneConversion: ConversionNames) {
     if (!this.startDate || isNaN(this.startDate.getTime())) {
       throw errors.Error('E1032', this.text);
     }
@@ -130,27 +126,22 @@ class AppointmentAdapter {
     return this.calculateDate(this.startDate, this.startDateTimeZone, pathTimeZoneConversion);
   }
 
-  calculateEndDate(pathTimeZoneConversion) {
+  calculateEndDate(pathTimeZoneConversion: ConversionNames) {
     return this.calculateDate(this.endDate, this.endDateTimeZone, pathTimeZoneConversion);
   }
 
-  calculateDate(date, appointmentTimeZone, pathTimeZoneConversion) {
-    if (!date) { // TODO: E1032 should be thrown only for startDate above
-      return undefined;
-    }
-
+  calculateDate(date, appointmentTimeZone, pathTimeZoneConversion: ConversionNames) {
     return this.timeZoneCalculator.createDate(date, {
       appointmentTimeZone,
-      path: pathTimeZoneConversion,
-    });
+      path: pathTimeZoneConversion as PathTimeZoneConversion,
+    }) as Date;
   }
 
-  clone(options?: { pathTimeZone: string }) {
+  clone(options?: { pathTimeZone: ConversionNames }) {
     const result = new AppointmentAdapter(
       deepExtendArraySafe({}, this.rawAppointment, false, false, false, true),
       this.dataAccessors,
       this.timeZoneCalculator,
-      options,
     );
 
     if (options?.pathTimeZone) {
@@ -160,9 +151,16 @@ class AppointmentAdapter {
     return result;
   }
 
-  calculateDates(pathTimeZoneConversion) {
-    this.startDate = this.calculateStartDate(pathTimeZoneConversion);
-    this.endDate = this.calculateEndDate(pathTimeZoneConversion);
+  calculateDates(pathTimeZoneConversion: ConversionNames) {
+    const startDate = this.calculateStartDate(pathTimeZoneConversion);
+    const endDate = this.calculateEndDate(pathTimeZoneConversion);
+
+    if (startDate) {
+      this.startDate = startDate;
+    }
+    if (endDate) {
+      this.endDate = endDate;
+    }
 
     return this;
   }
@@ -183,4 +181,5 @@ class AppointmentAdapter {
 
 export default AppointmentAdapter;
 
-export const createAppointmentAdapter = (rawAppointment, dataAccessors, timeZoneCalculator?: any, options?: any) => new AppointmentAdapter(rawAppointment, dataAccessors, timeZoneCalculator, options);
+// TODO: refactor timezone to avoid optional calculator
+export const createAppointmentAdapter = (rawAppointment, dataAccessors: AppointmentDataAccessor, timeZoneCalculator?: TimeZoneCalculator) => new AppointmentAdapter(rawAppointment, dataAccessors, timeZoneCalculator as TimeZoneCalculator);

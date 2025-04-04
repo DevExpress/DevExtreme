@@ -1,28 +1,10 @@
 import { describe, expect, it } from '@jest/globals';
-import { compileGetter, compileSetter } from '@js/core/utils/data';
+import { mockAppointmentDataAccessor } from '@ts/scheduler/__mock__/appointment_data_accessor.mock';
 
 import { createTimeZoneCalculator } from '../../timezone_calculator';
 import { excludeFromRecurrence } from '../index';
 
 describe('excludeFromRecurrence', () => {
-  const dataAccessors = {
-    getter: {
-      allDay: compileGetter('allDay') as any,
-      startDate: compileGetter('startDate') as any,
-      recurrenceException: compileGetter('recurrenceException') as any,
-    },
-    setter: {
-      allDay: compileSetter('allDay') as any,
-      startDate: compileSetter('startDate') as any,
-      recurrenceException: compileSetter('recurrenceException') as any,
-    },
-    expr: {
-      allDay: 'allDay',
-      startDate: 'startDate',
-      recurrenceException: 'recurrenceException',
-    },
-  };
-
   [
     {
       allDay: true,
@@ -56,7 +38,7 @@ describe('excludeFromRecurrence', () => {
           recurrenceException,
         },
         exceptionDate,
-        dataAccessors as any,
+        mockAppointmentDataAccessor,
         createTimeZoneCalculator(''),
       );
 
@@ -74,7 +56,7 @@ describe('excludeFromRecurrence', () => {
         endDate: new Date(2022, 3, 18, 13, 26),
       },
       exceptionDate,
-      dataAccessors as any,
+      mockAppointmentDataAccessor,
       createTimeZoneCalculator(''),
     );
 

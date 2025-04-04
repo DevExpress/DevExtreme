@@ -1,13 +1,12 @@
 import $ from 'jquery';
 import translator from 'common/core/animation/translator';
 import fx from 'common/core/animation/fx';
+import { mockDataAccessor } from '../../helpers/scheduler/mockDataAccessor.js';
 import { createWrapper } from '../../helpers/scheduler/helpers.js';
 import themes from 'ui/themes';
 import { CompactAppointmentsHelper } from '__internal/scheduler/m_compact_appointments_helper';
 import Widget from 'ui/widget/ui.widget';
 import Color from 'color';
-import { DataSource } from 'common/data/data_source/data_source';
-import { CustomStore } from 'common/data/custom_store';
 import AppointmentAdapter from '__internal/scheduler/m_appointment_adapter';
 
 import '__internal/scheduler/m_scheduler';
@@ -89,12 +88,7 @@ module('Integration: Appointments Collector Base Tests', baseConfig, () => {
             _getAppointmentTemplate(template) {
                 return this._getTemplateByOption(template);
             },
-            _dataAccessors: {
-                getter: {
-                    startDate: (obj) => obj.startDate,
-                    endDate: (obj) => obj.endDate,
-                },
-            },
+            _dataAccessors: mockDataAccessor,
             createAppointmentAdapter(date) {
                 const schedulerMock = {
                     fire: (methodName, fieldName, appointment) => appointment[fieldName]
