@@ -82,7 +82,7 @@ class SchedulerAgenda extends WorkSpace {
         this._recalculateAgenda(this._rows);
         break;
       case 'groups':
-        if (!value || !value.length) {
+        if (!value?.length) {
           if (this._$groupTable) {
             this._$groupTable.remove();
             this._$groupTable = null;
@@ -135,7 +135,9 @@ class SchedulerAgenda extends WorkSpace {
 
   _renderAllDayPanel() { return noop(); }
 
-  _toggleAllDayVisibility() { return noop(); }
+  _updateAllDayVisibility() { return noop(); }
+
+  _updateAllDayHeight() { return noop(); }
 
   _initWorkSpaceUnits() {
     this._initGroupTable();
@@ -147,7 +149,7 @@ class SchedulerAgenda extends WorkSpace {
 
   _initGroupTable() {
     const groups = this.option('groups');
-    if (groups && groups.length) {
+    if (groups?.length) {
       this._$groupTable = $('<table>').attr('aria-hidden', true).addClass(GROUP_TABLE_CLASS);
     }
   }
@@ -269,7 +271,7 @@ class SchedulerAgenda extends WorkSpace {
         const container = domAdapter.createElement('div');
         container.className = getGroupHeaderContentClass;
 
-        if (cellTemplate && cellTemplate.render) {
+        if (cellTemplate?.render) {
           cellTemplates.push(cellTemplate.render.bind(cellTemplate, {
             model: {
               data: data.data,
@@ -391,12 +393,12 @@ class SchedulerAgenda extends WorkSpace {
         setHeight($td, this._getRowHeight(rowSize));
 
         if (options.getStartDate) {
-          date = options.getStartDate && options.getStartDate(rowIndex);
+          date = options.getStartDate?.(rowIndex);
           cellDateNumber = dateLocalization.format(date, 'd');
           cellDayName = dateLocalization.format(date, formatWeekday);
         }
 
-        if (cellTemplateOpt && cellTemplateOpt.render) {
+        if (cellTemplateOpt?.render) {
           const templateOptions = this._prepareCellTemplateOptions(`${cellDateNumber} ${cellDayName}`, date, i, $td);
 
           cellTemplates.push(cellTemplateOpt.render.bind(cellTemplateOpt, templateOptions));

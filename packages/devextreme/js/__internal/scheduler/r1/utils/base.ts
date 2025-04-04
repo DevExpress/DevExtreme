@@ -80,7 +80,7 @@ export const getAppointmentRenderingStrategyName = (viewType: ViewType): string 
   return renderingStrategy;
 };
 
-export const getAppointmentTakesAllDay = (
+export const isAppointmentTakesAllDay = (
   appointmentAdapter: {
     allDay: boolean;
     startDate: Date;
@@ -325,7 +325,7 @@ export const calculateIsGroupedAllDayPanel = (
   groups: Group[],
   groupOrientation: GroupOrientation,
   isAllDayPanelVisible: boolean,
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+
 ): boolean => isVerticalGroupingApplied(groups, groupOrientation) && isAllDayPanelVisible;
 
 export const calculateViewStartDate = (
