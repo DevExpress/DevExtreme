@@ -1,4 +1,4 @@
-import type { AIProvider, RequestParams, ResponseParams } from '@js/ai';
+import type { AIProvider, RequestParams, ResponseParams } from '@js/ai_integration';
 
 export class Provider implements AIProvider {
   sendRequest(params: RequestParams): ResponseParams {

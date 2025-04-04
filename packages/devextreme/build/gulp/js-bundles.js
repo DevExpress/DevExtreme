@@ -20,7 +20,7 @@ const namedDebug = lazyPipe()
     .pipe(named, (file) => path.basename(file.path, path.extname(file.path)) + '.debug');
 
 const BUNDLES = [
-    '/bundles/dx.ai.js',
+    '/bundles/dx.ai-integration.js',
     '/bundles/dx.all.js',
     '/bundles/dx.web.js',
     '/bundles/dx.viz.js'

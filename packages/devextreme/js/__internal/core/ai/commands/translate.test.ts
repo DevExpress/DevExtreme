@@ -5,7 +5,7 @@ import {
   it,
   jest,
 } from '@jest/globals';
-import type { AIProvider, RequestCallbacks, TranslateCommandParams } from '@js/ai';
+import type { AIProvider, RequestCallbacks, TranslateCommandParams } from '@js/ai_integration';
 import { TranslateCommand } from '@ts/core/ai/commands/translate';
 import type { PromptData } from '@ts/core/ai/core/prompt_manager';
 import { PromptManager } from '@ts/core/ai/core/prompt_manager';

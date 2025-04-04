@@ -5,7 +5,7 @@ import {
   it,
   jest,
 } from '@jest/globals';
-import type { AIProvider, Prompt } from '@js/ai';
+import type { AIProvider, Prompt } from '@js/ai_integration';
 import { ERROR_MESSAGES, RequestManager } from '@ts/core/ai/core/request_manager';
 import { Provider } from '@ts/core/ai/test_utils/provider_mock';
 
