@@ -2,27 +2,23 @@ import { describe, expect, it } from '@jest/globals';
 import { compileGetter, compileSetter } from '@js/core/utils/data';
 
 import { createTimeZoneCalculator } from '../../timezone_calculator';
-import type { AppointmentDataItem, DataAccessorType } from '../../types';
+import type { AppointmentDataItem } from '../../types';
 import { getPreparedDataItems, resolveDataItems } from '../data';
 
-const defaultDataAccessors: DataAccessorType = {
-  getter: {
-    startDate: compileGetter('startDate') as any,
-    endDate: compileGetter('endDate') as any,
-    recurrenceRule: compileGetter('recurrenceRule') as any,
-    visible: compileGetter('visible') as any,
-  },
-  setter: {
-    startDate: compileSetter('startDate') as any,
-    endDate: compileSetter('endDate') as any,
-  },
+const defaultDataAccessors = {
   expr: {
     startDateExpr: 'startDate',
     endDateExpr: 'endDate',
     recurrenceRuleExpr: 'recurrenceRule',
     visibleExpr: 'visible',
   } as any,
-};
+  get(name, obj) {
+    return (compileGetter(name) as any)(obj);
+  },
+  set(name, obj, value) {
+    return (compileSetter(name) as any)(obj, value);
+  },
+} as any;
 
 describe('Data API', () => {
   describe('getPreparedDataItems', () => {

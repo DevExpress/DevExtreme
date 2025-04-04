@@ -31,13 +31,13 @@ import {
   getDropDownViewSwitcher,
   getTabViewSwitcher,
 } from './m_view_switcher';
+import { getTodayButtonOptions } from './today';
 
 const COMPONENT_CLASS = 'dx-scheduler-header';
-const DATE_NAVIGATOR_NAME = 'dateNavigator';
-const VIEW_SWITCHER_NAME = 'viewSwitcher';
-const TOOLBAR_ITEMS_MAP = {
-  [DATE_NAVIGATOR_NAME]: { location: 'before', name: 'dateNavigator' },
-  [VIEW_SWITCHER_NAME]: { location: 'after', name: 'viewSwitcher' },
+const ITEM_NAMES = {
+  today: 'today',
+  dateNavigator: 'dateNavigator',
+  viewSwitcher: 'viewSwitcher',
 };
 
 export class SchedulerHeader extends Widget<dxSchedulerOptions> {
@@ -91,6 +91,7 @@ export class SchedulerHeader extends Widget<dxSchedulerOptions> {
         ['tabIndex', [this.repaint.bind(this)]],
         ['focusStateEnabled', [this.repaint.bind(this)]],
         ['useDropDownViewSwitcher', [this.repaint.bind(this)]],
+        ['indicatorTime', []],
       ],
     );
   }
@@ -184,15 +185,17 @@ export class SchedulerHeader extends Widget<dxSchedulerOptions> {
 
   _parseItem(item) {
     const itemName = typeof item === 'string' ? item : item.name;
-    const itemOptions = { ...TOOLBAR_ITEMS_MAP[itemName], ...item };
+    const itemOptions = typeof item === 'string' ? {} : item;
 
     if (itemName) {
       switch (itemName) {
-        case VIEW_SWITCHER_NAME:
+        case ITEM_NAMES.today:
+          return getTodayButtonOptions(this, itemOptions);
+        case ITEM_NAMES.viewSwitcher:
           return this.option('useDropDownViewSwitcher')
             ? getDropDownViewSwitcher(this, itemOptions)
             : getTabViewSwitcher(this, itemOptions);
-        case DATE_NAVIGATOR_NAME:
+        case ITEM_NAMES.dateNavigator:
           this._renderCalendar();
 
           return getDateNavigator(this, itemOptions);

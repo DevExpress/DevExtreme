@@ -2,6 +2,7 @@
   $connector-background-color,
   $background-color,
   $margin-start,
+  $thickness,
 ) {
   .dx-stepper-connector {
     background-color: $connector-background-color;
@@ -13,9 +14,11 @@
 
   .dx-stepper-connector-horizontal {
     margin-block-start: $margin-start;
+    height: $thickness;
   }
 
   .dx-stepper-connector-vertical {
     margin-inline-start: $margin-start;
+    width: $thickness;
   }
 }

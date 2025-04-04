@@ -46,6 +46,7 @@ import {
   isTimelineView,
   viewsUtils,
 } from '@ts/scheduler/r1/utils/index';
+import type { IFieldExpr } from '@ts/scheduler/utils/index';
 import { macroTaskArray } from '@ts/scheduler/utils/index';
 
 import { createA11yStatusContainer } from './a11y_status/a11y_status_render';
@@ -60,7 +61,6 @@ import AppointmentLayoutManager from './m_appointments_layout_manager';
 import { CompactAppointmentsHelper } from './m_compact_appointments_helper';
 import { VIEWS } from './m_constants';
 import { AppointmentTooltipInfo } from './m_data_structures';
-import { ExpressionUtils } from './m_expression_utils';
 import { hide as hideLoading, show as showLoading } from './m_loading';
 import { getRecurrenceProcessor } from './m_recurrence';
 import subscribes from './m_subscribes';
@@ -78,6 +78,7 @@ import {
 } from './resources/m_utils';
 import { DesktopTooltipStrategy } from './tooltip_strategies/m_desktop_tooltip_strategy';
 import { MobileTooltipStrategy } from './tooltip_strategies/m_mobile_tooltip_strategy';
+import { AppointmentDataAccessor } from './utils/data_accessor/appointment_data_accessor';
 import SchedulerAgenda from './workspaces/m_agenda';
 import SchedulerTimelineDay from './workspaces/m_timeline_day';
 import SchedulerTimelineMonth from './workspaces/m_timeline_month';
@@ -182,7 +183,7 @@ class Scheduler extends Widget<any> {
 
   _dataSource: any;
 
-  _dataAccessors: any;
+  _dataAccessors!: AppointmentDataAccessor;
 
   agendaResourceProcessor: any;
 
@@ -749,11 +750,15 @@ class Scheduler extends Widget<any> {
         this.repaint();
         break;
       case 'showCurrentTimeIndicator':
-      case 'indicatorTime':
       case 'indicatorUpdateInterval':
       case 'shadeUntilCurrentTime':
       case 'groupByDate':
         this._updateOption('workSpace', name, value);
+        this.repaint();
+        break;
+      case 'indicatorTime':
+        this._updateOption('workSpace', name, value);
+        this._header?.option(name, value);
         this.repaint();
         break;
       case 'appointmentDragging':
@@ -1014,17 +1019,17 @@ class Scheduler extends Widget<any> {
 
   _init() {
     this._initExpressions({
-      startDate: this.option('startDateExpr'),
-      endDate: this.option('endDateExpr'),
-      startDateTimeZone: this.option('startDateTimeZoneExpr'),
-      endDateTimeZone: this.option('endDateTimeZoneExpr'),
-      allDay: this.option('allDayExpr'),
-      text: this.option('textExpr'),
-      description: this.option('descriptionExpr'),
-      recurrenceRule: this.option('recurrenceRuleExpr'),
-      recurrenceException: this.option('recurrenceExceptionExpr'),
-      disabled: this.option('disabledExpr'),
-    });
+      startDateExpr: this.option('startDateExpr'),
+      endDateExpr: this.option('endDateExpr'),
+      startDateTimeZoneExpr: this.option('startDateTimeZoneExpr'),
+      endDateTimeZoneExpr: this.option('endDateTimeZoneExpr'),
+      allDayExpr: this.option('allDayExpr'),
+      textExpr: this.option('textExpr'),
+      descriptionExpr: this.option('descriptionExpr'),
+      recurrenceRuleExpr: this.option('recurrenceRuleExpr'),
+      recurrenceExceptionExpr: this.option('recurrenceExceptionExpr'),
+      disabledExpr: this.option('disabledExpr'),
+    } as IFieldExpr);
 
     // @ts-expect-error
     super._init();
@@ -1221,21 +1226,18 @@ class Scheduler extends Widget<any> {
     );
   }
 
-  _initExpressions(fields) {
-    this._dataAccessors = utils.dataAccessors.create(
+  _initExpressions(fields: IFieldExpr) {
+    this._dataAccessors = new AppointmentDataAccessor(
       fields,
-      this._dataAccessors,
-      config().forceIsoDateParsing,
+      Boolean(config().forceIsoDateParsing),
       this.option('dateSerializationFormat'),
     );
 
     this._dataAccessors.resources = createExpressions(this.option('resources'));
   }
 
-  _updateExpression(name, value) {
-    const exprObj = {};
-    exprObj[name.replace('Expr', '')] = value;
-    this._initExpressions(exprObj);
+  _updateExpression(name: string, value: string) {
+    this._dataAccessors.updateExpression(name, value);
   }
 
   getResourceDataAccessors() {
@@ -1568,6 +1570,7 @@ class Scheduler extends Widget<any> {
       rtlEnabled: this.option('rtlEnabled'),
       useDropDownViewSwitcher: this.option('useDropDownViewSwitcher'),
       customizeDateNavigatorText: this.option('customizeDateNavigatorText'),
+      indicatorTime: this.option('indicatorTime'),
       agendaDuration: currentViewOptions.agendaDuration || DEFAULT_AGENDA_DURATION,
     }, currentViewOptions);
 
@@ -1877,7 +1880,7 @@ class Scheduler extends Widget<any> {
     dragEvent?: any,
     recurrenceEditMode?: any,
   ) {
-    const recurrenceRule = ExpressionUtils.getField(this._dataAccessors, 'recurrenceRule', rawAppointment);
+    const recurrenceRule = this._dataAccessors.get('recurrenceRule', rawAppointment);
 
     if (!getRecurrenceProcessor().evalRecurrenceRule(recurrenceRule).isValid || !this._editing.allowUpdating) {
       callback();
@@ -2103,8 +2106,8 @@ class Scheduler extends Widget<any> {
     if (this._isAgenda() && adapter.isRecurrent) {
       const { agendaSettings } = settings;
 
-      targetedAdapter.startDate = ExpressionUtils.getField(this._dataAccessors, 'startDate', agendaSettings);
-      targetedAdapter.endDate = ExpressionUtils.getField(this._dataAccessors, 'endDate', agendaSettings);
+      targetedAdapter.startDate = this._dataAccessors.get('startDate', agendaSettings);
+      targetedAdapter.endDate = this._dataAccessors.get('endDate', agendaSettings);
     } else if (settings) {
       targetedAdapter.startDate = info ? info.sourceAppointment.startDate : adapter.startDate; // TODO: in agenda we havn't info field
       targetedAdapter.endDate = info ? info.sourceAppointment.endDate : adapter.endDate;
@@ -2403,14 +2406,14 @@ class Scheduler extends Widget<any> {
   }
 
   createPopupAppointment() {
-    const result = {};
+    const result: any = {};
     const toMs = dateUtils.dateToMilliseconds;
 
     const startDate = new Date(this.option('currentDate'));
     const endDate = new Date(startDate.getTime() + this.option('cellDuration') * toMs('minute'));
 
-    ExpressionUtils.setField(this._dataAccessors, 'startDate', result, startDate);
-    ExpressionUtils.setField(this._dataAccessors, 'endDate', result, endDate);
+    this._dataAccessors.set('startDate', result, startDate);
+    this._dataAccessors.set('endDate', result, endDate);
 
     return result;
   }
