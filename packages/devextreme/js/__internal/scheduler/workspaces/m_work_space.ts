@@ -1021,7 +1021,6 @@ class SchedulerWorkSpace extends WidgetObserver {
 
   _updateScrollable() {
     this._dateTableScrollable.update();
-
     this._headerScrollable?.update();
     this._sidebarScrollable?.update();
   }
@@ -2115,7 +2114,7 @@ class SchedulerWorkSpace extends WidgetObserver {
     const visible = this.isAllDayPanelVisible && !this.isGroupedAllDayPanel();
 
     if (visible) {
-      this._toggleAllDayVisibility(false);
+      this._updateAllDayVisibility();
 
       const options = {
         viewData: this.viewDataProvider.viewData,
@@ -2129,7 +2128,8 @@ class SchedulerWorkSpace extends WidgetObserver {
       utils.renovation.renderComponent(this, this._$allDayTitle, AllDayPanelTitleComponent, 'renovatedAllDayPanelTitle', {});
     }
 
-    this._toggleAllDayVisibility(true);
+    this._updateAllDayVisibility();
+    this._updateScrollable();
   }
 
   renderRTimeTable() {
@@ -2332,13 +2332,14 @@ class SchedulerWorkSpace extends WidgetObserver {
           this._initGrouping();
           this.repaint();
         } else if (!this.isRenovatedRender()) {
-          this._toggleAllDayVisibility(true);
+          this._updateAllDayVisibility();
+          this._updateScrollable();
         } else {
           this.renderWorkSpace();
         }
         break;
       case 'allDayExpanded':
-        this._changeAllDayVisibility();
+        this._updateAllDayExpansion();
         this._attachTablesEvents();
         this._updateScrollable();
         break;
@@ -2782,34 +2783,31 @@ class SchedulerWorkSpace extends WidgetObserver {
   protected _setIndicationUpdateInterval() { return noop(); }
 
   _detachGroupCountClass() {
-    [
-      ...VERTICAL_GROUP_COUNT_CLASSES,
-    ].forEach((className) => {
-      (this.$element() as any).removeClass(className);
+    VERTICAL_GROUP_COUNT_CLASSES.forEach((className) => {
+      this.$element().removeClass(className);
     });
   }
 
   _attachGroupCountClass() {
     const className = this._groupedStrategy.getGroupCountClass(this.option('groups'));
 
-    (this.$element() as any).addClass(className);
+    this.$element().addClass(className);
   }
 
   _getDateHeaderTemplate() {
     return this.option('dateCellTemplate');
   }
 
-  _toggleAllDayVisibility(isUpdateScrollable) {
-    const showAllDayPanel = this._isShowAllDayPanel();
-    (this.$element() as any).toggleClass(WORKSPACE_WITH_ALL_DAY_CLASS, showAllDayPanel);
-
-    this._changeAllDayVisibility();
-    isUpdateScrollable && this._updateScrollable();
+  _updateAllDayVisibility(): void {
+    this.$element().toggleClass(WORKSPACE_WITH_ALL_DAY_CLASS, this._isShowAllDayPanel());
+    this._updateAllDayExpansion();
   }
 
-  _changeAllDayVisibility() {
+  _updateAllDayExpansion(): void {
+    const isExpanded = !this.option('allDayExpanded') && this._isShowAllDayPanel();
+
     this.cache.clear();
-    (this.$element() as any).toggleClass(WORKSPACE_WITH_COLLAPSED_ALL_DAY_CLASS, !this.option('allDayExpanded') && this._isShowAllDayPanel());
+    this.$element().toggleClass(WORKSPACE_WITH_COLLAPSED_ALL_DAY_CLASS, isExpanded);
   }
 
   _getDateTables() {
@@ -3109,7 +3107,8 @@ class SchedulerWorkSpace extends WidgetObserver {
       groupIndex: index,
     }, true);
 
-    this._toggleAllDayVisibility(true);
+    this._updateAllDayVisibility();
+    this._updateScrollable();
     this._applyCellTemplates(cellTemplates);
   }
 

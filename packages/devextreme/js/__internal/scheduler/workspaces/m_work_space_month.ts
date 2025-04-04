@@ -156,9 +156,9 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
     }
   }
 
-  _toggleAllDayVisibility() { return noop(); }
+  _updateAllDayVisibility() { return noop(); }
 
-  _changeAllDayVisibility() { return noop(); }
+  _updateAllDayHeight() { return noop(); }
 
   // --------------
   // These methods should be deleted when we get rid of old render

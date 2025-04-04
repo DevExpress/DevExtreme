@@ -1,21 +1,18 @@
 /* eslint-disable max-classes-per-file */
 import { wrapToArray } from '@js/core/utils/array';
 import dateUtils from '@js/core/utils/date';
-import { each, map } from '@js/core/utils/iterator';
+import { map } from '@js/core/utils/iterator';
 import { isDefined, isFunction } from '@js/core/utils/type';
 import query from '@js/data/query';
 import { dateUtilsTs } from '@ts/core/utils/date';
+import type { AppointmentDataItem } from '@ts/scheduler/r1/types';
 import {
-  getAppointmentTakesAllDay, getDatesWithoutTime, hasResourceValue, isDateAndTimeView,
-  isTimelineView,
+  getDatesWithoutTime, hasResourceValue, isAppointmentTakesAllDay, isTimelineView,
 } from '@ts/scheduler/r1/utils/index';
 import type { AppointmentDataAccessor } from '@ts/scheduler/utils';
 
 import { createAppointmentAdapter } from '../../m_appointment_adapter';
 import { getRecurrenceProcessor } from '../../m_recurrence';
-import {
-  getResourcesDataByGroups,
-} from '../../resources/m_utils';
 import {
   _appointmentPartInInterval,
   compareDateWithEndDayHour,
@@ -28,12 +25,9 @@ import {
 
 const toMs = dateUtils.dateToMilliseconds;
 
-const FilterStrategies = {
-  virtual: 'virtual',
-  standard: 'standard',
-};
-
 export class AppointmentFilterBaseStrategy {
+  public static readonly strategyName: string = 'standard';
+
   options: any;
 
   dataAccessors: AppointmentDataAccessor;
@@ -41,11 +35,7 @@ export class AppointmentFilterBaseStrategy {
   constructor(options) {
     this.options = options;
     this.dataAccessors = this.options.dataAccessors;
-
-    this._init();
   }
-
-  get strategyName() { return FilterStrategies.standard; }
 
   get timeZoneCalculator() { return this.options.timeZoneCalculator; }
 
@@ -82,11 +72,7 @@ export class AppointmentFilterBaseStrategy {
       : result;
   }
 
-  _init() {
-    this.setDataAccessors(this.dataAccessors);
-  }
-
-  filter(preparedItems) {
+  filter(preparedItems: AppointmentDataItem[]) {
     const [min, max] = this.dateRange;
     const { viewOffset } = this.options;
     const allDay = !this.showAllDayPanel && this.supportAllDayRow
@@ -109,36 +95,19 @@ export class AppointmentFilterBaseStrategy {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  hasAllDayAppointments(filteredItems, preparedItems) {
-    const adapters = filteredItems.map((item) => createAppointmentAdapter(
-      item,
-      this.dataAccessors,
-      this.timeZoneCalculator,
-    ));
-
-    let result = false;
-
-    // @ts-expect-error
-    each(adapters, (_, item) => {
-      if (getAppointmentTakesAllDay(
+  hasAllDayAppointments(filteredItems, preparedItems: AppointmentDataItem[]): boolean {
+    return filteredItems
+      .map((item) => createAppointmentAdapter(
         item,
-        this.allDayPanelMode,
-      )) {
-        result = true;
-        return false;
-      }
-    });
-
-    return result;
-  }
-
-  setDataAccessors(dataAccessors) {
-    this.dataAccessors = dataAccessors;
+        this.dataAccessors,
+        this.timeZoneCalculator,
+      ))
+      .some((item) => isAppointmentTakesAllDay(item, this.allDayPanelMode));
   }
 
   private _createAllDayAppointmentFilter() {
     return [[
-      (appointment) => getAppointmentTakesAllDay(
+      (appointment) => isAppointmentTakesAllDay(
         appointment,
         this.allDayPanelMode,
       ),
@@ -178,7 +147,7 @@ export class AppointmentFilterBaseStrategy {
       const startDate = dateUtilsTs.addOffsets(appointment.startDate, [-viewOffset]);
       const endDate = dateUtilsTs.addOffsets(appointment.endDate, [-viewOffset]);
 
-      const appointmentTakesAllDay = getAppointmentTakesAllDay(
+      const appointmentTakesAllDay = isAppointmentTakesAllDay(
         appointment,
         this.allDayPanelMode,
       );
@@ -336,12 +305,12 @@ export class AppointmentFilterBaseStrategy {
     return result;
   }
 
-  filterLoadedAppointments(filterOptions, preparedItems) {
+  filterLoadedAppointments(filterOptions, preparedItems: AppointmentDataItem[]) {
     const filteredItems = this.filterPreparedItems(filterOptions, preparedItems);
     return filteredItems.map(({ rawAppointment }) => rawAppointment);
   }
 
-  filterPreparedItems(filterOptions, preparedItems) {
+  filterPreparedItems(filterOptions, preparedItems: AppointmentDataItem[]) {
     const combinedFilter = this._createCombinedFilter(filterOptions);
 
     return query(preparedItems)
@@ -349,121 +318,11 @@ export class AppointmentFilterBaseStrategy {
       .toArray();
   }
 
-  filterAllDayAppointments(preparedItems) {
+  filterAllDayAppointments(preparedItems: AppointmentDataItem[]) {
     const combinedFilter = this._createAllDayAppointmentFilter();
     return query(preparedItems)
       .filter(combinedFilter)
       .toArray()
       .map(({ rawAppointment }) => rawAppointment);
-  }
-}
-
-export class AppointmentFilterVirtualStrategy extends AppointmentFilterBaseStrategy {
-  get strategyName() { return FilterStrategies.virtual; }
-
-  get resources() { return this.options.resources; }
-
-  filter(preparedItems) {
-    const { viewOffset } = this.options;
-    const hourMs = toMs('hour');
-    const isCalculateStartAndEndDayHour = isDateAndTimeView(this.viewType);
-    const checkIntersectViewport = isCalculateStartAndEndDayHour && this.viewDirection === 'horizontal';
-
-    const isAllDayWorkspace = !this.supportAllDayRow;
-    const showAllDayAppointments = this.showAllDayPanel || isAllDayWorkspace;
-
-    const endViewDate = this.viewDataProvider.getLastViewDateByEndDayHour(this.viewEndDayHour);
-    const shiftedEndViewDate = dateUtilsTs.addOffsets(endViewDate, [viewOffset]);
-    const filterOptions: any = [];
-
-    const groupsInfo = this.viewDataProvider.getCompletedGroupsInfo();
-    groupsInfo.forEach((item) => {
-      const { groupIndex } = item;
-      const groupStartDate: Date = item.startDate;
-      const groupEndDate: Date = new Date(
-        Math.min(
-          item.endDate.getTime(),
-          shiftedEndViewDate.getTime(),
-        ),
-      );
-
-      const startDayHour = isCalculateStartAndEndDayHour
-        ? groupStartDate.getHours()
-        : this.viewStartDayHour;
-      const endDayHour = isCalculateStartAndEndDayHour
-        ? startDayHour + groupStartDate.getMinutes() / 60 + (groupEndDate.getTime() - groupStartDate.getTime()) / hourMs
-        : this.viewEndDayHour;
-
-      const resources = this._getPrerenderFilterResources(groupIndex);
-
-      const hasAllDayPanel = this.viewDataProvider.hasGroupAllDayPanel(groupIndex);
-
-      const supportAllDayAppointment = isAllDayWorkspace || (!!showAllDayAppointments && hasAllDayPanel);
-
-      filterOptions.push({
-        isVirtualScrolling: true,
-        startDayHour,
-        endDayHour,
-        viewOffset,
-        viewStartDayHour: this.viewStartDayHour,
-        viewEndDayHour: this.viewEndDayHour,
-        min: dateUtilsTs.addOffsets(groupStartDate, [-viewOffset]),
-        max: dateUtilsTs.addOffsets(groupEndDate, [-viewOffset]),
-        supportMultiDayAppointments: isTimelineView(this.viewType),
-        allDay: supportAllDayAppointment,
-        resources,
-        firstDayOfWeek: this.firstDayOfWeek,
-        checkIntersectViewport,
-      });
-    });
-
-    return this.filterLoadedAppointments({
-      filterOptions,
-      groupCount: this.groupCount,
-    }, preparedItems);
-  }
-
-  filterPreparedItems({ filterOptions, groupCount }, preparedItems) {
-    const combinedFilters: any = [];
-
-    let itemsToFilter = preparedItems;
-    const needPreFilter = groupCount > 0;
-    if (needPreFilter) {
-      // @ts-expect-error
-      itemsToFilter = itemsToFilter.filter(({ rawAppointment }) => {
-        for (let i = 0; i < filterOptions.length; ++i) {
-          const { resources } = filterOptions[i];
-          if (this._filterAppointmentByResources(rawAppointment, resources)) {
-            return true;
-          }
-        }
-      });
-    }
-
-    filterOptions.forEach((option) => {
-      combinedFilters.length && combinedFilters.push('or');
-
-      const filter = this._createCombinedFilter(option);
-
-      combinedFilters.push(filter);
-    });
-
-    return query(itemsToFilter)
-      .filter(combinedFilters)
-      .toArray();
-  }
-
-  hasAllDayAppointments(filteredItems, preparedItems) {
-    return this.filterAllDayAppointments(preparedItems).length > 0;
-  }
-
-  _getPrerenderFilterResources(groupIndex) {
-    const cellGroup = this.viewDataProvider.getCellsGroup(groupIndex);
-
-    return getResourcesDataByGroups(
-      this.loadedResources,
-      this.resources,
-      [cellGroup],
-    );
   }
 }
