@@ -3,7 +3,7 @@ import { extend } from '@js/core/utils/extend';
 import { isNumeric, isObject } from '@js/core/utils/type';
 import { current as currentTheme } from '@js/ui/themes';
 import { dateUtilsTs } from '@ts/core/utils/date';
-import { getAppointmentTakesAllDay } from '@ts/scheduler/r1/utils/index';
+import { isAppointmentTakesAllDay } from '@ts/scheduler/r1/utils/index';
 
 import { createAppointmentAdapter } from '../../m_appointment_adapter';
 import timeZoneUtils from '../../m_utils_time_zone';
@@ -290,7 +290,7 @@ class BaseRenderingStrategy {
 
   isAppointmentTakesAllDay(rawAppointment) {
     const adapter = createAppointmentAdapter(rawAppointment, this.dataAccessors, this.timeZoneCalculator);
-    return getAppointmentTakesAllDay(
+    return isAppointmentTakesAllDay(
       adapter,
       this.allDayPanelMode,
     );

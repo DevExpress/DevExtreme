@@ -2,7 +2,7 @@ import dateUtils from '@js/core/utils/date';
 import { extend } from '@js/core/utils/extend';
 import { roundFloatPart } from '@js/core/utils/math';
 import { isNumeric } from '@js/core/utils/type';
-import { getAppointmentTakesAllDay, getSkippedHoursInRange } from '@ts/scheduler/r1/utils/index';
+import { getSkippedHoursInRange, isAppointmentTakesAllDay } from '@ts/scheduler/r1/utils/index';
 
 import { createAppointmentAdapter } from '../../m_appointment_adapter';
 import timeZoneUtils from '../../m_utils_time_zone';
@@ -310,7 +310,7 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
   }
 
   isAllDay(appointmentData) {
-    return getAppointmentTakesAllDay(
+    return isAppointmentTakesAllDay(
       createAppointmentAdapter(appointmentData, this.dataAccessors, this.timeZoneCalculator),
       this.allDayPanelMode,
     );
