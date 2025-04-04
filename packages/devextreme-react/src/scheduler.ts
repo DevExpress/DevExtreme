@@ -258,7 +258,7 @@ const Scrolling = Object.assign<typeof _componentScrolling, NestedComponentMeta>
 type IViewProps = React.PropsWithChildren<{
   agendaDuration?: number;
   allDayPanelMode?: AllDayPanelMode;
-  appointmentCollectorTemplate?: ((data: { appointmentCount: number, isCompact: boolean }, collectorElement: any) => string | any) | template;
+  appointmentCollectorTemplate?: ((data: { appointmentCount: number, isCompact: boolean, items: any }, collectorElement: any) => string | any) | template;
   appointmentTemplate?: ((model: AppointmentTemplateData | { appointmentData: Record<string, any>, targetedAppointmentData: Record<string, any> }, itemIndex: number, contentElement: any) => string | any) | template;
   appointmentTooltipTemplate?: ((model: AppointmentTooltipTemplateData | { appointmentData: Record<string, any>, targetedAppointmentData: Record<string, any> }, itemIndex: number, contentElement: any) => string | any) | template;
   cellDuration?: number;
