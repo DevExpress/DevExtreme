@@ -6,25 +6,25 @@
 // adduse
 
 /**
-* $name 10. Accent color
+* $name 10. Active color
 * $type color
 */
 $stepper-step-accent-bg: $base-accent !default;
 
 /**
-* $name 20. Hover state accent color
+* $name 20. Hover state active color
 * $type color
 */
 $stepper-step-accent-hover-bg: $base-accent-hover !default;
 
 /**
-* $name 30. Danger color
+* $name 30. Invalid color
 * $type color
 */
 $stepper-step-danger-bg: $base-danger !default;
 
 /**
-* $name 40. Hover state danger color
+* $name 40. Hover state invalid color
 * $type color
 */
 $stepper-step-danger-hover-bg: $base-danger-hover !default;
