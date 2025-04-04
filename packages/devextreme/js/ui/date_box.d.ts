@@ -327,14 +327,14 @@ export interface DateBoxBaseOptions<TComponent> extends dxDropDownEditorOptions<
     displayFormat?: Format;
     /**
      * @docid
-     * @type Date|number|string|null
+     * @type Date|number|string|null|undefined
      * @default undefined
      * @public
      */
     max?: DateLike | undefined;
     /**
      * @docid
-     * @type Date|number|string|null
+     * @type Date|number|string|null|undefined
      * @default undefined
      * @public
      */

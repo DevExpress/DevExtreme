@@ -534,10 +534,10 @@ export class DxDateRangeBoxComponent extends DxComponent implements OnDestroy, C
     
      */
     @Input()
-    get max(): Date | null | number | string {
+    get max(): Date | null | number | string | undefined {
         return this._getOption('max');
     }
-    set max(value: Date | null | number | string) {
+    set max(value: Date | null | number | string | undefined) {
         this._setOption('max', value);
     }
 
@@ -547,10 +547,10 @@ export class DxDateRangeBoxComponent extends DxComponent implements OnDestroy, C
     
      */
     @Input()
-    get min(): Date | null | number | string {
+    get min(): Date | null | number | string | undefined {
         return this._getOption('min');
     }
-    set min(value: Date | null | number | string) {
+    set min(value: Date | null | number | string | undefined) {
         this._setOption('min', value);
     }
 
@@ -1283,14 +1283,14 @@ export class DxDateRangeBoxComponent extends DxComponent implements OnDestroy, C
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() maxChange: EventEmitter<Date | null | number | string>;
+    @Output() maxChange: EventEmitter<Date | null | number | string | undefined>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() minChange: EventEmitter<Date | null | number | string>;
+    @Output() minChange: EventEmitter<Date | null | number | string | undefined>;
 
     /**
     
