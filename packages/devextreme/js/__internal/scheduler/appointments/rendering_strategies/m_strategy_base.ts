@@ -3,11 +3,11 @@ import { extend } from '@js/core/utils/extend';
 import { isNumeric, isObject } from '@js/core/utils/type';
 import { current as currentTheme } from '@js/ui/themes';
 import { dateUtilsTs } from '@ts/core/utils/date';
-import { ExpressionUtils } from '@ts/scheduler/m_expression_utils';
 import { getAppointmentTakesAllDay } from '@ts/scheduler/r1/utils/index';
 
 import { createAppointmentAdapter } from '../../m_appointment_adapter';
 import timeZoneUtils from '../../m_utils_time_zone';
+import type { AppointmentDataAccessor } from '../../utils';
 import { AppointmentSettingsGenerator } from '../m_settings_generator';
 import AdaptivePositioningStrategy from './m_appointments_positioning_strategy_adaptive';
 import AppointmentPositioningStrategy from './m_appointments_positioning_strategy_base';
@@ -94,7 +94,7 @@ class BaseRenderingStrategy {
 
   get viewDataProvider() { return this.options.viewDataProvider; }
 
-  get dataAccessors() { return this.options.dataAccessors; }
+  get dataAccessors(): AppointmentDataAccessor { return this.options.dataAccessors; }
 
   get timeZoneCalculator() { return this.options.timeZoneCalculator; }
 
@@ -240,7 +240,6 @@ class BaseRenderingStrategy {
             height,
           }, position[j]);
 
-          // eslint-disable-next-line max-depth
           if (this.rtlEnabled) {
             position[j].left = currentMaxAllowedPosition;
           }
@@ -890,9 +889,9 @@ class BaseRenderingStrategy {
     const startDateField = this.dataAccessors.expr.startDateExpr;
     const endDateField = this.dataAccessors.expr.endDateExpr;
 
-    let startDate = new Date(ExpressionUtils.getField(this.dataAccessors, 'startDate', appointment));
+    let startDate = new Date(this.dataAccessors.get('startDate', appointment));
     startDate = dateUtilsTs.addOffsets(startDate, [-viewOffset]);
-    let endDate = new Date(ExpressionUtils.getField(this.dataAccessors, 'endDate', appointment));
+    let endDate = new Date(this.dataAccessors.get('endDate', appointment));
     endDate = dateUtilsTs.addOffsets(endDate, [-viewOffset]);
 
     return {

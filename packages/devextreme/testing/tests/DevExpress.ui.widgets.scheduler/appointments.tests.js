@@ -3,6 +3,7 @@ import 'generic_light.css!';
 
 import pointerMock from '../../helpers/pointerMock.js';
 import keyboardMock from '../../helpers/keyboardMock.js';
+import { mockDataAccessor } from '../../helpers/scheduler/mockDataAccessor.js';
 
 import $ from 'jquery';
 import '__internal/scheduler/workspaces/m_work_space_week';
@@ -12,14 +13,12 @@ import SchedulerAppointments from '__internal/scheduler/appointments/m_appointme
 import eventsEngine from 'events/core/events_engine';
 import dblclickEvent from 'events/dblclick';
 import translator from 'animation/translator';
-import dataCoreUtils from 'core/utils/data';
 import commonUtils from 'core/utils/common';
-import typeUtils, { isRenderer } from 'core/utils/type';
+import { isRenderer } from 'core/utils/type';
 import config from 'core/config';
 import Resizable from 'ui/resizable';
 import fx from 'animation/fx';
 import { DataSource } from 'data/data_source/data_source';
-import { ExpressionUtils } from '__internal/scheduler/m_expression_utils';
 import { Deferred } from 'core/utils/deferred';
 import { createExpressions } from '__internal/scheduler/resources/m_utils';
 import { AppointmentDataProvider } from '__internal/scheduler/appointments/data_provider/m_appointment_data_provider.js';
@@ -45,35 +44,7 @@ const keyboardNavigationConfig = {
     cellWidth: 100,
     cellHeight: 30,
 };
-
-const compileGetter = dataCoreUtils.compileGetter;
-const compileSetter = dataCoreUtils.compileSetter;
-const dataAccessors = {
-    getter: {
-        startDate: compileGetter('startDate'),
-        endDate: compileGetter('endDate'),
-        allDay: compileGetter('allDay'),
-        text: compileGetter('text'),
-        recurrenceRule: compileGetter('recurrenceRule')
-    },
-    setter: {
-        startDate: compileSetter('startDate'),
-        endDate: compileSetter('endDate'),
-        allDay: compileSetter('allDay'),
-        text: compileSetter('text'),
-        recurrenceRule: compileSetter('recurrenceRule')
-    }
-};
-
-ExpressionUtils.getField = (_, field, obj) => {
-    if(typeUtils.isDefined(dataAccessors.getter[field])) {
-        return dataAccessors.getter[field](obj);
-    }
-};
-
-ExpressionUtils.setField = (_, field, obj, value) => {
-    return dataAccessors.setter[field](obj, value);
-};
+const dataAccessors = mockDataAccessor;
 
 const createSubscribes = (coordinates, cellWidth, cellHeight) => ({
     createAppointmentSettings: () => coordinates,
@@ -539,6 +510,7 @@ QUnit.module('Appointments', moduleOptions, () => {
             appointmentDataProvider: {
                 appointmentTakesAllDay: commonUtils.noop,
             },
+            dataAccessors: mockDataAccessor,
             allDayPanelMode: 'all',
             cellDurationInMinutes: 30,
             cellHeight: 50

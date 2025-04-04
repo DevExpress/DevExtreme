@@ -1,5 +1,6 @@
 import config from '@js/core/config';
 import { combineRemoteFilter } from '@ts/scheduler/r1/filterting/index';
+import type { AppointmentDataAccessor } from '@ts/scheduler/utils';
 
 import { AppointmentDataSource } from './m_appointment_data_source';
 import { AppointmentFilterBaseStrategy, AppointmentFilterVirtualStrategy } from './m_appointment_filter';
@@ -14,7 +15,7 @@ export class AppointmentDataProvider {
 
   dataSource: any;
 
-  dataAccessors: any;
+  dataAccessors: AppointmentDataAccessor;
 
   timeZoneCalculator: any;
 
