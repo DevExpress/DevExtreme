@@ -12,7 +12,7 @@ import type {
   TranslateCommandParams,
 } from '@js/ai_integration';
 import { TranslateCommand } from '@ts/core/ai_integration/commands/translate';
-import { AI, CommandNames } from '@ts/core/ai_integration/core/ai_integration';
+import { AIIntegration, CommandNames } from '@ts/core/ai_integration/core/ai_integration';
 import { PromptManager } from '@ts/core/ai_integration/core/prompt_manager';
 import { RequestManager } from '@ts/core/ai_integration/core/request_manager';
 import { Provider } from '@ts/core/ai_integration/test_utils/provider_mock';
@@ -22,11 +22,11 @@ describe('AI', () => {
   const params2: TranslateCommandParams = { text: 'text for translation 2', lang: 'Spanish' };
 
   let provider = null as unknown as AIProvider;
-  let ai = null as unknown as AI;
+  let ai = null as unknown as AIIntegration;
 
   beforeEach(() => {
     provider = new Provider();
-    ai = new AI(provider);
+    ai = new AIIntegration(provider);
   });
 
   afterEach(() => {

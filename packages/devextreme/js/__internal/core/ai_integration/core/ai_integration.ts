@@ -1,5 +1,5 @@
 import type {
-  AI as IAI,
+  AIIntegration as IAIIntegration,
   AIProvider,
   BaseCommandResult,
   RequestCallbacks,
@@ -29,7 +29,7 @@ export interface Commands {
   [CommandNames.Translate]: CommandDefinition<TranslateCommandParams, TranslateCommandResult>;
 }
 
-export class AI implements IAI {
+export class AIIntegration implements IAIIntegration {
   private readonly promptManager: PromptManager;
 
   private readonly requestManager: RequestManager;

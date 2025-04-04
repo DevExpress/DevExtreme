@@ -125,7 +125,7 @@ export interface AIProvider {
  * @namespace DevExpress.aiIntegration
  * @public
  */
-export class AI {
+export class AIIntegration {
   /**
    * @docid
    * @param provider
