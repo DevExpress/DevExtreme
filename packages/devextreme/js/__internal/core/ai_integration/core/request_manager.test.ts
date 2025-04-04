@@ -6,8 +6,8 @@ import {
   jest,
 } from '@jest/globals';
 import type { AIProvider, Prompt } from '@js/ai_integration';
-import { ERROR_MESSAGES, RequestManager } from '@ts/core/ai/core/request_manager';
-import { Provider } from '@ts/core/ai/test_utils/provider_mock';
+import { ERROR_MESSAGES, RequestManager } from '@ts/core/ai_integration/core/request_manager';
+import { Provider } from '@ts/core/ai_integration/test_utils/provider_mock';
 
 describe('RequestManager', () => {
   let provider = null as unknown as AIProvider;

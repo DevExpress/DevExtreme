@@ -6,10 +6,10 @@ import type {
   TranslateCommandParams,
   TranslateCommandResult,
 } from '@js/ai_integration';
-import type { BaseCommand } from '@ts/core/ai/commands/base';
-import { TranslateCommand } from '@ts/core/ai/commands/translate';
-import { PromptManager } from '@ts/core/ai/core/prompt_manager';
-import { RequestManager } from '@ts/core/ai/core/request_manager';
+import type { BaseCommand } from '@ts/core/ai_integration/commands/base';
+import { TranslateCommand } from '@ts/core/ai_integration/commands/translate';
+import { PromptManager } from '@ts/core/ai_integration/core/prompt_manager';
+import { RequestManager } from '@ts/core/ai_integration/core/request_manager';
 
 export const enum CommandNames {
   Translate = 'translate',

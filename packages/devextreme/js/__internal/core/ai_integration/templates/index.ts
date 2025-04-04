@@ -1,4 +1,4 @@
-import type { PromptTemplate } from '@ts/core/ai/core/prompt_manager';
+import type { PromptTemplate } from '@ts/core/ai_integration/core/prompt_manager';
 
 export type PromptTemplates = Record<string, PromptTemplate>;
 

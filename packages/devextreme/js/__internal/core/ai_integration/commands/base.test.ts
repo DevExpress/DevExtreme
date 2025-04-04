@@ -6,11 +6,11 @@ import {
   jest,
 } from '@jest/globals';
 import type { AIProvider, RequestCallbacks } from '@js/ai_integration';
-import { BaseCommand } from '@ts/core/ai/commands/base';
-import type { PromptData, PromptTemplateName } from '@ts/core/ai/core/prompt_manager';
-import { PromptManager } from '@ts/core/ai/core/prompt_manager';
-import { RequestManager } from '@ts/core/ai/core/request_manager';
-import { Provider } from '@ts/core/ai/test_utils/provider_mock';
+import { BaseCommand } from '@ts/core/ai_integration/commands/base';
+import type { PromptData, PromptTemplateName } from '@ts/core/ai_integration/core/prompt_manager';
+import { PromptManager } from '@ts/core/ai_integration/core/prompt_manager';
+import { RequestManager } from '@ts/core/ai_integration/core/request_manager';
+import { Provider } from '@ts/core/ai_integration/test_utils/provider_mock';
 
 jest.mock('@ts/core/ai/templates/index', () => ({
   templates: {

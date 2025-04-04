@@ -1,5 +1,5 @@
 import type { Prompt } from '@js/ai_integration';
-import { templates } from '@ts/core/ai/templates/index';
+import { templates } from '@ts/core/ai_integration/templates/index';
 
 export interface PromptData {
   system?: Record<string, string>;

@@ -3,9 +3,9 @@ import {
   expect,
   it,
 } from '@jest/globals';
-import type { PromptData, PromptTemplateName } from '@ts/core/ai/core/prompt_manager';
-import { ERROR_MESSAGES, PromptManager } from '@ts/core/ai/core/prompt_manager';
-import { templates } from '@ts/core/ai/templates/index';
+import type { PromptData, PromptTemplateName } from '@ts/core/ai_integration/core/prompt_manager';
+import { ERROR_MESSAGES, PromptManager } from '@ts/core/ai_integration/core/prompt_manager';
+import { templates } from '@ts/core/ai_integration/templates/index';
 
 describe('PromptManager', () => {
   const promptManager = new PromptManager();

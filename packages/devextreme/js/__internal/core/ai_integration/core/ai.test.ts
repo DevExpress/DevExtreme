@@ -11,11 +11,11 @@ import type {
   RequestCallbacks,
   TranslateCommandParams,
 } from '@js/ai_integration';
-import { TranslateCommand } from '@ts/core/ai/commands/translate';
-import { AI, CommandNames } from '@ts/core/ai/core/ai';
-import { PromptManager } from '@ts/core/ai/core/prompt_manager';
-import { RequestManager } from '@ts/core/ai/core/request_manager';
-import { Provider } from '@ts/core/ai/test_utils/provider_mock';
+import { TranslateCommand } from '@ts/core/ai_integration/commands/translate';
+import { AI, CommandNames } from '@ts/core/ai_integration/core/ai';
+import { PromptManager } from '@ts/core/ai_integration/core/prompt_manager';
+import { RequestManager } from '@ts/core/ai_integration/core/request_manager';
+import { Provider } from '@ts/core/ai_integration/test_utils/provider_mock';
 
 describe('AI', () => {
   const params: TranslateCommandParams = { text: 'text for translation', lang: 'French' };
