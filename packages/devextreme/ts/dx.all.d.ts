@@ -863,17 +863,18 @@ declare module DevExpress {
     static validateModel(model: any): any;
   }
 }
-declare module DevExpress.ai {
+declare module DevExpress.aiIntegration {
   /**
-   * [descr:AI]
+   * [descr:AIIntegration]
    */
-  export class AI {
+  export class AIIntegration {
     /**
+     * @docid
      * @param provider
      */
     constructor(provider: AIProvider);
     /**
-     * [descr:AI.translate(params, callbacks)]
+     * [descr:AIIntegration.translate(params, callbacks)]
      */
     translate(
       params: TranslateCommandParams,
@@ -884,6 +885,9 @@ declare module DevExpress.ai {
    * [descr:AIProvider]
    */
   export interface AIProvider {
+    /**
+     * [descr:AIProvider.sendRequest]
+     */
     sendRequest: (params: RequestParams) => ResponseParams;
   }
   /**
@@ -894,36 +898,69 @@ declare module DevExpress.ai {
    * [descr:Prompt]
    */
   export interface Prompt {
+    /**
+     * [descr:Prompt.system]
+     */
     system?: string;
+    /**
+     * [descr:Prompt.user]
+     */
     user?: string;
   }
   /**
    * [descr:RequestCallbacks]
    */
   export interface RequestCallbacks {
+    /**
+     * [descr:RequestCallbacks.onChunk]
+     */
     onChunk?: (chunk: string) => void;
+    /**
+     * [descr:RequestCallbacks.onComplete]
+     */
     onComplete?: (finalResponse: BaseCommandResult) => void;
+    /**
+     * [descr:RequestCallbacks.onError]
+     */
     onError?: (error: Error) => void;
   }
   /**
    * [descr:RequestParams]
    */
   export interface RequestParams {
+    /**
+     * [descr:RequestParams.prompt]
+     */
     prompt: Prompt;
+    /**
+     * [descr:RequestParams.onChunk]
+     */
     onChunk: (chunk: string) => void;
   }
   /**
    * [descr:ResponseParams]
    */
   export interface ResponseParams {
+    /**
+     * [descr:ResponseParams.promise]
+     */
     promise: Promise<string>;
+    /**
+     * [descr:ResponseParams.abort]
+     */
     abort: () => void;
   }
   /**
    * [descr:TranslateCommandParams]
    */
   export interface TranslateCommandParams {
+    /**
+     * [descr:TranslateCommandParams.text]
+     */
     text: string;
+    /**
+     * [descr:TranslateCommandParams.lang]
+     */
     lang: string;
   }
   /**

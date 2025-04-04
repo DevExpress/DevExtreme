@@ -86,4 +86,4 @@ export { DxValidationSummaryComponent, DxValidationSummaryModule } from 'devextr
 export { DxValidatorComponent, DxValidatorModule } from 'devextreme-angular/ui/validator';
 export { DxVectorMapComponent, DxVectorMapModule } from 'devextreme-angular/ui/vector-map';
 export * as Common from './common/index';
-export * from "./ai";
+export * from "./ai_integration";
