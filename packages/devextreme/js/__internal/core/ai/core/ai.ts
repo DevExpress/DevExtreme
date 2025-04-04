@@ -1,10 +1,12 @@
 import type {
   AI as IAI,
   AIProvider,
+  BaseCommandResult,
   RequestCallbacks,
   TranslateCommandParams,
   TranslateCommandResult,
 } from '@js/ai';
+import type { BaseCommand } from '@ts/core/ai/commands/base';
 import { TranslateCommand } from '@ts/core/ai/commands/translate';
 import { PromptManager } from '@ts/core/ai/core/prompt_manager';
 import { RequestManager } from '@ts/core/ai/core/request_manager';
@@ -13,22 +15,19 @@ export const enum CommandNames {
   Translate = 'translate',
 }
 
-export interface Commands {
-  [CommandNames.Translate]: {
-    params: TranslateCommandParams;
-    result: TranslateCommandResult;
-    command: TranslateCommand;
-  };
+export const COMMANDS = {
+  [CommandNames.Translate]: TranslateCommand,
+} as const;
+
+export interface CommandDefinition<TParams, TResult extends BaseCommandResult> {
+  params: TParams;
+  result: TResult;
+  command: BaseCommand<TParams, TResult>;
 }
 
-export const COMMANDS: {
-  [K in CommandNames]: new (
-    promptManager: PromptManager,
-    requestManager: RequestManager
-  ) => Commands[K]['command'];
-} = {
-  [CommandNames.Translate]: TranslateCommand,
-};
+export interface Commands {
+  [CommandNames.Translate]: CommandDefinition<TranslateCommandParams, TranslateCommandResult>;
+}
 
 export class AI implements IAI {
   private readonly promptManager: PromptManager;
@@ -48,7 +47,9 @@ export class AI implements IAI {
     params: Commands[K]['params'],
     callbacks: RequestCallbacks,
   ): () => void {
-    let command = this.commands.get(commandName) as Commands[K]['command'] | undefined;
+    type Command = BaseCommand<Commands[K]['params'], Commands[K]['result']>;
+
+    let command = this.commands.get(commandName) as Command | undefined;
 
     if (!command) {
       const Command = COMMANDS[commandName];
