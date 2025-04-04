@@ -20,7 +20,7 @@ export interface Props extends Omit<SortableProps, 'onAdd' | 'onReorder' | 'drag
 
   onMove: (column: Column, toIndex: number, source: string) => void;
 
-  dragTemplate?: ComponentType<{ column: Column; status: Status }>;
+  dragTemplate?: ComponentType<{ column: Column; status?: Status }>;
 }
 
 interface State {

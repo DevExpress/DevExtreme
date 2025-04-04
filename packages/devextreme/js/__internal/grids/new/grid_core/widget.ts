@@ -17,6 +17,8 @@ import { MainView } from './main_view';
 import { defaultOptions, defaultOptionsRules, type Options } from './options';
 import { PagerView } from './pager/view';
 import { SearchController } from './search/controller';
+import * as SortingControllerModule from './sorting_controller/index';
+import type { SortingController } from './sorting_controller/sorting_controller';
 import { ToolbarController } from './toolbar/controller';
 import { ToolbarView } from './toolbar/view';
 
@@ -32,6 +34,8 @@ export class GridCoreNewBase<
   protected itemsController!: ItemsController;
 
   protected columnsController!: ColumnsControllerModule.ColumnsController;
+
+  protected sortingController!: SortingController;
 
   private pagerView!: PagerView;
 
@@ -50,6 +54,7 @@ export class GridCoreNewBase<
     this.diContext.register(DataControllerModule.DataController);
     this.diContext.register(ItemsController);
     this.diContext.register(ColumnsControllerModule.ColumnsController);
+    this.diContext.register(SortingControllerModule.SortingController);
     this.diContext.register(ToolbarController);
     this.diContext.register(ToolbarView);
     this.diContext.register(PagerView);
@@ -61,6 +66,7 @@ export class GridCoreNewBase<
   protected _initDIContext(): void {
     this.dataController = this.diContext.get(DataControllerModule.DataController);
     this.columnsController = this.diContext.get(ColumnsControllerModule.ColumnsController);
+    this.sortingController = this.diContext.get(SortingControllerModule.SortingController);
     this.itemsController = this.diContext.get(ItemsController);
     this.toolbarController = this.diContext.get(ToolbarController);
     this.toolbarView = this.diContext.get(ToolbarView);
@@ -109,6 +115,8 @@ export class GridCoreNewBase<
 
 export class GridCoreNew extends ColumnsControllerModule.PublicMethods(
   DataControllerModule.PublicMethods(
-    GridCoreNewBase,
+    SortingControllerModule.PublicMethods(
+      GridCoreNewBase,
+    ),
   ),
 ) {}

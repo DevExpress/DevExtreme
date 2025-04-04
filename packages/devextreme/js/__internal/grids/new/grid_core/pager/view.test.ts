@@ -1,10 +1,10 @@
-/* eslint-disable spellcheck/spell-checker */
-/* eslint-disable @typescript-eslint/dot-notation */
 import { describe, expect, it } from '@jest/globals';
 
+import { ColumnsController } from '../columns_controller';
 import { DataController } from '../data_controller/data_controller';
 import type { Options } from '../options';
 import { OptionsControllerMock } from '../options_controller/options_controller.mock';
+import { SortingController } from '../sorting_controller';
 import { PagerView } from './view';
 
 const createPagerView = (options?: Options) => {
@@ -16,7 +16,10 @@ const createPagerView = (options?: Options) => {
     },
   });
 
-  const dataController = new DataController(optionsController);
+  const columnsController = new ColumnsController(optionsController);
+  const sortingController = new SortingController(optionsController, columnsController);
+  const dataController = new DataController(optionsController, sortingController);
+
   const pager = new PagerView(dataController, optionsController);
 
   pager.render(rootElement);
