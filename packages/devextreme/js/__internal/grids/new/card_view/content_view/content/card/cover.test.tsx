@@ -1,7 +1,7 @@
 import { describe, expect, it } from '@jest/globals';
 import { render } from 'inferno';
 
-import { CLASSES, Cover } from './cover';
+import { Cover } from './cover';
 
 describe('Cover', () => {
   it('should render the image correctly', () => {
@@ -27,7 +27,7 @@ describe('Cover', () => {
       const props = {};
 
       render(<Cover {...props} />, container);
-      expect(container.querySelector(CLASSES.cover)).toMatchInlineSnapshot();
+      expect(container).toMatchSnapshot();
     });
   });
 });
