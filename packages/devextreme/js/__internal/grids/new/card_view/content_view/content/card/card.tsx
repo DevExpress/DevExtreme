@@ -100,12 +100,10 @@ export class Card extends Component<CardProps> {
         <CardHeader
           items={this.props.toolbar || []}
         />
-        {imageSrc && (
-          <Cover
-            imageSrc={imageSrc}
-            alt={alt}
-          />
-        )}
+        <Cover
+          imageSrc={imageSrc}
+          alt={alt}
+        />
         <div className={CLASSES.content}>
           {this.props.row.cells.map((cell, index) => (
             <FieldTemplate

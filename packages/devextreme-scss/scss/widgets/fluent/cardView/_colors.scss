@@ -4,6 +4,7 @@
 @use '../../base/cardView/header_panel/item/variables' as *;
 @use '../../base/cardView/content_view/content/card/variables' as *;
 @use '../../base/cardView/content_view/content/card/header/variables' as *;
+@use '../../base/cardView/content_view/content/card/cover/variables' as *;
 @use '../../base/cardView/content_view/content/card/content/variables' as *;
 @use '../../base/cardView/content_view/content/variables' as *;
 
@@ -20,3 +21,6 @@ $cardview-card-background-color: $base-bg !default;
 
 $cardview-card-content-field-value-highlight-color: $base-inverted-text-color !default;
 $cardview-card-content-field-value-highlight-background: $base-accent !default;
+
+$cardview-card-cover-noimage-background-color: #E0E0E0 !default;
+$cardview-card-cover-noimage-icon-color: #B3B3B3 !default;

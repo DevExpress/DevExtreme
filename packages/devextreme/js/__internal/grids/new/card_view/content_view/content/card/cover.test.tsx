@@ -1,8 +1,7 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { describe, expect, it } from '@jest/globals';
 import { render } from 'inferno';
 
-import { Cover } from './cover';
+import { CLASSES, Cover } from './cover';
 
 describe('Cover', () => {
   it('should render the image correctly', () => {
@@ -20,5 +19,15 @@ describe('Cover', () => {
     expect(image?.src).toBe(props.imageSrc);
     expect(image?.alt).toBe(props.alt);
     expect(image?.className).toContain(props.className);
+  });
+
+  describe('when there is no image', () => {
+    it('should render image thumbnail', () => {
+      const container = document.createElement('div');
+      const props = {};
+
+      render(<Cover {...props} />, container);
+      expect(container.querySelector(CLASSES.cover)).toMatchInlineSnapshot();
+    });
   });
 });

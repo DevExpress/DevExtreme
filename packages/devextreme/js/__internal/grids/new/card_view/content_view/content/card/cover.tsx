@@ -1,14 +1,17 @@
+import { combineClasses } from '@ts/core/utils/combine_classes';
 import { Component } from 'inferno';
 
-const CLASSES = {
+export const CLASSES = {
   cover: 'dx-card-cover',
   image: 'dx-card-cover-image',
+  noImage: 'dx-card-cover-noimage',
+  noImageIcon: 'dx-icon dx-icon-imagethumbnail',
 };
 
 export interface CoverProps {
   imageSrc?: string;
   alt?: string;
-  template?: (src: string, alt: string | undefined, className: string) => JSX.Element;
+  template?: (src: string | undefined, alt: string | undefined, className: string) => JSX.Element;
 }
 
 export class Cover extends Component<CoverProps> {
@@ -18,21 +21,27 @@ export class Cover extends Component<CoverProps> {
     } = this.props;
     const src = imageSrc;
 
-    if (!src) {
-      // @ts-expect-error
-      return null;
-    }
-
     if (template) {
       return template(src, alt, CLASSES.image);
     }
+
+    const containerClasses = combineClasses({
+      [CLASSES.cover]: true,
+      [CLASSES.noImage]: !src,
+    });
+
     return (
-      <div className={CLASSES.cover}>
-        <img
-          src={src}
-          alt={alt}
-          className={CLASSES.image}
-        />
+      <div className={containerClasses}>
+        {src && (
+          <img
+            src={src}
+            alt={alt}
+            className={CLASSES.image}
+          />
+        )}
+        {!src && (
+          <div className={CLASSES.noImageIcon}/>
+        )}
       </div>
     );
   }
