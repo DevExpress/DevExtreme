@@ -2784,14 +2784,14 @@ class SchedulerWorkSpace extends WidgetObserver {
 
   _detachGroupCountClass() {
     VERTICAL_GROUP_COUNT_CLASSES.forEach((className) => {
-      this.$element().removeClass(className);
+      (this.$element() as any).removeClass(className);
     });
   }
 
   _attachGroupCountClass() {
     const className = this._groupedStrategy.getGroupCountClass(this.option('groups'));
 
-    this.$element().addClass(className);
+    (this.$element() as any).addClass(className);
   }
 
   _getDateHeaderTemplate() {
@@ -2799,7 +2799,7 @@ class SchedulerWorkSpace extends WidgetObserver {
   }
 
   _updateAllDayVisibility(): void {
-    this.$element().toggleClass(WORKSPACE_WITH_ALL_DAY_CLASS, this._isShowAllDayPanel());
+    (this.$element() as any).toggleClass(WORKSPACE_WITH_ALL_DAY_CLASS, this._isShowAllDayPanel());
     this._updateAllDayExpansion();
   }
 
@@ -2807,7 +2807,7 @@ class SchedulerWorkSpace extends WidgetObserver {
     const isExpanded = !this.option('allDayExpanded') && this._isShowAllDayPanel();
 
     this.cache.clear();
-    this.$element().toggleClass(WORKSPACE_WITH_COLLAPSED_ALL_DAY_CLASS, isExpanded);
+    (this.$element() as any).toggleClass(WORKSPACE_WITH_COLLAPSED_ALL_DAY_CLASS, isExpanded);
   }
 
   _getDateTables() {

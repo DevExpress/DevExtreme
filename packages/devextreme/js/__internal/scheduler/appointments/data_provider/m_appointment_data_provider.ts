@@ -7,7 +7,7 @@ import { AppointmentFilterBaseStrategy } from './m_appointment_filter';
 import { AppointmentFilterVirtualStrategy } from './m_appointment_filter_virtual';
 
 type FilterStrategy = (AppointmentFilterBaseStrategy | AppointmentFilterVirtualStrategy) & {
-  constructor: Function & {
+  constructor: (AppointmentFilterBaseStrategy | AppointmentFilterVirtualStrategy)['constructor'] & {
     strategyName: string;
   };
 };

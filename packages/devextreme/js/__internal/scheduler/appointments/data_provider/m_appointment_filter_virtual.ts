@@ -1,5 +1,5 @@
-import query from '@js/common/data/query';
 import dateUtils from '@js/core/utils/date';
+import query from '@js/data/query';
 import { dateUtilsTs } from '@ts/core/utils/date';
 import type { AppointmentDataItem } from '@ts/scheduler/r1/types';
 import { isDateAndTimeView, isTimelineView } from '@ts/scheduler/r1/utils/index';
@@ -103,9 +103,7 @@ export class AppointmentFilterVirtualStrategy extends AppointmentFilterBaseStrat
       combinedFilters.push(filter);
     });
 
-    // @ts-expect-error
     return query(itemsToFilter)
-      // @ts-expect-error
       .filter(combinedFilters)
       .toArray();
   }
