@@ -304,6 +304,14 @@ QUnit.module('Connector integration', moduleConfig, () => {
 
         assert.deepEqual(this.getConnector().option('orientation'), 'vertical', 'orientation value is passed');
     });
+
+    ['rtlEnabled', 'disabled', 'templatesRenderAsynchronously'].forEach((optionName) => {
+        QUnit.test(`connector content should not be duplicated after changing synchronizable ${optionName} options`, function(assert) {
+            this.instance.option(optionName, true);
+
+            assert.deepEqual(this.getConnector().$element().children().length, 1, 'content is not duplicated');
+        });
+    });
 });
 
 QUnit.module('Focus', moduleConfig, () => {

@@ -1,4 +1,3 @@
-@use "sass:math";
 @use "colors" as *;
 @use "../colors" as *;
 @use "../sizes" as *;
@@ -34,5 +33,5 @@ $stepper-step-transition-duration: .2s !default;
 }
 
 $stepper-connector-thickness: 1px !default;
-$stepper-connector-margin: math.div($stepper-step-indicator-size - $generic-base-border-width * 2 - $stepper-connector-thickness, 2) !default;
-$stepper-connector-padding: $stepper-padding;
+$stepper-connector-size: $stepper-step-indicator-size !default;
+$stepper-connector-padding: $stepper-padding !default;

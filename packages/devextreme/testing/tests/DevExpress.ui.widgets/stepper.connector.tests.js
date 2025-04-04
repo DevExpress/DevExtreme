@@ -2,6 +2,7 @@ import $ from 'jquery';
 
 import Connector, {
     STEPPER_CONNECTOR_VALUE_CLASS,
+    STEPPER_CONNECTOR_CONTAINER_CLASS,
 } from '__internal/ui/stepper/connector';
 
 import 'generic_light.css!';
@@ -43,6 +44,10 @@ const moduleConfig = {
             init(options, selector);
         };
 
+        this.getContainer = () => {
+            return this.$element.find(`.${STEPPER_CONNECTOR_CONTAINER_CLASS}`);
+        };
+
         this.getConnectorValue = () => {
             return this.$element.find(`.${STEPPER_CONNECTOR_VALUE_CLASS}`);
         };
@@ -81,13 +86,13 @@ QUnit.module('Size option', moduleConfig, () => {
                 size: 75,
             });
 
-            assert.strictEqual(this.$element.css(dimension), '300px');
-            assert.strictEqual(this.$element.css(newDimension), '1px');
+            assert.strictEqual(this.getContainer().css(dimension), '300px');
+            assert.strictEqual(this.getContainer().css(newDimension), '1px');
 
             this.instance.option('orientation', newOrientation);
 
-            assert.strictEqual(this.$element.css(dimension), '1px');
-            assert.strictEqual(this.$element.css(newDimension), '300px');
+            assert.strictEqual(this.getContainer().css(dimension), '1px');
+            assert.strictEqual(this.getContainer().css(newDimension), '300px');
         });
     });
 });

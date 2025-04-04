@@ -4,7 +4,7 @@ import Connector, {
     STEPPER_CONNECTOR_CLASS,
     STEPPER_CONNECTOR_HORIZONTAL_ORIENTATION_CLASS,
     STEPPER_CONNECTOR_VERTICAL_ORIENTATION_CLASS,
-    STEPPER_CONNECTOR_CONTENT_CLASS,
+    STEPPER_CONNECTOR_CONTAINER_CLASS,
     STEPPER_CONNECTOR_VALUE_CLASS,
 } from '__internal/ui/stepper/connector';
 
@@ -32,8 +32,8 @@ const moduleConfig = {
             init(options, selector);
         };
 
-        this.getContent = () => {
-            return this.$element.find(`.${STEPPER_CONNECTOR_CONTENT_CLASS}`);
+        this.getContainer = () => {
+            return this.$element.find(`.${STEPPER_CONNECTOR_CONTAINER_CLASS}`);
         };
 
         this.getConnectorValue = () => {
@@ -72,13 +72,13 @@ QUnit.module('Stepper connector markup', moduleConfig, () => {
         assert.strictEqual(this.$element.hasClass(STEPPER_CONNECTOR_VERTICAL_ORIENTATION_CLASS), false);
     });
 
-    QUnit.test(`connector content element should be rendered inside root container with the ${STEPPER_CONNECTOR_CONTENT_CLASS} class`, function(assert) {
-        assert.strictEqual(this.getContent().length, 1, 'content element was rendered');
-        assert.strictEqual(this.getContent().parent().is(this.$element), true, 'content element is rendered inside root container');
+    QUnit.test(`connector content element should be rendered inside root container with the ${STEPPER_CONNECTOR_CONTAINER_CLASS} class`, function(assert) {
+        assert.strictEqual(this.getContainer().length, 1, 'content element was rendered');
+        assert.strictEqual(this.getContainer().parent().is(this.$element), true, 'content element is rendered inside root container');
     });
 
     QUnit.test(`connector value element should be rendered inside content with the ${STEPPER_CONNECTOR_VALUE_CLASS} class`, function(assert) {
         assert.strictEqual(this.getConnectorValue().length, 1, 'value element was rendered');
-        assert.strictEqual(this.getConnectorValue().parent().is(this.getContent()), true, 'value element is rendered inside content');
+        assert.strictEqual(this.getConnectorValue().parent().is(this.getContainer()), true, 'value element is rendered inside content');
     });
 });

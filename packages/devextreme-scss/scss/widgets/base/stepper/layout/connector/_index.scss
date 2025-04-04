@@ -1,6 +1,8 @@
 .dx-stepper-connector {
   display: flex;
   position: absolute;
+  align-items: center;
+  pointer-events: none;
 }
 
 .dx-stepper-connector-horizontal {
@@ -13,9 +15,10 @@
 }
 
 .dx-stepper-connector-vertical {
+  flex-direction: column;
   height: 100%;
 
-  .dx-stepper-connector-content {
+  .dx-stepper-connector-container {
     flex-direction: column;
   }
 
@@ -25,9 +28,9 @@
   }
 }
 
-.dx-stepper-connector-content {
+.dx-stepper-connector-container {
   display: flex;
-  flex-grow: 1;
+  flex: 1;
 }
 
 .dx-stepper-connector-value {

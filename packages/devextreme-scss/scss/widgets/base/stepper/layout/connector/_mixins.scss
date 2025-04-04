@@ -1,11 +1,11 @@
 @mixin connector(
   $connector-background-color,
   $background-color,
-  $margin,
+  $size,
   $padding,
   $thickness,
 ) {
-  .dx-stepper-connector-content {
+  .dx-stepper-connector-container {
     background-color: $connector-background-color;
   }
 
@@ -15,13 +15,19 @@
 
   .dx-stepper-connector-horizontal {
     padding-inline: $padding;
-    margin-block-start: $margin;
-    height: $thickness;
+    height: $size;
+
+    .dx-stepper-connector-container {
+      height: $thickness;
+    }
   }
 
   .dx-stepper-connector-vertical {
     padding-block: $padding;
-    margin-inline-start: $margin;
-    width: $thickness;
+    width: $size;
+
+    .dx-stepper-connector-container {
+      width: $thickness;
+    }
   }
 }
