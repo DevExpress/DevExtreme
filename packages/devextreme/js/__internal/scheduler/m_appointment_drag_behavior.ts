@@ -3,7 +3,7 @@ import { Deferred } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import Draggable from '@js/ui/draggable';
 
-import { LIST_ITEM_DATA_KEY } from './m_constants';
+import { APPOINTMENT_SETTINGS_KEY, LIST_ITEM_DATA_KEY } from './m_constants';
 import { isSchedulerComponent } from './utils/is_scheduler_component';
 
 const APPOINTMENT_ITEM_CLASS = 'dx-scheduler-appointment';
@@ -26,7 +26,7 @@ export default class AppointmentDragBehavior {
   }
 
   isAllDay(appointment) {
-    return appointment.data('dxAppointmentSettings').allDay;
+    return appointment.data(APPOINTMENT_SETTINGS_KEY).allDay;
   }
 
   onDragStart(e) {

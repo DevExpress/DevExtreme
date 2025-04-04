@@ -1,5 +1,4 @@
 import { BaseInfernoComponent } from '@devextreme/runtime/inferno';
-import { getTemplate } from '@ts/core/r1/utils/index';
 
 import { renderUtils } from '../../utils/index';
 import type { DateTableCellBaseProps } from '../base/date_table_cell_base';
@@ -60,13 +59,12 @@ export class DateTableMonthCell extends BaseInfernoComponent<DateTableCellBasePr
       [className ?? '']: !!className,
     });
     const contentTemplateProps = this.getContentTemplateProps();
-    const DataCellTemplateComponent = getTemplate(dataCellTemplate);
 
     return (
       <DateTableCellBase
         className={classes}
         viewContext={viewContext}
-        dataCellTemplate={DataCellTemplateComponent}
+        dataCellTemplate={dataCellTemplate}
         startDate={startDate}
         endDate={endDate}
         text={text}

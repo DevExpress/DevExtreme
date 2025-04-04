@@ -1,6 +1,5 @@
 import type { InfernoEffect } from '@devextreme/runtime/inferno';
 import { createReRenderEffect, InfernoWrapperComponent } from '@devextreme/runtime/inferno';
-import { getTemplate } from '@ts/core/r1/utils/index';
 
 import type { DateTableProps } from '../base/date_table';
 import { DateTable, DateTableDefaultProps } from '../base/date_table';
@@ -24,8 +23,6 @@ export class DateTableMonth extends InfernoWrapperComponent<DateTableProps> {
       ...restProps
     } = this.props;
 
-    const DataCellTemplateComponent = getTemplate(dataCellTemplate);
-
     return (
       <DateTable
         {...restProps}
@@ -33,7 +30,7 @@ export class DateTableMonth extends InfernoWrapperComponent<DateTableProps> {
         viewContext={viewContext}
         groupOrientation={groupOrientation}
         addDateTableClass={addDateTableClass}
-        dataCellTemplate={DataCellTemplateComponent}
+        dataCellTemplate={dataCellTemplate}
         // @ts-expect-error JSX template types issue
         cellTemplate={DateTableMonthCell}
         tableRef={tableRef}

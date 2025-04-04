@@ -10,6 +10,7 @@ import { DataSource } from '@js/data/data_source/data_source';
 import { normalizeDataSourceOptions } from '@js/data/data_source/utils';
 import { current, isFluent } from '@js/ui/themes';
 import { getGroupCount, hasResourceValue } from '@ts/scheduler/r1/utils/index';
+import type { AppointmentDataAccessor } from '@ts/scheduler/utils';
 
 export const getValueExpr = (resource) => resource.valueExpr || 'id';
 export const getDisplayExpr = (resource) => resource.displayExpr || 'text';
@@ -353,7 +354,7 @@ export const reduceResourcesTree = (getDataAccessors, tree, existingAppointments
       }
     });
 
-    if (ok && node.children && node.children.length) {
+    if (ok && node.children?.length) {
       reduceResourcesTree(getDataAccessors, node.children, existingAppointments, _result[index]);
     }
   });
@@ -362,7 +363,7 @@ export const reduceResourcesTree = (getDataAccessors, tree, existingAppointments
 };
 
 export const getResourcesDataByGroups = (loadedResources, resources, groups) => {
-  if (!groups || !groups.length) {
+  if (!groups?.length) {
     return loadedResources;
   }
 
@@ -549,8 +550,12 @@ export const loadResources = (groups, resources, resourceLoaderMap) => {
   return result.promise();
 };
 
-export const getNormalizedResources = (rawAppointment, dataAccessors, resources) => {
-  const result = { };
+export const getNormalizedResources = (
+  rawAppointment,
+  dataAccessors: AppointmentDataAccessor,
+  resources,
+) => {
+  const result = {};
 
   each(dataAccessors.resources.getter, (fieldName) => {
     const value = dataAccessors.resources.getter[fieldName](rawAppointment);

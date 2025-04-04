@@ -1,6 +1,7 @@
 import $ from 'jquery';
 import translator from 'animation/translator';
 import fx from 'animation/fx';
+import { mockDataAccessor } from '../../helpers/scheduler/mockDataAccessor.js';
 import { createWrapper } from '../../helpers/scheduler/helpers.js';
 import themes from 'ui/themes';
 import { CompactAppointmentsHelper } from '__internal/scheduler/m_compact_appointments_helper';
@@ -89,6 +90,7 @@ module('Integration: Appointments Collector Base Tests', baseConfig, () => {
             _getAppointmentTemplate(template) {
                 return this._getTemplateByOption(template);
             },
+            _dataAccessors: mockDataAccessor,
             createAppointmentAdapter(date) {
                 const schedulerMock = {
                     fire: (methodName, fieldName, appointment) => appointment[fieldName]
