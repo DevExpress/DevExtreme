@@ -24384,7 +24384,7 @@ declare module DevExpress.ui {
         };
     export type AppointmentCollectorTemplateData = {
       readonly appointmentCount: number;
-      readonly items: any[];
+      readonly items: Appointment[];
       readonly isCompact: boolean;
     };
     /**
