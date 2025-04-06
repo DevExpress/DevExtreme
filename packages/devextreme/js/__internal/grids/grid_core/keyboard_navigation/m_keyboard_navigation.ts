@@ -105,8 +105,6 @@ export class KeyboardNavigationController extends modules.ViewController {
 
   private rowsViewRenderCompletedWithContext!: (e: any) => void;
 
-  private columnHeadersViewRenderCompletedWithContext!: (e: any) => void;
-
   private rowsViewFocusHandlerContext!: (event: any) => void;
 
   private rowsViewFocusOutHandlerContext!: (event: Event) => void;
@@ -124,8 +122,6 @@ export class KeyboardNavigationController extends modules.ViewController {
   private _pointerEventAction: any;
 
   private _rowsViewKeyDownListener: any;
-
-  private _columnHeadersViewKeyDownListener: any;
 
   private focusType: any;
 
@@ -171,7 +167,6 @@ export class KeyboardNavigationController extends modules.ViewController {
     this._memoFireFocusedRowChanged = memoize(this._memoFireFocusedRowChanged.bind(this), { compareType: 'value' });
 
     this.focusedHandlerWithContext = this.focusedHandlerWithContext || this.focusedHandler.bind(this);
-    this.columnHeadersViewRenderCompletedWithContext = this.columnHeadersViewRenderCompletedWithContext || this.columnHeadersViewRenderCompleted.bind(this);
     this.rowsViewRenderCompletedWithContext = this.rowsViewRenderCompletedWithContext || this.rowsViewRenderCompleted.bind(this);
     this.rowsViewFocusHandlerContext = this.rowsViewFocusHandlerContext || this.rowsViewFocusHandler.bind(this);
     this.rowsViewFocusOutHandlerContext = this.rowsViewFocusOutHandlerContext
@@ -191,7 +186,6 @@ export class KeyboardNavigationController extends modules.ViewController {
       this._editorFactory?.focused.remove(this.focusedHandlerWithContext);
     }
 
-    this.initColumnHeadersViewHandler();
     this.initRowsViewHandlers();
     this.initDocumentHandlers();
   }
@@ -200,7 +194,6 @@ export class KeyboardNavigationController extends modules.ViewController {
     super.dispose();
     this._resetFocusedView();
     keyboard.off(this._rowsViewKeyDownListener);
-    keyboard.off(this._columnHeadersViewKeyDownListener);
     eventsEngine.off(
       domAdapter.getDocument(),
       addNamespace(pointerEvents.down, 'dxDataGridKeyboardNavigation'),
@@ -276,10 +269,6 @@ export class KeyboardNavigationController extends modules.ViewController {
     eventsEngine.off($rowsView, 'focusout', this.rowsViewFocusOutHandlerContext);
   }
 
-  protected columnHeadersViewRenderCompleted(): void {
-    this.initColumnHeadersViewKeyDownHandler();
-  }
-
   protected rowsViewRenderCompleted(e: any): void {
     const $rowsView = this._rowsView.element();
     const isFullUpdate = !e || e.changeType === 'refresh';
@@ -321,16 +310,6 @@ export class KeyboardNavigationController extends modules.ViewController {
     }
 
     return true;
-  }
-
-  private initColumnHeadersViewHandler(): void {
-    this.unsubscribeFromColumnHeadersViewKeyDownEvent();
-
-    this._columnHeadersView?.renderCompleted?.remove(this.columnHeadersViewRenderCompletedWithContext);
-
-    if (this.isKeyboardEnabled()) {
-      this._columnHeadersView?.renderCompleted?.add(this.columnHeadersViewRenderCompletedWithContext);
-    }
   }
 
   private initRowsViewHandlers(): void {
@@ -433,23 +412,6 @@ export class KeyboardNavigationController extends modules.ViewController {
     this.subscribeToPointerEvent();
   }
 
-  private unsubscribeFromColumnHeadersViewKeyDownEvent(): void {
-    if (this._columnHeadersViewKeyDownListener) {
-      keyboard.off(this._columnHeadersViewKeyDownListener);
-    }
-  }
-
-  private subscribeToColumnHeadersViewKeyDownEvent(): void {
-    const $columnHeadersView = this._columnHeadersView.element();
-
-    this._columnHeadersViewKeyDownListener = keyboard.on($columnHeadersView, null, (e) => this._columnHeadersViewKeyDownHandler(e));
-  }
-
-  private initColumnHeadersViewKeyDownHandler(): void {
-    this.unsubscribeFromColumnHeadersViewKeyDownEvent();
-    this.subscribeToColumnHeadersViewKeyDownEvent();
-  }
-
   private unsubscribeFromRowsViewKeyDownEvent(): void {
     keyboard.off(this._rowsViewKeyDownListener);
   }
@@ -508,12 +470,6 @@ export class KeyboardNavigationController extends modules.ViewController {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   protected headerTabKeyHandler(e) {}
-
-  private _columnHeadersViewKeyDownHandler(e) {
-    if (e.keyName === 'tab') {
-      this.headerTabKeyHandler(e);
-    }
-  }
 
   private _rowsViewKeyDownHandler(e) {
     let needStopPropagation = true;

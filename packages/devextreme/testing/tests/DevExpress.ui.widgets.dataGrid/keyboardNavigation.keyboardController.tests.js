@@ -5,6 +5,7 @@ import 'generic_light.css!';
 import 'ui/data_grid';
 
 import { keyboardNavigationModule } from '__internal/grids/grid_core/keyboard_navigation/m_keyboard_navigation';
+import { headersKeyboardNavigationModule } from '__internal/grids/grid_core/keyboard_navigation/modules/m_headers_keyboard_navigation';
 import commonUtils from 'core/utils/common';
 import typeUtils from 'core/utils/type';
 import publicComponentUtils from 'core/utils/public_component';
@@ -15,6 +16,7 @@ import { MockDataController, MockColumnsController, MockEditingController } from
 import { CLICK_EVENT, callViewsRenderCompleted } from '../../helpers/grid/keyboardNavigationHelper.js';
 
 const KeyboardNavigationController = keyboardNavigationModule.controllers.keyboardNavigation;
+const HeadersKeyboardNavigationController = headersKeyboardNavigationModule.extenders.controllers.keyboardNavigation(KeyboardNavigationController);
 
 QUnit.testStart(function() {
     const markup = `
@@ -823,7 +825,7 @@ QUnit.module('Keyboard controller', {
         const onSpy = sinon.spy();
         const offSpy = sinon.spy();
         const columnHeadersView = this.getView('columnHeadersView');
-        const navigationController = new KeyboardNavigationController(this.component);
+        const navigationController = new HeadersKeyboardNavigationController(this.component);
 
         eventsEngine.on = onSpy;
         eventsEngine.off = offSpy;
@@ -858,7 +860,7 @@ QUnit.module('Keyboard controller', {
         const onSpy = sinon.spy();
         const offSpy = sinon.spy();
         const columnHeadersView = this.getView('columnHeadersView');
-        const navigationController = new KeyboardNavigationController(this.component);
+        const navigationController = new HeadersKeyboardNavigationController(this.component);
 
         eventsEngine.on = onSpy;
         eventsEngine.off = offSpy;
