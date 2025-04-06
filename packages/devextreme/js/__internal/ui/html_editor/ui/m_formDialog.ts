@@ -43,7 +43,7 @@ export default class FormDialog extends DialogBase {
     this._attachOptionChangedHandler();
   }
 
-  protected _attachOptionChangedHandler() {
+  protected _attachOptionChangedHandler(): void {
     this._popup?.on('optionChanged', ({ name, value }) => {
       if (name === 'title') {
         this._onTitleChanged(value);
