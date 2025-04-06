@@ -167,4 +167,29 @@ describe('ColumnsController', () => {
       ]);
     });
   });
+
+  it('should not reset current column state after column option change', () => {
+    const { columnsController, options } = setup(
+      {
+        columns: [
+          { dataField: 'a' },
+          { dataField: 'b' },
+          { dataField: 'c' },
+        ],
+      },
+    );
+
+    const { columns } = columnsController;
+
+    columnsController.columnOption(columns.unreactive_get()[0], 'sortOrder', 'asc');
+    expect(
+      columns.unreactive_get()[0].sortOrder,
+    ).toBe('asc');
+
+    options.option('columns[0].visible', false);
+
+    expect(
+      columns.unreactive_get()[0].sortOrder,
+    ).toBe('asc');
+  });
 });

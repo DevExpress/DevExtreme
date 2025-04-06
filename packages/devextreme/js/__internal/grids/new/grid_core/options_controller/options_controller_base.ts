@@ -50,7 +50,7 @@ function cloneObjectValue<T extends Record<string, unknown> | unknown[]>(
   return Array.isArray(value) ? [...value] : { ...value };
 }
 
-function updateImmutable<T extends Record<string, unknown> | unknown[]>(
+export function updateImmutable<T extends Record<string, unknown> | unknown[]>(
   value: T,
   newValue: T,
   pathParts: string[],
@@ -74,8 +74,12 @@ function getValue<T>(obj: unknown, path: string): T {
   return v;
 }
 
+export type SpecialCaseHandler = (e: ChangedOptionInfo) => 'processed' | 'not_processed';
+
 export class OptionsController<TProps, TDefaultProps extends TProps = TProps> {
   private isControlledMode = false;
+
+  private readonly specialCaseHandlers = new Set<SpecialCaseHandler>();
 
   private readonly props: SubsGetsUpd<TProps>;
 
@@ -93,6 +97,12 @@ export class OptionsController<TProps, TDefaultProps extends TProps = TProps> {
 
     component.on('optionChanged', (e: ChangedOptionInfo) => {
       this.updateIsControlledMode();
+
+      for (const handler of this.specialCaseHandlers) {
+        if (handler(e) === 'processed') {
+          return;
+        }
+      }
 
       const pathParts = getPathParts(e.fullName);
       // @ts-expect-error
@@ -177,5 +187,9 @@ export class OptionsController<TProps, TDefaultProps extends TProps = TProps> {
       () => this.component._createActionByOption(name) as any,
       [this.oneWay(name)],
     );
+  }
+
+  public addSpecialCaseHanler(handler: SpecialCaseHandler): void {
+    this.specialCaseHandlers.add(handler);
   }
 }

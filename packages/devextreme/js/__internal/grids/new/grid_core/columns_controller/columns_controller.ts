@@ -3,6 +3,7 @@ import type { Subscribable, SubsGets, SubsGetsUpd } from '@ts/core/reactive/inde
 import {
   computed, interruptableComputed,
 } from '@ts/core/reactive/index';
+import { getPathParts } from '@ts/core/utils/m_data';
 
 import { OptionsController } from '../options_controller/options_controller';
 import type { ColumnProperties, ColumnSettings, PreNormalizedColumn } from './options';
@@ -61,6 +62,32 @@ export class ColumnsController {
     );
 
     this.allowColumnReordering = this.options.oneWay('allowColumnReordering');
+
+    this.options.addSpecialCaseHanler((e) => {
+      const pathParts = getPathParts(e.fullName);
+
+      switch (true) {
+        case pathParts[0] !== 'columns':
+        case pathParts.length === 1:
+          return 'not_processed';
+        case pathParts.length === 2: {
+          const index = +pathParts[1];
+          const column = this.columns.unreactive_get()[index];
+          Object.entries(e.value).forEach(([key, value]) => {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            this.columnOption(column, key as any, value);
+          });
+          return 'processed';
+        }
+        default: {
+          const index = +pathParts[1];
+          const propName = pathParts[2];
+          const column = this.columns.unreactive_get()[index];
+          this.columnOption(column, propName, e.value);
+          return 'processed';
+        }
+      }
+    });
   }
 
   public addColumn(columnProps: ColumnProperties): void {

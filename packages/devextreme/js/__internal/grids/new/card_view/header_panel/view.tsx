@@ -1,6 +1,6 @@
 /* eslint-disable spellcheck/spell-checker */
 import type { SubsGets } from '@ts/core/reactive/index';
-import { combined, computed } from '@ts/core/reactive/index';
+import { combined } from '@ts/core/reactive/index';
 import { ColumnsController } from '@ts/grids/new/grid_core/columns_controller/columns_controller';
 import { View } from '@ts/grids/new/grid_core/core/view';
 
@@ -29,10 +29,7 @@ export class HeaderPanelView extends View<HeaderPanelProps> {
 
   protected override getProps(): SubsGets<HeaderPanelProps> {
     return combined({
-      columns: computed(
-        (columns) => [...columns].sort((a, b) => a.visibleIndex - b.visibleIndex),
-        [this.columnsController.columns],
-      ),
+      columns: this.columnsController.visibleColumns,
       onMove: this.onMove.bind(this),
       onRemove: this.onRemove.bind(this),
       allowColumnReordering: this.columnsController.allowColumnReordering,
