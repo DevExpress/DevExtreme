@@ -2,11 +2,11 @@ import $ from 'jquery';
 
 import 'generic_light.css!';
 
-import 'ui/select_box';
 import '__internal/ui/color_box/m_color_view';
 
 import Toolbar from '__internal/ui/html_editor/modules/m_toolbar';
 import FormDialog from '__internal/ui/html_editor/ui/m_formDialog';
+import AIDialog from '__internal/ui/html_editor/ui/m_aiDialog';
 import { noop } from 'core/utils/common';
 import keyboardMock from '../../../helpers/keyboardMock.js';
 import fx from 'common/core/animation/fx';
@@ -24,6 +24,7 @@ const DIALOG_CLASS = 'dx-formdialog';
 const DIALOG_TARGET_ITEM_CLASS = 'dx-formdialog-field-target';
 const SEPARATOR_CLASS = 'dx-htmleditor-toolbar-separator';
 const MENU_SEPARATOR_CLASS = 'dx-htmleditor-toolbar-menu-separator';
+const AI_DIALOG_CONTENT_CLASS = 'dx-aidialog-content';
 
 const BUTTON_CLASS = 'dx-button';
 const SELECTBOX_CLASS = 'dx-selectbox';
@@ -67,6 +68,50 @@ const TABLE_OPERATIONS = [
     'deleteColumn',
     'deleteRow',
     'deleteTable'
+];
+
+const defaultAITranslateOptions = [
+    'Arabic',
+    'Chinese',
+    'English',
+    'French',
+    'German',
+    'Japanese',
+    'Spanish'
+];
+
+const defaultAIChangeToneOptions = [
+    'Professional',
+    'Casual',
+    'Straightforward',
+    'Confident',
+    'Friendly'
+];
+
+const defaultAIChangeStyleOptions = [
+    'Formal',
+    'Informal',
+    'Technical',
+    'Business',
+    'Creative',
+    'Journalistic',
+    'Academic',
+    'Persuasive',
+    'Narrative',
+    'Expository',
+    'Descriptive',
+    'Conversational'
+];
+
+const defaultAICommands = [
+    'summarize',
+    'proofread',
+    'expand',
+    'shorten',
+    'changeStyle',
+    'changeTone',
+    'translate',
+    'askAI'
 ];
 
 const simpleModuleConfig = {
@@ -116,7 +161,8 @@ const simpleModuleConfig = {
                 },
                 _saveValueChangeEvent: noop,
                 option: noop,
-                on: noop
+                on: noop,
+                ai: {},
             }
         };
     },
@@ -191,6 +237,78 @@ const dialogModuleConfig = {
         };
 
         this.formDialog = new FormDialog(this.options.editorInstance, { container: this.$element, position: null });
+    },
+    afterEach: function() {
+        fx.off = false;
+    }
+};
+
+const dialogAIModuleConfig = {
+    beforeEach: function() {
+        fx.off = true;
+
+        this.$element = $('#htmlEditor');
+        this.log = [];
+        this.focusStub = sinon.stub();
+
+        this.quillMock = {
+            format: (format, value) => {
+                this.log.push({ format: format, value: value });
+            },
+            insertText: (index, text, formats) => {
+                this.log.push({ index: index, text: text, formats: formats });
+            },
+            insertEmbed: (index, type, value) => {
+                this.log.push({ index: index, type: type, value: value });
+            },
+            on: noop,
+            off: noop,
+            keyboard: {
+                addBinding: noop
+            },
+            table: {
+                insertTable: sinon.stub(),
+                insertRowAbove: sinon.stub(),
+                insertRowBelow: sinon.stub(),
+                insertColumnLeft: sinon.stub(),
+                insertColumnRight: sinon.stub(),
+                deleteTable: sinon.stub(),
+                deleteRow: sinon.stub(),
+                deleteColumn: sinon.stub()
+            },
+            focus: this.focusStub,
+            getSelection: noop,
+            setSelection: (index, length) => { this.log.push({ setSelection: [index, length] }); },
+            getFormat: () => { return {}; },
+            getLength: () => { return 1; },
+            getModule: (moduleName) => this.quillMock[moduleName]
+        };
+
+        this.options = {
+            editorInstance: {
+                NAME: 'dxHtmlEditor',
+                addCleanCallback: noop,
+                addContentInitializedCallback: noop,
+                $element: () => {
+                    return this.$element;
+                },
+                _createComponent: ($element, widget, options) => {
+                    return new widget($element, options);
+                },
+                _getQuillContainer: () => {
+                    return this.$element;
+                },
+                _saveValueChangeEvent: noop,
+                on: noop,
+                option: noop,
+                ai: {},
+                showAIDialog: (config) => {
+                    return this._dialogAI.show(config);
+                }
+            }
+        };
+
+        this._dialogAI = new AIDialog(this.options.editorInstance, {}, {});
     },
     afterEach: function() {
         fx.off = false;
@@ -665,6 +783,120 @@ testModule('Toolbar module', simpleModuleConfig, () => {
         const $headerEditor = this.$element.find(`.${HEADER_FORMAT_CLASS}`).eq(0);
 
         assert.ok($sizeEditor.width() < $headerEditor.width() * 0.9, 'Size editor has custom width');
+    });
+    QUnit.test('renders AI menu with default items when AI item is passed as string', function(assert) {
+        this.options.items = ['ai'];
+
+        new Toolbar(this.quillMock, this.options);
+
+        const $menu = this.$element.find('.dx-menu');
+        assert.ok($menu.length, 'menu for "ai" was rendered');
+
+        const menuInstance = $menu.dxMenu('instance');
+        const dataSource = menuInstance.option('dataSource');
+        assert.ok(dataSource, 'has dataSource');
+
+        const rootItem = dataSource[0];
+        const commands = rootItem.items || [];
+
+        const actualCommands = commands.map(command => command.id);
+        assert.deepEqual(actualCommands, defaultAICommands, 'commands match default list');
+
+        const changeStyleCommand = commands.find(command => command.id === 'changeStyle');
+        const changeStyleOptions = changeStyleCommand.items.map(option => option.id);
+        assert.deepEqual(changeStyleOptions, defaultAIChangeStyleOptions, 'changeStyle options match defaults');
+
+        const changeToneCommand = commands.find(command => command.id === 'changeTone');
+        const changeToneOptions = changeToneCommand.items.map(option => option.id);
+        assert.deepEqual(changeToneOptions, defaultAIChangeToneOptions, 'changeTone options match defaults');
+
+        const translateCommand = commands.find(command => command.id === 'translate');
+        const translateOptions = translateCommand.items.map(option => option.id);
+
+        assert.deepEqual(translateOptions, defaultAITranslateOptions, 'translate options match defaults');
+    });
+
+    QUnit.test('renders AI menu with default items when AI item is passed as object', function(assert) {
+        this.options.items = [{ name: 'ai' }];
+
+        new Toolbar(this.quillMock, this.options);
+
+        const $menu = this.$element.find('.dx-menu');
+        assert.ok($menu.length, 'menu for "ai" was rendered');
+
+        const menuInstance = $menu.dxMenu('instance');
+        const dataSource = menuInstance.option('dataSource');
+
+        const rootItem = dataSource[0];
+        const commands = rootItem.items || [];
+
+        const actualCommands = commands.map(command => command.id);
+        assert.deepEqual(actualCommands, defaultAICommands, 'commands match default list');
+
+        const changeStyleCommand = commands.find(command => command.id === 'changeStyle');
+        const changeStyleOptions = changeStyleCommand.items.map(option => option.id);
+        assert.deepEqual(changeStyleOptions, defaultAIChangeStyleOptions, 'changeStyle options match defaults');
+
+        const changeToneCommand = commands.find(command => command.id === 'changeTone');
+        const changeToneOptions = changeToneCommand.items.map(option => option.id);
+        assert.deepEqual(changeToneOptions, defaultAIChangeToneOptions, 'changeTone options match defaults');
+
+        const translateCommand = commands.find(command => command.id === 'translate');
+        const translateOptions = translateCommand.items.map(option => option.id);
+
+        assert.deepEqual(translateOptions, defaultAITranslateOptions, 'translate options match defaults');
+    });
+
+    QUnit.test('renders AI menu with commands and default options', function(assert) {
+        this.options.items = [{ name: 'ai', commands: ['translate', 'changeStyle'] }];
+
+        new Toolbar(this.quillMock, this.options);
+
+        const $menu = this.$element.find('.dx-menu');
+        assert.ok($menu.length, 'menu for "ai" was rendered');
+
+        const menuInstance = $menu.dxMenu('instance');
+        const dataSource = menuInstance.option('dataSource');
+
+        const rootItem = dataSource[0];
+        const commands = rootItem.items || [];
+        assert.strictEqual(commands.length, 2, 'only specified commands rendered');
+
+        const actualCommands = commands.map(command => command.id);
+        assert.deepEqual(actualCommands, ['translate', 'changeStyle'], 'commands match specified list');
+
+        const changeStyleCommand = commands.find(command => command.id === 'changeStyle');
+        const changeStyleOptions = changeStyleCommand.items.map(option => option.id);
+        assert.deepEqual(changeStyleOptions, defaultAIChangeStyleOptions, 'changeStyle options match defaults');
+
+        const translateCommand = commands.find(command => command.id === 'translate');
+        const translateOptions = translateCommand.items.map(option => option.id);
+        assert.deepEqual(translateOptions, defaultAITranslateOptions, 'translate options match defaults');
+    });
+
+
+    QUnit.test('renders AI menu with commands and options', function(assert) {
+        const commandOptions = ['English', 'Spanish'];
+        this.options.items = [{ name: 'ai', commands: [{ name: 'translate', options: commandOptions }] }];
+
+        new Toolbar(this.quillMock, this.options);
+
+        const $menu = this.$element.find('.dx-menu');
+        assert.ok($menu.length, 'menu for "ai" was rendered');
+
+        const menuInstance = $menu.dxMenu('instance');
+        const dataSource = menuInstance.option('dataSource');
+
+        const rootItem = dataSource[0];
+        const commands = rootItem.items || [];
+        assert.strictEqual(commands.length, 1, 'only specified commands rendered');
+
+        const actualCommands = commands.map(command => command.id);
+        assert.deepEqual(actualCommands, ['translate'], 'commands match specified list');
+
+        const translateCommand = commands.find(command => command.id === 'translate');
+        const translateOptions = translateCommand.items.map(option => option.id);
+        assert.deepEqual(translateOptions, commandOptions, 'only specified options rendered');
     });
 });
 
@@ -1337,6 +1569,27 @@ testModule('Toolbar dialogs', dialogModuleConfig, () => {
         const isFieldsVisible = Boolean($fieldInputs.length);
 
         assert.notOk(isFieldsVisible, 'insertTable dialog is hidden');
+    });
+});
+
+testModule('Toolbar dialogs', dialogAIModuleConfig, () => {
+    QUnit.skip('show AI dialog', function(assert) {
+        this.options.items = [{ name: 'ai' }];
+        new Toolbar(this.quillMock, this.options);
+
+        this.$element
+            .find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`)
+            .trigger('dxclick');
+
+        this.$element
+            .find('.dx-menu-item')
+            .trigger('dxclick');
+
+        const $dialog = $(`.${DIALOG_CLASS}`);
+        const $content = $dialog.find(`.${AI_DIALOG_CONTENT_CLASS}`);
+
+        assert.ok($dialog.length, 'Dialog wrapper rendered');
+        assert.ok($content.length, 'AI dialog content is rendered');
     });
 });
 
