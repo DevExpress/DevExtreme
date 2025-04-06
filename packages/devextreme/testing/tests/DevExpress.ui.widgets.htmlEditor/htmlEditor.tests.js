@@ -29,6 +29,7 @@ import './htmlEditorParts/mentionModule.tests.js';
 import mentionIntegrationTests from './htmlEditorParts/mentionIntegration.tests.js';
 import './htmlEditorParts/scrolling.tests.js';
 import multilineIntegrationTests from './htmlEditorParts/multilineIntegration.tests.js';
+import './htmlEditorParts/aiDialog.tests.js';
 
 markupTests();
 valueRenderingTests();

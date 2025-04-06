@@ -3,6 +3,7 @@ import $ from 'jquery';
 import 'generic_light.css!';
 
 import '__internal/ui/color_box/m_color_view';
+import 'ui/drop_down_button';
 
 import Toolbar from '__internal/ui/html_editor/modules/m_toolbar';
 import FormDialog from '__internal/ui/html_editor/ui/m_formDialog';
@@ -24,7 +25,6 @@ const DIALOG_CLASS = 'dx-formdialog';
 const DIALOG_TARGET_ITEM_CLASS = 'dx-formdialog-field-target';
 const SEPARATOR_CLASS = 'dx-htmleditor-toolbar-separator';
 const MENU_SEPARATOR_CLASS = 'dx-htmleditor-toolbar-menu-separator';
-const AI_DIALOG_CONTENT_CLASS = 'dx-aidialog-content';
 
 const BUTTON_CLASS = 'dx-button';
 const SELECTBOX_CLASS = 'dx-selectbox';
@@ -1572,8 +1572,8 @@ testModule('Toolbar dialogs', dialogModuleConfig, () => {
     });
 });
 
-testModule('Toolbar dialogs', dialogAIModuleConfig, () => {
-    QUnit.skip('show AI dialog', function(assert) {
+testModule('Toolbar AI dialog', dialogAIModuleConfig, () => {
+    QUnit.test('renders base controls in AI dialog', function(assert) {
         this.options.items = [{ name: 'ai' }];
         new Toolbar(this.quillMock, this.options);
 
@@ -1586,10 +1586,13 @@ testModule('Toolbar dialogs', dialogAIModuleConfig, () => {
             .trigger('dxclick');
 
         const $dialog = $(`.${DIALOG_CLASS}`);
-        const $content = $dialog.find(`.${AI_DIALOG_CONTENT_CLASS}`);
+        const $commandSelect = $dialog.find('.dx-selectbox').eq(0);
+        const $optionSelect = $dialog.find('.dx-selectbox').eq(1);
+        const $textArea = $dialog.find('.dx-textarea');
 
-        assert.ok($dialog.length, 'Dialog wrapper rendered');
-        assert.ok($content.length, 'AI dialog content is rendered');
+        assert.ok($commandSelect.length, 'Command SelectBox rendered');
+        assert.ok($optionSelect.length, 'Option SelectBox rendered');
+        assert.ok($textArea.length, 'TextArea rendered');
     });
 });
 
