@@ -55,6 +55,7 @@ export default class FormDialog extends DialogBase {
     const baseConfig = super._getPopupConfig();
 
     return extend(true, {}, baseConfig, {
+      showCloseButton: false,
       onInitialized: (e) => {
         this._popup = e.component;
         this._popup.on('hiding', () => this.onHiding());

@@ -107,7 +107,9 @@ function getFormatHandlers(module) {
   };
 }
 
-function handleAIDropDownSelection(module, { command, parentCommand, commandsMap }): void {
+function handleAIDropDownSelection(module, options): void {
+  const { command, parentCommand, commandsMap } = options;
+
   if (command === 'root') {
     return;
   }
@@ -124,7 +126,7 @@ function handleAIDropDownSelection(module, { command, parentCommand, commandsMap
     commandsMap,
   };
 
-  module.editorInstance.showAIDialog(dialogAIConfig).done((data, event) => {
+  module.editorInstance.showAIDialog(dialogAIConfig)?.done((data, event) => {
     const insertIndex = hasSelection ? selection.index : 0;
 
     quill.focus();

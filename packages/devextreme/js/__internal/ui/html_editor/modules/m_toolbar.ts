@@ -292,6 +292,8 @@ if (Quill) {
         this._detectRenamedOptions(item);
         if (isObject(item)) {
           newItem = this._handleObjectItem(item);
+        } else if (item === 'ai') {
+          resultItems.push(this._getToolbarItem(this._prepareAIMenuItemConfig(item)));
         } else if (isString(item)) {
           const buttonItemConfig = this._prepareButtonItemConfig(item);
           newItem = this._getToolbarItem(buttonItemConfig);
@@ -406,7 +408,7 @@ if (Quill) {
 
     _prepareAIMenuItemConfig(item: HtmlEditorAIToolbarItem) {
       const {
-        name,
+        name = 'ai',
         commands = Object.keys(defaultCommandNames) as HtmlEditorAICommandName[],
       } = item;
 
@@ -442,7 +444,7 @@ if (Quill) {
         widget: 'dxMenu',
         name,
         options,
-      }, item);
+      }, typeof item === 'string' ? {} : item);
     }
 
     _hideAdaptiveMenu() {

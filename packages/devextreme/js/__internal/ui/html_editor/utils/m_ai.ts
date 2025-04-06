@@ -97,10 +97,12 @@ export const buildCommandsMap = (
     } else {
       const { name, text, options } = command;
 
+      const preparedOptions = name === 'custom' ? options ?? [] : options?.map(capitalize) ?? getAICommandDefaultOptions(name)?.map(capitalize);
+
       map[name] = {
         id: name,
         text: text ?? capitalize(name),
-        options: options.map(capitalize),
+        options: preparedOptions,
       };
     }
   });

@@ -62,7 +62,6 @@ abstract class BaseDialog {
       },
       deferRendering: false,
       focusStateEnabled: false,
-      showCloseButton: false,
       fullScreen: isSmallScreen(),
       _wrapperClassExternal: `${DIALOG_CLASS} ${DROPDOWN_EDITOR_OVERLAY_CLASS}`,
       contentTemplate: (contentElem) => {
