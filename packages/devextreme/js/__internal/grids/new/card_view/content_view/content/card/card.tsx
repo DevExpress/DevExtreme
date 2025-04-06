@@ -82,6 +82,8 @@ export class Card extends Component<CardProps> {
       hoverStateEnabled ? CLASSES.cardHover : '',
     ].filter(Boolean).join(' ');
 
+    const hasCover = cover?.imageExpr;
+
     // @ts-expect-error
     const imageSrc = cover?.imageExpr?.(this.props.row.data);
     // @ts-expect-error
@@ -100,10 +102,10 @@ export class Card extends Component<CardProps> {
         <CardHeader
           items={this.props.toolbar || []}
         />
-        <Cover
+        {hasCover && <Cover
           imageSrc={imageSrc}
           alt={alt}
-        />
+        />}
         <div className={CLASSES.content}>
           {this.props.row.cells.map((cell, index) => (
             <FieldTemplate
