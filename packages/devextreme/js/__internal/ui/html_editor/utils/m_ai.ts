@@ -67,8 +67,8 @@ export const getAIDefaultCommandOptionName = (
   option: DefaultOptionName,
 ): string => defaultCommandOptions[command]?.[option] ?? capitalize(option);
 
-export const getAICommandDefaultOptions = (
-  command: HtmlEditorAICommandName,
+export const getDefaultOptionsByCommand = (
+  command: HtmlEditorAICommandName | 'custom',
 ): DefaultOptionName[] | undefined => {
   switch (command) {
     case 'changeStyle':
@@ -82,30 +82,47 @@ export const getAICommandDefaultOptions = (
   }
 };
 
-export const buildCommandsMap = (
+function createDefinitionFromString(commandName: HtmlEditorAICommandName): CommandDefinition {
+  const text = defaultCommandNames[commandName] ?? capitalize(commandName);
+  const defaultOptions = getDefaultOptionsByCommand(commandName)?.map(capitalize);
+
+  return {
+    id: commandName,
+    text,
+    options: defaultOptions,
+  };
+}
+
+function createDefinitionFromObject(
+  name: HtmlEditorAICommandName | 'custom',
+  text?: string,
+  rawOptions?: string[],
+): CommandDefinition {
+  const capitalizedRaw = rawOptions?.map(capitalize);
+  const options = capitalizedRaw ?? getDefaultOptionsByCommand(name)?.map(capitalize);
+
+  const displayText = text ?? defaultCommandNames[name] ?? capitalize(name);
+
+  return {
+    id: name,
+    text: displayText,
+    options,
+  };
+}
+
+export function buildCommandsMap(
   commands: HtmlEditorAIToolbarItem['commands'],
-): CommandsMap => {
+): CommandsMap {
   const map: CommandsMap = {};
 
   commands?.forEach((command) => {
     if (typeof command === 'string') {
-      map[command] = {
-        id: command,
-        text: defaultCommandNames[command] ?? capitalize(command),
-        options: getAICommandDefaultOptions(command)?.map(capitalize),
-      };
+      map[command] = createDefinitionFromString(command);
     } else {
       const { name, text, options } = command;
-
-      const preparedOptions = name === 'custom' ? options ?? [] : options?.map(capitalize) ?? getAICommandDefaultOptions(name)?.map(capitalize);
-
-      map[name] = {
-        id: name,
-        text: text ?? capitalize(name),
-        options: preparedOptions,
-      };
+      map[name] = createDefinitionFromObject(name, text, options);
     }
   });
 
   return map;
-};
+}

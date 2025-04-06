@@ -20,7 +20,7 @@ import errors from '@js/ui/widget/ui.errors';
 import Quill from 'devextreme-quill';
 
 import {
-  buildCommandsMap, capitalize, defaultCommandNames, getAICommandDefaultOptions,
+  buildCommandsMap, capitalize, defaultCommandNames, getDefaultOptionsByCommand,
 } from '../utils/m_ai';
 import { getTableFormats, TABLE_OPERATIONS } from '../utils/m_table_helper';
 import {
@@ -368,7 +368,7 @@ if (Quill) {
       }, item);
     }
 
-    private _prepareAIOptions(parentCommand: string, options?: string[]) {
+    private _prepareAIOptions(parentCommand: HtmlEditorAICommandName | 'custom', options?: string[]) {
       return options?.map((option) => ({
         id: option,
         text: option,
@@ -377,13 +377,13 @@ if (Quill) {
       }));
     }
 
-    private _createCommandMenuItem(id: string, text?: string, options?: string[]) {
+    private _createCommandMenuItem(id: HtmlEditorAICommandName, text?: string, options?: string[]) {
       return {
         id,
-        text: text ?? defaultCommandNames[id as HtmlEditorAICommandName],
+        text: text ?? defaultCommandNames[id],
         items: this._prepareAIOptions(
           id,
-          options ?? getAICommandDefaultOptions(id as HtmlEditorAICommandName)?.map(capitalize),
+          options ?? getDefaultOptionsByCommand(id)?.map(capitalize),
         ),
       };
     }
