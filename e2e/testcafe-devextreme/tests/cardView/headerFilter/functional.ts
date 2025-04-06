@@ -29,6 +29,7 @@ test('list should contain all column values', async (t) => {
 
   await t.click(cardView.element);
 }).before(async () => createWidget('dxCardView', {
+  columns: ['A', 'B', 'C'],
   dataSource: [
     { A: 'A_0', B: 'B_0', C: 'C_0' },
     { A: 'A_1', B: 'B_1', C: 'C_1' },
@@ -62,6 +63,7 @@ test('list should contain all column values from all pages', async (t) => {
 
   await t.click(cardView.element);
 }).before(async () => createWidget('dxCardView', {
+  columns: ['A', 'B', 'C'],
   dataSource: [
     { A: 'A_0', B: 'B_0', C: 'C_0' },
     { A: 'A_1', B: 'B_1', C: 'C_1' },

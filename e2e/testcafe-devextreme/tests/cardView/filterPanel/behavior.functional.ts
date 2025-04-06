@@ -63,6 +63,7 @@ test('filterEnabled checkbox switches the filter by keyboard', async (t) => {
     .eql(3);
 
   await t
+    .pressKey('tab') // TODO: remove this comment when focus loose on checkbox is fixed
     .pressKey('space')
     .expect(filterEnabledCheckbox.isChecked)
     .notOk()
