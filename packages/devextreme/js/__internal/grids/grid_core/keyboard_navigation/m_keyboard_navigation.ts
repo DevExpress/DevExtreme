@@ -42,9 +42,8 @@ import {
   FOCUSABLE_ELEMENT_SELECTOR,
   ROW_CLASS,
 } from '../editing/const';
-import modules from '../m_modules';
 import type {
-  Controllers, ModuleType, OptionChanged, RowKey, Views,
+  Controllers, ModuleType, RowKey, Views,
 } from '../m_types';
 import gridCoreUtils from '../m_utils';
 import {
@@ -76,6 +75,7 @@ import {
   WIDGET_CLASS,
 } from './const';
 import { GridCoreKeyboardNavigationDom } from './dom';
+import { KeyboardNavigationController as KeyboardNavigationControllerCore } from './m_keyboard_navigation_core';
 import {
   isCellInHeaderRow,
   isDataRow,
@@ -92,12 +92,10 @@ import {
 } from './m_keyboard_navigation_utils';
 import { keyboardNavigationScrollableA11yExtender } from './scrollable_a11y';
 
-export class KeyboardNavigationController extends modules.ViewController {
+export class KeyboardNavigationController extends KeyboardNavigationControllerCore {
   private _updateFocusTimeout: any;
 
   public _fastEditingStarted: any;
-
-  public _focusedCellPosition: any;
 
   private _canceledCellPosition: any;
 
@@ -137,10 +135,6 @@ export class KeyboardNavigationController extends modules.ViewController {
 
   protected _rowsView!: Views['rowsView'];
 
-  protected _columnHeadersView!: Views['columnHeadersView'];
-
-  protected _columnsController!: Controllers['columns'];
-
   private _editorFactory!: Controllers['editorFactory'];
 
   private _focusController!: Controllers['focus'];
@@ -151,13 +145,12 @@ export class KeyboardNavigationController extends modules.ViewController {
 
   // #region Initialization
   public init() {
+    super.init();
+
     this._dataController = this.getController('data');
     this._selectionController = this.getController('selection');
     this._editingController = this.getController('editing');
     this._headerPanel = this.getView('headerPanel');
-    this._rowsView = this.getView('rowsView');
-    this._columnHeadersView = this.getView('columnHeadersView');
-    this._columnsController = this.getController('columns');
     this._editorFactory = this.getController('editorFactory');
     this._focusController = this.getController('focus');
     this._adaptiveColumnsController = this.getController('adaptiveColumns');
@@ -174,13 +167,11 @@ export class KeyboardNavigationController extends modules.ViewController {
 
     this._updateFocusTimeout = null;
     this._fastEditingStarted = false;
-    this._focusedCellPosition = {};
     this._canceledCellPosition = null;
 
     if (this.isKeyboardEnabled()) {
       accessibility.subscribeVisibilityChange();
       this._editorFactory?.focused.add(this.focusedHandlerWithContext);
-      this.createAction('onKeyDown');
     } else {
       accessibility.unsubscribeVisibilityChange();
       this._editorFactory?.focused.remove(this.focusedHandlerWithContext);
@@ -430,23 +421,6 @@ export class KeyboardNavigationController extends modules.ViewController {
   // #endregion Initialization
 
   // #region Options
-  public optionChanged(args: OptionChanged) {
-    switch (args.name) {
-      case 'keyboardNavigation':
-        if (args.fullName === 'keyboardNavigation.enabled') {
-          this.init();
-        }
-        args.handled = true;
-        break;
-      case 'useLegacyKeyboardNavigation':
-        this.init();
-        args.handled = true;
-        break;
-      default:
-        super.optionChanged(args);
-    }
-  }
-
   public isRowFocusType() {
     return this.focusType === FOCUS_TYPE_ROW;
   }
@@ -468,14 +442,11 @@ export class KeyboardNavigationController extends modules.ViewController {
 
   // #region Key_Handlers
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  protected headerTabKeyHandler(e) {}
-
   private _rowsViewKeyDownHandler(e) {
     let needStopPropagation = true;
     this._isNeedFocus = true;
     this._isNeedScroll = true;
-    let isHandled = this._processOnKeyDown(e);
+    let isHandled = this.processOnKeyDown(e);
     const isEditing = this._editingController?.isEditing();
     const { originalEvent } = e;
 
@@ -572,22 +543,6 @@ export class KeyboardNavigationController extends modules.ViewController {
         originalEvent.stopPropagation();
       }
     }
-  }
-
-  private _processOnKeyDown(eventArgs) {
-    const { originalEvent } = eventArgs;
-    const args = {
-      handled: false,
-      event: originalEvent,
-    };
-
-    this.executeAction('onKeyDown', args);
-
-    eventArgs.ctrl = originalEvent.ctrlKey;
-    eventArgs.alt = originalEvent.altKey;
-    eventArgs.shift = originalEvent.shiftKey;
-
-    return !!args.handled;
   }
 
   private _closeEditCell() {
@@ -1582,9 +1537,7 @@ export class KeyboardNavigationController extends modules.ViewController {
   }
 
   private _getColumnByCellElement($cell) {
-    const cellIndex = this._rowsView.getCellIndex($cell);
-    const columnIndex = cellIndex + this._columnsController.getColumnIndexOffset();
-    return this._columnsController.getVisibleColumns(null, true)[columnIndex];
+    return this.getColumnByCellElement($cell, this._rowsView);
   }
 
   private _needFocusEditingCell() {
@@ -1789,31 +1742,6 @@ export class KeyboardNavigationController extends modules.ViewController {
     }
 
     return { columnIndex, rowIndex };
-  }
-
-  public setFocusedCellPosition(rowIndex, columnIndex) {
-    this.setFocusedRowIndex(rowIndex);
-    this.setFocusedColumnIndex(columnIndex);
-  }
-
-  /**
-   * @extended: focus
-   */
-  public setFocusedRowIndex(rowIndex) {
-    if (!this._focusedCellPosition) {
-      this._focusedCellPosition = {};
-    }
-    this._focusedCellPosition.rowIndex = rowIndex;
-  }
-
-  /**
-   * @extended: focus
-   */
-  protected setFocusedColumnIndex(columnIndex) {
-    if (!this._focusedCellPosition) {
-      this._focusedCellPosition = {};
-    }
-    this._focusedCellPosition.columnIndex = columnIndex;
   }
 
   private getRowIndex() {
@@ -2612,10 +2540,6 @@ export class KeyboardNavigationController extends modules.ViewController {
 
   private _getRowsViewElement() {
     return this._rowsView?.element();
-  }
-
-  public isKeyboardEnabled() {
-    return this.option('keyboardNavigation.enabled');
   }
 
   public _processCanceledEditCellPosition(rowIndex, columnIndex) {

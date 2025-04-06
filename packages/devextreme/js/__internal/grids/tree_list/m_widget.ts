@@ -24,6 +24,7 @@ import './module_not_extended/adaptivity';
 import './selection/m_selection';
 import './module_not_extended/search';
 import './m_keyboard_navigation';
+import './module_not_extended/headers_keyboard_navigation';
 import './module_not_extended/virtual_columns';
 import './m_focus';
 import './module_not_extended/row_dragging';

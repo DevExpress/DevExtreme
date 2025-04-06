@@ -5,7 +5,7 @@ import 'generic_light.css!';
 import 'ui/data_grid';
 
 import { keyboardNavigationModule } from '__internal/grids/grid_core/keyboard_navigation/m_keyboard_navigation';
-import { headersKeyboardNavigationModule } from '__internal/grids/grid_core/keyboard_navigation/modules/m_headers_keyboard_navigation';
+import { headersKeyboardNavigationModule } from '__internal/grids/grid_core/keyboard_navigation/m_headers_keyboard_navigation';
 import commonUtils from 'core/utils/common';
 import typeUtils from 'core/utils/type';
 import publicComponentUtils from 'core/utils/public_component';
@@ -16,7 +16,7 @@ import { MockDataController, MockColumnsController, MockEditingController } from
 import { CLICK_EVENT, callViewsRenderCompleted } from '../../helpers/grid/keyboardNavigationHelper.js';
 
 const KeyboardNavigationController = keyboardNavigationModule.controllers.keyboardNavigation;
-const HeadersKeyboardNavigationController = headersKeyboardNavigationModule.extenders.controllers.keyboardNavigation(KeyboardNavigationController);
+const HeadersKeyboardNavigationController = headersKeyboardNavigationModule.controllers.headersKeyboardNavigation;
 
 QUnit.testStart(function() {
     const markup = `
@@ -834,8 +834,8 @@ QUnit.module('Keyboard controller', {
         callViewsRenderCompleted(this.component._views);
 
         // assert
-        assert.ok(columnHeadersView.renderCompleted.has(navigationController.columnHeadersViewRenderCompletedWithContext), 'subscribed to the "columnHeadersView.renderCompleted" callback');
-        assert.ok(keyboard._getProcessor(navigationController._columnHeadersViewKeyDownListener), 'subscribed to the "keydown" event');
+        assert.ok(columnHeadersView.renderCompleted.has(navigationController.renderCompletedWithContext), 'subscribed to the "columnHeadersView.renderCompleted" callback');
+        assert.ok(keyboard._getProcessor(navigationController.keyDownListener), 'subscribed to the "keydown" event');
 
         // arrange
         onSpy.resetHistory();
@@ -846,8 +846,8 @@ QUnit.module('Keyboard controller', {
         callViewsRenderCompleted(this.component._views);
 
         // assert
-        assert.notOk(columnHeadersView.renderCompleted.has(navigationController.columnHeadersViewRenderCompletedWithContext), 'unsubscribed from the "columnHeadersView.renderCompleted" callback');
-        assert.notOk(keyboard._getProcessor(navigationController._columnHeadersViewKeyDownListener), 'unsubscribed from the "keydown" event');
+        assert.notOk(columnHeadersView.renderCompleted.has(navigationController.renderCompletedWithContext), 'unsubscribed from the "columnHeadersView.renderCompleted" callback');
+        assert.notOk(keyboard._getProcessor(navigationController.keyDownListener), 'unsubscribed from the "keydown" event');
     });
 
     // T1178858
@@ -869,8 +869,8 @@ QUnit.module('Keyboard controller', {
         callViewsRenderCompleted(this.component._views);
 
         // assert
-        assert.notOk(columnHeadersView.renderCompleted.has(navigationController.columnHeadersViewRenderCompletedWithContext), 'not subscribed to the "columnHeadersView.renderCompleted" callback');
-        assert.notOk(keyboard._getProcessor(navigationController._columnHeadersViewKeyDownListener), 'not subscribed to the "keydown" event');
+        assert.notOk(columnHeadersView.renderCompleted.has(navigationController.renderCompletedWithContext), 'not subscribed to the "columnHeadersView.renderCompleted" callback');
+        assert.notOk(keyboard._getProcessor(navigationController.keyDownListener), 'not subscribed to the "keydown" event');
 
         // arrange
         onSpy.resetHistory();
@@ -881,7 +881,7 @@ QUnit.module('Keyboard controller', {
         callViewsRenderCompleted(this.component._views);
 
         // assert
-        assert.ok(columnHeadersView.renderCompleted.has(navigationController.columnHeadersViewRenderCompletedWithContext), 'subscribed to the "columnHeadersView.renderCompleted" callback');
-        assert.ok(keyboard._getProcessor(navigationController._columnHeadersViewKeyDownListener), 'subscribed to the "keydown" event');
+        assert.ok(columnHeadersView.renderCompleted.has(navigationController.renderCompletedWithContext), 'subscribed to the "columnHeadersView.renderCompleted" callback');
+        assert.ok(keyboard._getProcessor(navigationController.keyDownListener), 'subscribed to the "keydown" event');
     });
 });
