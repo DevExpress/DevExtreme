@@ -11,8 +11,8 @@ export interface Properties {
   onSave: () => void;
   onCancel: () => void;
   onHide: () => void;
-
   customizeItem: FormProperties['customizeItem'];
+  items: FormProperties['items'];
 }
 
 export class EditPopup extends Component<Properties> {
@@ -27,8 +27,10 @@ export class EditPopup extends Component<Properties> {
         location: 'after',
         widget: 'dxButton',
         options: {
-          icon: 'save',
+          text: 'Save',
           onClick: this.props.onSave,
+          stylingMode: 'contained',
+          type: 'default',    
         },
       } as const,
       {
@@ -36,8 +38,10 @@ export class EditPopup extends Component<Properties> {
         location: 'after',
         widget: 'dxButton',
         options: {
-          icon: 'cancel',
+          text: 'Cancel',
           onClick: this.props.onCancel,
+          stylingMode: 'contained',
+          type: 'default',
         },
       } as const,
     ];
@@ -53,6 +57,7 @@ export class EditPopup extends Component<Properties> {
             colCount={2} // TODO: move
             formData={this.props.data}
             customizeItem={this.props.customizeItem}
+            items={this.props.items}
           />
         </Scrollable>
       </Popup>

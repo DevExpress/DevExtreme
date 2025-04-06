@@ -18,6 +18,7 @@ type InheritedColumnProps =
   | 'allowHeaderFiltering'
   | 'trueText'
   | 'falseText'
+  | 'validationRules'
   | 'caption';
 
 export type Column = Pick<Required<ColumnBase>, InheritedColumnProps> & {
