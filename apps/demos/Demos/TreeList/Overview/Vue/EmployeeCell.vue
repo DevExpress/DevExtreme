@@ -13,9 +13,9 @@
 </template>
 <script setup lang="ts">
 withDefaults(defineProps<{
-  cellData?: object
+  cellData?: Record<string, any>
 }>(), {
-  cellData: () => {},
+  cellData: () => ({} as Record<string, any>),
 });
 </script>
 <style>

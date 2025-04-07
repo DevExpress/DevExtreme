@@ -44,9 +44,8 @@ import DxChart, {
   DxSize,
   DxLoadingIndicator,
 } from 'devextreme-vue/chart';
-import DxSelectBox from 'devextreme-vue/select-box';
-import { DataSource } from 'devextreme-vue/common/data';
-import { CustomStore } from 'devextreme-vue/common/data';
+import DxSelectBox, { type DxSelectBoxTypes } from 'devextreme-vue/select-box';
+import { DataSource, CustomStore } from 'devextreme-vue/common/data';
 
 const temperature = [2, 4, 6, 8, 9, 10, 11];
 const palette = ['#c3a2cc', '#b7b5e0', '#e48cba'];
@@ -65,7 +64,7 @@ const monthWeather = new DataSource({
 
 const customizeLabelText = ({ valueText }) => `${valueText}${'&#176C'}`;
 
-function changeTemperature({ value }) {
+function changeTemperature({ value }: DxSelectBoxTypes.ValueChangedEvent) {
   monthWeather.filter(['t', '>', value]);
   monthWeather.load();
 }

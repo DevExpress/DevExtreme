@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import Chat, { ChatTypes } from 'devextreme-react/chat';
+import Chat, { type ChatTypes } from 'devextreme-react/chat';
 
 import { currentUser, supportAgent, initialMessages } from './data.ts';
 

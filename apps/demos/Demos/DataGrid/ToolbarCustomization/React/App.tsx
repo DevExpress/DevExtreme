@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo, useRef, useState } from 'react';
-import SelectBox, { SelectBoxTypes } from 'devextreme-react/select-box';
+import SelectBox, { type SelectBoxTypes } from 'devextreme-react/select-box';
 import DataGrid, {
   Grouping, Column, ColumnChooser, LoadPanel, Toolbar, Item, DataGridRef,
 } from 'devextreme-react/data-grid';

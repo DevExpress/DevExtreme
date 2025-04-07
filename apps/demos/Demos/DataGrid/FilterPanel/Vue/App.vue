@@ -59,15 +59,15 @@ import {
   DxFilterBuilderPopup,
   DxScrolling,
 } from 'devextreme-vue/data-grid';
-import { PositionConfig } from 'devextreme-vue/common/core/animation';
-import { orders, Order } from './data.ts';
+import { type PositionConfig } from 'devextreme-vue/common/core/animation';
+import { orders, type Order } from './data.ts';
 
-const saleAmountEditorOptions = { 
-  format: 'currency', 
-  showClearButton: true, 
+const saleAmountEditorOptions = {
+  format: 'currency',
+  showClearButton: true,
   inputAttr: {
     'aria-label': 'Filter cell',
-  }, 
+  },
 };
 
 const filterBuilderPopupPosition: PositionConfig = {

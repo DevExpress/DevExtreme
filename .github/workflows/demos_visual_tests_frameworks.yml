@@ -175,6 +175,64 @@ jobs:
           path: apps/demos/changed-files.json
           retention-days: 1
 
+  check-ts:
+    name: Check TS
+    needs: build-devextreme
+    runs-on: devextreme-shr2
+    timeout-minutes: 20
+
+    steps:
+      - name: Get sources
+        uses: actions/checkout@v4
+
+      - name: Download devextreme packages
+        uses: actions/download-artifact@v4
+        with:
+          name: devextreme-sources
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - uses: pnpm/action-setup@v3
+        with:
+          version: 9
+          run_install: false
+
+      - name: Get pnpm store directory
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+      - uses: actions/cache@v4
+        name: Setup pnpm cache
+        with:
+          path: |
+            ${{ env.STORE_PATH }}
+            .nx/cache
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Install tgz
+        run: pnpm add -w ./devextreme-installer.tgz ./devextreme-dist-installer.tgz ./devextreme-react-installer.tgz ./devextreme-vue-installer.tgz ./devextreme-angular-installer.tgz
+
+      - name: Run check TS for Vue
+        working-directory: apps/demos
+        run: pnpm run ts-check-vue
+
+      # - name: Run check TS for Angular
+      #   working-directory: apps/demos
+      #   run: pnpm run ts-check-ng
+
+      # - name: Run check TS for React
+      #   working-directory: apps/demos
+      #   run: pnpm run ts-check-react
+
   lint:
     name: ${{ matrix.name }}
     needs:

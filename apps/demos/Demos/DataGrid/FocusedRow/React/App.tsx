@@ -1,9 +1,9 @@
 import React, { useCallback, useState } from 'react';
 import {
-  DataGrid, Column, Paging, DataGridTypes, Pager,
+  DataGrid, Column, Paging, type DataGridTypes, Pager,
 } from 'devextreme-react/data-grid';
-import { NumberBox, NumberBoxTypes } from 'devextreme-react/number-box';
-import { CheckBox, CheckBoxTypes } from 'devextreme-react/check-box';
+import { NumberBox, type NumberBoxTypes } from 'devextreme-react/number-box';
+import { CheckBox, type CheckBoxTypes } from 'devextreme-react/check-box';
 import 'devextreme-react/common/data';
 
 const focusedRowKeyLabel = { 'aria-label': 'Focused Row Key' };

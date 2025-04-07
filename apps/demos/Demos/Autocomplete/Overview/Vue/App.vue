@@ -1,6 +1,5 @@
 <template>
   <div class="form">
-
     <div class="dx-fieldset">
       <div class="dx-fieldset-header">Default Mode</div>
       <div class="dx-field">
@@ -97,11 +96,11 @@
 </template>
 <script setup lang="ts">
 import { ref } from 'vue';
-import { ODataStore } from 'devextreme-vue/common/data';
+import { ODataStore, CustomStore, type LoadOptions } from 'devextreme-vue/common/data';
 import { DxAutocomplete } from 'devextreme-vue/autocomplete';
-import { CustomStore } from 'devextreme-vue/common/data';
 import 'whatwg-fetch';
 import { names, surnames, positions } from './data.ts';
+
 
 const statesStore = new ODataStore({
   version: 2,
@@ -114,17 +113,20 @@ const statesStore = new ODataStore({
 const clientsCustomStore = new CustomStore({
   key: 'Value',
   useDefaultSearch: true,
-  load(loadOptions) {
+  load(loadOptions: LoadOptions) {
     let params = '?';
-    [
+    const options: Array<keyof LoadOptions> = [
       'skip',
       'take',
       'filter',
-    ].forEach((option) => {
+    ];
+
+    options.forEach((option) => {
       if (option in loadOptions && isNotEmpty(loadOptions[option])) {
         params += `${option}=${JSON.stringify(loadOptions[option])}&`;
       }
     });
+
     params = params.slice(0, -1);
     return fetch(`https://js.devexpress.com/Demos/NetCore/api/DataGridWebApi/CustomersLookup${params}`)
       .then((response) => response.json())
@@ -152,7 +154,7 @@ function updateEmployeeInfo() {
   employeeInfo += (employeeInfo && currentClient.value) ? `, ${currentClient.value}` : currentClient.value || '';
   fullInfo.value = employeeInfo;
 }
-function isNotEmpty(value) {
+function isNotEmpty(value: unknown) {
   return value !== undefined && value !== null && value !== '';
 }
 </script>

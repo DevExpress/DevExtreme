@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import DataGrid, {
-  Column, DataGridTypes, FilterRow, Selection, Pager,
+  Column, type DataGridTypes, FilterRow, Selection, Pager,
 } from 'devextreme-react/data-grid';
 import Button from 'devextreme-react/button';
 import { query } from 'devextreme-react/common/data';

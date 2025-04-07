@@ -35,7 +35,7 @@
 <script setup lang="ts">
 import 'devextreme-vue/common/data';
 import { DxDataGrid, DxColumn } from 'devextreme-vue/data-grid';
-import { DataSourceOptions } from 'devextreme-vue/common/data';
+import { type DataSourceOptions } from 'devextreme-vue/common/data';
 
 const dataSource: DataSourceOptions = {
   store: {

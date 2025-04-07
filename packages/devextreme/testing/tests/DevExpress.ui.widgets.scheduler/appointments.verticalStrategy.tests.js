@@ -1,50 +1,19 @@
 import $ from 'jquery';
-import dataCoreUtils from 'core/utils/data';
-import typeUtils from 'core/utils/type';
 import { Deferred } from 'core/utils/deferred';
 import fx from 'common/core/animation/fx';
 
 import '__internal/scheduler/m_scheduler';
-import { ExpressionUtils } from '__internal/scheduler/m_expression_utils';
 import { createExpressions } from '__internal/scheduler/resources/m_utils';
 
-const { module, test, testStart } = QUnit;
+import { mockDataAccessor } from '../../helpers/scheduler/mockDataAccessor.js';
 
-const compileGetter = dataCoreUtils.compileGetter;
-const compileSetter = dataCoreUtils.compileSetter;
+const { module, test, testStart } = QUnit;
 
 testStart(function() {
     $('#qunit-fixture').html('<div id="scheduler-appointments"></div>\
         <div id="allDayContainer"></div>\
         <div id="fixedContainer"></div>');
 });
-
-const dataAccessors = {
-    getter: {
-        startDate: compileGetter('startDate'),
-        endDate: compileGetter('endDate'),
-        allDay: compileGetter('allDay'),
-        text: compileGetter('text'),
-        recurrenceRule: compileGetter('recurrenceRule')
-    },
-    setter: {
-        startDate: compileSetter('startDate'),
-        endDate: compileSetter('endDate'),
-        allDay: compileSetter('allDay'),
-        text: compileSetter('text'),
-        recurrenceRule: compileSetter('recurrenceRule')
-    }
-};
-
-ExpressionUtils.getField = (_, field, obj) => {
-    if(typeUtils.isDefined(dataAccessors.getter[field])) {
-        return dataAccessors.getter[field](obj);
-    }
-};
-
-ExpressionUtils.setField = (_, field, obj, value) => {
-    return dataAccessors.setter[field](obj, value);
-};
 
 const createInstance = (options) => {
     const observer = {
@@ -67,6 +36,7 @@ const createInstance = (options) => {
     return $('#scheduler-appointments').dxSchedulerAppointments({
         observer,
         ...options,
+        dataAccessors: mockDataAccessor,
         getResources: () => [],
         getLoadedResources: () => [],
         getAppointmentColor: () => new Deferred(),

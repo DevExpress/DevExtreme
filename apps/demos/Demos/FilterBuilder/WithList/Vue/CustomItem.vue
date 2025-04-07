@@ -14,7 +14,7 @@
 withDefaults(defineProps<{
   item?: Record<string, any>
 }>(), {
-  item: () => ({}),
+  item: () => ({} as Record<string, any>),
 });
 
 const currencyFormatter = new Intl.NumberFormat('en-US', {

@@ -1,3 +1,14 @@
+export type CompanyData = {
+  CompanyName: string,
+  Address: string,
+  City: string,
+  State: string,
+  Zipcode: number,
+  Phone: string,
+  Fax: string,
+  Website: string,
+}
+
 const companies = [{
   ID: 1,
   CompanyName: 'Super Mart of the West',

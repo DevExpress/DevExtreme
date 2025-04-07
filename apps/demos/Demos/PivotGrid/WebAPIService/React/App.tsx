@@ -1,5 +1,5 @@
 import React from 'react';
-import { PivotGrid, PivotGridTypes, Scrolling } from 'devextreme-react/pivot-grid';
+import { PivotGrid, type PivotGridTypes, Scrolling } from 'devextreme-react/pivot-grid';
 import { createStore } from 'devextreme-aspnet-data-nojquery';
 
 const dataSource: PivotGridTypes.Properties['dataSource'] = {

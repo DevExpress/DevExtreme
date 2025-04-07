@@ -1,5 +1,5 @@
 import React from 'react';
-import TreeView, { TreeViewTypes } from 'devextreme-react/tree-view';
+import TreeView, { type TreeViewTypes } from 'devextreme-react/tree-view';
 import 'whatwg-fetch';
 
 const createChildren = (parent: TreeViewTypes.Node) => {

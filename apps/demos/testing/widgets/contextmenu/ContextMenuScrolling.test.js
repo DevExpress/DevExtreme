@@ -4,7 +4,6 @@ import { runManualTest } from '../../../utils/visual-tests/matrix-test-helper';
 import { testScreenshot } from '../../../utils/visual-tests/helpers/theme-utils';
 
 fixture('ContextMenu.Scrolling')
-  .page('http://localhost:8080/')
   .before(async (ctx) => {
     ctx.initialWindowSize = [900, 800];
   });
@@ -12,7 +11,7 @@ fixture('ContextMenu.Scrolling')
 const TARGET_AREA = 'target-area';
 const MENU_ITEM_TEXT_CLASS = 'dx-menu-item-text';
 
-runManualTest('ContextMenu', 'Scrolling', ['jQuery', 'React', 'Vue', 'Angular'], (test) => {
+runManualTest('ContextMenu', 'Scrolling', (test) => {
   test('Custom Template Appearance', async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 

@@ -7,7 +7,7 @@
 
 <script setup lang="ts">
 import { query as Query } from 'devextreme-vue/common/data';
-import { DxSchedulerTypes } from 'devextreme-vue/scheduler';
+import { type DxSchedulerTypes } from 'devextreme-vue/scheduler';
 import { moviesData } from './data.ts';
 
 const props = defineProps<{

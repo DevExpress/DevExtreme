@@ -1,12 +1,12 @@
 import React, { useCallback, useState } from 'react';
 import DataGrid, {
   Column,
-  DataGridTypes,
+  type DataGridTypes,
   Paging,
   Scrolling,
   Selection,
 } from 'devextreme-react/data-grid';
-import DropDownBox, { DropDownBoxTypes } from 'devextreme-react/drop-down-box';
+import DropDownBox, { type DropDownBoxTypes } from 'devextreme-react/drop-down-box';
 
 const dropDownOptions = { width: 500 };
 const ownerLabel = { 'aria-label': 'Owner' };

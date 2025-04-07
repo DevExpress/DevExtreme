@@ -88,9 +88,8 @@ import { Workbook } from 'exceljs';
 // Our demo infrastructure requires us to use 'file-saver-es'.
 // We recommend that you use the official 'file-saver' package in your applications.
 import { saveAs } from 'file-saver-es';
-// import { DataGridCell, exportDataGrid } from 'devextreme/excel_exporter';
-import { DataGridCell, exportDataGrid } from 'devextreme-vue/common/export/excel';
-import { DataSourceOptions } from 'devextreme-vue/common/data';
+import { type DataGridCell, exportDataGrid } from 'devextreme-vue/common/export/excel';
+import { type DataSourceOptions } from 'devextreme-vue/common/data';
 
 import 'devextreme-vue/common/data';
 

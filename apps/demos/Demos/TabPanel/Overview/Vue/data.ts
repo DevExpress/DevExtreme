@@ -1,6 +1,9 @@
+import { type Position } from 'devextreme/common';
+import { type DxTabPanelTypes } from 'devextreme-vue/tab-panel';
+
 export const tabsPositionsSelectBoxLabel = { 'aria-label': 'Tab position' };
 
-export const tabsPositions = [
+export const tabsPositions: Position[] = [
   'left',
   'top',
   'right',
@@ -9,14 +12,14 @@ export const tabsPositions = [
 
 export const stylingModesSelectBoxLabel = { 'aria-label': 'Styling mode' };
 
-export const stylingModes = [
+export const stylingModes: DxTabPanelTypes.TabsStyle[] = [
   'secondary',
   'primary',
 ];
 
-export const iconPositionsSelectBoxLabel = { 'aria-label': 'Icon positions' };
+export const iconPositionsSelectBoxLabel  = { 'aria-label': 'Icon positions' };
 
-export const iconPositions = [
+export const iconPositions: DxTabPanelTypes.TabsIconPosition[] = [
   'top',
   'start',
   'end',

@@ -9,7 +9,7 @@ require('../../file_management/file_system_item');
 require('../../file_management/object_provider');
 require('../../file_management/provider_base');
 require('../../file_management/remote_provider');
-require('../../events/index');
+require('../../events');
 require('../../time_zone_utils');
 require('../../core/config');
 require('../../core/devices');

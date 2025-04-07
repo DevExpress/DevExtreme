@@ -5,5 +5,5 @@ packages:
   - 'packages/devextreme/artifacts/npm/devextreme-dist'
 
 catalog:
-  devexpress-diagram: 2.2.15
+  devexpress-diagram: 2.2.16
   devexpress-gantt: 4.1.60

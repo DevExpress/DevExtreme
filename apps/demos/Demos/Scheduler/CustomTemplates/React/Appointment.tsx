@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import { query as Query } from 'devextreme-react/common/data';
 import { formatDate } from 'devextreme/localization';
-import { SchedulerTypes } from 'devextreme-react/scheduler';
+import { type SchedulerTypes } from 'devextreme-react/scheduler';
 import { moviesData } from './data.ts';
 
 const getMovieById = (id) => Query(moviesData).filter(['id', id]).toArray()[0];

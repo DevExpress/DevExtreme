@@ -5,10 +5,10 @@ import DataGrid, {
   Paging,
   Lookup,
   KeyboardNavigation,
-  DataGridTypes,
+  type DataGridTypes,
 } from 'devextreme-react/data-grid';
-import SelectBox, { SelectBoxTypes } from 'devextreme-react/select-box';
-import CheckBox, { CheckBoxTypes } from 'devextreme-react/check-box';
+import SelectBox, { type SelectBoxTypes } from 'devextreme-react/select-box';
+import CheckBox, { type CheckBoxTypes } from 'devextreme-react/check-box';
 import {
   employees,
   states,

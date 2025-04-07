@@ -9,12 +9,11 @@ const TOOLBAR_CLASS = 'dx-toolbar';
 const BOTTOM_TOOLBAR_CLASS = 'dx-popup-bottom';
 
 fixture('Popup.Scrolling')
-  .page('http://localhost:8080/')
   .before(async (ctx) => {
     ctx.initialWindowSize = [900, 600];
   });
 
-runManualTest('Popup', 'Scrolling', ['jQuery', 'React', 'Vue', 'Angular'], (test) => {
+runManualTest('Popup', 'Scrolling', (test) => {
   test('Scrolling', async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 

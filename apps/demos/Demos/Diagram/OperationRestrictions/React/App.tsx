@@ -1,6 +1,6 @@
 import React, { useCallback, useRef } from 'react';
 import Diagram, {
-  CustomShape, Nodes, AutoLayout, ContextToolbox, Toolbox, PropertiesPanel, Group, DiagramTypes,
+  CustomShape, Nodes, AutoLayout, ContextToolbox, Toolbox, PropertiesPanel, Group, type DiagramTypes,
 } from 'devextreme-react/diagram';
 import notify from 'devextreme/ui/notify';
 import { ArrayStore } from 'devextreme-react/common/data';

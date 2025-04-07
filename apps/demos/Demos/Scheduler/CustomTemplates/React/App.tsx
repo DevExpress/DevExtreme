@@ -1,12 +1,12 @@
 import React from 'react';
-import Scheduler, { Editing, Resource, SchedulerTypes } from 'devextreme-react/scheduler';
+import Scheduler, { Editing, Resource, type SchedulerTypes } from 'devextreme-react/scheduler';
 import { query as Query } from 'devextreme-react/common/data';
-import { SelectBoxTypes } from 'devextreme-react/select-box';
-import { DateBoxTypes } from 'devextreme-react/date-box';
+import { type SelectBoxTypes } from 'devextreme-react/select-box';
+import { type DateBoxTypes } from 'devextreme-react/date-box';
 import Appointment from './Appointment.tsx';
 import AppointmentTooltip from './AppointmentTooltip.tsx';
 import {
-  data, moviesData, theatreData, Appointment as AppointmentType,
+  data, moviesData, theatreData, type Appointment as AppointmentType,
 } from './data.ts';
 
 const currentDate = new Date(2021, 3, 27);

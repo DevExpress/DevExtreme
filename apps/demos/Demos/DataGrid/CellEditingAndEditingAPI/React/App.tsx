@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import DataGrid, {
-  Column, Editing, Paging, Selection, Lookup, Toolbar, Item, DataGridTypes,
+  Column, Editing, Paging, Selection, Lookup, Toolbar, Item, type DataGridTypes,
 } from 'devextreme-react/data-grid';
 import { Button } from 'devextreme-react/button';
 import { ArrayStore } from 'devextreme-react/common/data';

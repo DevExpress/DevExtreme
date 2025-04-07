@@ -51,7 +51,7 @@
 </template>
 <script setup lang="ts">
 import { ref } from 'vue';
-import { DxFileUploader } from 'devextreme-vue/file-uploader';
+import { DxFileUploader, type DxFileUploaderTypes } from 'devextreme-vue/file-uploader';
 import { DxProgressBar } from 'devextreme-vue/progress-bar';
 
 const isDropZoneActive = ref(false);
@@ -61,9 +61,9 @@ const progressVisible = ref(false);
 const progressValue = ref(0);
 const allowedFileExtensions = ['.jpg', '.jpeg', '.gif', '.png'];
 
-function onDropZoneEnter({ component, dropZoneElement, event }) {
+function onDropZoneEnter({ component, dropZoneElement, event }: DxFileUploaderTypes.DropZoneEnterEvent) {
   if (dropZoneElement.id === 'dropzone-external') {
-    const items = event.originalEvent.dataTransfer.items;
+    const items = (event as any).originalEvent.dataTransfer.items;
 
     const allowedFileExtensions = component.option('allowedFileExtensions');
     const draggedFileExtension = `.${items[0].type.replace(/^image\//, '')}`;

@@ -1,6 +1,6 @@
 import { BaseInfernoComponent } from '@devextreme/runtime/inferno';
 import type { JSXTemplate } from '@devextreme-generator/declarations';
-import { getTemplate } from '@ts/core/r1/utils/index';
+import { PublicTemplate } from '@ts/scheduler/r1/components/templates/index';
 
 import { combineClasses } from '../../../../core/r1/utils/render_utils';
 import { renderUtils } from '../../utils/index';
@@ -62,32 +62,36 @@ export class DateHeaderCell extends BaseInfernoComponent<DateHeaderCellProps> {
       .getGroupCellClasses(isFirstGroupCell, isLastGroupCell, cellClasses);
     const useTemplate = (!isTimeCellTemplate && !!dateCellTemplate)
       || (isTimeCellTemplate && !!timeCellTemplate);
-    const TimeCellTemplateComponent = getTemplate(timeCellTemplate);
-    const DateCellTemplateComponent = getTemplate(dateCellTemplate);
 
     const children = useTemplate ? (
         // this is a workaround for https://github.com/DevExpress/devextreme-renovation/issues/574
         <>
-          {isTimeCellTemplate && TimeCellTemplateComponent
-            && TimeCellTemplateComponent({
-              data: {
-                date: startDate,
-                text,
-                groups,
-                groupIndex,
-              },
-              index,
-            })}
-          {!isTimeCellTemplate && DateCellTemplateComponent
-            && DateCellTemplateComponent({
-              data: {
-                date: startDate,
-                text,
-                groups,
-                groupIndex,
-              },
-              index,
-            })}
+          {isTimeCellTemplate
+            && <PublicTemplate
+              template={timeCellTemplate}
+              templateProps={{
+                data: {
+                  date: startDate,
+                  text,
+                  groups,
+                  groupIndex,
+                },
+                index,
+              } as DateTimeCellTemplateProps}
+            />}
+          {!isTimeCellTemplate
+            && <PublicTemplate
+              template={dateCellTemplate}
+              templateProps={{
+                data: {
+                  date: startDate,
+                  text,
+                  groups,
+                  groupIndex,
+                },
+                index,
+              } as DateTimeCellTemplateProps}
+            />}
         </>
     )
       : (

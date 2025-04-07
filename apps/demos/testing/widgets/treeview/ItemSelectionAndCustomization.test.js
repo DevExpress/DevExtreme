@@ -7,12 +7,11 @@ const OPTION_CLASS = 'option';
 const SELECTBOX_CLASS = 'dx-selectbox';
 
 fixture('TreeView.ItemSelectionAndCustomization')
-  .page('http://localhost:8080/')
   .before(async (ctx) => {
     ctx.initialWindowSize = [900, 1200];
   });
 
-runManualTest('TreeView', 'ItemSelectionAndCustomization', ['jQuery'/* , 'React', 'Vue' */], (test) => {
+runManualTest('TreeView', 'ItemSelectionAndCustomization', (test) => {
   test('ItemSelectionAndCustomization', async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 

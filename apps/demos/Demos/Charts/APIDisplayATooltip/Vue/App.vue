@@ -41,7 +41,7 @@ import DxPieChart, {
   DxSize,
   DxLegend,
 } from 'devextreme-vue/pie-chart';
-import DxSelectBox from 'devextreme-vue/select-box';
+import DxSelectBox, { type DxSelectBoxTypes } from 'devextreme-vue/select-box';
 import { populationData } from './data.ts';
 
 const selectedRegion = ref(null);
@@ -54,7 +54,7 @@ function onPointClick({ target: point }) {
   point.showTooltip();
   selectedRegion.value = point.argument;
 }
-function onRegionChanged({ value }) {
+function onRegionChanged({ value }: DxSelectBoxTypes.ValueChangedEvent) {
   pieChart.value.instance
     .getAllSeries()[0]
     .getPointsByArg(value)[0]
