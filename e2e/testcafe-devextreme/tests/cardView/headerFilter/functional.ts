@@ -283,6 +283,7 @@ test('should update column options with filterType and values (selectAll case #1
 
   await t.click(cardView.element);
 }).before(async () => createWidget('dxCardView', {
+  columns: ['A', 'B', 'C'],
   dataSource: [
     { A: 'A_0', B: 'B_0', C: 'C_0' },
     { A: 'A_1', B: 'B_1', C: 'C_1' },
