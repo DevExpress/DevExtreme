@@ -38,6 +38,8 @@ export const STEP_OPTIONAL_MARK_CLASS = 'dx-step-optional-mark';
 
 export const STEPPER_ITEM_DATA_KEY = 'dxStepperItemData';
 
+export const STEPPER_ARIA_LABEL = 'stepper';
+
 export const ORIENTATION: Record<string, Orientation> = {
   horizontal: 'horizontal',
   vertical: 'vertical',
@@ -51,6 +53,8 @@ export interface StepperProperties extends Properties {
   selectionRequired?: boolean;
 
   hintExpr?: (data: Item) => string | undefined;
+
+  _itemAttributes?: Record<string, unknown>;
 }
 
 class Stepper extends CollectionWidgetAsync<StepperProperties> {
@@ -73,6 +77,7 @@ class Stepper extends CollectionWidgetAsync<StepperProperties> {
       loopItemFocus: false,
       selectionRequired: true,
       hintExpr(data): string | undefined { return data ? data.hint : undefined; },
+      _itemAttributes: { role: 'tab' },
     };
   }
 
@@ -240,6 +245,8 @@ class Stepper extends CollectionWidgetAsync<StepperProperties> {
   _init(): void {
     super._init();
 
+    this.setAria('role', 'tablist');
+    this.setAria('label', STEPPER_ARIA_LABEL);
     this._appendStepsContainer();
   }
 
@@ -248,6 +255,7 @@ class Stepper extends CollectionWidgetAsync<StepperProperties> {
 
     this._renderConnector();
     this._toggleOrientationClass();
+    this._setAriaOrientation();
 
     super._initMarkup();
   }
@@ -291,6 +299,13 @@ class Stepper extends CollectionWidgetAsync<StepperProperties> {
       .addClass(STEP_LIST_CLASS);
 
     $(this.element()).append(this._$stepsContainer);
+  }
+
+  _setAriaOrientation(): void {
+    const isHorizontal = this._isHorizontalOrientation();
+    const orientation = isHorizontal ? ORIENTATION.horizontal : ORIENTATION.vertical;
+
+    this.setAria('orientation', orientation, $(this.element()));
   }
 
   _toggleOrientationClass(): void {
@@ -420,6 +435,7 @@ class Stepper extends CollectionWidgetAsync<StepperProperties> {
     switch (name) {
       case 'orientation':
         this._toggleOrientationClass();
+        this._setAriaOrientation();
 
         this._connector.option(name, value);
         break;

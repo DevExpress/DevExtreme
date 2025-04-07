@@ -13,6 +13,7 @@ import {
     STEP_LABEL_CLASS,
     STEP_TITLE_CLASS,
     STEP_OPTIONAL_MARK_CLASS,
+    STEPPER_ARIA_LABEL,
 } from '__internal/ui/stepper/stepper';
 import {
     STEP_COMPLETED_CLASS,
@@ -573,5 +574,94 @@ QUnit.module('Step.hint', moduleConfig, () => {
 
         this.instance.option('items[0].hint', null);
         assert.strictEqual(items.eq(0).attr('title'), undefined, 'Title is removed when hint is set to null');
+    });
+});
+
+QUnit.module('Aria accessibility', moduleConfig, () => {
+    QUnit.test('Stepper root element should have role=tablist', function(assert) {
+        assert.strictEqual(this.$element.attr('role'), 'tablist');
+    });
+
+    QUnit.test(`Stepper root element should have aria-label=${STEPPER_ARIA_LABEL}`, function(assert) {
+        assert.strictEqual(this.$element.attr('aria-label'), STEPPER_ARIA_LABEL);
+    });
+
+    ['horizontal', 'vertical'].forEach((orientation) => {
+        QUnit.test(`Root element for ${orientation} stepper should have aria-orientation=${orientation}`, function(assert) {
+            this.reinit({
+                orientation,
+            });
+
+            assert.strictEqual(this.$element.attr('aria-orientation'), orientation);
+        });
+    });
+
+    [
+        { initial: 'horizontal', updated: 'vertical' },
+        { initial: 'vertical', updated: 'horizontal' },
+    ].forEach((orientation) => {
+        QUnit.test(`Root element for ${orientation} stepper should have aria-orientation=${orientation.updated} after change orientation in runtime`, function(assert) {
+            this.reinit({
+                orientation: orientation.initial,
+            });
+
+            this.instance.option('orientation', orientation.updated);
+
+            assert.strictEqual(this.$element.attr('aria-orientation'), orientation.updated);
+        });
+    });
+
+    QUnit.test('Step element should have role=tab', function(assert) {
+        this.reinit({
+            items: [{}],
+        });
+
+        assert.strictEqual(this.getStepByIndex(0).attr('role'), 'tab');
+    });
+
+    QUnit.test('Selected step element should have aria-selected=true', function(assert) {
+        this.reinit({
+            items: [{}, {}, {}],
+            selectedIndex: 1,
+        });
+
+        assert.strictEqual(this.getStepByIndex(0).attr('aria-selected'), 'false');
+        assert.strictEqual(this.getStepByIndex(1).attr('aria-selected'), 'true');
+        assert.strictEqual(this.getStepByIndex(2).attr('aria-selected'), 'false');
+    });
+
+    QUnit.test('Selected step should have aria-selected=true after change selectedIndex at runtime', function(assert) {
+        this.reinit({
+            items: [{}, {}, {}],
+            selectedIndex: 1
+        });
+
+        this.instance.option('selectedIndex', 2);
+
+        assert.strictEqual(this.getStepByIndex(0).attr('aria-selected'), 'false');
+        assert.strictEqual(this.getStepByIndex(1).attr('aria-selected'), 'false');
+        assert.strictEqual(this.getStepByIndex(2).attr('aria-selected'), 'true');
+    });
+
+    QUnit.test('Disabled step element should have aria-disabled=true', function(assert) {
+        this.reinit({
+            items: [{}, { disabled: true }, {}],
+        });
+
+        assert.strictEqual(this.getStepByIndex(0).attr('aria-disabled'), undefined);
+        assert.strictEqual(this.getStepByIndex(1).attr('aria-disabled'), 'true');
+        assert.strictEqual(this.getStepByIndex(2).attr('aria-disabled'), undefined);
+    });
+
+    QUnit.test('Disabled step should have aria-disabled=true after disabling step at runtime', function(assert) {
+        this.reinit({
+            items: [{}, {}, {}],
+        });
+
+        this.instance.option('items[1].disabled', true);
+
+        assert.strictEqual(this.getStepByIndex(0).attr('aria-disabled'), undefined);
+        assert.strictEqual(this.getStepByIndex(1).attr('aria-disabled'), 'true');
+        assert.strictEqual(this.getStepByIndex(2).attr('aria-disabled'), undefined);
     });
 });
