@@ -60,6 +60,7 @@ export default class FormDialog extends DialogBase {
         this._popup = e.component;
         this._popup.on('hiding', () => this.onHiding());
         this._popup.on('shown', () => { this._form.focus(); });
+        this._addEscapeHandler.bind(this);
       },
       toolbarItems: [
         {

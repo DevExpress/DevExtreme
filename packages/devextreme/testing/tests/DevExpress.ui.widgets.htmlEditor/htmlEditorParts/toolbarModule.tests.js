@@ -303,12 +303,12 @@ const dialogAIModuleConfig = {
                 option: noop,
                 ai: {},
                 showAIDialog: (config) => {
-                    return this._aIDialog.show(config);
+                    return this._aiDialog.show(config);
                 }
             }
         };
 
-        this._aIDialog = new AIDialog(this.options.editorInstance, {}, {});
+        this._aiDialog = new AIDialog(this.options.editorInstance, {});
     },
     afterEach: function() {
         fx.off = false;

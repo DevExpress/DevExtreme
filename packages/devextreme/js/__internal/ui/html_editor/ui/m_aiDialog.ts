@@ -11,19 +11,25 @@ import DialogBase from './m_baseDialog';
 
 const AI_DIALOG_COMMANDS_WITH_OPTIONS = ['translate', 'changeStyle', 'changeTone', 'custom'];
 
+const AI_DIALOG_CONTROLS_CLASS = 'dx-aidialog-controls';
+const AI_DIALOG_CONTENT_CLASS = 'dx-aidialog-content';
+const AI_DIALOG_TITLE_CLASS = 'dx-aidialog-title';
+const AI_DIALOG_TITLE_TEXT_CLASS = 'dx-aidialog-title-text';
+
+const POPUP_MIN_WIDTH = 288;
+const POPUP_MAX_WIDTH = 460;
+const REPLACE_DROPDOWN_WIDTH = 150;
+
 export interface AIDialogShowPayload {
   currentCommand: string;
-  currentOption?: string;
+  currentCommandOption?: string;
   text?: string;
   commandsMap: CommandsMap;
   prompt?: HtmlEditorAICustomCommand['prompt'];
 }
 
-const AI_DIALOG_CONTROLS_CLASS = 'dx-aidialog-controls';
-const AI_DIALOG_CONTENT_CLASS = 'dx-aidialog-content';
-
 export default class AIDialog extends DialogBase {
-  private _loading = false;
+  private _isLoading = false;
 
   private readonly _aIService;
 
@@ -33,19 +39,21 @@ export default class AIDialog extends DialogBase {
 
   private _currentOption?: string;
 
-  private _optionsList?: string[];
+  private _commandOptionsList?: string[];
 
   private _resultText = '';
 
   private _prompt?: HtmlEditorAICustomCommand['prompt'];
 
-  private _commandBoxInstance?: SelectBox;
+  private _commandSelectBox?: SelectBox;
 
-  private _optionBoxInstance?: SelectBox;
+  private _optionSelectBox?: SelectBox;
 
-  private _textAreaInstance?: TextArea;
+  private _resultTextArea?: TextArea;
 
-  constructor(editorInstance, popupConfig: PopupProperties, aIService?) {
+  private _commandChangeSuppressed = false;
+
+  constructor(editorInstance, aIService?, popupConfig?: PopupProperties) {
     super(editorInstance, popupConfig);
 
     this._aIService = aIService;
@@ -56,22 +64,30 @@ export default class AIDialog extends DialogBase {
 
     return extend(true, {}, baseConfig, {
       titleTemplate: (titleElement) => {
-        const $titleContainer = $('<div>').addClass('dx-aidialog-title');
+        const $titleContainer = $('<div>').addClass(AI_DIALOG_TITLE_CLASS);
         const $icon = $('<i>').addClass('dx-icon dx-icon-sparkle');
         const $text = $('<span>')
-          .addClass('ai-dialog-title-text')
+          .addClass(AI_DIALOG_TITLE_TEXT_CLASS)
           .text(localizationMessage.format('dxHtmlEditor-aiDialogTitle'));
         $titleContainer
           .append($icon)
           .append($text);
         $(titleElement).append($titleContainer);
       },
-      width: 460,
+      minWidth: POPUP_MIN_WIDTH,
+      maxWidth: POPUP_MAX_WIDTH,
+      height: 'auto',
       shading: false,
       dragEnabled: true,
       dragAndResizeArea: this._editorInstance?.$element(),
       toolbarItems: this._getToolbarItems(),
       showCloseButton: true,
+      hideOnOutsideClick: true,
+      position: {
+        my: 'center',
+        at: 'center',
+        of: this._editorInstance?.$element(),
+      },
     }) as PopupProperties;
   }
 
@@ -84,50 +100,41 @@ export default class AIDialog extends DialogBase {
       .appendTo($container);
 
     const $commandSelectBox = $('<div>').appendTo($controls);
-    this._commandBoxInstance = this._editorInstance._createComponent($commandSelectBox, SelectBox, {
+    this._commandSelectBox = this._editorInstance._createComponent($commandSelectBox, SelectBox, {
       value: this._currentCommand,
       displayExpr: 'text',
-      valueExpr: 'id',
+      valueExpr: 'name',
       onValueChanged: (e) => {
-        if (e.value === this._currentCommand) {
+        if (this._commandChangeSuppressed) {
           return;
         }
 
         this._currentCommand = e.value;
-        this._optionsList = this._commandsMap?.[e.value]?.options ?? [];
-        this._currentOption = this._optionsList?.[0];
+        this._commandOptionsList = this._commandsMap?.[e.value]?.options ?? [];
+        this._currentOption = this._commandOptionsList?.[0];
 
-        this._updateUI();
+        this._syncDialogWithState();
       },
     });
 
     const $optionSelectBox = $('<div>').appendTo($controls);
-    this._optionBoxInstance = this._editorInstance._createComponent($optionSelectBox, SelectBox, {
+    this._optionSelectBox = this._editorInstance._createComponent($optionSelectBox, SelectBox, {
       width: 'auto',
-      items: this._optionsList,
-      value: this._currentOption ?? this._optionsList?.[0],
-      visible: this._getHasOptions(),
+      items: this._commandOptionsList,
+      value: this._currentOption ?? this._commandOptionsList?.[0],
+      visible: this._isCommandWithOptionsSelected(),
       onValueChanged: (e) => {
         this._currentOption = e.value;
       },
     });
 
     const $textArea = $('<div>').appendTo($container);
-    this._textAreaInstance = this._editorInstance._createComponent($textArea, TextArea, {
+    this._resultTextArea = this._editorInstance._createComponent($textArea, TextArea, {
       value: this._resultText,
       height: 100,
       width: '100%',
       readOnly: true,
-    });
-  }
-
-  private _updateOptionSelectBox(): void {
-    const hasOptions = this._getHasOptions();
-
-    this._optionBoxInstance?.option({
-      visible: hasOptions,
-      items: this._optionsList ?? [],
-      value: this._currentOption ?? this._optionsList?.[0],
+      onInitialized: this._addEscapeHandler.bind(this),
     });
   }
 
@@ -147,9 +154,9 @@ export default class AIDialog extends DialogBase {
             { id: 'insertBelow', text: localizationMessage.format('dxHtmlEditor-aiInsertBelow') },
           ],
           dropDownOptions: {
-            width: 'auto',
+            width: REPLACE_DROPDOWN_WIDTH,
           },
-          onItemClick: this.replaceButtonAction,
+          onItemClick: (e) => this.replaceButtonAction(e),
         },
       },
       {
@@ -177,27 +184,45 @@ export default class AIDialog extends DialogBase {
     // TODO: implement with integration
   }
 
-  private _getHasOptions(): boolean {
+  private _isCommandWithOptionsSelected(): boolean {
     return AI_DIALOG_COMMANDS_WITH_OPTIONS.includes(this._currentCommand ?? '');
   }
 
-  private _updateUI(): void {
+  private _refreshCommandSelectBox(): void {
     const commandsList = Object.entries(this._commandsMap).map(
-      ([id, config]: [string, CommandDefinition]) => ({ id, text: config.text }),
+      ([name, config]: [string, CommandDefinition]) => ({ name, text: config.text }),
     );
 
-    this._commandBoxInstance?.option({
+    this._commandChangeSuppressed = true;
+    this._commandSelectBox?.option({
       dataSource: commandsList,
       value: this._currentCommand,
     });
+    this._commandChangeSuppressed = false;
+  }
 
-    this._updateOptionSelectBox();
+  private _refreshOptionSelectBox(): void {
+    const hasOptions = this._isCommandWithOptionsSelected();
 
-    this._textAreaInstance?.option('value', this._resultText);
+    this._optionSelectBox?.option({
+      visible: hasOptions,
+      items: this._commandOptionsList ?? [],
+      value: this._currentOption ?? this._commandOptionsList?.[0],
+    });
+  }
+
+  private _refreshResultText(): void {
+    this._resultTextArea?.option('value', this._resultText);
+  }
+
+  private _syncDialogWithState(): void {
+    this._refreshCommandSelectBox();
+    this._refreshOptionSelectBox();
+    this._refreshResultText();
   }
 
   private _setLoadingState(isLoading: boolean) {
-    this._loading = isLoading;
+    this._isLoading = isLoading;
   }
 
   replaceButtonAction(event?): void {
@@ -206,16 +231,16 @@ export default class AIDialog extends DialogBase {
   }
 
   show({
-    currentCommand, currentOption, commandsMap, text, prompt,
+    currentCommand, currentCommandOption, commandsMap, text, prompt,
   }: AIDialogShowPayload): Promise<unknown> | undefined {
     this._commandsMap = commandsMap;
     this._currentCommand = currentCommand;
     this._resultText = text ?? '';
-    this._optionsList = commandsMap[currentCommand]?.options ?? [];
-    this._currentOption = currentOption;
+    this._commandOptionsList = commandsMap[currentCommand]?.options ?? [];
+    this._currentOption = currentCommandOption;
     this._prompt = prompt;
 
-    this._updateUI();
+    this._syncDialogWithState();
 
     return super.show();
   }

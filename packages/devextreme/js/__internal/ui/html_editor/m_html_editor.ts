@@ -55,7 +55,7 @@ class HtmlEditor extends Editor<Properties> {
 
   _formDialog!: FormDialog;
 
-  _aIDialog?: AIDialog;
+  _aiDialog?: AIDialog;
 
   _quillInstance?: any;
 
@@ -355,9 +355,7 @@ class HtmlEditor extends Editor<Properties> {
     this._renderHtmlEditor();
     this._renderFormDialog();
 
-    if (this.option('ai')) {
-      this._renderAIDialog();
-    }
+    this._renderAIDialog();
     this._addKeyPressHandler();
 
     return renderContentPromise;
@@ -560,15 +558,13 @@ class HtmlEditor extends Editor<Properties> {
   }
 
   _renderAIDialog() {
-    const userOptions = extend(true, {
-      width: 'auto',
-      height: 'auto',
-      hideOnOutsideClick: true,
-    });
+    const aIService = this.option('ai');
 
-    const AIService = this.option('ai');
+    if (!aIService) {
+      return;
+    }
 
-    this._aIDialog = new AIDialog(this, userOptions, AIService);
+    this._aiDialog = new AIDialog(this, aIService);
   }
 
   _getStylingModePrefix(): string {
@@ -837,7 +833,7 @@ class HtmlEditor extends Editor<Properties> {
   }
 
   showAIDialog(payload: AIDialogShowPayload) {
-    return this._aIDialog?.show(payload);
+    return this._aiDialog?.show(payload);
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
