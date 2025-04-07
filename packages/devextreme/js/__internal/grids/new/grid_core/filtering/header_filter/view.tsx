@@ -8,6 +8,7 @@ import { View } from '@ts/grids/new/grid_core/core/view';
 import { WidgetMock } from '@ts/grids/new/grid_core/widget_mock';
 import { Component, createRef } from 'inferno';
 
+import { CLASSES } from '../../const';
 import { HeaderFilterController } from './controller';
 
 export interface OldHeaderFilterPopupInterface {
@@ -24,7 +25,7 @@ export class HeaderFilterPopupComponent extends Component<HeaderFilterPopupCompo
 
   public render(): JSX.Element {
     return (
-        <div ref={this.containerRef}></div>
+      <div className={CLASSES.excludeFlexBox} ref={this.containerRef}></div>
     );
   }
 

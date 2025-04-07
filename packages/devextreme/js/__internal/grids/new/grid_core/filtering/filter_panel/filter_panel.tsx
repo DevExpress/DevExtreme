@@ -7,6 +7,8 @@ import type { FilterBuilderView as OldFilterBuilderView } from '@ts/grids/grid_c
 import type { FilterPanelView as OldFilterPanelView } from '@ts/grids/grid_core/filter/m_filter_panel';
 import { Component, createRef } from 'inferno';
 
+import { CLASSES } from '../../const';
+
 export interface FilterPanelProps {
   oldFilterPanelView: OldFilterPanelView;
   oldFilterBuilderView: OldFilterBuilderView;
@@ -27,7 +29,7 @@ export class FilterPanelComponent extends Component<FilterPanelProps> {
   public render(): JSX.Element {
     return <>
         <div ref={this.filterPanelRef}></div>
-        <div ref={this.filterBuilderRef}></div>
+        <div className={CLASSES.excludeFlexBox} ref={this.filterBuilderRef}></div>
     </>;
   }
 
