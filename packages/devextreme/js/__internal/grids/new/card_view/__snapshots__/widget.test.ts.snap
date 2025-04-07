@@ -93,7 +93,9 @@ exports[`common initial render should be successfull 1`] = `
     </div>
     
   </div>
-  <div>
+  <div
+    class="dx-cardview-exclude-flexbox"
+  >
     <div
       class="dx-header-filter-menu"
     />
@@ -171,7 +173,9 @@ exports[`common initial render should be successfull 1`] = `
       class="dx-hidden"
     />
   </div>
-  <div>
+  <div
+    class="dx-cardview-exclude-flexbox"
+  >
     <div />
   </div>
   <div>

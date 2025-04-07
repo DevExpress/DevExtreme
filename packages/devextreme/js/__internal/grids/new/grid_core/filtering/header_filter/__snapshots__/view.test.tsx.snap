@@ -2,6 +2,8 @@
 
 exports[`HeaderFilter HeaderFilterPopupComponent should render 1`] = `
 <div>
-  <div />
+  <div
+    class="dx-cardview-exclude-flexbox"
+  />
 </div>
 `;
