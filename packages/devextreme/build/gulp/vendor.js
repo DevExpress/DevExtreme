@@ -35,49 +35,6 @@ const JS_VENDORS = [
         suffix: 'debug'
     },
     {
-        path: 'cldrjs/dist/cldr.js',
-        noUglyFile: true
-    },
-    {
-        path: 'globalize/dist/globalize.js',
-        noUglyFile: true
-    },
-    {
-        path: 'cldrjs/dist/cldr/event.js',
-        dir: 'cldr',
-        noUglyFile: true
-    },
-    {
-        path: 'cldrjs/dist/cldr/supplemental.js',
-        dir: 'cldr',
-        noUglyFile: true
-    },
-    {
-        path: 'cldrjs/dist/cldr/unresolved.js',
-        dir: 'cldr',
-        noUglyFile: true
-    },
-    {
-        path: 'globalize/dist/globalize/number.js',
-        dir: 'globalize',
-        noUglyFile: true
-    },
-    {
-        path: 'globalize/dist/globalize/currency.js',
-        dir: 'globalize',
-        noUglyFile: true
-    },
-    {
-        path: 'globalize/dist/globalize/date.js',
-        dir: 'globalize',
-        noUglyFile: true
-    },
-    {
-        path: 'globalize/dist/globalize/message.js',
-        dir: 'globalize',
-        noUglyFile: true
-    },
-    {
         path: 'devexpress-diagram/dist/dx-diagram.js'
     },
     {
