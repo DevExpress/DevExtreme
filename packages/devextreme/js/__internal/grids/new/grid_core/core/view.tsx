@@ -11,6 +11,8 @@ import { Component, type ComponentType } from 'inferno';
 export abstract class View<T extends {}> {
   private inferno: undefined | ComponentType;
 
+  protected root?: HTMLDivElement;
+
   private props?: T;
 
   private readonly firstRender = true;
