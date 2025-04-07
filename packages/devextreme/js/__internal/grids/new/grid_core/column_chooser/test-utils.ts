@@ -1,4 +1,5 @@
 /* eslint-disable spellcheck/spell-checker */
+// eslint-disable-next-line import/no-extraneous-dependencies
 import { expect } from '@jest/globals';
 
 import { ColumnsController } from '../columns_controller';
@@ -9,6 +10,7 @@ import { ToolbarView } from '../toolbar/view';
 import { ColumnChooserController } from './controller';
 import { ColumnChooserView } from './view';
 
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const createToolbarView = (optionsController: OptionsControllerMock) => {
   const toolbarElement = document.createElement('div');
   const toolbarController = new ToolbarController(optionsController);

@@ -1,7 +1,7 @@
 /* eslint-disable spellcheck/spell-checker */
 import { describe, expect, it } from '@jest/globals';
 
-import { expectColumnVisibility, renderColumnChooser, renderColumnChooserWithToolbar } from './test-utils.test';
+import { expectColumnVisibility, renderColumnChooser, renderColumnChooserWithToolbar } from './test-utils';
 
 describe('ColumnChooser', () => {
   describe('View', () => {
