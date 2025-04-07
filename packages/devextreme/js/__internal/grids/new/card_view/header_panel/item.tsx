@@ -1,6 +1,7 @@
 import type { Column } from '@ts/grids/new/grid_core/columns_controller/types';
+import { MultipleKeyDownHandler } from '@ts/grids/new/grid_core/keyboard_navigation/index';
 import type { ComponentType } from 'inferno';
-import { Component } from 'inferno';
+import { Component, createRef } from 'inferno';
 
 import type { Status } from './column_sortable';
 
@@ -69,18 +70,41 @@ export interface ItemProps {
   template?: ComponentType<{ column: Column }>;
   cssClass?: string;
   onSortClick?: (e: MouseEvent) => void;
+  onFilterClick?: (
+    element: Element,
+    onFilterCloseCallback?: () => void,
+  ) => void;
 }
 
 export class Item extends Component<ItemProps> {
+  private readonly containerRef = createRef<HTMLDivElement>();
+
+  private readonly keyboardHandler = new MultipleKeyDownHandler(['alt', 'arrowdown']);
+
   public render(): JSX.Element {
     const Template = this.props.column.headerItemTemplate ?? this.props.template;
     const cssClass = `${CLASSES.item} ${this.props.column.headerItemCssClass ?? ''} ${this.props.cssClass ?? ''}`;
 
+    const { headerFilter } = this.props.column;
+
+    const hasHeaderFilterValue = headerFilter?.filterType === 'exclude'
+      || !!headerFilter?.values?.length;
+    const headerFilterIconClass = [
+      CLASSES.headerFilter.iconEmpty,
+      hasHeaderFilterValue ? CLASSES.headerFilter.iconFilled : '',
+    ].join(' ');
+
     return (
       <div
+        ref={this.containerRef}
         className={cssClass}
         tabIndex={0}
         onClick={this.props.onSortClick}
+        onKeyDown={(event) => this.keyboardHandler.onKeyDownHandler(
+          event,
+          this.onFilterKeyPressHandler,
+        )}
+        onKeyUp={this.keyboardHandler.onKeyUpHandler}
       >
         {this.props.status && ICONS[this.props.status]}
         {Template && <Template column={this.props.column}/>}
@@ -95,7 +119,32 @@ export class Item extends Component<ItemProps> {
             />
           )
         }
+        { this.props.column?.allowHeaderFiltering && (
+          <span className={headerFilterIconClass}
+                onClick={this.onFilterClickHandler}
+          />
+        )}
       </div>
     );
   }
+
+  private readonly onFilterClickHandler = (event: Event): void => {
+    event.stopPropagation();
+
+    if (this.containerRef.current) {
+      this.props.onFilterClick?.(this.containerRef.current);
+    }
+  };
+
+  private readonly onFilterKeyPressHandler = (event: KeyboardEvent): void => {
+    event.preventDefault();
+
+    if (this.containerRef.current) {
+      this.props.onFilterClick?.(this.containerRef.current, this.focusItem);
+    }
+  };
+
+  private readonly focusItem = (): void => {
+    this.containerRef?.current?.focus();
+  };
 }

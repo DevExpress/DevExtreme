@@ -18,3 +18,16 @@
     border: solid $cardview-header-item-border-width $cardview-header-item-hovered-border-color;
   }
 }
+
+.dx-cardview {
+  .dx-header-filter-icon {
+    @include dx-icon(filter);
+
+    color: $cardview-header-filter-icon-empty-color;
+    font-size: $cardview-header-filter-icon-size;
+
+    &--selected {
+      color: $cardview-header-filter-icon-selected-color;
+    }
+  }
+}

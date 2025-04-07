@@ -6,6 +6,8 @@ exports[`ItemsController createDataRow should process data object to data row us
     {
       "column": {
         "alignment": "left",
+        "allowFiltering": true,
+        "allowHeaderFiltering": false,
         "allowReordering": true,
         "allowSorting": true,
         "calculateCellValue": [Function],
@@ -14,6 +16,17 @@ exports[`ItemsController createDataRow should process data object to data row us
         "dataField": "a",
         "dataType": "string",
         "falseText": "false",
+        "headerFilter": {
+          "allowSelectAll": true,
+          "height": 325,
+          "search": {
+            "editorOptions": {},
+            "enabled": false,
+            "mode": "contains",
+            "timeout": 500,
+          },
+          "width": 252,
+        },
         "headerItemTemplate": undefined,
         "name": "a",
         "trueText": "true",
@@ -28,6 +41,8 @@ exports[`ItemsController createDataRow should process data object to data row us
     {
       "column": {
         "alignment": "left",
+        "allowFiltering": true,
+        "allowHeaderFiltering": false,
         "allowReordering": true,
         "allowSorting": true,
         "calculateCellValue": [Function],
@@ -36,6 +51,17 @@ exports[`ItemsController createDataRow should process data object to data row us
         "dataField": "b",
         "dataType": "string",
         "falseText": "false",
+        "headerFilter": {
+          "allowSelectAll": true,
+          "height": 325,
+          "search": {
+            "editorOptions": {},
+            "enabled": false,
+            "mode": "contains",
+            "timeout": 500,
+          },
+          "width": 252,
+        },
         "headerItemTemplate": undefined,
         "name": "b",
         "trueText": "true",
@@ -64,6 +90,8 @@ exports[`ItemsController createDataRow should process data object to data row us
     {
       "column": {
         "alignment": "left",
+        "allowFiltering": true,
+        "allowHeaderFiltering": false,
         "allowReordering": true,
         "allowSorting": true,
         "calculateCellValue": [Function],
@@ -72,6 +100,17 @@ exports[`ItemsController createDataRow should process data object to data row us
         "dataField": "a",
         "dataType": "string",
         "falseText": "false",
+        "headerFilter": {
+          "allowSelectAll": true,
+          "height": 325,
+          "search": {
+            "editorOptions": {},
+            "enabled": false,
+            "mode": "contains",
+            "timeout": 500,
+          },
+          "width": 252,
+        },
         "headerItemTemplate": undefined,
         "name": "a",
         "trueText": "true",
@@ -86,6 +125,8 @@ exports[`ItemsController createDataRow should process data object to data row us
     {
       "column": {
         "alignment": "left",
+        "allowFiltering": true,
+        "allowHeaderFiltering": false,
         "allowReordering": true,
         "allowSorting": true,
         "calculateCellValue": [Function],
@@ -94,6 +135,17 @@ exports[`ItemsController createDataRow should process data object to data row us
         "dataField": "b",
         "dataType": "string",
         "falseText": "false",
+        "headerFilter": {
+          "allowSelectAll": true,
+          "height": 325,
+          "search": {
+            "editorOptions": {},
+            "enabled": false,
+            "mode": "contains",
+            "timeout": 500,
+          },
+          "width": 252,
+        },
         "headerItemTemplate": undefined,
         "name": "b",
         "trueText": "true",
