@@ -1784,6 +1784,31 @@ QUnit.module('the \'onCustomItemCreating\' option', moduleSetup, () => {
             }
         });
     });
+
+    QUnit.test('It should be possible to create a custom item by enter key after navigate in list and close popup (T1270280)', function(assert) {
+        assert.expect(1);
+
+        const $tagBox = $('#tagBox').dxTagBox({
+            items: ['item1', 'item2', 'item3'],
+            onCustomItemCreating(e) {
+                e.customItem = e.text;
+
+                assert.strictEqual(e.text, 'it', 'custom item is creating');
+            },
+            acceptCustomValue: true,
+            opened: true,
+            searchEnabled: true,
+        });
+
+        const $input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        const keyboard = keyboardMock($input);
+
+        keyboard
+            .type('it')
+            .press('down')
+            .press('esc')
+            .press('enter');
+    });
 });
 
 QUnit.module('placeholder', () => {
