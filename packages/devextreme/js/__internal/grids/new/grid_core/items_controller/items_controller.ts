@@ -52,6 +52,37 @@ export class ItemsController {
     this.selectedCardKeys.update(keys);
   }
 
+  private updateColumnDataType(column: Column, value: unknown): unknown {
+    if (column.dataType === 'date') {
+      if (typeof value === 'string' && !isNaN(Date.parse(value))) {
+        return new Date(value);
+      }
+      // @ts-expect-error
+      return value instanceof Date ? value : new Date(value);
+    }
+
+    if (typeof value === 'number') {
+      column.dataType = 'number';
+      return Number(value);
+    }
+
+    if (typeof value === 'string') {
+      if (!isNaN(Number(value))) {
+        column.dataType = 'number';
+        return value;
+      }
+
+      const parsed = Date.parse(value);
+      if (!isNaN(parsed)) {
+        const hasTime = /[T\s]\d{2}:\d{2}/.test(value);
+        column.dataType = hasTime ? 'datetime' : 'date';
+        return new Date(parsed);
+      }
+    }
+
+    return value;
+  }
+
   public createDataRow(
     data: DataObject,
     columns: Column[],
@@ -63,14 +94,16 @@ export class ItemsController {
     return {
       // @ts-expect-error
       cells: columns.map((column) => {
-        const value = column.calculateCellValue(data);
-        const displayValue = column.calculateDisplayValue(data);
+        const calculatedValue = column.calculateCellValue?.(data);
+        const value = this.updateColumnDataType(column, calculatedValue);
+        const displayValue = value;
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const formattedText = formatHelper.format(displayValue as any, column.format);
         const text = column.customizeText
           ? column.customizeText({ value: displayValue, valueText: formattedText })
-          : formattedText;
+          : calculatedValue;
         const highlightedText = this.searchController
+          // @ts-expect-error
           .getHighlightedText(text);
 
         return {
