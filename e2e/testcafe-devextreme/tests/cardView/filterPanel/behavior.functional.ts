@@ -42,7 +42,7 @@ test('filterEnabled checkbox switches the filter by click', async (t) => {
   });
 });
 
-test.only('filterEnabled checkbox switches the filter by keyboard', async (t) => {
+test('filterEnabled checkbox switches the filter by keyboard', async (t) => {
   const cardView = new CardView('#container');
   const startButton = new Button('#otherContainer');
   const filterEnabledCheckbox = cardView.getFilterPanel().getFilterEnabledCheckbox();
