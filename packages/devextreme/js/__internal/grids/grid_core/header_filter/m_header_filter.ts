@@ -60,7 +60,7 @@ function ungroupUTCDates(items, dateParts?, dates?) {
   return dates;
 }
 
-function convertDataFromUTCToLocal(data, column) {
+export function convertDataFromUTCToLocal(data, column) {
   const dates = ungroupUTCDates(data);
   // @ts-expect-error
   const query = dataQuery(dates);
@@ -72,11 +72,11 @@ function convertDataFromUTCToLocal(data, column) {
   return storeHelper.queryByOptions(query, { group }).toArray();
 }
 
-function isUTCFormat(format) {
+export function isUTCFormat(format) {
   return format?.slice(-1) === 'Z' || format?.slice(-3) === '\'Z\'';
 }
 
-const getFormatOptions = function (value, column, currentLevel) {
+export const getFormatOptions = function (value, column, currentLevel) {
   const groupInterval = filterUtils.getGroupInterval(column);
   const result: any = gridCoreUtils.getFormatOptionsByColumn(column, 'headerFilter');
 

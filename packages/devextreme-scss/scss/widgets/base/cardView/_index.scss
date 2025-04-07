@@ -12,3 +12,7 @@
   background-color: $cardview-background-color;
   border-radius: $cardview-border-radius;
 }
+
+.dx-cardview-exclude-flexbox {
+  position: absolute;
+}
