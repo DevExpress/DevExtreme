@@ -1,6 +1,7 @@
 import localizationMessage from '@js/common/core/localization/message';
 import $ from '@js/core/renderer';
 import { extend } from '@js/core/utils/extend';
+import type { HtmlEditorAICustomCommand } from '@js/ui/html_editor';
 import type { Properties as PopupProperties, ToolbarItem } from '@js/ui/popup';
 import SelectBox from '@js/ui/select_box';
 import TextArea from '@js/ui/text_area';
@@ -15,6 +16,7 @@ export interface AIDialogShowPayload {
   currentOption?: string;
   text?: string;
   commandsMap: CommandsMap;
+  prompt?: HtmlEditorAICustomCommand['prompt'];
 }
 
 const AI_DIALOG_CONTROLS_CLASS = 'dx-aidialog-controls';
@@ -34,6 +36,8 @@ export default class AIDialog extends DialogBase {
   private _optionsList?: string[];
 
   private _resultText = '';
+
+  private _prompt?: HtmlEditorAICustomCommand['prompt'];
 
   private _commandBoxInstance?: SelectBox;
 
@@ -204,13 +208,14 @@ export default class AIDialog extends DialogBase {
   }
 
   show({
-    currentCommand, currentOption, commandsMap, text,
+    currentCommand, currentOption, commandsMap, text, prompt,
   }: AIDialogShowPayload): Promise<unknown> | undefined {
     this._commandsMap = commandsMap;
     this._currentCommand = currentCommand;
     this._resultText = text ?? '';
     this._optionsList = commandsMap[currentCommand]?.options ?? [];
     this._currentOption = currentOption;
+    this._prompt = prompt;
 
     this._updateUI();
 

@@ -13,7 +13,7 @@ import { each } from '@js/core/utils/iterator';
 import {
   isDefined, isEmptyObject, isObject, isString,
 } from '@js/core/utils/type';
-import type { HtmlEditorAICommandName, HtmlEditorAIToolbarItem } from '@js/ui/html_editor';
+import type { HtmlEditorAICommandName, HtmlEditorAICustomCommand, HtmlEditorAIToolbarItem } from '@js/ui/html_editor';
 import type { Item } from '@js/ui/toolbar';
 import Toolbar from '@js/ui/toolbar';
 import errors from '@js/ui/widget/ui.errors';
@@ -368,12 +368,13 @@ if (Quill) {
       }, item);
     }
 
-    private _prepareAIOptions(parentCommand: HtmlEditorAICommandName | 'custom', options?: string[]) {
+    private _prepareAIOptions(parentCommand: HtmlEditorAICommandName | 'custom', options?: string[], prompt?: HtmlEditorAICustomCommand['prompt']) {
       return options?.map((option) => ({
         id: option,
         text: option,
         parentId: parentCommand,
         options: options.map(capitalize),
+        prompt,
       }));
     }
 
@@ -393,9 +394,14 @@ if (Quill) {
         if (typeof command === 'object') {
           if (command.name === 'custom') {
             return {
-              id: command.name,
+              id: 'custom',
               text: command.text,
-              items: this._prepareAIOptions(command.name, command.options),
+              items: this._prepareAIOptions(
+                command.name,
+                command.options,
+                (command as HtmlEditorAICustomCommand).prompt,
+              ),
+              prompt: (command as HtmlEditorAICustomCommand).prompt,
             };
           }
 
@@ -434,6 +440,7 @@ if (Quill) {
             command: itemData.id,
             parentCommand: itemData.parentId,
             commandsMap,
+            prompt: itemData.prompt,
           };
 
           this._formatHandlers[name](this, dialogAIOptions);
