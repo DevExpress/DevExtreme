@@ -4,7 +4,7 @@ import DataGrid, {
   Selection,
   FilterRow,
   Paging,
-  DataGridTypes,
+  type DataGridTypes,
   Pager,
 } from 'devextreme-react/data-grid';
 import { SelectBox } from 'devextreme-react/select-box';

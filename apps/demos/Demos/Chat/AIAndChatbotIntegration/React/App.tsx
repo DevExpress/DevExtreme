@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react';
-import Chat, { ChatTypes } from 'devextreme-react/chat';
+import Chat, { type ChatTypes } from 'devextreme-react/chat';
 import { loadMessages } from 'devextreme/localization';
 import {
   user,

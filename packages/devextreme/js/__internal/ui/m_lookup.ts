@@ -977,13 +977,7 @@ class Lookup extends DropDownList<LookupProperties> {
       pageLoadMode: this.option('pageLoadMode'),
       nextButtonText: this.option('nextButtonText'),
       indicateLoading: this.option('searchEnabled'),
-      onSelectionChanged: this._getSelectionChangedHandler(),
     });
-  }
-
-  _getSelectionChangedHandler() {
-    // @ts-expect-error ts-error
-    return this.option('showSelectionControls') ? this._selectionChangeHandler.bind(this) : noop;
   }
 
   _listContentReadyHandler(): void {

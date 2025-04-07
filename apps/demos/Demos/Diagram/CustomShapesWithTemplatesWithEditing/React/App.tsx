@@ -10,7 +10,7 @@ import {
   PropertiesPanel,
   Tab,
   Toolbox,
-  DiagramTypes,
+  type DiagramTypes,
 } from 'devextreme-react/diagram';
 import { Popup } from 'devextreme-react/popup';
 import TextBox from 'devextreme-react/text-box';

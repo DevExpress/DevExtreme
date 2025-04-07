@@ -9,12 +9,11 @@ const CLASSES = {
 };
 
 fixture('Sortable.Kanban')
-  .page('http://localhost:8080/')
   .before(async (ctx) => {
     ctx.initialWindowSize = [900, 600];
   });
 
-runManualTest('Sortable', 'Kanban', ['jQuery', 'React', 'Vue', 'Angular'], (test) => {
+runManualTest('Sortable', 'Kanban', (test) => {
   test('Drag-n-drop kanban columns', async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
@@ -26,7 +25,7 @@ runManualTest('Sortable', 'Kanban', ['jQuery', 'React', 'Vue', 'Angular'], (test
   });
 });
 
-runManualTest('Sortable', 'Kanban', ['jQuery', 'React', 'Vue', 'Angular'], (test) => {
+runManualTest('Sortable', 'Kanban', (test) => {
   test('Drag-n-drop card inside the same column', async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
@@ -38,7 +37,7 @@ runManualTest('Sortable', 'Kanban', ['jQuery', 'React', 'Vue', 'Angular'], (test
   });
 });
 
-runManualTest('Sortable', 'Kanban', ['jQuery', 'React', 'Vue', 'Angular'], (test) => {
+runManualTest('Sortable', 'Kanban', (test) => {
   test('Drag-n-drop card to a different column', async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 

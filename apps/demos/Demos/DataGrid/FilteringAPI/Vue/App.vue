@@ -57,9 +57,9 @@ import {
   DxDataGrid,
   DxPager,
 } from 'devextreme-vue/data-grid';
-import DxSelectBox, { DxSelectBoxTypes } from 'devextreme-vue/select-box';
+import DxSelectBox, { type DxSelectBoxTypes } from 'devextreme-vue/select-box';
 import 'devextreme-vue/common/data';
-import { DataSourceOptions } from 'devextreme-vue/common/data';
+import { type DataSourceOptions } from 'devextreme-vue/common/data';
 
 const dataSource: DataSourceOptions = {
   store: {

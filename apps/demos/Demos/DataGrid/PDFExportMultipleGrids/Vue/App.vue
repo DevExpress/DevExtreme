@@ -84,8 +84,8 @@ import DxButton from 'devextreme-vue/button';
 import DxTabPanel, { DxItem } from 'devextreme-vue/tab-panel';
 import { DxDataGrid, DxColumn } from 'devextreme-vue/data-grid';
 
-import { DataSourceOptions } from 'devextreme-vue/common/data';
-import { exportDataGrid, DataGridCell, Cell } from 'devextreme-vue/common/export/pdf';
+import { type DataSourceOptions } from 'devextreme-vue/common/data';
+import { exportDataGrid, type DataGridCell, type Cell } from 'devextreme-vue/common/export/pdf';
 import { jsPDF } from 'jspdf';
 
 import 'devextreme/data/odata/store';

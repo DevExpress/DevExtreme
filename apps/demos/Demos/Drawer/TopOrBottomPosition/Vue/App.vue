@@ -23,39 +23,41 @@
     </DxDrawer>
     <div class="options">
       <div class="caption">Options</div>
-      <div class="option">
-        <label>Opened state mode</label>
-        <DxRadioGroup
-          v-model:value="selectedOpenMode"
-          :items="showModes"
-          layout="horizontal"
-        />
-      </div>
-      <div class="option">
-        <label>Position</label>
-        <DxRadioGroup
-          v-model:value="selectedPosition"
-          :items="positionModes"
-          layout="horizontal"
-        />
-      </div>
-      <div
-        v-if="selectedOpenMode !== 'push'"
-        class="option"
-      >
-        <label>Reveal mode</label>
-        <DxRadioGroup
-          v-model:value="selectedRevealMode"
-          :items="showSubmenuModes"
-          layout="horizontal"
-        />
+      <div class="options-container">
+        <div class="option">
+          <label>Opened state mode</label>
+          <DxRadioGroup
+            v-model:value="selectedOpenMode"
+            :items="showModes"
+            layout="horizontal"
+          />
+        </div>
+        <div class="option">
+          <label>Position</label>
+          <DxRadioGroup
+            v-model:value="selectedPosition"
+            :items="positionModes"
+            layout="horizontal"
+          />
+        </div>
+        <div
+          v-if="selectedOpenMode !== 'push'"
+          class="option"
+        >
+          <label>Reveal mode</label>
+          <DxRadioGroup
+            v-model:value="selectedRevealMode"
+            :items="showSubmenuModes"
+            layout="horizontal"
+          />
+        </div>
       </div>
     </div>
   </div>
 </template>
 <script setup lang="ts">
 import { ref } from 'vue';
-import DxDrawer from 'devextreme-vue/drawer';
+import DxDrawer, { type DxDrawerTypes } from 'devextreme-vue/drawer';
 import DxRadioGroup from 'devextreme-vue/radio-group';
 import DxToolbar from 'devextreme-vue/toolbar';
 import NavigationList from './NavigationList.vue';
@@ -64,9 +66,9 @@ import { text } from './data.ts';
 const showModes = ['push', 'shrink', 'overlap'];
 const positionModes = ['top', 'bottom'];
 const showSubmenuModes = ['slide', 'expand'];
-const selectedOpenMode = ref('shrink');
-const selectedPosition = ref('top');
-const selectedRevealMode = ref('expand');
+const selectedOpenMode = ref<DxDrawerTypes.OpenedStateMode>('shrink');
+const selectedPosition = ref<DxDrawerTypes.PanelLocation>('top');
+const selectedRevealMode = ref<DxDrawerTypes.RevealMode>('expand');
 const openState = ref(false);
 const toolbarContent = [{
   widget: 'dxButton',
@@ -124,6 +126,11 @@ const toolbarContent = [{
       background-color: rgba(191, 191, 191, 0.15);
     }
 
+    .options-container {
+      display: flex;
+      align-items: center;
+    }
+
     .caption {
       font-size: 18px;
       font-weight: 500;
@@ -132,7 +139,7 @@ const toolbarContent = [{
     .option {
       margin-top: 10px;
       display: inline-block;
-      margin-right: 54px;
+      margin-right: 50px;
     }
 
     label {

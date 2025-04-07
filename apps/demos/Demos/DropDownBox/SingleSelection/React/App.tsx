@@ -1,6 +1,6 @@
 import React, { useCallback, useRef, useState } from 'react';
-import DropDownBox, { DropDownBoxTypes } from 'devextreme-react/drop-down-box';
-import TreeView, { TreeViewTypes } from 'devextreme-react/tree-view';
+import DropDownBox, { type DropDownBoxTypes } from 'devextreme-react/drop-down-box';
+import TreeView, { type TreeViewTypes } from 'devextreme-react/tree-view';
 import DataGrid, {
   Selection, Paging, FilterRow, Scrolling,
 } from 'devextreme-react/data-grid';

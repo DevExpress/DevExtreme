@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import RangeSelector, {
-  Margin, Scale, MinorTick, Marker, Label, Behavior, SliderMarker, RangeSelectorTypes, IBehaviorProps,
+  Margin, Scale, MinorTick, Marker, Label, Behavior, SliderMarker, type RangeSelectorTypes, IBehaviorProps,
 } from 'devextreme-react/range-selector';
 import { SelectBox } from 'devextreme-react/select-box';
 

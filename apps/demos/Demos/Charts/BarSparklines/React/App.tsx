@@ -1,7 +1,6 @@
 import React, { useCallback } from 'react';
-import SelectBox, { SelectBoxTypes } from 'devextreme-react/select-box';
-import { DataSource } from 'devextreme-react/common/data';
-import { CustomStore } from 'devextreme-react/common/data';
+import SelectBox, { type SelectBoxTypes } from 'devextreme-react/select-box';
+import { DataSource, CustomStore } from 'devextreme-react/common/data';
 import RowTemplate from './RowTemplate.tsx';
 
 const months = [12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1];

@@ -18,11 +18,9 @@
   </svg>
 </template>
 <script setup lang="ts">
-withDefaults(defineProps<{
-  data?: Record<string, any>
-}>(), {
-  data: () => ({}),
-});
+defineProps<{
+  data?: { valueText: string }
+}>();
 
 const getFilePath = (text) => `../../../../images/flags/3x2/${text.toLowerCase().replace(' ', '')}.svg`;
 </script>

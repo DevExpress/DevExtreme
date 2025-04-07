@@ -29,13 +29,13 @@
 </template>
 <script setup lang="ts">
 import { ref } from 'vue';
-import DxTileView from 'devextreme-vue/tile-view';
+import DxTileView, { type DxTileViewTypes } from 'devextreme-vue/tile-view';
 import DxSelectBox from 'devextreme-vue/select-box';
 import HomeItem from './HomeItem.vue';
 import { homes } from './data.ts';
 
-const directions = ['horizontal', 'vertical'];
-const direction = ref('horizontal');
+const directions: DxTileViewTypes.Orientation[] = ['horizontal', 'vertical'];
+const direction = ref(directions[0]);
 const height = 390;
 const baseItemHeight = 120;
 const baseItemWidth = 185;

@@ -1,7 +1,7 @@
 import React from 'react';
 import DataGrid, {
   Column,
-  DataGridTypes,
+  type DataGridTypes,
   MasterDetail,
   Selection,
 } from 'devextreme-react/data-grid';

@@ -41,7 +41,7 @@
 </template>
 <script setup lang="ts">
 import {
-  DxDataGrid, DxColumn, DxExport, DxDataGridTypes,
+  DxDataGrid, DxColumn, DxExport, type DxDataGridTypes,
 } from 'devextreme-vue/data-grid';
 import { Anchor, Workbook } from 'exceljs';
 // Our demo infrastructure requires us to use 'file-saver-es'.

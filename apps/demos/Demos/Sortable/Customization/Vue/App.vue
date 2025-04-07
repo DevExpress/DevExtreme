@@ -105,17 +105,18 @@
 </template>
 <script setup lang="ts">
 import { computed, ref } from 'vue';
+import type { DragDirection, Orientation } from "devextreme/common";
 import DxScrollView from 'devextreme-vue/scroll-view';
-import DxSortable from 'devextreme-vue/sortable';
+import DxSortable, { type DxSortableTypes } from 'devextreme-vue/sortable';
 import DxSelectBox from 'devextreme-vue/select-box';
 import DxCheckBox from 'devextreme-vue/check-box';
 import DxNumberBox from 'devextreme-vue/number-box';
 import { tasks } from './data.ts';
 
 const items = ref(tasks);
-const dropFeedbackMode = ref('push');
-const itemOrientation = ref('vertical');
-const dragDirection = ref('both');
+const dropFeedbackMode = ref<DxSortableTypes.DragHighlight>('push');
+const itemOrientation = ref<Orientation>('vertical');
+const dragDirection = ref<DragDirection>('both');
 const scrollSpeed = ref(30);
 const scrollSensitivity = ref(60);
 const handle = ref('');

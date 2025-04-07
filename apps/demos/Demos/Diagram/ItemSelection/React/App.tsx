@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import Diagram, {
-  Nodes, AutoLayout, Toolbox, PropertiesPanel, DiagramTypes,
+  Nodes, AutoLayout, Toolbox, PropertiesPanel, type DiagramTypes,
 } from 'devextreme-react/diagram';
 import { ArrayStore } from 'devextreme-react/common/data';
 import service from './data.ts';

@@ -16,8 +16,8 @@
 </template>
 <script setup lang="ts">
 import { ref } from 'vue';
-import { DxDataGrid, DxDataGridTypes } from 'devextreme-vue/data-grid';
-import DxTagBox, { DxTagBoxTypes } from 'devextreme-vue/tag-box';
+import { DxDataGrid, type DxDataGridTypes } from 'devextreme-vue/data-grid';
+import DxTagBox, { type DxTagBoxTypes } from 'devextreme-vue/tag-box';
 import { CustomStore } from 'devextreme-vue/common/data';
 
 const props = defineProps<{

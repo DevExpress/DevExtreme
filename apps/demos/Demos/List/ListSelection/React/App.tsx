@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from 'react';
 
 import SelectBox from 'devextreme-react/select-box';
-import List, { ListTypes } from 'devextreme-react/list';
+import List, { type ListTypes } from 'devextreme-react/list';
 import CheckBox from 'devextreme-react/check-box';
 
 import { ArrayStore } from 'devextreme-react/common/data';

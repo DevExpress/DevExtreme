@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import { NumberBox } from 'devextreme-react/number-box';
-import { SelectBox, SelectBoxTypes } from 'devextreme-react/select-box';
+import { SelectBox, type SelectBoxTypes } from 'devextreme-react/select-box';
 import { Switch } from 'devextreme-react/switch';
 import { TextBox } from 'devextreme-react/text-box';
 import { Autocomplete } from 'devextreme-react/autocomplete';

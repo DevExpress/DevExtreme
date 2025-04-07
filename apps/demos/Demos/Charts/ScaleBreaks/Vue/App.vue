@@ -60,12 +60,13 @@ import DxChart, {
   DxTooltip,
   DxValueAxis,
   DxBreakStyle,
+  type DxChartTypes,
 } from 'devextreme-vue/chart';
 import DxSelectBox from 'devextreme-vue/select-box';
 import DxCheckBox from 'devextreme-vue/check-box';
 import { dataSource } from './data.ts';
 
-const lineStyles = ['waved', 'straight'];
+const lineStyles: DxChartTypes.ScaleBreakLineStyle[] = ['waved', 'straight'];
 const autoBreaksEnabledValue = ref(true);
 const breaksCount = ref([1, 2, 3, 4]);
 const lineStyleValue = ref(lineStyles[0]);

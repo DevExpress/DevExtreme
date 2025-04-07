@@ -36,10 +36,6 @@ const setupModule = function() {
         }, options));
     };
 
-    this.getColumns = function(parameterNames) {
-        return this.columnsController.getColumns();
-    };
-
     this.getFixedColumns = function(parameterNames) {
         return this.columnsController.getFixedColumns();
     };
@@ -535,10 +531,6 @@ const setupRenderingModule = function() {
             columns: this.columns,
             dataSource: [{}]
         }, options));
-    };
-
-    this.getColumns = function(parameterNames) {
-        return this.columnsController.getColumns();
     };
 
     this.clock = sinon.useFakeTimers();

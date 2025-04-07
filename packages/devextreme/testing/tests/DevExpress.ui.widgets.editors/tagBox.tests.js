@@ -399,13 +399,15 @@ QUnit.module('list selection', moduleSetup, () => {
         let $item = getListItems(tagBox).eq(0);
 
         $item.trigger('dxclick');
-        assert.deepEqual(spy.args[1][0].addedItems, [1], 'added items is correct');
-        assert.deepEqual(spy.args[1][0].removedItems, [], 'removed items is empty');
+
+        assert.deepEqual(spy.args[0][0].addedItems, [1], 'added items is correct');
+        assert.deepEqual(spy.args[0][0].removedItems, [], 'removed items is empty');
 
         $item = getListItems(tagBox).eq(1);
         $item.trigger('dxclick');
-        assert.deepEqual(spy.args[2][0].addedItems, [3], 'added items is correct');
-        assert.deepEqual(spy.args[2][0].removedItems, [], 'removed items is empty');
+
+        assert.deepEqual(spy.args[1][0].addedItems, [3], 'added items is correct');
+        assert.deepEqual(spy.args[1][0].removedItems, [], 'removed items is empty');
     });
 
     QUnit.test('selected items should be correct after item click with hideSelecterdItems option (T606462)', function(assert) {
@@ -695,51 +697,6 @@ QUnit.module('tags', moduleSetup, () => {
         });
     });
 
-    QUnit.test('Tags should be rendered on start if fieldTemplate is async (T1056792)', function(assert) {
-        const done = assert.async();
-        assert.expect(1);
-        this.clock.restore();
-
-        let rendered = false;
-        const $tagBox = $('#tagBox').dxTagBox({
-            items: [{ name: 'one', value: 1 }, { name: 'two', value: 2 }],
-            displayExpr: 'name',
-            valueExpr: 'value',
-            value: [1],
-            fieldTemplate: 'fieldTemplate',
-            templatesRenderAsynchronously: true,
-            integrationOptions: {
-                templates: {
-                    fieldTemplate: {
-                        render: (data) => {
-                            const text = $('<div>');
-                            if(!rendered) {
-                                setTimeout(() => {
-                                    text.dxTextBox({});
-                                    data.container.append(text.get(0));
-                                    data.onRendered();
-                                    rendered = true;
-                                }, TIME_TO_WAIT / 2);
-                            } else {
-                                text.dxTextBox({});
-                                data.container.append(text);
-                                data.onRendered();
-                            }
-
-                            return text;
-                        }
-                    }
-                }
-            },
-        });
-
-        setTimeout(() => {
-            const $tag = $tagBox.find(`.${TAGBOX_TAG_CLASS}`);
-            assert.equal($tag.length, 1, 'tag was rendered');
-            done();
-        }, TIME_TO_WAIT);
-    });
-
     ['items', 'dataSource'].forEach((optionName) => {
         QUnit.test('TagBox should not have unexpected selected tags when value includes item that doesn\'t exist in items', function(assert) {
             const options = { value: [1, 11] };
@@ -878,6 +835,63 @@ QUnit.module('tags', moduleSetup, () => {
                 assert.strictEqual($tags.length, expectedSelectedItems.length, 'tags are updated');
             });
         });
+    });
+
+    QUnit.test('Should not rerender previously rendered tags on value change (T1246066)', function(assert) {
+        let tagRenderCount = 0;
+        const tagBox = $('#tagBox').dxTagBox({
+            items: [{ name: 'one', value: 1 }, { name: 'two', value: 2 }],
+            displayExpr: 'name',
+            valueExpr: 'value',
+            value: [1],
+            tagTemplate(item) {
+                tagRenderCount += 1;
+
+                return $('<div>').text(item);
+            },
+        }).dxTagBox('instance');
+
+        tagBox.option('value', [1]);
+
+        assert.strictEqual(tagRenderCount, 1, 'tag was only rendred once');
+    });
+
+    QUnit.test('Should not rerender previously rendered tags on items change (T1246066)', function(assert) {
+        let tagRenderCount = 0;
+        const tagBox = $('#tagBox').dxTagBox({
+            items: [{ name: 'one', value: 1 }, { name: 'two', value: 2 }],
+            displayExpr: 'name',
+            valueExpr: 'value',
+            value: [1],
+            tagTemplate(item) {
+                tagRenderCount += 1;
+
+                return $('<div>').text(item);
+            },
+        }).dxTagBox('instance');
+
+        tagBox.option('items', [{ name: 'one', value: 1 }]);
+
+        assert.strictEqual(tagRenderCount, 1, 'tag was only rendred once');
+    });
+
+    QUnit.test('Should rerender tag on update item field that is used as displayExpr', function(assert) {
+        const $tagBox = $('#tagBox').dxTagBox({
+            items: [{ name: 'one', value: 1 }, { name: 'two', value: 2 }],
+            displayExpr: 'name',
+            valueExpr: 'value',
+            value: [1],
+        });
+        const tagBox = $tagBox.dxTagBox('instance');
+
+        let tagText = $tagBox.find(`.${TAGBOX_TAG_CLASS}`).text();
+
+        assert.equal(tagText, 'one', 'tag is correct on init');
+
+        tagBox.option('items[0].name', 'zero');
+
+        tagText = $tagBox.find(`.${TAGBOX_TAG_CLASS}`).text();
+        assert.equal(tagText, 'zero', 'tag text is updated');
     });
 });
 
@@ -1783,7 +1797,7 @@ QUnit.module('placeholder', () => {
 
         $($clearButton).trigger('dxclick');
 
-        const $placeholder = $tagBox.find('.dx-placeholder');
+        const $placeholder = $tagBox.find(`.${PLACEHOLDER_CLASS}`);
 
         assert.notEqual($placeholder.css('display'), 'none', 'placeholder was appear');
         assert.equal($placeholder.is(':visible'), true, 'placeholder was appear');
@@ -1796,7 +1810,7 @@ QUnit.module('placeholder', () => {
             searchEnabled: true
         });
 
-        const $placeholder = $tagBox.find('.dx-placeholder');
+        const $placeholder = $tagBox.find(`.${PLACEHOLDER_CLASS}`);
         const $input = $tagBox.find('.dx-texteditor-input');
 
         keyboardMock($input).type('123');
@@ -1810,7 +1824,7 @@ QUnit.module('placeholder', () => {
             searchEnabled: true
         });
 
-        const $placeholder = $tagBox.find('.dx-placeholder');
+        const $placeholder = $tagBox.find(`.${PLACEHOLDER_CLASS}`);
         const $input = $tagBox.find('.dx-texteditor-input');
 
         keyboardMock($input).type('5');
@@ -1851,7 +1865,7 @@ QUnit.module('placeholder', () => {
         $input = $tagBox.find('.dx-texteditor-input');
         $input.trigger('blur');
 
-        const $placeholder = $tagBox.find('.dx-placeholder');
+        const $placeholder = $tagBox.find(`.${PLACEHOLDER_CLASS}`);
         assert.notOk($placeholder.is(':visible'), 'placeholder is not visible');
     });
 });
@@ -3768,7 +3782,7 @@ QUnit.module('searchEnabled', moduleSetup, () => {
 
         keyboardMock($tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`)).type('test');
 
-        const $placeholder = $tagBox.find('.dx-placeholder');
+        const $placeholder = $tagBox.find(`.${PLACEHOLDER_CLASS}`);
 
         assert.ok($placeholder.is(':hidden'), 'placeholder is hidden');
     });
@@ -5077,6 +5091,77 @@ QUnit.module('the \'selectedItems\' option', moduleSetup, () => {
         assert.strictEqual(selectionChangedHandler.callCount, callCountOnInit + 1, 'onSelectionChanged handler was called');
     });
 
+    QUnit.test('onSelectionChanged should be called if value is specified on init', function(assert) {
+        const selectionChangedHandler = sinon.spy();
+
+        $('#tagBox').dxTagBox({
+            items: [1, 2, 3],
+            value: [1],
+            onSelectionChanged: selectionChangedHandler
+        });
+
+        assert.strictEqual(selectionChangedHandler.callCount, 1, 'onSelectionChanged handler was called on init');
+    });
+
+    QUnit.test('onSelectionChanged should not be called if value is not specified on init (T1259823)', function(assert) {
+        const selectionChangedHandler = sinon.spy();
+
+        $('#tagBox').dxTagBox({
+            items: [1, 2, 3],
+            onSelectionChanged: selectionChangedHandler
+        });
+
+        assert.strictEqual(selectionChangedHandler.callCount, 0, 'onSelectionChanged handler was not called on init');
+    });
+
+    QUnit.test('onSelectionChanged should not be called on runtime items change if new items include selected items (T1259823)', function(assert) {
+        const selectionChangedHandler = sinon.spy();
+
+        const tagBox = $('#tagBox').dxTagBox({
+            items: [1, 2, 3],
+            value: [1],
+            onSelectionChanged: selectionChangedHandler
+        }).dxTagBox('instance');
+
+        assert.strictEqual(selectionChangedHandler.callCount, 1, 'onSelectionChanged handler was called on init');
+
+        tagBox.option('items', [1, 2]);
+
+        assert.strictEqual(selectionChangedHandler.callCount, 1, 'onSelectionChanged handler was not called on items change');
+    });
+
+    QUnit.test('onSelectionChanged should be called on runtime items change if new items do not include selected items', function(assert) {
+        const selectionChangedHandler = sinon.spy();
+
+        const tagBox = $('#tagBox').dxTagBox({
+            items: [1, 2, 3],
+            value: [1],
+            onSelectionChanged: selectionChangedHandler
+        }).dxTagBox('instance');
+
+        assert.strictEqual(selectionChangedHandler.callCount, 1, 'onSelectionChanged handler was called on init');
+
+        tagBox.option('items', [2, 3]);
+
+        assert.strictEqual(selectionChangedHandler.callCount, 2, 'onSelectionChanged handler was called on items change');
+    });
+
+    QUnit.test('onSelectionChanged should not be called on runtime value change on the same value (T1259823)', function(assert) {
+        const selectionChangedHandler = sinon.spy();
+
+        const tagBox = $('#tagBox').dxTagBox({
+            items: [1, 2, 3],
+            value: [1],
+            onSelectionChanged: selectionChangedHandler
+        }).dxTagBox('instance');
+
+        assert.strictEqual(selectionChangedHandler.callCount, 1, 'onSelectionChanged handler was called on init');
+
+        tagBox.option('value', [1]);
+
+        assert.strictEqual(selectionChangedHandler.callCount, 1, 'onSelectionChanged handler was not called on value change');
+    });
+
     QUnit.test('The \'selectedItems\' option changes after the \'value\' option', function(assert) {
         const items = [1, 2, 3];
 
@@ -5169,13 +5254,13 @@ QUnit.module('the \'onSelectionChanged\' option', moduleSetup, () => {
         const $listItems = tagBox._list.$element().find('.dx-list-item');
 
         $($listItems.eq(0)).trigger('dxclick');
-        assert.deepEqual(spy.args[1][0].addedItems, [items[0]], 'first item is in the \'addedItems\' argument');
+        assert.deepEqual(spy.args[0][0].addedItems, [items[0]], 'first item is in the \'addedItems\' argument');
 
         $($listItems.eq(1)).trigger('dxclick');
-        assert.deepEqual(spy.args[2][0].addedItems, [items[1]], 'second item is in the \'addedItems\' argument');
+        assert.deepEqual(spy.args[1][0].addedItems, [items[1]], 'second item is in the \'addedItems\' argument');
 
         $($listItems.eq(1)).trigger('dxclick');
-        assert.deepEqual(spy.args[3][0].addedItems, [], 'no items in the \'addedItems\' argument after item is unselected');
+        assert.deepEqual(spy.args[2][0].addedItems, [], 'no items in the \'addedItems\' argument after item is unselected');
     });
 
     QUnit.test('the \'onSelectionChanged\' action should contain correct \'removedItems\' argument', function(assert) {
@@ -5307,8 +5392,8 @@ QUnit.module('the \'onSelectionChanged\' option', moduleSetup, () => {
     });
 });
 
-QUnit.module('the \'fieldTemplate\' option', moduleSetup, () => {
-    QUnit.test('the \'fieldTemplate\' function should be called only once on init and value change', function(assert) {
+QUnit.module('the fieldTemplate option', moduleSetup, () => {
+    QUnit.test('the fieldTemplate function should be called only once on init and value change', function(assert) {
         let callCount = 0;
 
         const tagBox = $('#tagBox').dxTagBox({
@@ -5327,7 +5412,7 @@ QUnit.module('the \'fieldTemplate\' option', moduleSetup, () => {
         assert.equal(callCount, 1, 'the \'fieldTemplate\' was called once on value change');
     });
 
-    QUnit.test('the \'fieldTemplate\' has correct arguments', function(assert) {
+    QUnit.test('the fieldTemplate has correct arguments', function(assert) {
         const args = [];
 
         const tagBox = $('#tagBox').dxTagBox({
@@ -5476,6 +5561,162 @@ QUnit.module('the \'fieldTemplate\' option', moduleSetup, () => {
         assert.deepEqual(focusSpy.args[1][0], { preventScroll: true }, 'focus() was called with preventScroll: true');
 
         focusSpy.restore();
+    });
+
+    QUnit.module('async', () => {
+        QUnit.test('Tags should be rendered on start if fieldTemplate is async (T1056792)', function(assert) {
+            const done = assert.async();
+            assert.expect(1);
+            this.clock.restore();
+
+            let rendered = false;
+            const $tagBox = $('#tagBox').dxTagBox({
+                items: [{ name: 'one', value: 1 }, { name: 'two', value: 2 }],
+                displayExpr: 'name',
+                valueExpr: 'value',
+                value: [1],
+                fieldTemplate: 'fieldTemplate',
+                templatesRenderAsynchronously: true,
+                integrationOptions: {
+                    templates: {
+                        fieldTemplate: {
+                            render: (data) => {
+                                const text = $('<div>');
+                                if(!rendered) {
+                                    setTimeout(() => {
+                                        text.dxTextBox({});
+                                        data.container.append(text.get(0));
+                                        data.onRendered();
+                                        rendered = true;
+                                    }, TIME_TO_WAIT / 2);
+                                } else {
+                                    text.dxTextBox({});
+                                    data.container.append(text);
+                                    data.onRendered();
+                                }
+
+                                return text;
+                            }
+                        }
+                    }
+                },
+            });
+
+            setTimeout(() => {
+                const $tag = $tagBox.find(`.${TAGBOX_TAG_CLASS}`);
+                assert.equal($tag.length, 1, 'tag was rendered');
+                done();
+            }, TIME_TO_WAIT);
+        });
+
+        QUnit.module('showSelectionControls=true', {
+            beforeEach: function() {
+                this.$tagBox = $('#tagBox').dxTagBox({
+                    items: [{ name: 'one', value: 1 }, { name: 'two', value: 2 }],
+                    displayExpr: 'name',
+                    valueExpr: 'value',
+                    value: [],
+                    showSelectionControls: true,
+                    fieldTemplate: 'fieldTemplate',
+                    templatesRenderAsynchronously: true,
+                    integrationOptions: {
+                        templates: {
+                            fieldTemplate: {
+                                render: (data) => {
+                                    const $textBox = $('<div>');
+                                    setTimeout(() => {
+                                        $textBox.dxTextBox({ placeholder: 'text' });
+                                        data.container.append($textBox.get(0));
+                                        data.onRendered();
+                                    }, TIME_TO_WAIT);
+
+                                    return $textBox;
+                                }
+                            }
+                        }
+                    },
+                });
+                this.tagBox = this.$tagBox.dxTagBox('instance');
+
+                this.clock.tick(TIME_TO_WAIT);
+            }
+        }, () => {
+            QUnit.test('popup should be repositioned correctly on selection change when popup is opened (T1283948)', function(assert) {
+                this.tagBox.open();
+
+                const $popupContent = $(this.tagBox.content());
+                const $listItems = $popupContent.find(`.${LIST_ITEM_CLASS}`);
+                const $firstItem = $listItems.eq(0);
+
+                const { top: initialTop } = $popupContent.offset();
+
+                $firstItem.trigger('dxclick');
+
+                this.clock.tick(TIME_TO_WAIT);
+
+                const { top: updatedTop } = $popupContent.offset();
+
+                assert.roughEqual(updatedTop, initialTop, 1, 'popup is positioned under the input');
+            });
+
+            QUnit.test('placeholder should be hidden after item is selected', function(assert) {
+                this.tagBox.open();
+
+                const $popupContent = $(this.tagBox.content());
+                const $listItems = $popupContent.find(`.${LIST_ITEM_CLASS}`);
+                const $firstItem = $listItems.eq(0);
+
+                $firstItem.trigger('dxclick');
+
+                this.clock.tick(TIME_TO_WAIT);
+
+                const $placeholder = this.$tagBox.find(`.${PLACEHOLDER_CLASS}`);
+                assert.notOk($placeholder.is(':visible'), 'placeholder is hidden');
+                const $tag = this.$tagBox.find(`.${TAGBOX_TAG_CLASS}`);
+                assert.strictEqual($tag.length, 1, 'tag is rendered');
+            });
+        });
+
+        QUnit.test('new tags should be rendered in React 18 strict mode', function(assert) {
+            const $tagBox = $('#tagBox').dxTagBox({
+                items: [{ name: 'one', value: 1 }, { name: 'two', value: 2 }],
+                displayExpr: 'name',
+                valueExpr: 'value',
+                value: [],
+                fieldTemplate: 'fieldTemplate',
+                templatesRenderAsynchronously: true,
+                integrationOptions: {
+                    templates: {
+                        fieldTemplate: {
+                            render: (data) => {
+                                const createTextBox = () => {
+                                    const $textBox = $('<div>');
+                                    $textBox.dxTextBox({ placeholder: 'text' });
+                                    return $textBox.get(0);
+                                };
+                                setTimeout(() => {
+                                    data.container.append(createTextBox());
+                                    data.onRendered();
+                                    $(data.container).empty();
+                                    data.container.append(createTextBox());
+                                    data.onRendered();
+                                }, TIME_TO_WAIT);
+                            }
+                        }
+                    }
+                },
+            });
+            const tagBox = $tagBox.dxTagBox('instance');
+
+            tagBox.option('value', [1]);
+
+            this.clock.tick(TIME_TO_WAIT);
+
+            const $tag = $tagBox.find(`.${TAGBOX_TAG_CLASS}`);
+            assert.strictEqual($tag.length, 1, 'tag is rendered');
+            const $placeholder = $tagBox.find(`.${PLACEHOLDER_CLASS}`);
+            assert.notOk($placeholder.is(':visible'), 'placeholder is hidden');
+        });
     });
 });
 

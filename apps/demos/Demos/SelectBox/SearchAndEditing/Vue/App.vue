@@ -105,7 +105,8 @@
 </template>
 <script setup lang="ts">
 import { ref } from 'vue';
-import { DxSelectBox } from 'devextreme-vue/select-box';
+import { type SimplifiedSearchMode } from 'devextreme-vue/common';
+import { DxSelectBox, type DxSelectBoxTypes } from 'devextreme-vue/select-box';
 import { DxNumberBox } from 'devextreme-vue/number-box';
 import { DxCheckBox } from 'devextreme-vue/check-box';
 import { DataSource } from 'devextreme-vue/common/data';
@@ -120,7 +121,7 @@ const productsDataSource = new DataSource({
 });
 const editBoxValue = ref(simpleProducts[0]);
 const product = ref(simpleProducts[0].ID);
-const searchModeOption = ref('contains');
+const searchModeOption = ref<SimplifiedSearchMode>('contains');
 const searchExprOption = ref('Name');
 const searchTimeoutOption = ref(200);
 const minSearchLengthOption = ref(0);

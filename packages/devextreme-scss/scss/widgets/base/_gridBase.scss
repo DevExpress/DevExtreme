@@ -532,7 +532,9 @@
         width: $grid-command-expand-column-width;
         min-width: $grid-command-expand-column-width;
         max-width: $grid-command-expand-column-width;
-        z-index: 1;
+
+        /* NOTE: z-index of group row in sticky mode is 2 */
+        z-index: 3;
 
         @include user-select(none);
       }

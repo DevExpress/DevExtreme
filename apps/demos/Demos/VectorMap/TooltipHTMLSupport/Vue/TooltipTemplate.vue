@@ -18,9 +18,9 @@ import { countriesGDP } from './data.ts';
 import PieChart from './PieChart.vue';
 
 const props = withDefaults(defineProps<{
-  info?: Record<string, unknown>
+  info?: Record<string, any>
 }>(), {
-  info: () => ({}),
+  info: () => ({} as Record<string, any>),
 });
 const name = props.info.attribute('name');
 const countryGDPData = countriesGDP[name];

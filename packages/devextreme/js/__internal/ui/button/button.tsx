@@ -80,7 +80,6 @@ export class Button extends InfernoWrapperComponent<ButtonProps> {
     this.onInactive = this.onInactive.bind(this);
     this.onWidgetClick = this.onWidgetClick.bind(this);
     this.keyDown = this.keyDown.bind(this);
-    this.emitClickEvent = this.emitClickEvent.bind(this);
   }
 
   createEffects(): InfernoEffect[] {
@@ -166,15 +165,13 @@ export class Button extends InfernoWrapperComponent<ButtonProps> {
     if (result?.cancel) {
       return result;
     }
+
     if (keyName === 'space' || which === 'space' || keyName === 'enter' || which === 'enter') {
       originalEvent.preventDefault();
-      this.emitClickEvent();
+
+      this.onWidgetClick(originalEvent);
     }
     return undefined;
-  }
-
-  emitClickEvent(): void {
-    this.contentRef.current!.click();
   }
 
   get aria(): Record<string, string> {

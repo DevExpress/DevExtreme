@@ -406,6 +406,7 @@ $fluent-list-item-border: $fluent-list-item-border-width solid $list-border-colo
     &.dx-list-select-checkbox-container,
     &.dx-list-select-radiobutton-container {
       display: flex;
+      flex-shrink: 0;
       width: $fluent-list-item-height;
       justify-content: center;
       align-items: center;

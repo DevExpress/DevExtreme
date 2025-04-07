@@ -75,14 +75,14 @@ import {
   DxLookup,
   DxToolbar,
   DxItem,
-  DxDataGridTypes,
+  type DxDataGridTypes,
 } from 'devextreme-vue/data-grid';
 import { DxButton } from 'devextreme-vue/button';
 
 import { DataSource } from 'devextreme-vue/common/data';
 import { ArrayStore } from 'devextreme-vue/common/data';
 
-import { Employee, employees, states } from './data.ts';
+import { type Employee, employees, states } from './data.ts';
 
 const dataSource = new DataSource<Employee, number>({
   store: new ArrayStore({

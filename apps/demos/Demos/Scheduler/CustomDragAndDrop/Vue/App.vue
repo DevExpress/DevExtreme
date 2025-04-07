@@ -42,10 +42,10 @@
 </template>
 <script setup lang="ts">
 import { ref } from 'vue';
-import DxScheduler, { DxAppointmentDragging, DxSchedulerTypes } from 'devextreme-vue/scheduler';
-import DxDraggable, { DxDraggableTypes } from 'devextreme-vue/draggable';
+import DxScheduler, { DxAppointmentDragging, type DxSchedulerTypes } from 'devextreme-vue/scheduler';
+import DxDraggable, { type DxDraggableTypes } from 'devextreme-vue/draggable';
 import DxScrollView from 'devextreme-vue/scroll-view';
-import { appointments as appointmentsData, tasks as tasksData, Task } from './data.ts';
+import { appointments as appointmentsData, tasks as tasksData, type Task } from './data.ts';
 
 const draggingGroupName = ref('appointmentsGroup');
 const views = ref([{ type: 'day', intervalCount: 3 }]);
@@ -53,7 +53,7 @@ const currentDate = ref(new Date(2021, 3, 26));
 const tasks = ref<Task[]>(tasksData);
 const appointments = ref<DxSchedulerTypes.Appointment[]>(appointmentsData);
 
-function onAppointmentRemove({ itemData }: DxSchedulerTypes.AppointmentDraggingRemoveEvent) {
+function onAppointmentRemove({ itemData }: any) {
   const index = appointments.value.indexOf(itemData);
 
   if (index >= 0) {
@@ -62,7 +62,7 @@ function onAppointmentRemove({ itemData }: DxSchedulerTypes.AppointmentDraggingR
     tasks.value = [...tasks.value, itemData];
   }
 }
-function onAppointmentAdd(e: DxSchedulerTypes.AppointmentDraggingAddEvent) {
+function onAppointmentAdd(e: any) {
   const index = tasks.value.indexOf(e.fromData);
 
   if (index >= 0) {

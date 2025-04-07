@@ -12,7 +12,7 @@
           value-expr="ID"
           display-expr="name"
           placeholder="Select a value..."
-          @value-changed="syncTreeViewSelection($event)"
+          @value-changed="syncTreeViewSelection()"
         >
           <template #content="{ data }">
             <DxTreeView
@@ -25,7 +25,7 @@
               display-expr="name"
               @content-ready="treeViewContentReady($event)"
               @item-selection-changed="treeViewItemSelectionChanged($event)"
-              @item-click="onTreeItemClick($event)"
+              @item-click="onTreeItemClick()"
             />
           </template>
         </DxDropDownBox>
@@ -52,7 +52,7 @@
               :hover-state-enabled="true"
               :show-borders="true"
               v-model:selected-row-keys="gridBoxValue"
-              @selection-changed="onGridSelectionChanged($event)"
+              @selection-changed="onGridSelectionChanged()"
               height="100%"
             >
               <DxSelection mode="single"/>

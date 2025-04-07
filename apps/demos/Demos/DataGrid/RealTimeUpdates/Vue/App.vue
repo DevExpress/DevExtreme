@@ -148,7 +148,7 @@ import {
 } from 'devextreme-vue/data-grid';
 import { DxSlider, DxTooltip } from 'devextreme-vue/slider';
 import {
-  productsStore, ordersStore, getOrderCount, addOrder, Order, Product,
+  productsStore, ordersStore, getOrderCount, addOrder, type Order, type Product,
 } from './data.ts';
 
 const updatesPerSecond = ref(100);
