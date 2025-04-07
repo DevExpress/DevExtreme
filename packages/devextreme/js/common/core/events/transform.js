@@ -110,6 +110,7 @@ import { exportNames } from '../../../__internal/events/m_transform';
   * @type_function_param1_field2 deltaRotation:number
   * @type_function_param1_field3 cancel:boolean
   * @module events/transform
+  * @hidden
 */
 
 /* eslint-disable spellcheck/spell-checker */

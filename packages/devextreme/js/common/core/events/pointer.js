@@ -4,6 +4,7 @@
   * @type_function_param1 event:event
   * @type_function_param1_field1 pointerType:string
   * @module events/pointer
+  * @hidden
 */
 /**
   * @name UI Events.dxpointermove
@@ -11,6 +12,7 @@
   * @type_function_param1 event:event
   * @type_function_param1_field1 pointerType:string
   * @module events/pointer
+  * @hidden
 */
 /**
   * @name UI Events.dxpointerup
@@ -18,6 +20,7 @@
   * @type_function_param1 event:event
   * @type_function_param1_field1 pointerType:string
   * @module events/pointer
+  * @hidden
 */
 /**
   * @name UI Events.dxpointercancel
@@ -25,6 +28,7 @@
   * @type_function_param1 event:event
   * @type_function_param1_field1 pointerType:string
   * @module events/pointer
+  * @hidden
 */
 /**
   * @name UI Events.dxpointerover
@@ -32,6 +36,7 @@
   * @type_function_param1 event:event
   * @type_function_param1_field1 pointerType:string
   * @module events/pointer
+  * @hidden
 */
 /**
   * @name UI Events.dxpointerout
@@ -39,6 +44,7 @@
   * @type_function_param1 event:event
   * @type_function_param1_field1 pointerType:string
   * @module events/pointer
+  * @hidden
 */
 /**
   * @name UI Events.dxpointerenter
@@ -46,6 +52,7 @@
   * @type_function_param1 event:event
   * @type_function_param1_field1 pointerType:string
   * @module events/pointer
+  * @hidden
 */
 /**
   * @name UI Events.dxpointerleave
@@ -53,6 +60,7 @@
   * @type_function_param1 event:event
   * @type_function_param1_field1 pointerType:string
   * @module events/pointer
+  * @hidden
 */
 
 export { default } from '../../../__internal/events/m_pointer';
