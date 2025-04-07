@@ -119,14 +119,14 @@ function handleAIDropDownSelection(module, options): void {
   const hasSelection = selection?.length > 0;
   const text = hasSelection ? quill.getText(selection) : quill.getText();
 
-  const aIDialogConfig: AIDialogShowPayload = {
+  const aiDialogConfig: AIDialogShowPayload = {
     currentCommand: parentCommand ?? command,
-    currentOption: parentCommand ? command : undefined,
+    currentCommandOption: parentCommand ? command : undefined,
     text,
     commandsMap,
   };
 
-  module.editorInstance.showAIDialog(aIDialogConfig)?.done((data, event) => {
+  module.editorInstance.showAIDialog(aiDialogConfig)?.done((data, event) => {
     const insertIndex = hasSelection ? selection.index : 0;
 
     quill.focus();

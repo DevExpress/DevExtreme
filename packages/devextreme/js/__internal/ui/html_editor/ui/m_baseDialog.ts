@@ -28,7 +28,7 @@ abstract class BaseDialog {
 
   deferred?: DeferredObj<unknown>;
 
-  constructor(editorInstance: HtmlEditor, popupConfig: PopupProperties) {
+  constructor(editorInstance: HtmlEditor, popupConfig?: PopupProperties) {
     this._editorInstance = editorInstance;
     this._popupUserConfig = popupConfig;
 
@@ -58,7 +58,6 @@ abstract class BaseDialog {
       onInitialized: (e) => {
         this._popup = e.component;
         this._popup.on('hiding', () => this.onHiding());
-        this._addEscapeHandler(e);
       },
       deferRendering: false,
       focusStateEnabled: false,

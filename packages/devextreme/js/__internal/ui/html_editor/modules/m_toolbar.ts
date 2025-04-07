@@ -368,24 +368,22 @@ if (Quill) {
       }, item);
     }
 
-    private _prepareAIOptions(parentCommand: HtmlEditorAICommandName | 'custom', options?: string[], prompt?: HtmlEditorAICustomCommand['prompt']) {
-      return options?.map((option) => ({
-        id: option,
-        text: option,
-        parentId: parentCommand,
-        options: options.map(capitalize),
-        prompt,
-      }));
-    }
+    private _createCommandMenuItem(
+      command: HtmlEditorAICommandName,
+      text?: string,
+      commandOptions?: string[],
+    ) {
+      const options = commandOptions ?? getDefaultOptionsByCommand(command)?.map(capitalize);
 
-    private _createCommandMenuItem(id: HtmlEditorAICommandName, text?: string, options?: string[]) {
       return {
-        id,
-        text: text ?? defaultCommandNames[id],
-        items: this._prepareAIOptions(
-          id,
-          options ?? getDefaultOptionsByCommand(id)?.map(capitalize),
-        ),
+        id: command,
+        text: text ?? defaultCommandNames[command],
+        items: options?.map((option) => ({
+          id: option,
+          text: option,
+          parentCommand: command,
+          options: options?.map(capitalize),
+        })),
       };
     }
 
@@ -396,11 +394,13 @@ if (Quill) {
             return {
               id: 'custom',
               text: command.text,
-              items: this._prepareAIOptions(
-                command.name,
-                command.options,
-                (command as HtmlEditorAICustomCommand).prompt,
-              ),
+              items: command.options?.map((option) => ({
+                parentCommand: 'custom',
+                id: option,
+                text: option,
+                options: command.options.map(capitalize),
+                prompt,
+              })),
               prompt: (command as HtmlEditorAICustomCommand).prompt,
             };
           }
@@ -436,14 +436,14 @@ if (Quill) {
             return;
           }
 
-          const aIDialogOptions = {
+          const aiDialogOptions = {
             command: itemData.id,
-            parentCommand: itemData.parentId,
+            parentCommand: itemData.parentCommand,
             commandsMap,
             prompt: itemData.prompt,
           };
 
-          this._formatHandlers[name](this, aIDialogOptions);
+          this._formatHandlers[name](this, aiDialogOptions);
         },
       };
 

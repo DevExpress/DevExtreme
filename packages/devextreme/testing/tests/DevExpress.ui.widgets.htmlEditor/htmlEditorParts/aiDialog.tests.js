@@ -1,4 +1,3 @@
-/* eslint-disable spellcheck/spell-checker */
 import $ from 'jquery';
 import AIDialog from '__internal/ui/html_editor/ui/m_aiDialog';
 import { isPromise } from 'core/utils/type';
@@ -26,18 +25,19 @@ const moduleConfig = {
 
 QUnit.module('AIDialog', moduleConfig, () => {
     QUnit.test('Should render AI dialog content', function(assert) {
-        const aiDialog = new AIDialog(this.componentMock, { container: this.$element });
+        const aiDialog = new AIDialog(this.componentMock, {}, { container: this.$element });
 
         const commandsMap = {
             translate: {
-                id: 'translate',
+                name: 'translate',
+                text: 'Translate',
                 options: ['english', 'german']
             }
         };
 
         const payload = {
             currentCommand: 'translate',
-            currentOption: 'english',
+            currentCommandOption: 'english',
             commandsMap,
             text: 'Test text',
         };
@@ -60,7 +60,7 @@ QUnit.module('AIDialog', moduleConfig, () => {
         assert.ok(commandSelectBox, 'Command SelectBox instance created');
         assert.strictEqual(commandSelectBox.option('value'), 'translate', 'Correct command selected');
         assert.deepEqual(
-            commandSelectBox.option('dataSource').map((item) => item.id),
+            commandSelectBox.option('dataSource').map((item) => item.name),
             ['translate'],
             'Command SelectBox contains correct items'
         );
@@ -77,11 +77,11 @@ QUnit.module('AIDialog', moduleConfig, () => {
     });
 
     QUnit.test('Should not render option select if command has no options', function(assert) {
-        const aiDialog = new AIDialog(this.componentMock, { container: this.$element });
+        const aiDialog = new AIDialog(this.componentMock, {}, { container: this.$element });
 
         const commandsMap = {
             translate: {
-                id: 'summarize',
+                name: 'summarize',
             }
         };
 
@@ -114,12 +114,12 @@ QUnit.module('AIDialog', moduleConfig, () => {
     });
 
     QUnit.test('show returns a promise', function(assert) {
-        const aiDialog = new AIDialog(this.componentMock, { container: this.$element });
+        const aiDialog = new AIDialog(this.componentMock, {}, { container: this.$element });
 
         const promise = aiDialog.show({
             currentCommand: 'translate',
             commandsMap: {
-                translate: { id: 'translate' }
+                translate: { name: 'translate' }
             }
         });
 
@@ -129,11 +129,11 @@ QUnit.module('AIDialog', moduleConfig, () => {
     QUnit.test('Cancel via popup hide triggers reject', function(assert) {
         assert.expect(1);
 
-        const aiDialog = new AIDialog(this.componentMock, { container: this.$element });
+        const aiDialog = new AIDialog(this.componentMock, {}, { container: this.$element });
         const promise = aiDialog.show({
             currentCommand: 'translate',
             commandsMap: {
-                translate: { id: 'translate' }
+                translate: { name: 'translate' }
             }
         });
 
