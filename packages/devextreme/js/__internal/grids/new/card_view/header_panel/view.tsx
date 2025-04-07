@@ -3,6 +3,7 @@ import type { SubsGets } from '@ts/core/reactive/index';
 import { combined, computed } from '@ts/core/reactive/index';
 import { ColumnsController } from '@ts/grids/new/grid_core/columns_controller/columns_controller';
 import { View } from '@ts/grids/new/grid_core/core/view';
+import { HeaderFilterController } from '@ts/grids/new/grid_core/filtering/header_filter/index';
 
 import type { Column } from '../../grid_core/columns_controller/types';
 import { SortingController } from '../../grid_core/sorting_controller/sorting_controller';
@@ -17,12 +18,14 @@ export class HeaderPanelView extends View<HeaderPanelProps> {
     SortingController,
     ColumnsController,
     OptionsController,
+    HeaderFilterController,
   ] as const;
 
   constructor(
     private readonly sortingController: SortingController,
     private readonly columnsController: ColumnsController,
     private readonly options: OptionsController,
+    private readonly headerFilterController: HeaderFilterController,
   ) {
     super();
   }
@@ -40,6 +43,7 @@ export class HeaderPanelView extends View<HeaderPanelProps> {
       onSortClick: this.onSortClick.bind(this),
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       itemTemplate: this.options.template('headerPanel.itemTemplate') as any,
+      onFilterClick: this.onFilterClick.bind(this),
       itemCssClass: this.options.oneWay('headerPanel.itemCssClass'),
       visible: this.options.oneWay('headerPanel.visible'),
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -48,7 +52,7 @@ export class HeaderPanelView extends View<HeaderPanelProps> {
   }
 
   public onRemove(column: Column): void {
-    this.columnsController.columnOption(column, 'visible', !column.visible);
+    this.columnsController.columnOption(column, 'visible', false);
   }
 
   public onMove(column: Column, toIndex: number): void {
@@ -70,5 +74,13 @@ export class HeaderPanelView extends View<HeaderPanelProps> {
       default:
         throw new Error('Unsupported sorting state');
     }
+  }
+
+  private onFilterClick(
+    element: Element,
+    column: Column,
+    onFilterCloseCallback?: () => void,
+  ): void {
+    this.headerFilterController.openPopup(element, column, onFilterCloseCallback);
   }
 }

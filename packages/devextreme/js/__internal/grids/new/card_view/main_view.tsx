@@ -1,6 +1,8 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { combined } from '@ts/core/reactive/index';
 import { View } from '@ts/grids/new/grid_core/core/view';
+import { FilterPanelView } from '@ts/grids/new/grid_core/filtering/filter_panel/view';
+import { HeaderFilterPopupView } from '@ts/grids/new/grid_core/filtering/header_filter/index';
 import { PagerView } from '@ts/grids/new/grid_core/pager/view';
 import { ToolbarView } from '@ts/grids/new/grid_core/toolbar/view';
 import type { ComponentType, RefObject } from 'inferno';
@@ -21,12 +23,14 @@ interface MainViewProps {
   Content: ComponentType;
   Pager: ComponentType;
   HeaderPanel: ComponentType;
+  HeaderFilterPopup: ComponentType;
+  FilterPanel: ComponentType;
   config: Config;
   rootElementRef: RefObject<HTMLDivElement>;
 }
 
 function MainViewComponent({
-  Toolbar, Content, Pager, HeaderPanel, config, rootElementRef,
+  Toolbar, Content, Pager, HeaderPanel, HeaderFilterPopup, FilterPanel, config, rootElementRef,
 }: MainViewProps): JSX.Element {
   return (<>
     <ConfigContext.Provider value={config}>
@@ -36,7 +40,9 @@ function MainViewComponent({
       >
         <Toolbar/>
         <HeaderPanel/>
+        <HeaderFilterPopup />
         <Content/>
+        <FilterPanel/>
         <div>
           {/*
             Pager, as renovated component, has strange disposing.
@@ -56,7 +62,13 @@ export class MainView extends View<MainViewProps> {
   protected override component = MainViewComponent;
 
   public static dependencies = [
-    ContentView, PagerView, ToolbarView, HeaderPanelView, OptionsController,
+    ContentView,
+    PagerView,
+    ToolbarView,
+    HeaderPanelView,
+    HeaderFilterPopupView,
+    FilterPanelView,
+    OptionsController,
   ] as const;
 
   constructor(
@@ -64,6 +76,8 @@ export class MainView extends View<MainViewProps> {
     private readonly pager: PagerView,
     private readonly toolbar: ToolbarView,
     private readonly headerPanel: HeaderPanelView,
+    private readonly headerFilterPopup: HeaderFilterPopupView,
+    private readonly filterPanel: FilterPanelView,
     private readonly options: OptionsController,
   ) {
     super();
@@ -77,6 +91,8 @@ export class MainView extends View<MainViewProps> {
       Content: this.content.asInferno(),
       Pager: this.pager.asInferno(),
       HeaderPanel: this.headerPanel.asInferno(),
+      HeaderFilterPopup: this.headerFilterPopup.asInferno(),
+      FilterPanel: this.filterPanel.asInferno(),
       config: combined({
         rtlEnabled: this.options.oneWay('rtlEnabled'),
         disabled: this.options.oneWay('disabled'),
