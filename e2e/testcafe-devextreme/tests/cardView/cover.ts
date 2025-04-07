@@ -17,7 +17,7 @@ test('default render', async (t) => {
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => createWidget('dxCardView', {
-  width: 400,
+  width: 1500,
   height: 600,
   columns: ['Customer', 'Order Date'],
   cardCover: {
