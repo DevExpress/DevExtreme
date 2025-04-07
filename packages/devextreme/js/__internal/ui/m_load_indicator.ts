@@ -22,8 +22,11 @@ const LOADINDICATOR_ICON_CLASS = 'dx-loadindicator-icon';
 const LOADINDICATOR_SEGMENT_CLASS = 'dx-loadindicator-segment';
 const LOADINDICATOR_SEGMENT_INNER_CLASS = 'dx-loadindicator-segment-inner';
 const LOADINDICATOR_IMAGE_CLASS = 'dx-loadindicator-image';
+const LOADINDICATOR_IMAGE_AI_CLASS = 'dx-loadindicator-image-ai';
 
 export interface LoadIndicatorProperties extends Properties {
+  useAISVG?: boolean;
+
   viaImage?: boolean;
 
   _animatingSegmentCount?: number;
@@ -120,12 +123,15 @@ class LoadIndicator extends Widget<LoadIndicatorProperties> {
   }
 
   _renderMarkup(): void {
-    const { viaImage, indicatorSrc } = this.option();
+    const { useAISVG, viaImage, indicatorSrc } = this.option();
+    const isAnimationAvailable = supportUtils.animation();
 
-    if (supportUtils.animation() && !viaImage && !indicatorSrc) { // B236922
-      this._renderMarkupForAnimation();
-    } else {
+    if (useAISVG) {
+      this._renderMarkupForSvg();
+    } else if (viaImage || indicatorSrc || !isAnimationAvailable) {
       this._renderMarkupForImage();
+    } else {
+      this._renderMarkupForAnimation();
     }
   }
 
@@ -149,6 +155,12 @@ class LoadIndicator extends Widget<LoadIndicatorProperties> {
 
       this._$indicator.append($segment);
     }
+  }
+
+  _renderMarkupForSvg(): void {
+    this._$wrapper
+      .addClass(LOADINDICATOR_IMAGE_CLASS)
+      .addClass(LOADINDICATOR_IMAGE_AI_CLASS);
   }
 
   _renderMarkupForImage(): void {
