@@ -436,14 +436,14 @@ if (Quill) {
             return;
           }
 
-          const dialogAIOptions = {
+          const aIDialogOptions = {
             command: itemData.id,
             parentCommand: itemData.parentId,
             commandsMap,
             prompt: itemData.prompt,
           };
 
-          this._formatHandlers[name](this, dialogAIOptions);
+          this._formatHandlers[name](this, aIDialogOptions);
         },
       };
 

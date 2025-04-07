@@ -25,7 +25,7 @@ const AI_DIALOG_CONTENT_CLASS = 'dx-aidialog-content';
 export default class AIDialog extends DialogBase {
   private _loading = false;
 
-  private readonly _serviceAI;
+  private readonly _aIService;
 
   private _commandsMap: CommandsMap = {};
 
@@ -45,12 +45,10 @@ export default class AIDialog extends DialogBase {
 
   private _textAreaInstance?: TextArea;
 
-  // eslint-disable-next-line spellcheck/spell-checker
-  constructor(editorInstance, popupConfig: PopupProperties, aiService?) {
+  constructor(editorInstance, popupConfig: PopupProperties, aIService?) {
     super(editorInstance, popupConfig);
 
-    // eslint-disable-next-line spellcheck/spell-checker
-    this._serviceAI = aiService;
+    this._aIService = aIService;
   }
 
   protected _getPopupConfig(): PopupProperties {

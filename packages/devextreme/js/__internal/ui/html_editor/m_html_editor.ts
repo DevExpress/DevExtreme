@@ -55,7 +55,7 @@ class HtmlEditor extends Editor<Properties> {
 
   _formDialog!: FormDialog;
 
-  _dialogAI?: AIDialog;
+  _aIDialog?: AIDialog;
 
   _quillInstance?: any;
 
@@ -568,7 +568,7 @@ class HtmlEditor extends Editor<Properties> {
 
     const AIService = this.option('ai');
 
-    this._dialogAI = new AIDialog(this, userOptions, AIService);
+    this._aIDialog = new AIDialog(this, userOptions, AIService);
   }
 
   _getStylingModePrefix(): string {
@@ -837,7 +837,7 @@ class HtmlEditor extends Editor<Properties> {
   }
 
   showAIDialog(payload: AIDialogShowPayload) {
-    return this._dialogAI?.show(payload);
+    return this._aIDialog?.show(payload);
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
