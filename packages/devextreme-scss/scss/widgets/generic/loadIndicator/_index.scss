@@ -11,6 +11,10 @@
   background-color: transparent;
 }
 
+.dx-loadindicator-image-ai {
+  background-image: $loadindicator-image-ai-bg;
+}
+
 .dx-loadindicator-icon {
   position: relative;
   top: 15%;
