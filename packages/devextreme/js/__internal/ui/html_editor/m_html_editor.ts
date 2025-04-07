@@ -35,8 +35,8 @@ import getWordMatcher from '@ts/ui/html_editor/matchers/m_wordLists';
 import FormDialog from '@ts/ui/html_editor/ui/m_formDialog';
 import { prepareScrollData } from '@ts/ui/text_box/m_utils.scroll';
 
-import type { AIDialogShowPayload } from './ui/m_aiDialog';
-import AIDialog from './ui/m_aiDialog';
+import type { AIDialogShowPayload } from './ui/aiDialog';
+import AIDialog from './ui/aiDialog';
 
 const HTML_EDITOR_CLASS = 'dx-htmleditor';
 const QUILL_CONTAINER_CLASS = 'dx-quill-container';
@@ -558,13 +558,13 @@ class HtmlEditor extends Editor<Properties> {
   }
 
   _renderAIDialog() {
-    const aIService = this.option('ai');
+    const aiService = this.option('ai');
 
-    if (!aIService) {
+    if (!aiService) {
       return;
     }
 
-    this._aiDialog = new AIDialog(this, aIService);
+    this._aiDialog = new AIDialog(this as any, aiService);
   }
 
   _getStylingModePrefix(): string {

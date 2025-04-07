@@ -89,7 +89,7 @@ abstract class BaseDialog {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  hide(_options: unknown, _event?: unknown): void {
+  hide(_options?: unknown, _event?: unknown): void {
     this._popup.hide();
   }
 
