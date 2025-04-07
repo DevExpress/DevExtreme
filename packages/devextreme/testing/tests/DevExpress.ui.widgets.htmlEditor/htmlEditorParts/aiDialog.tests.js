@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import AIDialog from '__internal/ui/html_editor/ui/m_aiDialog';
+import AIDialog from '__internal/ui/html_editor/ui/aiDialog';
 import { isPromise } from 'core/utils/type';
 
 import 'ui/menu';

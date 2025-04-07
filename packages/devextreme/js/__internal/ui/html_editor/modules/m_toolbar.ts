@@ -21,7 +21,7 @@ import Quill from 'devextreme-quill';
 
 import {
   buildCommandsMap, capitalize, defaultCommandNames, getDefaultOptionsByCommand,
-} from '../utils/m_ai';
+} from '../utils/ai';
 import { getTableFormats, TABLE_OPERATIONS } from '../utils/m_table_helper';
 import {
   applyFormat, getDefaultClickHandler, getFormatHandlers, ICON_MAP,

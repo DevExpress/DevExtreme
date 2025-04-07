@@ -11,7 +11,7 @@ import Form from '@js/ui/form';
 import ScrollView from '@js/ui/scroll_view';
 
 import { getQuill } from '../m_quill_importer';
-import type { AIDialogShowPayload } from '../ui/m_aiDialog';
+import type { AIDialogShowPayload } from '../ui/aiDialog';
 import { ImageUploader } from './m_image_uploader_helper';
 import {
   getAutoSizedElements,
@@ -126,17 +126,30 @@ function handleAIDropDownSelection(module, options): void {
     commandsMap,
   };
 
-  module.editorInstance.showAIDialog(aiDialogConfig)?.done((data, event) => {
-    const insertIndex = hasSelection ? selection.index : 0;
+  module.editorInstance.showAIDialog(aiDialogConfig)?.done((resultText, event) => {
+    const insertionMode = event.itemData.id;
+    let insertIndex = 0;
 
-    quill.focus();
-    quill.deleteText(
-      insertIndex,
-      hasSelection ? selection.length : text.length,
-      SILENT_ACTION,
-    );
+    switch (insertionMode) {
+      case 'replace':
+        insertIndex = hasSelection ? selection.index : 0;
+        quill.deleteText(insertIndex, hasSelection ? selection.length : text.length, SILENT_ACTION);
+        break;
 
-    // insert text
+      case 'insertAbove':
+        insertIndex = hasSelection ? selection.index : 0;
+        break;
+
+      case 'insertBelow':
+        insertIndex = hasSelection ? selection.index + selection.length : quill.getLength();
+        break;
+
+      default:
+        return;
+    }
+
+    quill.insertText(insertIndex, resultText, '', resultText, USER_ACTION);
+    quill.setSelection(insertIndex, resultText.length, USER_ACTION);
 
     module.saveValueChangeEvent(event);
   }).always(() => {

@@ -7,7 +7,7 @@ import 'ui/drop_down_button';
 
 import Toolbar from '__internal/ui/html_editor/modules/m_toolbar';
 import FormDialog from '__internal/ui/html_editor/ui/m_formDialog';
-import AIDialog from '__internal/ui/html_editor/ui/m_aiDialog';
+import AIDialog from '__internal/ui/html_editor/ui/aiDialog';
 import { noop } from 'core/utils/common';
 import keyboardMock from '../../../helpers/keyboardMock.js';
 import fx from 'common/core/animation/fx';

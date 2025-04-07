@@ -2,11 +2,12 @@ import localizationMessage from '@js/common/core/localization/message';
 import $ from '@js/core/renderer';
 import { extend } from '@js/core/utils/extend';
 import type { HtmlEditorAICustomCommand } from '@js/ui/html_editor';
+import type HtmlEditor from '@js/ui/html_editor';
 import type { Properties as PopupProperties, ToolbarItem } from '@js/ui/popup';
 import SelectBox from '@js/ui/select_box';
 import TextArea from '@js/ui/text_area';
 
-import type { CommandDefinition, CommandsMap } from '../utils/m_ai';
+import type { CommandDefinition, CommandsMap } from '../utils/ai';
 import DialogBase from './m_baseDialog';
 
 const AI_DIALOG_COMMANDS_WITH_OPTIONS = ['translate', 'changeStyle', 'changeTone', 'custom'];
@@ -31,7 +32,7 @@ export interface AIDialogShowPayload {
 export default class AIDialog extends DialogBase {
   private _isLoading = false;
 
-  private readonly _aIService;
+  private readonly _aiService;
 
   private _commandsMap: CommandsMap = {};
 
@@ -53,10 +54,10 @@ export default class AIDialog extends DialogBase {
 
   private _commandChangeSuppressed = false;
 
-  constructor(editorInstance, aIService?, popupConfig?: PopupProperties) {
+  constructor(editorInstance: HtmlEditor, aiService?: unknown, popupConfig?: PopupProperties) {
     super(editorInstance, popupConfig);
 
-    this._aIService = aIService;
+    this._aiService = aiService;
   }
 
   protected _getPopupConfig(): PopupProperties {
@@ -77,16 +78,17 @@ export default class AIDialog extends DialogBase {
       minWidth: POPUP_MIN_WIDTH,
       maxWidth: POPUP_MAX_WIDTH,
       height: 'auto',
-      shading: false,
+      shading: true,
+      shadingColor: 'transparent',
       dragEnabled: true,
-      dragAndResizeArea: this._editorInstance?.$element(),
+      dragAndResizeArea: this._editorInstance.$element(),
       toolbarItems: this._getToolbarItems(),
-      showCloseButton: true,
       hideOnOutsideClick: true,
+      focusStateEnabled: true,
       position: {
         my: 'center',
         at: 'center',
-        of: this._editorInstance?.$element(),
+        of: this._editorInstance.$element(),
       },
     }) as PopupProperties;
   }
@@ -110,7 +112,7 @@ export default class AIDialog extends DialogBase {
         }
 
         this._currentCommand = e.value;
-        this._commandOptionsList = this._commandsMap?.[e.value]?.options ?? [];
+        this._commandOptionsList = this._commandsMap[e.value].options ?? [];
         this._currentOption = this._commandOptionsList?.[0];
 
         this._syncDialogWithState();
@@ -134,7 +136,6 @@ export default class AIDialog extends DialogBase {
       height: 100,
       width: '100%',
       readOnly: true,
-      onInitialized: this._addEscapeHandler.bind(this),
     });
   }
 
@@ -175,6 +176,16 @@ export default class AIDialog extends DialogBase {
         options: {
           text: localizationMessage.format('dxHtmlEditor-aiTryAgain'),
           onClick: () => this._retryAIRequest(),
+        },
+      },
+      {
+        toolbar: 'top',
+        location: 'after',
+        widget: 'dxButton',
+        options: {
+          icon: 'close',
+          stylingMode: 'text',
+          onClick: () => this._popup.hide(),
         },
       },
     ];
@@ -221,12 +232,12 @@ export default class AIDialog extends DialogBase {
     this._refreshResultText();
   }
 
-  private _setLoadingState(isLoading: boolean) {
+  private _setLoadingState(isLoading: boolean): void {
     this._isLoading = isLoading;
   }
 
-  replaceButtonAction(event?): void {
-    // TODO: implement with integration
+  replaceButtonAction(event?: unknown): void {
+    // TODO: implement with integration so that the result text is updated
     this.hide(this._resultText, event);
   }
 
@@ -236,12 +247,18 @@ export default class AIDialog extends DialogBase {
     this._commandsMap = commandsMap;
     this._currentCommand = currentCommand;
     this._resultText = text ?? '';
-    this._commandOptionsList = commandsMap[currentCommand]?.options ?? [];
+    this._commandOptionsList = commandsMap[currentCommand].options ?? [];
     this._currentOption = currentCommandOption;
     this._prompt = prompt;
 
     this._syncDialogWithState();
 
     return super.show();
+  }
+
+  hide(resultText: string, event: unknown): void {
+    this.deferred?.resolve(resultText, event);
+
+    super.hide();
   }
 }
