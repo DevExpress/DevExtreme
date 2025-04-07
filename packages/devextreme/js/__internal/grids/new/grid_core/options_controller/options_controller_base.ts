@@ -13,7 +13,7 @@ import type { ComponentType } from 'inferno';
 
 import { TemplateWrapper } from '../inferno_wrappers/template_wrapper';
 import type { Template } from '../types';
-import { getTreeLeaf, mergeOptionTrees } from './tree_utils';
+import { getTreeNodeByPath, mergeOptionTrees } from './tree_utils';
 import type {
   ActionProperty,
   PropertyWithDefaults,
@@ -35,11 +35,13 @@ export class OptionsController<
   constructor(
     private readonly component: Component<TProps>,
   ) {
+    // @ts-expect-error
+    this.defaults = component._getDefaultOptions?.() ?? {};
+
     this.internalOptions = state(
       extend(true, {}, component.option()),
     );
-    // @ts-expect-error
-    this.defaults = component._getDefaultOptions?.() ?? {};
+
     this.updateIsControlledMode();
 
     component.on('optionChanged', this.onOptionChangedHandler.bind(this));
@@ -54,6 +56,7 @@ export class OptionsController<
     this.updateIsControlledMode();
 
     const pathParts = getPathParts(fullName);
+
     this.internalOptions.updateFunc((prevInternalOptions) => mergeOptionTrees(
       prevInternalOptions,
       this.component.option(),
@@ -68,7 +71,7 @@ export class OptionsController<
     const pathArray = getPathParts(name);
 
     return computed(
-      (props) => getTreeLeaf(props, pathArray),
+      (props) => getTreeNodeByPath(props, pathArray),
       [this.internalOptions],
     ) as SubsGets<PropertyWithDefaults<TProps, TDefaultProps, TProp>>;
   }

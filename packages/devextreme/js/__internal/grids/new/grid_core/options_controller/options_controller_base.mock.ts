@@ -1,6 +1,6 @@
-import { Component } from '@js/core/component';
-import { extend } from '@ts/core/utils/m_extend';
+import type { Component } from '@js/core/component';
 
+import { createComponentMock } from './component.mock';
 import { OptionsController } from './options_controller_base';
 
 export class OptionsControllerMock<
@@ -11,7 +11,7 @@ export class OptionsControllerMock<
   private readonly componentMock: Component<TProps>;
 
   constructor(options: TProps, defaultOptions: TDefaultProps) {
-    const componentMock = new Component(extend(true, {}, defaultOptions, options));
+    const componentMock = createComponentMock(options, defaultOptions);
     super(componentMock);
     this.defaults = defaultOptions;
     this.componentMock = componentMock;

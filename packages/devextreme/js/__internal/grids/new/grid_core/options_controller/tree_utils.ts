@@ -1,57 +1,94 @@
 import { extend } from '@ts/core/utils/m_extend';
 import { isPlainObject } from '@ts/core/utils/m_type';
 
-export const shallowCopyTree = <T extends Record<string, unknown> | unknown[]>(
-  tree: T,
-): T => (Array.isArray(tree)
-    ? [...tree] as T
-    : { ...tree });
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type TreeNodeChild = any;
+type TreeNodeType = Record<string, TreeNodeChild> | TreeNodeChild[] | TreeNodeChild;
 
-export const getSubTree = <T extends Record<string, unknown> | unknown[]>(
-  tree: T,
+export const shallowCopyTree = (
+  tree: TreeNodeType | undefined,
+): TreeNodeType => {
+  if (isPlainObject(tree)) {
+    return { ...tree };
+  } if (Array.isArray(tree)) {
+    return [...tree];
+  }
+
+  return tree;
+};
+
+// NOTE: Maybe we can use "structuredClone" build-in function here
+// instead of this custom function
+export const deepCopyTreeNode = (
+  treeNode: TreeNodeType,
+): TreeNodeType => {
+  switch (true) {
+    case isPlainObject(treeNode):
+      return extend(true, {}, treeNode);
+    case Array.isArray(treeNode):
+      return extend(true, [], treeNode);
+    default:
+      return treeNode;
+  }
+};
+
+export const deepMergeTrees = (
+  firstTree: TreeNodeType | undefined,
+  secondTree: TreeNodeType | undefined,
+): TreeNodeType | undefined => {
+  if (isPlainObject(secondTree) && isPlainObject(firstTree)) {
+    return extend(true, {}, firstTree, secondTree);
+  }
+
+  if (secondTree) {
+    return deepCopyTreeNode(secondTree);
+  }
+
+  return deepCopyTreeNode(firstTree);
+};
+
+export const getTreeNodeParentByPath = (
+  tree: TreeNodeType,
   path: string[],
-): T | undefined => {
+): TreeNodeType | undefined => {
   let currentNode = tree;
 
   for (let idx = 0; idx < path.length - 1; idx += 1) {
     const nextNodePath = path[idx];
     currentNode = currentNode[nextNodePath];
+
+    if (currentNode === undefined) {
+      return undefined;
+    }
   }
 
   return currentNode;
 };
 
-export const getTreeLeaf = <T extends Record<string, unknown> | unknown[]>(
-  tree: T,
+export const getTreeNodeByPath = (
+  tree: TreeNodeType,
   path: string[],
-): unknown | undefined => {
+): TreeNodeType => {
   const [lastNodePath] = path.slice(-1);
-  const subtree = getSubTree(tree, path);
+  const subtree = getTreeNodeParentByPath(tree, path);
 
   return subtree?.[lastNodePath];
 };
 
-export const deepCopyTreeLeaf = <T extends Record<string, unknown> | unknown[]>(
-  tree: T,
+export const shallowCopySubtreePath = (
+  tree: TreeNodeType,
   path: string[],
-): unknown | undefined => {
-  const leaf = getTreeLeaf(tree, path);
-
-  return isPlainObject(leaf)
-    ? extend(true, {}, leaf)
-    : leaf;
-};
-
-export const shallowCopySubtreePath = <T extends Record<string, unknown> | unknown[]>(
-  tree: T,
-  path: string[],
-): T => {
+): TreeNodeType => {
   const shallowCopiedTree = shallowCopyTree(tree);
   let currentNode = shallowCopiedTree;
 
   for (let idx = 0; idx < path.length - 1; idx += 1) {
     const nextNodePath = path[idx];
-    const nextNode = currentNode[nextNodePath] as T;
+    const nextNode = currentNode?.[nextNodePath];
+
+    if (nextNode === undefined) {
+      break;
+    }
 
     currentNode[nextNodePath] = shallowCopyTree(nextNode);
     currentNode = nextNode;
@@ -60,29 +97,25 @@ export const shallowCopySubtreePath = <T extends Record<string, unknown> | unkno
   return shallowCopiedTree;
 };
 
-export const mergeOptionTrees = <T extends Record<string, unknown> | unknown[]>(
-  internalTree: T,
-  publicTree: T,
-  defaultTree: T,
+export const mergeOptionTrees = (
+  internalTree: TreeNodeType,
+  publicTree: TreeNodeType,
+  defaultTree: TreeNodeType,
   pathToMerge: string[],
-): T => {
+): TreeNodeType => {
   const [lastNodePath] = pathToMerge.slice(-1);
   const result = shallowCopySubtreePath(internalTree, pathToMerge);
-  const targetSubtree = getSubTree(result, pathToMerge);
-  const updatedValue = deepCopyTreeLeaf(publicTree, pathToMerge);
-  const defaultValue = deepCopyTreeLeaf(defaultTree, pathToMerge);
+  const targetNodeParent = getTreeNodeParentByPath(result, pathToMerge);
 
-  if (targetSubtree) {
-    /*
-      NOTE: it is better not to use '??' operator,
-      because result will be different if value is 'null'.
-      Some code works differently if undefined is passed instead of null,
-      for example dataSource's getter-setter `.filter()`
-    */
-    targetSubtree[lastNodePath] = updatedValue !== undefined
-      ? updatedValue
-      : defaultValue;
+  // NOTE: If we don't find parent of the tree node to update -> do nothing
+  if (!targetNodeParent) {
+    return result;
   }
+
+  const newNodeValue = getTreeNodeByPath(publicTree, pathToMerge);
+  const defaultNodeValue = getTreeNodeByPath(defaultTree, pathToMerge);
+
+  targetNodeParent[lastNodePath] = deepMergeTrees(defaultNodeValue, newNodeValue);
 
   return result;
 };
