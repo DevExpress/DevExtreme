@@ -1795,6 +1795,7 @@ QUnit.module('the \'onCustomItemCreating\' option', moduleSetup, () => {
 
                 assert.strictEqual(e.text, 'it', 'custom item is creating');
             },
+            customItemCreateEvent: '',
             acceptCustomValue: true,
             opened: true,
             searchEnabled: true,
