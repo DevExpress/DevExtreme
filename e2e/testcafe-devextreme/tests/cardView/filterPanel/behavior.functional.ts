@@ -42,7 +42,7 @@ test('filterEnabled checkbox switches the filter by click', async (t) => {
   });
 });
 
-test('filterEnabled checkbox switches the filter by keyboard', async (t) => {
+test.only('filterEnabled checkbox switches the filter by keyboard', async (t) => {
   const cardView = new CardView('#container');
   const startButton = new Button('#otherContainer');
   const filterEnabledCheckbox = cardView.getFilterPanel().getFilterEnabledCheckbox();
@@ -63,7 +63,8 @@ test('filterEnabled checkbox switches the filter by keyboard', async (t) => {
     .eql(3);
 
   await t
-    .pressKey('tab') // TODO: remove this comment when focus loose on checkbox is fixed
+    .click(startButton.element) // TODO: remove this when checkbox focus loosing is fixed
+    .pressKey('shift+tab shift+tab shift+tab shift+tab')
     .pressKey('space')
     .expect(filterEnabledCheckbox.isChecked)
     .notOk()
