@@ -393,13 +393,9 @@ export type AppointmentTooltipTemplateData = TargetedAppointmentInfo & {
 
 /**
  * @public
- * @hidden
  */
 export type AppointmentCollectorTemplateData = {
   readonly appointmentCount: number;
-  /**
-   * @type dxSchedulerAppointment[]
-   */
   readonly items: Appointment[];
   readonly isCompact: boolean;
 };
@@ -432,7 +428,6 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
     /**
      * @docid
      * @default "appointmentCollector"
-     * @type_function_param1 model:{ui/scheduler:AppointmentCollectorTemplateData}
      * @type_function_param1_field appointmentCount:number
      * @type_function_param1_field items:dxSchedulerAppointment[]
      * @type_function_param1_field isCompact:boolean
@@ -1003,7 +998,6 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
       /**
        * @docid
        * @default "appointmentCollector"
-       * @type_function_param1 model:{ui/scheduler:AppointmentCollectorTemplateData}
        * @type_function_param1_field appointmentCount:number
        * @type_function_param1_field items:dxSchedulerAppointment[]
        * @type_function_param1_field isCompact:boolean
