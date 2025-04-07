@@ -1,5 +1,5 @@
 import formatHelper from '@js/format_helper';
-import { computed } from '@ts/core/reactive/index';
+import { computed, state } from '@ts/core/reactive/index';
 import { ColumnsController } from '@ts/grids/new/grid_core/columns_controller/columns_controller';
 import { DataController } from '@ts/grids/new/grid_core/data_controller/data_controller';
 
@@ -11,15 +11,22 @@ export class ItemsController {
     DataController, ColumnsController,
   ] as const;
 
+  public readonly additionalItems = state<DataRow[]>([]);
+
   public readonly items = computed(
-    (dataItems, columns: Column[]) => dataItems.map(
-      (item, itemIndex) => this.createDataRow(
-        item,
-        columns,
-        itemIndex,
-      ),
-    ),
-    [this.dataController.items, this.columnsController.visibleColumns],
+    (dataItems, columns, additionalItems) => dataItems
+      .map(
+        (item, itemIndex) => this.createDataRow(
+          item,
+          columns,
+          itemIndex,
+        ),
+      ).concat(additionalItems),
+    [
+      this.dataController.items,
+      this.columnsController.visibleColumns,
+      this.additionalItems,
+    ],
   );
 
   constructor(
@@ -35,8 +42,9 @@ export class ItemsController {
     data: DataObject,
     columns: Column[],
     itemIndex: number,
+    key?: Key,
   ): DataRow {
-    const itemKey = this.dataController.getDataKey(data);
+    const itemKey = key ?? this.dataController.getDataKey(data);
 
     return {
       // @ts-expect-error

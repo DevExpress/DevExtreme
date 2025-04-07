@@ -71,7 +71,11 @@ export interface CardProps {
 
   allowUpdating?: boolean;
 
+  allowDeleting?: boolean;
+
   onEdit?: (key: Key) => void;
+
+  onDelete?: (key: Key) => void;
 }
 
 export class Card extends Component<CardProps> {
@@ -126,8 +130,10 @@ export class Card extends Component<CardProps> {
       >
         <CardHeader
           onEdit={() => { this.props.onEdit?.(this.props.row.key); }}
+          onDelete={() => { this.props.onDelete?.(this.props.row.key); }}
           items={this.props.toolbar || []}
           allowUpdating={this.props.allowUpdating}
+          allowDeleting={this.props.allowDeleting}
         />
         {imageSrc && (
           <Cover

@@ -1,4 +1,3 @@
-import type { dxToolbarItem } from '@js/ui/toolbar';
 import type { DataRow } from '@ts/grids/new/grid_core/columns_controller/types';
 import { Toolbar } from '@ts/grids/new/grid_core/inferno_wrappers/toolbar';
 import { Component } from 'inferno';
@@ -17,14 +16,14 @@ export interface CardHeaderItem {
 
 export interface CardHeaderProps {
   items?: CardHeaderItem[];
-
   allowUpdating?: boolean;
+  allowDeleting?: boolean;
   visible?: boolean;
   captionExpr?: string;
   template?: (items: CardHeaderItem[]) => JSX.Element;
   row?: DataRow;
-
   onEdit?: () => void;
+  onDelete?: () => void;
 }
 
 export class CardHeader extends Component<CardHeaderProps> {
@@ -37,6 +36,7 @@ export class CardHeader extends Component<CardHeaderProps> {
       row,
       allowUpdating,
       onEdit,
+      onDelete,
     } = this.props;
 
     if (!visible) {
@@ -51,7 +51,11 @@ export class CardHeader extends Component<CardHeaderProps> {
       ? { location: 'after', widget: 'dxButton', options: { icon: 'edit', onClick: onEdit } }
       : null;
 
-    const finalItems = [captionItem, updateButton, ...items]
+    const deleteButton: CardHeaderItem | null = allowUpdating
+      ? { location: 'after', widget: 'dxButton', options: { icon: 'remove', onClick: onDelete } }
+      : null;
+
+    const finalItems = [captionItem, updateButton, deleteButton, ...items]
       .filter((item): item is CardHeaderItem => !!item);
 
     if (template) {

@@ -242,6 +242,14 @@ export class DataController {
     await this.dataSource.unreactive_get().store().update(key, data);
   }
 
+  public async insert(data: DataObject): Promise<void> {
+    await this.dataSource.unreactive_get().store().insert(data);
+  }
+
+  public async remove(key: Key): Promise<void> {
+    await this.dataSource.unreactive_get().store().remove(key);
+  }
+
   public async reload(): Promise<void> {
     await this.dataSource.unreactive_get().load();
   }

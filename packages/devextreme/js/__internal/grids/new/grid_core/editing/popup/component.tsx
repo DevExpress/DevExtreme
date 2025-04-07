@@ -30,7 +30,7 @@ export class EditPopup extends Component<Properties> {
           text: 'Save',
           onClick: this.props.onSave,
           stylingMode: 'contained',
-          type: 'default',    
+          type: 'default',
         },
       } as const,
       {
