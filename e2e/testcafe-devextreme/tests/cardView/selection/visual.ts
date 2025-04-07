@@ -5,7 +5,7 @@ import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 import { testScreenshot } from '../../../helpers/themeUtils';
 
-fixture.skip`Selection.Visual`
+fixture`Selection.Visual`
   .page(url(__dirname, '../../container.html'));
 
 const CARD_VIEW_SELECTOR = '#container';
