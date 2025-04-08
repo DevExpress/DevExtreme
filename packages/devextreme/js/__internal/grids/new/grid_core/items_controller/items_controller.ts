@@ -19,7 +19,7 @@ export class ItemsController {
       dataItems,
       columns: Column[],
       // NOTE: We should trigger computed by search options change
-      // But all work with these options encapsulated in SearchHighlightTextProcessor
+      // But all work with these options encapsulated in SearchController
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       highlightTextOptions,
     ) => dataItems.map(

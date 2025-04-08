@@ -20,13 +20,13 @@ const setup = (config: Options = {}) => {
   return { options, controller };
 };
 
-describe('Search', () => {
-  describe('Controller', () => {
+describe('SearchController', () => {
+  describe('highlightTextOptions', () => {
     afterEach(() => {
       jest.clearAllMocks();
     });
 
-    it('should have highlightTextOptions$ from widget options', () => {
+    it('should have observable from widget options', () => {
       const { controller } = setup({
         searchPanel: {
           highlightSearchText: true,
@@ -44,7 +44,7 @@ describe('Search', () => {
       });
     });
 
-    it('getHighlightText should call util function', () => {
+    it('getHighlightText method should call util function', () => {
       const { controller } = setup({
         searchPanel: {
           highlightSearchText: true,
