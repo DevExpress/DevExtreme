@@ -103,11 +103,11 @@ function getFormatHandlers(module) {
     deleteTable: getTableOperationHandler(module.quill, 'deleteTable'),
     cellProperties: prepareShowFormProperties(module, 'cell'),
     tableProperties: prepareShowFormProperties(module, 'table'),
-    ai: handleAIDropDownSelection(module),
+    ai: handleAiDropDownSelection(module),
   };
 }
 
-function handleAIDropDownSelection(module) {
+function handleAiDropDownSelection(module) {
   return (options): void => {
     const { command, parentCommand, commandsMap } = options;
 
