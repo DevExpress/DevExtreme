@@ -9,8 +9,7 @@ import DataGrid, {
   Item,
 } from 'devextreme-react/data-grid';
 import { Button } from 'devextreme-react/button';
-import ArrayStore from 'devextreme/data/array_store';
-import DataSource from 'devextreme/data/data_source';
+import { ArrayStore, DataSource } from 'devextreme-react/common/data';
 import { employees, states } from './data.js';
 
 const dataSource = new DataSource({

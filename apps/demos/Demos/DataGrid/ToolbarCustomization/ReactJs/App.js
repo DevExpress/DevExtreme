@@ -10,7 +10,7 @@ import DataGrid, {
   Toolbar,
   Item,
 } from 'devextreme-react/data-grid';
-import query from 'devextreme/data/query';
+import { query } from 'devextreme-react/common/data';
 import { orders } from './data.js';
 
 const countLabel = { 'aria-label': 'Count' };

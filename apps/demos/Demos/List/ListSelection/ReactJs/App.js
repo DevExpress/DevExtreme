@@ -2,7 +2,7 @@ import React, { useCallback, useState } from 'react';
 import SelectBox from 'devextreme-react/select-box';
 import List from 'devextreme-react/list';
 import CheckBox from 'devextreme-react/check-box';
-import ArrayStore from 'devextreme/data/array_store';
+import { ArrayStore } from 'devextreme-react/common/data';
 import {
   tasks, selectAllModeLabel, selectionModeLabel, selectByClickLabel,
 } from './data.js';

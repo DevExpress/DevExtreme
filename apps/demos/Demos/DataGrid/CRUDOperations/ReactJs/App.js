@@ -12,7 +12,7 @@ import {
 } from 'devextreme-react/data-grid';
 import { Button } from 'devextreme-react/button';
 import { SelectBox } from 'devextreme-react/select-box';
-import CustomStore from 'devextreme/data/custom_store';
+import { CustomStore } from 'devextreme-react/common/data';
 import { formatDate } from 'devextreme/localization';
 import 'whatwg-fetch';
 

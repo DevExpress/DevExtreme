@@ -9,7 +9,7 @@ import Diagram, {
   Group,
 } from 'devextreme-react/diagram';
 import notify from 'devextreme/ui/notify';
-import ArrayStore from 'devextreme/data/array_store';
+import { ArrayStore } from 'devextreme-react/common/data';
 import service from './data.js';
 
 const shapes = ['team', 'employee'];

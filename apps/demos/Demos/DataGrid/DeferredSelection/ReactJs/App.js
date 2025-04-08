@@ -3,8 +3,7 @@ import DataGrid, {
   Column, FilterRow, Selection, Pager,
 } from 'devextreme-react/data-grid';
 import Button from 'devextreme-react/button';
-import query from 'devextreme/data/query';
-import 'devextreme/data/odata/store';
+import { query } from 'devextreme-react/common/data';
 
 const MILLISECONDS_IN_DAY = 1000 * 60 * 60 * 24;
 const dataSource = {

@@ -4,8 +4,8 @@ import TabPanel, { Item } from 'devextreme-react/tab-panel';
 import DataGrid, { Column } from 'devextreme-react/data-grid';
 import { Workbook } from 'exceljs';
 import { saveAs } from 'file-saver-es';
-import { exportDataGrid } from 'devextreme/excel_exporter';
-import 'devextreme/data/odata/store';
+import { exportDataGrid } from 'devextreme-react/common/export/excel';
+import 'devextreme-react/common/data';
 
 const priceDataSource = {
   store: {
