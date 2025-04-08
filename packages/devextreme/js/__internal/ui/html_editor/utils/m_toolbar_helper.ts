@@ -103,58 +103,64 @@ function getFormatHandlers(module) {
     deleteTable: getTableOperationHandler(module.quill, 'deleteTable'),
     cellProperties: prepareShowFormProperties(module, 'cell'),
     tableProperties: prepareShowFormProperties(module, 'table'),
-    ai: handleAIDropDownSelection,
+    ai: handleAIDropDownSelection(module),
   };
 }
 
-function handleAIDropDownSelection(module, options): void {
-  const { command, parentCommand, commandsMap } = options;
+function handleAIDropDownSelection(module) {
+  return (options): void => {
+    const { command, parentCommand, commandsMap } = options;
 
-  if (command === 'root') {
-    return;
-  }
-
-  const { quill } = module;
-  const selection = quill.getSelection();
-  const hasSelection = selection?.length > 0;
-  const text = hasSelection ? quill.getText(selection) : quill.getText();
-
-  const aiDialogConfig: AiDialogShowPayload = {
-    currentCommand: parentCommand ?? command,
-    currentCommandOption: parentCommand ? command : undefined,
-    text,
-    commandsMap,
-  };
-
-  module.editorInstance.showAiDialog(aiDialogConfig)?.done((resultText, event) => {
-    const insertionMode = event.itemData.id;
-    let insertIndex = 0;
-
-    switch (insertionMode) {
-      case 'replace':
-        insertIndex = hasSelection ? selection.index : 0;
-        quill.deleteText(insertIndex, hasSelection ? selection.length : text.length, SILENT_ACTION);
-        break;
-
-      case 'insertAbove':
-        insertIndex = hasSelection ? selection.index : 0;
-        break;
-
-      case 'insertBelow':
-        insertIndex = hasSelection ? selection.index + selection.length : quill.getLength();
-        break;
-
-      default:
-        return;
+    if (command === 'root') {
+      return;
     }
 
-    quill.insertText(insertIndex, resultText, '', resultText, USER_ACTION);
-    quill.setSelection(insertIndex, resultText.length, USER_ACTION);
+    const { quill } = module;
+    const selection = quill.getSelection();
+    const hasSelection = selection?.length > 0;
+    const text = hasSelection ? quill.getText(selection) : quill.getText();
 
-    module.saveValueChangeEvent(event);
-  }).always(() => {
-    quill.focus();
-  });
+    const aiDialogConfig: AiDialogShowPayload = {
+      currentCommand: parentCommand ?? command,
+      currentCommandOption: parentCommand ? command : undefined,
+      text,
+      commandsMap,
+    };
+
+    module.editorInstance.showAiDialog(aiDialogConfig)?.done((resultText, event) => {
+      const insertionMode = event.itemData.id;
+      let insertIndex = 0;
+
+      switch (insertionMode) {
+        case 'replace':
+          insertIndex = hasSelection ? selection.index : 0;
+          quill.deleteText(
+            insertIndex,
+            hasSelection ? selection.length : text.length,
+            SILENT_ACTION,
+          );
+          break;
+
+        case 'insertAbove':
+          insertIndex = hasSelection ? selection.index : 0;
+          break;
+
+        case 'insertBelow':
+          insertIndex = hasSelection ? selection.index + selection.length : quill.getLength();
+          break;
+
+        default:
+          return;
+      }
+
+      quill.insertText(insertIndex, resultText, '', resultText, USER_ACTION);
+      quill.setSelection(insertIndex, resultText.length, USER_ACTION);
+
+      module.saveValueChangeEvent(event);
+    }).always(() => {
+      quill.focus();
+    });
+  };
 }
 
 function resetFormDialogOptions(editorInstance, {
