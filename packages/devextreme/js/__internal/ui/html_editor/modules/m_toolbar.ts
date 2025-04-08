@@ -447,7 +447,7 @@ if (Quill) {
             prompt: itemData.prompt,
           };
 
-          this._formatHandlers[name](this, aiDialogOptions);
+          this._formatHandlers[name](aiDialogOptions);
         },
       };
 
