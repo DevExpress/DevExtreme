@@ -40,7 +40,7 @@ export const deepMergeTrees = (
     return extend(true, {}, firstTree, secondTree);
   }
 
-  if (secondTree) {
+  if (secondTree !== undefined) {
     return deepCopyTreeNode(secondTree);
   }
 

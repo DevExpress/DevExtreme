@@ -357,6 +357,15 @@ describe('oneWay', () => {
         expect(value.unreactive_get()).toBe('newValue');
       });
 
+      it('should update boolean plain option on option changed', () => {
+        const { component, optionsController } = setup({}, { value: true });
+
+        const value = optionsController.oneWay('value');
+        component.option('value', false);
+
+        expect(value.unreactive_get()).toBe(false);
+      });
+
       it('should update to default value if updated to undefined', () => {
         const { component, optionsController } = setup(plainOptions, defaultPlainOptions);
 
