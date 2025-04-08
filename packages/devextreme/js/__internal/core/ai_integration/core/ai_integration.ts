@@ -5,7 +5,7 @@ import type {
   RequestCallbacks,
   TranslateCommandParams,
   TranslateCommandResult,
-} from '@js/ai_integration';
+} from '@js/common/ai-integration';
 import type { BaseCommand } from '@ts/core/ai_integration/commands/base';
 import { TranslateCommand } from '@ts/core/ai_integration/commands/translate';
 import { PromptManager } from '@ts/core/ai_integration/core/prompt_manager';

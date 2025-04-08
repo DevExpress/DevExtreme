@@ -1,4 +1,4 @@
-import type { TranslateCommandParams, TranslateCommandResult } from '@js/ai_integration';
+import type { TranslateCommandParams, TranslateCommandResult } from '@js/common/ai-integration';
 import { BaseCommand } from '@ts/core/ai_integration/commands/base';
 import type { PromptData, PromptTemplateName } from '@ts/core/ai_integration/core/prompt_manager';
 

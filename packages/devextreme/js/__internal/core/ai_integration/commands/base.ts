@@ -1,4 +1,4 @@
-import type { BaseCommandResult, RequestCallbacks } from '@js/ai_integration';
+import type { BaseCommandResult, RequestCallbacks } from '@js/common/ai-integration';
 import type { PromptData, PromptManager, PromptTemplateName } from '@ts/core/ai_integration/core/prompt_manager';
 import type { RequestManager } from '@ts/core/ai_integration/core/request_manager';
 

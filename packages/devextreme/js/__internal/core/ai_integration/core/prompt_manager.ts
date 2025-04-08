@@ -1,4 +1,4 @@
-import type { Prompt } from '@js/ai_integration';
+import type { Prompt } from '@js/common/ai-integration';
 import { templates } from '@ts/core/ai_integration/templates/index';
 
 export interface PromptData {
