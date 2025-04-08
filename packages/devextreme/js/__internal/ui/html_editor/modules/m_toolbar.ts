@@ -17,10 +17,11 @@ import type { HtmlEditorAICommandName, HtmlEditorAICustomCommand, HtmlEditorAITo
 import type { Item } from '@js/ui/toolbar';
 import Toolbar from '@js/ui/toolbar';
 import errors from '@js/ui/widget/ui.errors';
+import { capitalize } from '@ts/core/utils/capitalize';
 import Quill from 'devextreme-quill';
 
 import {
-  buildCommandsMap, capitalize, defaultCommandNames, getDefaultOptionsByCommand,
+  buildCommandsMap, defaultCommandNames, getDefaultOptionsByCommand,
 } from '../utils/ai';
 import { getTableFormats, TABLE_OPERATIONS } from '../utils/m_table_helper';
 import {
@@ -315,12 +316,15 @@ if (Quill) {
         const selectItemConfig = this._prepareSelectItemConfig(item);
 
         return this._getToolbarItem(selectItemConfig);
-      } if (item.name && this._isAcceptableItem(item.widget, 'dxButton')) {
+      }
+
+      if (item.name && this._isAcceptableItem(item.widget, 'dxButton')) {
         const defaultButtonItemConfig = this._prepareButtonItemConfig(item.name);
         const buttonItemConfig = extend(true, defaultButtonItemConfig, item);
 
         return this._getToolbarItem(buttonItemConfig);
       }
+
       return this._getToolbarItem(item);
     }
 

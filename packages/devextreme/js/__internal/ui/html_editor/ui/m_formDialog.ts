@@ -1,4 +1,5 @@
 import localizationMessage from '@js/common/core/localization/message';
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { extend } from '@js/core/utils/extend';
 import Form from '@js/ui/form';
@@ -93,8 +94,8 @@ export default class FormDialog extends DialogBase {
     });
   }
 
-  protected _renderContent(container) {
-    const $formContainer = $('<div>').appendTo(container);
+  protected _renderContent($contentElem: dxElementWrapper) {
+    const $formContainer = $('<div>').appendTo($contentElem);
 
     this._renderForm($formContainer, {
       onEditorEnterKey: (e) => this.callAddButtonAction(e.event),

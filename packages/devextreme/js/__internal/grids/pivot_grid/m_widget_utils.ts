@@ -182,7 +182,7 @@ function foreachDataLevel(data, callback, index, childrenField?) {
 
   for (let i = 0; i < data.length; i += 1) {
     const item = data[i];
-    if (item[childrenField] && item[childrenField].length) {
+    if (item[childrenField]?.length) {
       foreachDataLevel(item[childrenField], callback, index + 1, childrenField);
     }
   }
@@ -365,10 +365,6 @@ const storeDrillDownMixin = {
   },
 };
 
-function capitalizeFirstLetter(string) {
-  return string.charAt(0).toUpperCase() + string.slice(1);
-}
-
 const getScrollbarWidth = (
   containerElement,
 ): number => containerElement.offsetWidth - containerElement.clientWidth;
@@ -408,14 +404,12 @@ export default {
   setDefaultFieldValueFormatting,
   getFiltersByPath,
   storeDrillDownMixin,
-  capitalizeFirstLetter,
   getScrollbarWidth,
   calculateScrollbarWidth,
 };
 
 export {
   calculateScrollbarWidth,
-  capitalizeFirstLetter,
   createPath,
   discoverObjectFields,
   findField,
