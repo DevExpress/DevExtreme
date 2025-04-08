@@ -253,7 +253,7 @@ const dialogModuleConfig = {
     }
 };
 
-const dialogAIModuleConfig = {
+const dialogAiModuleConfig = {
     beforeEach: function() {
         fx.off = true;
 
@@ -1439,7 +1439,7 @@ testModule('Toolbar dialogs', dialogModuleConfig, () => {
     });
 });
 
-testModule('Toolbar AI dialog', dialogAIModuleConfig, () => {
+testModule('Toolbar AI dialog', dialogAiModuleConfig, () => {
     QUnit.test('renders base controls in AI dialog', function(assert) {
         this.options.items = [{ name: 'ai' }];
         new Toolbar(this.quillMock, this.options);
@@ -1549,7 +1549,6 @@ testModule('Toolbar AI dialog', dialogAIModuleConfig, () => {
             assert.deepEqual(actualOptions, defaultOptions, `Options for "${commandName}" match defaults`);
         });
     });
-
 
     QUnit.test('renders AI menu with specific commands and specific options', function(assert) {
         const commandOptions = ['English', 'Spanish'];

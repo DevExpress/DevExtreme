@@ -22,6 +22,10 @@ const DIALOG_FORM_CLASS = 'dx-formdialog-form';
 const BUTTON_CLASS = 'dx-button';
 const SUGGESTION_LIST_CLASS = 'dx-suggestion-list';
 const LIST_ITEM_CLASS = 'dx-list-item';
+const DROP_DOWN_BUTTON_CLASS = 'dx-dropdownbutton';
+const OVERLAY_CLASS = 'dx-overlay-content';
+const LISTBOX_ITEM_CLASS = 'dx-list-item';
+const MENU_ITEM_CLASS = 'dx-menu-item';
 
 const BLACK_PIXEL = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQYGWNgYmL6DwABFgEGpP/tHAAAAABJRU5ErkJggg==';
 
@@ -1025,10 +1029,99 @@ export default function() {
                 .trigger('dxclick');
 
             this.clock.tick(10);
-
             const value = editor.option('value');
 
             assert.strictEqual(prepareEmbedValue(value), expectedValue);
+        });
+
+        QUnit.test('AI dialog replaces result text', function(assert) {
+            const done = assert.async();
+
+            const instance = $('#htmlEditor').dxHtmlEditor({
+                value: 'Test value',
+                ai: {},
+                toolbar: {
+                    items: [{
+                        name: 'ai',
+                        commands: ['summarize']
+                    }]
+                },
+                onValueChanged: () => {
+                    const value = instance.option('value');
+                    assert.strictEqual(value, '<p>Test value</p><p><br></p>', 'Editor value replaced with same text for this test');
+                    done();
+                }
+            }).dxHtmlEditor('instance');
+
+            $('#htmlEditor').find(`.${TOOLBAR_FORMAT_WIDGET_CLASS} .${MENU_ITEM_CLASS}`).trigger('dxclick');
+
+            $(`.${MENU_ITEM_CLASS}`).eq(1).trigger('dxclick');
+
+            const $dropDownButton = $(`.${DROP_DOWN_BUTTON_CLASS} .${BUTTON_CLASS}`).eq(0);
+            $dropDownButton.trigger('dxclick');
+
+            const $option = $(`.${OVERLAY_CLASS} .${LISTBOX_ITEM_CLASS}`).eq(0);
+            $option.trigger('dxclick');
+        });
+
+        QUnit.test('AI dialog inserts above result text', function(assert) {
+            const done = assert.async();
+
+            const instance = $('#htmlEditor').dxHtmlEditor({
+                value: 'Test value',
+                ai: {},
+                toolbar: {
+                    items: [{
+                        name: 'ai',
+                        commands: ['summarize']
+                    }]
+                },
+                onValueChanged: () => {
+                    const value = instance.option('value');
+                    assert.strictEqual(value, '<p>Test value</p><p>Test value</p>', 'Inserted above');
+                    done();
+                }
+            }).dxHtmlEditor('instance');
+
+            $('#htmlEditor').find(`.${TOOLBAR_FORMAT_WIDGET_CLASS} .${MENU_ITEM_CLASS}`).trigger('dxclick');
+
+            $(`.${MENU_ITEM_CLASS}`).eq(1).trigger('dxclick');
+
+            const $dropDownButton = $(`.${DROP_DOWN_BUTTON_CLASS} .${BUTTON_CLASS}`).eq(0);
+            $dropDownButton.trigger('dxclick');
+
+            const $option = $(`.${OVERLAY_CLASS} .${LISTBOX_ITEM_CLASS}`).eq(1);
+            $option.trigger('dxclick');
+        });
+
+        QUnit.test('AI dialog inserts below result text', function(assert) {
+            const done = assert.async();
+
+            const instance = $('#htmlEditor').dxHtmlEditor({
+                value: 'Test value',
+                ai: {},
+                toolbar: {
+                    items: [{
+                        name: 'ai',
+                        commands: ['summarize']
+                    }]
+                },
+                onValueChanged: () => {
+                    const value = instance.option('value');
+                    assert.strictEqual(value, '<p>Test value</p><p>Test value</p>', 'Inserted below');
+                    done();
+                }
+            }).dxHtmlEditor('instance');
+
+            $('#htmlEditor').find(`.${TOOLBAR_FORMAT_WIDGET_CLASS} .${MENU_ITEM_CLASS}`).trigger('dxclick');
+
+            $(`.${MENU_ITEM_CLASS}`).eq(1).trigger('dxclick');
+
+            const $dropDownButton = $(`.${DROP_DOWN_BUTTON_CLASS} .${BUTTON_CLASS}`).eq(0);
+            $dropDownButton.trigger('dxclick');
+
+            const $option = $(`.${OVERLAY_CLASS} .${LISTBOX_ITEM_CLASS}`).eq(2);
+            $option.trigger('dxclick');
         });
     });
 }
