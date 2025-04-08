@@ -12,6 +12,10 @@ const AI_DIALOG_CONTROLS_CLASS = 'dx-aidialog-controls';
 const DIALOG_CLASS = 'dx-formdialog';
 const TEXT_AREA_CLASS = 'dx-textarea';
 const SELECT_BOX_CLASS = 'dx-selectbox';
+const DROP_DOWN_BUTTON_CLASS = 'dx-dropdownbutton';
+const BUTTON_CLASS = 'dx-button';
+const LIST_ITEM_CLASS = 'dx-list-item';
+const OVERLAY_CLASS = 'dx-overlay-content';
 
 const moduleConfig = {
     beforeEach: function() {
@@ -22,13 +26,13 @@ const moduleConfig = {
             },
             $element: () => this.$element,
         };
+
+        this.aiDialog = new AiDialog(this.componentMock, {}, { container: this.$element });
     }
 };
 
 QUnit.module('AiDialog', moduleConfig, () => {
     QUnit.test('Should render AI dialog content', function(assert) {
-        const aiDialog = new AiDialog(this.componentMock, {}, { container: this.$element });
-
         const commandsMap = {
             translate: {
                 name: 'translate',
@@ -44,7 +48,7 @@ QUnit.module('AiDialog', moduleConfig, () => {
             text: 'Test text',
         };
 
-        aiDialog.show(payload);
+        this.aiDialog.show(payload);
 
         const $wrapper = this.$element.find(`.${DIALOG_CLASS}`);
         const $aiContent = $wrapper.find(`.${AI_DIALOG_CONTENT_CLASS}`);
@@ -76,8 +80,6 @@ QUnit.module('AiDialog', moduleConfig, () => {
     });
 
     QUnit.test('Should not render option select if command has no options', function(assert) {
-        const aiDialog = new AiDialog(this.componentMock, {}, { container: this.$element });
-
         const commandsMap = {
             translate: {
                 name: 'summarize',
@@ -89,7 +91,7 @@ QUnit.module('AiDialog', moduleConfig, () => {
             commandsMap,
         };
 
-        aiDialog.show(payload);
+        this.aiDialog.show(payload);
 
         const $wrapper = this.$element.find(`.${DIALOG_CLASS}`);
         const $aiContent = $wrapper.find(`.${AI_DIALOG_CONTENT_CLASS}`);
@@ -113,23 +115,18 @@ QUnit.module('AiDialog', moduleConfig, () => {
     });
 
     QUnit.test('show returns a promise', function(assert) {
-        const aiDialog = new AiDialog(this.componentMock, {}, { container: this.$element });
-
-        const promise = aiDialog.show({
+        const promise = this.aiDialog.show({
             currentCommand: 'translate',
             commandsMap: {
                 translate: { name: 'translate' }
             }
         });
 
-        assert.ok(isPromise(promise), 'show() returns promise');
+        assert.strictEqual(isPromise(promise), true, 'show() returns promise');
     });
 
     QUnit.test('Cancel via popup hide triggers reject', function(assert) {
-        assert.expect(1);
-
-        const aiDialog = new AiDialog(this.componentMock, {}, { container: this.$element });
-        const promise = aiDialog.show({
+        const promise = this.aiDialog.show({
             currentCommand: 'translate',
             commandsMap: {
                 translate: { name: 'translate' }
@@ -137,9 +134,178 @@ QUnit.module('AiDialog', moduleConfig, () => {
         });
 
         promise.fail((data) => {
-            assert.notOk(data, 'Dialog was cancelled, no data');
+            assert.strictEqual(data, undefined, 'Dialog was cancelled, no data');
         });
 
-        aiDialog._popup.hide();
+        this.aiDialog._popup.hide();
+    });
+
+    QUnit.test('Command change updates options and result', function(assert) {
+        const commandsMap = {
+            translate: {
+                name: 'translate',
+                text: 'Translate',
+                options: ['english', 'german']
+            },
+            summarize: {
+                name: 'summarize',
+                text: 'Summarize',
+            }
+        };
+
+        this.aiDialog.show({
+            currentCommand: 'translate',
+            currentCommandOption: 'german',
+            commandsMap,
+            text: 'Initial',
+        });
+
+        const $commandSelect = this.$element.find(`.${SELECT_BOX_CLASS}`).eq(0);
+        const commandSelectBox = $commandSelect.dxSelectBox('instance');
+
+        const $optionSelect = this.$element.find(`.${SELECT_BOX_CLASS}`).eq(1);
+        const optionSelectBox = $optionSelect.dxSelectBox('instance');
+
+        assert.strictEqual(optionSelectBox.option('visible'), true, 'Option select is initially visible');
+
+        commandSelectBox.option('value', 'summarize');
+
+        assert.strictEqual(optionSelectBox.option('visible'), false, 'Option select hidden after changing command');
+        assert.strictEqual(commandSelectBox.option('value'), 'summarize', 'Command updated');
+    });
+
+    QUnit.test('Clicking "Replace" resolves with correct payload', function(assert) {
+        const done = assert.async();
+        const hideSpy = sinon.spy(this.aiDialog, 'hide');
+
+        const commandsMap = {
+            translate: {
+                name: 'translate',
+                text: 'Translate',
+                options: ['english', 'german']
+            }
+        };
+
+        this.aiDialog.show({
+            currentCommand: 'translate',
+            currentCommandOption: 'english',
+            commandsMap,
+            text: 'Test text',
+        }).done((resultText, event) => {
+            assert.strictEqual(resultText, 'Test text', 'Correct text resolved');
+            assert.strictEqual(event.itemData.id, 'replace', 'Correct operation: replace');
+            done();
+        });
+
+        const $replaceDropDown = this.$element.find(`.${DROP_DOWN_BUTTON_CLASS} .${BUTTON_CLASS}`).eq(0);
+        $replaceDropDown.trigger('dxclick');
+
+        const $replaceButton = $(`.${OVERLAY_CLASS} .${LIST_ITEM_CLASS}`).eq(0);
+        $replaceButton.trigger('dxclick');
+
+        assert.strictEqual(hideSpy.calledOnce, true, 'hide called');
+    });
+
+    QUnit.test('Clicking "Insert above" resolves with correct payload', function(assert) {
+        const done = assert.async();
+        const hideSpy = sinon.spy(this.aiDialog, 'hide');
+
+        const commandsMap = {
+            translate: {
+                name: 'translate',
+                text: 'Translate',
+                options: ['english', 'german']
+            }
+        };
+
+        this.aiDialog.show({
+            currentCommand: 'translate',
+            currentCommandOption: 'english',
+            commandsMap,
+            text: 'Test text',
+        }).done((resultText, event) => {
+            assert.strictEqual(resultText, 'Test text', 'Correct text resolved');
+            assert.strictEqual(event.itemData.id, 'insertAbove', 'Correct operation: insert above');
+            done();
+        });
+
+        const $replaceDropDown = this.$element.find(`.${DROP_DOWN_BUTTON_CLASS} .${BUTTON_CLASS}`).eq(0);
+        $replaceDropDown.trigger('dxclick');
+
+        const $replaceButton = $(`.${OVERLAY_CLASS} .${LIST_ITEM_CLASS}`).eq(1);
+        $replaceButton.trigger('dxclick');
+
+        assert.strictEqual(hideSpy.calledOnce, true, 'hide called');
+    });
+
+    QUnit.test('Clicking "Insert below" resolves with correct payload', function(assert) {
+        const done = assert.async();
+        const hideSpy = sinon.spy(this.aiDialog, 'hide');
+
+        const commandsMap = {
+            translate: {
+                name: 'translate',
+                text: 'Translate',
+                options: ['english', 'german']
+            }
+        };
+
+        this.aiDialog.show({
+            currentCommand: 'translate',
+            currentCommandOption: 'english',
+            commandsMap,
+            text: 'Test text',
+        }).done((resultText, event) => {
+            assert.strictEqual(resultText, 'Test text', 'Correct text resolved');
+            assert.strictEqual(event.itemData.id, 'insertBelow', 'Correct operation: insert below');
+            done();
+        });
+
+        const $replaceDropDown = this.$element.find(`.${DROP_DOWN_BUTTON_CLASS} .${BUTTON_CLASS}`).eq(0);
+        $replaceDropDown.trigger('dxclick');
+
+        const $replaceButton = $(`.${OVERLAY_CLASS} .${LIST_ITEM_CLASS}`).eq(2);
+        $replaceButton.trigger('dxclick');
+
+        assert.strictEqual(hideSpy.calledOnce, true, 'hide called');
+    });
+
+    QUnit.test('Copy button triggers clipboard write', function(assert) {
+        const clipboardSpy = sinon.stub(navigator.clipboard, 'writeText');
+
+        this.aiDialog.show({
+            currentCommand: 'translate',
+            commandsMap: {
+                translate: { name: 'translate', text: 'Translate' }
+            },
+            text: 'Test value',
+        });
+
+        const $copyButton = this.$element.find(`.${BUTTON_CLASS}`).filter((_, el) => {
+            return $(el).text() === 'Copy';
+        });
+
+        $copyButton.trigger('dxclick');
+
+        assert.strictEqual(clipboardSpy.calledWith('Test value'), true, 'Copied correct text');
+        clipboardSpy.restore();
+    });
+
+    QUnit.test('Try again button triggers _retryAIRequest', function(assert) {
+        const retrySpy = sinon.spy(this.aiDialog, '_retryAIRequest');
+
+        this.aiDialog.show({
+            currentCommand: 'translate',
+            commandsMap: {
+                translate: { name: 'translate', text: 'Translate' }
+            }
+        });
+
+        const $tryAgainButton = this.$element.find(`.${BUTTON_CLASS}`).filter((_, el) => {
+            return $(el).text() === 'Try again';
+        });
+
+        $tryAgainButton.trigger('dxclick');
+        assert.strictEqual(retrySpy.calledOnce, true, 'Try again handler called');
     });
 });

@@ -113,7 +113,7 @@ export default class AiDialog extends DialogBase {
         }
 
         this._currentCommand = e.value;
-        this._commandOptionsList = this._commandsMap[e.value].options ?? [];
+        this._commandOptionsList = this._commandsMap[e.value]?.options ?? [];
         this._currentOption = this._commandOptionsList?.[0];
 
         this._syncDialogWithState();
@@ -167,7 +167,9 @@ export default class AiDialog extends DialogBase {
         widget: 'dxButton',
         options: {
           text: localizationMessage.format('dxHtmlEditor-aiCopy'),
-          onClick: () => navigator?.clipboard?.writeText(this._resultText),
+          onClick: async (): Promise<void> => {
+            await navigator?.clipboard?.writeText(this._resultText);
+          },
         },
       },
       {
