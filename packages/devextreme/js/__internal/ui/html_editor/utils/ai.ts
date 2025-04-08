@@ -5,6 +5,7 @@ import type {
   HtmlEditorAIToolbarItem,
   HtmlEditorAITranslateOption,
 } from '@js/ui/html_editor';
+import { capitalize } from '@ts/core/utils/capitalize';
 
 type CommandOption =
   | HtmlEditorAIChangeStyleOption
@@ -18,8 +19,6 @@ export interface CommandDefinition {
 }
 
 export type CommandsMap = Record<string, CommandDefinition>;
-
-export const capitalize = (str: string): string => str.charAt(0).toUpperCase() + str.slice(1);
 
 export const defaultCommandNames: Record<HtmlEditorAICommandName, string> = {
   summarize: 'Summarize',

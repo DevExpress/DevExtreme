@@ -2,12 +2,13 @@ import $ from 'jquery';
 
 import 'generic_light.css!';
 
+import 'ui/select_box';
 import '__internal/ui/color_box/m_color_view';
 import 'ui/drop_down_button';
 
 import Toolbar from '__internal/ui/html_editor/modules/m_toolbar';
 import FormDialog from '__internal/ui/html_editor/ui/m_formDialog';
-import AIDialog from '__internal/ui/html_editor/ui/aiDialog';
+import AiDialog from '__internal/ui/html_editor/ui/aiDialog';
 import { noop } from 'core/utils/common';
 import keyboardMock from '../../../helpers/keyboardMock.js';
 import fx from 'common/core/animation/fx';
@@ -70,7 +71,7 @@ const TABLE_OPERATIONS = [
     'deleteTable'
 ];
 
-const defaultAITranslateOptions = [
+const defaultAiTranslateOptions = [
     'Arabic',
     'Chinese',
     'English',
@@ -80,7 +81,7 @@ const defaultAITranslateOptions = [
     'Spanish'
 ];
 
-const defaultAIChangeToneOptions = [
+const defaultAiChangeToneOptions = [
     'Professional',
     'Casual',
     'Straightforward',
@@ -88,7 +89,7 @@ const defaultAIChangeToneOptions = [
     'Friendly'
 ];
 
-const defaultAIChangeStyleOptions = [
+const defaultAiChangeStyleOptions = [
     'Formal',
     'Informal',
     'Technical',
@@ -103,7 +104,7 @@ const defaultAIChangeStyleOptions = [
     'Conversational'
 ];
 
-const defaultAICommands = [
+const defaultAiCommands = [
     'summarize',
     'proofread',
     'expand',
@@ -113,6 +114,12 @@ const defaultAICommands = [
     'translate',
     'askAI'
 ];
+
+const defaultAiOptions = {
+    translate: defaultAiTranslateOptions,
+    changeTone: defaultAiChangeToneOptions,
+    changeStyle: defaultAiChangeStyleOptions,
+};
 
 const simpleModuleConfig = {
     beforeEach: function() {
@@ -248,39 +255,12 @@ const dialogAIModuleConfig = {
         fx.off = true;
 
         this.$element = $('#htmlEditor');
-        this.log = [];
-        this.focusStub = sinon.stub();
 
         this.quillMock = {
-            format: (format, value) => {
-                this.log.push({ format: format, value: value });
-            },
-            insertText: (index, text, formats) => {
-                this.log.push({ index: index, text: text, formats: formats });
-            },
-            insertEmbed: (index, type, value) => {
-                this.log.push({ index: index, type: type, value: value });
-            },
             on: noop,
-            off: noop,
             keyboard: {
                 addBinding: noop
             },
-            table: {
-                insertTable: sinon.stub(),
-                insertRowAbove: sinon.stub(),
-                insertRowBelow: sinon.stub(),
-                insertColumnLeft: sinon.stub(),
-                insertColumnRight: sinon.stub(),
-                deleteTable: sinon.stub(),
-                deleteRow: sinon.stub(),
-                deleteColumn: sinon.stub()
-            },
-            focus: this.focusStub,
-            getSelection: noop,
-            setSelection: (index, length) => { this.log.push({ setSelection: [index, length] }); },
-            getFormat: () => { return {}; },
-            getLength: () => { return 1; },
             getModule: (moduleName) => this.quillMock[moduleName]
         };
 
@@ -295,20 +275,16 @@ const dialogAIModuleConfig = {
                 _createComponent: ($element, widget, options) => {
                     return new widget($element, options);
                 },
-                _getQuillContainer: () => {
-                    return this.$element;
-                },
-                _saveValueChangeEvent: noop,
                 on: noop,
                 option: noop,
                 ai: {},
-                showAIDialog: (config) => {
+                showAiDialog: (config) => {
                     return this._aiDialog.show(config);
                 }
             }
         };
 
-        this._aiDialog = new AIDialog(this.options.editorInstance, {});
+        this._aiDialog = new AiDialog(this.options.editorInstance, {});
     },
     afterEach: function() {
         fx.off = false;
@@ -784,71 +760,9 @@ testModule('Toolbar module', simpleModuleConfig, () => {
 
         assert.ok($sizeEditor.width() < $headerEditor.width() * 0.9, 'Size editor has custom width');
     });
-    QUnit.test('renders AI menu with default items when AI item is passed as string', function(assert) {
-        this.options.items = ['ai'];
-
-        new Toolbar(this.quillMock, this.options);
-
-        const $menu = this.$element.find('.dx-menu');
-        assert.ok($menu.length, 'menu for "ai" was rendered');
-
-        const menuInstance = $menu.dxMenu('instance');
-        const dataSource = menuInstance.option('dataSource');
-        assert.ok(dataSource, 'has dataSource');
-
-        const rootItem = dataSource[0];
-        const commands = rootItem.items || [];
-
-        const actualCommands = commands.map(command => command.id);
-        assert.deepEqual(actualCommands, defaultAICommands, 'commands match default list');
-
-        const changeStyleCommand = commands.find(command => command.id === 'changeStyle');
-        const changeStyleOptions = changeStyleCommand.items.map(option => option.id);
-        assert.deepEqual(changeStyleOptions, defaultAIChangeStyleOptions, 'changeStyle options match defaults');
-
-        const changeToneCommand = commands.find(command => command.id === 'changeTone');
-        const changeToneOptions = changeToneCommand.items.map(option => option.id);
-        assert.deepEqual(changeToneOptions, defaultAIChangeToneOptions, 'changeTone options match defaults');
-
-        const translateCommand = commands.find(command => command.id === 'translate');
-        const translateOptions = translateCommand.items.map(option => option.id);
-
-        assert.deepEqual(translateOptions, defaultAITranslateOptions, 'translate options match defaults');
-    });
-
-    QUnit.test('renders AI menu with default items when AI item is passed as object', function(assert) {
-        this.options.items = [{ name: 'ai' }];
-
-        new Toolbar(this.quillMock, this.options);
-
-        const $menu = this.$element.find('.dx-menu');
-        assert.ok($menu.length, 'menu for "ai" was rendered');
-
-        const menuInstance = $menu.dxMenu('instance');
-        const dataSource = menuInstance.option('dataSource');
-
-        const rootItem = dataSource[0];
-        const commands = rootItem.items || [];
-
-        const actualCommands = commands.map(command => command.id);
-        assert.deepEqual(actualCommands, defaultAICommands, 'commands match default list');
-
-        const changeStyleCommand = commands.find(command => command.id === 'changeStyle');
-        const changeStyleOptions = changeStyleCommand.items.map(option => option.id);
-        assert.deepEqual(changeStyleOptions, defaultAIChangeStyleOptions, 'changeStyle options match defaults');
-
-        const changeToneCommand = commands.find(command => command.id === 'changeTone');
-        const changeToneOptions = changeToneCommand.items.map(option => option.id);
-        assert.deepEqual(changeToneOptions, defaultAIChangeToneOptions, 'changeTone options match defaults');
-
-        const translateCommand = commands.find(command => command.id === 'translate');
-        const translateOptions = translateCommand.items.map(option => option.id);
-
-        assert.deepEqual(translateOptions, defaultAITranslateOptions, 'translate options match defaults');
-    });
 
     QUnit.test('renders AI menu with commands and default options', function(assert) {
-        this.options.items = [{ name: 'ai', commands: ['translate', 'changeStyle'] }];
+        this.options.items = [{ name: 'ai', commands: ['translate', 'changeStyle', 'changeTone'] }];
 
         new Toolbar(this.quillMock, this.options);
 
@@ -860,18 +774,16 @@ testModule('Toolbar module', simpleModuleConfig, () => {
 
         const rootItem = dataSource[0];
         const commands = rootItem.items || [];
-        assert.strictEqual(commands.length, 2, 'only specified commands rendered');
+        assert.strictEqual(commands.length, 3, 'only specified commands rendered');
 
         const actualCommands = commands.map(command => command.id);
-        assert.deepEqual(actualCommands, ['translate', 'changeStyle'], 'commands match specified list');
+        assert.deepEqual(actualCommands, ['translate', 'changeStyle', 'changeTone'], 'commands match specified list');
 
-        const changeStyleCommand = commands.find(command => command.id === 'changeStyle');
-        const changeStyleOptions = changeStyleCommand.items.map(option => option.id);
-        assert.deepEqual(changeStyleOptions, defaultAIChangeStyleOptions, 'changeStyle options match defaults');
-
-        const translateCommand = commands.find(command => command.id === 'translate');
-        const translateOptions = translateCommand.items.map(option => option.id);
-        assert.deepEqual(translateOptions, defaultAITranslateOptions, 'translate options match defaults');
+        Object.entries(defaultAiOptions).forEach(([commandName, defaultOptions]) => {
+            const command = commands.find((c) => c.id === commandName);
+            const actualOptions = command.items.map((item) => item.id);
+            assert.deepEqual(actualOptions, defaultOptions, `Options for "${commandName}" match defaults`);
+        });
     });
 
 
@@ -1573,6 +1485,69 @@ testModule('Toolbar dialogs', dialogModuleConfig, () => {
 });
 
 testModule('Toolbar AI dialog', dialogAIModuleConfig, () => {
+    QUnit.test('renders AI menu with default items when AI item is passed as string', function(assert) {
+        this.options.items = ['ai'];
+
+        new Toolbar(this.quillMock, this.options);
+
+        const $menu = this.$element.find('.dx-menu');
+        assert.ok($menu.length, 'menu for "ai" was rendered');
+
+        const menuInstance = $menu.dxMenu('instance');
+        const dataSource = menuInstance.option('dataSource');
+        assert.ok(dataSource, 'has dataSource');
+
+        const rootItem = dataSource[0];
+        const commands = rootItem.items || [];
+
+        const actualCommands = commands.map(command => command.id);
+        assert.deepEqual(actualCommands, defaultAiCommands, 'commands match default list');
+
+        const changeStyleCommand = commands.find(command => command.id === 'changeStyle');
+        const changeStyleOptions = changeStyleCommand.items.map(option => option.id);
+        assert.deepEqual(changeStyleOptions, defaultAiChangeStyleOptions, 'changeStyle options match defaults');
+
+        const changeToneCommand = commands.find(command => command.id === 'changeTone');
+        const changeToneOptions = changeToneCommand.items.map(option => option.id);
+        assert.deepEqual(changeToneOptions, defaultAiChangeToneOptions, 'changeTone options match defaults');
+
+        const translateCommand = commands.find(command => command.id === 'translate');
+        const translateOptions = translateCommand.items.map(option => option.id);
+
+        assert.deepEqual(translateOptions, defaultAiTranslateOptions, 'translate options match defaults');
+    });
+
+    QUnit.test('renders AI menu with default items when AI item is passed as object', function(assert) {
+        this.options.items = [{ name: 'ai' }];
+
+        new Toolbar(this.quillMock, this.options);
+
+        const $menu = this.$element.find('.dx-menu');
+        assert.ok($menu.length, 'menu for "ai" was rendered');
+
+        const menuInstance = $menu.dxMenu('instance');
+        const dataSource = menuInstance.option('dataSource');
+
+        const rootItem = dataSource[0];
+        const commands = rootItem.items || [];
+
+        const actualCommands = commands.map(command => command.id);
+        assert.deepEqual(actualCommands, defaultAiCommands, 'commands match default list');
+
+        const changeStyleCommand = commands.find(command => command.id === 'changeStyle');
+        const changeStyleOptions = changeStyleCommand.items.map(option => option.id);
+        assert.deepEqual(changeStyleOptions, defaultAiChangeStyleOptions, 'changeStyle options match defaults');
+
+        const changeToneCommand = commands.find(command => command.id === 'changeTone');
+        const changeToneOptions = changeToneCommand.items.map(option => option.id);
+        assert.deepEqual(changeToneOptions, defaultAiChangeToneOptions, 'changeTone options match defaults');
+
+        const translateCommand = commands.find(command => command.id === 'translate');
+        const translateOptions = translateCommand.items.map(option => option.id);
+
+        assert.deepEqual(translateOptions, defaultAiTranslateOptions, 'translate options match defaults');
+    });
+
     QUnit.test('renders base controls in AI dialog', function(assert) {
         this.options.items = [{ name: 'ai' }];
         new Toolbar(this.quillMock, this.options);

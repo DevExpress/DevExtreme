@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import AIDialog from '__internal/ui/html_editor/ui/aiDialog';
+import AiDialog from '__internal/ui/html_editor/ui/aiDialog';
 import { isPromise } from 'core/utils/type';
 
 import 'ui/menu';
@@ -10,6 +10,8 @@ import 'ui/select_box';
 const AI_DIALOG_CONTENT_CLASS = 'dx-aidialog-content';
 const AI_DIALOG_CONTROLS_CLASS = 'dx-aidialog-controls';
 const DIALOG_CLASS = 'dx-formdialog';
+const TEXT_AREA_CLASS = 'dx-textarea';
+const SELECT_BOX_CLASS = 'dx-selectbox';
 
 const moduleConfig = {
     beforeEach: function() {
@@ -23,9 +25,9 @@ const moduleConfig = {
     }
 };
 
-QUnit.module('AIDialog', moduleConfig, () => {
+QUnit.module('AiDialog', moduleConfig, () => {
     QUnit.test('Should render AI dialog content', function(assert) {
-        const aiDialog = new AIDialog(this.componentMock, {}, { container: this.$element });
+        const aiDialog = new AiDialog(this.componentMock, {}, { container: this.$element });
 
         const commandsMap = {
             translate: {
@@ -51,25 +53,22 @@ QUnit.module('AIDialog', moduleConfig, () => {
         const $controls = $aiContent.find(`.${AI_DIALOG_CONTROLS_CLASS}`);
         assert.strictEqual($controls.length, 1, 'Controls container rendered');
 
-        const $selectBoxes = $aiContent.find('.dx-selectbox');
+        const $selectBoxes = $aiContent.find(`.${SELECT_BOX_CLASS}`);
         assert.strictEqual($selectBoxes.length, 2, 'Two SelectBox components rendered');
 
         const commandSelectBox = $selectBoxes.eq(0).dxSelectBox('instance');
         const optionSelectBox = $selectBoxes.eq(1).dxSelectBox('instance');
+        const commandSelectDataSource = commandSelectBox.option('dataSource').map((item) => item.name);
 
         assert.ok(commandSelectBox, 'Command SelectBox instance created');
         assert.strictEqual(commandSelectBox.option('value'), 'translate', 'Correct command selected');
-        assert.deepEqual(
-            commandSelectBox.option('dataSource').map((item) => item.name),
-            ['translate'],
-            'Command SelectBox contains correct items'
-        );
+        assert.deepEqual(commandSelectDataSource, ['translate'], 'Command SelectBox contains correct items');
 
         assert.ok(optionSelectBox, 'Option SelectBox instance created');
         assert.strictEqual(optionSelectBox.option('value'), 'english', 'Correct option selected');
         assert.deepEqual(optionSelectBox.option('items'), ['english', 'german'], 'Option SelectBox contains correct items');
 
-        const $textArea = $aiContent.find('.dx-textarea');
+        const $textArea = $aiContent.find(`.${TEXT_AREA_CLASS}`);
         assert.strictEqual($textArea.length, 1, 'TextArea rendered');
 
         const textAreaInstance = $textArea.dxTextArea('instance');
@@ -77,7 +76,7 @@ QUnit.module('AIDialog', moduleConfig, () => {
     });
 
     QUnit.test('Should not render option select if command has no options', function(assert) {
-        const aiDialog = new AIDialog(this.componentMock, {}, { container: this.$element });
+        const aiDialog = new AiDialog(this.componentMock, {}, { container: this.$element });
 
         const commandsMap = {
             translate: {
@@ -98,7 +97,7 @@ QUnit.module('AIDialog', moduleConfig, () => {
         const $controls = $aiContent.find(`.${AI_DIALOG_CONTROLS_CLASS}`);
         assert.strictEqual($controls.length, 1, 'Controls container rendered');
 
-        const $selectBoxes = $aiContent.find('.dx-selectbox');
+        const $selectBoxes = $aiContent.find(`.${SELECT_BOX_CLASS}`);
 
         const commandSelectBox = $selectBoxes.eq(0).dxSelectBox('instance');
         const optionSelectBox = $selectBoxes.eq(1).dxSelectBox('instance');
@@ -114,7 +113,7 @@ QUnit.module('AIDialog', moduleConfig, () => {
     });
 
     QUnit.test('show returns a promise', function(assert) {
-        const aiDialog = new AIDialog(this.componentMock, {}, { container: this.$element });
+        const aiDialog = new AiDialog(this.componentMock, {}, { container: this.$element });
 
         const promise = aiDialog.show({
             currentCommand: 'translate',
@@ -129,7 +128,7 @@ QUnit.module('AIDialog', moduleConfig, () => {
     QUnit.test('Cancel via popup hide triggers reject', function(assert) {
         assert.expect(1);
 
-        const aiDialog = new AIDialog(this.componentMock, {}, { container: this.$element });
+        const aiDialog = new AiDialog(this.componentMock, {}, { container: this.$element });
         const promise = aiDialog.show({
             currentCommand: 'translate',
             commandsMap: {

@@ -1,4 +1,5 @@
 import devices from '@js/core/devices';
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred } from '@js/core/utils/deferred';
@@ -64,12 +65,12 @@ abstract class BaseDialog {
       fullScreen: isSmallScreen(),
       _wrapperClassExternal: `${DIALOG_CLASS} ${DROPDOWN_EDITOR_OVERLAY_CLASS}`,
       contentTemplate: (contentElem) => {
-        this._renderContent(contentElem);
+        this._renderContent($(contentElem));
       },
     }, this._popupUserConfig) as PopupProperties;
   }
 
-  protected abstract _renderContent(contentElem: HTMLElement): void;
+  protected abstract _renderContent($contentElem: dxElementWrapper): void;
 
   onHiding(): void {
     this.deferred?.reject();

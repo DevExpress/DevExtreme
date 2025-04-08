@@ -11,7 +11,7 @@ import Form from '@js/ui/form';
 import ScrollView from '@js/ui/scroll_view';
 
 import { getQuill } from '../m_quill_importer';
-import type { AIDialogShowPayload } from '../ui/aiDialog';
+import type { AiDialogShowPayload } from '../ui/aiDialog';
 import { ImageUploader } from './m_image_uploader_helper';
 import {
   getAutoSizedElements,
@@ -119,14 +119,14 @@ function handleAIDropDownSelection(module, options): void {
   const hasSelection = selection?.length > 0;
   const text = hasSelection ? quill.getText(selection) : quill.getText();
 
-  const aiDialogConfig: AIDialogShowPayload = {
+  const aiDialogConfig: AiDialogShowPayload = {
     currentCommand: parentCommand ?? command,
     currentCommandOption: parentCommand ? command : undefined,
     text,
     commandsMap,
   };
 
-  module.editorInstance.showAIDialog(aiDialogConfig)?.done((resultText, event) => {
+  module.editorInstance.showAiDialog(aiDialogConfig)?.done((resultText, event) => {
     const insertionMode = event.itemData.id;
     let insertIndex = 0;
 

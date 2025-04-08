@@ -1,4 +1,5 @@
 import localizationMessage from '@js/common/core/localization/message';
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { extend } from '@js/core/utils/extend';
 import type { HtmlEditorAICustomCommand } from '@js/ui/html_editor';
@@ -21,7 +22,7 @@ const POPUP_MIN_WIDTH = 288;
 const POPUP_MAX_WIDTH = 460;
 const REPLACE_DROPDOWN_WIDTH = 150;
 
-export interface AIDialogShowPayload {
+export interface AiDialogShowPayload {
   currentCommand: string;
   currentCommandOption?: string;
   text?: string;
@@ -29,7 +30,7 @@ export interface AIDialogShowPayload {
   prompt?: HtmlEditorAICustomCommand['prompt'];
 }
 
-export default class AIDialog extends DialogBase {
+export default class AiDialog extends DialogBase {
   private _isLoading = false;
 
   private readonly _aiService;
@@ -85,6 +86,7 @@ export default class AIDialog extends DialogBase {
       toolbarItems: this._getToolbarItems(),
       hideOnOutsideClick: true,
       focusStateEnabled: true,
+      showCloseButton: true,
       position: {
         my: 'center',
         at: 'center',
@@ -93,13 +95,12 @@ export default class AIDialog extends DialogBase {
     }) as PopupProperties;
   }
 
-  protected _renderContent(contentElem: HTMLElement): void {
-    const $container = $(contentElem);
-    $container.addClass(AI_DIALOG_CONTENT_CLASS);
+  protected _renderContent($contentElem: dxElementWrapper): void {
+    $contentElem.addClass(AI_DIALOG_CONTENT_CLASS);
 
     const $controls = $('<div>')
       .addClass(AI_DIALOG_CONTROLS_CLASS)
-      .appendTo($container);
+      .appendTo($contentElem);
 
     const $commandSelectBox = $('<div>').appendTo($controls);
     this._commandSelectBox = this._editorInstance._createComponent($commandSelectBox, SelectBox, {
@@ -130,7 +131,7 @@ export default class AIDialog extends DialogBase {
       },
     });
 
-    const $textArea = $('<div>').appendTo($container);
+    const $textArea = $('<div>').appendTo($contentElem);
     this._resultTextArea = this._editorInstance._createComponent($textArea, TextArea, {
       value: this._resultText,
       height: 100,
@@ -243,11 +244,11 @@ export default class AIDialog extends DialogBase {
 
   show({
     currentCommand, currentCommandOption, commandsMap, text, prompt,
-  }: AIDialogShowPayload): Promise<unknown> | undefined {
+  }: AiDialogShowPayload): Promise<unknown> | undefined {
     this._commandsMap = commandsMap;
     this._currentCommand = currentCommand;
     this._resultText = text ?? '';
-    this._commandOptionsList = commandsMap[currentCommand].options ?? [];
+    this._commandOptionsList = commandsMap[currentCommand]?.options ?? [];
     this._currentOption = currentCommandOption;
     this._prompt = prompt;
 
