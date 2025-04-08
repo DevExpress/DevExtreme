@@ -13,12 +13,12 @@ import type { ComponentType } from 'inferno';
 
 import { TemplateWrapper } from '../inferno_wrappers/template_wrapper';
 import type { Template } from '../types';
-import { getTreeNodeByPath, mergeOptionTrees } from './tree_utils';
 import type {
   ActionProperty,
   PropertyWithDefaults,
   TemplateProperty,
 } from './types';
+import { getTreeNodeByPath, mergeOptionTrees } from './utils/index';
 
 export class OptionsController<
   TProps extends Record<string, any>,

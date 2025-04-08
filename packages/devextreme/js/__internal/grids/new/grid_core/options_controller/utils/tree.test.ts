@@ -7,7 +7,7 @@ import {
   mergeOptionTrees,
   shallowCopySubtreePath,
   shallowCopyTree,
-} from './tree_utils';
+} from './tree';
 
 describe('OptionsController', () => {
   describe('TreeUtils', () => {

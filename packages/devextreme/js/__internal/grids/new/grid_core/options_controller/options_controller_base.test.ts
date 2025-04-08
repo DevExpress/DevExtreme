@@ -8,98 +8,6 @@ import {
 import { createComponentMock } from './component.mock';
 import { OptionsController } from './options_controller_base';
 
-// --- one way ---
-interface PlainOptions {
-  value?: string;
-  optionalValue?: string;
-}
-
-interface ObjectOptions {
-  nested?: {
-    value?: string;
-    optionalValue?: string;
-  };
-}
-
-interface ArrayOptions {
-  value?: string[];
-  optionalValue?: string[];
-}
-
-interface FunctionOptions {
-  value?: () => void;
-  optionalValue?: () => void;
-}
-
-interface MixedOptions {
-  value?: string | { valueA?: string; valueB?: string };
-  optionalValue?: string | { valueA?: string; valueB?: string };
-}
-
-const plainOptions: PlainOptions = {
-  value: 'ABC',
-};
-
-const defaultPlainOptions: PlainOptions = {
-  value: 'default_ABC',
-};
-
-const nestedPlainOptions: ObjectOptions = {
-  nested: {
-    value: 'ABC',
-  },
-};
-const defaultNestedPlainOptions: ObjectOptions = {
-  nested: {
-    value: 'default_ABC',
-  },
-};
-
-const arrayOptions: ArrayOptions = {
-  value: ['A', 'B', 'C'],
-};
-const defaultArrayOptions: ArrayOptions = {
-  value: ['A_default', 'B_default'],
-};
-
-const functionOptions: FunctionOptions = {
-  value: function fnValue() {},
-};
-const defaultFunctionOptions: FunctionOptions = {
-  value: function defaultFnValue() {},
-};
-
-const mixedPlainOptions: MixedOptions = {
-  value: 'default',
-};
-const mixedComplexOptions: MixedOptions = {
-  value: { valueA: 'A', valueB: 'B' },
-};
-
-// --- two way ---
-interface TestOptions {
-  value?: string;
-  objectValue?: {
-    nestedValue?: string;
-  };
-  onOptionChanged?: () => void;
-}
-
-const onOptionChangedTestMock = jest.fn();
-const testOptions: TestOptions = {
-  value: 'initialValue',
-  objectValue: {
-    nestedValue: 'initialNestedValue',
-  },
-  onOptionChanged: onOptionChangedTestMock,
-};
-const defaultTestOptions: TestOptions = {
-  value: 'value_default',
-  objectValue: {
-    nestedValue: 'nestedValue_default',
-  },
-};
-
 const setup = <TOptions extends Record<string, any>>(
   options: TOptions,
   defaultOptions: TOptions,
@@ -117,6 +25,73 @@ const setup = <TOptions extends Record<string, any>>(
 };
 
 describe('oneWay', () => {
+  interface PlainOptions {
+    value?: string;
+    optionalValue?: string;
+  }
+
+  interface ObjectOptions {
+    nested?: {
+      value?: string;
+      optionalValue?: string;
+    };
+  }
+
+  interface ArrayOptions {
+    value?: string[];
+    optionalValue?: string[];
+  }
+
+  interface FunctionOptions {
+    value?: () => void;
+    optionalValue?: () => void;
+  }
+
+  interface MixedOptions {
+    value?: string | { valueA?: string; valueB?: string };
+    optionalValue?: string | { valueA?: string; valueB?: string };
+  }
+
+  const plainOptions: PlainOptions = {
+    value: 'ABC',
+  };
+
+  const defaultPlainOptions: PlainOptions = {
+    value: 'default_ABC',
+  };
+
+  const nestedPlainOptions: ObjectOptions = {
+    nested: {
+      value: 'ABC',
+    },
+  };
+  const defaultNestedPlainOptions: ObjectOptions = {
+    nested: {
+      value: 'default_ABC',
+    },
+  };
+
+  const arrayOptions: ArrayOptions = {
+    value: ['A', 'B', 'C'],
+  };
+  const defaultArrayOptions: ArrayOptions = {
+    value: ['A_default', 'B_default'],
+  };
+
+  const functionOptions: FunctionOptions = {
+    value: function fnValue() {},
+  };
+  const defaultFunctionOptions: FunctionOptions = {
+    value: function defaultFnValue() {},
+  };
+
+  const mixedPlainOptions: MixedOptions = {
+    value: 'default',
+  };
+  const mixedComplexOptions: MixedOptions = {
+    value: { valueA: 'A', valueB: 'B' },
+  };
+
   describe('initial values', () => {
     describe('plain options', () => {
       it('should have initial value same as passed in config', () => {
@@ -710,6 +685,29 @@ describe('oneWay', () => {
 });
 
 describe('twoWay', () => {
+  interface TestOptions {
+    value?: string;
+    objectValue?: {
+      nestedValue?: string;
+    };
+    onOptionChanged?: () => void;
+  }
+
+  const onOptionChangedTestMock = jest.fn();
+  const testOptions: TestOptions = {
+    value: 'initialValue',
+    objectValue: {
+      nestedValue: 'initialNestedValue',
+    },
+    onOptionChanged: onOptionChangedTestMock,
+  };
+  const defaultTestOptions: TestOptions = {
+    value: 'value_default',
+    objectValue: {
+      nestedValue: 'nestedValue_default',
+    },
+  };
+
   beforeEach(() => {
     onOptionChangedTestMock.mockClear();
   });
