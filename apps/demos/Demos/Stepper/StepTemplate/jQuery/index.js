@@ -9,28 +9,28 @@ $(() => {
         </div>
         <div class="dx-step-label">
           <div class="dx-step-title">${data.title}</div>
-          ${data.optional ? '<div class="dx-step-optional-mark">(optional)</div>' : '' }
+          ${data.optional ? '<div class="dx-step-optional-mark">(optional)</div>' : ''}
         </div>`;
-    }
+    },
   });
-  
+
   $('#titleOnly').dxStepper({
     selectedIndex: 2,
-    dataSource: dataSource,
+    dataSource,
     linear: false,
     itemTemplate(data) {
       return `<div class='dx-step-label'>
         <div class='dx-step-title'>${data.title}</div>
-      </div>`
-    }
+      </div>`;
+    },
   });
-  
+
   $('#iconOnly').dxStepper({
     selectedIndex: 2,
-    dataSource: dataSource,
+    dataSource,
     linear: false,
     itemTemplate(data) {
       return `<i class="dx-icon dx-icon-${data.icon}"></i>`;
-    }
+    },
   });
 });

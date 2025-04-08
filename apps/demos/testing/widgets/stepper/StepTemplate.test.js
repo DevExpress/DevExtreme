@@ -7,7 +7,7 @@ fixture('Stepper.StepTemplate')
     ctx.initialWindowSize = [900, 800];
   });
 
-runManualTest('Stepper', 'Overview', (test) => {
+runManualTest('Stepper', 'StepTemplate', (test) => {
   test('Correct Focus styles on every Item Panes', async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
