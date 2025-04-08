@@ -3,6 +3,7 @@ import { Stepper, Item, IStepperOptions, IItemProps } from 'devextreme-react/ste
 import type { Meta, StoryObj } from '@storybook/react';
 
 import { defaultItems, itemsWithTitle, itemsWithIcon, itemsWithIconAndTitle } from './data';
+import FormIntegrationExample from './samples/formIntegration/FormIntegration';
 
 const meta: Meta<typeof Stepper> = {
     title: 'Navigation/Stepper',
@@ -99,4 +100,9 @@ export const Step: StoryObj<typeof Item> = {
             </Stepper>
         );
     }
+}
+
+export const FormIntegration: StoryObj<typeof Stepper> = {
+    args: {},
+    render: () => <FormIntegrationExample />,
 }
