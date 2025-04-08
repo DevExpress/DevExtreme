@@ -20,7 +20,12 @@ const createPagerView = (options?: Options) => {
   const filterController = new FilterController(optionsController);
   const columnsController = new ColumnsController(optionsController);
   const sortingController = new SortingController(optionsController, columnsController);
-  const dataController = new DataController(optionsController, sortingController, filterController);
+  const dataController = new DataController(
+    columnsController,
+    optionsController,
+    sortingController,
+    filterController,
+  );
 
   const pager = new PagerView(dataController, optionsController);
 

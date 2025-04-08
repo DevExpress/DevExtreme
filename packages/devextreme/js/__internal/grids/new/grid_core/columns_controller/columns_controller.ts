@@ -32,6 +32,8 @@ export class ColumnsController {
 
   public static dependencies = [OptionsController] as const;
 
+  public columnsInitialized = false;
+
   constructor(
     private readonly options: OptionsController,
   ) {
@@ -71,6 +73,9 @@ export class ColumnsController {
       (columns) => columns.filter((column) => !column.visible),
       [this.columns],
     );
+
+    // @ts-expect-error
+    this.columnsInitialized = !!this.columns.value.length;
 
     this.allowColumnReordering = this.options.oneWay('allowColumnReordering');
     this.dateSerializationFormat = this.options.oneWay('dateSerializationFormat');
@@ -139,5 +144,22 @@ export class ColumnsController {
     });
 
     return result;
+  }
+
+  public inferColumnsFromFirstItem(firstItem: Record<string, unknown>): void {
+    if (this.columnsInitialized
+      // @ts-expect-error
+      || (this.columns.value?.length ?? 0) > 0
+      || !firstItem) return;
+
+    const generatedColumns: PreNormalizedColumn[] = Object.keys(firstItem).map((key, index) => ({
+      name: key,
+      dataField: key,
+      visible: true,
+      visibleIndex: index,
+    }));
+
+    this.columnsSettings.update(generatedColumns);
+    this.columnsInitialized = true;
   }
 }

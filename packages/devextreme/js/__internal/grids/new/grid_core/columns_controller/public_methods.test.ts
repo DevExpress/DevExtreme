@@ -13,7 +13,12 @@ const setup = (config: Options = {}) => {
   const filterController = new FilterController(options);
   const columnsController = new ColumnsController(options);
   const sortingController = new SortingController(options, columnsController);
-  const dataController = new DataController(options, sortingController, filterController);
+  const dataController = new DataController(
+    columnsController,
+    options,
+    sortingController,
+    filterController,
+  );
 
   // @ts-expect-error
   const gridCore = new (PublicMethods(class {

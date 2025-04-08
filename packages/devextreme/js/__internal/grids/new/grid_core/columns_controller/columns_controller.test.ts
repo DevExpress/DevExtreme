@@ -15,7 +15,12 @@ const setup = (config: Options = {}) => {
   const filterController = new FilterController(options);
   const columnsController = new ColumnsController(options);
   const sortingController = new SortingController(options, columnsController);
-  const dataController = new DataController(options, sortingController, filterController);
+  const dataController = new DataController(
+    columnsController,
+    options,
+    sortingController,
+    filterController,
+  );
   const searchController = new SearchController(options);
   const itemsController = new ItemsController(
     dataController,
@@ -167,6 +172,56 @@ describe('ColumnsController', () => {
         { dataField: 'b', visibleIndex: 2 },
         { dataField: 'c', visibleIndex: 0 },
       ]);
+    });
+  });
+  describe('inferColumnsFromFirstItem', () => {
+    it('should initialize columns from the data\'s first item when no columns are defined', () => {
+      const { columnsController } = setup();
+
+      expect(columnsController.columnsInitialized).toBe(false);
+
+      const dataItem = {
+        id: 1,
+        name: 'Alice',
+        age: 30,
+      };
+
+      columnsController.inferColumnsFromFirstItem(dataItem);
+
+      const columns = columnsController.columns.unreactive_get();
+
+      expect(columns).toHaveLength(3);
+      expect(columns.map((col) => col.dataField)).toEqual(['id', 'name', 'age']);
+      expect(columnsController.columnsInitialized).toBe(true);
+    });
+
+    it('should not overwrite existing columns or reinitialize', () => {
+      const { columnsController } = setup({
+        columns: ['foo'],
+      });
+
+      expect(columnsController.columnsInitialized).toBe(true);
+
+      const dataItem = {
+        id: 1,
+        bar: 'baz',
+      };
+
+      columnsController.inferColumnsFromFirstItem(dataItem);
+
+      const columns = columnsController.columns.unreactive_get();
+      expect(columns).toHaveLength(1);
+      expect(columns[0].dataField).toBe('foo');
+    });
+
+    it('should do nothing if given item is null or undefined', () => {
+      const { columnsController } = setup();
+
+      // @ts-expect-error
+      columnsController.inferColumnsFromFirstItem(undefined);
+
+      expect(columnsController.columns.unreactive_get()).toEqual([]);
+      expect(columnsController.columnsInitialized).toBe(false);
     });
   });
 });
