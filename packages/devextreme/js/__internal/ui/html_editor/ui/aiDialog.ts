@@ -65,17 +65,6 @@ export default class AiDialog extends DialogBase {
     const baseConfig = super._getPopupConfig();
 
     return extend(true, {}, baseConfig, {
-      titleTemplate: (titleElement) => {
-        const $titleContainer = $('<div>').addClass(AI_DIALOG_TITLE_CLASS);
-        const $icon = $('<i>').addClass('dx-icon dx-icon-sparkle');
-        const $text = $('<span>')
-          .addClass(AI_DIALOG_TITLE_TEXT_CLASS)
-          .text(localizationMessage.format('dxHtmlEditor-aiDialogTitle'));
-        $titleContainer
-          .append($icon)
-          .append($text);
-        $(titleElement).append($titleContainer);
-      },
       minWidth: POPUP_MIN_WIDTH,
       maxWidth: POPUP_MAX_WIDTH,
       height: 'auto',
@@ -183,12 +172,17 @@ export default class AiDialog extends DialogBase {
       },
       {
         toolbar: 'top',
-        location: 'after',
-        widget: 'dxButton',
-        options: {
-          icon: 'close',
-          stylingMode: 'text',
-          onClick: () => this._popup.hide(),
+        location: 'before',
+        template: (data, index, titleElement): void => {
+          const $titleContainer = $('<div>').addClass(AI_DIALOG_TITLE_CLASS);
+          const $icon = $('<i>').addClass('dx-icon dx-icon-sparkle');
+          const $text = $('<span>')
+            .addClass(AI_DIALOG_TITLE_TEXT_CLASS)
+            .text(localizationMessage.format('dxHtmlEditor-aiDialogTitle'));
+          $titleContainer
+            .append($icon)
+            .append($text);
+          $(titleElement).append($titleContainer);
         },
       },
     ];

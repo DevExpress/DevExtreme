@@ -270,7 +270,7 @@ QUnit.module('AiDialog', moduleConfig, () => {
         assert.strictEqual(hideSpy.calledOnce, true, 'hide called');
     });
 
-    QUnit.test('Copy button triggers clipboard write', function(assert) {
+    QUnit.testInActiveWindow('Copy button triggers clipboard write', function(assert) {
         const clipboardSpy = sinon.stub(navigator.clipboard, 'writeText');
 
         this.aiDialog.show({
