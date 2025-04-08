@@ -8,4 +8,4 @@ export {
     ResponseParams,
     TranslateCommandParams,
     TranslateCommandResult,
-} from "devextreme/ai_integration";
+} from "devextreme/common/ai-integration";
