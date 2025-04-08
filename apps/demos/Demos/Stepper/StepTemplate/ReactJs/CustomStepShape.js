@@ -8,7 +8,7 @@ export default function CustomStepShape(data) {
       </div>
       <div className="dx-step-label">
         <div className="dx-step-title">{data.title}</div>
-        {data.optional && <div className="dx-step-optional-mark">(optional)</div>}
+        {data.optional && <div className="dx-step-optional-mark">(Optional)</div>}
       </div>
     </React.Fragment>
   );

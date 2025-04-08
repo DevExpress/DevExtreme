@@ -8,7 +8,7 @@ fixture('Stepper.StepTemplate')
   });
 
 runManualTest('Stepper', 'StepTemplate', (test) => {
-  test('Correct Focus styles on every Item Panes', async (t) => {
+  test('Correct focus styles when focusing on the stepper', async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     await t

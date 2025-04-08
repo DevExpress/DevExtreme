@@ -9,7 +9,7 @@ $(() => {
         </div>
         <div class="dx-step-label">
           <div class="dx-step-title">${data.title}</div>
-          ${data.optional ? '<div class="dx-step-optional-mark">(optional)</div>' : ''}
+          ${data.optional ? '<div class="dx-step-optional-mark">(Optional)</div>' : ''}
         </div>`;
     },
   });

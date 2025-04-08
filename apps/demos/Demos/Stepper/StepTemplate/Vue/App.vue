@@ -13,7 +13,7 @@
         </div>
         <div class="dx-step-label">
           <div class="dx-step-title">{{ data.title }}</div>
-          <div v-if="data.optional" class="dx-step-optional-mark">(optional)</div>
+          <div v-if="data.optional" class="dx-step-optional-mark">(Optional)</div>
         </div>
       </div>
     </template>
@@ -70,66 +70,59 @@ import { steps } from './data.ts';
 
 #customStepShape {
   margin-bottom: 64px;
-  
-  .dx-step-indicator {
-    border-radius: 4px;
-  }
+}
+
+#customStepShape .dx-step-indicator {
+  border-radius: 4px;
 }
 
 #titleOnly {
   margin-bottom: 64px;
   align-items: center;
-  
-  .dx-step {
-    padding-inline: 2px;
-  }
-  
-  .dx-step-content {
-    padding-block: 4px;
-  }
-  
-  .dx-step-label {
-    width: auto;
-    max-width: 100%;
-  }
-  
-  .dx-step-title {
-    background-color: var(--dx-color-main-bg);
-    padding-inline: 8px;
-  }
-  
-  .dx-step.dx-state-focused{
-    .dx-step-label {
-      box-shadow: 0 0 0 2px var(--dx-color-main-bg), 0 0 0 4px var(--dx-color-primary), 0 0 0 8px var(--dx-color-main-bg);
-      border-radius: 4px;
-    }
-  }
+}
+
+#titleOnly .dx-step {
+  padding-inline: 2px;
+}
+
+#titleOnly .dx-step-content {
+  padding-block: 4px;
+}
+
+#titleOnly .dx-step-label {
+  width: auto;
+  max-width: 100%;
+}
+
+#titleOnly .dx-step-title {
+  background-color: var(--dx-color-main-bg);
+  padding-inline: 8px;
+}
+
+#titleOnly .dx-step.dx-state-focused .dx-step-label {
+  box-shadow: 0 0 0 2px var(--dx-color-main-bg), 0 0 0 4px var(--dx-color-primary), 0 0 0 8px var(--dx-color-main-bg);
+  border-radius: 4px;
 }
 
 #iconOnly {
   align-items: center;
+}
 
-  .dx-step-content {
-    margin-block: 4px;
-  }
-  
-  .dx-icon {
-    padding: 6px;
-    background-color: var(--dx-color-main-bg);
-  }
-  
-  .dx-state-focused {
-    .dx-icon {
-      box-shadow: 0 0 0 2px var(--dx-color-primary), 0 0 0 6px var(--dx-color-main-bg);
-      border-radius: 4px;
-    }
-  }
-  
-  .dx-step-selected,
-  .dx-step-completed {
-    .dx-icon {
-      color: var(--dx-color-primary);
-    }
-  }
+#iconOnly .dx-step-content {
+  margin-block: 4px;
+}
+
+#iconOnly .dx-icon {
+  padding: 6px;
+  background-color: var(--dx-color-main-bg);
+}
+
+#iconOnly .dx-state-focused .dx-icon {
+  box-shadow: 0 0 0 2px var(--dx-color-primary), 0 0 0 6px var(--dx-color-main-bg);
+  border-radius: 4px;
+}
+
+#iconOnly :is(.dx-step-selected, .dx-step-completed) .dx-icon {
+  color: var(--dx-color-primary);
 }
 </style>

@@ -1,6 +1,4 @@
-import { StepperTypes } from 'devextreme-react/stepper';
-
-export const steps: StepperTypes.Item = [{
+export const steps = [{
   text: 'A',
   title: 'Cart',
   icon: 'cart',

@@ -58,7 +58,7 @@ const getTestSpecificSkipRules = (testName) => {
     case 'Localization-UsingGlobalize':
       return ['label'];
     case 'Stepper-StepTemplate':
-        return ['aria-allowed-attr'];
+      return ['aria-allowed-attr'];
     default:
       return [];
   }
