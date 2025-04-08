@@ -14,6 +14,7 @@ const dataSources = {
 }
 
 const columns = {
+  empty: [],
   remote: [
     {
       dataField: "OrderNumber",

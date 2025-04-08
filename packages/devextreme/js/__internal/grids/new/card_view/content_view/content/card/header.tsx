@@ -66,7 +66,7 @@ export class CardHeader extends Component<CardHeaderProps> {
   render(): JSX.Element | null {
     const {
       visible = true,
-      items = [],
+      items,
       captionExpr,
       template,
       row,
@@ -82,11 +82,15 @@ export class CardHeader extends Component<CardHeaderProps> {
       ? { location: 'before', text: row[captionExpr] }
       : null;
 
-    const finalItems = [checkBoxItem, captionItem, ...items]
+    const finalItems = items ?? [checkBoxItem, captionItem]
       .filter((item): item is CardHeaderItem => !!item);
 
     if (template) {
       return template(finalItems);
+    }
+
+    if (finalItems.length === 0) {
+      return <></>;
     }
 
     return (
