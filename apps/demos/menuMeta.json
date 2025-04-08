@@ -1631,6 +1631,87 @@
             "RoadmapSurveyUrl": "https://www.devexpress.com/support/surveys/devextreme-roadmap-cardview.xml"
           }
         ]
+      },
+      {
+        "Name": "Columns",
+        "Equivalents": "",
+        "Demos": [
+          {
+            "Title": "ColumnReordering",
+            "Name": "ColumnReordering",
+            "Widget": "CardView",
+            "MvcAdditionalFiles": [],
+            "DemoType": "Web",
+            "Badge": "New"
+          },
+          {
+            "Title": "ColumnChooser",
+            "Name": "ColumnChooser",
+            "DocUrl": "",
+            "Widget": "CardView",
+            "MvcDescription": "",
+            "NetCoreDescription": "",
+            "MvcAdditionalFiles": [],
+            "DemoType": "Web",
+            "Badge": "New"
+          }
+        ]
+      },
+      {
+        "Name": "Data Binding",
+        "Equivalents": "",
+        "Demos": [
+          {
+            "Title": "SimpleArray",
+            "Name": "SimpleArray",
+            "Widget": "CardView",
+            "MvcAdditionalFiles": [],
+            "DemoType": "Web",
+            "Badge": "New"
+          },
+          {
+            "Title": "Web API Service",
+            "Name": "WebAPIService",
+            "DocUrl": "",
+            "Widget": "CardView",
+            "MvcDescription": "",
+            "NetCoreDescription": "",
+            "MvcAdditionalFiles": [],
+            "DemoType": "Web",
+            "Badge": "New"
+          }
+        ]
+      },
+      {
+        "Name": "Adaptability",
+        "Equivalents": "adaptive",
+        "Demos": [
+          {
+            "Title": "Adaptability",
+            "Name": "Adaptability",
+            "Widget": "CardView",
+            "MvcAdditionalFiles": [],
+            "DemoType": "Adaptivity",
+            "Badge": "New"
+          }
+        ]
+      },
+      {
+        "Name": "Appearance",
+        "Equivalents": "",
+        "Demos": [
+          {
+            "Title": "Right-To-Left Support",
+            "Name": "Right-To-LeftSupport",
+            "DocUrl": "",
+            "Widget": "CardView",
+            "MvcDescription": "",
+            "NetCoreDescription": "",
+            "MvcAdditionalFiles": [],
+            "DemoType": "Web",
+            "Badge": "New"
+          }
+        ]
       }
     ]
   },

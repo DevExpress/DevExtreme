@@ -1,0 +1,24 @@
+<dx-card-view
+  id="cardview"
+  [dataSource]="dataSource"
+  keyExpr="ID"
+  [cardsPerRow]="3"
+  [remoteOperations]="true"
+  width="100%"
+>
+  <dxo-card-view-pager
+    [visible]="true"
+    [allowedPageSizes]="[3, 6, 9, 12, 30]"
+    [showPageSizeSelector]="true"
+    [showNavigationButtons]="true"
+    [showInfo]="true"
+  >
+  </dxo-card-view-pager>
+
+  <dxo-card-view-paging [pageSize]="6"> </dxo-card-view-paging>
+
+  <dxi-column
+    *ngFor="let column of columns"
+    [dataField]="column.dataField"
+  ></dxi-column>
+</dx-card-view>

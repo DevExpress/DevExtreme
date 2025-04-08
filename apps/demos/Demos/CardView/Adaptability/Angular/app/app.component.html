@@ -1,0 +1,31 @@
+
+<dx-select-box
+  [items]="[1, 2, 3, 4, 8]"
+  [value]="cardsPerRow"
+  label="Cards per row"
+  [width]="150"
+  (onValueChanged)="updateCardsPerRow($event)"
+>
+</dx-select-box>
+
+<dx-card-view id="cardview" [dataSource]="employees" keyExpr="ID" [cardsPerRow]="cardsPerRow">
+  <dxo-card-cover [imageExpr]="imageExpr" altExpr="FullName"> </dxo-card-cover>
+
+  <dxi-column [calculateCellValue]="calculateFullName" caption="Full Name"></dxi-column>
+  <dxi-column dataField="Prefix"></dxi-column>
+  <dxi-column dataField="Position"></dxi-column>
+  <dxi-column dataField="BirthDate"></dxi-column>
+  <dxi-column dataField="HireDate"></dxi-column>
+  <dxi-column dataField="Address"></dxi-column>
+
+  <dxo-pager
+    [allowedPageSizes]="[5, 8, 15, 30]"
+    [showInfo]="true"
+    [showNavigationButtons]="true"
+    [showPageSizeSelector]="true"
+    [visible]="true"
+  >
+  </dxo-pager>
+
+  <dxo-paging [pageSize]="5"></dxo-paging>
+</dx-card-view>

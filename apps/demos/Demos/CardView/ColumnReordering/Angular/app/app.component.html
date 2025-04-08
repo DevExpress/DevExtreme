@@ -1,0 +1,26 @@
+<dx-card-view
+  id="cardview"
+  [dataSource]="employees"
+  keyExpr="ID"
+  [cardsPerRow]="3"
+  [allowColumnReordering]="true"
+>
+  <dxo-card-view-pager
+    [visible]="true"
+    [showPageSizeSelector]="true"
+    [allowedPageSizes]="'auto'"
+  >
+  </dxo-card-view-pager>
+
+  <dxo-card-view-paging [pageSize]="6"> </dxo-card-view-paging>
+  
+  <dxi-column
+    *ngFor="let column of columns"
+    [caption]="column.dataField || column.caption"
+  ></dxi-column>
+
+  <dxo-card-view-card-cover
+    [imageExpr]="getImageExpr"
+    altExpr="FirstName"
+  ></dxo-card-view-card-cover>
+</dx-card-view>
