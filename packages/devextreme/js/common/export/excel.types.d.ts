@@ -1,5 +1,5 @@
 /**
- * @namespace DevExpress.export.internal
+ * @namespace DevExpress.exportInternal
  * @type object
  */
 export interface CellAddress {
@@ -16,7 +16,7 @@ export interface CellAddress {
 }
 
 /**
-* @namespace DevExpress.export.internal
+* @namespace DevExpress.exportInternal
 * @type object
 */
 export interface CellRange {
