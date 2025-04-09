@@ -2,4 +2,4 @@
 /* eslint-disable import/no-commonjs */
 import { AIIntegration } from '../common/ai-integration';
 
-module.exports = DevExpress.aIIntegration = AIIntegration;
+module.exports = DevExpress.aiIntegration = AIIntegration;
