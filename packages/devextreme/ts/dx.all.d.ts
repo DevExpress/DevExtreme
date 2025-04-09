@@ -19584,6 +19584,46 @@ declare module DevExpress.ui {
     undo(): void;
   }
   module dxHtmlEditor {
+    export type AIChangeStyleOption =
+      | 'formal'
+      | 'informal'
+      | 'technical'
+      | 'business'
+      | 'creative'
+      | 'journalistic'
+      | 'academic'
+      | 'persuasive'
+      | 'narrative'
+      | 'expository'
+      | 'descriptive'
+      | 'conversational';
+    export type AIChangeToneOption =
+      | 'professional'
+      | 'casual'
+      | 'straightforward'
+      | 'confident'
+      | 'friendly';
+    export type AICommandName =
+      | 'summarize'
+      | 'proofread'
+      | 'expand'
+      | 'shorten'
+      | 'changeStyle'
+      | 'changeTone'
+      | 'translate'
+      | 'askAI';
+    /**
+     * [descr:AICommandNameAll]
+     */
+    export type AICommandNameAll = AICommandName | 'custom';
+    export type AITranslateOption =
+      | 'arabic'
+      | 'chinese'
+      | 'english'
+      | 'french'
+      | 'german'
+      | 'japanese'
+      | 'spanish';
     /**
      * [descr:_ui_html_editor_ContentReadyEvent]
      */
@@ -19608,49 +19648,6 @@ declare module DevExpress.ui {
       dxHtmlEditor,
       FocusEvent
     >;
-    export type HtmlEditorAIChangeStyleOption =
-      | 'formal'
-      | 'informal'
-      | 'technical'
-      | 'business'
-      | 'creative'
-      | 'journalistic'
-      | 'academic'
-      | 'persuasive'
-      | 'narrative'
-      | 'expository'
-      | 'descriptive'
-      | 'conversational'
-      | string;
-    export type HtmlEditorAIChangeToneOption =
-      | 'professional'
-      | 'casual'
-      | 'straightforward'
-      | 'confident'
-      | 'friendly'
-      | string;
-    export type HtmlEditorAICommandName =
-      | 'summarize'
-      | 'proofread'
-      | 'expand'
-      | 'shorten'
-      | 'changeStyle'
-      | 'changeTone'
-      | 'translate'
-      | 'askAI';
-    /**
-     * [descr:HtmlEditorAICommandNameAll]
-     */
-    export type HtmlEditorAICommandNameAll = HtmlEditorAICommandName | 'custom';
-    export type HtmlEditorAITranslateOption =
-      | 'arabic'
-      | 'chinese'
-      | 'english'
-      | 'french'
-      | 'german'
-      | 'japanese'
-      | 'spanish'
-      | string;
     export type HtmlEditorFormat =
       | 'background'
       | 'bold'
@@ -31828,6 +31825,96 @@ declare module DevExpress.ui.dxGantt {
   export type ToolbarItem = dxGanttToolbarItem;
 }
 declare module DevExpress.ui.dxHtmlEditor {
+  /**
+   * [descr:AIChangeStyleCommand]
+   */
+  export type AIChangeStyleCommand = AICommandBase<
+    'changeStyle',
+    (AIChangeStyleOption | string)[]
+  >;
+  /**
+   * [descr:AIChangeToneCommand]
+   */
+  export type AIChangeToneCommand = AICommandBase<
+    'changeTone',
+    (AIChangeToneOption | string)[]
+  >;
+  /**
+   * [descr:AICommand]
+   */
+  export type AICommand =
+    | AICommandBase<'summarize', any>
+    | AICommandBase<'proofread', any>
+    | AICommandBase<'expand', any>
+    | AICommandBase<'shorten', any>
+    | AICommandBase<'askAI', any>
+    | AIChangeStyleCommand
+    | AIChangeToneCommand
+    | AITranslateCommand
+    | AICustomCommand;
+  /**
+   * [descr:AICommandBase]
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  export interface AICommandBase<
+    CommandName extends AICommandNameAll,
+    CommandOptions = undefined
+  > {
+    /**
+     * [descr:AICommandBase.name]
+     */
+    name: AICommandNameAll;
+    /**
+     * [descr:AICommandBase.text]
+     */
+    text?: string;
+    /**
+     * [descr:AICommandBase.options]
+     */
+    options?: CommandOptions;
+  }
+  /**
+   * [descr:AICustomCommand]
+   */
+  export interface AICustomCommand extends AICommandBase<'custom', string[]> {
+    /**
+     * [descr:AICustomCommand.prompt]
+     */
+    prompt: (param?: string) => string;
+    /**
+     * [descr:AICustomCommand.text]
+     */
+    text: string;
+  }
+  /**
+   * [descr:AIToolbarItem]
+   */
+  export interface AIToolbarItem
+    extends Omit<
+      DevExpress.ui.dxToolbar.Item,
+      | 'menuItemTemplate'
+      | 'showText'
+      | 'widget'
+      | 'options'
+      | 'template'
+      | 'html'
+    > {
+    /**
+     * [descr:AIToolbarItem.name]
+     */
+    name: 'ai';
+    /**
+     * [descr:AIToolbarItem.commands]
+     */
+    commands?: Array<AICommandName | AICommand>;
+  }
+  /**
+   * [descr:AITranslateCommand]
+   */
+  export type AITranslateCommand = AICommandBase<
+    'translate',
+    (AITranslateOption | string)[]
+  >;
   export type ContextMenuItem = dxHtmlEditorTableContextMenuItem;
   /**
    * [descr:Converter]
@@ -31842,104 +31929,8 @@ declare module DevExpress.ui.dxHtmlEditor {
      */
     fromHtml?: (value: string) => string;
   };
-  /**
-   * [descr:HtmlEditorAIBasicCommand]
-   */
-  export type HtmlEditorAIBasicCommand =
-    | HtmlEditorAICommandBase<'summarize', any>
-    | HtmlEditorAICommandBase<'proofread', any>
-    | HtmlEditorAICommandBase<'expand', any>
-    | HtmlEditorAICommandBase<'shorten', any>
-    | HtmlEditorAICommandBase<'askAI', any>;
-  /**
-   * [descr:HtmlEditorAIChangeStyleCommand]
-   */
-  export type HtmlEditorAIChangeStyleCommand = HtmlEditorAICommandBase<
-    'changeStyle',
-    HtmlEditorAIChangeStyleOption[]
-  >;
-  /**
-   * [descr:HtmlEditorAIChangeToneCommand]
-   */
-  export type HtmlEditorAIChangeToneCommand = HtmlEditorAICommandBase<
-    'changeTone',
-    HtmlEditorAIChangeToneOption[]
-  >;
-  /**
-   * [descr:HtmlEditorAICommand]
-   */
-  export type HtmlEditorAICommand =
-    | HtmlEditorAIBasicCommand
-    | HtmlEditorAIChangeStyleCommand
-    | HtmlEditorAIChangeToneCommand
-    | HtmlEditorAITranslateCommand
-    | HtmlEditorAICustomCommand;
-  /**
-   * [descr:HtmlEditorAICommandBase]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface HtmlEditorAICommandBase<
-    CommandName extends HtmlEditorAICommandNameAll,
-    CommandOptions = undefined
-  > {
-    /**
-     * [descr:HtmlEditorAICommandBase.name]
-     */
-    name: HtmlEditorAICommandNameAll;
-    /**
-     * [descr:HtmlEditorAICommandBase.text]
-     */
-    text?: string;
-    /**
-     * [descr:HtmlEditorAICommandBase.options]
-     */
-    options?: CommandOptions;
-  }
-  /**
-   * [descr:HtmlEditorAICustomCommand]
-   */
-  export interface HtmlEditorAICustomCommand
-    extends HtmlEditorAICommandBase<'custom', string[]> {
-    /**
-     * [descr:HtmlEditorAICustomCommand.prompt]
-     */
-    prompt: (param?: string) => string;
-    /**
-     * [descr:HtmlEditorAICustomCommand.text]
-     */
-    text: string;
-  }
-  /**
-   * [descr:HtmlEditorAIToolbarItem]
-   */
-  export interface HtmlEditorAIToolbarItem
-    extends Omit<
-      DevExpress.ui.dxToolbar.Item,
-      | 'menuItemTemplate'
-      | 'showText'
-      | 'widget'
-      | 'options'
-      | 'template'
-      | 'html'
-    > {
-    /**
-     * [descr:HtmlEditorAIToolbarItem.name]
-     */
-    name: 'ai';
-    /**
-     * [descr:HtmlEditorAIToolbarItem.commands]
-     */
-    commands?: Array<HtmlEditorAICommandName | HtmlEditorAICommand>;
-  }
-  /**
-   * [descr:HtmlEditorAITranslateCommand]
-   */
-  export type HtmlEditorAITranslateCommand = HtmlEditorAICommandBase<
-    'translate',
-    HtmlEditorAITranslateOption[]
-  >;
   export type ImageUploadTab = dxHtmlEditorImageUploadTabItem;
-  export type ToolbarItem = dxHtmlEditorToolbarItem | HtmlEditorAIToolbarItem;
+  export type ToolbarItem = dxHtmlEditorToolbarItem | AIToolbarItem;
 }
 declare module DevExpress.ui.dxList {
   export type Item = dxListItem;

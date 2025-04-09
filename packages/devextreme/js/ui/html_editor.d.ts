@@ -49,10 +49,10 @@ export type HtmlEditorPredefinedContextMenuItem = 'background' | 'bold' | 'color
 export type HtmlEditorPredefinedToolbarItem = 'background' | 'bold' | 'color' | 'font' | 'italic' | 'link' | 'image' | 'size' | 'strike' | 'subscript' | 'superscript' | 'underline' | 'blockquote' | 'header' | 'increaseIndent' | 'decreaseIndent' | 'orderedList' | 'bulletList' | 'alignLeft' | 'alignCenter' | 'alignRight' | 'alignJustify' | 'codeBlock' | 'variable' | 'separator' | 'undo' | 'redo' | 'clear' | 'cellProperties' | 'tableProperties' | 'insertTable' | 'insertHeaderRow' | 'insertRowAbove' | 'insertRowBelow' | 'insertColumnLeft' | 'insertColumnRight' | 'deleteColumn' | 'deleteRow' | 'deleteTable' | 'ai';
 
 /** @public */
-export type HtmlEditorAICommandName = 'summarize' | 'proofread' | 'expand' | 'shorten' | 'changeStyle' | 'changeTone' | 'translate' | 'askAI';
+export type AICommandName = 'summarize' | 'proofread' | 'expand' | 'shorten' | 'changeStyle' | 'changeTone' | 'translate' | 'askAI';
 
 /** @public */
-export type HtmlEditorAIChangeStyleOption =
+export type AIChangeStyleOption =
     | 'formal'
     | 'informal'
     | 'technical'
@@ -64,47 +64,44 @@ export type HtmlEditorAIChangeStyleOption =
     | 'narrative'
     | 'expository'
     | 'descriptive'
-    | 'conversational'
-    | string;
+    | 'conversational';
 
 /** @public */
-export type HtmlEditorAIChangeToneOption =
+export type AIChangeToneOption =
     | 'professional'
     | 'casual'
     | 'straightforward'
     | 'confident'
-    | 'friendly'
-    | string;
+    | 'friendly';
 
 /** @public */
-export type HtmlEditorAITranslateOption =
+export type AITranslateOption =
     | 'arabic'
     | 'chinese'
     | 'english'
     | 'french'
     | 'german'
     | 'japanese'
-    | 'spanish'
-    | string;
+    | 'spanish';
 
 /**
  * @docid
  * @public
  */
-export type HtmlEditorAICommandNameAll = HtmlEditorAICommandName | 'custom';
+export type AICommandNameAll = AICommandName | 'custom';
 
 /**
  * @docid
  * @namespace DevExpress.ui.dxHtmlEditor
  */
-export interface HtmlEditorAICommandBase<
-    CommandName extends HtmlEditorAICommandNameAll, // eslint-disable-line @typescript-eslint/no-unused-vars
+export interface AICommandBase<
+    CommandName extends AICommandNameAll, // eslint-disable-line @typescript-eslint/no-unused-vars
     CommandOptions = undefined> {
     /**
      * @docid
      * @public
      */
-    name: HtmlEditorAICommandNameAll;
+    name: AICommandNameAll;
     /**
      * @docid
      * @public
@@ -120,47 +117,34 @@ export interface HtmlEditorAICommandBase<
 /**
  * @docid
  * @public
- * @inherits HtmlEditorAICommandBase
+ * @inherits AICommandBase
  * @namespace DevExpress.ui.dxHtmlEditor
  */
-export type HtmlEditorAIBasicCommand =
-    | HtmlEditorAICommandBase<'summarize', any>
-    | HtmlEditorAICommandBase<'proofread', any>
-    | HtmlEditorAICommandBase<'expand', any>
-    | HtmlEditorAICommandBase<'shorten', any>
-    | HtmlEditorAICommandBase<'askAI', any>;
+export type AIChangeStyleCommand = AICommandBase<'changeStyle', (AIChangeStyleOption | string)[]>;
 
 /**
  * @docid
  * @public
- * @inherits HtmlEditorAICommandBase
+ * @inherits AICommandBase
  * @namespace DevExpress.ui.dxHtmlEditor
  */
-export type HtmlEditorAIChangeStyleCommand = HtmlEditorAICommandBase<'changeStyle', HtmlEditorAIChangeStyleOption[]>;
+export type AIChangeToneCommand = AICommandBase<'changeTone', (AIChangeToneOption | string)[]>;
 
 /**
  * @docid
  * @public
- * @inherits HtmlEditorAICommandBase
+ * @inherits AICommandBase
  * @namespace DevExpress.ui.dxHtmlEditor
  */
-export type HtmlEditorAIChangeToneCommand = HtmlEditorAICommandBase<'changeTone', HtmlEditorAIChangeToneOption[]>;
+export type AITranslateCommand = AICommandBase<'translate', (AITranslateOption | string)[]>;
 
 /**
  * @docid
  * @public
- * @inherits HtmlEditorAICommandBase
+ * @inherits AICommandBase
  * @namespace DevExpress.ui.dxHtmlEditor
  */
-export type HtmlEditorAITranslateCommand = HtmlEditorAICommandBase<'translate', HtmlEditorAITranslateOption[]>;
-
-/**
- * @docid
- * @public
- * @inherits HtmlEditorAICommandBase
- * @namespace DevExpress.ui.dxHtmlEditor
- */
-export interface HtmlEditorAICustomCommand extends HtmlEditorAICommandBase<'custom', string[]> {
+export interface AICustomCommand extends AICommandBase<'custom', string[]> {
     /**
      * @docid
      * @public
@@ -178,19 +162,23 @@ export interface HtmlEditorAICustomCommand extends HtmlEditorAICommandBase<'cust
  * @public
  * @namespace DevExpress.ui.dxHtmlEditor
  */
-export type HtmlEditorAICommand =
-    | HtmlEditorAIBasicCommand
-    | HtmlEditorAIChangeStyleCommand
-    | HtmlEditorAIChangeToneCommand
-    | HtmlEditorAITranslateCommand
-    | HtmlEditorAICustomCommand;
+export type AICommand =
+    | AICommandBase<'summarize', any>
+    | AICommandBase<'proofread', any>
+    | AICommandBase<'expand', any>
+    | AICommandBase<'shorten', any>
+    | AICommandBase<'askAI', any>
+    | AIChangeStyleCommand
+    | AIChangeToneCommand
+    | AITranslateCommand
+    | AICustomCommand;
 
 /**
  * @docid
  * @public
  * @namespace DevExpress.ui.dxHtmlEditor
  */
-export interface HtmlEditorAIToolbarItem extends Omit<dxToolbarItem, 'menuItemTemplate' | 'showText' | 'widget' | 'options' | 'template' | 'html'> {
+export interface AIToolbarItem extends Omit<dxToolbarItem, 'menuItemTemplate' | 'showText' | 'widget' | 'options' | 'template' | 'html'> {
     /**
      * @docid
      * @public
@@ -200,7 +188,7 @@ export interface HtmlEditorAIToolbarItem extends Omit<dxToolbarItem, 'menuItemTe
      * @docid
      * @public
      */
-    commands?: Array<HtmlEditorAICommandName | HtmlEditorAICommand>;
+    commands?: Array<AICommandName | AICommand>;
 }
 
 /**
@@ -815,7 +803,7 @@ export interface dxHtmlEditorToolbar {
  * @public
  * @namespace DevExpress.ui.dxHtmlEditor
  */
-export type ToolbarItem = dxHtmlEditorToolbarItem | HtmlEditorAIToolbarItem;
+export type ToolbarItem = dxHtmlEditorToolbarItem | AIToolbarItem;
 
 /**
  * @deprecated Use ToolbarItem instead
