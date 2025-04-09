@@ -60,7 +60,7 @@ $stepper-step-base-border-color: $base-border-color !default;
 $stepper-step-base-hover-border-color: $base-border-color-hover !default;
 
 /**
-* $name 100. Indicator text color
+* $name 100. Inner text color
 * $type color
 */
 $stepper-step-base-text-color: $base-text-color !default;
@@ -84,7 +84,7 @@ $stepper-step-selected-bg: $stepper-step-accent-bg !default;
 $stepper-step-selected-hover-bg: $stepper-step-accent-hover-bg !default;
 
 /**
-* $name 140. Indicator text color
+* $name 140. Inner text color
 * $type color
 */
 $stepper-step-selected-text-color: $base-inverted-text-color !default;
@@ -120,13 +120,13 @@ $stepper-step-invalid-border-color: $stepper-step-base-border-color !default;
 $stepper-step-invalid-hover-border-color: $stepper-step-base-hover-border-color !default;
 
 /**
-* $name 200. Indicator text color
+* $name 200. Inner text color
 * $type color
 */
 $stepper-step-invalid-text-color: $stepper-step-danger-bg !default;
 
 /**
-* $name 210. Hover state indicator text color
+* $name 210. Hover state inner text color
 * $type color
 */
 $stepper-step-invalid-hover-text-color: $stepper-step-danger-hover-bg !default;
@@ -168,13 +168,13 @@ $stepper-step-disabled-bg: $base-background-disabled !default;
 $stepper-step-disabled-text-color: $base-foreground-disabled !default;
 
 /**
-* $name 280. Background color
+* $name 280. Pending color
 * $type color
 */
 $stepper-connector-bg: $base-separator-color !default;
 
 /**
-* $name 290. Active state color
+* $name 290. Completed color
 * $type color
 */
 $stepper-connector-value-bg: $base-accent !default;
