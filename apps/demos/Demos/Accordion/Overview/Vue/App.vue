@@ -68,6 +68,7 @@ import CustomTitle from './CustomTitle.vue';
 import CustomItem from './CustomItem.vue';
 import service from './data.ts';
 
+console.log('arst');
 const companies = service.getCompanies();
 const selectedItems = ref([companies[0]]);
 const multiple = ref(false);
