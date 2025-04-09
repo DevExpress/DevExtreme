@@ -803,7 +803,7 @@ const headersKeyboardNavigation = (Base: ModuleType<HeadersKeyboardNavigationCon
   protected tabKeyHandler({ originalEvent, shift }) {
     // @ts-expect-error columnHeadersView's method
     const hasStickyColumns = this._columnHeadersView?.hasStickyColumns();
-    const scrollable = this._rowsView?.getScrollable();
+    const scrollable = this.getView('rowsView')?.getScrollable();
 
     if (hasStickyColumns && scrollable) {
       const $cell = $(originalEvent.target).closest('td');

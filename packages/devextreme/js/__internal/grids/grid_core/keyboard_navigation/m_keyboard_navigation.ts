@@ -83,7 +83,6 @@ import {
   isEditForm,
   isEditorCell,
   isElementDefined,
-  isFixedColumnIndexOffsetRequired,
   isGroupFooterRow,
   isGroupRow,
   isMobile,
@@ -155,6 +154,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
     this._focusController = this.getController('focus');
     this._adaptiveColumnsController = this.getController('adaptiveColumns');
     this._columnResizerController = this.getController('columnsResizer');
+    this._rowsView = this.getView('rowsView');
 
     this._memoFireFocusedCellChanged = memoize(this._memoFireFocusedCellChanged.bind(this), { compareType: 'value' });
     this._memoFireFocusedRowChanged = memoize(this._memoFireFocusedRowChanged.bind(this), { compareType: 'value' });
@@ -1536,10 +1536,6 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
     });
   }
 
-  private _getColumnByCellElement($cell) {
-    return this.getColumnByCellElement($cell, this._rowsView);
-  }
-
   private _needFocusEditingCell() {
     const isCellEditMode = this._editingController.getEditMode() === EDIT_MODE_CELL;
     const isBatchEditMode = this._editingController.getEditMode() === EDIT_MODE_BATCH;
@@ -1552,10 +1548,6 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
       $cell.children().length === 0
       || $cell.find(FOCUSABLE_ELEMENT_SELECTOR).length > 0
     ) && (cellEditModeHasChanges || isNewRowBatchEditMode);
-  }
-
-  public _getFocusedCell() {
-    return $(this._getCell(this._focusedCellPosition));
   }
 
   private _updateFocusedCellPositionByTarget(target) {
@@ -1571,65 +1563,6 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
     } else {
       this._updateFocusedCellPosition(this._getCellElementFromTarget(target));
     }
-  }
-
-  /**
-   * @extended: focus
-   */
-  protected _updateFocusedCellPosition($cell, direction?) {
-    const position = this._getCellPosition($cell, direction);
-    if (position) {
-      if (
-        !$cell.length
-        || (position.rowIndex >= 0 && position.columnIndex >= 0)
-      ) {
-        this.setFocusedCellPosition(position.rowIndex, position.columnIndex);
-      }
-    }
-    return position;
-  }
-
-  private _getFocusedColumnIndexOffset(columnIndex) {
-    let offset = 0;
-    const column = this._columnsController.getVisibleColumns()[columnIndex];
-    if (column && column.fixed) {
-      offset = this._getFixedColumnIndexOffset(column);
-    } else if (columnIndex >= 0) {
-      offset = this._columnsController.getColumnIndexOffset();
-    }
-    return offset;
-  }
-
-  private _getFixedColumnIndexOffset(column) {
-    const offset = isFixedColumnIndexOffsetRequired(this, column)
-      ? this._getVisibleColumnCount()
-        - this._columnsController.getVisibleColumns().length
-      : 0;
-    return offset;
-  }
-
-  private _getCellPosition($cell, direction?): {
-    rowIndex: number;
-    columnIndex: number;
-  } | undefined {
-    let columnIndex;
-    const $row = isElementDefined($cell) && $cell.closest('tr');
-
-    if (isElementDefined($row)) {
-      const rowIndex = this._getRowIndex($row);
-
-      columnIndex = this._rowsView.getCellIndex($cell, rowIndex);
-      columnIndex += this._getFocusedColumnIndexOffset(columnIndex);
-
-      if (direction) {
-        columnIndex = direction === 'previous' ? columnIndex - 1 : columnIndex + 1;
-        columnIndex = this._applyColumnIndexBoundaries(columnIndex);
-      }
-
-      return { rowIndex, columnIndex };
-    }
-
-    return undefined;
   }
 
   private _focusCell($cell, isDisabled?) {
@@ -1769,18 +1702,6 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
     return !isDefined(columnIndex)
       ? -1
       : columnIndex - this._columnsController.getColumnIndexOffset();
-  }
-
-  private _applyColumnIndexBoundaries(columnIndex) {
-    const visibleColumnsCount = this._getVisibleColumnCount();
-
-    if (columnIndex < 0) {
-      columnIndex = 0;
-    } else if (columnIndex >= visibleColumnsCount) {
-      columnIndex = visibleColumnsCount - 1;
-    }
-
-    return columnIndex;
   }
 
   private _isCellByPositionValid(cellPosition) {
@@ -2352,7 +2273,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
     $element.attr('tabindex', tabIndex);
   }
 
-  private _getCell(cellPosition) {
+  protected _getCell(cellPosition) {
     if (this._focusedView && cellPosition) {
       const rowIndexOffset = this._dataController.getRowIndexOffset();
       const column = this._columnsController.getVisibleColumns(null, true)[
@@ -2375,7 +2296,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
     }
   }
 
-  private _getRowIndex($row) {
+  protected _getRowIndex($row) {
     let rowIndex = this._rowsView.getRowIndex($row);
 
     if (rowIndex >= 0) {
@@ -2383,6 +2304,10 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
     }
 
     return rowIndex;
+  }
+
+  protected getCellIndex($cell, rowIndex): number {
+    return this._rowsView.getCellIndex($cell, rowIndex);
   }
 
   private _hasSkipRow($row) {

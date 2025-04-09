@@ -1,9 +1,11 @@
+import eventsEngine from '@js/common/core/events/core/events_engine';
 import { keyboard } from '@js/common/core/events/short';
 import {
   isCommandKeyPressed,
 } from '@js/common/core/events/utils/index';
 import $ from '@js/core/renderer';
 
+import type { Views } from '../m_types';
 import { KeyboardNavigationController as KeyboardNavigationControllerCore } from './m_keyboard_navigation_core';
 
 export class HeadersKeyboardNavigationController extends KeyboardNavigationControllerCore {
@@ -12,6 +14,10 @@ export class HeadersKeyboardNavigationController extends KeyboardNavigationContr
   private keyDownListener: any;
 
   private isNeedToFocusHeader = false;
+
+  private focusinHandlerContext!: (event: any) => void;
+
+  protected _columnHeadersView!: Views['columnHeadersView'];
 
   private initHandlers(): void {
     this.unsubscribeFromKeyDownEvent();
@@ -45,10 +51,12 @@ export class HeadersKeyboardNavigationController extends KeyboardNavigationContr
 
     if (isCommandKeyPressed(originalEvent)) {
       const $cell = $(originalEvent.target).closest('td');
-      const column = this.getColumnByCellElement($cell, this._columnHeadersView);
-      const newVisibleIndex = e.keyName === 'leftArrow' ? column.visibleIndex - 1 : column.visibleIndex + 2;
+      const column = this._getColumnByCellElement($cell);
+      const direction = e.keyName === 'leftArrow' ? 'previous' : 'next';
+      const newVisibleIndex = direction === 'previous' ? column.visibleIndex - 1 : column.visibleIndex + 2;
 
       this.isNeedToFocusHeader = true;
+      this._updateFocusedCellPosition($cell, direction);
       this._columnsController.columnOption(
         column.index,
         'visibleIndex',
@@ -78,27 +86,61 @@ export class HeadersKeyboardNavigationController extends KeyboardNavigationContr
     }
   }
 
+  private focusinHandler(e) {
+    this._updateFocusedCellPosition($(e.target));
+  }
+
+  private unsubscribeFromFocusinEvent() {
+    const $columnHeadersView = this._columnHeadersView?.element();
+
+    eventsEngine.off($columnHeadersView, 'focusin', this.focusinHandlerContext);
+  }
+
+  private subscribeToFocusinEvent() {
+    const $columnHeadersView = this._columnHeadersView?.element();
+
+    eventsEngine.on($columnHeadersView, 'focusin', '.dx-header-row > td', this.focusinHandlerContext);
+  }
+
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   protected tabKeyHandler(e) {}
 
-  public init() {
-    super.init();
-
-    this.renderCompletedWithContext = this.renderCompletedWithContext || this.renderCompleted.bind(this);
-    this.initHandlers();
+  protected getCellIndex($cell) {
+    return this._columnHeadersView.getCellIndex($cell);
   }
 
-  public dispose() {
-    keyboard.off(this.keyDownListener);
+  protected _getCell(cellPosition) {
+    return this._columnHeadersView?.getCell(cellPosition);
   }
 
   protected renderCompleted(): void {
     this.initKeyDownHandler();
 
+    this.unsubscribeFromFocusinEvent();
+    this.subscribeToFocusinEvent();
+
     if (this.isNeedToFocusHeader) {
+      const $focusElement = this._getFocusedCell();
+
       this.isNeedToFocusHeader = false;
-      // eventsEngine.trigger($focusElement, 'focus');
+      // @ts-expect-error
+      eventsEngine.trigger($focusElement, 'focus');
     }
+  }
+
+  public init() {
+    super.init();
+    this._columnHeadersView = this.getView('columnHeadersView');
+
+    this.renderCompletedWithContext = this.renderCompletedWithContext
+      ?? this.renderCompleted.bind(this);
+    this.focusinHandlerContext = this.focusinHandlerContext ?? this.focusinHandler.bind(this);
+
+    this.initHandlers();
+  }
+
+  public dispose() {
+    keyboard.off(this.keyDownListener);
   }
 }
 
