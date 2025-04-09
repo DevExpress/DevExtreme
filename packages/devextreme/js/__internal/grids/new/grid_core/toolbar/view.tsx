@@ -1,6 +1,6 @@
-/* eslint-disable spellcheck/spell-checker */
 import type { SubsGets } from '@ts/core/reactive/index';
 import { combined, computed } from '@ts/core/reactive/index';
+import { createRef } from 'inferno';
 
 import { View } from '../core/view';
 import { OptionsController } from '../options_controller/options_controller';
@@ -11,6 +11,8 @@ import { isVisible } from './utils';
 
 export class ToolbarView extends View<ToolbarProps> {
   protected override component = Toolbar;
+
+  public readonly containerRef = createRef<HTMLDivElement>();
 
   private readonly visibleConfig = this.options.oneWay('toolbar.visible');
 
@@ -30,6 +32,7 @@ export class ToolbarView extends View<ToolbarProps> {
 
   protected override getProps(): SubsGets<ToolbarProps> {
     return combined({
+      containerRef: this.containerRef,
       visible: this.visible,
       items: this.controller.items,
       disabled: this.options.oneWay('toolbar.disabled'),

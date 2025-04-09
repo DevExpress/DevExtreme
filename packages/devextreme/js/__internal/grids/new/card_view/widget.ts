@@ -8,6 +8,7 @@ import { OptionsController as OptionsControllerBase } from '@ts/grids/new/grid_c
 import { GridCoreNew } from '@ts/grids/new/grid_core/widget';
 
 import * as ContentViewModule from './content_view/index';
+import { ContextMenuView } from './context_menu/view';
 import { HeaderPanelView } from './header_panel/view';
 import { MainView } from './main_view';
 import { defaultOptions } from './options';
@@ -18,12 +19,15 @@ export class CardViewBase extends GridCoreNew {
 
   headerPanel!: HeaderPanelView;
 
+  contextMenu!: ContextMenuView;
+
   protected _registerDIContext(): void {
     super._registerDIContext();
 
     this.diContext.register(ContentViewModule.View);
     this.diContext.register(HeaderPanelView);
     this.diContext.register(MainViewBase, MainView);
+    this.diContext.register(ContextMenuView);
 
     const optionsController = new OptionsController(this);
     this.diContext.registerInstance(OptionsController, optionsController);
@@ -40,6 +44,13 @@ export class CardViewBase extends GridCoreNew {
     super._initDIContext();
     this.contentView = this.diContext.get(ContentViewModule.View);
     this.headerPanel = this.diContext.get(HeaderPanelView);
+    this.contextMenu = this.diContext.get(ContextMenuView);
+  }
+
+  protected _init(): void {
+    super._init();
+
+    this.contextMenu.setRootElement(this.element());
   }
 
   // eslint-disable-next-line @stylistic/max-len
