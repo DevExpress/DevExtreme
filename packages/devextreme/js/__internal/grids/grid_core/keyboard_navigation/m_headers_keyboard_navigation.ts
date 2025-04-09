@@ -3,6 +3,7 @@ import { keyboard } from '@js/common/core/events/short';
 import {
   isCommandKeyPressed,
 } from '@js/common/core/events/utils/index';
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 
 import type { Views } from '../m_types';
@@ -83,7 +84,7 @@ export class HeadersKeyboardNavigationController extends KeyboardNavigationContr
     }
   }
 
-  private keyDownHandler(e) {
+  private keyDownHandler(e): void {
     const isHandled = this.processOnKeyDown(e);
 
     if (isHandled) {
@@ -103,30 +104,30 @@ export class HeadersKeyboardNavigationController extends KeyboardNavigationContr
     }
   }
 
-  private focusinHandler(e) {
+  private focusinHandler(e): void {
     this._updateFocusedCellPosition($(e.target));
   }
 
-  private unsubscribeFromFocusinEvent() {
+  private unsubscribeFromFocusinEvent(): void {
     const $columnHeadersView = this._columnHeadersView?.element();
 
     eventsEngine.off($columnHeadersView, 'focusin', this.focusinHandlerContext);
   }
 
-  private subscribeToFocusinEvent() {
+  private subscribeToFocusinEvent(): void {
     const $columnHeadersView = this._columnHeadersView?.element();
 
     eventsEngine.on($columnHeadersView, 'focusin', '.dx-header-row > td', this.focusinHandlerContext);
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  protected tabKeyHandler(e) {}
+  protected tabKeyHandler(e): void {}
 
-  protected getCellIndex($cell) {
+  protected getCellIndex($cell): number {
     return this._columnHeadersView.getCellIndex($cell);
   }
 
-  protected _getCell(cellPosition) {
+  protected _getCell(cellPosition): dxElementWrapper {
     return this._columnHeadersView?.getCell(cellPosition);
   }
 
@@ -145,7 +146,7 @@ export class HeadersKeyboardNavigationController extends KeyboardNavigationContr
     }
   }
 
-  public init() {
+  public init(): void {
     super.init();
     this._columnHeadersView = this.getView('columnHeadersView');
 
@@ -156,7 +157,7 @@ export class HeadersKeyboardNavigationController extends KeyboardNavigationContr
     this.initHandlers();
   }
 
-  public dispose() {
+  public dispose(): void {
     keyboard.off(this.keyDownListener);
   }
 }
