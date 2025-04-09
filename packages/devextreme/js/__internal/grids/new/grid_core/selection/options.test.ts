@@ -1,46 +1,24 @@
 /* eslint-disable spellcheck/spell-checker */
 import { describe, expect, it } from '@jest/globals';
 
-import { ColumnsController } from '../columns_controller/columns_controller';
-import { DataController } from '../data_controller';
-import { FilterController } from '../filtering/filter_controller';
+import { getContext } from '../di.test_utils';
 import { ItemsController } from '../items_controller/items_controller';
 import type { Options } from '../options';
-import { OptionsControllerMock } from '../options_controller/options_controller.mock';
-import { SearchController } from '../search/controller';
-import { SortingController } from '../sorting_controller/sorting_controller';
 import { ToolbarController } from '../toolbar/controller';
 import { SelectionController } from './controller';
 
 const setup = (config: Options = {}) => {
-  const optionsController = new OptionsControllerMock({
+  const context = getContext({
     selection: {
       mode: 'single',
     },
     ...config,
   });
 
-  const filterController = new FilterController(optionsController);
-  const columnsController = new ColumnsController(optionsController);
-  const sortingController = new SortingController(optionsController, columnsController);
-
-  const dataController = new DataController(optionsController, sortingController, filterController);
-
-  const searchController = new SearchController(optionsController);
-  const itemsController = new ItemsController(dataController, columnsController, searchController);
-  const toolbarController = new ToolbarController(optionsController);
-
-  const selectionController = new SelectionController(
-    optionsController,
-    dataController,
-    itemsController,
-    toolbarController,
-  );
-
   return {
-    selectionController,
-    itemsController,
-    toolbarController,
+    selectionController: context.get(SelectionController),
+    itemsController: context.get(ItemsController),
+    toolbarController: context.get(ToolbarController),
   };
 };
 
