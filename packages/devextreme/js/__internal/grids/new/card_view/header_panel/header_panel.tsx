@@ -1,6 +1,6 @@
 import type { Column } from '@ts/grids/new/grid_core/columns_controller/types';
 import { Scrollable } from '@ts/grids/new/grid_core/inferno_wrappers/scrollable';
-import type { ComponentType, RefObject } from 'inferno';
+import type { ComponentType } from 'inferno';
 import { Component } from 'inferno';
 
 import { ColumnSortable } from './column_sortable';
@@ -13,8 +13,6 @@ export const CLASSES = {
 };
 
 export interface HeaderPanelProps {
-  containerRef: RefObject<HTMLDivElement>;
-
   columns: Column[];
 
   onMove: (column: Column, toIndex: number) => void;
@@ -38,6 +36,8 @@ export interface HeaderPanelProps {
   visible: boolean;
 
   draggingOptions?: DraggingOptions;
+
+  showContextMenu: (e: MouseEvent, column?: Column, columnIndex?: number) => void;
 }
 
 export class HeaderPanel extends Component<HeaderPanelProps> {
@@ -47,7 +47,10 @@ export class HeaderPanel extends Component<HeaderPanelProps> {
     }
 
     return (
-      <div className={CLASSES.headers} ref={this.props.containerRef}>
+      <div
+        className={CLASSES.headers}
+        onContextMenu={this.props.showContextMenu}
+      >
         <ColumnSortable
           {...this.props.draggingOptions}
           allowColumnReordering={this.props.allowColumnReordering}
@@ -65,7 +68,7 @@ export class HeaderPanel extends Component<HeaderPanelProps> {
             scrollByContent={true}
           >
             <div className={CLASSES.content}>
-              {this.props.columns.map((column) => (
+              {this.props.columns.map((column, index) => (
                 <Item
                   showSortIndexes={this.props.showSortIndexes}
                   column={column}
@@ -76,6 +79,9 @@ export class HeaderPanel extends Component<HeaderPanelProps> {
                     element: Element,
                     callback?: () => void,
                   ) => this.props.onFilterClick?.(element, column, callback)}
+                  onContextMenu={(e) => {
+                    this.props.showContextMenu(e, column, index);
+                  }}
                 />
               ))}
             </div>

@@ -2,6 +2,7 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { expect } from '@jest/globals';
 
+import { ContextMenuController } from '../../card_view/context_menu';
 import { ColumnsController } from '../columns_controller';
 import type { Options } from '../options';
 import { OptionsControllerMock } from '../options_controller/options_controller.mock';
@@ -10,27 +11,32 @@ import { ToolbarView } from '../toolbar/view';
 import { ColumnChooserController } from './controller';
 import { ColumnChooserView } from './view';
 
+const createToolbarView = (
+  columnsController: ColumnsController,
+  optionsController: OptionsControllerMock,
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-const createToolbarView = (optionsController: OptionsControllerMock) => {
+) => {
   const toolbarElement = document.createElement('div');
   const toolbarController = new ToolbarController(optionsController);
-  const toolbar = new ToolbarView(toolbarController, optionsController);
+  // @ts-expect-error
+
+  const contextMenuController = new ContextMenuController(columnsController, optionsController);
+  const toolbar = new ToolbarView(toolbarController, contextMenuController, optionsController);
 
   return { toolbarElement, toolbar, toolbarController };
 };
 
 const createColumnChooserView = (
+  columnsController: ColumnsController,
   optionsController: OptionsControllerMock,
   toolbarController?: ToolbarController,
 ): {
   columnChooserElement: HTMLDivElement;
   columnChooser: ColumnChooserView;
   columnChooserController: ColumnChooserController;
-  columnsController: ColumnsController;
 } => {
   const columnChooserElement = document.createElement('div');
 
-  const columnsController = new ColumnsController(optionsController);
   const columnChooserController = new ColumnChooserController(columnsController, optionsController);
 
   const columnChooser = new ColumnChooserView(
@@ -43,7 +49,6 @@ const createColumnChooserView = (
     columnChooserElement,
     columnChooser,
     columnChooserController,
-    columnsController,
   };
 };
 
@@ -55,9 +60,11 @@ export const renderColumnChooser = async (options?: Options): Promise<{
   columnsController: ColumnsController;
 }> => {
   const optionsController = new OptionsControllerMock(options ?? {});
+  const columnsController = new ColumnsController(optionsController);
+
   const {
-    columnChooserElement, columnChooser, columnChooserController, columnsController,
-  } = createColumnChooserView(optionsController);
+    columnChooserElement, columnChooser, columnChooserController,
+  } = createColumnChooserView(columnsController, optionsController);
 
   columnChooser.render(columnChooserElement);
 
@@ -90,17 +97,18 @@ export const renderColumnChooserWithToolbar = (options?: Options): {
   columnsController: ColumnsController;
 } => {
   const optionsController = new OptionsControllerMock(options ?? {});
+  const columnsController = new ColumnsController(optionsController);
+
   const {
     toolbarElement,
     toolbar,
     toolbarController,
-  } = createToolbarView(optionsController);
+  } = createToolbarView(columnsController, optionsController);
   const {
     columnChooserElement,
     columnChooser,
     columnChooserController,
-    columnsController,
-  } = createColumnChooserView(optionsController, toolbarController);
+  } = createColumnChooserView(columnsController, optionsController, toolbarController);
 
   const element = document.createElement('div');
   element.append(toolbarElement, columnChooserElement);

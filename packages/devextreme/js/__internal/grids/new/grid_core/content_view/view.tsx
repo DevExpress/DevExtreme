@@ -3,6 +3,7 @@
 import type dxScrollable from '@js/ui/scroll_view/ui.scrollable';
 import type { ScrollEventInfo } from '@js/ui/scroll_view/ui.scrollable';
 import { combined, computed, state } from '@ts/core/reactive/index';
+import { ContextMenuController } from '@ts/grids/new/card_view/context_menu';
 import { ColumnsController } from '@ts/grids/new/grid_core/columns_controller/columns_controller';
 import { View } from '@ts/grids/new/grid_core/core/view';
 import { DataController } from '@ts/grids/new/grid_core/data_controller/index';
@@ -21,8 +22,6 @@ export abstract class ContentView<TProps extends {}> extends View<TProps> {
 
   public readonly scrollableRef = createRef<dxScrollable>();
 
-  public readonly containerRef = createRef<HTMLDivElement>();
-
   public loadingText = this.options.twoWay('loadPanel.message');
 
   protected readonly viewportHeight = state(0);
@@ -38,6 +37,7 @@ export abstract class ContentView<TProps extends {}> extends View<TProps> {
     ColumnsController,
     SelectionController,
     ItemsController,
+    ContextMenuController,
   ] as const;
 
   constructor(
@@ -47,6 +47,7 @@ export abstract class ContentView<TProps extends {}> extends View<TProps> {
     protected readonly columnsController: ColumnsController,
     protected readonly selectionController: SelectionController,
     protected readonly itemsController: ItemsController,
+    protected readonly contextMenuController: ContextMenuController,
   ) {
     super();
   }
@@ -75,7 +76,6 @@ export abstract class ContentView<TProps extends {}> extends View<TProps> {
       onWidthChange: this.width.update.bind(this.width),
       onViewportHeightChange: this.viewportHeight.update.bind(this.viewportHeight),
       scrollableRef: this.scrollableRef,
-      containerRef: this.containerRef,
       scrollableProps: combined({
         onScroll: this.onScroll.bind(this),
         direction: 'both' as const,

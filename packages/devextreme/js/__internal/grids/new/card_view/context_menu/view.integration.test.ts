@@ -5,6 +5,7 @@ import type { SortOrder } from '@js/common';
 import $ from '@js/core/renderer';
 import type { ContextMenuPreparingEvent } from '@js/ui/card_view';
 import type ContextMenu from '@js/ui/context_menu';
+import type { PositioningEvent } from '@js/ui/context_menu';
 import type { Options as CardViewOptions } from '@ts/grids/new/card_view/options';
 import CardView from '@ts/grids/new/card_view/widget';
 
@@ -87,11 +88,27 @@ describe('ContextMenu', () => {
       $(cardView ?? undefined as any)?.dxCardView('dispose');
     });
 
-    it('contextMenu.target is set to CardView.element', () => {
-      const cardView = setup({});
+    it('contextMenu.onPositioning event is correct', () => {
+      const cardView = setup({ columns: ['Column 1'] });
       const contextMenu = getContextMenuInstance();
 
-      expect(contextMenu.option('target')).toBe(cardView.element());
+      expect(contextMenu.option('target')).toBe(undefined);
+      expect(contextMenu.option('showEvent')).toBe(undefined);
+
+      let invokesCount = 0;
+      // eslint-disable-next-line @typescript-eslint/init-declarations
+      let positioningEvent: PositioningEvent | undefined;
+
+      contextMenu.on('positioning', (e: PositioningEvent) => {
+        invokesCount += 1;
+        positioningEvent = e;
+      });
+
+      openContextMenu(cardView, SELECTORS.headerItem);
+
+      expect(invokesCount).toEqual(1);
+      expect(positioningEvent?.event).toBeUndefined();
+      expect(cardView.contextMenuController.lastEvent?.defaultPrevented).toBeTruthy();
     });
 
     it('contextMenu has class', () => {

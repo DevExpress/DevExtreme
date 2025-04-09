@@ -72,6 +72,8 @@ export interface CardProps {
 
   onPrepared?: (e: CardPreparedEvent) => void;
 
+  onContextMenu?: (e: MouseEvent, card?: DataRow, cardIndex?: number) => void;
+
   selectCard?: (row: DataRow, options: SelectCardOptions) => void;
 }
 
@@ -111,6 +113,7 @@ export class Card extends Component<CardProps> {
         onDblClick={this.handleDoubleClick}
         onMouseEnter={this.handleMouseEnter}
         onMouseLeave={this.handleMouseLeave}
+        onContextMenu={this.props.onContextMenu}
       >
         <CardHeader
           row={row}

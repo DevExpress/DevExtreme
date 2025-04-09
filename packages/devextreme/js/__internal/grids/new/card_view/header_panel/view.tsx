@@ -4,10 +4,10 @@ import { combined, computed } from '@ts/core/reactive/index';
 import { ColumnsController } from '@ts/grids/new/grid_core/columns_controller/columns_controller';
 import { View } from '@ts/grids/new/grid_core/core/view';
 import { HeaderFilterController } from '@ts/grids/new/grid_core/filtering/header_filter/index';
-import { createRef } from 'inferno';
 
 import type { Column } from '../../grid_core/columns_controller/types';
 import { SortingController } from '../../grid_core/sorting_controller/sorting_controller';
+import { ContextMenuController } from '../context_menu/controller';
 import { OptionsController } from '../options_controller';
 import type { HeaderPanelProps } from './header_panel';
 import { HeaderPanel } from './header_panel';
@@ -20,22 +20,21 @@ export class HeaderPanelView extends View<HeaderPanelProps> {
     ColumnsController,
     OptionsController,
     HeaderFilterController,
+    ContextMenuController,
   ] as const;
-
-  public readonly containerRef = createRef<HTMLDivElement>();
 
   constructor(
     private readonly sortingController: SortingController,
     private readonly columnsController: ColumnsController,
     private readonly options: OptionsController,
     private readonly headerFilterController: HeaderFilterController,
+    private readonly contextMenuController: ContextMenuController,
   ) {
     super();
   }
 
   protected override getProps(): SubsGets<HeaderPanelProps> {
     return combined({
-      containerRef: this.containerRef,
       columns: computed(
         (columns) => [...columns].sort((a, b) => a.visibleIndex - b.visibleIndex),
         [this.columnsController.columns],
@@ -52,6 +51,7 @@ export class HeaderPanelView extends View<HeaderPanelProps> {
       visible: this.options.oneWay('headerPanel.visible'),
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       draggingOptions: this.options.oneWay('headerPanel.dragging') as any,
+      showContextMenu: this.showContextMenu.bind(this),
     });
   }
 
@@ -86,5 +86,9 @@ export class HeaderPanelView extends View<HeaderPanelProps> {
     onFilterCloseCallback?: () => void,
   ): void {
     this.headerFilterController.openPopup(element, column, onFilterCloseCallback);
+  }
+
+  private showContextMenu(e: MouseEvent, column?: Column, columnIndex?: number): void {
+    this.contextMenuController.show(e, 'headerPanel', { column, columnIndex });
   }
 }
