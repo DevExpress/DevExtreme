@@ -3,6 +3,7 @@ import dateUtils from '@js/core/utils/date';
 import { getAppointmentRenderingStrategyName, getCellDuration, getGroupCount } from '@ts/scheduler/r1/utils/index';
 
 import { AppointmentViewModelGenerator } from './appointments/m_view_model_generator';
+import type Scheduler from './m_scheduler';
 import { getAllDayHeight, getCellHeight, getCellWidth } from './workspaces/helpers/m_position_helper';
 
 const toMs = dateUtils.dateToMilliseconds;
@@ -12,7 +13,7 @@ class AppointmentLayoutManager {
 
   _positionMap: any;
 
-  constructor(public instance) {
+  constructor(public instance: Scheduler) {
   }
 
   get appointmentRenderingStrategyName() {

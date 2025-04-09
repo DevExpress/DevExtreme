@@ -4,10 +4,11 @@ import dateUtils from '@js/core/utils/date';
 import { isDefined } from '@js/core/utils/type';
 import { dateUtilsTs } from '@ts/core/utils/date';
 
+import {
+  HORIZONTAL_GROUP_ORIENTATION, TIMELINE_VIEWS, VERTICAL_GROUP_ORIENTATION, VIEWS,
+} from '../../constants';
 import { VERTICAL_GROUP_COUNT_CLASSES } from '../../m_classes';
-import { VIEWS } from '../../m_constants';
 import timeZoneUtils from '../../m_utils_time_zone';
-import { HORIZONTAL_GROUP_ORIENTATION, TIMELINE_VIEWS, VERTICAL_GROUP_ORIENTATION } from '../const';
 import type {
   AllDayPanelModeType,
   AppointmentGeometry,
@@ -265,9 +266,7 @@ export const getHorizontalGroupCount = (
   return isVerticalGrouping ? 1 : groupCount;
 };
 
-export const isTimelineView = (
-  viewType: ViewType,
-): boolean => !!TIMELINE_VIEWS[viewType];
+export const isTimelineView = (viewType: ViewType): boolean => TIMELINE_VIEWS.includes(viewType);
 
 export const isDateAndTimeView = (
   viewType: ViewType,

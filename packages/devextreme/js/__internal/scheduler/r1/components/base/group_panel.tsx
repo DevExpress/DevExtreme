@@ -2,7 +2,7 @@ import type { InfernoEffect } from '@ts/core/r1/runtime/inferno/index';
 import { createReRenderEffect, InfernoWrapperComponent } from '@ts/core/r1/runtime/inferno/index';
 import type { RefObject } from '@ts/core/r1/types';
 
-import { VERTICAL_GROUP_ORIENTATION } from '../../const';
+import { VERTICAL_GROUP_ORIENTATION } from '../../../constants';
 import type { Group, GroupOrientation } from '../../types';
 import { isVerticalGroupingApplied } from '../../utils/index';
 import type { DefaultProps } from '../types';

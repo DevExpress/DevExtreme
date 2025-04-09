@@ -1,5 +1,5 @@
 import dateUtils from '@js/core/utils/date';
-import { VIEWS } from '@ts/scheduler/m_constants';
+import { VIEWS } from '@ts/scheduler/constants';
 import {
   formatWeekdayAndDay, getDisplayedCellCount, getGroupCount,
   getHeaderCellText,

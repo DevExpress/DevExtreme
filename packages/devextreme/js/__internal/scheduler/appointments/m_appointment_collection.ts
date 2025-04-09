@@ -25,9 +25,9 @@ import {
 import CollectionWidget from '@js/ui/collection/ui.collection_widget.edit';
 import { dateUtilsTs } from '@ts/core/utils/date';
 
+import { APPOINTMENT_SETTINGS_KEY } from '../constants';
 import { createAppointmentAdapter } from '../m_appointment_adapter';
 import { APPOINTMENT_CONTENT_CLASSES, APPOINTMENT_DRAG_SOURCE_CLASS, APPOINTMENT_ITEM_CLASS } from '../m_classes';
-import { APPOINTMENT_SETTINGS_KEY } from '../m_constants';
 import { getRecurrenceProcessor } from '../m_recurrence';
 import timeZoneUtils from '../m_utils_time_zone';
 import { getPathToLeaf } from '../resources/m_utils';

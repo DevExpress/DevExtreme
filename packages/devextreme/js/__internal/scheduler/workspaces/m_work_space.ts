@@ -49,6 +49,7 @@ import {
 } from '@ts/scheduler/r1/utils/index';
 
 import WidgetObserver from '../base/m_widget_observer';
+import { APPOINTMENT_SETTINGS_KEY } from '../constants';
 import AppointmentDragBehavior from '../m_appointment_drag_behavior';
 import {
   APPOINTMENT_DRAG_SOURCE_CLASS,
@@ -61,7 +62,6 @@ import {
   VERTICAL_GROUP_COUNT_CLASSES,
   VIRTUAL_CELL_CLASS,
 } from '../m_classes';
-import { APPOINTMENT_SETTINGS_KEY } from '../m_constants';
 import tableCreatorModule from '../m_table_creator';
 import { utils } from '../m_utils';
 import {
