@@ -6,6 +6,7 @@ import { extend } from '@js/core/utils/extend';
 import type { Item } from '@js/ui/list';
 import { isNumeric } from '@ts/core/utils/m_type';
 import type { OptionChanged } from '@ts/core/widget/types';
+import { NOT_EXISTING_INDEX } from '@ts/ui/collection/m_collection_widget.edit';
 
 import type { ListBaseProperties } from './m_list.base';
 import { ListBase } from './m_list.base';
@@ -322,8 +323,8 @@ class ListEdit extends ListBase {
     this.scrollToItem(this.option('focusedElement'));
   }
 
-  _getFlatIndex(): number | undefined {
-    const { selectedIndex } = this.option();
+  _getFlatIndex(): number {
+    const { selectedIndex = NOT_EXISTING_INDEX } = this.option();
 
     if (isNumeric(selectedIndex) || !selectedIndex) {
       return selectedIndex;
