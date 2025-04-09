@@ -10,7 +10,7 @@ export default class Toolbar {
     }
 
     getSelectAllButton(): Selector {
-        return this.element.find('[aria-label=\'Select All\']');
+        return this.element.find('[aria-label=\'Select all\']');
     }
 
     getClearSelectionButton(): Selector {
