@@ -28,6 +28,18 @@ const moduleConfig = {
         };
 
         this.aiDialog = new AiDialog(this.componentMock, {}, { container: this.$element });
+
+        this.clipboardStub = {
+            writeText: sinon.stub(),
+        };
+
+        Object.defineProperty(navigator, 'clipboard', {
+            configurable: true,
+            get: () => this.clipboardStub,
+        });
+    },
+    afterEach: function() {
+        delete navigator.clipboard;
     }
 };
 
@@ -270,9 +282,7 @@ QUnit.module('AiDialog', moduleConfig, () => {
         assert.strictEqual(hideSpy.calledOnce, true, 'hide called');
     });
 
-    QUnit.testInActiveWindow('Copy button triggers clipboard write', function(assert) {
-        const clipboardSpy = sinon.stub(navigator.clipboard, 'writeText');
-
+    QUnit.test('Copy button triggers clipboard write', function(assert) {
         this.aiDialog.show({
             currentCommand: 'translate',
             commandsMap: {
@@ -287,8 +297,7 @@ QUnit.module('AiDialog', moduleConfig, () => {
 
         $copyButton.trigger('dxclick');
 
-        assert.strictEqual(clipboardSpy.calledWith('Test value'), true, 'Copied correct text');
-        clipboardSpy.restore();
+        assert.strictEqual(this.clipboardStub.writeText.calledWith('Test value'), true, 'Copied correct text');
     });
 
     QUnit.test('Try again button triggers _retryAIRequest', function(assert) {
