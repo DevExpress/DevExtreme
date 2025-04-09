@@ -1,28 +1,22 @@
 import { describe, expect, it } from '@jest/globals';
 
-import { ColumnsController } from '../columns_controller';
-import { DataController } from '../data_controller/data_controller';
-import { FilterController } from '../filtering';
+import { getContext } from '../di.test_utils';
 import type { Options } from '../options';
 import { OptionsControllerMock } from '../options_controller/options_controller.mock';
-import { SortingController } from '../sorting_controller';
 import { PagerView } from './view';
 
 const createPagerView = (options?: Options) => {
-  const rootElement = document.createElement('div');
-  const optionsController = new OptionsControllerMock(options ?? {
+  const context = getContext(options ?? {
     dataSource: [],
     pager: {
       visible: true,
     },
   });
 
-  const filterController = new FilterController(optionsController);
-  const columnsController = new ColumnsController(optionsController);
-  const sortingController = new SortingController(optionsController, columnsController);
-  const dataController = new DataController(optionsController, sortingController, filterController);
+  const rootElement = document.createElement('div');
 
-  const pager = new PagerView(dataController, optionsController);
+  const pager = context.get(PagerView);
+  const optionsController = context.get(OptionsControllerMock);
 
   pager.render(rootElement);
 

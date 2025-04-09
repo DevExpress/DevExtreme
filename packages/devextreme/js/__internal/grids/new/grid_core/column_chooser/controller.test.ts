@@ -3,29 +3,19 @@ import { describe, expect, it } from '@jest/globals';
 import type { SelectionChangedEvent } from '@js/ui/tree_view';
 
 import { ColumnsController } from '../columns_controller';
+import { getContext } from '../di.test_utils';
 import type { Options } from '../options';
 import { OptionsControllerMock } from '../options_controller/options_controller.mock';
 import { ColumnChooserController } from './controller';
 import { expectColumnVisibility } from './test-utils';
 
-const createColumnChooserController = (options?: Options): {
-  controller: ColumnChooserController;
-  columnsController: ColumnsController;
-  optionsController: OptionsControllerMock;
-} => {
-  const optionsController = new OptionsControllerMock(options ?? {
-    columnChooser: {
-      enabled: true,
-    },
-  });
-  const columnsController = new ColumnsController(optionsController);
-
-  const columnChooserController = new ColumnChooserController(columnsController, optionsController);
+const setup = (options: Options) => {
+  const context = getContext(options);
 
   return {
-    controller: columnChooserController,
-    columnsController,
-    optionsController,
+    controller: context.get(ColumnChooserController),
+    columnsController: context.get(ColumnsController),
+    optionsController: context.get(OptionsControllerMock),
   };
 };
 
@@ -44,7 +34,7 @@ describe('ColumnChooser', () => {
       };
 
       it('is correct', () => {
-        const { controller } = createColumnChooserController({
+        const { controller } = setup({
           columns: [
             { dataField: 'A Column' },
             { dataField: 'B Column' },
@@ -55,7 +45,7 @@ describe('ColumnChooser', () => {
       });
 
       it('is correct when a column has showInColumnChooser=false', () => {
-        const { controller } = createColumnChooserController({
+        const { controller } = setup({
           columns: [
             { dataField: 'A Column' },
             { dataField: 'B Column', showInColumnChooser: false },
@@ -67,7 +57,7 @@ describe('ColumnChooser', () => {
       });
 
       it('is correct when sortOrder is set', () => {
-        const { controller, optionsController } = createColumnChooserController({
+        const { controller, optionsController } = setup({
           columns: [
             { dataField: 'C Column' },
             { dataField: 'A Column' },
@@ -88,7 +78,7 @@ describe('ColumnChooser', () => {
 
     describe('items state', () => {
       it('is correct', () => {
-        const { controller } = createColumnChooserController({
+        const { controller } = setup({
           columns: [
             { dataField: 'A Column' },
             { dataField: 'B Column', caption: 'B Caption' },
@@ -108,7 +98,7 @@ describe('ColumnChooser', () => {
       });
 
       it('updated when column option changed on select mode', () => {
-        const { columnsController, controller } = createColumnChooserController({
+        const { columnsController, controller } = setup({
           columns: ['Column 1', 'Column 2', 'Column 3', 'Column 4', 'Column 5'],
           columnChooser: {
             enabled: true,
@@ -155,7 +145,7 @@ describe('ColumnChooser', () => {
     });
 
     it('onSelectionChanged', () => {
-      const { controller, columnsController } = createColumnChooserController({
+      const { controller, columnsController } = setup({
         columns: [
           { dataField: 'A Column' },
           { dataField: 'B Column' },
