@@ -1,7 +1,7 @@
 import query from '@js/common/data/query';
 import dateUtils from '@js/core/utils/date';
 import { dateUtilsTs } from '@ts/core/utils/date';
-import type { AppointmentDataItem } from '@ts/scheduler/r1/types';
+import type { AppointmentDataItem, SafeAppointment } from '@ts/scheduler/r1/types';
 import { isDateAndTimeView, isTimelineView } from '@ts/scheduler/r1/utils/index';
 
 import {
@@ -18,7 +18,7 @@ export class AppointmentFilterVirtualStrategy extends AppointmentFilterBaseStrat
 
   get resources() { return this.options.resources; }
 
-  filter(preparedItems: AppointmentDataItem[]) {
+  filter(preparedItems: AppointmentDataItem[]): SafeAppointment[] {
     const { viewOffset } = this.options;
     const hourMs = toMs('hour');
     const isCalculateStartAndEndDayHour = isDateAndTimeView(this.viewType);
@@ -78,7 +78,10 @@ export class AppointmentFilterVirtualStrategy extends AppointmentFilterBaseStrat
     }, preparedItems);
   }
 
-  filterPreparedItems({ filterOptions, groupCount }, preparedItems: AppointmentDataItem[]) {
+  filterPreparedItems(
+    { filterOptions, groupCount },
+    preparedItems: AppointmentDataItem[],
+  ): AppointmentDataItem[] {
     const combinedFilters: any = [];
 
     let itemsToFilter = preparedItems;
@@ -110,7 +113,7 @@ export class AppointmentFilterVirtualStrategy extends AppointmentFilterBaseStrat
       .toArray();
   }
 
-  hasAllDayAppointments(filteredItems, preparedItems: AppointmentDataItem[]) {
+  hasAllDayAppointments(filteredItems, preparedItems: AppointmentDataItem[]): boolean {
     return this.filterAllDayAppointments(preparedItems).length > 0;
   }
 

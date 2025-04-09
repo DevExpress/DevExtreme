@@ -1,4 +1,3 @@
-import type { DxPromise } from '@js/core/utils/deferred';
 import type { Appointment } from '@js/ui/scheduler';
 
 export type Direction = 'vertical' | 'horizontal';
@@ -8,12 +7,9 @@ export type AllDayPanelModeType = 'all' | 'allDay' | 'hidden';
 export type FilterItemType = Record<string, string | number> | string | number;
 export type HeaderCellTextFormat = string | ((date: Date) => string);
 
-export interface BaseTemplateProps {
-  index: number;
-}
-
-export interface DataSourcePromise extends DxPromise {
-  done: (items: unknown) => void;
+export interface SafeAppointment extends Appointment {
+  startDate: Date | string;
+  endDate: Date | string;
 }
 
 export interface AppointmentDataItem {
@@ -26,11 +22,7 @@ export interface AppointmentDataItem {
   hasRecurrenceRule: boolean;
   allDay: boolean;
   visible: boolean;
-  rawAppointment: Appointment;
-}
-
-export interface AppointmentFilter {
-  filter: (dataItems: AppointmentDataItem[]) => Appointment[];
+  rawAppointment: SafeAppointment;
 }
 
 export interface AppointmentGeometry {

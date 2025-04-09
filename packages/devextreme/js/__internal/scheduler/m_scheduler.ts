@@ -37,7 +37,7 @@ import errors from '@js/ui/widget/ui.errors';
 import Widget from '@js/ui/widget/ui.widget';
 import { dateUtilsTs } from '@ts/core/utils/date';
 import { createTimeZoneCalculator } from '@ts/scheduler/r1/timezone_calculator/index';
-import type { AppointmentDataItem } from '@ts/scheduler/r1/types';
+import type { AppointmentDataItem, SafeAppointment } from '@ts/scheduler/r1/types';
 import {
   excludeFromRecurrence,
   getAppointmentDataItems,
@@ -164,9 +164,9 @@ const RECURRENCE_EDITING_MODE = {
 };
 
 class Scheduler extends Widget<any> {
-  _filteredItems!: any[];
+  filteredItems: SafeAppointment[] = [];
 
-  _preparedItems!: AppointmentDataItem[];
+  preparedItems: AppointmentDataItem[] = [];
 
   _timeZoneCalculator!: any;
 
@@ -397,28 +397,6 @@ class Scheduler extends Widget<any> {
         useDeferUpdateForTemplates: false,
       },
     });
-  }
-
-  get filteredItems() {
-    if (!this._filteredItems) {
-      this._filteredItems = [];
-    }
-    return this._filteredItems;
-  }
-
-  set filteredItems(value) {
-    this._filteredItems = value;
-  }
-
-  get preparedItems(): AppointmentDataItem[] {
-    if (!this._preparedItems) {
-      this._preparedItems = [];
-    }
-    return this._preparedItems;
-  }
-
-  set preparedItems(value: AppointmentDataItem[]) {
-    this._preparedItems = value;
   }
 
   get currentView() {

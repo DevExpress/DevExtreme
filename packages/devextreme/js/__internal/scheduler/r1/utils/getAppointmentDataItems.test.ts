@@ -127,7 +127,7 @@ describe('Data API', () => {
         .toEqual([]);
     });
 
-    it('should return correct value without endDate', () => {
+    it('should correct endDate value if it doesn\'t set', () => {
       const data = [{
         startDate: new Date(2021, 9, 9, 17),
       }];
@@ -136,7 +136,10 @@ describe('Data API', () => {
         allDay: false,
         endDate: new Date(2021, 9, 9, 17, 30),
         hasRecurrenceRule: false,
-        rawAppointment: data[0],
+        rawAppointment: {
+          ...data[0],
+          endDate: new Date(2021, 9, 9, 17, 30),
+        },
         recurrenceException: undefined,
         recurrenceRule: undefined,
         startDate: new Date(2021, 9, 9, 17),
@@ -204,8 +207,6 @@ describe('replaceIncorrectEndDate', () => {
     ].forEach((item) => {
       replaceIncorrectEndDate(
         item.data,
-        new Date(2019, 4, 3, 12),
-        item.data.endDate,
         30,
         mockAppointmentDataAccessor,
       );
