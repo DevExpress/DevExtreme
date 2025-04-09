@@ -351,6 +351,9 @@
         "dxCalendar-selectedDateRangeCount": "Há {0} intervalos de datas selecionados",
         "dxCalendar-readOnlyLabel": "Calendário somente leitura",
 
+        "dxCardView-selectAll": "Select All",
+        "dxCardView-clearSelection": "Clear selection",
+
         "dxAvatar-defaultImageAlt": "Avatar",
 
         "dxChat-elementAriaLabel": "Chat",
