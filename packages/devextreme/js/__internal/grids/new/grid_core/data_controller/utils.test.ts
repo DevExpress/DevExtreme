@@ -54,12 +54,12 @@ describe('normalizeRemoteOption', () => {
 describe('normalizeLocalOption', () => {
   each`
           remoteOperations                                      | expectedOperationOptions
-          ${{ filtering: true, sorting: false, paging: false }} | ${{ filtering: false, sorting: true, paging: true }}
-          ${{ filtering: false, sorting: true, paging: false }} | ${{ filtering: true, sorting: false, paging: true }}
-          ${{ filtering: false, sorting: false, paging: true }} | ${{ filtering: true, sorting: true, paging: false }}
+          ${{ filtering: true, sorting: false, paging: false }} | ${{ filtering: false, sorting: true, paging: true, grouping: true }}
+          ${{ filtering: false, sorting: true, paging: false }} | ${{ filtering: true, sorting: false, paging: true, grouping: true }}
+          ${{ filtering: false, sorting: false, paging: true }} | ${{ filtering: true, sorting: true, paging: false, grouping: true }}
 
-          ${{ filtering: true, sorting: true, paging: true }}   | ${{ filtering: false, sorting: false, paging: false }}
-          ${{ filtering: false, sorting: false, paging: false }}| ${{ filtering: true, sorting: true, paging: true }}
+          ${{ filtering: true, sorting: true, paging: true }}   | ${{ filtering: false, sorting: false, paging: false, grouping: true }}
+          ${{ filtering: false, sorting: false, paging: false }}| ${{ filtering: true, sorting: true, paging: true, grouping: true }}
   `
     .it('should invert remoteOperations', ({
       remoteOperations,
