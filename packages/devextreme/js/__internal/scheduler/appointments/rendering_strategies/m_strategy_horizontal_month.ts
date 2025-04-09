@@ -1,4 +1,5 @@
 import dateUtils from '@js/core/utils/date';
+import type { SafeAppointment } from '@ts/scheduler/r1/types';
 
 import { getGroupWidth } from '../../workspaces/helpers/m_position_helper';
 import HorizontalMonthLineRenderingStrategy from './m_strategy_horizontal_month_line';
@@ -146,7 +147,7 @@ class HorizontalMonthRenderingStrategy extends HorizontalMonthLineRenderingStrat
     return this._getAppointmentDefaultHeight();
   }
 
-  createTaskPositionMap(items) {
+  createTaskPositionMap(items: SafeAppointment[]) {
     return super.createTaskPositionMap(items, true);
   }
 

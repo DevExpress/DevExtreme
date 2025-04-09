@@ -3,6 +3,7 @@ import { extend } from '@js/core/utils/extend';
 import { isNumeric, isObject } from '@js/core/utils/type';
 import { current as currentTheme } from '@js/ui/themes';
 import { dateUtilsTs } from '@ts/core/utils/date';
+import type { SafeAppointment } from '@ts/scheduler/r1/types';
 import { isAppointmentTakesAllDay } from '@ts/scheduler/r1/utils/index';
 
 import { createAppointmentAdapter } from '../../m_appointment_adapter';
@@ -144,7 +145,7 @@ class BaseRenderingStrategy {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  createTaskPositionMap(items, skipSorting?) {
+  createTaskPositionMap(items: SafeAppointment[], skipSorting?) {
     delete this._maxAppointmentCountPerCell;
 
     const length = items?.length;

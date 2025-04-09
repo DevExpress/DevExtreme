@@ -1,5 +1,6 @@
 import dateUtils from '@js/core/utils/date';
 import { each } from '@js/core/utils/iterator';
+import type { SafeAppointment } from '@ts/scheduler/r1/types';
 
 import { createAppointmentAdapter } from '../../m_appointment_adapter';
 import { groupAppointmentsByResources } from '../../resources/m_utils';
@@ -43,7 +44,7 @@ class AgendaRenderingStrategy extends BaseRenderingStrategy {
     );
   }
 
-  createTaskPositionMap(appointments) {
+  createTaskPositionMap(appointments: SafeAppointment[]) {
     let height;
     let appointmentsByResources;
 

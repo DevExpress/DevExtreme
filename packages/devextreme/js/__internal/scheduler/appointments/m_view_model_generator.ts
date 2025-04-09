@@ -1,7 +1,9 @@
 import { dateUtilsTs } from '@ts/core/utils/date';
+import type { SafeAppointment } from '@ts/scheduler/r1/types';
 import { getAppointmentKey } from '@ts/scheduler/r1/utils/index';
 
 import AgendaAppointmentsStrategy from './rendering_strategies/m_strategy_agenda';
+import type BaseAppointmentsStrategy from './rendering_strategies/m_strategy_base';
 import HorizontalAppointmentsStrategy from './rendering_strategies/m_strategy_horizontal';
 import HorizontalMonthAppointmentsStrategy from './rendering_strategies/m_strategy_horizontal_month';
 import HorizontalMonthLineAppointmentsStrategy from './rendering_strategies/m_strategy_horizontal_month_line';
@@ -18,14 +20,18 @@ const RENDERING_STRATEGIES = {
 };
 
 export class AppointmentViewModelGenerator {
-  renderingStrategy: any;
+  renderingStrategy!: BaseAppointmentsStrategy;
 
   initRenderingStrategy(options) {
     const RenderingStrategy = RENDERING_STRATEGIES[options.appointmentRenderingStrategyName];
     this.renderingStrategy = new RenderingStrategy(options);
   }
 
-  generate(filteredItems, options) {
+  getRenderingStrategy() {
+    return this.renderingStrategy;
+  }
+
+  generate(filteredItems: SafeAppointment[], options) {
     const { viewOffset } = options;
     const appointments = filteredItems
       ? filteredItems.slice()
@@ -44,7 +50,7 @@ export class AppointmentViewModelGenerator {
     };
   }
 
-  postProcess(filteredItems, positionMap) {
+  postProcess(filteredItems: SafeAppointment[], positionMap) {
     const renderingStrategy = this.getRenderingStrategy();
 
     return filteredItems.map((data, index) => {
@@ -191,10 +197,6 @@ export class AppointmentViewModelGenerator {
     };
   }
 
-  getRenderingStrategy() {
-    return this.renderingStrategy;
-  }
-
   // NOTE: Unfortunately, we cannot implement immutable behavior here
   // because in this case it will break the refs (keys) of dataSource's appointments,
   // and it will break appointment updates :(
@@ -208,7 +210,6 @@ export class AppointmentViewModelGenerator {
     for (const model of viewModel) {
       // eslint-disable-next-line no-restricted-syntax
       for (const setting of model.settings ?? []) {
-        // eslint-disable-next-line prefer-destructuring
         const appointment = setting?.info?.appointment;
 
         if (appointment && !processedAppointments.has(appointment)) {

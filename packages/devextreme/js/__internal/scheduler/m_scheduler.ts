@@ -164,9 +164,9 @@ const RECURRENCE_EDITING_MODE = {
 };
 
 class Scheduler extends Widget<any> {
-  filteredItems: SafeAppointment[] = [];
+  filteredItems!: SafeAppointment[];
 
-  preparedItems: AppointmentDataItem[] = [];
+  preparedItems!: AppointmentDataItem[];
 
   _timeZoneCalculator!: any;
 
@@ -194,7 +194,7 @@ class Scheduler extends Widget<any> {
 
   _appointmentTooltip: any;
 
-  _readyToRenderAppointments = false;
+  _readyToRenderAppointments?: boolean;
 
   _editing: any;
 
@@ -1490,6 +1490,8 @@ class Scheduler extends Widget<any> {
   }
 
   _initMarkupCore(resources) {
+    this.filteredItems = [];
+    this.preparedItems = [];
     this._readyToRenderAppointments = hasWindow();
 
     this._workSpace && this._cleanWorkspace();

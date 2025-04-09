@@ -1,5 +1,6 @@
 import { equalByValue } from '@js/core/utils/common';
 import dateUtils from '@js/core/utils/date';
+import type { SafeAppointment } from '@ts/scheduler/r1/types';
 import { getAppointmentRenderingStrategyName, getCellDuration, getGroupCount } from '@ts/scheduler/r1/utils/index';
 
 import { AppointmentViewModelGenerator } from './appointments/m_view_model_generator';
@@ -121,7 +122,7 @@ class AppointmentLayoutManager {
     };
   }
 
-  createAppointmentsMap(items) {
+  createAppointmentsMap(items: SafeAppointment[]) {
     const renderingStrategyOptions = this._getRenderingStrategyOptions();
 
     const {
@@ -238,9 +239,9 @@ class AppointmentLayoutManager {
 
   getRenderingStrategyInstance() {
     const renderingStrategy = this.appointmentViewModel.getRenderingStrategy();
+
     if (!renderingStrategy) {
-      const options = this._getRenderingStrategyOptions();
-      this.appointmentViewModel.initRenderingStrategy(options);
+      this.appointmentViewModel.initRenderingStrategy(this._getRenderingStrategyOptions());
     }
 
     return this.appointmentViewModel.getRenderingStrategy();
