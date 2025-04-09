@@ -1044,7 +1044,7 @@ export default function() {
                     items: [{
                         name: 'ai',
                         commands: ['summarize']
-                    }]
+                    }],
                 },
                 onValueChanged: () => {
                     const value = instance.option('value');
@@ -1056,7 +1056,7 @@ export default function() {
             const $aiMenu = $(`.${TOOLBAR_FORMAT_WIDGET_CLASS} .${MENU_ITEM_CLASS}`);
             $aiMenu.trigger('dxclick');
 
-            const $menuItem = $(`.${MENU_ITEM_CLASS}`).eq(1);
+            const $menuItem = $(`.${MENU_ITEM_CLASS}`).last();
             $menuItem.trigger('dxclick');
 
             const $dropDownButton = $(`.${DROP_DOWN_BUTTON_CLASS} .${BUTTON_CLASS}`).eq(0);
@@ -1064,8 +1064,6 @@ export default function() {
 
             const $option = $(`.${OVERLAY_CLASS} .${LISTBOX_ITEM_CLASS}`).eq(0);
             $option.trigger('dxclick');
-
-            this.clock.tick(10);
         });
 
         QUnit.test('AI dialog inserts above result text', function(assert) {
@@ -1094,7 +1092,7 @@ export default function() {
             const $aiMenu = $(`.${TOOLBAR_FORMAT_WIDGET_CLASS} .${MENU_ITEM_CLASS}`);
             $aiMenu.trigger('dxclick');
 
-            const $menuItem = $(`.${MENU_ITEM_CLASS}`).eq(1);
+            const $menuItem = $(`.${MENU_ITEM_CLASS}`).last();
             $menuItem.trigger('dxclick');
 
             const $dropDownButton = $(`.${DROP_DOWN_BUTTON_CLASS} .${BUTTON_CLASS}`).eq(0);
@@ -1126,7 +1124,7 @@ export default function() {
             const $aiMenu = $(`.${TOOLBAR_FORMAT_WIDGET_CLASS} .${MENU_ITEM_CLASS}`);
             $aiMenu.trigger('dxclick');
 
-            const $menuItem = $(`.${MENU_ITEM_CLASS}`).eq(1);
+            const $menuItem = $(`.${MENU_ITEM_CLASS}`).last();
             $menuItem.trigger('dxclick');
 
             const $dropDownButton = $(`.${DROP_DOWN_BUTTON_CLASS} .${BUTTON_CLASS}`).eq(0);
@@ -1152,7 +1150,7 @@ export default function() {
             const $aiMenu = $(`.${TOOLBAR_FORMAT_WIDGET_CLASS} .${MENU_ITEM_CLASS}`);
             $aiMenu.trigger('dxclick');
 
-            const $menuItem = $(`.${MENU_ITEM_CLASS}`).eq(1);
+            const $menuItem = $(`.${MENU_ITEM_CLASS}`).last();
             $menuItem.trigger('dxclick');
 
             const $dropDownButton = $(`.${DROP_DOWN_BUTTON_CLASS} .${BUTTON_CLASS}`).eq(0);
@@ -1183,7 +1181,7 @@ export default function() {
             const $aiMenu = $(`.${TOOLBAR_FORMAT_WIDGET_CLASS} .${MENU_ITEM_CLASS}`);
             $aiMenu.trigger('dxclick');
 
-            const $menuItem = $(`.${MENU_ITEM_CLASS}`).eq(1);
+            const $menuItem = $(`.${MENU_ITEM_CLASS}`).last();
             $menuItem.trigger('dxclick');
 
             const $dropDownButton = $(`.${DROP_DOWN_BUTTON_CLASS} .${BUTTON_CLASS}`).eq(0);
