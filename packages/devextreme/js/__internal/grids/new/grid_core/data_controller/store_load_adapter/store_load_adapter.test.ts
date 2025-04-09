@@ -4,9 +4,10 @@ import {
 import type { DataSource } from '@js/common/data';
 import { Deferred } from '@js/core/utils/deferred';
 import { state } from '@ts/core/reactive';
-import { StoreLoadAdapter } from '@ts/grids/new/grid_core/data_controller/store_load_adapter/store_load_adapter';
-import type { LocalStoreFabric } from '@ts/grids/new/grid_core/data_controller/store_load_adapter/types';
 import type { InternalLoadOptions, OperationOptions } from '@ts/grids/new/grid_core/data_controller/types';
+
+import { StoreLoadAdapter } from './store_load_adapter';
+import type { LocalStoreFabric } from './types';
 
 const setup = (localOperations: OperationOptions) => {
   const remoteStoreLoadFnMock = jest.fn()

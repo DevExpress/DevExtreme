@@ -2,7 +2,7 @@ import CardView from 'devextreme-testcafe-models/cardView';
 import { ClientFunction } from 'testcafe';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
-import { remoteApiMock, remoteData } from '../helpers/remoteApiMock';
+import { remoteApiIdGroupMock, remoteApiMock, remoteData } from '../helpers/remoteApiMock';
 
 fixture`HeaderFilter.RemoteDataSource.Functional`
   .page(url(__dirname, '../../container.html'));
@@ -84,6 +84,7 @@ const clearRemoteOperations = () => ClientFunction(() => {
     await t.click(cardView.element);
   }).before(async (t) => {
     await t.addRequestHooks(remoteApiMock);
+    await setRemoteOperations(remoteOperations);
     await createWidget('dxCardView', () => ({
       dataSource: {
         store: (window as any).DevExpress.data.AspNet.createStore({
@@ -113,6 +114,7 @@ const clearRemoteOperations = () => ClientFunction(() => {
     }));
   }).after(async (t) => {
     await t.removeRequestHooks(remoteApiMock);
+    await clearRemoteOperations();
   });
 
   test(`remote operations: ${remoteOperations} -> should update column options with filterType and values (regular selection)`, async (t) => {
@@ -144,6 +146,7 @@ const clearRemoteOperations = () => ClientFunction(() => {
     await t.click(cardView.element);
   }).before(async (t) => {
     await t.addRequestHooks(remoteApiMock);
+    await setRemoteOperations(remoteOperations);
     await createWidget('dxCardView', () => ({
       dataSource: {
         store: (window as any).DevExpress.data.AspNet.createStore({
@@ -160,6 +163,7 @@ const clearRemoteOperations = () => ClientFunction(() => {
     }));
   }).after(async (t) => {
     await t.removeRequestHooks(remoteApiMock);
+    await clearRemoteOperations();
   });
 
   test(`remote operations: ${remoteOperations} -> should update column options with filterType and values (selectAll case #0)`, async (t) => {
@@ -189,6 +193,7 @@ const clearRemoteOperations = () => ClientFunction(() => {
     await t.click(cardView.element);
   }).before(async (t) => {
     await t.addRequestHooks(remoteApiMock);
+    await setRemoteOperations(remoteOperations);
     await createWidget('dxCardView', () => ({
       dataSource: {
         store: (window as any).DevExpress.data.AspNet.createStore({
@@ -205,6 +210,7 @@ const clearRemoteOperations = () => ClientFunction(() => {
     }));
   }).after(async (t) => {
     await t.removeRequestHooks(remoteApiMock);
+    await clearRemoteOperations();
   });
 
   test(`remote operations: ${remoteOperations} -> should update column options with filterType and values (selectAll case #1)`, async (t) => {
@@ -238,6 +244,7 @@ const clearRemoteOperations = () => ClientFunction(() => {
     await t.click(cardView.element);
   }).before(async (t) => {
     await t.addRequestHooks(remoteApiMock);
+    await setRemoteOperations(remoteOperations);
     await createWidget('dxCardView', () => ({
       dataSource: {
         store: (window as any).DevExpress.data.AspNet.createStore({
@@ -254,6 +261,7 @@ const clearRemoteOperations = () => ClientFunction(() => {
     }));
   }).after(async (t) => {
     await t.removeRequestHooks(remoteApiMock);
+    await clearRemoteOperations();
   });
 
   test(`remote operations: ${remoteOperations} -> should apply filter from options (type: "include" by default)`, async (t) => {
@@ -280,6 +288,7 @@ const clearRemoteOperations = () => ClientFunction(() => {
     await t.click(cardView.element);
   }).before(async (t) => {
     await t.addRequestHooks(remoteApiMock);
+    await setRemoteOperations(remoteOperations);
     await createWidget('dxCardView', () => ({
       dataSource: {
         store: (window as any).DevExpress.data.AspNet.createStore({
@@ -305,6 +314,7 @@ const clearRemoteOperations = () => ClientFunction(() => {
     }));
   }).after(async (t) => {
     await t.removeRequestHooks(remoteApiMock);
+    await clearRemoteOperations();
   });
 
   test(`remote operations: ${remoteOperations} -> should apply filter from options (type: "include")`, async (t) => {
@@ -331,6 +341,7 @@ const clearRemoteOperations = () => ClientFunction(() => {
     await t.click(cardView.element);
   }).before(async (t) => {
     await t.addRequestHooks(remoteApiMock);
+    await setRemoteOperations(remoteOperations);
     await createWidget('dxCardView', () => ({
       dataSource: {
         store: (window as any).DevExpress.data.AspNet.createStore({
@@ -357,6 +368,7 @@ const clearRemoteOperations = () => ClientFunction(() => {
     }));
   }).after(async (t) => {
     await t.removeRequestHooks(remoteApiMock);
+    await clearRemoteOperations();
   });
 
   test(`remote operations: ${remoteOperations} -> should apply filter from options (type: "exclude")`, async (t) => {
@@ -385,6 +397,7 @@ const clearRemoteOperations = () => ClientFunction(() => {
     await t.click(cardView.element);
   }).before(async (t) => {
     await t.addRequestHooks(remoteApiMock);
+    await setRemoteOperations(remoteOperations);
     await createWidget('dxCardView', () => ({
       dataSource: {
         store: (window as any).DevExpress.data.AspNet.createStore({
@@ -411,9 +424,10 @@ const clearRemoteOperations = () => ClientFunction(() => {
     }));
   }).after(async (t) => {
     await t.removeRequestHooks(remoteApiMock);
+    await clearRemoteOperations();
   });
 
-  test.only(`remote operations: ${remoteOperations} -> should process groupInterval option`, async (t) => {
+  test(`remote operations: ${remoteOperations} -> should process groupInterval option`, async (t) => {
     const cardView = new CardView(CARD_VIEW_SELECTOR);
     const expectedTexts = [
       '0 - 5',
@@ -437,7 +451,8 @@ const clearRemoteOperations = () => ClientFunction(() => {
 
     await t.click(cardView.element);
   }).before(async (t) => {
-    await t.addRequestHooks(remoteApiMock);
+    await t.addRequestHooks(remoteApiIdGroupMock);
+    await setRemoteOperations(remoteOperations);
     await createWidget('dxCardView', () => ({
       dataSource: {
         store: (window as any).DevExpress.data.AspNet.createStore({
@@ -462,7 +477,8 @@ const clearRemoteOperations = () => ClientFunction(() => {
       height: 600,
     }));
   }).after(async (t) => {
-    await t.removeRequestHooks(remoteApiMock);
+    await t.removeRequestHooks(remoteApiIdGroupMock);
+    await clearRemoteOperations();
   });
 
   test(`remote operations: ${remoteOperations} -> should not update column options if popup cancel btn clicked`, async (t) => {
@@ -495,6 +511,7 @@ const clearRemoteOperations = () => ClientFunction(() => {
     await t.click(cardView.element);
   }).before(async (t) => {
     await t.addRequestHooks(remoteApiMock);
+    await setRemoteOperations(remoteOperations);
     await createWidget('dxCardView', () => ({
       dataSource: {
         store: (window as any).DevExpress.data.AspNet.createStore({
@@ -520,5 +537,6 @@ const clearRemoteOperations = () => ClientFunction(() => {
     }));
   }).after(async (t) => {
     await t.removeRequestHooks(remoteApiMock);
+    await clearRemoteOperations();
   });
 });

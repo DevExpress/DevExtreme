@@ -30,3 +30,24 @@ export const remoteApiMock = RequestMock()
     200,
     { 'access-control-allow-origin': '*' },
   );
+
+export const remoteApiIdGroupMock = RequestMock()
+  .onRequestTo(/\/api\/data\?.*group=/)
+  .respond(
+    {
+      data: [
+        { key: 0, items: null },
+        { key: 5, items: null },
+      ],
+    },
+    200,
+    { 'access-control-allow-origin': '*' },
+  )
+  .onRequestTo(/\/api\/data/)
+  .respond(
+    {
+      data: remoteData,
+    },
+    200,
+    { 'access-control-allow-origin': '*' },
+  );

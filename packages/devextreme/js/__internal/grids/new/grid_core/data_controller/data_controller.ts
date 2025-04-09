@@ -8,11 +8,11 @@ import {
   computed, effect, state,
 } from '@ts/core/reactive/index';
 import { createPromise } from '@ts/core/utils/promise';
-import { StoreLoadAdapter } from '@ts/grids/new/grid_core/data_controller/store_load_adapter';
 
 import { FilterController } from '../filtering/filter_controller';
 import { OptionsController } from '../options_controller/options_controller';
 import { SortingController } from '../sorting_controller/sorting_controller';
+import { StoreLoadAdapter } from './store_load_adapter/index';
 import type { DataObject, Key } from './types';
 import {
   getLocalLoadOptions,

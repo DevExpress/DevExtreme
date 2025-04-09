@@ -2,7 +2,7 @@
 import type { DataSource, LoadResult } from '@js/common/data';
 import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred } from '@js/core/utils/deferred';
-import type { SubsGets } from '@ts/core/reactive';
+import type { SubsGets } from '@ts/core/reactive/index';
 
 import { deferredCache } from '../deferred_cache';
 import type { InternalLoadOptions, OperationOptions } from '../types';
