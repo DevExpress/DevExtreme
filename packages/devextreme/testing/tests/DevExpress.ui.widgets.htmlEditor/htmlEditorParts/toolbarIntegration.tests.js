@@ -1053,15 +1053,19 @@ export default function() {
                 }
             }).dxHtmlEditor('instance');
 
-            $('#htmlEditor').find(`.${TOOLBAR_FORMAT_WIDGET_CLASS} .${MENU_ITEM_CLASS}`).trigger('dxclick');
+            const $aiMenu = $(`.${TOOLBAR_FORMAT_WIDGET_CLASS} .${MENU_ITEM_CLASS}`);
+            $aiMenu.trigger('dxclick');
 
-            $(`.${MENU_ITEM_CLASS}`).eq(1).trigger('dxclick');
+            const $menuItem = $(`.${MENU_ITEM_CLASS}`).eq(1);
+            $menuItem.trigger('dxclick');
 
             const $dropDownButton = $(`.${DROP_DOWN_BUTTON_CLASS} .${BUTTON_CLASS}`).eq(0);
             $dropDownButton.trigger('dxclick');
 
             const $option = $(`.${OVERLAY_CLASS} .${LISTBOX_ITEM_CLASS}`).eq(0);
             $option.trigger('dxclick');
+
+            this.clock.tick(10);
         });
 
         QUnit.test('AI dialog inserts above result text', function(assert) {
@@ -1086,6 +1090,12 @@ export default function() {
             $('#htmlEditor').find(`.${TOOLBAR_FORMAT_WIDGET_CLASS} .${MENU_ITEM_CLASS}`).trigger('dxclick');
 
             $(`.${MENU_ITEM_CLASS}`).eq(1).trigger('dxclick');
+
+            const $aiMenu = $(`.${TOOLBAR_FORMAT_WIDGET_CLASS} .${MENU_ITEM_CLASS}`);
+            $aiMenu.trigger('dxclick');
+
+            const $menuItem = $(`.${MENU_ITEM_CLASS}`).eq(1);
+            $menuItem.trigger('dxclick');
 
             const $dropDownButton = $(`.${DROP_DOWN_BUTTON_CLASS} .${BUTTON_CLASS}`).eq(0);
             $dropDownButton.trigger('dxclick');
@@ -1113,15 +1123,79 @@ export default function() {
                 }
             }).dxHtmlEditor('instance');
 
-            $('#htmlEditor').find(`.${TOOLBAR_FORMAT_WIDGET_CLASS} .${MENU_ITEM_CLASS}`).trigger('dxclick');
+            const $aiMenu = $(`.${TOOLBAR_FORMAT_WIDGET_CLASS} .${MENU_ITEM_CLASS}`);
+            $aiMenu.trigger('dxclick');
 
-            $(`.${MENU_ITEM_CLASS}`).eq(1).trigger('dxclick');
+            const $menuItem = $(`.${MENU_ITEM_CLASS}`).eq(1);
+            $menuItem.trigger('dxclick');
 
             const $dropDownButton = $(`.${DROP_DOWN_BUTTON_CLASS} .${BUTTON_CLASS}`).eq(0);
             $dropDownButton.trigger('dxclick');
 
             const $option = $(`.${OVERLAY_CLASS} .${LISTBOX_ITEM_CLASS}`).eq(2);
             $option.trigger('dxclick');
+        });
+
+        QUnit.test('AI dialog uses selected text as input', function(assert) {
+            const instance = $('#htmlEditor').dxHtmlEditor({
+                value: 'Test value',
+                ai: {},
+                toolbar: {
+                    items: [{
+                        name: 'ai',
+                        commands: ['summarize']
+                    }]
+                },
+            }).dxHtmlEditor('instance');
+
+            instance.setSelection(0, 4);
+            const $aiMenu = $(`.${TOOLBAR_FORMAT_WIDGET_CLASS} .${MENU_ITEM_CLASS}`);
+            $aiMenu.trigger('dxclick');
+
+            const $menuItem = $(`.${MENU_ITEM_CLASS}`).eq(1);
+            $menuItem.trigger('dxclick');
+
+            const $dropDownButton = $(`.${DROP_DOWN_BUTTON_CLASS} .${BUTTON_CLASS}`).eq(0);
+            $dropDownButton.trigger('dxclick');
+
+            const $option = $(`.${OVERLAY_CLASS} .${LISTBOX_ITEM_CLASS}`).eq(0);
+            $option.trigger('dxclick');
+
+            const $textArea = $('.dx-textarea').dxTextArea('instance');
+            const resultText = $textArea.option('value');
+
+            assert.strictEqual(resultText, 'Test', 'Selected text used in resultTextArea');
+        });
+
+        QUnit.test('AI dialog uses all text as input if nothing is selected', function(assert) {
+            const instance = $('#htmlEditor').dxHtmlEditor({
+                value: 'Test value',
+                ai: {},
+                toolbar: {
+                    items: [{
+                        name: 'ai',
+                        commands: ['summarize']
+                    }]
+                },
+            }).dxHtmlEditor('instance');
+
+            instance.setSelection(0, 0);
+            const $aiMenu = $(`.${TOOLBAR_FORMAT_WIDGET_CLASS} .${MENU_ITEM_CLASS}`);
+            $aiMenu.trigger('dxclick');
+
+            const $menuItem = $(`.${MENU_ITEM_CLASS}`).eq(1);
+            $menuItem.trigger('dxclick');
+
+            const $dropDownButton = $(`.${DROP_DOWN_BUTTON_CLASS} .${BUTTON_CLASS}`).eq(0);
+            $dropDownButton.trigger('dxclick');
+
+            const $option = $(`.${OVERLAY_CLASS} .${LISTBOX_ITEM_CLASS}`).eq(0);
+            $option.trigger('dxclick');
+
+            const $textArea = $('.dx-textarea').dxTextArea('instance');
+            const resultText = $textArea.option('value');
+
+            assert.strictEqual(resultText, 'Test value\n', 'All text used in resultTextArea');
         });
     });
 }
