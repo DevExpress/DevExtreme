@@ -1,13 +1,11 @@
 /* eslint-disable spellcheck/spell-checker */
-import type {
-  ContextMenuPreparingEvent, ContextMenuTarget, DataRow,
-} from '@js/ui/card_view';
 import type { Item as ContextMenuItem, ItemClickEvent } from '@js/ui/context_menu';
 
 import { ColumnsController } from '../../grid_core/columns_controller';
-import type { Column } from '../../grid_core/columns_controller/types';
+import type { Column, DataRow } from '../../grid_core/columns_controller/types';
 import { BaseContextMenuController } from '../../grid_core/context_menu/controller';
 import { OptionsController } from '../options_controller';
+import type { ContextMenuPreparingEvent, ContextMenuTarget } from '.';
 
 export interface ContextInfo {
   column?: Column;
@@ -46,14 +44,14 @@ export class ContextMenuController
       items.push(...this.getSortingItems(contextInfo.column));
     }
 
-    const event: ContextMenuPreparingEvent = {
+    // @ts-expect-error
+    const event: ContextMenuPreparingEvent<DataRow> = {
       items: Array.isArray(items) ? items : undefined,
       target: view,
       targetElement: targetElement as HTMLElement,
       columnIndex: undefined,
       card: undefined,
       cardIndex: undefined,
-      // @ts-expect-error
       column: undefined,
 
       ...contextInfo,

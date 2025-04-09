@@ -3,11 +3,12 @@ import {
 } from '@jest/globals';
 import type { SortOrder } from '@js/common';
 import $ from '@js/core/renderer';
-import type { ContextMenuPreparingEvent } from '@js/ui/card_view';
 import type ContextMenu from '@js/ui/context_menu';
 import type { PositioningEvent } from '@js/ui/context_menu';
 import type { Options as CardViewOptions } from '@ts/grids/new/card_view/options';
 import CardView from '@ts/grids/new/card_view/widget';
+
+import type { ContextMenuPreparingEvent } from '.';
 
 const setup = (options: CardViewOptions = {}): CardView => {
   const container = document.createElement('div');

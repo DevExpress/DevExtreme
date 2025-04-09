@@ -2,7 +2,6 @@
 
 import type { EventInfo } from '@js/common/core/events';
 import type { DxElement } from '@js/core/element';
-import type dxCardView from '@js/ui/card_view';
 
 import type { Column, DataRow } from '../../grid_core/columns_controller/types';
 
@@ -10,7 +9,7 @@ export type ContextMenuTarget = 'toolbar' | 'headerPanel' | 'content';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export type ContextMenuPreparingEvent<TCardData = unknown, TKey = unknown>
-= EventInfo<dxCardView> & {
+= EventInfo<any> & {
   items?: any[];
 
   readonly target: ContextMenuTarget;
