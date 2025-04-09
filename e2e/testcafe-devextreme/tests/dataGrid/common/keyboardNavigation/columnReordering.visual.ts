@@ -68,3 +68,243 @@ const DATA_GRID_SELECTOR = '#container';
     });
   });
 });
+
+test('reorder fixed left column to right', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+  const firstFixedLeftHeader = dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(0);
+
+  await t
+    .click(firstFixedLeftHeader.element)
+    .pressKey('ctrl+right')
+    .pressKey('ctrl+right');
+
+  await takeScreenshot(
+    'reorder_fixed_left_column_to_right',
+    dataGrid.element,
+  );
+
+  await t.expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  await createWidget('dxDataGrid', {
+    columnWidth: 100,
+    dataSource: [{
+      field1: 'test1',
+      field2: 'test2',
+      field3: 'test3',
+      field4: 'test4',
+      field5: 'test5',
+      field6: 'test6',
+      field7: 'test7',
+      field8: 'test8',
+    }],
+    customizeColumns: (columns) => {
+      columns[0].fixed = true;
+      columns[1].fixed = true;
+    },
+  });
+});
+
+test('reorder fixed left column to left', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+  const secondFixedLeftHeader = dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(1);
+
+  await t
+    .click(secondFixedLeftHeader.element)
+    .pressKey('ctrl+left')
+    .pressKey('ctrl+left');
+
+  await takeScreenshot(
+    'reorder_fixed_left_column_to_left',
+    dataGrid.element,
+  );
+
+  await t.expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  await createWidget('dxDataGrid', {
+    columnWidth: 100,
+    dataSource: [{
+      field1: 'test1',
+      field2: 'test2',
+      field3: 'test3',
+      field4: 'test4',
+      field5: 'test5',
+      field6: 'test6',
+      field7: 'test7',
+      field8: 'test8',
+    }],
+    customizeColumns: (columns) => {
+      columns[0].fixed = true;
+      columns[1].fixed = true;
+    },
+  });
+});
+
+test('reorder fixed right column to right', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+  const firstFixedRightHeader = dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(6);
+
+  await t
+    .click(firstFixedRightHeader.element)
+    .pressKey('ctrl+right')
+    .pressKey('ctrl+right');
+
+  await takeScreenshot(
+    'reorder_fixed_right_column_to_right',
+    dataGrid.element,
+  );
+
+  await t.expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  await createWidget('dxDataGrid', {
+    columnWidth: 100,
+    dataSource: [{
+      field1: 'test1',
+      field2: 'test2',
+      field3: 'test3',
+      field4: 'test4',
+      field5: 'test5',
+      field6: 'test6',
+      field7: 'test7',
+      field8: 'test8',
+    }],
+    customizeColumns: (columns) => {
+      columns[6].fixed = true;
+      columns[6].fixedPosition = 'right';
+      columns[7].fixed = true;
+      columns[7].fixedPosition = 'right';
+    },
+  });
+});
+
+test('reorder fixed right column to left', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+  const secondFixedRightHeader = dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(7);
+
+  await t
+    .click(secondFixedRightHeader.element)
+    .pressKey('ctrl+left')
+    .pressKey('ctrl+left');
+
+  await takeScreenshot(
+    'reorder_fixed_right_column_to_left',
+    dataGrid.element,
+  );
+
+  await t.expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  await createWidget('dxDataGrid', {
+    columnWidth: 100,
+    dataSource: [{
+      field1: 'test1',
+      field2: 'test2',
+      field3: 'test3',
+      field4: 'test4',
+      field5: 'test5',
+      field6: 'test6',
+      field7: 'test7',
+      field8: 'test8',
+    }],
+    customizeColumns: (columns) => {
+      columns[6].fixed = true;
+      columns[6].fixedPosition = 'right';
+      columns[7].fixed = true;
+      columns[7].fixedPosition = 'right';
+    },
+  });
+});
+
+test('reorder sticky column to left when there are fixed columns', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+  const stickyHeader = dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(3);
+
+  await t
+    .click(stickyHeader.element)
+    .pressKey('ctrl+left')
+    .pressKey('ctrl+left');
+
+  await takeScreenshot(
+    'reorder_sticky_column_to_left',
+    dataGrid.element,
+  );
+
+  await t.expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  await createWidget('dxDataGrid', {
+    columnWidth: 100,
+    dataSource: [{
+      field1: 'test1',
+      field2: 'test2',
+      field3: 'test3',
+      field4: 'test4',
+      field5: 'test5',
+      field6: 'test6',
+      field7: 'test7',
+    }],
+    customizeColumns: (columns) => {
+      columns[0].fixed = true;
+      columns[1].fixed = true;
+
+      columns[3].fixed = true;
+      columns[3].fixedPosition = 'sticky';
+
+      columns[5].fixed = true;
+      columns[5].fixedPosition = 'right';
+      columns[6].fixed = true;
+      columns[6].fixedPosition = 'right';
+    },
+  });
+});
+
+test('reorder sticky column to right when there are fixed columns', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+  const stickyHeader = dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(3);
+
+  await t
+    .click(stickyHeader.element)
+    .pressKey('ctrl+right')
+    .pressKey('ctrl+right');
+
+  await takeScreenshot(
+    'reorder_sticky_column_to_right',
+    dataGrid.element,
+  );
+
+  await t.expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  await createWidget('dxDataGrid', {
+    columnWidth: 100,
+    dataSource: [{
+      field1: 'test1',
+      field2: 'test2',
+      field3: 'test3',
+      field4: 'test4',
+      field5: 'test5',
+      field6: 'test6',
+      field7: 'test7',
+    }],
+    customizeColumns: (columns) => {
+      columns[0].fixed = true;
+      columns[1].fixed = true;
+
+      columns[3].fixed = true;
+      columns[3].fixedPosition = 'sticky';
+
+      columns[5].fixed = true;
+      columns[5].fixedPosition = 'right';
+      columns[6].fixed = true;
+      columns[6].fixedPosition = 'right';
+    },
+  });
+});

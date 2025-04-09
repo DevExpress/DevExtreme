@@ -7,7 +7,14 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 
 import type { Views } from '../m_types';
+import { StickyPosition } from '../sticky_columns/const';
+import { getColumnFixedPosition, isFirstFixedColumn, isLastFixedColumn } from '../sticky_columns/utils';
 import { KeyboardNavigationController as KeyboardNavigationControllerCore } from './m_keyboard_navigation_core';
+
+enum Direction {
+  Next = 'next',
+  Previous = 'previous',
+}
 
 export class HeadersKeyboardNavigationController extends KeyboardNavigationControllerCore {
   private renderCompletedWithContext!: (e: any) => void;
@@ -47,21 +54,47 @@ export class HeadersKeyboardNavigationController extends KeyboardNavigationContr
     this.subscribeToKeyDownEvent();
   }
 
-  private getDirectionByKeyName(keyName): string {
+  private getDirectionByKeyName(keyName): Direction {
     const rtlEnabled = this.option('rtlEnabled');
 
     switch (keyName) {
       case 'leftArrow': {
-        return rtlEnabled ? 'next' : 'previous';
+        return rtlEnabled ? Direction.Next : Direction.Previous;
       }
       case 'rightArrow': {
-        return rtlEnabled ? 'previous' : 'next';
+        return rtlEnabled ? Direction.Previous : Direction.Next;
         break;
       }
       default: {
-        return 'next';
+        return Direction.Next;
       }
     }
+  }
+
+  private isHeaderValidForReordering(column, direction, rowIndex?): boolean {
+    if (column.fixed && column.fixedPosition !== StickyPosition.Sticky) {
+      const fixedPosition = getColumnFixedPosition(this._columnsController, column);
+
+      return direction === Direction.Next ? !isLastFixedColumn(
+        this._columnsController,
+        column,
+        rowIndex,
+        false,
+        fixedPosition,
+      ) : !isFirstFixedColumn(
+        this._columnsController,
+        column,
+        rowIndex,
+        false,
+        fixedPosition,
+      );
+    }
+
+    const unfixedColumns = this._columnsController.getUnfixedAndStickyColumns(rowIndex);
+    const isFirstColumn = column.index === unfixedColumns[0].index;
+    const isLastColumn = column.index === unfixedColumns[unfixedColumns.length - 1].index;
+
+    return direction === Direction.Next ? !isLastColumn : !isFirstColumn;
   }
 
   private leftRightKeysHandler(e): void {
@@ -71,15 +104,18 @@ export class HeadersKeyboardNavigationController extends KeyboardNavigationContr
       const $cell = $(originalEvent.target).closest('td');
       const column = this._getColumnByCellElement($cell);
       const direction = this.getDirectionByKeyName(e.keyName);
-      const newVisibleIndex = direction === 'previous' ? column.visibleIndex - 1 : column.visibleIndex + 2;
 
-      this.isNeedToFocusHeader = true;
-      this._updateFocusedCellPosition($cell, direction);
-      this._columnsController.columnOption(
-        column.index,
-        'visibleIndex',
-        newVisibleIndex,
-      );
+      if (this.isHeaderValidForReordering(column, direction)) {
+        const newVisibleIndex = direction === 'previous' ? column.visibleIndex - 1 : column.visibleIndex + 2;
+
+        this.isNeedToFocusHeader = true;
+        this._updateFocusedCellPosition($cell, direction);
+        this._columnsController.columnOption(
+          column.index,
+          'visibleIndex',
+          newVisibleIndex,
+        );
+      }
       originalEvent?.preventDefault();
     }
   }
