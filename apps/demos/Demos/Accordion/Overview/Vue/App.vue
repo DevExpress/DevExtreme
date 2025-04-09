@@ -68,6 +68,7 @@ import DxCheckBox from 'devextreme-vue/check-box';
 import DxSlider, { DxTooltip, DxLabel } from 'devextreme-vue/slider';
 import CustomTitle from './CustomTitle.vue';
 import CustomItem from './CustomItem.vue';
+import { type CompanyData } from './data.ts';
 import service from './data.ts';
 
 const multiple = ref(false);
@@ -75,14 +76,19 @@ const collapsible = ref(false);
 const animationDuration = ref(300);
 const companies = service.getCompanies();
 const selectedCompaniesIds = ref([companies[0].ID]);
+
+const getCompaniesBySelectedIds = () => {
+  const selectedIds = new Set(selectedCompaniesIds.value);
+  return companies.filter((company: CompanyData) => selectedIds.has(company.ID));
+};
+const setSelectedCompanies = (companies: CompanyData[]) => {
+  selectedCompaniesIds.value = companies.map((item) => item.ID);
+};
 const selectedCompanies = computed({
-  get() {
-    return companies.filter((company) => selectedCompaniesIds.value.includes(company.ID));
-  },
-  set(newValue) {
-    selectedCompaniesIds.value = newValue.map((item) => item.ID);
-  },
+  get: getCompaniesBySelectedIds,
+  set: setSelectedCompanies,
 });
+
 </script>
 <style scoped>
 #accordion {
