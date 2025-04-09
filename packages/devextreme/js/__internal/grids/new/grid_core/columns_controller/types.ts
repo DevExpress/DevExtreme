@@ -3,7 +3,7 @@ import type { ColumnBase } from '@js/common/grids';
 import type { HeaderFilterColumnOptions } from '@ts/grids/new/grid_core/filtering/header_filter/index';
 import type { ComponentType } from 'inferno';
 
-import type { DataObject } from '../data_controller/types';
+import type { DataObject, Key } from '../data_controller/types';
 import type { HighlightedTextItem } from '../search/types';
 
 type InheritedColumnProps =
@@ -71,9 +71,11 @@ export interface Cell {
 export interface DataRow {
   cells: Cell[];
 
-  key: unknown;
+  key: Key;
 
-  data: unknown;
+  data: DataObject;
+
+  isSelected?: boolean;
 
   index: number;
 }
