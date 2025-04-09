@@ -57,8 +57,6 @@ const getTestSpecificSkipRules = (testName) => {
       return ['empty-table-header'];
     case 'Localization-UsingGlobalize':
       return ['label'];
-    case 'Stepper-StepTemplate':
-      return ['aria-allowed-attr'];
     default:
       return [];
   }
