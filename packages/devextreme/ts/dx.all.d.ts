@@ -24382,8 +24382,14 @@ declare module DevExpress.ui {
            */
           readonly appointmentElement: DevExpress.core.DxElement;
         };
+    /**
+     * [descr:AppointmentCollectorTemplateData]
+     */
     export type AppointmentCollectorTemplateData = {
       readonly appointmentCount: number;
+      /**
+       * [descr:AppointmentCollectorTemplateData.items]
+       */
       readonly items: Appointment[];
       readonly isCompact: boolean;
     };

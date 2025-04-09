@@ -392,10 +392,15 @@ export type AppointmentTooltipTemplateData = TargetedAppointmentInfo & {
 };
 
 /**
+ * @docid
  * @public
  */
 export type AppointmentCollectorTemplateData = {
   readonly appointmentCount: number;
+  /**
+   * @docid
+   * @type dxSchedulerAppointment
+  */
   readonly items: Appointment[];
   readonly isCompact: boolean;
 };
