@@ -5,7 +5,6 @@ export type Direction = 'vertical' | 'horizontal';
 export type GroupOrientation = 'vertical' | 'horizontal';
 export type ViewType = 'agenda' | 'day' | 'month' | 'timelineDay' | 'timelineMonth' | 'timelineWeek' | 'timelineWorkWeek' | 'week' | 'workWeek';
 export type AllDayPanelModeType = 'all' | 'allDay' | 'hidden';
-export type LoadDataType = Appointment[] | CustomLoadDataType;
 export type FilterItemType = Record<string, string | number> | string | number;
 export type HeaderCellTextFormat = string | ((date: Date) => string);
 
@@ -33,9 +32,6 @@ export interface AppointmentDataItem {
 export interface AppointmentFilter {
   filter: (dataItems: AppointmentDataItem[]) => Appointment[];
 }
-
-// NOTE: CustomStore add "data" field to the result Object.
-export interface CustomLoadDataType { data: Appointment[] }
 
 export interface AppointmentGeometry {
   empty: boolean;

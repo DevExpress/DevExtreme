@@ -1,5 +1,6 @@
 import config from '@js/core/config';
 import { combineRemoteFilter } from '@ts/scheduler/r1/filterting/index';
+import type { AppointmentDataItem } from '@ts/scheduler/r1/types';
 import type { AppointmentDataAccessor } from '@ts/scheduler/utils';
 
 import { AppointmentDataSource } from './m_appointment_data_source';
@@ -101,7 +102,7 @@ export class AppointmentDataProvider {
   }
 
   // Filter mapping
-  filter(preparedItems) {
+  filter(preparedItems: AppointmentDataItem[]) {
     return this.getFilterStrategy().filter(preparedItems);
   }
 

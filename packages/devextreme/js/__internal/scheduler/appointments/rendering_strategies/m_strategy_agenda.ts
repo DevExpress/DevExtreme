@@ -3,7 +3,7 @@ import { each } from '@js/core/utils/iterator';
 
 import { createAppointmentAdapter } from '../../m_appointment_adapter';
 import { groupAppointmentsByResources } from '../../resources/m_utils';
-import { getAppointmentTakesSeveralDays, replaceWrongEndDate } from '../data_provider/m_utils';
+import { getAppointmentTakesSeveralDays } from '../data_provider/m_utils';
 import BaseRenderingStrategy from './m_strategy_base';
 
 class AgendaRenderingStrategy extends BaseRenderingStrategy {
@@ -185,13 +185,6 @@ class AgendaRenderingStrategy extends BaseRenderingStrategy {
   getCollectorTopOffset() {
   }
 
-  // From subscribe
-  replaceWrongAppointmentEndDate(rawAppointment, startDate, endDate) {
-    const adapter = createAppointmentAdapter(rawAppointment, this.dataAccessors, this.timeZoneCalculator);
-
-    replaceWrongEndDate(adapter, startDate, endDate, this.cellDuration, this.dataAccessors);
-  }
-
   calculateRows(appointments, agendaDuration, currentDate) {
     this._rows = [];
     currentDate = dateUtils.trimTime(new Date(currentDate));
@@ -211,12 +204,8 @@ class AgendaRenderingStrategy extends BaseRenderingStrategy {
       }
 
       each(currentAppointments, (index, appointment) => {
-        const startDate = this.dataAccessors.get('startDate', appointment);
-        const endDate = this.dataAccessors.get('endDate', appointment);
-
-        this.replaceWrongAppointmentEndDate(appointment, startDate, endDate);
-
         const result = this.instance.getAppointmentsInstance()._processRecurrenceAppointment(appointment, index, false);
+
         appts.parts = appts.parts.concat(result.parts);
         appts.indexes = appts.indexes.concat(result.indexes);
       });

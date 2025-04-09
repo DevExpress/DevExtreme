@@ -31,7 +31,7 @@ import {
 import { hasWindow } from '@js/core/utils/window';
 import DataHelperMixin from '@js/data_helper';
 import { custom as customDialog } from '@js/ui/dialog';
-import type { AppointmentTooltipShowingEvent } from '@js/ui/scheduler';
+import type { Appointment, AppointmentTooltipShowingEvent } from '@js/ui/scheduler';
 import { isMaterial, isMaterialBased } from '@js/ui/themes';
 import errors from '@js/ui/widget/ui.errors';
 import Widget from '@js/ui/widget/ui.widget';
@@ -40,7 +40,7 @@ import { createTimeZoneCalculator } from '@ts/scheduler/r1/timezone_calculator/i
 import type { AppointmentDataItem } from '@ts/scheduler/r1/types';
 import {
   excludeFromRecurrence,
-  getPreparedDataItems,
+  getAppointmentDataItems,
   getToday,
   isAppointmentTakesAllDay,
   isDateAndTimeView,
@@ -194,7 +194,7 @@ class Scheduler extends Widget<any> {
 
   _appointmentTooltip: any;
 
-  _readyToRenderAppointments: any;
+  _readyToRenderAppointments = false;
 
   _editing: any;
 
@@ -1162,8 +1162,8 @@ class Scheduler extends Widget<any> {
     this._renderContentImpl();
   }
 
-  _updatePreparedItems(items) {
-    this.preparedItems = getPreparedDataItems(
+  _updatePreparedItems(items?: Appointment[]): void {
+    this.preparedItems = getAppointmentDataItems(
       items,
       this._dataAccessors,
       this._getCurrentViewOption('cellDuration'),
@@ -1171,7 +1171,7 @@ class Scheduler extends Widget<any> {
     );
   }
 
-  _dataSourceChangedHandler(result) {
+  _dataSourceChangedHandler(result?: Appointment[]) {
     if (this._readyToRenderAppointments) {
       this._workSpaceRecalculation.done(() => {
         this._updatePreparedItems(result);

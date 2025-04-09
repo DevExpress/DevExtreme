@@ -179,7 +179,7 @@ class SchedulerAppointments extends CollectionWidget {
   _moveFocus() {}
 
   _focusTarget() {
-    return (this as any)._getNavigatableItems();
+    return this._getNavigatableItems();
   }
 
   _renderFocusTarget() {
