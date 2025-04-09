@@ -24,5 +24,3 @@ QUnit.module('capitalize', () => {
         assert.strictEqual(capitalize('-test'), '-test', 'Punctuation at beginning is preserved');
     });
 });
-
-
