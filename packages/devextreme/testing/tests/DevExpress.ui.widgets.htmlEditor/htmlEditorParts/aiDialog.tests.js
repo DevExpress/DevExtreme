@@ -186,6 +186,40 @@ QUnit.module('AiDialog', moduleConfig, () => {
         assert.strictEqual(commandSelectBox.option('value'), 'summarize', 'Command updated');
     });
 
+    QUnit.test('Command change sets first option as default', function(assert) {
+        const commandsMap = {
+            translate: {
+                name: 'translate',
+                text: 'Translate',
+                options: ['english', 'german']
+            },
+            summarize: {
+                name: 'summarize',
+                text: 'Summarize',
+            }
+        };
+
+        this.aiDialog.show({
+            currentCommand: 'summarize',
+            commandsMap,
+            text: 'Initial',
+        });
+
+        const $commandSelect = this.$element.find(`.${SELECT_BOX_CLASS}`).eq(0);
+        const commandSelectBox = $commandSelect.dxSelectBox('instance');
+
+        const $optionSelect = this.$element.find(`.${SELECT_BOX_CLASS}`).eq(1);
+        const optionSelectBox = $optionSelect.dxSelectBox('instance');
+
+        assert.strictEqual(optionSelectBox.option('visible'), false, 'Option select is initially not visible');
+
+        commandSelectBox.option('value', 'translate');
+
+        assert.strictEqual(optionSelectBox.option('visible'), true, 'Option select is visible after changing command');
+        assert.strictEqual(commandSelectBox.option('value'), 'translate', 'Command updated');
+        assert.strictEqual(optionSelectBox.option('value'), 'english', 'First command option is selected after command change');
+    });
+
     QUnit.test('Clicking "Replace" resolves with correct payload', function(assert) {
         const done = assert.async();
         const hideSpy = sinon.spy(this.aiDialog, 'hide');
