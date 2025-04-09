@@ -10,7 +10,7 @@ export {
   AIChangeStyleOption,
   AIChangeToneOption,
   AITranslateOption,
-  AICommandNameAll,
+  AICommandNameExtended,
   AIChangeStyleCommand,
   AIChangeToneCommand,
   AITranslateCommand,

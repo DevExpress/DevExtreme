@@ -19613,9 +19613,9 @@ declare module DevExpress.ui {
       | 'translate'
       | 'askAI';
     /**
-     * [descr:AICommandNameAll]
+     * [descr:AICommandNameExtended]
      */
-    export type AICommandNameAll = AICommandName | 'custom';
+    export type AICommandNameExtended = AICommandName | 'custom';
     export type AITranslateOption =
       | 'arabic'
       | 'chinese'
@@ -31857,13 +31857,13 @@ declare module DevExpress.ui.dxHtmlEditor {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface AICommandBase<
-    CommandName extends AICommandNameAll,
+    CommandName extends AICommandNameExtended,
     CommandOptions = undefined
   > {
     /**
      * [descr:AICommandBase.name]
      */
-    name: AICommandNameAll;
+    name: AICommandNameExtended;
     /**
      * [descr:AICommandBase.text]
      */

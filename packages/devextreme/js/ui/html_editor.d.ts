@@ -88,20 +88,20 @@ export type AITranslateOption =
  * @docid
  * @public
  */
-export type AICommandNameAll = AICommandName | 'custom';
+export type AICommandNameExtended = AICommandName | 'custom';
 
 /**
  * @docid
  * @namespace DevExpress.ui.dxHtmlEditor
  */
 export interface AICommandBase<
-    CommandName extends AICommandNameAll, // eslint-disable-line @typescript-eslint/no-unused-vars
+    CommandName extends AICommandNameExtended, // eslint-disable-line @typescript-eslint/no-unused-vars
     CommandOptions = undefined> {
     /**
      * @docid
      * @public
      */
-    name: AICommandNameAll;
+    name: AICommandNameExtended;
     /**
      * @docid
      * @public
