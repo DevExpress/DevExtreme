@@ -2,6 +2,7 @@ import browser from '@js/core/utils/browser';
 import { isMaterialBased } from '@js/ui/themes';
 import type { WidgetOptions } from '@js/ui/widget/ui.widget';
 
+import * as columnChooser from './column_chooser/index';
 import * as columnsController from './columns_controller/index';
 import * as contentView from './content_view/index';
 import * as dataController from './data_controller/index';
@@ -33,6 +34,7 @@ export type Options =
   & selection.Options
   // TODO: Remove this mock search options during search implementation
   & SearchProperties
+  & columnChooser.Options
   & toolbar.Options;
 
 export const defaultOptions = {
@@ -44,6 +46,7 @@ export const defaultOptions = {
   ...headerFilter.defaultOptions,
   ...contentView.defaultOptions,
   ...searchPanel.defaultOptions,
+  ...columnChooser.defaultOptions,
   ...selection.defaultOptions,
   searchText: '',
 } satisfies Options;

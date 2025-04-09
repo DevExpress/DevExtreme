@@ -9,6 +9,7 @@ import type { Subscription } from '@ts/core/reactive/index';
 import { SearchView } from '@ts/grids/new/grid_core/search/view';
 import { render } from 'inferno';
 
+import * as ColumnChooserModule from './column_chooser/index';
 import { CompatibilityColumnsController } from './columns_controller/compatibility';
 import * as ColumnsControllerModule from './columns_controller/index';
 import * as DataControllerModule from './data_controller/index';
@@ -50,6 +51,10 @@ export class GridCoreNewBase<
 
   private pagerView!: PagerView;
 
+  private columnChooserController!: ColumnChooserModule.ColumnChooserController;
+
+  protected columnChooserView!: ColumnChooserModule.ColumnChooserView;
+
   private toolbarController!: ToolbarController;
 
   private toolbarView!: ToolbarView;
@@ -78,6 +83,8 @@ export class GridCoreNewBase<
     this.diContext.register(PagerView);
     this.diContext.register(SearchController);
     this.diContext.register(SearchView);
+    this.diContext.register(ColumnChooserModule.ColumnChooserController);
+    this.diContext.register(ColumnChooserModule.ColumnChooserView);
     this.diContext.register(FilterControllerModule.FilterController);
     this.diContext.register(FilterControllerModule.FilterPanelView);
     this.diContext.register(FilterPanelView);
@@ -105,6 +112,8 @@ export class GridCoreNewBase<
     this.pagerView = this.diContext.get(PagerView);
     this.searchController = this.diContext.get(SearchController);
     this.searchView = this.diContext.get(SearchView);
+    this.columnChooserController = this.diContext.get(ColumnChooserModule.ColumnChooserController);
+    this.columnChooserView = this.diContext.get(ColumnChooserModule.ColumnChooserView);
     this.errorController = this.diContext.get(ErrorController);
     this.filterController = this.diContext.get(FilterControllerModule.FilterController);
     this.filterPanelView = this.diContext.get(FilterControllerModule.FilterPanelView);
@@ -167,8 +176,10 @@ export class GridCoreNew extends ColumnsControllerModule.PublicMethods(
   DataControllerModule.PublicMethods(
     SortingControllerModule.PublicMethods(
       FilterControllerModule.PublicMethods(
-        SelectionControllerModule.PublicMethods(
-          GridCoreNewBase,
+        ColumnChooserModule.PublicMethods(
+          SelectionControllerModule.PublicMethods(
+            GridCoreNewBase,
+          ),
         ),
       ),
     ),
