@@ -46,13 +46,30 @@ export class HeadersKeyboardNavigationController extends KeyboardNavigationContr
     this.subscribeToKeyDownEvent();
   }
 
-  private leftRightKeysHandler(e) {
+  private getDirectionByKeyName(keyName): string {
+    const rtlEnabled = this.option('rtlEnabled');
+
+    switch (keyName) {
+      case 'leftArrow': {
+        return rtlEnabled ? 'next' : 'previous';
+      }
+      case 'rightArrow': {
+        return rtlEnabled ? 'previous' : 'next';
+        break;
+      }
+      default: {
+        return 'next';
+      }
+    }
+  }
+
+  private leftRightKeysHandler(e): void {
     const { originalEvent } = e;
 
     if (isCommandKeyPressed(originalEvent)) {
       const $cell = $(originalEvent.target).closest('td');
       const column = this._getColumnByCellElement($cell);
-      const direction = e.keyName === 'leftArrow' ? 'previous' : 'next';
+      const direction = this.getDirectionByKeyName(e.keyName);
       const newVisibleIndex = direction === 'previous' ? column.visibleIndex - 1 : column.visibleIndex + 2;
 
       this.isNeedToFocusHeader = true;
