@@ -282,13 +282,6 @@ export const ContextMenuStory: Story = {
       }
       else if(e.target === 'headerPanel' && e.column) {
         e.items.push({
-          text: `show ${e.column.caption}`,
-          disabled: e.column.visible,
-          icon: 'eyeopen',
-          onItemClick: () => e.component.columnOption(e.columnIndex, 'visible', true)
-        });
-
-        e.items.push({
           text: `hide ${e.column.caption}`,
           disabled: !e.column.visible,
           icon: 'eyeclose',
