@@ -863,7 +863,7 @@ declare module DevExpress {
     static validateModel(model: any): any;
   }
 }
-declare module DevExpress.aIIntegration {
+declare module DevExpress.aiIntegration {
   /**
    * [descr:AIIntegration]
    */

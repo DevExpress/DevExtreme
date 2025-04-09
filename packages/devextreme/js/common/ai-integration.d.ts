@@ -1,6 +1,6 @@
 /**
  * @docid
- * @namespace DevExpress.aIIntegration
+ * @namespace DevExpress.aiIntegration
  * @public
  */
 export interface Prompt {
@@ -18,7 +18,7 @@ export interface Prompt {
 
 /**
  * @docid
- * @namespace DevExpress.aIIntegration
+ * @namespace DevExpress.aiIntegration
  * @public
  */
 export interface RequestParams {
@@ -36,7 +36,7 @@ export interface RequestParams {
 
 /**
  * @docid
- * @namespace DevExpress.aIIntegration
+ * @namespace DevExpress.aiIntegration
  * @public
  */
 export interface ResponseParams {
@@ -54,7 +54,7 @@ export interface ResponseParams {
 
 /**
  * @docid
- * @namespace DevExpress.aIIntegration
+ * @namespace DevExpress.aiIntegration
  * @public
  */
 export interface TranslateCommandParams {
@@ -72,21 +72,21 @@ export interface TranslateCommandParams {
 
 /**
  * @docid
- * @namespace DevExpress.aIIntegration
+ * @namespace DevExpress.aiIntegration
  * @public
  */
 export type TranslateCommandResult = string;
 
 /**
  * @docid
- * @namespace DevExpress.aIIntegration
+ * @namespace DevExpress.aiIntegration
  * @public
  */
 export type BaseCommandResult = TranslateCommandResult;
 
 /**
  * @docid
- * @namespace DevExpress.aIIntegration
+ * @namespace DevExpress.aiIntegration
  * @public
  */
 export interface RequestCallbacks {
@@ -109,7 +109,7 @@ export interface RequestCallbacks {
 
 /**
  * @docid
- * @namespace DevExpress.aIIntegration
+ * @namespace DevExpress.aiIntegration
  * @public
  */
 export interface AIProvider {
@@ -122,7 +122,7 @@ export interface AIProvider {
 
 /**
  * @docid
- * @namespace DevExpress.aIIntegration
+ * @namespace DevExpress.aiIntegration
  * @public
  */
 export class AIIntegration {
