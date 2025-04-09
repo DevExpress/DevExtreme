@@ -1,10 +1,11 @@
 <template>
-  <div class="stepper-label">Custom Step Shape</div>
+  <div id="label-customStepShape" class="stepper-label">Custom Step Shape</div>
   <DxStepper
     id="customStepShape"
     :data-source="steps"
     :selected-index="2"
     :linear="false"
+    :element-attr="{ 'aria-labelledby': 'label-customStepShape' }"
   >
     <template #item="{ data }">
       <div>
@@ -18,12 +19,13 @@
       </div>
     </template>
   </DxStepper>
-  <div class="stepper-label">Title Only</div>
+  <div id="label-titleOnly" class="stepper-label">Title Only</div>
   <DxStepper
     id="titleOnly"
     :data-source="steps"
     :selected-index="2"
     :linear="false"
+    :element-attr="{ 'aria-labelledby': 'label-titleOnly' }"
   >
     <template #item="{ data }">
       <div>
@@ -33,12 +35,13 @@
       </div>
     </template>
   </DxStepper>
-  <div class="stepper-label">Icon Only</div>
+  <div id="label-iconOnly" class="stepper-label">Icon Only</div>
   <DxStepper
     id="iconOnly"
     :data-source="steps"
     :selected-index="2"
     :linear="false"
+    :element-attr="{ 'aria-labelledby': 'label-iconOnly' }"
   >
     <template #item="{ data }">
       <div>
