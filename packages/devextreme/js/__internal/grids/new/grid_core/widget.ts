@@ -13,12 +13,8 @@ import * as ColumnChooserModule from './column_chooser/index';
 import { CompatibilityColumnsController } from './columns_controller/compatibility';
 import * as ColumnsControllerModule from './columns_controller/index';
 import * as DataControllerModule from './data_controller/index';
+import * as di from './di';
 import { ErrorController } from './error_controller/error_controller';
-import { FilterPanelView } from './filtering/filter_panel/view';
-import {
-  HeaderFilterController,
-  HeaderFilterPopupView,
-} from './filtering/header_filter/index';
 import * as FilterControllerModule from './filtering/index';
 import { ItemsController } from './items_controller/items_controller';
 import { MainView } from './main_view';
@@ -71,26 +67,7 @@ export class GridCoreNewBase<
 
   protected _registerDIContext(): void {
     this.diContext = new DIContext();
-    this.diContext.register(DataControllerModule.DataController);
-    this.diContext.register(DataControllerModule.CompatibilityDataController);
-    this.diContext.register(ItemsController);
-    this.diContext.register(ColumnsControllerModule.ColumnsController);
-    this.diContext.register(SelectionControllerModule.Controller);
-    this.diContext.register(ColumnsControllerModule.CompatibilityColumnsController);
-    this.diContext.register(SortingControllerModule.SortingController);
-    this.diContext.register(ToolbarController);
-    this.diContext.register(ToolbarView);
-    this.diContext.register(PagerView);
-    this.diContext.register(SearchController);
-    this.diContext.register(SearchView);
-    this.diContext.register(ColumnChooserModule.ColumnChooserController);
-    this.diContext.register(ColumnChooserModule.ColumnChooserView);
-    this.diContext.register(FilterControllerModule.FilterController);
-    this.diContext.register(FilterControllerModule.FilterPanelView);
-    this.diContext.register(FilterPanelView);
-    this.diContext.register(HeaderFilterController);
-    this.diContext.register(HeaderFilterPopupView);
-    this.diContext.register(ErrorController);
+    di.register(this.diContext);
   }
 
   protected _initWidgetMock() {
