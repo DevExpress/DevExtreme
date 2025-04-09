@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
-/* eslint-disable import/no-extraneous-dependencies */
+
 import { describe, expect, it } from '@jest/globals';
 import { render } from 'inferno';
 
@@ -67,5 +67,21 @@ describe('CardHeader', () => {
     const customHeader = container.querySelector('.custom-header');
     expect(customHeader).not.toBeNull();
     expect(customHeader?.textContent).toBe('Custom Header');
+  });
+
+  it('should render a selection checkbox', () => {
+    const container = document.createElement('div');
+    render(
+      <CardHeader
+        visible
+        isCheckBoxesRendered
+        // @ts-expect-error
+        row={{ name: 'Card Title' }}
+      />,
+      container,
+    );
+
+    const checkboxItem = container.querySelector('.dx-cardview-select-checkbox');
+    expect(checkboxItem).not.toBeNull();
   });
 });

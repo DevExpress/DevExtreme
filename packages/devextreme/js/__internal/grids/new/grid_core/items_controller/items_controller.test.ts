@@ -61,8 +61,21 @@ describe('ItemsController', () => {
       });
 
       const columns = columnsController.columns.unreactive_get();
-      const dataRow = itemsController.createDataRow(dataObject, columns, 0);
+      const dataRow = itemsController.createDataRow(dataObject, columns, 0, [1]);
       expect(dataRow).toMatchSnapshot();
+    });
+  });
+
+  describe('setSelectionState', () => {
+    it('should update the select state of the item', () => {
+      const { itemsController } = setup({
+        keyExpr: 'id',
+        dataSource: [{ id: 1, a: 'my a value' }],
+      });
+
+      itemsController.setSelectionState([1]);
+
+      expect(itemsController.items).toMatchSnapshot();
     });
   });
 });

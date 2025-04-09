@@ -352,6 +352,9 @@
         "dxCalendar-selectedDateRangeCount": "Der er {0} valgte datointervaller",
         "dxCalendar-readOnlyLabel": "Skrivebeskyttet kalender",
 
+        "dxCardView-selectAll": "Select All",
+        "dxCardView-clearSelection": "Clear selection",
+
         "dxAvatar-defaultImageAlt": "Avatar",
 
         "dxChat-elementAriaLabel": "Snak",

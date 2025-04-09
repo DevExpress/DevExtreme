@@ -80,6 +80,7 @@ exports[`ItemsController createDataRow should process data object to data row us
     "id": 1,
   },
   "index": 0,
+  "isSelected": false,
   "key": 1,
 }
 `;
@@ -164,6 +165,65 @@ exports[`ItemsController createDataRow should process data object to data row us
     "id": 1,
   },
   "index": 0,
+  "isSelected": true,
   "key": 1,
+}
+`;
+
+exports[`ItemsController setSelectionState should update the select state of the item 1`] = `
+InterruptableComputed {
+  "callbacks": Set {},
+  "depInitialized": [
+    true,
+    true,
+    true,
+    true,
+  ],
+  "depValues": [
+    [
+      {
+        "a": "my a value",
+        "id": 1,
+      },
+    ],
+    [],
+    [
+      1,
+    ],
+    {
+      "caseSensitive": false,
+      "enabled": true,
+      "searchStr": "",
+    },
+  ],
+  "isInitialized": true,
+  "subscriptions": SubscriptionBag {
+    "subscriptions": [
+      {
+        "unsubscribe": [Function],
+      },
+      {
+        "unsubscribe": [Function],
+      },
+      {
+        "unsubscribe": [Function],
+      },
+      {
+        "unsubscribe": [Function],
+      },
+    ],
+  },
+  "value": [
+    {
+      "cells": [],
+      "data": {
+        "a": "my a value",
+        "id": 1,
+      },
+      "index": 0,
+      "isSelected": true,
+      "key": 1,
+    },
+  ],
 }
 `;
