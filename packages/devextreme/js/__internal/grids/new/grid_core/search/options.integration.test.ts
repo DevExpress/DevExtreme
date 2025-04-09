@@ -1,8 +1,10 @@
+/* eslint-disable spellcheck/spell-checker */
 import {
   describe, expect, it,
 } from '@jest/globals';
 import CardView from '@ts/grids/new/card_view/widget';
 import type { Options as GridCoreOptions } from '@ts/grids/new/grid_core/options';
+import { rerender } from 'inferno';
 
 const SELECTORS = {
   cardContent: 'dx-cardview-card-content',

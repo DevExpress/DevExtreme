@@ -26,7 +26,7 @@ export class SearchController {
     searchStr: searchOptions.text,
   }), [this.options.oneWay('searchPanel') as SubsGets<DefinedSearchOptions>]);
 
-  private readonly searchTextOption = this.options.twoWay('searchPanel.text');
+  public readonly searchTextOption = this.options.twoWay('searchPanel.text');
 
   private readonly searchVisibleColumnsOnly = this.options.oneWay('searchPanel.searchVisibleColumnsOnly');
 
