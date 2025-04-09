@@ -2,6 +2,7 @@
 /* eslint-disable spellcheck/spell-checker */
 import type { DataSource } from '@js/common/data';
 import ArrayStore from '@js/common/data/array_store';
+import { Deferred } from '@js/core/utils/deferred';
 import type { SubsGets } from '@ts/core/reactive/index';
 import {
   computed, effect, state,
@@ -11,6 +12,7 @@ import { createPromise } from '@ts/core/utils/promise';
 import { FilterController } from '../filtering/filter_controller';
 import { OptionsController } from '../options_controller/options_controller';
 import { SortingController } from '../sorting_controller/sorting_controller';
+import { StoreLoadAdapter } from './store_load_adapter/index';
 import type { DataObject, Key } from './types';
 import {
   getLocalLoadOptions,
@@ -229,5 +231,15 @@ export class DataController {
 
   public waitLoaded(): Promise<void> {
     return this.loadedPromise.promise;
+  }
+
+  public getStoreLoadAdapter(): StoreLoadAdapter<unknown> {
+    return new StoreLoadAdapter<unknown>(
+      this.dataSource,
+      this.normalizedLocalOperations,
+      // NOTE: Badly typed ArrayStore
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+      (data) => new ArrayStore(data),
+    );
   }
 }

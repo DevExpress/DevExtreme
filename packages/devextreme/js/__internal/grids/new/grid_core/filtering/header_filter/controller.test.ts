@@ -183,7 +183,6 @@ describe('HeaderFilter', () => {
         expect(typeof state?.options.dataSource.postProcess).toBe('function');
       });
 
-      // TODO: Add remoteGrouping cases here
       // NOTE: Unfortunately, we cannot test perfectly local group functions here
       // Because these functions are local and too deep in the old grid_core
       it.each<{
