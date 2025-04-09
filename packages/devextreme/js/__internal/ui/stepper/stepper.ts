@@ -38,8 +38,6 @@ export const STEP_OPTIONAL_MARK_CLASS = 'dx-step-optional-mark';
 
 export const STEPPER_ITEM_DATA_KEY = 'dxStepperItemData';
 
-export const STEPPER_ARIA_LABEL = 'stepper';
-
 export const ORIENTATION: Record<string, Orientation> = {
   horizontal: 'horizontal',
   vertical: 'vertical',
@@ -246,7 +244,6 @@ class Stepper extends CollectionWidgetAsync<StepperProperties> {
     super._init();
 
     this.setAria('role', 'tablist');
-    this.setAria('label', STEPPER_ARIA_LABEL);
     this._appendStepsContainer();
   }
 
@@ -302,10 +299,9 @@ class Stepper extends CollectionWidgetAsync<StepperProperties> {
   }
 
   _setAriaOrientation(): void {
-    const isHorizontal = this._isHorizontalOrientation();
-    const orientation = isHorizontal ? ORIENTATION.horizontal : ORIENTATION.vertical;
+    const { orientation } = this.option();
 
-    this.setAria('orientation', orientation, $(this.element()));
+    this.setAria('orientation', orientation);
   }
 
   _toggleOrientationClass(): void {

@@ -13,7 +13,6 @@ import {
     STEP_LABEL_CLASS,
     STEP_TITLE_CLASS,
     STEP_OPTIONAL_MARK_CLASS,
-    STEPPER_ARIA_LABEL,
 } from '__internal/ui/stepper/stepper';
 import {
     STEP_COMPLETED_CLASS,
@@ -582,10 +581,6 @@ QUnit.module('Aria accessibility', moduleConfig, () => {
         assert.strictEqual(this.$element.attr('role'), 'tablist');
     });
 
-    QUnit.test(`Stepper root element should have aria-label=${STEPPER_ARIA_LABEL}`, function(assert) {
-        assert.strictEqual(this.$element.attr('aria-label'), STEPPER_ARIA_LABEL);
-    });
-
     ['horizontal', 'vertical'].forEach((orientation) => {
         QUnit.test(`Root element for ${orientation} stepper should have aria-orientation=${orientation}`, function(assert) {
             this.reinit({
@@ -625,9 +620,9 @@ QUnit.module('Aria accessibility', moduleConfig, () => {
             selectedIndex: 1,
         });
 
-        assert.strictEqual(this.getStepByIndex(0).attr('aria-selected'), 'false');
-        assert.strictEqual(this.getStepByIndex(1).attr('aria-selected'), 'true');
-        assert.strictEqual(this.getStepByIndex(2).attr('aria-selected'), 'false');
+        assert.strictEqual(this.getStepByIndex(0).attr('aria-selected'), 'false', 'First step has aria-selected=false');
+        assert.strictEqual(this.getStepByIndex(1).attr('aria-selected'), 'true', 'Second step has aria-selected=true');
+        assert.strictEqual(this.getStepByIndex(2).attr('aria-selected'), 'false', 'Third step has aria-selected=false');
     });
 
     QUnit.test('Selected step should have aria-selected=true after change selectedIndex at runtime', function(assert) {
@@ -638,9 +633,9 @@ QUnit.module('Aria accessibility', moduleConfig, () => {
 
         this.instance.option('selectedIndex', 2);
 
-        assert.strictEqual(this.getStepByIndex(0).attr('aria-selected'), 'false');
-        assert.strictEqual(this.getStepByIndex(1).attr('aria-selected'), 'false');
-        assert.strictEqual(this.getStepByIndex(2).attr('aria-selected'), 'true');
+        assert.strictEqual(this.getStepByIndex(0).attr('aria-selected'), 'false', 'First step has aria-selected=false');
+        assert.strictEqual(this.getStepByIndex(1).attr('aria-selected'), 'false', 'Second step has aria-selected=false');
+        assert.strictEqual(this.getStepByIndex(2).attr('aria-selected'), 'true', 'Third step has aria-selected=true');
     });
 
     QUnit.test('Disabled step element should have aria-disabled=true', function(assert) {
@@ -648,9 +643,9 @@ QUnit.module('Aria accessibility', moduleConfig, () => {
             items: [{}, { disabled: true }, {}],
         });
 
-        assert.strictEqual(this.getStepByIndex(0).attr('aria-disabled'), undefined);
-        assert.strictEqual(this.getStepByIndex(1).attr('aria-disabled'), 'true');
-        assert.strictEqual(this.getStepByIndex(2).attr('aria-disabled'), undefined);
+        assert.strictEqual(this.getStepByIndex(0).attr('aria-disabled'), undefined, 'First step has no aria-disabled attribute');
+        assert.strictEqual(this.getStepByIndex(1).attr('aria-disabled'), 'true', 'Second step has aria-selected=true');
+        assert.strictEqual(this.getStepByIndex(2).attr('aria-disabled'), undefined, 'Third step has no aria-disabled attribute');
     });
 
     QUnit.test('Disabled step should have aria-disabled=true after disabling step at runtime', function(assert) {
@@ -660,8 +655,8 @@ QUnit.module('Aria accessibility', moduleConfig, () => {
 
         this.instance.option('items[1].disabled', true);
 
-        assert.strictEqual(this.getStepByIndex(0).attr('aria-disabled'), undefined);
-        assert.strictEqual(this.getStepByIndex(1).attr('aria-disabled'), 'true');
-        assert.strictEqual(this.getStepByIndex(2).attr('aria-disabled'), undefined);
+        assert.strictEqual(this.getStepByIndex(0).attr('aria-disabled'), undefined, 'First step has no aria-disabled attribute');
+        assert.strictEqual(this.getStepByIndex(1).attr('aria-disabled'), 'true', 'Second step has aria-selected=true');
+        assert.strictEqual(this.getStepByIndex(2).attr('aria-disabled'), undefined, 'Third step has no aria-disabled attribute');
     });
 });
