@@ -93,6 +93,7 @@ export default class AiDialog extends DialogBase {
 
     const $commandSelectBox = $('<div>').appendTo($controls);
     this._commandSelectBox = this._editorInstance._createComponent($commandSelectBox, SelectBox, {
+      width: '100%',
       value: this._currentCommand,
       displayExpr: 'text',
       valueExpr: 'name',
@@ -111,7 +112,7 @@ export default class AiDialog extends DialogBase {
 
     const $optionSelectBox = $('<div>').appendTo($controls);
     this._optionSelectBox = this._editorInstance._createComponent($optionSelectBox, SelectBox, {
-      width: 'auto',
+      width: '100%',
       items: this._commandOptionsList,
       value: this._currentOption ?? this._commandOptionsList?.[0],
       visible: this._isCommandWithOptionsSelected(),
