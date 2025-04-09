@@ -264,7 +264,9 @@ const dialogAiModuleConfig = {
             keyboard: {
                 addBinding: noop
             },
-            getModule: (moduleName) => this.quillMock[moduleName]
+            getModule: (moduleName) => this.quillMock[moduleName],
+            getSelection: () => ({ index: 0, length: 0 }),
+            getText: () => 'Test',
         };
 
         this.options = {
@@ -1441,25 +1443,29 @@ testModule('Toolbar dialogs', dialogModuleConfig, () => {
 
 testModule('Toolbar AI dialog', dialogAiModuleConfig, () => {
     QUnit.test('renders base controls in AI dialog', function(assert) {
-        this.options.items = [{ name: 'ai' }];
+        this.options.items = [{ name: 'ai', commands: ['summarize'] }];
         new Toolbar(this.quillMock, this.options);
 
-        this.$element
-            .find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`)
-            .trigger('dxclick');
+        const showSpy = sinon.spy(this.options.editorInstance, 'showAiDialog');
 
         this.$element
-            .find(`.${MENU_ITEM_CLASS}`)
+            .find(`.${TOOLBAR_FORMAT_WIDGET_CLASS} .${MENU_ITEM_CLASS}`)
             .trigger('dxclick');
 
-        const $dialog = $(`.${DIALOG_CLASS}`);
-        const $commandSelect = $dialog.find(`.${SELECTBOX_CLASS}`).eq(0);
-        const $optionSelect = $dialog.find(`.${SELECTBOX_CLASS}`).eq(1);
-        const $textArea = $dialog.find(`.${TEXT_AREA_CLASS}`);
+        const $menuItem = $(`.${MENU_ITEM_CLASS}`).last();
+        $menuItem.trigger('dxclick');
 
-        assert.ok($commandSelect.length, 'Command SelectBox rendered');
-        assert.ok($optionSelect.length, 'Option SelectBox rendered');
-        assert.ok($textArea.length, 'TextArea rendered');
+        assert.ok(showSpy.calledOnce, 'showAiDialog called');
+        assert.deepEqual(showSpy.firstCall.args[0], {
+            currentCommand: 'summarize',
+            currentCommandOption: undefined,
+            text: 'Test',
+            commandsMap: { summarize: {
+                name: 'summarize',
+                options: undefined,
+                text: 'Summarize'
+            } },
+        }, 'Correct config passed to dialog');
     });
 
     QUnit.test('renders AI menu with default commands & options when AI item is passed as string', function(assert) {
