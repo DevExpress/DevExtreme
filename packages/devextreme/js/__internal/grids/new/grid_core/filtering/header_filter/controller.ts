@@ -39,11 +39,11 @@ export class HeaderFilterController {
     column: Column,
     onFilterCloseCallback?: () => void,
   ): void {
-    const rootDataSource = this.dataController.dataSource.unreactive_get();
+    const storeLoadAdapter = this.dataController.getStoreLoadAdapter();
     const rootHeaderFilterOptions = this.optionsController.oneWay('headerFilter').unreactive_get();
 
     const filterDataSourceOptions = getDataSourceOptions(
-      rootDataSource,
+      storeLoadAdapter,
       {
         ...column,
         filterType: column.headerFilter?.filterType,
