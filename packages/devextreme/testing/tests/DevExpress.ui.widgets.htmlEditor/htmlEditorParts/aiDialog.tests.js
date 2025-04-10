@@ -127,6 +127,11 @@ QUnit.module('AiDialog', moduleConfig, () => {
     });
 
     QUnit.test('Copy button triggers clipboard write', function(assert) {
+        if(!navigator.clipboard) {
+            assert.ok(true, 'clipboard not supported in this environment');
+            return;
+        }
+
         const clipboardStub = sinon.stub(navigator.clipboard, 'writeText');
 
         showAiDialog(this);
