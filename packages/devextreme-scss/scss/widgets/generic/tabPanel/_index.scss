@@ -25,7 +25,9 @@
 // adduse
 
 .dx-tabpanel {
-  .dx-tabpanel-tab {
-    flex-basis: unset;
+  .dx-tabs-vertical {
+    .dx-tabpanel-tab {
+      flex-basis: unset;
+    }
   }
 }
