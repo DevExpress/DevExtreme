@@ -80,9 +80,6 @@ describe('ItemsController', () => {
         0,
       );
 
-      // eslint-disable-next-line no-console
-      console.log(dataRow);
-
       const columnMap = new Map(columns.map((column) => [column.dataField, column.dataType]));
 
       expect(columnMap.get('id')).toBe('number');
