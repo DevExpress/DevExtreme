@@ -39,7 +39,7 @@ export type RequestParams = {
  * @namespace DevExpress.aiIntegration
  * @public
  */
-export type ResponseParams = {
+export type Response = {
   /**
    * @docid
    * @public
@@ -117,7 +117,7 @@ export type AIProvider = {
    * @docid
    * @public
    */
-  sendRequest: (params: RequestParams) => ResponseParams;
+  sendRequest: (params: RequestParams) => Response;
 };
 
 /**

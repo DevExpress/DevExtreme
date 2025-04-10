@@ -1,7 +1,7 @@
-import type { AIProvider, RequestParams, ResponseParams } from '@js/common/ai-integration';
+import type { AIProvider, RequestParams, Response } from '@js/common/ai-integration';
 
 export class Provider implements AIProvider {
-  sendRequest(params: RequestParams): ResponseParams {
+  sendRequest(params: RequestParams): Response {
     const { onChunk } = params;
 
     const promise = new Promise<string>((resolve) => {
