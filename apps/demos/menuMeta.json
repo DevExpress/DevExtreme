@@ -4098,6 +4098,7 @@
       },
       {
         "Name": "Stepper",
+        "Badge": "New",
         "Equivalents": "dxStepper, dx-stepper, stepper",
         "Demos": [
           {
@@ -4114,8 +4115,10 @@
             "Equivalents": "step customization, templates, custom steps",
             "DocUrl": "Guide/UI_Components/Stepper/Customization/",
             "Widget": "Stepper",
-            "DemoType": "Web",
-            "Badge": "Roadmap"
+            "MvcDescription": "",
+            "NetCoreDescription": "",
+            "MvcAdditionalFiles": [],
+            "DemoType": "Web"
           }
         ]
       },
