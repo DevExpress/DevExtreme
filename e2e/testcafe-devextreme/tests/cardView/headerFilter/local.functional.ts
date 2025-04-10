@@ -2,9 +2,8 @@ import CardView from 'devextreme-testcafe-models/cardView';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 
-// TODO: Write test with remote DataSource after remote grouping will be supported
 // TODO: Write integration test with filtering after filtering will be implemented
-fixture.disablePageReloads`HeaderFilter.Functional`
+fixture.disablePageReloads`HeaderFilter.LocalDataSource.Functional`
   .page(url(__dirname, '../../container.html'));
 
 const CARD_VIEW_SELECTOR = '#container';
@@ -439,6 +438,58 @@ test('should apply filter from options (type: "exclude")', async (t) => {
   height: 600,
 }));
 
+test('should process groupInterval option', async (t) => {
+  const cardView = new CardView(CARD_VIEW_SELECTOR);
+  const expectedTexts = [
+    '0 - 5',
+    '5 - 10',
+  ];
+
+  const filterIcon = cardView
+    .getHeaderPanel()
+    .getHeaderItem()
+    .getFilterIcon();
+  await t.click(filterIcon);
+
+  const list = cardView.getHeaderFilterList();
+  const itemCount = await list.getItems().count;
+
+  await t.expect(itemCount).eql(expectedTexts.length);
+
+  for (let idx = 0; idx < expectedTexts.length; idx += 1) {
+    await t.expect(list.getItem(idx).text).eql(expectedTexts[idx]);
+  }
+
+  await t.click(cardView.element);
+}).before(async () => createWidget('dxCardView', {
+  dataSource: [
+    { id: 0, A: 'A_0' },
+    { id: 1, A: 'A_1' },
+    { id: 2, A: 'A_2' },
+    { id: 3, A: 'A_3' },
+    { id: 4, A: 'A_4' },
+    { id: 5, A: 'A_4' },
+    { id: 6, A: 'A_4' },
+    { id: 7, A: 'A_4' },
+    { id: 8, A: 'A_4' },
+    { id: 9, A: 'A_4' },
+  ],
+  columns: [
+    {
+      dataField: 'id',
+      dataType: 'number',
+      headerFilter: {
+        groupInterval: 5,
+      },
+    },
+    'A',
+  ],
+  headerFilter: {
+    visible: true,
+  },
+  height: 600,
+}));
+
 test('should not update column options if popup cancel btn clicked', async (t) => {
   const cardView = new CardView(CARD_VIEW_SELECTOR);
 
@@ -487,56 +538,6 @@ test('should not update column options if popup cancel btn clicked', async (t) =
   ],
   headerFilter: {
     visible: true,
-  },
-  height: 600,
-}));
-
-test('should support custom translations', async (t) => {
-  const cardView = new CardView(CARD_VIEW_SELECTOR);
-
-  const filterIcon = cardView
-    .getHeaderPanel()
-    .getHeaderItem()
-    .getFilterIcon();
-  await t.click(filterIcon);
-
-  const popup = cardView.getHeaderFilterPopup();
-  const list = cardView.getHeaderFilterList();
-  const doneBtn = popup.getButton(0);
-  const closeBtn = popup.getButton(1);
-  const firstItem = list.getItem(0);
-
-  await t.expect(doneBtn.text)
-    .eql('TEST_OK')
-    .expect(closeBtn.text)
-    .eql('TEST_CANCEL')
-    .expect(firstItem.text)
-    .eql('TEST_EMPTY');
-
-  await t.click(cardView.element);
-}).before(async () => createWidget('dxCardView', {
-  dataSource: [
-    { A: 'A_0', B: 'B_0', C: 'C_0' },
-    { A: 'A_1', B: 'B_1', C: 'C_1' },
-    { A: 'A_2', B: 'B_2', C: 'C_2' },
-    { A: 'A_3', B: 'B_3', C: 'C_3' },
-    { A: 'A_4', B: 'B_4', C: 'C_4' },
-  ],
-  columns: [
-    {
-      dataField: 'A',
-      calculateCellValue: () => undefined,
-    },
-    'B',
-    'C',
-  ],
-  headerFilter: {
-    visible: true,
-    texts: {
-      ok: 'TEST_OK',
-      cancel: 'TEST_CANCEL',
-      emptyValue: 'TEST_EMPTY',
-    },
   },
   height: 600,
 }));

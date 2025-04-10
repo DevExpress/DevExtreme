@@ -10,6 +10,7 @@ import { GridCoreNew } from '@ts/grids/new/grid_core/widget';
 import * as ContentViewModule from './content_view/index';
 import { ContextMenuController } from './context_menu/controller';
 import { ContextMenuView } from './context_menu/view';
+import * as di from './di';
 import { HeaderPanelView } from './header_panel/view';
 import { MainView } from './main_view';
 import { defaultOptions } from './options';
@@ -27,11 +28,8 @@ export class CardViewBase extends GridCoreNew {
   protected _registerDIContext(): void {
     super._registerDIContext();
 
-    this.diContext.register(ContentViewModule.View);
-    this.diContext.register(HeaderPanelView);
+    di.register(this.diContext);
     this.diContext.register(MainViewBase, MainView);
-    this.diContext.register(ContextMenuView);
-    this.diContext.register(ContextMenuController);
 
     const optionsController = new OptionsController(this);
     this.diContext.registerInstance(OptionsController, optionsController);

@@ -91,7 +91,34 @@ const columns = {
         return new Date(data.birthDate).toDateString();
       }
     },
-  ]
+  ],
+  remoteHeaderFilter: [
+  {
+    dataField: "OrderNumber",
+    alignment: 'right',
+    dataType: "number",
+  },
+  {
+    dataField: "OrderDate", 
+    dataType: 'date',
+    calculateCellValue: (data) => {
+      return new Date(data.OrderDate);
+    },
+    calculateDisplayValue: (data) => {
+      return new Date(data.OrderDate).toDateString();
+    }
+  },
+  "StoreCity",
+  "StoreState",
+  "Employee",
+  {
+    dataField: "SaleAmount",
+    dataType: "number",
+    headerFilter: {
+      groupInterval: 1000,
+    }
+  },
+],
 }
 
 const meta: Meta<typeof CardView> = {
@@ -102,6 +129,10 @@ const meta: Meta<typeof CardView> = {
       options: Object.keys(dataSources),
       mapping: dataSources,
       control: { type: 'radio' },
+    },
+    remoteOperations: {
+      control: 'radio',
+      options: [false, true, 'auto'],
     },
     width: {
       control: 'text',

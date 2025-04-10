@@ -2,50 +2,28 @@
 import {
   describe, expect, it, jest,
 } from '@jest/globals';
-import { HeaderFilterController } from '@ts/grids/new/grid_core/filtering/header_filter/index';
 import { rerender } from 'inferno';
 
-import { ColumnsController } from '../../grid_core/columns_controller';
-import { DataController } from '../../grid_core/data_controller';
-import { FilterController } from '../../grid_core/filtering';
 import { Sortable } from '../../grid_core/inferno_wrappers/sortable';
-import { SortingController } from '../../grid_core/sorting_controller';
-import { ContextMenuController } from '../context_menu';
+import { getContext } from '../di.test_utils';
 import type { Options } from '../options';
 import { OptionsControllerMock } from '../options_controller.mock';
 import { HeaderPanelView } from './view';
 
-const setup = (options: Options) => {
+const setup = (config: Options) => {
   const rootElement = document.createElement('div');
   rootElement.classList.add('test-container');
 
-  const optionsController = new OptionsControllerMock(options);
-  const filterController = new FilterController(optionsController);
-  const columnsController = new ColumnsController(optionsController);
-  const sortingController = new SortingController(optionsController, columnsController);
-  const dataController = new DataController(optionsController, sortingController, filterController);
-  const headerFilterController = new HeaderFilterController(
-    optionsController,
-    dataController,
-    columnsController,
-  );
-  const contextMenuController = new ContextMenuController(columnsController, optionsController);
+  const context = getContext(config);
 
-  const headerPanelView = new HeaderPanelView(
-    sortingController,
-    columnsController,
-    optionsController,
-    headerFilterController,
-    contextMenuController,
-  );
+  const optionsController = context.get(OptionsControllerMock);
+  const headerPanelView = context.get(HeaderPanelView);
 
   headerPanelView.render(rootElement);
   rerender();
 
   return {
     optionsController,
-    dataController,
-    columnsController,
     headerPanelView,
     rootElement,
   };
