@@ -127,6 +127,9 @@ export default class AiDialog extends DialogBase {
       height: 100,
       width: '100%',
       readOnly: true,
+      onValueChanged: (e) => {
+        this._resultText = e.value;
+      },
     });
   }
 

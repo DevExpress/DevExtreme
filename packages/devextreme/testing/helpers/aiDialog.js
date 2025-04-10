@@ -8,6 +8,7 @@ const DIALOG_CLASS = 'dx-formdialog';
 const AI_DIALOG_CONTENT_CLASS = 'dx-aidialog-content';
 const AI_DIALOG_CONTROLS_CLASS = 'dx-aidialog-controls';
 const SELECT_BOX_CLASS = 'dx-selectbox';
+const TEXT_AREA_CLASS = 'dx-textarea';
 
 const CLICK_EVENT_NAME = 'dxclick';
 
@@ -42,7 +43,7 @@ const getDropDownButtonOption = (index) => {
     return $(`.${OVERLAY_CLASS} .${LIST_ITEM_CLASS}`).eq(index);
 };
 
-const getSelectBoxes = ($container) => {
+const getDialogSelectBoxes = ($container) => {
     const $wrapper = $container.find(`.${DIALOG_CLASS}`);
     const $aiContent = $wrapper.find(`.${AI_DIALOG_CONTENT_CLASS}`);
     const $controls = $aiContent.find(`.${AI_DIALOG_CONTROLS_CLASS}`);
@@ -69,7 +70,7 @@ export const selectInsertionMode = (insertionMode) => {
         insertBelow: 2,
     };
 
-    getDropDownButton($('#htmlEditor')).trigger(CLICK_EVENT_NAME);
+    getDropDownButton($(`.${DIALOG_CLASS}`)).trigger(CLICK_EVENT_NAME);
     getDropDownButtonOption(insertionModeToIndexMap[insertionMode]).trigger(CLICK_EVENT_NAME);
 };
 
@@ -77,5 +78,15 @@ export function findButtonByText($container, text) {
     return $container.find(`.${BUTTON_CLASS}`).filter((_, element) => $(element).text() === text);
 }
 
-export const getCommandSelectBoxInstance = ($container) => getSelectBoxes($container).eq(0).dxSelectBox('instance');
-export const getOptionSelectBoxInstance = ($container) => getSelectBoxes($container).eq(1).dxSelectBox('instance');
+export const getCommandSelectBoxInstance = ($container) => getDialogSelectBoxes($container).eq(0).dxSelectBox('instance');
+export const getOptionSelectBoxInstance = ($container) => getDialogSelectBoxes($container).eq(1).dxSelectBox('instance');
+
+export const setResultText = (value) => {
+    const textAreaInstance = $(`.${TEXT_AREA_CLASS}`).dxTextArea('instance');
+    textAreaInstance.option('value', value);
+};
+
+export const getResultText = () => {
+    const textAreaInstance = $(`.${TEXT_AREA_CLASS}`).dxTextArea('instance');
+    return textAreaInstance.option('value');
+};

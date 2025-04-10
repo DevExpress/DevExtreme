@@ -126,6 +126,7 @@ function prepareAiTextTrasformHandler(module) {
     module.editorInstance.showAiDialog(aiDialogConfig)?.done((resultText, event) => {
       const insertionMode = event.itemData.id;
       let insertIndex = 0;
+      let textToInsert = resultText;
 
       switch (insertionMode) {
         case 'replace':
@@ -139,6 +140,7 @@ function prepareAiTextTrasformHandler(module) {
 
         case 'insertAbove':
           insertIndex = hasSelection ? selection.index : 0;
+          textToInsert = `${resultText}\n`;
           break;
 
         case 'insertBelow':
@@ -149,12 +151,10 @@ function prepareAiTextTrasformHandler(module) {
           return;
       }
 
-      quill.insertText(insertIndex, resultText, USER_ACTION);
-      quill.setSelection(insertIndex, resultText.length, USER_ACTION);
+      quill.insertText(insertIndex, textToInsert, USER_ACTION);
+      quill.setSelection(insertIndex, textToInsert.length, USER_ACTION);
 
       module.saveValueChangeEvent(event);
-    }).always(() => {
-      quill.focus();
     });
   };
 }
