@@ -66,10 +66,10 @@ export class ItemsController {
         const calculatedValue = column.calculateCellValue?.(data);
         const {
           // @ts-expect-error
-          column: updatedColumn, value
+          column: updatedColumn, value,
         } = this.columnsController.updateColumnDataType(column, calculatedValue);
         const displayValue = value;
-        const formattedText = formatHelper.format(displayValue as any, column.format);
+        const formattedText = formatHelper.format(displayValue as never, column.format);
         const text = column.customizeText
           ? column.customizeText({ value: displayValue, valueText: formattedText })
           : calculatedValue;

@@ -196,7 +196,7 @@ export class ColumnsController {
 
   public updateColumnDataType(column: Column, value: unknown): unknown {
     const actualType = this.getActualColumnType(value);
-    let updatedColumn = column
+    let updatedColumn = column;
 
     if (actualType && actualType !== column.dataType) {
       this.updateColumnProps(column, { dataType: actualType });
