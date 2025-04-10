@@ -7,6 +7,7 @@ import type { HeaderFilterRootOptions } from '@ts/grids/new/grid_core/filtering/
 import headerFilterUtils from '@ts/grids/new/grid_core/filtering/header_filter/utils';
 
 import { OptionsController } from '../options_controller/options_controller';
+import { parseValue } from '../utils';
 import type { ColumnProperties, ColumnSettings, PreNormalizedColumn } from './options';
 import type { Column, VisibleColumn } from './types';
 import {
@@ -160,7 +161,6 @@ export class ColumnsController {
       || value.getMinutes() !== 0
       || value.getSeconds() !== 0
       || value.getMilliseconds() !== 0;
-
       return hasTime ? 'datetime' : 'date';
     }
 
@@ -206,12 +206,7 @@ export class ColumnsController {
     let newValue = value;
 
     if (typeof value === 'string') {
-      // Todo:
-      // - wait for PR#29402 to be merged
-      // - Transfer parseValue to root utils
-      // - Import utils
-      // - use parseValue from utils
-      // newValue = parseValue(column, value);
+      newValue = parseValue(column, value);
     } else if (column.dataType === 'date' && !(value instanceof Date)) {
       // @ts-expect-error
       newValue = new Date(value);
