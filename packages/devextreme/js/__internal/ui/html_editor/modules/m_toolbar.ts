@@ -60,6 +60,8 @@ if (Quill) {
     u: 85,
   };
 
+  const TOOLBAR_AI_ITEM_NAME = 'ai';
+
   const localize = (name) => localizationMessage.format(`dxHtmlEditor-${camelize(name)}`);
 
   const localizeValue = (value, name) => {
@@ -293,7 +295,7 @@ if (Quill) {
         this._detectRenamedOptions(item);
         if (isObject(item)) {
           newItem = this._handleObjectItem(item);
-        } else if (item === 'ai') {
+        } else if (item === TOOLBAR_AI_ITEM_NAME) {
           resultItems.push(this._getToolbarItem(this._prepareAIMenuItemConfig(item)));
         } else if (isString(item)) {
           const buttonItemConfig = this._prepareButtonItemConfig(item);
@@ -308,7 +310,7 @@ if (Quill) {
     }
 
     _handleObjectItem(item) {
-      if (item.name === 'ai') {
+      if (item.name === TOOLBAR_AI_ITEM_NAME) {
         return this._getToolbarItem(this._prepareAIMenuItemConfig(item));
       }
 
@@ -418,7 +420,7 @@ if (Quill) {
 
     _prepareAIMenuItemConfig(item: HtmlEditorAIToolbarItem) {
       const {
-        name = 'ai',
+        name = TOOLBAR_AI_ITEM_NAME,
         commands = Object.keys(defaultCommandNames) as HtmlEditorAICommandName[],
       } = item;
 
