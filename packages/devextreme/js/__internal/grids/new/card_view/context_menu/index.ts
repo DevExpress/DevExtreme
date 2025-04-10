@@ -1,3 +1,3 @@
 export * from './controller';
-export * from './options';
+export type { ContextMenuPreparingEvent, ContextMenuTarget, Options } from './options';
 export * from './view';
