@@ -5,7 +5,7 @@
       :collapsible="collapsible"
       :multiple="multiple"
       :animation-duration="animationDuration"
-      v-model:selected-items="selectedItems"
+      v-model:selected-items="selectedCompanies"
       id="accordion-container"
       item-title-template="itemTitle"
     >
@@ -49,30 +49,46 @@
         <span class="caption">Selected Items</span>
         <DxTagBox
           :data-source="companies"
-          v-model:value="selectedItems"
+          v-model:value="selectedCompaniesIds"
           :input-attr="{ 'aria-label': 'Company' }"
           :disabled="!multiple"
           display-expr="CompanyName"
+          value-expr="ID"
         />
       </div>
     </div>
   </div>
 </template>
+
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import DxAccordion from 'devextreme-vue/accordion';
 import DxTagBox from 'devextreme-vue/tag-box';
 import DxCheckBox from 'devextreme-vue/check-box';
 import DxSlider, { DxTooltip, DxLabel } from 'devextreme-vue/slider';
 import CustomTitle from './CustomTitle.vue';
 import CustomItem from './CustomItem.vue';
+import { type CompanyData } from './data.ts';
 import service from './data.ts';
 
-const companies = service.getCompanies();
-const selectedItems = ref([companies[0]]);
 const multiple = ref(false);
 const collapsible = ref(false);
 const animationDuration = ref(300);
+const companies = service.getCompanies();
+const selectedCompaniesIds = ref([companies[0].ID]);
+
+const getCompaniesBySelectedIds = () => {
+  const selectedIds = new Set(selectedCompaniesIds.value);
+  return companies.filter((company: CompanyData) => selectedIds.has(company.ID));
+};
+const setSelectedCompanies = (companies: CompanyData[]) => {
+  selectedCompaniesIds.value = companies.map((item) => item.ID);
+};
+const selectedCompanies = computed({
+  get: getCompaniesBySelectedIds,
+  set: setSelectedCompanies,
+});
+
 </script>
 <style scoped>
 #accordion {
