@@ -26,12 +26,14 @@ export interface AppointmentDataItem {
   rawAppointment: SafeAppointment;
 }
 
+// TODO: add correct types here. Agenda and other views have different types
 export interface BaseAppointmentViewModelSettings extends Record<string, unknown> {
   direction: string;
   groupIndex: number;
   height: number | string;
   sortedIndex: number;
   width: number | string;
+  allDay?: boolean;
 }
 
 export interface AppointmentViewModel {

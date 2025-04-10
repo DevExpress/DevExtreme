@@ -554,13 +554,9 @@ class SchedulerAppointments extends CollectionWidget {
 
   _getAppointmentContainer(allDay: boolean): dxElementWrapper {
     const $allDayContainer = this.option('allDayContainer');
-    let $container = (this as any).itemsContainer().not($allDayContainer);
+    const $container = (this as any).itemsContainer().not($allDayContainer);
 
-    if (allDay && $allDayContainer) {
-      $container = $allDayContainer;
-    }
-
-    return $container;
+    return allDay && $allDayContainer ? $allDayContainer : $container;
   }
 
   _postprocessRenderItem(args) {
