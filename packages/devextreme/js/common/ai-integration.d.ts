@@ -3,7 +3,7 @@
  * @namespace DevExpress.aiIntegration
  * @public
  */
-export interface Prompt {
+export type Prompt = {
   /**
    * @docid
    * @public
@@ -14,14 +14,14 @@ export interface Prompt {
    * @public
    */
   user?: string;
-}
+};
 
 /**
  * @docid
  * @namespace DevExpress.aiIntegration
  * @public
  */
-export interface RequestParams {
+export type RequestParams = {
   /**
    * @docid
    * @public
@@ -32,14 +32,14 @@ export interface RequestParams {
    * @public
    */
   onChunk: (chunk: string) => void;
-}
+};
 
 /**
  * @docid
  * @namespace DevExpress.aiIntegration
  * @public
  */
-export interface ResponseParams {
+export type ResponseParams = {
   /**
    * @docid
    * @public
@@ -50,14 +50,14 @@ export interface ResponseParams {
    * @public
    */
   abort: () => void;
-}
+};
 
 /**
  * @docid
  * @namespace DevExpress.aiIntegration
  * @public
  */
-export interface TranslateCommandParams {
+export type TranslateCommandParams = {
   /**
    * @docid
    * @public
@@ -68,7 +68,7 @@ export interface TranslateCommandParams {
    * @public
    */
   lang: string;
-}
+};
 
 /**
  * @docid
@@ -89,7 +89,7 @@ export type BaseCommandResult = TranslateCommandResult;
  * @namespace DevExpress.aiIntegration
  * @public
  */
-export interface RequestCallbacks {
+export type RequestCallbacks = {
   /**
    * @docid
    * @public
@@ -105,20 +105,20 @@ export interface RequestCallbacks {
    * @public
    */
   onError?: (error: Error) => void;
-}
+};
 
 /**
  * @docid
  * @namespace DevExpress.aiIntegration
  * @public
  */
-export interface AIProvider {
+export type AIProvider = {
   /**
    * @docid
    * @public
    */
   sendRequest: (params: RequestParams) => ResponseParams;
-}
+};
 
 /**
  * @docid

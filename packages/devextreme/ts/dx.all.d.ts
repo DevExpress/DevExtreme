@@ -884,12 +884,12 @@ declare module DevExpress.aiIntegration {
   /**
    * [descr:AIProvider]
    */
-  export interface AIProvider {
+  export type AIProvider = {
     /**
      * [descr:AIProvider.sendRequest]
      */
     sendRequest: (params: RequestParams) => ResponseParams;
-  }
+  };
   /**
    * [descr:BaseCommandResult]
    */
@@ -897,7 +897,7 @@ declare module DevExpress.aiIntegration {
   /**
    * [descr:Prompt]
    */
-  export interface Prompt {
+  export type Prompt = {
     /**
      * [descr:Prompt.system]
      */
@@ -906,11 +906,11 @@ declare module DevExpress.aiIntegration {
      * [descr:Prompt.user]
      */
     user?: string;
-  }
+  };
   /**
    * [descr:RequestCallbacks]
    */
-  export interface RequestCallbacks {
+  export type RequestCallbacks = {
     /**
      * [descr:RequestCallbacks.onChunk]
      */
@@ -923,11 +923,11 @@ declare module DevExpress.aiIntegration {
      * [descr:RequestCallbacks.onError]
      */
     onError?: (error: Error) => void;
-  }
+  };
   /**
    * [descr:RequestParams]
    */
-  export interface RequestParams {
+  export type RequestParams = {
     /**
      * [descr:RequestParams.prompt]
      */
@@ -936,11 +936,11 @@ declare module DevExpress.aiIntegration {
      * [descr:RequestParams.onChunk]
      */
     onChunk: (chunk: string) => void;
-  }
+  };
   /**
    * [descr:ResponseParams]
    */
-  export interface ResponseParams {
+  export type ResponseParams = {
     /**
      * [descr:ResponseParams.promise]
      */
@@ -949,11 +949,11 @@ declare module DevExpress.aiIntegration {
      * [descr:ResponseParams.abort]
      */
     abort: () => void;
-  }
+  };
   /**
    * [descr:TranslateCommandParams]
    */
-  export interface TranslateCommandParams {
+  export type TranslateCommandParams = {
     /**
      * [descr:TranslateCommandParams.text]
      */
@@ -962,7 +962,7 @@ declare module DevExpress.aiIntegration {
      * [descr:TranslateCommandParams.lang]
      */
     lang: string;
-  }
+  };
   /**
    * [descr:TranslateCommandResult]
    */
