@@ -763,3 +763,4 @@ test('TabPanel tabs min-width', async (t) => {
     return createWidget('dxTabPanel', tabPanelOptions);
   });
 });
+
