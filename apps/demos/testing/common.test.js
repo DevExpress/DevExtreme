@@ -240,9 +240,6 @@ const SKIPPED_TESTS = {
     ],
   },
   Vue: {
-    Accordion: [
-      { demo: 'Overview', themes: [THEME.generic, THEME.material, THEME.fluent] },
-    ],
     Chat: [
       // TODO Chrome133: skipped during chrome update
       // error "ReferenceError: AzureOpenAI is not defined"
