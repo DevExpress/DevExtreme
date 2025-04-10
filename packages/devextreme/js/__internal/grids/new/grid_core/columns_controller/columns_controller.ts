@@ -140,4 +140,65 @@ export class ColumnsController {
 
     return result;
   }
+
+  private updateColumnProps(column: Column, updatedProps: Partial<PreNormalizedColumn>): void {
+    this.columnsSettings.updateFunc((columns) => {
+      const index = getColumnIndexByName(columns, column.name);
+      if (index === -1) return columns;
+
+      const existing = columns[index];
+
+      const isChanged = Object.entries(updatedProps).some(
+        ([key, value]) => existing[key] !== value,
+      );
+
+      if (!isChanged) {
+        return columns;
+      }
+
+      const updated = {
+        ...existing,
+        ...updatedProps,
+      };
+
+      let newColumns = [...columns];
+      newColumns[index] = updated;
+      newColumns = this.normalizeColumnsVisibleIndexes(newColumns, index);
+      return newColumns;
+    });
+  }
+
+  public updateColumnDataType(column: Column, value: unknown): unknown {
+    let newColumn = column;
+    let newValue = value;
+
+    if (column.dataType === 'date') {
+      if (typeof value === 'string' && !isNaN(Date.parse(value))) {
+        newValue = new Date(value);
+      } else if (!(value instanceof Date)) {
+        // @ts-expect-error
+        newValue = new Date(value);
+      }
+    } else if (typeof value === 'number') {
+      newColumn = { ...column, dataType: 'number' };
+      newValue = Number(value);
+      this.updateColumnProps(column, { dataType: 'number' });
+    } else if (typeof value === 'string') {
+      if (!isNaN(Number(value))) {
+        newColumn = { ...column, dataType: 'number' };
+        this.updateColumnProps(column, { dataType: 'number' });
+      } else {
+        const parsed = Date.parse(value);
+        if (!isNaN(parsed)) {
+          const hasTime = /[T\s]\d{2}:\d{2}/.test(value);
+          const dataType = hasTime ? 'datetime' : 'date';
+          newColumn = { ...column, dataType };
+          newValue = new Date(parsed);
+          this.updateColumnProps(column, { dataType });
+        }
+      }
+    }
+
+    return { column: newColumn, value: newValue };
+  }
 }
