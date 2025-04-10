@@ -4,6 +4,7 @@ export type Direction = 'vertical' | 'horizontal';
 export type GroupOrientation = 'vertical' | 'horizontal';
 export type ViewType = 'agenda' | 'day' | 'month' | 'timelineDay' | 'timelineMonth' | 'timelineWeek' | 'timelineWorkWeek' | 'week' | 'workWeek';
 export type AllDayPanelModeType = 'all' | 'allDay' | 'hidden';
+export type RenderStrategyName = 'horizontal' | 'horizontalMonth' | 'horizontalMonthLine' | 'vertical' | 'week' | 'agenda';
 export type FilterItemType = Record<string, string | number> | string | number;
 export type HeaderCellTextFormat = string | ((date: Date) => string);
 
@@ -23,6 +24,21 @@ export interface AppointmentDataItem {
   allDay: boolean;
   visible: boolean;
   rawAppointment: SafeAppointment;
+}
+
+export interface BaseAppointmentViewModelSettings extends Record<string, unknown> {
+  direction: string;
+  groupIndex: number;
+  height: number | string;
+  sortedIndex: number;
+  width: number | string;
+}
+
+export interface AppointmentViewModel {
+  itemData: SafeAppointment;
+  needRepaint: boolean;
+  needRemove: boolean;
+  settings: BaseAppointmentViewModelSettings[];
 }
 
 export interface AppointmentGeometry {

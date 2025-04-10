@@ -45,42 +45,6 @@ export const getDatesWithoutTime = (min: Date, max: Date): [Date, Date] => {
   return [newMin, newMax];
 };
 
-export const getAppointmentRenderingStrategyName = (viewType: ViewType): string => {
-  const appointmentRenderingStrategyMap: Record<ViewType, { renderingStrategy: string }> = {
-    day: {
-      renderingStrategy: 'vertical',
-    },
-    week: {
-      renderingStrategy: 'week',
-    },
-    workWeek: {
-      renderingStrategy: 'week',
-    },
-    month: {
-      renderingStrategy: 'horizontalMonth',
-    },
-    timelineDay: {
-      renderingStrategy: 'horizontal',
-    },
-    timelineWeek: {
-      renderingStrategy: 'horizontal',
-    },
-    timelineWorkWeek: {
-      renderingStrategy: 'horizontal',
-    },
-    timelineMonth: {
-      renderingStrategy: 'horizontalMonthLine',
-    },
-    agenda: {
-      renderingStrategy: 'agenda',
-    },
-  };
-
-  const { renderingStrategy } = appointmentRenderingStrategyMap[viewType];
-
-  return renderingStrategy;
-};
-
 export const isAppointmentTakesAllDay = (
   appointmentAdapter: {
     allDay: boolean;
@@ -266,7 +230,9 @@ export const getHorizontalGroupCount = (
   return isVerticalGrouping ? 1 : groupCount;
 };
 
-export const isTimelineView = (viewType: ViewType): boolean => TIMELINE_VIEWS.includes(viewType);
+export const isTimelineView = (
+  viewType?: ViewType,
+): boolean => Boolean(viewType && TIMELINE_VIEWS.includes(viewType));
 
 export const isDateAndTimeView = (
   viewType: ViewType,

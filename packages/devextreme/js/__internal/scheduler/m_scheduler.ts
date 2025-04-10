@@ -36,8 +36,11 @@ import { isMaterial, isMaterialBased } from '@js/ui/themes';
 import errors from '@js/ui/widget/ui.errors';
 import Widget from '@js/ui/widget/ui.widget';
 import { dateUtilsTs } from '@ts/core/utils/date';
+import type { RawViewType } from '@ts/scheduler/header/types';
 import { createTimeZoneCalculator } from '@ts/scheduler/r1/timezone_calculator/index';
-import type { AppointmentDataItem, SafeAppointment } from '@ts/scheduler/r1/types';
+import type {
+  AppointmentDataItem, AppointmentViewModel, SafeAppointment, ViewType,
+} from '@ts/scheduler/r1/types';
 import {
   excludeFromRecurrence,
   getAppointmentDataItems,
@@ -399,16 +402,16 @@ class Scheduler extends Widget<any> {
     });
   }
 
-  get currentView() {
+  get currentView(): RawViewType {
     return viewsUtils.getCurrentView(
       this.option('currentView'),
       this.option('views'),
     );
   }
 
-  get currentViewType() {
+  get currentViewType(): ViewType {
     return isObject(this.currentView)
-      ? (this.currentView as any).type
+      ? this.currentView.type as ViewType
       : this.currentView;
   }
 
@@ -1185,7 +1188,7 @@ class Scheduler extends Widget<any> {
     workspace.option('allDayExpanded', this._isAllDayExpanded());
 
     // @ts-expect-error
-    const viewModel = this._isVisible()
+    const viewModel: AppointmentViewModel[] = this._isVisible()
       ? this._getAppointmentsToRepaint()
       : [];
 
@@ -1193,7 +1196,7 @@ class Scheduler extends Widget<any> {
     this.appointmentDataProvider.cleanState();
   }
 
-  _getAppointmentsToRepaint() {
+  _getAppointmentsToRepaint(): AppointmentViewModel[] {
     const layoutManager = this.getLayoutManager();
 
     const appointmentsMap = layoutManager.createAppointmentsMap(this.filteredItems);

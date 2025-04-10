@@ -3,7 +3,7 @@ import config from 'core/config';
 import { DataSource } from 'common/data/data_source/data_source';
 import { AppointmentDataProvider } from '__internal/scheduler/appointments/data_provider/m_appointment_data_provider';
 import { AppointmentDataAccessor } from '__internal/scheduler/utils/data_accessor/appointment_data_accessor';
-import { getPreparedDataItems } from '__internal/scheduler/r1/utils/index.js';
+import { getAppointmentDataItems } from '__internal/scheduler/r1/utils/index.js';
 
 const {
     module,
@@ -30,7 +30,7 @@ const createAppointmentDataProvider = (options) => {
         }),
         prepareDataItems: () => {
             const appointmentDuration = options.appointmentDuration || 30;
-            return getPreparedDataItems(
+            return getAppointmentDataItems(
                 options.dataSource.items(),
                 options.dataAccessors,
                 appointmentDuration,

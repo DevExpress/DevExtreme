@@ -3,7 +3,7 @@ import { mockAppointmentDataAccessor } from '@ts/scheduler/__mock__/appointment_
 
 import { createTimeZoneCalculator } from '../timezone_calculator';
 import type { AppointmentDataItem } from '../types';
-import { getAppointmentDataItems, replaceIncorrectEndDate } from './getAppointmentDataItems';
+import { getAppointmentDataItems, replaceIncorrectEndDate } from './get_appointment_data_items';
 
 describe('Data API', () => {
   describe('getAppointmentDataItems', () => {

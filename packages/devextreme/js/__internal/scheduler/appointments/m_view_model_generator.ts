@@ -1,5 +1,5 @@
 import { dateUtilsTs } from '@ts/core/utils/date';
-import type { SafeAppointment } from '@ts/scheduler/r1/types';
+import type { AppointmentViewModel, RenderStrategyName, SafeAppointment } from '@ts/scheduler/r1/types';
 import { getAppointmentKey } from '@ts/scheduler/r1/utils/index';
 
 import AgendaAppointmentsStrategy from './rendering_strategies/m_strategy_agenda';
@@ -10,7 +10,7 @@ import HorizontalMonthLineAppointmentsStrategy from './rendering_strategies/m_st
 import VerticalAppointmentsStrategy from './rendering_strategies/m_strategy_vertical';
 import WeekAppointmentRenderingStrategy from './rendering_strategies/m_strategy_week';
 
-const RENDERING_STRATEGIES = {
+const RENDERING_STRATEGIES: Record<RenderStrategyName, typeof BaseAppointmentsStrategy> = {
   horizontal: HorizontalAppointmentsStrategy,
   horizontalMonth: HorizontalMonthAppointmentsStrategy,
   horizontalMonthLine: HorizontalMonthLineAppointmentsStrategy,
@@ -50,7 +50,7 @@ export class AppointmentViewModelGenerator {
     };
   }
 
-  postProcess(filteredItems: SafeAppointment[], positionMap) {
+  postProcess(filteredItems: SafeAppointment[], positionMap): AppointmentViewModel[] {
     const renderingStrategy = this.getRenderingStrategy();
 
     return filteredItems.map((data, index) => {
@@ -67,13 +67,12 @@ export class AppointmentViewModelGenerator {
           : 'horizontal';
       });
 
-      const item: any = {
+      const item: AppointmentViewModel = {
         itemData: data,
         settings: appointmentSettings,
+        needRepaint: true,
+        needRemove: false,
       };
-
-      item.needRepaint = true;
-      item.needRemove = false;
 
       return item;
     });
@@ -201,16 +200,16 @@ export class AppointmentViewModelGenerator {
   // because in this case it will break the refs (keys) of dataSource's appointments,
   // and it will break appointment updates :(
   private unshiftViewModelAppointmentsByViewOffset(
-    viewModel: any[],
+    viewModel: AppointmentViewModel[],
     viewOffset: number,
-  ): any[] {
+  ): AppointmentViewModel[] {
     const processedAppointments = new Set();
 
     // eslint-disable-next-line no-restricted-syntax
     for (const model of viewModel) {
       // eslint-disable-next-line no-restricted-syntax
       for (const setting of model.settings ?? []) {
-        const appointment = setting?.info?.appointment;
+        const appointment = (setting as any)?.info?.appointment;
 
         if (appointment && !processedAppointments.has(appointment)) {
           appointment.startDate = dateUtilsTs
