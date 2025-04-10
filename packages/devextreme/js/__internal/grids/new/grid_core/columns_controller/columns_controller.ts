@@ -1,7 +1,7 @@
 /* eslint-disable spellcheck/spell-checker */
 import type { Subscribable, SubsGets, SubsGetsUpd } from '@ts/core/reactive/index';
 import {
-  computed, interruptableComputed, state
+  computed, interruptableComputed, state,
 } from '@ts/core/reactive/index';
 import type { HeaderFilterRootOptions } from '@ts/grids/new/grid_core/filtering/header_filter/index';
 import headerFilterUtils from '@ts/grids/new/grid_core/filtering/header_filter/utils';
@@ -78,9 +78,7 @@ export class ColumnsController {
         return normalizeColumns(
           finalColumns ?? [],
           this.options.normalizeTemplate.bind(this.options),
-        ).map((column) =>
-          headerFilterUtils.mergeColumnHeaderFilterOptions(column, headerFilterRootOptions)
-        );
+        ).map((column) =>headerFilterUtils.mergeColumnHeaderFilterOptions(column, headerFilterRootOptions));
       },
       [
         this.columnsSettings,

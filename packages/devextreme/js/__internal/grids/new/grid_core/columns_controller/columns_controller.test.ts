@@ -177,44 +177,49 @@ describe('ColumnsController', () => {
   describe('columns inference from firstItem', () => {
     it('should initialize columns from the data\'s first item when no columns are defined', () => {
       const { columnsController } = setup();
-  
+
       const dataItem = {
         id: 1,
         name: 'Alice',
         age: 30,
       };
-  
+
       columnsController.firstItem.update(dataItem);
-  
+
       const columns = columnsController.columns.unreactive_get();
-  
+
       expect(columns).toHaveLength(3);
       expect(columns.map((col) => col.dataField)).toEqual(['id', 'name', 'age']);
     });
-  
+
     it('should not overwrite existing columns', () => {
       const { columnsController } = setup({
-        columns: [{ dataField: 'foo', name: 'foo', visible: true, visibleIndex: 0 }],
+        columns: [{
+          dataField: 'foo',
+          name: 'foo',
+          visible: true,
+          visibleIndex: 0,
+        }],
       });
-  
+
       const dataItem = {
         id: 1,
         bar: 'baz',
       };
-  
+
       columnsController.firstItem.update(dataItem);
-  
+
       const columns = columnsController.columns.unreactive_get();
       expect(columns).toHaveLength(1);
       expect(columns[0].dataField).toBe('foo');
     });
-  
+
     it('should not generate columns if firstItem is null or undefined', () => {
       const { columnsController } = setup();
-  
+
       columnsController.firstItem.update(null);
       expect(columnsController.columns.unreactive_get()).toEqual([]);
-  
+
       // @ts-expect-error
       columnsController.firstItem.update(undefined);
       expect(columnsController.columns.unreactive_get()).toEqual([]);
