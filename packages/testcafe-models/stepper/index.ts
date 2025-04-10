@@ -1,24 +1,13 @@
 import type { WidgetName } from '../types';
-import Widget from '../internal/widget';
-import Step from './item';
+import Collection from "../internal/collection";
+import CollectionItem from "../internal/collectionItem";
 
-const CLASS = {
-  item: 'dx-stepper',
-};
-export default class Stepper extends Widget {
-  public static className = '.dx-step';
+export default class Stepper extends Collection {
+  public static className = '.dx-stepper';
 
-  itemElements: Selector;
+  itemClassName = '.dx-step';
 
-  constructor(id: string | Selector) {
-    super(id);
-    this.itemElements = this.element.find(`.${CLASS.item}`);
-  }
+  ItemClass = CollectionItem;
 
-  // eslint-disable-next-line class-methods-use-this
   getName(): WidgetName { return 'dxStepper'; }
-
-  public getItem(index = 0): Step {
-    return new Step(this.itemElements.nth(index));
-  }
 }
