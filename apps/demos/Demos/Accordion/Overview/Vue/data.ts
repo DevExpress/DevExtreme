@@ -1,4 +1,5 @@
 export type CompanyData = {
+  ID: number,
   CompanyName: string,
   Address: string,
   City: string,
@@ -9,7 +10,7 @@ export type CompanyData = {
   Website: string,
 }
 
-const companies = [{
+const companies: CompanyData[] = [{
   ID: 1,
   CompanyName: 'Super Mart of the West',
   Address: '702 SW 8th Street',
