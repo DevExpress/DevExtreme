@@ -52,6 +52,14 @@ export default class FormDialog extends DialogBase {
     });
   }
 
+  protected _escKeyHandler(): void {
+    this._popup?.hide();
+  }
+
+  protected _addEscapeHandler(e): void {
+    e.component.registerKeyHandler('escape', this._escKeyHandler.bind(this));
+  }
+
   protected _getPopupConfig() {
     const baseConfig = super._getPopupConfig();
 
@@ -91,6 +99,7 @@ export default class FormDialog extends DialogBase {
           },
         },
       ],
+      ...this._popupUserConfig,
     });
   }
 

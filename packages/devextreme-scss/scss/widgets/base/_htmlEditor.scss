@@ -355,6 +355,11 @@ $transparent-border: 1px solid transparent;
 .dx-aidialog-controls {
   display: flex;
   gap: 8px;
+
+  .dx-selectbox {
+    flex: 1 0 0;
+    max-width: calc(50% - 4px);
+  }
 }
 
 .dx-aidialog-content {

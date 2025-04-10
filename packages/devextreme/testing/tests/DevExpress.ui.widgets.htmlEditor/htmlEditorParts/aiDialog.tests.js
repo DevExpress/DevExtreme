@@ -83,19 +83,6 @@ QUnit.module('AiDialog', moduleConfig, () => {
         this.aiDialog._popup.hide();
     });
 
-    QUnit.skip('Should close AI dialog on Esc press', function(assert) {
-        assert.expect(1);
-
-        const promise = showAiDialog(this);
-
-        promise.fail((formData) => {
-            assert.notOk(formData, 'There is no data');
-        });
-
-        const escEvent = $.Event('keydown', { key: 'Escape' });
-        $(`.${DIALOG_CLASS}`).trigger(escEvent);
-    });
-
     QUnit.test('Should hide options SelectBox if command with no options selected', function(assert) {
         showAiDialog(this);
 

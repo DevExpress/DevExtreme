@@ -3,7 +3,6 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred } from '@js/core/utils/deferred';
-import { extend } from '@js/core/utils/extend';
 import {
   // @ts-expect-error
   getCurrentScreenFactor,
@@ -46,16 +45,8 @@ abstract class BaseDialog {
     return editorInstance._createComponent($container, Popup, popupConfig);
   }
 
-  protected _escKeyHandler(): void {
-    this._popup.hide();
-  }
-
-  protected _addEscapeHandler(e): void {
-    e.component.registerKeyHandler('escape', this._escKeyHandler.bind(this));
-  }
-
-  protected _getPopupConfig(): PopupProperties {
-    return extend({
+  protected _getPopupConfig() {
+    return {
       onInitialized: (e) => {
         this._popup = e.component;
         this._popup.on('hiding', () => this.onHiding());
@@ -67,7 +58,7 @@ abstract class BaseDialog {
       contentTemplate: (contentElem) => {
         this._renderContent($(contentElem));
       },
-    }, this._popupUserConfig) as PopupProperties;
+    };
   }
 
   protected abstract _renderContent($contentElem: dxElementWrapper): void;
