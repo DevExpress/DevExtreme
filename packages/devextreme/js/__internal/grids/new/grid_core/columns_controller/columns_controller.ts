@@ -138,6 +138,36 @@ export class ColumnsController {
     return result;
   }
 
+  private getActualColumnType = (value: unknown): 'number' | 'date' | 'datetime' | 'string' => {
+    if (typeof value === 'number') {
+      return 'number';
+    }
+
+    if (typeof value === 'string') {
+      if (!isNaN(Number(value))) {
+        return 'number';
+      }
+
+      const parsed = Date.parse(value);
+      if (!isNaN(parsed)) {
+        const hasTime = /[T\s]\d{2}:\d{2}/.test(value);
+        return hasTime ? 'datetime' : 'date';
+      }
+    }
+
+    if (value instanceof Date) {
+      const hasTime =
+        value.getHours() !== 0 ||
+        value.getMinutes() !== 0 ||
+        value.getSeconds() !== 0 ||
+        value.getMilliseconds() !== 0;
+
+      return hasTime ? 'datetime' : 'date';
+    }
+
+    return 'string';
+  };
+
   private updateColumnProps(column: Column, updatedProps: Partial<PreNormalizedColumn>): void {
     this.columnsSettings.updateFunc((columns) => {
       const index = getColumnIndexByName(columns, column.name);
@@ -166,36 +196,27 @@ export class ColumnsController {
   }
 
   public updateColumnDataType(column: Column, value: unknown): unknown {
-    let newColumn = column;
-    let newValue = value;
+    const actualType = this.getActualColumnType(value);
 
-    if (column.dataType === 'date') {
-      if (typeof value === 'string' && !isNaN(Date.parse(value))) {
-        newValue = new Date(value);
-      } else if (!(value instanceof Date)) {
-        // @ts-expect-error
-        newValue = new Date(value);
-      }
-    } else if (typeof value === 'number') {
-      newColumn = { ...column, dataType: 'number' };
-      newValue = Number(value);
-      this.updateColumnProps(column, { dataType: 'number' });
-    } else if (typeof value === 'string') {
-      if (!isNaN(Number(value))) {
-        newColumn = { ...column, dataType: 'number' };
-        this.updateColumnProps(column, { dataType: 'number' });
-      } else {
-        const parsed = Date.parse(value);
-        if (!isNaN(parsed)) {
-          const hasTime = /[T\s]\d{2}:\d{2}/.test(value);
-          const dataType = hasTime ? 'datetime' : 'date';
-          newColumn = { ...column, dataType };
-          newValue = new Date(parsed);
-          this.updateColumnProps(column, { dataType });
-        }
-      }
+    if (actualType && actualType !== column.dataType) {
+      this.updateColumnProps(column, { dataType: actualType });
+      column = { ...column, dataType: actualType };
     }
 
-    return { column: newColumn, value: newValue };
+    let newValue = value;
+
+    if (typeof value === 'string') {
+      // Todo:
+      // - wait for PR#29402 to be merged
+      // - Transfer parseValue to root utils
+      // - Import utils
+      // - use parseValue from utils
+      // newValue = parseValue(column, value);
+    } else if (column.dataType === 'date' && !(value instanceof Date)) {
+      // @ts-expect-error
+      newValue = new Date(value);
+    }
+
+    return { column, value: newValue };
   }
 }
