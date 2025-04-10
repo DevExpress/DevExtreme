@@ -62,18 +62,22 @@ export class ItemsController {
 
     return {
       cells: columns.map((column) => {
-        const value = column.calculateCellValue(data);
-        const displayValue = column.calculateDisplayValue(data);
+        const calculatedValue = column.calculateCellValue?.(data);
+        // @ts-expect-error
+        // eslint-disable-next-line @stylistic/max-len
+        const { column: updatedColumn, value } = this.columnsController.updateColumnDataType(column, calculatedValue);
+        const displayValue = value;
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const formattedText = formatHelper.format(displayValue as any, column.format);
         const text = column.customizeText
           ? column.customizeText({ value: displayValue, valueText: formattedText })
-          : formattedText;
+          : calculatedValue;
         const highlightedText = this.searchController
+          // @ts-expect-error
           .getHighlightedText(text);
 
         return {
-          column,
+          column: updatedColumn,
           value,
           displayValue,
           text,
