@@ -18,9 +18,9 @@ export class RequestManager {
         onChunk: (chunk: string): void => { callbacks?.onChunk?.(chunk); },
       };
 
-      const { promise, abort } = this.provider.sendRequest(params);
+      const { result, abort } = this.provider.sendRequest(params);
 
-      promise
+      result
         .then((response) => { callbacks?.onComplete?.(response); })
         .catch((e) => { callbacks?.onError?.(e); });
 

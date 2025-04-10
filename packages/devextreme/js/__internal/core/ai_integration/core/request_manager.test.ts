@@ -64,12 +64,12 @@ describe('RequestManager', () => {
     it('after completion of the promise calls onComplete with accumulated data', async () => {
       let resolvePromise: (result: string) => void = () => {};
 
-      const promise = new Promise<string>((resolve) => { resolvePromise = resolve; });
+      const result = new Promise<string>((resolve) => { resolvePromise = resolve; });
       const sendRequestSpy = jest.spyOn(provider, 'sendRequest');
       const onCompleteSpy = jest.fn();
 
       sendRequestSpy.mockImplementation(() => ({
-        promise,
+        result,
         abort: (): void => {},
       }));
 
@@ -77,7 +77,7 @@ describe('RequestManager', () => {
 
       resolvePromise('FirstSecond');
 
-      await promise;
+      await result;
 
       expect(onCompleteSpy).toHaveBeenCalledTimes(1);
       expect(onCompleteSpy).toHaveBeenCalledWith('FirstSecond');
@@ -86,14 +86,14 @@ describe('RequestManager', () => {
     it('calls onError if the promise was rejected', async () => {
       let rejectPromise: (error: Error) => void = () => {};
 
-      const promise = new Promise<string>((_, reject) => { rejectPromise = reject; });
+      const result = new Promise<string>((_, reject) => { rejectPromise = reject; });
       const sendRequestSpy = jest.spyOn(provider, 'sendRequest');
 
       const onErrorSpy = jest.fn();
       const error = new Error('Test error');
 
       sendRequestSpy.mockImplementation(() => ({
-        promise,
+        result,
         abort: (): void => {},
       }));
 
@@ -113,7 +113,7 @@ describe('RequestManager', () => {
       const sendRequestSpy = jest.spyOn(provider, 'sendRequest');
 
       sendRequestSpy.mockReturnValue({
-        promise: Promise.resolve(''),
+        result: Promise.resolve(''),
         abort,
       });
 

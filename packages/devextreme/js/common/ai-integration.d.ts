@@ -44,7 +44,7 @@ export type Response = {
    * @docid
    * @public
    */
-  promise: Promise<string>;
+  result: Promise<string>;
   /**
    * @docid
    * @public

@@ -888,7 +888,7 @@ declare module DevExpress.aiIntegration {
     /**
      * [descr:AIProvider.sendRequest]
      */
-    sendRequest: (params: RequestParams) => ResponseParams;
+    sendRequest: (params: RequestParams) => Response;
   };
   /**
    * [descr:BaseCommandResult]
@@ -938,15 +938,15 @@ declare module DevExpress.aiIntegration {
     onChunk: (chunk: string) => void;
   };
   /**
-   * [descr:ResponseParams]
+   * [descr:Response]
    */
-  export type ResponseParams = {
+  export type Response = {
     /**
-     * [descr:ResponseParams.promise]
+     * [descr:Response.result]
      */
-    promise: Promise<string>;
+    result: Promise<string>;
     /**
-     * [descr:ResponseParams.abort]
+     * [descr:Response.abort]
      */
     abort: () => void;
   };

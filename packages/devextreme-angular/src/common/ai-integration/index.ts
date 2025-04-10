@@ -5,7 +5,7 @@ export {
     Prompt,
     RequestCallbacks,
     RequestParams,
-    ResponseParams,
+    Response,
     TranslateCommandParams,
     TranslateCommandResult,
 } from 'devextreme/common/ai-integration';
