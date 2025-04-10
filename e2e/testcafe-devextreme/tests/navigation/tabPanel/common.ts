@@ -737,13 +737,13 @@ test('TabPanel tabs min-width', async (t) => {
 
 ['left', 'right'].forEach((tabsPosition) => {
   test('TabPanel should be shown correctly even if there is only one tab', async (t) => {
-    const {takeScreenshot, compareResults} = createScreenshotsComparer(t);
+    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-    await testScreenshot(t, takeScreenshot, `TabPanel with single tab, tabPosition=${tabsPosition}.png`, {element: '#container'});
+    await testScreenshot(t, takeScreenshot, `TabPanel with single tab, tabPosition=${tabsPosition}.png`, { element: '#container' });
 
     await t
-        .expect(compareResults.isValid())
-        .ok(compareResults.errorMessages());
+      .expect(compareResults.isValid())
+      .ok(compareResults.errorMessages());
   }).before(async () => {
     const dataSource: Item[] = [
       {
@@ -763,4 +763,3 @@ test('TabPanel tabs min-width', async (t) => {
     return createWidget('dxTabPanel', tabPanelOptions);
   });
 });
-
