@@ -59,19 +59,9 @@ const options: Options<Properties> = {
   height: [600],
 };
 
-const created = async (t: TestController): Promise<void> => {
-  await t.pressKey('tab');
-};
-
-const a11yCheckConfig = {
-  rules: { 'aria-allowed-attr': { enabled: false } },
-};
-
 const configuration: Configuration = {
   component: 'dxStepper',
-  a11yCheckConfig,
   options,
-  created,
 };
 
 testAccessibility(configuration);
