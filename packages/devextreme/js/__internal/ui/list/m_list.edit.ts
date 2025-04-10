@@ -4,7 +4,7 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { extend } from '@js/core/utils/extend';
 import type { Item } from '@js/ui/list';
-import { isNumeric } from '@ts/core/utils/m_type';
+import { isNumeric, isObject } from '@ts/core/utils/m_type';
 import type { OptionChanged } from '@ts/core/widget/types';
 import { NOT_EXISTING_INDEX } from '@ts/ui/collection/m_collection_widget.edit';
 
@@ -230,11 +230,15 @@ class ListEdit extends ListBase {
     return $itemFrame;
   }
 
-  _updateItemAriaLabel($itemFrame, itemData) {
+  _updateItemAriaLabel($itemFrame: dxElementWrapper, itemData: Item): void {
     // @ts-expect-error ts-error
     const label = this._displayGetter?.(itemData) ?? itemData?.text ?? itemData;
 
-    this.setAria('label', label, $itemFrame);
+    this.setAria(
+      'label',
+      isObject(label) ? localizationMessage.format('dxList-listAriaLabel-itemContent') : label,
+      $itemFrame,
+    );
   }
 
   _selectedItemClass() {
