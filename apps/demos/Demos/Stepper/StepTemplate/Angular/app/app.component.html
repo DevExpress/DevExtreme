@@ -1,9 +1,10 @@
-<div class="stepper-label">Custom Step Shape</div>
+<div id="label-customStepShape" class="stepper-label">Custom Step Shape</div>
 <dx-stepper
   id="customStepShape"
   [dataSource]="steps"
   [selectedIndex]="2"
   [linear]="false"
+  [elementAttr]="{ 'aria-labelledby': 'label-customStepShape' }"
 >
   <div *dxTemplate="let data of 'item'">
     <div class="dx-step-indicator">
@@ -15,12 +16,13 @@
     </div>
   </div>
 </dx-stepper>
-<div class="stepper-label">Title Only</div>
+<div id="label-titleOnly" class="stepper-label">Title Only</div>
 <dx-stepper
   id="titleOnly"
   [dataSource]="steps"
   [selectedIndex]="2"
   [linear]="false"
+  [elementAttr]="{ 'aria-labelledby': 'label-titleOnly' }"
 >
   <div *dxTemplate="let data of 'item'">
     <div class="dx-step-label">
@@ -28,12 +30,13 @@
     </div>
   </div>
 </dx-stepper>
-<div class="stepper-label">Icon Only</div>
+<div id="label-iconOnly" class="stepper-label">Icon Only</div>
 <dx-stepper
   id="iconOnly"
   [dataSource]="steps"
   [selectedIndex]="2"
   [linear]="false"
+  [elementAttr]="{ 'aria-labelledby': 'label-iconOnly' }"
 >
   <div *dxTemplate="let data of 'item'">
     <i class="dx-icon" [ngClass]="'dx-icon-' + data.icon"></i>
