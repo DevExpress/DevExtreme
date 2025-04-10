@@ -45,10 +45,10 @@ abstract class BaseDialog {
     return editorInstance._createComponent($container, Popup, popupConfig);
   }
 
-  protected _getPopupConfig() {
-    return {
+  protected _getPopupConfig(): PopupProperties {
+    return ({
       onInitialized: (e) => {
-        this._popup = e.component;
+        this._popup = e.component as Popup;
         this._popup.on('hiding', () => this.onHiding());
       },
       deferRendering: false,
@@ -58,7 +58,7 @@ abstract class BaseDialog {
       contentTemplate: (contentElem) => {
         this._renderContent($(contentElem));
       },
-    };
+    }) as PopupProperties;
   }
 
   protected abstract _renderContent($contentElem: dxElementWrapper): void;
