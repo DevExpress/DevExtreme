@@ -20,7 +20,10 @@ const commonItems: Item[] = [
 ['horizontal', 'vertical'].forEach((orientation) => {
   test('Stepper common properties', async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-    await testScreenshot(t, takeScreenshot, `Stepper orient=${orientation}.png`, { element: '#container' });
+    await testScreenshot(t, takeScreenshot, `Stepper orient=${orientation}.png`, {
+      element: '#container',
+      shouldTestInCompact: true,
+    });
 
     await t
       .expect(compareResults.isValid())
