@@ -103,17 +103,13 @@ function getFormatHandlers(module) {
     deleteTable: getTableOperationHandler(module.quill, 'deleteTable'),
     cellProperties: prepareShowFormProperties(module, 'cell'),
     tableProperties: prepareShowFormProperties(module, 'table'),
-    ai: handleAiDropDownSelection(module),
+    ai: prepareAiTextTrasformHandler(module),
   };
 }
 
-function handleAiDropDownSelection(module) {
+function prepareAiTextTrasformHandler(module) {
   return (options): void => {
     const { command, parentCommand, commandsMap } = options;
-
-    if (command === 'root') {
-      return;
-    }
 
     const { quill } = module;
     const selection = quill.getSelection();
@@ -136,7 +132,7 @@ function handleAiDropDownSelection(module) {
           insertIndex = hasSelection ? selection.index : 0;
           quill.deleteText(
             insertIndex,
-            hasSelection ? selection.length : text.length,
+            hasSelection ? selection.length : quill.getLength(),
             SILENT_ACTION,
           );
           break;
@@ -153,7 +149,7 @@ function handleAiDropDownSelection(module) {
           return;
       }
 
-      quill.insertText(insertIndex, resultText, '', resultText, USER_ACTION);
+      quill.insertText(insertIndex, resultText, USER_ACTION);
       quill.setSelection(insertIndex, resultText.length, USER_ACTION);
 
       module.saveValueChangeEvent(event);
