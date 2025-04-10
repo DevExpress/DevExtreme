@@ -138,7 +138,7 @@ export class ColumnsController {
     return result;
   }
 
-  private getActualColumnType = (value: unknown): 'number' | 'date' | 'datetime' | 'string' => {
+  private readonly getActualColumnType = (value: unknown): 'number' | 'date' | 'datetime' | 'string' => {
     if (typeof value === 'number') {
       return 'number';
     }
@@ -156,11 +156,10 @@ export class ColumnsController {
     }
 
     if (value instanceof Date) {
-      const hasTime =
-        value.getHours() !== 0 ||
-        value.getMinutes() !== 0 ||
-        value.getSeconds() !== 0 ||
-        value.getMilliseconds() !== 0;
+      const hasTime = value.getHours() !== 0
+      || value.getMinutes() !== 0
+      || value.getSeconds() !== 0
+      || value.getMilliseconds() !== 0;
 
       return hasTime ? 'datetime' : 'date';
     }
@@ -197,10 +196,11 @@ export class ColumnsController {
 
   public updateColumnDataType(column: Column, value: unknown): unknown {
     const actualType = this.getActualColumnType(value);
+    let updatedColumn = column
 
     if (actualType && actualType !== column.dataType) {
       this.updateColumnProps(column, { dataType: actualType });
-      column = { ...column, dataType: actualType };
+      updatedColumn = { ...column, dataType: actualType };
     }
 
     let newValue = value;
@@ -217,6 +217,6 @@ export class ColumnsController {
       newValue = new Date(value);
     }
 
-    return { column, value: newValue };
+    return { column: updatedColumn, value: newValue };
   }
 }

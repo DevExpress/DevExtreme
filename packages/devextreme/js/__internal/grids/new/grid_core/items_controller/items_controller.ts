@@ -64,8 +64,10 @@ export class ItemsController {
       // @ts-expect-error
       cells: columns.map((column) => {
         const calculatedValue = column.calculateCellValue?.(data);
-        // @ts-expect-error
-        const { column: updatedColumn, value } = this.columnsController.updateColumnDataType(column, calculatedValue);
+        const {
+          // @ts-expect-error
+          column: updatedColumn, value
+        } = this.columnsController.updateColumnDataType(column, calculatedValue);
         const displayValue = value;
         const formattedText = formatHelper.format(displayValue as any, column.format);
         const text = column.customizeText
