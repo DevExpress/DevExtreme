@@ -5,6 +5,7 @@ import {
 } from '@js/common/core/events/utils/index';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
+import { isDefined } from '@js/core/utils/type';
 
 import type { Views } from '../m_types';
 import { StickyPosition } from '../sticky_columns/const';
@@ -72,25 +73,27 @@ export class HeadersKeyboardNavigationController extends KeyboardNavigationContr
   }
 
   private isHeaderValidForReordering(column, direction, rowIndex?): boolean {
+    const columnsController = this._columnsController;
+
     if (column.fixed && column.fixedPosition !== StickyPosition.Sticky) {
-      const fixedPosition = getColumnFixedPosition(this._columnsController, column);
+      const fixedPosition = getColumnFixedPosition(columnsController, column);
 
       return direction === Direction.Next ? !isLastFixedColumn(
-        this._columnsController,
+        columnsController,
         column,
         rowIndex,
-        false,
+        isDefined(column.ownerBand),
         fixedPosition,
       ) : !isFirstFixedColumn(
-        this._columnsController,
+        columnsController,
         column,
         rowIndex,
-        false,
+        isDefined(column.ownerBand),
         fixedPosition,
       );
     }
 
-    const unfixedColumns = this._columnsController.getUnfixedAndStickyColumns(rowIndex);
+    const unfixedColumns = columnsController.getUnfixedAndStickyColumns(rowIndex, column.ownerBand);
     const isFirstColumn = column.index === unfixedColumns[0].index;
     const isLastColumn = column.index === unfixedColumns[unfixedColumns.length - 1].index;
 
@@ -102,10 +105,11 @@ export class HeadersKeyboardNavigationController extends KeyboardNavigationContr
 
     if (isCommandKeyPressed(originalEvent)) {
       const $cell = $(originalEvent.target).closest('td');
-      const column = this._getColumnByCellElement($cell);
+      const rowIndex = this._getRowIndex($cell.parent());
+      const column = this._getColumnByCellElement($cell, rowIndex);
       const direction = this.getDirectionByKeyName(e.keyName);
 
-      if (this.isHeaderValidForReordering(column, direction)) {
+      if (this.isHeaderValidForReordering(column, direction, rowIndex)) {
         const newVisibleIndex = direction === 'previous' ? column.visibleIndex - 1 : column.visibleIndex + 2;
 
         this.isNeedToFocusHeader = true;

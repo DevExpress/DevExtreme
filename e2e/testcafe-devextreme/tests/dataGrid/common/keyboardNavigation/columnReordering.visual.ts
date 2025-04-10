@@ -308,3 +308,237 @@ test('reorder sticky column to right when there are fixed columns', async (t) =>
     },
   });
 });
+
+test('reorder band column to right', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+  const firstFixedLeftHeader = dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(1);
+
+  await t
+    .click(firstFixedLeftHeader.element)
+    .pressKey('ctrl+right')
+    .pressKey('ctrl+right');
+
+  await takeScreenshot(
+    'reorder_band_column_to_right',
+    dataGrid.element,
+  );
+
+  await t.expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  await createWidget('dxDataGrid', {
+    columnWidth: 100,
+    dataSource: [{
+      field1: 'test1',
+      field2: 'test2',
+      field3: 'test3',
+      field4: 'test4',
+    }],
+    columns: [
+      'field1',
+      {
+        caption: 'Band Column',
+        columns: ['field2', 'field3'],
+      },
+      'field4',
+    ],
+  });
+});
+
+test('reorder band column to left', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+  const firstFixedLeftHeader = dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(1);
+
+  await t
+    .click(firstFixedLeftHeader.element)
+    .pressKey('ctrl+left')
+    .pressKey('ctrl+left');
+
+  await takeScreenshot(
+    'reorder_band_column_to_left',
+    dataGrid.element,
+  );
+
+  await t.expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  await createWidget('dxDataGrid', {
+    columnWidth: 100,
+    dataSource: [{
+      field1: 'test1',
+      field2: 'test2',
+      field3: 'test3',
+      field4: 'test4',
+    }],
+    columns: [
+      'field1',
+      {
+        caption: 'Band Column',
+        columns: ['field2', 'field3'],
+      },
+      'field4',
+    ],
+  });
+});
+
+test('reorder nested column to left', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+  const firstFixedLeftHeader = dataGrid.getHeaders().getHeaderRow(1).getHeaderCell(1);
+
+  await t
+    .click(firstFixedLeftHeader.element)
+    .pressKey('ctrl+left')
+    .pressKey('ctrl+left');
+
+  await takeScreenshot(
+    'reorder_nested_column_to_left',
+    dataGrid.element,
+  );
+
+  await t.expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  await createWidget('dxDataGrid', {
+    columnWidth: 100,
+    dataSource: [{
+      field1: 'test1',
+      field2: 'test2',
+      field3: 'test3',
+      field4: 'test4',
+    }],
+    columns: [
+      'field1',
+      {
+        caption: 'Band Column',
+        columns: ['field2', 'field3'],
+      },
+      'field4',
+    ],
+  });
+});
+
+test('reorder nested column to right', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+  const firstFixedLeftHeader = dataGrid.getHeaders().getHeaderRow(1).getHeaderCell(0);
+
+  await t
+    .click(firstFixedLeftHeader.element)
+    .pressKey('ctrl+right')
+    .pressKey('ctrl+right');
+
+  await takeScreenshot(
+    'reorder_nested_column_to_right',
+    dataGrid.element,
+  );
+
+  await t.expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  await createWidget('dxDataGrid', {
+    columnWidth: 100,
+    dataSource: [{
+      field1: 'test1',
+      field2: 'test2',
+      field3: 'test3',
+      field4: 'test4',
+    }],
+    columns: [
+      'field1',
+      {
+        caption: 'Band Column',
+        columns: ['field2', 'field3'],
+      },
+      'field4',
+    ],
+  });
+});
+
+test('reorder fixed nested column to right', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+  const firstFixedLeftHeader = dataGrid.getHeaders().getHeaderRow(1).getHeaderCell(0);
+
+  await t
+    .click(firstFixedLeftHeader.element)
+    .pressKey('ctrl+right')
+    .pressKey('ctrl+right');
+
+  await takeScreenshot(
+    'reorder_fixed_nested_column_to_right',
+    dataGrid.element,
+  );
+
+  await t.expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  await createWidget('dxDataGrid', {
+    columnWidth: 100,
+    dataSource: [{
+      field1: 'test1',
+      field2: 'test2',
+      field3: 'test3',
+      field4: 'test4',
+    }],
+    columns: [
+      'field1',
+      {
+        caption: 'Band Column 1',
+        fixed: true,
+        columns: ['field2', 'field3'],
+      },
+      {
+        caption: 'Band Column 2',
+        fixed: true,
+        columns: ['field4', 'field5'],
+      },
+      'field6',
+    ],
+  });
+});
+
+test('reorder fixed nested column to left', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+  const firstFixedLeftHeader = dataGrid.getHeaders().getHeaderRow(1).getHeaderCell(3);
+
+  await t
+    .click(firstFixedLeftHeader.element)
+    .pressKey('ctrl+left')
+    .pressKey('ctrl+left');
+
+  await takeScreenshot(
+    'reorder_fixed_nested_column_to_left',
+    dataGrid.element,
+  );
+
+  await t.expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  await createWidget('dxDataGrid', {
+    columnWidth: 100,
+    dataSource: [{
+      field1: 'test1',
+      field2: 'test2',
+      field3: 'test3',
+      field4: 'test4',
+    }],
+    columns: [
+      'field1',
+      {
+        caption: 'Band Column 1',
+        fixed: true,
+        columns: ['field2', 'field3'],
+      },
+      {
+        caption: 'Band Column 2',
+        fixed: true,
+        columns: ['field4', 'field5'],
+      },
+      'field6',
+    ],
+  });
+});

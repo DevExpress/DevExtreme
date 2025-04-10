@@ -509,11 +509,12 @@ export class ColumnsController extends modules.Controller {
     return visibleColumns.filter((column) => column.fixed);
   }
 
-  public getUnfixedAndStickyColumns(rowIndex?: number): any[] {
+  public getUnfixedAndStickyColumns(rowIndex: number, ownerBand: number): any[] {
     const visibleColumns = this.getVisibleColumns(rowIndex, true);
 
     return visibleColumns
-      .filter((column) => !column.fixed || column.fixedPosition === StickyPosition.Sticky);
+      .filter((column) => column.ownerBand === ownerBand
+        && (!column.fixed || column.fixedPosition === StickyPosition.Sticky));
   }
 
   private _getFixedColumnsCore() {

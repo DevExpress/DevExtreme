@@ -13,7 +13,7 @@ export class KeyboardNavigationController extends modules.ViewController {
     let offset = 0;
     const column = this._columnsController.getVisibleColumns()[columnIndex];
 
-    if (column && column.fixed) {
+    if (column?.fixed) {
       offset = this._getFixedColumnIndexOffset(column);
     } else if (columnIndex >= 0) {
       offset = this._columnsController.getColumnIndexOffset();
@@ -79,11 +79,11 @@ export class KeyboardNavigationController extends modules.ViewController {
     return undefined;
   }
 
-  protected _getColumnByCellElement($cell) {
+  protected _getColumnByCellElement($cell, rowIndex?) {
     const cellIndex = this.getCellIndex($cell);
     const columnIndex = cellIndex + this._columnsController.getColumnIndexOffset();
 
-    return this._columnsController.getVisibleColumns(null, true)[columnIndex];
+    return this._columnsController.getVisibleColumns(rowIndex, true)[columnIndex];
   }
 
   protected processOnKeyDown(eventArgs) {
