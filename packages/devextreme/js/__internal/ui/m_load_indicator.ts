@@ -14,8 +14,9 @@ import supportUtils from '../core/utils/m_support';
 const LOADINDICATOR_CLASS = 'dx-loadindicator';
 const LOADINDICATOR_WRAPPER_CLASS = 'dx-loadindicator-wrapper';
 const LOADINDICATOR_CONTENT_CLASS = 'dx-loadindicator-content';
+const LOADINDICATOR_CONTENT_SPARKLE_CLASS = 'dx-loadindicator-content-sparkle';
+const LOADINDICATOR_CONTENT_CIRCLE_CLASS = 'dx-loadindicator-content-circle';
 const LOADINDICATOR_ICON_CLASS = 'dx-loadindicator-icon';
-const LOADINDICATOR_ICON_SPARKLE_CLASS = 'dx-loadindicator-icon-sparkle';
 const LOADINDICATOR_SEGMENT_CLASS = 'dx-loadindicator-segment';
 const LOADINDICATOR_SEGMENT_INNER_CLASS = 'dx-loadindicator-segment-inner';
 const LOADINDICATOR_IMAGE_CLASS = 'dx-loadindicator-image';
@@ -108,7 +109,14 @@ class LoadIndicator extends Widget<LoadIndicatorProperties> {
   }
 
   _renderIndicatorContent(): void {
-    this._$content = $('<div>').addClass(LOADINDICATOR_CONTENT_CLASS);
+    const { _animationType: animationType } = this.option();
+    const isSparkle = animationType === AnimationType.Sparkle;
+    const animationClass = isSparkle
+      ? LOADINDICATOR_CONTENT_SPARKLE_CLASS : LOADINDICATOR_CONTENT_CIRCLE_CLASS;
+
+    const contentClasses = [LOADINDICATOR_CONTENT_CLASS, animationClass].join(' ');
+
+    this._$content = $('<div>').addClass(contentClasses);
     this._$wrapper.append(this._$content);
   }
 
@@ -134,14 +142,7 @@ class LoadIndicator extends Widget<LoadIndicatorProperties> {
 
     const isSparkle = animationType === AnimationType.Sparkle;
 
-    const indicatorClasses = [
-      LOADINDICATOR_ICON_CLASS,
-      isSparkle && LOADINDICATOR_ICON_SPARKLE_CLASS,
-    ]
-      .filter(Boolean)
-      .join(' ');
-
-    this._$indicator = $('<div>').addClass(indicatorClasses);
+    this._$indicator = $('<div>').addClass(LOADINDICATOR_ICON_CLASS);
     this._$content.append(this._$indicator);
 
     const segmentParams = {
@@ -155,7 +156,7 @@ class LoadIndicator extends Widget<LoadIndicatorProperties> {
   _renderSegments(segmentParams: { segmentCount: number; segmentInner: boolean }): void {
     const { segmentCount, segmentInner } = segmentParams;
 
-    for (let i = segmentCount; i >= 0; --i) {
+    for (let i = segmentCount - 1; i >= 0; --i) {
       const $segment = $('<div>')
         .addClass(LOADINDICATOR_SEGMENT_CLASS)
         .addClass(`${LOADINDICATOR_SEGMENT_CLASS}${i}`);
@@ -190,8 +191,7 @@ class LoadIndicator extends Widget<LoadIndicatorProperties> {
       return;
     }
 
-    let width = this.option('width');
-    let height = this.option('height');
+    let { width, height } = this.option();
 
     if (width || height) {
       width = getWidth(this.$element());
