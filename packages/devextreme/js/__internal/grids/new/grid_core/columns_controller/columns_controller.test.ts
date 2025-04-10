@@ -3,15 +3,19 @@ import { describe, expect, it } from '@jest/globals';
 import { SearchController } from '@ts/grids/new/grid_core/search';
 
 import { DataController } from '../data_controller';
+import { FilterController } from '../filtering';
 import { ItemsController } from '../items_controller/items_controller';
 import type { Options } from '../options';
 import { OptionsControllerMock } from '../options_controller/options_controller.mock';
+import { SortingController } from '../sorting_controller';
 import { ColumnsController } from './columns_controller';
 
 const setup = (config: Options = {}) => {
   const options = new OptionsControllerMock(config);
+  const filterController = new FilterController(options);
   const columnsController = new ColumnsController(options);
-  const dataController = new DataController(options);
+  const sortingController = new SortingController(options, columnsController);
+  const dataController = new DataController(options, sortingController, filterController);
   const searchController = new SearchController(options);
   const itemsController = new ItemsController(
     dataController,

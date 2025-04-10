@@ -9,16 +9,24 @@ import type { Subscription } from '@ts/core/reactive/index';
 import { SearchView } from '@ts/grids/new/grid_core/search/view';
 import { render } from 'inferno';
 
+import * as ColumnChooserModule from './column_chooser/index';
+import { CompatibilityColumnsController } from './columns_controller/compatibility';
 import * as ColumnsControllerModule from './columns_controller/index';
 import * as DataControllerModule from './data_controller/index';
+import * as di from './di';
 import { ErrorController } from './error_controller/error_controller';
+import * as FilterControllerModule from './filtering/index';
 import { ItemsController } from './items_controller/items_controller';
 import { MainView } from './main_view';
 import { defaultOptions, defaultOptionsRules, type Options } from './options';
 import { PagerView } from './pager/view';
 import { SearchController } from './search/controller';
+import * as SelectionControllerModule from './selection/index';
+import * as SortingControllerModule from './sorting_controller/index';
+import type { SortingController } from './sorting_controller/sorting_controller';
 import { ToolbarController } from './toolbar/controller';
 import { ToolbarView } from './toolbar/view';
+import { WidgetMock } from './widget_mock';
 
 export class GridCoreNewBase<
   TProperties extends Options = Options,
@@ -33,7 +41,15 @@ export class GridCoreNewBase<
 
   protected columnsController!: ColumnsControllerModule.ColumnsController;
 
+  protected sortingController!: SortingController;
+
+  protected selectionController!: SelectionControllerModule.Controller;
+
   private pagerView!: PagerView;
+
+  private columnChooserController!: ColumnChooserModule.ColumnChooserController;
+
+  protected columnChooserView!: ColumnChooserModule.ColumnChooserView;
 
   private toolbarController!: ToolbarController;
 
@@ -45,35 +61,46 @@ export class GridCoreNewBase<
 
   private searchView!: SearchView;
 
+  public filterController!: FilterControllerModule.FilterController;
+
+  private filterPanelView!: FilterControllerModule.FilterPanelView;
+
   protected _registerDIContext(): void {
     this.diContext = new DIContext();
-    this.diContext.register(DataControllerModule.DataController);
-    this.diContext.register(ItemsController);
-    this.diContext.register(ColumnsControllerModule.ColumnsController);
-    this.diContext.register(ToolbarController);
-    this.diContext.register(ToolbarView);
-    this.diContext.register(PagerView);
-    this.diContext.register(SearchController);
-    this.diContext.register(SearchView);
-    this.diContext.register(ErrorController);
+    di.register(this.diContext);
+  }
+
+  protected _initWidgetMock() {
+    this.diContext.registerInstance(WidgetMock, new WidgetMock(
+      this,
+      this.diContext.get(DataControllerModule.CompatibilityDataController),
+      this.diContext.get(CompatibilityColumnsController),
+    ));
   }
 
   protected _initDIContext(): void {
     this.dataController = this.diContext.get(DataControllerModule.DataController);
     this.columnsController = this.diContext.get(ColumnsControllerModule.ColumnsController);
+    this.sortingController = this.diContext.get(SortingControllerModule.SortingController);
+    this.selectionController = this.diContext.get(SelectionControllerModule.Controller);
     this.itemsController = this.diContext.get(ItemsController);
     this.toolbarController = this.diContext.get(ToolbarController);
     this.toolbarView = this.diContext.get(ToolbarView);
     this.pagerView = this.diContext.get(PagerView);
     this.searchController = this.diContext.get(SearchController);
     this.searchView = this.diContext.get(SearchView);
+    this.columnChooserController = this.diContext.get(ColumnChooserModule.ColumnChooserController);
+    this.columnChooserView = this.diContext.get(ColumnChooserModule.ColumnChooserView);
     this.errorController = this.diContext.get(ErrorController);
+    this.filterController = this.diContext.get(FilterControllerModule.FilterController);
+    this.filterPanelView = this.diContext.get(FilterControllerModule.FilterPanelView);
   }
 
   protected _init(): void {
     // @ts-expect-error
     super._init();
     this._registerDIContext();
+    this._initWidgetMock();
     this._initDIContext();
   }
 
@@ -99,6 +126,21 @@ export class GridCoreNewBase<
     );
   }
 
+  private _optionChanged(args) {
+    [
+      this.filterPanelView,
+    ].forEach((c) => {
+      if (c.isCompatibilityMode()) {
+        c.optionChanged(args);
+      }
+    });
+
+    if (!args.handled) {
+      // @ts-expect-error
+      super._optionChanged(args);
+    }
+  }
+
   protected _clean(): void {
     this.renderSubscription?.unsubscribe();
     render(null, this.$element().get(0));
@@ -109,6 +151,14 @@ export class GridCoreNewBase<
 
 export class GridCoreNew extends ColumnsControllerModule.PublicMethods(
   DataControllerModule.PublicMethods(
-    GridCoreNewBase,
+    SortingControllerModule.PublicMethods(
+      FilterControllerModule.PublicMethods(
+        ColumnChooserModule.PublicMethods(
+          SelectionControllerModule.PublicMethods(
+            GridCoreNewBase,
+          ),
+        ),
+      ),
+    ),
   ),
 ) {}

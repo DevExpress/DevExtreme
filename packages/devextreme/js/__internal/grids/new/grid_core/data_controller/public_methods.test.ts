@@ -4,14 +4,18 @@ import {
 } from '@jest/globals';
 import ArrayStore from '@ts/data/m_array_store';
 
+import { getContext } from '../di.test_utils';
 import type { Options } from '../options';
 import { OptionsControllerMock } from '../options_controller/options_controller.mock';
 import { DataController } from './data_controller';
 import { PublicMethods } from './public_methods';
 
 const setup = (options: Options) => {
-  const optionsController = new OptionsControllerMock(options);
-  const dataController = new DataController(optionsController);
+  const context = getContext(options);
+
+  const optionsController = context.get(OptionsControllerMock);
+  const dataController = context.get(DataController);
+
   // @ts-expect-error
   const gridCore = new (PublicMethods(class {
     protected dataController = dataController;

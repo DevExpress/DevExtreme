@@ -6,15 +6,31 @@ exports[`ItemsController createDataRow should process data object to data row us
     {
       "column": {
         "alignment": "left",
+        "allowFiltering": true,
+        "allowHeaderFiltering": false,
+        "allowHiding": true,
         "allowReordering": true,
+        "allowSorting": true,
         "calculateCellValue": [Function],
         "calculateDisplayValue": [Function],
         "caption": "A",
         "dataField": "a",
         "dataType": "string",
         "falseText": "false",
+        "headerFilter": {
+          "allowSelectAll": true,
+          "height": 325,
+          "search": {
+            "editorOptions": {},
+            "enabled": false,
+            "mode": "contains",
+            "timeout": 500,
+          },
+          "width": 252,
+        },
         "headerItemTemplate": undefined,
         "name": "a",
+        "showInColumnChooser": true,
         "trueText": "true",
         "visible": true,
         "visibleIndex": 0,
@@ -27,15 +43,31 @@ exports[`ItemsController createDataRow should process data object to data row us
     {
       "column": {
         "alignment": "left",
+        "allowFiltering": true,
+        "allowHeaderFiltering": false,
+        "allowHiding": true,
         "allowReordering": true,
+        "allowSorting": true,
         "calculateCellValue": [Function],
         "calculateDisplayValue": [Function],
         "caption": "B",
         "dataField": "b",
         "dataType": "string",
         "falseText": "false",
+        "headerFilter": {
+          "allowSelectAll": true,
+          "height": 325,
+          "search": {
+            "editorOptions": {},
+            "enabled": false,
+            "mode": "contains",
+            "timeout": 500,
+          },
+          "width": 252,
+        },
         "headerItemTemplate": undefined,
         "name": "b",
+        "showInColumnChooser": true,
         "trueText": "true",
         "visible": true,
         "visibleIndex": 1,
@@ -52,6 +84,7 @@ exports[`ItemsController createDataRow should process data object to data row us
     "id": 1,
   },
   "index": 0,
+  "isSelected": false,
   "key": 1,
 }
 `;
@@ -62,15 +95,31 @@ exports[`ItemsController createDataRow should process data object to data row us
     {
       "column": {
         "alignment": "left",
+        "allowFiltering": true,
+        "allowHeaderFiltering": false,
+        "allowHiding": true,
         "allowReordering": true,
+        "allowSorting": true,
         "calculateCellValue": [Function],
         "calculateDisplayValue": [Function],
         "caption": "A",
         "dataField": "a",
         "dataType": "string",
         "falseText": "false",
+        "headerFilter": {
+          "allowSelectAll": true,
+          "height": 325,
+          "search": {
+            "editorOptions": {},
+            "enabled": false,
+            "mode": "contains",
+            "timeout": 500,
+          },
+          "width": 252,
+        },
         "headerItemTemplate": undefined,
         "name": "a",
+        "showInColumnChooser": true,
         "trueText": "true",
         "visible": true,
         "visibleIndex": 0,
@@ -83,15 +132,31 @@ exports[`ItemsController createDataRow should process data object to data row us
     {
       "column": {
         "alignment": "left",
+        "allowFiltering": true,
+        "allowHeaderFiltering": false,
+        "allowHiding": true,
         "allowReordering": true,
+        "allowSorting": true,
         "calculateCellValue": [Function],
         "calculateDisplayValue": [Function],
         "caption": "B",
         "dataField": "b",
         "dataType": "string",
         "falseText": "false",
+        "headerFilter": {
+          "allowSelectAll": true,
+          "height": 325,
+          "search": {
+            "editorOptions": {},
+            "enabled": false,
+            "mode": "contains",
+            "timeout": 500,
+          },
+          "width": 252,
+        },
         "headerItemTemplate": undefined,
         "name": "b",
+        "showInColumnChooser": true,
         "trueText": "true",
         "visible": true,
         "visibleIndex": 1,
@@ -108,6 +173,65 @@ exports[`ItemsController createDataRow should process data object to data row us
     "id": 1,
   },
   "index": 0,
+  "isSelected": true,
   "key": 1,
+}
+`;
+
+exports[`ItemsController setSelectionState should update the select state of the item 1`] = `
+InterruptableComputed {
+  "callbacks": Set {},
+  "depInitialized": [
+    true,
+    true,
+    true,
+    true,
+  ],
+  "depValues": [
+    [
+      {
+        "a": "my a value",
+        "id": 1,
+      },
+    ],
+    [],
+    [
+      1,
+    ],
+    {
+      "caseSensitive": false,
+      "enabled": true,
+      "searchStr": "",
+    },
+  ],
+  "isInitialized": true,
+  "subscriptions": SubscriptionBag {
+    "subscriptions": [
+      {
+        "unsubscribe": [Function],
+      },
+      {
+        "unsubscribe": [Function],
+      },
+      {
+        "unsubscribe": [Function],
+      },
+      {
+        "unsubscribe": [Function],
+      },
+    ],
+  },
+  "value": [
+    {
+      "cells": [],
+      "data": {
+        "a": "my a value",
+        "id": 1,
+      },
+      "index": 0,
+      "isSelected": true,
+      "key": 1,
+    },
+  ],
 }
 `;

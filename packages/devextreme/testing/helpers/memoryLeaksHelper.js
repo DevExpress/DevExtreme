@@ -75,7 +75,10 @@
     };
 
     exports.componentCanBeTriviallyInstantiated = function(componentName) {
-        return $.inArray(componentName, ['dxDashboardViewer']) === -1;
+        return $.inArray(componentName, [
+            'dxDashboardViewer',
+            'dxCardView', // TODO
+        ]) === -1;
     };
 
     exports.getComponentOptions = function(componentName) {

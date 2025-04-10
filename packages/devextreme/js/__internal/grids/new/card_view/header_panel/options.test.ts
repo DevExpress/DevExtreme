@@ -4,29 +4,26 @@ import {
 } from '@jest/globals';
 import { rerender } from 'inferno';
 
-import { ColumnsController } from '../../grid_core/columns_controller';
-import { DataController } from '../../grid_core/data_controller';
 import { Sortable } from '../../grid_core/inferno_wrappers/sortable';
+import { getContext } from '../di.test_utils';
 import type { Options } from '../options';
 import { OptionsControllerMock } from '../options_controller.mock';
 import { HeaderPanelView } from './view';
 
-const setup = (options: Options) => {
+const setup = (config: Options) => {
   const rootElement = document.createElement('div');
   rootElement.classList.add('test-container');
 
-  const optionsController = new OptionsControllerMock(options);
-  const dataController = new DataController(optionsController);
-  const columnsController = new ColumnsController(optionsController);
-  const headerPanelView = new HeaderPanelView(columnsController, optionsController);
+  const context = getContext(config);
+
+  const optionsController = context.get(OptionsControllerMock);
+  const headerPanelView = context.get(HeaderPanelView);
 
   headerPanelView.render(rootElement);
   rerender();
 
   return {
     optionsController,
-    dataController,
-    columnsController,
     headerPanelView,
     rootElement,
   };

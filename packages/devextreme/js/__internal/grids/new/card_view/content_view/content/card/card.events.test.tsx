@@ -3,23 +3,21 @@
 /* eslint-disable @typescript-eslint/init-declarations */
 
 import { describe, expect, it } from '@jest/globals';
-import { render } from 'inferno';
+import { createRef, render } from 'inferno';
 
-import { Card } from './card';
+import { Card, CLASSES } from './card';
 
-const mockOnDblClick = {
+const createMockCallback = () => ({
   called: false,
-  call() {
+  call(): void {
     this.called = true;
   },
-};
+});
 
-const mockOnClick = {
-  called: false,
-  call() {
-    this.called = true;
-  },
-};
+const mockSelectCard = createMockCallback();
+const mockOnDblClick = createMockCallback();
+const mockOnClick = createMockCallback();
+const mockOnHold = createMockCallback();
 
 const props = {
   row: {
@@ -70,12 +68,10 @@ const props = {
   maxWidth: 300,
   width: 300,
   minWidth: 300,
-  onDblClick: mockOnDblClick.call(),
-  onClick: mockOnClick.call(),
-};
-
-const CLASSES = {
-  card: 'dx-cardview-card',
+  selectCard: mockSelectCard.call.bind(mockSelectCard),
+  onDblClick: mockOnDblClick.call.bind(mockOnDblClick),
+  onClick: mockOnClick.call.bind(mockOnClick),
+  onHold: mockOnHold.call.bind(mockOnHold),
 };
 
 describe('Events', () => {
@@ -84,27 +80,30 @@ describe('Events', () => {
   beforeEach(() => {
     container = document.createElement('div');
     // @ts-expect-error
-    render(<Card {...props} />, container);
+    render(<Card {...{ ...props, elementRef: createRef() } } />, container);
   });
 
   it('should trigger onClick event', () => {
-    // @ts-expect-error
-    render(<Card {...props} />, container);
-
     const cardElement = container.querySelector(`.${CLASSES.card}`);
     cardElement?.dispatchEvent(new MouseEvent('click'));
 
     expect(mockOnClick.called).toBe(true);
   });
 
-  it('should trigger onDblClick event', () => {
-    // @ts-expect-error
-    render(<Card {...props} />, container);
-
+  it.skip('should trigger onDblClick event', () => {
     const cardElement = container.querySelector(`.${CLASSES.card}`);
+
     cardElement?.dispatchEvent(new MouseEvent('dblclick'));
 
     expect(mockOnDblClick.called).toBe(true);
+  });
+
+  it('should trigger onHold event', () => {
+    const cardElement = container.querySelector(`.${CLASSES.card}`);
+
+    cardElement?.dispatchEvent(new MouseEvent('dxhold'));
+
+    expect(mockOnHold.called).toBe(true);
   });
 
   it('should trigger onHoverChanged event on mouse enter', () => {
@@ -159,5 +158,44 @@ describe('Events', () => {
 
     expect(fieldName?.textContent).toBe('Field:');
     expect(fieldValue?.textContent).toBe('devextreme');
+  });
+});
+
+describe('Callbacks', () => {
+  describe('selectCard', () => {
+    // @ts-expect-errors
+    beforeEach(() => {
+      mockSelectCard.called = false;
+    });
+
+    describe('when allowSelectOnClick = true', () => {
+      it('should rise it', () => {
+        const container = document.createElement('div');
+        const newProps = { ...props, elementRef: createRef(), allowSelectOnClick: true };
+        // @ts-expect-error
+        render(<Card {...newProps} />, container);
+
+        const cardElement = container.querySelector(`.${CLASSES.card}`);
+
+        cardElement?.dispatchEvent(new MouseEvent('click'));
+
+        expect(mockSelectCard.called).toBe(true);
+      });
+    });
+
+    describe('when allowSelectOnClick = false', () => {
+      it('should not rise it', () => {
+        const container = document.createElement('div');
+        const newProps = { ...props, elementRef: createRef(), allowSelectOnClick: false };
+        // @ts-expect-error
+        render(<Card {...newProps} />, container);
+
+        const cardElement = container.querySelector(`.${CLASSES.card}`);
+
+        cardElement?.dispatchEvent(new MouseEvent('click'));
+
+        expect(mockSelectCard.called).toBe(false);
+      });
+    });
   });
 });

@@ -50,7 +50,7 @@ export class DIContext {
       return instance;
     }
 
-    throw new Error('DI item is not registered');
+    throw new Error(`DI item is not registered: ${id}`);
   }
 
   public tryGet<T>(

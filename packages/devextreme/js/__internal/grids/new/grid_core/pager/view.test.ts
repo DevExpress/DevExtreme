@@ -1,23 +1,22 @@
-/* eslint-disable spellcheck/spell-checker */
-/* eslint-disable @typescript-eslint/dot-notation */
 import { describe, expect, it } from '@jest/globals';
 
-import { DataController } from '../data_controller/data_controller';
+import { getContext } from '../di.test_utils';
 import type { Options } from '../options';
 import { OptionsControllerMock } from '../options_controller/options_controller.mock';
 import { PagerView } from './view';
 
 const createPagerView = (options?: Options) => {
-  const rootElement = document.createElement('div');
-  const optionsController = new OptionsControllerMock(options ?? {
+  const context = getContext(options ?? {
     dataSource: [],
     pager: {
       visible: true,
     },
   });
 
-  const dataController = new DataController(optionsController);
-  const pager = new PagerView(dataController, optionsController);
+  const rootElement = document.createElement('div');
+
+  const pager = context.get(PagerView);
+  const optionsController = context.get(OptionsControllerMock);
 
   pager.render(rootElement);
 

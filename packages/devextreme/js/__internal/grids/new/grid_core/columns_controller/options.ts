@@ -31,8 +31,13 @@ export const defaultColumnProperties = {
   alignment: 'left',
   visible: true,
   allowReordering: true,
+  allowSorting: true,
+  allowHiding: true,
+  allowFiltering: true,
+  allowHeaderFiltering: true,
   trueText: messageLocalization.format('dxDataGrid-trueText'),
   falseText: messageLocalization.format('dxDataGrid-falseText'),
+  showInColumnChooser: true,
 } satisfies Partial<Column>;
 
 export const defaultColumnPropertiesByDataType: Record<

@@ -3,10 +3,11 @@ import {
   afterEach,
   describe, expect, it, jest,
 } from '@jest/globals';
-import { OptionsControllerMock } from '@ts/grids/new/card_view/options_controller.mock';
 import type { Options } from '@ts/grids/new/grid_core/options';
+import { OptionsControllerMock } from '@ts/grids/new/grid_core/options_controller/options_controller.mock';
 import { splitHighlightedText } from '@ts/grids/new/grid_core/search/utils';
 
+import { getContext } from '../di.test_utils';
 import { SearchController } from './controller';
 
 jest.mock('@ts/grids/new/grid_core/search/utils', () => ({
@@ -14,19 +15,21 @@ jest.mock('@ts/grids/new/grid_core/search/utils', () => ({
 }));
 
 const setup = (config: Options = {}) => {
-  const options = new OptionsControllerMock(config);
-  const controller = new SearchController(options);
+  const context = getContext(config);
 
-  return { options, controller };
+  return {
+    options: context.get(OptionsControllerMock),
+    controller: context.get(SearchController),
+  };
 };
 
-describe('Search', () => {
-  describe('Controller', () => {
+describe('SearchController', () => {
+  describe('highlightTextOptions', () => {
     afterEach(() => {
       jest.clearAllMocks();
     });
 
-    it('should have highlightTextOptions$ from widget options', () => {
+    it('should have observable from widget options', () => {
       const { controller } = setup({
         searchPanel: {
           highlightSearchText: true,
@@ -44,7 +47,7 @@ describe('Search', () => {
       });
     });
 
-    it('getHighlightText should call util function', () => {
+    it('getHighlightText method should call util function', () => {
       const { controller } = setup({
         searchPanel: {
           highlightSearchText: true,
