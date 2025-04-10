@@ -1,3 +1,4 @@
+import messageLocalization from '@js/localization/message';
 import { combineClasses } from '@ts/core/utils/combine_classes';
 import { Component } from 'inferno';
 
@@ -40,7 +41,10 @@ export class Cover extends Component<CoverProps> {
           />
         )}
         {!src && (
-          <div className={CLASSES.noImageIcon}/>
+          <div
+            className={CLASSES.noImageIcon}
+            aria-label={messageLocalization.format('dxCardView-cardNoImageAriaLabel')}
+          />
         )}
       </div>
     );

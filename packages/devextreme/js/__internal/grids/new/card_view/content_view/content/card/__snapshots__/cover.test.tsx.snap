@@ -6,6 +6,7 @@ exports[`Cover when there is no image should render image thumbnail 1`] = `
     class="dx-card-cover dx-card-cover-noimage"
   >
     <div
+      aria-label="No image"
       class="dx-icon dx-icon-imagethumbnail"
     />
   </div>

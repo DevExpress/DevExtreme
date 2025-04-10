@@ -353,6 +353,7 @@
 
         "dxCardView-selectAll": "Select All",
         "dxCardView-clearSelection": "Clear selection",
+        "dxCardView-cardNoImageAriaLabel": "No image",
 
         "dxAvatar-defaultImageAlt": "Avatar",
 
