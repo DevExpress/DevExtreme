@@ -1,11 +1,9 @@
 import messageLocalization from '@js/common/core/localization/message';
 import registerComponent from '@js/core/component_registrator';
-import devices from '@js/core/devices';
 import type { DefaultOptionsRule } from '@js/core/options/utils';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { getHeight, getWidth } from '@js/core/utils/size';
-import { getNavigator } from '@js/core/utils/window';
 import type { Properties } from '@js/ui/load_indicator';
 import { current, isGeneric, isMaterialBased } from '@js/ui/themes';
 import type { OptionChanged } from '@ts/core/widget/types';
@@ -13,21 +11,22 @@ import Widget from '@ts/core/widget/widget';
 
 import supportUtils from '../core/utils/m_support';
 
-const navigator = getNavigator();
-
 const LOADINDICATOR_CLASS = 'dx-loadindicator';
 const LOADINDICATOR_WRAPPER_CLASS = 'dx-loadindicator-wrapper';
 const LOADINDICATOR_CONTENT_CLASS = 'dx-loadindicator-content';
 const LOADINDICATOR_ICON_CLASS = 'dx-loadindicator-icon';
+const LOADINDICATOR_ICON_SPARKLE_CLASS = 'dx-loadindicator-icon-sparkle';
 const LOADINDICATOR_SEGMENT_CLASS = 'dx-loadindicator-segment';
 const LOADINDICATOR_SEGMENT_INNER_CLASS = 'dx-loadindicator-segment-inner';
 const LOADINDICATOR_IMAGE_CLASS = 'dx-loadindicator-image';
-const LOADINDICATOR_IMAGE_AI_CLASS = 'dx-loadindicator-image-ai';
+
+export enum AnimationType {
+  Sparkle = 'sparkle',
+  Circle = 'circle',
+}
 
 export interface LoadIndicatorProperties extends Properties {
-  useAISVG?: boolean;
-
-  viaImage?: boolean;
+  _animationType: AnimationType;
 
   _animatingSegmentCount?: number;
 
@@ -44,8 +43,9 @@ class LoadIndicator extends Widget<LoadIndicatorProperties> {
   _getDefaultOptions(): LoadIndicatorProperties {
     return {
       ...super._getDefaultOptions(),
-      indicatorSrc: '',
       activeStateEnabled: false,
+      _animationType: AnimationType.Circle,
+      indicatorSrc: '',
       hoverStateEnabled: false,
       _animatingSegmentCount: 1,
       _animatingSegmentInner: false,
@@ -56,16 +56,6 @@ class LoadIndicator extends Widget<LoadIndicatorProperties> {
     const themeName = current();
 
     return super._defaultOptionsRules().concat([
-      {
-        device() {
-          const realDevice = devices.real();
-          const obsoleteAndroid = realDevice.platform === 'android' && !/chrome/i.test(navigator.userAgent);
-          return obsoleteAndroid;
-        },
-        options: {
-          viaImage: true,
-        },
-      },
       {
         device(): boolean {
           return isMaterialBased(themeName);
@@ -123,54 +113,70 @@ class LoadIndicator extends Widget<LoadIndicatorProperties> {
   }
 
   _renderMarkup(): void {
-    const { useAISVG, viaImage, indicatorSrc } = this.option();
+    const { indicatorSrc } = this.option();
     const isAnimationAvailable = supportUtils.animation();
+    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+    const shouldRenderImageMarkup = indicatorSrc || !isAnimationAvailable;
 
-    if (useAISVG) {
-      this._renderMarkupForSvg();
-    } else if (viaImage || indicatorSrc || !isAnimationAvailable) {
-      this._renderMarkupForImage();
+    if (shouldRenderImageMarkup) {
+      this._renderImageMarkup();
     } else {
-      this._renderMarkupForAnimation();
+      this._renderAnimationMarkup();
     }
   }
 
-  _renderMarkupForAnimation(): void {
-    const animatingSegmentInner = this.option('_animatingSegmentInner');
+  _renderAnimationMarkup(): void {
+    const {
+      _animationType: animationType,
+      _animatingSegmentCount: animatingSegmentCount,
+      _animatingSegmentInner: animatingSegmentInner,
+    } = this.option();
 
-    this._$indicator = $('<div>').addClass(LOADINDICATOR_ICON_CLASS);
+    const isSparkle = animationType === AnimationType.Sparkle;
+
+    const indicatorClasses = [
+      LOADINDICATOR_ICON_CLASS,
+      isSparkle && LOADINDICATOR_ICON_SPARKLE_CLASS,
+    ]
+      .filter(Boolean)
+      .join(' ');
+
+    this._$indicator = $('<div>').addClass(indicatorClasses);
     this._$content.append(this._$indicator);
 
-    // Indicator markup
-    // @ts-expect-error ts-error
-    for (let i = this.option('_animatingSegmentCount'); i >= 0; --i) {
+    const segmentParams = {
+      segmentCount: isSparkle ? 3 : animatingSegmentCount!,
+      segmentInner: isSparkle ? false : !animatingSegmentInner,
+    };
+
+    this._renderSegments(segmentParams);
+  }
+
+  _renderSegments(segmentParams: { segmentCount: number; segmentInner: boolean }): void {
+    const { segmentCount, segmentInner } = segmentParams;
+
+    for (let i = segmentCount; i >= 0; --i) {
       const $segment = $('<div>')
         .addClass(LOADINDICATOR_SEGMENT_CLASS)
-        // eslint-disable-next-line @typescript-eslint/restrict-plus-operands, @typescript-eslint/no-base-to-string
-        .addClass(LOADINDICATOR_SEGMENT_CLASS + i);
+        .addClass(`${LOADINDICATOR_SEGMENT_CLASS}${i}`);
 
-      if (animatingSegmentInner) {
-        $segment.append($('<div>').addClass(LOADINDICATOR_SEGMENT_INNER_CLASS));
+      if (segmentInner) {
+        const $segmentInner = $('<div>').addClass(LOADINDICATOR_SEGMENT_INNER_CLASS);
+
+        $segment.append($segmentInner);
       }
 
-      this._$indicator.append($segment);
+      this._$indicator!.append($segment);
     }
   }
 
-  _renderMarkupForSvg(): void {
-    this._$wrapper
-      .addClass(LOADINDICATOR_IMAGE_CLASS)
-      .addClass(LOADINDICATOR_IMAGE_AI_CLASS);
-  }
-
-  _renderMarkupForImage(): void {
+  _renderImageMarkup(): void {
     const { indicatorSrc } = this.option();
 
     if (indicatorSrc) {
-      this._$wrapper.addClass(LOADINDICATOR_IMAGE_CLASS);
-      this._$wrapper.css('backgroundImage', `url(${indicatorSrc})`);
-    } else if (supportUtils.animation()) {
-      this._renderMarkupForAnimation();
+      this._$wrapper
+        .addClass(LOADINDICATOR_IMAGE_CLASS)
+        .css('backgroundImage', `url(${indicatorSrc})`);
     }
   }
 
@@ -225,6 +231,7 @@ class LoadIndicator extends Widget<LoadIndicatorProperties> {
     switch (args.name) {
       case '_animatingSegmentCount':
       case '_animatingSegmentInner':
+      case '_animationType':
       case 'indicatorSrc':
         this._invalidate();
         break;

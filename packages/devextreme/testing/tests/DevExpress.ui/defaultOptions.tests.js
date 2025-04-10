@@ -554,20 +554,6 @@ testComponentDefaults(List,
     }
 );
 
-if(!(/chrome/i.test(navigator.userAgent))) {
-    testComponentDefaults(LoadIndicator,
-        {},
-        { viaImage: true },
-        function() {
-            this._originalRealDevice = devices.real();
-            devices.real({ platform: 'android', version: [4, 0] });
-        },
-        function() {
-            devices.real(this._originalRealDevice);
-        }
-    );
-}
-
 
 testComponentDefaults(Lookup,
     {},
