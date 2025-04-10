@@ -78,7 +78,8 @@ export class ColumnsController {
         return normalizeColumns(
           finalColumns ?? [],
           this.options.normalizeTemplate.bind(this.options),
-        ).map((column) =>headerFilterUtils.mergeColumnHeaderFilterOptions(column, headerFilterRootOptions));
+        // eslint-disable-next-line @stylistic/max-len
+        ).map((column) => headerFilterUtils.mergeColumnHeaderFilterOptions(column, headerFilterRootOptions));
       },
       [
         this.columnsSettings,
