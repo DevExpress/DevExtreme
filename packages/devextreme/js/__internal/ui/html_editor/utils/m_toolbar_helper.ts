@@ -123,8 +123,8 @@ function prepareAiTextTrasformHandler(module) {
       commandsMap,
     };
 
-    module.editorInstance.showAiDialog(aiDialogConfig)?.done((resultText, event) => {
-      const insertionMode = event.itemData.id;
+    module.editorInstance.showAiDialog(aiDialogConfig)?.done((resultText, eventData) => {
+      const insertionMode = eventData.itemData.id;
       let insertIndex = 0;
       let textToInsert = resultText;
 
@@ -151,10 +151,10 @@ function prepareAiTextTrasformHandler(module) {
           return;
       }
 
+      module.saveValueChangeEvent(eventData.event);
+
       quill.insertText(insertIndex, textToInsert, USER_ACTION);
       quill.setSelection(insertIndex, textToInsert.length, USER_ACTION);
-
-      module.saveValueChangeEvent(event);
     });
   };
 }

@@ -88,4 +88,20 @@ QUnit.module('Toolbar AI dialog integration', {}, () => {
 
         assert.strictEqual(resultText, 'Test value\n', 'all text used in resultTextArea');
     });
+
+    QUnit.test('Should call saveValueChangeEvent with correct event', function(assert) {
+        const done = assert.async();
+
+        setupHtmlEditorWithAi(({ event }) => {
+            const clickedText = $(event.target).text();
+
+            assert.strictEqual(event.type, 'dxclick', 'called with correct event type');
+            assert.strictEqual(clickedText, 'Replace', 'called on correct element');
+            done();
+        });
+
+        openAiDialog($('#htmlEditor'));
+        setResultText('Inserted value');
+        selectInsertionMode('replace');
+    });
 });
