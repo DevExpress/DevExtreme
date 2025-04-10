@@ -214,12 +214,6 @@ export class DataController {
     );
   }
 
-  private initializeColumnsIfNeeded(items: DataObject[]): void {
-    if (!this.columnsController.columnsInitialized && items.length > 0) {
-      this.columnsController.inferColumnsFromFirstItem(items[0] as Record<string, unknown>);
-    }
-  }
-
   private onChanged(dataSource: DataSource, e): void {
     let items = dataSource.items() as DataObject[];
 
@@ -228,13 +222,14 @@ export class DataController {
       items = updateItemsImmutable(items, e.changes, dataSource.store());
     }
 
+    // @ts-expect-error
+    this.columnsController.firstItem.update(items[0] ?? null);
+
     this._items.update(items);
     this.pageIndex.update(dataSource.pageIndex());
     this.pageSize.update(dataSource.pageSize());
     this._totalCount.update(dataSource.totalCount());
     this.loadedPromise.resolve();
-
-    this.initializeColumnsIfNeeded(items);
   }
 
   public getDataKey(data: DataObject): Key {

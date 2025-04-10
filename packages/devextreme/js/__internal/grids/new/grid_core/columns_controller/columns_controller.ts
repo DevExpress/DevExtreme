@@ -1,7 +1,7 @@
 /* eslint-disable spellcheck/spell-checker */
 import type { Subscribable, SubsGets, SubsGetsUpd } from '@ts/core/reactive/index';
 import {
-  computed, interruptableComputed,
+  computed, interruptableComputed, state
 } from '@ts/core/reactive/index';
 import type { HeaderFilterRootOptions } from '@ts/grids/new/grid_core/filtering/header_filter/index';
 import headerFilterUtils from '@ts/grids/new/grid_core/filtering/header_filter/utils';
@@ -32,7 +32,7 @@ export class ColumnsController {
 
   public static dependencies = [OptionsController] as const;
 
-  public columnsInitialized = false;
+  public readonly firstItem = state<Record<string, unknown> | null>(null);
 
   constructor(
     private readonly options: OptionsController,
@@ -59,6 +59,33 @@ export class ColumnsController {
       [
         this.columnsSettings,
         this.headerFilterConfiguration,
+      ],
+    );
+
+    this.columns = computed(
+      (columnsSettings, headerFilterRootOptions, firstItem) => {
+        let finalColumns = columnsSettings;
+
+        if ((!finalColumns || finalColumns.length === 0) && firstItem) {
+          finalColumns = Object.keys(firstItem).map((key, index) => ({
+            name: key,
+            dataField: key,
+            visible: true,
+            visibleIndex: index,
+          }));
+        }
+
+        return normalizeColumns(
+          finalColumns ?? [],
+          this.options.normalizeTemplate.bind(this.options),
+        ).map((column) =>
+          headerFilterUtils.mergeColumnHeaderFilterOptions(column, headerFilterRootOptions)
+        );
+      },
+      [
+        this.columnsSettings,
+        this.headerFilterConfiguration,
+        this.firstItem,
       ],
     );
 
@@ -144,22 +171,5 @@ export class ColumnsController {
     });
 
     return result;
-  }
-
-  public inferColumnsFromFirstItem(firstItem: Record<string, unknown>): void {
-    if (this.columnsInitialized
-      // @ts-expect-error
-      || (this.columns.value?.length ?? 0) > 0
-      || !firstItem) return;
-
-    const generatedColumns: PreNormalizedColumn[] = Object.keys(firstItem).map((key, index) => ({
-      name: key,
-      dataField: key,
-      visible: true,
-      visibleIndex: index,
-    }));
-
-    this.columnsSettings.update(generatedColumns);
-    this.columnsInitialized = true;
   }
 }
