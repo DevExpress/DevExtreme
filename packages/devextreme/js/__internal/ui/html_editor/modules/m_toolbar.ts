@@ -13,7 +13,7 @@ import { each } from '@js/core/utils/iterator';
 import {
   isDefined, isEmptyObject, isObject, isString,
 } from '@js/core/utils/type';
-import type { HtmlEditorAICommandName, HtmlEditorAICustomCommand, HtmlEditorAIToolbarItem } from '@js/ui/html_editor';
+import type { AICommandName, AICustomCommand, AIToolbarItem } from '@js/ui/html_editor';
 import type { Item } from '@js/ui/toolbar';
 import Toolbar from '@js/ui/toolbar';
 import errors from '@js/ui/widget/ui.errors';
@@ -375,7 +375,7 @@ if (Quill) {
     }
 
     private _createCommandMenuItem(
-      command: HtmlEditorAICommandName,
+      command: AICommandName,
       text?: string,
       commandOptions?: string[],
     ) {
@@ -393,7 +393,7 @@ if (Quill) {
       };
     }
 
-    private _buildMenuItems(commands: HtmlEditorAIToolbarItem['commands']) {
+    private _buildMenuItems(commands: AIToolbarItem['commands']) {
       return commands?.map((command) => {
         if (typeof command === 'object') {
           if (command.name === 'custom') {
@@ -407,7 +407,7 @@ if (Quill) {
                 options: command.options.map(capitalize),
                 prompt,
               })),
-              prompt: (command as HtmlEditorAICustomCommand).prompt,
+              prompt: (command as AICustomCommand).prompt,
             };
           }
 
@@ -418,10 +418,10 @@ if (Quill) {
       });
     }
 
-    _prepareAIMenuItemConfig(item: HtmlEditorAIToolbarItem) {
+    _prepareAIMenuItemConfig(item: AIToolbarItem) {
       const {
         name = TOOLBAR_AI_ITEM_NAME,
-        commands = Object.keys(defaultCommandNames) as HtmlEditorAICommandName[],
+        commands = Object.keys(defaultCommandNames) as AICommandName[],
       } = item;
 
       const commandsMap = buildCommandsMap(commands);

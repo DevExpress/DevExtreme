@@ -2,7 +2,7 @@ import localizationMessage from '@js/common/core/localization/message';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { extend } from '@js/core/utils/extend';
-import type { HtmlEditorAICustomCommand } from '@js/ui/html_editor';
+import type { AICustomCommand } from '@js/ui/html_editor';
 import type HtmlEditor from '@js/ui/html_editor';
 import type { Properties as PopupProperties, ToolbarItem } from '@js/ui/popup';
 import SelectBox from '@js/ui/select_box';
@@ -27,7 +27,7 @@ export interface AiDialogShowPayload {
   currentCommandOption?: string;
   text?: string;
   commandsMap: CommandsMap;
-  prompt?: HtmlEditorAICustomCommand['prompt'];
+  prompt?: AICustomCommand['prompt'];
 }
 
 export default class AiDialog extends DialogBase {
@@ -45,7 +45,7 @@ export default class AiDialog extends DialogBase {
 
   private _resultText = '';
 
-  private _prompt?: HtmlEditorAICustomCommand['prompt'];
+  private _prompt?: AICustomCommand['prompt'];
 
   private _commandSelectBox?: SelectBox;
 

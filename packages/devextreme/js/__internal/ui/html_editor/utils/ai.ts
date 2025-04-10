@@ -1,26 +1,26 @@
 import type {
-  HtmlEditorAIChangeStyleOption,
-  HtmlEditorAIChangeToneOption,
-  HtmlEditorAICommandName,
-  HtmlEditorAIToolbarItem,
-  HtmlEditorAITranslateOption,
+  AIChangeStyleOption,
+  AIChangeToneOption,
+  AICommandName,
+  AIToolbarItem,
+  AITranslateOption,
 } from '@js/ui/html_editor';
 import { capitalize } from '@ts/core/utils/capitalize';
 
 type CommandOption =
-  | HtmlEditorAIChangeStyleOption
-  | HtmlEditorAIChangeToneOption
-  | HtmlEditorAITranslateOption;
+  | AIChangeStyleOption
+  | AIChangeToneOption
+  | AITranslateOption;
 
 export interface CommandDefinition {
   name: string;
   text: string;
-  options?: CommandOption[];
+  options?: (CommandOption | string)[];
 }
 
 export type CommandsMap = Record<string, CommandDefinition>;
 
-export const defaultCommandNames: Record<HtmlEditorAICommandName, string> = {
+export const defaultCommandNames: Record<AICommandName, string> = {
   summarize: 'Summarize',
   proofread: 'Proofread',
   expand: 'Expand',
@@ -31,22 +31,22 @@ export const defaultCommandNames: Record<HtmlEditorAICommandName, string> = {
   askAI: 'Ask AI',
 };
 
-const htmlEditorAIChangeStyleOptions: HtmlEditorAIChangeStyleOption[] = [
+const htmlEditorAIChangeStyleOptions: AIChangeStyleOption[] = [
   'formal', 'informal', 'technical', 'business',
   'creative', 'journalistic', 'academic', 'persuasive',
   'narrative', 'expository', 'descriptive', 'conversational',
 ];
 
-const htmlEditorAIChangeToneOptions: HtmlEditorAIChangeToneOption[] = [
+const htmlEditorAIChangeToneOptions: AIChangeToneOption[] = [
   'professional', 'casual', 'straightforward', 'confident', 'friendly',
 ];
 
-const htmlEditorAITranslateOptions: HtmlEditorAITranslateOption[] = [
+const htmlEditorAITranslateOptions: AITranslateOption[] = [
   'arabic', 'chinese', 'english', 'french', 'german', 'japanese', 'spanish',
 ];
 
 export const getDefaultOptionsByCommand = (
-  command: HtmlEditorAICommandName | 'custom',
+  command: AICommandName | 'custom',
 ): CommandOption[] | undefined => {
   switch (command) {
     case 'changeStyle':
@@ -60,7 +60,7 @@ export const getDefaultOptionsByCommand = (
   }
 };
 
-function createDefinitionFromString(commandName: HtmlEditorAICommandName): CommandDefinition {
+function createDefinitionFromString(commandName: AICommandName): CommandDefinition {
   const text = defaultCommandNames[commandName] ?? capitalize(commandName);
   const defaultOptions = getDefaultOptionsByCommand(commandName)?.map(capitalize);
 
@@ -72,7 +72,7 @@ function createDefinitionFromString(commandName: HtmlEditorAICommandName): Comma
 }
 
 function createDefinitionFromObject(
-  name: HtmlEditorAICommandName | 'custom',
+  name: AICommandName | 'custom',
   text?: string,
   rawOptions?: string[],
 ): CommandDefinition {
@@ -89,7 +89,7 @@ function createDefinitionFromObject(
 }
 
 export function buildCommandsMap(
-  commands: HtmlEditorAIToolbarItem['commands'],
+  commands: AIToolbarItem['commands'],
 ): CommandsMap {
   const map: CommandsMap = {};
 
