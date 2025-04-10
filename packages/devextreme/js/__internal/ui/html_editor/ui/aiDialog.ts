@@ -170,7 +170,7 @@ export default class AiDialog extends DialogBase {
         widget: 'dxButton',
         options: {
           text: localizationMessage.format('dxHtmlEditor-aiTryAgain'),
-          onClick: () => this._retryAIRequest(),
+          onClick: () => this._retryAiRequest(),
         },
       },
       {
@@ -191,7 +191,7 @@ export default class AiDialog extends DialogBase {
     ];
   }
 
-  private _retryAIRequest(): void {
+  private _retryAiRequest(): void {
     // TODO: implement with integration
   }
 
