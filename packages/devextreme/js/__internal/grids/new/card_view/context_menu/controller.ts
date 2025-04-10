@@ -1,7 +1,7 @@
 /* eslint-disable spellcheck/spell-checker */
 import type { Item as ContextMenuItem, ItemClickEvent } from '@js/ui/context_menu';
 
-import { ColumnsController } from '../../grid_core/columns_controller';
+import { ColumnsController } from '../../grid_core/columns_controller/index';
 import type { Column, DataRow } from '../../grid_core/columns_controller/types';
 import { BaseContextMenuController } from '../../grid_core/context_menu/controller';
 import { OptionsController } from '../options_controller';
