@@ -765,8 +765,6 @@ testModule('Toolbar module', simpleModuleConfig, () => {
 
         assert.ok($sizeEditor.width() < $headerEditor.width() * 0.9, 'Size editor has custom width');
     });
-
-
 });
 
 testModule('Active formats', simpleModuleConfig, () => {

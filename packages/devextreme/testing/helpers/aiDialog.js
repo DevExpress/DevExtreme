@@ -79,6 +79,7 @@ export function findButtonByText($container, text) {
 }
 
 export const getCommandSelectBoxInstance = ($container) => getDialogSelectBoxes($container).eq(0).dxSelectBox('instance');
+
 export const getOptionSelectBoxInstance = ($container) => getDialogSelectBoxes($container).eq(1).dxSelectBox('instance');
 
 export const setResultText = (value) => {
