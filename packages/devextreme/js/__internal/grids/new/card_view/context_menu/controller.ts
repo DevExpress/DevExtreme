@@ -46,7 +46,7 @@ export class ContextMenuController
 
     // @ts-expect-error
     const event: ContextMenuPreparingEvent<DataRow> = {
-      items: Array.isArray(items) ? items : undefined,
+      items: items.length > 0 ? items : undefined,
       target: view,
       targetElement: targetElement as HTMLElement,
       columnIndex: undefined,

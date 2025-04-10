@@ -2,7 +2,7 @@ import type { Item as ContextMenuItem, PositioningEvent } from '@js/ui/context_m
 import type dxContextMenu from '@js/ui/context_menu';
 import { createRef } from 'inferno';
 
-export abstract class BaseContextMenuController<TTargetView, TContextInfo> {
+export abstract class BaseContextMenuController<TTargetView = unknown, TContextInfo = unknown> {
   public readonly contextMenuRef = createRef<dxContextMenu>();
 
   private lastEvent?: MouseEvent;

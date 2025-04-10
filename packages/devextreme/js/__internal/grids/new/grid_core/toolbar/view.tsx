@@ -1,7 +1,7 @@
 import type { SubsGets } from '@ts/core/reactive/index';
 import { combined, computed } from '@ts/core/reactive/index';
 
-import { ContextMenuController } from '../../card_view/context_menu/controller';
+import { BaseContextMenuController } from '../context_menu/controller';
 import { View } from '../core/view';
 import { OptionsController } from '../options_controller/options_controller';
 import { ToolbarController } from './controller';
@@ -21,13 +21,13 @@ export class ToolbarView extends View<ToolbarProps> {
 
   public static dependencies = [
     ToolbarController,
-    ContextMenuController,
+    BaseContextMenuController,
     OptionsController,
   ] as const;
 
   constructor(
     private readonly controller: ToolbarController,
-    private readonly contextMenuController: ContextMenuController,
+    private readonly contextMenuController: BaseContextMenuController,
     private readonly options: OptionsController,
   ) {
     super();
