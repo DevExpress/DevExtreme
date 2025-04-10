@@ -31,7 +31,9 @@ import type MenuBaseEditStrategy from '../context_menu/m_menu_base.edit.strategy
 import type GroupedEditStrategy from '../list/m_list.edit.strategy.grouped';
 
 const ITEM_DELETING_DATA_KEY = 'dxItemDeleting';
-const NOT_EXISTING_INDEX = -1;
+const SELECTED_ITEM_CLASS = 'dx-item-selected';
+
+export const NOT_EXISTING_INDEX = -1;
 
 const indexExists = (index): boolean => index !== NOT_EXISTING_INDEX;
 
@@ -44,6 +46,10 @@ export interface CollectionWidgetEditProperties<
   TKey = any,
 > extends CollectionWidgetBaseProperties<TComponent, TItem, TKey> {
   selectionMode?: SingleMultipleOrNone | SingleMultipleAllOrNone;
+
+  selectionRequired?: boolean;
+
+  focusOnSelectedItem?: boolean;
 }
 
 class CollectionWidget<
@@ -85,6 +91,7 @@ class CollectionWidget<
       maxFilterLengthInRequest: 1500,
       keyExpr: null,
       selectedIndex: NOT_EXISTING_INDEX,
+      focusOnSelectedItem: true,
       selectedItem: null,
       onSelectionChanging: null,
       onSelectionChanged: null,
@@ -115,6 +122,10 @@ class CollectionWidget<
   _initKeyGetter(): void {
     // @ts-expect-error ts-error
     this._keyGetter = compileGetter(this.option('keyExpr'));
+  }
+
+  _selectedItemClass(): string {
+    return SELECTED_ITEM_CLASS;
   }
 
   // eslint-disable-next-line class-methods-use-this
@@ -569,7 +580,6 @@ class CollectionWidget<
         }
 
         this._editStrategy.endCache();
-
         this._updateSelection(addedSelection, removedSelection);
       }
 
@@ -588,6 +598,20 @@ class CollectionWidget<
     value: string,
   ): void {
     this.setAria('selected', value, $target);
+  }
+
+  _getFocusedElementIndex(): number {
+    const { focusOnSelectedItem } = this.option();
+
+    return focusOnSelectedItem
+      ? this._getFlatIndex()
+      : super._getFocusedElementIndex();
+  }
+
+  _getFlatIndex(): number {
+    const { selectedIndex = NOT_EXISTING_INDEX } = this.option();
+
+    return selectedIndex;
   }
 
   _removeSelection(normalizedIndex: number): void {
@@ -651,6 +675,8 @@ class CollectionWidget<
       case 'onItemDeleted':
       case 'onItemReordered':
       case 'maxFilterLengthInRequest':
+        break;
+      case 'focusOnSelectedItem':
         break;
       default:
         super._optionChanged(args);
