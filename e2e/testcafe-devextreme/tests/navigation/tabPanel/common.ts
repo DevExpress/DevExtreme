@@ -745,12 +745,12 @@ test('TabPanel tabs min-width', async (t) => {
         .expect(compareResults.isValid())
         .ok(compareResults.errorMessages());
   }).before(async () => {
-    const dataSource = [
+    const dataSource: Item[] = [
       {
         title: 'John Heart',
         text: 'John Heart',
       },
-    ] as Item[];
+    ];
 
     const tabPanelOptions = {
       dataSource,
