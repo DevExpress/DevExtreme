@@ -9,6 +9,7 @@ import {
   getDatesWithoutTime, hasResourceValue, isAppointmentTakesAllDay, isTimelineView,
 } from '@ts/scheduler/r1/utils/index';
 import type { AppointmentDataAccessor } from '@ts/scheduler/utils';
+import type ViewDataProvider from '@ts/scheduler/workspaces/view_model/m_view_data_provider';
 
 import { createAppointmentAdapter } from '../../m_appointment_adapter';
 import { getRecurrenceProcessor } from '../../m_recurrence';
@@ -60,7 +61,7 @@ export class AppointmentFilterBaseStrategy {
 
   get groupCount() { return this._resolveOption('groupCount'); }
 
-  get viewDataProvider() { return this._resolveOption('viewDataProvider'); }
+  get viewDataProvider(): ViewDataProvider { return this._resolveOption('viewDataProvider'); }
 
   get allDayPanelMode() { return this._resolveOption('allDayPanelMode'); }
 

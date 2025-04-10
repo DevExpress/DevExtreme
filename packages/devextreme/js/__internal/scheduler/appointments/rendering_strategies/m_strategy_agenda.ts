@@ -105,8 +105,7 @@ class AgendaRenderingStrategy extends BaseRenderingStrategy {
     return result;
   }
 
-  _calculateGroupIndex(apptIndex, appointmentsByResources) {
-    let resultInd;
+  _calculateGroupIndex(apptIndex, appointmentsByResources): number | undefined {
     let counter = 0;
 
     // eslint-disable-next-line
@@ -114,14 +113,13 @@ class AgendaRenderingStrategy extends BaseRenderingStrategy {
       const countApptInGroup = appointmentsByResources[i].length;
 
       if (apptIndex >= counter && apptIndex < counter + countApptInGroup) {
-        resultInd = Number(i);
-        break;
+        return Number(i);
       }
 
       counter += countApptInGroup;
     }
 
-    return resultInd;
+    return undefined;
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

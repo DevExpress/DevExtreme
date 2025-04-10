@@ -28,12 +28,12 @@ export interface AppointmentDataItem {
 
 // TODO: add correct types here. Agenda and other views have different types
 export interface BaseAppointmentViewModelSettings extends Record<string, unknown> {
-  direction: string;
-  groupIndex: number;
-  height: number | string;
-  sortedIndex: number;
-  width: number | string;
   allDay?: boolean;
+  direction: string;
+  height: number | string;
+  width: number | string;
+  groupIndex: number;
+  sortedIndex: number;
 }
 
 export interface AppointmentViewModel {
