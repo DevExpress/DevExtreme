@@ -44,7 +44,7 @@ export type Response = {
    * @docid
    * @public
    */
-  result: Promise<string>;
+  promise: Promise<string>;
   /**
    * @docid
    * @public
@@ -53,57 +53,29 @@ export type Response = {
 };
 
 /**
- * @docid
  * @namespace DevExpress.aiIntegration
- * @public
  */
 export type TranslateCommandParams = {
-  /**
-   * @docid
-   * @public
-   */
   text: string;
-  /**
-   * @docid
-   * @public
-   */
   lang: string;
 };
 
 /**
- * @docid
  * @namespace DevExpress.aiIntegration
- * @public
  */
 export type TranslateCommandResult = string;
 
 /**
- * @docid
  * @namespace DevExpress.aiIntegration
- * @public
  */
 export type BaseCommandResult = TranslateCommandResult;
 
 /**
- * @docid
  * @namespace DevExpress.aiIntegration
- * @public
  */
 export type RequestCallbacks = {
-  /**
-   * @docid
-   * @public
-   */
   onChunk?: (chunk: string) => void;
-  /**
-   * @docid
-   * @public
-   */
   onComplete?: (finalResponse: BaseCommandResult) => void;
-  /**
-   * @docid
-   * @public
-   */
   onError?: (error: Error) => void;
 };
 
@@ -132,9 +104,7 @@ export class AIIntegration {
    */
   constructor(provider: AIProvider);
   /**
-   * @docid
    * @publicName translate(params, callbacks)
-   * @public
    */
   translate(params: TranslateCommandParams, callbacks: RequestCallbacks): () => void;
 }

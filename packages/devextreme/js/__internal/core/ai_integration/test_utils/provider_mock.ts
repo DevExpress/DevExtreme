@@ -4,7 +4,7 @@ export class Provider implements AIProvider {
   sendRequest(params: RequestParams): Response {
     const { onChunk } = params;
 
-    const result = new Promise<string>((resolve) => {
+    const promise = new Promise<string>((resolve) => {
       onChunk('AI');
       onChunk(' response');
 
@@ -13,6 +13,6 @@ export class Provider implements AIProvider {
 
     const abort = (): void => {};
 
-    return { result, abort };
+    return { promise, abort };
   }
 }

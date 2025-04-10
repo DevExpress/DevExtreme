@@ -873,9 +873,6 @@ declare module DevExpress.aiIntegration {
      * @param provider
      */
     constructor(provider: AIProvider);
-    /**
-     * [descr:AIIntegration.translate(params, callbacks)]
-     */
     translate(
       params: TranslateCommandParams,
       callbacks: RequestCallbacks
@@ -891,7 +888,7 @@ declare module DevExpress.aiIntegration {
     sendRequest: (params: RequestParams) => Response;
   };
   /**
-   * [descr:BaseCommandResult]
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export type BaseCommandResult = TranslateCommandResult;
   /**
@@ -908,20 +905,11 @@ declare module DevExpress.aiIntegration {
     user?: string;
   };
   /**
-   * [descr:RequestCallbacks]
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export type RequestCallbacks = {
-    /**
-     * [descr:RequestCallbacks.onChunk]
-     */
     onChunk?: (chunk: string) => void;
-    /**
-     * [descr:RequestCallbacks.onComplete]
-     */
     onComplete?: (finalResponse: BaseCommandResult) => void;
-    /**
-     * [descr:RequestCallbacks.onError]
-     */
     onError?: (error: Error) => void;
   };
   /**
@@ -942,29 +930,23 @@ declare module DevExpress.aiIntegration {
    */
   export type Response = {
     /**
-     * [descr:Response.result]
+     * [descr:Response.promise]
      */
-    result: Promise<string>;
+    promise: Promise<string>;
     /**
      * [descr:Response.abort]
      */
     abort: () => void;
   };
   /**
-   * [descr:TranslateCommandParams]
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export type TranslateCommandParams = {
-    /**
-     * [descr:TranslateCommandParams.text]
-     */
     text: string;
-    /**
-     * [descr:TranslateCommandParams.lang]
-     */
     lang: string;
   };
   /**
-   * [descr:TranslateCommandResult]
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export type TranslateCommandResult = string;
 }
