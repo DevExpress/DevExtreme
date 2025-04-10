@@ -734,3 +734,43 @@ test('TabPanel tabs min-width', async (t) => {
 
   return createWidget('dxTabPanel', tabPanelOptions);
 });
+
+test('TabPanel should be shown correctly even if there is only one tab', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  await testScreenshot(t, takeScreenshot, 'TabPanel with one tab which should not stretch.png', { element: '#container' });
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  const dataSource = [
+    {
+      title: 'John Heart',
+      text: 'John Heart',
+    },
+  ] as Item[];
+
+  const tabPanelOptions = {
+    dataSource,
+    itemTemplate: (itemData, itemIndex, itemElement) => {
+      ($('<div>').css('marginTop', 10) as any)
+        .dxTabs({
+          items: [
+            {
+              title: 'John Heart',
+              text: 'John Heart',
+            },
+          ],
+          width: 300,
+          showNavButtons: true,
+        })
+        .appendTo(itemElement);
+    },
+    height: 120,
+    width: 300,
+    showNavButtons: true,
+  };
+
+  return createWidget('dxTabPanel', tabPanelOptions);
+});
