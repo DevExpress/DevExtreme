@@ -1,12 +1,12 @@
 import messageLocalization from '@js/localization/message';
 import { combineClasses } from '@ts/core/utils/combine_classes';
+import { Icon } from '@ts/grids/new/grid_core/icon';
 import { Component } from 'inferno';
 
 export const CLASSES = {
   cover: 'dx-card-cover',
   image: 'dx-card-cover-image',
   noImage: 'dx-card-cover-noimage',
-  noImageIcon: 'dx-icon dx-icon-imagethumbnail',
 };
 
 export interface CoverProps {
@@ -41,8 +41,8 @@ export class Cover extends Component<CoverProps> {
           />
         )}
         {!src && (
-          <div
-            className={CLASSES.noImageIcon}
+          <Icon
+            name='imagethumbnail'
             aria-label={messageLocalization.format('dxCardView-cardNoImageAriaLabel')}
           />
         )}

@@ -3,6 +3,7 @@ import { MultipleKeyDownHandler } from '@ts/grids/new/grid_core/keyboard_navigat
 import type { ComponentType } from 'inferno';
 import { Component, createRef } from 'inferno';
 
+import { Icon } from '../../grid_core/icon';
 import type { Status } from './column_sortable';
 
 export const CLASSES = {
@@ -16,29 +17,6 @@ export const CLASSES = {
     iconEmpty: 'dx-header-filter-icon',
     iconFilled: 'dx-header-filter-icon--selected',
   },
-  icon: 'dx-icon',
-};
-
-// TODO: extract icons to separate component
-const ICONS = {
-  // TODO: move to dx-icon once they are updated
-  forbid: (
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path
-        d="M16 8C16 12.4183 12.4183 16 8 16C3.58172 16 0 12.4183 0 8C0 3.58172 3.58172 0 8 0C12.4183 0 16 3.58172 16 8ZM15 8C15 6.24696 14.3556 4.64442 13.2907 3.41636L3.41636 13.2907C4.64442 14.3556 6.24696 15 8 15C11.866 15 15 11.866 15 8ZM2.70925 12.5836L12.5836 2.70925C11.3556 1.6444 9.75303 1 8 1C4.13401 1 1 4.13401 1 8C1 9.75303 1.6444 11.3556 2.70925 12.5836Z"
-        fill="#242424"/>
-    </svg>
-  ),
-  // TODO: move to dx-icon once they are updated
-  moving: (
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path
-        d="M8.35355 0.146447C8.25978 0.0526784 8.13261 0 8 0C7.86739 0 7.74021 0.0526784 7.64645 0.146447L5.14645 2.64645C4.95118 2.84171 4.95118 3.15829 5.14645 3.35355C5.34171 3.54882 5.65829 3.54882 5.85355 3.35355L7.5 1.70711V5.5C7.5 5.77614 7.72386 6 8 6C8.27614 6 8.5 5.77614 8.5 5.5V1.70711L10.1464 3.35355C10.3417 3.54882 10.6583 3.54882 10.8536 3.35355C11.0488 3.15829 11.0488 2.84171 10.8536 2.64645L8.35355 0.146447ZM0.146447 7.64645C0.0526784 7.74021 0 7.86739 0 8C0 8.13261 0.0526784 8.25979 0.146447 8.35355L2.64645 10.8536C2.84171 11.0488 3.15829 11.0488 3.35355 10.8536C3.54882 10.6583 3.54882 10.3417 3.35355 10.1464L1.70711 8.5H5.5C5.77614 8.5 6 8.27614 6 8C6 7.72386 5.77614 7.5 5.5 7.5H1.70711L3.35355 5.85355C3.54882 5.65829 3.54882 5.34171 3.35355 5.14645C3.15829 4.95118 2.84171 4.95118 2.64645 5.14645L0.146447 7.64645ZM8 16C7.86739 16 7.74021 15.9473 7.64645 15.8536L5.14645 13.3536C4.95118 13.1583 4.95118 12.8417 5.14645 12.6464C5.34171 12.4512 5.65829 12.4512 5.85355 12.6464L7.5 14.2929L7.5 10.5C7.5 10.2239 7.72386 10 8 10C8.27614 10 8.5 10.2239 8.5 10.5V14.2929L10.1464 12.6464C10.3417 12.4512 10.6583 12.4512 10.8536 12.6464C11.0488 12.8417 11.0488 13.1583 10.8536 13.3536L8.35355 15.8536C8.25979 15.9473 8.13261 16 8 16ZM15.8536 8.35355C15.9473 8.25978 16 8.13261 16 8C16 7.86739 15.9473 7.74021 15.8536 7.64645L13.3536 5.14645C13.1583 4.95118 12.8417 4.95118 12.6464 5.14645C12.4512 5.34171 12.4512 5.65829 12.6464 5.85355L14.2929 7.5L10.5 7.5C10.2239 7.5 10 7.72386 10 8C10 8.27614 10.2239 8.5 10.5 8.5L14.2929 8.5L12.6464 10.1464C12.4512 10.3417 12.4512 10.6583 12.6464 10.8536C12.8417 11.0488 13.1583 11.0488 13.3536 10.8536L15.8536 8.35355Z"
-        fill="#242424"/>
-    </svg>
-  ),
-  sortUp: <div className={`${CLASSES.icon} dx-icon-sortup`}/>,
-  sortDown: <div className={`${CLASSES.icon} dx-icon-sortdown`}/>,
 };
 
 interface SortIconProps {
@@ -50,8 +28,8 @@ interface SortIconProps {
 function SortIcon(props: SortIconProps): JSX.Element {
   return (
     <div className={CLASSES.sorting.container}>
-      {props.sortOrder === 'asc' && ICONS.sortUp}
-      {props.sortOrder === 'desc' && ICONS.sortDown}
+      {props.sortOrder === 'asc' && <Icon name='arrowsortup'/>}
+      {props.sortOrder === 'desc' && <Icon name='arrowsortdown'/>}
       {
         props.showSortIndex && (
           <div className={CLASSES.sorting.order}>
@@ -95,6 +73,12 @@ export class Item extends Component<ItemProps> {
       hasHeaderFilterValue ? CLASSES.headerFilter.iconFilled : '',
     ].join(' ');
 
+    const icon = this.props.status && {
+      forbid: <Icon name='cursorprohibition'/>,
+      moving: <Icon name='cursormove'/>,
+      none: undefined,
+    }[this.props.status];
+
     return (
       <div
         ref={this.containerRef}
@@ -108,7 +92,7 @@ export class Item extends Component<ItemProps> {
         onKeyUp={this.keyboardHandler.onKeyUpHandler}
         onContextMenu={this.props.onContextMenu}
       >
-        {this.props.status && ICONS[this.props.status]}
+        {icon}
         {Template && <Template column={this.props.column}/>}
         {!Template && this.props.column.caption}
         {
