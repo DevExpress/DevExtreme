@@ -1,0 +1,91 @@
+import $ from 'jquery';
+
+import 'ui/html_editor';
+
+import { openAiDialog } from '../../../helpers/aiToolbarMenu.js';
+import { selectInsertionMode, setResultText, getResultText } from '../../../helpers/aiDialog.js';
+
+const setupHtmlEditorWithAi = (onValueChanged, config) => {
+    return $('#htmlEditor').dxHtmlEditor({
+        value: 'Test value',
+        ai: {},
+        toolbar: {
+            items: [{
+                name: 'ai',
+                commands: ['summarize']
+            }],
+        },
+        onValueChanged,
+        ...config
+    }).dxHtmlEditor('instance');
+};
+
+QUnit.module('Toolbar AI dialog integration', {}, () => {
+    QUnit.test('Should replace result text', function(assert) {
+        const done = assert.async();
+
+        const instance = setupHtmlEditorWithAi(() => {
+            const value = instance.option('value');
+            assert.strictEqual(value, '<p>Inserted value</p>', 'value replaced');
+            done();
+        });
+
+        openAiDialog($('#htmlEditor'));
+        setResultText('Inserted value');
+        selectInsertionMode('replace');
+    });
+
+    QUnit.test('Should insert above result text', function(assert) {
+        const done = assert.async();
+
+        const instance = setupHtmlEditorWithAi(() => {
+            const value = instance.option('value');
+            assert.strictEqual(value, '<p>Inserted value</p><p>Test value</p>', 'inserted above');
+            done();
+        });
+
+        openAiDialog($('#htmlEditor'));
+        setResultText('Inserted value');
+        selectInsertionMode('insertAbove');
+    });
+
+    QUnit.test('Should insert below result text', function(assert) {
+        const done = assert.async();
+
+        const instance = setupHtmlEditorWithAi(() => {
+            const value = instance.option('value');
+            assert.strictEqual(value, '<p>Test value</p><p>Inserted value</p>', 'inserted below');
+            done();
+        });
+
+        openAiDialog($('#htmlEditor'));
+        setResultText('Inserted value');
+        selectInsertionMode('insertBelow');
+    });
+
+    QUnit.test('Should use selected text as input', function(assert) {
+        const instance = setupHtmlEditorWithAi();
+
+        instance.setSelection(0, 4);
+
+        openAiDialog($('#htmlEditor'));
+        selectInsertionMode('replace');
+
+        const resultText = getResultText();
+
+        assert.strictEqual(resultText, 'Test', 'selected text used in resultTextArea');
+    });
+
+    QUnit.test('Should use all text as input if nothing is selected', function(assert) {
+        const instance = setupHtmlEditorWithAi();
+
+        instance.setSelection(0, 0);
+
+        openAiDialog($('#htmlEditor'));
+        selectInsertionMode('replace');
+
+        const resultText = getResultText();
+
+        assert.strictEqual(resultText, 'Test value\n', 'all text used in resultTextArea');
+    });
+});
