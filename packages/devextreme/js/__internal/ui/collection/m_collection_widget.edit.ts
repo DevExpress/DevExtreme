@@ -486,7 +486,6 @@ class CollectionWidget<
     config?: ActionConfig,
   ): void {
     let itemSelectPromise = Deferred().resolve();
-
     this._createAction((e) => {
       itemSelectPromise = this._itemSelectHandler(e.event) ?? itemSelectPromise;
     }, {
@@ -495,7 +494,6 @@ class CollectionWidget<
       itemElement: $(e.currentTarget),
       event: e,
     });
-    // const parentItemClickHandler = super._itemClickHandler.bind(this);
 
     itemSelectPromise.always(() => {
       super._itemClickHandler(e, args, config);
