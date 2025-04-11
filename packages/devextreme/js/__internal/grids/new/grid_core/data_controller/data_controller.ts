@@ -222,8 +222,7 @@ export class DataController {
       items = updateItemsImmutable(items, e.changes, dataSource.store());
     }
 
-    // @ts-expect-error
-    this.columnsController.firstItem.update(items[0] ?? null);
+    this.columnsController.firstItem.update(items[0] as Record<string, unknown> ?? null);
 
     this._items.update(items);
     this.pageIndex.update(dataSource.pageIndex());

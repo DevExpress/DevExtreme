@@ -48,21 +48,6 @@ export class ColumnsController {
     );
 
     this.columns = computed(
-      (
-        columnsSettings,
-        headerFilterRootOptions,
-      ) => normalizeColumns(
-        columnsSettings ?? [],
-        this.options.normalizeTemplate.bind(this.options),
-      ).map((column) => headerFilterUtils
-        .mergeColumnHeaderFilterOptions(column, headerFilterRootOptions)),
-      [
-        this.columnsSettings,
-        this.headerFilterConfiguration,
-      ],
-    );
-
-    this.columns = computed(
       (columnsSettings, headerFilterRootOptions, firstItem) => {
         let finalColumns = columnsSettings;
 
@@ -99,9 +84,6 @@ export class ColumnsController {
       (columns) => columns.filter((column) => !column.visible),
       [this.columns],
     );
-
-    // @ts-expect-error
-    this.columnsInitialized = !!this.columns.value.length;
 
     this.allowColumnReordering = this.options.oneWay('allowColumnReordering');
     this.dateSerializationFormat = this.options.oneWay('dateSerializationFormat');

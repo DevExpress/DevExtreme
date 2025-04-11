@@ -6,13 +6,6 @@ async function createCardViewWithPager(): Promise<any> {
   const dataSource = Array.from({ length: 20 }, (_, i) => ({ text: i.toString(), value: i }));
   return createWidget('dxCardView', {
     dataSource,
-
-    // TODO: resolve the situation when colums are not set in config
-    // There is the 'Maximum call stack size exceeded' error in this case
-    columns: [
-      'text',
-      'value',
-    ],
     paging: {
       pageSize: 2,
       pageIndex: 5,
