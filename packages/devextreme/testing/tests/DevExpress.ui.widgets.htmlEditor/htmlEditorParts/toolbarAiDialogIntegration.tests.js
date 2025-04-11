@@ -3,7 +3,7 @@ import $ from 'jquery';
 import 'ui/html_editor';
 
 import { openAiDialog } from '../../../helpers/aiToolbarMenu.js';
-import { selectInsertionMode, setResultText, getResultText } from '../../../helpers/aiDialog.js';
+import { clickActionButton, setResultText, getResultText } from '../../../helpers/aiDialog.js';
 
 const setupHtmlEditorWithAi = (config) => {
     return $('#htmlEditor').dxHtmlEditor({
@@ -33,7 +33,7 @@ QUnit.module('Toolbar AI dialog integration', {}, () => {
 
         openAiDialog($('#htmlEditor'));
         setResultText('Inserted value');
-        selectInsertionMode('replace');
+        clickActionButton('replace');
     });
 
     QUnit.test('Should insert above result text', function(assert) {
@@ -49,7 +49,7 @@ QUnit.module('Toolbar AI dialog integration', {}, () => {
 
         openAiDialog($('#htmlEditor'));
         setResultText('Inserted value');
-        selectInsertionMode('insertAbove');
+        clickActionButton('insertAbove');
     });
 
     QUnit.test('Should insert below result text', function(assert) {
@@ -65,7 +65,7 @@ QUnit.module('Toolbar AI dialog integration', {}, () => {
 
         openAiDialog($('#htmlEditor'));
         setResultText('Inserted value');
-        selectInsertionMode('insertBelow');
+        clickActionButton('insertBelow');
     });
 
     QUnit.test('Should use selected text as input', function(assert) {
@@ -74,7 +74,7 @@ QUnit.module('Toolbar AI dialog integration', {}, () => {
         instance.setSelection(0, 4);
 
         openAiDialog($('#htmlEditor'));
-        selectInsertionMode('replace');
+        clickActionButton('replace');
 
         const resultText = getResultText();
 
@@ -87,7 +87,7 @@ QUnit.module('Toolbar AI dialog integration', {}, () => {
         instance.setSelection(0, 0);
 
         openAiDialog($('#htmlEditor'));
-        selectInsertionMode('replace');
+        clickActionButton('replace');
 
         const resultText = getResultText();
 
@@ -109,6 +109,6 @@ QUnit.module('Toolbar AI dialog integration', {}, () => {
 
         openAiDialog($('#htmlEditor'));
         setResultText('Inserted value');
-        selectInsertionMode('replace');
+        clickActionButton('replace');
     });
 });
