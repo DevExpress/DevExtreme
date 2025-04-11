@@ -3,7 +3,7 @@ import AiDialog from '__internal/ui/html_editor/ui/aiDialog';
 import { isPromise } from 'core/utils/type';
 import {
     showAiDialog,
-    selectInsertionMode,
+    clickActionButton,
     findButtonByText,
     getCommandSelectBoxInstance,
     getOptionSelectBoxInstance
@@ -122,7 +122,7 @@ QUnit.module('AiDialog', moduleConfig, () => {
                 done();
             });
 
-            selectInsertionMode(mode);
+            clickActionButton(mode);
         });
     });
 

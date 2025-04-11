@@ -63,7 +63,7 @@ export const showAiDialog = (instance, { isBasicCommand, config } = {}) => {
     return instance.aiDialog.show(payload);
 };
 
-export const selectInsertionMode = (insertionMode) => {
+export const clickActionButton = (insertionMode) => {
     const insertionModeToIndexMap = {
         replace: 0,
         insertAbove: 1,
