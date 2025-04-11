@@ -244,7 +244,7 @@ const dialogModuleConfig = {
             }
         };
 
-        this.formDialog = new FormDialog(this.options.editorInstance, { container: this.$element, position: null });
+        this.formDialog = new FormDialog(this.$element, { container: this.$element, position: null });
     },
     afterEach: function() {
         fx.off = false;
@@ -287,7 +287,7 @@ const dialogAiModuleConfig = {
             }
         };
 
-        this._aiDialog = new AiDialog(this.options.editorInstance, {});
+        this._aiDialog = new AiDialog(this.$element, {});
     },
     afterEach: function() {
         fx.off = false;

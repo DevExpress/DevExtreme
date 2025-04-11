@@ -554,7 +554,7 @@ class HtmlEditor extends Editor<Properties> {
       hideOnOutsideClick: true,
     }, this.option('formDialogOptions'));
 
-    this._formDialog = new FormDialog(this, userOptions);
+    this._formDialog = new FormDialog(this.$element(), userOptions);
   }
 
   _renderAiDialog(): void {
@@ -565,8 +565,7 @@ class HtmlEditor extends Editor<Properties> {
       return;
     }
 
-    // @ts-expect-error ts-error
-    this._aiDialog = new AiDialog(this, aiIntegration);
+    this._aiDialog = new AiDialog(this.$element(), aiIntegration);
   }
 
   _getStylingModePrefix(): string {

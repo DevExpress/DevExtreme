@@ -3,6 +3,7 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { extend } from '@js/core/utils/extend';
 import Form from '@js/ui/form';
+import type { Properties as PopupProperties } from '@js/ui/popup';
 import { isFluent, isMaterialBased } from '@js/ui/themes';
 
 import BaseDialog from './m_baseDialog';
@@ -39,8 +40,8 @@ export default class FormDialog extends BaseDialog {
 
   beforeAddButtonAction?: () => boolean;
 
-  constructor(editorInstance, popupConfig) {
-    super(editorInstance, popupConfig);
+  constructor($container: dxElementWrapper, popupConfig: PopupProperties) {
+    super($container, popupConfig);
 
     this._attachOptionChangedHandler();
   }
@@ -61,7 +62,7 @@ export default class FormDialog extends BaseDialog {
     e.component.registerKeyHandler('escape', this._escKeyHandler.bind(this));
   }
 
-  protected _getPopupConfig() {
+  protected _getPopupConfig(): PopupProperties {
     const baseConfig = super._getPopupConfig();
 
     return extend(true, {}, baseConfig, {
@@ -80,7 +81,7 @@ export default class FormDialog extends BaseDialog {
           options: {
             onInitialized: this._addEscapeHandler.bind(this),
             text: localizationMessage.format('OK'),
-            onClick: (e) => {
+            onClick: (e): void => {
               this.callAddButtonAction(e.event);
             },
             ...getApplyButtonConfig(),
@@ -93,7 +94,7 @@ export default class FormDialog extends BaseDialog {
           options: {
             onInitialized: this._addEscapeHandler.bind(this),
             text: localizationMessage.format('Cancel'),
-            onClick: () => {
+            onClick: (): void => {
               this._popup.hide();
             },
             ...getCancelButtonConfig(),
@@ -101,10 +102,10 @@ export default class FormDialog extends BaseDialog {
         },
       ],
       ...this._popupUserConfig,
-    });
+    }) as PopupProperties;
   }
 
-  protected _renderContent($contentElem: dxElementWrapper) {
+  protected _renderContent($contentElem: dxElementWrapper): void {
     const $formContainer = $('<div>').appendTo($contentElem);
 
     this._renderForm($formContainer, {
@@ -132,14 +133,13 @@ export default class FormDialog extends BaseDialog {
     this._updateFormLabel(value);
   }
 
-  _renderForm($container, options) {
+  _renderForm($container: dxElementWrapper, options): void {
     $container.addClass(FORM_CLASS);
-    // @ts-expect-error
-    this._form = this._editorInstance._createComponent($container, Form, options);
+    this._form = new Form($container.get(0), options);
     this._updateFormLabel();
   }
 
-  _updateFormLabel(text?: string) {
+  _updateFormLabel(text?: string): void {
     // @ts-expect-error
     const label = text ?? this.popupOption('title') as string;
     this._form
@@ -156,7 +156,7 @@ export default class FormDialog extends BaseDialog {
     };
   }
 
-  callAddButtonAction(event) {
+  callAddButtonAction(event): void {
     if (this.beforeAddButtonAction && !this.beforeAddButtonAction()) {
       return;
     }
@@ -166,7 +166,7 @@ export default class FormDialog extends BaseDialog {
     this.hide(formData, event);
   }
 
-  show(formUserConfig) {
+  show(formUserConfig): Promise<unknown> | undefined {
     const formConfig = extend(this._getDefaultFormOptions(), formUserConfig);
 
     this._form.option(formConfig);
@@ -174,12 +174,12 @@ export default class FormDialog extends BaseDialog {
     return super.show();
   }
 
-  hide(formData, event) {
+  hide(formData, event): void {
     this.deferred?.resolve(formData, event);
     this._popup.hide();
   }
 
-  onHiding() {
+  onHiding(): void {
     this.beforeAddButtonAction = undefined;
 
     super.onHiding();

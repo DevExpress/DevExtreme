@@ -5,8 +5,8 @@ import $ from '@js/core/renderer';
 import { extend } from '@js/core/utils/extend';
 import type { ItemClickEvent } from '@js/ui/drop_down_button_types';
 import type { AICustomCommand } from '@js/ui/html_editor';
-import type HtmlEditor from '@js/ui/html_editor';
 import type { Properties as PopupProperties, ToolbarItem } from '@js/ui/popup';
+import type dxSelectBox from '@js/ui/select_box';
 import SelectBox from '@js/ui/select_box';
 import TextArea from '@js/ui/text_area';
 
@@ -55,7 +55,7 @@ export default class AiDialog extends BaseDialog<AiDialogResult> {
 
   private _prompt?: AICustomCommand['prompt'];
 
-  private _commandSelectBox?: SelectBox;
+  private _commandSelectBox?: dxSelectBox;
 
   private _optionSelectBox?: SelectBox;
 
@@ -64,11 +64,11 @@ export default class AiDialog extends BaseDialog<AiDialogResult> {
   private _commandChangeSuppressed = false;
 
   constructor(
-    editorInstance: HtmlEditor,
+    $container: dxElementWrapper,
     aiService?: AIIntegration,
     popupConfig?: PopupProperties,
   ) {
-    super(editorInstance, popupConfig);
+    super($container, popupConfig);
 
     this._aiIntegration = aiService;
   }
@@ -83,7 +83,7 @@ export default class AiDialog extends BaseDialog<AiDialogResult> {
       shading: true,
       shadingColor: 'transparent',
       dragEnabled: true,
-      dragAndResizeArea: this._editorInstance.$element(),
+      dragAndResizeArea: this._$container,
       toolbarItems: this._getToolbarItems(),
       hideOnOutsideClick: true,
       focusStateEnabled: true,
@@ -91,7 +91,7 @@ export default class AiDialog extends BaseDialog<AiDialogResult> {
       position: {
         my: 'center',
         at: 'center',
-        of: this._editorInstance.$element(),
+        of: this._$container,
       },
       ...this._popupUserConfig,
     }) as PopupProperties;
@@ -100,11 +100,11 @@ export default class AiDialog extends BaseDialog<AiDialogResult> {
   protected _renderCommandSelectBox($container: dxElementWrapper): void {
     const $commandSelectBox = $('<div>').appendTo($container);
     // @ts-expect-error
-    this._commandSelectBox = this._editorInstance._createComponent($commandSelectBox, SelectBox, {
+    this._commandSelectBox = new SelectBox($commandSelectBox.get(0), {
       value: this._currentCommand,
       displayExpr: 'text',
       valueExpr: 'name',
-      onValueChanged: (e) => {
+      onValueChanged: (e): void => {
         if (this._commandChangeSuppressed) {
           return;
         }
@@ -121,11 +121,11 @@ export default class AiDialog extends BaseDialog<AiDialogResult> {
   protected _renderOptionSelectBox($container: dxElementWrapper): void {
     const $optionSelectBox = $('<div>').appendTo($container);
     // @ts-expect-error
-    this._optionSelectBox = this._editorInstance._createComponent($optionSelectBox, SelectBox, {
+    this._optionSelectBox = new SelectBox($optionSelectBox.get(0), {
       items: this._commandOptionsList,
       value: this._currentOption ?? this._commandOptionsList?.[0],
       visible: this._isCommandWithOptionsSelected(),
-      onValueChanged: (e) => {
+      onValueChanged: (e): void => {
         this._currentOption = e.value;
       },
     });
@@ -133,13 +133,12 @@ export default class AiDialog extends BaseDialog<AiDialogResult> {
 
   protected _renderResultTextArea($container: dxElementWrapper): void {
     const $textArea = $('<div>').appendTo($container);
-    // @ts-expect-error
-    this._resultTextArea = this._editorInstance._createComponent($textArea, TextArea, {
+    this._resultTextArea = new TextArea($textArea.get(0), {
       value: this._resultText,
       height: 100,
       width: '100%',
       readOnly: true,
-      onValueChanged: (e) => {
+      onValueChanged: (e): void => {
         this._resultText = e.value;
       },
     });

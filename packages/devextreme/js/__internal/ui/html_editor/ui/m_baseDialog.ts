@@ -8,7 +8,6 @@ import {
   getCurrentScreenFactor,
   hasWindow,
 } from '@js/core/utils/window';
-import type HtmlEditor from '@js/ui/html_editor';
 import type { Properties as PopupProperties } from '@js/ui/popup';
 import Popup from '@js/ui/popup';
 
@@ -19,7 +18,7 @@ const isSmallScreen = (): boolean => {
   return devices.real().deviceType === 'phone' || screenFactor === 'xs';
 };
 abstract class BaseDialog<T = unknown> {
-  _editorInstance: HtmlEditor;
+  _$container: dxElementWrapper;
 
   _popupUserConfig?: PopupProperties;
 
@@ -27,22 +26,19 @@ abstract class BaseDialog<T = unknown> {
 
   deferred?: DeferredObj<T>;
 
-  constructor(editorInstance: HtmlEditor, popupConfig?: PopupProperties) {
-    this._editorInstance = editorInstance;
+  constructor($container: dxElementWrapper, popupConfig?: PopupProperties) {
+    this._$container = $container;
     this._popupUserConfig = popupConfig;
 
     this._renderPopup();
   }
 
-  protected _renderPopup() {
-    const editorInstance = this._editorInstance;
+  protected _renderPopup(): void {
     const $container = $('<div>')
       .addClass(this._getPopupClass())
-      .appendTo(editorInstance.$element());
-    const popupConfig = this._getPopupConfig();
+      .appendTo(this._$container);
 
-    // @ts-expect-error
-    return editorInstance._createComponent($container, Popup, popupConfig);
+    this._popup = new Popup($container.get(0), this._getPopupConfig());
   }
 
   protected _getPopupConfig(): PopupProperties {

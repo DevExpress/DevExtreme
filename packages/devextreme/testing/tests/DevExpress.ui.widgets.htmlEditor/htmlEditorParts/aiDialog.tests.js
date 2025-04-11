@@ -23,14 +23,8 @@ const SELECT_BOX_CLASS = 'dx-selectbox';
 const moduleConfig = {
     beforeEach: function() {
         this.$element = $('#htmlEditor');
-        this.componentMock = {
-            _createComponent: ($container, Widget, options) => {
-                return new Widget($container, options);
-            },
-            $element: () => this.$element,
-        };
 
-        this.aiDialog = new AiDialog(this.componentMock, {}, { container: this.$element });
+        this.aiDialog = new AiDialog(this.$element, {}, { container: this.$element });
     },
 };
 
