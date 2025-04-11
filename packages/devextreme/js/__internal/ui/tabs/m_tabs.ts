@@ -648,6 +648,16 @@ class Tabs extends CollectionWidget<TabsProperties> {
     this._renderScrolling();
   }
 
+  _enterKeyHandler(
+    e: KeyboardEvent,
+  ): void {
+    const { focusedElement } = this.option();
+
+    super._enterKeyHandler(e);
+
+    this.option('focusedElement', focusedElement);
+  }
+
   _itemSelectHandler(e: DxEvent): void {
     const { selectionMode } = this.option();
     if (selectionMode === 'single' && this.isItemSelected(e.currentTarget)) {
