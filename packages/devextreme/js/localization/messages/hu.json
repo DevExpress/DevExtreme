@@ -55,6 +55,7 @@
         "dxList-selectAll-checked": "Checked",
         "dxList-selectAll-notChecked": "Not checked",
         "dxList-ariaRoleDescription": "List",
+        "dxList-listAriaLabel-itemContent": "List item content",
 
         "dxScrollView-pullingDownText": "Húzza le a frissítéshez...",
         "dxScrollView-pulledDownText": "Engedje el a frissítéshez...",
@@ -267,6 +268,7 @@
         "dxScheduler-editorLabelDescription": "Leírás",
         "dxScheduler-editorLabelRecurrence": "Ismétlődés",
 
+        "dxScheduler-navigationToday": "Today",
         "dxScheduler-navigationPrevious": "Previous page",
         "dxScheduler-navigationNext": "Next page",
 

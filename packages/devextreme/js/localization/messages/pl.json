@@ -55,6 +55,7 @@
         "dxList-selectAll-checked": "Checked",
         "dxList-selectAll-notChecked": "Not checked",
         "dxList-ariaRoleDescription": "List",
+        "dxList-listAriaLabel-itemContent": "List item content",
 
         "dxScrollView-pullingDownText": "Aby zaktualizować, przeciągnij w dół",
         "dxScrollView-pulledDownText": "Aby zaktualizować puść",
@@ -267,6 +268,7 @@
         "dxScheduler-editorLabelDescription": "Opis",
         "dxScheduler-editorLabelRecurrence": "Powtórz",
 
+        "dxScheduler-navigationToday": "Today",
         "dxScheduler-navigationPrevious": "Previous page",
         "dxScheduler-navigationNext": "Next page",
 

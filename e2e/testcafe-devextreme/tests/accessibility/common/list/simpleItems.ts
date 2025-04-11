@@ -4,7 +4,7 @@ import url from '../../../../helpers/getPageUrl';
 import { Configuration, testAccessibility } from '../../../../helpers/accessibility/test';
 
 fixture.disablePageReloads`Accessibility`
-  .page(url(__dirname, '../../container.html'));
+  .page(url(__dirname, '../../../container.html'));
 
 const simpleItems = ['Item_1', 'Item_2', 'Item_3'];
 

@@ -55,6 +55,7 @@
         "dxList-selectAll-checked": "Checked",
         "dxList-selectAll-notChecked": "Not checked",
         "dxList-ariaRoleDescription": "List",
+        "dxList-listAriaLabel-itemContent": "List item content",
 
         "dxScrollView-pullingDownText": "برای تازه کردن به پایین بکشید ...",
         "dxScrollView-pulledDownText": "انتشار برای تازه کردن ...",
@@ -267,6 +268,7 @@
         "dxScheduler-editorLabelDescription": "شرح",
         "dxScheduler-editorLabelRecurrence": "تکرار",
 
+        "dxScheduler-navigationToday": "Today",
         "dxScheduler-navigationPrevious": "Previous page",
         "dxScheduler-navigationNext": "Next page",
 

@@ -55,6 +55,7 @@
         "dxList-selectAll-checked": "Afkrydset",
         "dxList-selectAll-notChecked": "Ikke afkrydset",
         "dxList-ariaRoleDescription": "Liste",
+        "dxList-listAriaLabel-itemContent": "List item content",
 
         "dxScrollView-pullingDownText": "Træk ned for at opdatere...",
         "dxScrollView-pulledDownText": "Slip for at opdatere...",
@@ -267,6 +268,7 @@
         "dxScheduler-editorLabelDescription": "Beskrivelse",
         "dxScheduler-editorLabelRecurrence": "Gentag",
 
+        "dxScheduler-navigationToday": "Today",
         "dxScheduler-navigationPrevious": "Forrige side",
         "dxScheduler-navigationNext": "Næste side",
 

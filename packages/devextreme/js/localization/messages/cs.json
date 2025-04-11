@@ -55,6 +55,7 @@
         "dxList-selectAll-checked": "Checked",
         "dxList-selectAll-notChecked": "Not checked",
         "dxList-ariaRoleDescription": "List",
+        "dxList-listAriaLabel-itemContent": "List item content",
 
         "dxScrollView-pullingDownText": "Stáhněte dolů pro obnovení...",
         "dxScrollView-pulledDownText": "Uvolněte pro obnovení...",
@@ -267,6 +268,7 @@
         "dxScheduler-editorLabelDescription": "Popis",
         "dxScheduler-editorLabelRecurrence": "Opakovat",
 
+        "dxScheduler-navigationToday": "Today",
         "dxScheduler-navigationPrevious": "Previous page",
         "dxScheduler-navigationNext": "Next page",
 

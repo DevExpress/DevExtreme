@@ -1,6 +1,5 @@
 import type { InfernoEffect } from '@ts/core/r1/runtime/inferno/index';
 import { createReRenderEffect, InfernoWrapperComponent } from '@ts/core/r1/runtime/inferno/index';
-import { getTemplate } from '@ts/core/r1/utils/index';
 
 import type { DateTableProps } from '../base/date_table';
 import { DateTable, DateTableDefaultProps } from '../base/date_table';
@@ -24,8 +23,6 @@ export class DateTableMonth extends InfernoWrapperComponent<DateTableProps> {
       ...restProps
     } = this.props;
 
-    const DataCellTemplateComponent = getTemplate(dataCellTemplate);
-
     return (
       <DateTable
         {...restProps}
@@ -33,7 +30,7 @@ export class DateTableMonth extends InfernoWrapperComponent<DateTableProps> {
         viewContext={viewContext}
         groupOrientation={groupOrientation}
         addDateTableClass={addDateTableClass}
-        dataCellTemplate={DataCellTemplateComponent}
+        dataCellTemplate={dataCellTemplate}
         cellTemplate={DateTableMonthCell}
         tableRef={tableRef}
         addVerticalSizesClassToRows={addVerticalSizesClassToRows}

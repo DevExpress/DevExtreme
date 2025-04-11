@@ -3,7 +3,7 @@ window.config = {
   transpiler: 'plugin-babel',
   meta: {
     '*.vue': {
-      loader: 'demo-vue-loader',
+      loader: 'vue-loader',
     },
     '*.ts': {
       loader: 'demo-ts-loader',
@@ -50,7 +50,6 @@ window.config = {
     '@vue/shared': 'npm:@vue/shared/dist/shared.cjs.prod.js',
     'vue-loader': 'npm:dx-systemjs-vue-browser/index.js',
     'demo-ts-loader': 'project:utils/demo-ts-loader.js',
-    'demo-vue-loader': 'project:utils/demo-vue-loader.js',
     'jszip': 'npm:jszip/dist/jszip.min.js',
     'svg-loader': 'project:utils/svg-loader.js',
 
@@ -163,7 +162,11 @@ window.config = {
     },
     'devextreme/events': {
       main: 'index',
-    }/**//** globalize */,
+    }/** globalize */,
+    'devextreme-cldr-data': {
+      format: 'json',
+      defaultExtension: 'json',
+    },
     'globalize': {
       main: '../globalize.js',
       defaultExtension: 'js',

@@ -55,6 +55,7 @@
         "dxList-selectAll-checked": "Checked",
         "dxList-selectAll-notChecked": "Не перевірено",
         "dxList-ariaRoleDescription": "List",
+        "dxList-listAriaLabel-itemContent": "List item content",
 
         "dxScrollView-pullingDownText": "Pull down to refresh...",
         "dxScrollView-pulledDownText": "Release to refresh...",
@@ -267,6 +268,7 @@
         "dxScheduler-editorLabelDescription": "Опис",
         "dxScheduler-editorLabelRecurrence": "Repeat",
 
+        "dxScheduler-navigationToday": "Today",
         "dxScheduler-navigationPrevious": "Попередня сторінка",
         "dxScheduler-navigationNext": "Наступна сторінка",
 

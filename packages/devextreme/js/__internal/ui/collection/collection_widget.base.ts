@@ -50,7 +50,6 @@ const ITEM_DATA_KEY = 'dxItemData';
 const ITEM_INDEX_KEY = 'dxItemIndex';
 const ITEM_TEMPLATE_ID_PREFIX = 'tmpl-';
 const ITEMS_OPTIONS_NAME = 'dxItem';
-const SELECTED_ITEM_CLASS = 'dx-item-selected';
 const ITEM_RESPONSE_WAIT_CLASS = 'dx-item-response-wait';
 const EMPTY_COLLECTION = 'dx-empty-collection';
 const TEMPLATE_WRAPPER_CLASS = 'dx-template-wrapper';
@@ -104,8 +103,6 @@ export interface CollectionWidgetBaseProperties<
     TKey = any,
 > extends CollectionWidgetOptions<TComponent, TItem, TKey> {
   focusedElement?: dxElementWrapper;
-
-  focusOnSelectedItem?: boolean;
 
   encodeNoDataText?: boolean;
 
@@ -236,7 +233,6 @@ class CollectionWidget<
 
       _itemAttributes: {},
       itemTemplateProperty: 'template',
-      focusOnSelectedItem: true,
       focusedElement: null,
 
       displayExpr: undefined,
@@ -420,25 +416,24 @@ class CollectionWidget<
       return $focusedElement;
     }
 
-    const { focusOnSelectedItem } = this.option();
+    return this._determineFocusedElement(last);
+  }
 
-    let index = focusOnSelectedItem ? this._getFlatIndex() : 0;
+  _determineFocusedElement(last?: boolean): dxElementWrapper {
+    let index = this._getFocusedElementIndex();
 
     const activeElements = this._getActiveElement();
     const lastIndex = activeElements.length - 1;
 
-    // @ts-expect-error ts-error
     if (index < 0) {
       index = last ? lastIndex : 0;
     }
-    // @ts-expect-error ts-error
+
     return activeElements.eq(index);
   }
 
-  _getFlatIndex(): number | undefined {
-    const { selectedIndex } = this.option();
-
-    return selectedIndex;
+  _getFocusedElementIndex(): number {
+    return 0;
   }
 
   // eslint-disable-next-line consistent-return
@@ -655,8 +650,12 @@ class CollectionWidget<
   _resetItemFocus($item: dxElementWrapper): void {
     // @ts-expect-error ts-error
     if ($item.is(this.option('focusedElement'))) {
-      this.option('focusedElement', null);
+      this._resetFocusedElement();
     }
+  }
+
+  _resetFocusedElement(): void {
+    this.option('focusedElement', null);
   }
 
   _refreshItem(
@@ -732,7 +731,6 @@ class CollectionWidget<
         break;
       case 'selectOnFocus':
       case 'loopItemFocus':
-      case 'focusOnSelectedItem':
         break;
       case 'focusedElement':
         this._updateFocusedItemState(previousValue as Element | undefined, false, true);
@@ -753,7 +751,7 @@ class CollectionWidget<
   }
 
   _invalidate(): void {
-    this.option('focusedElement', null);
+    this._resetFocusedElement();
 
     super._invalidate();
   }
@@ -856,10 +854,6 @@ class CollectionWidget<
 
   _itemContentClass(): string {
     return `${this._itemClass()}${CONTENT_CLASS_POSTFIX}`;
-  }
-
-  _selectedItemClass(): string {
-    return SELECTED_ITEM_CLASS;
   }
 
   _itemResponseWaitClass(): string {

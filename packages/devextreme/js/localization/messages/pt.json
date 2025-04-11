@@ -55,6 +55,7 @@
         "dxList-selectAll-checked": "Marcado",
         "dxList-selectAll-notChecked": "Não marcado",
         "dxList-ariaRoleDescription": "List",
+        "dxList-listAriaLabel-itemContent": "List item content",
 
         "dxScrollView-pullingDownText": "Puxar para baixo para recarregar...",
         "dxScrollView-pulledDownText": "Soltar para recarregar...",
@@ -267,6 +268,7 @@
         "dxScheduler-editorLabelDescription": "Descrição",
         "dxScheduler-editorLabelRecurrence": "Repetir",
 
+        "dxScheduler-navigationToday": "Today",
         "dxScheduler-navigationPrevious": "Página anterior",
         "dxScheduler-navigationNext": "Próxima página",
 

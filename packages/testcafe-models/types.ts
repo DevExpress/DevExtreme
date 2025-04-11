@@ -54,6 +54,7 @@ export type WidgetName =
   | 'dxSortable'
   | 'dxSpeedDialAction'
   | 'dxSplitter'
+  | 'dxStepper'
   | 'dxSwitch'
   | 'dxTabPanel'
   | 'dxTabs'

@@ -40,8 +40,8 @@
         "devextreme-aspnet-data": "5.0.0",
         "devextreme-aspnet-data-nojquery": "5.0.0",
         "devextreme-cldr-data": "1.0.3",
-        "devextreme-quill": "1.7.2",
-        "dx-systemjs-vue-browser": "1.1.1",
+        "devextreme-quill": "1.7.1",
+        "dx-systemjs-vue-browser": "1.1.2",
         "esbuild": "0.25.0",
         "esbuild-plugin-vue3": "0.3.2",
         "eslint-plugin-react-hooks": "4.6.0",
@@ -143,7 +143,7 @@
         "systemjs-builder": "0.16.15",
         "testcafe": "2.6.2",
         "ts-node": "10.9.2",
-        "vue-tsc": "^2.2.2"
+        "vue-tsc": "^2.2.8"
     },
     "scripts": {
         "test": "jest --coverage --runInBand",

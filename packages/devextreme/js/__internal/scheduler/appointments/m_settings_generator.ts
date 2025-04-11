@@ -6,12 +6,12 @@ import { dateUtilsTs } from '@ts/core/utils/date';
 import { getGroupCount, isDateAndTimeView } from '@ts/scheduler/r1/utils/index';
 
 import { createAppointmentAdapter } from '../m_appointment_adapter';
-import { ExpressionUtils } from '../m_expression_utils';
 import { getRecurrenceProcessor } from '../m_recurrence';
 import timeZoneUtils from '../m_utils_time_zone';
 import {
   createResourcesTree, getDataAccessors, getResourceTreeLeaves,
 } from '../resources/m_utils';
+import type { AppointmentDataAccessor } from '../utils';
 import { CellPositionCalculator } from './m_cell_position_calculator';
 import { createFormattedDateText } from './m_text_utils';
 
@@ -59,7 +59,7 @@ export class DateGeneratorBaseStrategy {
 
   get isVerticalOrientation() { return this.options.isVerticalGroupOrientation; }
 
-  get dataAccessors() { return this.options.dataAccessors; }
+  get dataAccessors(): AppointmentDataAccessor { return this.options.dataAccessors; }
 
   get loadedResources() { return this.options.loadedResources; }
 
@@ -260,7 +260,7 @@ export class DateGeneratorBaseStrategy {
     }
 
     const endDayHour = this.viewEndDayHour;
-    const allDay = ExpressionUtils.getField(this.dataAccessors, 'allDay', rawAppointment);
+    const allDay = this.dataAccessors.get('allDay', rawAppointment);
     const currentViewEndTime = new Date(new Date(endDate.getTime()).setHours(endDayHour, 0, 0, 0));
 
     if (result.getTime() > currentViewEndTime.getTime() || (allDay && result.getHours() < endDayHour)) {
@@ -636,7 +636,7 @@ export class AppointmentSettingsGenerator {
 
   get rawAppointment() { return this.options.rawAppointment; }
 
-  get dataAccessors() { return this.options.dataAccessors; }
+  get dataAccessors(): AppointmentDataAccessor { return this.options.dataAccessors; }
 
   get timeZoneCalculator() { return this.options.timeZoneCalculator; }
 

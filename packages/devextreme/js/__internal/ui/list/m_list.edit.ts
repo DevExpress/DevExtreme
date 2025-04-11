@@ -4,8 +4,9 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { extend } from '@js/core/utils/extend';
 import type { Item } from '@js/ui/list';
-import { isNumeric } from '@ts/core/utils/m_type';
+import { isNumeric, isObject } from '@ts/core/utils/m_type';
 import type { OptionChanged } from '@ts/core/widget/types';
+import { NOT_EXISTING_INDEX } from '@ts/ui/collection/m_collection_widget.edit';
 
 import type { ListBaseProperties } from './m_list.base';
 import { ListBase } from './m_list.base';
@@ -44,8 +45,12 @@ class ListEdit extends ListBase {
         const nextItemIndex = focusedItemIndex + (moveUp ? -1 : 1);
         const $nextItem = editStrategy.getItemElement(nextItemIndex);
 
-        this.reorderItem(focusedElement, $nextItem);
-        this.scrollToItem(focusedElement);
+        const isMoveFromGroup = this.option('grouped')
+          && $(focusedElement).parent().get(0) !== $nextItem.parent().get(0);
+        if (!isMoveFromGroup) {
+          this.reorderItem(focusedElement, $nextItem);
+          this.scrollToItem(focusedElement);
+        }
         e.preventDefault();
       } else {
         const editProvider = this._editProvider;
@@ -225,11 +230,15 @@ class ListEdit extends ListBase {
     return $itemFrame;
   }
 
-  _updateItemAriaLabel($itemFrame, itemData) {
+  _updateItemAriaLabel($itemFrame: dxElementWrapper, itemData: Item): void {
     // @ts-expect-error ts-error
     const label = this._displayGetter?.(itemData) ?? itemData?.text ?? itemData;
 
-    this.setAria('label', label, $itemFrame);
+    this.setAria(
+      'label',
+      isObject(label) ? localizationMessage.format('dxList-listAriaLabel-itemContent') : label,
+      $itemFrame,
+    );
   }
 
   _selectedItemClass() {
@@ -318,8 +327,8 @@ class ListEdit extends ListBase {
     this.scrollToItem(this.option('focusedElement'));
   }
 
-  _getFlatIndex(): number | undefined {
-    const { selectedIndex } = this.option();
+  _getFlatIndex(): number {
+    const { selectedIndex = NOT_EXISTING_INDEX } = this.option();
 
     if (isNumeric(selectedIndex) || !selectedIndex) {
       return selectedIndex;

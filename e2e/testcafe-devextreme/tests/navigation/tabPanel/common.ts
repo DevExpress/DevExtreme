@@ -734,3 +734,32 @@ test('TabPanel tabs min-width', async (t) => {
 
   return createWidget('dxTabPanel', tabPanelOptions);
 });
+
+['left', 'right'].forEach((tabsPosition) => {
+  test('TabPanel should be shown correctly even if there is only one tab', async (t) => {
+    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+    await testScreenshot(t, takeScreenshot, `TabPanel with single tab, tabPosition=${tabsPosition}.png`, { element: '#container' });
+
+    await t
+      .expect(compareResults.isValid())
+      .ok(compareResults.errorMessages());
+  }).before(async () => {
+    const dataSource: Item[] = [
+      {
+        title: 'John Heart',
+        text: 'John Heart',
+      },
+    ];
+
+    const tabPanelOptions = {
+      dataSource,
+      height: 120,
+      width: 300,
+      showNavButtons: true,
+      tabsPosition,
+    };
+
+    return createWidget('dxTabPanel', tabPanelOptions);
+  });
+});

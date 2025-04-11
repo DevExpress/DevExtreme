@@ -2,10 +2,9 @@ import dateUtils from '@js/core/utils/date';
 import { extend } from '@js/core/utils/extend';
 import { roundFloatPart } from '@js/core/utils/math';
 import { isNumeric } from '@js/core/utils/type';
-import { getAppointmentTakesAllDay, getSkippedHoursInRange } from '@ts/scheduler/r1/utils/index';
+import { getSkippedHoursInRange, isAppointmentTakesAllDay } from '@ts/scheduler/r1/utils/index';
 
 import { createAppointmentAdapter } from '../../m_appointment_adapter';
-import { ExpressionUtils } from '../../m_expression_utils';
 import timeZoneUtils from '../../m_utils_time_zone';
 import BaseAppointmentsStrategy from './m_strategy_base';
 
@@ -68,7 +67,7 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
 
     const appointmentStartDate = adapter.calculateStartDate('toGrid');
     const appointmentEndDate = adapter.calculateEndDate('toGrid');
-    const appointmentDuration = appointmentEndDate - appointmentStartDate;
+    const appointmentDuration = appointmentEndDate.getTime() - appointmentStartDate.getTime();
 
     const appointmentBeginInCurrentView = this.options.startViewDate < appointmentStartDate;
     const isAppointmentTakesSeveralDays = !timeZoneUtils.isSameAppointmentDates(appointmentStartDate, appointmentEndDate);
@@ -311,7 +310,7 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
   }
 
   isAllDay(appointmentData) {
-    return getAppointmentTakesAllDay(
+    return isAppointmentTakesAllDay(
       createAppointmentAdapter(appointmentData, this.dataAccessors, this.timeZoneCalculator),
       this.allDayPanelMode,
     );
@@ -358,7 +357,7 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
       startDate,
       normalizedEndDate,
     } = position.info.appointment;
-    const allDay = ExpressionUtils.getField(this.dataAccessors, 'allDay', appointment);
+    const allDay = this.dataAccessors.get('allDay', appointment);
     const duration = this.getAppointmentDurationInMs(startDate, normalizedEndDate, allDay);
     const skippedMinutes = getSkippedHoursInRange(
       startDate,

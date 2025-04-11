@@ -89,15 +89,14 @@ function onExporting(e: DxPivotGridTypes.ExportingEvent) {
     });
   });
 }
-function onCellPrepared({ cell, area, cellElement }) {
-  cell.area = area;
+function onCellPrepared({ cell, area, cellElement }: DxPivotGridTypes.CellPreparedEvent) {
   if (isDataCell(cell) || isTotalCell(cell)) {
     const appearance = getConditionalAppearance(cell);
     Object.assign(cellElement.style, getCssStyles(appearance));
   }
 }
 function isDataCell(cell) {
-  return (cell.area === 'data' && cell.rowType === 'D' && cell.columnType === 'D');
+  return (cell.rowType === 'D' && cell.columnType === 'D');
 }
 function isTotalCell(cell) {
   return (cell.type === 'T' || cell.type === 'GT' || cell.rowType === 'T' || cell.rowType === 'GT' || cell.columnType === 'T' || cell.columnType === 'GT');

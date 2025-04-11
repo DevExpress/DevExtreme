@@ -863,6 +863,93 @@ declare module DevExpress {
     static validateModel(model: any): any;
   }
 }
+declare module DevExpress.aiIntegration {
+  /**
+   * [descr:AIIntegration]
+   */
+  export class AIIntegration {
+    /**
+     * @docid
+     * @param provider
+     */
+    constructor(provider: AIProvider);
+    translate(
+      params: TranslateCommandParams,
+      callbacks: RequestCallbacks
+    ): () => void;
+  }
+  /**
+   * [descr:AIProvider]
+   */
+  export type AIProvider = {
+    /**
+     * [descr:AIProvider.sendRequest]
+     */
+    sendRequest: (params: RequestParams) => Response;
+  };
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  export type BaseCommandResult = TranslateCommandResult;
+  /**
+   * [descr:Prompt]
+   */
+  export type Prompt = {
+    /**
+     * [descr:Prompt.system]
+     */
+    system?: string;
+    /**
+     * [descr:Prompt.user]
+     */
+    user?: string;
+  };
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  export type RequestCallbacks = {
+    onChunk?: (chunk: string) => void;
+    onComplete?: (finalResponse: BaseCommandResult) => void;
+    onError?: (error: Error) => void;
+  };
+  /**
+   * [descr:RequestParams]
+   */
+  export type RequestParams = {
+    /**
+     * [descr:RequestParams.prompt]
+     */
+    prompt: Prompt;
+    /**
+     * [descr:RequestParams.onChunk]
+     */
+    onChunk: (chunk: string) => void;
+  };
+  /**
+   * [descr:Response]
+   */
+  export type Response = {
+    /**
+     * [descr:Response.promise]
+     */
+    promise: Promise<string>;
+    /**
+     * [descr:Response.abort]
+     */
+    abort: () => void;
+  };
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  export type TranslateCommandParams = {
+    text: string;
+    lang: string;
+  };
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  export type TranslateCommandResult = string;
+}
 declare module DevExpress.animation {
   /**
    * @deprecated Use the DevExpress.common.core.animation.AnimationConfig type from common/core/animation instead
@@ -19584,6 +19671,46 @@ declare module DevExpress.ui {
     undo(): void;
   }
   module dxHtmlEditor {
+    export type AIChangeStyleOption =
+      | 'formal'
+      | 'informal'
+      | 'technical'
+      | 'business'
+      | 'creative'
+      | 'journalistic'
+      | 'academic'
+      | 'persuasive'
+      | 'narrative'
+      | 'expository'
+      | 'descriptive'
+      | 'conversational';
+    export type AIChangeToneOption =
+      | 'professional'
+      | 'casual'
+      | 'straightforward'
+      | 'confident'
+      | 'friendly';
+    export type AICommandName =
+      | 'summarize'
+      | 'proofread'
+      | 'expand'
+      | 'shorten'
+      | 'changeStyle'
+      | 'changeTone'
+      | 'translate'
+      | 'askAI';
+    /**
+     * [descr:AICommandNameExtended]
+     */
+    export type AICommandNameExtended = AICommandName | 'custom';
+    export type AITranslateOption =
+      | 'arabic'
+      | 'chinese'
+      | 'english'
+      | 'french'
+      | 'german'
+      | 'japanese'
+      | 'spanish';
     /**
      * [descr:_ui_html_editor_ContentReadyEvent]
      */
@@ -19703,7 +19830,8 @@ declare module DevExpress.ui {
       | 'insertColumnRight'
       | 'deleteColumn'
       | 'deleteRow'
-      | 'deleteTable';
+      | 'deleteTable'
+      | 'ai';
     /**
      * [descr:_ui_html_editor_InitializedEvent]
      */
@@ -31784,6 +31912,96 @@ declare module DevExpress.ui.dxGantt {
   export type ToolbarItem = dxGanttToolbarItem;
 }
 declare module DevExpress.ui.dxHtmlEditor {
+  /**
+   * [descr:AIChangeStyleCommand]
+   */
+  export type AIChangeStyleCommand = AICommandBase<
+    'changeStyle',
+    (AIChangeStyleOption | string)[]
+  >;
+  /**
+   * [descr:AIChangeToneCommand]
+   */
+  export type AIChangeToneCommand = AICommandBase<
+    'changeTone',
+    (AIChangeToneOption | string)[]
+  >;
+  /**
+   * [descr:AICommand]
+   */
+  export type AICommand =
+    | AICommandBase<'summarize', any>
+    | AICommandBase<'proofread', any>
+    | AICommandBase<'expand', any>
+    | AICommandBase<'shorten', any>
+    | AICommandBase<'askAI', any>
+    | AIChangeStyleCommand
+    | AIChangeToneCommand
+    | AITranslateCommand
+    | AICustomCommand;
+  /**
+   * [descr:AICommandBase]
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  export interface AICommandBase<
+    CommandName extends AICommandNameExtended,
+    CommandOptions = undefined
+  > {
+    /**
+     * [descr:AICommandBase.name]
+     */
+    name: AICommandNameExtended;
+    /**
+     * [descr:AICommandBase.text]
+     */
+    text?: string;
+    /**
+     * [descr:AICommandBase.options]
+     */
+    options?: CommandOptions;
+  }
+  /**
+   * [descr:AICustomCommand]
+   */
+  export interface AICustomCommand extends AICommandBase<'custom', string[]> {
+    /**
+     * [descr:AICustomCommand.prompt]
+     */
+    prompt: (param?: string) => string;
+    /**
+     * [descr:AICustomCommand.text]
+     */
+    text: string;
+  }
+  /**
+   * [descr:AIToolbarItem]
+   */
+  export interface AIToolbarItem
+    extends Omit<
+      DevExpress.ui.dxToolbar.Item,
+      | 'menuItemTemplate'
+      | 'showText'
+      | 'widget'
+      | 'options'
+      | 'template'
+      | 'html'
+    > {
+    /**
+     * [descr:AIToolbarItem.name]
+     */
+    name: 'ai';
+    /**
+     * [descr:AIToolbarItem.commands]
+     */
+    commands?: Array<AICommandName | AICommand>;
+  }
+  /**
+   * [descr:AITranslateCommand]
+   */
+  export type AITranslateCommand = AICommandBase<
+    'translate',
+    (AITranslateOption | string)[]
+  >;
   export type ContextMenuItem = dxHtmlEditorTableContextMenuItem;
   /**
    * [descr:Converter]
@@ -31799,7 +32017,7 @@ declare module DevExpress.ui.dxHtmlEditor {
     fromHtml?: (value: string) => string;
   };
   export type ImageUploadTab = dxHtmlEditorImageUploadTabItem;
-  export type ToolbarItem = dxHtmlEditorToolbarItem;
+  export type ToolbarItem = dxHtmlEditorToolbarItem | AIToolbarItem;
 }
 declare module DevExpress.ui.dxList {
   export type Item = dxListItem;

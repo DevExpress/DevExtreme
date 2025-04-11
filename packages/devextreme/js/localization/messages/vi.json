@@ -55,6 +55,7 @@
         "dxList-selectAll-checked": "Checked",
         "dxList-selectAll-notChecked": "Not checked",
         "dxList-ariaRoleDescription": "List",
+        "dxList-listAriaLabel-itemContent": "List item content",
 
         "dxScrollView-pullingDownText": "Kéo xuống để làm tươi...",
         "dxScrollView-pulledDownText": "Nhả ra để làm tươi...",
@@ -267,6 +268,7 @@
         "dxScheduler-editorLabelDescription": "Mô tả",
         "dxScheduler-editorLabelRecurrence": "Lặp lại",
 
+        "dxScheduler-navigationToday": "Today",
         "dxScheduler-navigationPrevious": "Previous page",
         "dxScheduler-navigationNext": "Next page",
 

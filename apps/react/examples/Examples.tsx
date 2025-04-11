@@ -26,6 +26,7 @@ import ValidationExample from './validation-example';
 import SelectBoxTemplatesExample from './selectbox-templates-example';
 import SelectBoxFieldTemplateExample from './selectbox-fieldtemplate-example';
 import SelectBoxParallelTemplateRenderExample from './selectbox-parallel-template-render-example';
+import TagBoxFieldTemplateCheckBoxesExample from './tagbox-fieldtemplate-checkboxes-example';
 
 const Examples = () => {
     return (
@@ -90,6 +91,10 @@ const Examples = () => {
 
             <Example title="SelectBox example with templates for item and field">
                 <SelectBoxTemplatesExample />
+            </Example>
+
+            <Example title="TagBox with field template and showSelectionControls=true">
+                <TagBoxFieldTemplateCheckBoxesExample />
             </Example>
 
             <Example title="SelectBox example with field template (controlled mode)">

@@ -82,6 +82,12 @@ class SplitterItem extends CollectionWidgetItem<Item> {
   isLast(): boolean {
     return this._owner._isLastVisibleItem(this.getIndex());
   }
+
+  _dispose(): void {
+    this._removeResizeHandle();
+
+    super._dispose();
+  }
 }
 
 export default SplitterItem;
