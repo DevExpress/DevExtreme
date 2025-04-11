@@ -20,7 +20,7 @@ const setupHtmlEditorWithAi = (config) => {
 };
 
 QUnit.module('Toolbar AI dialog integration', {}, () => {
-    QUnit.test('Should replace result text', function(assert) {
+    QUnit.test('replace button click should replace selected text with a text in result textArea', function(assert) {
         const done = assert.async();
 
         const instance = setupHtmlEditorWithAi({
@@ -36,7 +36,7 @@ QUnit.module('Toolbar AI dialog integration', {}, () => {
         clickActionButton('replace');
     });
 
-    QUnit.test('Should insert above result text', function(assert) {
+    QUnit.test('insertAbove button click should insert text from result textArea above the selected text', function(assert) {
         const done = assert.async();
 
         const instance = setupHtmlEditorWithAi({
@@ -52,7 +52,7 @@ QUnit.module('Toolbar AI dialog integration', {}, () => {
         clickActionButton('insertAbove');
     });
 
-    QUnit.test('Should insert below result text', function(assert) {
+    QUnit.test('insertBelow button click should insert text from result textArea below the selected text', function(assert) {
         const done = assert.async();
 
         const instance = setupHtmlEditorWithAi({
@@ -94,7 +94,7 @@ QUnit.module('Toolbar AI dialog integration', {}, () => {
         assert.strictEqual(resultText, 'Test value\n', 'all text used in resultTextArea');
     });
 
-    QUnit.test('Should call saveValueChangeEvent with correct event', function(assert) {
+    QUnit.test('onValueChanged should receive correct event parameter if value is updated after action button click', function(assert) {
         const done = assert.async();
 
         setupHtmlEditorWithAi({
