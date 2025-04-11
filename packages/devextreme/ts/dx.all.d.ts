@@ -24386,11 +24386,17 @@ declare module DevExpress.ui {
      * [descr:AppointmentCollectorTemplateData]
      */
     export type AppointmentCollectorTemplateData = {
+      /**
+       * [descr:AppointmentCollectorTemplateData.appointmentCount]
+       */
       readonly appointmentCount: number;
       /**
        * [descr:AppointmentCollectorTemplateData.items]
        */
       readonly items: Appointment[];
+      /**
+       * [descr:AppointmentCollectorTemplateData.isCompact]
+       */
       readonly isCompact: boolean;
     };
     /**
