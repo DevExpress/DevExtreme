@@ -13,7 +13,7 @@ import validationEngine from "devextreme/ui/validation_engine";
 import { initialSteps, formData, mealPlans, roomTypes } from "./data";
 import './styles.css';
 
-const FormIntegration: FC<IStepperOptions> = memo(() => {
+const SingleFormIntegration: FC<IStepperOptions> = memo(() => {
     const [selectedIndex, setSelectedIndex] = useState(0);
     const [steps, setSteps] = useState(initialSteps);
 
@@ -224,4 +224,4 @@ const FormIntegration: FC<IStepperOptions> = memo(() => {
     );
 });
 
-export default FormIntegration;
+export default SingleFormIntegration;
