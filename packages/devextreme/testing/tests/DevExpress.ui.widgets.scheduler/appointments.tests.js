@@ -259,17 +259,14 @@ QUnit.module('Appointments', moduleOptions, () => {
 
         instance.option('items', [
             {
-                itemData:
-                {
+                itemData: {
                     text: 'Appointment 1',
                     startDate: new Date(2015, 1, 9, 8),
                     endDate: new Date(2015, 1, 9, 9)
                 },
-                settings: [
-                    {
-                        height: 30
-                    }
-                ]
+                settings: [{ height: 30 }],
+                needRepaint: true,
+                needRemove: false,
             }
         ]);
 
@@ -442,7 +439,9 @@ QUnit.module('Appointments', moduleOptions, () => {
                 endDate: new Date(2015, 1, 9, 9),
                 allDay: true
             },
-            settings: [{ allDay: true }]
+            settings: [{ allDay: true }],
+            needRepaint: true,
+            needRemove: false,
         };
 
         const instance = createInstance({}, testConfig);
@@ -622,7 +621,9 @@ QUnit.module('Appointments Actions', moduleOptions, () => {
                 { top: 0, left: 0, height: 10, sortedIndex: 0, width: 10, count: 1, index: 0, allDay: false, appointmentReduced: null },
                 { top: 10, left: 10, height: 10, sortedIndex: 0, width: 10, count: 1, index: 0 },
                 { top: 20, left: 20, height: 10, sortedIndex: 0, width: 10, count: 1, index: 0 }
-            ]
+            ],
+            needRepaint: true,
+            needRemove: false,
         };
 
         const instance = createInstance({}, testConfig);
