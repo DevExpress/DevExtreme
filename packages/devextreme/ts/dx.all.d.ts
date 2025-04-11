@@ -863,6 +863,93 @@ declare module DevExpress {
     static validateModel(model: any): any;
   }
 }
+declare module DevExpress.aiIntegration {
+  /**
+   * [descr:AIIntegration]
+   */
+  export class AIIntegration {
+    /**
+     * @docid
+     * @param provider
+     */
+    constructor(provider: AIProvider);
+    translate(
+      params: TranslateCommandParams,
+      callbacks: RequestCallbacks
+    ): () => void;
+  }
+  /**
+   * [descr:AIProvider]
+   */
+  export type AIProvider = {
+    /**
+     * [descr:AIProvider.sendRequest]
+     */
+    sendRequest: (params: RequestParams) => Response;
+  };
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  export type BaseCommandResult = TranslateCommandResult;
+  /**
+   * [descr:Prompt]
+   */
+  export type Prompt = {
+    /**
+     * [descr:Prompt.system]
+     */
+    system?: string;
+    /**
+     * [descr:Prompt.user]
+     */
+    user?: string;
+  };
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  export type RequestCallbacks = {
+    onChunk?: (chunk: string) => void;
+    onComplete?: (finalResponse: BaseCommandResult) => void;
+    onError?: (error: Error) => void;
+  };
+  /**
+   * [descr:RequestParams]
+   */
+  export type RequestParams = {
+    /**
+     * [descr:RequestParams.prompt]
+     */
+    prompt: Prompt;
+    /**
+     * [descr:RequestParams.onChunk]
+     */
+    onChunk: (chunk: string) => void;
+  };
+  /**
+   * [descr:Response]
+   */
+  export type Response = {
+    /**
+     * [descr:Response.promise]
+     */
+    promise: Promise<string>;
+    /**
+     * [descr:Response.abort]
+     */
+    abort: () => void;
+  };
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  export type TranslateCommandParams = {
+    text: string;
+    lang: string;
+  };
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  export type TranslateCommandResult = string;
+}
 declare module DevExpress.animation {
   /**
    * @deprecated Use the DevExpress.common.core.animation.AnimationConfig type from common/core/animation instead

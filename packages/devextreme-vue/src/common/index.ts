@@ -74,6 +74,7 @@ export {
     VerticalEdge,
 } from "devextreme/common";
 
+export * as AiIntegration from "./ai-integration";
 export * as Charts from "./charts";
 export * as Core from "./core/index";
 export * as Data from "./data";
