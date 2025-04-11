@@ -3,6 +3,7 @@
     <DxList
       :data-source="dataSource"
       height="100%"
+      display-expr="Name"
     >
       <template #item="{ data: item }">
         <ProductInfo :item="item"/>

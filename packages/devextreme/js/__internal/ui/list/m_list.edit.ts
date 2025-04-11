@@ -1,5 +1,6 @@
 import $ from '@js/core/renderer';
 import { extend } from '@js/core/utils/extend';
+import { isObject } from '@js/core/utils/type';
 import { isTouchEvent } from '@js/events/utils/index';
 import localizationMessage from '@js/localization/message';
 
@@ -209,7 +210,11 @@ const ListEdit = ListBase.inherit({
   _updateItemAriaLabel($itemFrame, itemData) {
     const label = this._displayGetter?.(itemData) ?? itemData?.text ?? itemData;
 
-    this.setAria('label', label, $itemFrame);
+    this.setAria(
+      'label',
+      isObject(label) ? localizationMessage.format('dxList-listAriaLabel-itemContent') : label,
+      $itemFrame,
+    );
   },
 
   _selectedItemClass() {
