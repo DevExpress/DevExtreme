@@ -402,7 +402,7 @@ export type AppointmentCollectorTemplateData = {
   readonly appointmentCount: number;
   /**
    * @docid
-   * @type dxSchedulerAppointment
+   * @type dxSchedulerAppointment[]
    */
   readonly items: Appointment[];
   /**
