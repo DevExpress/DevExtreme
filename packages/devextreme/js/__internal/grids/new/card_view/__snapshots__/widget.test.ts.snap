@@ -132,5 +132,13 @@ exports[`common initial render should be successfull 1`] = `
     
   </div>
   
+  <div
+    class="dx-cardview-exclude-flexbox"
+  >
+    <div
+      class="dx-context-menu dx-has-context-menu dx-widget dx-visibility-change-handler dx-collection"
+      role="presentation"
+    />
+  </div>
 </div>
 `;

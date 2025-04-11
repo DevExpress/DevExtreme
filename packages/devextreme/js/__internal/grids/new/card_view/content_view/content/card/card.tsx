@@ -72,6 +72,8 @@ export interface CardProps {
 
   onPrepared?: (e: CardPreparedEvent) => void;
 
+  onContextMenu?: (e: MouseEvent, card?: DataRow, cardIndex?: number) => void;
+
   selectCard?: (row: DataRow, options: SelectCardOptions) => void;
 }
 
@@ -100,6 +102,8 @@ export class Card extends Component<CardProps> {
       [CLASSES.selectCard]: !!row.isSelected,
     });
 
+    const hasCover = cover?.imageExpr;
+
     const imageSrc = cover?.imageExpr?.(this.props.row.data);
     const alt = cover?.altExpr?.(this.props.row.data);
 
@@ -111,6 +115,7 @@ export class Card extends Component<CardProps> {
         onDblClick={this.handleDoubleClick}
         onMouseEnter={this.handleMouseEnter}
         onMouseLeave={this.handleMouseLeave}
+        onContextMenu={this.props.onContextMenu}
       >
         <CardHeader
           row={row}
@@ -118,12 +123,12 @@ export class Card extends Component<CardProps> {
           isCheckBoxesRendered={this.props.isCheckBoxesRendered}
           selectCard={this.props.selectCard}
         />
-        {imageSrc && (
+        {hasCover && (
           <Cover
             imageSrc={imageSrc}
             alt={alt}
           />
-        )}
+        ) }
         <div className={CLASSES.content}>
           {this.props.row.cells.map((cell, index) => (
             <FieldTemplate
