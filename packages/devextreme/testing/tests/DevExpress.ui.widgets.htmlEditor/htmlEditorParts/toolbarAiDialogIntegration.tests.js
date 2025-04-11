@@ -5,7 +5,7 @@ import 'ui/html_editor';
 import { openAiDialog } from '../../../helpers/aiToolbarMenu.js';
 import { selectInsertionMode, setResultText, getResultText } from '../../../helpers/aiDialog.js';
 
-const setupHtmlEditorWithAi = (onValueChanged, config) => {
+const setupHtmlEditorWithAi = (config) => {
     return $('#htmlEditor').dxHtmlEditor({
         value: 'Test value',
         ai: {},
@@ -15,7 +15,6 @@ const setupHtmlEditorWithAi = (onValueChanged, config) => {
                 commands: ['summarize']
             }],
         },
-        onValueChanged,
         ...config
     }).dxHtmlEditor('instance');
 };
@@ -24,10 +23,12 @@ QUnit.module('Toolbar AI dialog integration', {}, () => {
     QUnit.test('Should replace result text', function(assert) {
         const done = assert.async();
 
-        const instance = setupHtmlEditorWithAi(() => {
-            const value = instance.option('value');
-            assert.strictEqual(value, '<p>Inserted value</p>', 'value replaced');
-            done();
+        const instance = setupHtmlEditorWithAi({
+            onValueChanged: () => {
+                const value = instance.option('value');
+                assert.strictEqual(value, '<p>Inserted value</p>', 'value replaced');
+                done();
+            }
         });
 
         openAiDialog($('#htmlEditor'));
@@ -38,10 +39,12 @@ QUnit.module('Toolbar AI dialog integration', {}, () => {
     QUnit.test('Should insert above result text', function(assert) {
         const done = assert.async();
 
-        const instance = setupHtmlEditorWithAi(() => {
-            const value = instance.option('value');
-            assert.strictEqual(value, '<p>Inserted value</p><p>Test value</p>', 'inserted above');
-            done();
+        const instance = setupHtmlEditorWithAi({
+            onValueChanged: () => {
+                const value = instance.option('value');
+                assert.strictEqual(value, '<p>Inserted value</p><p>Test value</p>', 'inserted above');
+                done();
+            }
         });
 
         openAiDialog($('#htmlEditor'));
@@ -52,10 +55,12 @@ QUnit.module('Toolbar AI dialog integration', {}, () => {
     QUnit.test('Should insert below result text', function(assert) {
         const done = assert.async();
 
-        const instance = setupHtmlEditorWithAi(() => {
-            const value = instance.option('value');
-            assert.strictEqual(value, '<p>Test value</p><p>Inserted value</p>', 'inserted below');
-            done();
+        const instance = setupHtmlEditorWithAi({
+            onValueChanged: () => {
+                const value = instance.option('value');
+                assert.strictEqual(value, '<p>Test value</p><p>Inserted value</p>', 'inserted below');
+                done();
+            }
         });
 
         openAiDialog($('#htmlEditor'));
@@ -92,12 +97,14 @@ QUnit.module('Toolbar AI dialog integration', {}, () => {
     QUnit.test('Should call saveValueChangeEvent with correct event', function(assert) {
         const done = assert.async();
 
-        setupHtmlEditorWithAi(({ event }) => {
-            const clickedText = $(event.target).text();
+        setupHtmlEditorWithAi({
+            onValueChanged: ({ event }) => {
+                const clickedText = $(event.target).text();
 
-            assert.strictEqual(event.type, 'dxclick', 'called with correct event type');
-            assert.strictEqual(clickedText, 'Replace', 'called on correct element');
-            done();
+                assert.strictEqual(event.type, 'dxclick', 'called with correct event type');
+                assert.strictEqual(clickedText, 'Replace', 'called on correct element');
+                done();
+            }
         });
 
         openAiDialog($('#htmlEditor'));
