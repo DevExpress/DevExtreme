@@ -6,20 +6,20 @@ import { each } from '@js/core/utils/iterator';
 import { setHeight, setWidth } from '@js/core/utils/style';
 import Button from '@js/ui/button';
 import Popup from '@js/ui/popup/ui.popup';
+import { capitalize } from '@ts/core/utils/capitalize';
 
 import { AreaItem } from '../area_item/m_area_item';
-import { capitalizeFirstLetter } from '../m_widget_utils';
 
 const DIV = '<div>';
 
 const AREA_DRAG_CLASS = 'dx-pivotgrid-drag-action';
 
 function renderGroupConnector(field, nextField, prevField, $container) {
-  if (prevField && prevField.groupName && prevField.groupName === field.groupName) {
+  if (prevField?.groupName && prevField.groupName === field.groupName) {
     $(DIV).addClass('dx-group-connector').addClass('dx-group-connector-prev').appendTo($container);
   }
 
-  if (nextField && nextField.groupName && nextField.groupName === field.groupName) {
+  if (nextField?.groupName && nextField.groupName === field.groupName) {
     $(DIV).addClass('dx-group-connector').addClass('dx-group-connector-next').appendTo($container);
   }
 }
@@ -44,7 +44,7 @@ const FieldsArea = AreaItem.inherit({
   },
 
   isVisible() {
-    return !!this.option('fieldPanel.visible') && this.option(`fieldPanel.show${capitalizeFirstLetter(this._area)}Fields`);
+    return !!this.option('fieldPanel.visible') && this.option(`fieldPanel.show${capitalize(this._area)}Fields`);
   },
 
   _renderButton(element) {

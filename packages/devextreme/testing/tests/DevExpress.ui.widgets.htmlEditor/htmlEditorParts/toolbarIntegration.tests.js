@@ -1025,7 +1025,6 @@ export default function() {
                 .trigger('dxclick');
 
             this.clock.tick(10);
-
             const value = editor.option('value');
 
             assert.strictEqual(prepareEmbedValue(value), expectedValue);
