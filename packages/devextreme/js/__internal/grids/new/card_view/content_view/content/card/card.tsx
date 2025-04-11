@@ -100,6 +100,8 @@ export class Card extends Component<CardProps> {
       [CLASSES.selectCard]: !!row.isSelected,
     });
 
+    const hasCover = cover?.imageExpr;
+
     const imageSrc = cover?.imageExpr?.(this.props.row.data);
     const alt = cover?.altExpr?.(this.props.row.data);
 
@@ -118,12 +120,12 @@ export class Card extends Component<CardProps> {
           isCheckBoxesRendered={this.props.isCheckBoxesRendered}
           selectCard={this.props.selectCard}
         />
-        {imageSrc && (
+        {hasCover && (
           <Cover
             imageSrc={imageSrc}
             alt={alt}
           />
-        )}
+        ) }
         <div className={CLASSES.content}>
           {this.props.row.cells.map((cell, index) => (
             <FieldTemplate
