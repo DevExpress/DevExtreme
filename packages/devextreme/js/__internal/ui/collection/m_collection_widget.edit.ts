@@ -486,7 +486,6 @@ class CollectionWidget<
     config?: ActionConfig,
   ): void {
     let itemSelectPromise = Deferred().resolve();
-
     this._createAction((e) => {
       itemSelectPromise = this._itemSelectHandler(e.event) ?? itemSelectPromise;
     }, {
@@ -495,7 +494,6 @@ class CollectionWidget<
       itemElement: $(e.currentTarget),
       event: e,
     });
-    // const parentItemClickHandler = super._itemClickHandler.bind(this);
     // eslint-disable-next-line @typescript-eslint/no-floating-promises
     itemSelectPromise.always(() => {
       super._itemClickHandler(e, args, config);
@@ -513,7 +511,6 @@ class CollectionWidget<
 
     const $itemElement = e.currentTarget;
 
-    // @ts-expect-error ts-error
     if (this.isItemSelected($itemElement)) {
       this.unselectItem(e.currentTarget);
     } else {
@@ -822,8 +819,7 @@ class CollectionWidget<
     this._optionChangedAction?.({ name: optionName, fullName: optionName, value: optionValue });
   }
 
-  isItemSelected(itemElement: dxElementWrapper | number): boolean {
-    // @ts-expect-error ts-error
+  isItemSelected(itemElement: Element | number): boolean {
     return this._isItemSelected(this._editStrategy.getNormalizedIndex(itemElement));
   }
 
