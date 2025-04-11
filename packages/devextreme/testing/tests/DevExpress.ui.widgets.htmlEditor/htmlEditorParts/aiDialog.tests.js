@@ -145,7 +145,8 @@ QUnit.module('AiDialog', moduleConfig, () => {
     });
 
     QUnit.test('Popup config should contain correct parameters', function(assert) {
-        const popupConfig = this.aiDialog['_getPopupConfig']();
+        const popup = this.aiDialog._popup;
+        const popupConfig = popup.option();
 
         assert.strictEqual(popupConfig.minWidth, 288, 'minWidth is correct');
         assert.strictEqual(popupConfig.maxWidth, 460, 'maxWidth is correct');
