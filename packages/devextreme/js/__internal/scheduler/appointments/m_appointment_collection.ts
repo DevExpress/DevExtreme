@@ -24,7 +24,6 @@ import {
 } from '@js/core/utils/type';
 import CollectionWidget from '@js/ui/collection/ui.collection_widget.edit';
 import { dateUtilsTs } from '@ts/core/utils/date';
-import type { AppointmentViewModel } from '@ts/scheduler/r1/types';
 
 import { APPOINTMENT_SETTINGS_KEY } from '../constants';
 import { createAppointmentAdapter } from '../m_appointment_adapter';
@@ -32,6 +31,7 @@ import { APPOINTMENT_CONTENT_CLASSES, APPOINTMENT_DRAG_SOURCE_CLASS, APPOINTMENT
 import { getRecurrenceProcessor } from '../m_recurrence';
 import timeZoneUtils from '../m_utils_time_zone';
 import { getPathToLeaf } from '../resources/m_utils';
+import type { AppointmentViewModel } from '../types';
 import type { AppointmentDataAccessor } from '../utils';
 import { getAppointmentTakesSeveralDays, sortAppointmentsByStartDate } from './data_provider/m_utils';
 import { AgendaAppointment, Appointment } from './m_appointment';
@@ -46,7 +46,7 @@ const DBLCLICK_EVENT_NAME = addNamespace(dblclickEvent, 'dxSchedulerAppointment'
 const toMs = dateUtils.dateToMilliseconds;
 const isAllDayAppointment = (
   appointment: AppointmentViewModel,
-): boolean => Boolean(appointment.settings.length && appointment.settings[0].allDay);
+): boolean => Boolean(appointment.settings[0]?.allDay);
 
 // @ts-expect-error
 class SchedulerAppointments extends CollectionWidget {
@@ -291,7 +291,7 @@ class SchedulerAppointments extends CollectionWidget {
           ? $allDayFragment
           : $commonFragment;
 
-        if (appointment?.needRemove) {
+        if (appointment.needRemove) {
           this._clearItem(appointment);
         } else if (isRepaintAll || appointment.needRepaint) {
           appointment.needRepaint = false;

@@ -38,9 +38,6 @@ import Widget from '@js/ui/widget/ui.widget';
 import { dateUtilsTs } from '@ts/core/utils/date';
 import type { RawViewType } from '@ts/scheduler/header/types';
 import { createTimeZoneCalculator } from '@ts/scheduler/r1/timezone_calculator/index';
-import type {
-  AppointmentDataItem, AppointmentViewModel, SafeAppointment, ViewType,
-} from '@ts/scheduler/r1/types';
 import {
   excludeFromRecurrence,
   getAppointmentDataItems,
@@ -82,6 +79,9 @@ import {
 } from './resources/m_utils';
 import { DesktopTooltipStrategy } from './tooltip_strategies/m_desktop_tooltip_strategy';
 import { MobileTooltipStrategy } from './tooltip_strategies/m_mobile_tooltip_strategy';
+import type {
+  AppointmentDataItem, AppointmentViewModel, SafeAppointment, ViewType,
+} from './types';
 import { AppointmentDataAccessor } from './utils/data_accessor/appointment_data_accessor';
 import SchedulerAgenda from './workspaces/m_agenda';
 import SchedulerTimelineDay from './workspaces/m_timeline_day';
@@ -167,6 +167,8 @@ const RECURRENCE_EDITING_MODE = {
 };
 
 class Scheduler extends Widget<any> {
+  // NOTE: Do not initialize variables here, because `_initMarkup` function runs before constructor,
+  // and initialization in constructor will erase the data
   filteredItems!: SafeAppointment[];
 
   preparedItems!: AppointmentDataItem[];

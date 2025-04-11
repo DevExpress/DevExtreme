@@ -1,8 +1,8 @@
 import { describe, expect, it } from '@jest/globals';
 import { mockAppointmentDataAccessor } from '@ts/scheduler/__mock__/appointment_data_accessor.mock';
 
+import type { AppointmentDataItem } from '../../types';
 import { createTimeZoneCalculator } from '../timezone_calculator';
-import type { AppointmentDataItem } from '../types';
 import { getAppointmentDataItems, replaceIncorrectEndDate } from './get_appointment_data_items';
 
 describe('Data API', () => {

@@ -8,8 +8,8 @@ import dateUtils from '@js/core/utils/date';
 import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import { setHeight, setOuterHeight } from '@js/core/utils/size';
-import type { SafeAppointment } from '@ts/scheduler/r1/types';
 import { agendaUtils, formatWeekday, getVerticalGroupCountClass } from '@ts/scheduler/r1/utils/index';
+import type { SafeAppointment } from '@ts/scheduler/types';
 
 import { VIEWS } from '../constants';
 import {

@@ -1,5 +1,5 @@
 import dateUtils from '@js/core/utils/date';
-import type { SafeAppointment } from '@ts/scheduler/r1/types';
+import type { SafeAppointment } from '@ts/scheduler/types';
 
 import { getGroupWidth } from '../../workspaces/helpers/m_position_helper';
 import HorizontalMonthLineRenderingStrategy from './m_strategy_horizontal_month_line';

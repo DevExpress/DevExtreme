@@ -3,7 +3,7 @@ import {
 } from '@jest/globals';
 import { HORIZONTAL_GROUP_ORIENTATION, VERTICAL_GROUP_ORIENTATION } from '@ts/scheduler/constants';
 
-import type { ViewType } from '../../types';
+import type { ViewType } from '../../../types';
 import {
   getAppointmentKey,
   getCellDuration,

@@ -4,10 +4,10 @@ import dateUtils from '@js/core/utils/date';
 import { map } from '@js/core/utils/iterator';
 import { isDefined, isFunction } from '@js/core/utils/type';
 import { dateUtilsTs } from '@ts/core/utils/date';
-import type { AppointmentDataItem, SafeAppointment } from '@ts/scheduler/r1/types';
 import {
   getDatesWithoutTime, hasResourceValue, isAppointmentTakesAllDay, isTimelineView,
 } from '@ts/scheduler/r1/utils/index';
+import type { AppointmentDataItem, SafeAppointment } from '@ts/scheduler/types';
 import type { AppointmentDataAccessor } from '@ts/scheduler/utils';
 import type ViewDataProvider from '@ts/scheduler/workspaces/view_model/m_view_data_provider';
 

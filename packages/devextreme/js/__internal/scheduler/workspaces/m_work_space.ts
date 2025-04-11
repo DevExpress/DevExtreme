@@ -40,13 +40,13 @@ import {
   TimePanelComponent,
 } from '@ts/scheduler/r1/components/index';
 import type { ViewContext } from '@ts/scheduler/r1/components/types';
-import type { SafeAppointment, ViewType } from '@ts/scheduler/r1/types';
 import {
   calculateIsGroupedAllDayPanel,
   calculateViewStartDate, getCellDuration, getGroupCount, getStartViewDateTimeOffset,
   getViewStartByOptions,
   isDateAndTimeView,
 } from '@ts/scheduler/r1/utils/index';
+import type { SafeAppointment, ViewType } from '@ts/scheduler/types';
 
 import WidgetObserver from '../base/m_widget_observer';
 import { APPOINTMENT_SETTINGS_KEY } from '../constants';

@@ -1,6 +1,6 @@
 import { dateUtilsTs } from '@ts/core/utils/date';
-import type { AppointmentViewModel, RenderStrategyName, SafeAppointment } from '@ts/scheduler/r1/types';
 import { getAppointmentKey } from '@ts/scheduler/r1/utils/index';
+import type { AppointmentViewModel, RenderStrategyName, SafeAppointment } from '@ts/scheduler/types';
 
 import AgendaAppointmentsStrategy from './rendering_strategies/m_strategy_agenda';
 import type BaseAppointmentsStrategy from './rendering_strategies/m_strategy_base';

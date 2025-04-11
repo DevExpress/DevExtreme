@@ -1,8 +1,8 @@
 import query from '@js/common/data/query';
 import dateUtils from '@js/core/utils/date';
 import { dateUtilsTs } from '@ts/core/utils/date';
-import type { AppointmentDataItem, SafeAppointment } from '@ts/scheduler/r1/types';
 import { isDateAndTimeView, isTimelineView } from '@ts/scheduler/r1/utils/index';
+import type { AppointmentDataItem, SafeAppointment } from '@ts/scheduler/types';
 
 import {
   getResourcesDataByGroups,

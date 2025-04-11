@@ -16,14 +16,15 @@ import type {
   FilterItemType,
   GetDateForHeaderText,
   GetDateForHeaderTextOptions,
-  Group, GroupItem,
+  Group,
+  GroupItem,
   GroupOrientation,
   GroupPanelData,
   GroupRenderItem,
   HeaderCellTextFormat,
   ViewDataProviderType,
   ViewType,
-} from '../types';
+} from '../../types';
 
 const toMs = dateUtils.dateToMilliseconds;
 const DAY_HOURS = 24;

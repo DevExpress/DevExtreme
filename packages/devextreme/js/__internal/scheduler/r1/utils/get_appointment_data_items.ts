@@ -4,9 +4,9 @@ import { dateUtilsTs } from '@ts/core/utils/date';
 import { dateUtils } from '@ts/core/utils/m_date';
 
 import { createAppointmentAdapter } from '../../m_appointment_adapter';
+import type { AppointmentDataItem, SafeAppointment } from '../../types';
 import type { AppointmentDataAccessor } from '../../utils/data_accessor/appointment_data_accessor';
 import type { TimeZoneCalculator } from '../timezone_calculator';
-import type { AppointmentDataItem, SafeAppointment } from '../types';
 
 const RECURRENCE_FREQ = 'freq';
 const toMs = dateUtils.dateToMilliseconds;

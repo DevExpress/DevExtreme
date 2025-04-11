@@ -1,9 +1,13 @@
 import { equalByValue } from '@js/core/utils/common';
 import dateUtils from '@js/core/utils/date';
-import type {
-  AppointmentViewModel, BaseAppointmentViewModelSettings, RenderStrategyName, SafeAppointment, ViewType,
-} from '@ts/scheduler/r1/types';
 import { getCellDuration, getGroupCount } from '@ts/scheduler/r1/utils/index';
+import type {
+  AppointmentViewModel,
+  BaseAppointmentViewModelSettings,
+  RenderStrategyName,
+  SafeAppointment,
+  ViewType,
+} from '@ts/scheduler/types';
 
 import { AppointmentViewModelGenerator } from './appointments/m_view_model_generator';
 import type Scheduler from './m_scheduler';
@@ -263,7 +267,8 @@ class AppointmentLayoutManager {
     const renderingStrategy = this.appointmentViewModel.getRenderingStrategy();
 
     if (!renderingStrategy) {
-      this.appointmentViewModel.initRenderingStrategy(this._getRenderingStrategyOptions());
+      const options = this._getRenderingStrategyOptions();
+      this.appointmentViewModel.initRenderingStrategy(options);
     }
 
     return this.appointmentViewModel.getRenderingStrategy();
