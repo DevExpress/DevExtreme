@@ -1,3 +1,4 @@
+/* eslint-disable spellcheck/spell-checker */
 import {
   afterEach, describe, expect, it,
 } from '@jest/globals';
@@ -7,6 +8,7 @@ import type ContextMenu from '@js/ui/context_menu';
 import type { PositioningEvent } from '@js/ui/context_menu';
 import type { Options as CardViewOptions } from '@ts/grids/new/card_view/options';
 import CardView from '@ts/grids/new/card_view/widget';
+import { rerender } from 'inferno';
 
 import type { ContextMenuPreparingEvent } from '.';
 
@@ -15,7 +17,11 @@ const setup = (options: CardViewOptions = {}): CardView => {
   const { body } = document;
   body.append(container);
 
-  return new CardView(container, options);
+  const cardView = new CardView(container, options);
+
+  rerender();
+
+  return cardView;
 };
 
 const SELECTORS = {
@@ -74,6 +80,8 @@ const openContextMenu = (cardView: CardView, selector: string): ContextMenuPrepa
 
   eventElement?.dispatchEvent(contextMenuEvent);
 
+  rerender();
+
   if (itemsPreparingEvent === null) {
     throw new Error('contextMenuPreparing event was not fired');
   }
@@ -127,7 +135,10 @@ describe('ContextMenu', () => {
       { targetView: 'headerPanel', selector: SELECTORS.headerPanel },
       { targetView: 'content', selector: SELECTORS.contentView },
     ])('onContextMenuPreparing fired on $targetView', ({ targetView, selector }) => {
-      const cardView = setup({ columns: ['Column 1'] });
+      const cardView = setup({
+        columns: ['Column 1'],
+        toolbar: { items: [{ text: 'a' }] },
+      });
       const event = openContextMenu(cardView, selector);
 
       expect(event.card).toBeUndefined();

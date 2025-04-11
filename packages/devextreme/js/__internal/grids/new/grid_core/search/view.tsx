@@ -1,4 +1,4 @@
-import { combined, computed, type SubsGets } from '@ts/core/reactive';
+import { combined, computed, type SubsGets } from '@ts/core/reactive/index';
 import { SearchController } from '@ts/grids/new/grid_core/search/controller';
 import { ToolbarController } from '@ts/grids/new/grid_core/toolbar/controller';
 
