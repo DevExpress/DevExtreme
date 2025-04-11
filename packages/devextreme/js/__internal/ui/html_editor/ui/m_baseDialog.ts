@@ -12,21 +12,20 @@ import type HtmlEditor from '@js/ui/html_editor';
 import type { Properties as PopupProperties } from '@js/ui/popup';
 import Popup from '@js/ui/popup';
 
-const DIALOG_CLASS = 'dx-formdialog';
 const DROPDOWN_EDITOR_OVERLAY_CLASS = 'dx-dropdowneditor-overlay';
 
 const isSmallScreen = (): boolean => {
   const screenFactor = hasWindow() ? getCurrentScreenFactor() : null;
   return devices.real().deviceType === 'phone' || screenFactor === 'xs';
 };
-abstract class BaseDialog {
-  _editorInstance: any;
+abstract class BaseDialog<T = unknown> {
+  _editorInstance: HtmlEditor;
 
   _popupUserConfig?: PopupProperties;
 
   _popup!: Popup;
 
-  deferred?: DeferredObj<unknown>;
+  deferred?: DeferredObj<T>;
 
   constructor(editorInstance: HtmlEditor, popupConfig?: PopupProperties) {
     this._editorInstance = editorInstance;
@@ -38,10 +37,11 @@ abstract class BaseDialog {
   protected _renderPopup() {
     const editorInstance = this._editorInstance;
     const $container = $('<div>')
-      .addClass(DIALOG_CLASS)
+      .addClass(this._getPopupClass())
       .appendTo(editorInstance.$element());
     const popupConfig = this._getPopupConfig();
 
+    // @ts-expect-error
     return editorInstance._createComponent($container, Popup, popupConfig);
   }
 
@@ -54,7 +54,7 @@ abstract class BaseDialog {
       deferRendering: false,
       focusStateEnabled: false,
       fullScreen: isSmallScreen(),
-      _wrapperClassExternal: `${DIALOG_CLASS} ${DROPDOWN_EDITOR_OVERLAY_CLASS}`,
+      _wrapperClassExternal: `${this._getPopupClass()} ${DROPDOWN_EDITOR_OVERLAY_CLASS}`,
       contentTemplate: (contentElem) => {
         this._renderContent($(contentElem));
       },
@@ -62,18 +62,19 @@ abstract class BaseDialog {
   }
 
   protected abstract _renderContent($contentElem: dxElementWrapper): void;
+  protected abstract _getPopupClass(): string;
 
   onHiding(): void {
     this.deferred?.reject();
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  show(_options?: unknown): Promise<unknown> | undefined {
+  show(options?: unknown): Promise<T> | undefined {
     if (this._popup.option('visible')) {
       return;
     }
 
-    this.deferred = Deferred();
+    this.deferred = Deferred<T>();
 
     this._popup.show();
 

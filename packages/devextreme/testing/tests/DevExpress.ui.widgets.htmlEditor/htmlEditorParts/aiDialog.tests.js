@@ -14,9 +14,9 @@ import 'ui/popup';
 import 'ui/text_area';
 import 'ui/select_box';
 
+const AI_DIALOG_CLASS = 'dx-aidialog';
 const AI_DIALOG_CONTENT_CLASS = 'dx-aidialog-content';
 const AI_DIALOG_CONTROLS_CLASS = 'dx-aidialog-controls';
-const DIALOG_CLASS = 'dx-formdialog';
 const TEXT_AREA_CLASS = 'dx-textarea';
 const SELECT_BOX_CLASS = 'dx-selectbox';
 
@@ -38,7 +38,7 @@ QUnit.module('AiDialog', moduleConfig, () => {
     QUnit.test('Should render AI dialog content with correct values', function(assert) {
         showAiDialog(this);
 
-        const $wrapper = this.$element.find(`.${DIALOG_CLASS}`);
+        const $wrapper = this.$element.find(`.${AI_DIALOG_CLASS}`);
         const $aiContent = $wrapper.find(`.${AI_DIALOG_CONTENT_CLASS}`);
         const $controls = $aiContent.find(`.${AI_DIALOG_CONTROLS_CLASS}`);
         const $selectBoxes = $controls.find(`.${SELECT_BOX_CLASS}`);
@@ -115,7 +115,7 @@ QUnit.module('AiDialog', moduleConfig, () => {
             const done = assert.async();
             const hideSpy = sinon.spy(this.aiDialog, 'hide');
 
-            showAiDialog(this).done((resultText, event) => {
+            showAiDialog(this).done(({ resultText, event }) => {
                 assert.strictEqual(resultText, 'Test text', 'resolved text is correct');
                 assert.strictEqual(event.itemData.id, mode, `operation is correct: ${mode}`);
                 assert.strictEqual(hideSpy.calledOnce, true, 'hide called');

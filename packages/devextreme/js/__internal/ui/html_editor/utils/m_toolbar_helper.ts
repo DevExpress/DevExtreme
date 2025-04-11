@@ -11,7 +11,7 @@ import Form from '@js/ui/form';
 import ScrollView from '@js/ui/scroll_view';
 
 import { getQuill } from '../m_quill_importer';
-import type { AiDialogShowPayload } from '../ui/aiDialog';
+import type { AiDialogResult, AiDialogShowPayload } from '../ui/aiDialog';
 import { ImageUploader } from './m_image_uploader_helper';
 import {
   getAutoSizedElements,
@@ -123,7 +123,10 @@ function prepareAiTextTrasformHandler(module) {
       commandsMap,
     };
 
-    module.editorInstance.showAiDialog(aiDialogConfig)?.done((resultText, eventData) => {
+    module.editorInstance.showAiDialog(aiDialogConfig)?.done(({
+      resultText,
+      event: eventData,
+    }: AiDialogResult) => {
       const insertionMode = eventData.itemData.id;
       let insertIndex = 0;
       let textToInsert = resultText;

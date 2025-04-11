@@ -1,7 +1,9 @@
+import type { AIIntegration } from '@js/common/ai-integration';
 import localizationMessage from '@js/common/core/localization/message';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { extend } from '@js/core/utils/extend';
+import type { ItemClickEvent } from '@js/ui/drop_down_button_types';
 import type { AICustomCommand } from '@js/ui/html_editor';
 import type HtmlEditor from '@js/ui/html_editor';
 import type { Properties as PopupProperties, ToolbarItem } from '@js/ui/popup';
@@ -9,10 +11,11 @@ import SelectBox from '@js/ui/select_box';
 import TextArea from '@js/ui/text_area';
 
 import type { CommandDefinition, CommandsMap } from '../utils/ai';
-import DialogBase from './m_baseDialog';
+import BaseDialog from './m_baseDialog';
 
 const AI_DIALOG_COMMANDS_WITH_OPTIONS = ['translate', 'changeStyle', 'changeTone', 'custom'];
 
+const AI_DIALOG_CLASS = 'dx-aidialog';
 const AI_DIALOG_CONTROLS_CLASS = 'dx-aidialog-controls';
 const AI_DIALOG_CONTENT_CLASS = 'dx-aidialog-content';
 const AI_DIALOG_TITLE_CLASS = 'dx-aidialog-title';
@@ -30,10 +33,15 @@ export interface AiDialogShowPayload {
   prompt?: AICustomCommand['prompt'];
 }
 
-export default class AiDialog extends DialogBase {
+export interface AiDialogResult {
+  resultText: string;
+  event: ItemClickEvent;
+}
+
+export default class AiDialog extends BaseDialog<AiDialogResult> {
   private _isLoading = false;
 
-  private readonly _aiService;
+  private readonly _aiIntegration?: AIIntegration;
 
   private _commandsMap: CommandsMap = {};
 
@@ -55,10 +63,14 @@ export default class AiDialog extends DialogBase {
 
   private _commandChangeSuppressed = false;
 
-  constructor(editorInstance: HtmlEditor, aiService?: unknown, popupConfig?: PopupProperties) {
+  constructor(
+    editorInstance: HtmlEditor,
+    aiService?: AIIntegration,
+    popupConfig?: PopupProperties,
+  ) {
     super(editorInstance, popupConfig);
 
-    this._aiService = aiService;
+    this._aiIntegration = aiService;
   }
 
   protected _getPopupConfig(): PopupProperties {
@@ -85,14 +97,9 @@ export default class AiDialog extends DialogBase {
     }) as PopupProperties;
   }
 
-  protected _renderContent($contentElem: dxElementWrapper): void {
-    $contentElem.addClass(AI_DIALOG_CONTENT_CLASS);
-
-    const $controls = $('<div>')
-      .addClass(AI_DIALOG_CONTROLS_CLASS)
-      .appendTo($contentElem);
-
-    const $commandSelectBox = $('<div>').appendTo($controls);
+  protected _renderCommandSelectBox($container: dxElementWrapper): void {
+    const $commandSelectBox = $('<div>').appendTo($container);
+    // @ts-expect-error
     this._commandSelectBox = this._editorInstance._createComponent($commandSelectBox, SelectBox, {
       value: this._currentCommand,
       displayExpr: 'text',
@@ -109,8 +116,11 @@ export default class AiDialog extends DialogBase {
         this._syncDialogWithState();
       },
     });
+  }
 
-    const $optionSelectBox = $('<div>').appendTo($controls);
+  protected _renderOptionSelectBox($container: dxElementWrapper): void {
+    const $optionSelectBox = $('<div>').appendTo($container);
+    // @ts-expect-error
     this._optionSelectBox = this._editorInstance._createComponent($optionSelectBox, SelectBox, {
       items: this._commandOptionsList,
       value: this._currentOption ?? this._commandOptionsList?.[0],
@@ -119,8 +129,11 @@ export default class AiDialog extends DialogBase {
         this._currentOption = e.value;
       },
     });
+  }
 
-    const $textArea = $('<div>').appendTo($contentElem);
+  protected _renderResultTextArea($container: dxElementWrapper): void {
+    const $textArea = $('<div>').appendTo($container);
+    // @ts-expect-error
     this._resultTextArea = this._editorInstance._createComponent($textArea, TextArea, {
       value: this._resultText,
       height: 100,
@@ -130,6 +143,22 @@ export default class AiDialog extends DialogBase {
         this._resultText = e.value;
       },
     });
+  }
+
+  protected _renderContent($contentElem: dxElementWrapper): void {
+    $contentElem.addClass(AI_DIALOG_CONTENT_CLASS);
+
+    const $controls = $('<div>')
+      .addClass(AI_DIALOG_CONTROLS_CLASS)
+      .appendTo($contentElem);
+
+    this._renderCommandSelectBox($controls);
+    this._renderOptionSelectBox($controls);
+    this._renderResultTextArea($contentElem);
+  }
+
+  protected _getPopupClass(): string {
+    return AI_DIALOG_CLASS;
   }
 
   protected _getToolbarItems(): ToolbarItem[] {
@@ -236,14 +265,14 @@ export default class AiDialog extends DialogBase {
     this._isLoading = isLoading;
   }
 
-  replaceButtonAction(event?: unknown): void {
+  replaceButtonAction(event: ItemClickEvent): void {
     // TODO: implement with integration so that the result text is updated
     this.hide(this._resultText, event);
   }
 
   show({
     currentCommand, currentCommandOption, commandsMap, text, prompt,
-  }: AiDialogShowPayload): Promise<unknown> | undefined {
+  }: AiDialogShowPayload): Promise<AiDialogResult> | undefined {
     this._commandsMap = commandsMap;
     this._currentCommand = currentCommand;
     this._resultText = text ?? '';
@@ -256,8 +285,8 @@ export default class AiDialog extends DialogBase {
     return super.show();
   }
 
-  hide(resultText: string, event: unknown): void {
-    this.deferred?.resolve(resultText, event);
+  hide(resultText: string, event: ItemClickEvent): void {
+    this.deferred?.resolve({ resultText, event });
 
     super.hide();
   }

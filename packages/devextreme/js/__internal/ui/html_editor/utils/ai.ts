@@ -45,19 +45,14 @@ const htmlEditorAITranslateOptions: AITranslateOption[] = [
   'arabic', 'chinese', 'english', 'french', 'german', 'japanese', 'spanish',
 ];
 
-export const getDefaultOptionsByCommand = (
-  command: AICommandName | 'custom',
-): CommandOption[] | undefined => {
-  switch (command) {
-    case 'changeStyle':
-      return htmlEditorAIChangeStyleOptions;
-    case 'changeTone':
-      return htmlEditorAIChangeToneOptions;
-    case 'translate':
-      return htmlEditorAITranslateOptions;
-    default:
-      return undefined;
-  }
+export const getDefaultOptionsByCommand = (command: AICommandName | 'custom'): CommandOption[] | undefined => {
+  const commandToOptionsMap: Record<string, CommandOption[]> = {
+    changeStyle: htmlEditorAIChangeStyleOptions,
+    changeTone: htmlEditorAIChangeToneOptions,
+    translate: htmlEditorAITranslateOptions,
+  };
+
+  return commandToOptionsMap[command];
 };
 
 function createDefinitionFromString(commandName: AICommandName): CommandDefinition {
@@ -65,8 +60,8 @@ function createDefinitionFromString(commandName: AICommandName): CommandDefiniti
   const defaultOptions = getDefaultOptionsByCommand(commandName)?.map(capitalize);
 
   return {
-    name: commandName,
     text,
+    name: commandName,
     options: defaultOptions,
   };
 }

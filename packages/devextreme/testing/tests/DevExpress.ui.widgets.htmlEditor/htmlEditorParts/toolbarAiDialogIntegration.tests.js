@@ -8,7 +8,7 @@ import { clickActionButton, setResultText, getResultText } from '../../../helper
 const setupHtmlEditorWithAi = (config) => {
     return $('#htmlEditor').dxHtmlEditor({
         value: 'Test value',
-        ai: {},
+        aiIntegration: {},
         toolbar: {
             items: [{
                 name: 'ai',

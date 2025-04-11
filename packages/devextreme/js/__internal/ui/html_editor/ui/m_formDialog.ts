@@ -5,9 +5,10 @@ import { extend } from '@js/core/utils/extend';
 import Form from '@js/ui/form';
 import { isFluent, isMaterialBased } from '@js/ui/themes';
 
-import DialogBase from './m_baseDialog';
+import BaseDialog from './m_baseDialog';
 
 const FORM_CLASS = 'dx-formdialog-form';
+const FORM_DIALOG_CLASS = 'dx-formdialog';
 
 const getApplyButtonConfig = () => {
   // @ts-expect-error
@@ -33,7 +34,7 @@ const getCancelButtonConfig = () => {
   return {};
 };
 
-export default class FormDialog extends DialogBase {
+export default class FormDialog extends BaseDialog {
   _form!: Form;
 
   beforeAddButtonAction?: () => boolean;
@@ -123,12 +124,17 @@ export default class FormDialog extends DialogBase {
     this._updateFormLabel();
   }
 
+  protected _getPopupClass(): string {
+    return FORM_DIALOG_CLASS;
+  }
+
   protected _onTitleChanged(value: string) {
     this._updateFormLabel(value);
   }
 
   _renderForm($container, options) {
     $container.addClass(FORM_CLASS);
+    // @ts-expect-error
     this._form = this._editorInstance._createComponent($container, Form, options);
     this._updateFormLabel();
   }

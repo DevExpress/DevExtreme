@@ -45,7 +45,6 @@ const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 const DROPDOWNEDITOR_ICON_CLASS = 'dx-dropdowneditor-icon';
 const LIST_ITEM_CLASS = 'dx-list-item';
 const POPUP_TITLE_CLASS = 'dx-popup-title';
-const MENU_CLASS = 'dx-menu';
 const MENU_ITEM_CLASS = 'dx-menu-item';
 
 const BOLD_FORMAT_CLASS = 'dx-bold-format';
@@ -172,7 +171,6 @@ const simpleModuleConfig = {
                 _saveValueChangeEvent: noop,
                 option: noop,
                 on: noop,
-                ai: {},
             }
         };
     },
@@ -282,7 +280,7 @@ const dialogAiModuleConfig = {
                 },
                 on: noop,
                 option: noop,
-                ai: {},
+                aiIntegration: {},
                 showAiDialog: (config) => {
                     return this._aiDialog.show(config);
                 }
