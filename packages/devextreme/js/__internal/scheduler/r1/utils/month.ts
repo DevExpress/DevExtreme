@@ -1,7 +1,7 @@
 import dateUtils from '@js/core/utils/date';
 import dateLocalization from '@js/localization/date';
 
-import type { CalculateCellIndex } from '../types';
+import type { CalculateCellIndex } from '../../types';
 import {
   getCalculatedFirstDayOfWeek,
   isDateInRange,

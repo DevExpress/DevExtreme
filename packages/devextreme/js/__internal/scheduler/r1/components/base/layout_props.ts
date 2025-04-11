@@ -1,6 +1,6 @@
 import type { JSXTemplate } from '@devextreme-generator/declarations';
 
-import type { GroupOrientation } from '../../types';
+import type { GroupOrientation } from '../../../types';
 import type {
   DataCellTemplateProps, DefaultProps, GroupedViewData, PropsWithViewContext,
 } from '../types';

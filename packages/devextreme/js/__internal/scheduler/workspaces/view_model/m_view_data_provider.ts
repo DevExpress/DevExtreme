@@ -1,12 +1,12 @@
 import dateUtils from '@js/core/utils/date';
 import { dateUtilsTs } from '@ts/core/utils/date';
-import type { ViewCellData, ViewType } from '@ts/scheduler/r1/types';
 import {
   calculateIsGroupedAllDayPanel,
   getGroupPanelData, isGroupingByDate,
   isHorizontalGroupingApplied, isHorizontalView,
   isVerticalGroupingApplied,
 } from '@ts/scheduler/r1/utils/index';
+import type { ViewCellData, ViewType } from '@ts/scheduler/types';
 
 import timeZoneUtils from '../../m_utils_time_zone';
 import { DateHeaderDataGenerator } from './m_date_header_data_generator';

@@ -40,15 +40,16 @@ import {
   TimePanelComponent,
 } from '@ts/scheduler/r1/components/index';
 import type { ViewContext } from '@ts/scheduler/r1/components/types';
-import type { ViewType } from '@ts/scheduler/r1/types';
 import {
   calculateIsGroupedAllDayPanel,
   calculateViewStartDate, getCellDuration, getGroupCount, getStartViewDateTimeOffset,
   getViewStartByOptions,
   isDateAndTimeView,
 } from '@ts/scheduler/r1/utils/index';
+import type { SafeAppointment, ViewType } from '@ts/scheduler/types';
 
 import WidgetObserver from '../base/m_widget_observer';
+import { APPOINTMENT_SETTINGS_KEY } from '../constants';
 import AppointmentDragBehavior from '../m_appointment_drag_behavior';
 import {
   APPOINTMENT_DRAG_SOURCE_CLASS,
@@ -61,7 +62,6 @@ import {
   VERTICAL_GROUP_COUNT_CLASSES,
   VIRTUAL_CELL_CLASS,
 } from '../m_classes';
-import { APPOINTMENT_SETTINGS_KEY } from '../m_constants';
 import tableCreatorModule from '../m_table_creator';
 import { utils } from '../m_utils';
 import {
@@ -775,7 +775,7 @@ class SchedulerWorkSpace extends WidgetObserver {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  onDataSourceChanged(argument?: any) {
+  onDataSourceChanged(argument?: SafeAppointment[]): void {
   }
 
   isGroupedAllDayPanel() {

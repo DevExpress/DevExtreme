@@ -23,11 +23,12 @@ import { addNamespace, isFakeClickEvent } from '@js/events/utils/index';
 import CollectionWidget from '@js/ui/collection/ui.collection_widget.edit';
 import { dateUtilsTs } from '@ts/core/utils/date';
 
+import { APPOINTMENT_SETTINGS_KEY } from '../constants';
 import { createAppointmentAdapter } from '../m_appointment_adapter';
 import { APPOINTMENT_CONTENT_CLASSES, APPOINTMENT_DRAG_SOURCE_CLASS, APPOINTMENT_ITEM_CLASS } from '../m_classes';
-import { APPOINTMENT_SETTINGS_KEY } from '../m_constants';
 import { getRecurrenceProcessor } from '../m_recurrence';
 import timeZoneUtils from '../m_utils_time_zone';
+import type { AppointmentViewModel } from '../types';
 import type { AppointmentDataAccessor } from '../utils';
 import { getAppointmentTakesSeveralDays, sortAppointmentsByStartDate } from './data_provider/m_utils';
 import { AgendaAppointment, Appointment } from './m_appointment';
@@ -39,6 +40,10 @@ const COMPONENT_CLASS = 'dx-scheduler-scrollable-appointments';
 const DBLCLICK_EVENT_NAME = addNamespace(dblclickEvent, 'dxSchedulerAppointment');
 
 const toMs = dateUtils.dateToMilliseconds;
+
+const isAllDayAppointment = (
+  appointment: AppointmentViewModel,
+): boolean => Boolean(appointment.settings[0]?.allDay);
 
 class SchedulerAppointments extends CollectionWidget {
   _virtualAppointments: any;
@@ -245,47 +250,17 @@ class SchedulerAppointments extends CollectionWidget {
     }
   }
 
-  _isAllDayAppointment(appointment) {
-    return appointment.settings.length && appointment.settings[0].allDay || false;
+  _isRepaintAll(appointments: AppointmentViewModel[]): boolean {
+    return this.isAgendaView || appointments.every((item) => item.needRepaint);
   }
 
-  _isRepaintAppointment(appointment) {
-    return !isDefined(appointment.needRepaint) || appointment.needRepaint === true;
-  }
-
-  _isRepaintAll(appointments) {
-    if (this.isAgendaView) {
-      return true;
-    }
-    for (let i = 0; i < appointments.length; i++) {
-      if (!this._isRepaintAppointment(appointments[i])) {
-        return false;
-      }
-    }
-    return true;
-  }
-
-  _applyFragment(fragment, allDay) {
+  _applyFragment(fragment, allDay: boolean): void {
     if (fragment.children().length > 0) {
       this._getAppointmentContainer(allDay).append(fragment);
     }
   }
 
-  _onEachAppointment(appointment, index, container, isRepaintAll) {
-    const repaintAppointment = () => {
-      appointment.needRepaint = false;
-      this._clearItem(appointment);
-      this._renderItem(index, appointment, container);
-    };
-
-    if (appointment?.needRemove === true) {
-      this._clearItem(appointment);
-    } else if (isRepaintAll || this._isRepaintAppointment(appointment)) {
-      repaintAppointment();
-    }
-  }
-
-  _repaintAppointments(appointments) {
+  _repaintAppointments(appointments: AppointmentViewModel[]): void {
     this._renderByFragments(($commonFragment, $allDayFragment) => {
       const isRepaintAll = this._isRepaintAll(appointments);
 
@@ -293,19 +268,30 @@ class SchedulerAppointments extends CollectionWidget {
         this._getAppointmentContainer(true).html('');
         this._getAppointmentContainer(false).html('');
       }
-
-      !appointments.length && this._cleanItemContainer();
+      if (!appointments.length) {
+        this._cleanItemContainer();
+      }
 
       appointments.forEach((appointment, index) => {
-        const container = this._isAllDayAppointment(appointment)
+        const container = isAllDayAppointment(appointment)
           ? $allDayFragment
           : $commonFragment;
-        this._onEachAppointment(appointment, index, container, isRepaintAll);
+
+        if (appointment.needRemove) {
+          this._clearItem(appointment);
+        } else if (isRepaintAll || appointment.needRepaint) {
+          appointment.needRepaint = false;
+          this._clearItem(appointment);
+          this._renderItem(index, appointment, container);
+        }
       });
     });
   }
 
-  _renderByFragments(renderFunction) {
+  _renderByFragments(renderFunction: (
+    $commonFragment,
+    $allDayFragment,
+  ) => void): void {
     if (this.isVirtualScrolling) {
       const $commonFragment = $(domAdapter.createDocumentFragment() as any);
       const $allDayFragment = $(domAdapter.createDocumentFragment() as any);
@@ -333,7 +319,7 @@ class SchedulerAppointments extends CollectionWidget {
     (this as any)._attachHoverEvents();
   }
 
-  _clearItem(item) {
+  _clearItem(item: AppointmentViewModel): void {
     const $items = this._findItemElementByItem(item.itemData);
     if (!$items.length) {
       return;
@@ -504,9 +490,13 @@ class SchedulerAppointments extends CollectionWidget {
     this.notifyObserver('showEditAppointmentPopup', { data: appointmentData, target: $targetAppointment });
   }
 
-  _renderItem(index, item, container) {
+  _renderItem(
+    index: number,
+    item: AppointmentViewModel,
+    container,
+  ) {
     const { itemData } = item;
-    const $items: any = [];
+    const $items: any[] = [];
 
     for (let i = 0; i < item.settings.length; i++) {
       const setting = item.settings[i];
@@ -540,15 +530,11 @@ class SchedulerAppointments extends CollectionWidget {
     });
   }
 
-  _getAppointmentContainer(allDay) {
+  _getAppointmentContainer(allDay: boolean) {
     const $allDayContainer = this.option('allDayContainer');
-    let $container = (this as any).itemsContainer().not($allDayContainer);
+    const $container = (this as any).itemsContainer().not($allDayContainer);
 
-    if (allDay && $allDayContainer) {
-      $container = $allDayContainer;
-    }
-
-    return $container;
+    return allDay && $allDayContainer ? $allDayContainer : $container;
   }
 
   _postprocessRenderItem(args) {
