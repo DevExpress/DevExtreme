@@ -15,6 +15,8 @@ export interface ContentProps {
 
   onRowHeightChange?: (value: number) => void;
 
+  showContextMenu?: (e: MouseEvent, card?: DataRow, cardIndex?: number) => void;
+
   cardsPerRow?: number;
 
   needToHiddenCheckBoxes?: boolean;
@@ -88,14 +90,18 @@ export class Content extends Component<ContentProps> {
         className={className}
         style={this.getCssVariables()}
         ref={this.containerRef}
+        onContextMenu={this.props.showContextMenu}
       >
-        {this.props.items.map((item, i) => (
+        {this.props.items.map((item, index) => (
           <Card
             {...this.props.cardProps}
             key={getInfernoCardKey(item)}
-            elementRef={this.cardRefs[i]}
+            elementRef={this.cardRefs[index]}
             row={item}
             fieldTemplate={this.props.fieldTemplate}
+            onContextMenu={(e) => {
+              this.props.showContextMenu?.(e, item, index);
+            }}
           />
         ))}
       </div>
