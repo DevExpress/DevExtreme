@@ -1344,11 +1344,12 @@ class CollectionWidget<
     itemTemplate,
     renderArgs: ItemRenderInfo<TItem>,
   ) {
+    const { itemData, container, index } = renderArgs;
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return itemTemplate.render({
-      model: renderArgs.itemData,
-      container: renderArgs.container,
-      index: renderArgs.index,
+      model: itemData,
+      container,
+      index,
       onRendered: this._onItemTemplateRendered(itemTemplate, renderArgs),
     });
   }
