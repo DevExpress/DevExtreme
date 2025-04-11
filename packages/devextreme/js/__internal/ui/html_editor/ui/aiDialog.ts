@@ -66,12 +66,12 @@ export default class AiDialog extends BaseDialog<AiDialogResult> {
 
   constructor(
     $container: dxElementWrapper,
-    aiService?: AIIntegration,
+    aiIntegration?: AIIntegration,
     popupConfig?: PopupProperties,
   ) {
     super($container, popupConfig);
 
-    this._aiIntegration = aiService;
+    this._aiIntegration = aiIntegration;
   }
 
   protected _getPopupConfig(): PopupProperties {
