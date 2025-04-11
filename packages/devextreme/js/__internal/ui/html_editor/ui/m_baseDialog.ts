@@ -34,11 +34,11 @@ abstract class BaseDialog<T = unknown> {
   }
 
   protected _renderPopup(): void {
-    const $container = $('<div>')
+    const $popupContainer = $('<div>')
       .addClass(this._getPopupClass())
       .appendTo(this._$container);
 
-    this._popup = new Popup($container.get(0), this._getPopupConfig());
+    this._popup = new Popup($popupContainer.get(0), this._getPopupConfig());
   }
 
   protected _getPopupConfig(): PopupProperties {
