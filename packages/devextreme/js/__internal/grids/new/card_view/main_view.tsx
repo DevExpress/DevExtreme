@@ -12,6 +12,7 @@ import type { Config } from '../grid_core/core/config_context';
 import { ConfigContext } from '../grid_core/core/config_context';
 import { RootElementUpdater } from '../grid_core/inferno_wrappers/root_element_updater';
 import { ContentView } from './content_view/view';
+import { ContextMenuView } from './context_menu/view';
 import { HeaderPanelView } from './header_panel/view';
 import { OptionsController } from './options_controller';
 
@@ -27,13 +28,14 @@ interface MainViewProps {
   HeaderFilterPopup: ComponentType;
   FilterPanel: ComponentType;
   ColumnChooser: ComponentType;
+  ContextMenu: ComponentType;
   config: Config;
   rootElementRef: RefObject<HTMLDivElement>;
 }
 
 function MainViewComponent({
   Toolbar, Content, Pager, HeaderPanel, HeaderFilterPopup,
-  FilterPanel, ColumnChooser, config, rootElementRef,
+  FilterPanel, ColumnChooser, ContextMenu, config, rootElementRef,
 }: MainViewProps): JSX.Element {
   return (<>
     <ConfigContext.Provider value={config}>
@@ -57,6 +59,7 @@ function MainViewComponent({
           <Pager/>
         </div>
         <ColumnChooser/>
+        <ContextMenu/>
       </RootElementUpdater>
     </ConfigContext.Provider>
   </>);
@@ -73,6 +76,7 @@ export class MainView extends View<MainViewProps> {
     HeaderFilterPopupView,
     FilterPanelView,
     ColumnChooserView,
+    ContextMenuView,
     OptionsController,
   ] as const;
 
@@ -84,6 +88,7 @@ export class MainView extends View<MainViewProps> {
     private readonly headerFilterPopup: HeaderFilterPopupView,
     private readonly filterPanel: FilterPanelView,
     private readonly columnsChooser: ColumnChooserView,
+    private readonly contextMenu: ContextMenuView,
     private readonly options: OptionsController,
   ) {
     super();
@@ -100,6 +105,7 @@ export class MainView extends View<MainViewProps> {
       HeaderFilterPopup: this.headerFilterPopup.asInferno(),
       FilterPanel: this.filterPanel.asInferno(),
       ColumnChooser: this.columnsChooser.asInferno(),
+      ContextMenu: this.contextMenu.asInferno(),
       config: combined({
         rtlEnabled: this.options.oneWay('rtlEnabled'),
         disabled: this.options.oneWay('disabled'),
