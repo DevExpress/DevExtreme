@@ -5,7 +5,7 @@ import {
   it,
   jest,
 } from '@jest/globals';
-import type { AIProvider, RequestCallbacks, ShortenCommandParams } from '@js/ai_integration';
+import type { AIProvider, RequestCallbacks, ShortenCommandParams } from '@js/common/ai-integration';
 import { ShortenCommand } from '@ts/core/ai_integration/commands';
 import type { PromptData } from '@ts/core/ai_integration/core/prompt_manager';
 import { PromptManager } from '@ts/core/ai_integration/core/prompt_manager';
