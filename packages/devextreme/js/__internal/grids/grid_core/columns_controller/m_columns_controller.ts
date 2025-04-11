@@ -514,6 +514,7 @@ export class ColumnsController extends modules.Controller {
 
     return visibleColumns
       .filter((column) => column.ownerBand === ownerBand
+        && (!isDefined(column.type) || this.isCustomCommandColumn(column))
         && (!column.fixed || column.fixedPosition === StickyPosition.Sticky));
   }
 
@@ -1859,6 +1860,10 @@ export class ColumnsController extends modules.Controller {
     fixedPosition?: StickyPosition,
   ): boolean {
     return isFirstOrLastColumn(this, column, rowIndex, onlyWithinBandColumn, true, fixedPosition);
+  }
+
+  public isCustomCommandColumn(commandColumn): boolean {
+    return gridCoreUtils.isCustomCommandColumn(this._columns, commandColumn);
   }
 
   public getColumnId(column) {

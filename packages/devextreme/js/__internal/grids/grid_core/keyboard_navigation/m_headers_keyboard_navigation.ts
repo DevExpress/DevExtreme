@@ -72,7 +72,7 @@ export class HeadersKeyboardNavigationController extends KeyboardNavigationContr
     }
   }
 
-  private isHeaderValidForReordering(column, direction, rowIndex?): boolean {
+  private isHeaderValidForReordering(column, direction, rowIndex): boolean {
     const columnsController = this._columnsController;
 
     if (column.fixed && column.fixedPosition !== StickyPosition.Sticky) {
@@ -100,6 +100,10 @@ export class HeadersKeyboardNavigationController extends KeyboardNavigationContr
     return direction === Direction.Next ? !isLastColumn : !isFirstColumn;
   }
 
+  private getNewVisibleIndex(visibleIndex, direction) {
+    return direction === 'previous' ? visibleIndex - 1 : visibleIndex + 2;
+  }
+
   private leftRightKeysHandler(e): void {
     const { originalEvent } = e;
 
@@ -110,14 +114,16 @@ export class HeadersKeyboardNavigationController extends KeyboardNavigationContr
       const direction = this.getDirectionByKeyName(e.keyName);
 
       if (this.isHeaderValidForReordering(column, direction, rowIndex)) {
-        const newVisibleIndex = direction === 'previous' ? column.visibleIndex - 1 : column.visibleIndex + 2;
+        const visibleIndex = this._columnsController.getVisibleIndex(column.index, rowIndex);
+        const newVisibleIndex = this.getNewVisibleIndex(visibleIndex, direction);
 
         this.isNeedToFocusHeader = true;
         this._updateFocusedCellPosition($cell, direction);
-        this._columnsController.columnOption(
-          column.index,
-          'visibleIndex',
-          newVisibleIndex,
+        this._columnsController.moveColumn(
+          { columnIndex: visibleIndex, rowIndex },
+          { columnIndex: newVisibleIndex, rowIndex },
+          'headers',
+          'headers',
         );
       }
       originalEvent?.preventDefault();
