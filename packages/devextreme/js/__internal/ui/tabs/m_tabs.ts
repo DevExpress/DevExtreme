@@ -1,4 +1,4 @@
-import type { Position } from '@js/common';
+import type { DefaultOptionsRule, Position } from '@js/common';
 import eventsEngine from '@js/common/core/events/core/events_engine';
 import holdEvent from '@js/common/core/events/hold';
 import pointerEvents from '@js/common/core/events/pointer';
@@ -13,10 +13,12 @@ import { each } from '@js/core/utils/iterator';
 import { getHeight, getOuterWidth, getWidth } from '@js/core/utils/size';
 import { isDefined, isPlainObject } from '@js/core/utils/type';
 import { hasWindow } from '@js/core/utils/window';
+import type { DxEvent, ItemInfo } from '@js/events';
 import Button from '@js/ui/button';
 // eslint-disable-next-line import/no-named-default
 import { default as CollectionWidget } from '@js/ui/collection/ui.collection_widget.live_update';
 import type {
+  Item,
   Orientation, Properties, TabsIconPosition, TabsStyle,
 } from '@js/ui/tabs';
 import { current as currentTheme, isFluent, isMaterial } from '@js/ui/themes';
@@ -68,14 +70,14 @@ const INDICATOR_POSITION_CLASS: Record<Position, string> = {
   left: 'dx-tab-indicator-position-left',
 };
 
-const TABS_ICON_POSITION_CLASS = {
+const TABS_ICON_POSITION_CLASS: Record<TabsIconPosition, string> = {
   top: 'dx-tabs-icon-position-top',
   end: 'dx-tabs-icon-position-end',
   bottom: 'dx-tabs-icon-position-bottom',
   start: 'dx-tabs-icon-position-start',
 };
 
-const TABS_STYLING_MODE_CLASS = {
+const TABS_STYLING_MODE_CLASS: Record<TabsStyle, string> = {
   primary: 'dx-tabs-styling-mode-primary',
   secondary: 'dx-tabs-styling-mode-secondary',
 };
@@ -129,7 +131,7 @@ export interface TabsProperties extends Properties {
 
   useInkRipple?: boolean;
 
-  badgeExpr?: (data) => boolean | undefined;
+  badgeExpr?: (data) => string | undefined;
 
   _itemAttributes?: Record<string, unknown>;
 
@@ -143,6 +145,7 @@ class Tabs extends CollectionWidget<TabsProperties> {
 
   _scrollable?: Scrollable | null;
 
+  // eslint-disable-next-line no-restricted-globals
   _holdInterval?: ReturnType<typeof setInterval>;
 
   _leftButton?: Button | null;
@@ -167,18 +170,20 @@ class Tabs extends CollectionWidget<TabsProperties> {
       selectOnFocus: true,
       loopItemFocus: false,
       useInkRipple: false,
-      badgeExpr(data) { return data ? data.badge : undefined; },
+      badgeExpr(data: Item): string | undefined {
+        return data?.badge;
+      },
       _itemAttributes: { role: 'tab' },
       _indicatorPosition: null,
     };
   }
 
-  _defaultOptionsRules() {
+  _defaultOptionsRules(): DefaultOptionsRule<TabsProperties>[] {
     const themeName = currentTheme();
 
     return super._defaultOptionsRules().concat([
       {
-        device() {
+        device(): boolean {
           return devices.real().deviceType !== 'desktop';
         },
         options: {
@@ -192,7 +197,7 @@ class Tabs extends CollectionWidget<TabsProperties> {
         },
       },
       {
-        device() {
+        device(): boolean {
           return devices.real().deviceType === 'desktop' && !devices.isSimulator();
         },
         options: {
@@ -200,7 +205,7 @@ class Tabs extends CollectionWidget<TabsProperties> {
         },
       },
       {
-        device() {
+        device(): boolean {
           return isFluent(themeName);
         },
         options: {
@@ -209,7 +214,7 @@ class Tabs extends CollectionWidget<TabsProperties> {
         },
       },
       {
-        device() {
+        device(): boolean {
           return isMaterial(themeName);
         },
         options: {
@@ -241,7 +246,8 @@ class Tabs extends CollectionWidget<TabsProperties> {
     this._feedbackHideTimeout = FEEDBACK_HIDE_TIMEOUT;
   }
 
-  _prepareDefaultItemTemplate(data, $container) {
+  // eslint-disable-next-line class-methods-use-this
+  _prepareDefaultItemTemplate(data: Item, $container: dxElementWrapper): void {
     const text = isPlainObject(data) ? data?.text : data;
 
     if (isDefined(text)) {
@@ -262,7 +268,7 @@ class Tabs extends CollectionWidget<TabsProperties> {
     }
   }
 
-  _initTemplates() {
+  _initTemplates(): void {
     super._initTemplates();
 
     this._templateManager.addDefaultTemplates({
@@ -270,22 +276,14 @@ class Tabs extends CollectionWidget<TabsProperties> {
         this._prepareDefaultItemTemplate(data, $container);
 
         const $iconElement = getImageContainer(data.icon);
-        $iconElement && $iconElement.prependTo($container);
+        if ($iconElement) {
+          $iconElement.prependTo($container);
+        }
 
         const $tabItem = $('<div>').addClass(TABS_ITEM_TEXT_CLASS);
 
         $container.wrapInner($tabItem);
       }, ['text', 'html', 'icon'], this.option('integrationOptions.watchMethod')),
-    });
-  }
-
-  _createItemByTemplate(itemTemplate, renderArgs) {
-    const { itemData, container, index } = renderArgs;
-    return itemTemplate.render({
-      model: itemData,
-      container,
-      index,
-      onRendered: this._onItemTemplateRendered(itemTemplate, renderArgs),
     });
   }
 
@@ -299,14 +297,17 @@ class Tabs extends CollectionWidget<TabsProperties> {
     return TABS_ITEM_SELECTED_CLASS;
   }
 
-  _itemDataKey() {
+  // eslint-disable-next-line class-methods-use-this
+  _itemDataKey(): string {
     return TABS_ITEM_DATA_KEY;
   }
 
   _initMarkup(): void {
     super._initMarkup();
 
-    this.option('useInkRipple') && this._renderInkRipple();
+    if (this.option('useInkRipple')) {
+      this._renderInkRipple();
+    }
 
     this.$element().addClass(OVERFLOW_HIDDEN_CLASS);
   }
@@ -335,7 +336,9 @@ class Tabs extends CollectionWidget<TabsProperties> {
       }
       this._updateNavButtonsState();
 
-      this._scrollToItem(this.option('selectedItem'));
+      const { selectedItem } = this.option();
+
+      this._scrollToItem(selectedItem);
     }
 
     if (!(this.option('scrollingEnabled') && this._isItemsSizeExceeded())) {
@@ -356,14 +359,16 @@ class Tabs extends CollectionWidget<TabsProperties> {
     return orientation === ORIENTATION.vertical;
   }
 
-  _isItemsSizeExceeded() {
+  _isItemsSizeExceeded(): boolean {
     const isVertical = this._isVertical();
-    const isItemsSizeExceeded = isVertical ? this._isItemsHeightExceeded() : this._isItemsWidthExceeded();
+    const isItemsSizeExceeded = isVertical
+      ? this._isItemsHeightExceeded()
+      : this._isItemsWidthExceeded();
 
     return isItemsSizeExceeded;
   }
 
-  _isItemsWidthExceeded() {
+  _isItemsWidthExceeded(): boolean {
     const $visibleItems = this._getVisibleItems();
     const tabItemTotalWidth = this._getSummaryItemsSize('width', $visibleItems, true);
     const elementWidth = getWidth(this.$element());
@@ -377,7 +382,7 @@ class Tabs extends CollectionWidget<TabsProperties> {
     return isItemsWidthExceeded;
   }
 
-  _isItemsHeightExceeded() {
+  _isItemsHeightExceeded(): boolean {
     const $visibleItems = this._getVisibleItems();
     const itemsHeight = this._getSummaryItemsSize('height', $visibleItems, true);
     const elementHeight = getHeight(this.$element());
@@ -386,13 +391,13 @@ class Tabs extends CollectionWidget<TabsProperties> {
     return isItemsHeightExceeded;
   }
 
-  _needStretchItems() {
+  _needStretchItems(): boolean {
     const $visibleItems = this._getVisibleItems();
     const elementWidth = getWidth(this.$element());
     const itemsWidth = [];
 
     each($visibleItems, (_, item) => {
-      // @ts-expect-error
+      // @ts-expect-error ts-error
       itemsWidth.push(getOuterWidth(item, true));
     });
 
@@ -403,7 +408,7 @@ class Tabs extends CollectionWidget<TabsProperties> {
     return needStretchItems;
   }
 
-  _cleanNavButtons() {
+  _cleanNavButtons(): void {
     if (!this._leftButton || !this._rightButton) return;
 
     this._leftButton.$element().remove();
@@ -423,17 +428,25 @@ class Tabs extends CollectionWidget<TabsProperties> {
     this._cleanNavButtons();
   }
 
-  _renderInkRipple() {
+  _renderInkRipple(): void {
     this._inkRipple = render();
   }
 
-  _getPointerEvent() {
+  // eslint-disable-next-line class-methods-use-this
+  _getPointerEvent(): string {
     return pointerEvents.up;
   }
 
-  _toggleActiveState($element, value, e) {
-    // @ts-expect-error ts-error
-    super._toggleActiveState.apply(this, arguments);
+  _toggleActiveState(
+    $element: dxElementWrapper,
+    value: boolean,
+    e: Record<string, unknown>,
+  ): void {
+    super._toggleActiveState(
+      $element,
+      value,
+      e,
+    );
 
     if (!this._inkRipple) {
       return;
@@ -468,9 +481,11 @@ class Tabs extends CollectionWidget<TabsProperties> {
     return this._$wrapper;
   }
 
-  _getScrollableDirection() {
+  _getScrollableDirection(): Orientation {
     const isVertical = this._isVertical();
-    const scrollableDirection = isVertical ? SCROLLABLE_DIRECTION.vertical : SCROLLABLE_DIRECTION.horizontal;
+    const scrollableDirection = isVertical
+      ? SCROLLABLE_DIRECTION.vertical
+      : SCROLLABLE_DIRECTION.horizontal;
 
     return scrollableDirection;
   }
@@ -500,10 +515,10 @@ class Tabs extends CollectionWidget<TabsProperties> {
     this.$element().append(this._scrollable.$element());
   }
 
-  _scrollToItem(itemData): void {
+  _scrollToItem(item: dxElementWrapper | undefined): void {
     if (!this._scrollable) return;
-
-    const $item = this._editStrategy.getItemElement(itemData);
+    // @ts-expect-error ts-error
+    const $item = this._editStrategy.getItemElement(item);
     this._scrollable.scrollToElement($item);
   }
 
@@ -565,13 +580,14 @@ class Tabs extends CollectionWidget<TabsProperties> {
     this._updateNavButtonsAriaDisabled();
   }
 
-  _updateScrollPosition(offset, duration) {
+  _updateScrollPosition(offset: number, duration: number): void {
     this._scrollable?.update();
     this._scrollable?.scrollBy(offset / duration);
   }
 
-  _createNavButton(offset, icon): Button {
+  _createNavButton(offset: number, icon: string): Button {
     const holdAction = this._createAction(() => {
+      // eslint-disable-next-line no-restricted-globals
       this._holdInterval = setInterval(() => {
         this._updateScrollPosition(offset, FEEDBACK_DURATION_INTERVAL);
       }, FEEDBACK_DURATION_INTERVAL);
@@ -614,11 +630,15 @@ class Tabs extends CollectionWidget<TabsProperties> {
     if (this._holdInterval) clearInterval(this._holdInterval);
   }
 
-  _updateSelection(addedSelection): void {
-    this._scrollable && this._scrollable.scrollToElement(this.itemElements().eq(addedSelection[0]));
+  _updateSelection(addedSelection: number[]): void {
+    if (this._scrollable) {
+      return this._scrollable.scrollToElement(this.itemElements().eq(addedSelection[0]));
+    }
+
+    return undefined;
   }
 
-  _visibilityChanged(visible): void {
+  _visibilityChanged(visible: boolean): void {
     if (visible) {
       this._dimensionChanged();
     }
@@ -628,7 +648,7 @@ class Tabs extends CollectionWidget<TabsProperties> {
     this._renderScrolling();
   }
 
-  _itemSelectHandler(e): void {
+  _itemSelectHandler(e: DxEvent): void {
     const { selectionMode } = this.option();
     if (selectionMode === 'single' && this.isItemSelected(e.currentTarget)) {
       return;
@@ -650,11 +670,12 @@ class Tabs extends CollectionWidget<TabsProperties> {
     this.$element().toggleClass(TABS_ORIENTATION_CLASS.horizontal, value);
   }
 
-  _getIndicatorPositionClass(indicatorPosition) {
+  // eslint-disable-next-line class-methods-use-this
+  _getIndicatorPositionClass(indicatorPosition: Position): string {
     return INDICATOR_POSITION_CLASS[indicatorPosition];
   }
 
-  _getIndicatorPosition() {
+  _getIndicatorPosition(): Position {
     // eslint-disable-next-line @typescript-eslint/naming-convention
     const { _indicatorPosition, rtlEnabled } = this.option();
 
@@ -670,27 +691,27 @@ class Tabs extends CollectionWidget<TabsProperties> {
     return isVertical ? INDICATOR_POSITION.right : INDICATOR_POSITION.bottom;
   }
 
-  _toggleIndicatorPositionClass(indicatorPosition) {
+  _toggleIndicatorPositionClass(indicatorPosition: Position): void {
     const newClass = this._getIndicatorPositionClass(indicatorPosition);
 
     this._toggleElementClasses(INDICATOR_POSITION_CLASS, newClass);
   }
 
-  _toggleScrollingEnabledClass(scrollingEnabled) {
+  _toggleScrollingEnabledClass(scrollingEnabled: boolean | undefined): void {
     this.$element().toggleClass(TABS_SCROLLING_ENABLED_CLASS, Boolean(scrollingEnabled));
   }
 
-  _toggleOrientationClass(orientation) {
+  _toggleOrientationClass(orientation: Orientation | undefined): void {
     const isVertical = orientation === ORIENTATION.vertical;
 
     this._toggleTabsVerticalClass(isVertical);
     this._toggleTabsHorizontalClass(!isVertical);
   }
 
-  _getTabsIconPositionClass() {
-    const position = this.option('iconPosition');
+  _getTabsIconPositionClass(): string {
+    const { iconPosition } = this.option();
 
-    switch (position) {
+    switch (iconPosition) {
       case ICON_POSITION.top:
         return TABS_ICON_POSITION_CLASS.top;
       case ICON_POSITION.end:
@@ -709,13 +730,18 @@ class Tabs extends CollectionWidget<TabsProperties> {
     this._toggleElementClasses(TABS_ICON_POSITION_CLASS, newClass);
   }
 
-  _toggleStylingModeClass(value): void {
-    const newClass = TABS_STYLING_MODE_CLASS[value] ?? TABS_STYLING_MODE_CLASS.primary;
+  _toggleStylingModeClass(value: TabsStyle | undefined): void {
+    const newClass = TABS_STYLING_MODE_CLASS[value ?? 'primary'];
 
     this._toggleElementClasses(TABS_STYLING_MODE_CLASS, newClass);
   }
 
-  _toggleElementClasses(classMap, newClass): void {
+  _toggleElementClasses(
+    classMap: Record<TabsStyle, string>
+      | Record<TabsIconPosition, string>
+      | Record<Position, string>,
+    newClass: string,
+  ): void {
     // eslint-disable-next-line no-restricted-syntax, guard-for-in
     for (const key in classMap) {
       this.$element().removeClass(classMap[key]);
@@ -724,19 +750,19 @@ class Tabs extends CollectionWidget<TabsProperties> {
     this.$element().addClass(newClass);
   }
 
-  _toggleFocusedDisabledNextClass(currentIndex, isNextDisabled): void {
+  _toggleFocusedDisabledNextClass(currentIndex: number, isNextDisabled: boolean): void {
     this._itemElements()
       .eq(currentIndex)
       .toggleClass(FOCUSED_DISABLED_NEXT_TAB_CLASS, isNextDisabled);
   }
 
-  _toggleFocusedDisabledPrevClass(currentIndex, isPrevDisabled): void {
+  _toggleFocusedDisabledPrevClass(currentIndex: number, isPrevDisabled: boolean): void {
     this._itemElements()
       .eq(currentIndex)
       .toggleClass(FOCUSED_DISABLED_PREV_TAB_CLASS, isPrevDisabled);
   }
 
-  _toggleFocusedDisabledClasses(value): void {
+  _toggleFocusedDisabledClasses(value: dxElementWrapper | undefined): void {
     const { selectedIndex: currentIndex } = this.option();
 
     this._itemElements()
@@ -754,8 +780,9 @@ class Tabs extends CollectionWidget<TabsProperties> {
 
     const shouldNextClassBeSetted = isNextDisabled && nextFocusedIndex === nextItemIndex;
     const shouldPrevClassBeSetted = isPrevDisabled && nextFocusedIndex === prevItemIndex;
-
+    // @ts-expect-error ts-error
     this._toggleFocusedDisabledNextClass(currentIndex, shouldNextClassBeSetted);
+    // @ts-expect-error ts-error
     this._toggleFocusedDisabledPrevClass(currentIndex, shouldPrevClassBeSetted);
   }
 
@@ -772,17 +799,19 @@ class Tabs extends CollectionWidget<TabsProperties> {
   }
 
   _optionChanged(args: OptionChanged<TabsProperties>): void {
-    switch (args.name) {
+    const { name, value } = args;
+
+    switch (name) {
       case 'useInkRipple':
       case 'scrollingEnabled':
-        this._toggleScrollingEnabledClass(args.value);
+        this._toggleScrollingEnabledClass(value);
         this._invalidate();
         break;
       case 'showNavButtons':
         this._invalidate();
         break;
       case 'scrollByContent':
-        this._scrollable?.option(args.name, args.value);
+        this._scrollable?.option(name, value);
         break;
       case 'width':
       case 'height':
@@ -797,9 +826,11 @@ class Tabs extends CollectionWidget<TabsProperties> {
         this._invalidate();
         break;
       case 'focusedElement': {
-        this._toggleFocusedDisabledClasses(args.value);
+        type PropertyType = TabsProperties[typeof name];
+
+        this._toggleFocusedDisabledClasses(value as PropertyType);
         super._optionChanged(args);
-        this._scrollToItem(args.value);
+        this._scrollToItem(value as PropertyType);
         break;
       }
       case 'rtlEnabled': {
@@ -809,7 +840,7 @@ class Tabs extends CollectionWidget<TabsProperties> {
         break;
       }
       case 'orientation': {
-        this._toggleOrientationClass(args.value);
+        this._toggleOrientationClass(value);
         const indicatorPosition = this._getIndicatorPosition();
         this._toggleIndicatorPositionClass(indicatorPosition);
         if (hasWindow()) {
@@ -825,14 +856,15 @@ class Tabs extends CollectionWidget<TabsProperties> {
         break;
       }
       case 'stylingMode': {
-        this._toggleStylingModeClass(args.value);
+        this._toggleStylingModeClass(value);
         if (hasWindow()) {
           this._dimensionChanged();
         }
         break;
       }
       case '_indicatorPosition': {
-        this._toggleIndicatorPositionClass(args.value);
+        const indicatorPosition = this._getIndicatorPosition();
+        this._toggleIndicatorPositionClass(indicatorPosition);
         break;
       }
       case 'selectedIndex':
@@ -848,10 +880,11 @@ class Tabs extends CollectionWidget<TabsProperties> {
 
   _afterItemElementInserted(): void {
     super._afterItemElementInserted();
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     this._planPostRenderActions();
   }
 
-  _afterItemElementDeleted($item, deletedActionArgs): void {
+  _afterItemElementDeleted($item: dxElementWrapper, deletedActionArgs: ItemInfo<Item>): void {
     super._afterItemElementDeleted($item, deletedActionArgs);
     this._renderScrolling();
   }

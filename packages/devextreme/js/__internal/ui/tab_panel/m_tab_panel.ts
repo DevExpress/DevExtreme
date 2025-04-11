@@ -1,4 +1,5 @@
 import type {
+  DefaultOptionsRule,
   Orientation, Position, TabsIconPosition, TabsStyle,
 } from '@js/common';
 import registerComponent from '@js/core/component_registrator';
@@ -10,7 +11,8 @@ import $ from '@js/core/renderer';
 import { BindableTemplate } from '@js/core/templates/bindable_template';
 import { getImageContainer } from '@js/core/utils/icon';
 import { isDefined, isPlainObject } from '@js/core/utils/type';
-import type { Properties } from '@js/ui/tab_panel';
+import type { DxEvent } from '@js/events';
+import type { Item, Properties } from '@js/ui/tab_panel';
 import { current as currentTheme, isFluent, isMaterialBased } from '@js/ui/themes';
 import supportUtils from '@ts/core/utils/m_support';
 import type { OptionChanged } from '@ts/core/widget/types';
@@ -71,7 +73,7 @@ const STYLING_MODE: Record<TabsStyle, TabsStyle> = {
 export interface TabPanelProperties extends Properties {
   _tabsIndicatorPosition?: Position | null;
 
-  badgeExpr?: (data) => boolean | undefined;
+  badgeExpr?: (data) => string | undefined;
 
   focusedElement?: dxElementWrapper;
 }
@@ -111,18 +113,19 @@ class TabPanel extends MultiView<TabPanelProperties> {
       onTitleHold: null,
       // @ts-expect-error ts-error
       onTitleRendered: null,
-      badgeExpr(data) { return data ? data.badge : undefined; },
-
+      badgeExpr(data: Item): string | undefined {
+        return data?.badge;
+      },
       _tabsIndicatorPosition: null,
     };
   }
 
-  _defaultOptionsRules() {
+  _defaultOptionsRules(): DefaultOptionsRule<TabPanelProperties>[] {
     const themeName = currentTheme();
 
     return super._defaultOptionsRules().concat([
       {
-        device() {
+        device(): boolean {
           return devices.real().deviceType === 'desktop' && !devices.isSimulator();
         },
         options: {
@@ -130,7 +133,7 @@ class TabPanel extends MultiView<TabPanelProperties> {
         },
       },
       {
-        device() {
+        device(): boolean {
           return !supportUtils.touch;
         },
         options: {
@@ -144,7 +147,7 @@ class TabPanel extends MultiView<TabPanelProperties> {
         },
       },
       {
-        device() {
+        device(): boolean {
           return isFluent(themeName);
         },
         options: {
@@ -152,7 +155,7 @@ class TabPanel extends MultiView<TabPanelProperties> {
         },
       },
       {
-        device() {
+        device(): boolean {
           return isMaterialBased(themeName);
         },
         options: {
@@ -169,22 +172,25 @@ class TabPanel extends MultiView<TabPanelProperties> {
     this._toggleTabPanelTabsPositionClass();
   }
 
-  _getElementAria() {
+  // eslint-disable-next-line class-methods-use-this
+  _getElementAria(): Record<string, string> {
     return { role: 'tabpanel' };
   }
 
-  _getItemAria() {
+  // eslint-disable-next-line class-methods-use-this
+  _getItemAria(): Record<string, string> {
     return { role: 'tabpanel' };
   }
 
-  _initMarkup() {
+  _initMarkup(): void {
     super._initMarkup();
 
     this._createTitleActions();
     this._renderLayout();
   }
 
-  _prepareTabsItemTemplate(data, $container) {
+  // eslint-disable-next-line class-methods-use-this
+  _prepareTabsItemTemplate(data: Item, $container: dxElementWrapper): void {
     const $iconElement = getImageContainer(data?.icon);
 
     if ($iconElement) {
@@ -205,7 +211,7 @@ class TabPanel extends MultiView<TabPanelProperties> {
     }
   }
 
-  _initTemplates() {
+  _initTemplates(): void {
     super._initTemplates();
 
     this._templateManager.addDefaultTemplates({
@@ -273,11 +279,12 @@ class TabPanel extends MultiView<TabPanelProperties> {
     this.setAria('controls', id, $activeTab);
   }
 
-  _getTabsIndicatorPosition() {
+  _getTabsIndicatorPosition(): Position {
     // eslint-disable-next-line @typescript-eslint/naming-convention
     const { _tabsIndicatorPosition, tabsPosition } = this.option();
-    // @ts-expect-error ts-error
-    return _tabsIndicatorPosition ?? TABS_INDICATOR_POSITION_BY_TABS_POSITION[tabsPosition];
+
+    return _tabsIndicatorPosition
+      ?? TABS_INDICATOR_POSITION_BY_TABS_POSITION[tabsPosition ?? TABS_POSITION.top];
   }
 
   _tabConfig(): TabsProperties {
@@ -349,7 +356,7 @@ class TabPanel extends MultiView<TabPanelProperties> {
       itemTemplateProperty: 'tabTemplate',
       loopItemFocus: loop,
       selectionRequired: true,
-      onOptionChanged: function (args) {
+      onOptionChanged: (args): void => {
         if (args.name === 'focusedElement') {
           if (args.value) {
             const $value = $(args.value);
@@ -359,13 +366,13 @@ class TabPanel extends MultiView<TabPanelProperties> {
             this.option('focusedElement', args.value);
           }
         }
-      }.bind(this),
-      onFocusIn: function (args) { this._focusInHandler(args.event); }.bind(this),
-      onFocusOut: function (args) {
+      },
+      onFocusIn: (args): void => { this._focusInHandler(args.event); },
+      onFocusOut: (args): void => {
         if (!this._isFocusOutHandlerExecuting) {
           this._focusOutHandler(args.event);
         }
-      }.bind(this),
+      },
       orientation: this._getTabsOrientation(),
       iconPosition,
       stylingMode,
@@ -389,9 +396,9 @@ class TabPanel extends MultiView<TabPanelProperties> {
   }
 
   _getTabPanelTabsPositionClass(): string {
-    const position = this.option('tabsPosition');
+    const { tabsPosition } = this.option();
 
-    switch (position) {
+    switch (tabsPosition) {
       case TABS_POSITION.right:
         return TABPANEL_TABS_POSITION_CLASS.right;
       case TABS_POSITION.bottom:
@@ -421,15 +428,15 @@ class TabPanel extends MultiView<TabPanelProperties> {
     this._setTabsOption('orientation', orientation);
   }
 
-  _toggleWrapperFocusedClass(isFocused): void {
+  _toggleWrapperFocusedClass(isFocused: boolean): void {
     this._toggleFocusClass(isFocused, this._$wrapper);
   }
 
-  _toggleDisabledFocusedClass(isFocused): void {
+  _toggleDisabledFocusedClass(isFocused: boolean): void {
     this._focusTarget().toggleClass(DISABLED_FOCUSED_TAB_CLASS, isFocused);
   }
 
-  _updateFocusState(e, isFocused): void {
+  _updateFocusState(e: DxEvent, isFocused: boolean): void {
     super._updateFocusState(e, isFocused);
 
     const isTabsTarget = e.target === this._tabs._focusTarget().get(0);
@@ -454,32 +461,31 @@ class TabPanel extends MultiView<TabPanelProperties> {
     }
   }
 
-  _focusOutHandler(e): void {
+  _focusOutHandler(e: DxEvent): void {
     this._isFocusOutHandlerExecuting = true;
-    // @ts-expect-error ts-error
-    super._focusOutHandler.apply(this, arguments);
+    super._focusOutHandler(e);
 
     this._tabs._focusOutHandler(e);
     this._isFocusOutHandlerExecuting = false;
   }
 
-  _setTabsOption(name, value): void {
+  _setTabsOption(name: keyof TabsProperties, value: unknown): void {
     if (this._tabs) {
       this._tabs.option(name, value);
     }
   }
 
-  _postprocessSwipe({ swipedTabsIndex }): void {
-    this._setTabsOption('selectedIndex', swipedTabsIndex);
+  _postprocessSwipe(args: { swipedTabsIndex: number }): void {
+    this._setTabsOption('selectedIndex', args.swipedTabsIndex);
   }
 
-  _visibilityChanged(visible): void {
+  _visibilityChanged(visible: boolean): void {
     if (visible) {
       this._tabs._dimensionChanged();
     }
   }
 
-  registerKeyHandler(key, handler): void {
+  registerKeyHandler(key: string, handler: (event?) => void): void {
     super.registerKeyHandler(key, handler);
 
     if (this._tabs) {
@@ -520,8 +526,10 @@ class TabPanel extends MultiView<TabPanelProperties> {
       case 'selectedItem': {
         this._setTabsOption(fullName, value);
         super._optionChanged(args);
-        // @ts-expect-error ts-error
-        if (this.option('focusStateEnabled') === true) {
+
+        const { focusStateEnabled } = this.option();
+
+        if (focusStateEnabled === true) {
           const selectedIndex = this.option('selectedIndex');
           // @ts-expect-error ts-error
           const selectedTabContent = this._itemElements().eq(selectedIndex);

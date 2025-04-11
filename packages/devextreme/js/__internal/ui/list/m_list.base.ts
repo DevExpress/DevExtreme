@@ -21,7 +21,7 @@ import { getHeight, getOuterHeight, setHeight } from '@js/core/utils/size';
 import { isDefined, isPlainObject } from '@js/core/utils/type';
 import { hasWindow } from '@js/core/utils/window';
 import Button from '@js/ui/button';
-import type { Properties } from '@js/ui/list';
+import type { Item, Properties } from '@js/ui/list';
 import ScrollView from '@js/ui/scroll_view';
 import { current, isMaterial, isMaterialBased } from '@js/ui/themes';
 import { render } from '@js/ui/widget/utils.ink_ripple';
@@ -70,7 +70,7 @@ export interface ListBaseProperties extends Properties<ListBase> {
 
   showChevronExpr?: (data) => boolean | undefined;
 
-  badgeExpr?: (data) => boolean | undefined;
+  badgeExpr?: (data) => string | undefined;
 
   wrapItemText?: boolean;
 
@@ -230,11 +230,11 @@ export class ListBase extends CollectionWidget<ListBaseProperties> {
       useInkRipple: false,
       wrapItemText: false,
       _swipeEnabled: true,
-
-      showChevronExpr(data) { return data ? data.showChevron : undefined; },
-      badgeExpr(data) { return data ? data.badge : undefined; },
-
-      _onItemsRendered: () => {},
+      showChevronExpr(data: Item): boolean | undefined {
+        return data?.showChevron;
+      },
+      badgeExpr(data: Item): string | undefined { return data?.badge; },
+      _onItemsRendered: (): void => {},
     };
   }
 
@@ -243,7 +243,7 @@ export class ListBase extends CollectionWidget<ListBaseProperties> {
     // @ts-expect-error ts-error
     return super._defaultOptionsRules().concat(deviceDependentOptions(), [
       {
-        device() {
+        device(): boolean {
           return !supportUtils.nativeScrolling;
         },
         options: {
@@ -251,7 +251,7 @@ export class ListBase extends CollectionWidget<ListBaseProperties> {
         },
       },
       {
-        device(device) {
+        device(device): boolean {
           return !supportUtils.nativeScrolling && !devices.isSimulator() && devices.real().deviceType === 'desktop' && device.platform === 'generic';
         },
         options: {
@@ -261,7 +261,7 @@ export class ListBase extends CollectionWidget<ListBaseProperties> {
         },
       },
       {
-        device() {
+        device(): boolean {
           return devices.real().deviceType === 'desktop' && !devices.isSimulator();
         },
         options: {
@@ -269,7 +269,7 @@ export class ListBase extends CollectionWidget<ListBaseProperties> {
         },
       },
       {
-        device() {
+        device(): boolean {
           return isMaterial(themeName);
         },
         options: {
@@ -277,7 +277,7 @@ export class ListBase extends CollectionWidget<ListBaseProperties> {
         },
       },
       {
-        device() {
+        device(): boolean {
           return isMaterialBased(themeName);
         },
         options: {
@@ -290,7 +290,7 @@ export class ListBase extends CollectionWidget<ListBaseProperties> {
     ]);
   }
 
-  _visibilityChanged(visible) {
+  _visibilityChanged(visible: boolean): void {
     if (visible) {
       this._updateLoadingState(true);
     }
