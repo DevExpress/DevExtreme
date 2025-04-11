@@ -186,36 +186,50 @@ jobs:
     steps:
       - run: exit 1
   # testcafe_tests.yml
-  testcafe_tests1:
-    name: 'accessibility (1/5)'
+  testcafe_tests_accessibility_1:
+    name: 'accessibility (1/7)'
     needs: [ changesSegregation ]
     if: false
     runs-on: ubuntu-latest
     steps:
       - run: exit 1
-  testcafe_tests2:
-    name: 'accessibility (2/5)'
+  testcafe_tests_accessibility_2:
+    name: 'accessibility (2/7)'
     needs: [ changesSegregation ]
     if: false
     runs-on: ubuntu-latest
     steps:
       - run: exit 1
-  testcafe_tests3:
-    name: 'accessibility (3/5)'
+  testcafe_tests_accessibility_3:
+    name: 'accessibility (3/7)'
     needs: [ changesSegregation ]
     if: false
     runs-on: ubuntu-latest
     steps:
       - run: exit 1
-  testcafe_tests4:
-    name: 'accessibility (4/5)'
+  testcafe_tests_accessibility_4:
+    name: 'accessibility (4/7)'
     needs: [ changesSegregation ]
     if: false
     runs-on: ubuntu-latest
     steps:
       - run: exit 1
-  testcafe_tests5:
-    name: 'accessibility (5/5)'
+  testcafe_tests_accessibility_5:
+    name: 'accessibility (5/7)'
+    needs: [ changesSegregation ]
+    if: false
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 1
+  testcafe_tests_accessibility_6:
+    name: 'accessibility (6/7)'
+    needs: [ changesSegregation ]
+    if: false
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 1
+  testcafe_tests_accessibility_7:
+    name: 'accessibility (7/7)'
     needs: [ changesSegregation ]
     if: false
     runs-on: ubuntu-latest
@@ -347,15 +361,64 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: exit 1
-  testcafe_tests24:
-    name: 'dataGrid (1/2)'
+  testcafe_tests_data_grid_common_1:
+    name: 'dataGrid / common (1/5)'
     needs: [ changesSegregation ]
     if: false
     runs-on: ubuntu-latest
     steps:
       - run: exit 1
-  testcafe_tests25:
-    name: 'dataGrid (2/2)'
+  testcafe_tests_data_grid_common_2:
+    name: 'dataGrid / common (2/5)'
+    needs: [ changesSegregation ]
+    if: false
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 1
+  testcafe_tests_data_grid_common_3:
+    name: 'dataGrid / common (3/5)'
+    needs: [ changesSegregation ]
+    if: false
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 1
+  testcafe_tests_data_grid_common_4:
+    name: 'dataGrid / common (4/5)'
+    needs: [ changesSegregation ]
+    if: false
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 1
+  testcafe_tests_data_grid_common_5:
+    name: 'dataGrid / common (5/5)'
+    needs: [ changesSegregation ]
+    if: false
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 1
+  testcafe_tests_data_grid_sticky_common:
+    name: 'dataGrid / sticky common'
+    needs: [ changesSegregation ]
+    if: false
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 1
+  testcafe_tests_data_grid_sticky_1:
+    name: 'dataGrid / sticky (1/3)'
+    needs: [ changesSegregation ]
+    if: false
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 1
+  testcafe_tests_data_grid_sticky_2:
+    name: 'dataGrid / sticky (2/3)'
+    needs: [ changesSegregation ]
+    if: false
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 1
+  testcafe_tests_data_grid_sticky_3:
+    name: 'dataGrid / sticky (3/3)'
     needs: [ changesSegregation ]
     if: false
     runs-on: ubuntu-latest
@@ -382,41 +445,77 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: exit 1
-  testcafe_tests29:
-    name: 'scheduler (1/5)'
+  testcafe_tests_scheduler_common_1:
+    name: 'scheduler / common (1/6)'
     needs: [ changesSegregation ]
     if: false
     runs-on: ubuntu-latest
     steps:
       - run: exit 1
-  testcafe_tests30:
-    name: 'scheduler (2/5)'
+  testcafe_tests_scheduler_common_2:
+    name: 'scheduler / common (2/6)'
     needs: [ changesSegregation ]
     if: false
     runs-on: ubuntu-latest
     steps:
       - run: exit 1
-  testcafe_tests31:
-    name: 'scheduler (3/5)'
+  testcafe_tests_scheduler_common_3:
+    name: 'scheduler / common (3/6)'
     needs: [ changesSegregation ]
     if: false
     runs-on: ubuntu-latest
     steps:
       - run: exit 1
-  testcafe_tests32:
-    name: 'scheduler (4/5)'
+  testcafe_tests_scheduler_common_4:
+    name: 'scheduler / common (4/6)'
     needs: [ changesSegregation ]
     if: false
     runs-on: ubuntu-latest
     steps:
       - run: exit 1
-  testcafe_tests33:
-    name: 'scheduler (5/5)'
+  testcafe_tests_scheduler_common_5:
+    name: 'scheduler / common (5/6)'
     needs: [ changesSegregation ]
     if: false
     runs-on: ubuntu-latest
     steps:
       - run: exit 1
+  testcafe_tests_scheduler_common_6:
+    name: 'scheduler / common (6/6)'
+    needs: [ changesSegregation ]
+    if: false
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 1
+  testcafe_tests_scheduler_offset:
+    name: 'scheduler / offset'
+    needs: [ changesSegregation ]
+    if: false
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 1
+  testcafe_tests_scheduler_offset_markups:
+    name: 'scheduler / offset markups'
+    needs: [ changesSegregation ]
+    if: false
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 1
+  testcafe_tests_scheduler_timezones_A:
+    name: 'scheduler / timezones (America/Los_Angeles)'
+    needs: [ changesSegregation ]
+    if: false
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 1
+  testcafe_tests_scheduler_timezones_E:
+    name: 'scheduler / timezones (Europe/Berlin)'
+    needs: [ changesSegregation ]
+    if: false
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 1
+
   testcafe_tests34:
     name: 'form (1/2)'
     needs: [ changesSegregation ]
@@ -431,29 +530,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: exit 1
-  testcafe_tests36:
-    name: 'form - material (1/4)'
+  testcafe_tests_form_material_1:
+    name: 'form - material (1/2)'
     needs: [ changesSegregation ]
     if: false
     runs-on: ubuntu-latest
     steps:
       - run: exit 1
-  testcafe_tests37:
-    name: 'form - material (2/4)'
-    needs: [ changesSegregation ]
-    if: false
-    runs-on: ubuntu-latest
-    steps:
-      - run: exit 1
-  testcafe_tests58:
-    name: 'form - material (3/4)'
-    needs: [ changesSegregation ]
-    if: false
-    runs-on: ubuntu-latest
-    steps:
-      - run: exit 1
-  testcafe_tests59:
-    name: 'form - material (4/4)'
+  testcafe_tests_form_material_2:
+    name: 'form - material (2/2)'
     needs: [ changesSegregation ]
     if: false
     runs-on: ubuntu-latest
@@ -473,43 +558,64 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: exit 1
-  testcafe_tests40:
-    name: 'editors (1/2)'
+  testcafe_tests_editors_1:
+    name: 'editors (1/3)'
     needs: [ changesSegregation ]
     if: false
     runs-on: ubuntu-latest
     steps:
       - run: exit 1
-  testcafe_tests41:
-    name: 'editors (2/2)'
+  testcafe_tests_editors_2:
+    name: 'editors (2/3)'
     needs: [ changesSegregation ]
     if: false
     runs-on: ubuntu-latest
     steps:
       - run: exit 1
-  testcafe_tests42:
-    name: 'editors - material (1/2)'
+  testcafe_tests_editors_3:
+    name: 'editors (3/3)'
     needs: [ changesSegregation ]
     if: false
     runs-on: ubuntu-latest
     steps:
       - run: exit 1
-  testcafe_tests43:
-    name: 'editors - material (2/2)'
+  testcafe_tests_editors_material_1:
+    name: 'editors - material (1/3)'
     needs: [ changesSegregation ]
     if: false
     runs-on: ubuntu-latest
     steps:
       - run: exit 1
-  testcafe_tests44:
-    name: 'editors - fluent (1/2)'
+  testcafe_tests_editors_material_2:
+    name: 'editors - material (2/3)'
     needs: [ changesSegregation ]
     if: false
     runs-on: ubuntu-latest
     steps:
       - run: exit 1
-  testcafe_tests45:
-    name: 'editors - fluent (2/2)'
+  testcafe_tests_editors_material_3:
+    name: 'editors - material (3/3)'
+    needs: [ changesSegregation ]
+    if: false
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 1
+  testcafe_tests_editors_fluent_1:
+    name: 'editors - fluent (1/3)'
+    needs: [ changesSegregation ]
+    if: false
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 1
+  testcafe_tests_editors_fluent_2:
+    name: 'editors - fluent (2/3)'
+    needs: [ changesSegregation ]
+    if: false
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 1
+  testcafe_tests_editors_fluent_3:
+    name: 'editors - fluent (3/3)'
     needs: [ changesSegregation ]
     if: false
     runs-on: ubuntu-latest
