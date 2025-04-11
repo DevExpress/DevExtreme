@@ -68,7 +68,7 @@ const COMMANDS = {
   },
 };
 
-describe('AI', () => {
+describe('AIIntegration', () => {
   let provider = null as unknown as AIProvider;
   let ai = null as unknown as AIIntegration;
 

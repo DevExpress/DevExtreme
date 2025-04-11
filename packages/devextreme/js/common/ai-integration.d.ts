@@ -104,15 +104,9 @@ export type SummarizeCommandParams = {
 };
 
 /**
- * @docid
  * @namespace DevExpress.aiIntegration
- * @public
  */
 export type TranslateCommandParams = {
-  /**
-   * @docid
-   * @public
-   */
   text: string;
   lang: string;
 };
@@ -123,30 +117,22 @@ export type TranslateCommandParams = {
 export type ChangeStyleCommandResult = string;
 
 /**
- * @docid
  * @namespace DevExpress.aiIntegration
- * @public
  */
 export type ChangeToneCommandResult = string;
 
 /**
- * @docid
  * @namespace DevExpress.aiIntegration
- * @public
  */
 export type ExecuteCommandResult = string;
 
 /**
- * @docid
  * @namespace DevExpress.aiIntegration
- * @public
  */
 export type ExpandCommandResult = string;
 
 /**
- * @docid
  * @namespace DevExpress.aiIntegration
- * @public
  */
 export type ProofreadCommandResult = string;
 
@@ -156,23 +142,17 @@ export type ProofreadCommandResult = string;
 export type ShortenCommandResult = string;
 
 /**
- * @docid
  * @namespace DevExpress.aiIntegration
- * @public
  */
 export type SummarizeCommandResult = string;
 
 /**
- * @docid
  * @namespace DevExpress.aiIntegration
- * @public
  */
 export type TranslateCommandResult = string;
 
 /**
- * @docid
  * @namespace DevExpress.aiIntegration
- * @public
  */
 export type BaseCommandResult =
   | ExecuteCommandResult
