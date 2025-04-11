@@ -1,6 +1,6 @@
 import type { JSXTemplate } from '@devextreme-generator/declarations';
 
-import type { GroupItem, ViewDataBase, ViewType } from '../types';
+import type { GroupItem, ViewDataBase, ViewType } from '../../types';
 
 export interface BaseTemplateProps {
   index: number;

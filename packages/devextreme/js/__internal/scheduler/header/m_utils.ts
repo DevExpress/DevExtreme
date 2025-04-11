@@ -5,7 +5,7 @@ import dateUtils from '@js/core/utils/date';
 import { camelize } from '@js/core/utils/inflector';
 import { isFunction, isObject } from '@js/core/utils/type';
 
-import { VIEWS } from '../m_constants';
+import { VIEWS } from '../constants';
 
 const DAY_FORMAT = 'd';
 
