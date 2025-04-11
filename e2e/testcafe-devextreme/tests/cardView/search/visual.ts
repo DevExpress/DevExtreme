@@ -3,7 +3,6 @@ import CardView from 'devextreme-testcafe-models/cardView';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 import { testScreenshot } from '../../../helpers/themeUtils';
-import { baseConfig } from '../filterPanel/helpers/baseConfig';
 
 fixture`Search.Visual`
   .page(url(__dirname, '../../container.html'));
