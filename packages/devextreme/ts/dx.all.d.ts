@@ -11016,7 +11016,7 @@ declare module DevExpress.ui {
       /**
        * [descr:_ui_data_grid_ContextMenuPreparingEvent.target]
        */
-      readonly target: string;
+      readonly target: ContextMenuTarget;
       /**
        * [descr:_ui_data_grid_ContextMenuPreparingEvent.targetElement]
        */
@@ -11038,6 +11038,7 @@ declare module DevExpress.ui {
        */
       readonly row?: Row<TRowData, TKey>;
     };
+    export type ContextMenuTarget = 'toolbar' | 'header' | 'content' | 'footer';
     export type CustomSummaryInfo<TRowData = any, TKey = any> = {
       readonly component: dxDataGrid<TRowData, TKey>;
       readonly name?: string;
