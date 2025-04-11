@@ -7,6 +7,7 @@ import type { ItemClickEvent } from '@js/ui/drop_down_button_types';
 import type { AICustomCommand } from '@js/ui/html_editor';
 import type { Properties as PopupProperties, ToolbarItem } from '@js/ui/popup';
 import type dxSelectBox from '@js/ui/select_box';
+import type { Properties as SelectBoxProperties } from '@js/ui/select_box';
 import SelectBox from '@js/ui/select_box';
 import TextArea from '@js/ui/text_area';
 
@@ -99,7 +100,6 @@ export default class AiDialog extends BaseDialog<AiDialogResult> {
 
   protected _renderCommandSelectBox($container: dxElementWrapper): void {
     const $commandSelectBox = $('<div>').appendTo($container);
-    // @ts-expect-error
     this._commandSelectBox = new SelectBox($commandSelectBox.get(0), {
       value: this._currentCommand,
       displayExpr: 'text',
@@ -115,12 +115,11 @@ export default class AiDialog extends BaseDialog<AiDialogResult> {
 
         this._syncDialogWithState();
       },
-    });
+    } as SelectBoxProperties);
   }
 
   protected _renderOptionSelectBox($container: dxElementWrapper): void {
     const $optionSelectBox = $('<div>').appendTo($container);
-    // @ts-expect-error
     this._optionSelectBox = new SelectBox($optionSelectBox.get(0), {
       items: this._commandOptionsList,
       value: this._currentOption ?? this._commandOptionsList?.[0],
@@ -128,7 +127,7 @@ export default class AiDialog extends BaseDialog<AiDialogResult> {
       onValueChanged: (e): void => {
         this._currentOption = e.value;
       },
-    });
+    } as SelectBoxProperties);
   }
 
   protected _renderResultTextArea($container: dxElementWrapper): void {
