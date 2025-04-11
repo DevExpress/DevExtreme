@@ -1,24 +1,13 @@
 import type { WidgetName } from '../types';
-import Widget from '../internal/widget';
 import TabItem from './item';
+import Collection from "../internal/collection";
 
-const CLASS = {
-  item: 'dx-tab',
-};
-export default class Tabs extends Widget {
+export default class Tabs extends Collection<TabItem> {
   public static className = '.dx-tabs';
 
-  itemElements: Selector;
+  itemClassName = '.dx-tab';
 
-  constructor(id: string | Selector) {
-    super(id);
-    this.itemElements = this.element.find(`.${CLASS.item}`);
-  }
+  ItemClass = TabItem;
 
-  // eslint-disable-next-line class-methods-use-this
   getName(): WidgetName { return 'dxTabs'; }
-
-  public getItem(index = 0): TabItem {
-    return new TabItem(this.itemElements.nth(index));
-  }
 }
