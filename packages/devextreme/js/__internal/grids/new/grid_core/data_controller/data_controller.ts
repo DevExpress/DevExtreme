@@ -218,7 +218,6 @@ export class DataController {
         this.filterController.displayFilter,
         this.pagingEnabled,
         this.sortingController.sortParameters,
-        this.searchController.searchTextOption,
       ],
     );
   }

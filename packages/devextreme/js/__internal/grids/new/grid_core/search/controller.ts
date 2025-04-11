@@ -4,7 +4,7 @@ import { computed } from '@ts/core/reactive/index';
 import type { Options as SearchOptions } from '@ts/grids/new/grid_core/search/options';
 import type { HighlightedTextItem, HighlightTextOptions } from '@ts/grids/new/grid_core/search/types';
 
-import { ColumnsController } from '../columns_controller';
+import { ColumnsController } from '../columns_controller/columns_controller';
 import { OptionsController } from '../options_controller/options_controller';
 import {
   calculateSearchFilter, splitHighlightedText,

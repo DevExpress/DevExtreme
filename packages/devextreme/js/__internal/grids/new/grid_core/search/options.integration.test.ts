@@ -16,15 +16,20 @@ const setup = (options: GridCoreOptions = {}) => {
   const container = document.createElement('div');
   const cardView = new CardView(container, options);
 
+  rerender();
+
   return { container, cardView };
 };
 
-const getCardContent = (container: Element) => container
-  .querySelector(`.${SELECTORS.cardContent}`);
+function getCardContent(container: Element) {
+  rerender();
+  return container
+    .querySelector(`.${SELECTORS.cardContent}`);
+}
 
 describe('Options', () => {
-  it('searchPanel.text (card contains match)', () => {
-    const { container } = setup({
+  it('searchPanel.text (card contains match)', async () => {
+    const { container, cardView } = setup({
       dataSource: [
         { Name: 'John Doe' },
       ],
@@ -34,13 +39,17 @@ describe('Options', () => {
       },
     });
 
+    // @ts-expect-error protected property
+    await cardView.dataController.waitLoaded();
+    rerender();
+
     const content = getCardContent(container);
 
     expect(content).toMatchSnapshot();
   });
 
-  it('searchPanel.text (card not contains match)', () => {
-    const { container } = setup({
+  it('searchPanel.text (card not contains match)', async () => {
+    const { container, cardView } = setup({
       dataSource: [
         { Name: 'John Doe' },
       ],
@@ -50,13 +59,17 @@ describe('Options', () => {
       },
     });
 
+    // @ts-expect-error protected property
+    await cardView.dataController.waitLoaded();
+    rerender();
+
     const content = getCardContent(container);
 
     expect(content).toMatchSnapshot();
   });
 
-  it('searchPanel.highlightCaseSensitive = true', () => {
-    const { container } = setup({
+  it('searchPanel.highlightCaseSensitive = true', async () => {
+    const { container, cardView } = setup({
       dataSource: [
         { Name: 'John Doe john' },
       ],
@@ -66,6 +79,9 @@ describe('Options', () => {
         highlightCaseSensitive: true,
       },
     });
+
+    // @ts-expect-error protected property
+    await cardView.dataController.waitLoaded();
 
     const content = getCardContent(container);
 

@@ -30,7 +30,11 @@ const setup = (options: GridCoreOptions = {}): CardView => {
   const { body } = document;
   body.append(container);
 
-  return new CardView(container, options);
+  const cardView = new CardView(container, options);
+
+  rerender();
+
+  return cardView;
 };
 
 const openHeaderFilterPopup = (cardView: CardView): Element => {
