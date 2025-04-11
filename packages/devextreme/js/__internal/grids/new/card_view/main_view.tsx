@@ -11,7 +11,7 @@ import type { ComponentType, RefObject } from 'inferno';
 import type { Config } from '../grid_core/core/config_context';
 import { ConfigContext } from '../grid_core/core/config_context';
 import { RootElementUpdater } from '../grid_core/inferno_wrappers/root_element_updater';
-import { SearchView } from '../grid_core/search';
+import { SearchView } from '../grid_core/search/index';
 import { ContentView } from './content_view/view';
 import { HeaderPanelView } from './header_panel/view';
 import { OptionsController } from './options_controller';

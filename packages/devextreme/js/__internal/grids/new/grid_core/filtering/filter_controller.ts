@@ -3,7 +3,7 @@ import { computed } from '@ts/core/reactive/index';
 import gridCoreUtils from '@ts/grids/grid_core/m_utils';
 
 import { OptionsController } from '../options_controller/options_controller';
-import { SearchController } from '../search';
+import { SearchController } from '../search/index';
 
 export class FilterController {
   public readonly filter = this.options.twoWay('filterValue');
