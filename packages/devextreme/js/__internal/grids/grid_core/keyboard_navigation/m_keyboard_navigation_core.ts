@@ -56,6 +56,10 @@ export class KeyboardNavigationController extends modules.ViewController {
     return offset;
   }
 
+  protected getNewVisibleIndex(visibleIndex: number, direction: string): number {
+    return direction === 'previous' ? visibleIndex - 1 : visibleIndex + 1;
+  }
+
   protected _getCellPosition($cell, direction?): {
     rowIndex: number;
     columnIndex: number;
@@ -69,7 +73,7 @@ export class KeyboardNavigationController extends modules.ViewController {
       columnIndex += this._getFocusedColumnIndexOffset(columnIndex);
 
       if (direction) {
-        columnIndex = direction === 'previous' ? columnIndex - 1 : columnIndex + 1;
+        columnIndex = this.getNewVisibleIndex(columnIndex, direction);
         columnIndex = this._applyColumnIndexBoundaries(columnIndex);
       }
 

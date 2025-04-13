@@ -100,10 +100,6 @@ export class HeadersKeyboardNavigationController extends KeyboardNavigationContr
     return direction === Direction.Next ? !isLastColumn : !isFirstColumn;
   }
 
-  private getNewVisibleIndex(visibleIndex, direction) {
-    return direction === 'previous' ? visibleIndex - 1 : visibleIndex + 2;
-  }
-
   private leftRightKeysHandler(e): void {
     const { originalEvent } = e;
 
@@ -116,9 +112,10 @@ export class HeadersKeyboardNavigationController extends KeyboardNavigationContr
       if (this.isHeaderValidForReordering(column, direction, rowIndex)) {
         const visibleIndex = this._columnsController.getVisibleIndex(column.index, rowIndex);
         const newVisibleIndex = this.getNewVisibleIndex(visibleIndex, direction);
+        const newFocusedColumnIndex = direction === 'next' ? newVisibleIndex - 1 : newVisibleIndex;
 
         this.isNeedToFocusHeader = true;
-        this._updateFocusedCellPosition($cell, direction);
+        this.setFocusedCellPosition(rowIndex, newFocusedColumnIndex);
         this._columnsController.moveColumn(
           { columnIndex: visibleIndex, rowIndex },
           { columnIndex: newVisibleIndex, rowIndex },
@@ -164,6 +161,10 @@ export class HeadersKeyboardNavigationController extends KeyboardNavigationContr
     const $columnHeadersView = this._columnHeadersView?.element();
 
     eventsEngine.on($columnHeadersView, 'focusin', '.dx-header-row > td', this.focusinHandlerContext);
+  }
+
+  protected getNewVisibleIndex(visibleIndex, direction) {
+    return direction === 'previous' ? visibleIndex - 1 : visibleIndex + 2;
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

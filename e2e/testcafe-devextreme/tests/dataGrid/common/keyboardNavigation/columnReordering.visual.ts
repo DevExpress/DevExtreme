@@ -703,3 +703,82 @@ test('reorder a custom command column to left', async (t) => {
     ],
   });
 });
+
+// Regular columns when adaptability is enabled
+test('reorder column to right when adaptability is enabled and there are hidden columns', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+  const commandHeader = dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(3);
+
+  await t
+    .click(commandHeader.element)
+    .pressKey('ctrl+right')
+    .pressKey('ctrl+right');
+
+  await takeScreenshot(
+    'reorder_column_to_right_when_there_are_hidden_columns',
+    dataGrid.element,
+  );
+
+  await t.expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  await createWidget('dxDataGrid', {
+    width: 550,
+    columnWidth: 100,
+    dataSource: [{
+      field1: 'test1',
+      field2: 'test2',
+      field3: 'test3',
+      field4: 'test4',
+      field5: 'test5',
+      field6: 'test6',
+      field7: 'test7',
+      field8: 'test8',
+    }],
+    customizeColumns: (columns) => {
+      columns[4].hidingPriority = 0;
+      columns[5].hidingPriority = 1;
+      columns[7].hidingPriority = 2;
+    },
+  });
+});
+
+test('reorder column to left when adaptability is enabled and there are hidden columns', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+  const commandHeader = dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(4);
+
+  await t
+    .click(commandHeader.element)
+    .pressKey('ctrl+left')
+    .pressKey('ctrl+left');
+
+  await takeScreenshot(
+    'reorder_column_to_left_when_there_are_hidden_columns',
+    dataGrid.element,
+  );
+
+  await t.expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  await createWidget('dxDataGrid', {
+    width: 550,
+    columnWidth: 100,
+    dataSource: [{
+      field1: 'test1',
+      field2: 'test2',
+      field3: 'test3',
+      field4: 'test4',
+      field5: 'test5',
+      field6: 'test6',
+      field7: 'test7',
+      field8: 'test8',
+    }],
+    customizeColumns: (columns) => {
+      columns[0].hidingPriority = 0;
+      columns[2].hidingPriority = 1;
+      columns[3].hidingPriority = 2;
+    },
+  });
+});
