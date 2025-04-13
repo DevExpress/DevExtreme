@@ -541,10 +541,10 @@ test('reorder fixed nested column to left', async (t) => {
 test('reorder column to left when there is a command column', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
-  const commandHeader = dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(2);
+  const thirdHeader = dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(2);
 
   await t
-    .click(commandHeader.element)
+    .click(thirdHeader.element)
     .pressKey('ctrl+left')
     .pressKey('ctrl+left');
 
@@ -582,10 +582,10 @@ test('reorder column to left when there is a command column', async (t) => {
 test('reorder column to right when there is a command column', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
-  const commandHeader = dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(2);
+  const thirdHeader = dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(2);
 
   await t
-    .click(commandHeader.element)
+    .click(thirdHeader.element)
     .pressKey('ctrl+right')
     .pressKey('ctrl+right');
 
@@ -708,10 +708,10 @@ test('reorder a custom command column to left', async (t) => {
 test('reorder column to right when adaptability is enabled and there are hidden columns', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
-  const commandHeader = dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(3);
+  const fourthHeader = dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(3);
 
   await t
-    .click(commandHeader.element)
+    .click(fourthHeader.element)
     .pressKey('ctrl+right')
     .pressKey('ctrl+right');
 
@@ -747,10 +747,10 @@ test('reorder column to right when adaptability is enabled and there are hidden 
 test('reorder column to left when adaptability is enabled and there are hidden columns', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
-  const commandHeader = dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(4);
+  const fifthHeader = dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(4);
 
   await t
-    .click(commandHeader.element)
+    .click(fifthHeader.element)
     .pressKey('ctrl+left')
     .pressKey('ctrl+left');
 
@@ -780,5 +780,68 @@ test('reorder column to left when adaptability is enabled and there are hidden c
       columns[2].hidingPriority = 1;
       columns[3].hidingPriority = 2;
     },
+  });
+});
+
+// Regular columns with async templates
+[true, false].forEach((renderAsync) => {
+  test(`reorder column when there are async templates and renderAsync = ${renderAsync}`, async (t) => {
+    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+    const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+    const firstHeader = dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(0);
+
+    await t
+      .expect(firstHeader.element.textContent)
+      .contains('Field');
+
+    await t
+      .click(firstHeader.element)
+      .pressKey('ctrl+right');
+
+    await t
+      .expect(firstHeader.element.textContent)
+      .contains('Field');
+
+    await takeScreenshot(
+      `reorder_column_when_there_are_async_templates_and_renderAsync_=_${renderAsync}`,
+      dataGrid.element,
+    );
+
+    await t.expect(compareResults.isValid())
+      .ok(compareResults.errorMessages());
+  }).before(async () => {
+    await createWidget('dxDataGrid', {
+      columnWidth: 100,
+      dataSource: [{
+        field1: 'test1',
+        field2: 'test2',
+        field3: 'test3',
+        field4: 'test4',
+      }],
+      columns: [
+        'field1',
+        {
+          dataField: 'field2',
+          headerCellTemplate: 'testHeaderCellTemplate',
+        },
+        'field3',
+        'field4',
+      ],
+      renderAsync,
+      // @ts-expect-error private option
+      templatesRenderAsynchronously: true,
+      integrationOptions: {
+        templates: {
+          testHeaderCellTemplate: {
+            render({ model, container, onRendered }) {
+              setTimeout(() => {
+                container.append($('<b/>').text(model.column.caption));
+                onRendered();
+              }, 100);
+            },
+          },
+        },
+      },
+    });
   });
 });
