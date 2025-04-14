@@ -7,10 +7,13 @@
 @use '../../base/cardView/content_view/content/card/cover/variables' as *;
 @use '../../base/cardView/content_view/content/card/content/variables' as *;
 @use '../../base/cardView/content_view/content/variables' as *;
+@use '../../base/cardView/content_view/no_data/variables' as *;
 
 // adduse
 
+$cardview-fluent-sizes-64: null;
 $cardview-fluent-sizes-48: null;
+$cardview-fluent-sizes-40: null;
 $cardview-fluent-paddings-24: null;
 $cardview-fluent-paddings-12: null;
 $cardview-fluent-paddings-6: null;
@@ -20,7 +23,9 @@ $cardview-fluent-gaps-16: null;
 $cardview-fluent-gaps-24: null;
 
 @if $size == "default" {
+  $cardview-fluent-sizes-64: 64px;
   $cardview-fluent-sizes-48: 48px;
+  $cardview-fluent-sizes-40: 40px;
   $cardview-fluent-paddings-24: 24px;
   $cardview-fluent-paddings-12: 12px;
   $cardview-fluent-paddings-6: 6px;
@@ -30,7 +35,9 @@ $cardview-fluent-gaps-24: null;
   $cardview-fluent-gaps-24: 24px;
 }
 @else if $size == "compact" {
+  $cardview-fluent-sizes-64: 48px;
   $cardview-fluent-sizes-48: 32px;
+  $cardview-fluent-sizes-40: 32px;
   $cardview-fluent-paddings-24: 16px;
   $cardview-fluent-paddings-12: 8px;
   $cardview-fluent-paddings-6: 4px;
@@ -48,6 +55,10 @@ $cardview-headerpanel-content-gap: 8px !default;
 
 $cardview-header-item-border-width: 1px !default;
 $cardview-header-item-border-radius: 6px !default;
+
+$cardview-nodata-icon-container-size: $cardview-fluent-sizes-64 !default;
+$cardview-nodata-icon-container-margin: $cardview-fluent-paddings-12 !default;
+$cardview-nodata-icon-size: $cardview-fluent-sizes-40 !default;
 
 $cardview-content-column-gap: $cardview-fluent-gaps-16 !default;
 $cardview-content-row-gap: $cardview-fluent-gaps-16 !default;
