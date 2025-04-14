@@ -1,7 +1,7 @@
+import dateUtils from '@js/core/utils/date';
 import { isDefined } from '@js/core/utils/type';
 import type { Appointment } from '@js/ui/scheduler';
 import { dateUtilsTs } from '@ts/core/utils/date';
-import { dateUtils } from '@ts/core/utils/m_date';
 
 import { createAppointmentAdapter } from '../../m_appointment_adapter';
 import type { AppointmentDataItem, SafeAppointment } from '../../types';
