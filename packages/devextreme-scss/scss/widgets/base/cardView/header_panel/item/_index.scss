@@ -17,6 +17,10 @@
     background-color: $cardview-header-item-hovered-background-color;
     border: solid $cardview-header-item-border-width $cardview-header-item-hovered-border-color;
   }
+
+  .dx-icon-cursorprohibition {
+    color: $cardview-header-item-prohibition-icon-color;
+  }
 }
 
 .dx-cardview {
