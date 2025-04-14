@@ -107,7 +107,9 @@ gulp.task(NPM_PREPARE_MODULES, (done) => {
   const packParamsForFolders = [
     ['common'],
     ['core', ['config', 'index']],
+    ['common/core'],
     ['common/data'],
+    ['common/export'],
   ];
   const modulesImportsFromIndex = fs.readFileSync(
     config.npm.dist + 'esm/index.js',
