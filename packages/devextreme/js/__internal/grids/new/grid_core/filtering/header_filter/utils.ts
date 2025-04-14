@@ -27,8 +27,10 @@ export const mergeColumnHeaderFilterOptions = (
   };
 };
 
+export const getColumnIdentifier = (column: Column): string => column.name ?? column.dataField;
+
 export const getColumnName = (column: Column): string => {
-  const name = column.name ?? column.dataField;
+  const name = getColumnIdentifier(column);
   if (!isDefined(name)) {
     throw errors.Error('E1049', column.caption);
   }

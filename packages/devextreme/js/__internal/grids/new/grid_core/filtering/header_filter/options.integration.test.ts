@@ -3,7 +3,6 @@ import {
   afterEach, describe, expect, it,
 } from '@jest/globals';
 import $ from '@js/core/renderer';
-import { HeaderPanelView } from '@ts/grids/new/card_view/header_panel/view';
 import CardView from '@ts/grids/new/card_view/widget';
 import type {
   HeaderFilterSearchColumnOptions,
@@ -14,6 +13,7 @@ import type { Options as GridCoreOptions } from '@ts/grids/new/grid_core/options
 import { rerender } from 'inferno';
 
 import { defaultOptions } from './options';
+import { HeaderFilterView } from './view';
 
 const SELECTORS = {
   cardView: '.dx-cardview',
@@ -41,7 +41,7 @@ const openHeaderFilterPopup = (cardView: CardView): Element => {
   const popupContainer = document.createElement('div');
 
   // @ts-expect-error get protected property
-  const view = cardView.diContext.get(HeaderPanelView);
+  const view = cardView.diContext.get(HeaderFilterView);
 
   const column = cardView.getVisibleColumns()[0];
   view.openPopup(popupContainer, column);

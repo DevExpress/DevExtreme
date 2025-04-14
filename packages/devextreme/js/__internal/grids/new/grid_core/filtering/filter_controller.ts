@@ -46,29 +46,49 @@ export class FilterController {
     [this.filterBuilderCustomOperations],
   );
 
-  public readonly displayFilter = computed(
+  private readonly appliedFiltersInternal = computed(
     (
-      columns,
       filterPanelValue,
       headerFilterValue,
       searchFilter,
       filterSyncEnabled,
-      customOperations,
     ) => {
       const filters = [filterPanelValue, searchFilter];
       if (!filterSyncEnabled) {
-        const headerFilterExpression = getFilterExpression(headerFilterValue, columns, customOperations, 'filterBuilder');
-        filters.push(headerFilterExpression);
+        filters.push(headerFilterValue);
       }
-      return gridCoreUtils.combineFilters(filters);
+      return filters?.filter((f) => f) ?? [];
     },
     [
-      this.columnsController.visibleColumns,
       this.filterPanelValue,
       this.headerFilterController.composedHeaderFilter,
       this.searchController.searchFilter,
       this.filterSyncEnabled,
+    ],
+  );
+
+  public readonly appliedFilters = computed(
+    (filters) => gridCoreUtils.combineFilters(filters),
+    [
+      this.appliedFiltersInternal,
+    ],
+  );
+
+  private readonly combinedFilters = computed(
+    (appliedFilters, columns, customOperations) => appliedFilters?.map(
+      (filter) => getFilterExpression(filter, columns, customOperations, 'filterBuilder'),
+    ),
+    [
+      this.appliedFiltersInternal,
+      this.columnsController.visibleColumns,
       this.customOperations,
+    ],
+  );
+
+  public readonly displayFilter = computed(
+    (filters) => gridCoreUtils.combineFilters(filters),
+    [
+      this.combinedFilters,
     ],
   );
 
@@ -80,10 +100,10 @@ export class FilterController {
     private readonly sharedController: SharedController,
   ) {
     effect(
-      (displayFilter) => {
-        this.sharedController.displayFilter.update(displayFilter);
+      (appliedFilters) => {
+        this.sharedController.appliedFilters.update(appliedFilters);
       },
-      [this.displayFilter],
+      [this.appliedFilters],
     );
   }
 

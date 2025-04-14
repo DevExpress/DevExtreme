@@ -10,7 +10,7 @@ export class SharedController {
 
   public readonly dataSource = state<DataSource<unknown, unknown> | undefined>(undefined);
 
-  public readonly displayFilter = state(undefined);
+  public readonly appliedFilters = state<unknown[]>([]);
 
   constructor(
     private readonly optionsController: OptionsController,

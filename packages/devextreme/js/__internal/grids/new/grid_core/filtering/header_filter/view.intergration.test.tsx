@@ -4,9 +4,10 @@ import {
   expect,
   it,
 } from '@jest/globals';
-import { HeaderPanelView } from '@ts/grids/new/card_view/header_panel/view';
 import CardView from '@ts/grids/new/card_view/widget';
 import { rerender } from 'inferno';
+
+import { HeaderFilterView } from './view';
 
 const SELECTORS = {
   popupContent: '.dx-popup-wrapper.dx-header-filter-menu',
@@ -37,7 +38,7 @@ describe('HeaderFilter', () => {
       });
 
       // @ts-expect-error getting protected field
-      const view = cardView.diContext.get(HeaderPanelView);
+      const view = cardView.diContext.get(HeaderFilterView);
 
       const column = cardView.getVisibleColumns()[0];
       view.openPopup(popupContainer, column);
@@ -70,7 +71,7 @@ describe('HeaderFilter', () => {
       });
 
       // @ts-expect-error getting protected field
-      const view = cardView.diContext.get(HeaderPanelView);
+      const view = cardView.diContext.get(HeaderFilterView);
 
       const column = cardView.getVisibleColumns()[0];
       view.openPopup(popupContainer, column);
