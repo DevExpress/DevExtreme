@@ -5,7 +5,7 @@ import { isFunction, isObject } from '@js/core/utils/type';
 import dateLocalization from '@js/localization/date';
 import messageLocalization from '@js/localization/message';
 
-import { VIEWS } from '../m_constants';
+import { VIEWS } from '../constants';
 
 const DAY_FORMAT = 'd';
 

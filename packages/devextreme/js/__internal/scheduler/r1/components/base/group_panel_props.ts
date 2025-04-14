@@ -1,7 +1,7 @@
 import type { JSXTemplate } from '@devextreme-generator/declarations';
 import type { PropsWithClassName, PropsWithStyles } from '@ts/core/r1/index';
 
-import type { GroupItem, GroupPanelData, GroupRenderItem } from '../../types';
+import type { GroupItem, GroupPanelData, GroupRenderItem } from '../../../types';
 import type { DefaultProps, PropsWithViewContext, ResourceCellTemplateProps } from '../types';
 
 export interface GroupPanelBaseProps extends

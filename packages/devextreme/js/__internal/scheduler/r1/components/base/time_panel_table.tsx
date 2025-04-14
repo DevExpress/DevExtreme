@@ -3,7 +3,7 @@ import { createReRenderEffect, InfernoWrapperComponent } from '@devextreme/runti
 import type { JSXTemplate, RefObject } from '@devextreme-generator/declarations';
 import { Fragment } from 'inferno';
 
-import type { GroupOrientation, TimePanelData } from '../../types';
+import type { GroupOrientation, TimePanelData } from '../../../types';
 import type { DateTimeCellTemplateProps, DefaultProps, PropsWithViewContext } from '../types';
 import { AllDayPanelTitle } from './all_day_panel_title';
 import { CellBase, CellBaseDefaultProps } from './cell';

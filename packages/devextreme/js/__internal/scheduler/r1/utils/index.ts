@@ -47,7 +47,6 @@ export {
   calculateViewStartDate,
   extendGroupItemsForGroupingByDate,
   getAppointmentKey,
-  getAppointmentRenderingStrategyName,
   getCalculatedFirstDayOfWeek,
   getCellDuration,
   getDatesWithoutTime,
@@ -85,15 +84,15 @@ export {
   splitNumber,
 } from './base';
 export {
-  getPreparedDataItems,
-} from './data';
-export {
   excludeFromRecurrence,
 } from './exclude_from_recurrence';
 export {
   formatWeekday,
   formatWeekdayAndDay,
 } from './format_weekday';
+export {
+  getAppointmentDataItems,
+} from './get_appointment_data_items';
 
 export const agendaUtils = {
   calculateStartViewDate,

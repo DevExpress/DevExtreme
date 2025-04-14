@@ -5,11 +5,12 @@ import { map } from '@js/core/utils/iterator';
 import { isDefined, isFunction } from '@js/core/utils/type';
 import query from '@js/data/query';
 import { dateUtilsTs } from '@ts/core/utils/date';
-import type { AppointmentDataItem } from '@ts/scheduler/r1/types';
 import {
   getDatesWithoutTime, hasResourceValue, isAppointmentTakesAllDay, isTimelineView,
 } from '@ts/scheduler/r1/utils/index';
+import type { AppointmentDataItem, SafeAppointment } from '@ts/scheduler/types';
 import type { AppointmentDataAccessor } from '@ts/scheduler/utils';
+import type ViewDataProvider from '@ts/scheduler/workspaces/view_model/m_view_data_provider';
 
 import { createAppointmentAdapter } from '../../m_appointment_adapter';
 import { getRecurrenceProcessor } from '../../m_recurrence';
@@ -61,7 +62,7 @@ export class AppointmentFilterBaseStrategy {
 
   get groupCount() { return this._resolveOption('groupCount'); }
 
-  get viewDataProvider() { return this._resolveOption('viewDataProvider'); }
+  get viewDataProvider(): ViewDataProvider { return this._resolveOption('viewDataProvider'); }
 
   get allDayPanelMode() { return this._resolveOption('allDayPanelMode'); }
 
@@ -72,7 +73,7 @@ export class AppointmentFilterBaseStrategy {
       : result;
   }
 
-  filter(preparedItems: AppointmentDataItem[]) {
+  filter(preparedItems: AppointmentDataItem[]): SafeAppointment[] {
     const [min, max] = this.dateRange;
     const { viewOffset } = this.options;
     const allDay = !this.showAllDayPanel && this.supportAllDayRow
@@ -305,12 +306,12 @@ export class AppointmentFilterBaseStrategy {
     return result;
   }
 
-  filterLoadedAppointments(filterOptions, preparedItems: AppointmentDataItem[]) {
+  filterLoadedAppointments(filterOptions, preparedItems: AppointmentDataItem[]): SafeAppointment[] {
     const filteredItems = this.filterPreparedItems(filterOptions, preparedItems);
     return filteredItems.map(({ rawAppointment }) => rawAppointment);
   }
 
-  filterPreparedItems(filterOptions, preparedItems: AppointmentDataItem[]) {
+  filterPreparedItems(filterOptions, preparedItems: AppointmentDataItem[]): AppointmentDataItem[] {
     const combinedFilter = this._createCombinedFilter(filterOptions);
 
     return query(preparedItems)
@@ -318,7 +319,7 @@ export class AppointmentFilterBaseStrategy {
       .toArray();
   }
 
-  filterAllDayAppointments(preparedItems: AppointmentDataItem[]) {
+  filterAllDayAppointments(preparedItems: AppointmentDataItem[]): SafeAppointment[] {
     const combinedFilter = this._createAllDayAppointmentFilter();
     return query(preparedItems)
       .filter(combinedFilter)
