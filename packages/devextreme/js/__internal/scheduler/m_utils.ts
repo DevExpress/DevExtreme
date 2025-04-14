@@ -2,7 +2,7 @@ import { getPublicElement } from '@js/core/element';
 import $ from '@js/core/renderer';
 import { getOuterHeight, setHeight, setWidth } from '@js/core/utils/size';
 
-import { APPOINTMENT_SETTINGS_KEY } from './m_constants';
+import { APPOINTMENT_SETTINGS_KEY } from './constants';
 
 export const utils = {
   dataAccessors: {

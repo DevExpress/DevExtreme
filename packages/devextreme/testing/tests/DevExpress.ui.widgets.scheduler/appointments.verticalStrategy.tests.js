@@ -64,7 +64,9 @@ module('Vertical Strategy', moduleOptions, () => {
                 endDate: new Date(2015, 1, 9, 12),
                 allDay: true
             },
-            settings: [{ width: 40, height: 100, allDay: true }]
+            settings: [{ width: 40, height: 100, allDay: true }],
+            needRepaint: true,
+            needRemove: false,
         }, {
             itemData: {
                 text: 'Appointment 2',
@@ -72,7 +74,9 @@ module('Vertical Strategy', moduleOptions, () => {
                 endDate: new Date(2015, 1, 9, 12),
                 allDay: true
             },
-            settings: [{ width: 40, height: 100, allDay: true }]
+            settings: [{ width: 40, height: 100, allDay: true }],
+            needRepaint: true,
+            needRemove: false,
         }];
 
         const instance = createInstance({
@@ -93,7 +97,9 @@ module('Vertical Strategy', moduleOptions, () => {
                 endDate: new Date(2015, 1, 9, 12),
                 allDay: true
             },
-            settings: [{ count: 1, index: 0, width: 35, height: 100, allDay: true, empty: true }]
+            settings: [{ count: 1, index: 0, width: 35, height: 100, allDay: true, empty: true }],
+            needRepaint: true,
+            needRemove: false,
         }, {
             itemData: {
                 text: 'Appointment 2',
@@ -101,7 +107,9 @@ module('Vertical Strategy', moduleOptions, () => {
                 endDate: new Date(2015, 1, 9, 12),
                 allDay: true
             },
-            settings: [{ count: 1, index: 0, width: 35, height: 100, allDay: true, empty: true }]
+            settings: [{ count: 1, index: 0, width: 35, height: 100, allDay: true, empty: true }],
+            needRepaint: true,
+            needRemove: false,
         }];
 
         const instance = createInstance({
@@ -127,13 +135,17 @@ module('Vertical All Day Strategy', moduleOptions, () => {
                 startDate: new Date(),
                 allDay: true
             },
-            settings: [{ count: 1, index: 0, width: 40, height: 100, allDay: true }]
+            settings: [{ count: 1, index: 0, width: 40, height: 100, allDay: true }],
+            needRepaint: true,
+            needRemove: false,
         }, {
             itemData: {
                 text: 'Appointment 2',
                 startDate: new Date()
             },
-            settings: [{ count: 1, index: 0, width: 40, height: 100 }]
+            settings: [{ count: 1, index: 0, width: 40, height: 100 }],
+            needRepaint: true,
+            needRemove: false,
         }];
 
         instance.option('items', items);
@@ -148,7 +160,9 @@ module('Vertical All Day Strategy', moduleOptions, () => {
                 text: 'Appointment 1',
                 startDate: new Date()
             },
-            settings: [{ count: 1, index: 0, width: 40, height: 100 }]
+            settings: [{ count: 1, index: 0, width: 40, height: 100 }],
+            needRepaint: true,
+            needRemove: false,
         }];
 
         const instance = createInstance({
@@ -166,7 +180,9 @@ module('Vertical All Day Strategy', moduleOptions, () => {
                 startDate: new Date(),
                 allDay: true
             },
-            settings: [{ count: 1, index: 0, width: 40, height: 100, allDay: true }]
+            settings: [{ count: 1, index: 0, width: 40, height: 100, allDay: true }],
+            needRepaint: true,
+            needRemove: false,
         }]
         );
 

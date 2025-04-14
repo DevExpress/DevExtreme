@@ -3,7 +3,7 @@ import { BaseInfernoComponent } from '@devextreme/runtime/inferno';
 import type { JSXTemplate } from '@devextreme-generator/declarations';
 
 import { combineClasses } from '../../../../core/r1/utils/render_utils';
-import type { ViewCellData } from '../../types';
+import type { ViewCellData } from '../../../types';
 import type { DataCellTemplateProps, DefaultProps, PropsWithViewContext } from '../types';
 import { AllDayPanelCell } from './all_day_panel_cell';
 import { Row } from './row';

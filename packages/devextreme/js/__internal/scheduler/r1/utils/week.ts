@@ -1,7 +1,7 @@
 import dateLocalization from '@js/common/core/localization/date';
 import dateUtils from '@js/core/utils/date';
 
-import type { CalculateStartViewDate } from '../types';
+import type { CalculateStartViewDate } from '../../types';
 import {
   getCalculatedFirstDayOfWeek,
   getValidCellDateForLocalTimeFormat,
