@@ -209,6 +209,8 @@
         "dxTreeList-ariaToolbar": "Koka rīkjosla",
         "dxTreeList-editingAddRowToNode": "Pievienot",
 
+        "dxCardView-ariaSearchInGrid": "Search in the card view",
+
         "dxPager-infoText": "Lapa {0} no {1} ({2} rindas)",
         "dxPager-pagesCountText": "no",
         "dxPager-pageSize": "Rindas lapā: {0}",

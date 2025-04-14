@@ -118,25 +118,4 @@ exports[`Options searchPanel.text (card contains match) 1`] = `
 </div>
 `;
 
-exports[`Options searchPanel.text (card not contains match) 1`] = `
-<div
-  class="dx-cardview-card-content"
->
-  <div
-    class="dx-cardview-field"
-    tabindex="0"
-  >
-    <span
-      class="dx-cardview-field-name"
-    >
-      Name
-      :
-    </span>
-    <span
-      class="dx-cardview-field-value dx-cardview-field-value--text-align-left dx-cardview-field-value--white-space-nowrap"
-    >
-      John Doe
-    </span>
-  </div>
-</div>
-`;
+exports[`Options searchPanel.text (card not contains match) 1`] = `null`;

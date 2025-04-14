@@ -209,6 +209,8 @@
         "dxTreeList-ariaToolbar": "Tree list toolbar",
         "dxTreeList-editingAddRowToNode": "افزودن",
 
+        "dxCardView-ariaSearchInGrid": "Search in the card view",
+
         "dxPager-infoText": "صفحه {0} از {1} ({2} آیتم)",
         "dxPager-pagesCountText": "از",
         "dxPager-pageSize": "Items per page: {0}",

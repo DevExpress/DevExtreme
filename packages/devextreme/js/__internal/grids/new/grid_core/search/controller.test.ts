@@ -10,9 +10,7 @@ import { splitHighlightedText } from '@ts/grids/new/grid_core/search/utils';
 import { getContext } from '../di.test_utils';
 import { SearchController } from './controller';
 
-jest.mock('@ts/grids/new/grid_core/search/utils', () => ({
-  splitHighlightedText: jest.fn(),
-}));
+jest.mock('@ts/grids/new/grid_core/search/utils');
 
 const setup = (config: Options = {}) => {
   const context = getContext(config);

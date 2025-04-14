@@ -209,6 +209,8 @@
         "dxTreeList-ariaToolbar": "ツリー リストのツール バー",
         "dxTreeList-editingAddRowToNode": "追加",
 
+        "dxCardView-ariaSearchInGrid": "Search in the card view",
+
         "dxPager-infoText": "ページ {0} / {1} ({2} アイテム)",
         "dxPager-pagesCountText": "/",
         "dxPager-pageSize": "ページあたりのアイテム数: {0}",

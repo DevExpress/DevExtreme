@@ -209,6 +209,8 @@
         "dxTreeList-ariaToolbar": "Symbolleiste der Strukturliste",
         "dxTreeList-editingAddRowToNode": "Hinzufügen",
 
+        "dxCardView-ariaSearchInGrid": "Search in the card view",
+
         "dxPager-infoText": "Seite {0} von {1} ({2} Elemente)",
         "dxPager-pagesCountText": "von",
         "dxPager-pageSize": "Elemente pro Seite: {0}",
