@@ -9,6 +9,8 @@
   border-bottom: $cardview-card-border-size solid $cardview-card-border-color;
   max-height: var(--dx-cardview-card-cover-max-height);
   aspect-ratio: var(--dx-cardview-card-cover-ratio);
+  width: 100%;
+  background-color: $cardview-card-cover-background-color;
 
   &-noimage {
     background-color: $cardview-card-cover-noimage-background-color;
@@ -23,6 +25,5 @@
 
 .dx-card-cover-image {
   object-fit: contain;
-  width: 100%;
 }
 
