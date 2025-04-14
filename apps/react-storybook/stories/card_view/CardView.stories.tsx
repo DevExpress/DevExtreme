@@ -298,3 +298,32 @@ export const SelectionStory: Story = {
   }
 }
 
+export const ContextMenuStory: Story = {
+  ...DefaultMode,
+  args: {
+    ...DefaultMode.args,
+    onContextMenuPreparing: (e) => {
+      e.items = e.items ?? [];
+
+      if(e.target === 'toolbar') {
+        e.items.push({
+          text: 'show column chooser',
+          onItemClick: () => e.component.showColumnChooser()
+        });
+      }
+      else if(e.target === 'headerPanel' && e.column) {
+        e.items.push({
+          text: `hide ${e.column.caption}`,
+          disabled: !e.column.visible,
+          icon: 'eyeclose',
+          onItemClick: () => e.component.columnOption(e.columnIndex, 'visible', false)
+        });
+      }
+      else if(e.target === 'content' && e.card) {
+        e.items.push({
+          text: 'do something with card'
+        });
+      }
+    }
+  }
+}

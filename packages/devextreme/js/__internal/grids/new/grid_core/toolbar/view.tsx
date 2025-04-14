@@ -1,7 +1,7 @@
-/* eslint-disable spellcheck/spell-checker */
 import type { SubsGets } from '@ts/core/reactive/index';
 import { combined, computed } from '@ts/core/reactive/index';
 
+import { BaseContextMenuController } from '../context_menu/controller';
 import { View } from '../core/view';
 import { OptionsController } from '../options_controller/options_controller';
 import { ToolbarController } from './controller';
@@ -19,10 +19,15 @@ export class ToolbarView extends View<ToolbarProps> {
     [this.visibleConfig, this.controller.items],
   );
 
-  public static dependencies = [ToolbarController, OptionsController] as const;
+  public static dependencies = [
+    ToolbarController,
+    BaseContextMenuController,
+    OptionsController,
+  ] as const;
 
   constructor(
     private readonly controller: ToolbarController,
+    private readonly contextMenuController: BaseContextMenuController,
     private readonly options: OptionsController,
   ) {
     super();
@@ -33,6 +38,11 @@ export class ToolbarView extends View<ToolbarProps> {
       visible: this.visible,
       items: this.controller.items,
       disabled: this.options.oneWay('toolbar.disabled'),
+      showContextMenu: this.showContextMenu.bind(this),
     });
+  }
+
+  private showContextMenu(e: MouseEvent): void {
+    this.contextMenuController.show(e, 'toolbar');
   }
 }

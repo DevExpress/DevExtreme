@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import type { ContentViewProps as ContentViewBaseProps } from '@ts/grids/new/grid_core/content_view/content_view';
 import { ContentView as ContentViewBase } from '@ts/grids/new/grid_core/content_view/content_view';
 import type { InfernoNode } from 'inferno';
