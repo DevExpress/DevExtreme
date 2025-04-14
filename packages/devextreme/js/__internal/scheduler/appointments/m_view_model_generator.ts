@@ -1,14 +1,16 @@
 import { dateUtilsTs } from '@ts/core/utils/date';
 import { getAppointmentKey } from '@ts/scheduler/r1/utils/index';
+import type { AppointmentViewModel, RenderStrategyName, SafeAppointment } from '@ts/scheduler/types';
 
 import AgendaAppointmentsStrategy from './rendering_strategies/m_strategy_agenda';
+import type BaseAppointmentsStrategy from './rendering_strategies/m_strategy_base';
 import HorizontalAppointmentsStrategy from './rendering_strategies/m_strategy_horizontal';
 import HorizontalMonthAppointmentsStrategy from './rendering_strategies/m_strategy_horizontal_month';
 import HorizontalMonthLineAppointmentsStrategy from './rendering_strategies/m_strategy_horizontal_month_line';
 import VerticalAppointmentsStrategy from './rendering_strategies/m_strategy_vertical';
 import WeekAppointmentRenderingStrategy from './rendering_strategies/m_strategy_week';
 
-const RENDERING_STRATEGIES = {
+const RENDERING_STRATEGIES: Record<RenderStrategyName, typeof BaseAppointmentsStrategy> = {
   horizontal: HorizontalAppointmentsStrategy,
   horizontalMonth: HorizontalMonthAppointmentsStrategy,
   horizontalMonthLine: HorizontalMonthLineAppointmentsStrategy,
@@ -18,14 +20,18 @@ const RENDERING_STRATEGIES = {
 };
 
 export class AppointmentViewModelGenerator {
-  renderingStrategy: any;
+  renderingStrategy!: BaseAppointmentsStrategy;
 
   initRenderingStrategy(options) {
     const RenderingStrategy = RENDERING_STRATEGIES[options.appointmentRenderingStrategyName];
     this.renderingStrategy = new RenderingStrategy(options);
   }
 
-  generate(filteredItems, options) {
+  getRenderingStrategy() {
+    return this.renderingStrategy;
+  }
+
+  generate(filteredItems: SafeAppointment[], options) {
     const { viewOffset } = options;
     const appointments = filteredItems
       ? filteredItems.slice()
@@ -44,7 +50,7 @@ export class AppointmentViewModelGenerator {
     };
   }
 
-  postProcess(filteredItems, positionMap) {
+  postProcess(filteredItems: SafeAppointment[], positionMap): AppointmentViewModel[] {
     const renderingStrategy = this.getRenderingStrategy();
 
     return filteredItems.map((data, index) => {
@@ -61,13 +67,12 @@ export class AppointmentViewModelGenerator {
           : 'horizontal';
       });
 
-      const item: any = {
+      const item: AppointmentViewModel = {
         itemData: data,
         settings: appointmentSettings,
+        needRepaint: true,
+        needRemove: false,
       };
-
-      item.needRepaint = true;
-      item.needRemove = false;
 
       return item;
     });
@@ -191,25 +196,20 @@ export class AppointmentViewModelGenerator {
     };
   }
 
-  getRenderingStrategy() {
-    return this.renderingStrategy;
-  }
-
   // NOTE: Unfortunately, we cannot implement immutable behavior here
   // because in this case it will break the refs (keys) of dataSource's appointments,
   // and it will break appointment updates :(
   private unshiftViewModelAppointmentsByViewOffset(
-    viewModel: any[],
+    viewModel: AppointmentViewModel[],
     viewOffset: number,
-  ): any[] {
+  ): AppointmentViewModel[] {
     const processedAppointments = new Set();
 
     // eslint-disable-next-line no-restricted-syntax
     for (const model of viewModel) {
       // eslint-disable-next-line no-restricted-syntax
       for (const setting of model.settings ?? []) {
-        // eslint-disable-next-line prefer-destructuring
-        const appointment = setting?.info?.appointment;
+        const appointment = (setting as any)?.info?.appointment;
 
         if (appointment && !processedAppointments.has(appointment)) {
           appointment.startDate = dateUtilsTs
