@@ -8,10 +8,10 @@ import 'ui/drop_down_button';
 
 import Toolbar from '__internal/ui/html_editor/modules/m_toolbar';
 import FormDialog from '__internal/ui/html_editor/ui/m_formDialog';
-import AiDialog from '__internal/ui/html_editor/ui/aiDialog';
+import AIDialog from '__internal/ui/html_editor/ui/aiDialog';
 import { noop } from 'core/utils/common';
 import keyboardMock from '../../../helpers/keyboardMock.js';
-import { getMenuItems, openAiDialog, openAiToolbarMenu } from '../../../helpers/aiToolbarMenu.js';
+import { getMenuItems, openAIDialog, openAIToolbarMenu } from '../../../helpers/aiToolbarMenu.js';
 import fx from 'common/core/animation/fx';
 import errors from 'ui/widget/ui.errors';
 import localization from 'localization';
@@ -73,7 +73,7 @@ const TABLE_OPERATIONS = [
     'deleteTable'
 ];
 
-const defaultAiTranslateOptions = [
+const defaultAITranslateOptions = [
     'Arabic',
     'Chinese',
     'English',
@@ -83,7 +83,7 @@ const defaultAiTranslateOptions = [
     'Spanish'
 ];
 
-const defaultAiChangeToneOptions = [
+const defaultAIChangeToneOptions = [
     'Professional',
     'Casual',
     'Straightforward',
@@ -91,7 +91,7 @@ const defaultAiChangeToneOptions = [
     'Friendly'
 ];
 
-const defaultAiChangeStyleOptions = [
+const defaultAIChangeStyleOptions = [
     'Formal',
     'Informal',
     'Technical',
@@ -106,7 +106,7 @@ const defaultAiChangeStyleOptions = [
     'Conversational'
 ];
 
-const defaultAiCommands = [
+const defaultAICommands = [
     'summarize',
     'proofread',
     'expand',
@@ -117,10 +117,10 @@ const defaultAiCommands = [
     'askAI'
 ];
 
-const defaultAiOptions = {
-    translate: defaultAiTranslateOptions,
-    changeTone: defaultAiChangeToneOptions,
-    changeStyle: defaultAiChangeStyleOptions,
+const defaultAIOptions = {
+    translate: defaultAITranslateOptions,
+    changeTone: defaultAIChangeToneOptions,
+    changeStyle: defaultAIChangeStyleOptions,
 };
 
 const simpleModuleConfig = {
@@ -251,7 +251,7 @@ const dialogModuleConfig = {
     }
 };
 
-const dialogAiModuleConfig = {
+const dialogAIModuleConfig = {
     beforeEach: function() {
         fx.off = true;
 
@@ -281,13 +281,13 @@ const dialogAiModuleConfig = {
                 on: noop,
                 option: noop,
                 aiIntegration: {},
-                showAiDialog: (config) => {
+                showAIDialog: (config) => {
                     return this._aiDialog.show(config);
                 }
             }
         };
 
-        this._aiDialog = new AiDialog(this.$element, {});
+        this._aiDialog = new AIDialog(this.$element, {});
     },
     afterEach: function() {
         fx.off = false;
@@ -1437,16 +1437,16 @@ testModule('Toolbar dialogs', dialogModuleConfig, () => {
     });
 });
 
-testModule('Toolbar AI menu', dialogAiModuleConfig, () => {
+testModule('Toolbar AI menu', dialogAIModuleConfig, () => {
     QUnit.test('Should pass correct payload to dialog on item click', function(assert) {
         this.options.items = [{ name: 'ai', commands: ['summarize'] }];
         new Toolbar(this.quillMock, this.options);
 
-        const showSpy = sinon.spy(this.options.editorInstance, 'showAiDialog');
+        const showSpy = sinon.spy(this.options.editorInstance, 'showAIDialog');
 
-        openAiDialog(this.$element);
+        openAIDialog(this.$element);
 
-        assert.ok(showSpy.calledOnce, 'showAiDialog called');
+        assert.ok(showSpy.calledOnce, 'showAIDialog called');
         assert.deepEqual(showSpy.firstCall.args[0], {
             currentCommand: 'summarize',
             currentCommandOption: undefined,
@@ -1459,18 +1459,18 @@ testModule('Toolbar AI menu', dialogAiModuleConfig, () => {
         }, 'Correct config passed to dialog');
     });
 
-    QUnit.test('showAiDialog is not called on root menu item click (with submenu)', function(assert) {
+    QUnit.test('showAIDialog is not called on root menu item click (with submenu)', function(assert) {
         this.options.items = [{ name: 'ai', commands: ['translate'] }];
         new Toolbar(this.quillMock, this.options);
 
-        const showSpy = sinon.spy(this.options.editorInstance, 'showAiDialog');
+        const showSpy = sinon.spy(this.options.editorInstance, 'showAIDialog');
 
-        openAiToolbarMenu(this.$element);
+        openAIToolbarMenu(this.$element);
 
         const $rootItem = $(`.${MENU_ITEM_CLASS}`).eq(1);
         $rootItem.trigger('dxclick');
 
-        assert.strictEqual(showSpy.callCount, 0, 'showAiDialog is not called on root item click');
+        assert.strictEqual(showSpy.callCount, 0, 'showAIDialog is not called on root item click');
     });
 
     ['ai', { name: 'ai' }].forEach(item => {
@@ -1483,9 +1483,9 @@ testModule('Toolbar AI menu', dialogAiModuleConfig, () => {
             const menuItems = getMenuItems(this.$element);
             const commandNames = menuItems.map(command => command.id);
 
-            assert.deepEqual(commandNames, defaultAiCommands, 'commands match default list');
+            assert.deepEqual(commandNames, defaultAICommands, 'commands match default list');
 
-            Object.entries(defaultAiOptions).forEach(([commandName, defaultOptions]) => {
+            Object.entries(defaultAIOptions).forEach(([commandName, defaultOptions]) => {
                 const command = menuItems.find((command) => command.id === commandName);
                 const options = command.items.map((option) => option.id);
                 assert.deepEqual(options, defaultOptions, `Options for "${commandName}" match defaults`);
@@ -1504,7 +1504,7 @@ testModule('Toolbar AI menu', dialogAiModuleConfig, () => {
         assert.strictEqual(menuItems.length, 3, 'only specified commands rendered');
         assert.deepEqual(commandNames, ['translate', 'changeStyle', 'changeTone'], 'commands match specified list');
 
-        Object.entries(defaultAiOptions).forEach(([commandName, defaultOptions]) => {
+        Object.entries(defaultAIOptions).forEach(([commandName, defaultOptions]) => {
             const command = menuItems.find((command) => command.id === commandName);
             const actualOptions = command.items.map((option) => option.id);
             assert.deepEqual(actualOptions, defaultOptions, `Options for "${commandName}" match defaults`);
@@ -1556,7 +1556,7 @@ testModule('Toolbar AI menu', dialogAiModuleConfig, () => {
 
         new Toolbar(this.quillMock, this.options);
 
-        openAiToolbarMenu(this.$element);
+        openAIToolbarMenu(this.$element);
 
         const $menuItem = $(`.${MENU_ITEM_CLASS}`).last();
         assert.strictEqual($menuItem.text(), 'Summarize name', 'custom command text rendered in menu');
@@ -1573,7 +1573,7 @@ testModule('Toolbar AI menu', dialogAiModuleConfig, () => {
 
         new Toolbar(this.quillMock, this.options);
 
-        openAiToolbarMenu(this.$element);
+        openAIToolbarMenu(this.$element);
 
         const $menuItem = $(`.${MENU_ITEM_CLASS}`).last();
         assert.strictEqual($menuItem.text(), 'Custom command', 'custom command rendered in menu');

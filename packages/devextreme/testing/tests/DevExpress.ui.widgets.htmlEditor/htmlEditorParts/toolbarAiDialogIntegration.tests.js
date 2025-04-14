@@ -2,7 +2,7 @@ import $ from 'jquery';
 
 import 'ui/html_editor';
 
-import { openAiDialog } from '../../../helpers/aiToolbarMenu.js';
+import { openAIDialog } from '../../../helpers/aiToolbarMenu.js';
 import { clickActionButton, setResultText, getResultText } from '../../../helpers/aiDialog.js';
 
 const setupHtmlEditorWithAi = (config) => {
@@ -31,7 +31,7 @@ QUnit.module('Toolbar AI dialog integration', {}, () => {
             }
         });
 
-        openAiDialog($('#htmlEditor'));
+        openAIDialog($('#htmlEditor'));
         setResultText('Inserted value');
         clickActionButton('replace');
     });
@@ -47,7 +47,7 @@ QUnit.module('Toolbar AI dialog integration', {}, () => {
             }
         });
 
-        openAiDialog($('#htmlEditor'));
+        openAIDialog($('#htmlEditor'));
         setResultText('Inserted value');
         clickActionButton('insertAbove');
     });
@@ -63,7 +63,7 @@ QUnit.module('Toolbar AI dialog integration', {}, () => {
             }
         });
 
-        openAiDialog($('#htmlEditor'));
+        openAIDialog($('#htmlEditor'));
         setResultText('Inserted value');
         clickActionButton('insertBelow');
     });
@@ -73,7 +73,7 @@ QUnit.module('Toolbar AI dialog integration', {}, () => {
 
         instance.setSelection(0, 4);
 
-        openAiDialog($('#htmlEditor'));
+        openAIDialog($('#htmlEditor'));
         clickActionButton('replace');
 
         const resultText = getResultText();
@@ -86,7 +86,7 @@ QUnit.module('Toolbar AI dialog integration', {}, () => {
 
         instance.setSelection(0, 0);
 
-        openAiDialog($('#htmlEditor'));
+        openAIDialog($('#htmlEditor'));
         clickActionButton('replace');
 
         const resultText = getResultText();
@@ -107,7 +107,7 @@ QUnit.module('Toolbar AI dialog integration', {}, () => {
             }
         });
 
-        openAiDialog($('#htmlEditor'));
+        openAIDialog($('#htmlEditor'));
         setResultText('Inserted value');
         clickActionButton('replace');
     });
