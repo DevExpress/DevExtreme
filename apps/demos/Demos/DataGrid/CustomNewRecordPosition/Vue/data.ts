@@ -1,6 +1,6 @@
 import { createStore } from 'devextreme-aspnet-data-nojquery';
 
-const url = 'https://js.devexpress.com/Demos/Mvc/api/DataGridWebApi';
+const url = 'https://js.devexpress.com/Demos/NetCore/api/DataGridWebApi';
 
 export const dataSource = createStore({
   key: 'OrderID',

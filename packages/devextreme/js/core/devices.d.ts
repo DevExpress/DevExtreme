@@ -78,7 +78,7 @@ declare class DevicesObject {
 * @hidden
 * @public
 */
-// eslint-disable-next-line @typescript-eslint/init-declarations
+
 declare const devices: DevicesObject;
 
 export default devices;

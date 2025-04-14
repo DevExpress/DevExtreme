@@ -30,7 +30,7 @@ export class DetailViewComponent implements AfterViewInit {
   orderHistoryData: DataSource;
 
   constructor() {
-    this.url = 'https://js.devexpress.com/Demos/Mvc/api/DataGridAdvancedMasterDetailView';
+    this.url = 'https://js.devexpress.com/Demos/NetCore/api/DataGridAdvancedMasterDetailView';
   }
 
   ngAfterViewInit() {

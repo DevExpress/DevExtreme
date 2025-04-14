@@ -1,11 +1,11 @@
 import React, { useCallback, useState } from 'react';
 import FileManager, {
-  Permissions, ItemView, Details, Column, FileManagerTypes,
+  Permissions, ItemView, Details, Column, type FileManagerTypes,
 } from 'devextreme-react/file-manager';
 import RemoteFileSystemProvider from 'devextreme/file_management/remote_provider';
 
 const remoteProvider = new RemoteFileSystemProvider({
-  endpointUrl: 'https://js.devexpress.com/Demos/Mvc/api/file-manager-db',
+  endpointUrl: 'https://js.devexpress.com/Demos/NetCore/api/file-manager-db',
 });
 
 const allowedFileExtensions = [];

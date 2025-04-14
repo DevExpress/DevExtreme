@@ -1,0 +1,9 @@
+.dx-step-list {
+  display: flex;
+  width: 100%;
+
+  .dx-stepper-vertical & {
+    height: 100%;
+    flex-direction: column;
+  }
+}

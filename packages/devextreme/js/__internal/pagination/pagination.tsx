@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-import type { InfernoEffect } from '@devextreme/runtime/inferno';
-import { createReRenderEffect, InfernoWrapperComponent } from '@devextreme/runtime/inferno';
+import type { InfernoEffect } from '@ts/core/r1/runtime/inferno/index';
+import { createReRenderEffect, InfernoWrapperComponent } from '@ts/core/r1/runtime/inferno/index';
 
 import { combineClasses } from '../core/r1/utils/render_utils';
 import type { PaginationProps } from './common/pagination_props';
@@ -53,7 +53,7 @@ export class Pagination extends InfernoWrapperComponent<PaginationProps> {
       ...this.props,
       className: this.getClassName(),
       pageIndex: this.getPageIndex(),
-      // eslint-disable-next-line max-len
+      // eslint-disable-next-line @stylistic/max-len
       pageIndexChangedInternal: (pageIndex: number): void => this.pageIndexChangedInternal(pageIndex),
       pageSizeChangedInternal: (pageSize: number): void => this.pageSizeChangedInternal(pageSize),
     };

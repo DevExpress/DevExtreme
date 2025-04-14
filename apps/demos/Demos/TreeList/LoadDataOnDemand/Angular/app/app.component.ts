@@ -34,7 +34,7 @@ export class AppComponent {
           });
         }
         return lastValueFrom(
-          http.get('https://js.devexpress.com/Demos/Mvc/api/treeListData', { params }),
+          http.get('https://js.devexpress.com/Demos/NetCore/api/treeListData', { params }),
         );
       },
     });

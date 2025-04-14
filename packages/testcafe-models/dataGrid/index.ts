@@ -1,12 +1,9 @@
 import { ClientFunction, Selector } from 'testcafe';
 import DataGridInstance from 'devextreme/ui/data_grid';
 import type { SelectionSensitivity } from 'devextreme/ui/data_grid';
-import Widget from '../internal/widget';
 import Toolbar from '../toolbar';
 import DataRow from './data/row';
 import GroupRow from './groupRow';
-import FilterPanel from './filter/panel';
-import Pager from '../pagination';
 import EditForm from './editForm';
 import HeaderPanel from './headers/panel';
 import DataCell from './data/cell';
@@ -21,8 +18,11 @@ import AdaptiveDetailRow from './adaptiveDetailRow';
 import ColumnChooser from './columnChooser';
 import TextBox from '../textBox';
 import { GroupPanel } from './groupPanel';
+import GridCore from '../gridCore';
+import { CLASS as CLASS_BASE } from '../gridCore';
 
 export const CLASS = {
+  ...CLASS_BASE,
   dataGrid: 'dx-datagrid',
   headers: 'headers',
   headerPanel: 'header-panel',
@@ -32,11 +32,9 @@ export const CLASS = {
   groupPanel: 'group-panel',
   columnChooser: 'column-chooser',
   focusedRow: 'dx-row-focused',
-  filterPanel: 'filter-panel',
   filterRow: 'filter-row',
   filterRangeOverlay: 'filter-range-overlay',
   focusOverlay: 'focus-overlay',
-  pager: 'pager',
   editFormRow: 'edit-form',
   button: 'dx-button',
   formButtonsContainer: 'form-buttons-container',
@@ -127,24 +125,17 @@ const moveElement = ($element: JQuery, x: number, y: number, isStart = false): v
   }
 };
 
-export default class DataGrid extends Widget {
+export default class DataGrid extends GridCore {
   dataRows: Selector;
-
-  body: Selector;
 
   constructor(id: string | Selector) {
     super(id);
 
     this.dataRows = this.element.find(`.${CLASS.dataRow}`);
-    this.body = Selector('body');
   }
 
   // eslint-disable-next-line class-methods-use-this
   getName(): WidgetName { return 'dxDataGrid'; }
-
-  addWidgetPrefix(className = ''): string {
-    return Widget.addClassPrefix(this.getName(), className);
-  }
 
   getContainer(): Selector {
     return this.element.find(`.${CLASS.dataGrid}`);
@@ -210,10 +201,6 @@ export default class DataGrid extends Widget {
     return this.element.find(`.${CLASS.errorRow}`);
   }
 
-  getFilterPanel(): FilterPanel {
-    return new FilterPanel(this.element.find(`.${this.addWidgetPrefix(CLASS.filterPanel)}`), this.getName());
-  }
-
   getFilterRow(): Selector {
     return this.element.find(`.${this.addWidgetPrefix(CLASS.filterRow)}`);
   }
@@ -270,10 +257,6 @@ export default class DataGrid extends Widget {
 
   getInvalidMessageTooltip(): Selector {
     return this.body.find(`.dx-${CLASS.invalidMessage}.dx-${CLASS.invalidMessage}-always.${this.addWidgetPrefix(CLASS.invalidMessage)}`);
-  }
-
-  getPager(): Pager {
-    return new Pager(this.element.find(`.${this.addWidgetPrefix(CLASS.pager)}`));
   }
 
   getFooterRow(): Selector {
@@ -415,31 +398,6 @@ export default class DataGrid extends Widget {
 
   getColumnChooserButton(): Selector {
     return this.element.find(`.${this.addWidgetPrefix(CLASS.columnChooserButton)}`);
-  }
-
-  apiClearFilter(): Promise<void> {
-    const { getInstance } = this;
-
-    return ClientFunction(
-      () => (getInstance() as any).clearFilter(),
-      { dependencies: { getInstance } },
-    )();
-  }
-
-  apiColumnOption(id: string, name: string, value: any = 'empty'): Promise<any> {
-    const { getInstance } = this;
-
-    return ClientFunction(
-      () => {
-        const dataGrid = getInstance() as any;
-        return value !== 'empty' ? dataGrid.columnOption(id, name, value === 'undefined' ? undefined : value) : dataGrid.columnOption(id, name);
-      },
-      {
-        dependencies: {
-          getInstance, id, name, value,
-        },
-      },
-    )();
   }
 
   apiAddRow(): Promise<void> {
@@ -666,6 +624,20 @@ export default class DataGrid extends Widget {
       },
     )();
   }
+
+  apiSearchByText(text: string): Promise<void> {
+    const { getInstance } = this;
+
+    return ClientFunction(
+      () => (getInstance() as DataGridInstance).searchByText(text),
+      {
+        dependencies: {
+          getInstance, text
+        },
+      },
+    )();
+  }
+
   moveRow(rowIndex: number, x: number, y: number, isStart = false): Promise<void> {
     const { getInstance } = this;
 

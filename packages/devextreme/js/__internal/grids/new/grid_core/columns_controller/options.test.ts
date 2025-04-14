@@ -1,18 +1,21 @@
 /* eslint-disable spellcheck/spell-checker */
 import { describe, expect, it } from '@jest/globals';
 
+import { DataController } from '../data_controller';
+import { getContext } from '../di.test_utils';
+import { ItemsController } from '../items_controller/items_controller';
 import type { Options } from '../options';
 import { OptionsControllerMock } from '../options_controller/options_controller.mock';
 import { ColumnsController } from './columns_controller';
 
 const setup = (config: Options) => {
-  const options = new OptionsControllerMock(config);
-
-  const columnsController = new ColumnsController(options);
+  const context = getContext(config);
 
   return {
-    options,
-    columnsController,
+    options: context.get(OptionsControllerMock),
+    dataController: context.get(DataController),
+    columnsController: context.get(ColumnsController),
+    itemsController: context.get(ItemsController),
   };
 };
 
@@ -123,7 +126,7 @@ describe('Options', () => {
 
   describe('column[].calculateCellValue', () => {
     it('should override value in DataRow', () => {
-      const { columnsController } = setup({
+      const { columnsController, itemsController } = setup({
         columns: [
           { calculateCellValue: (data: any) => `${data.a} ${data.b}` },
         ],
@@ -131,14 +134,14 @@ describe('Options', () => {
 
       const dataObject = { a: 'a', b: 'b' };
       const columns = columnsController.columns.unreactive_get();
-      const dataRow = columnsController.createDataRow(dataObject, columns);
+      const dataRow = itemsController.createDataRow(dataObject, columns, 0);
 
       expect(dataRow.cells).toHaveLength(1);
       expect(dataRow.cells[0].value).toBe('a b');
     });
 
     it('should take priority over dataField', () => {
-      const { columnsController } = setup({
+      const { columnsController, itemsController } = setup({
         columns: [
           {
             calculateCellValue: (data: any) => `${data.a} ${data.b}`,
@@ -149,7 +152,7 @@ describe('Options', () => {
 
       const dataObject = { a: 'a', b: 'b' };
       const columns = columnsController.columns.unreactive_get();
-      const dataRow = columnsController.createDataRow(dataObject, columns);
+      const dataRow = itemsController.createDataRow(dataObject, columns, 0);
 
       expect(dataRow.cells).toHaveLength(1);
       expect(dataRow.cells[0].value).toBe('a b');
@@ -158,7 +161,7 @@ describe('Options', () => {
 
   describe('column[].calculateDisplayValue', () => {
     it('should override displayValue in DataRow', () => {
-      const { columnsController } = setup({
+      const { columnsController, itemsController } = setup({
         columns: [
           { calculateDisplayValue: (data: any) => `${data.a} ${data.b}` },
         ],
@@ -166,7 +169,7 @@ describe('Options', () => {
 
       const dataObject = { a: 'a', b: 'b' };
       const columns = columnsController.columns.unreactive_get();
-      const dataRow = columnsController.createDataRow(dataObject, columns);
+      const dataRow = itemsController.createDataRow(dataObject, columns, 0);
 
       expect(dataRow.cells).toHaveLength(1);
       expect(dataRow.cells[0].displayValue).toBe('a b');
@@ -175,7 +178,7 @@ describe('Options', () => {
 
   describe('column[].customizeText', () => {
     it('should override text in DataRow', () => {
-      const { columnsController } = setup({
+      const { columnsController, itemsController } = setup({
         columns: [
           {
             dataField: 'a',
@@ -186,7 +189,7 @@ describe('Options', () => {
 
       const dataObject = { a: 'a', b: 'b' };
       const columns = columnsController.columns.unreactive_get();
-      const dataRow = columnsController.createDataRow(dataObject, columns);
+      const dataRow = itemsController.createDataRow(dataObject, columns, 0);
 
       expect(dataRow.cells).toHaveLength(1);
       expect(dataRow.cells[0].text).toBe('aa a aa');
@@ -195,13 +198,13 @@ describe('Options', () => {
 
   describe('column[].dataField', () => {
     it('should determine which value from data will be used', () => {
-      const { columnsController } = setup({
+      const { columnsController, itemsController } = setup({
         columns: [{ dataField: 'a' }, { dataField: 'b' }],
       });
 
       const dataObject = { a: 'a text', b: 'b text' };
       const columns = columnsController.columns.unreactive_get();
-      const dataRow = columnsController.createDataRow(dataObject, columns);
+      const dataRow = itemsController.createDataRow(dataObject, columns, 0);
 
       expect(dataRow.cells).toHaveLength(2);
       expect(dataRow.cells[0].text).toBe('a text');
@@ -229,7 +232,7 @@ describe('Options', () => {
   (['falseText', 'trueText'] as const).forEach((propName) => {
     describe(`column[].${propName}`, () => {
       it('should be used as text for boolean column', () => {
-        const { columnsController } = setup({
+        const { columnsController, itemsController } = setup({
           columns: [
             {
               dataField: 'a',
@@ -241,7 +244,7 @@ describe('Options', () => {
 
         const dataObject = { a: propName === 'trueText' };
         const columns = columnsController.columns.unreactive_get();
-        const dataRow = columnsController.createDataRow(dataObject, columns);
+        const dataRow = itemsController.createDataRow(dataObject, columns, 0);
 
         expect(dataRow.cells).toHaveLength(1);
         expect(dataRow.cells[0].text).toBe(`my ${propName} text`);
@@ -251,7 +254,7 @@ describe('Options', () => {
 
   describe('column[].format', () => {
     it('should affect dataRow text', () => {
-      const { columnsController } = setup({
+      const { columnsController, itemsController } = setup({
         columns: [
           {
             dataField: 'a',
@@ -262,7 +265,7 @@ describe('Options', () => {
 
       const dataObject = { a: 123 };
       const columns = columnsController.columns.unreactive_get();
-      const dataRow = columnsController.createDataRow(dataObject, columns);
+      const dataRow = itemsController.createDataRow(dataObject, columns, 0);
 
       expect(dataRow.cells).toHaveLength(1);
       expect(dataRow.cells[0].text).toBe('$123');

@@ -33,6 +33,7 @@ export const CLASS = {
   workspaceBothScrollbar: 'dx-scheduler-work-space-both-scrollbar',
 
   workSpace: 'dx-scheduler-work-space',
+  statusContainer: 'dx-scheduler-a11y-status-container ',
 };
 
 const ViewTypeClassesMap = {
@@ -184,6 +185,10 @@ export default class Scheduler extends Widget {
 
   getAppointmentResourceByIndex(index: number, label: string): Promise<string> {
     return this.getAppointmentByIndex(index).getResource(label);
+  }
+
+  getGeneralStatusContainer(): Selector {
+    return this.element.find(`.${CLASS.statusContainer}`);
   }
 
   scrollTo(date: Date, group?: Record<string, unknown>, allDay?: boolean): Promise<any> {

@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react';
-import ColorBox, { ColorBoxTypes } from 'devextreme-react/color-box';
+import ColorBox, { type ColorBoxTypes } from 'devextreme-react/color-box';
 
 const defaultModeLabel = { 'aria-label': 'Default mode' };
 const alphaChannelLabel = { 'aria-label': 'With alpha channel editing' };

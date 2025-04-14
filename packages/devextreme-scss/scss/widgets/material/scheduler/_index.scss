@@ -105,8 +105,10 @@ $material-scheduler-agenda-time-panel-cell-padding: 8px;
 }
 
 .dx-scheduler-all-day-title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   height: $material-scheduler-all-day-table-cell-height;
-  line-height: $material-scheduler-all-day-table-cell-height;
   font-size: $material-scheduler-all-day-title-font-size;
   border-bottom: baseScheduler.$scheduler-base-border;
 
@@ -116,7 +118,6 @@ $material-scheduler-agenda-time-panel-cell-padding: 8px;
 
   .dx-scheduler-work-space-all-day-collapsed & {
     height: $material-scheduler-collapsed-all-day-table-cell-height;
-    line-height: $material-scheduler-collapsed-all-day-table-cell-height;
   }
 }
 
@@ -378,6 +379,7 @@ $material-scheduler-agenda-time-panel-cell-padding: 8px;
   @include header-sizes(
     $material-scheduler-header-height,
     $material-scheduler-toolbar-item-offset,
+    baseScheduler.$scheduler-base-border,
   );
   @include header-buttons(
     $button-normal-bg,

@@ -24,7 +24,6 @@ export const getFormatType = (startDate, endDate, isAllDay, isDateAndTimeView?) 
   return 'DATETIME';
 };
 
-// @ts-expect-error
 export const formatDates = (startDate, endDate, formatType) => {
   const dateFormat = 'monthandday';
   const timeFormat = 'shorttime';
@@ -45,6 +44,6 @@ export const formatDates = (startDate, endDate, formatType) => {
     case 'DATE':
       return `${dateLocalization.format(startDate, dateFormat)}${isSameDate ? '' : ` - ${dateLocalization.format(endDate, dateFormat)}`}`;
     default:
-      break;
+      return undefined;
   }
 };

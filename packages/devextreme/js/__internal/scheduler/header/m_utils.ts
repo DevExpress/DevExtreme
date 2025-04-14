@@ -4,8 +4,11 @@ import errors from '@js/core/errors';
 import dateUtils from '@js/core/utils/date';
 import { camelize } from '@js/core/utils/inflector';
 import { isFunction, isObject } from '@js/core/utils/type';
+import type { DateNavigatorTextInfo, Properties } from '@js/ui/scheduler';
 
 import { VIEWS } from '../m_constants';
+import type { Direction } from './constants';
+import type { RawViewType } from './types';
 
 const DAY_FORMAT = 'd';
 
@@ -29,23 +32,23 @@ const WEEK_DURATION = { days: 7 };
 const SATURDAY_INDEX = 6;
 const SUNDAY_INDEX = 0;
 
-const subMS = (date) => addDateInterval(date, MS_DURATION, -1);
+const subMS = (date: Date): Date => addDateInterval(date, MS_DURATION, -1);
 
-const addMS = (date) => addDateInterval(date, MS_DURATION, 1);
+const addMS = (date: Date): Date => addDateInterval(date, MS_DURATION, 1);
 
-const nextDay = (date) => addDateInterval(date, DAY_DURATION, 1);
+const nextDay = (date: Date): Date => addDateInterval(date, DAY_DURATION, 1);
 
-export const nextWeek = (date) => addDateInterval(date, WEEK_DURATION, 1);
+export const nextWeek = (date: Date): Date => addDateInterval(date, WEEK_DURATION, 1);
 
-const nextMonth = (date) => {
+const nextMonth = (date: Date): Date => {
   const days = getLastMonthDay(date);
 
   return addDateInterval(date, { days }, 1);
 };
 
-const isWeekend = (date) => date.getDay() === SATURDAY_INDEX || date.getDay() === SUNDAY_INDEX;
+const isWeekend = (date: Date): boolean => [SATURDAY_INDEX, SUNDAY_INDEX].includes(date.getDay());
 
-const getWorkWeekStart = (firstDayOfWeek) => {
+const getWorkWeekStart = (firstDayOfWeek: Date): Date => {
   let date = new Date(firstDayOfWeek);
   while (isWeekend(date)) {
     date = nextDay(date);
@@ -54,7 +57,7 @@ const getWorkWeekStart = (firstDayOfWeek) => {
   return date;
 };
 
-const getDateAfterWorkWeek = (workWeekStart) => {
+const getDateAfterWorkWeek = (workWeekStart: Date): Date => {
   let date = new Date(workWeekStart);
 
   let workDaysCount = 0;
@@ -69,17 +72,7 @@ const getDateAfterWorkWeek = (workWeekStart) => {
   return date;
 };
 
-const nextAgendaStart = (date, agendaDuration) => addDateInterval(date, { days: agendaDuration }, 1);
-
-const getInterval = (options) => {
-  const startDate = getIntervalStartDate(options);
-  const endDate = getIntervalEndDate(startDate, options);
-
-  return {
-    startDate,
-    endDate,
-  };
-};
+const nextAgendaStart = (date: Date, agendaDuration: number): Date => addDateInterval(date, { days: agendaDuration }, 1);
 
 const getIntervalStartDate = (options) => {
   const { date, step, firstDayOfWeek } = options;
@@ -99,7 +92,7 @@ const getIntervalStartDate = (options) => {
   }
 };
 
-const getIntervalEndDate = (startDate, options) => {
+const getIntervalEndDate = (startDate: Date, options) => {
   const { intervalCount, step, agendaDuration } = options;
 
   let periodStartDate;
@@ -117,7 +110,17 @@ const getIntervalEndDate = (startDate, options) => {
   return periodEndDate;
 };
 
-const getPeriodEndDate = (currentPeriodStartDate, step, agendaDuration) => {
+export const getCaptionInterval = (options): {
+  startDate: Date;
+  endDate: Date;
+} => {
+  const startDate = getIntervalStartDate(options);
+  const endDate = getIntervalEndDate(startDate, options);
+
+  return { startDate, endDate };
+};
+
+const getPeriodEndDate = (currentPeriodStartDate: Date, step, agendaDuration: number): Date => {
   let date;
 
   // eslint-disable-next-line default-case
@@ -142,7 +145,7 @@ const getPeriodEndDate = (currentPeriodStartDate, step, agendaDuration) => {
   return subMS(date);
 };
 
-const getNextPeriodStartDate = (currentPeriodEndDate, step) => {
+const getNextPeriodStartDate = (currentPeriodEndDate: Date, step): Date => {
   let date = addMS(currentPeriodEndDate);
 
   if (step === 'workWeek') {
@@ -154,7 +157,7 @@ const getNextPeriodStartDate = (currentPeriodEndDate, step) => {
   return date;
 };
 
-export const getNextIntervalDate = (options, direction) => {
+export const getNextIntervalDate = (options, direction: Direction): Date => {
   const {
     date, step, intervalCount, agendaDuration,
   } = options;
@@ -179,7 +182,7 @@ export const getNextIntervalDate = (options, direction) => {
   return addDateInterval(date, { days: dayDuration }, direction);
 };
 
-const getNextMonthDate = (date, intervalCount, direction) => {
+const getNextMonthDate = (date: Date, intervalCount: number, direction: Direction): Date => {
   const currentDate = date.getDate();
 
   const currentMonthFirstDate = new Date(new Date(date.getTime()).setDate(1));
@@ -200,11 +203,11 @@ const getNextMonthDate = (date, intervalCount, direction) => {
   return thatMonthMinDate;
 };
 
-const getDateMonthFormatter = (isShort) => {
+const getDateMonthFormatter = (isShort: boolean) => {
   const monthType = isShort ? 'abbreviated' : 'wide';
   const months = dateLocalization.getMonthNames(monthType as any);
 
-  return (date) => {
+  return (date: Date): string => {
     const day = formatDate(date, 'day');
 
     const month = months[date.getMonth()];
@@ -213,7 +216,7 @@ const getDateMonthFormatter = (isShort) => {
   };
 };
 
-const formatMonthYear = (date) => {
+const formatMonthYear = (date: Date): string => {
   const months = dateLocalization.getMonthNames('abbreviated');
   const month = months[date.getMonth()];
 
@@ -222,7 +225,7 @@ const formatMonthYear = (date) => {
   return `${month} ${year}`;
 };
 
-const getDateMonthYearFormatter = (isShort) => (date) => {
+const getDateMonthYearFormatter = (isShort: boolean) => (date: Date): string => {
   const dateMonthFormat = getDateMonthFormatter(isShort);
   const dateMonth = dateMonthFormat(date);
 
@@ -231,14 +234,14 @@ const getDateMonthYearFormatter = (isShort) => (date) => {
   return `${dateMonth} ${year}`;
 };
 
-const getDifferentYearCaption = (startDate, endDate) => {
+const getDifferentYearCaption = (startDate: Date, endDate: Date): string => {
   const firstDateText = formatDate(startDate, getDateMonthYearFormatter(true));
   const lastDateDateText = formatDate(endDate, getDateMonthYearFormatter(true));
 
   return `${firstDateText}-${lastDateDateText}`;
 };
 
-const getSameYearCaption = (startDate, endDate, isShort) => {
+const getSameYearCaption = (startDate: Date, endDate: Date, isShort: boolean): string => {
   const isDifferentMonthDates = startDate.getMonth() !== endDate.getMonth();
   const useShortFormat = isDifferentMonthDates || isShort;
 
@@ -252,7 +255,7 @@ const getSameYearCaption = (startDate, endDate, isShort) => {
   return `${firstDateText}-${lastDateText}`;
 };
 
-const getSameDateCaption = (date, step, isShort) => {
+const getSameDateCaption = (date: Date, step, isShort: boolean): string => {
   const useShortFormat = step === 'agenda' ? isShort : false;
 
   const dateMonthFormat = getDateMonthFormatter(useShortFormat);
@@ -263,7 +266,7 @@ const getSameDateCaption = (date, step, isShort) => {
   return `${dateMonth} ${year}`;
 };
 
-const formatCaptionByMonths = (startDate, endDate, isShort) => {
+const formatCaptionByMonths = (startDate: Date, endDate: Date, isShort: boolean): string => {
   const isDifferentYears = startDate.getFullYear() !== endDate.getFullYear();
 
   if (isDifferentYears) {
@@ -273,9 +276,9 @@ const formatCaptionByMonths = (startDate, endDate, isShort) => {
   return getSameYearCaption(startDate, endDate, isShort);
 };
 
-const formatMonthViewCaption = (startDate, endDate) => {
+const formatMonthViewCaption = (startDate: Date, endDate: Date): string => {
   if (dateUtils.sameMonth(startDate, endDate)) {
-    return formatDate(startDate, 'monthandyear');
+    return String(formatDate(startDate, 'monthandyear') ?? '');
   }
 
   const isSameYear = dateUtils.sameYear(startDate, endDate);
@@ -288,7 +291,7 @@ const formatMonthViewCaption = (startDate, endDate) => {
   return `${firstDateText}-${lastDateText}`;
 };
 
-const getCaptionText = (startDate, endDate, isShort, step) => {
+const getCaptionText = (startDate: Date, endDate: Date, isShort: boolean, step): string => {
   if (dateUtils.sameDate(startDate, endDate)) {
     return getSameDateCaption(startDate, step, isShort);
   }
@@ -300,8 +303,8 @@ const getCaptionText = (startDate, endDate, isShort, step) => {
   return formatCaptionByMonths(startDate, endDate, isShort);
 };
 
-export const getCaption = (options, isShort, customizationFunction) => {
-  const { startDate, endDate } = getInterval(options);
+export const getCaption = (options, isShort: boolean, customizationFunction?: Properties['customizeDateNavigatorText']): DateNavigatorTextInfo => {
+  const { startDate, endDate } = getCaptionInterval(options);
 
   let text = getCaptionText(startDate, endDate, isShort, options.step);
 
@@ -322,36 +325,37 @@ const STEP_MAP = {
   timelineWorkWeek: 'workWeek',
   timelineMonth: 'month',
   agenda: 'agenda',
+} as const;
+
+export const getViewType = (view: RawViewType): string | undefined => (isObject(view) ? view.type : view);
+
+export const getStep = (view: RawViewType): (typeof STEP_MAP)[keyof typeof STEP_MAP] | undefined => {
+  const type = getViewType(view);
+
+  return type ? STEP_MAP[type] : undefined;
 };
 
-export const getStep = (view) => STEP_MAP[getViewType(view)];
-
-export const getViewType = (view) => {
-  if (isObject(view) && (view as any).type) {
-    return (view as any).type;
-  }
-
-  return view;
-};
-
-export const getViewName = (view) => {
+export const getViewName = (view: RawViewType): string | undefined => {
   if (isObject(view)) {
-    return (view as any).name ? (view as any).name : (view as any).type;
+    return view.name ?? view.type;
   }
 
   return view;
 };
 
-export const getViewText = (view) => {
-  if (view.name) return view.name;
+export const getViewText = (view: RawViewType) => {
+  if (isObject(view) && view.name) {
+    return view.name;
+  }
 
-  const viewName = camelize(view.type || view, true);
+  const viewName = camelize(getViewType(view), true);
+
   return messageLocalization.format(`dxScheduler-switcher${viewName}`);
 };
 
-const isValidView = (view) => Object.values(VIEWS).includes(view);
+const isValidView = (view?: string): boolean => Boolean(view && Object.values(VIEWS).includes(view));
 
-export const validateViews = (views) => {
+export const validateViews = (views: Properties['views'] = []) => {
   views.forEach((view) => {
     const viewType = getViewType(view);
 
@@ -361,7 +365,7 @@ export const validateViews = (views) => {
   });
 };
 
-export const formatViews = (views) => {
+export const formatViews = (views: Properties['views'] = []) => {
   validateViews(views);
 
   return views.map((view) => {

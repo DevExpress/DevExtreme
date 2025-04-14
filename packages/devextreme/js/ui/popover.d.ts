@@ -252,7 +252,7 @@ export type Properties = dxPopoverOptions<PopoverInstance>;
 /** @deprecated use Properties instead */
 export type Options = Properties;
 
-///#DEBUG
+/// #DEBUG
 // eslint-disable-next-line import/first
 import { CheckedEvents } from '../core';
 
@@ -310,4 +310,4 @@ onShown?: ((e: ShownEvent) => void);
  */
 onTitleRendered?: ((e: TitleRenderedEvent) => void);
 };
-///#ENDDEBUG
+/// #ENDDEBUG

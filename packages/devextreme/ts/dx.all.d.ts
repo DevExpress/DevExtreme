@@ -377,6 +377,12 @@ declare global {
     dxSplitter(options: string): any;
     dxSplitter(options: string, ...params: any[]): any;
 
+    dxStepper(): JQuery;
+    dxStepper(options: 'instance'): DevExpress.ui.dxStepper;
+    dxStepper(options: DevExpress.ui.dxStepper.Properties): JQuery;
+    dxStepper(options: string): any;
+    dxStepper(options: string, ...params: any[]): any;
+
     dxSortable(): JQuery;
     dxSortable(options: 'instance'): DevExpress.ui.dxSortable;
     dxSortable(options: DevExpress.ui.dxSortable.Properties): JQuery;
@@ -606,9 +612,9 @@ declare module DevExpress {
    */
   export function config(): DevExpress.common.GlobalConfig;
   /**
-   * [descr:config(config)]
-   */
-  export function config(config: DevExpress.common.GlobalConfig): void;
+    * [descr:config(config)]
+    */
+   export function config(config: DevExpress.common.GlobalConfig): void;
   /**
    * [descr:DataHelperMixin]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
@@ -1197,7 +1203,6 @@ declare module DevExpress.common {
     | Array<DevExpress.common.data.GroupItem<TItem>>;
   export type MaskMode = 'always' | 'onFocus';
   export type Mode = 'auto';
-
   /**
    * [descr:NumericRule]
    */
@@ -1409,7 +1414,6 @@ declare module DevExpress.common {
   export type TabsIconPosition = 'top' | 'end' | 'bottom' | 'start';
   export type TabsStyle = 'primary' | 'secondary';
   export type TextBoxPredefinedButton = 'clear';
-
   /**
    * [descr:TextEditorButton]
    */
@@ -2557,9 +2561,9 @@ declare module DevExpress.common.core.environment {
     version?: Array<number>;
   };
   /**
-   * [descr:devices]
-   */
-  export const devices: DevExpress.core.DevicesObject;
+    * [descr:devices]
+    */
+   export const devices: DevExpress.core.DevicesObject;
   /**
    * [descr:utils.getTimeZones(date)]
    */
@@ -2861,9 +2865,9 @@ declare module DevExpress.common.core.localization {
    */
   export function locale(): string;
   /**
-   * [descr:localization.locale(locale)]
-   */
-  export function locale(locale: string): void;
+    * [descr:localization.locale(locale)]
+    */
+   export function locale(locale: string): void;
   /**
    * [descr:localization.parseDate(text, format)]
    */
@@ -3246,9 +3250,9 @@ declare module DevExpress.common.data {
      */
     group?: GroupDescriptor<TItem> | Array<GroupDescriptor<TItem>>;
     /**
-     * [descr:DataSourceOptions.langParams]
-     */
-    langParams?: LangParams;
+      * [descr:DataSourceOptions.langParams]
+      */
+     langParams?: LangParams;
     /**
      * [descr:DataSourceOptions.map]
      */
@@ -6521,11 +6525,13 @@ declare module DevExpress.core {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export type DeepPartial<T> = T extends Scalar
-    ? T
-    : {
-        [P in keyof T]?: DeepPartial<T[P]>;
-      };
+  export type DeepPartial<T> =
+    | T
+    | (T extends Scalar
+        ? T
+        : {
+            [P in keyof T]?: DeepPartial<T[P]>;
+          });
   /**
    * [descr:DevicesObject]
    */
@@ -6848,10 +6854,10 @@ declare module DevExpress.core.utils {
     ): PromiseLike<TResult1 | TResult2>;
   };
   /**
-   * [descr:DxPromise]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export type DxPromise<T = void> = {} extends PromiseType<T>
+    * [descr:DxPromise]
+    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+    */
+   export type DxPromise<T = void> = {} extends PromiseType<T>
     ? Promise<T>
     : PromiseType<T>;
 }
@@ -7656,6 +7662,12 @@ declare module DevExpress.events {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface EventType {}
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  interface EventType extends JQueryEventObject {
+    cancel?: boolean;
+  }
   /**
    * [descr:events.triggerHandler(element, event)]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
@@ -8532,10 +8544,10 @@ declare module DevExpress.ui {
       'field' | 'reset'
     >);
   /**
-   * [descr:DraggableBase]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface DraggableBase {}
+    * [descr:DraggableBase]
+    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+    */
+   export interface DraggableBase {}
   /**
    * [descr:DraggableBaseOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
@@ -9777,7 +9789,7 @@ declare module DevExpress.ui {
         /**
          * [descr:_ui_chat_MessageEnteredEvent.message]
          */
-        readonly message?: Message;
+        readonly message: Message;
       };
     export type MessageTemplateData = {
       readonly component: dxChat;
@@ -9798,7 +9810,7 @@ declare module DevExpress.ui {
         /**
          * [descr:_ui_chat_TypingEndEvent.user]
          */
-        readonly user?: User;
+        readonly user: User;
       };
     /**
      * [descr:_ui_chat_TypingStartEvent]
@@ -16814,6 +16826,23 @@ declare module DevExpress.ui {
       readonly setValue: Function;
     };
     /**
+     * [descr:FieldInfo]
+     */
+    export type FieldInfo = {
+      /**
+       * [descr:FieldInfo.value]
+       */
+      value?: string | number | Date;
+      /**
+       * [descr:FieldInfo.valueText]
+       */
+      valueText?: string;
+      /**
+       * [descr:FieldInfo.field]
+       */
+      field?: Field;
+    };
+    /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
      */
     export type FilterBuilderOperation =
@@ -16884,11 +16913,9 @@ declare module DevExpress.ui {
     /**
      * [descr:dxFilterBuilderCustomOperation.customizeText]
      */
-    customizeText?: (fieldInfo: {
-      value?: string | number | Date;
-      valueText?: string;
-      field?: Field;
-    }) => string;
+    customizeText?: (
+      fieldInfo: DevExpress.ui.dxFilterBuilder.FieldInfo
+    ) => string;
     /**
      * [descr:dxFilterBuilderCustomOperation.dataTypes]
      */
@@ -16934,10 +16961,9 @@ declare module DevExpress.ui {
     /**
      * [descr:dxFilterBuilderField.customizeText]
      */
-    customizeText?: (fieldInfo: {
-      value?: string | number | Date;
-      valueText?: string;
-    }) => string;
+    customizeText?: (
+      fieldInfo: DevExpress.ui.dxFilterBuilder.FieldInfo
+    ) => string;
     /**
      * [descr:dxFilterBuilderField.dataField]
      */
@@ -21074,7 +21100,12 @@ declare module DevExpress.ui {
     export type ClickEvent = DevExpress.common.core.events.NativeEventInfo<
       dxMap,
       MouseEvent | PointerEvent
-    >;
+    > & {
+      /**
+       * [descr:_ui_map_ClickEvent.location]
+       */
+      location: MapLocation;
+    };
     /**
      * [descr:_ui_map_DisposingEvent]
      */
@@ -21295,7 +21326,7 @@ declare module DevExpress.ui {
       /**
        * [descr:dxMapOptions.routes.mode]
        */
-      mode?: DevExpress.ui.dxMap.RouteMode;
+      mode?: DevExpress.ui.dxMap.RouteMode | string;
       /**
        * [descr:dxMapOptions.routes.opacity]
        */
@@ -25687,10 +25718,10 @@ declare module DevExpress.ui {
         DevExpress.ui.Editor.ValueChangedInfo;
   }
   /**
-   * [descr:dxSliderBase]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface dxSliderBase {}
+    * [descr:dxSliderBase]
+    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+    */
+   export interface dxSliderBase {}
   /**
    * [descr:dxSliderBaseOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
@@ -26509,6 +26540,176 @@ declare module DevExpress.ui {
      * [descr:dxSplitterOptions.onItemCollapsed]
      */
     onItemCollapsed?: (e: DevExpress.ui.dxSplitter.ItemCollapsedEvent) => void;
+  }
+  /**
+   * [descr:dxStepper]
+   */
+  export class dxStepper<
+    TItem extends DevExpress.ui.dxStepper.ItemLike = any,
+    TKey = any
+  > extends CollectionWidget<
+    DevExpress.ui.dxStepper.Properties<TItem, TKey>,
+    TItem,
+    TKey
+  > {}
+  module dxStepper {
+    /**
+     * [descr:_ui_stepper_DisposingEvent]
+     */
+    export type DisposingEvent<
+      TItem extends ItemLike = any,
+      TKey = any
+    > = DevExpress.common.core.events.EventInfo<dxStepper<TItem, TKey>>;
+    export type ExplicitTypes<TItem extends ItemLike, TKey> = {
+      Properties: Properties<TItem, TKey>;
+      DisposingEvent: DisposingEvent<TItem, TKey>;
+      InitializedEvent: InitializedEvent<TItem, TKey>;
+      ItemClickEvent: ItemClickEvent<TItem, TKey>;
+      ItemContextMenuEvent: ItemContextMenuEvent<TItem, TKey>;
+      ItemRenderedEvent: ItemRenderedEvent<TItem, TKey>;
+      OptionChangedEvent: OptionChangedEvent<TItem, TKey>;
+      SelectionChangedEvent: SelectionChangedEvent<TItem, TKey>;
+      SelectionChangingEvent: SelectionChangingEvent<TItem, TKey>;
+    };
+    /**
+     * [descr:_ui_stepper_InitializedEvent]
+     */
+    export type InitializedEvent<
+      TItem extends ItemLike = any,
+      TKey = any
+    > = DevExpress.common.core.events.InitializedEventInfo<
+      dxStepper<TItem, TKey>
+    >;
+    /**
+     * [descr:_ui_stepper_ItemClickEvent]
+     */
+    export type ItemClickEvent<
+      TItem extends ItemLike = any,
+      TKey = any
+    > = DevExpress.common.core.events.NativeEventInfo<
+      dxStepper<TItem, TKey>,
+      MouseEvent | PointerEvent
+    > &
+      DevExpress.common.core.events.ItemInfo<TItem>;
+    /**
+     * [descr:_ui_stepper_ItemContextMenuEvent]
+     */
+    export type ItemContextMenuEvent<
+      TItem extends ItemLike = any,
+      TKey = any
+    > = DevExpress.common.core.events.NativeEventInfo<
+      dxStepper<TItem, TKey>,
+      MouseEvent | PointerEvent | TouchEvent
+    > &
+      DevExpress.common.core.events.ItemInfo<TItem>;
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+     */
+    type ItemLike = string | Item | any;
+    /**
+     * [descr:_ui_stepper_ItemRenderedEvent]
+     */
+    export type ItemRenderedEvent<
+      TItem extends ItemLike = any,
+      TKey = any
+    > = DevExpress.common.core.events.EventInfo<dxStepper<TItem, TKey>> &
+      DevExpress.common.core.events.ItemInfo<TItem>;
+    /**
+     * [descr:_ui_stepper_OptionChangedEvent]
+     */
+    export type OptionChangedEvent<
+      TItem extends ItemLike = any,
+      TKey = any
+    > = DevExpress.common.core.events.EventInfo<dxStepper<TItem, TKey>> &
+      DevExpress.common.core.events.ChangedOptionInfo;
+    export type Properties<
+      TItem extends ItemLike = any,
+      TKey = any
+    > = dxStepperOptions<TItem, TKey>;
+    /**
+     * [descr:_ui_stepper_SelectionChangedEvent]
+     */
+    export type SelectionChangedEvent<
+      TItem extends ItemLike = any,
+      TKey = any
+    > = DevExpress.common.core.events.EventInfo<dxStepper<TItem, TKey>> &
+      DevExpress.ui.CollectionWidget.SelectionChangeInfo<TItem>;
+    /**
+     * [descr:_ui_stepper_SelectionChangingEvent]
+     */
+    export type SelectionChangingEvent<
+      TItem extends ItemLike = any,
+      TKey = any
+    > = DevExpress.ui.CollectionWidget.SelectionChangingEventBase<
+      dxStepper<TItem, TKey>
+    >;
+  }
+  /**
+   * @deprecated Use Item instead
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  export interface dxStepperItem extends CollectionWidgetItem {
+    /**
+     * [descr:dxStepperItem.icon]
+     */
+    icon?: string;
+    /**
+     * [descr:dxStepperItem.title]
+     */
+    title?: string;
+    /**
+     * [descr:dxStepperItem.hint]
+     */
+    hint?: string;
+    /**
+     * [descr:dxStepperItem.optional]
+     */
+    optional?: boolean;
+    /**
+     * [descr:dxStepperItem.isValid]
+     */
+    isValid?: boolean;
+  }
+  /**
+   * [descr:dxStepperOptions]
+   * @deprecated [depNote:dxStepperOptions]
+   */
+  export interface dxStepperOptions<
+    TItem extends DevExpress.ui.dxStepper.ItemLike = any,
+    TKey = any
+  > extends CollectionWidgetOptions<dxStepper<TItem, TKey>, TItem, TKey> {
+    /**
+     * [descr:dxStepperOptions.activeStateEnabled]
+     */
+    activeStateEnabled?: boolean;
+    /**
+     * [descr:dxStepperOptions.focusStateEnabled]
+     */
+    focusStateEnabled?: boolean;
+    /**
+     * [descr:dxStepperOptions.hoverStateEnabled]
+     */
+    hoverStateEnabled?: boolean;
+    /**
+     * [descr:dxStepperOptions.selectOnFocus]
+     */
+    selectOnFocus?: boolean;
+    /**
+     * [descr:dxStepperOptions.dataSource]
+     */
+    dataSource?: DevExpress.data.DataSourceLike<TItem, TKey> | null;
+    /**
+     * [descr:dxStepperOptions.orientation]
+     */
+    orientation?: DevExpress.common.Orientation;
+    /**
+     * [descr:dxStepperOptions.linear]
+     */
+    linear?: boolean;
+    /**
+     * [descr:dxStepperOptions.items]
+     */
+    items?: Array<TItem>;
   }
   /**
    * [descr:dxSwitch]
@@ -31045,6 +31246,9 @@ declare module DevExpress.ui {
      */
     selectedExpr?: string | Function;
   }
+  /**
+   * [descr:MapLocation]
+   */
   export interface MapLocation {
     /**
      * [descr:MapLocation.lat]
@@ -31636,6 +31840,9 @@ declare module DevExpress.ui.dxResponsiveBox {
 }
 declare module DevExpress.ui.dxSplitter {
   export type Item<TKey = any> = dxSplitterItem<TKey>;
+}
+declare module DevExpress.ui.dxStepper {
+  export type Item = dxStepperItem;
 }
 declare module DevExpress.ui.dxTabPanel {
   export type Item = dxTabPanelItem;

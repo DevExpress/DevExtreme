@@ -29,13 +29,14 @@
 import { ref } from 'vue';
 import {
   DxDataGrid,
+  type DxDataGridTypes,
 } from 'devextreme-vue/data-grid';
 import DxSelectBox from 'devextreme-vue/select-box';
 import { orders } from './data.ts';
 
 const columns = ['CompanyName', 'City', 'State', 'Phone', 'Fax'];
-const resizingModes = ['nextColumn', 'widget'];
-const currentMode = ref('nextColumn');
+const resizingModes: DxDataGridTypes.ColumnResizeMode[] = ['nextColumn', 'widget'];
+const currentMode = ref(resizingModes[0]);
 
 </script>
 <style scoped>

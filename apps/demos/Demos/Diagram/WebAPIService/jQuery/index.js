@@ -1,5 +1,5 @@
 $(() => {
-  const url = 'https://js.devexpress.com/Demos/Mvc/api/DiagramEmployees';
+  const url = 'https://js.devexpress.com/Demos/NetCore/api/DiagramEmployees';
   const dataSource = DevExpress.data.AspNet.createStore({
     key: 'ID',
     loadUrl: `${url}/Employees`,

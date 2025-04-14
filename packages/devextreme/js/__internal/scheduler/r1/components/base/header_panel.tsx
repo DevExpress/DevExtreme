@@ -1,7 +1,7 @@
-import type { InfernoEffect } from '@devextreme/runtime/inferno';
-import { createReRenderEffect, InfernoWrapperComponent } from '@devextreme/runtime/inferno';
+import type { InfernoEffect } from '@ts/core/r1/runtime/inferno/index';
+import { createReRenderEffect, InfernoWrapperComponent } from '@ts/core/r1/runtime/inferno/index';
 import type { JSXTemplate } from '@ts/core/r1/types';
-import { getTemplate } from '@ts/core/r1/utils/index';
+import { PublicTemplate } from '@ts/scheduler/r1/components/templates/index';
 
 import type { DateHeaderData } from '../../types';
 import { isHorizontalGroupingApplied } from '../../utils/index';
@@ -26,7 +26,6 @@ export const HeaderPanelDefaultProps = {
 };
 
 export class HeaderPanel extends InfernoWrapperComponent<HeaderPanelProps> {
-  // eslint-disable-next-line class-methods-use-this
   createEffects(): InfernoEffect[] {
     return [createReRenderEffect()];
   }
@@ -46,47 +45,45 @@ export class HeaderPanel extends InfernoWrapperComponent<HeaderPanelProps> {
       timeCellTemplate,
     } = this.props;
     const isHorizontalGrouping = isHorizontalGroupingApplied(groups, groupOrientation);
-    const DateCellTemplateComponent = getTemplate(dateCellTemplate);
-    const DateHeaderTemplateComponent = getTemplate(dateHeaderTemplate);
-    const ResourceCellTemplateComponent = getTemplate(resourceCellTemplate);
-    const TimeCellTemplateComponent = getTemplate(timeCellTemplate);
 
     return (
       <thead>
       {
         isHorizontalGrouping && !groupByDate && (
-          // @ts-ignore
           <GroupPanel
             viewContext={viewContext}
             groupPanelData={groupPanelData}
             groups={groups}
             groupByDate={groupByDate}
             groupOrientation={groupOrientation}
-            resourceCellTemplate={ResourceCellTemplateComponent}
+            resourceCellTemplate={resourceCellTemplate}
           />
         )
       }
       {
-        isRenderDateHeader && DateHeaderTemplateComponent({
-          viewContext,
-          groupByDate,
-          dateHeaderData,
-          groupOrientation,
-          groups,
-          dateCellTemplate: DateCellTemplateComponent,
-          timeCellTemplate: TimeCellTemplateComponent,
-        })
+        isRenderDateHeader
+        && <PublicTemplate
+          template={dateHeaderTemplate}
+          templateProps={{
+            viewContext,
+            groupByDate,
+            dateHeaderData,
+            groupOrientation,
+            groups,
+            dateCellTemplate,
+            timeCellTemplate,
+          }}
+        />
       }
       {
         groupByDate && (
-          // @ts-ignore
           <GroupPanel
             viewContext={viewContext}
             groupPanelData={groupPanelData}
             groups={groups}
             groupByDate={groupByDate}
             groupOrientation={groupOrientation}
-            resourceCellTemplate={ResourceCellTemplateComponent}
+            resourceCellTemplate={resourceCellTemplate}
           />
         )
       }

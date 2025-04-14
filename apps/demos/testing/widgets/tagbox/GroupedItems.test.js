@@ -3,12 +3,11 @@ import { runManualTest } from '../../../utils/visual-tests/matrix-test-helper';
 import { testScreenshot } from '../../../utils/visual-tests/helpers/theme-utils';
 
 fixture('TagBox.GroupedItems')
-  .page('http://localhost:8080/')
   .before(async (ctx) => {
     ctx.initialWindowSize = [900, 600];
   });
 
-runManualTest('TagBox', 'GroupedItems', ['jQuery', 'React', 'Vue', 'Angular'], (test) => {
+runManualTest('TagBox', 'GroupedItems', (test) => {
   test('GroupedItems', async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 

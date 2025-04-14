@@ -10,6 +10,7 @@ import { deepExtendArraySafe } from '@js/core/utils/object';
 import { isDefined } from '@js/core/utils/type';
 import { current, isFluent } from '@js/ui/themes';
 import { getGroupCount, hasResourceValue } from '@ts/scheduler/r1/utils/index';
+import type { AppointmentDataAccessor } from '@ts/scheduler/utils';
 
 export const getValueExpr = (resource) => resource.valueExpr || 'id';
 export const getDisplayExpr = (resource) => resource.displayExpr || 'text';
@@ -101,7 +102,6 @@ export const getPathToLeaf = (leafIndex, groups) => {
   return makeBranch(leaf).reverse();
 };
 
-// TODO rework
 export const getCellGroups = (groupIndex, groups) => {
   const result: any = [];
 
@@ -355,7 +355,7 @@ export const reduceResourcesTree = (getDataAccessors, tree, existingAppointments
       }
     });
 
-    if (ok && node.children && node.children.length) {
+    if (ok && node.children?.length) {
       reduceResourcesTree(getDataAccessors, node.children, existingAppointments, _result[index]);
     }
   });
@@ -364,7 +364,7 @@ export const reduceResourcesTree = (getDataAccessors, tree, existingAppointments
 };
 
 export const getResourcesDataByGroups = (loadedResources, resources, groups) => {
-  if (!groups || !groups.length) {
+  if (!groups?.length) {
     return loadedResources;
   }
 
@@ -499,7 +499,7 @@ const getTransformedResourceData = (resource, data) => {
       text: displayGetter(item),
     };
 
-    if (item.color) { // TODO for passed tests
+    if (item.color) { // for tests
       result.color = item.color;
     }
 
@@ -551,7 +551,11 @@ export const loadResources = (groups, resources, resourceLoaderMap) => {
   return result.promise();
 };
 
-export const getNormalizedResources = (rawAppointment, dataAccessors, resources) => {
+export const getNormalizedResources = (
+  rawAppointment,
+  dataAccessors: AppointmentDataAccessor,
+  resources,
+) => {
   const result = {};
 
   each(dataAccessors.resources.getter, (fieldName) => {

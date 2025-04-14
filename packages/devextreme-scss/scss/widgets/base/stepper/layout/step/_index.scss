@@ -1,0 +1,58 @@
+.dx-step {
+  position: relative;
+  flex: 1;
+  cursor: default;
+
+  &.dx-state-hover {
+    cursor: pointer;
+  }
+}
+
+.dx-step-indicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition-property: color, background-color, border-color;
+  transition-timing-function: ease-in-out;
+  border-style: solid;
+  border-radius: 999em;
+  border-width: 1px;
+}
+
+.dx-step-content {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.dx-step-label {
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dx-step-title,
+.dx-step-optional-mark {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-align: center;
+}
+
+.dx-stepper-vertical {
+  .dx-step {
+    display: flex;
+  }
+
+  .dx-step-content {
+    flex-direction: row;
+    width: 100%;
+  }
+
+  .dx-step-title,
+  .dx-step-optional-mark {
+    text-align: start;
+  }
+}

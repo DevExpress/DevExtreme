@@ -103,7 +103,7 @@ export default class Widget<TProperties> extends DOMComponent<TProperties> {
  * @public
  * @namespace DevExpress.ui
  */
-// eslint-disable-next-line vars-on-top, import/no-mutable-exports, no-var, @typescript-eslint/init-declarations, @typescript-eslint/no-explicit-any
+// eslint-disable-next-line vars-on-top, import/no-mutable-exports, no-var, @typescript-eslint/init-declarations
 export var dxItem: any;
 
 /**

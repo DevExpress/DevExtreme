@@ -1,5 +1,5 @@
-import { BaseInfernoComponent } from '@devextreme/runtime/inferno';
 import type { PropsWithStyles } from '@ts/core/r1/index';
+import { BaseInfernoComponent } from '@ts/core/r1/runtime/inferno/index';
 
 import { renderUtils } from '../../utils/index';
 import { HeaderCell } from './header_cell';
@@ -29,7 +29,6 @@ export class VirtualCell extends BaseInfernoComponent<VirtualCellProps> {
     const Cell = isHeaderCell ? HeaderCell : OrdinaryCell;
 
     return (
-      // @ts-ignore
       <Cell
         className="dx-scheduler-virtual-cell"
         styles={modifiedStyles}

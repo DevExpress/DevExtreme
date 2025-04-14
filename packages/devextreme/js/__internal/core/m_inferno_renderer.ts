@@ -1,9 +1,9 @@
-import { hydrate, InfernoEffectHost } from '@devextreme/runtime/inferno';
+/* eslint-disable spellcheck/spell-checker */
 import domAdapter from '@js/core/dom_adapter';
 import { cleanDataRecursive } from '@js/core/element_data';
 import injector from '@js/core/utils/dependency_injector';
+import { hydrate, InfernoEffectHost } from '@ts/core/r1/runtime/inferno/index';
 import { render } from 'inferno';
-// eslint-disable-next-line import/no-extraneous-dependencies
 import { createElement } from 'inferno-create-element';
 
 const remove = (element) => {
@@ -57,6 +57,14 @@ const infernoRenderer = injector({
       }
     } else {
       render(createElement(component, props), container);
+    }
+  },
+
+  renderIntoContainer: (jsx, container, replace) => {
+    if (!replace) {
+      hydrate(jsx, container);
+    } else {
+      render(jsx, container);
     }
   },
 });

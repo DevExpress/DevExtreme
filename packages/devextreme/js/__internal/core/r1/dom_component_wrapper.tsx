@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-/* eslint-disable @typescript-eslint/no-unsafe-return */
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import type { ComponentClass } from '@js/core/dom_component';
 import {
   hasTemplate, InfernoComponent, InfernoEffect, renderTemplate,
-} from '@devextreme/runtime/inferno';
-import type { ComponentClass } from '@js/core/dom_component';
+} from '@ts/core/r1/runtime/inferno/index';
 import type { DisposeEffectReturn } from '@ts/core/r1/utils/effect_return';
 import { getUpdatedOptions } from '@ts/core/r1/utils/get_updated_options';
 import type { RefObject } from 'inferno';

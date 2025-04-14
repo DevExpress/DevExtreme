@@ -2,10 +2,12 @@
 import '@js/ui/button';
 import '@js/ui/check_box';
 
+import type { Properties as ToolbarProps } from '@js/ui/toolbar';
 import dxToolbar from '@js/ui/toolbar';
 
-import type { ToolbarProps } from '../toolbar/types';
 import { InfernoWrapper } from './widget_wrapper';
+
+const excludedStateOptions = ['onInput', 'inputAttr', 'elementAttr'];
 
 export class Toolbar extends InfernoWrapper<ToolbarProps, dxToolbar> {
   protected getComponentFabric(): typeof dxToolbar {
@@ -24,7 +26,19 @@ export class Toolbar extends InfernoWrapper<ToolbarProps, dxToolbar> {
 
           Object.keys(item).forEach((key) => {
             if (item[key] !== prevItem[key]) {
-              this.component?.option(`items[${index}].${key}`, props.items![index][key]);
+              if (key !== 'options') {
+                this.component?.option(`items[${index}].${key}`, props.items![index][key]);
+              } else {
+                const prevOptions = prevItem[key];
+                const currentOptions = item[key];
+                Object.keys(currentOptions).forEach((option) => {
+                  const isOptionChanged = currentOptions[option] !== prevOptions[option];
+                  const isExcludedOption = excludedStateOptions.includes(option);
+                  if (isOptionChanged && !isExcludedOption) {
+                    this.component?.option(`items[${index}].${key}.${option}`, props.items![index][key][option]);
+                  }
+                });
+              }
             }
           });
         }

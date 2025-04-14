@@ -127,8 +127,7 @@ const baseStickyColumns = <T extends ModuleType<ColumnsView>>(Base: T) => class 
   }
 
   protected _renderCore(options?) {
-    super._renderCore(options);
-
+    const deferred = super._renderCore(options);
     const $element = this.element();
     const hasStickyColumns = this.hasStickyColumns();
 
@@ -137,6 +136,14 @@ const baseStickyColumns = <T extends ModuleType<ColumnsView>>(Base: T) => class 
       hasStickyColumns,
       this.addWidgetPrefix.bind(this),
     );
+
+    if (hasStickyColumns) {
+      return deferred.done(() => {
+        this.setStickyOffsets();
+      });
+    }
+
+    return deferred;
   }
 
   protected _createCell(options) {

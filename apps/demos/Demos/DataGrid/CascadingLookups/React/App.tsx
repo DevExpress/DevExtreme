@@ -1,6 +1,6 @@
 import React from 'react';
 import DataGrid, {
-  Column, DataGridTypes, Editing, Lookup,
+  Column, type DataGridTypes, Editing, Lookup,
 } from 'devextreme-react/data-grid';
 import {
   employees, states, cities, Employee,
@@ -21,7 +21,7 @@ const getFilteredCities = (options: { data?: Employee; }) => ({
 
 function setStateValue(rowData: Employee, value) {
   rowData.CityID = null;
-  this.defaultSetCellValue(rowData, value);
+  this.defaultSetCellValue?.(rowData, value);
 }
 
 const App = () => (

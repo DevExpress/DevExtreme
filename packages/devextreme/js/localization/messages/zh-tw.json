@@ -208,6 +208,8 @@
         "dxTreeList-ariaToolbar": "Tree list toolbar",
         "dxTreeList-editingAddRowToNode": "添加",
 
+        "dxCardView-ariaSearchInGrid": "Search in the card view",
+
         "dxPager-infoText": "第{0}頁,共{1}頁 ({2} 個項目)",
         "dxPager-pagesCountText": "到",
         "dxPager-pageSize": "Items per page: {0}",
@@ -250,8 +252,10 @@
         "dxPivotGrid-rowFieldArea": "將列欄位拖到到此次",
         "dxPivotGrid-filterFieldArea": "拖動篩選欄位到此處",
 
-        "dxScheduler-ariaLabel": "Scheduler. {0} view",
-
+        "dxScheduler-dateRange": "from {0} to {1}",
+        "dxScheduler-ariaLabel": "Scheduler. {0} view: {1} with {2} appointments",
+        "dxScheduler-ariaLabel-currentIndicator-present": "The current time indicator is visible in the view",
+        "dxScheduler-ariaLabel-currentIndicator-not-present": "The current time indicator is not visible on the screen",
 
         "dxScheduler-appointmentAriaLabel-group": "Group: {0}",
         "dxScheduler-appointmentAriaLabel-recurring": "Recurring appointment",
@@ -265,6 +269,7 @@
         "dxScheduler-editorLabelDescription": "描述",
         "dxScheduler-editorLabelRecurrence": "重複",
 
+        "dxScheduler-navigationToday": "Today",
         "dxScheduler-navigationPrevious": "Previous page",
         "dxScheduler-navigationNext": "Next page",
 
@@ -347,6 +352,10 @@
         "dxCalendar-selectedMultipleDateRange": "from {0} to {1}",
         "dxCalendar-selectedDateRangeCount": "There are {0} selected date ranges",
         "dxCalendar-readOnlyLabel": "Read-only calendar",
+
+        "dxCardView-selectAll": "Select all",
+        "dxCardView-clearSelection": "Clear selection",
+        "dxCardView-cardNoImageAriaLabel": "No image",
 
         "dxAvatar-defaultImageAlt": "Avatar",
 
@@ -796,6 +805,8 @@
         "dxMultiView-itemAriaLabel": "{0} of {1}",
 
         "dxSplitter-resizeHandleAriaLabel": "Split bar",
-        "dxSplitter-resizeHandleAriaRoleDescription": "Separator"
+        "dxSplitter-resizeHandleAriaRoleDescription": "Separator",
+
+        "dxStepper-optionalMark": "(Optional)"
     }
 }

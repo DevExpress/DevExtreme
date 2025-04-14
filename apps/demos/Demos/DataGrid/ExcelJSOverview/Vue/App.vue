@@ -41,7 +41,7 @@
 </template>
 <script setup lang="ts">
 import {
-  DxDataGrid, DxColumn, DxExport, DxSelection, DxGroupPanel, DxGrouping, DxDataGridTypes,
+  DxDataGrid, DxColumn, DxExport, DxSelection, DxGroupPanel, DxGrouping, type DxDataGridTypes,
 } from 'devextreme-vue/data-grid';
 
 import { Workbook } from 'exceljs';

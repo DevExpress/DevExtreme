@@ -2,7 +2,7 @@ import React, { useCallback, useState } from 'react';
 import {
   LinearGauge, Scale, Label, Tooltip, Export, Title, Font,
 } from 'devextreme-react/linear-gauge';
-import { SelectBox, SelectBoxTypes } from 'devextreme-react/select-box';
+import { SelectBox, type SelectBoxTypes } from 'devextreme-react/select-box';
 import { dataSource, departmentLabel } from './data.ts';
 
 function customizeText({ valueText }) {

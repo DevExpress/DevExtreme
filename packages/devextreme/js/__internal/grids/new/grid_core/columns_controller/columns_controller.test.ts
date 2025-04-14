@@ -1,18 +1,21 @@
 /* eslint-disable spellcheck/spell-checker */
 import { describe, expect, it } from '@jest/globals';
 
+import { DataController } from '../data_controller';
+import { getContext } from '../di.test_utils';
+import { ItemsController } from '../items_controller/items_controller';
 import type { Options } from '../options';
 import { OptionsControllerMock } from '../options_controller/options_controller.mock';
 import { ColumnsController } from './columns_controller';
 
 const setup = (config: Options = {}) => {
-  const options = new OptionsControllerMock(config);
-
-  const columnsController = new ColumnsController(options);
+  const context = getContext(config);
 
   return {
-    options,
-    columnsController,
+    options: context.get(OptionsControllerMock),
+    dataController: context.get(DataController),
+    columnsController: context.get(ColumnsController),
+    itemsController: context.get(ItemsController),
   };
 };
 
@@ -60,22 +63,6 @@ describe('ColumnsController', () => {
       const nonVisibleColumns = columnsController.nonVisibleColumns.unreactive_get();
       expect(nonVisibleColumns).toHaveLength(1);
       expect(nonVisibleColumns[0].name).toBe('c');
-    });
-  });
-
-  describe('createDataRow', () => {
-    it('should process data object to data row using column configuration', () => {
-      const { columnsController } = setup({
-        columns: [
-          'a',
-          { dataField: 'b' },
-        ],
-      });
-
-      const columns = columnsController.columns.unreactive_get();
-      const dataObject = { a: 'my a value', b: 'my b value' };
-      const dataRow = columnsController.createDataRow(dataObject, columns);
-      expect(dataRow).toMatchSnapshot();
     });
   });
 

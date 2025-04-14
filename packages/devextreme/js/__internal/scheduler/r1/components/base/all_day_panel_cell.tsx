@@ -1,5 +1,4 @@
-import { BaseInfernoComponent } from '@devextreme/runtime/inferno';
-import { getTemplate } from '@ts/core/r1/utils/index';
+import { BaseInfernoComponent } from '@ts/core/r1/runtime/inferno/index';
 
 import { ALL_DAY_PANEL_CELL_CLASS } from '../const';
 import type { DateTableCellBaseProps } from './date_table_cell_base';
@@ -21,10 +20,8 @@ export class AllDayPanelCell extends BaseInfernoComponent<DateTableCellBaseProps
       isSelected,
       startDate,
     } = this.props;
-    const DataCellTemplateComponent = getTemplate(dataCellTemplate);
 
     return (
-      // @ts-ignore
       <DateTableCellBase
         className={`${ALL_DAY_PANEL_CELL_CLASS} ${className}`}
         viewContext={viewContext}
@@ -36,7 +33,7 @@ export class AllDayPanelCell extends BaseInfernoComponent<DateTableCellBaseProps
         isFirstGroupCell={isFirstGroupCell}
         isLastGroupCell={isLastGroupCell}
         index={index}
-        dataCellTemplate={DataCellTemplateComponent}
+        dataCellTemplate={dataCellTemplate}
         isSelected={isSelected}
         isFocused={isFocused}
       />

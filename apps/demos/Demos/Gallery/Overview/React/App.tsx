@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import Gallery from 'devextreme-react/gallery';
-import CheckBox, { CheckBoxTypes } from 'devextreme-react/check-box';
+import CheckBox, { type CheckBoxTypes } from 'devextreme-react/check-box';
 import { gallery } from './data.ts';
 
 const App = () => {

@@ -1114,8 +1114,8 @@ $material-grid-base-group-panel-message-line-height: $material-button-text-line-
         padding-top: $material-grid-base-cell-vertical-padding + 1px;
       }
 
-      .dx-selection.dx-row:not(.dx-edit-row) > td:not(.dx-editor-cell, .dx-master-detail-cell),
-      .dx-row-focused.dx-row:not(.dx-edit-row) > td:not(.dx-editor-cell, .dx-master-detail-cell) {
+      .dx-row.dx-selection:not(.dx-edit-row):not(.dx-row-lines) > td:not(.dx-editor-cell, .dx-master-detail-cell),
+      .dx-row.dx-row-focused:not(.dx-edit-row):not(.dx-row-lines) > td:not(.dx-editor-cell, .dx-master-detail-cell) {
         padding-bottom: $material-grid-base-cell-vertical-padding - 1px;
       }
 

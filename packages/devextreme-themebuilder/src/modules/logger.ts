@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/prefer-optional-chain */
 /* eslint no-console: 0 */
 export function log(message: string, data: unknown = undefined): void {
   const debugEnvVariableName = 'THEMEBUILDER_DEBUG';

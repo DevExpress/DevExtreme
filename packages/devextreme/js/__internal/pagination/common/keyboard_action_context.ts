@@ -1,4 +1,4 @@
-import { createContext } from '@devextreme/runtime/inferno';
+import { createContext } from '@ts/core/r1/runtime/inferno/index';
 
 import type { EventCallback } from '../../core/r1/event_callback';
 import type { DisposeEffectReturn } from '../../core/r1/utils/effect_return';

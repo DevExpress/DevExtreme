@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { InfernoComponent, InfernoEffect } from '@devextreme/runtime/inferno';
+import { InfernoComponent, InfernoEffect } from '@ts/core/r1/runtime/inferno/index';
 import type { RefObject } from 'inferno';
 import { createRef } from 'inferno';
 
@@ -17,7 +17,6 @@ const PAGER_PAGE_INDEX_CLASS = 'dx-page-index';
 const LIGHT_PAGES_CLASS = 'dx-light-pages';
 const PAGER_PAGES_COUNT_CLASS = 'dx-pages-count';
 
-// eslint-disable-next-line @typescript-eslint/no-type-alias
 type PaginationSmallPropsType = Pick<PaginationProps, 'pageCount' | 'pageIndex' | 'pageIndexChangedInternal' | 'pagesCountText'>;
 
 export const PaginationSmallDefaultProps: PaginationSmallPropsType = {

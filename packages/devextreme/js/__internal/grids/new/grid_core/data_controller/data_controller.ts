@@ -1,16 +1,19 @@
 /* eslint-disable @typescript-eslint/no-invalid-void-type */
-/* eslint-disable no-param-reassign */
 /* eslint-disable spellcheck/spell-checker */
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import type { DataSource } from '@js/common/data';
 import ArrayStore from '@js/common/data/array_store';
+import { Deferred } from '@js/core/utils/deferred';
 import type { SubsGets } from '@ts/core/reactive/index';
 import {
   computed, effect, state,
 } from '@ts/core/reactive/index';
 import { createPromise } from '@ts/core/utils/promise';
 
+import { FilterController } from '../filtering/filter_controller';
 import { OptionsController } from '../options_controller/options_controller';
+import { SearchController } from '../search/index';
+import { SortingController } from '../sorting_controller/sorting_controller';
+import { StoreLoadAdapter } from './store_load_adapter/index';
 import type { DataObject, Key } from './types';
 import {
   getLocalLoadOptions,
@@ -65,6 +68,8 @@ export class DataController {
     [this.totalCount, this.pageSize],
   );
 
+  public readonly isLoaded = state(false);
+
   private readonly normalizedRemoteOptions = computed(
     (remoteOperations, dataSource) => {
       const store = dataSource.store();
@@ -78,14 +83,21 @@ export class DataController {
     [this.normalizedRemoteOptions],
   );
 
-  public static dependencies = [OptionsController] as const;
+  public static dependencies = [
+    OptionsController, SortingController,
+    FilterController, SearchController,
+  ] as const;
 
   constructor(
     private readonly options: OptionsController,
+    private readonly sortingController: SortingController,
+    private readonly filterController: FilterController,
+    private readonly searchController: SearchController,
   ) {
     effect(
       (dataSource) => {
         const changedCallback = (e?): void => {
+          this.isLoaded.update(true);
           this.onChanged(dataSource, e);
         };
         const loadingChangedCallback = (): void => {
@@ -159,7 +171,14 @@ export class DataController {
     );
 
     effect(
-      (dataSource, pageIndex, pageSize, pagingEnabled) => {
+      (
+        dataSource,
+        pageIndex,
+        pageSize,
+        displayFilter,
+        pagingEnabled,
+        sortParameters,
+      ) => {
         let someParamChanged = false;
         if (dataSource.pageIndex() !== pageIndex) {
           dataSource.pageIndex(pageIndex);
@@ -169,13 +188,21 @@ export class DataController {
           dataSource.pageSize(pageSize);
           someParamChanged ||= true;
         }
-        // eslint-disable-next-line @typescript-eslint/no-unnecessary-boolean-literal-compare
-        if (dataSource.requireTotalCount() !== true) {
+
+        if (!dataSource.requireTotalCount()) {
           dataSource.requireTotalCount(true);
+          someParamChanged ||= true;
+        }
+        if (dataSource.filter() !== displayFilter) {
+          dataSource.filter(displayFilter ?? null);
           someParamChanged ||= true;
         }
         if (dataSource.paginate() !== pagingEnabled) {
           dataSource.paginate(pagingEnabled);
+          someParamChanged ||= true;
+        }
+        if (sortParameters && dataSource.sort() !== sortParameters) {
+          dataSource.sort(sortParameters);
           someParamChanged ||= true;
         }
 
@@ -184,7 +211,14 @@ export class DataController {
           dataSource.load();
         }
       },
-      [this.dataSource, this.pageIndex, this.pageSize, this.pagingEnabled],
+      [
+        this.dataSource,
+        this.pageIndex,
+        this.pageSize,
+        this.filterController.displayFilter,
+        this.pagingEnabled,
+        this.sortingController.sortParameters,
+      ],
     );
   }
 
@@ -209,5 +243,15 @@ export class DataController {
 
   public waitLoaded(): Promise<void> {
     return this.loadedPromise.promise;
+  }
+
+  public getStoreLoadAdapter(): StoreLoadAdapter<unknown> {
+    return new StoreLoadAdapter<unknown>(
+      this.dataSource,
+      this.normalizedLocalOperations,
+      // NOTE: Badly typed ArrayStore
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+      (data) => new ArrayStore(data),
+    );
   }
 }

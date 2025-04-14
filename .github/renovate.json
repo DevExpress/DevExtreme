@@ -11,36 +11,53 @@
         "enabled": true,
         "automerge": true
     },
+    "rebaseWhen": "conflicted",
     "packageRules": [
         {
-            "matchPackagePrefixes": [ "cldr-" ],
-            "groupName": "CLDR"
+            "groupName": "CLDR",
+            "matchPackageNames": [
+                "cldr-{/,}**"
+            ]
         },
         {
-            "matchPackagePrefixes": [ "actions/" ],
             "groupName": "actions",
-            "matchUpdateTypes": [ "major" ],
+            "matchUpdateTypes": [
+                "major"
+            ],
+            "automerge": true,
+            "matchPackageNames": [
+                "actions/{/,}**"
+            ]
+        },
+        {
+            "matchPackageNames": [
+                "chrome",
+                "firefox"
+            ],
+            "matchUpdateTypes": [
+                "major"
+            ],
             "automerge": true
         },
         {
-            "matchPackageNames": [ "chrome", "firefox" ],
-            "matchUpdateTypes": [ "major" ],
-            "automerge": true
-        },
-        {
-            "matchPackageNames": [ "chrome", "firefox" ],
-            "matchUpdateTypes": [ "minor", "patch" ],
-            "enabled": false
-        },
-        {
-            "matchPackagePatterns": [
-                "^@devextreme-generator/"
+            "matchPackageNames": [
+                "chrome",
+                "firefox"
+            ],
+            "matchUpdateTypes": [
+                "minor",
+                "patch"
             ],
             "enabled": false
         },
         {
+            "enabled": false,
             "matchPackageNames": [
-                "@devextreme/runtime",
+                "/^@devextreme-generator//"
+            ]
+        },
+        {
+            "matchPackageNames": [
                 "devexpress-gantt",
                 "devexpress-diagram",
                 "rrule",
@@ -50,22 +67,41 @@
             "enabled": false
         },
         {
-            "matchPackageNames": [ "typescript", "typescript-min" ],
-            "matchUpdateTypes": [ "major", "minor" ],
+            "matchPackageNames": [
+                "typescript",
+                "typescript-min"
+            ],
+            "matchUpdateTypes": [
+                "major",
+                "minor"
+            ],
             "enabled": false
         },
         {
-            "matchPackagePatterns": [ "*" ],
-            "excludePackagePrefixes": [ "cldr-", "chrome", "firefox" ],
-            "matchUpdateTypes": [ "major" ],
-            "dependencyDashboardApproval": true
+            "matchUpdateTypes": [
+                "major"
+            ],
+            "dependencyDashboardApproval": true,
+            "matchPackageNames": [
+                "*",
+                "!cldr-{/,}**",
+                "!chrome{/,}**",
+                "!firefox{/,}**"
+            ]
         },
         {
-            "matchPackagePatterns": [ "*" ],
-            "matchUpdateTypes": [ "minor", "patch" ],
+            "matchUpdateTypes": [
+                "minor",
+                "patch"
+            ],
             "automerge": true,
-            "matchDatasources": [ "npm" ],
-            "minimumReleaseAge": "7 days"
+            "matchDatasources": [
+                "npm"
+            ],
+            "minimumReleaseAge": "7 days",
+            "matchPackageNames": [
+                "*"
+            ]
         },
         {
             "matchPackageNames": [
@@ -102,11 +138,16 @@
     ],
     "lockFileMaintenance": {
         "enabled": true,
-        "schedule": ["before 4am on Thursday"]
+        "schedule": [
+            "before 4am on Thursday"
+        ]
     },
-    "regexManagers": [
+    "customManagers": [
         {
-            "fileMatch": ["^\\.github\\/.+\\.ya?ml$"],
+            "customType": "regex",
+            "fileMatch": [
+                "^\\.github\\/.+\\.ya?ml$"
+            ],
             "matchStrings": [
                 "node-version:\\s*['\"]?(?<currentValue>\\d+([\\.-]\\d+)*)['\"]?(\\s|$)"
             ],
@@ -115,7 +156,10 @@
             "datasourceTemplate": "node-version"
         },
         {
-            "fileMatch": ["^\\.github\\/.+\\.ya?ml$"],
+            "customType": "regex",
+            "fileMatch": [
+                "^\\.github\\/.+\\.ya?ml$"
+            ],
             "matchStrings": [
                 "chrome-version:\\s*['\"]?(?<currentValue>\\d+(\\.\\d+)+)(-1)?['\"]?(\\s|$)"
             ],
@@ -124,7 +168,10 @@
             "datasourceTemplate": "custom.chrome"
         },
         {
-            "fileMatch": ["^\\.github\\/.+\\.ya?ml$"],
+            "customType": "regex",
+            "fileMatch": [
+                "^\\.github\\/.+\\.ya?ml$"
+            ],
             "matchStrings": [
                 "firefox-version:\\s*['\"]?(?<currentValue>\\d+(\\.\\d+)+)['\"]?(\\s|$)"
             ],

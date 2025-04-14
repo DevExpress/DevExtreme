@@ -3,6 +3,7 @@ import messageLocalization from '@js/common/core/localization/message';
 import domAdapter from '@js/core/dom_adapter';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
+import { Deferred } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import { getHeight } from '@js/core/utils/size';
@@ -49,7 +50,7 @@ const createCellContent = function (that, $cell, options) {
 function addCssClassesToCellContent(that, $cell, column, $cellContent?) {
   const $indicatorElements = that._getIndicatorElements($cell, true);
   const $visibleIndicatorElements = that._getIndicatorElements($cell);
-  const indicatorCount = $indicatorElements && $indicatorElements.length;
+  const indicatorCount = $indicatorElements?.length;
   const columnAlignment = that._getColumnAlignment(column.alignment);
 
   const sortIndicatorClassName = `.${that._getIndicatorClassName('sort')}`;
@@ -294,13 +295,13 @@ export class ColumnHeadersView extends ColumnsView {
     const change = {};
 
     if (that._tableElement && !that._dataController.isLoaded() && !that._hasRowElements) {
-      return;
+      // @ts-expect-error
+      return new Deferred().resolve();
     }
 
     $container
       .addClass(that.addWidgetPrefix(HEADERS_CLASS))
-      .toggleClass(that.addWidgetPrefix(NOWRAP_CLASS), !that.option('wordWrapEnabled'))
-      .empty();
+      .toggleClass(that.addWidgetPrefix(NOWRAP_CLASS), !that.option('wordWrapEnabled'));
 
     that.setAria('role', 'presentation', $container);
 
@@ -388,13 +389,13 @@ export class ColumnHeadersView extends ColumnsView {
    * @extended: filter_row
    */
   protected _isElementVisible(elementOptions) {
-    return elementOptions && elementOptions.visible;
+    return elementOptions?.visible;
   }
 
   private _alignCaptionByCenter($cell) {
     let $indicatorsContainer = this._getIndicatorContainer($cell, true);
 
-    if ($indicatorsContainer && $indicatorsContainer.length) {
+    if ($indicatorsContainer?.length) {
       $indicatorsContainer.filter(`.${VISIBILITY_HIDDEN_CLASS}`).remove();
       $indicatorsContainer = this._getIndicatorContainer($cell);
 
@@ -445,9 +446,10 @@ export class ColumnHeadersView extends ColumnsView {
 
   public getHeadersRowHeight() {
     const $tableElement = this.getTableElement();
-    const $headerRows = $tableElement && $tableElement.find(`.${HEADER_ROW_CLASS}`);
+    const $headerRows = $tableElement?.find(`.${HEADER_ROW_CLASS}`);
 
-    return $headerRows && $headerRows.toArray().reduce((sum, headerRow) => sum + getHeight(headerRow), 0) || 0;
+    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+    return $headerRows?.toArray().reduce((sum, headerRow) => sum + getHeight(headerRow), 0) || 0;
   }
 
   public getHeaderElement(index: number): dxElementWrapper {
@@ -504,7 +506,7 @@ export class ColumnHeadersView extends ColumnsView {
   public getColumnWidths($tableElement?, rowIndex?: number) {
     const $columnElements = this.getColumnElements(rowIndex);
 
-    if ($columnElements && $columnElements.length) {
+    if ($columnElements?.length) {
       return this._getWidths($columnElements);
     }
 
@@ -528,7 +530,7 @@ export class ColumnHeadersView extends ColumnsView {
     const that = this;
     const $columnElements = that.getColumnElements();
 
-    if ($columnElements && $columnElements.length) {
+    if ($columnElements?.length) {
       const offset = that.getTableElement()!.offset();
       return {
         top: offset!.top,
@@ -583,7 +585,7 @@ export class ColumnHeadersView extends ColumnsView {
     if (options.row && (options.row.rowType === 'header' || options.row.rowType === 'detailAdaptive')) {
       const sortingOptions = that.option('sorting');
 
-      if (sortingOptions && sortingOptions.mode !== 'none' && column && column.allowSorting) {
+      if (sortingOptions && sortingOptions.mode !== 'none' && column?.allowSorting) {
         const onItemClick = function (params) {
           setTimeout(() => {
             that._columnsController.changeSortOrder(column.index, params.itemData.value);
@@ -606,7 +608,7 @@ export class ColumnHeadersView extends ColumnsView {
   }
 
   protected getRowCount() {
-    return this._columnsController && this._columnsController.getRowCount();
+    return this._columnsController?.getRowCount();
   }
 
   public toggleDraggableColumnClass(columnIndex, value, rowIndex?) {
@@ -614,8 +616,8 @@ export class ColumnHeadersView extends ColumnsView {
     let columnElements;
     const rowCount = this.getRowCount();
     const columns = this._columnsController.getColumns();
-    const column = columns && columns[columnIndex];
-    const columnID = column && column.isBand && column.index;
+    const column = columns?.[columnIndex];
+    const columnID = column?.isBand && column.index;
     const setColumnClass = (column, index) => {
       if (column.ownerBand === columnID) {
         columnElements

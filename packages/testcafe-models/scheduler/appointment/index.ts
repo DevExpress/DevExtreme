@@ -29,7 +29,7 @@ const CLASS = {
 export default class Appointment {
   element: Selector;
 
-  date: { time: Promise<string> };
+  date: { time: Promise<string>; roleDescription: Promise<string | null> };
 
   resizableHandle: { left: Selector; right: Selector; top: Selector; bottom: Selector };
 
@@ -63,6 +63,7 @@ export default class Appointment {
 
     this.date = {
       time: appointmentContentDate.nth(0).innerText,
+      roleDescription: this.element.getAttribute('aria-roledescription'),
     };
 
     this.resizableHandle = {

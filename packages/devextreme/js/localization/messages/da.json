@@ -208,6 +208,8 @@
         "dxTreeList-ariaToolbar": "Trælisteværktøjslinje",
         "dxTreeList-editingAddRowToNode": "Tilføj",
 
+        "dxCardView-ariaSearchInGrid": "Search in the card view",
+
         "dxPager-infoText": "Side {0} af {1} ({2} elementer)",
         "dxPager-pagesCountText": "af",
         "dxPager-pageSize": "Elementer per side: {0}",
@@ -250,8 +252,10 @@
         "dxPivotGrid-rowFieldArea": "Slip rækkefelter her",
         "dxPivotGrid-filterFieldArea": "Slip filterfelter her",
 
-        "dxScheduler-ariaLabel": "Planlægger. {0} visning",
-
+        "dxScheduler-dateRange": "from {0} to {1}",
+        "dxScheduler-ariaLabel": "Scheduler. {0} view: {1} with {2} appointments",
+        "dxScheduler-ariaLabel-currentIndicator-present": "The current time indicator is visible in the view",
+        "dxScheduler-ariaLabel-currentIndicator-not-present": "The current time indicator is not visible on the screen",
 
         "dxScheduler-appointmentAriaLabel-group": "Gruppe: {0}",
         "dxScheduler-appointmentAriaLabel-recurring": "Tilbagevendende aftale",
@@ -265,6 +269,7 @@
         "dxScheduler-editorLabelDescription": "Beskrivelse",
         "dxScheduler-editorLabelRecurrence": "Gentag",
 
+        "dxScheduler-navigationToday": "Today",
         "dxScheduler-navigationPrevious": "Forrige side",
         "dxScheduler-navigationNext": "Næste side",
 
@@ -347,6 +352,10 @@
         "dxCalendar-selectedMultipleDateRange": "fra {0} til {1}",
         "dxCalendar-selectedDateRangeCount": "Der er {0} valgte datointervaller",
         "dxCalendar-readOnlyLabel": "Skrivebeskyttet kalender",
+
+        "dxCardView-selectAll": "Select all",
+        "dxCardView-clearSelection": "Clear selection",
+        "dxCardView-cardNoImageAriaLabel": "No image",
 
         "dxAvatar-defaultImageAlt": "Avatar",
 
@@ -796,6 +805,8 @@
         "dxMultiView-itemAriaLabel": "{0} af {1}",
 
         "dxSplitter-resizeHandleAriaLabel": "Split bar",
-        "dxSplitter-resizeHandleAriaRoleDescription": "Separator"
+        "dxSplitter-resizeHandleAriaRoleDescription": "Separator",
+
+        "dxStepper-optionalMark": "(Optional)"
     }
 }

@@ -41,21 +41,20 @@ const forcibleWatcher = <T>(
   };
 };
 
-export interface ItemExtraOption<TProperties, T = boolean> {
+export interface ItemExtraOption<TProperties> {
   owner: Record<string, unknown>;
-  fieldGetter: (
+  fieldGetter: <TT>(
     field: keyof TProperties
-  ) => (rawData: TProperties | undefined) => T;
-  watchMethod: () => (
+  ) => (rawData: TProperties | undefined) => TT;
+  watchMethod: <TT>() => (
     fn: () => void,
-    callback: (value: T) => void
+    callback: (value: TT) => void
   ) => () => void;
 }
 
 class CollectionItem<
   TProperties extends CollectionWidgetItem = CollectionWidgetItem,
   // @ts-expect-error dxClass inheritance issue
-  // eslint-disable-next-line @typescript-eslint/ban-types
 > extends (Class.inherit({}) as new() => {}) {
   _dirty?: boolean;
 
@@ -94,18 +93,18 @@ class CollectionItem<
     this._startWatcher('visible', this._renderVisible.bind(this));
   }
 
-  _startWatcher(
+  _startWatcher<T = boolean>(
     field: keyof TProperties,
     render: (
-      value: boolean | undefined,
-      oldValue: boolean | undefined,
+      value: T | undefined,
+      oldValue: T | undefined,
     ) => void,
   ): void {
     const rawData = this._rawData;
-    const exprGetter = this._options.fieldGetter(field);
+    const exprGetter = this._options.fieldGetter<T>(field);
 
-    const watcher = forcibleWatcher<boolean>(
-      this._options.watchMethod(),
+    const watcher = forcibleWatcher<T>(
+      this._options.watchMethod<T>(),
       () => exprGetter(rawData),
       (value, oldValue) => {
         this._dirty = true;
@@ -146,7 +145,6 @@ class CollectionItem<
     }
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   _renderVisible(
     value: boolean | undefined,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars

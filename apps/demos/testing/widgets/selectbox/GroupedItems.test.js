@@ -4,15 +4,16 @@ import { runManualTest } from '../../../utils/visual-tests/matrix-test-helper';
 import { testScreenshot } from '../../../utils/visual-tests/helpers/theme-utils';
 
 fixture('SelectBox.GroupedItems')
-  .page('http://localhost:8080/')
   .before(async (ctx) => {
     ctx.initialWindowSize = [900, 600];
   });
 
-runManualTest('SelectBox', 'GroupedItems', ['jQuery', 'React', 'Vue', 'Angular'], (test) => {
+runManualTest('SelectBox', 'GroupedItems', (test) => {
   test('GroupedItems', async (t) => {
     const SELECT_BOX_CLASS = 'dx-selectbox';
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+    await t.wait(1000);
 
     await t
       .click($(`.${SELECT_BOX_CLASS}`).nth(0))

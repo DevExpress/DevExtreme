@@ -1,6 +1,10 @@
 import type { Format, SortOrder } from '@js/common';
 import type { ColumnBase } from '@js/common/grids';
+import type { HeaderFilterColumnOptions } from '@ts/grids/new/grid_core/filtering/header_filter/index';
 import type { ComponentType } from 'inferno';
+
+import type { DataObject, Key } from '../data_controller/types';
+import type { HighlightedTextItem } from '../search/types';
 
 type InheritedColumnProps =
   | 'alignment'
@@ -8,21 +12,38 @@ type InheritedColumnProps =
   | 'visible'
   | 'visibleIndex'
   | 'allowReordering'
+  | 'allowHiding'
+  | 'allowFiltering'
+  | 'allowHeaderFiltering'
+  | 'allowSearch'
   | 'trueText'
   | 'falseText'
-  | 'caption';
+  | 'caption'
+  | 'showInColumnChooser';
 
 export type Column = Pick<Required<ColumnBase>, InheritedColumnProps> & {
   dataField?: string;
 
   sortOrder?: SortOrder; // todo: move to sorting module
   sortIndex?: number; // todo: move to sorting module
+  allowSorting?: boolean;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  sortingMethod?: ((this: Column, value1: any, value2: any) => number) | undefined;
+  calculateSortValue?: string | ((this: Column, rowData: DataObject) => unknown);
 
   name: string;
 
   calculateCellValue: (this: Column, data: unknown) => unknown;
 
   calculateDisplayValue: (this: Column, data: unknown) => unknown;
+
+  calculateFilterExpression: (
+    this: Column,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    filterValue: any,
+    selectedFilterOperation: string | undefined,
+    target: string,
+  ) => unknown;
 
   format?: Format;
 
@@ -39,6 +60,9 @@ export type Column = Pick<Required<ColumnBase>, InheritedColumnProps> & {
   headerItemTemplate?: ComponentType<{ column: Column }>;
 
   headerItemCssClass?: string;
+
+  // header filter options for specific column.
+  headerFilter?: HeaderFilterColumnOptions;
 };
 
 export type VisibleColumn = Column & { visible: true };
@@ -51,12 +75,18 @@ export interface Cell {
   text: string;
 
   column: Column;
+
+  highlightedText: HighlightedTextItem[] | null;
 }
 
 export interface DataRow {
   cells: Cell[];
 
-  key: unknown;
+  key: Key;
 
-  data: unknown;
+  data: DataObject;
+
+  isSelected?: boolean;
+
+  index: number;
 }

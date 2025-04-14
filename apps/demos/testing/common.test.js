@@ -14,6 +14,7 @@ import {
   changeTheme,
   waitForAngularLoading,
   shouldSkipDemo,
+  FRAMEWORKS,
 } from '../utils/visual-tests/matrix-test-helper';
 import {
   getThemePostfix,
@@ -38,7 +39,7 @@ const execCode = ClientFunction((code) => {
 });
 
 const injectStyle = (style) => `
-    var style = document.createElement('style'); 
+    var style = document.createElement('style');
     style.innerHTML = \`${style}\`;
     document.getElementsByTagName('head')[0].appendChild(style);
   `;
@@ -56,9 +57,6 @@ const getTestSpecificSkipRules = (testName) => {
       return ['empty-table-header'];
     case 'Localization-UsingGlobalize':
       return ['label'];
-    case 'Map-Markers':
-    case 'Map-Routes':
-      return ['aria-hidden-focus', 'image-alt', 'image-redundant-alt'];
     default:
       return [];
   }
@@ -96,6 +94,7 @@ const SKIPPED_TESTS = {
       { demo: 'PointImage', themes: [THEME.material] },
       { demo: 'BiDirectionalBarChart', themes: [THEME.material] },
       { demo: 'CustomizePointsAndLabels', themes: [THEME.material] },
+      { demo: 'ClientSideDataProcessing', themes: [THEME.material] },
       { demo: 'ServerSideDataProcessing', themes: [THEME.material] },
       { demo: 'MultiplePointSelection', themes: [THEME.material] },
       { demo: 'PiesWithEqualSize', themes: [THEME.material] },
@@ -156,6 +155,7 @@ const SKIPPED_TESTS = {
     Charts: [
       { demo: 'PiesWithEqualSize', themes: [THEME.material] },
       { demo: 'CustomAnnotations', themes: [THEME.material] },
+      { demo: 'ClientSideDataProcessing', themes: [THEME.material] },
       { demo: 'ServerSideDataProcessing', themes: [THEME.material] },
       { demo: 'SubvalueIndicatorTextFormatting', themes: [THEME.material] },
     ],
@@ -167,8 +167,13 @@ const SKIPPED_TESTS = {
       { demo: 'MultipleRecordSelectionAPI', themes: [THEME.material] },
       { demo: 'CellEditingAndEditingAPI', themes: [THEME.material] },
     ],
+    TreeList: [
+      { demo: 'Resizing', themes: [THEME.material] },
+      { demo: 'Overview', themes: [THEME.material] },
+    ],
     Gantt: [
       { demo: 'Validation', themes: [THEME.generic, THEME.material, THEME.fluent] },
+      { demo: 'ContextMenu', themes: [THEME.material] },
     ],
     Scheduler: [
       { demo: 'Overview', themes: [THEME.fluent, THEME.material] },
@@ -210,6 +215,9 @@ const SKIPPED_TESTS = {
     ],
   },
   Vue: {
+    Accordion: [
+      { demo: 'Overview', themes: [THEME.generic, THEME.material, THEME.fluent] },
+    ],
     Charts: [
       { demo: 'TilingAlgorithms', themes: [THEME.material] },
       { demo: 'ExportAndPrintingAPI', themes: [THEME.material] },
@@ -221,6 +229,7 @@ const SKIPPED_TESTS = {
       { demo: 'PointsAggregation', themes: [THEME.material] },
       { demo: 'SubvalueIndicatorTextFormatting', themes: [THEME.material] },
       { demo: 'AxisLabelsOverlapping', themes: [THEME.material] },
+      { demo: 'ClientSideDataProcessing', themes: [THEME.material] },
       { demo: 'ServerSideDataProcessing', themes: [THEME.material] },
       { demo: 'PiesWithEqualSize', themes: [THEME.material] },
       { demo: 'Palette', themes: [THEME.material] },
@@ -257,6 +266,8 @@ const SKIPPED_TESTS = {
     ],
     TreeList: [
       { demo: 'Overview', themes: [THEME.material] },
+      { demo: 'MultipleRowSelection', themes: [THEME.material] },
+      { demo: 'Resizing', themes: [THEME.material] },
     ],
     List: [
       { demo: 'ListWithSearchBar', themes: [THEME.material] },
@@ -303,7 +314,7 @@ const SKIPPED_TESTS = {
   },
 };
 
-['jQuery', 'React', 'Vue', 'Angular'].forEach((approach) => {
+FRAMEWORKS.forEach((approach) => {
   if (!shouldRunFramework(approach)) { return; }
   fixture(approach)
     .beforeEach(async (t) => {
@@ -321,7 +332,7 @@ const SKIPPED_TESTS = {
       {
         content: `
           window.addEventListener('error', function (e) {
-              console.error(e.message); 
+              console.error(e.message);
           });`,
       },
     ]);
@@ -334,6 +345,7 @@ const SKIPPED_TESTS = {
     'Diagram',
     'FileManager',
     'Gantt',
+    'Map',
     'Scheduler',
     'PivotGrid',
   ];
@@ -386,6 +398,11 @@ const SKIPPED_TESTS = {
     if (isGitHubDemos && (widgetName !== 'DataGrid' || gitHubIgnored.includes(demoName))) {
       return;
     }
+
+    if (shouldSkipDemo(approach, widgetName, demoName, SKIPPED_TESTS)) {
+      return;
+    }
+
     runTestAtPage(
       test,
       pageURL,
@@ -425,10 +442,6 @@ const SKIPPED_TESTS = {
           await t.expect(results.violations.length === 0).ok(createReport(results.violations));
         } else {
           const testTheme = process.env.THEME;
-
-          if (shouldSkipDemo(approach, widgetName, demoName, SKIPPED_TESTS)) {
-            return;
-          }
 
           let comparisonResult;
           if (isGitHubDemos) {

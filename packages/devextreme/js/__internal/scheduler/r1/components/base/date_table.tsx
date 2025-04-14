@@ -1,7 +1,6 @@
-import type { InfernoEffect } from '@devextreme/runtime/inferno';
-import { createReRenderEffect, InfernoWrapperComponent } from '@devextreme/runtime/inferno';
+import type { InfernoEffect } from '@ts/core/r1/runtime/inferno/index';
+import { createReRenderEffect, InfernoWrapperComponent } from '@ts/core/r1/runtime/inferno/index';
 import type { JSXTemplate, RefObject } from '@ts/core/r1/types';
-import { getTemplate } from '@ts/core/r1/utils/index';
 
 import type { CellTemplateProps, DefaultProps } from '../types';
 import { DateTableBody, DateTableBodyDefaultProps } from './date_table_body';
@@ -44,11 +43,8 @@ export class DateTable extends InfernoWrapperComponent<DateTableProps> {
     const leftVirtualCellWidth = viewData.leftVirtualCellWidth ?? 0;
     const rightVirtualCellWidth = viewData.rightVirtualCellWidth ?? 0;
     const virtualCellsCount = viewData.groupedData[0].dateTable[0].cells.length;
-    const CellTemplateComponent = getTemplate(cellTemplate);
-    const DataCellTemplateComponent = getTemplate(dataCellTemplate);
 
     return (
-      // @ts-ignore
       <Table
         {...restProps}
         tableRef={tableRef}
@@ -62,12 +58,11 @@ export class DateTable extends InfernoWrapperComponent<DateTableProps> {
         className={classes}
         width={width}
       >
-         {/* @ts-ignore */}
         <DateTableBody
           viewData={viewData}
           viewContext={viewContext}
-          cellTemplate={CellTemplateComponent}
-          dataCellTemplate={DataCellTemplateComponent}
+          cellTemplate={cellTemplate}
+          dataCellTemplate={dataCellTemplate}
           leftVirtualCellWidth={leftVirtualCellWidth}
           rightVirtualCellWidth={rightVirtualCellWidth}
           groupOrientation={groupOrientation}

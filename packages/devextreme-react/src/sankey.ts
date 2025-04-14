@@ -112,7 +112,6 @@ const AdaptiveLayout = Object.assign<typeof _componentAdaptiveLayout, NestedComp
 // Link
 // HoverStyle
 // Node
-// HoverStyle
 // Tooltip
 type IBorderProps = React.PropsWithChildren<{
   color?: string | undefined;
@@ -209,7 +208,6 @@ const Format = Object.assign<typeof _componentFormat, NestedComponentMeta>(_comp
 
 // owners:
 // HoverStyle
-// HoverStyle
 type IHatchingProps = React.PropsWithChildren<{
   direction?: HatchDirection;
   opacity?: number;
@@ -252,6 +250,11 @@ const _componentHoverStyle = (props: IHoverStyleProps) => {
     ...props,
     elementDescriptor: {
       OptionName: "hoverStyle",
+      ExpectedChildren: {
+        border: { optionName: "border", isCollectionItem: false },
+        hatching: { optionName: "hatching", isCollectionItem: false },
+        sankeyborder: { optionName: "border", isCollectionItem: false }
+      },
     },
   });
 };
@@ -450,7 +453,6 @@ const Node = Object.assign<typeof _componentNode, NestedComponentMeta>(_componen
 // Link
 // HoverStyle
 // Node
-// HoverStyle
 type ISankeyborderProps = React.PropsWithChildren<{
   color?: string | undefined;
   visible?: boolean | undefined;

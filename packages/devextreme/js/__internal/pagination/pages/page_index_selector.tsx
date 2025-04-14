@@ -1,7 +1,6 @@
-/* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-import { BaseInfernoComponent } from '@devextreme/runtime/inferno';
+import { BaseInfernoComponent } from '@ts/core/r1/runtime/inferno/index';
 import { Fragment } from 'inferno';
 
 import { ConfigContext } from '../../core/r1/config_context';
@@ -57,7 +56,7 @@ const PageIndexSelectorDefaultProps: PageIndexSelectorPropsType = {
   itemCount: PaginationDefaultProps.itemCount,
 };
 
-interface NavigationButtonProps extends Pick<LightButtonProps, 'className' | 'tabIndex' > {navigate: LightButtonProps['onClick']}
+interface NavigationButtonProps extends Pick<LightButtonProps, 'className' | 'tabIndex' > { navigate: LightButtonProps['onClick'] }
 
 interface NavigationButtonPropsCache {
   prevButtonProps: NavigationButtonProps | undefined;
@@ -98,7 +97,7 @@ export class PageIndexSelector extends BaseInfernoComponent<PageIndexSelectorPro
   }
 
   getButtonProps(direction): NavigationButtonProps {
-    // eslint-disable-next-line max-len
+    // eslint-disable-next-line @stylistic/max-len
     const rtlAwareDirection = this.getConfig()?.rtlEnabled ? reverseDirections[direction] : direction;
     const canNavigate = this.canNavigateTo(rtlAwareDirection);
     const className = classNames[`${direction}${canNavigate ? 'Enabled' : 'Disabled'}Class`];

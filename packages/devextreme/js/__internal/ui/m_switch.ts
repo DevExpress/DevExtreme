@@ -7,12 +7,16 @@ import { addNamespace } from '@js/common/core/events/utils/index';
 import messageLocalization from '@js/common/core/localization/message';
 import registerComponent from '@js/core/component_registrator';
 import devices from '@js/core/devices';
+import type { DefaultOptionsRule } from '@js/core/options/utils';
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
+import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred } from '@js/core/utils/deferred';
-import { extend } from '@js/core/utils/extend';
 import { getBoundingRect } from '@js/core/utils/position';
 import { getOuterWidth } from '@js/core/utils/size';
-import Editor from '@js/ui/editor/editor';
+import type { Properties } from '@js/ui/switch';
+import type { OptionChanged } from '@ts/core/widget/types';
+import Editor from '@ts/ui/editor/editor';
 
 const SWITCH_CLASS = 'dx-switch';
 const SWITCH_WRAPPER_CLASS = `${SWITCH_CLASS}-wrapper`;
@@ -25,10 +29,31 @@ const SWITCH_OFF_CLASS = `${SWITCH_CLASS}-off`;
 
 const SWITCH_ANIMATION_DURATION = 100;
 
-// @ts-expect-error
-const Switch = Editor.inherit({
-  _supportedKeys() {
-    const isRTL = this.option('rtlEnabled');
+class Switch extends Editor<Properties> {
+  _$switchWrapper!: dxElementWrapper;
+
+  _$switchContainer!: dxElementWrapper;
+
+  _$switchInner!: dxElementWrapper;
+
+  _$handle!: dxElementWrapper;
+
+  _$labelOn?: dxElementWrapper;
+
+  _$labelOff?: dxElementWrapper;
+
+  _animating?: boolean;
+
+  _swiping?: boolean;
+
+  _feedbackDeferred?: DeferredObj<unknown>;
+
+  _$submitElement!: dxElementWrapper;
+
+  _clickAction?: (event?: Record<string, unknown>) => void;
+
+  _supportedKeys(): Record<string, (e: KeyboardEvent, options?: Record<string, unknown>) => void> {
+    const { rtlEnabled } = this.option();
 
     const click = function (e) {
       e.preventDefault();
@@ -40,36 +65,35 @@ const Switch = Editor.inherit({
       this._saveValueChangeEvent(e);
       this._animateValue(value);
     };
-    return extend(this.callBase(), {
+    return {
+      ...super._supportedKeys(),
       space: click,
       enter: click,
-      leftArrow: move.bind(this, !!isRTL),
-      rightArrow: move.bind(this, !isRTL),
-    });
-  },
+      leftArrow: move.bind(this, !!rtlEnabled),
+      rightArrow: move.bind(this, !rtlEnabled),
+    };
+  }
 
-  _useTemplates() {
+  // eslint-disable-next-line class-methods-use-this
+  _useTemplates(): boolean {
     return false;
-  },
+  }
 
-  _getDefaultOptions() {
-    return extend(this.callBase(), {
+  _getDefaultOptions(): Properties {
+    return {
+      ...super._getDefaultOptions(),
       hoverStateEnabled: true,
-
       activeStateEnabled: true,
-
       switchedOnText: messageLocalization.format('dxSwitch-switchedOnText'),
-
       switchedOffText: messageLocalization.format('dxSwitch-switchedOffText'),
-
       value: false,
-    });
-  },
+    };
+  }
 
-  _defaultOptionsRules() {
-    return this.callBase().concat([
+  _defaultOptionsRules(): DefaultOptionsRule<Properties>[] {
+    return super._defaultOptionsRules().concat([
       {
-        device() {
+        device(): boolean {
           return devices.real().deviceType === 'desktop' && !devices.isSimulator();
         },
         options: {
@@ -77,12 +101,16 @@ const Switch = Editor.inherit({
         },
       },
     ]);
-  },
+  }
 
-  _feedbackHideTimeout: 0,
-  _animating: false,
+  _init(): void {
+    super._init();
 
-  _initMarkup() {
+    this._feedbackHideTimeout = 0;
+    this._animating = false;
+  }
+
+  _initMarkup(): void {
     this._renderContainers();
 
     this.$element()
@@ -97,19 +125,19 @@ const Switch = Editor.inherit({
 
     this._renderSwipeable();
 
-    this.callBase();
+    super._initMarkup();
 
     this._renderSwitchInner();
     this._renderLabels();
     this._renderValue();
-  },
+  }
 
-  _getInnerOffset(value, offset) {
+  _getInnerOffset(value, offset): string {
     const ratio = (offset - this._offsetDirection() * Number(!value)) / 2;
     return `${100 * ratio}%`;
-  },
+  }
 
-  _getHandleOffset(value, offset) {
+  _getHandleOffset(value, offset): string {
     if (this.option('rtlEnabled')) {
       value = !value;
     }
@@ -119,7 +147,7 @@ const Switch = Editor.inherit({
       return `${calcValue}%`;
     }
     return `${100 * -offset}%`;
-  },
+  }
 
   _renderSwitchInner() {
     this._$switchInner = $('<div>')
@@ -129,7 +157,7 @@ const Switch = Editor.inherit({
     this._$handle = $('<div>')
       .addClass(SWITCH_HANDLE_CLASS)
       .appendTo(this._$switchInner);
-  },
+  }
 
   _renderLabels() {
     this._$labelOn = $('<div>')
@@ -141,7 +169,7 @@ const Switch = Editor.inherit({
       .appendTo(this._$switchInner);
 
     this._setLabelsText();
-  },
+  }
 
   _renderContainers() {
     this._$switchContainer = $('<div>')
@@ -150,7 +178,7 @@ const Switch = Editor.inherit({
     this._$switchWrapper = $('<div>')
       .addClass(SWITCH_WRAPPER_CLASS)
       .append(this._$switchContainer);
-  },
+  }
 
   _renderSwipeable() {
     this._createComponent(this.$element(), Swipeable, {
@@ -161,53 +189,54 @@ const Switch = Editor.inherit({
       onEnd: this._swipeEndHandler.bind(this),
       itemSizeFunc: this._getItemSizeFunc.bind(this),
     });
-  },
+  }
 
-  _getItemSizeFunc() {
+  _getItemSizeFunc(): number {
     return getOuterWidth(this._$switchContainer, true) - getBoundingRect(this._$handle.get(0)).width;
-  },
+  }
 
-  _renderSubmitElement() {
+  _renderSubmitElement(): void {
     this._$submitElement = $('<input>')
       .attr('type', 'hidden')
       .appendTo(this.$element());
-  },
+  }
 
-  _getSubmitElement() {
+  _getSubmitElement(): dxElementWrapper {
     return this._$submitElement;
-  },
+  }
 
-  _offsetDirection() {
+  _offsetDirection(): number {
     return this.option('rtlEnabled') ? -1 : 1;
-  },
+  }
 
-  _renderPosition(state, swipeOffset) {
+  _renderPosition(state, swipeOffset): void {
     const innerOffset = this._getInnerOffset(state, swipeOffset);
     const handleOffset = this._getHandleOffset(state, swipeOffset);
 
     this._$switchInner.css('transform', ` translateX(${innerOffset})`);
     this._$handle.css('transform', ` translateX(${handleOffset})`);
-  },
+  }
 
-  _validateValue() {
+  _validateValue(): void {
     const check = this.option('value');
     if (typeof check !== 'boolean') {
       this._options.silent('value', !!check);
     }
-  },
+  }
 
-  _renderClick() {
+  _renderClick(): void {
+    // @ts-expect-error ts-error
     const eventName = addNamespace(clickEventName, this.NAME);
     const $element = this.$element();
     this._clickAction = this._createAction(this._clickHandler.bind(this));
 
     eventsEngine.off($element, eventName);
     eventsEngine.on($element, eventName, (e) => {
-      this._clickAction({ event: e });
+      this._clickAction?.({ event: e });
     });
-  },
+  }
 
-  _clickHandler(args) {
+  _clickHandler(args): void {
     const e = args.event;
 
     this._saveValueChangeEvent(e);
@@ -217,9 +246,9 @@ const Switch = Editor.inherit({
     }
 
     this._animateValue(!this.option('value'));
-  },
+  }
 
-  _animateValue(value) {
+  _animateValue(value): void {
     const startValue = this.option('value');
     const endValue = value;
 
@@ -239,29 +268,25 @@ const Switch = Editor.inherit({
     const toInnerConfig = {};
     const fromHandleConfig = {};
     const toHandlerConfig = {};
-    // @ts-expect-error
+    // @ts-expect-error ts-error
     fromInnerConfig.transform = ` translateX(${fromInnerOffset})`;
-    // @ts-expect-error
+    // @ts-expect-error ts-error
     toInnerConfig.transform = ` translateX(${toInnerOffset})`;
-    // @ts-expect-error
+    // @ts-expect-error ts-error
     fromHandleConfig.transform = ` translateX(${fromHandleOffset})`;
-    // @ts-expect-error
+    // @ts-expect-error ts-error
     toHandlerConfig.transform = ` translateX(${toHandleOffset})`;
 
     this.$element().toggleClass(SWITCH_ON_VALUE_CLASS, endValue);
-
+    // @ts-expect-error ts-error
     fx.animate(this._$handle, {
-      // @ts-expect-error
       from: fromHandleConfig,
-      // @ts-expect-error
       to: toHandlerConfig,
       duration: SWITCH_ANIMATION_DURATION,
     });
-
+    // @ts-expect-error ts-error
     fx.animate(this._$switchInner, {
-      // @ts-expect-error
       from: fromInnerConfig,
-      // @ts-expect-error
       to: toInnerConfig,
       duration: SWITCH_ANIMATION_DURATION,
       complete() {
@@ -269,9 +294,9 @@ const Switch = Editor.inherit({
         that.option('value', endValue);
       },
     });
-  },
+  }
 
-  _swipeStartHandler(e) {
+  _swipeStartHandler(e): void {
     const state = this.option('value');
     const rtlEnabled = this.option('rtlEnabled');
     const maxOffOffset = rtlEnabled ? 0 : 1;
@@ -283,14 +308,16 @@ const Switch = Editor.inherit({
 
     this._feedbackDeferred = Deferred();
     lock(this._feedbackDeferred);
-    this._toggleActiveState(this.$element(), this.option('activeStateEnabled'));
-  },
+    const { activeStateEnabled } = this.option();
+    // @ts-expect-error ts-error
+    this._toggleActiveState(this.$element(), activeStateEnabled);
+  }
 
-  _swipeUpdateHandler(e) {
+  _swipeUpdateHandler(e): void {
     this._renderPosition(this.option('value'), e.event.offset);
-  },
+  }
 
-  _swipeEndHandler(e) {
+  _swipeEndHandler(e): void {
     const that = this;
     const offsetDirection = this._offsetDirection();
     const toInnerConfig = {};
@@ -302,57 +329,59 @@ const Switch = Editor.inherit({
     toInnerConfig.transform = ` translateX(${innerOffset})`;
     // @ts-expect-error
     toHandleConfig.transform = ` translateX(${handleOffset})`;
-
+    // @ts-expect-error ts-error
     fx.animate(this._$handle, {
-      // @ts-expect-error
       to: toHandleConfig,
       duration: SWITCH_ANIMATION_DURATION,
     });
-
+    // @ts-expect-error ts-error
     fx.animate(this._$switchInner, {
-      // @ts-expect-error
       to: toInnerConfig,
       duration: SWITCH_ANIMATION_DURATION,
       complete() {
         that._swiping = false;
+        // @ts-expect-error ts-error
         const pos = that.option('value') + offsetDirection * e.event.targetOffset;
         that._saveValueChangeEvent(e.event);
         that.option('value', Boolean(pos));
-        that._feedbackDeferred.resolve();
+        that._feedbackDeferred?.resolve();
         that._toggleActiveState(that.$element(), false);
       },
     });
-  },
+  }
 
-  _renderValue() {
+  _renderValue(): void {
     this._validateValue();
 
-    const value = this.option('value');
+    const { value } = this.option();
     this._renderPosition(value, 0);
 
     this.$element().toggleClass(SWITCH_ON_VALUE_CLASS, value);
+    // @ts-expect-error ts-error
     this._getSubmitElement().val(value);
     this.setAria({
       checked: value,
       label: value ? this.option('switchedOnText') : this.option('switchedOffText'),
     });
-  },
+  }
 
-  _setLabelsText() {
-    this._$labelOn && this._$labelOn.text(this.option('switchedOnText'));
-    this._$labelOff && this._$labelOff.text(this.option('switchedOffText'));
-  },
+  _setLabelsText(): void {
+    const { switchedOnText, switchedOffText } = this.option();
+    // @ts-expect-error ts-error
+    this._$labelOn?.text(switchedOnText);
+    // @ts-expect-error ts-error
+    this._$labelOff?.text(switchedOffText);
+  }
 
-  _visibilityChanged(visible) {
+  _visibilityChanged(visible: boolean): void {
     if (visible) {
       this.repaint();
     }
-  },
+  }
 
-  _optionChanged(args) {
+  _optionChanged(args: OptionChanged<Properties>): void {
     switch (args.name) {
       case 'width':
-        delete this._marginBound;
         this._refresh();
         break;
       case 'switchedOnText':
@@ -361,13 +390,13 @@ const Switch = Editor.inherit({
         break;
       case 'value':
         this._renderValue();
-        this.callBase(args);
+        super._optionChanged(args);
         break;
       default:
-        this.callBase(args);
+        super._optionChanged(args);
     }
-  },
-});
+  }
+}
 
 registerComponent('dxSwitch', Switch);
 

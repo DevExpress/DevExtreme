@@ -1,5 +1,5 @@
-import { BaseInfernoComponent, normalizeStyles } from '@devextreme/runtime/inferno';
 import type { PropsWithChildren, PropsWithClassName, PropsWithStyles } from '@ts/core/r1/index';
+import { BaseInfernoComponent, normalizeStyles } from '@ts/core/r1/runtime/inferno/index';
 
 import { splitNumber } from '../../utils/index';
 import { VirtualCell, VirtualCellDefaultProps } from './virtual_cell';
@@ -47,9 +47,9 @@ export class Row extends BaseInfernoComponent<RowProps> {
           hasLeftVirtualCell
           && leftVirtualCellCount != null
           && splitNumber(leftVirtualCellCount, MAX_COL_SPAN).map(
-            // @ts-ignore
-            (colSpan, index) => <VirtualCell
-              className={`left-virtual-cell-${index}`}
+            (colSpan) => <VirtualCell
+              // TODO: do we need this?
+              // className={`left-virtual-cell-${index}`}
               width={leftVirtualCellWidth * (colSpan / leftVirtualCellCount)}
               colSpan={colSpan}
               isHeaderCell={isHeaderRow ?? VirtualCellDefaultProps.isHeaderCell}
@@ -61,9 +61,9 @@ export class Row extends BaseInfernoComponent<RowProps> {
           hasRightVirtualCell
           && rightVirtualCellCount != null
           && splitNumber(rightVirtualCellCount, MAX_COL_SPAN).map(
-            // @ts-ignore
-            (colSpan, index) => <VirtualCell
-              className={`right-virtual-cell-${index}`}
+            (colSpan) => <VirtualCell
+              // TODO: do we need this?
+              // className={`right-virtual-cell-${index}`}
               width={rightVirtualCellWidth * (colSpan / rightVirtualCellCount)}
               colSpan={colSpan}
               isHeaderCell={isHeaderRow ?? VirtualCellDefaultProps.isHeaderCell}

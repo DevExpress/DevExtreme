@@ -2379,6 +2379,24 @@ QUnit.module('editing', moduleSetup, () => {
         assert.equal(onCustomItemCreating.callCount, 0, 'action has not been called');
     });
 
+    QUnit.test('onCustomItemCreating should not be called when customItemCreateEvent is equal to empty string and component loses focus (T1269852)', function(assert) {
+        const onCustomItemCreating = sinon.stub();
+
+        const $selectBox = $('#selectBox').dxSelectBox({
+            acceptCustomValue: true,
+            customItemCreateEvent: '',
+            onCustomItemCreating: onCustomItemCreating,
+        });
+
+        const $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const keyboard = keyboardMock($input);
+
+        keyboard.type('t');
+        $input.trigger('focusout');
+
+        assert.strictEqual(onCustomItemCreating.callCount, 0, 'action has not been called');
+    });
+
     QUnit.test('onCustomItemCreating should not be called more then once even when there is value change handler call inside of event handler (T893205)', function(assert) {
         let handlerCallCount = 0;
 

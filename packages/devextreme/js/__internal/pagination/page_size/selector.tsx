@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-import { InfernoComponent, InfernoEffect } from '@devextreme/runtime/inferno';
+import { InfernoComponent, InfernoEffect } from '@ts/core/r1/runtime/inferno/index';
 import type { RefObject } from '@ts/core/r1/types';
 import { createRef as infernoCreateRef } from 'inferno';
 
@@ -19,7 +19,6 @@ export interface PageSizeSelectorProps {
   rootElementRef?: RefObject<HTMLDivElement>;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-type-alias
 type PageSizeSelectorPropsType = Pick<PaginationProps, 'pageSize' | 'pageSizeChangedInternal' | 'allowedPageSizes' > & PageSizeSelectorProps;
 
 const PageSizeSelectorDefaultProps: PageSizeSelectorPropsType = {
@@ -75,7 +74,7 @@ export class PageSizeSelector extends InfernoComponent<PageSizeSelectorPropsType
       text: String(p),
       value: p,
     });
-    // eslint-disable-next-line max-len
+    // eslint-disable-next-line @stylistic/max-len
     const result: FullPageSize[] | undefined = this.props.allowedPageSizes.map<FullPageSize>(mapFunction);
     this.__getterCache.normalizedPageSizes = result;
     return result;

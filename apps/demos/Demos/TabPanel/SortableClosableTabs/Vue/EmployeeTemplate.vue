@@ -33,7 +33,7 @@ import service from './data.ts';
 const props = withDefaults(defineProps<{
   employee?: Record<string, any>
 }>(), {
-  employee: () => ({}),
+  employee: () => ({} as Record<string, any>),
 });
 
 const tasks = service.getTasks();

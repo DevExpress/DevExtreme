@@ -113,7 +113,7 @@ class Gantt extends Widget {
     }
     _refreshGantt() {
         this._refreshDataSources();
-        this._refresh();
+        setTimeout(() => this._refresh());
     }
     _refreshDataSources() {
         this._refreshDataSource(GANTT_TASKS);

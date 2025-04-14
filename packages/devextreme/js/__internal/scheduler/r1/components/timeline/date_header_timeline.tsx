@@ -1,5 +1,4 @@
-import { BaseInfernoComponent } from '@devextreme/runtime/inferno';
-import { getTemplate } from '@ts/core/r1/utils/index';
+import { BaseInfernoComponent } from '@ts/core/r1/runtime/inferno/index';
 import { getThemeType } from '@ts/scheduler/r1/utils/themes';
 
 import { isHorizontalGroupingApplied } from '../../utils/index';
@@ -37,8 +36,6 @@ export class TimelineDateHeaderLayout extends BaseInfernoComponent<DateHeaderPro
     } = dateHeaderData;
     const isHorizontalGrouping = isHorizontalGroupingApplied(groups, groupOrientation)
       && !groupByDate;
-    const DateCellTemplateComponent = getTemplate(dateCellTemplate);
-    const TimeCellTemplateComponent = getTemplate(timeCellTemplate);
 
     return (
       <>
@@ -47,6 +44,7 @@ export class TimelineDateHeaderLayout extends BaseInfernoComponent<DateHeaderPro
             const rowsCount = dataMap.length;
             const isTimeCellTemplate = rowsCount - 1 === rowIndex;
             const isWeekDayRow = rowsCount > 1 && rowIndex === 0;
+            // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
             const splitText = isMaterialBased && (isMonthDateHeader || isWeekDayRow);
 
             let validLeftVirtualCellCount: number | undefined = leftVirtualCellCount;
@@ -62,7 +60,6 @@ export class TimelineDateHeaderLayout extends BaseInfernoComponent<DateHeaderPro
             }
 
             return (
-              // @ts-ignore
               <Row
                 key={rowIndex.toString()}
                 className="dx-scheduler-header-row"
@@ -87,7 +84,6 @@ export class TimelineDateHeaderLayout extends BaseInfernoComponent<DateHeaderPro
                     text,
                     today,
                   }) => (
-                    // @ts-ignore
                     <DateHeaderCell
                       key={key}
                       viewContext={viewContext}
@@ -103,8 +99,8 @@ export class TimelineDateHeaderLayout extends BaseInfernoComponent<DateHeaderPro
                       isWeekDayCell={isWeekDayRow}
                       colSpan={colSpan}
                       splitText={splitText}
-                      dateCellTemplate={DateCellTemplateComponent}
-                      timeCellTemplate={TimeCellTemplateComponent}
+                      dateCellTemplate={dateCellTemplate}
+                      timeCellTemplate={timeCellTemplate}
                       isTimeCellTemplate={isTimeCellTemplate}
                     />
                   ))

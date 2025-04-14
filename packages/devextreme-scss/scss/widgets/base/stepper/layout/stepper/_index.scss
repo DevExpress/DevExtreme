@@ -1,0 +1,14 @@
+.dx-stepper {
+  display: flex;
+  position: relative;
+}
+
+.dx-stepper-vertical {
+  height: 100%;
+  align-items: center;
+}
+
+.dx-stepper-horizontal {
+  width: 100%;
+  justify-content: center;
+}

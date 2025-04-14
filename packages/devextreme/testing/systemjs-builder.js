@@ -3,10 +3,9 @@ const fs = require('fs');
 const babel = require('@babel/core');
 const parseArguments = require('minimist');
 
-// eslint-disable-next-line no-undef
+
 const root = path.join(__dirname, '..');
 const transpileRenovationPath = path.join(root, '/artifacts/transpiled-renovation');
-const transpilePath = path.join(root, '/artifacts/transpiled');
 
 const getFileList = (dirName) => {
     let files = [];
@@ -34,27 +33,6 @@ const writeFileSync = (destPath, file) => {
     }
 
     fs.writeFileSync(destPath, file);
-};
-
-const transpileModules = async() => {
-    getFileList(transpilePath).forEach((filePath) => {
-        transpileFile(filePath, filePath.replace(path.normalize('/transpiled'), path.normalize('/transpiled-systemjs')));
-    });
-
-    const infernoPath = path.dirname(require.resolve('@devextreme/runtime/esm/inferno'));
-    const listRuntimeFiles = getFileList(infernoPath);
-
-    // eslint-disable-next-line no-restricted-syntax
-    for(const filePath of listRuntimeFiles) {
-        const file = fs.readFileSync(filePath);
-        const { code } = await babel.transform(file.toString(), {
-            presets: ['@babel/preset-env'],
-            plugins: ['@babel/plugin-transform-modules-systemjs'],
-        });
-
-        const destPath = filePath.replace(infernoPath, path.join(root, 'artifacts/transpiled-systemjs/runtime/inferno'));
-        writeFileSync(destPath, code);
-    }
 };
 
 const buildAmdModule = (body) => `
@@ -272,12 +250,10 @@ const transpileTesting = async() => {
 };
 
 (async() => {
-    // eslint-disable-next-line no-undef
+
     const { transpile } = parseArguments(process.argv);
 
     switch(transpile) {
-        case 'modules':
-            return await transpileModules();
         case 'modules-renovation':
             return await transpileRenovationModules();
         case 'testing':

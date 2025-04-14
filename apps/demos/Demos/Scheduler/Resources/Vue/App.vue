@@ -45,7 +45,7 @@
 </template>
 <script setup lang="ts">
 import { ref } from 'vue';
-import DxScheduler, { DxResource, DxSchedulerTypes } from 'devextreme-vue/scheduler';
+import DxScheduler, { DxResource, type DxSchedulerTypes } from 'devextreme-vue/scheduler';
 import DxRadioGroup from 'devextreme-vue/radio-group';
 import {
   resourcesList, data, priorities, assignees, rooms,

@@ -1,6 +1,5 @@
-import type { InfernoEffect } from '@devextreme/runtime/inferno';
-import { createReRenderEffect, InfernoWrapperComponent } from '@devextreme/runtime/inferno';
-import { getTemplate } from '@ts/core/r1/utils/index';
+import type { InfernoEffect } from '@ts/core/r1/runtime/inferno/index';
+import { createReRenderEffect, InfernoWrapperComponent } from '@ts/core/r1/runtime/inferno/index';
 
 import type { HeaderPanelProps } from '../base/header_panel';
 import { HeaderPanel, HeaderPanelDefaultProps } from '../base/header_panel';
@@ -24,12 +23,8 @@ export class HeaderPanelTimeline extends InfernoWrapperComponent<HeaderPanelProp
       resourceCellTemplate,
       timeCellTemplate,
     } = this.props;
-    const DateCellTemplateComponent = getTemplate(dateCellTemplate);
-    const ResourceCellTemplateComponent = getTemplate(resourceCellTemplate);
-    const TimeCellTemplateComponent = getTemplate(timeCellTemplate);
 
     return (
-      // @ts-ignore
       <HeaderPanel
         viewContext={viewContext}
         dateHeaderData={dateHeaderData}
@@ -39,9 +34,9 @@ export class HeaderPanelTimeline extends InfernoWrapperComponent<HeaderPanelProp
         groupOrientation={groupOrientation}
         isRenderDateHeader={isRenderDateHeader}
         dateHeaderTemplate={TimelineDateHeaderLayout}
-        resourceCellTemplate={ResourceCellTemplateComponent}
-        dateCellTemplate={DateCellTemplateComponent}
-        timeCellTemplate={TimeCellTemplateComponent}
+        resourceCellTemplate={resourceCellTemplate}
+        dateCellTemplate={dateCellTemplate}
+        timeCellTemplate={timeCellTemplate}
       />
     );
   }

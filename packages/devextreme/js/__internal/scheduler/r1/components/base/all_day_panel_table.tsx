@@ -1,7 +1,6 @@
-import type { InfernoEffect } from '@devextreme/runtime/inferno';
-import { createReRenderEffect, InfernoWrapperComponent } from '@devextreme/runtime/inferno';
+import type { InfernoEffect } from '@ts/core/r1/runtime/inferno/index';
+import { createReRenderEffect, InfernoWrapperComponent } from '@ts/core/r1/runtime/inferno/index';
 import type { RefObject } from '@ts/core/r1/types';
-import { getTemplate } from '@ts/core/r1/utils/index';
 import type { ViewCellData } from '@ts/scheduler/r1/types';
 
 import { DefaultSizes } from '../const';
@@ -47,17 +46,14 @@ export class AllDayTable extends InfernoWrapperComponent<AllDayPanelTableProps> 
       dataCellTemplate,
     } = this.props;
     const allDayPanelData = this.getAllDayPanelData();
-    const DataCellTemplateComponent = getTemplate(dataCellTemplate);
 
     return (
-      // @ts-ignore
       <Table
         className="dx-scheduler-all-day-table"
         height={allDayPanelData ? undefined : DefaultSizes.allDayPanelHeight}
         width={width}
         tableRef={tableRef}
       >
-        {/* @ts-ignore */}
         <AllDayPanelTableBody
           viewData={allDayPanelData ?? AllDayPanelTableBodyDefaultProps.viewData}
           viewContext={viewContext}
@@ -67,7 +63,7 @@ export class AllDayTable extends InfernoWrapperComponent<AllDayPanelTableProps> 
             ?? AllDayPanelTableBodyDefaultProps.rightVirtualCellWidth}
           leftVirtualCellCount={viewData.leftVirtualCellCount}
           rightVirtualCellCount={viewData.rightVirtualCellCount}
-          dataCellTemplate={DataCellTemplateComponent}
+          dataCellTemplate={dataCellTemplate}
         />
       </Table>
     );

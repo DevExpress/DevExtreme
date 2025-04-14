@@ -1,5 +1,5 @@
 import type { PropsWithChildren, PropsWithClassName, PropsWithStyles } from '__internal/core/r1';
-import { BaseInfernoComponent, normalizeStyles } from '@devextreme/runtime/inferno';
+import { BaseInfernoComponent, normalizeStyles } from '@ts/core/r1/runtime/inferno/index';
 import type * as CSS from 'csstype';
 import type { RefObject } from 'inferno';
 
@@ -67,7 +67,6 @@ export class Table extends BaseInfernoComponent<TableProps> {
         <tbody>
         {
           hasTopVirtualRow && (
-            // @ts-ignore
             <VirtualRow
               height={topVirtualRowHeight}
               cellsCount={virtualCellsCount ?? VirtualRowDefaultProps.cellsCount}
@@ -83,7 +82,6 @@ export class Table extends BaseInfernoComponent<TableProps> {
         {children}
         {
           hasBottomVirtualRow && (
-            // @ts-ignore
             <VirtualRow
               height={bottomVirtualRowHeight}
               cellsCount={virtualCellsCount ?? VirtualRowDefaultProps.cellsCount}

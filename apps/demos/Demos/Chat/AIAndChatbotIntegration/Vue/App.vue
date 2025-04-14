@@ -1,9 +1,9 @@
 <template>
   <div
     class="chat-container"
-    :class="{'dx-chat-disabled' : isDisabled == true }"
   >
     <DxChat
+      :class="{'dx-chat-disabled' : isDisabled == true }"
       ref="chatElement"
       :height="710"
       :data-source="dataSource"
@@ -49,7 +49,7 @@
 
 <script setup lang="ts">
 import { ref, onBeforeMount } from 'vue';
-import DxChat from 'devextreme-vue/chat';
+import DxChat, { type DxChatTypes } from 'devextreme-vue/chat';
 import DxButton from 'devextreme-vue/button';
 import { loadMessages } from 'devextreme/localization';
 import { AzureOpenAI } from 'openai';
@@ -171,7 +171,7 @@ async function regenerate() {
   }
 }
 
-function onMessageEntered({ message, event }) {
+function onMessageEntered({ message, event }: DxChatTypes.MessageEnteredEvent) {
   dataSource.store().push([{ type: 'insert', data: { id: Date.now(), ...message } }]);
 
   if (!alerts.value.length) {

@@ -1,0 +1,245 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ItemsController createDataRow should process data object to data row using column configuration 1`] = `
+{
+  "cells": [
+    {
+      "column": {
+        "alignment": "left",
+        "allowFiltering": true,
+        "allowHeaderFiltering": false,
+        "allowHiding": true,
+        "allowReordering": true,
+        "allowSearch": true,
+        "allowSorting": true,
+        "calculateCellValue": [Function],
+        "calculateDisplayValue": [Function],
+        "calculateFilterExpression": [Function],
+        "caption": "A",
+        "dataField": "a",
+        "dataType": "string",
+        "falseText": "false",
+        "headerFilter": {
+          "allowSelectAll": true,
+          "height": 325,
+          "search": {
+            "editorOptions": {},
+            "enabled": false,
+            "mode": "contains",
+            "timeout": 500,
+          },
+          "width": 252,
+        },
+        "headerItemTemplate": undefined,
+        "name": "a",
+        "showInColumnChooser": true,
+        "trueText": "true",
+        "visible": true,
+        "visibleIndex": 0,
+      },
+      "displayValue": "my a value",
+      "highlightedText": null,
+      "text": "my a value",
+      "value": "my a value",
+    },
+    {
+      "column": {
+        "alignment": "left",
+        "allowFiltering": true,
+        "allowHeaderFiltering": false,
+        "allowHiding": true,
+        "allowReordering": true,
+        "allowSearch": true,
+        "allowSorting": true,
+        "calculateCellValue": [Function],
+        "calculateDisplayValue": [Function],
+        "calculateFilterExpression": [Function],
+        "caption": "B",
+        "dataField": "b",
+        "dataType": "string",
+        "falseText": "false",
+        "headerFilter": {
+          "allowSelectAll": true,
+          "height": 325,
+          "search": {
+            "editorOptions": {},
+            "enabled": false,
+            "mode": "contains",
+            "timeout": 500,
+          },
+          "width": 252,
+        },
+        "headerItemTemplate": undefined,
+        "name": "b",
+        "showInColumnChooser": true,
+        "trueText": "true",
+        "visible": true,
+        "visibleIndex": 1,
+      },
+      "displayValue": "my b value",
+      "highlightedText": null,
+      "text": "my b value",
+      "value": "my b value",
+    },
+  ],
+  "data": {
+    "a": "my a value",
+    "b": "my b value",
+    "id": 1,
+  },
+  "index": 0,
+  "isSelected": false,
+  "key": 1,
+}
+`;
+
+exports[`ItemsController createDataRow should process data object to data row using column configuration 2`] = `
+{
+  "cells": [
+    {
+      "column": {
+        "alignment": "left",
+        "allowFiltering": true,
+        "allowHeaderFiltering": false,
+        "allowHiding": true,
+        "allowReordering": true,
+        "allowSearch": true,
+        "allowSorting": true,
+        "calculateCellValue": [Function],
+        "calculateDisplayValue": [Function],
+        "calculateFilterExpression": [Function],
+        "caption": "A",
+        "dataField": "a",
+        "dataType": "string",
+        "falseText": "false",
+        "headerFilter": {
+          "allowSelectAll": true,
+          "height": 325,
+          "search": {
+            "editorOptions": {},
+            "enabled": false,
+            "mode": "contains",
+            "timeout": 500,
+          },
+          "width": 252,
+        },
+        "headerItemTemplate": undefined,
+        "name": "a",
+        "showInColumnChooser": true,
+        "trueText": "true",
+        "visible": true,
+        "visibleIndex": 0,
+      },
+      "displayValue": "my a value",
+      "highlightedText": null,
+      "text": "my a value",
+      "value": "my a value",
+    },
+    {
+      "column": {
+        "alignment": "left",
+        "allowFiltering": true,
+        "allowHeaderFiltering": false,
+        "allowHiding": true,
+        "allowReordering": true,
+        "allowSearch": true,
+        "allowSorting": true,
+        "calculateCellValue": [Function],
+        "calculateDisplayValue": [Function],
+        "calculateFilterExpression": [Function],
+        "caption": "B",
+        "dataField": "b",
+        "dataType": "string",
+        "falseText": "false",
+        "headerFilter": {
+          "allowSelectAll": true,
+          "height": 325,
+          "search": {
+            "editorOptions": {},
+            "enabled": false,
+            "mode": "contains",
+            "timeout": 500,
+          },
+          "width": 252,
+        },
+        "headerItemTemplate": undefined,
+        "name": "b",
+        "showInColumnChooser": true,
+        "trueText": "true",
+        "visible": true,
+        "visibleIndex": 1,
+      },
+      "displayValue": "my b value",
+      "highlightedText": null,
+      "text": "my b value",
+      "value": "my b value",
+    },
+  ],
+  "data": {
+    "a": "my a value",
+    "b": "my b value",
+    "id": 1,
+  },
+  "index": 0,
+  "isSelected": true,
+  "key": 1,
+}
+`;
+
+exports[`ItemsController setSelectionState should update the select state of the item 1`] = `
+InterruptableComputed {
+  "callbacks": Set {},
+  "depInitialized": [
+    true,
+    true,
+    true,
+    true,
+  ],
+  "depValues": [
+    [
+      {
+        "a": "my a value",
+        "id": 1,
+      },
+    ],
+    [],
+    [
+      1,
+    ],
+    {
+      "caseSensitive": false,
+      "enabled": true,
+      "searchStr": "",
+    },
+  ],
+  "isInitialized": true,
+  "subscriptions": SubscriptionBag {
+    "subscriptions": [
+      {
+        "unsubscribe": [Function],
+      },
+      {
+        "unsubscribe": [Function],
+      },
+      {
+        "unsubscribe": [Function],
+      },
+      {
+        "unsubscribe": [Function],
+      },
+    ],
+  },
+  "value": [
+    {
+      "cells": [],
+      "data": {
+        "a": "my a value",
+        "id": 1,
+      },
+      "index": 0,
+      "isSelected": true,
+      "key": 1,
+    },
+  ],
+}
+`;

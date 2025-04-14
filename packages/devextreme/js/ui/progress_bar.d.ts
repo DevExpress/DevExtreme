@@ -115,7 +115,7 @@ export type Properties = dxProgressBarOptions;
 /** @deprecated use Properties instead */
 export type Options = dxProgressBarOptions;
 
-///#DEBUG
+/// #DEBUG
 // eslint-disable-next-line import/first
 import { CheckedEvents } from '../core';
 
@@ -153,4 +153,4 @@ onOptionChanged?: ((e: OptionChangedEvent) => void);
  */
 onValueChanged?: ((e: ValueChangedEvent) => void);
 };
-///#ENDDEBUG
+/// #ENDDEBUG

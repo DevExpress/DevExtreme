@@ -82,14 +82,14 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import DxTabPanel from 'devextreme-vue/tab-panel';
-import DxTreeView from 'devextreme-vue/tree-view';
+import DxTreeView, { type DxTreeViewTypes } from 'devextreme-vue/tree-view';
 import { continents } from './data.ts';
 
 const tabPanelIndex = ref(0);
-const countryData = ref(continents[0].items[0]);
+const countryData = ref<Record<string, any>>(continents[0].items[0]);
 const citiesData = ref(continents[0].items[0].cities);
 
-function changeSelection({ itemData }) {
+function changeSelection({ itemData }: DxTreeViewTypes.ItemSelectionChangedEvent) {
   if (itemData.cities) {
     countryData.value = itemData;
     citiesData.value = itemData.cities;

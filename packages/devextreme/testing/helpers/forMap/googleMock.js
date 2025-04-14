@@ -61,10 +61,8 @@
                 TERRAIN: 4
             },
             TravelMode: {
-                BICYCLING: 1,
-                DRIVING: 2,
-                TRANSIT: 3,
-                WALKING: 4
+                DRIVING: 1,
+                WALKING: 2,
             },
             DirectionsStatus: {
                 INVALID_REQUEST: 1,
@@ -397,6 +395,7 @@
             MouseEvent: function(latLng) {
                 this.stop = function() {};
                 this.latLng = latLng;
+                this.domEvent = new MouseEvent({ type: 'click' });
             }
         }
     };

@@ -52,9 +52,9 @@ runs:
 
     - name: Setup Chrome
       if: ${{ inputs.browser == 'chrome' }}
-      uses: ./.github/actions/setup-chrome
+      uses: ./.github/actions/setup-chrome-headless-shell
       with:
-        chrome-version: '121.0.6167.184'
+        chrome-version: '133.0.6943.53'
 
     - name: Setup Firefox profile
       if: ${{ inputs.browser == 'firefox' }}
@@ -139,7 +139,9 @@ runs:
         GITHUBACTION: "true"
         TARGET: "test"
         DISPLAY: ":99"
+        CHROME_CMD: ${{ env.CHROME_SHELL }}
       run: |
+        node ../../tools/scripts/performance_log.js &
         chmod +x ./docker-ci.sh
         ./docker-ci.sh
 

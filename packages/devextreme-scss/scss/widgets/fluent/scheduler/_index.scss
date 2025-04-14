@@ -116,25 +116,26 @@ $fluent-scheduler-agenda-time-panel-cell-padding: 8px;
 }
 
 .dx-scheduler-all-day-title {
+  display: flex;
+  align-items: center;
+  justify-content: end;
   height: $fluent-scheduler-all-day-table-cell-height;
-  line-height: $fluent-scheduler-all-day-table-cell-height;
   font-size: $fluent-scheduler-all-day-title-font-size;
   border-bottom: baseScheduler.$scheduler-base-border;
   text-align: right;
   padding-right: $fluent-scheduler-agenda-time-panel-cell-padding;
-}
 
-.dx-scheduler-small {
-  .dx-scheduler-all-day-title {
+  .dx-rtl & {
+    justify-content: start;
+  }
+
+  .dx-scheduler-small & {
     font-size: $fluent-scheduler-all-day-title-font-size * 0.8;
     padding-right: 2px;
   }
-}
 
-.dx-scheduler-work-space-all-day-collapsed {
-  .dx-scheduler-all-day-title {
+  .dx-scheduler-work-space-all-day-collapsed & {
     height: $fluent-scheduler-collapsed-all-day-table-cell-height;
-    line-height: $fluent-scheduler-collapsed-all-day-table-cell-height;
   }
 }
 
@@ -441,6 +442,7 @@ $fluent-scheduler-agenda-time-panel-cell-padding: 8px;
   @include header-sizes(
     $fluent-scheduler-header-height,
     $fluent-scheduler-toolbar-item-offset,
+    baseScheduler.$scheduler-base-border,
   );
 
   .dx-scheduler-navigator-next,

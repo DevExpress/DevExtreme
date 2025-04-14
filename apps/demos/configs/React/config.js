@@ -69,12 +69,6 @@ window.config = {
     'html-react-parser': 'npm:html-react-parser/dist/html-react-parser.min.js',
     /**/
 
-    /** globalize--vue&react */
-    'globalize': 'npm:globalize/dist/globalize',
-    'json': 'npm:systemjs-plugin-json/json.js',
-    'cldr': 'npm:cldrjs/dist/cldr',
-    /**/
-
     /** globalize */
     'globalize': 'npm:globalize/dist/globalize',
     'json': 'npm:systemjs-plugin-json/json.js',
@@ -138,7 +132,6 @@ window.config = {
     'devextreme-quill': 'npm:devextreme-quill/dist/dx-quill.min.js',
     'devexpress-diagram': 'npm:devexpress-diagram/dist/dx-diagram.js',
     'devexpress-gantt': 'npm:devexpress-gantt/dist/dx-gantt.js',
-    '@devextreme/runtime': 'npm:@devextreme/runtime',
     'inferno': 'npm:inferno/dist/inferno.min.js',
     'inferno-compat': 'npm:inferno-compat/dist/inferno-compat.min.js',
     'inferno-create-element': 'npm:inferno-create-element/dist/inferno-create-element.min.js',
@@ -167,6 +160,9 @@ window.config = {
     'devextreme/events/utils': {
       main: 'index',
     },
+    'devextreme/common/core/events/utils': {
+      main: 'index',
+    },
     'devextreme/localization/messages': {
       format: 'json',
       defaultExtension: 'json',
@@ -177,14 +173,6 @@ window.config = {
     'devextreme-cldr-data': {
       format: 'json',
       defaultExtension: 'json',
-    }/**//** globalize--vue&react */,
-    'globalize': {
-      main: '../globalize.js',
-      defaultExtension: 'js',
-    },
-    'cldr': {
-      main: '../cldr.js',
-      defaultExtension: 'js',
     }/**//** globalize */,
     'globalize': {
       main: '../globalize.js',
@@ -205,7 +193,6 @@ window.config = {
   },
   packageConfigPaths: [
     'npm:@devextreme/*/package.json',
-    'npm:@devextreme/runtime/inferno/package.json',
   ],
   babelOptions: {
     sourceMaps: false,

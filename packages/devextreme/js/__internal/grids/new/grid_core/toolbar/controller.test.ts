@@ -1,26 +1,23 @@
 /* eslint-disable spellcheck/spell-checker */
-/* eslint-disable @typescript-eslint/dot-notation */
-import { describe, expect, it } from '@jest/globals';
 
+import { describe, expect, it } from '@jest/globals';
+import { state } from '@ts/core/reactive';
+
+import { getContext } from '../di.test_utils';
 import type { Options } from '../options';
 import { OptionsControllerMock } from '../options_controller/options_controller.mock';
 import { ToolbarController } from './controller';
 
-const createToolbarController = (options?: Options): {
-  toolbarController: ToolbarController;
-  optionsController: OptionsControllerMock;
-} => {
-  const optionsController = new OptionsControllerMock(options ?? {
+const setup = (config?: Options) => {
+  const context = getContext(config ?? {
     toolbar: {
       visible: true,
     },
   });
 
-  const toolbarController = new ToolbarController(optionsController);
-
   return {
-    toolbarController,
-    optionsController,
+    toolbarController: context.get(ToolbarController),
+    optionsController: context.get(OptionsControllerMock),
   };
 };
 
@@ -28,7 +25,7 @@ describe('ToolbarController', () => {
   describe('items', () => {
     describe('when user items are specified', () => {
       it('should contain processed toolbar items', () => {
-        const { toolbarController } = createToolbarController({
+        const { toolbarController } = setup({
           toolbar: {
             items: [{ location: 'before' }],
           },
@@ -40,7 +37,7 @@ describe('ToolbarController', () => {
 
     describe('when default items and user items are specified', () => {
       it('should contain processed toolbar items', () => {
-        const { toolbarController } = createToolbarController({
+        const { toolbarController } = setup({
           toolbar: {
             items: ['searchPanel', { location: 'before' }],
           },
@@ -58,7 +55,7 @@ describe('ToolbarController', () => {
 
   describe('addDefaultItem', () => {
     it('should add new default item to items', () => {
-      const { toolbarController } = createToolbarController();
+      const { toolbarController } = setup();
 
       toolbarController.addDefaultItem({ name: 'searchPanel', location: 'after' });
 
@@ -66,21 +63,24 @@ describe('ToolbarController', () => {
         { name: 'searchPanel', location: 'after' },
       ]);
     });
-  });
 
-  describe('removeDefaultItem', () => {
-    it('should remove given default item from items', () => {
-      const { toolbarController } = createToolbarController();
+    it('item should toggle default item when needUpdate changes', () => {
+      const { toolbarController } = setup();
+      const needRender = state(true);
 
-      toolbarController.addDefaultItem({ name: 'searchPanel', location: 'after' });
+      toolbarController.addDefaultItem({ name: 'searchPanel', location: 'after' }, needRender);
 
       expect(toolbarController.items.unreactive_get()).toStrictEqual([
         { name: 'searchPanel', location: 'after' },
       ]);
 
-      toolbarController.removeDefaultItem('searchPanel');
-
+      needRender.update(false);
       expect(toolbarController.items.unreactive_get()).toStrictEqual([]);
+
+      needRender.update(true);
+      expect(toolbarController.items.unreactive_get()).toStrictEqual([
+        { name: 'searchPanel', location: 'after' },
+      ]);
     });
   });
 });

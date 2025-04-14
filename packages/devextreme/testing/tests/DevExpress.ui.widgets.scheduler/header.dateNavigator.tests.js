@@ -128,8 +128,7 @@ test('should display correct caption after switching to the next week', function
         '27 Sep-1 Oct 2021',
         'caption correct'
     );
-}
-);
+});
 
 module('Option Changing', () => {
     test('should change caption text after changing "currentView"', function(assert) {

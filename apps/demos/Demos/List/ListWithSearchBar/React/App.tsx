@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react';
-import SelectBox, { SelectBoxTypes } from 'devextreme-react/select-box';
-import List, { ListTypes } from 'devextreme-react/list';
+import SelectBox, { type SelectBoxTypes } from 'devextreme-react/select-box';
+import List, { type ListTypes } from 'devextreme-react/list';
 import { products, searchModeLabel } from './data.ts';
 
 function ItemTemplate(data) {

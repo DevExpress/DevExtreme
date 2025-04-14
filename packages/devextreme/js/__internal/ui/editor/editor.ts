@@ -41,16 +41,16 @@ const VALIDATION_MESSAGE_KEYS_MAP = {
 };
 
 export type UnresolvedEvents = 'onContentReady' | 'onDisposing' | 'onInitialized' | 'onOptionChanged' | 'onValueChanged';
-type ValueChangedEvent = NativeEventInfo<Editor> & ValueChangedInfo;
+export type ValueChangedEvent = NativeEventInfo<Editor> & ValueChangedInfo;
 
 export interface EditorProperties<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   TComponent extends PublicEditor<any> = PublicEditor,
 > extends EditorOptions<TComponent> {
-  validationMessageOffset: { h: number; v: number };
+  validationMessageOffset?: { h: number; v: number };
   validationBoundary?: dxElementWrapper;
-  validationTooltipOptions: Record<string, unknown>;
-  _showValidationMessage: boolean;
+  validationTooltipOptions?: Record<string, unknown>;
+  _showValidationMessage?: boolean;
   name?: string;
   _onMarkupRendered?: () => void;
 }
@@ -72,7 +72,7 @@ class Editor<
 
   private _valueChangeActionSuppressed?: boolean;
 
-  private _valueChangeEventInstance?: ValueChangedEvent;
+  _valueChangeEventInstance?: ValueChangedEvent;
 
   _$validationMessage?: dxElementWrapper;
 
@@ -126,7 +126,7 @@ class Editor<
       validationTooltipOptions: {},
       _showValidationMessage: true,
       isDirty: false,
-    } as unknown as TProperties;
+    };
   }
 
   _attachKeyboardEvents(): void {
@@ -219,12 +219,10 @@ class Editor<
     super._focusInHandler(e);
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _canValueBeChangedByClick(): boolean {
     return false;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _getStylingModePrefix(): string {
     return 'dx-editor-';
   }
@@ -246,7 +244,6 @@ class Editor<
         this._defaultOptionsRules(),
       )[optionName];
 
-      // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
       stylingModeClass = prefix + (platformOptionValue ?? defaultOptionValue);
     }
 
@@ -367,7 +364,7 @@ class Editor<
     super._dispose();
   }
 
-  _setSubmitElementName(name: string | undefined): void {
+  _setSubmitElementName(name?: string): void {
     const $submitElement = this._getSubmitElement();
 
     if (!$submitElement) {
@@ -381,7 +378,6 @@ class Editor<
     }
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _getSubmitElement(): dxElementWrapper | null {
     return null;
   }
@@ -396,7 +392,6 @@ class Editor<
     this._validationMessage?.option(optionKey, value);
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _hasActiveElement(): boolean {
     return false;
   }

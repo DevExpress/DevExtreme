@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import type { RefObject } from '@devextreme/runtime/inferno';
-import { BaseInfernoComponent } from '@devextreme/runtime/inferno';
+import type { RefObject } from '@ts/core/r1/runtime/inferno/index';
+import { BaseInfernoComponent } from '@ts/core/r1/runtime/inferno/index';
 import { createRef as infernoCreateRef } from 'inferno';
 
 import { format } from '../../core/utils/string';
@@ -26,7 +26,7 @@ export class InfoText extends BaseInfernoComponent<InfoTextPropsType> {
 
   public refs: any = null;
 
-  // eslint-disable-next-line max-len
+  // eslint-disable-next-line @stylistic/max-len
   public rootElementRef?: RefObject<HTMLDivElement> = infernoCreateRef() as RefObject<HTMLDivElement>;
 
   getInfoText(): string {

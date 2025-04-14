@@ -22,7 +22,6 @@ import { setScrollView } from '__internal/ui/list/m_list.base';
 import ScrollView from 'ui/scroll_view';
 import eventsEngine from 'common/core/events/core/events_engine';
 import ariaAccessibilityTestHelper from '../../../helpers/ariaAccessibilityTestHelper.js';
-import { reorderingPointerMock } from './utils.js';
 
 const LIST_ITEM_CLASS = 'dx-list-item';
 const LIST_ITEMS_CLASS = 'dx-list-items';
@@ -4315,6 +4314,46 @@ QUnit.module('keyboard navigation', {
         assert.ok(secondItemIsFocused, 'focused item change to last visible item on new page');
     });
 
+    QUnit.test('focus should be moved to selectedItem after focusing of grouped list (T1278005)', function(assert) {
+        const list = $('#list').dxList({
+            selectedItemKeys: [5],
+            keyExpr: 'id',
+            items: [{
+                key: 'a',
+                items: [
+                    { id: 1, text: '1' },
+                    { id: 2, text: '2' },
+                    { id: 3, text: '3' },
+                ] }, {
+                key: 'b',
+                items: [
+                    { id: 4, text: '4' },
+                    { id: 5, text: '5' },
+                    { id: 6, text: '6' },
+                ] },
+            ],
+            grouped: true,
+            focusStateEnabled: true,
+            collapsibleGroups: false,
+            selectionMode: 'multiple',
+            showSelectionControls: false,
+        }).dxList('instance');
+
+        const $element = $(list.element());
+
+        const keyboard = getListKeyboard($element);
+        list.focus();
+
+        const $items = $element.find(`.${LIST_ITEM_CLASS}`);
+
+        assert.strictEqual($items.eq(4).hasClass(FOCUSED_STATE_CLASS), true, 'focused class is added to selected item');
+
+        keyboard.keyDown('down');
+
+        assert.strictEqual($items.eq(4).hasClass(FOCUSED_STATE_CLASS), false, 'focused class is removed');
+        assert.strictEqual($items.eq(5).hasClass(FOCUSED_STATE_CLASS), true, 'next item is focused');
+    });
+
     QUnit.test('list should attach keyboard events even if focusStateEnabled is false when the widget\'s onKeyboardHandled is defined', function(assert) {
         const handler = sinon.stub();
         const $element = $('#list');
@@ -4473,8 +4512,7 @@ QUnit.module('Search', () => {
         assert.deepEqual(instance.option('items')[0], expectedValue, 'items');
     });
 
-    // T582179
-    QUnit.test('Selection should not be cleared after searching', function(assert) {
+    QUnit.test('Selection should not be cleared after searching (T582179)', function(assert) {
         const $element = $('#list').dxList({
             dataSource: [1, 2, 3],
             searchEnabled: true,
@@ -4595,60 +4633,6 @@ if(devices.real().deviceType === 'desktop') {
                 helper.checkAttributes(helper.getListContainer(), this.expectedItemsContainerAttrs);
                 helper.checkItemsAttributes([0, 1, 2], { attributes: ['aria-selected'], focusedItemIndex: 1, role: 'option' });
             });
-        });
-    });
-}
-
-if(QUnit.urlParams['nojquery'] && QUnit.urlParams['shadowDom']) {
-    QUnit.module('ShadowDOM', {
-        beforeEach: function() {
-            this.clock = sinon.useFakeTimers();
-
-            this.$list = $('#list').dxList({
-                items: ['One', 'Two', 'Three'],
-                itemDragging: { allowReordering: true },
-                focusStateEnabled: true,
-            });
-
-            this.root = $('#list')[0].getRootNode();
-        },
-
-        afterEach: function() {
-            this.clock.restore();
-        },
-
-        getItems: function() {
-            return this.$list.find(`.${LIST_ITEM_CLASS}`);
-        },
-
-        createEvent: function(eventName) {
-            return $.Event(eventName, {
-                originalEvent: {
-                    type: eventName,
-                    target: { shadowRoot: this.root },
-                    path: [ this.getItems().eq(1)[0] ],
-                    changedTouches: [{}]
-                }
-            });
-        },
-    }, () => {
-        QUnit.test('drag item', function(assert) {
-            const pointer = reorderingPointerMock(this.getItems().first());
-
-            pointer.dragStart().drag(34).dragEnd();
-
-            const orderedItems = this.getItems().toArray().map(e => e.innerText.trim());
-
-            assert.deepEqual(orderedItems, ['Two', 'Three', 'One']);
-        });
-
-        QUnit.test('focus item', function(assert) {
-            $(this.root).trigger(this.createEvent('mousedown'));
-            $(this.root).trigger(this.createEvent('touchstart'));
-
-            this.clock.tick(10);
-
-            assert.ok(this.getItems().eq(1).hasClass(FOCUSED_STATE_CLASS));
         });
     });
 }

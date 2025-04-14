@@ -24,16 +24,16 @@ export class TimeZoneCalculator {
 
     switch (info.path) {
       case PathTimeZoneConversion.fromSourceToAppointment:
-        return this.getConvertedDate(date, info.appointmentTimeZone, true, false);
+        return this.getConvertedDate(date, info.appointmentTimeZone, false);
 
       case PathTimeZoneConversion.fromAppointmentToSource:
-        return this.getConvertedDate(date, info.appointmentTimeZone, true, true);
+        return this.getConvertedDate(date, info.appointmentTimeZone, true);
 
       case PathTimeZoneConversion.fromSourceToGrid:
-        return this.getConvertedDate(date, info.appointmentTimeZone, false, false);
+        return this.getConvertedDate(date, undefined, false);
 
       case PathTimeZoneConversion.fromGridToSource:
-        return this.getConvertedDate(date, info.appointmentTimeZone, false, true);
+        return this.getConvertedDate(date, undefined, true);
 
       default:
         throw new Error('not specified pathTimeZoneConversion');
@@ -50,32 +50,6 @@ export class TimeZoneCalculator {
       common: !isDefined(commonOffset) ? clientOffset : commonOffset,
       appointment: typeof appointmentOffset !== 'number' ? clientOffset : appointmentOffset,
     };
-  }
-
-  // QUnit tests are checked call of this method
-  // eslint-disable-next-line class-methods-use-this
-  getConvertedDateByOffsets(
-    date: Date,
-    clientOffset: number,
-    targetOffset: number,
-    isBack: boolean,
-  ): Date {
-    const direction = isBack
-      ? -1
-      : 1;
-
-    const resultDate = new Date(date);
-    return dateUtilsTs.addOffsets(resultDate, [
-      direction * (toMs('hour') * targetOffset),
-      -direction * (toMs('hour') * clientOffset),
-    ]);
-
-    // V1
-    // NOTE: Previous date calculation engine.
-    // Engine was changed after fix T1078292.
-    // eslint-disable-next-line max-len
-    // const utcDate = date.getTime() - direction * clientOffset * dateUtils.dateToMilliseconds('hour');
-    // return new Date(utcDate + direction * targetOffset * dateUtils.dateToMilliseconds('hour'));
   }
 
   getOriginStartDateOffsetInMs(
@@ -123,16 +97,16 @@ export class TimeZoneCalculator {
   protected getConvertedDate(
     date: Date,
     appointmentTimezone: string | undefined,
-    useAppointmentTimeZone: boolean,
     isBack: boolean,
   ): Date {
     const newDate = new Date(date.getTime());
     const offsets = this.getOffsets(newDate, appointmentTimezone);
+    const targetOffsetName = appointmentTimezone ? 'appointment' : 'common';
+    const direction = isBack ? -1 : 1;
 
-    if (useAppointmentTimeZone && !!appointmentTimezone) {
-      return this.getConvertedDateByOffsets(date, offsets.client, offsets.appointment, isBack);
-    }
-
-    return this.getConvertedDateByOffsets(date, offsets.client, offsets.common, isBack);
+    return dateUtilsTs.addOffsets(newDate, [
+      direction * toMs('hour') * offsets[targetOffsetName],
+      -direction * toMs('hour') * offsets.client,
+    ]);
   }
 }

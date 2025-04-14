@@ -1,4 +1,3 @@
-/* eslint-disable spellcheck/spell-checker */
 import { describe, expect, it } from '@jest/globals';
 
 import { OptionsControllerMock } from '../options_controller/options_controller.mock';

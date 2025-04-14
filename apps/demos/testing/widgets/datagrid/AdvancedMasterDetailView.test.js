@@ -4,12 +4,11 @@ import { runManualTest } from '../../../utils/visual-tests/matrix-test-helper';
 import { testScreenshot } from '../../../utils/visual-tests/helpers/theme-utils';
 
 fixture('DataGrid.AdvancedMasterDetailView')
-  .page('http://localhost:8080/')
   .before(async (ctx) => {
     ctx.initialWindowSize = [900, 600];
   });
 
-runManualTest('DataGrid', 'AdvancedMasterDetailView', ['jQuery', 'React', 'Vue', 'Angular'], (test) => {
+runManualTest('DataGrid', 'AdvancedMasterDetailView', (test) => {
   test('AdvancedMasterDetailView', async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 

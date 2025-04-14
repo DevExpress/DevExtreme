@@ -1,20 +1,23 @@
-/* eslint-disable object-curly-newline */
+/* eslint-disable @stylistic/object-curly-newline */
 import { describe, expect } from '@jest/globals';
 import each from 'jest-each';
 
 import {
-  getLocalLoadOptions, getStoreLoadOptions, normalizeLocalOptions, normalizeRemoteOptions,
+  getLocalLoadOptions,
+  getStoreLoadOptions,
+  normalizeLocalOptions,
+  normalizeRemoteOptions,
 } from './utils';
 
 describe('normalizeRemoteOption', () => {
   describe('with non-object arg', () => {
     each`
             remoteOperations | isLocalStore | isCustomStore | expectedOperationOptions
-            ${'auto'}        | ${true}      | ${true}       | ${{ filtering: false, sorting: false, paging: false }}
-            ${'auto'}        | ${false}     | ${true}       | ${{ filtering: false, sorting: false, paging: false }}
-            ${'auto'}        | ${true}      | ${false}      | ${{ filtering: false, sorting: false, paging: false }}
-            ${false}         | ${false}     | ${false}      | ${{ filtering: false, sorting: false, paging: false }}
-            ${true}          | ${false}     | ${false}      | ${{ filtering: true, sorting: true, paging: true }}
+            ${'auto'}        | ${true}      | ${true}       | ${{ filtering: false, sorting: false, paging: false, grouping: false }}
+            ${'auto'}        | ${false}     | ${true}       | ${{ filtering: false, sorting: false, paging: false, grouping: false }}
+            ${'auto'}        | ${true}      | ${false}      | ${{ filtering: false, sorting: false, paging: false, grouping: false }}
+            ${false}         | ${false}     | ${false}      | ${{ filtering: false, sorting: false, paging: false, grouping: false }}
+            ${true}          | ${false}     | ${false}      | ${{ filtering: true, sorting: true, paging: true, grouping: true }}
     `
       .it('should calculate the operation options', ({
         remoteOperations,
@@ -51,12 +54,12 @@ describe('normalizeRemoteOption', () => {
 describe('normalizeLocalOption', () => {
   each`
           remoteOperations                                      | expectedOperationOptions
-          ${{ filtering: true, sorting: false, paging: false }} | ${{ filtering: false, sorting: true, paging: true }}
-          ${{ filtering: false, sorting: true, paging: false }} | ${{ filtering: true, sorting: false, paging: true }}
-          ${{ filtering: false, sorting: false, paging: true }} | ${{ filtering: true, sorting: true, paging: false }}
+          ${{ filtering: true, sorting: false, paging: false }} | ${{ filtering: false, sorting: true, paging: true, grouping: true }}
+          ${{ filtering: false, sorting: true, paging: false }} | ${{ filtering: true, sorting: false, paging: true, grouping: true }}
+          ${{ filtering: false, sorting: false, paging: true }} | ${{ filtering: true, sorting: true, paging: false, grouping: true }}
 
-          ${{ filtering: true, sorting: true, paging: true }}   | ${{ filtering: false, sorting: false, paging: false }}
-          ${{ filtering: false, sorting: false, paging: false }}| ${{ filtering: true, sorting: true, paging: true }}
+          ${{ filtering: true, sorting: true, paging: true }}   | ${{ filtering: false, sorting: false, paging: false, grouping: true }}
+          ${{ filtering: false, sorting: false, paging: false }}| ${{ filtering: true, sorting: true, paging: true, grouping: true }}
   `
     .it('should invert remoteOperations', ({
       remoteOperations,
@@ -69,7 +72,7 @@ describe('normalizeLocalOption', () => {
 
 describe('getLocalLoadOptions', () => {
   each`
-          originOptions                                         | localOperations        | expectedLoadOptions 
+          originOptions                                         | localOperations        | expectedLoadOptions
           ${{ filter: 'test', sort: 'asc', skip: 0, take: 20 }} | ${{ filtering: true }} | ${{ filter: 'test' }}
           ${{ filter: 'test', sort: 'asc', skip: 0, take: 20 }} | ${{ sorting: true }}   | ${{ sort: 'asc' }}
           ${{ filter: 'test', sort: 'asc', skip: 0, take: 20 }} | ${{ paging: true }}    | ${{ skip: 0, take: 20 }}
@@ -87,7 +90,7 @@ describe('getLocalLoadOptions', () => {
 
 describe('getStoreLoadOptions', () => {
   each`
-          originOptions                                         | localOperations        | expectedLoadOptions 
+          originOptions                                         | localOperations        | expectedLoadOptions
           ${{ filter: 'test', sort: 'asc', skip: 0, take: 20 }} | ${{ filtering: true }} | ${{ sort: 'asc', skip: 0, take: 20 }}
           ${{ filter: 'test', sort: 'asc', skip: 0, take: 20 }} | ${{ sorting: true }}   | ${{ filter: 'test', skip: 0, take: 20 }}
           ${{ filter: 'test', sort: 'asc', skip: 0, take: 20 }} | ${{ paging: true }}    | ${{ filter: 'test', sort: 'asc' }}

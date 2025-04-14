@@ -9,20 +9,6 @@ export type LoadDataType = Appointment[] | CustomLoadDataType;
 export type FilterItemType = Record<string, string | number> | string | number;
 export type HeaderCellTextFormat = string | ((date: Date) => string);
 
-export interface IFieldExpr {
-  startDateExpr: string;
-  endDateExpr: string;
-  startDateTimeZoneExpr: string;
-  endDateTimeZoneExpr: string;
-  allDayExpr: string;
-  textExpr: string;
-  descriptionExpr: string;
-  recurrenceRuleExpr: string;
-  recurrenceExceptionExpr: string;
-  disabledExpr: string;
-  visibleExpr: string;
-}
-
 export interface BaseTemplateProps {
   index: number;
 }
@@ -52,20 +38,13 @@ export interface AppointmentFilter {
 export interface CustomLoadDataType { data: Appointment[] }
 
 export interface AppointmentGeometry {
-  empty: boolean; // TODO
+  empty: boolean;
   left: number;
   top: number;
   width: number;
   height: number;
   leftVirtualWidth: number;
   topVirtualHeight: number;
-}
-
-export interface DataAccessorType {
-  getter: Record<string, (data: unknown) => Date | string>;
-  setter: Record<string, (object: unknown, data: unknown) => Date | string>;
-  expr: IFieldExpr;
-  resources?: DataAccessorType;
 }
 
 export type GetDateForHeaderText = (

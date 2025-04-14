@@ -20,6 +20,16 @@
                     if(eventName === 'move') {
                         atlas.moveActionCallback = callbackFun;
                     }
+
+                    if(eventName === 'ready') {
+                        atlas.readyCallbackCalled = true;
+
+                        if(!window.postponeMapReadyPromise) {
+                            callbackFun();
+                        } else {
+                            atlas.mapReadyResolve = callbackFun;
+                        }
+                    }
                 },
                 remove: (eventName) => {
                     atlas.removedEvents = atlas.removedEvents || [];

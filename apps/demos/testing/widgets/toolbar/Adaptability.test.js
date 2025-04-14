@@ -10,12 +10,11 @@ const TOOLBAR_CLASS = 'dx-toolbar';
 const DROP_DOWN_MENU_BUTTON_CLASS = 'dx-dropdownmenu-button';
 
 fixture('Toolbar.Adaptability')
-  .page('http://localhost:8080/')
   .before(async (ctx) => {
     ctx.initialWindowSize = [900, 600];
   });
 
-runManualTest('Toolbar', 'Adaptability', ['jQuery', 'React', 'Vue', 'Angular'], (test) => {
+runManualTest('Toolbar', 'Adaptability', (test) => {
   test('Adaptability', async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 

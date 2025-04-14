@@ -24,6 +24,7 @@
   </DxChart>
 </template>
 <script setup lang="ts">
+import { type ChartSeries } from 'devextreme/viz/common';
 import DxChart, {
   DxLegend,
   DxSeriesTemplate,
@@ -34,7 +35,7 @@ import DxChart, {
 } from 'devextreme-vue/chart';
 import { dataSource } from './data.ts';
 
-const customizeSeries = (seriesName) => ((seriesName === 2009)
+const customizeSeries: (seriesName: any) => ChartSeries = (seriesName) => ((seriesName === 2009)
   ? { type: 'line', label: { visible: true }, color: '#ff3f7a' }
   : {});
 </script>

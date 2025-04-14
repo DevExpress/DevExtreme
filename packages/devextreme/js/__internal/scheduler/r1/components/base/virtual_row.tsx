@@ -1,4 +1,4 @@
-import { BaseInfernoComponent } from '@devextreme/runtime/inferno';
+import { BaseInfernoComponent } from '@ts/core/r1/runtime/inferno/index';
 
 import { renderUtils } from '../../utils/index';
 import type { RowProps } from './row';
@@ -58,7 +58,6 @@ export class VirtualRow extends BaseInfernoComponent<VirtualRowProps> {
     const virtualCells = this.getVirtualCells();
 
     return (
-      // @ts-ignore
       <Row
         className={classes}
         styles={modifiedStyles}
@@ -70,7 +69,6 @@ export class VirtualRow extends BaseInfernoComponent<VirtualRowProps> {
         {
           virtualCells.map(
             (_, index) => (
-              // @ts-ignore
               <VirtualCell
                 key={index.toString()}
                 width={VirtualCellDefaultProps.width}

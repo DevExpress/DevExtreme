@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import ODataStore from 'devextreme/data/odata/store';
-import { Autocomplete, AutocompleteTypes } from 'devextreme-react/autocomplete';
+import { Autocomplete, type AutocompleteTypes } from 'devextreme-react/autocomplete';
 import CustomStore from 'devextreme/data/custom_store';
 import 'whatwg-fetch';
 import { names, surnames, positions } from './data.ts';
@@ -30,7 +30,7 @@ const clientsStore = new CustomStore({
       }
     });
     params = params.slice(0, -1);
-    return fetch(`https://js.devexpress.com/Demos/Mvc/api/DataGridWebApi/CustomersLookup${params}`)
+    return fetch(`https://js.devexpress.com/Demos/NetCore/api/DataGridWebApi/CustomersLookup${params}`)
       .then((response) => response.json())
       .then((data) => ({
         data: data.data,

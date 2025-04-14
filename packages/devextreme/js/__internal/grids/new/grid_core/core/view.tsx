@@ -1,32 +1,41 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable @typescript-eslint/no-this-alias */
-/* eslint-disable @typescript-eslint/no-use-before-define */
-/* eslint-disable @typescript-eslint/no-unsafe-return */
-/* eslint-disable @typescript-eslint/ban-types */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 /* eslint-disable max-classes-per-file */
 /* eslint-disable spellcheck/spell-checker */
-import type { Subscribable, Subscription } from '@ts/core/reactive/index';
+import { infernoRenderer } from '@ts/core/m_inferno_renderer';
+import type { Subscription, SubsGets } from '@ts/core/reactive/index';
 import { toSubscribable } from '@ts/core/reactive/index';
-import { Component, type ComponentType, render } from 'inferno';
+import { Component, type ComponentType } from 'inferno';
 
 export abstract class View<T extends {}> {
   private inferno: undefined | ComponentType;
 
+  private props?: T;
+
+  private firstRender = true;
+
+  protected root?: HTMLDivElement;
+
   protected abstract component: ComponentType<T>;
 
-  protected abstract getProps(): Subscribable<T>;
+  protected abstract getProps(): SubsGets<T>;
 
-  public render(root: Element): Subscription {
+  public render(root: HTMLDivElement): Subscription {
+    this.root = root;
     const ViewComponent = this.component;
     return toSubscribable(this.getProps()).subscribe((props: T) => {
-      // @ts-expect-error
-      render(<ViewComponent {...props}/>, root);
+      this.props = props;
+      const content = (
+        <ViewComponent {...props}/>
+      );
+
+      infernoRenderer.renderIntoContainer(content, root, !this.firstRender);
+      this.firstRender = false;
     });
   }
 
   public asInferno(): ComponentType {
-    // @ts-expect-error fixed in inferno v8
     // eslint-disable-next-line no-return-assign
     return this.inferno ??= this._asInferno();
   }
@@ -56,7 +65,6 @@ export abstract class View<T extends {}> {
 
       public render(): JSX.Element | undefined {
         const ViewComponent = view.component;
-        // @ts-expect-error
         return <ViewComponent {...this.state!.props}/>;
       }
     };

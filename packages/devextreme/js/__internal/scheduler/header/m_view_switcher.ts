@@ -1,16 +1,20 @@
 import { isFluent } from '@js/ui/themes';
+import type { Item as ToolbarItem } from '@js/ui/toolbar';
 
+import type { SchedulerHeader } from './m_header';
 import {
   formatViews,
   getViewName,
   isOneView,
 } from './m_utils';
 
-const VIEW_SWITCHER_CLASS = 'dx-scheduler-view-switcher';
-const VIEW_SWITCHER_DROP_DOWN_BUTTON_CLASS = 'dx-scheduler-view-switcher-dropdown-button';
-const VIEW_SWITCHER_DROP_DOWN_BUTTON_CONTENT_CLASS = 'dx-scheduler-view-switcher-dropdown-button-content';
+const ClASS = {
+  container: 'dx-scheduler-view-switcher',
+  dropDownButton: 'dx-scheduler-view-switcher-dropdown-button',
+  dropDownButtonContent: 'dx-scheduler-view-switcher-dropdown-button-content',
+};
 
-const getViewsAndSelectedView = (header) => {
+const getViewsAndSelectedView = (header: SchedulerHeader) => {
   const views = formatViews(header.views);
   let selectedView = getViewName(header.currentView);
 
@@ -21,7 +25,7 @@ const getViewsAndSelectedView = (header) => {
   return { selectedView, views };
 };
 
-export const getViewSwitcher = (header, item) => {
+export const getTabViewSwitcher = (header: SchedulerHeader, item): ToolbarItem => {
   const { selectedView, views } = getViewsAndSelectedView(header);
 
   // @ts-expect-error
@@ -30,7 +34,9 @@ export const getViewSwitcher = (header, item) => {
   return {
     widget: 'dxButtonGroup',
     locateInMenu: 'auto',
-    cssClass: VIEW_SWITCHER_CLASS,
+    location: 'after',
+    name: 'viewSwitcher',
+    cssClass: ClASS.container,
     options: {
       items: views,
       keyExpr: 'name',
@@ -53,7 +59,7 @@ export const getViewSwitcher = (header, item) => {
   };
 };
 
-export const getDropDownViewSwitcher = (header, item) => {
+export const getDropDownViewSwitcher = (header: SchedulerHeader, item): ToolbarItem => {
   const { selectedView, views } = getViewsAndSelectedView(header);
 
   const oneView = isOneView(views, selectedView);
@@ -61,7 +67,9 @@ export const getDropDownViewSwitcher = (header, item) => {
   return {
     widget: 'dxDropDownButton',
     locateInMenu: 'never',
-    cssClass: VIEW_SWITCHER_CLASS,
+    location: 'after',
+    name: 'viewSwitcher',
+    cssClass: ClASS.container,
     options: {
       items: views,
       useSelectMode: true,
@@ -70,7 +78,7 @@ export const getDropDownViewSwitcher = (header, item) => {
       displayExpr: 'text',
       showArrowIcon: !oneView,
       elementAttr: {
-        class: VIEW_SWITCHER_DROP_DOWN_BUTTON_CLASS,
+        class: ClASS.dropDownButton,
       },
       onItemClick: (e) => {
         const { view } = e.itemData;
@@ -81,12 +89,9 @@ export const getDropDownViewSwitcher = (header, item) => {
         const viewSwitcher = e.component;
 
         header._addEvent('currentView', (view) => {
-          const views = formatViews(header.views);
+          const currentViews = formatViews(header.views);
 
-          if (isOneView(views, view)) {
-            header.repaint();
-          }
-
+          viewSwitcher.option('showArrowIcon', !isOneView(currentViews, view));
           viewSwitcher.option('selectedItemKey', getViewName(view));
         });
       },
@@ -97,7 +102,7 @@ export const getDropDownViewSwitcher = (header, item) => {
           }
         },
         width: 'max-content',
-        _wrapperClassExternal: VIEW_SWITCHER_DROP_DOWN_BUTTON_CONTENT_CLASS,
+        _wrapperClassExternal: ClASS.dropDownButtonContent,
       },
     },
     ...item,

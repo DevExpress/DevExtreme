@@ -34,7 +34,7 @@ export class AppointmentViewModelGenerator {
     this.initRenderingStrategy(options);
 
     const renderingStrategy = this.getRenderingStrategy();
-    const positionMap = renderingStrategy.createTaskPositionMap(appointments); // TODO - appointments are mutated inside!
+    const positionMap = renderingStrategy.createTaskPositionMap(appointments); // appointments are mutated inside!
     const shiftedViewModel = this.postProcess(appointments, positionMap);
     const viewModel = this.unshiftViewModelAppointmentsByViewOffset(shiftedViewModel, viewOffset);
 

@@ -1,4 +1,3 @@
-/* eslint-disable max-classes-per-file */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 /*
@@ -17,7 +16,7 @@ import type { ModuleType } from '@ts/grids/grid_core/m_types';
 
 import type { KeyboardNavigationController } from './m_keyboard_navigation';
 
-// eslint-disable-next-line max-len
+// eslint-disable-next-line @stylistic/max-len
 export const keyboardNavigationScrollableA11yExtender = (Base: ModuleType<KeyboardNavigationController>): ModuleType<KeyboardNavigationController> => class ScrollableA11yExtender extends Base {
   private _$firstNotFixedCell: dxElementWrapper | undefined;
 
