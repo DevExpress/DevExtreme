@@ -209,6 +209,8 @@
         "dxTreeList-ariaToolbar": "Tree list toolbar",
         "dxTreeList-editingAddRowToNode": "Lägg till",
 
+        "dxCardView-ariaSearchInGrid": "Search in the card view",
+
         "dxPager-infoText": "Sida {0} av {1} ({2} uppgifter)",
         "dxPager-pagesCountText": "av",
         "dxPager-pageSize": "Items per page: {0}",

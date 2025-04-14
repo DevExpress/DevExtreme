@@ -15,6 +15,7 @@ type InheritedColumnProps =
   | 'allowHiding'
   | 'allowFiltering'
   | 'allowHeaderFiltering'
+  | 'allowSearch'
   | 'trueText'
   | 'falseText'
   | 'caption'
@@ -35,6 +36,14 @@ export type Column = Pick<Required<ColumnBase>, InheritedColumnProps> & {
   calculateCellValue: (this: Column, data: unknown) => unknown;
 
   calculateDisplayValue: (this: Column, data: unknown) => unknown;
+
+  calculateFilterExpression: (
+    this: Column,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    filterValue: any,
+    selectedFilterOperation: string | undefined,
+    target: string,
+  ) => unknown;
 
   format?: Format;
 

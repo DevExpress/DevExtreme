@@ -209,6 +209,8 @@
         "dxTreeList-ariaToolbar": "Tree list toolbar",
         "dxTreeList-editingAddRowToNode": "Adaugă",
 
+        "dxCardView-ariaSearchInGrid": "Search in the card view",
+
         "dxPager-infoText": "Pagina {0} de {1} ({2} obiecte)",
         "dxPager-pagesCountText": "de",
         "dxPager-pageSize": "Items per page: {0}",
