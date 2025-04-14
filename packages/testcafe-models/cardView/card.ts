@@ -9,6 +9,7 @@ export const CLASS = {
     selectCheckbox: 'dx-cardview-select-checkbox',
     selectCard: 'dx-cardview-card-selection',
     checkbox: 'dx-checkbox',
+    highlightedState: 'text-part--highlighted',
 }
 
 export default class Card {
@@ -35,5 +36,9 @@ export default class Card {
 
     getFieldValueCell(fieldCaption: String): Selector {
         return this.getFieldCaptionCell(fieldCaption).nextSibling();
+    }
+
+    getHighlightedTexts(): Selector {
+        return this.element.find(`.${CLASS.fieldValue}__${CLASS.highlightedState}`);
     }
 }

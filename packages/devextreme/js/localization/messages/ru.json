@@ -208,6 +208,8 @@
         "dxTreeList-ariaToolbar": "Панель инструментов иерархической таблицы данных",
         "dxTreeList-editingAddRowToNode": "Добавить",
 
+        "dxCardView-ariaSearchInGrid": "Search in the card view",
+
         "dxPager-infoText": "Страница {0} из {1} (Всего элементов: {2})",
         "dxPager-pagesCountText": "из",
         "dxPager-pageSize": "Количество элементов на странице: {0}",

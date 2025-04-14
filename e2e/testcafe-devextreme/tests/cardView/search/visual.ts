@@ -4,7 +4,6 @@ import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 import { testScreenshot } from '../../../helpers/themeUtils';
 
-// TODO: Unskip this fixture after markup will be stabilized
 fixture`Search.Visual`
   .page(url(__dirname, '../../container.html'));
 
@@ -58,7 +57,8 @@ test('highlighted search text', async (t) => {
   dataSource: DATA,
   columns: COLUMNS,
   searchPanel: {
-    text: 'Female',
+    visible: true,
+    text: 'rt',
   },
   height: 600,
 }));

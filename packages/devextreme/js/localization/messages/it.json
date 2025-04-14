@@ -208,6 +208,8 @@
         "dxTreeList-ariaToolbar": "Barra degli strumenti albero",
         "dxTreeList-editingAddRowToNode": "Aggiungi",
 
+        "dxCardView-ariaSearchInGrid": "Search in the card view",
+
         "dxPager-infoText": "Pagina {0} di {1} ({2} elementi)",
         "dxPager-pagesCountText": "di",
         "dxPager-pageSize": "Items per page: {0}",

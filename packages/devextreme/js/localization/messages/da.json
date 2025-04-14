@@ -208,6 +208,8 @@
         "dxTreeList-ariaToolbar": "Trælisteværktøjslinje",
         "dxTreeList-editingAddRowToNode": "Tilføj",
 
+        "dxCardView-ariaSearchInGrid": "Search in the card view",
+
         "dxPager-infoText": "Side {0} af {1} ({2} elementer)",
         "dxPager-pagesCountText": "af",
         "dxPager-pageSize": "Elementer per side: {0}",

@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import type { DataType } from '@js/common';
 import messageLocalization from '@js/localization/message';
+import filterUtils from '@js/ui/shared/filtering';
 
 import type { Template, WithRequired } from '../types';
 import type { Column } from './types';
@@ -28,6 +29,7 @@ export const defaultColumnProperties = {
   calculateDisplayValue(data): unknown {
     return this.calculateCellValue(data);
   },
+  calculateFilterExpression: filterUtils.defaultCalculateFilterExpression,
   alignment: 'left',
   visible: true,
   allowReordering: true,
@@ -35,6 +37,7 @@ export const defaultColumnProperties = {
   allowHiding: true,
   allowFiltering: true,
   allowHeaderFiltering: true,
+  allowSearch: true,
   trueText: messageLocalization.format('dxDataGrid-trueText'),
   falseText: messageLocalization.format('dxDataGrid-falseText'),
   showInColumnChooser: true,

@@ -4,6 +4,7 @@ import Pager from '../pagination';
 import FilterPanel from './filter/panel';
 import ColumnChooser from '../dataGrid/columnChooser';
 import type { WidgetName } from '../types';
+import TextBox from '../textBox';
 
 export const CLASS = {
     pager: 'pager',
@@ -11,6 +12,7 @@ export const CLASS = {
     filterPanel: 'filter-panel',
     columnChooser: 'column-chooser',
     columnChooserButton: 'column-chooser-button',
+    searchBox: 'dx-searchbox',
 }
 
 export default abstract class GridCore extends Widget {
@@ -79,6 +81,10 @@ export default abstract class GridCore extends Widget {
     return new FilterPanel(this.element.find(`.${this.addWidgetPrefix(CLASS.filterPanel, true)}`), this.getCompatibilityName());
   }
 
+  getSearchBox(): TextBox {
+    return new TextBox(this.element.find(`.${CLASS.searchBox}`));
+  }
+
   apiFilter(filter: any[]): Promise<void> {
     const { getInstance } = this;
 
@@ -112,6 +118,19 @@ export default abstract class GridCore extends Widget {
     return ClientFunction(
       () => (getInstance() as any).hideColumnChooser(),
       { dependencies: { getInstance } },
+    )();
+  }
+
+  apiSearchByText(text: string): Promise<void> {
+    const { getInstance } = this;
+
+    return ClientFunction(
+      () => (getInstance() as any).searchByText(text),
+      {
+        dependencies: {
+          getInstance, text
+        },
+      },
     )();
   }
 }

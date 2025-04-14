@@ -1,6 +1,8 @@
+/* eslint-disable spellcheck/spell-checker */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { describe, expect, it } from '@jest/globals';
 import $ from '@js/core/renderer';
+import { rerender } from 'inferno';
 
 import { CardView } from './widget';
 
@@ -9,6 +11,8 @@ describe('common', () => {
     it('should be successfull', () => {
       const container = document.createElement('div');
       const cardView = new CardView(container, {});
+
+      rerender();
 
       expect(container).toMatchSnapshot();
     });
