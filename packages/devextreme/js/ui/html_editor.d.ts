@@ -1,3 +1,4 @@
+import { AIIntegration } from '../common/ai-integration';
 import { DataSourceLike } from '../data/data_source';
 import {
     UserDefinedElement,
@@ -278,6 +279,13 @@ export type Converter = {
  * @docid
  */
 export interface dxHtmlEditorOptions extends EditorOptions<dxHtmlEditor> {
+    /**
+     * @docid
+     * @default undefined
+     * @public
+     * @type object
+     */
+    aiIntegration?: AIIntegration | undefined;
     /**
      * @docid
      * @default false

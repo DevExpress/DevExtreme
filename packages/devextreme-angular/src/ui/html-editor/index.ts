@@ -127,6 +127,19 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
 
 
     /**
+     * [descr:dxHtmlEditorOptions.aiIntegration]
+    
+     */
+    @Input()
+    get aiIntegration(): Record<string, any> {
+        return this._getOption('aiIntegration');
+    }
+    set aiIntegration(value: Record<string, any>) {
+        this._setOption('aiIntegration', value);
+    }
+
+
+    /**
      * [descr:dxHtmlEditorOptions.allowSoftLineBreak]
     
      */
@@ -616,6 +629,13 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
+    @Output() aiIntegrationChange: EventEmitter<Record<string, any>>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
     @Output() allowSoftLineBreakChange: EventEmitter<boolean>;
 
     /**
@@ -887,6 +907,7 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
             { subscribe: 'valueChanged', emit: 'onValueChanged' },
             { emit: 'accessKeyChange' },
             { emit: 'activeStateEnabledChange' },
+            { emit: 'aiIntegrationChange' },
             { emit: 'allowSoftLineBreakChange' },
             { emit: 'converterChange' },
             { emit: 'customizeModulesChange' },
