@@ -25,7 +25,11 @@ import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { isDefined, isFunction } from '@js/core/utils/type';
-import type { Converter, Properties } from '@js/ui/html_editor';
+import type { DxEvent } from '@js/events';
+import type { Properties as FormProperties } from '@js/ui/form';
+import type { Converter, HtmlEditorFormat, Properties } from '@js/ui/html_editor';
+import type { OptionChanged } from '@ts/core/widget/types';
+import type { ValueChangedEvent } from '@ts/ui/editor/editor';
 import Editor from '@ts/ui/editor/editor';
 import type DeltaConverterType from '@ts/ui/html_editor/converters/m_delta';
 import ConverterController from '@ts/ui/html_editor/m_converterController';
@@ -33,21 +37,43 @@ import { getQuill } from '@ts/ui/html_editor/m_quill_importer';
 import QuillRegistrator from '@ts/ui/html_editor/m_quill_registrator';
 import getWordMatcher from '@ts/ui/html_editor/matchers/m_wordLists';
 import FormDialog from '@ts/ui/html_editor/ui/m_formDialog';
+import { sanitizeHtml } from '@ts/ui/html_editor/utils/html_sanitizer';
 import { prepareScrollData } from '@ts/ui/text_box/m_utils.scroll';
 
 import type { AIDialogResult, AIDialogShowPayload } from './ui/aiDialog';
 import AIDialog from './ui/aiDialog';
 
-const HTML_EDITOR_CLASS = 'dx-htmleditor';
 const QUILL_CONTAINER_CLASS = 'dx-quill-container';
 const QUILL_CLIPBOARD_CLASS = 'ql-clipboard';
+const HTML_EDITOR_CLASS = 'dx-htmleditor';
+const HTML_EDITOR_STYLING_MODE_PREFIX = 'dx-htmleditor-';
 const HTML_EDITOR_SUBMIT_ELEMENT_CLASS = 'dx-htmleditor-submit-element';
 const HTML_EDITOR_CONTENT_CLASS = 'dx-htmleditor-content';
 
 const ANONYMOUS_TEMPLATE_NAME = 'htmlContent';
 
-const isIos = devices.current().platform === 'ios';
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type QuillInstance = any;
 
+type ModulesConfig = Record<string, unknown>;
+type TextFormat = Record<HtmlEditorFormat | string, string>;
+type FocusEvent = DxEvent & { relatedTarget?: Element };
+
+interface TextSelection {
+  index: number;
+  length: number;
+}
+
+interface Bounds {
+  bottom: number;
+  height: number;
+  left: number;
+  right: number;
+  top: number;
+  width: number;
+}
+
+const isIos = devices.current().platform === 'ios';
 let editorsCount = 0;
 
 class HtmlEditor extends Editor<Properties> {
@@ -57,17 +83,17 @@ class HtmlEditor extends Editor<Properties> {
 
   _aiDialog?: AIDialog;
 
-  _quillInstance?: any;
+  _quillInstance?: QuillInstance;
 
   _cleanCallback!: Callback;
 
   _contentInitializedCallback!: Callback;
 
-  _htmlConverter!: Converter;
+  _htmlConverter?: Converter;
 
   _deltaConverter!: DeltaConverterType;
 
-  _updateContentTask?: DeferredObj<unknown>;
+  _updateContentTask?: DeferredObj<unknown> & { abort: () => void };
 
   _isEditorUpdating?: boolean;
 
@@ -84,38 +110,44 @@ class HtmlEditor extends Editor<Properties> {
   _$submitElement!: dxElementWrapper;
 
   _getDefaultOptions(): Properties {
+    const { editorStylingMode } = config();
+    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+    const stylingMode = editorStylingMode || 'outlined';
+
     return {
       ...super._getDefaultOptions(),
-      focusStateEnabled: true,
-      placeholder: '',
-      // @ts-expect-error ts-error
-      toolbar: null,
-      // @ts-expect-error ts-error
-      variables: null,
-      // @ts-expect-error ts-error
-      mediaResizing: null,
-      // @ts-expect-error ts-error
-      tableResizing: null,
-      // @ts-expect-error ts-error
-      mentions: null,
-      // @ts-expect-error ts-error
-      customizeModules: null,
-      // @ts-expect-error ts-error
-      tableContextMenu: null,
       allowSoftLineBreak: false,
-      formDialogOptions: null,
-      // @ts-expect-error ts-error
-      imageUpload: null,
-      // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-      stylingMode: config().editorStylingMode || 'outlined',
-      // @ts-expect-error ts-error
+      // @ts-expect-error undefined is not allowed
       converter: null,
+      // @ts-expect-error undefined is not allowed
+      customizeModules: null,
+      focusStateEnabled: true,
+      // @ts-expect-error undefined is not allowed
+      imageUpload: null,
+      // @ts-expect-error undefined is not allowed
+      mediaResizing: null,
+      // @ts-expect-error undefined is not allowed
+      mentions: null,
+      placeholder: '',
+      stylingMode,
+      // @ts-expect-error undefined is not allowed
+      tableContextMenu: null,
+      // @ts-expect-error undefined is not allowed
+      tableResizing: null,
+      // @ts-expect-error undefined is not allowed
+      toolbar: null,
+      // @ts-expect-error undefined is not allowed
+      variables: null,
     };
   }
 
   _init(): void {
-    this._mentionKeyInTemplateStorage = editorsCount++;
+    this._mentionKeyInTemplateStorage = editorsCount;
+
+    editorsCount += 1;
+
     super._init();
+
     this._cleanCallback = Callbacks();
     this._contentInitializedCallback = Callbacks();
     this._prepareHtmlConverter();
@@ -140,7 +172,7 @@ class HtmlEditor extends Editor<Properties> {
     super._initTemplates();
   }
 
-  _focusTarget() {
+  _focusTarget(): dxElementWrapper {
     return this._getContent();
   }
 
@@ -148,29 +180,31 @@ class HtmlEditor extends Editor<Properties> {
     return this.$element().find(`.${HTML_EDITOR_CONTENT_CLASS}`);
   }
 
-  // @ts-expect-error ts-error
-  _focusInHandler({ relatedTarget }): void {
+  _focusInHandler(e: DxEvent): void {
+    const { relatedTarget } = e as FocusEvent;
+
     if (this._shouldSkipFocusEvent(relatedTarget)) {
       return;
     }
 
     this._toggleFocusClass(true, this.$element());
-    // @ts-expect-error ts-error
-    super._focusInHandler.apply(this, arguments);
+
+    super._focusInHandler(e);
   }
 
-  // @ts-expect-error ts-error
-  _focusOutHandler({ relatedTarget }): void {
+  _focusOutHandler(e: DxEvent): void {
+    const { relatedTarget } = e as FocusEvent;
+
     if (this._shouldSkipFocusEvent(relatedTarget)) {
       return;
     }
 
     this._toggleFocusClass(false, this.$element());
-    // @ts-expect-error ts-error
-    super._focusOutHandler.apply(this, arguments);
+
+    super._focusOutHandler(e);
   }
 
-  _shouldSkipFocusEvent(relatedTarget): boolean {
+  _shouldSkipFocusEvent(relatedTarget?: Element): boolean {
     return $(relatedTarget).hasClass(QUILL_CLIPBOARD_CLASS);
   }
 
@@ -187,8 +221,7 @@ class HtmlEditor extends Editor<Properties> {
     const template = this._getTemplate(ANONYMOUS_TEMPLATE_NAME);
     const transclude = true;
 
-    // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
-    this._$templateResult = template && template.render({
+    this._$templateResult = template?.render({
       container: getPublicElement(this._$htmlContainer),
       noModel: true,
       transclude,
@@ -213,93 +246,34 @@ class HtmlEditor extends Editor<Properties> {
       .attr('hidden', true)
       .appendTo(this.$element());
 
-    this._setSubmitValue(this.option('value'));
+    const { value } = this.option();
+
+    this._setSubmitValue(value);
   }
 
-  _setSubmitValue(value): void {
+  _setSubmitValue(value: Properties['value']): void {
     this._getSubmitElement().val(value);
   }
 
-  _getSubmitElement() {
+  _getSubmitElement(): dxElementWrapper {
     return this._$submitElement;
   }
 
-  _createNoScriptFrame() {
-    return $('<iframe>')
-      .css('display', 'none')
-      // @ts-expect-error
-      .attr({
-        // eslint-disable-next-line spellcheck/spell-checker
-        srcdoc: '', // NOTE: srcdoc is used to prevent an excess "Blocked script execution" error in Opera. See T1150911.
-        id: 'xss-frame',
-        sandbox: 'allow-same-origin',
-      });
-  }
+  _convertToHtml(raw: Properties['value']): string {
+    const value: string = raw ?? '';
 
-  _removeXSSVulnerableHtml(value) {
-    // NOTE: Script tags and inline handlers are removed to prevent XSS attacks.
-    // "Blocked script execution in 'about:blank' because the document's frame is sandboxed and the 'allow-scripts' permission is not set."
-    // error can be logged to the console if the html value is XSS vulnerable.
-
-    const $frame = this
-      ._createNoScriptFrame()
-      // @ts-expect-error ts-error
-      .appendTo('body');
-
-    const frame = $frame.get(0);
-    // @ts-expect-error ts-error
-    const frameWindow = frame.contentWindow;
-    const frameDocument = frameWindow.document;
-    const frameDocumentBody = frameDocument.body;
-
-    const quill = getQuill();
-
-    // NOTE: Operations with style attribute is required
-    // to prevent a 'unsafe-inline' CSP error in DOMParser.
-    const valueWithoutStyles = quill.replaceStyleAttribute(value);
-
-    frameDocumentBody.innerHTML = valueWithoutStyles;
-
-    const removeInlineHandlers = (element) => {
-      if (element.attributes) {
-        for (let i = 0; i < element.attributes.length; i++) {
-          const { name } = element.attributes[i];
-          if (name.startsWith('on')) {
-            element.removeAttribute(name);
-          }
-        }
-      }
-      if (element.childNodes) {
-        for (let i = 0; i < element.childNodes.length; i++) {
-          removeInlineHandlers(element.childNodes[i]);
-        }
-      }
-    };
-
-    removeInlineHandlers(frameDocumentBody);
-
-    // NOTE: Do not use jQuery to prevent an excess "Blocked script execution" error in Safari.
-    frameDocumentBody
-      .querySelectorAll('script')
-      .forEach((scriptNode) => { scriptNode.remove(); });
-
-    const sanitizedHtml = frameDocumentBody.innerHTML;
-
-    $frame.remove();
-    return sanitizedHtml;
-  }
-
-  _convertToHtml(value: string): string {
     const result = isFunction(this._htmlConverter?.toHtml)
-      ? String(this._htmlConverter.toHtml(value ?? '') ?? '')
+      ? String(this._htmlConverter?.toHtml(value) ?? '')
       : value;
 
     return result;
   }
 
-  _convertFromHtml(value: string): string {
+  _convertFromHtml(raw: Properties['value']): string {
+    const value: string = raw ?? '';
+
     const result = isFunction(this._htmlConverter?.fromHtml)
-      ? String(this._htmlConverter.fromHtml(value) ?? '')
+      ? String(this._htmlConverter?.fromHtml(value) ?? '')
       : value;
 
     return result;
@@ -313,7 +287,9 @@ class HtmlEditor extends Editor<Properties> {
       return;
     }
 
-    const sanitizedHtml = this._removeXSSVulnerableHtml(html);
+    const quill = getQuill();
+    const sanitizedHtml = sanitizeHtml(quill, html);
+
     this._$htmlContainer.html(sanitizedHtml);
   }
 
@@ -351,38 +327,41 @@ class HtmlEditor extends Editor<Properties> {
 
     const renderContentPromise = this._contentRenderedDeferred.promise();
 
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     super._renderContentImpl();
+
     this._renderHtmlEditor();
     this._renderFormDialog();
-
     this._renderAIDialog();
+
     this._addKeyPressHandler();
 
     return renderContentPromise;
   }
 
-  _pointerMoveHandler(e) {
+  _pointerMoveHandler(e: PointerEvent): void {
     if (isIos) {
       e.stopPropagation();
     }
   }
 
-  _attachFocusEvents() {
+  _attachFocusEvents(): void {
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     deferRender(super._attachFocusEvents.bind(this));
   }
 
-  _addKeyPressHandler() {
+  _addKeyPressHandler(): void {
     const keyDownEvent = addNamespace('keydown', `${this.NAME}TextChange`);
 
     eventsEngine.on(this._$htmlContainer, keyDownEvent, this._keyDownHandler.bind(this));
   }
 
-  _keyDownHandler(e) {
+  _keyDownHandler(e: ValueChangedEvent): void {
     this._saveValueChangeEvent(e);
   }
 
-  _renderHtmlEditor() {
-    const customizeModules = this.option('customizeModules');
+  _renderHtmlEditor(): void {
+    const { customizeModules } = this.option();
     const modulesConfig = this._getModulesConfig();
 
     if (isFunction(customizeModules)) {
@@ -401,6 +380,7 @@ class HtmlEditor extends Editor<Properties> {
     this._textChangeHandlerWithContext = this._textChangeHandler.bind(this);
     this._quillInstance.on('text-change', this._textChangeHandlerWithContext);
     this._renderScrollHandler();
+
     if (this._hasTranscludedContent()) {
       this._updateContentTask = executeAsync(() => {
         this._applyTranscludedContent();
@@ -412,22 +392,34 @@ class HtmlEditor extends Editor<Properties> {
 
   _renderScrollHandler(): void {
     const $scrollContainer = this._getContent();
-
     const initScrollData = prepareScrollData($scrollContainer);
-    // @ts-expect-error ts-error
-    eventsEngine.on($scrollContainer, addNamespace(scrollEvents.init, this.NAME), initScrollData, noop);
-    // @ts-expect-error ts-error
-    eventsEngine.on($scrollContainer, addNamespace(pointerEvents.move, this.NAME), this._pointerMoveHandler.bind(this));
+
+    eventsEngine.on(
+      $scrollContainer,
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      addNamespace(scrollEvents.init, this.NAME!),
+      initScrollData,
+      noop,
+    );
+
+    eventsEngine.on(
+      $scrollContainer,
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      addNamespace(pointerEvents.move, this.NAME!),
+      this._pointerMoveHandler.bind(this),
+    );
   }
 
   _applyTranscludedContent(): void {
-    const valueOption = this.option('value');
-    if (!isDefined(valueOption)) {
+    const { value } = this.option();
+
+    if (!isDefined(value)) {
       const html = this._deltaConverter.toHtml();
       const newDelta = this._quillInstance.clipboard.convert({ html });
 
       if (newDelta.ops.length) {
         this._quillInstance.setContents(newDelta);
+
         return;
       }
     }
@@ -435,71 +427,96 @@ class HtmlEditor extends Editor<Properties> {
     this._finalizeContentRendering();
   }
 
-  _hasTranscludedContent() {
-    // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
-    return this._$templateResult && this._$templateResult.length;
+  _hasTranscludedContent(): boolean {
+    return Boolean(this._$templateResult?.length);
   }
 
-  _getModulesConfig() {
-    const quill = this._getRegistrator().getQuill();
-    const wordListMatcher = getWordMatcher(quill);
-    const modulesConfig = extend({}, {
-      table: true,
-      toolbar: this._getModuleConfigByOption('toolbar'),
-      variables: this._getModuleConfigByOption('variables'),
-      // TODO: extract some IE11 tweaks for the Quill uploader module
-      // dropImage: this._getBaseModuleConfig(),
-      resizing: this._getModuleConfigByOption('mediaResizing'),
-      tableResizing: this._getModuleConfigByOption('tableResizing'),
-      tableContextMenu: this._getModuleConfigByOption('tableContextMenu'),
-      imageUpload: this._getModuleConfigByOption('imageUpload'),
-      imageCursor: this._getBaseModuleConfig(),
-      mentions: this._getModuleConfigByOption('mentions'),
-      uploader: {
-        onDrop: (e) => this._saveValueChangeEvent(dxEvent(e)),
-        imageBlot: 'extendedImage',
+  _getModulesConfig(): ModulesConfig {
+    const modulesConfig: ModulesConfig = extend(
+      {},
+      {
+        clipboard: this._getClipboardConfig(),
+        // TODO: extract some IE11 tweaks for the Quill uploader module
+        // dropImage: this._getBaseModuleConfig(),
+        imageCursor: this._getBaseModuleConfig(),
+        imageUpload: this._getModuleConfigByOption('imageUpload'),
+        keyboard: this._getKeyboardConfig(),
+        mentions: this._getModuleConfigByOption('mentions'),
+        multiline: Boolean(this.option('allowSoftLineBreak')),
+        resizing: this._getModuleConfigByOption('mediaResizing'),
+        table: true,
+        tableContextMenu: this._getModuleConfigByOption('tableContextMenu'),
+        tableResizing: this._getModuleConfigByOption('tableResizing'),
+        toolbar: this._getModuleConfigByOption('toolbar'),
+        uploader: this._getUploaderConfig(),
+        variables: this._getModuleConfigByOption('variables'),
       },
-      keyboard: {
-        onKeydown: (e) => this._saveValueChangeEvent(dxEvent(e)),
-      },
-      clipboard: {
-        onPaste: (e) => this._saveValueChangeEvent(dxEvent(e)),
-        onCut: (e) => this._saveValueChangeEvent(dxEvent(e)),
-        matchers: [
-          ['p.MsoListParagraphCxSpFirst', wordListMatcher],
-          ['p.MsoListParagraphCxSpMiddle', wordListMatcher],
-          ['p.MsoListParagraphCxSpLast', wordListMatcher],
-        ],
-      },
-      multiline: Boolean(this.option('allowSoftLineBreak')),
-    }, this._getCustomModules());
+      this._getCustomModules(),
+    );
 
     return modulesConfig;
   }
 
-  _getModuleConfigByOption(userOptionName) {
-    const optionValue = this.option(userOptionName);
-    let config = {};
+  _getUploaderConfig(): {
+    onDrop: (e: DxEvent) => void;
+    imageBlot: string;
+  } {
+    return {
+      onDrop: (e) => this._saveValueChangeEvent(dxEvent(e)),
+      imageBlot: 'extendedImage',
+    };
+  }
+
+  _getKeyboardConfig(): { onKeydown: (e: DxEvent) => void } {
+    return {
+      onKeydown: (e) => this._saveValueChangeEvent(dxEvent(e)),
+    };
+  }
+
+  _getClipboardConfig(): {
+    onPaste: (e: DxEvent) => void;
+    onCut: (e: DxEvent) => void;
+    matchers: [string, unknown][];
+  } {
+    const quill = this._getRegistrator().getQuill();
+    const wordListMatcher = getWordMatcher(quill);
+
+    return {
+      onPaste: (e) => this._saveValueChangeEvent(dxEvent(e)),
+      onCut: (e) => this._saveValueChangeEvent(dxEvent(e)),
+      matchers: [
+        ['p.MsoListParagraphCxSpFirst', wordListMatcher],
+        ['p.MsoListParagraphCxSpMiddle', wordListMatcher],
+        ['p.MsoListParagraphCxSpLast', wordListMatcher],
+      ],
+    };
+  }
+
+  _getModuleConfigByOption(optionName: string): Partial<ModulesConfig> | undefined {
+    const optionValue = this.option(optionName);
 
     if (!isDefined(optionValue)) {
       return undefined;
     }
 
-    if (Array.isArray(optionValue)) {
-      config[userOptionName] = optionValue;
-    } else {
-      config = optionValue;
-    }
+    const configuration: ModulesConfig | unknown = Array.isArray(optionValue)
+      ? { [optionName]: optionValue }
+      : optionValue;
 
-    return extend(this._getBaseModuleConfig(), config);
+    const finalConfiguration: ModulesConfig = extend(
+      this._getBaseModuleConfig(),
+      configuration,
+    );
+
+    return finalConfiguration;
   }
 
-  _getBaseModuleConfig() {
+  _getBaseModuleConfig(): ModulesConfig {
     return { editorInstance: this };
   }
 
-  _getCustomModules() {
-    const modules = {};
+  _getCustomModules(): ModulesConfig {
+    const modules: ModulesConfig = {};
     const moduleNames = this._getRegistrator().getRegisteredModuleNames();
 
     moduleNames.forEach((modulePath) => {
@@ -510,24 +527,27 @@ class HtmlEditor extends Editor<Properties> {
   }
 
   _textChangeHandler(): void {
-    const { value: currentValue } = this.option();
+    const { value } = this.option();
 
     const html = this._deltaConverter.toHtml();
     const convertedValue = this._convertFromHtml(html);
 
     if (
-      currentValue !== convertedValue
-      && !this._isNullValueConverted(currentValue, convertedValue)
+      value !== convertedValue
+      && !this._isNullValueConverted(value, convertedValue)
     ) {
       this._isEditorUpdating = true;
-      this.option('value', convertedValue);
+      this.option({ value: convertedValue });
     }
 
     this._finalizeContentRendering();
   }
 
-  _isNullValueConverted(currentValue, convertedValue): boolean {
-    return currentValue === null && convertedValue === '';
+  _isNullValueConverted(
+    value: Properties['value'],
+    convertedValue: string,
+  ): boolean {
+    return value === null && convertedValue === '';
   }
 
   _finalizeContentRendering(): void {
@@ -547,14 +567,14 @@ class HtmlEditor extends Editor<Properties> {
     }
   }
 
-  _renderFormDialog() {
-    const userOptions = extend(true, {
+  _renderFormDialog(): void {
+    const options = {
       width: 'auto',
       height: 'auto',
       hideOnOutsideClick: true,
-    }, this.option('formDialogOptions'));
+    };
 
-    this._formDialog = new FormDialog(this.$element(), userOptions);
+    this._formDialog = new FormDialog(this.$element(), options);
   }
 
   _renderAIDialog(): void {
@@ -568,17 +588,19 @@ class HtmlEditor extends Editor<Properties> {
   }
 
   _getStylingModePrefix(): string {
-    return 'dx-htmleditor-';
+    return HTML_EDITOR_STYLING_MODE_PREFIX;
   }
 
-  _getQuillContainer() {
+  _getQuillContainer(): dxElementWrapper {
     return this._$htmlContainer;
   }
 
-  _prepareModuleOptions(args) {
-    const optionData = args.fullName?.split('.');
+  _prepareModuleOptions(args: OptionChanged<Properties>): [string, unknown] {
     let { value } = args;
-    const optionName = optionData.length >= 2 ? optionData[1] : args.name;
+    const { fullName, name } = args;
+
+    const optionData = fullName?.split('.');
+    const optionName: string = optionData.length >= 2 ? optionData[1] : name;
 
     if (optionData.length === 3) {
       value = { [optionData[2]]: value };
@@ -587,7 +609,7 @@ class HtmlEditor extends Editor<Properties> {
     return [optionName, value];
   }
 
-  _moduleOptionChanged(moduleName, args) {
+  _moduleOptionChanged(moduleName: string, args: OptionChanged<Properties>): void {
     const moduleInstance = this.getModule(moduleName);
     const shouldPassOptionsToModule = Boolean(moduleInstance);
 
@@ -598,12 +620,12 @@ class HtmlEditor extends Editor<Properties> {
     }
   }
 
-  _processHtmlContentUpdating(value): void {
+  _processHtmlContentUpdating(value: Properties['value']): void {
     if (this._quillInstance) {
       if (this._isEditorUpdating) {
         this._isEditorUpdating = false;
       } else {
-        const html = this._convertToHtml(value);
+        const html: string = this._convertToHtml(value);
 
         this._suppressValueChangeAction();
         this._updateHtmlContent(html);
@@ -614,24 +636,26 @@ class HtmlEditor extends Editor<Properties> {
     }
   }
 
-  _optionChanged(args) {
-    switch (args.name) {
+  _optionChanged(args: OptionChanged<Properties>): void {
+    const { name, value, previousValue } = args;
+
+    switch (name) {
       case 'converter': {
-        this._htmlConverter = args.value;
+        this._htmlConverter = value as Properties[typeof name];
 
-        const { value } = this.option();
+        const { value: currentValue } = this.option();
 
-        this._processHtmlContentUpdating(value);
+        this._processHtmlContentUpdating(currentValue);
         break;
       }
       case 'value': {
-        this._processHtmlContentUpdating(args.value);
+        this._processHtmlContentUpdating(value);
 
-        // NOTE: value can be optimized by Quill
-        const value = this.option('value');
-        if (value !== args.previousValue) {
-          this._setSubmitValue(value);
-          super._optionChanged({ ...args, value });
+        const { value: currentValue } = this.option();
+
+        if (currentValue !== previousValue) {
+          this._setSubmitValue(currentValue);
+          super._optionChanged({ ...args, [name]: currentValue });
         }
         break;
       }
@@ -653,9 +677,6 @@ class HtmlEditor extends Editor<Properties> {
       case 'disabled':
         super._optionChanged(args);
         this._resetEnabledState();
-        break;
-      case 'formDialogOptions':
-        this._renderFormDialog();
         break;
       case 'tableContextMenu':
         this._moduleOptionChanged('tableContextMenu', args);
@@ -679,7 +700,7 @@ class HtmlEditor extends Editor<Properties> {
     this._applyToolbarMethod('repaint');
   }
 
-  _updateHtmlContent(html): void {
+  _updateHtmlContent(html: string): void {
     const newDelta = this._quillInstance.clipboard.convert({ html });
     this._quillInstance.setContents(newDelta);
   }
@@ -699,38 +720,42 @@ class HtmlEditor extends Editor<Properties> {
 
   _abortUpdateContentTask(): void {
     if (this._updateContentTask) {
-      // @ts-expect-error ts-error
       this._updateContentTask.abort();
       this._updateContentTask = undefined;
     }
   }
 
-  _applyQuillMethod(methodName, args?) {
-    if (this._quillInstance) {
-      return this._quillInstance[methodName].apply(this._quillInstance, args);
+  _applyQuillMethod<T extends keyof QuillInstance>(
+    methodName: T,
+    ...args: Parameters<QuillInstance[T]>
+  ): ReturnType<QuillInstance[T]> | undefined {
+    if (!this._quillInstance) {
+      return undefined;
     }
+
+    // eslint-disable-next-line prefer-spread
+    return this._quillInstance[methodName].apply(this._quillInstance, args);
   }
 
-  _applyQuillHistoryMethod(methodName): void {
-    // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
-    if (this._quillInstance && this._quillInstance.history) {
+  _applyQuillHistoryMethod(methodName: string): void {
+    if (this._quillInstance?.history) {
       this._quillInstance.history[methodName]();
     }
   }
 
-  _applyToolbarMethod(methodName): void {
+  _applyToolbarMethod(methodName: string): void {
     this.getModule('toolbar')?.[methodName]();
   }
 
-  addCleanCallback(callback): void {
+  addCleanCallback(callback: () => unknown): void {
     this._cleanCallback.add(callback);
   }
 
-  addContentInitializedCallback(callback): void {
+  addContentInitializedCallback(callback: () => unknown): void {
     this._contentInitializedCallback.add(callback);
   }
 
-  register(components): void {
+  register(components: unknown): void {
     this._getRegistrator().registerModules(components);
 
     if (this._quillInstance) {
@@ -738,57 +763,71 @@ class HtmlEditor extends Editor<Properties> {
     }
   }
 
-  get(modulePath) {
-    return this._getRegistrator().getQuill().import(modulePath);
+  get(componentPath: string): unknown {
+    return this._getRegistrator().getQuill().import(componentPath);
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  getModule(moduleName) {
-    return this._applyQuillMethod('getModule', arguments);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  getModule(moduleName: string): any {
+    return this._applyQuillMethod('getModule', moduleName);
   }
 
-  getQuillInstance() {
+  getQuillInstance(): QuillInstance | undefined {
     return this._quillInstance;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  getSelection(focus) {
-    return this._applyQuillMethod('getSelection', arguments);
+  getSelection(focus?: boolean): TextSelection {
+    const selection: TextSelection = this._applyQuillMethod('getSelection', focus);
+
+    return selection;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  setSelection(index, length) {
-    this._applyQuillMethod('setSelection', arguments);
+  setSelection(index: number, length: number): void {
+    this._applyQuillMethod('setSelection', index, length);
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  getText(index, length) {
-    return this._applyQuillMethod('getText', arguments);
+  getText(index: number, length: number): string {
+    const text: string = this._applyQuillMethod('getText', index, length);
+
+    return text;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  format(formatName, formatValue) {
-    this._applyQuillMethod('format', arguments);
+  format(
+    formatName: HtmlEditorFormat | string,
+    formatValue: unknown,
+  ): void {
+    this._applyQuillMethod('format', formatName, formatValue);
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  formatText(index, length, formatName, formatValue) {
-    this._applyQuillMethod('formatText', arguments);
+  formatText(
+    index: number,
+    length: number,
+    formatName: HtmlEditorFormat | string,
+    formatValue: unknown,
+  ): void {
+    this._applyQuillMethod('formatText', index, length, formatName, formatValue);
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  formatLine(index, length, formatName, formatValue) {
-    this._applyQuillMethod('formatLine', arguments);
+  formatLine(
+    index: number,
+    length: number,
+    formatName: HtmlEditorFormat | string,
+    formatValue: unknown,
+  ): void {
+    this._applyQuillMethod('formatLine', index, length, formatName, formatValue);
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  getFormat(index, length) {
-    return this._applyQuillMethod('getFormat', arguments);
+  getFormat(
+    index: number,
+    length: number,
+  ): TextFormat {
+    const formats: TextFormat = this._applyQuillMethod('getFormat', index, length);
+
+    return formats;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  removeFormat(index, length) {
-    return this._applyQuillMethod('removeFormat', arguments);
+  removeFormat(index: number, length: number): void {
+    this._applyQuillMethod('removeFormat', index, length);
   }
 
   clearHistory(): void {
@@ -804,31 +843,40 @@ class HtmlEditor extends Editor<Properties> {
     this._applyQuillHistoryMethod('redo');
   }
 
-  getLength() {
-    return this._applyQuillMethod('getLength');
+  getLength(): number {
+    const length: number = this._applyQuillMethod('getLength');
+
+    return length;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  getBounds(index, length): void {
-    return this._applyQuillMethod('getBounds', arguments);
+  getBounds(index: number, length: number): Bounds {
+    const bounds: Bounds = this._applyQuillMethod('getBounds', index, length);
+
+    return bounds;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  delete(index, length): void {
-    this._applyQuillMethod('deleteText', arguments);
+  delete(index: number, length: number): void {
+    this._applyQuillMethod('deleteText', index, length);
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  insertText(index, text, formats): void {
-    this._applyQuillMethod('insertText', arguments);
+  insertText(
+    index: number,
+    text: string,
+    formatName: TextFormat | HtmlEditorFormat | string,
+    formatValue?: unknown,
+  ): void {
+    this._applyQuillMethod('insertText', index, text, formatName, formatValue);
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  insertEmbed(index, type, config): void {
-    this._applyQuillMethod('insertEmbed', arguments);
+  insertEmbed(
+    index: number,
+    type: string,
+    options: unknown,
+  ): void {
+    this._applyQuillMethod('insertEmbed', index, type, options);
   }
 
-  showFormDialog(formConfig) {
+  showFormDialog(formConfig: FormProperties): Promise<unknown> | undefined {
     return this._formDialog.show(formConfig);
   }
 
@@ -836,10 +884,14 @@ class HtmlEditor extends Editor<Properties> {
     return this._aiDialog?.show(payload);
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  formDialogOption(optionName, optionValue): void {
-    // @ts-expect-error ts-error
-    return this._formDialog.popupOption.apply(this._formDialog, arguments);
+  formDialogOption(
+    optionName: string,
+    optionValue: unknown,
+  ): void {
+    return this._formDialog.popupOption.apply(
+      this._formDialog,
+      [optionName, optionValue],
+    );
   }
 
   focus(): void {
@@ -851,7 +903,7 @@ class HtmlEditor extends Editor<Properties> {
     this._applyQuillMethod('blur');
   }
 
-  getMentionKeyInTemplateStorage() {
+  getMentionKeyInTemplateStorage(): number | undefined {
     return this._mentionKeyInTemplateStorage;
   }
 }

@@ -2,7 +2,7 @@ import $ from 'jquery';
 
 import 'ui/html_editor';
 import { getOuterHeight } from 'core/utils/size';
-
+import { createNoScriptFrame } from '__internal/ui/html_editor/utils/html_sanitizer';
 import { checkLink, prepareEmbedValue, prepareTableValue } from './utils.js';
 import Quill from 'devextreme-quill';
 
@@ -405,8 +405,7 @@ export default function() {
         }
     }, () => {
         test('frame should have an empty srcdoc attribute to prevent an excess "Blocked script execution" error in Opera (T1150911)', function(assert) {
-            const htmlEditor = $('#htmlEditor').dxHtmlEditor({}).dxHtmlEditor('instance');
-            const $frame = htmlEditor._createNoScriptFrame();
+            const $frame = createNoScriptFrame();
 
             assert.strictEqual($frame.attr('srcdoc'), '', 'srcdoc attribute is set');
         });

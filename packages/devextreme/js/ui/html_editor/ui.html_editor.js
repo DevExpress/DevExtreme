@@ -1,4 +1,4 @@
-import HtmlEditor from '../../__internal/ui/html_editor/m_html_editor';
+import HtmlEditor from '../../__internal/ui/html_editor/html_editor';
 
 export default HtmlEditor;
 
