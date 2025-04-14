@@ -139,6 +139,7 @@ export const getDataSourceOptions = (
   storeLoadAdapter,
   column,
   headerFilterOptions,
+  filter,
 ) => {
   if (!storeLoadAdapter) {
     return undefined;
@@ -161,7 +162,7 @@ export const getDataSourceOptions = (
   // const filter = this._dataController.getCombinedFilter();
 
   options.dataSource = {
-    // filter,
+    filter,
     group,
     useDefaultSearch: true,
     load: (loadOptions) => {

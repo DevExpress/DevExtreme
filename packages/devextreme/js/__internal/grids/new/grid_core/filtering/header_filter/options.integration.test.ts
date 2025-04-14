@@ -3,8 +3,8 @@ import {
   afterEach, describe, expect, it,
 } from '@jest/globals';
 import $ from '@js/core/renderer';
+import { HeaderPanelView } from '@ts/grids/new/card_view/header_panel/view';
 import CardView from '@ts/grids/new/card_view/widget';
-import { HeaderFilterController } from '@ts/grids/new/grid_core/filtering/header_filter/controller';
 import type {
   HeaderFilterSearchColumnOptions,
   HeaderFilterSearchMode,
@@ -41,10 +41,10 @@ const openHeaderFilterPopup = (cardView: CardView): Element => {
   const popupContainer = document.createElement('div');
 
   // @ts-expect-error get protected property
-  const controller = cardView.diContext.get(HeaderFilterController);
+  const view = cardView.diContext.get(HeaderPanelView);
 
   const column = cardView.getVisibleColumns()[0];
-  controller.openPopup(popupContainer, column);
+  view.openPopup(popupContainer, column);
   rerender();
 
   return popupContainer;

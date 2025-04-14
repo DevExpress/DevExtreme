@@ -1,7 +1,7 @@
 /* eslint-disable spellcheck/spell-checker */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 
-import { computed } from '@ts/core/reactive';
+import { computed, effect } from '@ts/core/reactive';
 import { getFilterExpression } from '@ts/filter_builder/m_utils';
 import { anyOf, noneOf } from '@ts/grids/grid_core/filter/m_filter_custom_operations';
 import gridCoreUtils from '@ts/grids/grid_core/m_utils';
@@ -9,6 +9,7 @@ import gridCoreUtils from '@ts/grids/grid_core/m_utils';
 import { ColumnsController } from '../columns_controller';
 import { OptionsController } from '../options_controller/options_controller';
 import { SearchController } from '../search';
+import { SharedController } from '../shared/controller';
 import { HeaderFilterController } from './header_filter';
 
 export class FilterController {
@@ -25,6 +26,7 @@ export class FilterController {
     ColumnsController,
     SearchController,
     HeaderFilterController,
+    SharedController,
   ] as const;
 
   private readonly filterPanelValue = computed(
@@ -75,7 +77,15 @@ export class FilterController {
     private readonly columnsController: ColumnsController,
     private readonly searchController: SearchController,
     private readonly headerFilterController: HeaderFilterController,
-  ) { }
+    private readonly sharedController: SharedController,
+  ) {
+    effect(
+      (displayFilter) => {
+        this.sharedController.displayFilter.update(displayFilter);
+      },
+      [this.displayFilter],
+    );
+  }
 
   public clearFilter(): void {
     this.searchController.searchTextOption.update('');

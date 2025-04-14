@@ -4,8 +4,8 @@ import {
   expect,
   it,
 } from '@jest/globals';
+import { HeaderPanelView } from '@ts/grids/new/card_view/header_panel/view';
 import CardView from '@ts/grids/new/card_view/widget';
-import { HeaderFilterController } from '@ts/grids/new/grid_core/filtering/header_filter/controller';
 import { rerender } from 'inferno';
 
 const SELECTORS = {
@@ -37,10 +37,10 @@ describe('HeaderFilter', () => {
       });
 
       // @ts-expect-error getting protected field
-      const controller = cardView.diContext.get(HeaderFilterController);
+      const view = cardView.diContext.get(HeaderPanelView);
 
       const column = cardView.getVisibleColumns()[0];
-      controller.openPopup(popupContainer, column);
+      view.openPopup(popupContainer, column);
       rerender();
 
       expect(rootQuerySelector(SELECTORS.popupContent)).toMatchSnapshot();
@@ -70,10 +70,10 @@ describe('HeaderFilter', () => {
       });
 
       // @ts-expect-error getting protected field
-      const controller = cardView.diContext.get(HeaderFilterController);
+      const view = cardView.diContext.get(HeaderPanelView);
 
       const column = cardView.getVisibleColumns()[0];
-      controller.openPopup(popupContainer, column);
+      view.openPopup(popupContainer, column);
       rerender();
 
       expect(rootQuerySelector(SELECTORS.popupContent)).toMatchSnapshot();
