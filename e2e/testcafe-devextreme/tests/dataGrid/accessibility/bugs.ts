@@ -28,7 +28,6 @@ test('DataGrid - The \'aria-label\' attribute value is "Show filter options for 
   await t
     .expect(dataGrid.getGroupPanel().getHeader(0).getFilterButton().getAttribute('aria-label'))
     .eql('Show filter options for column \'Id\'');
-    
 }).before(async () => createWidget('dxDataGrid', {
   keyExpr: 'id',
   dataSource: [{
