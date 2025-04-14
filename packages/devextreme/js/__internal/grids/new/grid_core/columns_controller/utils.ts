@@ -1,6 +1,9 @@
+/* eslint-disable spellcheck/spell-checker */
 import { compileGetter } from '@js/core/utils/data';
 import { captionize } from '@js/core/utils/inflector';
 import { isDefined, isString } from '@js/core/utils/type';
+import type { Subscribable, SubsGetsUpd } from '@ts/core/reactive/index';
+import { interruptableComputed } from '@ts/core/reactive/index';
 import type { ComponentType } from 'inferno';
 
 import type { Template } from '../types';
@@ -153,4 +156,13 @@ export function getColumnByIndexOrName(
   });
 
   return column;
+}
+
+export function getActualColumnSettings(
+  columnsConfiguration: Subscribable<ColumnProperties[] | undefined>,
+): SubsGetsUpd<PreNormalizedColumn[]> {
+  return interruptableComputed(
+    (columnsConfig) => preNormalizeColumns(columnsConfig ?? []),
+    [columnsConfiguration],
+  );
 }

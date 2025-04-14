@@ -10,7 +10,11 @@ import { OptionsController } from '../options_controller/options_controller';
 import type { ColumnProperties, ColumnSettings, PreNormalizedColumn } from './options';
 import type { Column, VisibleColumn } from './types';
 import {
-  getColumnIndexByName, normalizeColumns, normalizeVisibleIndexes, preNormalizeColumns,
+  getActualColumnSettings,
+  getColumnIndexByName,
+  normalizeColumns,
+  normalizeVisibleIndexes,
+  preNormalizeColumns,
 } from './utils';
 
 export class ColumnsController {
@@ -37,13 +41,7 @@ export class ColumnsController {
   ) {
     this.columnsConfiguration = this.options.oneWay('columns');
     this.headerFilterConfiguration = this.options.oneWay('headerFilter');
-
-    this.columnsSettings = interruptableComputed(
-      (columnsConfiguration) => preNormalizeColumns(columnsConfiguration ?? []),
-      [
-        this.columnsConfiguration,
-      ],
-    );
+    this.columnsSettings = getActualColumnSettings(this.columnsConfiguration);
 
     this.columns = computed(
       (columnsSettings, headerFilterRootOptions, firstItem) => {
