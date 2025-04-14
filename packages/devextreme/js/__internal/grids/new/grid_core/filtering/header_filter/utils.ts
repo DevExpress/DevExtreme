@@ -51,12 +51,17 @@ export const getFilterOperator = (values: unknown, filterType?: FilterType): str
   }
 };
 
+const needCreateFilter = (column: Column): boolean => {
+  const allowFiltering = column.allowFiltering && column.allowHeaderFiltering;
+  const values = column.headerFilter?.values;
+  const hasSelectedItems = isDefined(values) && values.length > 0;
+  return allowFiltering && hasSelectedItems;
+};
+
 export const getComposedHeaderFilter = (columns: Column[]): unknown => {
   const filterValue: unknown[] = [];
   const filterableColumns = columns
-    .filter((c) => c.allowFiltering
-      && c.allowHeaderFiltering
-      && c.headerFilter?.values !== undefined);
+    .filter((c) => needCreateFilter(c));
   filterableColumns
     .forEach((c, index) => {
       filterValue.push([

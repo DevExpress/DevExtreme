@@ -560,7 +560,8 @@ describe('Options', () => {
         ],
         columns: [{
           dataField: 'A',
-          headerFilter: { filterType, values: filterValues },
+          headerFilter: { values: filterValues },
+          filterType,
         }],
         headerFilter: {
           visible: true,
@@ -613,7 +614,8 @@ describe('Options', () => {
             ],
             columns: [{
               dataField: 'A',
-              headerFilter: { dataSource, filterType, values: filterValues },
+              headerFilter: { dataSource, values: filterValues },
+              filterType,
             }],
             headerFilter: {
               visible: true,

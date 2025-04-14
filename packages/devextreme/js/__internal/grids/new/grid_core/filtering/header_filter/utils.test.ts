@@ -67,12 +67,10 @@ describe('HeaderFilter', () => {
           root: {},
           col: {
             dataSource: { test: 'TEST_DS' } as DataSourceLike<unknown>,
-            filterType: 'exclude',
             values: ['A', 'B', 'C'],
           },
           result: {
             dataSource: { test: 'TEST_DS' } as DataSourceLike<unknown>,
-            filterType: 'exclude',
             values: ['A', 'B', 'C'],
             search: {},
           },

@@ -54,8 +54,6 @@ export interface HeaderFilterColumnOptions extends HeaderFilterBaseOptions {
   groupInterval?: number;
   // Specifies the header filter search options.
   search?: HeaderFilterSearchColumnOptions;
-  // Whitelist or blacklist meaning of values property.
-  filterType?: HeaderFilterType;
   // Current column's filter values
   // NOTE: Original DataGrid type not typed too:
   // https://js.devexpress.com/jQuery/Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/columns/#filterValues

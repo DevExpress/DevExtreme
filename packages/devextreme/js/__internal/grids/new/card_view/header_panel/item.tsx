@@ -86,9 +86,9 @@ export class Item extends Component<ItemProps> {
     const Template = this.props.column.headerItemTemplate ?? this.props.template;
     const cssClass = `${CLASSES.item} ${this.props.column.headerItemCssClass ?? ''} ${this.props.cssClass ?? ''}`;
 
-    const { headerFilter } = this.props.column;
+    const { headerFilter, filterType } = this.props.column;
 
-    const hasHeaderFilterValue = headerFilter?.filterType === 'exclude'
+    const hasHeaderFilterValue = filterType === 'exclude'
       || !!headerFilter?.values?.length;
     const headerFilterIconClass = [
       CLASSES.headerFilter.iconEmpty,
