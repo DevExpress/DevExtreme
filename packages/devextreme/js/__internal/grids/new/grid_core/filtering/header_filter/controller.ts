@@ -1,14 +1,17 @@
 /* eslint-disable spellcheck/spell-checker */
 import type { SubsGets } from '@ts/core/reactive/index';
-import { state } from '@ts/core/reactive/index';
-import { ColumnsController } from '@ts/grids/new/grid_core/columns_controller/index';
+import { computed, state } from '@ts/core/reactive/index';
+import { ColumnsController } from '@ts/grids/new/grid_core/columns_controller';
 import type { Column } from '@ts/grids/new/grid_core/columns_controller/types';
-import { DataController } from '@ts/grids/new/grid_core/data_controller/index';
+// import { DataController } from '@ts/grids/new/grid_core/data_controller';
 import {
   getDataSourceOptions,
   getFilterType,
 } from '@ts/grids/new/grid_core/filtering/header_filter/legacy_header_filter';
 import { OptionsController } from '@ts/grids/new/grid_core/options_controller/options_controller';
+
+import { DataController } from '../../data_controller';
+import { getComposedHeaderFilter } from './utils';
 
 export type PopupState = {
   element: Element;
@@ -27,11 +30,29 @@ export class HeaderFilterController {
 
   public readonly popupState$: SubsGets<PopupState> = this.popupState;
 
+  public readonly composedHeaderFilter: SubsGets<unknown>;
+
   constructor(
     private readonly optionsController: OptionsController,
     private readonly dataController: DataController,
     private readonly columnsController: ColumnsController,
   ) {
+    this.composedHeaderFilter = computed(
+      (columns) => getComposedHeaderFilter(columns),
+      [
+        this.columnsController.visibleColumns,
+      ],
+    );
+  }
+
+  public clearHeaderFilters(): void {
+    this.columnsController.updateColumns(
+      (columns) => columns.map((c) => {
+        delete c.headerFilter?.values;
+        delete c.filterType;
+        return c;
+      }),
+    );
   }
 
   public openPopup(

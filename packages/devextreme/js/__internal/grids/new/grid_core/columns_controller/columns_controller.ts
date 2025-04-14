@@ -4,7 +4,7 @@ import {
   computed, interruptableComputed,
 } from '@ts/core/reactive/index';
 import type { HeaderFilterRootOptions } from '@ts/grids/new/grid_core/filtering/header_filter/index';
-import headerFilterUtils from '@ts/grids/new/grid_core/filtering/header_filter/utils';
+import { mergeColumnHeaderFilterOptions } from '@ts/grids/new/grid_core/filtering/header_filter/utils';
 
 import { OptionsController } from '../options_controller/options_controller';
 import type { ColumnProperties, ColumnSettings, PreNormalizedColumn } from './options';
@@ -50,8 +50,7 @@ export class ColumnsController {
       ) => normalizeColumns(
         columnsSettings ?? [],
         this.options.normalizeTemplate.bind(this.options),
-      ).map((column) => headerFilterUtils
-        .mergeColumnHeaderFilterOptions(column, headerFilterRootOptions)),
+      ).map((column) => mergeColumnHeaderFilterOptions(column, headerFilterRootOptions)),
       [
         this.columnsSettings,
         this.headerFilterConfiguration,

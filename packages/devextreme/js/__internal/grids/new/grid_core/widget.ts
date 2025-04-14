@@ -21,7 +21,7 @@ import { MainView } from './main_view';
 import { defaultOptions, defaultOptionsRules, type Options } from './options';
 import { PagerView } from './pager/view';
 import * as SearchControllerModule from './search/index';
-import * as SelectionControllerModule from './selection/index';
+import * as SelectionControllerModule from './selection';
 import * as SortingControllerModule from './sorting_controller/index';
 import type { SortingController } from './sorting_controller/sorting_controller';
 import { ToolbarController } from './toolbar/controller';

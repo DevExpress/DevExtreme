@@ -6,7 +6,7 @@ import type {
   HeaderFilterRootOptions,
 } from '@ts/grids/new/grid_core/filtering/header_filter/types';
 
-import utils from './utils';
+import * as utils from './utils';
 
 describe('HeaderFilter', () => {
   describe('Utils', () => {
