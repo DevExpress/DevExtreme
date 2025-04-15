@@ -4110,17 +4110,6 @@
             "RoadmapSurveyUrl": "https://www.devexpress.com/support/surveys/devextreme-roadmap-stepper.xml"
           },
           {
-            "Title": "Step Template",
-            "Name": "StepTemplate",
-            "Equivalents": "step customization, templates, custom steps",
-            "DocUrl": "Guide/UI_Components/Stepper/Customization/",
-            "Widget": "Stepper",
-            "MvcDescription": "",
-            "NetCoreDescription": "",
-            "MvcAdditionalFiles": [],
-            "DemoType": "Web"
-          },
-          {
             "Title": "Form Integration",
             "Name": "FormIntegration",
             "Equivalents": "multi-page form, wizard, multi-steps form, step validation",
@@ -4131,6 +4120,17 @@
             "MvcAdditionalFiles": [],
             "DemoType": "Web",
             "Badge": "New"
+          },
+          {
+            "Title": "Step Template",
+            "Name": "StepTemplate",
+            "Equivalents": "step customization, templates, custom steps",
+            "DocUrl": "Guide/UI_Components/Stepper/Customization/",
+            "Widget": "Stepper",
+            "MvcDescription": "",
+            "NetCoreDescription": "",
+            "MvcAdditionalFiles": [],
+            "DemoType": "Web"
           }
         ]
       },

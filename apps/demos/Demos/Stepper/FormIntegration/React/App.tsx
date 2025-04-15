@@ -126,7 +126,7 @@ export default function App () {
         onSelectionChanged={onSelectionChanged}
         onSelectionChanging={onSelectionChanging}
       >
-        {steps.map((step) => <Item key={step.title} {...step} />)}
+        {steps.map((step) => <Item key={step.label} {...step} />)}
       </Stepper>
 
       <div className="content">

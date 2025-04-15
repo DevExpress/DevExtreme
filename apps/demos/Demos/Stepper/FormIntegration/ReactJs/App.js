@@ -107,7 +107,7 @@ export default function App() {
       >
         {steps.map((step) => (
           <Item
-            key={step.title}
+            key={step.label}
             {...step}
           />
         ))}

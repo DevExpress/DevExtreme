@@ -1,27 +1,27 @@
 export const initialSteps = [
   {
-    title: 'Dates',
+    label: 'Dates',
     hint: 'Dates',
     icon: 'daterangepicker',
   },
   {
-    title: 'Guests',
+    label: 'Guests',
     hint: 'Guests',
     icon: 'group',
   },
   {
-    title: 'Room and Meal Plan',
+    label: 'Room and Meal Plan',
     hint: 'Room and Meal Plan',
     icon: 'servicebell',
   },
   {
-    title: 'Additional Requests',
+    label: 'Additional Requests',
     hint: 'Additional Requests',
     icon: 'clipboardtasklist',
     optional: true,
   },
   {
-    title: 'Confirmation',
+    label: 'Confirmation',
     hint: 'Confirmation',
     icon: 'checkmarkcircle',
   },
