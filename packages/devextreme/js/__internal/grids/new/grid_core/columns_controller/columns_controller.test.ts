@@ -184,8 +184,8 @@ describe('ColumnsController', () => {
       });
 
       columnsController.setFirstItem({
-        created: '2024-01-01',
-        amount: '1234.56',
+        created: new Date('2024-01-01'),
+        amount: 1234.56,
       });
 
       const columns = columnsController.columns.unreactive_get();

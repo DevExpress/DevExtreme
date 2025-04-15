@@ -46,16 +46,16 @@ export const parseDateValue = (
     return isNaN(parsedValue.getTime()) ? null : parsedValue;
   }
   // @ts-expect-error
-  return dateLocalization.parse(text, format) ?? null;
+  return dateLocalization.parse(text, format) ?? new Date(text);
 };
 
-export const parseValue = (column: Column, text: string, dataType?: string): unknown => {
+export const parseValue = (column: Column, text: string): unknown => {
   switch (true) {
-    case column.dataType === 'number' || dataType === 'number':
+    case column.dataType === 'number':
       return parseNumberValue(text, column.format);
-    case column.dataType === 'boolean' || dataType === 'boolean':
+    case column.dataType === 'boolean':
       return parseBooleanValue(text, column.trueText, column.falseText);
-    case gridCoreUtils.isDateType(column.dataType) || gridCoreUtils.isDateType(dataType):
+    case gridCoreUtils.isDateType(column.dataType):
       return parseDateValue(text, column.format);
     default:
       return text;

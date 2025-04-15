@@ -59,15 +59,9 @@ describe('parseValue', () => {
     expect(parseValue(columnTrue, 'no')).toBe(false);
   });
 
-  it('should parse date based on dataType argument', () => {
-    // @ts-expect-error
-    const column: Column = { dataField: '' };
-    expect(parseValue(column, '2024-01-01', 'date')).toEqual(new Date('2024-01-01'));
-  });
-
   it('should return text for unknown dataType', () => {
     // @ts-expect-error
     const column: Column = { dataField: '' };
-    expect(parseValue(column, 'hello', 'string')).toBe('hello');
+    expect(parseValue(column, 'hello')).toBe('hello');
   });
 });

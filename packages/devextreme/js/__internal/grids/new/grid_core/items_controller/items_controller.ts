@@ -53,26 +53,44 @@ export class ItemsController {
     this.selectedCardKeys.update(keys);
   }
 
+  private parseItemData(data: DataObject, columns: Column[]): Record<string, unknown> {
+    const parsed: Record<string, unknown> = {};
+
+    for (const column of columns) {
+      const { dataField } = column;
+      if (dataField) {
+        const value = data[dataField];
+        // @ts-expect-error
+        parsed[dataField] = parseValue(column, value);
+      }
+    }
+
+    return parsed;
+  }
+
   public createDataRow(
     data: DataObject,
     columns: Column[],
     itemIndex: number,
     selectedCardKeys?: Key[],
   ): DataRow {
+    const parsedItems = this.parseItemData(data, columns);
     const itemKey = this.dataController.getDataKey(data);
 
     return {
-      // @ts-expect-error
       cells: columns.map((column) => {
-        const rawValue = column.calculateCellValue?.(data);
-        const value = typeof rawValue === 'string' ? parseValue(column, rawValue) : rawValue;
-        const displayValue = value;
-        const formattedText = formatHelper.format(displayValue as never, column.format);
+        const value = column.calculateCellValue?.(data);
+        const displayValue = column.calculateDisplayValue(data);
+
+        const formattedText = formatHelper.format(
+          // @ts-expect-error
+          parsedItems[column.dataField] as never,
+          column.format,
+        );
         const text = column.customizeText
           ? column.customizeText({ value: displayValue, valueText: formattedText })
-          : rawValue?.toString();
+          : formattedText;
         const highlightedText = this.searchController
-          // @ts-expect-error
           .getHighlightedText(text);
 
         return {

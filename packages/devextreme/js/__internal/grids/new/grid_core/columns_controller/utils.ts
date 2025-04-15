@@ -165,31 +165,10 @@ export function getColumnByIndexOrName(
   return column;
 }
 
-export const getColumnDataTypeFromValue = function (value: string): any {
-  if (value) {
-    if (typeof value === 'string') {
-      if (!isNaN(Number(value))) {
-        return 'number';
-      }
-
-      const parsed = Date.parse(value);
-      if (!isNaN(parsed)) {
-        const hasTime = /[T\s]\d{2}:\d{2}/.test(value);
-        return hasTime ? 'datetime' : 'date';
-      }
-
-      return 'string';
-    }
-  }
-};
-
 export const getValueDataType = function (value) {
   let dataType: any = type(value);
   if (dataType !== 'string' && dataType !== 'boolean' && dataType !== 'number' && dataType !== 'date' && dataType !== 'object') {
     dataType = undefined;
-  }
-  if (dataType === 'string') {
-    dataType = getColumnDataTypeFromValue(value);
   }
   // eslint-disable-next-line @typescript-eslint/no-unsafe-return
   return dataType;
@@ -210,4 +189,19 @@ export const getSerializationFormat = function (dataType, value): any {
         return null;
       }
   }
+};
+
+export const getColumnFormat = function (column: Column[]): string | null {
+  // @ts-expect-error
+  if (column.format) {
+    // @ts-expect-error
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+    return column.format;
+  }
+  // @ts-expect-error
+  if (column.dataType === 'date' || column.dataType === 'datetime') {
+    return 'shortDate';
+  }
+
+  return null;
 };

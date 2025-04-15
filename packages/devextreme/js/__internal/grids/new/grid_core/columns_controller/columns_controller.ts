@@ -7,11 +7,10 @@ import type { HeaderFilterRootOptions } from '@ts/grids/new/grid_core/filtering/
 import headerFilterUtils from '@ts/grids/new/grid_core/filtering/header_filter/utils';
 
 import { OptionsController } from '../options_controller/options_controller';
-import { parseValue } from '../utils';
 import type { ColumnProperties, ColumnSettings, PreNormalizedColumn } from './options';
 import type { Column, VisibleColumn } from './types';
 import {
-  getColumnIndexByName, getSerializationFormat,
+  getColumnFormat, getColumnIndexByName, getSerializationFormat,
   getValueDataType, normalizeColumns, normalizeVisibleIndexes, preNormalizeColumns,
 } from './utils';
 
@@ -160,12 +159,18 @@ export class ColumnsController {
     columns.forEach((column, index) => {
       if (firstItem && column.calculateCellValue) {
         const columnSetting = columnSettings[index];
-        const rawValue = column.calculateCellValue(firstItem);
-        const dataType = columnSetting.dataType ?? getValueDataType(rawValue);
-        const value = parseValue(column, rawValue as string, dataType);
+        const value = column.calculateCellValue(firstItem);
+        const dataType = columnSetting.dataType ?? getValueDataType(value);
         const serializationFormat = getSerializationFormat(dataType, value);
+        // @ts-expect-error
+        const columnFormat = getColumnFormat(column);
+
         if (dataType && dataType !== column.dataType) {
           this.columnOption(column, 'dataType', dataType);
+        }
+
+        if (columnFormat && columnFormat !== column.format) {
+          this.columnOption(column, 'format', dataType);
         }
 
         // @ts-expect-error
