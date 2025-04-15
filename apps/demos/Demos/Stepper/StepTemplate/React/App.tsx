@@ -3,7 +3,7 @@ import Stepper from 'devextreme-react/stepper';
 
 import { steps } from './data.ts';
 import CustomStepShape from './CustomStepShape.tsx';
-import TitleOnly from './TitleOnly.tsx';
+import LabelOnly from './LabelOnly.tsx';
 import IconOnly from './IconOnly.tsx';
 
 export default function App() {
@@ -18,14 +18,14 @@ export default function App() {
         linear={false}
         itemRender={CustomStepShape}
       />
-      <div id="label-titleOnly" className="stepper-label">Title Only</div>
+      <div id="label-labelOnly" className="stepper-label">Title Only</div>
       <Stepper
-        id="titleOnly"
-        elementAttr={{ 'aria-labelledby': 'label-titleOnly' }}
+        id="labelOnly"
+        elementAttr={{ 'aria-labelledby': 'label-labelOnly' }}
         dataSource={steps}
         defaultSelectedIndex={2}
         linear={false}
-        itemRender={TitleOnly}
+        itemRender={LabelOnly}
       />
       <div id="label-iconOnly" className="stepper-label">Icon Only</div>
       <Stepper

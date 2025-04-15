@@ -10,28 +10,28 @@ export class AppService {
   constructor() {
     this.steps = [{
       text: 'A',
-      title: 'Cart',
+      label: 'Cart',
       icon: 'cart',
     },
     {
       text: 'B',
-      title: 'Shipping Info',
+      label: 'Shipping Info',
       icon: 'clipboardtasklist',
     },
     {
       text: 'C',
-      title: 'Promo Code',
+      label: 'Promo Code',
       icon: 'gift',
       optional: true,
     },
     {
       text: 'D',
-      title: 'Checkout',
+      label: 'Checkout',
       icon: 'packagebox',
     },
     {
       text: 'E',
-      title: 'Ordered',
+      label: 'Ordered',
       icon: 'checkmarkcircle',
     }];
   }

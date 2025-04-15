@@ -151,20 +151,20 @@ const DxItemConfig = {
     "update:hint": null,
     "update:icon": null,
     "update:isValid": null,
+    "update:label": null,
     "update:optional": null,
     "update:template": null,
     "update:text": null,
-    "update:title": null,
   },
   props: {
     disabled: Boolean,
     hint: String,
     icon: String,
     isValid: Boolean,
+    label: String,
     optional: Boolean,
     template: {},
-    text: String,
-    title: String
+    text: String
   }
 };
 

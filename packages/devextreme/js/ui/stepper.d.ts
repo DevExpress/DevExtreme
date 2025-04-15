@@ -178,7 +178,7 @@ export interface dxStepperItem extends CollectionWidgetItem {
    * @docid
    * @public
    */
-  title?: string;
+  label?: string;
   /**
    * @docid
    * @public
