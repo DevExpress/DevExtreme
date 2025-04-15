@@ -26782,9 +26782,9 @@ declare module DevExpress.ui {
      */
     icon?: string;
     /**
-     * [descr:dxStepperItem.title]
+     * [descr:dxStepperItem.label]
      */
-    title?: string;
+    label?: string;
     /**
      * [descr:dxStepperItem.hint]
      */

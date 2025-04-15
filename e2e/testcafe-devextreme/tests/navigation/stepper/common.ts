@@ -10,11 +10,11 @@ fixture.disablePageReloads`Stepper_common`
   .page(url(__dirname, '../../container.html'));
 
 const commonItems: Item[] = [
-  { icon: 'cart', title: 'Cart' },
-  { icon: 'clipboardtasklist', title: 'Shipping Info' },
-  { icon: 'gift', title: 'Promo Code', optional: true },
-  { icon: 'packagebox', title: 'Checkout' },
-  { icon: 'checkmarkcircle', title: 'Ordered' },
+  { icon: 'cart', label: 'Cart' },
+  { icon: 'clipboardtasklist', label: 'Shipping Info' },
+  { icon: 'gift', label: 'Promo Code', optional: true },
+  { icon: 'packagebox', label: 'Checkout' },
+  { icon: 'checkmarkcircle', label: 'Ordered' },
 ];
 
 ['horizontal', 'vertical'].forEach((orientation) => {
@@ -142,15 +142,15 @@ test('Stepper text overflow in vertical orientation', async (t) => {
     await setAttribute('#container', 'style', 'width: 800px; height: 150px;');
 
     const dataSource: Item[] = [
-      { title: 'Default' },
-      { title: 'Valid', isValid: true, optional: true },
-      { title: 'Invalid', isValid: false, optional: true },
+      { label: 'Default' },
+      { label: 'Valid', isValid: true, optional: true },
+      { label: 'Invalid', isValid: false, optional: true },
       {
-        title: 'Disabled', icon: 'packagebox', disabled: true, optional: true,
+        label: 'Disabled', icon: 'packagebox', disabled: true, optional: true,
       },
-      { title: 'Disabled Valid', disabled: true, isValid: true },
-      { title: 'Disabled Invalid', disabled: true, isValid: false },
-      { title: 'With Text', text: 'T', optional: true },
+      { label: 'Disabled Valid', disabled: true, isValid: true },
+      { label: 'Disabled Invalid', disabled: true, isValid: false },
+      { label: 'With Text', text: 'T', optional: true },
     ];
 
     const stepperOptions = {
@@ -185,10 +185,10 @@ test('Stepper completed item states', async (t) => {
   await setAttribute('#container', 'style', 'width: 800px; height: 150px;');
 
   const dataSource: Item[] = [
-    { title: 'Default' },
-    { title: 'Valid', isValid: true, optional: true },
-    { title: 'Invalid', isValid: false, optional: true },
-    { title: 'With Text', text: 'T', optional: true },
+    { label: 'Default' },
+    { label: 'Valid', isValid: true, optional: true },
+    { label: 'Invalid', isValid: false, optional: true },
+    { label: 'With Text', text: 'T', optional: true },
   ];
 
   const stepperOptions = {

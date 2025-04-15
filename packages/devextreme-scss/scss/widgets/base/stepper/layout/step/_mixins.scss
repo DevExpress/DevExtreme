@@ -76,7 +76,7 @@
     color: $base-text-color;
   }
 
-  .dx-step-label {
+  .dx-step-caption {
     color: $base-label-color;
   }
 
@@ -94,7 +94,7 @@
         color: $invalid-text-color;
       }
 
-      .dx-step-label {
+      .dx-step-caption {
         color: $invalid-label-color;
       }
     }
@@ -111,7 +111,7 @@
         box-shadow: 0 0 0 8px $shadow-color;
       }
 
-      .dx-step-label {
+      .dx-step-caption {
         color: $selected-label-color;
       }
 
@@ -122,7 +122,7 @@
           box-shadow: 0 0 0 8px $shadow-color;
         }
 
-        .dx-step-label {
+        .dx-step-caption {
           color: $invalid-label-color;
         }
       }
@@ -130,7 +130,7 @@
 
     &.dx-step-selected {
       .dx-step-text,
-      .dx-step-label {
+      .dx-step-caption {
         font-weight: $selected-font-weight;
       }
 
@@ -141,7 +141,7 @@
         box-shadow: 0 0 0 2px $shadow-color, 0 0 0 4px $selected-bg, 0 0 0 8px $shadow-color;
       }
 
-      .dx-step-label {
+      .dx-step-caption {
         color: $selected-label-color;
       }
 
@@ -152,7 +152,7 @@
           box-shadow: 0 0 0 2px $shadow-color, 0 0 0 4px $selected-invalid-bg, 0 0 0 8px $shadow-color;
         }
 
-        .dx-step-label {
+        .dx-step-caption {
           color: $invalid-label-color;
         }
       }
@@ -263,7 +263,7 @@
         background-color: $disabled-bg;
       }
 
-      .dx-step-label {
+      .dx-step-caption {
         color: $disabled-text-color;
       }
 
@@ -274,7 +274,7 @@
           background-color: $disabled-bg;
         }
 
-        .dx-step-label {
+        .dx-step-caption {
           color: $disabled-text-color;
         }
       }
@@ -286,7 +286,7 @@
           background-color: $disabled-bg;
         }
 
-        .dx-step-label {
+        .dx-step-caption {
           color: $disabled-text-color;
         }
 
@@ -297,7 +297,7 @@
             background-color: $disabled-bg;
           }
 
-          .dx-step-label {
+          .dx-step-caption {
             color: $disabled-text-color;
           }
         }
