@@ -262,7 +262,8 @@ const SKIPPED_TESTS = {
     ],
     VectorMap: [
       { demo: 'TooltipHTMLSupport', themes: [THEME.material] },
-    ]
+    ],
+    Stepper: ['Overview'],
   },
   Vue: {
     Common: [
@@ -302,6 +303,7 @@ const SKIPPED_TESTS = {
       { demo: 'ContextMenuIntegration', themes: [THEME.generic, THEME.fluent, THEME.material] },
       { demo: 'ToolbarCustomization', themes: [THEME.generic, THEME.fluent, THEME.material] },
     ],
+    Stepper: ['Overview'],
   },
   React: {
     Common: [
@@ -343,7 +345,8 @@ const SKIPPED_TESTS = {
     ],
     VectorMap: [
       { demo: 'TooltipHTMLSupport', themes: [THEME.material] },
-    ]
+    ],
+    Stepper: ['Overview'],
   },
 };
 

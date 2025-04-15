@@ -2,18 +2,21 @@ $(() => {
   const stepperWithIcons = $('#icons').dxStepper({
     linear: navigationModes[0].value,
     elementAttr: { 'aria-labelledby': 'iconsLabel' },
+    selectedIndex: 2,
     dataSource,
   }).dxStepper('instance');
 
   const stepperWithNumbers = $('#numbers').dxStepper({
     linear: navigationModes[0].value,
     elementAttr: { 'aria-labelledby': 'numbersLabel' },
+    selectedIndex: 2,
     dataSource: dataSource.map(({ icon, text, ...rest }) => rest),
   }).dxStepper('instance');
 
   const stepperWithCustomText = $('#customText').dxStepper({
     linear: navigationModes[0].value,
     elementAttr: { 'aria-labelledby': 'customTextLabel' },
+    selectedIndex: 2,
     dataSource: dataSource.map(({
       icon, label, optional, ...rest
     }) => rest),
