@@ -11,7 +11,13 @@
   border-radius: $cardview-card-border-radius;
   background-color: $cardview-card-background-color;
   overflow: hidden;
+
+  & > :nth-child(1) {
+    border-top: none;
+  }
 }
+
+
 
 .dx-cardview-card-selection {
   background-color: $cardview-card-selection-background-color;
