@@ -229,23 +229,26 @@ describe('DxList', () => {
   });
 
   [
-    {name: '*ngFor', tpl: '<dxi-item *ngFor="let item of items">{{item}}</dxi-item>'},
-    {name: '@for', tpl: `@for (item of items; track item) {
+    { name: '*ngFor', tpl: '<dxi-item *ngFor="let item of items">{{item}}</dxi-item>' },
+    {
+      name: '@for', tpl: `@for (item of items; track item) {
         <dxi-item>{{item}}</dxi-item>
-     }`},
-  ].forEach(({name, tpl}) => {
+     }`,
+    },
+  ].forEach(({ name, tpl }) => {
     it(`should be able to accept items as an ${name} components list`, () => {
       TestBed.overrideComponent(TestContainerComponent, {
         set: {
-          template: `<dx-list>${tpl}</dx-list>`
-        }
+          template: `<dx-list>${tpl}</dx-list>`,
+        },
       });
 
-      let fixture = TestBed.createComponent(TestContainerComponent);
+      const fixture = TestBed.createComponent(TestContainerComponent);
 
       fixture.detectChanges();
 
-      let testComponent = fixture.componentInstance, instance = testComponent.innerWidget.instance;
+      const testComponent = fixture.componentInstance; const
+        { instance } = testComponent.innerWidget;
 
       expect(instance?.option('items')?.length).toBe(1);
       expect(instance.element().querySelectorAll('.dx-item-content').length).toBe(1);
@@ -289,11 +292,13 @@ describe('DxList', () => {
   });
 
   [
-    {name: '*ngFor', tpl: '<dxi-item *ngFor="let item of items" [badge]="10">{{item}}</dxi-item>'},
-    {name: '@for', tpl: `@for (item of items; track item) {
+    { name: '*ngFor', tpl: '<dxi-item *ngFor="let item of items" [badge]="10">{{item}}</dxi-item>' },
+    {
+      name: '@for', tpl: `@for (item of items; track item) {
         <dxi-item [badge]="10">{{item}}</dxi-item>
-     }`},
-  ].forEach(({name, tpl}) => {
+     }`,
+    },
+  ].forEach(({ name, tpl }) => {
     it(`should be able to replace items by ${name}`, () => {
       TestBed.overrideComponent(TestContainerComponent, {
         set: {
@@ -319,11 +324,13 @@ describe('DxList', () => {
   });
 
   [
-    {name: '*ngFor', tpl: '<dxi-item *ngFor="let item of complexItems">{{item.text}}</dxi-item>'},
-    {name: '@for', tpl: `@for (item of complexItems; track item.text) {
+    { name: '*ngFor', tpl: '<dxi-item *ngFor="let item of complexItems">{{item.text}}</dxi-item>' },
+    {
+      name: '@for', tpl: `@for (item of complexItems; track item.text) {
         <dxi-item>{{item.text}}</dxi-item>
-     }`},
-  ].forEach(({name, tpl}) => {
+     }`,
+    },
+  ].forEach(({ name, tpl }) => {
     it(`should respond to items changes rendered with ${name}`, () => {
       TestBed.overrideComponent(TestContainerComponent, {
         set: {
