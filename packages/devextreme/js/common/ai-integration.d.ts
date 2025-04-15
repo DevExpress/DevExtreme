@@ -154,22 +154,9 @@ export type TranslateCommandResult = string;
 /**
  * @namespace DevExpress.aiIntegration
  */
-export type BaseCommandResult =
-  | ExecuteCommandResult
-  | ChangeStyleCommandResult
-  | ChangeToneCommandResult
-  | TranslateCommandResult
-  | ProofreadCommandResult
-  | ShortenCommandResult
-  | SummarizeCommandResult
-  | ExpandCommandResult;
-
-/**
- * @namespace DevExpress.aiIntegration
- */
-export type RequestCallbacks = {
+export type RequestCallbacks<T> = {
   onChunk?: (chunk: string) => void;
-  onComplete?: (finalResponse: BaseCommandResult) => void;
+  onComplete?: (finalResponse: T) => void;
   onError?: (error: Error) => void;
 };
 
@@ -200,33 +187,33 @@ export class AIIntegration {
   /**
    * @publicName changeStyle(params, callbacks)
    */
-  changeStyle(params: ChangeStyleCommandParams, callbacks: RequestCallbacks): () => void;
+  changeStyle(params: ChangeStyleCommandParams, callbacks: RequestCallbacks<ChangeStyleCommandResult>): () => void;
   /**
    * @publicName changeTone(params, callbacks)
    */
-  changeTone(params: ChangeToneCommandParams, callbacks: RequestCallbacks): () => void;
+  changeTone(params: ChangeToneCommandParams, callbacks: RequestCallbacks<ChangeToneCommandResult>): () => void;
   /**
    * @publicName execute(params, callbacks)
    */
-  execute(params: ExecuteCommandParams, callbacks: RequestCallbacks): () => void;
+  execute(params: ExecuteCommandParams, callbacks: RequestCallbacks<ExecuteCommandResult>): () => void;
   /**
    * @publicName expand(params, callbacks)
    */
-  expand(params: ExpandCommandParams, callbacks: RequestCallbacks): () => void;
+  expand(params: ExpandCommandParams, callbacks: RequestCallbacks<ExpandCommandResult>): () => void;
   /**
    * @publicName proofread(params, callbacks)
    */
-  proofread(params: ProofreadCommandParams, callbacks: RequestCallbacks): () => void;
+  proofread(params: ProofreadCommandParams, callbacks: RequestCallbacks<ProofreadCommandResult>): () => void;
   /**
    * @publicName shorten(params, callbacks)
    */
-  shorten(params: ShortenCommandParams, callbacks: RequestCallbacks): () => void;
+  shorten(params: ShortenCommandParams, callbacks: RequestCallbacks<ShortenCommandResult>): () => void;
   /**
    * @publicName summarize(params, callbacks)
    */
-  summarize(params: SummarizeCommandParams, callbacks: RequestCallbacks): () => void;
+  summarize(params: SummarizeCommandParams, callbacks: RequestCallbacks<SummarizeCommandResult>): () => void;
   /**
    * @publicName translate(params, callbacks)
    */
-  translate(params: TranslateCommandParams, callbacks: RequestCallbacks): () => void;
+  translate(params: TranslateCommandParams, callbacks: RequestCallbacks<TranslateCommandResult>): () => void;
 }

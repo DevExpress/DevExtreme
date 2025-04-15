@@ -875,35 +875,35 @@ declare module DevExpress.aiIntegration {
     constructor(provider: AIProvider);
     changeStyle(
       params: ChangeStyleCommandParams,
-      callbacks: RequestCallbacks
+      callbacks: RequestCallbacks<ChangeStyleCommandResult>
     ): () => void;
     changeTone(
       params: ChangeToneCommandParams,
-      callbacks: RequestCallbacks
+      callbacks: RequestCallbacks<ChangeToneCommandResult>
     ): () => void;
     execute(
       params: ExecuteCommandParams,
-      callbacks: RequestCallbacks
+      callbacks: RequestCallbacks<ExecuteCommandResult>
     ): () => void;
     expand(
       params: ExpandCommandParams,
-      callbacks: RequestCallbacks
+      callbacks: RequestCallbacks<ExpandCommandResult>
     ): () => void;
     proofread(
       params: ProofreadCommandParams,
-      callbacks: RequestCallbacks
+      callbacks: RequestCallbacks<ProofreadCommandResult>
     ): () => void;
     shorten(
       params: ShortenCommandParams,
-      callbacks: RequestCallbacks
+      callbacks: RequestCallbacks<ShortenCommandResult>
     ): () => void;
     summarize(
       params: SummarizeCommandParams,
-      callbacks: RequestCallbacks
+      callbacks: RequestCallbacks<SummarizeCommandResult>
     ): () => void;
     translate(
       params: TranslateCommandParams,
-      callbacks: RequestCallbacks
+      callbacks: RequestCallbacks<TranslateCommandResult>
     ): () => void;
   }
   /**
@@ -915,18 +915,6 @@ declare module DevExpress.aiIntegration {
      */
     sendRequest: (params: RequestParams) => Response;
   };
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export type BaseCommandResult =
-    | ExecuteCommandResult
-    | ChangeStyleCommandResult
-    | ChangeToneCommandResult
-    | TranslateCommandResult
-    | ProofreadCommandResult
-    | ShortenCommandResult
-    | SummarizeCommandResult
-    | ExpandCommandResult;
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
@@ -995,9 +983,9 @@ declare module DevExpress.aiIntegration {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export type RequestCallbacks = {
+  export type RequestCallbacks<T> = {
     onChunk?: (chunk: string) => void;
-    onComplete?: (finalResponse: BaseCommandResult) => void;
+    onComplete?: (finalResponse: T) => void;
     onError?: (error: Error) => void;
   };
   /**

@@ -1,7 +1,6 @@
 import type {
   AIIntegration as IAIIntegration,
   AIProvider,
-  BaseCommandResult,
   ChangeStyleCommandParams,
   ChangeStyleCommandResult,
   ChangeToneCommandParams,
@@ -56,7 +55,7 @@ export const COMMANDS = {
   [CommandNames.Translate]: TranslateCommand,
 } as const;
 
-export interface CommandDefinition<TParams, TResult extends BaseCommandResult> {
+export interface CommandDefinition<TParams, TResult> {
   command: BaseCommand<TParams, TResult>;
   params: TParams;
   result: TResult;
@@ -89,7 +88,7 @@ export class AIIntegration implements IAIIntegration {
   private executeCommand<K extends CommandNames>(
     commandName: K,
     params: Commands[K]['params'],
-    callbacks: RequestCallbacks,
+    callbacks: RequestCallbacks<Commands[K]['result']>,
   ): () => void {
     type Command = BaseCommand<Commands[K]['params'], Commands[K]['result']>;
 
@@ -106,7 +105,10 @@ export class AIIntegration implements IAIIntegration {
     return command.execute(params, callbacks);
   }
 
-  public changeStyle(params: ChangeStyleCommandParams, callbacks: RequestCallbacks): () => void {
+  public changeStyle(
+    params: ChangeStyleCommandParams,
+    callbacks: RequestCallbacks<ChangeStyleCommandResult>,
+  ): () => void {
     return this.executeCommand(
       CommandNames.ChangeStyle,
       params,
@@ -114,7 +116,10 @@ export class AIIntegration implements IAIIntegration {
     );
   }
 
-  public changeTone(params: ChangeToneCommandParams, callbacks: RequestCallbacks): () => void {
+  public changeTone(
+    params: ChangeToneCommandParams,
+    callbacks: RequestCallbacks<ChangeToneCommandResult>,
+  ): () => void {
     return this.executeCommand(
       CommandNames.ChangeTone,
       params,
@@ -122,7 +127,10 @@ export class AIIntegration implements IAIIntegration {
     );
   }
 
-  public execute(params: ExecuteCommandParams, callbacks: RequestCallbacks): () => void {
+  public execute(
+    params: ExecuteCommandParams,
+    callbacks: RequestCallbacks<ExecuteCommandResult>,
+  ): () => void {
     return this.executeCommand(
       CommandNames.Execute,
       params,
@@ -130,7 +138,10 @@ export class AIIntegration implements IAIIntegration {
     );
   }
 
-  public expand(params: ExpandCommandParams, callbacks: RequestCallbacks): () => void {
+  public expand(
+    params: ExpandCommandParams,
+    callbacks: RequestCallbacks<ExpandCommandResult>,
+  ): () => void {
     return this.executeCommand(
       CommandNames.Expand,
       params,
@@ -138,7 +149,10 @@ export class AIIntegration implements IAIIntegration {
     );
   }
 
-  public proofread(params: ProofreadCommandParams, callbacks: RequestCallbacks): () => void {
+  public proofread(
+    params: ProofreadCommandParams,
+    callbacks: RequestCallbacks<ProofreadCommandResult>,
+  ): () => void {
     return this.executeCommand(
       CommandNames.Proofread,
       params,
@@ -146,7 +160,10 @@ export class AIIntegration implements IAIIntegration {
     );
   }
 
-  public shorten(params: SummarizeCommandParams, callbacks: RequestCallbacks): () => void {
+  public shorten(
+    params: SummarizeCommandParams,
+    callbacks: RequestCallbacks<ShortenCommandResult>,
+  ): () => void {
     return this.executeCommand(
       CommandNames.Shorten,
       params,
@@ -154,7 +171,10 @@ export class AIIntegration implements IAIIntegration {
     );
   }
 
-  public summarize(params: SummarizeCommandParams, callbacks: RequestCallbacks): () => void {
+  public summarize(
+    params: SummarizeCommandParams,
+    callbacks: RequestCallbacks<SummarizeCommandResult>,
+  ): () => void {
     return this.executeCommand(
       CommandNames.Summarize,
       params,
@@ -162,7 +182,10 @@ export class AIIntegration implements IAIIntegration {
     );
   }
 
-  public translate(params: TranslateCommandParams, callbacks: RequestCallbacks): () => void {
+  public translate(
+    params: TranslateCommandParams,
+    callbacks: RequestCallbacks<TranslateCommandResult>,
+  ): () => void {
     return this.executeCommand(
       CommandNames.Translate,
       params,
