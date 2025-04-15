@@ -20,7 +20,7 @@ export class HeaderFilterController {
     this.composedHeaderFilter = computed(
       (columns) => getComposedHeaderFilter(columns),
       [
-        this.columnsController.columns,
+        this.columnsController.visibleColumns,
       ],
     );
   }
