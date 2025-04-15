@@ -437,7 +437,7 @@ export function runManualTestCore(testObject, widget, demo, framework, callback)
   let testURL = '';
 
   if (isGitHubDemos) {
-    if (widget !== 'DataGrid' || demo.GHPIgnored) {
+    if (widget !== 'DataGrid' || demo.NoPreloaded) {
       return;
     }
 
