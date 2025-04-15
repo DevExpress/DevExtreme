@@ -3,13 +3,13 @@
 
 import type { SubsGetsUpd } from '@ts/core/reactive';
 import { computed, state } from '@ts/core/reactive';
-import { getFilterExpression } from '@ts/filter_builder/m_utils';
 import { anyOf, noneOf } from '@ts/grids/grid_core/filter/m_filter_custom_operations';
 import gridCoreUtils from '@ts/grids/grid_core/m_utils';
 
 import { ColumnsController } from '../columns_controller';
 import { OptionsController } from '../options_controller/options_controller';
 import type { AppliedFilters } from './types';
+import { getAppliedFilterExpressions } from './utils';
 
 export class FilterController {
   public readonly filterSyncEnabled = this.options.oneWay('filterSyncEnabled');
@@ -23,7 +23,7 @@ export class FilterController {
     ColumnsController,
   ] as const;
 
-  private readonly customOperations = computed(
+  public readonly customOperations = computed(
     (fbCustomOperations) => [
       anyOf(null),
       noneOf(null),
@@ -33,14 +33,11 @@ export class FilterController {
   );
 
   private readonly appliedFilterExpressions = computed(
-    (appliedFilters, columns, customOperations) => [
-      appliedFilters.filterPanel,
-      appliedFilters.headerFilter,
-      appliedFilters.search,
-    ].filter((f) => f)
-      .map(
-        (filter) => getFilterExpression(filter, columns, customOperations, 'filterBuilder'),
-      ),
+    (
+      appliedFilters,
+      columns,
+      customOperations,
+    ) => getAppliedFilterExpressions(appliedFilters, columns, customOperations),
     [
       this.appliedFilters,
       this.columnsController.visibleColumns,

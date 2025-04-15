@@ -2,6 +2,7 @@
 import type { SubsGets } from '@ts/core/reactive';
 import { state } from '@ts/core/reactive';
 import { removeFieldConditionsFromFilter } from '@ts/filter_builder/m_utils';
+import gridCoreUtils from '@ts/grids/grid_core/m_utils';
 
 import { ColumnsController } from '../../columns_controller';
 import type { Column } from '../../columns_controller/types';
@@ -9,6 +10,8 @@ import { getColumnIndexByName } from '../../columns_controller/utils';
 import { DataController } from '../../data_controller';
 import { OptionsController } from '../../options_controller/options_controller';
 import { FilterController } from '../filter_controller';
+import type { AppliedFilters } from '../types';
+import { getAppliedFilterExpressions } from '../utils';
 import { getDataSourceOptions, getFilterType } from './legacy_header_filter';
 import type { PopupState } from './types';
 import { getColumnIdentifier } from './utils';
@@ -39,9 +42,7 @@ export class HeaderFilterViewController {
   ): void {
     const rootDataSource = this.dataController.getStoreLoadAdapter();
     const rootHeaderFilterOptions = this.options.oneWay('headerFilter').unreactive_get();
-    const displayFilter = this.filterController.displayFilter.unreactive_get();
-    const columnId = getColumnIdentifier(column);
-    const actualFilter = removeFieldConditionsFromFilter(displayFilter, columnId);
+    const filterExpression = this.getFilterExpressionWithoutCurrentColumn(column);
 
     const filterDataSourceOptions = getDataSourceOptions(
       rootDataSource,
@@ -54,7 +55,8 @@ export class HeaderFilterViewController {
       {
         texts: rootHeaderFilterOptions.texts,
       },
-      actualFilter,
+
+      filterExpression,
     );
 
     const type = getFilterType(column);
@@ -103,5 +105,42 @@ export class HeaderFilterViewController {
         },
       },
     });
+  }
+
+  private removeColumnFromFilters(
+    appliedFilters: AppliedFilters,
+    excludedColumn: Column,
+  ): AppliedFilters {
+    const columnId = getColumnIdentifier(excludedColumn);
+    const filterPanel = removeFieldConditionsFromFilter(appliedFilters.filterPanel, columnId);
+    const headerFilter = removeFieldConditionsFromFilter(appliedFilters.headerFilter, columnId);
+
+    return {
+      filterPanel,
+      headerFilter,
+      search: appliedFilters.search,
+    };
+  }
+
+  private combineFilterExpressions(filterExpressions: unknown[]): unknown {
+    if (!filterExpressions || filterExpressions.length === 0) {
+      return undefined;
+    }
+    return gridCoreUtils.combineFilters(filterExpressions);
+  }
+
+  private getFilterExpressionWithoutCurrentColumn(column: Column): unknown {
+    const appliedFilters = this.filterController.appliedFilters.unreactive_get();
+
+    const filtersWithoutCurrentColumn = this.removeColumnFromFilters(appliedFilters, column);
+    const allColumns = this.columnsController.columns.unreactive_get();
+    const customOperations = this.filterController.customOperations.unreactive_get();
+
+    const appliedFilterExpresssionsArray = getAppliedFilterExpressions(
+      filtersWithoutCurrentColumn,
+      allColumns,
+      customOperations,
+    );
+    return this.combineFilterExpressions(appliedFilterExpresssionsArray);
   }
 }
