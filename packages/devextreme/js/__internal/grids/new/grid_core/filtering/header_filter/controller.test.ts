@@ -45,12 +45,10 @@ describe('HeaderFilter', () => {
       });
 
       it('should pass headerFilter options', () => {
-        const expectedFilterType = 'TEST_TYPE';
         const expectedFilterValues = ['VAL_0', 'VAL_1', 'VAL_2'];
         const expectedHeaderFilter = {
           allowSearch: true,
           testRandomField: 'A',
-          filterType: expectedFilterType as any,
           values: expectedFilterValues,
         } as HeaderFilterColumnOptions;
 
@@ -62,15 +60,12 @@ describe('HeaderFilter', () => {
 
         const state = viewController.popupState$.unreactive_get();
         expect(state?.options?.headerFilter).toStrictEqual(expectedHeaderFilter);
-        expect(state?.options?.filterType).toEqual(expectedFilterType);
         expect(state?.options?.filterValues).toEqual(expectedFilterValues);
       });
 
       it('should apply headerFilter to column options by callback call', () => {
-        const expectedFilterType = 'TEST_TYPE';
         const expectedFilterValues = ['VAL_0', 'VAL_1', 'VAL_2'];
         const expectedHeaderFilter = {
-          filterType: expectedFilterType as any,
           values: expectedFilterValues,
         } as HeaderFilterColumnOptions;
 
@@ -86,7 +81,6 @@ describe('HeaderFilter', () => {
 
         const state = viewController.popupState$.unreactive_get();
         state?.options?.apply?.call({
-          filterType: expectedFilterType,
           filterValues: expectedFilterValues,
         });
 
@@ -97,7 +91,6 @@ describe('HeaderFilter', () => {
       });
 
       it('should save passed headerFilter values during update by callback call', () => {
-        const expectedFilterType = 'TEST_TYPE';
         const expectedFilterValues = ['VAL_0', 'VAL_1', 'VAL_2'];
         const expectedSearch = {
           enabled: true,
@@ -105,12 +98,14 @@ describe('HeaderFilter', () => {
         };
         const expectedHeaderFilter = {
           search: expectedSearch,
-          filterType: expectedFilterType as any,
           values: expectedFilterValues,
         } as HeaderFilterColumnOptions;
 
         const { viewController, columnsController } = setup({
-          headerFilter: { visible: true },
+          headerFilter: {
+            ...expectedHeaderFilter,
+            values: 'test',
+          },
           columns: [{ name: 'A' }],
         });
 
@@ -121,7 +116,6 @@ describe('HeaderFilter', () => {
 
         const state = viewController.popupState$.unreactive_get();
         state?.options?.apply?.call({
-          filterType: expectedFilterType,
           filterValues: expectedFilterValues,
         });
 

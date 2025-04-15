@@ -75,11 +75,6 @@ export class HeaderFilterViewController {
           ? [...column.headerFilter!.values]
           : column.headerFilter?.values,
         apply() {
-          // NOTE: Copy array because of mutations in legacy code
-          const values = Array.isArray(this.filterValues)
-            ? [...this.filterValues]
-            : this.filterValues;
-          const { filterType } = this;
           colsController.updateColumns(
             (columns) => {
               const index = getColumnIndexByName(columns, column.name);
@@ -89,9 +84,12 @@ export class HeaderFilterViewController {
                 ...newColumns[index],
                 headerFilter: {
                   ...newColumns[index].headerFilter,
-                  values,
+                  // NOTE: Copy array because of mutations in legacy code
+                  values: Array.isArray(this.filterValues)
+                    ? [...this.filterValues]
+                    : this.filterValues,
                 },
-                filterType,
+                filterType: this.filterType,
               };
               return newColumns;
             },
