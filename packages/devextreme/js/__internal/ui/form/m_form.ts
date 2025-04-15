@@ -1374,6 +1374,7 @@ class Form extends Widget<FormProperties> {
       const editorName = editor.option('name');
       if (editorsData && editorName in editorsData) {
         editor.reset(editorsData[editorName]);
+        this._updateIsDirty(editorName);
       } else {
         editor.reset();
       }
