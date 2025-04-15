@@ -94,7 +94,7 @@ describe('AIIntegration', () => {
     describe(commandName, () => {
       const { command, params, params2 } = COMMANDS[commandName];
 
-      it(`should call executeCommand with ${commandName} command correctly`, () => {
+      it(`should call executeCommand with ${commandName} command once with expected params`, () => {
         const callbacks: RequestCallbacks<unknown> = {
           onComplete: () => {},
           onChunk: () => {},

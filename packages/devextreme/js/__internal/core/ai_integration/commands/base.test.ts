@@ -93,7 +93,7 @@ describe('BaseCommand', () => {
       });
     });
 
-    it('parseResult should receive correct value and returns expected result', async () => {
+    it('parseResult should receive correct value and return expected result', async () => {
       const spy = jest.spyOn(command, 'parseResult');
 
       command.execute(params, {});
@@ -105,7 +105,7 @@ describe('BaseCommand', () => {
       expect(spy).toHaveReturnedWith('Parsed result: AI response');
     });
 
-    it('callbacks should be called correctly', async () => {
+    it('callbacks should be called a specified number of times', async () => {
       const callbacks: RequestCallbacks<unknown> = {
         onComplete: jest.fn(),
         onError: jest.fn(),
@@ -131,34 +131,36 @@ describe('BaseCommand', () => {
       expect(callbacks.onComplete).toHaveBeenCalledWith('Parsed result: AI response');
     });
 
-    it('should call onError if request fails', async () => {
-      const originalSendRequest = requestManager.sendRequest;
+    describe('if request fails', () => {
+      it('should call onError ', async () => {
+        const originalSendRequest = requestManager.sendRequest;
 
-      requestManager.sendRequest = (_, callbacks) => {
-        callbacks.onError?.(new Error('Test error'));
+        requestManager.sendRequest = (_, callbacks) => {
+          callbacks.onError?.(new Error('Test error'));
 
-        return (): void => {};
-      };
-
-      try {
-        const callbacks: RequestCallbacks<unknown> = {
-          onError: jest.fn(),
-          onComplete: jest.fn(),
+          return (): void => {};
         };
 
-        command.execute(params, callbacks);
+        try {
+          const callbacks: RequestCallbacks<unknown> = {
+            onError: jest.fn(),
+            onComplete: jest.fn(),
+          };
 
-        await new Promise(process.nextTick);
+          command.execute(params, callbacks);
 
-        expect(callbacks.onError).toHaveBeenCalledTimes(1);
-        expect(callbacks.onError).toHaveBeenCalledWith(new Error('Test error'));
-        expect(callbacks.onComplete).toHaveBeenCalledTimes(0);
-      } finally {
-        requestManager.sendRequest = originalSendRequest;
-      }
+          await new Promise(process.nextTick);
+
+          expect(callbacks.onError).toHaveBeenCalledTimes(1);
+          expect(callbacks.onError).toHaveBeenCalledWith(new Error('Test error'));
+          expect(callbacks.onComplete).toHaveBeenCalledTimes(0);
+        } finally {
+          requestManager.sendRequest = originalSendRequest;
+        }
+      });
     });
 
-    it('should call onChunk for each chunk and onComplete correctly', () => {
+    it('should call onChunk for each chunk and onComplete a specified number of times with expected params', () => {
       const originalSendRequest = requestManager.sendRequest;
 
       requestManager.sendRequest = (_, callbacks) => {

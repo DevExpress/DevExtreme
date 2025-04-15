@@ -26,17 +26,19 @@ describe('RequestManager', () => {
   });
 
   describe('sendRequest', () => {
-    it('should throw an error if the provider does not have a valid sendRequest method', () => {
-      const aIProvider = {} as AIProvider;
+    describe('if the provider does not have a valid sendRequest method', () => {
+      it('should throw an error', () => {
+        const aIProvider = {} as AIProvider;
 
-      requestManager = new RequestManager(aIProvider);
+        requestManager = new RequestManager(aIProvider);
 
-      expect(() => {
-        requestManager.sendRequest({ user: 'test' }, {});
-      }).toThrow(ERROR_MESSAGES.METHOD_NOT_IMPLEMENTED);
+        expect(() => {
+          requestManager.sendRequest({ user: 'test' }, {});
+        }).toThrow(ERROR_MESSAGES.METHOD_NOT_IMPLEMENTED);
+      });
     });
 
-    it('should call provider.sendRequest with the correct parameters', () => {
+    it('should call provider.sendRequest with the propmpt and onChunk once', () => {
       const prompt: Prompt = { user: 'User', system: 'System' };
       const onChunk = jest.fn();
 
@@ -61,50 +63,54 @@ describe('RequestManager', () => {
       expect(onChunkSpy).toHaveBeenNthCalledWith(2, ' response');
     });
 
-    it('after completion of the promise should call onComplete with accumulated data', async () => {
-      let resolvePromise: (result: string) => void = () => {};
+    describe('after completion of the promise', () => {
+      it('should call onComplete with accumulated data', async () => {
+        let resolvePromise: (result: string) => void = () => {};
 
-      const promise = new Promise<string>((resolve) => { resolvePromise = resolve; });
-      const sendRequestSpy = jest.spyOn(provider, 'sendRequest');
-      const onCompleteSpy = jest.fn();
+        const promise = new Promise<string>((resolve) => { resolvePromise = resolve; });
+        const sendRequestSpy = jest.spyOn(provider, 'sendRequest');
+        const onCompleteSpy = jest.fn();
 
-      sendRequestSpy.mockImplementation(() => ({
-        promise,
-        abort: (): void => {},
-      }));
+        sendRequestSpy.mockImplementation(() => ({
+          promise,
+          abort: (): void => {},
+        }));
 
-      requestManager.sendRequest({ user: 'test' }, { onComplete: onCompleteSpy });
+        requestManager.sendRequest({ user: 'test' }, { onComplete: onCompleteSpy });
 
-      resolvePromise('FirstSecond');
+        resolvePromise('FirstSecond');
 
-      await promise;
+        await promise;
 
-      expect(onCompleteSpy).toHaveBeenCalledTimes(1);
-      expect(onCompleteSpy).toHaveBeenCalledWith('FirstSecond');
+        expect(onCompleteSpy).toHaveBeenCalledTimes(1);
+        expect(onCompleteSpy).toHaveBeenCalledWith('FirstSecond');
+      });
     });
 
-    it('should call onError if the promise was rejected', async () => {
-      let rejectPromise: (error: Error) => void = () => {};
+    describe('if the promise was rejected', () => {
+      it('should call onError', async () => {
+        let rejectPromise: (error: Error) => void = () => {};
 
-      const promise = new Promise<string>((_, reject) => { rejectPromise = reject; });
-      const sendRequestSpy = jest.spyOn(provider, 'sendRequest');
+        const promise = new Promise<string>((_, reject) => { rejectPromise = reject; });
+        const sendRequestSpy = jest.spyOn(provider, 'sendRequest');
 
-      const onErrorSpy = jest.fn();
-      const error = new Error('Test error');
+        const onErrorSpy = jest.fn();
+        const error = new Error('Test error');
 
-      sendRequestSpy.mockImplementation(() => ({
-        promise,
-        abort: (): void => {},
-      }));
+        sendRequestSpy.mockImplementation(() => ({
+          promise,
+          abort: (): void => {},
+        }));
 
-      requestManager.sendRequest({ user: 'user prompt' }, { onError: onErrorSpy });
+        requestManager.sendRequest({ user: 'user prompt' }, { onError: onErrorSpy });
 
-      rejectPromise(error);
+        rejectPromise(error);
 
-      await new Promise(process.nextTick);
+        await new Promise(process.nextTick);
 
-      expect(onErrorSpy).toHaveBeenCalledTimes(1);
-      expect(onErrorSpy).toHaveBeenCalledWith(error);
+        expect(onErrorSpy).toHaveBeenCalledTimes(1);
+        expect(onErrorSpy).toHaveBeenCalledWith(error);
+      });
     });
 
     it('should return the abort function that returned from sendRequest', () => {
@@ -122,11 +128,13 @@ describe('RequestManager', () => {
       expect(abortRequest).toBe(abort);
     });
 
-    it('should work correctly with no or partial definition of callbacks', () => {
+    it('should work correctly with no definition of callbacks', () => {
       expect(() => {
         requestManager.sendRequest({ user: 'test' }, {});
       }).not.toThrow();
+    });
 
+    it('should work correctly with partial definition of callbacks', () => {
       expect(() => {
         requestManager.sendRequest({ user: 'test' }, { onChunk: () => {} });
       }).not.toThrow();

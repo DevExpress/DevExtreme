@@ -41,122 +41,150 @@ describe('PromptManager', () => {
   });
 
   describe('buildPrompt', () => {
-    it('should throw an error if no template is found', () => {
-      expect(() => {
-        promptManager.buildPrompt('unknown-template' as PromptTemplateName, {});
-      }).toThrow(ERROR_MESSAGES.TEMPLATE_NOT_FOUND);
+    describe('if no template is found', () => {
+      it('should throw an error', () => {
+        expect(() => {
+          promptManager.buildPrompt('unknown-template' as PromptTemplateName, {});
+        }).toThrow(ERROR_MESSAGES.TEMPLATE_NOT_FOUND);
+      });
     });
 
     describe('full-template', () => {
-      it('should replace all placeholders in system and user, if passed', () => {
-        const data: PromptData = {
-          system: { placeholder: 'system-value' },
-          user: { placeholder: 'user-value' },
-        };
+      describe('if placeholders are passed', () => {
+        it('should replace all placeholders in system and user', () => {
+          const data: PromptData = {
+            system: { placeholder: 'system-value' },
+            user: { placeholder: 'user-value' },
+          };
 
-        const prompt = promptManager.buildPrompt('full-template' as PromptTemplateName, data);
+          const prompt = promptManager.buildPrompt('full-template' as PromptTemplateName, data);
 
-        expect(prompt.system).toBe('System message with system-value');
-        expect(prompt.user).toBe('User message with user-value');
+          expect(prompt.system).toBe('System message with system-value');
+          expect(prompt.user).toBe('User message with user-value');
+        });
       });
-    });
 
-    it('part of placeholders are not passed => they should remain {{...}} in the string', () => {
-      const data: PromptData = {
-        system: { placeholder: 'system-value' },
-      };
+      describe('part of placeholders are not passed', () => {
+        it('should remain {{...}} in the string', () => {
+          const data: PromptData = {
+            system: { placeholder: 'system-value' },
+          };
 
-      const prompt = promptManager.buildPrompt('full-template' as PromptTemplateName, data);
+          const prompt = promptManager.buildPrompt('full-template' as PromptTemplateName, data);
 
-      expect(prompt.system).toBe('System message with system-value');
-      expect(prompt.user).toBe('User message with {{placeholder}}');
-    });
+          expect(prompt.system).toBe('System message with system-value');
+          expect(prompt.user).toBe('User message with {{placeholder}}');
+        });
+      });
 
-    it('if system is not set, the original system string with placeholders should be returned', () => {
-      const prompt = promptManager.buildPrompt('full-template' as PromptTemplateName, {});
+      describe('if system placeholder is not passed', () => {
+        it('the original system string with placeholders should be returned', () => {
+          const prompt = promptManager.buildPrompt('full-template' as PromptTemplateName, {});
 
-      expect(prompt.system).toBe('System message with {{placeholder}}');
-      expect(prompt.user).toBe('User message with {{placeholder}}');
+          expect(prompt.system).toBe('System message with {{placeholder}}');
+          expect(prompt.user).toBe('User message with {{placeholder}}');
+        });
+      });
     });
 
     describe('system-only', () => {
-      it('should substitute placeholders into system, if passed', () => {
-        const data: PromptData = {
-          system: { placeholder: 'some-value' },
-        };
+      describe('if only system placeholder is passed', () => {
+        it('should substitute placeholders into system', () => {
+          const data: PromptData = {
+            system: { placeholder: 'some-value' },
+          };
 
-        const prompt = promptManager.buildPrompt('system-only' as PromptTemplateName, data);
+          const prompt = promptManager.buildPrompt('system-only' as PromptTemplateName, data);
 
-        expect(prompt.system).toBe('System message only. Placeholder is some-value');
-        expect(prompt.user).toBeUndefined();
+          expect(prompt.system).toBe('System message only. Placeholder is some-value');
+          expect(prompt.user).toBeUndefined();
+        });
       });
 
-      it('if system is not set, should return the string from the template as is', () => {
-        const prompt = promptManager.buildPrompt('system-only' as PromptTemplateName, {});
+      describe('if system placeholder is not passed', () => {
+        it('should return the string from the template as is', () => {
+          const prompt = promptManager.buildPrompt('system-only' as PromptTemplateName, {});
 
-        expect(prompt.system).toBe('System message only. Placeholder is {{placeholder}}');
-        expect(prompt.user).toBeUndefined();
+          expect(prompt.system).toBe('System message only. Placeholder is {{placeholder}}');
+          expect(prompt.user).toBeUndefined();
+        });
       });
 
-      it('if user placeholders are set and there is no user template, user should be assembled from values', () => {
-        const data: PromptData = {
-          user: { text: 'text' },
-        };
+      describe('if user placeholders are passed', () => {
+        describe('there is no user template', () => {
+          it('user should be assembled from values', () => {
+            const data: PromptData = {
+              user: { text: 'text' },
+            };
 
-        const prompt = promptManager.buildPrompt('system-only' as PromptTemplateName, data);
+            const prompt = promptManager.buildPrompt('system-only' as PromptTemplateName, data);
 
-        expect(prompt.system).toBe('System message only. Placeholder is {{placeholder}}');
-        expect(prompt.user).toBe('text');
+            expect(prompt.system).toBe('System message only. Placeholder is {{placeholder}}');
+            expect(prompt.user).toBe('text');
+          });
+        });
       });
     });
 
     describe('user-only', () => {
-      it('should substitute placeholders into user, if passed', () => {
-        const data: PromptData = {
-          user: { placeholder: 'text' },
-        };
+      describe('if only user placeholder is passed', () => {
+        it('should substitute placeholders into user', () => {
+          const data: PromptData = {
+            user: { placeholder: 'text' },
+          };
 
-        const prompt = promptManager.buildPrompt('user-only' as PromptTemplateName, data);
+          const prompt = promptManager.buildPrompt('user-only' as PromptTemplateName, data);
 
-        expect(prompt.user).toBe('User message only. Placeholder is text');
-        expect(prompt.system).toBeUndefined();
+          expect(prompt.user).toBe('User message only. Placeholder is text');
+          expect(prompt.system).toBeUndefined();
+        });
       });
 
-      it('if user is not specified, the user string with placeholders should be returned', () => {
-        const prompt = promptManager.buildPrompt('user-only' as PromptTemplateName, {});
+      describe('if user placeholder is not passed', () => {
+        it('the user string with placeholders should be returned', () => {
+          const prompt = promptManager.buildPrompt('user-only' as PromptTemplateName, {});
 
-        expect(prompt.user).toBe('User message only. Placeholder is {{placeholder}}');
-        expect(prompt.system).toBeUndefined();
+          expect(prompt.user).toBe('User message only. Placeholder is {{placeholder}}');
+          expect(prompt.system).toBeUndefined();
+        });
       });
 
-      it('if system placeholders are set and there is no system template, system should be assembled from values', () => {
-        const data: PromptData = {
-          system: { text: '123' },
-        };
+      describe('if system placeholder is passed', () => {
+        describe('there is no system template', () => {
+          it('system should be assembled from values', () => {
+            const data: PromptData = {
+              system: { text: '123' },
+            };
 
-        const prompt = promptManager.buildPrompt('user-only' as PromptTemplateName, data);
+            const prompt = promptManager.buildPrompt('user-only' as PromptTemplateName, data);
 
-        expect(prompt.user).toBe('User message only. Placeholder is {{placeholder}}');
-        expect(prompt.system).toBe('123');
+            expect(prompt.user).toBe('User message only. Placeholder is {{placeholder}}');
+            expect(prompt.system).toBe('123');
+          });
+        });
       });
     });
 
     describe('empty', () => {
-      it('if something is passed to system/user, should build a string, otherwise undefined', () => {
-        const prompt = promptManager.buildPrompt('empty' as PromptTemplateName, {
-          system: { text: 'A', lang: 'B' },
-          user: { text: 'C', lang: 'D' },
-        });
+      describe('if something is passed to system/user', () => {
+        it('should build a string', () => {
+          const prompt = promptManager.buildPrompt('empty' as PromptTemplateName, {
+            system: { text: 'A', lang: 'B' },
+            user: { text: 'C', lang: 'D' },
+          });
 
-        expect(prompt.system).toBe('A B');
-        expect(prompt.user).toBe('C D');
+          expect(prompt.system).toBe('A B');
+          expect(prompt.user).toBe('C D');
+        });
       });
 
-      it('if neither system nor user passed, it should be undefined in both of them', () => {
-        const prompt = promptManager.buildPrompt('empty' as PromptTemplateName, {});
+      describe('if neither system nor user passed', () => {
+        it('should be undefined in both of them', () => {
+          const prompt = promptManager.buildPrompt('empty' as PromptTemplateName, {});
 
-        expect(prompt.system).toBeUndefined();
-        expect(prompt.user).toBeUndefined();
+          expect(prompt.system).toBeUndefined();
+          expect(prompt.user).toBeUndefined();
+        });
       });
     });
   });
