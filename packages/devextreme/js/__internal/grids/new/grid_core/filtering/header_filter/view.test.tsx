@@ -14,7 +14,7 @@ import {
 import { state } from '@ts/core/reactive/index';
 import { render, rerender } from 'inferno';
 
-import type { PopupState } from './controller';
+import type { PopupState } from './types';
 import {
   HeaderFilterPopupComponent,
   HeaderFilterPopupView,

@@ -5,7 +5,7 @@ import { ColumnsController } from '@ts/grids/new/grid_core/columns_controller/co
 import { View } from '@ts/grids/new/grid_core/core/view';
 
 import type { Column } from '../../grid_core/columns_controller/types';
-import { HeaderFilterView } from '../../grid_core/filtering/header_filter/view';
+import { HeaderFilterViewController } from '../../grid_core/filtering/header_filter/view_controller';
 import { SortingController } from '../../grid_core/sorting_controller/sorting_controller';
 import { ContextMenuController } from '../context_menu';
 import { OptionsController } from '../options_controller';
@@ -20,7 +20,7 @@ export class HeaderPanelView extends View<HeaderPanelProps> {
     SortingController,
     ColumnsController,
     OptionsController,
-    HeaderFilterView,
+    HeaderFilterViewController,
   ] as const;
 
   constructor(
@@ -28,7 +28,7 @@ export class HeaderPanelView extends View<HeaderPanelProps> {
     private readonly sortingController: SortingController,
     private readonly columnsController: ColumnsController,
     private readonly options: OptionsController,
-    private readonly headerFilter: HeaderFilterView,
+    private readonly headerFilterViewController: HeaderFilterViewController,
   ) {
     super();
   }
@@ -85,7 +85,7 @@ export class HeaderPanelView extends View<HeaderPanelProps> {
     column: Column,
     onFilterCloseCallback?: () => void,
   ): void {
-    this.headerFilter.openPopup(element, column, onFilterCloseCallback);
+    this.headerFilterViewController.openPopup(element, column, onFilterCloseCallback);
   }
 
   private showContextMenu(e: MouseEvent, column?: Column, columnIndex?: number): void {

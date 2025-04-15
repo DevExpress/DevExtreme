@@ -3,6 +3,12 @@ import type { DataSourceLike } from '@js/data/data_source';
 export type HeaderFilterSearchMode = 'contains' | 'startswith' | 'equals';
 export type HeaderFilterType = 'include' | 'exclude';
 
+export type PopupState = {
+  element: Element;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  options: Record<string, any>;
+} | null;
+
 export interface HeaderFilterTextOptions {
   // Specifies text for the button that applies the specified filter.
   ok?: string;

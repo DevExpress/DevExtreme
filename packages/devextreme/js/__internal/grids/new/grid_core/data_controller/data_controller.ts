@@ -11,7 +11,6 @@ import { createPromise } from '@ts/core/utils/promise';
 
 import { FilterController } from '../filtering/filter_controller';
 import { OptionsController } from '../options_controller/options_controller';
-import { SharedController } from '../shared/controller';
 import { SortingController } from '../sorting_controller/sorting_controller';
 import { StoreLoadAdapter } from './store_load_adapter/index';
 import type { DataObject, Key } from './types';
@@ -87,22 +86,13 @@ export class DataController {
     OptionsController,
     SortingController,
     FilterController,
-    SharedController,
   ] as const;
 
   constructor(
     private readonly options: OptionsController,
     private readonly sortingController: SortingController,
     private readonly filterController: FilterController,
-    private readonly sharedController: SharedController,
   ) {
-    effect(
-      (dataSource) => {
-        this.sharedController.dataSource.update(dataSource);
-      },
-      [this.dataSource],
-    );
-
     effect(
       (dataSource) => {
         const changedCallback = (e?): void => {

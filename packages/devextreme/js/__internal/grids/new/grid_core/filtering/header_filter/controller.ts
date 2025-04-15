@@ -5,12 +5,6 @@ import { ColumnsController } from '@ts/grids/new/grid_core/columns_controller';
 import { OptionsController } from '../../options_controller/options_controller';
 import { getComposedHeaderFilter } from './utils';
 
-export type PopupState = {
-  element: Element;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  options: Record<string, any>;
-} | null;
-
 export class HeaderFilterController {
   public static dependencies = [
     OptionsController,
@@ -26,7 +20,7 @@ export class HeaderFilterController {
     this.composedHeaderFilter = computed(
       (columns) => getComposedHeaderFilter(columns),
       [
-        this.columnsController.visibleColumns,
+        this.columnsController.columns,
       ],
     );
   }

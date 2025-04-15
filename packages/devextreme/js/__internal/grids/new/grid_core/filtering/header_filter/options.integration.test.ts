@@ -13,7 +13,7 @@ import type { Options as GridCoreOptions } from '@ts/grids/new/grid_core/options
 import { rerender } from 'inferno';
 
 import { defaultOptions } from './options';
-import { HeaderFilterView } from './view';
+import { HeaderFilterViewController } from './view_controller';
 
 const SELECTORS = {
   cardView: '.dx-cardview',
@@ -41,10 +41,10 @@ const openHeaderFilterPopup = (cardView: CardView): Element => {
   const popupContainer = document.createElement('div');
 
   // @ts-expect-error get protected property
-  const view = cardView.diContext.get(HeaderFilterView);
+  const viewController = cardView.diContext.get(HeaderFilterViewController);
 
   const column = cardView.getVisibleColumns()[0];
-  view.openPopup(popupContainer, column);
+  viewController.openPopup(popupContainer, column);
   rerender();
 
   return popupContainer;
