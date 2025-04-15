@@ -16,6 +16,7 @@ $cardview-fluent-sizes-48: null;
 $cardview-fluent-sizes-40: null;
 $cardview-fluent-paddings-24: null;
 $cardview-fluent-paddings-12: null;
+$cardview-fluent-paddings-8: null;
 $cardview-fluent-paddings-6: null;
 $cardview-fluent-text-size-16: null;
 $cardview-fluent-border-radius-8: null;
@@ -28,6 +29,7 @@ $cardview-fluent-gaps-24: null;
   $cardview-fluent-sizes-40: 40px;
   $cardview-fluent-paddings-24: 24px;
   $cardview-fluent-paddings-12: 12px;
+  $cardview-fluent-paddings-8: 8px;
   $cardview-fluent-paddings-6: 6px;
   $cardview-fluent-text-size-16: 16px;
   $cardview-fluent-border-radius-8: 8px;
@@ -40,6 +42,7 @@ $cardview-fluent-gaps-24: null;
   $cardview-fluent-sizes-40: 32px;
   $cardview-fluent-paddings-24: 16px;
   $cardview-fluent-paddings-12: 8px;
+  $cardview-fluent-paddings-8: 6px;
   $cardview-fluent-paddings-6: 4px;
   $cardview-fluent-text-size-16: 14px;
   $cardview-fluent-border-radius-8: 6px;
@@ -55,6 +58,9 @@ $cardview-headerpanel-content-gap: 8px !default;
 
 $cardview-header-item-border-width: 1px !default;
 $cardview-header-item-border-radius: 6px !default;
+$cardview-header-item-padding-horizontal: $cardview-fluent-paddings-8 !default;
+$cardview-header-item-padding-vertical: $cardview-fluent-paddings-6 !default;
+$cardview-header-item-icon-size: $fluent-base-icon-size !default;
 
 $cardview-nodata-icon-container-size: $cardview-fluent-sizes-64 !default;
 $cardview-nodata-icon-container-margin: $cardview-fluent-paddings-12 !default;
@@ -76,6 +82,4 @@ $cardview-card-content-cell-padding-vertical: $cardview-fluent-paddings-6 !defau
 $cardview-card-content-cell-padding-horizontal: $cardview-fluent-paddings-12 !default;
 
 $cardview-card-header-text-size: $cardview-fluent-text-size-16 !default;
-$cardview-card-header-border-radius: 8px !default;
-
-$cardview-header-filter-icon-size: 20px !default;
+$cardview-card-header-border-radius: $cardview-fluent-border-radius-8 !default;
