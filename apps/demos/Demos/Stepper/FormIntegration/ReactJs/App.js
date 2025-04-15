@@ -172,7 +172,7 @@ export default function App() {
               text="Back"
               type="normal"
               onClick={onPrevButtonClick}
-              visible={selectedIndex !== 0}
+              visible={selectedIndex !== 0 && !isConfirmed}
             />
 
             <Button

@@ -33,18 +33,18 @@ export default function App () {
     setSelectedIndex((prev) => prev - 1);
   }, []);
 
-    const onConfirm = useCallback(() => {
-      setIsConfirmed(true);
-      setStepValidationResult(initialSteps.length - 1, true);
-    }, []);
+  const onConfirm = useCallback(() => {
+    setIsConfirmed(true);
+    setStepValidationResult(initialSteps.length - 1, true);
+  }, []);
 
-    const onReset = useCallback(() => {
-      setIsConfirmed(false);
-      setSteps(initialSteps);
-      setSelectedIndex(0);
-      formRef.current.instance().updateData(cloneFormData());
-      validationEngine.resetGroup(validationGroups[0])
-    }, []);
+  const onReset = useCallback(() => {
+    setIsConfirmed(false);
+    setSteps(initialSteps);
+    setSelectedIndex(0);
+    formRef.current.instance().updateData(cloneFormData());
+    validationEngine.resetGroup(validationGroups[0])
+  }, []);
 
   const onNextButtonClick = useCallback(() => {
     if (selectedIndex < initialSteps.length -1) {
@@ -160,7 +160,7 @@ export default function App () {
               text="Back"
               type="normal"
               onClick={onPrevButtonClick}
-              visible={selectedIndex !== 0}
+              visible={selectedIndex !== 0 && !isConfirmed}
             />
 
             <Button
