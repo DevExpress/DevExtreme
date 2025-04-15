@@ -17,7 +17,6 @@ import 'ui/select_box';
 const AI_DIALOG_CLASS = 'dx-aidialog';
 const AI_DIALOG_CONTENT_CLASS = 'dx-aidialog-content';
 const AI_DIALOG_CONTROLS_CLASS = 'dx-aidialog-controls';
-const TEXT_EDITOR_INPUT_CLASS = 'dx-texteditor-input';
 const TEXT_AREA_CLASS = 'dx-textarea';
 const SELECT_BOX_CLASS = 'dx-selectbox';
 
@@ -26,6 +25,12 @@ const moduleConfig = {
         this.$element = $('#htmlEditor');
 
         this.aiDialog = new AIDialog(this.$element, {}, { container: this.$element });
+
+        this.aiDialogPopup = this.aiDialog._popup;
+
+        this.setDialogState = (state) => {
+            this.aiDialog['_setDialogState'](state);
+        };
     },
 };
 
@@ -45,7 +50,6 @@ QUnit.module('AIDialog', moduleConfig, () => {
         const commandSelectDataSource = commandSelectBox.option('dataSource').map((item) => item.name);
         const resultTextAreaInstance = $resultTextArea.dxTextArea('instance');
         const promptTextAreaInstance = $promptTextArea.dxTextArea('instance');
-
 
         assert.strictEqual($aiContent.length, 1, 'AI dialog content rendered');
         assert.strictEqual($controls.length, 1, 'controls container rendered');
@@ -81,7 +85,7 @@ QUnit.module('AIDialog', moduleConfig, () => {
             assert.strictEqual(data, undefined, 'dialog was cancelled, no data');
         });
 
-        this.aiDialog._popup.hide();
+        this.aiDialogPopup.hide();
     });
 
     QUnit.test('Should hide options SelectBox if command with no options selected', function(assert) {
@@ -157,9 +161,9 @@ QUnit.module('AIDialog', moduleConfig, () => {
     });
 
     QUnit.test('Popup config should contain correct parameters', function(assert) {
-        const popup = this.aiDialog._popup;
-        const popupConfig = popup.option();
         showAIDialog(this);
+
+        const popupConfig = this.aiDialogPopup.option();
 
         assert.strictEqual(popupConfig.minWidth, 288, 'minWidth is correct');
         assert.strictEqual(popupConfig.maxWidth, 460, 'maxWidth is correct');
@@ -187,11 +191,9 @@ QUnit.module('AIDialog', moduleConfig, () => {
             config: { currentCommand: 'translate' }
         });
 
-        const instance = this.aiDialog;
-        instance['_setDialogState']('generating');
+        this.setDialogState('generating');
 
-        const popup = this.aiDialog._popup;
-        const toolbarButtonItems = popup.option('toolbarItems').filter(item => ['dxButton', 'dxDropDownButton'].includes(item.widget));
+        const toolbarButtonItems = this.aiDialogPopup.option('toolbarItems').filter(item => ['dxButton', 'dxDropDownButton'].includes(item.widget));
         const stopButtonItem = toolbarButtonItems.find(item => item.options.text === 'Stop');
         const replaceButtonItem = toolbarButtonItems.find(item => item.options.text === 'Replace');
         const copyButtonItem = toolbarButtonItems.find(item => item.options.text === 'Copy');
@@ -211,8 +213,7 @@ QUnit.module('AIDialog', moduleConfig, () => {
             const promptTextAreaInstance = $textAreas.eq(0).dxTextArea('instance');
             const resultTextAreaInstance = $textAreas.eq(1).dxTextArea('instance');
 
-            const popup = this.aiDialog._popup;
-            const toolbarButtonItems = popup.option('toolbarItems').filter(item => item.widget === 'dxButton');
+            const toolbarButtonItems = this.aiDialogPopup.option('toolbarItems').filter(item => item.widget === 'dxButton');
             const generateButtonItem = toolbarButtonItems.find(item => item.options.text === 'Generate');
             const stopButtonItem = toolbarButtonItems.find(item => item.options.text === 'Stop');
             const buttonTexts = toolbarButtonItems.map(item => item.options.text);
@@ -238,8 +239,7 @@ QUnit.module('AIDialog', moduleConfig, () => {
             const promptTextAreaInstance = $textAreas.eq(0).dxTextArea('instance');
             const resultTextAreaInstance = $textAreas.eq(1).dxTextArea('instance');
 
-            const popup = this.aiDialog._popup;
-            const toolbarButtonItems = popup.option('toolbarItems').filter(item => ['dxButton', 'dxDropDownButton'].includes(item.widget));
+            const toolbarButtonItems = this.aiDialogPopup.option('toolbarItems').filter(item => ['dxButton', 'dxDropDownButton'].includes(item.widget));
             const buttonTexts = toolbarButtonItems.map(item => item.options.text);
             const replaceButtonItem = toolbarButtonItems.find(item => item.options.text === 'Replace');
             const copyButtonItem = toolbarButtonItems.find(item => item.options.text === 'Copy');
@@ -257,8 +257,7 @@ QUnit.module('AIDialog', moduleConfig, () => {
                 config: { currentCommand: 'askAI' }
             });
 
-            const instance = this.aiDialog;
-            instance['_setDialogState']('generating');
+            this.setDialogState('generating');
 
             const $stopButton = findButtonByText(this.$element, 'Stop');
             $stopButton.trigger('dxclick');
@@ -267,8 +266,7 @@ QUnit.module('AIDialog', moduleConfig, () => {
             const promptTextAreaInstance = $textAreas.eq(0).dxTextArea('instance');
             const resultTextAreaInstance = $textAreas.eq(1).dxTextArea('instance');
 
-            const popup = this.aiDialog._popup;
-            const toolbarButtonItems = popup.option('toolbarItems').filter(item => item.widget === 'dxButton');
+            const toolbarButtonItems = this.aiDialogPopup.option('toolbarItems').filter(item => item.widget === 'dxButton');
             const buttonTexts = toolbarButtonItems.map(item => item.options.text);
 
             assert.strictEqual(promptTextAreaInstance.option('visible'), true, 'prompt TextArea is visible');
@@ -309,8 +307,7 @@ QUnit.module('AIDialog', moduleConfig, () => {
             const promptTextAreaInstance = $textAreas.eq(0).dxTextArea('instance');
             const resultTextAreaInstance = $textAreas.eq(1).dxTextArea('instance');
 
-            const popup = this.aiDialog._popup;
-            const toolbarButtonItems = popup.option('toolbarItems').filter(item => item.widget === 'dxButton');
+            const toolbarButtonItems = this.aiDialogPopup.option('toolbarItems').filter(item => item.widget === 'dxButton');
             const buttonTexts = toolbarButtonItems.map(item => item.options.text);
 
             assert.strictEqual(promptTextAreaInstance.option('visible'), true, 'prompt TextArea is visible');
