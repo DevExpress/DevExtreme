@@ -210,7 +210,7 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
       location: 'before',
       template: (data, index, titleElement): void => {
         const $titleContainer = $('<div>').addClass(AI_DIALOG_TITLE_CLASS);
-        const $icon = $('<i>').addClass(`.${ICON_CLASS} .${ICON_SPARKLE_CLASS}`);
+        const $icon = $('<i>').addClass(`${ICON_CLASS} ${ICON_SPARKLE_CLASS}`);
         const $text = $('<span>')
           .addClass(AI_DIALOG_TITLE_TEXT_CLASS)
           .text(localizationMessage.format('dxHtmlEditor-aiDialogTitle'));
