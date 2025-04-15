@@ -26,14 +26,14 @@
   flex-direction: column;
 }
 
-.dx-step-label {
+.dx-step-caption {
   width: 100%;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-.dx-step-title,
+.dx-step-label,
 .dx-step-optional-mark {
   overflow: hidden;
   text-overflow: ellipsis;
@@ -51,7 +51,7 @@
     width: 100%;
   }
 
-  .dx-step-title,
+  .dx-step-label,
   .dx-step-optional-mark {
     text-align: start;
   }

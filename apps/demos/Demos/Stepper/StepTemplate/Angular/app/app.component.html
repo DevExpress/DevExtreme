@@ -10,23 +10,23 @@
     <div class="dx-step-indicator">
       <i class="dx-icon" [ngClass]="'dx-icon-' + data.icon"></i>
     </div>
-    <div class="dx-step-label">
-      <div class="dx-step-title">{{ data.title }}</div>
+    <div class="dx-step-caption">
+      <div class="dx-step-label">{{ data.label }}</div>
       <div class="dx-step-optional-mark" *ngIf="data.optional">(Optional)</div>
     </div>
   </div>
 </dx-stepper>
-<div id="label-titleOnly" class="stepper-label">Title Only</div>
+<div id="label-labelOnly" class="stepper-label">Title Only</div>
 <dx-stepper
-  id="titleOnly"
+  id="labelOnly"
   [dataSource]="steps"
   [selectedIndex]="2"
   [linear]="false"
-  [elementAttr]="{ 'aria-labelledby': 'label-titleOnly' }"
+  [elementAttr]="{ 'aria-labelledby': 'label-labelOnly' }"
 >
   <div *dxTemplate="let data of 'item'">
-    <div class="dx-step-label">
-      <div class="dx-step-title">{{ data.title }}</div>
+    <div class="dx-step-caption">
+      <div class="dx-step-label">{{ data.label }}</div>
     </div>
   </div>
 </dx-stepper>

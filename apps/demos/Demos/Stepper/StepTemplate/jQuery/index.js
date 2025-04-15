@@ -8,21 +8,21 @@ $(() => {
       return `<div class="dx-step-indicator">
           <i class="dx-icon dx-icon-${data.icon}"></i>
         </div>
-        <div class="dx-step-label">
-          <div class="dx-step-title">${data.title}</div>
+        <div class="dx-step-caption">
+          <div class="dx-step-label">${data.label}</div>
           ${data.optional ? '<div class="dx-step-optional-mark">(Optional)</div>' : ''}
         </div>`;
     },
   });
 
-  $('#titleOnly').dxStepper({
+  $('#labelOnly').dxStepper({
     selectedIndex: 2,
     dataSource,
     linear: false,
-    elementAttr: { 'aria-labelledby': 'label-titleOnly' },
+    elementAttr: { 'aria-labelledby': 'label-labelOnly' },
     itemTemplate(data) {
-      return `<div class='dx-step-label'>
-        <div class='dx-step-title'>${data.title}</div>
+      return `<div class='dx-step-caption'>
+        <div class='dx-step-label'>${data.label}</div>
       </div>`;
     },
   });
