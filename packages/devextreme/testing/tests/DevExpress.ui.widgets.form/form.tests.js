@@ -4509,6 +4509,25 @@ QUnit.test('TagBox.SelectionChanged is raised once if formData is wrapped into a
 
         assert.strictEqual(form.option('isDirty'), false, 'pristine after setting initial value');
     });
+
+    QUnit.test(`form should not be marked as dirty after calling the reset(editorsData) method and resetting ${editorData[0]} to initial value, which is equal to the current value (T1279884)`, function(assert) {
+        const editorName = editorData[0];
+        const newEditorValue = editorData[1];
+        const initialFormData = editorData[2];
+
+        const form = $('#form').dxForm({
+            formData: initialFormData,
+            items: [{ dataField: editorName, editorType: editorName }]
+        }).dxForm('instance');
+
+        form.updateData(editorName, newEditorValue);
+
+        assert.strictEqual(form.option('isDirty'), true, 'is dirty after update');
+
+        form.reset({ [editorName]: newEditorValue });
+
+        assert.strictEqual(form.option('isDirty'), false, 'pristine after setting initial value');
+    });
 });
 
 QUnit.test('nested form items should affect isDirty', function(assert) {
