@@ -72,7 +72,7 @@ const DATA_GRID_SELECTOR = '#container';
   });
 });
 
-[false].forEach((allowColumnReordering) => {
+[true, false].forEach((allowColumnReordering) => {
   test(`The column should ${!allowColumnReordering ? 'not' : ''} be reordered when allowColumnReordering is ${allowColumnReordering}`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
     const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
