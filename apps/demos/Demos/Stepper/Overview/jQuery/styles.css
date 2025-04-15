@@ -1,8 +1,7 @@
 .stepper-demo {
   display: flex;
-  height: 100%;
+  height: 700px;
   gap: 20px;
-  padding: 20px;
 }
 
 .widget-container {
