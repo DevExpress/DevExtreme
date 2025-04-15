@@ -228,134 +228,151 @@ describe('DxList', () => {
     expect(instance.element().querySelectorAll('.dx-item.dx-state-disabled').length).toBe(1);
   });
 
-  it('should be able to accept items as an *ngFor components list', () => {
-    TestBed.overrideComponent(TestContainerComponent, {
-      set: {
-        template: `
-                    <dx-list>
-                        <dxi-item *ngFor="let item of items">{{item}}</dxi-item>
-                    </dx-list>
-                `,
-      },
+  [
+    {name: '*ngFor', tpl: '<dxi-item *ngFor="let item of items">{{item}}</dxi-item>'},
+    {name: '@for', tpl: `@for (item of items; track item) {
+        <dxi-item>{{item}}</dxi-item>
+     }`},
+  ].forEach(({name, tpl}) => {
+    it(`should be able to accept items as an ${name} components list`, () => {
+      TestBed.overrideComponent(TestContainerComponent, {
+        set: {
+          template: `<dx-list>${tpl}</dx-list>`
+        }
+      });
+
+      let fixture = TestBed.createComponent(TestContainerComponent);
+
+      fixture.detectChanges();
+
+      let testComponent = fixture.componentInstance, instance = testComponent.innerWidget.instance;
+
+      expect(instance?.option('items')?.length).toBe(1);
+      expect(instance.element().querySelectorAll('.dx-item-content').length).toBe(1);
+      expect(instance.element().querySelectorAll('.dx-item-content')[0].textContent).toBe('1');
+
+      testComponent.items.push(2);
+
+      fixture.detectChanges();
+
+      expect(instance?.option('items')?.length).toBe(2);
+      expect(instance.element().querySelectorAll('.dx-item-content').length).toBe(2);
+      expect(instance.element().querySelectorAll('.dx-item-content')[0].textContent).toBe('1');
+      expect(instance.element().querySelectorAll('.dx-item-content')[1].textContent).toBe('2');
     });
-    const fixture = TestBed.createComponent(TestContainerComponent);
-    fixture.detectChanges();
 
-    const testComponent = fixture.componentInstance;
-    const { instance } = testComponent.innerWidget;
+    it(`should be able to clear items rendered with ${name}`, () => {
+      TestBed.overrideComponent(TestContainerComponent, {
+        set: {
+          template: `<dx-list>
+                        ${tpl}
+                    </dx-list>`,
+        },
+      });
+      const fixture = TestBed.createComponent(TestContainerComponent);
+      fixture.detectChanges();
 
-    expect(instance?.option('items')?.length).toBe(1);
-    expect(instance.element().querySelectorAll('.dx-item-content').length).toBe(1);
-    expect(instance.element().querySelectorAll('.dx-item-content')[0].textContent).toBe('1');
+      const testComponent = fixture.componentInstance;
+      const { instance } = testComponent.innerWidget;
 
-    testComponent.items.push(2);
-    fixture.detectChanges();
+      expect(instance?.option('items')?.length).toBe(1);
+      expect(instance.element().querySelectorAll('.dx-item-content').length).toBe(1);
+      expect(instance.element().querySelectorAll('.dx-item-content')[0].textContent).toBe('1');
 
-    expect(instance?.option('items')?.length).toBe(2);
-    expect(instance.element().querySelectorAll('.dx-item-content').length).toBe(2);
-    expect(instance.element().querySelectorAll('.dx-item-content')[0].textContent).toBe('1');
-    expect(instance.element().querySelectorAll('.dx-item-content')[1].textContent).toBe('2');
+      testComponent.items.pop();
+      expect(testComponent.items.length).toBe(0);
+      fixture.detectChanges();
+
+      expect(instance?.option('items')?.length).toBe(0);
+      expect(instance.element().querySelectorAll('.dx-item-content').length).toBe(0);
+    });
   });
 
-  it('should be able to replace items by ng-for', () => {
-    TestBed.overrideComponent(TestContainerComponent, {
-      set: {
-        template: `
-                    <dx-list>
-                        <dxi-item *ngFor="let item of items" [badge]="10">{{item}}</dxi-item>
-                    </dx-list>
-                `,
-      },
+  [
+    {name: '*ngFor', tpl: '<dxi-item *ngFor="let item of items" [badge]="10">{{item}}</dxi-item>'},
+    {name: '@for', tpl: `@for (item of items; track item) {
+        <dxi-item [badge]="10">{{item}}</dxi-item>
+     }`},
+  ].forEach(({name, tpl}) => {
+    it(`should be able to replace items by ${name}`, () => {
+      TestBed.overrideComponent(TestContainerComponent, {
+        set: {
+          template: `<dx-list>${tpl}</dx-list>`,
+        },
+      });
+      const fixture = TestBed.createComponent(TestContainerComponent);
+      const testComponent = fixture.componentInstance;
+
+      testComponent.items = [1, 2];
+      fixture.detectChanges();
+
+      const { instance } = testComponent.innerWidget;
+
+      testComponent.items = [3, 4];
+      fixture.detectChanges();
+
+      expect(instance?.option('items')?.length).toBe(2);
+      expect(instance.element().querySelectorAll('.dx-item-content').length).toBe(2);
+      expect(instance.element().querySelectorAll('.dx-item-content')[0].textContent).toBe('3');
+      expect(instance.element().querySelectorAll('.dx-item-content')[1].textContent).toBe('4');
     });
-    const fixture = TestBed.createComponent(TestContainerComponent);
-    const testComponent = fixture.componentInstance;
-
-    testComponent.items = [1, 2];
-    fixture.detectChanges();
-
-    const { instance } = testComponent.innerWidget;
-
-    testComponent.items = [3, 4];
-    fixture.detectChanges();
-
-    expect(instance?.option('items')?.length).toBe(2);
-    expect(instance.element().querySelectorAll('.dx-item-content').length).toBe(2);
-    expect(instance.element().querySelectorAll('.dx-item-content')[0].textContent).toBe('3');
-    expect(instance.element().querySelectorAll('.dx-item-content')[1].textContent).toBe('4');
   });
 
-  it('should be able to clear items rendered with *ngFor', () => {
-    TestBed.overrideComponent(TestContainerComponent, {
-      set: {
-        template: `
-                    <dx-list>
-                        <dxi-item *ngFor="let item of items">{{item}}</dxi-item>
-                    </dx-list>
-                `,
-      },
+  [
+    {name: '*ngFor', tpl: '<dxi-item *ngFor="let item of complexItems">{{item.text}}</dxi-item>'},
+    {name: '@for', tpl: `@for (item of complexItems; track item.text) {
+        <dxi-item>{{item.text}}</dxi-item>
+     }`},
+  ].forEach(({name, tpl}) => {
+    it(`should respond to items changes rendered with ${name}`, () => {
+      TestBed.overrideComponent(TestContainerComponent, {
+        set: {
+          template: `<dx-list>${tpl}</dx-list>`,
+        },
+      });
+
+      const fixture = TestBed.createComponent(TestContainerComponent);
+
+      fixture.detectChanges();
+
+      const testComponent = fixture.componentInstance;
+      const { instance } = testComponent.innerWidget;
+
+      expect(instance?.option('items')?.length).toBe(1);
+      expect(instance.element().querySelectorAll('.dx-item-content').length).toBe(1);
+      expect(instance.element().querySelectorAll('.dx-item-content')[0].textContent).toBe('Item 1');
+
+      const optionSpy = spyOn(instance, 'option').and.callThrough();
+
+      fixture.detectChanges();
+
+      expect(instance.option).not.toHaveBeenCalled;
+
+      testComponent.complexItems.push({ text: 'Item 2' });
+
+      fixture.detectChanges();
+
+      expect(instance.option).toHaveBeenCalled;
+      expect(instance?.option('items')?.length).toBe(2);
+      expect(instance.element().querySelectorAll('.dx-item-content').length).toBe(2);
+      expect(instance.element().querySelectorAll('.dx-item-content')[0].textContent).toBe('Item 1');
+      expect(instance.element().querySelectorAll('.dx-item-content')[1].textContent).toBe('Item 2');
+
+      optionSpy.calls.reset();
+
+      testComponent.complexItems[0].text = 'Changed';
+
+      fixture.detectChanges();
+
+      expect(optionSpy).toHaveBeenCalledTimes(1);
+      expect(optionSpy.calls.allArgs().length).toBe(1);
+      expect(instance?.option('items')?.length).toBe(2);
+      expect(instance.element().querySelectorAll('.dx-item-content').length).toBe(2);
+      expect(instance.element().querySelectorAll('.dx-item-content')[0].textContent).toBe('Changed');
+      expect(instance.element().querySelectorAll('.dx-item-content')[1].textContent).toBe('Item 2');
+
+      optionSpy.calls.reset();
     });
-    const fixture = TestBed.createComponent(TestContainerComponent);
-    fixture.detectChanges();
-
-    const testComponent = fixture.componentInstance;
-    const { instance } = testComponent.innerWidget;
-
-    expect(instance?.option('items')?.length).toBe(1);
-    expect(instance.element().querySelectorAll('.dx-item-content').length).toBe(1);
-    expect(instance.element().querySelectorAll('.dx-item-content')[0].textContent).toBe('1');
-
-    testComponent.items.pop();
-    expect(testComponent.items.length).toBe(0);
-    fixture.detectChanges();
-
-    expect(instance?.option('items')?.length).toBe(0);
-    expect(instance.element().querySelectorAll('.dx-item-content').length).toBe(0);
-  });
-
-  it('should respond to items changes rendered with ngFor', () => {
-    TestBed.overrideComponent(TestContainerComponent, {
-      set: {
-        template: `
-                    <dx-list>
-                        <dxi-item *ngFor="let item of complexItems">{{item.text}}</dxi-item>
-                    </dx-list>
-                `,
-      },
-    });
-    const fixture = TestBed.createComponent(TestContainerComponent);
-    fixture.detectChanges();
-
-    const testComponent = fixture.componentInstance;
-    const { instance } = testComponent.innerWidget;
-
-    expect(instance?.option('items')?.length).toBe(1);
-    expect(instance.element().querySelectorAll('.dx-item-content').length).toBe(1);
-    expect(instance.element().querySelectorAll('.dx-item-content')[0].textContent).toBe('Item 1');
-
-    const optionSpy = spyOn(instance, 'option').and.callThrough();
-    fixture.detectChanges();
-    expect(instance.option).not.toHaveBeenCalled;
-
-    testComponent.complexItems.push({ text: 'Item 2' });
-    fixture.detectChanges();
-
-    expect(instance.option).toHaveBeenCalled;
-    expect(instance?.option('items')?.length).toBe(2);
-    expect(instance.element().querySelectorAll('.dx-item-content').length).toBe(2);
-    expect(instance.element().querySelectorAll('.dx-item-content')[0].textContent).toBe('Item 1');
-    expect(instance.element().querySelectorAll('.dx-item-content')[1].textContent).toBe('Item 2');
-
-    optionSpy.calls.reset();
-    testComponent.complexItems[0].text = 'Changed';
-    fixture.detectChanges();
-
-    expect(optionSpy).toHaveBeenCalledTimes(1);
-    expect(optionSpy.calls.allArgs().length).toBe(1);
-    expect(instance?.option('items')?.length).toBe(2);
-    expect(instance.element().querySelectorAll('.dx-item-content').length).toBe(2);
-    expect(instance.element().querySelectorAll('.dx-item-content')[0].textContent).toBe('Changed');
-    expect(instance.element().querySelectorAll('.dx-item-content')[1].textContent).toBe('Item 2');
-    optionSpy.calls.reset();
   });
 
   it('should be able to set option "template" for each item', () => {
