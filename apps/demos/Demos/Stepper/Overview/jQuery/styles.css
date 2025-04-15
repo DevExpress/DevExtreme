@@ -1,20 +1,8 @@
-.dx-viewport {
-  height: 800px;
-  width: 100%;
-  margin: 0;
-}
-
-.demo-container {
-  height: 700px;
-  width: 100%;
-  padding: 20px;
-  box-sizing: border-box;
-}
-
 .stepper-demo {
   display: flex;
   height: 100%;
   gap: 20px;
+  padding: 20px;
 }
 
 .widget-container {
@@ -38,11 +26,12 @@
 .widget-wrapper-vertical {
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: space-around;
 }
 
 .widget-wrapper-vertical .stepper-wrapper {
-  width: 33%;
+  width: auto;
+  max-width: 33%;
 }
 
 .widget-wrapper-vertical .stepper-label {
@@ -50,8 +39,13 @@
   white-space: nowrap;
 }
 
+.widget-wrapper-vertical #customText {
+  width: auto;
+}
+
 .dx-stepper-vertical {
   height: 400px;
+  width: 100%;
 }
 
 .stepper-wrapper {

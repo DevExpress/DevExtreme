@@ -4105,7 +4105,12 @@
           {
             "Title": "Overview",
             "Name": "Overview",
+            "Equivalents": "stepper configuration, step settings, step options",
             "Widget": "Stepper",
+            "DocUrl": "",
+            "MvcDescription": "",
+            "NetCoreDescription": "",
+            "MvcAdditionalFiles": [],
             "DemoType": "Web"
           },
           {

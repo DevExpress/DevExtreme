@@ -1,21 +1,21 @@
 $(() => {
-  const stepperWithIcons = $('#stepperWithText').dxStepper({
+  const stepperWithIcons = $('#icons').dxStepper({
     linear: navigationModes[0].value,
-    elementAttr: { 'aria-labelledby': 'label-stepperWithText' },
+    elementAttr: { 'aria-labelledby': 'iconsLabel' },
     dataSource,
   }).dxStepper('instance');
 
-  const stepperDefault = $('#stepperWithIconAndText').dxStepper({
+  const stepperWithNumbers = $('#numbers').dxStepper({
     linear: navigationModes[0].value,
-    elementAttr: { 'aria-labelledby': 'label-stepperWithIconAndText' },
+    elementAttr: { 'aria-labelledby': 'numbersLabel' },
     dataSource: dataSource.map(({ icon, text, ...rest }) => rest),
   }).dxStepper('instance');
 
-  const stepperWithText = $('#stepperWithIcon').dxStepper({
+  const stepperWithCustomText = $('#customText').dxStepper({
     linear: navigationModes[0].value,
-    elementAttr: { 'aria-labelledby': 'label-stepperWithIcon' },
+    elementAttr: { 'aria-labelledby': 'customTextLabel' },
     dataSource: dataSource.map(({
-      icon, title, ...rest
+      icon, label, optional, ...rest
     }) => rest),
   }).dxStepper('instance');
 
@@ -64,7 +64,7 @@ $(() => {
 
   function setOption(option, value) {
     stepperWithIcons.option(option, value);
-    stepperDefault.option(option, value);
-    stepperWithText.option(option, value);
+    stepperWithNumbers.option(option, value);
+    stepperWithCustomText.option(option, value);
   }
 });
