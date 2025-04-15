@@ -428,7 +428,7 @@ export function runManualTestCore(
   let testURL = '';
 
   if (isGitHubDemos) {
-    if (widget !== 'DataGrid' || gitHubIgnored.includes(demo)) {
+    if (widget !== 'DataGrid' || demo.NoPreloaded) {
       return;
     }
 
