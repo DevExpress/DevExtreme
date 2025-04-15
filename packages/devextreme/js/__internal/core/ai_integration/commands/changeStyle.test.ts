@@ -68,8 +68,9 @@ describe('ChangeStyleCommand', () => {
   });
 
   describe('execute', () => {
+    const callbacks: RequestCallbacks<ChangeStyleCommandResult> = { onComplete: () => {} };
+
     it('promptManager.buildPrompt should be called with parameters containing the passed values', () => {
-      const callbacks: RequestCallbacks<ChangeStyleCommandResult> = { onComplete: () => {} };
       const buildPromptSpy = jest.spyOn(promptManager, 'buildPrompt');
 
       command.execute(params, callbacks);
@@ -82,7 +83,7 @@ describe('ChangeStyleCommand', () => {
     });
 
     it('promptManager.buildPrompt should should return prompt with passed values', () => {
-      const callbacks: RequestCallbacks<ChangeStyleCommandResult> = { onComplete: () => {} };
+      jest.spyOn(promptManager, 'buildPrompt');
 
       command.execute(params, callbacks);
 
@@ -93,7 +94,6 @@ describe('ChangeStyleCommand', () => {
     });
 
     it('should call provider.sendRequest once and return the abort function', () => {
-      const callbacks: RequestCallbacks<ChangeStyleCommandResult> = { onComplete: () => {} };
       const sendRequestSpy = jest.spyOn(requestManager, 'sendRequest');
 
       const abort = command.execute(params, callbacks);

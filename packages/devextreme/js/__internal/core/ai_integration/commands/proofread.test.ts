@@ -64,8 +64,9 @@ describe('ProofreadCommand', () => {
   });
 
   describe('execute', () => {
+    const callbacks: RequestCallbacks<ProofreadCommandResult> = { onComplete: () => {} };
+
     it('promptManager.buildPrompt should be called with parameters containing the passed values', () => {
-      const callbacks: RequestCallbacks<ProofreadCommandResult> = { onComplete: () => {} };
       const buildPromptSpy = jest.spyOn(promptManager, 'buildPrompt');
 
       command.execute(params, callbacks);
@@ -75,7 +76,7 @@ describe('ProofreadCommand', () => {
     });
 
     it('promptManager.buildPrompt should should return prompt with passed values', () => {
-      const callbacks: RequestCallbacks<ProofreadCommandResult> = { onComplete: () => {} };
+      jest.spyOn(promptManager, 'buildPrompt');
 
       command.execute(params, callbacks);
 
@@ -86,7 +87,6 @@ describe('ProofreadCommand', () => {
     });
 
     it('should call provider.sendRequest once and return the abort function', () => {
-      const callbacks: RequestCallbacks<ProofreadCommandResult> = { onComplete: () => {} };
       const sendRequestSpy = jest.spyOn(requestManager, 'sendRequest');
 
       const abort = command.execute(params, callbacks);

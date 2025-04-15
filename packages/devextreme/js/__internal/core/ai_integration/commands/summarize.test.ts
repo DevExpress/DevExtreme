@@ -64,8 +64,9 @@ describe('SummarizeCommand', () => {
   });
 
   describe('execute', () => {
+    const callbacks: RequestCallbacks<SummarizeCommandResult> = { onComplete: () => {} };
+
     it('promptManager.buildPrompt should be called with parameters containing the passed values', () => {
-      const callbacks: RequestCallbacks<SummarizeCommandResult> = { onComplete: () => {} };
       const buildPromptSpy = jest.spyOn(promptManager, 'buildPrompt');
 
       command.execute(params, callbacks);
@@ -75,7 +76,7 @@ describe('SummarizeCommand', () => {
     });
 
     it('promptManager.buildPrompt should should return prompt with passed values', () => {
-      const callbacks: RequestCallbacks<SummarizeCommandResult> = { onComplete: () => {} };
+      jest.spyOn(promptManager, 'buildPrompt');
 
       command.execute(params, callbacks);
 
@@ -86,7 +87,6 @@ describe('SummarizeCommand', () => {
     });
 
     it('should call provider.sendRequest once and return the abort function', () => {
-      const callbacks: RequestCallbacks<SummarizeCommandResult> = { onComplete: () => {} };
       const sendRequestSpy = jest.spyOn(requestManager, 'sendRequest');
 
       const abort = command.execute(params, callbacks);
