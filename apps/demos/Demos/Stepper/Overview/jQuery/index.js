@@ -1,16 +1,19 @@
 $(() => {
-  const stepperWithIcons = $('#withText').dxStepper({
+  const stepperWithIcons = $('#stepperWithText').dxStepper({
     linear: navigationModes[0].value,
+    elementAttr: { 'aria-labelledby': 'label-stepperWithText' },
     dataSource,
   }).dxStepper('instance');
 
-  const stepperDefault = $('#withIconAndText').dxStepper({
+  const stepperDefault = $('#stepperWithIconAndText').dxStepper({
     linear: navigationModes[0].value,
+    elementAttr: { 'aria-labelledby': 'label-stepperWithIconAndText' },
     dataSource: dataSource.map(({ icon, text, ...rest }) => rest),
   }).dxStepper('instance');
 
-  const stepperWithText = $('#withIcon').dxStepper({
+  const stepperWithText = $('#stepperWithIcon').dxStepper({
     linear: navigationModes[0].value,
+    elementAttr: { 'aria-labelledby': 'label-stepperWithIcon' },
     dataSource: dataSource.map(({
       icon, title, ...rest
     }) => rest),
@@ -44,7 +47,7 @@ $(() => {
   });
 
   $('#selectOnFocus').dxCheckBox({
-    text: 'Select on focus',
+    text: 'Select step on focus',
     value: true,
     onValueChanged(data) {
       setOption('selectOnFocus', data.value);

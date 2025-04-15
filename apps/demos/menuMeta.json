@@ -4098,6 +4098,7 @@
       },
       {
         "Name": "Stepper",
+        "Breadcrumb": true,
         "Badge": "New",
         "Equivalents": "dxStepper, dx-stepper, stepper",
         "Demos": [
@@ -4105,9 +4106,7 @@
             "Title": "Overview",
             "Name": "Overview",
             "Widget": "Stepper",
-            "DemoType": "Web",
-            "Badge": "Roadmap",
-            "RoadmapSurveyUrl": "https://www.devexpress.com/support/surveys/devextreme-roadmap-stepper.xml"
+            "DemoType": "Web"
           },
           {
             "Title": "Step Template",
