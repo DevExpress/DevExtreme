@@ -8,6 +8,7 @@ const dataSource = [
     text: 'B',
     title: 'Shipping Info',
     icon: 'clipboardtasklist',
+    isValid: false,
   },
   {
     text: 'C',

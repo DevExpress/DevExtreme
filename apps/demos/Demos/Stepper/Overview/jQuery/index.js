@@ -1,26 +1,18 @@
 $(() => {
-  const initialStepperSettings = {
-    rtlEnabled: false,
-    selectedIndex: 2,
-    selectOnFocus: false,
-    orientation: orientations[0].value,
-    linear: navigationModes[0].value,
-  };
-
   const stepperWithIcons = $('#withText').dxStepper({
-    ...initialStepperSettings,
+    linear: navigationModes[0].value,
     dataSource,
   }).dxStepper('instance');
 
   const stepperDefault = $('#withIconAndText').dxStepper({
-    ...initialStepperSettings,
+    linear: navigationModes[0].value,
     dataSource: dataSource.map(({ icon, text, ...rest }) => rest),
   }).dxStepper('instance');
 
   const stepperWithText = $('#withIcon').dxStepper({
-    ...initialStepperSettings,
+    linear: navigationModes[0].value,
     dataSource: dataSource.map(({
-      icon, title, optional, ...rest
+      icon, title, ...rest
     }) => rest),
   }).dxStepper('instance');
 
@@ -28,39 +20,38 @@ $(() => {
     width: '100%',
     items: orientations,
     selectedItems: [orientations[0]],
-    inputAttr: { 'aria-label': 'Orientation' },
     onSelectionChanged(data) {
       const $widgetWrapper = $('.widget-wrapper');
 
-      const isVertical = data.addedItems[0].text === 'Vertical';
+      const { text, value } = data.addedItems[0];
+
+      const isVertical = text === 'Vertical';
 
       $widgetWrapper.toggleClass('widget-wrapper-vertical', isVertical);
       $widgetWrapper.toggleClass('widget-wrapper-horizontal', !isVertical);
 
-      setOption('orientation', data.addedItems[0].value);
+      setOption('orientation', value);
     },
   });
 
-  $('#navigation-mode').dxButtonGroup({
+  $('#navigationMode').dxButtonGroup({
     width: '100%',
     items: navigationModes,
     selectedItems: [navigationModes[0]],
-    valueExpr: 'value',
-    inputAttr: { 'aria-label': 'Navigation Mode' },
     onSelectionChanged(data) {
       setOption('linear', data.addedItems[0].value);
     },
   });
 
-  $('#select-on-focus').dxCheckBox({
+  $('#selectOnFocus').dxCheckBox({
     text: 'Select on focus',
-    value: false,
+    value: true,
     onValueChanged(data) {
       setOption('selectOnFocus', data.value);
     },
   });
 
-  $('#rtl-mode').dxCheckBox({
+  $('#rtlMode').dxCheckBox({
     text: 'Right-to-left mode',
     value: false,
     onValueChanged(data) {
