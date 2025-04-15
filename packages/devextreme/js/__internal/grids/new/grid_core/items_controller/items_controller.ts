@@ -65,12 +65,12 @@ export class ItemsController {
       // @ts-expect-error
       cells: columns.map((column) => {
         const rawValue = column.calculateCellValue?.(data);
-        const value = parseValue(column, rawValue as string);
+        const value = typeof rawValue === 'string' ? parseValue(column, rawValue) : rawValue;
         const displayValue = value;
         const formattedText = formatHelper.format(displayValue as never, column.format);
         const text = column.customizeText
           ? column.customizeText({ value: displayValue, valueText: formattedText })
-          : rawValue;
+          : rawValue?.toString();
         const highlightedText = this.searchController
           // @ts-expect-error
           .getHighlightedText(text);
