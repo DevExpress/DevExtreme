@@ -1,5 +1,3 @@
-import eventsEngine from '@js/common/core/events/core/events_engine';
-import { keyboard } from '@js/common/core/events/short';
 import {
   isCommandKeyPressed,
 } from '@js/common/core/events/utils/index';
@@ -18,42 +16,7 @@ enum Direction {
 }
 
 export class HeadersKeyboardNavigationController extends KeyboardNavigationControllerCore {
-  private renderCompletedWithContext!: (e: any) => void;
-
-  private keyDownListener: any;
-
-  private isNeedToFocusHeader = false;
-
-  private focusinHandlerContext!: (event: any) => void;
-
   protected _columnHeadersView!: Views['columnHeadersView'];
-
-  private initHandlers(): void {
-    this.unsubscribeFromKeyDownEvent();
-
-    this._columnHeadersView?.renderCompleted?.remove(this.renderCompletedWithContext);
-
-    if (this.isKeyboardEnabled()) {
-      this._columnHeadersView?.renderCompleted?.add(this.renderCompletedWithContext);
-    }
-  }
-
-  private unsubscribeFromKeyDownEvent(): void {
-    if (this.keyDownListener) {
-      keyboard.off(this.keyDownListener);
-    }
-  }
-
-  private subscribeToKeyDownEvent(): void {
-    const $columnHeadersView = this._columnHeadersView.element();
-
-    this.keyDownListener = keyboard.on($columnHeadersView, null, (e) => this.keyDownHandler(e));
-  }
-
-  private initKeyDownHandler(): void {
-    this.unsubscribeFromKeyDownEvent();
-    this.subscribeToKeyDownEvent();
-  }
 
   private getDirectionByKeyName(keyName): Direction {
     const rtlEnabled = this.option('rtlEnabled');
@@ -119,7 +82,7 @@ export class HeadersKeyboardNavigationController extends KeyboardNavigationContr
         const newVisibleIndex = this.getNewVisibleIndex(visibleIndex, direction);
         const newFocusedColumnIndex = direction === 'next' ? newVisibleIndex - 1 : newVisibleIndex;
 
-        this.isNeedToFocusHeader = true;
+        this.isNeedToFocus = true;
         this.setFocusedCellPosition(rowIndex, newFocusedColumnIndex);
         this._columnsController.moveColumn(
           { columnIndex: visibleIndex, rowIndex },
@@ -132,7 +95,7 @@ export class HeadersKeyboardNavigationController extends KeyboardNavigationContr
     }
   }
 
-  private keyDownHandler(e): void {
+  protected keyDownHandler(e): void {
     const isHandled = this.processOnKeyDown(e);
 
     if (isHandled) {
@@ -152,22 +115,6 @@ export class HeadersKeyboardNavigationController extends KeyboardNavigationContr
     }
   }
 
-  private focusinHandler(e): void {
-    this._updateFocusedCellPosition($(e.target));
-  }
-
-  private unsubscribeFromFocusinEvent(): void {
-    const $columnHeadersView = this._columnHeadersView?.element();
-
-    eventsEngine.off($columnHeadersView, 'focusin', this.focusinHandlerContext);
-  }
-
-  private subscribeToFocusinEvent(): void {
-    const $columnHeadersView = this._columnHeadersView?.element();
-
-    eventsEngine.on($columnHeadersView, 'focusin', '.dx-header-row > td', this.focusinHandlerContext);
-  }
-
   protected getNewVisibleIndex(visibleIndex, direction) {
     return direction === 'previous' ? visibleIndex - 1 : visibleIndex + 2;
   }
@@ -183,34 +130,21 @@ export class HeadersKeyboardNavigationController extends KeyboardNavigationContr
     return this._columnHeadersView?.getCell(cellPosition);
   }
 
-  protected renderCompleted(): void {
-    this.initKeyDownHandler();
+  protected getFocusedView(): any {
+    return this.getView('columnHeadersView');
+  }
 
-    this.unsubscribeFromFocusinEvent();
-    this.subscribeToFocusinEvent();
+  protected focusinHandler(e): void {
+    this._updateFocusedCellPosition($(e.target));
+  }
 
-    if (this.isNeedToFocusHeader) {
-      const $focusElement = this._getFocusedCell();
-
-      this.isNeedToFocusHeader = false;
-      // @ts-expect-error
-      eventsEngine.trigger($focusElement, 'focus');
-    }
+  protected getFocusinSelector(): string {
+    return '.dx-header-row > td';
   }
 
   public init(): void {
     super.init();
     this._columnHeadersView = this.getView('columnHeadersView');
-
-    this.renderCompletedWithContext = this.renderCompletedWithContext
-      ?? this.renderCompleted.bind(this);
-    this.focusinHandlerContext = this.focusinHandlerContext ?? this.focusinHandler.bind(this);
-
-    this.initHandlers();
-  }
-
-  public dispose(): void {
-    keyboard.off(this.keyDownListener);
   }
 }
 
