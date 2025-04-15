@@ -520,7 +520,7 @@ export class ColumnHeadersView extends ColumnsView {
   /**
    * @extended: column_chooser
    */
-  protected allowDragging(column) {
+  public allowDragging(column) {
     const rowIndex = column && this._columnsController.getRowIndex(column.index);
     const columns = this.getColumns(rowIndex);
 

@@ -74,6 +74,11 @@ export class HeadersKeyboardNavigationController extends KeyboardNavigationContr
 
   private isHeaderValidForReordering(column, direction, rowIndex): boolean {
     const columnsController = this._columnsController;
+    const allowReordering = this._columnHeadersView.allowDragging(column);
+
+    if (!allowReordering) {
+      return false;
+    }
 
     if (column.fixed && column.fixedPosition !== StickyPosition.Sticky) {
       const fixedPosition = getColumnFixedPosition(columnsController, column);

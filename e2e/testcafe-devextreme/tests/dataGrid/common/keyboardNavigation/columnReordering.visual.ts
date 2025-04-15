@@ -31,6 +31,7 @@ const DATA_GRID_SELECTOR = '#container';
   }).before(async () => {
     await createWidget('dxDataGrid', {
       rtlEnabled,
+      allowColumnReordering: true,
       dataSource: [{
         field1: 'test1',
         field2: 'test2',
@@ -60,6 +61,7 @@ const DATA_GRID_SELECTOR = '#container';
   }).before(async () => {
     await createWidget('dxDataGrid', {
       rtlEnabled,
+      allowColumnReordering: true,
       dataSource: [{
         field1: 'test1',
         field2: 'test2',
@@ -67,6 +69,73 @@ const DATA_GRID_SELECTOR = '#container';
         field4: 'test4',
       }],
     });
+  });
+});
+
+[false].forEach((allowColumnReordering) => {
+  test(`The column should ${!allowColumnReordering ? 'not' : ''} be reordered when allowColumnReordering is ${allowColumnReordering}`, async (t) => {
+    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+    const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+    const firstHeaderCell = dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(0);
+
+    await t
+      .click(firstHeaderCell.element)
+      .pressKey('ctrl+right');
+
+    await takeScreenshot(
+      `reorder_column_when_allowColumnReordering_is_${allowColumnReordering}`,
+      dataGrid.element,
+    );
+
+    await t.expect(compareResults.isValid())
+      .ok(compareResults.errorMessages());
+  }).before(async () => {
+    await createWidget('dxDataGrid', {
+      allowColumnReordering,
+      dataSource: [{
+        field1: 'test1',
+        field2: 'test2',
+        field3: 'test3',
+        field4: 'test4',
+      }],
+    });
+  });
+});
+
+test('The column should not be reordered when it has allowReordering set to false', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+  const firstHeaderCell = dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(0);
+
+  await t
+    .click(firstHeaderCell.element)
+    .pressKey('ctrl+right');
+
+  await takeScreenshot(
+    'reorder_column_with_allowReordering_is_false',
+    dataGrid.element,
+  );
+
+  await t.expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  await createWidget('dxDataGrid', {
+    allowColumnReordering: true,
+    dataSource: [{
+      field1: 'test1',
+      field2: 'test2',
+      field3: 'test3',
+      field4: 'test4',
+    }],
+    columns: [
+      {
+        dataField: 'field1',
+        allowReordering: false,
+      },
+      'field2',
+      'field3',
+      'field4',
+    ],
   });
 });
 
@@ -91,6 +160,7 @@ test('reorder fixed left column to right', async (t) => {
 }).before(async () => {
   await createWidget('dxDataGrid', {
     columnWidth: 100,
+    allowColumnReordering: true,
     dataSource: [{
       field1: 'test1',
       field2: 'test2',
@@ -128,6 +198,7 @@ test('reorder fixed left column to left', async (t) => {
 }).before(async () => {
   await createWidget('dxDataGrid', {
     columnWidth: 100,
+    allowColumnReordering: true,
     dataSource: [{
       field1: 'test1',
       field2: 'test2',
@@ -165,6 +236,7 @@ test('reorder fixed right column to right', async (t) => {
 }).before(async () => {
   await createWidget('dxDataGrid', {
     columnWidth: 100,
+    allowColumnReordering: true,
     dataSource: [{
       field1: 'test1',
       field2: 'test2',
@@ -204,6 +276,7 @@ test('reorder fixed right column to left', async (t) => {
 }).before(async () => {
   await createWidget('dxDataGrid', {
     columnWidth: 100,
+    allowColumnReordering: true,
     dataSource: [{
       field1: 'test1',
       field2: 'test2',
@@ -243,6 +316,7 @@ test('reorder sticky column to left when there are fixed columns', async (t) => 
 }).before(async () => {
   await createWidget('dxDataGrid', {
     columnWidth: 100,
+    allowColumnReordering: true,
     dataSource: [{
       field1: 'test1',
       field2: 'test2',
@@ -287,6 +361,7 @@ test('reorder sticky column to right when there are fixed columns', async (t) =>
 }).before(async () => {
   await createWidget('dxDataGrid', {
     columnWidth: 100,
+    allowColumnReordering: true,
     dataSource: [{
       field1: 'test1',
       field2: 'test2',
@@ -332,6 +407,7 @@ test('reorder band column to right', async (t) => {
 }).before(async () => {
   await createWidget('dxDataGrid', {
     columnWidth: 100,
+    allowColumnReordering: true,
     dataSource: [{
       field1: 'test1',
       field2: 'test2',
@@ -369,6 +445,7 @@ test('reorder band column to left', async (t) => {
 }).before(async () => {
   await createWidget('dxDataGrid', {
     columnWidth: 100,
+    allowColumnReordering: true,
     dataSource: [{
       field1: 'test1',
       field2: 'test2',
@@ -406,6 +483,7 @@ test('reorder nested column to left', async (t) => {
 }).before(async () => {
   await createWidget('dxDataGrid', {
     columnWidth: 100,
+    allowColumnReordering: true,
     dataSource: [{
       field1: 'test1',
       field2: 'test2',
@@ -443,6 +521,7 @@ test('reorder nested column to right', async (t) => {
 }).before(async () => {
   await createWidget('dxDataGrid', {
     columnWidth: 100,
+    allowColumnReordering: true,
     dataSource: [{
       field1: 'test1',
       field2: 'test2',
@@ -480,6 +559,7 @@ test('reorder fixed nested column to right', async (t) => {
 }).before(async () => {
   await createWidget('dxDataGrid', {
     columnWidth: 100,
+    allowColumnReordering: true,
     dataSource: [{
       field1: 'test1',
       field2: 'test2',
@@ -518,6 +598,7 @@ test('reorder fixed nested column to left', async (t) => {
 }).before(async () => {
   await createWidget('dxDataGrid', {
     columnWidth: 100,
+    allowColumnReordering: true,
     dataSource: [{
       field1: 'test1',
       field2: 'test2',
@@ -558,6 +639,7 @@ test('reorder column to left when there is a command column', async (t) => {
 }).before(async () => {
   await createWidget('dxDataGrid', {
     columnWidth: 100,
+    allowColumnReordering: true,
     selection: {
       mode: 'multiple',
       showCheckBoxesMode: 'always',
@@ -599,6 +681,7 @@ test('reorder column to right when there is a command column', async (t) => {
 }).before(async () => {
   await createWidget('dxDataGrid', {
     columnWidth: 100,
+    allowColumnReordering: true,
     editing: {
       mode: 'row',
       allowUpdating: true,
@@ -639,6 +722,7 @@ test('reorder a custom command column to right', async (t) => {
 }).before(async () => {
   await createWidget('dxDataGrid', {
     columnWidth: 100,
+    allowColumnReordering: true,
     selection: {
       mode: 'multiple',
       allowSelectAll: false,
@@ -681,6 +765,7 @@ test('reorder a custom command column to left', async (t) => {
 }).before(async () => {
   await createWidget('dxDataGrid', {
     columnWidth: 100,
+    allowColumnReordering: true,
     selection: {
       mode: 'multiple',
       allowSelectAll: false,
@@ -726,6 +811,7 @@ test('reorder column to right when adaptability is enabled and there are hidden 
   await createWidget('dxDataGrid', {
     width: 550,
     columnWidth: 100,
+    allowColumnReordering: true,
     dataSource: [{
       field1: 'test1',
       field2: 'test2',
@@ -765,6 +851,7 @@ test('reorder column to left when adaptability is enabled and there are hidden c
   await createWidget('dxDataGrid', {
     width: 550,
     columnWidth: 100,
+    allowColumnReordering: true,
     dataSource: [{
       field1: 'test1',
       field2: 'test2',
@@ -812,6 +899,7 @@ test('reorder column to left when adaptability is enabled and there are hidden c
   }).before(async () => {
     await createWidget('dxDataGrid', {
       columnWidth: 100,
+      allowColumnReordering: true,
       dataSource: [{
         field1: 'test1',
         field2: 'test2',
