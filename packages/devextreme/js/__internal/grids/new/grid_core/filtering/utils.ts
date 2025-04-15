@@ -16,6 +16,7 @@ export const getAppliedFilterExpressions = (
   ].map(
     (filter) => getFilterExpression(filter, columns, customOperations, 'filterBuilder'),
   );
+  // Note: Search filters do not contain filter expressions
   filterExpressions.push(appliedFilters.search);
   return filterExpressions.filter((f) => f);
 };

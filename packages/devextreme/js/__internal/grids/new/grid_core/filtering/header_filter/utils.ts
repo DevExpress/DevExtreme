@@ -53,7 +53,7 @@ export const getFilterOperator = (values: unknown, filterType?: FilterType): str
   }
 };
 
-const needCreateFilter = (column: Column): boolean => {
+export const needCreateHeaderFilter = (column: Column): boolean => {
   const allowFiltering = column.allowFiltering && column.allowHeaderFiltering;
   const values = column.headerFilter?.values;
   const hasSelectedItems = isDefined(values) && values.length > 0;
@@ -63,7 +63,7 @@ const needCreateFilter = (column: Column): boolean => {
 export const getComposedHeaderFilter = (columns: Column[]): unknown => {
   const filterValue: unknown[] = [];
   const filterableColumns = columns
-    .filter((c) => needCreateFilter(c));
+    .filter((c) => needCreateHeaderFilter(c));
   filterableColumns
     .forEach((c, index) => {
       filterValue.push([

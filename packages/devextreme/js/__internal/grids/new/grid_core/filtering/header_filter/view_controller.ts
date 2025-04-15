@@ -118,6 +118,7 @@ export class HeaderFilterViewController {
     return {
       filterPanel,
       headerFilter,
+      // Note: Search filter should not be handled as in the DataGrid implementation
       search: appliedFilters.search,
     };
   }
