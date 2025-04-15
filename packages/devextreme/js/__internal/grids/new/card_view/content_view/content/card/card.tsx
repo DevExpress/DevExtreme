@@ -2,9 +2,9 @@
 import { isCommandKeyPressed } from '@js/common/core/events/utils/index';
 import { off, on } from '@js/events/index';
 import { combineClasses } from '@ts/core/utils/combine_classes';
-import type { Cell, DataRow } from '@ts/grids/new/grid_core/columns_controller/types';
+import type { DataRow } from '@ts/grids/new/grid_core/columns_controller/types';
 import type { DataObject } from '@ts/grids/new/grid_core/data_controller/types';
-import type { ComponentType, InfernoNode, RefObject } from 'inferno';
+import type { InfernoNode, RefObject } from 'inferno';
 import { Component, createRef } from 'inferno';
 
 import type { SelectCardOptions } from '../../types';
