@@ -19,14 +19,14 @@ describe('RequestManager', () => {
   });
 
   describe('constructor', () => {
-    it('stores the provider in a private field', () => {
+    it('should store the provider in a private field', () => {
       // @ts-expect-error Access to protected property for a test
       expect(requestManager.provider).toBe(provider);
     });
   });
 
   describe('sendRequest', () => {
-    it('throws an error if the provider does not have a valid sendRequest method', () => {
+    it('should throw an error if the provider does not have a valid sendRequest method', () => {
       const aIProvider = {} as AIProvider;
 
       requestManager = new RequestManager(aIProvider);
@@ -36,7 +36,7 @@ describe('RequestManager', () => {
       }).toThrow(ERROR_MESSAGES.METHOD_NOT_IMPLEMENTED);
     });
 
-    it('calls provider.sendRequest with the correct parameters', () => {
+    it('should call provider.sendRequest with the correct parameters', () => {
       const prompt: Prompt = { user: 'User', system: 'System' };
       const onChunk = jest.fn();
 
@@ -51,7 +51,7 @@ describe('RequestManager', () => {
       });
     });
 
-    it('accumulates chunk data and calls onChunk on every chunk', () => {
+    it('should call onChunk on every chunk', () => {
       const onChunkSpy = jest.fn();
 
       requestManager.sendRequest({ user: 'test' }, { onChunk: onChunkSpy });
@@ -61,7 +61,7 @@ describe('RequestManager', () => {
       expect(onChunkSpy).toHaveBeenNthCalledWith(2, ' response');
     });
 
-    it('after completion of the promise calls onComplete with accumulated data', async () => {
+    it('after completion of the promise should call onComplete with accumulated data', async () => {
       let resolvePromise: (result: string) => void = () => {};
 
       const promise = new Promise<string>((resolve) => { resolvePromise = resolve; });
@@ -83,7 +83,7 @@ describe('RequestManager', () => {
       expect(onCompleteSpy).toHaveBeenCalledWith('FirstSecond');
     });
 
-    it('calls onError if the promise was rejected', async () => {
+    it('should call onError if the promise was rejected', async () => {
       let rejectPromise: (error: Error) => void = () => {};
 
       const promise = new Promise<string>((_, reject) => { rejectPromise = reject; });
@@ -107,7 +107,7 @@ describe('RequestManager', () => {
       expect(onErrorSpy).toHaveBeenCalledWith(error);
     });
 
-    it('returns the abort function that returned from sendRequest', () => {
+    it('should return the abort function that returned from sendRequest', () => {
       const abort = (): void => {};
 
       const sendRequestSpy = jest.spyOn(provider, 'sendRequest');
@@ -122,7 +122,7 @@ describe('RequestManager', () => {
       expect(abortRequest).toBe(abort);
     });
 
-    it('works correctly with no or partial definition of callbacks', () => {
+    it('should work correctly with no or partial definition of callbacks', () => {
       expect(() => {
         requestManager.sendRequest({ user: 'test' }, {});
       }).not.toThrow();

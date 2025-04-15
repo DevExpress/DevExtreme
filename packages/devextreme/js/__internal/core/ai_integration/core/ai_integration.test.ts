@@ -82,7 +82,7 @@ describe('AIIntegration', () => {
   });
 
   describe('constructor', () => {
-    it('creates and stores PromptManager and RequestManager', () => {
+    it('should create and store PromptManager and RequestManager', () => {
       // @ts-expect-error Access to protected property for a test
       expect(ai.promptManager).toBeInstanceOf(PromptManager);
       // @ts-expect-error Access to protected property for a test
@@ -94,8 +94,8 @@ describe('AIIntegration', () => {
     describe(commandName, () => {
       const { command, params, params2 } = COMMANDS[commandName];
 
-      it(`calls execute with ${commandName} command correctly`, () => {
-        const callbacks: RequestCallbacks = {
+      it(`should call executeCommand with ${commandName} command correctly`, () => {
+        const callbacks: RequestCallbacks<unknown> = {
           onComplete: () => {},
           onChunk: () => {},
           onError: () => {},
@@ -109,7 +109,7 @@ describe('AIIntegration', () => {
         expect(executeSpy).toHaveBeenCalledWith(params, callbacks);
       });
 
-      it('returns the abort function received from the command', () => {
+      it('should return the abort function received from the command', () => {
         const abort = (): void => {};
 
         jest
@@ -122,8 +122,8 @@ describe('AIIntegration', () => {
         expect(abortRequest).toBe(abort);
       });
 
-      it(`reuses the same command instance for multiple ${commandName} calls`, () => {
-        const callbacks: RequestCallbacks = {};
+      it(`should reuse the same command instance for multiple ${commandName} calls`, () => {
+        const callbacks: RequestCallbacks<unknown> = {};
         const executeSpy = jest.spyOn(command.prototype, 'execute');
 
         ai[commandName](params, callbacks);

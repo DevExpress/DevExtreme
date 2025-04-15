@@ -5,7 +5,12 @@ import {
   it,
   jest,
 } from '@jest/globals';
-import type { AIProvider, ProofreadCommandParams, RequestCallbacks } from '@js/common/ai-integration';
+import type {
+  AIProvider,
+  ProofreadCommandParams,
+  ProofreadCommandResult,
+  RequestCallbacks,
+} from '@js/common/ai-integration';
 import { ProofreadCommand } from '@ts/core/ai_integration/commands';
 import type { PromptData } from '@ts/core/ai_integration/core/prompt_manager';
 import { PromptManager } from '@ts/core/ai_integration/core/prompt_manager';
@@ -29,7 +34,7 @@ describe('ProofreadCommand', () => {
   });
 
   describe('getTemplateName', () => {
-    it('returns name of template correctly', () => {
+    it('should return name of template correctly', () => {
       // @ts-expect-error Access to protected property for a test
       const templateName = command.getTemplateName();
 
@@ -38,7 +43,7 @@ describe('ProofreadCommand', () => {
   });
 
   describe('buildPromptData', () => {
-    it('forms PromptData with empty object', () => {
+    it('should form PromptData with empty object', () => {
       // @ts-expect-error Access to protected property for a test
       const promptData: PromptData = command.buildPromptData(params);
 
@@ -49,7 +54,7 @@ describe('ProofreadCommand', () => {
   });
 
   describe('parseResult', () => {
-    it('returns the string without changes', () => {
+    it('should return the string without changes', () => {
       const response = 'Proofread text';
       // @ts-expect-error Access to protected property for a test
       const result = command.parseResult(response);
@@ -59,8 +64,8 @@ describe('ProofreadCommand', () => {
   });
 
   describe('execute', () => {
-    it('correctly calls promptManager.buildPrompt and returns the abort function', () => {
-      const callbacks: RequestCallbacks = { onComplete: () => {} };
+    it('should call promptManager.buildPrompt correctly and return the abort function', () => {
+      const callbacks: RequestCallbacks<ProofreadCommandResult> = { onComplete: () => {} };
 
       const buildPromptSpy = jest.spyOn(promptManager, 'buildPrompt');
       const sendRequestSpy = jest.spyOn(requestManager, 'sendRequest');

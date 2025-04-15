@@ -5,7 +5,12 @@ import {
   it,
   jest,
 } from '@jest/globals';
-import type { AIProvider, RequestCallbacks, TranslateCommandParams } from '@js/common/ai-integration';
+import type {
+  AIProvider,
+  RequestCallbacks,
+  TranslateCommandParams,
+  TranslateCommandResult,
+} from '@js/common/ai-integration';
 import { TranslateCommand } from '@ts/core/ai_integration/commands/translate';
 import type { PromptData } from '@ts/core/ai_integration/core/prompt_manager';
 import { PromptManager } from '@ts/core/ai_integration/core/prompt_manager';
@@ -28,7 +33,7 @@ describe('TranslateCommand', () => {
   });
 
   describe('getTemplateName', () => {
-    it('returns name of template correctly', () => {
+    it('should return name of template correctly', () => {
       // @ts-expect-error Access to protected property for a test
       const templateName = command.getTemplateName();
 
@@ -37,7 +42,7 @@ describe('TranslateCommand', () => {
   });
 
   describe('buildPromptData', () => {
-    it('forms PromptData with text in user section and lang in system section', () => {
+    it('should form PromptData with text in user section and lang in system section', () => {
       // @ts-expect-error Access to protected property for a test
       const promptData: PromptData = command.buildPromptData(params);
 
@@ -49,7 +54,7 @@ describe('TranslateCommand', () => {
   });
 
   describe('parseResult', () => {
-    it('returns the string without changes', () => {
+    it('should return the string without changes', () => {
       const response = 'Translated text';
       // @ts-expect-error Access to protected property for a test
       const result = command.parseResult(response);
@@ -59,8 +64,8 @@ describe('TranslateCommand', () => {
   });
 
   describe('execute', () => {
-    it('correctly calls promptManager.buildPrompt and returns the abort function', () => {
-      const callbacks: RequestCallbacks = { onComplete: () => {} };
+    it('should call promptManager.buildPrompt correctly and return the abort function', () => {
+      const callbacks: RequestCallbacks<TranslateCommandResult> = { onComplete: () => {} };
 
       const buildPromptSpy = jest.spyOn(promptManager, 'buildPrompt');
       const sendRequestSpy = jest.spyOn(requestManager, 'sendRequest');
