@@ -1,9 +1,12 @@
 import { combineClasses } from '@ts/core/utils/combine_classes';
 
-export interface Properties {
-  className?: string;
+export interface Properties extends Pick<
+  JSX.IntrinsicElements['div'],
+  | 'onClick'
+  | 'aria-label'
+  | 'className'
+> {
   name: IconName;
-  'aria-label'?: string;
 }
 
 export function Icon(props: Properties): JSX.Element {
@@ -18,6 +21,7 @@ export function Icon(props: Properties): JSX.Element {
       className={classes}
       aria-label={props['aria-label']}
       role={props['aria-label'] ? 'img' : undefined}
+      onClick={props.onClick}
     />
   );
 }

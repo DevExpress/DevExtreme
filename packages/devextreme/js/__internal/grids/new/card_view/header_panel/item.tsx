@@ -106,8 +106,10 @@ export class Item extends Component<ItemProps> {
           )
         }
         { this.props.column?.allowHeaderFiltering && (
-          <span className={headerFilterIconClass}
-                onClick={this.onFilterClickHandler}
+          <Icon
+            name='filter'
+            className={headerFilterIconClass}
+            onClick={this.onFilterClickHandler}
           />
         )}
       </div>
