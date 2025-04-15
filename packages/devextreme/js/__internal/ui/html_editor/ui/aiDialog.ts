@@ -21,12 +21,14 @@ const AI_DIALOG_CONTROLS_CLASS = 'dx-aidialog-controls';
 const AI_DIALOG_CONTENT_CLASS = 'dx-aidialog-content';
 const AI_DIALOG_TITLE_CLASS = 'dx-aidialog-title';
 const AI_DIALOG_TITLE_TEXT_CLASS = 'dx-aidialog-title-text';
+const ICON_CLASS = 'dx-icon';
+const ICON_SPARKLE_CLASS = 'dx-icon-sparkle';
 
 const POPUP_MIN_WIDTH = 288;
 const POPUP_MAX_WIDTH = 460;
 const REPLACE_DROPDOWN_WIDTH = 150;
-const TEXT_AREA_HEIGHT = 36;
-const TEXT_AREA_EXPANDED_HEIGHT = 64;
+const TEXT_AREA_ROWS = 1;
+const TEXT_AREA_EXPANDED_ROWS = 2;
 
 enum DialogState {
   Initial = 'initial',
@@ -72,9 +74,9 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
 
   private _resultText = '';
 
-  private _promptText = '';
+  private _askAIPrompt = '';
 
-  private _getPrompt?: AICustomCommand['prompt'];
+  private _getCustomCommandPrompt?: AICustomCommand['prompt'];
 
   private _commandSelectBox?: dxSelectBox;
 
@@ -136,7 +138,7 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
         this._currentOption = this._commandOptionsList?.[0];
 
         this._isAskAICommandSelected = e.value === 'askAI';
-        this._promptText = '';
+        this._askAIPrompt = '';
 
         this._setDialogState(this._getInitialDialogState());
       },
@@ -158,12 +160,14 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
   protected _renderPromptTextArea($container: dxElementWrapper): void {
     const $textArea = $('<div>').appendTo($container);
     this._promptTextArea = new TextArea($textArea.get(0), {
-      value: this._promptText,
-      height: TEXT_AREA_EXPANDED_HEIGHT,
+      value: this._askAIPrompt,
+      inputAttr: {
+        rows: TEXT_AREA_EXPANDED_ROWS,
+      },
       width: '100%',
-      placeholder: 'Ask AI a question',
+      placeholder: localizationMessage.format('dxHtmlEditor-aiAskPlaceholder'),
       onValueChanged: (e): void => {
-        this._promptText = e.value;
+        this._askAIPrompt = e.value;
       },
     });
   }
@@ -172,7 +176,9 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
     const $textArea = $('<div>').appendTo($container);
     this._resultTextArea = new TextArea($textArea.get(0), {
       value: this._resultText,
-      height: TEXT_AREA_EXPANDED_HEIGHT,
+      inputAttr: {
+        rows: TEXT_AREA_EXPANDED_ROWS,
+      },
       width: '100%',
       readOnly: true,
       onValueChanged: (e): void => {
@@ -204,7 +210,7 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
       location: 'before',
       template: (data, index, titleElement): void => {
         const $titleContainer = $('<div>').addClass(AI_DIALOG_TITLE_CLASS);
-        const $icon = $('<i>').addClass('dx-icon dx-icon-sparkle');
+        const $icon = $('<i>').addClass(`.${ICON_CLASS} .${ICON_SPARKLE_CLASS}`);
         const $text = $('<span>')
           .addClass(AI_DIALOG_TITLE_TEXT_CLASS)
           .text(localizationMessage.format('dxHtmlEditor-aiDialogTitle'));
@@ -334,10 +340,10 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
     this._refreshCommandSelectBox();
     this._refreshOptionSelectBox();
     this._refreshTextAreas();
-    this._updateToolbarItems();
+    this._refreshToolbarItems();
   }
 
-  private _updateToolbarItems(): void {
+  private _refreshToolbarItems(): void {
     this._popup.option('toolbarItems', this._getToolbarItems());
   }
 
@@ -386,42 +392,32 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
   private _refreshTextAreas(): void {
     switch (this._dialogState) {
       case DialogState.Initial:
-        this._promptTextArea?.option({
-          visible: this._isAskAICommandSelected,
-          value: this._promptText,
-          readOnly: false,
-          height: TEXT_AREA_EXPANDED_HEIGHT,
-        });
+        this._promptTextArea?.option({ visible: false });
         this._resultTextArea?.option({
-          visible: !this._isAskAICommandSelected,
+          visible: true,
           value: this._resultText,
         });
         break;
       case DialogState.Asking:
         this._promptTextArea?.option({
           visible: true,
-          value: this._promptText,
+          value: this._askAIPrompt,
           disabled: false,
-          height: TEXT_AREA_EXPANDED_HEIGHT,
+          inputAttr: { rows: TEXT_AREA_EXPANDED_ROWS },
         });
-        this._resultTextArea?.option('visible', false);
+        this._resultTextArea?.option({ visible: false });
         break;
       case DialogState.Generating:
         this._promptTextArea?.option({
           disabled: true,
-          height: TEXT_AREA_HEIGHT,
+          inputAttr: { rows: TEXT_AREA_ROWS },
         });
         this._resultTextArea?.option({
           visible: true,
+          value: this._resultText,
         });
         break;
       case DialogState.ResultReady:
-        this._promptTextArea?.option({
-          visible: this._isAskAICommandSelected,
-          value: this._promptText,
-          readOnly: true,
-          height: TEXT_AREA_HEIGHT,
-        });
         this._resultTextArea?.option({
           visible: true,
           value: this._resultText,
@@ -451,10 +447,10 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
     this._resultText = text ?? '';
     this._commandOptionsList = commandsMap[currentCommand]?.options ?? [];
     this._currentOption = currentCommandOption;
-    this._getPrompt = prompt;
+    this._getCustomCommandPrompt = prompt;
 
     this._isAskAICommandSelected = currentCommand === 'askAI';
-    this._promptText = '';
+    this._askAIPrompt = '';
 
     this._setDialogState(this._getInitialDialogState());
 
