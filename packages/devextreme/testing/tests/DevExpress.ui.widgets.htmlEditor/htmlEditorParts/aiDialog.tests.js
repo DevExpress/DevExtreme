@@ -219,7 +219,7 @@ QUnit.module('AIDialog', moduleConfig, () => {
 
             assert.strictEqual(promptTextAreaInstance.option('visible'), true, 'prompt TextArea is visible');
             assert.strictEqual(resultTextAreaInstance.option('visible'), false, 'result TextArea is hidden initially');
-            assert.strictEqual(promptTextAreaInstance.option('disabled'), false, 'prompt TextArea is editable');
+            assert.strictEqual(promptTextAreaInstance.option('readOnly'), false, 'prompt TextArea is not readOnly');
 
             assert.deepEqual(buttonTexts, ['Generate', 'Stop'], 'toolbar contains correct buttons for Ask AI mode');
             assert.strictEqual(generateButtonItem.disabled, undefined, 'generate button is not disabled');
@@ -244,8 +244,7 @@ QUnit.module('AIDialog', moduleConfig, () => {
             const replaceButtonItem = toolbarButtonItems.find(item => item.options.text === 'Replace');
             const copyButtonItem = toolbarButtonItems.find(item => item.options.text === 'Copy');
 
-            assert.strictEqual(promptTextAreaInstance.option('disabled'), true, 'prompt TextArea is disabled');
-            assert.strictEqual($textAreas.eq(0).find(`.${TEXT_EDITOR_INPUT_CLASS}`).attr('rows'), '1', 'prompt TextArea has correct rows');
+            assert.strictEqual(promptTextAreaInstance.option('readOnly'), true, 'prompt TextArea is readOnly');
             assert.strictEqual(resultTextAreaInstance.option('visible'), true, 'result TextArea is visible');
 
             assert.deepEqual(buttonTexts, ['Replace', 'Try again', 'Copy'], 'Toolbar contains correct buttons after generation');
@@ -273,8 +272,7 @@ QUnit.module('AIDialog', moduleConfig, () => {
             const buttonTexts = toolbarButtonItems.map(item => item.options.text);
 
             assert.strictEqual(promptTextAreaInstance.option('visible'), true, 'prompt TextArea is visible');
-            assert.strictEqual(promptTextAreaInstance.option('disabled'), false, 'prompt TextArea is not disabled');
-            assert.strictEqual($textAreas.eq(0).find(`.${TEXT_EDITOR_INPUT_CLASS}`).attr('rows'), '2', 'prompt TextArea has correct rows');
+            assert.strictEqual(promptTextAreaInstance.option('readOnly'), false, 'prompt TextArea is not readOnly');
             assert.strictEqual(resultTextAreaInstance.option('visible'), false, 'result TextArea is hidden');
 
             assert.deepEqual(buttonTexts, ['Generate', 'Stop'], 'toolbar reset to Ask AI state with correct buttons');
@@ -316,8 +314,7 @@ QUnit.module('AIDialog', moduleConfig, () => {
             const buttonTexts = toolbarButtonItems.map(item => item.options.text);
 
             assert.strictEqual(promptTextAreaInstance.option('visible'), true, 'prompt TextArea is visible');
-            assert.strictEqual(promptTextAreaInstance.option('disabled'), false, 'prompt TextArea is editable');
-            assert.strictEqual($textAreas.eq(0).find(`.${TEXT_EDITOR_INPUT_CLASS}`).attr('rows'), '2', 'prompt TextArea has correct rows');
+            assert.strictEqual(promptTextAreaInstance.option('readOnly'), false, 'prompt TextArea is not readOnly');
             assert.strictEqual(resultTextAreaInstance.option('visible'), false, 'result TextArea is hidden');
             assert.strictEqual(optionSelectBoxInstance.option('visible'), false, 'option SelectBox hidden for askAI');
 

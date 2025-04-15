@@ -27,8 +27,8 @@ const ICON_SPARKLE_CLASS = 'dx-icon-sparkle';
 const POPUP_MIN_WIDTH = 288;
 const POPUP_MAX_WIDTH = 460;
 const REPLACE_DROPDOWN_WIDTH = 150;
-const TEXT_AREA_ROWS = 1;
-const TEXT_AREA_EXPANDED_ROWS = 2;
+const TEXT_AREA_MIN_HEIGHT = 64;
+const TEXT_AREA_MAX_HEIGHT = 128;
 
 enum DialogState {
   Initial = 'initial',
@@ -78,13 +78,13 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
 
   private _getCustomCommandPrompt?: AICustomCommand['prompt'];
 
-  private _commandSelectBox?: dxSelectBox;
+  private _commandSelectBox!: dxSelectBox;
 
-  private _optionSelectBox?: SelectBox;
+  private _optionSelectBox!: SelectBox;
 
-  private _resultTextArea?: TextArea;
+  private _resultTextArea!: TextArea;
 
-  private _promptTextArea?: TextArea;
+  private _promptTextArea!: TextArea;
 
   private _commandChangeSuppressed = false;
 
@@ -161,9 +161,9 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
     const $textArea = $('<div>').appendTo($container);
     this._promptTextArea = new TextArea($textArea.get(0), {
       value: this._askAIPrompt,
-      inputAttr: {
-        rows: TEXT_AREA_EXPANDED_ROWS,
-      },
+      minHeight: TEXT_AREA_MIN_HEIGHT,
+      maxHeight: TEXT_AREA_MAX_HEIGHT,
+      autoResizeEnabled: true,
       width: '100%',
       placeholder: localizationMessage.format('dxHtmlEditor-aiAskPlaceholder'),
       onValueChanged: (e): void => {
@@ -176,9 +176,9 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
     const $textArea = $('<div>').appendTo($container);
     this._resultTextArea = new TextArea($textArea.get(0), {
       value: this._resultText,
-      inputAttr: {
-        rows: TEXT_AREA_EXPANDED_ROWS,
-      },
+      minHeight: TEXT_AREA_MIN_HEIGHT,
+      maxHeight: TEXT_AREA_MAX_HEIGHT,
+      autoResizeEnabled: true,
       width: '100%',
       readOnly: true,
       onValueChanged: (e): void => {
@@ -372,7 +372,7 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
     );
 
     this._commandChangeSuppressed = true;
-    this._commandSelectBox?.option({
+    this._commandSelectBox.option({
       dataSource: commandsList,
       value: this._currentCommand,
     });
@@ -382,7 +382,7 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
   private _refreshOptionSelectBox(): void {
     const hasOptions = this._isCommandWithOptionsSelected();
 
-    this._optionSelectBox?.option({
+    this._optionSelectBox.option({
       visible: hasOptions,
       items: this._commandOptionsList ?? [],
       value: this._currentOption ?? this._commandOptionsList?.[0],
@@ -392,33 +392,29 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
   private _refreshTextAreas(): void {
     switch (this._dialogState) {
       case DialogState.Initial:
-        this._promptTextArea?.option({ visible: false });
-        this._resultTextArea?.option({
+        this._promptTextArea.option({ visible: false });
+        this._resultTextArea.option({
           visible: true,
           value: this._resultText,
         });
         break;
       case DialogState.Asking:
-        this._promptTextArea?.option({
+        this._promptTextArea.option({
           visible: true,
           value: this._askAIPrompt,
-          disabled: false,
-          inputAttr: { rows: TEXT_AREA_EXPANDED_ROWS },
+          readOnly: false,
         });
-        this._resultTextArea?.option({ visible: false });
+        this._resultTextArea.option({ visible: false });
         break;
       case DialogState.Generating:
-        this._promptTextArea?.option({
-          disabled: true,
-          inputAttr: { rows: TEXT_AREA_ROWS },
-        });
-        this._resultTextArea?.option({
+        this._promptTextArea.option({ readOnly: true });
+        this._resultTextArea.option({
           visible: true,
           value: this._resultText,
         });
         break;
       case DialogState.ResultReady:
-        this._resultTextArea?.option({
+        this._resultTextArea.option({
           visible: true,
           value: this._resultText,
         });
