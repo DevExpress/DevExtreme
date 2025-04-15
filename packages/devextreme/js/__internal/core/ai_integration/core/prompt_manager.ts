@@ -80,7 +80,8 @@ export class PromptManager {
     placeholders: Record<string, string>,
   ): string {
     const result = Object.entries(placeholders).reduce(
-      (acc, [key, value]) => acc.split(`{{${key}}}`).join(value),
+      // @ts-expect-error 'replaceAll' does not exist on type 'string'
+      (acc, [key, value]) => (acc.replaceAll(`{{${key}}}`, value) as string),
       promptTemplate,
     );
 
