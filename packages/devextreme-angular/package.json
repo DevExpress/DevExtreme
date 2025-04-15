@@ -79,7 +79,7 @@
     "zone.js": "0.14.10"
   },
   "main": "./src/index.ts",
-"keywords": [
+  "keywords": [
     "Angular",
     "Angular grid",
     "angular-component",
