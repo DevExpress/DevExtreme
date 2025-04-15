@@ -7,6 +7,7 @@ import { SearchController } from '@ts/grids/new/grid_core/search/index';
 
 import type { Column, DataRow } from '../columns_controller/types';
 import type { DataObject, Key } from '../data_controller/types';
+import { parseValue } from '../utils';
 
 export class ItemsController {
   private readonly selectedCardKeys = state<Key[]>([]);
@@ -63,22 +64,19 @@ export class ItemsController {
     return {
       // @ts-expect-error
       cells: columns.map((column) => {
-        const calculatedValue = column.calculateCellValue?.(data);
-        const {
-          // @ts-expect-error
-          column: updatedColumn, value,
-        } = this.columnsController.updateColumnDataType(column, calculatedValue);
+        const rawValue = column.calculateCellValue?.(data);
+        const value = parseValue(column, rawValue as string);
         const displayValue = value;
         const formattedText = formatHelper.format(displayValue as never, column.format);
         const text = column.customizeText
           ? column.customizeText({ value: displayValue, valueText: formattedText })
-          : calculatedValue;
+          : rawValue;
         const highlightedText = this.searchController
           // @ts-expect-error
           .getHighlightedText(text);
 
         return {
-          column: updatedColumn,
+          column,
           value,
           displayValue,
           text,

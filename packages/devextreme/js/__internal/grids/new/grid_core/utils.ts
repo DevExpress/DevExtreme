@@ -49,13 +49,13 @@ export const parseDateValue = (
   return dateLocalization.parse(text, format) ?? null;
 };
 
-export const parseValue = (column: Column, text: string): unknown => {
+export const parseValue = (column: Column, text: string, dataType?: string): unknown => {
   switch (true) {
-    case column.dataType === 'number':
+    case column.dataType === 'number' || dataType === 'number':
       return parseNumberValue(text, column.format);
-    case column.dataType === 'boolean':
+    case column.dataType === 'boolean' || dataType === 'boolean':
       return parseBooleanValue(text, column.trueText, column.falseText);
-    case gridCoreUtils.isDateType(column.dataType):
+    case gridCoreUtils.isDateType(column.dataType) || gridCoreUtils.isDateType(dataType):
       return parseDateValue(text, column.format);
     default:
       return text;

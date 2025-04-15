@@ -1,6 +1,16 @@
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
+/* eslint-disable consistent-return */
 import { compileGetter } from '@js/core/utils/data';
+import dateSerialization from '@js/core/utils/date_serialization';
 import { captionize } from '@js/core/utils/inflector';
-import { isDefined, isString } from '@js/core/utils/type';
+import {
+  isDefined,
+  isNumeric,
+  isString,
+  type,
+} from '@js/core/utils/type';
 import type { ComponentType } from 'inferno';
 
 import type { Template } from '../types';
@@ -154,3 +164,50 @@ export function getColumnByIndexOrName(
 
   return column;
 }
+
+export const getColumnDataTypeFromValue = function (value: string): any {
+  if (value) {
+    if (typeof value === 'string') {
+      if (!isNaN(Number(value))) {
+        return 'number';
+      }
+
+      const parsed = Date.parse(value);
+      if (!isNaN(parsed)) {
+        const hasTime = /[T\s]\d{2}:\d{2}/.test(value);
+        return hasTime ? 'datetime' : 'date';
+      }
+
+      return 'string';
+    }
+  }
+};
+
+export const getValueDataType = function (value) {
+  let dataType: any = type(value);
+  if (dataType !== 'string' && dataType !== 'boolean' && dataType !== 'number' && dataType !== 'date' && dataType !== 'object') {
+    dataType = undefined;
+  }
+  if (dataType === 'string') {
+    dataType = getColumnDataTypeFromValue(value);
+  }
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+  return dataType;
+};
+
+export const getSerializationFormat = function (dataType, value): any {
+  // eslint-disable-next-line default-case
+  switch (dataType) {
+    case 'date':
+    case 'datetime':
+      return dateSerialization.getDateSerializationFormat(value);
+    case 'number':
+      if (isString(value)) {
+        return 'string';
+      }
+
+      if (isNumeric(value)) {
+        return null;
+      }
+  }
+};

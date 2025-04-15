@@ -9,6 +9,7 @@ import {
 } from '@ts/core/reactive/index';
 import { createPromise } from '@ts/core/utils/promise';
 
+import { ColumnsController } from '../columns_controller/columns_controller';
 import { FilterController } from '../filtering/filter_controller';
 import { OptionsController } from '../options_controller/options_controller';
 import { SortingController } from '../sorting_controller/sorting_controller';
@@ -82,9 +83,15 @@ export class DataController {
     [this.normalizedRemoteOptions],
   );
 
-  public static dependencies = [OptionsController, SortingController, FilterController] as const;
+  public static dependencies = [
+    ColumnsController,
+    OptionsController,
+    SortingController,
+    FilterController,
+  ] as const;
 
   constructor(
+    private readonly columnsController: ColumnsController,
     private readonly options: OptionsController,
     private readonly sortingController: SortingController,
     private readonly filterController: FilterController,
@@ -217,6 +224,8 @@ export class DataController {
       items = this._items.unreactive_get();
       items = updateItemsImmutable(items, e.changes, dataSource.store());
     }
+
+    this.columnsController.setFirstItem(items[0]);
 
     this._items.update(items);
     this.pageIndex.update(dataSource.pageIndex());

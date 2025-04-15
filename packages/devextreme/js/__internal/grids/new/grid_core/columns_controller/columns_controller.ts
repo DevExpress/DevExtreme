@@ -1,7 +1,7 @@
 /* eslint-disable spellcheck/spell-checker */
 import type { Subscribable, SubsGets, SubsGetsUpd } from '@ts/core/reactive/index';
 import {
-  computed, interruptableComputed,
+  computed, interruptableComputed, state,
 } from '@ts/core/reactive/index';
 import type { HeaderFilterRootOptions } from '@ts/grids/new/grid_core/filtering/header_filter/index';
 import headerFilterUtils from '@ts/grids/new/grid_core/filtering/header_filter/utils';
@@ -11,7 +11,8 @@ import { parseValue } from '../utils';
 import type { ColumnProperties, ColumnSettings, PreNormalizedColumn } from './options';
 import type { Column, VisibleColumn } from './types';
 import {
-  getColumnIndexByName, normalizeColumns, normalizeVisibleIndexes, preNormalizeColumns,
+  getColumnIndexByName, getSerializationFormat,
+  getValueDataType, normalizeColumns, normalizeVisibleIndexes, preNormalizeColumns,
 } from './utils';
 
 export class ColumnsController {
@@ -28,6 +29,8 @@ export class ColumnsController {
   public readonly nonVisibleColumns: SubsGets<Column[]>;
 
   public readonly allowColumnReordering: Subscribable<boolean>;
+
+  public readonly firstItem = state<Record<string, unknown> | null>(null);
 
   public static dependencies = [OptionsController] as const;
 
@@ -139,79 +142,39 @@ export class ColumnsController {
     return result;
   }
 
-  private readonly getActualColumnType = (value: unknown): 'number' | 'date' | 'datetime' | 'string' => {
-    if (typeof value === 'number') {
-      return 'number';
-    }
-
-    if (typeof value === 'string') {
-      if (!isNaN(Number(value))) {
-        return 'number';
-      }
-
-      const parsed = Date.parse(value);
-      if (!isNaN(parsed)) {
-        const hasTime = /[T\s]\d{2}:\d{2}/.test(value);
-        return hasTime ? 'datetime' : 'date';
-      }
-    }
-
-    if (value instanceof Date) {
-      const hasTime = value.getHours() !== 0
-      || value.getMinutes() !== 0
-      || value.getSeconds() !== 0
-      || value.getMilliseconds() !== 0;
-      return hasTime ? 'datetime' : 'date';
-    }
-
-    return 'string';
-  };
-
-  private updateColumnProps(column: Column, updatedProps: Partial<PreNormalizedColumn>): void {
-    this.columnsSettings.updateFunc((columns) => {
-      const index = getColumnIndexByName(columns, column.name);
-      if (index === -1) return columns;
-
-      const existing = columns[index];
-
-      const isChanged = Object.entries(updatedProps).some(
-        ([key, value]) => existing[key] !== value,
-      );
-
-      if (!isChanged) {
-        return columns;
-      }
-
-      const updated = {
-        ...existing,
-        ...updatedProps,
-      };
-
-      let newColumns = [...columns];
-      newColumns[index] = updated;
-      newColumns = this.normalizeColumnsVisibleIndexes(newColumns, index);
-      return newColumns;
-    });
+  public setFirstItem(item: Record<string, unknown> | null): void {
+    if (this.firstItem.unreactive_get()) return;
+    this.firstItem.update(item);
+    this.updateColumnDataType();
   }
 
-  public updateColumnDataType(column: Column, value: unknown): unknown {
-    const actualType = this.getActualColumnType(value);
-    let updatedColumn = column;
+  public getFirstItem(): Record<string, unknown> | null {
+    return this.firstItem.unreactive_get();
+  }
 
-    if (actualType && actualType !== column.dataType) {
-      this.updateColumnProps(column, { dataType: actualType });
-      updatedColumn = { ...column, dataType: actualType };
-    }
+  private updateColumnDataType(): void {
+    const columns = this.columns.unreactive_get();
+    const columnSettings = this.columnsSettings.unreactive_get();
+    const firstItem = this.getFirstItem();
 
-    let newValue = value;
+    columns.forEach((column, index) => {
+      if (firstItem && column.calculateCellValue) {
+        const columnSetting = columnSettings[index];
+        const rawValue = column.calculateCellValue(firstItem);
+        const dataType = columnSetting.dataType ?? getValueDataType(rawValue);
+        const value = parseValue(column, rawValue as string, dataType);
+        const serializationFormat = getSerializationFormat(dataType, value);
+        if (dataType && dataType !== column.dataType) {
+          this.columnOption(column, 'dataType', dataType);
+        }
 
-    if (typeof value === 'string') {
-      newValue = parseValue(column, value);
-    } else if (column.dataType === 'date' && !(value instanceof Date)) {
-      // @ts-expect-error
-      newValue = new Date(value);
-    }
-
-    return { column: updatedColumn, value: newValue };
+        // @ts-expect-error
+        // eslint-disable-next-line @stylistic/max-len
+        if (serializationFormat !== undefined && serializationFormat !== column.serializationFormat) {
+        // @ts-expect-error
+          this.columnOption(column, 'serializationFormat', serializationFormat);
+        }
+      }
+    });
   }
 }

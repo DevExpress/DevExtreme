@@ -15,7 +15,12 @@ const setup = (config: Options = {}) => {
   const filterController = new FilterController(options);
   const columnsController = new ColumnsController(options);
   const sortingController = new SortingController(options, columnsController);
-  const dataController = new DataController(options, sortingController, filterController);
+  const dataController = new DataController(
+    columnsController,
+    options,
+    sortingController,
+    filterController,
+  );
   const searchController = new SearchController(options);
   const itemsController = new ItemsController(
     dataController,
@@ -167,6 +172,26 @@ describe('ColumnsController', () => {
         { dataField: 'b', visibleIndex: 2 },
         { dataField: 'c', visibleIndex: 0 },
       ]);
+    });
+  });
+  describe('updateColumnDataType', () => {
+    it('should infer and apply dataType based on firstItem', () => {
+      const { columnsController } = setup({
+        columns: [
+          { dataField: 'created' },
+          { dataField: 'amount' },
+        ],
+      });
+
+      columnsController.setFirstItem({
+        created: '2024-01-01',
+        amount: '1234.56',
+      });
+
+      const columns = columnsController.columns.unreactive_get();
+
+      expect(columns[0].dataType).toBe('date');
+      expect(columns[1].dataType).toBe('number');
     });
   });
 });
