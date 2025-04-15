@@ -34,7 +34,7 @@ describe('ShortenCommand', () => {
   });
 
   describe('getTemplateName', () => {
-    it('should return name of template correctly', () => {
+    it('should return the name of the corresponding template', () => {
       // @ts-expect-error Access to protected property for a test
       const templateName = command.getTemplateName();
 
@@ -64,20 +64,33 @@ describe('ShortenCommand', () => {
   });
 
   describe('execute', () => {
-    it('should call promptManager.buildPrompt correctly and return the abort function', () => {
+    it('promptManager.buildPrompt should be called with parameters containing the passed values', () => {
       const callbacks: RequestCallbacks<ShortenCommandResult> = { onComplete: () => {} };
-
       const buildPromptSpy = jest.spyOn(promptManager, 'buildPrompt');
-      const sendRequestSpy = jest.spyOn(requestManager, 'sendRequest');
 
-      const abort = command.execute(params, callbacks);
+      command.execute(params, callbacks);
 
       expect(buildPromptSpy).toHaveBeenCalledTimes(1);
       expect(promptManager.buildPrompt).toHaveBeenCalledWith('shorten', { user: { text: params.text } });
+    });
+
+    it('promptManager.buildPrompt should should return prompt with passed values', () => {
+      const callbacks: RequestCallbacks<ShortenCommandResult> = { onComplete: () => {} };
+
+      command.execute(params, callbacks);
+
       expect(promptManager.buildPrompt).toHaveReturnedWith({
         system: 'Please shorten the text provided by summarizing its content while retaining the main point and essential details. Aim to reduce the text to approximately 50% of its original length. Ensure that the key message remains clear and intact. Return answer with no markdown formatting.',
         user: params.text,
       });
+    });
+
+    it('should call provider.sendRequest once and return the abort function', () => {
+      const callbacks: RequestCallbacks<ShortenCommandResult> = { onComplete: () => {} };
+      const sendRequestSpy = jest.spyOn(requestManager, 'sendRequest');
+
+      const abort = command.execute(params, callbacks);
+
       expect(typeof abort).toBe('function');
       expect(sendRequestSpy).toHaveBeenCalledTimes(1);
     });

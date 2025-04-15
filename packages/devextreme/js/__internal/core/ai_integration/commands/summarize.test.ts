@@ -34,7 +34,7 @@ describe('SummarizeCommand', () => {
   });
 
   describe('getTemplateName', () => {
-    it('should return name of template correctly', () => {
+    it('should return the name of the corresponding template', () => {
       // @ts-expect-error Access to protected property for a test
       const templateName = command.getTemplateName();
 
@@ -64,20 +64,33 @@ describe('SummarizeCommand', () => {
   });
 
   describe('execute', () => {
-    it('should call promptManager.buildPrompt correctly and return the abort function', () => {
+    it('promptManager.buildPrompt should be called with parameters containing the passed values', () => {
       const callbacks: RequestCallbacks<SummarizeCommandResult> = { onComplete: () => {} };
-
       const buildPromptSpy = jest.spyOn(promptManager, 'buildPrompt');
-      const sendRequestSpy = jest.spyOn(requestManager, 'sendRequest');
 
-      const abort = command.execute(params, callbacks);
+      command.execute(params, callbacks);
 
       expect(buildPromptSpy).toHaveBeenCalledTimes(1);
       expect(promptManager.buildPrompt).toHaveBeenCalledWith('summarize', { user: { text: params.text } });
+    });
+
+    it('promptManager.buildPrompt should should return prompt with passed values', () => {
+      const callbacks: RequestCallbacks<SummarizeCommandResult> = { onComplete: () => {} };
+
+      command.execute(params, callbacks);
+
       expect(promptManager.buildPrompt).toHaveReturnedWith({
         system: 'First, identify the key points of the provided text. Then, generate an abstractive summary by paraphrasing these points, ensuring the summary captures the core ideas and is approximately 20% of the text\'s length. Return answer with no markdown formatting.',
         user: params.text,
       });
+    });
+
+    it('should call provider.sendRequest once and return the abort function', () => {
+      const callbacks: RequestCallbacks<SummarizeCommandResult> = { onComplete: () => {} };
+      const sendRequestSpy = jest.spyOn(requestManager, 'sendRequest');
+
+      const abort = command.execute(params, callbacks);
+
       expect(typeof abort).toBe('function');
       expect(sendRequestSpy).toHaveBeenCalledTimes(1);
     });

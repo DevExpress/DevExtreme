@@ -37,7 +37,7 @@ describe('ChangeStyleCommand', () => {
   });
 
   describe('getTemplateName', () => {
-    it('should return name of template correctly', () => {
+    it('should return the name of the corresponding template', () => {
       // @ts-expect-error Access to protected property for a test
       const templateName = command.getTemplateName();
 
@@ -68,23 +68,36 @@ describe('ChangeStyleCommand', () => {
   });
 
   describe('execute', () => {
-    it('should call promptManager.buildPrompt correctly and return the abort function', () => {
+    it('promptManager.buildPrompt should be called with parameters containing the passed values', () => {
       const callbacks: RequestCallbacks<ChangeStyleCommandResult> = { onComplete: () => {} };
-
       const buildPromptSpy = jest.spyOn(promptManager, 'buildPrompt');
-      const sendRequestSpy = jest.spyOn(requestManager, 'sendRequest');
 
-      const abort = command.execute(params, callbacks);
+      command.execute(params, callbacks);
 
       expect(buildPromptSpy).toHaveBeenCalledTimes(1);
       expect(promptManager.buildPrompt).toHaveBeenCalledWith('changeStyle', {
         system: { writingStyle: params.writingStyle },
         user: { text: params.text },
       });
+    });
+
+    it('promptManager.buildPrompt should should return prompt with passed values', () => {
+      const callbacks: RequestCallbacks<ChangeStyleCommandResult> = { onComplete: () => {} };
+
+      command.execute(params, callbacks);
+
       expect(promptManager.buildPrompt).toHaveReturnedWith({
         system: 'Rewrite the text provided to match the creative writing style. Ensure the rewritten text follows the grammatical rules and stylistic conventions of the specified style. Preserve the original meaning and context. Use complete sentences and a professional tone. Return answer with no markdown formatting.',
         user: params.text,
       });
+    });
+
+    it('should call provider.sendRequest once and return the abort function', () => {
+      const callbacks: RequestCallbacks<ChangeStyleCommandResult> = { onComplete: () => {} };
+      const sendRequestSpy = jest.spyOn(requestManager, 'sendRequest');
+
+      const abort = command.execute(params, callbacks);
+
       expect(typeof abort).toBe('function');
       expect(sendRequestSpy).toHaveBeenCalledTimes(1);
     });

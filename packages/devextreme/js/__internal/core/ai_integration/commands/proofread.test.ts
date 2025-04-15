@@ -34,7 +34,7 @@ describe('ProofreadCommand', () => {
   });
 
   describe('getTemplateName', () => {
-    it('should return name of template correctly', () => {
+    it('should return the name of the corresponding template', () => {
       // @ts-expect-error Access to protected property for a test
       const templateName = command.getTemplateName();
 
@@ -64,20 +64,33 @@ describe('ProofreadCommand', () => {
   });
 
   describe('execute', () => {
-    it('should call promptManager.buildPrompt correctly and return the abort function', () => {
+    it('promptManager.buildPrompt should be called with parameters containing the passed values', () => {
       const callbacks: RequestCallbacks<ProofreadCommandResult> = { onComplete: () => {} };
-
       const buildPromptSpy = jest.spyOn(promptManager, 'buildPrompt');
-      const sendRequestSpy = jest.spyOn(requestManager, 'sendRequest');
 
-      const abort = command.execute(params, callbacks);
+      command.execute(params, callbacks);
 
       expect(buildPromptSpy).toHaveBeenCalledTimes(1);
       expect(promptManager.buildPrompt).toHaveBeenCalledWith('proofread', { user: { text: params.text } });
+    });
+
+    it('promptManager.buildPrompt should should return prompt with passed values', () => {
+      const callbacks: RequestCallbacks<ProofreadCommandResult> = { onComplete: () => {} };
+
+      command.execute(params, callbacks);
+
       expect(promptManager.buildPrompt).toHaveReturnedWith({
         system: 'Proofread the following text for grammar, punctuation, and style errors. Make corrections to ensure clarity and conciseness while preserving the original meaning. Use a formal writing style unless otherwise specified. Return only the revised text without any formatting or explanations.',
         user: params.text,
       });
+    });
+
+    it('should call provider.sendRequest once and return the abort function', () => {
+      const callbacks: RequestCallbacks<ProofreadCommandResult> = { onComplete: () => {} };
+      const sendRequestSpy = jest.spyOn(requestManager, 'sendRequest');
+
+      const abort = command.execute(params, callbacks);
+
       expect(typeof abort).toBe('function');
       expect(sendRequestSpy).toHaveBeenCalledTimes(1);
     });

@@ -62,7 +62,7 @@ describe('BaseCommand', () => {
   });
 
   describe('constructor', () => {
-    it('should store PromptManager and RequestManager correctly', () => {
+    it('should store PromptManager and RequestManager instances', () => {
       // @ts-expect-error Access to protected property for a test
       expect(command.promptManager).toBe(promptManager);
       // @ts-expect-error Access to protected property for a test
@@ -71,7 +71,7 @@ describe('BaseCommand', () => {
   });
 
   describe('execute', () => {
-    it('getTemplateName should return value correctly', () => {
+    it('getTemplateName should return the name of the corresponding template', () => {
       const spy = jest.spyOn(command, 'getTemplateName');
 
       command.execute(params, {});
