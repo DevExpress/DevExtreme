@@ -61,6 +61,7 @@ export class ContentView extends ContentViewBase<ContentViewProps> {
           onDblClick: this.options.action('onCardDblClick'),
           onHoverChanged: this.options.action('onCardHoverChanged'),
           onPrepared: this.options.action('onCardPrepared'),
+          footerTemplate: this.options.template('cardFooterTemplate'),
           cover: combined({
             imageExpr: computed(
               (imageExpr) => this.processExpr(imageExpr),
