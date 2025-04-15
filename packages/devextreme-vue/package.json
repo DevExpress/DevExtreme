@@ -16,7 +16,7 @@
     "pack": "gulp npm.pack",
     "test": "jest"
   },
-"keywords": [
+  "keywords": [
     "Vue",
     "Vue grid",
     "vue-component",
