@@ -50,6 +50,7 @@ export class ContentView extends ContentViewBase<ContentViewProps> {
         cardsPerRow: this.cardsPerRow,
         onRowHeightChange: this.rowHeight.update.bind(this.rowHeight),
         showContextMenu: this.showContextMenu.bind(this),
+        wordWrapEnabled: this.options.oneWay('wordWrapEnabled'),
         cardProps: combined({
           minWidth: this.cardMinWidth,
           maxWidth: this.options.oneWay('cardMaxWidth'),

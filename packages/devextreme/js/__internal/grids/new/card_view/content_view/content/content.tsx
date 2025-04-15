@@ -21,6 +21,8 @@ export interface ContentProps {
 
   needToHiddenCheckBoxes?: boolean;
 
+  wordWrapEnabled: boolean;
+
   cardProps?: {
     toolbar?: CardHeaderItem[];
     minWidth?: number;
@@ -32,6 +34,7 @@ export const CLASSES = {
   content: 'dx-cardview-content',
   grid: 'dx-cardview-content-grid',
   selectCheckBoxesHidden: 'dx-cardview-select-checkboxes-hidden',
+  wrapEnabled: 'dx-cardview-word-wrap-enabled',
 };
 
 function getInfernoCardKey(card: DataRow): undefined | string | number {
@@ -83,6 +86,7 @@ export class Content extends Component<ContentProps> {
       [CLASSES.content]: true,
       [CLASSES.grid]: true,
       [CLASSES.selectCheckBoxesHidden]: !!this.props.needToHiddenCheckBoxes,
+      [CLASSES.wrapEnabled]: !!this.props.wordWrapEnabled,
     });
     return (
       <div
@@ -98,7 +102,6 @@ export class Content extends Component<ContentProps> {
             key={getInfernoCardKey(item)}
             elementRef={this.cardRefs[index]}
             row={item}
-            fieldTemplate={this.props.fieldTemplate}
             onContextMenu={(e) => {
               this.props.showContextMenu?.(e, item, index);
             }}

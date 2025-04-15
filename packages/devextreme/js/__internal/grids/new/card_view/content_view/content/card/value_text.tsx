@@ -1,11 +1,9 @@
-import type { HighlightedTextItem } from '@ts/grids/new/grid_core/search/types';
+import type { Cell } from '@ts/grids/new/grid_core/columns_controller/types';
+import type { ComponentType } from 'inferno';
 
 export interface ValueTextProps {
-  text: string;
-  highlightedText: HighlightedTextItem[] | null;
-  valueTemplate?: (text: string) => JSX.Element;
-  wordWrapEnabled?: boolean;
-  alignment: 'right' | 'center' | 'left';
+  cell: Cell;
+  template?: ComponentType<{ cell: Cell }>;
   cellHintEnabled?: boolean;
 }
 
@@ -16,34 +14,29 @@ const CLASS = {
 };
 
 export const ValueText = ({
-  text,
-  highlightedText,
-  valueTemplate,
-  wordWrapEnabled,
-  alignment,
+  cell,
+  template: Template,
   cellHintEnabled,
 }: ValueTextProps): JSX.Element => {
-  if (valueTemplate && text) {
-    return valueTemplate(text);
-  }
-
   const classNames = [
     CLASS.root,
-    `${CLASS.root}--text-align-${alignment}`,
-    `${CLASS.root}--white-space-${wordWrapEnabled ? 'normal' : 'nowrap'}`,
+    `${CLASS.root}--text-align-${cell.column.alignment}`,
   ].join(' ');
 
+  const content = cell.highlightedText
+    ? cell.highlightedText.map(({ type, text: textPart }) => (
+      <span className={type === 'highlighted' ? CLASS.textPartHighlighted : ''}>{textPart}</span>
+    ))
+    : cell.text;
+
   return (
-    <span
+    <div
       className={classNames}
-      title={cellHintEnabled ? text : undefined}
+      title={cellHintEnabled ? cell.text : undefined}
     >
-      { highlightedText
-        ? highlightedText.map(({ type, text: textPart }) => (
-          <span className={type === 'highlighted' ? CLASS.textPartHighlighted : ''}>{textPart}</span>
-        ))
-        : text
-       }
-    </span>
+      {Template ? (
+        <Template cell={cell}/>
+      ) : content}
+    </div>
   );
 };

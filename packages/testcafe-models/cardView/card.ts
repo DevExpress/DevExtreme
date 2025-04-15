@@ -2,7 +2,7 @@ export const CLASS = {
     header: 'dx-cardview-card-header',
     content: 'dx-cardview-content',
     field: 'dx-cardview-field',
-    fieldName: 'dx-cardview-field-name',
+    fieldCaption: 'dx-cardview-field-caption',
     fieldValue: 'dx-cardview-field-value',
     toolbarItem: 'dx-toolbar-item',
     toolbarItemContent: 'dx-toolbar-item-content',
@@ -31,7 +31,7 @@ export default class Card {
     }
 
     getFieldCaptionCell(fieldCaption: String): Selector {
-        return this.element.find(`.${CLASS.fieldName}`).withText(fieldCaption + ':');
+        return this.element.find(`.${CLASS.fieldCaption}`).withText(fieldCaption + ':');
     }
 
     getFieldValueCell(fieldCaption: String): Selector {

@@ -2,9 +2,9 @@
 import { isCommandKeyPressed } from '@js/common/core/events/utils/index';
 import { off, on } from '@js/events/index';
 import { combineClasses } from '@ts/core/utils/combine_classes';
-import type { DataRow } from '@ts/grids/new/grid_core/columns_controller/types';
+import type { Cell, DataRow } from '@ts/grids/new/grid_core/columns_controller/types';
 import type { DataObject } from '@ts/grids/new/grid_core/data_controller/types';
-import type { InfernoNode, RefObject } from 'inferno';
+import type { ComponentType, InfernoNode, RefObject } from 'inferno';
 import { Component, createRef } from 'inferno';
 
 import type { SelectCardOptions } from '../../types';
@@ -51,9 +51,6 @@ export interface CardProps {
 
   elementRef?: RefObject<HTMLDivElement>;
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  fieldTemplate?: any;
-
   hoverStateEnabled?: boolean;
 
   toolbar?: CardHeaderItem[];
@@ -80,17 +77,12 @@ export interface CardProps {
 export class Card extends Component<CardProps> {
   private containerRef = createRef<HTMLDivElement>();
 
-  private fieldRefs: RefObject<HTMLDivElement>[] = [];
-
   render(): InfernoNode {
     if (this.props.elementRef) {
       this.containerRef = this.props.elementRef;
     }
 
-    this.fieldRefs = new Array(this.props.row.cells.length).fill(undefined).map(() => createRef());
-
     const {
-      fieldTemplate: FieldTemplate = Field,
       hoverStateEnabled,
       cover,
       row,
@@ -130,13 +122,12 @@ export class Card extends Component<CardProps> {
           />
         ) }
         <div className={CLASSES.content}>
-          {this.props.row.cells.map((cell, index) => (
-            <FieldTemplate
-              alignment={cell.column.alignment}
-              elementRef={this.fieldRefs[index]}
-              title={cell.column.caption || cell.column.name}
-              text={cell.text}
-              highlightedText={cell.highlightedText}
+          {this.props.row.cells.map((cell) => (
+            <Field
+              cell={cell}
+              template={cell.column.fieldTemplate}
+              captionTemplate={cell.column.captionTemplate}
+              valueTemplate={cell.column.valueTemplate}
             />
           ))}
         </div>

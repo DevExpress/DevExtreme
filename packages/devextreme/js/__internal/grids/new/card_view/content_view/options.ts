@@ -5,6 +5,7 @@ export interface Options extends Base.Options {
   cardsPerRow?: number | 'auto';
   cardMinWidth?: number;
   cardMaxWidth?: number;
+  wordWrapEnabled?: boolean;
   cardCover?: {
     imageExpr?: string | ((data: DataObject) => string);
     altExpr?: string | ((data: DataObject) => string);
@@ -14,6 +15,7 @@ export interface Options extends Base.Options {
 }
 
 export const defaultOptions = {
+  wordWrapEnabled: false,
   cardsPerRow: 3,
   cardCover: {
     ratio: '1 / 1',

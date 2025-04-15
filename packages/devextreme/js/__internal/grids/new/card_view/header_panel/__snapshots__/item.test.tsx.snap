@@ -25,7 +25,7 @@ exports[`Item should render sort icons 1`] = `
       class="dx-cardview-header-item-sorting"
     >
       <div
-        class="dx-icon dx-icon-sortup"
+        class="dx-icon dx-icon-arrowsortup"
       />
     </div>
     <span

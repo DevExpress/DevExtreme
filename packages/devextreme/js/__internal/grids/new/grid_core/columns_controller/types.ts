@@ -54,9 +54,10 @@ export type Column = Pick<Required<ColumnBase>, InheritedColumnProps> & {
 
   editorTemplate?: unknown;
 
-  fieldTemplate?: unknown;
+  fieldTemplate?: ComponentType<{ cell: Cell }>;
+  captionTemplate?: ComponentType<{ cell: Cell }>;
+  valueTemplate?: ComponentType<{ cell: Cell }>;
 
-  // TODO: move to cardview/headerpanel
   headerItemTemplate?: ComponentType<{ column: Column }>;
 
   headerItemCssClass?: string;
@@ -77,6 +78,8 @@ export interface Cell {
   column: Column;
 
   highlightedText: HighlightedTextItem[] | null;
+
+  index: number;
 }
 
 export interface DataRow {
