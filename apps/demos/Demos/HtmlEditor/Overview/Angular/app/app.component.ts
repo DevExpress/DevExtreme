@@ -1,7 +1,13 @@
 import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { DxHtmlEditorModule, DxCheckBoxModule, DxSelectBoxModule } from 'devextreme-angular';
+import { DxCheckBoxModule, DxSelectBoxModule } from 'devextreme-angular';
+import { DxHtmlEditorComponent,
+  DxoHtmlEditorToolbarComponent,
+  DxiHtmlEditorToolbarItemComponent,
+  DxoHtmlEditorImageUploadComponent,
+  DxoHtmlEditorMediaResizingComponent,
+} from 'devextreme-angular/ui/html-editor';
 
 import { Service, TabConfig } from './app.service';
 
@@ -41,7 +47,11 @@ export class AppComponent {
 @NgModule({
   imports: [
     BrowserModule,
-    DxHtmlEditorModule,
+    DxHtmlEditorComponent,
+    DxoHtmlEditorToolbarComponent,
+    DxiHtmlEditorToolbarItemComponent,
+    DxoHtmlEditorImageUploadComponent,
+    DxoHtmlEditorMediaResizingComponent,
     DxCheckBoxModule,
     DxSelectBoxModule,
   ],
