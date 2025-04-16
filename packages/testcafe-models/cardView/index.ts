@@ -90,7 +90,7 @@ export default class CardView extends GridCore {
   }
 
   getToolbar(): Toolbar {
-    return new Toolbar(this.element.child(`.${CLASS.toolbar}`));
+    return new Toolbar(this.element.child().child(`.${CLASS.toolbar}`));
   }
 
   isCheckBoxesHidden(): Promise<boolean> {

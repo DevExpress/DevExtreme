@@ -121,7 +121,7 @@ test('Should change page to the next one and focus first card', async (t) => {
   height: 700,
 }));
 
-test('Should focus first card if pageup pressed on first page', async (t) => {
+test('Should do nothing if pageup pressed on first page', async (t) => {
   const cardView = new CardView(CARD_VIEW_SELECTOR);
   const firstCard = cardView.getCard(2);
   const firstCardValue = await firstCard.getFieldValueCell('Id').textContent;
@@ -139,7 +139,7 @@ test('Should focus first card if pageup pressed on first page', async (t) => {
     await cardView.getCard(2).element.focused,
   ];
 
-  await t.expect(focusState).eql([true, false, false]);
+  await t.expect(focusState).eql([false, false, true]);
   await t.expect(targetCardText).eql('0');
 }).before(async () => createWidget('dxCardView', {
   dataSource: new Array(9).fill(undefined).map((_, idx) => ({ id: idx })),
@@ -152,7 +152,7 @@ test('Should focus first card if pageup pressed on first page', async (t) => {
   height: 700,
 }));
 
-test('Should focus first card if pagedown pressed on last page', async (t) => {
+test('Should do nothing if pagedown pressed on last page', async (t) => {
   const cardView = new CardView(CARD_VIEW_SELECTOR);
   const firstCard = cardView.getCard(2);
   const firstCardValue = await firstCard.getFieldValueCell('Id').textContent;
@@ -170,7 +170,7 @@ test('Should focus first card if pagedown pressed on last page', async (t) => {
     await cardView.getCard(2).element.focused,
   ];
 
-  await t.expect(focusState).eql([true, false, false]);
+  await t.expect(focusState).eql([false, false, true]);
   await t.expect(targetCardText).eql('6');
 }).before(async () => createWidget('dxCardView', {
   dataSource: new Array(9).fill(undefined).map((_, idx) => ({ id: idx })),

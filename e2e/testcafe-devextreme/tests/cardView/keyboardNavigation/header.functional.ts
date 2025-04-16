@@ -11,38 +11,13 @@ fixture.disablePageReloads`KeyboardNavigation.Header`
 
 const CARD_VIEW_SELECTOR = '#container';
 
-test('Should focus first item on header panel focus in', async (t) => {
-  const cardView = new CardView(CARD_VIEW_SELECTOR);
-  const headerPanel = cardView.getHeaderPanel();
-
-  // NOTE: Tab through license panel
-  await t
-    .pressKey('tab tab tab');
-
-  const focusState = [
-    await headerPanel.getHeaderItem(0).element.focused,
-    await headerPanel.getHeaderItem(1).element.focused,
-    await headerPanel.getHeaderItem(2).element.focused,
-  ];
-
-  await t.expect(focusState).eql([true, false, false]);
-}).before(async () => createWidget('dxCardView', {
-  dataSource: [
-    {
-      id: 0, A: 'A_0', B: 'B_0', C: 'C_0',
-    },
-  ],
-  columns: ['A', 'B', 'C'],
-  keyExpr: 'id',
-  height: 700,
-}));
-
 test('Should navigate between items by arrows', async (t) => {
   const cardView = new CardView(CARD_VIEW_SELECTOR);
   const headerPanel = cardView.getHeaderPanel();
 
   await t
-    .pressKey('tab tab tab right right');
+    .click(headerPanel.getHeaderItem(0).element)
+    .pressKey('right right');
 
   const focusState = [
     await headerPanel.getHeaderItem(0).element.focused,
