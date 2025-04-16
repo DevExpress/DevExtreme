@@ -10,7 +10,7 @@ import { OptionsController } from '../options_controller/options_controller';
 import type { ColumnProperties, ColumnSettings, PreNormalizedColumn } from './options';
 import type { Column, VisibleColumn } from './types';
 import {
-  generateColumnsIfNeeded,
+  generateColumns,
   getColumnIndexByName,
   normalizeColumns,
   normalizeVisibleIndexes,
@@ -42,32 +42,35 @@ export class ColumnsController {
     this.columnsConfiguration = this.options.oneWay('columns');
     this.headerFilterConfiguration = this.options.oneWay('headerFilter');
     this.columnsSettings = interruptableComputed(
-      (columnsConfiguration) => preNormalizeColumns(columnsConfiguration ?? []),
+      (columnsConfiguration, firstItem) => {
+        if (columnsConfiguration) {
+          return preNormalizeColumns(columnsConfiguration);
+        }
+
+        if (firstItem) {
+          return preNormalizeColumns(generateColumns(firstItem));
+        }
+
+        return [];
+      },
       [
         this.columnsConfiguration,
+        this.firstItem,
       ],
     );
 
     this.columns = computed(
-      (columnsSettings, headerFilterRootOptions, firstItem, columnsConfiguration) => {
-        const initialColumns = generateColumnsIfNeeded(
-          columnsSettings,
-          columnsConfiguration,
-          firstItem,
-        );
-
-        return normalizeColumns(
-          // @ts-expect-error
-          initialColumns ?? [],
-          this.options.normalizeTemplate.bind(this.options),
-        // eslint-disable-next-line @stylistic/max-len
-        ).map((column) => headerFilterUtils.mergeColumnHeaderFilterOptions(column, headerFilterRootOptions));
-      },
+      (
+        columnsSettings,
+        headerFilterRootOptions,
+      ) => normalizeColumns(
+        columnsSettings ?? [],
+        this.options.normalizeTemplate.bind(this.options),
+      ).map((column) => headerFilterUtils
+        .mergeColumnHeaderFilterOptions(column, headerFilterRootOptions)),
       [
         this.columnsSettings,
         this.headerFilterConfiguration,
-        this.firstItem,
-        this.columnsConfiguration,
       ],
     );
 

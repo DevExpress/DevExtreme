@@ -3,6 +3,7 @@ import { captionize } from '@js/core/utils/inflector';
 import { isDefined, isString } from '@js/core/utils/type';
 import type { ComponentType } from 'inferno';
 
+import type { DataObject } from '../data_controller/types';
 import type { Template } from '../types';
 import type { ColumnProperties, ColumnSettings, PreNormalizedColumn } from './options';
 import { defaultColumnProperties, defaultColumnPropertiesByDataType } from './options';
@@ -155,21 +156,8 @@ export function getColumnByIndexOrName(
   return column;
 }
 
-export function generateColumnsIfNeeded(
-  columnsSettings: PreNormalizedColumn[] | null | undefined,
-  columnsConfiguration: unknown,
-  firstItem: Record<string, unknown> | null,
-): unknown {
-  const userDefinedColumns = Array.isArray(columnsConfiguration);
-
-  if ((!columnsSettings || columnsSettings.length === 0) && !userDefinedColumns && firstItem) {
-    return Object.keys(firstItem).map((key, index) => ({
-      name: key,
-      dataField: key,
-      visible: true,
-      visibleIndex: index,
-    }));
-  }
-
-  return columnsSettings ?? [];
+export function generateColumns(
+  firstItem: DataObject,
+): string[] {
+  return Object.keys(firstItem);
 }
