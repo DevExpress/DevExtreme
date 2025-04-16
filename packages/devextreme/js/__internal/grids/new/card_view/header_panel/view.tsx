@@ -4,8 +4,7 @@ import { combined, computed } from '@ts/core/reactive/index';
 import { ColumnsController } from '@ts/grids/new/grid_core/columns_controller/columns_controller';
 import { View } from '@ts/grids/new/grid_core/core/view';
 import { HeaderFilterController } from '@ts/grids/new/grid_core/filtering/header_filter/index';
-import { NavigationStrategyHorizontalList } from '@ts/grids/new/grid_core/keyboard_navigation';
-import { KeyboardNavigationController } from '@ts/grids/new/grid_core/keyboard_navigation/index';
+import { KeyboardNavigationController, NavigationStrategyHorizontalList } from '@ts/grids/new/grid_core/keyboard_navigation/index';
 
 import type { Column } from '../../grid_core/columns_controller/types';
 import { HeaderFilterViewController } from '../../grid_core/filtering/header_filter/view_controller';

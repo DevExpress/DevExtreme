@@ -1,9 +1,9 @@
 /* eslint-disable spellcheck/spell-checker */
-import { markEventAsHandled } from '@ts/grids/new/grid_core/keyboard_navigation/utils';
 import type { RefObject } from 'inferno';
 import { Component, createRef } from 'inferno';
 
 import { ALL_FOCUSABLE_ELEMENTS_SELECTOR } from './const';
+import { markEventAsHandled } from './utils';
 
 export type KbnFocusTrapProps = KbnFocusTrapBaseProps & {
   enabled?: boolean;
@@ -26,8 +26,10 @@ export const KbnFocusTrapDisabled = (
       ref={elementRef}
       {...restProps}
     >
-      <div dx-focus-trap-content={false}>
+      <div data-dx-focus-trap-content={false}>
+        <div data-dx-focus-decoy={false} />
         {children}
+        <div data-dx-focus-decoy={false} />
       </div>
     </div>
   );
@@ -65,10 +67,10 @@ export class KbnFocusTrapEnabled extends Component<KbnFocusTrapBaseProps> {
           onKeyDown={this.onKeyDown}
           {...(restProps as KbnFocusTrapProps)}
         >
-          <div dx-focus-trap-content={true} onKeyDown={this.onContentKeyDown}>
-            <div ref={this.firstFocusDecoyRef} dx-focus-decoy={true} tabIndex={0} />
+          <div data-dx-focus-trap-content={true} onKeyDown={this.onContentKeyDown}>
+            <div ref={this.firstFocusDecoyRef} data-dx-focus-decoy={true} tabIndex={0} />
             {children}
-            <div ref={this.lastFocusDecoyRef} dx-focus-decoy={true} tabIndex={0} />
+            <div ref={this.lastFocusDecoyRef} data-dx-focus-decoy={true} tabIndex={0} />
           </div>
         </div>
     );

@@ -1,4 +1,4 @@
-import type { EventWithHandled } from '@ts/grids/new/grid_core/keyboard_navigation/types';
+import type { EventWithHandled } from './types';
 
 export const KEY_NAMES_MAPPING: Record<string, string> = {
   ' ': 'Space',

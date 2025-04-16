@@ -12,7 +12,7 @@
   background-color: $cardview-card-background-color;
   overflow: hidden;
 
-  & > :nth-child(1) {
+  & > div > :nth-child(2) {
     border-top: none;
   }
 }

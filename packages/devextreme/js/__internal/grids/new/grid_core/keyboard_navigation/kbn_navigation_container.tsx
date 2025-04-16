@@ -1,9 +1,9 @@
 /* eslint-disable spellcheck/spell-checker */
-import { markEventAsHandled } from '@ts/grids/new/grid_core/keyboard_navigation/utils';
 import type { RefObject } from 'inferno';
 import { Component, createRef } from 'inferno';
 
 import type { NavigationStrategyBase } from './navigation_strategy/index';
+import { markEventAsHandled } from './utils';
 
 export type KbnNavigationContainerProps = KbnNavigationContainerBaseProps & {
   enabled?: boolean;
@@ -19,14 +19,22 @@ export type KbnNavigationContainerBaseProps = Exclude<JSX.IntrinsicElements['div
 export const KbnNavigationContainerDisabled = (
   props: KbnNavigationContainerBaseProps,
 ): JSX.Element => {
-  const { elementRef, children, ...restProps } = props;
+  const {
+    elementRef,
+    navigationStrategy,
+    children,
+    ...restProps
+  } = props;
 
   return (
     <div
       ref={elementRef}
       { ...restProps }
+      data-dx-focus-container={false}
     >
+      <div data-dx-focus-decoy={false} />
       { children }
+      <div data-dx-focus-decoy={false} />
     </div>
   );
 };
@@ -74,10 +82,11 @@ export class KbnNavigationContainerEnabled extends Component<KbnNavigationContai
         {...restProps}
         ref={ref}
         onKeyDown={this.onKeyDown}
+        data-dx-focus-container={true}
       >
-        <div ref={this.firstFocusDecoyRef} dx-focus-decoy={true} tabIndex={0} />
+        <div ref={this.firstFocusDecoyRef} data-dx-focus-decoy={true} tabIndex={0} />
         { children }
-        <div ref={this.lastFocusDecoyRef} dx-focus-decoy={true} tabIndex={0} />
+        <div ref={this.lastFocusDecoyRef} data-dx-focus-decoy={true} tabIndex={0} />
       </div>
     );
   }

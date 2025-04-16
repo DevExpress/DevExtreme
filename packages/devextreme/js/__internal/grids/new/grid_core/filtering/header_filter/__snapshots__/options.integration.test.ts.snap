@@ -3579,9 +3579,11 @@ exports[`Options HeaderFilter visible: false 1`] = `
           class="dx-scrollable-content"
           style="left: 0px; top: 0px; transform: none;"
         >
-          <div>
+          <div
+            data-dx-focus-container="true"
+          >
             <div
-              dx-focus-decoy="true"
+              data-dx-focus-decoy="true"
               tabindex="0"
             />
             <div
@@ -3598,7 +3600,7 @@ exports[`Options HeaderFilter visible: false 1`] = `
               </div>
             </div>
             <div
-              dx-focus-decoy="true"
+              data-dx-focus-decoy="true"
               tabindex="0"
             />
           </div>
@@ -3639,9 +3641,11 @@ exports[`Options HeaderFilter visible: true 1`] = `
           class="dx-scrollable-content"
           style="left: 0px; top: 0px; transform: none;"
         >
-          <div>
+          <div
+            data-dx-focus-container="true"
+          >
             <div
-              dx-focus-decoy="true"
+              data-dx-focus-decoy="true"
               tabindex="0"
             />
             <div
@@ -3658,7 +3662,7 @@ exports[`Options HeaderFilter visible: true 1`] = `
               </div>
             </div>
             <div
-              dx-focus-decoy="true"
+              data-dx-focus-decoy="true"
               tabindex="0"
             />
           </div>
@@ -3699,9 +3703,11 @@ exports[`Options HeaderFilter visible: undefined 1`] = `
           class="dx-scrollable-content"
           style="left: 0px; top: 0px; transform: none;"
         >
-          <div>
+          <div
+            data-dx-focus-container="true"
+          >
             <div
-              dx-focus-decoy="true"
+              data-dx-focus-decoy="true"
               tabindex="0"
             />
             <div
@@ -3718,7 +3724,7 @@ exports[`Options HeaderFilter visible: undefined 1`] = `
               </div>
             </div>
             <div
-              dx-focus-decoy="true"
+              data-dx-focus-decoy="true"
               tabindex="0"
             />
           </div>

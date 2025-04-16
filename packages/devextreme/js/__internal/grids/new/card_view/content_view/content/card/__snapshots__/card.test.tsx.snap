@@ -6,8 +6,11 @@ exports[`Rendering should be rendered correctly 1`] = `
     class="dx-cardview-card"
   >
     <div
-      dx-focus-trap-content="false"
+      data-dx-focus-trap-content="false"
     >
+      <div
+        data-dx-focus-decoy="false"
+      />
       <div
         class="dx-cardview-card-header"
       >
@@ -143,6 +146,9 @@ exports[`Rendering should be rendered correctly 1`] = `
           devextreme
         </div>
       </div>
+      <div
+        data-dx-focus-decoy="false"
+      />
     </div>
   </div>
 </div>

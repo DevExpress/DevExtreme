@@ -3,7 +3,6 @@
  @typescript-eslint/explicit-module-boundary-types,
  spellcheck/spell-checker
 */
-import { markEventAsHandled } from '@ts/grids/new/grid_core/keyboard_navigation/utils';
 import type { RefObject } from 'inferno';
 import { Component, createRef } from 'inferno';
 
@@ -14,6 +13,7 @@ import type {
   WithoutTabIndex,
   WithTabIndex,
 } from './types';
+import { markEventAsHandled } from './utils';
 
 interface WithKbnNavigationItemProps {
   navigationIdx: number;

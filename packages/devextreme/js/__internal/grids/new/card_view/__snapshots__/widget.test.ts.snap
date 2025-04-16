@@ -24,16 +24,18 @@ exports[`common initial render should be successfull 1`] = `
               class="dx-scrollable-content"
               style="left: 0px; top: 0px; transform: none;"
             >
-              <div>
+              <div
+                data-dx-focus-container="true"
+              >
                 <div
-                  dx-focus-decoy="true"
+                  data-dx-focus-decoy="true"
                   tabindex="0"
                 />
                 <div
                   class="dx-cardview-headerpanel-content"
                 />
                 <div
-                  dx-focus-decoy="true"
+                  data-dx-focus-decoy="true"
                   tabindex="0"
                 />
               </div>
@@ -107,9 +109,11 @@ exports[`common initial render should be successfull 1`] = `
               class="dx-scrollable-content"
               style="left: 0px; top: 0px; transform: none;"
             >
-              <div>
+              <div
+                data-dx-focus-container="true"
+              >
                 <div
-                  dx-focus-decoy="true"
+                  data-dx-focus-decoy="true"
                   tabindex="0"
                 />
                 <div
@@ -117,7 +121,7 @@ exports[`common initial render should be successfull 1`] = `
                   style="--dx-cardview-cardsperrow: 3; --dx-cardview-card-cover-ratio: 1 / 1;"
                 />
                 <div
-                  dx-focus-decoy="true"
+                  data-dx-focus-decoy="true"
                   tabindex="0"
                 />
               </div>

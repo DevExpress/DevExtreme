@@ -10,7 +10,7 @@ import {
   KbnNavigationContainer,
   type NavigationStrategyBase,
   withKbnNavigationItem, withKeyDownHandler,
-} from '@ts/grids/new/grid_core/keyboard_navigation';
+} from '@ts/grids/new/grid_core/keyboard_navigation/index';
 import { Component, createRef } from 'inferno';
 
 import { Card } from './card/card';

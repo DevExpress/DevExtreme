@@ -2,8 +2,9 @@
 import { getPublicElement } from '@js/core/element';
 import $ from '@js/core/renderer';
 import type { DataRow } from '@ts/grids/new/grid_core/columns_controller/types';
-import type { EventWithHandled } from '@ts/grids/new/grid_core/keyboard_navigation/types';
 import { OptionsController } from '@ts/grids/new/grid_core/options_controller/options_controller';
+
+import type { EventWithHandled } from './types';
 
 export class KeyboardNavigationController {
   public static dependencies = [

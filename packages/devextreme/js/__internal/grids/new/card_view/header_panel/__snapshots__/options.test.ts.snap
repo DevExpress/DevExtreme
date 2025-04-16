@@ -20,9 +20,11 @@ exports[`ColumnProperties headerItemCssClass should override content of headerPa
             class="dx-scrollable-content"
             style="left: 0px; top: 0px; transform: none;"
           >
-            <div>
+            <div
+              data-dx-focus-container="true"
+            >
               <div
-                dx-focus-decoy="true"
+                data-dx-focus-decoy="true"
                 tabindex="0"
               />
               <div
@@ -36,7 +38,7 @@ exports[`ColumnProperties headerItemCssClass should override content of headerPa
                 </div>
               </div>
               <div
-                dx-focus-decoy="true"
+                data-dx-focus-decoy="true"
                 tabindex="0"
               />
             </div>
@@ -75,9 +77,11 @@ exports[`Options headerPanel itemCssClass should add css class to headerPanel it
         class="dx-scrollable-content"
         style="left: 0px; top: 0px; transform: none;"
       >
-        <div>
+        <div
+          data-dx-focus-container="true"
+        >
           <div
-            dx-focus-decoy="true"
+            data-dx-focus-decoy="true"
             tabindex="0"
           />
           <div
@@ -91,7 +95,7 @@ exports[`Options headerPanel itemCssClass should add css class to headerPanel it
             </div>
           </div>
           <div
-            dx-focus-decoy="true"
+            data-dx-focus-decoy="true"
             tabindex="0"
           />
         </div>
@@ -141,9 +145,11 @@ exports[`Options headerPanel visible when it is true should show headerPanel 1`]
             class="dx-scrollable-content"
             style="left: 0px; top: 0px; transform: none;"
           >
-            <div>
+            <div
+              data-dx-focus-container="true"
+            >
               <div
-                dx-focus-decoy="true"
+                data-dx-focus-decoy="true"
                 tabindex="0"
               />
               <div
@@ -157,7 +163,7 @@ exports[`Options headerPanel visible when it is true should show headerPanel 1`]
                 </div>
               </div>
               <div
-                dx-focus-decoy="true"
+                data-dx-focus-decoy="true"
                 tabindex="0"
               />
             </div>

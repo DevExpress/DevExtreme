@@ -17,8 +17,8 @@ const SELECTORS = {
 };
 
 const ATTRS = {
-  focusDecoy: 'dx-focus-decoy',
-  focusTrapContent: 'dx-focus-trap-content',
+  focusDecoy: 'data-dx-focus-decoy',
+  focusTrapContent: 'data-dx-focus-trap-content',
 };
 
 const rootQuerySelector = (selector: string) => document.body.querySelector(selector);
@@ -143,7 +143,7 @@ describe('Options', () => {
         expect(headerItem?.getAttribute('tabindex')).toBe(null);
       });
 
-      it('header items container should not render focus decoys', () => {
+      it('header items container should not has active focus decoys', () => {
         const { container } = setup({
           ...baseConfig,
           keyboardNavigation: { enabled: false },
@@ -155,9 +155,9 @@ describe('Options', () => {
         const lastDecoy = parentContainer?.lastElementChild;
 
         expect(firstDecoy?.getAttribute('tabindex')).toBe(null);
-        expect(firstDecoy?.getAttribute(ATTRS.focusDecoy)).toBe(null);
+        expect(firstDecoy?.getAttribute(ATTRS.focusDecoy)).toBe('false');
         expect(lastDecoy?.getAttribute('tabindex')).toBe(null);
-        expect(lastDecoy?.getAttribute(ATTRS.focusDecoy)).toBe(null);
+        expect(lastDecoy?.getAttribute(ATTRS.focusDecoy)).toBe('false');
       });
 
       it('cards should not contain tabindex', () => {
@@ -182,7 +182,7 @@ describe('Options', () => {
         expect(focusTrapNode?.getAttribute(ATTRS.focusTrapContent)).toBe('false');
       });
 
-      it('card content should not render focus decoys', () => {
+      it('card content should not has active focus decoys', () => {
         const { container } = setup({
           ...baseConfig,
           keyboardNavigation: { enabled: false },
@@ -194,9 +194,9 @@ describe('Options', () => {
         const lastDecoy = parentContainer?.lastElementChild;
 
         expect(firstDecoy?.getAttribute('tabindex')).toBe(null);
-        expect(firstDecoy?.getAttribute(ATTRS.focusDecoy)).toBe(null);
+        expect(firstDecoy?.getAttribute(ATTRS.focusDecoy)).toBe('false');
         expect(lastDecoy?.getAttribute('tabindex')).toBe(null);
-        expect(lastDecoy?.getAttribute(ATTRS.focusDecoy)).toBe(null);
+        expect(lastDecoy?.getAttribute(ATTRS.focusDecoy)).toBe('false');
       });
 
       it('cards container should not render focus decoys', () => {
