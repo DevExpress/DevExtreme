@@ -1,8 +1,13 @@
 import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { DxSchedulerModule, DxDraggableModule, DxScrollViewModule } from 'devextreme-angular';
-import { DxSchedulerTypes } from 'devextreme-angular/ui/scheduler';
+import { DxDraggableComponent } from 'devextreme-angular/ui/draggable';
+import { DxScrollViewComponent } from 'devextreme-angular/ui/scroll-view';
+import {
+  DxSchedulerComponent,
+  DxiSchedulerViewComponent,
+  DxoSchedulerAppointmentDraggingComponent,
+  DxSchedulerTypes } from 'devextreme-angular/ui/scheduler';
 import { DxDraggableTypes } from 'devextreme-angular/ui/draggable';
 import { Appointment, Task, Service } from './app.service';
 
@@ -72,9 +77,11 @@ export class AppComponent {
 @NgModule({
   imports: [
     BrowserModule,
-    DxSchedulerModule,
-    DxDraggableModule,
-    DxScrollViewModule,
+    DxSchedulerComponent,
+    DxiSchedulerViewComponent,
+    DxDraggableComponent,
+    DxoSchedulerAppointmentDraggingComponent,
+    DxScrollViewComponent,
   ],
   declarations: [AppComponent],
   bootstrap: [AppComponent],
