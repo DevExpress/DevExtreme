@@ -74,6 +74,7 @@ export interface ItemProps {
     element: Element,
     onFilterCloseCallback?: () => void,
   ) => void;
+  onContextMenu?: (e: MouseEvent) => void;
 }
 
 export class Item extends Component<ItemProps> {
@@ -105,6 +106,7 @@ export class Item extends Component<ItemProps> {
           this.onFilterKeyPressHandler,
         )}
         onKeyUp={this.keyboardHandler.onKeyUpHandler}
+        onContextMenu={this.props.onContextMenu}
       >
         {this.props.status && ICONS[this.props.status]}
         {Template && <Template column={this.props.column}/>}

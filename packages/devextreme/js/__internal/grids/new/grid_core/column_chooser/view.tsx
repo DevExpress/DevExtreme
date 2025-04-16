@@ -16,6 +16,7 @@ import { View } from '../core/view';
 import { OptionsController } from '../options_controller/options_controller';
 import { ToolbarController } from '../toolbar/controller';
 import type { PredefinedToolbarItem } from '../toolbar/types';
+import { addWidgetPrefix } from '../utils';
 import type { ColumnChooserProps } from './column_chooser';
 import { ColumnChooser } from './column_chooser';
 import { ColumnChooserController } from './controller';
@@ -62,7 +63,7 @@ export class ColumnChooserView extends View<ColumnChooserProps> {
           onClick: () => { this.popupVisible.update(true); },
           elementAttr: {
             'aria-haspopup': 'dialog',
-            class: this.addWidgetPrefix(CLASS.toolbarBtn),
+            class: addWidgetPrefix(CLASS.toolbarBtn),
           },
         } as ButtonProperties,
         showText: 'inMenu',
@@ -81,11 +82,6 @@ export class ColumnChooserView extends View<ColumnChooserProps> {
   public hide(): void {
     // eslint-disable-next-line @typescript-eslint/no-floating-promises
     this.popupRef.current?.hide();
-  }
-
-  // TODO: move it to the other place
-  private addWidgetPrefix(cssClass: string): string {
-    return `dx-cardview-${cssClass}`;
   }
 
   protected override getProps(): SubsGets<ColumnChooserProps> {
@@ -188,7 +184,7 @@ export class ColumnChooserView extends View<ColumnChooserProps> {
   private getPopupWrapperClass(): string {
     const modeSpecificClass = this.isSelectMode() ? CLASS.selectMode : CLASS.dragMode;
 
-    return [this.addWidgetPrefix(CLASS.root), this.addWidgetPrefix(modeSpecificClass)].join(' ');
+    return [addWidgetPrefix(CLASS.root), addWidgetPrefix(modeSpecificClass)].join(' ');
   }
 
   private setPopupAttributes(popup: dxPopup): void {
@@ -201,11 +197,11 @@ export class ColumnChooserView extends View<ColumnChooserProps> {
     });
 
     // @ts-expect-error
-    popup.$content().addClass(this.addWidgetPrefix(CLASS.list));
+    popup.$content().addClass(addWidgetPrefix(CLASS.list));
 
     if (this.isSelectMode() && !isBandColumnsUsed) {
       // @ts-expect-error
-      popup.$content().addClass(this.addWidgetPrefix(CLASS.plain));
+      popup.$content().addClass(addWidgetPrefix(CLASS.plain));
     }
   }
 

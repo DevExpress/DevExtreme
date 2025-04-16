@@ -36,6 +36,8 @@ export interface HeaderPanelProps {
   visible: boolean;
 
   draggingOptions?: DraggingOptions;
+
+  showContextMenu: (e: MouseEvent, column?: Column, columnIndex?: number) => void;
 }
 
 export class HeaderPanel extends Component<HeaderPanelProps> {
@@ -45,7 +47,10 @@ export class HeaderPanel extends Component<HeaderPanelProps> {
     }
 
     return (
-      <div className={CLASSES.headers}>
+      <div
+        className={CLASSES.headers}
+        onContextMenu={this.props.showContextMenu}
+      >
         <ColumnSortable
           {...this.props.draggingOptions}
           allowColumnReordering={this.props.allowColumnReordering}
@@ -63,7 +68,7 @@ export class HeaderPanel extends Component<HeaderPanelProps> {
             scrollByContent={true}
           >
             <div className={CLASSES.content}>
-              {this.props.columns.map((column) => (
+              {this.props.columns.map((column, index) => (
                 <Item
                   showSortIndexes={this.props.showSortIndexes}
                   column={column}
@@ -74,6 +79,9 @@ export class HeaderPanel extends Component<HeaderPanelProps> {
                     element: Element,
                     callback?: () => void,
                   ) => this.props.onFilterClick?.(element, column, callback)}
+                  onContextMenu={(e) => {
+                    this.props.showContextMenu(e, column, index);
+                  }}
                 />
               ))}
             </div>

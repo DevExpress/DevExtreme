@@ -208,6 +208,8 @@
         "dxTreeList-ariaToolbar": "Tree list toolbar",
         "dxTreeList-editingAddRowToNode": "添加",
 
+        "dxCardView-ariaSearchInGrid": "Search in the card view",
+
         "dxPager-infoText": "第{0}页,共{1}页 ({2} 个项目)",
         "dxPager-pagesCountText": "到",
         "dxPager-pageSize": "Items per page: {0}",
@@ -353,6 +355,7 @@
 
         "dxCardView-selectAll": "Select all",
         "dxCardView-clearSelection": "Clear selection",
+        "dxCardView-cardNoImageAriaLabel": "No image",
 
         "dxAvatar-defaultImageAlt": "Avatar",
 

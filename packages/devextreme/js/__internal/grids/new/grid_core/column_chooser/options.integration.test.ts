@@ -1,3 +1,4 @@
+/* eslint-disable spellcheck/spell-checker */
 import {
   afterEach, describe, expect, it,
 } from '@jest/globals';
@@ -7,7 +8,6 @@ import type dxPopup from '@js/ui/popup';
 import type dxTreeView from '@js/ui/tree_view';
 import CardView from '@ts/grids/new/card_view/widget';
 import type { Options as GridCoreOptions } from '@ts/grids/new/grid_core/options';
-// eslint-disable-next-line spellcheck/spell-checker
 import { rerender } from 'inferno';
 
 import { CLASSES as ContentViewClasses } from '../content_view/content_view';
@@ -27,20 +27,25 @@ const setup = (options: GridCoreOptions = {}): CardView => {
   const { body } = document;
   body.append(container);
 
-  return new CardView(container, options);
+  const cardView = new CardView(container, options);
+
+  rerender();
+
+  return cardView;
 };
 
 const setupOpened = (options: GridCoreOptions = {}) => {
   const cardView = setup(options);
 
   cardView.showColumnChooser();
-  // eslint-disable-next-line spellcheck/spell-checker
+
   rerender();
 
   return cardView;
 };
 
 const getPopupInstance = (): dxPopup => {
+  rerender();
   const popupElement = rootQuerySelector(SELECTORS.popup);
   const instance = ($(popupElement ?? undefined) as any).dxPopup('instance') as dxPopup;
 
