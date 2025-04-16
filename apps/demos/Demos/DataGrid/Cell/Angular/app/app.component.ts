@@ -4,10 +4,22 @@ import {
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import {
-  DxDataGridModule,
-  DxSparklineModule,
-  DxTemplateModule,
+  DxSparklineComponent,
+  DxTemplateDirective,
 } from 'devextreme-angular';
+import {
+  DxDataGridComponent,
+    DxoDataGridSortingComponent,
+    DxoDataGridPagerComponent,
+    DxoDataGridPagingComponent,
+    DxoDataGridColumnComponent,
+} from 'devextreme-angular/ui/data-grid';
+import {
+  DxSparklineComponent,
+  DxSparklineSizeComponent,
+  DxoSparklineTooltipComponent,
+} from 'devextreme-angular/ui/sparkline';
+
 import { Service, WeekData } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
@@ -48,9 +60,9 @@ export class GridCellDataPipe implements PipeTransform {
 @NgModule({
   imports: [
     BrowserModule,
-    DxDataGridModule,
-    DxTemplateModule,
-    DxSparklineModule,
+    DxDataGridComponent,
+    DxTemplateDirective,
+    DxSparklineComponent,
   ],
   declarations: [AppComponent, GridCellDataPipe],
   bootstrap: [AppComponent],

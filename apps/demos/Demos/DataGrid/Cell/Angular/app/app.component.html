@@ -6,19 +6,19 @@
   [showColumnLines]="false"
   [showBorders]="true"
 >
-  <dxo-sorting mode="none"></dxo-sorting>
-  <dxo-pager [visible]="true"></dxo-pager>
-  <dxo-paging [pageSize]="10"></dxo-paging>
-  <dxi-column dataField="date" [width]="110" dataType="date"></dxi-column>
-  <dxi-column caption="Open" cellTemplate="diffCellTemplate"></dxi-column>
-  <dxi-column caption="Close" cellTemplate="diffCellTemplate"></dxi-column>
-  <dxi-column
+  <dxo-data-grid-sorting mode="none"></dxo-data-grid-sorting>
+  <dxo-data-grid-pager [visible]="true"></dxo-data-grid-pager>
+  <dxo-data-grid-paging [pageSize]="10"></dxo-data-grid-paging>
+  <dxi-data-grid-column dataField="date" [width]="110" dataType="date"></dxi-data-grid-column>
+  <dxi-data-grid-column caption="Open" cellTemplate="diffCellTemplate"></dxi-data-grid-column>
+  <dxi-data-grid-column caption="Close" cellTemplate="diffCellTemplate"></dxi-data-grid-column>
+  <dxi-data-grid-column
     caption="Dynamics"
     [minWidth]="320"
     cellTemplate="chartCellTemplate"
-  ></dxi-column>
-  <dxi-column caption="High" cellTemplate="diffCellTemplate"></dxi-column>
-  <dxi-column caption="Low" cellTemplate="diffCellTemplate"></dxi-column>
+  ></dxi-data-grid-column>
+  <dxi-data-grid-column caption="High" cellTemplate="diffCellTemplate"></dxi-data-grid-column>
+  <dxi-data-grid-column caption="Low" cellTemplate="diffCellTemplate"></dxi-data-grid-column>
 
   <div *dxTemplate="let d of 'chartCellTemplate'">
     <div class="chart-cell">
@@ -32,8 +32,8 @@
         maxColor="#2ab71b"
         [pointSize]="6"
       >
-        <dxo-size [width]="290" [height]="40"></dxo-size>
-        <dxo-tooltip [enabled]="false"></dxo-tooltip>
+        <dxo-sparkline-size [width]="290" [height]="40"></dxo-sparkline-size>
+        <dxo-sparkline-tooltip [enabled]="false"></dxo-sparkline-tooltip>
       </dx-sparkline>
     </div>
   </div>
