@@ -557,7 +557,7 @@ class HtmlEditor extends Editor<Properties> {
     this._formDialog = new FormDialog(this.$element(), userOptions);
   }
 
-  _renderAiDialog(): void {
+  _renderAIDialog(): void {
     const { aiIntegration } = this.option();
 
     if (!aiIntegration) {
