@@ -52,15 +52,15 @@ describe('ItemsController', () => {
       const dataRow = itemsController.createDataRow(dataObject, columns, 0, [1]);
       expect(dataRow).toMatchSnapshot();
     });
-    it('should detect and assign proper data types to columns and convert values accordingly', () => {
+    it('should only detect types from actual typed values and only convert values if dataType is declared', () => {
       const { columnsController, itemsController } = setup({
         keyExpr: 'id',
         dataSource: [
           {
             id: 1,
             amount: '123',
-            birthday: '2024-01-01',
-            updatedAt: '2024-01-01T10:00:00',
+            birthday: new Date('2024-01-01'),
+            updatedAt: new Date('2024-01-01T10:00:00'),
             ref: 'abc123',
           },
         ],
@@ -72,8 +72,8 @@ describe('ItemsController', () => {
         {
           id: 1,
           amount: '123',
-          birthday: '2024-01-01',
-          updatedAt: '2024-01-01T10:00:00',
+          birthday: new Date('2024-01-01'),
+          updatedAt: new Date('2024-01-01T10:00:00'),
           ref: 'abc123',
         },
         columns,
@@ -83,9 +83,9 @@ describe('ItemsController', () => {
       const columnMap = new Map(columns.map((column) => [column.dataField, column.dataType]));
 
       expect(columnMap.get('id')).toBe('number');
-      expect(columnMap.get('amount')).toBe('number');
+      expect(columnMap.get('amount')).toBe('string');
       expect(columnMap.get('birthday')).toBe('date');
-      expect(columnMap.get('updatedAt')).toBe('datetime');
+      expect(columnMap.get('updatedAt')).toBe('date');
       expect(columnMap.get('ref')).toBe('string');
 
       const birthdayCell = dataRow.cells.find((cell) => cell.column.dataField === 'birthday');
@@ -93,6 +93,9 @@ describe('ItemsController', () => {
 
       const updatedAtCell = dataRow.cells.find((cell) => cell.column.dataField === 'updatedAt');
       expect(updatedAtCell?.value).toBeInstanceOf(Date);
+
+      const amountCell = dataRow.cells.find((cell) => cell.column.dataField === 'amount');
+      expect(typeof amountCell?.value).toBe('string');
     });
   });
 

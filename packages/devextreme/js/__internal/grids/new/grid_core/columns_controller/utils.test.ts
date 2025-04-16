@@ -35,13 +35,6 @@ describe('getValueDataType', () => {
     expect(getValueDataType({})).toBe('object');
   });
 
-  it('should refine strings using getColumnDataTypeFromValue', () => {
-    expect(getValueDataType('123')).toBe('number');
-    expect(getValueDataType('2024-01-01')).toBe('date');
-    expect(getValueDataType('2024-01-01T12:30:00')).toBe('datetime');
-    expect(getValueDataType('hello')).toBe('string');
-  });
-
   it('should return undefined for unsupported types', () => {
     expect(getValueDataType(() => {})).toBeUndefined();
     expect(getValueDataType(Symbol('s'))).toBeUndefined();
