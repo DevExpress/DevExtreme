@@ -62,6 +62,26 @@ exports[`common initial render should be successfull 1`] = `
       />
     </div>
     <div
+      class="dx-gridcore-nodata-container"
+    >
+      <div
+        class="dx-gridcore-nodata-element"
+      >
+        <div
+          class="dx-gridcore-nodata-icon-container"
+        >
+          <div
+            class="dx-icon dx-icon-cardcontent"
+          />
+        </div>
+        <div
+          class="dx-gridcore-nodata-text"
+        >
+          No data
+        </div>
+      </div>
+    </div>
+    <div
       class="dx-scrollable dx-visibility-change-handler dx-scrollable-both dx-scrollable-simulated"
     >
       <div
@@ -75,11 +95,6 @@ exports[`common initial render should be successfull 1`] = `
             class="dx-scrollable-content"
             style="left: 0px; top: 0px; transform: none;"
           >
-            <span
-              class="dx-gridcore-nodata"
-            >
-              No data
-            </span>
             <div
               class="dx-cardview-content dx-cardview-content-grid"
               style="--dx-cardview-cardsperrow: 3; --dx-cardview-card-cover-ratio: 1 / 1;"

@@ -11,20 +11,26 @@
   border: solid $cardview-header-item-border-width $cardview-header-item-border-color;
   border-radius: $cardview-header-item-border-radius;
   background-color: $cardview-header-item-background-color;
+  line-height: $cardview-header-item-line-height;
   cursor: pointer;
 
   &:hover {
     background-color: $cardview-header-item-hovered-background-color;
     border: solid $cardview-header-item-border-width $cardview-header-item-hovered-border-color;
   }
+
+  .dx-icon-cursorprohibition {
+    color: $cardview-header-item-prohibition-icon-color;
+  }
+
+  .dx-icon {
+    font-size: $cardview-header-item-icon-size;
+  }
 }
 
 .dx-cardview {
   .dx-header-filter-icon {
-    @include dx-icon(filter);
-
     color: $cardview-header-filter-icon-empty-color;
-    font-size: $cardview-header-filter-icon-size;
 
     &--selected {
       color: $cardview-header-filter-icon-selected-color;

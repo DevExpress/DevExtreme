@@ -1,33 +1,31 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-/* eslint-disable @typescript-eslint/prefer-nullish-coalescing */
-import type { HighlightedTextItem } from '@ts/grids/new/grid_core/search/types';
-import type { RefObject } from 'inferno';
+
+import type { Cell } from '@ts/grids/new/grid_core/columns_controller/types';
+import type { ComponentType, RefObject } from 'inferno';
 import { Component, createRef } from 'inferno';
 
 import { Caption } from './caption';
 import { ValueText } from './value_text';
 
 export const CLASSES = {
-  field: 'dx-cardview-field',
-  fieldValue: 'dx-cardview-field-value',
+  fieldTemplate: 'dx-cardview-field-template',
   overflowHint: 'dx-cardview-overflow-hint',
 };
 
 export interface FieldProps {
-  title: string | undefined;
-  text: string;
-  highlightedText: HighlightedTextItem[] | null;
-  alignment: 'right' | 'center' | 'left';
-  wordWrapEnabled?: boolean;
   cellHintEnabled?: boolean;
   elementRef?: RefObject<HTMLDivElement>;
-  captionTemplate?: (title: string) => JSX.Element;
-  valueTemplate?: (value: unknown) => JSX.Element;
+  captionTemplate?: ComponentType<{ cell: Cell }>;
+  valueTemplate?: ComponentType<{ cell: Cell }>;
+
+  cell: Cell;
 
   onClick?: (e: MouseEvent) => void;
   onDblClick?: (e: MouseEvent) => void;
   onHoverChanged?: (hovered: boolean) => void;
   onPrepared?: (element: HTMLElement) => void;
+
+  template?: ComponentType<{ cell: Cell }>;
 }
 
 export class Field extends Component<FieldProps> {
@@ -35,7 +33,7 @@ export class Field extends Component<FieldProps> {
 
   constructor(props: FieldProps) {
     super(props);
-    this.containerRef = this.props.elementRef || createRef<HTMLDivElement>();
+    this.containerRef = this.props.elementRef ?? createRef<HTMLDivElement>();
   }
 
   componentDidMount(): void {
@@ -43,26 +41,27 @@ export class Field extends Component<FieldProps> {
   }
 
   render(): JSX.Element {
+    const Template = this.props.template;
+
+    if (Template) {
+      return (
+        <div className={CLASSES.fieldTemplate}>
+          <Template cell={this.props.cell}/>
+        </div>
+      );
+    }
+
     return (
-      <div
-        ref={this.containerRef}
-        tabIndex={0}
-        className={CLASSES.field}
-        onMouseEnter={(): void => this.props.onHoverChanged?.(true)}
-        onMouseLeave={(): void => this.props.onHoverChanged?.(false)}
-        onClick={this.props.onClick}
-        onDblClick={this.props.onDblClick}
-      >
-        <Caption title={this.props.title} template={this.props.captionTemplate} />
-        <ValueText
-          text={this.props.text}
-          highlightedText={this.props.highlightedText}
-          valueTemplate={this.props.valueTemplate}
-          alignment={this.props.alignment}
-          wordWrapEnabled={this.props.wordWrapEnabled}
-          cellHintEnabled={this.props.cellHintEnabled}
+      <>
+        <Caption
+          cell={this.props.cell}
+          template={this.props.captionTemplate}
         />
-      </div>
+        <ValueText
+          cell={this.props.cell}
+          template={this.props.valueTemplate}
+        />
+      </>
     );
   }
 }
