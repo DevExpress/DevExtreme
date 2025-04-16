@@ -1,0 +1,29 @@
+@use "../colors" as *;
+@use "sass:color";
+
+// adduse
+
+// $informer-color: $base-invalid-color !default;
+$informer-color: blue !default;
+$informer-background-color: null !default;
+$informer-color-with-background: null !default;
+
+@if $mode == "light" {
+  $informer-background-color: mix(#FFF, $base-danger, 92%);
+  $informer-color-with-background: mix(#000, $base-danger, 25%);
+  
+  @if $color == "saas" {
+    $informer-background-color: mix(#FFF, $base-danger, 90%);
+    $informer-color-with-background: $base-danger;
+  }
+}
+  
+@if $mode == "dark" {
+  $informer-background-color: $base-danger;
+  $informer-color-with-background: mix(#000, $base-danger, 85%);
+
+  @if $color == "saas" {
+    $informer-background-color: mix(#000, $base-danger, 95%);
+    $informer-color-with-background: $base-danger;
+  }
+}

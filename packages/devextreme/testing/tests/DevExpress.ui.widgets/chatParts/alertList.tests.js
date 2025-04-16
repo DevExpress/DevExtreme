@@ -1,6 +1,7 @@
 import $ from 'jquery';
 
 import AlertList from '__internal/ui/chat/alertlist';
+import Informer from 'ui/informer';
 
 const CHAT_ALERTLIST_ERROR_CLASS = 'dx-chat-alertlist-error';
 
@@ -82,6 +83,45 @@ QUnit.module('AlertList', moduleConfig, () => {
             this.instance.option({ items: null });
 
             assert.strictEqual(this.getErrors().length, 0, 'error count after option change');
+        });
+    });
+
+    QUnit.module('Informer integration', () => {
+        QUnit.test('Error should be instance of Informer', function(assert) {
+            this.instance.option({
+                items: [ { id: '1', message: 'error' } ]
+            });
+
+            const $error = this.getErrors();
+            const informer = $error.dxInformer('instance');
+
+            assert.ok(informer instanceof Informer, 'error is instance of Informer');
+        });
+
+        QUnit.test('Informer instanse should be disposed on items change', function(assert) {
+            this.instance.option({
+                items: [ { id: '1', message: 'error' } ]
+            });
+
+            const $error = this.getErrors();
+            const informer = $error.dxInformer('instance');
+
+            this.instance.option('items', []);
+
+            assert.strictEqual(informer._disposed, true, 'Informer instance was disposed');
+        });
+
+        QUnit.test('Informer instanse should be disposed on AlertList dispose', function(assert) {
+            this.instance.option({
+                items: [ { id: '1', message: 'error' } ]
+            });
+
+            const $error = this.getErrors();
+            const informer = $error.dxInformer('instance');
+
+            this.instance.dispose();
+
+            assert.strictEqual(informer._disposed, true, 'Informer instance was disposed');
         });
     });
 });

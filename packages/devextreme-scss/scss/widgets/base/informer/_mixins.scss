@@ -1,0 +1,31 @@
+@use "../icons" as *;
+
+@mixin informer(
+  $color,
+  $background-color,
+  $color-with-background,
+  $border-radius,
+  $icon-size,
+  $padding-inline,
+  $padding-block,
+  $column-gap,
+) {
+  .dx-informer {
+    color: $color;
+    padding-inline: $padding-inline;
+    padding-block: $padding-block;
+    column-gap: $column-gap;
+  }
+
+  .dx-informer-with-background {
+    color: $color-with-background;
+    background-color: $background-color;
+    border-radius: $border-radius;
+  }
+
+  .dx-informer-icon {
+    & * {
+      @include dx-icon-sizing($icon-size);
+    }
+  }
+}
