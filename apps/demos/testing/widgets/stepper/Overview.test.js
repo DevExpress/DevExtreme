@@ -28,18 +28,18 @@ runManualTest('Stepper', 'Overview', (test) => {
     await testScreenshot(t, takeScreenshot, 'Stepper overview rtl=true, orientation=horizontal.png');
 
     await t
-      .click($(`#${ORIENTATION_BUTTON_GROUP_ID}`).child('.dx-button').nth(0));
+      .click($(`#${ORIENTATION_BUTTON_GROUP_ID}`).find('.dx-button').nth(0));
 
     await testScreenshot(t, takeScreenshot, 'Stepper overview rtl=true, orientation=vertical.png');
 
     await t
       .click($(`#${RTL_MODE_CHECK_BOX_ID}`))
-      .click($(`#${ORIENTATION_BUTTON_GROUP_ID}`).child('.dx-button').nth(1));
+      .click($(`#${ORIENTATION_BUTTON_GROUP_ID}`).find('.dx-button').nth(1));
 
     const steppers = await $(`.${STEP_LIST_CLASS}`);
 
     await t
-      .click($(`#${NAVIGATION_MODE_BUTTON_GROUP_ID}`).child('.dx-button').nth(1));
+      .click($(`#${NAVIGATION_MODE_BUTTON_GROUP_ID}`).find('.dx-button').nth(1));
 
     await asyncForEach(steppers, async (stepper) => {
       await stepper
@@ -49,7 +49,7 @@ runManualTest('Stepper', 'Overview', (test) => {
     });
 
     await t
-      .click($(`#${NAVIGATION_MODE_BUTTON_GROUP_ID}`).child('.dx-button').nth(0));
+      .click($(`#${NAVIGATION_MODE_BUTTON_GROUP_ID}`).find('.dx-button').nth(0));
 
     await asyncForEach(steppers, async (stepper) => {
       await stepper
