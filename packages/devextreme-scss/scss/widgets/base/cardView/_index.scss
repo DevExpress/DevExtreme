@@ -6,12 +6,15 @@
 // adduse
 
 .dx-cardview {
-  display: flex;
-  flex-direction: column;
-  gap: $cardview-gap;
   padding: $cardview-padding;
   background-color: $cardview-background-color;
   border-radius: $cardview-border-radius;
+}
+
+.dx-cardview-root-container {
+  display: flex;
+  flex-direction: column;
+  gap: $cardview-gap;
 }
 
 .dx-cardview-exclude-flexbox {
