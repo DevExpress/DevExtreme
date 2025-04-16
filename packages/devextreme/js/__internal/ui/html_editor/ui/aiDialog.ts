@@ -23,6 +23,8 @@ const AI_DIALOG_TITLE_CLASS = 'dx-aidialog-title';
 const AI_DIALOG_TITLE_TEXT_CLASS = 'dx-aidialog-title-text';
 const ICON_CLASS = 'dx-icon';
 const ICON_SPARKLE_CLASS = 'dx-icon-sparkle';
+const COPY_BUTTON_ICON = 'copy';
+const TRY_AGAIN_BUTTON_ICON = 'redo';
 
 const POPUP_MIN_WIDTH = 288;
 const POPUP_MAX_WIDTH = 460;
@@ -251,6 +253,8 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
       location: 'after',
       widget: 'dxButton',
       options: {
+        stylingMode: 'outlined',
+        icon: COPY_BUTTON_ICON,
         text: localizationMessage.format('dxHtmlEditor-aiCopy'),
         onClick: async (): Promise<void> => {
           await navigator?.clipboard?.writeText(this._resultText);
@@ -266,6 +270,8 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
       location: 'after',
       widget: 'dxButton',
       options: {
+        stylingMode: 'outlined',
+        icon: TRY_AGAIN_BUTTON_ICON,
         text: localizationMessage.format('dxHtmlEditor-aiTryAgain'),
         onClick: () => this._retryAIRequest(),
       },
@@ -308,8 +314,8 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
       case DialogState.ResultReady:
         items.push(
           this._getReplaceButtonItem(),
-          this._getTryAgainButtonItem(),
           this._getCopyButtonItem(),
+          this._getTryAgainButtonItem(),
         );
         break;
       case DialogState.Asking:

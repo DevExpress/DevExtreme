@@ -248,7 +248,7 @@ QUnit.module('AIDialog', moduleConfig, () => {
             assert.strictEqual(promptTextAreaInstance.option('readOnly'), true, 'prompt TextArea is readOnly');
             assert.strictEqual(resultTextAreaInstance.option('visible'), true, 'result TextArea is visible');
 
-            assert.deepEqual(buttonTexts, ['Replace', 'Try again', 'Copy'], 'Toolbar contains correct buttons after generation');
+            assert.deepEqual(buttonTexts, ['Replace', 'Copy', 'Try again'], 'Toolbar contains correct buttons after generation');
             assert.strictEqual(replaceButtonItem.disabled, undefined, 'replace button is not disabled');
             assert.strictEqual(copyButtonItem.disabled, undefined, 'copy button is not disabled');
         });
