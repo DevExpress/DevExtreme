@@ -11,7 +11,7 @@ $informer-color-with-background: null !default;
   $informer-background-color: rgba(244, 67, 54, 0.08);
   $informer-color-with-background: rgba(244, 67, 54, 1);
 }
-  
+
 @if $mode == "dark" {
   $informer-background-color: rgba(244, 67, 54, 0.08);
   $informer-color-with-background: rgba(244, 67, 54, 1);

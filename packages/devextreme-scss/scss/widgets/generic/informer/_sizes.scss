@@ -16,7 +16,7 @@ $informer-border-radius: null !default;
   $informer-column-gap: 6px !default;
   $informer-border-radius: 4px !default;
 }
-  
+
 @else if $size == "compact" {
   $informer-icon-size: $generic-base-icon-size + 2px !default;
   $informer-padding-inline: 8px !default;
