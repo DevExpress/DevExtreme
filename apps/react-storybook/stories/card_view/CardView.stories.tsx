@@ -256,6 +256,10 @@ export const SearchCardView: Story = {
       highlightCaseSensitive: false,
       highlightSearchText: true,
       text: '',
+      visible: true,
+      placeholder: 'Search...',
+      searchVisibleColumnsOnly: false,
+      width: 160,
     }
   }
 }

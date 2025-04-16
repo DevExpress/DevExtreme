@@ -3,15 +3,19 @@ import type { SubsGets } from '@ts/core/reactive/index';
 import { computed } from '@ts/core/reactive/index';
 import type { Options as SearchOptions } from '@ts/grids/new/grid_core/search/options';
 import type { HighlightedTextItem, HighlightTextOptions } from '@ts/grids/new/grid_core/search/types';
-import { splitHighlightedText } from '@ts/grids/new/grid_core/search/utils';
 
+import { ColumnsController } from '../columns_controller/columns_controller';
 import { OptionsController } from '../options_controller/options_controller';
+import {
+  calculateSearchFilter, splitHighlightedText,
+} from './utils';
 
 type DefinedSearchOptions = Required<Required<SearchOptions>['searchPanel']>;
 
 export class SearchController {
   public static dependencies = [
     OptionsController,
+    ColumnsController,
   ] as const;
 
   public readonly highlightTextOptions: SubsGets<HighlightTextOptions> = computed((
@@ -22,11 +26,27 @@ export class SearchController {
     searchStr: searchOptions.text,
   }), [this.options.oneWay('searchPanel') as SubsGets<DefinedSearchOptions>]);
 
-  private readonly _searchTextOption = this.options.twoWay('searchPanel.text');
+  public readonly searchTextOption = this.options.twoWay('searchPanel.text');
 
-  public readonly searchTextOption: SubsGets<string> = this._searchTextOption;
+  private readonly searchVisibleColumnsOnly = this.options.oneWay('searchPanel.searchVisibleColumnsOnly');
 
-  constructor(private readonly options: OptionsController) {}
+  public readonly searchFilter = computed(
+    (
+      searchText,
+      columns,
+      searchVisibleColumnsOnly,
+    ) => calculateSearchFilter(searchText, columns, searchVisibleColumnsOnly),
+    [
+      this.searchTextOption,
+      this.columnsController.columns,
+      this.searchVisibleColumnsOnly,
+    ],
+  );
+
+  constructor(
+    private readonly options: OptionsController,
+    private readonly columnsController: ColumnsController,
+  ) { }
 
   public readonly getHighlightedText = (
     text: string,
@@ -36,6 +56,6 @@ export class SearchController {
   );
 
   public readonly updateSearchText = (text: string): void => {
-    this._searchTextOption.update(text);
+    this.searchTextOption.update(text);
   };
 }

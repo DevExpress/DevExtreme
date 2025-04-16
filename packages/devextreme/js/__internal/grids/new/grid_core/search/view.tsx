@@ -1,34 +1,40 @@
-import $ from '@js/core/renderer';
+import { combined, computed, type SubsGets } from '@ts/core/reactive/index';
 import { SearchController } from '@ts/grids/new/grid_core/search/controller';
-import { SearchField } from '@ts/grids/new/grid_core/search/search_field';
 import { ToolbarController } from '@ts/grids/new/grid_core/toolbar/controller';
-import { render } from 'inferno';
+
+import { OptionsController } from '../options_controller/options_controller';
+import type { SearchFieldProps } from './types';
+import { addSearchTextBox } from './utils';
 
 export class SearchView {
   public static dependencies = [
+    OptionsController,
     ToolbarController,
     SearchController,
   ] as const;
 
   constructor(
-    private readonly headerPanel: ToolbarController,
+    private readonly options: OptionsController,
+    private readonly toolbarController: ToolbarController,
     private readonly searchController: SearchController,
   ) {
-    this.headerPanel.addDefaultItem({
-      name: 'searchPanel',
-      showText: 'inMenu',
-      location: 'after',
-      locateInMenu: 'auto',
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      template: (data, index, element: any) => {
-        render(
-          <SearchField
-            onChange={(text) => {
-              this.searchController.updateSearchText(text);
-            }}
-        />,
-          $(element).get(0),
-        );
+    this.toolbarController.addDefaultItem(
+      computed(
+        addSearchTextBox,
+        [this.getProps()],
+      ),
+      this.options.oneWay('searchPanel.visible'),
+    );
+  }
+
+  protected getProps(): SubsGets<SearchFieldProps> {
+    return combined({
+      placeholder: this.options.oneWay('searchPanel.placeholder'),
+      // TODO: resolve update cycle: editor - option - editor
+      // value: this.searchController.searchTextOption,
+      width: this.options.oneWay('searchPanel.width'),
+      onValueChanged: (text) => {
+        this.searchController.updateSearchText(text);
       },
     });
   }
