@@ -28,13 +28,13 @@ runManualTest('Stepper', 'Overview', (test) => {
     await testScreenshot(t, takeScreenshot, 'Stepper overview rtl=true, orientation=horizontal.png');
 
     await t
-      .click($(`#${ORIENTATION_BUTTON_GROUP_ID}`).find('.dx-button').nth(0));
+      .click($(`#${ORIENTATION_BUTTON_GROUP_ID}`).find('.dx-button').nth(1));
 
     await testScreenshot(t, takeScreenshot, 'Stepper overview rtl=true, orientation=vertical.png');
 
     await t
       .click($(`#${RTL_MODE_CHECK_BOX_ID}`))
-      .click($(`#${ORIENTATION_BUTTON_GROUP_ID}`).find('.dx-button').nth(1));
+      .click($(`#${ORIENTATION_BUTTON_GROUP_ID}`).find('.dx-button').nth(0));
 
     const steppers = await $(`.${STEP_LIST_CLASS}`);
 
