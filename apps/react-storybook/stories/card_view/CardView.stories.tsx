@@ -131,48 +131,126 @@ const meta: Meta<typeof CardView> = {
       mapping: dataSources,
       control: { type: 'radio' },
     },
-    remoteOperations: {
-      control: 'radio',
-      options: [false, true, 'auto'],
-    },
-    width: {
-      control: 'text',
-    },
-    height: {
-      control: 'text',
-    },
-    keyExpr: {
-      control: 'text',
-    },
-    cardsPerRow: {
-      options: ['auto', 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-      control: { type: 'select' },
-    },
-    paging: {
-      pageSize: 12,
-    },
-    // cardMinWidth: 250,
-    // cardMaxWidth: 350,
-    // filterPanel: { visible: true },
     columns: {
       options: Object.keys(columns),
       mapping: columns,
       control: { type: 'radio' },
     },
-    headerFilter: {
-      control: 'object',
+    'paging.enabled': {
+      control: 'boolean',
     },
-    searchPanel: {
-      control: 'object',
+    'paging.pageIndex': {
+      control: 'number',
     },
-    cardFooterTemplate: {
+    'paging.pageSize': {
+      control: 'number', 
+    },
+    'sorting.mode': {
       control: 'radio',
-      options: ['show (custom template)', 'undefined'],
-      mapping: {
-        'show (custom template)': renderFooter,
-        'undefined': undefined,
+      options: ['none', 'single', 'multiple'],
+      additionalProps: {
+        default: 'none'
       }
-    }
+    },
+    'filterValue': {
+      control: 'object',
+    },
+    'filterPanel.visible': {
+      control: 'boolean'
+    },
+    'filterPanel.filterEnabled': {
+      control: 'boolean'
+    },
+    'headerFilter.visible': {
+      control: 'boolean'
+    },
+    'noDataText': {
+      control: 'text'
+    },
+    'searchPanel.highlightCaseSensitive': {
+      control: 'boolean'
+    },
+    'searchPanel.highlightSearchText': {
+      control: 'boolean'
+    },
+    'searchPanel.placeholder': {
+      control: 'text'
+    },
+    'searchPanel.searchVisibleColumnsOnly': {
+      control: 'boolean'
+    },
+    'searchPanel.text': {
+      control: 'text'
+    },
+    'searchPanel.visible': {
+      control: 'boolean'
+    },
+    'selection.mode': {
+      control: 'radio',
+      options: ['none', 'single', 'multiple']
+    },
+    'selection.showCheckBoxesMode': {
+      control: 'radio',
+      options: ['always', 'none', 'onClick', 'onLongTap']
+    },
+    'selection.allowSelectAll': {
+      control: 'boolean',
+    },
+    'selection.selectAllMode': {
+      control: 'radio',
+      options: ['allPages', 'page']
+    },
+    'columnChooser.enabled': {
+      control: 'boolean',
+    },
+    'columnChooser.mode': {
+      control: 'radio',
+      options: ['select', 'dragAndDrop']
+    },
+    'toolbar.visible': {
+      control: 'boolean',
+    },
+    'toolbar.disabled': {
+      control: 'boolean',
+    },
+    'headerPanel.visible': {
+      control: 'boolean',
+    },
+    'cardsPerRow': {
+      options: ['auto', 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+      control: { type: 'select' },
+    },
+    cardMinWidth: {
+      control: 'number'
+    },
+    cardMaxWidth: {
+      control: 'number'
+    },
+    wordWrapEnabled: {
+      control: 'boolean'
+    },
+    'cardCover.imageExpr': {
+      control: 'radio',
+      options: ['picture', 'none'],
+      mapping: {
+        picture: 'picture',
+        none: undefined
+      }
+    },
+    'cardCover.maxHeight': {
+      control: 'number',
+    },
+    'cardCover.ratio': {
+      control: 'text'
+    },
+    'cardFooterTemplate': {
+      control: 'radio',
+      options: ['yes', 'no'],
+      mapping: {
+        yes: renderFooter,
+        no: undefined,
+      }
+    },  
   }
 };
 
@@ -188,13 +266,11 @@ export const DefaultMode: Story = {
     // height: '500px',
     keyExpr: "OrderNumber",
     cardsPerRow: "auto",
-    paging: {
-      pageSize: 12,
-    },
+    'paging.pageSize': 12,
     cardMinWidth: 250,
     cardMaxWidth: 350,
     columns: 'local',
-    filterPanel: { visible: true },
+    'filterPanel.visible': true,
     cardFooterTemplate: undefined,
   },
 };
@@ -239,11 +315,7 @@ export const CardViewWithCover  : Story = {
   ...DefaultMode,
   args: {
     ...DefaultMode.args,
-    cardCover: {
-      imageExpr: (data) => `https://js.devexpress.com/jQuery/Demos/WidgetsGallery/JSDemos/${data.picture}`,
-      altExpr: 'FirstName',
-      // ratio: '2 / 1',
-    },
+    'cardCover.imageExpr': 'image',
   },
 };
 
@@ -262,15 +334,13 @@ export const SearchCardView: Story = {
     ...DefaultMode.args,
     dataSource: 'local',
     columns: 'local',
-    searchPanel: {
-      highlightCaseSensitive: false,
-      highlightSearchText: true,
-      text: '',
-      visible: true,
-      placeholder: 'Search...',
-      searchVisibleColumnsOnly: false,
-      width: 160,
-    }
+    'searchPanel.highlightCaseSensitive': false,
+    'searchPanel.highlightSearchText': true,
+    'searchPanel.text': '',
+    'searchPanel.visible': true,
+    'searchPanel.placeholder': 'Search...',
+    'searchPanel.searchVisibleColumnsOnly': false,
+    'searchPanel.width': 160,
   }
 }
 
@@ -278,8 +348,8 @@ export const HeaderFilterStory: Story = {
   ...DefaultMode,
   args: {
     ...DefaultMode.args,
+    'headerFilter.visible': true,
     headerFilter: {
-      visible: true,
       width: 252,
       height: 325,
       allowSelectAll: true,
@@ -303,12 +373,10 @@ export const SelectionStory: Story = {
   args: {
     ...DefaultMode.args,
     keyExpr: 'id',
-    selection: {
-      mode: 'multiple',
-      showCheckBoxesMode: 'onClick',
-      allowSelectAll: true,
-      selectAllMode: 'allPages',
-    }
+    'selection.mode': 'multiple',
+    'selection.showCheckBoxesMode': 'always',
+    'selection.allowSelectAll': true,
+    'selection.selectAllMode': 'allPages',
   }
 }
 
