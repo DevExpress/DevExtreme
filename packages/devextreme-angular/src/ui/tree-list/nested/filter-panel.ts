@@ -26,6 +26,7 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-tree-list-filter-panel',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -100,7 +101,7 @@ export class DxoTreeListFilterPanelComponent extends NestedOption implements OnD
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoTreeListFilterPanelComponent
   ],
   exports: [

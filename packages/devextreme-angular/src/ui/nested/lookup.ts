@@ -25,6 +25,7 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-lookup',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -96,7 +97,7 @@ export class DxoLookupComponent extends NestedOption implements OnDestroy, OnIni
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoLookupComponent
   ],
   exports: [

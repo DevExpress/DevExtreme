@@ -26,7 +26,7 @@ import {
 
 
 import * as CommonTypes from 'devextreme/common';
-import { DisposingEvent, InitializedEvent, OptionChangedEvent, ValidatedEvent } from 'devextreme/ui/validator';
+import { EventInfo } from 'devextreme/common/core/events';
 
 import DxValidator from 'devextreme/ui/validator';
 
@@ -78,6 +78,7 @@ import { DxiValidatorValidationRuleComponent } from 'devextreme-angular/ui/valid
     selector: 'dx-validator',
     template: '',
     host: { ngSkipHydration: 'true' },
+    standalone: true,
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -180,27 +181,27 @@ export class DxValidatorComponent extends DxComponentExtension implements OnDest
 
     /**
     
-     * [descr:dxValidatorOptions.onDisposing]
+     * [descr:DOMComponentOptions.onDisposing]
     
     
      */
-    @Output() onDisposing: EventEmitter<DisposingEvent>;
+    @Output() onDisposing: EventEmitter<EventInfo<any>>;
 
     /**
     
-     * [descr:dxValidatorOptions.onInitialized]
+     * [descr:ComponentOptions.onInitialized]
     
     
      */
-    @Output() onInitialized: EventEmitter<InitializedEvent>;
+    @Output() onInitialized: EventEmitter<Object>;
 
     /**
     
-     * [descr:dxValidatorOptions.onOptionChanged]
+     * [descr:DOMComponentOptions.onOptionChanged]
     
     
      */
-    @Output() onOptionChanged: EventEmitter<OptionChangedEvent>;
+    @Output() onOptionChanged: EventEmitter<Object>;
 
     /**
     
@@ -208,7 +209,7 @@ export class DxValidatorComponent extends DxComponentExtension implements OnDest
     
     
      */
-    @Output() onValidated: EventEmitter<ValidatedEvent>;
+    @Output() onValidated: EventEmitter<Object>;
 
     /**
     
@@ -437,6 +438,7 @@ export class DxValidatorComponent extends DxComponentExtension implements OnDest
 
 @NgModule({
   imports: [
+    DxValidatorComponent,
     DxoAdapterModule,
     DxiValidationRuleModule,
     DxoValidatorAdapterModule,
@@ -452,9 +454,6 @@ export class DxValidatorComponent extends DxComponentExtension implements OnDest
     DxiValidatorValidationRuleModule,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxValidatorComponent
   ],
   exports: [
     DxValidatorComponent,

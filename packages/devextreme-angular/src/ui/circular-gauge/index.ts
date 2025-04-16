@@ -101,6 +101,7 @@ import { DxoCircularGaugeValueIndicatorModule } from 'devextreme-angular/ui/circ
     template: '',
     styles: [ ' :host {  display: block; }'],
     host: { ngSkipHydration: 'true' },
+    standalone: true,
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -725,6 +726,7 @@ export class DxCircularGaugeComponent extends DxComponent implements OnDestroy, 
 
 @NgModule({
   imports: [
+    DxCircularGaugeComponent,
     DxoAnimationModule,
     DxoExportModule,
     DxoGeometryModule,
@@ -775,9 +777,6 @@ export class DxCircularGaugeComponent extends DxComponent implements OnDestroy, 
     DxoCircularGaugeValueIndicatorModule,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxCircularGaugeComponent
   ],
   exports: [
     DxCircularGaugeComponent,

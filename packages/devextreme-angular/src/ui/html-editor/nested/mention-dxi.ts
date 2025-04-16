@@ -32,6 +32,7 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxi-html-editor-mention',
+    standalone: true,
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
     providers: [NestedOptionHost, DxTemplateHost]
@@ -144,7 +145,7 @@ export class DxiHtmlEditorMentionComponent extends CollectionNestedOption implem
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiHtmlEditorMentionComponent
   ],
   exports: [

@@ -30,6 +30,7 @@ import { DxiFileManagerToolbarItemComponent } from './toolbar-item-dxi';
 
 @Component({
     selector: 'dxo-file-manager-toolbar',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -101,7 +102,7 @@ export class DxoFileManagerToolbarComponent extends NestedOption implements OnDe
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoFileManagerToolbarComponent
   ],
   exports: [

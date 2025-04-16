@@ -23,6 +23,7 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-chart-background-color',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -70,7 +71,7 @@ export class DxoChartBackgroundColorComponent extends NestedOption implements On
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoChartBackgroundColorComponent
   ],
   exports: [

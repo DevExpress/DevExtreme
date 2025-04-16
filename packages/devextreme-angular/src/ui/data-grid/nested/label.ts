@@ -33,6 +33,7 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-data-grid-label',
+    standalone: true,
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
     providers: [NestedOptionHost, DxTemplateHost]
@@ -125,7 +126,7 @@ export class DxoDataGridLabelComponent extends NestedOption implements AfterView
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoDataGridLabelComponent
   ],
   exports: [

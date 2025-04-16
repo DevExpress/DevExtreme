@@ -90,6 +90,7 @@ import { DxoBarGaugeTooltipBorderModule } from 'devextreme-angular/ui/bar-gauge/
     template: '',
     styles: [ ' :host {  display: block; }'],
     host: { ngSkipHydration: 'true' },
+    standalone: true,
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -821,6 +822,7 @@ export class DxBarGaugeComponent extends DxComponent implements OnDestroy, OnCha
 
 @NgModule({
   imports: [
+    DxBarGaugeComponent,
     DxoAnimationModule,
     DxoExportModule,
     DxoGeometryModule,
@@ -861,9 +863,6 @@ export class DxBarGaugeComponent extends DxComponent implements OnDestroy, OnCha
     DxoBarGaugeTooltipBorderModule,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxBarGaugeComponent
   ],
   exports: [
     DxBarGaugeComponent,

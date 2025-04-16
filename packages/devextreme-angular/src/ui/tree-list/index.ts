@@ -196,6 +196,7 @@ import { DxiTreeListColumnComponent } from 'devextreme-angular/ui/tree-list/nest
     selector: 'dx-tree-list',
     template: '',
     host: { ngSkipHydration: 'true' },
+    standalone: true,
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -2234,6 +2235,7 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
 
 @NgModule({
   imports: [
+    DxTreeListComponent,
     DxoColumnChooserModule,
     DxoPositionModule,
     DxoAtModule,
@@ -2366,9 +2368,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     DxiTreeListValidationRuleModule,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxTreeListComponent
   ],
   exports: [
     DxTreeListComponent,

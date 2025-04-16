@@ -22,6 +22,7 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxi-data-grid-pattern-rule',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -81,7 +82,7 @@ export class DxiDataGridPatternRuleComponent extends CollectionNestedOption {
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiDataGridPatternRuleComponent
   ],
   exports: [

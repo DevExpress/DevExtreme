@@ -23,6 +23,7 @@ import { DxoChartCommonSeriesSettings } from './base/chart-common-series-setting
 
 @Component({
     selector: 'dxo-steparea',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost],
@@ -117,7 +118,7 @@ export class DxoStepareaComponent extends DxoChartCommonSeriesSettings implement
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoStepareaComponent
   ],
   exports: [

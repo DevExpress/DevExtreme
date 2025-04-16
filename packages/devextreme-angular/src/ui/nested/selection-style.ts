@@ -24,6 +24,7 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-selection-style',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -111,7 +112,7 @@ export class DxoSelectionStyleComponent extends NestedOption implements OnDestro
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoSelectionStyleComponent
   ],
   exports: [

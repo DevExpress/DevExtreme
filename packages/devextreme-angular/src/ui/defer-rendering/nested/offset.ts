@@ -23,6 +23,7 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-defer-rendering-offset',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -70,7 +71,7 @@ export class DxoDeferRenderingOffsetComponent extends NestedOption implements On
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoDeferRenderingOffsetComponent
   ],
   exports: [

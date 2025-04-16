@@ -23,6 +23,7 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-data-grid-offset',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -70,7 +71,7 @@ export class DxoDataGridOffsetComponent extends NestedOption implements OnDestro
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoDataGridOffsetComponent
   ],
   exports: [

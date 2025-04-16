@@ -23,6 +23,7 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-max-range',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -126,7 +127,7 @@ export class DxoMaxRangeComponent extends NestedOption implements OnDestroy, OnI
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoMaxRangeComponent
   ],
   exports: [

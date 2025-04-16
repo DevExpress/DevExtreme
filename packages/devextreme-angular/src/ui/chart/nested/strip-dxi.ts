@@ -23,6 +23,7 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxi-chart-strip',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -98,7 +99,7 @@ export class DxiChartStripComponent extends CollectionNestedOption {
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiChartStripComponent
   ],
   exports: [

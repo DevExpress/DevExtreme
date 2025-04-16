@@ -21,6 +21,7 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxi-menu-item',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -64,7 +65,7 @@ export class DxiMenuItemComponent extends CollectionNestedOption {
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiMenuItemComponent
   ],
   exports: [

@@ -33,6 +33,7 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-number-box-options',
+    standalone: true,
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
     providers: [NestedOptionHost, DxTemplateHost]
@@ -269,7 +270,7 @@ export class DxoNumberBoxOptionsComponent extends NestedOption implements AfterV
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoNumberBoxOptionsComponent
   ],
   exports: [

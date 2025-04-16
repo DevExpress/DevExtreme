@@ -23,6 +23,7 @@ import { DxoFormat } from './base/format';
 
 @Component({
     selector: 'dxo-day-header-format',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost],
@@ -62,7 +63,7 @@ export class DxoDayHeaderFormatComponent extends DxoFormat implements OnDestroy,
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoDayHeaderFormatComponent
   ],
   exports: [

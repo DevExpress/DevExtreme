@@ -22,6 +22,7 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxi-tree-list-range-rule',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -97,7 +98,7 @@ export class DxiTreeListRangeRuleComponent extends CollectionNestedOption {
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiTreeListRangeRuleComponent
   ],
   exports: [

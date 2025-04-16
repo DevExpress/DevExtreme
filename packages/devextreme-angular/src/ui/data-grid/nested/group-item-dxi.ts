@@ -23,6 +23,7 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxi-data-grid-group-item',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -130,7 +131,7 @@ export class DxiDataGridGroupItemComponent extends CollectionNestedOption {
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiDataGridGroupItemComponent
   ],
   exports: [

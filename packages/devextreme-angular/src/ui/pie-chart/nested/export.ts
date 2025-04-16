@@ -24,6 +24,7 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-pie-chart-export',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -111,7 +112,7 @@ export class DxoPieChartExportComponent extends NestedOption implements OnDestro
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoPieChartExportComponent
   ],
   exports: [

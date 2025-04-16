@@ -24,6 +24,7 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxi-legend',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -251,7 +252,7 @@ export class DxiLegendComponent extends CollectionNestedOption {
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiLegendComponent
   ],
   exports: [

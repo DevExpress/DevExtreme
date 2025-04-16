@@ -23,6 +23,7 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-show-event',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -70,7 +71,7 @@ export class DxoShowEventComponent extends NestedOption implements OnDestroy, On
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoShowEventComponent
   ],
   exports: [

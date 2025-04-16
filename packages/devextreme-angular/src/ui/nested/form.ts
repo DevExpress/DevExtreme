@@ -29,6 +29,7 @@ import { DxiItemComponent } from './item-dxi';
 
 @Component({
     selector: 'dxo-form',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost],
@@ -121,7 +122,7 @@ export class DxoFormComponent extends DxoFormOptions implements OnDestroy, OnIni
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoFormComponent
   ],
   exports: [

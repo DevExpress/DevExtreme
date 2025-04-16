@@ -23,6 +23,7 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-data-grid-editing-texts',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -142,7 +143,7 @@ export class DxoDataGridEditingTextsComponent extends NestedOption implements On
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoDataGridEditingTextsComponent
   ],
   exports: [

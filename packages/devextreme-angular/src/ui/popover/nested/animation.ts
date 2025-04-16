@@ -24,6 +24,7 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-popover-animation',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -71,7 +72,7 @@ export class DxoPopoverAnimationComponent extends NestedOption implements OnDest
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoPopoverAnimationComponent
   ],
   exports: [

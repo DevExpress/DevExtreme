@@ -25,6 +25,7 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-polar-chart-polar-chart-title',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -128,7 +129,7 @@ export class DxoPolarChartPolarChartTitleComponent extends NestedOption implemen
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoPolarChartPolarChartTitleComponent
   ],
   exports: [

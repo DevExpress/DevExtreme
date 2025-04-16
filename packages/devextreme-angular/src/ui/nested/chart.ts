@@ -30,6 +30,7 @@ import { DxiSeriesComponent } from './series-dxi';
 
 @Component({
     selector: 'dxo-chart',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -181,7 +182,7 @@ export class DxoChartComponent extends NestedOption implements OnDestroy, OnInit
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoChartComponent
   ],
   exports: [

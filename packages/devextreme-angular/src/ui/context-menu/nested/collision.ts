@@ -24,6 +24,7 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-context-menu-collision',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -71,7 +72,7 @@ export class DxoContextMenuCollisionComponent extends NestedOption implements On
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoContextMenuCollisionComponent
   ],
   exports: [

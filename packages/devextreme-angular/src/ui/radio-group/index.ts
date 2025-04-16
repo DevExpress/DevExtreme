@@ -71,6 +71,7 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
     selector: 'dx-radio-group',
     template: '',
     host: { ngSkipHydration: 'true' },
+    standalone: true,
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -828,13 +829,11 @@ export class DxRadioGroupComponent extends DxComponent implements OnDestroy, Con
 
 @NgModule({
   imports: [
+    DxRadioGroupComponent,
     DxiItemModule,
     DxiRadioGroupItemModule,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxRadioGroupComponent
   ],
   exports: [
     DxRadioGroupComponent,

@@ -24,6 +24,7 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-load-panel-my',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -71,7 +72,7 @@ export class DxoLoadPanelMyComponent extends NestedOption implements OnDestroy, 
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoLoadPanelMyComponent
   ],
   exports: [

@@ -34,6 +34,7 @@ import { DxiTreeListChangeComponent } from './change-dxi';
 
 @Component({
     selector: 'dxo-tree-list-editing',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -220,7 +221,7 @@ export class DxoTreeListEditingComponent extends NestedOption implements OnDestr
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoTreeListEditingComponent
   ],
   exports: [

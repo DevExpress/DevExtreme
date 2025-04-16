@@ -24,6 +24,7 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-chart-tooltip-border',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -95,7 +96,7 @@ export class DxoChartTooltipBorderComponent extends NestedOption implements OnDe
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoChartTooltipBorderComponent
   ],
   exports: [

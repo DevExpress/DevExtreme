@@ -23,6 +23,7 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-width',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -86,7 +87,7 @@ export class DxoWidthComponent extends NestedOption implements OnDestroy, OnInit
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoWidthComponent
   ],
   exports: [

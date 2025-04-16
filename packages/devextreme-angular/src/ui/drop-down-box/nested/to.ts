@@ -24,6 +24,7 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-drop-down-box-to',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -95,7 +96,7 @@ export class DxoDropDownBoxToComponent extends NestedOption implements OnDestroy
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoDropDownBoxToComponent
   ],
   exports: [

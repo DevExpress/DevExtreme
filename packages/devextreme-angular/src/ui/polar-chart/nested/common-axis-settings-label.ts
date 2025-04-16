@@ -24,6 +24,7 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-polar-chart-common-axis-settings-label',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -87,7 +88,7 @@ export class DxoPolarChartCommonAxisSettingsLabelComponent extends NestedOption 
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoPolarChartCommonAxisSettingsLabelComponent
   ],
   exports: [

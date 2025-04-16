@@ -23,6 +23,7 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxi-color-box-button',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -74,7 +75,7 @@ export class DxiColorBoxButtonComponent extends CollectionNestedOption {
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiColorBoxButtonComponent
   ],
   exports: [

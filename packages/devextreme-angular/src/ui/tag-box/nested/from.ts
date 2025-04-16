@@ -24,6 +24,7 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-tag-box-from',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -95,7 +96,7 @@ export class DxoTagBoxFromComponent extends NestedOption implements OnDestroy, O
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoTagBoxFromComponent
   ],
   exports: [

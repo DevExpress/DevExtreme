@@ -24,6 +24,7 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-polar-chart-point-selection-style',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -79,7 +80,7 @@ export class DxoPolarChartPointSelectionStyleComponent extends NestedOption impl
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoPolarChartPointSelectionStyleComponent
   ],
   exports: [

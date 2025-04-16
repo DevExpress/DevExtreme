@@ -10,10 +10,7 @@ import {
     Inject,
     AfterViewInit,
     SkipSelf,
-    Input,
-    ContentChildren,
-    forwardRef,
-    QueryList
+    Input
 } from '@angular/core';
 
 import { DOCUMENT } from '@angular/common';
@@ -33,6 +30,7 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxi-menu-item',
+    standalone: true,
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
     providers: [NestedOptionHost, DxTemplateHost]
@@ -141,14 +139,6 @@ export class DxiMenuItemComponent extends CollectionNestedOption implements Afte
     }
 
 
-    @ContentChildren(forwardRef(() => DxiMenuItemComponent))
-    get itemsChildren(): QueryList<DxiMenuItemComponent> {
-        return this._getOption('items');
-    }
-    set itemsChildren(value) {
-        this.setChildren('items', value);
-    }
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost,
             private renderer: Renderer2,
@@ -177,7 +167,7 @@ export class DxiMenuItemComponent extends CollectionNestedOption implements Afte
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiMenuItemComponent
   ],
   exports: [

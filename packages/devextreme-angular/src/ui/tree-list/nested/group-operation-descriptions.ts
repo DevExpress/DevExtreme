@@ -23,6 +23,7 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-tree-list-group-operation-descriptions',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -86,7 +87,7 @@ export class DxoTreeListGroupOperationDescriptionsComponent extends NestedOption
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoTreeListGroupOperationDescriptionsComponent
   ],
   exports: [

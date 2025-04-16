@@ -36,6 +36,7 @@ import { DxiChartStripComponent } from './strip-dxi';
 
 @Component({
     selector: 'dxo-chart-argument-axis',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -510,7 +511,7 @@ export class DxoChartArgumentAxisComponent extends NestedOption implements OnDes
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoChartArgumentAxisComponent
   ],
   exports: [

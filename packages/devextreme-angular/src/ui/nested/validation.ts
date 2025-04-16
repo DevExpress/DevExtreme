@@ -23,6 +23,7 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-validation',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -78,7 +79,7 @@ export class DxoValidationComponent extends NestedOption implements OnDestroy, O
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoValidationComponent
   ],
   exports: [

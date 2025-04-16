@@ -24,6 +24,7 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-date-range-box-at',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -71,7 +72,7 @@ export class DxoDateRangeBoxAtComponent extends NestedOption implements OnDestro
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoDateRangeBoxAtComponent
   ],
   exports: [

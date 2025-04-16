@@ -25,6 +25,7 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-polar-chart-common-series-settings-label',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -152,7 +153,7 @@ export class DxoPolarChartCommonSeriesSettingsLabelComponent extends NestedOptio
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoPolarChartCommonSeriesSettingsLabelComponent
   ],
   exports: [

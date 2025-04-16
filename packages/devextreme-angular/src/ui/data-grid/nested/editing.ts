@@ -34,6 +34,7 @@ import { DxiDataGridChangeComponent } from './change-dxi';
 
 @Component({
     selector: 'dxo-data-grid-editing',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -228,7 +229,7 @@ export class DxoDataGridEditingComponent extends NestedOption implements OnDestr
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoDataGridEditingComponent
   ],
   exports: [

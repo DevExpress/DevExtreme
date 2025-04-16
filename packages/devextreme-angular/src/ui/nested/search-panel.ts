@@ -25,6 +25,7 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-search-panel',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -123,7 +124,7 @@ export class DxoSearchPanelComponent extends NestedOption implements OnDestroy, 
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoSearchPanelComponent
   ],
   exports: [

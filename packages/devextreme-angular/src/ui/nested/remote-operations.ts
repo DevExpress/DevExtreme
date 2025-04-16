@@ -23,6 +23,7 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-remote-operations',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -102,7 +103,7 @@ export class DxoRemoteOperationsComponent extends NestedOption implements OnDest
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoRemoteOperationsComponent
   ],
   exports: [

@@ -23,6 +23,7 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-funnel-adaptive-layout',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -78,7 +79,7 @@ export class DxoFunnelAdaptiveLayoutComponent extends NestedOption implements On
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoFunnelAdaptiveLayoutComponent
   ],
   exports: [

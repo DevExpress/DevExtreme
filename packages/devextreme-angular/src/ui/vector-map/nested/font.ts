@@ -23,6 +23,7 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-vector-map-font',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -94,7 +95,7 @@ export class DxoVectorMapFontComponent extends NestedOption implements OnDestroy
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoVectorMapFontComponent
   ],
   exports: [

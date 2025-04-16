@@ -27,6 +27,7 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-legend',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -258,7 +259,7 @@ export class DxoLegendComponent extends NestedOption implements OnDestroy, OnIni
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoLegendComponent
   ],
   exports: [

@@ -23,6 +23,7 @@ import { DxoChartCommonSeriesSettings } from './base/chart-common-series-setting
 
 @Component({
     selector: 'dxo-stackedbar',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost],
@@ -118,7 +119,7 @@ export class DxoStackedbarComponent extends DxoChartCommonSeriesSettings impleme
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoStackedbarComponent
   ],
   exports: [

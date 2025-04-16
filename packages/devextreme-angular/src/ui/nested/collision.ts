@@ -24,6 +24,7 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-collision',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -71,7 +72,7 @@ export class DxoCollisionComponent extends NestedOption implements OnDestroy, On
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoCollisionComponent
   ],
   exports: [

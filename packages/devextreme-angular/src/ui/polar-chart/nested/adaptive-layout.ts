@@ -23,6 +23,7 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-polar-chart-adaptive-layout',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -78,7 +79,7 @@ export class DxoPolarChartAdaptiveLayoutComponent extends NestedOption implement
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoPolarChartAdaptiveLayoutComponent
   ],
   exports: [

@@ -45,6 +45,7 @@ import {
     selector: 'dx-drawer',
     template: '<ng-content></ng-content>',
     host: { ngSkipHydration: 'true' },
+    standalone: true,
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -534,11 +535,9 @@ export class DxDrawerComponent extends DxComponent implements OnDestroy {
 
 @NgModule({
   imports: [
+    DxDrawerComponent,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxDrawerComponent
   ],
   exports: [
     DxDrawerComponent,

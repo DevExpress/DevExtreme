@@ -24,6 +24,7 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-chart-annotation-border',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -103,7 +104,7 @@ export class DxoChartAnnotationBorderComponent extends NestedOption implements O
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoChartAnnotationBorderComponent
   ],
   exports: [

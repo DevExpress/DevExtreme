@@ -24,6 +24,7 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-pie-chart-border',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -103,7 +104,7 @@ export class DxoPieChartBorderComponent extends NestedOption implements OnDestro
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoPieChartBorderComponent
   ],
   exports: [

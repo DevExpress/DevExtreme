@@ -23,6 +23,7 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-polar-chart-minor-tick-interval',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -126,7 +127,7 @@ export class DxoPolarChartMinorTickIntervalComponent extends NestedOption implem
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoPolarChartMinorTickIntervalComponent
   ],
   exports: [

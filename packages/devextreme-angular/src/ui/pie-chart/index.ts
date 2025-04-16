@@ -124,6 +124,7 @@ import { DxiPieChartSeriesComponent } from 'devextreme-angular/ui/pie-chart/nest
     template: '',
     styles: [ ' :host {  display: block; }'],
     host: { ngSkipHydration: 'true' },
+    standalone: true,
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -1125,6 +1126,7 @@ export class DxPieChartComponent extends DxComponent implements OnDestroy, OnCha
 
 @NgModule({
   imports: [
+    DxPieChartComponent,
     DxoAdaptiveLayoutModule,
     DxoAnimationModule,
     DxiAnnotationModule,
@@ -1190,9 +1192,6 @@ export class DxPieChartComponent extends DxComponent implements OnDestroy, OnCha
     DxoPieChartTooltipBorderModule,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxPieChartComponent
   ],
   exports: [
     DxPieChartComponent,

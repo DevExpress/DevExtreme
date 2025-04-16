@@ -23,6 +23,7 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-min-visual-range-length',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -126,7 +127,7 @@ export class DxoMinVisualRangeLengthComponent extends NestedOption implements On
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoMinVisualRangeLengthComponent
   ],
   exports: [

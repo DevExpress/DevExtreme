@@ -27,6 +27,7 @@ import { DxiTabComponent } from './tab-dxi';
 
 @Component({
     selector: 'dxo-image-upload',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost],
@@ -73,7 +74,7 @@ export class DxoImageUploadComponent extends DxoHtmlEditorImageUpload implements
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoImageUploadComponent
   ],
   exports: [

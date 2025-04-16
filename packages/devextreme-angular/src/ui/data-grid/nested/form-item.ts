@@ -47,6 +47,7 @@ import { DxiDataGridValidationRuleComponent } from './validation-rule-dxi';
 
 @Component({
     selector: 'dxo-data-grid-form-item',
+    standalone: true,
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
     providers: [NestedOptionHost, DxTemplateHost]
@@ -283,7 +284,7 @@ export class DxoDataGridFormItemComponent extends NestedOption implements AfterV
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoDataGridFormItemComponent
   ],
   exports: [

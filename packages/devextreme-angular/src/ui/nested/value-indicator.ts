@@ -23,6 +23,7 @@ import { DxoGaugeIndicator } from './base/gauge-indicator';
 
 @Component({
     selector: 'dxo-value-indicator',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost],
@@ -75,7 +76,7 @@ export class DxoValueIndicatorComponent extends DxoGaugeIndicator implements OnD
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoValueIndicatorComponent
   ],
   exports: [

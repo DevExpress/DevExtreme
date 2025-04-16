@@ -23,6 +23,7 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-pivot-grid-load-panel',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -126,7 +127,7 @@ export class DxoPivotGridLoadPanelComponent extends NestedOption implements OnDe
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoPivotGridLoadPanelComponent
   ],
   exports: [

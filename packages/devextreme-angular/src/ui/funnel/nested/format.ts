@@ -24,6 +24,7 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-funnel-format',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -103,7 +104,7 @@ export class DxoFunnelFormatComponent extends NestedOption implements OnDestroy,
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoFunnelFormatComponent
   ],
   exports: [

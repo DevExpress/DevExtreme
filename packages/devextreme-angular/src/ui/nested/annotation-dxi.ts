@@ -21,6 +21,7 @@ import { DxiChartAnnotationConfig } from './base/chart-annotation-config-dxi';
 
 @Component({
     selector: 'dxi-annotation',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost],
@@ -86,7 +87,7 @@ export class DxiAnnotationComponent extends DxiChartAnnotationConfig {
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiAnnotationComponent
   ],
   exports: [

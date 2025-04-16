@@ -93,6 +93,7 @@ import { DxoTreeMapTreeMapborderModule } from 'devextreme-angular/ui/tree-map/ne
     template: '',
     styles: [ ' :host {  display: block; }'],
     host: { ngSkipHydration: 'true' },
+    standalone: true,
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -858,6 +859,7 @@ export class DxTreeMapComponent extends DxComponent implements OnDestroy, OnChan
 
 @NgModule({
   imports: [
+    DxTreeMapComponent,
     DxoColorizerModule,
     DxoExportModule,
     DxoGroupModule,
@@ -898,9 +900,6 @@ export class DxTreeMapComponent extends DxComponent implements OnDestroy, OnChan
     DxoTreeMapTreeMapborderModule,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxTreeMapComponent
   ],
   exports: [
     DxTreeMapComponent,

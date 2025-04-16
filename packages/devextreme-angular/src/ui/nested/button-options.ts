@@ -23,6 +23,7 @@ import { DxoButtonOptions } from './base/button-options';
 
 @Component({
     selector: 'dxo-button-options',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost],
@@ -80,7 +81,7 @@ export class DxoButtonOptionsComponent extends DxoButtonOptions implements OnDes
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoButtonOptionsComponent
   ],
   exports: [

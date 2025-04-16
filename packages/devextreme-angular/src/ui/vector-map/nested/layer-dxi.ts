@@ -27,6 +27,7 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxi-vector-map-layer',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -286,7 +287,7 @@ export class DxiVectorMapLayerComponent extends CollectionNestedOption {
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiVectorMapLayerComponent
   ],
   exports: [

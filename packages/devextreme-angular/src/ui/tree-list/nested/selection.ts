@@ -24,6 +24,7 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-tree-list-selection',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -87,7 +88,7 @@ export class DxoTreeListSelectionComponent extends NestedOption implements OnDes
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoTreeListSelectionComponent
   ],
   exports: [

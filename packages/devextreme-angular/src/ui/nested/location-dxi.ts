@@ -21,6 +21,7 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxi-location',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -104,7 +105,7 @@ export class DxiLocationComponent extends CollectionNestedOption {
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiLocationComponent
   ],
   exports: [

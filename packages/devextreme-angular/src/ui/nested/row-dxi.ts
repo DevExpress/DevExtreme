@@ -21,6 +21,7 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxi-row',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -80,7 +81,7 @@ export class DxiRowComponent extends CollectionNestedOption {
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiRowComponent
   ],
   exports: [

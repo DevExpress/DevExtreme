@@ -24,6 +24,7 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-image',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -87,7 +88,7 @@ export class DxoImageComponent extends NestedOption implements OnDestroy, OnInit
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoImageComponent
   ],
   exports: [

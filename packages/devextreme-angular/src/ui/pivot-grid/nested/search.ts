@@ -24,6 +24,7 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-pivot-grid-search',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -87,7 +88,7 @@ export class DxoPivotGridSearchComponent extends NestedOption implements OnDestr
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoPivotGridSearchComponent
   ],
   exports: [

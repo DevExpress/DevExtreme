@@ -32,6 +32,7 @@ import { DxiChangeComponent } from './change-dxi';
 
 @Component({
     selector: 'dxo-editing',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -402,7 +403,7 @@ export class DxoEditingComponent extends NestedOption implements OnDestroy, OnIn
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoEditingComponent
   ],
   exports: [

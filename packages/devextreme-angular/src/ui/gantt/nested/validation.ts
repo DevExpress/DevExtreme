@@ -23,6 +23,7 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-gantt-validation',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -78,7 +79,7 @@ export class DxoGanttValidationComponent extends NestedOption implements OnDestr
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoGanttValidationComponent
   ],
   exports: [

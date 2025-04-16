@@ -25,6 +25,7 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-context-menu-show',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -136,7 +137,7 @@ export class DxoContextMenuShowComponent extends NestedOption implements OnDestr
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoContextMenuShowComponent
   ],
   exports: [

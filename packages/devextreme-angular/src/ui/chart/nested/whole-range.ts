@@ -26,6 +26,7 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-chart-whole-range',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -100,7 +101,7 @@ export class DxoChartWholeRangeComponent extends NestedOption implements OnDestr
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoChartWholeRangeComponent
   ],
   exports: [

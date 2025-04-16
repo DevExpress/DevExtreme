@@ -25,6 +25,7 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-popup-position',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -112,7 +113,7 @@ export class DxoPopupPositionComponent extends NestedOption implements OnDestroy
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoPopupPositionComponent
   ],
   exports: [

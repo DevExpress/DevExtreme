@@ -29,6 +29,7 @@ import { DxiLinearGaugeRangeComponent } from './range-dxi';
 
 @Component({
     selector: 'dxo-linear-gauge-range-container',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -132,7 +133,7 @@ export class DxoLinearGaugeRangeContainerComponent extends NestedOption implemen
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoLinearGaugeRangeContainerComponent
   ],
   exports: [

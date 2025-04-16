@@ -24,6 +24,7 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-polar-chart-value-error-bar',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -127,7 +128,7 @@ export class DxoPolarChartValueErrorBarComponent extends NestedOption implements
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoPolarChartValueErrorBarComponent
   ],
   exports: [

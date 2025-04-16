@@ -21,6 +21,7 @@ import { DxiTextEditorButton } from './base/text-editor-button-dxi';
 
 @Component({
     selector: 'dxi-button',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost],
@@ -61,7 +62,7 @@ export class DxiButtonComponent extends DxiTextEditorButton {
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiButtonComponent
   ],
   exports: [

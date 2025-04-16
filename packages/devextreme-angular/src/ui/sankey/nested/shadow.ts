@@ -23,6 +23,7 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-sankey-shadow',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -94,7 +95,7 @@ export class DxoSankeyShadowComponent extends NestedOption implements OnDestroy,
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoSankeyShadowComponent
   ],
   exports: [

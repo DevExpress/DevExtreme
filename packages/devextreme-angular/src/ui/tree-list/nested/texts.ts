@@ -23,6 +23,7 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-tree-list-texts',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -238,7 +239,7 @@ export class DxoTreeListTextsComponent extends NestedOption implements OnDestroy
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoTreeListTextsComponent
   ],
   exports: [

@@ -23,6 +23,7 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-sankey-margin',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -86,7 +87,7 @@ export class DxoSankeyMarginComponent extends NestedOption implements OnDestroy,
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoSankeyMarginComponent
   ],
   exports: [

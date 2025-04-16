@@ -25,6 +25,7 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-vector-map-vector-map-title',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -128,7 +129,7 @@ export class DxoVectorMapVectorMapTitleComponent extends NestedOption implements
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoVectorMapVectorMapTitleComponent
   ],
   exports: [

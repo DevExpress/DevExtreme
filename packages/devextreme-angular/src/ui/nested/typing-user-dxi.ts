@@ -21,6 +21,7 @@ import { DxiUser } from './base/user-dxi';
 
 @Component({
     selector: 'dxi-typing-user',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost],
@@ -54,7 +55,7 @@ export class DxiTypingUserComponent extends DxiUser {
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiTypingUserComponent
   ],
   exports: [

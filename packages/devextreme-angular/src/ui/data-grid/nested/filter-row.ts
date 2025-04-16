@@ -24,6 +24,7 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-data-grid-filter-row',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -127,7 +128,7 @@ export class DxoDataGridFilterRowComponent extends NestedOption implements OnDes
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoDataGridFilterRowComponent
   ],
   exports: [

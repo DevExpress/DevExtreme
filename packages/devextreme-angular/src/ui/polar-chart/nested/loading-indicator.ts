@@ -26,6 +26,7 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-polar-chart-loading-indicator',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -108,7 +109,7 @@ export class DxoPolarChartLoadingIndicatorComponent extends NestedOption impleme
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoPolarChartLoadingIndicatorComponent
   ],
   exports: [

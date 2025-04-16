@@ -21,6 +21,7 @@ import { DxiChartSeries } from './base/chart-series-dxi';
 
 @Component({
     selector: 'dxi-series',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost],
@@ -94,7 +95,7 @@ export class DxiSeriesComponent extends DxiChartSeries {
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiSeriesComponent
   ],
   exports: [

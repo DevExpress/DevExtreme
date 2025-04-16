@@ -25,6 +25,7 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-slider-tooltip',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -88,7 +89,7 @@ export class DxoSliderTooltipComponent extends NestedOption implements OnDestroy
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoSliderTooltipComponent
   ],
   exports: [

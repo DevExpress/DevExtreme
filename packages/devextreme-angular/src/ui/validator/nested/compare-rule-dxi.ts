@@ -22,6 +22,7 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxi-validator-compare-rule',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -89,7 +90,7 @@ export class DxiValidatorCompareRuleComponent extends CollectionNestedOption {
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiValidatorCompareRuleComponent
   ],
   exports: [

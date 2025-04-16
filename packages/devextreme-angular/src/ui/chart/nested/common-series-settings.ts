@@ -27,6 +27,7 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-chart-common-series-settings',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -546,7 +547,7 @@ export class DxoChartCommonSeriesSettingsComponent extends NestedOption implemen
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoChartCommonSeriesSettingsComponent
   ],
   exports: [

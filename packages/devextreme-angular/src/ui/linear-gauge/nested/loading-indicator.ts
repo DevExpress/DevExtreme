@@ -26,6 +26,7 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-linear-gauge-loading-indicator',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -100,7 +101,7 @@ export class DxoLinearGaugeLoadingIndicatorComponent extends NestedOption implem
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoLinearGaugeLoadingIndicatorComponent
   ],
   exports: [

@@ -24,6 +24,7 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-default-item-properties',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -127,7 +128,7 @@ export class DxoDefaultItemPropertiesComponent extends NestedOption implements O
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoDefaultItemPropertiesComponent
   ],
   exports: [

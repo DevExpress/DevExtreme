@@ -31,6 +31,7 @@ import { DxiDataGridFieldComponent } from './field-dxi';
 
 @Component({
     selector: 'dxo-data-grid-filter-builder',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -305,7 +306,7 @@ export class DxoDataGridFilterBuilderComponent extends NestedOption implements O
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoDataGridFilterBuilderComponent
   ],
   exports: [

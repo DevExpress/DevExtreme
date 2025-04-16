@@ -23,6 +23,7 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-filter-builder-filter-operation-descriptions',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -158,7 +159,7 @@ export class DxoFilterBuilderFilterOperationDescriptionsComponent extends Nested
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoFilterBuilderFilterOperationDescriptionsComponent
   ],
   exports: [

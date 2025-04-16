@@ -23,6 +23,7 @@ import { DxoButtonOptions } from './base/button-options';
 
 @Component({
     selector: 'dxo-options',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost],
@@ -80,7 +81,7 @@ export class DxoOptionsComponent extends DxoButtonOptions implements OnDestroy, 
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoOptionsComponent
   ],
   exports: [

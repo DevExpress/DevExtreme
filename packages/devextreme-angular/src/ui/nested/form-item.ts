@@ -27,6 +27,7 @@ import { DxiValidationRuleComponent } from './validation-rule-dxi';
 
 @Component({
     selector: 'dxo-form-item',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost],
@@ -82,7 +83,7 @@ export class DxoFormItemComponent extends DxoFormSimpleItem implements OnDestroy
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoFormItemComponent
   ],
   exports: [

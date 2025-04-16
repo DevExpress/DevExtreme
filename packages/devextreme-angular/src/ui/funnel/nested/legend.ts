@@ -26,6 +26,7 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-funnel-legend',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -233,7 +234,7 @@ export class DxoFunnelLegendComponent extends NestedOption implements OnDestroy,
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoFunnelLegendComponent
   ],
   exports: [

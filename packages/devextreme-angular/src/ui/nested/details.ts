@@ -28,6 +28,7 @@ import { DxiColumnComponent } from './column-dxi';
 
 @Component({
     selector: 'dxo-details',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -75,7 +76,7 @@ export class DxoDetailsComponent extends NestedOption implements OnDestroy, OnIn
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoDetailsComponent
   ],
   exports: [

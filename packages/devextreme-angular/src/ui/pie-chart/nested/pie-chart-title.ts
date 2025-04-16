@@ -25,6 +25,7 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-pie-chart-pie-chart-title',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -128,7 +129,7 @@ export class DxoPieChartPieChartTitleComponent extends NestedOption implements O
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoPieChartPieChartTitleComponent
   ],
   exports: [

@@ -25,6 +25,7 @@ import { DxiLocationComponent } from './location-dxi';
 
 @Component({
     selector: 'dxi-marker',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -92,7 +93,7 @@ export class DxiMarkerComponent extends CollectionNestedOption {
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiMarkerComponent
   ],
   exports: [

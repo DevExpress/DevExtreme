@@ -24,6 +24,7 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-diagram-default-item-properties',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -127,7 +128,7 @@ export class DxoDiagramDefaultItemPropertiesComponent extends NestedOption imple
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoDiagramDefaultItemPropertiesComponent
   ],
   exports: [

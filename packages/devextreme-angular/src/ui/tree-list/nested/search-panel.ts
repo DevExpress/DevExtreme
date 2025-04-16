@@ -25,6 +25,7 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-tree-list-search-panel',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -123,7 +124,7 @@ export class DxoTreeListSearchPanelComponent extends NestedOption implements OnD
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoTreeListSearchPanelComponent
   ],
   exports: [

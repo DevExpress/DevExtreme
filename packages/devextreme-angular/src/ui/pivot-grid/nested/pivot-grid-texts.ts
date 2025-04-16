@@ -23,6 +23,7 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-pivot-grid-pivot-grid-texts',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -142,7 +143,7 @@ export class DxoPivotGridPivotGridTextsComponent extends NestedOption implements
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoPivotGridPivotGridTextsComponent
   ],
   exports: [

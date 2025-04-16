@@ -31,6 +31,7 @@ import { DxiToolbarItemComponent } from './toolbar-item-dxi';
 
 @Component({
     selector: 'dxo-popup',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost],
@@ -156,7 +157,7 @@ export class DxoPopupComponent extends DxoPopupOptions implements OnDestroy, OnI
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoPopupComponent
   ],
   exports: [

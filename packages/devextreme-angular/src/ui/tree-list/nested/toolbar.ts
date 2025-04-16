@@ -28,6 +28,7 @@ import { DxiTreeListItemComponent } from './item-dxi';
 
 @Component({
     selector: 'dxo-tree-list-toolbar',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -91,7 +92,7 @@ export class DxoTreeListToolbarComponent extends NestedOption implements OnDestr
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoTreeListToolbarComponent
   ],
   exports: [

@@ -24,6 +24,7 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-number-box-format',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -103,7 +104,7 @@ export class DxoNumberBoxFormatComponent extends NestedOption implements OnDestr
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoNumberBoxFormatComponent
   ],
   exports: [

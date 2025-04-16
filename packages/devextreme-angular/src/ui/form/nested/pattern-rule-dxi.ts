@@ -22,6 +22,7 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxi-form-pattern-rule',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -81,7 +82,7 @@ export class DxiFormPatternRuleComponent extends CollectionNestedOption {
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiFormPatternRuleComponent
   ],
   exports: [

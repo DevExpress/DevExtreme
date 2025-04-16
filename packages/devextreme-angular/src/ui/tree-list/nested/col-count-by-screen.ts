@@ -23,6 +23,7 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-tree-list-col-count-by-screen',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -86,7 +87,7 @@ export class DxoTreeListColCountByScreenComponent extends NestedOption implement
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoTreeListColCountByScreenComponent
   ],
   exports: [

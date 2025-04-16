@@ -21,6 +21,7 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxi-chart-break',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -64,7 +65,7 @@ export class DxiChartBreakComponent extends CollectionNestedOption {
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiChartBreakComponent
   ],
   exports: [

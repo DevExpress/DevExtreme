@@ -23,6 +23,7 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxi-number-box-button',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -74,7 +75,7 @@ export class DxiNumberBoxButtonComponent extends CollectionNestedOption {
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiNumberBoxButtonComponent
   ],
   exports: [

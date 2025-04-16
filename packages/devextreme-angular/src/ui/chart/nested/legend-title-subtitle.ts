@@ -24,6 +24,7 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-chart-legend-title-subtitle',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -79,7 +80,7 @@ export class DxoChartLegendTitleSubtitleComponent extends NestedOption implement
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoChartLegendTitleSubtitleComponent
   ],
   exports: [

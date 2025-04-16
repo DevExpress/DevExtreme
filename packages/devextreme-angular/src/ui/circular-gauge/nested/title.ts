@@ -25,6 +25,7 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-circular-gauge-title',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -128,7 +129,7 @@ export class DxoCircularGaugeTitleComponent extends NestedOption implements OnDe
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoCircularGaugeTitleComponent
   ],
   exports: [

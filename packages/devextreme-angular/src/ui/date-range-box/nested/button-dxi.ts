@@ -23,6 +23,7 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxi-date-range-box-button',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -74,7 +75,7 @@ export class DxiDateRangeBoxButtonComponent extends CollectionNestedOption {
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiDateRangeBoxButtonComponent
   ],
   exports: [

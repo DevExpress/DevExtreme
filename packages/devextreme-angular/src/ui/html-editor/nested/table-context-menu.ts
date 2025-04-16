@@ -29,6 +29,7 @@ import { DxiHtmlEditorTableContextMenuItemComponent } from './table-context-menu
 
 @Component({
     selector: 'dxo-html-editor-table-context-menu',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -92,7 +93,7 @@ export class DxoHtmlEditorTableContextMenuComponent extends NestedOption impleme
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoHtmlEditorTableContextMenuComponent
   ],
   exports: [

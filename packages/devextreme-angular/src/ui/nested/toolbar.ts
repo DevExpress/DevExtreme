@@ -28,6 +28,7 @@ import { DxiFileSelectionItemComponent } from './file-selection-item-dxi';
 
 @Component({
     selector: 'dxo-toolbar',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost],
@@ -83,7 +84,7 @@ export class DxoToolbarComponent extends DxoDataGridToolbar implements OnDestroy
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoToolbarComponent
   ],
   exports: [

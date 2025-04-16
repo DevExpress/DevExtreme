@@ -26,6 +26,7 @@ import { DxiDiagramCommandComponent } from './command-dxi';
 
 @Component({
     selector: 'dxi-diagram-group',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -109,7 +110,7 @@ export class DxiDiagramGroupComponent extends CollectionNestedOption {
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiDiagramGroupComponent
   ],
   exports: [

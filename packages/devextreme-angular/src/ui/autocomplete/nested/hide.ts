@@ -25,6 +25,7 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-autocomplete-hide',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -136,7 +137,7 @@ export class DxoAutocompleteHideComponent extends NestedOption implements OnDest
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoAutocompleteHideComponent
   ],
   exports: [

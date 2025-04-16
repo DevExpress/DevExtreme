@@ -25,6 +25,7 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-auto-layout',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -72,7 +73,7 @@ export class DxoAutoLayoutComponent extends NestedOption implements OnDestroy, O
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoAutoLayoutComponent
   ],
   exports: [

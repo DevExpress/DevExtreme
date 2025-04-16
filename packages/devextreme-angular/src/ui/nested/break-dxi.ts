@@ -21,6 +21,7 @@ import { DxiVizScaleBreak } from './base/viz-scale-break-dxi';
 
 @Component({
     selector: 'dxi-break',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost],
@@ -52,7 +53,7 @@ export class DxiBreakComponent extends DxiVizScaleBreak {
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiBreakComponent
   ],
   exports: [

@@ -23,6 +23,7 @@ import { DxoGanttSorting } from './base/gantt-sorting';
 
 @Component({
     selector: 'dxo-sorting',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost],
@@ -61,7 +62,7 @@ export class DxoSortingComponent extends DxoGanttSorting implements OnDestroy, O
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoSortingComponent
   ],
   exports: [

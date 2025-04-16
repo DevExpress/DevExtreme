@@ -29,6 +29,7 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxi-tag-box-item',
+    standalone: true,
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
     providers: [NestedOptionHost, DxTemplateHost]
@@ -109,7 +110,7 @@ export class DxiTagBoxItemComponent extends CollectionNestedOption implements Af
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiTagBoxItemComponent
   ],
   exports: [

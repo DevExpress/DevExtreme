@@ -64,6 +64,7 @@ import { DxoDeferRenderingToModule } from 'devextreme-angular/ui/defer-rendering
     selector: 'dx-defer-rendering',
     template: '',
     host: { ngSkipHydration: 'true' },
+    standalone: true,
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -496,6 +497,7 @@ export class DxDeferRenderingComponent extends DxComponent implements OnDestroy 
 
 @NgModule({
   imports: [
+    DxDeferRenderingComponent,
     DxoAnimationModule,
     DxoFromModule,
     DxoPositionModule,
@@ -516,9 +518,6 @@ export class DxDeferRenderingComponent extends DxComponent implements OnDestroy 
     DxoDeferRenderingToModule,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxDeferRenderingComponent
   ],
   exports: [
     DxDeferRenderingComponent,

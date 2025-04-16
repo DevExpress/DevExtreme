@@ -23,6 +23,7 @@ import { DxoPager } from './base/pager';
 
 @Component({
     selector: 'dxo-pager',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost],
@@ -64,7 +65,7 @@ export class DxoPagerComponent extends DxoPager implements OnDestroy, OnInit  {
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoPagerComponent
   ],
   exports: [

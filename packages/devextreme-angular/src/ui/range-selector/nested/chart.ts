@@ -31,6 +31,7 @@ import { DxiRangeSelectorSeriesComponent } from './series-dxi';
 
 @Component({
     selector: 'dxo-range-selector-chart',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -182,7 +183,7 @@ export class DxoRangeSelectorChartComponent extends NestedOption implements OnDe
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoRangeSelectorChartComponent
   ],
   exports: [

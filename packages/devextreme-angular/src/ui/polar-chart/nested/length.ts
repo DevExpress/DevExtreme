@@ -23,6 +23,7 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-polar-chart-length',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -126,7 +127,7 @@ export class DxoPolarChartLengthComponent extends NestedOption implements OnDest
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoPolarChartLengthComponent
   ],
   exports: [

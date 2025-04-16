@@ -26,6 +26,7 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-vector-map-loading-indicator',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -108,7 +109,7 @@ export class DxoVectorMapLoadingIndicatorComponent extends NestedOption implemen
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoVectorMapLoadingIndicatorComponent
   ],
   exports: [

@@ -23,6 +23,7 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxi-autocomplete-button',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -74,7 +75,7 @@ export class DxiAutocompleteButtonComponent extends CollectionNestedOption {
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiAutocompleteButtonComponent
   ],
   exports: [

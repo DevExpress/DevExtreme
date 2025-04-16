@@ -23,6 +23,7 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxi-group-item',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -130,7 +131,7 @@ export class DxiGroupItemComponent extends CollectionNestedOption {
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiGroupItemComponent
   ],
   exports: [

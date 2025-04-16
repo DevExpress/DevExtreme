@@ -23,6 +23,7 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-appointment-dragging',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -134,7 +135,7 @@ export class DxoAppointmentDraggingComponent extends NestedOption implements OnD
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoAppointmentDraggingComponent
   ],
   exports: [

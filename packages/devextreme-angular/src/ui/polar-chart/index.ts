@@ -181,6 +181,7 @@ import { DxiPolarChartSeriesComponent } from 'devextreme-angular/ui/polar-chart/
     template: '',
     styles: [ ' :host {  display: block; }'],
     host: { ngSkipHydration: 'true' },
+    standalone: true,
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -1278,6 +1279,7 @@ export class DxPolarChartComponent extends DxComponent implements OnDestroy, OnC
 
 @NgModule({
   imports: [
+    DxPolarChartComponent,
     DxoAdaptiveLayoutModule,
     DxoAnimationModule,
     DxiAnnotationModule,
@@ -1399,9 +1401,6 @@ export class DxPolarChartComponent extends DxComponent implements OnDestroy, OnC
     DxoPolarChartWholeRangeModule,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxPolarChartComponent
   ],
   exports: [
     DxPolarChartComponent,

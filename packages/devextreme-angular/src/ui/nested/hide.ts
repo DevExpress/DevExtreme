@@ -23,6 +23,7 @@ import { DxoAnimationConfig } from './base/animation-config';
 
 @Component({
     selector: 'dxo-hide',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost],
@@ -66,7 +67,7 @@ export class DxoHideComponent extends DxoAnimationConfig implements OnDestroy, O
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoHideComponent
   ],
   exports: [

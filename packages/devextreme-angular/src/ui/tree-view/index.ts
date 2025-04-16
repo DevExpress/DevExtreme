@@ -66,6 +66,7 @@ import { DxiTreeViewItemComponent } from 'devextreme-angular/ui/tree-view/nested
     selector: 'dx-tree-view',
     template: '',
     host: { ngSkipHydration: 'true' },
+    standalone: true,
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -1283,6 +1284,7 @@ export class DxTreeViewComponent<TKey = any> extends DxComponent implements OnDe
 
 @NgModule({
   imports: [
+    DxTreeViewComponent,
     DxiItemModule,
     DxoSearchEditorOptionsModule,
     DxiButtonModule,
@@ -1293,9 +1295,6 @@ export class DxTreeViewComponent<TKey = any> extends DxComponent implements OnDe
     DxoTreeViewSearchEditorOptionsModule,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxTreeViewComponent
   ],
   exports: [
     DxTreeViewComponent,

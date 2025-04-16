@@ -30,6 +30,7 @@ import { DxiDiagramPageSizeItemComponent } from './page-size-item-dxi';
 
 @Component({
     selector: 'dxo-diagram-page-size',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -120,7 +121,7 @@ export class DxoDiagramPageSizeComponent extends NestedOption implements OnDestr
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoDiagramPageSizeComponent
   ],
   exports: [

@@ -29,6 +29,7 @@ import { DxiGanttToolbarItemComponent } from './toolbar-item-dxi';
 
 @Component({
     selector: 'dxo-gantt-toolbar',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -84,7 +85,7 @@ export class DxoGanttToolbarComponent extends NestedOption implements OnDestroy,
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoGanttToolbarComponent
   ],
   exports: [

@@ -23,6 +23,7 @@ import { DxoVizFont } from './base/viz-font';
 
 @Component({
     selector: 'dxo-font',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost],
@@ -61,7 +62,7 @@ export class DxoFontComponent extends DxoVizFont implements OnDestroy, OnInit  {
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoFontComponent
   ],
   exports: [

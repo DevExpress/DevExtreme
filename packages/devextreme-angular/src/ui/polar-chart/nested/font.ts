@@ -23,6 +23,7 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-polar-chart-font',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -94,7 +95,7 @@ export class DxoPolarChartFontComponent extends NestedOption implements OnDestro
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoPolarChartFontComponent
   ],
   exports: [

@@ -69,6 +69,7 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
     selector: 'dx-text-box',
     template: '',
     host: { ngSkipHydration: 'true' },
+    standalone: true,
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -1166,15 +1167,13 @@ export class DxTextBoxComponent extends DxComponent implements OnDestroy, Contro
 
 @NgModule({
   imports: [
+    DxTextBoxComponent,
     DxiButtonModule,
     DxoOptionsModule,
     DxiTextBoxButtonModule,
     DxoTextBoxOptionsModule,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxTextBoxComponent
   ],
   exports: [
     DxTextBoxComponent,

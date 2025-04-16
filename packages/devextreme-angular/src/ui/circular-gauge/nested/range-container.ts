@@ -29,6 +29,7 @@ import { DxiCircularGaugeRangeComponent } from './range-dxi';
 
 @Component({
     selector: 'dxo-circular-gauge-range-container',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -124,7 +125,7 @@ export class DxoCircularGaugeRangeContainerComponent extends NestedOption implem
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoCircularGaugeRangeContainerComponent
   ],
   exports: [

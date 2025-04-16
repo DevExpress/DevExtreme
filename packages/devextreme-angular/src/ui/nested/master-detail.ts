@@ -31,6 +31,7 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-master-detail',
+    standalone: true,
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
     providers: [NestedOptionHost, DxTemplateHost]
@@ -99,7 +100,7 @@ export class DxoMasterDetailComponent extends NestedOption implements AfterViewI
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoMasterDetailComponent
   ],
   exports: [

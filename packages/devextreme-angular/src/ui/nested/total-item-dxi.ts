@@ -24,6 +24,7 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxi-total-item',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -131,7 +132,7 @@ export class DxiTotalItemComponent extends CollectionNestedOption {
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiTotalItemComponent
   ],
   exports: [

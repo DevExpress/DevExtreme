@@ -23,6 +23,7 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-polar-chart-shadow',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -94,7 +95,7 @@ export class DxoPolarChartShadowComponent extends NestedOption implements OnDest
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoPolarChartShadowComponent
   ],
   exports: [

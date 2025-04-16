@@ -25,6 +25,7 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-drop-down-button-hide',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -136,7 +137,7 @@ export class DxoDropDownButtonHideComponent extends NestedOption implements OnDe
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoDropDownButtonHideComponent
   ],
   exports: [

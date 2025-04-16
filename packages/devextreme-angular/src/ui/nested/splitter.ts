@@ -30,6 +30,7 @@ import { DxiItemComponent } from './item-dxi';
 
 @Component({
     selector: 'dxo-splitter',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost],
@@ -107,7 +108,7 @@ export class DxoSplitterComponent extends DxoSplitterOptions implements OnDestro
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoSplitterComponent
   ],
   exports: [

@@ -45,6 +45,7 @@ import {
     selector: 'dx-button',
     template: '<ng-content></ng-content>',
     host: { ngSkipHydration: 'true' },
+    standalone: true,
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -531,11 +532,9 @@ export class DxButtonComponent extends DxComponent implements OnDestroy {
 
 @NgModule({
   imports: [
+    DxButtonComponent,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxButtonComponent
   ],
   exports: [
     DxButtonComponent,

@@ -26,6 +26,7 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-data-grid-group-panel',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -92,7 +93,7 @@ export class DxoDataGridGroupPanelComponent extends NestedOption implements OnDe
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoDataGridGroupPanelComponent
   ],
   exports: [

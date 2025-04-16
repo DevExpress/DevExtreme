@@ -23,6 +23,7 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-grid',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -86,7 +87,7 @@ export class DxoGridComponent extends NestedOption implements OnDestroy, OnInit 
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoGridComponent
   ],
   exports: [

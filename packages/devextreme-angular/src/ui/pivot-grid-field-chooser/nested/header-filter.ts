@@ -24,6 +24,7 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-pivot-grid-field-chooser-header-filter',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -119,7 +120,7 @@ export class DxoPivotGridFieldChooserHeaderFilterComponent extends NestedOption 
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoPivotGridFieldChooserHeaderFilterComponent
   ],
   exports: [

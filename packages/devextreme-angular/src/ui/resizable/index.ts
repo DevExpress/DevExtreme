@@ -44,6 +44,7 @@ import {
     selector: 'dx-resizable',
     template: '<ng-content></ng-content>',
     host: { ngSkipHydration: 'true' },
+    standalone: true,
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -371,11 +372,9 @@ export class DxResizableComponent extends DxComponent implements OnDestroy {
 
 @NgModule({
   imports: [
+    DxResizableComponent,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxResizableComponent
   ],
   exports: [
     DxResizableComponent,

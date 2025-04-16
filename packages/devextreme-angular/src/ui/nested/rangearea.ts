@@ -23,6 +23,7 @@ import { DxoChartCommonSeriesSettings } from './base/chart-common-series-setting
 
 @Component({
     selector: 'dxo-rangearea',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost],
@@ -117,7 +118,7 @@ export class DxoRangeareaComponent extends DxoChartCommonSeriesSettings implemen
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoRangeareaComponent
   ],
   exports: [

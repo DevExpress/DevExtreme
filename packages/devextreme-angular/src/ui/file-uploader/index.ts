@@ -62,6 +62,7 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
     selector: 'dx-file-uploader',
     template: '',
     host: { ngSkipHydration: 'true' },
+    standalone: true,
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -1346,11 +1347,9 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
 
 @NgModule({
   imports: [
+    DxFileUploaderComponent,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxFileUploaderComponent
   ],
   exports: [
     DxFileUploaderComponent,

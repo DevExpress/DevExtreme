@@ -25,6 +25,7 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-range-selector-value-axis',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -104,7 +105,7 @@ export class DxoRangeSelectorValueAxisComponent extends NestedOption implements 
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoRangeSelectorValueAxisComponent
   ],
   exports: [

@@ -44,6 +44,7 @@ import {
     selector: 'dx-validation-group',
     template: '<ng-content></ng-content>',
     host: { ngSkipHydration: 'true' },
+    standalone: true,
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -176,11 +177,9 @@ export class DxValidationGroupComponent extends DxComponent implements OnDestroy
 
 @NgModule({
   imports: [
+    DxValidationGroupComponent,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxValidationGroupComponent
   ],
   exports: [
     DxValidationGroupComponent,

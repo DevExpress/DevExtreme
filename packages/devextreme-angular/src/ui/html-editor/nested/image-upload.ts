@@ -29,6 +29,7 @@ import { DxiHtmlEditorTabComponent } from './tab-dxi';
 
 @Component({
     selector: 'dxo-html-editor-image-upload',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -108,7 +109,7 @@ export class DxoHtmlEditorImageUploadComponent extends NestedOption implements O
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoHtmlEditorImageUploadComponent
   ],
   exports: [

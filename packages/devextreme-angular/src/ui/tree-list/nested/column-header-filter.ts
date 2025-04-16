@@ -27,6 +27,7 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-tree-list-column-header-filter',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -122,7 +123,7 @@ export class DxoTreeListColumnHeaderFilterComponent extends NestedOption impleme
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoTreeListColumnHeaderFilterComponent
   ],
   exports: [

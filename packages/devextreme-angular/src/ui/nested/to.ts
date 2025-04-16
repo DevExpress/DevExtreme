@@ -23,6 +23,7 @@ import { DxoAnimationState } from './base/animation-state';
 
 @Component({
     selector: 'dxo-to',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost],
@@ -61,7 +62,7 @@ export class DxoToComponent extends DxoAnimationState implements OnDestroy, OnIn
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoToComponent
   ],
   exports: [

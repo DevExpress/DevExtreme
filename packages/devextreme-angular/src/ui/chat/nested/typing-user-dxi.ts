@@ -21,6 +21,7 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxi-chat-typing-user',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -80,7 +81,7 @@ export class DxiChatTypingUserComponent extends CollectionNestedOption {
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiChatTypingUserComponent
   ],
   exports: [

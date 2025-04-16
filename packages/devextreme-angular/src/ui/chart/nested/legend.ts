@@ -25,6 +25,7 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-chart-legend',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -248,7 +249,7 @@ export class DxoChartLegendComponent extends NestedOption implements OnDestroy, 
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoChartLegendComponent
   ],
   exports: [

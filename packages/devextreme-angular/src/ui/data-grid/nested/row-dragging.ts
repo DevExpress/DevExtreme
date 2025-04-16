@@ -28,6 +28,7 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-data-grid-row-dragging',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -243,7 +244,7 @@ export class DxoDataGridRowDraggingComponent extends NestedOption implements OnD
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoDataGridRowDraggingComponent
   ],
   exports: [

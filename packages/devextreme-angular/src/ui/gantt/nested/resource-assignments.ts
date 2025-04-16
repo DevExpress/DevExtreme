@@ -26,6 +26,7 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-gantt-resource-assignments',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -89,7 +90,7 @@ export class DxoGanttResourceAssignmentsComponent extends NestedOption implement
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoGanttResourceAssignmentsComponent
   ],
   exports: [

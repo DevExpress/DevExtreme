@@ -49,6 +49,7 @@ import {
     selector: 'dx-pagination',
     template: '',
     host: { ngSkipHydration: 'true' },
+    standalone: true,
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -619,11 +620,9 @@ export class DxPaginationComponent extends DxComponent implements OnDestroy, OnC
 
 @NgModule({
   imports: [
+    DxPaginationComponent,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxPaginationComponent
   ],
   exports: [
     DxPaginationComponent,

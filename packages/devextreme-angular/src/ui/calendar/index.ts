@@ -61,6 +61,7 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
     selector: 'dx-calendar',
     template: '',
     host: { ngSkipHydration: 'true' },
+    standalone: true,
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -961,11 +962,9 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
 
 @NgModule({
   imports: [
+    DxCalendarComponent,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxCalendarComponent
   ],
   exports: [
     DxCalendarComponent,

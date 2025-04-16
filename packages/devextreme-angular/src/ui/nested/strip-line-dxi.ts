@@ -21,6 +21,7 @@ import { DxiGanttStripLine } from './base/gantt-strip-line-dxi';
 
 @Component({
     selector: 'dxi-strip-line',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost],
@@ -54,7 +55,7 @@ export class DxiStripLineComponent extends DxiGanttStripLine {
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiStripLineComponent
   ],
   exports: [

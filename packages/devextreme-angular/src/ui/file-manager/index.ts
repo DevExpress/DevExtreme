@@ -72,6 +72,7 @@ import { DxoFileManagerUploadModule } from 'devextreme-angular/ui/file-manager/n
     selector: 'dx-file-manager',
     template: '',
     host: { ngSkipHydration: 'true' },
+    standalone: true,
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -961,6 +962,7 @@ export class DxFileManagerComponent extends DxComponent implements OnDestroy, On
 
 @NgModule({
   imports: [
+    DxFileManagerComponent,
     DxoContextMenuModule,
     DxiItemModule,
     DxoItemViewModule,
@@ -985,9 +987,6 @@ export class DxFileManagerComponent extends DxComponent implements OnDestroy, On
     DxoFileManagerUploadModule,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxFileManagerComponent
   ],
   exports: [
     DxFileManagerComponent,

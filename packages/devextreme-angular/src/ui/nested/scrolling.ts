@@ -23,6 +23,7 @@ import { DxoSchedulerScrolling } from './base/scheduler-scrolling';
 
 @Component({
     selector: 'dxo-scrolling',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost],
@@ -65,7 +66,7 @@ export class DxoScrollingComponent extends DxoSchedulerScrolling implements OnDe
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoScrollingComponent
   ],
   exports: [

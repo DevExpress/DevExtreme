@@ -23,6 +23,7 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-file-manager-permissions',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -110,7 +111,7 @@ export class DxoFileManagerPermissionsComponent extends NestedOption implements 
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoFileManagerPermissionsComponent
   ],
   exports: [

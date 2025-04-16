@@ -25,6 +25,7 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-tree-list-scrolling',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -128,7 +129,7 @@ export class DxoTreeListScrollingComponent extends NestedOption implements OnDes
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoTreeListScrollingComponent
   ],
   exports: [

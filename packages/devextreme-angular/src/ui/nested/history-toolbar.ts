@@ -28,6 +28,7 @@ import { DxiCommandComponent } from './command-dxi';
 
 @Component({
     selector: 'dxo-history-toolbar',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -83,7 +84,7 @@ export class DxoHistoryToolbarComponent extends NestedOption implements OnDestro
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoHistoryToolbarComponent
   ],
   exports: [

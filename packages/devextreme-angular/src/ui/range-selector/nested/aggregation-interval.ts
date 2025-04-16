@@ -23,6 +23,7 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-range-selector-aggregation-interval',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -126,7 +127,7 @@ export class DxoRangeSelectorAggregationIntervalComponent extends NestedOption i
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoRangeSelectorAggregationIntervalComponent
   ],
   exports: [

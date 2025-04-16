@@ -30,6 +30,7 @@ import { DxiValidationRuleComponent } from './validation-rule-dxi';
 
 @Component({
     selector: 'dxi-column',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost],
@@ -213,7 +214,7 @@ export class DxiColumnComponent extends DxiDataGridColumn {
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiColumnComponent
   ],
   exports: [

@@ -45,6 +45,7 @@ import {
     selector: 'dx-scroll-view',
     template: '<ng-content></ng-content>',
     host: { ngSkipHydration: 'true' },
+    standalone: true,
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -465,11 +466,9 @@ export class DxScrollViewComponent extends DxComponent implements OnDestroy {
 
 @NgModule({
   imports: [
+    DxScrollViewComponent,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxScrollViewComponent
   ],
   exports: [
     DxScrollViewComponent,

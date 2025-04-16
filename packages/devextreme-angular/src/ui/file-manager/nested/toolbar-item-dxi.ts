@@ -24,6 +24,7 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxi-file-manager-toolbar-item',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -139,7 +140,7 @@ export class DxiFileManagerToolbarItemComponent extends CollectionNestedOption {
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiFileManagerToolbarItemComponent
   ],
   exports: [

@@ -47,6 +47,7 @@ import { DxoDraggableCursorOffsetModule } from 'devextreme-angular/ui/draggable/
     selector: 'dx-draggable',
     template: '<ng-content></ng-content>',
     host: { ngSkipHydration: 'true' },
+    standalone: true,
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -479,13 +480,11 @@ export class DxDraggableComponent extends DxComponent implements OnDestroy {
 
 @NgModule({
   imports: [
+    DxDraggableComponent,
     DxoCursorOffsetModule,
     DxoDraggableCursorOffsetModule,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxDraggableComponent
   ],
   exports: [
     DxDraggableComponent,

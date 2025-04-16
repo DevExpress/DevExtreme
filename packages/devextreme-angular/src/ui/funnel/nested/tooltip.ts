@@ -26,6 +26,7 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-funnel-tooltip',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -177,7 +178,7 @@ export class DxoFunnelTooltipComponent extends NestedOption implements OnDestroy
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoFunnelTooltipComponent
   ],
   exports: [

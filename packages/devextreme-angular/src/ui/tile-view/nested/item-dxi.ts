@@ -29,6 +29,7 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxi-tile-view-item',
+    standalone: true,
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
     providers: [NestedOptionHost, DxTemplateHost]
@@ -125,7 +126,7 @@ export class DxiTileViewItemComponent extends CollectionNestedOption implements 
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiTileViewItemComponent
   ],
   exports: [

@@ -26,6 +26,7 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-chart-tooltip',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -209,7 +210,7 @@ export class DxoChartTooltipComponent extends NestedOption implements OnDestroy,
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoChartTooltipComponent
   ],
   exports: [

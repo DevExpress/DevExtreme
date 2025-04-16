@@ -21,6 +21,7 @@ import { DxiFilterBuilderField } from './base/filter-builder-field-dxi';
 
 @Component({
     selector: 'dxi-field',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost],
@@ -63,7 +64,7 @@ export class DxiFieldComponent extends DxiFilterBuilderField {
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiFieldComponent
   ],
   exports: [

@@ -25,6 +25,7 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-chart-axis-constant-line-style-label',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -96,7 +97,7 @@ export class DxoChartAxisConstantLineStyleLabelComponent extends NestedOption im
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoChartAxisConstantLineStyleLabelComponent
   ],
   exports: [

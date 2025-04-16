@@ -28,6 +28,7 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-tree-list-row-dragging',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -243,7 +244,7 @@ export class DxoTreeListRowDraggingComponent extends NestedOption implements OnD
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoTreeListRowDraggingComponent
   ],
   exports: [

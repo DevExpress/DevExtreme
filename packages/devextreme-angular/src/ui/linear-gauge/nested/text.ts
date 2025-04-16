@@ -25,6 +25,7 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-linear-gauge-text',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -88,7 +89,7 @@ export class DxoLinearGaugeTextComponent extends NestedOption implements OnDestr
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoLinearGaugeTextComponent
   ],
   exports: [

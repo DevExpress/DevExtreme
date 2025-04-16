@@ -31,6 +31,7 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxi-polar-chart-annotation',
+    standalone: true,
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
     providers: [NestedOptionHost, DxTemplateHost]
@@ -335,7 +336,7 @@ export class DxiPolarChartAnnotationComponent extends CollectionNestedOption imp
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiPolarChartAnnotationComponent
   ],
   exports: [

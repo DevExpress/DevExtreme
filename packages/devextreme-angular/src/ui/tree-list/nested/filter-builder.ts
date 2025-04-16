@@ -31,6 +31,7 @@ import { DxiTreeListFieldComponent } from './field-dxi';
 
 @Component({
     selector: 'dxo-tree-list-filter-builder',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -305,7 +306,7 @@ export class DxoTreeListFilterBuilderComponent extends NestedOption implements O
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoTreeListFilterBuilderComponent
   ],
   exports: [

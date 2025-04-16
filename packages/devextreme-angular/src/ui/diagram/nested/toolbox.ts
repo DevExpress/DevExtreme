@@ -29,6 +29,7 @@ import { DxiDiagramToolboxGroupComponent } from './toolbox-group-dxi';
 
 @Component({
     selector: 'dxo-diagram-toolbox',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -116,7 +117,7 @@ export class DxoDiagramToolboxComponent extends NestedOption implements OnDestro
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoDiagramToolboxComponent
   ],
   exports: [

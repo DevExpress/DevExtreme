@@ -23,6 +23,7 @@ import { DxoChartCommonSeriesSettings } from './base/chart-common-series-setting
 
 @Component({
     selector: 'dxo-stepline',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost],
@@ -117,7 +118,7 @@ export class DxoSteplineComponent extends DxoChartCommonSeriesSettings implement
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoSteplineComponent
   ],
   exports: [

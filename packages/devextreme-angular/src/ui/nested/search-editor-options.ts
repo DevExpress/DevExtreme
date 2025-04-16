@@ -29,6 +29,7 @@ import { DxiButtonComponent } from './button-dxi';
 
 @Component({
     selector: 'dxo-search-editor-options',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost],
@@ -144,7 +145,7 @@ export class DxoSearchEditorOptionsComponent extends DxoTextBoxOptions implement
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoSearchEditorOptionsComponent
   ],
   exports: [

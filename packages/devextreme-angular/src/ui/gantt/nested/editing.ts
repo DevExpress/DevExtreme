@@ -23,6 +23,7 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-gantt-editing',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -134,7 +135,7 @@ export class DxoGanttEditingComponent extends NestedOption implements OnDestroy,
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoGanttEditingComponent
   ],
   exports: [

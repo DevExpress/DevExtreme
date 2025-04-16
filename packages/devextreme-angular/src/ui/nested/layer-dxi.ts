@@ -26,6 +26,7 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxi-layer',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -285,7 +286,7 @@ export class DxiLayerComponent extends CollectionNestedOption {
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiLayerComponent
   ],
   exports: [

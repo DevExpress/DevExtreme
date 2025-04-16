@@ -48,6 +48,7 @@ import { DxiFormValidationRuleComponent } from './validation-rule-dxi';
 
 @Component({
     selector: 'dxi-form-item',
+    standalone: true,
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
     providers: [NestedOptionHost, DxTemplateHost]
@@ -432,7 +433,7 @@ export class DxiFormItemComponent extends CollectionNestedOption implements Afte
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiFormItemComponent
   ],
   exports: [

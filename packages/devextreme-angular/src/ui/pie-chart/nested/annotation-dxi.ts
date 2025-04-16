@@ -31,6 +31,7 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxi-pie-chart-annotation',
+    standalone: true,
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
     providers: [NestedOptionHost, DxTemplateHost]
@@ -319,7 +320,7 @@ export class DxiPieChartAnnotationComponent extends CollectionNestedOption imple
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiPieChartAnnotationComponent
   ],
   exports: [

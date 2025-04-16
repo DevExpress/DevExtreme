@@ -28,6 +28,7 @@ import { DxiDataGridItemComponent } from './item-dxi';
 
 @Component({
     selector: 'dxo-data-grid-toolbar',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -91,7 +92,7 @@ export class DxoDataGridToolbarComponent extends NestedOption implements OnDestr
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoDataGridToolbarComponent
   ],
   exports: [

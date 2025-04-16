@@ -25,6 +25,7 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-list-item-dragging',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -304,7 +305,7 @@ export class DxoListItemDraggingComponent extends NestedOption implements OnDest
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoListItemDraggingComponent
   ],
   exports: [

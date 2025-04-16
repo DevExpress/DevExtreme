@@ -73,6 +73,7 @@ import { DxoTooltipToModule } from 'devextreme-angular/ui/tooltip/nested';
     selector: 'dx-tooltip',
     template: '<ng-content></ng-content>',
     host: { ngSkipHydration: 'true' },
+    standalone: true,
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -714,6 +715,7 @@ export class DxTooltipComponent extends DxComponent implements OnDestroy {
 
 @NgModule({
   imports: [
+    DxTooltipComponent,
     DxoAnimationModule,
     DxoHideModule,
     DxoFromModule,
@@ -742,9 +744,6 @@ export class DxTooltipComponent extends DxComponent implements OnDestroy {
     DxoTooltipToModule,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxTooltipComponent
   ],
   exports: [
     DxTooltipComponent,

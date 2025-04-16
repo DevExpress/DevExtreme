@@ -23,6 +23,7 @@ import { DxoUser } from './base/user';
 
 @Component({
     selector: 'dxo-user',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost],
@@ -60,7 +61,7 @@ export class DxoUserComponent extends DxoUser implements OnDestroy, OnInit  {
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoUserComponent
   ],
   exports: [

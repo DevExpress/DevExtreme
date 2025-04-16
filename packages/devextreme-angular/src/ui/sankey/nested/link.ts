@@ -25,6 +25,7 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-sankey-link',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -96,7 +97,7 @@ export class DxoSankeyLinkComponent extends NestedOption implements OnDestroy, O
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoSankeyLinkComponent
   ],
   exports: [

@@ -26,6 +26,7 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-circular-gauge-value-indicator',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -209,7 +210,7 @@ export class DxoCircularGaugeValueIndicatorComponent extends NestedOption implem
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoCircularGaugeValueIndicatorComponent
   ],
   exports: [

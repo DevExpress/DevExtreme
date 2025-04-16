@@ -24,6 +24,7 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxi-vector-map-legend',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -251,7 +252,7 @@ export class DxiVectorMapLegendComponent extends CollectionNestedOption {
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiVectorMapLegendComponent
   ],
   exports: [

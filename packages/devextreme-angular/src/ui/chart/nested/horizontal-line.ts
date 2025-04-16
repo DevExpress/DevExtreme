@@ -26,6 +26,7 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-chart-horizontal-line',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -105,7 +106,7 @@ export class DxoChartHorizontalLineComponent extends NestedOption implements OnD
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoChartHorizontalLineComponent
   ],
   exports: [

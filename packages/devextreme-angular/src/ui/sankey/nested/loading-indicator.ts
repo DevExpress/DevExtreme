@@ -26,6 +26,7 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-sankey-loading-indicator',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -108,7 +109,7 @@ export class DxoSankeyLoadingIndicatorComponent extends NestedOption implements 
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoSankeyLoadingIndicatorComponent
   ],
   exports: [

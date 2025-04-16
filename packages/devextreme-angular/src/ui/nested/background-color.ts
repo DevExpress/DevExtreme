@@ -23,6 +23,7 @@ import { DxoChartsColor } from './base/charts-color';
 
 @Component({
     selector: 'dxo-background-color',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost],
@@ -58,7 +59,7 @@ export class DxoBackgroundColorComponent extends DxoChartsColor implements OnDes
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoBackgroundColorComponent
   ],
   exports: [

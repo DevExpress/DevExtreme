@@ -24,6 +24,7 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxi-file-manager-file-selection-item',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -139,7 +140,7 @@ export class DxiFileManagerFileSelectionItemComponent extends CollectionNestedOp
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiFileManagerFileSelectionItemComponent
   ],
   exports: [

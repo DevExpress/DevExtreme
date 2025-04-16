@@ -23,6 +23,7 @@ import { DxoGanttHeaderFilterTexts } from './base/gantt-header-filter-texts';
 
 @Component({
     selector: 'dxo-texts',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost],
@@ -116,7 +117,7 @@ export class DxoTextsComponent extends DxoGanttHeaderFilterTexts implements OnDe
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoTextsComponent
   ],
   exports: [

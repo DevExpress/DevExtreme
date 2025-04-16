@@ -25,6 +25,7 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-resources',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -88,7 +89,7 @@ export class DxoResourcesComponent extends NestedOption implements OnDestroy, On
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoResourcesComponent
   ],
   exports: [

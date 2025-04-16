@@ -25,6 +25,7 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-zoom-level',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -83,7 +84,7 @@ export class DxoZoomLevelComponent extends NestedOption implements OnDestroy, On
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoZoomLevelComponent
   ],
   exports: [

@@ -25,6 +25,7 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-row-dragging',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -240,7 +241,7 @@ export class DxoRowDraggingComponent extends NestedOption implements OnDestroy, 
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoRowDraggingComponent
   ],
   exports: [

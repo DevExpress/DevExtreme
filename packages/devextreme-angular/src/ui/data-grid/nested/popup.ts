@@ -38,6 +38,7 @@ import { DxiDataGridToolbarItemComponent } from './toolbar-item-dxi';
 
 @Component({
     selector: 'dxo-data-grid-popup',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -504,7 +505,7 @@ export class DxoDataGridPopupComponent extends NestedOption implements OnDestroy
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoDataGridPopupComponent
   ],
   exports: [

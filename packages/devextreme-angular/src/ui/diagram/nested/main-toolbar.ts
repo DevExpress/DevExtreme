@@ -28,6 +28,7 @@ import { DxiDiagramCommandComponent } from './command-dxi';
 
 @Component({
     selector: 'dxo-diagram-main-toolbar',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -83,7 +84,7 @@ export class DxoDiagramMainToolbarComponent extends NestedOption implements OnDe
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoDiagramMainToolbarComponent
   ],
   exports: [

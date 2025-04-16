@@ -27,6 +27,7 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-date-range-box-calendar-options',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -397,7 +398,7 @@ export class DxoDateRangeBoxCalendarOptionsComponent extends NestedOption implem
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoDateRangeBoxCalendarOptionsComponent
   ],
   exports: [

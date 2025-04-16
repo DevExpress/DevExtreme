@@ -24,6 +24,7 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-tree-map-group',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -119,7 +120,7 @@ export class DxoTreeMapGroupComponent extends NestedOption implements OnDestroy,
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoTreeMapGroupComponent
   ],
   exports: [

@@ -23,6 +23,7 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-data-grid-remote-operations',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -102,7 +103,7 @@ export class DxoDataGridRemoteOperationsComponent extends NestedOption implement
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoDataGridRemoteOperationsComponent
   ],
   exports: [

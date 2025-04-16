@@ -23,6 +23,7 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxi-resource',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -114,7 +115,7 @@ export class DxiResourceComponent extends CollectionNestedOption {
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiResourceComponent
   ],
   exports: [

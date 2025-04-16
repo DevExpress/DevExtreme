@@ -61,6 +61,7 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
     selector: 'dx-switch',
     template: '',
     host: { ngSkipHydration: 'true' },
+    standalone: true,
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -714,11 +715,9 @@ export class DxSwitchComponent extends DxComponent implements OnDestroy, Control
 
 @NgModule({
   imports: [
+    DxSwitchComponent,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxSwitchComponent
   ],
   exports: [
     DxSwitchComponent,

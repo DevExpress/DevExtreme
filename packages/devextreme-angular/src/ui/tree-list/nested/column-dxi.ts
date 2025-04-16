@@ -45,6 +45,7 @@ import { DxiTreeListValidationRuleComponent } from './validation-rule-dxi';
 
 @Component({
     selector: 'dxi-tree-list-column',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -667,7 +668,7 @@ export class DxiTreeListColumnComponent extends CollectionNestedOption {
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiTreeListColumnComponent
   ],
   exports: [

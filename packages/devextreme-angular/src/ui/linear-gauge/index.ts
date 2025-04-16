@@ -103,6 +103,7 @@ import { DxoLinearGaugeWidthModule } from 'devextreme-angular/ui/linear-gauge/ne
     template: '',
     styles: [ ' :host {  display: block; }'],
     host: { ngSkipHydration: 'true' },
+    standalone: true,
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -706,6 +707,7 @@ export class DxLinearGaugeComponent extends DxComponent implements OnDestroy, On
 
 @NgModule({
   imports: [
+    DxLinearGaugeComponent,
     DxoAnimationModule,
     DxoExportModule,
     DxoGeometryModule,
@@ -758,9 +760,6 @@ export class DxLinearGaugeComponent extends DxComponent implements OnDestroy, On
     DxoLinearGaugeWidthModule,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxLinearGaugeComponent
   ],
   exports: [
     DxLinearGaugeComponent,

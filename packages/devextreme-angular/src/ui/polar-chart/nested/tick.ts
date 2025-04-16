@@ -23,6 +23,7 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-polar-chart-tick',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -102,7 +103,7 @@ export class DxoPolarChartTickComponent extends NestedOption implements OnDestro
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoPolarChartTickComponent
   ],
   exports: [

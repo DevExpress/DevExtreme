@@ -29,6 +29,7 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxi-list-item',
+    standalone: true,
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
     providers: [NestedOptionHost, DxTemplateHost]
@@ -141,7 +142,7 @@ export class DxiListItemComponent extends CollectionNestedOption implements Afte
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiListItemComponent
   ],
   exports: [

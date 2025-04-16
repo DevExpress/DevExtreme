@@ -78,6 +78,7 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
     selector: 'dx-filter-builder',
     template: '',
     host: { ngSkipHydration: 'true' },
+    standalone: true,
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -701,6 +702,7 @@ export class DxFilterBuilderComponent extends DxComponent implements OnDestroy, 
 
 @NgModule({
   imports: [
+    DxFilterBuilderComponent,
     DxiCustomOperationModule,
     DxiFieldModule,
     DxoFormatModule,
@@ -715,9 +717,6 @@ export class DxFilterBuilderComponent extends DxComponent implements OnDestroy, 
     DxoFilterBuilderLookupModule,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxFilterBuilderComponent
   ],
   exports: [
     DxFilterBuilderComponent,

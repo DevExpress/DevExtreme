@@ -27,6 +27,7 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-column-chooser',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -162,7 +163,7 @@ export class DxoColumnChooserComponent extends NestedOption implements OnDestroy
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoColumnChooserComponent
   ],
   exports: [

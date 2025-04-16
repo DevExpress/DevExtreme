@@ -27,6 +27,7 @@ import { DxiFormTabComponent } from './tab-dxi';
 
 @Component({
     selector: 'dxi-form-tabbed-item',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -126,7 +127,7 @@ export class DxiFormTabbedItemComponent extends CollectionNestedOption {
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiFormTabbedItemComponent
   ],
   exports: [

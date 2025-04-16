@@ -26,6 +26,7 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-range-selector-loading-indicator',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -108,7 +109,7 @@ export class DxoRangeSelectorLoadingIndicatorComponent extends NestedOption impl
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoRangeSelectorLoadingIndicatorComponent
   ],
   exports: [

@@ -27,6 +27,7 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-data-grid-form',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -389,7 +390,7 @@ export class DxoDataGridFormComponent extends NestedOption implements OnDestroy,
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoDataGridFormComponent
   ],
   exports: [

@@ -23,6 +23,7 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-polar-chart-common-axis-settings-minor-tick',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -94,7 +95,7 @@ export class DxoPolarChartCommonAxisSettingsMinorTickComponent extends NestedOpt
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoPolarChartCommonAxisSettingsMinorTickComponent
   ],
   exports: [

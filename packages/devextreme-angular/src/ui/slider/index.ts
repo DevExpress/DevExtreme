@@ -68,6 +68,7 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
     selector: 'dx-slider',
     template: '',
     host: { ngSkipHydration: 'true' },
+    standalone: true,
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -847,6 +848,7 @@ export class DxSliderComponent extends DxComponent implements OnDestroy, Control
 
 @NgModule({
   imports: [
+    DxSliderComponent,
     DxoLabelModule,
     DxoFormatModule,
     DxoTooltipModule,
@@ -855,9 +857,6 @@ export class DxSliderComponent extends DxComponent implements OnDestroy, Control
     DxoSliderTooltipModule,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxSliderComponent
   ],
   exports: [
     DxSliderComponent,

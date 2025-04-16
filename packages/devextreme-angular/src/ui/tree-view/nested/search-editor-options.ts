@@ -31,6 +31,7 @@ import { DxiTreeViewButtonComponent } from './button-dxi';
 
 @Component({
     selector: 'dxo-tree-view-search-editor-options',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -521,7 +522,7 @@ export class DxoTreeViewSearchEditorOptionsComponent extends NestedOption implem
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoTreeViewSearchEditorOptionsComponent
   ],
   exports: [

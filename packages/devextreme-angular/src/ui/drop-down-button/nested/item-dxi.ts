@@ -30,6 +30,7 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxi-drop-down-button-item',
+    standalone: true,
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
     providers: [NestedOptionHost, DxTemplateHost]
@@ -134,7 +135,7 @@ export class DxiDropDownButtonItemComponent extends CollectionNestedOption imple
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiDropDownButtonItemComponent
   ],
   exports: [

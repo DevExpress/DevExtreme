@@ -21,6 +21,7 @@ import { DxiFileManagerToolbarItem } from './base/file-manager-toolbar-item-dxi'
 
 @Component({
     selector: 'dxi-file-selection-item',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost],
@@ -61,7 +62,7 @@ export class DxiFileSelectionItemComponent extends DxiFileManagerToolbarItem {
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiFileSelectionItemComponent
   ],
   exports: [

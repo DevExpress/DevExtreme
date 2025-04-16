@@ -23,6 +23,7 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-range-selector-data-prepare-settings',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -78,7 +79,7 @@ export class DxoRangeSelectorDataPrepareSettingsComponent extends NestedOption i
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoRangeSelectorDataPrepareSettingsComponent
   ],
   exports: [

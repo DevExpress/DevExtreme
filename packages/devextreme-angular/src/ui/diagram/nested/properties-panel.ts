@@ -28,6 +28,7 @@ import { DxiDiagramTabComponent } from './tab-dxi';
 
 @Component({
     selector: 'dxo-diagram-properties-panel',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -83,7 +84,7 @@ export class DxoDiagramPropertiesPanelComponent extends NestedOption implements 
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoDiagramPropertiesPanelComponent
   ],
   exports: [

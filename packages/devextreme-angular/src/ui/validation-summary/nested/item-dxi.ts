@@ -29,6 +29,7 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxi-validation-summary-item',
+    standalone: true,
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
     providers: [NestedOptionHost, DxTemplateHost]
@@ -109,7 +110,7 @@ export class DxiValidationSummaryItemComponent extends CollectionNestedOption im
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiValidationSummaryItemComponent
   ],
   exports: [

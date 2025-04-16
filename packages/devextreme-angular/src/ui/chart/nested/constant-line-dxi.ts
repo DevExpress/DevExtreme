@@ -23,6 +23,7 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxi-chart-constant-line',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -122,7 +123,7 @@ export class DxiChartConstantLineComponent extends CollectionNestedOption {
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiChartConstantLineComponent
   ],
   exports: [

@@ -103,6 +103,7 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
     selector: 'dx-date-box',
     template: '',
     host: { ngSkipHydration: 'true' },
+    standalone: true,
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -1598,6 +1599,7 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
 
 @NgModule({
   imports: [
+    DxDateBoxComponent,
     DxiButtonModule,
     DxoOptionsModule,
     DxoCalendarOptionsModule,
@@ -1633,9 +1635,6 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
     DxiDateBoxToolbarItemModule,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxDateBoxComponent
   ],
   exports: [
     DxDateBoxComponent,

@@ -61,6 +61,7 @@ import { DxoBulletTooltipModule } from 'devextreme-angular/ui/bullet/nested';
     template: '',
     styles: [ ' :host {  display: block; }'],
     host: { ngSkipHydration: 'true' },
+    standalone: true,
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -550,6 +551,7 @@ export class DxBulletComponent extends DxComponent implements OnDestroy {
 
 @NgModule({
   imports: [
+    DxBulletComponent,
     DxoMarginModule,
     DxoSizeModule,
     DxoTooltipModule,
@@ -566,9 +568,6 @@ export class DxBulletComponent extends DxComponent implements OnDestroy {
     DxoBulletTooltipModule,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxBulletComponent
   ],
   exports: [
     DxBulletComponent,

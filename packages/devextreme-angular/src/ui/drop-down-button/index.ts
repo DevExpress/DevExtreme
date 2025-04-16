@@ -84,6 +84,7 @@ import { DxiDropDownButtonItemComponent } from 'devextreme-angular/ui/drop-down-
     selector: 'dx-drop-down-button',
     template: '',
     host: { ngSkipHydration: 'true' },
+    standalone: true,
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -951,6 +952,7 @@ export class DxDropDownButtonComponent extends DxComponent implements OnDestroy,
 
 @NgModule({
   imports: [
+    DxDropDownButtonComponent,
     DxoDropDownOptionsModule,
     DxoAnimationModule,
     DxoHideModule,
@@ -980,9 +982,6 @@ export class DxDropDownButtonComponent extends DxComponent implements OnDestroy,
     DxiDropDownButtonToolbarItemModule,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxDropDownButtonComponent
   ],
   exports: [
     DxDropDownButtonComponent,

@@ -21,6 +21,7 @@ import { DxiAlert } from './base/alert-dxi';
 
 @Component({
     selector: 'dxi-alert',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost],
@@ -52,7 +53,7 @@ export class DxiAlertComponent extends DxiAlert {
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiAlertComponent
   ],
   exports: [

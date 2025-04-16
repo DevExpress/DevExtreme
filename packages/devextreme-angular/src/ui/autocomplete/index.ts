@@ -104,6 +104,7 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
     selector: 'dx-autocomplete',
     template: '',
     host: { ngSkipHydration: 'true' },
+    standalone: true,
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -1553,6 +1554,7 @@ export class DxAutocompleteComponent extends DxComponent implements OnDestroy, C
 
 @NgModule({
   imports: [
+    DxAutocompleteComponent,
     DxiButtonModule,
     DxoOptionsModule,
     DxoDropDownOptionsModule,
@@ -1586,9 +1588,6 @@ export class DxAutocompleteComponent extends DxComponent implements OnDestroy, C
     DxiAutocompleteToolbarItemModule,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxAutocompleteComponent
   ],
   exports: [
     DxAutocompleteComponent,

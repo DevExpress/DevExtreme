@@ -29,6 +29,7 @@ import { DxiItemComponent } from './item-dxi';
 
 @Component({
     selector: 'dxo-page-size',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -111,7 +112,7 @@ export class DxoPageSizeComponent extends NestedOption implements OnDestroy, OnI
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoPageSizeComponent
   ],
   exports: [

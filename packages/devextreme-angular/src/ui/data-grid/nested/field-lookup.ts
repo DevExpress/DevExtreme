@@ -25,6 +25,7 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-data-grid-field-lookup',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -88,7 +89,7 @@ export class DxoDataGridFieldLookupComponent extends NestedOption implements OnD
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoDataGridFieldLookupComponent
   ],
   exports: [

@@ -24,6 +24,7 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-range-selector-point-selection-style',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -79,7 +80,7 @@ export class DxoRangeSelectorPointSelectionStyleComponent extends NestedOption i
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoRangeSelectorPointSelectionStyleComponent
   ],
   exports: [

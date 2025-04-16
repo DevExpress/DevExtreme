@@ -96,6 +96,7 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
     selector: 'dx-color-box',
     template: '',
     host: { ngSkipHydration: 'true' },
+    standalone: true,
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -1265,6 +1266,7 @@ export class DxColorBoxComponent extends DxComponent implements OnDestroy, Contr
 
 @NgModule({
   imports: [
+    DxColorBoxComponent,
     DxiButtonModule,
     DxoOptionsModule,
     DxoDropDownOptionsModule,
@@ -1296,9 +1298,6 @@ export class DxColorBoxComponent extends DxComponent implements OnDestroy, Contr
     DxiColorBoxToolbarItemModule,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxColorBoxComponent
   ],
   exports: [
     DxColorBoxComponent,

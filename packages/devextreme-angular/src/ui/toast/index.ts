@@ -68,6 +68,7 @@ import { DxoToastToModule } from 'devextreme-angular/ui/toast/nested';
     selector: 'dx-toast',
     template: '',
     host: { ngSkipHydration: 'true' },
+    standalone: true,
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -772,6 +773,7 @@ export class DxToastComponent extends DxComponent implements OnDestroy {
 
 @NgModule({
   imports: [
+    DxToastComponent,
     DxoAnimationModule,
     DxoHideModule,
     DxoFromModule,
@@ -796,9 +798,6 @@ export class DxToastComponent extends DxComponent implements OnDestroy {
     DxoToastToModule,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxToastComponent
   ],
   exports: [
     DxToastComponent,

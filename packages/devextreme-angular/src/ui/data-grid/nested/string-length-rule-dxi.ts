@@ -22,6 +22,7 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxi-data-grid-string-length-rule',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -97,7 +98,7 @@ export class DxiDataGridStringLengthRuleComponent extends CollectionNestedOption
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiDataGridStringLengthRuleComponent
   ],
   exports: [

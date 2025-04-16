@@ -38,6 +38,7 @@ import { DxiDateRangeBoxToolbarItemComponent } from './toolbar-item-dxi';
 
 @Component({
     selector: 'dxo-date-range-box-drop-down-options',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -504,7 +505,7 @@ export class DxoDateRangeBoxDropDownOptionsComponent extends NestedOption implem
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoDateRangeBoxDropDownOptionsComponent
   ],
   exports: [

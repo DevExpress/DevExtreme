@@ -26,6 +26,7 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-diagram-edges',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -185,7 +186,7 @@ export class DxoDiagramEdgesComponent extends NestedOption implements OnDestroy,
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoDiagramEdgesComponent
   ],
   exports: [

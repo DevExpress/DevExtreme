@@ -23,6 +23,7 @@ import { DxoSortableOptions } from './base/sortable-options';
 
 @Component({
     selector: 'dxo-item-dragging',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost],
@@ -87,7 +88,7 @@ export class DxoItemDraggingComponent extends DxoSortableOptions implements OnDe
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoItemDraggingComponent
   ],
   exports: [

@@ -27,6 +27,7 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-range-selector-common-series-settings',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -546,7 +547,7 @@ export class DxoRangeSelectorCommonSeriesSettingsComponent extends NestedOption 
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoRangeSelectorCommonSeriesSettingsComponent
   ],
   exports: [

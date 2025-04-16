@@ -31,6 +31,7 @@ import { DxiTotalItemComponent } from './total-item-dxi';
 
 @Component({
     selector: 'dxo-summary',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -126,7 +127,7 @@ export class DxoSummaryComponent extends NestedOption implements OnDestroy, OnIn
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoSummaryComponent
   ],
   exports: [

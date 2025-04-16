@@ -23,6 +23,7 @@ import { DxoChartCommonSeriesSettings } from './base/chart-common-series-setting
 
 @Component({
     selector: 'dxo-bar',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost],
@@ -118,7 +119,7 @@ export class DxoBarComponent extends DxoChartCommonSeriesSettings implements OnD
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoBarComponent
   ],
   exports: [

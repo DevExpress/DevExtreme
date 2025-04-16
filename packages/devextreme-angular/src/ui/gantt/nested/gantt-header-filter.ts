@@ -25,6 +25,7 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-gantt-gantt-header-filter',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -120,7 +121,7 @@ export class DxoGanttGanttHeaderFilterComponent extends NestedOption implements 
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoGanttGanttHeaderFilterComponent
   ],
   exports: [

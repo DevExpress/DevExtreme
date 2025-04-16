@@ -34,6 +34,7 @@ import { DxiChartStripComponent } from './strip-dxi';
 
 @Component({
     selector: 'dxi-chart-value-axis',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -488,7 +489,7 @@ export class DxiChartValueAxisComponent extends CollectionNestedOption {
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiChartValueAxisComponent
   ],
   exports: [

@@ -26,6 +26,7 @@ import { DxoCalendarOptions } from './base/calendar-options';
 
 @Component({
     selector: 'dxo-calendar-options',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost],
@@ -118,7 +119,7 @@ export class DxoCalendarOptionsComponent extends DxoCalendarOptions implements O
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoCalendarOptionsComponent
   ],
   exports: [

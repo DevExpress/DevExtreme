@@ -33,6 +33,7 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-text-box-options',
+    standalone: true,
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
     providers: [NestedOptionHost, DxTemplateHost]
@@ -269,7 +270,7 @@ export class DxoTextBoxOptionsComponent extends NestedOption implements AfterVie
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoTextBoxOptionsComponent
   ],
   exports: [

@@ -38,6 +38,7 @@ import { DxiTagBoxToolbarItemComponent } from './toolbar-item-dxi';
 
 @Component({
     selector: 'dxo-tag-box-drop-down-options',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -504,7 +505,7 @@ export class DxoTagBoxDropDownOptionsComponent extends NestedOption implements O
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoTagBoxDropDownOptionsComponent
   ],
   exports: [

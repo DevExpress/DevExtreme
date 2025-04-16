@@ -23,6 +23,7 @@ import { DxoConverter } from './base/converter';
 
 @Component({
     selector: 'dxo-converter',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost],
@@ -58,7 +59,7 @@ export class DxoConverterComponent extends DxoConverter implements OnDestroy, On
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoConverterComponent
   ],
   exports: [

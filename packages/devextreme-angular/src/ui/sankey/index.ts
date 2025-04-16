@@ -91,6 +91,7 @@ import { DxoSankeyTooltipBorderModule } from 'devextreme-angular/ui/sankey/neste
     template: '',
     styles: [ ' :host {  display: block; }'],
     host: { ngSkipHydration: 'true' },
+    standalone: true,
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -800,6 +801,7 @@ export class DxSankeyComponent extends DxComponent implements OnDestroy, OnChang
 
 @NgModule({
   imports: [
+    DxSankeyComponent,
     DxoAdaptiveLayoutModule,
     DxoExportModule,
     DxoLabelModule,
@@ -838,9 +840,6 @@ export class DxSankeyComponent extends DxComponent implements OnDestroy, OnChang
     DxoSankeyTooltipBorderModule,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxSankeyComponent
   ],
   exports: [
     DxSankeyComponent,

@@ -25,6 +25,7 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxi-range-selector-series',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -372,7 +373,7 @@ export class DxiRangeSelectorSeriesComponent extends CollectionNestedOption {
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiRangeSelectorSeriesComponent
   ],
   exports: [

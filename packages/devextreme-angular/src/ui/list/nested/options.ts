@@ -33,6 +33,7 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-list-options',
+    standalone: true,
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
     providers: [NestedOptionHost, DxTemplateHost]
@@ -269,7 +270,7 @@ export class DxoListOptionsComponent extends NestedOption implements AfterViewIn
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoListOptionsComponent
   ],
   exports: [

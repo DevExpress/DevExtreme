@@ -28,6 +28,7 @@ import { DxiDiagramTabGroupComponent } from './tab-group-dxi';
 
 @Component({
     selector: 'dxi-diagram-tab',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -103,7 +104,7 @@ export class DxiDiagramTabComponent extends CollectionNestedOption {
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiDiagramTabComponent
   ],
   exports: [

@@ -23,6 +23,7 @@ import { DxoChartsColor } from './base/charts-color';
 
 @Component({
     selector: 'dxo-color',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost],
@@ -58,7 +59,7 @@ export class DxoColorComponent extends DxoChartsColor implements OnDestroy, OnIn
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoColorComponent
   ],
   exports: [

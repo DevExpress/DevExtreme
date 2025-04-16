@@ -38,6 +38,7 @@ import { DxiColorBoxToolbarItemComponent } from './toolbar-item-dxi';
 
 @Component({
     selector: 'dxo-color-box-drop-down-options',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -504,7 +505,7 @@ export class DxoColorBoxDropDownOptionsComponent extends NestedOption implements
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoColorBoxDropDownOptionsComponent
   ],
   exports: [

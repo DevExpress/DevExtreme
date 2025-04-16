@@ -61,6 +61,7 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
     selector: 'dx-recurrence-editor',
     template: '',
     host: { ngSkipHydration: 'true' },
+    standalone: true,
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -651,11 +652,9 @@ export class DxRecurrenceEditorComponent extends DxComponent implements OnDestro
 
 @NgModule({
   imports: [
+    DxRecurrenceEditorComponent,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxRecurrenceEditorComponent
   ],
   exports: [
     DxRecurrenceEditorComponent,

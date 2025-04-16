@@ -32,6 +32,7 @@ import { DxiDataGridTotalItemComponent } from './total-item-dxi';
 
 @Component({
     selector: 'dxo-data-grid-summary',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -127,7 +128,7 @@ export class DxoDataGridSummaryComponent extends NestedOption implements OnDestr
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoDataGridSummaryComponent
   ],
   exports: [

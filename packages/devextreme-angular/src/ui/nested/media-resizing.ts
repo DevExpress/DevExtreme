@@ -23,6 +23,7 @@ import { DxoHtmlEditorMediaResizing } from './base/html-editor-media-resizing';
 
 @Component({
     selector: 'dxo-media-resizing',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost],
@@ -58,7 +59,7 @@ export class DxoMediaResizingComponent extends DxoHtmlEditorMediaResizing implem
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoMediaResizingComponent
   ],
   exports: [

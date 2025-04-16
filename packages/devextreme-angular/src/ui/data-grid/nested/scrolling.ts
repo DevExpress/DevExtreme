@@ -26,6 +26,7 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-data-grid-scrolling',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -129,7 +130,7 @@ export class DxoDataGridScrollingComponent extends NestedOption implements OnDes
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoDataGridScrollingComponent
   ],
   exports: [

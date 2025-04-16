@@ -58,6 +58,7 @@ import { DxiActionSheetItemComponent } from 'devextreme-angular/ui/action-sheet/
     selector: 'dx-action-sheet',
     template: '',
     host: { ngSkipHydration: 'true' },
+    standalone: true,
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -607,13 +608,11 @@ export class DxActionSheetComponent<TItem = any, TKey = any> extends DxComponent
 
 @NgModule({
   imports: [
+    DxActionSheetComponent,
     DxiItemModule,
     DxiActionSheetItemModule,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxActionSheetComponent
   ],
   exports: [
     DxActionSheetComponent,

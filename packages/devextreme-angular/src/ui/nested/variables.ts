@@ -23,6 +23,7 @@ import { DxoHtmlEditorVariables } from './base/html-editor-variables';
 
 @Component({
     selector: 'dxo-variables',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost],
@@ -58,7 +59,7 @@ export class DxoVariablesComponent extends DxoHtmlEditorVariables implements OnD
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoVariablesComponent
   ],
   exports: [

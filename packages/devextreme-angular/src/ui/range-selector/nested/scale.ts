@@ -30,6 +30,7 @@ import { DxiRangeSelectorBreakComponent } from './break-dxi';
 
 @Component({
     selector: 'dxo-range-selector-scale',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -309,7 +310,7 @@ export class DxoRangeSelectorScaleComponent extends NestedOption implements OnDe
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoRangeSelectorScaleComponent
   ],
   exports: [

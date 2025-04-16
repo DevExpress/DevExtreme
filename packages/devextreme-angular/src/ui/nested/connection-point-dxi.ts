@@ -21,6 +21,7 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxi-connection-point',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -64,7 +65,7 @@ export class DxiConnectionPointComponent extends CollectionNestedOption {
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiConnectionPointComponent
   ],
   exports: [

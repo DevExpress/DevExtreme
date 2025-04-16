@@ -23,6 +23,7 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-pivot-grid-field-chooser-pivot-grid-field-chooser-texts',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -94,7 +95,7 @@ export class DxoPivotGridFieldChooserPivotGridFieldChooserTextsComponent extends
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoPivotGridFieldChooserPivotGridFieldChooserTextsComponent
   ],
   exports: [

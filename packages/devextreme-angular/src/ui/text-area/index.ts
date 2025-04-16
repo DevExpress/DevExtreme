@@ -61,6 +61,7 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
     selector: 'dx-text-area',
     template: '',
     host: { ngSkipHydration: 'true' },
+    standalone: true,
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -1014,11 +1015,9 @@ export class DxTextAreaComponent extends DxComponent implements OnDestroy, Contr
 
 @NgModule({
   imports: [
+    DxTextAreaComponent,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxTextAreaComponent
   ],
   exports: [
     DxTextAreaComponent,

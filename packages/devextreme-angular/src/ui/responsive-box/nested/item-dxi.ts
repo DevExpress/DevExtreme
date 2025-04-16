@@ -33,6 +33,7 @@ import { DxiResponsiveBoxLocationComponent } from './location-dxi';
 
 @Component({
     selector: 'dxi-responsive-box-item',
+    standalone: true,
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
     providers: [NestedOptionHost, DxTemplateHost]
@@ -129,7 +130,7 @@ export class DxiResponsiveBoxItemComponent extends CollectionNestedOption implem
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiResponsiveBoxItemComponent
   ],
   exports: [

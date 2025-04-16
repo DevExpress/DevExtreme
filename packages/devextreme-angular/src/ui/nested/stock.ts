@@ -23,6 +23,7 @@ import { DxoChartCommonSeriesSettings } from './base/chart-common-series-setting
 
 @Component({
     selector: 'dxo-stock',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost],
@@ -117,7 +118,7 @@ export class DxoStockComponent extends DxoChartCommonSeriesSettings implements O
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoStockComponent
   ],
   exports: [

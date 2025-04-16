@@ -23,6 +23,7 @@ import { DxoHtmlEditorTableResizing } from './base/html-editor-table-resizing';
 
 @Component({
     selector: 'dxo-table-resizing',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost],
@@ -59,7 +60,7 @@ export class DxoTableResizingComponent extends DxoHtmlEditorTableResizing implem
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoTableResizingComponent
   ],
   exports: [

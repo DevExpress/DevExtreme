@@ -28,6 +28,7 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxi-gantt-column',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -370,7 +371,7 @@ export class DxiGanttColumnComponent extends CollectionNestedOption {
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiGanttColumnComponent
   ],
   exports: [

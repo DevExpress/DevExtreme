@@ -30,6 +30,7 @@ import { DxiPolarChartStripComponent } from './strip-dxi';
 
 @Component({
     selector: 'dxo-polar-chart-argument-axis',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -325,7 +326,7 @@ export class DxoPolarChartArgumentAxisComponent extends NestedOption implements 
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoPolarChartArgumentAxisComponent
   ],
   exports: [

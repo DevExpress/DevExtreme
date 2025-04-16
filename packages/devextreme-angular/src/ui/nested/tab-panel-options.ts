@@ -29,6 +29,7 @@ import { DxiItemComponent } from './item-dxi';
 
 @Component({
     selector: 'dxo-tab-panel-options',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost],
@@ -141,7 +142,7 @@ export class DxoTabPanelOptionsComponent extends DxoTabPanelOptions implements O
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoTabPanelOptionsComponent
   ],
   exports: [

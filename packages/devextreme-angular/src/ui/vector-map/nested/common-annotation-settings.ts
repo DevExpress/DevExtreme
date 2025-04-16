@@ -33,6 +33,7 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-vector-map-common-annotation-settings',
+    standalone: true,
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
     providers: [NestedOptionHost, DxTemplateHost]
@@ -301,7 +302,7 @@ export class DxoVectorMapCommonAnnotationSettingsComponent extends NestedOption 
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoVectorMapCommonAnnotationSettingsComponent
   ],
   exports: [

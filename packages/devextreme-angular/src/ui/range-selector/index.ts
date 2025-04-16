@@ -200,6 +200,7 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
     template: '',
     styles: [ ' :host {  display: block; }'],
     host: { ngSkipHydration: 'true' },
+    standalone: true,
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -908,6 +909,7 @@ export class DxRangeSelectorComponent extends DxComponent implements OnDestroy, 
 
 @NgModule({
   imports: [
+    DxRangeSelectorComponent,
     DxoBackgroundModule,
     DxoImageModule,
     DxoBehaviorModule,
@@ -1040,9 +1042,6 @@ export class DxRangeSelectorComponent extends DxComponent implements OnDestroy, 
     DxoRangeSelectorWidthModule,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxRangeSelectorComponent
   ],
   exports: [
     DxRangeSelectorComponent,

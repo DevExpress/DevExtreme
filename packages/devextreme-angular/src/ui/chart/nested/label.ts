@@ -35,6 +35,7 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-chart-label',
+    standalone: true,
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
     providers: [NestedOptionHost, DxTemplateHost]
@@ -287,7 +288,7 @@ export class DxoChartLabelComponent extends NestedOption implements AfterViewIni
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoChartLabelComponent
   ],
   exports: [

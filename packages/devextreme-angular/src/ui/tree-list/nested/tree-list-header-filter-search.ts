@@ -24,6 +24,7 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-tree-list-tree-list-header-filter-search',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -87,7 +88,7 @@ export class DxoTreeListTreeListHeaderFilterSearchComponent extends NestedOption
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoTreeListTreeListHeaderFilterSearchComponent
   ],
   exports: [

@@ -75,6 +75,7 @@ import { DxiListMenuItemComponent } from 'devextreme-angular/ui/list/nested';
     selector: 'dx-list',
     template: '',
     host: { ngSkipHydration: 'true' },
+    standalone: true,
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -1515,6 +1516,7 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
 
 @NgModule({
   imports: [
+    DxListComponent,
     DxoItemDraggingModule,
     DxoCursorOffsetModule,
     DxiItemModule,
@@ -1531,9 +1533,6 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
     DxoListSearchEditorOptionsModule,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxListComponent
   ],
   exports: [
     DxListComponent,

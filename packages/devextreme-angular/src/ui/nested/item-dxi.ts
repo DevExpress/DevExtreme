@@ -35,6 +35,7 @@ import { DxiLocationComponent } from './location-dxi';
 
 @Component({
     selector: 'dxi-item',
+    standalone: true,
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
     providers: [NestedOptionHost, DxTemplateHost],
@@ -113,8 +114,6 @@ import { DxiLocationComponent } from './location-dxi';
         'resizable',
         'size',
         'splitter',
-        'isValid',
-        'optional',
         'heightRatio',
         'widthRatio',
         'expanded',
@@ -190,7 +189,7 @@ export class DxiItemComponent extends DxiButtonGroupItem implements AfterViewIni
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiItemComponent
   ],
   exports: [

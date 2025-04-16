@@ -29,6 +29,7 @@ import { DxiFileManagerItemComponent } from './item-dxi';
 
 @Component({
     selector: 'dxo-file-manager-context-menu',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -84,7 +85,7 @@ export class DxoFileManagerContextMenuComponent extends NestedOption implements 
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoFileManagerContextMenuComponent
   ],
   exports: [

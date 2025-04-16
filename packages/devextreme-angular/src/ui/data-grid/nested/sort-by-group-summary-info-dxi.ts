@@ -22,6 +22,7 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxi-data-grid-sort-by-group-summary-info',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -73,7 +74,7 @@ export class DxiDataGridSortByGroupSummaryInfoComponent extends CollectionNested
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiDataGridSortByGroupSummaryInfoComponent
   ],
   exports: [

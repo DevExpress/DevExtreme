@@ -23,6 +23,7 @@ import { DxoFormat } from './base/format';
 
 @Component({
     selector: 'dxo-message-timestamp-format',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost],
@@ -62,7 +63,7 @@ export class DxoMessageTimestampFormatComponent extends DxoFormat implements OnD
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoMessageTimestampFormatComponent
   ],
   exports: [

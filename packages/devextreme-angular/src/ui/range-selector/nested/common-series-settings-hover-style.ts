@@ -24,6 +24,7 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-range-selector-common-series-settings-hover-style',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -103,7 +104,7 @@ export class DxoRangeSelectorCommonSeriesSettingsHoverStyleComponent extends Nes
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoRangeSelectorCommonSeriesSettingsHoverStyleComponent
   ],
   exports: [

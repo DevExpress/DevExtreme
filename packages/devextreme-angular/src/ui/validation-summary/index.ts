@@ -56,6 +56,7 @@ import { DxiValidationSummaryItemComponent } from 'devextreme-angular/ui/validat
     selector: 'dx-validation-summary',
     template: '',
     host: { ngSkipHydration: 'true' },
+    standalone: true,
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -294,13 +295,11 @@ export class DxValidationSummaryComponent<TItem = any, TKey = any> extends DxCom
 
 @NgModule({
   imports: [
+    DxValidationSummaryComponent,
     DxiItemModule,
     DxiValidationSummaryItemModule,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxValidationSummaryComponent
   ],
   exports: [
     DxValidationSummaryComponent,

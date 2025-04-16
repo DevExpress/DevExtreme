@@ -10,10 +10,7 @@ import {
     SkipSelf,
     Input,
     Output,
-    EventEmitter,
-    ContentChildren,
-    forwardRef,
-    QueryList
+    EventEmitter
 } from '@angular/core';
 
 
@@ -33,11 +30,11 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-import { DxiDataGridToolbarItemComponent } from './toolbar-item-dxi';
 
 
 @Component({
     selector: 'dxo-data-grid-filter-builder-popup',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -468,14 +465,6 @@ export class DxoDataGridFilterBuilderPopupComponent extends NestedOption impleme
     }
 
 
-    @ContentChildren(forwardRef(() => DxiDataGridToolbarItemComponent))
-    get toolbarItemsChildren(): QueryList<DxiDataGridToolbarItemComponent> {
-        return this._getOption('toolbarItems');
-    }
-    set toolbarItemsChildren(value) {
-        this.setChildren('toolbarItems', value);
-    }
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
@@ -504,7 +493,7 @@ export class DxoDataGridFilterBuilderPopupComponent extends NestedOption impleme
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoDataGridFilterBuilderPopupComponent
   ],
   exports: [

@@ -26,6 +26,7 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-chart-crosshair',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -121,7 +122,7 @@ export class DxoChartCrosshairComponent extends NestedOption implements OnDestro
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoChartCrosshairComponent
   ],
   exports: [

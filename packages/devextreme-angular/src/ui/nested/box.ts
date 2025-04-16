@@ -30,6 +30,7 @@ import { DxiItemComponent } from './item-dxi';
 
 @Component({
     selector: 'dxo-box',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost],
@@ -104,7 +105,7 @@ export class DxoBoxComponent extends DxoBoxOptions implements OnDestroy, OnInit 
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoBoxComponent
   ],
   exports: [

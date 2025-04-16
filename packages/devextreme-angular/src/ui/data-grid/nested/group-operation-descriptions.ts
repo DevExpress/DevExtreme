@@ -23,6 +23,7 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-data-grid-group-operation-descriptions',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -86,7 +87,7 @@ export class DxoDataGridGroupOperationDescriptionsComponent extends NestedOption
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoDataGridGroupOperationDescriptionsComponent
   ],
   exports: [

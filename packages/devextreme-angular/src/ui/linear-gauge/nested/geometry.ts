@@ -24,6 +24,7 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-linear-gauge-geometry',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -63,7 +64,7 @@ export class DxoLinearGaugeGeometryComponent extends NestedOption implements OnD
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoLinearGaugeGeometryComponent
   ],
   exports: [

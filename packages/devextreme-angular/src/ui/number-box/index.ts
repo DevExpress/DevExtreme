@@ -72,6 +72,7 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
     selector: 'dx-number-box',
     template: '',
     host: { ngSkipHydration: 'true' },
+    standalone: true,
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -1148,6 +1149,7 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
 
 @NgModule({
   imports: [
+    DxNumberBoxComponent,
     DxiButtonModule,
     DxoOptionsModule,
     DxoFormatModule,
@@ -1156,9 +1158,6 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
     DxoNumberBoxOptionsModule,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxNumberBoxComponent
   ],
   exports: [
     DxNumberBoxComponent,

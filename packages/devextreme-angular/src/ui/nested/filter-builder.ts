@@ -30,6 +30,7 @@ import { DxiFieldComponent } from './field-dxi';
 
 @Component({
     selector: 'dxo-filter-builder',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost],
@@ -117,7 +118,7 @@ export class DxoFilterBuilderComponent extends DxoFilterBuilderOptions implement
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoFilterBuilderComponent
   ],
   exports: [

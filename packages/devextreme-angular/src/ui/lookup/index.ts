@@ -101,6 +101,7 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
     selector: 'dx-lookup',
     template: '',
     host: { ngSkipHydration: 'true' },
+    standalone: true,
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -1809,6 +1810,7 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
 
 @NgModule({
   imports: [
+    DxLookupComponent,
     DxoDropDownOptionsModule,
     DxoAnimationModule,
     DxoHideModule,
@@ -1842,9 +1844,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
     DxiLookupToolbarItemModule,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxLookupComponent
   ],
   exports: [
     DxLookupComponent,

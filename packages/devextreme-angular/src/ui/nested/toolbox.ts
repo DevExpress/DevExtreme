@@ -28,6 +28,7 @@ import { DxiGroupComponent } from './group-dxi';
 
 @Component({
     selector: 'dxo-toolbox',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -107,7 +108,7 @@ export class DxoToolboxComponent extends NestedOption implements OnDestroy, OnIn
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoToolboxComponent
   ],
   exports: [

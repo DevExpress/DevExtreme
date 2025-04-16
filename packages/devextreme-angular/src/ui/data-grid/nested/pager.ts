@@ -25,6 +25,7 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-data-grid-pager',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -120,7 +121,7 @@ export class DxoDataGridPagerComponent extends NestedOption implements OnDestroy
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoDataGridPagerComponent
   ],
   exports: [

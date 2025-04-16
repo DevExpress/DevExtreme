@@ -68,6 +68,7 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
     selector: 'dx-range-slider',
     template: '',
     host: { ngSkipHydration: 'true' },
+    standalone: true,
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -912,6 +913,7 @@ export class DxRangeSliderComponent extends DxComponent implements OnDestroy, Co
 
 @NgModule({
   imports: [
+    DxRangeSliderComponent,
     DxoLabelModule,
     DxoFormatModule,
     DxoTooltipModule,
@@ -920,9 +922,6 @@ export class DxRangeSliderComponent extends DxComponent implements OnDestroy, Co
     DxoRangeSliderTooltipModule,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxRangeSliderComponent
   ],
   exports: [
     DxRangeSliderComponent,

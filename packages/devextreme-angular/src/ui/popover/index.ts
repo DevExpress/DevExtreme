@@ -82,6 +82,7 @@ import { DxiPopoverToolbarItemComponent } from 'devextreme-angular/ui/popover/ne
     selector: 'dx-popover',
     template: '<ng-content></ng-content>',
     host: { ngSkipHydration: 'true' },
+    standalone: true,
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -896,6 +897,7 @@ export class DxPopoverComponent extends DxComponent implements OnDestroy, OnChan
 
 @NgModule({
   imports: [
+    DxPopoverComponent,
     DxoAnimationModule,
     DxoHideModule,
     DxoFromModule,
@@ -925,9 +927,6 @@ export class DxPopoverComponent extends DxComponent implements OnDestroy, OnChan
     DxiPopoverToolbarItemModule,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxPopoverComponent
   ],
   exports: [
     DxPopoverComponent,

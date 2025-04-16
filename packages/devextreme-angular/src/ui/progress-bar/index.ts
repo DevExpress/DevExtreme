@@ -61,6 +61,7 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
     selector: 'dx-progress-bar',
     template: '',
     host: { ngSkipHydration: 'true' },
+    standalone: true,
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -660,11 +661,9 @@ export class DxProgressBarComponent extends DxComponent implements OnDestroy, Co
 
 @NgModule({
   imports: [
+    DxProgressBarComponent,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxProgressBarComponent
   ],
   exports: [
     DxProgressBarComponent,

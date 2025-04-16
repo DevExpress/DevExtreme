@@ -23,6 +23,7 @@ import { DxoAnimationConfig } from './base/animation-config';
 
 @Component({
     selector: 'dxo-animation',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost],
@@ -70,7 +71,7 @@ export class DxoAnimationComponent extends DxoAnimationConfig implements OnDestr
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoAnimationComponent
   ],
   exports: [

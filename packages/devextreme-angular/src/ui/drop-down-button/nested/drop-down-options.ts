@@ -38,6 +38,7 @@ import { DxiDropDownButtonToolbarItemComponent } from './toolbar-item-dxi';
 
 @Component({
     selector: 'dxo-drop-down-button-drop-down-options',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -504,7 +505,7 @@ export class DxoDropDownButtonDropDownOptionsComponent extends NestedOption impl
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoDropDownButtonDropDownOptionsComponent
   ],
   exports: [

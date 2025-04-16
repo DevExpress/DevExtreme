@@ -23,6 +23,7 @@ import { DxoColumnChooserSelectionConfig } from './base/column-chooser-selection
 
 @Component({
     selector: 'dxo-selection',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost],
@@ -64,7 +65,7 @@ export class DxoSelectionComponent extends DxoColumnChooserSelectionConfig imple
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoSelectionComponent
   ],
   exports: [

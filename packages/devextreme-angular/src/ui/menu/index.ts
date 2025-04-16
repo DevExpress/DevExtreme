@@ -88,6 +88,7 @@ import { DxiMenuItemComponent } from 'devextreme-angular/ui/menu/nested';
     selector: 'dx-menu',
     template: '',
     host: { ngSkipHydration: 'true' },
+    standalone: true,
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -916,6 +917,7 @@ export class DxMenuComponent<TKey = any> extends DxComponent implements OnDestro
 
 @NgModule({
   imports: [
+    DxMenuComponent,
     DxoAnimationModule,
     DxoHideModule,
     DxoFromModule,
@@ -948,9 +950,6 @@ export class DxMenuComponent<TKey = any> extends DxComponent implements OnDestro
     DxoMenuToModule,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxMenuComponent
   ],
   exports: [
     DxMenuComponent,

@@ -23,6 +23,7 @@ import { DxoVectorMapProjectionConfig } from './base/vector-map-projection-confi
 
 @Component({
     selector: 'dxo-projection',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost],
@@ -59,7 +60,7 @@ export class DxoProjectionComponent extends DxoVectorMapProjectionConfig impleme
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoProjectionComponent
   ],
   exports: [

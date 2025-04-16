@@ -23,6 +23,7 @@ import { DxoChartCommonSeriesSettings } from './base/chart-common-series-setting
 
 @Component({
     selector: 'dxo-stackedspline',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost],
@@ -117,7 +118,7 @@ export class DxoStackedsplineComponent extends DxoChartCommonSeriesSettings impl
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoStackedsplineComponent
   ],
   exports: [

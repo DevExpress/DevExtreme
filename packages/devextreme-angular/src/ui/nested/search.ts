@@ -23,6 +23,7 @@ import { DxoColumnChooserSearchConfig } from './base/column-chooser-search-confi
 
 @Component({
     selector: 'dxo-search',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost],
@@ -61,7 +62,7 @@ export class DxoSearchComponent extends DxoColumnChooserSearchConfig implements 
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoSearchComponent
   ],
   exports: [

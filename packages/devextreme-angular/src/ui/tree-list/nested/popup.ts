@@ -38,6 +38,7 @@ import { DxiTreeListToolbarItemComponent } from './toolbar-item-dxi';
 
 @Component({
     selector: 'dxo-tree-list-popup',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -504,7 +505,7 @@ export class DxoTreeListPopupComponent extends NestedOption implements OnDestroy
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoTreeListPopupComponent
   ],
   exports: [

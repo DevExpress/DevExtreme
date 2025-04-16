@@ -35,6 +35,7 @@ import { DxiFormTabPanelOptionsItemComponent } from './tab-panel-options-item-dx
 
 @Component({
     selector: 'dxo-form-tab-panel-options',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -461,7 +462,7 @@ export class DxoFormTabPanelOptionsComponent extends NestedOption implements OnD
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoFormTabPanelOptionsComponent
   ],
   exports: [

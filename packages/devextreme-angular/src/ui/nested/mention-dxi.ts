@@ -21,6 +21,7 @@ import { DxiHtmlEditorMention } from './base/html-editor-mention-dxi';
 
 @Component({
     selector: 'dxi-mention',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost],
@@ -59,7 +60,7 @@ export class DxiMentionComponent extends DxiHtmlEditorMention {
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiMentionComponent
   ],
   exports: [

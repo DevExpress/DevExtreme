@@ -30,6 +30,7 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxi-form-group-item',
+    standalone: true,
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
     providers: [NestedOptionHost, DxTemplateHost]
@@ -174,7 +175,7 @@ export class DxiFormGroupItemComponent extends CollectionNestedOption implements
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiFormGroupItemComponent
   ],
   exports: [

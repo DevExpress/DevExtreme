@@ -27,6 +27,7 @@ import { DxiItemComponent } from './item-dxi';
 
 @Component({
     selector: 'dxo-table-context-menu',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost],
@@ -70,7 +71,7 @@ export class DxoTableContextMenuComponent extends DxoHtmlEditorTableContextMenu 
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoTableContextMenuComponent
   ],
   exports: [

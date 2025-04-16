@@ -24,6 +24,7 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxi-pie-chart-series',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -179,7 +180,7 @@ export class DxiPieChartSeriesComponent extends CollectionNestedOption {
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiPieChartSeriesComponent
   ],
   exports: [

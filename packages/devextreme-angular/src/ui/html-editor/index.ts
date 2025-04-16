@@ -89,6 +89,7 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
     selector: 'dx-html-editor',
     template: '<ng-content></ng-content>',
     host: { ngSkipHydration: 'true' },
+    standalone: true,
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -988,6 +989,7 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
 
 @NgModule({
   imports: [
+    DxHtmlEditorComponent,
     DxoConverterModule,
     DxoImageUploadModule,
     DxoFileUploaderOptionsModule,
@@ -1014,9 +1016,6 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
     DxoHtmlEditorVariablesModule,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxHtmlEditorComponent
   ],
   exports: [
     DxHtmlEditorComponent,

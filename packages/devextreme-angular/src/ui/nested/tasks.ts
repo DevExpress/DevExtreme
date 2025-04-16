@@ -25,6 +25,7 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-tasks',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -120,7 +121,7 @@ export class DxoTasksComponent extends NestedOption implements OnDestroy, OnInit
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoTasksComponent
   ],
   exports: [

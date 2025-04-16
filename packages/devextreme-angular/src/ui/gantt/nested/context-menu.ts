@@ -29,6 +29,7 @@ import { DxiGanttItemComponent } from './item-dxi';
 
 @Component({
     selector: 'dxo-gantt-context-menu',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -92,7 +93,7 @@ export class DxoGanttContextMenuComponent extends NestedOption implements OnDest
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoGanttContextMenuComponent
   ],
   exports: [

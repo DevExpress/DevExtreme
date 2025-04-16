@@ -61,6 +61,7 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
     selector: 'dx-check-box',
     template: '',
     host: { ngSkipHydration: 'true' },
+    standalone: true,
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -735,11 +736,9 @@ export class DxCheckBoxComponent extends DxComponent implements OnDestroy, Contr
 
 @NgModule({
   imports: [
+    DxCheckBoxComponent,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxCheckBoxComponent
   ],
   exports: [
     DxCheckBoxComponent,

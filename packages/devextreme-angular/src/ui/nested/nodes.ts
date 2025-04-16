@@ -27,6 +27,7 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-nodes',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -218,7 +219,7 @@ export class DxoNodesComponent extends NestedOption implements OnDestroy, OnInit
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoNodesComponent
   ],
   exports: [

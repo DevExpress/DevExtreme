@@ -31,6 +31,7 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxi-vector-map-annotation',
+    standalone: true,
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
     providers: [NestedOptionHost, DxTemplateHost]
@@ -303,7 +304,7 @@ export class DxiVectorMapAnnotationComponent extends CollectionNestedOption impl
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiVectorMapAnnotationComponent
   ],
   exports: [

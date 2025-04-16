@@ -21,6 +21,7 @@ import { DxiDataChange } from './base/data-change-dxi';
 
 @Component({
     selector: 'dxi-change',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost],
@@ -55,7 +56,7 @@ export class DxiChangeComponent extends DxiDataChange {
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiChangeComponent
   ],
   exports: [

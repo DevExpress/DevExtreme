@@ -32,6 +32,7 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxi-html-editor-toolbar-item',
+    standalone: true,
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
     providers: [NestedOptionHost, DxTemplateHost]
@@ -200,7 +201,7 @@ export class DxiHtmlEditorToolbarItemComponent extends CollectionNestedOption im
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiHtmlEditorToolbarItemComponent
   ],
   exports: [

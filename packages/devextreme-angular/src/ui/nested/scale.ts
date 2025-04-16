@@ -32,6 +32,7 @@ import { DxiBreakComponent } from './break-dxi';
 
 @Component({
     selector: 'dxo-scale',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -359,7 +360,7 @@ export class DxoScaleComponent extends NestedOption implements OnDestroy, OnInit
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoScaleComponent
   ],
   exports: [

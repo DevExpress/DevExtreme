@@ -21,6 +21,7 @@ import { DxiFilterBuilderCustomOperation } from './base/filter-builder-custom-op
 
 @Component({
     selector: 'dxi-custom-operation',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost],
@@ -58,7 +59,7 @@ export class DxiCustomOperationComponent extends DxiFilterBuilderCustomOperation
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiCustomOperationComponent
   ],
   exports: [

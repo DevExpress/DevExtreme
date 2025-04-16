@@ -29,6 +29,7 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxi-form-tab-panel-options-item',
+    standalone: true,
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
     providers: [NestedOptionHost, DxTemplateHost]
@@ -141,7 +142,7 @@ export class DxiFormTabPanelOptionsItemComponent extends CollectionNestedOption 
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiFormTabPanelOptionsItemComponent
   ],
   exports: [

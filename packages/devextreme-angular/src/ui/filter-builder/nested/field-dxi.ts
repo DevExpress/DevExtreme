@@ -12,8 +12,8 @@ import {
 
 
 
-import { FieldInfo, FilterBuilderOperation } from 'devextreme/ui/filter_builder';
 import { DataType } from 'devextreme/common';
+import { FilterBuilderOperation } from 'devextreme/ui/filter_builder';
 import { Format } from 'devextreme/common/core/localization';
 import { DataSourceOptions } from 'devextreme/data/data_source';
 import { Store } from 'devextreme/data/store';
@@ -26,6 +26,7 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxi-filter-builder-field',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -48,10 +49,10 @@ export class DxiFilterBuilderFieldComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get customizeText(): ((fieldInfo: FieldInfo) => string) {
+    get customizeText(): ((fieldInfo: { value: string | number | Date, valueText: string }) => string) {
         return this._getOption('customizeText');
     }
-    set customizeText(value: ((fieldInfo: FieldInfo) => string)) {
+    set customizeText(value: ((fieldInfo: { value: string | number | Date, valueText: string }) => string)) {
         this._setOption('customizeText', value);
     }
 
@@ -157,7 +158,7 @@ export class DxiFilterBuilderFieldComponent extends CollectionNestedOption {
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiFilterBuilderFieldComponent
   ],
   exports: [

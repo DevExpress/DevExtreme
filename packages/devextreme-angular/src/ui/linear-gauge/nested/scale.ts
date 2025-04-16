@@ -26,6 +26,7 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-linear-gauge-scale',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -161,7 +162,7 @@ export class DxoLinearGaugeScaleComponent extends NestedOption implements OnDest
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoLinearGaugeScaleComponent
   ],
   exports: [

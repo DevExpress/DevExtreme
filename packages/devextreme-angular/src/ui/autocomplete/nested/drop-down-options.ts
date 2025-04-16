@@ -38,6 +38,7 @@ import { DxiAutocompleteToolbarItemComponent } from './toolbar-item-dxi';
 
 @Component({
     selector: 'dxo-autocomplete-drop-down-options',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -504,7 +505,7 @@ export class DxoAutocompleteDropDownOptionsComponent extends NestedOption implem
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoAutocompleteDropDownOptionsComponent
   ],
   exports: [

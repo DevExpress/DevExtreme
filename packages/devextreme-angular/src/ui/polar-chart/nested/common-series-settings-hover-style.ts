@@ -24,6 +24,7 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-polar-chart-common-series-settings-hover-style',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -103,7 +104,7 @@ export class DxoPolarChartCommonSeriesSettingsHoverStyleComponent extends Nested
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoPolarChartCommonSeriesSettingsHoverStyleComponent
   ],
   exports: [

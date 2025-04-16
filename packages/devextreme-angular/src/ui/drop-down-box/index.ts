@@ -101,6 +101,7 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
     selector: 'dx-drop-down-box',
     template: '<ng-content></ng-content>',
     host: { ngSkipHydration: 'true' },
+    standalone: true,
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -1345,6 +1346,7 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
 
 @NgModule({
   imports: [
+    DxDropDownBoxComponent,
     DxiButtonModule,
     DxoOptionsModule,
     DxoDropDownOptionsModule,
@@ -1377,9 +1379,6 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
     DxiDropDownBoxToolbarItemModule,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxDropDownBoxComponent
   ],
   exports: [
     DxDropDownBoxComponent,

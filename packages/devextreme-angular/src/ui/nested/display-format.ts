@@ -23,6 +23,7 @@ import { DxoFormat } from './base/format';
 
 @Component({
     selector: 'dxo-display-format',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost],
@@ -62,7 +63,7 @@ export class DxoDisplayFormatComponent extends DxoFormat implements OnDestroy, O
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoDisplayFormatComponent
   ],
   exports: [

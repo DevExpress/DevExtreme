@@ -23,6 +23,7 @@ import { DxoChartCommonSeriesSettings } from './base/chart-common-series-setting
 
 @Component({
     selector: 'dxo-fullstackedline',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost],
@@ -117,7 +118,7 @@ export class DxoFullstackedlineComponent extends DxoChartCommonSeriesSettings im
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoFullstackedlineComponent
   ],
   exports: [

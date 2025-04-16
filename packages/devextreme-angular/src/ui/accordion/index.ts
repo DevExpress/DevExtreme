@@ -58,6 +58,7 @@ import { DxiAccordionItemComponent } from 'devextreme-angular/ui/accordion/neste
     selector: 'dx-accordion',
     template: '',
     host: { ngSkipHydration: 'true' },
+    standalone: true,
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -830,13 +831,11 @@ export class DxAccordionComponent<TItem = any, TKey = any> extends DxComponent i
 
 @NgModule({
   imports: [
+    DxAccordionComponent,
     DxiItemModule,
     DxiAccordionItemModule,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxAccordionComponent
   ],
   exports: [
     DxAccordionComponent,

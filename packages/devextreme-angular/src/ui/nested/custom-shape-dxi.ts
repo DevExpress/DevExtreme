@@ -34,6 +34,7 @@ import { DxiConnectionPointComponent } from './connection-point-dxi';
 
 @Component({
     selector: 'dxi-custom-shape',
+    standalone: true,
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
     providers: [NestedOptionHost, DxTemplateHost]
@@ -386,7 +387,7 @@ export class DxiCustomShapeComponent extends CollectionNestedOption implements A
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiCustomShapeComponent
   ],
   exports: [

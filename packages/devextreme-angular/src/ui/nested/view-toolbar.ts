@@ -28,6 +28,7 @@ import { DxiCommandComponent } from './command-dxi';
 
 @Component({
     selector: 'dxo-view-toolbar',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -83,7 +84,7 @@ export class DxoViewToolbarComponent extends NestedOption implements OnDestroy, 
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoViewToolbarComponent
   ],
   exports: [

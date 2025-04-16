@@ -26,6 +26,7 @@ import { DxiMapLocationComponent } from './location-dxi';
 
 @Component({
     selector: 'dxi-map-route',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -48,10 +49,10 @@ export class DxiMapRouteComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get mode(): RouteMode | string {
+    get mode(): RouteMode {
         return this._getOption('mode');
     }
-    set mode(value: RouteMode | string) {
+    set mode(value: RouteMode) {
         this._setOption('mode', value);
     }
 
@@ -101,7 +102,7 @@ export class DxiMapRouteComponent extends CollectionNestedOption {
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiMapRouteComponent
   ],
   exports: [

@@ -35,6 +35,7 @@ import { DxiStripComponent } from './strip-dxi';
 
 @Component({
     selector: 'dxo-argument-axis',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -541,7 +542,7 @@ export class DxoArgumentAxisComponent extends NestedOption implements OnDestroy,
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoArgumentAxisComponent
   ],
   exports: [

@@ -23,6 +23,7 @@ import { DxoChartCommonSeriesSettings } from './base/chart-common-series-setting
 
 @Component({
     selector: 'dxo-bubble',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost],
@@ -117,7 +118,7 @@ export class DxoBubbleComponent extends DxoChartCommonSeriesSettings implements 
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoBubbleComponent
   ],
   exports: [

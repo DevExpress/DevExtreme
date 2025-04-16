@@ -25,6 +25,7 @@ import { DxiItemComponent } from './item-dxi';
 
 @Component({
     selector: 'dxi-command',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost],
@@ -67,7 +68,7 @@ export class DxiCommandComponent extends DxiDiagramCustomCommand {
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiCommandComponent
   ],
   exports: [

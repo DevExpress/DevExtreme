@@ -101,6 +101,7 @@ import { DxoFunnelTooltipBorderModule } from 'devextreme-angular/ui/funnel/neste
     template: '',
     styles: [ ' :host {  display: block; }'],
     host: { ngSkipHydration: 'true' },
+    standalone: true,
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -913,6 +914,7 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
 
 @NgModule({
   imports: [
+    DxFunnelComponent,
     DxoAdaptiveLayoutModule,
     DxoExportModule,
     DxoItemModule,
@@ -961,9 +963,6 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
     DxoFunnelTooltipBorderModule,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxFunnelComponent
   ],
   exports: [
     DxFunnelComponent,

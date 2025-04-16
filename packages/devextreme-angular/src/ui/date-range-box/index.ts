@@ -102,6 +102,7 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
     selector: 'dx-date-range-box',
     template: '',
     host: { ngSkipHydration: 'true' },
+    standalone: true,
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -1681,6 +1682,7 @@ export class DxDateRangeBoxComponent extends DxComponent implements OnDestroy, C
 
 @NgModule({
   imports: [
+    DxDateRangeBoxComponent,
     DxiButtonModule,
     DxoOptionsModule,
     DxoCalendarOptionsModule,
@@ -1716,9 +1718,6 @@ export class DxDateRangeBoxComponent extends DxComponent implements OnDestroy, C
     DxiDateRangeBoxToolbarItemModule,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxDateRangeBoxComponent
   ],
   exports: [
     DxDateRangeBoxComponent,

@@ -28,6 +28,7 @@ import { DxiTabComponent } from './tab-dxi';
 
 @Component({
     selector: 'dxo-properties-panel',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -83,7 +84,7 @@ export class DxoPropertiesPanelComponent extends NestedOption implements OnDestr
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoPropertiesPanelComponent
   ],
   exports: [

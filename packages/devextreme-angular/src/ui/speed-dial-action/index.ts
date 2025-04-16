@@ -44,6 +44,7 @@ import {
     selector: 'dx-speed-dial-action',
     template: '',
     host: { ngSkipHydration: 'true' },
+    standalone: true,
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -383,11 +384,9 @@ export class DxSpeedDialActionComponent extends DxComponent implements OnDestroy
 
 @NgModule({
   imports: [
+    DxSpeedDialActionComponent,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxSpeedDialActionComponent
   ],
   exports: [
     DxSpeedDialActionComponent,

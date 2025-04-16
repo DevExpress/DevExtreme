@@ -28,6 +28,7 @@ import { DxiFileManagerColumnComponent } from './column-dxi';
 
 @Component({
     selector: 'dxo-file-manager-details',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -75,7 +76,7 @@ export class DxoFileManagerDetailsComponent extends NestedOption implements OnDe
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoFileManagerDetailsComponent
   ],
   exports: [

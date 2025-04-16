@@ -32,6 +32,7 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxi-gantt-toolbar-item',
+    standalone: true,
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
     providers: [NestedOptionHost, DxTemplateHost]
@@ -176,7 +177,7 @@ export class DxiGanttToolbarItemComponent extends CollectionNestedOption impleme
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiGanttToolbarItemComponent
   ],
   exports: [

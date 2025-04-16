@@ -23,6 +23,7 @@ import { DxoGanttFilterRowOperationDescriptions } from './base/gantt-filter-row-
 
 @Component({
     selector: 'dxo-operation-descriptions',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost],
@@ -67,7 +68,7 @@ export class DxoOperationDescriptionsComponent extends DxoGanttFilterRowOperatio
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoOperationDescriptionsComponent
   ],
   exports: [

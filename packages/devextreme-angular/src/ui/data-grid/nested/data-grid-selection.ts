@@ -26,6 +26,7 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-data-grid-data-grid-selection',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -105,7 +106,7 @@ export class DxoDataGridDataGridSelectionComponent extends NestedOption implemen
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoDataGridDataGridSelectionComponent
   ],
   exports: [

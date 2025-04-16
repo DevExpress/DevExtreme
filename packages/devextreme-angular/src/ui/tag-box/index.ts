@@ -104,6 +104,7 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
     selector: 'dx-tag-box',
     template: '',
     host: { ngSkipHydration: 'true' },
+    standalone: true,
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -1853,6 +1854,7 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
 
 @NgModule({
   imports: [
+    DxTagBoxComponent,
     DxiButtonModule,
     DxoOptionsModule,
     DxoDropDownOptionsModule,
@@ -1886,9 +1888,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
     DxiTagBoxToolbarItemModule,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxTagBoxComponent
   ],
   exports: [
     DxTagBoxComponent,

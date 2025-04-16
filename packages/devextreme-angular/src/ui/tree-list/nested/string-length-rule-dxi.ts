@@ -22,6 +22,7 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxi-tree-list-string-length-rule',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -97,7 +98,7 @@ export class DxiTreeListStringLengthRuleComponent extends CollectionNestedOption
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiTreeListStringLengthRuleComponent
   ],
   exports: [

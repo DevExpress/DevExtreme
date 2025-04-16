@@ -30,6 +30,7 @@ import { DxiRangeComponent } from './range-dxi';
 
 @Component({
     selector: 'dxo-range-container',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -141,7 +142,7 @@ export class DxoRangeContainerComponent extends NestedOption implements OnDestro
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoRangeContainerComponent
   ],
   exports: [

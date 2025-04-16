@@ -72,6 +72,7 @@ import { DxiSchedulerViewComponent } from 'devextreme-angular/ui/scheduler/neste
     selector: 'dx-scheduler',
     template: '',
     host: { ngSkipHydration: 'true' },
+    standalone: true,
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -1608,6 +1609,7 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
 
 @NgModule({
   imports: [
+    DxSchedulerComponent,
     DxoAppointmentDraggingModule,
     DxoEditingModule,
     DxiResourceModule,
@@ -1620,9 +1622,6 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
     DxiSchedulerViewModule,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxSchedulerComponent
   ],
   exports: [
     DxSchedulerComponent,

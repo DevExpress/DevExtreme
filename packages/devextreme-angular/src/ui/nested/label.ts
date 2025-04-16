@@ -37,6 +37,7 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-label',
+    standalone: true,
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
     providers: [NestedOptionHost, DxTemplateHost]
@@ -401,7 +402,7 @@ export class DxoLabelComponent extends NestedOption implements AfterViewInit, On
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoLabelComponent
   ],
   exports: [

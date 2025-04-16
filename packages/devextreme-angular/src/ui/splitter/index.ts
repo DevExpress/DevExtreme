@@ -60,6 +60,7 @@ import { DxiSplitterItemComponent } from 'devextreme-angular/ui/splitter/nested'
     selector: 'dx-splitter',
     template: '',
     host: { ngSkipHydration: 'true' },
+    standalone: true,
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -531,14 +532,12 @@ export class DxSplitterComponent<TItem = any, TKey = any> extends DxComponent im
 
 @NgModule({
   imports: [
+    DxSplitterComponent,
     DxiItemModule,
     DxoSplitterModule,
     DxiSplitterItemModule,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxSplitterComponent
   ],
   exports: [
     DxSplitterComponent,

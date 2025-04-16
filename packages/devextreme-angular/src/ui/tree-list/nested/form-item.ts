@@ -47,6 +47,7 @@ import { DxiTreeListValidationRuleComponent } from './validation-rule-dxi';
 
 @Component({
     selector: 'dxo-tree-list-form-item',
+    standalone: true,
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
     providers: [NestedOptionHost, DxTemplateHost]
@@ -283,7 +284,7 @@ export class DxoTreeListFormItemComponent extends NestedOption implements AfterV
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoTreeListFormItemComponent
   ],
   exports: [

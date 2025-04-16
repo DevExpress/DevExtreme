@@ -87,6 +87,7 @@ import { DxiFormTabbedItemComponent } from 'devextreme-angular/ui/form/nested';
     selector: 'dx-form',
     template: '',
     host: { ngSkipHydration: 'true' },
+    standalone: true,
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -983,6 +984,7 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
 
 @NgModule({
   imports: [
+    DxFormComponent,
     DxoColCountByScreenModule,
     DxiItemModule,
     DxoLabelModule,
@@ -1014,9 +1016,6 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
     DxiFormValidationRuleModule,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxFormComponent
   ],
   exports: [
     DxFormComponent,

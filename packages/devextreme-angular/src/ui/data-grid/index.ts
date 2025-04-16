@@ -220,6 +220,7 @@ import { DxiDataGridSortByGroupSummaryInfoComponent } from 'devextreme-angular/u
     selector: 'dx-data-grid',
     template: '',
     host: { ngSkipHydration: 'true' },
+    standalone: true,
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -2278,6 +2279,7 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
 @NgModule({
   imports: [
+    DxDataGridComponent,
     DxoColumnChooserModule,
     DxoPositionModule,
     DxoAtModule,
@@ -2431,9 +2433,6 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
     DxoDataGridValueFormatModule,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxDataGridComponent
   ],
   exports: [
     DxDataGridComponent,

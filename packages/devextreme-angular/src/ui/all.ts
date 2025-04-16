@@ -63,7 +63,6 @@ import { DxSortableModule } from 'devextreme-angular/ui/sortable';
 import { DxSparklineModule } from 'devextreme-angular/ui/sparkline';
 import { DxSpeedDialActionModule } from 'devextreme-angular/ui/speed-dial-action';
 import { DxSplitterModule } from 'devextreme-angular/ui/splitter';
-import { DxStepperModule } from 'devextreme-angular/ui/stepper';
 import { DxSwitchModule } from 'devextreme-angular/ui/switch';
 import { DxTabPanelModule } from 'devextreme-angular/ui/tab-panel';
 import { DxTabsModule } from 'devextreme-angular/ui/tabs';
@@ -149,7 +148,6 @@ import { DxTemplateModule } from 'devextreme-angular/core';
     DxSparklineModule,
     DxSpeedDialActionModule,
     DxSplitterModule,
-    DxStepperModule,
     DxSwitchModule,
     DxTabPanelModule,
     DxTabsModule,
@@ -234,7 +232,6 @@ import { DxTemplateModule } from 'devextreme-angular/core';
     DxSparklineModule,
     DxSpeedDialActionModule,
     DxSplitterModule,
-    DxStepperModule,
     DxSwitchModule,
     DxTabPanelModule,
     DxTabsModule,

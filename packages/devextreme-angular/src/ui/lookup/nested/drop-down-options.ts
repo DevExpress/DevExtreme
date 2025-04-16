@@ -34,6 +34,7 @@ import { DxiLookupToolbarItemComponent } from './toolbar-item-dxi';
 
 @Component({
     selector: 'dxo-lookup-drop-down-options',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -428,7 +429,7 @@ export class DxoLookupDropDownOptionsComponent extends NestedOption implements O
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoLookupDropDownOptionsComponent
   ],
   exports: [

@@ -31,6 +31,7 @@ import { DxiToolbarItemComponent } from './toolbar-item-dxi';
 
 @Component({
     selector: 'dxo-drop-down-options',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost],
@@ -159,7 +160,7 @@ export class DxoDropDownOptionsComponent extends DxoPopupOptions implements OnDe
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoDropDownOptionsComponent
   ],
   exports: [

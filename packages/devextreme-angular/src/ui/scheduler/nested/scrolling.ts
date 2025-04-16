@@ -24,6 +24,7 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-scheduler-scrolling',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -63,7 +64,7 @@ export class DxoSchedulerScrollingComponent extends NestedOption implements OnDe
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoSchedulerScrollingComponent
   ],
   exports: [

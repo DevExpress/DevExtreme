@@ -25,6 +25,7 @@ import { DxoFileUploaderOptions } from './base/file-uploader-options';
 
 @Component({
     selector: 'dxo-file-uploader-options',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost],
@@ -133,7 +134,7 @@ export class DxoFileUploaderOptionsComponent extends DxoFileUploaderOptions impl
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoFileUploaderOptionsComponent
   ],
   exports: [

@@ -23,6 +23,7 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-tree-list-column-chooser-selection',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -78,7 +79,7 @@ export class DxoTreeListColumnChooserSelectionComponent extends NestedOption imp
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoTreeListColumnChooserSelectionComponent
   ],
   exports: [

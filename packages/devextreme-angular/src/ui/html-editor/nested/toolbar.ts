@@ -29,6 +29,7 @@ import { DxiHtmlEditorToolbarItemComponent } from './toolbar-item-dxi';
 
 @Component({
     selector: 'dxo-html-editor-toolbar',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -100,7 +101,7 @@ export class DxoHtmlEditorToolbarComponent extends NestedOption implements OnDes
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoHtmlEditorToolbarComponent
   ],
   exports: [

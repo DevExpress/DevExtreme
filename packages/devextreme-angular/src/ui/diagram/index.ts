@@ -104,6 +104,7 @@ import { DxiDiagramCustomShapeComponent } from 'devextreme-angular/ui/diagram/ne
     selector: 'dx-diagram',
     template: '',
     host: { ngSkipHydration: 'true' },
+    standalone: true,
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -1038,6 +1039,7 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
 
 @NgModule({
   imports: [
+    DxDiagramComponent,
     DxoContextMenuModule,
     DxiCommandModule,
     DxiItemModule,
@@ -1088,9 +1090,6 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
     DxoDiagramZoomLevelModule,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxDiagramComponent
   ],
   exports: [
     DxDiagramComponent,

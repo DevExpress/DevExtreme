@@ -31,6 +31,7 @@ import { DxiListButtonComponent } from './button-dxi';
 
 @Component({
     selector: 'dxo-list-search-editor-options',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -521,7 +522,7 @@ export class DxoListSearchEditorOptionsComponent extends NestedOption implements
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoListSearchEditorOptionsComponent
   ],
   exports: [

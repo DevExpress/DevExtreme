@@ -23,6 +23,7 @@ import { DxoGanttFilterRow } from './base/gantt-filter-row';
 
 @Component({
     selector: 'dxo-filter-row',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost],
@@ -65,7 +66,7 @@ export class DxoFilterRowComponent extends DxoGanttFilterRow implements OnDestro
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoFilterRowComponent
   ],
   exports: [

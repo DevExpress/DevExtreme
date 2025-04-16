@@ -26,6 +26,7 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-linear-gauge-subvalue-indicator',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
@@ -209,7 +210,7 @@ export class DxoLinearGaugeSubvalueIndicatorComponent extends NestedOption imple
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoLinearGaugeSubvalueIndicatorComponent
   ],
   exports: [

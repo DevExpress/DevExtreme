@@ -74,6 +74,7 @@ import { DxoPivotGridTextsModule } from 'devextreme-angular/ui/pivot-grid/nested
     selector: 'dx-pivot-grid',
     template: '',
     host: { ngSkipHydration: 'true' },
+    standalone: true,
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -890,6 +891,7 @@ export class DxPivotGridComponent extends DxComponent implements OnDestroy, OnCh
 
 @NgModule({
   imports: [
+    DxPivotGridComponent,
     DxoExportModule,
     DxoFieldChooserModule,
     DxoTextsModule,
@@ -914,9 +916,6 @@ export class DxPivotGridComponent extends DxComponent implements OnDestroy, OnCh
     DxoPivotGridTextsModule,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxPivotGridComponent
   ],
   exports: [
     DxPivotGridComponent,

@@ -28,6 +28,7 @@ import { DxiItemComponent } from './item-dxi';
 
 @Component({
     selector: 'dxo-context-menu',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost],
@@ -80,7 +81,7 @@ export class DxoContextMenuComponent extends DxoFileManagerContextMenu implement
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoContextMenuComponent
   ],
   exports: [

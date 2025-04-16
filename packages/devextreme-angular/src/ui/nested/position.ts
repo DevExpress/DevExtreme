@@ -23,6 +23,7 @@ import { DxoPositionConfig } from './base/position-config';
 
 @Component({
     selector: 'dxo-position',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost],
@@ -63,7 +64,7 @@ export class DxoPositionComponent extends DxoPositionConfig implements OnDestroy
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoPositionComponent
   ],
   exports: [

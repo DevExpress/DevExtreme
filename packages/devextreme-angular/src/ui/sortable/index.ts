@@ -47,6 +47,7 @@ import { DxoSortableCursorOffsetModule } from 'devextreme-angular/ui/sortable/ne
     selector: 'dx-sortable',
     template: '<ng-content></ng-content>',
     host: { ngSkipHydration: 'true' },
+    standalone: true,
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -620,13 +621,11 @@ export class DxSortableComponent extends DxComponent implements OnDestroy {
 
 @NgModule({
   imports: [
+    DxSortableComponent,
     DxoCursorOffsetModule,
     DxoSortableCursorOffsetModule,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxSortableComponent
   ],
   exports: [
     DxSortableComponent,

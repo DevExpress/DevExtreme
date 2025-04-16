@@ -31,6 +31,7 @@ import { DxiToolbarItemComponent } from './toolbar-item-dxi';
 
 @Component({
     selector: 'dxo-filter-builder-popup',
+    standalone: true,
     template: '',
     styles: [''],
     providers: [NestedOptionHost],
@@ -156,7 +157,7 @@ export class DxoFilterBuilderPopupComponent extends DxoPopupOptions implements O
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoFilterBuilderPopupComponent
   ],
   exports: [
