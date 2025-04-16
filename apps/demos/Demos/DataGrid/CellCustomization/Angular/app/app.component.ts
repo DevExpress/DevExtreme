@@ -8,17 +8,17 @@ import {
 } from 'devextreme-angular';
 import {
   DxDataGridComponent,
-    DxoDataGridSortingComponent,
-    DxoDataGridPagerComponent,
-    DxoDataGridPagingComponent,
-    DxoDataGridColumnComponent,
+  DxoDataGridSortingComponent,
+  DxoDataGridPagerComponent,
+  DxoDataGridPagingComponent,
+  DxiDataGridColumnComponent,
 } from 'devextreme-angular/ui/data-grid';
+
 import {
   DxSparklineComponent,
-  DxSparklineSizeComponent,
-  DxoSparklineTooltipComponent,
+    DxoSparklineTooltipComponent,
+    DxoSparklineSizeComponent
 } from 'devextreme-angular/ui/sparkline';
-
 import { Service, WeekData } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
@@ -63,11 +63,11 @@ export class GridCellDataPipe implements PipeTransform {
     DxoDataGridSortingComponent,
     DxoDataGridPagerComponent,
     DxoDataGridPagingComponent,
-    DxoDataGridColumnComponent,
+    DxiDataGridColumnComponent,
     DxTemplateDirective,
     DxSparklineComponent,
-    DxSparklineSizeComponent,
     DxoSparklineTooltipComponent,
+    DxoSparklineSizeComponent
   ],
   declarations: [AppComponent, GridCellDataPipe],
   bootstrap: [AppComponent],
