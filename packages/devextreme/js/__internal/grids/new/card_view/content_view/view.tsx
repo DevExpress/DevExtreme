@@ -1,10 +1,18 @@
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
+/* eslint-disable
+  @typescript-eslint/explicit-function-return-type,
+  @typescript-eslint/explicit-module-boundary-types,
+  spellcheck/spell-checker
+*/
 import { compileGetter } from '@js/core/utils/data';
 import { isDefined } from '@js/core/utils/type';
-import { combined, computed, state } from '@ts/core/reactive/index';
+import {
+  combined, computed, effect, state,
+} from '@ts/core/reactive/index';
 import type { OptionsController } from '@ts/grids/new/card_view/options_controller';
 import type { DataRow } from '@ts/grids/new/grid_core/columns_controller/types';
+import {
+  NavigationStrategyMatrix,
+} from '@ts/grids/new/grid_core/keyboard_navigation/index';
 
 import { ContentView as ContentViewBase } from '../../grid_core/content_view/view';
 import type { DataObject } from '../../grid_core/data_controller/types';
@@ -38,17 +46,34 @@ export class ContentView extends ContentViewBase<ContentViewProps> {
     [this.width, this.cardMinWidth, this.dataController.pageSize, this.options.oneWay('cardsPerRow')],
   );
 
+  protected readonly navigationStrategy = new NavigationStrategyMatrix(
+    this.cardsPerRow.unreactive_get(),
+  );
+
   protected override component = ContentViewComponent;
+
+  constructor(...args) {
+    // @ts-expect-error
+    super(...args);
+
+    effect((cardsPerRow) => {
+      this.navigationStrategy.updateColumnsCount(cardsPerRow);
+    }, [this.cardsPerRow]);
+  }
 
   protected override getProps() {
     return combined({
       ...this.getBaseProps(),
       contentProps: combined({
         items: this.itemsController.items,
+        navigationEnabled: this.keyboardNavigationController.enabled,
+        navigationStrategy: this.navigationStrategy,
+        isLoading: this.dataController.isReloading,
         needToHiddenCheckBoxes: this.selectionController.needToHiddenCheckBoxes,
         fieldTemplate: this.options.template('fieldTemplate'),
         cardsPerRow: this.cardsPerRow,
         onRowHeightChange: this.rowHeight.update.bind(this.rowHeight),
+        onPageChange: this.onPageChange.bind(this),
         showContextMenu: this.showContextMenu.bind(this),
         wordWrapEnabled: this.options.oneWay('wordWrapEnabled'),
         cardProps: combined({
@@ -77,6 +102,16 @@ export class ContentView extends ContentViewBase<ContentViewProps> {
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           toolbar: this.options.oneWay('cardHeader.items') as any,
           selectCard: this.selectCard.bind(this),
+          onSelectAllCards: this.onSelectAllCards.bind(this),
+          onSearchFocus: () => {
+            this.searchUIController.doUIAction('focusSearchTextBox');
+          },
+          onCardContentKeyDown: (event: KeyboardEvent) => {
+            this.keyboardNavigationController.onKeyDown(event);
+          },
+          onFocusedCardChanged: (card: DataRow, cardIdx: number, element: HTMLElement) => {
+            this.keyboardNavigationController.onFocusedCardChanged(card, cardIdx, element);
+          },
         }),
       }),
     });
@@ -106,5 +141,17 @@ export class ContentView extends ContentViewBase<ContentViewProps> {
 
   private showContextMenu(e: MouseEvent, card?: DataRow, cardIndex?: number): void {
     this.contextMenuController.show(e, 'content', { card, cardIndex });
+  }
+
+  private onSelectAllCards(): void {
+    this.selectionController.selectAll();
+  }
+
+  private onPageChange(value: number) {
+    if (value < 0) {
+      this.dataController.decreasePageIndex();
+    } else {
+      this.dataController.increasePageIndex();
+    }
   }
 }

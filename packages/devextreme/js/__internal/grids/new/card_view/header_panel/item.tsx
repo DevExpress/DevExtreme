@@ -1,7 +1,6 @@
 import type { Column } from '@ts/grids/new/grid_core/columns_controller/types';
-import { MultipleKeyDownHandler } from '@ts/grids/new/grid_core/keyboard_navigation/index';
-import type { ComponentType } from 'inferno';
-import { Component, createRef } from 'inferno';
+import type { ComponentType, RefObject } from 'inferno';
+import { Component } from 'inferno';
 
 import { Icon } from '../../grid_core/icon';
 import type { Status } from './column_sortable';
@@ -42,24 +41,20 @@ function SortIcon(props: SortIconProps): JSX.Element {
 }
 
 export interface ItemProps {
+  elementRef?: RefObject<HTMLDivElement>;
+  tabIndex?: number;
   column: Column;
   status?: Status;
   showSortIndexes?: boolean;
   template?: ComponentType<{ column: Column }>;
   cssClass?: string;
-  onSortClick?: (e: MouseEvent) => void;
-  onFilterClick?: (
-    element: Element,
-    onFilterCloseCallback?: () => void,
-  ) => void;
-  onContextMenu?: (e: MouseEvent) => void;
+  onKeyDown?: (event: KeyboardEvent) => void;
+  onSortClick?: (event: MouseEvent) => void;
+  onFilterClick?: (element: Element) => void;
+  onContextMenu?: (event: MouseEvent) => void;
 }
 
 export class Item extends Component<ItemProps> {
-  private readonly containerRef = createRef<HTMLDivElement>();
-
-  private readonly keyboardHandler = new MultipleKeyDownHandler(['alt', 'arrowdown']);
-
   public render(): JSX.Element {
     const Template = this.props.column.headerItemTemplate ?? this.props.template;
     const cssClass = `${CLASSES.item} ${this.props.column.headerItemCssClass ?? ''} ${this.props.cssClass ?? ''}`;
@@ -81,15 +76,11 @@ export class Item extends Component<ItemProps> {
 
     return (
       <div
-        ref={this.containerRef}
+        ref={this.props.elementRef}
         className={cssClass}
-        tabIndex={0}
+        tabIndex={this.props.tabIndex}
         onClick={this.props.onSortClick}
-        onKeyDown={(event) => this.keyboardHandler.onKeyDownHandler(
-          event,
-          this.onFilterKeyPressHandler,
-        )}
-        onKeyUp={this.keyboardHandler.onKeyUpHandler}
+        onKeyDown={this.props.onKeyDown}
         onContextMenu={this.props.onContextMenu}
       >
         {icon}
@@ -119,20 +110,8 @@ export class Item extends Component<ItemProps> {
   private readonly onFilterClickHandler = (event: Event): void => {
     event.stopPropagation();
 
-    if (this.containerRef.current) {
-      this.props.onFilterClick?.(this.containerRef.current);
+    if (this.props.elementRef?.current) {
+      this.props.onFilterClick?.(this.props.elementRef.current);
     }
-  };
-
-  private readonly onFilterKeyPressHandler = (event: KeyboardEvent): void => {
-    event.preventDefault();
-
-    if (this.containerRef.current) {
-      this.props.onFilterClick?.(this.containerRef.current, this.focusItem);
-    }
-  };
-
-  private readonly focusItem = (): void => {
-    this.containerRef?.current?.focus();
   };
 }
