@@ -42,12 +42,12 @@ export class ContentView extends Component<ContentViewProps> {
     return (
       <div className={CLASSES.contentView} ref={this.containerRef}>
         <LoadPanel {...this.props.loadPanelProps} />
+        {this.props.noDataTextProps.visible && <NoDataText {...this.props.noDataTextProps} />}
         <Scrollable
           ref={this.scrollableRef}
           componentRef={this.props.scrollableRef}
           {...this.props.scrollableProps}
         >
-          {this.props.noDataTextProps.visible && <NoDataText {...this.props.noDataTextProps} />}
           {this.props.children!}
         </Scrollable>
         <ErrorRow {...this.props.errorRowProps} />

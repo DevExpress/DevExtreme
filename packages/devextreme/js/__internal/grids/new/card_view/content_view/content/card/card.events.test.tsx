@@ -26,6 +26,7 @@ const props = {
         column: {
           dataField: 'Name',
           name: 'Field',
+          caption: 'Field',
         },
         value: 'devextreme',
         text: 'devextreme',
@@ -153,7 +154,7 @@ describe('Events', () => {
   });
 
   it('should render field template correctly', () => {
-    const fieldName = container.querySelector('.dx-cardview-field-name');
+    const fieldName = container.querySelector('.dx-cardview-field-caption');
     const fieldValue = container.querySelector('.dx-cardview-field-value');
 
     expect(fieldName?.textContent).toBe('Field:');

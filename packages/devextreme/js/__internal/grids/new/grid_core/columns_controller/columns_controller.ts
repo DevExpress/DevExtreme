@@ -49,7 +49,7 @@ export class ColumnsController {
         headerFilterRootOptions,
       ) => normalizeColumns(
         columnsSettings ?? [],
-        this.options.normalizeTemplate.bind(this.options),
+        (template) => (template ? this.options.normalizeTemplate(template) : undefined),
       ).map((column) => headerFilterUtils
         .mergeColumnHeaderFilterOptions(column, headerFilterRootOptions)),
       [

@@ -130,20 +130,15 @@ exports[`Rendering should be rendered correctly 1`] = `
       class="dx-cardview-card-content"
     >
       <div
-        class="dx-cardview-field"
-        tabindex="0"
+        class="dx-cardview-field-caption"
       >
-        <span
-          class="dx-cardview-field-name"
-        >
-          Field
-          :
-        </span>
-        <span
-          class="dx-cardview-field-value dx-cardview-field-value--text-align-undefined dx-cardview-field-value--white-space-nowrap"
-        >
-          devextreme
-        </span>
+        Field
+        :
+      </div>
+      <div
+        class="dx-cardview-field-value dx-cardview-field-value--text-align-undefined"
+      >
+        devextreme
       </div>
     </div>
   </div>
