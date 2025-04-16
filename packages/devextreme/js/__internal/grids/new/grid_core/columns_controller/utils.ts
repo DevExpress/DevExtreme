@@ -1,6 +1,11 @@
 import { compileGetter } from '@js/core/utils/data';
+import dateSerialization from '@js/core/utils/date_serialization';
 import { captionize } from '@js/core/utils/inflector';
-import { isDefined, isString } from '@js/core/utils/type';
+import {
+  isDefined, isNumeric,
+  isString,
+  type,
+} from '@js/core/utils/type';
 import type { ComponentType } from 'inferno';
 
 import type { Template } from '../types';
@@ -154,3 +159,45 @@ export function getColumnByIndexOrName(
 
   return column;
 }
+
+export const getValueDataType = function (value: unknown): string | undefined {
+  let dataType: string | undefined = type(value);
+  if (dataType !== 'string' && dataType !== 'boolean' && dataType !== 'number' && dataType !== 'date' && dataType !== 'object') {
+    dataType = undefined;
+  }
+
+  return dataType;
+};
+
+// eslint-disable-next-line consistent-return
+export const getSerializationFormat = function (dataType: string, value: unknown): unknown {
+  // eslint-disable-next-line default-case
+  switch (dataType) {
+    case 'date':
+    case 'datetime':
+      return dateSerialization.getDateSerializationFormat(value);
+    case 'number':
+      if (isString(value)) {
+        return 'string';
+      }
+
+      if (isNumeric(value)) {
+        return null;
+      }
+  }
+};
+
+export const getColumnFormat = function (column: Column[]): string | null {
+  // @ts-expect-error
+  if (column.format) {
+    // @ts-expect-error
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+    return column.format;
+  }
+  // @ts-expect-error
+  if (column.dataType === 'date' || column.dataType === 'datetime') {
+    return 'shortDate';
+  }
+
+  return null;
+};

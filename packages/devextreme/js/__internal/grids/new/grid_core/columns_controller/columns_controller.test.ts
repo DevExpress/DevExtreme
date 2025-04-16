@@ -157,4 +157,25 @@ describe('ColumnsController', () => {
       ]);
     });
   });
+
+  describe('updateColumnDataType', () => {
+    it('should infer and apply dataType based on firstItem', () => {
+      const { columnsController } = setup({
+        columns: [
+          { dataField: 'created' },
+          { dataField: 'amount' },
+        ],
+      });
+
+      columnsController.setFirstItem({
+        created: new Date('2024-01-01'),
+        amount: 1234.56,
+      });
+
+      const columns = columnsController.columns.unreactive_get();
+
+      expect(columns[0].dataType).toBe('date');
+      expect(columns[1].dataType).toBe('number');
+    });
+  });
 });

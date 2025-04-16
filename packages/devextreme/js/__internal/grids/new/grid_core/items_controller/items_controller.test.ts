@@ -52,6 +52,48 @@ describe('ItemsController', () => {
       const dataRow = itemsController.createDataRow(dataObject, columns, 0, [1]);
       expect(dataRow).toMatchSnapshot();
     });
+    it('should detect and assign proper data types to columns and convert values accordingly', () => {
+      const { columnsController, itemsController } = setup({
+        keyExpr: 'id',
+        dataSource: [
+          {
+            id: 1,
+            amount: '123',
+            birthday: '2024-01-01',
+            updatedAt: '2024-01-01T10:00:00',
+            ref: 'abc123',
+          },
+        ],
+        columns: ['id', 'amount', 'birthday', 'updatedAt', 'ref'],
+      });
+
+      const columns = columnsController.columns.unreactive_get();
+      const dataRow = itemsController.createDataRow(
+        {
+          id: 1,
+          amount: '123',
+          birthday: '2024-01-01',
+          updatedAt: '2024-01-01T10:00:00',
+          ref: 'abc123',
+        },
+        columns,
+        0,
+      );
+
+      const columnMap = new Map(columns.map((column) => [column.dataField, column.dataType]));
+
+      expect(columnMap.get('id')).toBe('number');
+      expect(columnMap.get('amount')).toBe('number');
+      expect(columnMap.get('birthday')).toBe('date');
+      expect(columnMap.get('updatedAt')).toBe('datetime');
+      expect(columnMap.get('ref')).toBe('string');
+
+      const birthdayCell = dataRow.cells.find((cell) => cell.column.dataField === 'birthday');
+      expect(birthdayCell?.value).toBeInstanceOf(Date);
+
+      const updatedAtCell = dataRow.cells.find((cell) => cell.column.dataField === 'updatedAt');
+      expect(updatedAtCell?.value).toBeInstanceOf(Date);
+    });
   });
 
   describe('setSelectionState', () => {
