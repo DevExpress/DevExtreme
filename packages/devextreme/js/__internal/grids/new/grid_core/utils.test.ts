@@ -38,8 +38,8 @@ describe('parseDateValue', () => {
     expect(result).toEqual(new Date('2024-01-01'));
   });
 
-  it('should return null for invalid date without format', () => {
-    expect(parseDateValue('invalid-date')).toBeNull();
+  it('should return same value for invalid date', () => {
+    expect(parseDateValue('invalid-date')).toBe('invalid-date');
   });
 });
 

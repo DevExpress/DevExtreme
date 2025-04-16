@@ -41,12 +41,22 @@ export const parseDateValue = (
   text: string,
   format?: Format,
 ): unknown => {
-  if (!format) {
-    const parsedValue = new Date(text);
-    return isNaN(parsedValue.getTime()) ? null : parsedValue;
+  let parsedValue: Date | null = null;
+
+  if (format) {
+    try {
+      // @ts-expect-error
+      parsedValue = dateLocalization.parse(text, format);
+    } catch {
+      parsedValue = null;
+    }
   }
-  // @ts-expect-error
-  return dateLocalization.parse(text, format) ?? new Date(text);
+
+  if (!parsedValue) {
+    parsedValue = new Date(text);
+  }
+
+  return isNaN(parsedValue.getTime()) ? text : parsedValue;
 };
 
 export const parseValue = (column: Column, text: string): unknown => {
