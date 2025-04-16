@@ -10,13 +10,13 @@ export const getMenuItems = ($element) => {
     return menuInstance.option('dataSource')[0].items;
 };
 
-export const openAiToolbarMenu = ($element) => {
+export const openAIToolbarMenu = ($element) => {
     const $toolbarItem = $element.find(`.${TOOLBAR_FORMAT_WIDGET_CLASS} .${MENU_ITEM_CLASS}`);
     $toolbarItem.trigger('dxclick');
 };
 
-export const openAiDialog = ($element) => {
-    openAiToolbarMenu($element);
+export const openAIDialog = ($element) => {
+    openAIToolbarMenu($element);
 
     const $menuItem = $(`.${MENU_ITEM_CLASS}`).last();
     $menuItem.trigger('dxclick');

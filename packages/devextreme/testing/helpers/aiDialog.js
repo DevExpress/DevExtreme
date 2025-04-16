@@ -50,7 +50,7 @@ const getDialogSelectBoxes = ($container) => {
     return $controls.find(`.${SELECT_BOX_CLASS}`);
 };
 
-export const showAiDialog = (instance, { isBasicCommand, config } = {}) => {
+export const showAIDialog = (instance, { isBasicCommand, config } = {}) => {
     const commandsMap = createCommandsMap(isBasicCommand);
     const payload = {
         currentCommand: 'translate',
@@ -83,11 +83,11 @@ export const getCommandSelectBoxInstance = ($container) => getDialogSelectBoxes(
 export const getOptionSelectBoxInstance = ($container) => getDialogSelectBoxes($container).eq(1).dxSelectBox('instance');
 
 export const setResultText = (value) => {
-    const textAreaInstance = $(`.${TEXT_AREA_CLASS}`).dxTextArea('instance');
+    const textAreaInstance = $(`.${TEXT_AREA_CLASS}`).eq(1).dxTextArea('instance');
     textAreaInstance.option('value', value);
 };
 
 export const getResultText = () => {
-    const textAreaInstance = $(`.${TEXT_AREA_CLASS}`).dxTextArea('instance');
+    const textAreaInstance = $(`.${TEXT_AREA_CLASS}`).eq(1).dxTextArea('instance');
     return textAreaInstance.option('value');
 };

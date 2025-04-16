@@ -11,7 +11,7 @@ import Form from '@js/ui/form';
 import ScrollView from '@js/ui/scroll_view';
 
 import { getQuill } from '../m_quill_importer';
-import type { AiDialogResult, AiDialogShowPayload } from '../ui/aiDialog';
+import type { AIDialogResult, AIDialogShowPayload } from '../ui/aiDialog';
 import { ImageUploader } from './m_image_uploader_helper';
 import {
   getAutoSizedElements,
@@ -103,11 +103,11 @@ function getFormatHandlers(module) {
     deleteTable: getTableOperationHandler(module.quill, 'deleteTable'),
     cellProperties: prepareShowFormProperties(module, 'cell'),
     tableProperties: prepareShowFormProperties(module, 'table'),
-    ai: prepareAiTextTrasformHandler(module),
+    ai: prepareAITextTrasformHandler(module),
   };
 }
 
-function prepareAiTextTrasformHandler(module) {
+function prepareAITextTrasformHandler(module) {
   return (options): void => {
     const { command, parentCommand, commandsMap } = options;
 
@@ -116,17 +116,17 @@ function prepareAiTextTrasformHandler(module) {
     const hasSelection = selection?.length > 0;
     const text = hasSelection ? quill.getText(selection) : quill.getText();
 
-    const aiDialogConfig: AiDialogShowPayload = {
+    const aiDialogConfig: AIDialogShowPayload = {
       currentCommand: parentCommand ?? command,
       currentCommandOption: parentCommand ? command : undefined,
       text,
       commandsMap,
     };
 
-    module.editorInstance.showAiDialog(aiDialogConfig)?.done(({
+    module.editorInstance.showAIDialog(aiDialogConfig)?.done(({
       resultText,
       event: eventData,
-    }: AiDialogResult) => {
+    }: AIDialogResult) => {
       const insertionMode = eventData.itemData.id;
       let insertIndex = 0;
       let textToInsert = resultText;
