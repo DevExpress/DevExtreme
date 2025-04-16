@@ -11,7 +11,7 @@ import { View } from '@ts/grids/new/grid_core/core/view';
 import { DataController } from '@ts/grids/new/grid_core/data_controller/index';
 import { ErrorController } from '@ts/grids/new/grid_core/error_controller/error_controller';
 import { KeyboardNavigationController } from '@ts/grids/new/grid_core/keyboard_navigation/index';
-import { SearchUIController } from '@ts/grids/new/grid_core/search';
+import { SearchUIController } from '@ts/grids/new/grid_core/search/index';
 import { SelectionController } from '@ts/grids/new/grid_core/selection/controller';
 import { createRef } from 'inferno';
 

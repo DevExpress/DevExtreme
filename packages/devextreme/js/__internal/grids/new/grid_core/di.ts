@@ -1,6 +1,6 @@
 /* eslint-disable spellcheck/spell-checker */
 import type { DIContext } from '@ts/core/di/index';
-import { SearchUIController } from '@ts/grids/new/grid_core/search/controller_ui';
+import { SearchUIController } from '@ts/grids/new/grid_core/search/index';
 
 import * as ColumnChooserModule from './column_chooser/index';
 import * as ColumnsControllerModule from './columns_controller/index';
