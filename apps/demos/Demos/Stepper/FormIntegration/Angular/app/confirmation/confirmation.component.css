@@ -1,0 +1,34 @@
+::ng-deep .dx-multiview-item-content:has( .summary-container) {
+  overflow: auto;
+}
+
+::ng-deep .summary-container {
+  display: flex;
+  flex-direction: column;
+  row-gap: 20px;
+}
+
+::ng-deep .summary-item {
+  display: flex;
+  flex-direction: column;
+  row-gap: 8px;
+}
+
+::ng-deep .summary-item-header {
+  font-weight: 600;
+  font-size: var(--dx-font-size-sm);
+}
+
+::ng-deep .center {
+  text-align: center;
+}
+
+::ng-deep .summary-item-label {
+  color: var(--dx-color-icon);
+}
+
+::ng-deep .separator {
+  width: 100%;
+  height: 1px;
+  border-bottom: solid 1px var(--dx-color-border);
+}

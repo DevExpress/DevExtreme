@@ -34,7 +34,7 @@
 <script setup lang="ts">
 import DxForm, { DxRangeRule, DxSimpleItem } from 'devextreme-vue/form';
 import 'devextreme/ui/number_box';
-import { BookingFormData } from './types.ts';
+import type { BookingFormData } from './types.ts';
 import { initialFormData } from './data.ts';
 
 const props = withDefaults(defineProps<{
@@ -56,7 +56,7 @@ const childrenLabelOptions = {
 };
 
 const petsLabelOptions = {
-  text: 'Pelts',
+  text: 'Pets',
   location: 'top',
 };
 

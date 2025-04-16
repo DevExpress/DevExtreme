@@ -86,7 +86,7 @@ import RoomMealPlanTemplate from './RoomMealPlanTemplate.vue';
 import AdditionalTemplate from './AdditionalTemplate.vue';
 import ConfirmationTemplate from './ConfirmationTemplate.vue';
 import { initialSteps, initialFormData } from './data.ts';
-import { BookingFormData } from './types';
+import type { BookingFormData } from './types';
 
 const cloneItems = () => initialSteps.map((item) => ({ ...item }));
 const cloneFormData = () => ({
@@ -176,6 +176,7 @@ const reset = () => {
   selectedIndex.value = 0;
   formData.value = cloneFormData();
   validationEngine.resetGroup(validationGroups[0]);
+  validationEngine.resetGroup(validationGroups[1]);
   items.value = cloneItems();
 };
 

@@ -50,7 +50,7 @@
 </template>
 
 <script setup lang="ts">
-import { BookingFormData } from './types.ts';
+import type { BookingFormData } from './types.ts';
 import { initialFormData } from './data.ts';
 
 const props = withDefaults(defineProps<{

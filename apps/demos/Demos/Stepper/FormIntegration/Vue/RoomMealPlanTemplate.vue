@@ -32,7 +32,7 @@
 <script setup lang="ts">
 import DxForm, { DxRequiredRule, DxSimpleItem } from 'devextreme-vue/form';
 import 'devextreme/ui/select_box';
-import { BookingFormData } from './types.ts';
+import type { BookingFormData } from './types.ts';
 import { roomTypes, mealPlans, initialFormData } from './data.ts';
 
 const props = withDefaults(defineProps<{
