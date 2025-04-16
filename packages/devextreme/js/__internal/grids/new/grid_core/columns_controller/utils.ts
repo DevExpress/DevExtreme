@@ -1,3 +1,4 @@
+import type { DataType } from '@js/common';
 import { compileGetter } from '@js/core/utils/data';
 import dateSerialization from '@js/core/utils/date_serialization';
 import { captionize } from '@js/core/utils/inflector';
@@ -160,7 +161,7 @@ export function getColumnByIndexOrName(
   return column;
 }
 
-export const getValueDataType = function (value: unknown): string | undefined {
+export const getValueDataType = function (value: unknown): DataType | undefined {
   let dataType: string | undefined = type(value);
   if (dataType !== 'string' && dataType !== 'boolean' && dataType !== 'number' && dataType !== 'date' && dataType !== 'object') {
     dataType = undefined;
@@ -169,6 +170,7 @@ export const getValueDataType = function (value: unknown): string | undefined {
   return dataType;
 };
 
+// @ts-expect-error
 // eslint-disable-next-line consistent-return
 export const getSerializationFormat = function (dataType: string, value: unknown): unknown {
   // eslint-disable-next-line default-case

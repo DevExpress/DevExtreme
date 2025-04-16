@@ -59,7 +59,8 @@ export class ItemsController {
     for (const column of columns) {
       const { dataField } = column;
       if (dataField) {
-        const value = data[dataField];
+        // @ts-expect-error
+        const value: string = data[dataField];
         parsed[dataField] = parseValue(column, value);
       }
     }

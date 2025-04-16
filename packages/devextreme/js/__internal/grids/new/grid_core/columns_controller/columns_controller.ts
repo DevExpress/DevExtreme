@@ -1,4 +1,5 @@
 /* eslint-disable spellcheck/spell-checker */
+import type { DataType } from '@js/common';
 import type { Subscribable, SubsGets, SubsGetsUpd } from '@ts/core/reactive/index';
 import {
   computed, interruptableComputed, state,
@@ -10,7 +11,7 @@ import { OptionsController } from '../options_controller/options_controller';
 import type { ColumnProperties, ColumnSettings, PreNormalizedColumn } from './options';
 import type { Column, VisibleColumn } from './types';
 import {
-  getColumnFormat, getColumnIndexByName, getSerializationFormat,
+  getColumnFormat, getColumnIndexByName,
   getValueDataType, normalizeColumns, normalizeVisibleIndexes, preNormalizeColumns,
 } from './utils';
 
@@ -160,8 +161,8 @@ export class ColumnsController {
       if (firstItem && column.calculateCellValue) {
         const columnSetting = columnSettings[index];
         const value = column.calculateCellValue(firstItem);
-        const dataType = columnSetting.dataType ?? getValueDataType(value);
-        const serializationFormat = getSerializationFormat(dataType, value);
+        const dataType: DataType | undefined = columnSetting.dataType ?? getValueDataType(value);
+        // @ts-expect-error
         const columnFormat = getColumnFormat(column);
 
         if (dataType && dataType !== column.dataType) {
@@ -169,14 +170,8 @@ export class ColumnsController {
         }
 
         if (columnFormat && columnFormat !== column.format) {
-          this.columnOption(column, 'format', dataType);
-        }
-
-        // @ts-expect-error
-        // eslint-disable-next-line @stylistic/max-len
-        if (serializationFormat !== undefined && serializationFormat !== column.serializationFormat) {
-        // @ts-expect-error
-          this.columnOption(column, 'serializationFormat', serializationFormat);
+          // @ts-expect-error
+          this.columnOption(column, 'format', columnFormat);
         }
       }
     });
