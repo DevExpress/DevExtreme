@@ -7,21 +7,25 @@ import {
 } from '@jest/globals';
 import type {
   AIProvider,
+  ChangeToneCommandParams,
+  ChangeToneCommandResult,
   RequestCallbacks,
-  TranslateCommandParams,
-  TranslateCommandResult,
 } from '@js/common/ai-integration';
-import { TranslateCommand } from '@ts/core/ai_integration/commands/translate';
+import { ChangeToneCommand } from '@ts/core/ai_integration/commands';
 import type { PromptData } from '@ts/core/ai_integration/core/prompt_manager';
 import { PromptManager } from '@ts/core/ai_integration/core/prompt_manager';
 import { RequestManager } from '@ts/core/ai_integration/core/request_manager';
 import { Provider } from '@ts/core/ai_integration/test_utils/provider_mock';
 
-describe('TranslateCommand', () => {
-  const params: TranslateCommandParams = { text: 'text to translate', lang: 'French' };
+describe('ChangeToneCommand', () => {
+  const params: ChangeToneCommandParams = {
+    text: 'text to tone change',
+    tone: 'friendly',
+  };
+
   let promptManager = null as unknown as PromptManager;
   let requestManager = null as unknown as RequestManager;
-  let command = null as unknown as TranslateCommand;
+  let command = null as unknown as ChangeToneCommand;
 
   beforeEach(() => {
     const provider: AIProvider = new Provider();
@@ -29,7 +33,7 @@ describe('TranslateCommand', () => {
     requestManager = new RequestManager(provider);
     promptManager = new PromptManager();
 
-    command = new TranslateCommand(promptManager, requestManager);
+    command = new ChangeToneCommand(promptManager, requestManager);
   });
 
   describe('getTemplateName', () => {
@@ -37,25 +41,25 @@ describe('TranslateCommand', () => {
       // @ts-expect-error Access to protected property for a test
       const templateName = command.getTemplateName();
 
-      expect(templateName).toBe('translate');
+      expect(templateName).toBe('changeTone');
     });
   });
 
   describe('buildPromptData', () => {
-    it('should form PromptData with text in user section and lang in system section', () => {
+    it('should form PromptData with empty object', () => {
       // @ts-expect-error Access to protected property for a test
       const promptData: PromptData = command.buildPromptData(params);
 
       expect(promptData).toEqual({
-        system: { lang: 'French' },
-        user: { text: 'text to translate' },
+        system: { tone: params.tone },
+        user: { text: params.text },
       });
     });
   });
 
   describe('parseResult', () => {
     it('should return the string without changes', () => {
-      const response = 'Translated text';
+      const response = 'Shorten text';
       // @ts-expect-error Access to protected property for a test
       const result = command.parseResult(response);
 
@@ -64,7 +68,7 @@ describe('TranslateCommand', () => {
   });
 
   describe('execute', () => {
-    const callbacks: RequestCallbacks<TranslateCommandResult> = { onComplete: () => {} };
+    const callbacks: RequestCallbacks<ChangeToneCommandResult> = { onComplete: () => {} };
 
     it('promptManager.buildPrompt should be called with parameters containing the passed values', () => {
       const buildPromptSpy = jest.spyOn(promptManager, 'buildPrompt');
@@ -72,9 +76,9 @@ describe('TranslateCommand', () => {
       command.execute(params, callbacks);
 
       expect(buildPromptSpy).toHaveBeenCalledTimes(1);
-      expect(promptManager.buildPrompt).toHaveBeenCalledWith('translate', {
-        system: { lang: 'French' },
-        user: { text: 'text to translate' },
+      expect(promptManager.buildPrompt).toHaveBeenCalledWith('changeTone', {
+        system: { tone: params.tone },
+        user: { text: params.text },
       });
     });
 
@@ -84,8 +88,8 @@ describe('TranslateCommand', () => {
       command.execute(params, callbacks);
 
       expect(promptManager.buildPrompt).toHaveReturnedWith({
-        system: 'Translate the text provided into French. Ensure the translation retains the original meaning and tone. Provide only the translated text in your response, without any additional formatting or commentary.',
-        user: 'text to translate',
+        system: 'Rewrite the following text to keep its original meaning but change its tone to friendly. Provide only the rewritten text as plain text without any comments or formatting.',
+        user: params.text,
       });
     });
 
