@@ -3588,8 +3588,8 @@ exports[`Options HeaderFilter visible: false 1`] = `
               tabindex="0"
             >
               A
-              <span
-                class="dx-header-filter-icon "
+              <div
+                class="dx-icon dx-icon-filter dx-header-filter-icon "
               />
             </div>
           </div>
@@ -3639,8 +3639,8 @@ exports[`Options HeaderFilter visible: true 1`] = `
               tabindex="0"
             >
               A
-              <span
-                class="dx-header-filter-icon "
+              <div
+                class="dx-icon dx-icon-filter dx-header-filter-icon "
               />
             </div>
           </div>
@@ -3690,8 +3690,8 @@ exports[`Options HeaderFilter visible: undefined 1`] = `
               tabindex="0"
             >
               A
-              <span
-                class="dx-header-filter-icon "
+              <div
+                class="dx-icon dx-icon-filter dx-header-filter-icon "
               />
             </div>
           </div>
