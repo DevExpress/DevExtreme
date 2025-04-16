@@ -3574,24 +3574,33 @@ exports[`Options HeaderFilter visible: false 1`] = `
     >
       <div
         class="dx-scrollable-container"
-        tabindex="0"
       >
         <div
           class="dx-scrollable-content"
           style="left: 0px; top: 0px; transform: none;"
         >
-          <div
-            class="dx-cardview-headerpanel-content"
-          >
+          <div>
             <div
-              class="dx-cardview-header-item  "
+              dx-focus-decoy="true"
               tabindex="0"
+            />
+            <div
+              class="dx-cardview-headerpanel-content"
             >
-              A
               <div
-                class="dx-icon dx-icon-filter dx-header-filter-icon "
-              />
+                class="dx-cardview-header-item  "
+                tabindex="0"
+              >
+                A
+                <div
+                  class="dx-icon dx-icon-filter dx-header-filter-icon "
+                />
+              </div>
             </div>
+            <div
+              dx-focus-decoy="true"
+              tabindex="0"
+            />
           </div>
         </div>
         <div
@@ -3625,24 +3634,33 @@ exports[`Options HeaderFilter visible: true 1`] = `
     >
       <div
         class="dx-scrollable-container"
-        tabindex="0"
       >
         <div
           class="dx-scrollable-content"
           style="left: 0px; top: 0px; transform: none;"
         >
-          <div
-            class="dx-cardview-headerpanel-content"
-          >
+          <div>
             <div
-              class="dx-cardview-header-item  "
+              dx-focus-decoy="true"
               tabindex="0"
+            />
+            <div
+              class="dx-cardview-headerpanel-content"
             >
-              A
               <div
-                class="dx-icon dx-icon-filter dx-header-filter-icon "
-              />
+                class="dx-cardview-header-item  "
+                tabindex="0"
+              >
+                A
+                <div
+                  class="dx-icon dx-icon-filter dx-header-filter-icon "
+                />
+              </div>
             </div>
+            <div
+              dx-focus-decoy="true"
+              tabindex="0"
+            />
           </div>
         </div>
         <div
@@ -3676,24 +3694,33 @@ exports[`Options HeaderFilter visible: undefined 1`] = `
     >
       <div
         class="dx-scrollable-container"
-        tabindex="0"
       >
         <div
           class="dx-scrollable-content"
           style="left: 0px; top: 0px; transform: none;"
         >
-          <div
-            class="dx-cardview-headerpanel-content"
-          >
+          <div>
             <div
-              class="dx-cardview-header-item  "
+              dx-focus-decoy="true"
               tabindex="0"
+            />
+            <div
+              class="dx-cardview-headerpanel-content"
             >
-              A
               <div
-                class="dx-icon dx-icon-filter dx-header-filter-icon "
-              />
+                class="dx-cardview-header-item  "
+                tabindex="0"
+              >
+                A
+                <div
+                  class="dx-icon dx-icon-filter dx-header-filter-icon "
+                />
+              </div>
             </div>
+            <div
+              dx-focus-decoy="true"
+              tabindex="0"
+            />
           </div>
         </div>
         <div
