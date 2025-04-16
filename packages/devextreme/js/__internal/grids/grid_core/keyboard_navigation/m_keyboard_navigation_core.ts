@@ -4,6 +4,7 @@ import $ from '@js/core/renderer';
 
 import modules from '../m_modules';
 import type { Controllers, OptionChanged } from '../m_types';
+import { Direction } from './const';
 import { isElementDefined, isFixedColumnIndexOffsetRequired } from './m_keyboard_navigation_utils';
 
 export class KeyboardNavigationController extends modules.ViewController {
@@ -51,11 +52,32 @@ export class KeyboardNavigationController extends modules.ViewController {
   }
 
   private subscribeToKeyDownEvent(): void {
-    const $focusedView = this.getFocusedView()?.element();
+    const $focusedViewElement = this.getFocusedViewElement();
 
-    if ($focusedView) {
-      this.keyDownListener = keyboard.on($focusedView, null, (e) => this.keyDownHandler(e));
+    if ($focusedViewElement) {
+      this.keyDownListener = keyboard.on($focusedViewElement, null, (e) => this.keyDownHandler(e));
     }
+  }
+
+  protected getDirectionByKeyName(keyName: string): Direction {
+    const rtlEnabled = this.option('rtlEnabled');
+
+    switch (keyName) {
+      case 'leftArrow': {
+        return rtlEnabled ? Direction.Next : Direction.Previous;
+      }
+      case 'rightArrow': {
+        return rtlEnabled ? Direction.Previous : Direction.Next;
+        break;
+      }
+      default: {
+        return Direction.Next;
+      }
+    }
+  }
+
+  protected getFocusedViewElement() {
+    return this.getFocusedView()?.element();
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -67,7 +89,7 @@ export class KeyboardNavigationController extends modules.ViewController {
   }
 
   private unsubscribeFromFocusinEvent(): void {
-    const $focusedView = this.getFocusedView()?.element();
+    const $focusedView = this.getFocusedViewElement();
 
     if ($focusedView) {
       eventsEngine.off($focusedView, 'focusin', this.focusinHandlerContext);
@@ -75,7 +97,7 @@ export class KeyboardNavigationController extends modules.ViewController {
   }
 
   private subscribeToFocusinEvent(): void {
-    const $focusedView = this.getFocusedView()?.element();
+    const $focusedView = this.getFocusedViewElement();
     const focusinSelector = this.getFocusinSelector();
 
     if ($focusedView) {

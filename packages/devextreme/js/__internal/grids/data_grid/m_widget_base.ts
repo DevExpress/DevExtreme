@@ -51,6 +51,7 @@ gridCore.registerModulesOrder([
   'contextMenu',
   'keyboardNavigation',
   'headersKeyboardNavigation',
+  'groupPanelKeyboardNavigation',
   'errorHandling',
   'summary',
   'columnFixing',

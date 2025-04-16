@@ -8,32 +8,11 @@ import { isDefined } from '@js/core/utils/type';
 import type { Views } from '../m_types';
 import { StickyPosition } from '../sticky_columns/const';
 import { getColumnFixedPosition, isFirstFixedColumn, isLastFixedColumn } from '../sticky_columns/utils';
+import { Direction } from './const';
 import { KeyboardNavigationController as KeyboardNavigationControllerCore } from './m_keyboard_navigation_core';
-
-enum Direction {
-  Next = 'next',
-  Previous = 'previous',
-}
 
 export class HeadersKeyboardNavigationController extends KeyboardNavigationControllerCore {
   protected _columnHeadersView!: Views['columnHeadersView'];
-
-  private getDirectionByKeyName(keyName): Direction {
-    const rtlEnabled = this.option('rtlEnabled');
-
-    switch (keyName) {
-      case 'leftArrow': {
-        return rtlEnabled ? Direction.Next : Direction.Previous;
-      }
-      case 'rightArrow': {
-        return rtlEnabled ? Direction.Previous : Direction.Next;
-        break;
-      }
-      default: {
-        return Direction.Next;
-      }
-    }
-  }
 
   private isHeaderValidForReordering(column, direction, rowIndex): boolean {
     const columnsController = this._columnsController;
@@ -80,7 +59,9 @@ export class HeadersKeyboardNavigationController extends KeyboardNavigationContr
       if (this.isHeaderValidForReordering(column, direction, rowIndex)) {
         const visibleIndex = this._columnsController.getVisibleIndex(column.index, rowIndex);
         const newVisibleIndex = this.getNewVisibleIndex(visibleIndex, direction);
-        const newFocusedColumnIndex = direction === 'next' ? newVisibleIndex - 1 : newVisibleIndex;
+        const newFocusedColumnIndex = direction === Direction.Next
+          ? newVisibleIndex - 1
+          : newVisibleIndex;
 
         this.isNeedToFocus = true;
         this.setFocusedCellPosition(rowIndex, newFocusedColumnIndex);

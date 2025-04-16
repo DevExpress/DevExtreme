@@ -1,0 +1,101 @@
+import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import DataGrid from 'devextreme-testcafe-models/dataGrid';
+import url from '../../../../helpers/getPageUrl';
+import { createWidget } from '../../../../helpers/createWidget';
+
+fixture
+  .disablePageReloads`Keyboard Navigation - Group Column Reordering`
+  .page(url(__dirname, '../../../container.html'));
+
+const DATA_GRID_SELECTOR = '#container';
+
+// Group columns
+[true, false].forEach((rtlEnabled) => {
+  test(`reorder group column when ${rtlEnabled ? 'left' : 'right'} arrow is pressed when rtlEnabled = ${rtlEnabled}`, async (t) => {
+    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+    const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+    const firstGroupHeader = dataGrid.getGroupPanel().getHeader(0);
+    const shortcut = rtlEnabled ? 'ctrl+left' : 'ctrl+right';
+
+    await t
+      .click(firstGroupHeader.element)
+      .pressKey(shortcut);
+
+    await takeScreenshot(
+      `reorder_group_column_to_${rtlEnabled ? 'left' : 'right'}_when_rtlEnabled_=_${rtlEnabled}`,
+      dataGrid.element,
+    );
+
+    await t.expect(compareResults.isValid())
+      .ok(compareResults.errorMessages());
+  }).before(async () => {
+    await createWidget('dxDataGrid', {
+      rtlEnabled,
+      dataSource: [{
+        field1: 'test1',
+        field2: 'test2',
+        field3: 'test3',
+        field4: 'test4',
+      }],
+      groupPanel: {
+        visible: true,
+      },
+      columns: [
+        {
+          dataField: 'field1',
+          groupIndex: 1,
+        },
+        'field2',
+        'field3',
+        {
+          dataField: 'field4',
+          groupIndex: 0,
+        },
+      ],
+    });
+  });
+
+  test(`reorder group column when ${rtlEnabled ? 'right' : 'left'} arrow is pressed when rtlEnabled = ${rtlEnabled}`, async (t) => {
+    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+    const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+    const lastGroupHeader = dataGrid.getGroupPanel().getHeader(1);
+    const shortcut = rtlEnabled ? 'ctrl+right' : 'ctrl+left';
+
+    await t
+      .click(lastGroupHeader.element)
+      .pressKey(shortcut);
+
+    await takeScreenshot(
+      `reorder_group_column_to_${rtlEnabled ? 'right' : 'left'}_when_rtlEnabled_=_${rtlEnabled}`,
+      dataGrid.element,
+    );
+
+    await t.expect(compareResults.isValid())
+      .ok(compareResults.errorMessages());
+  }).before(async () => {
+    await createWidget('dxDataGrid', {
+      rtlEnabled,
+      dataSource: [{
+        field1: 'test1',
+        field2: 'test2',
+        field3: 'test3',
+        field4: 'test4',
+      }],
+      groupPanel: {
+        visible: true,
+      },
+      columns: [
+        {
+          dataField: 'field1',
+          groupIndex: 1,
+        },
+        'field2',
+        'field3',
+        {
+          dataField: 'field4',
+          groupIndex: 0,
+        },
+      ],
+    });
+  });
+});
