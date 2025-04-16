@@ -558,7 +558,6 @@ class HtmlEditor extends Editor<Properties> {
   }
 
   _renderAIDialog(): void {
-    // @ts-expect-error ts-error
     const { aiIntegration } = this.option();
 
     if (!aiIntegration) {
