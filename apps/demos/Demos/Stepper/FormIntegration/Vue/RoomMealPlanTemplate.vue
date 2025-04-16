@@ -50,6 +50,7 @@ const roomLabelOptions = {
 
 const roomSelectBoxOptions = {
   items: roomTypes,
+  elementAttr: { id: 'roomType' },
 };
 
 const mealLabelOptions = {
@@ -59,5 +60,6 @@ const mealLabelOptions = {
 
 const mealSelectBoxOptions = {
   items: mealPlans,
+  elementAttr: { id: 'mealPlan' },
 };
 </script>

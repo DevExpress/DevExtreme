@@ -37,5 +37,6 @@ export class GuestsFormComponent {
     min: 0,
     max: 5,
     showSpinButtons: true,
+    elementAttr: { id: 'adultsCount' }
   };
 }

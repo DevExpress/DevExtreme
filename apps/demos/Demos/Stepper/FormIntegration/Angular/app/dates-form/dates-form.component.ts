@@ -21,6 +21,7 @@ export class DatesFormComponent {
   dateRangeBoxOptions: DxDateRangeBoxTypes.Properties = {
     startDatePlaceholder: 'Check-in',
     endDatePlaceholder: 'Check-out',
+    elementAttr: { id: 'datesPicker' },
   }
 
   labelOptions: DxFormTypes.SimpleItem["label"] = {

@@ -30,5 +30,6 @@ const labelOptions = {
 
 const textAreaOptions = {
   height: 160,
+  elementAttr: { id: 'additionalRequest' },
 };
 </script>

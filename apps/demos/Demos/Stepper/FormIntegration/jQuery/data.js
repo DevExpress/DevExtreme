@@ -1,4 +1,4 @@
-const items = [
+const initialSteps = [
   {
     label: 'Dates', hint: 'Dates', icon: 'daterangepicker',
   },
@@ -29,3 +29,8 @@ const initialFormData = {
   mealPlan: undefined,
   additionalRequest: '',
 };
+
+const getInitialFormData = () => ({
+  ...initialFormData,
+  dates: [...initialFormData.dates],
+});

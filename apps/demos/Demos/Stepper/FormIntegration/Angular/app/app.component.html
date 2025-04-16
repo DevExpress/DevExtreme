@@ -1,9 +1,14 @@
 <dx-stepper
-  #stepper
-  [items]="steps"
   [(selectedIndex)]="selectedIndex"
   (onSelectionChanging)="onSelectionChanging($event)"
 >
+  <dxi-item
+    *ngFor="let step of steps"
+    [label]="step.label"
+    [icon]="step.icon"
+    [isValid]="step.isValid"
+    [hint]="step.hint"
+  ></dxi-item>
 </dx-stepper>
 <div class="content">
   <dx-multi-view
@@ -59,16 +64,20 @@
     </div>
     <div class="nav-buttons">
       <dx-button
+        id="prevButton"
         [visible]="selectedIndex !== 0 && !isConfirmed"
         text="Back"
         type="normal"
         (onClick)="onPrevButtonClick($event)"
+        [width]="100"
       >
       </dx-button>
       <dx-button
+        id="nextButton"
         [text]="getNextButtonText()"
         type="default"
         (onClick)="onNextButtonClick($event)"
+        [width]="100"
       >
       </dx-button>
     </div>

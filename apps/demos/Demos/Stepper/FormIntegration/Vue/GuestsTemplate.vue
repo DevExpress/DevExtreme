@@ -11,7 +11,7 @@
       :is-required="true"
       data-field="adultsCount"
       editor-type="dxNumberBox"
-      :editor-options="numberBoxOptions"
+      :editor-options="adultsNumberBoxOptions"
       :label="adultsLabelOptions"
     >
       <DxRangeRule :min="1"/>
@@ -64,5 +64,10 @@ const numberBoxOptions = {
   min: 0,
   max: 5,
   showSpinButtons: true,
+};
+
+const adultsNumberBoxOptions = {
+  ...numberBoxOptions,
+  elementAttr: { id: 'adultsCount' },
 };
 </script>

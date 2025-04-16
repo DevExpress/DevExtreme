@@ -1,14 +1,8 @@
 $(() => {
-  const itemsCount = items.length;
+  const stepsCount = initialSteps.length;
   const validationGroups = ['dates', 'guests', 'roomAndMealPlan'];
   let confirmed = false;
-
-  const cloneFormData = () => ({
-    ...initialFormData,
-    dates: [...initialFormData.dates],
-  });
-
-  const formData = cloneFormData();
+  let formData = getInitialFormData();
 
   const setSelectedIndex = (index) => {
     stepper.option('selectedIndex', index);
@@ -19,8 +13,7 @@ $(() => {
 
     prevButton.option('visible', false);
     nextButton.option('text', 'Reset');
-    setStepValidationResult(itemsCount - 1, true);
-    stepContent.repaint();
+    setStepValidationResult(stepsCount - 1, true);
     $('.current-step').text('');
   };
 
@@ -28,29 +21,35 @@ $(() => {
     stepper.option(`items[${index}].isValid`, isValid);
   };
 
+  const moveNext = (selectedIndex) => {
+    const isValid = getValidationResult(selectedIndex);
+
+    setStepValidationResult(selectedIndex, isValid);
+
+    if (isValid) {
+      setSelectedIndex(selectedIndex + 1);
+    }
+  };
+
   const resetStepperState = () => {
     stepper.beginUpdate();
 
     stepper.option('selectedIndex', 0);
 
-    for (let i = 0; i < itemsCount; i += 1) {
+    for (let i = 0; i < stepsCount; i += 1) {
       setStepValidationResult(i, undefined);
     }
 
     stepper.endUpdate();
   };
 
-  const resetFormData = () => {
-    $('#form').dxForm('instance').updateData(cloneFormData());
-  };
-
   const reset = () => {
     confirmed = false;
 
     resetStepperState();
-    resetFormData();
-    stepContent.repaint();
-    $('.current-step').append(`Step <span class="selected-index">1</span> of <span class="step-count">${itemsCount}</span>`);
+    formData = getInitialFormData();
+    stepContent.option('items', multiViewItems);
+    $('.current-step').append(`Step <span class="selected-index">1</span> of <span class="step-count">${stepsCount}</span>`);
   };
 
   const prevButton = $('#prevButton').dxButton({
@@ -72,12 +71,16 @@ $(() => {
     onClick: () => {
       const selectedIndex = stepper.option('selectedIndex');
 
-      if (selectedIndex < itemsCount - 1) {
-        setSelectedIndex(selectedIndex + 1);
+      if (selectedIndex < stepsCount - 1) {
+        moveNext(selectedIndex);
       } else if (confirmed) {
         reset();
       } else {
         confirm();
+      }
+
+      if (stepper.option('selectedIndex') === stepsCount - 1) {
+        stepContent.option('items[4].template', getConfirmationTemplate());
       }
     },
   }).dxButton('instance');
@@ -91,10 +94,10 @@ $(() => {
   };
 
   const stepper = $('#stepper').dxStepper({
-    items,
+    items: initialSteps,
     onSelectionChanged(e) {
       const selectedIndex = e.component.option('selectedIndex');
-      const isLastStep = selectedIndex === itemsCount - 1;
+      const isLastStep = selectedIndex === stepsCount - 1;
 
       prevButton.option('visible', !!selectedIndex);
       nextButton.option('text', isLastStep ? 'Confirm' : 'Next');
@@ -122,21 +125,21 @@ $(() => {
 
         if (isValid === false) {
           args.cancel = true;
-          setSelectedIndex(removedIndex);
         }
       }
     },
   }).dxStepper('instance');
 
-  const datesForm = () => $('<div>').append(
+  const getDatesForm = () => () => $('<div>').append(
     $('<p>').text('Select your check-in and check-out dates. If your dates are flexible, include that information in Additional Requests. We will do our best to suggest best pricing options, depending on room availability.'),
-    $('<div id="form">').dxForm({
+    $('<div>').dxForm({
       formData,
       validationGroup: validationGroups[0],
       items: [{
         dataField: 'dates',
         editorType: 'dxDateRangeBox',
         editorOptions: {
+          elementAttr: { id: 'datesPicker' },
           startDatePlaceholder: 'Check-in',
           endDatePlaceholder: 'Check-out',
         },
@@ -147,11 +150,16 @@ $(() => {
     }),
   );
 
-  const guestsForm = () => {
+  const getGuestsForm = () => () => {
     const getNumberBoxOptions = (options) => ({
       editorType: 'dxNumberBox',
-      editorOptions: { showSpinButtons: true, min: 0, max: 5 },
       ...options,
+      editorOptions: {
+        showSpinButtons: true,
+        min: 0,
+        max: 5,
+        ...options.editorOptions,
+      },
       label: {
         location: 'top',
         ...options.label,
@@ -170,6 +178,9 @@ $(() => {
             dataField: 'adultsCount',
             isRequired: true,
             label: { text: 'Adults' },
+            editorOptions: {
+              elementAttr: { id: 'adultsCount' },
+            },
             validationRules: [{
               type: 'range',
               min: 1,
@@ -188,7 +199,7 @@ $(() => {
     );
   };
 
-  const roomAndMealForm = () => {
+  const getRoomAndMealForm = () => () => {
     const getSelectBoxOptions = (options) => ({
       editorType: 'dxSelectBox',
       isRequired: true,
@@ -210,12 +221,18 @@ $(() => {
         items: [
           getSelectBoxOptions({
             dataField: 'roomType',
-            editorOptions: { items: roomTypes },
+            editorOptions: {
+              items: roomTypes,
+              elementAttr: { id: 'roomType' },
+            },
             label: { text: 'Room Type' },
           }),
           getSelectBoxOptions({
             dataField: 'mealPlan',
-            editorOptions: { items: mealPlans },
+            editorOptions: {
+              items: mealPlans,
+              elementAttr: { id: 'mealPlan' },
+            },
             label: { text: 'Meal Plan' },
           }),
         ],
@@ -223,7 +240,7 @@ $(() => {
     );
   };
 
-  const additionalRequestsForm = () => $('<div>').append(
+  const getAdditionalRequestsForm = () => () => $('<div>').append(
     $('<div>').text('Please let us know if you have any other requests.'),
     $('<div>').dxForm({
       formData,
@@ -231,14 +248,17 @@ $(() => {
         {
           dataField: 'additionalRequest',
           editorType: 'dxTextArea',
-          editorOptions: { height: 160 },
+          editorOptions: {
+            height: 160,
+            elementAttr: { id: 'additionalRequest' },
+          },
           label: { visible: false },
         },
       ],
     }),
   );
 
-  const summary = () => {
+  const getConfirmationTemplate = () => () => {
     if (confirmed) {
       return '<div class="summary-item-header center">Your booking request was submitted.</div>';
     }
@@ -290,18 +310,20 @@ $(() => {
     return summaryContainer;
   };
 
+  const multiViewItems = [
+    { template: getDatesForm() },
+    { template: getGuestsForm() },
+    { template: getRoomAndMealForm() },
+    { template: getAdditionalRequestsForm() },
+    { template: getConfirmationTemplate() },
+  ];
+
   const stepContent = $('#stepContent').dxMultiView({
     animationEnabled: false,
     swipeEnabled: false,
     height: 300,
-    items: [
-      { template: datesForm },
-      { template: guestsForm },
-      { template: roomAndMealForm },
-      { template: additionalRequestsForm },
-      { template: summary },
-    ],
+    items: multiViewItems,
   }).dxMultiView('instance');
 
-  $('.step-count').text(itemsCount);
+  $('.step-count').text(stepsCount);
 });

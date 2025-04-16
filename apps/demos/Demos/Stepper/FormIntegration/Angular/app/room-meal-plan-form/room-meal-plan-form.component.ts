@@ -34,9 +34,11 @@ export class RoomMealPlanFormComponent {
 
   mealSelectBoxOptions: DxSelectBoxTypes.Properties = {
     items: this.mealPlans,
+    elementAttr: { id: 'mealPlan' },
   };
 
   roomSelectBoxOptions: DxSelectBoxTypes.Properties = {
     items: this.roomTypes,
+    elementAttr: { id: 'roomType' },
   }
 }

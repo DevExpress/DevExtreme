@@ -1,8 +1,8 @@
-import React, { forwardRef } from 'react';
+import React, { memo } from 'react';
 import 'devextreme-react/date-range-box';
 import { Form, RequiredRule, SimpleItem } from 'devextreme-react/form';
 
-const DatesForm = forwardRef(({ formData, validationGroup }, ref) => (
+const DatesForm = memo(({ formData, validationGroup }) => (
   <React.Fragment>
     <p>
       Select your check-in and check-out dates. If your dates are flexible, include that information
@@ -12,7 +12,6 @@ const DatesForm = forwardRef(({ formData, validationGroup }, ref) => (
     <Form
       formData={formData}
       validationGroup={validationGroup}
-      ref={ref}
     >
       <SimpleItem
         isRequired
@@ -21,6 +20,7 @@ const DatesForm = forwardRef(({ formData, validationGroup }, ref) => (
         editorOptions={{
           startDatePlaceholder: 'Check-in',
           endDatePlaceholder: 'Check-out',
+          elementAttr: { id: 'datesPicker' },
         }}
         label={{ visible: false }}
       >

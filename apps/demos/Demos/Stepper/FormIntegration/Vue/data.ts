@@ -32,3 +32,10 @@ export const initialFormData: BookingFormData = {
   mealPlan: undefined,
   additionalRequest: '',
 };
+
+export const getInitialSteps = () => initialSteps.map((item) => ({ ...item }));
+
+export const getInitialFormData = () => ({
+  ...initialFormData,
+  dates: [...initialFormData.dates],
+});

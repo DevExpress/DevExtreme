@@ -39,5 +39,6 @@ const labelOptions = {
 const dateRangeBoxOptions = {
   startDatePlaceholder: 'Check-in',
   endDatePlaceholder: 'Check-out',
+  elementAttr: { id: 'datesPicker' },
 };
 </script>

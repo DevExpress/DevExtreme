@@ -1,6 +1,4 @@
-import React, {
-  useState, useCallback, useRef, useMemo,
-} from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import { Stepper, Item } from 'devextreme-react/stepper';
 import Button from 'devextreme-react/button';
 import { MultiView } from 'devextreme-react/multi-view';
@@ -10,22 +8,24 @@ import GuestsForm from './GuestsForm.js';
 import RoomMealPlanForm from './RoomMealPlanForm.js';
 import AdditionalForm from './AdditionalForm.js';
 import Confirmation from './Confirmation.js';
-import { initialSteps, initialFormData } from './data.js';
+import { initialSteps, getInitialFormData } from './data.js';
 
-const cloneFormData = () => ({
-  ...initialFormData,
-  dates: [...initialFormData.dates],
-});
-const formData = cloneFormData();
 const validationGroups = ['dates', 'guests', 'roomAndMealPlan'];
 export default function App() {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [steps, setSteps] = useState(initialSteps);
+  const [formData, setFormData] = useState(getInitialFormData);
   const [isConfirmed, setIsConfirmed] = useState(false);
-  const formRef = useRef(null);
   const onPrevButtonClick = useCallback(() => {
     setSelectedIndex((prev) => prev - 1);
   }, []);
+  const moveNext = useCallback(() => {
+    const isValid = getValidationResult(selectedIndex);
+    setStepValidationResult(selectedIndex, isValid);
+    if (isValid) {
+      setSelectedIndex(selectedIndex + 1);
+    }
+  }, [selectedIndex]);
   const onConfirm = useCallback(() => {
     setIsConfirmed(true);
     setStepValidationResult(initialSteps.length - 1, true);
@@ -34,12 +34,11 @@ export default function App() {
     setIsConfirmed(false);
     setSteps(initialSteps);
     setSelectedIndex(0);
-    formRef.current.instance().updateData(cloneFormData());
-    validationEngine.resetGroup(validationGroups[0]);
+    setFormData(getInitialFormData);
   }, []);
   const onNextButtonClick = useCallback(() => {
     if (selectedIndex < initialSteps.length - 1) {
-      setSelectedIndex((prev) => prev + 1);
+      moveNext();
     } else if (isConfirmed) {
       onReset();
     } else {
@@ -89,7 +88,6 @@ export default function App() {
         setStepValidationResult(removedIndex, isValid);
         if (isValid === false) {
           args.cancel = true;
-          setSelectedIndex(removedIndex);
         }
       }
     },
@@ -98,6 +96,31 @@ export default function App() {
   const onSelectionChanged = useCallback(({ component }) => {
     setSelectedIndex(component.option('selectedIndex') ?? 0);
   }, []);
+  const renderDatesForm = useCallback(() => (
+    <DatesForm
+      formData={formData}
+      validationGroup={validationGroups[0]}
+    />
+  ), [formData]);
+  const renderGuestsForm = useCallback(() => (
+    <GuestsForm
+      formData={formData}
+      validationGroup={validationGroups[1]}
+    />
+  ), [formData]);
+  const renderRoomMealPlanForm = useCallback(() => (
+    <RoomMealPlanForm
+      formData={formData}
+      validationGroup={validationGroups[2]}
+    />
+  ), [formData]);
+  const renderAdditionalForm = useCallback(() => <AdditionalForm formData={formData} />, [formData]);
+  const renderConfirmation = useCallback(() => (
+    <Confirmation
+      formData={formData}
+      isConfirmed={isConfirmed}
+    />
+  ), [formData, isConfirmed]);
   return (
     <React.Fragment>
       <Stepper
@@ -120,40 +143,11 @@ export default function App() {
           swipeEnabled={false}
           height={300}
         >
-          <Item
-            render={() => (
-              <DatesForm
-                ref={formRef}
-                formData={formData}
-                validationGroup={validationGroups[0]}
-              />
-            )}
-          />
-          <Item
-            render={() => (
-              <GuestsForm
-                formData={formData}
-                validationGroup={validationGroups[1]}
-              />
-            )}
-          />
-          <Item
-            render={() => (
-              <RoomMealPlanForm
-                formData={formData}
-                validationGroup={validationGroups[2]}
-              />
-            )}
-          />
-          <Item render={() => <AdditionalForm formData={formData} />} />
-          <Item
-            render={() => (
-              <Confirmation
-                formData={formData}
-                isConfirmed={isConfirmed}
-              />
-            )}
-          />
+          <Item render={renderDatesForm} />
+          <Item render={renderGuestsForm} />
+          <Item render={renderRoomMealPlanForm} />
+          <Item render={renderAdditionalForm} />
+          <Item render={renderConfirmation} />
         </MultiView>
 
         <div className="nav-panel">
@@ -169,16 +163,20 @@ export default function App() {
 
           <div className="nav-buttons">
             <Button
+              id="prevButton"
               text="Back"
               type="normal"
               onClick={onPrevButtonClick}
               visible={selectedIndex !== 0 && !isConfirmed}
+              width={100}
             />
 
             <Button
+              id="nextButton"
               text={nextButtonText}
               type="default"
               onClick={onNextButtonClick}
+              width={100}
             />
           </div>
         </div>

@@ -20,7 +20,10 @@ const RoomMealPlanForm = memo(({ formData, validationGroup }) => (
         isRequired
         editorType="dxSelectBox"
         label={{ text: 'Room Type', location: 'top' }}
-        editorOptions={{ items: roomTypes }}
+        editorOptions={{
+          items: roomTypes,
+          elementAttr: { id: 'roomType' },
+        }}
       >
         <RequiredRule />
       </SimpleItem>
@@ -29,7 +32,10 @@ const RoomMealPlanForm = memo(({ formData, validationGroup }) => (
         isRequired
         editorType="dxSelectBox"
         label={{ text: 'Meal Plan', location: 'top' }}
-        editorOptions={{ items: mealPlans }}
+        editorOptions={{
+          items: mealPlans,
+          elementAttr: { id: 'mealPlan' },
+        }}
       >
         <RequiredRule />
       </SimpleItem>

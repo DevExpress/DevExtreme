@@ -1,9 +1,16 @@
 <template>
   <DxStepper
-    :items="items"
     v-model:selected-index="selectedIndex"
     @selection-changing="onSelectionChanging"
-  />
+  >
+    <DxStepperItem
+      v-for="item of steps"
+      :label="item.label"
+      :icon="item.icon"
+      :is-valid="item.isValid"
+      :hint="item.hint"
+    />
+  </DxStepper>
   <div class="content">
     <DxMultiView
       v-model:selected-index="selectedIndex"
@@ -11,61 +18,67 @@
       :swipe-enabled="false"
       :height="300"
     >
-      <DxItem>
+      <DxMultiViewItem>
         <template #default>
           <DatesTemplate
             :form-data="formData"
             :validation-group="validationGroups[0]"
           />
         </template>
-      </DxItem>
-      <DxItem>
+      </DxMultiViewItem>
+      <DxMultiViewItem>
         <template #default>
           <GuestsTemplate
             :form-data="formData"
             :validation-group="validationGroups[1]"
           />
         </template>
-      </DxItem>
-      <DxItem>
+      </DxMultiViewItem>
+      <DxMultiViewItem>
         <template #default>
           <RoomMealPlanTemplate
             :form-data="formData"
             :validation-group="validationGroups[2]"
           />
         </template>
-      </DxItem>
-      <DxItem>
+      </DxMultiViewItem>
+      <DxMultiViewItem>
         <template #default>
           <AdditionalTemplate :form-data="formData"/>
         </template>
-      </DxItem>
-      <DxItem>
+      </DxMultiViewItem>
+      <DxMultiViewItem>
         <template #default>
           <ConfirmationTemplate
             :form-data="formData"
             v-model:is-confirmed="isConfirmed"
           />
         </template>
-      </DxItem>
+      </DxMultiViewItem>
     </DxMultiView>
     <div class="nav-panel">
       <div class="current-step">
         <span v-if="!isConfirmed">
-          Step <span class="selected-index">{{ selectedIndex + 1 }}</span> of <span class="step-count">{{ items.length }}</span>
+          Step <span class="selected-index">{{ selectedIndex + 1 }}</span> of <span class="step-count">{{
+            steps.length
+          }}</span>
         </span>
       </div>
       <div class="nav-buttons">
         <DxButton
+          id="prevButton"
           :visible="selectedIndex !== 0 && !isConfirmed"
           text="Back"
           type="normal"
           @click="onPrevButtonClick"
+          :width="100"
         />
         <DxButton
+          id="nextButton"
           :text="nextButtonText"
           type="default"
           @click="onNextButtonClick"
+          :width="100"
         />
       </div>
     </div>
@@ -75,8 +88,8 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
 import DxButton from 'devextreme-vue/button';
-import DxMultiView, { DxItem } from 'devextreme-vue/multi-view';
-import DxStepper from 'devextreme-vue/stepper';
+import DxMultiView, { DxItem as DxMultiViewItem } from 'devextreme-vue/multi-view';
+import DxStepper, { DxItem as DxStepperItem } from 'devextreme-vue/stepper';
 import type { IItemProps } from 'devextreme-react/cjs/stepper';
 import type { SelectionChangingEvent } from 'devextreme/ui/stepper';
 import validationEngine from 'devextreme/ui/validation_engine';
@@ -85,24 +98,18 @@ import GuestsTemplate from './GuestsTemplate.vue';
 import RoomMealPlanTemplate from './RoomMealPlanTemplate.vue';
 import AdditionalTemplate from './AdditionalTemplate.vue';
 import ConfirmationTemplate from './ConfirmationTemplate.vue';
-import { initialSteps, initialFormData } from './data.ts';
+import { getInitialSteps, getInitialFormData } from './data.ts';
 import type { BookingFormData } from './types';
-
-const cloneItems = () => initialSteps.map((item) => ({ ...item }));
-const cloneFormData = () => ({
-  ...initialFormData,
-  dates: [...initialFormData.dates],
-});
 
 const selectedIndex = ref(0);
 const isConfirmed = ref(false);
-const items = ref<IItemProps[]>(cloneItems());
-const formData = ref<BookingFormData>(cloneFormData());
+const steps = ref<IItemProps[]>(getInitialSteps());
+const formData = ref<BookingFormData>(getInitialFormData());
 
 const validationGroups = ['dates', 'guests', 'roomAndMealPlan'];
 
 const nextButtonText = computed(() => {
-  if (selectedIndex.value < items.value.length - 1) {
+  if (selectedIndex.value < steps.value.length - 1) {
     return 'Next';
   }
 
@@ -118,18 +125,7 @@ const getValidationResult = (index: number) => {
 };
 
 const setStepValidationResult = (index: number, isValid: boolean | undefined) => {
-  const prev = items.value;
-
-  items.value = prev.map((item, i) => {
-    if (i === index) {
-      return {
-        ...item,
-        isValid,
-      };
-    }
-
-    return item;
-  });
+  steps.value[index].isValid = isValid;
 };
 
 function onSelectionChanging(e: SelectionChangingEvent) {
@@ -174,19 +170,19 @@ const moveNext = () => {
 const reset = () => {
   isConfirmed.value = false;
   selectedIndex.value = 0;
-  formData.value = cloneFormData();
+  steps.value = getInitialSteps();
+  formData.value = getInitialFormData();
   validationEngine.resetGroup(validationGroups[0]);
   validationEngine.resetGroup(validationGroups[1]);
-  items.value = cloneItems();
 };
 
 const confirm = () => {
   isConfirmed.value = true;
-  setStepValidationResult(items.value.length - 1, true);
+  setStepValidationResult(selectedIndex.value, true);
 };
 
 function onNextButtonClick() {
-  if (selectedIndex.value < items.value.length - 1) {
+  if (selectedIndex.value < steps.value.length - 1) {
     moveNext();
   } else if (isConfirmed.value) {
     reset();
@@ -203,7 +199,7 @@ function onNextButtonClick() {
   justify-content: center;
   row-gap: 20px;
   height: 480px;
-  min-width: 420px;
+  min-width: 620px;
   padding: 40px 20px;
 }
 

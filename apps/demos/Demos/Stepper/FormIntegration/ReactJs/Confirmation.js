@@ -1,7 +1,7 @@
-import React, { memo } from 'react';
+import React from 'react';
 import 'devextreme-react/date-range-box';
 
-const Confirmation = memo(({ formData, isConfirmed }) => {
+const Confirmation = ({ formData, isConfirmed }) => {
   if (isConfirmed) {
     return <div className="summary-item-header center">Your booking request was submitted.</div>;
   }
@@ -11,11 +11,11 @@ const Confirmation = memo(({ formData, isConfirmed }) => {
         <div className="summary-item-header">Dates</div>
         <div className="separator"></div>
         <div>
-          <span className="summary-item-label">Check-in Date: </span>$
+          <span className="summary-item-label">Check-in Date: </span>
           {new Date(formData.dates[0]).toLocaleDateString()}
         </div>
         <div>
-          <span className="summary-item-label">Check-out Date: </span>$
+          <span className="summary-item-label">Check-out Date: </span>
           {new Date(formData.dates[1]).toLocaleDateString()}
         </div>
       </div>
@@ -24,13 +24,16 @@ const Confirmation = memo(({ formData, isConfirmed }) => {
         <div className="summary-item-header">Guests</div>
         <div className="separator"></div>
         <div>
-          <span className="summary-item-label">Adults: </span>${formData.adultsCount}
+          <span className="summary-item-label">Adults: </span>
+          {formData.adultsCount}
         </div>
         <div>
-          <span className="summary-item-label">Children: </span>${formData.childrenCount}
+          <span className="summary-item-label">Children: </span>
+          {formData.childrenCount}
         </div>
         <div>
-          <span className="summary-item-label">Pets: </span>${formData.petsCount}
+          <span className="summary-item-label">Pets: </span>
+          {formData.petsCount}
         </div>
       </div>
 
@@ -38,10 +41,12 @@ const Confirmation = memo(({ formData, isConfirmed }) => {
         <div className="summary-item-header">Room and Meals</div>
         <div className="separator"></div>
         <div>
-          <span className="summary-item-label">Room Type: </span>${formData.roomType}
+          <span className="summary-item-label">Room Type: </span>
+          {formData.roomType}
         </div>
         <div>
-          <span className="summary-item-label">Check-out Date: </span>${formData.mealPlan}
+          <span className="summary-item-label">Check-out Date: </span>
+          {formData.mealPlan}
         </div>
       </div>
 
@@ -49,11 +54,11 @@ const Confirmation = memo(({ formData, isConfirmed }) => {
         <div className="summary-item">
           <div className="summary-item-header">Additional Requests</div>
           <div className="separator"></div>
-          <div>${formData.additionalRequest}</div>
+          <div>{formData.additionalRequest}</div>
         </div>
       )}
     </div>
   );
-});
+};
 Confirmation.displayName = 'Confirmation';
 export default Confirmation;

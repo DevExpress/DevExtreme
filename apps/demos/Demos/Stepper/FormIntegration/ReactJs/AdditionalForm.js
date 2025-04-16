@@ -9,7 +9,10 @@ const AdditionalForm = memo(({ formData }) => (
       <SimpleItem
         dataField="additionalRequest"
         editorType="dxTextArea"
-        editorOptions={{ height: 160 }}
+        editorOptions={{
+          height: 160,
+          elementAttr: { id: 'additionalRequest' },
+        }}
         label={{ visible: false }}
       ></SimpleItem>
     </Form>

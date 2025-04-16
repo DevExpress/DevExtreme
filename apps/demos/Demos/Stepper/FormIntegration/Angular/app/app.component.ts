@@ -1,17 +1,15 @@
-import { NgModule, Component, enableProdMode, ViewChild } from '@angular/core';
+import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import {
   DxStepperModule,
   DxButtonModule,
   DxMultiViewModule,
-  DxTemplateModule,
   DxFormModule,
   DxDateRangeBoxModule,
   DxNumberBoxModule,
   DxSelectBoxModule,
   DxTextAreaModule,
-  DxStepperComponent,
 } from 'devextreme-angular';
 import type { Item, SelectionChangingEvent } from 'devextreme/ui/stepper';
 import validationEngine from "devextreme/ui/validation_engine";
@@ -39,38 +37,36 @@ if (window && window.config?.packageConfigPaths) {
   styleUrls: [`.${modulePrefix}/app.component.css`],
 })
 export class AppComponent {
-  @ViewChild("stepper", { static: false }) stepper: DxStepperComponent
-
   steps: Item[];
-  selectedIndex: number;
-  isConfirmed: boolean;
+
   formData: BookingFormData;
+
+  selectedIndex: number;
+
+  isConfirmed: boolean;
 
   validationGroups = ['dates', 'guests', 'roomAndMealPlan'];
 
   constructor(private readonly appService: AppService) {
     this.steps = this.appService.getInitialSteps();
+    this.formData = this.appService.getInitialFormData();
     this.selectedIndex = 0;
     this.isConfirmed = false;
-    this.formData = this.appService.getInitialFormData();
 
     this.getNextButtonText = this.getNextButtonText.bind(this);
   }
 
-  getValidationResult = (index: number) => {
+  getValidationResult(index: number){
     if (index >= this.validationGroups.length) {
       return true;
     }
 
     return validationEngine.validateGroup(this.validationGroups[index]).isValid;
-  };
+  }
 
-  setStepValidationResult = (index: number, isValid: boolean | undefined) => {
-    this.steps[index] = {
-      ...this.steps[index],
-      isValid,
-    };
-  };
+  setStepValidationResult(index: number, isValid: boolean | undefined){
+    this.steps[index].isValid = isValid;
+  }
 
   onSelectionChanging(e: SelectionChangingEvent) {
     if (this.isConfirmed) {
@@ -84,7 +80,7 @@ export class AppComponent {
 
     const addedIndex = items.findIndex((item: Item) => item === addedItems[0]);
     const removedIndex = items.findIndex((item: Item) => item === removedItems[0]);
-    const isMoveForward = addedIndex > removedIndex;
+    const isMoveForward = removedIndex > -1 && addedIndex > removedIndex;
 
     if (isMoveForward) {
       const isValid = this.getValidationResult(removedIndex);
@@ -109,7 +105,7 @@ export class AppComponent {
     this.selectedIndex -= 1;
   }
 
-  moveNext = () => {
+  moveNext() {
     const isValid = this.getValidationResult(this.selectedIndex);
 
     this.setStepValidationResult(this.selectedIndex, isValid);
@@ -117,21 +113,21 @@ export class AppComponent {
     if (isValid) {
       this.selectedIndex += 1;
     }
-  };
+  }
 
-  reset = () => {
+  reset(){
     this.isConfirmed = false;
     this.selectedIndex = 0;
     this.steps = this.appService.getInitialSteps();
     this.formData = this.appService.getInitialFormData();
     validationEngine.resetGroup(this.validationGroups[0]);
     validationEngine.resetGroup(this.validationGroups[1]);
-  };
+  }
 
-  confirm = () => {
+  confirm(){
     this.isConfirmed = true;
-    this.setStepValidationResult(this.steps.length - 1, true);
-  };
+    this.setStepValidationResult(this.selectedIndex, true);
+  }
 
   onNextButtonClick() {
     if (this.selectedIndex < this.steps.length - 1) {
@@ -150,7 +146,6 @@ export class AppComponent {
     DxStepperModule,
     DxButtonModule,
     DxMultiViewModule,
-    DxTemplateModule,
     DxFormModule,
     DxDateRangeBoxModule,
     DxNumberBoxModule,

@@ -18,7 +18,12 @@ const GuestsForm = memo(({ formData, validationGroup }) => (
         isRequired
         dataField="adultsCount"
         editorType="dxNumberBox"
-        editorOptions={{ showSpinButtons: true, min: 0, max: 5 }}
+        editorOptions={{
+          elementAttr: { id: 'adultsCount' },
+          showSpinButtons: true,
+          min: 0,
+          max: 5,
+        }}
         label={{ text: 'Adults', location: 'top' }}
       >
         <RangeRule min={1} />

@@ -37,3 +37,7 @@ export const initialFormData = {
   mealPlan: undefined,
   additionalRequest: '',
 };
+export const getInitialFormData = () => ({
+  ...initialFormData,
+  dates: [...initialFormData.dates],
+});
