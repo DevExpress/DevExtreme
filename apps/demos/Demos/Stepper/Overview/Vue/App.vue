@@ -16,7 +16,7 @@
             id="icons"
             :element-attr="{ 'aria-labelledby': 'iconsLabel' }"
             :selected-index="2"
-            :orientation="orientation"
+            :orientation="orientation as Orientation"
             :linear="navigationMode"
             :select-on-focus="selectOnFocus"
             :rtl-enabled="rtlMode"
@@ -60,7 +60,7 @@
             id="numbers"
             :element-attr="{ 'aria-labelledby': 'numbersLabel' }"
             :selected-index="2"
-            :orientation="orientation"
+            :orientation="orientation as Orientation"
             :linear="navigationMode"
             :select-on-focus="selectOnFocus"
             :rtl-enabled="rtlMode"
@@ -95,7 +95,7 @@
             id="customText"
             :element-attr="{ 'aria-labelledby': 'customTextLabel' }"
             :selected-index="2"
-            :orientation="orientation"
+            :orientation="orientation as Orientation"
             :linear="navigationMode"
             :select-on-focus="selectOnFocus"
             :rtl-enabled="rtlMode"
@@ -168,6 +168,7 @@ import { ref } from 'vue';
 import { DxStepper, DxItem } from 'devextreme-vue/stepper';
 import DxButtonGroup, { type DxButtonGroupTypes } from 'devextreme-vue/button-group';
 import DxCheckBox from 'devextreme-vue/check-box';
+import { type Orientation } from 'devextreme-react/common';
 import { steps, orientations, navigationModes } from './data.ts';
 
 const orientation = ref(orientations[0].value);
