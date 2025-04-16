@@ -1,9 +1,6 @@
-/* eslint-disable spellcheck/spell-checker */
 import { compileGetter } from '@js/core/utils/data';
 import { captionize } from '@js/core/utils/inflector';
 import { isDefined, isString } from '@js/core/utils/type';
-import type { Subscribable, SubsGetsUpd } from '@ts/core/reactive/index';
-import { interruptableComputed } from '@ts/core/reactive/index';
 import type { ComponentType } from 'inferno';
 
 import type { Template } from '../types';
@@ -158,11 +155,21 @@ export function getColumnByIndexOrName(
   return column;
 }
 
-export function getActualColumnSettings(
-  columnsConfiguration: Subscribable<ColumnProperties[] | undefined>,
-): SubsGetsUpd<PreNormalizedColumn[]> {
-  return interruptableComputed(
-    (columnsConfig) => preNormalizeColumns(columnsConfig ?? []),
-    [columnsConfiguration],
-  );
+export function generateColumnsIfNeeded(
+  columnsSettings: PreNormalizedColumn[] | null | undefined,
+  columnsConfiguration: unknown,
+  firstItem: Record<string, unknown> | null,
+): unknown {
+  const userDefinedColumns = Array.isArray(columnsConfiguration);
+
+  if ((!columnsSettings || columnsSettings.length === 0) && !userDefinedColumns && firstItem) {
+    return Object.keys(firstItem).map((key, index) => ({
+      name: key,
+      dataField: key,
+      visible: true,
+      visibleIndex: index,
+    }));
+  }
+
+  return columnsSettings ?? [];
 }

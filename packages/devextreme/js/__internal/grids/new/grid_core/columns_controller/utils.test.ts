@@ -1,7 +1,6 @@
 import { describe, expect, it } from '@jest/globals';
-import { state } from '@ts/core/reactive/index';
 
-import { getActualColumnSettings, getVisibleIndexes, preNormalizeColumns } from './utils';
+import { getVisibleIndexes } from './utils';
 
 describe('getVisibleIndexes', () => {
   it('should create visible indexes if not present', () => {
@@ -26,31 +25,5 @@ describe('getVisibleIndexes', () => {
     ])).toEqual([
       3, 1, 0, 2,
     ]);
-  });
-});
-describe('getActualColumnSettings', () => {
-  it('should compute pre-normalized columns from configuration', () => {
-    const columnsConfig = state([
-      { dataField: 'id' },
-      { name: 'username', dataField: 'user_name', visibleIndex: 2 },
-    ]);
-
-    const actualColumnSettings = getActualColumnSettings(columnsConfig);
-
-    const expected = preNormalizeColumns([
-      { dataField: 'id' },
-      { name: 'username', dataField: 'user_name', visibleIndex: 2 },
-    ]);
-
-    // @ts-expect-error
-    expect(actualColumnSettings.value).toEqual(expected);
-  });
-
-  it('should return empty array if configuration is undefined', () => {
-    const columnsConfig = state(undefined);
-    const actualColumnSettings = getActualColumnSettings(columnsConfig);
-
-    // @ts-expect-error
-    expect(actualColumnSettings.value).toEqual([]);
   });
 });

@@ -10,7 +10,7 @@ import { OptionsController } from '../options_controller/options_controller';
 import type { ColumnProperties, ColumnSettings, PreNormalizedColumn } from './options';
 import type { Column, VisibleColumn } from './types';
 import {
-  getActualColumnSettings,
+  generateColumnsIfNeeded,
   getColumnIndexByName,
   normalizeColumns,
   normalizeVisibleIndexes,
@@ -41,23 +41,24 @@ export class ColumnsController {
   ) {
     this.columnsConfiguration = this.options.oneWay('columns');
     this.headerFilterConfiguration = this.options.oneWay('headerFilter');
-    this.columnsSettings = getActualColumnSettings(this.columnsConfiguration);
+    this.columnsSettings = interruptableComputed(
+      (columnsConfiguration) => preNormalizeColumns(columnsConfiguration ?? []),
+      [
+        this.columnsConfiguration,
+      ],
+    );
 
     this.columns = computed(
-      (columnsSettings, headerFilterRootOptions, firstItem) => {
-        let finalColumns = columnsSettings;
-
-        if ((!finalColumns || finalColumns.length === 0) && firstItem) {
-          finalColumns = Object.keys(firstItem).map((key, index) => ({
-            name: key,
-            dataField: key,
-            visible: true,
-            visibleIndex: index,
-          }));
-        }
+      (columnsSettings, headerFilterRootOptions, firstItem, columnsConfiguration) => {
+        const initialColumns = generateColumnsIfNeeded(
+          columnsSettings,
+          columnsConfiguration,
+          firstItem,
+        );
 
         return normalizeColumns(
-          finalColumns ?? [],
+          // @ts-expect-error
+          initialColumns ?? [],
           this.options.normalizeTemplate.bind(this.options),
         // eslint-disable-next-line @stylistic/max-len
         ).map((column) => headerFilterUtils.mergeColumnHeaderFilterOptions(column, headerFilterRootOptions));
@@ -66,6 +67,7 @@ export class ColumnsController {
         this.columnsSettings,
         this.headerFilterConfiguration,
         this.firstItem,
+        this.columnsConfiguration,
       ],
     );
 

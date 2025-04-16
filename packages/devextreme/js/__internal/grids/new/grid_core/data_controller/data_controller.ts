@@ -9,6 +9,7 @@ import {
 } from '@ts/core/reactive/index';
 import { createPromise } from '@ts/core/utils/promise';
 
+import { ColumnsController } from '../columns_controller/columns_controller';
 import { FilterController } from '../filtering/filter_controller';
 import { OptionsController } from '../options_controller/options_controller';
 import { SearchController } from '../search/index';
@@ -84,6 +85,7 @@ export class DataController {
   );
 
   public static dependencies = [
+    ColumnsController,
     OptionsController, SortingController,
     FilterController, SearchController,
   ] as const;
