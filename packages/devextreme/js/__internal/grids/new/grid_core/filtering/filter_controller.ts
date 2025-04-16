@@ -52,6 +52,8 @@ export class FilterController {
     ],
   );
 
+  public clearFilterContext: unknown = null;
+
   constructor(
     private readonly options: OptionsController,
     private readonly columnsController: ColumnsController,
@@ -60,6 +62,6 @@ export class FilterController {
   public clearFilterCallback = (): void => {};
 
   public clearFilter(): void {
-    this.clearFilterCallback();
+    this.clearFilterCallback.call(this.clearFilterContext);
   }
 }

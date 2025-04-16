@@ -23,6 +23,7 @@ export class ClearFilterVisitor {
     private readonly filterController: FilterController,
   ) {
     this.filterController.clearFilterCallback = this.clearFilters;
+    this.filterController.clearFilterContext = this;
   }
 
   public clearFilters(): void {
