@@ -1,5 +1,5 @@
 import type { CompatibilityColumnsController } from './columns_controller/compatibility';
-import type { CompatibilityDataController } from './data_controller/index';
+import type { CompatibilityDataController } from './data_controller';
 import type { GridCoreNewBase } from './widget';
 
 export class WidgetMock {

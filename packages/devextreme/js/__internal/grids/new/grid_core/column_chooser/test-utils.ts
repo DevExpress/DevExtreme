@@ -2,8 +2,8 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { expect } from '@jest/globals';
 
-import { ContextMenuController } from '../../card_view/context_menu/index';
-import { ColumnsController } from '../columns_controller/index';
+import { ContextMenuController } from '../../card_view/context_menu';
+import { ColumnsController } from '../columns_controller';
 import type { Options } from '../options';
 import { OptionsControllerMock } from '../options_controller/options_controller.mock';
 import { ToolbarController } from '../toolbar/controller';
