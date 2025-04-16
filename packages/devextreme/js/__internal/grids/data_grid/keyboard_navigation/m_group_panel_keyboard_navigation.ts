@@ -1,7 +1,10 @@
+import { name as clickEventName } from '@js/common/core/events/click';
+import eventsEngine from '@js/common/core/events/core/events_engine';
 import {
   isCommandKeyPressed,
 } from '@js/common/core/events/utils/index';
 import $ from '@js/core/renderer';
+import { hiddenFocus } from '@js/ui/shared/accessibility';
 import { Direction } from '@ts/grids/grid_core/keyboard_navigation/const';
 import { KeyboardNavigationController as KeyboardNavigationControllerCore } from '@ts/grids/grid_core/keyboard_navigation/m_keyboard_navigation_core';
 import type { Views } from '@ts/grids/grid_core/m_types';
@@ -10,14 +13,44 @@ import { CLASSES as GROUPING_CLASSES } from '../grouping/const';
 import gridCore from '../m_core';
 
 export class GroupPanelKeyboardNavigationController extends KeyboardNavigationControllerCore {
-  protected headerPanel!: Views['headerPanel'];
+  private isNeedToHiddenFocus = false;
+
+  private groupItemClickHandlerContext!: (event: any) => void;
+
+  private headerPanel!: Views['headerPanel'];
 
   private isGroupColumnValidForReordering(groupColumn, direction: Direction): boolean {
     const groupedColumns = this._columnsController.getGroupColumns();
 
+    if (!groupColumn) {
+      return false;
+    }
+
     return direction === Direction.Next
       ? groupColumn.index !== groupedColumns[groupedColumns.length - 1].index
       : groupColumn.index !== groupedColumns[0].index;
+  }
+
+  private groupItemClickHandler(e) {
+    const groupColumn: any = $(e.originalEvent.target).data('columnData');
+
+    this.isNeedToHiddenFocus = this._columnsController?.allowColumnSorting(groupColumn);
+  }
+
+  private unsubscribeFromGroupItemClick() {
+    const $focusedView = this.getFocusedViewElement();
+
+    if ($focusedView) {
+      eventsEngine.off($focusedView, clickEventName, this.groupItemClickHandlerContext);
+    }
+  }
+
+  private subscribeToGroupItemClick() {
+    const $focusedView = this.getFocusedViewElement();
+
+    if ($focusedView) {
+      eventsEngine.on($focusedView, clickEventName, `.${GROUPING_CLASSES.groupPanelItem}`, this.groupItemClickHandlerContext);
+    }
   }
 
   private leftRightKeysHandler(e): void {
@@ -66,6 +99,10 @@ export class GroupPanelKeyboardNavigationController extends KeyboardNavigationCo
     return `.${GROUPING_CLASSES.groupPanelItem}`;
   }
 
+  protected focusinHandler(e: any): void {
+    this.setFocusedCellPosition(0, $(e.target).index());
+  }
+
   protected keyDownHandler(e): void {
     const isHandled = this.processOnKeyDown(e);
 
@@ -82,8 +119,28 @@ export class GroupPanelKeyboardNavigationController extends KeyboardNavigationCo
     }
   }
 
+  protected renderCompleted(e: any) {
+    const { isNeedToFocus } = this;
+
+    super.renderCompleted(e);
+    this.unsubscribeFromGroupItemClick();
+    this.subscribeToGroupItemClick();
+
+    if (!isNeedToFocus && this.isNeedToHiddenFocus) {
+      const $focusElement = this._getFocusedCell();
+
+      if ($focusElement?.length) {
+        hiddenFocus($focusElement.get(0));
+      }
+
+      this.isNeedToHiddenFocus = false;
+    }
+  }
+
   public init(): void {
     this.headerPanel = this.getView('headerPanel');
+    this.groupItemClickHandlerContext = this.groupItemClickHandlerContext
+      ?? this.groupItemClickHandler.bind(this);
     super.init();
   }
 }
