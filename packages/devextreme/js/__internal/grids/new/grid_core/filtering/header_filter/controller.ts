@@ -1,6 +1,6 @@
 import type { SubsGets } from '@ts/core/reactive/index';
 import { computed } from '@ts/core/reactive/index';
-import { ColumnsController } from '@ts/grids/new/grid_core/columns_controller';
+import { ColumnsController } from '@ts/grids/new/grid_core/columns_controller/index';
 
 import { OptionsController } from '../../options_controller/options_controller';
 import { getComposedHeaderFilter } from './utils';

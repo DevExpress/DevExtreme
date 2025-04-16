@@ -1,8 +1,8 @@
 /* eslint-disable spellcheck/spell-checker */
 import { OptionsController } from '../../options_controller/options_controller';
-import { SearchController } from '../../search';
+import { SearchController } from '../../search/index';
 import { FilterController } from '../filter_controller';
-import { HeaderFilterController } from '../header_filter';
+import { HeaderFilterController } from '../header_filter/index';
 
 export class ClearFilterVisitor {
   public static dependencies = [

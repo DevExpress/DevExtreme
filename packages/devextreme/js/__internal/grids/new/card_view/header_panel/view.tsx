@@ -7,7 +7,7 @@ import { View } from '@ts/grids/new/grid_core/core/view';
 import type { Column } from '../../grid_core/columns_controller/types';
 import { HeaderFilterViewController } from '../../grid_core/filtering/header_filter/view_controller';
 import { SortingController } from '../../grid_core/sorting_controller/sorting_controller';
-import { ContextMenuController } from '../context_menu';
+import { ContextMenuController } from '../context_menu/index';
 import { OptionsController } from '../options_controller';
 import type { HeaderPanelProps } from './header_panel';
 import { HeaderPanel } from './header_panel';

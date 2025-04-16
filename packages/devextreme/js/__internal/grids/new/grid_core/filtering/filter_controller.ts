@@ -1,12 +1,12 @@
 /* eslint-disable spellcheck/spell-checker */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 
-import type { SubsGetsUpd } from '@ts/core/reactive';
-import { computed, state } from '@ts/core/reactive';
+import type { SubsGetsUpd } from '@ts/core/reactive/index';
+import { computed, state } from '@ts/core/reactive/index';
 import { anyOf, noneOf } from '@ts/grids/grid_core/filter/m_filter_custom_operations';
 import gridCoreUtils from '@ts/grids/grid_core/m_utils';
 
-import { ColumnsController } from '../columns_controller';
+import { ColumnsController } from '../columns_controller/index';
 import { OptionsController } from '../options_controller/options_controller';
 import type { AppliedFilters } from './types';
 import { getAppliedFilterExpressions } from './utils';

@@ -1,13 +1,13 @@
 /* eslint-disable spellcheck/spell-checker */
-import type { SubsGets } from '@ts/core/reactive';
-import { state } from '@ts/core/reactive';
+import type { SubsGets } from '@ts/core/reactive/index';
+import { state } from '@ts/core/reactive/index';
 import { removeFieldConditionsFromFilter } from '@ts/filter_builder/m_utils';
 import gridCoreUtils from '@ts/grids/grid_core/m_utils';
 
-import { ColumnsController } from '../../columns_controller';
+import { ColumnsController } from '../../columns_controller/index';
 import type { Column } from '../../columns_controller/types';
 import { getColumnIndexByName } from '../../columns_controller/utils';
-import { DataController } from '../../data_controller';
+import { DataController } from '../../data_controller/index';
 import { OptionsController } from '../../options_controller/options_controller';
 import { FilterController } from '../filter_controller';
 import type { AppliedFilters } from '../types';
