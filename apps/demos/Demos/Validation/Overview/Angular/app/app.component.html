@@ -32,11 +32,11 @@
           [(value)]="password"
           (onValueChanged)="onPasswordChanged()"
         >
-          <dxi-button
+          <dxi-text-box-button
             name="password"
             location="after"
             [options]="passwordButton"
-          ></dxi-button>
+          ></dxi-text-box-button>
           <dx-validator>
             <dxi-validation-rule
               type="required"
@@ -54,11 +54,11 @@
           [mode]="confirmPasswordMode"
           [inputAttr]="{ 'aria-label': 'Password' }"
         >
-          <dxi-button
+          <dxi-text-box-button
             name="password"
             location="after"
             [options]="confirmPasswordButton"
-          ></dxi-button>
+          ></dxi-text-box-button>
           <dx-validator #targetValidator>
             <dxi-validation-rule
               type="required"

@@ -3,17 +3,41 @@ import {
 } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+
+
 import {
-  DxSelectBoxModule,
-  DxCheckBoxModule,
-  DxTextBoxModule,
-  DxDateBoxModule,
-  DxDateRangeBoxModule,
-  DxButtonModule,
-  DxValidatorModule,
+  DxSelectBoxComponent,
+} from 'devextreme-angular/ui/select-box';
+
+import {
+  DxCheckBoxComponent,
+} from 'devextreme-angular/ui/check-box';
+
+import {
+  DxTextBoxComponent,
+  DxiTextBoxButtonComponent,
+} from 'devextreme-angular/ui/text-box';
+import {
+  DxDateBoxComponent,
+} from 'devextreme-angular/ui/date-box';
+
+import {
+  DxDateRangeBoxComponent,
+} from 'devextreme-angular/ui/date-range-box';
+
+import {
+  DxButtonComponent,
+} from 'devextreme-angular/ui/button';
+
+import {
   DxValidatorComponent,
-  DxValidationSummaryModule,
-} from 'devextreme-angular';
+    DxiValidatorValidationRuleComponent,
+} from 'devextreme-angular/ui/validator';
+
+import {
+  DxValidationSummaryComponent,
+} from 'devextreme-angular/ui/validation-summary';
+
 import notify from 'devextreme/ui/notify';
 import { DxButtonTypes } from 'devextreme-angular/ui/button';
 import { DxTextBoxTypes } from 'devextreme-angular/ui/text-box';
@@ -139,14 +163,16 @@ export class AppComponent {
 @NgModule({
   imports: [
     BrowserModule,
-    DxSelectBoxModule,
-    DxCheckBoxModule,
-    DxTextBoxModule,
-    DxDateBoxModule,
-    DxDateRangeBoxModule,
-    DxButtonModule,
-    DxValidatorModule,
-    DxValidationSummaryModule,
+    DxSelectBoxComponent,
+    DxCheckBoxComponent,
+    DxTextBoxComponent,
+    DxiTextBoxButtonComponent,
+    DxDateBoxComponent,
+    DxDateRangeBoxComponent,
+    DxButtonComponent,
+    DxValidatorComponent,
+    DxiValidatorValidationRuleComponent,
+    DxValidationSummaryComponent,
   ],
   declarations: [AppComponent],
   bootstrap: [AppComponent],
