@@ -60,16 +60,16 @@ export const needCreateHeaderFilter = (column: Column): boolean => {
   return allowFiltering && hasSelectedItems;
 };
 
-export const getComposedHeaderFilter = (columns: Column[]): unknown => {
+export const getComposedHeaderFilter = (columns: Column[]): unknown[] => {
   const filterValue: unknown[] = [];
   const filterableColumns = columns
-    .filter((c) => needCreateHeaderFilter(c));
+    .filter((col) => needCreateHeaderFilter(col));
   filterableColumns
-    .forEach((c, index) => {
+    .forEach((col, index) => {
       filterValue.push([
-        getColumnName(c),
-        getFilterOperator(c.headerFilter?.values, c.filterType),
-        c.headerFilter?.values,
+        getColumnName(col),
+        getFilterOperator(col.headerFilter?.values, col.filterType),
+        col.headerFilter?.values,
       ]);
       if (index < filterableColumns.length - 1) {
         filterValue.push('and');

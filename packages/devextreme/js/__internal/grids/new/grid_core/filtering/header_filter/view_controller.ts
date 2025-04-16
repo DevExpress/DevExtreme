@@ -17,9 +17,9 @@ import type { PopupState } from './types';
 import { getColumnIdentifier } from './utils';
 
 export class HeaderFilterViewController {
-  private readonly popupState = state<PopupState>(null);
+  private readonly popupStateInternal = state<PopupState>(null);
 
-  public readonly popupState$: SubsGets<PopupState> = this.popupState;
+  public readonly popupState: SubsGets<PopupState> = this.popupStateInternal;
 
   public static dependencies = [
     OptionsController,
@@ -62,7 +62,7 @@ export class HeaderFilterViewController {
     const type = getFilterType(column);
     const colsController = this.columnsController;
 
-    this.popupState.update({
+    this.popupStateInternal.update({
       element,
       options: {
         type,
@@ -98,7 +98,7 @@ export class HeaderFilterViewController {
           onFilterCloseCallback?.();
         },
         hidePopupCallback: () => {
-          this.popupState.update(null);
+          this.popupStateInternal.update(null);
           onFilterCloseCallback?.();
         },
       },

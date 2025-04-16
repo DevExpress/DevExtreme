@@ -12,9 +12,11 @@ import type { AppliedFilters } from './types';
 import { getAppliedFilterExpressions } from './utils';
 
 export class FilterController {
-  public readonly filterSyncEnabled = this.options.oneWay('filterSyncEnabled');
-
   private readonly filterBuilderCustomOperations = this.options.oneWay('filterBuilder.customOperations');
+
+  public readonly filterPanelFilterEnabled = this.options.oneWay('filterPanel.filterEnabled');
+
+  public readonly filterValueOption = this.options.twoWay('filterValue');
 
   public readonly appliedFilters: SubsGetsUpd<AppliedFilters> = state({});
 
@@ -52,8 +54,6 @@ export class FilterController {
     ],
   );
 
-  public clearFilterContext: unknown = null;
-
   constructor(
     private readonly options: OptionsController,
     private readonly columnsController: ColumnsController,
@@ -62,6 +62,6 @@ export class FilterController {
   public clearFilterCallback = (): void => {};
 
   public clearFilter(): void {
-    this.clearFilterCallback.call(this.clearFilterContext);
+    this.clearFilterCallback();
   }
 }

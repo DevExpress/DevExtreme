@@ -1,32 +1,25 @@
 import { computed, effect } from '@ts/core/reactive/index';
 
-import { OptionsController } from '../../options_controller/options_controller';
 import { SearchController } from '../../search/index';
 import { FilterController } from '../filter_controller';
 import { HeaderFilterController } from '../header_filter/index';
 
 export class GetAppliedFilterVisitor {
   public static dependencies = [
-    OptionsController,
     SearchController,
     HeaderFilterController,
     FilterController,
   ] as const;
 
-  public readonly filter = this.options.twoWay('filterValue');
-
-  public readonly filterEnabled = this.options.twoWay('filterPanel.filterEnabled');
-
   private readonly filterPanelValue = computed(
     (filterValue, filterEnabled) => (filterEnabled ? filterValue : undefined),
     [
-      this.filter,
-      this.filterEnabled,
+      this.filterController.filterValueOption,
+      this.filterController.filterPanelFilterEnabled,
     ],
   );
 
   constructor(
-    private readonly options: OptionsController,
     private readonly searchController: SearchController,
     private readonly headerFilterController: HeaderFilterController,
     private readonly filterController: FilterController,

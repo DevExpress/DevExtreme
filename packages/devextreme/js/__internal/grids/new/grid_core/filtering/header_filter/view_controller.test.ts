@@ -17,14 +17,14 @@ const setup = (options = {}) => {
 };
 
 describe('HeaderFilter', () => {
-  describe('Controller', () => {
+  describe('ViewController', () => {
     describe('openPopup', () => {
-      it('should pass element as is to popupState$', () => {
+      it('should pass element as is to popupState', () => {
         const mockElement = {} as Element;
         const { viewController } = setup();
         viewController.openPopup(mockElement, {} as Column);
 
-        const result = viewController.popupState$.unreactive_get();
+        const result = viewController.popupState.unreactive_get();
         expect(result?.element).toBe(mockElement);
       });
 
@@ -40,7 +40,7 @@ describe('HeaderFilter', () => {
         const { viewController } = setup();
         viewController.openPopup({} as Element, { dataType } as Column);
 
-        const state = viewController.popupState$.unreactive_get();
+        const state = viewController.popupState.unreactive_get();
         expect(state?.options?.type).toBe(result);
       });
 
@@ -58,7 +58,7 @@ describe('HeaderFilter', () => {
           { headerFilter: expectedHeaderFilter } as Column,
         );
 
-        const state = viewController.popupState$.unreactive_get();
+        const state = viewController.popupState.unreactive_get();
         expect(state?.options?.headerFilter).toStrictEqual(expectedHeaderFilter);
         expect(state?.options?.filterValues).toEqual(expectedFilterValues);
       });
@@ -79,7 +79,7 @@ describe('HeaderFilter', () => {
           { name: 'A' } as Column,
         );
 
-        const state = viewController.popupState$.unreactive_get();
+        const state = viewController.popupState.unreactive_get();
         state?.options?.apply?.call({
           filterValues: expectedFilterValues,
         });
@@ -114,7 +114,7 @@ describe('HeaderFilter', () => {
           { name: 'A', headerFilter: { search: expectedSearch } } as unknown as Column,
         );
 
-        const state = viewController.popupState$.unreactive_get();
+        const state = viewController.popupState.unreactive_get();
         state?.options?.apply?.call({
           filterValues: expectedFilterValues,
         });
@@ -125,7 +125,7 @@ describe('HeaderFilter', () => {
           .toMatchObject(expectedHeaderFilter as Record<string, unknown>);
       });
 
-      it('should clear popupState$ on hide popup callback', () => {
+      it('should clear popupState on hide popup callback', () => {
         const { viewController } = setup({
           headerFilter: { visible: true },
           columns: [{ name: 'A' }],
@@ -136,12 +136,12 @@ describe('HeaderFilter', () => {
           { name: 'A' } as Column,
         );
 
-        const state = viewController.popupState$.unreactive_get();
+        const state = viewController.popupState.unreactive_get();
         expect(state !== null).toBeTruthy();
 
         state?.options?.hidePopupCallback?.();
 
-        const stateAfterClose = viewController.popupState$.unreactive_get();
+        const stateAfterClose = viewController.popupState.unreactive_get();
         expect(stateAfterClose === null).toBeTruthy();
       });
     });
@@ -158,7 +158,7 @@ describe('HeaderFilter', () => {
           { name: 'A' } as Column,
         );
 
-        const state = viewController.popupState$.unreactive_get();
+        const state = viewController.popupState.unreactive_get();
 
         expect(typeof state?.options.dataSource.load).toBe('function');
         expect(typeof state?.options.dataSource.postProcess).toBe('function');
@@ -197,7 +197,7 @@ describe('HeaderFilter', () => {
               column,
             );
 
-            const state = viewController.popupState$.unreactive_get();
+            const state = viewController.popupState.unreactive_get();
 
             expect(state?.options.dataSource.group).toBeTruthy();
             expect(checkFn(state?.options.dataSource.group)).toBeTruthy();

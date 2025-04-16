@@ -68,7 +68,7 @@ export class HeaderFilterPopupView extends View<{}> {
 
         this.oldHeaderFilterPopup.showHeaderFilterMenu($(popupState.element), popupState.options);
       },
-      [this.headerFilterViewController.popupState$],
+      [this.headerFilterViewController.popupState],
     );
   }
 
