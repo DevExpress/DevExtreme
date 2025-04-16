@@ -4,7 +4,6 @@ export const items = new Array(1000).fill(null).map(() => (
   {column1: 1, column2: 2}
 ));
 
-
 function isNotEmpty(value: string | undefined | null) {
   return value !== undefined && value !== null && value !== '';
 }

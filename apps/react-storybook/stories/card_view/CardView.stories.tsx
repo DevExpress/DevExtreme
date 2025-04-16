@@ -4,6 +4,7 @@ import dxCardView from "devextreme/ui/card_view";
 import { wrapDxWithReact } from "../utils";
 import { store } from "./data";
 import { generatedData } from "./generatedData";
+import { renderFooter } from "./templates";
 
 const CardView = wrapDxWithReact(dxCardView);
 
@@ -164,6 +165,14 @@ const meta: Meta<typeof CardView> = {
     searchPanel: {
       control: 'object',
     },
+    cardFooterTemplate: {
+      control: 'radio',
+      options: ['show (custom template)', 'undefined'],
+      mapping: {
+        'show (custom template)': renderFooter,
+        'undefined': undefined,
+      }
+    }
   }
 };
 
@@ -186,6 +195,7 @@ export const DefaultMode: Story = {
     cardMaxWidth: 350,
     columns: 'local',
     filterPanel: { visible: true },
+    cardFooterTemplate: undefined,
   },
 };
 

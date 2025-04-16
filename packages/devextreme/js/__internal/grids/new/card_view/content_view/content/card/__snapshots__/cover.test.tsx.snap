@@ -8,6 +8,7 @@ exports[`Cover when there is no image should render image thumbnail 1`] = `
     <div
       aria-label="No image"
       class="dx-icon dx-icon-imagethumbnail"
+      role="img"
     />
   </div>
 </div>

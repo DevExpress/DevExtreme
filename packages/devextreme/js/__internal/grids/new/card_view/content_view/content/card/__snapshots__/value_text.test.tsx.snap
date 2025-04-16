@@ -2,19 +2,19 @@
 
 exports[`Content View ValueText should add title attribute 1`] = `
 <div>
-  <span
-    class="dx-cardview-field-value dx-cardview-field-value--text-align-center dx-cardview-field-value--white-space-nowrap"
+  <div
+    class="dx-cardview-field-value dx-cardview-field-value--text-align-center"
     title="TEST"
   >
     TEST
-  </span>
+  </div>
 </div>
 `;
 
 exports[`Content View ValueText should render highlighted text if passed 1`] = `
 <div>
-  <span
-    class="dx-cardview-field-value dx-cardview-field-value--text-align-center dx-cardview-field-value--white-space-nowrap"
+  <div
+    class="dx-cardview-field-value dx-cardview-field-value--text-align-center"
   >
     <span>
       USUAL_PART 
@@ -27,26 +27,26 @@ exports[`Content View ValueText should render highlighted text if passed 1`] = `
     <span>
        USUAL_PART
     </span>
-  </span>
+  </div>
 </div>
 `;
 
 exports[`Content View ValueText should render plain text if highlighted text is null 1`] = `
 <div>
-  <span
-    class="dx-cardview-field-value dx-cardview-field-value--text-align-center dx-cardview-field-value--white-space-nowrap"
+  <div
+    class="dx-cardview-field-value dx-cardview-field-value--text-align-center"
   >
     TEST_TEXT
-  </span>
+  </div>
 </div>
 `;
 
 exports[`Content View ValueText should set root classes 1`] = `
 <div>
-  <span
-    class="dx-cardview-field-value dx-cardview-field-value--text-align-center dx-cardview-field-value--white-space-nowrap"
+  <div
+    class="dx-cardview-field-value dx-cardview-field-value--text-align-center"
   >
     TEST
-  </span>
+  </div>
 </div>
 `;

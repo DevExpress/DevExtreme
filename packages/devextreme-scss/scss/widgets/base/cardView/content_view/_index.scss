@@ -1,7 +1,8 @@
 @use '../variables' as *;
 @use './content';
+@use './no_data';
 
-.dx-cardview-contentview {
+.dx-gridcore-contentview {
   overflow: hidden;
   flex-grow: 1;
 }
