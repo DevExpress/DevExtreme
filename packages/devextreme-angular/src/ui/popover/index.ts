@@ -963,6 +963,8 @@ export class DxPopoverComponent extends DxComponent implements OnDestroy, OnChan
 })
 export class DxPopoverModule { }
 
+export * from 'devextreme-angular/ui/popover/nested';
+
 import type * as DxPopoverTypes from "devextreme/ui/popover_types";
 export { DxPopoverTypes };
 

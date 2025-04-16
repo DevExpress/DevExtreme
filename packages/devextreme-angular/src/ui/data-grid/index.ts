@@ -2593,6 +2593,8 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 })
 export class DxDataGridModule { }
 
+export * from 'devextreme-angular/ui/data-grid/nested';
+
 import type * as DxDataGridTypes from "devextreme/ui/data_grid_types";
 export { DxDataGridTypes };
 

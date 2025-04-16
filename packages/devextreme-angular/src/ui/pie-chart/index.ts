@@ -1264,6 +1264,8 @@ export class DxPieChartComponent extends DxComponent implements OnDestroy, OnCha
 })
 export class DxPieChartModule { }
 
+export * from 'devextreme-angular/ui/pie-chart/nested';
+
 import type * as DxPieChartTypes from "devextreme/viz/pie_chart_types";
 export { DxPieChartTypes };
 

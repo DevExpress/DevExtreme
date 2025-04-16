@@ -910,6 +910,8 @@ export class DxBarGaugeComponent extends DxComponent implements OnDestroy, OnCha
 })
 export class DxBarGaugeModule { }
 
+export * from 'devextreme-angular/ui/bar-gauge/nested';
+
 import type * as DxBarGaugeTypes from "devextreme/viz/bar_gauge_types";
 export { DxBarGaugeTypes };
 

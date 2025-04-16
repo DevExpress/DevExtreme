@@ -550,6 +550,8 @@ export class DxSplitterComponent<TItem = any, TKey = any> extends DxComponent im
 })
 export class DxSplitterModule { }
 
+export * from 'devextreme-angular/ui/splitter/nested';
+
 import type * as DxSplitterTypes from "devextreme/ui/splitter_types";
 export { DxSplitterTypes };
 

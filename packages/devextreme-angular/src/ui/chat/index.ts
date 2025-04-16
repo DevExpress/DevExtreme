@@ -799,6 +799,8 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
 })
 export class DxChatModule { }
 
+export * from 'devextreme-angular/ui/chat/nested';
+
 import type * as DxChatTypes from "devextreme/ui/chat_types";
 export { DxChatTypes };
 

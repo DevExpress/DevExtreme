@@ -1181,6 +1181,8 @@ export class DxRangeSelectorComponent extends DxComponent implements OnDestroy, 
 })
 export class DxRangeSelectorModule { }
 
+export * from 'devextreme-angular/ui/range-selector/nested';
+
 import type * as DxRangeSelectorTypes from "devextreme/viz/range_selector_types";
 export { DxRangeSelectorTypes };
 

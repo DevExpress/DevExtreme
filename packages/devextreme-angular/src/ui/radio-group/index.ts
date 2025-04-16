@@ -845,6 +845,8 @@ export class DxRadioGroupComponent extends DxComponent implements OnDestroy, Con
 })
 export class DxRadioGroupModule { }
 
+export * from 'devextreme-angular/ui/radio-group/nested';
+
 import type * as DxRadioGroupTypes from "devextreme/ui/radio_group_types";
 export { DxRadioGroupTypes };
 

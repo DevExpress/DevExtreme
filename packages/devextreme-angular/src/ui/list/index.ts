@@ -1556,6 +1556,8 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
 })
 export class DxListModule { }
 
+export * from 'devextreme-angular/ui/list/nested';
+
 import type * as DxListTypes from "devextreme/ui/list_types";
 export { DxListTypes };
 

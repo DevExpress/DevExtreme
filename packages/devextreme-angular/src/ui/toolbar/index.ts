@@ -531,6 +531,8 @@ export class DxToolbarComponent<TItem = any, TKey = any> extends DxComponent imp
 })
 export class DxToolbarModule { }
 
+export * from 'devextreme-angular/ui/toolbar/nested';
+
 import type * as DxToolbarTypes from "devextreme/ui/toolbar_types";
 export { DxToolbarTypes };
 

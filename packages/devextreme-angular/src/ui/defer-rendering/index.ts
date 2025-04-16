@@ -545,6 +545,8 @@ export class DxDeferRenderingComponent extends DxComponent implements OnDestroy 
 })
 export class DxDeferRenderingModule { }
 
+export * from 'devextreme-angular/ui/defer-rendering/nested';
+
 import type * as DxDeferRenderingTypes from "devextreme/ui/defer_rendering_types";
 export { DxDeferRenderingTypes };
 

@@ -1628,6 +1628,8 @@ export class DxAutocompleteComponent extends DxComponent implements OnDestroy, C
 })
 export class DxAutocompleteModule { }
 
+export * from 'devextreme-angular/ui/autocomplete/nested';
+
 import type * as DxAutocompleteTypes from "devextreme/ui/autocomplete_types";
 export { DxAutocompleteTypes };
 

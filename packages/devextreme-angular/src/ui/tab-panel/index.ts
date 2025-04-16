@@ -934,6 +934,8 @@ export class DxTabPanelComponent<TItem = any, TKey = any> extends DxComponent im
 })
 export class DxTabPanelModule { }
 
+export * from 'devextreme-angular/ui/tab-panel/nested';
+
 import type * as DxTabPanelTypes from "devextreme/ui/tab_panel_types";
 export { DxTabPanelTypes };
 

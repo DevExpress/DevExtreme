@@ -534,6 +534,8 @@ export class DxBoxComponent<TItem = any, TKey = any> extends DxComponent impleme
 })
 export class DxBoxModule { }
 
+export * from 'devextreme-angular/ui/box/nested';
+
 import type * as DxBoxTypes from "devextreme/ui/box_types";
 export { DxBoxTypes };
 

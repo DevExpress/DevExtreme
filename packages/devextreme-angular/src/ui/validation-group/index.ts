@@ -189,6 +189,7 @@ export class DxValidationGroupComponent extends DxComponent implements OnDestroy
 })
 export class DxValidationGroupModule { }
 
+
 import type * as DxValidationGroupTypes from "devextreme/ui/validation_group_types";
 export { DxValidationGroupTypes };
 

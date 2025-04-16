@@ -793,6 +793,8 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
 })
 export class DxMapModule { }
 
+export * from 'devextreme-angular/ui/map/nested';
+
 import type * as DxMapTypes from "devextreme/ui/map_types";
 export { DxMapTypes };
 

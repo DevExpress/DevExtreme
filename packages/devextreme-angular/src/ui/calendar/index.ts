@@ -974,6 +974,7 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
 })
 export class DxCalendarModule { }
 
+
 import type * as DxCalendarTypes from "devextreme/ui/calendar_types";
 export { DxCalendarTypes };
 

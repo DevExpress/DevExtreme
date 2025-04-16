@@ -1035,6 +1035,8 @@ export class DxVectorMapComponent extends DxComponent implements OnDestroy, OnCh
 })
 export class DxVectorMapModule { }
 
+export * from 'devextreme-angular/ui/vector-map/nested';
+
 import type * as DxVectorMapTypes from "devextreme/viz/vector_map_types";
 export { DxVectorMapTypes };
 

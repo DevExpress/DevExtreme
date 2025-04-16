@@ -1641,6 +1641,8 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
 })
 export class DxSchedulerModule { }
 
+export * from 'devextreme-angular/ui/scheduler/nested';
+
 import type * as DxSchedulerTypes from "devextreme/ui/scheduler_types";
 export { DxSchedulerTypes };
 

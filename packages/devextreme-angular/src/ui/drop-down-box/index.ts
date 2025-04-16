@@ -1418,6 +1418,8 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
 })
 export class DxDropDownBoxModule { }
 
+export * from 'devextreme-angular/ui/drop-down-box/nested';
+
 import type * as DxDropDownBoxTypes from "devextreme/ui/drop_down_box_types";
 export { DxDropDownBoxTypes };
 

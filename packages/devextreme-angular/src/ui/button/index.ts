@@ -544,6 +544,7 @@ export class DxButtonComponent extends DxComponent implements OnDestroy {
 })
 export class DxButtonModule { }
 
+
 import type * as DxButtonTypes from "devextreme/ui/button_types";
 export { DxButtonTypes };
 

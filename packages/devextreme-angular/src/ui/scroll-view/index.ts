@@ -478,6 +478,7 @@ export class DxScrollViewComponent extends DxComponent implements OnDestroy {
 })
 export class DxScrollViewModule { }
 
+
 import type * as DxScrollViewTypes from "devextreme/ui/scroll_view_types";
 export { DxScrollViewTypes };
 

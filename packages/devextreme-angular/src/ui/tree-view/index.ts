@@ -1312,6 +1312,8 @@ export class DxTreeViewComponent<TKey = any> extends DxComponent implements OnDe
 })
 export class DxTreeViewModule { }
 
+export * from 'devextreme-angular/ui/tree-view/nested';
+
 import type * as DxTreeViewTypes from "devextreme/ui/tree_view_types";
 export { DxTreeViewTypes };
 

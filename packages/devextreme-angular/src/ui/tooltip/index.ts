@@ -779,6 +779,8 @@ export class DxTooltipComponent extends DxComponent implements OnDestroy {
 })
 export class DxTooltipModule { }
 
+export * from 'devextreme-angular/ui/tooltip/nested';
+
 import type * as DxTooltipTypes from "devextreme/ui/tooltip_types";
 export { DxTooltipTypes };
 

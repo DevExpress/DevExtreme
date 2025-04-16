@@ -1884,6 +1884,8 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
 })
 export class DxLookupModule { }
 
+export * from 'devextreme-angular/ui/lookup/nested';
+
 import type * as DxLookupTypes from "devextreme/ui/lookup_types";
 export { DxLookupTypes };
 

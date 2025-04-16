@@ -617,6 +617,8 @@ export class DxButtonGroupComponent extends DxComponent implements OnDestroy, On
 })
 export class DxButtonGroupModule { }
 
+export * from 'devextreme-angular/ui/button-group/nested';
+
 import type * as DxButtonGroupTypes from "devextreme/ui/button_group_types";
 export { DxButtonGroupTypes };
 

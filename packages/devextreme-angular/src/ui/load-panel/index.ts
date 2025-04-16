@@ -788,6 +788,8 @@ export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
 })
 export class DxLoadPanelModule { }
 
+export * from 'devextreme-angular/ui/load-panel/nested';
+
 import type * as DxLoadPanelTypes from "devextreme/ui/load_panel_types";
 export { DxLoadPanelTypes };
 

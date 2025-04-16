@@ -476,6 +476,8 @@ export class DxValidatorComponent extends DxComponentExtension implements OnDest
 })
 export class DxValidatorModule { }
 
+export * from 'devextreme-angular/ui/validator/nested';
+
 import type * as DxValidatorTypes from "devextreme/ui/validator_types";
 export { DxValidatorTypes };
 

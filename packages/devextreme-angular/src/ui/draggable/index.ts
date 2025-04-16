@@ -496,6 +496,8 @@ export class DxDraggableComponent extends DxComponent implements OnDestroy {
 })
 export class DxDraggableModule { }
 
+export * from 'devextreme-angular/ui/draggable/nested';
+
 import type * as DxDraggableTypes from "devextreme/ui/draggable_types";
 export { DxDraggableTypes };
 

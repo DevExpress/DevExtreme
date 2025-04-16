@@ -1022,6 +1022,8 @@ export class DxContextMenuComponent<TKey = any> extends DxComponent implements O
 })
 export class DxContextMenuModule { }
 
+export * from 'devextreme-angular/ui/context-menu/nested';
+
 import type * as DxContextMenuTypes from "devextreme/ui/context_menu_types";
 export { DxContextMenuTypes };
 

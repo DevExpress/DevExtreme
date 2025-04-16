@@ -610,6 +610,8 @@ export class DxResponsiveBoxComponent<TItem = any, TKey = any> extends DxCompone
 })
 export class DxResponsiveBoxModule { }
 
+export * from 'devextreme-angular/ui/responsive-box/nested';
+
 import type * as DxResponsiveBoxTypes from "devextreme/ui/responsive_box_types";
 export { DxResponsiveBoxTypes };
 

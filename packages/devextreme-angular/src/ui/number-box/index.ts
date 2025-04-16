@@ -1173,6 +1173,8 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
 })
 export class DxNumberBoxModule { }
 
+export * from 'devextreme-angular/ui/number-box/nested';
+
 import type * as DxNumberBoxTypes from "devextreme/ui/number_box_types";
 export { DxNumberBoxTypes };
 

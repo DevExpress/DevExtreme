@@ -2507,6 +2507,8 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
 })
 export class DxTreeListModule { }
 
+export * from 'devextreme-angular/ui/tree-list/nested';
+
 import type * as DxTreeListTypes from "devextreme/ui/tree_list_types";
 export { DxTreeListTypes };
 

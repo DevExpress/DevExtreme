@@ -632,6 +632,7 @@ export class DxPaginationComponent extends DxComponent implements OnDestroy, OnC
 })
 export class DxPaginationModule { }
 
+
 import type * as DxPaginationTypes from "devextreme/ui/pagination_types";
 export { DxPaginationTypes };
 

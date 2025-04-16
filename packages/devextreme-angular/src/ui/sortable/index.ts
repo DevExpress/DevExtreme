@@ -637,6 +637,8 @@ export class DxSortableComponent extends DxComponent implements OnDestroy {
 })
 export class DxSortableModule { }
 
+export * from 'devextreme-angular/ui/sortable/nested';
+
 import type * as DxSortableTypes from "devextreme/ui/sortable_types";
 export { DxSortableTypes };
 

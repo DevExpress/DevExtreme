@@ -1187,6 +1187,8 @@ export class DxTextBoxComponent extends DxComponent implements OnDestroy, Contro
 })
 export class DxTextBoxModule { }
 
+export * from 'devextreme-angular/ui/text-box/nested';
+
 import type * as DxTextBoxTypes from "devextreme/ui/text_box_types";
 export { DxTextBoxTypes };
 

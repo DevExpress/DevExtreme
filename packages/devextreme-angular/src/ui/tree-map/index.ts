@@ -947,6 +947,8 @@ export class DxTreeMapComponent extends DxComponent implements OnDestroy, OnChan
 })
 export class DxTreeMapModule { }
 
+export * from 'devextreme-angular/ui/tree-map/nested';
+
 import type * as DxTreeMapTypes from "devextreme/viz/tree_map_types";
 export { DxTreeMapTypes };
 

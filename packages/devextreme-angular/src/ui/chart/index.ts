@@ -2014,6 +2014,8 @@ export class DxChartComponent extends DxComponent implements OnDestroy, OnChange
 })
 export class DxChartModule { }
 
+export * from 'devextreme-angular/ui/chart/nested';
+
 import type * as DxChartTypes from "devextreme/viz/chart_types";
 export { DxChartTypes };
 

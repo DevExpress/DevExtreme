@@ -1452,6 +1452,8 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
 })
 export class DxGanttModule { }
 
+export * from 'devextreme-angular/ui/gantt/nested';
+
 import type * as DxGanttTypes from "devextreme/ui/gantt_types";
 export { DxGanttTypes };
 

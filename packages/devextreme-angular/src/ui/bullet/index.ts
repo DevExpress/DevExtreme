@@ -591,6 +591,8 @@ export class DxBulletComponent extends DxComponent implements OnDestroy {
 })
 export class DxBulletModule { }
 
+export * from 'devextreme-angular/ui/bullet/nested';
+
 import type * as DxBulletTypes from "devextreme/viz/bullet_types";
 export { DxBulletTypes };
 

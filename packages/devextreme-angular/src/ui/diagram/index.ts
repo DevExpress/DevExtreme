@@ -1147,6 +1147,8 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
 })
 export class DxDiagramModule { }
 
+export * from 'devextreme-angular/ui/diagram/nested';
+
 import type * as DxDiagramTypes from "devextreme/ui/diagram_types";
 export { DxDiagramTypes };
 

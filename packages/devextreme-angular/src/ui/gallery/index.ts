@@ -855,6 +855,8 @@ export class DxGalleryComponent<TItem = any, TKey = any> extends DxComponent imp
 })
 export class DxGalleryModule { }
 
+export * from 'devextreme-angular/ui/gallery/nested';
+
 import type * as DxGalleryTypes from "devextreme/ui/gallery_types";
 export { DxGalleryTypes };
 

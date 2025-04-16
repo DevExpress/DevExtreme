@@ -384,6 +384,7 @@ export class DxResizableComponent extends DxComponent implements OnDestroy {
 })
 export class DxResizableModule { }
 
+
 import type * as DxResizableTypes from "devextreme/ui/resizable_types";
 export { DxResizableTypes };
 

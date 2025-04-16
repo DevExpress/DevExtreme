@@ -947,6 +947,8 @@ export class DxPivotGridComponent extends DxComponent implements OnDestroy, OnCh
 })
 export class DxPivotGridModule { }
 
+export * from 'devextreme-angular/ui/pivot-grid/nested';
+
 import type * as DxPivotGridTypes from "devextreme/ui/pivot_grid_types";
 export { DxPivotGridTypes };
 

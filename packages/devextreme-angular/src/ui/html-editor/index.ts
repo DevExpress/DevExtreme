@@ -1049,6 +1049,8 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
 })
 export class DxHtmlEditorModule { }
 
+export * from 'devextreme-angular/ui/html-editor/nested';
+
 import type * as DxHtmlEditorTypes from "devextreme/ui/html_editor_types";
 export { DxHtmlEditorTypes };
 

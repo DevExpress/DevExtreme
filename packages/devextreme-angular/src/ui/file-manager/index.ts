@@ -1018,6 +1018,8 @@ export class DxFileManagerComponent extends DxComponent implements OnDestroy, On
 })
 export class DxFileManagerModule { }
 
+export * from 'devextreme-angular/ui/file-manager/nested';
+
 import type * as DxFileManagerTypes from "devextreme/ui/file_manager_types";
 export { DxFileManagerTypes };
 

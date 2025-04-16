@@ -989,6 +989,8 @@ export class DxMenuComponent<TKey = any> extends DxComponent implements OnDestro
 })
 export class DxMenuModule { }
 
+export * from 'devextreme-angular/ui/menu/nested';
+
 import type * as DxMenuTypes from "devextreme/ui/menu_types";
 export { DxMenuTypes };
 

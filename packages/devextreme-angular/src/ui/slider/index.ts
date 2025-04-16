@@ -872,6 +872,8 @@ export class DxSliderComponent extends DxComponent implements OnDestroy, Control
 })
 export class DxSliderModule { }
 
+export * from 'devextreme-angular/ui/slider/nested';
+
 import type * as DxSliderTypes from "devextreme/ui/slider_types";
 export { DxSliderTypes };
 

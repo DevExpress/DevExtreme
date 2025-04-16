@@ -834,6 +834,8 @@ export class DxCircularGaugeComponent extends DxComponent implements OnDestroy, 
 })
 export class DxCircularGaugeModule { }
 
+export * from 'devextreme-angular/ui/circular-gauge/nested';
+
 import type * as DxCircularGaugeTypes from "devextreme/viz/circular_gauge_types";
 export { DxCircularGaugeTypes };
 

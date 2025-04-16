@@ -1027,6 +1027,7 @@ export class DxTextAreaComponent extends DxComponent implements OnDestroy, Contr
 })
 export class DxTextAreaModule { }
 
+
 import type * as DxTextAreaTypes from "devextreme/ui/text_area_types";
 export { DxTextAreaTypes };
 

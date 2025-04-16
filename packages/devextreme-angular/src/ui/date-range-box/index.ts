@@ -1760,6 +1760,8 @@ export class DxDateRangeBoxComponent extends DxComponent implements OnDestroy, C
 })
 export class DxDateRangeBoxModule { }
 
+export * from 'devextreme-angular/ui/date-range-box/nested';
+
 import type * as DxDateRangeBoxTypes from "devextreme/ui/date_range_box_types";
 export { DxDateRangeBoxTypes };
 

@@ -829,6 +829,8 @@ export class DxToastComponent extends DxComponent implements OnDestroy {
 })
 export class DxToastModule { }
 
+export * from 'devextreme-angular/ui/toast/nested';
+
 import type * as DxToastTypes from "devextreme/ui/toast_types";
 export { DxToastTypes };
 

@@ -1529,6 +1529,8 @@ export class DxPolarChartComponent extends DxComponent implements OnDestroy, OnC
 })
 export class DxPolarChartModule { }
 
+export * from 'devextreme-angular/ui/polar-chart/nested';
+
 import type * as DxPolarChartTypes from "devextreme/viz/polar_chart_types";
 export { DxPolarChartTypes };
 

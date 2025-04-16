@@ -847,6 +847,8 @@ export class DxAccordionComponent<TItem = any, TKey = any> extends DxComponent i
 })
 export class DxAccordionModule { }
 
+export * from 'devextreme-angular/ui/accordion/nested';
+
 import type * as DxAccordionTypes from "devextreme/ui/accordion_types";
 export { DxAccordionTypes };
 

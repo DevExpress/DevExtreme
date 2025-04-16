@@ -547,6 +547,7 @@ export class DxDrawerComponent extends DxComponent implements OnDestroy {
 })
 export class DxDrawerModule { }
 
+
 import type * as DxDrawerTypes from "devextreme/ui/drawer_types";
 export { DxDrawerTypes };
 

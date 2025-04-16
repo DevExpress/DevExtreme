@@ -1336,6 +1336,8 @@ export class DxColorBoxComponent extends DxComponent implements OnDestroy, Contr
 })
 export class DxColorBoxModule { }
 
+export * from 'devextreme-angular/ui/color-box/nested';
+
 import type * as DxColorBoxTypes from "devextreme/ui/color_box_types";
 export { DxColorBoxTypes };
 

@@ -937,6 +937,8 @@ export class DxRangeSliderComponent extends DxComponent implements OnDestroy, Co
 })
 export class DxRangeSliderModule { }
 
+export * from 'devextreme-angular/ui/range-slider/nested';
+
 import type * as DxRangeSliderTypes from "devextreme/ui/range_slider_types";
 export { DxRangeSliderTypes };
 

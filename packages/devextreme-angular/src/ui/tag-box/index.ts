@@ -1928,6 +1928,8 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
 })
 export class DxTagBoxModule { }
 
+export * from 'devextreme-angular/ui/tag-box/nested';
+
 import type * as DxTagBoxTypes from "devextreme/ui/tag_box_types";
 export { DxTagBoxTypes };
 

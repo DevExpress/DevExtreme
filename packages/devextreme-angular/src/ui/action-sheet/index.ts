@@ -624,6 +624,8 @@ export class DxActionSheetComponent<TItem = any, TKey = any> extends DxComponent
 })
 export class DxActionSheetModule { }
 
+export * from 'devextreme-angular/ui/action-sheet/nested';
+
 import type * as DxActionSheetTypes from "devextreme/ui/action_sheet_types";
 export { DxActionSheetTypes };
 
