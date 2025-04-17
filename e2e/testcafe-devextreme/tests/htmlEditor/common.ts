@@ -35,8 +35,8 @@ fixture.disablePageReloads`HtmlEditor`
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
   }).before(async () => {
-    await setStyleAttribute(Selector('#container'), 'box-sizing: border-box; height: 200px; width: 200px');
-    await setStyleAttribute(Selector('#otherContainer'), 'box-sizing: border-box; height: 200px; width: 200px');
+    await setStyleAttribute(Selector('#container'), 'box-sizing: border-box; height: 200px; width: 200px; overflow: hidden');
+    await setStyleAttribute(Selector('#otherContainer'), 'box-sizing: border-box; height: 200px; width: 200px; overflow: hidden');
     await appendElementTo('#container', 'div', 'editor');
     await appendElementTo('#otherContainer', 'div', 'editorWithToolbar');
 
