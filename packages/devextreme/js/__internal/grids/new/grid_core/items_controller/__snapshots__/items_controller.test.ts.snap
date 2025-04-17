@@ -20,6 +20,7 @@ exports[`ItemsController createDataRow should process data object to data row us
         "defaultSetCellValue": [Function],
         "editorOptions": {},
         "falseText": "false",
+        "formItem": {},
         "headerFilter": {
           "allowSelectAll": true,
           "height": 325,
@@ -62,6 +63,7 @@ exports[`ItemsController createDataRow should process data object to data row us
         "defaultSetCellValue": [Function],
         "editorOptions": {},
         "falseText": "false",
+        "formItem": {},
         "headerFilter": {
           "allowSelectAll": true,
           "height": 325,
@@ -119,6 +121,7 @@ exports[`ItemsController createDataRow should process data object to data row us
         "defaultSetCellValue": [Function],
         "editorOptions": {},
         "falseText": "false",
+        "formItem": {},
         "headerFilter": {
           "allowSelectAll": true,
           "height": 325,
@@ -161,6 +164,7 @@ exports[`ItemsController createDataRow should process data object to data row us
         "defaultSetCellValue": [Function],
         "editorOptions": {},
         "falseText": "false",
+        "formItem": {},
         "headerFilter": {
           "allowSelectAll": true,
           "height": 325,

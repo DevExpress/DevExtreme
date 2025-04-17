@@ -1,4 +1,5 @@
-import type dxForm from '@js/ui/form';
+import type * as dxForm from '@js/ui/form';
+import type * as dxPopup from '@js/ui/popup';
 import type { RefObject } from 'inferno';
 import { Component } from 'inferno';
 
@@ -15,7 +16,9 @@ export interface Properties {
   onHide: () => void;
   customizeItem: NonNullable<FormProperties['customizeItem']>;
   items: NonNullable<FormProperties['items']>;
-  formRef: RefObject<dxForm>;
+  formRef: RefObject<dxForm.default>;
+  formProps: dxForm.Options;
+  popupProps: dxPopup.Options;
 }
 
 export class EditPopup extends Component<Properties> {
@@ -54,6 +57,7 @@ export class EditPopup extends Component<Properties> {
         visible={true}
         toolbarItems={toolbarItems}
         onHidden={this.props.onHide}
+        showTitle={false}
       >
         <Scrollable>
           <Form
@@ -62,6 +66,7 @@ export class EditPopup extends Component<Properties> {
             formData={this.props.data}
             customizeItem={this.props.customizeItem}
             items={this.props.items}
+            {...this.props.formProps}
           />
         </Scrollable>
       </Popup>

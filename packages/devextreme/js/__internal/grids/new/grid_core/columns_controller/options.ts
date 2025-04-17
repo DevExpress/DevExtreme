@@ -42,6 +42,7 @@ export const defaultColumnProperties = {
   validationRules: [],
   allowEditing: true,
   editorOptions: {},
+  formItem: {},
   setCellValue: defaultSetCellValue,
   defaultSetCellValue,
 } satisfies Partial<Column>;

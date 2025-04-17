@@ -41,12 +41,15 @@ export class EditPopupView extends View<Properties> {
       validationRules: column.validationRules,
       label: {
         text: column.caption,
+        ...column.formItem.label,
       },
       editorType: EDITOR_TYPES_BY_DATA_TYPE[column.dataType],
       editorOptions: {
         ...column.editorOptions,
         disabled: !column.allowEditing,
+        ...column.formItem.editorOptions,
       },
+      ...column.formItem,
     })),
     [this.columnsController.columns],
   );
@@ -79,6 +82,8 @@ export class EditPopupView extends View<Properties> {
 
   protected getProps(): SubsGets<Properties> {
     return combined({
+      formProps: this.options.oneWay('editing.form'),
+      popupProps: this.options.oneWay('editing.popup'),
       formRef: this.formRef,
       data: computed(
         (editRow) => editRow?.data && { ...editRow.data },

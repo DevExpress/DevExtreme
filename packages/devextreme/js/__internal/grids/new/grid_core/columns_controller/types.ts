@@ -1,6 +1,7 @@
 import type { Format, SortOrder } from '@js/common';
 import type { ColumnBase } from '@js/common/grids';
 import type { DeepPartial } from '@js/core/index';
+import type * as dxForm from '@js/ui/form';
 import type { HeaderFilterColumnOptions } from '@ts/grids/new/grid_core/filtering/header_filter/index';
 import type { ComponentType } from 'inferno';
 
@@ -55,6 +56,8 @@ export type Column = Pick<Required<ColumnBase>, InheritedColumnProps> & {
   headerItemTemplate?: ComponentType<{ column: Column }>;
 
   headerItemCssClass?: string;
+
+  formItem: dxForm.SimpleItem;
 
   // header filter options for specific column.
   headerFilter?: HeaderFilterColumnOptions;

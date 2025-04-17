@@ -18,6 +18,7 @@ exports[`ColumnsController columns should contain processed column configs 1`] =
     "defaultSetCellValue": [Function],
     "editorOptions": {},
     "falseText": "false",
+    "formItem": {},
     "headerFilter": {
       "allowSelectAll": true,
       "height": 325,
@@ -54,6 +55,7 @@ exports[`ColumnsController columns should contain processed column configs 1`] =
     "defaultSetCellValue": [Function],
     "editorOptions": {},
     "falseText": "false",
+    "formItem": {},
     "headerFilter": {
       "allowSelectAll": true,
       "height": 325,
@@ -90,6 +92,7 @@ exports[`ColumnsController columns should contain processed column configs 1`] =
     "defaultSetCellValue": [Function],
     "editorOptions": {},
     "falseText": "false",
+    "formItem": {},
     "headerFilter": {
       "allowSelectAll": true,
       "height": 325,

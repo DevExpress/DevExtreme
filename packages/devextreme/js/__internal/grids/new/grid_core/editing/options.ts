@@ -1,6 +1,9 @@
 import messageLocalization from '@js/localization/message';
+import type * as dxForm from '@js/ui/form';
+import type * as dxPopup from '@js/ui/popup';
 
-import type { Key } from '../data_controller/types';
+import type { DataObject, Key } from '../data_controller/types';
+import type { Action } from '../types';
 import type { Change } from './types';
 
 export interface Options {
@@ -13,10 +16,57 @@ export interface Options {
 
     changes?: Change[];
 
+    confirmDelete?: boolean;
+
+    form?: dxForm.Options;
+    popup?: dxPopup.Options;
+
     texts?: {
       addCard?: string;
+      confirmDeleteMessage?: string;
+      confirmDeleteTitle?: string;
     };
+
   };
+
+  onEditCanceled?: Action<{
+    changes: Change[];
+  }>;
+  onEditCanceling?: Action<{
+    changes: Change[]; cancel: boolean;
+  }>;
+  onEditingStart?: Action<{
+    key: Key; data: DataObject; cancel: boolean;
+  }>;
+  onInitNewCard?: Action<{
+    promise?: Promise<void>; data: DataObject;
+  }>;
+  onCardInserting?: Action<{
+    cancel: boolean | Promise<boolean>; data: DataObject;
+  }>;
+  onCardInserted?: Action<{
+    data: DataObject;
+  }>;
+  onCardRemoving?: Action<{
+    cancel: boolean | Promise<boolean>; key: Key; data: DataObject;
+  }>;
+  onCardRemoved?: Action<{
+    data: DataObject; key: Key;
+  }>;
+  onCardUpdating?: Action<{
+    cancel: boolean | Promise<boolean>; key: Key; oldData: DataObject; newData: DataObject;
+  }>;
+  onCardUpdated?: Action<{
+    data: DataObject; key: Key;
+  }>;
+  onSaved?: Action<{
+    changes: Change[];
+  }>;
+  onSaving?: Action<{
+    promise?: Promise<void>;
+    cancel: boolean;
+    changes: Change[];
+  }>;
 }
 
 export const defaultOptions = {
@@ -26,9 +76,13 @@ export const defaultOptions = {
     allowAdding: false,
     allowDeleting: false,
     allowUpdating: false,
+    confirmDelete: true,
+
+    form: {},
+    popup: {},
 
     texts: {
-      addCard: messageLocalization.format('dxCardView-editingAddCard'),
+      confirmDeleteMessage: messageLocalization.format('dxDataGrid-editingConfirmDeleteMessage'),
     },
   },
 } satisfies Options;

@@ -39,6 +39,18 @@ exports[`Options editing allowAdding should add "add" button to toolbar 1`] = `
 ]
 `;
 
+exports[`Options editing changes should contain unsaved changes 1`] = `
+[
+  {
+    "data": {
+      "some_field": "qwe",
+    },
+    "key": 1,
+    "type": "update",
+  },
+]
+`;
+
 exports[`Options editing editCardKey should open popup with given item 1`] = `
 {
   "field1": "value1",

@@ -75,6 +75,7 @@ export class CardHeader extends Component<CardHeaderProps> {
       template,
       row,
       allowUpdating,
+      allowDeleting,
       onEdit,
       onDelete,
     } = this.props;
@@ -93,7 +94,7 @@ export class CardHeader extends Component<CardHeaderProps> {
       ? { location: 'after', widget: 'dxButton', options: { icon: 'edit', onClick: onEdit } }
       : null;
 
-    const deleteButton: CardHeaderItem | null = allowUpdating
+    const deleteButton: CardHeaderItem | null = allowDeleting
       ? { location: 'after', widget: 'dxButton', options: { icon: 'remove', onClick: onDelete } }
       : null;
 

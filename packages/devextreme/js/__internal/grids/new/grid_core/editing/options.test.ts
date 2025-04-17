@@ -27,12 +27,25 @@ const setup = (config: Options) => {
   editPopupView.render(rootElement);
   rerender();
 
+  const getForm = () => {
+    // @ts-expect-error private field
+    const form = editPopupView.formRef.current;
+
+    if (!form) {
+      throw new Error('form is not visible');
+    }
+
+    return form;
+  };
+
   return {
     optionsController,
     editingController,
     editPopupView,
     rootElement,
     toolbarController,
+    context,
+    getForm,
   };
 };
 
@@ -69,7 +82,7 @@ describe('ColumnProperties', () => {
         newData.mycustomfield = value;
       });
 
-      const { editPopupView, editingController } = setup({
+      const { editPopupView, editingController, getForm } = setup({
         columns: [{
           dataField: 'field1',
           setCellValue,
@@ -84,10 +97,7 @@ describe('ColumnProperties', () => {
         },
       });
 
-      // @ts-expect-error private field
-      const form = editPopupView.formRef.current!;
-
-      form.getEditor('field1')!.option('value', 'qwe');
+      getForm().getEditor('field1')!.option('value', 'qwe');
 
       // @ts-expect-error private field
       await editPopupView.promises.waitForAll();
@@ -97,10 +107,17 @@ describe('ColumnProperties', () => {
     });
   });
 
-  describe.skip('editCellTemplate', () => {
-  });
+  describe('formItem', () => {
+    it('should be passed to form item', () => {
+      const { editPopupView } = setup({
+        columns: [{ dataField: 'field1', formItem: { colSpan: 2 } }],
+      });
 
-  describe.skip('formItem', () => {
+      // @ts-expect-error private field
+      const props = editPopupView.props!;
+
+      expect((props.items[0] as dxForm.SimpleItem).colSpan).toBe(2);
+    });
   });
 
   describe('validationRules', () => {
@@ -121,7 +138,7 @@ describe('Options', () => {
   describe('editing', () => {
     describe('editCardKey', () => {
       it('should open popup with given item', () => {
-        const { editPopupView } = setup({
+        const { getForm } = setup({
           columns: [{
             dataField: 'field1',
           }, 'id'],
@@ -135,32 +152,83 @@ describe('Options', () => {
           },
         });
 
-        // @ts-expect-error private field
-        const form = editPopupView.formRef.current!;
-
-        expect(form.option('formData')).toMatchSnapshot();
+        expect(getForm().option('formData')).toMatchSnapshot();
       });
     });
 
     describe('allowAdding', () => {
       it('should add "add" button to toolbar', () => {
-        const { toolbarController } = setup({
-          editing: {
-            allowAdding: true,
-          },
-        });
+        const { toolbarController, optionsController } = setup({});
 
+        expect(toolbarController.items.unreactive_get()).toEqual([]);
+        optionsController.option('editing.allowAdding', 'true');
         expect(toolbarController.items.unreactive_get()).toMatchSnapshot();
       });
     });
     describe('allowUpdating', () => {
       it.skip('should add "edit" button to card', () => {
-
+        // TODO: think how to organize test
       });
     });
     describe('allowRemoving', () => {
-      it.skip('should add "remove" button to card', () => {
+      it('should add "remove" button to card', () => {
+        // TODO: think how to organize test
+      });
+    });
 
+    describe('changes', () => {
+      const config = {
+        dataSource: [
+          { key: 1, some_field: 'asd' },
+        ],
+        columns: ['some_field'],
+        keyExpr: 'key',
+        editing: {
+          editCardKey: 1,
+        },
+      };
+      it('should be empty initially', () => {
+        const { editingController } = setup(config);
+        expect(editingController.changes.unreactive_get()).toEqual([]);
+      });
+      it('should contain unsaved changes', async () => {
+        const { editingController, editPopupView, getForm } = setup(config);
+
+        getForm().getEditor('some_field')?.option('value', 'qwe');
+
+        // @ts-expect-error private prop
+        await editPopupView.promises.waitForAll();
+
+        expect(editingController.changes.unreactive_get()).toMatchSnapshot();
+      });
+      it('should update state in editor', () => {
+        const { editingController, getForm } = setup(config);
+
+        editingController.changes.update([{
+          type: 'update',
+          key: 1,
+          data: { some_field: 'qwe' },
+        }]);
+
+        expect(getForm().getEditor('some_field')?.option('value')).toBe('qwe');
+      });
+    });
+
+    describe('form', () => {
+      it('should pass options to edit form', () => {
+        const { getForm } = setup({
+          dataSource: [
+            { key: 1, some_field: 'asd' },
+          ],
+          columns: ['some_field'],
+          keyExpr: 'key',
+          editing: {
+            editCardKey: 1,
+            form: { disabled: true },
+          },
+        });
+
+        expect(getForm().option('disabled')).toBe(true);
       });
     });
   });
