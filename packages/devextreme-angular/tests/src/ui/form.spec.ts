@@ -10,10 +10,14 @@ import {
 } from '@angular/core/testing';
 
 import {
-  DxFormModule,
-  DxTagBoxModule,
-  DxFormComponent,
+  DxTagBoxComponent,
 } from 'devextreme-angular';
+
+import { DxiItemComponent } from 'devextreme-angular/ui/nested';
+
+import {
+  DxFormComponent, DxiFormItemComponent, DxiFormValidationRuleComponent, DxoFormLabelComponent
+} from 'devextreme-angular/ui/form';
 
 @Component({
   selector: 'test-container-component',
@@ -45,7 +49,14 @@ describe('DxForm', () => {
     TestBed.configureTestingModule(
       {
         declarations: [TestContainerComponent],
-        imports: [DxFormModule, DxTagBoxModule],
+        imports: [
+            DxFormComponent,
+          DxTagBoxComponent,
+          DxiFormItemComponent,
+          DxoFormLabelComponent,
+          DxiFormValidationRuleComponent,
+          DxiItemComponent
+        ],
       },
     );
   });
@@ -60,7 +71,7 @@ describe('DxForm', () => {
       set: {
         template: `
                     <dx-form id="form" [formData]="formData">
-                        <dxi-item dataField="name" editorType="dxTextBox"></dxi-item>
+                        <dxi-form-item dataField="name" editorType="dxTextBox"></dxi-form-item>
                     </dx-form>
                 `,
       },
@@ -99,13 +110,13 @@ describe('DxForm', () => {
       set: {
         template: `
                     <dx-form id="form" [formData]="formData">
-                        <dxi-item dataField="name" editorType="dxTextBox">
-                            <dxi-validation-rule
+                        <dxi-form-item dataField="name" editorType="dxTextBox">
+                            <dxi-form-validation-rule
                                 *ngIf="true"
                                 type="required"
                                 message="item is required."
-                            ></dxi-validation-rule>
-                        </dxi-item>
+                            ></dxi-form-validation-rule>
+                        </dxi-form-item>
                     </dx-form>
                 `,
       },
@@ -122,8 +133,8 @@ describe('DxForm', () => {
       set: {
         template: `
                     <dx-form [formData]="formData">
-                        <dxi-item dataField="name" editorType="dxTextBox">
-                        </dxi-item>
+                        <dxi-form-item dataField="name" editorType="dxTextBox">
+                        </dxi-form-item>
                     </dx-form>
                     <span id="text">{{formData.name}}<span>
                 `,
@@ -177,12 +188,12 @@ describe('DxForm', () => {
       set: {
         template: `
                     <dx-form [formData]="{ text: 1 }">
-                        <dxi-item itemType="group" *ngIf="true">
-                            <dxi-item dataField="text">
-                                <dxi-validation-rule type="custom" [validationCallback]="validateForm">
-                                </dxi-validation-rule>
-                            </dxi-item>
-                        </dxi-item>
+                        <dxi-form-item itemType="group" *ngIf="true">
+                            <dxi-form-item dataField="text">
+                                <dxi-form-validation-rule type="custom" [validationCallback]="validateForm">
+                                </dxi-form-validation-rule>
+                            </dxi-form-item>
+                        </dxi-form-item>
                     </dx-form>
                 `,
       },
@@ -203,7 +214,7 @@ describe('DxForm', () => {
                         <dxi-item itemType="group"
                             name="label-container">
                             <dxi-item [dataField]="'labels[' + i + ']'" *ngFor="let labelValue of labelValues; let i = index">
-                                <dxo-label [text]="labelValue.name"></dxo-label>
+                                <dxo-form-label [text]="labelValue.name"></dxo-form-label>
                             </dxi-item>
                         </dxi-item>
                     </dx-form>
@@ -228,9 +239,9 @@ describe('DxForm', () => {
       set: {
         template: `
                     <dx-form [formData]="formData1">
-                        <dxi-item [dataField]="'labels[' + i + ']'"  *ngFor="let labelValue of labelValues; let i = index">
-                            <dxo-label [text]="labelValue.name"></dxo-label>
-                        </dxi-item>
+                        <dxi-form-item [dataField]="'labels[' + i + ']'"  *ngFor="let labelValue of labelValues; let i = index">
+                            <dxo-form-label [text]="labelValue.name"></dxo-form-label>
+                        </dxi-form-item>
                     </dx-form>
                 `,
       },
@@ -254,9 +265,9 @@ describe('DxForm', () => {
       set: {
         template: `
                     <dx-form [formData]="{}">
-                        <dxi-item [dataField]="'labels[' + i + ']'" *ngFor="let labelValue of labelValuesSecond; let i = index">
-                            <dxo-label text="{{ labelValue.name }}"></dxo-label>
-                        </dxi-item>
+                        <dxi-form-item [dataField]="'labels[' + i + ']'" *ngFor="let labelValue of labelValuesSecond; let i = index">
+                            <dxo-form-label text="{{ labelValue.name }}"></dxo-form-label>
+                        </dxi-form-item>
                     </dx-form>
                 `,
       },
@@ -280,12 +291,12 @@ describe('DxForm', () => {
       set: {
         template: `
                     <dx-form [formData]="{}">
-                        <dxi-item [dataField]="'labels[' + i + ']'" *ngFor="let labelValue of labelValuesSecond; let i = index">
-                            <dxo-label text="{{ labelValue.name }}"></dxo-label>
-                        </dxi-item>
-                        <dxi-item [dataField]="'labels[4]'">
-                            <dxo-label text="label4" *ngIf="condition"></dxo-label>
-                        </dxi-item>
+                        <dxi-form-item [dataField]="'labels[' + i + ']'" *ngFor="let labelValue of labelValuesSecond; let i = index">
+                            <dxo-form-label text="{{ labelValue.name }}"></dxo-form-label>
+                        </dxi-form-item>
+                        <dxi-form-item [dataField]="'labels[4]'">
+                            <dxo-form-label text="label4" *ngIf="condition"></dxo-form-label>
+                        </dxi-form-item>
                     </dx-form>
                 `,
       },
@@ -313,18 +324,18 @@ describe('DxForm', () => {
                     <dx-form [formData]="{}">
                         <dxi-item caption="First Group" itemType="group">
                             <dxi-item [dataField]="'labels[' + i + ']'" *ngFor="let labelValue of labelValues; let i = index">
-                                <dxo-label text="{{ labelValue.name }}"></dxo-label>
+                                <dxo-form-label text="{{ labelValue.name }}"></dxo-form-label>
                             </dxi-item>
                             <dxi-item [dataField]="'labels[3]'">
-                                <dxo-label text="label3" *ngIf="condition"></dxo-label>
+                                <dxo-form-label text="label3" *ngIf="condition"></dxo-form-label>
                             </dxi-item>
                         </dxi-item>
                         <dxi-item caption="Second Group" itemType="group">
                             <dxi-item [dataField]="'labels[0]'">
-                                <dxo-label text="label0" *ngIf="condition"></dxo-label>
+                                <dxo-form-label text="label0" *ngIf="condition"></dxo-form-label>
                             </dxi-item>
                             <dxi-item [dataField]="'labels[' + i++ + ']'" *ngFor="let labelValue of labelValuesSecond; let i = index">
-                                <dxo-label text="{{ labelValue.name }}"></dxo-label>
+                                <dxo-form-label text="{{ labelValue.name }}"></dxo-form-label>
                             </dxi-item>
                         </dxi-item>
                     </dx-form>

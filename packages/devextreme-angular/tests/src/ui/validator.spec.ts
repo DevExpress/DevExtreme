@@ -10,9 +10,7 @@ import {
 } from '@angular/core/testing';
 
 import {
-  DxTextBoxModule,
   DxTextBoxComponent,
-  DxValidatorModule,
   DxValidatorComponent,
 } from 'devextreme-angular';
 
@@ -49,7 +47,7 @@ describe('DxValidator', () => {
     TestBed.configureTestingModule(
       {
         declarations: [TestContainerComponent],
-        imports: [DxTextBoxModule, DxValidatorModule],
+        imports: [DxTextBoxComponent, DxValidatorComponent],
       },
     );
   });

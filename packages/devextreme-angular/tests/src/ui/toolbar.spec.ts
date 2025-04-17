@@ -9,9 +9,8 @@ import {
 } from '@angular/core/testing';
 
 import {
-  DxToolbarModule,
-  DxToolbarComponent,
-} from 'devextreme-angular';
+  DxToolbarComponent, DxiToolbarItemComponent
+} from 'devextreme-angular/ui/toolbar';
 
 @Component({
   selector: 'test-container-component',
@@ -26,7 +25,7 @@ describe('DxToolbar', () => {
     TestBed.configureTestingModule(
       {
         declarations: [TestContainerComponent],
-        imports: [DxToolbarModule],
+        imports: [DxToolbarComponent, DxiToolbarItemComponent],
       },
     );
   });
@@ -37,7 +36,7 @@ describe('DxToolbar', () => {
       set: {
         template: `
                     <dx-toolbar>
-                        <dxi-item>Item1</dxi-item>
+                        <dxi-toolbar-item>Item1</dxi-toolbar-item>
                     </dx-toolbar>
                 `,
       },

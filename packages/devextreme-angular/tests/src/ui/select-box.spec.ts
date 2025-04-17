@@ -10,9 +10,9 @@ import {
 } from '@angular/core/testing';
 
 import {
-  DxSelectBoxModule,
-  DxTextBoxModule,
+  DxTextBoxComponent,
   DxSelectBoxComponent,
+  DxTemplateDirective,
 } from 'devextreme-angular';
 
 @Component({
@@ -34,7 +34,7 @@ describe('DxSelectBox', () => {
     TestBed.configureTestingModule(
       {
         declarations: [TestContainerComponent],
-        imports: [DxSelectBoxModule, DxTextBoxModule],
+        imports: [DxSelectBoxComponent, DxTextBoxComponent, DxTemplateDirective],
       },
     );
   });

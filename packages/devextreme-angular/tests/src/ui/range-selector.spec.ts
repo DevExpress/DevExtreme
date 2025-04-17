@@ -10,7 +10,7 @@ import {
 } from '@angular/core/testing';
 
 import {
-  DxRangeSelectorModule, DxRangeSelectorComponent,
+  DxRangeSelectorComponent,
 } from 'devextreme-angular';
 
 @Component({
@@ -36,7 +36,7 @@ describe('DxRangeSelector', () => {
     TestBed.configureTestingModule(
       {
         declarations: [TestContainerComponent],
-        imports: [DxRangeSelectorModule],
+        imports: [DxRangeSelectorComponent],
       },
     );
   });

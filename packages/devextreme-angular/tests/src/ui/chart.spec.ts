@@ -9,8 +9,12 @@ import {
 } from '@angular/core/testing';
 
 import {
-  DxChartModule, DxChartComponent, DxScrollViewModule,
+  DxScrollViewComponent,
 } from 'devextreme-angular';
+
+import {
+  DxChartComponent, DxoChartArgumentAxisComponent, DxoChartStripLabelComponent, DxiChartStripComponent, DxiChartSeriesComponent
+} from 'devextreme-angular/ui/chart';
 
 import dxChart from 'devextreme/viz/chart';
 
@@ -49,7 +53,14 @@ describe('DxChart', () => {
     TestBed.configureTestingModule(
       {
         declarations: [TestContainerComponent],
-        imports: [DxChartModule, DxScrollViewModule],
+        imports: [
+            DxChartComponent,
+          DxScrollViewComponent,
+          DxiChartSeriesComponent,
+          DxoChartArgumentAxisComponent,
+          DxoChartStripLabelComponent,
+          DxiChartStripComponent
+        ],
       },
     );
   });
@@ -136,12 +147,12 @@ describe('DxChart', () => {
       set: {
         template: `
                 <dx-chart [dataSource]="[]" >
-                    <dxo-argument-axis>
-                         <dxi-strip *ngFor="let strip of strips">
-                             <dxo-label [text]="strip.label">
-                             </dxo-label>
-                         </dxi-strip>
-                    </dxo-argument-axis>
+                    <dxo-chart-argument-axis>
+                         <dxi-chart-strip *ngFor="let strip of strips">
+                             <dxo-chart-strip-label [text]="strip.label">
+                             </dxo-chart-strip-label>
+                         </dxi-chart-strip>
+                    </dxo-chart-argument-axis>
                 </dx-chart>`,
       },
     });
@@ -163,9 +174,9 @@ describe('DxChart', () => {
       set: {
         template: `
                 <dx-chart [dataSource]="[{ ID: 1, Text: 'A', Value: '2' }]" (onDisposing)='onDisposing()'>
-                    <dxi-series argumentField='Text' valueField='Value' type='bar' color='#f9ce2d'>
-                        <dxo-label [visible]='false'> </dxo-label>
-                    </dxi-series>
+                    <dxi-chart-series argumentField='Text' valueField='Value' type='bar' color='#f9ce2d'>
+                        <dxo-chart-strip-label [visible]='false'> </dxo-chart-strip-label>
+                    </dxi-chart-series>
                 </dx-chart>`,
       },
     });

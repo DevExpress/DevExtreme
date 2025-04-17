@@ -8,7 +8,6 @@ import {
 import { TestBed } from '@angular/core/testing';
 
 import {
-  DxCalendarModule,
   DxCalendarComponent,
 } from 'devextreme-angular';
 
@@ -27,7 +26,7 @@ describe('DxCalendar', () => {
     TestBed.configureTestingModule(
       {
         declarations: [TestContainerComponent],
-        imports: [DxCalendarModule],
+        imports: [DxCalendarComponent],
       },
     );
   });

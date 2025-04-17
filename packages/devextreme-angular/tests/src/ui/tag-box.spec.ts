@@ -10,7 +10,6 @@ import {
 } from '@angular/core/testing';
 
 import {
-  DxTagBoxModule,
   DxTagBoxComponent,
 } from 'devextreme-angular';
 
@@ -31,7 +30,7 @@ describe('DxTagBox', () => {
     TestBed.configureTestingModule(
       {
         declarations: [TestContainerComponent],
-        imports: [DxTagBoxModule],
+        imports: [DxTagBoxComponent],
       },
     );
   });
