@@ -37,7 +37,11 @@ const columns = {
       'firstName',
       'lastName',
       'gender',
-      'birthDate'
+      {
+        dataField: 'birthDate',
+        dataType: 'date',
+      }
+      
   ],
   sortedRemote: [
     {

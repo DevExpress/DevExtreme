@@ -4,7 +4,7 @@ export const generatedData = [{
     "lastName": "Moynham",
     "email": "cmoynham0@google.com.au",
     "gender": "Male",
-    "birthDate": "1983/11/07",
+    "birthDate": new Date("1983/11/07"),
     "picture": "images/employees/01.png",
 }, {
     "id": 2,
@@ -12,14 +12,14 @@ export const generatedData = [{
     "lastName": "Le Claire",
     "email": "aleclaire1@tinyurl.com",
     "gender": "Female",
-    "birthDate": "1988/03/27",
+    "birthDate": new Date("1988/03/27"),
 }, {
     "id": 3,
     "firstName": "Raven",
     "lastName": "Slayton",
     "email": "rslayton2@scientificamerican.com",
     "gender": "Female",
-    "birthDate": "1981/04/29",
+    "birthDate": new Date("1981/04/29"),
     "picture": "images/employees/03.png",
 }, {
     "id": 4,
@@ -27,7 +27,7 @@ export const generatedData = [{
     "lastName": "Casini",
     "email": "mcasini3@ted.com",
     "gender": "Female",
-    "birthDate": "1993/11/29",
+    "birthDate": new Date("1993/11/29"),
     "picture": "images/employees/04.png",
 }, {
     "id": 5,
@@ -35,14 +35,14 @@ export const generatedData = [{
     "lastName": "Workes",
     "email": "gworkes4@uol.com.br",
     "gender": "Female",
-    "birthDate": "1980/11/28",
+    "birthDate": new Date("1980/11/28"),
 }, {
     "id": 6,
     "firstName": "Elvis",
     "lastName": "Matthew",
     "email": "ematthew5@qq.com",
     "gender": "Male",
-    "birthDate": "1981/07/24",
+    "birthDate": new Date("1981/07/24"),
     "picture": "images/employees/06.png",
 }, {
     "id": 7,
@@ -50,7 +50,7 @@ export const generatedData = [{
     "lastName": "Greneham",
     "email": "ggreneham6@ucoz.ru",
     "gender": "Female",
-    "birthDate": "1994/12/18",
+    "birthDate": new Date("1994/12/18"),
     "picture": "images/employees/07.png",
 }, {
     "id": 8,
@@ -58,7 +58,7 @@ export const generatedData = [{
     "lastName": "Collinge",
     "email": "kcollinge7@friendfeed.com",
     "gender": "Male",
-    "birthDate": "1982/11/30",
+    "birthDate": new Date("1982/11/30"),
     "picture": "images/employees/08.png",
 }, {
     "id": 9,
@@ -66,7 +66,7 @@ export const generatedData = [{
     "lastName": "Warder",
     "email": "gwarder8@salon.com",
     "gender": "Female",
-    "birthDate": "1999/01/14",
+    "birthDate": new Date("1999/01/14"),
     "picture": "images/employees/09.png",
 }, {
     "id": 10,
@@ -74,7 +74,7 @@ export const generatedData = [{
     "lastName": "Vertey",
     "email": "mvertey9@vinaora.com",
     "gender": "Male",
-    "birthDate": "1996/09/11",
+    "birthDate": new Date("1996/09/11"),
     "picture": "images/employees/02.png",
 }, {
     "id": 11,
@@ -82,7 +82,7 @@ export const generatedData = [{
     "lastName": "Windows",
     "email": "kwindowsa@wunderground.com",
     "gender": "Male",
-    "birthDate": "1980/03/17",
+    "birthDate": new Date("1980/03/17"),
     "picture": "images/employees/02.png",
 }, {
     "id": 12,
@@ -90,7 +90,7 @@ export const generatedData = [{
     "lastName": "Navan",
     "email": "knavanb@hatena.ne.jp",
     "gender": "Female",
-    "birthDate": "1980/04/23",
+    "birthDate": new Date("1980/04/23"),
     "picture": "images/employees/02.png",
 }, {
     "id": 13,
@@ -98,7 +98,7 @@ export const generatedData = [{
     "lastName": "Saberton",
     "email": "asabertonc@quantcast.com",
     "gender": "Female",
-    "birthDate": "1992/05/05",
+    "birthDate": new Date("1992/05/05"),
     "picture": "images/employees/02.png",
 }, {
     "id": 14,
@@ -106,7 +106,7 @@ export const generatedData = [{
     "lastName": "Casserly",
     "email": "rcasserlyd@ezinearticles.com",
     "gender": "Female",
-    "birthDate": "1982/05/25",
+    "birthDate": new Date("1982/05/25"),
     "picture": "images/employees/02.png",
 }, {
     "id": 15,
@@ -114,7 +114,7 @@ export const generatedData = [{
     "lastName": "McCrainor",
     "email": "hmccrainore@prnewswire.com",
     "gender": "Polygender",
-    "birthDate": "1989/02/26",
+    "birthDate": new Date("1989/02/26"),
     "picture": "images/employees/02.png",
 }, {
     "id": 16,
@@ -122,7 +122,7 @@ export const generatedData = [{
     "lastName": "Kinsell",
     "email": "jkinsellf@prnewswire.com",
     "gender": "Female",
-    "birthDate": "1989/10/07",
+    "birthDate": new Date("1989/10/07"),
     "picture": "images/employees/02.png",
 }, {
     "id": 17,
@@ -130,7 +130,7 @@ export const generatedData = [{
     "lastName": "Abramovitch",
     "email": "rabramovitchg@psu.edu",
     "gender": "Male",
-    "birthDate": "1997/10/05",
+    "birthDate": new Date("1997/10/05"),
     "picture": "images/employees/02.png",
 }, {
     "id": 18,
@@ -138,7 +138,7 @@ export const generatedData = [{
     "lastName": "Heinlein",
     "email": "aheinleinh@pen.io",
     "gender": "Agender",
-    "birthDate": "1987/05/08",
+    "birthDate": new Date("1987/05/08"),
     "picture": "images/employees/02.png",
 }, {
     "id": 19,
@@ -146,7 +146,7 @@ export const generatedData = [{
     "lastName": "Climar",
     "email": "oclimari@histats.com",
     "gender": "Female",
-    "birthDate": "1986/04/10",
+    "birthDate": new Date("1986/04/10"),
     "picture": "images/employees/02.png",
 }, {
     "id": 20,
@@ -154,7 +154,7 @@ export const generatedData = [{
     "lastName": "Mullan",
     "email": "smullanj@senate.gov",
     "gender": "Male",
-    "birthDate": "1985/10/26",
+    "birthDate": new Date("1985/10/26"),
     "picture": "images/employees/02.png",
 }, {
     "id": 21,
@@ -162,7 +162,7 @@ export const generatedData = [{
     "lastName": "Congrave",
     "email": "lcongravek@globo.com",
     "gender": "Female",
-    "birthDate": "1983/04/12",
+    "birthDate": new Date("1983/04/12"),
     "picture": "images/employees/02.png",
 }, {
     "id": 22,
@@ -170,7 +170,7 @@ export const generatedData = [{
     "lastName": "Gerardot",
     "email": "hgerardotl@comcast.net",
     "gender": "Male",
-    "birthDate": "1992/01/04",
+    "birthDate": new Date("1992/01/04"),
     "picture": "images/employees/02.png",
 }, {
     "id": 23,
@@ -178,7 +178,7 @@ export const generatedData = [{
     "lastName": "Boken",
     "email": "mbokenm@economist.com",
     "gender": "Female",
-    "birthDate": "1985/07/03",
+    "birthDate": new Date("1985/07/03"),
     "picture": "images/employees/02.png",
 }, {
     "id": 24,
@@ -186,7 +186,7 @@ export const generatedData = [{
     "lastName": "Sayle",
     "email": "dsaylen@squarespace.com",
     "gender": "Male",
-    "birthDate": "1980/06/24",
+    "birthDate": new Date("1980/06/24"),
     "picture": "images/employees/02.png",
 }, {
     "id": 25,
@@ -194,7 +194,7 @@ export const generatedData = [{
     "lastName": "Schuler",
     "email": "cschulero@reference.com",
     "gender": "Male",
-    "birthDate": "1995/05/02",
+    "birthDate": new Date("1995/05/02"),
     "picture": "images/employees/02.png",
 }, {
     "id": 26,
@@ -202,7 +202,7 @@ export const generatedData = [{
     "lastName": "Navan",
     "email": "jnavanp@buzzfeed.com",
     "gender": "Male",
-    "birthDate": "1985/03/16",
+    "birthDate": new Date("1985/03/16"),
     "picture": "images/employees/02.png",
 }, {
     "id": 27,
@@ -210,7 +210,7 @@ export const generatedData = [{
     "lastName": "Hellens",
     "email": "whellensq@wikispaces.com",
     "gender": "Male",
-    "birthDate": "1986/01/20",
+    "birthDate": new Date("1986/01/20"),
     "picture": "images/employees/02.png",
 }, {
     "id": 28,
@@ -218,7 +218,7 @@ export const generatedData = [{
     "lastName": "Garahan",
     "email": "agarahanr@sina.com.cn",
     "gender": "Female",
-    "birthDate": "1986/06/09",
+    "birthDate": new Date("1986/06/09"),
     "picture": "images/employees/02.png",
 }, {
     "id": 29,
@@ -226,7 +226,7 @@ export const generatedData = [{
     "lastName": "Pembridge",
     "email": "tpembridges@about.com",
     "gender": "Male",
-    "birthDate": "1991/03/06",
+    "birthDate": new Date("1991/03/06"),
     "picture": "images/employees/02.png",
 }, {
     "id": 30,
@@ -234,7 +234,7 @@ export const generatedData = [{
     "lastName": "Hannaway",
     "email": "ahannawayt@dion.ne.jp",
     "gender": "Non-binary",
-    "birthDate": "1996/01/15",
+    "birthDate": new Date("1996/01/15"),
     "picture": "images/employees/02.png",
 }, {
     "id": 31,
@@ -242,7 +242,7 @@ export const generatedData = [{
     "lastName": "Geerdts",
     "email": "ngeerdtsu@abc.net.au",
     "gender": "Male",
-    "birthDate": "1999/03/12",
+    "birthDate": new Date("1999/03/12"),
     "picture": "images/employees/02.png",
 }, {
     "id": 32,
@@ -250,7 +250,7 @@ export const generatedData = [{
     "lastName": "Collet",
     "email": "vcolletv@ox.ac.uk",
     "gender": "Female",
-    "birthDate": "1984/09/20",
+    "birthDate": new Date("1984/09/20"),
     "picture": "images/employees/02.png",
 }, {
     "id": 33,
@@ -258,7 +258,7 @@ export const generatedData = [{
     "lastName": "Sneyd",
     "email": "psneydw@nyu.edu",
     "gender": "Female",
-    "birthDate": "1998/04/30",
+    "birthDate": new Date("1998/04/30"),
     "picture": "images/employees/02.png",
 }, {
     "id": 34,
@@ -266,7 +266,7 @@ export const generatedData = [{
     "lastName": "Yekel",
     "email": "syekelx@netscape.com",
     "gender": "Agender",
-    "birthDate": "1990/03/27",
+    "birthDate": new Date("1990/03/27"),
     "picture": "images/employees/02.png",
 }, {
     "id": 35,
@@ -274,7 +274,7 @@ export const generatedData = [{
     "lastName": "Crowcombe",
     "email": "mcrowcombey@yahoo.com",
     "gender": "Male",
-    "birthDate": "1993/11/14",
+    "birthDate": new Date("1993/11/14"),
     "picture": "images/employees/02.png",
 }, {
     "id": 36,
@@ -282,7 +282,7 @@ export const generatedData = [{
     "lastName": "Squibb",
     "email": "msquibbz@themeforest.net",
     "gender": "Male",
-    "birthDate": "1997/12/06",
+    "birthDate": new Date("1997/12/06"),
     "picture": "images/employees/02.png",
 }, {
     "id": 37,
@@ -290,7 +290,7 @@ export const generatedData = [{
     "lastName": "Tippings",
     "email": "ttippings10@shop-pro.jp",
     "gender": "Male",
-    "birthDate": "1987/06/28",
+    "birthDate": new Date("1987/06/28"),
     "picture": "images/employees/02.png",
 }, {
     "id": 38,
@@ -298,7 +298,7 @@ export const generatedData = [{
     "lastName": "Saiens",
     "email": "rsaiens11@163.com",
     "gender": "Female",
-    "birthDate": "1980/08/30",
+    "birthDate": new Date("1980/08/30"),
     "picture": "images/employees/02.png",
 }, {
     "id": 39,
@@ -306,7 +306,7 @@ export const generatedData = [{
     "lastName": "Lugton",
     "email": "dlugton12@elpais.com",
     "gender": "Male",
-    "birthDate": "1997/01/18",
+    "birthDate": new Date("1997/01/18"),
     "picture": "images/employees/02.png",
 }, {
     "id": 40,
@@ -314,7 +314,7 @@ export const generatedData = [{
     "lastName": "Laphorn",
     "email": "mlaphorn13@vinaora.com",
     "gender": "Male",
-    "birthDate": "1990/10/14",
+    "birthDate": new Date("1990/10/14"),
     "picture": "images/employees/02.png",
 }, {
     "id": 41,
@@ -322,7 +322,7 @@ export const generatedData = [{
     "lastName": "Lorking",
     "email": "clorking14@surveymonkey.com",
     "gender": "Female",
-    "birthDate": "1998/07/07",
+    "birthDate": new Date("1998/07/07"),
     "picture": "images/employees/02.png",
 }, {
     "id": 42,
@@ -330,7 +330,7 @@ export const generatedData = [{
     "lastName": "Wagenen",
     "email": "swagenen15@archive.org",
     "gender": "Male",
-    "birthDate": "1989/12/13",
+    "birthDate": new Date("1989/12/13"),
     "picture": "images/employees/02.png",
 }, {
     "id": 43,
@@ -338,7 +338,7 @@ export const generatedData = [{
     "lastName": "Hopfner",
     "email": "jhopfner16@google.ca",
     "gender": "Female",
-    "birthDate": "1998/10/11",
+    "birthDate": new Date("1998/10/11"),
     "picture": "images/employees/02.png",
 }, {
     "id": 44,
@@ -346,7 +346,7 @@ export const generatedData = [{
     "lastName": "Murdy",
     "email": "emurdy17@typepad.com",
     "gender": "Female",
-    "birthDate": "1987/05/19",
+    "birthDate": new Date("1987/05/19"),
     "picture": "images/employees/02.png",
 }, {
     "id": 45,
@@ -354,7 +354,7 @@ export const generatedData = [{
     "lastName": "Brimham",
     "email": "fbrimham18@army.mil",
     "gender": "Male",
-    "birthDate": "1994/01/18",
+    "birthDate": new Date("1994/01/18"),
     "picture": "images/employees/02.png",
 }, {
     "id": 46,
@@ -362,7 +362,7 @@ export const generatedData = [{
     "lastName": "Mangeon",
     "email": "fmangeon19@bravesites.com",
     "gender": "Male",
-    "birthDate": "1998/04/22",
+    "birthDate": new Date("1998/04/22"),
     "picture": "images/employees/02.png",
 }, {
     "id": 47,
@@ -370,7 +370,7 @@ export const generatedData = [{
     "lastName": "Disney",
     "email": "gdisney1a@disqus.com",
     "gender": "Male",
-    "birthDate": "1991/06/04",
+    "birthDate": new Date("1991/06/04"),
     "picture": "images/employees/02.png",
 }, {
     "id": 48,
@@ -378,7 +378,7 @@ export const generatedData = [{
     "lastName": "Descroix",
     "email": "tdescroix1b@wunderground.com",
     "gender": "Male",
-    "birthDate": "1981/03/15",
+    "birthDate": new Date("1981/03/15"),
     "picture": "images/employees/02.png",
 }, {
     "id": 49,
@@ -386,7 +386,7 @@ export const generatedData = [{
     "lastName": "Clewett",
     "email": "oclewett1c@merriam-webster.com",
     "gender": "Female",
-    "birthDate": "1986/09/28",
+    "birthDate": new Date("1986/09/28"),
     "picture": "images/employees/02.png",
 }, {
     "id": 50,
@@ -394,7 +394,7 @@ export const generatedData = [{
     "lastName": "Scrauniage",
     "email": "kscrauniage1d@cmu.edu",
     "gender": "Male",
-    "birthDate": "1982/09/25",
+    "birthDate": new Date("1982/09/25"),
     "picture": "images/employees/02.png",
 }, {
     "id": 51,
@@ -402,7 +402,7 @@ export const generatedData = [{
     "lastName": "Bonallack",
     "email": "mbonallack1e@amazon.com",
     "gender": "Male",
-    "birthDate": "1985/05/07",
+    "birthDate": new Date("1985/05/07"),
     "picture": "images/employees/02.png",
 }, {
     "id": 52,
@@ -410,7 +410,7 @@ export const generatedData = [{
     "lastName": "Brave",
     "email": "nbrave1f@freewebs.com",
     "gender": "Bigender",
-    "birthDate": "1997/06/10",
+    "birthDate": new Date("1997/06/10"),
     "picture": "images/employees/02.png",
 }, {
     "id": 53,
@@ -418,7 +418,7 @@ export const generatedData = [{
     "lastName": "Lipson",
     "email": "slipson1g@nydailynews.com",
     "gender": "Female",
-    "birthDate": "1994/11/29",
+    "birthDate": new Date("1994/11/29"),
     "picture": "images/employees/02.png",
 }, {
     "id": 54,
@@ -426,7 +426,7 @@ export const generatedData = [{
     "lastName": "Barley",
     "email": "bbarley1h@jigsy.com",
     "gender": "Female",
-    "birthDate": "1999/04/17",
+    "birthDate": new Date("1999/04/17"),
     "picture": "images/employees/02.png",
 }, {
     "id": 55,
@@ -434,7 +434,7 @@ export const generatedData = [{
     "lastName": "Spurrett",
     "email": "pspurrett1i@mysql.com",
     "gender": "Genderfluid",
-    "birthDate": "1981/08/31",
+    "birthDate": new Date("1981/08/31"),
     "picture": "images/employees/02.png",
 }, {
     "id": 56,
@@ -442,7 +442,7 @@ export const generatedData = [{
     "lastName": "Davana",
     "email": "mdavana1j@booking.com",
     "gender": "Female",
-    "birthDate": "1985/07/25",
+    "birthDate": new Date("1985/07/25"),
     "picture": "images/employees/02.png",
 }, {
     "id": 57,
@@ -450,7 +450,7 @@ export const generatedData = [{
     "lastName": "Sacaze",
     "email": "tsacaze1k@livejournal.com",
     "gender": "Female",
-    "birthDate": "1998/08/26",
+    "birthDate": new Date("1998/08/26"),
     "picture": "images/employees/02.png",
 }, {
     "id": 58,
@@ -458,7 +458,7 @@ export const generatedData = [{
     "lastName": "Loomis",
     "email": "hloomis1l@phoca.cz",
     "gender": "Male",
-    "birthDate": "1980/06/23",
+    "birthDate": new Date("1980/06/23"),
     "picture": "images/employees/02.png",
 }, {
     "id": 59,
@@ -466,7 +466,7 @@ export const generatedData = [{
     "lastName": "Keeling",
     "email": "rkeeling1m@umn.edu",
     "gender": "Male",
-    "birthDate": "1989/05/13",
+    "birthDate": new Date("1989/05/13"),
     "picture": "images/employees/02.png",
 }, {
     "id": 60,
@@ -474,7 +474,7 @@ export const generatedData = [{
     "lastName": "Harwin",
     "email": "bharwin1n@adobe.com",
     "gender": "Female",
-    "birthDate": "1988/09/03",
+    "birthDate": new Date("1988/09/03"),
     "picture": "images/employees/02.png",
 }, {
     "id": 61,
@@ -482,7 +482,7 @@ export const generatedData = [{
     "lastName": "Doswell",
     "email": "edoswell1o@amazonaws.com",
     "gender": "Female",
-    "birthDate": "1985/08/25",
+    "birthDate": new Date("1985/08/25"),
     "picture": "images/employees/02.png",
 }, {
     "id": 62,
@@ -490,7 +490,7 @@ export const generatedData = [{
     "lastName": "McQuode",
     "email": "zmcquode1p@berkeley.edu",
     "gender": "Male",
-    "birthDate": "1998/03/24",
+    "birthDate": new Date("1998/03/24"),
     "picture": "images/employees/02.png",
 }, {
     "id": 63,
@@ -498,7 +498,7 @@ export const generatedData = [{
     "lastName": "Yannikov",
     "email": "pyannikov1q@weibo.com",
     "gender": "Male",
-    "birthDate": "1988/09/19",
+    "birthDate": new Date("1988/09/19"),
     "picture": "images/employees/02.png",
 }, {
     "id": 64,
@@ -506,7 +506,7 @@ export const generatedData = [{
     "lastName": "Starford",
     "email": "kstarford1r@huffingtonpost.com",
     "gender": "Female",
-    "birthDate": "1998/11/29",
+    "birthDate": new Date("1998/11/29"),
     "picture": "images/employees/02.png",
 }, {
     "id": 65,
@@ -514,7 +514,7 @@ export const generatedData = [{
     "lastName": "Surby",
     "email": "ksurby1s@hostgator.com",
     "gender": "Male",
-    "birthDate": "1981/09/19",
+    "birthDate": new Date("1981/09/19"),
     "picture": "images/employees/02.png",
 }, {
     "id": 66,
@@ -522,7 +522,7 @@ export const generatedData = [{
     "lastName": "Sickling",
     "email": "dsickling1t@constantcontact.com",
     "gender": "Male",
-    "birthDate": "1988/10/24",
+    "birthDate": new Date("1988/10/24"),
     "picture": "images/employees/02.png",
 }, {
     "id": 67,
@@ -530,7 +530,7 @@ export const generatedData = [{
     "lastName": "Tawse",
     "email": "vtawse1u@cornell.edu",
     "gender": "Female",
-    "birthDate": "1995/10/13",
+    "birthDate": new Date("1995/10/13"),
     "picture": "images/employees/02.png",
 }, {
     "id": 68,
@@ -538,7 +538,7 @@ export const generatedData = [{
     "lastName": "Edgcombe",
     "email": "ledgcombe1v@yelp.com",
     "gender": "Female",
-    "birthDate": "1983/07/23",
+    "birthDate": new Date("1983/07/23"),
     "picture": "images/employees/02.png",
 }, {
     "id": 69,
@@ -546,7 +546,7 @@ export const generatedData = [{
     "lastName": "Fewell",
     "email": "ofewell1w@creativecommons.org",
     "gender": "Male",
-    "birthDate": "1987/10/25",
+    "birthDate": new Date("1987/10/25"),
     "picture": "images/employees/02.png",
 }, {
     "id": 70,
@@ -554,7 +554,7 @@ export const generatedData = [{
     "lastName": "Hatchett",
     "email": "ehatchett1x@wufoo.com",
     "gender": "Male",
-    "birthDate": "1994/12/04",
+    "birthDate": new Date("1994/12/04"),
     "picture": "images/employees/02.png",
 }, {
     "id": 71,
@@ -562,7 +562,7 @@ export const generatedData = [{
     "lastName": "Jex",
     "email": "mjex1y@friendfeed.com",
     "gender": "Female",
-    "birthDate": "1989/09/03",
+    "birthDate": new Date("1989/09/03"),
     "picture": "images/employees/02.png",
 }, {
     "id": 72,
@@ -570,7 +570,7 @@ export const generatedData = [{
     "lastName": "Kisting",
     "email": "ckisting1z@netvibes.com",
     "gender": "Male",
-    "birthDate": "1996/06/13",
+    "birthDate": new Date("1996/06/13"),
     "picture": "images/employees/02.png",
 }, {
     "id": 73,
@@ -578,7 +578,7 @@ export const generatedData = [{
     "lastName": "Carff",
     "email": "dcarff20@about.com",
     "gender": "Male",
-    "birthDate": "1997/09/16",
+    "birthDate": new Date("1997/09/16"),
     "picture": "images/employees/02.png",
 }, {
     "id": 74,
@@ -586,7 +586,7 @@ export const generatedData = [{
     "lastName": "John",
     "email": "ajohn21@amazon.co.uk",
     "gender": "Male",
-    "birthDate": "1981/01/23",
+    "birthDate": new Date("1981/01/23"),
     "picture": "images/employees/02.png",
 }, {
     "id": 75,
@@ -594,7 +594,7 @@ export const generatedData = [{
     "lastName": "Lourenco",
     "email": "blourenco22@sogou.com",
     "gender": "Male",
-    "birthDate": "1995/06/10",
+    "birthDate": new Date("1995/06/10"),
     "picture": "images/employees/02.png",
 }, {
     "id": 76,
@@ -602,7 +602,7 @@ export const generatedData = [{
     "lastName": "Tandey",
     "email": "wtandey23@elpais.com",
     "gender": "Male",
-    "birthDate": "1996/02/08",
+    "birthDate": new Date("1996/02/08"),
     "picture": "images/employees/02.png",
 }, {
     "id": 77,
@@ -610,7 +610,7 @@ export const generatedData = [{
     "lastName": "Gumm",
     "email": "jgumm24@goo.ne.jp",
     "gender": "Female",
-    "birthDate": "1991/06/21",
+    "birthDate": new Date("1991/06/21"),
     "picture": "images/employees/02.png",
 }, {
     "id": 78,
@@ -618,7 +618,7 @@ export const generatedData = [{
     "lastName": "Lafaye",
     "email": "wlafaye25@pcworld.com",
     "gender": "Female",
-    "birthDate": "1985/02/17",
+    "birthDate": new Date("1985/02/17"),
     "picture": "images/employees/02.png",
 }, {
     "id": 79,
@@ -626,7 +626,7 @@ export const generatedData = [{
     "lastName": "Gifkins",
     "email": "cgifkins26@slate.com",
     "gender": "Male",
-    "birthDate": "1997/11/10",
+    "birthDate": new Date("1997/11/10"),
     "picture": "images/employees/02.png",
 }, {
     "id": 80,
@@ -634,7 +634,7 @@ export const generatedData = [{
     "lastName": "Lyddy",
     "email": "dlyddy27@infoseek.co.jp",
     "gender": "Male",
-    "birthDate": "1984/07/07",
+    "birthDate": new Date("1984/07/07"),
     "picture": "images/employees/02.png",
 }, {
     "id": 81,
@@ -642,7 +642,7 @@ export const generatedData = [{
     "lastName": "Knowller",
     "email": "tknowller28@sciencedirect.com",
     "gender": "Male",
-    "birthDate": "1992/12/14",
+    "birthDate": new Date("1992/12/14"),
     "picture": "images/employees/02.png",
 }, {
     "id": 82,
@@ -650,7 +650,7 @@ export const generatedData = [{
     "lastName": "Coppeard",
     "email": "mcoppeard29@ted.com",
     "gender": "Female",
-    "birthDate": "1992/03/29",
+    "birthDate": new Date("1992/03/29"),
     "picture": "images/employees/02.png",
 }, {
     "id": 83,
@@ -658,7 +658,7 @@ export const generatedData = [{
     "lastName": "Davidwitz",
     "email": "cdavidwitz2a@yandex.ru",
     "gender": "Female",
-    "birthDate": "1982/02/10",
+    "birthDate": new Date("1982/02/10"),
     "picture": "images/employees/02.png",
 }, {
     "id": 84,
@@ -666,7 +666,7 @@ export const generatedData = [{
     "lastName": "Pherps",
     "email": "lpherps2b@tripadvisor.com",
     "gender": "Female",
-    "birthDate": "1980/01/12",
+    "birthDate": new Date("1980/01/12"),
     "picture": "images/employees/02.png",
 }, {
     "id": 85,
@@ -674,7 +674,7 @@ export const generatedData = [{
     "lastName": "Jennaway",
     "email": "ljennaway2c@parallels.com",
     "gender": "Female",
-    "birthDate": "1993/10/12",
+    "birthDate": new Date("1993/10/12"),
     "picture": "images/employees/02.png",
 }, {
     "id": 86,
@@ -682,7 +682,7 @@ export const generatedData = [{
     "lastName": "Besnardeau",
     "email": "rbesnardeau2d@php.net",
     "gender": "Agender",
-    "birthDate": "1999/05/24",
+    "birthDate": new Date("1999/05/24"),
     "picture": "images/employees/02.png",
 }, {
     "id": 87,
@@ -690,7 +690,7 @@ export const generatedData = [{
     "lastName": "Keaton",
     "email": "akeaton2e@surveymonkey.com",
     "gender": "Female",
-    "birthDate": "1985/08/16",
+    "birthDate": new Date("1985/08/16"),
     "picture": "images/employees/02.png",
 }, {
     "id": 88,
@@ -698,7 +698,7 @@ export const generatedData = [{
     "lastName": "Couthard",
     "email": "wcouthard2f@webmd.com",
     "gender": "Male",
-    "birthDate": "1990/08/06",
+    "birthDate": new Date("1990/08/06"),
     "picture": "images/employees/02.png",
 }, {
     "id": 89,
@@ -706,7 +706,7 @@ export const generatedData = [{
     "lastName": "Cleevely",
     "email": "scleevely2g@java.com",
     "gender": "Agender",
-    "birthDate": "1999/04/28",
+    "birthDate": new Date("1999/04/28"),
     "picture": "images/employees/02.png",
 }, {
     "id": 90,
@@ -714,7 +714,7 @@ export const generatedData = [{
     "lastName": "Maitland",
     "email": "tmaitland2h@ning.com",
     "gender": "Female",
-    "birthDate": "1999/12/21",
+    "birthDate": new Date("1999/12/21"),
     "picture": "images/employees/02.png",
 }, {
     "id": 91,
@@ -722,7 +722,7 @@ export const generatedData = [{
     "lastName": "Dregan",
     "email": "jdregan2i@ucla.edu",
     "gender": "Female",
-    "birthDate": "1999/01/30",
+    "birthDate": new Date("1999/01/30"),
     "picture": "images/employees/02.png",
 }, {
     "id": 92,
@@ -730,7 +730,7 @@ export const generatedData = [{
     "lastName": "Tilt",
     "email": "rtilt2j@drupal.org",
     "gender": "Male",
-    "birthDate": "1996/02/03",
+    "birthDate": new Date("1996/02/03"),
     "picture": "images/employees/02.png",
 }, {
     "id": 93,
@@ -738,7 +738,7 @@ export const generatedData = [{
     "lastName": "Beyne",
     "email": "bbeyne2k@zdnet.com",
     "gender": "Male",
-    "birthDate": "1992/07/18",
+    "birthDate": new Date("1992/07/18"),
     "picture": "images/employees/02.png",
 }, {
     "id": 94,
@@ -746,7 +746,7 @@ export const generatedData = [{
     "lastName": "Spaducci",
     "email": "gspaducci2l@bravesites.com",
     "gender": "Female",
-    "birthDate": "1995/11/06",
+    "birthDate": new Date("1995/11/06"),
     "picture": "images/employees/02.png",
 }, {
     "id": 95,
@@ -754,7 +754,7 @@ export const generatedData = [{
     "lastName": "Witcherley",
     "email": "lwitcherley2m@latimes.com",
     "gender": "Female",
-    "birthDate": "1987/01/09",
+    "birthDate": new Date("1987/01/09"),
     "picture": "images/employees/02.png",
 }, {
     "id": 96,
@@ -762,7 +762,7 @@ export const generatedData = [{
     "lastName": "Gwatkins",
     "email": "cgwatkins2n@marriott.com",
     "gender": "Male",
-    "birthDate": "1984/08/26",
+    "birthDate": new Date("1984/08/26"),
     "picture": "images/employees/02.png",
 }, {
     "id": 97,
@@ -770,7 +770,7 @@ export const generatedData = [{
     "lastName": "Abbey",
     "email": "aabbey2o@miitbeian.gov.cn",
     "gender": "Agender",
-    "birthDate": "1999/05/03",
+    "birthDate": new Date("1999/05/03"),
     "picture": "images/employees/02.png",
 }, {
     "id": 98,
@@ -778,7 +778,7 @@ export const generatedData = [{
     "lastName": "Isaksen",
     "email": "disaksen2p@indiatimes.com",
     "gender": "Female",
-    "birthDate": "1994/05/10",
+    "birthDate": new Date("1994/05/10"),
     "picture": "images/employees/02.png",
 }, {
     "id": 99,
@@ -786,7 +786,7 @@ export const generatedData = [{
     "lastName": "Oulett",
     "email": "soulett2q@ifeng.com",
     "gender": "Female",
-    "birthDate": "1985/01/14",
+    "birthDate": new Date("1985/01/14"),
     "picture": "images/employees/02.png",
 }, {
     "id": 100,
@@ -794,6 +794,6 @@ export const generatedData = [{
     "lastName": "Hellewell",
     "email": "jhellewell2r@springer.com",
     "gender": "Male",
-    "birthDate": "1985/08/20",
+    "birthDate": new Date("1985/08/20"),
     "picture": "images/employees/02.png",
 }];
