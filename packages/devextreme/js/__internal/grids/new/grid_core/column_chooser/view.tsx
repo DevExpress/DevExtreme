@@ -1,5 +1,6 @@
 /* eslint-disable spellcheck/spell-checker */
 import type { ColumnChooserMode } from '@js/common/grids';
+import type { DxElement } from '@js/core/element';
 import messageLocalization from '@js/localization/message';
 import type { Properties as ButtonProperties } from '@js/ui/button';
 import type { Properties as PopupProperties, ShownEvent } from '@js/ui/popup';
@@ -41,6 +42,8 @@ export class ColumnChooserView extends View<ColumnChooserProps> {
 
   private readonly mode: SubsGets<ColumnChooserMode>;
 
+  private toolbarButtonElement: DxElement | undefined = undefined;
+
   public static dependencies = [
     ToolbarController, ColumnChooserController, OptionsController,
   ] as const;
@@ -60,6 +63,9 @@ export class ColumnChooserView extends View<ColumnChooserProps> {
         widget: 'dxButton',
         options: {
           icon: 'column-chooser',
+          onContentReady: ({ element }) => {
+            this.toolbarButtonElement = element;
+          },
           onClick: () => { this.popupVisible.update(true); },
           elementAttr: {
             'aria-haspopup': 'dialog',
@@ -136,7 +142,10 @@ export class ColumnChooserView extends View<ColumnChooserProps> {
         ),
 
         onShown: (e: ShownEvent) => { this.setPopupAttributes(e?.component); },
-        onHidden: () => { this.popupVisible.update(false); },
+        onHidden: () => {
+          this.popupVisible.update(false);
+          this.toolbarButtonElement?.focus();
+        },
       } as MapMaybeSubscribable<PopupProperties>),
 
       treeViewConfig: combined({
