@@ -5,8 +5,7 @@
 
 $informer-color: $base-danger !default;
 $informer-background-color: null !default;
-// $base-danger: #f44336;
-// orange $base-danger: #e91e63;
+
 @if $mode == "light" {
   $informer-background-color: lighten(desaturate(adjust-hue($base-danger, 1), 24.92), 38.24);
 }

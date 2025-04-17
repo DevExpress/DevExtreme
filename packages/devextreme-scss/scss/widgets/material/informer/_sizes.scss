@@ -18,7 +18,7 @@ $informer-border-radius: null !default;
 
 @else if $size == "compact" {
   $informer-padding-inline: 8px !default;
-  $informer-padding-block: 4px !default;
+  $informer-padding-block: 6px !default;
   $informer-column-gap: 4px !default;
   $informer-border-radius: 3px !default;
 }

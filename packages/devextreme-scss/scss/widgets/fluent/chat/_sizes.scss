@@ -24,7 +24,7 @@ $chat-header-padding: 20px !default;
 $chat-information-font-size: 12px !default;
 
 $chat-alerts-padding-block: null !default;
-$chat-alerts-padding-inline: null !default;
+$chat-alerts-padding-inline: 8px !default;
 $chat-alerts-row-gap: null !default;
 
 $chat-messagelist-empty-icon-box-size: null !default;
@@ -57,7 +57,6 @@ $chat-typingindicator-circle-border-radius: 999em !default;
   $chat-messagegroup-padding: 24px !default;
 
   $chat-alerts-padding-block: 12px !default;
-  $chat-alerts-padding-inline: 20px !default;
   $chat-alerts-row-gap: 2px !default;
 
   $chat-messagelist-empty-icon-box-size: 64px !default;
@@ -83,7 +82,6 @@ $chat-typingindicator-circle-border-radius: 999em !default;
   $chat-messagegroup-padding: 12px !default;
 
   $chat-alerts-padding-block: 8px !default;
-  $chat-alerts-padding-inline: 16px !default;
   $chat-alerts-row-gap: 2px !default;
 
   $chat-messagelist-empty-icon-box-size: 48px !default;
