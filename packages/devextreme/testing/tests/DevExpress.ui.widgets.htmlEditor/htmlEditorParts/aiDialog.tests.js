@@ -184,7 +184,7 @@ QUnit.module('AIDialog', moduleConfig, () => {
         assert.strictEqual(toolbarItems.length, 4, '4 toolbar items rendered');
 
         const dropDownItem = toolbarItems.find(item => item.widget === 'dxDropDownButton');
-        assert.deepEqual(dropDownItem.options.items.map(i => i.id), ['replace', 'insertAbove', 'insertBelow'], 'DropDown has correct items');
+        assert.deepEqual(dropDownItem.options.items.map(i => i.id), ['insertAbove', 'insertBelow'], 'DropDown has correct items');
     });
 
     QUnit.test('Should disable buttons while loading', function(assert) {

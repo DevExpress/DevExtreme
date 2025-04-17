@@ -36,7 +36,7 @@ const createCommandsMap = (isBasicCommand) => {
 };
 
 const getDropDownButton = ($container) => {
-    return $container.find(`.${DROP_DOWN_BUTTON_CLASS} .${BUTTON_CLASS}`).eq(0);
+    return $container.find(`.${DROP_DOWN_BUTTON_CLASS} .${BUTTON_CLASS}`);
 };
 
 const getDropDownButtonOption = (index) => {
@@ -64,13 +64,20 @@ export const showAIDialog = (instance, { isBasicCommand, config } = {}) => {
 };
 
 export const clickActionButton = (insertionMode) => {
+    const dropDownButtons = getDropDownButton($(`.${AI_DIALOG_CLASS}`));
+
+    if(insertionMode === 'replace') {
+        dropDownButtons.eq(0).trigger(CLICK_EVENT_NAME);
+
+        return;
+    }
+
     const insertionModeToIndexMap = {
-        replace: 0,
-        insertAbove: 1,
-        insertBelow: 2,
+        insertAbove: 0,
+        insertBelow: 1,
     };
 
-    getDropDownButton($(`.${AI_DIALOG_CLASS}`)).trigger(CLICK_EVENT_NAME);
+    dropDownButtons.eq(1).trigger(CLICK_EVENT_NAME);
     getDropDownButtonOption(insertionModeToIndexMap[insertionMode]).trigger(CLICK_EVENT_NAME);
 };
 

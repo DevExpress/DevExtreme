@@ -5,7 +5,7 @@ import localizationMessage from '@js/common/core/localization/message';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { extend } from '@js/core/utils/extend';
-import type { ItemClickEvent } from '@js/ui/drop_down_button_types';
+import type { ButtonClickEvent, ItemClickEvent } from '@js/ui/drop_down_button_types';
 import type { AICustomCommand } from '@js/ui/html_editor';
 import type { Properties as PopupProperties, ToolbarItem } from '@js/ui/popup';
 import type dxSelectBox from '@js/ui/select_box';
@@ -58,7 +58,7 @@ export interface AIDialogShowPayload {
 
 export interface AIDialogResult {
   resultText: string;
-  event: ItemClickEvent;
+  event: ItemClickEvent | ButtonClickEvent & ItemClickEvent['itemData'];
 }
 
 export default class AIDialog extends BaseDialog<AIDialogResult> {
@@ -235,13 +235,17 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
         text: localizationMessage.format('dxHtmlEditor-aiReplace'),
         stylingMode: 'contained',
         type: 'default',
+        splitButton: true,
+        useSelectMode: false,
         items: [
-          { id: ReplaceButtonActions.Replace, text: localizationMessage.format('dxHtmlEditor-aiReplace') },
           { id: ReplaceButtonActions.InsertAbove, text: localizationMessage.format('dxHtmlEditor-aiInsertAbove') },
           { id: ReplaceButtonActions.InsertBelow, text: localizationMessage.format('dxHtmlEditor-aiInsertBelow') },
         ],
         dropDownOptions: {
           width: REPLACE_DROPDOWN_WIDTH,
+        },
+        onButtonClick: (e: ButtonClickEvent): void => {
+          this.replaceButtonAction({ ...e, itemData: { id: ReplaceButtonActions.Replace } });
         },
         onItemClick: (e: ItemClickEvent) => this.replaceButtonAction(e),
       },
@@ -252,7 +256,7 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
   protected _getCopyButtonItem(config?: ToolbarItem): ToolbarItem {
     return {
       toolbar: 'bottom',
-      location: 'after',
+      location: 'before',
       widget: 'dxButton',
       options: {
         stylingMode: 'outlined',
@@ -443,7 +447,7 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
     this._aiIntegration = aiIntegration;
   }
 
-  replaceButtonAction(event: ItemClickEvent): void {
+  replaceButtonAction(event: AIDialogResult['event']): void {
     this.hide(this._resultText, event);
   }
 
@@ -465,7 +469,7 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
     return super.show();
   }
 
-  hide(resultText: string, event: ItemClickEvent): void {
+  hide(resultText: string, event: AIDialogResult['event']): void {
     this.deferred?.resolve({ resultText, event });
 
     super.hide();
