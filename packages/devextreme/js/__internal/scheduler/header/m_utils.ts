@@ -6,7 +6,7 @@ import { camelize } from '@js/core/utils/inflector';
 import { isFunction, isObject } from '@js/core/utils/type';
 import type { DateNavigatorTextInfo, Properties } from '@js/ui/scheduler';
 
-import { VIEWS } from '../m_constants';
+import { VIEWS } from '../constants';
 import type { Direction } from './constants';
 import type { RawViewType } from './types';
 

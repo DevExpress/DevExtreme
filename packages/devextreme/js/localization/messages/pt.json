@@ -55,6 +55,7 @@
         "dxList-selectAll-checked": "Marcado",
         "dxList-selectAll-notChecked": "Não marcado",
         "dxList-ariaRoleDescription": "List",
+        "dxList-listAriaLabel-itemContent": "List item content",
 
         "dxScrollView-pullingDownText": "Puxar para baixo para recarregar...",
         "dxScrollView-pulledDownText": "Soltar para recarregar...",
@@ -510,6 +511,15 @@
         "dxHtmlEditor-borderStyleRidge": "ridge",
         "dxHtmlEditor-borderStyleInset": "inset",
         "dxHtmlEditor-borderStyleOutset": "outset",
+        "dxHtmlEditor-aiDialogTitle": "AI Assistant",
+        "dxHtmlEditor-aiReplace": "Replace",
+        "dxHtmlEditor-aiInsertAbove": "Insert above",
+        "dxHtmlEditor-aiInsertBelow": "Insert below",
+        "dxHtmlEditor-aiCopy": "Copy",
+        "dxHtmlEditor-aiTryAgain": "Try again",
+        "dxHtmlEditor-aiGenerate": "Generate",
+        "dxHtmlEditor-aiStop": "Stop",
+        "dxHtmlEditor-aiAskPlaceholder": "Ask AI to modify text",
 
         "dxFileManager-newDirectoryName": "Diretório sem título",
         "dxFileManager-rootDirectoryName": "Arquivos",

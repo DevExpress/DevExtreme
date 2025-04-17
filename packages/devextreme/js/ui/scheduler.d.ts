@@ -391,9 +391,23 @@ export type AppointmentTooltipTemplateData = TargetedAppointmentInfo & {
   readonly isButtonClicked: boolean;
 };
 
-/** @public */
+/**
+ * @docid
+ * @public
+ */
 export type AppointmentCollectorTemplateData = {
+  /**
+   * @docid
+   */
   readonly appointmentCount: number;
+  /**
+   * @docid
+   * @type Array<dxSchedulerAppointment>
+   */
+  readonly items: Appointment[];
+  /**
+   * @docid
+   */
   readonly isCompact: boolean;
 };
 

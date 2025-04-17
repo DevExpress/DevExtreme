@@ -13,11 +13,16 @@ import { each } from '@js/core/utils/iterator';
 import {
   isDefined, isEmptyObject, isObject, isString,
 } from '@js/core/utils/type';
+import type { AICommandName, AICustomCommand, AIToolbarItem } from '@js/ui/html_editor';
 import type { Item } from '@js/ui/toolbar';
 import Toolbar from '@js/ui/toolbar';
 import errors from '@js/ui/widget/ui.errors';
+import { capitalize } from '@ts/core/utils/capitalize';
 import Quill from 'devextreme-quill';
 
+import {
+  buildCommandsMap, defaultCommandNames, getDefaultOptionsByCommand,
+} from '../utils/ai';
 import { getTableFormats, TABLE_OPERATIONS } from '../utils/m_table_helper';
 import {
   applyFormat, getDefaultClickHandler, getFormatHandlers, ICON_MAP,
@@ -54,6 +59,8 @@ if (Quill) {
     i: 73,
     u: 85,
   };
+
+  const TOOLBAR_AI_ITEM_NAME = 'ai';
 
   const localize = (name) => localizationMessage.format(`dxHtmlEditor-${camelize(name)}`);
 
@@ -288,6 +295,8 @@ if (Quill) {
         this._detectRenamedOptions(item);
         if (isObject(item)) {
           newItem = this._handleObjectItem(item);
+        } else if (item === TOOLBAR_AI_ITEM_NAME) {
+          resultItems.push(this._getToolbarItem(this._prepareAIMenuItemConfig(item)));
         } else if (isString(item)) {
           const buttonItemConfig = this._prepareButtonItemConfig(item);
           newItem = this._getToolbarItem(buttonItemConfig);
@@ -301,16 +310,23 @@ if (Quill) {
     }
 
     _handleObjectItem(item) {
+      if (item.name === TOOLBAR_AI_ITEM_NAME) {
+        return this._getToolbarItem(this._prepareAIMenuItemConfig(item));
+      }
+
       if (item.name && item.acceptedValues && this._isAcceptableItem(item.widget, 'dxSelectBox')) {
         const selectItemConfig = this._prepareSelectItemConfig(item);
 
         return this._getToolbarItem(selectItemConfig);
-      } if (item.name && this._isAcceptableItem(item.widget, 'dxButton')) {
+      }
+
+      if (item.name && this._isAcceptableItem(item.widget, 'dxButton')) {
         const defaultButtonItemConfig = this._prepareButtonItemConfig(item.name);
         const buttonItemConfig = extend(true, defaultButtonItemConfig, item);
 
         return this._getToolbarItem(buttonItemConfig);
       }
+
       return this._getToolbarItem(item);
     }
 
@@ -356,6 +372,92 @@ if (Quill) {
           },
         },
       }, item);
+    }
+
+    private _createCommandMenuItem(
+      command: AICommandName,
+      text?: string,
+      commandOptions?: string[],
+    ) {
+      const options = commandOptions ?? getDefaultOptionsByCommand(command)?.map(capitalize);
+
+      return {
+        id: command,
+        text: text ?? defaultCommandNames[command],
+        items: options?.map((option) => ({
+          id: option,
+          text: option,
+          parentCommand: command,
+          options: options?.map(capitalize),
+        })),
+      };
+    }
+
+    private _buildMenuItems(commands: AIToolbarItem['commands']) {
+      return commands?.map((command) => {
+        if (typeof command === 'object') {
+          if (command.name === 'custom') {
+            return {
+              id: 'custom',
+              text: command.text,
+              items: command.options?.map((option) => ({
+                parentCommand: 'custom',
+                id: option,
+                text: option,
+                options: command.options.map(capitalize),
+                prompt,
+              })),
+              prompt: (command as AICustomCommand).prompt,
+            };
+          }
+
+          return this._createCommandMenuItem(command.name, command.text, command.options);
+        }
+
+        return this._createCommandMenuItem(command);
+      });
+    }
+
+    _prepareAIMenuItemConfig(item: AIToolbarItem) {
+      const {
+        name = TOOLBAR_AI_ITEM_NAME,
+        commands = Object.keys(defaultCommandNames) as AICommandName[],
+      } = item;
+
+      const commandsMap = buildCommandsMap(commands);
+      const menuItems = this._buildMenuItems(commands);
+
+      const dataSource = [{
+        id: 'root',
+        icon: 'sparkle',
+        items: menuItems,
+      }];
+
+      const options = {
+        dataSource,
+        onItemClick: (e): void => {
+          const { itemData } = e;
+
+          if (itemData.items?.length) {
+            return;
+          }
+
+          const aiDialogOptions = {
+            command: itemData.id,
+            parentCommand: itemData.parentCommand,
+            commandsMap,
+            prompt: itemData.prompt,
+          };
+
+          this._formatHandlers[name](aiDialogOptions);
+        },
+      };
+
+      return extend(true, {
+        widget: 'dxMenu',
+        name,
+        options,
+      }, typeof item === 'string' ? {} : item);
     }
 
     _hideAdaptiveMenu() {

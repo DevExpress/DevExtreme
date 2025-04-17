@@ -9,7 +9,9 @@ import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import { setHeight, setOuterHeight } from '@js/core/utils/size';
 import { agendaUtils, formatWeekday, getVerticalGroupCountClass } from '@ts/scheduler/r1/utils/index';
+import type { SafeAppointment } from '@ts/scheduler/types';
 
+import { VIEWS } from '../constants';
 import {
   DATE_TABLE_CLASS,
   DATE_TABLE_ROW_CLASS,
@@ -17,7 +19,6 @@ import {
   GROUP_ROW_CLASS,
   TIME_PANEL_CLASS,
 } from '../m_classes';
-import { VIEWS } from '../m_constants';
 import tableCreatorModule from '../m_table_creator';
 import { createReducedResourcesTree, getDataAccessors, getPathToLeaf } from '../resources/m_utils';
 import WorkSpace from './m_work_space';
@@ -476,7 +477,7 @@ class SchedulerAgenda extends WorkSpace {
     return result;
   }
 
-  _calculateRows(appointments) {
+  _calculateRows(appointments?: SafeAppointment[]) {
     return this.renderingStrategy.calculateRows(
       appointments,
       this.option('agendaDuration'),
@@ -484,7 +485,7 @@ class SchedulerAgenda extends WorkSpace {
     );
   }
 
-  onDataSourceChanged(appointments) {
+  onDataSourceChanged(appointments?: SafeAppointment[]) {
     super.onDataSourceChanged();
 
     this._renderView();

@@ -262,14 +262,11 @@ const SKIPPED_TESTS = {
     ],
     VectorMap: [
       { demo: 'TooltipHTMLSupport', themes: [THEME.material] },
-    ]
+    ],
   },
   Vue: {
     Common: [
       { demo: 'DialogsAndNotificationsOverview', themes: [THEME.generic, THEME.material, THEME.fluent] },
-    ],
-    Accordion: [
-      { demo: 'Overview', themes: [THEME.generic, THEME.material, THEME.fluent] },
     ],
     Charts: [
       { demo: 'Overview', themes: [THEME.material] },
@@ -346,7 +343,7 @@ const SKIPPED_TESTS = {
     ],
     VectorMap: [
       { demo: 'TooltipHTMLSupport', themes: [THEME.material] },
-    ]
+    ],
   },
 };
 
