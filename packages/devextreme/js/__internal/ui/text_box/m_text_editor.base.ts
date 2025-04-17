@@ -33,7 +33,7 @@ import type { TextEditorButtonInfo } from './texteditor_button_collection/m_inde
 import TextEditorButtonCollection from './texteditor_button_collection/m_index';
 
 export const TEXTEDITOR_CLASS = 'dx-texteditor';
-const TEXTEDITOR_INPUT_CONTAINER_CLASS = 'dx-texteditor-input-container';
+export const TEXTEDITOR_INPUT_CONTAINER_CLASS = 'dx-texteditor-input-container';
 export const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 const TEXTEDITOR_INPUT_SELECTOR = `.${TEXTEDITOR_INPUT_CLASS}`;
 const TEXTEDITOR_CONTAINER_CLASS = 'dx-texteditor-container';

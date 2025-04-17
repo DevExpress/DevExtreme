@@ -315,3 +315,7 @@
   padding: $fluent-aidialog-content-padding;
   gap: $fluent-aidialog-content-gap;
 }
+
+.dx-aidialog .dx-pending-indicator {
+  @include dx-pending-indicator-centered-fluent();
+}

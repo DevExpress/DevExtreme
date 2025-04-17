@@ -64,6 +64,10 @@ $badge-invalid-bg: $base-invalid-color;
   @include dx-pending-indicator($fluent-invalid-badge-size);
 }
 
+@mixin dx-pending-indicator-centered-fluent() {
+  @include dx-pending-indicator-centered($fluent-invalid-badge-size);
+}
+
 @mixin dx-dropdownlist-list-appearance() {
   height: 100%;
 

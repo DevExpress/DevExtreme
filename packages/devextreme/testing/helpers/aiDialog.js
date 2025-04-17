@@ -1,5 +1,6 @@
 import $ from 'jquery';
 
+const AI_DIALOG_LOAD_INDICATOR_CLASS = 'dx-pending-indicator';
 const AI_DIALOG_CLASS = 'dx-aidialog';
 const AI_DIALOG_CONTROLS_CLASS = 'dx-aidialog-controls';
 const AI_DIALOG_CONTENT_CLASS = 'dx-aidialog-content';
@@ -33,6 +34,58 @@ const createCommandsMap = (isBasicCommand) => {
             text: 'Summarize',
         }
     };
+};
+
+export const buildDefaultCommandsMap = () => ({
+    summarize: {
+        id: 'summarize',
+        name: 'summarize',
+        text: 'Summarize',
+    },
+    translate: {
+        id: 'translate',
+        name: 'translate',
+        text: 'Translate',
+        options: ['english', 'german'],
+    },
+    changeStyle: {
+        id: 'changeStyle',
+        name: 'changeStyle',
+        text: 'Change style',
+        options: ['formal', 'informal'],
+    },
+    changeTone: {
+        id: 'changeTone',
+        name: 'changeTone',
+        text: 'Change tone',
+        options: ['professional', 'casual'],
+    },
+    askAI: {
+        id: 'askAI',
+        name: 'askAI',
+        text: 'Ask AI',
+    },
+    custom: {
+        id: 'custom',
+        name: 'custom',
+        text: 'Custom',
+        options: ['option 1', 'option 2'],
+        prompt: (param) => `Prompt with ${param}`,
+    },
+    custom2: {
+        id: 'custom2',
+        name: 'custom',
+        text: 'Custom 2',
+        prompt: () => 'Simple prompt',
+    },
+});
+
+export const getLoadIndicator = ($container) => {
+    return $container.find(`.${AI_DIALOG_LOAD_INDICATOR_CLASS}`);
+};
+
+export const getToolbarButtonItems = (popup) => {
+    return popup.option('toolbarItems').filter(item => ['dxButton', 'dxDropDownButton'].includes(item.widget));
 };
 
 const getDropDownButton = ($container) => {
@@ -86,8 +139,9 @@ export function findButtonByText($container, text) {
 }
 
 export const getCommandSelectBoxInstance = ($container) => getDialogSelectBoxes($container).eq(0).dxSelectBox('instance');
-
 export const getOptionSelectBoxInstance = ($container) => getDialogSelectBoxes($container).eq(1).dxSelectBox('instance');
+export const getPromptTextAreaInstance = ($container) => $container.find(`.${TEXT_AREA_CLASS}`).eq(0).dxTextArea('instance');
+export const getResultTextAreaInstance = ($container) => $container.find(`.${TEXT_AREA_CLASS}`).eq(1).dxTextArea('instance');
 
 export const setResultText = (value) => {
     const textAreaInstance = $(`.${TEXT_AREA_CLASS}`).eq(1).dxTextArea('instance');

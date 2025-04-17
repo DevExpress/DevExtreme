@@ -316,4 +316,8 @@
   .dx-button {
     min-width: auto;
   }
+
+  .dx-pending-indicator {
+    @include dx-pending-indicator-centered-generic();
+  }
 }

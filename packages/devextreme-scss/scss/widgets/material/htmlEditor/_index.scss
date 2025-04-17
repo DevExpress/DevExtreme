@@ -366,4 +366,8 @@
     padding: $material-aidialog-content-padding;
     gap: $material-aidialog-content-gap;
   }
+
+  .dx-pending-indicator {
+    @include dx-pending-indicator-centered-material();
+  }
 }

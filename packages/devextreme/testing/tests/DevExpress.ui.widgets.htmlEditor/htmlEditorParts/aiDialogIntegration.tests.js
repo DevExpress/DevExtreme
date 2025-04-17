@@ -92,21 +92,74 @@ QUnit.module('AI dialog integration', {}, () => {
 
             assert.strictEqual($dialog.length, 1, 'dialog is rendered');
         });
+
+        QUnit.module('runtime update', () => {
+            QUnit.test('update aiIntegration cancels active request and resets dialog state', function(assert) {
+                const abortSpy = sinon.spy();
+                const summarizeSpy1 = sinon.stub().returns(abortSpy);
+                const summarizeSpy2 = sinon.stub().returns(() => {});
+                const initialAIIntegration = { summarize: summarizeSpy1 };
+                const newAIIntegration = { summarize: summarizeSpy2 };
+                const htmlEditor = setupHtmlEditorWithAi({ aiIntegration: initialAIIntegration });
+
+                openAIDialog($('#htmlEditor'));
+
+                assert.ok(summarizeSpy1.calledOnce, 'initial summarize called');
+
+                htmlEditor.option({ aiIntegration: newAIIntegration });
+
+                assert.ok(abortSpy.calledOnce, 'previous request aborted');
+                assert.ok(summarizeSpy1.calledOnce, 'initial summarize is not called again');
+                assert.ok(summarizeSpy2.calledOnce, 'new summarize invoked after update');
+            });
+        });
+
+        QUnit.module('aiIntegration absence', () => {
+            QUnit.test('showAIDialog should return undefined when aiIntegration is omitted', function(assert) {
+                const htmlEditor = setupHtmlEditorWithAi({ aiIntegration: null });
+                const result = htmlEditor.showAIDialog({
+                    currentCommand: 'summarize',
+                    currentCommandOption: undefined,
+                    text: '',
+                    commandsMap: {},
+                });
+
+                assert.strictEqual(result, undefined, 'showAIDialog returns undefined');
+            });
+        });
     });
 
     QUnit.module('action buttons', () => {
-        QUnit.test('replace button click should replace selected text with a text in result textArea', function(assert) {
+        QUnit.test('replace without selected text should replece all text', function(assert) {
             const done = assert.async();
 
-            const instance = setupHtmlEditorWithAi({
-                onValueChanged: () => {
-                    const value = instance.option('value');
-                    assert.strictEqual(value, '<p>Inserted value</p>', 'value replaced');
+            setupHtmlEditorWithAi({
+                value: 'Old value',
+                onValueChanged: ({ value }) => {
+                    assert.strictEqual(value, '<p>New value</p>', 'all text is replaced');
                     done();
-                }
+                },
             });
 
             openAIDialog($('#htmlEditor'));
+            setResultText('New value');
+            clickActionButton('replace');
+        });
+
+        QUnit.test('replace should replace selected text', function(assert) {
+            const done = assert.async();
+
+            const htmlEditor = setupHtmlEditorWithAi({
+                value: 'Test value',
+                onValueChanged: ({ value }) => {
+                    assert.strictEqual(value, '<p>Inserted value value</p>', 'selected text replaced');
+                    done();
+                },
+            });
+
+            htmlEditor.setSelection(0, 4);
+
+            openAIDialog(($('#htmlEditor')));
             setResultText('Inserted value');
             clickActionButton('replace');
         });
@@ -114,12 +167,11 @@ QUnit.module('AI dialog integration', {}, () => {
         QUnit.test('insertAbove button click should insert text from result textArea above the selected text', function(assert) {
             const done = assert.async();
 
-            const instance = setupHtmlEditorWithAi({
-                onValueChanged: () => {
-                    const value = instance.option('value');
+            setupHtmlEditorWithAi({
+                onValueChanged: ({ value }) => {
                     assert.strictEqual(value, '<p>Inserted value</p><p>Test value</p>', 'inserted above');
                     done();
-                }
+                },
             });
 
             openAIDialog($('#htmlEditor'));
@@ -130,12 +182,11 @@ QUnit.module('AI dialog integration', {}, () => {
         QUnit.test('insertBelow button click should insert text from result textArea below the selected text', function(assert) {
             const done = assert.async();
 
-            const instance = setupHtmlEditorWithAi({
-                onValueChanged: () => {
-                    const value = instance.option('value');
+            setupHtmlEditorWithAi({
+                onValueChanged: ({ value }) => {
                     assert.strictEqual(value, '<p>Test value</p><p>Inserted value</p>', 'inserted below');
                     done();
-                }
+                },
             });
 
             openAIDialog($('#htmlEditor'));
@@ -175,7 +226,7 @@ QUnit.module('AI dialog integration', {}, () => {
                     assert.strictEqual(event.type, 'dxclick', 'called with correct event type');
                     assert.strictEqual(clickedText, 'Replace', 'called on correct element');
                     done();
-                }
+                },
             });
 
             openAIDialog($('#htmlEditor'));

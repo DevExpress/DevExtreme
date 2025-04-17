@@ -380,10 +380,12 @@ if (Quill) {
       text?: string,
       commandOptions?: string[],
     ) {
-      const options = commandOptions ?? getDefaultOptionsByCommand(command)?.map(capitalize);
+      const options = commandOptions?.map(capitalize)
+        ?? getDefaultOptionsByCommand(command)?.map(capitalize);
 
-      return {
+      const item = {
         id: command,
+        name: command,
         text: text ?? defaultCommandNames[command],
         items: options?.map((option) => ({
           id: option,
@@ -392,24 +394,42 @@ if (Quill) {
           options: options?.map(capitalize),
         })),
       };
+
+      return item;
     }
 
     private _buildMenuItems(commands: AIToolbarItem['commands']) {
+      let customCommandIndex = 0;
+
       return commands?.map((command) => {
         if (typeof command === 'object') {
           if (command.name === 'custom') {
-            return {
-              id: 'custom',
+            const id = `custom${customCommandIndex}`;
+            const { prompt } = command as AICustomCommand;
+
+            const item = {
+              id,
+              name: 'custom',
               text: command.text,
-              items: command.options?.map((option) => ({
-                parentCommand: 'custom',
-                id: option,
-                text: option,
-                options: command.options.map(capitalize),
-                prompt,
-              })),
-              prompt: (command as AICustomCommand).prompt,
+              items: command.options?.map((raw: string) => {
+                const option = capitalize(raw);
+
+                const result = {
+                  parentCommand: id,
+                  id: option,
+                  text: option,
+                  options: command.options.map(capitalize),
+                  prompt,
+                };
+
+                return result;
+              }),
+              prompt,
             };
+
+            customCommandIndex += 1;
+
+            return item;
           }
 
           return this._createCommandMenuItem(command.name, command.text, command.options);
