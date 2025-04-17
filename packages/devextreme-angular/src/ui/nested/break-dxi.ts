@@ -14,6 +14,7 @@ import {
 
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxiVizScaleBreak } from './base/viz-scale-break-dxi';
@@ -24,6 +25,7 @@ import { DxiVizScaleBreak } from './base/viz-scale-break-dxi';
     standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost],
     inputs: [
         'endValue',

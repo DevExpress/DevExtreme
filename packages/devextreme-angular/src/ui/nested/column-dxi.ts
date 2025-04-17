@@ -21,6 +21,7 @@ import { SortOrder } from 'devextreme/common';
 import { SelectedFilterOperation } from 'devextreme/common/grids';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxiDataGridColumn } from './base/data-grid-column-dxi';
@@ -33,6 +34,7 @@ import { DxiValidationRuleComponent } from './validation-rule-dxi';
     standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost],
     inputs: [
         'alignment',

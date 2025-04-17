@@ -19,6 +19,7 @@ import {
 
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxoFileManagerContextMenu } from './base/file-manager-context-menu';
@@ -31,6 +32,7 @@ import { DxiItemComponent } from './item-dxi';
     standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost],
     inputs: [
         'commands',

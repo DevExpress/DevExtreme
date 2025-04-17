@@ -19,6 +19,7 @@ import { DOCUMENT } from '@angular/common';
 import { dxFormButtonItem, dxFormEmptyItem, dxFormGroupItem, dxFormSimpleItem, dxFormTabbedItem } from 'devextreme/ui/form';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
     extractTemplate,
     DxTemplateDirective,
@@ -33,6 +34,7 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     standalone: true,
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost, DxTemplateHost]
 })
 export class DxiFormTabComponent extends CollectionNestedOption implements AfterViewInit,

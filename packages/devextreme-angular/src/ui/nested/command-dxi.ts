@@ -17,6 +17,7 @@ import {
 
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxiDiagramCustomCommand } from './base/diagram-custom-command-dxi';
@@ -28,6 +29,7 @@ import { DxiItemComponent } from './item-dxi';
     standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost],
     inputs: [
         'icon',

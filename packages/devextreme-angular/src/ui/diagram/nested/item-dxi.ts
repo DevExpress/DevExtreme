@@ -16,6 +16,7 @@ import { Command, CustomCommand } from 'devextreme/ui/diagram';
 import { ToolbarItemLocation } from 'devextreme/common';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
@@ -26,6 +27,7 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxiDiagramItemComponent extends CollectionNestedOption {

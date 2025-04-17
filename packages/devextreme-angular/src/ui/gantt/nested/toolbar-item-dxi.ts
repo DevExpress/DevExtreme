@@ -21,6 +21,7 @@ import { ToolbarItemLocation, ToolbarItemComponent } from 'devextreme/common';
 import { GanttPredefinedToolbarItem } from 'devextreme/ui/gantt';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
     extractTemplate,
     DxTemplateDirective,
@@ -35,6 +36,7 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     standalone: true,
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost, DxTemplateHost]
 })
 export class DxiGanttToolbarItemComponent extends CollectionNestedOption implements AfterViewInit,

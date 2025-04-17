@@ -19,6 +19,7 @@ import {
 
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxoFormSimpleItem } from './base/form-simple-item';
@@ -30,6 +31,7 @@ import { DxiValidationRuleComponent } from './validation-rule-dxi';
     standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost],
     inputs: [
         'colSpan',

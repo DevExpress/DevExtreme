@@ -19,6 +19,7 @@ import { PieChartLegendItem, PieChartLegendHoverMode } from 'devextreme/viz/pie_
 import { HorizontalAlignment, Position, Orientation, VerticalEdge } from 'devextreme/common';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
@@ -29,6 +30,7 @@ import { NestedOption } from 'devextreme-angular/core';
     standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxoPieChartLegendComponent extends NestedOption implements OnDestroy, OnInit  {

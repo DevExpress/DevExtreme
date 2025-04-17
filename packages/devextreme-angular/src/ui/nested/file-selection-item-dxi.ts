@@ -14,6 +14,7 @@ import {
 
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxiFileManagerToolbarItem } from './base/file-manager-toolbar-item-dxi';
@@ -24,6 +25,7 @@ import { DxiFileManagerToolbarItem } from './base/file-manager-toolbar-item-dxi'
     standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost],
     inputs: [
         'cssClass',

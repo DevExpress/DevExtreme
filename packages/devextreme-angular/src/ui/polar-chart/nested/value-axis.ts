@@ -25,6 +25,7 @@ import { Format } from 'devextreme/common/core/localization';
 import { ValueAxisVisualRangeUpdateMode } from 'devextreme/viz/polar_chart';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
@@ -37,6 +38,7 @@ import { DxiPolarChartStripComponent } from './strip-dxi';
     standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxoPolarChartValueAxisComponent extends NestedOption implements OnDestroy, OnInit  {

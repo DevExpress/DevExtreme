@@ -17,6 +17,7 @@ import {
 import { dxFileManagerDetailsColumn, FileManagerItemViewMode } from 'devextreme/ui/file_manager';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
@@ -27,6 +28,7 @@ import { NestedOption } from 'devextreme-angular/core';
     standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxoItemViewComponent extends NestedOption implements OnDestroy, OnInit  {

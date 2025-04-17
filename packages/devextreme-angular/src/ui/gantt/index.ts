@@ -103,6 +103,7 @@ import { DxiGanttStripLineComponent } from 'devextreme-angular/ui/gantt/nested';
     template: '',
     host: { ngSkipHydration: 'true' },
     standalone: true,
+    imports: [ DxIntegrationModule ],
     providers: [
         DxTemplateHost,
         WatcherHelper,

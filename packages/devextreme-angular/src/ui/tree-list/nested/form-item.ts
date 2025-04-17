@@ -26,6 +26,7 @@ import { FormItemComponent, FormItemType, LabelLocation } from 'devextreme/ui/fo
 import { HorizontalAlignment } from 'devextreme/common';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
     extractTemplate,
     DxTemplateDirective,
@@ -50,6 +51,7 @@ import { DxiTreeListValidationRuleComponent } from './validation-rule-dxi';
     standalone: true,
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost, DxTemplateHost]
 })
 export class DxoTreeListFormItemComponent extends NestedOption implements AfterViewInit, OnDestroy, OnInit,

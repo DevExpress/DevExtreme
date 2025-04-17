@@ -59,6 +59,7 @@ import { DxiActionSheetItemComponent } from 'devextreme-angular/ui/action-sheet/
     template: '',
     host: { ngSkipHydration: 'true' },
     standalone: true,
+    imports: [ DxIntegrationModule ],
     providers: [
         DxTemplateHost,
         WatcherHelper,

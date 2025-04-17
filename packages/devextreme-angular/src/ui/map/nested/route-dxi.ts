@@ -18,6 +18,7 @@ import {
 import { RouteMode } from 'devextreme/ui/map';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
@@ -29,6 +30,7 @@ import { DxiMapLocationComponent } from './location-dxi';
     standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxiMapRouteComponent extends CollectionNestedOption {

@@ -94,6 +94,7 @@ import { DxoTreeMapTreeMapborderModule } from 'devextreme-angular/ui/tree-map/ne
     styles: [ ' :host {  display: block; }'],
     host: { ngSkipHydration: 'true' },
     standalone: true,
+    imports: [ DxIntegrationModule ],
     providers: [
         DxTemplateHost,
         WatcherHelper,

@@ -18,6 +18,7 @@ import { dxSankeyNode } from 'devextreme/viz/sankey';
 import { Font, TextOverflow } from 'devextreme/common/charts';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
@@ -28,6 +29,7 @@ import { NestedOption } from 'devextreme-angular/core';
     standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxoSankeyLabelComponent extends NestedOption implements OnDestroy, OnInit  {

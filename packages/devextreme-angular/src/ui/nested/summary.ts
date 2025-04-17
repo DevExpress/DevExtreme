@@ -22,6 +22,7 @@ import { Format } from 'devextreme/common/core/localization';
 import { SummaryType } from 'devextreme/common/grids';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
@@ -34,6 +35,7 @@ import { DxiTotalItemComponent } from './total-item-dxi';
     standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxoSummaryComponent extends NestedOption implements OnDestroy, OnInit  {

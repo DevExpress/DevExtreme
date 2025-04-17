@@ -16,6 +16,7 @@ import {
 
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxoGanttSorting } from './base/gantt-sorting';
@@ -26,6 +27,7 @@ import { DxoGanttSorting } from './base/gantt-sorting';
     standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost],
     inputs: [
         'ascendingText',

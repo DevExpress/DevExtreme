@@ -110,6 +110,7 @@ import { DxiVectorMapLegendComponent } from 'devextreme-angular/ui/vector-map/ne
     styles: [ ' :host {  display: block; }'],
     host: { ngSkipHydration: 'true' },
     standalone: true,
+    imports: [ DxIntegrationModule ],
     providers: [
         DxTemplateHost,
         WatcherHelper,

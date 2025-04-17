@@ -102,6 +102,7 @@ import { DxoFunnelTooltipBorderModule } from 'devextreme-angular/ui/funnel/neste
     styles: [ ' :host {  display: block; }'],
     host: { ngSkipHydration: 'true' },
     standalone: true,
+    imports: [ DxIntegrationModule ],
     providers: [
         DxTemplateHost,
         WatcherHelper,

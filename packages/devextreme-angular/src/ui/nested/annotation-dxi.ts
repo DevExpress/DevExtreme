@@ -14,6 +14,7 @@ import {
 
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxiChartAnnotationConfig } from './base/chart-annotation-config-dxi';
@@ -24,6 +25,7 @@ import { DxiChartAnnotationConfig } from './base/chart-annotation-config-dxi';
     standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost],
     inputs: [
         'allowDragging',

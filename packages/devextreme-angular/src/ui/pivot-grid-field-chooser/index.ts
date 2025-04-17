@@ -60,6 +60,7 @@ import { DxoPivotGridFieldChooserTextsModule } from 'devextreme-angular/ui/pivot
     template: '',
     host: { ngSkipHydration: 'true' },
     standalone: true,
+    imports: [ DxIntegrationModule ],
     providers: [
         DxTemplateHost,
         WatcherHelper,

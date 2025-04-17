@@ -104,6 +104,7 @@ import { DxoLinearGaugeWidthModule } from 'devextreme-angular/ui/linear-gauge/ne
     styles: [ ' :host {  display: block; }'],
     host: { ngSkipHydration: 'true' },
     standalone: true,
+    imports: [ DxIntegrationModule ],
     providers: [
         DxTemplateHost,
         WatcherHelper,

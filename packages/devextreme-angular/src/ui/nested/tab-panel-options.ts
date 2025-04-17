@@ -21,6 +21,7 @@ import {
 
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxoTabPanelOptions } from './base/tab-panel-options';
@@ -32,6 +33,7 @@ import { DxiItemComponent } from './item-dxi';
     standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost],
     inputs: [
         'accessKey',

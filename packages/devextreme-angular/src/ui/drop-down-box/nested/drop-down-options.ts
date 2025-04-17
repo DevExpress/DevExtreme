@@ -30,6 +30,7 @@ import { PositionAlignment } from 'devextreme/common';
 import { dxPopupToolbarItem } from 'devextreme/ui/popup';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
@@ -41,6 +42,7 @@ import { DxiDropDownBoxToolbarItemComponent } from './toolbar-item-dxi';
     standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxoDropDownBoxDropDownOptionsComponent extends NestedOption implements OnDestroy, OnInit  {

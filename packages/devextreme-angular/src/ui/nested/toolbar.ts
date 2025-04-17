@@ -19,6 +19,7 @@ import {
 
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxoDataGridToolbar } from './base/data-grid-toolbar';
@@ -31,6 +32,7 @@ import { DxiFileSelectionItemComponent } from './file-selection-item-dxi';
     standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost],
     inputs: [
         'disabled',

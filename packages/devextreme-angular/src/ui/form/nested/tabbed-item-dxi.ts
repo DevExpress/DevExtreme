@@ -19,6 +19,7 @@ import { FormItemType, dxFormButtonItem, dxFormEmptyItem, dxFormGroupItem, dxFor
 import { dxTabPanelOptions } from 'devextreme/ui/tab_panel';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
@@ -30,6 +31,7 @@ import { DxiFormTabComponent } from './tab-dxi';
     standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxiFormTabbedItemComponent extends CollectionNestedOption {

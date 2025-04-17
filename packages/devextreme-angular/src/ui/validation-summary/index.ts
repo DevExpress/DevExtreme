@@ -57,6 +57,7 @@ import { DxiValidationSummaryItemComponent } from 'devextreme-angular/ui/validat
     template: '',
     host: { ngSkipHydration: 'true' },
     standalone: true,
+    imports: [ DxIntegrationModule ],
     providers: [
         DxTemplateHost,
         WatcherHelper,

@@ -125,6 +125,7 @@ import { DxiPieChartSeriesComponent } from 'devextreme-angular/ui/pie-chart/nest
     styles: [ ' :host {  display: block; }'],
     host: { ngSkipHydration: 'true' },
     standalone: true,
+    imports: [ DxIntegrationModule ],
     providers: [
         DxTemplateHost,
         WatcherHelper,

@@ -244,6 +244,7 @@ import { DxiChartValueAxisComponent } from 'devextreme-angular/ui/chart/nested';
     styles: [ ' :host {  display: block; }'],
     host: { ngSkipHydration: 'true' },
     standalone: true,
+    imports: [ DxIntegrationModule ],
     providers: [
         DxTemplateHost,
         WatcherHelper,

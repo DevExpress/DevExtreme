@@ -61,6 +61,7 @@ import { DxiSplitterItemComponent } from 'devextreme-angular/ui/splitter/nested'
     template: '',
     host: { ngSkipHydration: 'true' },
     standalone: true,
+    imports: [ DxIntegrationModule ],
     providers: [
         DxTemplateHost,
         WatcherHelper,

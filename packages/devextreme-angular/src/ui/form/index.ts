@@ -88,6 +88,7 @@ import { DxiFormTabbedItemComponent } from 'devextreme-angular/ui/form/nested';
     template: '',
     host: { ngSkipHydration: 'true' },
     standalone: true,
+    imports: [ DxIntegrationModule ],
     providers: [
         DxTemplateHost,
         WatcherHelper,

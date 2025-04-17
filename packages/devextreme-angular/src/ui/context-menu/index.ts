@@ -90,6 +90,7 @@ import { DxiContextMenuItemComponent } from 'devextreme-angular/ui/context-menu/
     template: '',
     host: { ngSkipHydration: 'true' },
     standalone: true,
+    imports: [ DxIntegrationModule ],
     providers: [
         DxTemplateHost,
         WatcherHelper,

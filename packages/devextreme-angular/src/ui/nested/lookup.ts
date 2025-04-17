@@ -18,6 +18,7 @@ import { Store } from 'devextreme/data';
 import { Options as DataSourceOptions } from 'devextreme/data/data_source';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
@@ -28,6 +29,7 @@ import { NestedOption } from 'devextreme-angular/core';
     standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxoLookupComponent extends NestedOption implements OnDestroy, OnInit  {

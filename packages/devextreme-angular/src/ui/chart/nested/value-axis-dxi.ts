@@ -24,6 +24,7 @@ import { HorizontalAlignment, VerticalAlignment, Position } from 'devextreme/com
 import { Format } from 'devextreme/common/core/localization';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
@@ -37,6 +38,7 @@ import { DxiChartStripComponent } from './strip-dxi';
     standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxiChartValueAxisComponent extends CollectionNestedOption {

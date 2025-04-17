@@ -16,6 +16,7 @@ import {
 
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxoGanttHeaderFilter } from './base/gantt-header-filter';
@@ -26,6 +27,7 @@ import { DxoGanttHeaderFilter } from './base/gantt-header-filter';
     standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost],
     inputs: [
         'allowSearch',

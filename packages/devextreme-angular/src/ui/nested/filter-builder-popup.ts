@@ -23,6 +23,7 @@ import { PositionAlignment } from 'devextreme/common';
 import { PositionConfig } from 'devextreme/common/core/animation';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxoPopupOptions } from './base/popup-options';
@@ -34,6 +35,7 @@ import { DxiToolbarItemComponent } from './toolbar-item-dxi';
     standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost],
     inputs: [
         'accessKey',

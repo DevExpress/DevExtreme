@@ -92,6 +92,7 @@ import { DxoSankeyTooltipBorderModule } from 'devextreme-angular/ui/sankey/neste
     styles: [ ' :host {  display: block; }'],
     host: { ngSkipHydration: 'true' },
     standalone: true,
+    imports: [ DxIntegrationModule ],
     providers: [
         DxTemplateHost,
         WatcherHelper,

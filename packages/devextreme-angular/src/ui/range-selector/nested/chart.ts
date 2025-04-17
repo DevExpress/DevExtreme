@@ -23,6 +23,7 @@ import { ChartSeries } from 'devextreme/viz/common';
 import { ChartAxisScale } from 'devextreme/viz/range_selector';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
@@ -34,6 +35,7 @@ import { DxiRangeSelectorSeriesComponent } from './series-dxi';
     standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxoRangeSelectorChartComponent extends NestedOption implements OnDestroy, OnInit  {

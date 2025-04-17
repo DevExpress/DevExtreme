@@ -19,6 +19,7 @@ import { DOCUMENT } from '@angular/common';
 import { dxBoxOptions } from 'devextreme/ui/box';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
     extractTemplate,
     DxTemplateDirective,
@@ -33,6 +34,7 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     standalone: true,
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost, DxTemplateHost]
 })
 export class DxiBoxItemComponent extends CollectionNestedOption implements AfterViewInit,

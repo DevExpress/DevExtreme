@@ -20,6 +20,7 @@ import {
 import { dxGanttToolbarItem, GanttPredefinedToolbarItem } from 'devextreme/ui/gantt';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
@@ -32,6 +33,7 @@ import { DxiGanttToolbarItemComponent } from './toolbar-item-dxi';
     standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxoGanttToolbarComponent extends NestedOption implements OnDestroy, OnInit  {

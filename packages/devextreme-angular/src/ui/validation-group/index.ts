@@ -45,6 +45,7 @@ import {
     template: '<ng-content></ng-content>',
     host: { ngSkipHydration: 'true' },
     standalone: true,
+    imports: [ DxIntegrationModule ],
     providers: [
         DxTemplateHost,
         WatcherHelper,

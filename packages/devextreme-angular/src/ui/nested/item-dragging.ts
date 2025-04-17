@@ -16,6 +16,7 @@ import {
 
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxoSortableOptions } from './base/sortable-options';
@@ -26,6 +27,7 @@ import { DxoSortableOptions } from './base/sortable-options';
     standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost],
     inputs: [
         'allowDropInsideItem',

@@ -16,6 +16,7 @@ import {
 
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxoHtmlEditorVariables } from './base/html-editor-variables';
@@ -26,6 +27,7 @@ import { DxoHtmlEditorVariables } from './base/html-editor-variables';
     standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost],
     inputs: [
         'dataSource',

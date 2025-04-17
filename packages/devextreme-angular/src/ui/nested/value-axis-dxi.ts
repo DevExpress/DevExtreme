@@ -23,6 +23,7 @@ import { Format } from 'devextreme/common/core/localization';
 import { AggregatedPointsPosition, ChartLabelDisplayMode } from 'devextreme/viz/chart';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
@@ -36,6 +37,7 @@ import { DxiStripComponent } from './strip-dxi';
     standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxiValueAxisComponent extends CollectionNestedOption {

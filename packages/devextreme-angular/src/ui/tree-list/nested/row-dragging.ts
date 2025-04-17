@@ -21,6 +21,7 @@ import { GridBase } from 'devextreme/common/grids';
 import { event } from 'devextreme/events/events.types';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
@@ -31,6 +32,7 @@ import { NestedOption } from 'devextreme-angular/core';
     standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxoTreeListRowDraggingComponent extends NestedOption implements OnDestroy, OnInit  {

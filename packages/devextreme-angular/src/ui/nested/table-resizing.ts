@@ -16,6 +16,7 @@ import {
 
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxoHtmlEditorTableResizing } from './base/html-editor-table-resizing';
@@ -26,6 +27,7 @@ import { DxoHtmlEditorTableResizing } from './base/html-editor-table-resizing';
     standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost],
     inputs: [
         'enabled',

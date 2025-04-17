@@ -20,6 +20,7 @@ import {
 import { Command, CustomCommand } from 'devextreme/ui/diagram';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
@@ -31,6 +32,7 @@ import { DxiCommandComponent } from './command-dxi';
     standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxoMainToolbarComponent extends NestedOption implements OnDestroy, OnInit  {

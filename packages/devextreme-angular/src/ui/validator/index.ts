@@ -79,6 +79,7 @@ import { DxiValidatorValidationRuleComponent } from 'devextreme-angular/ui/valid
     template: '',
     host: { ngSkipHydration: 'true' },
     standalone: true,
+    imports: [ DxIntegrationModule ],
     providers: [
         DxTemplateHost,
         WatcherHelper,

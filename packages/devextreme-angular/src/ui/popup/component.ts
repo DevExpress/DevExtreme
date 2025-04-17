@@ -79,6 +79,7 @@ import { DxiPopupToolbarItemComponent } from 'devextreme-angular/ui/popup/nested
     template: '<ng-content></ng-content>',
     host: { ngSkipHydration: 'true' },
     standalone: true,
+    imports: [ DxIntegrationModule ],
     providers: [
         DxTemplateHost,
         WatcherHelper,

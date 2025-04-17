@@ -19,6 +19,7 @@ import { DOCUMENT } from '@angular/common';
 import { ItemClickEvent } from 'devextreme/ui/drop_down_button';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
     extractTemplate,
     DxTemplateDirective,
@@ -33,6 +34,7 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     standalone: true,
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost, DxTemplateHost]
 })
 export class DxiDropDownButtonItemComponent extends CollectionNestedOption implements AfterViewInit,

@@ -221,6 +221,7 @@ import { DxiDataGridSortByGroupSummaryInfoComponent } from 'devextreme-angular/u
     template: '',
     host: { ngSkipHydration: 'true' },
     standalone: true,
+    imports: [ DxIntegrationModule ],
     providers: [
         DxTemplateHost,
         WatcherHelper,

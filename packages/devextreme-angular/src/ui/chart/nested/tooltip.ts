@@ -19,6 +19,7 @@ import { DashStyle, Font } from 'devextreme/common/charts';
 import { ChartTooltipLocation } from 'devextreme/viz/chart';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
@@ -29,6 +30,7 @@ import { NestedOption } from 'devextreme-angular/core';
     standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxoChartTooltipComponent extends NestedOption implements OnDestroy, OnInit  {

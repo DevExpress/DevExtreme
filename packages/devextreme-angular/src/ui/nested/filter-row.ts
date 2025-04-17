@@ -16,6 +16,7 @@ import {
 
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxoGanttFilterRow } from './base/gantt-filter-row';
@@ -26,6 +27,7 @@ import { DxoGanttFilterRow } from './base/gantt-filter-row';
     standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost],
     inputs: [
         'applyFilter',

@@ -17,6 +17,7 @@ import {
 import { ChartZoomAndPanMode, EventKeyModifier } from 'devextreme/viz/chart';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
@@ -27,6 +28,7 @@ import { NestedOption } from 'devextreme-angular/core';
     standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxoChartZoomAndPanComponent extends NestedOption implements OnDestroy, OnInit  {

@@ -22,6 +22,7 @@ import {
 import { Properties as dxBoxOptions } from 'devextreme/ui/box';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxoBoxOptions } from './base/box-options';
@@ -33,6 +34,7 @@ import { DxiItemComponent } from './item-dxi';
     standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost],
     inputs: [
         'align',

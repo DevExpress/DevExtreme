@@ -22,6 +22,7 @@ import {
 import { Properties as dxSplitterOptions } from 'devextreme/ui/splitter';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxoSplitterOptions } from './base/splitter-options';
@@ -33,6 +34,7 @@ import { DxiItemComponent } from './item-dxi';
     standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost],
     inputs: [
         'allowKeyboardNavigation',

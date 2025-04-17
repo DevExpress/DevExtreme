@@ -26,6 +26,7 @@ import { HorizontalAlignment, VerticalAlignment, Position } from 'devextreme/com
 import { Format } from 'devextreme/common/core/localization';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
@@ -39,6 +40,7 @@ import { DxiChartStripComponent } from './strip-dxi';
     standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxoChartArgumentAxisComponent extends NestedOption implements OnDestroy, OnInit  {

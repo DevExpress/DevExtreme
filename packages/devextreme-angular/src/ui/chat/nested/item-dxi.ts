@@ -15,6 +15,7 @@ import {
 import { User } from 'devextreme/ui/chat';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
@@ -25,6 +26,7 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxiChatItemComponent extends CollectionNestedOption {

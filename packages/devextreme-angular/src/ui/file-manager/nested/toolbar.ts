@@ -20,6 +20,7 @@ import {
 import { dxFileManagerToolbarItem, FileManagerPredefinedToolbarItem } from 'devextreme/ui/file_manager';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
@@ -33,6 +34,7 @@ import { DxiFileManagerToolbarItemComponent } from './toolbar-item-dxi';
     standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxoFileManagerToolbarComponent extends NestedOption implements OnDestroy, OnInit  {

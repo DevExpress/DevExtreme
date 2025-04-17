@@ -85,6 +85,7 @@ import { DxiDropDownButtonItemComponent } from 'devextreme-angular/ui/drop-down-
     template: '',
     host: { ngSkipHydration: 'true' },
     standalone: true,
+    imports: [ DxIntegrationModule ],
     providers: [
         DxTemplateHost,
         WatcherHelper,

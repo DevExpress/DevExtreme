@@ -20,6 +20,7 @@ import { ColumnChooserMode, ColumnChooserSearchConfig, ColumnChooserSelectionCon
 import { UserDefinedElement } from 'devextreme/core/element';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
@@ -30,6 +31,7 @@ import { NestedOption } from 'devextreme-angular/core';
     standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxoColumnChooserComponent extends NestedOption implements OnDestroy, OnInit  {

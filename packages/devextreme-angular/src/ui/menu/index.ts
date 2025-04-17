@@ -89,6 +89,7 @@ import { DxiMenuItemComponent } from 'devextreme-angular/ui/menu/nested';
     template: '',
     host: { ngSkipHydration: 'true' },
     standalone: true,
+    imports: [ DxIntegrationModule ],
     providers: [
         DxTemplateHost,
         WatcherHelper,

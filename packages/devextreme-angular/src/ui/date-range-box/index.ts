@@ -103,6 +103,7 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
     template: '',
     host: { ngSkipHydration: 'true' },
     standalone: true,
+    imports: [ DxIntegrationModule ],
     providers: [
         DxTemplateHost,
         WatcherHelper,

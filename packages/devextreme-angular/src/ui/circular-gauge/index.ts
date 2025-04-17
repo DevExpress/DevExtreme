@@ -102,6 +102,7 @@ import { DxoCircularGaugeValueIndicatorModule } from 'devextreme-angular/ui/circ
     styles: [ ' :host {  display: block; }'],
     host: { ngSkipHydration: 'true' },
     standalone: true,
+    imports: [ DxIntegrationModule ],
     providers: [
         DxTemplateHost,
         WatcherHelper,

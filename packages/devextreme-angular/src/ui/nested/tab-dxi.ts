@@ -21,6 +21,7 @@ import { DOCUMENT } from '@angular/common';
 
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
     extractTemplate,
     DxTemplateDirective,
@@ -38,6 +39,7 @@ import { DxiGroupComponent } from './group-dxi';
     standalone: true,
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost, DxTemplateHost],
     inputs: [
         'alignItemLabels',

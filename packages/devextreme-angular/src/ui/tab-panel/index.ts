@@ -60,6 +60,7 @@ import { DxiTabPanelItemComponent } from 'devextreme-angular/ui/tab-panel/nested
     template: '',
     host: { ngSkipHydration: 'true' },
     standalone: true,
+    imports: [ DxIntegrationModule ],
     providers: [
         DxTemplateHost,
         WatcherHelper,

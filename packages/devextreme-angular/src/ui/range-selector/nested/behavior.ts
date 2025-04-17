@@ -18,6 +18,7 @@ import { ValueChangedCallMode } from 'devextreme/viz/range_selector';
 import { SliderValueChangeMode } from 'devextreme/common';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
@@ -28,6 +29,7 @@ import { NestedOption } from 'devextreme-angular/core';
     standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxoRangeSelectorBehaviorComponent extends NestedOption implements OnDestroy, OnInit  {

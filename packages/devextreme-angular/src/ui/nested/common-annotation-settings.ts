@@ -16,6 +16,7 @@ import {
 
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxoChartCommonAnnotationConfig } from './base/chart-common-annotation-config';
@@ -26,6 +27,7 @@ import { DxoChartCommonAnnotationConfig } from './base/chart-common-annotation-c
     standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost],
     inputs: [
         'allowDragging',

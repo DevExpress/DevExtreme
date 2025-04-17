@@ -56,6 +56,7 @@ import { DxiButtonGroupItemComponent } from 'devextreme-angular/ui/button-group/
     template: '',
     host: { ngSkipHydration: 'true' },
     standalone: true,
+    imports: [ DxIntegrationModule ],
     providers: [
         DxTemplateHost,
         WatcherHelper,

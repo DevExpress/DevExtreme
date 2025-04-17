@@ -70,6 +70,7 @@ import { DxoLoadPanelToModule } from 'devextreme-angular/ui/load-panel/nested';
     template: '',
     host: { ngSkipHydration: 'true' },
     standalone: true,
+    imports: [ DxIntegrationModule ],
     providers: [
         DxTemplateHost,
         WatcherHelper,

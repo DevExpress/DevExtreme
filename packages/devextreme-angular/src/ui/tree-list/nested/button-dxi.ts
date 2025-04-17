@@ -21,6 +21,7 @@ import { dxTreeListColumn, dxTreeListRowObject, TreeListPredefinedColumnButton }
 import { event } from 'devextreme/events/events.types';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
     extractTemplate,
     DxTemplateDirective,
@@ -35,6 +36,7 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     standalone: true,
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost, DxTemplateHost]
 })
 export class DxiTreeListButtonComponent extends CollectionNestedOption implements AfterViewInit,

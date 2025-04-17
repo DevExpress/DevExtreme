@@ -14,6 +14,7 @@ import {
 
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxiFilterBuilderField } from './base/filter-builder-field-dxi';
@@ -24,6 +25,7 @@ import { DxiFilterBuilderField } from './base/filter-builder-field-dxi';
     standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost],
     inputs: [
         'calculateFilterExpression',

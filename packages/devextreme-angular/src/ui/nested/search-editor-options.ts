@@ -21,6 +21,7 @@ import {
 
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxoTextBoxOptions } from './base/text-box-options';
@@ -32,6 +33,7 @@ import { DxiButtonComponent } from './button-dxi';
     standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost],
     inputs: [
         'accessKey',

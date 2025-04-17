@@ -19,6 +19,7 @@ import { DOCUMENT } from '@angular/common';
 import { dxTreeViewItem } from 'devextreme/ui/tree_view';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
     extractTemplate,
     DxTemplateDirective,
@@ -33,6 +34,7 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     standalone: true,
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost, DxTemplateHost]
 })
 export class DxiTreeViewItemComponent extends CollectionNestedOption implements AfterViewInit,

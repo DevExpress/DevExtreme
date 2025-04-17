@@ -16,6 +16,7 @@ import {
 
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxoGaugeIndicator } from './base/gauge-indicator';
@@ -26,6 +27,7 @@ import { DxoGaugeIndicator } from './base/gauge-indicator';
     standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost],
     inputs: [
         'arrowLength',

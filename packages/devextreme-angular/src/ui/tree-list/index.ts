@@ -197,6 +197,7 @@ import { DxiTreeListColumnComponent } from 'devextreme-angular/ui/tree-list/nest
     template: '',
     host: { ngSkipHydration: 'true' },
     standalone: true,
+    imports: [ DxIntegrationModule ],
     providers: [
         DxTemplateHost,
         WatcherHelper,

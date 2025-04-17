@@ -20,6 +20,7 @@ import { Font, Palette } from 'devextreme/common/charts';
 import { SingleMultipleOrNone } from 'devextreme/common';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
@@ -30,6 +31,7 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxiVectorMapLayerComponent extends CollectionNestedOption {

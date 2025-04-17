@@ -16,6 +16,7 @@ import {
 
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxoColumnChooserSearchConfig } from './base/column-chooser-search-config';
@@ -26,6 +27,7 @@ import { DxoColumnChooserSearchConfig } from './base/column-chooser-search-confi
     standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost],
     inputs: [
         'editorOptions',

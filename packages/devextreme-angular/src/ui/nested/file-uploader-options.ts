@@ -18,6 +18,7 @@ import {
 
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxoFileUploaderOptions } from './base/file-uploader-options';
@@ -28,6 +29,7 @@ import { DxoFileUploaderOptions } from './base/file-uploader-options';
     standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost],
     inputs: [
         'abortUpload',

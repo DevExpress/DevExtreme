@@ -60,6 +60,7 @@ import { DxiBoxItemComponent } from 'devextreme-angular/ui/box/nested';
     template: '',
     host: { ngSkipHydration: 'true' },
     standalone: true,
+    imports: [ DxIntegrationModule ],
     providers: [
         DxTemplateHost,
         WatcherHelper,

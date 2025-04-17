@@ -22,6 +22,7 @@ import { ClickEvent, ContentReadyEvent, DisposingEvent, InitializedEvent, Option
 import { ButtonStyle, ButtonType } from 'devextreme/common';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
     extractTemplate,
     DxTemplateDirective,
@@ -36,6 +37,7 @@ import { NestedOption } from 'devextreme-angular/core';
     standalone: true,
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost, DxTemplateHost]
 })
 export class DxoSelectBoxOptionsComponent extends NestedOption implements AfterViewInit, OnDestroy, OnInit,

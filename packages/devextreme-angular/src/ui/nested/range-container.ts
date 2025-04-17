@@ -22,6 +22,7 @@ import { ChartsColor, Palette, PaletteExtensionMode } from 'devextreme/common/ch
 import { CircularGaugeElementOrientation } from 'devextreme/viz/circular_gauge';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
@@ -33,6 +34,7 @@ import { DxiRangeComponent } from './range-dxi';
     standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxoRangeContainerComponent extends NestedOption implements OnDestroy, OnInit  {

@@ -16,6 +16,7 @@ import {
 
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxoVectorMapProjectionConfig } from './base/vector-map-projection-config';
@@ -26,6 +27,7 @@ import { DxoVectorMapProjectionConfig } from './base/vector-map-projection-confi
     standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost],
     inputs: [
         'aspectRatio',
