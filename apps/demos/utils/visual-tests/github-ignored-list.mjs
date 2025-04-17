@@ -1,4 +1,4 @@
-import menuMeta from '../../menuMeta.json';
+import menuMeta from '../../menuMeta.json' with { type: 'json' };
 
 const gridMeta = menuMeta[0].Groups;
 
