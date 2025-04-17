@@ -110,10 +110,10 @@ export abstract class DxoCalendarOptions extends NestedOption {
         this._setOption('isValid', value);
     }
 
-    get max(): Date | number | string {
+    get max(): Date | number | null | string {
         return this._getOption('max');
     }
-    set max(value: Date | number | string) {
+    set max(value: Date | number | null | string) {
         this._setOption('max', value);
     }
 
@@ -124,10 +124,10 @@ export abstract class DxoCalendarOptions extends NestedOption {
         this._setOption('maxZoomLevel', value);
     }
 
-    get min(): Date | number | string {
+    get min(): Date | number | null | string {
         return this._getOption('min');
     }
-    set min(value: Date | number | string) {
+    set min(value: Date | number | null | string) {
         this._setOption('min', value);
     }
 
@@ -257,10 +257,10 @@ export abstract class DxoCalendarOptions extends NestedOption {
         this._setOption('validationStatus', value);
     }
 
-    get value(): Date | number | string | Array<Date | number | string> {
+    get value(): Date | number | null | string | Array<Date | number | string | null> {
         return this._getOption('value');
     }
-    set value(value: Date | number | string | Array<Date | number | string>) {
+    set value(value: Date | number | null | string | Array<Date | number | string | null>) {
         this._setOption('value', value);
     }
 

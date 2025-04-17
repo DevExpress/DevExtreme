@@ -6,6 +6,7 @@ import { getWidth } from '@js/core/utils/size';
 // eslint-disable-next-line @typescript-eslint/consistent-type-imports
 import type { DateBoxBase, Properties } from '@js/ui/date_box';
 import DateBox from '@js/ui/date_box';
+import type { DateLike } from '@js/ui/date_range_box_types';
 import type Popup from '@js/ui/popup';
 
 import { getDeserializedDate, monthDifference } from './m_date_range.utils';
@@ -20,7 +21,7 @@ export interface MultiselectDateBoxProperties extends Properties {
 }
 
 declare class ExtendedDateBox extends DateBoxBase<MultiselectDateBoxProperties> {
-  reset(value?: Date | number | string | null): void;
+  reset(value?: DateLike): void;
 }
 
 const TypedDateBox: typeof ExtendedDateBox = DateBox as any;
