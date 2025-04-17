@@ -4,11 +4,10 @@ exports[`Item should render headerFilter icons if enabled 1`] = `
 <div>
   <div
     class="dx-cardview-header-item  "
-    tabindex="0"
   >
     Column 1
-    <span
-      class="dx-header-filter-icon "
+    <div
+      class="dx-icon dx-icon-filter dx-header-filter-icon "
     />
   </div>
 </div>
@@ -18,18 +17,17 @@ exports[`Item should render sort icons 1`] = `
 <div>
   <div
     class="dx-cardview-header-item  "
-    tabindex="0"
   >
     Column 1
     <div
       class="dx-cardview-header-item-sorting"
     >
       <div
-        class="dx-icon dx-icon-sortup"
+        class="dx-icon dx-icon-arrowsortup"
       />
     </div>
-    <span
-      class="dx-header-filter-icon "
+    <div
+      class="dx-icon dx-icon-filter dx-header-filter-icon "
     />
   </div>
 </div>
@@ -39,11 +37,10 @@ exports[`Item should use column caption as text 1`] = `
 <div>
   <div
     class="dx-cardview-header-item  "
-    tabindex="0"
   >
     my column caption
-    <span
-      class="dx-header-filter-icon "
+    <div
+      class="dx-icon dx-icon-filter dx-header-filter-icon "
     />
   </div>
 </div>

@@ -4,11 +4,14 @@ import messageLocalization from '@js/localization/message';
 import filterUtils from '@js/ui/shared/filtering';
 
 import type { Template, WithRequired } from '../types';
-import type { Column } from './types';
+import type { Cell, Column } from './types';
 
 interface NonNormalizedColumnOptions {
   calculateDisplayValue: string | ((this: Column, data: unknown) => unknown);
   headerItemTemplate?: Template<{ column: Column }>;
+  fieldTemplate?: Template<{ cell: Cell }>;
+  captionTemplate?: Template<{ cell: Cell }>;
+  valueTemplate?: Template<{ cell: Cell }>;
 }
 
 export type ColumnSettings = Partial<

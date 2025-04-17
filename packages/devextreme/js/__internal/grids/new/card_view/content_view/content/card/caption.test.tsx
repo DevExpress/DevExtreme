@@ -1,6 +1,7 @@
 import {
   describe, expect, it,
 } from '@jest/globals';
+import type { Cell } from '@ts/grids/new/grid_core/columns_controller/types';
 import { render } from 'inferno';
 
 import { Caption } from './caption';
@@ -10,7 +11,9 @@ describe('Content View', () => {
     it('should render title', () => {
       const container = document.createElement('div');
 
-      render(<Caption title={'TEST_TITLE'} />, container);
+      const cell = { column: { caption: 'TEST_TITLE' } } as unknown as Cell;
+
+      render(<Caption cell={cell} />, container);
 
       expect(container).toMatchSnapshot();
     });
@@ -18,8 +21,11 @@ describe('Content View', () => {
     it('should render template with title', () => {
       const container = document.createElement('div');
 
-      render(<Caption title={'TEST_TITLE'}
-                      template={(title) => (<div test-template="true">{title}</div>)}
+      const cell = { column: { caption: 'TEST_TITLE' } } as unknown as Cell;
+
+      render(<Caption cell={cell}
+                      // eslint-disable-next-line @typescript-eslint/no-shadow
+                      template={({ cell }) => (<div test-template="true">{cell.column.caption}</div>)}
       />, container);
 
       expect(container).toMatchSnapshot();

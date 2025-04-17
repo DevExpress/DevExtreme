@@ -61,7 +61,7 @@ export class ItemsController {
     const itemKey = this.dataController.getDataKey(data);
 
     return {
-      cells: columns.map((column) => {
+      cells: columns.map((column, index) => {
         const value = column.calculateCellValue(data);
         const displayValue = column.calculateDisplayValue(data);
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -73,6 +73,7 @@ export class ItemsController {
           .getHighlightedText(text);
 
         return {
+          index,
           column,
           value,
           displayValue,

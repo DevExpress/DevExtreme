@@ -1,5 +1,8 @@
+import TextBox from "../textBox";
+
 const CLASS = {
     disabledState: 'dx-state-disabled',
+    textBox: 'dx-textbox',
 };
 
 export default class Toolbar {
@@ -15,6 +18,10 @@ export default class Toolbar {
 
     getClearSelectionButton(): Selector {
         return this.element.find('[aria-label=\'Clear selection\']');
+    }
+
+    getSearchTextBox(): TextBox {
+        return new TextBox(this.element.find(`.${CLASS.textBox}`));
     }
 
     isSelectAllButtonDisabled(): Promise<boolean> {

@@ -11,7 +11,6 @@ import { createPromise } from '@ts/core/utils/promise';
 
 import { FilterController } from '../filtering/filter_controller';
 import { OptionsController } from '../options_controller/options_controller';
-import { SearchController } from '../search/index';
 import { SortingController } from '../sorting_controller/sorting_controller';
 import { StoreLoadAdapter } from './store_load_adapter/index';
 import type { DataObject, Key } from './types';
@@ -70,6 +69,8 @@ export class DataController {
 
   public readonly isLoaded = state(false);
 
+  public readonly isReloading = state(false);
+
   private readonly normalizedRemoteOptions = computed(
     (remoteOperations, dataSource) => {
       const store = dataSource.store();
@@ -84,15 +85,15 @@ export class DataController {
   );
 
   public static dependencies = [
-    OptionsController, SortingController,
-    FilterController, SearchController,
+    OptionsController,
+    SortingController,
+    FilterController,
   ] as const;
 
   constructor(
     private readonly options: OptionsController,
     private readonly sortingController: SortingController,
     private readonly filterController: FilterController,
-    private readonly searchController: SearchController,
   ) {
     effect(
       (dataSource) => {
@@ -102,6 +103,7 @@ export class DataController {
         };
         const loadingChangedCallback = (): void => {
           this.isLoading.update(dataSource.isLoading());
+          this.isReloading.update(true);
         };
         const loadErrorCallback = (error: string): void => {
           const callback = this.onDataErrorOccurred.unreactive_get();
@@ -234,6 +236,13 @@ export class DataController {
     this.pageIndex.update(dataSource.pageIndex());
     this.pageSize.update(dataSource.pageSize());
     this._totalCount.update(dataSource.totalCount());
+
+    this.loadedPromise.promise.then(() => {
+      this.isReloading.update(false);
+    }).catch(() => {
+      this.isReloading.update(false);
+    });
+
     this.loadedPromise.resolve();
   }
 
@@ -253,5 +262,30 @@ export class DataController {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-return
       (data) => new ArrayStore(data),
     );
+  }
+
+  public increasePageIndex(): void {
+    const currentPageIdx = this.pageIndex.unreactive_get();
+    const totalCount = this.totalCount.unreactive_get();
+    const pageSize = this.pageSize.unreactive_get();
+    const nextPageIdx = currentPageIdx + 1;
+    const maxPageIdx = Math.ceil(totalCount / pageSize) - 1;
+
+    if (nextPageIdx > maxPageIdx) {
+      return;
+    }
+
+    this.pageIndex.update(nextPageIdx);
+  }
+
+  public decreasePageIndex(): void {
+    const currentPageIdx = this.pageIndex.unreactive_get();
+    const nextPageIdx = currentPageIdx - 1;
+
+    if (nextPageIdx < 0) {
+      return;
+    }
+
+    this.pageIndex.update(nextPageIdx);
   }
 }

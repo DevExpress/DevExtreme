@@ -1,5 +1,5 @@
 import type { Format, SortOrder } from '@js/common';
-import type { ColumnBase } from '@js/common/grids';
+import type { ColumnBase, FilterType } from '@js/common/grids';
 import type { HeaderFilterColumnOptions } from '@ts/grids/new/grid_core/filtering/header_filter/index';
 import type { ComponentType } from 'inferno';
 
@@ -54,15 +54,18 @@ export type Column = Pick<Required<ColumnBase>, InheritedColumnProps> & {
 
   editorTemplate?: unknown;
 
-  fieldTemplate?: unknown;
+  fieldTemplate?: ComponentType<{ cell: Cell }>;
+  captionTemplate?: ComponentType<{ cell: Cell }>;
+  valueTemplate?: ComponentType<{ cell: Cell }>;
 
-  // TODO: move to cardview/headerpanel
   headerItemTemplate?: ComponentType<{ column: Column }>;
 
   headerItemCssClass?: string;
 
   // header filter options for specific column.
   headerFilter?: HeaderFilterColumnOptions;
+
+  filterType?: FilterType;
 };
 
 export type VisibleColumn = Column & { visible: true };
@@ -77,6 +80,8 @@ export interface Cell {
   column: Column;
 
   highlightedText: HighlightedTextItem[] | null;
+
+  index: number;
 }
 
 export interface DataRow {

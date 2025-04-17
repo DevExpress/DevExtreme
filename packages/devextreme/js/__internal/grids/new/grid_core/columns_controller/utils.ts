@@ -8,7 +8,9 @@ import type { ColumnProperties, ColumnSettings, PreNormalizedColumn } from './op
 import { defaultColumnProperties, defaultColumnPropertiesByDataType } from './options';
 import type { Column } from './types';
 
-type TemplateNormalizationFunc = <T>(template: Template<T>) => ComponentType<T>;
+type TemplateNormalizationFunc = <T>(
+  template: Template<T> | undefined
+) => ComponentType<T> | undefined;
 
 function normalizeColumn(
   column: PreNormalizedColumn,
@@ -32,9 +34,10 @@ function normalizeColumn(
     calculateDisplayValue: isString(colWithDefaults.calculateDisplayValue)
       ? compileGetter(colWithDefaults.calculateDisplayValue) as (data: unknown) => string
       : colWithDefaults.calculateDisplayValue,
-    headerItemTemplate: colWithDefaults.headerItemTemplate
-      ? templateNormalizationFunc(colWithDefaults.headerItemTemplate)
-      : undefined,
+    headerItemTemplate: templateNormalizationFunc(colWithDefaults.headerItemTemplate),
+    fieldTemplate: templateNormalizationFunc(colWithDefaults.fieldTemplate),
+    captionTemplate: templateNormalizationFunc(colWithDefaults.captionTemplate),
+    valueTemplate: templateNormalizationFunc(colWithDefaults.valueTemplate),
   };
 }
 

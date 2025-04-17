@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { describe, expect, it } from '@jest/globals';
 import { compileGetter } from '@js/common/data';
 import { render } from 'inferno';
@@ -12,6 +11,7 @@ const props = {
         column: {
           dataField: 'Name',
           name: 'Field',
+          caption: 'Field',
         },
         value: 'devextreme',
         text: 'devextreme',
@@ -112,7 +112,7 @@ describe('Field Template', () => {
     // @ts-expect-error
     render(<Card {...props} />, container);
 
-    const fieldName = container.querySelector('.dx-cardview-field-name');
+    const fieldName = container.querySelector('.dx-cardview-field-caption');
     const fieldValue = container.querySelector('.dx-cardview-field-value');
 
     expect(fieldName?.textContent).toBe('Field:');
