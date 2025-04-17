@@ -22,9 +22,9 @@ type ICalendarOptionsNarrowedEvents = {
 type ICalendarOptions = React.PropsWithChildren<ReplaceFieldTypes<Properties, ICalendarOptionsNarrowedEvents> & IHtmlOptions & {
   cellRender?: (...params: any) => React.ReactNode;
   cellComponent?: React.ComponentType<any>;
-  defaultValue?: Array<Date | number | string> | Date | number | string;
+  defaultValue?: Array<Date | null | number | string> | Date | null | number | string;
   defaultZoomLevel?: CalendarZoomLevel;
-  onValueChange?: (value: Array<Date | number | string> | Date | number | string) => void;
+  onValueChange?: (value: Array<Date | null | number | string> | Date | null | number | string) => void;
   onZoomLevelChange?: (value: CalendarZoomLevel) => void;
 }>
 

@@ -9,6 +9,7 @@ export {
     CustomRule,
     DataStructure,
     DataType,
+    DateLike,
     DefaultOptionsRule,
     Direction,
     DisplayMode,
