@@ -10,7 +10,7 @@ const INFORMER_CLASS = 'dx-informer';
 const INFORMER_ALIGNMENT_START_CLASS = 'dx-informer-alignment-start';
 const INFORMER_ALIGNMENT_CENTER_CLASS = 'dx-informer-alignment-center';
 const INFORMER_ALIGNMENT_END_CLASS = 'dx-informer-alignment-end';
-const INFORMER_WITH_BACKGROUND_CLASS = 'dx-informer-with-background';
+const INFORMER_BG_CLASS = 'dx-informer-bg';
 const INFORMER_TEXT_CLASS = 'dx-informer-text';
 const INFORMER_ICON_CLASS = 'dx-informer-icon';
 
@@ -41,7 +41,7 @@ class Informer extends Widget<Properties> {
     const { showBackground } = this.option();
 
     $element.addClass(INFORMER_CLASS);
-    $element.toggleClass(INFORMER_WITH_BACKGROUND_CLASS, showBackground);
+    $element.toggleClass(INFORMER_BG_CLASS, showBackground);
     this._setAlignmentClass();
 
     super._initMarkup();
@@ -115,7 +115,7 @@ class Informer extends Widget<Properties> {
         this._setAlignmentClass();
         break;
       case 'showBackground':
-        $(this.$element()).toggleClass(INFORMER_WITH_BACKGROUND_CLASS, value);
+        $(this.$element()).toggleClass(INFORMER_BG_CLASS, value);
         break;
       case 'text':
         this._updateText();

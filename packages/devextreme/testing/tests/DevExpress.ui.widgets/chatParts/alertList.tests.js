@@ -95,7 +95,7 @@ QUnit.module('AlertList', moduleConfig, () => {
             const $error = this.getErrors();
             const informer = $error.dxInformer('instance');
 
-            assert.ok(informer instanceof Informer, 'error is instance of Informer');
+            assert.strictEqual(informer instanceof Informer, true, 'error is instance of Informer');
         });
 
         QUnit.test('Informer instanse should be disposed on items change', function(assert) {

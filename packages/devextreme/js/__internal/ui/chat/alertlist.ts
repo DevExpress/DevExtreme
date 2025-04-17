@@ -10,6 +10,7 @@ import Informer from '@ts/ui/m_informer';
 
 const CHAT_ALERTLIST_CLASS = 'dx-chat-alertlist';
 const CHAT_ALERTLIST_ERROR_CLASS = 'dx-chat-alertlist-error';
+const ICON_ERRORCIRCLE = 'errorcircle';
 
 export interface Properties extends WidgetOptions<AlertList> {
   items: Alert[];
@@ -46,7 +47,7 @@ class AlertList extends Widget<Properties> {
     }
   }
 
-  _renderItem(itemData: Alert): void {
+  _renderItem(itemData: Alert | undefined): void {
     const $informer = $('<div>')
       .addClass(CHAT_ALERTLIST_ERROR_CLASS);
 
@@ -54,7 +55,7 @@ class AlertList extends Widget<Properties> {
 
     const informer = this._createComponent($informer, Informer, {
       text: itemData?.message ?? '',
-      icon: 'errorcircle',
+      icon: ICON_ERRORCIRCLE,
       showBackground: false,
     });
 
