@@ -3,7 +3,6 @@
 @mixin informer(
   $color,
   $background-color,
-  $color-with-background,
   $border-radius,
   $icon-size,
   $padding-inline,
@@ -17,8 +16,7 @@
     column-gap: $column-gap;
   }
 
-  .dx-informer-with-background {
-    color: $color-with-background;
+  .dx-informer-bg {
     background-color: $background-color;
     border-radius: $border-radius;
   }

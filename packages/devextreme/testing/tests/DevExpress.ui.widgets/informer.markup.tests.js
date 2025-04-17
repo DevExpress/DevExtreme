@@ -6,7 +6,7 @@ const INFORMER_CLASS = 'dx-informer';
 const INFORMER_ALIGNMENT_START_CLASS = 'dx-informer-alignment-start';
 const INFORMER_ALIGNMENT_CENTER_CLASS = 'dx-informer-alignment-center';
 const INFORMER_ALIGNMENT_END_CLASS = 'dx-informer-alignment-end';
-const INFORMER_WITH_BACKGROUND_CLASS = 'dx-informer-with-background';
+const INFORMER_BG_CLASS = 'dx-informer-bg';
 const INFORMER_TEXT_CLASS = 'dx-informer-text';
 const INFORMER_ICON_CLASS = 'dx-informer-icon';
 
@@ -54,10 +54,10 @@ QUnit.module('Informer', moduleConfig, () => {
         });
 
         [true, false].forEach((showBackground) => {
-            QUnit.test(`should ${showBackground ? '' : 'not '}have ${INFORMER_WITH_BACKGROUND_CLASS} class when showBackground=${showBackground}`, function(assert) {
+            QUnit.test(`should ${showBackground ? '' : 'not '}have ${INFORMER_BG_CLASS} class when showBackground=${showBackground}`, function(assert) {
                 this.reinit({ showBackground });
 
-                assert.strictEqual(this.$element.hasClass(INFORMER_WITH_BACKGROUND_CLASS), showBackground);
+                assert.strictEqual(this.$element.hasClass(INFORMER_BG_CLASS), showBackground);
             });
         });
 

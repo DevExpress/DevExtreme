@@ -5,24 +5,11 @@
 
 $informer-color: $base-invalid-color !default;
 $informer-background-color: null !default;
-$informer-color-with-background: null !default;
 
 @if $mode == "light" {
-  $informer-background-color: mix(#FFF, $base-danger, 92%);
-  $informer-color-with-background: mix(#000, $base-danger, 25%);
-
-  @if $color == "saas" {
-    $informer-background-color: mix(#FFF, $base-danger, 90%);
-    $informer-color-with-background: $base-danger;
-  }
+  $informer-background-color: lighten(saturate(adjust-hue($base-danger, -358), 0.58), 46.67);
 }
 
 @if $mode == "dark" {
-  $informer-background-color: $base-danger;
-  $informer-color-with-background: mix(#000, $base-danger, 85%);
-
-  @if $color == "saas" {
-    $informer-background-color: mix(#000, $base-danger, 95%);
-    $informer-color-with-background: $base-danger;
-  }
+  $informer-background-color: darken(desaturate($base-danger, 5.06), 53.53);
 }
