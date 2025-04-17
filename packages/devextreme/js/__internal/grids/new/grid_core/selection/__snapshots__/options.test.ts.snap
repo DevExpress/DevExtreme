@@ -75,7 +75,7 @@ exports[`Options selection allowSelectAll when it is true and selection mode is 
       "disabled": false,
       "icon": "selectall",
       "onClick": [Function],
-      "text": "Select All",
+      "text": "Select all",
     },
     "widget": "dxButton",
   },

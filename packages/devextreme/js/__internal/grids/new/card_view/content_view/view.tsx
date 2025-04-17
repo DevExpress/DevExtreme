@@ -49,6 +49,8 @@ export class ContentView extends ContentViewBase<ContentViewProps> {
         fieldTemplate: this.options.template('fieldTemplate'),
         cardsPerRow: this.cardsPerRow,
         onRowHeightChange: this.rowHeight.update.bind(this.rowHeight),
+        showContextMenu: this.showContextMenu.bind(this),
+        wordWrapEnabled: this.options.oneWay('wordWrapEnabled'),
         cardProps: combined({
           minWidth: this.cardMinWidth,
           maxWidth: this.options.oneWay('cardMaxWidth'),
@@ -67,6 +69,7 @@ export class ContentView extends ContentViewBase<ContentViewProps> {
           },
           allowUpdating: this.editingController.allowUpdating,
           allowDeleting: this.editingController.allowDeleting,
+          footerTemplate: this.options.template('cardFooterTemplate'),
           cover: combined({
             imageExpr: computed(
               (imageExpr) => this.processExpr(imageExpr),
@@ -107,5 +110,9 @@ export class ContentView extends ContentViewBase<ContentViewProps> {
 
   private onCardHold(e: CardHoldEvent) {
     this.selectionController.processLongTap(e.row);
+  }
+
+  private showContextMenu(e: MouseEvent, card?: DataRow, cardIndex?: number): void {
+    this.contextMenuController.show(e, 'content', { card, cardIndex });
   }
 }

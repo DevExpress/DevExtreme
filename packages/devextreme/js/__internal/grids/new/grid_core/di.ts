@@ -1,6 +1,5 @@
 /* eslint-disable spellcheck/spell-checker */
 import type { DIContext } from '@ts/core/di/index';
-import { SearchView } from '@ts/grids/new/grid_core/search/view';
 
 import * as ColumnChooserModule from './column_chooser/index';
 import * as ColumnsControllerModule from './columns_controller/index';
@@ -17,6 +16,7 @@ import * as FilterControllerModule from './filtering/index';
 import { ItemsController } from './items_controller/items_controller';
 import { PagerView } from './pager/view';
 import { SearchController } from './search/controller';
+import { SearchView } from './search/view';
 import * as SelectionControllerModule from './selection/index';
 import * as SortingControllerModule from './sorting_controller/index';
 import { ToolbarController } from './toolbar/controller';
@@ -45,4 +45,5 @@ export function register(diContext: DIContext): void {
   diContext.register(ErrorController);
   diContext.register(EditingController);
   diContext.register(EditPopupView);
+  diContext.register(SearchView);
 }

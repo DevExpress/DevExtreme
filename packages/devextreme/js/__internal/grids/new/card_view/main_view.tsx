@@ -13,6 +13,7 @@ import { ConfigContext } from '../grid_core/core/config_context';
 import { EditPopupView } from '../grid_core/editing/popup/view';
 import { RootElementUpdater } from '../grid_core/inferno_wrappers/root_element_updater';
 import { ContentView } from './content_view/view';
+import { ContextMenuView } from './context_menu/view';
 import { HeaderPanelView } from './header_panel/view';
 import { OptionsController } from './options_controller';
 
@@ -29,6 +30,7 @@ interface MainViewProps {
   FilterPanel: ComponentType;
   ColumnChooser: ComponentType;
   EditPopup: ComponentType;
+  ContextMenu: ComponentType;
   config: Config;
   rootElementRef: RefObject<HTMLDivElement>;
 }
@@ -36,7 +38,7 @@ interface MainViewProps {
 function MainViewComponent({
   Toolbar, Content, Pager, HeaderPanel, HeaderFilterPopup,
   FilterPanel, ColumnChooser, EditPopup,
-  config, rootElementRef,
+  ContextMenu, config, rootElementRef,
 }: MainViewProps): JSX.Element {
   return (<>
     <ConfigContext.Provider value={config}>
@@ -61,6 +63,7 @@ function MainViewComponent({
         </div>
         <ColumnChooser/>
         <EditPopup/>
+        <ContextMenu/>
       </RootElementUpdater>
     </ConfigContext.Provider>
   </>);
@@ -78,6 +81,7 @@ export class MainView extends View<MainViewProps> {
     FilterPanelView,
     ColumnChooserView,
     EditPopupView,
+    ContextMenuView,
     OptionsController,
   ] as const;
 
@@ -90,6 +94,7 @@ export class MainView extends View<MainViewProps> {
     private readonly filterPanel: FilterPanelView,
     private readonly columnsChooser: ColumnChooserView,
     private readonly editPopup: EditPopupView,
+    private readonly contextMenu: ContextMenuView,
     private readonly options: OptionsController,
   ) {
     super();
@@ -107,6 +112,7 @@ export class MainView extends View<MainViewProps> {
       FilterPanel: this.filterPanel.asInferno(),
       ColumnChooser: this.columnsChooser.asInferno(),
       EditPopup: this.editPopup.asInferno(),
+      ContextMenu: this.contextMenu.asInferno(),
       config: combined({
         rtlEnabled: this.options.oneWay('rtlEnabled'),
         disabled: this.options.oneWay('disabled'),

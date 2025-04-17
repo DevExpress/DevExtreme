@@ -105,6 +105,10 @@ export class CardHeader extends Component<CardHeaderProps> {
       return template(finalItems);
     }
 
+    if (!finalItems.length) {
+      return <></>;
+    }
+
     return (
       <div className={CLASSES.cardHeader}>
         <Toolbar items={finalItems} />

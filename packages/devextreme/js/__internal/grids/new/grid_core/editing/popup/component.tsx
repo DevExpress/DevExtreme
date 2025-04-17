@@ -3,6 +3,7 @@ import type * as dxPopup from '@js/ui/popup';
 import type { RefObject } from 'inferno';
 import { Component } from 'inferno';
 
+import { CLASSES } from '../../const';
 import type { DataObject } from '../../data_controller/types';
 import type { FormProperties } from '../../inferno_wrappers/form';
 import { Form } from '../../inferno_wrappers/form';
@@ -53,23 +54,25 @@ export class EditPopup extends Component<Properties> {
     ];
 
     return (
-      <Popup
-        visible={true}
-        toolbarItems={toolbarItems}
-        onHidden={this.props.onHide}
-        showTitle={false}
-      >
-        <Scrollable>
-          <Form
-            componentRef={this.props.formRef}
-            colCount={2} // TODO: move
-            formData={this.props.data}
-            customizeItem={this.props.customizeItem}
-            items={this.props.items}
-            {...this.props.formProps}
-          />
-        </Scrollable>
-      </Popup>
+      <div className={CLASSES.excludeFlexBox}>
+        <Popup
+          visible={true}
+          toolbarItems={toolbarItems}
+          onHidden={this.props.onHide}
+          showTitle={false}
+        >
+          <Scrollable>
+            <Form
+              componentRef={this.props.formRef}
+              colCount={2} // TODO: move
+              formData={this.props.data}
+              customizeItem={this.props.customizeItem}
+              items={this.props.items}
+              {...this.props.formProps}
+            />
+          </Scrollable>
+        </Popup>
+      </div>
     );
   }
 }

@@ -4,6 +4,7 @@ import dxCardView from "devextreme/ui/card_view";
 import { wrapDxWithReact } from "../utils";
 import { store } from "./data";
 import { generatedData } from "./generatedData";
+import { renderFooter } from "./templates";
 
 const CardView = wrapDxWithReact(dxCardView);
 
@@ -164,6 +165,14 @@ const meta: Meta<typeof CardView> = {
     searchPanel: {
       control: 'object',
     },
+    cardFooterTemplate: {
+      control: 'radio',
+      options: ['show (custom template)', 'undefined'],
+      mapping: {
+        'show (custom template)': renderFooter,
+        'undefined': undefined,
+      }
+    }
   }
 };
 
@@ -186,6 +195,7 @@ export const DefaultMode: Story = {
     cardMaxWidth: 350,
     columns: 'local',
     filterPanel: { visible: true },
+    cardFooterTemplate: undefined,
   },
 };
 
@@ -256,6 +266,10 @@ export const SearchCardView: Story = {
       highlightCaseSensitive: false,
       highlightSearchText: true,
       text: '',
+      visible: true,
+      placeholder: 'Search...',
+      searchVisibleColumnsOnly: false,
+      width: 160,
     }
   }
 }
@@ -298,3 +312,32 @@ export const SelectionStory: Story = {
   }
 }
 
+export const ContextMenuStory: Story = {
+  ...DefaultMode,
+  args: {
+    ...DefaultMode.args,
+    onContextMenuPreparing: (e) => {
+      e.items = e.items ?? [];
+
+      if(e.target === 'toolbar') {
+        e.items.push({
+          text: 'show column chooser',
+          onItemClick: () => e.component.showColumnChooser()
+        });
+      }
+      else if(e.target === 'headerPanel' && e.column) {
+        e.items.push({
+          text: `hide ${e.column.caption}`,
+          disabled: !e.column.visible,
+          icon: 'eyeclose',
+          onItemClick: () => e.component.columnOption(e.columnIndex, 'visible', false)
+        });
+      }
+      else if(e.target === 'content' && e.card) {
+        e.items.push({
+          text: 'do something with card'
+        });
+      }
+    }
+  }
+}

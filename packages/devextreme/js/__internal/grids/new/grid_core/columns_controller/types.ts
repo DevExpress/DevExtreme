@@ -17,6 +17,7 @@ type InheritedColumnProps =
   | 'allowHiding'
   | 'allowFiltering'
   | 'allowHeaderFiltering'
+  | 'allowSearch'
   | 'trueText'
   | 'falseText'
   | 'showInColumnChooser'
@@ -41,6 +42,14 @@ export type Column = Pick<Required<ColumnBase>, InheritedColumnProps> & {
 
   calculateDisplayValue: (this: Column, data: unknown) => unknown;
 
+  calculateFilterExpression: (
+    this: Column,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    filterValue: any,
+    selectedFilterOperation: string | undefined,
+    target: string,
+  ) => unknown;
+
   format?: Format;
 
   customizeText?: (this: Column, info: {
@@ -50,9 +59,10 @@ export type Column = Pick<Required<ColumnBase>, InheritedColumnProps> & {
 
   editorTemplate?: unknown;
 
-  fieldTemplate?: unknown;
+  fieldTemplate?: ComponentType<{ cell: Cell }>;
+  captionTemplate?: ComponentType<{ cell: Cell }>;
+  valueTemplate?: ComponentType<{ cell: Cell }>;
 
-  // TODO: move to cardview/headerpanel
   headerItemTemplate?: ComponentType<{ column: Column }>;
 
   headerItemCssClass?: string;
@@ -81,6 +91,8 @@ export interface Cell {
   column: Column;
 
   highlightedText: HighlightedTextItem[] | null;
+
+  index: number;
 }
 
 export interface DataRow {

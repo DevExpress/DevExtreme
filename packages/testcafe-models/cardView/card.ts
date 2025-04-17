@@ -2,13 +2,14 @@ export const CLASS = {
     header: 'dx-cardview-card-header',
     content: 'dx-cardview-content',
     field: 'dx-cardview-field',
-    fieldName: 'dx-cardview-field-name',
+    fieldCaption: 'dx-cardview-field-caption',
     fieldValue: 'dx-cardview-field-value',
     toolbarItem: 'dx-toolbar-item',
     toolbarItemContent: 'dx-toolbar-item-content',
     selectCheckbox: 'dx-cardview-select-checkbox',
     selectCard: 'dx-cardview-card-selection',
     checkbox: 'dx-checkbox',
+    highlightedState: 'text-part--highlighted',
 }
 
 export default class Card {
@@ -30,7 +31,7 @@ export default class Card {
     }
 
     getFieldCaptionCell(fieldCaption: String): Selector {
-        return this.element.find(`.${CLASS.fieldName}`).withText(fieldCaption + ':');
+        return this.element.find(`.${CLASS.fieldCaption}`).withText(fieldCaption + ':');
     }
 
     getFieldValueCell(fieldCaption: String): Selector {
@@ -39,5 +40,9 @@ export default class Card {
 
     getToolbarItem(index: number): Selector {
         return this.element.find(`.${CLASS.header}`).find('.dx-toolbar-item').nth(index);
+    }
+
+    getHighlightedTexts(): Selector {
+        return this.element.find(`.${CLASS.fieldValue}__${CLASS.highlightedState}`);
     }
 }

@@ -1,14 +1,18 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import type { DataType } from '@js/common';
 import messageLocalization from '@js/localization/message';
+import filterUtils from '@js/ui/shared/filtering';
 
 import { defaultSetCellValue } from '../editing/utils';
 import type { Template, WithRequired } from '../types';
-import type { Column } from './types';
+import type { Cell, Column } from './types';
 
 interface NonNormalizedColumnOptions {
   calculateDisplayValue: string | ((this: Column, data: unknown) => unknown);
   headerItemTemplate?: Template<{ column: Column }>;
+  fieldTemplate?: Template<{ cell: Cell }>;
+  captionTemplate?: Template<{ cell: Cell }>;
+  valueTemplate?: Template<{ cell: Cell }>;
 }
 
 export type ColumnSettings = Partial<
@@ -29,6 +33,7 @@ export const defaultColumnProperties = {
   calculateDisplayValue(data): unknown {
     return this.calculateCellValue(data);
   },
+  calculateFilterExpression: filterUtils.defaultCalculateFilterExpression,
   alignment: 'left',
   visible: true,
   allowReordering: true,
@@ -36,6 +41,7 @@ export const defaultColumnProperties = {
   allowHiding: true,
   allowFiltering: true,
   allowHeaderFiltering: true,
+  allowSearch: true,
   trueText: messageLocalization.format('dxDataGrid-trueText'),
   falseText: messageLocalization.format('dxDataGrid-falseText'),
   showInColumnChooser: true,

@@ -12,3 +12,10 @@ export interface HighlightedTextItem {
   type: 'highlighted' | 'usual';
   text: string;
 }
+
+export interface SearchFieldProps {
+  value?: string;
+  placeholder?: string;
+  width?: string | number;
+  onValueChanged?: (v: string) => void;
+}
