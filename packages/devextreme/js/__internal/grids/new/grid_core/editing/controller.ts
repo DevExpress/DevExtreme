@@ -153,7 +153,7 @@ export class EditingController {
     if (!confirmStatus) {
       return;
     }
-    // todo: onCardDeleting event
+
     // @ts-expect-error
     this.changes.update([...this.changes.unreactive_get(), {
       type: 'remove',
@@ -329,17 +329,4 @@ export class EditingController {
       newChange,
     ]);
   }
-
-  // public onChanged(key: unknown, columnName: string, value: unknown): void {
-  //   this.changes.update([
-  //     ...this.changes.unreactive_get() ?? [],
-  //     {
-  //       type: 'update',
-  //       key,
-  //       data: {
-  //         [columnName]: value,
-  //       },
-  //     },
-  //   ]);
-  // }
 }

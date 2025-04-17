@@ -4,6 +4,7 @@ import CardView from 'testcafe-models/cardView';
 import url from '../../helpers/getPageUrl';
 import { createWidget } from '../../helpers/createWidget';
 import { columns, data } from './helpers/simpleArrayData';
+import { testScreenshot } from '../../helpers/themeUtils';
 
 fixture.disablePageReloads`CardView - Editing`
   .page(url(__dirname, '../container.html'));
@@ -24,7 +25,7 @@ test('default render', async (t) => {
   const cardView = new CardView('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  await takeScreenshot('editing-default-render', cardView.element);
+  await testScreenshot(t, takeScreenshot, 'editing-default-render.png', { element: cardView.element });
 
   await t
     .expect(compareResults.isValid())

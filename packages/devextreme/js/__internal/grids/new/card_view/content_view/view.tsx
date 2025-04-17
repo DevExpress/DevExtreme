@@ -62,7 +62,6 @@ export class ContentView extends ContentViewBase<ContentViewProps> {
           onHoverChanged: this.options.action('onCardHoverChanged'),
           onPrepared: this.options.action('onCardPrepared'),
           onEdit: (key: Key) => { this.editingController.editRow(key); },
-
           onDelete: (key: Key) => {
             // eslint-disable-next-line @typescript-eslint/no-floating-promises
             this.editingController.deleteRow(key);
