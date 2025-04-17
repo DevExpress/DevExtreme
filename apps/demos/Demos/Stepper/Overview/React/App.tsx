@@ -10,7 +10,7 @@ import Steppers from './Steppers.tsx';
 import Options from './Options.tsx';
 
 export default function App() {
-  const [orientation, setOrientation] = useState<string>(orientations[0].value);
+  const [orientation, setOrientation] = useState<Orientation>(orientations[0].value);
   const [navigationMode, setNavigationMode] = useState<boolean>(navigationModes[0].value);
   const [selectOnFocus, setSelectOnFocus] = useState<boolean>(true);
   const [rtlMode, setRtlMode] = useState<boolean>(false);
@@ -38,7 +38,7 @@ export default function App() {
       <div className="widget-container">
         <div className={"widget-wrapper " + widgetWrapperOrientationClass}>
           <Steppers
-            orientation={orientation as Orientation}
+            orientation={orientation}
             navigationMode={navigationMode}
             selectOnFocus={selectOnFocus}
             rtlMode={rtlMode}
@@ -48,7 +48,7 @@ export default function App() {
 
       <div className="options">
         <Options
-          orientation={orientation as Orientation}
+          orientation={orientation}
           navigationMode={navigationMode}
           selectOnFocus={selectOnFocus}
           rtlMode={rtlMode}
