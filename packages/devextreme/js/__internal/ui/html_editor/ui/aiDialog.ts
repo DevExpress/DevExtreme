@@ -1,3 +1,5 @@
+import '@js/ui/drop_down_button';
+
 import type { AIIntegration } from '@js/common/ai-integration';
 import localizationMessage from '@js/common/core/localization/message';
 import type { dxElementWrapper } from '@js/core/renderer';

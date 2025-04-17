@@ -2,6 +2,7 @@ import React from 'react';
 import { HtmlEditor, Toolbar, Item, IHtmlEditorOptions, IItemProps } from 'devextreme-react/html-editor';
 import type { Meta, StoryObj } from '@storybook/react';
 import { defaultToolbarItems, fullToolbarItems } from './data';
+import { AIIntegration } from 'devextreme/artifacts/npm/devextreme/common/ai-integration';
 
 const meta: Meta<typeof HtmlEditor> = {
   title: 'Editors/HtmlEditor',
@@ -62,7 +63,7 @@ export const WithAI: StoryObj<HtmlEditorRenderArgs> = {
     items: [
       ...defaultToolbarItems,
       { name: 'separator' },
-      // { name: 'ai' },
+      { name: 'ai' }
     ],
     height: 500,
     width: '100%',
@@ -72,6 +73,7 @@ export const WithAI: StoryObj<HtmlEditorRenderArgs> = {
         <HtmlEditor
           {...editorProps}
           defaultValue="<p>What is the capital of France?</p>"
+          aiIntegration={{} as AIIntegration}
         >
           <Toolbar>
             {items.map((item, index) => (
