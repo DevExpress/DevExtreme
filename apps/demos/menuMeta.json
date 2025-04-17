@@ -4098,16 +4098,20 @@
       },
       {
         "Name": "Stepper",
+        "Breadcrumb": true,
         "Badge": "New",
         "Equivalents": "dxStepper, dx-stepper, stepper",
         "Demos": [
           {
             "Title": "Overview",
             "Name": "Overview",
+            "Equivalents": "stepper configuration, step settings, step options",
             "Widget": "Stepper",
-            "DemoType": "Web",
-            "Badge": "Roadmap",
-            "RoadmapSurveyUrl": "https://www.devexpress.com/support/surveys/devextreme-roadmap-stepper.xml"
+            "DocUrl": "",
+            "MvcDescription": "",
+            "NetCoreDescription": "",
+            "MvcAdditionalFiles": [],
+            "DemoType": "Web"
           },
           {
             "Title": "Step Template",
