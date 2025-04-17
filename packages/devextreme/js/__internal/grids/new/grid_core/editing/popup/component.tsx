@@ -10,7 +10,7 @@ import { Form } from '../../inferno_wrappers/form';
 import { Popup } from '../../inferno_wrappers/popup';
 import { Scrollable } from '../../inferno_wrappers/scrollable';
 
-export interface Properties {
+export interface Props {
   data?: DataObject;
   onSave: () => void;
   onCancel: () => void;
@@ -22,7 +22,7 @@ export interface Properties {
   popupProps: dxPopup.Options;
 }
 
-export class EditPopup extends Component<Properties> {
+export class EditPopup extends Component<Props> {
   public render(): JSX.Element {
     if (!this.props.data) {
       return <></>;

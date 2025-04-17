@@ -13,7 +13,7 @@ import { OptionsController } from '../../options_controller/options_controller';
 import { ToolbarController } from '../../toolbar/controller';
 import { EditingController } from '../controller';
 import { PendingPromises } from '../utils';
-import type { Properties } from './component';
+import type { Props } from './component';
 import { EditPopup } from './component';
 
 const EDITOR_TYPES_BY_DATA_TYPE: Record<DataType, dxForm.FormItemComponent> = {
@@ -25,7 +25,7 @@ const EDITOR_TYPES_BY_DATA_TYPE: Record<DataType, dxForm.FormItemComponent> = {
   datetime: 'dxDateBox',
 };
 
-export class EditPopupView extends View<Properties> {
+export class EditPopupView extends View<Props> {
   private readonly promises = new PendingPromises();
 
   private readonly formRef = createRef<dxForm.default>();
@@ -80,7 +80,7 @@ export class EditPopupView extends View<Properties> {
     );
   }
 
-  protected getProps(): SubsGets<Properties> {
+  protected getProps(): SubsGets<Props> {
     return combined({
       formProps: this.options.oneWay('editing.form'),
       popupProps: this.options.oneWay('editing.popup'),
