@@ -3,7 +3,6 @@ import type { SubsGets } from '@ts/core/reactive/index';
 import { combined, computed } from '@ts/core/reactive/index';
 import { ColumnsController } from '@ts/grids/new/grid_core/columns_controller/columns_controller';
 import { View } from '@ts/grids/new/grid_core/core/view';
-import { HeaderFilterController } from '@ts/grids/new/grid_core/filtering/header_filter/index';
 import { KeyboardNavigationController, NavigationStrategyHorizontalList } from '@ts/grids/new/grid_core/keyboard_navigation/index';
 
 import type { Column } from '../../grid_core/columns_controller/types';
@@ -23,8 +22,6 @@ export class HeaderPanelView extends View<HeaderPanelProps> {
     ColumnsController,
     OptionsController,
     HeaderFilterViewController,
-    HeaderFilterController,
-    ContextMenuController,
     KeyboardNavigationController,
   ] as const;
 
@@ -36,7 +33,6 @@ export class HeaderPanelView extends View<HeaderPanelProps> {
     private readonly columnsController: ColumnsController,
     private readonly options: OptionsController,
     private readonly headerFilterViewController: HeaderFilterViewController,
-    private readonly headerFilterController: HeaderFilterController,
     private readonly keyboardNavigationController: KeyboardNavigationController,
   ) {
     super();
