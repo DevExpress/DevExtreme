@@ -6,6 +6,7 @@ exports[`ItemsController createDataRow should process data object to data row us
     {
       "column": {
         "alignment": "left",
+        "allowEditing": true,
         "allowFiltering": true,
         "allowHeaderFiltering": false,
         "allowHiding": true,
@@ -16,6 +17,8 @@ exports[`ItemsController createDataRow should process data object to data row us
         "caption": "A",
         "dataField": "a",
         "dataType": "string",
+        "defaultSetCellValue": [Function],
+        "editorOptions": {},
         "falseText": "false",
         "headerFilter": {
           "allowSelectAll": true,
@@ -30,8 +33,10 @@ exports[`ItemsController createDataRow should process data object to data row us
         },
         "headerItemTemplate": undefined,
         "name": "a",
+        "setCellValue": [Function],
         "showInColumnChooser": true,
         "trueText": "true",
+        "validationRules": [],
         "visible": true,
         "visibleIndex": 0,
       },
@@ -43,6 +48,7 @@ exports[`ItemsController createDataRow should process data object to data row us
     {
       "column": {
         "alignment": "left",
+        "allowEditing": true,
         "allowFiltering": true,
         "allowHeaderFiltering": false,
         "allowHiding": true,
@@ -53,6 +59,8 @@ exports[`ItemsController createDataRow should process data object to data row us
         "caption": "B",
         "dataField": "b",
         "dataType": "string",
+        "defaultSetCellValue": [Function],
+        "editorOptions": {},
         "falseText": "false",
         "headerFilter": {
           "allowSelectAll": true,
@@ -67,8 +75,10 @@ exports[`ItemsController createDataRow should process data object to data row us
         },
         "headerItemTemplate": undefined,
         "name": "b",
+        "setCellValue": [Function],
         "showInColumnChooser": true,
         "trueText": "true",
+        "validationRules": [],
         "visible": true,
         "visibleIndex": 1,
       },
@@ -95,6 +105,7 @@ exports[`ItemsController createDataRow should process data object to data row us
     {
       "column": {
         "alignment": "left",
+        "allowEditing": true,
         "allowFiltering": true,
         "allowHeaderFiltering": false,
         "allowHiding": true,
@@ -105,6 +116,8 @@ exports[`ItemsController createDataRow should process data object to data row us
         "caption": "A",
         "dataField": "a",
         "dataType": "string",
+        "defaultSetCellValue": [Function],
+        "editorOptions": {},
         "falseText": "false",
         "headerFilter": {
           "allowSelectAll": true,
@@ -119,8 +132,10 @@ exports[`ItemsController createDataRow should process data object to data row us
         },
         "headerItemTemplate": undefined,
         "name": "a",
+        "setCellValue": [Function],
         "showInColumnChooser": true,
         "trueText": "true",
+        "validationRules": [],
         "visible": true,
         "visibleIndex": 0,
       },
@@ -132,6 +147,7 @@ exports[`ItemsController createDataRow should process data object to data row us
     {
       "column": {
         "alignment": "left",
+        "allowEditing": true,
         "allowFiltering": true,
         "allowHeaderFiltering": false,
         "allowHiding": true,
@@ -142,6 +158,8 @@ exports[`ItemsController createDataRow should process data object to data row us
         "caption": "B",
         "dataField": "b",
         "dataType": "string",
+        "defaultSetCellValue": [Function],
+        "editorOptions": {},
         "falseText": "false",
         "headerFilter": {
           "allowSelectAll": true,
@@ -156,8 +174,10 @@ exports[`ItemsController createDataRow should process data object to data row us
         },
         "headerItemTemplate": undefined,
         "name": "b",
+        "setCellValue": [Function],
         "showInColumnChooser": true,
         "trueText": "true",
+        "validationRules": [],
         "visible": true,
         "visibleIndex": 1,
       },
@@ -186,6 +206,7 @@ InterruptableComputed {
     true,
     true,
     true,
+    true,
   ],
   "depValues": [
     [
@@ -203,10 +224,14 @@ InterruptableComputed {
       "enabled": true,
       "searchStr": "",
     },
+    [],
   ],
   "isInitialized": true,
   "subscriptions": SubscriptionBag {
     "subscriptions": [
+      {
+        "unsubscribe": [Function],
+      },
       {
         "unsubscribe": [Function],
       },

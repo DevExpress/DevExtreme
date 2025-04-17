@@ -231,6 +231,10 @@ export class DataController {
   }
 
   public waitLoaded(): Promise<void> {
+    if (!this.dataSource.unreactive_get().isLoading()) {
+      return Promise.resolve();
+    }
+
     if (!this.loadedPromise) {
       this.loadedPromise = createPromise();
     }

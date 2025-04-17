@@ -22,7 +22,7 @@ export class EditingController {
 
   public allowUpdating = this.options.twoWay('editing.allowUpdating');
 
-  public allowAdding = this.options.twoWay('editing.allowDeleting');
+  public allowAdding = this.options.twoWay('editing.allowAdding');
 
   public readonly editingRow = computed(
     (editRowKey, items, changes) => {
@@ -43,7 +43,6 @@ export class EditingController {
       const newItem = this.itemsController.createDataRow(
         newData,
         this.columnController.columns.unreactive_get(),
-        // @ts-expect-error
         oldItem.index,
       );
       return newItem;
@@ -74,6 +73,7 @@ export class EditingController {
         {},
         this.columnController.columns.unreactive_get(),
         -1,
+        [],
         newItemKey,
       );
       return [...additionalItems, newItem];
@@ -151,7 +151,6 @@ export class EditingController {
       ...existingChange,
       data: {
         ...existingChange.data,
-        // @ts-expect-error
         ...newData,
       },
     } : {

@@ -66,12 +66,15 @@ export class EditPopupView extends View<Properties> {
   ) {
     super();
 
-    this.toolbar.addDefaultItem({
-      name: 'addCardButton',
-      location: 'after',
-      widget: 'dxButton',
-      options: { icon: 'add', onClick: () => this.editingController.addCard() },
-    }); // TODO: add conditional showing of button after rebase
+    this.toolbar.addDefaultItem(
+      {
+        name: 'addCardButton',
+        location: 'after',
+        widget: 'dxButton',
+        options: { icon: 'add', onClick: () => this.editingController.addCard() },
+      },
+      this.editingController.allowAdding,
+    );
   }
 
   protected getProps(): SubsGets<Properties> {

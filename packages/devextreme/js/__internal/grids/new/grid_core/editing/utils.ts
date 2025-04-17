@@ -9,7 +9,6 @@ export const defaultSetCellValue: Column['setCellValue'] = function (newData, va
     return;
   }
 
-  // @ts-expect-error
   newData[dataField] = value;
 };
 

@@ -6,11 +6,8 @@ import {
 import type * as dxForm from '@js/ui/form';
 import { rerender } from 'inferno';
 
-import { ColumnsController } from '../columns_controller';
 import type { Column } from '../columns_controller/types';
-import { DataController } from '../data_controller';
-import { FilterController } from '../filtering';
-import { ItemsController } from '../items_controller/items_controller';
+import { getContext } from '../di.test_utils';
 import type { Options } from '../options';
 import { OptionsControllerMock } from '../options_controller/options_controller.mock';
 import { ToolbarController } from '../toolbar/controller';
@@ -20,31 +17,22 @@ import { EditPopupView } from './popup/view';
 const setup = (config: Options) => {
   const rootElement = document.createElement('div');
 
-  const optionsController = new OptionsControllerMock(config);
-  const filteringController = new FilterController(optionsController);
-  const dataController = new DataController(optionsController, filteringController);
-  const columnsController = new ColumnsController(optionsController, dataController);
-  const itemsController = new ItemsController(dataController, columnsController);
-  const editingController = new EditingController(
-    optionsController,
-    itemsController,
-    columnsController,
-    dataController,
-  );
-  const toolbarController = new ToolbarController(optionsController);
-  const editPopupView = new EditPopupView(
-    optionsController,
-    columnsController,
-    itemsController,
-    editingController,
-    toolbarController,
-  );
+  const context = getContext(config);
+
+  const optionsController = context.get(OptionsControllerMock);
+  const editingController = context.get(EditingController);
+  const toolbarController = context.get(ToolbarController);
+  const editPopupView = context.get(EditPopupView);
 
   editPopupView.render(rootElement);
   rerender();
 
   return {
-    optionsController, editingController, editPopupView, rootElement, toolbarController,
+    optionsController,
+    editingController,
+    editPopupView,
+    rootElement,
+    toolbarController,
   };
 };
 
