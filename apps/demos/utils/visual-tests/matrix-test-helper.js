@@ -2,7 +2,6 @@ import { readFileSync, existsSync, writeFileSync } from 'fs';
 import { join } from 'path';
 import { ClientFunction, Selector } from 'testcafe';
 import { THEME } from './helpers/theme-utils';
-import { gitHubIgnored } from './github-ignored-list.mjs';
 
 export const FRAMEWORKS = ['jQuery', 'React', 'Vue', 'Angular'];
 
