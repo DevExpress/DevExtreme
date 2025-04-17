@@ -36,7 +36,7 @@ test('render of add card popup', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   await t.click(cardView.getHeaderPanel().getHeaderItem(1).element);
-  await takeScreenshot('editing-popup-add', cardView.element);
+  await testScreenshot(t, takeScreenshot, 'editing-popup-add.png', { element: cardView.element });
 
   await t
     .expect(compareResults.isValid())
@@ -48,7 +48,7 @@ test('render of edit card popup', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   await t.click(cardView.getCard(0).getToolbarItem(0));
-  await takeScreenshot('editing-popup-edit', cardView.element);
+  await testScreenshot(t, takeScreenshot, 'editing-popup-edit.png', { element: cardView.element });
 
   await t
     .expect(compareResults.isValid())
