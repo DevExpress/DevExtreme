@@ -114,6 +114,8 @@ class HtmlEditor extends Editor<Properties> {
 
     return {
       ...super._getDefaultOptions(),
+      // @ts-expect-error undefined is not allowed
+      aiIntegration: null,
       allowSoftLineBreak: false,
       // @ts-expect-error undefined is not allowed
       converter: null,
@@ -279,7 +281,7 @@ class HtmlEditor extends Editor<Properties> {
 
   _updateContainerMarkup(): void {
     const { value } = this.option();
-    const html = this._convertToHtml(value);
+    const html: string = this._convertToHtml(value);
 
     if (!html) {
       return;
@@ -575,14 +577,25 @@ class HtmlEditor extends Editor<Properties> {
     this._formDialog = new FormDialog(this.$element(), options);
   }
 
-  _renderAIDialog(): void {
-    const { aiIntegration } = this.option();
+  _shouldRenderAIDialog(): boolean {
+    const { aiIntegration, toolbar } = this.option();
 
-    if (!aiIntegration) {
-      return;
+    if (!(aiIntegration && toolbar?.items)) {
+      return false;
     }
 
-    this._aiDialog = new AIDialog(this.$element(), aiIntegration);
+    return toolbar.items.some((item) => (typeof item === 'string' ? item === 'ai' : item.name === 'ai'));
+  }
+
+  _renderAIDialog(): void {
+    const shouldRenderAIDialog = this._shouldRenderAIDialog();
+
+    if (shouldRenderAIDialog) {
+      const { aiIntegration } = this.option();
+
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      this._aiDialog = new AIDialog(this.$element(), aiIntegration!);
+    }
   }
 
   _getStylingModePrefix(): string {
@@ -634,10 +647,26 @@ class HtmlEditor extends Editor<Properties> {
     }
   }
 
+  _processAIIntegrationUpdate(): void {
+    if (isDefined(this._aiDialog)) {
+      const { aiIntegration } = this.option();
+
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      this._aiDialog.updateAIIntegration(aiIntegration!);
+
+      return;
+    }
+    this._renderAIDialog();
+  }
+
   _optionChanged(args: OptionChanged<Properties>): void {
     const { name, value, previousValue } = args;
 
     switch (name) {
+      case 'aiIntegration': {
+        this._processAIIntegrationUpdate();
+        break;
+      }
       case 'converter': {
         this._htmlConverter = value as Properties[typeof name];
 

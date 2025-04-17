@@ -1,5 +1,9 @@
 import $ from 'jquery';
-import AIDialog from '__internal/ui/html_editor/ui/aiDialog';
+import AIDialog, {
+    AI_DIALOG_CLASS,
+    AI_DIALOG_CONTROLS_CLASS,
+    AI_DIALOG_CONTENT_CLASS,
+} from '__internal/ui/html_editor/ui/aiDialog';
 import { isPromise } from 'core/utils/type';
 import {
     showAIDialog,
@@ -14,9 +18,6 @@ import 'ui/popup';
 import 'ui/text_area';
 import 'ui/select_box';
 
-const AI_DIALOG_CLASS = 'dx-aidialog';
-const AI_DIALOG_CONTENT_CLASS = 'dx-aidialog-content';
-const AI_DIALOG_CONTROLS_CLASS = 'dx-aidialog-controls';
 const TEXT_AREA_CLASS = 'dx-textarea';
 const SELECT_BOX_CLASS = 'dx-selectbox';
 
