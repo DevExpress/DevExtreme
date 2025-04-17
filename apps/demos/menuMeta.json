@@ -4114,6 +4114,18 @@
             "DemoType": "Web"
           },
           {
+            "Title": "Form Integration",
+            "Name": "FormIntegration",
+            "Equivalents": "multi-page form, wizard, multi-steps form, step validation",
+            "DocUrl": "",
+            "Widget": "Stepper",
+            "MvcDescription": "",
+            "NetCoreDescription": "",
+            "MvcAdditionalFiles": [],
+            "DemoType": "Web",
+            "Badge": "New"
+          },
+          {
             "Title": "Step Template",
             "Name": "StepTemplate",
             "Equivalents": "step customization, templates, custom steps",

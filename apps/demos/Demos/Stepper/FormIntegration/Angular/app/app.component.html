@@ -1,0 +1,85 @@
+<dx-stepper
+  [(selectedIndex)]="selectedIndex"
+  (onSelectionChanging)="onSelectionChanging($event)"
+>
+  <dxi-item
+    *ngFor="let step of steps"
+    [label]="step.label"
+    [icon]="step.icon"
+    [isValid]="step.isValid"
+    [hint]="step.hint"
+  ></dxi-item>
+</dx-stepper>
+<div class="content">
+  <dx-multi-view
+    [(selectedIndex)]="selectedIndex"
+    [animationEnabled]="false"
+    [swipeEnabled]="false"
+    [height]="300"
+  >
+    <dxi-item>
+      <div *dxTemplate>
+        <dates-form
+          [formData]="formData"
+          [validationGroup]="validationGroups[0]"
+        ></dates-form>
+      </div>
+    </dxi-item>
+    <dxi-item>
+      <div *dxTemplate>
+        <guests-form
+          [formData]="formData"
+          [validationGroup]="validationGroups[1]"
+        ></guests-form>
+      </div>
+    </dxi-item>
+    <dxi-item>
+      <div *dxTemplate>
+        <room-meal-plan-form
+          [formData]="formData"
+          [validationGroup]="validationGroups[2]"
+        ></room-meal-plan-form>
+      </div>
+    </dxi-item>
+    <dxi-item>
+      <div *dxTemplate>
+        <additional-form [formData]="formData"></additional-form>
+      </div>
+    </dxi-item>
+    <dxi-item>
+      <div *dxTemplate>
+        <confirmation
+          [formData]="formData"
+          [isConfirmed]="isConfirmed"
+        ></confirmation>
+      </div>
+    </dxi-item>
+  </dx-multi-view>
+  <div class="nav-panel">
+    <div class="current-step">
+      <span *ngIf="!isConfirmed">
+        Step <span class="selected-index">{{ selectedIndex + 1 }}</span> of
+        <span class="step-count">{{ steps.length }}</span>
+      </span>
+    </div>
+    <div class="nav-buttons">
+      <dx-button
+        id="prevButton"
+        [visible]="selectedIndex !== 0 && !isConfirmed"
+        text="Back"
+        type="normal"
+        (onClick)="onPrevButtonClick($event)"
+        [width]="100"
+      >
+      </dx-button>
+      <dx-button
+        id="nextButton"
+        [text]="getNextButtonText()"
+        type="default"
+        (onClick)="onNextButtonClick($event)"
+        [width]="100"
+      >
+      </dx-button>
+    </div>
+  </div>
+</div>
