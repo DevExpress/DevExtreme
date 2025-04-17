@@ -6,7 +6,7 @@ import type { SubsGetsUpd } from '@ts/core/reactive/index';
 import { computed } from '@ts/core/reactive/index';
 import { generateNewRowTempKey } from '@ts/grids/grid_core/editing/m_editing_utils';
 
-import { ColumnsController } from '../columns_controller';
+import { ColumnsController } from '../columns_controller/columns_controller';
 import { DataController } from '../data_controller/data_controller';
 import type { DataObject, Key } from '../data_controller/types';
 import { ItemsController } from '../items_controller/items_controller';

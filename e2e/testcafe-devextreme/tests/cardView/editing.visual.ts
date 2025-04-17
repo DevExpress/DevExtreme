@@ -1,6 +1,5 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import { Selector } from 'testcafe';
-import CardView from 'testcafe-models/cardView';
+import CardView from 'devextreme-testcafe-models/cardView';
 import url from '../../helpers/getPageUrl';
 import { createWidget } from '../../helpers/createWidget';
 import { columns, data } from './helpers/simpleArrayData';

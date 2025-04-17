@@ -6,7 +6,7 @@ import type { SubsGets } from '@ts/core/reactive/index';
 import { combined, computed } from '@ts/core/reactive/index';
 import { createRef } from 'inferno';
 
-import { ColumnsController } from '../../columns_controller';
+import { ColumnsController } from '../../columns_controller/columns_controller';
 import { View } from '../../core/view';
 import { ItemsController } from '../../items_controller/items_controller';
 import { OptionsController } from '../../options_controller/options_controller';
