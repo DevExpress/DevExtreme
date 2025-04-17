@@ -1,5 +1,9 @@
 /* eslint-disable max-classes-per-file */
 import {
+    DateLike,
+} from '../common';
+
+import {
     EventInfo,
     NativeEventInfo,
     InitializedEventInfo,
@@ -27,6 +31,10 @@ import {
 import {
     Properties as PopupProperties,
 } from './popup';
+
+export {
+    DateLike,
+};
 
 /** @public */
 export type DateType = 'date' | 'datetime' | 'time';
@@ -275,9 +283,10 @@ export interface dxDateBoxOptions extends DateBoxBaseOptions<dxDateBox> {
     /**
      * @docid
      * @default null
+     * @type Date|number|string|null
      * @public
      */
-    value?: Date | number | string;
+    value?: DateLike;
 }
 
 /**
@@ -318,16 +327,18 @@ export interface DateBoxBaseOptions<TComponent> extends dxDropDownEditorOptions<
     displayFormat?: Format;
     /**
      * @docid
+     * @type Date|number|string|null|undefined
      * @default undefined
      * @public
      */
-    max?: Date | number | string | undefined;
+    max?: DateLike | undefined;
     /**
      * @docid
+     * @type Date|number|string|null|undefined
      * @default undefined
      * @public
      */
-    min?: Date | number | string | undefined;
+    min?: DateLike | undefined;
     /**
      * @docid
      * @default "Today"
@@ -383,7 +394,7 @@ export default class dxDateBox extends DateBoxBase<Properties> {
      * @publicName reset(value)
      * @public
      */
-    reset(value?: Date | number | string | null): void;
+    reset(value?: DateLike): void;
 }
 
 /**

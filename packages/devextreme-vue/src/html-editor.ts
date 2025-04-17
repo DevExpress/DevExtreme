@@ -70,6 +70,7 @@ import { prepareConfigurationComponentConfig } from "./core/index";
 type AccessibleOptions = Pick<Properties,
   "accessKey" |
   "activeStateEnabled" |
+  "aiIntegration" |
   "allowSoftLineBreak" |
   "converter" |
   "customizeModules" |
@@ -119,6 +120,7 @@ const componentConfig = {
   props: {
     accessKey: String,
     activeStateEnabled: Boolean,
+    aiIntegration: Object as PropType<Record<string, any>>,
     allowSoftLineBreak: Boolean,
     converter: Object as PropType<Converter | Record<string, any>>,
     customizeModules: Function as PropType<((config: any) => void)>,
@@ -164,6 +166,7 @@ const componentConfig = {
     "update:hoveredElement": null,
     "update:accessKey": null,
     "update:activeStateEnabled": null,
+    "update:aiIntegration": null,
     "update:allowSoftLineBreak": null,
     "update:converter": null,
     "update:customizeModules": null,

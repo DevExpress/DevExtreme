@@ -9,12 +9,11 @@ export class TranslateCommand extends BaseCommand<TranslateCommandParams, Transl
 
   protected buildPromptData(params: TranslateCommandParams): PromptData {
     return {
-      user: {
-        text: params.text,
-        lang: params.lang,
-      },
       system: {
         lang: params.lang,
+      },
+      user: {
+        text: params.text,
       },
     };
   }
