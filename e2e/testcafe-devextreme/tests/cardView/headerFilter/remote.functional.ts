@@ -140,7 +140,7 @@ const clearRemoteOperations = () => ClientFunction(() => {
     const columnOptions = await cardView.getColumnOption('A');
 
     await t
-      .expect(columnOptions.headerFilter.filterType).eql(undefined)
+      .expect(columnOptions.filterType).eql(undefined)
       .expect(columnOptions.headerFilter.values).eql(['A_0', 'A_1']);
 
     await t.click(cardView.element);
@@ -187,7 +187,7 @@ const clearRemoteOperations = () => ClientFunction(() => {
     const columnOptions = await cardView.getColumnOption('A');
 
     await t
-      .expect(columnOptions.headerFilter.filterType).eql('exclude')
+      .expect(columnOptions.filterType).eql('exclude')
       .expect(columnOptions.headerFilter.values).eql(null);
 
     await t.click(cardView.element);
@@ -238,7 +238,7 @@ const clearRemoteOperations = () => ClientFunction(() => {
     const columnOptions = await cardView.getColumnOption('A');
 
     await t
-      .expect(columnOptions.headerFilter.filterType).eql('exclude')
+      .expect(columnOptions.filterType).eql('exclude')
       .expect(columnOptions.headerFilter.values).eql(['A_2', 'A_3']);
 
     await t.click(cardView.element);
@@ -353,9 +353,9 @@ const clearRemoteOperations = () => ClientFunction(() => {
         {
           dataField: 'A',
           headerFilter: {
-            filterType: 'include',
             values: ['A_0', 'A_1'],
           },
+          filterType: 'include',
         },
         'B',
         'C',
@@ -409,9 +409,9 @@ const clearRemoteOperations = () => ClientFunction(() => {
         {
           dataField: 'A',
           headerFilter: {
-            filterType: 'exclude',
             values: ['A_2', 'A_3', 'A_4'],
           },
+          filterType: 'exclude',
         },
         'B',
         'C',
@@ -505,7 +505,7 @@ const clearRemoteOperations = () => ClientFunction(() => {
     const columnOptions = await cardView.getColumnOption('A');
 
     await t
-      .expect(columnOptions.headerFilter.filterType).eql(undefined)
+      .expect(columnOptions.filterType).eql(undefined)
       .expect(columnOptions.headerFilter.values).eql(['A_4']);
 
     await t.click(cardView.element);
