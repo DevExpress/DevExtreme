@@ -4,6 +4,7 @@ import { ColumnChooserView } from '@ts/grids/new/grid_core/column_chooser/index'
 import { View } from '@ts/grids/new/grid_core/core/view';
 import { FilterPanelView } from '@ts/grids/new/grid_core/filtering/filter_panel/view';
 import { HeaderFilterPopupView } from '@ts/grids/new/grid_core/filtering/header_filter/index';
+import { KeyboardNavigationController } from '@ts/grids/new/grid_core/keyboard_navigation/index';
 import { PagerView } from '@ts/grids/new/grid_core/pager/view';
 import { ToolbarView } from '@ts/grids/new/grid_core/toolbar/view';
 import type { ComponentType, RefObject } from 'inferno';
@@ -31,36 +32,51 @@ interface MainViewProps {
   ContextMenu: ComponentType;
   config: Config;
   rootElementRef: RefObject<HTMLDivElement>;
+  onKeyDown: (event: KeyboardEvent) => void;
 }
 
 function MainViewComponent({
-  Toolbar, Content, Pager, HeaderPanel, HeaderFilterPopup,
-  FilterPanel, ColumnChooser, ContextMenu, config, rootElementRef,
+  Toolbar,
+  Content,
+  Pager,
+  HeaderPanel,
+  HeaderFilterPopup,
+  FilterPanel,
+  ColumnChooser,
+  ContextMenu,
+  config,
+  rootElementRef,
+  onKeyDown,
 }: MainViewProps): JSX.Element {
   return (<>
     <ConfigContext.Provider value={config}>
-      <RootElementUpdater
-        rootElementRef={rootElementRef}
-        className={CLASSES.cardView}
-      >
-        <Toolbar/>
-        <HeaderPanel/>
-        <HeaderFilterPopup />
-        <Content/>
-        <FilterPanel/>
-        <div>
-          {/*
+        <RootElementUpdater
+          rootElementRef={rootElementRef}
+          className={CLASSES.cardView}
+        >
+          <div
+            class="dx-cardview-root-container"
+            onKeyDown={onKeyDown}
+          >
+            <Toolbar/>
+            <HeaderPanel/>
+            <HeaderFilterPopup />
+            <Content/>
+            <FilterPanel/>
+            <div>
+              {/*
             Pager, as renovated component, has strange disposing.
             See `inferno_renderer.remove` method.
             It somehow mutates $V prop of parent element.
             Without this div, CardView would be parent of Pager.
             In this case all `componentWillUnmount`s aren't called
           */}
-          <Pager/>
-        </div>
-        <ColumnChooser/>
-        <ContextMenu/>
-      </RootElementUpdater>
+              <Pager/>
+            </div>
+            <ColumnChooser/>
+            <ContextMenu/>
+          </div>
+        </RootElementUpdater>
     </ConfigContext.Provider>
   </>);
 }
@@ -78,6 +94,7 @@ export class MainView extends View<MainViewProps> {
     ColumnChooserView,
     ContextMenuView,
     OptionsController,
+    KeyboardNavigationController,
   ] as const;
 
   constructor(
@@ -90,6 +107,7 @@ export class MainView extends View<MainViewProps> {
     private readonly columnsChooser: ColumnChooserView,
     private readonly contextMenu: ContextMenuView,
     private readonly options: OptionsController,
+    private readonly keyboardNavigation: KeyboardNavigationController,
   ) {
     super();
   }
@@ -112,6 +130,9 @@ export class MainView extends View<MainViewProps> {
         templatesRenderAsynchronously: this.options.oneWay('templatesRenderAsynchronously'),
       }),
       rootElementRef: { current: this.root! },
+      onKeyDown: (event: KeyboardEvent) => {
+        this.keyboardNavigation.onKeyDown(event);
+      },
     });
   }
 }

@@ -5,14 +5,19 @@ import { createRef } from 'inferno';
 export abstract class BaseContextMenuController<TTargetView = unknown, TContextInfo = unknown> {
   public readonly contextMenuRef = createRef<dxContextMenu>();
 
-  private lastEvent?: MouseEvent;
+  private lastEvent?: KeyboardEvent | MouseEvent;
 
   public onPositioning = (e: PositioningEvent): void => {
     // @ts-expect-error
     e.position.of = this.lastEvent;
   };
 
-  public show(event: MouseEvent, view: TTargetView, contextInfo?: TContextInfo): void {
+  public show(
+    event: KeyboardEvent | MouseEvent,
+    view: TTargetView,
+    contextInfo?: TContextInfo,
+    onMenuCloseCallback?: () => void,
+  ): void {
     const contextMenu = this.contextMenuRef.current;
     const targetElement = event.target as Element;
 
@@ -23,7 +28,6 @@ export abstract class BaseContextMenuController<TTargetView = unknown, TContextI
     this.lastEvent = event;
 
     const items = this.getItems(view, targetElement, contextInfo);
-    contextMenu.option('items', items);
 
     if (!items) {
       return;
@@ -32,6 +36,8 @@ export abstract class BaseContextMenuController<TTargetView = unknown, TContextI
     event.stopPropagation();
     event.preventDefault();
 
+    contextMenu.option('items', items);
+    contextMenu.option('onHiding', () => { onMenuCloseCallback?.(); });
     contextMenu.show().catch(console.error);
   }
 

@@ -15,5 +15,5 @@ export interface ToolbarProps {
   items?: ToolbarItems;
   visible?: boolean | undefined;
   disabled?: boolean;
-  showContextMenu?: (e: MouseEvent) => void;
+  showContextMenu?: (event: KeyboardEvent | MouseEvent) => void;
 }
