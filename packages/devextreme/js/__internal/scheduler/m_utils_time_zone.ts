@@ -23,7 +23,6 @@ export interface TimezoneData extends TimezoneLabel {
 const toMs = dateUtils.dateToMilliseconds;
 const MINUTES_IN_HOUR = 60;
 const MS_IN_MINUTE = 60000;
-const GET_TIMEZONES_BATCH_SIZE = 20;
 const GMT = 'GMT';
 const offsetFormatRegexp = /^GMT(?:[+-]\d{2}:\d{2})?$/;
 
@@ -333,32 +332,32 @@ const addOffsetsWithoutDST = (date: Date, ...offsets: number[]): Date => {
     : newDate;
 };
 
-const getTimeZoneLabelsAsyncBatch = (
+const getTimeZones = (
   date = new Date(),
-): Promise<TimezoneLabel[]> => macroTaskArray.map(
+  timeZones = timeZoneList.value,
+): TimezoneData[] => timeZones.map((timezoneId) => ({
+  id: timezoneId,
+  title: getTimezoneTitle(timezoneId, date),
+  offset: calculateTimezoneByValue(timezoneId, date),
+}));
+
+// START getTimeZonesCache.ts
+let timeZoneDataCache: TimezoneLabel[] = [];
+const cacheTimeZones = (
+  date = new Date(),
+): Promise<void> => macroTaskArray.map(
   timeZoneList.value,
   (timezoneId) => ({
     id: timezoneId,
     title: getTimezoneTitle(timezoneId, date),
   }),
-  GET_TIMEZONES_BATCH_SIZE,
-);
-
-const getTimeZoneLabel = (
-  timezoneId: string,
-  date = new Date(),
-): TimezoneLabel => ({
-  id: timezoneId,
-  title: getTimezoneTitle(timezoneId, date),
+  10,
+).then((cache) => {
+  timeZoneDataCache = cache;
 });
 
-const getTimeZones = (
-  date = new Date(),
-): TimezoneData[] => timeZoneList.value.map((timezoneId) => ({
-  id: timezoneId,
-  title: getTimezoneTitle(timezoneId, date),
-  offset: calculateTimezoneByValue(timezoneId, date),
-}));
+const getTimeZonesCache = (): TimezoneLabel[] => timeZoneDataCache;
+// END
 
 const utils = {
   getDaylightOffset,
@@ -385,9 +384,9 @@ const utils = {
   setOffsetsToDate,
   addOffsetsWithoutDST,
 
-  getTimeZoneLabelsAsyncBatch,
-  getTimeZoneLabel,
   getTimeZones,
+  getTimeZonesCache,
+  cacheTimeZones,
 };
 
 export default utils;

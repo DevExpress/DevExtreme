@@ -1002,6 +1002,7 @@ class Scheduler extends Widget<any> {
   }
 
   _init() {
+    timeZoneUtils.cacheTimeZones();
     this._initExpressions({
       startDateExpr: this.option('startDateExpr'),
       endDateExpr: this.option('endDateExpr'),
