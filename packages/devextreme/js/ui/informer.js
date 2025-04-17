@@ -1,4 +1,4 @@
-import Informer from '../__internal/ui/m_informer';
+import Informer from '../__internal/ui/informer/informer';
 
 export default Informer;
 

@@ -88,8 +88,7 @@ export const DefaultInformer: Story = {
                     icon={icon}
                     showBackground={showBackground}
                     contentAlignment={contentAlignment}
-                >
-                </Informer>
+                />
             </div>
         );
     }

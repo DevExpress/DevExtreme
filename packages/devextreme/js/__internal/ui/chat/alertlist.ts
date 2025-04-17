@@ -6,7 +6,7 @@ import type {
 import type { WidgetOptions } from '@js/ui/widget/ui.widget';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
-import Informer from '@ts/ui/m_informer';
+import Informer from '@ts/ui/informer/informer';
 
 const CHAT_ALERTLIST_CLASS = 'dx-chat-alertlist';
 const CHAT_ALERTLIST_ERROR_CLASS = 'dx-chat-alertlist-error';

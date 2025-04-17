@@ -37,11 +37,10 @@ class Informer extends Widget<Properties> {
   }
 
   _initMarkup(): void {
-    const $element = $(this.$element());
     const { showBackground } = this.option();
 
-    $element.addClass(INFORMER_CLASS);
-    $element.toggleClass(INFORMER_BG_CLASS, showBackground);
+    this.$element().addClass(INFORMER_CLASS);
+    this.$element().toggleClass(INFORMER_BG_CLASS, showBackground);
     this._setAlignmentClass();
 
     super._initMarkup();
@@ -51,7 +50,7 @@ class Informer extends Widget<Properties> {
   }
 
   _setAlignmentClass(): void {
-    $(this.$element())
+    this.$element()
       .removeClass(INFORMER_ALIGNMENT_START_CLASS)
       .removeClass(INFORMER_ALIGNMENT_CENTER_CLASS)
       .removeClass(INFORMER_ALIGNMENT_END_CLASS);
@@ -60,14 +59,14 @@ class Informer extends Widget<Properties> {
 
     switch (contentAlignment) {
       case 'start':
-        $(this.$element()).addClass(INFORMER_ALIGNMENT_START_CLASS);
+        this.$element().addClass(INFORMER_ALIGNMENT_START_CLASS);
         break;
       case 'end':
-        $(this.$element()).addClass(INFORMER_ALIGNMENT_END_CLASS);
+        this.$element().addClass(INFORMER_ALIGNMENT_END_CLASS);
         break;
       case 'center':
       default:
-        $(this.$element()).addClass(INFORMER_ALIGNMENT_CENTER_CLASS);
+        this.$element().addClass(INFORMER_ALIGNMENT_CENTER_CLASS);
         break;
     }
   }
@@ -85,7 +84,7 @@ class Informer extends Widget<Properties> {
 
     this._$icon = $('<div>')
       .addClass(INFORMER_ICON_CLASS)
-      .prependTo($(this.$element()))
+      .prependTo(this.$element())
       .append($icon);
   }
 
@@ -94,7 +93,7 @@ class Informer extends Widget<Properties> {
 
     this._$text = $('<div>')
       .addClass(INFORMER_TEXT_CLASS)
-      .appendTo($(this.$element()))
+      .appendTo(this.$element())
       .text(text);
   }
 
@@ -115,7 +114,7 @@ class Informer extends Widget<Properties> {
         this._setAlignmentClass();
         break;
       case 'showBackground':
-        $(this.$element()).toggleClass(INFORMER_BG_CLASS, value);
+        this.$element().toggleClass(INFORMER_BG_CLASS, value);
         break;
       case 'text':
         this._updateText();

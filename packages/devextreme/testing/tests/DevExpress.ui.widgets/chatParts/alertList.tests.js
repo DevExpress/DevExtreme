@@ -98,7 +98,7 @@ QUnit.module('AlertList', moduleConfig, () => {
             assert.strictEqual(informer instanceof Informer, true, 'error is instance of Informer');
         });
 
-        QUnit.test('Informer instanse should be disposed on items change', function(assert) {
+        QUnit.test('Informer instance should be disposed on items change', function(assert) {
             this.instance.option({
                 items: [ { id: '1', message: 'error' } ]
             });
@@ -111,7 +111,7 @@ QUnit.module('AlertList', moduleConfig, () => {
             assert.strictEqual(informer._disposed, true, 'Informer instance was disposed');
         });
 
-        QUnit.test('Informer instanse should be disposed on AlertList dispose', function(assert) {
+        QUnit.test('Informer instance should be disposed on AlertList dispose', function(assert) {
             this.instance.option({
                 items: [ { id: '1', message: 'error' } ]
             });
