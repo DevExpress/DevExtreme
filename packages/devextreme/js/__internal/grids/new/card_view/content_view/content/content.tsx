@@ -19,7 +19,7 @@ import type { CardHeaderItem } from './card/header';
 export interface ContentProps {
   items: DataRow[];
 
-  navigationEnabled: boolean;
+  kbnEnabled: boolean;
 
   navigationStrategy: NavigationStrategyBase;
 
@@ -114,13 +114,13 @@ export class Content extends Component<ContentProps> {
       [CLASSES.wrapEnabled]: !!this.props.wordWrapEnabled,
     });
 
-    const CardItem = this.props.navigationEnabled
+    const CardItem = this.props.kbnEnabled
       ? CardWithKbn
       : Card;
 
     return (
       <KbnNavigationContainer
-        enabled={this.props.navigationEnabled}
+        enabled={this.props.kbnEnabled}
         navigationStrategy={this.props.navigationStrategy}
         onFocusMoved={(newIdx, element) => {
           this.onCardFocusMoved(newIdx, element);
@@ -137,7 +137,7 @@ export class Content extends Component<ContentProps> {
               key={getInfernoCardKey(item)}
               elementRef={idx === 0 ? this.firstCardRef : undefined}
               navigationIdx={idx}
-              navigationEnabled={this.props.navigationEnabled}
+              kbnEnabled={this.props.kbnEnabled}
               navigationStrategy={this.props.navigationStrategy}
               keyDownConfig={{
                 PageUp: () => {
@@ -220,12 +220,11 @@ export class Content extends Component<ContentProps> {
 
     if (!isLoading && this.focusFirstCardAfterReload) {
       this.focusFirstCardAfterReload = false;
-      const prevActiveItem = navigationStrategy.getActiveItem();
-      navigationStrategy.setActiveItem(0, true);
-      const nextActiveItem = navigationStrategy.getActiveItem();
+      const [, newActiveItem] = navigationStrategy
+        .getNewActiveItem(() => navigationStrategy.setActiveItem(0, true));
 
-      if (nextActiveItem && prevActiveItem?.element !== nextActiveItem?.element) {
-        this.onCardFocusMoved(nextActiveItem.idx, nextActiveItem.element);
+      if (newActiveItem) {
+        this.onCardFocusMoved(newActiveItem.idx, newActiveItem.element);
       }
     }
   }
