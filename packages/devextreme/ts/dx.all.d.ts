@@ -2654,7 +2654,10 @@ declare module DevExpress.common.core.environment {
   /**
    * [descr:utils.getTimeZones(date)]
    */
-  export function getTimeZones(date?: Date): Array<SchedulerTimeZone>;
+  export function getTimeZones(
+    date?: Date,
+    timeZones?: string[]
+  ): Array<SchedulerTimeZone>;
   /**
    * [descr:hideTopOverlay()]
    */
