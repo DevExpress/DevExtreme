@@ -339,6 +339,12 @@ export class SelectionController {
   }
 
   public selectAll(): DeferredObj<unknown> | undefined {
+    const { mode } = this.selectionOption.unreactive_get();
+
+    if (mode !== SelectionMode.Multiple) {
+      return undefined;
+    }
+
     const selectionHelper = this.selectionHelper.unreactive_get();
 
     return selectionHelper?.selectAll(this.isOnePageSelectAll());

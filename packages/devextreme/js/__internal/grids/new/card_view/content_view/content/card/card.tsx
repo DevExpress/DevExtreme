@@ -1,9 +1,13 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
+/* eslint-disable
+  @typescript-eslint/no-non-null-assertion,
+  spellcheck/spell-checker
+*/
 import { isCommandKeyPressed } from '@js/common/core/events/utils/index';
 import { off, on } from '@js/events/index';
 import { combineClasses } from '@ts/core/utils/combine_classes';
 import type { DataRow } from '@ts/grids/new/grid_core/columns_controller/types';
 import type { DataObject } from '@ts/grids/new/grid_core/data_controller/types';
+import { KbnFocusTrap } from '@ts/grids/new/grid_core/keyboard_navigation/index';
 import type { ComponentType, InfernoNode, RefObject } from 'inferno';
 import { Component, createRef } from 'inferno';
 
@@ -38,6 +42,8 @@ export interface CardPreparedEvent {
 export interface CardProps {
   row: DataRow;
 
+  navigationEnabled: boolean;
+
   allowSelectOnClick?: boolean;
 
   cover?: {
@@ -52,6 +58,11 @@ export interface CardProps {
 
   elementRef?: RefObject<HTMLDivElement>;
 
+  tabIndex?: number;
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  fieldTemplate?: any;
+
   hoverStateEnabled?: boolean;
 
   toolbar?: CardHeaderItem[];
@@ -60,21 +71,25 @@ export interface CardProps {
 
   template?: (row: DataRow) => JSX.Element;
 
-  onClick?: (e: CardClickEvent) => void;
+  onClick?: (event: CardClickEvent) => void;
 
-  onHold?: (e: CardClickEvent) => void;
+  onHold?: (event: CardClickEvent) => void;
 
-  onDblClick?: (e: CardClickEvent) => void;
+  onDblClick?: (event: CardClickEvent) => void;
 
-  onHoverChanged?: (e: CardHoverEvent) => void;
+  onKeyDown?: (event: KeyboardEvent) => void;
 
-  onPrepared?: (e: CardPreparedEvent) => void;
+  onHoverChanged?: (event: CardHoverEvent) => void;
 
-  onContextMenu?: (e: MouseEvent, card?: DataRow, cardIndex?: number) => void;
+  onPrepared?: (event: CardPreparedEvent) => void;
+
+  onContextMenu?: (event: MouseEvent, card?: DataRow, cardIndex?: number) => void;
 
   selectCard?: (row: DataRow, options: SelectCardOptions) => void;
 
   footerTemplate?: ComponentType<{ card: DataRow }>;
+
+  onCardContentKeyDown?: (event: KeyboardEvent) => void;
 }
 
 export class Card extends Component<CardProps> {
@@ -104,14 +119,17 @@ export class Card extends Component<CardProps> {
     const alt = cover?.altExpr?.(this.props.row.data);
 
     return (
-      <div
+      <KbnFocusTrap
+        elementRef={this.containerRef}
+        enabled={this.props.navigationEnabled}
+        tabIndex={this.props.tabIndex}
         className={className}
-        tabIndex={0}
-        ref={this.props.elementRef}
         onDblClick={this.handleDoubleClick}
         onMouseEnter={this.handleMouseEnter}
         onMouseLeave={this.handleMouseLeave}
         onContextMenu={this.props.onContextMenu}
+        onKeyDown={this.props.onKeyDown}
+        onTrapKeyDown={this.props.onCardContentKeyDown}
       >
         <CardHeader
           row={row}
@@ -142,7 +160,7 @@ export class Card extends Component<CardProps> {
             <FooterTemplate card={row}/>
           </div>
         )}
-      </div>
+      </KbnFocusTrap>
     );
   }
 

@@ -137,7 +137,7 @@ export class SortingController {
     );
   }
 
-  public onSingleModeSortClick(column: Column, e: MouseEvent): void {
+  public onSingleModeSortClick(column: Column, e: KeyboardEvent | MouseEvent): void {
     if (!column.allowSorting) {
       return;
     }
@@ -159,7 +159,7 @@ export class SortingController {
     this.columnsController.columnOption(column, 'sortOrder', nextSortOrder);
   }
 
-  public onMultipleModeSortClick(column: Column, e: MouseEvent): void {
+  public onMultipleModeSortClick(column: Column, e: KeyboardEvent | MouseEvent): void {
     if (!column.allowSorting) {
       return;
     }

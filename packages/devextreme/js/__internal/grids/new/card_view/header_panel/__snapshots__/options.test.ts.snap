@@ -15,21 +15,32 @@ exports[`ColumnProperties headerItemCssClass should override content of headerPa
       >
         <div
           class="dx-scrollable-container"
-          tabindex="0"
         >
           <div
             class="dx-scrollable-content"
             style="left: 0px; top: 0px; transform: none;"
           >
             <div
-              class="dx-cardview-headerpanel-content"
+              data-dx-focus-container="true"
             >
               <div
-                class="dx-cardview-header-item my-css-class "
+                data-dx-focus-decoy="true"
                 tabindex="0"
+              />
+              <div
+                class="dx-cardview-headerpanel-content"
               >
-                Column 1
+                <div
+                  class="dx-cardview-header-item my-css-class "
+                  tabindex="0"
+                >
+                  Column 1
+                </div>
               </div>
+              <div
+                data-dx-focus-decoy="true"
+                tabindex="0"
+              />
             </div>
           </div>
           <div
@@ -61,21 +72,32 @@ exports[`Options headerPanel itemCssClass should add css class to headerPanel it
   >
     <div
       class="dx-scrollable-container"
-      tabindex="0"
     >
       <div
         class="dx-scrollable-content"
         style="left: 0px; top: 0px; transform: none;"
       >
         <div
-          class="dx-cardview-headerpanel-content"
+          data-dx-focus-container="true"
         >
           <div
-            class="dx-cardview-header-item  my-class"
+            data-dx-focus-decoy="true"
             tabindex="0"
+          />
+          <div
+            class="dx-cardview-headerpanel-content"
           >
-            Column 1
+            <div
+              class="dx-cardview-header-item  my-class"
+              tabindex="0"
+            >
+              Column 1
+            </div>
           </div>
+          <div
+            data-dx-focus-decoy="true"
+            tabindex="0"
+          />
         </div>
       </div>
       <div
@@ -118,21 +140,32 @@ exports[`Options headerPanel visible when it is true should show headerPanel 1`]
       >
         <div
           class="dx-scrollable-container"
-          tabindex="0"
         >
           <div
             class="dx-scrollable-content"
             style="left: 0px; top: 0px; transform: none;"
           >
             <div
-              class="dx-cardview-headerpanel-content"
+              data-dx-focus-container="true"
             >
               <div
-                class="dx-cardview-header-item  "
+                data-dx-focus-decoy="true"
                 tabindex="0"
+              />
+              <div
+                class="dx-cardview-headerpanel-content"
               >
-                Column 1
+                <div
+                  class="dx-cardview-header-item  "
+                  tabindex="0"
+                >
+                  Column 1
+                </div>
               </div>
+              <div
+                data-dx-focus-decoy="true"
+                tabindex="0"
+              />
             </div>
           </div>
           <div
