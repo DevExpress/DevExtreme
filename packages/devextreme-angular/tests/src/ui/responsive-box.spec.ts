@@ -9,7 +9,9 @@ import {
 } from '@angular/core/testing';
 
 import {
-  DxResponsiveBoxComponent, DxiResponsiveBoxItemComponent, DxiResponsiveBoxLocationComponent
+  DxResponsiveBoxComponent,
+  DxiResponsiveBoxItemComponent,
+  DxiResponsiveBoxLocationComponent,
 } from 'devextreme-angular/ui/responsive-box';
 
 @Component({

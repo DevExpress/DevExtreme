@@ -16,7 +16,10 @@ import {
 import { DxiItemComponent } from 'devextreme-angular/ui/nested';
 
 import {
-  DxFormComponent, DxiFormItemComponent, DxiFormValidationRuleComponent, DxoFormLabelComponent
+  DxFormComponent,
+  DxiFormItemComponent,
+  DxiFormValidationRuleComponent,
+  DxoFormLabelComponent,
 } from 'devextreme-angular/ui/form';
 
 @Component({
@@ -50,12 +53,12 @@ describe('DxForm', () => {
       {
         declarations: [TestContainerComponent],
         imports: [
-            DxFormComponent,
+          DxFormComponent,
           DxTagBoxComponent,
           DxiFormItemComponent,
           DxoFormLabelComponent,
           DxiFormValidationRuleComponent,
-          DxiItemComponent
+          DxiItemComponent,
         ],
       },
     );

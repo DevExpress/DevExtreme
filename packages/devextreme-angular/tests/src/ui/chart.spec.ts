@@ -13,7 +13,11 @@ import {
 } from 'devextreme-angular';
 
 import {
-  DxChartComponent, DxoChartArgumentAxisComponent, DxoChartStripLabelComponent, DxiChartStripComponent, DxiChartSeriesComponent
+  DxChartComponent,
+  DxoChartArgumentAxisComponent,
+  DxoChartStripLabelComponent,
+  DxiChartStripComponent,
+  DxiChartSeriesComponent,
 } from 'devextreme-angular/ui/chart';
 
 import dxChart from 'devextreme/viz/chart';
@@ -54,12 +58,12 @@ describe('DxChart', () => {
       {
         declarations: [TestContainerComponent],
         imports: [
-            DxChartComponent,
+          DxChartComponent,
           DxScrollViewComponent,
           DxiChartSeriesComponent,
           DxoChartArgumentAxisComponent,
           DxoChartStripLabelComponent,
-          DxiChartStripComponent
+          DxiChartStripComponent,
         ],
       },
     );
