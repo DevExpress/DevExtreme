@@ -19,7 +19,8 @@ import {
 } from 'devextreme-angular';
 
 import {
-  DxListComponent, DxiListItemComponent
+  DxListComponent,
+  DxiListItemComponent,
 } from 'devextreme-angular/ui/list';
 
 @Component({

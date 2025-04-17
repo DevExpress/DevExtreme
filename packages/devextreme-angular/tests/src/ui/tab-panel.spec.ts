@@ -9,7 +9,8 @@ import {
 } from '@angular/core/testing';
 
 import {
-  DxTabPanelComponent, DxiTabPanelItemComponent
+  DxTabPanelComponent,
+  DxiTabPanelItemComponent,
 } from 'devextreme-angular/ui/tab-panel';
 
 @Component({

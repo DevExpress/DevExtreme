@@ -9,7 +9,8 @@ import {
 } from '@angular/core/testing';
 
 import {
-  DxToolbarComponent, DxiToolbarItemComponent
+  DxToolbarComponent,
+  DxiToolbarItemComponent,
 } from 'devextreme-angular/ui/toolbar';
 
 @Component({
