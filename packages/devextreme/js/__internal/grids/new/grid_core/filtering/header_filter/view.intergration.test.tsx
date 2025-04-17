@@ -5,8 +5,9 @@ import {
   it,
 } from '@jest/globals';
 import CardView from '@ts/grids/new/card_view/widget';
-import { HeaderFilterController } from '@ts/grids/new/grid_core/filtering/header_filter/controller';
 import { rerender } from 'inferno';
+
+import { HeaderFilterViewController } from './view_controller';
 
 const SELECTORS = {
   popupContent: '.dx-popup-wrapper.dx-header-filter-menu',
@@ -37,10 +38,10 @@ describe('HeaderFilter', () => {
       });
 
       // @ts-expect-error getting protected field
-      const controller = cardView.diContext.get(HeaderFilterController);
+      const viewController = cardView.diContext.get(HeaderFilterViewController);
 
       const column = cardView.getVisibleColumns()[0];
-      controller.openPopup(popupContainer, column);
+      viewController.openPopup(popupContainer, column);
       rerender();
 
       expect(rootQuerySelector(SELECTORS.popupContent)).toMatchSnapshot();
@@ -70,10 +71,10 @@ describe('HeaderFilter', () => {
       });
 
       // @ts-expect-error getting protected field
-      const controller = cardView.diContext.get(HeaderFilterController);
+      const viewController = cardView.diContext.get(HeaderFilterViewController);
 
       const column = cardView.getVisibleColumns()[0];
-      controller.openPopup(popupContainer, column);
+      viewController.openPopup(popupContainer, column);
       rerender();
 
       expect(rootQuerySelector(SELECTORS.popupContent)).toMatchSnapshot();

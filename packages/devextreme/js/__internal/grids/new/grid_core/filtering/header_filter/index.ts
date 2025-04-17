@@ -1,4 +1,4 @@
-import headerFilterUtils from './utils';
+import * as headerFilterUtils from './utils';
 
 export {
   HeaderFilterController,

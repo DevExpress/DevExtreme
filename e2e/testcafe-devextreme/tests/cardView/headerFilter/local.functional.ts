@@ -191,7 +191,7 @@ test('should update column options with filterType and values (regular selection
   const columnOptions = await cardView.getColumnOption('A');
 
   await t
-    .expect(columnOptions.headerFilter.filterType).eql(undefined)
+    .expect(columnOptions.filterType).eql(undefined)
     .expect(columnOptions.headerFilter.values).eql(['A_0', 'A_1']);
 
   await t.click(cardView.element);
@@ -233,7 +233,7 @@ test('should update column options with filterType and values (selectAll case #0
   const columnOptions = await cardView.getColumnOption('A');
 
   await t
-    .expect(columnOptions.headerFilter.filterType).eql('exclude')
+    .expect(columnOptions.filterType).eql('exclude')
     .expect(columnOptions.headerFilter.values).eql(null);
 
   await t.click(cardView.element);
@@ -277,7 +277,7 @@ test('should update column options with filterType and values (selectAll case #1
   const columnOptions = await cardView.getColumnOption('A');
 
   await t
-    .expect(columnOptions.headerFilter.filterType).eql('exclude')
+    .expect(columnOptions.filterType).eql('exclude')
     .expect(columnOptions.headerFilter.values).eql(['A_2', 'A_3']);
 
   await t.click(cardView.element);
@@ -376,9 +376,9 @@ test('should apply filter from options (type: "include")', async (t) => {
     {
       dataField: 'A',
       headerFilter: {
-        filterType: 'include',
         values: ['A_0', 'A_1'],
       },
+      filterType: 'include',
     },
     'B',
     'C',
@@ -425,9 +425,9 @@ test('should apply filter from options (type: "exclude")', async (t) => {
     {
       dataField: 'A',
       headerFilter: {
-        filterType: 'exclude',
         values: ['A_2', 'A_3', 'A_4'],
       },
+      filterType: 'exclude',
     },
     'B',
     'C',
@@ -514,7 +514,7 @@ test('should not update column options if popup cancel btn clicked', async (t) =
   const columnOptions = await cardView.getColumnOption('A');
 
   await t
-    .expect(columnOptions.headerFilter.filterType).eql(undefined)
+    .expect(columnOptions.filterType).eql(undefined)
     .expect(columnOptions.headerFilter.values).eql(['A_4']);
 
   await t.click(cardView.element);

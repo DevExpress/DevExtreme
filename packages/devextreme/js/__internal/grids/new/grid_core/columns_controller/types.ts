@@ -1,5 +1,5 @@
 import type { Format, SortOrder } from '@js/common';
-import type { ColumnBase } from '@js/common/grids';
+import type { ColumnBase, FilterType } from '@js/common/grids';
 import type { HeaderFilterColumnOptions } from '@ts/grids/new/grid_core/filtering/header_filter/index';
 import type { ComponentType } from 'inferno';
 
@@ -64,6 +64,8 @@ export type Column = Pick<Required<ColumnBase>, InheritedColumnProps> & {
 
   // header filter options for specific column.
   headerFilter?: HeaderFilterColumnOptions;
+
+  filterType?: FilterType;
 };
 
 export type VisibleColumn = Column & { visible: true };

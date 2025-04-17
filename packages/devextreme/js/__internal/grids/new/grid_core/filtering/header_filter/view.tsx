@@ -9,7 +9,7 @@ import { WidgetMock } from '@ts/grids/new/grid_core/widget_mock';
 import { Component, createRef } from 'inferno';
 
 import { CLASSES } from '../../const';
-import { HeaderFilterController } from './controller';
+import { HeaderFilterViewController } from './view_controller';
 
 export interface OldHeaderFilterPopupInterface {
   render: (dxWrapper: dxElementWrapper) => void;
@@ -49,12 +49,12 @@ export class HeaderFilterPopupView extends View<{}> {
 
   public static dependencies = [
     WidgetMock,
-    HeaderFilterController,
+    HeaderFilterViewController,
   ] as const;
 
   constructor(
     private readonly widget: WidgetMock,
-    private readonly controller: HeaderFilterController,
+    private readonly headerFilterViewController: HeaderFilterViewController,
   ) {
     super();
     this.oldHeaderFilterPopup = new OldHeaderFilterPopup(this.widget);
@@ -68,7 +68,7 @@ export class HeaderFilterPopupView extends View<{}> {
 
         this.oldHeaderFilterPopup.showHeaderFilterMenu($(popupState.element), popupState.options);
       },
-      [this.controller.popupState$],
+      [this.headerFilterViewController.popupState],
     );
   }
 
