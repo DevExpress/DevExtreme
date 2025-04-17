@@ -87,7 +87,7 @@ export const setResultText = (value) => {
     textAreaInstance.option('value', value);
 };
 
-export const getResultText = () => {
+export const getResultTextAreaValue = () => {
     const textAreaInstance = $(`.${TEXT_AREA_CLASS}`).eq(1).dxTextArea('instance');
     return textAreaInstance.option('value');
 };

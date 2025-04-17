@@ -6,7 +6,7 @@ import { openAIDialog } from '../../../helpers/aiToolbarMenu.js';
 import {
     clickActionButton,
     setResultText,
-    getResultText,
+    getResultTextAreaValue,
 } from '../../../helpers/aiDialog.js';
 import { AI_DIALOG_CLASS } from '__internal/ui/html_editor/ui/aiDialog';
 
@@ -144,31 +144,23 @@ QUnit.module('AI dialog integration', {}, () => {
         });
     });
 
-    QUnit.module('input source based on selection', () => {
-        QUnit.test('Should use selected text as input', function(assert) {
+    QUnit.module('TextArea', () => {
+        QUnit.test('should not have any text inside it if nothing is selected', function(assert) {
+            setupHtmlEditorWithAi();
+
+            const resultText = getResultTextAreaValue();
+
+            assert.strictEqual(resultText, undefined, 'textarea does not contain text');
+        });
+
+        QUnit.test('should not have any text inside it if part of the text is selected', function(assert) {
             const instance = setupHtmlEditorWithAi();
 
             instance.setSelection(0, 4);
 
-            openAIDialog($('#htmlEditor'));
-            clickActionButton('replace');
+            const resultText = getResultTextAreaValue();
 
-            const resultText = getResultText();
-
-            assert.strictEqual(resultText, 'Test', 'selected text used in resultTextArea');
-        });
-
-        QUnit.test('Should use all text as input if nothing is selected', function(assert) {
-            const instance = setupHtmlEditorWithAi();
-
-            instance.setSelection(0, 0);
-
-            openAIDialog($('#htmlEditor'));
-            clickActionButton('replace');
-
-            const resultText = getResultText();
-
-            assert.strictEqual(resultText, 'Test value\n', 'all text used in resultTextArea');
+            assert.strictEqual(resultText, undefined, 'textarea does not contain text');
         });
     });
 
