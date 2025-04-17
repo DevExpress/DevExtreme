@@ -6,17 +6,19 @@ import type {
 import type { WidgetOptions } from '@js/ui/widget/ui.widget';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
+import Informer from '@ts/ui/informer/informer';
 
 const CHAT_ALERTLIST_CLASS = 'dx-chat-alertlist';
 const CHAT_ALERTLIST_ERROR_CLASS = 'dx-chat-alertlist-error';
-const CHAT_ALERTLIST_ERROR_ICON_CLASS = 'dx-chat-alertlist-error-icon';
-const CHAT_ALERTLIST_ERROR_TEXT_CLASS = 'dx-chat-alertlist-error-text';
+const ICON_ERRORCIRCLE = 'errorcircle';
 
 export interface Properties extends WidgetOptions<AlertList> {
   items: Alert[];
 }
 
 class AlertList extends Widget<Properties> {
+  _informersInstances!: Informer[];
+
   _getDefaultOptions(): Properties {
     return {
       ...super._getDefaultOptions(),
@@ -36,6 +38,8 @@ class AlertList extends Widget<Properties> {
   }
 
   _renderItems(items: Alert[]): void {
+    this._informersInstances = [];
+
     if (items?.length) {
       items.forEach((itemData) => {
         this._renderItem(itemData);
@@ -43,22 +47,25 @@ class AlertList extends Widget<Properties> {
     }
   }
 
-  _renderItem(itemData: Alert): void {
-    const $item = $('<div>');
-
-    $item
+  _renderItem(itemData: Alert | undefined): void {
+    const $informer = $('<div>')
       .addClass(CHAT_ALERTLIST_ERROR_CLASS);
 
-    $('<div>')
-      .addClass(CHAT_ALERTLIST_ERROR_ICON_CLASS)
-      .appendTo($item);
+    this.$element().append($informer);
 
-    $('<div>')
-      .addClass(CHAT_ALERTLIST_ERROR_TEXT_CLASS)
-      .appendTo($item)
-      .text(String(itemData?.message ?? ''));
+    const informer = this._createComponent($informer, Informer, {
+      text: itemData?.message ?? '',
+      icon: ICON_ERRORCIRCLE,
+      showBackground: false,
+    });
 
-    $item.appendTo(this.$element());
+    this._informersInstances.push(informer);
+  }
+
+  _cleanItems(): void {
+    this._informersInstances.forEach((informerInstance) => {
+      informerInstance.dispose();
+    });
   }
 
   _updateAria(): void {
@@ -71,6 +78,12 @@ class AlertList extends Widget<Properties> {
     };
 
     this.setAria(aria);
+  }
+
+  _clean(): void {
+    this._cleanItems();
+
+    super._clean();
   }
 
   _optionChanged(args: OptionChanged<Properties>): void {
