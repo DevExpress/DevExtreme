@@ -14,10 +14,13 @@ import {
 import DxButton from 'devextreme/ui/button';
 
 import {
-  DxButtonModule,
-  DxListModule,
-  DxListComponent,
+  DxButtonComponent,
+  DxTemplateDirective,
 } from 'devextreme-angular';
+
+import {
+  DxListComponent, DxiListItemComponent
+} from 'devextreme-angular/ui/list';
 
 @Component({
   selector: 'test-container-component',
@@ -46,7 +49,7 @@ describe('DxList', () => {
     TestBed.configureTestingModule(
       {
         declarations: [TestContainerComponent],
-        imports: [DxListModule],
+        imports: [DxListComponent, DxiListItemComponent, DxTemplateDirective],
       },
     );
   });
@@ -126,8 +129,8 @@ describe('DxList', () => {
       set: {
         template: `
                     <dx-list>
-                        <dxi-item>Item 1</dxi-item>
-                        <dxi-item>Item 2</dxi-item>
+                        <dxi-list-item>Item 1</dxi-list-item>
+                        <dxi-list-item>Item 2</dxi-list-item>
                     </dx-list>
                 `,
       },
@@ -147,7 +150,7 @@ describe('DxList', () => {
       set: {
         template: `
                     <dx-list>
-                        <dxi-item>item</dxi-item>
+                        <dxi-list-item>item</dxi-list-item>
                     </dx-list>
                 `,
       },
@@ -188,8 +191,8 @@ describe('DxList', () => {
       set: {
         template: `
                     <dx-list>
-                        <dxi-item [disabled]="true">Item 1</dxi-item>
-                        <dxi-item>Item 2</dxi-item>
+                        <dxi-list-item [disabled]="true">Item 1</dxi-list-item>
+                        <dxi-list-item>Item 2</dxi-list-item>
                     </dx-list>
                 `,
       },
@@ -208,8 +211,8 @@ describe('DxList', () => {
       set: {
         template: `
                     <dx-list>
-                        <dxi-item [disabled]="disabled">Item 1</dxi-item>
-                        <dxi-item>Item 2</dxi-item>
+                        <dxi-list-item [disabled]="disabled">Item 1</dxi-list-item>
+                        <dxi-list-item>Item 2</dxi-list-item>
                     </dx-list>
                 `,
       },
@@ -233,7 +236,7 @@ describe('DxList', () => {
       set: {
         template: `
                     <dx-list>
-                        <dxi-item *ngFor="let item of items">{{item}}</dxi-item>
+                        <dxi-list-item *ngFor="let item of items">{{item}}</dxi-list-item>
                     </dx-list>
                 `,
       },
@@ -262,7 +265,7 @@ describe('DxList', () => {
       set: {
         template: `
                     <dx-list>
-                        <dxi-item *ngFor="let item of items" [badge]="10">{{item}}</dxi-item>
+                        <dxi-list-item *ngFor="let item of items" [badge]="10">{{item}}</dxi-list-item>
                     </dx-list>
                 `,
       },
@@ -289,7 +292,7 @@ describe('DxList', () => {
       set: {
         template: `
                     <dx-list>
-                        <dxi-item *ngFor="let item of items">{{item}}</dxi-item>
+                        <dxi-list-item *ngFor="let item of items">{{item}}</dxi-list-item>
                     </dx-list>
                 `,
       },
@@ -317,7 +320,7 @@ describe('DxList', () => {
       set: {
         template: `
                     <dx-list>
-                        <dxi-item *ngFor="let item of complexItems">{{item.text}}</dxi-item>
+                        <dxi-list-item *ngFor="let item of complexItems">{{item.text}}</dxi-list-item>
                     </dx-list>
                 `,
       },
@@ -363,7 +366,7 @@ describe('DxList', () => {
       set: {
         template: `
                     <dx-list>
-                        <dxi-item [template]="'testTemplate'"></dxi-item>
+                        <dxi-list-item [template]="'testTemplate'"></dxi-list-item>
 
                         <div *dxTemplate="let item of 'testTemplate'">testTemplate</div>
                     </dx-list>
@@ -382,7 +385,7 @@ describe('DxList', () => {
       set: {
         template: `
                     <dx-list>
-                        <dxi-item text="TestText"></dxi-item>
+                        <dxi-list-item text="TestText"></dxi-list-item>
                     </dx-list>
                 `,
       },
@@ -408,7 +411,7 @@ describe('DxList', () => {
 
     TestBed.configureTestingModule({
       declarations: [DestroyableComponent, TestContainerComponent],
-      imports: [DxListModule],
+      imports: [DxListComponent, DxTemplateDirective],
     });
 
     TestBed.overrideComponent(TestContainerComponent, {
@@ -447,7 +450,7 @@ describe('DxList', () => {
 
     TestBed.configureTestingModule({
       declarations: [TestContainerComponent],
-      imports: [DxButtonModule, DxListModule],
+      imports: [DxButtonComponent, DxListComponent, DxTemplateDirective],
     });
 
     TestBed.overrideComponent(TestContainerComponent, {
@@ -486,7 +489,7 @@ describe('DxList', () => {
 
     TestBed.configureTestingModule({
       declarations: [TestContainerComponent],
-      imports: [DxButtonModule, DxListModule],
+      imports: [DxButtonComponent, DxListComponent],
     });
 
     TestBed.overrideComponent(TestContainerComponent, {
@@ -513,21 +516,21 @@ describe('DxList', () => {
 
     TestBed.configureTestingModule({
       declarations: [TestContainerComponent],
-      imports: [DxButtonModule, DxListModule],
+      imports: [DxButtonComponent, DxListComponent, DxiListItemComponent, DxTemplateDirective],
     });
 
     TestBed.overrideComponent(TestContainerComponent, {
       set: {
         template: `
                     <dx-list>
-                        <dxi-item>
+                        <dxi-list-item>
                             <dx-button *dxTemplate></dx-button>
-                        </dxi-item>
-                        <dxi-item>
+                        </dxi-list-item>
+                        <dxi-list-item>
                             <${ngTemplateName} dxTemplate>
                                 <dx-button></dx-button>
                             </${ngTemplateName}>
-                        </dxi-item>
+                        </dxi-list-item>
                     </dx-list>
                 `,
       },

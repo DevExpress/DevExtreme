@@ -19,7 +19,7 @@ import {
 import DxTextBox from 'devextreme/ui/text_box';
 
 import {
-  DxTextBoxModule,
+  DxTextBoxComponent,
 } from 'devextreme-angular';
 
 @Component({
@@ -52,7 +52,7 @@ describe('DxTextBox value accessor', () => {
     TestBed.configureTestingModule(
       {
         declarations: [TestContainerComponent],
-        imports: [DxTextBoxModule, ReactiveFormsModule],
+        imports: [DxTextBoxComponent, ReactiveFormsModule],
       },
     );
   });

@@ -9,9 +9,8 @@ import {
 } from '@angular/core/testing';
 
 import {
-  DxTabPanelModule,
-  DxTabPanelComponent,
-} from 'devextreme-angular';
+  DxTabPanelComponent, DxiTabPanelItemComponent
+} from 'devextreme-angular/ui/tab-panel';
 
 @Component({
   selector: 'test-container-component',
@@ -35,7 +34,7 @@ describe('DxTabPanel', () => {
     TestBed.configureTestingModule(
       {
         declarations: [TestContainerComponent],
-        imports: [DxTabPanelModule],
+        imports: [DxTabPanelComponent, DxiTabPanelItemComponent],
       },
     );
   });
@@ -83,9 +82,9 @@ describe('DxTabPanel', () => {
       set: {
         template: `
                     <dx-tab-panel>
-                        <dxi-item title="page1">
+                        <dxi-tab-panel-item title="page1">
                             <div id="content">Page1</div>
-                        </dxi-item>
+                        </dxi-tab-panel-item>
                     </dx-tab-panel>
                 `,
       },

@@ -8,7 +8,7 @@ import {
 } from '@angular/core/testing';
 
 import {
-  DxDataGridModule,
+  DxDataGridComponent,
 } from 'devextreme-angular';
 
 import readyCallbacks from 'devextreme/core/utils/ready_callbacks';
@@ -33,7 +33,7 @@ describe('global events', () => {
 
     TestBed.configureTestingModule({
       declarations: [TestContainerComponent],
-      imports: [DxDataGridModule],
+      imports: [DxDataGridComponent],
     });
 
     TestBed.overrideComponent(TestContainerComponent, {
@@ -55,7 +55,7 @@ describe('events', () => {
   it('should be fired within Angular Zone', () => {
     TestBed.configureTestingModule({
       declarations: [TestContainerComponent],
-      imports: [DxDataGridModule],
+      imports: [DxDataGridComponent],
     });
 
     TestBed.overrideComponent(TestContainerComponent, {

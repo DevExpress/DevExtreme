@@ -9,9 +9,8 @@ import {
 } from '@angular/core/testing';
 
 import {
-  DxResponsiveBoxModule,
-  DxResponsiveBoxComponent,
-} from 'devextreme-angular';
+  DxResponsiveBoxComponent, DxiResponsiveBoxItemComponent, DxiResponsiveBoxLocationComponent
+} from 'devextreme-angular/ui/responsive-box';
 
 @Component({
   selector: 'test-container-component',
@@ -30,7 +29,7 @@ describe('DxResponsiveBox', () => {
     TestBed.configureTestingModule(
       {
         declarations: [TestContainerComponent],
-        imports: [DxResponsiveBoxModule],
+        imports: [DxResponsiveBoxComponent, DxiResponsiveBoxItemComponent, DxiResponsiveBoxLocationComponent],
       },
     );
   });
@@ -46,15 +45,15 @@ describe('DxResponsiveBox', () => {
                         [height]="480"
                         singleColumnScreen="sm"
                         [(screenByWidth)]="screen">
-                        <dxi-item>
-                            <dxi-location
+                        <dxi-responsive-box-item>
+                            <dxi-responsive-box-location
                                 [row]="0"
                                 [col]="0"
                                 [colspan]="1"
                                 screen="lg">
-                            </dxi-location>
+                            </dxi-responsive-box-location>
                             <p>Header</p>
-                        </dxi-item>
+                        </dxi-responsive-box-item>
                     </dx-responsive-box>
                 `,
       },
