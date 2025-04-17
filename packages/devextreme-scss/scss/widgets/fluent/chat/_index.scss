@@ -20,6 +20,7 @@
   $chat-alertlist-color,
   $chat-alerts-padding-block,
   $chat-alerts-padding-inline,
+  $chat-alert-padding-block,
   $chat-alerts-row-gap,
 );
 @include chat-messagebox(

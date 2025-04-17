@@ -4,6 +4,7 @@
   $error-color,
   $padding-block,
   $padding-inline,
+  $error-padding-block,
   $row-gap,
 ) {
   .dx-chat-alertlist {
@@ -20,6 +21,7 @@
   .dx-chat-alertlist-error {
     &.dx-informer {
       color: $error-color;
+      padding-block: $error-padding-block;
     }
   }
 }
