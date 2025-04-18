@@ -3,8 +3,7 @@
 import { applyChanges } from '@js/common/data';
 import { isDefined } from '@js/core/utils/type';
 import { confirm } from '@js/ui/dialog';
-import type { SubsGetsUpd } from '@ts/core/reactive/index';
-import { computed } from '@ts/core/reactive/index';
+import { computed, type Signal } from '@preact/signals-core';
 import { generateNewRowTempKey } from '@ts/grids/grid_core/editing/m_editing_utils';
 
 import { ColumnsController } from '../columns_controller/columns_controller';
@@ -17,7 +16,7 @@ import type { Change } from './types';
 
 export class EditingController {
   // todo: fix typing, remove explicit type here
-  public readonly changes: SubsGetsUpd<Change[]> = this.options.twoWay('editing.changes');
+  public readonly changes: Signal<Change[]> = this.options.twoWay('editing.changes');
 
   public readonly editRowKey = this.options.twoWay('editing.editCardKey');
 
@@ -55,31 +54,32 @@ export class EditingController {
 
   private readonly onSaved = this.options.action('onSaved');
 
-  public readonly editingRow = computed(
-    (editRowKey, items, changes) => {
-      if (!isDefined(editRowKey)) {
-        return null;
-      }
+  public readonly editingRow = computed(() => {
+    const editRowKey = this.editRowKey.value;
+    const items = this.itemsController.items.value;
+    const changes = this.changes.value;
 
-      const oldItem = this.itemsController.findItemByKey(items, editRowKey)!;
-      const newData = applyChanges(
-        [oldItem.data],
-        changes,
-        {
-          keyExpr: this.dataController.dataSource.unreactive_get().key(),
-          immutable: true,
-        },
-      )[0];
+    if (!isDefined(editRowKey)) {
+      return null;
+    }
 
-      const newItem = this.itemsController.createDataRow(
-        newData,
-        this.columnController.columns.unreactive_get(),
-        oldItem.index,
-      );
-      return newItem;
-    },
-    [this.editRowKey, this.itemsController.items, this.changes],
-  );
+    const oldItem = this.itemsController.findItemByKey(items, editRowKey)!;
+    const newData = applyChanges(
+      [oldItem.data],
+      changes,
+      {
+        keyExpr: this.dataController.dataSource.peek().key(),
+        immutable: true,
+      },
+    )[0];
+
+    const newItem = this.itemsController.createDataRow(
+      newData,
+      this.columnController.columns.peek(),
+      oldItem.index,
+    );
+    return newItem;
+  });
 
   public static dependencies = [
     OptionsController, ItemsController,
@@ -102,10 +102,10 @@ export class EditingController {
       data: this.itemsController.getRowByKey(key)!.data,
     };
 
-    this.onEditingStart.unreactive_get()(eventArgs);
+    this.onEditingStart.peek()(eventArgs);
 
     if (!eventArgs.cancel) {
-      this.editRowKey.update(key);
+      this.editRowKey.value = key;
     }
   }
 
@@ -115,38 +115,40 @@ export class EditingController {
       data: {},
     };
 
-    this.onInitNewCard.unreactive_get()(eventArgs);
+    this.onInitNewCard.peek()(eventArgs);
 
     // eslint-disable-next-line @typescript-eslint/await-thenable
     await eventArgs.promise;
 
     const newItemKey = this.dataController.getDataKey(eventArgs.data) ?? generateNewRowTempKey();
-    this.itemsController.additionalItems.updateFunc((additionalItems) => {
-      const newItem = this.itemsController.createDataRow(
+
+    this.itemsController.additionalItems.value = [
+      ...this.itemsController.additionalItems.peek(),
+      this.itemsController.createDataRow(
         eventArgs.data,
-        this.columnController.columns.unreactive_get(),
+        this.columnController.columns.peek(),
         -1,
         [],
         newItemKey,
-      );
-      return [...additionalItems, newItem];
-    });
-    this.changes.update([
-      ...this.changes.unreactive_get(), { type: 'insert', key: newItemKey, data: {} },
-    ]);
-    this.editRowKey.update(newItemKey);
+      ),
+    ];
+
+    this.changes.value = [
+      ...this.changes.peek(), { type: 'insert', key: newItemKey, data: {} },
+    ];
+    this.editRowKey.value = newItemKey;
   }
 
   private async confirmDelete(): Promise<boolean> {
-    if (!this.needConfirmDelete.unreactive_get()) {
+    if (!this.needConfirmDelete.peek()) {
       return Promise.resolve(true);
     }
 
     const result = await confirm(
       // @ts-expect-error wrong typing in optionController
-      this.texts.unreactive_get().confirmDeleteMessage,
+      this.texts.peek().confirmDeleteMessage,
       // @ts-expect-error wrong typing in optionController
-      this.texts.unreactive_get().confirmDeleteTitle,
+      this.texts.peek().confirmDeleteTitle,
     );
 
     return result;
@@ -161,7 +163,7 @@ export class EditingController {
     }
 
     // @ts-expect-error
-    this.changes.update([...this.changes.unreactive_get(), {
+    this.changes.update([...this.changes.peek(), {
       type: 'remove',
       key,
     }]);
@@ -171,37 +173,37 @@ export class EditingController {
   }
 
   private clear(): void {
-    this.changes.update([]);
-    this.editRowKey.update(null);
-    this.itemsController.additionalItems.update([]);
+    this.changes.value = [];
+    this.editRowKey.value = null;
+    this.itemsController.additionalItems.value = [];
   }
 
   private async flushChanges(): Promise<void> {
-    await this.processChanges(this.changes.unreactive_get());
+    await this.processChanges(this.changes.peek());
     this.clear();
   }
 
   public cancel(): boolean {
-    const changes = this.changes.unreactive_get();
+    const changes = this.changes.peek();
     const eventArgs = {
       changes,
       cancel: false,
     };
 
-    this.onEditCanceling.unreactive_get()(eventArgs);
+    this.onEditCanceling.peek()(eventArgs);
     if (eventArgs.cancel) {
       return false;
     }
 
     this.clear();
 
-    this.onEditCanceled.unreactive_get()({ changes });
+    this.onEditCanceled.peek()({ changes });
 
     return true;
   }
 
   public async save(): Promise<void> {
-    const changes = this.changes.unreactive_get();
+    const changes = this.changes.peek();
 
     const eventArgs = {
       promise: undefined,
@@ -209,7 +211,7 @@ export class EditingController {
       changes,
     };
 
-    this.onSaving.unreactive_get()(eventArgs);
+    this.onSaving.peek()(eventArgs);
 
     // eslint-disable-next-line @typescript-eslint/await-thenable
     await eventArgs.promise;
@@ -220,7 +222,7 @@ export class EditingController {
 
     await this.flushChanges();
 
-    this.onSaved.unreactive_get()({
+    this.onSaved.peek()({
       changes,
     });
   }
@@ -239,7 +241,7 @@ export class EditingController {
             key: change.key,
           };
 
-          this.onCardUpdating.unreactive_get()(updatingArgs);
+          this.onCardUpdating.peek()(updatingArgs);
 
           // eslint-disable-next-line no-await-in-loop, @typescript-eslint/await-thenable
           if (await updatingArgs.cancel) {
@@ -250,7 +252,7 @@ export class EditingController {
             this.dataController.update(change.key, change.data),
           );
 
-          this.onCardUpdated.unreactive_get()({
+          this.onCardUpdated.peek()({
             data: change.data,
             key: change.key,
           });
@@ -258,7 +260,7 @@ export class EditingController {
         }
         case 'remove': {
           const { data } = (this.itemsController.findItemByKey(
-            this.itemsController.items.unreactive_get(),
+            this.itemsController.items.peek(),
             change.key,
           )!);
 
@@ -268,7 +270,7 @@ export class EditingController {
             key: change.key,
           };
 
-          this.onCardRemoving.unreactive_get()(removingArgs);
+          this.onCardRemoving.peek()(removingArgs);
 
           // eslint-disable-next-line no-await-in-loop, @typescript-eslint/await-thenable
           if (await removingArgs.cancel) {
@@ -279,7 +281,7 @@ export class EditingController {
             this.dataController.remove(change.key),
           );
 
-          this.onCardRemoved.unreactive_get()({
+          this.onCardRemoved.peek()({
             data,
             key: change.key,
           });
@@ -291,7 +293,7 @@ export class EditingController {
             data: change.data,
           };
 
-          this.onCardInserting.unreactive_get()(insertingArgs);
+          this.onCardInserting.peek()(insertingArgs);
 
           // eslint-disable-next-line no-await-in-loop, @typescript-eslint/await-thenable
           if (await insertingArgs.cancel) {
@@ -302,7 +304,7 @@ export class EditingController {
             this.dataController.insert(change.data),
           );
 
-          this.onCardInserted.unreactive_get()({
+          this.onCardInserted.peek()({
             data: change.data,
           });
           break;
@@ -315,7 +317,7 @@ export class EditingController {
   }
 
   public addChange(key: Key, newData: DataObject): void {
-    const existingChange = this.changes.unreactive_get()
+    const existingChange = this.changes.peek()
       .find(
         (change) => change.key === key && ['insert', 'update'].includes(change.type),
       );
@@ -332,9 +334,10 @@ export class EditingController {
       data: newData,
     };
 
-    this.changes.update([
-      ...this.changes.unreactive_get().filter((change) => change !== existingChange),
+    this.changes.value = [
+      ...this.changes.peek()
+        .filter((change) => change !== existingChange),
       newChange,
-    ]);
+    ];
   }
 }
