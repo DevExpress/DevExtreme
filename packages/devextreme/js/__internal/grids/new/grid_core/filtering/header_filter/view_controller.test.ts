@@ -1,4 +1,4 @@
-/* eslint-disable spellcheck/spell-checker, no-spaced-func */
+/* eslint-disable no-spaced-func */
 import { describe, expect, it } from '@jest/globals';
 import { ColumnsController } from '@ts/grids/new/grid_core/columns_controller';
 import type { Column } from '@ts/grids/new/grid_core/columns_controller/types';
@@ -24,7 +24,7 @@ describe('HeaderFilter', () => {
         const { viewController } = setup();
         viewController.openPopup(mockElement, {} as Column);
 
-        const result = viewController.popupState.unreactive_get();
+        const result = viewController.popupState.peek();
         expect(result?.element).toBe(mockElement);
       });
 
@@ -40,7 +40,7 @@ describe('HeaderFilter', () => {
         const { viewController } = setup();
         viewController.openPopup({} as Element, { dataType } as Column);
 
-        const state = viewController.popupState.unreactive_get();
+        const state = viewController.popupState.peek();
         expect(state?.options?.type).toBe(result);
       });
 
@@ -58,7 +58,7 @@ describe('HeaderFilter', () => {
           { headerFilter: expectedHeaderFilter } as Column,
         );
 
-        const state = viewController.popupState.unreactive_get();
+        const state = viewController.popupState.peek();
         expect(state?.options?.headerFilter).toStrictEqual(expectedHeaderFilter);
         expect(state?.options?.filterValues).toEqual(expectedFilterValues);
       });
@@ -79,12 +79,12 @@ describe('HeaderFilter', () => {
           { name: 'A' } as Column,
         );
 
-        const state = viewController.popupState.unreactive_get();
+        const state = viewController.popupState.peek();
         state?.options?.apply?.call({
           filterValues: expectedFilterValues,
         });
 
-        const updatedColumn = columnsController.columns.unreactive_get()[0];
+        const updatedColumn = columnsController.columns.peek()[0];
 
         expect(updatedColumn?.headerFilter)
           .toMatchObject(expectedHeaderFilter as Record<string, unknown>);
@@ -114,12 +114,12 @@ describe('HeaderFilter', () => {
           { name: 'A', headerFilter: { search: expectedSearch } } as unknown as Column,
         );
 
-        const state = viewController.popupState.unreactive_get();
+        const state = viewController.popupState.peek();
         state?.options?.apply?.call({
           filterValues: expectedFilterValues,
         });
 
-        const updatedColumn = columnsController.columns.unreactive_get()[0];
+        const updatedColumn = columnsController.columns.peek()[0];
 
         expect(updatedColumn?.headerFilter)
           .toMatchObject(expectedHeaderFilter as Record<string, unknown>);
@@ -136,12 +136,12 @@ describe('HeaderFilter', () => {
           { name: 'A' } as Column,
         );
 
-        const state = viewController.popupState.unreactive_get();
+        const state = viewController.popupState.peek();
         expect(state !== null).toBeTruthy();
 
         state?.options?.hidePopupCallback?.();
 
-        const stateAfterClose = viewController.popupState.unreactive_get();
+        const stateAfterClose = viewController.popupState.peek();
         expect(stateAfterClose === null).toBeTruthy();
       });
     });
@@ -158,7 +158,7 @@ describe('HeaderFilter', () => {
           { name: 'A' } as Column,
         );
 
-        const state = viewController.popupState.unreactive_get();
+        const state = viewController.popupState.peek();
 
         expect(typeof state?.options.dataSource.load).toBe('function');
         expect(typeof state?.options.dataSource.postProcess).toBe('function');
@@ -197,7 +197,7 @@ describe('HeaderFilter', () => {
               column,
             );
 
-            const state = viewController.popupState.unreactive_get();
+            const state = viewController.popupState.peek();
 
             expect(state?.options.dataSource.group).toBeTruthy();
             expect(checkFn(state?.options.dataSource.group)).toBeTruthy();

@@ -1,4 +1,3 @@
-/* eslint-disable spellcheck/spell-checker */
 import { describe, expect, it } from '@jest/globals';
 import type { SortOrder } from '@js/common';
 import type { ColumnChooserMode } from '@js/common/grids';
@@ -30,7 +29,7 @@ const expectColumnVisibility = (
   columnsController: ColumnsController,
   visibility: boolean[],
 ): void => {
-  const columns = columnsController.columns.unreactive_get();
+  const columns = columnsController.columns.peek();
   const columnsVisibility = columns.map((column) => column.visible);
 
   expect(columnsVisibility).toEqual(visibility);
@@ -44,7 +43,7 @@ describe('ColumnChooser', () => {
         columnNames: string[],
       ): void => {
         const columns = controller.chooserColumns
-          .unreactive_get()
+          .peek()
           .map((column) => column.name);
 
         expect(columns).toEqual(columnNames);
@@ -195,7 +194,7 @@ describe('ColumnChooser', () => {
           expectedItems = expectedItems.filter((item) => !item.selected);
         }
 
-        expect(controller.items.unreactive_get()).toMatchObject(expectedItems);
+        expect(controller.items.peek()).toMatchObject(expectedItems);
       });
     });
 
@@ -241,7 +240,7 @@ describe('ColumnChooser', () => {
         ],
       });
 
-      const getFirstColumn = (): Column => columnsController.columns.unreactive_get()[0];
+      const getFirstColumn = (): Column => columnsController.columns.peek()[0];
 
       controller.onColumnMove(getFirstColumn());
 
@@ -302,7 +301,7 @@ describe('ColumnChooser', () => {
 
         // make second column invisible
         columnsController.columnOption(
-          columnsController.columns.unreactive_get()[1],
+          columnsController.columns.peek()[1],
           'visible',
           false,
         );
@@ -328,7 +327,7 @@ describe('ColumnChooser', () => {
 
         // make second column invisible
         columnsController.columnOption(
-          columnsController.columns.unreactive_get()[1],
+          columnsController.columns.peek()[1],
           'visible',
           false,
         );

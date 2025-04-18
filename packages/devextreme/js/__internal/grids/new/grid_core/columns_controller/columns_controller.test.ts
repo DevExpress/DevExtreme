@@ -1,4 +1,3 @@
-/* eslint-disable spellcheck/spell-checker */
 import { describe, expect, it } from '@jest/globals';
 
 import { DataController } from '../data_controller';
@@ -30,7 +29,7 @@ describe('ColumnsController', () => {
         ],
       });
 
-      const columns = columnsController.columns.unreactive_get();
+      const columns = columnsController.columns.peek();
       expect(columns).toMatchSnapshot();
     });
   });
@@ -44,7 +43,7 @@ describe('ColumnsController', () => {
         ],
       });
 
-      const visibleColumns = columnsController.visibleColumns.unreactive_get();
+      const visibleColumns = columnsController.visibleColumns.peek();
       expect(visibleColumns).toHaveLength(2);
       expect(visibleColumns[0].name).toBe('a');
       expect(visibleColumns[1].name).toBe('b');
@@ -59,7 +58,7 @@ describe('ColumnsController', () => {
         ],
       });
 
-      const visibleColumns = columnsController.visibleColumns.unreactive_get();
+      const visibleColumns = columnsController.visibleColumns.peek();
 
       expect(visibleColumns).toMatchObject([
         { name: 'b', headerPanelIndex: 0, visibleIndex: 0 },
@@ -77,7 +76,7 @@ describe('ColumnsController', () => {
         ],
       });
 
-      const nonVisibleColumns = columnsController.nonVisibleColumns.unreactive_get();
+      const nonVisibleColumns = columnsController.nonVisibleColumns.peek();
       expect(nonVisibleColumns).toHaveLength(1);
       expect(nonVisibleColumns[0].name).toBe('c');
     });
@@ -89,7 +88,7 @@ describe('ColumnsController', () => {
         { columns: ['a', 'b'] },
       );
 
-      let columns = columnsController.columns.unreactive_get();
+      let columns = columnsController.columns.peek();
       expect(columns).toHaveLength(2);
       expect(columns).toMatchObject([
         { dataField: 'a' },
@@ -98,7 +97,7 @@ describe('ColumnsController', () => {
 
       columnsController.addColumn('c');
 
-      columns = columnsController.columns.unreactive_get();
+      columns = columnsController.columns.peek();
       expect(columns).toHaveLength(3);
       expect(columns).toMatchObject([
         { dataField: 'a' },
@@ -114,7 +113,7 @@ describe('ColumnsController', () => {
         { columns: ['a', 'b'] },
       );
 
-      let columns = columnsController.columns.unreactive_get();
+      let columns = columnsController.columns.peek();
       expect(columns).toHaveLength(2);
       expect(columns).toMatchObject([
         { dataField: 'a' },
@@ -123,7 +122,7 @@ describe('ColumnsController', () => {
 
       columnsController.deleteColumn(columns[1]);
 
-      columns = columnsController.columns.unreactive_get();
+      columns = columnsController.columns.peek();
       expect(columns).toHaveLength(1);
       expect(columns).toMatchObject([
         { dataField: 'a' },
@@ -137,7 +136,7 @@ describe('ColumnsController', () => {
         { columns: ['a', 'b'] },
       );
 
-      let columns = columnsController.columns.unreactive_get();
+      let columns = columnsController.columns.peek();
       expect(columns).toMatchObject([
         { dataField: 'a', visible: true },
         { dataField: 'b', visible: true },
@@ -145,7 +144,7 @@ describe('ColumnsController', () => {
 
       columnsController.columnOption(columns[1], 'visible', false);
 
-      columns = columnsController.columns.unreactive_get();
+      columns = columnsController.columns.peek();
       expect(columns).toMatchObject([
         { dataField: 'a', visible: true },
         { dataField: 'b', visible: false },
@@ -157,7 +156,7 @@ describe('ColumnsController', () => {
         { columns: ['a', 'b', 'c'] },
       );
 
-      let columns = columnsController.columns.unreactive_get();
+      let columns = columnsController.columns.peek();
       expect(columns).toMatchObject([
         { dataField: 'a', visibleIndex: 0 },
         { dataField: 'b', visibleIndex: 1 },
@@ -166,7 +165,7 @@ describe('ColumnsController', () => {
 
       columnsController.columnOption(columns[2], 'visibleIndex', 0);
 
-      columns = columnsController.columns.unreactive_get();
+      columns = columnsController.columns.peek();
       expect(columns).toMatchObject([
         { dataField: 'a', visibleIndex: 1 },
         { dataField: 'b', visibleIndex: 2 },

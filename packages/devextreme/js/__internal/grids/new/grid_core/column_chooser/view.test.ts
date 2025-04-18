@@ -94,14 +94,14 @@ describe('ColumnChooser', () => {
         },
       });
 
-      let toolbarItems = toolbarController.items.unreactive_get();
+      let toolbarItems = toolbarController.items.peek();
 
       expect(toolbarItems).toHaveLength(1);
       expect(toolbarItems[0].name).toEqual('columnChooserButton');
 
       optionsController.option('columnChooser.enabled', false);
 
-      toolbarItems = toolbarController.items.unreactive_get();
+      toolbarItems = toolbarController.items.peek();
 
       expect(toolbarItems).toHaveLength(0);
     });
@@ -126,7 +126,7 @@ describe('ColumnChooser', () => {
         columnChooserView.show();
       }
 
-      expect(columnChooserView.dragModeOpened.unreactive_get()).toEqual(result);
+      expect(columnChooserView.dragModeOpened.peek()).toEqual(result);
     });
 
     describe('Select mode', () => {

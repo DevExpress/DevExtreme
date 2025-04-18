@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { combined } from '@ts/core/reactive/index';
+import { computed } from '@preact/signals-core';
 import { ColumnChooserView } from '@ts/grids/new/grid_core/column_chooser/index';
 import { View } from '@ts/grids/new/grid_core/core/view';
 import { FilterPanelView } from '@ts/grids/new/grid_core/filtering/filter_panel/view';
@@ -121,7 +121,7 @@ export class MainView extends View<MainViewProps> {
   // eslint-disable-next-line @stylistic/max-len
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types, @typescript-eslint/explicit-function-return-type
   protected override getProps() {
-    return combined({
+    return computed(() => ({
       Toolbar: this.toolbar.asInferno(),
       Content: this.content.asInferno(),
       Pager: this.pager.asInferno(),
@@ -131,15 +131,15 @@ export class MainView extends View<MainViewProps> {
       ColumnChooser: this.columnsChooser.asInferno(),
       EditPopup: this.editPopup.asInferno(),
       ContextMenu: this.contextMenu.asInferno(),
-      config: combined({
-        rtlEnabled: this.options.oneWay('rtlEnabled'),
-        disabled: this.options.oneWay('disabled'),
-        templatesRenderAsynchronously: this.options.oneWay('templatesRenderAsynchronously'),
-      }),
+      config: {
+        rtlEnabled: this.options.oneWay('rtlEnabled').value,
+        disabled: this.options.oneWay('disabled').value,
+        templatesRenderAsynchronously: this.options.oneWay('templatesRenderAsynchronously').value,
+      },
       rootElementRef: { current: this.root! },
-      onKeyDown: (event: KeyboardEvent) => {
+      onKeyDown: (event: KeyboardEvent): void => {
         this.keyboardNavigation.onKeyDown(event);
       },
-    });
+    }));
   }
 }

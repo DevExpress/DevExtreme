@@ -194,11 +194,15 @@
                     'devextreme-cldr-data': '@Url.Content("~/packages/devextreme/artifacts/js-systemjs/devextreme-cldr-data")',
                     'cldr-core': '@Url.Content("~/packages/devextreme/artifacts/js-systemjs/cldr-core")',
 
-                    'json': '@Url.Content("~/packages/devextreme/artifacts/js-systemjs/json.js")'
+                    'json': '@Url.Content("~/packages/devextreme/artifacts/js-systemjs/json.js")',
+                    '@@preact/signals-core': '@Url.Content("~/packages/devextreme/artifacts/js-systemjs/preact-signals.js")',
+
                 }
                 : {
                     'devextreme-cldr-data': '@Url.Content("~/packages/devextreme/node_modules/devextreme-cldr-data")',
-                    'cldr-core': '@Url.Content("~/packages/devextreme/node_modules/cldr-core")'
+                    'cldr-core': '@Url.Content("~/packages/devextreme/node_modules/cldr-core")',
+                    '@@preact/signals-core': '@Url.Content("~/packages/devextreme/node_modules/@preact/signals-core/dist/signals-core.js")',
+
                 };
 
             const cspPackages = {};

@@ -103,7 +103,7 @@ describe('ColumnProperties', () => {
       await editPopupView.promises.waitForAll();
 
       expect(setCellValue.mock.calls[0]).toMatchSnapshot();
-      expect(editingController.changes.unreactive_get()).toMatchSnapshot();
+      expect(editingController.changes.peek()).toMatchSnapshot();
     });
   });
 
@@ -160,9 +160,9 @@ describe('Options', () => {
       it('should add "add" button to toolbar', () => {
         const { toolbarController, optionsController } = setup({});
 
-        expect(toolbarController.items.unreactive_get()).toEqual([]);
+        expect(toolbarController.items.peek()).toEqual([]);
         optionsController.option('editing.allowAdding', 'true');
-        expect(toolbarController.items.unreactive_get()).toMatchSnapshot();
+        expect(toolbarController.items.peek()).toMatchSnapshot();
       });
     });
     describe('allowUpdating', () => {
@@ -189,7 +189,7 @@ describe('Options', () => {
       };
       it('should be empty initially', () => {
         const { editingController } = setup(config);
-        expect(editingController.changes.unreactive_get()).toEqual([]);
+        expect(editingController.changes.peek()).toEqual([]);
       });
       it('should contain unsaved changes', async () => {
         const { editingController, editPopupView, getForm } = setup(config);
@@ -199,16 +199,16 @@ describe('Options', () => {
         // @ts-expect-error private prop
         await editPopupView.promises.waitForAll();
 
-        expect(editingController.changes.unreactive_get()).toMatchSnapshot();
+        expect(editingController.changes.peek()).toMatchSnapshot();
       });
       it('should update state in editor', () => {
         const { editingController, getForm } = setup(config);
 
-        editingController.changes.update([{
+        editingController.changes.value = [{
           type: 'update',
           key: 1,
           data: { some_field: 'qwe' },
-        }]);
+        }];
 
         expect(getForm().getEditor('some_field')?.option('value')).toBe('qwe');
       });

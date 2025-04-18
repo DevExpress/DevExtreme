@@ -1,5 +1,4 @@
-/* eslint-disable spellcheck/spell-checker, @typescript-eslint/no-non-null-assertion */
-
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import {
   beforeEach,
   describe, expect, it, jest,
@@ -99,7 +98,7 @@ describe('oneWay', () => {
 
         const value = optionsController.oneWay('value');
 
-        expect(value.unreactive_get()).toBe(plainOptions.value);
+        expect(value.peek()).toBe(plainOptions.value);
       });
 
       it('should have initial default value if config options is undefined', () => {
@@ -107,7 +106,7 @@ describe('oneWay', () => {
 
         const value = optionsController.oneWay('value');
 
-        expect(value.unreactive_get()).toBe(defaultPlainOptions.value);
+        expect(value.peek()).toBe(defaultPlainOptions.value);
       });
 
       it('should have initial value same as passed in config if default not specified', () => {
@@ -116,7 +115,7 @@ describe('oneWay', () => {
 
         const value = optionsController.oneWay('optionalValue');
 
-        expect(value.unreactive_get()).toBe(optionalOptions.optionalValue);
+        expect(value.peek()).toBe(optionalOptions.optionalValue);
       });
 
       it('should have undefined value if options not passed with config and doesnt have default value', () => {
@@ -124,7 +123,7 @@ describe('oneWay', () => {
 
         const value = optionsController.oneWay('optionalValue');
 
-        expect(value.unreactive_get()).toBe(undefined);
+        expect(value.peek()).toBe(undefined);
       });
     });
 
@@ -134,7 +133,7 @@ describe('oneWay', () => {
 
         const value = optionsController.oneWay('nested.value');
 
-        expect(value.unreactive_get()).toBe(nestedPlainOptions.nested!.value);
+        expect(value.peek()).toBe(nestedPlainOptions.nested!.value);
       });
 
       it('should have initial default value if parent config option is undefined', () => {
@@ -142,7 +141,7 @@ describe('oneWay', () => {
 
         const value = optionsController.oneWay('nested.value');
 
-        expect(value.unreactive_get()).toBe(defaultNestedPlainOptions.nested?.value);
+        expect(value.peek()).toBe(defaultNestedPlainOptions.nested?.value);
       });
 
       it('should have initial default value if plain config option is undefined', () => {
@@ -153,7 +152,7 @@ describe('oneWay', () => {
 
         const value = optionsController.oneWay('nested.value');
 
-        expect(value.unreactive_get()).toBe(defaultNestedPlainOptions.nested?.value);
+        expect(value.peek()).toBe(defaultNestedPlainOptions.nested?.value);
       });
 
       it('should have initial value same as passed in config if default not specified', () => {
@@ -165,7 +164,7 @@ describe('oneWay', () => {
 
         const value = optionsController.oneWay('optionalValue');
 
-        expect(value.unreactive_get()).toBe(defaultNestedPlainOptions.nested?.optionalValue);
+        expect(value.peek()).toBe(defaultNestedPlainOptions.nested?.optionalValue);
       });
 
       it('should have undefined value if options not passed with config and doesnt have default value', () => {
@@ -176,7 +175,7 @@ describe('oneWay', () => {
 
         const value = optionsController.oneWay('nested.optionalValue');
 
-        expect(value.unreactive_get()).toBe(undefined);
+        expect(value.peek()).toBe(undefined);
       });
     });
 
@@ -186,7 +185,7 @@ describe('oneWay', () => {
 
         const value = optionsController.oneWay('nested');
 
-        expect(value.unreactive_get()).toStrictEqual(nestedPlainOptions.nested);
+        expect(value.peek()).toStrictEqual(nestedPlainOptions.nested);
       });
 
       it('should have initial default value if config options is undefined', () => {
@@ -194,7 +193,7 @@ describe('oneWay', () => {
 
         const value = optionsController.oneWay('nested');
 
-        expect(value.unreactive_get()).toStrictEqual(defaultNestedPlainOptions.nested);
+        expect(value.peek()).toStrictEqual(defaultNestedPlainOptions.nested);
       });
 
       it('should have initial default value if child config option is undefined', () => {
@@ -205,7 +204,7 @@ describe('oneWay', () => {
 
         const value = optionsController.oneWay('nested');
 
-        expect(value.unreactive_get()).toStrictEqual(defaultNestedPlainOptions.nested);
+        expect(value.peek()).toStrictEqual(defaultNestedPlainOptions.nested);
       });
 
       it('should merge passed optional values with default ones', () => {
@@ -217,7 +216,7 @@ describe('oneWay', () => {
 
         const value = optionsController.oneWay('nested');
 
-        expect(value.unreactive_get()).toStrictEqual({
+        expect(value.peek()).toStrictEqual({
           ...defaultNestedPlainOptions.nested,
           ...optionalOptions.nested,
         });
@@ -231,7 +230,7 @@ describe('oneWay', () => {
 
         const value = optionsController.oneWay('value');
 
-        expect(value.unreactive_get()).toStrictEqual(arrayOptions.value);
+        expect(value.peek()).toStrictEqual(arrayOptions.value);
       });
 
       it('should have initial default value if config options is undefined', () => {
@@ -239,7 +238,7 @@ describe('oneWay', () => {
 
         const value = optionsController.oneWay('value');
 
-        expect(value.unreactive_get()).toStrictEqual(defaultArrayOptions.value);
+        expect(value.peek()).toStrictEqual(defaultArrayOptions.value);
       });
 
       it('should have initial value same as passed in config if default not specified', () => {
@@ -248,7 +247,7 @@ describe('oneWay', () => {
 
         const value = optionsController.oneWay('optionalValue');
 
-        expect(value.unreactive_get()).toStrictEqual(optionalOptions.optionalValue);
+        expect(value.peek()).toStrictEqual(optionalOptions.optionalValue);
       });
 
       it('should have undefined value if options not passed with config and doesnt have default value', () => {
@@ -256,7 +255,7 @@ describe('oneWay', () => {
 
         const value = optionsController.oneWay('optionalValue');
 
-        expect(value.unreactive_get()).toBe(undefined);
+        expect(value.peek()).toBe(undefined);
       });
     });
 
@@ -266,7 +265,7 @@ describe('oneWay', () => {
 
         const value = optionsController.oneWay('value');
 
-        expect(value.unreactive_get()?.name).toBe(functionOptions.value?.name);
+        expect(value.peek()?.name).toBe(functionOptions.value?.name);
       });
 
       it('should have initial default value if config options is undefined', () => {
@@ -274,7 +273,7 @@ describe('oneWay', () => {
 
         const value = optionsController.oneWay('value');
 
-        expect(value.unreactive_get()?.name).toBe(defaultFunctionOptions.value?.name);
+        expect(value.peek()?.name).toBe(defaultFunctionOptions.value?.name);
       });
 
       it('should have initial value same as passed in config if default not specified', () => {
@@ -286,7 +285,7 @@ describe('oneWay', () => {
 
         const value = optionsController.oneWay('optionalValue');
 
-        expect(value.unreactive_get()?.name).toBe('optionalFnValue');
+        expect(value.peek()?.name).toBe('optionalFnValue');
       });
 
       it('should have undefined value if options not passed with config and doesnt have default value', () => {
@@ -297,7 +296,7 @@ describe('oneWay', () => {
 
         const value = optionsController.oneWay('optionalValue');
 
-        expect(value.unreactive_get()).toBe(undefined);
+        expect(value.peek()).toBe(undefined);
       });
     });
 
@@ -307,7 +306,7 @@ describe('oneWay', () => {
 
         const value = optionsController.oneWay('value.valueA');
 
-        expect(value.unreactive_get()).toStrictEqual((mixedComplexOptions.value as any).valueA);
+        expect(value.peek()).toStrictEqual((mixedComplexOptions.value as any).valueA);
       });
 
       it('should have initial value undefined if parent is plain value', () => {
@@ -315,7 +314,7 @@ describe('oneWay', () => {
 
         const value = optionsController.oneWay('value.valueA');
 
-        expect(value.unreactive_get()).toBe(undefined);
+        expect(value.peek()).toBe(undefined);
       });
 
       it('should have initial default value if config options is undefined', () => {
@@ -323,7 +322,7 @@ describe('oneWay', () => {
 
         const value = optionsController.oneWay('value.valueA');
 
-        expect(value.unreactive_get()).toBe((mixedComplexOptions.value as any).valueA);
+        expect(value.peek()).toBe((mixedComplexOptions.value as any).valueA);
       });
     });
 
@@ -333,7 +332,7 @@ describe('oneWay', () => {
 
         const value = optionsController.oneWay('value');
 
-        expect(value.unreactive_get()).toStrictEqual(mixedComplexOptions.value);
+        expect(value.peek()).toStrictEqual(mixedComplexOptions.value);
       });
 
       it('should have initial default value if config options is undefined', () => {
@@ -341,7 +340,7 @@ describe('oneWay', () => {
 
         const value = optionsController.oneWay('value');
 
-        expect(value.unreactive_get()).toBe(mixedPlainOptions.value);
+        expect(value.peek()).toBe(mixedPlainOptions.value);
       });
     });
   });
@@ -354,7 +353,7 @@ describe('oneWay', () => {
         const value = optionsController.oneWay('value');
         component.option('value', 'newValue');
 
-        expect(value.unreactive_get()).toBe('newValue');
+        expect(value.peek()).toBe('newValue');
       });
 
       it('should update boolean plain option on option changed', () => {
@@ -363,7 +362,7 @@ describe('oneWay', () => {
         const value = optionsController.oneWay('value');
         component.option('value', false);
 
-        expect(value.unreactive_get()).toBe(false);
+        expect(value.peek()).toBe(false);
       });
 
       it('should update to default value if updated to undefined', () => {
@@ -372,7 +371,7 @@ describe('oneWay', () => {
         const value = optionsController.oneWay('value');
         component.option('value', undefined);
 
-        expect(value.unreactive_get()).toBe(defaultPlainOptions.value);
+        expect(value.peek()).toBe(defaultPlainOptions.value);
       });
 
       it('should update initial undefined value to updated value', () => {
@@ -381,7 +380,7 @@ describe('oneWay', () => {
         const value = optionsController.oneWay('optionalValue');
         component.option('optionalValue', 'newValue');
 
-        expect(value.unreactive_get()).toBe('newValue');
+        expect(value.peek()).toBe('newValue');
       });
     });
 
@@ -395,7 +394,7 @@ describe('oneWay', () => {
         const value = optionsController.oneWay('nested.value');
         component.option('nested.value', 'newValue');
 
-        expect(value.unreactive_get()).toBe('newValue');
+        expect(value.peek()).toBe('newValue');
       });
 
       it('should update on parent option changed', () => {
@@ -407,7 +406,7 @@ describe('oneWay', () => {
         const value = optionsController.oneWay('nested.value');
         component.option('nested', { value: 'newValue' });
 
-        expect(value.unreactive_get()).toBe('newValue');
+        expect(value.peek()).toBe('newValue');
       });
 
       it('should update to default value if updated to undefined', () => {
@@ -419,7 +418,7 @@ describe('oneWay', () => {
         const value = optionsController.oneWay('nested.value');
         component.option('nested.value', undefined);
 
-        expect(value.unreactive_get()).toBe(defaultNestedPlainOptions.nested?.value);
+        expect(value.peek()).toBe(defaultNestedPlainOptions.nested?.value);
       });
 
       it('should update to default value if parent option updated to undefined', () => {
@@ -431,7 +430,7 @@ describe('oneWay', () => {
         const value = optionsController.oneWay('nested.value');
         component.option('nested', undefined);
 
-        expect(value.unreactive_get()).toBe(defaultNestedPlainOptions.nested?.value);
+        expect(value.peek()).toBe(defaultNestedPlainOptions.nested?.value);
       });
 
       it('should update initial undefined value to updated value', () => {
@@ -443,7 +442,7 @@ describe('oneWay', () => {
         const value = optionsController.oneWay('nested.optionalValue');
         component.option('nested.optionalValue', 'newValue');
 
-        expect(value.unreactive_get()).toBe('newValue');
+        expect(value.peek()).toBe('newValue');
       });
 
       it('should update initial undefined value to updated value on parent option update', () => {
@@ -455,7 +454,7 @@ describe('oneWay', () => {
         const value = optionsController.oneWay('nested.optionalValue');
         component.option('nested', { optionalValue: 'newValue' });
 
-        expect(value.unreactive_get()).toBe('newValue');
+        expect(value.peek()).toBe('newValue');
       });
     });
 
@@ -470,7 +469,7 @@ describe('oneWay', () => {
         const value = optionsController.oneWay('nested');
         component.option('nested', updatedOptions);
 
-        expect(value.unreactive_get()).toStrictEqual(updatedOptions);
+        expect(value.peek()).toStrictEqual(updatedOptions);
       });
 
       it('should update on child option changed', () => {
@@ -482,7 +481,7 @@ describe('oneWay', () => {
         const value = optionsController.oneWay('nested');
         component.option('nested.value', 'newValue');
 
-        expect(value.unreactive_get()).toStrictEqual({ value: 'newValue' });
+        expect(value.peek()).toStrictEqual({ value: 'newValue' });
       });
 
       it('should update to default value if updated to undefined', () => {
@@ -494,7 +493,7 @@ describe('oneWay', () => {
         const value = optionsController.oneWay('nested');
         component.option('nested', undefined);
 
-        expect(value.unreactive_get()).toStrictEqual(defaultNestedPlainOptions.nested);
+        expect(value.peek()).toStrictEqual(defaultNestedPlainOptions.nested);
       });
     });
 
@@ -505,7 +504,7 @@ describe('oneWay', () => {
         const value = optionsController.oneWay('value');
         component.option('value', ['F', 'E']);
 
-        expect(value.unreactive_get()).toStrictEqual(['F', 'E']);
+        expect(value.peek()).toStrictEqual(['F', 'E']);
       });
 
       it('should update on array element option changed', () => {
@@ -514,7 +513,7 @@ describe('oneWay', () => {
         const value = optionsController.oneWay('value');
         component.option('value[0]', 'F');
 
-        expect(value.unreactive_get()).toStrictEqual(['F', 'B', 'C']);
+        expect(value.peek()).toStrictEqual(['F', 'B', 'C']);
       });
 
       it('should update on array element child option changed', () => {
@@ -526,7 +525,7 @@ describe('oneWay', () => {
         const value = optionsController.oneWay('value');
         component.option('value[0].A', 'F');
 
-        expect(value.unreactive_get()).toStrictEqual([{ A: 'F', B: 'B_0' }, { A: 'A_1', B: 'B_1' }]);
+        expect(value.peek()).toStrictEqual([{ A: 'F', B: 'B_0' }, { A: 'A_1', B: 'B_1' }]);
       });
 
       it('should update to default value if updated to undefined', () => {
@@ -535,7 +534,7 @@ describe('oneWay', () => {
         const value = optionsController.oneWay('value');
         component.option('value', undefined);
 
-        expect(value.unreactive_get()).toStrictEqual(defaultArrayOptions.value);
+        expect(value.peek()).toStrictEqual(defaultArrayOptions.value);
       });
 
       it('should update initial undefined value to updated value', () => {
@@ -544,7 +543,7 @@ describe('oneWay', () => {
         const value = optionsController.oneWay('optionalValue');
         component.option('optionalValue', ['F', 'E']);
 
-        expect(value.unreactive_get()).toStrictEqual(['F', 'E']);
+        expect(value.peek()).toStrictEqual(['F', 'E']);
       });
     });
 
@@ -556,7 +555,7 @@ describe('oneWay', () => {
         // eslint-disable-next-line prefer-arrow-callback
         component.option('value', function newFn() {});
 
-        expect(value.unreactive_get()?.name).toBe('newFn');
+        expect(value.peek()?.name).toBe('newFn');
       });
 
       it('should update to default value if updated to undefined', () => {
@@ -565,7 +564,7 @@ describe('oneWay', () => {
         const value = optionsController.oneWay('value');
         component.option('value', undefined);
 
-        expect(value.unreactive_get()?.name).toBe(defaultFunctionOptions.value?.name);
+        expect(value.peek()?.name).toBe(defaultFunctionOptions.value?.name);
       });
 
       it('should update initial undefined value to updated value', () => {
@@ -575,7 +574,7 @@ describe('oneWay', () => {
         // eslint-disable-next-line prefer-arrow-callback
         component.option('optionalValue', function newFn() {});
 
-        expect(value.unreactive_get()?.name).toBe('newFn');
+        expect(value.peek()?.name).toBe('newFn');
       });
     });
 
@@ -589,7 +588,7 @@ describe('oneWay', () => {
         const value = optionsController.oneWay('value.valueA');
         component.option('value.valueA', 'newValue');
 
-        expect(value.unreactive_get()).toBe('newValue');
+        expect(value.peek()).toBe('newValue');
       });
 
       it('should update to default value if updated to undefined', () => {
@@ -601,7 +600,7 @@ describe('oneWay', () => {
         const value = optionsController.oneWay('value.valueA');
         component.option('value.valueA', undefined);
 
-        expect(value.unreactive_get()).toBe((mixedComplexOptions.value as any)?.valueA);
+        expect(value.peek()).toBe((mixedComplexOptions.value as any)?.valueA);
       });
 
       it('should update to undefined if parent option update to plain one', () => {
@@ -613,7 +612,7 @@ describe('oneWay', () => {
         const value = optionsController.oneWay('value.valueA');
         component.option('value', 'plain');
 
-        expect(value.unreactive_get()).toBe(undefined);
+        expect(value.peek()).toBe(undefined);
       });
 
       it('should update to default value if parent updated to undefined', () => {
@@ -625,7 +624,7 @@ describe('oneWay', () => {
         const value = optionsController.oneWay('value.valueA');
         component.option('value', undefined);
 
-        expect(value.unreactive_get()).toBe((mixedComplexOptions.value as any)?.valueA);
+        expect(value.peek()).toBe((mixedComplexOptions.value as any)?.valueA);
       });
 
       it('should update to undefined if default value is plain', () => {
@@ -637,7 +636,7 @@ describe('oneWay', () => {
         const value = optionsController.oneWay('value.valueA');
         component.option('value', undefined);
 
-        expect(value.unreactive_get()).toBe(undefined);
+        expect(value.peek()).toBe(undefined);
       });
     });
 
@@ -651,7 +650,7 @@ describe('oneWay', () => {
         const value = optionsController.oneWay('value');
         component.option('value', { valueA: '1', valueB: '2' });
 
-        expect(value.unreactive_get()).toStrictEqual({ valueA: '1', valueB: '2' });
+        expect(value.peek()).toStrictEqual({ valueA: '1', valueB: '2' });
       });
 
       it('should update on option changed to plain', () => {
@@ -663,7 +662,7 @@ describe('oneWay', () => {
         const value = optionsController.oneWay('value');
         component.option('value', 'newValue');
 
-        expect(value.unreactive_get()).toBe('newValue');
+        expect(value.peek()).toBe('newValue');
       });
 
       it('should update on child option changed', () => {
@@ -675,7 +674,7 @@ describe('oneWay', () => {
         const value = optionsController.oneWay('value');
         component.option('value.valueA', 'newValue');
 
-        expect(value.unreactive_get()).toStrictEqual({ valueA: 'newValue', valueB: 'B' });
+        expect(value.peek()).toStrictEqual({ valueA: 'newValue', valueB: 'B' });
       });
 
       it('should update to default value if updated to undefined', () => {
@@ -687,7 +686,7 @@ describe('oneWay', () => {
         const value = optionsController.oneWay('value');
         component.option('value', undefined);
 
-        expect(value.unreactive_get()).toStrictEqual(mixedPlainOptions.value);
+        expect(value.peek()).toStrictEqual(mixedPlainOptions.value);
       });
     });
   });
@@ -725,7 +724,7 @@ describe('twoWay', () => {
     const { optionsController } = setup(testOptions, defaultTestOptions);
 
     const value = optionsController.twoWay('value');
-    expect(value.unreactive_get()).toBe('initialValue');
+    expect(value.value).toBe('initialValue');
   });
 
   it('should update on options changed', () => {
@@ -745,16 +744,16 @@ describe('twoWay', () => {
     const { optionsController } = setup(testOptions, defaultTestOptions);
 
     const value = optionsController.twoWay('value');
-    value.update('newValue');
+    value.value = 'newValue';
 
-    expect(value.unreactive_get()).toBe('newValue');
+    expect(value.value).toBe('newValue');
   });
 
   it('should call optionChanged on update', () => {
     const { component, optionsController } = setup(testOptions, defaultTestOptions);
 
     const value = optionsController.twoWay('value');
-    value.update('newValue');
+    value.value = 'newValue';
 
     expect(testOptions.onOptionChanged).toHaveBeenCalledTimes(1);
     expect(testOptions.onOptionChanged).toHaveBeenCalledWith({

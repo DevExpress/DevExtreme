@@ -5,9 +5,7 @@
 */
 import { compileGetter } from '@js/core/utils/data';
 import { isDefined } from '@js/core/utils/type';
-import {
-  combined, computed, effect, state,
-} from '@ts/core/reactive/index';
+import { computed, effect, signal } from '@preact/signals-core';
 import type { OptionsController } from '@ts/grids/new/card_view/options_controller';
 import type { DataRow } from '@ts/grids/new/grid_core/columns_controller/types';
 import {
@@ -27,10 +25,17 @@ export class ContentView extends ContentViewBase<ContentViewProps> {
 
   private readonly cardMinWidth = this.options.oneWay('cardMinWidth');
 
-  private readonly rowHeight = state(0);
+  private readonly rowHeight = signal(0);
+
+  private readonly cardsPerRowProp = this.options.oneWay('cardsPerRow');
 
   private readonly cardsPerRow = computed(
-    (width, cardMinWidth, pageSize, cardsPerRowProp) => {
+    () => {
+      const width = this.width.value;
+      const cardMinWidth = this.cardMinWidth.value;
+      const pageSize = this.dataController.pageSize.value;
+      const cardsPerRowProp = this.cardsPerRowProp.value;
+
       if (cardsPerRowProp !== 'auto') {
         return cardsPerRowProp;
       }
@@ -43,11 +48,10 @@ export class ContentView extends ContentViewBase<ContentViewProps> {
 
       return result ?? 1;
     },
-    [this.width, this.cardMinWidth, this.dataController.pageSize, this.options.oneWay('cardsPerRow')],
   );
 
   protected readonly navigationStrategy = new NavigationStrategyMatrix(
-    this.cardsPerRow.unreactive_get(),
+    this.cardsPerRow.peek(),
   );
 
   protected override component = ContentViewComponent;
@@ -56,39 +60,39 @@ export class ContentView extends ContentViewBase<ContentViewProps> {
     // @ts-expect-error
     super(...args);
 
-    effect((cardsPerRow) => {
-      this.navigationStrategy.updateColumnsCount(cardsPerRow);
-    }, [this.cardsPerRow]);
+    effect(() => {
+      this.navigationStrategy.updateColumnsCount(this.cardsPerRow.value);
+    });
   }
 
   protected override getProps() {
-    return combined({
+    return computed(() => ({
       ...this.getBaseProps(),
-      contentProps: combined({
-        items: this.itemsController.items,
-        kbnEnabled: this.keyboardNavigationController.enabled,
+      contentProps: {
+        items: this.itemsController.items.value,
+        kbnEnabled: this.keyboardNavigationController.enabled.value,
         navigationStrategy: this.navigationStrategy,
-        isLoading: this.dataController.isReloading,
-        needToHiddenCheckBoxes: this.selectionController.needToHiddenCheckBoxes,
-        fieldTemplate: this.options.template('fieldTemplate'),
-        cardsPerRow: this.cardsPerRow,
-        onRowHeightChange: this.rowHeight.update.bind(this.rowHeight),
+        isLoading: this.dataController.isReloading.value,
+        needToHiddenCheckBoxes: this.selectionController.needToHiddenCheckBoxes.value,
+        fieldTemplate: this.options.template('fieldTemplate').value,
+        cardsPerRow: this.cardsPerRow.value,
+        onRowHeightChange: (height) => { this.rowHeight.value = height; },
         onFirstElementChange: (firstElement: HTMLDivElement | undefined): void => {
           this.keyboardNavigationController.setFirstCardElement(firstElement);
         },
         onPageChange: this.onPageChange.bind(this),
         showContextMenu: this.showContextMenu.bind(this),
-        wordWrapEnabled: this.options.oneWay('wordWrapEnabled'),
-        cardProps: combined({
-          minWidth: this.cardMinWidth,
-          maxWidth: this.options.oneWay('cardMaxWidth'),
-          isCheckBoxesRendered: this.selectionController.isCheckBoxesRendered,
-          allowSelectOnClick: this.selectionController.allowSelectOnClick,
+        wordWrapEnabled: this.options.oneWay('wordWrapEnabled').value,
+        cardProps: {
+          minWidth: this.cardMinWidth.value,
+          maxWidth: this.options.oneWay('cardMaxWidth').value,
+          isCheckBoxesRendered: this.selectionController.isCheckBoxesRendered.value,
+          allowSelectOnClick: this.selectionController.allowSelectOnClick.value,
           onHold: this.onCardHold.bind(this),
-          onClick: this.options.action('onCardClick'),
-          onDblClick: this.options.action('onCardDblClick'),
-          onHoverChanged: this.options.action('onCardHoverChanged'),
-          onPrepared: this.options.action('onCardPrepared'),
+          onClick: this.options.action('onCardClick').value,
+          onDblClick: this.options.action('onCardDblClick').value,
+          onHoverChanged: this.options.action('onCardHoverChanged').value,
+          onPrepared: this.options.action('onCardPrepared').value,
           onEdit: (key: Key, returnFocusTo?: HTMLElement) => {
             this.keyboardNavigationController.setReturnFocusTo(returnFocusTo);
             this.editingController.editRow(key);
@@ -98,23 +102,21 @@ export class ContentView extends ContentViewBase<ContentViewProps> {
             // eslint-disable-next-line @typescript-eslint/no-floating-promises
             this.editingController.deleteRow(key);
           },
-          allowUpdating: this.editingController.allowUpdating,
-          allowDeleting: this.editingController.allowDeleting,
-          footerTemplate: this.options.template('cardFooterTemplate'),
-          cover: combined({
-            imageExpr: computed(
-              (imageExpr) => this.processExpr(imageExpr),
-              [this.options.oneWay('cardCover.imageExpr')],
+          allowUpdating: this.editingController.allowUpdating.value,
+          allowDeleting: this.editingController.allowDeleting.value,
+          footerTemplate: this.options.template('cardFooterTemplate').value,
+          cover: {
+            imageExpr: this.processExpr(
+              this.options.oneWay('cardCover.imageExpr').value,
             ),
-            altExpr: computed(
-              (altExpr) => this.processExpr(altExpr),
-              [this.options.oneWay('cardCover.altExpr')],
+            altExpr: this.processExpr(
+              this.options.oneWay('cardCover.altExpr').value,
             ),
-            maxHeight: this.options.oneWay('cardCover.maxHeight'),
-            ratio: this.options.oneWay('cardCover.ratio'),
-          }),
+            maxHeight: this.options.oneWay('cardCover.maxHeight').value,
+            ratio: this.options.oneWay('cardCover.ratio').value,
+          },
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          toolbar: this.options.oneWay('cardHeader.items') as any,
+          toolbar: this.options.oneWay('cardHeader.items').value as any,
           selectCard: this.selectCard.bind(this),
           onSelectAllCards: this.onSelectAllCards.bind(this),
           onSearchFocus: () => {
@@ -123,9 +125,9 @@ export class ContentView extends ContentViewBase<ContentViewProps> {
           onFocusedCardChanged: (card: DataRow, cardIdx: number, element: HTMLElement) => {
             this.keyboardNavigationController.onFocusedCardChanged(card, cardIdx, element);
           },
-        }),
-      }),
-    });
+        },
+      },
+    }));
   }
 
   private processExpr<T>(

@@ -1,6 +1,5 @@
 import type { Item as TreeViewItemProperties, SelectionChangedEvent } from '@js/ui/tree_view';
-import type { SubsGets } from '@ts/core/reactive/index';
-import { computed } from '@ts/core/reactive/index';
+import { computed, type ReadonlySignal } from '@preact/signals-core';
 import { sortColumns } from '@ts/grids/grid_core/columns_controller/m_columns_controller_utils';
 
 import { ColumnsController } from '../columns_controller/columns_controller';
@@ -11,17 +10,19 @@ import { OptionsController } from '../options_controller/options_controller';
 export class ColumnChooserController {
   public static dependencies = [ColumnsController, OptionsController] as const;
 
-  public readonly chooserColumns: SubsGets<Column[]>;
+  public readonly chooserColumns: ReadonlySignal<Column[]>;
 
-  public readonly items: SubsGets<TreeViewItemProperties[]>;
+  public readonly items: ReadonlySignal<TreeViewItemProperties[]>;
 
   constructor(
     private readonly columnsController: ColumnsController,
     private readonly options: OptionsController,
   ) {
     this.chooserColumns = computed(
-      (columns, sortOrder, mode) => {
-        let chooserColumns = columns;
+      () => {
+        const sortOrder = this.options.oneWay('columnChooser.sortOrder').value;
+        const mode = this.options.oneWay('columnChooser.mode').value;
+        let chooserColumns = this.columnsController.columns.value;
 
         if (mode === 'dragAndDrop') {
           chooserColumns = chooserColumns.filter((column) => !column.visible);
@@ -32,15 +33,10 @@ export class ColumnChooserController {
 
         return chooserColumns;
       },
-      [
-        this.columnsController.columns,
-        this.options.oneWay('columnChooser.sortOrder'),
-        this.options.oneWay('columnChooser.mode'),
-      ],
     );
 
     this.items = computed(
-      (chooserColumns) => chooserColumns.map((column, index) => ({
+      () => this.chooserColumns.value.map((column, index) => ({
         id: index,
         columnName: column.name,
         selected: column.visible,
@@ -48,7 +44,6 @@ export class ColumnChooserController {
         disabled: !column.allowHiding,
         column,
       }) as TreeViewItemProperties),
-      [this.chooserColumns],
     );
   }
 

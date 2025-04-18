@@ -1,5 +1,5 @@
 import dxTreeView from '@js/ui/tree_view';
-import { effect } from '@ts/core/reactive';
+import { effect } from '@preact/signals-core';
 
 import type { ColumnsController } from '../columns_controller';
 import type { OptionsController } from '../options_controller/options_controller';
@@ -22,8 +22,8 @@ export class ColumnChooserControllerMock extends ColumnChooserController {
       onSelectionChanged: this.onSelectionChanged.bind(this),
     });
 
-    effect((items) => {
-      this.treeView.option('items', items);
-    }, [this.items]);
+    effect(() => {
+      this.treeView.option('items', this.items.value);
+    });
   }
 }

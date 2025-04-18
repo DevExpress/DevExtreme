@@ -4,7 +4,7 @@
 */
 import type dxScrollable from '@js/ui/scroll_view/ui.scrollable';
 import type { ScrollEventInfo } from '@js/ui/scroll_view/ui.scrollable';
-import { combined, computed, state } from '@ts/core/reactive/index';
+import { computed, signal } from '@preact/signals-core';
 import { ContextMenuController } from '@ts/grids/new/card_view/context_menu/index';
 import { ColumnsController } from '@ts/grids/new/grid_core/columns_controller/columns_controller';
 import { View } from '@ts/grids/new/grid_core/core/view';
@@ -21,19 +21,19 @@ import { OptionsController } from '../options_controller/options_controller';
 
 export abstract class ContentView<TProps extends {}> extends View<TProps> {
   private readonly isNoData = computed(
-    (isLoading, items) => !isLoading && items.length === 0,
-    [this.dataController.isLoading, this.dataController.items],
+    () => !this.dataController.isLoading.value
+      && this.dataController.items.value.length === 0,
   );
 
   public readonly scrollableRef = createRef<dxScrollable>();
 
   public loadingText = this.options.twoWay('loadPanel.message');
 
-  protected readonly viewportHeight = state(0);
+  protected readonly viewportHeight = signal(0);
 
-  protected readonly scrollTop = state(0);
+  protected readonly scrollTop = signal(0);
 
-  protected readonly width = state(0);
+  protected readonly width = signal(0);
 
   public static dependencies = [
     DataController,
@@ -64,45 +64,49 @@ export abstract class ContentView<TProps extends {}> extends View<TProps> {
   }
 
   protected getBaseProps() {
+    const loadPanelConfig = this.options.oneWay('loadPanel');
+    const noDataTextConfig = this.options.oneWay('noDataText');
+    const noDataTemplateConfig = this.options.template('noDataTemplate');
+    const errorRowEnabledConfig = this.options.oneWay('errorRowEnabled');
+    const scrollByContent = this.options.oneWay('scrolling.scrollByContent');
+    const scrollByThumb = this.options.oneWay('scrolling.scrollByThumb');
+    const showScrollbar = this.options.oneWay('scrolling.showScrollbar');
+    const useNativeConfig = this.options.oneWay('scrolling.useNative');
+
     return {
-      loadPanelProps: computed(
-        (visible, loadPanel) => ({
-          ...loadPanel,
-          visible,
-        }),
-        [
-          this.dataController.isLoading,
-          this.options.oneWay('loadPanel'),
-        ],
-      ),
-      noDataTextProps: combined({
-        text: this.options.oneWay('noDataText'),
-        template: this.options.template('noDataTemplate'),
-        visible: this.isNoData,
-      }),
-      errorRowProps: combined({
-        enabled: this.options.oneWay('errorRowEnabled'),
-        errors: this.errorController.errors,
-      }),
-      onWidthChange: this.width.update.bind(this.width),
-      onViewportHeightChange: this.viewportHeight.update.bind(this.viewportHeight),
+      loadPanelProps: {
+        ...loadPanelConfig.value,
+        visible: this.dataController.isLoading.value,
+      },
+      noDataTextProps: {
+        text: noDataTextConfig.value,
+        template: noDataTemplateConfig.value,
+        visible: this.isNoData.value,
+      },
+      errorRowProps: {
+        enabled: errorRowEnabledConfig.value,
+        errors: this.errorController.errors.value,
+      },
+      onWidthChange: (width: number): void => {
+        this.width.value = width;
+      },
+      onViewportHeightChange: (height: number) => {
+        this.viewportHeight.value = height;
+      },
       scrollableRef: this.scrollableRef,
-      scrollableProps: combined({
+      scrollableProps: {
         onScroll: this.onScroll.bind(this),
         direction: 'both' as const,
-        scrollTop: this.scrollTop,
-        scrollByContent: this.options.oneWay('scrolling.scrollByContent'),
-        scrollByThumb: this.options.oneWay('scrolling.scrollByThumb'),
-        showScrollbar: this.options.oneWay('scrolling.showScrollbar'),
-        useNative: computed(
-          (useNative) => (useNative === 'auto' ? undefined : useNative),
-          [this.options.oneWay('scrolling.useNative')],
-        ),
-      }),
+        scrollTop: this.scrollTop.value,
+        scrollByContent: scrollByContent.value,
+        scrollByThumb: scrollByThumb.value,
+        showScrollbar: showScrollbar.value,
+        useNative: useNativeConfig.value === 'auto' ? undefined : useNativeConfig.value,
+      },
     };
   }
 
   private onScroll(e: ScrollEventInfo<unknown>): void {
-    this.scrollTop.update(e.scrollOffset.top);
+    this.scrollTop.value = e.scrollOffset.top;
   }
 }
