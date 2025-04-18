@@ -323,6 +323,7 @@ class Tabs extends CollectionWidget<TabsProperties> {
       }
 
       const scrollable = this.getScrollable();
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
       scrollable?.update();
 
       if (this.option('rtlEnabled')) {
@@ -576,6 +577,7 @@ class Tabs extends CollectionWidget<TabsProperties> {
   }
 
   _updateScrollPosition(offset: number, duration: number): void {
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     this._scrollable?.update();
     this._scrollable?.scrollBy(offset / duration);
   }
@@ -659,6 +661,7 @@ class Tabs extends CollectionWidget<TabsProperties> {
       return;
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     super._itemSelectHandler(e);
   }
 
@@ -775,6 +778,7 @@ class Tabs extends CollectionWidget<TabsProperties> {
     // @ts-expect-error ts-error
     const prevItemIndex = currentIndex - 1;
     // @ts-expect-error ts-error
+    // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
     const nextItemIndex = currentIndex + 1;
 
     const nextFocusedIndex = $(value).index();
