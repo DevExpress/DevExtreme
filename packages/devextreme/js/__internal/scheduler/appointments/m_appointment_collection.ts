@@ -30,7 +30,6 @@ import { createAppointmentAdapter } from '../m_appointment_adapter';
 import { APPOINTMENT_CONTENT_CLASSES, APPOINTMENT_DRAG_SOURCE_CLASS, APPOINTMENT_ITEM_CLASS } from '../m_classes';
 import { getRecurrenceProcessor } from '../m_recurrence';
 import timeZoneUtils from '../m_utils_time_zone';
-import { getPathToLeaf } from '../resources/m_utils';
 import type { AppointmentViewModel } from '../types';
 import type { AppointmentDataAccessor } from '../utils';
 import { AgendaAppointment } from './appointment/agenda_appointment';
@@ -433,6 +432,11 @@ class SchedulerAppointments extends CollectionWidget {
       ? createAgendaAppointmentLayout(formatText, config)
       : createAppointmentLayout(formatText, config));
 
+    $container.parent().prepend(
+      $('<span>')
+        .addClass(APPOINTMENT_CONTENT_CLASSES.ARIA_DESCRIPTION)
+        .attr('hidden', true),
+    );
     if (!this.isAgendaView) {
       $container.parent().prepend(
         $('<div>').addClass(APPOINTMENT_CONTENT_CLASSES.STRIP),
@@ -564,20 +568,6 @@ class SchedulerAppointments extends CollectionWidget {
     this._renderAppointment(args.itemElement, this._currentAppointmentSettings);
   }
 
-  _getGroupTexts(groupIndex, loadedResources) {
-    if (!loadedResources?.length) {
-      return [];
-    }
-    const idPath = getPathToLeaf(groupIndex, loadedResources);
-    const textPath = idPath.map(
-      (id, index) => loadedResources[index].items
-        .find(
-          (item) => item.id === id,
-        ).text,
-    );
-    return textPath;
-  }
-
   _renderAppointment(element, settings) {
     element.data(APPOINTMENT_SETTINGS_KEY, settings);
 
@@ -603,7 +593,6 @@ class SchedulerAppointments extends CollectionWidget {
       const config: any = {
         data: rawAppointment,
         groupIndex: settings.groupIndex,
-        groupTexts: this._getGroupTexts(settings.groupIndex, this.option('getLoadedResources')()),
         observer: this.option('observer'),
         geometry,
         direction: settings.direction || 'vertical',
@@ -620,20 +609,19 @@ class SchedulerAppointments extends CollectionWidget {
         partIndex: settings.partIndex,
         partTotalCount: settings.partTotalCount,
 
+        dataAccessors: this.dataAccessors,
+        timeZoneCalculator: this.option('timeZoneCalculator'),
+        getLoadedResources: this.option('getLoadedResources'),
         getAppointmentColor: this.option('getAppointmentColor'),
         getResourceDataAccessors: this.option('getResourceDataAccessors'),
         getResourceProcessor: this.option('getResourceProcessor'),
-        timeZoneCalculator: this.option('timeZoneCalculator'),
+        getResizableStep: this.option('getResizableStep'),
       };
 
       (this as any)._createComponent(
         element,
         this.isAgendaView ? AgendaAppointment : Appointment,
-        {
-          ...config,
-          dataAccessors: this.dataAccessors,
-          getResizableStep: this.option('getResizableStep'),
-        },
+        config,
       );
     }
   }

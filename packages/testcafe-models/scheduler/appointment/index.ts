@@ -115,4 +115,20 @@ export default class Appointment {
   getRecurrenceElement(): Selector {
     return this.element.find(`.${CLASS.appoinmentRecurrenceIcon}`);
   }
+
+  getAriaLabel(): Promise<string | null> {
+    return this.element.getAttribute('aria-label');
+  }
+
+  async hasAriaDescription(): Promise<boolean> {
+    const id = await this.element.getAttribute('aria-describedby');
+
+    return Boolean(id);
+  }
+
+  async getAriaDescription(): Promise<string> {
+    const id = await this.element.getAttribute('aria-describedby');
+
+    return this.element.find(`#${id}`).innerText;
+  }
 }

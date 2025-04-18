@@ -1,6 +1,5 @@
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
-import type { ResourceProcessor } from '@ts/scheduler/resources/resource_processor';
 
 import {
   APPOINTMENT_CONTENT_CLASSES,
@@ -12,17 +11,13 @@ export class AgendaAppointment extends Appointment {
     return this.$element().find(`.${APPOINTMENT_CONTENT_CLASSES.AGENDA_MARKER}`);
   }
 
-  get resourceProcessor(): ResourceProcessor {
-    const getResourceProcessor = this.option('getResourceProcessor') as () => ResourceProcessor;
-    return getResourceProcessor();
-  }
-
   _renderResourceList(): void {
+    const parent = this.$element().find(`.${APPOINTMENT_CONTENT_CLASSES.APPOINTMENT_CONTENT_DETAILS}`);
+
     // eslint-disable-next-line no-void
     void this.resourceProcessor
       .getAppointmentResourcesValues(this.rawAppointment)
       .then((list) => {
-        const parent = this.$element().find(`.${APPOINTMENT_CONTENT_CLASSES.APPOINTMENT_CONTENT_DETAILS}`);
         const container = $('<div>')
           .addClass(APPOINTMENT_CONTENT_CLASSES.AGENDA_RESOURCE_LIST)
           .appendTo(parent);
