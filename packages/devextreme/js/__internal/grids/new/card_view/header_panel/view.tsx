@@ -1,6 +1,5 @@
 /* eslint-disable spellcheck/spell-checker */
-import type { SubsGets } from '@ts/core/reactive/index';
-import { combined } from '@ts/core/reactive/index';
+import { computed, type ReadonlySignal } from '@preact/signals-core';
 import { ColumnsController } from '@ts/grids/new/grid_core/columns_controller/columns_controller';
 import { View } from '@ts/grids/new/grid_core/core/view';
 import { KeyboardNavigationController, NavigationStrategyHorizontalList } from '@ts/grids/new/grid_core/keyboard_navigation/index';
@@ -42,25 +41,25 @@ export class HeaderPanelView extends View<HeaderPanelProps> {
     super();
   }
 
-  protected override getProps(): SubsGets<HeaderPanelProps> {
-    return combined({
-      visibleColumns: this.columnsController.visibleColumns,
-      kbnEnabled: this.keyboardNavigationController.enabled,
+  protected override getProps(): ReadonlySignal<HeaderPanelProps> {
+    return computed(() => ({
+      visibleColumns: this.columnsController.visibleColumns.value,
+      kbnEnabled: this.keyboardNavigationController.enabled.value,
       navigationStrategy: this.navigationStrategy,
       onColumnMove: this.onColumnMove.bind(this),
-      allowColumnReordering: this.columnsController.allowColumnReordering,
-      columnChooserDragModeOpened: this.columnChooserView.dragModeOpened,
-      showSortIndexes: this.sortingController.showSortIndexes,
+      allowColumnReordering: this.columnsController.allowColumnReordering.value,
+      columnChooserDragModeOpened: this.columnChooserView.dragModeOpened.value,
+      showSortIndexes: this.sortingController.showSortIndexes.value,
       onColumnSort: this.onColumnSort.bind(this),
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      itemTemplate: this.options.template('headerPanel.itemTemplate') as any,
+      itemTemplate: this.options.template('headerPanel.itemTemplate').value as any,
       onHeaderFilterOpen: this.onHeaderFilterOpen.bind(this),
-      itemCssClass: this.options.oneWay('headerPanel.itemCssClass'),
-      visible: this.options.oneWay('headerPanel.visible'),
+      itemCssClass: this.options.oneWay('headerPanel.itemCssClass').value,
+      visible: this.options.oneWay('headerPanel.visible').value,
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      draggingOptions: this.options.oneWay('headerPanel.dragging') as any,
+      draggingOptions: this.options.oneWay('headerPanel.dragging').value as any,
       showContextMenu: this.showContextMenu.bind(this),
-    });
+    }));
   }
 
   public onColumnMove(
@@ -77,7 +76,7 @@ export class HeaderPanelView extends View<HeaderPanelProps> {
     }
 
     if (columnAfter === undefined) {
-      const columnsCount = this.columnsController.columns.unreactive_get().length;
+      const columnsCount = this.columnsController.columns.peek().length;
 
       this.columnsController.columnOption(column, 'visible', true);
       this.columnsController.columnOption(column, 'visibleIndex', columnsCount);
@@ -106,7 +105,7 @@ export class HeaderPanelView extends View<HeaderPanelProps> {
   }
 
   public onColumnSort(column: Column, event: KeyboardEvent | MouseEvent): void {
-    const mode = this.sortingController.mode.unreactive_get();
+    const mode = this.sortingController.mode.peek();
     switch (mode) {
       case 'none':
         return;
