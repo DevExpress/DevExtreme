@@ -1,4 +1,3 @@
-/* eslint-disable spellcheck/spell-checker */
 import { ColumnsController } from './columns_controller';
 import type { Column } from './types';
 
@@ -10,10 +9,10 @@ export class CompatibilityColumnsController {
   ) {}
 
   public getColumns(): Column[] {
-    return this.realColumnsController.columns.unreactive_get();
+    return this.realColumnsController.columns.peek();
   }
 
   public getFilteringColumns(): Column[] {
-    return this.realColumnsController.columns.unreactive_get();
+    return this.realColumnsController.columns.peek();
   }
 }

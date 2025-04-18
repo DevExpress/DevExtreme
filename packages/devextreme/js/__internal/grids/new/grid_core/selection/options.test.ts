@@ -1,4 +1,3 @@
-/* eslint-disable spellcheck/spell-checker */
 import { describe, expect, it } from '@jest/globals';
 
 import { getContext } from '../di.test_utils';
@@ -90,7 +89,7 @@ describe('Options', () => {
             },
           });
 
-          expect(toolbarController.items.unreactive_get()).toMatchSnapshot();
+          expect(toolbarController.items.peek()).toMatchSnapshot();
         });
       });
 
@@ -107,7 +106,7 @@ describe('Options', () => {
             },
           });
 
-          expect(toolbarController.items.unreactive_get()).toMatchSnapshot();
+          expect(toolbarController.items.peek()).toMatchSnapshot();
         });
       });
 
@@ -124,7 +123,7 @@ describe('Options', () => {
             },
           });
 
-          expect(toolbarController.items.unreactive_get()).toMatchSnapshot();
+          expect(toolbarController.items.peek()).toMatchSnapshot();
         });
       });
     });

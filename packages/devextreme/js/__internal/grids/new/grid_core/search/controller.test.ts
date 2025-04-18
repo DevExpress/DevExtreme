@@ -1,4 +1,3 @@
-/* eslint-disable spellcheck/spell-checker */
 import {
   afterEach,
   describe, expect, it, jest,
@@ -36,7 +35,7 @@ describe('SearchController', () => {
         },
       });
 
-      const stateSlice = controller.highlightTextOptions.unreactive_get();
+      const stateSlice = controller.highlightTextOptions.peek();
 
       expect(stateSlice).toStrictEqual({
         enabled: true,

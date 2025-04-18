@@ -1,13 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
-/* eslint-disable spellcheck/spell-checker */
+
 import { Component } from '@js/core/component';
 import { getPathParts } from '@js/core/utils/data';
 import type { ChangedOptionInfo } from '@js/events';
-import type {
-  SubsGets, SubsGetsUpd,
-} from '@ts/core/reactive/index';
-import { computed, state } from '@ts/core/reactive/index';
+import type { ReadonlySignal, Signal } from '@preact/signals-core';
+import { computed, effect, signal } from '@preact/signals-core';
 import { extend } from '@ts/core/utils/m_extend';
 import type { ComponentType } from 'inferno';
 
@@ -20,17 +18,35 @@ import type {
 } from './types';
 import { getTreeNodeByPath, mergeOptionTrees } from './utils/index';
 
+function getOr<T>(cache: Record<string, T>, key: string, orElse: () => T): T {
+  if (cache[key]) {
+    return cache[key];
+  }
+
+  const value = orElse();
+
+  cache[key] = value;
+  return value;
+}
+
 export class OptionsController<
   TProps extends Record<string, any>,
   TDefaultProps extends TProps = TProps,
 > {
+  private readonly cache = {
+    oneWay: {},
+    twoWay: {},
+    action: {},
+    template: {},
+  };
+
   public static dependencies = [Component];
 
   protected defaults: TDefaultProps;
 
   private isControlledMode = false;
 
-  private readonly internalOptions: SubsGetsUpd<TProps>;
+  private readonly internalOptions: Signal<TProps>;
 
   constructor(
     private readonly component: Component<TProps>,
@@ -38,7 +54,7 @@ export class OptionsController<
     // @ts-expect-error
     this.defaults = component._getDefaultOptions?.() ?? {};
 
-    this.internalOptions = state(
+    this.internalOptions = signal(
       extend(true, {}, component.option()),
     );
 
@@ -57,47 +73,72 @@ export class OptionsController<
 
     const pathParts = getPathParts(fullName);
 
-    this.internalOptions.updateFunc((prevInternalOptions) => mergeOptionTrees(
-      prevInternalOptions,
+    this.internalOptions.value = mergeOptionTrees(
+      this.internalOptions.peek(),
       this.component.option(),
       this.defaults,
       pathParts,
-    ));
+    );
   }
 
   public oneWay<TProp extends string>(
     name: TProp,
-  ): SubsGets<PropertyWithDefaults<TProps, TDefaultProps, TProp>> {
-    const pathArray = getPathParts(name);
+  ): ReadonlySignal<PropertyWithDefaults<TProps, TDefaultProps, TProp>> {
+    return getOr(this.cache.oneWay, name, () => {
+      const pathArray = getPathParts(name);
 
-    return computed(
-      (props) => getTreeNodeByPath(props, pathArray),
-      [this.internalOptions],
-    ) as SubsGets<PropertyWithDefaults<TProps, TDefaultProps, TProp>>;
+      return computed(
+        () => getTreeNodeByPath(
+          this.internalOptions.value,
+          pathArray,
+        ),
+      );
+    });
   }
 
   public twoWay<TProp extends string>(
     name: TProp,
-  ): SubsGetsUpd<PropertyWithDefaults<TProps, TDefaultProps, TProp>> {
-    const obs = state(this.component.option(name));
-    this.oneWay(name).subscribe(obs.update.bind(obs) as any);
-    return {
-      subscribe: obs.subscribe.bind(obs) as any,
-      update: (value): void => {
-        const callbackName = `on${name}Change`;
-        const callback = this.component.option(callbackName) as any;
-        const isControlled = this.isControlledMode && this.component.option(name) !== undefined;
-        if (isControlled) {
-          callback?.(value);
-        } else {
-          // @ts-expect-error
-          this.component.option(name, value);
-          callback?.(value);
-        }
-      },
-      // @ts-expect-error
-      unreactive_get: obs.unreactive_get.bind(obs),
-    };
+  ): Signal<PropertyWithDefaults<TProps, TDefaultProps, TProp>> {
+    return getOr(this.cache.twoWay, name, () => {
+      // eslint-disable-next-line @typescript-eslint/no-this-alias
+      const that = this;
+      const obs = signal(this.component.option(name));
+      effect(() => {
+        obs.value = this.oneWay(name).value as any;
+      });
+      return {
+        get value(): any {
+          return obs.value;
+        },
+        set value(value: any) {
+          const callbackName = `on${name}Change`;
+          const callback = that.component.option(callbackName) as any;
+          const isControlled = that.isControlledMode && that.component.option(name) !== undefined;
+          if (isControlled) {
+            callback?.(value);
+          } else {
+            that.component.option(name, value);
+            callback?.(value);
+          }
+        },
+        peek(): any {
+          return obs.peek();
+        },
+        subscribe(...params: any): any {
+        // @ts-expect-error
+          return obs.subscribe(...params);
+        },
+        toJSON(...params: any[]): any {
+        // @ts-expect-error
+          return obs.toJSON(...params);
+        },
+        valueOf(...params: any[]): any {
+        // @ts-expect-error
+          return obs.valueOf(...params);
+        },
+        brand: obs.brand,
+      };
+    });
   }
 
   public normalizeTemplate<T>(template: Template<T>): ComponentType<T> {
@@ -107,21 +148,29 @@ export class OptionsController<
 
   public template<TProp extends string>(
     name: TProp,
-  ): SubsGets<TemplateProperty<TProps, TProp>> {
-    return computed(
-      // @ts-expect-error
-      (template) => template && this.normalizeTemplate(template) as any,
-      [this.oneWay(name)],
-    );
+  ): ReadonlySignal<TemplateProperty<TProps, TProp>> {
+    return getOr(this.cache.template, name, () => {
+      const templateOption = this.oneWay(name);
+      return computed(
+        // @ts-expect-error
+        () => templateOption.value && this.normalizeTemplate(templateOption.value) as any,
+      );
+    });
   }
 
   public action<TProp extends string>(
     name: TProp,
-  ): SubsGets<ActionProperty<TProps, TProp>> {
-    return computed(
-      // @ts-expect-error
-      () => this.component._createActionByOption(name) as any,
-      [this.oneWay(name)],
-    );
+  ): ReadonlySignal<ActionProperty<TProps, TProp>> {
+    return getOr(this.cache.action, name, () => {
+      const actionOption = this.oneWay(name);
+      return computed(
+        () => {
+          // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+          actionOption.value;
+          // @ts-expect-error
+          return this.component._createActionByOption(name) as any;
+        },
+      );
+    });
   }
 }

@@ -226,6 +226,10 @@ const transpileJsVendors = async() => {
         require.resolve('knockout/build/output/knockout-latest.debug.js'),
         path.join(root, 'artifacts/js-systemjs/knockout.js')
     );
+    await transpileFile(
+        path.join(root, 'node_modules/@preact/signals-core/dist/signals-core.js'),
+        path.join(root, 'artifacts/js-systemjs/preact-signals.js')
+    );
 
 
     [].concat(

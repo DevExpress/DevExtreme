@@ -1,4 +1,3 @@
-/* eslint-disable spellcheck/spell-checker */
 import { describe, expect, it } from '@jest/globals';
 
 import { ColumnsController } from '../columns_controller/columns_controller';
@@ -32,7 +31,7 @@ describe('ItemsController', () => {
         ],
       });
 
-      const columns = columnsController.columns.unreactive_get();
+      const columns = columnsController.columns.peek();
       const dataRow = itemsController.createDataRow(dataObject, columns, 0);
       expect(dataRow).toMatchSnapshot();
     });
@@ -48,7 +47,7 @@ describe('ItemsController', () => {
         ],
       });
 
-      const columns = columnsController.columns.unreactive_get();
+      const columns = columnsController.columns.peek();
       const dataRow = itemsController.createDataRow(dataObject, columns, 0, [1]);
       expect(dataRow).toMatchSnapshot();
     });
@@ -63,7 +62,7 @@ describe('ItemsController', () => {
 
       itemsController.setSelectionState([1]);
 
-      expect(itemsController.items).toMatchSnapshot();
+      expect(itemsController.items.peek()).toMatchSnapshot();
     });
   });
 });

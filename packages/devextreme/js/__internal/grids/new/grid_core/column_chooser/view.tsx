@@ -1,4 +1,3 @@
-/* eslint-disable spellcheck/spell-checker */
 import type { ColumnChooserMode } from '@js/common/grids';
 import type { DxElement } from '@js/core/element';
 import type { Properties as ButtonProperties } from '@js/ui/button';
@@ -7,10 +6,8 @@ import type dxPopup from '@js/ui/popup';
 import { current, isGeneric, isMaterial } from '@js/ui/themes';
 import type { Properties as TreeViewProperties } from '@js/ui/tree_view';
 import type dxTreeView from '@js/ui/tree_view';
-import type { MapMaybeSubscribable, SubsGets } from '@ts/core/reactive/index';
-import {
-  combined, computed, state,
-} from '@ts/core/reactive/index';
+import type { ReadonlySignal } from '@preact/signals-core';
+import { computed, signal } from '@preact/signals-core';
 import { createRef } from 'inferno';
 
 import { ColumnsController } from '../columns_controller/index';
@@ -26,17 +23,46 @@ import { ColumnChooserController } from './controller';
 export class ColumnChooserView extends View<ColumnChooserProps> {
   protected override component = ColumnChooser;
 
-  private readonly popupVisible = state(false);
+  private readonly popupVisible = signal(false);
 
   public readonly popupRef = createRef<dxPopup>();
 
   public readonly treeViewRef = createRef<dxTreeView>();
 
-  public readonly mode: SubsGets<ColumnChooserMode>;
+  public readonly mode: ReadonlySignal<ColumnChooserMode>;
 
-  public dragModeOpened: SubsGets<boolean>;
+  public dragModeOpened: ReadonlySignal<boolean>;
 
   private toolbarButtonElement: DxElement | undefined = undefined;
+
+  private readonly selectModeConfig: ReadonlySignal<TreeViewProperties> = computed(() => ({
+    showCheckBoxesMode: this.options.oneWay('columnChooser.selection.allowSelectAll').value
+      ? 'selectAll'
+      : 'normal',
+    selectByClick: this.options.oneWay('columnChooser.selection.selectByClick').value,
+    onSelectionChanged: this.columnChooserController.onSelectionChanged.bind(
+      this.columnChooserController,
+    ),
+  }));
+
+  private readonly dragAndDropModeConfig: ReadonlySignal<TreeViewProperties> = computed(() => ({
+    noDataText: this.options.oneWay('columnChooser.emptyPanelText').value,
+    activeStateEnabled: false,
+  }));
+
+  private readonly popupToolbarItems: ReadonlySignal<ToolbarItem[]> = computed(() => {
+    const title = this.options.oneWay('columnChooser.title').value;
+    const items = [
+      { text: title, toolbar: 'top', location: this.isMaterialOrGeneric() ? 'before' : 'center' },
+    ] as ToolbarItem[];
+
+    if (!this.isMaterialOrGeneric()) {
+      // @ts-expect-error
+      items.push({ shortcut: 'cancel' });
+    }
+
+    return items;
+  });
 
   public static dependencies = [
     ToolbarController, ColumnChooserController, ColumnsController, OptionsController,
@@ -53,12 +79,11 @@ export class ColumnChooserView extends View<ColumnChooserProps> {
     this.mode = this.options.oneWay('columnChooser.mode');
 
     this.dragModeOpened = computed(
-      (opened, mode) => opened && mode === 'dragAndDrop',
-      [this.popupVisible, this.mode],
+      () => this.popupVisible.value && this.mode.value === 'dragAndDrop',
     );
 
     this.toolbarController.addDefaultItem(
-      {
+      signal({
         name: 'columnChooserButton',
         widget: 'dxButton',
         options: {
@@ -66,7 +91,7 @@ export class ColumnChooserView extends View<ColumnChooserProps> {
           onContentReady: ({ element }) => {
             this.toolbarButtonElement = element;
           },
-          onClick: () => { this.popupVisible.update(true); },
+          onClick: () => { this.popupVisible.value = true; },
           elementAttr: {
             'aria-haspopup': 'dialog',
             class: addWidgetPrefix(CLASS.toolbarBtn),
@@ -76,13 +101,13 @@ export class ColumnChooserView extends View<ColumnChooserProps> {
         location: 'after',
         locateInMenu: 'auto',
         visible: true,
-      } as PredefinedToolbarItem,
+      } as PredefinedToolbarItem),
       this.options.oneWay('columnChooser.enabled'),
     );
   }
 
   public show(): void {
-    this.popupVisible.update(true);
+    this.popupVisible.value = true;
   }
 
   public hide(): void {
@@ -90,84 +115,46 @@ export class ColumnChooserView extends View<ColumnChooserProps> {
     this.popupRef.current?.hide();
   }
 
-  protected override getProps(): SubsGets<ColumnChooserProps> {
-    return combined({
+  protected override getProps(): ReadonlySignal<ColumnChooserProps> {
+    return computed(() => ({
       popupRef: this.popupRef,
       treeViewRef: this.treeViewRef,
 
-      visible: this.popupVisible,
-      mode: this.mode,
-      title: this.options.oneWay('columnChooser.title'),
-      chooserColumns: this.columnChooserController.chooserColumns,
-      visibleColumns: this.columnsController.visibleColumns,
+      visible: this.popupVisible.value,
+      mode: this.mode.value,
+      title: this.options.oneWay('columnChooser.title').value,
+      chooserColumns: this.columnChooserController.chooserColumns.value,
+      visibleColumns: this.columnsController.visibleColumns.value,
       // TODO: band columns aren't yet implemented in cardview
       isBandColumnsUsed: false,
 
       onColumnMove: this.columnChooserController.onColumnMove,
 
-      popupConfig: combined({
-        width: this.options.oneWay('columnChooser.width'),
-        height: this.options.oneWay('columnChooser.height'),
-        container: this.options.oneWay('columnChooser.container'),
-        position: this.options.oneWay('columnChooser.position'),
-        toolbarItems: this.getPopupToolbarItems(),
+      popupConfig: {
+        width: this.options.oneWay('columnChooser.width').value,
+        height: this.options.oneWay('columnChooser.height').value,
+        container: this.options.oneWay('columnChooser.container').value,
+        position: this.options.oneWay('columnChooser.position').value,
+        toolbarItems: this.popupToolbarItems.value,
         showCloseButton: this.isMaterialOrGeneric(),
 
         onHidden: () => {
-          this.popupVisible.update(false);
+          this.popupVisible.value = false;
           this.toolbarButtonElement?.focus();
         },
-      } as MapMaybeSubscribable<PopupProperties>),
+      } as PopupProperties,
 
-      treeViewConfig: combined({
-        searchEditorOptions: this.options.oneWay('columnChooser.search.editorOptions'),
-        searchEnabled: this.options.oneWay('columnChooser.search.enabled'),
-        searchTimeout: this.options.oneWay('columnChooser.search.timeout'),
+      treeViewConfig: {
+        searchEditorOptions: this.options.oneWay('columnChooser.search.editorOptions').value,
+        searchEnabled: this.options.oneWay('columnChooser.search.enabled').value,
+        searchTimeout: this.options.oneWay('columnChooser.search.timeout').value,
 
-        items: this.columnChooserController.items,
-      } as MapMaybeSubscribable<TreeViewProperties>),
+        items: this.columnChooserController.items.value,
+      } as TreeViewProperties,
 
-      treeViewSelectModeConfig: this.getSelectModeConfig(),
-      treeViewDragAndDropModeConfig: this.getDragAndDropModeConfig(),
-    });
-  }
-
-  private getSelectModeConfig(): SubsGets<TreeViewProperties> {
-    const controller = this.columnChooserController;
-
-    return combined({
-      showCheckBoxesMode: computed(
-        (v) => (v ? 'selectAll' : 'normal'),
-        [this.options.oneWay('columnChooser.selection.allowSelectAll')],
-      ),
-      selectByClick: this.options.oneWay('columnChooser.selection.selectByClick'),
-      onSelectionChanged: controller.onSelectionChanged.bind(controller),
-    });
-  }
-
-  private getDragAndDropModeConfig(): SubsGets<TreeViewProperties> {
-    return combined({
-      noDataText: this.options.oneWay('columnChooser.emptyPanelText'),
-      activeStateEnabled: false,
-    });
-  }
-
-  private getPopupToolbarItems(): SubsGets<ToolbarItem[]> {
-    return computed(
-      (title) => {
-        const items = [
-          { text: title, toolbar: 'top', location: this.isMaterialOrGeneric() ? 'before' : 'center' },
-        ] as ToolbarItem[];
-
-        if (!this.isMaterialOrGeneric()) {
-          // @ts-expect-error
-          items.push({ shortcut: 'cancel' });
-        }
-
-        return items;
-      },
-      [this.options.oneWay('columnChooser.title')],
-    );
+      treeViewSelectModeConfig: this.selectModeConfig.value,
+      treeViewDragAndDropModeConfig: this.dragAndDropModeConfig.value,
+    }));
   }
 
   private isMaterialOrGeneric(): boolean {

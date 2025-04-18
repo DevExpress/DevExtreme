@@ -1,8 +1,7 @@
 /* eslint-disable max-classes-per-file */
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
-import type { SubsGets } from '@ts/core/reactive/index';
-import { combined, effect } from '@ts/core/reactive/index';
+import { computed, effect, type ReadonlySignal } from '@preact/signals-core';
 import { HeaderFilterView as OldHeaderFilterPopup } from '@ts/grids/grid_core/header_filter/m_header_filter_core';
 import { View } from '@ts/grids/new/grid_core/core/view';
 import { WidgetMock } from '@ts/grids/new/grid_core/widget_mock';
@@ -60,21 +59,19 @@ export class HeaderFilterPopupView extends View<{}> {
     this.oldHeaderFilterPopup = new OldHeaderFilterPopup(this.widget);
     this.oldHeaderFilterPopup.init();
 
-    effect(
-      (popupState) => {
-        if (!popupState) {
-          return;
-        }
+    effect(() => {
+      const popupState = this.headerFilterViewController.popupState.value;
+      if (!popupState) {
+        return;
+      }
 
-        this.oldHeaderFilterPopup.showHeaderFilterMenu($(popupState.element), popupState.options);
-      },
-      [this.headerFilterViewController.popupState],
-    );
+      this.oldHeaderFilterPopup.showHeaderFilterMenu($(popupState.element), popupState.options);
+    });
   }
 
-  protected getProps(): SubsGets<{}> {
-    return combined({
+  protected getProps(): ReadonlySignal<{}> {
+    return computed(() => ({
       oldHeaderFilterPopup: this.oldHeaderFilterPopup,
-    });
+    }));
   }
 }

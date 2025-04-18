@@ -1,4 +1,3 @@
-/* eslint-disable spellcheck/spell-checker */
 import {
   describe, expect, it, jest,
 } from '@jest/globals';
@@ -197,7 +196,7 @@ describe('SelectionController', () => {
       });
 
       expect(selectionController.getSelectedCards())
-        .toEqual(itemsController.items.unreactive_get());
+        .toEqual(itemsController.items.peek());
     });
   });
 
@@ -231,7 +230,7 @@ describe('SelectionController', () => {
         });
 
         selectionController.updateSelectionCheckBoxesVisible(true);
-        expect(selectionController.isCheckBoxesVisible.unreactive_get()).toBe(true);
+        expect(selectionController.isCheckBoxesVisible.peek()).toBe(true);
       });
 
       it('should hide the selection checkboxes', () => {
@@ -247,7 +246,7 @@ describe('SelectionController', () => {
         });
 
         selectionController.updateSelectionCheckBoxesVisible(false);
-        expect(selectionController.isCheckBoxesVisible.unreactive_get()).toBe(false);
+        expect(selectionController.isCheckBoxesVisible.peek()).toBe(false);
       });
     });
   });
@@ -268,7 +267,7 @@ describe('SelectionController', () => {
 
         // @ts-expect-error
         selectionController.processLongTap({ index: 0 });
-        expect(selectionController.isCheckBoxesRendered.unreactive_get()).toBe(true);
+        expect(selectionController.isCheckBoxesRendered.peek()).toBe(true);
       });
     });
 
@@ -287,7 +286,7 @@ describe('SelectionController', () => {
 
         // @ts-expect-error
         selectionController.processLongTap({ index: 0 });
-        expect(selectionController.isCheckBoxesVisible.unreactive_get()).toBe(true);
+        expect(selectionController.isCheckBoxesVisible.peek()).toBe(true);
       });
     });
 
@@ -344,7 +343,7 @@ describe('SelectionController', () => {
           },
         });
 
-        expect(selectionController.isCheckBoxesRendered.unreactive_get()).toBe(false);
+        expect(selectionController.isCheckBoxesRendered.peek()).toBe(false);
       });
     });
 
@@ -361,7 +360,7 @@ describe('SelectionController', () => {
           },
         });
 
-        expect(selectionController.isCheckBoxesRendered.unreactive_get()).toBe(true);
+        expect(selectionController.isCheckBoxesRendered.peek()).toBe(true);
       });
     });
 
@@ -378,7 +377,7 @@ describe('SelectionController', () => {
           },
         });
 
-        expect(selectionController.isCheckBoxesRendered.unreactive_get()).toBe(true);
+        expect(selectionController.isCheckBoxesRendered.peek()).toBe(true);
       });
     });
 
@@ -395,7 +394,7 @@ describe('SelectionController', () => {
           },
         });
 
-        expect(selectionController.isCheckBoxesRendered.unreactive_get()).toBe(false);
+        expect(selectionController.isCheckBoxesRendered.peek()).toBe(false);
       });
     });
   });
@@ -414,7 +413,7 @@ describe('SelectionController', () => {
           },
         });
 
-        expect(selectionController.isCheckBoxesVisible.unreactive_get()).toBe(false);
+        expect(selectionController.isCheckBoxesVisible.peek()).toBe(false);
       });
     });
 
@@ -432,7 +431,7 @@ describe('SelectionController', () => {
         });
 
         selectionController.selectCards([1]);
-        expect(selectionController.isCheckBoxesVisible.unreactive_get()).toBe(false);
+        expect(selectionController.isCheckBoxesVisible.peek()).toBe(false);
       });
     });
 
@@ -450,7 +449,7 @@ describe('SelectionController', () => {
         });
 
         selectionController.selectCards([1, 2]);
-        expect(selectionController.isCheckBoxesVisible.unreactive_get()).toBe(true);
+        expect(selectionController.isCheckBoxesVisible.peek()).toBe(true);
       });
     });
 
@@ -469,7 +468,7 @@ describe('SelectionController', () => {
         });
 
         selectionController.deselectCards([1, 2]);
-        expect(selectionController.isCheckBoxesVisible.unreactive_get()).toBe(false);
+        expect(selectionController.isCheckBoxesVisible.peek()).toBe(false);
       });
     });
   });
@@ -488,7 +487,7 @@ describe('SelectionController', () => {
           },
         });
 
-        expect(selectionController.needToHiddenCheckBoxes.unreactive_get()).toBe(true);
+        expect(selectionController.needToHiddenCheckBoxes.peek()).toBe(true);
       });
     });
 
@@ -505,7 +504,7 @@ describe('SelectionController', () => {
           },
         });
 
-        expect(selectionController.needToHiddenCheckBoxes.unreactive_get()).toBe(false);
+        expect(selectionController.needToHiddenCheckBoxes.peek()).toBe(false);
       });
     });
   });

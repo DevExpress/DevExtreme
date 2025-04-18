@@ -1,8 +1,8 @@
 import type {
   InitializedEvent, Item as ItemClickEvent,
 } from '@js/ui/context_menu';
-import type { SubsGets } from '@ts/core/reactive/index';
-import { combined } from '@ts/core/reactive/index';
+import type { ReadonlySignal } from '@preact/signals-core';
+import { computed } from '@preact/signals-core';
 
 import { View } from '../core/view';
 import type { ContextMenuProps } from './context_menu';
@@ -22,8 +22,8 @@ export abstract class BaseContextMenuView extends View<ContextMenuProps> {
     super();
   }
 
-  protected override getProps(): SubsGets<ContextMenuProps> {
-    return combined({
+  protected override getProps(): ReadonlySignal<ContextMenuProps> {
+    return computed(() => ({
       componentRef: this.controller.contextMenuRef,
       cssClass: this.getWidgetContainerClass(),
       onInitialized: (e: InitializedEvent) => {
@@ -35,7 +35,7 @@ export abstract class BaseContextMenuView extends View<ContextMenuProps> {
         e.itemData?.onItemClick?.(e);
       },
       onPositioning: this.controller.onPositioning,
-    } as ContextMenuProps);
+    }) as ContextMenuProps);
   }
 
   // TODO: move this to another place

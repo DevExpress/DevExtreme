@@ -1,5 +1,5 @@
-import type { SubsGets } from '@ts/core/reactive/index';
-import { computed } from '@ts/core/reactive/index';
+import type { ReadonlySignal } from '@preact/signals-core';
+import { computed } from '@preact/signals-core';
 import { ColumnsController } from '@ts/grids/new/grid_core/columns_controller/index';
 
 import { getComposedHeaderFilter } from './utils';
@@ -9,16 +9,15 @@ export class HeaderFilterController {
     ColumnsController,
   ] as const;
 
-  public readonly composedHeaderFilter: SubsGets<unknown>;
+  public readonly composedHeaderFilter: ReadonlySignal<unknown>;
 
   constructor(
     private readonly columnsController: ColumnsController,
   ) {
     this.composedHeaderFilter = computed(
-      (columns) => getComposedHeaderFilter(columns),
-      [
-        this.columnsController.visibleColumns,
-      ],
+      () => getComposedHeaderFilter(
+        this.columnsController.visibleColumns.value,
+      ),
     );
   }
 

@@ -1,6 +1,6 @@
 import createCallback from '@js/core/utils/callbacks';
 import type DataSource from '@js/data/data_source';
-import { effect } from '@ts/core/reactive/index';
+import { effect } from '@preact/signals-core';
 
 import { DataController } from './data_controller';
 
@@ -12,16 +12,14 @@ export class CompatibilityDataController {
   constructor(
     private readonly realDataController: DataController,
   ) {
-    effect(
-      (dataSource) => {
-        this.dataSourceChanged.fire(dataSource);
-      },
-      [this.realDataController.dataSource],
-    );
+    effect(() => {
+      this.dataSourceChanged.fire(
+        this.realDataController.dataSource.value,
+      );
+    });
   }
 
   public dataSource(): DataSource {
-    // eslint-disable-next-line spellcheck/spell-checker
-    return this.realDataController.dataSource.unreactive_get();
+    return this.realDataController.dataSource.peek();
   }
 }

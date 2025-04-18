@@ -1,4 +1,3 @@
-/* eslint-disable spellcheck/spell-checker */
 import {
   afterAll,
   beforeAll,
@@ -62,10 +61,10 @@ describe('Options', () => {
         });
         expect(store.load).toBeCalledTimes(1);
 
-        dataController.pageIndex.update(1);
+        dataController.pageIndex.value = 1;
         expect(store.load).toBeCalledTimes(2);
 
-        dataController.pageIndex.update(0);
+        dataController.pageIndex.value = 0;
         expect(store.load).toBeCalledTimes(3);
       });
     });
@@ -85,7 +84,7 @@ describe('Options', () => {
 
         const { dataController } = setup({ dataSource });
 
-        expect(dataController.dataSource.unreactive_get()).toBe(dataSource);
+        expect(dataController.dataSource.peek()).toBe(dataSource);
       });
     });
     describe('when it is array', () => {
@@ -93,7 +92,7 @@ describe('Options', () => {
         const data = [{ a: 1 }, { b: 2 }];
         const { dataController } = setup({ dataSource: data });
 
-        const dataSource = dataController.dataSource.unreactive_get();
+        const dataSource = dataController.dataSource.peek();
 
         expect(dataSource).toBeInstanceOf(DataSource);
         expect(dataSource.items()).toEqual(data);
@@ -103,7 +102,7 @@ describe('Options', () => {
       it('should should normalize to empty DataSource', () => {
         const { dataController } = setup({});
 
-        const dataSource = dataController.dataSource.unreactive_get();
+        const dataSource = dataController.dataSource.peek();
 
         expect(dataSource).toBeInstanceOf(DataSource);
         expect(dataSource.items()).toHaveLength(0);
@@ -119,7 +118,7 @@ describe('Options', () => {
           keyExpr: 'myKeyExpr',
         });
 
-        const dataSource = dataController.dataSource.unreactive_get();
+        const dataSource = dataController.dataSource.peek();
         expect(dataSource.key()).toBe('myKeyExpr');
       });
     });
@@ -133,7 +132,7 @@ describe('Options', () => {
           keyExpr: 'myKeyExpr',
         });
 
-        const dataSource = dataController.dataSource.unreactive_get();
+        const dataSource = dataController.dataSource.peek();
         expect(dataSource.key()).toBe('storeKeyExpr');
       });
     });
@@ -172,7 +171,7 @@ describe('Options', () => {
           },
         });
 
-        const items = dataController.items.unreactive_get();
+        const items = dataController.items.peek();
         expect(items).toHaveLength(2);
       });
     });
@@ -186,7 +185,7 @@ describe('Options', () => {
           },
         });
 
-        const items = dataController.items.unreactive_get();
+        const items = dataController.items.peek();
         expect(items).toHaveLength(4);
       });
     });
@@ -202,11 +201,11 @@ describe('Options', () => {
         },
       });
 
-      let items = dataController.items.unreactive_get();
+      let items = dataController.items.peek();
       expect(items).toEqual([{ a: '3' }, { a: '4' }]);
 
       optionsController.option('paging.pageIndex', 0);
-      items = dataController.items.unreactive_get();
+      items = dataController.items.peek();
       expect(items).toEqual([{ a: '1' }, { a: '2' }]);
     });
   });
@@ -220,11 +219,11 @@ describe('Options', () => {
         },
       });
 
-      let items = dataController.items.unreactive_get();
+      let items = dataController.items.peek();
       expect(items).toEqual([{ a: '1' }, { a: '2' }]);
 
       optionsController.option('paging.pageSize', 3);
-      items = dataController.items.unreactive_get();
+      items = dataController.items.peek();
       expect(items).toEqual([{ a: '1' }, { a: '2' }, { a: '3' }]);
     });
   });
@@ -276,7 +275,7 @@ describe('Options', () => {
 
       await dataController.waitLoaded();
 
-      const items = dataController.items.unreactive_get();
+      const items = dataController.items.peek();
       expect(items).toHaveLength(1);
 
       // @ts-expect-error
@@ -292,7 +291,7 @@ describe('Options', () => {
 
       await dataController.waitLoaded();
 
-      const items = dataController.items.unreactive_get();
+      const items = dataController.items.peek();
       expect(items).toHaveLength(1);
 
       // @ts-expect-error
@@ -308,7 +307,7 @@ describe('Options', () => {
 
       await dataController.waitLoaded();
 
-      const items = dataController.items.unreactive_get();
+      const items = dataController.items.peek();
       expect(items).toHaveLength(1);
 
       // @ts-expect-error
