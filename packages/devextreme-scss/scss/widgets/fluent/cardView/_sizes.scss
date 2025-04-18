@@ -8,6 +8,7 @@
 @use '../../base/cardView/content_view/content/card/content/variables' as *;
 @use '../../base/cardView/content_view/content/variables' as *;
 @use '../../base/cardView/content_view/no_data/variables' as *;
+@use '../../base/cardView/column_chooser/variables' as *;
 
 // adduse
 
@@ -23,6 +24,8 @@ $cardview-fluent-border-radius-8: null;
 $cardview-fluent-gaps-16: null;
 $cardview-fluent-gaps-24: null;
 
+$cardview-fluent-column-chooser-select-all-item-horizontal-padding: null;
+
 @if $size == "default" {
   $cardview-fluent-sizes-64: 64px;
   $cardview-fluent-sizes-48: 48px;
@@ -35,6 +38,8 @@ $cardview-fluent-gaps-24: null;
   $cardview-fluent-border-radius-8: 8px;
   $cardview-fluent-gaps-16: 16px;
   $cardview-fluent-gaps-24: 24px;
+
+  $cardview-fluent-column-chooser-select-all-item-horizontal-padding: 14px;
 }
 @else if $size == "compact" {
   $cardview-fluent-sizes-64: 48px;
@@ -48,6 +53,8 @@ $cardview-fluent-gaps-24: null;
   $cardview-fluent-border-radius-8: 6px;
   $cardview-fluent-gaps-16: 12px;
   $cardview-fluent-gaps-24: 16px;
+
+  $cardview-fluent-column-chooser-select-all-item-horizontal-padding: 12px;
 }
 
 $cardview-border-radius: 16px !default;
@@ -83,3 +90,6 @@ $cardview-card-content-cell-padding-horizontal: $cardview-fluent-paddings-12 !de
 
 $cardview-card-header-text-size: $cardview-fluent-text-size-16 !default;
 $cardview-card-header-border-radius: $cardview-fluent-border-radius-8 !default;
+
+$cardview-column-chooser-empty-message-horizontal-padding: $cardview-fluent-paddings-24 !default;
+$cardview-column-chooser-select-all-item-horizontal-padding: $cardview-fluent-column-chooser-select-all-item-horizontal-padding !default;

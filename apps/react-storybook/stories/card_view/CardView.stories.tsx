@@ -122,6 +122,16 @@ const columns = {
 ],
 }
 
+const onKeyDownHandlers = {
+  off: undefined,
+  on: (event) => { console.log('onKeyDown event: ', event); }
+}
+
+const onFocusedCardChangedEvent = {
+  off: undefined,
+  on: (event) => { console.log('onFocusedCardChanged event: ', event); }
+}
+
 const meta: Meta<typeof CardView> = {
   title: "Grids/CardView",
   component: CardView,
@@ -172,6 +182,22 @@ const meta: Meta<typeof CardView> = {
         'show (custom template)': renderFooter,
         'undefined': undefined,
       }
+    },
+    keyboardNavigation: {
+      control: 'object',
+    },
+    onKeyDown: {
+      control: 'radio',
+      options: Object.keys(onKeyDownHandlers),
+      mapping: onKeyDownHandlers,
+    },
+    onFocusedCardChanged: {
+      control: 'radio',
+      options: Object.keys(onFocusedCardChangedEvent),
+      mapping: onFocusedCardChangedEvent,
+    },
+    columnChooser: {
+      control: 'object',
     }
   }
 };
@@ -196,6 +222,9 @@ export const DefaultMode: Story = {
     columns: 'local',
     filterPanel: { visible: true },
     cardFooterTemplate: undefined,
+    keyboardNavigation: {
+      enabled: true,
+    },
   },
 };
 
@@ -341,3 +370,100 @@ export const ContextMenuStory: Story = {
     }
   }
 }
+export const ColumnChooserSelectModeStory: Story = {
+  ...DefaultMode,
+  name: 'Column chooser \'select\' mode',
+  args: {
+    ...DefaultMode.args,
+    columnChooser: {
+      enabled: true,
+      mode: 'select',
+      title: 'Column chooser',
+      sortOrder: undefined,
+      selection: {
+        allowSelectAll: true,
+        selectByClick: true,
+      },
+      search: {
+        enabled: true,
+        timeout: 0,
+        editorOptions: {
+          placeholder: 'search columns',
+        }
+      },
+      height: 300,
+    },
+    columns: [
+      {
+        dataField: 'id',
+        allowReordering: false,
+      },
+      {
+        dataField: 'firstName',
+        allowReordering: false,
+        allowHiding: false,
+      },
+      {
+        dataField: 'lastName',
+        showInColumnChooser: false,
+        allowHiding: false,
+      },
+      {
+        dataField: "email",
+        visible: false,
+      },
+      {
+        dataField: "gender",
+      },
+      {
+        dataField: "birthDate",
+      },      
+    ]
+  },
+}
+
+export const ColumnChooserDragAndDropModeStory: Story = {
+  ...DefaultMode,
+  name: 'Column chooser \'dragAndDrop\' mode',
+  argTypes: {
+    columns: {
+      control: 'object',
+    }
+  },
+  args: {
+    ...DefaultMode.args,
+    allowColumnReordering: true,
+    columnChooser: {
+      enabled: true,
+      mode: 'dragAndDrop',
+      emptyPanelText: 'Drop a column here',
+    },
+    columns: [
+      {
+        dataField: 'id',
+        allowReordering: false,
+      },
+      {
+        dataField: 'firstName',
+        allowReordering: false,
+        allowHiding: false,
+      },
+      {
+        dataField: 'lastName',
+        showInColumnChooser: false,
+        allowHiding: false,
+      },
+      {
+        dataField: "email",
+        visible: false,
+      },
+      {
+        dataField: "gender",
+      },
+      {
+        dataField: "birthDate",
+      },      
+    ]
+  }
+}
+
