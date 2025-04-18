@@ -210,12 +210,12 @@ export class Content extends Component<ContentProps> {
     const firstCardElement = this.cardElementRefs[0]?.current ?? undefined;
     this.props.onFirstElementChange?.(firstCardElement);
 
-    if (!firstCardElement) {
+    if (!firstCardElement || !this.containerRef.current) {
       return;
     }
 
     const cardHeight = firstCardElement.offsetHeight;
-    const gapHeight = parseFloat(getComputedStyle(this.containerRef.current!).rowGap);
+    const gapHeight = parseFloat(getComputedStyle(this.containerRef.current).rowGap);
     const rowHeight = cardHeight + gapHeight;
     this.props.onRowHeightChange?.(rowHeight);
   }
