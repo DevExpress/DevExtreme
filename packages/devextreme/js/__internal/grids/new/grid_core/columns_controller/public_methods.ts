@@ -1,4 +1,3 @@
-/* eslint-disable max-classes-per-file */
 /* eslint-disable consistent-return */
 /* eslint-disable spellcheck/spell-checker */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
@@ -97,6 +96,7 @@ export function PublicMethods<TBase extends Constructor<GridCoreNewBase>>(GridCo
             );
           });
         } else {
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-return
           return column[option as T];
         }
       }

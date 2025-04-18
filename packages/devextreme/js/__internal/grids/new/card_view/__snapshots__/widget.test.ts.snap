@@ -172,6 +172,7 @@ exports[`common initial render should be successfull 1`] = `
       
     </div>
     
+    
     <div
       class="dx-cardview-exclude-flexbox"
     >

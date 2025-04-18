@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-invalid-void-type */
 /* eslint-disable spellcheck/spell-checker */
 import type { DataSource } from '@js/common/data';
 import ArrayStore from '@js/common/data/array_store';
@@ -7,6 +6,7 @@ import type { SubsGets } from '@ts/core/reactive/index';
 import {
   computed, effect, state,
 } from '@ts/core/reactive/index';
+import type { PromiseWithResolvers } from '@ts/core/utils/promise';
 import { createPromise } from '@ts/core/utils/promise';
 
 import { FilterController } from '../filtering/filter_controller';
@@ -28,7 +28,7 @@ import {
 export class DataController {
   private readonly pendingLocalOperations = {};
 
-  private readonly loadedPromise = createPromise<void>();
+  private loadedPromise?: PromiseWithResolvers<void>;
 
   private readonly dataSourceConfiguration = this.options.oneWay('dataSource');
 
@@ -237,13 +237,13 @@ export class DataController {
     this.pageSize.update(dataSource.pageSize());
     this._totalCount.update(dataSource.totalCount());
 
-    this.loadedPromise.promise.then(() => {
-      this.isReloading.update(false);
-    }).catch(() => {
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
+    Promise.resolve().then(() => {
       this.isReloading.update(false);
     });
 
-    this.loadedPromise.resolve();
+    this.loadedPromise?.resolve();
+    this.loadedPromise = undefined;
   }
 
   public getDataKey(data: DataObject): Key {
@@ -251,6 +251,13 @@ export class DataController {
   }
 
   public waitLoaded(): Promise<void> {
+    if (!this.dataSource.unreactive_get().isLoading()) {
+      return Promise.resolve();
+    }
+
+    if (!this.loadedPromise) {
+      this.loadedPromise = createPromise();
+    }
     return this.loadedPromise.promise;
   }
 
@@ -262,6 +269,22 @@ export class DataController {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-return
       (data) => new ArrayStore(data),
     );
+  }
+
+  public async update(key: Key, data: DataObject): Promise<void> {
+    await this.dataSource.unreactive_get().store().update(key, data);
+  }
+
+  public async insert(data: DataObject): Promise<void> {
+    await this.dataSource.unreactive_get().store().insert(data);
+  }
+
+  public async remove(key: Key): Promise<void> {
+    await this.dataSource.unreactive_get().store().remove(key);
+  }
+
+  public async reload(): Promise<void> {
+    await this.dataSource.unreactive_get().load();
   }
 
   public increasePageIndex(): void {

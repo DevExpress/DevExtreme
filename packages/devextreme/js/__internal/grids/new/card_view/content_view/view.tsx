@@ -15,7 +15,7 @@ import {
 } from '@ts/grids/new/grid_core/keyboard_navigation/index';
 
 import { ContentView as ContentViewBase } from '../../grid_core/content_view/view';
-import type { DataObject } from '../../grid_core/data_controller/types';
+import type { DataObject, Key } from '../../grid_core/data_controller/types';
 import type { ContentViewProps } from './content_view';
 import { ContentView as ContentViewComponent } from './content_view';
 import type { CardHoldEvent, SelectCardOptions } from './types';
@@ -73,6 +73,9 @@ export class ContentView extends ContentViewBase<ContentViewProps> {
         fieldTemplate: this.options.template('fieldTemplate'),
         cardsPerRow: this.cardsPerRow,
         onRowHeightChange: this.rowHeight.update.bind(this.rowHeight),
+        onFirstElementChange: (firstElement: HTMLDivElement | undefined): void => {
+          this.keyboardNavigationController.setFirstCardElement(firstElement);
+        },
         onPageChange: this.onPageChange.bind(this),
         showContextMenu: this.showContextMenu.bind(this),
         wordWrapEnabled: this.options.oneWay('wordWrapEnabled'),
@@ -86,6 +89,17 @@ export class ContentView extends ContentViewBase<ContentViewProps> {
           onDblClick: this.options.action('onCardDblClick'),
           onHoverChanged: this.options.action('onCardHoverChanged'),
           onPrepared: this.options.action('onCardPrepared'),
+          onEdit: (key: Key, returnFocusTo?: HTMLElement) => {
+            this.keyboardNavigationController.setReturnFocusTo(returnFocusTo);
+            this.editingController.editRow(key);
+          },
+          onDelete: (key: Key, returnFocusTo?: HTMLElement) => {
+            this.keyboardNavigationController.setReturnFocusTo(returnFocusTo);
+            // eslint-disable-next-line @typescript-eslint/no-floating-promises
+            this.editingController.deleteRow(key);
+          },
+          allowUpdating: this.editingController.allowUpdating,
+          allowDeleting: this.editingController.allowDeleting,
           footerTemplate: this.options.template('cardFooterTemplate'),
           cover: combined({
             imageExpr: computed(

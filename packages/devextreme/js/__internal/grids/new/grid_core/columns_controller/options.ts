@@ -3,6 +3,7 @@ import type { DataType } from '@js/common';
 import messageLocalization from '@js/localization/message';
 import filterUtils from '@js/ui/shared/filtering';
 
+import { defaultSetCellValue } from '../editing/utils';
 import type { Template, WithRequired } from '../types';
 import type { Cell, Column } from './types';
 
@@ -44,6 +45,12 @@ export const defaultColumnProperties = {
   trueText: messageLocalization.format('dxDataGrid-trueText'),
   falseText: messageLocalization.format('dxDataGrid-falseText'),
   showInColumnChooser: true,
+  validationRules: [],
+  allowEditing: true,
+  editorOptions: {},
+  formItem: {},
+  setCellValue: defaultSetCellValue,
+  defaultSetCellValue,
 } satisfies Partial<Column>;
 
 export const defaultColumnPropertiesByDataType: Record<

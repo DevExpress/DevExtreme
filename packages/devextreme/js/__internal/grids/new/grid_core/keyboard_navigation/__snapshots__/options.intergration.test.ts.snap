@@ -6,6 +6,7 @@ exports[`Options KeyboardNavigation onFocusedCardChanged common API contract tes
     {
       "column": {
         "alignment": "left",
+        "allowEditing": true,
         "allowFiltering": true,
         "allowHeaderFiltering": false,
         "allowHiding": true,
@@ -19,8 +20,11 @@ exports[`Options KeyboardNavigation onFocusedCardChanged common API contract tes
         "captionTemplate": undefined,
         "dataField": "id",
         "dataType": "string",
+        "defaultSetCellValue": [Function],
+        "editorOptions": {},
         "falseText": "false",
         "fieldTemplate": undefined,
+        "formItem": {},
         "headerFilter": {
           "allowSelectAll": true,
           "height": 325,
@@ -35,8 +39,10 @@ exports[`Options KeyboardNavigation onFocusedCardChanged common API contract tes
         "headerItemTemplate": undefined,
         "headerPanelIndex": 0,
         "name": "id",
+        "setCellValue": [Function],
         "showInColumnChooser": true,
         "trueText": "true",
+        "validationRules": [],
         "valueTemplate": undefined,
         "visible": true,
         "visibleIndex": 0,
