@@ -150,6 +150,9 @@ const SKIPPED_TESTS = {
       { demo: 'TooltipHTMLSupport', themes: [THEME.material] },
       { demo: 'CustomMapData', themes: [THEME.material] },
     ],
+    Stepper: [
+      { demo: 'FormIntegration', themes: [THEME.generic, THEME.material, THEME.fluent] },
+    ],
   },
   React: {
     Charts: [
@@ -213,6 +216,9 @@ const SKIPPED_TESTS = {
       { demo: 'DifferentValueIndicatorTypesLinearGauge', themes: [THEME.material] },
       { demo: 'ScaleLabelFormatting', themes: [THEME.material] },
     ],
+    Stepper: [
+      { demo: 'FormIntegration', themes: [THEME.generic, THEME.material, THEME.fluent] },
+    ],
   },
   Vue: {
     Charts: [
@@ -231,9 +237,6 @@ const SKIPPED_TESTS = {
       { demo: 'PiesWithEqualSize', themes: [THEME.material] },
       { demo: 'Palette', themes: [THEME.material] },
     ],
-    Drawer: [
-      { demo: 'TopOrBottomPosition', themes: [THEME.material] },
-    ],
     DataGrid: [
       { demo: 'SignalRService', themes: [THEME.fluent, THEME.material] },
       { demo: 'EditStateManagement', themes: [THEME.material] },
@@ -247,9 +250,6 @@ const SKIPPED_TESTS = {
       { demo: 'PopupEditing', themes: [THEME.generic] },
       { demo: 'RecordPaging', themes: [THEME.generic] },
     ],
-    FieldSet: [
-      { demo: 'Overview', themes: [THEME.fluent] },
-    ],
     FileManager: [
       { demo: 'BindingToFileSystem', themes: [THEME.material] },
       { demo: 'CustomThumbnails', themes: [THEME.generic] },
@@ -257,17 +257,13 @@ const SKIPPED_TESTS = {
     FilterBuilder: [
       { demo: 'Customization', themes: [THEME.material] },
     ],
-    Form: [
-      { demo: 'ColumnsAdaptability', themes: [THEME.generic] },
-      { demo: 'UpdateItemsDynamically', themes: [THEME.generic] },
+    Stepper: [
+      { demo: 'FormIntegration', themes: [THEME.generic, THEME.material, THEME.fluent] },
     ],
     TreeList: [
       { demo: 'Overview', themes: [THEME.material] },
       { demo: 'MultipleRowSelection', themes: [THEME.material] },
       { demo: 'Resizing', themes: [THEME.material] },
-    ],
-    List: [
-      { demo: 'ListWithSearchBar', themes: [THEME.material] },
     ],
     Map: [
       { demo: 'ProvidersAndTypes', themes: [THEME.generic, THEME.material, THEME.fluent] },
