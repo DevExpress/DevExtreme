@@ -1,4 +1,3 @@
-/* eslint-disable spellcheck/spell-checker */
 import {
   describe, expect, it, jest,
 } from '@jest/globals';
@@ -37,7 +36,7 @@ describe('PublicMethods', () => {
       expect(
         gridCore.getDataSource(),
       ).toBe(
-        dataController.dataSource.unreactive_get(),
+        dataController.dataSource.peek(),
       );
     });
   });
@@ -126,7 +125,7 @@ describe('PublicMethods', () => {
       });
       expect(gridCore.pageCount()).toBe(2);
 
-      dataController.pageSize.update(4);
+      dataController.pageSize.value = 4;
       expect(gridCore.pageCount()).toBe(1);
     });
   });
@@ -141,7 +140,7 @@ describe('PublicMethods', () => {
       });
       expect(gridCore.pageSize()).toBe(2);
 
-      dataController.pageSize.update(4);
+      dataController.pageSize.value = 4;
       expect(gridCore.pageSize()).toBe(4);
     });
   });
@@ -156,7 +155,7 @@ describe('PublicMethods', () => {
       });
       expect(gridCore.pageIndex()).toBe(0);
 
-      dataController.pageIndex.update(3);
+      dataController.pageIndex.value = 3;
       expect(gridCore.pageIndex()).toBe(3);
     });
   });

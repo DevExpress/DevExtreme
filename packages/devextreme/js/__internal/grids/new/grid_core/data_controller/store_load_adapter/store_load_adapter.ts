@@ -1,8 +1,7 @@
-/* eslint-disable spellcheck/spell-checker */
 import type { DataSource, LoadResult } from '@js/common/data';
 import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred } from '@js/core/utils/deferred';
-import type { SubsGets } from '@ts/core/reactive/index';
+import type { ReadonlySignal } from '@preact/signals-core';
 
 import { deferredCache } from '../deferred_cache';
 import type { InternalLoadOptions, OperationOptions } from '../types';
@@ -15,13 +14,13 @@ export class StoreLoadAdapter<TData> {
   ) => DeferredObj<LoadResult<TData>>;
 
   constructor(
-    private readonly dataSourceReactive: SubsGets<DataSource<unknown, unknown>>,
-    private readonly localLoadOptionsReactive: SubsGets<OperationOptions>,
+    private readonly dataSourceReactive: ReadonlySignal<DataSource<unknown, unknown>>,
+    private readonly localLoadOptionsReactive: ReadonlySignal<OperationOptions>,
     private readonly localStoreFabric: LocalStoreFabric<unknown, TData>,
   ) {
     this.loadFromStore = deferredCache<InternalLoadOptions, LoadResult<TData>>(
       (loadOptions: InternalLoadOptions) => {
-        const dataSource = this.dataSourceReactive.unreactive_get();
+        const dataSource = this.dataSourceReactive.peek();
         // NOTE: In runtime we have deferred here (not promise)
         return dataSource.store().load(loadOptions) as unknown as DeferredObj<LoadResult<TData>>;
       },
@@ -51,13 +50,13 @@ export class StoreLoadAdapter<TData> {
   }
 
   public getLocalLoadOperations(): OperationOptions {
-    return this.localLoadOptionsReactive.unreactive_get();
+    return this.localLoadOptionsReactive.peek();
   }
 
   private getLoadOptions(
     loadOptions: InternalLoadOptions,
   ): { localOptions: InternalLoadOptions; remoteOptions: InternalLoadOptions } {
-    const localLoadOptions = this.localLoadOptionsReactive.unreactive_get();
+    const localLoadOptions = this.localLoadOptionsReactive.peek();
 
     const localOptions = getLocalLoadOptions(
       loadOptions,

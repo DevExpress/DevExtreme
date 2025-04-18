@@ -1,7 +1,5 @@
-/* eslint-disable spellcheck/spell-checker */
-
 import { describe, expect, it } from '@jest/globals';
-import { state } from '@ts/core/reactive';
+import { signal } from '@preact/signals-core';
 
 import { getContext } from '../di.test_utils';
 import type { Options } from '../options';
@@ -31,7 +29,7 @@ describe('ToolbarController', () => {
           },
         });
 
-        expect(toolbarController.items.unreactive_get()).toStrictEqual([{ location: 'before' }]);
+        expect(toolbarController.items.peek()).toStrictEqual([{ location: 'before' }]);
       });
     });
 
@@ -43,9 +41,9 @@ describe('ToolbarController', () => {
           },
         });
 
-        toolbarController.addDefaultItem({ name: 'searchPanel', location: 'after' });
+        toolbarController.addDefaultItem(signal({ name: 'searchPanel', location: 'after' }));
 
-        expect(toolbarController.items.unreactive_get()).toStrictEqual([
+        expect(toolbarController.items.peek()).toStrictEqual([
           { name: 'searchPanel', location: 'after' },
           { location: 'before' },
         ]);
@@ -57,28 +55,28 @@ describe('ToolbarController', () => {
     it('should add new default item to items', () => {
       const { toolbarController } = setup();
 
-      toolbarController.addDefaultItem({ name: 'searchPanel', location: 'after' });
+      toolbarController.addDefaultItem(signal({ name: 'searchPanel', location: 'after' }));
 
-      expect(toolbarController.items.unreactive_get()).toStrictEqual([
+      expect(toolbarController.items.peek()).toStrictEqual([
         { name: 'searchPanel', location: 'after' },
       ]);
     });
 
     it('item should toggle default item when needUpdate changes', () => {
       const { toolbarController } = setup();
-      const needRender = state(true);
+      const needRender = signal(true);
 
-      toolbarController.addDefaultItem({ name: 'searchPanel', location: 'after' }, needRender);
+      toolbarController.addDefaultItem(signal({ name: 'searchPanel', location: 'after' }), needRender);
 
-      expect(toolbarController.items.unreactive_get()).toStrictEqual([
+      expect(toolbarController.items.peek()).toStrictEqual([
         { name: 'searchPanel', location: 'after' },
       ]);
 
-      needRender.update(false);
-      expect(toolbarController.items.unreactive_get()).toStrictEqual([]);
+      needRender.value = false;
+      expect(toolbarController.items.peek()).toStrictEqual([]);
 
-      needRender.update(true);
-      expect(toolbarController.items.unreactive_get()).toStrictEqual([
+      needRender.value = true;
+      expect(toolbarController.items.peek()).toStrictEqual([
         { name: 'searchPanel', location: 'after' },
       ]);
     });

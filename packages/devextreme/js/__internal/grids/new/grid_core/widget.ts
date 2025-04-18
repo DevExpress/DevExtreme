@@ -5,7 +5,6 @@
 import { extend } from '@js/core/utils/extend';
 import Widget from '@js/ui/widget/ui.widget';
 import { DIContext } from '@ts/core/di/index';
-import type { Subscription } from '@ts/core/reactive/index';
 import { SearchView } from '@ts/grids/new/grid_core/search/view';
 import { render } from 'inferno';
 
@@ -37,7 +36,7 @@ import { WidgetMock } from './widget_mock';
 export class GridCoreNewBase<
   TProperties extends Options = Options,
 > extends Widget<TProperties> {
-  protected renderSubscription?: Subscription;
+  protected renderSubscription?: () => void;
 
   protected diContext!: DIContext;
 
@@ -167,7 +166,7 @@ export class GridCoreNewBase<
   }
 
   protected _clean(): void {
-    this.renderSubscription?.unsubscribe();
+    this.renderSubscription?.();
     render(null, this.$element().get(0));
     // @ts-expect-error
     super._clean();

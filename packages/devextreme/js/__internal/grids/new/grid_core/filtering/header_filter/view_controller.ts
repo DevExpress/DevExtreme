@@ -1,6 +1,6 @@
 /* eslint-disable spellcheck/spell-checker */
-import type { SubsGets } from '@ts/core/reactive/index';
-import { state } from '@ts/core/reactive/index';
+import type { ReadonlySignal } from '@preact/signals-core';
+import { signal } from '@preact/signals-core';
 import { removeFieldConditionsFromFilter } from '@ts/filter_builder/m_utils';
 import gridCoreUtils from '@ts/grids/grid_core/m_utils';
 
@@ -17,9 +17,9 @@ import type { PopupState } from './types';
 import { getColumnIdentifier } from './utils';
 
 export class HeaderFilterViewController {
-  private readonly popupStateInternal = state<PopupState>(null);
+  private readonly popupStateInternal = signal<PopupState>(null);
 
-  public readonly popupState: SubsGets<PopupState> = this.popupStateInternal;
+  public readonly popupState: ReadonlySignal<PopupState> = this.popupStateInternal;
 
   public static dependencies = [
     OptionsController,
@@ -41,7 +41,7 @@ export class HeaderFilterViewController {
     onFilterCloseCallback?: () => void,
   ): void {
     const rootDataSource = this.dataController.getStoreLoadAdapter();
-    const rootHeaderFilterOptions = this.options.oneWay('headerFilter').unreactive_get();
+    const rootHeaderFilterOptions = this.options.oneWay('headerFilter').peek();
     const filterExpression = this.getFilterExpressionWithoutCurrentColumn(column);
 
     const filterDataSourceOptions = getDataSourceOptions(
@@ -62,7 +62,7 @@ export class HeaderFilterViewController {
     const type = getFilterType(column);
     const colsController = this.columnsController;
 
-    this.popupStateInternal.update({
+    this.popupStateInternal.value = {
       element,
       options: {
         type,
@@ -74,7 +74,7 @@ export class HeaderFilterViewController {
           // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
           ? [...column.headerFilter!.values]
           : column.headerFilter?.values,
-        apply() {
+        apply(): void {
           colsController.updateColumns(
             (columns) => {
               const index = getColumnIndexByName(columns, column.name);
@@ -97,12 +97,12 @@ export class HeaderFilterViewController {
 
           onFilterCloseCallback?.();
         },
-        hidePopupCallback: () => {
-          this.popupStateInternal.update(null);
+        hidePopupCallback: (): void => {
+          this.popupStateInternal.value = null;
           onFilterCloseCallback?.();
         },
       },
-    });
+    };
   }
 
   private removeColumnFromFilters(
@@ -129,11 +129,11 @@ export class HeaderFilterViewController {
   }
 
   private getFilterExpressionWithoutCurrentColumn(column: Column): unknown {
-    const appliedFilters = this.filterController.appliedFilters.unreactive_get();
+    const appliedFilters = this.filterController.appliedFilters.peek();
 
     const filtersWithoutCurrentColumn = this.removeColumnFromFilters(appliedFilters, column);
-    const allColumns = this.columnsController.columns.unreactive_get();
-    const customOperations = this.filterController.customOperations.unreactive_get();
+    const allColumns = this.columnsController.columns.peek();
+    const customOperations = this.filterController.customOperations.peek();
 
     const appliedFilterExpresssionsArray = getAppliedFilterExpressions(
       filtersWithoutCurrentColumn,
