@@ -37,7 +37,7 @@ safeSizeTest('render of add card popup', async (t) => {
   const cardView = new CardView('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  await t.click(cardView.getHeaderPanel().getHeaderItem(1).element);
+  await t.click(cardView.getToolbar().getAddButton().element);
   await testScreenshot(t, takeScreenshot, 'editing-popup-add.png', { element: cardView.element });
 
   await t
