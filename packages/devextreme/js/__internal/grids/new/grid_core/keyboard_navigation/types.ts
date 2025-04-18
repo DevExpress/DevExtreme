@@ -18,7 +18,3 @@ export interface WithKeyDown {
 export interface WithKbnProps {
   navigationEnabled?: boolean;
 }
-
-export type EventWithHandled<TEvent extends Event> = TEvent & {
-  handled?: boolean;
-};

@@ -66,7 +66,7 @@ export class ContentView extends ContentViewBase<ContentViewProps> {
       ...this.getBaseProps(),
       contentProps: combined({
         items: this.itemsController.items,
-        navigationEnabled: this.keyboardNavigationController.enabled,
+        kbnEnabled: this.keyboardNavigationController.enabled,
         navigationStrategy: this.navigationStrategy,
         isLoading: this.dataController.isReloading,
         needToHiddenCheckBoxes: this.selectionController.needToHiddenCheckBoxes,
@@ -119,9 +119,6 @@ export class ContentView extends ContentViewBase<ContentViewProps> {
           onSelectAllCards: this.onSelectAllCards.bind(this),
           onSearchFocus: () => {
             this.searchUIController.doUIAction('focusSearchTextBox');
-          },
-          onCardContentKeyDown: (event: KeyboardEvent) => {
-            this.keyboardNavigationController.onKeyDown(event);
           },
           onFocusedCardChanged: (card: DataRow, cardIdx: number, element: HTMLElement) => {
             this.keyboardNavigationController.onFocusedCardChanged(card, cardIdx, element);
