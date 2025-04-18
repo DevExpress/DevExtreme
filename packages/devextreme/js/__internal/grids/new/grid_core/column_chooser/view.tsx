@@ -35,6 +35,35 @@ export class ColumnChooserView extends View<ColumnChooserProps> {
 
   private toolbarButtonElement: DxElement | undefined = undefined;
 
+  private readonly selectModeConfig: ReadonlySignal<TreeViewProperties> = computed(() => ({
+    showCheckBoxesMode: this.options.oneWay('columnChooser.selection.allowSelectAll').value
+      ? 'selectAll'
+      : 'normal',
+    selectByClick: this.options.oneWay('columnChooser.selection.selectByClick').value,
+    onSelectionChanged: this.columnChooserController.onSelectionChanged.bind(
+      this.columnChooserController,
+    ),
+  }));
+
+  private readonly dragAndDropModeConfig: ReadonlySignal<TreeViewProperties> = computed(() => ({
+    noDataText: this.options.oneWay('columnChooser.emptyPanelText').value,
+    activeStateEnabled: false,
+  }));
+
+  private readonly popupToolbarItems: ReadonlySignal<ToolbarItem[]> = computed(() => {
+    const title = this.options.oneWay('columnChooser.title').value;
+    const items = [
+      { text: title, toolbar: 'top', location: this.isMaterialOrGeneric() ? 'before' : 'center' },
+    ] as ToolbarItem[];
+
+    if (!this.isMaterialOrGeneric()) {
+      // @ts-expect-error
+      items.push({ shortcut: 'cancel' });
+    }
+
+    return items;
+  });
+
   public static dependencies = [
     ToolbarController, ColumnChooserController, ColumnsController, OptionsController,
   ] as const;
@@ -106,7 +135,7 @@ export class ColumnChooserView extends View<ColumnChooserProps> {
         height: this.options.oneWay('columnChooser.height').value,
         container: this.options.oneWay('columnChooser.container').value,
         position: this.options.oneWay('columnChooser.position').value,
-        toolbarItems: this.getPopupToolbarItems().value,
+        toolbarItems: this.popupToolbarItems.value,
         showCloseButton: this.isMaterialOrGeneric(),
 
         onHidden: () => {
@@ -123,44 +152,9 @@ export class ColumnChooserView extends View<ColumnChooserProps> {
         items: this.columnChooserController.items.value,
       } as TreeViewProperties,
 
-      treeViewSelectModeConfig: this.getSelectModeConfig().value,
-      treeViewDragAndDropModeConfig: this.getDragAndDropModeConfig().value,
+      treeViewSelectModeConfig: this.selectModeConfig.value,
+      treeViewDragAndDropModeConfig: this.dragAndDropModeConfig.value,
     }));
-  }
-
-  private getSelectModeConfig(): ReadonlySignal<TreeViewProperties> {
-    const controller = this.columnChooserController;
-
-    return computed(() => ({
-      showCheckBoxesMode: this.options.oneWay('columnChooser.selection.allowSelectAll').value
-        ? 'selectAll'
-        : 'normal',
-      selectByClick: this.options.oneWay('columnChooser.selection.selectByClick').value,
-      onSelectionChanged: controller.onSelectionChanged.bind(controller),
-    }));
-  }
-
-  private getDragAndDropModeConfig(): ReadonlySignal<TreeViewProperties> {
-    return computed(() => ({
-      noDataText: this.options.oneWay('columnChooser.emptyPanelText').value,
-      activeStateEnabled: false,
-    }));
-  }
-
-  private getPopupToolbarItems(): ReadonlySignal<ToolbarItem[]> {
-    return computed(() => {
-      const title = this.options.oneWay('columnChooser.title').value;
-      const items = [
-        { text: title, toolbar: 'top', location: this.isMaterialOrGeneric() ? 'before' : 'center' },
-      ] as ToolbarItem[];
-
-      if (!this.isMaterialOrGeneric()) {
-        // @ts-expect-error
-        items.push({ shortcut: 'cancel' });
-      }
-
-      return items;
-    });
   }
 
   private isMaterialOrGeneric(): boolean {
