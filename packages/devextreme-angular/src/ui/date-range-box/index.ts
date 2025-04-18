@@ -328,10 +328,10 @@ export class DxDateRangeBoxComponent extends DxComponent implements OnDestroy, C
     
      */
     @Input()
-    get endDate(): Date | null | number | string {
+    get endDate(): Date | number | string {
         return this._getOption('endDate');
     }
-    set endDate(value: Date | null | number | string) {
+    set endDate(value: Date | number | string) {
         this._setOption('endDate', value);
     }
 
@@ -536,10 +536,10 @@ export class DxDateRangeBoxComponent extends DxComponent implements OnDestroy, C
     
      */
     @Input()
-    get max(): Date | null | number | string | undefined {
+    get max(): Date | number | string | undefined {
         return this._getOption('max');
     }
-    set max(value: Date | null | number | string | undefined) {
+    set max(value: Date | number | string | undefined) {
         this._setOption('max', value);
     }
 
@@ -549,10 +549,10 @@ export class DxDateRangeBoxComponent extends DxComponent implements OnDestroy, C
     
      */
     @Input()
-    get min(): Date | null | number | string | undefined {
+    get min(): Date | number | string | undefined {
         return this._getOption('min');
     }
-    set min(value: Date | null | number | string | undefined) {
+    set min(value: Date | number | string | undefined) {
         this._setOption('min', value);
     }
 
@@ -666,10 +666,10 @@ export class DxDateRangeBoxComponent extends DxComponent implements OnDestroy, C
     
      */
     @Input()
-    get startDate(): Date | null | number | string {
+    get startDate(): Date | number | string {
         return this._getOption('startDate');
     }
-    set startDate(value: Date | null | number | string) {
+    set startDate(value: Date | number | string) {
         this._setOption('startDate', value);
     }
 
@@ -874,10 +874,10 @@ export class DxDateRangeBoxComponent extends DxComponent implements OnDestroy, C
     
      */
     @Input()
-    get value(): Array<Date | null | number | string> {
+    get value(): Array<Date | number | string> {
         return this._getOption('value');
     }
-    set value(value: Array<Date | null | number | string>) {
+    set value(value: Array<Date | number | string>) {
         this._setOption('value', value);
     }
 
@@ -1173,7 +1173,7 @@ export class DxDateRangeBoxComponent extends DxComponent implements OnDestroy, C
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() endDateChange: EventEmitter<Date | null | number | string>;
+    @Output() endDateChange: EventEmitter<Date | number | string>;
 
     /**
     
@@ -1285,14 +1285,14 @@ export class DxDateRangeBoxComponent extends DxComponent implements OnDestroy, C
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() maxChange: EventEmitter<Date | null | number | string | undefined>;
+    @Output() maxChange: EventEmitter<Date | number | string | undefined>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() minChange: EventEmitter<Date | null | number | string | undefined>;
+    @Output() minChange: EventEmitter<Date | number | string | undefined>;
 
     /**
     
@@ -1355,7 +1355,7 @@ export class DxDateRangeBoxComponent extends DxComponent implements OnDestroy, C
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() startDateChange: EventEmitter<Date | null | number | string>;
+    @Output() startDateChange: EventEmitter<Date | number | string>;
 
     /**
     
@@ -1467,7 +1467,7 @@ export class DxDateRangeBoxComponent extends DxComponent implements OnDestroy, C
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() valueChange: EventEmitter<Array<Date | null | number | string>>;
+    @Output() valueChange: EventEmitter<Array<Date | number | string>>;
 
     /**
     

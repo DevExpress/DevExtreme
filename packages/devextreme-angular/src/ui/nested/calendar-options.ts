@@ -82,7 +82,7 @@ export class DxoCalendarOptionsComponent extends DxoCalendarOptions implements O
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() valueChange: EventEmitter<Date | number | null | string | Array<Date | number | string | null>>;
+    @Output() valueChange: EventEmitter<Date | number | string | Array<Date | number | string>>;
 
     /**
     

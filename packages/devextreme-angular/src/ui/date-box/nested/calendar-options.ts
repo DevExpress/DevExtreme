@@ -148,10 +148,10 @@ export class DxoDateBoxCalendarOptionsComponent extends NestedOption implements 
     }
 
     @Input()
-    get max(): Date | null | number | string {
+    get max(): Date | number | string {
         return this._getOption('max');
     }
-    set max(value: Date | null | number | string) {
+    set max(value: Date | number | string) {
         this._setOption('max', value);
     }
 
@@ -164,10 +164,10 @@ export class DxoDateBoxCalendarOptionsComponent extends NestedOption implements 
     }
 
     @Input()
-    get min(): Date | null | number | string {
+    get min(): Date | number | string {
         return this._getOption('min');
     }
-    set min(value: Date | null | number | string) {
+    set min(value: Date | number | string) {
         this._setOption('min', value);
     }
 
@@ -316,10 +316,10 @@ export class DxoDateBoxCalendarOptionsComponent extends NestedOption implements 
     }
 
     @Input()
-    get value(): Array<Date | null | number | string> | Date | null | number | string {
+    get value(): Array<Date | number | string> | Date | number | string {
         return this._getOption('value');
     }
-    set value(value: Array<Date | null | number | string> | Date | null | number | string) {
+    set value(value: Array<Date | number | string> | Date | number | string) {
         this._setOption('value', value);
     }
 
@@ -361,7 +361,7 @@ export class DxoDateBoxCalendarOptionsComponent extends NestedOption implements 
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() valueChange: EventEmitter<Array<Date | null | number | string> | Date | null | number | string>;
+    @Output() valueChange: EventEmitter<Array<Date | number | string> | Date | number | string>;
 
     /**
     
