@@ -13,6 +13,7 @@ const baseConfig = {
   height: 600,
   columns,
   dataSource: data,
+  keyExpr: 'id',
   editing: {
     allowUpdating: true,
     allowDeleting: true,

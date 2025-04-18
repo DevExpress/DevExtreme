@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable spellcheck/spell-checker */
 import { applyChanges } from '@js/common/data';
+import { isDefined } from '@js/core/utils/type';
 import { confirm } from '@js/ui/dialog';
 import type { SubsGetsUpd } from '@ts/core/reactive/index';
 import { computed } from '@ts/core/reactive/index';
@@ -56,7 +57,7 @@ export class EditingController {
 
   public readonly editingRow = computed(
     (editRowKey, items, changes) => {
-      if (!editRowKey) {
+      if (!isDefined(editRowKey)) {
         return null;
       }
 
