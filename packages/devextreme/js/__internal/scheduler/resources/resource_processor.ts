@@ -6,11 +6,11 @@ import {
 } from './m_utils';
 
 type ResourceMap = Record<string, {
-  label: string;
+  label?: string;
   texts: Map<unknown, string>;
 }>;
 export interface AppointmentResource {
-  label: string;
+  label?: string;
   values: string[];
 }
 
@@ -95,7 +95,7 @@ export class ResourceProcessor {
     const textExpr = getTextExpr(resource);
 
     this.resourceMap[getFieldExpr(resource)] = {
-      label: resource.label ?? '',
+      label: resource.label,
       texts: items.reduce<Map<unknown, string>>((result, item) => {
         result.set(item[idExpr], (item[textExpr] ?? '') as string);
 

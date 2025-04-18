@@ -63,6 +63,21 @@ describe('ResourceProcessor', () => {
       expect(await processor.getAppointmentResourcesValues(appointment)).toEqual([]);
     });
 
+    it('should process resource with empty text', async () => {
+      const processor = new ResourceProcessor([{
+        ...roomResource,
+        label: undefined,
+      }]);
+
+      expect(await processor.getAppointmentResourcesValues({
+        ...appointment,
+        roomId: 1,
+      })).toEqual([{
+        label: undefined,
+        values: ['Room 1'],
+      }]);
+    });
+
     it('should process two resources with empty appointment', async () => {
       const processor = new ResourceProcessor([roomResource, ownerResource]);
 
