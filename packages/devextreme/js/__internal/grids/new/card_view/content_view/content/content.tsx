@@ -6,11 +6,13 @@ import { isCommandKeyPressed } from '@js/common/core/events/utils';
 import { combineClasses } from '@ts/core/utils/combine_classes';
 import type { SelectCardOptions } from '@ts/grids/new/card_view/content_view/types';
 import type { DataRow } from '@ts/grids/new/grid_core/columns_controller/types';
+import type { Key } from '@ts/grids/new/grid_core/data_controller/types';
 import {
   KbnNavigationContainer,
   type NavigationStrategyBase,
   withKbnNavigationItem, withKeyDownHandler,
 } from '@ts/grids/new/grid_core/keyboard_navigation/index';
+import type { RefObject } from 'inferno';
 import { Component, createRef } from 'inferno';
 
 import { Card } from './card/card';
@@ -27,6 +29,8 @@ export interface ContentProps {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   fieldTemplate?: any;
+
+  onFirstElementChange?: (element: HTMLDivElement | undefined) => void;
 
   onRowHeightChange?: (value: number) => void;
 
@@ -47,6 +51,8 @@ export interface ContentProps {
     onSearchFocus?: () => void;
     onCardContentKeyDown?: (event: KeyboardEvent) => void;
     onFocusedCardChanged?: (card: DataRow, cardIdx: number, element: HTMLElement) => void;
+    onEdit?: (key: Key, returnFocusTo?: HTMLElement) => void;
+    onDelete?: (key: Key, returnFocusTo?: HTMLElement) => void;
   };
 
   onPageChange?: (value: number) => void;
@@ -72,7 +78,7 @@ function getInfernoCardKey(card: DataRow): undefined | string | number {
 export class Content extends Component<ContentProps> {
   private readonly containerRef = createRef<HTMLDivElement>();
 
-  private readonly firstCardRef = createRef<HTMLDivElement>();
+  private cardElementRefs: RefObject<HTMLDivElement>[] = [];
 
   private focusFirstCardAfterReload = false;
 
@@ -118,6 +124,10 @@ export class Content extends Component<ContentProps> {
       ? CardWithKbn
       : Card;
 
+    this.cardElementRefs = new Array(this.props.items.length)
+      .fill(undefined)
+      .map(() => createRef());
+
     return (
       <KbnNavigationContainer
         enabled={this.props.navigationEnabled}
@@ -135,7 +145,7 @@ export class Content extends Component<ContentProps> {
             <CardItem
               {...this.props.cardProps}
               key={getInfernoCardKey(item)}
-              elementRef={idx === 0 ? this.firstCardRef : undefined}
+              elementRef={this.cardElementRefs[idx]}
               navigationIdx={idx}
               navigationEnabled={this.props.navigationEnabled}
               navigationStrategy={this.props.navigationStrategy}
@@ -168,6 +178,18 @@ export class Content extends Component<ContentProps> {
                 'f+ctrl': () => {
                   this.props.cardProps?.onSearchFocus?.();
                 },
+                'Enter+shift': () => {
+                  this.props.cardProps?.onEdit?.(
+                    item.key,
+                    this.cardElementRefs[idx].current ?? undefined,
+                  );
+                },
+                Delete: () => {
+                  this.props.cardProps?.onDelete?.(
+                    item.key,
+                    this.cardElementRefs[idx].current ?? undefined,
+                  );
+                },
               }}
               caughtEventPreventDefault={true}
               row={item}
@@ -185,11 +207,14 @@ export class Content extends Component<ContentProps> {
   }
 
   updateSizesInfo(): void {
-    if (!this.firstCardRef.current) {
+    const firstCardElement = this.cardElementRefs[0]?.current ?? undefined;
+    this.props.onFirstElementChange?.(firstCardElement);
+
+    if (!firstCardElement) {
       return;
     }
 
-    const cardHeight = this.firstCardRef.current.offsetHeight;
+    const cardHeight = firstCardElement.offsetHeight;
     const gapHeight = parseFloat(getComputedStyle(this.containerRef.current!).rowGap);
     const rowHeight = cardHeight + gapHeight;
     this.props.onRowHeightChange?.(rowHeight);

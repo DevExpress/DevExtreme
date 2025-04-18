@@ -10,6 +10,7 @@ import { ColumnsController } from '../columns_controller/columns_controller';
 import { DataController } from '../data_controller/data_controller';
 import type { DataObject, Key } from '../data_controller/types';
 import { ItemsController } from '../items_controller/items_controller';
+import { KeyboardNavigationController } from '../keyboard_navigation';
 import { OptionsController } from '../options_controller/options_controller';
 import type { Change } from './types';
 
@@ -82,6 +83,7 @@ export class EditingController {
   public static dependencies = [
     OptionsController, ItemsController,
     ColumnsController, DataController,
+    KeyboardNavigationController,
   ] as const;
 
   constructor(
@@ -89,6 +91,7 @@ export class EditingController {
     private readonly itemsController: ItemsController,
     private readonly columnController: ColumnsController,
     private readonly dataController: DataController,
+    private readonly kbn: KeyboardNavigationController,
   ) {}
 
   public editRow(key: Key): void {
@@ -139,7 +142,8 @@ export class EditingController {
     }
 
     const result = await confirm(
-      this.texts.unreactive_get().confirmDeleteMessage!,
+      // @ts-expect-error wrong typing in optionController
+      this.texts.unreactive_get().confirmDeleteMessage,
       // @ts-expect-error wrong typing in optionController
       this.texts.unreactive_get().confirmDeleteTitle,
     );
@@ -151,6 +155,7 @@ export class EditingController {
     const confirmStatus = await this.confirmDelete();
 
     if (!confirmStatus) {
+      this.kbn.returnFocus();
       return;
     }
 
@@ -160,6 +165,8 @@ export class EditingController {
       key,
     }]);
     await this.save();
+
+    this.kbn.returnFocus();
   }
 
   private clear(): void {

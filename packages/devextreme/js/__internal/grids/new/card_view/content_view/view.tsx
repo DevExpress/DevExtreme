@@ -73,6 +73,9 @@ export class ContentView extends ContentViewBase<ContentViewProps> {
         fieldTemplate: this.options.template('fieldTemplate'),
         cardsPerRow: this.cardsPerRow,
         onRowHeightChange: this.rowHeight.update.bind(this.rowHeight),
+        onFirstElementChange: (firstElement: HTMLDivElement | undefined): void => {
+          this.keyboardNavigationController.setFirstCardElement(firstElement);
+        },
         onPageChange: this.onPageChange.bind(this),
         showContextMenu: this.showContextMenu.bind(this),
         wordWrapEnabled: this.options.oneWay('wordWrapEnabled'),
@@ -86,8 +89,12 @@ export class ContentView extends ContentViewBase<ContentViewProps> {
           onDblClick: this.options.action('onCardDblClick'),
           onHoverChanged: this.options.action('onCardHoverChanged'),
           onPrepared: this.options.action('onCardPrepared'),
-          onEdit: (key: Key) => { this.editingController.editRow(key); },
-          onDelete: (key: Key) => {
+          onEdit: (key: Key, returnFocusTo?: HTMLElement) => {
+            this.keyboardNavigationController.setReturnFocusTo(returnFocusTo);
+            this.editingController.editRow(key);
+          },
+          onDelete: (key: Key, returnFocusTo?: HTMLElement) => {
+            this.keyboardNavigationController.setReturnFocusTo(returnFocusTo);
             // eslint-disable-next-line @typescript-eslint/no-floating-promises
             this.editingController.deleteRow(key);
           },

@@ -237,9 +237,8 @@ export class DataController {
     this.pageSize.update(dataSource.pageSize());
     this._totalCount.update(dataSource.totalCount());
 
-    this.loadedPromise?.promise.then(() => {
-      this.isReloading.update(false);
-    }).catch(() => {
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
+    Promise.resolve().then(() => {
       this.isReloading.update(false);
     });
 

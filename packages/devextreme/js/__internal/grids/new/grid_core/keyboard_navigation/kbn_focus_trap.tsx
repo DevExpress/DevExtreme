@@ -79,7 +79,7 @@ export class KbnFocusTrapEnabled extends Component<KbnFocusTrapBaseProps> {
   private readonly onKeyDown = (
     event: KeyboardEvent,
   ): void => {
-    if (event.key === 'Enter') {
+    if (event.key === 'Enter' && !event.shiftKey) {
       this.onLastDecoyFocusIn();
       markEventAsHandled(event);
     }

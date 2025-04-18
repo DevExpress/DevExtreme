@@ -9,6 +9,7 @@ import { createRef } from 'inferno';
 import { ColumnsController } from '../../columns_controller/columns_controller';
 import { View } from '../../core/view';
 import { ItemsController } from '../../items_controller/items_controller';
+import { KeyboardNavigationController } from '../../keyboard_navigation';
 import { OptionsController } from '../../options_controller/options_controller';
 import { ToolbarController } from '../../toolbar/controller';
 import { EditingController } from '../controller';
@@ -57,7 +58,7 @@ export class EditPopupView extends View<Props> {
   public static dependencies = [
     OptionsController, ColumnsController,
     ItemsController, EditingController,
-    ToolbarController,
+    ToolbarController, KeyboardNavigationController,
   ] as const;
 
   constructor(
@@ -66,6 +67,7 @@ export class EditPopupView extends View<Props> {
     private readonly itemsController: ItemsController,
     private readonly editingController: EditingController,
     private readonly toolbar: ToolbarController,
+    private readonly kbn: KeyboardNavigationController,
   ) {
     super();
 
@@ -89,9 +91,19 @@ export class EditPopupView extends View<Props> {
         (editRow) => editRow?.data && { ...editRow.data },
         [this.editingController.editingRow],
       ),
-      onSave: () => this.editingController.save(),
-      onCancel: () => this.editingController.cancel(),
-      onHide: () => this.editingController.cancel(),
+      onSave: () => {
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
+        this.editingController.save();
+        this.kbn.returnFocus();
+      },
+      onCancel: () => {
+        this.editingController.cancel();
+        this.kbn.returnFocus();
+      },
+      onHide: () => {
+        this.editingController.cancel();
+        this.kbn.returnFocus();
+      },
       items: this.items,
       customizeItem: computed(
         (editingRow) => (item: dxForm.SimpleItem) => {
