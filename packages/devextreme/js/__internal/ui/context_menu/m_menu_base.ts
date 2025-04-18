@@ -10,7 +10,7 @@ import type { DxEvent } from '@js/events';
 import type { dxMenuBaseOptions } from '@js/ui/context_menu/ui.menu_base';
 import type { Item, SubmenuShowMode } from '@js/ui/menu';
 import { render } from '@js/ui/widget/utils.ink_ripple';
-import MenuItem from '@ts/ui/collection/m_item';
+import MenuItem from '@ts/ui/collection/item';
 import MenuBaseEditStrategy from '@ts/ui/context_menu/m_menu_base.edit.strategy';
 import HierarchicalCollectionWidget from '@ts/ui/hierarchical_collection/m_hierarchical_collection_widget';
 

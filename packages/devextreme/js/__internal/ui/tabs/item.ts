@@ -1,6 +1,6 @@
 import $ from '@js/core/renderer';
 import type { Item } from '@js/ui/tabs';
-import CollectionItem from '@ts/ui/collection/m_item';
+import CollectionItem from '@ts/ui/collection/item';
 
 const TABS_ITEM_BADGE_CLASS = 'dx-tabs-item-badge';
 const BADGE_CLASS = 'dx-badge';

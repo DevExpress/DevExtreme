@@ -31,7 +31,7 @@ import {
 import { getScrollLeftMax } from '@ts/ui/scroll_view/utils/get_scroll_left_max';
 
 import { TABS_EXPANDED_CLASS } from './constants';
-import TabsItem from './m_item';
+import TabsItem from './item';
 
 // STYLE tabs
 
@@ -246,7 +246,6 @@ class Tabs extends CollectionWidget<TabsProperties> {
     this._feedbackHideTimeout = FEEDBACK_HIDE_TIMEOUT;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _prepareDefaultItemTemplate(data: Item, $container: dxElementWrapper): void {
     const text = isPlainObject(data) ? data?.text : data;
 
@@ -287,17 +286,14 @@ class Tabs extends CollectionWidget<TabsProperties> {
     });
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _itemClass(): string {
     return TABS_ITEM_CLASS;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _selectedItemClass(): string {
     return TABS_ITEM_SELECTED_CLASS;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _itemDataKey(): string {
     return TABS_ITEM_DATA_KEY;
   }
@@ -432,7 +428,6 @@ class Tabs extends CollectionWidget<TabsProperties> {
     this._inkRipple = render();
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _getPointerEvent(): string {
     return pointerEvents.up;
   }
@@ -680,7 +675,6 @@ class Tabs extends CollectionWidget<TabsProperties> {
     this.$element().toggleClass(TABS_ORIENTATION_CLASS.horizontal, value);
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _getIndicatorPositionClass(indicatorPosition: Position): string {
     return INDICATOR_POSITION_CLASS[indicatorPosition];
   }
