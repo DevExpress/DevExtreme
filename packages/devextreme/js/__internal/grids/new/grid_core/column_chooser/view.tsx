@@ -1,5 +1,6 @@
 /* eslint-disable spellcheck/spell-checker */
 import type { ColumnChooserMode } from '@js/common/grids';
+import type { DxElement } from '@js/core/element';
 import type { Properties as ButtonProperties } from '@js/ui/button';
 import type { Properties as PopupProperties, ToolbarItem } from '@js/ui/popup';
 import type dxPopup from '@js/ui/popup';
@@ -21,7 +22,6 @@ import { addWidgetPrefix } from '../utils';
 import type { ColumnChooserProps } from './column_chooser';
 import { CLASS, ColumnChooser } from './column_chooser';
 import { ColumnChooserController } from './controller';
-import { DxElement } from '@js/core/element';
 
 export class ColumnChooserView extends View<ColumnChooserProps> {
   protected override component = ColumnChooser;
