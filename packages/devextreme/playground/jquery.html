@@ -41,6 +41,81 @@
     <script type="text/javascript" src="../artifacts/js/dx.all.debug.js" charset="utf-8"></script>
     <script type="text/javascript" src="./themeSelector.js"></script>
     <script type="text/javascript" src="../../../node_modules/axe-core/axe.min.js"></script>
+    <style>
+.demo-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  row-gap: 16px;
+  height: 760px;
+  min-width: 320px;
+}
+
+.stepper-label {
+  font-weight: 600;
+}
+
+#customStepShape {
+  margin-bottom: 64px;
+}
+
+#customStepShape .dx-step-indicator {
+  border-radius: 4px;
+}
+
+#labelOnly {
+  margin-bottom: 64px;
+  align-items: center;
+}
+
+#labelOnly .dx-step {
+  padding-inline: 2px;
+}
+
+#labelOnly .dx-step-content {
+  padding-block: 4px;
+}
+
+#labelOnly .dx-step-caption {
+  width: auto;
+  max-width: 100%;
+}
+
+#labelOnly .dx-step-label {
+  background-color: var(--dx-color-main-bg);
+  padding-inline: 8px;
+}
+
+#labelOnly .dx-step.dx-state-focused .dx-step-caption {
+  box-shadow: 0 0 0 2px var(--dx-color-main-bg), 0 0 0 4px var(--dx-color-primary), 0 0 0 8px var(--dx-color-main-bg);
+  border-radius: 4px;
+}
+
+#iconOnly {
+  align-items: center;
+}
+
+#iconOnly .dx-step-content {
+  margin-block: 4px;
+}
+
+#iconOnly .dx-icon {
+  box-sizing: content-box;
+  padding: 6px;
+  background-color: var(--dx-color-main-bg);
+}
+
+#iconOnly .dx-state-focused .dx-icon {
+  box-shadow: 0 0 0 2px var(--dx-color-primary), 0 0 0 6px var(--dx-color-main-bg);
+  border-radius: 4px;
+}
+
+#iconOnly :is(.dx-step-selected, .dx-step-completed) .dx-icon {
+  color: var(--dx-color-primary);
+}
+
+    </style>
 </head>
 <body class="dx-surface">
     <div role="main">
@@ -49,14 +124,83 @@
         <select id="theme-selector" style="display: block;">
         </select>
         <br />
-        <div id="button"></div>
+        <div class="demo-container">
+          <div id="label-customStepShape" class="stepper-label">Custom Step Shape</div>
+          <div id="customStepShape"></div>
+          <div id="label-labelOnly" class="stepper-label">Label Only</div>
+          <div id="labelOnly"></div>
+          <div id="label-iconOnly" class="stepper-label">Icon Only</div>
+          <div id="iconOnly"></div>
+        </div>
         <script>
-            $(function() {
-                $("#button").dxButton({
-                    text: 'Click me!',
-                    onClick: function() { alert("clicked"); }
-                });
-            });
+           $(() => {
+  $('#customStepShape').dxStepper({
+    selectedIndex: 2,
+    dataSource,
+    linear: false,
+    elementAttr: { 'aria-labelledby': 'label-customStepShape' },
+    itemTemplate(data) {
+      return `<div class="dx-step-indicator">
+          <i class="dx-icon dx-icon-${data.icon}"></i>
+        </div>
+        <div class="dx-step-caption">
+          <div class="dx-step-label">${data.label}</div>
+          ${data.optional ? '<div class="dx-step-optional-mark">(Optional)</div>' : ''}
+        </div>`;
+    },
+  });
+
+  $('#labelOnly').dxStepper({
+    selectedIndex: 2,
+    dataSource,
+    linear: false,
+    elementAttr: { 'aria-labelledby': 'label-labelOnly' },
+    itemTemplate(data) {
+      return `<div class='dx-step-caption'>
+        <div class='dx-step-label'>${data.label}</div>
+      </div>`;
+    },
+  });
+
+  $('#iconOnly').dxStepper({
+    selectedIndex: 2,
+    dataSource,
+    linear: false,
+    elementAttr: { 'aria-labelledby': 'label-iconOnly' },
+    itemTemplate(data) {
+      return `<i class="dx-icon dx-icon-${data.icon}"></i>`;
+    },
+  });
+});
+
+
+const dataSource = [{
+  text: 'A',
+  label: 'Cart',
+  icon: 'cart',
+},
+{
+  text: 'B',
+  label: 'Shipping Info',
+  icon: 'clipboardtasklist',
+},
+{
+  text: 'C',
+  label: 'Promo Code',
+  icon: 'gift',
+  optional: true,
+},
+{
+  text: 'D',
+  label: 'Checkout',
+  icon: 'packagebox',
+},
+{
+  text: 'E',
+  label: 'Ordered',
+  icon: 'checkmarkcircle',
+}];
+
         </script>
     </div>
 </body>

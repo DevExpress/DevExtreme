@@ -31,7 +31,7 @@ import {
 import { getScrollLeftMax } from '@ts/ui/scroll_view/utils/get_scroll_left_max';
 
 import { TABS_EXPANDED_CLASS } from './constants';
-import TabsItem from './m_item';
+import TabsItem from './item';
 
 // STYLE tabs
 
@@ -246,7 +246,6 @@ class Tabs extends CollectionWidget<TabsProperties> {
     this._feedbackHideTimeout = FEEDBACK_HIDE_TIMEOUT;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _prepareDefaultItemTemplate(data: Item, $container: dxElementWrapper): void {
     const text = isPlainObject(data) ? data?.text : data;
 
@@ -287,17 +286,14 @@ class Tabs extends CollectionWidget<TabsProperties> {
     });
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _itemClass(): string {
     return TABS_ITEM_CLASS;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _selectedItemClass(): string {
     return TABS_ITEM_SELECTED_CLASS;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _itemDataKey(): string {
     return TABS_ITEM_DATA_KEY;
   }
@@ -327,6 +323,7 @@ class Tabs extends CollectionWidget<TabsProperties> {
       }
 
       const scrollable = this.getScrollable();
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
       scrollable?.update();
 
       if (this.option('rtlEnabled')) {
@@ -432,7 +429,6 @@ class Tabs extends CollectionWidget<TabsProperties> {
     this._inkRipple = render();
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _getPointerEvent(): string {
     return pointerEvents.up;
   }
@@ -581,6 +577,7 @@ class Tabs extends CollectionWidget<TabsProperties> {
   }
 
   _updateScrollPosition(offset: number, duration: number): void {
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     this._scrollable?.update();
     this._scrollable?.scrollBy(offset / duration);
   }
@@ -664,6 +661,7 @@ class Tabs extends CollectionWidget<TabsProperties> {
       return;
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     super._itemSelectHandler(e);
   }
 
@@ -680,7 +678,6 @@ class Tabs extends CollectionWidget<TabsProperties> {
     this.$element().toggleClass(TABS_ORIENTATION_CLASS.horizontal, value);
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _getIndicatorPositionClass(indicatorPosition: Position): string {
     return INDICATOR_POSITION_CLASS[indicatorPosition];
   }
@@ -781,6 +778,7 @@ class Tabs extends CollectionWidget<TabsProperties> {
     // @ts-expect-error ts-error
     const prevItemIndex = currentIndex - 1;
     // @ts-expect-error ts-error
+    // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
     const nextItemIndex = currentIndex + 1;
 
     const nextFocusedIndex = $(value).index();
