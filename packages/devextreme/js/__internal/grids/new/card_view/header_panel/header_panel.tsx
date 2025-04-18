@@ -1,13 +1,14 @@
 /* eslint-disable
   spellcheck/spell-checker
 */
-import type { Column } from '@ts/grids/new/grid_core/columns_controller/types';
+import type { Column, VisibleColumn } from '@ts/grids/new/grid_core/columns_controller/types';
 import { Scrollable } from '@ts/grids/new/grid_core/inferno_wrappers/scrollable';
 import type { NavigationStrategyBase } from '@ts/grids/new/grid_core/keyboard_navigation/index';
 import { KbnNavigationContainer, withKbnNavigationItem, withKeyDownHandler } from '@ts/grids/new/grid_core/keyboard_navigation/index';
 import type { ComponentType } from 'inferno';
 import { Component } from 'inferno';
 
+import type { DraggingColumnData } from './column_sortable';
 import { ColumnSortable } from './column_sortable';
 import { CLASSES as itemClasses, Item } from './item';
 import type { DraggingOptions } from './options';
@@ -20,15 +21,17 @@ export const CLASSES = {
 const ItemWithKbn = withKbnNavigationItem(withKeyDownHandler(Item));
 
 export interface HeaderPanelProps {
-  columns: Column[];
+  visibleColumns: VisibleColumn[];
 
   kbnEnabled: boolean;
 
   navigationStrategy: NavigationStrategyBase;
 
-  onMove: (column: Column, toIndex: number) => void;
+  onColumnMove: (column: Column, toIndex: number, draggingData: DraggingColumnData) => void;
 
   allowColumnReordering: boolean;
+
+  columnChooserDragModeOpened: boolean;
 
   showSortIndexes: boolean;
 
@@ -73,13 +76,15 @@ export class HeaderPanel extends Component<HeaderPanelProps> {
       >
         <ColumnSortable
           {...this.props.draggingOptions}
-          allowColumnReordering={this.props.allowColumnReordering}
           source="header-panel-main"
-          visibleColumns={this.props.columns}
+          visibleColumns={this.props.visibleColumns}
+          getColumnByIndex={(index) => this.props.visibleColumns[index]}
+          allowDragging={this.props.allowColumnReordering}
+          columnChooserDragModeOpened={this.props.columnChooserDragModeOpened}
+          onColumnMove={this.props.onColumnMove}
+          columnDragTemplate={Item}
           itemOrientation="horizontal"
-          onMove={(column, index): void => this.props.onMove?.(column, index)}
           filter={`.${itemClasses.item}`}
-          dragTemplate={Item}
         >
           <Scrollable
             direction='horizontal'
@@ -94,7 +99,7 @@ export class HeaderPanel extends Component<HeaderPanelProps> {
               navigationStrategy={this.props.navigationStrategy}
             >
               <div className={CLASSES.content}>
-                {this.props.columns.map((column, idx) => (
+                {this.props.visibleColumns.map((column, idx) => (
                   <HeaderItem
                     navigationIdx={idx}
                     navigationStrategy={this.props.navigationStrategy}

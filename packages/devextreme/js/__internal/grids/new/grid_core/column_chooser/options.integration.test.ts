@@ -1,8 +1,10 @@
 /* eslint-disable spellcheck/spell-checker */
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import {
   afterEach, describe, expect, it,
 } from '@jest/globals';
 import type { PositionConfig } from '@js/common/core/animation';
+import type { ColumnChooserMode } from '@js/common/grids';
 import $ from '@js/core/renderer';
 import type dxPopup from '@js/ui/popup';
 import type dxTreeView from '@js/ui/tree_view';
@@ -10,8 +12,7 @@ import CardView from '@ts/grids/new/card_view/widget';
 import type { Options as GridCoreOptions } from '@ts/grids/new/grid_core/options';
 import { rerender } from 'inferno';
 
-import { CLASSES as ContentViewClasses } from '../content_view/content_view';
-import { defaultOptions } from './options';
+import { defaultOptions as columnChooserDefaultOptions } from './options';
 
 const SELECTORS = {
   cardView: '.dx-cardview',
@@ -19,6 +20,8 @@ const SELECTORS = {
   popup: '.dx-popup',
   treeView: '.dx-treeview',
 };
+
+const defaultOptions = columnChooserDefaultOptions.columnChooser;
 
 const rootQuerySelector = (selector: string) => document.body.querySelector(selector);
 
@@ -70,7 +73,7 @@ describe('Options', () => {
     it.each([
       { value: true, result: true },
       { value: false, result: false },
-      { value: undefined, result: false },
+      { value: undefined, result: defaultOptions!.enabled! },
     ])('enabled: %s', ({ value, result }) => {
       setup({ columnChooser: { enabled: value } });
 
@@ -80,16 +83,15 @@ describe('Options', () => {
     });
 
     it.each<{
-      value?: number; result: number | string | undefined;
+      value?: number; result: number | string;
     }>([
-      { value: undefined, result: defaultOptions.columnChooser?.width },
+      { value: undefined, result: defaultOptions!.width! },
       { value: 100, result: 100 },
       { value: 1000, result: 1000 },
     ])('width: $value', ({ value, result }) => {
-      const cardView = setup({
+      setupOpened({
         columnChooser: { enabled: true, width: value },
       });
-      cardView.showColumnChooser();
 
       const popup = getPopupInstance();
 
@@ -97,16 +99,15 @@ describe('Options', () => {
     });
 
     it.each<{
-      value?: number; result: number | string | undefined;
+      value?: number; result: number | string;
     }>([
-      { value: undefined, result: defaultOptions.columnChooser?.height },
+      { value: undefined, result: defaultOptions!.height! },
       { value: 100, result: 100 },
       { value: 1000, result: 1000 },
     ])('height: $value', ({ value, result }) => {
-      const cardView = setup({
+      setupOpened({
         columnChooser: { enabled: true, height: value },
       });
-      cardView.showColumnChooser();
 
       const popup = getPopupInstance();
 
@@ -114,9 +115,9 @@ describe('Options', () => {
     });
 
     it.each<{
-      value?: string; result?: string;
+      value?: string; result: string | Element | undefined;
     }>([
-      { value: undefined, result: undefined },
+      { value: undefined, result: defaultOptions!.container },
       { value: '#custom', result: '#custom' },
     ])('container: $value', ({ value, result }) => {
       setupOpened({
@@ -136,7 +137,7 @@ describe('Options', () => {
         result: {
           my: 'right bottom',
           at: 'right bottom',
-          of: ContentViewClasses.contentView,
+          of: '.dx-gridcore-contentview',
           collision: 'fit',
           offset: '-2 -2',
           boundaryOffset: '2 2',
@@ -164,24 +165,25 @@ describe('Options', () => {
       expect(popup.option('position')).toMatchObject(result);
     });
 
-    // Implement when dragAndDrop mode is developed
-    it.skip.each<{
-      value?: string; result?: string;
+    it.each<{
+      value?: string; result: string;
     }>([
-      { value: undefined, result: defaultOptions.columnChooser?.emptyPanelText },
+      { value: undefined, result: defaultOptions!.emptyPanelText! },
       { value: 'custom value', result: 'custom value' },
-    ])('emptyPanelText: $value', ({ value }) => {
+    ])('emptyPanelText: $value', ({ value, result }) => {
       setupOpened({
         columnChooser: { enabled: true, emptyPanelText: value },
       });
 
-      // TODO
+      const treeView = getTreeViewInstance();
+
+      expect(treeView.option('noDataText')).toEqual(result);
     });
 
     it.each<{
-      value?: string; result?: string;
+      value?: string; result: string;
     }>([
-      { value: undefined, result: defaultOptions.columnChooser?.title },
+      { value: undefined, result: defaultOptions!.title! },
       { value: 'custom value', result: 'custom value' },
     ])('title: $value', ({ value, result }) => {
       setupOpened({
@@ -196,7 +198,7 @@ describe('Options', () => {
     it.each<{
       value?: boolean; result: boolean;
     }>([
-      { value: undefined, result: false },
+      { value: undefined, result: defaultOptions!.search!.enabled! },
       { value: true, result: true },
       { value: false, result: false },
     ])('search.enabled: $value', ({ value, result }) => {
@@ -212,7 +214,7 @@ describe('Options', () => {
     it.each<{
       value?: number; result: number;
     }>([
-      { value: undefined, result: 500 },
+      { value: undefined, result: defaultOptions!.search!.timeout! },
       { value: 100, result: 100 },
       { value: 1000, result: 1000 },
     ])('search.timeout: $value', ({ value, result }) => {
@@ -241,25 +243,30 @@ describe('Options', () => {
       expect(treeView.option('searchEditorOptions')).toMatchObject(result);
     });
 
-    // Implement when dragAndDrop mode is developed
-    it.skip.each<{
-      value?: 'select' | 'dragAndDrop'; result?: 'select' | 'dragAndDrop';
+    it.each<{
+      mode?: ColumnChooserMode;
     }>([
-      { value: undefined, result: defaultOptions.columnChooser?.mode },
-      { value: 'select', result: 'select' },
-      { value: 'dragAndDrop', result: 'dragAndDrop' },
-    ])('mode: $value', ({ value }) => {
+      { mode: undefined },
+      { mode: 'select' },
+      { mode: 'dragAndDrop' },
+    ])('mode: $value', ({ mode }) => {
       setupOpened({
-        columnChooser: { enabled: true, mode: value },
+        columnChooser: { enabled: true, mode },
       });
 
-      // TODO
+      const treeView = getTreeViewInstance();
+
+      if (mode === 'select') {
+        expect(['selectAll', 'normal']).toContain(treeView.option('showCheckBoxesMode'));
+      } else {
+        expect(['none']).toContain(treeView.option('showCheckBoxesMode'));
+      }
     });
 
     it.each<{
       value?: boolean; result: 'selectAll' | 'normal';
     }>([
-      { value: undefined, result: 'normal' },
+      { value: undefined, result: defaultOptions!.selection!.allowSelectAll! ? 'selectAll' : 'normal' },
       { value: true, result: 'selectAll' },
       { value: false, result: 'normal' },
     ])('selection.allowSelectAll: $value', ({ value, result }) => {
@@ -275,7 +282,7 @@ describe('Options', () => {
     it.each<{
       value?: boolean; result: boolean;
     }>([
-      { value: undefined, result: false },
+      { value: undefined, result: defaultOptions!.selection!.selectByClick! },
       { value: true, result: true },
       { value: false, result: false },
     ])('selection.selectByClick: $value', ({ value, result }) => {
@@ -304,6 +311,118 @@ describe('Options', () => {
       const items = (treeView.option('items') ?? []).map((item) => item.text);
 
       expect(items).toEqual(result);
+    });
+  });
+
+  describe('Column options related to ColumnChooser', () => {
+    it.each<{
+      value?: boolean; result: boolean;
+    }>([
+      { value: true, result: true },
+      { value: false, result: false },
+    ])('column.visible: $value', ({ value, result }) => {
+      setupOpened({
+        columns: [{
+          dataField: 'column',
+          visible: value,
+        }],
+        columnChooser: {
+          enabled: true,
+          mode: 'select',
+        },
+      });
+
+      const treeView = getTreeViewInstance();
+
+      expect(treeView.getNodes()[0].selected).toBe(result);
+    });
+
+    it.each<{
+      value?: string; result: string;
+    }>([
+      { value: undefined, result: 'Test' },
+      { value: 'custom caption', result: 'custom caption' },
+    ])('column.caption: $value', ({ value, result }) => {
+      setupOpened({
+        columns: [{
+          dataField: 'Test',
+          caption: value,
+        }],
+        columnChooser: {
+          enabled: true,
+          mode: 'select',
+        },
+      });
+
+      const treeView = getTreeViewInstance();
+
+      expect(treeView.getNodes()[0].text).toBe(result);
+    });
+
+    it.each<{
+      value: boolean; result: boolean;
+    }>([
+      { value: false, result: true },
+      { value: true, result: false },
+    ])('column.allowHiding: $value', ({ value, result }) => {
+      setupOpened({
+        columns: [{
+          dataField: 'test column',
+          allowHiding: value,
+        }],
+        columnChooser: {
+          enabled: true,
+          mode: 'select',
+        },
+      });
+
+      const treeView = getTreeViewInstance();
+
+      expect(treeView.getNodes()[0].disabled).toBe(result);
+    });
+
+    it.each<{
+      value: boolean; result: number;
+    }>([
+      { value: false, result: 0 },
+      { value: true, result: 1 },
+    ])('column.showInColumnChooser: $value', ({ value, result }) => {
+      setupOpened({
+        columns: [{
+          dataField: 'test column',
+          showInColumnChooser: value,
+        }],
+        columnChooser: {
+          enabled: true,
+          mode: 'select',
+        },
+      });
+
+      const treeView = getTreeViewInstance();
+
+      expect(treeView.getNodes()).toHaveLength(result);
+    });
+
+    it.each<{
+      value?: string; result: string;
+    }>([
+      { value: undefined, result: 'test' },
+      { value: 'custom_name', result: 'custom_name' },
+    ])('column.name: $value', ({ value, result }) => {
+      setupOpened({
+        columns: [{
+          dataField: 'test',
+          name: value,
+        }],
+        columnChooser: {
+          enabled: true,
+          mode: 'select',
+        },
+      });
+
+      const treeView = getTreeViewInstance();
+
+      expect(treeView.getNodes()[0].itemData?.columnName).toEqual(result);
     });
   });
 });

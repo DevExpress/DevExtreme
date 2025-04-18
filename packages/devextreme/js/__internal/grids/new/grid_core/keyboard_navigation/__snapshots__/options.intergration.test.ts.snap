@@ -33,6 +33,7 @@ exports[`Options KeyboardNavigation onFocusedCardChanged common API contract tes
           "width": 252,
         },
         "headerItemTemplate": undefined,
+        "headerPanelIndex": 0,
         "name": "id",
         "showInColumnChooser": true,
         "trueText": "true",

@@ -8,6 +8,7 @@
 @use '../../base/cardView/content_view/content/card/content/variables' as *;
 @use '../../base/cardView/content_view/content/variables' as *;
 @use '../../base/cardView/content_view/no_data/variables' as *;
+@use '../../base/cardView/column_chooser/variables' as *;
 
 // adduse
 
@@ -126,3 +127,5 @@ $cardview-card-selection-background-color: $cardview-fluent-card-selection-backg
 
 $cardview-card-border-color: $cardview-fluent-card-border-color !default;
 $cardview-card-background-color: $cardview-fluent-card-background-color !default;
+
+$cardview-columnchooser-message-color: lighten($base-text-color, 26%) !default;
