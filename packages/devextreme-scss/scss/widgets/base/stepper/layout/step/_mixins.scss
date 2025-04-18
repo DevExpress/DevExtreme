@@ -1,3 +1,5 @@
+@use "../../../icons" as *;
+
 @mixin step(
   $min-size,
   $width,
@@ -25,7 +27,7 @@
     column-gap: $content-column-gap;
 
     .dx-icon {
-      font-size: $stepper-step-icon-size;
+      @include dx-icon-sizing($stepper-step-icon-size);
     }
 
     .dx-step-optional-mark {

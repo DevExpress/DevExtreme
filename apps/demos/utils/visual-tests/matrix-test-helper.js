@@ -263,6 +263,9 @@ const SKIPPED_TESTS = {
     VectorMap: [
       { demo: 'TooltipHTMLSupport', themes: [THEME.material] },
     ],
+    Stepper: [
+      { demo: 'FormIntegration', themes: [THEME.generic, THEME.material, THEME.fluent] },
+    ],
   },
   Vue: {
     Common: [
@@ -302,6 +305,9 @@ const SKIPPED_TESTS = {
       { demo: 'ContextMenuIntegration', themes: [THEME.generic, THEME.fluent, THEME.material] },
       { demo: 'ToolbarCustomization', themes: [THEME.generic, THEME.fluent, THEME.material] },
     ],
+    Stepper: [
+      { demo: 'FormIntegration', themes: [THEME.generic, THEME.material, THEME.fluent] },
+    ],
   },
   React: {
     Common: [
@@ -340,6 +346,9 @@ const SKIPPED_TESTS = {
     Form: [
       // Flaky issue: Source image size does not match target size
       { demo: 'CustomizeItem', themes: [THEME.generic] },
+    ],
+    Stepper: [
+      { demo: 'FormIntegration', themes: [THEME.generic, THEME.material, THEME.fluent] },
     ],
     VectorMap: [
       { demo: 'TooltipHTMLSupport', themes: [THEME.material] },

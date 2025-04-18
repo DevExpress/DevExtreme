@@ -18,7 +18,7 @@ export default function App() {
         linear={false}
         itemRender={CustomStepShape}
       />
-      <div id="label-labelOnly" className="stepper-label">Title Only</div>
+      <div id="label-labelOnly" className="stepper-label">Label Only</div>
       <Stepper
         id="labelOnly"
         elementAttr={{ 'aria-labelledby': 'label-labelOnly' }}

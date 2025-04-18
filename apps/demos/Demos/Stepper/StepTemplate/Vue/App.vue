@@ -1,5 +1,8 @@
 <template>
-  <div id="label-customStepShape" class="stepper-label">Custom Step Shape</div>
+  <div
+    id="label-customStepShape"
+    class="stepper-label"
+  >Custom Step Shape</div>
   <DxStepper
     id="customStepShape"
     :data-source="steps"
@@ -10,16 +13,22 @@
     <template #item="{ data }">
       <div>
         <div class="dx-step-indicator">
-          <i :class="'dx-icon dx-icon-' + data.icon"></i>
+          <i :class="'dx-icon dx-icon-' + data.icon"/>
         </div>
         <div class="dx-step-caption">
           <div class="dx-step-label">{{ data.label }}</div>
-          <div v-if="data.optional" class="dx-step-optional-mark">(Optional)</div>
+          <div
+            v-if="data.optional"
+            class="dx-step-optional-mark"
+          >(Optional)</div>
         </div>
       </div>
     </template>
   </DxStepper>
-  <div id="label-labelOnly" class="stepper-label">Title Only</div>
+  <div
+    id="label-labelOnly"
+    class="stepper-label"
+  >Label Only</div>
   <DxStepper
     id="labelOnly"
     :data-source="steps"
@@ -35,7 +44,10 @@
       </div>
     </template>
   </DxStepper>
-  <div id="label-iconOnly" class="stepper-label">Icon Only</div>
+  <div
+    id="label-iconOnly"
+    class="stepper-label"
+  >Icon Only</div>
   <DxStepper
     id="iconOnly"
     :data-source="steps"
@@ -45,7 +57,7 @@
   >
     <template #item="{ data }">
       <div>
-        <i :class="'dx-icon dx-icon-' + data.icon"></i>
+        <i :class="'dx-icon dx-icon-' + data.icon"/>
       </div>
     </template>
   </DxStepper>
@@ -116,6 +128,7 @@ import { steps } from './data.ts';
 }
 
 #iconOnly .dx-icon {
+  box-sizing: content-box;
   padding: 6px;
   background-color: var(--dx-color-main-bg);
 }
