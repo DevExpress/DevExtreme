@@ -8,6 +8,7 @@ InterruptableComputed {
     true,
     true,
     true,
+    true,
   ],
   "depValues": [
     [
@@ -25,10 +26,14 @@ InterruptableComputed {
       "enabled": true,
       "searchStr": "",
     },
+    [],
   ],
   "isInitialized": true,
   "subscriptions": SubscriptionBag {
     "subscriptions": [
+      {
+        "unsubscribe": [Function],
+      },
       {
         "unsubscribe": [Function],
       },
@@ -99,6 +104,7 @@ InterruptableComputed {
     true,
     true,
     true,
+    true,
   ],
   "depValues": [
     [
@@ -114,10 +120,14 @@ InterruptableComputed {
       "enabled": true,
       "searchStr": "",
     },
+    [],
   ],
   "isInitialized": true,
   "subscriptions": SubscriptionBag {
     "subscriptions": [
+      {
+        "unsubscribe": [Function],
+      },
       {
         "unsubscribe": [Function],
       },
@@ -155,6 +165,7 @@ InterruptableComputed {
     true,
     true,
     true,
+    true,
   ],
   "depValues": [
     [
@@ -170,10 +181,14 @@ InterruptableComputed {
       "enabled": true,
       "searchStr": "",
     },
+    [],
   ],
   "isInitialized": true,
   "subscriptions": SubscriptionBag {
     "subscriptions": [
+      {
+        "unsubscribe": [Function],
+      },
       {
         "unsubscribe": [Function],
       },

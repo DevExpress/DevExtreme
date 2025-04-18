@@ -3,7 +3,7 @@ import {
 } from '@jest/globals';
 import dxContextMenu from '@js/ui/context_menu';
 
-import { ColumnsController } from '../../grid_core/columns_controller';
+import { ColumnsController } from '../../grid_core/columns_controller/index';
 import type { Options } from '../options';
 import { OptionsControllerMock } from '../options_controller.mock';
 import { ContextMenuControllerMock } from './controller.mock';

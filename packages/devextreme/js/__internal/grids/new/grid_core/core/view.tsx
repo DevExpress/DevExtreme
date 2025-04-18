@@ -53,6 +53,7 @@ export abstract class View<T extends {}> {
       constructor() {
         super();
         this.subscription = toSubscribable(view.getProps()).subscribe((props) => {
+          view.props = props;
           this.state ??= {
             props,
           };

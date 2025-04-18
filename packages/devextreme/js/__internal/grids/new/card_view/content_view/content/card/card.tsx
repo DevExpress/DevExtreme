@@ -6,7 +6,7 @@ import { isCommandKeyPressed } from '@js/common/core/events/utils/index';
 import { off, on } from '@js/events/index';
 import { combineClasses } from '@ts/core/utils/combine_classes';
 import type { DataRow } from '@ts/grids/new/grid_core/columns_controller/types';
-import type { DataObject } from '@ts/grids/new/grid_core/data_controller/types';
+import type { DataObject, Key } from '@ts/grids/new/grid_core/data_controller/types';
 import { KbnFocusTrap } from '@ts/grids/new/grid_core/keyboard_navigation/index';
 import type { ComponentType, InfernoNode, RefObject } from 'inferno';
 import { Component, createRef } from 'inferno';
@@ -87,6 +87,14 @@ export interface CardProps {
 
   selectCard?: (row: DataRow, options: SelectCardOptions) => void;
 
+  allowUpdating?: boolean;
+
+  allowDeleting?: boolean;
+
+  onEdit?: (key: Key) => void;
+
+  onDelete?: (key: Key) => void;
+
   footerTemplate?: ComponentType<{ card: DataRow }>;
 }
 
@@ -133,6 +141,10 @@ export class Card extends Component<CardProps> {
           items={this.props.toolbar ?? []}
           isCheckBoxesRendered={this.props.isCheckBoxesRendered}
           selectCard={this.props.selectCard}
+          onEdit={() => { this.props.onEdit?.(this.props.row.key); }}
+          onDelete={() => { this.props.onDelete?.(this.props.row.key); }}
+          allowUpdating={this.props.allowUpdating}
+          allowDeleting={this.props.allowDeleting}
         />
         {hasCover && (
           <Cover

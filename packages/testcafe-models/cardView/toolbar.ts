@@ -1,4 +1,5 @@
 import TextBox from "../textBox";
+import Button from "../button";
 
 const CLASS = {
     disabledState: 'dx-state-disabled',
@@ -22,6 +23,10 @@ export default class Toolbar {
 
     getSearchTextBox(): TextBox {
         return new TextBox(this.element.find(`.${CLASS.textBox}`));
+    }
+
+    getAddButton(): Button {
+        return new Button(this.element.find('[aria-label=\'add\']'));
     }
 
     isSelectAllButtonDisabled(): Promise<boolean> {

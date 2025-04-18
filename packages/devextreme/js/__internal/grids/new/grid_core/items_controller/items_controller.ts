@@ -17,6 +17,8 @@ export class ItemsController {
     SearchController,
   ] as const;
 
+  public readonly additionalItems = state<DataRow[]>([]);
+
   public readonly items = computed(
     (
       dataItems,
@@ -24,8 +26,9 @@ export class ItemsController {
       selectedCardKeys,
       // NOTE: We should trigger computed by search options change
       // But all work with these options encapsulated in SearchController
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
       highlightTextOptions,
+      additionalItems,
     ) => dataItems.map(
       (item, itemIndex) => this.createDataRow(
         item,
@@ -33,12 +36,13 @@ export class ItemsController {
         itemIndex,
         selectedCardKeys,
       ),
-    ),
+    ).concat(additionalItems),
     [
       this.dataController.items,
       this.columnsController.visibleColumns,
       this.selectedCardKeys,
       this.searchController.highlightTextOptions,
+      this.additionalItems,
     ],
   );
 
@@ -52,13 +56,18 @@ export class ItemsController {
     this.selectedCardKeys.update(keys);
   }
 
+  public findItemByKey(items: DataRow[], key: Key): DataRow | null {
+    return items.find((item) => item.key === key) ?? null;
+  }
+
   public createDataRow(
     data: DataObject,
     columns: Column[],
     itemIndex: number,
     selectedCardKeys?: Key[],
+    key?: Key,
   ): DataRow {
-    const itemKey = this.dataController.getDataKey(data);
+    const itemKey = key ?? this.dataController.getDataKey(data);
 
     return {
       cells: columns.map((column, index) => {
