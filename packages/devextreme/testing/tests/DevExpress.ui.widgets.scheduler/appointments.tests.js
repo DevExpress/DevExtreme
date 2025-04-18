@@ -99,7 +99,7 @@ const createInstance = (options, subscribesConfig) => {
         timeZoneCalculator: createTimeZoneCalculator(),
         getResources: () => [],
         getLoadedResources: () => [],
-        getAgendaResourceProcessor: () => ({}),
+        getResourceProcessor: () => ({}),
         getAppointmentColor: () => new Deferred(),
         getResourceDataAccessors: () => createExpressions([]),
         dataAccessors,

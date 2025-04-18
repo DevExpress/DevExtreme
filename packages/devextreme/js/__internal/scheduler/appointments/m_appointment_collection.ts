@@ -33,8 +33,9 @@ import timeZoneUtils from '../m_utils_time_zone';
 import { getPathToLeaf } from '../resources/m_utils';
 import type { AppointmentViewModel } from '../types';
 import type { AppointmentDataAccessor } from '../utils';
+import { AgendaAppointment } from './appointment/agenda_appointment';
+import { Appointment } from './appointment/m_appointment';
 import { getAppointmentTakesSeveralDays, sortAppointmentsByStartDate } from './data_provider/m_utils';
-import { AgendaAppointment, Appointment } from './m_appointment';
 import { createAgendaAppointmentLayout, createAppointmentLayout } from './m_appointment_layout';
 import { getAppointmentDateRange } from './resizing/m_core';
 import { countVisibleAppointments } from './utils/countVisibleAppointments';
@@ -621,13 +622,10 @@ class SchedulerAppointments extends CollectionWidget {
 
         getAppointmentColor: this.option('getAppointmentColor'),
         getResourceDataAccessors: this.option('getResourceDataAccessors'),
+        getResourceProcessor: this.option('getResourceProcessor'),
         timeZoneCalculator: this.option('timeZoneCalculator'),
       };
 
-      if (this.isAgendaView) {
-        const agendaResourceProcessor = this.option('getAgendaResourceProcessor')();
-        config.createPlainResourceListAsync = (rawAppointment) => agendaResourceProcessor.createListAsync(rawAppointment);
-      }
       (this as any)._createComponent(
         element,
         this.isAgendaView ? AgendaAppointment : Appointment,
