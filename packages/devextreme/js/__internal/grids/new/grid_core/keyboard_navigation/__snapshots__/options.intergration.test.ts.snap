@@ -1,0 +1,57 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Options KeyboardNavigation onFocusedCardChanged common API contract test 1`] = `
+{
+  "cells": [
+    {
+      "column": {
+        "alignment": "left",
+        "allowFiltering": true,
+        "allowHeaderFiltering": false,
+        "allowHiding": true,
+        "allowReordering": true,
+        "allowSearch": true,
+        "allowSorting": true,
+        "calculateCellValue": [Function],
+        "calculateDisplayValue": [Function],
+        "calculateFilterExpression": [Function],
+        "caption": "Id",
+        "captionTemplate": undefined,
+        "dataField": "id",
+        "dataType": "string",
+        "falseText": "false",
+        "fieldTemplate": undefined,
+        "headerFilter": {
+          "allowSelectAll": true,
+          "height": 325,
+          "search": {
+            "editorOptions": {},
+            "enabled": false,
+            "mode": "contains",
+            "timeout": 500,
+          },
+          "width": 252,
+        },
+        "headerItemTemplate": undefined,
+        "name": "id",
+        "showInColumnChooser": true,
+        "trueText": "true",
+        "valueTemplate": undefined,
+        "visible": true,
+        "visibleIndex": 0,
+      },
+      "displayValue": 1,
+      "highlightedText": null,
+      "index": 0,
+      "text": "1",
+      "value": 1,
+    },
+  ],
+  "data": {
+    "id": 1,
+  },
+  "index": 1,
+  "isSelected": false,
+  "key": 1,
+}
+`;
