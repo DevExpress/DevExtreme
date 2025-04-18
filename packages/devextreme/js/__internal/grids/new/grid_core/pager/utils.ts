@@ -1,8 +1,8 @@
-import type { PagerVisible, PageSize, PageSizes } from './options';
+import type { PagerVisible, PageSizes } from './options';
 
 // TODO: Need to fix case with runtime changes the allowedPageSizes property to 'auto'
 export function calculatePageSizes(
-  allowedPageSizes: PageSize[] | undefined,
+  allowedPageSizes: PageSizes | undefined,
   pageSizesConfig: PageSizes,
   pageSize: number,
 ): PageSizes {
