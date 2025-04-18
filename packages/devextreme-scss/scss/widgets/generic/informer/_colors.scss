@@ -1,0 +1,47 @@
+@use "../colors" as *;
+@use "sass:color";
+
+// adduse
+
+$informer-color: $base-invalid-color !default;
+$informer-background-color: null !default;
+
+@if $color == "carmine" {
+  $informer-color: darken(desaturate(adjust-hue($base-danger, -351), 26.91), 5.49);
+  $informer-background-color: lighten(desaturate(adjust-hue($base-danger, -347), 26.69), 33.14);
+}
+
+@if $color == "contrast" {
+  $informer-color: darken(desaturate(adjust-hue($base-danger, 2), 16.93), 6.08);
+  $informer-background-color: rgba(212, 63, 58, 0.1);
+}
+
+@if $color == "dark" {
+  $informer-color: $base-danger;
+  $informer-background-color: rgba(212, 63, 58, 0.1);
+}
+
+@if $color == "darkmoon" {
+  $informer-color: darken(desaturate(adjust-hue($base-danger, -342), 28.85), 6.67);
+  $informer-background-color: rgba(212, 63, 58, 0.1);
+}
+
+@if $color == "darkviolet" {
+  $informer-color: $base-danger;
+  $informer-background-color: rgba(212, 63, 58, 0.1);
+}
+
+@if $color == "greenmist" {
+  $informer-color: darken(desaturate(adjust-hue($base-danger, -351), 27.05), 4.90);
+  $informer-background-color: lighten(desaturate(adjust-hue($base-danger, -348), 26.83), 33.73);
+}
+
+@if $color == "light" {
+  $informer-color: $base-danger;
+  $informer-background-color: lighten(saturate(adjust-hue($base-danger, 4), 0.22), 38.63);
+}
+
+@if $color == "softblue" {
+  $informer-color: $base-danger;
+  $informer-background-color: lighten(saturate(adjust-hue($base-danger, 4), 0.22), 38.63);
+}

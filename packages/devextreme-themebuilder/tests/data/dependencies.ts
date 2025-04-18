@@ -28,6 +28,7 @@ export const dependencies: FlatStylesDependencies = {
   dropdownbox: ['validation', 'button', 'loadindicator', 'textbox', 'popup'],
   progressbar: ['validation'],
   fileuploader: ['validation', 'button', 'progressbar'],
+  informer: [],
   multiview: [],
   tabs: ['validation', 'button'],
   tabpanel: ['multiview', 'validation', 'button', 'tabs'],
