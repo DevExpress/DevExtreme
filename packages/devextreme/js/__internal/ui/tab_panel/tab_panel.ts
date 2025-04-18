@@ -17,11 +17,11 @@ import { current as currentTheme, isFluent, isMaterialBased } from '@js/ui/theme
 import supportUtils from '@ts/core/utils/m_support';
 import type { OptionChanged } from '@ts/core/widget/types';
 import MultiView from '@ts/ui/m_multi_view';
-import type { TabsProperties } from '@ts/ui/tabs/m_tabs';
-import Tabs from '@ts/ui/tabs/m_tabs';
+import type { TabsProperties } from '@ts/ui/tabs/tabs';
+import Tabs from '@ts/ui/tabs/tabs';
 
 // eslint-disable-next-line import/no-named-default
-import { default as TabPanelItem } from './m_item';
+import { default as TabPanelItem } from './item';
 
 export const TABPANEL_CLASS = 'dx-tabpanel';
 const TABPANEL_TABS_CLASS = 'dx-tabpanel-tabs';
@@ -172,12 +172,10 @@ class TabPanel extends MultiView<TabPanelProperties> {
     this._toggleTabPanelTabsPositionClass();
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _getElementAria(): Record<string, string> {
     return { role: 'tabpanel' };
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _getItemAria(): Record<string, string> {
     return { role: 'tabpanel' };
   }
@@ -189,7 +187,6 @@ class TabPanel extends MultiView<TabPanelProperties> {
     this._renderLayout();
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _prepareTabsItemTemplate(data: Item, $container: dxElementWrapper): void {
     const $iconElement = getImageContainer(data?.icon);
 

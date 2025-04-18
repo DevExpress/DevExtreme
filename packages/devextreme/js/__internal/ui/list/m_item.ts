@@ -1,6 +1,6 @@
 import $ from '@js/core/renderer';
 import type { Item } from '@js/ui/list';
-import CollectionWidgetItem from '@ts/ui/collection/m_item';
+import CollectionWidgetItem from '@ts/ui/collection/item';
 
 const LIST_ITEM_BADGE_CONTAINER_CLASS = 'dx-list-item-badge-container';
 const LIST_ITEM_BADGE_CLASS = 'dx-list-item-badge';

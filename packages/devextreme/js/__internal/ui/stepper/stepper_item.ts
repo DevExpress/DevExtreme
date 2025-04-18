@@ -1,5 +1,5 @@
 import type { Item } from '@js/ui/stepper';
-import CollectionWidgetItem from '@ts/ui/collection/m_item';
+import CollectionWidgetItem from '@ts/ui/collection/item';
 
 export const STEP_COMPLETED_CLASS = 'dx-step-completed';
 export const STEP_INVALID_CLASS = 'dx-step-invalid';
