@@ -2,10 +2,11 @@
  @typescript-eslint/explicit-function-return-type,
  @typescript-eslint/explicit-module-boundary-types
 */
+import { eventHandler, eventUtils } from '@ts/grids/new/grid_core/core/events/index';
 import { Component, createRef, type RefObject } from 'inferno';
 
 import type { WithElementRef, WithKeyDown } from './types';
-import { getKeyWithModifications, markEventAsHandled } from './utils';
+import { getKeyWithModifications } from './utils';
 
 export interface WithKeyDownHandlerProps {
   keyDownConfig?: Record<string, (
@@ -32,14 +33,15 @@ export const withKeyDownHandler = <
       return (
         <WrappedComponent
           {...(restProps as TProps)}
-          onKeyDown={this.onKeyDown}
+          onKeyDown={this.onKeyDown.bind(this)}
         >
           { children }
         </WrappedComponent>
       );
     }
 
-    private readonly onKeyDown = (event: KeyboardEvent): void => {
+    @eventHandler
+    private onKeyDown(event: KeyboardEvent): void {
       const { keyDownConfig, onKeyDown, caughtEventPreventDefault } = this.props;
       const ref = this.getActualRef();
       const fullKeyName = getKeyWithModifications(event);
@@ -47,7 +49,7 @@ export const withKeyDownHandler = <
 
       if (handler) {
         handler(event, ref);
-        markEventAsHandled(event);
+        eventUtils.markHandled(event);
       }
 
       if (handler && caughtEventPreventDefault) {
@@ -55,7 +57,7 @@ export const withKeyDownHandler = <
       }
 
       onKeyDown?.(event);
-    };
+    }
 
     private getActualRef(): RefObject<HTMLElement> {
       return this.props.elementRef ?? this.elementRef;

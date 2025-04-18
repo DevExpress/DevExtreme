@@ -44,7 +44,7 @@ export class HeaderPanelView extends View<HeaderPanelProps> {
         (columns) => [...columns].sort((a, b) => a.visibleIndex - b.visibleIndex),
         [this.columnsController.columns],
       ),
-      navigationEnabled: this.keyboardNavigationController.enabled,
+      kbnEnabled: this.keyboardNavigationController.enabled,
       navigationStrategy: this.navigationStrategy,
       onMove: this.onMove.bind(this),
       onRemove: this.onRemove.bind(this),
@@ -59,8 +59,6 @@ export class HeaderPanelView extends View<HeaderPanelProps> {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       draggingOptions: this.options.oneWay('headerPanel.dragging') as any,
       showContextMenu: this.showContextMenu.bind(this),
-      onKeyDown: this.keyboardNavigationController
-        .onKeyDown.bind(this.keyboardNavigationController),
     });
   }
 

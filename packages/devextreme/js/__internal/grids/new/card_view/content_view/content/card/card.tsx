@@ -42,7 +42,7 @@ export interface CardPreparedEvent {
 export interface CardProps {
   row: DataRow;
 
-  navigationEnabled: boolean;
+  kbnEnabled: boolean;
 
   allowSelectOnClick?: boolean;
 
@@ -88,8 +88,6 @@ export interface CardProps {
   selectCard?: (row: DataRow, options: SelectCardOptions) => void;
 
   footerTemplate?: ComponentType<{ card: DataRow }>;
-
-  onCardContentKeyDown?: (event: KeyboardEvent) => void;
 }
 
 export class Card extends Component<CardProps> {
@@ -121,7 +119,7 @@ export class Card extends Component<CardProps> {
     return (
       <KbnFocusTrap
         elementRef={this.containerRef}
-        enabled={this.props.navigationEnabled}
+        enabled={this.props.kbnEnabled}
         tabIndex={this.props.tabIndex}
         className={className}
         onDblClick={this.handleDoubleClick}
@@ -129,7 +127,6 @@ export class Card extends Component<CardProps> {
         onMouseLeave={this.handleMouseLeave}
         onContextMenu={this.props.onContextMenu}
         onKeyDown={this.props.onKeyDown}
-        onTrapKeyDown={this.props.onCardContentKeyDown}
       >
         <CardHeader
           row={row}
