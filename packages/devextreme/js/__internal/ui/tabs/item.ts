@@ -9,10 +9,10 @@ class TabsItem extends CollectionItem<Item> {
   _renderWatchers(): void {
     super._renderWatchers();
 
-    this._startWatcher('badge', this._renderBadge.bind(this));
+    this._startWatcher<string>('badge', this._renderBadge.bind(this));
   }
 
-  _renderBadge(badge): void {
+  _renderBadge(badge: string | undefined): void {
     this._$element.children(`.${BADGE_CLASS}`).remove();
 
     if (!badge) {
