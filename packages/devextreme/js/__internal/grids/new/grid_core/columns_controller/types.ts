@@ -68,7 +68,7 @@ export type Column = Pick<Required<ColumnBase>, InheritedColumnProps> & {
   filterType?: FilterType;
 };
 
-export type VisibleColumn = Column & { visible: true };
+export type VisibleColumn = Column & { headerPanelIndex: number };
 
 export interface Cell {
   value: unknown;
