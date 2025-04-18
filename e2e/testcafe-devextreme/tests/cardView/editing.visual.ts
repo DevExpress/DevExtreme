@@ -9,7 +9,7 @@ fixture.disablePageReloads`CardView - Editing`
   .page(url(__dirname, '../container.html'));
 
 const baseConfig = {
-  width: 400,
+  width: 1000,
   height: 600,
   columns,
   dataSource: data,
