@@ -122,6 +122,16 @@ const columns = {
 ],
 }
 
+const onKeyDownHandlers = {
+  off: undefined,
+  on: (event) => { console.log('onKeyDown event: ', event); }
+}
+
+const onFocusedCardChangedEvent = {
+  off: undefined,
+  on: (event) => { console.log('onFocusedCardChanged event: ', event); }
+}
+
 const meta: Meta<typeof CardView> = {
   title: "Grids/CardView",
   component: CardView,
@@ -172,6 +182,19 @@ const meta: Meta<typeof CardView> = {
         'show (custom template)': renderFooter,
         'undefined': undefined,
       }
+    },
+    keyboardNavigation: {
+      control: 'object',
+    },
+    onKeyDown: {
+      control: 'radio',
+      options: Object.keys(onKeyDownHandlers),
+      mapping: onKeyDownHandlers,
+    },
+    onFocusedCardChanged: {
+      control: 'radio',
+      options: Object.keys(onFocusedCardChangedEvent),
+      mapping: onFocusedCardChangedEvent,
     }
   }
 };
@@ -196,6 +219,9 @@ export const DefaultMode: Story = {
     columns: 'local',
     filterPanel: { visible: true },
     cardFooterTemplate: undefined,
+    keyboardNavigation: {
+      enabled: true,
+    },
   },
 };
 
