@@ -63,7 +63,7 @@ import themes from 'ui/themes';
 import registerKeyHandlerTestHelper from '../../helpers/registerKeyHandlerTestHelper.js';
 import responsiveBoxScreenMock from '../../helpers/responsiveBoxScreenMock.js';
 import { isDefined } from 'core/utils/type.js';
-import { TABPANEL_CLASS } from '__internal/ui/tab_panel/m_tab_panel';
+import { TABPANEL_CLASS } from '__internal/ui/tab_panel/tab_panel';
 
 const INVALID_CLASS = 'dx-invalid';
 const FORM_GROUP_CONTENT_CLASS = 'dx-form-group-content';
