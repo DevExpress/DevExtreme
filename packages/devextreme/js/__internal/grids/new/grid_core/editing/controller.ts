@@ -10,7 +10,7 @@ import { ColumnsController } from '../columns_controller/columns_controller';
 import { DataController } from '../data_controller/data_controller';
 import type { DataObject, Key } from '../data_controller/types';
 import { ItemsController } from '../items_controller/items_controller';
-import { KeyboardNavigationController } from '../keyboard_navigation';
+import { KeyboardNavigationController } from '../keyboard_navigation/index';
 import { OptionsController } from '../options_controller/options_controller';
 import type { Change } from './types';
 

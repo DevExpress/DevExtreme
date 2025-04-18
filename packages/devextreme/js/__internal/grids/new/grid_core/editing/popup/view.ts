@@ -9,7 +9,7 @@ import { createRef } from 'inferno';
 import { ColumnsController } from '../../columns_controller/columns_controller';
 import { View } from '../../core/view';
 import { ItemsController } from '../../items_controller/items_controller';
-import { KeyboardNavigationController } from '../../keyboard_navigation';
+import { KeyboardNavigationController } from '../../keyboard_navigation/index';
 import { OptionsController } from '../../options_controller/options_controller';
 import { ToolbarController } from '../../toolbar/controller';
 import { EditingController } from '../controller';
