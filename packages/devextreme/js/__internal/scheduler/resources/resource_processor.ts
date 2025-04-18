@@ -21,7 +21,7 @@ const loadResource = (dataSourceConfig: ResourceConfig['dataSource']): Promise<R
 
   const dataSource = getWrappedDataSource(dataSourceConfig);
   if (dataSource.isLoaded()) {
-    return Promise.resolve(dataSource.items());
+    return Promise.resolve(dataSource.items() as Record<string, unknown>[]);
   }
 
   return new Promise((resolve, reject) => {
@@ -37,24 +37,24 @@ const getAppointmentResources = (
 ): AppointmentResource[] => Object
   .entries(resourceMap)
   .reduce<AppointmentResource[]>((result, [fieldName, data]) => {
-    const item: AppointmentResource = {
-      label: data.label,
-      values: [],
-    };
+  const item: AppointmentResource = {
+    label: data.label,
+    values: [],
+  };
 
-    if (fieldName in rawAppointment) {
-      wrapToArray(rawAppointment[fieldName])
-        .forEach((value) => {
-          item.values.push(data.texts.get(value) ?? '');
-        });
-    }
+  if (fieldName in rawAppointment) {
+    wrapToArray(rawAppointment[fieldName])
+      .forEach((value) => {
+        item.values.push(data.texts.get(value) ?? '');
+      });
+  }
 
-    if (item.values.length) {
-      result.push(item);
-    }
+  if (item.values.length) {
+    result.push(item);
+  }
 
-    return result;
-  }, []);
+  return result;
+}, []);
 
 export class ResourceProcessor {
   private loadingPromise?: Promise<ResourceMap>;
