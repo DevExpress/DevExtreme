@@ -57,6 +57,7 @@
 }
 
 ::ng-deep #iconOnly .dx-icon {
+  box-sizing: content-box;
   padding: 6px;
   background-color: var(--dx-color-main-bg);
 }

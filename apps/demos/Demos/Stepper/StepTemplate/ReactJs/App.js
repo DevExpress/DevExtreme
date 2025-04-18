@@ -26,7 +26,7 @@ export default function App() {
         id="label-labelOnly"
         className="stepper-label"
       >
-        Title Only
+        Label Only
       </div>
       <Stepper
         id="labelOnly"
