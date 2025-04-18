@@ -1,13 +1,5 @@
-/* eslint-disable spellcheck/spell-checker */
-
-import type { SortDescriptor } from '@js/data';
-import type {
-  SubsGets,
-  SubsGetsUpd,
-} from '@ts/core/reactive/index';
-import {
-  computed, interruptableComputed,
-} from '@ts/core/reactive/index';
+import type { ReadonlySignal } from '@preact/signals-core';
+import { computed } from '@preact/signals-core';
 
 import { ColumnsController } from '../columns_controller/index';
 import type { Column } from '../columns_controller/types';
@@ -27,14 +19,61 @@ export class SortingController {
 
   private readonly _showSortIndexes = this.options.oneWay('sorting.showSortIndexes');
 
-  public readonly sortedColumns: SubsGets<Column[]>;
+  public readonly sortedColumns = computed(
+    () => this.columnsController.visibleColumns.value
+      .filter(
+        (column) => column.sortOrder,
+      ),
+  );
 
-  public readonly orderedSortedColumns: SubsGetsUpd<Column[]>;
+  public readonly orderedSortedColumns: ReadonlySignal<Column[]> = computed(() => {
+    const columns = this.sortedColumns.value;
+    const mode = this.mode.value;
+    if (mode !== 'multiple' && this.areColumnsInitialized) {
+      return columns;
+    }
+    const result = columns.sort(sortOrderDelegate);
 
-  public readonly showSortIndexes: SubsGets<boolean>;
+    if (!this.areColumnsInitialized) {
+      this.areColumnsInitialized = true;
 
-  // eslint-disable-next-line @stylistic/max-len
-  public readonly sortParameters: SubsGets<SortDescriptor<unknown> | SortDescriptor<unknown>[] | undefined>;
+      let counter = 0;
+      result.forEach((c) => {
+        this.columnsController.columnOption(c, 'sortIndex', counter);
+        counter += 1;
+        return c;
+      });
+    }
+
+    return result;
+  });
+
+  public readonly showSortIndexes = computed(() => {
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    const _showSortIndexes = this._showSortIndexes.value;
+    const sortedColumns = this.sortedColumns.value;
+    if (!_showSortIndexes) {
+      return _showSortIndexes;
+    }
+    return sortedColumns.length > 1;
+  });
+
+  public readonly sortParameters = computed(() => {
+    const columns = this.orderedSortedColumns.value;
+    const result: SortOptions[] = [];
+    columns.forEach((c) => {
+      const sortItem = {
+        selector: c.calculateSortValue ?? c.dataField,
+        desc: c.sortOrder === 'desc',
+      } as SortOptions;
+      if (c.sortingMethod) {
+        sortItem.compare = c.sortingMethod.bind(c);
+      }
+      result.push(sortItem);
+    });
+
+    return result;
+  });
 
   public static dependencies = [OptionsController, ColumnsController] as const;
 
@@ -44,63 +83,6 @@ export class SortingController {
     private readonly options: OptionsController,
     private readonly columnsController: ColumnsController,
   ) {
-    this.sortedColumns = computed(
-      (columns) => columns.filter((column) => column.sortOrder),
-      [this.columnsController.visibleColumns],
-    );
-
-    this.orderedSortedColumns = interruptableComputed(
-      (columns, mode) => {
-        if (mode !== 'multiple' && this.areColumnsInitialized) {
-          return columns;
-        }
-        const result = columns.sort(sortOrderDelegate);
-
-        if (!this.areColumnsInitialized) {
-          this.areColumnsInitialized = true;
-
-          let counter = 0;
-          result.forEach((c) => {
-            this.columnsController.columnOption(c, 'sortIndex', counter);
-            counter += 1;
-            return c;
-          });
-        }
-
-        return result;
-      },
-      [this.sortedColumns, this.mode],
-    );
-
-    this.sortParameters = computed(
-      (columns) => {
-        const result: SortOptions[] = [];
-        columns.forEach((c) => {
-          const sortItem = {
-            selector: c.calculateSortValue ?? c.dataField,
-            desc: c.sortOrder === 'desc',
-          } as SortOptions;
-          if (c.sortingMethod) {
-            sortItem.compare = c.sortingMethod.bind(c);
-          }
-          result.push(sortItem);
-        });
-
-        return result;
-      },
-      [this.orderedSortedColumns],
-    );
-
-    this.showSortIndexes = computed(
-      (_showSortIndexes, sortedColumns) => {
-        if (!_showSortIndexes) {
-          return _showSortIndexes;
-        }
-        return sortedColumns.length > 1;
-      },
-      [this._showSortIndexes, this.sortedColumns],
-    );
-
     // TODO: Resolve the nested update issue
 
     // const updateOrderedSortedColumns = (
@@ -150,7 +132,7 @@ export class SortingController {
     }
 
     const isClearSortingRequired = (!column.sortOrder && !isCtrl)
-    || this.sortedColumns.unreactive_get().length > 1;
+    || this.sortedColumns.peek().length > 1;
     if (isClearSortingRequired) {
       this.clearSorting();
     }
@@ -182,7 +164,7 @@ export class SortingController {
   }
 
   private updateColumnSortOrder(column, nextSortOrder): void {
-    const needChanges = this.mode.unreactive_get() === 'multiple';
+    const needChanges = this.mode.peek() === 'multiple';
     if (!needChanges) {
       return;
     }
@@ -191,7 +173,7 @@ export class SortingController {
       const newColumns = [...columns];
 
       let needNormalizing = false;
-      const orderedSortedColumns = this.orderedSortedColumns.unreactive_get();
+      const orderedSortedColumns = this.orderedSortedColumns.peek();
       const orderedIndex = getColumnIndexByName(orderedSortedColumns, column.name);
       const commonIndex = getColumnIndexByName(newColumns, column.name);
 

@@ -41,7 +41,7 @@ export class KeyboardNavigationController {
   }
 
   public onKeyDown(event: EventWithHandled<KeyboardEvent>): void {
-    const action = this.options.action('onKeyDown').unreactive_get();
+    const action = this.options.action('onKeyDown').peek();
     action({
       handled: event.dxHandled ?? false,
       event,
@@ -50,7 +50,7 @@ export class KeyboardNavigationController {
   }
 
   public onFocusedCardChanged(card: DataRow, cardIdx: number, element: HTMLElement): void {
-    const action = this.options.action('onFocusedCardChanged').unreactive_get();
+    const action = this.options.action('onFocusedCardChanged').peek();
     action({
       cardIndex: cardIdx,
       card,

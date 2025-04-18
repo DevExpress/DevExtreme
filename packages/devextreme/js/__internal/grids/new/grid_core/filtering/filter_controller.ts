@@ -1,8 +1,6 @@
-/* eslint-disable spellcheck/spell-checker */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
-
-import type { SubsGetsUpd } from '@ts/core/reactive/index';
-import { computed, state } from '@ts/core/reactive/index';
+import type { Signal } from '@preact/signals-core';
+import { computed, signal } from '@preact/signals-core';
 import { anyOf, noneOf } from '@ts/grids/grid_core/filter/m_filter_custom_operations';
 import gridCoreUtils from '@ts/grids/grid_core/m_utils';
 
@@ -18,7 +16,7 @@ export class FilterController {
 
   public readonly filterValueOption = this.options.twoWay('filterValue');
 
-  public readonly appliedFilters: SubsGetsUpd<AppliedFilters> = state({});
+  public readonly appliedFilters: Signal<AppliedFilters> = signal({});
 
   public static dependencies = [
     OptionsController,
@@ -26,32 +24,26 @@ export class FilterController {
   ] as const;
 
   public readonly customOperations = computed(
-    (fbCustomOperations) => [
+    () => [
       anyOf(null),
       noneOf(null),
-    ].concat(fbCustomOperations)
+    ]
+      .concat(this.filterBuilderCustomOperations.value)
       .filter((o) => o),
-    [this.filterBuilderCustomOperations],
   );
 
   private readonly appliedFilterExpressions = computed(
-    (
-      appliedFilters,
-      columns,
-      customOperations,
-    ) => getAppliedFilterExpressions(appliedFilters, columns, customOperations),
-    [
-      this.appliedFilters,
-      this.columnsController.visibleColumns,
-      this.customOperations,
-    ],
+    () => getAppliedFilterExpressions(
+      this.appliedFilters.value,
+      this.columnsController.visibleColumns.value,
+      this.customOperations.value,
+    ),
   );
 
   public readonly displayFilter = computed(
-    (filters) => gridCoreUtils.combineFilters(filters),
-    [
-      this.appliedFilterExpressions,
-    ],
+    () => gridCoreUtils.combineFilters(
+      this.appliedFilterExpressions.value,
+    ),
   );
 
   constructor(

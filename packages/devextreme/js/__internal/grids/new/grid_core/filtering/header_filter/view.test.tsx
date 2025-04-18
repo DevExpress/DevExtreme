@@ -11,7 +11,7 @@ import {
   it,
   jest,
 } from '@jest/globals';
-import { state } from '@ts/core/reactive/index';
+import { signal } from '@preact/signals-core';
 import { render, rerender } from 'inferno';
 
 import type { PopupState } from './types';
@@ -98,7 +98,7 @@ describe('HeaderFilter', () => {
     it('should init old popup module on creation', () => {
       new HeaderFilterPopupView(
         {} as any,
-        { popupState: state<PopupState>(null) } as any,
+        { popupState: signal<PopupState>(null) } as any,
       );
 
       expect(oldHeaderFilterMock.init).toHaveBeenCalledTimes(1);
@@ -107,14 +107,14 @@ describe('HeaderFilter', () => {
     it('should open popup if popupState changed', () => {
       const expectedElement = { 0: {}, length: 1 } as any;
       const expectedOptions = { optA: 'A', optB: 'B' };
-      const popupState = state<PopupState>(null);
+      const popupState = signal<PopupState>(null);
 
       new HeaderFilterPopupView(
         {} as any,
         { popupState } as any,
       );
 
-      popupState.update({ element: {} as any, options: expectedOptions });
+      popupState.value = { element: {} as any, options: expectedOptions };
 
       expect(oldHeaderFilterMock.showHeaderFilterMenu)
         .toHaveBeenCalledTimes(1);
@@ -123,15 +123,15 @@ describe('HeaderFilter', () => {
     });
 
     it('should do nothing if popupState update is empty', () => {
-      const popupState = state<PopupState>(null);
+      const popupState = signal<PopupState>(null);
 
       new HeaderFilterPopupView(
         {} as any,
         { popupState } as any,
       );
 
-      popupState.update({ element: {} as any, options: {} });
-      popupState.update(null);
+      popupState.value = { element: {} as any, options: {} };
+      popupState.value = null;
 
       expect(oldHeaderFilterMock.showHeaderFilterMenu)
         .toHaveBeenCalledTimes(1);

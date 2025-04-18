@@ -2,8 +2,8 @@
 /* eslint-disable spellcheck/spell-checker */
 import type { DataType } from '@js/common';
 import type * as dxForm from '@js/ui/form';
-import type { SubsGets } from '@ts/core/reactive/index';
-import { combined, computed } from '@ts/core/reactive/index';
+import type { ReadonlySignal } from '@preact/signals-core';
+import { computed, signal } from '@preact/signals-core';
 import { createRef } from 'inferno';
 
 import { ColumnsController } from '../../columns_controller/columns_controller';
@@ -34,7 +34,7 @@ export class EditPopupView extends View<Props> {
   protected component = EditPopup;
 
   private readonly items = computed(
-    (columns) => columns.map((column): dxForm.Item => ({
+    () => this.columnsController.columns.value.map((column): dxForm.Item => ({
       // @ts-expect-error
       column,
       name: column.name,
@@ -52,7 +52,37 @@ export class EditPopupView extends View<Props> {
       },
       ...column.formItem,
     })),
-    [this.columnsController.columns],
+  );
+
+  private readonly formData = computed(() => {
+    const editRow = this.editingController.editingRow.value;
+    return editRow?.data && { ...editRow.data };
+  });
+
+  private readonly customizeItems = computed(
+    () => (item: dxForm.SimpleItem): void => {
+      const editingRow = this.editingController.editingRow.value;
+
+      if (!editingRow) {
+        return;
+      }
+
+      const column = this.columnsController.columns.peek()
+        .find((c) => c.name === item.name)!;
+
+      item.editorOptions ??= {};
+      item.editorOptions.onValueChanged = async ({ value }): Promise<void> => {
+        const newData = {};
+        await this.promises.add(
+          Promise.resolve(column.setCellValue.bind(column)(newData, value, editingRow.data)),
+        );
+        this.editingController.addChange(editingRow.key, newData);
+        this.formRef.current?.repaint();
+      };
+      item.editorOptions.value = editingRow?.cells.find(
+        (c) => c.column.name === column.name,
+      )?.value;
+    },
   );
 
   public static dependencies = [
@@ -72,63 +102,37 @@ export class EditPopupView extends View<Props> {
     super();
 
     this.toolbar.addDefaultItem(
-      {
+      signal({
         name: 'addCardButton',
         location: 'after',
         widget: 'dxButton',
         options: { icon: 'add', onClick: () => this.editingController.addCard() },
-      },
+      }),
       this.editingController.allowAdding,
     );
   }
 
-  protected getProps(): SubsGets<Props> {
-    return combined({
-      formProps: this.options.oneWay('editing.form'),
-      popupProps: this.options.oneWay('editing.popup'),
+  protected getProps(): ReadonlySignal<Props> {
+    return computed(() => ({
+      formProps: this.options.oneWay('editing.form').value,
+      popupProps: this.options.oneWay('editing.popup').value,
       formRef: this.formRef,
-      data: computed(
-        (editRow) => editRow?.data && { ...editRow.data },
-        [this.editingController.editingRow],
-      ),
-      onSave: () => {
+      data: this.formData.value,
+      onSave: (): void => {
         // eslint-disable-next-line @typescript-eslint/no-floating-promises
         this.editingController.save();
         this.kbn.returnFocus();
       },
-      onCancel: () => {
+      onCancel: (): void => {
         this.editingController.cancel();
         this.kbn.returnFocus();
       },
-      onHide: () => {
+      onHide: (): void => {
         this.editingController.cancel();
         this.kbn.returnFocus();
       },
-      items: this.items,
-      customizeItem: computed(
-        (editingRow) => (item: dxForm.SimpleItem) => {
-          if (!editingRow) {
-            return;
-          }
-
-          const column = this.columnsController.columns.unreactive_get()
-            .find((c) => c.name === item.name)!;
-
-          item.editorOptions ??= {};
-          item.editorOptions.onValueChanged = async ({ value }): Promise<void> => {
-            const newData = {};
-            await this.promises.add(
-              Promise.resolve(column.setCellValue.bind(column)(newData, value, editingRow.data)),
-            );
-            this.editingController.addChange(editingRow.key, newData);
-            this.formRef.current?.repaint();
-          };
-          item.editorOptions.value = editingRow?.cells.find(
-            (c) => c.column.name === column.name,
-          )?.value;
-        },
-        [this.editingController.editingRow],
-      ),
-    });
+      items: this.items.value,
+      customizeItem: this.customizeItems.value,
+    }));
   }
 }

@@ -1,4 +1,4 @@
-import { computed, effect } from '@ts/core/reactive/index';
+import { computed, effect } from '@preact/signals-core';
 
 import { SearchController } from '../../search/index';
 import { FilterController } from '../filter_controller';
@@ -12,11 +12,11 @@ export class GetAppliedFilterVisitor {
   ] as const;
 
   private readonly filterPanelValue = computed(
-    (filterValue, filterEnabled) => (filterEnabled ? filterValue : undefined),
-    [
-      this.filterController.filterValueOption,
-      this.filterController.filterPanelFilterEnabled,
-    ],
+    () => (
+      this.filterController.filterPanelFilterEnabled.value
+        ? this.filterController.filterValueOption.value
+        : undefined
+    ),
   );
 
   constructor(
@@ -24,19 +24,12 @@ export class GetAppliedFilterVisitor {
     private readonly headerFilterController: HeaderFilterController,
     private readonly filterController: FilterController,
   ) {
-    effect(
-      (filterPanel, headerFilter, search) => {
-        this.filterController.appliedFilters.update({
-          filterPanel,
-          headerFilter,
-          search,
-        });
-      },
-      [
-        this.filterPanelValue,
-        this.headerFilterController.composedHeaderFilter,
-        this.searchController.searchFilter,
-      ],
-    );
+    effect(() => {
+      this.filterController.appliedFilters.value = {
+        filterPanel: this.filterPanelValue.value,
+        headerFilter: this.headerFilterController.composedHeaderFilter.value,
+        search: this.searchController.searchFilter.value,
+      };
+    });
   }
 }

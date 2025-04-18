@@ -1,6 +1,5 @@
-/* eslint-disable spellcheck/spell-checker */
-import type { Subscribable } from '@ts/core/reactive/index';
-import { state } from '@ts/core/reactive/index';
+import type { ReadonlySignal } from '@preact/signals-core';
+import { signal } from '@preact/signals-core';
 
 export interface GridError {
   text: string;
@@ -8,27 +7,25 @@ export interface GridError {
 }
 
 export class ErrorController {
-  private readonly _errors = state<GridError[]>([]);
+  private readonly _errors = signal<GridError[]>([]);
 
-  public errors: Subscribable<GridError[]> = this._errors;
+  public errors: ReadonlySignal<GridError[]> = this._errors;
 
   public static dependencies = [] as const;
 
   private counter = 0;
 
   public showError(error: string): void {
-    this._errors.updateFunc((errors) => [...errors, {
+    this._errors.value = [...this._errors.peek(), {
       text: error,
       id: this.counter,
-    }]);
+    }];
     this.counter += 1;
   }
 
   public removeError(index: number): void {
-    this._errors.updateFunc((errors) => {
-      const newErrors = errors.slice();
-      newErrors.splice(index, 1);
-      return newErrors;
-    });
+    const newErrors = this._errors.peek().slice();
+    newErrors.splice(index, 1);
+    this._errors.value = newErrors;
   }
 }

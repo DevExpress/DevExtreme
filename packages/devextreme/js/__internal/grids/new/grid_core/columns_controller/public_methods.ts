@@ -1,5 +1,5 @@
 /* eslint-disable consistent-return */
-/* eslint-disable spellcheck/spell-checker */
+
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 
@@ -14,7 +14,7 @@ import { getColumnByIndexOrName } from './utils';
 export function PublicMethods<TBase extends Constructor<GridCoreNewBase>>(GridCore: TBase) {
   return class GridCoreWithColumnsController extends GridCore {
     public getVisibleColumns(): Column[] {
-      return this.columnsController.visibleColumns.unreactive_get();
+      return this.columnsController.visibleColumns.peek();
     }
 
     public addColumn(column: ColumnProperties): void {
@@ -23,11 +23,11 @@ export function PublicMethods<TBase extends Constructor<GridCoreNewBase>>(GridCo
 
     public getVisibleColumnIndex(columnNameOrIndex: string | number): number {
       const column = getColumnByIndexOrName(
-        this.columnsController.columns.unreactive_get(),
+        this.columnsController.columns.peek(),
         columnNameOrIndex,
       );
 
-      return this.columnsController.visibleColumns.unreactive_get()
+      return this.columnsController.visibleColumns.peek()
         .findIndex(
           (c) => c.name === column?.name,
         );
@@ -35,7 +35,7 @@ export function PublicMethods<TBase extends Constructor<GridCoreNewBase>>(GridCo
 
     public deleteColumn(columnNameOrIndex: string | number): void {
       const column = getColumnByIndexOrName(
-        this.columnsController.columns.unreactive_get(),
+        this.columnsController.columns.peek(),
         columnNameOrIndex,
       );
 
@@ -74,7 +74,7 @@ export function PublicMethods<TBase extends Constructor<GridCoreNewBase>>(GridCo
     // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
     ): Column | Column[T] | void {
       const column = getColumnByIndexOrName(
-        this.columnsController.columns.unreactive_get(),
+        this.columnsController.columns.peek(),
         columnNameOrIndex,
       );
 
