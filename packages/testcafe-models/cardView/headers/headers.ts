@@ -23,4 +23,9 @@ export default class HeadersElement extends FocusableElement {
     const selector = this.element.find(`.${Widget.addClassPrefix(this.widgetName, CLASS.headerItem)}`).nth(nth);
     return new HeaderItem(selector, this.widgetName);
   }
+
+  getHeaderItemsElements(): Selector {
+    const selector = this.element.find(`.${Widget.addClassPrefix(this.widgetName, CLASS.headerItem)}`)
+    return selector;
+  }
 }

@@ -46,6 +46,7 @@ export interface ItemProps {
   column: Column;
   status?: Status;
   showSortIndexes?: boolean;
+  isDragging?: boolean;
   template?: ComponentType<{ column: Column }>;
   cssClass?: string;
   onKeyDown?: (event: KeyboardEvent) => void;
@@ -74,6 +75,9 @@ export class Item extends Component<ItemProps> {
       none: undefined,
     }[this.props.status];
 
+    const showSortIcon = !this.props.isDragging && this.props.column.sortOrder !== undefined;
+    const showHeaderFilterIcon = !this.props.isDragging && this.props.column?.allowHeaderFiltering;
+
     return (
       <div
         ref={this.props.elementRef}
@@ -87,16 +91,17 @@ export class Item extends Component<ItemProps> {
         {Template && <Template column={this.props.column}/>}
         {!Template && this.props.column.caption}
         {
-          this.props.column.sortOrder !== undefined && (
+          showSortIcon && (
             <SortIcon
               // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
               sortIndex={this.props.column.sortIndex! + 1}
-              sortOrder={this.props.column.sortOrder}
+              // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+              sortOrder={this.props.column.sortOrder!}
               showSortIndex={this.props.showSortIndexes ?? false}
             />
           )
         }
-        { this.props.column?.allowHeaderFiltering && (
+        { showHeaderFilterIcon && (
           <Icon
             name='filter'
             className={headerFilterIconClass}
