@@ -64,7 +64,6 @@ import subscribes from './m_subscribes';
 import { utils } from './m_utils';
 import timeZoneUtils from './m_utils_time_zone';
 import { SchedulerOptionsValidator, SchedulerOptionsValidatorErrorsHandler } from './options_validator/index';
-import { AgendaResourceProcessor } from './resources/m_agenda_resource_processor';
 import {
   createExpressions,
   createResourceEditorModel,
@@ -73,6 +72,7 @@ import {
   loadResources,
   setResourceToAppointment,
 } from './resources/m_utils';
+import { ResourceProcessor } from './resources/resource_processor';
 import { DesktopTooltipStrategy } from './tooltip_strategies/m_desktop_tooltip_strategy';
 import { MobileTooltipStrategy } from './tooltip_strategies/m_mobile_tooltip_strategy';
 import type {
@@ -185,7 +185,7 @@ class Scheduler extends Widget<any> {
 
   _dataAccessors!: AppointmentDataAccessor;
 
-  agendaResourceProcessor: any;
+  agendaResourceProcessor!: ResourceProcessor;
 
   _actions: any;
 
@@ -605,7 +605,7 @@ class Scheduler extends Widget<any> {
         break;
       case 'resources':
         this._dataAccessors.resources = createExpressions(this.option('resources'));
-        this.agendaResourceProcessor.initializeState(this.option('resources'));
+        this.agendaResourceProcessor = new ResourceProcessor(this.option('resources'));
         this.updateInstances();
         this.option('resourceLoaderMap').clear();
 
@@ -1033,7 +1033,7 @@ class Scheduler extends Widget<any> {
 
     this._subscribes = subscribes;
 
-    this.agendaResourceProcessor = new AgendaResourceProcessor(this.option('resources'));
+    this.agendaResourceProcessor = new ResourceProcessor(this.option('resources'));
 
     this._optionsValidator = new SchedulerOptionsValidator();
 
@@ -1547,7 +1547,7 @@ class Scheduler extends Widget<any> {
     const config = {
       getResources: () => this.option('resources'),
       getResourceDataAccessors: this.getResourceDataAccessors.bind(this),
-      getAgendaResourceProcessor: () => this.agendaResourceProcessor,
+      getResourceProcessor: () => this.agendaResourceProcessor,
       getAppointmentColor: this.createGetAppointmentColor(),
 
       getAppointmentDataProvider: () => this.appointmentDataProvider,

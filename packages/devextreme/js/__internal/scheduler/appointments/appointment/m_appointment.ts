@@ -3,7 +3,6 @@ import { move } from '@js/animation/translator';
 import registerComponent from '@js/core/component_registrator';
 import DOMComponent from '@js/core/dom_component';
 import $ from '@js/core/renderer';
-import { Deferred } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import eventsEngine from '@js/events/core/events_engine';
 import pointerEvents from '@js/events/pointer';
@@ -15,7 +14,6 @@ import { hide, show } from '@ts/ui/tooltip/m_tooltip';
 
 import {
   ALL_DAY_APPOINTMENT_CLASS,
-  APPOINTMENT_CONTENT_CLASSES,
   APPOINTMENT_DRAG_SOURCE_CLASS,
   APPOINTMENT_HAS_RESOURCE_COLOR_CLASS,
   DIRECTION_APPOINTMENT_CLASSES,
@@ -24,9 +22,9 @@ import {
   REDUCED_APPOINTMENT_CLASS,
   REDUCED_APPOINTMENT_ICON,
   REDUCED_APPOINTMENT_PARTS_CLASSES,
-} from '../m_classes';
-import { getRecurrenceProcessor } from '../m_recurrence';
-import type { AppointmentDataAccessor } from '../utils';
+} from '../../m_classes';
+import { getRecurrenceProcessor } from '../../m_recurrence';
+import type { AppointmentDataAccessor } from '../../utils';
 
 const DEFAULT_HORIZONTAL_HANDLES = 'left right';
 const DEFAULT_VERTICAL_HANDLES = 'top bottom';
@@ -295,47 +293,3 @@ export class Appointment extends DOMComponent {
 }
 
 registerComponent('dxSchedulerAppointment', Appointment);
-
-export class AgendaAppointment extends Appointment {
-  get coloredElement() {
-    return (this.$element() as any).find(`.${APPOINTMENT_CONTENT_CLASSES.AGENDA_MARKER}`);
-  }
-
-  _getDefaultOptions() {
-    return extend(super._getDefaultOptions(), {
-      // @ts-expect-error
-      createPlainResourceListAsync: new Deferred(),
-    });
-  }
-
-  _renderResourceList(container, list) {
-    list.forEach((item) => {
-      const itemContainer = $('<div>')
-        .addClass(APPOINTMENT_CONTENT_CLASSES.AGENDA_RESOURCE_LIST_ITEM)
-        .appendTo(container);
-
-      $('<div>')
-        .text(`${item.label}:`)
-        .appendTo(itemContainer);
-
-      $('<div>')
-        .addClass(APPOINTMENT_CONTENT_CLASSES.AGENDA_RESOURCE_LIST_ITEM_VALUE)
-        .text(item.values.join(', '))
-        .appendTo(itemContainer);
-    });
-  }
-
-  _render() {
-    super._render();
-
-    const createPlainResourceListAsync: any = this.option('createPlainResourceListAsync');
-    createPlainResourceListAsync(this.rawAppointment).done((list) => {
-      const parent = (this.$element() as any).find(`.${APPOINTMENT_CONTENT_CLASSES.APPOINTMENT_CONTENT_DETAILS}`);
-      const container = $('<div>')
-        .addClass(APPOINTMENT_CONTENT_CLASSES.AGENDA_RESOURCE_LIST)
-        .appendTo(parent);
-
-      this._renderResourceList(container, list);
-    });
-  }
-}

@@ -12,8 +12,8 @@ import { current, isFluent } from '@js/ui/themes';
 import { getGroupCount, hasResourceValue } from '@ts/scheduler/r1/utils/index';
 import type { AppointmentDataAccessor } from '@ts/scheduler/utils';
 
-export const getValueExpr = (resource) => resource.valueExpr || 'id';
-export const getDisplayExpr = (resource) => resource.displayExpr || 'text';
+export const getIdExpr = (resource) => resource.valueExpr || 'id';
+export const getTextExpr = (resource) => resource.displayExpr || 'text';
 export const getFieldExpr = (resource) => resource.fieldExpr || resource.field;
 
 export const getWrappedDataSource = (dataSource) => {
@@ -158,8 +158,8 @@ export const createResourceEditorModel = (resources, loadedResources) => resourc
   return {
     editorOptions: {
       dataSource: dataSource.length ? dataSource : getWrappedDataSource(resource.dataSource),
-      displayExpr: getDisplayExpr(resource),
-      valueExpr: getValueExpr(resource),
+      displayExpr: getTextExpr(resource),
+      valueExpr: getIdExpr(resource),
       stylingMode: isFluent(current()) ? 'filled' : 'outlined',
     },
     dataField,
@@ -206,7 +206,7 @@ export const getOrLoadResourceItem = (resources, resourceLoaderMap, field, value
             && isDefined(resource.dataSource))
     .forEach((resource) => {
       const wrappedDataSource: any = getWrappedDataSource(resource.dataSource);
-      const valueExpr = getValueExpr(resource);
+      const valueExpr = getIdExpr(resource);
 
       if (!resourceLoaderMap.has(field)) {
         resourceLoaderMap.set(field, wrappedDataSource.load());
@@ -387,7 +387,7 @@ export const getResourcesDataByGroups = (loadedResources, resources, groups) => 
     } = currentResource;
 
     const resource = filterResources(resources, [resourceName])[0] || {};
-    const valueExpr = getValueExpr(resource);
+    const valueExpr = getIdExpr(resource);
     const filteredItems: any = [];
     const filteredData: any = [];
 
@@ -489,8 +489,8 @@ export const createExpressions = (resources: any = []) => {
 };
 
 const getTransformedResourceData = (resource, data) => {
-  const valueGetter: any = compileGetter(getValueExpr(resource));
-  const displayGetter: any = compileGetter(getDisplayExpr(resource));
+  const valueGetter: any = compileGetter(getIdExpr(resource));
+  const displayGetter: any = compileGetter(getTextExpr(resource));
 
   return data.map((item) => {
     const result: any = {

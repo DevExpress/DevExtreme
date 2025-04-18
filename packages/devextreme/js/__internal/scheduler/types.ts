@@ -1,4 +1,7 @@
-import type { Appointment } from '@js/ui/scheduler';
+import type { Appointment, Properties } from '@js/ui/scheduler';
+
+export type ResourcesConfig = Required<Properties>['resources'];
+export type ResourceConfig = ResourcesConfig[number];
 
 export type Direction = 'vertical' | 'horizontal';
 export type GroupOrientation = 'vertical' | 'horizontal';
