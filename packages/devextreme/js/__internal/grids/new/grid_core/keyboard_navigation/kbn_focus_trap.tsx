@@ -1,9 +1,9 @@
 /* eslint-disable spellcheck/spell-checker */
+import { eventHandler, eventUtils, NativeEventListener } from '@ts/grids/new/grid_core/core/events/index';
 import type { RefObject } from 'inferno';
 import { Component, createRef } from 'inferno';
 
 import { ALL_FOCUSABLE_ELEMENTS_SELECTOR } from './const';
-import { markEventAsHandled } from './utils';
 
 export type KbnFocusTrapProps = KbnFocusTrapBaseProps & {
   enabled?: boolean;
@@ -12,7 +12,6 @@ export type KbnFocusTrapProps = KbnFocusTrapBaseProps & {
 export type KbnFocusTrapBaseProps = Exclude<JSX.IntrinsicElements['div'], 'ref'> & {
   elementRef?: RefObject<HTMLDivElement>;
   onKeyDown?: (event: KeyboardEvent) => void;
-  onTrapKeyDown?: (event: KeyboardEvent) => void;
 };
 
 // NOTE: Return same DOM structure to prevent unexpected markup behavior
@@ -42,14 +41,16 @@ export class KbnFocusTrapEnabled extends Component<KbnFocusTrapBaseProps> {
 
   private readonly lastFocusDecoyRef = createRef<HTMLDivElement>();
 
+  private readonly eventListener = new NativeEventListener();
+
   public componentDidMount(): void {
-    this.firstFocusDecoyRef.current?.addEventListener('focusin', this.onFirstDecoyFocusIn);
-    this.lastFocusDecoyRef.current?.addEventListener('focusin', this.onLastDecoyFocusIn);
+    this.eventListener
+      .add(this.firstFocusDecoyRef, 'focusin', this.onFirstDecoyFocusIn.bind(this))
+      .add(this.lastFocusDecoyRef, 'focusin', this.onLastDecoyFocusIn.bind(this));
   }
 
   public componentWillUnmount(): void {
-    this.firstFocusDecoyRef.current?.removeEventListener('focusin', this.onFirstDecoyFocusIn);
-    this.lastFocusDecoyRef.current?.removeEventListener('focusin', this.onLastDecoyFocusIn);
+    this.eventListener.unsubscribe();
   }
 
   public render(): JSX.Element {
@@ -64,10 +65,10 @@ export class KbnFocusTrapEnabled extends Component<KbnFocusTrapBaseProps> {
     return (
         <div
           ref={ref}
-          onKeyDown={this.onKeyDown}
+          onKeyDown={this.onKeyDown.bind(this)}
           {...(restProps as KbnFocusTrapProps)}
         >
-          <div data-dx-focus-trap-content={true} onKeyDown={this.onContentKeyDown}>
+          <div data-dx-focus-trap-content={true} onKeyDown={this.onContentKeyDown.bind(this)}>
             <div ref={this.firstFocusDecoyRef} data-dx-focus-decoy={true} tabIndex={0} />
             {children}
             <div ref={this.lastFocusDecoyRef} data-dx-focus-decoy={true} tabIndex={0} />
@@ -76,36 +77,41 @@ export class KbnFocusTrapEnabled extends Component<KbnFocusTrapBaseProps> {
     );
   }
 
-  private readonly onKeyDown = (
-    event: KeyboardEvent,
-  ): void => {
+  @eventHandler
+  private onKeyDown(event: KeyboardEvent): void {
     if (event.key === 'Enter') {
-      this.onLastDecoyFocusIn();
-      markEventAsHandled(event);
+      this.focusLastChild();
+      eventUtils.markHandled(event);
     }
 
     this.props.onKeyDown?.(event);
-  };
+  }
 
-  private readonly onContentKeyDown = (event: KeyboardEvent): void => {
+  @eventHandler
+  private onContentKeyDown(event: KeyboardEvent): void {
     if (event.key === 'Escape') {
       this.getActualRef().current?.focus();
-      markEventAsHandled(event);
+      eventUtils.markHandled(event);
     }
 
-    event.stopPropagation();
-    this.props.onTrapKeyDown?.(event);
-  };
+    eventUtils.markIgnored(event);
+  }
 
-  private readonly onFirstDecoyFocusIn = (): void => {
-    const lastFocusableElement = this.getInnerFocusableElement('last');
-    lastFocusableElement?.focus();
-  };
+  @eventHandler
+  private onFirstDecoyFocusIn(): void {
+    this.focusLastChild();
+  }
 
-  private readonly onLastDecoyFocusIn = (): void => {
+  @eventHandler
+  private onLastDecoyFocusIn(): void {
     const firstFocusableElement = this.getInnerFocusableElement('first');
     firstFocusableElement?.focus();
-  };
+  }
+
+  private focusLastChild(): void {
+    const lastFocusableElement = this.getInnerFocusableElement('last');
+    lastFocusableElement?.focus();
+  }
 
   private getActualRef(): RefObject<HTMLDivElement> {
     return this.props.elementRef ?? this.elementRef;

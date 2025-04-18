@@ -1,5 +1,3 @@
-import type { EventWithHandled } from './types';
-
 export const KEY_NAMES_MAPPING: Record<string, string> = {
   ' ': 'Space',
 };
@@ -32,8 +30,4 @@ export const getKeyWithModifications = (
     default:
       return normalizedKeyName;
   }
-};
-
-export const markEventAsHandled = (event: EventWithHandled<KeyboardEvent>): void => {
-  event.handled = true;
 };

@@ -1,4 +1,4 @@
-import type { NavigationItem } from './types';
+import type { ActiveItem, BaseFunctionType, NavigationItem } from './types';
 
 export abstract class NavigationStrategyBase {
   protected items: NavigationItem[] = [];
@@ -26,7 +26,7 @@ export abstract class NavigationStrategyBase {
     activeItem?.focus();
   }
 
-  public getActiveItem(): { idx: number; element: HTMLElement } | null {
+  public getActiveItem(): ActiveItem | null {
     const activeItem = this.items[this.activeIdx];
     const element = activeItem?.getElement();
 
@@ -47,5 +47,17 @@ export abstract class NavigationStrategyBase {
     if (focus) {
       this.focusActiveItem();
     }
+  }
+
+  public getNewActiveItem<TAction extends BaseFunctionType>(
+    action: () => ReturnType<TAction>,
+  ): [ReturnType<TAction>, ActiveItem | null] {
+    const prevActiveItem = this.getActiveItem();
+    const result = action();
+    const nextActiveItem = this.getActiveItem();
+
+    return !!nextActiveItem && prevActiveItem?.element !== nextActiveItem?.element
+      ? [result, nextActiveItem]
+      : [result, null];
   }
 }
