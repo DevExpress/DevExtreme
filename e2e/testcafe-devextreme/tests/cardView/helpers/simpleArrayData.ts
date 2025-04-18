@@ -1,3 +1,5 @@
+export const columns = ['id', 'title', 'name', 'lastName'];
+
 export const data = [
   {
     id: 1,

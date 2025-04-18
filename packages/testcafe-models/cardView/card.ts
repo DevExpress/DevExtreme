@@ -38,6 +38,10 @@ export default class Card {
         return this.getFieldCaptionCell(fieldCaption).nextSibling();
     }
 
+    getToolbarItem(index: number): Selector {
+        return this.element.find(`.${CLASS.header}`).find('.dx-toolbar-item').nth(index);
+    }
+
     getHighlightedTexts(): Selector {
         return this.element.find(`.${CLASS.fieldValue}__${CLASS.highlightedState}`);
     }
