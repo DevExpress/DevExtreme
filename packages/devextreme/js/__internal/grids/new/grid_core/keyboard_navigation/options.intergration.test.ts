@@ -1,6 +1,6 @@
 /* eslint-disable spellcheck/spell-checker */
 import {
-  afterEach, describe, expect, it,
+  afterEach, describe, expect, it, jest,
 } from '@jest/globals';
 import $ from '@js/core/renderer';
 import CardView from '@ts/grids/new/card_view/widget';
@@ -216,11 +216,169 @@ describe('Options', () => {
     });
 
     describe('onKeyDown', () => {
-      // TODO: Cover public action by tests
+      it('common API contract test', () => {
+        const callbackMock = jest.fn();
+        const { container } = setup({
+          ...baseConfig,
+          keyboardNavigation: { enabled: true },
+          onKeyDown: callbackMock,
+        });
+
+        const headerItem = container.querySelector(SELECTORS.headerItem);
+        headerItem?.dispatchEvent(new KeyboardEvent('keydown', { key: 'a', bubbles: true }));
+
+        expect(callbackMock).toHaveBeenCalledTimes(1);
+        const [[{
+          handled, event, element, component,
+        }]] = callbackMock.mock.calls as any;
+        expect(handled).toBe(false);
+        expect(event).toStrictEqual(expect.any(KeyboardEvent));
+        expect(element).toStrictEqual(expect.any(HTMLDivElement));
+        expect(component).toStrictEqual(expect.any(CardView));
+      });
+
+      it.each([
+        'Escape', ' ', 'ArrowDown', 'ArrowUp', 'B',
+      ])('should be called with unhandled events on header item: "%s"', (key) => {
+        const callbackMock = jest.fn();
+        const { container } = setup({
+          ...baseConfig,
+          keyboardNavigation: { enabled: true },
+          onKeyDown: callbackMock,
+        });
+
+        const headerItem = container.querySelector(SELECTORS.headerItem);
+        headerItem?.dispatchEvent(new KeyboardEvent('keydown', { key, bubbles: true }));
+
+        expect(callbackMock).toHaveBeenCalledTimes(1);
+        const [[{
+          handled, event: { key: eventKey },
+        }]] = callbackMock.mock.calls as any;
+        expect(handled).toBe(false);
+        expect(eventKey).toBe(key);
+      });
+
+      it.each([
+        'ArrowRight', 'ArrowLeft', 'Enter',
+      ])('should be called with handled events on header item: "%s"', (key) => {
+        const callbackMock = jest.fn();
+        const { container } = setup({
+          ...baseConfig,
+          keyboardNavigation: { enabled: true },
+          onKeyDown: callbackMock,
+        });
+
+        const headerItem = container.querySelector(SELECTORS.headerItem);
+        headerItem?.dispatchEvent(new KeyboardEvent('keydown', { key, bubbles: true }));
+
+        expect(callbackMock).toHaveBeenCalledTimes(1);
+        expect(callbackMock).toHaveBeenCalledTimes(1);
+        const [[{
+          handled, event: { key: eventKey },
+        }]] = callbackMock.mock.calls as any;
+        expect(handled).toBe(true);
+        expect(eventKey).toBe(key);
+      });
+
+      it.each([
+        'a', ' ',
+      ])('should be called with unhandled events on card: "%s"', (key) => {
+        const callbackMock = jest.fn();
+        const { container } = setup({
+          ...baseConfig,
+          keyboardNavigation: { enabled: true },
+          onKeyDown: callbackMock,
+        });
+
+        const card = container.querySelector(SELECTORS.headerItem);
+        card?.dispatchEvent(new KeyboardEvent('keydown', { key, bubbles: true }));
+
+        expect(callbackMock).toHaveBeenCalledTimes(1);
+        const [[{
+          handled, event: { key: eventKey },
+        }]] = callbackMock.mock.calls as any;
+        expect(handled).toBe(false);
+        expect(eventKey).toBe(key);
+      });
+
+      it.each([
+        'ArrowRight', 'ArrowLeft', 'Enter',
+      ])('should be called with handled events on card: "%s"', (key) => {
+        const callbackMock = jest.fn();
+        const { container } = setup({
+          ...baseConfig,
+          keyboardNavigation: { enabled: true },
+          onKeyDown: callbackMock,
+        });
+
+        const card = container.querySelector(SELECTORS.headerItem);
+        card?.dispatchEvent(new KeyboardEvent('keydown', { key, bubbles: true }));
+
+        expect(callbackMock).toHaveBeenCalledTimes(1);
+        const [[{
+          handled, event: { key: eventKey },
+        }]] = callbackMock.mock.calls as any;
+        expect(handled).toBe(true);
+        expect(eventKey).toBe(key);
+      });
     });
 
     describe('onFocusedCardChanged', () => {
-      // TODO: Cover public action by tests
+      it('common API contract test', () => {
+        const callbackMock = jest.fn();
+        const { container } = setup({
+          ...baseConfig,
+          keyboardNavigation: { enabled: true },
+          onFocusedCardChanged: callbackMock,
+        });
+
+        const cardElement = container.querySelector(SELECTORS.card);
+        cardElement?.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowRight', bubbles: true }));
+
+        expect(callbackMock).toHaveBeenCalledTimes(1);
+        const [[{
+          cardIndex, card, element, component,
+        }]] = callbackMock.mock.calls as any;
+        expect(cardIndex).toEqual(1);
+        expect(card).toMatchSnapshot();
+        expect(element).toStrictEqual(expect.any(HTMLDivElement));
+        expect(component).toStrictEqual(expect.any(CardView));
+      });
+
+      it.each([
+        { idx: 0, keys: ['ArrowRight', 'ArrowRight'], path: [1, 2] },
+        { idx: 1, keys: ['ArrowRight', 'ArrowLeft'], path: [1, 0] },
+        { idx: 2, keys: ['ArrowRight', 'ArrowLeft'], path: [1, 0] },
+        { idx: 3, keys: ['ArrowDown', 'ArrowRight'], path: [3, 4] },
+        { idx: 4, keys: ['ArrowDown', 'ArrowUp'], path: [3, 0] },
+        { idx: 4, keys: ['ArrowDown', 'ArrowRight', 'ArrowDown', 'ArrowLeft'], path: [3, 4, 7, 6] },
+        { idx: 4, keys: ['ArrowRight', 'ArrowRight', 'ArrowRight', 'ArrowRight'], path: [1, 2] },
+        { idx: 4, keys: ['ArrowLeft', 'ArrowLeft', 'ArrowLeft', 'ArrowLeft'], path: [] },
+        { idx: 4, keys: ['ArrowDown', 'ArrowDown', 'ArrowDown', 'ArrowDown'], path: [3, 6] },
+        { idx: 4, keys: ['ArrowUp', 'ArrowUp', 'ArrowUp', 'ArrowUp'], path: [] },
+      ])('should fire event after each card focus change -> case #$idx', ({ keys, path }) => {
+        const callbackMock = jest.fn();
+        const { container } = setup({
+          dataSource: new Array(9).fill(null).map((_, idx) => ({ id: idx })),
+          keyExpr: 'id',
+          columns: ['id'],
+          keyboardNavigation: { enabled: true },
+          paging: {
+            pageSize: 9,
+          },
+          onFocusedCardChanged: callbackMock,
+        });
+
+        const cardElement = container.querySelector(SELECTORS.card);
+        keys.forEach((key) => {
+          cardElement?.dispatchEvent(new KeyboardEvent('keydown', { key, bubbles: true }));
+        });
+
+        const result = callbackMock.mock.calls
+          .flat<any>()
+          .map(({ cardIndex }) => cardIndex);
+        expect(result).toStrictEqual(path);
+      });
     });
   });
 });

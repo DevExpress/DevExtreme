@@ -2,9 +2,8 @@
 import { getPublicElement } from '@js/core/element';
 import $ from '@js/core/renderer';
 import type { DataRow } from '@ts/grids/new/grid_core/columns_controller/types';
+import type { EventWithHandled } from '@ts/grids/new/grid_core/core/events/index';
 import { OptionsController } from '@ts/grids/new/grid_core/options_controller/options_controller';
-
-import type { EventWithHandled } from './types';
 
 export class KeyboardNavigationController {
   public static dependencies = [
@@ -18,7 +17,7 @@ export class KeyboardNavigationController {
   public onKeyDown(event: EventWithHandled<KeyboardEvent>): void {
     const action = this.options.action('onKeyDown').unreactive_get();
     action({
-      handled: event.handled ?? false,
+      handled: event.dxHandled ?? false,
       event,
       element: getPublicElement($(event.target as Element)),
     });

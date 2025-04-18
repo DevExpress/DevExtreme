@@ -3,6 +3,7 @@
  @typescript-eslint/explicit-module-boundary-types,
  spellcheck/spell-checker
 */
+import { eventHandler, eventUtils, NativeEventListener } from '@ts/grids/new/grid_core/core/events/index';
 import type { RefObject } from 'inferno';
 import { Component, createRef } from 'inferno';
 
@@ -13,7 +14,6 @@ import type {
   WithoutTabIndex,
   WithTabIndex,
 } from './types';
-import { markEventAsHandled } from './utils';
 
 interface WithKbnNavigationItemProps {
   navigationIdx: number;
@@ -29,6 +29,8 @@ export const withKbnNavigationItem = <
   > {
     private readonly elementRef = createRef<HTMLElement>();
 
+    private readonly eventListener = new NativeEventListener();
+
     private readonly navigationItem: NavigationItem = {
       focus: () => {
         this.getActualRef().current?.focus();
@@ -41,7 +43,7 @@ export const withKbnNavigationItem = <
       const { navigationStrategy, navigationIdx } = this.props;
 
       navigationStrategy.setItem(navigationIdx, this.navigationItem);
-      elementRef.current?.addEventListener('focusin', this.onFocusIn);
+      this.eventListener.add(elementRef, 'focusin', this.onFocusIn.bind(this));
     }
 
     public componentDidUpdate(): void {
@@ -49,9 +51,7 @@ export const withKbnNavigationItem = <
     }
 
     public componentWillUnmount(): void {
-      const elementRef = this.getActualRef();
-
-      elementRef.current?.removeEventListener('focusin', this.onFocusIn);
+      this.eventListener.unsubscribe();
     }
 
     public render(): JSX.Element {
@@ -68,7 +68,7 @@ export const withKbnNavigationItem = <
         <WrappedComponent
           elementRef={ref}
           tabIndex={0}
-          onKeyDown={this.onKeyDown}
+          onKeyDown={this.onKeyDown.bind(this)}
           {...(restProps as TProps)}
         >
           {children}
@@ -76,38 +76,38 @@ export const withKbnNavigationItem = <
       );
     }
 
-    private readonly onKeyDown = (event: KeyboardEvent): void => {
+    @eventHandler
+    private onKeyDown(event: KeyboardEvent): void {
       const {
         navigationStrategy, onKeyDown, onFocusMoved,
       } = this.props;
 
-      const prevActiveItem = navigationStrategy.getActiveItem();
-      const eventHandled = navigationStrategy.onKeyDown(event);
-      const nextActiveItem = navigationStrategy.getActiveItem();
+      const [eventHandled, newActiveItem] = navigationStrategy
+        .getNewActiveItem(() => navigationStrategy.onKeyDown(event));
 
       if (eventHandled) {
         event.preventDefault();
-        markEventAsHandled(event);
+        eventUtils.markHandled(event);
       }
 
-      if (!!nextActiveItem && prevActiveItem?.element !== nextActiveItem?.element) {
-        onFocusMoved?.(nextActiveItem.idx, nextActiveItem.element);
+      if (newActiveItem) {
+        onFocusMoved?.(newActiveItem.idx, newActiveItem.element);
       }
 
       onKeyDown?.(event);
-    };
+    }
 
-    private readonly onFocusIn = (): void => {
+    @eventHandler
+    private onFocusIn(): void {
       const { navigationStrategy, navigationIdx, onFocusMoved } = this.props;
 
-      const prevActiveItem = navigationStrategy.getActiveItem();
-      navigationStrategy.setActiveItem(navigationIdx, false);
-      const nextActiveItem = navigationStrategy.getActiveItem();
+      const [, newActiveItem] = navigationStrategy
+        .getNewActiveItem(() => navigationStrategy.setActiveItem(navigationIdx, false));
 
-      if (!!nextActiveItem && prevActiveItem?.element !== nextActiveItem?.element) {
-        onFocusMoved?.(nextActiveItem.idx, nextActiveItem.element);
+      if (newActiveItem) {
+        onFocusMoved?.(newActiveItem.idx, newActiveItem.element);
       }
-    };
+    }
 
     private getActualRef(): RefObject<HTMLElement> {
       return this.props.elementRef ?? this.elementRef;

@@ -22,7 +22,7 @@ const ItemWithKbn = withKbnNavigationItem(withKeyDownHandler(Item));
 export interface HeaderPanelProps {
   columns: Column[];
 
-  navigationEnabled: boolean;
+  kbnEnabled: boolean;
 
   navigationStrategy: NavigationStrategyBase;
 
@@ -54,13 +54,11 @@ export interface HeaderPanelProps {
     columnIndex?: number,
     onMenuCloseCallback?: () => void,
   ) => void;
-
-  onKeyDown?: (event: KeyboardEvent) => void;
 }
 
 export class HeaderPanel extends Component<HeaderPanelProps> {
   public render(): JSX.Element {
-    const HeaderItem = this.props.navigationEnabled
+    const HeaderItem = this.props.kbnEnabled
       ? ItemWithKbn
       : Item;
 
@@ -92,7 +90,7 @@ export class HeaderPanel extends Component<HeaderPanelProps> {
             useKeyboard={false}
           >
             <KbnNavigationContainer
-              enabled={this.props.navigationEnabled}
+              enabled={this.props.kbnEnabled}
               navigationStrategy={this.props.navigationStrategy}
             >
               <div className={CLASSES.content}>
