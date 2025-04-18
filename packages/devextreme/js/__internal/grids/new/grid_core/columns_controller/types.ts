@@ -1,5 +1,5 @@
 import type { Format, SortOrder } from '@js/common';
-import type { ColumnBase } from '@js/common/grids';
+import type { ColumnBase, FilterType } from '@js/common/grids';
 import type { DeepPartial } from '@js/core/index';
 import type * as dxForm from '@js/ui/form';
 import type { HeaderFilterColumnOptions } from '@ts/grids/new/grid_core/filtering/header_filter/index';
@@ -75,8 +75,9 @@ export type Column = Pick<Required<ColumnBase>, InheritedColumnProps> & {
   setCellValue: (
     this: Column, newData: DeepPartial<DataObject>, value: unknown, currentRowData: DataObject
   ) => (void | Promise<void>);
-
   defaultSetCellValue: Column['setCellValue'];
+
+  filterType?: FilterType;
 };
 
 export type VisibleColumn = Column & { visible: true };

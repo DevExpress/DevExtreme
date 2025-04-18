@@ -26,11 +26,12 @@ export class ContextMenuController
   }
 
   public override show(
-    event: MouseEvent,
+    event: KeyboardEvent | MouseEvent,
     view: ContextMenuTarget,
     contextInfo: ContextInfo = {},
+    onMenuCloseCallback?: () => void,
   ): void {
-    super.show(event, view, contextInfo);
+    super.show(event, view, contextInfo, onMenuCloseCallback);
   }
 
   protected override getItems(

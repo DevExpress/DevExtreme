@@ -1,5 +1,10 @@
+/* eslint-disable
+  spellcheck/spell-checker
+*/
 import type { Column } from '@ts/grids/new/grid_core/columns_controller/types';
 import { Scrollable } from '@ts/grids/new/grid_core/inferno_wrappers/scrollable';
+import type { NavigationStrategyBase } from '@ts/grids/new/grid_core/keyboard_navigation/index';
+import { KbnNavigationContainer, withKbnNavigationItem, withKeyDownHandler } from '@ts/grids/new/grid_core/keyboard_navigation/index';
 import type { ComponentType } from 'inferno';
 import { Component } from 'inferno';
 
@@ -12,8 +17,14 @@ export const CLASSES = {
   content: 'dx-cardview-headerpanel-content',
 };
 
+const ItemWithKbn = withKbnNavigationItem(withKeyDownHandler(Item));
+
 export interface HeaderPanelProps {
   columns: Column[];
+
+  navigationEnabled: boolean;
+
+  navigationStrategy: NavigationStrategyBase;
 
   onMove: (column: Column, toIndex: number) => void;
 
@@ -21,10 +32,10 @@ export interface HeaderPanelProps {
 
   showSortIndexes: boolean;
 
-  onSortClick: (column: Column, e: MouseEvent) => void;
+  onColumnSort: (column: Column, event: KeyboardEvent | MouseEvent) => void;
 
-  onFilterClick?: (
-    element: Element,
+  onHeaderFilterOpen?: (
+    element: Element | null,
     column: Column,
     onFilterCloseCallback?: () => void,
   ) => void;
@@ -37,11 +48,22 @@ export interface HeaderPanelProps {
 
   draggingOptions?: DraggingOptions;
 
-  showContextMenu: (e: MouseEvent, column?: Column, columnIndex?: number) => void;
+  showContextMenu: (
+    event: KeyboardEvent | MouseEvent,
+    column?: Column,
+    columnIndex?: number,
+    onMenuCloseCallback?: () => void,
+  ) => void;
+
+  onKeyDown?: (event: KeyboardEvent) => void;
 }
 
 export class HeaderPanel extends Component<HeaderPanelProps> {
   public render(): JSX.Element {
+    const HeaderItem = this.props.navigationEnabled
+      ? ItemWithKbn
+      : Item;
+
     if (!this.props.visible) {
       return <></>;
     }
@@ -66,25 +88,56 @@ export class HeaderPanel extends Component<HeaderPanelProps> {
             showScrollbar='never'
             useNative={false}
             scrollByContent={true}
+            // @ts-expect-error private option usage
+            useKeyboard={false}
           >
-            <div className={CLASSES.content}>
-              {this.props.columns.map((column, index) => (
-                <Item
-                  showSortIndexes={this.props.showSortIndexes}
-                  column={column}
-                  onSortClick={(e): void => { this.props.onSortClick(column, e); }}
-                  template={this.props.itemTemplate}
-                  cssClass={this.props.itemCssClass}
-                  onFilterClick={(
-                    element: Element,
-                    callback?: () => void,
-                  ) => this.props.onFilterClick?.(element, column, callback)}
-                  onContextMenu={(e) => {
-                    this.props.showContextMenu(e, column, index);
-                  }}
-                />
-              ))}
-            </div>
+            <KbnNavigationContainer
+              enabled={this.props.navigationEnabled}
+              navigationStrategy={this.props.navigationStrategy}
+            >
+              <div className={CLASSES.content}>
+                {this.props.columns.map((column, idx) => (
+                  <HeaderItem
+                    navigationIdx={idx}
+                    navigationStrategy={this.props.navigationStrategy}
+                    showSortIndexes={this.props.showSortIndexes}
+                    column={column}
+                    template={this.props.itemTemplate}
+                    cssClass={this.props.itemCssClass}
+                    keyDownConfig={{
+                      Enter: (event) => { this.props.onColumnSort(column, event); },
+                      'Enter+ctrl': (event) => { this.props.onColumnSort(column, event); },
+                      'Enter+shift': (event) => { this.props.onColumnSort(column, event); },
+                      'ArrowDown+alt': (event, ref) => {
+                        this.props.onHeaderFilterOpen?.(
+                          ref.current,
+                          column,
+                          () => ref.current?.focus(),
+                        );
+                      },
+                      'F10+shift': (event, ref) => {
+                        this.props.showContextMenu(
+                          event,
+                          column,
+                          idx,
+                          () => ref.current?.focus(),
+                        );
+                      },
+                    }}
+                    caughtEventPreventDefault={true}
+                    onSortClick={(event): void => {
+                      this.props.onColumnSort(column, event);
+                    }}
+                    onFilterClick={(element: Element) => {
+                      this.props.onHeaderFilterOpen?.(element, column);
+                    }}
+                    onContextMenu={(event) => {
+                      this.props.showContextMenu(event, column, idx);
+                    }}
+                  />
+                ))}
+              </div>
+            </KbnNavigationContainer>
           </Scrollable>
         </ColumnSortable>
       </div>

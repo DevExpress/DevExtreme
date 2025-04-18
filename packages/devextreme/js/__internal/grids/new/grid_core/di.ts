@@ -1,5 +1,6 @@
 /* eslint-disable spellcheck/spell-checker */
 import type { DIContext } from '@ts/core/di/index';
+import { SearchUIController } from '@ts/grids/new/grid_core/search/index';
 
 import * as ColumnChooserModule from './column_chooser/index';
 import * as ColumnsControllerModule from './columns_controller/index';
@@ -8,12 +9,16 @@ import { EditingController } from './editing/controller';
 import { EditPopupView } from './editing/popup/view';
 import { ErrorController } from './error_controller/error_controller';
 import { FilterPanelView } from './filtering/filter_panel/view';
+import { ClearFilterVisitor } from './filtering/filter_visitors/clear_filter_visitor';
+import { GetAppliedFilterVisitor } from './filtering/filter_visitors/get_applied_filters_visitor';
 import {
   HeaderFilterController,
   HeaderFilterPopupView,
 } from './filtering/header_filter/index';
+import { HeaderFilterViewController } from './filtering/header_filter/view_controller';
 import * as FilterControllerModule from './filtering/index';
 import { ItemsController } from './items_controller/items_controller';
+import { KeyboardNavigationController } from './keyboard_navigation/index';
 import { PagerView } from './pager/view';
 import { SearchController } from './search/controller';
 import { SearchView } from './search/view';
@@ -45,5 +50,11 @@ export function register(diContext: DIContext): void {
   diContext.register(ErrorController);
   diContext.register(EditingController);
   diContext.register(EditPopupView);
+  diContext.register(SearchUIController);
   diContext.register(SearchView);
+  diContext.register(HeaderFilterViewController);
+
+  diContext.register(ClearFilterVisitor);
+  diContext.register(GetAppliedFilterVisitor);
+  diContext.register(KeyboardNavigationController);
 }

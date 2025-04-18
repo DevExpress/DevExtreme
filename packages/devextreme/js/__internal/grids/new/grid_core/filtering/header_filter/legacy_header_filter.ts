@@ -139,6 +139,7 @@ export const getDataSourceOptions = (
   storeLoadAdapter,
   column,
   headerFilterOptions,
+  filter,
 ) => {
   if (!storeLoadAdapter) {
     return undefined;
@@ -157,11 +158,9 @@ export const getDataSourceOptions = (
   }
 
   const cutoffLevel = Array.isArray(group) ? group.length - 1 : 0;
-  // TODO FilterSync: Support combined filter here
-  // const filter = this._dataController.getCombinedFilter();
 
   options.dataSource = {
-    // filter,
+    filter,
     group,
     useDefaultSearch: true,
     load: (loadOptions) => {

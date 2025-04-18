@@ -17,6 +17,10 @@ import * as di from './di';
 import { EditingController } from './editing/controller';
 import { EditPopupView } from './editing/popup/view';
 import { ErrorController } from './error_controller/error_controller';
+import { ClearFilterVisitor } from './filtering/filter_visitors/clear_filter_visitor';
+import { GetAppliedFilterVisitor } from './filtering/filter_visitors/get_applied_filters_visitor';
+import { HeaderFilterController } from './filtering/header_filter/index';
+import { HeaderFilterViewController } from './filtering/header_filter/view_controller';
 import * as FilterControllerModule from './filtering/index';
 import { ItemsController } from './items_controller/items_controller';
 import { MainView } from './main_view';
@@ -71,6 +75,14 @@ export class GridCoreNewBase<
 
   private filterPanelView!: FilterControllerModule.FilterPanelView;
 
+  private headerFilterViewController!: HeaderFilterViewController;
+
+  private headerFilterController!: HeaderFilterController;
+
+  private clearFilterVisitor!: ClearFilterVisitor;
+
+  private getAppliedFiltersVisitor!: GetAppliedFilterVisitor;
+
   protected _registerDIContext(): void {
     this.diContext = new DIContext();
     di.register(this.diContext);
@@ -100,8 +112,13 @@ export class GridCoreNewBase<
     this.columnChooserView = this.diContext.get(ColumnChooserModule.ColumnChooserView);
     this.errorController = this.diContext.get(ErrorController);
     this.filterController = this.diContext.get(FilterControllerModule.FilterController);
+    this.headerFilterController = this.diContext.get(HeaderFilterController);
     this.filterPanelView = this.diContext.get(FilterControllerModule.FilterPanelView);
+    this.headerFilterViewController = this.diContext.get(HeaderFilterViewController);
     this.searchView = this.diContext.get(SearchView);
+
+    this.clearFilterVisitor = this.diContext.get(ClearFilterVisitor);
+    this.getAppliedFiltersVisitor = this.diContext.get(GetAppliedFilterVisitor);
   }
 
   protected _init(): void {

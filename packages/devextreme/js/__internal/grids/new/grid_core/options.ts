@@ -10,6 +10,7 @@ import * as editing from './editing/index';
 import * as headerFilter from './filtering/header_filter/index';
 import type * as filterController from './filtering/index';
 import { filterPanel } from './filtering/index';
+import * as keyboardNavigation from './keyboard_navigation/index';
 import * as pager from './pager/index';
 import * as searchPanel from './search/index';
 import type { SearchProperties } from './search/types';
@@ -37,7 +38,8 @@ export type Options =
   & SearchProperties
   & columnChooser.Options
   & editing.Options
-  & toolbar.Options;
+  & toolbar.Options
+  & keyboardNavigation.Options;
 
 export const defaultOptions = {
   ...dataController.defaultOptions,
@@ -51,6 +53,7 @@ export const defaultOptions = {
   ...columnChooser.defaultOptions,
   ...selection.defaultOptions,
   ...editing.defaultOptions,
+  ...keyboardNavigation.defaultOptions,
   searchText: '',
 } satisfies Options;
 

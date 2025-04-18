@@ -133,5 +133,18 @@ export default abstract class GridCore extends Widget {
       },
     )();
   }
+
+  apiGetCombinedFilter(): Promise<unknown> {
+    const { getInstance } = this;
+
+    return ClientFunction(
+      () => (getInstance() as any).getCombinedFilter(),
+      {
+        dependencies: {
+          getInstance,
+        },
+      },
+    )();
+  }
 }
 

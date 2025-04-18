@@ -1,11 +1,13 @@
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable
+  @typescript-eslint/explicit-module-boundary-types,
+  @typescript-eslint/no-explicit-any
+*/
 import type { Format } from '@js/common';
 import dateLocalization from '@js/common/core/localization/date';
 import {
   isDefined, isFunction, isNumeric, isString,
 } from '@js/core/utils/type';
-import type { NativeEventInfo } from '@js/events';
+import type { EventInfo, NativeEventInfo } from '@js/events';
 import messageLocalization from '@js/localization/message';
 import type { TextBoxInstance } from '@js/ui/text_box';
 import { strictParseNumber } from '@ts/grids/grid_core/columns_controller/m_columns_controller_utils';
@@ -169,7 +171,10 @@ export const calculateSearchFilter = (
 // eslint-disable-next-line @typescript-eslint/init-declarations
 let timer;
 
-export const addSearchTextBox = (props: SearchFieldProps): PredefinedToolbarItem => ({
+export const addSearchTextBox = (
+  props: SearchFieldProps,
+  setTextBoxRef: (component: TextBoxInstance) => void,
+): PredefinedToolbarItem => ({
   name: 'searchPanel',
   showText: 'inMenu',
   location: 'after',
@@ -177,6 +182,9 @@ export const addSearchTextBox = (props: SearchFieldProps): PredefinedToolbarItem
 
   widget: 'dxTextBox',
   options: {
+    onContentReady: ({ component }: EventInfo<TextBoxInstance>) => {
+      setTextBoxRef(component);
+    },
     onInput: (e: NativeEventInfo<TextBoxInstance, UIEvent>): void => {
       clearTimeout(timer);
       const component = e.component as any;

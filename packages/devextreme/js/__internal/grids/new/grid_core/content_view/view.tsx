@@ -1,5 +1,7 @@
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
+/* eslint-disable
+  @typescript-eslint/explicit-function-return-type,
+  @typescript-eslint/explicit-module-boundary-types
+*/
 import type dxScrollable from '@js/ui/scroll_view/ui.scrollable';
 import type { ScrollEventInfo } from '@js/ui/scroll_view/ui.scrollable';
 import { combined, computed, state } from '@ts/core/reactive/index';
@@ -8,6 +10,8 @@ import { ColumnsController } from '@ts/grids/new/grid_core/columns_controller/co
 import { View } from '@ts/grids/new/grid_core/core/view';
 import { DataController } from '@ts/grids/new/grid_core/data_controller/index';
 import { ErrorController } from '@ts/grids/new/grid_core/error_controller/error_controller';
+import { KeyboardNavigationController } from '@ts/grids/new/grid_core/keyboard_navigation/index';
+import { SearchUIController } from '@ts/grids/new/grid_core/search/index';
 import { SelectionController } from '@ts/grids/new/grid_core/selection/controller';
 import { createRef } from 'inferno';
 
@@ -40,6 +44,8 @@ export abstract class ContentView<TProps extends {}> extends View<TProps> {
     ItemsController,
     EditingController,
     ContextMenuController,
+    SearchUIController,
+    KeyboardNavigationController,
   ] as const;
 
   constructor(
@@ -51,6 +57,8 @@ export abstract class ContentView<TProps extends {}> extends View<TProps> {
     protected readonly itemsController: ItemsController,
     protected readonly editingController: EditingController,
     protected readonly contextMenuController: ContextMenuController,
+    protected readonly searchUIController: SearchUIController,
+    protected readonly keyboardNavigationController: KeyboardNavigationController,
   ) {
     super();
   }

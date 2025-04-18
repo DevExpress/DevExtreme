@@ -42,7 +42,7 @@ export class ToolbarView extends View<ToolbarProps> {
     });
   }
 
-  private showContextMenu(e: MouseEvent): void {
-    this.contextMenuController.show(e, 'toolbar');
+  private showContextMenu(event: KeyboardEvent | MouseEvent): void {
+    this.contextMenuController.show(event, 'toolbar');
   }
 }
