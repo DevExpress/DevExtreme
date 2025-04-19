@@ -1178,8 +1178,7 @@ QUnit.module('MessageList', () => {
             });
         });
 
-        // TODO Chrome133: skipped during chrome update
-        QUnit.test.skip('should not be scroll down if typingUsers changed at runtime if scroll position not at the bottom', function(assert) {
+        QUnit.test('should not be scroll down if typingUsers changed at runtime if scroll position not at the bottom', function(assert) {
             const done = assert.async();
 
             this.reinit({
