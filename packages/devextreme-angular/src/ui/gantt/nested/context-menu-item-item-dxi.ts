@@ -10,16 +10,13 @@ import {
     Inject,
     AfterViewInit,
     SkipSelf,
-    Input,
-    ContentChildren,
-    forwardRef,
-    QueryList
+    Input
 } from '@angular/core';
 
 import { DOCUMENT } from '@angular/common';
 
 
-import { dxMenuItem } from 'devextreme/ui/menu';
+import { dxContextMenuItem } from 'devextreme/ui/context_menu';
 
 import {
     DxIntegrationModule,
@@ -33,14 +30,14 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxi-menu-item',
+    selector: 'dxi-gantt-context-menu-item-item',
     standalone: true,
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
     imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost, DxTemplateHost]
 })
-export class DxiMenuItemComponent extends CollectionNestedOption implements AfterViewInit,
+export class DxiGanttContextMenuItemItemComponent extends CollectionNestedOption implements AfterViewInit,
     IDxTemplateHost {
     @Input()
     get beginGroup(): boolean {
@@ -75,19 +72,11 @@ export class DxiMenuItemComponent extends CollectionNestedOption implements Afte
     }
 
     @Input()
-    get items(): Array<dxMenuItem> {
+    get items(): Array<dxContextMenuItem> {
         return this._getOption('items');
     }
-    set items(value: Array<dxMenuItem>) {
+    set items(value: Array<dxContextMenuItem>) {
         this._setOption('items', value);
-    }
-
-    @Input()
-    get linkAttr(): Record<string, any> {
-        return this._getOption('linkAttr');
-    }
-    set linkAttr(value: Record<string, any>) {
-        this._setOption('linkAttr', value);
     }
 
     @Input()
@@ -123,14 +112,6 @@ export class DxiMenuItemComponent extends CollectionNestedOption implements Afte
     }
 
     @Input()
-    get url(): string {
-        return this._getOption('url');
-    }
-    set url(value: string) {
-        this._setOption('url', value);
-    }
-
-    @Input()
     get visible(): boolean {
         return this._getOption('visible');
     }
@@ -143,14 +124,6 @@ export class DxiMenuItemComponent extends CollectionNestedOption implements Afte
         return 'items';
     }
 
-
-    @ContentChildren(forwardRef(() => DxiMenuItemComponent))
-    get itemsChildren(): QueryList<DxiMenuItemComponent> {
-        return this._getOption('items');
-    }
-    set itemsChildren(value) {
-        this.setChildren('items', value);
-    }
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost,
@@ -181,10 +154,10 @@ export class DxiMenuItemComponent extends CollectionNestedOption implements Afte
 
 @NgModule({
   imports: [
-    DxiMenuItemComponent
+    DxiGanttContextMenuItemItemComponent
   ],
   exports: [
-    DxiMenuItemComponent
+    DxiGanttContextMenuItemItemComponent
   ],
 })
-export class DxiMenuItemModule { }
+export class DxiGanttContextMenuItemItemModule { }

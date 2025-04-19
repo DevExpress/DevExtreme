@@ -12,7 +12,7 @@ import {
 
 
 
-import { dxFilterBuilderField } from 'devextreme/ui/filter_builder';
+import { dxFilterBuilderField, FieldInfo } from 'devextreme/ui/filter_builder';
 import { DataType } from 'devextreme/common';
 
 import {
@@ -48,10 +48,10 @@ export class DxiDataGridCustomOperationComponent extends CollectionNestedOption 
     }
 
     @Input()
-    get customizeText(): ((fieldInfo: { field: dxFilterBuilderField, value: string | number | Date, valueText: string }) => string) {
+    get customizeText(): ((fieldInfo: FieldInfo) => string) {
         return this._getOption('customizeText');
     }
-    set customizeText(value: ((fieldInfo: { field: dxFilterBuilderField, value: string | number | Date, valueText: string }) => string)) {
+    set customizeText(value: ((fieldInfo: FieldInfo) => string)) {
         this._setOption('customizeText', value);
     }
 

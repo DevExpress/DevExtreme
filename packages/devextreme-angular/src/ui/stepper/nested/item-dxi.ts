@@ -10,16 +10,12 @@ import {
     Inject,
     AfterViewInit,
     SkipSelf,
-    Input,
-    ContentChildren,
-    forwardRef,
-    QueryList
+    Input
 } from '@angular/core';
 
 import { DOCUMENT } from '@angular/common';
 
 
-import { dxMenuItem } from 'devextreme/ui/menu';
 
 import {
     DxIntegrationModule,
@@ -33,37 +29,29 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxi-menu-item',
+    selector: 'dxi-stepper-item',
     standalone: true,
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
     imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost, DxTemplateHost]
 })
-export class DxiMenuItemComponent extends CollectionNestedOption implements AfterViewInit,
+export class DxiStepperItemComponent extends CollectionNestedOption implements AfterViewInit,
     IDxTemplateHost {
-    @Input()
-    get beginGroup(): boolean {
-        return this._getOption('beginGroup');
-    }
-    set beginGroup(value: boolean) {
-        this._setOption('beginGroup', value);
-    }
-
-    @Input()
-    get closeMenuOnClick(): boolean {
-        return this._getOption('closeMenuOnClick');
-    }
-    set closeMenuOnClick(value: boolean) {
-        this._setOption('closeMenuOnClick', value);
-    }
-
     @Input()
     get disabled(): boolean {
         return this._getOption('disabled');
     }
     set disabled(value: boolean) {
         this._setOption('disabled', value);
+    }
+
+    @Input()
+    get hint(): string {
+        return this._getOption('hint');
+    }
+    set hint(value: string) {
+        this._setOption('hint', value);
     }
 
     @Input()
@@ -75,35 +63,27 @@ export class DxiMenuItemComponent extends CollectionNestedOption implements Afte
     }
 
     @Input()
-    get items(): Array<dxMenuItem> {
-        return this._getOption('items');
+    get isValid(): boolean {
+        return this._getOption('isValid');
     }
-    set items(value: Array<dxMenuItem>) {
-        this._setOption('items', value);
-    }
-
-    @Input()
-    get linkAttr(): Record<string, any> {
-        return this._getOption('linkAttr');
-    }
-    set linkAttr(value: Record<string, any>) {
-        this._setOption('linkAttr', value);
+    set isValid(value: boolean) {
+        this._setOption('isValid', value);
     }
 
     @Input()
-    get selectable(): boolean {
-        return this._getOption('selectable');
+    get label(): string {
+        return this._getOption('label');
     }
-    set selectable(value: boolean) {
-        this._setOption('selectable', value);
+    set label(value: string) {
+        this._setOption('label', value);
     }
 
     @Input()
-    get selected(): boolean {
-        return this._getOption('selected');
+    get optional(): boolean {
+        return this._getOption('optional');
     }
-    set selected(value: boolean) {
-        this._setOption('selected', value);
+    set optional(value: boolean) {
+        this._setOption('optional', value);
     }
 
     @Input()
@@ -122,35 +102,11 @@ export class DxiMenuItemComponent extends CollectionNestedOption implements Afte
         this._setOption('text', value);
     }
 
-    @Input()
-    get url(): string {
-        return this._getOption('url');
-    }
-    set url(value: string) {
-        this._setOption('url', value);
-    }
-
-    @Input()
-    get visible(): boolean {
-        return this._getOption('visible');
-    }
-    set visible(value: boolean) {
-        this._setOption('visible', value);
-    }
-
 
     protected get _optionPath() {
         return 'items';
     }
 
-
-    @ContentChildren(forwardRef(() => DxiMenuItemComponent))
-    get itemsChildren(): QueryList<DxiMenuItemComponent> {
-        return this._getOption('items');
-    }
-    set itemsChildren(value) {
-        this.setChildren('items', value);
-    }
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost,
@@ -181,10 +137,10 @@ export class DxiMenuItemComponent extends CollectionNestedOption implements Afte
 
 @NgModule({
   imports: [
-    DxiMenuItemComponent
+    DxiStepperItemComponent
   ],
   exports: [
-    DxiMenuItemComponent
+    DxiStepperItemComponent
   ],
 })
-export class DxiMenuItemModule { }
+export class DxiStepperItemModule { }
