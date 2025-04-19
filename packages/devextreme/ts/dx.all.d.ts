@@ -9170,7 +9170,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxActionSheetItem.type]
      */
-    type?: DevExpress.common.ButtonType;
+    type?: DevExpress.common.ButtonType | string;
     /**
      * [descr:dxActionSheetItem.stylingMode]
      */
@@ -9657,7 +9657,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxButtonGroupItem.type]
      */
-    type?: DevExpress.common.ButtonType;
+    type?: DevExpress.common.ButtonType | string;
 
     /**
      * [descr:dxButtonGroupItem.elementAttr]
@@ -15370,7 +15370,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxDropDownButtonOptions.type]
      */
-    type?: DevExpress.common.ButtonType;
+    type?: DevExpress.common.ButtonType | string;
     /**
      * [descr:dxDropDownButtonOptions.useSelectMode]
      */
