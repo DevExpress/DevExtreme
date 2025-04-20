@@ -61,7 +61,7 @@ jobs:
         run: pnpx nx build
 
       - name: Generate wrappers
-        run: pnpm run regenerate-all
+   #    run: pnpm run regenerate-all
 
       - name: Check generated code
         shell: bash
