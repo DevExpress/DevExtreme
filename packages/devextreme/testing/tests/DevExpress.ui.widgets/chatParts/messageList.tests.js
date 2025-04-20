@@ -1180,6 +1180,7 @@ QUnit.module('MessageList', () => {
 
         QUnit.test('should not be scroll down if typingUsers changed at runtime if scroll position not at the bottom', function(assert) {
             const done = assert.async();
+            const timeout = 10;
 
             this.reinit({
                 width: 300,
@@ -1204,9 +1205,9 @@ QUnit.module('MessageList', () => {
 
                         assert.roughEqual(scrollTop, scrollTopBefore, 1, 'scroll position should remain the same after updating typingUsers when not at the bottom');
                         done();
-                    });
-                });
-            });
+                    }, timeout);
+                }, timeout);
+            }, timeout);
         });
 
         QUnit.test('should be scroll down if typingUsers changed at runtime, provided the content does not overflow before the typing indicator is displayed', function(assert) {
