@@ -1,8 +1,8 @@
 import type { Orientation } from '@js/common';
-import type { TimeZoneCalculator } from '@ts/scheduler/r1/timezone_calculator';
+import type { TimeZoneCalculator } from '@ts/scheduler/r1/timezone_calculator/calculator';
 import type { ResourceProcessor } from '@ts/scheduler/resources/resource_processor';
 import type { SafeAppointment } from '@ts/scheduler/types';
-import type { AppointmentDataAccessor } from '@ts/scheduler/utils';
+import type { AppointmentDataAccessor } from '@ts/scheduler/utils/data_accessor/appointment_data_accessor';
 
 export interface AppointmentProperties extends Record<string, unknown> {
   data: SafeAppointment;

@@ -1,14 +1,20 @@
 import dateLocalization from '@js/common/core/localization/date';
 import messageLocalization from '@js/common/core/localization/message';
 import { isDefined } from '@js/core/utils/type';
-import type { AppointmentProperties } from '@ts/scheduler/appointments/appointment/m_types';
-import { PathTimeZoneConversion } from '@ts/scheduler/r1/timezone_calculator';
-import { getPathToLeaf } from '@ts/scheduler/resources/m_utils';
+import { PathTimeZoneConversion } from '@ts/scheduler/r1/timezone_calculator/const';
+
+import { getPathToLeaf } from '../../resources/m_utils';
+import type { AppointmentProperties } from './m_types';
 
 const localizeDate = (date: Date): string => `${dateLocalization.format(date, 'monthAndDay')}, ${dateLocalization.format(date, 'year')}`;
 const localizeTime = (date: Date): string => `${dateLocalization.format(date, 'shorttime')}`;
 const getDate = (options: AppointmentProperties, propName: 'endDate' | 'startDate'): Date => {
   const result = options.dataAccessors.get(propName, options.data);
+
+  if (!result) {
+    return result;
+  }
+
   const date = new Date(result);
   const gridDate = options.timeZoneCalculator?.createDate(
     date,
