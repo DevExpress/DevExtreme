@@ -5,8 +5,15 @@ import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 
 import {
-  DxPopupModule, DxTemplateModule, DxDiagramModule, DxDiagramComponent,
+  DxPopupComponent,
+  DxIntegrationModule,
+  DxTemplateModule,
 } from 'devextreme-angular';
+import {
+   DxDiagramComponent,
+   DxiDiagramCustomShapeComponent,
+   DxoDiagramNodesComponent,
+} from 'devextreme-angular/ui/diagram';
 import ArrayStore from 'devextreme/data/array_store';
 import { Service, Employee } from './app.service';
 
@@ -57,8 +64,11 @@ export class AppComponent {
 @NgModule({
   imports: [
     BrowserModule,
-    DxDiagramModule,
-    DxPopupModule,
+    DxDiagramComponent,
+    DxiDiagramCustomShapeComponent,
+    DxoDiagramNodesComponent,
+    DxPopupComponent,
+    DxIntegrationModule,
     DxTemplateModule,
   ],
   declarations: [AppComponent],
