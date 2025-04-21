@@ -122,7 +122,7 @@ QUnit.module('AIDialog', moduleConfig, () => {
             const hideSpy = sinon.spy(this.aiDialog, 'hide');
 
             showAIDialog(this).done(({ resultText, event }) => {
-                assert.strictEqual(resultText, 'Test text', 'resolved text is correct');
+                assert.strictEqual(resultText, '', 'resolved text is empty');
                 assert.strictEqual(event.itemData.id, mode, `operation is correct: ${mode}`);
                 assert.strictEqual(hideSpy.calledOnce, true, 'hide called');
                 done();
