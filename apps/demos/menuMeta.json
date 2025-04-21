@@ -4121,9 +4121,11 @@
             "Widget": "Stepper",
             "MvcDescription": "",
             "NetCoreDescription": "",
-            "MvcAdditionalFiles": [],
-            "DemoType": "Web",
-            "Badge": "New"
+            "MvcAdditionalFiles": [
+              "/Models/SampleData/StepperData.cs",
+              "/ViewModels/StepperViewModel.cs"
+            ],
+            "DemoType": "Web"
           },
           {
             "Title": "Step Template",
