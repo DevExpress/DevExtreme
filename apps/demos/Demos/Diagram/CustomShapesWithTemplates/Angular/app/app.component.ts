@@ -6,7 +6,6 @@ import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 
 import {
   DxPopupComponent,
-  DxIntegrationModule,
   DxTemplateModule,
 } from 'devextreme-angular';
 import {
@@ -68,7 +67,6 @@ export class AppComponent {
     DxiDiagramCustomShapeComponent,
     DxoDiagramNodesComponent,
     DxPopupComponent,
-    DxIntegrationModule,
     DxTemplateModule,
   ],
   declarations: [AppComponent],

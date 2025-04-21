@@ -4,8 +4,7 @@ import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 
 import {
   DxButtonComponent,
-  DxIntegrationModule,
-  DxTemplateModule,
+  DxTemplateDirective,
 } from 'devextreme-angular';
 import {
   DxPopupComponent,
@@ -104,8 +103,7 @@ export class AppComponent {
     DxiPopupToolbarItemComponent,
     DxoPopupPositionComponent,
     DxButtonComponent,
-    DxIntegrationModule,
-    DxTemplateModule,
+    DxTemplateDirective,
   ],
   declarations: [AppComponent],
   bootstrap: [AppComponent],
