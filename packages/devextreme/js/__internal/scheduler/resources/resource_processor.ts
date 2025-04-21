@@ -14,6 +14,7 @@ export interface AppointmentResource {
   values: string[];
 }
 
+// NOTE: merge it with main resource loader
 const loadResource = (dataSourceConfig: ResourceConfig['dataSource']): Promise<Record<string, unknown>[]> => {
   if (!dataSourceConfig) {
     return Promise.resolve([]);
