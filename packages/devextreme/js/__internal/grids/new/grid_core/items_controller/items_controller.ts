@@ -37,7 +37,7 @@ export class ItemsController {
     ),
     [
       this.dataController.items,
-      this.columnsController.visibleColumns,
+      this.columnsController.columns,
       this.selectedCardKeys,
       this.searchController.highlightTextOptions,
     ],
@@ -53,28 +53,12 @@ export class ItemsController {
     this.selectedCardKeys.update(keys);
   }
 
-  private parseItemData(data: DataObject, columns: Column[]): Record<string, unknown> {
-    const parsed: Record<string, unknown> = {};
-
-    for (const column of columns) {
-      const { dataField } = column;
-      if (dataField) {
-        // @ts-expect-error
-        const value: string = data[dataField];
-        parsed[dataField] = parseValue(column, value);
-      }
-    }
-
-    return parsed;
-  }
-
   public createDataRow(
     data: DataObject,
     columns: Column[],
     itemIndex: number,
     selectedCardKeys?: Key[],
   ): DataRow {
-    const parsedItems = this.parseItemData(data, columns);
     const itemKey = this.dataController.getDataKey(data);
 
     return {
@@ -83,8 +67,7 @@ export class ItemsController {
         const displayValue = column.calculateDisplayValue(data);
 
         const formattedText = formatHelper.format(
-          // @ts-expect-error
-          parsedItems[column.dataField] as never,
+          parseValue(column, displayValue as string) as never,
           column.format,
         );
         const text = column.customizeText

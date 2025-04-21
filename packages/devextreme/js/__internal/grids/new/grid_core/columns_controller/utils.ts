@@ -100,8 +100,27 @@ export function normalizeVisibleIndexes(
 export function normalizeColumns(
   columns: PreNormalizedColumn[],
   templateNormalizationFunc: TemplateNormalizationFunc,
+  firstItemDataTypes?: Record<string, { dataType?: DataType; format: string | null }> | null,
 ): Column[] {
-  const normalizedColumns = columns.map((c) => normalizeColumn(c, templateNormalizationFunc));
+  const normalizedColumns = columns.map((c) => {
+    const column = normalizeColumn(c, templateNormalizationFunc);
+
+    if (firstItemDataTypes && column.name && firstItemDataTypes[column.name]) {
+      const { dataType, format } = firstItemDataTypes[column.name];
+
+      if (dataType && column.dataType !== dataType) {
+        column.dataType = dataType;
+      }
+
+      if (format !== undefined && format !== null && !column.format) {
+        // @ts-expect-error
+        column.format = format;
+      }
+    }
+
+    return column;
+  });
+
   return normalizedColumns;
 }
 
@@ -189,14 +208,11 @@ export const getSerializationFormat = function (dataType: string, value: unknown
   }
 };
 
-export const getColumnFormat = function (column: Column[]): string | null {
-  // @ts-expect-error
+export const getColumnFormat = function (column: Partial<Pick<Column, 'format' | 'dataType'>>): string | null {
   if (column.format) {
-    // @ts-expect-error
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-    return column.format;
+    return column.format as string;
   }
-  // @ts-expect-error
+
   if (column.dataType === 'date' || column.dataType === 'datetime') {
     return 'shortDate';
   }

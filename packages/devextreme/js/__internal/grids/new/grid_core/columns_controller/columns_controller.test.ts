@@ -167,7 +167,7 @@ describe('ColumnsController', () => {
         ],
       });
 
-      columnsController.setFirstItem({
+      columnsController.setFirstItems({
         created: new Date('2024-01-01'),
         amount: 1234.56,
       });

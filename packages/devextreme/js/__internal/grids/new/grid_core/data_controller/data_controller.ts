@@ -97,6 +97,13 @@ export class DataController {
     private readonly filterController: FilterController,
     private readonly searchController: SearchController,
   ) {
+    effect(() => {
+      const items = this._items.unreactive_get();
+      if (items.length > 0) {
+        this.columnsController.setFirstItems(items[0]);
+      }
+    }, [this._items]);
+
     effect(
       (dataSource) => {
         const changedCallback = (e?): void => {
@@ -232,8 +239,6 @@ export class DataController {
       items = this._items.unreactive_get();
       items = updateItemsImmutable(items, e.changes, dataSource.store());
     }
-
-    this.columnsController.setFirstItem(items[0]);
 
     this._items.update(items);
     this.pageIndex.update(dataSource.pageIndex());

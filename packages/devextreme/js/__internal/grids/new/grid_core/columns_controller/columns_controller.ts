@@ -30,7 +30,7 @@ export class ColumnsController {
 
   public readonly allowColumnReordering: Subscribable<boolean>;
 
-  public readonly firstItem = state<Record<string, unknown> | null>(null);
+  public readonly firstItems = state<Record<string, unknown> | null>(null);
 
   public static dependencies = [OptionsController] as const;
 
@@ -39,6 +39,25 @@ export class ColumnsController {
   ) {
     this.columnsConfiguration = this.options.oneWay('columns');
     this.headerFilterConfiguration = this.options.oneWay('headerFilter');
+
+    const firstItemsDataTypes = computed(
+      () => {
+        const firstItems = this.firstItems.unreactive_get();
+
+        if (!firstItems) return null;
+
+        const types: Record<string, { dataType: DataType | undefined; format: string | null }> = {};
+
+        for (const [field, value] of Object.entries(firstItems)) {
+          const dataType = getValueDataType(value);
+          const format = getColumnFormat({ dataType });
+          types[field] = { dataType, format };
+        }
+
+        return types;
+      },
+      [this.firstItems],
+    );
 
     this.columnsSettings = interruptableComputed(
       (columnsConfiguration) => preNormalizeColumns(columnsConfiguration ?? []),
@@ -51,14 +70,17 @@ export class ColumnsController {
       (
         columnsSettings,
         headerFilterRootOptions,
+        inferredDataTypes,
       ) => normalizeColumns(
         columnsSettings ?? [],
         this.options.normalizeTemplate.bind(this.options),
+        inferredDataTypes,
       ).map((column) => headerFilterUtils
         .mergeColumnHeaderFilterOptions(column, headerFilterRootOptions)),
       [
         this.columnsSettings,
         this.headerFilterConfiguration,
+        firstItemsDataTypes,
       ],
     );
 
@@ -142,38 +164,12 @@ export class ColumnsController {
     return result;
   }
 
-  public setFirstItem(item: Record<string, unknown> | null): void {
-    if (this.firstItem.unreactive_get()) return;
-    this.firstItem.update(item);
-    this.updateColumnDataType();
+  public setFirstItems(item: Record<string, unknown> | null): void {
+    if (this.firstItems.unreactive_get()) return;
+    this.firstItems.update(item);
   }
 
-  public getFirstItem(): Record<string, unknown> | null {
-    return this.firstItem.unreactive_get();
-  }
-
-  private updateColumnDataType(): void {
-    const columns = this.columns.unreactive_get();
-    const columnSettings = this.columnsSettings.unreactive_get();
-    const firstItem = this.getFirstItem();
-
-    columns.forEach((column, index) => {
-      if (firstItem && column.calculateCellValue) {
-        const columnSetting = columnSettings[index];
-        const value = column.calculateCellValue(firstItem);
-        const dataType: DataType | undefined = columnSetting.dataType ?? getValueDataType(value);
-        // @ts-expect-error
-        const columnFormat = getColumnFormat(column);
-
-        if (dataType && dataType !== column.dataType) {
-          this.columnOption(column, 'dataType', dataType);
-        }
-
-        if (columnFormat && columnFormat !== column.format) {
-          // @ts-expect-error
-          this.columnOption(column, 'format', columnFormat);
-        }
-      }
-    });
+  public getFirstItems(): Record<string, unknown> | null {
+    return this.firstItems.unreactive_get();
   }
 }
