@@ -7,7 +7,6 @@ import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import {
   DxPopupComponent,
   DxTemplateDirective,
-  DxIntegrationModule,
   DxTextBoxComponent,
   DxButtonComponent,
 } from 'devextreme-angular';
@@ -153,7 +152,6 @@ export class AppComponent {
     DxiDiagramToolboxGroupComponent,
     DxPopupComponent,
     DxTemplateDirective,
-    DxIntegrationModule,
     DxTextBoxComponent,
     DxButtonComponent,
   ],
