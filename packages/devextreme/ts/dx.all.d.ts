@@ -10031,13 +10031,26 @@ declare module DevExpress.ui {
    * @deprecated [depNote:dxCardViewOptions]
    */
   export interface dxCardViewOptions<TRowData = unknown, TKey = unknown>
-    extends WidgetOptions<dxCardView>,
-      DevExpress.ui.dxCardView.DataControllerConfiguration<TRowData, TKey>,
-      DevExpress.ui.dxCardView.PagerConfiguration,
-      DevExpress.ui.dxCardView.ColumnsControllerConfiguration<TRowData, TKey>,
-      DevExpress.ui.dxCardView.HeaderPanelConfiguration<TRowData, TKey>,
-      DevExpress.ui.dxCardView.ContentViewConfiguration<TRowData>,
-      DevExpress.ui.dxCardView.ToolbarConfiguration {
+    extends WidgetOptions<dxCardView> {
+    /**
+     * [descr:dxCardViewOptions.dataSource]
+     */
+    dataSource?: DevExpress.data.DataSourceLike<TRowData, TKey>;
+    /**
+     * [descr:dxCardViewOptions.paging]
+     */
+    paging?: DevExpress.ui.dxCardView.Paging;
+    /**
+     * [descr:dxCardViewOptions.keyExpr]
+     */
+    keyExpr?: string | string[];
+    /**
+     * [descr:dxCardViewOptions.remoteOperations]
+     */
+    remoteOperations?:
+      | DevExpress.ui.dxCardView.RemoteOperations
+      | boolean
+      | DevExpress.common.Mode;
     /**
      * [descr:dxCardViewOptions.onDataErrorOccurred]
      */
@@ -10045,6 +10058,68 @@ declare module DevExpress.ui {
       e: DevExpress.common.core.events.EventInfo<dxCardView> &
         DevExpress.common.grids.DataErrorOccurredInfo
     ) => void;
+
+    /**
+     * [descr:dxCardViewOptions.pager]
+     */
+    pager?: DevExpress.common.grids.Pager;
+
+    /**
+     * [descr:dxCardViewOptions.columns]
+     */
+    columns?: (
+      | DevExpress.ui.dxCardView.ColumnProperties<TRowData, TKey>
+      | string
+    )[];
+
+    /**
+     * [descr:dxCardViewOptions.headerPanel]
+     */
+    headerPanel?: DevExpress.ui.dxCardView.HeaderPanel<TRowData, TKey>;
+
+    /**
+     * [descr:dxCardViewOptions.cardsPerRow]
+     */
+    cardsPerRow?: number | DevExpress.common.Mode;
+    /**
+     * [descr:dxCardViewOptions.cardMinWidth]
+     */
+    cardMinWidth?: number;
+    /**
+     * [descr:dxCardViewOptions.cardMaxWidth]
+     */
+    cardMaxWidth?: number;
+    /**
+     * [descr:dxCardViewOptions.cardCover]
+     */
+    cardCover?: DevExpress.ui.dxCardView.CardCover<TRowData>;
+    /**
+     * [descr:dxCardViewOptions.cardTemplate]
+     */
+    cardTemplate?:
+      | template
+      | ((
+          row: DevExpress.ui.dxCardView.DataRow
+        ) => string | DevExpress.core.UserDefinedElement);
+    /**
+     * [descr:dxCardViewOptions.cardHeader]
+     */
+    cardHeader?: DevExpress.ui.dxCardView.CardHeader<TRowData>;
+
+    /**
+     * [descr:dxCardViewOptions.toolbar]
+     */
+    toolbar?: {
+      /**
+       * [descr:dxCardViewOptions.toolbar.items]
+       */
+      items?: Array<
+        | DevExpress.ui.dxCardView.PredefinedToolbarItem
+        | DevExpress.ui.dxCardView.ToolbarItem
+      >;
+      visible?: boolean | undefined;
+      disabled?: boolean;
+    };
   }
   /**
    * [descr:dxChat]
@@ -31988,77 +32063,6 @@ declare module DevExpress.ui.dxCardView {
     headerItemCssClass?: string;
   };
   /**
-   * [descr:ColumnsControllerConfiguration]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export type ColumnsControllerConfiguration<
-    TRowData = unknown,
-    TKey = unknown
-  > = {
-    /**
-     * [descr:ColumnsControllerConfiguration.columns]
-     */
-    columns?: (ColumnProperties<TRowData, TKey> | string)[];
-  };
-  /**
-   * [descr:ContentViewConfiguration]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface ContentViewConfiguration<TRowData = unknown>
-    extends BaseContentViewConfiguration {
-    /**
-     * [descr:ContentViewConfiguration.cardsPerRow]
-     */
-    cardsPerRow?: number | DevExpress.common.Mode;
-    /**
-     * [descr:ContentViewConfiguration.cardMinWidth]
-     */
-    cardMinWidth?: number;
-    /**
-     * [descr:ContentViewConfiguration.cardMaxWidth]
-     */
-    cardMaxWidth?: number;
-    /**
-     * [descr:ContentViewConfiguration.cardCover]
-     */
-    cardCover?: CardCover<TRowData>;
-    /**
-     * [descr:ContentViewConfiguration.cardTemplate]
-     */
-    cardTemplate?:
-      | template
-      | ((row: DataRow) => string | DevExpress.core.UserDefinedElement);
-    /**
-     * [descr:ContentViewConfiguration.cardHeader]
-     */
-    cardHeader?: CardHeader<TRowData>;
-  }
-  /**
-   * [descr:DataControllerConfiguration]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export type DataControllerConfiguration<
-    TRowData = unknown,
-    TKey = unknown
-  > = {
-    /**
-     * [descr:DataControllerConfiguration.dataSource]
-     */
-    dataSource?: DevExpress.data.DataSourceLike<TRowData, TKey>;
-    /**
-     * [descr:DataControllerConfiguration.paging]
-     */
-    paging?: Paging;
-    /**
-     * [descr:DataControllerConfiguration.keyExpr]
-     */
-    keyExpr?: string | string[];
-    /**
-     * [descr:DataControllerConfiguration.remoteOperations]
-     */
-    remoteOperations?: RemoteOperations | boolean | DevExpress.common.Mode;
-  };
-  /**
    * [descr:DataRow]
    */
   export interface DataRow<TRowData = unknown, TKey = unknown> {
@@ -32075,28 +32079,6 @@ declare module DevExpress.ui.dxCardView {
      */
     data: TRowData;
   }
-  /**
-   * [descr:HeaderPanelConfiguration]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export type HeaderPanelConfiguration<TRowData = unknown, TKey = unknown> = {
-    /**
-     * [descr:HeaderPanelConfiguration.headerPanel]
-     */
-    headerPanel?: HeaderPanel<TRowData, TKey>;
-  };
-
-  /**
-   * [descr:PagerConfiguration]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export type PagerConfiguration = {
-    /**
-     * [descr:PagerConfiguration.pager]
-     */
-    pager?: DevExpress.common.grids.Pager;
-  };
-
   /**
    * [descr:Paging]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
@@ -32137,23 +32119,6 @@ declare module DevExpress.ui.dxCardView {
      */
     summary?: boolean;
   }
-  /**
-   * [descr:ToolbarConfiguration]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export type ToolbarConfiguration = {
-    /**
-     * [descr:ToolbarConfiguration.toolbar]
-     */
-    toolbar?: {
-      /**
-       * [descr:ToolbarConfiguration.toolbar.items]
-       */
-      items?: Array<PredefinedToolbarItem | ToolbarItem>;
-      visible?: boolean | undefined;
-      disabled?: boolean;
-    };
-  };
   /**
    * [descr:ToolbarItem]
    */

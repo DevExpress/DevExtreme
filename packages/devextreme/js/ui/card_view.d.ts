@@ -10,8 +10,6 @@ import { dxToolbarItem, ToolbarItemLocation } from './toolbar';
 import { dxSortableOptions } from './sortable';
 import { dxLoadPanelOptions } from './load_panel';
 
-// #region DataController
-
 /**
  * @docid
  * @namespace DevExpress.ui.dxCardView
@@ -66,57 +64,6 @@ interface RemoteOperations {
     summary?: boolean;
 }
 
-/**
- * @docid
- * @hidden
- * @namespace DevExpress.ui.dxCardView
- */
-export type DataControllerConfiguration<TRowData = unknown, TKey = unknown> = {
-    /**
-     * @docid
-     * @default undefined
-     * @type string | Array<any> | Store | DataSource | DataSourceOptions
-     * @public
-     */
-    dataSource?: DataSourceLike<TRowData, TKey>;
-    /**
-     * @docid
-     * @public
-     */
-    paging?: Paging;
-    /**
-     * @docid
-     * @default undefined
-     * @public
-     */
-    keyExpr?: string | string[];
-    /**
-     * @docid
-     * @default "auto"
-     * @public
-     */
-    remoteOperations?: RemoteOperations | boolean | Mode;
-};
-
-// #endregion
-
-// #region Pager
-
-/**
- * @docid
- * @hidden
- * @namespace DevExpress.ui.dxCardView
- */
-export type PagerConfiguration = {
-    /**
-     * @docid
-     * @public
-     */
-    pager?: Pager;
-};
-
-// #endregion
-
 // #region Toolbar
 
 export type PredefinedToolbarItem = 'columnChooserButton' | 'searchPanel' | 'addCardButton';
@@ -139,35 +86,6 @@ export type ToolbarItem = dxToolbarItem & {
      * @public
      */
     location?: ToolbarItemLocation;
-  };
-
-/**
- * @docid
- * @hidden
- * @namespace DevExpress.ui.dxCardView
- */
-export type ToolbarConfiguration = {
-    /**
-     * @docid
-     * @public
-     */
-    toolbar?: {
-        /**
-         * @docid
-         * @public
-         */
-        items?: Array<PredefinedToolbarItem | ToolbarItem>;
-        /**
-         * @default undefined
-         * @public
-         */
-        visible?: boolean | undefined;
-        /**
-         * @default false
-         * @public
-         */
-        disabled?: boolean;
-    };
 };
 
 // #endregion
@@ -292,19 +210,6 @@ export type Column<TRowData = unknown, TKey = unknown> =
     Pick<Required<ColumnProperties<TRowData, TKey>>, RequiredColumnProps>
     & Omit<ColumnProperties, RequiredColumnProps>;
 
-/**
- * @docid
- * @hidden
- * @namespace DevExpress.ui.dxCardView
- */
-export type ColumnsControllerConfiguration<TRowData = unknown, TKey = unknown> = {
-    /**
-     * @public
-     * @docid
-     */
-    columns?: (ColumnProperties<TRowData, TKey> | string)[];
-};
-
 // #endregion
 
 // #region HeaderPanel
@@ -337,58 +242,9 @@ type HeaderPanel<TRowData = unknown, TKey = unknown> = {
     itemCssClass?: string;
 };
 
-/**
- * @docid
- * @hidden
- * @namespace DevExpress.ui.dxCardView
- */
-export type HeaderPanelConfiguration<TRowData = unknown, TKey = unknown> = {
-    /**
-     * @docid
-     */
-    headerPanel?: HeaderPanel<TRowData, TKey>;
-};
-
 // #endregion
 
 // #region ContentView
-
-/**
- * @docid
- * @hidden
- * @namespace DevExpress.ui.dxCardView
- * @type object
- */
-export interface BaseContentViewConfiguration {
-    /**
-     * @docid
-     * @public
-     * @type object
-     */
-    scrolling?: Pick<ScrollingBase, 'scrollByContent' | 'scrollByThumb' | 'showScrollbar' | 'useNative'>;
-    /**
-     * @docid
-     * @public
-     * @default true
-     */
-    errorRowEnabled?: boolean;
-    /**
-     * @docid
-     * @public
-     */
-    loadPanel?: dxLoadPanelOptions;
-    /**
-     * @docid
-     * @public
-     * @default "No data"
-     */
-    noDataText?: string;
-    /**
-     * @docid
-     * @public
-     */
-    noDataTemplate?: template | ((e: { text: string }) => string | UserDefinedElement);
-}
 
 /**
  * @docid
@@ -424,13 +280,114 @@ interface CardHeader<TRowData = unknown> {
     visible?: boolean;
 }
 
+// #endregion
+
 /**
+ * @namespace DevExpress.ui
+ * @public
  * @docid
- * @hidden
- * @namespace DevExpress.ui.dxCardView
- * @type object
+ * @deprecated use Properties instead
  */
-export interface ContentViewConfiguration<TRowData = unknown> extends BaseContentViewConfiguration {
+export interface dxCardViewOptions<TRowData = unknown, TKey = unknown> extends WidgetOptions<dxCardView> {
+
+    // #region DataController
+
+    /**
+     * @docid
+     * @default undefined
+     * @type string | Array<any> | Store | DataSource | DataSourceOptions
+     * @public
+     */
+    dataSource?: DataSourceLike<TRowData, TKey>;
+    /**
+     * @docid
+     * @public
+     */
+    paging?: Paging;
+    /**
+     * @docid
+     * @default undefined
+     * @public
+     */
+    keyExpr?: string | string[];
+    /**
+     * @docid
+     * @default "auto"
+     * @public
+     */
+    remoteOperations?: RemoteOperations | boolean | Mode;
+    /**
+     * @docid
+     * @default undefined
+     * @type_function_param1 e:object
+     * @type_function_param1_field component:this
+     * @action
+     * @public
+     */
+    onDataErrorOccurred?: (e: EventInfo<dxCardView> & DataErrorOccurredInfo) => void;
+
+    // #endregion
+
+    // #region Pager
+
+    /**
+     * @docid
+     * @public
+     */
+    pager?: Pager;
+
+    // #endregion
+
+    // #region ColumnsController
+
+    /**
+     * @public
+     * @docid
+     */
+    columns?: (ColumnProperties<TRowData, TKey> | string)[];
+
+    // #endregion
+
+    // #region HeaderPanel
+
+    /**
+     * @docid
+     */
+    headerPanel?: HeaderPanel<TRowData, TKey>;
+
+    // #endregion
+
+    // #region ContentView
+
+    /**
+     * @docid
+     * @public
+     * @type object
+     */
+    scrolling?: Pick<ScrollingBase, 'scrollByContent' | 'scrollByThumb' | 'showScrollbar' | 'useNative'>;
+    /**
+     * @docid
+     * @public
+     * @default true
+     */
+    errorRowEnabled?: boolean;
+    /**
+     * @docid
+     * @public
+     */
+    loadPanel?: dxLoadPanelOptions;
+    /**
+     * @docid
+     * @public
+     * @default "No data"
+     */
+    noDataText?: string;
+    /**
+     * @docid
+     * @public
+     */
+    noDataTemplate?: template | ((e: { text: string }) => string | UserDefinedElement);
+
     /**
      * @docid
      * @public
@@ -461,33 +418,34 @@ export interface ContentViewConfiguration<TRowData = unknown> extends BaseConten
      * @public
      */
     cardHeader?: CardHeader<TRowData>;
-}
 
-// #endregion
+    // #endregion
 
-/**
- * @namespace DevExpress.ui
- * @public
- * @docid
- * @deprecated use Properties instead
- * @inherits DataControllerConfiguration,PagerConfiguration,ToolbarConfiguration,ColumnsControllerConfiguration,HeaderPanelConfiguration,ContentViewConfiguration
- */
-export interface dxCardViewOptions<TRowData = unknown, TKey = unknown> extends WidgetOptions<dxCardView>,
-DataControllerConfiguration<TRowData, TKey>,
-PagerConfiguration,
-ColumnsControllerConfiguration<TRowData, TKey>,
-HeaderPanelConfiguration<TRowData, TKey>,
-ContentViewConfiguration<TRowData>,
-ToolbarConfiguration {
+    // #region Toolbar
+
     /**
      * @docid
-     * @default undefined
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:this
-     * @action
      * @public
      */
-    onDataErrorOccurred?: (e: EventInfo<dxCardView> & DataErrorOccurredInfo) => void;
+    toolbar?: {
+        /**
+         * @docid
+         * @public
+         */
+        items?: Array<PredefinedToolbarItem | ToolbarItem>;
+        /**
+         * @default undefined
+         * @public
+         */
+        visible?: boolean | undefined;
+        /**
+         * @default false
+         * @public
+         */
+        disabled?: boolean;
+    };
+
+    // #endregion
 }
 
 /** @public */

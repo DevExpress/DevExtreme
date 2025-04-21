@@ -114,7 +114,7 @@ export class DxCardViewComponent<TRowData = any, TKey = any> extends DxComponent
 
 
     /**
-     * [descr:ContentViewConfiguration.cardCover]
+     * [descr:dxCardViewOptions.cardCover]
     
      */
     @Input()
@@ -127,7 +127,7 @@ export class DxCardViewComponent<TRowData = any, TKey = any> extends DxComponent
 
 
     /**
-     * [descr:ContentViewConfiguration.cardHeader]
+     * [descr:dxCardViewOptions.cardHeader]
     
      */
     @Input()
@@ -140,7 +140,7 @@ export class DxCardViewComponent<TRowData = any, TKey = any> extends DxComponent
 
 
     /**
-     * [descr:ContentViewConfiguration.cardMaxWidth]
+     * [descr:dxCardViewOptions.cardMaxWidth]
     
      */
     @Input()
@@ -153,7 +153,7 @@ export class DxCardViewComponent<TRowData = any, TKey = any> extends DxComponent
 
 
     /**
-     * [descr:ContentViewConfiguration.cardMinWidth]
+     * [descr:dxCardViewOptions.cardMinWidth]
     
      */
     @Input()
@@ -166,7 +166,7 @@ export class DxCardViewComponent<TRowData = any, TKey = any> extends DxComponent
 
 
     /**
-     * [descr:ContentViewConfiguration.cardsPerRow]
+     * [descr:dxCardViewOptions.cardsPerRow]
     
      */
     @Input()
@@ -179,7 +179,7 @@ export class DxCardViewComponent<TRowData = any, TKey = any> extends DxComponent
 
 
     /**
-     * [descr:ContentViewConfiguration.cardTemplate]
+     * [descr:dxCardViewOptions.cardTemplate]
     
      */
     @Input()
@@ -192,7 +192,7 @@ export class DxCardViewComponent<TRowData = any, TKey = any> extends DxComponent
 
 
     /**
-     * [descr:ColumnsControllerConfiguration.columns]
+     * [descr:dxCardViewOptions.columns]
     
      */
     @Input()
@@ -205,7 +205,7 @@ export class DxCardViewComponent<TRowData = any, TKey = any> extends DxComponent
 
 
     /**
-     * [descr:DataControllerConfiguration.dataSource]
+     * [descr:dxCardViewOptions.dataSource]
     
      */
     @Input()
@@ -257,7 +257,7 @@ export class DxCardViewComponent<TRowData = any, TKey = any> extends DxComponent
 
 
     /**
-     * [descr:HeaderPanelConfiguration.headerPanel]
+     * [descr:dxCardViewOptions.headerPanel]
     
      */
     @Input()
@@ -309,7 +309,7 @@ export class DxCardViewComponent<TRowData = any, TKey = any> extends DxComponent
 
 
     /**
-     * [descr:DataControllerConfiguration.keyExpr]
+     * [descr:dxCardViewOptions.keyExpr]
     
      */
     @Input()
@@ -322,7 +322,7 @@ export class DxCardViewComponent<TRowData = any, TKey = any> extends DxComponent
 
 
     /**
-     * [descr:PagerConfiguration.pager]
+     * [descr:dxCardViewOptions.pager]
     
      */
     @Input()
@@ -335,7 +335,7 @@ export class DxCardViewComponent<TRowData = any, TKey = any> extends DxComponent
 
 
     /**
-     * [descr:DataControllerConfiguration.paging]
+     * [descr:dxCardViewOptions.paging]
     
      */
     @Input()
@@ -348,7 +348,7 @@ export class DxCardViewComponent<TRowData = any, TKey = any> extends DxComponent
 
 
     /**
-     * [descr:DataControllerConfiguration.remoteOperations]
+     * [descr:dxCardViewOptions.remoteOperations]
     
      */
     @Input()
@@ -387,7 +387,7 @@ export class DxCardViewComponent<TRowData = any, TKey = any> extends DxComponent
 
 
     /**
-     * [descr:ToolbarConfiguration.toolbar]
+     * [descr:dxCardViewOptions.toolbar]
     
      */
     @Input()
