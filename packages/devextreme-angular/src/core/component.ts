@@ -39,7 +39,7 @@ import {
   CollectionNestedOptionContainerImpl,
 } from './nested-option';
 
-import { DxIntegrationModule} from "./integration";
+import { DxIntegrationModule } from './integration';
 
 
 config({
@@ -231,11 +231,10 @@ export abstract class DxComponent implements OnChanges, OnInit, DoCheck, AfterCo
     private readonly transferState: TransferState,
     @Inject(PLATFORM_ID) private readonly platformId: any,
   ) {
+      const injector = inject(Injector);
 
-    const injector = inject(Injector);
-
-    if (!DxIntegrationModule.initialized) {
-     createNgModule(DxIntegrationModule, injector);
+      if (!DxIntegrationModule.initialized) {
+       createNgModule(DxIntegrationModule, injector);
     }
 
     this.templates = [];

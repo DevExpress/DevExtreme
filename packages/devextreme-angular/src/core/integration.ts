@@ -12,7 +12,6 @@ import eventsEngine from 'devextreme/common/core/events/core/events_engine';
 const outsideZoneEvents = ['mousemove', 'mouseover', 'mouseout'];
 const insideZoneEvents = ['mouseup', 'click', 'mousedown', 'transitionend', 'wheel'];
 
-
 let originalAdd;
 let callbacks = [];
 let readyCallbackAdd = function (callback) {
@@ -91,7 +90,6 @@ let doInjections = (document: any, ngZone: NgZone, xhrFactory: XhrFactory) => {
   readyCallbackAdd = (callback) => ngZone.run(() => callback());
   doInjections = runReadyCallbacksInZone;
 };
-
 
 @NgModule({})
 export class DxIntegrationModule {
