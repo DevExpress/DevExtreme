@@ -27,7 +27,6 @@ import { DxoCardHeader } from './base/card-header';
     styles: [''],
     providers: [NestedOptionHost],
     inputs: [
-        'captionExpr',
         'visible'
     ]
 })

@@ -28,7 +28,9 @@ import { DxoCardCover } from './base/card-cover';
     providers: [NestedOptionHost],
     inputs: [
         'altExpr',
-        'imageExpr'
+        'aspectRatio',
+        'imageExpr',
+        'maxHeight'
     ]
 })
 export class DxoCardCoverComponent extends DxoCardCover implements OnDestroy, OnInit  {

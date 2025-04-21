@@ -10090,6 +10090,10 @@ declare module DevExpress.ui {
      */
     cardMaxWidth?: number;
     /**
+     * [descr:dxCardViewOptions.wordWrapEnabled]
+     */
+    wordWrapEnabled?: boolean;
+    /**
      * [descr:dxCardViewOptions.cardCover]
      */
     cardCover?: DevExpress.ui.dxCardView.CardCover<TRowData>;
@@ -10097,6 +10101,14 @@ declare module DevExpress.ui {
      * [descr:dxCardViewOptions.cardTemplate]
      */
     cardTemplate?:
+      | template
+      | ((
+          row: DevExpress.ui.dxCardView.DataRow
+        ) => string | DevExpress.core.UserDefinedElement);
+    /**
+     * [descr:dxCardViewOptions.cardFooterTemplate]
+     */
+    cardFooterTemplate?:
       | template
       | ((
           row: DevExpress.ui.dxCardView.DataRow
@@ -31973,16 +31985,20 @@ declare module DevExpress.ui.dxCardView {
      * [descr:CardCover.altExpr]
      */
     altExpr: string | ((data: TRowData) => string);
+    /**
+     * [descr:CardCover.maxHeight]
+     */
+    maxHeight?: number;
+    /**
+     * [descr:CardCover.aspectRatio]
+     */
+    aspectRatio?: string;
   }
   /**
    * [descr:CardHeader]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  interface CardHeader<TRowData = unknown> {
-    /**
-     * [descr:CardHeader.captionExpr]
-     */
-    captionExpr?: string | ((data: TRowData) => string);
+  interface CardHeader {
     /**
      * [descr:CardHeader.visible]
      */

@@ -17,10 +17,24 @@ export abstract class DxoCardCover extends NestedOption {
         this._setOption('altExpr', value);
     }
 
+    get aspectRatio(): string {
+        return this._getOption('aspectRatio');
+    }
+    set aspectRatio(value: string) {
+        this._setOption('aspectRatio', value);
+    }
+
     get imageExpr(): Function | string {
         return this._getOption('imageExpr');
     }
     set imageExpr(value: Function | string) {
         this._setOption('imageExpr', value);
+    }
+
+    get maxHeight(): number {
+        return this._getOption('maxHeight');
+    }
+    set maxHeight(value: number) {
+        this._setOption('maxHeight', value);
     }
 }

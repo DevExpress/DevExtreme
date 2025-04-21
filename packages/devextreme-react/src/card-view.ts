@@ -17,6 +17,8 @@ import type { PagerPageSize } from "devextreme/common/grids";
 
 type ICardViewOptions<TRowData = any, TKey = any> = React.PropsWithChildren<Properties<TRowData, TKey> & IHtmlOptions & {
   dataSource?: Properties<TRowData, TKey>["dataSource"];
+  cardFooterRender?: (...params: any) => React.ReactNode;
+  cardFooterComponent?: React.ComponentType<any>;
   cardRender?: (...params: any) => React.ReactNode;
   cardComponent?: React.ComponentType<any>;
 }>
@@ -53,6 +55,11 @@ const CardView = memo(
 
       const templateProps = useMemo(() => ([
         {
+          tmplOption: "cardFooterTemplate",
+          render: "cardFooterRender",
+          component: "cardFooterComponent"
+        },
+        {
           tmplOption: "cardTemplate",
           render: "cardRender",
           component: "cardComponent"
@@ -78,7 +85,9 @@ const CardView = memo(
 // CardView
 type ICardCoverProps = React.PropsWithChildren<{
   altExpr?: ((data: any) => string) | string;
+  aspectRatio?: string;
   imageExpr?: ((data: any) => string) | string;
+  maxHeight?: number;
 }>
 const _componentCardCover = (props: ICardCoverProps) => {
   return React.createElement(NestedOption<ICardCoverProps>, {
@@ -96,7 +105,6 @@ const CardCover = Object.assign<typeof _componentCardCover, NestedComponentMeta>
 // owners:
 // CardView
 type ICardHeaderProps = React.PropsWithChildren<{
-  captionExpr?: ((data: any) => string) | string;
   visible?: boolean;
 }>
 const _componentCardHeader = (props: ICardHeaderProps) => {

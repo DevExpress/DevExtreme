@@ -29,14 +29,6 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoCardViewCardHeaderComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get captionExpr(): ((data: any) => string) | string {
-        return this._getOption('captionExpr');
-    }
-    set captionExpr(value: ((data: any) => string) | string) {
-        this._setOption('captionExpr', value);
-    }
-
-    @Input()
     get visible(): boolean {
         return this._getOption('visible');
     }

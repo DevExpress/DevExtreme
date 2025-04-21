@@ -127,6 +127,19 @@ export class DxCardViewComponent<TRowData = any, TKey = any> extends DxComponent
 
 
     /**
+     * [descr:dxCardViewOptions.cardFooterTemplate]
+    
+     */
+    @Input()
+    get cardFooterTemplate(): any {
+        return this._getOption('cardFooterTemplate');
+    }
+    set cardFooterTemplate(value: any) {
+        this._setOption('cardFooterTemplate', value);
+    }
+
+
+    /**
      * [descr:dxCardViewOptions.cardHeader]
     
      */
@@ -424,6 +437,19 @@ export class DxCardViewComponent<TRowData = any, TKey = any> extends DxComponent
         this._setOption('width', value);
     }
 
+
+    /**
+     * [descr:dxCardViewOptions.wordWrapEnabled]
+    
+     */
+    @Input()
+    get wordWrapEnabled(): boolean {
+        return this._getOption('wordWrapEnabled');
+    }
+    set wordWrapEnabled(value: boolean) {
+        this._setOption('wordWrapEnabled', value);
+    }
+
     /**
     
      * [descr:WidgetOptions.onContentReady]
@@ -484,6 +510,13 @@ export class DxCardViewComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Output() cardCoverChange: EventEmitter<CardCover>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
+    @Output() cardFooterTemplateChange: EventEmitter<any>;
 
     /**
     
@@ -646,6 +679,13 @@ export class DxCardViewComponent<TRowData = any, TKey = any> extends DxComponent
      */
     @Output() widthChange: EventEmitter<(() => number | string) | number | string | undefined>;
 
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
+    @Output() wordWrapEnabledChange: EventEmitter<boolean>;
+
 
 
 
@@ -687,6 +727,7 @@ export class DxCardViewComponent<TRowData = any, TKey = any> extends DxComponent
             { emit: 'accessKeyChange' },
             { emit: 'activeStateEnabledChange' },
             { emit: 'cardCoverChange' },
+            { emit: 'cardFooterTemplateChange' },
             { emit: 'cardHeaderChange' },
             { emit: 'cardMaxWidthChange' },
             { emit: 'cardMinWidthChange' },
@@ -709,7 +750,8 @@ export class DxCardViewComponent<TRowData = any, TKey = any> extends DxComponent
             { emit: 'tabIndexChange' },
             { emit: 'toolbarChange' },
             { emit: 'visibleChange' },
-            { emit: 'widthChange' }
+            { emit: 'widthChange' },
+            { emit: 'wordWrapEnabledChange' }
         ]);
 
         this._idh.setHost(this);

@@ -37,11 +37,27 @@ export class DxoCardViewCardCoverComponent extends NestedOption implements OnDes
     }
 
     @Input()
+    get aspectRatio(): string {
+        return this._getOption('aspectRatio');
+    }
+    set aspectRatio(value: string) {
+        this._setOption('aspectRatio', value);
+    }
+
+    @Input()
     get imageExpr(): ((data: any) => string) | string {
         return this._getOption('imageExpr');
     }
     set imageExpr(value: ((data: any) => string) | string) {
         this._setOption('imageExpr', value);
+    }
+
+    @Input()
+    get maxHeight(): number {
+        return this._getOption('maxHeight');
+    }
+    set maxHeight(value: number) {
+        this._setOption('maxHeight', value);
     }
 
 

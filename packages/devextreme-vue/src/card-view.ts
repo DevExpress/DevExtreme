@@ -50,6 +50,7 @@ type AccessibleOptions = Pick<Properties,
   "accessKey" |
   "activeStateEnabled" |
   "cardCover" |
+  "cardFooterTemplate" |
   "cardHeader" |
   "cardMaxWidth" |
   "cardMinWidth" |
@@ -77,7 +78,8 @@ type AccessibleOptions = Pick<Properties,
   "tabIndex" |
   "toolbar" |
   "visible" |
-  "width"
+  "width" |
+  "wordWrapEnabled"
 >;
 
 interface DxCardView extends AccessibleOptions {
@@ -89,6 +91,7 @@ const componentConfig = {
     accessKey: String,
     activeStateEnabled: Boolean,
     cardCover: Object as PropType<CardCover>,
+    cardFooterTemplate: {},
     cardHeader: Object as PropType<CardHeader>,
     cardMaxWidth: Number,
     cardMinWidth: Number,
@@ -116,7 +119,8 @@ const componentConfig = {
     tabIndex: Number,
     toolbar: Object as PropType<Record<string, any>>,
     visible: Boolean,
-    width: [Function, Number, String] as PropType<((() => number | string)) | number | string>
+    width: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
+    wordWrapEnabled: Boolean
   },
   emits: {
     "update:isActive": null,
@@ -124,6 +128,7 @@ const componentConfig = {
     "update:accessKey": null,
     "update:activeStateEnabled": null,
     "update:cardCover": null,
+    "update:cardFooterTemplate": null,
     "update:cardHeader": null,
     "update:cardMaxWidth": null,
     "update:cardMinWidth": null,
@@ -152,6 +157,7 @@ const componentConfig = {
     "update:toolbar": null,
     "update:visible": null,
     "update:width": null,
+    "update:wordWrapEnabled": null,
   },
   computed: {
     instance(): CardView {
@@ -184,11 +190,15 @@ const DxCardCoverConfig = {
     "update:isActive": null,
     "update:hoveredElement": null,
     "update:altExpr": null,
+    "update:aspectRatio": null,
     "update:imageExpr": null,
+    "update:maxHeight": null,
   },
   props: {
     altExpr: [Function, String] as PropType<(((data: any) => string)) | string>,
-    imageExpr: [Function, String] as PropType<(((data: any) => string)) | string>
+    aspectRatio: String,
+    imageExpr: [Function, String] as PropType<(((data: any) => string)) | string>,
+    maxHeight: Number
   }
 };
 
@@ -202,11 +212,9 @@ const DxCardHeaderConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
-    "update:captionExpr": null,
     "update:visible": null,
   },
   props: {
-    captionExpr: [Function, String] as PropType<(((data: any) => string)) | string>,
     visible: Boolean
   }
 };

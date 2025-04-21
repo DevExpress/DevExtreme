@@ -10,13 +10,6 @@ import {
     template: ''
 })
 export abstract class DxoCardHeader extends NestedOption {
-    get captionExpr(): Function | string {
-        return this._getOption('captionExpr');
-    }
-    set captionExpr(value: Function | string) {
-        this._setOption('captionExpr', value);
-    }
-
     get visible(): boolean {
         return this._getOption('visible');
     }
