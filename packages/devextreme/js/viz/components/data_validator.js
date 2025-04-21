@@ -487,5 +487,7 @@ export function validateData(data, groupsData, incidentOccurred, options) {
     }
     groupPieData(data, groupsData);
 
-    return sortData(data, groupsData, options, getUniqueArgumentFields(groupsData));
+    const dataByArgumentFields = sortData(data, groupsData, options, getUniqueArgumentFields(groupsData));
+
+    return dataByArgumentFields;
 }
