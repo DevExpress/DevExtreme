@@ -310,7 +310,7 @@ test('[T1284200] Should handle dxList "selectAll" when has unselected items on t
   columns: [{
     dataField: 'id',
     filterType: 'exclude',
-    filterValues: [25],
+    filterValues: [70],
   }],
   headerFilter: {
     visible: true,

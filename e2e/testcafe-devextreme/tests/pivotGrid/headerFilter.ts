@@ -79,7 +79,7 @@ test('[T1284200] Should handle dxList "selectAll" when has unselected items on t
         dataField: 'id',
         area: 'column',
         filterType: 'exclude',
-        filterValues: [25],
+        filterValues: [70],
       },
     ],
     store: new Array(100).fill(null).map((_, idx) => ({
