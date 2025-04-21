@@ -41,7 +41,6 @@ import {
 
 import { DxIntegrationModule } from './integration';
 
-
 config({
   buyNowLink: 'https://go.devexpress.com/Licensing_Installer_Watermark_DevExtremeAngular.aspx',
   licensingDocLink: 'https://go.devexpress.com/Licensing_Documentation_DevExtremeAngular.aspx',
@@ -231,10 +230,10 @@ export abstract class DxComponent implements OnChanges, OnInit, DoCheck, AfterCo
     private readonly transferState: TransferState,
     @Inject(PLATFORM_ID) private readonly platformId: any,
   ) {
-      const injector = inject(Injector);
+    const injector = inject(Injector);
 
-      if (!DxIntegrationModule.initialized) {
-       createNgModule(DxIntegrationModule, injector);
+    if (!DxIntegrationModule.initialized) {
+      createNgModule(DxIntegrationModule, injector);
     }
 
     this.templates = [];
