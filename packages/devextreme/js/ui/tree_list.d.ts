@@ -239,6 +239,9 @@ export type CellPreparedEvent<TRowData = any, TKey = any> = EventInfo<dxTreeList
  */
 export type ContentReadyEvent<TRowData = any, TKey = any> = EventInfo<dxTreeList<TRowData, TKey>>;
 
+/** @public */
+export type ContextMenuTarget = 'toolbar' | 'header' | 'content' | 'footer';
+
 /**
  * @docid _ui_tree_list_ContextMenuPreparingEvent
  * @public
@@ -252,7 +255,7 @@ export type ContextMenuPreparingEvent<TRowData = any, TKey = any> = EventInfo<dx
      */
     items?: Array<any>;
     /** @docid _ui_tree_list_ContextMenuPreparingEvent.target */
-    readonly target: string;
+    readonly target: ContextMenuTarget;
     /** @docid _ui_tree_list_ContextMenuPreparingEvent.targetElement */
     readonly targetElement: DxElement;
     /** @docid _ui_tree_list_ContextMenuPreparingEvent.columnIndex */

@@ -29168,7 +29168,7 @@ declare module DevExpress.ui {
       /**
        * [descr:_ui_tree_list_ContextMenuPreparingEvent.target]
        */
-      readonly target: string;
+      readonly target: ContextMenuTarget;
       /**
        * [descr:_ui_tree_list_ContextMenuPreparingEvent.targetElement]
        */
@@ -29190,6 +29190,7 @@ declare module DevExpress.ui {
        */
       readonly row?: Row<TRowData, TKey>;
     };
+    export type ContextMenuTarget = 'toolbar' | 'header' | 'content' | 'footer';
     /**
      * [descr:_ui_tree_list_DataErrorOccurredEvent]
      */

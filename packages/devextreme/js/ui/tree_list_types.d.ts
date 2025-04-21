@@ -61,6 +61,7 @@ export {
   CellHoverChangedEvent,
   CellPreparedEvent,
   ContentReadyEvent,
+  ContextMenuTarget,
   ContextMenuPreparingEvent,
   DataErrorOccurredEvent,
   DisposingEvent,
