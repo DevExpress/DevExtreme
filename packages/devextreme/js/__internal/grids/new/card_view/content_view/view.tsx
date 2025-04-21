@@ -113,7 +113,7 @@ export class ContentView extends ContentViewBase<ContentViewProps> {
               this.options.oneWay('cardCover.altExpr').value,
             ),
             maxHeight: this.options.oneWay('cardCover.maxHeight').value,
-            ratio: this.options.oneWay('cardCover.ratio').value,
+            ratio: this.options.oneWay('cardCover.aspectRatio').value,
           },
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           toolbar: this.options.oneWay('cardHeader.items').value as any,

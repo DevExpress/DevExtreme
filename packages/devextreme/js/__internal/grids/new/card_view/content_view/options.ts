@@ -12,7 +12,7 @@ export interface Options extends Base.Options {
     imageExpr?: string | ((data: DataObject) => string);
     altExpr?: string | ((data: DataObject) => string);
     maxHeight?: number;
-    ratio?: string;
+    aspectRatio?: string;
   };
   cardFooterTemplate?: Template<{ card: DataRow }>;
 }
@@ -21,7 +21,7 @@ export const defaultOptions = {
   wordWrapEnabled: false,
   cardsPerRow: 3,
   cardCover: {
-    ratio: '1 / 1',
+    aspectRatio: '1 / 1',
   },
   ...Base.defaultOptions,
 } satisfies Options;
