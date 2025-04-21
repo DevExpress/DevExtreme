@@ -393,6 +393,7 @@ export default class dxDateBox extends DateBoxBase<Properties> {
      * @docid
      * @publicName reset(value)
      * @public
+     * @param1 value:Date|number|string|null
      */
     reset(value?: DateLike): void;
 }
