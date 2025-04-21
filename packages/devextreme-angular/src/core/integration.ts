@@ -1,6 +1,6 @@
 /* tslint:disable:max-line-length */
 import {
-  NgModule, Inject, NgZone, Optional, VERSION, InjectionToken,
+  NgModule, Inject, NgZone, Optional, VERSION, InjectionToken, APP_INITIALIZER,
 } from '@angular/core';
 import { DOCUMENT, XhrFactory } from '@angular/common';
 import httpRequest from 'devextreme/core/http_request';
@@ -9,10 +9,10 @@ import domAdapter from 'devextreme/core/dom_adapter';
 import readyCallbacks from 'devextreme/core/utils/ready_callbacks';
 import eventsEngine from 'devextreme/common/core/events/core/events_engine';
 
+export const DX_INTEGRATION_MODULE_INIT_TOKEN = new InjectionToken<boolean>('DX_INTEGRATION_MODULE_INIT');
+
 const outsideZoneEvents = ['mousemove', 'mouseover', 'mouseout'];
 const insideZoneEvents = ['mouseup', 'click', 'mousedown', 'transitionend', 'wheel'];
-
-export const DX_INTEGRATION_MODULE_INIT_TOKEN = new InjectionToken<boolean>('DX_INTEGRATION_MODULE_INIT');
 
 let originalAdd;
 let callbacks = [];
@@ -97,7 +97,7 @@ let doInjections = (document: any, ngZone: NgZone, xhrFactory: XhrFactory) => {
   providers: [
     {
       provide: DX_INTEGRATION_MODULE_INIT_TOKEN,
-      useFactory: () => true
+      useValue: true
     }
   ]
 })
