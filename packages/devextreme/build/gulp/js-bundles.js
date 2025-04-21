@@ -20,6 +20,7 @@ const namedDebug = lazyPipe()
     .pipe(named, (file) => path.basename(file.path, path.extname(file.path)) + '.debug');
 
 const BUNDLES = [
+    '/bundles/dx.ai-integration.js',
     '/bundles/dx.all.js',
     '/bundles/dx.web.js',
     '/bundles/dx.viz.js'
@@ -53,8 +54,10 @@ const jsBundlesProd = (src, dist, bundles) => (() =>
 );
 
 gulp.task('js-bundles-prod',
-    jsBundlesProd(ctx.TRANSPILED_PROD_RENOVATION_PATH,
-        ctx.RESULT_JS_PATH, BUNDLES
+    jsBundlesProd(
+        ctx.TRANSPILED_PROD_RENOVATION_PATH,
+        ctx.RESULT_JS_PATH,
+        BUNDLES,
     )
 );
 

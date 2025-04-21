@@ -43,10 +43,10 @@ test('ContextMenu items render', async (t) => {
     .ok(compareResults.errorMessages());
 }).before(async () => {
   await appendElementTo('#container', 'div', 'contextMenu');
-  await setAttribute('#container', 'class', 'dx-theme-generic-typography');
+  await setAttribute('#container', 'class', `dx-theme-${process.env.theme?.split('.')[0]}-typography`);
   await setStyleAttribute(Selector('#container'), 'width: 300px; height: 200px;');
 
-  await insertStylesheetRulesToPage('.custom-class { border: 2px solid green !important; }');
+  await insertStylesheetRulesToPage('.custom-class { box-shadow: 0 0 0 2px green !important; }');
 
   const menuItems = [
     { text: 'remove', icon: 'remove', items: [{ text: 'item_1' }, { text: 'item_2' }] },

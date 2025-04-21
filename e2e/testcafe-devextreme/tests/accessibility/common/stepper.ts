@@ -9,43 +9,43 @@ fixture.disablePageReloads`Accessibility`
 const items: Item[] = [
   {
     icon: 'cart',
-    title: 'Cart',
+    label: 'Cart',
   },
   {
     icon: 'cart',
-    title: 'Cart',
+    label: 'Cart',
     isValid: true,
   },
   {
     icon: 'clipboardtasklist',
-    title: 'Shipping Info',
+    label: 'Shipping Info',
     isValid: false,
   },
   {
     icon: 'gift',
-    title: 'Promo Code',
+    label: 'Promo Code',
     optional: true,
   },
   {
     icon: 'packagebox',
-    title: 'Checkout ',
+    label: 'Checkout ',
     disabled: true,
   },
   {
     icon: 'packagebox',
-    title: 'Checkout ',
+    label: 'Checkout ',
     disabled: true,
     isValid: true,
   },
   {
     icon: 'packagebox',
-    title: 'Checkout ',
+    label: 'Checkout ',
     disabled: true,
     isValid: false,
   },
   {
     icon: 'checkmarkcircle',
-    title: 'Ordered',
+    label: 'Ordered',
   },
 ];
 
@@ -59,19 +59,9 @@ const options: Options<Properties> = {
   height: [600],
 };
 
-const created = async (t: TestController): Promise<void> => {
-  await t.pressKey('tab');
-};
-
-const a11yCheckConfig = {
-  rules: { 'aria-allowed-attr': { enabled: false } },
-};
-
 const configuration: Configuration = {
   component: 'dxStepper',
-  a11yCheckConfig,
   options,
-  created,
 };
 
 testAccessibility(configuration);

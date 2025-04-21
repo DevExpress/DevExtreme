@@ -5,8 +5,8 @@ import $ from '@js/core/renderer';
 import { FunctionTemplate } from '@js/core/templates/function_template';
 import Button from '@js/ui/button';
 
+import { APPOINTMENT_SETTINGS_KEY, LIST_ITEM_CLASS, LIST_ITEM_DATA_KEY } from './constants';
 import { createAppointmentAdapter } from './m_appointment_adapter';
-import { APPOINTMENT_SETTINGS_KEY, LIST_ITEM_CLASS, LIST_ITEM_DATA_KEY } from './m_constants';
 import { AppointmentTooltipInfo } from './m_data_structures';
 
 const APPOINTMENT_COLLECTOR_CLASS = 'dx-scheduler-appointment-collector';
@@ -159,6 +159,7 @@ export class CompactAppointmentsHelper {
     return new (FunctionTemplate as any)((options) => template.render({
       model: {
         appointmentCount: items.data.length,
+        items: items.data,
         isCompact,
       },
       container: options.container,

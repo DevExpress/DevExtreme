@@ -7,7 +7,7 @@ import { hasWindow } from '@js/core/utils/window';
 import { DateTableMonthComponent } from '@ts/scheduler/r1/components/index';
 import { formatWeekday, monthUtils } from '@ts/scheduler/r1/utils/index';
 
-import { VIEWS } from '../m_constants';
+import { VIEWS } from '../constants';
 import { utils } from '../m_utils';
 import SchedulerWorkSpace from './m_work_space_indicator';
 
@@ -156,9 +156,9 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
     }
   }
 
-  _toggleAllDayVisibility() { return noop(); }
+  _updateAllDayVisibility() { return noop(); }
 
-  _changeAllDayVisibility() { return noop(); }
+  _updateAllDayHeight() { return noop(); }
 
   // --------------
   // These methods should be deleted when we get rid of old render

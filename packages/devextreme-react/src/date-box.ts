@@ -51,9 +51,9 @@ type IDateBoxOptions = React.PropsWithChildren<ReplaceFieldTypes<Properties, IDa
   dropDownButtonRender?: (...params: any) => React.ReactNode;
   dropDownButtonComponent?: React.ComponentType<any>;
   defaultOpened?: boolean;
-  defaultValue?: Date | number | string;
+  defaultValue?: Date | null | number | string;
   onOpenedChange?: (value: boolean) => void;
-  onValueChange?: (value: Date | number | string) => void;
+  onValueChange?: (value: Date | null | number | string) => void;
 }>
 
 interface DateBoxRef {
@@ -217,9 +217,9 @@ type ICalendarOptionsProps = React.PropsWithChildren<{
   hoverStateEnabled?: boolean;
   isDirty?: boolean;
   isValid?: boolean;
-  max?: Date | number | string;
+  max?: Date | null | number | string;
   maxZoomLevel?: CalendarZoomLevel;
-  min?: Date | number | string;
+  min?: Date | null | number | string;
   minZoomLevel?: CalendarZoomLevel;
   name?: string;
   onDisposing?: ((e: CalendarDisposingEvent) => void);
@@ -238,13 +238,13 @@ type ICalendarOptionsProps = React.PropsWithChildren<{
   validationMessageMode?: ValidationMessageMode;
   validationMessagePosition?: CommonPosition;
   validationStatus?: ValidationStatus;
-  value?: Array<Date | number | string> | Date | number | string;
+  value?: Array<Date | null | number | string> | Date | null | number | string;
   visible?: boolean;
   weekNumberRule?: WeekNumberRule;
   width?: (() => number | string) | number | string | undefined;
   zoomLevel?: CalendarZoomLevel;
-  defaultValue?: Array<Date | number | string> | Date | number | string;
-  onValueChange?: (value: Array<Date | number | string> | Date | number | string) => void;
+  defaultValue?: Array<Date | null | number | string> | Date | null | number | string;
+  onValueChange?: (value: Array<Date | null | number | string> | Date | null | number | string) => void;
   defaultZoomLevel?: CalendarZoomLevel;
   onZoomLevelChange?: (value: CalendarZoomLevel) => void;
   cellRender?: (...params: any) => React.ReactNode;

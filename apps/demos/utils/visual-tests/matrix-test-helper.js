@@ -262,14 +262,14 @@ const SKIPPED_TESTS = {
     ],
     VectorMap: [
       { demo: 'TooltipHTMLSupport', themes: [THEME.material] },
-    ]
+    ],
+    Stepper: [
+      { demo: 'FormIntegration', themes: [THEME.generic, THEME.material, THEME.fluent] },
+    ],
   },
   Vue: {
     Common: [
       { demo: 'DialogsAndNotificationsOverview', themes: [THEME.generic, THEME.material, THEME.fluent] },
-    ],
-    Accordion: [
-      { demo: 'Overview', themes: [THEME.generic, THEME.material, THEME.fluent] },
     ],
     Charts: [
       { demo: 'Overview', themes: [THEME.material] },
@@ -304,6 +304,9 @@ const SKIPPED_TESTS = {
       { demo: 'Overview', themes: [THEME.generic, THEME.fluent, THEME.material] },
       { demo: 'ContextMenuIntegration', themes: [THEME.generic, THEME.fluent, THEME.material] },
       { demo: 'ToolbarCustomization', themes: [THEME.generic, THEME.fluent, THEME.material] },
+    ],
+    Stepper: [
+      { demo: 'FormIntegration', themes: [THEME.generic, THEME.material, THEME.fluent] },
     ],
   },
   React: {
@@ -344,9 +347,12 @@ const SKIPPED_TESTS = {
       // Flaky issue: Source image size does not match target size
       { demo: 'CustomizeItem', themes: [THEME.generic] },
     ],
+    Stepper: [
+      { demo: 'FormIntegration', themes: [THEME.generic, THEME.material, THEME.fluent] },
+    ],
     VectorMap: [
       { demo: 'TooltipHTMLSupport', themes: [THEME.material] },
-    ]
+    ],
   },
 };
 

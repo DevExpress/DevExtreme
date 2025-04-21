@@ -55,6 +55,7 @@
         "dxList-selectAll-checked": "Afkrydset",
         "dxList-selectAll-notChecked": "Ikke afkrydset",
         "dxList-ariaRoleDescription": "Liste",
+        "dxList-listAriaLabel-itemContent": "List item content",
 
         "dxScrollView-pullingDownText": "Træk ned for at opdatere...",
         "dxScrollView-pulledDownText": "Slip for at opdatere...",
@@ -516,6 +517,15 @@
         "dxHtmlEditor-borderStyleRidge": "ryg",
         "dxHtmlEditor-borderStyleInset": "indsat",
         "dxHtmlEditor-borderStyleOutset": "udsat",
+        "dxHtmlEditor-aiDialogTitle": "AI Assistant",
+        "dxHtmlEditor-aiReplace": "Replace",
+        "dxHtmlEditor-aiInsertAbove": "Insert above",
+        "dxHtmlEditor-aiInsertBelow": "Insert below",
+        "dxHtmlEditor-aiCopy": "Copy",
+        "dxHtmlEditor-aiTryAgain": "Try again",
+        "dxHtmlEditor-aiGenerate": "Generate",
+        "dxHtmlEditor-aiStop": "Stop",
+        "dxHtmlEditor-aiAskPlaceholder": "Ask AI to modify text",
 
         "dxFileManager-newDirectoryName": "Unavngivet mappe",
         "dxFileManager-rootDirectoryName": "Filer",

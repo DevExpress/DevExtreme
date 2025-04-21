@@ -397,7 +397,7 @@ class Gantt extends Widget {
 
     _sortAndFilter() {
         const treeList = this._treeList;
-        const columns = treeList.getVisibleColumns();
+        const columns = treeList.getColumns();
 
         const sortedColumns = columns.filter(c => c.sortIndex > -1);
         const sortedState = sortedColumns.map(c => ({ sortIndex: c.sortIndex, sortOrder: c.sortOrder }));

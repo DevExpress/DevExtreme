@@ -4,9 +4,12 @@ import '@ts/ui/list/modules/m_selection';
 
 import messageLocalization from '@js/common/core/localization/message';
 import $ from '@js/core/renderer';
+import type { DeferredObj } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
-import { isDefined, isFunction } from '@js/core/utils/type';
+import { isDeferred, isDefined, isFunction } from '@js/core/utils/type';
+import type dxCheckBox from '@js/ui/check_box';
+import type dxList from '@js/ui/list';
 import List from '@js/ui/list_light';
 import Popup from '@js/ui/popup/ui.popup';
 import TreeView from '@js/ui/tree_view';
@@ -28,20 +31,45 @@ function resetChildrenItemSelection(items) {
   }
 }
 
-function getSelectAllCheckBox(listComponent) {
+function getSelectAllCheckBox(listComponent): dxCheckBox {
   const selector = listComponent.NAME === 'dxTreeView' ? '.dx-treeview-select-all-item' : '.dx-list-select-all-checkbox';
 
   return listComponent.$element().find(selector).dxCheckBox('instance');
 }
 
-function updateListSelectAllState(e, filterValues) {
-  if (e.component.option('searchValue')) {
+function updateListSelectAllState(
+  // NOTE: In runtime dxList's "unselectAll" returns Deferred.
+  // But in d.ts dxList has a void return type.
+  listComponent: Omit<dxList, 'unselectAll'> & { unselectAll: () => (DeferredObj<void> | void) },
+  filterValues: any[],
+): void {
+  if (listComponent.option('searchValue')) {
     return;
   }
-  const selectAllCheckBox = getSelectAllCheckBox(e.component);
 
-  if (selectAllCheckBox && filterValues && filterValues.length) {
+  const selectAllCheckBox = getSelectAllCheckBox(listComponent);
+
+  if (selectAllCheckBox && filterValues?.length) {
     selectAllCheckBox.option('value', undefined);
+
+    // NOTE: T1284200 fix
+    // We manually set checkbox state (value) above
+    // So, list do nothing because inner list component's "select all" state
+    // doesn't react to our manual update.
+    // Therefore -> we should handle first "select all" checkbox click manually.
+    // And after it return original "onValueChanged" handler back.
+    const originalValueChanged = selectAllCheckBox.option('onValueChanged');
+    selectAllCheckBox.option('onValueChanged', (event) => {
+      selectAllCheckBox.option('onValueChanged', originalValueChanged);
+
+      const deferred = listComponent.unselectAll();
+
+      if (isDeferred(deferred)) {
+        (deferred as DeferredObj<void>).always(() => { originalValueChanged?.(event); });
+      } else {
+        originalValueChanged?.(event);
+      }
+    });
   }
 }
 
@@ -332,11 +360,12 @@ export class HeaderFilterView extends Modules.View {
           showSelectionControls: true,
           selectionMode: needShowSelectAllCheckbox ? 'all' : 'multiple',
           onOptionChanged,
-          onSelectionChanged(e) {
-            const items = e.component.option('items');
-            const selectedItems = e.component.option('selectedItems');
+          onSelectionChanged(event) {
+            const { component: listComponent } = event;
+            const items = listComponent.option('items');
+            const selectedItems = listComponent.option('selectedItems');
 
-            if (!e.component._selectedItemsUpdating && !e.component.option('searchValue') && !options.isFilterBuilder) {
+            if (!listComponent._selectedItemsUpdating && !listComponent.option('searchValue') && !options.isFilterBuilder) {
               const filterValues = options.filterValues || [];
               const isExclude = options.filterType === 'exclude';
               if (selectedItems.length === 0 && items.length && (filterValues.length <= 1 || isExclude && filterValues.length === items.length - 1)) {
@@ -368,11 +397,11 @@ export class HeaderFilterView extends Modules.View {
               }
             });
 
-            updateListSelectAllState(e, options.filterValues);
+            updateListSelectAllState(listComponent, options.filterValues);
           },
           onContentReady(e) {
-            const { component } = e;
-            const items = component.option('items');
+            const { component: listComponent } = e;
+            const items = listComponent.option('items');
             const selectedItems: any = [];
 
             each(items, function () {
@@ -380,11 +409,12 @@ export class HeaderFilterView extends Modules.View {
                 selectedItems.push(this);
               }
             });
-            component._selectedItemsUpdating = true;
-            component.option('selectedItems', selectedItems);
-            component._selectedItemsUpdating = false;
 
-            updateListSelectAllState(e, options.filterValues);
+            listComponent._selectedItemsUpdating = true;
+            listComponent.option('selectedItems', selectedItems);
+            listComponent._selectedItemsUpdating = false;
+
+            updateListSelectAllState(listComponent, options.filterValues);
           },
         }),
       );

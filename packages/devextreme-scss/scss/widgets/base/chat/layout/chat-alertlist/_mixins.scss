@@ -6,8 +6,6 @@
   $padding-inline,
   $error-padding-block,
   $row-gap,
-  $icon-size,
-  $content-column-gap,
 ) {
   .dx-chat-alertlist {
     padding-block: $padding-block;
@@ -21,13 +19,9 @@
   }
 
   .dx-chat-alertlist-error {
-    color: $error-color;
-    column-gap: $content-column-gap;
-    padding-block: $error-padding-block;
-  }
-
-  .dx-chat-alertlist-error-icon {
-    @include dx-icon(errorcircle);
-    @include dx-icon-sizing($icon-size);
+    &.dx-informer {
+      color: $error-color;
+      padding-block: $error-padding-block;
+    }
   }
 }

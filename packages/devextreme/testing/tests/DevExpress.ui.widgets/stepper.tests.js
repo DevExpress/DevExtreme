@@ -9,7 +9,7 @@ import Connector, {
 import {
     STEP_CLASS,
     STEP_INDICATOR_CLASS,
-    STEP_TITLE_CLASS,
+    STEP_LABEL_CLASS,
 } from '__internal/ui/stepper/stepper';
 
 import {
@@ -274,21 +274,21 @@ QUnit.module('Item data', moduleConfig, () => {
         assert.strictEqual(getIndicatorText(2), '3');
     });
 
-    QUnit.test('Item should have title that is passed in options', function(assert) {
+    QUnit.test('Item should have label that is passed in options', function(assert) {
         this.reinit({
             items: [
-                { title: 'Step 1' },
-                { text: 'Step 2', title: 'Step 2' },
-                { icon: 'test', title: 'Step 3' }
+                { label: 'Step 1' },
+                { text: 'Step 2', label: 'Step 2' },
+                { icon: 'test', label: 'Step 3' }
             ],
         });
 
         const $steps = this.getItems();
-        const getStepTitle = (index) => $steps.eq(index).find(`.${STEP_TITLE_CLASS}`).text();
+        const getStepLabel = (index) => $steps.eq(index).find(`.${STEP_LABEL_CLASS}`).text();
 
-        assert.strictEqual(getStepTitle(0), 'Step 1');
-        assert.strictEqual(getStepTitle(1), 'Step 2');
-        assert.strictEqual(getStepTitle(2), 'Step 3');
+        assert.strictEqual(getStepLabel(0), 'Step 1');
+        assert.strictEqual(getStepLabel(1), 'Step 2');
+        assert.strictEqual(getStepLabel(2), 'Step 3');
     });
 });
 
@@ -303,6 +303,14 @@ QUnit.module('Connector integration', moduleConfig, () => {
         this.instance.option({ orientation: 'vertical' });
 
         assert.deepEqual(this.getConnector().option('orientation'), 'vertical', 'orientation value is passed');
+    });
+
+    ['rtlEnabled', 'disabled', 'templatesRenderAsynchronously'].forEach((optionName) => {
+        QUnit.test(`connector content should not be duplicated after changing synchronizable ${optionName} options`, function(assert) {
+            this.instance.option(optionName, true);
+
+            assert.deepEqual(this.getConnector().$element().children().length, 1, 'content is not duplicated');
+        });
     });
 });
 

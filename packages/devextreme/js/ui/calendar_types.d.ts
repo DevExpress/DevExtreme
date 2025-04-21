@@ -1,5 +1,6 @@
 export {
   FirstDayOfWeek,
+  DateLike,
   CalendarZoomLevel,
   CalendarSelectionMode,
   WeekNumberRule,

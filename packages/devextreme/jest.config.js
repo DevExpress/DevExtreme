@@ -19,7 +19,7 @@ module.exports = {
     transform: {
         '\\.[jt]sx?$': ['ts-jest', {
             // eslint-disable-next-line spellcheck/spell-checker
-            tsconfig: './js/__internal/tsconfig.json',
+            tsconfig: '<rootDir>/js/__internal/tsconfig.json',
             diagnostics: false, // set to true to enable type checking
             isolatedModules: true, // performance optimization https://kulshekhar.github.io/ts-jest/user/config/isolatedModules
             babelConfig: {

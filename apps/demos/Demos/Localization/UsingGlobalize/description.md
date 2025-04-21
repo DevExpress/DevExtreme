@@ -1,2 +1,10 @@
-DevExtreme components can be&nbsp;localized by&nbsp;means of&nbsp;Globalize. You need to&nbsp;link Globalize modules, CLDR scripts, and DevExtreme dictionaries for desired locales (see the <head\> tag of&nbsp;index.html). Then, load CLDR data for the same locales (see index.js). Using Angular, Vue and React, get all the needed components as&nbsp;imported modules instead (see app.component.ts, App.vue and App.js correspondingly). Finally, set the current locale with the **Globalize.locale** method.
+[note]
+
+The Globalize package is outdated and potentially [unsafe](https://supportcenter.devexpress.com/ticket/details/t1260546/devextreme-improper-code-sanitization-vulnerabilities-in-third-party-globalize-message).
+
+Use Globalize at your own risk. We recommend switching to [Intl](https://js.devexpress.com/Demos/WidgetsGallery/Demo/Localization/UsingIntl/) for a more secure solution.
+
+[/note]
 <!--split-->
+
+To localize components with Globalize, link modules, CLDR scripts, and DevExtreme dictionaries for the target locales. Load the CLDR data for these locales. If following a modular approach, import the necessary components. Set the current locale with the **Globalize.locale** method.

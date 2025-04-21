@@ -12,8 +12,8 @@ import { isDefined } from '@js/core/utils/type';
 import { hasWindow } from '@js/core/utils/window';
 import CollectionWidget from '@js/ui//collection/ui.collection_widget.edit';
 import type { Item, Properties } from '@js/ui/box';
-import type { ItemExtraOption } from '@ts/ui/collection/m_item';
-import CollectionWidgetItem from '@ts/ui/collection/m_item';
+import type { ItemExtraOption } from '@ts/ui/collection/item';
+import CollectionWidgetItem from '@ts/ui/collection/item';
 
 // STYLE box
 
