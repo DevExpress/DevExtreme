@@ -10116,7 +10116,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxCardViewOptions.cardHeader]
      */
-    cardHeader?: DevExpress.ui.dxCardView.CardHeader<TRowData>;
+    cardHeader?: DevExpress.ui.dxCardView.CardHeader;
 
     /**
      * [descr:dxCardViewOptions.toolbar]
