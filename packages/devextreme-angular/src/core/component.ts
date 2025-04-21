@@ -19,7 +19,6 @@ import {
   createNgModule,
   inject,
   Injector,
-  InjectionToken,
 } from '@angular/core';
 
 import { isPlatformServer } from '@angular/common';
@@ -40,11 +39,7 @@ import {
   CollectionNestedOptionContainerImpl,
 } from './nested-option';
 
-const dxIntegartionModuleState = {
-  initialized: false,
-}
-
-import { DX_INTEGRATION_MODULE_INIT_TOKEN, DxIntegrationModule } from "./integration";
+import { DxIntegrationModule} from "./integration";
 
 
 config({
@@ -239,8 +234,8 @@ export abstract class DxComponent implements OnChanges, OnInit, DoCheck, AfterCo
 
     const injector = inject(Injector);
 
-    if (!injector.get(DX_INTEGRATION_MODULE_INIT_TOKEN, null) && !dxIntegartionModuleState.initialized) {
-      dxIntegartionModuleState.initialized = !!createNgModule(DxIntegrationModule, injector);
+    if (!DxIntegrationModule.initialized) {
+     createNgModule(DxIntegrationModule, injector);
     }
 
     this.templates = [];
