@@ -261,18 +261,23 @@ interface CardCover<TRowData = unknown> {
      * @public
      */
     altExpr: string | ((data: TRowData) => string);
+    /**
+     * @docid
+     * @public
+     */
+    maxHeight?: number;
+    /**
+     * @docid
+     * @public
+     */
+    aspectRatio?: string;
 }
 
 /**
  * @docid
  * @namespace DevExpress.ui.dxCardView
  */
-interface CardHeader<TRowData = unknown> {
-    /**
-     * @docid
-     * @public
-     */
-    captionExpr?: string | ((data: TRowData) => string);
+interface CardHeader {
     /**
      * @docid
      * @public
@@ -407,6 +412,11 @@ export interface dxCardViewOptions<TRowData = unknown, TKey = unknown> extends W
      * @docid
      * @public
      */
+    wordWrapEnabled?: boolean;
+    /**
+     * @docid
+     * @public
+     */
     cardCover?: CardCover<TRowData>;
     /**
      * @docid
@@ -417,7 +427,12 @@ export interface dxCardViewOptions<TRowData = unknown, TKey = unknown> extends W
      * @docid
      * @public
      */
-    cardHeader?: CardHeader<TRowData>;
+    cardFooterTemplate?: template | ((row: DataRow) => string | UserDefinedElement);
+    /**
+     * @docid
+     * @public
+     */
+    cardHeader?: CardHeader;
 
     // #endregion
 
