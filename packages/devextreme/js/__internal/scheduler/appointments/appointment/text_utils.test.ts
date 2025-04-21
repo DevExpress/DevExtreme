@@ -9,14 +9,12 @@ import {
 } from './text_utils';
 
 const getAppointmentResourcesValues = jest.fn();
-const getLoadedResources = jest.fn();
 const options = {
   dataAccessors: mockAppointmentDataAccessor,
   timeZoneCalculator: mockTimeZoneCalculator,
   getResourceProcessor: () => ({
     getAppointmentResourcesValues,
   }),
-  getLoadedResources,
 } as any;
 
 describe('Appointment text utils', () => {
@@ -91,38 +89,36 @@ describe('Appointment text utils', () => {
     });
 
     it('should return text with one resource', async () => {
-      getLoadedResources.mockReturnValue({ items: [] });
       getAppointmentResourcesValues.mockReturnValue(Promise.resolve([
         { label: 'Assignee', values: ['Samantha Bright'] },
       ]));
-      expect(await getAriaDescription(options)).toBe('Assignee: Samantha Bright');
+      expect(await getAriaDescription({
+        ...options,
+        groupTexts: [],
+      })).toBe('Assignee: Samantha Bright');
     });
 
     it('should return text with multiple resources', async () => {
-      getLoadedResources.mockReturnValue({ items: [] });
       getAppointmentResourcesValues.mockReturnValue(Promise.resolve([
         { label: 'Assignee', values: ['Samantha Bright', 'John Heart'] },
         { label: 'Room', values: ['Room 1'] },
       ]));
-      expect(await getAriaDescription(options)).toBe('Assignee: Samantha Bright, John Heart; Room: Room 1');
+      expect(await getAriaDescription({
+        ...options,
+        groupTexts: [],
+      })).toBe('Assignee: Samantha Bright, John Heart; Room: Room 1');
     });
 
     it('should return text with group', async () => {
-      getLoadedResources.mockReturnValue([
-        { items: [{ text: 'Samantha Bright' }], name: 'assigneeId' },
-      ]);
       getAppointmentResourcesValues.mockReturnValue([]);
       expect(await getAriaDescription({
         ...options,
         groupIndex: 0,
+        groupTexts: ['Samantha Bright'],
       })).toBe('Group: Samantha Bright');
     });
 
     it('should return text with multiple groups and resources', async () => {
-      getLoadedResources.mockReturnValue([
-        { items: [{ text: 'Samantha Bright' }, { text: 'John Heart' }], name: 'assigneeId' },
-        { items: [{ text: 'Room 1' }, { text: 'Room 2' }], name: 'roomId' },
-      ]);
       getAppointmentResourcesValues.mockReturnValue(Promise.resolve([
         { label: 'Assignee', values: ['Samantha Bright'] },
         { label: 'Room', values: ['Room 1', 'Room 2'] },
@@ -130,6 +126,7 @@ describe('Appointment text utils', () => {
       expect(await getAriaDescription({
         ...options,
         groupIndex: 1,
+        groupTexts: ['Samantha Bright', 'Room 1'],
       })).toBe('Group: Samantha Bright, Room 1; Assignee: Samantha Bright; Room: Room 1, Room 2');
     });
   });
