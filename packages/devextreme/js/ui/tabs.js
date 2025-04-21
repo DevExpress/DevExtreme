@@ -1,4 +1,4 @@
-import Tabs from '../__internal/ui/tabs/m_tabs';
+import Tabs from '../__internal/ui/tabs/tabs';
 
 export default Tabs;
 

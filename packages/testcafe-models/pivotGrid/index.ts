@@ -1,10 +1,11 @@
-import { ClientFunction } from 'testcafe';
+import { ClientFunction, Selector } from 'testcafe';
 import type { WidgetName } from '../types';
 import Widget from '../internal/widget';
 import ColumnHeaderArea from './columnHeaderArea';
 import DataHeaderArea from './dataHeaderArea';
 import FieldChooser from './fieldChooser';
 import Popup from '../popup';
+import Overlay from './overlay';
 import RowHeaderArea from './rowHeaderArea';
 import RowsArea from './rowsArea';
 
@@ -13,6 +14,7 @@ const CLASS = {
   fieldChooserButton: 'dx-pivotgrid-field-chooser-button',
   fieldChooserPopup: 'dx-fieldchooser-popup',
   exportBtn: 'dx-pivotgrid-export-button',
+  loadPanel: 'dx-loadpanel',
 };
 
 export default class PivotGrid extends Widget {
@@ -73,5 +75,9 @@ export default class PivotGrid extends Widget {
 
   getDataHeaderArea(): DataHeaderArea {
     return new DataHeaderArea(this.element);
+  }
+
+  getLoadPanel(): Overlay {
+    return new Overlay(Selector(`.${CLASS.loadPanel}`));
   }
 }

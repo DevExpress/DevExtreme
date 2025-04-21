@@ -159,6 +159,7 @@ export class CompactAppointmentsHelper {
     return new (FunctionTemplate as any)((options) => template.render({
       model: {
         appointmentCount: items.data.length,
+        items: items.data,
         isCompact,
       },
       container: options.container,

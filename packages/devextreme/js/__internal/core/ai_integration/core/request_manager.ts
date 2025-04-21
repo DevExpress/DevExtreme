@@ -1,8 +1,14 @@
-import type { AIProvider, Prompt, RequestCallbacks } from '@js/common/ai-integration';
+import type { AIProvider, Prompt, RequestParams } from '@js/common/ai-integration';
 
 export const ERROR_MESSAGES = {
   METHOD_NOT_IMPLEMENTED: 'No method for queries has been implemented',
 };
+
+export interface RequestManagerCallbacks {
+  onChunk?: (chunk: string) => void;
+  onComplete?: (response: string) => void;
+  onError?: (error: Error) => void;
+}
 
 export class RequestManager {
   private readonly provider: AIProvider;
@@ -11,9 +17,9 @@ export class RequestManager {
     this.provider = provider;
   }
 
-  public sendRequest(prompt: Prompt, callbacks: RequestCallbacks): () => void {
+  public sendRequest(prompt: Prompt, callbacks: RequestManagerCallbacks): () => void {
     if (typeof this.provider.sendRequest === 'function') {
-      const params = {
+      const params: RequestParams = {
         prompt,
         onChunk: (chunk: string): void => { callbacks?.onChunk?.(chunk); },
       };

@@ -4,8 +4,8 @@ import AlertList from '__internal/ui/chat/alertlist';
 
 const CHAT_ALERTLIST_CLASS = 'dx-chat-alertlist';
 const CHAT_ALERTLIST_ERROR_CLASS = 'dx-chat-alertlist-error';
-const CHAT_ALERTLIST_ERROR_ICON_CLASS = 'dx-chat-alertlist-error-icon';
-const CHAT_ALERTLIST_ERROR_TEXT_CLASS = 'dx-chat-alertlist-error-text';
+const INFORMER_TEXT_CLASS = 'dx-informer-text';
+const INFORMER_ICON_CLASS = 'dx-informer-icon';
 
 const moduleConfig = {
     beforeEach: function() {
@@ -55,8 +55,8 @@ QUnit.module('AlertList', moduleConfig, () => {
 
             const $alerts = this.getAlerts();
 
-            assert.strictEqual($alerts.children(0).hasClass(CHAT_ALERTLIST_ERROR_ICON_CLASS), true, 'icon container was rendered');
-            assert.strictEqual($alerts.children(1).hasClass(CHAT_ALERTLIST_ERROR_TEXT_CLASS), true, 'text container was rendered');
+            assert.strictEqual($alerts.children(0).hasClass(INFORMER_ICON_CLASS), true, 'icon container was rendered');
+            assert.strictEqual($alerts.children(1).hasClass(INFORMER_TEXT_CLASS), true, 'text container was rendered');
         });
 
         QUnit.test('should be rendered with right text inside', function(assert) {
@@ -69,8 +69,8 @@ QUnit.module('AlertList', moduleConfig, () => {
 
             const $alerts = this.getAlerts();
 
-            assert.strictEqual($alerts.eq(0).find(`.${CHAT_ALERTLIST_ERROR_TEXT_CLASS}`).text(), 'error_1', 'first error text is correct');
-            assert.strictEqual($alerts.eq(1).find(`.${CHAT_ALERTLIST_ERROR_TEXT_CLASS}`).text(), 'error_2', 'second error text is correct');
+            assert.strictEqual($alerts.eq(0).find(`.${INFORMER_TEXT_CLASS}`).text(), 'error_1', 'first error text is correct');
+            assert.strictEqual($alerts.eq(1).find(`.${INFORMER_TEXT_CLASS}`).text(), 'error_2', 'second error text is correct');
         });
     });
 

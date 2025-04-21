@@ -1,4 +1,5 @@
 export {
+  DateLike,
   DateType,
   DatePickerType,
   ChangeEvent,

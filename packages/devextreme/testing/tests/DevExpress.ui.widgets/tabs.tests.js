@@ -742,20 +742,20 @@ QUnit.module('Tab select action', () => {
         });
         const tabs = $tabs.dxTabs('instance');
 
-        const tabsItemFirst = $tabs.find(`.${TABS_ITEM_CLASS}`).eq(0);
+        const $tabsItemFirst = $tabs.find(`.${TABS_ITEM_CLASS}`).eq(0);
 
-        tabsItemFirst.trigger('dxclick');
+        $tabsItemFirst.trigger('dxclick');
 
         const $focusedElementFirst = tabs.option('focusedElement');
 
-        assert.strictEqual($focusedElementFirst, tabsItemFirst[0]);
+        assert.strictEqual($focusedElementFirst, $tabsItemFirst[0]);
 
         tabs.option({ selectedIndex: 1 });
 
-        const tabItemSecond = $tabs.find(`.${TABS_ITEM_CLASS}`).eq(1);
+        const $tabItemSecond = $tabs.find(`.${TABS_ITEM_CLASS}`).eq(1);
         const $focusedElementSecond = tabs.option('focusedElement');
 
-        assert.strictEqual($focusedElementSecond, tabItemSecond[0]);
+        assert.strictEqual($focusedElementSecond, $tabItemSecond[0]);
     });
 
     QUnit.test('focusedElement must be changed after changing the selectedItem', function(assert) {
@@ -771,20 +771,20 @@ QUnit.module('Tab select action', () => {
         });
         const tabs = $tabs.dxTabs('instance');
 
-        const tabsItemFirst = $tabs.find(`.${TABS_ITEM_CLASS}`).eq(0);
+        const $tabsItemFirst = $tabs.find(`.${TABS_ITEM_CLASS}`).eq(0);
 
-        tabsItemFirst.trigger('dxclick');
+        $tabsItemFirst.trigger('dxclick');
 
         const $focusedElementFirst = tabs.option('focusedElement');
 
-        assert.strictEqual($focusedElementFirst, tabsItemFirst[0]);
+        assert.strictEqual($focusedElementFirst, $tabsItemFirst[0]);
 
         tabs.option({ selectedItem: tabs.option('items[1]') });
 
-        const tabItemSecond = $tabs.find(`.${TABS_ITEM_CLASS}`).eq(1);
+        const $tabItemSecond = $tabs.find(`.${TABS_ITEM_CLASS}`).eq(1);
         const $focusedElementSecond = tabs.option('focusedElement');
 
-        assert.strictEqual($focusedElementSecond, tabItemSecond[0]);
+        assert.strictEqual($focusedElementSecond, $tabItemSecond[0]);
     });
 
     QUnit.test('focusedElement must be changed after changing the selectedItems', function(assert) {
@@ -798,20 +798,51 @@ QUnit.module('Tab select action', () => {
         const $tabs = $('#tabs').dxTabs({ items, focusStateEnabled: true });
         const tabs = $tabs.dxTabs('instance');
 
-        const tabItemFirst = $tabs.find(`.${TABS_ITEM_CLASS}`).eq(0);
+        const $tabItemFirst = $tabs.find(`.${TABS_ITEM_CLASS}`).eq(0);
 
-        tabItemFirst.trigger('dxclick');
+        $tabItemFirst.trigger('dxclick');
 
         const $focusedElementFirst = tabs.option('focusedElement');
 
-        assert.strictEqual($focusedElementFirst, tabItemFirst[0]);
+        assert.strictEqual($focusedElementFirst, $tabItemFirst[0]);
 
         tabs.option({ selectedItems: [items[1], items[2]] });
 
-        const tabItemSecond = $tabs.find(`.${TABS_ITEM_CLASS}`).eq(1);
+        const $tabItemSecond = $tabs.find(`.${TABS_ITEM_CLASS}`).eq(1);
         const $focusedElementSecond = tabs.option('focusedElement');
 
-        assert.strictEqual($focusedElementSecond, tabItemSecond[0]);
+        assert.strictEqual($focusedElementSecond, $tabItemSecond[0]);
+    });
+
+    QUnit.test('focusedElement should remain on the same selected tab after pressing Enter when multiple selection mode is used (T1285635)', function(assert) {
+        const items = [
+            { text: '0' },
+            { text: '1' },
+            { text: '2' },
+            { text: '3' },
+        ];
+
+        const $tabs = $('#tabs').dxTabs({
+            items,
+            focusStateEnabled: true
+        });
+        const tabs = $tabs.dxTabs('instance');
+
+        const $tabItems = $tabs.find(`.${TABS_ITEM_CLASS}`);
+        const $secondTab = $tabItems.eq(1);
+
+        $secondTab.trigger('dxclick');
+
+        const keyboard = keyboardMock($tabs);
+        keyboard
+            .press('right')
+            .press('right')
+            .press('enter');
+
+        const $fourthTab = $tabItems.eq(3);
+        const focusedElement = tabs.option('focusedElement');
+
+        assert.strictEqual(focusedElement, $fourthTab.get(0), 'focusedElement should match the selected tab');
     });
 });
 
