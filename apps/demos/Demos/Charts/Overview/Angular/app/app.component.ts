@@ -1,7 +1,18 @@
 import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { DxChartModule, DxChartTypes } from 'devextreme-angular/ui/chart';
+import {
+  DxChartComponent,
+  DxiChartValueAxisComponent,
+  DxoChartArgumentAxisComponent,
+  DxoChartLabelComponent,
+  DxoChartTooltipComponent,
+  DxoChartCommonSeriesSettingsComponent,
+  DxiChartSeriesComponent,
+  DxoChartLegendComponent,
+  DxiChartConstantLineComponent,
+  DxChartTypes,
+} from 'devextreme-angular/ui/chart';
 import { Service, ComplaintsWithPercent } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
@@ -47,7 +58,15 @@ export class AppComponent {
 @NgModule({
   imports: [
     BrowserModule,
-    DxChartModule,
+    DxChartComponent,
+    DxiChartValueAxisComponent,
+    DxoChartArgumentAxisComponent,
+    DxoChartLabelComponent,
+    DxoChartTooltipComponent,
+    DxoChartCommonSeriesSettingsComponent,
+    DxiChartSeriesComponent,
+    DxoChartLegendComponent,
+    DxiChartConstantLineComponent,
   ],
   declarations: [AppComponent],
   bootstrap: [AppComponent],
