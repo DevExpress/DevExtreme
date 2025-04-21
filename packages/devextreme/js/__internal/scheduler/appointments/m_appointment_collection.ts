@@ -34,6 +34,7 @@ import type { AppointmentViewModel } from '../types';
 import type { AppointmentDataAccessor } from '../utils';
 import { AgendaAppointment } from './appointment/agenda_appointment';
 import { Appointment } from './appointment/m_appointment';
+import { getGroupTexts } from './appointment/text_utils';
 import { getAppointmentTakesSeveralDays, sortAppointmentsByStartDate } from './data_provider/m_utils';
 import { createAgendaAppointmentLayout, createAppointmentLayout } from './m_appointment_layout';
 import { getAppointmentDateRange } from './resizing/m_core';
@@ -593,6 +594,7 @@ class SchedulerAppointments extends CollectionWidget {
       const config: any = {
         data: rawAppointment,
         groupIndex: settings.groupIndex,
+        groupTexts: getGroupTexts(settings.groupIndex, this.option('getLoadedResources')()),
         observer: this.option('observer'),
         geometry,
         direction: settings.direction || 'vertical',
@@ -611,7 +613,6 @@ class SchedulerAppointments extends CollectionWidget {
 
         dataAccessors: this.dataAccessors,
         timeZoneCalculator: this.option('timeZoneCalculator'),
-        getLoadedResources: this.option('getLoadedResources'),
         getAppointmentColor: this.option('getAppointmentColor'),
         getResourceDataAccessors: this.option('getResourceDataAccessors'),
         getResourceProcessor: this.option('getResourceProcessor'),

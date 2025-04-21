@@ -4,7 +4,7 @@ import { isDefined } from '@js/core/utils/type';
 import { PathTimeZoneConversion } from '@ts/scheduler/r1/timezone_calculator/const';
 
 import { getPathToLeaf } from '../../resources/m_utils';
-import type { AppointmentProperties } from './m_types';
+import type { AppointmentProperties, LoadedResource } from './m_types';
 
 const localizeDate = (date: Date): string => `${dateLocalization.format(date, 'monthAndDay')}, ${dateLocalization.format(date, 'year')}`;
 const localizeTime = (date: Date): string => `${dateLocalization.format(date, 'shorttime')}`;
@@ -62,9 +62,10 @@ export const getReducedIconTooltip = (options: AppointmentProperties): string =>
   return `${tooltipLabel}: ${endDateText}`;
 };
 
-const getGroupTexts = ({ groupIndex, getLoadedResources }: AppointmentProperties): string[] => {
-  const loadedResources = getLoadedResources();
-
+export const getGroupTexts = (
+  groupIndex: number,
+  loadedResources: LoadedResource[],
+): string[] => {
   if (!loadedResources?.length) {
     return [];
   }
@@ -79,13 +80,11 @@ const getGroupTexts = ({ groupIndex, getLoadedResources }: AppointmentProperties
   return textPath as string[];
 };
 const getGroupText = (options: AppointmentProperties): string => {
-  const groupTexts = getGroupTexts(options);
-
-  if (!groupTexts.length) {
+  if (!options.groupTexts.length) {
     return '';
   }
 
-  const groupText = groupTexts.join(', ');
+  const groupText = options.groupTexts.join(', ');
   // @ts-ignore @ts-expect-error
   return messageLocalization.format('dxScheduler-appointmentAriaLabel-group', groupText);
 };

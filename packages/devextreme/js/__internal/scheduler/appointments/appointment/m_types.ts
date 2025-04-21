@@ -4,6 +4,14 @@ import type { ResourceProcessor } from '@ts/scheduler/resources/resource_process
 import type { SafeAppointment } from '@ts/scheduler/types';
 import type { AppointmentDataAccessor } from '@ts/scheduler/utils/data_accessor/appointment_data_accessor';
 
+export interface LoadedResource {
+  data: Record<string, unknown>[];
+  items: {
+    id: number | string;
+    text: string;
+  }[];
+  name: string;
+}
 export interface AppointmentProperties extends Record<string, unknown> {
   data: SafeAppointment;
   groupIndex?: number;
@@ -26,14 +34,6 @@ export interface AppointmentProperties extends Record<string, unknown> {
 
   dataAccessors: AppointmentDataAccessor;
   timeZoneCalculator: TimeZoneCalculator;
-  getLoadedResources: () => {
-    data: Record<string, unknown>[];
-    items: {
-      id: number | string;
-      text: string;
-    }[];
-    name: string;
-  }[];
   getAppointmentColor: (config: any) => any;
   getResourceDataAccessors: () => any;
   getResourceProcessor: () => ResourceProcessor;
