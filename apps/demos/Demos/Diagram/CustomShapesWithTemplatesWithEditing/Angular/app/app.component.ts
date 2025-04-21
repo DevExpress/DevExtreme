@@ -5,8 +5,26 @@ import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 
 import {
-  DxPopupModule, DxTemplateModule, DxDiagramModule, DxDiagramComponent, DxTextBoxModule, DxButtonModule,
+  DxPopupComponent,
+  DxTemplateDirective,
+  DxIntegrationModule,
+  DxTextBoxComponent,
+  DxButtonComponent,
 } from 'devextreme-angular';
+
+import {
+  DxDiagramComponent,
+  DxiDiagramCustomShapeComponent,
+  DxoDiagramNodesComponent,
+  DxoDiagramAutoLayoutComponent,
+  DxoDiagramContextToolboxComponent,
+  DxoDiagramToolboxComponent,
+  DxoDiagramPropertiesPanelComponent,
+  DxiDiagramTabComponent,
+  DxiDiagramToolboxGroupComponent,
+  DxiDiagramTabGroupComponent,
+} from 'devextreme-angular/ui/diagram';
+
 import ArrayStore from 'devextreme/data/array_store';
 import { Service, Employee } from './app.service';
 
@@ -121,12 +139,23 @@ export class AppComponent {
 
 @NgModule({
   imports: [
+    DxPopupComponent,
     BrowserModule,
-    DxDiagramModule,
-    DxPopupModule,
-    DxTextBoxModule,
-    DxButtonModule,
-    DxTemplateModule,
+    DxDiagramComponent,
+    DxiDiagramCustomShapeComponent,
+    DxoDiagramNodesComponent,
+    DxoDiagramAutoLayoutComponent,
+    DxoDiagramContextToolboxComponent,
+    DxoDiagramToolboxComponent,
+    DxoDiagramPropertiesPanelComponent,
+    DxiDiagramTabComponent,
+    DxiDiagramTabGroupComponent,
+    DxiDiagramToolboxGroupComponent,
+    DxPopupComponent,
+    DxTemplateDirective,
+    DxIntegrationModule,
+    DxTextBoxComponent,
+    DxButtonComponent,
   ],
   declarations: [AppComponent],
   bootstrap: [AppComponent],
