@@ -46,7 +46,6 @@ import AIDialog from './ui/aiDialog';
 const QUILL_CONTAINER_CLASS = 'dx-quill-container';
 const QUILL_CLIPBOARD_CLASS = 'ql-clipboard';
 const HTML_EDITOR_CLASS = 'dx-htmleditor';
-const HTML_EDITOR_STYLING_MODE_PREFIX = 'dx-htmleditor-';
 const HTML_EDITOR_SUBMIT_ELEMENT_CLASS = 'dx-htmleditor-submit-element';
 const HTML_EDITOR_CONTENT_CLASS = 'dx-htmleditor-content';
 
@@ -56,7 +55,6 @@ const ANONYMOUS_TEMPLATE_NAME = 'htmlContent';
 export type QuillInstance = any;
 
 type ModulesConfig = Record<string, unknown>;
-type TextFormat = Record<HtmlEditorFormat | string, string>;
 type FocusEvent = DxEvent & { relatedTarget?: Element };
 
 interface TextSelection {
@@ -65,12 +63,12 @@ interface TextSelection {
 }
 
 interface Bounds {
-  bottom: number;
-  height: number;
-  left: number;
-  right: number;
-  top: number;
-  width: number;
+  bottom?: number;
+  height?: number;
+  left?: number;
+  right?: number;
+  top?: number;
+  width?: number;
 }
 
 const isIos = devices.current().platform === 'ios';
@@ -440,7 +438,7 @@ class HtmlEditor extends Editor<Properties> {
         // dropImage: this._getBaseModuleConfig(),
         imageCursor: this._getBaseModuleConfig(),
         imageUpload: this._getModuleConfigByOption('imageUpload'),
-        keyboard: this._getKeyboardConfig(),
+        keyboard: this._getKeyboardModuleConfig(),
         mentions: this._getModuleConfigByOption('mentions'),
         multiline: Boolean(this.option('allowSoftLineBreak')),
         resizing: this._getModuleConfigByOption('mediaResizing'),
@@ -448,7 +446,7 @@ class HtmlEditor extends Editor<Properties> {
         tableContextMenu: this._getModuleConfigByOption('tableContextMenu'),
         tableResizing: this._getModuleConfigByOption('tableResizing'),
         toolbar: this._getModuleConfigByOption('toolbar'),
-        uploader: this._getUploaderConfig(),
+        uploader: this._getUploaderModuleConfig(),
         variables: this._getModuleConfigByOption('variables'),
       },
       this._getCustomModules(),
@@ -457,7 +455,7 @@ class HtmlEditor extends Editor<Properties> {
     return modulesConfig;
   }
 
-  _getUploaderConfig(): {
+  _getUploaderModuleConfig(): {
     onDrop: (e: DxEvent) => void;
     imageBlot: string;
   } {
@@ -467,7 +465,7 @@ class HtmlEditor extends Editor<Properties> {
     };
   }
 
-  _getKeyboardConfig(): { onKeydown: (e: DxEvent) => void } {
+  _getKeyboardModuleConfig(): { onKeydown: (e: DxEvent) => void } {
     return {
       onKeydown: (e) => this._saveValueChangeEvent(dxEvent(e)),
     };
@@ -588,7 +586,7 @@ class HtmlEditor extends Editor<Properties> {
   }
 
   _getStylingModePrefix(): string {
-    return HTML_EDITOR_STYLING_MODE_PREFIX;
+    return `${HTML_EDITOR_CLASS}-`;
   }
 
   _getQuillContainer(): dxElementWrapper {
@@ -651,6 +649,7 @@ class HtmlEditor extends Editor<Properties> {
       case 'value': {
         this._processHtmlContentUpdating(value);
 
+        // NOTE: value can be optimized by Quill
         const { value: currentValue } = this.option();
 
         if (currentValue !== previousValue) {
@@ -820,8 +819,8 @@ class HtmlEditor extends Editor<Properties> {
   getFormat(
     index: number,
     length: number,
-  ): TextFormat {
-    const formats: TextFormat = this._applyQuillMethod('getFormat', index, length);
+  ): unknown {
+    const formats = this._applyQuillMethod('getFormat', index, length);
 
     return formats;
   }
@@ -862,7 +861,7 @@ class HtmlEditor extends Editor<Properties> {
   insertText(
     index: number,
     text: string,
-    formatName: TextFormat | HtmlEditorFormat | string,
+    formatName: unknown,
     formatValue?: unknown,
   ): void {
     this._applyQuillMethod('insertText', index, text, formatName, formatValue);
