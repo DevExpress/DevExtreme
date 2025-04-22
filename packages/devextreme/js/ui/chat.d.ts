@@ -303,7 +303,6 @@ export interface dxChatOptions extends WidgetOptions<dxChat> {
     items?: Array<Message>;
     /**
      * @docid
-     * @default { allowUpdating: false, allowDeleting: false }
      * @type object
      * @public
      */
