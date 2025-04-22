@@ -22,8 +22,12 @@ export default class Headers extends FocusableElement {
     return this.element.find(`.${Widget.addClassPrefix(this.widgetName, CLASS.content)}:not(.${Widget.addClassPrefix(this.widgetName, CLASS.contentFixed)})`);
   }
 
-  getHeaderRow(index: number): HeaderRow {
-    return new HeaderRow(this.element.find(`.${Widget.addClassPrefix(this.widgetName, CLASS.content)}:not(.${Widget.addClassPrefix(this.widgetName, CLASS.contentFixed)}) .${CLASS.headerRow}:nth-child(${index + 1})`), this.widgetName);
+  getHeaderRow(index: number, isFixed = false): HeaderRow {
+    const headersContainerSelector = isFixed
+      ? `.${Widget.addClassPrefix(this.widgetName, CLASS.contentFixed)}`
+      : `.${Widget.addClassPrefix(this.widgetName, CLASS.content)}:not(.${Widget.addClassPrefix(this.widgetName, CLASS.contentFixed)})`;
+
+    return new HeaderRow(this.element.find(`${headersContainerSelector} .${CLASS.headerRow}:nth-child(${index + 1})`), this.widgetName);
   }
 
   getFilterRow(): FilterRow {

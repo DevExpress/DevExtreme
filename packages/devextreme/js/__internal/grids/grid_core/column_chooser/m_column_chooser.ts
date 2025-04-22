@@ -590,7 +590,7 @@ const columns = (Base: ModuleType<ColumnsController>) => class ColumnsChooserCol
 };
 
 const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnChooserColumnHeadersExtender extends Base {
-  protected allowDragging(column) {
+  public allowDragging(column) {
     const isDragMode = !this._columnChooserView.isSelectMode();
     const isColumnChooserVisible = this._columnChooserView.isColumnChooserVisible();
 

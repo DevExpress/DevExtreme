@@ -854,7 +854,11 @@ test('Edit - The first command cell should be focused using Tab (T884646)', asyn
   // header row
   await t
     .pressKey('tab')
-    .expect(headerRow.getHeaderCell(1).element.focused).ok();
+    .expect(headerRow.getHeaderCell(0).element.focused)
+    .ok()
+    .pressKey('tab')
+    .expect(headerRow.getHeaderCell(1).element.focused)
+    .ok();
 
   // data row
   await t
@@ -896,7 +900,11 @@ test('Edit - The first command cell should be focused using Tab (T884646)', asyn
   // header row
   await t
     .pressKey('shift+tab')
-    .expect(headerRow.getHeaderCell(1).element.focused).ok();
+    .expect(headerRow.getHeaderCell(1).element.focused)
+    .ok()
+    .pressKey('shift+tab')
+    .expect(headerRow.getHeaderCell(0).element.focused)
+    .ok();
 
   // focus BODY
   await t
@@ -979,7 +987,13 @@ test('Adaptive - Hidden cells should not be focused using Tab (T887014)', async 
   // header row
   await t
     .pressKey('tab')
-    .expect(headerRow.getHeaderCell(1).element.focused).ok()
+    .expect(headerRow.getHeaderCell(0).element.focused)
+    .ok()
+    .expect(headerRow.getHeaderCell(0).element.hasAttribute('tabindex'))
+    .ok()
+    .pressKey('tab')
+    .expect(headerRow.getHeaderCell(1).element.focused)
+    .ok()
     .expect(headerRow.getHeaderCell(1).element.hasAttribute('tabindex'))
     .ok()
     .expect(headerRow.getHeaderCell(2).isHidden)
@@ -1047,6 +1061,11 @@ test('Adaptive - Hidden cells should not be focused using Tab (T887014)', async 
     .expect(headerRow.getHeaderCell(1).element.focused)
     .ok()
     .expect(headerRow.getHeaderCell(1).element.hasAttribute('tabindex'))
+    .ok()
+    .pressKey('shift+tab')
+    .expect(headerRow.getHeaderCell(0).element.focused)
+    .ok()
+    .expect(headerRow.getHeaderCell(0).element.hasAttribute('tabindex'))
     .ok();
 
   // focus BODY
@@ -2170,7 +2189,10 @@ test('Empty row should lose focus on Tab (T941246)', async (t) => {
 
     async function checkNavigationOfAllCells(): Promise<void> {
       await t
-        .click(headers.getHeaderRow(0).getHeaderCell(1).element)
+        .click(headers.getHeaderRow(0, isCommandColumnFixed).getHeaderCell(0).element)
+        .expect(headers.getHeaderRow(0, isCommandColumnFixed).getHeaderCell(0).element.focused)
+        .ok()
+        .pressKey('tab')
         .expect(headers.getHeaderRow(0).getHeaderCell(1).element.focused)
         .ok()
         .pressKey('tab')
@@ -2252,7 +2274,10 @@ test('Empty row should lose focus on Tab (T941246)', async (t) => {
 
     async function checkNavigationOfAllCells(): Promise<void> {
       await t
-        .click(headers.getHeaderRow(0).getHeaderCell(1).element)
+        .click(headers.getHeaderRow(0, isCommandColumnFixed).getHeaderCell(0).element)
+        .expect(headers.getHeaderRow(0, isCommandColumnFixed).getHeaderCell(0).element.focused)
+        .ok()
+        .pressKey('tab')
         .expect(headers.getHeaderRow(0).getHeaderCell(1).element.focused)
         .ok()
         .pressKey('tab')
@@ -2339,7 +2364,16 @@ test('Empty row should lose focus on Tab (T941246)', async (t) => {
         .pressKey('tab')
         .expect(headers.getHeaderRow(0).getHeaderCell(1).element.focused)
         .ok()
-        .pressKey('tab')
+        .pressKey('tab');
+
+      if (!isCommandColumnFixed) {
+        await t
+          .expect(headers.getHeaderRow(0).getHeaderCell(2).element.focused)
+          .ok()
+          .pressKey('tab');
+      }
+
+      await t
         .expect(dataGrid.getDataCell(0, 0).element.focused)
         .ok()
         .pressKey('tab')
@@ -2424,7 +2458,16 @@ test('Empty row should lose focus on Tab (T941246)', async (t) => {
         .pressKey('tab')
         .expect(headers.getHeaderRow(0).getHeaderCell(1).element.focused)
         .ok()
-        .pressKey('tab')
+        .pressKey('tab');
+
+      if (!isCommandColumnFixed) {
+        await t
+          .expect(headers.getHeaderRow(0).getHeaderCell(2).element.focused)
+          .ok()
+          .pressKey('tab');
+      }
+
+      await t
         .expect(dataGrid.getDataCell(0, 0).element.focused)
         .ok()
         .pressKey('tab')
@@ -2491,7 +2534,16 @@ test('Empty row should lose focus on Tab (T941246)', async (t) => {
         .pressKey('tab')
         .expect(headers.getHeaderRow(0).getHeaderCell(1).element.focused)
         .ok()
-        .pressKey('tab')
+        .pressKey('tab');
+
+      if (!isCommandColumnFixed) {
+        await t
+          .expect(headers.getHeaderRow(0).getHeaderCell(2).element.focused)
+          .ok()
+          .pressKey('tab');
+      }
+
+      await t
         .expect(dataGrid.getDataCell(0, 0).element.focused)
         .ok()
         .pressKey('tab')
@@ -4334,7 +4386,7 @@ test('DataGrid - Cell focus in edit mode does not work correctly if a cell has a
 
 test('DataGrid - Cell focus works incorrectly if the command column has a disabled native button element (T1179207)', async (t) => {
   await t
-    .pressKey('tab tab tab tab tab tab')
+    .pressKey('tab tab tab tab tab tab tab')
 
     .expect(Selector(':focus').tagName)
     .eql('td')

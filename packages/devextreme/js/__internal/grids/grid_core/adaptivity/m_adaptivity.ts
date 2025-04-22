@@ -25,6 +25,7 @@ import type { ColumnsResizerViewController, DraggingHeaderViewController } from 
 import type { DataController } from '../data_controller/m_data_controller';
 import type { EditingController } from '../editing/m_editing';
 import type { EditorFactory } from '../editor_factory/m_editor_factory';
+import type { HeadersKeyboardNavigationController } from '../keyboard_navigation/m_headers_keyboard_navigation';
 import type { KeyboardNavigationController } from '../keyboard_navigation/m_keyboard_navigation';
 import modules from '../m_modules';
 import type { Module, ModuleType } from '../m_types';
@@ -1262,6 +1263,11 @@ const columns = (
     return super.getVisibleDataColumnsByBandColumn(bandColumnIndex)
       .filter((column) => column.visibleWidth !== HIDDEN_COLUMNS_WIDTH);
   }
+
+  public getUnfixedAndStickyColumns(rowIndex: number, ownerBand: number): any[] {
+    return super.getUnfixedAndStickyColumns(rowIndex, ownerBand)
+      .filter((col) => col.visibleWidth !== HIDDEN_COLUMNS_WIDTH);
+  }
 };
 
 const resizing = (Base: ModuleType<ResizingController>) => class AdaptivityResizingControllerExtender extends Base {
@@ -1304,6 +1310,23 @@ const resizing = (Base: ModuleType<ResizingController>) => class AdaptivityResiz
   }
 };
 
+const headersKeyboardNavigation = (Base: ModuleType<HeadersKeyboardNavigationController>) => class AdaptivityHeadersKeyboardNavigationExtender extends Base {
+  protected getNewVisibleIndex(visibleIndex, direction) {
+    let newVisibleIndex = super.getNewVisibleIndex(visibleIndex, direction);
+    let visibleColumns = this._columnsController.getVisibleColumns();
+
+    visibleColumns = direction === 'next'
+      ? visibleColumns.slice(newVisibleIndex - 1)
+      : visibleColumns.slice(0, newVisibleIndex).reverse();
+
+    while (visibleColumns?.shift()?.visibleWidth === HIDDEN_COLUMNS_WIDTH) {
+      newVisibleIndex += direction === 'next' ? 1 : -1;
+    }
+
+    return newVisibleIndex;
+  }
+};
+
 export const adaptivityModule: Module = {
   defaultOptions() {
     return {
@@ -1329,6 +1352,7 @@ export const adaptivityModule: Module = {
       editorFactory,
       columns,
       keyboardNavigation,
+      headersKeyboardNavigation,
     },
   },
 };
