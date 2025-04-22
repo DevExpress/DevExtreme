@@ -7,7 +7,7 @@ import { isDefined } from '@js/core/utils/type';
 
 import type { Views } from '../m_types';
 import { StickyPosition } from '../sticky_columns/const';
-import { getColumnFixedPosition, isFirstFixedColumn, isLastFixedColumn } from '../sticky_columns/utils';
+import { getColumnFixedPosition } from '../sticky_columns/utils';
 import { Direction } from './const';
 import { KeyboardNavigationController as KeyboardNavigationControllerCore } from './m_keyboard_navigation_core';
 
@@ -15,34 +15,15 @@ export class HeadersKeyboardNavigationController extends KeyboardNavigationContr
   protected _columnHeadersView!: Views['columnHeadersView'];
 
   private isHeaderValidForReordering(column, direction, rowIndex): boolean {
-    const columnsController = this._columnsController;
     const allowReordering = this._columnHeadersView.allowDragging(column);
 
     if (!allowReordering) {
       return false;
     }
 
-    if (column.fixed && column.fixedPosition !== StickyPosition.Sticky) {
-      const fixedPosition = getColumnFixedPosition(columnsController, column);
-
-      return direction === Direction.Next ? !isLastFixedColumn(
-        columnsController,
-        column,
-        rowIndex,
-        isDefined(column.ownerBand),
-        fixedPosition,
-      ) : !isFirstFixedColumn(
-        columnsController,
-        column,
-        rowIndex,
-        isDefined(column.ownerBand),
-        fixedPosition,
-      );
-    }
-
-    const unfixedColumns = columnsController.getUnfixedAndStickyColumns(rowIndex, column.ownerBand);
-    const isFirstColumn = column.index === unfixedColumns[0].index;
-    const isLastColumn = column.index === unfixedColumns[unfixedColumns.length - 1].index;
+    const draggableColumns = this.getDraggableColumns(column, rowIndex);
+    const isFirstColumn = column.index === draggableColumns[0].index;
+    const isLastColumn = column.index === draggableColumns[draggableColumns.length - 1].index;
 
     return direction === Direction.Next ? !isLastColumn : !isFirstColumn;
   }
@@ -74,6 +55,28 @@ export class HeadersKeyboardNavigationController extends KeyboardNavigationContr
       }
       originalEvent?.preventDefault();
     }
+  }
+
+  protected getDraggableColumns(
+    column,
+    rowIndex: number,
+  ): any[] {
+    const columnsController = this._columnsController;
+    const visibleColumns = columnsController.getVisibleColumns(rowIndex, true)
+      ?.filter((col) => col.ownerBand === column?.ownerBand
+        && (!isDefined(col.type) || columnsController.isCustomCommandColumn(col)));
+
+    if (column?.fixed) {
+      const fixedPosition = getColumnFixedPosition(columnsController, column);
+
+      if (fixedPosition !== StickyPosition.Sticky) {
+        return visibleColumns
+          .filter((col) => col.fixed
+            && getColumnFixedPosition(columnsController, col) === fixedPosition);
+      }
+    }
+
+    return visibleColumns.filter((column) => !column.fixed || column.fixedPosition === StickyPosition.Sticky);
   }
 
   protected keyDownHandler(e): void {

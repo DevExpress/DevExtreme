@@ -386,6 +386,118 @@ test('reorder sticky column to right when there are fixed columns', async (t) =>
   });
 });
 
+test('reorder fixed right column to right when there is a command column on the right', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+  const firstFixedRightHeader = dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(6);
+
+  await t
+    .click(firstFixedRightHeader.element)
+    .pressKey('ctrl+right')
+    .pressKey('ctrl+right');
+
+  await takeScreenshot(
+    'reorder_fixed_right_column_to_right_when_there_is_command_column_on_right',
+    dataGrid.element,
+  );
+
+  await t.expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  await createWidget('dxDataGrid', {
+    columnWidth: 100,
+    allowColumnReordering: true,
+    editing: {
+      mode: 'row',
+      allowUpdating: true,
+    },
+    dataSource: [{
+      field1: 'test1',
+      field2: 'test2',
+      field3: 'test3',
+      field4: 'test4',
+      field5: 'test5',
+      field6: 'test6',
+      field7: 'test7',
+      field8: 'test8',
+    }],
+    customizeColumns: (columns) => {
+      columns[0].fixed = true;
+      columns[0].fixedPosition = 'right';
+      columns[7].fixed = true;
+      columns[7].fixedPosition = 'right';
+    },
+  });
+});
+
+test('reorder fixed right column to right when there is a custom command column on the right', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+  const firstFixedRightHeader = dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(6);
+
+  await t
+    .click(firstFixedRightHeader.element)
+    .pressKey('ctrl+right')
+    .pressKey('ctrl+right')
+    .pressKey('ctrl+right');
+
+  await takeScreenshot(
+    'reorder_fixed_right_column_to_right_when_there_is_custom_command_column_on_right',
+    dataGrid.element,
+  );
+
+  await t.expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  await createWidget('dxDataGrid', {
+    columnWidth: 100,
+    allowColumnReordering: true,
+    editing: {
+      mode: 'row',
+      allowUpdating: true,
+    },
+    dataSource: [{
+      field1: 'test1',
+      field2: 'test2',
+      field3: 'test3',
+      field4: 'test4',
+      field5: 'test5',
+      field6: 'test6',
+      field7: 'test7',
+      field8: 'test8',
+    }],
+    columns: [
+      {
+        dataField: 'field1',
+        fixed: true,
+        fixedPosition: 'right',
+      },
+      'field2',
+      'field3',
+      'field4',
+      'field5',
+      'field6',
+      'field7',
+      {
+        dataField: 'field8',
+        fixed: true,
+        fixedPosition: 'right',
+      },
+      {
+        type: 'buttons',
+        fixed: true,
+        fixedPosition: 'right',
+      },
+    ],
+    customizeColumns: (columns) => {
+      columns[0].fixed = true;
+      columns[0].fixedPosition = 'right';
+      columns[7].fixed = true;
+      columns[7].fixedPosition = 'right';
+    },
+  });
+});
+
 // Band columns
 test('reorder band column to right', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
