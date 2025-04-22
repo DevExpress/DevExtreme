@@ -24,7 +24,7 @@ import {
 export { ExplicitTypes } from 'devextreme/ui/card_view';
 
 import DataSource from 'devextreme/data/data_source';
-import { CardCover, CardHeader, ColumnProperties, HeaderPanel, CardClickEvent, CardDblClickEvent, CardHoverChangedEvent, CardPreparedEvent, Paging, RemoteOperations, PredefinedToolbarItem, ToolbarItem } from 'devextreme/ui/card_view';
+import { CardCover, CardHeader, ColumnProperties, HeaderPanel, CardClickEvent, CardDblClickEvent, CardHoverChangedEvent, CardPreparedEvent, Paging, RemoteOperations, Toolbar } from 'devextreme/ui/card_view';
 import { Mode } from 'devextreme/common';
 import { DataSourceOptions } from 'devextreme/data/data_source';
 import { Store } from 'devextreme/data/store';
@@ -615,10 +615,10 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     
      */
     @Input()
-    get toolbar(): { items?: Array<PredefinedToolbarItem | ToolbarItem> } {
+    get toolbar(): Toolbar {
         return this._getOption('toolbar');
     }
-    set toolbar(value: { items?: Array<PredefinedToolbarItem | ToolbarItem> }) {
+    set toolbar(value: Toolbar) {
         this._setOption('toolbar', value);
     }
 
@@ -997,7 +997,7 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() toolbarChange: EventEmitter<{ items?: Array<PredefinedToolbarItem | ToolbarItem> }>;
+    @Output() toolbarChange: EventEmitter<Toolbar>;
 
     /**
     

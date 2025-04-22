@@ -2,6 +2,7 @@ export {
   Paging,
   RemoteOperations,
   ToolbarItem,
+  Toolbar,
   FieldInfoType,
   CardInfo,
   ColumnProperties,

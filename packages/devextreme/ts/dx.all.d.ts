@@ -10109,6 +10109,18 @@ declare module DevExpress.ui {
       | 'trueText'
       | 'falseText'
       | 'caption';
+    /**
+     * [descr:Toolbar]
+     */
+    export type Toolbar = {
+      /**
+       * [descr:Toolbar.items]
+       */
+      items?: Array<PredefinedToolbarItem | ToolbarItem>;
+      visible?: boolean | undefined;
+      disabled?: boolean;
+      multiline?: boolean;
+    };
 
     /**
      * [descr:WithCardInfo]
@@ -10274,18 +10286,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxCardViewOptions.toolbar]
      */
-    toolbar?: {
-      /**
-       * [descr:dxCardViewOptions.toolbar.items]
-       */
-      items?: Array<
-        | DevExpress.ui.dxCardView.PredefinedToolbarItem
-        | DevExpress.ui.dxCardView.ToolbarItem
-      >;
-      visible?: boolean | undefined;
-      disabled?: boolean;
-      multiline?: boolean;
-    };
+    toolbar?: DevExpress.ui.dxCardView.Toolbar;
 
     sorting?: DevExpress.common.grids.Sorting;
 

@@ -16,6 +16,7 @@ import {
  CardPreparedEvent,
  Paging,
  RemoteOperations,
+ Toolbar,
  CardHeaderPredefinedToolbarItem,
  CardHeaderToolbarItem,
  PredefinedToolbarItem,
@@ -203,7 +204,7 @@ const componentConfig = {
     scrolling: Object as PropType<Record<string, any>>,
     searchPanel: Object as PropType<Record<string, any>>,
     tabIndex: Number,
-    toolbar: Object as PropType<Record<string, any>>,
+    toolbar: Object as PropType<Toolbar | Record<string, any>>,
     visible: Boolean,
     width: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
     wordWrapEnabled: Boolean

@@ -95,6 +95,33 @@ export type ToolbarItem = dxToolbarItem & {
     location?: ToolbarItemLocation;
 };
 
+/**
+ * @docid
+ * @public
+ */
+export type Toolbar = {
+    /**
+     * @docid
+     * @public
+     */
+    items?: Array<PredefinedToolbarItem | ToolbarItem>;
+    /**
+     * @default undefined
+     * @public
+     */
+    visible?: boolean | undefined;
+    /**
+     * @default false
+     * @public
+     */
+    disabled?: boolean;
+    /**
+     * @default false
+     * @public
+     */
+    multiline?: boolean;
+};
+
 // #endregion
 
 // #region ColumnsController
@@ -583,28 +610,7 @@ export interface dxCardViewOptions<TCardData = unknown, TKey = unknown> extends 
      * @docid
      * @public
      */
-    toolbar?: {
-        /**
-         * @docid
-         * @public
-         */
-        items?: Array<PredefinedToolbarItem | ToolbarItem>;
-        /**
-         * @default undefined
-         * @public
-         */
-        visible?: boolean | undefined;
-        /**
-         * @default false
-         * @public
-         */
-        disabled?: boolean;
-        /**
-         * @default false
-         * @public
-         */
-        multiline?: boolean;
-    };
+    toolbar?: Toolbar;
 
     // #endregion
 

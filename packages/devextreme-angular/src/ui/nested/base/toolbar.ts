@@ -18,7 +18,7 @@ import { dxTreeListToolbarItem, TreeListPredefinedToolbarItem } from 'devextreme
 @Component({
     template: ''
 })
-export abstract class DxoDataGridToolbar extends NestedOption {
+export abstract class DxoToolbar extends NestedOption {
     get items(): Array<PredefinedToolbarItem | any | { cssClass?: string | undefined, disabled?: boolean, html?: string, locateInMenu?: LocateInMenuMode, location?: ToolbarItemLocation, menuItemTemplate?: any, name?: PredefinedToolbarItem | string, options?: any, showText?: ShowTextMode, template?: any, text?: string, visible?: boolean, widget?: ToolbarItemComponent } | dxDataGridToolbarItem | DataGridPredefinedToolbarItem | dxFileManagerToolbarItem | FileManagerPredefinedToolbarItem | dxGanttToolbarItem | GanttPredefinedToolbarItem | dxHtmlEditorToolbarItem | HtmlEditorPredefinedToolbarItem | dxTreeListToolbarItem | TreeListPredefinedToolbarItem> {
         return this._getOption('items');
     }
