@@ -77,7 +77,7 @@ export class ColumnsController {
         (template) => (template ? this.options.normalizeTemplate(template) : undefined),
         firstItemDataTypes,
       ).map(
-        (column) => mergeColumnHeaderFilterOptions(column, headerFilterRootOptions) as Column,
+        (column) => mergeColumnHeaderFilterOptions(column, headerFilterRootOptions),
       );
     });
 

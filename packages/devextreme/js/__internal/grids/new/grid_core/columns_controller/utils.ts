@@ -5,7 +5,6 @@ import {
   isDefined,
   isString, type,
 } from '@js/core/utils/type';
-import type { ReadonlySignal } from '@preact/signals-core';
 import type { ComponentType } from 'inferno';
 
 import type { DataObject } from '../data_controller/types';
