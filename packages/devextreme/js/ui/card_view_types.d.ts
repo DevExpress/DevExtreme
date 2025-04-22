@@ -1,9 +1,15 @@
 export {
+  Paging,
+  RemoteOperations,
   ToolbarItem,
-  Cell,
-  DataRow,
+  FieldInfo,
+  CardInfo,
   ColumnProperties,
   Column,
+  HeaderPanel,
+  CardCover,
+  CardHeader,
   dxCardViewOptions,
   Properties,
+  Pager,
 } from './card_view';

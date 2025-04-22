@@ -28,6 +28,7 @@ import { CardCover, CardHeader, ColumnProperties, HeaderPanel, Paging, RemoteOpe
 import { Mode } from 'devextreme/common';
 import { DataSourceOptions } from 'devextreme/data/data_source';
 import { Store } from 'devextreme/data/store';
+import { dxLoadPanelOptions } from 'devextreme/ui/load_panel';
 import { EventInfo } from 'devextreme/common/core/events';
 import { Pager } from 'devextreme/common/grids';
 
@@ -48,20 +49,44 @@ import { DxoCardCoverModule } from 'devextreme-angular/ui/nested';
 import { DxoCardHeaderModule } from 'devextreme-angular/ui/nested';
 import { DxiColumnModule } from 'devextreme-angular/ui/nested';
 import { DxoHeaderPanelModule } from 'devextreme-angular/ui/nested';
+import { DxoLoadPanelModule } from 'devextreme-angular/ui/nested';
+import { DxoAnimationModule } from 'devextreme-angular/ui/nested';
+import { DxoHideModule } from 'devextreme-angular/ui/nested';
+import { DxoFromModule } from 'devextreme-angular/ui/nested';
+import { DxoPositionModule } from 'devextreme-angular/ui/nested';
+import { DxoAtModule } from 'devextreme-angular/ui/nested';
+import { DxoBoundaryOffsetModule } from 'devextreme-angular/ui/nested';
+import { DxoCollisionModule } from 'devextreme-angular/ui/nested';
+import { DxoMyModule } from 'devextreme-angular/ui/nested';
+import { DxoOffsetModule } from 'devextreme-angular/ui/nested';
+import { DxoToModule } from 'devextreme-angular/ui/nested';
+import { DxoShowModule } from 'devextreme-angular/ui/nested';
 import { DxoPagerModule } from 'devextreme-angular/ui/nested';
 import { DxoPagingModule } from 'devextreme-angular/ui/nested';
 import { DxoRemoteOperationsModule } from 'devextreme-angular/ui/nested';
 import { DxoToolbarModule } from 'devextreme-angular/ui/nested';
 import { DxiItemModule } from 'devextreme-angular/ui/nested';
 
+import { DxoCardViewAnimationModule } from 'devextreme-angular/ui/card-view/nested';
+import { DxoCardViewAtModule } from 'devextreme-angular/ui/card-view/nested';
+import { DxoCardViewBoundaryOffsetModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxoCardViewCardCoverModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxoCardViewCardHeaderModule } from 'devextreme-angular/ui/card-view/nested';
+import { DxoCardViewCollisionModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxiCardViewColumnModule } from 'devextreme-angular/ui/card-view/nested';
+import { DxoCardViewFromModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxoCardViewHeaderPanelModule } from 'devextreme-angular/ui/card-view/nested';
+import { DxoCardViewHideModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxiCardViewItemModule } from 'devextreme-angular/ui/card-view/nested';
+import { DxoCardViewLoadPanelModule } from 'devextreme-angular/ui/card-view/nested';
+import { DxoCardViewMyModule } from 'devextreme-angular/ui/card-view/nested';
+import { DxoCardViewOffsetModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxoCardViewPagerModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxoCardViewPagingModule } from 'devextreme-angular/ui/card-view/nested';
+import { DxoCardViewPositionModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxoCardViewRemoteOperationsModule } from 'devextreme-angular/ui/card-view/nested';
+import { DxoCardViewShowModule } from 'devextreme-angular/ui/card-view/nested';
+import { DxoCardViewToModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxoCardViewToolbarModule } from 'devextreme-angular/ui/card-view/nested';
 
 import { DxiColumnComponent } from 'devextreme-angular/ui/nested';
@@ -84,8 +109,8 @@ import { DxiCardViewColumnComponent } from 'devextreme-angular/ui/card-view/nest
         IterableDifferHelper
     ]
 })
-export class DxCardViewComponent<TRowData = any, TKey = any> extends DxComponent implements OnDestroy, OnChanges, DoCheck {
-    instance: DxCardView<TRowData, TKey> = null;
+export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponent implements OnDestroy, OnChanges, DoCheck {
+    instance: DxCardView<TCardData, TKey> = null;
 
     /**
      * [descr:WidgetOptions.accessKey]
@@ -257,6 +282,19 @@ export class DxCardViewComponent<TRowData = any, TKey = any> extends DxComponent
 
 
     /**
+     * [descr:dxCardViewOptions.errorRowEnabled]
+    
+     */
+    @Input()
+    get errorRowEnabled(): boolean {
+        return this._getOption('errorRowEnabled');
+    }
+    set errorRowEnabled(value: boolean) {
+        this._setOption('errorRowEnabled', value);
+    }
+
+
+    /**
      * [descr:WidgetOptions.focusStateEnabled]
     
      */
@@ -335,6 +373,45 @@ export class DxCardViewComponent<TRowData = any, TKey = any> extends DxComponent
 
 
     /**
+     * [descr:dxCardViewOptions.loadPanel]
+    
+     */
+    @Input()
+    get loadPanel(): dxLoadPanelOptions {
+        return this._getOption('loadPanel');
+    }
+    set loadPanel(value: dxLoadPanelOptions) {
+        this._setOption('loadPanel', value);
+    }
+
+
+    /**
+     * [descr:dxCardViewOptions.noDataTemplate]
+    
+     */
+    @Input()
+    get noDataTemplate(): any {
+        return this._getOption('noDataTemplate');
+    }
+    set noDataTemplate(value: any) {
+        this._setOption('noDataTemplate', value);
+    }
+
+
+    /**
+     * [descr:dxCardViewOptions.noDataText]
+    
+     */
+    @Input()
+    get noDataText(): string {
+        return this._getOption('noDataText');
+    }
+    set noDataText(value: string) {
+        this._setOption('noDataText', value);
+    }
+
+
+    /**
      * [descr:dxCardViewOptions.pager]
     
      */
@@ -383,6 +460,19 @@ export class DxCardViewComponent<TRowData = any, TKey = any> extends DxComponent
     }
     set rtlEnabled(value: boolean) {
         this._setOption('rtlEnabled', value);
+    }
+
+
+    /**
+     * [descr:dxCardViewOptions.scrolling]
+    
+     */
+    @Input()
+    get scrolling(): Record<string, any> {
+        return this._getOption('scrolling');
+    }
+    set scrolling(value: Record<string, any>) {
+        this._setOption('scrolling', value);
     }
 
 
@@ -586,6 +676,13 @@ export class DxCardViewComponent<TRowData = any, TKey = any> extends DxComponent
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
+    @Output() errorRowEnabledChange: EventEmitter<boolean>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
     @Output() focusStateEnabledChange: EventEmitter<boolean>;
 
     /**
@@ -628,6 +725,27 @@ export class DxCardViewComponent<TRowData = any, TKey = any> extends DxComponent
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
+    @Output() loadPanelChange: EventEmitter<dxLoadPanelOptions>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
+    @Output() noDataTemplateChange: EventEmitter<any>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
+    @Output() noDataTextChange: EventEmitter<string>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
     @Output() pagerChange: EventEmitter<Pager>;
 
     /**
@@ -650,6 +768,13 @@ export class DxCardViewComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Output() rtlEnabledChange: EventEmitter<boolean>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
+    @Output() scrollingChange: EventEmitter<Record<string, any>>;
 
     /**
     
@@ -737,16 +862,21 @@ export class DxCardViewComponent<TRowData = any, TKey = any> extends DxComponent
             { emit: 'dataSourceChange' },
             { emit: 'disabledChange' },
             { emit: 'elementAttrChange' },
+            { emit: 'errorRowEnabledChange' },
             { emit: 'focusStateEnabledChange' },
             { emit: 'headerPanelChange' },
             { emit: 'heightChange' },
             { emit: 'hintChange' },
             { emit: 'hoverStateEnabledChange' },
             { emit: 'keyExprChange' },
+            { emit: 'loadPanelChange' },
+            { emit: 'noDataTemplateChange' },
+            { emit: 'noDataTextChange' },
             { emit: 'pagerChange' },
             { emit: 'pagingChange' },
             { emit: 'remoteOperationsChange' },
             { emit: 'rtlEnabledChange' },
+            { emit: 'scrollingChange' },
             { emit: 'tabIndexChange' },
             { emit: 'toolbarChange' },
             { emit: 'visibleChange' },
@@ -806,19 +936,43 @@ export class DxCardViewComponent<TRowData = any, TKey = any> extends DxComponent
     DxoCardHeaderModule,
     DxiColumnModule,
     DxoHeaderPanelModule,
+    DxoLoadPanelModule,
+    DxoAnimationModule,
+    DxoHideModule,
+    DxoFromModule,
+    DxoPositionModule,
+    DxoAtModule,
+    DxoBoundaryOffsetModule,
+    DxoCollisionModule,
+    DxoMyModule,
+    DxoOffsetModule,
+    DxoToModule,
+    DxoShowModule,
     DxoPagerModule,
     DxoPagingModule,
     DxoRemoteOperationsModule,
     DxoToolbarModule,
     DxiItemModule,
+    DxoCardViewAnimationModule,
+    DxoCardViewAtModule,
+    DxoCardViewBoundaryOffsetModule,
     DxoCardViewCardCoverModule,
     DxoCardViewCardHeaderModule,
+    DxoCardViewCollisionModule,
     DxiCardViewColumnModule,
+    DxoCardViewFromModule,
     DxoCardViewHeaderPanelModule,
+    DxoCardViewHideModule,
     DxiCardViewItemModule,
+    DxoCardViewLoadPanelModule,
+    DxoCardViewMyModule,
+    DxoCardViewOffsetModule,
     DxoCardViewPagerModule,
     DxoCardViewPagingModule,
+    DxoCardViewPositionModule,
     DxoCardViewRemoteOperationsModule,
+    DxoCardViewShowModule,
+    DxoCardViewToModule,
     DxoCardViewToolbarModule,
     DxIntegrationModule,
     DxTemplateModule
@@ -832,19 +986,43 @@ export class DxCardViewComponent<TRowData = any, TKey = any> extends DxComponent
     DxoCardHeaderModule,
     DxiColumnModule,
     DxoHeaderPanelModule,
+    DxoLoadPanelModule,
+    DxoAnimationModule,
+    DxoHideModule,
+    DxoFromModule,
+    DxoPositionModule,
+    DxoAtModule,
+    DxoBoundaryOffsetModule,
+    DxoCollisionModule,
+    DxoMyModule,
+    DxoOffsetModule,
+    DxoToModule,
+    DxoShowModule,
     DxoPagerModule,
     DxoPagingModule,
     DxoRemoteOperationsModule,
     DxoToolbarModule,
     DxiItemModule,
+    DxoCardViewAnimationModule,
+    DxoCardViewAtModule,
+    DxoCardViewBoundaryOffsetModule,
     DxoCardViewCardCoverModule,
     DxoCardViewCardHeaderModule,
+    DxoCardViewCollisionModule,
     DxiCardViewColumnModule,
+    DxoCardViewFromModule,
     DxoCardViewHeaderPanelModule,
+    DxoCardViewHideModule,
     DxiCardViewItemModule,
+    DxoCardViewLoadPanelModule,
+    DxoCardViewMyModule,
+    DxoCardViewOffsetModule,
     DxoCardViewPagerModule,
     DxoCardViewPagingModule,
+    DxoCardViewPositionModule,
     DxoCardViewRemoteOperationsModule,
+    DxoCardViewShowModule,
+    DxoCardViewToModule,
     DxoCardViewToolbarModule,
     DxTemplateModule
   ]

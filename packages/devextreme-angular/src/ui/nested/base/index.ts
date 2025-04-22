@@ -43,6 +43,7 @@ export * from './html-editor-mention-dxi';
 export * from './html-editor-table-context-menu';
 export * from './html-editor-table-resizing';
 export * from './html-editor-variables';
+export * from './load-panel-options';
 export * from './pager';
 export * from './paging';
 export * from './popup-options';

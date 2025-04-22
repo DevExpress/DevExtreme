@@ -9,27 +9,32 @@ import dxCardView, {
 import { Component as BaseComponent, IHtmlOptions, ComponentRef, NestedComponentMeta } from "./core/component";
 import NestedOption from "./core/nested-option";
 
-import type { DataRow, Column as CardViewColumn, PredefinedToolbarItem, ToolbarItem } from "devextreme/ui/card_view";
-import type { template, ToolbarItemLocation, ToolbarItemComponent, Mode, DisplayMode } from "devextreme/common";
+import type { AnimationConfig, CollisionResolution, PositionConfig, AnimationState, AnimationType, CollisionResolutionCombination } from "devextreme/common/core/animation";
+import type { HorizontalAlignment, VerticalAlignment, template, Direction, ToolbarItemLocation, ToolbarItemComponent, PositionAlignment, Mode, DisplayMode } from "devextreme/common";
+import type { CardInfo, Column as CardViewColumn, PredefinedToolbarItem, ToolbarItem } from "devextreme/ui/card_view";
 import type { LocateInMenuMode, ShowTextMode } from "devextreme/ui/toolbar";
 import type { CollectionWidgetItem } from "devextreme/ui/collection/ui.collection_widget.base";
+import type { event } from "devextreme/events/events.types";
+import type { ContentReadyEvent, DisposingEvent, HiddenEvent, HidingEvent, InitializedEvent, OptionChangedEvent, ShowingEvent, ShownEvent } from "devextreme/ui/load_panel";
 import type { PagerPageSize } from "devextreme/common/grids";
 
-type ICardViewOptions<TRowData = any, TKey = any> = React.PropsWithChildren<Properties<TRowData, TKey> & IHtmlOptions & {
-  dataSource?: Properties<TRowData, TKey>["dataSource"];
+type ICardViewOptions<TCardData = any, TKey = any> = React.PropsWithChildren<Properties<TCardData, TKey> & IHtmlOptions & {
+  dataSource?: Properties<TCardData, TKey>["dataSource"];
   cardFooterRender?: (...params: any) => React.ReactNode;
   cardFooterComponent?: React.ComponentType<any>;
   cardRender?: (...params: any) => React.ReactNode;
   cardComponent?: React.ComponentType<any>;
+  noDataRender?: (...params: any) => React.ReactNode;
+  noDataComponent?: React.ComponentType<any>;
 }>
 
-interface CardViewRef<TRowData = any, TKey = any> {
-  instance: () => dxCardView<TRowData, TKey>;
+interface CardViewRef<TCardData = any, TKey = any> {
+  instance: () => dxCardView<TCardData, TKey>;
 }
 
 const CardView = memo(
   forwardRef(
-    <TRowData = any, TKey = any>(props: React.PropsWithChildren<ICardViewOptions<TRowData, TKey>>, ref: ForwardedRef<CardViewRef<TRowData, TKey>>) => {
+    <TCardData = any, TKey = any>(props: React.PropsWithChildren<ICardViewOptions<TCardData, TKey>>, ref: ForwardedRef<CardViewRef<TCardData, TKey>>) => {
       const baseRef = useRef<ComponentRef>(null);
 
       useImperativeHandle(ref, () => (
@@ -47,6 +52,7 @@ const CardView = memo(
         cardHeader: { optionName: "cardHeader", isCollectionItem: false },
         column: { optionName: "columns", isCollectionItem: true },
         headerPanel: { optionName: "headerPanel", isCollectionItem: false },
+        loadPanel: { optionName: "loadPanel", isCollectionItem: false },
         pager: { optionName: "pager", isCollectionItem: false },
         paging: { optionName: "paging", isCollectionItem: false },
         remoteOperations: { optionName: "remoteOperations", isCollectionItem: false },
@@ -64,10 +70,15 @@ const CardView = memo(
           render: "cardRender",
           component: "cardComponent"
         },
+        {
+          tmplOption: "noDataTemplate",
+          render: "noDataRender",
+          component: "noDataComponent"
+        },
       ]), []);
 
       return (
-        React.createElement(BaseComponent<React.PropsWithChildren<ICardViewOptions<TRowData, TKey>>>, {
+        React.createElement(BaseComponent<React.PropsWithChildren<ICardViewOptions<TCardData, TKey>>>, {
           WidgetClass: dxCardView,
           ref: baseRef,
           independentEvents,
@@ -78,8 +89,69 @@ const CardView = memo(
       );
     },
   ),
-) as <TRowData = any, TKey = any>(props: React.PropsWithChildren<ICardViewOptions<TRowData, TKey>> & { ref?: Ref<CardViewRef<TRowData, TKey>> }) => ReactElement | null;
+) as <TCardData = any, TKey = any>(props: React.PropsWithChildren<ICardViewOptions<TCardData, TKey>> & { ref?: Ref<CardViewRef<TCardData, TKey>> }) => ReactElement | null;
 
+
+// owners:
+// LoadPanel
+type IAnimationProps = React.PropsWithChildren<{
+  hide?: AnimationConfig;
+  show?: AnimationConfig;
+}>
+const _componentAnimation = (props: IAnimationProps) => {
+  return React.createElement(NestedOption<IAnimationProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "animation",
+      ExpectedChildren: {
+        hide: { optionName: "hide", isCollectionItem: false },
+        show: { optionName: "show", isCollectionItem: false }
+      },
+    },
+  });
+};
+
+const Animation = Object.assign<typeof _componentAnimation, NestedComponentMeta>(_componentAnimation, {
+  componentType: "option",
+});
+
+// owners:
+// Position
+type IAtProps = React.PropsWithChildren<{
+  x?: HorizontalAlignment;
+  y?: VerticalAlignment;
+}>
+const _componentAt = (props: IAtProps) => {
+  return React.createElement(NestedOption<IAtProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "at",
+    },
+  });
+};
+
+const At = Object.assign<typeof _componentAt, NestedComponentMeta>(_componentAt, {
+  componentType: "option",
+});
+
+// owners:
+// Position
+type IBoundaryOffsetProps = React.PropsWithChildren<{
+  x?: number;
+  y?: number;
+}>
+const _componentBoundaryOffset = (props: IBoundaryOffsetProps) => {
+  return React.createElement(NestedOption<IBoundaryOffsetProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "boundaryOffset",
+    },
+  });
+};
+
+const BoundaryOffset = Object.assign<typeof _componentBoundaryOffset, NestedComponentMeta>(_componentBoundaryOffset, {
+  componentType: "option",
+});
 
 // owners:
 // CardView
@@ -121,11 +193,30 @@ const CardHeader = Object.assign<typeof _componentCardHeader, NestedComponentMet
 });
 
 // owners:
+// Position
+type ICollisionProps = React.PropsWithChildren<{
+  x?: CollisionResolution;
+  y?: CollisionResolution;
+}>
+const _componentCollision = (props: ICollisionProps) => {
+  return React.createElement(NestedOption<ICollisionProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "collision",
+    },
+  });
+};
+
+const Collision = Object.assign<typeof _componentCollision, NestedComponentMeta>(_componentCollision, {
+  componentType: "option",
+});
+
+// owners:
 // CardView
 type IColumnProps = React.PropsWithChildren<{
-  fieldCaptionTemplate?: ((dataRow: DataRow) => string | any) | template;
-  fieldTemplate?: ((dataRow: DataRow) => string | any) | template;
-  fieldValueTemplate?: ((dataRow: DataRow) => string | any) | template;
+  fieldCaptionTemplate?: ((card: CardInfo) => string | any) | template;
+  fieldTemplate?: ((card: CardInfo) => string | any) | template;
+  fieldValueTemplate?: ((card: CardInfo) => string | any) | template;
   headerItemCssClass?: string;
   headerItemTemplate?: ((column: CardViewColumn) => string | any) | template;
   fieldCaptionRender?: (...params: any) => React.ReactNode;
@@ -169,6 +260,32 @@ const Column = Object.assign<typeof _componentColumn, NestedComponentMeta>(_comp
 });
 
 // owners:
+// Hide
+// Show
+type IFromProps = React.PropsWithChildren<{
+  left?: number;
+  opacity?: number;
+  position?: PositionConfig;
+  scale?: number;
+  top?: number;
+}>
+const _componentFrom = (props: IFromProps) => {
+  return React.createElement(NestedOption<IFromProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "from",
+      ExpectedChildren: {
+        position: { optionName: "position", isCollectionItem: false }
+      },
+    },
+  });
+};
+
+const From = Object.assign<typeof _componentFrom, NestedComponentMeta>(_componentFrom, {
+  componentType: "option",
+});
+
+// owners:
 // CardView
 type IHeaderPanelProps = React.PropsWithChildren<{
   dragging?: Record<string, any>;
@@ -193,6 +310,37 @@ const _componentHeaderPanel = (props: IHeaderPanelProps) => {
 };
 
 const HeaderPanel = Object.assign<typeof _componentHeaderPanel, NestedComponentMeta>(_componentHeaderPanel, {
+  componentType: "option",
+});
+
+// owners:
+// Animation
+type IHideProps = React.PropsWithChildren<{
+  complete?: (($element: any, config: AnimationConfig) => void);
+  delay?: number;
+  direction?: Direction | undefined;
+  duration?: number;
+  easing?: string;
+  from?: AnimationState;
+  staggerDelay?: number | undefined;
+  start?: (($element: any, config: AnimationConfig) => void);
+  to?: AnimationState;
+  type?: AnimationType;
+}>
+const _componentHide = (props: IHideProps) => {
+  return React.createElement(NestedOption<IHideProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "hide",
+      ExpectedChildren: {
+        from: { optionName: "from", isCollectionItem: false },
+        to: { optionName: "to", isCollectionItem: false }
+      },
+    },
+  });
+};
+
+const Hide = Object.assign<typeof _componentHide, NestedComponentMeta>(_componentHide, {
   componentType: "option",
 });
 
@@ -237,6 +385,111 @@ const _componentItem = (props: IItemProps) => {
 };
 
 const Item = Object.assign<typeof _componentItem, NestedComponentMeta>(_componentItem, {
+  componentType: "option",
+});
+
+// owners:
+// CardView
+type ILoadPanelProps = React.PropsWithChildren<{
+  animation?: Record<string, any> | {
+    hide?: AnimationConfig;
+    show?: AnimationConfig;
+  };
+  bindingOptions?: Record<string, any>;
+  closeOnOutsideClick?: boolean | ((event: event) => boolean);
+  container?: any | string | undefined;
+  deferRendering?: boolean;
+  delay?: number;
+  focusStateEnabled?: boolean;
+  height?: (() => number | string) | number | string;
+  hideOnOutsideClick?: boolean | ((event: event) => boolean);
+  hideOnParentScroll?: boolean;
+  hint?: string | undefined;
+  hoverStateEnabled?: boolean;
+  indicatorSrc?: string;
+  maxHeight?: (() => number | string) | number | string;
+  maxWidth?: (() => number | string) | number | string;
+  message?: string;
+  minHeight?: (() => number | string) | number | string;
+  minWidth?: (() => number | string) | number | string;
+  onContentReady?: ((e: ContentReadyEvent) => void);
+  onDisposing?: ((e: DisposingEvent) => void);
+  onHidden?: ((e: HiddenEvent) => void);
+  onHiding?: ((e: HidingEvent) => void);
+  onInitialized?: ((e: InitializedEvent) => void);
+  onOptionChanged?: ((e: OptionChangedEvent) => void);
+  onShowing?: ((e: ShowingEvent) => void);
+  onShown?: ((e: ShownEvent) => void);
+  position?: (() => void) | PositionAlignment | PositionConfig;
+  rtlEnabled?: boolean;
+  shading?: boolean;
+  shadingColor?: string;
+  showIndicator?: boolean;
+  showPane?: boolean;
+  visible?: boolean;
+  width?: (() => number | string) | number | string;
+  wrapperAttr?: any;
+  defaultPosition?: (() => void) | PositionAlignment | PositionConfig;
+  onPositionChange?: (value: (() => void) | PositionAlignment | PositionConfig) => void;
+  defaultVisible?: boolean;
+  onVisibleChange?: (value: boolean) => void;
+}>
+const _componentLoadPanel = (props: ILoadPanelProps) => {
+  return React.createElement(NestedOption<ILoadPanelProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "loadPanel",
+      DefaultsProps: {
+        defaultPosition: "position",
+        defaultVisible: "visible"
+      },
+      ExpectedChildren: {
+        animation: { optionName: "animation", isCollectionItem: false },
+        position: { optionName: "position", isCollectionItem: false }
+      },
+    },
+  });
+};
+
+const LoadPanel = Object.assign<typeof _componentLoadPanel, NestedComponentMeta>(_componentLoadPanel, {
+  componentType: "option",
+});
+
+// owners:
+// Position
+type IMyProps = React.PropsWithChildren<{
+  x?: HorizontalAlignment;
+  y?: VerticalAlignment;
+}>
+const _componentMy = (props: IMyProps) => {
+  return React.createElement(NestedOption<IMyProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "my",
+    },
+  });
+};
+
+const My = Object.assign<typeof _componentMy, NestedComponentMeta>(_componentMy, {
+  componentType: "option",
+});
+
+// owners:
+// Position
+type IOffsetProps = React.PropsWithChildren<{
+  x?: number;
+  y?: number;
+}>
+const _componentOffset = (props: IOffsetProps) => {
+  return React.createElement(NestedOption<IOffsetProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "offset",
+    },
+  });
+};
+
+const Offset = Object.assign<typeof _componentOffset, NestedComponentMeta>(_componentOffset, {
   componentType: "option",
 });
 
@@ -294,6 +547,54 @@ const Paging = Object.assign<typeof _componentPaging, NestedComponentMeta>(_comp
 });
 
 // owners:
+// From
+// To
+// LoadPanel
+type IPositionProps = React.PropsWithChildren<{
+  at?: Record<string, any> | PositionAlignment | {
+    x?: HorizontalAlignment;
+    y?: VerticalAlignment;
+  };
+  boundary?: any | string;
+  boundaryOffset?: Record<string, any> | string | {
+    x?: number;
+    y?: number;
+  };
+  collision?: CollisionResolutionCombination | Record<string, any> | {
+    x?: CollisionResolution;
+    y?: CollisionResolution;
+  };
+  my?: Record<string, any> | PositionAlignment | {
+    x?: HorizontalAlignment;
+    y?: VerticalAlignment;
+  };
+  of?: any | string;
+  offset?: Record<string, any> | string | {
+    x?: number;
+    y?: number;
+  };
+}>
+const _componentPosition = (props: IPositionProps) => {
+  return React.createElement(NestedOption<IPositionProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "position",
+      ExpectedChildren: {
+        at: { optionName: "at", isCollectionItem: false },
+        boundaryOffset: { optionName: "boundaryOffset", isCollectionItem: false },
+        collision: { optionName: "collision", isCollectionItem: false },
+        my: { optionName: "my", isCollectionItem: false },
+        offset: { optionName: "offset", isCollectionItem: false }
+      },
+    },
+  });
+};
+
+const Position = Object.assign<typeof _componentPosition, NestedComponentMeta>(_componentPosition, {
+  componentType: "option",
+});
+
+// owners:
 // CardView
 type IRemoteOperationsProps = React.PropsWithChildren<{
   filtering?: boolean;
@@ -311,6 +612,63 @@ const _componentRemoteOperations = (props: IRemoteOperationsProps) => {
 };
 
 const RemoteOperations = Object.assign<typeof _componentRemoteOperations, NestedComponentMeta>(_componentRemoteOperations, {
+  componentType: "option",
+});
+
+// owners:
+// Animation
+type IShowProps = React.PropsWithChildren<{
+  complete?: (($element: any, config: AnimationConfig) => void);
+  delay?: number;
+  direction?: Direction | undefined;
+  duration?: number;
+  easing?: string;
+  from?: AnimationState;
+  staggerDelay?: number | undefined;
+  start?: (($element: any, config: AnimationConfig) => void);
+  to?: AnimationState;
+  type?: AnimationType;
+}>
+const _componentShow = (props: IShowProps) => {
+  return React.createElement(NestedOption<IShowProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "show",
+      ExpectedChildren: {
+        from: { optionName: "from", isCollectionItem: false },
+        to: { optionName: "to", isCollectionItem: false }
+      },
+    },
+  });
+};
+
+const Show = Object.assign<typeof _componentShow, NestedComponentMeta>(_componentShow, {
+  componentType: "option",
+});
+
+// owners:
+// Hide
+// Show
+type IToProps = React.PropsWithChildren<{
+  left?: number;
+  opacity?: number;
+  position?: PositionConfig;
+  scale?: number;
+  top?: number;
+}>
+const _componentTo = (props: IToProps) => {
+  return React.createElement(NestedOption<IToProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "to",
+      ExpectedChildren: {
+        position: { optionName: "position", isCollectionItem: false }
+      },
+    },
+  });
+};
+
+const To = Object.assign<typeof _componentTo, NestedComponentMeta>(_componentTo, {
   componentType: "option",
 });
 
@@ -340,22 +698,46 @@ export {
   CardView,
   ICardViewOptions,
   CardViewRef,
+  Animation,
+  IAnimationProps,
+  At,
+  IAtProps,
+  BoundaryOffset,
+  IBoundaryOffsetProps,
   CardCover,
   ICardCoverProps,
   CardHeader,
   ICardHeaderProps,
+  Collision,
+  ICollisionProps,
   Column,
   IColumnProps,
+  From,
+  IFromProps,
   HeaderPanel,
   IHeaderPanelProps,
+  Hide,
+  IHideProps,
   Item,
   IItemProps,
+  LoadPanel,
+  ILoadPanelProps,
+  My,
+  IMyProps,
+  Offset,
+  IOffsetProps,
   Pager,
   IPagerProps,
   Paging,
   IPagingProps,
+  Position,
+  IPositionProps,
   RemoteOperations,
   IRemoteOperationsProps,
+  Show,
+  IShowProps,
+  To,
+  IToProps,
   Toolbar,
   IToolbarProps
 };
