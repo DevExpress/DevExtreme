@@ -298,3 +298,16 @@
     background-color: $htmleditor-cells-separator-bg;
   }
 }
+
+.dx-aidialog-controls {
+  gap: $generic-aidialog-selects-gap;
+
+  .dx-selectbox {
+    max-width: calc(50% - $generic-aidialog-selects-gap * 0.5);
+  }
+}
+
+.dx-aidialog-content {
+  padding: $generic-aidialog-content-padding;
+  gap: $generic-aidialog-content-gap;
+}

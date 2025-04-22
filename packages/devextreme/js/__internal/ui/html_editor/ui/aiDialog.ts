@@ -229,7 +229,7 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
   protected _getReplaceButtonItem(config?: ToolbarItem): ToolbarItem {
     return {
       toolbar: 'bottom',
-      location: 'before',
+      location: 'after',
       widget: 'dxDropDownButton',
       options: {
         text: localizationMessage.format('dxHtmlEditor-aiReplace'),
@@ -256,7 +256,7 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
   protected _getCopyButtonItem(config?: ToolbarItem): ToolbarItem {
     return {
       toolbar: 'bottom',
-      location: 'before',
+      location: 'after',
       widget: 'dxButton',
       options: {
         stylingMode: 'outlined',
@@ -273,7 +273,7 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
   protected _getTryAgainButtonItem(): ToolbarItem {
     return {
       toolbar: 'bottom',
-      location: 'after',
+      location: 'before',
       widget: 'dxButton',
       options: {
         stylingMode: 'outlined',
@@ -287,11 +287,11 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
   protected _getGenerateButtonItem(config?: ToolbarItem): ToolbarItem {
     return {
       toolbar: 'bottom',
-      location: 'before',
+      location: 'after',
       widget: 'dxButton',
       options: {
-        text: localizationMessage.format('dxHtmlEditor-aiGenerate'),
         type: 'default',
+        text: localizationMessage.format('dxHtmlEditor-aiGenerate'),
         stylingMode: 'contained',
         onClick: () => this._generateAIResponse(),
       },
@@ -305,6 +305,8 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
       location: 'after',
       widget: 'dxButton',
       options: {
+        type: 'default',
+        stylingMode: 'contained',
         text: localizationMessage.format('dxHtmlEditor-aiStop'),
         onClick: () => this._stopGeneration(),
       },
@@ -319,19 +321,19 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
       case DialogState.Initial:
       case DialogState.ResultReady:
         items.push(
-          this._getReplaceButtonItem(),
-          this._getCopyButtonItem(),
           this._getTryAgainButtonItem(),
+          this._getCopyButtonItem(),
+          this._getReplaceButtonItem(),
         );
         break;
       case DialogState.Asking:
-        items.push(this._getGenerateButtonItem(), this._getStopButtonItem({ disabled: true }));
+        items.push(this._getStopButtonItem({ disabled: true }), this._getGenerateButtonItem());
         break;
       case DialogState.Generating:
         items.push(
-          this._getReplaceButtonItem({ disabled: true }),
-          this._getCopyButtonItem({ disabled: true }),
           this._getStopButtonItem(),
+          this._getCopyButtonItem({ disabled: true }),
+          this._getReplaceButtonItem({ disabled: true }),
         );
         break;
       case DialogState.Error:

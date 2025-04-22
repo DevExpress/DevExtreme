@@ -337,8 +337,27 @@
   }
 }
 
-.dx-formdialog.dx-dropdowneditor-overlay.dx-popup-wrapper {
-  .dx-overlay-content {
-    box-shadow: $material-popup-overlay-content-shadow;
+.dx-aidialog {
+  .dx-toolbar.dx-popup-bottom {
+    padding: $material-aidialog-toolbar-padding;
+  }
+
+  .dx-formdialog.dx-dropdowneditor-overlay.dx-popup-wrapper {
+    .dx-overlay-content {
+      box-shadow: $material-popup-overlay-content-shadow;
+    }
+  }
+
+  .dx-aidialog-controls {
+    gap: $material-aidialog-selects-gap;
+
+    .dx-selectbox {
+      max-width: calc(50% - $material-aidialog-selects-gap * 0.5);
+    }
+  }
+
+  .dx-aidialog-content {
+    padding: $material-aidialog-content-padding;
+    gap: $material-aidialog-content-gap;
   }
 }
