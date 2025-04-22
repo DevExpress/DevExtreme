@@ -99,7 +99,7 @@ export type ToolbarItem = dxToolbarItem & {
  * @docid
  * @namespace DevExpress.ui.dxCardView
  */
-export interface FieldInfo {
+export interface FieldInfoType { // TODO: rename to FieldInfo
     /**
      * @public
      * @docid
@@ -134,7 +134,7 @@ export type CardInfo<TCardData = unknown, TKey = unknown> = {
      * @public
      * @docid
      */
-    fields: FieldInfo[];
+    fields: FieldInfoType[];
     /**
      * @public
      * @docid
