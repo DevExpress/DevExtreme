@@ -37,7 +37,7 @@ export class ItemsController {
     ),
     [
       this.dataController.items,
-      this.columnsController.columns,
+      this.columnsController.visibleColumns,
       this.selectedCardKeys,
       this.searchController.highlightTextOptions,
     ],

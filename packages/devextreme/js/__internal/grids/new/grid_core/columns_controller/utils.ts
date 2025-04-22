@@ -1,4 +1,4 @@
-import type { DataType } from '@js/common';
+import type { DataType, Format } from '@js/common';
 import { compileGetter } from '@js/core/utils/data';
 import dateSerialization from '@js/core/utils/date_serialization';
 import { captionize } from '@js/core/utils/inflector';
@@ -19,9 +19,11 @@ type TemplateNormalizationFunc = <T>(template: Template<T>) => ComponentType<T>;
 function normalizeColumn(
   column: PreNormalizedColumn,
   templateNormalizationFunc: TemplateNormalizationFunc,
+  inferred?: { dataType?: DataType; format?: Format | null },
 ): Column {
+  const effectiveDataType = column.dataType ?? inferred?.dataType;
   const dataTypeDefault = defaultColumnPropertiesByDataType[
-    column.dataType ?? defaultColumnProperties.dataType
+    effectiveDataType ?? defaultColumnProperties.dataType
   ];
 
   const caption = captionize(column.name);
@@ -31,6 +33,7 @@ function normalizeColumn(
     ...dataTypeDefault,
     caption,
     ...column,
+    ...effectiveDataType && { dataType: effectiveDataType },
   };
 
   return {
@@ -100,20 +103,20 @@ export function normalizeVisibleIndexes(
 export function normalizeColumns(
   columns: PreNormalizedColumn[],
   templateNormalizationFunc: TemplateNormalizationFunc,
-  firstItemDataTypes?: Record<string, { dataType?: DataType; format: string | null }> | null,
+  firstItemDataTypes?: Record<string, { dataType?: DataType; format: Format | null }> | null,
 ): Column[] {
   const normalizedColumns = columns.map((c) => {
-    const column = normalizeColumn(c, templateNormalizationFunc);
+    const inferred = c.name ? firstItemDataTypes?.[c.name] : undefined;
+    const column = normalizeColumn(c, templateNormalizationFunc, inferred);
 
     if (firstItemDataTypes && column.name && firstItemDataTypes[column.name]) {
       const { dataType, format } = firstItemDataTypes[column.name];
 
       if (dataType && column.dataType !== dataType) {
-        column.dataType = dataType;
+        column.dataType ??= dataType;
       }
 
       if (format !== undefined && format !== null && !column.format) {
-        // @ts-expect-error
         column.format = format;
       }
     }
@@ -180,13 +183,13 @@ export function getColumnByIndexOrName(
   return column;
 }
 
-export const getValueDataType = function (value: unknown): DataType | undefined {
+export const getValueDataType = function (value: unknown): DataType {
   let dataType: string | undefined = type(value);
   if (dataType !== 'string' && dataType !== 'boolean' && dataType !== 'number' && dataType !== 'date' && dataType !== 'object') {
     dataType = undefined;
   }
 
-  return dataType;
+  return dataType as DataType;
 };
 
 // @ts-expect-error
@@ -208,9 +211,9 @@ export const getSerializationFormat = function (dataType: string, value: unknown
   }
 };
 
-export const getColumnFormat = function (column: Partial<Pick<Column, 'format' | 'dataType'>>): string | null {
+export const getColumnFormat = function (column: Partial<Pick<Column, 'format' | 'dataType'>>): Format | null {
   if (column.format) {
-    return column.format as string;
+    return column.format;
   }
 
   if (column.dataType === 'date' || column.dataType === 'datetime') {

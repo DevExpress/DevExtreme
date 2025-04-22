@@ -1,5 +1,5 @@
 /* eslint-disable spellcheck/spell-checker */
-import type { DataType } from '@js/common';
+import type { DataType, Format } from '@js/common';
 import type { Subscribable, SubsGets, SubsGetsUpd } from '@ts/core/reactive/index';
 import {
   computed, interruptableComputed, state,
@@ -46,7 +46,7 @@ export class ColumnsController {
 
         if (!firstItems) return null;
 
-        const types: Record<string, { dataType: DataType | undefined; format: string | null }> = {};
+        const types: Record<string, { dataType: DataType; format: Format | null }> = {};
 
         for (const [field, value] of Object.entries(firstItems)) {
           const dataType = getValueDataType(value);
