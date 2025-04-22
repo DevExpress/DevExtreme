@@ -305,7 +305,10 @@ class MessageList extends Widget<Properties> {
       elementAttr: {
         class: CHAT_MESSAGELIST_CONTEXT_MENU_CLASS,
       },
-      hideOnParentScroll: true,
+      hideOnParentScroll: false,
+      overlayContainer: this._scrollView.content(),
+      // @ts-expect-error
+      visualContainer: this._scrollView.container(),
     });
 
     $contextMenu.appendTo(this.$element());

@@ -121,6 +121,8 @@ class ContextMenu extends MenuBase {
       onLeftLastItem: null,
       onCloseRootSubmenu: null,
       onExpandLastSubmenu: null,
+      hideOnParentScroll: true,
+      visualContainer: window,
     });
   }
 
@@ -553,8 +555,9 @@ class ContextMenu extends MenuBase {
       innerOverlay: true,
       hideOnOutsideClick: (e) => this._hideOnOutsideClickHandler(e),
       propagateOutsideClick: true,
-      hideOnParentScroll: true,
+      hideOnParentScroll: this.option('hideOnParentScroll'),
       deferRendering: false,
+      container: this.option('overlayContainer'),
       position: {
         // @ts-expect-error
         at: position.at,
@@ -562,6 +565,8 @@ class ContextMenu extends MenuBase {
         my: position.my,
         of: this._getTarget(),
         collision: 'flipfit',
+        boundary: this.option('visualContainer'),
+        boundaryOffset: { x: 20 },
       },
       shading: false,
       showTitle: false,
@@ -570,7 +575,7 @@ class ContextMenu extends MenuBase {
       onShown: this._overlayShownActionHandler.bind(this),
       onHiding: this._overlayHidingActionHandler.bind(this),
       onHidden: this._overlayHiddenActionHandler.bind(this),
-      visualContainer: window,
+      visualContainer: this.option('visualContainer'),
     };
     // @ts-expect-error
     return overlayOptions;
