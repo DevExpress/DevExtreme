@@ -99,7 +99,7 @@ export type ToolbarItem = dxToolbarItem & {
  * @docid
  * @namespace DevExpress.ui.dxCardView
  */
-export interface Cell {
+export interface FieldInfo {
     /**
      * @public
      * @docid
@@ -129,12 +129,12 @@ export interface Cell {
  * @docid
  * @namespace DevExpress.ui.dxCardView
  */
-export type DataRow<TRowData = unknown, TKey = unknown> = {
+export type CardInfo<TCardData = unknown, TKey = unknown> = {
     /**
      * @public
      * @docid
      */
-    cells: Cell[];
+    fields: FieldInfo[];
     /**
      * @public
      * @docid
@@ -144,7 +144,7 @@ export type DataRow<TRowData = unknown, TKey = unknown> = {
      * @public
      * @docid
      */
-    data: TRowData;
+    data: TCardData;
 };
 
 type InheritedColumnProps =
@@ -161,7 +161,7 @@ type InheritedColumnProps =
   | 'sortOrder'
   | 'sortIndex'
   | 'name'
-  | 'calculateCellValue'
+  | 'calculateCellValue' // TODO: move
   | 'calculateDisplayValue'
   | 'customizeText'
   ;
@@ -172,27 +172,27 @@ type InheritedColumnProps =
  * @namespace DevExpress.ui.dxCardView
  * @type object
  */
-export type ColumnProperties<TRowData = unknown, TKey = unknown> = Pick<ColumnBase<TRowData>, InheritedColumnProps> & {
+export type ColumnProperties<TCardData = unknown, TKey = unknown> = Pick<ColumnBase<TCardData>, InheritedColumnProps> & {
     /**
      * @public
      * @docid
      */
-    fieldTemplate?: template | ((dataRow: DataRow<TRowData, TKey>) => string | UserDefinedElement);
+    fieldTemplate?: template | ((card: CardInfo<TCardData, TKey>) => string | UserDefinedElement);
     /**
      * @public
      * @docid
      */
-    fieldCaptionTemplate?: template | ((dataRow: DataRow<TRowData, TKey>) => string | UserDefinedElement);
+    fieldCaptionTemplate?: template | ((card: CardInfo<TCardData, TKey>) => string | UserDefinedElement);
     /**
      * @public
      * @docid
      */
-    fieldValueTemplate?: template | ((dataRow: DataRow<TRowData, TKey>) => string | UserDefinedElement);
+    fieldValueTemplate?: template | ((card: CardInfo<TCardData, TKey>) => string | UserDefinedElement);
     /**
      * @public
      * @docid
      */
-    headerItemTemplate?: template | ((column: Column<TRowData, TKey>) => string | UserDefinedElement);
+    headerItemTemplate?: template | ((column: Column<TCardData, TKey>) => string | UserDefinedElement);
     /**
      * @public
      * @docid
@@ -208,8 +208,8 @@ type RequiredColumnProps = 'alignment' | 'dataType' | 'visible' | 'visibleIndex'
  * @type object
  * @namespace DevExpress.ui.dxCardView
  */
-export type Column<TRowData = unknown, TKey = unknown> =
-    Pick<Required<ColumnProperties<TRowData, TKey>>, RequiredColumnProps>
+export type Column<TCardData = unknown, TKey = unknown> =
+    Pick<Required<ColumnProperties<TCardData, TKey>>, RequiredColumnProps>
     & Omit<ColumnProperties, RequiredColumnProps>;
 
 // #endregion
@@ -220,7 +220,7 @@ export type Column<TRowData = unknown, TKey = unknown> =
  * @docid
  * @public
  */
-export type HeaderPanel<TRowData = unknown, TKey = unknown> = {
+export type HeaderPanel<TCardData = unknown, TKey = unknown> = {
     /**
      * @docid
      * @public
@@ -237,7 +237,7 @@ export type HeaderPanel<TRowData = unknown, TKey = unknown> = {
      * @docid
      * @public
      */
-    itemTemplate?: template | ((e: { column: Column<TRowData, TKey> }) => string | UserDefinedElement);
+    itemTemplate?: template | ((e: { column: Column<TCardData, TKey> }) => string | UserDefinedElement);
     /**
      * @docid
      * @public
@@ -254,17 +254,17 @@ export type HeaderPanel<TRowData = unknown, TKey = unknown> = {
  * @public
  * @namespace DevExpress.ui.dxCardView
  */
-export type CardCover<TRowData = unknown> = {
+export type CardCover<TCardData = unknown> = {
     /**
      * @docid
      * @public
      */
-    imageExpr: string | ((data: TRowData) => string);
+    imageExpr: string | ((data: TCardData) => string);
     /**
      * @docid
      * @public
      */
-    altExpr: string | ((data: TRowData) => string);
+    altExpr: string | ((data: TCardData) => string);
     /**
      * @docid
      * @public
@@ -298,7 +298,7 @@ export type CardHeader = {
  * @docid
  * @deprecated use Properties instead
  */
-export interface dxCardViewOptions<TRowData = unknown, TKey = unknown> extends WidgetOptions<dxCardView> {
+export interface dxCardViewOptions<TCardData = unknown, TKey = unknown> extends WidgetOptions<dxCardView> {
 
     // #region DataController
 
@@ -308,7 +308,7 @@ export interface dxCardViewOptions<TRowData = unknown, TKey = unknown> extends W
      * @type string | Array<any> | Store | DataSource | DataSourceOptions
      * @public
      */
-    dataSource?: DataSourceLike<TRowData, TKey>;
+    dataSource?: DataSourceLike<TCardData, TKey>;
     /**
      * @docid
      * @public
@@ -354,7 +354,7 @@ export interface dxCardViewOptions<TRowData = unknown, TKey = unknown> extends W
      * @public
      * @docid
      */
-    columns?: (ColumnProperties<TRowData, TKey> | string)[];
+    columns?: (ColumnProperties<TCardData, TKey> | string)[];
 
     // #endregion
 
@@ -363,7 +363,7 @@ export interface dxCardViewOptions<TRowData = unknown, TKey = unknown> extends W
     /**
      * @docid
      */
-    headerPanel?: HeaderPanel<TRowData, TKey>;
+    headerPanel?: HeaderPanel<TCardData, TKey>;
 
     // #endregion
 
@@ -422,17 +422,17 @@ export interface dxCardViewOptions<TRowData = unknown, TKey = unknown> extends W
      * @docid
      * @public
      */
-    cardCover?: CardCover<TRowData>;
+    cardCover?: CardCover<TCardData>;
     /**
      * @docid
      * @public
      */
-    cardTemplate?: template | ((row: DataRow) => string | UserDefinedElement);
+    cardTemplate?: template | ((card: CardInfo) => string | UserDefinedElement);
     /**
      * @docid
      * @public
      */
-    cardFooterTemplate?: template | ((row: DataRow) => string | UserDefinedElement);
+    cardFooterTemplate?: template | ((card: CardInfo) => string | UserDefinedElement);
     /**
      * @docid
      * @public
@@ -469,7 +469,7 @@ export interface dxCardViewOptions<TRowData = unknown, TKey = unknown> extends W
 }
 
 /** @public */
-export type Properties<TRowData = unknown, TKey = unknown> = dxCardViewOptions<TRowData, TKey>;
+export type Properties<TCardData = unknown, TKey = unknown> = dxCardViewOptions<TCardData, TKey>;
 
 /**
 * @docid
@@ -478,7 +478,7 @@ export type Properties<TRowData = unknown, TKey = unknown> = dxCardViewOptions<T
 * @public
 */
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-export default class dxCardView<TRowData = unknown, TKey = unknown> extends Widget<Properties> {
+export default class dxCardView<TCardData = unknown, TKey = unknown> extends Widget<Properties> {
 
 }
 
@@ -487,6 +487,6 @@ export {
     DataErrorOccurredInfo,
 };
 
-export type ExplicitTypes<TRowData = unknown, TKey = unknown> = {
-    Properties: Properties<TRowData, TKey>;
+export type ExplicitTypes<TCardData = unknown, TKey = unknown> = {
+    Properties: Properties<TCardData, TKey>;
 };
