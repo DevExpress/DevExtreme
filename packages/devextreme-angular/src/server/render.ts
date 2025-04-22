@@ -41,6 +41,11 @@ export class DxServerModule {
           jsx,
           container,
         ) => {
+          if (jsx === null) {
+            container.innerHTML = '';
+            return;
+          }
+
           container.innerHTML = renderToString(jsx);
         },
       });
