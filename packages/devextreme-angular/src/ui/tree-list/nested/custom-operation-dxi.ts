@@ -12,8 +12,7 @@ import {
 
 
 
-import { dxFilterBuilderField } from 'devextreme/ui/filter_builder';
-import { FieldInfo } from 'devextreme/ui/card_view';
+import { dxFilterBuilderField, FieldInfo } from 'devextreme/ui/filter_builder';
 import { DataType } from 'devextreme/common';
 
 import {

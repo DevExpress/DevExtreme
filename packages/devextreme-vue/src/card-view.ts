@@ -75,6 +75,7 @@ import { prepareConfigurationComponentConfig } from "./core/index";
 type AccessibleOptions = Pick<Properties,
   "accessKey" |
   "activeStateEnabled" |
+  "allowColumnReordering" |
   "cardCover" |
   "cardFooterTemplate" |
   "cardHeader" |
@@ -121,6 +122,7 @@ const componentConfig = {
   props: {
     accessKey: String,
     activeStateEnabled: Boolean,
+    allowColumnReordering: Boolean,
     cardCover: Object as PropType<CardCover | Record<string, any>>,
     cardFooterTemplate: {},
     cardHeader: Object as PropType<CardHeader | Record<string, any>>,
@@ -163,6 +165,7 @@ const componentConfig = {
     "update:hoveredElement": null,
     "update:accessKey": null,
     "update:activeStateEnabled": null,
+    "update:allowColumnReordering": null,
     "update:cardCover": null,
     "update:cardFooterTemplate": null,
     "update:cardHeader": null,

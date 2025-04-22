@@ -139,6 +139,19 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
 
 
     /**
+     * [descr:dxCardViewOptions.allowColumnReordering]
+    
+     */
+    @Input()
+    get allowColumnReordering(): boolean {
+        return this._getOption('allowColumnReordering');
+    }
+    set allowColumnReordering(value: boolean) {
+        this._setOption('allowColumnReordering', value);
+    }
+
+
+    /**
      * [descr:dxCardViewOptions.cardCover]
     
      */
@@ -599,6 +612,13 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
+    @Output() allowColumnReorderingChange: EventEmitter<boolean>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
     @Output() cardCoverChange: EventEmitter<CardCover>;
 
     /**
@@ -851,6 +871,7 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
             { subscribe: 'optionChanged', emit: 'onOptionChanged' },
             { emit: 'accessKeyChange' },
             { emit: 'activeStateEnabledChange' },
+            { emit: 'allowColumnReorderingChange' },
             { emit: 'cardCoverChange' },
             { emit: 'cardFooterTemplateChange' },
             { emit: 'cardHeaderChange' },

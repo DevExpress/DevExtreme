@@ -10072,6 +10072,11 @@ declare module DevExpress.ui {
     )[];
 
     /**
+     * [descr:dxCardViewOptions.allowColumnReordering]
+     */
+    allowColumnReordering?: boolean;
+
+    /**
      * [descr:dxCardViewOptions.headerPanel]
      */
     headerPanel?: DevExpress.ui.dxCardView.HeaderPanel<TCardData, TKey>;
@@ -10156,6 +10161,7 @@ declare module DevExpress.ui {
       >;
       visible?: boolean | undefined;
       disabled?: boolean;
+      multiline?: boolean;
     };
   }
   /**
@@ -32003,7 +32009,7 @@ declare module DevExpress.ui.dxCardView {
     /**
      * [descr:CardInfo.fields]
      */
-    fields: FieldInfo[];
+    fields: FieldInfoType[];
     /**
      * [descr:CardInfo.key]
      */
@@ -32067,23 +32073,23 @@ declare module DevExpress.ui.dxCardView {
   };
 
   /**
-   * [descr:FieldInfo]
+   * [descr:FieldInfoType]
    */
-  export interface FieldInfo {
+  export interface FieldInfoType {
     /**
-     * [descr:FieldInfo.value]
+     * [descr:FieldInfoType.value]
      */
     value: unknown;
     /**
-     * [descr:FieldInfo.displayValue]
+     * [descr:FieldInfoType.displayValue]
      */
     displayValue: unknown;
     /**
-     * [descr:FieldInfo.text]
+     * [descr:FieldInfoType.text]
      */
     text: string;
     /**
-     * [descr:FieldInfo.column]
+     * [descr:FieldInfoType.column]
      */
     column: Column;
   }

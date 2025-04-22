@@ -119,6 +119,7 @@ import {
 import {
  dxFilterBuilderOptions,
  dxFilterBuilderField,
+ FieldInfo,
  FilterBuilderOperation,
  dxFilterBuilderCustomOperation,
  GroupOperation,
@@ -170,9 +171,6 @@ import {
  FormItemComponent,
  FormItemType,
 } from "devextreme/ui/form";
-import {
- FieldInfo,
-} from "devextreme/ui/card_view";
 import {
  EventInfo,
 } from "devextreme/common/core/events";
