@@ -1,5 +1,5 @@
 import { Mode, template } from '../common';
-import { UserDefinedElement } from '../core/element';
+import { UserDefinedElement, DxElement } from '../core/element';
 import {
  ColumnBase, DataErrorOccurredInfo, Pager, ScrollingBase,
 } from '../common/grids';
@@ -9,6 +9,7 @@ import { EventInfo } from '../events';
 import { dxToolbarItem, ToolbarItemLocation } from './toolbar';
 import { dxSortableOptions } from './sortable';
 import { dxLoadPanelOptions } from './load_panel';
+import dxScrollable from './scroll_view/ui.scrollable';
 
 /**
  * @docid
@@ -129,7 +130,12 @@ export interface FieldInfoType { // TODO: rename to FieldInfo
  * @docid
  * @namespace DevExpress.ui.dxCardView
  */
-export type CardInfo<TCardData = unknown, TKey = unknown> = {
+export type CardInfo<TCardData = unknown, TKey = unknown> = { // TODO: sync to impl
+    /**
+     * @public
+     * @docid
+     */
+    index: Column[];
     /**
      * @public
      * @docid
@@ -145,6 +151,17 @@ export type CardInfo<TCardData = unknown, TKey = unknown> = {
      * @docid
      */
     data: TCardData;
+    /**
+     * @public
+     * @docid
+     */
+    isSelected: boolean;
+    /**
+     * @public
+     * @type Array<any>
+     * @docid
+     */
+    values: any[];
 };
 
 type InheritedColumnProps =
@@ -491,7 +508,48 @@ export type Properties<TCardData = unknown, TKey = unknown> = dxCardViewOptions<
 */
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export default class dxCardView<TCardData = unknown, TKey = unknown> extends Widget<Properties> {
-
+    /**
+     * @docid
+     * @publicName getCardElement(cardIndex)
+     * @public
+     */
+    getCardElement(cardIndex: number): DxElement;
+    /**
+     * @docid
+     * @publicName getVisibleCards()
+     * @public
+     */
+    getVisibleCards(): CardInfo[];
+    /**
+     * @docid
+     * @publicName getCardIndexByKey(key)
+     * @public
+     */
+    getCardIndexByKey(key: TKey): number;
+    /**
+     * @docid
+     * @publicName getKeyByCardIndex(cardIndex)
+     * @public
+     */
+    getKeyByCardIndex(cardIndex: number): TKey;
+    /**
+     * @docid
+     * @publicName getScrollable()
+     * @public
+     */
+    getScrollable(): dxScrollable;
+    /**
+     * @docid
+     * @publicName beginCustomLoading(text)
+     * @public
+    */
+    beginCustomLoading(text?: string): void;
+    /**
+     * @docid
+     * @publicName endCustomLoading()
+     * @public
+    */
+    endCustomLoading(): void;
 }
 
 export {

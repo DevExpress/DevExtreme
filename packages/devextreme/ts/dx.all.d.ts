@@ -9940,7 +9940,36 @@ declare module DevExpress.ui {
   export class dxCardView<
     TCardData = unknown,
     TKey = unknown
-  > extends Widget<DevExpress.ui.dxCardView.Properties> {}
+  > extends Widget<DevExpress.ui.dxCardView.Properties> {
+    /**
+     * [descr:dxCardView.getCardElement(cardIndex)]
+     */
+    getCardElement(cardIndex: number): DevExpress.core.DxElement;
+    /**
+     * [descr:dxCardView.getVisibleCards()]
+     */
+    getVisibleCards(): DevExpress.ui.dxCardView.CardInfo[];
+    /**
+     * [descr:dxCardView.getCardIndexByKey(key)]
+     */
+    getCardIndexByKey(key: TKey): number;
+    /**
+     * [descr:dxCardView.getKeyByCardIndex(cardIndex)]
+     */
+    getKeyByCardIndex(cardIndex: number): TKey;
+    /**
+     * [descr:dxCardView.getScrollable()]
+     */
+    getScrollable(): dxScrollable;
+    /**
+     * [descr:dxCardView.beginCustomLoading(text)]
+     */
+    beginCustomLoading(text?: string): void;
+    /**
+     * [descr:dxCardView.endCustomLoading()]
+     */
+    endCustomLoading(): void;
+  }
   module dxCardView {
     /**
      * [descr:HeaderPanel]
@@ -32007,6 +32036,10 @@ declare module DevExpress.ui.dxCardView {
    */
   export type CardInfo<TCardData = unknown, TKey = unknown> = {
     /**
+     * [descr:CardInfo.index]
+     */
+    index: Column[];
+    /**
      * [descr:CardInfo.fields]
      */
     fields: FieldInfoType[];
@@ -32018,6 +32051,14 @@ declare module DevExpress.ui.dxCardView {
      * [descr:CardInfo.data]
      */
     data: TCardData;
+    /**
+     * [descr:CardInfo.isSelected]
+     */
+    isSelected: boolean;
+    /**
+     * [descr:CardInfo.values]
+     */
+    values: any[];
   };
   /**
    * [descr:Column]
