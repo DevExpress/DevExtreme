@@ -19,8 +19,8 @@ const setup = (options: Options = {}) => {
 };
 
 describe('ItemsController', () => {
-  describe('createDataRow', () => {
-    it('should process data object to data row using column configuration', () => {
+  describe('createCardInfo', () => {
+    it('should process data object to cardInfo using column configuration', () => {
       const dataObject = { id: 1, a: 'my a value', b: 'my b value' };
       const { columnsController, itemsController } = setup({
         keyExpr: 'id',
@@ -32,11 +32,11 @@ describe('ItemsController', () => {
       });
 
       const columns = columnsController.columns.peek();
-      const dataRow = itemsController.createDataRow(dataObject, columns, 0);
-      expect(dataRow).toMatchSnapshot();
+      const CardInfo = itemsController.createCardInfo(dataObject, columns, 0);
+      expect(CardInfo).toMatchSnapshot();
     });
 
-    it('should process data object to data row using column configuration', () => {
+    it('should process data object to cardInfo using column configuration', () => {
       const dataObject = { id: 1, a: 'my a value', b: 'my b value' };
       const { columnsController, itemsController } = setup({
         keyExpr: 'id',
@@ -48,8 +48,8 @@ describe('ItemsController', () => {
       });
 
       const columns = columnsController.columns.peek();
-      const dataRow = itemsController.createDataRow(dataObject, columns, 0, [1]);
-      expect(dataRow).toMatchSnapshot();
+      const CardInfo = itemsController.createCardInfo(dataObject, columns, 0, [1]);
+      expect(CardInfo).toMatchSnapshot();
     });
   });
 

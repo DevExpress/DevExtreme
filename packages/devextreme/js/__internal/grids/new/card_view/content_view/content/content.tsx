@@ -1,11 +1,10 @@
 /* eslint-disable
-  @typescript-eslint/no-non-null-assertion,
   spellcheck/spell-checker
 */
 import { isCommandKeyPressed } from '@js/common/core/events/utils';
 import { combineClasses } from '@ts/core/utils/combine_classes';
 import type { SelectCardOptions } from '@ts/grids/new/card_view/content_view/types';
-import type { DataRow } from '@ts/grids/new/grid_core/columns_controller/types';
+import type { CardInfo } from '@ts/grids/new/grid_core/columns_controller/types';
 import type { Key } from '@ts/grids/new/grid_core/data_controller/types';
 import {
   KbnNavigationContainer,
@@ -19,7 +18,7 @@ import { Card } from './card/card';
 import type { CardHeaderItem } from './card/header';
 
 export interface ContentProps {
-  items: DataRow[];
+  items: CardInfo[];
 
   kbnEnabled: boolean;
 
@@ -34,7 +33,7 @@ export interface ContentProps {
 
   onRowHeightChange?: (value: number) => void;
 
-  showContextMenu?: (e: MouseEvent, card?: DataRow, cardIndex?: number) => void;
+  showContextMenu?: (e: MouseEvent, card?: CardInfo, cardIndex?: number) => void;
 
   cardsPerRow?: number;
 
@@ -46,11 +45,11 @@ export interface ContentProps {
     toolbar?: CardHeaderItem[];
     minWidth?: number;
     maxWidth?: number;
-    selectCard: (row: DataRow, options: SelectCardOptions) => void;
+    selectCard: (card: CardInfo, options: SelectCardOptions) => void;
     onSelectAllCards?: () => void;
     onSearchFocus?: () => void;
     onCardContentKeyDown?: (event: KeyboardEvent) => void;
-    onFocusedCardChanged?: (card: DataRow, cardIdx: number, element: HTMLElement) => void;
+    onFocusedCardChanged?: (card: CardInfo, cardIdx: number, element: HTMLElement) => void;
     onEdit?: (key: Key, returnFocusTo?: HTMLElement) => void;
     onDelete?: (key: Key, returnFocusTo?: HTMLElement) => void;
   };
@@ -67,7 +66,7 @@ export const CLASSES = {
 
 const CardWithKbn = withKeyDownHandler(withKbnNavigationItem(Card));
 
-function getInfernoCardKey(card: DataRow): undefined | string | number {
+function getInfernoCardKey(card: CardInfo): undefined | string | number {
   if (typeof card.key === 'string' || typeof card.key === 'number') {
     return card.key;
   }
@@ -192,7 +191,7 @@ export class Content extends Component<ContentProps> {
                 },
               }}
               caughtEventPreventDefault={true}
-              row={item}
+              card={item}
               onContextMenu={(e) => {
                 this.props.showContextMenu?.(e, item, idx);
               }}

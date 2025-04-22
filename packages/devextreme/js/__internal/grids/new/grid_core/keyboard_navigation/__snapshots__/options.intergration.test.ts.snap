@@ -2,7 +2,10 @@
 
 exports[`Options KeyboardNavigation onFocusedCardChanged common API contract test 1`] = `
 {
-  "cells": [
+  "data": {
+    "id": 1,
+  },
+  "fields": [
     {
       "column": {
         "alignment": "left",
@@ -13,14 +16,14 @@ exports[`Options KeyboardNavigation onFocusedCardChanged common API contract tes
         "allowReordering": true,
         "allowSearch": true,
         "allowSorting": true,
-        "calculateCellValue": [Function],
         "calculateDisplayValue": [Function],
+        "calculateFieldValue": [Function],
         "calculateFilterExpression": [Function],
         "caption": "Id",
         "captionTemplate": undefined,
         "dataField": "id",
         "dataType": "string",
-        "defaultSetCellValue": [Function],
+        "defaultSetFieldValue": [Function],
         "editorOptions": {},
         "falseText": "false",
         "fieldTemplate": undefined,
@@ -39,7 +42,7 @@ exports[`Options KeyboardNavigation onFocusedCardChanged common API contract tes
         "headerItemTemplate": undefined,
         "headerPanelIndex": 0,
         "name": "id",
-        "setCellValue": [Function],
+        "setFieldValue": [Function],
         "showInColumnChooser": true,
         "trueText": "true",
         "validationRules": [],
@@ -54,9 +57,6 @@ exports[`Options KeyboardNavigation onFocusedCardChanged common API contract tes
       "value": 1,
     },
   ],
-  "data": {
-    "id": 1,
-  },
   "index": 1,
   "isSelected": false,
   "key": 1,

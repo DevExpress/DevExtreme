@@ -3,16 +3,16 @@ import type { DataType } from '@js/common';
 import messageLocalization from '@js/localization/message';
 import filterUtils from '@js/ui/shared/filtering';
 
-import { defaultSetCellValue } from '../editing/utils';
+import { defaultSetFieldValue } from '../editing/utils';
 import type { Template, WithRequired } from '../types';
-import type { Cell, Column } from './types';
+import type { Column, FieldInfo } from './types';
 
 interface NonNormalizedColumnOptions {
   calculateDisplayValue: string | ((this: Column, data: unknown) => unknown);
   headerItemTemplate?: Template<{ column: Column }>;
-  fieldTemplate?: Template<{ cell: Cell }>;
-  captionTemplate?: Template<{ cell: Cell }>;
-  valueTemplate?: Template<{ cell: Cell }>;
+  fieldTemplate?: Template<{ field: FieldInfo }>;
+  captionTemplate?: Template<{ field: FieldInfo }>;
+  valueTemplate?: Template<{ field: FieldInfo }>;
 }
 
 export type ColumnSettings = Partial<
@@ -26,12 +26,12 @@ export type ColumnProperties = ColumnSettings | string;
 
 export const defaultColumnProperties = {
   dataType: 'string',
-  calculateCellValue(data): unknown {
+  calculateFieldValue(data): unknown {
     // @ts-expect-error
     return data[this.dataField!];
   },
   calculateDisplayValue(data): unknown {
-    return this.calculateCellValue(data);
+    return this.calculateFieldValue(data);
   },
   calculateFilterExpression: filterUtils.defaultCalculateFilterExpression,
   alignment: 'left',
@@ -49,8 +49,8 @@ export const defaultColumnProperties = {
   allowEditing: true,
   editorOptions: {},
   formItem: {},
-  setCellValue: defaultSetCellValue,
-  defaultSetCellValue,
+  setFieldValue: defaultSetFieldValue,
+  defaultSetFieldValue,
 } satisfies Partial<Column>;
 
 export const defaultColumnPropertiesByDataType: Record<

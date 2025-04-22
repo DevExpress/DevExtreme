@@ -1,6 +1,6 @@
 import { isCommandKeyPressed } from '@js/common/core/events/utils/index';
 import type { ValueChangedEvent } from '@js/ui/check_box';
-import type { DataRow } from '@ts/grids/new/grid_core/columns_controller/types';
+import type { CardInfo } from '@ts/grids/new/grid_core/columns_controller/types';
 import { Toolbar } from '@ts/grids/new/grid_core/inferno_wrappers/toolbar';
 import { Component } from 'inferno';
 
@@ -13,7 +13,7 @@ export const CLASSES = {
 
 export interface CheckBoxClickEvent {
   event?: MouseEvent;
-  row: DataRow;
+  card: CardInfo;
 }
 
 export interface CardHeaderItem {
@@ -32,28 +32,28 @@ export interface CardHeaderProps {
   visible?: boolean;
   captionExpr?: string;
   template?: (items: CardHeaderItem[]) => JSX.Element;
-  row?: DataRow;
+  card?: CardInfo;
   isCheckBoxesRendered?: boolean;
-  selectCard?: (row: DataRow, options: SelectCardOptions) => void;
+  selectCard?: (card: CardInfo, options: SelectCardOptions) => void;
   onEdit?: () => void;
   onDelete?: () => void;
 }
 
 export class CardHeader extends Component<CardHeaderProps> {
   private getCheckBoxItem(): CardHeaderItem | null {
-    const { isCheckBoxesRendered, selectCard, row } = this.props;
+    const { isCheckBoxesRendered, selectCard, card } = this.props;
 
-    if (row && isCheckBoxesRendered) {
+    if (card && isCheckBoxesRendered) {
       return {
         location: 'before',
         widget: 'dxCheckBox',
         cssClass: CLASSES.cardSelectCheckBox,
         options: {
-          value: row.isSelected,
+          value: card.isSelected,
           onValueChanged: (e: ValueChangedEvent): void => {
             const event = e.event as MouseEvent;
 
-            selectCard?.(row, {
+            selectCard?.(card, {
               control: isCommandKeyPressed(event),
               shift: event.shiftKey,
               needToUpdateCheckboxes: true,
@@ -73,7 +73,7 @@ export class CardHeader extends Component<CardHeaderProps> {
       items = [],
       captionExpr,
       template,
-      row,
+      card,
       allowUpdating,
       allowDeleting,
       onEdit,
@@ -86,8 +86,8 @@ export class CardHeader extends Component<CardHeaderProps> {
 
     const checkBoxItem = this.getCheckBoxItem();
 
-    const captionItem: CardHeaderItem | null = captionExpr && row?.[captionExpr]
-      ? { location: 'before', text: row[captionExpr] }
+    const captionItem: CardHeaderItem | null = captionExpr && card?.[captionExpr]
+      ? { location: 'before', text: card[captionExpr] }
       : null;
 
     const updateButton: CardHeaderItem | null = allowUpdating

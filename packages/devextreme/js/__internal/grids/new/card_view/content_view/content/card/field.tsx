@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 
-import type { Cell } from '@ts/grids/new/grid_core/columns_controller/types';
+import type { FieldInfo } from '@ts/grids/new/grid_core/columns_controller/types';
 import type { ComponentType, RefObject } from 'inferno';
 import { Component, createRef } from 'inferno';
 
@@ -15,17 +15,17 @@ export const CLASSES = {
 export interface FieldProps {
   cellHintEnabled?: boolean;
   elementRef?: RefObject<HTMLDivElement>;
-  captionTemplate?: ComponentType<{ cell: Cell }>;
-  valueTemplate?: ComponentType<{ cell: Cell }>;
+  captionTemplate?: ComponentType<{ field: FieldInfo }>;
+  valueTemplate?: ComponentType<{ field: FieldInfo }>;
 
-  cell: Cell;
+  field: FieldInfo;
 
   onClick?: (e: MouseEvent) => void;
   onDblClick?: (e: MouseEvent) => void;
   onHoverChanged?: (hovered: boolean) => void;
   onPrepared?: (element: HTMLElement) => void;
 
-  template?: ComponentType<{ cell: Cell }>;
+  template?: ComponentType<{ field: FieldInfo }>;
 }
 
 export class Field extends Component<FieldProps> {
@@ -46,7 +46,7 @@ export class Field extends Component<FieldProps> {
     if (Template) {
       return (
         <div className={CLASSES.fieldTemplate}>
-          <Template cell={this.props.cell}/>
+          <Template field={this.props.field}/>
         </div>
       );
     }
@@ -54,11 +54,11 @@ export class Field extends Component<FieldProps> {
     return (
       <>
         <Caption
-          cell={this.props.cell}
+          field={this.props.field}
           template={this.props.captionTemplate}
         />
         <ValueText
-          cell={this.props.cell}
+          field={this.props.field}
           template={this.props.valueTemplate}
         />
       </>

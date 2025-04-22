@@ -9,7 +9,7 @@ import { DataController } from '@ts/grids/new/grid_core/data_controller/index';
 import { ShowCheckBoxesMode } from '@ts/grids/new/grid_core/selection/const';
 import Selection from '@ts/ui/selection/m_selection';
 
-import type { DataRow } from '../columns_controller/types';
+import type { CardInfo } from '../columns_controller/types';
 import type { Key } from '../data_controller/types';
 import { ItemsController } from '../items_controller/items_controller';
 import { OptionsController } from '../options_controller/options_controller';
@@ -344,12 +344,12 @@ export class SelectionController {
     return selectionHelper?.clearSelection();
   }
 
-  public getSelectedCards(): DataRow[] {
+  public getSelectedCards(): CardInfo[] {
     const selectedCardKey = this.getSelectedCardKeys();
 
     return selectedCardKey
-      .map((key) => this.itemsController.getRowByKey(key))
-      .filter((item): item is DataRow => !!item);
+      .map((key) => this.itemsController.getCardByKey(key))
+      .filter((item): item is CardInfo => !!item);
   }
 
   public getSelectedCardKeys(): Key[] {
@@ -366,7 +366,7 @@ export class SelectionController {
     this._isCheckBoxesVisible.value = value;
   }
 
-  public processLongTap(row: DataRow): void {
+  public processLongTap(card: CardInfo): void {
     const { mode, showCheckBoxesMode } = this.selectionOption.peek();
 
     if (mode !== SelectionMode.None) {
@@ -377,7 +377,7 @@ export class SelectionController {
           this._isCheckBoxesVisible.value = true;
         }
         if (showCheckBoxesMode !== ShowCheckBoxesMode.Always) {
-          this.changeCardSelection(row.index, { control: true });
+          this.changeCardSelection(card.index, { control: true });
         }
       }
     }

@@ -5,8 +5,8 @@ import { render } from 'inferno';
 import { Card } from './card';
 
 const props = {
-  row: {
-    cells: [
+  card: {
+    fields: [
       {
         column: {
           dataField: 'Name',

@@ -38,6 +38,8 @@ function normalizeColumn(
     fieldTemplate: templateNormalizationFunc(colWithDefaults.fieldTemplate),
     captionTemplate: templateNormalizationFunc(colWithDefaults.captionTemplate),
     valueTemplate: templateNormalizationFunc(colWithDefaults.valueTemplate),
+    // @ts-expect-error for compatibility
+    calculateCellValue: colWithDefaults.calculateFieldValue,
   };
 }
 

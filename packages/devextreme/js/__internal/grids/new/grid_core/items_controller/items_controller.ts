@@ -5,7 +5,7 @@ import { ColumnsController } from '@ts/grids/new/grid_core/columns_controller/co
 import { DataController } from '@ts/grids/new/grid_core/data_controller/data_controller';
 import { SearchController } from '@ts/grids/new/grid_core/search/index';
 
-import type { Column, DataRow } from '../columns_controller/types';
+import type { CardInfo, Column } from '../columns_controller/types';
 import type { DataObject, Key } from '../data_controller/types';
 
 export class ItemsController {
@@ -17,7 +17,7 @@ export class ItemsController {
     SearchController,
   ] as const;
 
-  public readonly additionalItems = signal<DataRow[]>([]);
+  public readonly additionalItems = signal<CardInfo[]>([]);
 
   public readonly items = computed(
     () => {
@@ -26,7 +26,7 @@ export class ItemsController {
       // eslint-disable-next-line @typescript-eslint/no-unused-expressions
       this.searchController.highlightTextOptions.value;
       return this.dataController.items.value.map(
-        (item, itemIndex) => this.createDataRow(
+        (item, itemIndex) => this.createCardInfo(
           item,
           this.columnsController.visibleColumns.value,
           itemIndex,
@@ -48,22 +48,22 @@ export class ItemsController {
     this.selectedCardKeys.value = keys;
   }
 
-  public findItemByKey(items: DataRow[], key: Key): DataRow | null {
+  public findItemByKey(items: CardInfo[], key: Key): CardInfo | null {
     return items.find((item) => item.key === key) ?? null;
   }
 
-  public createDataRow(
+  public createCardInfo(
     data: DataObject,
     columns: Column[],
     itemIndex: number,
     selectedCardKeys?: Key[],
     key?: Key,
-  ): DataRow {
+  ): CardInfo {
     const itemKey = key ?? this.dataController.getDataKey(data);
 
     return {
-      cells: columns.map((column, index) => {
-        const value = column.calculateCellValue(data);
+      fields: columns.map((column, index) => {
+        const value = column.calculateFieldValue(data);
         const displayValue = column.calculateDisplayValue(data);
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const formattedText = formatHelper.format(displayValue as any, column.format);
@@ -89,7 +89,8 @@ export class ItemsController {
     };
   }
 
-  public getRowByKey(key: Key): DataRow | undefined {
+  // TODO: remove this method, it is duplicated
+  public getCardByKey(key: Key): CardInfo | undefined {
     const items = this.items.peek();
 
     return items.find((item) => equalByValue(item.key, key));

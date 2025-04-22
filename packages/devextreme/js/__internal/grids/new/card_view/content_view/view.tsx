@@ -7,7 +7,7 @@ import { compileGetter } from '@js/core/utils/data';
 import { isDefined } from '@js/core/utils/type';
 import { computed, effect, signal } from '@preact/signals-core';
 import type { OptionsController } from '@ts/grids/new/card_view/options_controller';
-import type { DataRow } from '@ts/grids/new/grid_core/columns_controller/types';
+import type { CardInfo } from '@ts/grids/new/grid_core/columns_controller/types';
 import {
   NavigationStrategyMatrix,
 } from '@ts/grids/new/grid_core/keyboard_navigation/index';
@@ -95,12 +95,12 @@ export class ContentView extends ContentViewBase<ContentViewProps> {
           onPrepared: this.options.action('onCardPrepared').value,
           onEdit: (key: Key, returnFocusTo?: HTMLElement) => {
             this.keyboardNavigationController.setReturnFocusTo(returnFocusTo);
-            this.editingController.editRow(key);
+            this.editingController.editCard(key);
           },
           onDelete: (key: Key, returnFocusTo?: HTMLElement) => {
             this.keyboardNavigationController.setReturnFocusTo(returnFocusTo);
             // eslint-disable-next-line @typescript-eslint/no-floating-promises
-            this.editingController.deleteRow(key);
+            this.editingController.deleteCard(key);
           },
           allowUpdating: this.editingController.allowUpdating.value,
           allowDeleting: this.editingController.allowDeleting.value,
@@ -122,7 +122,7 @@ export class ContentView extends ContentViewBase<ContentViewProps> {
           onSearchFocus: () => {
             this.searchUIController.doUIAction('focusSearchTextBox');
           },
-          onFocusedCardChanged: (card: DataRow, cardIdx: number, element: HTMLElement) => {
+          onFocusedCardChanged: (card: CardInfo, cardIdx: number, element: HTMLElement) => {
             this.keyboardNavigationController.onFocusedCardChanged(card, cardIdx, element);
           },
         },
@@ -140,19 +140,19 @@ export class ContentView extends ContentViewBase<ContentViewProps> {
     return compileGetter(expr);
   }
 
-  private selectCard(row: DataRow, options: SelectCardOptions) {
+  private selectCard(card: CardInfo, options: SelectCardOptions) {
     if (options.needToUpdateCheckboxes) {
       this.selectionController.updateSelectionCheckBoxesVisible(true);
     }
 
-    this.selectionController.changeCardSelection(row.index, options);
+    this.selectionController.changeCardSelection(card.index, options);
   }
 
   private onCardHold(e: CardHoldEvent) {
-    this.selectionController.processLongTap(e.row);
+    this.selectionController.processLongTap(e.card);
   }
 
-  private showContextMenu(e: MouseEvent, card?: DataRow, cardIndex?: number): void {
+  private showContextMenu(e: MouseEvent, card?: CardInfo, cardIndex?: number): void {
     this.contextMenuController.show(e, 'content', { card, cardIndex });
   }
 

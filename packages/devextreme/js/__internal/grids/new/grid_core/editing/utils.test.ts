@@ -6,9 +6,9 @@ import {
 import { createPromise } from '@ts/core/utils/promise';
 
 import type { Column } from '../columns_controller/types';
-import { defaultSetCellValue, PendingPromises } from './utils';
+import { defaultSetFieldValue, PendingPromises } from './utils';
 
-describe('defaultSetCellValue', () => {
+describe('defaultSetFieldValue', () => {
   it('should set value to dataField', () => {
     const newData = {};
     const value = 'some_value';
@@ -17,7 +17,7 @@ describe('defaultSetCellValue', () => {
       dataField: 'some_field',
     } as Column;
 
-    defaultSetCellValue.call(column, newData, value, {});
+    defaultSetFieldValue.call(column, newData, value, {});
 
     expect(newData).toEqual({ some_field: 'some_value' });
   });
@@ -28,7 +28,7 @@ describe('defaultSetCellValue', () => {
 
       const column = {} as Column;
 
-      defaultSetCellValue.call(column, newData, value, {});
+      defaultSetFieldValue.call(column, newData, value, {});
 
       expect(newData).toEqual({});
     });

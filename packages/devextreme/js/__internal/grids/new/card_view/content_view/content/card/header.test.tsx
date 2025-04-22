@@ -37,7 +37,7 @@ describe('CardHeader', () => {
         visible
         captionExpr="name"
         // @ts-expect-error
-        row={{ name: 'Card Title' }}
+        card={{ name: 'Card Title' }}
       />,
       container,
     );
@@ -76,7 +76,7 @@ describe('CardHeader', () => {
         visible
         isCheckBoxesRendered
         // @ts-expect-error
-        row={{ name: 'Card Title' }}
+        card={{ name: 'Card Title' }}
       />,
       container,
     );

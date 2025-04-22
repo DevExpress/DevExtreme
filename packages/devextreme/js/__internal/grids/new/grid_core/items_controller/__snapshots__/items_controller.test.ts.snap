@@ -1,8 +1,13 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`ItemsController createDataRow should process data object to data row using column configuration 1`] = `
+exports[`ItemsController createCardInfo should process data object to cardInfo using column configuration 1`] = `
 {
-  "cells": [
+  "data": {
+    "a": "my a value",
+    "b": "my b value",
+    "id": 1,
+  },
+  "fields": [
     {
       "column": {
         "alignment": "left",
@@ -13,14 +18,14 @@ exports[`ItemsController createDataRow should process data object to data row us
         "allowReordering": true,
         "allowSearch": true,
         "allowSorting": true,
-        "calculateCellValue": [Function],
         "calculateDisplayValue": [Function],
+        "calculateFieldValue": [Function],
         "calculateFilterExpression": [Function],
         "caption": "A",
         "captionTemplate": undefined,
         "dataField": "a",
         "dataType": "string",
-        "defaultSetCellValue": [Function],
+        "defaultSetFieldValue": [Function],
         "editorOptions": {},
         "falseText": "false",
         "fieldTemplate": undefined,
@@ -38,7 +43,7 @@ exports[`ItemsController createDataRow should process data object to data row us
         },
         "headerItemTemplate": undefined,
         "name": "a",
-        "setCellValue": [Function],
+        "setFieldValue": [Function],
         "showInColumnChooser": true,
         "trueText": "true",
         "validationRules": [],
@@ -62,14 +67,14 @@ exports[`ItemsController createDataRow should process data object to data row us
         "allowReordering": true,
         "allowSearch": true,
         "allowSorting": true,
-        "calculateCellValue": [Function],
         "calculateDisplayValue": [Function],
+        "calculateFieldValue": [Function],
         "calculateFilterExpression": [Function],
         "caption": "B",
         "captionTemplate": undefined,
         "dataField": "b",
         "dataType": "string",
-        "defaultSetCellValue": [Function],
+        "defaultSetFieldValue": [Function],
         "editorOptions": {},
         "falseText": "false",
         "fieldTemplate": undefined,
@@ -87,7 +92,7 @@ exports[`ItemsController createDataRow should process data object to data row us
         },
         "headerItemTemplate": undefined,
         "name": "b",
-        "setCellValue": [Function],
+        "setFieldValue": [Function],
         "showInColumnChooser": true,
         "trueText": "true",
         "validationRules": [],
@@ -102,20 +107,20 @@ exports[`ItemsController createDataRow should process data object to data row us
       "value": "my b value",
     },
   ],
-  "data": {
-    "a": "my a value",
-    "b": "my b value",
-    "id": 1,
-  },
   "index": 0,
   "isSelected": false,
   "key": 1,
 }
 `;
 
-exports[`ItemsController createDataRow should process data object to data row using column configuration 2`] = `
+exports[`ItemsController createCardInfo should process data object to cardInfo using column configuration 2`] = `
 {
-  "cells": [
+  "data": {
+    "a": "my a value",
+    "b": "my b value",
+    "id": 1,
+  },
+  "fields": [
     {
       "column": {
         "alignment": "left",
@@ -126,14 +131,14 @@ exports[`ItemsController createDataRow should process data object to data row us
         "allowReordering": true,
         "allowSearch": true,
         "allowSorting": true,
-        "calculateCellValue": [Function],
         "calculateDisplayValue": [Function],
+        "calculateFieldValue": [Function],
         "calculateFilterExpression": [Function],
         "caption": "A",
         "captionTemplate": undefined,
         "dataField": "a",
         "dataType": "string",
-        "defaultSetCellValue": [Function],
+        "defaultSetFieldValue": [Function],
         "editorOptions": {},
         "falseText": "false",
         "fieldTemplate": undefined,
@@ -151,7 +156,7 @@ exports[`ItemsController createDataRow should process data object to data row us
         },
         "headerItemTemplate": undefined,
         "name": "a",
-        "setCellValue": [Function],
+        "setFieldValue": [Function],
         "showInColumnChooser": true,
         "trueText": "true",
         "validationRules": [],
@@ -175,14 +180,14 @@ exports[`ItemsController createDataRow should process data object to data row us
         "allowReordering": true,
         "allowSearch": true,
         "allowSorting": true,
-        "calculateCellValue": [Function],
         "calculateDisplayValue": [Function],
+        "calculateFieldValue": [Function],
         "calculateFilterExpression": [Function],
         "caption": "B",
         "captionTemplate": undefined,
         "dataField": "b",
         "dataType": "string",
-        "defaultSetCellValue": [Function],
+        "defaultSetFieldValue": [Function],
         "editorOptions": {},
         "falseText": "false",
         "fieldTemplate": undefined,
@@ -200,7 +205,7 @@ exports[`ItemsController createDataRow should process data object to data row us
         },
         "headerItemTemplate": undefined,
         "name": "b",
-        "setCellValue": [Function],
+        "setFieldValue": [Function],
         "showInColumnChooser": true,
         "trueText": "true",
         "validationRules": [],
@@ -215,11 +220,6 @@ exports[`ItemsController createDataRow should process data object to data row us
       "value": "my b value",
     },
   ],
-  "data": {
-    "a": "my a value",
-    "b": "my b value",
-    "id": 1,
-  },
   "index": 0,
   "isSelected": true,
   "key": 1,
@@ -229,11 +229,11 @@ exports[`ItemsController createDataRow should process data object to data row us
 exports[`ItemsController setSelectionState should update the select state of the item 1`] = `
 [
   {
-    "cells": [],
     "data": {
       "a": "my a value",
       "id": 1,
     },
+    "fields": [],
     "index": 0,
     "isSelected": true,
     "key": 1,

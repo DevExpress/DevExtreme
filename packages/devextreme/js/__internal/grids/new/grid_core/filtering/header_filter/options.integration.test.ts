@@ -257,7 +257,7 @@ describe('Options', () => {
         columns: [{
           dataField: 'A',
           // NOTE: WA for check "emptyValue" translation
-          calculateCellValue: (): null => null,
+          calculateFieldValue: (): null => null,
         }],
         headerFilter: {
           visible: true,

@@ -38,7 +38,7 @@ export type Column = Pick<Required<ColumnBase>, InheritedColumnProps> & {
 
   name: string;
 
-  calculateCellValue: (this: Column, data: unknown) => unknown;
+  calculateFieldValue: (this: Column, data: unknown) => unknown;
 
   calculateDisplayValue: (this: Column, data: unknown) => unknown;
 
@@ -59,9 +59,9 @@ export type Column = Pick<Required<ColumnBase>, InheritedColumnProps> & {
 
   editorTemplate?: unknown;
 
-  fieldTemplate?: ComponentType<{ cell: Cell }>;
-  captionTemplate?: ComponentType<{ cell: Cell }>;
-  valueTemplate?: ComponentType<{ cell: Cell }>;
+  fieldTemplate?: ComponentType<{ field: FieldInfo }>;
+  captionTemplate?: ComponentType<{ field: FieldInfo }>;
+  valueTemplate?: ComponentType<{ field: FieldInfo }>;
 
   headerItemTemplate?: ComponentType<{ column: Column }>;
 
@@ -72,17 +72,17 @@ export type Column = Pick<Required<ColumnBase>, InheritedColumnProps> & {
   // header filter options for specific column.
   headerFilter?: HeaderFilterColumnOptions;
 
-  setCellValue: (
+  setFieldValue: (
     this: Column, newData: DeepPartial<DataObject>, value: unknown, currentRowData: DataObject
   ) => (void | Promise<void>);
-  defaultSetCellValue: Column['setCellValue'];
+  defaultSetFieldValue: Column['setFieldValue'];
 
   filterType?: FilterType;
 };
 
 export type VisibleColumn = Column & { headerPanelIndex: number };
 
-export interface Cell {
+export interface FieldInfo {
   value: unknown;
 
   displayValue: unknown;
@@ -96,8 +96,8 @@ export interface Cell {
   index: number;
 }
 
-export interface DataRow {
-  cells: Cell[];
+export interface CardInfo {
+  fields: FieldInfo[];
 
   key: Key;
 
