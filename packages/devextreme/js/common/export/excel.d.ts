@@ -22,11 +22,11 @@ import type {
 export type CellAddress = CellAddressInternal;
 
 /**
-* @docid
-* @namespace DevExpress.excelExporter
-* @type object
-* @public
-*/
+ * @docid
+ * @namespace DevExpress.excelExporter
+ * @type object
+ * @public
+ */
 export type CellRange = CellRangeInternal;
 
 /**
