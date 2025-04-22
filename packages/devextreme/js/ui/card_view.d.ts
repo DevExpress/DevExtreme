@@ -482,6 +482,11 @@ export default class dxCardView<TRowData = unknown, TKey = unknown> extends Widg
 
 }
 
+export {
+    Pager,
+    DataErrorOccurredInfo,
+};
+
 export type ExplicitTypes<TRowData = unknown, TKey = unknown> = {
     Properties: Properties<TRowData, TKey>;
 };
