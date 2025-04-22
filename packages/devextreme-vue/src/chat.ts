@@ -8,7 +8,13 @@ import {
  Message,
  DisposingEvent,
  InitializedEvent,
+ MessageDeletedEvent,
+ MessageDeletingEvent,
+ MessageEditCanceledEvent,
+ MessageEditingStartEvent,
  MessageEnteredEvent,
+ MessageUpdatedEvent,
+ MessageUpdatingEvent,
  OptionChangedEvent,
  TypingEndEvent,
  TypingStartEvent,
@@ -35,6 +41,7 @@ type AccessibleOptions = Pick<Properties,
   "dataSource" |
   "dayHeaderFormat" |
   "disabled" |
+  "editing" |
   "elementAttr" |
   "focusStateEnabled" |
   "height" |
@@ -45,7 +52,13 @@ type AccessibleOptions = Pick<Properties,
   "messageTimestampFormat" |
   "onDisposing" |
   "onInitialized" |
+  "onMessageDeleted" |
+  "onMessageDeleting" |
+  "onMessageEditCanceled" |
+  "onMessageEditingStart" |
   "onMessageEntered" |
+  "onMessageUpdated" |
+  "onMessageUpdating" |
   "onOptionChanged" |
   "onTypingEnd" |
   "onTypingStart" |
@@ -73,6 +86,7 @@ const componentConfig = {
     dataSource: [Array, Object, String] as PropType<Array<Message> | DataSource | DataSourceOptions | null | Store | string | Record<string, any>>,
     dayHeaderFormat: [Object, String, Function] as PropType<Format | CommonFormat | (((value: number | Date) => string)) | Record<string, any> | string>,
     disabled: Boolean,
+    editing: Object as PropType<Record<string, any>>,
     elementAttr: Object as PropType<Record<string, any>>,
     focusStateEnabled: Boolean,
     height: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
@@ -83,7 +97,13 @@ const componentConfig = {
     messageTimestampFormat: [Object, String, Function] as PropType<Format | CommonFormat | (((value: number | Date) => string)) | Record<string, any> | string>,
     onDisposing: Function as PropType<((e: DisposingEvent) => void)>,
     onInitialized: Function as PropType<((e: InitializedEvent) => void)>,
+    onMessageDeleted: Function as PropType<((e: MessageDeletedEvent) => void)>,
+    onMessageDeleting: Function as PropType<((e: MessageDeletingEvent) => void)>,
+    onMessageEditCanceled: Function as PropType<((e: MessageEditCanceledEvent) => void)>,
+    onMessageEditingStart: Function as PropType<((e: MessageEditingStartEvent) => void)>,
     onMessageEntered: Function as PropType<((e: MessageEnteredEvent) => void)>,
+    onMessageUpdated: Function as PropType<((e: MessageUpdatedEvent) => void)>,
+    onMessageUpdating: Function as PropType<((e: MessageUpdatingEvent) => void)>,
     onOptionChanged: Function as PropType<((e: OptionChangedEvent) => void)>,
     onTypingEnd: Function as PropType<((e: TypingEndEvent) => void)>,
     onTypingStart: Function as PropType<((e: TypingStartEvent) => void)>,
@@ -107,6 +127,7 @@ const componentConfig = {
     "update:dataSource": null,
     "update:dayHeaderFormat": null,
     "update:disabled": null,
+    "update:editing": null,
     "update:elementAttr": null,
     "update:focusStateEnabled": null,
     "update:height": null,
@@ -117,7 +138,13 @@ const componentConfig = {
     "update:messageTimestampFormat": null,
     "update:onDisposing": null,
     "update:onInitialized": null,
+    "update:onMessageDeleted": null,
+    "update:onMessageDeleting": null,
+    "update:onMessageEditCanceled": null,
+    "update:onMessageEditingStart": null,
     "update:onMessageEntered": null,
+    "update:onMessageUpdated": null,
+    "update:onMessageUpdating": null,
     "update:onOptionChanged": null,
     "update:onTypingEnd": null,
     "update:onTypingStart": null,
@@ -232,12 +259,16 @@ const DxItemConfig = {
     "update:hoveredElement": null,
     "update:author": null,
     "update:id": null,
+    "update:isDeleted": null,
+    "update:isEdited": null,
     "update:text": null,
     "update:timestamp": null,
   },
   props: {
     author: Object as PropType<User | Record<string, any>>,
     id: [Number, String],
+    isDeleted: Boolean,
+    isEdited: Boolean,
     text: String,
     timestamp: [Date, Number, String]
   }
