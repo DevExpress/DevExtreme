@@ -8,12 +8,14 @@
     [icon]="step.icon"
     [isValid]="step.isValid"
     [hint]="step.hint"
+    [optional]="step.optional"
   ></dxi-item>
 </dx-stepper>
 <div class="content">
   <dx-multi-view
     [(selectedIndex)]="selectedIndex"
     [animationEnabled]="false"
+    [focusStateEnabled]="false"
     [swipeEnabled]="false"
     [height]="300"
   >

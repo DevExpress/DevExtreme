@@ -1,11 +1,14 @@
 ::ng-deep .demo-container {
+  min-height: 480px;
+}
+
+::ng-deep demo-app {
   display: flex;
   flex-direction: column;
   justify-content: center;
   row-gap: 20px;
   height: 480px;
   min-width: 620px;
-  padding: 40px 20px;
 }
 
 ::ng-deep .content {
@@ -26,6 +29,7 @@
   color: var(--dx-color-icon);
 }
 
-::ng-deep .nav-buttons > *:not(:last-child) {
-  margin-right: 8px;
+::ng-deep .nav-buttons {
+  display: flex;
+  gap: 8px;
 }

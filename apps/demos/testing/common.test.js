@@ -150,9 +150,6 @@ const SKIPPED_TESTS = {
       { demo: 'TooltipHTMLSupport', themes: [THEME.material] },
       { demo: 'CustomMapData', themes: [THEME.material] },
     ],
-    Stepper: [
-      { demo: 'FormIntegration', themes: [THEME.generic, THEME.material, THEME.fluent] },
-    ],
   },
   React: {
     Charts: [
@@ -216,9 +213,6 @@ const SKIPPED_TESTS = {
       { demo: 'DifferentValueIndicatorTypesLinearGauge', themes: [THEME.material] },
       { demo: 'ScaleLabelFormatting', themes: [THEME.material] },
     ],
-    Stepper: [
-      { demo: 'FormIntegration', themes: [THEME.generic, THEME.material, THEME.fluent] },
-    ],
   },
   Vue: {
     Charts: [
@@ -256,9 +250,6 @@ const SKIPPED_TESTS = {
     ],
     FilterBuilder: [
       { demo: 'Customization', themes: [THEME.material] },
-    ],
-    Stepper: [
-      { demo: 'FormIntegration', themes: [THEME.generic, THEME.material, THEME.fluent] },
     ],
     TreeList: [
       { demo: 'Overview', themes: [THEME.material] },
