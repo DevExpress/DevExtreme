@@ -9994,17 +9994,6 @@ declare module DevExpress.ui {
         readonly message: Message;
       };
     /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-     */
-    export type MessageEditingFunction = (options: {
-      component?: dxChat;
-      message?: Message;
-    }) => void;
-    export type MessageEditingOptions = {
-      allowUpdating?: boolean | MessageEditingFunction;
-      allowDeleting?: boolean | MessageEditingFunction;
-    };
-    /**
      * [descr:_ui_chat_MessageEditingStartEvent]
      */
     export type MessageEditingStartEvent =
@@ -10120,7 +10109,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxChatOptions.editing]
      */
-    editing?: DevExpress.ui.dxChat.MessageEditingOptions;
+    editing?: DevExpress.ui.dxChat.Editing;
     /**
      * [descr:dxChatOptions.dataSource]
      */
@@ -31876,6 +31865,23 @@ declare module DevExpress.ui.dxChat {
      * [descr:Alert.message]
      */
     message?: string;
+  };
+  /**
+   * [descr:Editing]
+   */
+  export type Editing = {
+    /**
+     * [descr:Editing.allowUpdating]
+     */
+    allowUpdating?:
+      | boolean
+      | ((options: { component?: dxChat; message?: Message }) => boolean);
+    /**
+     * [descr:Editing.allowDeleting]
+     */
+    allowDeleting?:
+      | boolean
+      | ((options: { component?: dxChat; message?: Message }) => boolean);
   };
   /**
    * [descr:Message]

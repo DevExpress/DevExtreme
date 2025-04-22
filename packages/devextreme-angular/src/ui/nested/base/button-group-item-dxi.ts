@@ -161,6 +161,20 @@ export abstract class DxiButtonGroupItem extends CollectionNestedOption {
         this._setOption('id', value);
     }
 
+    get isDeleted(): boolean {
+        return this._getOption('isDeleted');
+    }
+    set isDeleted(value: boolean) {
+        this._setOption('isDeleted', value);
+    }
+
+    get isEdited(): boolean {
+        return this._getOption('isEdited');
+    }
+    set isEdited(value: boolean) {
+        this._setOption('isEdited', value);
+    }
+
     get timestamp(): Date | number | string {
         return this._getOption('timestamp');
     }
