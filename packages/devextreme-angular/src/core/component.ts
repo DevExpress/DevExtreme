@@ -230,10 +230,8 @@ export abstract class DxComponent implements OnChanges, OnInit, DoCheck, AfterCo
     private readonly transferState: TransferState,
     @Inject(PLATFORM_ID) private readonly platformId: any,
   ) {
-    const injector = inject(Injector);
-
     if (!DxIntegrationModule.initialized) {
-      createNgModule(DxIntegrationModule, injector);
+      createNgModule(DxIntegrationModule, inject(Injector));
     }
 
     this.templates = [];
