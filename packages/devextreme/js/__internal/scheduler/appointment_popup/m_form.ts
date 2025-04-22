@@ -39,10 +39,11 @@ const E2E_TEST_CLASSES = {
   recurrenceSwitch: 'e2e-dx-scheduler-form-recurrence-switch',
 };
 
-const DEFAULT_TIMEZONE_EDITOR_DATA_SOURCE_OPTIONS = {
+const createTimeZoneDataSource = () => new DataSource({
+  store: timeZoneUtils.getTimeZonesCache(),
   paginate: true,
   pageSize: 10,
-};
+});
 
 const getStylingModeFunc = (): string | undefined => (isFluent(current()) ? 'filled' : undefined);
 
@@ -191,6 +192,7 @@ export class AppointmentForm {
         valueExpr: 'id',
         placeholder: noTzTitle,
         searchEnabled: true,
+        dataSource: createTimeZoneDataSource(),
         onValueChanged: (args) => {
           const { form } = this;
           const secondTimezoneEditor = form.getEditor(secondTimeZoneExpr);
@@ -426,16 +428,6 @@ export class AppointmentForm {
     editor && this.form.itemOption(editorPath, 'editorOptions', extend({}, editor.editorOptions, options));
   }
 
-  private setupTimezoneEditorDataSource(editorName: string): void {
-    const timezones = timeZoneUtils.getTimeZonesCache();
-    const dataSource = new DataSource({
-      ...DEFAULT_TIMEZONE_EDITOR_DATA_SOURCE_OPTIONS,
-      store: timezones,
-    });
-
-    this.setEditorOptions(editorName, 'Main', { dataSource });
-  }
-
   updateFormData(formData: Record<string, any>): void {
     this.isFormUpdating = true;
     this.form.option('formData', formData);
@@ -447,9 +439,6 @@ export class AppointmentForm {
 
     const allDay = dataAccessors.get('allDay', formData);
     const startDate = new Date(rawStartDate);
-
-    this.setupTimezoneEditorDataSource(expr.startDateTimeZoneExpr);
-    this.setupTimezoneEditorDataSource(expr.endDateTimeZoneExpr);
 
     this.updateRecurrenceEditorStartDate(startDate, expr.recurrenceRuleExpr);
 

@@ -92,9 +92,9 @@ export type SchedulerTimeZone = {
 
 /**
 * @docid utils.getTimeZones
-* @publicName getTimeZones(date)
+* @publicName getTimeZones(date, timeZones)
 * @param1 date:Date|undefined
-* @param2 timeZones:string[]|undefined
+* @param2 timeZones:Array<string>|undefined
 * @namespace DevExpress.common.core.environment
 * @static
 * @public
