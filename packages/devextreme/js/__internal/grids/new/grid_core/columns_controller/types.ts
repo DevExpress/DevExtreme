@@ -1,5 +1,7 @@
 import type { Format, SortOrder } from '@js/common';
-import type { ColumnBase } from '@js/common/grids';
+import type { ColumnBase, FilterType } from '@js/common/grids';
+import type { DeepPartial } from '@js/core/index';
+import type * as dxForm from '@js/ui/form';
 import type { HeaderFilterColumnOptions } from '@ts/grids/new/grid_core/filtering/header_filter/index';
 import type { ComponentType } from 'inferno';
 
@@ -18,8 +20,11 @@ type InheritedColumnProps =
   | 'allowSearch'
   | 'trueText'
   | 'falseText'
-  | 'caption'
-  | 'showInColumnChooser';
+  | 'showInColumnChooser'
+  | 'validationRules'
+  | 'allowEditing'
+  | 'editorOptions'
+  | 'caption';
 
 export type Column = Pick<Required<ColumnBase>, InheritedColumnProps> & {
   dataField?: string;
@@ -62,11 +67,20 @@ export type Column = Pick<Required<ColumnBase>, InheritedColumnProps> & {
 
   headerItemCssClass?: string;
 
+  formItem: dxForm.SimpleItem;
+
   // header filter options for specific column.
   headerFilter?: HeaderFilterColumnOptions;
+
+  setCellValue: (
+    this: Column, newData: DeepPartial<DataObject>, value: unknown, currentRowData: DataObject
+  ) => (void | Promise<void>);
+  defaultSetCellValue: Column['setCellValue'];
+
+  filterType?: FilterType;
 };
 
-export type VisibleColumn = Column & { visible: true };
+export type VisibleColumn = Column & { headerPanelIndex: number };
 
 export interface Cell {
   value: unknown;

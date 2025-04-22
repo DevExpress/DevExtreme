@@ -194,11 +194,15 @@
                     'devextreme-cldr-data': '@Url.Content("~/packages/devextreme/artifacts/js-systemjs/devextreme-cldr-data")',
                     'cldr-core': '@Url.Content("~/packages/devextreme/artifacts/js-systemjs/cldr-core")',
 
-                    'json': '@Url.Content("~/packages/devextreme/artifacts/js-systemjs/json.js")'
+                    'json': '@Url.Content("~/packages/devextreme/artifacts/js-systemjs/json.js")',
+                    '@@preact/signals-core': '@Url.Content("~/packages/devextreme/artifacts/js-systemjs/preact-signals.js")',
+
                 }
                 : {
                     'devextreme-cldr-data': '@Url.Content("~/packages/devextreme/node_modules/devextreme-cldr-data")',
-                    'cldr-core': '@Url.Content("~/packages/devextreme/node_modules/cldr-core")'
+                    'cldr-core': '@Url.Content("~/packages/devextreme/node_modules/cldr-core")',
+                    '@@preact/signals-core': '@Url.Content("~/packages/devextreme/node_modules/@preact/signals-core/dist/signals-core.js")',
+
                 };
 
             const cspPackages = {};
@@ -208,9 +212,9 @@
                 transpiler: 'plugin-babel',
                 map: {
                     // Deps
-                    'globalize': '@Url.Content("~/packages/devextreme/artifacts/js/globalize")',
+                    'globalize': '@Url.Content("~/packages/devextreme/node_modules/globalize/dist/globalize")',
                     'intl': '@Url.Content("~/packages/devextreme/node_modules/intl/index.js")',
-                    'cldr': '@Url.Content("~/packages/devextreme/artifacts/js/cldr")',
+                    'cldr': '@Url.Content("~/packages/devextreme/node_modules/cldrjs/dist/cldr")',
                     'jquery': '@GetJQueryUrl()',
                     'knockout': '@Url.Content("~/packages/devextreme/node_modules/knockout/build/output/knockout-latest.debug.js")',
                     'jszip': '@Url.Content("~/packages/devextreme/artifacts/js/jszip.js")',

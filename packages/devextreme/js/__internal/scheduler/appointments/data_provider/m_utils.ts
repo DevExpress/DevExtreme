@@ -69,9 +69,6 @@ export const compareDateWithEndDayHour = (options) => {
 export const getAppointmentTakesSeveralDays = (adapter) => !dateUtils.sameDate(adapter.startDate, adapter.endDate);
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
-export const _isEndDateWrong = (startDate, endDate) => !endDate || isNaN(endDate.getTime()) || startDate.getTime() > endDate.getTime();
-
-// eslint-disable-next-line @typescript-eslint/naming-convention
 export const _appointmentPartInInterval = (startDate, endDate, startDayHour, endDayHour) => {
   const apptStartDayHour = startDate.getHours();
   const apptEndDayHour = endDate.getHours();
@@ -122,29 +119,6 @@ export const _convertRecurrenceException = (exceptionString, startDate, timeZone
   exceptionString = dateSerialization.serializeDate(convertedExceptionDate, FULL_DATE_FORMAT);
 
   return exceptionString;
-};
-
-export const replaceWrongEndDate = (
-  rawAppointment,
-  startDate,
-  endDate,
-  appointmentDuration,
-  dataAccessors: AppointmentDataAccessor,
-) => {
-  const calculateAppointmentEndDate = (isAllDay, startDate) => {
-    if (isAllDay) {
-      return dateUtils.setToDayEnd(new Date(startDate));
-    }
-
-    return new Date(startDate.getTime() + appointmentDuration * toMs('minute'));
-  };
-
-  if (_isEndDateWrong(startDate, endDate)) {
-    const isAllDay = Boolean(dataAccessors.get('allDay', rawAppointment));
-
-    const calculatedEndDate = calculateAppointmentEndDate(isAllDay, startDate);
-    dataAccessors.set('endDate', rawAppointment, calculatedEndDate);
-  }
 };
 
 export const sortAppointmentsByStartDate = (

@@ -8,6 +8,7 @@ import Toolbar from './toolbar';
 import Popup from "../popup";
 import List from "../list";
 import {ClientFunction} from "testcafe";
+import TreeView from '../treeView';
 
 export const CLASS = {
     ...CLASS_BASE,
@@ -64,6 +65,12 @@ export default class CardView extends GridCore {
       return new List(listElement);
   }
 
+  getHeaderFilterTreeView(): TreeView {
+    const popup = this.getHeaderFilterPopup();
+    const treeViewElement = popup.getWrapper().find(`.dx-treeview`);
+    return new TreeView(treeViewElement);
+}
+
   getColumnOption(columnName: string): Promise<Record<string, any>> {
       const { getInstance } = this;
 
@@ -83,7 +90,7 @@ export default class CardView extends GridCore {
   }
 
   getToolbar(): Toolbar {
-    return new Toolbar(this.element.child(`.${CLASS.toolbar}`));
+    return new Toolbar(this.element.child().child(`.${CLASS.toolbar}`));
   }
 
   isCheckBoxesHidden(): Promise<boolean> {

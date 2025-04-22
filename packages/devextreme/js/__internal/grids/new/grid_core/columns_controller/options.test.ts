@@ -1,4 +1,3 @@
-/* eslint-disable spellcheck/spell-checker */
 import { describe, expect, it } from '@jest/globals';
 
 import { DataController } from '../data_controller';
@@ -24,13 +23,13 @@ describe('Options', () => {
     describe('when given as string', () => {
       it('should be normalized', () => {
         const { columnsController } = setup({ columns: ['a', 'b', 'c'] });
-        const columns = columnsController.columns.unreactive_get();
+        const columns = columnsController.columns.peek();
 
         expect(columns).toMatchSnapshot();
       });
       it('should use given string as dataField', () => {
         const { columnsController } = setup({ columns: ['a', 'b', 'c'] });
-        const columns = columnsController.columns.unreactive_get();
+        const columns = columnsController.columns.peek();
 
         expect(columns[0].dataField).toBe('a');
         expect(columns[1].dataField).toBe('b');
@@ -40,7 +39,7 @@ describe('Options', () => {
         const { columnsController: columnsController1 } = setup({
           columns: ['a', 'b', 'c'],
         });
-        const columns1 = columnsController1.columns.unreactive_get();
+        const columns1 = columnsController1.columns.peek();
 
         const { columnsController: columnsController2 } = setup({
           columns: [
@@ -49,7 +48,7 @@ describe('Options', () => {
             { dataField: 'c' },
           ],
         });
-        const columns2 = columnsController2.columns.unreactive_get();
+        const columns2 = columnsController2.columns.peek();
 
         expect(columns1).toEqual(columns2);
       });
@@ -63,7 +62,7 @@ describe('Options', () => {
             { dataField: 'c' },
           ],
         });
-        const columns = columnsController.columns.unreactive_get();
+        const columns = columnsController.columns.peek();
         expect(columns).toMatchSnapshot();
       });
     });
@@ -79,7 +78,7 @@ describe('Options', () => {
           ],
         });
 
-        const visibleColumns = columnsController.visibleColumns.unreactive_get();
+        const visibleColumns = columnsController.visibleColumns.peek();
         expect(visibleColumns).toHaveLength(2);
         expect(visibleColumns[0].name).toBe('a');
         expect(visibleColumns[1].name).toBe('b');
@@ -95,7 +94,7 @@ describe('Options', () => {
           ],
         });
 
-        const visibleColumns = columnsController.visibleColumns.unreactive_get();
+        const visibleColumns = columnsController.visibleColumns.peek();
         expect(visibleColumns).toHaveLength(1);
         expect(visibleColumns[0].name).toBe('a');
       });
@@ -110,7 +109,7 @@ describe('Options', () => {
           { dataField: 'b' },
         ],
       });
-      const visibleColumns = columnsController.visibleColumns.unreactive_get();
+      const visibleColumns = columnsController.visibleColumns.peek();
 
       expect(visibleColumns).toHaveLength(2);
       expect(visibleColumns[0]).toMatchObject({
@@ -133,7 +132,7 @@ describe('Options', () => {
       });
 
       const dataObject = { a: 'a', b: 'b' };
-      const columns = columnsController.columns.unreactive_get();
+      const columns = columnsController.columns.peek();
       const dataRow = itemsController.createDataRow(dataObject, columns, 0);
 
       expect(dataRow.cells).toHaveLength(1);
@@ -151,7 +150,7 @@ describe('Options', () => {
       });
 
       const dataObject = { a: 'a', b: 'b' };
-      const columns = columnsController.columns.unreactive_get();
+      const columns = columnsController.columns.peek();
       const dataRow = itemsController.createDataRow(dataObject, columns, 0);
 
       expect(dataRow.cells).toHaveLength(1);
@@ -168,7 +167,7 @@ describe('Options', () => {
       });
 
       const dataObject = { a: 'a', b: 'b' };
-      const columns = columnsController.columns.unreactive_get();
+      const columns = columnsController.columns.peek();
       const dataRow = itemsController.createDataRow(dataObject, columns, 0);
 
       expect(dataRow.cells).toHaveLength(1);
@@ -188,7 +187,7 @@ describe('Options', () => {
       });
 
       const dataObject = { a: 'a', b: 'b' };
-      const columns = columnsController.columns.unreactive_get();
+      const columns = columnsController.columns.peek();
       const dataRow = itemsController.createDataRow(dataObject, columns, 0);
 
       expect(dataRow.cells).toHaveLength(1);
@@ -203,7 +202,7 @@ describe('Options', () => {
       });
 
       const dataObject = { a: 'a text', b: 'b text' };
-      const columns = columnsController.columns.unreactive_get();
+      const columns = columnsController.columns.peek();
       const dataRow = itemsController.createDataRow(dataObject, columns, 0);
 
       expect(dataRow.cells).toHaveLength(2);
@@ -221,7 +220,7 @@ describe('Options', () => {
         ],
       });
 
-      const columns = columnsController.columns.unreactive_get();
+      const columns = columnsController.columns.peek();
 
       expect(columns).toHaveLength(2);
       expect(columns[0].alignment).toMatchInlineSnapshot('"right"');
@@ -243,7 +242,7 @@ describe('Options', () => {
         });
 
         const dataObject = { a: propName === 'trueText' };
-        const columns = columnsController.columns.unreactive_get();
+        const columns = columnsController.columns.peek();
         const dataRow = itemsController.createDataRow(dataObject, columns, 0);
 
         expect(dataRow.cells).toHaveLength(1);
@@ -264,7 +263,7 @@ describe('Options', () => {
       });
 
       const dataObject = { a: 123 };
-      const columns = columnsController.columns.unreactive_get();
+      const columns = columnsController.columns.peek();
       const dataRow = itemsController.createDataRow(dataObject, columns, 0);
 
       expect(dataRow.cells).toHaveLength(1);

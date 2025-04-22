@@ -68,6 +68,14 @@ export class DxiStepperItemComponent extends CollectionNestedOption implements A
     }
 
     @Input()
+    get label(): string {
+        return this._getOption('label');
+    }
+    set label(value: string) {
+        this._setOption('label', value);
+    }
+
+    @Input()
     get optional(): boolean {
         return this._getOption('optional');
     }
@@ -89,14 +97,6 @@ export class DxiStepperItemComponent extends CollectionNestedOption implements A
     }
     set text(value: string) {
         this._setOption('text', value);
-    }
-
-    @Input()
-    get title(): string {
-        return this._getOption('title');
-    }
-    set title(value: string) {
-        this._setOption('title', value);
     }
 
 

@@ -1,6 +1,6 @@
 /* eslint-disable consistent-return */
 /* eslint-disable @typescript-eslint/no-invalid-void-type */
-/* eslint-disable spellcheck/spell-checker */
+
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import type { FilterDescriptor } from '@js/data';
@@ -14,7 +14,7 @@ import type { DataObject, Key } from './types';
 export function PublicMethods<T extends Constructor<GridCoreNewBase>>(GridCore: T) {
   return class GridCoreWithDataController extends GridCore {
     public getDataSource(): DataSource {
-      return this.dataController.dataSource.unreactive_get();
+      return this.dataController.dataSource.peek();
     }
 
     public byKey(key: Key): Promise<DataObject> | undefined {
@@ -42,30 +42,30 @@ export function PublicMethods<T extends Constructor<GridCoreNewBase>>(GridCore: 
     }
 
     public pageCount(): number {
-      return this.dataController.pageCount.unreactive_get();
+      return this.dataController.pageCount.peek();
     }
 
     public pageSize(): number;
     public pageSize(value: number): void;
     public pageSize(value?: number): number | void {
       if (value === undefined) {
-        return this.dataController.pageSize.unreactive_get();
+        return this.dataController.pageSize.peek();
       }
-      this.dataController.pageSize.update(value);
+      this.dataController.pageSize.value = value;
     }
 
     public pageIndex(): number;
     public pageIndex(newIndex: number): void;
     public pageIndex(newIndex?: number): number | void {
       if (newIndex === undefined) {
-        return this.dataController.pageIndex.unreactive_get();
+        return this.dataController.pageIndex.peek();
       }
       // TODO: Promise<void> (jQuery or native)
-      return this.dataController.pageIndex.update(newIndex);
+      this.dataController.pageIndex.value = newIndex;
     }
 
     public totalCount(): number {
-      return this.dataController.totalCount.unreactive_get();
+      return this.dataController.totalCount.peek();
     }
   };
 }

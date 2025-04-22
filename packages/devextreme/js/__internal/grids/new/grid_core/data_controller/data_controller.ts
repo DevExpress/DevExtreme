@@ -1,17 +1,13 @@
-/* eslint-disable @typescript-eslint/no-invalid-void-type */
-/* eslint-disable spellcheck/spell-checker */
 import type { DataSource } from '@js/common/data';
 import ArrayStore from '@js/common/data/array_store';
 import { Deferred } from '@js/core/utils/deferred';
-import type { SubsGets } from '@ts/core/reactive/index';
-import {
-  computed, effect, state,
-} from '@ts/core/reactive/index';
+import type { ReadonlySignal } from '@preact/signals-core';
+import { computed, effect, signal } from '@preact/signals-core';
+import type { PromiseWithResolvers } from '@ts/core/utils/promise';
 import { createPromise } from '@ts/core/utils/promise';
 
 import { FilterController } from '../filtering/filter_controller';
 import { OptionsController } from '../options_controller/options_controller';
-import { SearchController } from '../search/index';
 import { SortingController } from '../sorting_controller/sorting_controller';
 import { StoreLoadAdapter } from './store_load_adapter/index';
 import type { DataObject, Key } from './types';
@@ -29,15 +25,17 @@ import {
 export class DataController {
   private readonly pendingLocalOperations = {};
 
-  private readonly loadedPromise = createPromise<void>();
+  private loadedPromise?: PromiseWithResolvers<void>;
 
   private readonly dataSourceConfiguration = this.options.oneWay('dataSource');
 
   private readonly keyExpr = this.options.oneWay('keyExpr');
 
   public readonly dataSource = computed(
-    (dataSourceLike, keyExpr) => normalizeDataSource(dataSourceLike, keyExpr),
-    [this.dataSourceConfiguration, this.keyExpr],
+    () => normalizeDataSource(
+      this.dataSourceConfiguration.value,
+      this.keyExpr.value,
+    ),
   );
 
   // TODO
@@ -53,63 +51,70 @@ export class DataController {
 
   private readonly onDataErrorOccurred = this.options.action('onDataErrorOccurred');
 
-  private readonly _items = state<DataObject[]>([]);
+  private readonly _items = signal<DataObject[]>([]);
 
-  public readonly items: SubsGets<DataObject[]> = this._items;
+  public readonly items: ReadonlySignal<DataObject[]> = this._items;
 
-  private readonly _totalCount = state(0);
+  private readonly _totalCount = signal(0);
 
-  public readonly totalCount: SubsGets<number> = this._totalCount;
+  public readonly totalCount: ReadonlySignal<number> = this._totalCount;
 
-  public readonly isLoading = state(false);
+  public readonly isLoading = signal(false);
 
   public readonly pageCount = computed(
-    (totalCount, pageSize) => Math.ceil(totalCount / pageSize),
-    [this.totalCount, this.pageSize],
+    () => Math.ceil(
+      this.totalCount.value / this.pageSize.value,
+    ),
   );
 
-  public readonly isLoaded = state(false);
+  public readonly isLoaded = signal(false);
+
+  public readonly isReloading = signal(false);
 
   private readonly normalizedRemoteOptions = computed(
-    (remoteOperations, dataSource) => {
-      const store = dataSource.store();
-      return normalizeRemoteOptions(remoteOperations, isLocalStore(store), isCustomStore(store));
+    () => {
+      const store = this.dataSource.value.store();
+      return normalizeRemoteOptions(
+        this.remoteOperations.value,
+        isLocalStore(store),
+        isCustomStore(store),
+      );
     },
-    [this.remoteOperations, this.dataSource],
   );
 
   private readonly normalizedLocalOperations = computed(
-    (normalizedRemoteOperations) => normalizeLocalOptions(normalizedRemoteOperations),
-    [this.normalizedRemoteOptions],
+    () => normalizeLocalOptions(this.normalizedRemoteOptions.value),
   );
 
   public static dependencies = [
-    OptionsController, SortingController,
-    FilterController, SearchController,
+    OptionsController,
+    SortingController,
+    FilterController,
   ] as const;
 
   constructor(
     private readonly options: OptionsController,
     private readonly sortingController: SortingController,
     private readonly filterController: FilterController,
-    private readonly searchController: SearchController,
   ) {
     effect(
-      (dataSource) => {
+      () => {
+        const dataSource = this.dataSource.value;
         const changedCallback = (e?): void => {
-          this.isLoaded.update(true);
+          this.isLoaded.value = true;
           this.onChanged(dataSource, e);
         };
         const loadingChangedCallback = (): void => {
-          this.isLoading.update(dataSource.isLoading());
+          this.isLoading.value = dataSource.isLoading();
+          this.isReloading.value = true;
         };
         const loadErrorCallback = (error: string): void => {
-          const callback = this.onDataErrorOccurred.unreactive_get();
+          const callback = this.onDataErrorOccurred.peek();
           callback({ error });
           changedCallback();
         };
         const customizeStoreLoadOptionsCallback = (e): void => {
-          const localOptions = this.normalizedLocalOperations.unreactive_get();
+          const localOptions = this.normalizedLocalOperations.peek();
           this.pendingLocalOperations[e.operationId] = getLocalLoadOptions(
             e.storeLoadOptions,
             localOptions,
@@ -157,28 +162,28 @@ export class DataController {
           dataSource.off('customizeLoadResult', dataLoadedCallback);
         };
       },
-      [this.dataSource],
     );
 
     effect(
       () => {
-        if (this.dataSource.unreactive_get().isLoaded()) {
+        // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+        this.normalizedRemoteOptions.value;
+        if (this.dataSource.peek().isLoaded()) {
           // eslint-disable-next-line @typescript-eslint/no-floating-promises
-          this.dataSource.unreactive_get().load();
+          this.dataSource.peek().load();
         }
       },
-      [this.normalizedRemoteOptions],
     );
 
     effect(
-      (
-        dataSource,
-        pageIndex,
-        pageSize,
-        displayFilter,
-        pagingEnabled,
-        sortParameters,
-      ) => {
+      () => {
+        const dataSource = this.dataSource.value;
+        const pageIndex = this.pageIndex.value;
+        const pageSize = this.pageSize.value;
+        const displayFilter = this.filterController.displayFilter.value;
+        const pagingEnabled = this.pagingEnabled.value;
+        const sortParameters = this.sortingController.sortParameters.value;
+
         let someParamChanged = false;
         if (dataSource.pageIndex() !== pageIndex) {
           dataSource.pageIndex(pageIndex);
@@ -211,14 +216,6 @@ export class DataController {
           dataSource.load();
         }
       },
-      [
-        this.dataSource,
-        this.pageIndex,
-        this.pageSize,
-        this.filterController.displayFilter,
-        this.pagingEnabled,
-        this.sortingController.sortParameters,
-      ],
     );
   }
 
@@ -226,22 +223,36 @@ export class DataController {
     let items = dataSource.items() as DataObject[];
 
     if (e?.changes) {
-      items = this._items.unreactive_get();
+      items = this._items.peek();
       items = updateItemsImmutable(items, e.changes, dataSource.store());
     }
 
-    this._items.update(items);
-    this.pageIndex.update(dataSource.pageIndex());
-    this.pageSize.update(dataSource.pageSize());
-    this._totalCount.update(dataSource.totalCount());
-    this.loadedPromise.resolve();
+    this._items.value = items;
+    this.pageIndex.value = dataSource.pageIndex();
+    this.pageSize.value = dataSource.pageSize();
+    this._totalCount.value = dataSource.totalCount();
+
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
+    Promise.resolve().then(() => {
+      this.isReloading.value = false;
+    });
+
+    this.loadedPromise?.resolve();
+    this.loadedPromise = undefined;
   }
 
   public getDataKey(data: DataObject): Key {
-    return this.dataSource.unreactive_get().store().keyOf(data);
+    return this.dataSource.peek().store().keyOf(data);
   }
 
   public waitLoaded(): Promise<void> {
+    if (!this.dataSource.peek().isLoading()) {
+      return Promise.resolve();
+    }
+
+    if (!this.loadedPromise) {
+      this.loadedPromise = createPromise();
+    }
     return this.loadedPromise.promise;
   }
 
@@ -253,5 +264,46 @@ export class DataController {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-return
       (data) => new ArrayStore(data),
     );
+  }
+
+  public async update(key: Key, data: DataObject): Promise<void> {
+    await this.dataSource.peek().store().update(key, data);
+  }
+
+  public async insert(data: DataObject): Promise<void> {
+    await this.dataSource.peek().store().insert(data);
+  }
+
+  public async remove(key: Key): Promise<void> {
+    await this.dataSource.peek().store().remove(key);
+  }
+
+  public async reload(): Promise<void> {
+    await this.dataSource.peek().load();
+  }
+
+  public increasePageIndex(): void {
+    const currentPageIdx = this.pageIndex.peek();
+    const totalCount = this.totalCount.peek();
+    const pageSize = this.pageSize.peek();
+    const nextPageIdx = currentPageIdx + 1;
+    const maxPageIdx = Math.ceil(totalCount / pageSize) - 1;
+
+    if (nextPageIdx > maxPageIdx) {
+      return;
+    }
+
+    this.pageIndex.value = nextPageIdx;
+  }
+
+  public decreasePageIndex(): void {
+    const currentPageIdx = this.pageIndex.peek();
+    const nextPageIdx = currentPageIdx - 1;
+
+    if (nextPageIdx < 0) {
+      return;
+    }
+
+    this.pageIndex.value = nextPageIdx;
   }
 }

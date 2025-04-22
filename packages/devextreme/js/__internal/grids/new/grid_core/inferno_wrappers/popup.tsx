@@ -6,6 +6,8 @@ import { createPortal } from 'inferno';
 import { wrapRef } from './utils';
 import { InfernoWrapper } from './widget_wrapper';
 
+export type { PopupProperties };
+
 export class Popup extends InfernoWrapper<PopupProperties, dxPopup> {
   private readonly contentRef: { current?: HTMLDivElement } = {};
 

@@ -276,9 +276,9 @@ describe('ContextMenu', () => {
           { dataField: 'column2' },
         ],
       });
-      const event = openContextMenu(cardView, `${SELECTORS.headerItem}:nth-of-type(2)`);
+      const event = openContextMenu(cardView, `${SELECTORS.headerItem}`);
 
-      expect(event.columnIndex).toEqual(1);
+      expect(event.columnIndex).toEqual(0);
       expect(event.column?.name).toEqual('column2');
     });
   });

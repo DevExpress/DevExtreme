@@ -1,66 +1,97 @@
-/* eslint-disable spellcheck/spell-checker */
 import type { ColumnChooserMode } from '@js/common/grids';
-import messageLocalization from '@js/localization/message';
+import type { DxElement } from '@js/core/element';
 import type { Properties as ButtonProperties } from '@js/ui/button';
-import type { Properties as PopupProperties, ShownEvent } from '@js/ui/popup';
+import type { Properties as PopupProperties, ToolbarItem } from '@js/ui/popup';
 import type dxPopup from '@js/ui/popup';
 import { current, isGeneric, isMaterial } from '@js/ui/themes';
 import type { Properties as TreeViewProperties } from '@js/ui/tree_view';
 import type dxTreeView from '@js/ui/tree_view';
-import type { MapMaybeSubscribable, SubsGets } from '@ts/core/reactive/index';
-import { combined, computed, state } from '@ts/core/reactive/index';
+import type { ReadonlySignal } from '@preact/signals-core';
+import { computed, signal } from '@preact/signals-core';
 import { createRef } from 'inferno';
 
-import { CLASSES as ContentViewClasses } from '../content_view/content_view';
+import { ColumnsController } from '../columns_controller/index';
 import { View } from '../core/view';
 import { OptionsController } from '../options_controller/options_controller';
 import { ToolbarController } from '../toolbar/controller';
 import type { PredefinedToolbarItem } from '../toolbar/types';
 import { addWidgetPrefix } from '../utils';
 import type { ColumnChooserProps } from './column_chooser';
-import { ColumnChooser } from './column_chooser';
+import { CLASS, ColumnChooser } from './column_chooser';
 import { ColumnChooserController } from './controller';
-
-const CLASS = {
-  root: 'column-chooser',
-  toolbarBtn: 'column-chooser-button',
-  list: 'column-chooser-list',
-  plain: 'column-chooser-plain',
-  dragMode: 'column-chooser-mode-drag',
-  selectMode: 'column-chooser-mode-select',
-};
 
 export class ColumnChooserView extends View<ColumnChooserProps> {
   protected override component = ColumnChooser;
 
-  private readonly popupVisible = state(false);
+  private readonly popupVisible = signal(false);
 
   public readonly popupRef = createRef<dxPopup>();
 
   public readonly treeViewRef = createRef<dxTreeView>();
 
-  private readonly mode: SubsGets<ColumnChooserMode>;
+  public readonly mode: ReadonlySignal<ColumnChooserMode>;
+
+  public dragModeOpened: ReadonlySignal<boolean>;
+
+  private toolbarButtonElement: DxElement | undefined = undefined;
+
+  private readonly selectModeConfig: ReadonlySignal<TreeViewProperties> = computed(() => ({
+    showCheckBoxesMode: this.options.oneWay('columnChooser.selection.allowSelectAll').value
+      ? 'selectAll'
+      : 'normal',
+    selectByClick: this.options.oneWay('columnChooser.selection.selectByClick').value,
+    onSelectionChanged: this.columnChooserController.onSelectionChanged.bind(
+      this.columnChooserController,
+    ),
+  }));
+
+  private readonly dragAndDropModeConfig: ReadonlySignal<TreeViewProperties> = computed(() => ({
+    noDataText: this.options.oneWay('columnChooser.emptyPanelText').value,
+    activeStateEnabled: false,
+  }));
+
+  private readonly popupToolbarItems: ReadonlySignal<ToolbarItem[]> = computed(() => {
+    const title = this.options.oneWay('columnChooser.title').value;
+    const items = [
+      { text: title, toolbar: 'top', location: this.isMaterialOrGeneric() ? 'before' : 'center' },
+    ] as ToolbarItem[];
+
+    if (!this.isMaterialOrGeneric()) {
+      // @ts-expect-error
+      items.push({ shortcut: 'cancel' });
+    }
+
+    return items;
+  });
 
   public static dependencies = [
-    ToolbarController, ColumnChooserController, OptionsController,
+    ToolbarController, ColumnChooserController, ColumnsController, OptionsController,
   ] as const;
 
   constructor(
     private readonly toolbarController: ToolbarController,
     private readonly columnChooserController: ColumnChooserController,
+    private readonly columnsController: ColumnsController,
     private readonly options: OptionsController,
   ) {
     super();
 
     this.mode = this.options.oneWay('columnChooser.mode');
 
+    this.dragModeOpened = computed(
+      () => this.popupVisible.value && this.mode.value === 'dragAndDrop',
+    );
+
     this.toolbarController.addDefaultItem(
-      {
+      signal({
         name: 'columnChooserButton',
         widget: 'dxButton',
         options: {
           icon: 'column-chooser',
-          onClick: () => { this.popupVisible.update(true); },
+          onContentReady: ({ element }) => {
+            this.toolbarButtonElement = element;
+          },
+          onClick: () => { this.popupVisible.value = true; },
           elementAttr: {
             'aria-haspopup': 'dialog',
             class: addWidgetPrefix(CLASS.toolbarBtn),
@@ -70,13 +101,13 @@ export class ColumnChooserView extends View<ColumnChooserProps> {
         location: 'after',
         locateInMenu: 'auto',
         visible: true,
-      } as PredefinedToolbarItem,
+      } as PredefinedToolbarItem),
       this.options.oneWay('columnChooser.enabled'),
     );
   }
 
   public show(): void {
-    this.popupVisible.update(true);
+    this.popupVisible.value = true;
   }
 
   public hide(): void {
@@ -84,128 +115,49 @@ export class ColumnChooserView extends View<ColumnChooserProps> {
     this.popupRef.current?.hide();
   }
 
-  protected override getProps(): SubsGets<ColumnChooserProps> {
-    return combined({
+  protected override getProps(): ReadonlySignal<ColumnChooserProps> {
+    return computed(() => ({
       popupRef: this.popupRef,
       treeViewRef: this.treeViewRef,
 
-      visible: this.popupVisible,
-      mode: this.mode,
+      visible: this.popupVisible.value,
+      mode: this.mode.value,
+      title: this.options.oneWay('columnChooser.title').value,
+      chooserColumns: this.columnChooserController.chooserColumns.value,
+      visibleColumns: this.columnsController.visibleColumns.value,
+      // TODO: band columns aren't yet implemented in cardview
+      isBandColumnsUsed: false,
 
-      popupConfig: combined({
-        shading: false,
+      onColumnMove: this.columnChooserController.onColumnMove,
+
+      popupConfig: {
+        width: this.options.oneWay('columnChooser.width').value,
+        height: this.options.oneWay('columnChooser.height').value,
+        container: this.options.oneWay('columnChooser.container').value,
+        position: this.options.oneWay('columnChooser.position').value,
+        toolbarItems: this.popupToolbarItems.value,
         showCloseButton: this.isMaterialOrGeneric(),
-        dragEnabled: true,
-        resizeEnabled: true,
-        wrapperAttr: {
-          class: this.getPopupWrapperClass(),
+
+        onHidden: () => {
+          this.popupVisible.value = false;
+          this.toolbarButtonElement?.focus();
         },
-        _loopFocus: true,
+      } as PopupProperties,
 
-        width: this.options.oneWay('columnChooser.width'),
-        height: this.options.oneWay('columnChooser.height'),
-        container: this.options.oneWay('columnChooser.container'),
-        rtlEnabled: this.options.oneWay('rtlEnabled'),
+      treeViewConfig: {
+        searchEditorOptions: this.options.oneWay('columnChooser.search.editorOptions').value,
+        searchEnabled: this.options.oneWay('columnChooser.search.enabled').value,
+        searchTimeout: this.options.oneWay('columnChooser.search.timeout').value,
 
-        position: computed(
-          (v) => v ?? {
-            my: 'right bottom',
-            at: 'right bottom',
-            of: ContentViewClasses.contentView,
-            collision: 'fit',
-            offset: '-2 -2',
-            boundaryOffset: '2 2',
-          },
-          [this.options.oneWay('columnChooser.position')],
-        ),
+        items: this.columnChooserController.items.value,
+      } as TreeViewProperties,
 
-        toolbarItems: computed(
-          (title) => {
-            const items = [
-              { text: title, toolbar: 'top', location: this.isMaterialOrGeneric() ? 'before' : 'center' },
-            ];
-
-            if (!this.isMaterialOrGeneric()) {
-              // @ts-expect-error
-              items.push({ shortcut: 'cancel' });
-            }
-
-            return items;
-          },
-          [this.options.oneWay('columnChooser.title')],
-        ),
-
-        onShown: (e: ShownEvent) => { this.setPopupAttributes(e?.component); },
-        onHidden: () => { this.popupVisible.update(false); },
-      } as MapMaybeSubscribable<PopupProperties>),
-
-      treeViewConfig: combined({
-        dataStructure: 'plain',
-        activeStateEnabled: true,
-        focusStateEnabled: true,
-        hoverStateEnabled: true,
-        disabled: false,
-        rootValue: null,
-        rtlEnabled: this.options.oneWay('rtlEnabled'),
-
-        searchEditorOptions: this.options.oneWay('columnChooser.search.editorOptions'),
-        searchEnabled: this.options.oneWay('columnChooser.search.enabled'),
-        searchTimeout: this.options.oneWay('columnChooser.search.timeout'),
-
-        ...this.getTreeViewConfig(),
-      } as MapMaybeSubscribable<TreeViewProperties>),
-    });
-  }
-
-  protected getTreeViewConfig(): MapMaybeSubscribable<TreeViewProperties> {
-    if (this.isSelectMode()) {
-      const controller = this.columnChooserController;
-
-      return {
-        items: controller.items,
-        showCheckBoxesMode: computed(
-          (v) => (v ? 'selectAll' : 'normal'),
-          [this.options.oneWay('columnChooser.selection.allowSelectAll')],
-        ),
-        selectByClick: this.options.oneWay('columnChooser.selection.selectByClick'),
-        onSelectionChanged: controller.onSelectionChanged.bind(controller),
-      };
-    }
-
-    return {};
+      treeViewSelectModeConfig: this.selectModeConfig.value,
+      treeViewDragAndDropModeConfig: this.dragAndDropModeConfig.value,
+    }));
   }
 
   private isMaterialOrGeneric(): boolean {
-    const theme = current();
-
-    return isMaterial(theme) || isGeneric(theme);
-  }
-
-  private getPopupWrapperClass(): string {
-    const modeSpecificClass = this.isSelectMode() ? CLASS.selectMode : CLASS.dragMode;
-
-    return [addWidgetPrefix(CLASS.root), addWidgetPrefix(modeSpecificClass)].join(' ');
-  }
-
-  private setPopupAttributes(popup: dxPopup): void {
-    // TODO: band columns aren't yet implemented in cardview
-    const isBandColumnsUsed = false;
-
-    // @ts-expect-error
-    popup.setAria({
-      label: messageLocalization.format('dxDataGrid-columnChooserTitle'),
-    });
-
-    // @ts-expect-error
-    popup.$content().addClass(addWidgetPrefix(CLASS.list));
-
-    if (this.isSelectMode() && !isBandColumnsUsed) {
-      // @ts-expect-error
-      popup.$content().addClass(addWidgetPrefix(CLASS.plain));
-    }
-  }
-
-  private isSelectMode(): boolean {
-    return this.mode.unreactive_get() === 'select';
+    return isMaterial(current()) || isGeneric(current());
   }
 }

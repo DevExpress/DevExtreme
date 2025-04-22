@@ -1,4 +1,5 @@
 import type DOMComponent from '@js/core/dom_component';
+import type { WithKeyDown } from '@ts/grids/new/grid_core/keyboard_navigation/index';
 import type { InfernoNode, RefObject } from 'inferno';
 import { Component, createRef } from 'inferno';
 
@@ -12,7 +13,7 @@ interface WithRef<TComponent> {
 export abstract class InfernoWrapper<
   TProperties,
   TComponent extends DOMComponent<TProperties>,
-> extends Component<TProperties & WithRef<TComponent>> {
+> extends Component<TProperties & WithRef<TComponent> & WithKeyDown> {
   protected ref = createRef<HTMLDivElement>();
 
   protected component?: TComponent;
@@ -25,7 +26,10 @@ export abstract class InfernoWrapper<
     if (this.props.elementRef) {
       this.ref = this.props.elementRef;
     }
-    return <div ref={this.ref}></div>;
+    return <div
+      ref={this.ref}
+      onKeyDown={this.props.onKeyDown}
+    />;
   }
 
   private getComponentOptions(): TProperties {

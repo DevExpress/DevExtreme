@@ -147,7 +147,7 @@ class TagBox<
         delete this._preserveFocusedTag;
       },
       enter(e, options): void {
-        const isListItemFocused = this._list && this._list.option('focusedElement') !== null;
+        const isListItemFocused = this._list?.option('focusedElement') !== null && this.option('opened') === true;
         const isCustomItem = this.option('acceptCustomValue') && !isListItemFocused;
 
         if (isCustomItem) {

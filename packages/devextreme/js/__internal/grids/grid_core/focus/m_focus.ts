@@ -213,6 +213,7 @@ export class FocusController extends core.ViewController {
     const isAutoNavigate = that.isAutoNavigateToFocusedRow();
     // @ts-expect-error
     const d = new Deferred();
+    const rowsView = this.getView('rowsView');
 
     if (key === undefined || !this.getDataController().dataSource()) {
       return d.reject().promise();
@@ -239,7 +240,9 @@ export class FocusController extends core.ViewController {
           }).fail(d.reject);
         } else {
           this.getDataController().pageIndex(pageIndex).done(() => {
-            that._navigateTo(key, d, needFocusRow);
+            rowsView.waitAsyncTemplates(true).done(() => {
+              that._navigateTo(key, d, needFocusRow);
+            });
           }).fail(d.reject);
         }
       }).fail(d.reject);

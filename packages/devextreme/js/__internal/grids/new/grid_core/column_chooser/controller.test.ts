@@ -1,174 +1,228 @@
-/* eslint-disable spellcheck/spell-checker */
 import { describe, expect, it } from '@jest/globals';
+import type { SortOrder } from '@js/common';
+import type { ColumnChooserMode } from '@js/common/grids';
 import type { SelectionChangedEvent } from '@js/ui/tree_view';
 
 import { ColumnsController } from '../columns_controller';
+import type { Column } from '../columns_controller/types';
 import { getContext } from '../di.test_utils';
 import type { Options } from '../options';
 import { OptionsControllerMock } from '../options_controller/options_controller.mock';
-import { ColumnChooserController } from './controller';
-import { expectColumnVisibility } from './test-utils';
+import type { ColumnChooserController } from './controller';
+import { ColumnChooserControllerMock } from './controller.mock';
 
 const setup = (options: Options) => {
   const context = getContext(options);
 
+  const columnsController = context.get(ColumnsController);
+  const optionsController = context.get(OptionsControllerMock);
+  const controller = new ColumnChooserControllerMock(columnsController, optionsController);
+
   return {
-    controller: context.get(ColumnChooserController),
-    columnsController: context.get(ColumnsController),
-    optionsController: context.get(OptionsControllerMock),
+    columnsController,
+    controller,
+    treeView: controller.treeView,
   };
+};
+
+const expectColumnVisibility = (
+  columnsController: ColumnsController,
+  visibility: boolean[],
+): void => {
+  const columns = columnsController.columns.peek();
+  const columnsVisibility = columns.map((column) => column.visible);
+
+  expect(columnsVisibility).toEqual(visibility);
 };
 
 describe('ColumnChooser', () => {
   describe('Controller', () => {
-    describe('chooserColumns state', () => {
+    describe('chooserColumns', () => {
       const expectChooserColumns = (
         controller: ColumnChooserController,
         columnNames: string[],
       ): void => {
         const columns = controller.chooserColumns
-          .unreactive_get()
+          .peek()
           .map((column) => column.name);
 
         expect(columns).toEqual(columnNames);
       };
 
-      it('is correct', () => {
-        const { controller } = setup({
-          columns: [
-            { dataField: 'A Column' },
-            { dataField: 'B Column' },
-          ],
-        });
+      it.each<
+        { mode: ColumnChooserMode; sortOrder?: SortOrder; result: string[] }
+      >([
+        { mode: 'dragAndDrop', sortOrder: 'asc', result: [] },
+        { mode: 'dragAndDrop', sortOrder: 'desc', result: [] },
+        { mode: 'dragAndDrop', sortOrder: undefined, result: [] },
+        { mode: 'select', sortOrder: 'asc', result: ['A', 'B', 'C'] },
+        { mode: 'select', sortOrder: 'desc', result: ['C', 'B', 'A'] },
+        { mode: 'select', sortOrder: undefined, result: ['C', 'A', 'B'] },
+      ])(
+        'when mode: \'$mode\', sortOrder: \'$sortOrder\'',
+        ({ mode, sortOrder, result }) => {
+          const { controller } = setup({
+            columns: [
+              { dataField: 'C' },
+              { dataField: 'A' },
+              { dataField: 'B' },
+            ],
+            columnChooser: {
+              enabled: true,
+              mode,
+              sortOrder,
+            },
+          });
 
-        expectChooserColumns(controller, ['A Column', 'B Column']);
-      });
+          expectChooserColumns(controller, result);
+        },
+      );
 
-      it('is correct when a column has showInColumnChooser=false', () => {
-        const { controller } = setup({
-          columns: [
-            { dataField: 'A Column' },
-            { dataField: 'B Column', showInColumnChooser: false },
-            { dataField: 'C Column' },
-          ],
-        });
+      it.each<
+      { mode: ColumnChooserMode; sortOrder?: SortOrder; result: string[] }
+    >([
+        { mode: 'dragAndDrop', sortOrder: 'asc', result: ['A', 'B', 'C'] },
+        { mode: 'dragAndDrop', sortOrder: 'desc', result: ['C', 'B', 'A'] },
+        { mode: 'dragAndDrop', sortOrder: undefined, result: ['C', 'A', 'B'] },
+        { mode: 'select', sortOrder: 'asc', result: ['A', 'B', 'C', 'D', 'E'] },
+        { mode: 'select', sortOrder: 'desc', result: ['E', 'D', 'C', 'B', 'A'] },
+        { mode: 'select', sortOrder: undefined, result: ['C', 'D', 'A', 'B', 'E'] },
+      ])(
+        'when some columns are invisible and mode: \'$mode\', sortOrder: \'$sortOrder\'',
+        ({ mode, sortOrder, result }) => {
+          const { controller } = setup({
+            columns: [
+              { dataField: 'C', visible: false },
+              { dataField: 'D' },
+              { dataField: 'A', visible: false },
+              { dataField: 'B', visible: false },
+              { dataField: 'E' },
+            ],
+            columnChooser: {
+              enabled: true,
+              mode,
+              sortOrder,
+            },
+          });
 
-        expectChooserColumns(controller, ['A Column', 'C Column']);
-      });
+          expectChooserColumns(controller, result);
+        },
+      );
 
-      it('is correct when sortOrder is set', () => {
-        const { controller, optionsController } = setup({
-          columns: [
-            { dataField: 'C Column' },
-            { dataField: 'A Column' },
-            { dataField: 'B Column' },
-          ],
-          columnChooser: {
-            sortOrder: 'asc',
-          },
-        });
+      it.each<
+      { mode: ColumnChooserMode; sortOrder?: SortOrder; result: string[] }
+    >([
+        { mode: 'dragAndDrop', sortOrder: 'asc', result: ['A', 'C'] },
+        { mode: 'dragAndDrop', sortOrder: 'desc', result: ['C', 'A'] },
+        { mode: 'dragAndDrop', sortOrder: undefined, result: ['C', 'A'] },
+        { mode: 'select', sortOrder: 'asc', result: ['A', 'C', 'D', 'E'] },
+        { mode: 'select', sortOrder: 'desc', result: ['E', 'D', 'C', 'A'] },
+        { mode: 'select', sortOrder: undefined, result: ['C', 'D', 'A', 'E'] },
+      ])(
+        'when some columns have showInColumnChooser=false and mode: \'$mode\', sortOrder: \'$sortOrder\'',
+        ({ mode, sortOrder, result }) => {
+          const { controller } = setup({
+            columns: [
+              { dataField: 'C', visible: false },
+              { dataField: 'D' },
+              { dataField: 'A', visible: false },
+              { dataField: 'B', visible: false, showInColumnChooser: false },
+              { dataField: 'E' },
+              { dataField: 'F', showInColumnChooser: false },
+            ],
+            columnChooser: {
+              enabled: true,
+              mode,
+              sortOrder,
+            },
+          });
 
-        expectChooserColumns(controller, ['A Column', 'B Column', 'C Column']);
-
-        optionsController.option('columnChooser.sortOrder', 'desc');
-
-        expectChooserColumns(controller, ['C Column', 'B Column', 'A Column']);
-      });
+          expectChooserColumns(controller, result);
+        },
+      );
     });
 
-    describe('items state', () => {
-      it('is correct', () => {
+    describe('items', () => {
+      it.each<
+        { mode: ColumnChooserMode }
+      >([
+        { mode: 'select' },
+        { mode: 'dragAndDrop' },
+      ])('when mode=\'$mode\'', ({ mode }) => {
         const { controller } = setup({
           columns: [
-            { dataField: 'A Column' },
-            { dataField: 'B Column', caption: 'B Caption' },
-          ],
-        });
+            { dataField: 'A', visible: true },
+            { dataField: 'B', visible: false },
 
-        expect(controller.items.unreactive_get()).toEqual(
-          [
-            {
-              id: 0, columnName: 'A Column', selected: true, text: 'A Column', disabled: false,
-            },
-            {
-              id: 1, columnName: 'B Column', selected: true, text: 'B Caption', disabled: false,
-            },
-          ],
-        );
-      });
+            { dataField: 'C', caption: '1', visible: true },
+            { dataField: 'D', caption: '2', visible: false },
 
-      it('updated when column option changed on select mode', () => {
-        const { columnsController, controller } = setup({
-          columns: ['Column 1', 'Column 2', 'Column 3', 'Column 4', 'Column 5'],
+            { dataField: 'E', allowHiding: false, visible: true },
+            { dataField: 'F', allowHiding: false, visible: false },
+
+            { dataField: 'G', showInColumnChooser: false },
+            { dataField: 'H', showInColumnChooser: false, visible: false },
+          ],
           columnChooser: {
             enabled: true,
-            mode: 'select',
+            mode,
           },
         });
 
-        const getItems = () => controller.items.unreactive_get();
-        const getItem = (index: number) => getItems()[index];
+        let expectedItems = [
+          {
+            columnName: 'A', selected: true, text: 'A', disabled: false,
+          },
+          {
+            columnName: 'B', selected: false, text: 'B', disabled: false,
+          },
+          {
+            columnName: 'C', selected: true, text: '1', disabled: false,
+          },
+          {
+            columnName: 'D', selected: false, text: '2', disabled: false,
+          },
+          {
+            columnName: 'E', selected: true, text: 'E', disabled: true,
+          },
+          {
+            columnName: 'F', selected: false, text: 'F', disabled: true,
+          },
+        ];
 
-        const columnOption = (index: number, option, value) => {
-          const column = columnsController.columns.unreactive_get()[index];
-          columnsController.columnOption(column, option, value);
-        };
+        if (mode === 'dragAndDrop') {
+          expectedItems = expectedItems.filter((item) => !item.selected);
+        }
 
-        columnOption(0, 'showInColumnChooser', false);
-        expect(getItems().filter((item) => item.columnName === 'Column 1')).toHaveLength(0);
-
-        columnOption(0, 'showInColumnChooser', true);
-        expect(getItem(0).columnName).toBe('Column 1');
-
-        // test column.visible
-        columnOption(1, 'visible', false);
-        expect(getItem(1).selected).toBeFalsy();
-
-        columnOption(1, 'visible', true);
-        expect(getItem(1).selected).toBeTruthy();
-
-        // test column.caption
-        columnOption(2, 'caption', 'new caption');
-        expect(getItem(2).text).toBe('new caption');
-
-        // test column.name
-        columnOption(3, 'name', 'new name');
-        expect(getItem(3).columnName).toBe('new name');
-
-        // test column.allowHiding
-        columnOption(4, 'allowHiding', false);
-        expect(getItem(4).disabled).toBeTruthy();
-
-        columnOption(4, 'allowHiding', true);
-        expect(getItem(4).disabled).toBeFalsy();
+        expect(controller.items.peek()).toMatchObject(expectedItems);
       });
     });
 
     it('onSelectionChanged', () => {
       const { controller, columnsController } = setup({
         columns: [
-          { dataField: 'A Column' },
-          { dataField: 'B Column' },
-          { dataField: 'C Column', allowHiding: false },
-          { dataField: 'D Column', allowHiding: false },
-          { dataField: 'E Column', visible: false },
-          { dataField: 'F Column', visible: false },
-          { dataField: 'G Column', allowHiding: false, visible: false },
-          { dataField: 'H Column', allowHiding: false, visible: false },
+          { dataField: 'A' },
+          { dataField: 'B' },
+          { dataField: 'C', allowHiding: false },
+          { dataField: 'D', allowHiding: false },
+          { dataField: 'E', visible: false },
+          { dataField: 'F', visible: false },
+          { dataField: 'G', allowHiding: false, visible: false },
+          { dataField: 'H', allowHiding: false, visible: false },
         ],
       });
 
       controller.onSelectionChanged({
         component: {
           getNodes: () => [
-            { itemData: { columnName: 'A Column' }, selected: true },
-            { itemData: { columnName: 'B Column' }, selected: false },
-            { itemData: { columnName: 'C Column' }, selected: true },
-            { itemData: { columnName: 'D Column' }, selected: false },
-            { itemData: { columnName: 'E Column' }, selected: true },
-            { itemData: { columnName: 'F Column' }, selected: false },
-            { itemData: { columnName: 'G Column' }, selected: true },
-            { itemData: { columnName: 'H Column' }, selected: false },
+            { itemData: { columnName: 'A' }, selected: true },
+            { itemData: { columnName: 'B' }, selected: false },
+            { itemData: { columnName: 'C' }, selected: true },
+            { itemData: { columnName: 'D' }, selected: false },
+            { itemData: { columnName: 'E' }, selected: true },
+            { itemData: { columnName: 'F' }, selected: false },
+            { itemData: { columnName: 'G' }, selected: true },
+            { itemData: { columnName: 'H' }, selected: false },
           ],
         },
       } as unknown as SelectionChangedEvent);
@@ -177,6 +231,110 @@ describe('ColumnChooser', () => {
         columnsController,
         [true, false, true, true, true, false, true, false],
       );
+    });
+
+    it('onColumnMove', () => {
+      const { controller, columnsController } = setup({
+        columns: [
+          { dataField: 'A', visible: true },
+        ],
+      });
+
+      const getFirstColumn = (): Column => columnsController.columns.peek()[0];
+
+      controller.onColumnMove(getFirstColumn());
+
+      expect(getFirstColumn().visible).toBeFalsy();
+    });
+
+    describe('select mode', () => {
+      it('toggles column visibility on select/unselect', () => {
+        const { columnsController, treeView } = setup({
+          columns: ['Column 1', 'Column 2', 'Column 3', 'Column 4'],
+          columnChooser: {
+            enabled: true,
+            mode: 'select',
+          },
+        });
+
+        treeView?.unselectItem(0);
+        expectColumnVisibility(columnsController, [false, true, true, true]);
+
+        treeView?.selectItem(0);
+        expectColumnVisibility(columnsController, [true, true, true, true]);
+      });
+
+      it('toggles column visibility on selectAll/unselectAll', () => {
+        const { columnsController, treeView } = setup({
+          columns: [
+            { name: 'Column 1', visible: false },
+            { name: 'Column 2', visible: true },
+          ],
+          columnChooser: {
+            enabled: true,
+            mode: 'select',
+          },
+        });
+
+        treeView?.selectAll();
+        expectColumnVisibility(columnsController, [true, true]);
+
+        treeView?.unselectAll();
+        expectColumnVisibility(columnsController, [false, false]);
+      });
+
+      it('toggles column visibility on selectAll/unselectAll when some column have showInColumnChooser=false', () => {
+        const { columnsController, treeView } = setup({
+          columns: [
+            { name: 'Column 1' },
+            { name: 'Column 2', showInColumnChooser: false },
+            { name: 'Column 3' },
+          ],
+          columnChooser: {
+            enabled: true,
+            mode: 'select',
+          },
+        });
+
+        treeView?.unselectAll();
+        expectColumnVisibility(columnsController, [false, true, false]);
+
+        // make second column invisible
+        columnsController.columnOption(
+          columnsController.columns.peek()[1],
+          'visible',
+          false,
+        );
+
+        treeView?.selectAll();
+        expectColumnVisibility(columnsController, [true, false, true]);
+      });
+
+      it('does not toggle columns with allowHiding=false on selectAll/unselectAll', () => {
+        const { columnsController, treeView } = setup({
+          columns: [
+            { name: 'Column 1' },
+            { name: 'Column 2', allowHiding: false },
+          ],
+          columnChooser: {
+            enabled: true,
+            mode: 'select',
+          },
+        });
+
+        treeView?.unselectAll();
+        expectColumnVisibility(columnsController, [false, true]);
+
+        // make second column invisible
+        columnsController.columnOption(
+          columnsController.columns.peek()[1],
+          'visible',
+          false,
+        );
+
+        treeView?.selectAll();
+        expectColumnVisibility(columnsController, [true, true]);
+      });
     });
   });
 });

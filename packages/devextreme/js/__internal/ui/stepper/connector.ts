@@ -11,6 +11,7 @@ import { ORIENTATION } from './stepper';
 export const STEPPER_CONNECTOR_CLASS = 'dx-stepper-connector';
 export const STEPPER_CONNECTOR_HORIZONTAL_ORIENTATION_CLASS = 'dx-stepper-connector-horizontal';
 export const STEPPER_CONNECTOR_VERTICAL_ORIENTATION_CLASS = 'dx-stepper-connector-vertical';
+export const STEPPER_CONNECTOR_CONTAINER_CLASS = 'dx-stepper-connector-container';
 export const STEPPER_CONNECTOR_VALUE_CLASS = 'dx-stepper-connector-value';
 
 const PERCENT_UNIT = '%';
@@ -91,9 +92,19 @@ class Connector extends DOMComponent<Connector, ConnectorProperties> {
   }
 
   _renderContent(): void {
+    const $container = $('<div>')
+      .addClass(STEPPER_CONNECTOR_CONTAINER_CLASS)
+      .appendTo(this.element());
+
     $('<div>')
       .addClass(STEPPER_CONNECTOR_VALUE_CLASS)
-      .appendTo(this.element());
+      .appendTo($container);
+  }
+
+  _clean(): void {
+    super._clean();
+
+    this.$element().empty();
   }
 
   _optionChanged(args: OptionChanged<ConnectorProperties>): void {

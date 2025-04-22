@@ -11,13 +11,9 @@ interface AccessExpressions {
   getter: AppointmentGetter;
   setter: AppointmentSetter;
 }
-interface KnownFields extends Record<string, unknown> {
+interface KnownFields extends Appointment {
   startDate: Date;
   endDate: Date;
-  startDateTimeZone?: string;
-  endDateTimeZone?: string;
-  recurrenceRule?: string;
-  recurrenceException?: string;
 }
 
 const isDateField = (field: string): boolean => field === 'startDate' || field === 'endDate';

@@ -1,12 +1,11 @@
 import {
   describe, expect, it, jest,
 } from '@jest/globals';
-import { HORIZONTAL_GROUP_ORIENTATION, VERTICAL_GROUP_ORIENTATION } from '@ts/scheduler/r1/const';
+import { HORIZONTAL_GROUP_ORIENTATION, VERTICAL_GROUP_ORIENTATION } from '@ts/scheduler/constants';
 
-import type { ViewType } from '../../types';
+import type { ViewType } from '../../../types';
 import {
   getAppointmentKey,
-  getAppointmentTakesAllDay,
   getCellDuration,
   getDatesWithoutTime,
   getGroupPanelData,
@@ -14,6 +13,7 @@ import {
   getKeyByGroup,
   getSkippedHoursInRange,
   hasResourceValue,
+  isAppointmentTakesAllDay,
   isDataOnWeekend, isGroupingByDate, isHorizontalGroupingApplied, isVerticalGroupingApplied,
 } from '../index';
 
@@ -46,7 +46,7 @@ describe('getAppointmentTakesAllDay', () => {
         endDate: new Date(2022, 0, 1, 12),
       };
 
-      expect(getAppointmentTakesAllDay(appointment, 'all'))
+      expect(isAppointmentTakesAllDay(appointment, 'all'))
         .toBe(true);
     });
 
@@ -57,7 +57,7 @@ describe('getAppointmentTakesAllDay', () => {
         endDate: new Date(2022, 0, 2, 12),
       };
 
-      expect(getAppointmentTakesAllDay(appointment, 'all'))
+      expect(isAppointmentTakesAllDay(appointment, 'all'))
         .toBe(true);
     });
 
@@ -68,7 +68,7 @@ describe('getAppointmentTakesAllDay', () => {
         endDate: new Date(2022, 0, 1, 11),
       };
 
-      expect(getAppointmentTakesAllDay(appointment, 'all'))
+      expect(isAppointmentTakesAllDay(appointment, 'all'))
         .toBe(false);
     });
 
@@ -79,7 +79,7 @@ describe('getAppointmentTakesAllDay', () => {
         endDate: new Date(2022, 0, 1, 13),
       };
 
-      expect(getAppointmentTakesAllDay(appointment, 'all'))
+      expect(isAppointmentTakesAllDay(appointment, 'all'))
         .toBe(false);
     });
 
@@ -94,7 +94,7 @@ describe('getAppointmentTakesAllDay', () => {
           endDate,
         };
 
-        expect(getAppointmentTakesAllDay(appointment, 'all'))
+        expect(isAppointmentTakesAllDay(appointment, 'all'))
           .toBe(false);
       });
     });
@@ -108,7 +108,7 @@ describe('getAppointmentTakesAllDay', () => {
         endDate: new Date(2022, 0, 1, 12),
       };
 
-      expect(getAppointmentTakesAllDay(appointment, 'hidden'))
+      expect(isAppointmentTakesAllDay(appointment, 'hidden'))
         .toBe(false);
     });
   });
@@ -121,7 +121,7 @@ describe('getAppointmentTakesAllDay', () => {
         endDate: new Date(2022, 0, 1, 12),
       };
 
-      expect(getAppointmentTakesAllDay(appointment, 'allDay'))
+      expect(isAppointmentTakesAllDay(appointment, 'allDay'))
         .toBe(true);
     });
 
@@ -132,7 +132,7 @@ describe('getAppointmentTakesAllDay', () => {
         endDate: new Date(2022, 0, 2, 12),
       };
 
-      expect(getAppointmentTakesAllDay(appointment, 'allDay'))
+      expect(isAppointmentTakesAllDay(appointment, 'allDay'))
         .toBe(false);
     });
   });

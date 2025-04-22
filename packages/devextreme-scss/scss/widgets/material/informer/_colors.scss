@@ -1,0 +1,15 @@
+@use "../colors" as *;
+@use "sass:color";
+
+// adduse
+
+$informer-color: $base-danger !default;
+$informer-background-color: null !default;
+
+@if $mode == "light" {
+  $informer-background-color: lighten(desaturate(adjust-hue($base-danger, 1), 24.92), 38.24);
+}
+
+@if $mode == "dark" {
+  $informer-background-color: darken(desaturate(adjust-hue($base-danger, 1), 41.80), 53.92);
+}

@@ -1,6 +1,6 @@
 import type { JSXTemplate } from '@ts/core/r1/types';
 
-import type { GroupOrientation } from '../../types';
+import type { GroupOrientation } from '../../../types';
 import type {
   DataCellTemplateProps, DefaultProps, GroupedViewData, PropsWithViewContext,
 } from '../types';

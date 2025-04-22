@@ -1,28 +1,38 @@
 .dx-stepper-connector {
   display: flex;
   position: absolute;
+  align-items: center;
+  pointer-events: none;
+}
+
+.dx-stepper-connector-horizontal {
+  width: 100%;
 
   .dx-stepper-connector-value {
-    transition: flex-grow 0.5s ease-in-out;
-  }
-
-  &.dx-stepper-connector-horizontal {
-    width: 100%;
-
-    .dx-stepper-connector-value {
-      width: 0;
-      height: 100%;
-    }
-  }
-
-  &.dx-stepper-connector-vertical {
+    width: 0;
     height: 100%;
-    flex-direction: column;
-
-    .dx-stepper-connector-value {
-      height: 0;
-      width: 100%;
-    }
   }
 }
 
+.dx-stepper-connector-vertical {
+  flex-direction: column;
+  height: 100%;
+
+  .dx-stepper-connector-container {
+    flex-direction: column;
+  }
+
+  .dx-stepper-connector-value {
+    height: 0;
+    width: 100%;
+  }
+}
+
+.dx-stepper-connector-container {
+  display: flex;
+  flex: 1;
+}
+
+.dx-stepper-connector-value {
+  transition: flex-grow 0.5s ease-in-out;
+}

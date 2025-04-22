@@ -6,9 +6,9 @@ import { Deferred, when } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import { isDefined, isString } from '@js/core/utils/type';
+import { capitalize } from '@ts/core/utils/capitalize';
 
 import pivotGridUtils, {
-  capitalizeFirstLetter,
   getExpandedLevel,
   getFiltersByPath,
   setDefaultFieldValueFormatting,
@@ -38,7 +38,7 @@ function getFieldFilterSelector(field) {
     if (groupInterval.toLowerCase() === 'quarter') {
       groupInterval = 'Month';
     }
-    selector = `${selector}.${capitalizeFirstLetter(groupInterval)}`;
+    selector = `${selector}.${capitalize(groupInterval)}`;
   }
 
   return selector;
@@ -99,7 +99,7 @@ function createFieldFilterExpressions(field, operation?) {
     let currentExpression: any = [];
 
     if (Array.isArray(filterValue)) {
-      const parseLevelsRecursive = field.levels && field.levels.length;
+      const parseLevelsRecursive = field.levels?.length;
 
       if (parseLevelsRecursive) {
         currentExpression = createFieldFilterExpressions({
@@ -249,7 +249,7 @@ function parseResult(data, total, descriptions, result) {
   const { rowHash } = result;
   const { columnHash } = result;
 
-  if (total && total.summary) {
+  if (total?.summary) {
     each(total.summary, (index, summary) => {
       setValue(
         result.values,
@@ -331,10 +331,10 @@ function parseResult(data, total, descriptions, result) {
       result.rows.push({});
     }
 
-    const currentRowIndex = rowItem && rowItem.index || result.grandTotalRowIndex;
-    const currentColumnIndex = columnItem && columnItem.index || result.grandTotalColumnIndex;
+    const currentRowIndex = rowItem?.index || result.grandTotalRowIndex;
+    const currentColumnIndex = columnItem?.index || result.grandTotalColumnIndex;
 
-    each(item && item.summary || [], (i, summary) => {
+    each(item?.summary || [], (i, summary) => {
       setValue(result.values, summary, currentRowIndex, currentColumnIndex, i);
     });
   });

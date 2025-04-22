@@ -2,10 +2,10 @@
 /* eslint-disable @typescript-eslint/no-this-alias */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 /* eslint-disable max-classes-per-file */
-/* eslint-disable spellcheck/spell-checker */
+
+import type { ReadonlySignal } from '@preact/signals-core';
+import { effect } from '@preact/signals-core';
 import { infernoRenderer } from '@ts/core/m_inferno_renderer';
-import type { Subscription, SubsGets } from '@ts/core/reactive/index';
-import { toSubscribable } from '@ts/core/reactive/index';
 import { Component, type ComponentType } from 'inferno';
 
 export abstract class View<T extends {}> {
@@ -19,15 +19,16 @@ export abstract class View<T extends {}> {
 
   protected abstract component: ComponentType<T>;
 
-  protected abstract getProps(): SubsGets<T>;
+  protected abstract getProps(): ReadonlySignal<T>;
 
-  public render(root: HTMLDivElement): Subscription {
+  public render(root: HTMLDivElement): () => void {
     this.root = root;
     const ViewComponent = this.component;
-    return toSubscribable(this.getProps()).subscribe((props: T) => {
-      this.props = props;
+    const props = this.getProps();
+    return effect(() => {
+      this.props = props.value;
       const content = (
-        <ViewComponent {...props}/>
+        <ViewComponent {...props.value}/>
       );
 
       infernoRenderer.renderIntoContainer(content, root, !this.firstRender);
@@ -48,17 +49,20 @@ export abstract class View<T extends {}> {
     }
 
     return class InfernoView extends Component<{}, State> {
-      private readonly subscription: Subscription;
+      private readonly subscription: () => void;
 
       constructor() {
         super();
-        this.subscription = toSubscribable(view.getProps()).subscribe((props) => {
+        const props = view.getProps();
+        this.subscription = effect(() => {
+          view.props = props.value;
+
           this.state ??= {
-            props,
+            props: props.value,
           };
 
-          if (this.state.props !== props) {
-            this.setState({ props });
+          if (this.state.props !== props.value) {
+            this.setState({ props: props.value });
           }
         });
       }

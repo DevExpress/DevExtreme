@@ -1,4 +1,3 @@
-/* eslint-disable spellcheck/spell-checker */
 import type { Item as ContextMenuItem, ItemClickEvent } from '@js/ui/context_menu';
 
 import { ColumnsController } from '../../grid_core/columns_controller/index';
@@ -26,11 +25,12 @@ export class ContextMenuController
   }
 
   public override show(
-    event: MouseEvent,
+    event: KeyboardEvent | MouseEvent,
     view: ContextMenuTarget,
     contextInfo: ContextInfo = {},
+    onMenuCloseCallback?: () => void,
   ): void {
-    super.show(event, view, contextInfo);
+    super.show(event, view, contextInfo, onMenuCloseCallback);
   }
 
   protected override getItems(
@@ -57,7 +57,7 @@ export class ContextMenuController
       ...contextInfo,
     };
 
-    const callback = this.options.action('onContextMenuPreparing').unreactive_get();
+    const callback = this.options.action('onContextMenuPreparing').peek();
 
     callback(event);
 
@@ -71,21 +71,21 @@ export class ContextMenuController
 
     return [
       {
-        text: this.options.oneWay('sorting.ascendingText').unreactive_get(),
+        text: this.options.oneWay('sorting.ascendingText').peek(),
         value: 'asc',
         disabled: column.sortOrder === 'asc',
         icon: 'sortuptext',
         onItemClick,
       },
       {
-        text: this.options.oneWay('sorting.descendingText').unreactive_get(),
+        text: this.options.oneWay('sorting.descendingText').peek(),
         value: 'desc',
         disabled: column.sortOrder === 'desc',
         icon: 'sortdowntext',
         onItemClick,
       },
       {
-        text: this.options.oneWay('sorting.clearText').unreactive_get(),
+        text: this.options.oneWay('sorting.clearText').peek(),
         value: undefined,
         disabled: !column.sortOrder,
         icon: 'none',

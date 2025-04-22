@@ -1,37 +1,59 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
-import { computed } from '@ts/core/reactive/index';
+import type { Signal } from '@preact/signals-core';
+import { computed, signal } from '@preact/signals-core';
+import { anyOf, noneOf } from '@ts/grids/grid_core/filter/m_filter_custom_operations';
 import gridCoreUtils from '@ts/grids/grid_core/m_utils';
 
+import { ColumnsController } from '../columns_controller/index';
 import { OptionsController } from '../options_controller/options_controller';
-import { SearchController } from '../search/index';
+import type { AppliedFilters } from './types';
+import { getAppliedFilterExpressions } from './utils';
 
 export class FilterController {
-  public readonly filter = this.options.twoWay('filterValue');
+  private readonly filterBuilderCustomOperations = this.options.oneWay('filterBuilder.customOperations');
 
-  public readonly filterEnabled = this.options.twoWay('filterPanel.filterEnabled');
+  public readonly filterPanelFilterEnabled = this.options.oneWay('filterPanel.filterEnabled');
 
-  public static dependencies = [OptionsController, SearchController] as const;
+  public readonly filterValueOption = this.options.twoWay('filterValue');
+
+  public readonly appliedFilters: Signal<AppliedFilters> = signal({});
+
+  public static dependencies = [
+    OptionsController,
+    ColumnsController,
+  ] as const;
+
+  public readonly customOperations = computed(
+    () => [
+      anyOf(null),
+      noneOf(null),
+    ]
+      .concat(this.filterBuilderCustomOperations.value)
+      .filter((o) => o),
+  );
+
+  private readonly appliedFilterExpressions = computed(
+    () => getAppliedFilterExpressions(
+      this.appliedFilters.value,
+      this.columnsController.visibleColumns.value,
+      this.customOperations.value,
+    ),
+  );
 
   public readonly displayFilter = computed(
-    (filterEnabled, filter, searchFilter) => {
-      if (!filterEnabled) {
-        return searchFilter;
-      }
-      return gridCoreUtils.combineFilters([filter, searchFilter]);
-    },
-    [
-      this.filterEnabled,
-      this.filter,
-      this.searchController.searchFilter,
-    ],
+    () => gridCoreUtils.combineFilters(
+      this.appliedFilterExpressions.value,
+    ),
   );
 
   constructor(
     private readonly options: OptionsController,
-    private readonly searchController: SearchController,
+    private readonly columnsController: ColumnsController,
   ) { }
 
+  public clearFilterCallback = (): void => {};
+
   public clearFilter(): void {
-    this.filter.update(null);
+    this.clearFilterCallback();
   }
 }

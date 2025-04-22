@@ -1,7 +1,6 @@
 import type { Column } from '@ts/grids/new/grid_core/columns_controller/types';
-import { MultipleKeyDownHandler } from '@ts/grids/new/grid_core/keyboard_navigation/index';
-import type { ComponentType } from 'inferno';
-import { Component, createRef } from 'inferno';
+import type { ComponentType, RefObject } from 'inferno';
+import { Component } from 'inferno';
 
 import { Icon } from '../../grid_core/icon';
 import type { Status } from './column_sortable';
@@ -42,31 +41,28 @@ function SortIcon(props: SortIconProps): JSX.Element {
 }
 
 export interface ItemProps {
+  elementRef?: RefObject<HTMLDivElement>;
+  tabIndex?: number;
   column: Column;
   status?: Status;
   showSortIndexes?: boolean;
+  isDragging?: boolean;
   template?: ComponentType<{ column: Column }>;
   cssClass?: string;
-  onSortClick?: (e: MouseEvent) => void;
-  onFilterClick?: (
-    element: Element,
-    onFilterCloseCallback?: () => void,
-  ) => void;
-  onContextMenu?: (e: MouseEvent) => void;
+  onKeyDown?: (event: KeyboardEvent) => void;
+  onSortClick?: (event: MouseEvent) => void;
+  onFilterClick?: (element: Element) => void;
+  onContextMenu?: (event: MouseEvent) => void;
 }
 
 export class Item extends Component<ItemProps> {
-  private readonly containerRef = createRef<HTMLDivElement>();
-
-  private readonly keyboardHandler = new MultipleKeyDownHandler(['alt', 'arrowdown']);
-
   public render(): JSX.Element {
     const Template = this.props.column.headerItemTemplate ?? this.props.template;
     const cssClass = `${CLASSES.item} ${this.props.column.headerItemCssClass ?? ''} ${this.props.cssClass ?? ''}`;
 
-    const { headerFilter } = this.props.column;
+    const { headerFilter, filterType } = this.props.column;
 
-    const hasHeaderFilterValue = headerFilter?.filterType === 'exclude'
+    const hasHeaderFilterValue = filterType === 'exclude'
       || !!headerFilter?.values?.length;
     const headerFilterIconClass = [
       CLASSES.headerFilter.iconEmpty,
@@ -79,33 +75,33 @@ export class Item extends Component<ItemProps> {
       none: undefined,
     }[this.props.status];
 
+    const showSortIcon = !this.props.isDragging && this.props.column.sortOrder !== undefined;
+    const showHeaderFilterIcon = !this.props.isDragging && this.props.column?.allowHeaderFiltering;
+
     return (
       <div
-        ref={this.containerRef}
+        ref={this.props.elementRef}
         className={cssClass}
-        tabIndex={0}
+        tabIndex={this.props.tabIndex}
         onClick={this.props.onSortClick}
-        onKeyDown={(event) => this.keyboardHandler.onKeyDownHandler(
-          event,
-          this.onFilterKeyPressHandler,
-        )}
-        onKeyUp={this.keyboardHandler.onKeyUpHandler}
+        onKeyDown={this.props.onKeyDown}
         onContextMenu={this.props.onContextMenu}
       >
         {icon}
         {Template && <Template column={this.props.column}/>}
         {!Template && this.props.column.caption}
         {
-          this.props.column.sortOrder !== undefined && (
+          showSortIcon && (
             <SortIcon
               // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
               sortIndex={this.props.column.sortIndex! + 1}
-              sortOrder={this.props.column.sortOrder}
+              // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+              sortOrder={this.props.column.sortOrder!}
               showSortIndex={this.props.showSortIndexes ?? false}
             />
           )
         }
-        { this.props.column?.allowHeaderFiltering && (
+        { showHeaderFilterIcon && (
           <Icon
             name='filter'
             className={headerFilterIconClass}
@@ -119,20 +115,8 @@ export class Item extends Component<ItemProps> {
   private readonly onFilterClickHandler = (event: Event): void => {
     event.stopPropagation();
 
-    if (this.containerRef.current) {
-      this.props.onFilterClick?.(this.containerRef.current);
+    if (this.props.elementRef?.current) {
+      this.props.onFilterClick?.(this.props.elementRef.current);
     }
-  };
-
-  private readonly onFilterKeyPressHandler = (event: KeyboardEvent): void => {
-    event.preventDefault();
-
-    if (this.containerRef.current) {
-      this.props.onFilterClick?.(this.containerRef.current, this.focusItem);
-    }
-  };
-
-  private readonly focusItem = (): void => {
-    this.containerRef?.current?.focus();
   };
 }

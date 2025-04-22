@@ -1,61 +1,18 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Options selectedCardKeys when given should set the select state of the item 1`] = `
-InterruptableComputed {
-  "callbacks": Set {},
-  "depInitialized": [
-    true,
-    true,
-    true,
-    true,
-  ],
-  "depValues": [
-    [
-      {
-        "id": 1,
-        "value": "test",
-      },
-    ],
-    [],
-    [
-      1,
-    ],
-    {
-      "caseSensitive": false,
-      "enabled": true,
-      "searchStr": "",
+[
+  {
+    "cells": [],
+    "data": {
+      "id": 1,
+      "value": "test",
     },
-  ],
-  "isInitialized": true,
-  "subscriptions": SubscriptionBag {
-    "subscriptions": [
-      {
-        "unsubscribe": [Function],
-      },
-      {
-        "unsubscribe": [Function],
-      },
-      {
-        "unsubscribe": [Function],
-      },
-      {
-        "unsubscribe": [Function],
-      },
-    ],
+    "index": 0,
+    "isSelected": true,
+    "key": 1,
   },
-  "value": [
-    {
-      "cells": [],
-      "data": {
-        "id": 1,
-        "value": "test",
-      },
-      "index": 0,
-      "isSelected": true,
-      "key": 1,
-    },
-  ],
-}
+]
 `;
 
 exports[`Options selection allowSelectAll when it is false and selection mode is 'multiple' selection should not work 1`] = `[]`;
@@ -92,113 +49,31 @@ exports[`Options selection allowSelectAll when it is true and selection mode is 
 exports[`Options selection allowSelectAll when it is true and selection mode isn't 'multiple' selection should not work 1`] = `[]`;
 
 exports[`Options selection mode when it is 'none' and the selectedCardKeys is specified selection should not apply 1`] = `
-InterruptableComputed {
-  "callbacks": Set {},
-  "depInitialized": [
-    true,
-    true,
-    true,
-    true,
-  ],
-  "depValues": [
-    [
-      {
-        "id": 1,
-        "value": "test",
-      },
-    ],
-    [],
-    [],
-    {
-      "caseSensitive": false,
-      "enabled": true,
-      "searchStr": "",
+[
+  {
+    "cells": [],
+    "data": {
+      "id": 1,
+      "value": "test",
     },
-  ],
-  "isInitialized": true,
-  "subscriptions": SubscriptionBag {
-    "subscriptions": [
-      {
-        "unsubscribe": [Function],
-      },
-      {
-        "unsubscribe": [Function],
-      },
-      {
-        "unsubscribe": [Function],
-      },
-      {
-        "unsubscribe": [Function],
-      },
-    ],
+    "index": 0,
+    "isSelected": false,
+    "key": 1,
   },
-  "value": [
-    {
-      "cells": [],
-      "data": {
-        "id": 1,
-        "value": "test",
-      },
-      "index": 0,
-      "isSelected": false,
-      "key": 1,
-    },
-  ],
-}
+]
 `;
 
 exports[`Options selection mode when it is 'none' selection should not work 1`] = `
-InterruptableComputed {
-  "callbacks": Set {},
-  "depInitialized": [
-    true,
-    true,
-    true,
-    true,
-  ],
-  "depValues": [
-    [
-      {
-        "id": 1,
-        "value": "test",
-      },
-    ],
-    [],
-    [],
-    {
-      "caseSensitive": false,
-      "enabled": true,
-      "searchStr": "",
+[
+  {
+    "cells": [],
+    "data": {
+      "id": 1,
+      "value": "test",
     },
-  ],
-  "isInitialized": true,
-  "subscriptions": SubscriptionBag {
-    "subscriptions": [
-      {
-        "unsubscribe": [Function],
-      },
-      {
-        "unsubscribe": [Function],
-      },
-      {
-        "unsubscribe": [Function],
-      },
-      {
-        "unsubscribe": [Function],
-      },
-    ],
+    "index": 0,
+    "isSelected": false,
+    "key": 1,
   },
-  "value": [
-    {
-      "cells": [],
-      "data": {
-        "id": 1,
-        "value": "test",
-      },
-      "index": 0,
-      "isSelected": false,
-      "key": 1,
-    },
-  ],
-}
+]
 `;

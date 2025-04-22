@@ -6,9 +6,11 @@ import * as columnChooser from './column_chooser/index';
 import * as columnsController from './columns_controller/index';
 import * as contentView from './content_view/index';
 import * as dataController from './data_controller/index';
+import * as editing from './editing/index';
 import * as headerFilter from './filtering/header_filter/index';
 import type * as filterController from './filtering/index';
 import { filterPanel } from './filtering/index';
+import * as keyboardNavigation from './keyboard_navigation/index';
 import * as pager from './pager/index';
 import * as searchPanel from './search/index';
 import type { SearchProperties } from './search/types';
@@ -35,7 +37,9 @@ export type Options =
   // TODO: Remove this mock search options during search implementation
   & SearchProperties
   & columnChooser.Options
-  & toolbar.Options;
+  & editing.Options
+  & toolbar.Options
+  & keyboardNavigation.Options;
 
 export const defaultOptions = {
   ...dataController.defaultOptions,
@@ -49,6 +53,8 @@ export const defaultOptions = {
   ...columnChooser.defaultOptions,
   ...selection.defaultOptions,
   ...toolbar.defaultOptions,
+  ...editing.defaultOptions,
+  ...keyboardNavigation.defaultOptions,
   searchText: '',
 } satisfies Options;
 

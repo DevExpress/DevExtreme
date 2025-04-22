@@ -1,0 +1,72 @@
+::ng-deep demo-app {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  row-gap: 16px;
+  height: 760px;
+  min-width: 320px;
+}
+
+::ng-deep .stepper-label {
+  font-weight: 600;
+}
+
+::ng-deep #customStepShape {
+  margin-bottom: 64px;
+}
+
+::ng-deep #customStepShape .dx-step-indicator {
+  border-radius: 4px;
+}
+
+::ng-deep #labelOnly {
+  margin-bottom: 64px;
+  align-items: center;
+}
+
+::ng-deep #labelOnly .dx-step {
+  padding-inline: 2px;
+}
+
+::ng-deep #labelOnly .dx-step-content {
+  padding-block: 4px;
+}
+
+::ng-deep #labelOnly .dx-step-caption {
+  width: auto;
+  max-width: 100%;
+}
+
+::ng-deep #labelOnly .dx-step-label {
+  background-color: var(--dx-color-main-bg);
+  padding-inline: 8px;
+}
+
+::ng-deep #labelOnly .dx-step.dx-state-focused .dx-step-caption {
+  box-shadow: 0 0 0 2px var(--dx-color-main-bg), 0 0 0 4px var(--dx-color-primary), 0 0 0 8px var(--dx-color-main-bg);
+  border-radius: 4px;
+}
+
+::ng-deep #iconOnly {
+  align-items: center;
+}
+
+::ng-deep #iconOnly .dx-step-content {
+  margin-block: 4px;
+}
+
+::ng-deep #iconOnly .dx-icon {
+  box-sizing: content-box;
+  padding: 6px;
+  background-color: var(--dx-color-main-bg);
+}
+
+::ng-deep #iconOnly .dx-state-focused .dx-icon {
+  box-shadow: 0 0 0 2px var(--dx-color-primary), 0 0 0 6px var(--dx-color-main-bg);
+  border-radius: 4px;
+}
+
+::ng-deep #iconOnly :is(.dx-step-selected, .dx-step-completed) .dx-icon {
+  color: var(--dx-color-primary);
+}

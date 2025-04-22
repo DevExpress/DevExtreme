@@ -17,14 +17,6 @@ const CUSTOM_CLASS = 'custom-class';
 const moduleConfig = {
     beforeEach: function() {
         this.$element = $('#htmlEditor');
-        this.componentMock = {
-            _createComponent: ($container, Widget, options) => {
-                return new Widget($container, options);
-            },
-            $element: () => {
-                return this.$element;
-            }
-        };
     }
 };
 
@@ -37,7 +29,7 @@ QUnit.module('FormDialog', moduleConfig, () => {
             wrapperAttr: { class: CUSTOM_CLASS },
         };
 
-        const formDialog = new FormDialog(this.componentMock, popupConfig);
+        const formDialog = new FormDialog(this.$element, popupConfig);
         formDialog.show();
 
         const $wrapper = this.$element.find(`.${CUSTOM_CLASS}`)[0];
@@ -47,7 +39,7 @@ QUnit.module('FormDialog', moduleConfig, () => {
     });
 
     test('Dialog wrapper has dx-dropdowneditor-overlay class (T1141075)', function(assert) {
-        const formDialog = new FormDialog(this.componentMock, { container: this.$element });
+        const formDialog = new FormDialog(this.$element, { container: this.$element });
 
         formDialog.show();
 
@@ -57,7 +49,7 @@ QUnit.module('FormDialog', moduleConfig, () => {
     });
 
     test('render FormDialog', function(assert) {
-        const formDialog = new FormDialog(this.componentMock);
+        const formDialog = new FormDialog(this.$element);
         const $dialog = this.$element.find(`.${DIALOG_CLASS}`);
         const $form = $dialog.find(`.${FORM_CLASS}`);
 
@@ -67,13 +59,13 @@ QUnit.module('FormDialog', moduleConfig, () => {
     });
 
     test('render FormDialog with popup options', function(assert) {
-        const formDialog = new FormDialog(this.componentMock, { width: 155 });
+        const formDialog = new FormDialog(this.$element, { width: 155 });
 
         assert.equal(formDialog.popupOption('width'), 155, 'Custom width should apply');
     });
 
     test('change FormDialog form options', function(assert) {
-        const formDialog = new FormDialog(this.componentMock);
+        const formDialog = new FormDialog(this.$element);
 
         formDialog.formOption('width', 155);
 
@@ -81,7 +73,7 @@ QUnit.module('FormDialog', moduleConfig, () => {
     });
 
     test('show dialog', function(assert) {
-        const formDialog = new FormDialog(this.componentMock, { container: this.$element });
+        const formDialog = new FormDialog(this.$element, { container: this.$element });
         const promise = formDialog.show({ items: ['name', 'age'] });
         const formItemsCount = this.$element.find(`.${FORM_CLASS} .${FIELD_ITEM_CLASS}`).length;
 
@@ -93,7 +85,7 @@ QUnit.module('FormDialog', moduleConfig, () => {
         const screenFactor = hasWindow() ? getCurrentScreenFactor() : null;
         const expectedFullScreen = devices.real().deviceType === 'phone' || screenFactor === 'xs';
 
-        const formDialog = new FormDialog(this.componentMock, { container: this.$element });
+        const formDialog = new FormDialog(this.$element, { container: this.$element });
         formDialog.show({ items: ['name'] });
 
         assert.strictEqual(formDialog._popup.option('fullScreen'), expectedFullScreen);
@@ -103,7 +95,7 @@ QUnit.module('FormDialog', moduleConfig, () => {
         assert.expect(1);
 
         const EXPECTED_DATA = { name: 'Test', age: 20 };
-        const formDialog = new FormDialog(this.componentMock, { container: this.$element });
+        const formDialog = new FormDialog(this.$element, { container: this.$element });
         const promise = formDialog.show({ items: ['name', 'age'] });
 
         promise.done((formData) => {
@@ -117,7 +109,7 @@ QUnit.module('FormDialog', moduleConfig, () => {
         assert.expect(1);
 
         const EXPECTED_DATA = { name: 'Test' };
-        const formDialog = new FormDialog(this.componentMock, { container: this.$element });
+        const formDialog = new FormDialog(this.$element, { container: this.$element });
         const promise = formDialog.show({ items: ['name'] });
         const $input = $(`.${FORM_CLASS} .${TEXTEDITOR_INPUT_CLASS}`);
 
@@ -132,7 +124,7 @@ QUnit.module('FormDialog', moduleConfig, () => {
         assert.expect(1);
 
         const EXPECTED_DATA = { name: 'Test' };
-        const formDialog = new FormDialog(this.componentMock, { container: this.$element });
+        const formDialog = new FormDialog(this.$element, { container: this.$element });
         const promise = formDialog.show({ items: ['name'] });
         const $input = $(`.${FORM_CLASS} .${TEXTEDITOR_INPUT_CLASS}`);
 
@@ -150,7 +142,7 @@ QUnit.module('FormDialog', moduleConfig, () => {
     test('decline dialog by button click', function(assert) {
         assert.expect(1);
 
-        const formDialog = new FormDialog(this.componentMock, { container: this.$element });
+        const formDialog = new FormDialog(this.$element, { container: this.$element });
         const promise = formDialog.show({ items: ['name'] });
         const $input = $(`.${FORM_CLASS} .${TEXTEDITOR_INPUT_CLASS}`);
 
@@ -168,7 +160,7 @@ QUnit.module('FormDialog', moduleConfig, () => {
     test('decline dialog on hiding', function(assert) {
         assert.expect(1);
 
-        const formDialog = new FormDialog(this.componentMock, { container: this.$element });
+        const formDialog = new FormDialog(this.$element, { container: this.$element });
         const promise = formDialog.show({ items: ['name'] });
         const $input = $(`.${FORM_CLASS} .${TEXTEDITOR_INPUT_CLASS}`);
 
@@ -184,7 +176,7 @@ QUnit.module('FormDialog', moduleConfig, () => {
     test('decline dialog by escape key press', function(assert) {
         assert.expect(1);
 
-        const formDialog = new FormDialog(this.componentMock, { container: this.$element });
+        const formDialog = new FormDialog(this.$element, { container: this.$element });
         const promise = formDialog.show({ items: ['name'] });
         const $input = $(`.${FORM_CLASS} .${TEXTEDITOR_INPUT_CLASS}`);
 

@@ -5,7 +5,6 @@
 import { extend } from '@js/core/utils/extend';
 import Widget from '@js/ui/widget/ui.widget';
 import { DIContext } from '@ts/core/di/index';
-import type { Subscription } from '@ts/core/reactive/index';
 import { SearchView } from '@ts/grids/new/grid_core/search/view';
 import { render } from 'inferno';
 
@@ -14,7 +13,13 @@ import { CompatibilityColumnsController } from './columns_controller/compatibili
 import * as ColumnsControllerModule from './columns_controller/index';
 import * as DataControllerModule from './data_controller/index';
 import * as di from './di';
+import { EditingController } from './editing/controller';
+import { EditPopupView } from './editing/popup/view';
 import { ErrorController } from './error_controller/error_controller';
+import { ClearFilterVisitor } from './filtering/filter_visitors/clear_filter_visitor';
+import { GetAppliedFilterVisitor } from './filtering/filter_visitors/get_applied_filters_visitor';
+import { HeaderFilterController } from './filtering/header_filter/index';
+import { HeaderFilterViewController } from './filtering/header_filter/view_controller';
 import * as FilterControllerModule from './filtering/index';
 import { ItemsController } from './items_controller/items_controller';
 import { MainView } from './main_view';
@@ -31,7 +36,7 @@ import { WidgetMock } from './widget_mock';
 export class GridCoreNewBase<
   TProperties extends Options = Options,
 > extends Widget<TProperties> {
-  protected renderSubscription?: Subscription;
+  protected renderSubscription?: () => void;
 
   protected diContext!: DIContext;
 
@@ -44,6 +49,10 @@ export class GridCoreNewBase<
   protected sortingController!: SortingController;
 
   protected selectionController!: SelectionControllerModule.Controller;
+
+  private editingController!: EditingController;
+
+  private editPopupView!: EditPopupView;
 
   private pagerView!: PagerView;
 
@@ -64,6 +73,14 @@ export class GridCoreNewBase<
   public filterController!: FilterControllerModule.FilterController;
 
   private filterPanelView!: FilterControllerModule.FilterPanelView;
+
+  private headerFilterViewController!: HeaderFilterViewController;
+
+  private headerFilterController!: HeaderFilterController;
+
+  private clearFilterVisitor!: ClearFilterVisitor;
+
+  private getAppliedFiltersVisitor!: GetAppliedFilterVisitor;
 
   protected _registerDIContext(): void {
     this.diContext = new DIContext();
@@ -86,14 +103,21 @@ export class GridCoreNewBase<
     this.itemsController = this.diContext.get(ItemsController);
     this.toolbarController = this.diContext.get(ToolbarController);
     this.toolbarView = this.diContext.get(ToolbarView);
+    this.editingController = this.diContext.get(EditingController);
+    this.editPopupView = this.diContext.get(EditPopupView);
     this.pagerView = this.diContext.get(PagerView);
     this.searchController = this.diContext.get(SearchControllerModule.SearchController);
     this.columnChooserController = this.diContext.get(ColumnChooserModule.ColumnChooserController);
     this.columnChooserView = this.diContext.get(ColumnChooserModule.ColumnChooserView);
     this.errorController = this.diContext.get(ErrorController);
     this.filterController = this.diContext.get(FilterControllerModule.FilterController);
+    this.headerFilterController = this.diContext.get(HeaderFilterController);
     this.filterPanelView = this.diContext.get(FilterControllerModule.FilterPanelView);
+    this.headerFilterViewController = this.diContext.get(HeaderFilterViewController);
     this.searchView = this.diContext.get(SearchView);
+
+    this.clearFilterVisitor = this.diContext.get(ClearFilterVisitor);
+    this.getAppliedFiltersVisitor = this.diContext.get(GetAppliedFilterVisitor);
   }
 
   protected _init(): void {
@@ -142,7 +166,7 @@ export class GridCoreNewBase<
   }
 
   protected _clean(): void {
-    this.renderSubscription?.unsubscribe();
+    this.renderSubscription?.();
     render(null, this.$element().get(0));
     // @ts-expect-error
     super._clean();

@@ -1,7 +1,7 @@
 import type { InfernoEffect } from '@ts/core/r1/runtime/inferno/index';
 import { createReRenderEffect, InfernoWrapperComponent } from '@ts/core/r1/runtime/inferno/index';
 import type { RefObject } from '@ts/core/r1/types';
-import type { ViewCellData } from '@ts/scheduler/r1/types';
+import type { ViewCellData } from '@ts/scheduler/types';
 
 import { DefaultSizes } from '../const';
 import { AllDayPanelTableBody, AllDayPanelTableBodyDefaultProps } from './all_day_panel_table_body';

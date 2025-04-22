@@ -3,7 +3,7 @@ import {
 } from '@jest/globals';
 import type { DataSource } from '@js/common/data';
 import { Deferred } from '@js/core/utils/deferred';
-import { state } from '@ts/core/reactive';
+import { signal } from '@preact/signals-core';
 import type { InternalLoadOptions, OperationOptions } from '@ts/grids/new/grid_core/data_controller/types';
 
 import { StoreLoadAdapter } from './store_load_adapter';
@@ -15,14 +15,14 @@ const setup = (localOperations: OperationOptions) => {
   const localStoreLoadFnMock = jest.fn()
     .mockImplementation(() => Deferred().resolve());
 
-  const dataSourceMock = state({
+  const dataSourceMock = signal({
     store() {
       return {
         load: remoteStoreLoadFnMock,
       };
     },
   } as unknown as DataSource<unknown, unknown>);
-  const localLoadOptionsMock = state(localOperations);
+  const localLoadOptionsMock = signal(localOperations);
 
   const arrayStoreMock = {
     load: localStoreLoadFnMock,
@@ -323,7 +323,7 @@ describe('DataController', () => {
           localLoadOptionsMock,
         } = setup(initialLocalOperations);
 
-        localLoadOptionsMock.update(updatedLocalOperations);
+        localLoadOptionsMock.value = updatedLocalOperations;
 
         const result = storeLoadAdapter.getLocalLoadOperations();
 

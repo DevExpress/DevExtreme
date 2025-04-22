@@ -1,5 +1,5 @@
-import type { SubsGets } from '@ts/core/reactive/index';
-import { combined, computed } from '@ts/core/reactive/index';
+import type { ReadonlySignal } from '@preact/signals-core';
+import { computed } from '@preact/signals-core';
 
 import { BaseContextMenuController } from '../context_menu/controller';
 import { View } from '../core/view';
@@ -15,8 +15,10 @@ export class ToolbarView extends View<ToolbarProps> {
   private readonly visibleConfig = this.options.oneWay('toolbar.visible');
 
   private readonly visible = computed(
-    (visibleConfig, items) => isVisible(visibleConfig, items),
-    [this.visibleConfig, this.controller.items],
+    () => isVisible(
+      this.visibleConfig.value,
+      this.controller.items.value,
+    ),
   );
 
   public static dependencies = [
@@ -33,16 +35,16 @@ export class ToolbarView extends View<ToolbarProps> {
     super();
   }
 
-  protected override getProps(): SubsGets<ToolbarProps> {
-    return combined({
-      visible: this.visible,
-      items: this.controller.items,
-      disabled: this.options.oneWay('toolbar.disabled'),
+  protected override getProps(): ReadonlySignal<ToolbarProps> {
+    return computed(() => ({
+      visible: this.visible.value,
+      items: this.controller.items.value,
+      disabled: this.options.oneWay('toolbar.disabled').value,
       showContextMenu: this.showContextMenu.bind(this),
-    });
+    }));
   }
 
-  private showContextMenu(e: MouseEvent): void {
-    this.contextMenuController.show(e, 'toolbar');
+  private showContextMenu(event: KeyboardEvent | MouseEvent): void {
+    this.contextMenuController.show(event, 'toolbar');
   }
 }

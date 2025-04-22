@@ -1,8 +1,11 @@
+import type { FilterType } from '@js/common/grids';
+import errors from '@js/core/errors';
+import { isDefined } from '@js/core/utils/type';
 import type { Column } from '@ts/grids/new/grid_core/columns_controller/types';
 
 import type { HeaderFilterRootOptions } from './types';
 
-const mergeColumnHeaderFilterOptions = (
+export const mergeColumnHeaderFilterOptions = (
   column: Column,
   rootOptions: HeaderFilterRootOptions | undefined,
 ): Column => {
@@ -24,6 +27,53 @@ const mergeColumnHeaderFilterOptions = (
   };
 };
 
-export default {
-  mergeColumnHeaderFilterOptions,
+export const getColumnIdentifier = (column: Column): string => column.name ?? column.dataField;
+
+export const getColumnName = (column: Column): string => {
+  const name = getColumnIdentifier(column);
+  if (!isDefined(name)) {
+    throw errors.Error('E1049', column.caption);
+  }
+  return name;
+};
+
+export const getFilterOperator = (values: unknown, filterType?: FilterType): string => {
+  const isInclude = !filterType || filterType === 'include';
+  const isValueArray = Array.isArray(values);
+  switch (true) {
+    case isValueArray && isInclude:
+      return 'anyof';
+    case isValueArray && !isInclude:
+      return 'noneof';
+    case !isValueArray && isInclude:
+      return '=';
+    case !isValueArray && !isInclude:
+      return '<>';
+    default: throw new Error('Invalid state');
+  }
+};
+
+export const needCreateHeaderFilter = (column: Column): boolean => {
+  const allowFiltering = column.allowFiltering && column.allowHeaderFiltering;
+  const values = column.headerFilter?.values;
+  const hasSelectedItems = isDefined(values) && values.length > 0;
+  return allowFiltering && hasSelectedItems;
+};
+
+export const getComposedHeaderFilter = (columns: Column[]): unknown[] => {
+  const filterValue: unknown[] = [];
+  const filterableColumns = columns
+    .filter((col) => needCreateHeaderFilter(col));
+  filterableColumns
+    .forEach((col, index) => {
+      filterValue.push([
+        getColumnName(col),
+        getFilterOperator(col.headerFilter?.values, col.filterType),
+        col.headerFilter?.values,
+      ]);
+      if (index < filterableColumns.length - 1) {
+        filterValue.push('and');
+      }
+    });
+  return filterValue;
 };

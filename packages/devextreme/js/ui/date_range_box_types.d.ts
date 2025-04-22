@@ -1,4 +1,5 @@
 export {
+  DateLike,
   ChangeEvent,
   ClosedEvent,
   ContentReadyEvent,

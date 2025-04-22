@@ -1,7 +1,7 @@
 import { BaseInfernoComponent } from '@ts/core/r1/runtime/inferno/index';
 import type { JSXTemplate } from '@ts/core/r1/types';
 
-import type { DateHeaderData, Group, GroupOrientation } from '../../types';
+import type { DateHeaderData, Group, GroupOrientation } from '../../../types';
 import { isHorizontalGroupingApplied, themeUtils } from '../../utils/index';
 import type { DateTimeCellTemplateProps, PropsWithViewContext } from '../types';
 import { DateHeaderCell } from './date_header_cell';

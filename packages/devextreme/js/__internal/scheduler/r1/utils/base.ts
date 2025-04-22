@@ -4,10 +4,11 @@ import dateUtils from '@js/core/utils/date';
 import { isDefined } from '@js/core/utils/type';
 import { dateUtilsTs } from '@ts/core/utils/date';
 
+import {
+  HORIZONTAL_GROUP_ORIENTATION, TIMELINE_VIEWS, VERTICAL_GROUP_ORIENTATION, VIEWS,
+} from '../../constants';
 import { VERTICAL_GROUP_COUNT_CLASSES } from '../../m_classes';
-import { VIEWS } from '../../m_constants';
 import timeZoneUtils from '../../m_utils_time_zone';
-import { HORIZONTAL_GROUP_ORIENTATION, TIMELINE_VIEWS, VERTICAL_GROUP_ORIENTATION } from '../const';
 import type {
   AllDayPanelModeType,
   AppointmentGeometry,
@@ -15,14 +16,15 @@ import type {
   FilterItemType,
   GetDateForHeaderText,
   GetDateForHeaderTextOptions,
-  Group, GroupItem,
+  Group,
+  GroupItem,
   GroupOrientation,
   GroupPanelData,
   GroupRenderItem,
   HeaderCellTextFormat,
   ViewDataProviderType,
   ViewType,
-} from '../types';
+} from '../../types';
 
 const toMs = dateUtils.dateToMilliseconds;
 const DAY_HOURS = 24;
@@ -44,43 +46,7 @@ export const getDatesWithoutTime = (min: Date, max: Date): [Date, Date] => {
   return [newMin, newMax];
 };
 
-export const getAppointmentRenderingStrategyName = (viewType: ViewType): string => {
-  const appointmentRenderingStrategyMap: Record<ViewType, { renderingStrategy: string }> = {
-    day: {
-      renderingStrategy: 'vertical',
-    },
-    week: {
-      renderingStrategy: 'week',
-    },
-    workWeek: {
-      renderingStrategy: 'week',
-    },
-    month: {
-      renderingStrategy: 'horizontalMonth',
-    },
-    timelineDay: {
-      renderingStrategy: 'horizontal',
-    },
-    timelineWeek: {
-      renderingStrategy: 'horizontal',
-    },
-    timelineWorkWeek: {
-      renderingStrategy: 'horizontal',
-    },
-    timelineMonth: {
-      renderingStrategy: 'horizontalMonthLine',
-    },
-    agenda: {
-      renderingStrategy: 'agenda',
-    },
-  };
-
-  const { renderingStrategy } = appointmentRenderingStrategyMap[viewType];
-
-  return renderingStrategy;
-};
-
-export const getAppointmentTakesAllDay = (
+export const isAppointmentTakesAllDay = (
   appointmentAdapter: {
     allDay: boolean;
     startDate: Date;
@@ -266,8 +232,8 @@ export const getHorizontalGroupCount = (
 };
 
 export const isTimelineView = (
-  viewType: ViewType,
-): boolean => !!TIMELINE_VIEWS[viewType];
+  viewType?: ViewType,
+): boolean => Boolean(viewType && TIMELINE_VIEWS.includes(viewType));
 
 export const isDateAndTimeView = (
   viewType: ViewType,
@@ -325,7 +291,7 @@ export const calculateIsGroupedAllDayPanel = (
   groups: Group[],
   groupOrientation: GroupOrientation,
   isAllDayPanelVisible: boolean,
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+
 ): boolean => isVerticalGroupingApplied(groups, groupOrientation) && isAllDayPanelVisible;
 
 export const calculateViewStartDate = (

@@ -20,16 +20,16 @@ export function PublicMethods<T extends Constructor<GridCoreNewBase>>(GridCore: 
       const dataController = this.diContext.get(DataController);
 
       if (text) {
-        contentView.loadingText.update(text);
+        contentView.loadingText.value = text;
       }
 
-      dataController.isLoading.update(true);
+      dataController.isLoading.value = true;
     }
 
     public endCustomLoading(): void {
       const dataController = this.diContext.get(DataController);
 
-      dataController.isLoading.update(false);
+      dataController.isLoading.value = false;
     }
   };
 }

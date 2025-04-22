@@ -5,6 +5,7 @@ import { wrapDxWithReact } from "../utils";
 import { store } from "./data";
 import { generatedData } from "./generatedData";
 import { renderFooter } from "./templates";
+import { fn } from '@storybook/test';
 
 const CardView = wrapDxWithReact(dxCardView);
 
@@ -122,6 +123,7 @@ const columns = {
 ],
 }
 
+
 const meta: Meta<typeof CardView> = {
   title: "Grids/CardView",
   component: CardView,
@@ -135,6 +137,9 @@ const meta: Meta<typeof CardView> = {
       options: Object.keys(columns),
       mapping: columns,
       control: { type: 'radio' },
+    },
+    allowColumnReordering: {
+      control: 'boolean',
     },
     'paging.enabled': {
       control: 'boolean',
@@ -200,13 +205,6 @@ const meta: Meta<typeof CardView> = {
       control: 'radio',
       options: ['allPages', 'page']
     },
-    'columnChooser.enabled': {
-      control: 'boolean',
-    },
-    'columnChooser.mode': {
-      control: 'radio',
-      options: ['select', 'dragAndDrop']
-    },
     'toolbar.visible': {
       control: 'boolean',
     },
@@ -251,6 +249,44 @@ const meta: Meta<typeof CardView> = {
         no: undefined,
       }
     },  
+    'editing.allowAdding': {
+      control: 'boolean',
+    },
+    'editing.allowUpdating': {
+      control: 'boolean',
+    },
+    'editing.allowDeleting': {
+      control: 'boolean',
+    },
+    'keyboardNavigation.enabled': {
+      control: 'boolean',
+    },
+    onKeyDown: {
+      control: 'radio',
+      options: ['on', 'off'],
+      mapping: {
+        on: fn(),
+        off: undefined,
+      },
+    },
+    onFocusedCardChanged: {
+      control: 'radio',
+      options: ['on', 'off'],
+      mapping: {
+        on: fn(),
+        off: undefined,
+      },
+    },
+    'columnChooser.allowSearch': {
+      control: 'boolean',
+    },
+    'columnChooser.enabled': {
+      control: 'boolean',
+    },
+    'columnChooser.mode': {
+      control: 'radio',
+      options: ['select', 'dragAndDrop']
+    },
   }
 };
 
@@ -272,6 +308,7 @@ export const DefaultMode: Story = {
     columns: 'local',
     'filterPanel.visible': true,
     cardFooterTemplate: undefined,
+    'keyboardNavigation.enabled': true,
   },
 };
 
@@ -409,3 +446,96 @@ export const ContextMenuStory: Story = {
     }
   }
 }
+export const ColumnChooserSelectModeStory: Story = {
+  ...DefaultMode,
+  name: 'Column chooser \'select\' mode',
+  args: {
+    ...DefaultMode.args,
+    'columnChooser.enabled': true,
+    'columnChooser.mode': 'select',
+    'columnChooser.title': 'Column chooser',
+    'columnChooser.sortOrder': undefined,
+    'columnChooser.selection': {
+      allowSelectAll: true,
+      selectByClick: true,
+    },
+    'columnChooser.search': {
+      enabled: true,
+      timeout: 0,
+      editorOptions: {
+        placeholder: 'search columns',
+      }
+    },
+    'columnChooser.height': 300,
+    columns: [
+      {
+        dataField: 'id',
+        allowReordering: false,
+      },
+      {
+        dataField: 'firstName',
+        allowReordering: false,
+        allowHiding: false,
+      },
+      {
+        dataField: 'lastName',
+        showInColumnChooser: false,
+        allowHiding: false,
+      },
+      {
+        dataField: "email",
+        visible: false,
+      },
+      {
+        dataField: "gender",
+      },
+      {
+        dataField: "birthDate",
+      },
+    ]
+  },
+}
+
+export const ColumnChooserDragAndDropModeStory: Story = {
+  ...DefaultMode,
+  name: 'Column chooser \'dragAndDrop\' mode',
+  argTypes: {
+    columns: {
+      control: 'object',
+    }
+  },
+  args: {
+    ...DefaultMode.args,
+    allowColumnReordering: true,
+    'columnChooser.enabled': true,
+    'columnChooser.mode': 'dragAndDrop',
+    'columnChooser.emptyPanelText': 'Drop a column here',
+    columns: [
+      {
+        dataField: 'id',
+        allowReordering: false,
+      },
+      {
+        dataField: 'firstName',
+        allowReordering: false,
+        allowHiding: false,
+      },
+      {
+        dataField: 'lastName',
+        showInColumnChooser: false,
+        allowHiding: false,
+      },
+      {
+        dataField: "email",
+        visible: false,
+      },
+      {
+        dataField: "gender",
+      },
+      {
+        dataField: "birthDate",
+      },      
+    ]
+  }
+}
+

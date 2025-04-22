@@ -1,0 +1,25 @@
+.dx-informer {
+  width: 100%;
+  align-items: center;
+  display: flex;
+  word-break: break-word;
+
+  &.dx-informer-alignment-start {
+    justify-content: flex-start;
+    align-self: flex-start;
+  }
+
+  &.dx-informer-alignment-center {
+    justify-content: center;
+    align-self: center;
+  }
+
+  &.dx-informer-alignment-end {
+    justify-content: flex-end;
+    align-self: flex-end;
+  }
+
+  .dx-informer-icon {
+    display: flex;
+  }
+}

@@ -1,5 +1,4 @@
-import type { SubsGets } from '@ts/core/reactive/index';
-import { combined } from '@ts/core/reactive/index';
+import { computed, type ReadonlySignal } from '@preact/signals-core';
 import { FilterBuilderView as OldFilterBuilderView } from '@ts/grids/grid_core/filter/m_filter_builder';
 import { FilterPanelView as OldFilterPanelView } from '@ts/grids/grid_core/filter/m_filter_panel';
 
@@ -28,16 +27,16 @@ export class FilterPanelView extends View<FilterPanelProps> {
     this.oldFilterBuilderView.init();
   }
 
-  protected override getProps(): SubsGets<FilterPanelProps> {
-    return combined({
+  protected override getProps(): ReadonlySignal<FilterPanelProps> {
+    return computed(() => ({
       oldFilterBuilderView: this.oldFilterBuilderView,
       oldFilterPanelView: this.oldFilterPanelView,
 
-      filterValue: this.options.oneWay('filterValue'),
-      filterPanel: this.options.oneWay('filterPanel'),
-      filterBuilder: this.options.oneWay('filterBuilder'),
-      filterBuilderPopup: this.options.oneWay('filterBuilderPopup'),
-    });
+      filterValue: this.options.oneWay('filterValue').value,
+      filterPanel: this.options.oneWay('filterPanel').value,
+      filterBuilder: this.options.oneWay('filterBuilder').value,
+      filterBuilderPopup: this.options.oneWay('filterBuilderPopup').value,
+    }));
   }
 
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types

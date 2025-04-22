@@ -23,12 +23,12 @@ export function PublicMethods<T extends Constructor<CardViewBase>>(GridCore: T) 
 
     public getVisibleCards(): DataRow[] {
       const itemsController = this.diContext.get(ItemsController);
-      return itemsController.items.unreactive_get();
+      return itemsController.items.peek();
     }
 
     public getCardIndexByKey(key: Key): number {
       const itemsController = this.diContext.get(ItemsController);
-      const cards = itemsController.items.unreactive_get();
+      const cards = itemsController.items.peek();
 
       return cards.findIndex((card) => card.key === key);
     }

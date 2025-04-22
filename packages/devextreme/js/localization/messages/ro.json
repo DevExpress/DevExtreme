@@ -55,6 +55,7 @@
         "dxList-selectAll-checked": "Checked",
         "dxList-selectAll-notChecked": "Not checked",
         "dxList-ariaRoleDescription": "List",
+        "dxList-listAriaLabel-itemContent": "List item content",
 
         "dxScrollView-pullingDownText": "Trageți în jos pentru a actualiza...",
         "dxScrollView-pulledDownText": "Eliberați pentru a actualiza...",
@@ -516,6 +517,15 @@
         "dxHtmlEditor-borderStyleRidge": "ridge",
         "dxHtmlEditor-borderStyleInset": "inset",
         "dxHtmlEditor-borderStyleOutset": "outset",
+        "dxHtmlEditor-aiDialogTitle": "AI Assistant",
+        "dxHtmlEditor-aiReplace": "Replace",
+        "dxHtmlEditor-aiInsertAbove": "Insert above",
+        "dxHtmlEditor-aiInsertBelow": "Insert below",
+        "dxHtmlEditor-aiCopy": "Copy",
+        "dxHtmlEditor-aiTryAgain": "Try again",
+        "dxHtmlEditor-aiGenerate": "Generate",
+        "dxHtmlEditor-aiStop": "Stop",
+        "dxHtmlEditor-aiAskPlaceholder": "Ask AI to modify text",
 
         "dxFileManager-newDirectoryName": "Director fără titlu",
         "dxFileManager-rootDirectoryName": "Fişiere",

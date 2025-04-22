@@ -4,7 +4,6 @@ import {
 } from '@jest/globals';
 import $ from '@js/core/renderer';
 import CardView from '@ts/grids/new/card_view/widget';
-import { HeaderFilterController } from '@ts/grids/new/grid_core/filtering/header_filter/controller';
 import type {
   HeaderFilterSearchColumnOptions,
   HeaderFilterSearchMode,
@@ -14,6 +13,7 @@ import type { Options as GridCoreOptions } from '@ts/grids/new/grid_core/options
 import { rerender } from 'inferno';
 
 import { defaultOptions } from './options';
+import { HeaderFilterViewController } from './view_controller';
 
 const SELECTORS = {
   cardView: '.dx-cardview',
@@ -41,10 +41,10 @@ const openHeaderFilterPopup = (cardView: CardView): Element => {
   const popupContainer = document.createElement('div');
 
   // @ts-expect-error get protected property
-  const controller = cardView.diContext.get(HeaderFilterController);
+  const viewController = cardView.diContext.get(HeaderFilterViewController);
 
   const column = cardView.getVisibleColumns()[0];
-  controller.openPopup(popupContainer, column);
+  viewController.openPopup(popupContainer, column);
   rerender();
 
   return popupContainer;
@@ -560,7 +560,8 @@ describe('Options', () => {
         ],
         columns: [{
           dataField: 'A',
-          headerFilter: { filterType, values: filterValues },
+          headerFilter: { values: filterValues },
+          filterType,
         }],
         headerFilter: {
           visible: true,
@@ -613,7 +614,8 @@ describe('Options', () => {
             ],
             columns: [{
               dataField: 'A',
-              headerFilter: { dataSource, filterType, values: filterValues },
+              headerFilter: { dataSource, values: filterValues },
+              filterType,
             }],
             headerFilter: {
               visible: true,

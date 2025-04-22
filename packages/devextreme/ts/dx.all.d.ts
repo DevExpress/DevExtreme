@@ -863,6 +863,189 @@ declare module DevExpress {
     static validateModel(model: any): any;
   }
 }
+declare module DevExpress.aiIntegration {
+  /**
+   * [descr:AIIntegration]
+   */
+  export class AIIntegration {
+    /**
+     * @docid
+     * @param provider
+     */
+    constructor(provider: AIProvider);
+    changeStyle(
+      params: ChangeStyleCommandParams,
+      callbacks: RequestCallbacks<ChangeStyleCommandResult>
+    ): () => void;
+    changeTone(
+      params: ChangeToneCommandParams,
+      callbacks: RequestCallbacks<ChangeToneCommandResult>
+    ): () => void;
+    execute(
+      params: ExecuteCommandParams,
+      callbacks: RequestCallbacks<ExecuteCommandResult>
+    ): () => void;
+    expand(
+      params: ExpandCommandParams,
+      callbacks: RequestCallbacks<ExpandCommandResult>
+    ): () => void;
+    proofread(
+      params: ProofreadCommandParams,
+      callbacks: RequestCallbacks<ProofreadCommandResult>
+    ): () => void;
+    shorten(
+      params: ShortenCommandParams,
+      callbacks: RequestCallbacks<ShortenCommandResult>
+    ): () => void;
+    summarize(
+      params: SummarizeCommandParams,
+      callbacks: RequestCallbacks<SummarizeCommandResult>
+    ): () => void;
+    translate(
+      params: TranslateCommandParams,
+      callbacks: RequestCallbacks<TranslateCommandResult>
+    ): () => void;
+  }
+  /**
+   * [descr:AIProvider]
+   */
+  export type AIProvider = {
+    /**
+     * [descr:AIProvider.sendRequest]
+     */
+    sendRequest: (params: RequestParams) => Response;
+  };
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  export type ChangeStyleCommandParams = {
+    text: string;
+    writingStyle: string;
+  };
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  export type ChangeStyleCommandResult = string;
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  export type ChangeToneCommandParams = {
+    text: string;
+    tone: string;
+  };
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  export type ChangeToneCommandResult = string;
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  export type ExecuteCommandParams = {
+    text: string;
+  };
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  export type ExecuteCommandResult = string;
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  export type ExpandCommandParams = {
+    text: string;
+  };
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  export type ExpandCommandResult = string;
+  /**
+   * [descr:Prompt]
+   */
+  export type Prompt = {
+    /**
+     * [descr:Prompt.system]
+     */
+    system?: string;
+    /**
+     * [descr:Prompt.user]
+     */
+    user?: string;
+  };
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  export type ProofreadCommandParams = {
+    text: string;
+  };
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  export type ProofreadCommandResult = string;
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  export type RequestCallbacks<T> = {
+    onChunk?: (chunk: string) => void;
+    onComplete?: (finalResponse: T) => void;
+    onError?: (error: Error) => void;
+  };
+  /**
+   * [descr:RequestParams]
+   */
+  export type RequestParams = {
+    /**
+     * [descr:RequestParams.prompt]
+     */
+    prompt: Prompt;
+    /**
+     * [descr:RequestParams.onChunk]
+     */
+    onChunk: (chunk: string) => void;
+  };
+  /**
+   * [descr:Response]
+   */
+  export type Response = {
+    /**
+     * [descr:Response.promise]
+     */
+    promise: Promise<string>;
+    /**
+     * [descr:Response.abort]
+     */
+    abort: () => void;
+  };
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  export type ShortenCommandParams = {
+    text: string;
+  };
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  export type ShortenCommandResult = string;
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  export type SummarizeCommandParams = {
+    text: string;
+  };
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  export type SummarizeCommandResult = string;
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  export type TranslateCommandParams = {
+    text: string;
+    lang: string;
+  };
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  export type TranslateCommandResult = string;
+}
 declare module DevExpress.animation {
   /**
    * @deprecated Use the DevExpress.common.core.animation.AnimationConfig type from common/core/animation instead
@@ -987,6 +1170,7 @@ declare module DevExpress.common {
     | 'boolean'
     | 'object'
     | 'datetime';
+  export type DateLike = Date | number | string | null;
   export type Direction = 'bottom' | 'left' | 'right' | 'top';
   export type DisplayMode = 'adaptive' | 'compact' | 'full';
   export type DragDirection = 'both' | 'horizontal' | 'vertical';
@@ -8514,11 +8698,11 @@ declare module DevExpress.ui {
     /**
      * [descr:DateBoxBaseOptions.max]
      */
-    max?: Date | number | string | undefined;
+    max?: DevExpress.common.DateLike | undefined;
     /**
      * [descr:DateBoxBaseOptions.min]
      */
-    min?: Date | number | string | undefined;
+    min?: DevExpress.common.DateLike | undefined;
     /**
      * [descr:DateBoxBaseOptions.todayButtonText]
      */
@@ -9602,7 +9786,7 @@ declare module DevExpress.ui {
      * [descr:dxCalendar.reset(value)]
      */
     reset(
-      value?: Date | number | string | Array<Date | number | string> | null
+      value?: DevExpress.common.DateLike | Array<Date | number | string | null>
     ): void;
   }
   module dxCalendar {
@@ -9704,7 +9888,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxCalendarOptions.max]
      */
-    max?: Date | number | string;
+    max?: DevExpress.common.DateLike;
     /**
      * [descr:dxCalendarOptions.maxZoomLevel]
      */
@@ -9712,7 +9896,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxCalendarOptions.min]
      */
-    min?: Date | number | string;
+    min?: DevExpress.common.DateLike;
     /**
      * [descr:dxCalendarOptions.minZoomLevel]
      */
@@ -9744,7 +9928,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxCalendarOptions.value]
      */
-    value?: Date | number | string | Array<Date | number | string>;
+    value?: DevExpress.common.DateLike | DevExpress.common.DateLike[];
     /**
      * [descr:dxCalendarOptions.zoomLevel]
      */
@@ -12692,7 +12876,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxDateBox.reset(value)]
      */
-    reset(value?: Date | number | string | null): void;
+    reset(value?: DevExpress.common.DateLike): void;
   }
   module dxDateBox {
     /**
@@ -12884,7 +13068,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxDateBoxOptions.value]
      */
-    value?: Date | number | string;
+    value?: DevExpress.common.DateLike;
   }
   /**
    * [descr:dxDateRangeBox]
@@ -13023,7 +13207,7 @@ declare module DevExpress.ui {
       /**
        * [descr:dxDateRangeBoxOptions.endDate]
        */
-      endDate?: Date | number | string;
+      endDate?: DevExpress.common.DateLike;
       /**
        * [descr:dxDateRangeBoxOptions.endDateInputAttr]
        */
@@ -13067,7 +13251,7 @@ declare module DevExpress.ui {
       /**
        * [descr:dxDateRangeBoxOptions.startDate]
        */
-      startDate?: Date | number | string;
+      startDate?: DevExpress.common.DateLike;
       /**
        * [descr:dxDateRangeBoxOptions.startDateInputAttr]
        */
@@ -13095,7 +13279,7 @@ declare module DevExpress.ui {
       /**
        * [descr:dxDateRangeBoxOptions.value]
        */
-      value?: Array<Date | number | string>;
+      value?: DevExpress.common.DateLike[];
     };
     /**
      * [descr:_ui_date_range_box_ValueChangedEvent]
@@ -19584,6 +19768,46 @@ declare module DevExpress.ui {
     undo(): void;
   }
   module dxHtmlEditor {
+    export type AIChangeStyleOption =
+      | 'formal'
+      | 'informal'
+      | 'technical'
+      | 'business'
+      | 'creative'
+      | 'journalistic'
+      | 'academic'
+      | 'persuasive'
+      | 'narrative'
+      | 'expository'
+      | 'descriptive'
+      | 'conversational';
+    export type AIChangeToneOption =
+      | 'professional'
+      | 'casual'
+      | 'straightforward'
+      | 'confident'
+      | 'friendly';
+    export type AICommandName =
+      | 'summarize'
+      | 'proofread'
+      | 'expand'
+      | 'shorten'
+      | 'changeStyle'
+      | 'changeTone'
+      | 'translate'
+      | 'askAI';
+    /**
+     * [descr:AICommandNameExtended]
+     */
+    export type AICommandNameExtended = AICommandName | 'custom';
+    export type AITranslateOption =
+      | 'arabic'
+      | 'chinese'
+      | 'english'
+      | 'french'
+      | 'german'
+      | 'japanese'
+      | 'spanish';
     /**
      * [descr:_ui_html_editor_ContentReadyEvent]
      */
@@ -19703,7 +19927,8 @@ declare module DevExpress.ui {
       | 'insertColumnRight'
       | 'deleteColumn'
       | 'deleteRow'
-      | 'deleteTable';
+      | 'deleteTable'
+      | 'ai';
     /**
      * [descr:_ui_html_editor_InitializedEvent]
      */
@@ -19843,6 +20068,10 @@ declare module DevExpress.ui {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxHtmlEditorOptions extends EditorOptions<dxHtmlEditor> {
+    /**
+     * [descr:dxHtmlEditorOptions.aiIntegration]
+     */
+    aiIntegration?: DevExpress.aiIntegration.AIIntegration | undefined;
     /**
      * [descr:dxHtmlEditorOptions.allowSoftLineBreak]
      */
@@ -24254,8 +24483,21 @@ declare module DevExpress.ui {
            */
           readonly appointmentElement: DevExpress.core.DxElement;
         };
+    /**
+     * [descr:AppointmentCollectorTemplateData]
+     */
     export type AppointmentCollectorTemplateData = {
+      /**
+       * [descr:AppointmentCollectorTemplateData.appointmentCount]
+       */
       readonly appointmentCount: number;
+      /**
+       * [descr:AppointmentCollectorTemplateData.items]
+       */
+      readonly items: Appointment[];
+      /**
+       * [descr:AppointmentCollectorTemplateData.isCompact]
+       */
       readonly isCompact: boolean;
     };
     /**
@@ -26654,9 +26896,9 @@ declare module DevExpress.ui {
      */
     icon?: string;
     /**
-     * [descr:dxStepperItem.title]
+     * [descr:dxStepperItem.label]
      */
-    title?: string;
+    label?: string;
     /**
      * [descr:dxStepperItem.hint]
      */
@@ -31784,6 +32026,96 @@ declare module DevExpress.ui.dxGantt {
   export type ToolbarItem = dxGanttToolbarItem;
 }
 declare module DevExpress.ui.dxHtmlEditor {
+  /**
+   * [descr:AIChangeStyleCommand]
+   */
+  export type AIChangeStyleCommand = AICommandBase<
+    'changeStyle',
+    (AIChangeStyleOption | string)[]
+  >;
+  /**
+   * [descr:AIChangeToneCommand]
+   */
+  export type AIChangeToneCommand = AICommandBase<
+    'changeTone',
+    (AIChangeToneOption | string)[]
+  >;
+  /**
+   * [descr:AICommand]
+   */
+  export type AICommand =
+    | AICommandBase<'summarize', any>
+    | AICommandBase<'proofread', any>
+    | AICommandBase<'expand', any>
+    | AICommandBase<'shorten', any>
+    | AICommandBase<'askAI', any>
+    | AIChangeStyleCommand
+    | AIChangeToneCommand
+    | AITranslateCommand
+    | AICustomCommand;
+  /**
+   * [descr:AICommandBase]
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  export interface AICommandBase<
+    CommandName extends AICommandNameExtended,
+    CommandOptions = undefined
+  > {
+    /**
+     * [descr:AICommandBase.name]
+     */
+    name: AICommandNameExtended;
+    /**
+     * [descr:AICommandBase.text]
+     */
+    text?: string;
+    /**
+     * [descr:AICommandBase.options]
+     */
+    options?: CommandOptions;
+  }
+  /**
+   * [descr:AICustomCommand]
+   */
+  export interface AICustomCommand extends AICommandBase<'custom', string[]> {
+    /**
+     * [descr:AICustomCommand.prompt]
+     */
+    prompt: (param?: string) => string;
+    /**
+     * [descr:AICustomCommand.text]
+     */
+    text: string;
+  }
+  /**
+   * [descr:AIToolbarItem]
+   */
+  export interface AIToolbarItem
+    extends Omit<
+      DevExpress.ui.dxToolbar.Item,
+      | 'menuItemTemplate'
+      | 'showText'
+      | 'widget'
+      | 'options'
+      | 'template'
+      | 'html'
+    > {
+    /**
+     * [descr:AIToolbarItem.name]
+     */
+    name: 'ai';
+    /**
+     * [descr:AIToolbarItem.commands]
+     */
+    commands?: Array<AICommandName | AICommand>;
+  }
+  /**
+   * [descr:AITranslateCommand]
+   */
+  export type AITranslateCommand = AICommandBase<
+    'translate',
+    (AITranslateOption | string)[]
+  >;
   export type ContextMenuItem = dxHtmlEditorTableContextMenuItem;
   /**
    * [descr:Converter]
@@ -31799,7 +32131,7 @@ declare module DevExpress.ui.dxHtmlEditor {
     fromHtml?: (value: string) => string;
   };
   export type ImageUploadTab = dxHtmlEditorImageUploadTabItem;
-  export type ToolbarItem = dxHtmlEditorToolbarItem;
+  export type ToolbarItem = dxHtmlEditorToolbarItem | AIToolbarItem;
 }
 declare module DevExpress.ui.dxList {
   export type Item = dxListItem;
