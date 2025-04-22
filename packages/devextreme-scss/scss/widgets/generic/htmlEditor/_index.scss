@@ -299,15 +299,21 @@
   }
 }
 
-.dx-aidialog-controls {
-  gap: $generic-aidialog-selects-gap;
+.dx-aidialog {
+  .dx-aidialog-controls {
+    gap: $generic-aidialog-selects-gap;
 
-  .dx-selectbox {
-    max-width: calc(50% - $generic-aidialog-selects-gap * 0.5);
+    .dx-selectbox {
+      max-width: calc(50% - $generic-aidialog-selects-gap * 0.5);
+    }
   }
-}
 
-.dx-aidialog-content {
-  padding: $generic-aidialog-content-padding;
-  gap: $generic-aidialog-content-gap;
+  .dx-aidialog-content {
+    padding: $generic-aidialog-content-padding;
+    gap: $generic-aidialog-content-gap;
+  }
+
+  .dx-button {
+    min-width: auto;
+  }
 }
