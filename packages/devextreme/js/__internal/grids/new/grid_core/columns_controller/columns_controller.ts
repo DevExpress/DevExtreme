@@ -1,3 +1,4 @@
+import type { DataType, Format } from '@js/common';
 import type { ReadonlySignal, Signal } from '@preact/signals-core';
 import { computed, effect, signal } from '@preact/signals-core';
 import type { HeaderFilterRootOptions } from '@ts/grids/new/grid_core/filtering/header_filter/index';
@@ -7,7 +8,9 @@ import { OptionsController } from '../options_controller/options_controller';
 import type { ColumnProperties, ColumnSettings, PreNormalizedColumn } from './options';
 import type { Column, VisibleColumn } from './types';
 import {
-  getColumnIndexByName, normalizeColumns, normalizeVisibleIndexes, preNormalizeColumns,
+  generateColumns,
+  getColumnFormat, getColumnIndexByName,
+  getValueDataType, normalizeColumns, normalizeVisibleIndexes, preNormalizeColumns,
 } from './utils';
 
 export class ColumnsController {
@@ -25,6 +28,8 @@ export class ColumnsController {
 
   public readonly allowColumnReordering: ReadonlySignal<boolean>;
 
+  public readonly firstItems = signal<Record<string, unknown> | null>(null);
+
   public static dependencies = [OptionsController] as const;
 
   constructor(
@@ -33,22 +38,46 @@ export class ColumnsController {
     this.columnsConfiguration = this.options.oneWay('columns');
     this.headerFilterConfiguration = this.options.oneWay('headerFilter');
 
+    const firstItemsDataTypes = computed(
+      () => {
+        const firstItems = this.firstItems.value;
+
+        if (!firstItems) return null;
+
+        const types: Record<string, { dataType: DataType; format: Format | undefined }> = {};
+
+        for (const [field, value] of Object.entries(firstItems)) {
+          const dataType = getValueDataType(value);
+          const format = getColumnFormat({ dataType });
+          types[field] = { dataType, format };
+        }
+
+        return types;
+      },
+    );
+
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     this.columnsSettings = signal(undefined as any);
     effect(() => {
       const columnsConfiguration = this.columnsConfiguration.value;
-      this.columnsSettings.value = preNormalizeColumns(columnsConfiguration ?? []);
+      const firstItems = this.firstItems.value;
+      this.columnsSettings.value = preNormalizeColumns(
+        columnsConfiguration
+        ?? generateColumns(firstItems as never),
+      );
     });
 
     this.columns = computed(() => {
       const columnsSettings = this.columnsSettings.value;
       const headerFilterRootOptions = this.headerFilterConfiguration.value;
+      const firstItemDataTypes = firstItemsDataTypes.value;
 
       return normalizeColumns(
         columnsSettings ?? [],
         (template) => (template ? this.options.normalizeTemplate(template) : undefined),
+        firstItemDataTypes,
       ).map(
-        (column) => mergeColumnHeaderFilterOptions(column, headerFilterRootOptions),
+        (column) => mergeColumnHeaderFilterOptions(column, headerFilterRootOptions) as Column,
       );
     });
 
@@ -126,5 +155,14 @@ export class ColumnsController {
     });
 
     return result;
+  }
+
+  public setFirstItems(item: Record<string, unknown> | null): void {
+    if (this.firstItems.value) { return; }
+    this.firstItems.value = item;
+  }
+
+  public getFirstItems(): Record<string, unknown> | null {
+    return this.firstItems.peek();
   }
 }

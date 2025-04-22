@@ -32,6 +32,76 @@ describe('ColumnsController', () => {
       const columns = columnsController.columns.peek();
       expect(columns).toMatchSnapshot();
     });
+    it('should infer dataType and format from firstItems', () => {
+      const { columnsController } = setup({
+        columns: ['id', 'price', 'createdAt'],
+      });
+
+      columnsController.setFirstItems({
+        id: 1,
+        price: 9.99,
+        createdAt: new Date('2023-01-01T00:00:00Z'),
+      });
+
+      const columns = columnsController.columns.peek();
+
+      expect(columns).toMatchObject([
+        {
+          name: 'id',
+          dataType: 'number',
+        },
+        {
+          name: 'price',
+          dataType: 'number',
+        },
+        {
+          name: 'createdAt',
+          dataType: 'date',
+          format: 'shortDate',
+        },
+      ]);
+    });
+    it('should generate columns from firstItems when no columns config is provided', () => {
+      const { columnsController } = setup();
+
+      columnsController.setFirstItems({
+        id: 1,
+        title: 'Hello',
+        price: 99.99,
+        createdAt: new Date('2024-01-01T00:00:00Z'),
+      });
+
+      const columns = columnsController.columns.peek();
+
+      expect(columns).toMatchObject([
+        { name: 'id', dataType: 'number' },
+        { name: 'title', dataType: 'string' },
+        { name: 'price', dataType: 'number' },
+        { name: 'createdAt', dataType: 'date', format: 'shortDate' },
+      ]);
+    });
+    it('should not generate columns from firstItems when columns config is provided', () => {
+      const { columnsController } = setup({
+        columns: ['id', 'title'],
+      });
+
+      // Set firstItems with extra fields that aren't in the config
+      columnsController.setFirstItems({
+        id: 1,
+        title: 'Sample',
+        extra: 'Should be ignored',
+      });
+
+      const columns = columnsController.columns.peek();
+
+      expect(columns).toHaveLength(2);
+      expect(columns).toMatchObject([
+        { name: 'id' },
+        { name: 'title' },
+      ]);
+
+      expect(columns.find((col) => col.name === 'extra')).toBeUndefined();
+    });
   });
   describe('visibleColumns', () => {
     it('should contain visible columns', () => {

@@ -6,6 +6,7 @@ import { computed, effect, signal } from '@preact/signals-core';
 import type { PromiseWithResolvers } from '@ts/core/utils/promise';
 import { createPromise } from '@ts/core/utils/promise';
 
+import { ColumnsController } from '../columns_controller/columns_controller';
 import { FilterController } from '../filtering/filter_controller';
 import { OptionsController } from '../options_controller/options_controller';
 import { SortingController } from '../sorting_controller/sorting_controller';
@@ -87,12 +88,14 @@ export class DataController {
   );
 
   public static dependencies = [
+    ColumnsController,
     OptionsController,
     SortingController,
     FilterController,
   ] as const;
 
   constructor(
+    private readonly columnsController: ColumnsController,
     private readonly options: OptionsController,
     private readonly sortingController: SortingController,
     private readonly filterController: FilterController,
@@ -226,6 +229,8 @@ export class DataController {
       items = this._items.peek();
       items = updateItemsImmutable(items, e.changes, dataSource.store());
     }
+
+    this.columnsController.setFirstItems(items[0]);
 
     this._items.value = items;
     this.pageIndex.value = dataSource.pageIndex();
