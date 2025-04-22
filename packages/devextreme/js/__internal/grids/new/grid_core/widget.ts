@@ -5,8 +5,8 @@
 import { extend } from '@js/core/utils/extend';
 import Widget from '@js/ui/widget/ui.widget';
 import { DIContext } from '@ts/core/di/index';
+import { infernoRenderer } from '@ts/core/m_inferno_renderer';
 import { SearchView } from '@ts/grids/new/grid_core/search/view';
-import { render } from 'inferno';
 
 import * as ColumnChooserModule from './column_chooser/index';
 import { CompatibilityColumnsController } from './columns_controller/compatibility';
@@ -167,7 +167,7 @@ export class GridCoreNewBase<
 
   protected _clean(): void {
     this.renderSubscription?.();
-    render(null, this.$element().get(0));
+    infernoRenderer.renderIntoContainer(null, this.$element().get(0), true);
     // @ts-expect-error
     super._clean();
   }
