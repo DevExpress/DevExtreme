@@ -1,5 +1,5 @@
 import type { ReadonlySignal } from '@preact/signals-core';
-import { computed } from '@preact/signals-core';
+import { batch, computed } from '@preact/signals-core';
 
 import { ColumnsController } from '../columns_controller/index';
 import type { Column } from '../columns_controller/types';
@@ -120,47 +120,52 @@ export class SortingController {
   }
 
   public onSingleModeSortClick(column: Column, e: KeyboardEvent | MouseEvent): void {
-    if (!column.allowSorting) {
-      return;
-    }
-    const isCtrl = e.ctrlKey || e.metaKey;
+    batch(() => {
+      if (!column.allowSorting) {
+        return;
+      }
+      const isCtrl = e.ctrlKey || e.metaKey;
 
-    const isClearSorting = !!column.sortOrder && isCtrl;
-    if (isClearSorting) {
-      this.clearSorting();
-      return;
-    }
+      const isClearSorting = !!column.sortOrder && isCtrl;
+      if (isClearSorting) {
+        this.clearSorting();
+        return;
+      }
 
-    const isClearSortingRequired = (!column.sortOrder && !isCtrl)
-    || this.sortedColumns.peek().length > 1;
-    if (isClearSortingRequired) {
-      this.clearSorting();
-    }
+      const isClearSortingRequired = (!column.sortOrder && !isCtrl)
+      || this.sortedColumns.peek().length > 1;
 
-    const nextSortOrder = getNextSortOrder(column.sortOrder, isCtrl);
-    this.columnsController.columnOption(column, 'sortOrder', nextSortOrder);
+      if (isClearSortingRequired) {
+        this.clearSorting();
+      }
+
+      const nextSortOrder = getNextSortOrder(column.sortOrder, isCtrl);
+      this.columnsController.columnOption(column, 'sortOrder', nextSortOrder);
+    });
   }
 
   public onMultipleModeSortClick(column: Column, e: KeyboardEvent | MouseEvent): void {
-    if (!column.allowSorting) {
-      return;
-    }
+    batch(() => {
+      if (!column.allowSorting) {
+        return;
+      }
 
-    const isCtrl = e.ctrlKey || e.metaKey;
-    const hasNothingToChange = !column.sortOrder && isCtrl && !e.shiftKey;
-    if (hasNothingToChange) {
-      return;
-    }
+      const isCtrl = e.ctrlKey || e.metaKey;
+      const hasNothingToChange = !column.sortOrder && isCtrl && !e.shiftKey;
+      if (hasNothingToChange) {
+        return;
+      }
 
-    const nextSortOrder = getNextSortOrder(column.sortOrder, isCtrl);
-    const isClearSortingRequired = !isCtrl && !e.shiftKey;
-    if (isClearSortingRequired) {
-      this.clearSorting();
-    }
+      const nextSortOrder = getNextSortOrder(column.sortOrder, isCtrl);
+      const isClearSortingRequired = !isCtrl && !e.shiftKey;
+      if (isClearSortingRequired) {
+        this.clearSorting();
+      }
 
-    // TODO: Resolve the nested update issue
-    // this.columnsController.columnOption(column, 'sortOrder', nextSortOrder);
-    this.updateColumnSortOrder(column, nextSortOrder);
+      // TODO: Resolve the nested update issue
+      // this.columnsController.columnOption(column, 'sortOrder', nextSortOrder);
+      this.updateColumnSortOrder(column, nextSortOrder);
+    });
   }
 
   private updateColumnSortOrder(column, nextSortOrder): void {
