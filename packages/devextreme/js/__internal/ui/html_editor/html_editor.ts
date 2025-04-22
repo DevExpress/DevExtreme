@@ -281,7 +281,7 @@ class HtmlEditor extends Editor<Properties> {
 
   _updateContainerMarkup(): void {
     const { value } = this.option();
-    const html: string = this._convertToHtml(value);
+    const html = this._convertToHtml(value);
 
     if (!html) {
       return;
