@@ -5133,11 +5133,7 @@ declare module DevExpress.common.grids {
    * [descr:FilterPanel]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface FilterPanel<
-    TComponent extends GridBase<TRowData, TKey>,
-    TRowData = any,
-    TKey = any
-  > {
+  export interface FilterPanel<TComponent, TRowData = any, TKey = any> {
     /**
      * [descr:GridBaseOptions.filterPanel.customizeText]
      */
@@ -9969,8 +9965,67 @@ declare module DevExpress.ui {
      * [descr:dxCardView.endCustomLoading()]
      */
     endCustomLoading(): void;
+    /**
+     * [descr:dxCardView.clearSorting()]
+     */
+    clearSorting(): void;
+    /**
+     * [descr:dxCardView.getCombinedFilter()]
+     */
+    getCombinedFilter(): any;
+    /**
+     * [descr:dxCardView.clearFilter()]
+     */
+    clearFilter(): void;
+    /**
+     * [descr:dxCardView.hideColumnChooser()]
+     */
+    hideColumnChooser(): void;
+    /**
+     * [descr:dxCardView.showColumnChooser()]
+     */
+    showColumnChooser(): void;
+    /**
+     * [descr:dxCardView.searchByText(text)]
+     */
+    searchByText(text: string): void;
   }
   module dxCardView {
+    /**
+     * [descr:CardClickEvent]
+     */
+    export type CardClickEvent = DevExpress.common.core.events.NativeEventInfo<
+      dxCardView,
+      PointerEvent | MouseEvent | TouchEvent
+    > &
+      WithCardInfo;
+    /**
+     * [descr:CardDblClickEvent]
+     */
+    export type CardDblClickEvent =
+      DevExpress.common.core.events.NativeEventInfo<
+        dxCardView,
+        PointerEvent | MouseEvent | TouchEvent
+      > &
+        WithCardInfo;
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+     */
+    export type CardHeaderPredefinedToolbarItem =
+      | 'selectionCheckBox'
+      | 'updateButton'
+      | 'deleteButton';
+    /**
+     * [descr:CardHoverChangedEvent]
+     */
+    export type CardHoverChangedEvent =
+      DevExpress.common.core.events.EventInfo<dxCardView> & WithCardInfo;
+    /**
+     * [descr:CardPreparedEvent]
+     */
+    export type CardPreparedEvent =
+      DevExpress.common.core.events.EventInfo<dxCardView> & WithCardInfo;
+
     /**
      * [descr:HeaderPanel]
      */
@@ -10034,7 +10089,9 @@ declare module DevExpress.ui {
     export type PredefinedToolbarItem =
       | 'columnChooserButton'
       | 'searchPanel'
-      | 'addCardButton';
+      | 'addCardButton'
+      | 'selectAllButton'
+      | 'clearSelectionButton';
     export type Properties<
       TCardData = unknown,
       TKey = unknown
@@ -10052,6 +10109,21 @@ declare module DevExpress.ui {
       | 'trueText'
       | 'falseText'
       | 'caption';
+
+    /**
+     * [descr:WithCardInfo]
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+     */
+    type WithCardInfo = {
+      /**
+       * [descr:WithCardInfo.card]
+       */
+      readonly card: CardInfo;
+      /**
+       * [descr:WithCardInfo.cardElement]
+       */
+      readonly cardElement: DevExpress.core.DxElement;
+    };
   }
 
   /**
@@ -10135,7 +10207,6 @@ declare module DevExpress.ui {
     noDataTemplate?:
       | template
       | ((e: { text: string }) => string | DevExpress.core.UserDefinedElement);
-
     /**
      * [descr:dxCardViewOptions.cardsPerRow]
      */
@@ -10165,6 +10236,24 @@ declare module DevExpress.ui {
           card: DevExpress.ui.dxCardView.CardInfo
         ) => string | DevExpress.core.UserDefinedElement);
     /**
+     * [descr:dxCardViewOptions.onCardClick]
+     */
+    onCardClick?: (e: DevExpress.ui.dxCardView.CardClickEvent) => void;
+    /**
+     * [descr:dxCardViewOptions.onCardDblClick]
+     */
+    onCardDblClick?: (e: DevExpress.ui.dxCardView.CardDblClickEvent) => void;
+    /**
+     * [descr:dxCardViewOptions.onCardPrepared]
+     */
+    onCardPrepared?: (e: DevExpress.ui.dxCardView.CardPreparedEvent) => void;
+    /**
+     * [descr:dxCardViewOptions.onCardHoverChanged]
+     */
+    onCardHoverChanged?: (
+      e: DevExpress.ui.dxCardView.CardHoverChangedEvent
+    ) => void;
+    /**
      * [descr:dxCardViewOptions.cardFooterTemplate]
      */
     cardFooterTemplate?:
@@ -10176,6 +10265,11 @@ declare module DevExpress.ui {
      * [descr:dxCardViewOptions.cardHeader]
      */
     cardHeader?: DevExpress.ui.dxCardView.CardHeader;
+
+    /**
+     * [descr:dxCardViewOptions.hoverStateEnabled]
+     */
+    hoverStateEnabled?: boolean;
 
     /**
      * [descr:dxCardViewOptions.toolbar]
@@ -10192,6 +10286,37 @@ declare module DevExpress.ui {
       disabled?: boolean;
       multiline?: boolean;
     };
+
+    sorting?: DevExpress.common.grids.Sorting;
+
+    /**
+     * [descr:dxCardViewOptions.filterValue]
+     */
+    filterValue?: string | Array<any> | Function;
+    /**
+     * [descr:dxCardViewOptions.filterBuilderPopup]
+     */
+    filterBuilderPopup?: DevExpress.ui.dxPopup.Properties;
+    /**
+     * [descr:dxCardViewOptions.filterBuilder]
+     */
+    filterBuilder?: dxFilterBuilderOptions;
+    /**
+     * [descr:dxCardViewOptions.filterPanel]
+     */
+    filterPanel?: DevExpress.common.grids.FilterPanel<dxCardView>;
+    /**
+     * [descr:dxCardViewOptions.columnChooser]
+     */
+    columnChooser?: DevExpress.common.grids.ColumnChooser;
+    /**
+     * [descr:dxCardViewOptions.searchPanel]
+     */
+    searchPanel?: DevExpress.common.grids.SearchPanel;
+    /**
+     * [descr:dxCardViewOptions.headerFilter]
+     */
+    headerFilter?: DevExpress.common.grids.HeaderFilter;
   }
   /**
    * [descr:dxChat]
@@ -32021,6 +32146,12 @@ declare module DevExpress.ui.dxCardView {
      * [descr:CardCover.aspectRatio]
      */
     aspectRatio?: string;
+    /**
+     * [descr:CardCover.template]
+     */
+    template?:
+      | template
+      | ((card: CardInfo) => string | DevExpress.core.UserDefinedElement);
   };
   /**
    * [descr:CardHeader]
@@ -32030,6 +32161,29 @@ declare module DevExpress.ui.dxCardView {
      * [descr:CardHeader.visible]
      */
     visible?: boolean;
+    /**
+     * [descr:CardHeader.items]
+     */
+    items?: Array<CardHeaderPredefinedToolbarItem | CardHeaderToolbarItem>;
+    /**
+     * [descr:CardHeader.template]
+     */
+    template?:
+      | template
+      | ((card: CardInfo) => string | DevExpress.core.UserDefinedElement);
+  };
+  /**
+   * [descr:CardHeaderToolbarItem]
+   */
+  export type CardHeaderToolbarItem = dxToolbarItem & {
+    /**
+     * [descr:CardHeaderToolbarItem.name]
+     */
+    name?: CardHeaderPredefinedToolbarItem | string;
+    /**
+     * [descr:CardHeaderToolbarItem.location]
+     */
+    location?: DevExpress.common.ToolbarItemLocation;
   };
   /**
    * [descr:CardInfo]
@@ -32168,9 +32322,9 @@ declare module DevExpress.ui.dxCardView {
      */
     sorting?: boolean;
     /**
-     * [descr:RemoteOperations.summary]
+     * [descr:RemoteOperations.grouping]
      */
-    summary?: boolean;
+    grouping?: boolean;
   };
   /**
    * [descr:ToolbarItem]

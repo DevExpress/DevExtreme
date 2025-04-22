@@ -22,47 +22,47 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-card-view-remote-operations',
+    selector: 'dxo-card-view-group-operation-descriptions',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoCardViewRemoteOperationsComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoCardViewGroupOperationDescriptionsComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get filtering(): boolean {
-        return this._getOption('filtering');
+    get and(): string {
+        return this._getOption('and');
     }
-    set filtering(value: boolean) {
-        this._setOption('filtering', value);
+    set and(value: string) {
+        this._setOption('and', value);
     }
 
     @Input()
-    get grouping(): boolean {
-        return this._getOption('grouping');
+    get notAnd(): string {
+        return this._getOption('notAnd');
     }
-    set grouping(value: boolean) {
-        this._setOption('grouping', value);
-    }
-
-    @Input()
-    get paging(): boolean {
-        return this._getOption('paging');
-    }
-    set paging(value: boolean) {
-        this._setOption('paging', value);
+    set notAnd(value: string) {
+        this._setOption('notAnd', value);
     }
 
     @Input()
-    get sorting(): boolean {
-        return this._getOption('sorting');
+    get notOr(): string {
+        return this._getOption('notOr');
     }
-    set sorting(value: boolean) {
-        this._setOption('sorting', value);
+    set notOr(value: string) {
+        this._setOption('notOr', value);
+    }
+
+    @Input()
+    get or(): string {
+        return this._getOption('or');
+    }
+    set or(value: string) {
+        this._setOption('or', value);
     }
 
 
     protected get _optionPath() {
-        return 'remoteOperations';
+        return 'groupOperationDescriptions';
     }
 
 
@@ -87,10 +87,10 @@ export class DxoCardViewRemoteOperationsComponent extends NestedOption implement
 
 @NgModule({
   declarations: [
-    DxoCardViewRemoteOperationsComponent
+    DxoCardViewGroupOperationDescriptionsComponent
   ],
   exports: [
-    DxoCardViewRemoteOperationsComponent
+    DxoCardViewGroupOperationDescriptionsComponent
   ],
 })
-export class DxoCardViewRemoteOperationsModule { }
+export class DxoCardViewGroupOperationDescriptionsModule { }

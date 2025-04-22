@@ -28,11 +28,11 @@ import { DxoRemoteOperations } from './base/remote-operations';
     providers: [NestedOptionHost],
     inputs: [
         'filtering',
+        'grouping',
         'paging',
         'sorting',
-        'summary',
-        'grouping',
-        'groupPaging'
+        'groupPaging',
+        'summary'
     ]
 })
 export class DxoRemoteOperationsComponent extends DxoRemoteOperations implements OnDestroy, OnInit  {

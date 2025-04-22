@@ -14,8 +14,8 @@ import {
 
 
 
-import { Store } from 'devextreme/data';
-import { Options as DataSourceOptions } from 'devextreme/data/data_source';
+import { DataSourceOptions } from 'devextreme/data/data_source';
+import { Store } from 'devextreme/data/store';
 
 import {
     NestedOptionHost,
@@ -24,12 +24,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-lookup',
+    selector: 'dxo-card-view-lookup',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoLookupComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoCardViewLookupComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get allowClearing(): boolean {
         return this._getOption('allowClearing');
@@ -39,35 +39,27 @@ export class DxoLookupComponent extends NestedOption implements OnDestroy, OnIni
     }
 
     @Input()
-    get dataSource(): Store | DataSourceOptions | undefined | Function | null | Array<any> {
+    get dataSource(): Array<any> | DataSourceOptions | Store | undefined {
         return this._getOption('dataSource');
     }
-    set dataSource(value: Store | DataSourceOptions | undefined | Function | null | Array<any>) {
+    set dataSource(value: Array<any> | DataSourceOptions | Store | undefined) {
         this._setOption('dataSource', value);
     }
 
     @Input()
-    get displayExpr(): Function | string | undefined {
+    get displayExpr(): ((data: any) => string) | string | undefined {
         return this._getOption('displayExpr');
     }
-    set displayExpr(value: Function | string | undefined) {
+    set displayExpr(value: ((data: any) => string) | string | undefined) {
         this._setOption('displayExpr', value);
     }
 
     @Input()
-    get valueExpr(): Function | string | undefined {
+    get valueExpr(): ((data: any) => string | number | boolean) | string | undefined {
         return this._getOption('valueExpr');
     }
-    set valueExpr(value: Function | string | undefined) {
+    set valueExpr(value: ((data: any) => string | number | boolean) | string | undefined) {
         this._setOption('valueExpr', value);
-    }
-
-    @Input()
-    get calculateCellValue(): Function {
-        return this._getOption('calculateCellValue');
-    }
-    set calculateCellValue(value: Function) {
-        this._setOption('calculateCellValue', value);
     }
 
 
@@ -97,10 +89,10 @@ export class DxoLookupComponent extends NestedOption implements OnDestroy, OnIni
 
 @NgModule({
   declarations: [
-    DxoLookupComponent
+    DxoCardViewLookupComponent
   ],
   exports: [
-    DxoLookupComponent
+    DxoCardViewLookupComponent
   ],
 })
-export class DxoLookupModule { }
+export class DxoCardViewLookupModule { }

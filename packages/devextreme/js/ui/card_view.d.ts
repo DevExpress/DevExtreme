@@ -1,15 +1,19 @@
 import { Mode, template } from '../common';
 import { UserDefinedElement, DxElement } from '../core/element';
 import {
- ColumnBase, DataErrorOccurredInfo, Pager, ScrollingBase,
+ ColumnBase, ColumnChooser, DataErrorOccurredInfo, FilterPanel, HeaderFilter, Pager, ScrollingBase, SearchPanel, Sorting,
 } from '../common/grids';
 import { DataSourceLike } from '../data/data_source';
 import Widget, { WidgetOptions } from './widget/ui.widget';
-import { EventInfo } from '../events';
+import { EventInfo, NativeEventInfo } from '../events';
 import { dxToolbarItem, ToolbarItemLocation } from './toolbar';
 import { dxSortableOptions } from './sortable';
 import { dxLoadPanelOptions } from './load_panel';
 import dxScrollable from './scroll_view/ui.scrollable';
+import {
+    Properties as PopupProperties,
+  } from './popup';
+import { dxFilterBuilderOptions } from './filter_builder';
 
 /**
  * @docid
@@ -64,12 +68,12 @@ export type RemoteOperations = {
      * @docid
      * @default false
      */
-    summary?: boolean;
+    grouping?: boolean;
 };
 
 // #region Toolbar
 
-export type PredefinedToolbarItem = 'columnChooserButton' | 'searchPanel' | 'addCardButton';
+export type PredefinedToolbarItem = 'columnChooserButton' | 'searchPanel' | 'addCardButton' | 'selectAllButton' | 'clearSelectionButton';
 
 /**
  * @docid
@@ -268,10 +272,52 @@ export type HeaderPanel<TCardData = unknown, TKey = unknown> = {
 
 /**
  * @docid
+ */
+type WithCardInfo = {
+    /** @docid */
+    readonly card: CardInfo;
+    /** @docid */
+    readonly cardElement: DxElement;
+};
+
+/**
+ * @docid
+ * @public
+ * @type object
+ * @inherits NativeEventInfo,WithCardInfo
+ */
+export type CardClickEvent = NativeEventInfo<dxCardView, PointerEvent | MouseEvent | TouchEvent> & WithCardInfo;
+
+/**
+ * @docid
+ * @public
+ * @type object
+ * @inherits NativeEventInfo,WithCardInfo
+ */
+export type CardDblClickEvent = NativeEventInfo<dxCardView, PointerEvent | MouseEvent | TouchEvent> & WithCardInfo;
+
+/**
+ * @docid
+ * @public
+ * @type object
+ * @inherits EventInfo,WithCardInfo
+ */
+export type CardHoverChangedEvent = EventInfo<dxCardView> & WithCardInfo;
+
+/**
+ * @docid
+ * @public
+ * @type object
+ * @inherits EventInfo,WithCardInfo
+ */
+export type CardPreparedEvent = EventInfo<dxCardView> & WithCardInfo;
+
+/**
+ * @docid
  * @public
  * @namespace DevExpress.ui.dxCardView
  */
-export type CardCover<TCardData = unknown> = {
+export type CardCover<TCardData = unknown> = { // TODO: sync with impl
     /**
      * @docid
      * @public
@@ -292,6 +338,33 @@ export type CardCover<TCardData = unknown> = {
      * @public
      */
     aspectRatio?: string;
+    /**
+     * @docid
+     * @public
+     */
+    template?: template | ((card: CardInfo) => string | UserDefinedElement);
+};
+
+export type CardHeaderPredefinedToolbarItem = 'selectionCheckBox' | 'updateButton' | 'deleteButton';
+
+/**
+ * @docid
+ * @inherits dxToolbarItem
+ * @public
+ * @namespace DevExpress.ui.dxCardView
+ */
+export type CardHeaderToolbarItem = dxToolbarItem & {
+    /**
+     * @docid
+     * @public
+     */
+    name?: CardHeaderPredefinedToolbarItem | string;
+    /**
+     * @docid
+     * @default 'after'
+     * @public
+     */
+    location?: ToolbarItemLocation;
 };
 
 /**
@@ -299,12 +372,22 @@ export type CardCover<TCardData = unknown> = {
  * @public
  * @namespace DevExpress.ui.dxCardView
  */
-export type CardHeader = {
+export type CardHeader = { // TODO: sync with impl
     /**
      * @docid
      * @public
      */
     visible?: boolean;
+    /**
+     * @docid
+     * @public
+     */
+    items?: Array<CardHeaderPredefinedToolbarItem | CardHeaderToolbarItem>;
+    /**
+     * @docid
+     * @public
+     */
+    template?: template | ((card: CardInfo) => string | UserDefinedElement);
 };
 
 // #endregion
@@ -421,7 +504,6 @@ export interface dxCardViewOptions<TCardData = unknown, TKey = unknown> extends 
      * @public
      */
     noDataTemplate?: template | ((e: { text: string }) => string | UserDefinedElement);
-
     /**
      * @docid
      * @public
@@ -455,6 +537,30 @@ export interface dxCardViewOptions<TCardData = unknown, TKey = unknown> extends 
     /**
      * @docid
      * @public
+     * @action
+     */
+    onCardClick?: (e: CardClickEvent) => void; // TODO: sync with impl
+    /**
+     * @docid
+     * @public
+     * @action
+     */
+    onCardDblClick?: (e: CardDblClickEvent) => void; // TODO: sync with impl
+    /**
+     * @docid
+     * @public
+     * @action
+     */
+    onCardPrepared?: (e: CardPreparedEvent) => void; // TODO: sync with impl
+    /**
+     * @docid
+     * @public
+     * @action
+     */
+    onCardHoverChanged?: (e: CardHoverChangedEvent) => void; // TODO: sync with impl
+    /**
+     * @docid
+     * @public
      */
     cardFooterTemplate?: template | ((card: CardInfo) => string | UserDefinedElement);
     /**
@@ -462,6 +568,12 @@ export interface dxCardViewOptions<TCardData = unknown, TKey = unknown> extends 
      * @public
      */
     cardHeader?: CardHeader;
+
+    /**
+     * @docid
+     * @public
+     */
+    hoverStateEnabled?: boolean; // TODO: sync with impl
 
     // #endregion
 
@@ -495,6 +607,52 @@ export interface dxCardViewOptions<TCardData = unknown, TKey = unknown> extends 
     };
 
     // #endregion
+
+    sorting?: Sorting;
+
+    /**
+     * @docid
+     * @type Filter expression
+     * @default null
+     * @fires dxCardViewOptions.onOptionChanged
+     * @public
+     */
+    filterValue?: string | Array<any> | Function;
+    /**
+     * @docid
+     * @public
+     * @type object
+     */
+    filterBuilderPopup?: PopupProperties;
+    /**
+     * @docid
+     * @public
+     */
+    filterBuilder?: dxFilterBuilderOptions;
+    /**
+     * @docid
+     * @type object
+     * @public
+     */
+    filterPanel?: FilterPanel<dxCardView>;
+    /**
+     * @docid
+     * @type object
+     * @public
+     */
+    columnChooser?: ColumnChooser;
+    /**
+     * @docid
+     * @type object
+     * @public
+     */
+    searchPanel?: SearchPanel;
+    /**
+     * @docid
+     * @type object
+     * @public
+     */
+    headerFilter?: HeaderFilter;
 }
 
 /** @public */
@@ -550,11 +708,52 @@ export default class dxCardView<TCardData = unknown, TKey = unknown> extends Wid
      * @public
     */
     endCustomLoading(): void;
+    /**
+     * @docid
+     * @publicName clearSorting()
+     * @public
+     */
+    clearSorting(): void;
+    /**
+     * @docid
+     * @publicName getCombinedFilter()
+     * @public
+     */
+    getCombinedFilter(): any;
+    /**
+     * @docid
+     * @publicName clearFilter()
+     * @public
+     */
+    clearFilter(): void;
+    /**
+     * @docid
+     * @publicName hideColumnChooser()
+     * @public
+     */
+    hideColumnChooser(): void;
+    /**
+     * @docid
+     * @publicName showColumnChooser()
+     * @public
+     */
+    showColumnChooser(): void;
+    /**
+     * @docid
+     * @publicName searchByText(text)
+     * @public
+     */
+    searchByText(text: string): void;
 }
 
 export {
+    Sorting,
     Pager,
     DataErrorOccurredInfo,
+    PopupProperties,
+    ColumnChooser,
+    SearchPanel,
+    HeaderFilter,
 };
 
 export type ExplicitTypes<TCardData = unknown, TKey = unknown> = {

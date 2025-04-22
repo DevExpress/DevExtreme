@@ -24,10 +24,11 @@ import {
 export { ExplicitTypes } from 'devextreme/ui/card_view';
 
 import DataSource from 'devextreme/data/data_source';
-import { CardCover, CardHeader, ColumnProperties, HeaderPanel, Paging, RemoteOperations, PredefinedToolbarItem, ToolbarItem } from 'devextreme/ui/card_view';
+import { CardCover, CardHeader, ColumnProperties, HeaderPanel, CardClickEvent, CardDblClickEvent, CardHoverChangedEvent, CardPreparedEvent, Paging, RemoteOperations, PredefinedToolbarItem, ToolbarItem } from 'devextreme/ui/card_view';
 import { Mode } from 'devextreme/common';
 import { DataSourceOptions } from 'devextreme/data/data_source';
 import { Store } from 'devextreme/data/store';
+import { dxFilterBuilderOptions } from 'devextreme/ui/filter_builder';
 import { dxLoadPanelOptions } from 'devextreme/ui/load_panel';
 import { EventInfo } from 'devextreme/common/core/events';
 import { Pager } from 'devextreme/common/grids';
@@ -47,7 +48,15 @@ import {
 
 import { DxoCardCoverModule } from 'devextreme-angular/ui/nested';
 import { DxoCardHeaderModule } from 'devextreme-angular/ui/nested';
+import { DxiItemModule } from 'devextreme-angular/ui/nested';
 import { DxiColumnModule } from 'devextreme-angular/ui/nested';
+import { DxoFilterBuilderModule } from 'devextreme-angular/ui/nested';
+import { DxiCustomOperationModule } from 'devextreme-angular/ui/nested';
+import { DxiFieldModule } from 'devextreme-angular/ui/nested';
+import { DxoFormatModule } from 'devextreme-angular/ui/nested';
+import { DxoLookupModule } from 'devextreme-angular/ui/nested';
+import { DxoFilterOperationDescriptionsModule } from 'devextreme-angular/ui/nested';
+import { DxoGroupOperationDescriptionsModule } from 'devextreme-angular/ui/nested';
 import { DxoHeaderPanelModule } from 'devextreme-angular/ui/nested';
 import { DxoLoadPanelModule } from 'devextreme-angular/ui/nested';
 import { DxoAnimationModule } from 'devextreme-angular/ui/nested';
@@ -65,20 +74,27 @@ import { DxoPagerModule } from 'devextreme-angular/ui/nested';
 import { DxoPagingModule } from 'devextreme-angular/ui/nested';
 import { DxoRemoteOperationsModule } from 'devextreme-angular/ui/nested';
 import { DxoToolbarModule } from 'devextreme-angular/ui/nested';
-import { DxiItemModule } from 'devextreme-angular/ui/nested';
 
 import { DxoCardViewAnimationModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxoCardViewAtModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxoCardViewBoundaryOffsetModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxoCardViewCardCoverModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxoCardViewCardHeaderModule } from 'devextreme-angular/ui/card-view/nested';
+import { DxiCardViewCardHeaderItemModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxoCardViewCollisionModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxiCardViewColumnModule } from 'devextreme-angular/ui/card-view/nested';
+import { DxiCardViewCustomOperationModule } from 'devextreme-angular/ui/card-view/nested';
+import { DxiCardViewFieldModule } from 'devextreme-angular/ui/card-view/nested';
+import { DxoCardViewFilterBuilderModule } from 'devextreme-angular/ui/card-view/nested';
+import { DxoCardViewFilterOperationDescriptionsModule } from 'devextreme-angular/ui/card-view/nested';
+import { DxoCardViewFormatModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxoCardViewFromModule } from 'devextreme-angular/ui/card-view/nested';
+import { DxoCardViewGroupOperationDescriptionsModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxoCardViewHeaderPanelModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxoCardViewHideModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxiCardViewItemModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxoCardViewLoadPanelModule } from 'devextreme-angular/ui/card-view/nested';
+import { DxoCardViewLookupModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxoCardViewMyModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxoCardViewOffsetModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxoCardViewPagerModule } from 'devextreme-angular/ui/card-view/nested';
@@ -88,6 +104,7 @@ import { DxoCardViewRemoteOperationsModule } from 'devextreme-angular/ui/card-vi
 import { DxoCardViewShowModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxoCardViewToModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxoCardViewToolbarModule } from 'devextreme-angular/ui/card-view/nested';
+import { DxiCardViewToolbarItemModule } from 'devextreme-angular/ui/card-view/nested';
 
 import { DxiColumnComponent } from 'devextreme-angular/ui/nested';
 
@@ -243,6 +260,19 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
 
 
     /**
+     * [descr:dxCardViewOptions.columnChooser]
+    
+     */
+    @Input()
+    get columnChooser(): Record<string, any> {
+        return this._getOption('columnChooser');
+    }
+    set columnChooser(value: Record<string, any>) {
+        this._setOption('columnChooser', value);
+    }
+
+
+    /**
      * [descr:dxCardViewOptions.columns]
     
      */
@@ -308,6 +338,58 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
 
 
     /**
+     * [descr:dxCardViewOptions.filterBuilder]
+    
+     */
+    @Input()
+    get filterBuilder(): dxFilterBuilderOptions {
+        return this._getOption('filterBuilder');
+    }
+    set filterBuilder(value: dxFilterBuilderOptions) {
+        this._setOption('filterBuilder', value);
+    }
+
+
+    /**
+     * [descr:dxCardViewOptions.filterBuilderPopup]
+    
+     */
+    @Input()
+    get filterBuilderPopup(): Record<string, any> {
+        return this._getOption('filterBuilderPopup');
+    }
+    set filterBuilderPopup(value: Record<string, any>) {
+        this._setOption('filterBuilderPopup', value);
+    }
+
+
+    /**
+     * [descr:dxCardViewOptions.filterPanel]
+    
+     */
+    @Input()
+    get filterPanel(): Record<string, any> {
+        return this._getOption('filterPanel');
+    }
+    set filterPanel(value: Record<string, any>) {
+        this._setOption('filterPanel', value);
+    }
+
+
+    /**
+     * [descr:dxCardViewOptions.filterValue]
+    
+     */
+    @Input()
+    get filterValue(): Array<any> | Function | string {
+        return this._getOption('filterValue');
+    }
+    set filterValue(value: Array<any> | Function | string) {
+        this._setOption('filterValue', value);
+    }
+
+
+    /**
      * [descr:WidgetOptions.focusStateEnabled]
     
      */
@@ -317,6 +399,19 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     }
     set focusStateEnabled(value: boolean) {
         this._setOption('focusStateEnabled', value);
+    }
+
+
+    /**
+     * [descr:dxCardViewOptions.headerFilter]
+    
+     */
+    @Input()
+    get headerFilter(): Record<string, any> {
+        return this._getOption('headerFilter');
+    }
+    set headerFilter(value: Record<string, any>) {
+        this._setOption('headerFilter', value);
     }
 
 
@@ -360,7 +455,7 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
 
 
     /**
-     * [descr:WidgetOptions.hoverStateEnabled]
+     * [descr:dxCardViewOptions.hoverStateEnabled]
     
      */
     @Input()
@@ -490,6 +585,19 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
 
 
     /**
+     * [descr:dxCardViewOptions.searchPanel]
+    
+     */
+    @Input()
+    get searchPanel(): Record<string, any> {
+        return this._getOption('searchPanel');
+    }
+    set searchPanel(value: Record<string, any>) {
+        this._setOption('searchPanel', value);
+    }
+
+
+    /**
      * [descr:WidgetOptions.tabIndex]
     
      */
@@ -552,6 +660,38 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     set wordWrapEnabled(value: boolean) {
         this._setOption('wordWrapEnabled', value);
     }
+
+    /**
+    
+     * [descr:dxCardViewOptions.onCardClick]
+    
+    
+     */
+    @Output() onCardClick: EventEmitter<CardClickEvent>;
+
+    /**
+    
+     * [descr:dxCardViewOptions.onCardDblClick]
+    
+    
+     */
+    @Output() onCardDblClick: EventEmitter<CardDblClickEvent>;
+
+    /**
+    
+     * [descr:dxCardViewOptions.onCardHoverChanged]
+    
+    
+     */
+    @Output() onCardHoverChanged: EventEmitter<CardHoverChangedEvent>;
+
+    /**
+    
+     * [descr:dxCardViewOptions.onCardPrepared]
+    
+    
+     */
+    @Output() onCardPrepared: EventEmitter<CardPreparedEvent>;
 
     /**
     
@@ -668,6 +808,13 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
+    @Output() columnChooserChange: EventEmitter<Record<string, any>>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
     @Output() columnsChange: EventEmitter<Array<ColumnProperties | string>>;
 
     /**
@@ -703,7 +850,42 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
+    @Output() filterBuilderChange: EventEmitter<dxFilterBuilderOptions>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
+    @Output() filterBuilderPopupChange: EventEmitter<Record<string, any>>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
+    @Output() filterPanelChange: EventEmitter<Record<string, any>>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
+    @Output() filterValueChange: EventEmitter<Array<any> | Function | string>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
     @Output() focusStateEnabledChange: EventEmitter<boolean>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
+    @Output() headerFilterChange: EventEmitter<Record<string, any>>;
 
     /**
     
@@ -801,6 +983,13 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
+    @Output() searchPanelChange: EventEmitter<Record<string, any>>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
     @Output() tabIndexChange: EventEmitter<number>;
 
     /**
@@ -864,6 +1053,10 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
         super(elementRef, ngZone, templateHost, _watcherHelper, transferState, platformId);
 
         this._createEventEmitters([
+            { subscribe: 'cardClick', emit: 'onCardClick' },
+            { subscribe: 'cardDblClick', emit: 'onCardDblClick' },
+            { subscribe: 'cardHoverChanged', emit: 'onCardHoverChanged' },
+            { subscribe: 'cardPrepared', emit: 'onCardPrepared' },
             { subscribe: 'contentReady', emit: 'onContentReady' },
             { subscribe: 'dataErrorOccurred', emit: 'onDataErrorOccurred' },
             { subscribe: 'disposing', emit: 'onDisposing' },
@@ -879,12 +1072,18 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
             { emit: 'cardMinWidthChange' },
             { emit: 'cardsPerRowChange' },
             { emit: 'cardTemplateChange' },
+            { emit: 'columnChooserChange' },
             { emit: 'columnsChange' },
             { emit: 'dataSourceChange' },
             { emit: 'disabledChange' },
             { emit: 'elementAttrChange' },
             { emit: 'errorRowEnabledChange' },
+            { emit: 'filterBuilderChange' },
+            { emit: 'filterBuilderPopupChange' },
+            { emit: 'filterPanelChange' },
+            { emit: 'filterValueChange' },
             { emit: 'focusStateEnabledChange' },
+            { emit: 'headerFilterChange' },
             { emit: 'headerPanelChange' },
             { emit: 'heightChange' },
             { emit: 'hintChange' },
@@ -898,6 +1097,7 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
             { emit: 'remoteOperationsChange' },
             { emit: 'rtlEnabledChange' },
             { emit: 'scrollingChange' },
+            { emit: 'searchPanelChange' },
             { emit: 'tabIndexChange' },
             { emit: 'toolbarChange' },
             { emit: 'visibleChange' },
@@ -955,7 +1155,15 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
   imports: [
     DxoCardCoverModule,
     DxoCardHeaderModule,
+    DxiItemModule,
     DxiColumnModule,
+    DxoFilterBuilderModule,
+    DxiCustomOperationModule,
+    DxiFieldModule,
+    DxoFormatModule,
+    DxoLookupModule,
+    DxoFilterOperationDescriptionsModule,
+    DxoGroupOperationDescriptionsModule,
     DxoHeaderPanelModule,
     DxoLoadPanelModule,
     DxoAnimationModule,
@@ -973,19 +1181,26 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     DxoPagingModule,
     DxoRemoteOperationsModule,
     DxoToolbarModule,
-    DxiItemModule,
     DxoCardViewAnimationModule,
     DxoCardViewAtModule,
     DxoCardViewBoundaryOffsetModule,
     DxoCardViewCardCoverModule,
     DxoCardViewCardHeaderModule,
+    DxiCardViewCardHeaderItemModule,
     DxoCardViewCollisionModule,
     DxiCardViewColumnModule,
+    DxiCardViewCustomOperationModule,
+    DxiCardViewFieldModule,
+    DxoCardViewFilterBuilderModule,
+    DxoCardViewFilterOperationDescriptionsModule,
+    DxoCardViewFormatModule,
     DxoCardViewFromModule,
+    DxoCardViewGroupOperationDescriptionsModule,
     DxoCardViewHeaderPanelModule,
     DxoCardViewHideModule,
     DxiCardViewItemModule,
     DxoCardViewLoadPanelModule,
+    DxoCardViewLookupModule,
     DxoCardViewMyModule,
     DxoCardViewOffsetModule,
     DxoCardViewPagerModule,
@@ -995,6 +1210,7 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     DxoCardViewShowModule,
     DxoCardViewToModule,
     DxoCardViewToolbarModule,
+    DxiCardViewToolbarItemModule,
     DxIntegrationModule,
     DxTemplateModule
   ],
@@ -1005,7 +1221,15 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     DxCardViewComponent,
     DxoCardCoverModule,
     DxoCardHeaderModule,
+    DxiItemModule,
     DxiColumnModule,
+    DxoFilterBuilderModule,
+    DxiCustomOperationModule,
+    DxiFieldModule,
+    DxoFormatModule,
+    DxoLookupModule,
+    DxoFilterOperationDescriptionsModule,
+    DxoGroupOperationDescriptionsModule,
     DxoHeaderPanelModule,
     DxoLoadPanelModule,
     DxoAnimationModule,
@@ -1023,19 +1247,26 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     DxoPagingModule,
     DxoRemoteOperationsModule,
     DxoToolbarModule,
-    DxiItemModule,
     DxoCardViewAnimationModule,
     DxoCardViewAtModule,
     DxoCardViewBoundaryOffsetModule,
     DxoCardViewCardCoverModule,
     DxoCardViewCardHeaderModule,
+    DxiCardViewCardHeaderItemModule,
     DxoCardViewCollisionModule,
     DxiCardViewColumnModule,
+    DxiCardViewCustomOperationModule,
+    DxiCardViewFieldModule,
+    DxoCardViewFilterBuilderModule,
+    DxoCardViewFilterOperationDescriptionsModule,
+    DxoCardViewFormatModule,
     DxoCardViewFromModule,
+    DxoCardViewGroupOperationDescriptionsModule,
     DxoCardViewHeaderPanelModule,
     DxoCardViewHideModule,
     DxiCardViewItemModule,
     DxoCardViewLoadPanelModule,
+    DxoCardViewLookupModule,
     DxoCardViewMyModule,
     DxoCardViewOffsetModule,
     DxoCardViewPagerModule,
@@ -1045,6 +1276,7 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     DxoCardViewShowModule,
     DxoCardViewToModule,
     DxoCardViewToolbarModule,
+    DxiCardViewToolbarItemModule,
     DxTemplateModule
   ]
 })

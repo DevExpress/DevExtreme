@@ -18,7 +18,7 @@ import { DOCUMENT } from '@angular/common';
 
 import { LocateInMenuMode, ShowTextMode } from 'devextreme/ui/toolbar';
 import { ToolbarItemLocation, ToolbarItemComponent } from 'devextreme/common';
-import { CardHeaderPredefinedToolbarItem, PredefinedToolbarItem } from 'devextreme/ui/card_view';
+import { CardHeaderPredefinedToolbarItem } from 'devextreme/ui/card_view';
 
 import {
     NestedOptionHost,
@@ -31,12 +31,12 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxi-card-view-item',
+    selector: 'dxi-card-view-card-header-item',
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
     providers: [NestedOptionHost, DxTemplateHost]
 })
-export class DxiCardViewItemComponent extends CollectionNestedOption implements AfterViewInit,
+export class DxiCardViewCardHeaderItemComponent extends CollectionNestedOption implements AfterViewInit,
     IDxTemplateHost {
     @Input()
     get cssClass(): string | undefined {
@@ -87,10 +87,10 @@ export class DxiCardViewItemComponent extends CollectionNestedOption implements 
     }
 
     @Input()
-    get name(): CardHeaderPredefinedToolbarItem | string | PredefinedToolbarItem {
+    get name(): CardHeaderPredefinedToolbarItem | string {
         return this._getOption('name');
     }
-    set name(value: CardHeaderPredefinedToolbarItem | string | PredefinedToolbarItem) {
+    set name(value: CardHeaderPredefinedToolbarItem | string) {
         this._setOption('name', value);
     }
 
@@ -177,10 +177,10 @@ export class DxiCardViewItemComponent extends CollectionNestedOption implements 
 
 @NgModule({
   declarations: [
-    DxiCardViewItemComponent
+    DxiCardViewCardHeaderItemComponent
   ],
   exports: [
-    DxiCardViewItemComponent
+    DxiCardViewCardHeaderItemComponent
   ],
 })
-export class DxiCardViewItemModule { }
+export class DxiCardViewCardHeaderItemModule { }

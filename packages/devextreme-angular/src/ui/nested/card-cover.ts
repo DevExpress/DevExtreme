@@ -30,7 +30,8 @@ import { DxoCardCover } from './base/card-cover';
         'altExpr',
         'aspectRatio',
         'imageExpr',
-        'maxHeight'
+        'maxHeight',
+        'template'
     ]
 })
 export class DxoCardCoverComponent extends DxoCardCover implements OnDestroy, OnInit  {

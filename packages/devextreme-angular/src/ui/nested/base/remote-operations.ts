@@ -17,6 +17,13 @@ export abstract class DxoRemoteOperations extends NestedOption {
         this._setOption('filtering', value);
     }
 
+    get grouping(): boolean {
+        return this._getOption('grouping');
+    }
+    set grouping(value: boolean) {
+        this._setOption('grouping', value);
+    }
+
     get paging(): boolean {
         return this._getOption('paging');
     }
@@ -31,24 +38,17 @@ export abstract class DxoRemoteOperations extends NestedOption {
         this._setOption('sorting', value);
     }
 
-    get summary(): boolean {
-        return this._getOption('summary');
-    }
-    set summary(value: boolean) {
-        this._setOption('summary', value);
-    }
-
-    get grouping(): boolean {
-        return this._getOption('grouping');
-    }
-    set grouping(value: boolean) {
-        this._setOption('grouping', value);
-    }
-
     get groupPaging(): boolean {
         return this._getOption('groupPaging');
     }
     set groupPaging(value: boolean) {
         this._setOption('groupPaging', value);
+    }
+
+    get summary(): boolean {
+        return this._getOption('summary');
+    }
+    set summary(value: boolean) {
+        this._setOption('summary', value);
     }
 }

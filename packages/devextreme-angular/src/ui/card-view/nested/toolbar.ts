@@ -24,6 +24,7 @@ import {
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
 import { DxiCardViewItemComponent } from './item-dxi';
+import { DxiCardViewToolbarItemComponent } from './toolbar-item-dxi';
 
 
 @Component({
@@ -52,6 +53,14 @@ export class DxoCardViewToolbarComponent extends NestedOption implements OnDestr
         return this._getOption('items');
     }
     set itemsChildren(value) {
+        this.setChildren('items', value);
+    }
+
+    @ContentChildren(forwardRef(() => DxiCardViewToolbarItemComponent))
+    get toolbarItemsChildren(): QueryList<DxiCardViewToolbarItemComponent> {
+        return this._getOption('items');
+    }
+    set toolbarItemsChildren(value) {
         this.setChildren('items', value);
     }
 

@@ -7,27 +7,36 @@ import {
     OnDestroy,
     NgModule,
     Host,
+    ElementRef,
+    Renderer2,
+    Inject,
+    AfterViewInit,
     SkipSelf,
     Input
 } from '@angular/core';
 
-
+import { DOCUMENT } from '@angular/common';
 
 
 
 import {
     NestedOptionHost,
+    extractTemplate,
+    DxTemplateDirective,
+    IDxTemplateHost,
+    DxTemplateHost
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
     selector: 'dxo-card-view-card-cover',
-    template: '',
-    styles: [''],
-    providers: [NestedOptionHost]
+    template: '<ng-content></ng-content>',
+    styles: [':host { display: block; }'],
+    providers: [NestedOptionHost, DxTemplateHost]
 })
-export class DxoCardViewCardCoverComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoCardViewCardCoverComponent extends NestedOption implements AfterViewInit, OnDestroy, OnInit,
+    IDxTemplateHost {
     @Input()
     get altExpr(): ((data: any) => string) | string {
         return this._getOption('altExpr');
@@ -60,6 +69,14 @@ export class DxoCardViewCardCoverComponent extends NestedOption implements OnDes
         this._setOption('maxHeight', value);
     }
 
+    @Input()
+    get template(): any {
+        return this._getOption('template');
+    }
+    set template(value: any) {
+        this._setOption('template', value);
+    }
+
 
     protected get _optionPath() {
         return 'cardCover';
@@ -67,10 +84,22 @@ export class DxoCardViewCardCoverComponent extends NestedOption implements OnDes
 
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
-            @Host() optionHost: NestedOptionHost) {
+            @Host() optionHost: NestedOptionHost,
+            private renderer: Renderer2,
+            @Inject(DOCUMENT) private document: any,
+            @Host() templateHost: DxTemplateHost,
+            private element: ElementRef) {
         super();
         parentOptionHost.setNestedOption(this);
         optionHost.setHost(this, this._fullOptionPath.bind(this));
+        templateHost.setHost(this);
+    }
+
+    setTemplate(template: DxTemplateDirective) {
+        this.template = template;
+    }
+    ngAfterViewInit() {
+        extractTemplate(this, this.element, this.renderer, this.document);
     }
 
 

@@ -37,4 +37,11 @@ export abstract class DxoCardCover extends NestedOption {
     set maxHeight(value: number) {
         this._setOption('maxHeight', value);
     }
+
+    get template(): any {
+        return this._getOption('template');
+    }
+    set template(value: any) {
+        this._setOption('template', value);
+    }
 }

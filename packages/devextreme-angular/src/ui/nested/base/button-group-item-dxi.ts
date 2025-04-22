@@ -8,7 +8,7 @@ import {
 import { AsyncRule, ButtonStyle, ButtonType, CompareRule, CustomRule, EmailRule, HorizontalAlignment, NumericRule, PatternRule, RangeRule, RequiredRule, StringLengthRule, ToolbarItemComponent, ToolbarItemLocation, VerticalAlignment } from 'devextreme/common';
 import { Properties as dxBoxOptions } from 'devextreme/ui/box';
 import { Properties as dxButtonOptions } from 'devextreme/ui/button';
-import { PredefinedToolbarItem } from 'devextreme/ui/card_view';
+import { CardHeaderPredefinedToolbarItem, PredefinedToolbarItem } from 'devextreme/ui/card_view';
 import { User } from 'devextreme/ui/chat';
 import { dxContextMenuItem } from 'devextreme/ui/context_menu';
 import { DataGridPredefinedToolbarItem } from 'devextreme/ui/data_grid';
@@ -176,10 +176,10 @@ export abstract class DxiButtonGroupItem extends CollectionNestedOption {
         this._setOption('menuItemTemplate', value);
     }
 
-    get name(): PredefinedToolbarItem | string | undefined | DataGridPredefinedToolbarItem | Command | FileManagerPredefinedContextMenuItem | FileManagerPredefinedToolbarItem | GanttPredefinedContextMenuItem | GanttPredefinedToolbarItem | HtmlEditorPredefinedContextMenuItem | HtmlEditorPredefinedToolbarItem | TreeListPredefinedToolbarItem {
+    get name(): CardHeaderPredefinedToolbarItem | string | PredefinedToolbarItem | undefined | DataGridPredefinedToolbarItem | Command | FileManagerPredefinedContextMenuItem | FileManagerPredefinedToolbarItem | GanttPredefinedContextMenuItem | GanttPredefinedToolbarItem | HtmlEditorPredefinedContextMenuItem | HtmlEditorPredefinedToolbarItem | TreeListPredefinedToolbarItem {
         return this._getOption('name');
     }
-    set name(value: PredefinedToolbarItem | string | undefined | DataGridPredefinedToolbarItem | Command | FileManagerPredefinedContextMenuItem | FileManagerPredefinedToolbarItem | GanttPredefinedContextMenuItem | GanttPredefinedToolbarItem | HtmlEditorPredefinedContextMenuItem | HtmlEditorPredefinedToolbarItem | TreeListPredefinedToolbarItem) {
+    set name(value: CardHeaderPredefinedToolbarItem | string | PredefinedToolbarItem | undefined | DataGridPredefinedToolbarItem | Command | FileManagerPredefinedContextMenuItem | FileManagerPredefinedToolbarItem | GanttPredefinedContextMenuItem | GanttPredefinedToolbarItem | HtmlEditorPredefinedContextMenuItem | HtmlEditorPredefinedToolbarItem | TreeListPredefinedToolbarItem) {
         this._setOption('name', value);
     }
 

@@ -8,7 +8,10 @@ import {
     OnDestroy,
     NgModule,
     Host,
-    SkipSelf
+    SkipSelf,
+    ContentChildren,
+    forwardRef,
+    QueryList
 } from '@angular/core';
 
 
@@ -19,6 +22,7 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxoCardHeader } from './base/card-header';
+import { DxiItemComponent } from './item-dxi';
 
 
 @Component({
@@ -27,6 +31,8 @@ import { DxoCardHeader } from './base/card-header';
     styles: [''],
     providers: [NestedOptionHost],
     inputs: [
+        'items',
+        'template',
         'visible'
     ]
 })
@@ -36,6 +42,14 @@ export class DxoCardHeaderComponent extends DxoCardHeader implements OnDestroy, 
         return 'cardHeader';
     }
 
+
+    @ContentChildren(forwardRef(() => DxiItemComponent))
+    get itemsChildren(): QueryList<DxiItemComponent> {
+        return this._getOption('items');
+    }
+    set itemsChildren(value) {
+        this.setChildren('items', value);
+    }
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

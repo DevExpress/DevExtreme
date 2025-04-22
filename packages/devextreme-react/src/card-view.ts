@@ -10,12 +10,16 @@ import { Component as BaseComponent, IHtmlOptions, ComponentRef, NestedComponent
 import NestedOption from "./core/nested-option";
 
 import type { AnimationConfig, CollisionResolution, PositionConfig, AnimationState, AnimationType, CollisionResolutionCombination } from "devextreme/common/core/animation";
-import type { HorizontalAlignment, VerticalAlignment, template, Direction, ToolbarItemLocation, ToolbarItemComponent, PositionAlignment, Mode, DisplayMode } from "devextreme/common";
-import type { CardInfo, Column as CardViewColumn, PredefinedToolbarItem, ToolbarItem } from "devextreme/ui/card_view";
+import type { HorizontalAlignment, VerticalAlignment, template, ToolbarItemLocation, ToolbarItemComponent, DataType, Format as CommonFormat, Direction, PositionAlignment, Mode, DisplayMode } from "devextreme/common";
+import type { CardInfo, CardHeaderPredefinedToolbarItem, CardHeaderToolbarItem, Column as CardViewColumn, PredefinedToolbarItem, ToolbarItem as CardViewToolbarItem } from "devextreme/ui/card_view";
 import type { LocateInMenuMode, ShowTextMode } from "devextreme/ui/toolbar";
 import type { CollectionWidgetItem } from "devextreme/ui/collection/ui.collection_widget.base";
+import type { dxFilterBuilderField, FieldInfo, FilterBuilderOperation, dxFilterBuilderCustomOperation, GroupOperation, ContentReadyEvent, DisposingEvent, EditorPreparedEvent, EditorPreparingEvent, InitializedEvent, OptionChangedEvent, ValueChangedEvent } from "devextreme/ui/filter_builder";
+import type { Format as LocalizationFormat } from "devextreme/common/core/localization";
+import type { DataSourceOptions } from "devextreme/data/data_source";
+import type { Store } from "devextreme/data/store";
+import type { ContentReadyEvent as LoadPanelContentReadyEvent, DisposingEvent as LoadPanelDisposingEvent, InitializedEvent as LoadPanelInitializedEvent, OptionChangedEvent as LoadPanelOptionChangedEvent, HiddenEvent, HidingEvent, ShowingEvent, ShownEvent } from "devextreme/ui/load_panel";
 import type { event } from "devextreme/events/events.types";
-import type { ContentReadyEvent, DisposingEvent, HiddenEvent, HidingEvent, InitializedEvent, OptionChangedEvent, ShowingEvent, ShownEvent } from "devextreme/ui/load_panel";
 import type { PagerPageSize } from "devextreme/common/grids";
 
 type ICardViewOptions<TCardData = any, TKey = any> = React.PropsWithChildren<Properties<TCardData, TKey> & IHtmlOptions & {
@@ -26,6 +30,8 @@ type ICardViewOptions<TCardData = any, TKey = any> = React.PropsWithChildren<Pro
   cardComponent?: React.ComponentType<any>;
   noDataRender?: (...params: any) => React.ReactNode;
   noDataComponent?: React.ComponentType<any>;
+  defaultFilterValue?: Array<any> | (() => any) | string;
+  onFilterValueChange?: (value: Array<any> | (() => any) | string) => void;
 }>
 
 interface CardViewRef<TCardData = any, TKey = any> {
@@ -45,12 +51,18 @@ const CardView = memo(
         }
       ), [baseRef.current]);
 
-      const independentEvents = useMemo(() => (["onContentReady","onDataErrorOccurred","onDisposing","onInitialized"]), []);
+      const subscribableOptions = useMemo(() => (["filterValue"]), []);
+      const independentEvents = useMemo(() => (["onCardClick","onCardDblClick","onCardPrepared","onContentReady","onDataErrorOccurred","onDisposing","onInitialized"]), []);
+
+      const defaults = useMemo(() => ({
+        defaultFilterValue: "filterValue",
+      }), []);
 
       const expectedChildren = useMemo(() => ({
         cardCover: { optionName: "cardCover", isCollectionItem: false },
         cardHeader: { optionName: "cardHeader", isCollectionItem: false },
         column: { optionName: "columns", isCollectionItem: true },
+        filterBuilder: { optionName: "filterBuilder", isCollectionItem: false },
         headerPanel: { optionName: "headerPanel", isCollectionItem: false },
         loadPanel: { optionName: "loadPanel", isCollectionItem: false },
         pager: { optionName: "pager", isCollectionItem: false },
@@ -81,7 +93,9 @@ const CardView = memo(
         React.createElement(BaseComponent<React.PropsWithChildren<ICardViewOptions<TCardData, TKey>>>, {
           WidgetClass: dxCardView,
           ref: baseRef,
+          subscribableOptions,
           independentEvents,
+          defaults,
           expectedChildren,
           templateProps,
           ...props,
@@ -160,12 +174,20 @@ type ICardCoverProps = React.PropsWithChildren<{
   aspectRatio?: string;
   imageExpr?: ((data: any) => string) | string;
   maxHeight?: number;
+  template?: ((card: CardInfo) => string | any) | template;
+  render?: (...params: any) => React.ReactNode;
+  component?: React.ComponentType<any>;
 }>
 const _componentCardCover = (props: ICardCoverProps) => {
   return React.createElement(NestedOption<ICardCoverProps>, {
     ...props,
     elementDescriptor: {
       OptionName: "cardCover",
+      TemplateProps: [{
+        tmplOption: "template",
+        render: "render",
+        component: "component"
+      }],
     },
   });
 };
@@ -177,18 +199,75 @@ const CardCover = Object.assign<typeof _componentCardCover, NestedComponentMeta>
 // owners:
 // CardView
 type ICardHeaderProps = React.PropsWithChildren<{
+  items?: Array<CardHeaderPredefinedToolbarItem | CardHeaderToolbarItem>;
+  template?: ((card: CardInfo) => string | any) | template;
   visible?: boolean;
+  render?: (...params: any) => React.ReactNode;
+  component?: React.ComponentType<any>;
 }>
 const _componentCardHeader = (props: ICardHeaderProps) => {
   return React.createElement(NestedOption<ICardHeaderProps>, {
     ...props,
     elementDescriptor: {
       OptionName: "cardHeader",
+      ExpectedChildren: {
+        cardHeaderItem: { optionName: "items", isCollectionItem: true },
+        item: { optionName: "items", isCollectionItem: true }
+      },
+      TemplateProps: [{
+        tmplOption: "template",
+        render: "render",
+        component: "component"
+      }],
     },
   });
 };
 
 const CardHeader = Object.assign<typeof _componentCardHeader, NestedComponentMeta>(_componentCardHeader, {
+  componentType: "option",
+});
+
+// owners:
+// CardHeader
+type ICardHeaderItemProps = React.PropsWithChildren<{
+  cssClass?: string | undefined;
+  disabled?: boolean;
+  html?: string;
+  locateInMenu?: LocateInMenuMode;
+  location?: ToolbarItemLocation;
+  menuItemTemplate?: (() => string | any) | template;
+  name?: CardHeaderPredefinedToolbarItem | string;
+  options?: any;
+  showText?: ShowTextMode;
+  template?: ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string | any) | template;
+  text?: string;
+  visible?: boolean;
+  widget?: ToolbarItemComponent;
+  menuItemRender?: (...params: any) => React.ReactNode;
+  menuItemComponent?: React.ComponentType<any>;
+  render?: (...params: any) => React.ReactNode;
+  component?: React.ComponentType<any>;
+}>
+const _componentCardHeaderItem = (props: ICardHeaderItemProps) => {
+  return React.createElement(NestedOption<ICardHeaderItemProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "items",
+      IsCollectionItem: true,
+      TemplateProps: [{
+        tmplOption: "menuItemTemplate",
+        render: "menuItemRender",
+        component: "menuItemComponent"
+      }, {
+        tmplOption: "template",
+        render: "render",
+        component: "component"
+      }],
+    },
+  });
+};
+
+const CardHeaderItem = Object.assign<typeof _componentCardHeaderItem, NestedComponentMeta>(_componentCardHeaderItem, {
   componentType: "option",
 });
 
@@ -260,6 +339,214 @@ const Column = Object.assign<typeof _componentColumn, NestedComponentMeta>(_comp
 });
 
 // owners:
+// FilterBuilder
+type ICustomOperationProps = React.PropsWithChildren<{
+  calculateFilterExpression?: ((filterValue: any, field: dxFilterBuilderField) => string | (() => any) | Array<any>);
+  caption?: string | undefined;
+  customizeText?: ((fieldInfo: FieldInfo) => string);
+  dataTypes?: Array<DataType> | undefined;
+  editorTemplate?: ((conditionInfo: { field: dxFilterBuilderField, setValue: (() => void), value: string | number | Date }, container: any) => string | any) | template;
+  hasValue?: boolean;
+  icon?: string | undefined;
+  name?: string | undefined;
+  editorRender?: (...params: any) => React.ReactNode;
+  editorComponent?: React.ComponentType<any>;
+}>
+const _componentCustomOperation = (props: ICustomOperationProps) => {
+  return React.createElement(NestedOption<ICustomOperationProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "customOperations",
+      IsCollectionItem: true,
+      TemplateProps: [{
+        tmplOption: "editorTemplate",
+        render: "editorRender",
+        component: "editorComponent"
+      }],
+    },
+  });
+};
+
+const CustomOperation = Object.assign<typeof _componentCustomOperation, NestedComponentMeta>(_componentCustomOperation, {
+  componentType: "option",
+});
+
+// owners:
+// FilterBuilder
+type IFieldProps = React.PropsWithChildren<{
+  calculateFilterExpression?: ((filterValue: any, selectedFilterOperation: string) => string | (() => any) | Array<any>);
+  caption?: string | undefined;
+  customizeText?: ((fieldInfo: FieldInfo) => string);
+  dataField?: string | undefined;
+  dataType?: DataType;
+  editorOptions?: any;
+  editorTemplate?: ((conditionInfo: { field: dxFilterBuilderField, filterOperation: string, setValue: (() => void), value: string | number | Date }, container: any) => string | any) | template;
+  falseText?: string;
+  filterOperations?: Array<FilterBuilderOperation | string>;
+  format?: LocalizationFormat;
+  lookup?: Record<string, any> | {
+    allowClearing?: boolean;
+    dataSource?: Array<any> | DataSourceOptions | Store | undefined;
+    displayExpr?: ((data: any) => string) | string | undefined;
+    valueExpr?: ((data: any) => string | number | boolean) | string | undefined;
+  };
+  name?: string | undefined;
+  trueText?: string;
+  editorRender?: (...params: any) => React.ReactNode;
+  editorComponent?: React.ComponentType<any>;
+}>
+const _componentField = (props: IFieldProps) => {
+  return React.createElement(NestedOption<IFieldProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "fields",
+      IsCollectionItem: true,
+      ExpectedChildren: {
+        format: { optionName: "format", isCollectionItem: false },
+        lookup: { optionName: "lookup", isCollectionItem: false }
+      },
+      TemplateProps: [{
+        tmplOption: "editorTemplate",
+        render: "editorRender",
+        component: "editorComponent"
+      }],
+    },
+  });
+};
+
+const Field = Object.assign<typeof _componentField, NestedComponentMeta>(_componentField, {
+  componentType: "option",
+});
+
+// owners:
+// CardView
+type IFilterBuilderProps = React.PropsWithChildren<{
+  accessKey?: string | undefined;
+  activeStateEnabled?: boolean;
+  allowHierarchicalFields?: boolean;
+  bindingOptions?: Record<string, any>;
+  customOperations?: Array<dxFilterBuilderCustomOperation>;
+  disabled?: boolean;
+  elementAttr?: Record<string, any>;
+  fields?: Array<dxFilterBuilderField>;
+  filterOperationDescriptions?: Record<string, any> | {
+    between?: string;
+    contains?: string;
+    endsWith?: string;
+    equal?: string;
+    greaterThan?: string;
+    greaterThanOrEqual?: string;
+    isBlank?: string;
+    isNotBlank?: string;
+    lessThan?: string;
+    lessThanOrEqual?: string;
+    notContains?: string;
+    notEqual?: string;
+    startsWith?: string;
+  };
+  focusStateEnabled?: boolean;
+  groupOperationDescriptions?: Record<string, any> | {
+    and?: string;
+    notAnd?: string;
+    notOr?: string;
+    or?: string;
+  };
+  groupOperations?: Array<GroupOperation>;
+  height?: (() => number | string) | number | string | undefined;
+  hint?: string | undefined;
+  hoverStateEnabled?: boolean;
+  maxGroupLevel?: number | undefined;
+  onContentReady?: ((e: ContentReadyEvent) => void);
+  onDisposing?: ((e: DisposingEvent) => void);
+  onEditorPrepared?: ((e: EditorPreparedEvent) => void);
+  onEditorPreparing?: ((e: EditorPreparingEvent) => void);
+  onInitialized?: ((e: InitializedEvent) => void);
+  onOptionChanged?: ((e: OptionChangedEvent) => void);
+  onValueChanged?: ((e: ValueChangedEvent) => void);
+  rtlEnabled?: boolean;
+  tabIndex?: number;
+  value?: Array<any> | (() => any) | string;
+  visible?: boolean;
+  width?: (() => number | string) | number | string | undefined;
+  defaultValue?: Array<any> | (() => any) | string;
+  onValueChange?: (value: Array<any> | (() => any) | string) => void;
+}>
+const _componentFilterBuilder = (props: IFilterBuilderProps) => {
+  return React.createElement(NestedOption<IFilterBuilderProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "filterBuilder",
+      DefaultsProps: {
+        defaultValue: "value"
+      },
+      ExpectedChildren: {
+        customOperation: { optionName: "customOperations", isCollectionItem: true },
+        field: { optionName: "fields", isCollectionItem: true },
+        filterOperationDescriptions: { optionName: "filterOperationDescriptions", isCollectionItem: false },
+        groupOperationDescriptions: { optionName: "groupOperationDescriptions", isCollectionItem: false }
+      },
+    },
+  });
+};
+
+const FilterBuilder = Object.assign<typeof _componentFilterBuilder, NestedComponentMeta>(_componentFilterBuilder, {
+  componentType: "option",
+});
+
+// owners:
+// FilterBuilder
+type IFilterOperationDescriptionsProps = React.PropsWithChildren<{
+  between?: string;
+  contains?: string;
+  endsWith?: string;
+  equal?: string;
+  greaterThan?: string;
+  greaterThanOrEqual?: string;
+  isBlank?: string;
+  isNotBlank?: string;
+  lessThan?: string;
+  lessThanOrEqual?: string;
+  notContains?: string;
+  notEqual?: string;
+  startsWith?: string;
+}>
+const _componentFilterOperationDescriptions = (props: IFilterOperationDescriptionsProps) => {
+  return React.createElement(NestedOption<IFilterOperationDescriptionsProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "filterOperationDescriptions",
+    },
+  });
+};
+
+const FilterOperationDescriptions = Object.assign<typeof _componentFilterOperationDescriptions, NestedComponentMeta>(_componentFilterOperationDescriptions, {
+  componentType: "option",
+});
+
+// owners:
+// Field
+type IFormatProps = React.PropsWithChildren<{
+  currency?: string;
+  formatter?: ((value: number | Date) => string);
+  parser?: ((value: string) => number | Date);
+  precision?: number;
+  type?: CommonFormat | string;
+  useCurrencyAccountingStyle?: boolean;
+}>
+const _componentFormat = (props: IFormatProps) => {
+  return React.createElement(NestedOption<IFormatProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "format",
+    },
+  });
+};
+
+const Format = Object.assign<typeof _componentFormat, NestedComponentMeta>(_componentFormat, {
+  componentType: "option",
+});
+
+// owners:
 // Hide
 // Show
 type IFromProps = React.PropsWithChildren<{
@@ -282,6 +569,27 @@ const _componentFrom = (props: IFromProps) => {
 };
 
 const From = Object.assign<typeof _componentFrom, NestedComponentMeta>(_componentFrom, {
+  componentType: "option",
+});
+
+// owners:
+// FilterBuilder
+type IGroupOperationDescriptionsProps = React.PropsWithChildren<{
+  and?: string;
+  notAnd?: string;
+  notOr?: string;
+  or?: string;
+}>
+const _componentGroupOperationDescriptions = (props: IGroupOperationDescriptionsProps) => {
+  return React.createElement(NestedOption<IGroupOperationDescriptionsProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "groupOperationDescriptions",
+    },
+  });
+};
+
+const GroupOperationDescriptions = Object.assign<typeof _componentGroupOperationDescriptions, NestedComponentMeta>(_componentGroupOperationDescriptions, {
   componentType: "option",
 });
 
@@ -345,6 +653,7 @@ const Hide = Object.assign<typeof _componentHide, NestedComponentMeta>(_componen
 });
 
 // owners:
+// CardHeader
 // Toolbar
 type IItemProps = React.PropsWithChildren<{
   cssClass?: string | undefined;
@@ -353,7 +662,7 @@ type IItemProps = React.PropsWithChildren<{
   locateInMenu?: LocateInMenuMode;
   location?: ToolbarItemLocation;
   menuItemTemplate?: (() => string | any) | template;
-  name?: PredefinedToolbarItem | string;
+  name?: CardHeaderPredefinedToolbarItem | string | PredefinedToolbarItem;
   options?: any;
   showText?: ShowTextMode;
   template?: ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string | any) | template;
@@ -412,12 +721,12 @@ type ILoadPanelProps = React.PropsWithChildren<{
   message?: string;
   minHeight?: (() => number | string) | number | string;
   minWidth?: (() => number | string) | number | string;
-  onContentReady?: ((e: ContentReadyEvent) => void);
-  onDisposing?: ((e: DisposingEvent) => void);
+  onContentReady?: ((e: LoadPanelContentReadyEvent) => void);
+  onDisposing?: ((e: LoadPanelDisposingEvent) => void);
   onHidden?: ((e: HiddenEvent) => void);
   onHiding?: ((e: HidingEvent) => void);
-  onInitialized?: ((e: InitializedEvent) => void);
-  onOptionChanged?: ((e: OptionChangedEvent) => void);
+  onInitialized?: ((e: LoadPanelInitializedEvent) => void);
+  onOptionChanged?: ((e: LoadPanelOptionChangedEvent) => void);
   onShowing?: ((e: ShowingEvent) => void);
   onShown?: ((e: ShownEvent) => void);
   position?: (() => void) | PositionAlignment | PositionConfig;
@@ -452,6 +761,27 @@ const _componentLoadPanel = (props: ILoadPanelProps) => {
 };
 
 const LoadPanel = Object.assign<typeof _componentLoadPanel, NestedComponentMeta>(_componentLoadPanel, {
+  componentType: "option",
+});
+
+// owners:
+// Field
+type ILookupProps = React.PropsWithChildren<{
+  allowClearing?: boolean;
+  dataSource?: Array<any> | DataSourceOptions | Store | undefined;
+  displayExpr?: ((data: any) => string) | string | undefined;
+  valueExpr?: ((data: any) => string | number | boolean) | string | undefined;
+}>
+const _componentLookup = (props: ILookupProps) => {
+  return React.createElement(NestedOption<ILookupProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "lookup",
+    },
+  });
+};
+
+const Lookup = Object.assign<typeof _componentLookup, NestedComponentMeta>(_componentLookup, {
   componentType: "option",
 });
 
@@ -598,9 +928,9 @@ const Position = Object.assign<typeof _componentPosition, NestedComponentMeta>(_
 // CardView
 type IRemoteOperationsProps = React.PropsWithChildren<{
   filtering?: boolean;
+  grouping?: boolean;
   paging?: boolean;
   sorting?: boolean;
-  summary?: boolean;
 }>
 const _componentRemoteOperations = (props: IRemoteOperationsProps) => {
   return React.createElement(NestedOption<IRemoteOperationsProps>, {
@@ -675,7 +1005,7 @@ const To = Object.assign<typeof _componentTo, NestedComponentMeta>(_componentTo,
 // owners:
 // CardView
 type IToolbarProps = React.PropsWithChildren<{
-  items?: Array<PredefinedToolbarItem | ToolbarItem>;
+  items?: Array<PredefinedToolbarItem | CardViewToolbarItem>;
 }>
 const _componentToolbar = (props: IToolbarProps) => {
   return React.createElement(NestedOption<IToolbarProps>, {
@@ -683,13 +1013,58 @@ const _componentToolbar = (props: IToolbarProps) => {
     elementDescriptor: {
       OptionName: "toolbar",
       ExpectedChildren: {
-        item: { optionName: "items", isCollectionItem: true }
+        item: { optionName: "items", isCollectionItem: true },
+        toolbarItem: { optionName: "items", isCollectionItem: true }
       },
     },
   });
 };
 
 const Toolbar = Object.assign<typeof _componentToolbar, NestedComponentMeta>(_componentToolbar, {
+  componentType: "option",
+});
+
+// owners:
+// Toolbar
+type IToolbarItemProps = React.PropsWithChildren<{
+  cssClass?: string | undefined;
+  disabled?: boolean;
+  html?: string;
+  locateInMenu?: LocateInMenuMode;
+  location?: ToolbarItemLocation;
+  menuItemTemplate?: (() => string | any) | template;
+  name?: PredefinedToolbarItem | string;
+  options?: any;
+  showText?: ShowTextMode;
+  template?: ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string | any) | template;
+  text?: string;
+  visible?: boolean;
+  widget?: ToolbarItemComponent;
+  menuItemRender?: (...params: any) => React.ReactNode;
+  menuItemComponent?: React.ComponentType<any>;
+  render?: (...params: any) => React.ReactNode;
+  component?: React.ComponentType<any>;
+}>
+const _componentToolbarItem = (props: IToolbarItemProps) => {
+  return React.createElement(NestedOption<IToolbarItemProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "items",
+      IsCollectionItem: true,
+      TemplateProps: [{
+        tmplOption: "menuItemTemplate",
+        render: "menuItemRender",
+        component: "menuItemComponent"
+      }, {
+        tmplOption: "template",
+        render: "render",
+        component: "component"
+      }],
+    },
+  });
+};
+
+const ToolbarItem = Object.assign<typeof _componentToolbarItem, NestedComponentMeta>(_componentToolbarItem, {
   componentType: "option",
 });
 
@@ -708,12 +1083,26 @@ export {
   ICardCoverProps,
   CardHeader,
   ICardHeaderProps,
+  CardHeaderItem,
+  ICardHeaderItemProps,
   Collision,
   ICollisionProps,
   Column,
   IColumnProps,
+  CustomOperation,
+  ICustomOperationProps,
+  Field,
+  IFieldProps,
+  FilterBuilder,
+  IFilterBuilderProps,
+  FilterOperationDescriptions,
+  IFilterOperationDescriptionsProps,
+  Format,
+  IFormatProps,
   From,
   IFromProps,
+  GroupOperationDescriptions,
+  IGroupOperationDescriptionsProps,
   HeaderPanel,
   IHeaderPanelProps,
   Hide,
@@ -722,6 +1111,8 @@ export {
   IItemProps,
   LoadPanel,
   ILoadPanelProps,
+  Lookup,
+  ILookupProps,
   My,
   IMyProps,
   Offset,
@@ -739,7 +1130,9 @@ export {
   To,
   IToProps,
   Toolbar,
-  IToolbarProps
+  IToolbarProps,
+  ToolbarItem,
+  IToolbarItemProps
 };
 import type * as CardViewTypes from 'devextreme/ui/card_view_types';
 export { CardViewTypes };
