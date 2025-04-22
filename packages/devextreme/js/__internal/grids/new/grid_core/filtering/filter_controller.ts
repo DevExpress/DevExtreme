@@ -14,6 +14,8 @@ export class FilterController {
 
   public readonly filterPanelFilterEnabled = this.options.oneWay('filterPanel.filterEnabled');
 
+  public readonly filterPanelVisible = this.options.oneWay('filterPanel.visible');
+
   public readonly filterValueOption = this.options.twoWay('filterValue');
 
   public readonly appliedFilters: Signal<AppliedFilters> = signal({});
@@ -30,6 +32,14 @@ export class FilterController {
     ]
       .concat(this.filterBuilderCustomOperations.value)
       .filter((o) => o),
+  );
+
+  public readonly filterPanelValue = computed(
+    () => (
+      this.filterPanelFilterEnabled.value
+        ? this.filterValueOption.value
+        : undefined
+    ),
   );
 
   private readonly appliedFilterExpressions = computed(

@@ -7,13 +7,13 @@ import * as columnsController from './columns_controller/index';
 import * as contentView from './content_view/index';
 import * as dataController from './data_controller/index';
 import * as editing from './editing/index';
+import * as filterSync from './filtering/filter_sync/index';
 import * as headerFilter from './filtering/header_filter/index';
 import type * as filterController from './filtering/index';
 import { filterPanel } from './filtering/index';
 import * as keyboardNavigation from './keyboard_navigation/index';
 import * as pager from './pager/index';
 import * as searchPanel from './search/index';
-import type { SearchProperties } from './search/types';
 import * as selection from './selection/index';
 import * as sortingController from './sorting_controller/index';
 import * as toolbar from './toolbar/index';
@@ -31,11 +31,10 @@ export type Options =
   & filterController.Options
   & filterPanel.Options
   & headerFilter.Options
+  & filterSync.Options
   & contentView.Options
   & searchPanel.Options
   & selection.Options
-  // TODO: Remove this mock search options during search implementation
-  & SearchProperties
   & columnChooser.Options
   & editing.Options
   & toolbar.Options
@@ -48,6 +47,7 @@ export const defaultOptions = {
   ...pager.defaultOptions,
   ...filterPanel.defaultOptions,
   ...headerFilter.defaultOptions,
+  ...filterSync.defaultOptions,
   ...contentView.defaultOptions,
   ...searchPanel.defaultOptions,
   ...columnChooser.defaultOptions,
@@ -55,7 +55,6 @@ export const defaultOptions = {
   ...toolbar.defaultOptions,
   ...editing.defaultOptions,
   ...keyboardNavigation.defaultOptions,
-  searchText: '',
 } satisfies Options;
 
 // TODO: separate by modules

@@ -239,12 +239,12 @@ describe('HeaderFilter', () => {
     describe('needCreateHeaderFilter', () => {
       each`
       column                                                      | expectedResult
-      ${{ allowFiltering: true, allowHeaderFiltering: false }}    | ${false}
-      ${{ allowFiltering: false, allowHeaderFiltering: true }}    | ${false}
+      ${{ allowFiltering: true, allowHeaderFiltering: false }}    | ${true}
+      ${{ allowFiltering: false, allowHeaderFiltering: true }}    | ${true}
       ${{ allowFiltering: false, allowHeaderFiltering: false }}   | ${false}
 
 `
-        .it('should return false if filtering is prohibited', ({
+        .it('should take into account allowFiltering and allowHeaderFiltering', ({
           column,
 
           expectedResult,

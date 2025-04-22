@@ -53,11 +53,16 @@ export const getFilterOperator = (values: unknown, filterType?: FilterType): str
   }
 };
 
+const isFilteringAllowed = (column: Column): boolean => column.allowFiltering
+|| column.allowHeaderFiltering;
+
+export const isColumnFilterable = (column: Column): boolean => isFilteringAllowed(column)
+&& !!getColumnIdentifier(column);
+
 export const needCreateHeaderFilter = (column: Column): boolean => {
-  const allowFiltering = column.allowFiltering && column.allowHeaderFiltering;
-  const values = column.filterValues;
+  const values = column.headerFilter?.values;
   const hasSelectedItems = isDefined(values) && values.length > 0;
-  return allowFiltering && hasSelectedItems;
+  return isFilteringAllowed(column) && hasSelectedItems;
 };
 
 export const getComposedHeaderFilter = (columns: Column[]): unknown[] => {
