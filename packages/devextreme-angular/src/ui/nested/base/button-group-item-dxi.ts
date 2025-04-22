@@ -98,10 +98,10 @@ export abstract class DxiButtonGroupItem extends CollectionNestedOption {
         this._setOption('stylingMode', value);
     }
 
-    get type(): ButtonType {
+    get type(): ButtonType | string {
         return this._getOption('type');
     }
-    set type(value: ButtonType) {
+    set type(value: ButtonType | string) {
         this._setOption('type', value);
     }
 

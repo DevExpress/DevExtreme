@@ -146,7 +146,7 @@ const DxItemConfig = {
     icon: String,
     template: {},
     text: String,
-    type: String as PropType<ButtonType>,
+    type: String as PropType<ButtonType | string>,
     visible: Boolean
   }
 };
