@@ -1,4 +1,5 @@
 import { Guid } from '@js/common';
+import type { AsyncCancelable, EventInfo, NativeEventInfo } from '@js/common/core/events';
 import messageLocalization from '@js/common/core/localization/message';
 import type { DataSourceOptions } from '@js/common/data';
 import registerComponent from '@js/core/component_registrator';
@@ -22,13 +23,20 @@ import type {
   TypingStartEvent as MessageBoxTypingStartEvent,
 } from '@ts/ui/chat/messagebox';
 import MessageBox from '@ts/ui/chat/messagebox';
-import type { MessageTemplate, Properties as MessageListProperties } from '@ts/ui/chat/messagelist';
+import type { MessageEditingEvent, MessageTemplate, Properties as MessageListProperties } from '@ts/ui/chat/messagelist';
 import MessageList from '@ts/ui/chat/messagelist';
 import type { DataChange } from '@ts/ui/collection/collection_widget.base';
 
 const CHAT_CLASS = 'dx-chat';
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 
+export type MessageDeletingEvent = AsyncCancelable & EventInfo<Chat> & {
+  readonly message: Message;
+};
+
+export type MessageEditingStartEvent = AsyncCancelable & EventInfo<Chat> & {
+  readonly message: Message;
+};
 export interface ChatProperties extends Properties {
   editing: {
     allowUpdating: boolean | ((options: {
@@ -40,6 +48,8 @@ export interface ChatProperties extends Properties {
       message: Message;
     }) => boolean);
   };
+  onMessageEditingStart?: (e: MessageEditingStartEvent) => void;
+  onMessageDeleting?: (e: MessageEditingStartEvent) => void;
 }
 
 class Chat extends Widget<ChatProperties> {
@@ -54,6 +64,10 @@ class Chat extends Widget<ChatProperties> {
   _typingStartAction?: (e: Partial<TypingStartEvent>) => void;
 
   _typingEndAction?: (e: Partial<TypingEndEvent>) => void;
+
+  _messageEditingStartAction?: (e: Partial<MessageEnteredEvent>) => void;
+
+  _messageDeletingAction?: (e: Partial<MessageEnteredEvent>) => void;
 
   _getDefaultOptions(): ChatProperties {
     return {
@@ -93,6 +107,8 @@ class Chat extends Widget<ChatProperties> {
     this._refreshDataSource();
 
     this._createMessageEnteredAction();
+    this._createMessageEditingStartAction();
+    this._createMessageDeletingAction();
     this._createTypingStartAction();
     this._createTypingEndAction();
   }
@@ -181,11 +197,11 @@ class Chat extends Widget<ChatProperties> {
       messageTimestampFormat,
       typingUsers,
       isLoading,
-      onMessageEditingStart: () => {
-        console.log('onMessageEditingStart');
+      onMessageEditingStart: (e) => {
+        this._messageEditingStartHandler(e);
       },
-      onMessageDeleting: () => {
-        console.log('onMessageDeleting');
+      onMessageDeleting: (e) => {
+        this._messageDeletingHandler(e);
       },
     };
 
@@ -235,6 +251,18 @@ class Chat extends Widget<ChatProperties> {
     }
 
     return null;
+  }
+
+  _messageEditingStartHandler(e: MessageEditingEvent): void {
+    const { message, event } = e;
+
+    this._messageEditingStartAction?.({ message, event });
+  }
+
+  _messageDeletingHandler(e: MessageEditingEvent): void {
+    const { message, event } = e;
+
+    this._messageDeletingAction?.({ message, event });
   }
 
   _renderAlertList(): void {
@@ -296,6 +324,20 @@ class Chat extends Widget<ChatProperties> {
   _createMessageEnteredAction(): void {
     this._messageEnteredAction = this._createActionByOption(
       'onMessageEntered',
+      { excludeValidators: ['disabled'] },
+    );
+  }
+
+  _createMessageEditingStartAction(): void {
+    this._messageEditingStartAction = this._createActionByOption(
+      'onMessageEditingStart',
+      { excludeValidators: ['disabled'] },
+    );
+  }
+
+  _createMessageDeletingAction(): void {
+    this._messageDeletingAction = this._createActionByOption(
+      'onMessageDeleting',
       { excludeValidators: ['disabled'] },
     );
   }
@@ -389,6 +431,12 @@ class Chat extends Widget<ChatProperties> {
         break;
       case 'onMessageEntered':
         this._createMessageEnteredAction();
+        break;
+      case 'onMessageEditingStart':
+        this._createMessageEditingStartAction();
+        break;
+      case 'onMessageDeleting':
+        this._createMessageDeletingAction();
         break;
       case 'onTypingStart':
         this._createTypingStartAction();

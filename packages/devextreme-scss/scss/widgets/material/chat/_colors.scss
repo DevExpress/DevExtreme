@@ -131,3 +131,5 @@ $chat-typingindicator-circle-bg-color: rgba($base-inverted-bg, 0.4) !default;
 @else if $mode == "dark" {
   $chat-bubble-background-color-primary: rgba(lighten($base-accent, 19.22), 0.08) !default;
 }
+
+$chat-messagelist-contextmenu-delete-button-color: $base-invalid-color !default;

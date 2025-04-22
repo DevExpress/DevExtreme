@@ -15,12 +15,11 @@ import { isDate, isDefined } from '@js/core/utils/type';
 import type { DxEvent } from '@js/events';
 import type { Message, User } from '@js/ui/chat';
 import type { Item } from '@js/ui/context_menu';
-import type dxContextMenu from '@js/ui/context_menu';
-import ScrollView from '@js/ui/scroll_view';
 import type { WidgetOptions } from '@js/ui/widget/ui.widget';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
 import ContextMenu from '@ts/ui/context_menu/m_context_menu';
+import { ScrollView } from '@ts/ui/scroll_view/m_scroll_view';
 import { getScrollTopMax } from '@ts/ui/scroll_view/utils/get_scroll_top_max';
 
 import type { DataChange } from '../collection/collection_widget.base';
@@ -62,6 +61,12 @@ export type ItemClick = NativeEventInfo<ContextMenu, KeyboardEvent | MouseEvent 
   readonly itemData?: Item;
   readonly itemElement: dxElementWrapper;
 };
+
+export interface MessageEditingEvent {
+  event: DxEvent<KeyboardEvent | MouseEvent | PointerEvent> | undefined;
+  message: Message;
+}
+
 export interface Properties extends WidgetOptions<MessageList> {
   items: Message[];
   allowUpdating: ((message: Message) => boolean);
@@ -76,14 +81,8 @@ export interface Properties extends WidgetOptions<MessageList> {
   showAvatar: boolean;
   showUserName: boolean;
   showMessageTimestamp: boolean;
-  onMessageEditingStart: (
-    event: DxEvent<KeyboardEvent | MouseEvent | PointerEvent> | undefined,
-    message: Message,
-  ) => void;
-  onMessageDeleting: (
-    event: DxEvent<KeyboardEvent | MouseEvent | PointerEvent> | undefined,
-    message: Message,
-  ) => void;
+  onMessageEditingStart?: (e: MessageEditingEvent) => void;
+  onMessageDeleting?: (e: MessageEditingEvent) => void;
 }
 
 class MessageList extends Widget<Properties> {
@@ -260,8 +259,8 @@ class MessageList extends Widget<Properties> {
     const {
       allowUpdating,
       allowDeleting,
-      // onMessageEditingStart,
-      // onMessageDeleting,
+      onMessageEditingStart,
+      onMessageDeleting,
     } = this.option();
 
     const editText = messageLocalization.format('dxChat-editingEditMessage');
@@ -274,10 +273,7 @@ class MessageList extends Widget<Properties> {
         icon: 'edit',
         text: editText,
         onClick(e: ItemClick): void {
-          // onMessageEditingStart({
-          //   event: e.event,
-          //   message,
-          // });
+          onMessageEditingStart?.({ event: e.event, message });
         },
       });
     }
@@ -287,7 +283,7 @@ class MessageList extends Widget<Properties> {
         icon: 'trash',
         text: deleteText,
         onClick(e: ItemClick): void {
-          // onMessageDeleting(e);
+          onMessageDeleting?.({ event: e.event, message });
         },
       });
     }
@@ -302,19 +298,17 @@ class MessageList extends Widget<Properties> {
       onShowing: (e) => {
         this._onContextMenuShowing(e);
       },
-      elementAttr: {
-        class: CHAT_MESSAGELIST_CONTEXT_MENU_CLASS,
-      },
+      cssClass: CHAT_MESSAGELIST_CONTEXT_MENU_CLASS,
       hideOnParentScroll: false,
       overlayContainer: this._scrollView.content(),
-      // @ts-expect-error
       visualContainer: this._scrollView.container(),
+      boundaryOffset: { h: 16 },
     });
 
     $contextMenu.appendTo(this.$element());
   }
 
-  _onContextMenuShowing(e: Cancelable & EventInfo<dxContextMenu>): void {
+  _onContextMenuShowing(e: Cancelable & EventInfo<ContextMenu>): void {
     // @ts-expect-error ts-error
     const { currentTarget } = e.jQEvent;
 
@@ -327,8 +321,6 @@ class MessageList extends Widget<Properties> {
     }
 
     e.component.option('items', items);
-
-    console.log('showing', e);
   }
 
   _renderScrollView(): void {
@@ -341,10 +333,6 @@ class MessageList extends Widget<Properties> {
       reachBottomText: '',
       indicateLoading: false,
       onReachBottom: noop,
-      // onScroll: () => {
-      //   // eslint-disable-next-line @typescript-eslint/no-floating-promises
-      //   this._contextMenu?.hide();
-      // },
     });
   }
 
@@ -394,7 +382,6 @@ class MessageList extends Widget<Properties> {
 
     this.$element().toggleClass(CHAT_MESSAGELIST_EMPTY_LOADING_CLASS, this._isEmpty() && isLoading);
 
-    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     this._scrollView.release(!isLoading);
   }
 
@@ -693,12 +680,10 @@ class MessageList extends Widget<Properties> {
   }
 
   _setIsReachedBottom(): void {
-    // @ts-expect-error
     this._isBottomReached = !this._isContentOverflowing() || this._scrollView.isBottomReached();
   }
 
   _isContentOverflowing(): boolean {
-    // @ts-expect-error
     return getHeight(this._scrollView.content()) > getHeight(this._scrollView.container());
   }
 

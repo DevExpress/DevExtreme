@@ -37,7 +37,7 @@ const DX_MENU_PHONE_CLASS = 'dx-menu-phone-overlay';
 const DX_MENU_ITEMS_CONTAINER_CLASS = `${DX_MENU_CLASS}-items-container`;
 const DX_MENU_ITEM_WRAPPER_CLASS = `${DX_MENU_ITEM_CLASS}-wrapper`;
 const DX_SUBMENU_CLASS = 'dx-submenu';
-const DX_CONTEXT_MENU_CLASS = 'dx-context-menu';
+export const DX_CONTEXT_MENU_CLASS = 'dx-context-menu';
 const DX_HAS_CONTEXT_MENU_CLASS = 'dx-has-context-menu';
 const DX_STATE_DISABLED_CLASS = 'dx-state-disabled';
 const DX_STATE_FOCUSED_CLASS = 'dx-state-focused';
@@ -566,7 +566,7 @@ class ContextMenu extends MenuBase {
         of: this._getTarget(),
         collision: 'flipfit',
         boundary: this.option('visualContainer'),
-        boundaryOffset: { x: 20 },
+        boundaryOffset: this.option('boundaryOffset'),
       },
       shading: false,
       showTitle: false,

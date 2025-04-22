@@ -8,8 +8,14 @@
   $day-header-font-size,
 ) {
   .dx-chat-messagelist {
-    .dx-scrollable-content {
-      padding-inline: $padding;
+    > .dx-scrollable {
+      > .dx-scrollable-wrapper {
+        > .dx-scrollable-container {
+          > .dx-scrollable-content {
+            padding-inline: $padding;
+          }
+        }
+      }
     }
   }
 
@@ -63,3 +69,14 @@
     color: $messagelist-empty-prompt-color;
   }
 }
+
+@mixin chat-messagelist-contextmenu(
+  $delete-button-color,
+) {
+  .dx-messagelist-context-menu {
+    .dx-menu-item:has(.dx-icon-trash) {
+      color: $delete-button-color;
+    }
+  }
+}
+

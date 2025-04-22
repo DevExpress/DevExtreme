@@ -4,6 +4,7 @@ import MessageList, {
     MESSAGEGROUP_TIMEOUT,
     CHAT_MESSAGELIST_CONTEXT_MENU_TARGET,
     CHAT_MESSAGELIST_CONTEXT_MENU_CLASS,
+    DX_CONTEXT_MENU_CLASS,
 } from '__internal/ui/chat/messagelist';
 import ScrollView from 'ui/scroll_view';
 import {
@@ -21,7 +22,6 @@ import MessageGroup from '__internal/ui/chat/messagegroup';
 import TypingIndicator from '__internal/ui/chat/typingindicator';
 import devices from '__internal/core/m_devices';
 import localization from 'localization';
-import fx from 'common/core/animation/fx';
 import dateLocalization from 'common/core/localization/date';
 
 const CHAT_MESSAGELIST_CONTENT_CLASS = 'dx-chat-messagelist-content';
@@ -57,7 +57,7 @@ const moduleConfig = {
             this.getDayHeaders = () => $(this.getScrollView().content()).find(`.${CHAT_MESSAGELIST_DAY_HEADER_CLASS}`);
             this.getMessageGroups = () => this.$element.find(`.${CHAT_MESSAGEGROUP_CLASS}`);
             this.getBubbles = () => this.$element.find(`.${CHAT_MESSAGEBUBBLE_CLASS}`);
-            this.getContextMenu = () => ContextMenu.getInstance(this.$element.find(`.${CHAT_MESSAGELIST_CONTEXT_MENU_CLASS}`));
+            this.getContextMenu = () => ContextMenu.getInstance(this.$element.find(`.${DX_CONTEXT_MENU_CLASS}`));
             this.getContextMenuItems = () => $(this.getContextMenu().itemsContainer()).find(`.${DX_MENU_ITEM_CLASS}`);
 
             this.scrollView = this.getScrollView();
@@ -1109,9 +1109,12 @@ QUnit.module('MessageList', () => {
     QUnit.module('ContextMenu', moduleConfig, () => {
         QUnit.test('should be initialized with the correct options', function(assert) {
             const expectedOptions = {
-                hideOnParentScroll: true,
+                hideOnParentScroll: false,
                 target: CHAT_MESSAGELIST_CONTEXT_MENU_TARGET,
+                cssClass: CHAT_MESSAGELIST_CONTEXT_MENU_CLASS,
                 visible: false,
+                overlayContainer: this.getScrollView().content(),
+                visualContainer: this.getScrollView().container(),
             };
 
             Object.entries(expectedOptions).forEach(([key, value]) => {
@@ -1231,7 +1234,6 @@ QUnit.module('MessageList', () => {
             },
         ].forEach(({ editingOptions, expectedActions }) => {
             QUnit.test(`should contain corresponding actions when ${JSON.stringify(editingOptions)}`, function(assert) {
-
                 this.reinit({
                     ...editingOptions,
                     items: [
@@ -1254,8 +1256,64 @@ QUnit.module('MessageList', () => {
         });
     });
 
-    QUnit.module('Editing', moduleConfig, {
+    QUnit.module('Editing', moduleConfig, () => {
+        QUnit.test('onMessageEditingStart should be fired when the Edit button is clicked', function(assert) {
+            assert.expect(4);
+            const items = [
+                { id: '1', text: 'a', author: userFirst },
+                { id: '2', text: 'b', author: userSecond },
+            ];
 
+            this.reinit({
+                allowUpdating: () => true,
+                items,
+                onMessageEditingStart(e) {
+                    const { event, message } = e;
+
+                    assert.strictEqual(event.type, 'dxclick', 'e.event.type is correct');
+                    assert.strictEqual(event.target, $editButton.get(0), 'event target is correct');
+                    assert.deepEqual(message, items[1], 'message field is correct');
+                },
+                currentUserId: userSecond.id,
+            });
+
+            const $bubbles = this.getBubbles();
+            $bubbles.eq(1).trigger('dxcontextmenu');
+
+            const $editButton = this.getContextMenuItems().eq(0);
+            $editButton.trigger('dxclick');
+
+            assert.strictEqual(this.contextMenu.option('visible'), false, 'context menu is hidden');
+        });
+
+        QUnit.test('onMessageDeleting should be fired when the Edit button is clicked', function(assert) {
+            assert.expect(4);
+            const items = [
+                { id: '1', text: 'a', author: userFirst },
+                { id: '2', text: 'b', author: userSecond },
+            ];
+
+            this.reinit({
+                allowDeleting: () => true,
+                items,
+                onMessageDeleting(e) {
+                    const { event, message } = e;
+
+                    assert.strictEqual(event.type, 'dxclick', 'e.event.type is correct');
+                    assert.strictEqual(event.target, $deleteButton.get(0), 'event target is correct');
+                    assert.deepEqual(message, items[1], 'message field is correct');
+                },
+                currentUserId: userSecond.id,
+            });
+
+            const $bubbles = this.getBubbles();
+            $bubbles.eq(1).trigger('dxcontextmenu');
+
+            const $deleteButton = this.getContextMenuItems().eq(0);
+            $deleteButton.trigger('dxclick');
+
+            assert.strictEqual(this.contextMenu.option('visible'), false, 'context menu is hidden');
+        });
     });
 
     QUnit.module('ScrollView', {

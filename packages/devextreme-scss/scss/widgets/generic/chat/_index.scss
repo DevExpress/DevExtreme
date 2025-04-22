@@ -71,6 +71,9 @@
   $chat-messagelist-day-header-first-padding-top,
   $chat-messagelist-day-header-font-size,
 );
+@include chat-messagelist-contextmenu(
+  $chat-messagelist-contextmenu-delete-button-color,
+);
 @include chat-typingindicator(
   $chat-typingindicator-template,
   $chat-typingindicator-padding,

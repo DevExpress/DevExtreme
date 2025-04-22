@@ -2,6 +2,10 @@ import $ from 'jquery';
 
 import Chat from 'ui/chat';
 import MessageList from '__internal/ui/chat/messagelist';
+import ContextMenu, {
+    DX_MENU_ITEM_CLASS,
+    DX_CONTEXT_MENU_CLASS,
+} from '__internal/ui/context_menu/m_context_menu';
 import AlertList from '__internal/ui/chat/alertlist';
 import MessageBox, { TYPING_END_DELAY } from '__internal/ui/chat/messagebox';
 import keyboardMock from '../../../helpers/keyboardMock.js';
@@ -86,6 +90,8 @@ const moduleConfig = {
         this.getDayHeaders = () => this.$element.find(`.${CHAT_MESSAGELIST_DAY_HEADER_CLASS}`);
         this.getBubbles = () => this.$element.find(`.${CHAT_MESSAGEBUBBLE_CLASS}`);
         this.getBubblesContents = () => this.$element.find(`.${CHAT_MESSAGEBUBBLE_CONTENT_CLASS}`);
+        this.getContextMenu = () => ContextMenu.getInstance(this.$element.find(`.${DX_CONTEXT_MENU_CLASS}`));
+        this.getContextMenuItems = () => $(this.getContextMenu().itemsContainer()).find(`.${DX_MENU_ITEM_CLASS}`);
 
         init();
     }
@@ -617,6 +623,202 @@ QUnit.module('Chat', () => {
                     .type(text);
 
                 this.$sendButton.trigger('dxclick');
+            });
+        });
+
+        QUnit.module('OnMessageEditingStart', moduleConfig, () => {
+            QUnit.test('should be called when the Edit button is clicked', function(assert) {
+                const onMessageEditingStart = sinon.spy();
+
+                const items = [
+                    { text: 'a', author: userFirst },
+                    { text: 'b', author: userSecond },
+                ];
+
+                this.reinit({
+                    user: userSecond,
+                    editing: {
+                        allowUpdating: true
+                    },
+                    onMessageEditingStart,
+                    items,
+                    currentUserId: userSecond.id,
+                });
+
+                const $bubbles = this.getBubbles();
+                $bubbles.eq(1).trigger('dxcontextmenu');
+
+                const $editButton = this.getContextMenuItems().eq(0);
+                $editButton.trigger('dxclick');
+
+                assert.strictEqual(onMessageEditingStart.callCount, 1);
+            });
+
+            QUnit.test('should get correct arguments after clicking the Edit button', function(assert) {
+                assert.expect(6);
+
+                const items = [
+                    { text: 'a', author: userFirst },
+                    { text: 'b', author: userSecond },
+                ];
+
+                this.reinit({
+                    user: userSecond,
+                    editing: {
+                        allowUpdating: true
+                    },
+                    onMessageEditingStart: (e) => {
+                        const { component, element, event, message } = e;
+
+                        assert.strictEqual(component, this.instance, 'e.component is correct');
+                        assert.strictEqual(isRenderer(element), !!config().useJQuery, 'e.element uses correct renderer');
+                        assert.strictEqual($(element).is(this.$element), true, 'e.element matches the widget root');
+                        assert.strictEqual(event.type, 'dxclick', 'e.event.type is correct');
+                        assert.strictEqual(event.target, $editButton.get(0), 'e.event.target is correct');
+                        assert.strictEqual(message, items[1], 'e.message is correct');
+                    },
+                    items,
+                    currentUserId: userSecond.id,
+                });
+
+                const $bubbles = this.getBubbles();
+                $bubbles.eq(1).trigger('dxcontextmenu');
+
+                const $editButton = this.getContextMenuItems().eq(0);
+                $editButton.trigger('dxclick');
+            });
+
+            QUnit.test('should allow updating onMessageEditingStart at runtime', function(assert) {
+                const items = [
+                    { text: 'a', author: userFirst },
+                    { text: 'b', author: userSecond },
+                ];
+
+                this.reinit({
+                    user: userSecond,
+                    editing: {
+                        allowUpdating: true
+                    },
+                    onMessageEditingStart: () => {},
+                    items,
+                    currentUserId: userSecond.id,
+                });
+
+                const onMessageEditingStart = sinon.spy();
+
+                this.instance.option({ onMessageEditingStart });
+
+                const text = 'new text message';
+
+                keyboardMock(this.$input)
+                    .focus()
+                    .type(text);
+
+                const $bubbles = this.getBubbles();
+                $bubbles.eq(1).trigger('dxcontextmenu');
+
+                const $editButton = this.getContextMenuItems().eq(0);
+                $editButton.trigger('dxclick');
+
+                assert.strictEqual(onMessageEditingStart.callCount, 1);
+            });
+        });
+
+        QUnit.module('onMessageDeleting', moduleConfig, () => {
+            QUnit.test('should be called when the Edit button is clicked', function(assert) {
+                const onMessageDeleting = sinon.spy();
+
+                const items = [
+                    { text: 'a', author: userFirst },
+                    { text: 'b', author: userSecond },
+                ];
+
+                this.reinit({
+                    user: userSecond,
+                    editing: {
+                        allowDeleting: true
+                    },
+                    onMessageDeleting,
+                    items,
+                    currentUserId: userSecond.id,
+                });
+
+                const $bubbles = this.getBubbles();
+                $bubbles.eq(1).trigger('dxcontextmenu');
+
+                const $deleteButton = this.getContextMenuItems().eq(0);
+                $deleteButton.trigger('dxclick');
+
+                assert.strictEqual(onMessageDeleting.callCount, 1);
+            });
+
+            QUnit.test('should get correct arguments after clicking the Delete button', function(assert) {
+                assert.expect(6);
+
+                const items = [
+                    { text: 'a', author: userFirst },
+                    { text: 'b', author: userSecond },
+                ];
+
+                this.reinit({
+                    user: userSecond,
+                    editing: {
+                        allowDeleting: true
+                    },
+                    onMessageDeleting: (e) => {
+                        const { component, element, event, message } = e;
+
+                        assert.strictEqual(component, this.instance, 'e.component is correct');
+                        assert.strictEqual(isRenderer(element), !!config().useJQuery, 'e.element uses correct renderer');
+                        assert.strictEqual($(element).is(this.$element), true, 'e.element matches the widget root');
+                        assert.strictEqual(event.type, 'dxclick', 'e.event.type is correct');
+                        assert.strictEqual(event.target, $deleteButton.get(0), 'e.event.target is correct');
+                        assert.strictEqual(message, items[1], 'e.message is correct');
+                    },
+                    items,
+                    currentUserId: userSecond.id,
+                });
+
+                const $bubbles = this.getBubbles();
+                $bubbles.eq(1).trigger('dxcontextmenu');
+
+                const $deleteButton = this.getContextMenuItems().eq(0);
+                $deleteButton.trigger('dxclick');
+            });
+
+            QUnit.test('should allow updating onMessageDeleting at runtime', function(assert) {
+                const items = [
+                    { text: 'a', author: userFirst },
+                    { text: 'b', author: userSecond },
+                ];
+
+                this.reinit({
+                    user: userSecond,
+                    editing: {
+                        allowDeleting: true
+                    },
+                    onMessageDeleting: () => {},
+                    items,
+                    currentUserId: userSecond.id,
+                });
+
+                const onMessageDeleting = sinon.spy();
+
+                this.instance.option({ onMessageDeleting });
+
+                const text = 'new text message';
+
+                keyboardMock(this.$input)
+                    .focus()
+                    .type(text);
+
+                const $bubbles = this.getBubbles();
+                $bubbles.eq(1).trigger('dxcontextmenu');
+
+                const $deleteButton = this.getContextMenuItems().eq(0);
+                $deleteButton.trigger('dxclick');
+
+                assert.strictEqual(onMessageDeleting.callCount, 1);
             });
         });
 
