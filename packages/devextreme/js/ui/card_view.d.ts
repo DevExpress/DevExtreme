@@ -463,6 +463,11 @@ export interface dxCardViewOptions<TCardData = unknown, TKey = unknown> extends 
          * @public
          */
         disabled?: boolean;
+        /**
+         * @default false
+         * @public
+         */
+        multiline?: boolean;
     };
 
     // #endregion
