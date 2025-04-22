@@ -12,9 +12,10 @@ import { dxLoadPanelOptions } from './load_panel';
 
 /**
  * @docid
+ * @public
  * @namespace DevExpress.ui.dxCardView
  */
-interface Paging {
+export type Paging = {
     /**
      * @docid
      * @default true
@@ -35,13 +36,14 @@ interface Paging {
      * @public
      */
     pageSize?: number;
-}
+};
 
 /**
  * @docid
+ * @public
  * @namespace DevExpress.ui.dxCardView
  */
-interface RemoteOperations {
+export type RemoteOperations = {
     /**
      * @docid
      * @default false
@@ -62,7 +64,7 @@ interface RemoteOperations {
      * @default false
      */
     summary?: boolean;
-}
+};
 
 // #region Toolbar
 
@@ -127,7 +129,7 @@ export interface Cell {
  * @docid
  * @namespace DevExpress.ui.dxCardView
  */
-export interface DataRow<TRowData = unknown, TKey = unknown> {
+export type DataRow<TRowData = unknown, TKey = unknown> = {
     /**
      * @public
      * @docid
@@ -143,7 +145,7 @@ export interface DataRow<TRowData = unknown, TKey = unknown> {
      * @docid
      */
     data: TRowData;
-}
+};
 
 type InheritedColumnProps =
   | 'alignment'
@@ -216,8 +218,9 @@ export type Column<TRowData = unknown, TKey = unknown> =
 
 /**
  * @docid
+ * @public
  */
-type HeaderPanel<TRowData = unknown, TKey = unknown> = {
+export type HeaderPanel<TRowData = unknown, TKey = unknown> = {
     /**
      * @docid
      * @public
@@ -248,9 +251,10 @@ type HeaderPanel<TRowData = unknown, TKey = unknown> = {
 
 /**
  * @docid
+ * @public
  * @namespace DevExpress.ui.dxCardView
  */
-interface CardCover<TRowData = unknown> {
+export type CardCover<TRowData = unknown> = {
     /**
      * @docid
      * @public
@@ -271,19 +275,20 @@ interface CardCover<TRowData = unknown> {
      * @public
      */
     aspectRatio?: string;
-}
+};
 
 /**
  * @docid
+ * @public
  * @namespace DevExpress.ui.dxCardView
  */
-interface CardHeader {
+export type CardHeader = {
     /**
      * @docid
      * @public
      */
     visible?: boolean;
-}
+};
 
 // #endregion
 
