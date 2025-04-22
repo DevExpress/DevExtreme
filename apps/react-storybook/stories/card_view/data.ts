@@ -8,6 +8,22 @@ function isNotEmpty(value: string | undefined | null) {
   return value !== undefined && value !== null && value !== '';
 }
 
+const imageCount = 51;
+const getImageUrl = (n: number) => {
+  if (n === 0) {
+    return undefined;
+  }
+  const name = n < 10 ? `0${n}` : n;
+  return `https://js.devexpress.com/jQuery/Demos/WidgetsGallery/JSDemos/images/employees/${name}.png`
+}
+
+function addImageToData(data: Record<string, unknown>[]): Record<string, unknown>[] {
+  return data.map((item) => ({
+    ...item,
+    picture: getImageUrl(item.OrderNumber as number % (imageCount + 1))
+  }))
+}
+
 export const store = new CustomStore({
   key: 'OrderNumber',
   async load(loadOptions) {
@@ -27,7 +43,7 @@ export const store = new CustomStore({
       const result = await response.json();
 
       return {
-        data: result.data,
+        data: addImageToData(result.data),
         totalCount: result.totalCount,
         summary: result.summary,
         groupCount: result.groupCount,

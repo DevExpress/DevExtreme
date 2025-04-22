@@ -91,11 +91,11 @@ export class CardHeader extends Component<CardHeaderProps> {
       : null;
 
     const updateButton: CardHeaderItem | null = allowUpdating
-      ? { location: 'after', widget: 'dxButton', options: { icon: 'edit', onClick: onEdit } }
+      ? { location: 'after', widget: 'dxButton', options: { icon: 'edit', onClick: onEdit, stylingMode: 'text' } }
       : null;
 
     const deleteButton: CardHeaderItem | null = allowDeleting
-      ? { location: 'after', widget: 'dxButton', options: { icon: 'remove', onClick: onDelete } }
+      ? { location: 'after', widget: 'dxButton', options: { icon: 'remove', onClick: onDelete, stylingMode: 'text' } }
       : null;
 
     const finalItems = [checkBoxItem, captionItem, updateButton, deleteButton, ...items]
