@@ -102,7 +102,7 @@ QUnit.module('Chat', () => {
         QUnit.test('user should be set to an object with generated id if property is not passed', function(assert) {
             const { user } = this.instance.option();
 
-            // eslint-disable-next-line no-prototype-builtins
+
             assert.strictEqual(user.hasOwnProperty('id'), true);
         });
 
@@ -243,6 +243,87 @@ QUnit.module('Chat', () => {
                 const messageList = this.getMessageList();
 
                 assert.strictEqual(messageList.option(option), false, `${option} with value undefined is passed as false on runtime`);
+            });
+        });
+
+        QUnit.module('Editing', () => {
+            ['allowDeleting', 'allowUpdating'].forEach(option => {
+                QUnit.test(`Chat should pass editing.${option} to messageList on init`, function(assert) {
+                    this.reinit({
+                        editing: {
+                            [option]: true
+                        }
+                    });
+
+                    const messageList = this.getMessageList();
+
+                    assert.strictEqual(messageList.option(option)(), true, `${option} is passed on init`);
+                });
+
+                QUnit.test(`Chat should pass editing.${option} as function to messageList on init`, function(assert) {
+                    this.reinit({
+                        editing: {
+                            [option]: (options) => {
+                                return true;
+                            }
+                        }
+                    });
+
+                    const messageList = this.getMessageList();
+
+                    assert.strictEqual(messageList.option(option)(), true, `${option} is passed on init`);
+                });
+
+                QUnit.test(`Chat editing.${option} should be respected by messageList after changing at runtime`, function(assert) {
+                    this.reinit({
+                        editing: {
+                            [option]: () => {
+                                return false;
+                            }
+                        }
+                    });
+
+                    const messageList = this.getMessageList();
+
+                    this.instance.option('editing', {
+                        [option]: (options) => {
+                            debugger;
+                            return options.message.id === 1;
+                        }
+                    });
+
+                    assert.strictEqual(messageList.option(option)({ id: 1 }), true, `${option} is respected after change at runtime`
+                    );
+                });
+
+                QUnit.test(`Chat editing.${option} should receive correct arguments`, function(assert) {
+                    assert.expect(4);
+
+                    const allowActionSpy = sinon.spy(() => true);
+
+                    const items = [
+                        { text: 'a', author: userFirst },
+                        { text: 'b', author: userSecond },
+                    ];
+
+                    this.reinit({
+                        user: userSecond,
+                        editing: {
+                            [option]: allowActionSpy
+                        },
+                        items,
+                        currentUserId: userSecond.id,
+                    });
+
+                    assert.strictEqual(allowActionSpy.callCount, 0, 'allow action callback should not be called initially');
+
+                    const $bubbles = this.getBubbles();
+                    $bubbles.eq(1).trigger('dxcontextmenu');
+
+                    assert.strictEqual(allowActionSpy.callCount, 1, 'allow action callback should be called after bubble click');
+                    assert.strictEqual(allowActionSpy.args[0][0].component.NAME, 'dxChat', 'component is passed correctly');
+                    assert.deepEqual(allowActionSpy.args[0][0].message, items[1], 'target message is passed correctly');
+                });
             });
         });
 
@@ -525,7 +606,7 @@ QUnit.module('Chat', () => {
                         const { author, text: messageText } = message;
 
                         assert.strictEqual(author, this.instance.option('user'), 'author field is correct');
-                        // eslint-disable-next-line no-prototype-builtins
+
                         assert.strictEqual(message.hasOwnProperty('timestamp'), true, 'timestamp field is set');
                         assert.strictEqual(messageText, text, 'text field is correct');
                     },

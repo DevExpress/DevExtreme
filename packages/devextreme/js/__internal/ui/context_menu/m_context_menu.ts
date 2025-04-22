@@ -31,7 +31,7 @@ import { current as currentTheme, isGeneric } from '@js/ui/themes';
 import MenuBase from '@ts/ui/context_menu/m_menu_base';
 
 const DX_MENU_CLASS = 'dx-menu';
-const DX_MENU_ITEM_CLASS = `${DX_MENU_CLASS}-item`;
+export const DX_MENU_ITEM_CLASS = `${DX_MENU_CLASS}-item`;
 const DX_MENU_ITEM_EXPANDED_CLASS = `${DX_MENU_ITEM_CLASS}-expanded`;
 const DX_MENU_PHONE_CLASS = 'dx-menu-phone-overlay';
 const DX_MENU_ITEMS_CONTAINER_CLASS = `${DX_MENU_CLASS}-items-container`;

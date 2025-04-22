@@ -1377,6 +1377,10 @@ testComponentDefaults(Chat,
         onMessageEntered: undefined,
         onTypingStart: undefined,
         onTypingEnd: undefined,
+        editing: {
+            allowUpdating: false,
+            allowDeleting: false,
+        }
     }
 );
 
@@ -1426,6 +1430,8 @@ testComponentDefaults(ChatMessageList,
         isLoading: false,
         dayHeaderFormat: 'shortdate',
         messageTimestampFormat: 'shorttime',
+        allowUpdating: false,
+        allowDeleting: false,
     }
 );
 

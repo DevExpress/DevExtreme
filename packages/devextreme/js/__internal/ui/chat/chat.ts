@@ -29,7 +29,20 @@ import type { DataChange } from '@ts/ui/collection/collection_widget.base';
 const CHAT_CLASS = 'dx-chat';
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 
-class Chat extends Widget<Properties> {
+export interface ChatProperties extends Properties {
+  editing: {
+    allowUpdating: boolean | ((options: {
+      component: Chat;
+      message: Message;
+    }) => boolean);
+    allowDeleting: boolean | ((options: {
+      component: Chat;
+      message: Message;
+    }) => boolean);
+  };
+}
+
+class Chat extends Widget<ChatProperties> {
   _messageBox!: MessageBox;
 
   _messageList!: MessageList;
@@ -42,11 +55,15 @@ class Chat extends Widget<Properties> {
 
   _typingEndAction?: (e: Partial<TypingEndEvent>) => void;
 
-  _getDefaultOptions(): Properties {
+  _getDefaultOptions(): ChatProperties {
     return {
       ...super._getDefaultOptions(),
       showDayHeaders: true,
       activeStateEnabled: true,
+      editing: {
+        allowUpdating: false,
+        allowDeleting: false,
+      },
       focusStateEnabled: true,
       hoverStateEnabled: true,
       items: [],
@@ -153,6 +170,8 @@ class Chat extends Widget<Properties> {
     const options: MessageListProperties = {
       items,
       currentUserId,
+      allowUpdating: (message: Message): boolean => this._allowEditAction(message),
+      allowDeleting: (message: Message): boolean => this._allowDeleteAction(message),
       messageTemplate: this._getMessageTemplate(),
       showDayHeaders,
       showAvatar,
@@ -162,9 +181,41 @@ class Chat extends Widget<Properties> {
       messageTimestampFormat,
       typingUsers,
       isLoading,
+      onMessageEditingStart: () => {
+        console.log('onMessageEditingStart');
+      },
+      onMessageDeleting: () => {
+        console.log('onMessageDeleting');
+      },
     };
 
     return options;
+  }
+
+  protected _allowEditAction(message: Message): boolean {
+    const { editing } = this.option();
+    const { allowUpdating } = editing;
+
+    if (typeof allowUpdating === 'function') {
+      return allowUpdating({
+        component: this,
+        message,
+      });
+    }
+    return allowUpdating;
+  }
+
+  protected _allowDeleteAction(message: Message): boolean {
+    const { editing } = this.option();
+    const { allowDeleting } = editing;
+
+    if (typeof allowDeleting === 'function') {
+      return allowDeleting({
+        component: this,
+        message,
+      });
+    }
+    return allowDeleting;
   }
 
   _getMessageTemplate(): MessageTemplate {
@@ -308,7 +359,7 @@ class Chat extends Widget<Properties> {
     return $input;
   }
 
-  _optionChanged(args: OptionChanged<Properties>): void {
+  _optionChanged(args: OptionChanged<ChatProperties>): void {
     const { name, value } = args;
 
     switch (name) {
@@ -323,6 +374,8 @@ class Chat extends Widget<Properties> {
         this._messageList.option('currentUserId', author?.id);
         break;
       }
+      case 'editing':
+        break;
       case 'items':
         this._messageList.option(name, value);
         this._updateMessageBoxAria();

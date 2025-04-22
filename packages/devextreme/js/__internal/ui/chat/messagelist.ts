@@ -1,4 +1,5 @@
 import { Guid } from '@js/common';
+import type { Cancelable, EventInfo, NativeEventInfo } from '@js/common/core/events';
 import type { Format } from '@js/common/core/localization';
 import dateLocalization from '@js/common/core/localization/date';
 import messageLocalization from '@js/common/core/localization/message';
@@ -11,11 +12,15 @@ import dateSerialization from '@js/core/utils/date_serialization';
 import { isElementInDom } from '@js/core/utils/dom';
 import { getHeight } from '@js/core/utils/size';
 import { isDate, isDefined } from '@js/core/utils/type';
+import type { DxEvent } from '@js/events';
 import type { Message, User } from '@js/ui/chat';
+import type { Item } from '@js/ui/context_menu';
+import type dxContextMenu from '@js/ui/context_menu';
 import ScrollView from '@js/ui/scroll_view';
 import type { WidgetOptions } from '@js/ui/widget/ui.widget';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
+import ContextMenu from '@ts/ui/context_menu/m_context_menu';
 import { getScrollTopMax } from '@ts/ui/scroll_view/utils/get_scroll_top_max';
 
 import type { DataChange } from '../collection/collection_widget.base';
@@ -44,12 +49,23 @@ const CHAT_MESSAGELIST_DAY_HEADER_CLASS = 'dx-chat-messagelist-day-header';
 const CHAT_LAST_MESSAGEGROUP_ALIGNMENT_START_CLASS = 'dx-chat-last-messagegroup-alignment-start';
 const CHAT_LAST_MESSAGEGROUP_ALIGNMENT_END_CLASS = 'dx-chat-last-messagegroup-alignment-end';
 
+export const CHAT_MESSAGELIST_CONTEXT_MENU_CLASS = 'dx-messagelist-context-menu';
+export const CHAT_MESSAGELIST_CONTEXT_MENU_TARGET = `.${CHAT_MESSAGEGROUP_ALIGNMENT_END_CLASS} .${CHAT_MESSAGEBUBBLE_CLASS}`;
+
 const SCROLLABLE_CONTAINER_CLASS = 'dx-scrollable-container';
+
 export const MESSAGEGROUP_TIMEOUT = 5 * 1000 * 60;
 
 export type MessageTemplate = ((data: Message, messageBubbleContainer: Element) => void) | null;
+
+export type ItemClick = NativeEventInfo<ContextMenu, KeyboardEvent | MouseEvent | PointerEvent> & {
+  readonly itemData?: Item;
+  readonly itemElement: dxElementWrapper;
+};
 export interface Properties extends WidgetOptions<MessageList> {
   items: Message[];
+  allowUpdating: ((message: Message) => boolean);
+  allowDeleting: ((message: Message) => boolean);
   currentUserId: number | string | undefined;
   showDayHeaders: boolean;
   messageTemplate?: MessageTemplate;
@@ -60,6 +76,14 @@ export interface Properties extends WidgetOptions<MessageList> {
   showAvatar: boolean;
   showUserName: boolean;
   showMessageTimestamp: boolean;
+  onMessageEditingStart: (
+    event: DxEvent<KeyboardEvent | MouseEvent | PointerEvent> | undefined,
+    message: Message,
+  ) => void;
+  onMessageDeleting: (
+    event: DxEvent<KeyboardEvent | MouseEvent | PointerEvent> | undefined,
+    message: Message,
+  ) => void;
 }
 
 class MessageList extends Widget<Properties> {
@@ -73,11 +97,15 @@ class MessageList extends Widget<Properties> {
 
   private _typingIndicator!: TypingIndicator;
 
+  private _contextMenu!: ContextMenu;
+
   private _$content!: dxElementWrapper;
 
   _getDefaultOptions(): Properties {
     return {
       ...super._getDefaultOptions(),
+      allowUpdating: () => false,
+      allowDeleting: () => false,
       items: [],
       currentUserId: '',
       showDayHeaders: true,
@@ -108,6 +136,7 @@ class MessageList extends Widget<Properties> {
     this._toggleEmptyView();
     this._renderMessageGroups();
     this._renderTypingIndicator();
+    this._renderContextMenu();
 
     this._updateAria();
     this._scrollDownContent();
@@ -227,6 +256,78 @@ class MessageList extends Widget<Properties> {
     });
   }
 
+  _getContextMenuButtons(message: Message): Item[] {
+    const {
+      allowUpdating,
+      allowDeleting,
+      // onMessageEditingStart,
+      // onMessageDeleting,
+    } = this.option();
+
+    const editText = messageLocalization.format('dxChat-editingEditMessage');
+    const deleteText = messageLocalization.format('dxChat-editingDeleteMessage');
+
+    const buttons: Item[] = [];
+
+    if (allowUpdating(message)) {
+      buttons.push({
+        icon: 'edit',
+        text: editText,
+        onClick(e: ItemClick): void {
+          // onMessageEditingStart({
+          //   event: e.event,
+          //   message,
+          // });
+        },
+      });
+    }
+
+    if (allowDeleting(message)) {
+      buttons.push({
+        icon: 'trash',
+        text: deleteText,
+        onClick(e: ItemClick): void {
+          // onMessageDeleting(e);
+        },
+      });
+    }
+
+    return buttons;
+  }
+
+  _renderContextMenu(): void {
+    const $contextMenu = $('<div>');
+    this._contextMenu = this._createComponent($contextMenu, ContextMenu, {
+      target: CHAT_MESSAGELIST_CONTEXT_MENU_TARGET,
+      onShowing: (e) => {
+        this._onContextMenuShowing(e);
+      },
+      elementAttr: {
+        class: CHAT_MESSAGELIST_CONTEXT_MENU_CLASS,
+      },
+      hideOnParentScroll: true,
+    });
+
+    $contextMenu.appendTo(this.$element());
+  }
+
+  _onContextMenuShowing(e: Cancelable & EventInfo<dxContextMenu>): void {
+    // @ts-expect-error ts-error
+    const { currentTarget } = e.jQEvent;
+
+    const message = this._getMessageData(currentTarget);
+
+    const items = this._getContextMenuButtons(message);
+
+    if (!items.length) {
+      e.cancel = true;
+    }
+
+    e.component.option('items', items);
+
+    console.log('showing', e);
+  }
+
   _renderScrollView(): void {
     const $scrollable = $('<div>')
       .appendTo(this.$element());
@@ -237,6 +338,10 @@ class MessageList extends Widget<Properties> {
       reachBottomText: '',
       indicateLoading: false,
       onReachBottom: noop,
+      // onScroll: () => {
+      //   // eslint-disable-next-line @typescript-eslint/no-floating-promises
+      //   this._contextMenu?.hide();
+      // },
     });
   }
 
