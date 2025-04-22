@@ -356,6 +356,13 @@ export interface dxCardViewOptions<TCardData = unknown, TKey = unknown> extends 
      */
     columns?: (ColumnProperties<TCardData, TKey> | string)[];
 
+    /**
+     * @public
+     * @docid
+     * @default false
+     */
+    allowColumnReordering?: boolean;
+
     // #endregion
 
     // #region HeaderPanel
