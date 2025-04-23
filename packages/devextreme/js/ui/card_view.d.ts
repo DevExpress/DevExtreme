@@ -154,6 +154,11 @@ export interface FieldInfoType { // TODO: rename to FieldInfo
      * @docid
      */
     column: Column;
+    /**
+     * @public
+     * @docid
+     */
+    card: CardInfo; // TODO: sync with impl
 }
 
 /**
@@ -225,22 +230,22 @@ export type ColumnProperties<TCardData = unknown, TKey = unknown> = Pick<ColumnB
      * @public
      * @docid
      */
-    fieldTemplate?: template | ((card: CardInfo<TCardData, TKey>) => string | UserDefinedElement);
+    fieldTemplate?: template | ((card: FieldInfoType, container: DxElement) => string | UserDefinedElement);
     /**
      * @public
      * @docid
      */
-    fieldCaptionTemplate?: template | ((card: CardInfo<TCardData, TKey>) => string | UserDefinedElement);
+    fieldCaptionTemplate?: template | ((card: FieldInfoType, container: DxElement) => string | UserDefinedElement);
     /**
      * @public
      * @docid
      */
-    fieldValueTemplate?: template | ((card: CardInfo<TCardData, TKey>) => string | UserDefinedElement);
+    fieldValueTemplate?: template | ((card: FieldInfoType, container: DxElement) => string | UserDefinedElement);
     /**
      * @public
      * @docid
      */
-    headerItemTemplate?: template | ((column: Column<TCardData, TKey>) => string | UserDefinedElement);
+    headerItemTemplate?: template | ((column: Column<TCardData, TKey>, container: DxElement) => string | UserDefinedElement);
     /**
      * @public
      * @docid
@@ -285,7 +290,7 @@ export type HeaderPanel<TCardData = unknown, TKey = unknown> = {
      * @docid
      * @public
      */
-    itemTemplate?: template | ((e: { column: Column<TCardData, TKey> }) => string | UserDefinedElement);
+    itemTemplate?: template | ((column: Column<TCardData, TKey>, container: DxElement) => string | UserDefinedElement);
     /**
      * @docid
      * @public
@@ -309,6 +314,36 @@ type WithCardInfo = {
 
 /**
  * @docid
+ */
+type WithFieldInfo = {
+    /** @docid */
+    readonly field: FieldInfoType;
+    /** @docid */
+    readonly fieldElement: DxElement;
+};
+
+/**
+ * @docid
+ */
+type WithFieldCaptionInfo = {
+    /** @docid */
+    readonly field: FieldInfoType;
+    /** @docid */
+    readonly fieldCaptionElement: DxElement;
+};
+
+/**
+ * @docid
+ */
+type WithFieldValueInfo = {
+    /** @docid */
+    readonly field: FieldInfoType;
+    /** @docid */
+    readonly fieldValueElement: DxElement;
+};
+
+/**
+ * @docid
  * @public
  * @type object
  * @inherits NativeEventInfo,WithCardInfo
@@ -328,8 +363,79 @@ export type CardDblClickEvent = NativeEventInfo<dxCardView, PointerEvent | Mouse
  * @public
  * @type object
  * @inherits EventInfo,WithCardInfo
+*/
+export type CardPreparedEvent = EventInfo<dxCardView> & WithCardInfo;
+
+/**
+ * @docid
+ * @public
+ * @type object
+ * @inherits NativeEventInfo,WithFieldInfo
  */
-export type CardHoverChangedEvent = EventInfo<dxCardView> & WithCardInfo;
+export type FieldClickEvent = NativeEventInfo<dxCardView, PointerEvent | MouseEvent | TouchEvent> & WithFieldInfo;
+
+/**
+ * @docid
+ * @public
+ * @type object
+ * @inherits NativeEventInfo,WithFieldInfo
+ */
+export type FieldDblClickEvent = NativeEventInfo<dxCardView, PointerEvent | MouseEvent | TouchEvent> & WithFieldInfo;
+
+/**
+ * @docid
+ * @public
+ * @type object
+ * @inherits EventInfo,WithFieldInfo
+*/
+export type FieldPreparedEvent = EventInfo<dxCardView> & WithFieldInfo;
+
+/**
+ * @docid
+ * @public
+ * @type object
+ * @inherits NativeEventInfo,WithFieldCaptionInfo
+ */
+export type FieldCaptionClickEvent = NativeEventInfo<dxCardView, PointerEvent | MouseEvent | TouchEvent> & WithFieldCaptionInfo;
+
+/**
+ * @docid
+ * @public
+ * @type object
+ * @inherits NativeEventInfo,WithFieldCaptionInfo
+ */
+export type FieldCaptionDblClickEvent = NativeEventInfo<dxCardView, PointerEvent | MouseEvent | TouchEvent> & WithFieldCaptionInfo;
+
+/**
+ * @docid
+ * @public
+ * @type object
+ * @inherits EventInfo,WithFieldValueInfo
+*/
+export type FieldValuePreparedEvent = EventInfo<dxCardView> & WithFieldValueInfo;
+/**
+ * @docid
+ * @public
+ * @type object
+ * @inherits NativeEventInfo,WithFieldValueInfo
+ */
+export type FieldValueClickEvent = NativeEventInfo<dxCardView, PointerEvent | MouseEvent | TouchEvent> & WithFieldValueInfo;
+
+/**
+ * @docid
+ * @public
+ * @type object
+ * @inherits NativeEventInfo,WithFieldValueInfo
+ */
+export type FieldValueDblClickEvent = NativeEventInfo<dxCardView, PointerEvent | MouseEvent | TouchEvent> & WithFieldValueInfo;
+
+/**
+ * @docid
+ * @public
+ * @type object
+ * @inherits EventInfo,WithFieldCaptionInfo
+*/
+export type FieldCaptionPreparedEvent = EventInfo<dxCardView> & WithFieldCaptionInfo;
 
 /**
  * @docid
@@ -337,7 +443,10 @@ export type CardHoverChangedEvent = EventInfo<dxCardView> & WithCardInfo;
  * @type object
  * @inherits EventInfo,WithCardInfo
  */
-export type CardPreparedEvent = EventInfo<dxCardView> & WithCardInfo;
+export type CardHoverChangedEvent = EventInfo<dxCardView> & WithCardInfo & {
+    /** @docid */
+    eventType: string;
+};
 
 /**
  * @docid
@@ -369,7 +478,7 @@ export type CardCover<TCardData = unknown> = { // TODO: sync with impl
      * @docid
      * @public
      */
-    template?: template | ((card: CardInfo) => string | UserDefinedElement);
+    template?: template | ((card: CardInfo, container: DxElement) => string | UserDefinedElement);
 };
 
 export type CardHeaderPredefinedToolbarItem = 'selectionCheckBox' | 'updateButton' | 'deleteButton';
@@ -530,7 +639,7 @@ export interface dxCardViewOptions<TCardData = unknown, TKey = unknown> extends 
      * @docid
      * @public
      */
-    noDataTemplate?: template | ((e: { text: string }) => string | UserDefinedElement);
+    noDataTemplate?: template | ((e: { text: string }, container: DxElement) => string | UserDefinedElement);
     /**
      * @docid
      * @public
@@ -560,7 +669,17 @@ export interface dxCardViewOptions<TCardData = unknown, TKey = unknown> extends 
      * @docid
      * @public
      */
-    cardTemplate?: template | ((card: CardInfo) => string | UserDefinedElement);
+    cardTemplate?: template | ((card: CardInfo, container: DxElement) => string | UserDefinedElement);
+    /**
+     * @docid
+     * @public
+     */
+    cardContentTemplate?: template | ((card: CardInfo, container: DxElement) => string | UserDefinedElement);
+    /**
+     * @docid
+     * @public
+     */
+    fieldHintEnabled?: boolean; // TODO: sync with impl
     /**
      * @docid
      * @public
@@ -584,12 +703,66 @@ export interface dxCardViewOptions<TCardData = unknown, TKey = unknown> extends 
      * @public
      * @action
      */
+    onFieldClick?: (e: FieldClickEvent) => void; // TODO: sync with impl
+    /**
+     * @docid
+     * @public
+     * @action
+     */
+    onFieldDblClick?: (e: FieldDblClickEvent) => void; // TODO: sync with impl
+    /**
+     * @docid
+     * @public
+     * @action
+     */
+    onFieldPrepared?: (e: FieldPreparedEvent) => void; // TODO: sync with impl
+    /**
+     * @docid
+     * @public
+     * @action
+     */
+    onFieldCaptionClick?: (e: FieldCaptionClickEvent) => void; // TODO: sync with impl
+    /**
+     * @docid
+     * @public
+     * @action
+     */
+    onFieldCaptionDblClick?: (e: FieldCaptionDblClickEvent) => void; // TODO: sync with impl
+    /**
+     * @docid
+     * @public
+     * @action
+     */
+    onFieldCaptionPrepared?: (e: FieldCaptionPreparedEvent) => void; // TODO: sync with impl
+    /**
+     * @docid
+     * @public
+     * @action
+     */
+    onFieldValueClick?: (e: FieldValueClickEvent) => void; // TODO: sync with impl
+    /**
+     * @docid
+     * @public
+     * @action
+     */
+    onFieldValueDblClick?: (e: FieldValueDblClickEvent) => void; // TODO: sync with impl
+    /**
+     * @docid
+     * @public
+     * @action
+     */
+    onFieldValuePrepared?: (e: FieldValuePreparedEvent) => void; // TODO: sync with impl
+    /**
+     * @docid
+     * @public
+     * @action
+     */
     onCardHoverChanged?: (e: CardHoverChangedEvent) => void; // TODO: sync with impl
     /**
      * @docid
      * @public
      */
-    cardFooterTemplate?: template | ((card: CardInfo) => string | UserDefinedElement);
+    cardFooterTemplate?: template | ((card: CardInfo, container: DxElement) => string | UserDefinedElement);
     /**
      * @docid
      * @public

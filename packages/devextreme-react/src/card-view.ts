@@ -11,7 +11,7 @@ import NestedOption from "./core/nested-option";
 
 import type { AnimationConfig, CollisionResolution, PositionConfig, AnimationState, AnimationType, CollisionResolutionCombination } from "devextreme/common/core/animation";
 import type { HorizontalAlignment, VerticalAlignment, template, ToolbarItemLocation, ToolbarItemComponent, DataType, Format as CommonFormat, Direction, PositionAlignment, Mode, DisplayMode } from "devextreme/common";
-import type { CardInfo, CardHeaderPredefinedToolbarItem, CardHeaderToolbarItem, Column as CardViewColumn, PredefinedToolbarItem, ToolbarItem as CardViewToolbarItem } from "devextreme/ui/card_view";
+import type { CardInfo, CardHeaderPredefinedToolbarItem, CardHeaderToolbarItem, FieldInfoType, Column as CardViewColumn, PredefinedToolbarItem, ToolbarItem as CardViewToolbarItem } from "devextreme/ui/card_view";
 import type { LocateInMenuMode, ShowTextMode } from "devextreme/ui/toolbar";
 import type { CollectionWidgetItem } from "devextreme/ui/collection/ui.collection_widget.base";
 import type { dxFilterBuilderField, FieldInfo, FilterBuilderOperation, dxFilterBuilderCustomOperation, GroupOperation, ContentReadyEvent, DisposingEvent, EditorPreparedEvent, EditorPreparingEvent, InitializedEvent, OptionChangedEvent, ValueChangedEvent } from "devextreme/ui/filter_builder";
@@ -24,6 +24,8 @@ import type { PagerPageSize } from "devextreme/common/grids";
 
 type ICardViewOptions<TCardData = any, TKey = any> = React.PropsWithChildren<Properties<TCardData, TKey> & IHtmlOptions & {
   dataSource?: Properties<TCardData, TKey>["dataSource"];
+  cardContentRender?: (...params: any) => React.ReactNode;
+  cardContentComponent?: React.ComponentType<any>;
   cardFooterRender?: (...params: any) => React.ReactNode;
   cardFooterComponent?: React.ComponentType<any>;
   cardRender?: (...params: any) => React.ReactNode;
@@ -52,7 +54,7 @@ const CardView = memo(
       ), [baseRef.current]);
 
       const subscribableOptions = useMemo(() => (["filterValue"]), []);
-      const independentEvents = useMemo(() => (["onCardClick","onCardDblClick","onCardPrepared","onContentReady","onDataErrorOccurred","onDisposing","onInitialized"]), []);
+      const independentEvents = useMemo(() => (["onCardClick","onCardDblClick","onCardPrepared","onContentReady","onDataErrorOccurred","onDisposing","onFieldCaptionClick","onFieldCaptionDblClick","onFieldCaptionPrepared","onFieldClick","onFieldDblClick","onFieldPrepared","onFieldValueClick","onFieldValueDblClick","onFieldValuePrepared","onInitialized"]), []);
 
       const defaults = useMemo(() => ({
         defaultFilterValue: "filterValue",
@@ -72,6 +74,11 @@ const CardView = memo(
       }), []);
 
       const templateProps = useMemo(() => ([
+        {
+          tmplOption: "cardContentTemplate",
+          render: "cardContentRender",
+          component: "cardContentComponent"
+        },
         {
           tmplOption: "cardFooterTemplate",
           render: "cardFooterRender",
@@ -174,7 +181,7 @@ type ICardCoverProps = React.PropsWithChildren<{
   aspectRatio?: string;
   imageExpr?: ((data: any) => string) | string;
   maxHeight?: number;
-  template?: ((card: CardInfo) => string | any) | template;
+  template?: ((card: CardInfo, container: any) => string | any) | template;
   render?: (...params: any) => React.ReactNode;
   component?: React.ComponentType<any>;
 }>
@@ -293,11 +300,11 @@ const Collision = Object.assign<typeof _componentCollision, NestedComponentMeta>
 // owners:
 // CardView
 type IColumnProps = React.PropsWithChildren<{
-  fieldCaptionTemplate?: ((card: CardInfo) => string | any) | template;
-  fieldTemplate?: ((card: CardInfo) => string | any) | template;
-  fieldValueTemplate?: ((card: CardInfo) => string | any) | template;
+  fieldCaptionTemplate?: ((card: FieldInfoType, container: any) => string | any) | template;
+  fieldTemplate?: ((card: FieldInfoType, container: any) => string | any) | template;
+  fieldValueTemplate?: ((card: FieldInfoType, container: any) => string | any) | template;
   headerItemCssClass?: string;
-  headerItemTemplate?: ((column: CardViewColumn) => string | any) | template;
+  headerItemTemplate?: ((column: CardViewColumn, container: any) => string | any) | template;
   fieldCaptionRender?: (...params: any) => React.ReactNode;
   fieldCaptionComponent?: React.ComponentType<any>;
   fieldRender?: (...params: any) => React.ReactNode;
@@ -598,7 +605,7 @@ const GroupOperationDescriptions = Object.assign<typeof _componentGroupOperation
 type IHeaderPanelProps = React.PropsWithChildren<{
   dragging?: Record<string, any>;
   itemCssClass?: string;
-  itemTemplate?: ((e: { column: CardViewColumn }) => string | any) | template;
+  itemTemplate?: ((column: CardViewColumn, container: any) => string | any) | template;
   visible?: boolean;
   itemRender?: (...params: any) => React.ReactNode;
   itemComponent?: React.ComponentType<any>;

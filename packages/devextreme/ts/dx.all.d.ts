@@ -10019,12 +10019,87 @@ declare module DevExpress.ui {
      * [descr:CardHoverChangedEvent]
      */
     export type CardHoverChangedEvent =
-      DevExpress.common.core.events.EventInfo<dxCardView> & WithCardInfo;
+      DevExpress.common.core.events.EventInfo<dxCardView> &
+        WithCardInfo & {
+          /**
+           * [descr:CardHoverChangedEvent.eventType]
+           */
+          eventType: string;
+        };
     /**
      * [descr:CardPreparedEvent]
      */
     export type CardPreparedEvent =
       DevExpress.common.core.events.EventInfo<dxCardView> & WithCardInfo;
+    /**
+     * [descr:FieldCaptionClickEvent]
+     */
+    export type FieldCaptionClickEvent =
+      DevExpress.common.core.events.NativeEventInfo<
+        dxCardView,
+        PointerEvent | MouseEvent | TouchEvent
+      > &
+        WithFieldCaptionInfo;
+    /**
+     * [descr:FieldCaptionDblClickEvent]
+     */
+    export type FieldCaptionDblClickEvent =
+      DevExpress.common.core.events.NativeEventInfo<
+        dxCardView,
+        PointerEvent | MouseEvent | TouchEvent
+      > &
+        WithFieldCaptionInfo;
+    /**
+     * [descr:FieldCaptionPreparedEvent]
+     */
+    export type FieldCaptionPreparedEvent =
+      DevExpress.common.core.events.EventInfo<dxCardView> &
+        WithFieldCaptionInfo;
+    /**
+     * [descr:FieldClickEvent]
+     */
+    export type FieldClickEvent = DevExpress.common.core.events.NativeEventInfo<
+      dxCardView,
+      PointerEvent | MouseEvent | TouchEvent
+    > &
+      WithFieldInfo;
+    /**
+     * [descr:FieldDblClickEvent]
+     */
+    export type FieldDblClickEvent =
+      DevExpress.common.core.events.NativeEventInfo<
+        dxCardView,
+        PointerEvent | MouseEvent | TouchEvent
+      > &
+        WithFieldInfo;
+    /**
+     * [descr:FieldPreparedEvent]
+     */
+    export type FieldPreparedEvent =
+      DevExpress.common.core.events.EventInfo<dxCardView> & WithFieldInfo;
+    /**
+     * [descr:FieldValueClickEvent]
+     */
+    export type FieldValueClickEvent =
+      DevExpress.common.core.events.NativeEventInfo<
+        dxCardView,
+        PointerEvent | MouseEvent | TouchEvent
+      > &
+        WithFieldValueInfo;
+    /**
+     * [descr:FieldValueDblClickEvent]
+     */
+    export type FieldValueDblClickEvent =
+      DevExpress.common.core.events.NativeEventInfo<
+        dxCardView,
+        PointerEvent | MouseEvent | TouchEvent
+      > &
+        WithFieldValueInfo;
+    /**
+     * [descr:FieldValuePreparedEvent]
+     */
+    export type FieldValuePreparedEvent =
+      DevExpress.common.core.events.EventInfo<dxCardView> & WithFieldValueInfo;
 
     /**
      * [descr:HeaderPanel]
@@ -10054,9 +10129,10 @@ declare module DevExpress.ui {
        */
       itemTemplate?:
         | template
-        | ((e: {
-            column: Column<TCardData, TKey>;
-          }) => string | DevExpress.core.UserDefinedElement);
+        | ((
+            column: Column<TCardData, TKey>,
+            container: DevExpress.core.DxElement
+          ) => string | DevExpress.core.UserDefinedElement);
       /**
        * [descr:HeaderPanel.itemCssClass]
        */
@@ -10135,6 +10211,48 @@ declare module DevExpress.ui {
        * [descr:WithCardInfo.cardElement]
        */
       readonly cardElement: DevExpress.core.DxElement;
+    };
+    /**
+     * [descr:WithFieldCaptionInfo]
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+     */
+    type WithFieldCaptionInfo = {
+      /**
+       * [descr:WithFieldCaptionInfo.field]
+       */
+      readonly field: FieldInfoType;
+      /**
+       * [descr:WithFieldCaptionInfo.fieldCaptionElement]
+       */
+      readonly fieldCaptionElement: DevExpress.core.DxElement;
+    };
+    /**
+     * [descr:WithFieldInfo]
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+     */
+    type WithFieldInfo = {
+      /**
+       * [descr:WithFieldInfo.field]
+       */
+      readonly field: FieldInfoType;
+      /**
+       * [descr:WithFieldInfo.fieldElement]
+       */
+      readonly fieldElement: DevExpress.core.DxElement;
+    };
+    /**
+     * [descr:WithFieldValueInfo]
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+     */
+    type WithFieldValueInfo = {
+      /**
+       * [descr:WithFieldValueInfo.field]
+       */
+      readonly field: FieldInfoType;
+      /**
+       * [descr:WithFieldValueInfo.fieldValueElement]
+       */
+      readonly fieldValueElement: DevExpress.core.DxElement;
     };
   }
 
@@ -10218,7 +10336,10 @@ declare module DevExpress.ui {
      */
     noDataTemplate?:
       | template
-      | ((e: { text: string }) => string | DevExpress.core.UserDefinedElement);
+      | ((
+          e: { text: string },
+          container: DevExpress.core.DxElement
+        ) => string | DevExpress.core.UserDefinedElement);
     /**
      * [descr:dxCardViewOptions.cardsPerRow]
      */
@@ -10245,8 +10366,22 @@ declare module DevExpress.ui {
     cardTemplate?:
       | template
       | ((
-          card: DevExpress.ui.dxCardView.CardInfo
+          card: DevExpress.ui.dxCardView.CardInfo,
+          container: DevExpress.core.DxElement
         ) => string | DevExpress.core.UserDefinedElement);
+    /**
+     * [descr:dxCardViewOptions.cardContentTemplate]
+     */
+    cardContentTemplate?:
+      | template
+      | ((
+          card: DevExpress.ui.dxCardView.CardInfo,
+          container: DevExpress.core.DxElement
+        ) => string | DevExpress.core.UserDefinedElement);
+    /**
+     * [descr:dxCardViewOptions.fieldHintEnabled]
+     */
+    fieldHintEnabled?: boolean;
     /**
      * [descr:dxCardViewOptions.onCardClick]
      */
@@ -10260,6 +10395,54 @@ declare module DevExpress.ui {
      */
     onCardPrepared?: (e: DevExpress.ui.dxCardView.CardPreparedEvent) => void;
     /**
+     * [descr:dxCardViewOptions.onFieldClick]
+     */
+    onFieldClick?: (e: DevExpress.ui.dxCardView.FieldClickEvent) => void;
+    /**
+     * [descr:dxCardViewOptions.onFieldDblClick]
+     */
+    onFieldDblClick?: (e: DevExpress.ui.dxCardView.FieldDblClickEvent) => void;
+    /**
+     * [descr:dxCardViewOptions.onFieldPrepared]
+     */
+    onFieldPrepared?: (e: DevExpress.ui.dxCardView.FieldPreparedEvent) => void;
+    /**
+     * [descr:dxCardViewOptions.onFieldCaptionClick]
+     */
+    onFieldCaptionClick?: (
+      e: DevExpress.ui.dxCardView.FieldCaptionClickEvent
+    ) => void;
+    /**
+     * [descr:dxCardViewOptions.onFieldCaptionDblClick]
+     */
+    onFieldCaptionDblClick?: (
+      e: DevExpress.ui.dxCardView.FieldCaptionDblClickEvent
+    ) => void;
+    /**
+     * [descr:dxCardViewOptions.onFieldCaptionPrepared]
+     */
+    onFieldCaptionPrepared?: (
+      e: DevExpress.ui.dxCardView.FieldCaptionPreparedEvent
+    ) => void;
+    /**
+     * [descr:dxCardViewOptions.onFieldValueClick]
+     */
+    onFieldValueClick?: (
+      e: DevExpress.ui.dxCardView.FieldValueClickEvent
+    ) => void;
+    /**
+     * [descr:dxCardViewOptions.onFieldValueDblClick]
+     */
+    onFieldValueDblClick?: (
+      e: DevExpress.ui.dxCardView.FieldValueDblClickEvent
+    ) => void;
+    /**
+     * [descr:dxCardViewOptions.onFieldValuePrepared]
+     */
+    onFieldValuePrepared?: (
+      e: DevExpress.ui.dxCardView.FieldValuePreparedEvent
+    ) => void;
+    /**
      * [descr:dxCardViewOptions.onCardHoverChanged]
      */
     onCardHoverChanged?: (
@@ -10271,7 +10454,8 @@ declare module DevExpress.ui {
     cardFooterTemplate?:
       | template
       | ((
-          card: DevExpress.ui.dxCardView.CardInfo
+          card: DevExpress.ui.dxCardView.CardInfo,
+          container: DevExpress.core.DxElement
         ) => string | DevExpress.core.UserDefinedElement);
     /**
      * [descr:dxCardViewOptions.cardHeader]
@@ -32152,7 +32336,10 @@ declare module DevExpress.ui.dxCardView {
      */
     template?:
       | template
-      | ((card: CardInfo) => string | DevExpress.core.UserDefinedElement);
+      | ((
+          card: CardInfo,
+          container: DevExpress.core.DxElement
+        ) => string | DevExpress.core.UserDefinedElement);
   };
   /**
    * [descr:CardHeader]
@@ -32236,7 +32423,8 @@ declare module DevExpress.ui.dxCardView {
     fieldTemplate?:
       | template
       | ((
-          card: CardInfo<TCardData, TKey>
+          card: FieldInfoType,
+          container: DevExpress.core.DxElement
         ) => string | DevExpress.core.UserDefinedElement);
     /**
      * [descr:ColumnProperties.fieldCaptionTemplate]
@@ -32244,7 +32432,8 @@ declare module DevExpress.ui.dxCardView {
     fieldCaptionTemplate?:
       | template
       | ((
-          card: CardInfo<TCardData, TKey>
+          card: FieldInfoType,
+          container: DevExpress.core.DxElement
         ) => string | DevExpress.core.UserDefinedElement);
     /**
      * [descr:ColumnProperties.fieldValueTemplate]
@@ -32252,7 +32441,8 @@ declare module DevExpress.ui.dxCardView {
     fieldValueTemplate?:
       | template
       | ((
-          card: CardInfo<TCardData, TKey>
+          card: FieldInfoType,
+          container: DevExpress.core.DxElement
         ) => string | DevExpress.core.UserDefinedElement);
     /**
      * [descr:ColumnProperties.headerItemTemplate]
@@ -32260,7 +32450,8 @@ declare module DevExpress.ui.dxCardView {
     headerItemTemplate?:
       | template
       | ((
-          column: Column<TCardData, TKey>
+          column: Column<TCardData, TKey>,
+          container: DevExpress.core.DxElement
         ) => string | DevExpress.core.UserDefinedElement);
     /**
      * [descr:ColumnProperties.headerItemCssClass]
@@ -32288,6 +32479,10 @@ declare module DevExpress.ui.dxCardView {
      * [descr:FieldInfoType.column]
      */
     column: Column;
+    /**
+     * [descr:FieldInfoType.card]
+     */
+    card: CardInfo;
   }
   /**
    * [descr:Paging]

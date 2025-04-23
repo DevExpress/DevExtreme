@@ -14,6 +14,15 @@ import {
  CardDblClickEvent,
  CardHoverChangedEvent,
  CardPreparedEvent,
+ FieldCaptionClickEvent,
+ FieldCaptionDblClickEvent,
+ FieldCaptionPreparedEvent,
+ FieldClickEvent,
+ FieldDblClickEvent,
+ FieldPreparedEvent,
+ FieldValueClickEvent,
+ FieldValueDblClickEvent,
+ FieldValuePreparedEvent,
  Paging,
  RemoteOperations,
  Toolbar,
@@ -103,6 +112,7 @@ type AccessibleOptions = Pick<Properties,
   "accessKey" |
   "activeStateEnabled" |
   "allowColumnReordering" |
+  "cardContentTemplate" |
   "cardCover" |
   "cardFooterTemplate" |
   "cardHeader" |
@@ -116,6 +126,7 @@ type AccessibleOptions = Pick<Properties,
   "disabled" |
   "elementAttr" |
   "errorRowEnabled" |
+  "fieldHintEnabled" |
   "filterBuilder" |
   "filterBuilderPopup" |
   "filterPanel" |
@@ -137,6 +148,15 @@ type AccessibleOptions = Pick<Properties,
   "onContentReady" |
   "onDataErrorOccurred" |
   "onDisposing" |
+  "onFieldCaptionClick" |
+  "onFieldCaptionDblClick" |
+  "onFieldCaptionPrepared" |
+  "onFieldClick" |
+  "onFieldDblClick" |
+  "onFieldPrepared" |
+  "onFieldValueClick" |
+  "onFieldValueDblClick" |
+  "onFieldValuePrepared" |
   "onInitialized" |
   "onOptionChanged" |
   "pager" |
@@ -161,6 +181,7 @@ const componentConfig = {
     accessKey: String,
     activeStateEnabled: Boolean,
     allowColumnReordering: Boolean,
+    cardContentTemplate: {},
     cardCover: Object as PropType<CardCover | Record<string, any>>,
     cardFooterTemplate: {},
     cardHeader: Object as PropType<CardHeader | Record<string, any>>,
@@ -174,6 +195,7 @@ const componentConfig = {
     disabled: Boolean,
     elementAttr: Object as PropType<Record<string, any>>,
     errorRowEnabled: Boolean,
+    fieldHintEnabled: Boolean,
     filterBuilder: Object as PropType<dxFilterBuilderOptions | Record<string, any>>,
     filterBuilderPopup: Object as PropType<Record<string, any>>,
     filterPanel: Object as PropType<Record<string, any>>,
@@ -195,6 +217,15 @@ const componentConfig = {
     onContentReady: Function as PropType<((e: EventInfo<any>) => void)>,
     onDataErrorOccurred: Function as PropType<((e: { component: Object, element: any, error: any, model: any }) => void)>,
     onDisposing: Function as PropType<((e: EventInfo<any>) => void)>,
+    onFieldCaptionClick: Function as PropType<((e: FieldCaptionClickEvent) => void)>,
+    onFieldCaptionDblClick: Function as PropType<((e: FieldCaptionDblClickEvent) => void)>,
+    onFieldCaptionPrepared: Function as PropType<((e: FieldCaptionPreparedEvent) => void)>,
+    onFieldClick: Function as PropType<((e: FieldClickEvent) => void)>,
+    onFieldDblClick: Function as PropType<((e: FieldDblClickEvent) => void)>,
+    onFieldPrepared: Function as PropType<((e: FieldPreparedEvent) => void)>,
+    onFieldValueClick: Function as PropType<((e: FieldValueClickEvent) => void)>,
+    onFieldValueDblClick: Function as PropType<((e: FieldValueDblClickEvent) => void)>,
+    onFieldValuePrepared: Function as PropType<((e: FieldValuePreparedEvent) => void)>,
     onInitialized: Function as PropType<((e: { component: Component<any>, element: any }) => void)>,
     onOptionChanged: Function as PropType<((e: { component: DOMComponent, element: any, fullName: string, model: any, name: string, previousValue: any, value: any }) => void)>,
     pager: Object as PropType<Pager | Record<string, any> | PagerBase>,
@@ -215,6 +246,7 @@ const componentConfig = {
     "update:accessKey": null,
     "update:activeStateEnabled": null,
     "update:allowColumnReordering": null,
+    "update:cardContentTemplate": null,
     "update:cardCover": null,
     "update:cardFooterTemplate": null,
     "update:cardHeader": null,
@@ -228,6 +260,7 @@ const componentConfig = {
     "update:disabled": null,
     "update:elementAttr": null,
     "update:errorRowEnabled": null,
+    "update:fieldHintEnabled": null,
     "update:filterBuilder": null,
     "update:filterBuilderPopup": null,
     "update:filterPanel": null,
@@ -249,6 +282,15 @@ const componentConfig = {
     "update:onContentReady": null,
     "update:onDataErrorOccurred": null,
     "update:onDisposing": null,
+    "update:onFieldCaptionClick": null,
+    "update:onFieldCaptionDblClick": null,
+    "update:onFieldCaptionPrepared": null,
+    "update:onFieldClick": null,
+    "update:onFieldDblClick": null,
+    "update:onFieldPrepared": null,
+    "update:onFieldValueClick": null,
+    "update:onFieldValueDblClick": null,
+    "update:onFieldValuePrepared": null,
     "update:onInitialized": null,
     "update:onOptionChanged": null,
     "update:pager": null,
