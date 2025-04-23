@@ -26,7 +26,7 @@ const AI_DIALOG_TITLE_TEXT_CLASS = 'dx-aidialog-title-text';
 const ICON_CLASS = 'dx-icon';
 const ICON_SPARKLE_CLASS = 'dx-icon-sparkle';
 const COPY_BUTTON_ICON = 'copy';
-const TRY_AGAIN_BUTTON_ICON = 'redo';
+const TRY_AGAIN_BUTTON_ICON = 'restore';
 
 const POPUP_MIN_WIDTH = 288;
 const POPUP_MAX_WIDTH = 460;
