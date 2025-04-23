@@ -4,7 +4,7 @@ import type { DataSourceOptions } from '@js/common/data';
 import registerComponent from '@js/core/component_registrator';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
-import { isBoolean, isDefined, isPromise } from '@js/core/utils/type';
+import { isDefined, isPromise } from '@js/core/utils/type';
 import DataHelperMixin from '@js/data_helper';
 import type {
   Message,
@@ -279,10 +279,8 @@ class Chat extends Widget<Properties> {
       cancelResult
         .then(invokeCallback)
         .catch(callback);
-    }
-
-    if (isBoolean(cancelResult)) {
-      invokeCallback(cancelResult);
+    } else {
+      invokeCallback(Boolean(cancelResult));
     }
   }
 
