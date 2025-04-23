@@ -151,6 +151,7 @@ export class DataController {
           }
 
           new ArrayStore(e.data).load(loadOptions).done((filteredData) => {
+            // remoteOperations is false
             if (Object.keys(loadOptions).length > 0) {
               this._filteredItemCount.value = filteredData.length;
 
