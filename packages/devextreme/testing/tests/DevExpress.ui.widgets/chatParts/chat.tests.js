@@ -16,6 +16,7 @@ import keyboardMock from '../../../helpers/keyboardMock.js';
 import { DataSource } from 'common/data/data_source/data_source';
 import { CustomStore } from 'common/data/custom_store';
 import dataUtils from 'core/element_data';
+import devices from '__internal/core/m_devices';
 
 import { isRenderer } from 'core/utils/type';
 
@@ -335,6 +336,11 @@ QUnit.module('Chat', () => {
             });
 
             QUnit.testInActiveWindow('Contextmenu should be hidden and input focused after esc is pressed', function(assert) {
+                if(devices.real().deviceType !== 'desktop') {
+                    assert.ok(true, 'Test is not applicable for mobile devices');
+                    return;
+                }
+
                 const items = [
                     { id: '1', text: 'a', author: userFirst },
                     { id: '2', text: 'b', author: userSecond },
