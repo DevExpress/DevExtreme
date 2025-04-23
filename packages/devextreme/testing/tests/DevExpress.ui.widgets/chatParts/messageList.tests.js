@@ -1286,7 +1286,7 @@ QUnit.module('MessageList', () => {
             assert.strictEqual(this.contextMenu.option('visible'), false, 'context menu is hidden');
         });
 
-        QUnit.test('onMessageDeleting should be fired when the Edit button is clicked', function(assert) {
+        QUnit.test('onMessageDeleting should be fired when the Delete button is clicked', function(assert) {
             assert.expect(4);
             const items = [
                 { id: '1', text: 'a', author: userFirst },
