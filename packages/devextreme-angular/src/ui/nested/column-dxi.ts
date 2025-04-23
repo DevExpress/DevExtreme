@@ -24,8 +24,8 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxiColumnProperties } from './base/column-properties-dxi';
-import { DxiButtonComponent } from './button-dxi';
 import { DxiValidationRuleComponent } from './validation-rule-dxi';
+import { DxiButtonComponent } from './button-dxi';
 
 
 @Component({
@@ -34,73 +34,75 @@ import { DxiValidationRuleComponent } from './validation-rule-dxi';
     styles: [''],
     providers: [NestedOptionHost],
     inputs: [
-        'fieldCaptionTemplate',
-        'fieldTemplate',
-        'fieldValueTemplate',
-        'headerItemCssClass',
-        'headerItemTemplate',
         'alignment',
         'allowEditing',
-        'allowExporting',
         'allowFiltering',
-        'allowFixing',
-        'allowGrouping',
         'allowHeaderFiltering',
         'allowHiding',
         'allowReordering',
-        'allowResizing',
         'allowSearch',
         'allowSorting',
-        'autoExpandGroup',
-        'buttons',
-        'calculateCellValue',
         'calculateDisplayValue',
+        'calculateFieldValue',
         'calculateFilterExpression',
-        'calculateGroupValue',
         'calculateSortValue',
         'caption',
-        'cellTemplate',
-        'columns',
-        'cssClass',
         'customizeText',
         'dataField',
         'dataType',
-        'editCellTemplate',
         'editorOptions',
-        'encodeHtml',
         'falseText',
-        'filterOperations',
+        'fieldCaptionTemplate',
+        'fieldTemplate',
+        'fieldValueTemplate',
         'filterType',
         'filterValue',
         'filterValues',
-        'fixed',
-        'fixedPosition',
         'format',
         'formItem',
+        'headerFilter',
+        'headerItemCssClass',
+        'headerItemTemplate',
+        'name',
+        'setFieldValue',
+        'showInColumnChooser',
+        'sortIndex',
+        'sortingMethod',
+        'sortOrder',
+        'trueText',
+        'validationRules',
+        'visible',
+        'visibleIndex',
+        'allowExporting',
+        'allowFixing',
+        'allowGrouping',
+        'allowResizing',
+        'autoExpandGroup',
+        'buttons',
+        'calculateCellValue',
+        'calculateGroupValue',
+        'cellTemplate',
+        'columns',
+        'cssClass',
+        'editCellTemplate',
+        'encodeHtml',
+        'filterOperations',
+        'fixed',
+        'fixedPosition',
         'groupCellTemplate',
         'groupIndex',
         'headerCellTemplate',
-        'headerFilter',
         'hidingPriority',
         'isBand',
         'lookup',
         'minWidth',
-        'name',
         'ownerBand',
         'renderAsync',
         'selectedFilterOperation',
         'setCellValue',
         'showEditorAlways',
-        'showInColumnChooser',
         'showWhenGrouped',
-        'sortIndex',
-        'sortingMethod',
-        'sortOrder',
-        'trueText',
         'type',
-        'validationRules',
-        'visible',
-        'visibleIndex',
         'width'
     ]
 })
@@ -125,20 +127,6 @@ export class DxiColumnComponent extends DxiColumnProperties {
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() groupIndexChange: EventEmitter<number | undefined>;
-
-    /**
-    
-     * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
-     */
-    @Output() selectedFilterOperationChange: EventEmitter<SelectedFilterOperation | undefined>;
-
-    /**
-    
-     * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
-     */
     @Output() sortIndexChange: EventEmitter<number | undefined>;
 
     /**
@@ -146,7 +134,7 @@ export class DxiColumnComponent extends DxiColumnProperties {
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() sortOrderChange: EventEmitter<SortOrder | string | undefined>;
+    @Output() sortOrderChange: EventEmitter<SortOrder | undefined>;
 
     /**
     
@@ -161,10 +149,32 @@ export class DxiColumnComponent extends DxiColumnProperties {
     
      */
     @Output() visibleIndexChange: EventEmitter<number | undefined>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
+    @Output() groupIndexChange: EventEmitter<number | undefined>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
+    @Output() selectedFilterOperationChange: EventEmitter<SelectedFilterOperation | undefined>;
     protected get _optionPath() {
         return 'columns';
     }
 
+
+    @ContentChildren(forwardRef(() => DxiValidationRuleComponent))
+    get validationRulesChildren(): QueryList<DxiValidationRuleComponent> {
+        return this._getOption('validationRules');
+    }
+    set validationRulesChildren(value) {
+        this.setChildren('validationRules', value);
+    }
 
     @ContentChildren(forwardRef(() => DxiButtonComponent))
     get buttonsChildren(): QueryList<DxiButtonComponent> {
@@ -182,14 +192,6 @@ export class DxiColumnComponent extends DxiColumnProperties {
         this.setChildren('columns', value);
     }
 
-    @ContentChildren(forwardRef(() => DxiValidationRuleComponent))
-    get validationRulesChildren(): QueryList<DxiValidationRuleComponent> {
-        return this._getOption('validationRules');
-    }
-    set validationRulesChildren(value) {
-        this.setChildren('validationRules', value);
-    }
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
@@ -197,12 +199,12 @@ export class DxiColumnComponent extends DxiColumnProperties {
         this._createEventEmitters([
             { emit: 'filterValueChange' },
             { emit: 'filterValuesChange' },
-            { emit: 'groupIndexChange' },
-            { emit: 'selectedFilterOperationChange' },
             { emit: 'sortIndexChange' },
             { emit: 'sortOrderChange' },
             { emit: 'visibleChange' },
-            { emit: 'visibleIndexChange' }
+            { emit: 'visibleIndexChange' },
+            { emit: 'groupIndexChange' },
+            { emit: 'selectedFilterOperationChange' }
         ]);
 
         parentOptionHost.setNestedOption(this);

@@ -10477,26 +10477,6 @@ declare module DevExpress.ui {
       itemCssClass?: string;
     };
     /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-     */
-    type InheritedColumnProps =
-      | 'alignment'
-      | 'dataType'
-      | 'visible'
-      | 'visibleIndex'
-      | 'allowReordering'
-      | 'allowHiding'
-      | 'trueText'
-      | 'falseText'
-      | 'caption'
-      | 'dataField'
-      | 'sortOrder'
-      | 'sortIndex'
-      | 'name'
-      | 'calculateCellValue'
-      | 'calculateDisplayValue'
-      | 'customizeText';
-    /**
      * [descr:InitNewCardEvent]
      */
     export type InitNewCardEvent<TCardData = unknown> =
@@ -10524,19 +10504,6 @@ declare module DevExpress.ui {
       TCardData = unknown,
       TKey = unknown
     > = dxCardViewOptions<TCardData, TKey>;
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-     */
-    type RequiredColumnProps =
-      | 'alignment'
-      | 'dataType'
-      | 'visible'
-      | 'visibleIndex'
-      | 'allowReordering'
-      | 'allowHiding'
-      | 'trueText'
-      | 'falseText'
-      | 'caption';
     /**
      * [descr:SelectionChangedEvent]
      */
@@ -32911,18 +32878,173 @@ declare module DevExpress.ui.dxCardView {
   /**
    * [descr:Column]
    */
-  export type Column<TCardData = unknown, TKey = unknown> = Pick<
-    Required<ColumnProperties<TCardData, TKey>>,
-    RequiredColumnProps
-  > &
-    Omit<ColumnProperties, RequiredColumnProps>;
+  export type Column<TCardData = unknown, TKey = unknown> = ColumnProperties<
+    TCardData,
+    TKey
+  > & {
+    defaultCalculateFilterExpression: NonNullable<
+      ColumnProperties['calculateFilterExpression']
+    >;
+    defaultSetFieldValue: NonNullable<ColumnProperties['setFieldValue']>;
+    defaultCalculateFieldValue: NonNullable<
+      ColumnProperties['calculateFieldValue']
+    >;
+  };
   /**
    * [descr:ColumnProperties]
    */
-  export type ColumnProperties<TCardData = unknown, TKey = unknown> = Pick<
-    DevExpress.common.grids.ColumnBase<TCardData>,
-    InheritedColumnProps
-  > & {
+  export type ColumnProperties<TCardData = unknown, TKey = unknown> = {
+    /**
+     * [descr:ColumnProperties.alignment]
+     */
+    alignment?: DevExpress.common.HorizontalAlignment | undefined;
+    /**
+     * [descr:ColumnProperties.allowEditing]
+     */
+    allowEditing?: boolean;
+    /**
+     * [descr:ColumnProperties.allowFiltering]
+     */
+    allowFiltering?: boolean;
+    /**
+     * [descr:ColumnProperties.allowHeaderFiltering]
+     */
+    allowHeaderFiltering?: boolean;
+    /**
+     * [descr:ColumnProperties.allowHiding]
+     */
+    allowHiding?: boolean;
+    /**
+     * [descr:ColumnProperties.allowReordering]
+     */
+    allowReordering?: boolean;
+    /**
+     * [descr:ColumnProperties.allowSearch]
+     */
+    allowSearch?: boolean;
+    /**
+     * [descr:ColumnProperties.allowSorting]
+     */
+    allowSorting?: boolean;
+    /**
+     * [descr:ColumnProperties.calculateFieldValue]
+     */
+    calculateFieldValue?: (this: Column, cardData: TCardData) => any;
+    /**
+     * [descr:ColumnProperties.calculateDisplayValue]
+     */
+    calculateDisplayValue?: (this: Column, cardData: TCardData) => any;
+    /**
+     * [descr:ColumnProperties.calculateFilterExpression]
+     */
+    calculateFilterExpression?: (
+      this: Column,
+      filterValue: any,
+      selectedFilterOperation: string | null,
+      target: string
+    ) => string | Array<any> | Function;
+    /**
+     * [descr:ColumnProperties.calculateSortValue]
+     */
+    calculateSortValue?: string | ((this: Column, cardData: TCardData) => any);
+    /**
+     * [descr:ColumnProperties.caption]
+     */
+    caption?: string | undefined;
+    /**
+     * [descr:ColumnProperties.customizeText]
+     */
+    customizeText?: (
+      this: Column,
+      cellInfo: DevExpress.common.grids.ColumnCustomizeTextArg
+    ) => string;
+    /**
+     * [descr:ColumnProperties.dataField]
+     */
+    dataField?: string | undefined;
+    /**
+     * [descr:ColumnProperties.dataType]
+     */
+    dataType?: DevExpress.common.DataType | undefined;
+    /**
+     * [descr:ColumnProperties.editorOptions]
+     */
+    editorOptions?: any;
+    /**
+     * [descr:ColumnProperties.falseText]
+     */
+    falseText?: string;
+    /**
+     * [descr:ColumnProperties.filterType]
+     */
+    filterType?: DevExpress.common.grids.FilterType;
+    /**
+     * [descr:ColumnProperties.filterValue]
+     */
+    filterValue?: any | undefined;
+    /**
+     * [descr:ColumnProperties.filterValues]
+     */
+    filterValues?: Array<any>;
+    /**
+     * [descr:ColumnProperties.formItem]
+     */
+    formItem?: DevExpress.ui.dxForm.SimpleItem;
+    /**
+     * [descr:ColumnProperties.format]
+     */
+    format?: DevExpress.common.Format;
+    /**
+     * [descr:ColumnProperties.headerFilter]
+     */
+    headerFilter?: DevExpress.common.grids.ColumnHeaderFilter | undefined;
+    /**
+     * [descr:ColumnProperties.name]
+     */
+    name?: string | undefined;
+    /**
+     * [descr:ColumnProperties.setFieldValue]
+     */
+    setFieldValue?: (
+      this: Column,
+      newData: DevExpress.core.DeepPartial<TCardData>,
+      value: any,
+      currentCardData: TCardData
+    ) => void | PromiseLike<void>;
+    /**
+     * [descr:ColumnProperties.showInColumnChooser]
+     */
+    showInColumnChooser?: boolean;
+    /**
+     * [descr:ColumnProperties.sortIndex]
+     */
+    sortIndex?: number | undefined;
+    /**
+     * [descr:ColumnProperties.sortOrder]
+     */
+    sortOrder?: DevExpress.common.SortOrder | undefined;
+    /**
+     * [descr:ColumnProperties.sortingMethod]
+     */
+    sortingMethod?:
+      | ((this: Column, value1: any, value2: any) => number)
+      | undefined;
+    /**
+     * [descr:ColumnProperties.trueText]
+     */
+    trueText?: string;
+    /**
+     * [descr:ColumnProperties.validationRules]
+     */
+    validationRules?: Array<DevExpress.common.ValidationRule>;
+    /**
+     * [descr:ColumnProperties.visible]
+     */
+    visible?: boolean;
+    /**
+     * [descr:ColumnProperties.visibleIndex]
+     */
+    visibleIndex?: number | undefined;
     /**
      * [descr:ColumnProperties.fieldTemplate]
      */

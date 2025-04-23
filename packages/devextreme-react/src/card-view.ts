@@ -10,17 +10,22 @@ import { Component as BaseComponent, IHtmlOptions, ComponentRef, NestedComponent
 import NestedOption from "./core/nested-option";
 
 import type { AnimationConfig, CollisionResolution, PositionConfig, AnimationState, AnimationType, CollisionResolutionCombination } from "devextreme/common/core/animation";
-import type { HorizontalAlignment, VerticalAlignment, template, ToolbarItemLocation, ToolbarItemComponent, DataType, Format as CommonFormat, Direction, PositionAlignment, Mode, DisplayMode, SingleMultipleOrNone, SelectAllMode } from "devextreme/common";
+import type { ValidationRuleType, HorizontalAlignment, VerticalAlignment, template, ToolbarItemLocation, ToolbarItemComponent, DataType, Format as CommonFormat, SortOrder, ComparisonOperator, Direction, PositionAlignment, Mode, DisplayMode, SingleMultipleOrNone, SelectAllMode } from "devextreme/common";
 import type { CardInfo, CardHeaderPredefinedToolbarItem, CardHeaderToolbarItem, FieldInfoType, Column as CardViewColumn, PredefinedToolbarItem, ToolbarItem as CardViewToolbarItem } from "devextreme/ui/card_view";
 import type { LocateInMenuMode, ShowTextMode } from "devextreme/ui/toolbar";
 import type { CollectionWidgetItem } from "devextreme/ui/collection/ui.collection_widget.base";
-import type { DataChangeType, DataChange, PagerPageSize, SelectionColumnDisplayMode } from "devextreme/common/grids";
-import type { dxFilterBuilderField, FieldInfo, FilterBuilderOperation, dxFilterBuilderCustomOperation, GroupOperation, ContentReadyEvent, DisposingEvent, EditorPreparedEvent, EditorPreparingEvent, InitializedEvent, OptionChangedEvent, ValueChangedEvent } from "devextreme/ui/filter_builder";
+import type { DataChangeType, FilterType, DataChange, PagerPageSize, SelectionColumnDisplayMode } from "devextreme/common/grids";
 import type { Format as LocalizationFormat } from "devextreme/common/core/localization";
+import type { dxFormSimpleItem, FormItemComponent, FormItemType, LabelLocation } from "devextreme/ui/form";
+import type { dxFilterBuilderField, FieldInfo, FilterBuilderOperation, dxFilterBuilderCustomOperation, GroupOperation, ContentReadyEvent, DisposingEvent, EditorPreparedEvent, EditorPreparingEvent, InitializedEvent, OptionChangedEvent, ValueChangedEvent } from "devextreme/ui/filter_builder";
 import type { DataSourceOptions } from "devextreme/data/data_source";
 import type { Store } from "devextreme/data/store";
 import type { ContentReadyEvent as LoadPanelContentReadyEvent, DisposingEvent as LoadPanelDisposingEvent, InitializedEvent as LoadPanelInitializedEvent, OptionChangedEvent as LoadPanelOptionChangedEvent, HiddenEvent, HidingEvent, ShowingEvent, ShownEvent } from "devextreme/ui/load_panel";
 import type { event } from "devextreme/events/events.types";
+
+import type dxForm from "devextreme/ui/form";
+
+import type * as CommonTypes from "devextreme/common";
 
 type ICardViewOptions<TCardData = any, TKey = any> = React.PropsWithChildren<Properties<TCardData, TKey> & IHtmlOptions & {
   dataSource?: Properties<TCardData, TKey>["dataSource"];
@@ -138,6 +143,33 @@ const _componentAnimation = (props: IAnimationProps) => {
 };
 
 const Animation = Object.assign<typeof _componentAnimation, NestedComponentMeta>(_componentAnimation, {
+  componentType: "option",
+});
+
+// owners:
+// FormItem
+// Column
+type IAsyncRuleProps = React.PropsWithChildren<{
+  ignoreEmptyValue?: boolean;
+  message?: string;
+  reevaluate?: boolean;
+  type?: ValidationRuleType;
+  validationCallback?: ((options: { column: Record<string, any>, data: Record<string, any>, formItem: Record<string, any>, rule: Record<string, any>, validator: Record<string, any>, value: string | number }) => any);
+}>
+const _componentAsyncRule = (props: IAsyncRuleProps) => {
+  return React.createElement(NestedOption<IAsyncRuleProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "validationRules",
+      IsCollectionItem: true,
+      PredefinedProps: {
+        type: "async"
+      },
+    },
+  });
+};
+
+const AsyncRule = Object.assign<typeof _componentAsyncRule, NestedComponentMeta>(_componentAsyncRule, {
   componentType: "option",
 });
 
@@ -328,11 +360,57 @@ const Collision = Object.assign<typeof _componentCollision, NestedComponentMeta>
 // owners:
 // CardView
 type IColumnProps = React.PropsWithChildren<{
+  alignment?: HorizontalAlignment | undefined;
+  allowEditing?: boolean;
+  allowFiltering?: boolean;
+  allowHeaderFiltering?: boolean;
+  allowHiding?: boolean;
+  allowReordering?: boolean;
+  allowSearch?: boolean;
+  allowSorting?: boolean;
+  calculateDisplayValue?: ((cardData: any) => any);
+  calculateFieldValue?: ((cardData: any) => any);
+  calculateFilterExpression?: ((filterValue: any, selectedFilterOperation: string | null, target: string) => string | Array<any> | (() => void));
+  calculateSortValue?: ((cardData: any) => any) | string;
+  caption?: string | undefined;
+  customizeText?: ((cellInfo: { groupInterval: string | number, target: string, value: any, valueText: string }) => string);
+  dataField?: string | undefined;
+  dataType?: DataType | undefined;
+  editorOptions?: any;
+  falseText?: string;
   fieldCaptionTemplate?: ((card: FieldInfoType, container: any) => string | any) | template;
   fieldTemplate?: ((card: FieldInfoType, container: any) => string | any) | template;
   fieldValueTemplate?: ((card: FieldInfoType, container: any) => string | any) | template;
+  filterType?: FilterType;
+  filterValue?: any | undefined;
+  filterValues?: Array<any>;
+  format?: CommonFormat;
+  formItem?: dxFormSimpleItem;
+  headerFilter?: Record<string, any>;
   headerItemCssClass?: string;
   headerItemTemplate?: ((column: CardViewColumn, container: any) => string | any) | template;
+  name?: string | undefined;
+  setFieldValue?: ((newData: any, value: any, currentCardData: any) => any);
+  showInColumnChooser?: boolean;
+  sortIndex?: number | undefined;
+  sortingMethod?: ((value1: any, value2: any) => number) | undefined;
+  sortOrder?: SortOrder | undefined;
+  trueText?: string;
+  validationRules?: Array<CommonTypes.ValidationRule>;
+  visible?: boolean;
+  visibleIndex?: number | undefined;
+  defaultFilterValue?: any | undefined;
+  onFilterValueChange?: (value: any | undefined) => void;
+  defaultFilterValues?: Array<any>;
+  onFilterValuesChange?: (value: Array<any>) => void;
+  defaultSortIndex?: number | undefined;
+  onSortIndexChange?: (value: number | undefined) => void;
+  defaultSortOrder?: SortOrder | undefined;
+  onSortOrderChange?: (value: SortOrder | undefined) => void;
+  defaultVisible?: boolean;
+  onVisibleChange?: (value: boolean) => void;
+  defaultVisibleIndex?: number | undefined;
+  onVisibleIndexChange?: (value: number | undefined) => void;
   fieldCaptionRender?: (...params: any) => React.ReactNode;
   fieldCaptionComponent?: React.ComponentType<any>;
   fieldRender?: (...params: any) => React.ReactNode;
@@ -348,6 +426,27 @@ const _componentColumn = (props: IColumnProps) => {
     elementDescriptor: {
       OptionName: "columns",
       IsCollectionItem: true,
+      DefaultsProps: {
+        defaultFilterValue: "filterValue",
+        defaultFilterValues: "filterValues",
+        defaultSortIndex: "sortIndex",
+        defaultSortOrder: "sortOrder",
+        defaultVisible: "visible",
+        defaultVisibleIndex: "visibleIndex"
+      },
+      ExpectedChildren: {
+        AsyncRule: { optionName: "validationRules", isCollectionItem: true },
+        CompareRule: { optionName: "validationRules", isCollectionItem: true },
+        CustomRule: { optionName: "validationRules", isCollectionItem: true },
+        EmailRule: { optionName: "validationRules", isCollectionItem: true },
+        formItem: { optionName: "formItem", isCollectionItem: false },
+        NumericRule: { optionName: "validationRules", isCollectionItem: true },
+        PatternRule: { optionName: "validationRules", isCollectionItem: true },
+        RangeRule: { optionName: "validationRules", isCollectionItem: true },
+        RequiredRule: { optionName: "validationRules", isCollectionItem: true },
+        StringLengthRule: { optionName: "validationRules", isCollectionItem: true },
+        validationRule: { optionName: "validationRules", isCollectionItem: true }
+      },
       TemplateProps: [{
         tmplOption: "fieldCaptionTemplate",
         render: "fieldCaptionRender",
@@ -370,6 +469,33 @@ const _componentColumn = (props: IColumnProps) => {
 };
 
 const Column = Object.assign<typeof _componentColumn, NestedComponentMeta>(_componentColumn, {
+  componentType: "option",
+});
+
+// owners:
+// FormItem
+// Column
+type ICompareRuleProps = React.PropsWithChildren<{
+  comparisonTarget?: (() => any);
+  comparisonType?: ComparisonOperator;
+  ignoreEmptyValue?: boolean;
+  message?: string;
+  type?: ValidationRuleType;
+}>
+const _componentCompareRule = (props: ICompareRuleProps) => {
+  return React.createElement(NestedOption<ICompareRuleProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "validationRules",
+      IsCollectionItem: true,
+      PredefinedProps: {
+        type: "compare"
+      },
+    },
+  });
+};
+
+const CompareRule = Object.assign<typeof _componentCompareRule, NestedComponentMeta>(_componentCompareRule, {
   componentType: "option",
 });
 
@@ -407,6 +533,33 @@ const CustomOperation = Object.assign<typeof _componentCustomOperation, NestedCo
 });
 
 // owners:
+// FormItem
+// Column
+type ICustomRuleProps = React.PropsWithChildren<{
+  ignoreEmptyValue?: boolean;
+  message?: string;
+  reevaluate?: boolean;
+  type?: ValidationRuleType;
+  validationCallback?: ((options: { column: Record<string, any>, data: Record<string, any>, formItem: Record<string, any>, rule: Record<string, any>, validator: Record<string, any>, value: string | number }) => boolean);
+}>
+const _componentCustomRule = (props: ICustomRuleProps) => {
+  return React.createElement(NestedOption<ICustomRuleProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "validationRules",
+      IsCollectionItem: true,
+      PredefinedProps: {
+        type: "custom"
+      },
+    },
+  });
+};
+
+const CustomRule = Object.assign<typeof _componentCustomRule, NestedComponentMeta>(_componentCustomRule, {
+  componentType: "option",
+});
+
+// owners:
 // CardView
 type IEditingProps = React.PropsWithChildren<{
   allowAdding?: boolean;
@@ -431,6 +584,31 @@ const _componentEditing = (props: IEditingProps) => {
 };
 
 const Editing = Object.assign<typeof _componentEditing, NestedComponentMeta>(_componentEditing, {
+  componentType: "option",
+});
+
+// owners:
+// FormItem
+// Column
+type IEmailRuleProps = React.PropsWithChildren<{
+  ignoreEmptyValue?: boolean;
+  message?: string;
+  type?: ValidationRuleType;
+}>
+const _componentEmailRule = (props: IEmailRuleProps) => {
+  return React.createElement(NestedOption<IEmailRuleProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "validationRules",
+      IsCollectionItem: true,
+      PredefinedProps: {
+        type: "email"
+      },
+    },
+  });
+};
+
+const EmailRule = Object.assign<typeof _componentEmailRule, NestedComponentMeta>(_componentEmailRule, {
   componentType: "option",
 });
 
@@ -610,6 +788,64 @@ const Format = Object.assign<typeof _componentFormat, NestedComponentMeta>(_comp
 });
 
 // owners:
+// Column
+type IFormItemProps = React.PropsWithChildren<{
+  colSpan?: number | undefined;
+  cssClass?: string | undefined;
+  dataField?: string | undefined;
+  editorOptions?: any | undefined;
+  editorType?: FormItemComponent;
+  helpText?: string | undefined;
+  isRequired?: boolean | undefined;
+  itemType?: FormItemType;
+  label?: Record<string, any> | {
+    alignment?: HorizontalAlignment;
+    location?: LabelLocation;
+    showColon?: boolean;
+    template?: ((itemData: { component: dxForm, dataField: string, editorOptions: any, editorType: string, name: string, text: string }, itemElement: any) => string | any) | template;
+    text?: string | undefined;
+    visible?: boolean;
+  };
+  name?: string | undefined;
+  template?: ((data: { component: dxForm, dataField: string, editorOptions: Record<string, any>, editorType: string, name: string }, itemElement: any) => string | any) | template;
+  validationRules?: Array<CommonTypes.ValidationRule>;
+  visible?: boolean;
+  visibleIndex?: number | undefined;
+  render?: (...params: any) => React.ReactNode;
+  component?: React.ComponentType<any>;
+}>
+const _componentFormItem = (props: IFormItemProps) => {
+  return React.createElement(NestedOption<IFormItemProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "formItem",
+      ExpectedChildren: {
+        AsyncRule: { optionName: "validationRules", isCollectionItem: true },
+        CompareRule: { optionName: "validationRules", isCollectionItem: true },
+        CustomRule: { optionName: "validationRules", isCollectionItem: true },
+        EmailRule: { optionName: "validationRules", isCollectionItem: true },
+        label: { optionName: "label", isCollectionItem: false },
+        NumericRule: { optionName: "validationRules", isCollectionItem: true },
+        PatternRule: { optionName: "validationRules", isCollectionItem: true },
+        RangeRule: { optionName: "validationRules", isCollectionItem: true },
+        RequiredRule: { optionName: "validationRules", isCollectionItem: true },
+        StringLengthRule: { optionName: "validationRules", isCollectionItem: true },
+        validationRule: { optionName: "validationRules", isCollectionItem: true }
+      },
+      TemplateProps: [{
+        tmplOption: "template",
+        render: "render",
+        component: "component"
+      }],
+    },
+  });
+};
+
+const FormItem = Object.assign<typeof _componentFormItem, NestedComponentMeta>(_componentFormItem, {
+  componentType: "option",
+});
+
+// owners:
 // Hide
 // Show
 type IFromProps = React.PropsWithChildren<{
@@ -761,6 +997,36 @@ const Item = Object.assign<typeof _componentItem, NestedComponentMeta>(_componen
 });
 
 // owners:
+// FormItem
+type ILabelProps = React.PropsWithChildren<{
+  alignment?: HorizontalAlignment;
+  location?: LabelLocation;
+  showColon?: boolean;
+  template?: ((itemData: { component: dxForm, dataField: string, editorOptions: any, editorType: string, name: string, text: string }, itemElement: any) => string | any) | template;
+  text?: string | undefined;
+  visible?: boolean;
+  render?: (...params: any) => React.ReactNode;
+  component?: React.ComponentType<any>;
+}>
+const _componentLabel = (props: ILabelProps) => {
+  return React.createElement(NestedOption<ILabelProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "label",
+      TemplateProps: [{
+        tmplOption: "template",
+        render: "render",
+        component: "component"
+      }],
+    },
+  });
+};
+
+const Label = Object.assign<typeof _componentLabel, NestedComponentMeta>(_componentLabel, {
+  componentType: "option",
+});
+
+// owners:
 // CardView
 type ILoadPanelProps = React.PropsWithChildren<{
   animation?: Record<string, any> | {
@@ -868,6 +1134,31 @@ const My = Object.assign<typeof _componentMy, NestedComponentMeta>(_componentMy,
 });
 
 // owners:
+// FormItem
+// Column
+type INumericRuleProps = React.PropsWithChildren<{
+  ignoreEmptyValue?: boolean;
+  message?: string;
+  type?: ValidationRuleType;
+}>
+const _componentNumericRule = (props: INumericRuleProps) => {
+  return React.createElement(NestedOption<INumericRuleProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "validationRules",
+      IsCollectionItem: true,
+      PredefinedProps: {
+        type: "numeric"
+      },
+    },
+  });
+};
+
+const NumericRule = Object.assign<typeof _componentNumericRule, NestedComponentMeta>(_componentNumericRule, {
+  componentType: "option",
+});
+
+// owners:
 // Position
 type IOffsetProps = React.PropsWithChildren<{
   x?: number;
@@ -940,6 +1231,32 @@ const Paging = Object.assign<typeof _componentPaging, NestedComponentMeta>(_comp
 });
 
 // owners:
+// FormItem
+// Column
+type IPatternRuleProps = React.PropsWithChildren<{
+  ignoreEmptyValue?: boolean;
+  message?: string;
+  pattern?: RegExp | string;
+  type?: ValidationRuleType;
+}>
+const _componentPatternRule = (props: IPatternRuleProps) => {
+  return React.createElement(NestedOption<IPatternRuleProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "validationRules",
+      IsCollectionItem: true,
+      PredefinedProps: {
+        type: "pattern"
+      },
+    },
+  });
+};
+
+const PatternRule = Object.assign<typeof _componentPatternRule, NestedComponentMeta>(_componentPatternRule, {
+  componentType: "option",
+});
+
+// owners:
 // From
 // To
 // LoadPanel
@@ -988,6 +1305,34 @@ const Position = Object.assign<typeof _componentPosition, NestedComponentMeta>(_
 });
 
 // owners:
+// FormItem
+// Column
+type IRangeRuleProps = React.PropsWithChildren<{
+  ignoreEmptyValue?: boolean;
+  max?: Date | number | string;
+  message?: string;
+  min?: Date | number | string;
+  reevaluate?: boolean;
+  type?: ValidationRuleType;
+}>
+const _componentRangeRule = (props: IRangeRuleProps) => {
+  return React.createElement(NestedOption<IRangeRuleProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "validationRules",
+      IsCollectionItem: true,
+      PredefinedProps: {
+        type: "range"
+      },
+    },
+  });
+};
+
+const RangeRule = Object.assign<typeof _componentRangeRule, NestedComponentMeta>(_componentRangeRule, {
+  componentType: "option",
+});
+
+// owners:
 // CardView
 type IRemoteOperationsProps = React.PropsWithChildren<{
   filtering?: boolean;
@@ -1005,6 +1350,31 @@ const _componentRemoteOperations = (props: IRemoteOperationsProps) => {
 };
 
 const RemoteOperations = Object.assign<typeof _componentRemoteOperations, NestedComponentMeta>(_componentRemoteOperations, {
+  componentType: "option",
+});
+
+// owners:
+// FormItem
+// Column
+type IRequiredRuleProps = React.PropsWithChildren<{
+  message?: string;
+  trim?: boolean;
+  type?: ValidationRuleType;
+}>
+const _componentRequiredRule = (props: IRequiredRuleProps) => {
+  return React.createElement(NestedOption<IRequiredRuleProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "validationRules",
+      IsCollectionItem: true,
+      PredefinedProps: {
+        type: "required"
+      },
+    },
+  });
+};
+
+const RequiredRule = Object.assign<typeof _componentRequiredRule, NestedComponentMeta>(_componentRequiredRule, {
   componentType: "option",
 });
 
@@ -1057,6 +1427,34 @@ const _componentShow = (props: IShowProps) => {
 };
 
 const Show = Object.assign<typeof _componentShow, NestedComponentMeta>(_componentShow, {
+  componentType: "option",
+});
+
+// owners:
+// FormItem
+// Column
+type IStringLengthRuleProps = React.PropsWithChildren<{
+  ignoreEmptyValue?: boolean;
+  max?: number;
+  message?: string;
+  min?: number;
+  trim?: boolean;
+  type?: ValidationRuleType;
+}>
+const _componentStringLengthRule = (props: IStringLengthRuleProps) => {
+  return React.createElement(NestedOption<IStringLengthRuleProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "validationRules",
+      IsCollectionItem: true,
+      PredefinedProps: {
+        type: "stringLength"
+      },
+    },
+  });
+};
+
+const StringLengthRule = Object.assign<typeof _componentStringLengthRule, NestedComponentMeta>(_componentStringLengthRule, {
   componentType: "option",
 });
 
@@ -1152,6 +1550,39 @@ const ToolbarItem = Object.assign<typeof _componentToolbarItem, NestedComponentM
   componentType: "option",
 });
 
+// owners:
+// FormItem
+// Column
+type IValidationRuleProps = React.PropsWithChildren<{
+  message?: string;
+  trim?: boolean;
+  type?: ValidationRuleType;
+  ignoreEmptyValue?: boolean;
+  max?: Date | number | string;
+  min?: Date | number | string;
+  reevaluate?: boolean;
+  validationCallback?: ((options: { column: Record<string, any>, data: Record<string, any>, formItem: Record<string, any>, rule: Record<string, any>, validator: Record<string, any>, value: string | number }) => boolean);
+  comparisonTarget?: (() => any);
+  comparisonType?: ComparisonOperator;
+  pattern?: RegExp | string;
+}>
+const _componentValidationRule = (props: IValidationRuleProps) => {
+  return React.createElement(NestedOption<IValidationRuleProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "validationRules",
+      IsCollectionItem: true,
+      PredefinedProps: {
+        type: "required"
+      },
+    },
+  });
+};
+
+const ValidationRule = Object.assign<typeof _componentValidationRule, NestedComponentMeta>(_componentValidationRule, {
+  componentType: "option",
+});
+
 export default CardView;
 export {
   CardView,
@@ -1159,6 +1590,8 @@ export {
   CardViewRef,
   Animation,
   IAnimationProps,
+  AsyncRule,
+  IAsyncRuleProps,
   At,
   IAtProps,
   BoundaryOffset,
@@ -1175,10 +1608,16 @@ export {
   ICollisionProps,
   Column,
   IColumnProps,
+  CompareRule,
+  ICompareRuleProps,
   CustomOperation,
   ICustomOperationProps,
+  CustomRule,
+  ICustomRuleProps,
   Editing,
   IEditingProps,
+  EmailRule,
+  IEmailRuleProps,
   Field,
   IFieldProps,
   FilterBuilder,
@@ -1187,6 +1626,8 @@ export {
   IFilterOperationDescriptionsProps,
   Format,
   IFormatProps,
+  FormItem,
+  IFormItemProps,
   From,
   IFromProps,
   GroupOperationDescriptions,
@@ -1197,32 +1638,46 @@ export {
   IHideProps,
   Item,
   IItemProps,
+  Label,
+  ILabelProps,
   LoadPanel,
   ILoadPanelProps,
   Lookup,
   ILookupProps,
   My,
   IMyProps,
+  NumericRule,
+  INumericRuleProps,
   Offset,
   IOffsetProps,
   Pager,
   IPagerProps,
   Paging,
   IPagingProps,
+  PatternRule,
+  IPatternRuleProps,
   Position,
   IPositionProps,
+  RangeRule,
+  IRangeRuleProps,
   RemoteOperations,
   IRemoteOperationsProps,
+  RequiredRule,
+  IRequiredRuleProps,
   Selection,
   ISelectionProps,
   Show,
   IShowProps,
+  StringLengthRule,
+  IStringLengthRuleProps,
   To,
   IToProps,
   Toolbar,
   IToolbarProps,
   ToolbarItem,
-  IToolbarItemProps
+  IToolbarItemProps,
+  ValidationRule,
+  IValidationRuleProps
 };
 import type * as CardViewTypes from 'devextreme/ui/card_view_types';
 export { CardViewTypes };

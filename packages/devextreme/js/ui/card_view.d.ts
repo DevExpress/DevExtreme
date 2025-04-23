@@ -1,10 +1,13 @@
 import { DeepPartial } from '../core';
 import {
- Mode, SelectAllMode, SingleMultipleOrNone, template,
+    DataType,
+    Format,
+    HorizontalAlignment,
+ Mode, SelectAllMode, SingleMultipleOrNone, SortOrder, template, ValidationRule,
 } from '../common';
 import { UserDefinedElement, DxElement } from '../core/element';
 import {
- ColumnBase, ColumnChooser, DataChange, DataErrorOccurredInfo, FilterPanel, HeaderFilter, Pager, ScrollingBase, SearchPanel, SelectionColumnDisplayMode, Sorting,
+ ColumnChooser, ColumnCustomizeTextArg, ColumnHeaderFilter, DataChange, DataErrorOccurredInfo, FilterPanel, FilterType, HeaderFilter, Pager, ScrollingBase, SearchPanel, SelectionColumnDisplayMode, Sorting,
 } from '../common/grids';
 import DataSource, { DataSourceLike } from '../data/data_source';
 import Widget, { WidgetOptions } from './widget/ui.widget';
@@ -17,7 +20,7 @@ import {
     Properties as PopupProperties,
   } from './popup';
 import {
-    Properties as FormProperties,
+    Properties as FormProperties, SimpleItem,
   } from './form';
 import { dxFilterBuilderOptions } from './filter_builder';
 
@@ -207,32 +210,211 @@ export type CardInfo<TCardData = unknown, TKey = unknown> = { // TODO: sync to i
     values: any[];
 };
 
-type InheritedColumnProps =
-  | 'alignment'
-  | 'dataType'
-  | 'visible'
-  | 'visibleIndex'
-  | 'allowReordering'
-  | 'allowHiding'
-  | 'trueText'
-  | 'falseText'
-  | 'caption'
-  | 'dataField'
-  | 'sortOrder'
-  | 'sortIndex'
-  | 'name'
-  | 'calculateCellValue' // TODO: move
-  | 'calculateDisplayValue'
-  | 'customizeText'
-  ;
-
 /**
  * @docid
  * @public
  * @namespace DevExpress.ui.dxCardView
- * @type object
  */
-export type ColumnProperties<TCardData = unknown, TKey = unknown> = Pick<ColumnBase<TCardData>, InheritedColumnProps> & {
+export type ColumnProperties<TCardData = unknown, TKey = unknown> = {
+    /**
+     * @docid
+     * @public
+     */
+    alignment?: HorizontalAlignment | undefined;
+    /**
+     * @docid
+     * @default true
+     * @public
+     */
+    allowEditing?: boolean;
+    /**
+     * @docid
+     * @default true
+     * @public
+     */
+    allowFiltering?: boolean;
+    /**
+     * @docid
+     * @default true
+     * @public
+     */
+    allowHeaderFiltering?: boolean;
+    /**
+     * @docid
+     * @default true
+     * @public
+     */
+    allowHiding?: boolean;
+    /**
+     * @docid
+     * @default true
+     * @public
+     */
+    allowReordering?: boolean;
+    /**
+     * @docid
+     * @default true
+     * @public
+     */
+    allowSearch?: boolean;
+    /**
+     * @docid
+     * @default true
+     * @public
+     */
+    allowSorting?: boolean;
+    /**
+     * @docid
+     * @type_function_param1 cardData:object
+     * @public
+     */
+    calculateFieldValue?: ((this: Column, cardData: TCardData) => any);
+    /**
+     * @docid
+     * @type_function_param1 cardData:object
+     * @public
+     */
+    calculateDisplayValue?: ((this: Column, cardData: TCardData) => any);
+    /**
+     * @docid
+     * @public
+     */
+    calculateFilterExpression?: ((this: Column, filterValue: any, selectedFilterOperation: string | null, target: string) => string | Array<any> | Function);
+    /**
+     * @docid
+     * @type_function_param1 cardData:object
+     * @public
+     */
+    calculateSortValue?: string | ((this: Column, cardData: TCardData) => any);
+    /**
+     * @docid
+     * @public
+     */
+    caption?: string | undefined;
+    /**
+     * @docid
+     * @public
+     */
+    customizeText?: ((this: Column, cellInfo: ColumnCustomizeTextArg) => string);
+    /**
+     * @docid
+     * @public
+     */
+    dataField?: string | undefined;
+    /**
+     * @docid
+     * @public
+     */
+    dataType?: DataType | undefined;
+    /**
+     * @docid
+     * @public
+     */
+    editorOptions?: any;
+    /**
+     * @docid
+     * @default "false"
+     * @public
+     */
+    falseText?: string;
+    /**
+     * @docid
+     * @default "include"
+     * @public
+     */
+    filterType?: FilterType;
+    /**
+     * @docid
+     * @default undefined
+     * @fires dxCardViewOptions.onOptionChanged
+     * @public
+     */
+    filterValue?: any | undefined;
+    /**
+     * @docid
+     * @fires dxCardViewOptions.onOptionChanged
+     * @public
+     */
+    filterValues?: Array<any>;
+    /**
+     * @docid
+     * @type dxFormSimpleItem
+     * @public
+     */
+    formItem?: SimpleItem; // TODO: sync with impl
+    /**
+     * @docid
+     * @default ""
+     * @public
+     */
+    format?: Format;
+    /**
+     * @docid
+     * @type object
+     * @public
+     */
+    headerFilter?: ColumnHeaderFilter | undefined;
+    /**
+     * @docid
+     * @public
+     */
+    name?: string | undefined;
+    /**
+     * @docid
+     * @public
+     * @type_function_param1 newData:object
+     * @type_function_param3 currentCardData:object
+     * @type_function_return void|Promise<void>
+     */
+    setFieldValue?: ((this: Column, newData: DeepPartial<TCardData>, value: any, currentCardData: TCardData) => void | PromiseLike<void>);
+    /**
+     * @docid
+     * @default true
+     * @public
+     */
+    showInColumnChooser?: boolean;
+    /**
+     * @docid
+     * @fires dxCardViewOptions.onOptionChanged
+     * @public
+     */
+    sortIndex?: number | undefined;
+    /**
+     * @docid
+     * @fires dxCardViewOptions.onOptionChanged
+     * @public
+     */
+    sortOrder?: SortOrder | undefined;
+    /**
+     * @docid
+     * @public
+     */
+    sortingMethod?: ((this: Column, value1: any, value2: any) => number) | undefined;
+    /**
+     * @docid
+     * @default "true"
+     * @public
+     */
+    trueText?: string;
+    /**
+     * @docid
+     * @type Array<RequiredRule | NumericRule | RangeRule | StringLengthRule | CustomRule | CompareRule | PatternRule | EmailRule | AsyncRule>
+     * @public
+     */
+    validationRules?: Array<ValidationRule>;
+    /**
+     * @docid
+     * @default true
+     * @fires dxCardViewOptions.onOptionChanged
+     * @public
+     */
+    visible?: boolean;
+    /**
+     * @docid
+     * @fires dxCardViewOptions.onOptionChanged
+     * @public
+     */
+    visibleIndex?: number | undefined;
     /**
      * @public
      * @docid
@@ -260,17 +442,26 @@ export type ColumnProperties<TCardData = unknown, TKey = unknown> = Pick<ColumnB
     headerItemCssClass?: string;
 };
 
-type RequiredColumnProps = 'alignment' | 'dataType' | 'visible' | 'visibleIndex' | 'allowReordering' | 'allowHiding' | 'trueText' | 'falseText' | 'caption';
-
 /**
  * @docid
  * @public
  * @type object
  * @namespace DevExpress.ui.dxCardView
  */
-export type Column<TCardData = unknown, TKey = unknown> =
-    Pick<Required<ColumnProperties<TCardData, TKey>>, RequiredColumnProps>
-    & Omit<ColumnProperties, RequiredColumnProps>;
+export type Column<TCardData = unknown, TKey = unknown> = ColumnProperties<TCardData, TKey> & {
+    /**
+     * @public
+    */
+    defaultCalculateFilterExpression: NonNullable<ColumnProperties['calculateFilterExpression']>;
+    /**
+     * @public
+    */
+    defaultSetFieldValue: NonNullable<ColumnProperties['setFieldValue']>;
+    /**
+     * @public
+    */
+    defaultCalculateFieldValue: NonNullable<ColumnProperties['calculateFieldValue']>;
+};
 
 // #endregion
 
@@ -1323,7 +1514,7 @@ export interface dxCardViewOptions<TCardData = unknown, TKey = unknown> extends 
 
     /**
      * @docid
-     * @fires GridBaseOptions.onSelectionChanged
+     * @fires dxCardViewOptions.onSelectionChanged
      * @public
      */
     selectedCardKeys?: Array<TKey>;

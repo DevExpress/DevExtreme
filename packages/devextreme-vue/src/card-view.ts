@@ -51,12 +51,15 @@ import {
 } from "devextreme/ui/card_view";
 import {
  Mode,
+ ValidationRuleType,
  HorizontalAlignment,
  VerticalAlignment,
  ToolbarItemLocation,
  ToolbarItemComponent,
  DataType,
- Format as CommonFormat,
+ Format,
+ SortOrder,
+ ComparisonOperator,
  Direction,
  PositionAlignment,
  DisplayMode,
@@ -104,6 +107,7 @@ import {
 import {
  Pager,
  DataChangeType,
+ FilterType,
  DataChange,
  PagerPageSize,
  SelectionColumnDisplayMode,
@@ -124,11 +128,18 @@ import {
  ShowTextMode,
 } from "devextreme/ui/toolbar";
 import {
- Format,
+ dxFormSimpleItem,
+ FormItemComponent,
+ FormItemType,
+ LabelLocation,
+} from "devextreme/ui/form";
+import {
+ Format as LocalizationFormat,
 } from "devextreme/common/core/localization";
 import {
  event,
 } from "devextreme/events/events.types";
+import  * as CommonTypes from "devextreme/common";
 import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
@@ -438,6 +449,35 @@ const DxAnimation = defineComponent(DxAnimationConfig);
   show: { isCollectionItem: false, optionName: "show" }
 };
 
+const DxAsyncRuleConfig = {
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:ignoreEmptyValue": null,
+    "update:message": null,
+    "update:reevaluate": null,
+    "update:type": null,
+    "update:validationCallback": null,
+  },
+  props: {
+    ignoreEmptyValue: Boolean,
+    message: String,
+    reevaluate: Boolean,
+    type: String as PropType<ValidationRuleType>,
+    validationCallback: Function as PropType<((options: { column: Record<string, any>, data: Record<string, any>, formItem: Record<string, any>, rule: Record<string, any>, validator: Record<string, any>, value: string | number }) => any)>
+  }
+};
+
+prepareConfigurationComponentConfig(DxAsyncRuleConfig);
+
+const DxAsyncRule = defineComponent(DxAsyncRuleConfig);
+
+(DxAsyncRule as any).$_optionName = "validationRules";
+(DxAsyncRule as any).$_isCollectionItem = true;
+(DxAsyncRule as any).$_predefinedProps = {
+  type: "async"
+};
+
 const DxAtConfig = {
   emits: {
     "update:isActive": null,
@@ -615,18 +655,86 @@ const DxColumnConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
+    "update:alignment": null,
+    "update:allowEditing": null,
+    "update:allowFiltering": null,
+    "update:allowHeaderFiltering": null,
+    "update:allowHiding": null,
+    "update:allowReordering": null,
+    "update:allowSearch": null,
+    "update:allowSorting": null,
+    "update:calculateDisplayValue": null,
+    "update:calculateFieldValue": null,
+    "update:calculateFilterExpression": null,
+    "update:calculateSortValue": null,
+    "update:caption": null,
+    "update:customizeText": null,
+    "update:dataField": null,
+    "update:dataType": null,
+    "update:editorOptions": null,
+    "update:falseText": null,
     "update:fieldCaptionTemplate": null,
     "update:fieldTemplate": null,
     "update:fieldValueTemplate": null,
+    "update:filterType": null,
+    "update:filterValue": null,
+    "update:filterValues": null,
+    "update:format": null,
+    "update:formItem": null,
+    "update:headerFilter": null,
     "update:headerItemCssClass": null,
     "update:headerItemTemplate": null,
+    "update:name": null,
+    "update:setFieldValue": null,
+    "update:showInColumnChooser": null,
+    "update:sortIndex": null,
+    "update:sortingMethod": null,
+    "update:sortOrder": null,
+    "update:trueText": null,
+    "update:validationRules": null,
+    "update:visible": null,
+    "update:visibleIndex": null,
   },
   props: {
+    alignment: String as PropType<HorizontalAlignment>,
+    allowEditing: Boolean,
+    allowFiltering: Boolean,
+    allowHeaderFiltering: Boolean,
+    allowHiding: Boolean,
+    allowReordering: Boolean,
+    allowSearch: Boolean,
+    allowSorting: Boolean,
+    calculateDisplayValue: Function as PropType<((cardData: any) => any)>,
+    calculateFieldValue: Function as PropType<((cardData: any) => any)>,
+    calculateFilterExpression: Function as PropType<((filterValue: any, selectedFilterOperation: string | null, target: string) => string | Array<any> | (() => void))>,
+    calculateSortValue: [Function, String] as PropType<(((cardData: any) => any)) | string>,
+    caption: String,
+    customizeText: Function as PropType<((cellInfo: { groupInterval: string | number, target: string, value: any, valueText: string }) => string)>,
+    dataField: String,
+    dataType: String as PropType<DataType>,
+    editorOptions: {},
+    falseText: String,
     fieldCaptionTemplate: {},
     fieldTemplate: {},
     fieldValueTemplate: {},
+    filterType: String as PropType<FilterType>,
+    filterValue: {},
+    filterValues: Array as PropType<Array<any>>,
+    format: String as PropType<Format>,
+    formItem: Object as PropType<dxFormSimpleItem | Record<string, any>>,
+    headerFilter: Object as PropType<Record<string, any>>,
     headerItemCssClass: String,
-    headerItemTemplate: {}
+    headerItemTemplate: {},
+    name: String,
+    setFieldValue: Function as PropType<((newData: any, value: any, currentCardData: any) => any)>,
+    showInColumnChooser: Boolean,
+    sortIndex: Number,
+    sortingMethod: Function as PropType<((value1: any, value2: any) => number)>,
+    sortOrder: String as PropType<SortOrder>,
+    trueText: String,
+    validationRules: Array as PropType<Array<CommonTypes.ValidationRule>>,
+    visible: Boolean,
+    visibleIndex: Number
   }
 };
 
@@ -636,6 +744,48 @@ const DxColumn = defineComponent(DxColumnConfig);
 
 (DxColumn as any).$_optionName = "columns";
 (DxColumn as any).$_isCollectionItem = true;
+(DxColumn as any).$_expectedChildren = {
+  AsyncRule: { isCollectionItem: true, optionName: "validationRules" },
+  CompareRule: { isCollectionItem: true, optionName: "validationRules" },
+  CustomRule: { isCollectionItem: true, optionName: "validationRules" },
+  EmailRule: { isCollectionItem: true, optionName: "validationRules" },
+  formItem: { isCollectionItem: false, optionName: "formItem" },
+  NumericRule: { isCollectionItem: true, optionName: "validationRules" },
+  PatternRule: { isCollectionItem: true, optionName: "validationRules" },
+  RangeRule: { isCollectionItem: true, optionName: "validationRules" },
+  RequiredRule: { isCollectionItem: true, optionName: "validationRules" },
+  StringLengthRule: { isCollectionItem: true, optionName: "validationRules" },
+  validationRule: { isCollectionItem: true, optionName: "validationRules" }
+};
+
+const DxCompareRuleConfig = {
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:comparisonTarget": null,
+    "update:comparisonType": null,
+    "update:ignoreEmptyValue": null,
+    "update:message": null,
+    "update:type": null,
+  },
+  props: {
+    comparisonTarget: Function as PropType<(() => any)>,
+    comparisonType: String as PropType<ComparisonOperator>,
+    ignoreEmptyValue: Boolean,
+    message: String,
+    type: String as PropType<ValidationRuleType>
+  }
+};
+
+prepareConfigurationComponentConfig(DxCompareRuleConfig);
+
+const DxCompareRule = defineComponent(DxCompareRuleConfig);
+
+(DxCompareRule as any).$_optionName = "validationRules";
+(DxCompareRule as any).$_isCollectionItem = true;
+(DxCompareRule as any).$_predefinedProps = {
+  type: "compare"
+};
 
 const DxCustomOperationConfig = {
   emits: {
@@ -668,6 +818,35 @@ const DxCustomOperation = defineComponent(DxCustomOperationConfig);
 
 (DxCustomOperation as any).$_optionName = "customOperations";
 (DxCustomOperation as any).$_isCollectionItem = true;
+
+const DxCustomRuleConfig = {
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:ignoreEmptyValue": null,
+    "update:message": null,
+    "update:reevaluate": null,
+    "update:type": null,
+    "update:validationCallback": null,
+  },
+  props: {
+    ignoreEmptyValue: Boolean,
+    message: String,
+    reevaluate: Boolean,
+    type: String as PropType<ValidationRuleType>,
+    validationCallback: Function as PropType<((options: { column: Record<string, any>, data: Record<string, any>, formItem: Record<string, any>, rule: Record<string, any>, validator: Record<string, any>, value: string | number }) => boolean)>
+  }
+};
+
+prepareConfigurationComponentConfig(DxCustomRuleConfig);
+
+const DxCustomRule = defineComponent(DxCustomRuleConfig);
+
+(DxCustomRule as any).$_optionName = "validationRules";
+(DxCustomRule as any).$_isCollectionItem = true;
+(DxCustomRule as any).$_predefinedProps = {
+  type: "custom"
+};
 
 const DxEditingConfig = {
   emits: {
@@ -703,6 +882,31 @@ const DxEditing = defineComponent(DxEditingConfig);
   change: { isCollectionItem: true, optionName: "changes" }
 };
 
+const DxEmailRuleConfig = {
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:ignoreEmptyValue": null,
+    "update:message": null,
+    "update:type": null,
+  },
+  props: {
+    ignoreEmptyValue: Boolean,
+    message: String,
+    type: String as PropType<ValidationRuleType>
+  }
+};
+
+prepareConfigurationComponentConfig(DxEmailRuleConfig);
+
+const DxEmailRule = defineComponent(DxEmailRuleConfig);
+
+(DxEmailRule as any).$_optionName = "validationRules";
+(DxEmailRule as any).$_isCollectionItem = true;
+(DxEmailRule as any).$_predefinedProps = {
+  type: "email"
+};
+
 const DxFieldConfig = {
   emits: {
     "update:isActive": null,
@@ -731,7 +935,7 @@ const DxFieldConfig = {
     editorTemplate: {},
     falseText: String,
     filterOperations: Array as PropType<Array<FilterBuilderOperation | string>>,
-    format: [Object, String, Function] as PropType<Format | CommonFormat | (((value: number | Date) => string)) | Record<string, any> | string>,
+    format: [Object, String, Function] as PropType<LocalizationFormat | Format | (((value: number | Date) => string)) | Record<string, any> | string>,
     lookup: Object as PropType<Record<string, any>>,
     name: String,
     trueText: String
@@ -883,7 +1087,7 @@ const DxFormatConfig = {
     formatter: Function as PropType<((value: number | Date) => string)>,
     parser: Function as PropType<((value: string) => number | Date)>,
     precision: Number,
-    type: String as PropType<CommonFormat | string>,
+    type: String as PropType<Format | string>,
     useCurrencyAccountingStyle: Boolean
   }
 };
@@ -893,6 +1097,62 @@ prepareConfigurationComponentConfig(DxFormatConfig);
 const DxFormat = defineComponent(DxFormatConfig);
 
 (DxFormat as any).$_optionName = "format";
+
+const DxFormItemConfig = {
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:colSpan": null,
+    "update:cssClass": null,
+    "update:dataField": null,
+    "update:editorOptions": null,
+    "update:editorType": null,
+    "update:helpText": null,
+    "update:isRequired": null,
+    "update:itemType": null,
+    "update:label": null,
+    "update:name": null,
+    "update:template": null,
+    "update:validationRules": null,
+    "update:visible": null,
+    "update:visibleIndex": null,
+  },
+  props: {
+    colSpan: Number,
+    cssClass: String,
+    dataField: String,
+    editorOptions: {},
+    editorType: String as PropType<FormItemComponent>,
+    helpText: String,
+    isRequired: Boolean,
+    itemType: String as PropType<FormItemType>,
+    label: Object as PropType<Record<string, any>>,
+    name: String,
+    template: {},
+    validationRules: Array as PropType<Array<CommonTypes.ValidationRule>>,
+    visible: Boolean,
+    visibleIndex: Number
+  }
+};
+
+prepareConfigurationComponentConfig(DxFormItemConfig);
+
+const DxFormItem = defineComponent(DxFormItemConfig);
+
+(DxFormItem as any).$_optionName = "formItem";
+(DxFormItem as any).$_expectedChildren = {
+  AsyncRule: { isCollectionItem: true, optionName: "validationRules" },
+  CompareRule: { isCollectionItem: true, optionName: "validationRules" },
+  CustomRule: { isCollectionItem: true, optionName: "validationRules" },
+  EmailRule: { isCollectionItem: true, optionName: "validationRules" },
+  label: { isCollectionItem: false, optionName: "label" },
+  NumericRule: { isCollectionItem: true, optionName: "validationRules" },
+  PatternRule: { isCollectionItem: true, optionName: "validationRules" },
+  RangeRule: { isCollectionItem: true, optionName: "validationRules" },
+  RequiredRule: { isCollectionItem: true, optionName: "validationRules" },
+  StringLengthRule: { isCollectionItem: true, optionName: "validationRules" },
+  validationRule: { isCollectionItem: true, optionName: "validationRules" }
+};
 
 const DxFromConfig = {
   emits: {
@@ -1049,6 +1309,33 @@ const DxItem = defineComponent(DxItemConfig);
 (DxItem as any).$_optionName = "items";
 (DxItem as any).$_isCollectionItem = true;
 
+const DxLabelConfig = {
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:alignment": null,
+    "update:location": null,
+    "update:showColon": null,
+    "update:template": null,
+    "update:text": null,
+    "update:visible": null,
+  },
+  props: {
+    alignment: String as PropType<HorizontalAlignment>,
+    location: String as PropType<LabelLocation>,
+    showColon: Boolean,
+    template: {},
+    text: String,
+    visible: Boolean
+  }
+};
+
+prepareConfigurationComponentConfig(DxLabelConfig);
+
+const DxLabel = defineComponent(DxLabelConfig);
+
+(DxLabel as any).$_optionName = "label";
+
 const DxLoadPanelConfig = {
   emits: {
     "update:isActive": null,
@@ -1180,6 +1467,31 @@ const DxMy = defineComponent(DxMyConfig);
 
 (DxMy as any).$_optionName = "my";
 
+const DxNumericRuleConfig = {
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:ignoreEmptyValue": null,
+    "update:message": null,
+    "update:type": null,
+  },
+  props: {
+    ignoreEmptyValue: Boolean,
+    message: String,
+    type: String as PropType<ValidationRuleType>
+  }
+};
+
+prepareConfigurationComponentConfig(DxNumericRuleConfig);
+
+const DxNumericRule = defineComponent(DxNumericRuleConfig);
+
+(DxNumericRule as any).$_optionName = "validationRules";
+(DxNumericRule as any).$_isCollectionItem = true;
+(DxNumericRule as any).$_predefinedProps = {
+  type: "numeric"
+};
+
 const DxOffsetConfig = {
   emits: {
     "update:isActive": null,
@@ -1251,6 +1563,33 @@ const DxPaging = defineComponent(DxPagingConfig);
 
 (DxPaging as any).$_optionName = "paging";
 
+const DxPatternRuleConfig = {
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:ignoreEmptyValue": null,
+    "update:message": null,
+    "update:pattern": null,
+    "update:type": null,
+  },
+  props: {
+    ignoreEmptyValue: Boolean,
+    message: String,
+    pattern: [RegExp, String],
+    type: String as PropType<ValidationRuleType>
+  }
+};
+
+prepareConfigurationComponentConfig(DxPatternRuleConfig);
+
+const DxPatternRule = defineComponent(DxPatternRuleConfig);
+
+(DxPatternRule as any).$_optionName = "validationRules";
+(DxPatternRule as any).$_isCollectionItem = true;
+(DxPatternRule as any).$_predefinedProps = {
+  type: "pattern"
+};
+
 const DxPositionConfig = {
   emits: {
     "update:isActive": null,
@@ -1287,6 +1626,37 @@ const DxPosition = defineComponent(DxPositionConfig);
   offset: { isCollectionItem: false, optionName: "offset" }
 };
 
+const DxRangeRuleConfig = {
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:ignoreEmptyValue": null,
+    "update:max": null,
+    "update:message": null,
+    "update:min": null,
+    "update:reevaluate": null,
+    "update:type": null,
+  },
+  props: {
+    ignoreEmptyValue: Boolean,
+    max: [Date, Number, String],
+    message: String,
+    min: [Date, Number, String],
+    reevaluate: Boolean,
+    type: String as PropType<ValidationRuleType>
+  }
+};
+
+prepareConfigurationComponentConfig(DxRangeRuleConfig);
+
+const DxRangeRule = defineComponent(DxRangeRuleConfig);
+
+(DxRangeRule as any).$_optionName = "validationRules";
+(DxRangeRule as any).$_isCollectionItem = true;
+(DxRangeRule as any).$_predefinedProps = {
+  type: "range"
+};
+
 const DxRemoteOperationsConfig = {
   emits: {
     "update:isActive": null,
@@ -1309,6 +1679,31 @@ prepareConfigurationComponentConfig(DxRemoteOperationsConfig);
 const DxRemoteOperations = defineComponent(DxRemoteOperationsConfig);
 
 (DxRemoteOperations as any).$_optionName = "remoteOperations";
+
+const DxRequiredRuleConfig = {
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:message": null,
+    "update:trim": null,
+    "update:type": null,
+  },
+  props: {
+    message: String,
+    trim: Boolean,
+    type: String as PropType<ValidationRuleType>
+  }
+};
+
+prepareConfigurationComponentConfig(DxRequiredRuleConfig);
+
+const DxRequiredRule = defineComponent(DxRequiredRuleConfig);
+
+(DxRequiredRule as any).$_optionName = "validationRules";
+(DxRequiredRule as any).$_isCollectionItem = true;
+(DxRequiredRule as any).$_predefinedProps = {
+  type: "required"
+};
 
 const DxSelectionConfig = {
   emits: {
@@ -1370,6 +1765,37 @@ const DxShow = defineComponent(DxShowConfig);
 (DxShow as any).$_expectedChildren = {
   from: { isCollectionItem: false, optionName: "from" },
   to: { isCollectionItem: false, optionName: "to" }
+};
+
+const DxStringLengthRuleConfig = {
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:ignoreEmptyValue": null,
+    "update:max": null,
+    "update:message": null,
+    "update:min": null,
+    "update:trim": null,
+    "update:type": null,
+  },
+  props: {
+    ignoreEmptyValue: Boolean,
+    max: Number,
+    message: String,
+    min: Number,
+    trim: Boolean,
+    type: String as PropType<ValidationRuleType>
+  }
+};
+
+prepareConfigurationComponentConfig(DxStringLengthRuleConfig);
+
+const DxStringLengthRule = defineComponent(DxStringLengthRuleConfig);
+
+(DxStringLengthRule as any).$_optionName = "validationRules";
+(DxStringLengthRule as any).$_isCollectionItem = true;
+(DxStringLengthRule as any).$_predefinedProps = {
+  type: "stringLength"
 };
 
 const DxToConfig = {
@@ -1463,10 +1889,52 @@ const DxToolbarItem = defineComponent(DxToolbarItemConfig);
 (DxToolbarItem as any).$_optionName = "items";
 (DxToolbarItem as any).$_isCollectionItem = true;
 
+const DxValidationRuleConfig = {
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:comparisonTarget": null,
+    "update:comparisonType": null,
+    "update:ignoreEmptyValue": null,
+    "update:max": null,
+    "update:message": null,
+    "update:min": null,
+    "update:pattern": null,
+    "update:reevaluate": null,
+    "update:trim": null,
+    "update:type": null,
+    "update:validationCallback": null,
+  },
+  props: {
+    comparisonTarget: Function as PropType<(() => any)>,
+    comparisonType: String as PropType<ComparisonOperator>,
+    ignoreEmptyValue: Boolean,
+    max: [Date, Number, String],
+    message: String,
+    min: [Date, Number, String],
+    pattern: [RegExp, String],
+    reevaluate: Boolean,
+    trim: Boolean,
+    type: String as PropType<ValidationRuleType>,
+    validationCallback: Function as PropType<((options: { column: Record<string, any>, data: Record<string, any>, formItem: Record<string, any>, rule: Record<string, any>, validator: Record<string, any>, value: string | number }) => boolean)>
+  }
+};
+
+prepareConfigurationComponentConfig(DxValidationRuleConfig);
+
+const DxValidationRule = defineComponent(DxValidationRuleConfig);
+
+(DxValidationRule as any).$_optionName = "validationRules";
+(DxValidationRule as any).$_isCollectionItem = true;
+(DxValidationRule as any).$_predefinedProps = {
+  type: "required"
+};
+
 export default DxCardView;
 export {
   DxCardView,
   DxAnimation,
+  DxAsyncRule,
   DxAt,
   DxBoundaryOffset,
   DxCardCover,
@@ -1475,30 +1943,41 @@ export {
   DxChange,
   DxCollision,
   DxColumn,
+  DxCompareRule,
   DxCustomOperation,
+  DxCustomRule,
   DxEditing,
+  DxEmailRule,
   DxField,
   DxFilterBuilder,
   DxFilterOperationDescriptions,
   DxFormat,
+  DxFormItem,
   DxFrom,
   DxGroupOperationDescriptions,
   DxHeaderPanel,
   DxHide,
   DxItem,
+  DxLabel,
   DxLoadPanel,
   DxLookup,
   DxMy,
+  DxNumericRule,
   DxOffset,
   DxPager,
   DxPaging,
+  DxPatternRule,
   DxPosition,
+  DxRangeRule,
   DxRemoteOperations,
+  DxRequiredRule,
   DxSelection,
   DxShow,
+  DxStringLengthRule,
   DxTo,
   DxToolbar,
-  DxToolbarItem
+  DxToolbarItem,
+  DxValidationRule
 };
 import type * as DxCardViewTypes from "devextreme/ui/card_view_types";
 export { DxCardViewTypes };

@@ -50,6 +50,9 @@ import { DxoCardCoverModule } from 'devextreme-angular/ui/nested';
 import { DxoCardHeaderModule } from 'devextreme-angular/ui/nested';
 import { DxiItemModule } from 'devextreme-angular/ui/nested';
 import { DxiColumnModule } from 'devextreme-angular/ui/nested';
+import { DxoFormItemModule } from 'devextreme-angular/ui/nested';
+import { DxoLabelModule } from 'devextreme-angular/ui/nested';
+import { DxiValidationRuleModule } from 'devextreme-angular/ui/nested';
 import { DxoEditingModule } from 'devextreme-angular/ui/nested';
 import { DxiChangeModule } from 'devextreme-angular/ui/nested';
 import { DxoFilterBuilderModule } from 'devextreme-angular/ui/nested';
@@ -79,6 +82,7 @@ import { DxoSelectionModule } from 'devextreme-angular/ui/nested';
 import { DxoToolbarModule } from 'devextreme-angular/ui/nested';
 
 import { DxoCardViewAnimationModule } from 'devextreme-angular/ui/card-view/nested';
+import { DxiCardViewAsyncRuleModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxoCardViewAtModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxoCardViewBoundaryOffsetModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxoCardViewCardCoverModule } from 'devextreme-angular/ui/card-view/nested';
@@ -87,30 +91,41 @@ import { DxiCardViewCardHeaderItemModule } from 'devextreme-angular/ui/card-view
 import { DxiCardViewChangeModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxoCardViewCollisionModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxiCardViewColumnModule } from 'devextreme-angular/ui/card-view/nested';
+import { DxiCardViewCompareRuleModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxiCardViewCustomOperationModule } from 'devextreme-angular/ui/card-view/nested';
+import { DxiCardViewCustomRuleModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxoCardViewEditingModule } from 'devextreme-angular/ui/card-view/nested';
+import { DxiCardViewEmailRuleModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxiCardViewFieldModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxoCardViewFilterBuilderModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxoCardViewFilterOperationDescriptionsModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxoCardViewFormatModule } from 'devextreme-angular/ui/card-view/nested';
+import { DxoCardViewFormItemModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxoCardViewFromModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxoCardViewGroupOperationDescriptionsModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxoCardViewHeaderPanelModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxoCardViewHideModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxiCardViewItemModule } from 'devextreme-angular/ui/card-view/nested';
+import { DxoCardViewLabelModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxoCardViewLoadPanelModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxoCardViewLookupModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxoCardViewMyModule } from 'devextreme-angular/ui/card-view/nested';
+import { DxiCardViewNumericRuleModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxoCardViewOffsetModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxoCardViewPagerModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxoCardViewPagingModule } from 'devextreme-angular/ui/card-view/nested';
+import { DxiCardViewPatternRuleModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxoCardViewPositionModule } from 'devextreme-angular/ui/card-view/nested';
+import { DxiCardViewRangeRuleModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxoCardViewRemoteOperationsModule } from 'devextreme-angular/ui/card-view/nested';
+import { DxiCardViewRequiredRuleModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxoCardViewSelectionModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxoCardViewShowModule } from 'devextreme-angular/ui/card-view/nested';
+import { DxiCardViewStringLengthRuleModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxoCardViewToModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxoCardViewToolbarModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxiCardViewToolbarItemModule } from 'devextreme-angular/ui/card-view/nested';
+import { DxiCardViewValidationRuleModule } from 'devextreme-angular/ui/card-view/nested';
 
 import { DxiColumnComponent } from 'devextreme-angular/ui/nested';
 
@@ -1495,6 +1510,9 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     DxoCardHeaderModule,
     DxiItemModule,
     DxiColumnModule,
+    DxoFormItemModule,
+    DxoLabelModule,
+    DxiValidationRuleModule,
     DxoEditingModule,
     DxiChangeModule,
     DxoFilterBuilderModule,
@@ -1523,6 +1541,7 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     DxoSelectionModule,
     DxoToolbarModule,
     DxoCardViewAnimationModule,
+    DxiCardViewAsyncRuleModule,
     DxoCardViewAtModule,
     DxoCardViewBoundaryOffsetModule,
     DxoCardViewCardCoverModule,
@@ -1531,30 +1550,41 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     DxiCardViewChangeModule,
     DxoCardViewCollisionModule,
     DxiCardViewColumnModule,
+    DxiCardViewCompareRuleModule,
     DxiCardViewCustomOperationModule,
+    DxiCardViewCustomRuleModule,
     DxoCardViewEditingModule,
+    DxiCardViewEmailRuleModule,
     DxiCardViewFieldModule,
     DxoCardViewFilterBuilderModule,
     DxoCardViewFilterOperationDescriptionsModule,
     DxoCardViewFormatModule,
+    DxoCardViewFormItemModule,
     DxoCardViewFromModule,
     DxoCardViewGroupOperationDescriptionsModule,
     DxoCardViewHeaderPanelModule,
     DxoCardViewHideModule,
     DxiCardViewItemModule,
+    DxoCardViewLabelModule,
     DxoCardViewLoadPanelModule,
     DxoCardViewLookupModule,
     DxoCardViewMyModule,
+    DxiCardViewNumericRuleModule,
     DxoCardViewOffsetModule,
     DxoCardViewPagerModule,
     DxoCardViewPagingModule,
+    DxiCardViewPatternRuleModule,
     DxoCardViewPositionModule,
+    DxiCardViewRangeRuleModule,
     DxoCardViewRemoteOperationsModule,
+    DxiCardViewRequiredRuleModule,
     DxoCardViewSelectionModule,
     DxoCardViewShowModule,
+    DxiCardViewStringLengthRuleModule,
     DxoCardViewToModule,
     DxoCardViewToolbarModule,
     DxiCardViewToolbarItemModule,
+    DxiCardViewValidationRuleModule,
     DxIntegrationModule,
     DxTemplateModule
   ],
@@ -1567,6 +1597,9 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     DxoCardHeaderModule,
     DxiItemModule,
     DxiColumnModule,
+    DxoFormItemModule,
+    DxoLabelModule,
+    DxiValidationRuleModule,
     DxoEditingModule,
     DxiChangeModule,
     DxoFilterBuilderModule,
@@ -1595,6 +1628,7 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     DxoSelectionModule,
     DxoToolbarModule,
     DxoCardViewAnimationModule,
+    DxiCardViewAsyncRuleModule,
     DxoCardViewAtModule,
     DxoCardViewBoundaryOffsetModule,
     DxoCardViewCardCoverModule,
@@ -1603,30 +1637,41 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     DxiCardViewChangeModule,
     DxoCardViewCollisionModule,
     DxiCardViewColumnModule,
+    DxiCardViewCompareRuleModule,
     DxiCardViewCustomOperationModule,
+    DxiCardViewCustomRuleModule,
     DxoCardViewEditingModule,
+    DxiCardViewEmailRuleModule,
     DxiCardViewFieldModule,
     DxoCardViewFilterBuilderModule,
     DxoCardViewFilterOperationDescriptionsModule,
     DxoCardViewFormatModule,
+    DxoCardViewFormItemModule,
     DxoCardViewFromModule,
     DxoCardViewGroupOperationDescriptionsModule,
     DxoCardViewHeaderPanelModule,
     DxoCardViewHideModule,
     DxiCardViewItemModule,
+    DxoCardViewLabelModule,
     DxoCardViewLoadPanelModule,
     DxoCardViewLookupModule,
     DxoCardViewMyModule,
+    DxiCardViewNumericRuleModule,
     DxoCardViewOffsetModule,
     DxoCardViewPagerModule,
     DxoCardViewPagingModule,
+    DxiCardViewPatternRuleModule,
     DxoCardViewPositionModule,
+    DxiCardViewRangeRuleModule,
     DxoCardViewRemoteOperationsModule,
+    DxiCardViewRequiredRuleModule,
     DxoCardViewSelectionModule,
     DxoCardViewShowModule,
+    DxiCardViewStringLengthRuleModule,
     DxoCardViewToModule,
     DxoCardViewToolbarModule,
     DxiCardViewToolbarItemModule,
+    DxiCardViewValidationRuleModule,
     DxTemplateModule
   ]
 })
