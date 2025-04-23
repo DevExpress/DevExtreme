@@ -24,7 +24,7 @@ import {
 export { ExplicitTypes } from 'devextreme/ui/card_view';
 
 import DataSource from 'devextreme/data/data_source';
-import { CardCover, CardHeader, ColumnProperties, Editing, HeaderPanel, CardClickEvent, CardDblClickEvent, CardHoverChangedEvent, CardInsertedEvent, CardInsertingEvent, CardPreparedEvent, CardRemovedEvent, CardRemovingEvent, CardSavedEvent, CardSavingEvent, CardUpdatedEvent, CardUpdatingEvent, EditCanceledEvent, EditCancelingEvent, EditingStartEvent, FieldCaptionClickEvent, FieldCaptionDblClickEvent, FieldCaptionPreparedEvent, FieldClickEvent, FieldDblClickEvent, FieldPreparedEvent, FieldValueClickEvent, FieldValueDblClickEvent, FieldValuePreparedEvent, InitNewCardEvent, Paging, RemoteOperations, Toolbar } from 'devextreme/ui/card_view';
+import { CardCover, CardHeader, ColumnProperties, Editing, HeaderPanel, CardClickEvent, CardDblClickEvent, CardHoverChangedEvent, CardInsertedEvent, CardInsertingEvent, CardPreparedEvent, CardRemovedEvent, CardRemovingEvent, CardSavedEvent, CardSavingEvent, CardUpdatedEvent, CardUpdatingEvent, EditCanceledEvent, EditCancelingEvent, EditingStartEvent, FieldCaptionClickEvent, FieldCaptionDblClickEvent, FieldCaptionPreparedEvent, FieldClickEvent, FieldDblClickEvent, FieldPreparedEvent, FieldValueClickEvent, FieldValueDblClickEvent, FieldValuePreparedEvent, InitNewCardEvent, SelectionChangedEvent, SelectionChangingEvent, Paging, RemoteOperations, SelectionConfiguration, Toolbar } from 'devextreme/ui/card_view';
 import { Mode } from 'devextreme/common';
 import { DataSourceOptions } from 'devextreme/data/data_source';
 import { Store } from 'devextreme/data/store';
@@ -75,6 +75,7 @@ import { DxoShowModule } from 'devextreme-angular/ui/nested';
 import { DxoPagerModule } from 'devextreme-angular/ui/nested';
 import { DxoPagingModule } from 'devextreme-angular/ui/nested';
 import { DxoRemoteOperationsModule } from 'devextreme-angular/ui/nested';
+import { DxoSelectionModule } from 'devextreme-angular/ui/nested';
 import { DxoToolbarModule } from 'devextreme-angular/ui/nested';
 
 import { DxoCardViewAnimationModule } from 'devextreme-angular/ui/card-view/nested';
@@ -105,6 +106,7 @@ import { DxoCardViewPagerModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxoCardViewPagingModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxoCardViewPositionModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxoCardViewRemoteOperationsModule } from 'devextreme-angular/ui/card-view/nested';
+import { DxoCardViewSelectionModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxoCardViewShowModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxoCardViewToModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxoCardViewToolbarModule } from 'devextreme-angular/ui/card-view/nested';
@@ -641,6 +643,32 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
 
 
     /**
+     * [descr:dxCardViewOptions.selectedCardKeys]
+    
+     */
+    @Input()
+    get selectedCardKeys(): Array<any> {
+        return this._getOption('selectedCardKeys');
+    }
+    set selectedCardKeys(value: Array<any>) {
+        this._setOption('selectedCardKeys', value);
+    }
+
+
+    /**
+     * [descr:dxCardViewOptions.selection]
+    
+     */
+    @Input()
+    get selection(): SelectionConfiguration {
+        return this._getOption('selection');
+    }
+    set selection(value: SelectionConfiguration) {
+        this._setOption('selection', value);
+    }
+
+
+    /**
      * [descr:WidgetOptions.tabIndex]
     
      */
@@ -946,6 +974,22 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
 
     /**
     
+     * [descr:dxCardViewOptions.onSelectionChanged]
+    
+    
+     */
+    @Output() onSelectionChanged: EventEmitter<SelectionChangedEvent>;
+
+    /**
+    
+     * [descr:dxCardViewOptions.onSelectionChanging]
+    
+    
+     */
+    @Output() onSelectionChanging: EventEmitter<SelectionChangingEvent>;
+
+    /**
+    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
@@ -1222,6 +1266,20 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
+    @Output() selectedCardKeysChange: EventEmitter<Array<any>>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
+    @Output() selectionChange: EventEmitter<SelectionConfiguration>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
     @Output() tabIndexChange: EventEmitter<number>;
 
     /**
@@ -1315,6 +1373,8 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
             { subscribe: 'initialized', emit: 'onInitialized' },
             { subscribe: 'initNewCard', emit: 'onInitNewCard' },
             { subscribe: 'optionChanged', emit: 'onOptionChanged' },
+            { subscribe: 'selectionChanged', emit: 'onSelectionChanged' },
+            { subscribe: 'selectionChanging', emit: 'onSelectionChanging' },
             { emit: 'accessKeyChange' },
             { emit: 'activeStateEnabledChange' },
             { emit: 'allowColumnReorderingChange' },
@@ -1354,6 +1414,8 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
             { emit: 'rtlEnabledChange' },
             { emit: 'scrollingChange' },
             { emit: 'searchPanelChange' },
+            { emit: 'selectedCardKeysChange' },
+            { emit: 'selectionChange' },
             { emit: 'tabIndexChange' },
             { emit: 'toolbarChange' },
             { emit: 'visibleChange' },
@@ -1380,6 +1442,7 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
         this.setupChanges('columns', changes);
         this.setupChanges('dataSource', changes);
         this.setupChanges('keyExpr', changes);
+        this.setupChanges('selectedCardKeys', changes);
     }
 
     setupChanges(prop: string, changes: SimpleChanges) {
@@ -1392,6 +1455,7 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
         this._idh.doCheck('columns');
         this._idh.doCheck('dataSource');
         this._idh.doCheck('keyExpr');
+        this._idh.doCheck('selectedCardKeys');
         this._watcherHelper.checkWatchers();
         super.ngDoCheck();
         super.clearChangedOptions();
@@ -1438,6 +1502,7 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     DxoPagerModule,
     DxoPagingModule,
     DxoRemoteOperationsModule,
+    DxoSelectionModule,
     DxoToolbarModule,
     DxoCardViewAnimationModule,
     DxoCardViewAtModule,
@@ -1467,6 +1532,7 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     DxoCardViewPagingModule,
     DxoCardViewPositionModule,
     DxoCardViewRemoteOperationsModule,
+    DxoCardViewSelectionModule,
     DxoCardViewShowModule,
     DxoCardViewToModule,
     DxoCardViewToolbarModule,
@@ -1508,6 +1574,7 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     DxoPagerModule,
     DxoPagingModule,
     DxoRemoteOperationsModule,
+    DxoSelectionModule,
     DxoToolbarModule,
     DxoCardViewAnimationModule,
     DxoCardViewAtModule,
@@ -1537,6 +1604,7 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     DxoCardViewPagingModule,
     DxoCardViewPositionModule,
     DxoCardViewRemoteOperationsModule,
+    DxoCardViewSelectionModule,
     DxoCardViewShowModule,
     DxoCardViewToModule,
     DxoCardViewToolbarModule,

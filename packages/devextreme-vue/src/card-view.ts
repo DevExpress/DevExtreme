@@ -36,8 +36,11 @@ import {
  FieldValueDblClickEvent,
  FieldValuePreparedEvent,
  InitNewCardEvent,
+ SelectionChangedEvent,
+ SelectionChangingEvent,
  Paging,
  RemoteOperations,
+ SelectionConfiguration,
  Toolbar,
  CardHeaderPredefinedToolbarItem,
  CardHeaderToolbarItem,
@@ -55,6 +58,8 @@ import {
  Direction,
  PositionAlignment,
  DisplayMode,
+ SingleMultipleOrNone,
+ SelectAllMode,
 } from "devextreme/common";
 import {
  DataSourceOptions,
@@ -99,6 +104,7 @@ import {
  DataChangeType,
  DataChange,
  PagerPageSize,
+ SelectionColumnDisplayMode,
 } from "devextreme/common/grids";
 import {
  PagerBase,
@@ -187,12 +193,16 @@ type AccessibleOptions = Pick<Properties,
   "onInitialized" |
   "onInitNewCard" |
   "onOptionChanged" |
+  "onSelectionChanged" |
+  "onSelectionChanging" |
   "pager" |
   "paging" |
   "remoteOperations" |
   "rtlEnabled" |
   "scrolling" |
   "searchPanel" |
+  "selectedCardKeys" |
+  "selection" |
   "tabIndex" |
   "toolbar" |
   "visible" |
@@ -269,12 +279,16 @@ const componentConfig = {
     onInitialized: Function as PropType<((e: { component: Component<any>, element: any }) => void)>,
     onInitNewCard: Function as PropType<((e: InitNewCardEvent) => void)>,
     onOptionChanged: Function as PropType<((e: { component: DOMComponent, element: any, fullName: string, model: any, name: string, previousValue: any, value: any }) => void)>,
+    onSelectionChanged: Function as PropType<((e: SelectionChangedEvent) => void)>,
+    onSelectionChanging: Function as PropType<((e: SelectionChangingEvent) => void)>,
     pager: Object as PropType<Pager | Record<string, any> | PagerBase>,
     paging: Object as PropType<Paging | Record<string, any>>,
     remoteOperations: [Boolean, String, Object] as PropType<boolean | Mode | RemoteOperations | Record<string, any>>,
     rtlEnabled: Boolean,
     scrolling: Object as PropType<Record<string, any>>,
     searchPanel: Object as PropType<Record<string, any>>,
+    selectedCardKeys: Array as PropType<Array<any>>,
+    selection: Object as PropType<SelectionConfiguration | Record<string, any>>,
     tabIndex: Number,
     toolbar: Object as PropType<Toolbar | Record<string, any>>,
     visible: Boolean,
@@ -347,12 +361,16 @@ const componentConfig = {
     "update:onInitialized": null,
     "update:onInitNewCard": null,
     "update:onOptionChanged": null,
+    "update:onSelectionChanged": null,
+    "update:onSelectionChanging": null,
     "update:pager": null,
     "update:paging": null,
     "update:remoteOperations": null,
     "update:rtlEnabled": null,
     "update:scrolling": null,
     "update:searchPanel": null,
+    "update:selectedCardKeys": null,
+    "update:selection": null,
     "update:tabIndex": null,
     "update:toolbar": null,
     "update:visible": null,
@@ -378,6 +396,7 @@ const componentConfig = {
       pager: { isCollectionItem: false, optionName: "pager" },
       paging: { isCollectionItem: false, optionName: "paging" },
       remoteOperations: { isCollectionItem: false, optionName: "remoteOperations" },
+      selection: { isCollectionItem: false, optionName: "selection" },
       toolbar: { isCollectionItem: false, optionName: "toolbar" }
     };
   }
@@ -1283,6 +1302,29 @@ const DxRemoteOperations = defineComponent(DxRemoteOperationsConfig);
 
 (DxRemoteOperations as any).$_optionName = "remoteOperations";
 
+const DxSelectionConfig = {
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:allowSelectAll": null,
+    "update:mode": null,
+    "update:selectAllMode": null,
+    "update:showCheckBoxesMode": null,
+  },
+  props: {
+    allowSelectAll: Boolean,
+    mode: String as PropType<SingleMultipleOrNone>,
+    selectAllMode: String as PropType<SelectAllMode>,
+    showCheckBoxesMode: String as PropType<SelectionColumnDisplayMode>
+  }
+};
+
+prepareConfigurationComponentConfig(DxSelectionConfig);
+
+const DxSelection = defineComponent(DxSelectionConfig);
+
+(DxSelection as any).$_optionName = "selection";
+
 const DxShowConfig = {
   emits: {
     "update:isActive": null,
@@ -1444,6 +1486,7 @@ export {
   DxPaging,
   DxPosition,
   DxRemoteOperations,
+  DxSelection,
   DxShow,
   DxTo,
   DxToolbar,

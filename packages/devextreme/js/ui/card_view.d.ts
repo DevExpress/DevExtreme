@@ -1,8 +1,10 @@
 import { DeepPartial } from '../core';
-import { Mode, template } from '../common';
+import {
+ Mode, SelectAllMode, SingleMultipleOrNone, template,
+} from '../common';
 import { UserDefinedElement, DxElement } from '../core/element';
 import {
- ColumnBase, ColumnChooser, DataChange, DataErrorOccurredInfo, FilterPanel, HeaderFilter, Pager, ScrollingBase, SearchPanel, Sorting,
+ ColumnBase, ColumnChooser, DataChange, DataErrorOccurredInfo, FilterPanel, HeaderFilter, Pager, ScrollingBase, SearchPanel, SelectionColumnDisplayMode, Sorting,
 } from '../common/grids';
 import DataSource, { DataSourceLike } from '../data/data_source';
 import Widget, { WidgetOptions } from './widget/ui.widget';
@@ -782,6 +784,93 @@ export type CardSavingEvent = EventInfo<dxCardView> & Cancelable & {
 
 // #endregion
 
+// #region Selection
+
+/**
+ * @public
+ * @docid
+ */
+export type SelectionConfiguration = {
+    /**
+     * @public
+     * @docid
+     */
+    allowSelectAll?: boolean;
+    /**
+     * @public
+     * @docid
+     */
+    mode?: SingleMultipleOrNone;
+    /**
+     * @public
+     * @docid
+     */
+    selectAllMode?: SelectAllMode;
+    /**
+     * @public
+     * @docid
+     */
+    showCheckBoxesMode?: SelectionColumnDisplayMode;
+};
+
+/**
+ * @docid
+ * @public
+ * @inherits EventInfo,Cancelable
+ */
+export type SelectionChangingEvent<TCardData = unknown, TKey = unknown> = EventInfo<dxCardView> & Cancelable & {
+    /**
+     * @docid
+     * @public
+     */
+    selectedCardsData: Array<TCardData>;
+    /**
+     * @docid
+     * @public
+     */
+    selectedCardKeys: Array<TKey>;
+    /**
+     * @docid
+     * @public
+     */
+    currentSelectedCardKeys: Array<TKey>;
+    /**
+     * @docid
+     * @public
+     */
+    currentDeselectedCardKeys: Array<TKey>;
+
+};
+/**
+ * @docid
+ * @public
+ * @inherits EventInfo
+ */
+export type SelectionChangedEvent<TCardData = unknown, TKey = unknown> = EventInfo<dxCardView> & {
+    /**
+     * @docid
+     * @public
+     */
+    selectedCardsData: Array<TCardData>;
+    /**
+     * @docid
+     * @public
+     */
+    selectedCardKeys: Array<TKey>;
+    /**
+     * @docid
+     * @public
+     */
+    currentSelectedCardKeys: Array<TKey>;
+    /**
+     * @docid
+     * @public
+     */
+    currentDeselectedCardKeys: Array<TKey>;
+};
+
+// #endregion
+
 /**
  * @namespace DevExpress.ui
  * @public
@@ -1168,6 +1257,34 @@ export interface dxCardViewOptions<TCardData = unknown, TKey = unknown> extends 
     onCardSaving?: (e: CardSavingEvent) => void;
 
     // #endregion
+
+    // #region Selection
+
+    /**
+     * @docid
+     * @fires GridBaseOptions.onSelectionChanged
+     * @public
+     */
+    selectedCardKeys?: Array<TKey>;
+    /**
+     * @docid
+     * @public
+     */
+    selection?: SelectionConfiguration;
+    /**
+     * @docid
+     * @action
+     * @public
+     */
+    onSelectionChanging?: (e: SelectionChangingEvent) => void;
+    /**
+     * @docid
+     * @action
+     * @public
+     */
+    onSelectionChanged?: (e: SelectionChangedEvent) => void;
+
+    // #endregion
 }
 
 /** @public */
@@ -1358,6 +1475,59 @@ export default class dxCardView<TCardData = unknown, TKey = unknown> extends Wid
      * @public
      */
     totalCount(): number;
+
+    // #endregion
+
+    // #region Selection
+
+    /**
+     * @docid
+     * @publicName selectCards(keys, preserve)
+     * @public
+     */
+    selectCards(keys: Array<TKey>, preserve: boolean): void;
+    /**
+     * @docid
+     * @publicName deselectCards(keys)
+     * @public
+     */
+    deselectCards(keys: Array<TKey>): void;
+    /**
+     * @docid
+     * @publicName selectAll()
+     * @public
+     */
+    selectAll(): void;
+    /**
+     * @docid
+     * @publicName deselectAll()
+     * @public
+     */
+    deselectAll(): void;
+    /**
+     * @docid
+     * @publicName clearSelection()
+     * @public
+     */
+    clearSelection(): void;
+    /**
+     * @docid
+     * @publicName getSelectedCardsData()
+     * @public
+     */
+    getSelectedCardsData(): Array<TCardData>; // TODO: sync with impl
+    /**
+     * @docid
+     * @publicName getSelectedCardKeys()
+     * @public
+     */
+    getSelectedCardKeys(): Array<TKey>; // TODO: sync with impl
+    /**
+     * @docid
+     * @publicName isCardSelected(key)
+     * @public
+     */
+    isCardSelected(key: TKey): boolean;
 
     // #endregion
 }

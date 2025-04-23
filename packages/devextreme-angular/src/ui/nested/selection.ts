@@ -18,7 +18,7 @@ import {
 import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
-import { DxoColumnChooserSelectionConfig } from './base/column-chooser-selection-config';
+import { DxoSelectionConfiguration } from './base/selection-configuration';
 
 
 @Component({
@@ -28,16 +28,16 @@ import { DxoColumnChooserSelectionConfig } from './base/column-chooser-selection
     providers: [NestedOptionHost],
     inputs: [
         'allowSelectAll',
+        'mode',
+        'selectAllMode',
+        'showCheckBoxesMode',
         'recursive',
         'selectByClick',
         'deferred',
-        'mode',
-        'selectAllMode',
-        'sensitivity',
-        'showCheckBoxesMode'
+        'sensitivity'
     ]
 })
-export class DxoSelectionComponent extends DxoColumnChooserSelectionConfig implements OnDestroy, OnInit  {
+export class DxoSelectionComponent extends DxoSelectionConfiguration implements OnDestroy, OnInit  {
 
     protected get _optionPath() {
         return 'selection';

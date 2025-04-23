@@ -26,6 +26,7 @@ export * from './pager';
 export * from './paging';
 export * from './position';
 export * from './remote-operations';
+export * from './selection';
 export * from './show';
 export * from './to';
 export * from './toolbar-item-dxi';

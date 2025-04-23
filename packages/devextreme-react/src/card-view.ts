@@ -10,11 +10,11 @@ import { Component as BaseComponent, IHtmlOptions, ComponentRef, NestedComponent
 import NestedOption from "./core/nested-option";
 
 import type { AnimationConfig, CollisionResolution, PositionConfig, AnimationState, AnimationType, CollisionResolutionCombination } from "devextreme/common/core/animation";
-import type { HorizontalAlignment, VerticalAlignment, template, ToolbarItemLocation, ToolbarItemComponent, DataType, Format as CommonFormat, Direction, PositionAlignment, Mode, DisplayMode } from "devextreme/common";
+import type { HorizontalAlignment, VerticalAlignment, template, ToolbarItemLocation, ToolbarItemComponent, DataType, Format as CommonFormat, Direction, PositionAlignment, Mode, DisplayMode, SingleMultipleOrNone, SelectAllMode } from "devextreme/common";
 import type { CardInfo, CardHeaderPredefinedToolbarItem, CardHeaderToolbarItem, FieldInfoType, Column as CardViewColumn, PredefinedToolbarItem, ToolbarItem as CardViewToolbarItem } from "devextreme/ui/card_view";
 import type { LocateInMenuMode, ShowTextMode } from "devextreme/ui/toolbar";
 import type { CollectionWidgetItem } from "devextreme/ui/collection/ui.collection_widget.base";
-import type { DataChangeType, DataChange, PagerPageSize } from "devextreme/common/grids";
+import type { DataChangeType, DataChange, PagerPageSize, SelectionColumnDisplayMode } from "devextreme/common/grids";
 import type { dxFilterBuilderField, FieldInfo, FilterBuilderOperation, dxFilterBuilderCustomOperation, GroupOperation, ContentReadyEvent, DisposingEvent, EditorPreparedEvent, EditorPreparingEvent, InitializedEvent, OptionChangedEvent, ValueChangedEvent } from "devextreme/ui/filter_builder";
 import type { Format as LocalizationFormat } from "devextreme/common/core/localization";
 import type { DataSourceOptions } from "devextreme/data/data_source";
@@ -33,7 +33,9 @@ type ICardViewOptions<TCardData = any, TKey = any> = React.PropsWithChildren<Pro
   noDataRender?: (...params: any) => React.ReactNode;
   noDataComponent?: React.ComponentType<any>;
   defaultFilterValue?: Array<any> | (() => any) | string;
+  defaultSelectedCardKeys?: Array<any>;
   onFilterValueChange?: (value: Array<any> | (() => any) | string) => void;
+  onSelectedCardKeysChange?: (value: Array<any>) => void;
 }>
 
 interface CardViewRef<TCardData = any, TKey = any> {
@@ -53,11 +55,12 @@ const CardView = memo(
         }
       ), [baseRef.current]);
 
-      const subscribableOptions = useMemo(() => (["filterValue"]), []);
-      const independentEvents = useMemo(() => (["onCardClick","onCardDblClick","onCardInserted","onCardInserting","onCardPrepared","onCardRemoved","onCardRemoving","onCardSaved","onCardSaving","onCardUpdated","onCardUpdating","onContentReady","onDataErrorOccurred","onDisposing","onEditCanceled","onEditCanceling","onEditingStart","onFieldCaptionClick","onFieldCaptionDblClick","onFieldCaptionPrepared","onFieldClick","onFieldDblClick","onFieldPrepared","onFieldValueClick","onFieldValueDblClick","onFieldValuePrepared","onInitialized","onInitNewCard"]), []);
+      const subscribableOptions = useMemo(() => (["filterValue","selectedCardKeys"]), []);
+      const independentEvents = useMemo(() => (["onCardClick","onCardDblClick","onCardInserted","onCardInserting","onCardPrepared","onCardRemoved","onCardRemoving","onCardSaved","onCardSaving","onCardUpdated","onCardUpdating","onContentReady","onDataErrorOccurred","onDisposing","onEditCanceled","onEditCanceling","onEditingStart","onFieldCaptionClick","onFieldCaptionDblClick","onFieldCaptionPrepared","onFieldClick","onFieldDblClick","onFieldPrepared","onFieldValueClick","onFieldValueDblClick","onFieldValuePrepared","onInitialized","onInitNewCard","onSelectionChanging"]), []);
 
       const defaults = useMemo(() => ({
         defaultFilterValue: "filterValue",
+        defaultSelectedCardKeys: "selectedCardKeys",
       }), []);
 
       const expectedChildren = useMemo(() => ({
@@ -71,6 +74,7 @@ const CardView = memo(
         pager: { optionName: "pager", isCollectionItem: false },
         paging: { optionName: "paging", isCollectionItem: false },
         remoteOperations: { optionName: "remoteOperations", isCollectionItem: false },
+        selection: { optionName: "selection", isCollectionItem: false },
         toolbar: { optionName: "toolbar", isCollectionItem: false }
       }), []);
 
@@ -1005,6 +1009,27 @@ const RemoteOperations = Object.assign<typeof _componentRemoteOperations, Nested
 });
 
 // owners:
+// CardView
+type ISelectionProps = React.PropsWithChildren<{
+  allowSelectAll?: boolean;
+  mode?: SingleMultipleOrNone;
+  selectAllMode?: SelectAllMode;
+  showCheckBoxesMode?: SelectionColumnDisplayMode;
+}>
+const _componentSelection = (props: ISelectionProps) => {
+  return React.createElement(NestedOption<ISelectionProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "selection",
+    },
+  });
+};
+
+const Selection = Object.assign<typeof _componentSelection, NestedComponentMeta>(_componentSelection, {
+  componentType: "option",
+});
+
+// owners:
 // Animation
 type IShowProps = React.PropsWithChildren<{
   complete?: (($element: any, config: AnimationConfig) => void);
@@ -1188,6 +1213,8 @@ export {
   IPositionProps,
   RemoteOperations,
   IRemoteOperationsProps,
+  Selection,
+  ISelectionProps,
   Show,
   IShowProps,
   To,

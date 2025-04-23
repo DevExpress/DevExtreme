@@ -10051,6 +10051,39 @@ declare module DevExpress.ui {
      * [descr:dxCardView.totalCount()]
      */
     totalCount(): number;
+
+    /**
+     * [descr:dxCardView.selectCards(keys, preserve)]
+     */
+    selectCards(keys: Array<TKey>, preserve: boolean): void;
+    /**
+     * [descr:dxCardView.deselectCards(keys)]
+     */
+    deselectCards(keys: Array<TKey>): void;
+    /**
+     * [descr:dxCardView.selectAll()]
+     */
+    selectAll(): void;
+    /**
+     * [descr:dxCardView.deselectAll()]
+     */
+    deselectAll(): void;
+    /**
+     * [descr:dxCardView.clearSelection()]
+     */
+    clearSelection(): void;
+    /**
+     * [descr:dxCardView.getSelectedCardsData()]
+     */
+    getSelectedCardsData(): Array<TCardData>;
+    /**
+     * [descr:dxCardView.getSelectedCardKeys()]
+     */
+    getSelectedCardKeys(): Array<TKey>;
+    /**
+     * [descr:dxCardView.isCardSelected(key)]
+     */
+    isCardSelected(key: TKey): boolean;
   }
   module dxCardView {
     /**
@@ -10448,6 +10481,77 @@ declare module DevExpress.ui {
       | 'falseText'
       | 'caption';
     /**
+     * [descr:SelectionChangedEvent]
+     */
+    export type SelectionChangedEvent<
+      TCardData = unknown,
+      TKey = unknown
+    > = DevExpress.common.core.events.EventInfo<dxCardView> & {
+      /**
+       * [descr:SelectionChangedEvent.selectedCardsData]
+       */
+      selectedCardsData: Array<TCardData>;
+      /**
+       * [descr:SelectionChangedEvent.selectedCardKeys]
+       */
+      selectedCardKeys: Array<TKey>;
+      /**
+       * [descr:SelectionChangedEvent.currentSelectedCardKeys]
+       */
+      currentSelectedCardKeys: Array<TKey>;
+      /**
+       * [descr:SelectionChangedEvent.currentDeselectedCardKeys]
+       */
+      currentDeselectedCardKeys: Array<TKey>;
+    };
+    /**
+     * [descr:SelectionChangingEvent]
+     */
+    export type SelectionChangingEvent<
+      TCardData = unknown,
+      TKey = unknown
+    > = DevExpress.common.core.events.EventInfo<dxCardView> &
+      DevExpress.common.core.events.Cancelable & {
+        /**
+         * [descr:SelectionChangingEvent.selectedCardsData]
+         */
+        selectedCardsData: Array<TCardData>;
+        /**
+         * [descr:SelectionChangingEvent.selectedCardKeys]
+         */
+        selectedCardKeys: Array<TKey>;
+        /**
+         * [descr:SelectionChangingEvent.currentSelectedCardKeys]
+         */
+        currentSelectedCardKeys: Array<TKey>;
+        /**
+         * [descr:SelectionChangingEvent.currentDeselectedCardKeys]
+         */
+        currentDeselectedCardKeys: Array<TKey>;
+      };
+
+    /**
+     * [descr:SelectionConfiguration]
+     */
+    export type SelectionConfiguration = {
+      /**
+       * [descr:SelectionConfiguration.allowSelectAll]
+       */
+      allowSelectAll?: boolean;
+      /**
+       * [descr:SelectionConfiguration.mode]
+       */
+      mode?: DevExpress.common.SingleMultipleOrNone;
+      /**
+       * [descr:SelectionConfiguration.selectAllMode]
+       */
+      selectAllMode?: DevExpress.common.SelectAllMode;
+      /**
+       * [descr:SelectionConfiguration.showCheckBoxesMode]
+       */
+      showCheckBoxesMode?: DevExpress.common.grids.SelectionColumnDisplayMode;
+    };
+    /**
      * [descr:Toolbar]
      */
     export type Toolbar = {
@@ -10819,6 +10923,27 @@ declare module DevExpress.ui {
      * [descr:dxCardViewOptions.onCardSaving]
      */
     onCardSaving?: (e: DevExpress.ui.dxCardView.CardSavingEvent) => void;
+
+    /**
+     * [descr:dxCardViewOptions.selectedCardKeys]
+     */
+    selectedCardKeys?: Array<TKey>;
+    /**
+     * [descr:dxCardViewOptions.selection]
+     */
+    selection?: DevExpress.ui.dxCardView.SelectionConfiguration;
+    /**
+     * [descr:dxCardViewOptions.onSelectionChanging]
+     */
+    onSelectionChanging?: (
+      e: DevExpress.ui.dxCardView.SelectionChangingEvent
+    ) => void;
+    /**
+     * [descr:dxCardViewOptions.onSelectionChanged]
+     */
+    onSelectionChanged?: (
+      e: DevExpress.ui.dxCardView.SelectionChangedEvent
+    ) => void;
   }
   /**
    * [descr:dxChat]
