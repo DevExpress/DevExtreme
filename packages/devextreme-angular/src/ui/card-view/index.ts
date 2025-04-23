@@ -24,7 +24,7 @@ import {
 export { ExplicitTypes } from 'devextreme/ui/card_view';
 
 import DataSource from 'devextreme/data/data_source';
-import { CardCover, CardHeader, ColumnProperties, Editing, HeaderPanel, CardClickEvent, CardDblClickEvent, CardHoverChangedEvent, CardInsertedEvent, CardInsertingEvent, CardPreparedEvent, CardRemovedEvent, CardRemovingEvent, CardSavedEvent, CardSavingEvent, CardUpdatedEvent, CardUpdatingEvent, EditCanceledEvent, EditCancelingEvent, EditingStartEvent, FieldCaptionClickEvent, FieldCaptionDblClickEvent, FieldCaptionPreparedEvent, FieldClickEvent, FieldDblClickEvent, FieldPreparedEvent, FieldValueClickEvent, FieldValueDblClickEvent, FieldValuePreparedEvent, InitNewCardEvent, SelectionChangedEvent, SelectionChangingEvent, Paging, RemoteOperations, SelectionConfiguration, Toolbar } from 'devextreme/ui/card_view';
+import { CardCover, CardHeader, ColumnProperties, Editing, HeaderPanel, CardClickEvent, CardDblClickEvent, CardHoverChangedEvent, CardInsertedEvent, CardInsertingEvent, CardPreparedEvent, CardRemovedEvent, CardRemovingEvent, CardSavedEvent, CardSavingEvent, CardUpdatedEvent, CardUpdatingEvent, EditCanceledEvent, EditCancelingEvent, EditingStartEvent, FieldCaptionClickEvent, FieldCaptionDblClickEvent, FieldCaptionPreparedEvent, FieldClickEvent, FieldDblClickEvent, FieldPreparedEvent, FieldValueClickEvent, FieldValueDblClickEvent, FieldValuePreparedEvent, FocusedCardChanged, InitNewCardEvent, SelectionChangedEvent, SelectionChangingEvent, Paging, RemoteOperations, SelectionConfiguration, Toolbar } from 'devextreme/ui/card_view';
 import { Mode } from 'devextreme/common';
 import { DataSourceOptions } from 'devextreme/data/data_source';
 import { Store } from 'devextreme/data/store';
@@ -950,6 +950,14 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
 
     /**
     
+     * [descr:dxCardViewOptions.onFocusedCardChanged]
+    
+    
+     */
+    @Output() onFocusedCardChanged: EventEmitter<FocusedCardChanged>;
+
+    /**
+    
      * [descr:ComponentOptions.onInitialized]
     
     
@@ -1370,6 +1378,7 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
             { subscribe: 'fieldValueClick', emit: 'onFieldValueClick' },
             { subscribe: 'fieldValueDblClick', emit: 'onFieldValueDblClick' },
             { subscribe: 'fieldValuePrepared', emit: 'onFieldValuePrepared' },
+            { subscribe: 'focusedCardChanged', emit: 'onFocusedCardChanged' },
             { subscribe: 'initialized', emit: 'onInitialized' },
             { subscribe: 'initNewCard', emit: 'onInitNewCard' },
             { subscribe: 'optionChanged', emit: 'onOptionChanged' },

@@ -40,6 +40,7 @@ export {
   SelectionConfiguration,
   SelectionChangingEvent,
   SelectionChangedEvent,
+  FocusedCardChanged,
   dxCardViewOptions,
   Properties,
   Sorting,

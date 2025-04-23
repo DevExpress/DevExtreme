@@ -871,6 +871,17 @@ export type SelectionChangedEvent<TCardData = unknown, TKey = unknown> = EventIn
 
 // #endregion
 
+// #region KBN
+
+/**
+ * @docid
+ * @public
+ * @inherits EventInfo,WithCardInfo
+ */
+export type FocusedCardChanged = EventInfo<dxCardView> & WithCardInfo;
+
+// #endregion
+
 /**
  * @namespace DevExpress.ui
  * @public
@@ -1283,6 +1294,17 @@ export interface dxCardViewOptions<TCardData = unknown, TKey = unknown> extends 
      * @public
      */
     onSelectionChanged?: (e: SelectionChangedEvent) => void;
+
+    // #endregion
+
+    // #region KBN
+
+    /**
+     * @docid
+     * @action
+     * @public
+     */
+    onFocusedCardChanged?: (e: FocusedCardChanged) => void;
 
     // #endregion
 }

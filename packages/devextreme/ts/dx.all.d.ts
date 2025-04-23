@@ -10383,6 +10383,12 @@ declare module DevExpress.ui {
       DevExpress.common.core.events.EventInfo<dxCardView> & WithFieldValueInfo;
 
     /**
+     * [descr:FocusedCardChanged]
+     */
+    export type FocusedCardChanged =
+      DevExpress.common.core.events.EventInfo<dxCardView> & WithCardInfo;
+
+    /**
      * [descr:HeaderPanel]
      */
     export type HeaderPanel<TCardData = unknown, TKey = unknown> = {
@@ -10943,6 +10949,13 @@ declare module DevExpress.ui {
      */
     onSelectionChanged?: (
       e: DevExpress.ui.dxCardView.SelectionChangedEvent
+    ) => void;
+
+    /**
+     * [descr:dxCardViewOptions.onFocusedCardChanged]
+     */
+    onFocusedCardChanged?: (
+      e: DevExpress.ui.dxCardView.FocusedCardChanged
     ) => void;
   }
   /**

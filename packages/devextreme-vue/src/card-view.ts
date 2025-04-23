@@ -35,6 +35,7 @@ import {
  FieldValueClickEvent,
  FieldValueDblClickEvent,
  FieldValuePreparedEvent,
+ FocusedCardChanged,
  InitNewCardEvent,
  SelectionChangedEvent,
  SelectionChangingEvent,
@@ -190,6 +191,7 @@ type AccessibleOptions = Pick<Properties,
   "onFieldValueClick" |
   "onFieldValueDblClick" |
   "onFieldValuePrepared" |
+  "onFocusedCardChanged" |
   "onInitialized" |
   "onInitNewCard" |
   "onOptionChanged" |
@@ -276,6 +278,7 @@ const componentConfig = {
     onFieldValueClick: Function as PropType<((e: FieldValueClickEvent) => void)>,
     onFieldValueDblClick: Function as PropType<((e: FieldValueDblClickEvent) => void)>,
     onFieldValuePrepared: Function as PropType<((e: FieldValuePreparedEvent) => void)>,
+    onFocusedCardChanged: Function as PropType<((e: FocusedCardChanged) => void)>,
     onInitialized: Function as PropType<((e: { component: Component<any>, element: any }) => void)>,
     onInitNewCard: Function as PropType<((e: InitNewCardEvent) => void)>,
     onOptionChanged: Function as PropType<((e: { component: DOMComponent, element: any, fullName: string, model: any, name: string, previousValue: any, value: any }) => void)>,
@@ -358,6 +361,7 @@ const componentConfig = {
     "update:onFieldValueClick": null,
     "update:onFieldValueDblClick": null,
     "update:onFieldValuePrepared": null,
+    "update:onFocusedCardChanged": null,
     "update:onInitialized": null,
     "update:onInitNewCard": null,
     "update:onOptionChanged": null,
