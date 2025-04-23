@@ -16,9 +16,9 @@ import BaseDialog from './m_baseDialog';
 
 const AI_DIALOG_COMMANDS_WITH_OPTIONS = ['translate', 'changeStyle', 'changeTone', 'custom'];
 
-const AI_DIALOG_CLASS = 'dx-aidialog';
-const AI_DIALOG_CONTROLS_CLASS = 'dx-aidialog-controls';
-const AI_DIALOG_CONTENT_CLASS = 'dx-aidialog-content';
+export const AI_DIALOG_CLASS = 'dx-aidialog';
+export const AI_DIALOG_CONTROLS_CLASS = 'dx-aidialog-controls';
+export const AI_DIALOG_CONTENT_CLASS = 'dx-aidialog-content';
 const AI_DIALOG_TITLE_CLASS = 'dx-aidialog-title';
 const AI_DIALOG_TITLE_TEXT_CLASS = 'dx-aidialog-title-text';
 const ICON_CLASS = 'dx-icon';
@@ -62,7 +62,7 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
 
   private _isAskAICommandSelected = false;
 
-  private readonly _aiIntegration?: AIIntegration;
+  private _aiIntegration: AIIntegration;
 
   private _commandsMap: CommandsMap = {};
 
@@ -90,7 +90,7 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
 
   constructor(
     $container: dxElementWrapper,
-    aiIntegration?: AIIntegration,
+    aiIntegration: AIIntegration,
     popupConfig?: PopupProperties,
   ) {
     super($container, popupConfig);
@@ -429,6 +429,10 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
 
   private _getInitialDialogState(): DialogState {
     return this._isAskAICommandSelected ? DialogState.Asking : DialogState.Initial;
+  }
+
+  updateAIIntegration(aiIntegration: AIIntegration): void {
+    this._aiIntegration = aiIntegration;
   }
 
   replaceButtonAction(event: ItemClickEvent): void {
