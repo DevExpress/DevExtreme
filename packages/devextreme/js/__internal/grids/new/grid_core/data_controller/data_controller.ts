@@ -61,6 +61,10 @@ export class DataController {
 
   public readonly isLoading = signal(false);
 
+  private readonly _filteredItemCount = signal(0);
+
+  public readonly filteredItemCount: ReadonlySignal<number> = this._filteredItemCount;
+
   public readonly pageCount = computed(
     () => Math.ceil(
       this.totalCount.value / this.pageSize.value,
@@ -130,13 +134,40 @@ export class DataController {
             We use Deffered here because the code below is synchronous.
             customizeLoadResult callback does not support async code.
           */
-          new ArrayStore(e.data).load(this.pendingLocalOperations[e.operationId]).done((data) => {
-            e.data = data;
+          const { operationId } = e;
+          const loadOptions = { ...this.pendingLocalOperations[operationId] };
+
+          const { skip } = loadOptions;
+          const { take } = loadOptions;
+
+          if (typeof skip === 'number') {
+            e.skip = skip;
+            delete loadOptions.skip;
+          }
+
+          if (typeof take === 'number') {
+            e.take = take;
+            delete loadOptions.take;
+          }
+
+          new ArrayStore(e.data).load(loadOptions).done((filteredData) => {
+            const totalCount = filteredData.length;
+            this._filteredItemCount.value = totalCount;
+
+            const pagedData = typeof e.skip === 'number' && typeof e.take === 'number'
+              ? filteredData.slice(e.skip, e.skip + e.take)
+              : filteredData;
+
+            e.data = pagedData;
+
+            e.extra = e.extra || {};
+            e.extra.totalCount = totalCount;
           }).fail((error) => {
             // @ts-expect-error
             e.data = new Deferred().reject(error);
           });
-          this.pendingLocalOperations[e.operationId] = undefined;
+
+          this.pendingLocalOperations[operationId] = undefined;
         };
 
         if (dataSource.isLoaded()) {
@@ -230,7 +261,7 @@ export class DataController {
     this._items.value = items;
     this.pageIndex.value = dataSource.pageIndex();
     this.pageSize.value = dataSource.pageSize();
-    this._totalCount.value = dataSource.totalCount();
+    this._totalCount.value = this._filteredItemCount.peek() ?? dataSource.totalCount();
 
     // eslint-disable-next-line @typescript-eslint/no-floating-promises
     Promise.resolve().then(() => {
