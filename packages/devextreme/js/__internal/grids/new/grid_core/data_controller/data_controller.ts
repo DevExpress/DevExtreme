@@ -1,6 +1,7 @@
 import type { DataSource } from '@js/common/data';
 import ArrayStore from '@js/common/data/array_store';
 import { Deferred } from '@js/core/utils/deferred';
+import { isDefined } from '@js/core/utils/type';
 import type { ReadonlySignal } from '@preact/signals-core';
 import { computed, effect, signal } from '@preact/signals-core';
 import type { PromiseWithResolvers } from '@ts/core/utils/promise';
@@ -137,15 +138,14 @@ export class DataController {
           const { operationId } = e;
           const loadOptions = { ...this.pendingLocalOperations[operationId] };
 
-          const { skip } = loadOptions;
-          const { take } = loadOptions;
+          const { skip, take } = loadOptions;
 
-          if (typeof skip === 'number') {
+          if (isDefined(skip)) {
             e.skip = skip;
             delete loadOptions.skip;
           }
 
-          if (typeof take === 'number') {
+          if (isDefined(take)) {
             e.take = take;
             delete loadOptions.take;
           }
@@ -154,7 +154,7 @@ export class DataController {
             const totalCount = filteredData.length;
             this._filteredItemCount.value = totalCount;
 
-            const pagedData = typeof e.skip === 'number' && typeof e.take === 'number'
+            const pagedData = isDefined(e.skip) && isDefined(e.take)
               ? filteredData.slice(e.skip, e.skip + e.take)
               : filteredData;
 

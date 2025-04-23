@@ -62,7 +62,12 @@ test('Runtime filterValue change updates paging', async (t) => {
   const cardView = new CardView('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  await cardView.apiOption('filterValue', ['value', '=', '1']);
+  await cardView.apiOption('filterValue', [
+    ['value', '=', '1'],
+    'or', ['value', '=', '2'],
+    'or', ['value', '=', '3'],
+    'or', ['value', '=', '4'],
+  ]);
 
   await testScreenshot(t, takeScreenshot, 'filter-value-edit-paging-update.png', { element: cardView.element });
 
