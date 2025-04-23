@@ -1,11 +1,15 @@
 import $ from 'jquery';
 
 import Chat from 'ui/chat';
-import MessageList from '__internal/ui/chat/messagelist';
+import MessageList, {
+    CHAT_MESSAGELIST_CONTEXT_MENU_CLASS
+} from '__internal/ui/chat/messagelist';
 import ContextMenu, {
     DX_MENU_ITEM_CLASS,
-    DX_CONTEXT_MENU_CLASS,
 } from '__internal/ui/context_menu/m_context_menu';
+import {
+    FOCUSED_STATE_CLASS
+} from '__internal/core/widget/widget';
 import AlertList from '__internal/ui/chat/alertlist';
 import MessageBox, { TYPING_END_DELAY } from '__internal/ui/chat/messagebox';
 import keyboardMock from '../../../helpers/keyboardMock.js';
@@ -90,7 +94,7 @@ const moduleConfig = {
         this.getDayHeaders = () => this.$element.find(`.${CHAT_MESSAGELIST_DAY_HEADER_CLASS}`);
         this.getBubbles = () => this.$element.find(`.${CHAT_MESSAGEBUBBLE_CLASS}`);
         this.getBubblesContents = () => this.$element.find(`.${CHAT_MESSAGEBUBBLE_CONTENT_CLASS}`);
-        this.getContextMenu = () => ContextMenu.getInstance(this.$element.find(`.${DX_CONTEXT_MENU_CLASS}`));
+        this.getContextMenu = () => ContextMenu.getInstance(this.$element.find(`.${CHAT_MESSAGELIST_CONTEXT_MENU_CLASS}`));
         this.getContextMenuItems = () => $(this.getContextMenu().itemsContainer()).find(`.${DX_MENU_ITEM_CLASS}`);
 
         init();
@@ -269,7 +273,7 @@ QUnit.module('Chat', () => {
                 QUnit.test(`Chat should pass editing.${option} as function to messageList on init`, function(assert) {
                     this.reinit({
                         editing: {
-                            [option]: (options) => {
+                            [option]: () => {
                                 return true;
                             }
                         }
@@ -293,7 +297,6 @@ QUnit.module('Chat', () => {
 
                     this.instance.option('editing', {
                         [option]: (options) => {
-                            debugger;
                             return options.message.id === 1;
                         }
                     });
@@ -318,7 +321,6 @@ QUnit.module('Chat', () => {
                             [option]: allowActionSpy
                         },
                         items,
-                        currentUserId: userSecond.id,
                     });
 
                     assert.strictEqual(allowActionSpy.callCount, 0, 'allow action callback should not be called initially');
@@ -330,6 +332,32 @@ QUnit.module('Chat', () => {
                     assert.strictEqual(allowActionSpy.args[0][0].component.NAME, 'dxChat', 'component is passed correctly');
                     assert.deepEqual(allowActionSpy.args[0][0].message, items[1], 'target message is passed correctly');
                 });
+            });
+
+            QUnit.testInActiveWindow('Contextmenu should be hidden and input focused after esc is pressed', function(assert) {
+                const items = [
+                    { id: '1', text: 'a', author: userFirst },
+                    { id: '2', text: 'b', author: userSecond },
+                ];
+
+                this.reinit({
+                    focusStateEnabled: true,
+                    items,
+                    user: userSecond,
+                    editing: {
+                        allowUpdating: true,
+                        allowDeleting: true,
+                    }
+                });
+                debugger;
+                const $bubbles = this.getBubbles();
+                $bubbles.eq(1).trigger('dxcontextmenu');
+
+                keyboardMock(this.getContextMenu().itemsContainer())
+                    .keyDown('esc');
+
+                assert.strictEqual(this.getContextMenu().option('visible'), false, 'context menu is hidden');
+                assert.strictEqual(this.$textArea.hasClass(FOCUSED_STATE_CLASS), true, 'input is focused');
             });
         });
 
@@ -642,7 +670,6 @@ QUnit.module('Chat', () => {
                     },
                     onMessageEditingStart,
                     items,
-                    currentUserId: userSecond.id,
                 });
 
                 const $bubbles = this.getBubbles();
@@ -678,7 +705,6 @@ QUnit.module('Chat', () => {
                         assert.strictEqual(message, items[1], 'e.message is correct');
                     },
                     items,
-                    currentUserId: userSecond.id,
                 });
 
                 const $bubbles = this.getBubbles();
@@ -701,18 +727,11 @@ QUnit.module('Chat', () => {
                     },
                     onMessageEditingStart: () => {},
                     items,
-                    currentUserId: userSecond.id,
                 });
 
                 const onMessageEditingStart = sinon.spy();
 
                 this.instance.option({ onMessageEditingStart });
-
-                const text = 'new text message';
-
-                keyboardMock(this.$input)
-                    .focus()
-                    .type(text);
 
                 const $bubbles = this.getBubbles();
                 $bubbles.eq(1).trigger('dxcontextmenu');
@@ -740,7 +759,6 @@ QUnit.module('Chat', () => {
                     },
                     onMessageDeleting,
                     items,
-                    currentUserId: userSecond.id,
                 });
 
                 const $bubbles = this.getBubbles();
@@ -776,7 +794,6 @@ QUnit.module('Chat', () => {
                         assert.strictEqual(message, items[1], 'e.message is correct');
                     },
                     items,
-                    currentUserId: userSecond.id,
                 });
 
                 const $bubbles = this.getBubbles();
@@ -799,18 +816,11 @@ QUnit.module('Chat', () => {
                     },
                     onMessageDeleting: () => {},
                     items,
-                    currentUserId: userSecond.id,
                 });
 
                 const onMessageDeleting = sinon.spy();
 
                 this.instance.option({ onMessageDeleting });
-
-                const text = 'new text message';
-
-                keyboardMock(this.$input)
-                    .focus()
-                    .type(text);
 
                 const $bubbles = this.getBubbles();
                 $bubbles.eq(1).trigger('dxcontextmenu');

@@ -3,8 +3,8 @@ import $ from 'jquery';
 import MessageList, {
     MESSAGEGROUP_TIMEOUT,
     CHAT_MESSAGELIST_CONTEXT_MENU_TARGET,
+    CHAT_MESSAGELIST_CONTEXT_MENU_CONTENT_CLASS,
     CHAT_MESSAGELIST_CONTEXT_MENU_CLASS,
-    DX_CONTEXT_MENU_CLASS,
 } from '__internal/ui/chat/messagelist';
 import ScrollView from 'ui/scroll_view';
 import {
@@ -57,7 +57,7 @@ const moduleConfig = {
             this.getDayHeaders = () => $(this.getScrollView().content()).find(`.${CHAT_MESSAGELIST_DAY_HEADER_CLASS}`);
             this.getMessageGroups = () => this.$element.find(`.${CHAT_MESSAGEGROUP_CLASS}`);
             this.getBubbles = () => this.$element.find(`.${CHAT_MESSAGEBUBBLE_CLASS}`);
-            this.getContextMenu = () => ContextMenu.getInstance(this.$element.find(`.${DX_CONTEXT_MENU_CLASS}`));
+            this.getContextMenu = () => ContextMenu.getInstance(this.$element.find(`.${CHAT_MESSAGELIST_CONTEXT_MENU_CLASS}`));
             this.getContextMenuItems = () => $(this.getContextMenu().itemsContainer()).find(`.${DX_MENU_ITEM_CLASS}`);
 
             this.scrollView = this.getScrollView();
@@ -1111,7 +1111,7 @@ QUnit.module('MessageList', () => {
             const expectedOptions = {
                 hideOnParentScroll: false,
                 target: CHAT_MESSAGELIST_CONTEXT_MENU_TARGET,
-                cssClass: CHAT_MESSAGELIST_CONTEXT_MENU_CLASS,
+                cssClass: CHAT_MESSAGELIST_CONTEXT_MENU_CONTENT_CLASS,
                 visible: false,
                 overlayContainer: this.getScrollView().content(),
                 visualContainer: this.getScrollView().container(),

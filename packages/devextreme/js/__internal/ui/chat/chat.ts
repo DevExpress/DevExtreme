@@ -1,5 +1,5 @@
 import { Guid } from '@js/common';
-import type { AsyncCancelable, EventInfo, NativeEventInfo } from '@js/common/core/events';
+import type { AsyncCancelable, EventInfo } from '@js/common/core/events';
 import messageLocalization from '@js/common/core/localization/message';
 import type { DataSourceOptions } from '@js/common/data';
 import registerComponent from '@js/core/component_registrator';
@@ -23,7 +23,11 @@ import type {
   TypingStartEvent as MessageBoxTypingStartEvent,
 } from '@ts/ui/chat/messagebox';
 import MessageBox from '@ts/ui/chat/messagebox';
-import type { MessageEditingEvent, MessageTemplate, Properties as MessageListProperties } from '@ts/ui/chat/messagelist';
+import type {
+  MessageEditingEvent,
+  MessageTemplate,
+  Properties as MessageListProperties,
+} from '@ts/ui/chat/messagelist';
 import MessageList from '@ts/ui/chat/messagelist';
 import type { DataChange } from '@ts/ui/collection/collection_widget.base';
 
@@ -202,6 +206,9 @@ class Chat extends Widget<ChatProperties> {
       },
       onMessageDeleting: (e) => {
         this._messageDeletingHandler(e);
+      },
+      onKeyHandled: () => {
+        this.focus();
       },
     };
 

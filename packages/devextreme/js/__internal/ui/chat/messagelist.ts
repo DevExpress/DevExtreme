@@ -14,7 +14,7 @@ import { getHeight } from '@js/core/utils/size';
 import { isDate, isDefined } from '@js/core/utils/type';
 import type { DxEvent } from '@js/events';
 import type { Message, User } from '@js/ui/chat';
-import type { Item } from '@js/ui/context_menu';
+import type { Item as ContextMenuItem } from '@js/ui/context_menu';
 import type { WidgetOptions } from '@js/ui/widget/ui.widget';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
@@ -49,16 +49,18 @@ const CHAT_LAST_MESSAGEGROUP_ALIGNMENT_START_CLASS = 'dx-chat-last-messagegroup-
 const CHAT_LAST_MESSAGEGROUP_ALIGNMENT_END_CLASS = 'dx-chat-last-messagegroup-alignment-end';
 
 export const CHAT_MESSAGELIST_CONTEXT_MENU_CLASS = 'dx-messagelist-context-menu';
+export const CHAT_MESSAGELIST_CONTEXT_MENU_CONTENT_CLASS = 'dx-messagelist-context-menu-content';
 export const CHAT_MESSAGELIST_CONTEXT_MENU_TARGET = `.${CHAT_MESSAGEGROUP_ALIGNMENT_END_CLASS} .${CHAT_MESSAGEBUBBLE_CLASS}`;
 
 const SCROLLABLE_CONTAINER_CLASS = 'dx-scrollable-container';
+const ESCAPE_KEY = 'escape';
 
 export const MESSAGEGROUP_TIMEOUT = 5 * 1000 * 60;
 
 export type MessageTemplate = ((data: Message, messageBubbleContainer: Element) => void) | null;
 
 export type ItemClick = NativeEventInfo<ContextMenu, KeyboardEvent | MouseEvent | PointerEvent> & {
-  readonly itemData?: Item;
+  readonly itemData?: ContextMenuItem;
   readonly itemElement: dxElementWrapper;
 };
 
@@ -83,6 +85,7 @@ export interface Properties extends WidgetOptions<MessageList> {
   showMessageTimestamp: boolean;
   onMessageEditingStart?: (e: MessageEditingEvent) => void;
   onMessageDeleting?: (e: MessageEditingEvent) => void;
+  onKeyHandled?: (e: KeyboardEvent) => void;
 }
 
 class MessageList extends Widget<Properties> {
@@ -255,7 +258,7 @@ class MessageList extends Widget<Properties> {
     });
   }
 
-  _getContextMenuButtons(message: Message): Item[] {
+  _getContextMenuButtons(message: Message): ContextMenuItem[] {
     const {
       allowUpdating,
       allowDeleting,
@@ -266,7 +269,7 @@ class MessageList extends Widget<Properties> {
     const editText = messageLocalization.format('dxChat-editingEditMessage');
     const deleteText = messageLocalization.format('dxChat-editingDeleteMessage');
 
-    const buttons: Item[] = [];
+    const buttons: ContextMenuItem[] = [];
 
     if (allowUpdating(message)) {
       buttons.push({
@@ -298,11 +301,22 @@ class MessageList extends Widget<Properties> {
       onShowing: (e) => {
         this._onContextMenuShowing(e);
       },
-      cssClass: CHAT_MESSAGELIST_CONTEXT_MENU_CLASS,
+      elementAttr: {
+        class: CHAT_MESSAGELIST_CONTEXT_MENU_CLASS,
+      },
+      cssClass: CHAT_MESSAGELIST_CONTEXT_MENU_CONTENT_CLASS,
       hideOnParentScroll: false,
       overlayContainer: this._scrollView.content(),
       visualContainer: this._scrollView.container(),
       boundaryOffset: { h: 16 },
+    });
+
+    this._contextMenu.registerKeyHandler(ESCAPE_KEY, (event: KeyboardEvent) => {
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
+      this._contextMenu.hide();
+
+      const { onKeyHandled } = this.option();
+      onKeyHandled?.(event);
     });
 
     $contextMenu.appendTo(this.$element());

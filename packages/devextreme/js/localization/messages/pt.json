@@ -366,6 +366,8 @@
         "dxChat-typingMessageTwoUsers": "{0} e {1} estão digitando...",
         "dxChat-typingMessageThreeUsers": "{0}, {1} e {2} estão digitando...",
         "dxChat-typingMessageMultipleUsers": "{0} e outros estão digitando...",
+        "dxChat-editingEditMessage": "Editar",
+        "dxChat-editingDeleteMessage": "Eliminar",
 
         "dxColorView-ariaRed": "Vermelho",
         "dxColorView-ariaGreen": "Verde",

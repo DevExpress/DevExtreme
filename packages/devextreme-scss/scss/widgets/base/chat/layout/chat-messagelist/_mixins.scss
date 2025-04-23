@@ -73,7 +73,7 @@
 @mixin chat-messagelist-contextmenu(
   $delete-button-color,
 ) {
-  .dx-messagelist-context-menu {
+  .dx-messagelist-context-menu-content {
     .dx-menu-item:has(.dx-icon-trash) {
       color: $delete-button-color;
     }
