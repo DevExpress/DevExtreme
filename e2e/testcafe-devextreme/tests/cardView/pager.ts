@@ -1,6 +1,8 @@
 import CardView from 'devextreme-testcafe-models/cardView';
+import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../helpers/getPageUrl';
 import { createWidget } from '../../helpers/createWidget';
+import { testScreenshot } from '../../helpers/themeUtils';
 
 async function createCardViewWithPager(): Promise<any> {
   const dataSource = Array.from({ length: 20 }, (_, i) => ({ text: i.toString(), value: i }));
@@ -54,4 +56,17 @@ test('Page index interaction', async (t) => {
     .click(pager.getPrevNavButton().element)
     .expect(pager.getInfoText().textContent)
     .eql('Page 6 of 10 (20 items)');
+}).before(async () => createCardViewWithPager());
+
+test('Runtime filterValue change updates paging', async (t) => {
+  const cardView = new CardView('#container');
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  await cardView.apiOption('filterValue', ['value', '=', '1']);
+
+  await testScreenshot(t, takeScreenshot, 'content-no-data.png', { element: cardView.element });
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
 }).before(async () => createCardViewWithPager());
