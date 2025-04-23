@@ -13,7 +13,8 @@ import type { ResourceProcessor } from '@ts/scheduler/resources/resource_process
 import { hide, show } from '@ts/ui/tooltip/m_tooltip';
 
 import {
-  ALL_DAY_APPOINTMENT_CLASS, APPOINTMENT_CONTENT_CLASSES,
+  ALL_DAY_APPOINTMENT_CLASS,
+  APPOINTMENT_CONTENT_CLASSES,
   APPOINTMENT_DRAG_SOURCE_CLASS,
   APPOINTMENT_HAS_RESOURCE_COLOR_CLASS,
   DIRECTION_APPOINTMENT_CLASSES,

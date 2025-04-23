@@ -7,7 +7,9 @@ import { getPathToLeaf } from '../../resources/m_utils';
 import type { AppointmentProperties, LoadedResource } from './m_types';
 
 const localizeDate = (date: Date): string => `${dateLocalization.format(date, 'monthAndDay')}, ${dateLocalization.format(date, 'year')}`;
+
 const localizeTime = (date: Date): string => `${dateLocalization.format(date, 'shorttime')}`;
+
 const getDate = (options: AppointmentProperties, propName: 'endDate' | 'startDate'): Date => {
   const result = options.dataAccessors.get(propName, options.data);
 
@@ -23,6 +25,7 @@ const getDate = (options: AppointmentProperties, propName: 'endDate' | 'startDat
 
   return gridDate ?? date;
 };
+
 const getDateText = (options: AppointmentProperties): string => {
   const startDate = getDate(options, 'startDate');
   const endDate = getDate(options, 'endDate');
@@ -43,6 +46,7 @@ const getDateText = (options: AppointmentProperties): string => {
     ? `${startDateText} - ${endDateText}, ${allDayText}`
     : `${startDateText}, ${startTimeText} - ${endDateText}, ${endTimeText}`;
 };
+
 const getPartsText = (
   { partIndex, partTotalCount }: AppointmentProperties,
 ): string => (isDefined(partIndex) ? ` (${partIndex + 1}/${partTotalCount})` : '');
@@ -79,6 +83,7 @@ export const getGroupTexts = (
 
   return textPath as string[];
 };
+
 const getGroupText = (options: AppointmentProperties): string => {
   if (!options.groupTexts.length) {
     return '';
@@ -88,6 +93,7 @@ const getGroupText = (options: AppointmentProperties): string => {
   // @ts-ignore @ts-expect-error
   return messageLocalization.format('dxScheduler-appointmentAriaLabel-group', groupText);
 };
+
 const getResourceText = async (options: AppointmentProperties): Promise<string[]> => {
   const resourceProcessor = options.getResourceProcessor();
   const list = await resourceProcessor.getAppointmentResourcesValues(options.data);

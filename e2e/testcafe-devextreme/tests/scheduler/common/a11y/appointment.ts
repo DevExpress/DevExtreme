@@ -43,7 +43,7 @@ const currentDate = Date.UTC(2021, 1, 1);
       .expect(appointment.getAriaLabel())
       .eql('App 1: February 1, 2021, 12:00 PM - 1:00 PM')
       .expect(await appointment.getAriaDescription())
-      .eql('Group: resource1; Resource 1: resource1');
+      .eql('Group: resource1; Group 1: resource1');
 
     await a11yCheck(t, checkOptions, '#container');
   }).before(async () => {
@@ -63,7 +63,7 @@ const currentDate = Date.UTC(2021, 1, 1);
             text: 'resource1',
             id: 1,
           }],
-          label: 'Resource 1',
+          label: 'Group 1',
         },
       ],
     });
@@ -77,7 +77,7 @@ const currentDate = Date.UTC(2021, 1, 1);
       .expect(appointment.getAriaLabel())
       .eql('App 1: February 1, 2021, 12:00 PM - 1:00 PM')
       .expect(await appointment.getAriaDescription())
-      .eql('Group: resource11, resource21; Resource 1: resource11; Resource 2: resource21, resource22');
+      .eql('Group: resource11, resource21; Group 1: resource11; Group 2: resource21, resource22');
 
     await a11yCheck(t, checkOptions, '#container');
   }).before(async () => {
@@ -98,7 +98,7 @@ const currentDate = Date.UTC(2021, 1, 1);
             text: 'resource11',
             id: 1,
           }],
-          label: 'Resource 1',
+          label: 'Group 1',
         },
         {
           fieldExpr: 'groupId2',
@@ -109,7 +109,7 @@ const currentDate = Date.UTC(2021, 1, 1);
             text: 'resource22',
             id: 2,
           }],
-          label: 'Resource 2',
+          label: 'Group 2',
         },
       ],
     });
