@@ -337,6 +337,12 @@
   }
 }
 
+.dx-formdialog.dx-dropdowneditor-overlay.dx-popup-wrapper {
+  .dx-overlay-content {
+    box-shadow: $material-popup-overlay-content-shadow;
+  }
+}
+
 .dx-aidialog {
   .dx-toolbar.dx-popup-bottom {
     padding: $material-aidialog-toolbar-padding;

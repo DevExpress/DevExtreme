@@ -5,21 +5,21 @@ export const defaultToolbarItems = [
     { name: 'separator' },
     { name: 'undo' },
     { name: 'redo' },
-  ];
-  
-  export const fullToolbarItems = [
+];
+
+export const fullToolbarItems = [
     { name: 'undo' },
     { name: 'redo' },
     { name: 'separator' },
     {
-      name: 'size',
-      acceptedValues: ['8pt', '10pt', '12pt', '14pt', '18pt', '24pt', '36pt'],
-      options: { placeholder: 'Font size' },
+        name: 'size',
+        acceptedValues: ['8pt', '10pt', '12pt', '14pt', '18pt', '24pt', '36pt'],
+        options: { placeholder: 'Font size' },
     },
     {
-      name: 'font',
-      acceptedValues: ['Arial', 'Courier New', 'Georgia', 'Impact', 'Lucida Console', 'Tahoma', 'Times New Roman', 'Verdana'],
-      options: { placeholder: 'Font' },
+        name: 'font',
+        acceptedValues: ['Arial', 'Courier New', 'Georgia', 'Impact', 'Lucida Console', 'Tahoma', 'Times New Roman', 'Verdana'],
+        options: { placeholder: 'Font' },
     },
     { name: 'separator' },
     { name: 'bold' },
@@ -36,9 +36,9 @@ export const defaultToolbarItems = [
     { name: 'bulletList' },
     { name: 'separator' },
     {
-      name: 'header',
-      acceptedValues: [false, 1, 2, 3, 4, 5],
-      options: { placeholder: 'Header' },
+        name: 'header',
+        acceptedValues: [false, 1, 2, 3, 4, 5],
+        options: { placeholder: 'Header' },
     },
     { name: 'separator' },
     { name: 'color' },
@@ -59,4 +59,4 @@ export const defaultToolbarItems = [
     { name: 'insertColumnLeft' },
     { name: 'insertColumnRight' },
     { name: 'deleteColumn' },
-  ];
+];
