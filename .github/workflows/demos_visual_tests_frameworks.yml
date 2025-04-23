@@ -137,7 +137,7 @@ jobs:
 
     - name: Prepare bundles
       working-directory: apps/demos
-      run: pnpx nx prepare-bundles
+      run: pnpx nx prepare-bundles --release
 
     - name: Demos - Run tsc
       working-directory: apps/demos

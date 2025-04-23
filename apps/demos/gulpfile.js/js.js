@@ -5,7 +5,7 @@ const { task, parallel, series } = require('gulp');
 const { init } = require('../utils/shared/config-helper');
 const createConfig = require('../utils/internal/create-config');
 const { copyJsSharedResources } = require('../utils/copy-shared-resources/copy');
-const { copyBundlesFolder, build } = require('../utils/bundle');
+const { copyBundlesFolder, build } = require('../utils/bundle'); // build -> prepareConfigs --release
 
 const demosDir = join(__dirname, '..', 'Demos');
 
