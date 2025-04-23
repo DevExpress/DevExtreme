@@ -14,13 +14,13 @@ import type { HorizontalAlignment, VerticalAlignment, template, ToolbarItemLocat
 import type { CardInfo, CardHeaderPredefinedToolbarItem, CardHeaderToolbarItem, FieldInfoType, Column as CardViewColumn, PredefinedToolbarItem, ToolbarItem as CardViewToolbarItem } from "devextreme/ui/card_view";
 import type { LocateInMenuMode, ShowTextMode } from "devextreme/ui/toolbar";
 import type { CollectionWidgetItem } from "devextreme/ui/collection/ui.collection_widget.base";
+import type { DataChangeType, DataChange, PagerPageSize } from "devextreme/common/grids";
 import type { dxFilterBuilderField, FieldInfo, FilterBuilderOperation, dxFilterBuilderCustomOperation, GroupOperation, ContentReadyEvent, DisposingEvent, EditorPreparedEvent, EditorPreparingEvent, InitializedEvent, OptionChangedEvent, ValueChangedEvent } from "devextreme/ui/filter_builder";
 import type { Format as LocalizationFormat } from "devextreme/common/core/localization";
 import type { DataSourceOptions } from "devextreme/data/data_source";
 import type { Store } from "devextreme/data/store";
 import type { ContentReadyEvent as LoadPanelContentReadyEvent, DisposingEvent as LoadPanelDisposingEvent, InitializedEvent as LoadPanelInitializedEvent, OptionChangedEvent as LoadPanelOptionChangedEvent, HiddenEvent, HidingEvent, ShowingEvent, ShownEvent } from "devextreme/ui/load_panel";
 import type { event } from "devextreme/events/events.types";
-import type { PagerPageSize } from "devextreme/common/grids";
 
 type ICardViewOptions<TCardData = any, TKey = any> = React.PropsWithChildren<Properties<TCardData, TKey> & IHtmlOptions & {
   dataSource?: Properties<TCardData, TKey>["dataSource"];
@@ -54,7 +54,7 @@ const CardView = memo(
       ), [baseRef.current]);
 
       const subscribableOptions = useMemo(() => (["filterValue"]), []);
-      const independentEvents = useMemo(() => (["onCardClick","onCardDblClick","onCardPrepared","onContentReady","onDataErrorOccurred","onDisposing","onFieldCaptionClick","onFieldCaptionDblClick","onFieldCaptionPrepared","onFieldClick","onFieldDblClick","onFieldPrepared","onFieldValueClick","onFieldValueDblClick","onFieldValuePrepared","onInitialized"]), []);
+      const independentEvents = useMemo(() => (["onCardClick","onCardDblClick","onCardInserted","onCardInserting","onCardPrepared","onCardRemoved","onCardRemoving","onCardSaved","onCardSaving","onCardUpdated","onCardUpdating","onContentReady","onDataErrorOccurred","onDisposing","onEditCanceled","onEditCanceling","onEditingStart","onFieldCaptionClick","onFieldCaptionDblClick","onFieldCaptionPrepared","onFieldClick","onFieldDblClick","onFieldPrepared","onFieldValueClick","onFieldValueDblClick","onFieldValuePrepared","onInitialized","onInitNewCard"]), []);
 
       const defaults = useMemo(() => ({
         defaultFilterValue: "filterValue",
@@ -64,6 +64,7 @@ const CardView = memo(
         cardCover: { optionName: "cardCover", isCollectionItem: false },
         cardHeader: { optionName: "cardHeader", isCollectionItem: false },
         column: { optionName: "columns", isCollectionItem: true },
+        editing: { optionName: "editing", isCollectionItem: false },
         filterBuilder: { optionName: "filterBuilder", isCollectionItem: false },
         headerPanel: { optionName: "headerPanel", isCollectionItem: false },
         loadPanel: { optionName: "loadPanel", isCollectionItem: false },
@@ -279,6 +280,29 @@ const CardHeaderItem = Object.assign<typeof _componentCardHeaderItem, NestedComp
 });
 
 // owners:
+// Editing
+type IChangeProps = React.PropsWithChildren<{
+  data?: any;
+  insertAfterKey?: any;
+  insertBeforeKey?: any;
+  key?: any;
+  type?: DataChangeType;
+}>
+const _componentChange = (props: IChangeProps) => {
+  return React.createElement(NestedOption<IChangeProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "changes",
+      IsCollectionItem: true,
+    },
+  });
+};
+
+const Change = Object.assign<typeof _componentChange, NestedComponentMeta>(_componentChange, {
+  componentType: "option",
+});
+
+// owners:
 // Position
 type ICollisionProps = React.PropsWithChildren<{
   x?: CollisionResolution;
@@ -375,6 +399,34 @@ const _componentCustomOperation = (props: ICustomOperationProps) => {
 };
 
 const CustomOperation = Object.assign<typeof _componentCustomOperation, NestedComponentMeta>(_componentCustomOperation, {
+  componentType: "option",
+});
+
+// owners:
+// CardView
+type IEditingProps = React.PropsWithChildren<{
+  allowAdding?: boolean;
+  allowDeleting?: boolean;
+  allowUpdating?: boolean;
+  changes?: Array<DataChange>;
+  confirmDelete?: boolean;
+  editCardKey?: any;
+  form?: Record<string, any>;
+  popup?: Record<string, any>;
+}>
+const _componentEditing = (props: IEditingProps) => {
+  return React.createElement(NestedOption<IEditingProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "editing",
+      ExpectedChildren: {
+        change: { optionName: "changes", isCollectionItem: true }
+      },
+    },
+  });
+};
+
+const Editing = Object.assign<typeof _componentEditing, NestedComponentMeta>(_componentEditing, {
   componentType: "option",
 });
 
@@ -1092,12 +1144,16 @@ export {
   ICardHeaderProps,
   CardHeaderItem,
   ICardHeaderItemProps,
+  Change,
+  IChangeProps,
   Collision,
   ICollisionProps,
   Column,
   IColumnProps,
   CustomOperation,
   ICustomOperationProps,
+  Editing,
+  IEditingProps,
   Field,
   IFieldProps,
   FilterBuilder,

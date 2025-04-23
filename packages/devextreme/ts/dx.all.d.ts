@@ -9989,6 +9989,31 @@ declare module DevExpress.ui {
      * [descr:dxCardView.searchByText(text)]
      */
     searchByText(text: string): void;
+
+    /**
+     * [descr:dxCardView.addRow()]
+     */
+    addCard(): void;
+    /**
+     * [descr:dxCardView.cancelEditData()]
+     */
+    cancelEditData(): void;
+    /**
+     * [descr:dxCardView.deleteCard(cardIndex)]
+     */
+    deleteCard(cardIndex: number): void;
+    /**
+     * [descr:dxCardView.editCard(cardIndex)]
+     */
+    editCard(cardIndex: number): void;
+    /**
+     * [descr:dxCardView.hasEditData()]
+     */
+    hasEditData(): void;
+    /**
+     * [descr:dxCardView.saveEditData()]
+     */
+    saveEditData(): void;
   }
   module dxCardView {
     /**
@@ -10027,10 +10052,196 @@ declare module DevExpress.ui {
           eventType: string;
         };
     /**
+     * [descr:CardInsertedEvent]
+     */
+    export type CardInsertedEvent<TCardData = unknown> =
+      DevExpress.common.core.events.EventInfo<dxCardView> & {
+        /**
+         * [descr:CardInsertedEvent.data]
+         */
+        data: DevExpress.core.DeepPartial<TCardData>;
+      };
+    /**
+     * [descr:CardInsertingEvent]
+     */
+    export type CardInsertingEvent<TCardData = unknown> =
+      DevExpress.common.core.events.EventInfo<dxCardView> &
+        DevExpress.common.core.events.Cancelable & {
+          /**
+           * [descr:CardInsertingEvent.data]
+           */
+          data: DevExpress.core.DeepPartial<TCardData>;
+        };
+    /**
      * [descr:CardPreparedEvent]
      */
     export type CardPreparedEvent =
       DevExpress.common.core.events.EventInfo<dxCardView> & WithCardInfo;
+    /**
+     * [descr:CardRemovedEvent]
+     */
+    export type CardRemovedEvent<
+      TCardData = unknown,
+      TKey = unknown
+    > = DevExpress.common.core.events.EventInfo<dxCardView> & {
+      /**
+       * [descr:CardRemovedEvent.data]
+       */
+      data: TCardData;
+      /**
+       * [descr:CardRemovedEvent.key]
+       */
+      key: TKey;
+    };
+    /**
+     * [descr:CardRemovingEvent]
+     */
+    export type CardRemovingEvent<
+      TCardData = unknown,
+      TKey = unknown
+    > = DevExpress.common.core.events.EventInfo<dxCardView> &
+      DevExpress.common.core.events.Cancelable & {
+        /**
+         * [descr:CardRemovingEvent.data]
+         */
+        data: TCardData;
+        /**
+         * [descr:CardRemovingEvent.key]
+         */
+        key: TKey;
+      };
+    /**
+     * [descr:CardSavedEvent]
+     */
+    export type CardSavedEvent =
+      DevExpress.common.core.events.EventInfo<dxCardView> & {
+        /**
+         * [descr:CardSavedEvent.changes]
+         */
+        changes: DevExpress.common.grids.DataChange[];
+      };
+    /**
+     * [descr:CardSavingEvent]
+     */
+    export type CardSavingEvent =
+      DevExpress.common.core.events.EventInfo<dxCardView> &
+        DevExpress.common.core.events.Cancelable & {
+          /**
+           * [descr:CardSavingEvent.promise]
+           */
+          promise?: PromiseLike<void>;
+          /**
+           * [descr:CardSavingEvent.changes]
+           */
+          changes: DevExpress.common.grids.DataChange[];
+        };
+    /**
+     * [descr:CardUpdatedEvent]
+     */
+    export type CardUpdatedEvent<
+      TCardData = unknown,
+      TKey = unknown
+    > = DevExpress.common.core.events.EventInfo<dxCardView> & {
+      /**
+       * [descr:CardUpdatedEvent.data]
+       */
+      data: TCardData;
+      /**
+       * [descr:CardUpdatedEvent.key]
+       */
+      key: TKey;
+    };
+    /**
+     * [descr:CardUpdatingEvent]
+     */
+    export type CardUpdatingEvent<
+      TCardData = unknown,
+      TKey = unknown
+    > = DevExpress.common.core.events.EventInfo<dxCardView> &
+      DevExpress.common.core.events.Cancelable & {
+        /**
+         * [descr:CardUpdatingEvent.key]
+         */
+        key: TKey;
+        /**
+         * [descr:CardUpdatingEvent.oldData]
+         */
+        oldData: TCardData;
+        /**
+         * [descr:CardUpdatingEvent.newData]
+         */
+        newData: DevExpress.core.DeepPartial<TCardData>;
+      };
+    /**
+     * [descr:EditCanceledEvent]
+     */
+    export type EditCanceledEvent =
+      DevExpress.common.core.events.EventInfo<dxCardView> & {
+        changes: DevExpress.common.grids.DataChange[];
+      };
+    /**
+     * [descr:EditCancelingEvent]
+     */
+    export type EditCancelingEvent =
+      DevExpress.common.core.events.EventInfo<dxCardView> &
+        DevExpress.common.core.events.Cancelable & {
+          changes: DevExpress.common.grids.DataChange[];
+        };
+
+    /**
+     * [descr:Editing]
+     */
+    export type Editing<TCardData = unknown, TKey = unknown> = {
+      /**
+       * [descr:Editing.allowAdding]
+       */
+      allowAdding?: boolean;
+      /**
+       * [descr:Editing.allowDeleting]
+       */
+      allowDeleting?: boolean;
+      /**
+       * [descr:Editing.allowUpdating]
+       */
+      allowUpdating?: boolean;
+      /**
+       * [descr:Editing.changes]
+       */
+      changes?: DevExpress.common.grids.DataChange<TCardData, TKey>[];
+      /**
+       * [descr:Editing.confirmDelete]
+       */
+      confirmDelete?: boolean;
+      /**
+       * [descr:Editing.editCardKey]
+       */
+      editCardKey?: TKey | null;
+      /**
+       * [descr:Editing.form]
+       */
+      form?: DevExpress.ui.dxForm.Properties;
+      /**
+       * [descr:Editing.popup]
+       */
+      popup?: DevExpress.ui.dxPopup.Properties;
+    };
+    /**
+     * [descr:EditingStartEvent]
+     */
+    export type EditingStartEvent<
+      TCardData = unknown,
+      TKey = unknown
+    > = DevExpress.common.core.events.EventInfo<dxCardView> &
+      DevExpress.common.core.events.Cancelable & {
+        /**
+         * [descr:EditingStartEvent.data]
+         */
+        data: TCardData;
+        /**
+         * [descr:EditingStartEvent.key]
+         */
+        key: TKey;
+      };
     /**
      * [descr:FieldCaptionClickEvent]
      */
@@ -10158,6 +10369,20 @@ declare module DevExpress.ui {
       | 'calculateCellValue'
       | 'calculateDisplayValue'
       | 'customizeText';
+    /**
+     * [descr:InitNewCardEvent]
+     */
+    export type InitNewCardEvent<TCardData = unknown> =
+      DevExpress.common.core.events.EventInfo<dxCardView> & {
+        /**
+         * [descr:InitNewCardEvent.data]
+         */
+        data: DevExpress.core.DeepPartial<TCardData>;
+        /**
+         * [descr:InitNewCardEvent.promise]
+         */
+        promise?: PromiseLike<void>;
+      };
 
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
@@ -10502,6 +10727,61 @@ declare module DevExpress.ui {
      * [descr:dxCardViewOptions.headerFilter]
      */
     headerFilter?: DevExpress.common.grids.HeaderFilter;
+
+    /**
+     * [descr:dxCardViewOptions.editing]
+     */
+    editing?: DevExpress.ui.dxCardView.Editing<TCardData, TKey>;
+    /**
+     * [descr:dxCardViewOptions.onEditCanceled]
+     */
+    onEditCanceled?: (e: DevExpress.ui.dxCardView.EditCanceledEvent) => void;
+    /**
+     * [descr:dxCardViewOptions.onEditCanceling]
+     */
+    onEditCanceling?: (e: DevExpress.ui.dxCardView.EditCancelingEvent) => void;
+    /**
+     * [descr:dxCardViewOptions.onEditingStart]
+     */
+    onEditingStart?: (e: DevExpress.ui.dxCardView.EditingStartEvent) => void;
+    /**
+     * [descr:dxCardViewOptions.onInitNewCard]
+     */
+    onInitNewCard?: (
+      e: DevExpress.ui.dxCardView.InitNewCardEvent<TCardData>
+    ) => void;
+    /**
+     * [descr:dxCardViewOptions.onCardInserted]
+     */
+    onCardInserted?: (e: DevExpress.ui.dxCardView.CardInsertedEvent) => void;
+    /**
+     * [descr:dxCardViewOptions.onCardInserting]
+     */
+    onCardInserting?: (e: DevExpress.ui.dxCardView.CardInsertingEvent) => void;
+    /**
+     * [descr:dxCardViewOptions.onCardRemoved]
+     */
+    onCardRemoved?: (e: DevExpress.ui.dxCardView.CardRemovedEvent) => void;
+    /**
+     * [descr:dxCardViewOptions.onCardRemoving]
+     */
+    onCardRemoving?: (e: DevExpress.ui.dxCardView.CardRemovingEvent) => void;
+    /**
+     * [descr:dxCardViewOptions.onCardUpdated]
+     */
+    onCardUpdated?: (e: DevExpress.ui.dxCardView.CardUpdatedEvent) => void;
+    /**
+     * [descr:dxCardViewOptions.onCardUpdating]
+     */
+    onCardUpdating?: (e: DevExpress.ui.dxCardView.CardUpdatingEvent) => void;
+    /**
+     * [descr:dxCardViewOptions.onCardSaved]
+     */
+    onCardSaved?: (e: DevExpress.ui.dxCardView.CardSavedEvent) => void;
+    /**
+     * [descr:dxCardViewOptions.onCardSaving]
+     */
+    onCardSaving?: (e: DevExpress.ui.dxCardView.CardSavingEvent) => void;
   }
   /**
    * [descr:dxChat]

@@ -1,11 +1,12 @@
+import { DeepPartial } from '../core';
 import { Mode, template } from '../common';
 import { UserDefinedElement, DxElement } from '../core/element';
 import {
- ColumnBase, ColumnChooser, DataErrorOccurredInfo, FilterPanel, HeaderFilter, Pager, ScrollingBase, SearchPanel, Sorting,
+ ColumnBase, ColumnChooser, DataChange, DataErrorOccurredInfo, FilterPanel, HeaderFilter, Pager, ScrollingBase, SearchPanel, Sorting,
 } from '../common/grids';
 import { DataSourceLike } from '../data/data_source';
 import Widget, { WidgetOptions } from './widget/ui.widget';
-import { EventInfo, NativeEventInfo } from '../events';
+import { Cancelable, EventInfo, NativeEventInfo } from '../events';
 import { dxToolbarItem, ToolbarItemLocation } from './toolbar';
 import { dxSortableOptions } from './sortable';
 import { dxLoadPanelOptions } from './load_panel';
@@ -13,6 +14,9 @@ import dxScrollable from './scroll_view/ui.scrollable';
 import {
     Properties as PopupProperties,
   } from './popup';
+import {
+    Properties as FormProperties,
+  } from './form';
 import { dxFilterBuilderOptions } from './filter_builder';
 
 /**
@@ -180,6 +184,7 @@ export type CardInfo<TCardData = unknown, TKey = unknown> = { // TODO: sync to i
     /**
      * @public
      * @docid
+     * @type any
      */
     key: TKey;
     /**
@@ -528,6 +533,255 @@ export type CardHeader = { // TODO: sync with impl
 
 // #endregion
 
+// #region Editing
+
+/**
+ * @docid
+ * @public
+ */
+export type Editing<TCardData=unknown, TKey=unknown> = { // TODO: sync with impl
+    /**
+     * @docid
+     * @public
+     * @default false
+     */
+    allowAdding?: boolean;
+    /**
+     * @docid
+     * @public
+     * @default false
+     */
+    allowDeleting?: boolean;
+    /**
+     * @docid
+     * @public
+     * @default false
+     */
+    allowUpdating?: boolean;
+    /**
+     * @docid
+     * @public
+     * @default []
+     */
+    changes?: DataChange<TCardData, TKey>[];
+    /**
+     * @docid
+     * @public
+     * @default true
+     */
+    confirmDelete?: boolean;
+    /**
+     * @docid
+     * @public
+     * @type any
+     * @default null
+     */
+    editCardKey?: TKey | null;
+    /**
+     * @docid
+     * @public
+     * @type object
+     */
+    form?: FormProperties;
+    /**
+     * @docid
+     * @public
+     * @type object
+     */
+    popup?: PopupProperties;
+};
+
+/**
+ * @docid
+ * @public
+ * @inherits EventInfo
+ */
+export type EditCanceledEvent = EventInfo<dxCardView> & {
+    changes: DataChange[];
+};
+/**
+ * @docid
+ * @public
+ * @inherits EventInfo,Cancelable
+ */
+export type EditCancelingEvent = EventInfo<dxCardView> & Cancelable & {
+    changes: DataChange[];
+};
+/**
+ * @docid
+ * @public
+ * @inherits EventInfo,Cancelable
+ */
+export type EditingStartEvent<TCardData = unknown, TKey = unknown> = EventInfo<dxCardView> & Cancelable & {
+    /**
+     * @docid
+     * @type object
+     * @public
+     */
+    data: TCardData;
+    /**
+     * @docid
+     * @public
+     * @type any
+     */
+    key: TKey;
+};
+/**
+ * @docid
+ * @public
+ * @inherits EventInfo
+ */
+export type InitNewCardEvent<TCardData = unknown> = EventInfo<dxCardView> & {
+    /**
+     * @docid
+     * @public
+     * @type object
+     */
+    data: DeepPartial<TCardData>;
+    /**
+     * @docid
+     * @type Promise<void>
+     * @public
+     */
+    promise?: PromiseLike<void>;
+};
+/**
+ * @docid
+ * @public
+ * @inherits EventInfo
+ */
+export type CardInsertedEvent<TCardData = unknown> = EventInfo<dxCardView> & {
+    /**
+     * @docid
+     * @public
+     * @type object
+     */
+    data: DeepPartial<TCardData>;
+};
+/**
+ * @docid
+ * @public
+ * @inherits EventInfo,Cancelable
+ */
+export type CardInsertingEvent<TCardData = unknown> = EventInfo<dxCardView> & Cancelable & {
+    /**
+     * @docid
+     * @public
+     * @type object
+     */
+    data: DeepPartial<TCardData>;
+};
+/**
+ * @docid
+ * @public
+ * @inherits EventInfo
+ */
+export type CardRemovedEvent<TCardData = unknown, TKey = unknown> = EventInfo<dxCardView> & {
+    /**
+     * @docid
+     * @public
+     */
+    data: TCardData;
+    /**
+     * @docid
+     * @public
+     * @type any
+     */
+    key: TKey;
+};
+/**
+ * @docid
+ * @public
+ * @inherits EventInfo,Cancelable
+ */
+export type CardRemovingEvent<TCardData = unknown, TKey = unknown> = EventInfo<dxCardView> & Cancelable & {
+    /**
+     * @docid
+     * @public
+     */
+    data: TCardData;
+    /**
+     * @docid
+     * @public
+     * @type any
+     */
+    key: TKey;
+};
+/**
+ * @docid
+ * @public
+ * @inherits EventInfo
+ */
+export type CardUpdatedEvent<TCardData = unknown, TKey = unknown> = EventInfo<dxCardView> & {
+    /**
+     * @docid
+     * @public
+     */
+    data: TCardData;
+    /**
+     * @docid
+     * @public
+     * @type any
+     */
+    key: TKey;
+};
+/**
+ * @docid
+ * @public
+ * @inherits EventInfo,Cancelable
+ */
+export type CardUpdatingEvent<TCardData = unknown, TKey = unknown> = EventInfo<dxCardView> & Cancelable & {
+    /**
+     * @docid
+     * @public
+     * @type any
+     */
+    key: TKey;
+    /**
+     * @docid
+     * @public
+     */
+    oldData: TCardData;
+    /**
+     * @docid
+     * @public
+     * @type object
+     */
+    newData: DeepPartial<TCardData>;
+};
+/**
+ * @docid
+ * @public
+ * @inherits EventInfo
+ */
+export type CardSavedEvent = EventInfo<dxCardView> & {
+    /**
+     * @docid
+     * @public
+     */
+    changes: DataChange[];
+};
+/**
+ * @docid
+ * @public
+ * @inherits EventInfo,Cancelable
+ */
+export type CardSavingEvent = EventInfo<dxCardView> & Cancelable & {
+    /**
+     * @docid
+     * @type Promise<void>
+     * @public
+     */
+    promise?: PromiseLike<void>;
+    /**
+     * @docid
+     * @public
+     */
+    changes: DataChange[];
+};
+
+// #endregion
+
 /**
  * @namespace DevExpress.ui
  * @public
@@ -832,6 +1086,88 @@ export interface dxCardViewOptions<TCardData = unknown, TKey = unknown> extends 
      * @public
      */
     headerFilter?: HeaderFilter;
+
+    // #region Editing
+
+    /**
+     * @docid
+     * @public
+     */
+    editing?: Editing<TCardData, TKey>;
+    /**
+     * @docid
+     * @public
+     * @action
+     */
+    onEditCanceled?: (e: EditCanceledEvent) => void;
+    /**
+     * @docid
+     * @public
+     * @action
+     */
+    onEditCanceling?: (e: EditCancelingEvent) => void;
+    /**
+     * @docid
+     * @public
+     * @action
+     */
+    onEditingStart?: (e: EditingStartEvent) => void;
+    /**
+     * @docid
+     * @public
+     * @action
+     */
+    onInitNewCard?: (e: InitNewCardEvent<TCardData>) => void;
+    /**
+     * @docid
+     * @public
+     * @action
+     */
+    onCardInserted?: (e: CardInsertedEvent) => void;
+    /**
+     * @docid
+     * @public
+     * @action
+     */
+    onCardInserting?: (e: CardInsertingEvent) => void;
+    /**
+     * @docid
+     * @public
+     * @action
+     */
+    onCardRemoved?: (e: CardRemovedEvent) => void;
+    /**
+     * @docid
+     * @public
+     * @action
+     */
+    onCardRemoving?: (e: CardRemovingEvent) => void;
+    /**
+     * @docid
+     * @public
+     * @action
+     */
+    onCardUpdated?: (e: CardUpdatedEvent) => void;
+    /**
+     * @docid
+     * @public
+     * @action
+     */
+    onCardUpdating?: (e: CardUpdatingEvent) => void;
+    /**
+     * @docid
+     * @public
+     * @action
+     */
+    onCardSaved?: (e: CardSavedEvent) => void;
+    /**
+     * @docid
+     * @public
+     * @action
+     */
+    onCardSaving?: (e: CardSavingEvent) => void;
+
+    // #endregion
 }
 
 /** @public */
@@ -923,6 +1259,47 @@ export default class dxCardView<TCardData = unknown, TKey = unknown> extends Wid
      * @public
      */
     searchByText(text: string): void;
+
+    // #region Editing
+
+    /**
+     * @docid
+     * @publicName addRow()
+     * @public
+     */
+    addCard(): void;
+    /**
+     * @docid
+     * @publicName cancelEditData()
+     * @public
+     */
+    cancelEditData(): void;
+    /**
+     * @docid
+     * @publicName deleteCard(cardIndex)
+     * @public
+     */
+    deleteCard(cardIndex: number): void;
+    /**
+     * @docid
+     * @publicName editCard(cardIndex)
+     * @public
+     */
+    editCard(cardIndex: number): void;
+    /**
+     * @docid
+     * @publicName hasEditData()
+     * @public
+     */
+    hasEditData(): void;
+    /**
+     * @docid
+     * @publicName saveEditData()
+     * @public
+     */
+    saveEditData(): void;
+
+    // #endregion
 }
 
 export {
@@ -930,6 +1307,7 @@ export {
     Pager,
     DataErrorOccurredInfo,
     PopupProperties,
+    FormProperties,
     ColumnChooser,
     SearchPanel,
     HeaderFilter,

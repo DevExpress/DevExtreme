@@ -9,11 +9,23 @@ import {
  CardCover,
  CardHeader,
  ColumnProperties,
+ Editing,
  HeaderPanel,
  CardClickEvent,
  CardDblClickEvent,
  CardHoverChangedEvent,
+ CardInsertedEvent,
+ CardInsertingEvent,
  CardPreparedEvent,
+ CardRemovedEvent,
+ CardRemovingEvent,
+ CardSavedEvent,
+ CardSavingEvent,
+ CardUpdatedEvent,
+ CardUpdatingEvent,
+ EditCanceledEvent,
+ EditCancelingEvent,
+ EditingStartEvent,
  FieldCaptionClickEvent,
  FieldCaptionDblClickEvent,
  FieldCaptionPreparedEvent,
@@ -23,6 +35,7 @@ import {
  FieldValueClickEvent,
  FieldValueDblClickEvent,
  FieldValuePreparedEvent,
+ InitNewCardEvent,
  Paging,
  RemoteOperations,
  Toolbar,
@@ -83,6 +96,8 @@ import {
 } from "devextreme/core/component";
 import {
  Pager,
+ DataChangeType,
+ DataChange,
  PagerPageSize,
 } from "devextreme/common/grids";
 import {
@@ -124,6 +139,7 @@ type AccessibleOptions = Pick<Properties,
   "columns" |
   "dataSource" |
   "disabled" |
+  "editing" |
   "elementAttr" |
   "errorRowEnabled" |
   "fieldHintEnabled" |
@@ -144,10 +160,21 @@ type AccessibleOptions = Pick<Properties,
   "onCardClick" |
   "onCardDblClick" |
   "onCardHoverChanged" |
+  "onCardInserted" |
+  "onCardInserting" |
   "onCardPrepared" |
+  "onCardRemoved" |
+  "onCardRemoving" |
+  "onCardSaved" |
+  "onCardSaving" |
+  "onCardUpdated" |
+  "onCardUpdating" |
   "onContentReady" |
   "onDataErrorOccurred" |
   "onDisposing" |
+  "onEditCanceled" |
+  "onEditCanceling" |
+  "onEditingStart" |
   "onFieldCaptionClick" |
   "onFieldCaptionDblClick" |
   "onFieldCaptionPrepared" |
@@ -158,6 +185,7 @@ type AccessibleOptions = Pick<Properties,
   "onFieldValueDblClick" |
   "onFieldValuePrepared" |
   "onInitialized" |
+  "onInitNewCard" |
   "onOptionChanged" |
   "pager" |
   "paging" |
@@ -193,6 +221,7 @@ const componentConfig = {
     columns: Array as PropType<Array<ColumnProperties | string>>,
     dataSource: [Array, Object, String] as PropType<Array<any> | DataSource | DataSourceOptions | Store | string | Record<string, any>>,
     disabled: Boolean,
+    editing: Object as PropType<Editing | Record<string, any>>,
     elementAttr: Object as PropType<Record<string, any>>,
     errorRowEnabled: Boolean,
     fieldHintEnabled: Boolean,
@@ -213,10 +242,21 @@ const componentConfig = {
     onCardClick: Function as PropType<((e: CardClickEvent) => void)>,
     onCardDblClick: Function as PropType<((e: CardDblClickEvent) => void)>,
     onCardHoverChanged: Function as PropType<((e: CardHoverChangedEvent) => void)>,
+    onCardInserted: Function as PropType<((e: CardInsertedEvent) => void)>,
+    onCardInserting: Function as PropType<((e: CardInsertingEvent) => void)>,
     onCardPrepared: Function as PropType<((e: CardPreparedEvent) => void)>,
+    onCardRemoved: Function as PropType<((e: CardRemovedEvent) => void)>,
+    onCardRemoving: Function as PropType<((e: CardRemovingEvent) => void)>,
+    onCardSaved: Function as PropType<((e: CardSavedEvent) => void)>,
+    onCardSaving: Function as PropType<((e: CardSavingEvent) => void)>,
+    onCardUpdated: Function as PropType<((e: CardUpdatedEvent) => void)>,
+    onCardUpdating: Function as PropType<((e: CardUpdatingEvent) => void)>,
     onContentReady: Function as PropType<((e: EventInfo<any>) => void)>,
     onDataErrorOccurred: Function as PropType<((e: { component: Object, element: any, error: any, model: any }) => void)>,
     onDisposing: Function as PropType<((e: EventInfo<any>) => void)>,
+    onEditCanceled: Function as PropType<((e: EditCanceledEvent) => void)>,
+    onEditCanceling: Function as PropType<((e: EditCancelingEvent) => void)>,
+    onEditingStart: Function as PropType<((e: EditingStartEvent) => void)>,
     onFieldCaptionClick: Function as PropType<((e: FieldCaptionClickEvent) => void)>,
     onFieldCaptionDblClick: Function as PropType<((e: FieldCaptionDblClickEvent) => void)>,
     onFieldCaptionPrepared: Function as PropType<((e: FieldCaptionPreparedEvent) => void)>,
@@ -227,6 +267,7 @@ const componentConfig = {
     onFieldValueDblClick: Function as PropType<((e: FieldValueDblClickEvent) => void)>,
     onFieldValuePrepared: Function as PropType<((e: FieldValuePreparedEvent) => void)>,
     onInitialized: Function as PropType<((e: { component: Component<any>, element: any }) => void)>,
+    onInitNewCard: Function as PropType<((e: InitNewCardEvent) => void)>,
     onOptionChanged: Function as PropType<((e: { component: DOMComponent, element: any, fullName: string, model: any, name: string, previousValue: any, value: any }) => void)>,
     pager: Object as PropType<Pager | Record<string, any> | PagerBase>,
     paging: Object as PropType<Paging | Record<string, any>>,
@@ -258,6 +299,7 @@ const componentConfig = {
     "update:columns": null,
     "update:dataSource": null,
     "update:disabled": null,
+    "update:editing": null,
     "update:elementAttr": null,
     "update:errorRowEnabled": null,
     "update:fieldHintEnabled": null,
@@ -278,10 +320,21 @@ const componentConfig = {
     "update:onCardClick": null,
     "update:onCardDblClick": null,
     "update:onCardHoverChanged": null,
+    "update:onCardInserted": null,
+    "update:onCardInserting": null,
     "update:onCardPrepared": null,
+    "update:onCardRemoved": null,
+    "update:onCardRemoving": null,
+    "update:onCardSaved": null,
+    "update:onCardSaving": null,
+    "update:onCardUpdated": null,
+    "update:onCardUpdating": null,
     "update:onContentReady": null,
     "update:onDataErrorOccurred": null,
     "update:onDisposing": null,
+    "update:onEditCanceled": null,
+    "update:onEditCanceling": null,
+    "update:onEditingStart": null,
     "update:onFieldCaptionClick": null,
     "update:onFieldCaptionDblClick": null,
     "update:onFieldCaptionPrepared": null,
@@ -292,6 +345,7 @@ const componentConfig = {
     "update:onFieldValueDblClick": null,
     "update:onFieldValuePrepared": null,
     "update:onInitialized": null,
+    "update:onInitNewCard": null,
     "update:onOptionChanged": null,
     "update:pager": null,
     "update:paging": null,
@@ -317,6 +371,7 @@ const componentConfig = {
       cardCover: { isCollectionItem: false, optionName: "cardCover" },
       cardHeader: { isCollectionItem: false, optionName: "cardHeader" },
       column: { isCollectionItem: true, optionName: "columns" },
+      editing: { isCollectionItem: false, optionName: "editing" },
       filterBuilder: { isCollectionItem: false, optionName: "filterBuilder" },
       headerPanel: { isCollectionItem: false, optionName: "headerPanel" },
       loadPanel: { isCollectionItem: false, optionName: "loadPanel" },
@@ -486,6 +541,30 @@ const DxCardHeaderItem = defineComponent(DxCardHeaderItemConfig);
 (DxCardHeaderItem as any).$_optionName = "items";
 (DxCardHeaderItem as any).$_isCollectionItem = true;
 
+const DxChangeConfig = {
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:data": null,
+    "update:insertAfterKey": null,
+    "update:insertBeforeKey": null,
+    "update:type": null,
+  },
+  props: {
+    data: {},
+    insertAfterKey: {},
+    insertBeforeKey: {},
+    type: String as PropType<DataChangeType>
+  }
+};
+
+prepareConfigurationComponentConfig(DxChangeConfig);
+
+const DxChange = defineComponent(DxChangeConfig);
+
+(DxChange as any).$_optionName = "changes";
+(DxChange as any).$_isCollectionItem = true;
+
 const DxCollisionConfig = {
   emits: {
     "update:isActive": null,
@@ -562,6 +641,40 @@ const DxCustomOperation = defineComponent(DxCustomOperationConfig);
 
 (DxCustomOperation as any).$_optionName = "customOperations";
 (DxCustomOperation as any).$_isCollectionItem = true;
+
+const DxEditingConfig = {
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:allowAdding": null,
+    "update:allowDeleting": null,
+    "update:allowUpdating": null,
+    "update:changes": null,
+    "update:confirmDelete": null,
+    "update:editCardKey": null,
+    "update:form": null,
+    "update:popup": null,
+  },
+  props: {
+    allowAdding: Boolean,
+    allowDeleting: Boolean,
+    allowUpdating: Boolean,
+    changes: Array as PropType<Array<DataChange>>,
+    confirmDelete: Boolean,
+    editCardKey: {},
+    form: Object as PropType<Record<string, any>>,
+    popup: Object as PropType<Record<string, any>>
+  }
+};
+
+prepareConfigurationComponentConfig(DxEditingConfig);
+
+const DxEditing = defineComponent(DxEditingConfig);
+
+(DxEditing as any).$_optionName = "editing";
+(DxEditing as any).$_expectedChildren = {
+  change: { isCollectionItem: true, optionName: "changes" }
+};
 
 const DxFieldConfig = {
   emits: {
@@ -1309,9 +1422,11 @@ export {
   DxCardCover,
   DxCardHeader,
   DxCardHeaderItem,
+  DxChange,
   DxCollision,
   DxColumn,
   DxCustomOperation,
+  DxEditing,
   DxField,
   DxFilterBuilder,
   DxFilterOperationDescriptions,

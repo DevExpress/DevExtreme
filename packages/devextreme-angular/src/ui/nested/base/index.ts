@@ -18,6 +18,7 @@ export * from './column-properties-dxi';
 export * from './converter';
 export * from './data-change-dxi';
 export * from './diagram-custom-command-dxi';
+export * from './editing';
 export * from './file-manager-context-menu';
 export * from './file-manager-toolbar-item-dxi';
 export * from './file-uploader-options';

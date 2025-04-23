@@ -24,7 +24,7 @@ import {
 export { ExplicitTypes } from 'devextreme/ui/card_view';
 
 import DataSource from 'devextreme/data/data_source';
-import { CardCover, CardHeader, ColumnProperties, HeaderPanel, CardClickEvent, CardDblClickEvent, CardHoverChangedEvent, CardPreparedEvent, FieldCaptionClickEvent, FieldCaptionDblClickEvent, FieldCaptionPreparedEvent, FieldClickEvent, FieldDblClickEvent, FieldPreparedEvent, FieldValueClickEvent, FieldValueDblClickEvent, FieldValuePreparedEvent, Paging, RemoteOperations, Toolbar } from 'devextreme/ui/card_view';
+import { CardCover, CardHeader, ColumnProperties, Editing, HeaderPanel, CardClickEvent, CardDblClickEvent, CardHoverChangedEvent, CardInsertedEvent, CardInsertingEvent, CardPreparedEvent, CardRemovedEvent, CardRemovingEvent, CardSavedEvent, CardSavingEvent, CardUpdatedEvent, CardUpdatingEvent, EditCanceledEvent, EditCancelingEvent, EditingStartEvent, FieldCaptionClickEvent, FieldCaptionDblClickEvent, FieldCaptionPreparedEvent, FieldClickEvent, FieldDblClickEvent, FieldPreparedEvent, FieldValueClickEvent, FieldValueDblClickEvent, FieldValuePreparedEvent, InitNewCardEvent, Paging, RemoteOperations, Toolbar } from 'devextreme/ui/card_view';
 import { Mode } from 'devextreme/common';
 import { DataSourceOptions } from 'devextreme/data/data_source';
 import { Store } from 'devextreme/data/store';
@@ -50,6 +50,8 @@ import { DxoCardCoverModule } from 'devextreme-angular/ui/nested';
 import { DxoCardHeaderModule } from 'devextreme-angular/ui/nested';
 import { DxiItemModule } from 'devextreme-angular/ui/nested';
 import { DxiColumnModule } from 'devextreme-angular/ui/nested';
+import { DxoEditingModule } from 'devextreme-angular/ui/nested';
+import { DxiChangeModule } from 'devextreme-angular/ui/nested';
 import { DxoFilterBuilderModule } from 'devextreme-angular/ui/nested';
 import { DxiCustomOperationModule } from 'devextreme-angular/ui/nested';
 import { DxiFieldModule } from 'devextreme-angular/ui/nested';
@@ -81,9 +83,11 @@ import { DxoCardViewBoundaryOffsetModule } from 'devextreme-angular/ui/card-view
 import { DxoCardViewCardCoverModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxoCardViewCardHeaderModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxiCardViewCardHeaderItemModule } from 'devextreme-angular/ui/card-view/nested';
+import { DxiCardViewChangeModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxoCardViewCollisionModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxiCardViewColumnModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxiCardViewCustomOperationModule } from 'devextreme-angular/ui/card-view/nested';
+import { DxoCardViewEditingModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxiCardViewFieldModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxoCardViewFilterBuilderModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxoCardViewFilterOperationDescriptionsModule } from 'devextreme-angular/ui/card-view/nested';
@@ -321,6 +325,19 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     }
     set disabled(value: boolean) {
         this._setOption('disabled', value);
+    }
+
+
+    /**
+     * [descr:dxCardViewOptions.editing]
+    
+     */
+    @Input()
+    get editing(): Editing {
+        return this._getOption('editing');
+    }
+    set editing(value: Editing) {
+        this._setOption('editing', value);
     }
 
 
@@ -713,11 +730,75 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
 
     /**
     
+     * [descr:dxCardViewOptions.onCardInserted]
+    
+    
+     */
+    @Output() onCardInserted: EventEmitter<CardInsertedEvent>;
+
+    /**
+    
+     * [descr:dxCardViewOptions.onCardInserting]
+    
+    
+     */
+    @Output() onCardInserting: EventEmitter<CardInsertingEvent>;
+
+    /**
+    
      * [descr:dxCardViewOptions.onCardPrepared]
     
     
      */
     @Output() onCardPrepared: EventEmitter<CardPreparedEvent>;
+
+    /**
+    
+     * [descr:dxCardViewOptions.onCardRemoved]
+    
+    
+     */
+    @Output() onCardRemoved: EventEmitter<CardRemovedEvent>;
+
+    /**
+    
+     * [descr:dxCardViewOptions.onCardRemoving]
+    
+    
+     */
+    @Output() onCardRemoving: EventEmitter<CardRemovingEvent>;
+
+    /**
+    
+     * [descr:dxCardViewOptions.onCardSaved]
+    
+    
+     */
+    @Output() onCardSaved: EventEmitter<CardSavedEvent>;
+
+    /**
+    
+     * [descr:dxCardViewOptions.onCardSaving]
+    
+    
+     */
+    @Output() onCardSaving: EventEmitter<CardSavingEvent>;
+
+    /**
+    
+     * [descr:dxCardViewOptions.onCardUpdated]
+    
+    
+     */
+    @Output() onCardUpdated: EventEmitter<CardUpdatedEvent>;
+
+    /**
+    
+     * [descr:dxCardViewOptions.onCardUpdating]
+    
+    
+     */
+    @Output() onCardUpdating: EventEmitter<CardUpdatingEvent>;
 
     /**
     
@@ -742,6 +823,30 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     
      */
     @Output() onDisposing: EventEmitter<EventInfo<any>>;
+
+    /**
+    
+     * [descr:dxCardViewOptions.onEditCanceled]
+    
+    
+     */
+    @Output() onEditCanceled: EventEmitter<EditCanceledEvent>;
+
+    /**
+    
+     * [descr:dxCardViewOptions.onEditCanceling]
+    
+    
+     */
+    @Output() onEditCanceling: EventEmitter<EditCancelingEvent>;
+
+    /**
+    
+     * [descr:dxCardViewOptions.onEditingStart]
+    
+    
+     */
+    @Output() onEditingStart: EventEmitter<EditingStartEvent>;
 
     /**
     
@@ -822,6 +927,14 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     
      */
     @Output() onInitialized: EventEmitter<Object>;
+
+    /**
+    
+     * [descr:dxCardViewOptions.onInitNewCard]
+    
+    
+     */
+    @Output() onInitNewCard: EventEmitter<InitNewCardEvent>;
 
     /**
     
@@ -935,6 +1048,13 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     
      */
     @Output() disabledChange: EventEmitter<boolean>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
+    @Output() editingChange: EventEmitter<Editing>;
 
     /**
     
@@ -1168,10 +1288,21 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
             { subscribe: 'cardClick', emit: 'onCardClick' },
             { subscribe: 'cardDblClick', emit: 'onCardDblClick' },
             { subscribe: 'cardHoverChanged', emit: 'onCardHoverChanged' },
+            { subscribe: 'cardInserted', emit: 'onCardInserted' },
+            { subscribe: 'cardInserting', emit: 'onCardInserting' },
             { subscribe: 'cardPrepared', emit: 'onCardPrepared' },
+            { subscribe: 'cardRemoved', emit: 'onCardRemoved' },
+            { subscribe: 'cardRemoving', emit: 'onCardRemoving' },
+            { subscribe: 'cardSaved', emit: 'onCardSaved' },
+            { subscribe: 'cardSaving', emit: 'onCardSaving' },
+            { subscribe: 'cardUpdated', emit: 'onCardUpdated' },
+            { subscribe: 'cardUpdating', emit: 'onCardUpdating' },
             { subscribe: 'contentReady', emit: 'onContentReady' },
             { subscribe: 'dataErrorOccurred', emit: 'onDataErrorOccurred' },
             { subscribe: 'disposing', emit: 'onDisposing' },
+            { subscribe: 'editCanceled', emit: 'onEditCanceled' },
+            { subscribe: 'editCanceling', emit: 'onEditCanceling' },
+            { subscribe: 'editingStart', emit: 'onEditingStart' },
             { subscribe: 'fieldCaptionClick', emit: 'onFieldCaptionClick' },
             { subscribe: 'fieldCaptionDblClick', emit: 'onFieldCaptionDblClick' },
             { subscribe: 'fieldCaptionPrepared', emit: 'onFieldCaptionPrepared' },
@@ -1182,6 +1313,7 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
             { subscribe: 'fieldValueDblClick', emit: 'onFieldValueDblClick' },
             { subscribe: 'fieldValuePrepared', emit: 'onFieldValuePrepared' },
             { subscribe: 'initialized', emit: 'onInitialized' },
+            { subscribe: 'initNewCard', emit: 'onInitNewCard' },
             { subscribe: 'optionChanged', emit: 'onOptionChanged' },
             { emit: 'accessKeyChange' },
             { emit: 'activeStateEnabledChange' },
@@ -1198,6 +1330,7 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
             { emit: 'columnsChange' },
             { emit: 'dataSourceChange' },
             { emit: 'disabledChange' },
+            { emit: 'editingChange' },
             { emit: 'elementAttrChange' },
             { emit: 'errorRowEnabledChange' },
             { emit: 'fieldHintEnabledChange' },
@@ -1280,6 +1413,8 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     DxoCardHeaderModule,
     DxiItemModule,
     DxiColumnModule,
+    DxoEditingModule,
+    DxiChangeModule,
     DxoFilterBuilderModule,
     DxiCustomOperationModule,
     DxiFieldModule,
@@ -1310,9 +1445,11 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     DxoCardViewCardCoverModule,
     DxoCardViewCardHeaderModule,
     DxiCardViewCardHeaderItemModule,
+    DxiCardViewChangeModule,
     DxoCardViewCollisionModule,
     DxiCardViewColumnModule,
     DxiCardViewCustomOperationModule,
+    DxoCardViewEditingModule,
     DxiCardViewFieldModule,
     DxoCardViewFilterBuilderModule,
     DxoCardViewFilterOperationDescriptionsModule,
@@ -1346,6 +1483,8 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     DxoCardHeaderModule,
     DxiItemModule,
     DxiColumnModule,
+    DxoEditingModule,
+    DxiChangeModule,
     DxoFilterBuilderModule,
     DxiCustomOperationModule,
     DxiFieldModule,
@@ -1376,9 +1515,11 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     DxoCardViewCardCoverModule,
     DxoCardViewCardHeaderModule,
     DxiCardViewCardHeaderItemModule,
+    DxiCardViewChangeModule,
     DxoCardViewCollisionModule,
     DxiCardViewColumnModule,
     DxiCardViewCustomOperationModule,
+    DxoCardViewEditingModule,
     DxiCardViewFieldModule,
     DxoCardViewFilterBuilderModule,
     DxoCardViewFilterOperationDescriptionsModule,
