@@ -1,5 +1,4 @@
 import type { ColumnChooserMode } from '@js/common/grids';
-import $ from '@js/core/renderer';
 import messageLocalization from '@js/localization/message';
 import type {
   Properties as PopupProperties, ShowingEvent,
@@ -27,7 +26,6 @@ export const CLASS = {
 
   treeviewItem: 'dx-treeview-item',
   treeviewExpanderIcon: 'dx-treeview-expander-icon-stub',
-  hidden: 'dx-hidden',
 };
 
 export interface ColumnChooserProps {
@@ -98,8 +96,6 @@ export class ColumnChooser extends Component<ColumnChooserProps> {
           allowDragging={!this.isSelectMode()}
           columnDragTemplate={Item}
           onColumnMove={this.props.onColumnMove}
-          // @ts-expect-error
-          onPlaceholderPrepared={this.onSortablePlaceholderPrepared}
         >
           { treeView }
         </ColumnSortable>
@@ -194,10 +190,5 @@ export class ColumnChooser extends Component<ColumnChooserProps> {
     const column = treeView!.getNodes()[index].itemData!.column as Column;
 
     return column;
-  };
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  private readonly onSortablePlaceholderPrepared = (e: any): void => {
-    $(e.placeholderElement).addClass(CLASS.hidden);
   };
 }
