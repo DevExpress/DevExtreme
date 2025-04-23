@@ -871,6 +871,56 @@ export type SelectionChangedEvent<TCardData = unknown, TKey = unknown> = EventIn
 
 // #endregion
 
+// #region ContextMenu
+
+/** @public */
+export type ContextMenuTarget = 'toolbar' | 'headerPanel' | 'content';
+
+/**
+ * @public
+ * @docid
+ * @inherits EventInfo
+ */
+export type ContextMenuPreparingEvent<TCardData = unknown> = EventInfo<dxCardView> & {
+  /**
+   * @docid
+   * @public
+   */
+  items?: any[];
+  /**
+   * @docid
+   * @public
+   */
+  readonly target: ContextMenuTarget;
+  /**
+   * @docid
+   * @public
+   */
+  readonly targetElement: DxElement;
+  /**
+   * @docid
+   * @public
+   */
+  readonly columnIndex?: number;
+  /**
+   * @docid
+   * @public
+   */
+  readonly column?: Column;
+  /**
+   * @docid
+   * @public
+   */
+  readonly cardIndex?: number;
+  /**
+   * @docid
+   * @public
+   */
+  readonly card?: TCardData;
+};
+
+// #endregion
+
 // #region KBN
 
 /**
@@ -1552,6 +1602,13 @@ export default class dxCardView<TCardData = unknown, TKey = unknown> extends Wid
     isCardSelected(key: TKey): boolean;
 
     // #endregion
+
+    /**
+     * @docid
+     * @action
+     * @public
+     */
+    onContextMenuPreparing?: ((e: ContextMenuPreparingEvent<TCardData>) => void);
 }
 
 export {

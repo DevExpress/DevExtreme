@@ -23,6 +23,7 @@ import {
  CardSavingEvent,
  CardUpdatedEvent,
  CardUpdatingEvent,
+ ContextMenuPreparingEvent,
  EditCanceledEvent,
  EditCancelingEvent,
  EditingStartEvent,
@@ -177,6 +178,7 @@ type AccessibleOptions = Pick<Properties,
   "onCardUpdated" |
   "onCardUpdating" |
   "onContentReady" |
+  "onContextMenuPreparing" |
   "onDataErrorOccurred" |
   "onDisposing" |
   "onEditCanceled" |
@@ -264,6 +266,7 @@ const componentConfig = {
     onCardUpdated: Function as PropType<((e: CardUpdatedEvent) => void)>,
     onCardUpdating: Function as PropType<((e: CardUpdatingEvent) => void)>,
     onContentReady: Function as PropType<((e: EventInfo<any>) => void)>,
+    onContextMenuPreparing: Function as PropType<((e: ContextMenuPreparingEvent) => void)>,
     onDataErrorOccurred: Function as PropType<((e: { component: Object, element: any, error: any, model: any }) => void)>,
     onDisposing: Function as PropType<((e: EventInfo<any>) => void)>,
     onEditCanceled: Function as PropType<((e: EditCanceledEvent) => void)>,
@@ -347,6 +350,7 @@ const componentConfig = {
     "update:onCardUpdated": null,
     "update:onCardUpdating": null,
     "update:onContentReady": null,
+    "update:onContextMenuPreparing": null,
     "update:onDataErrorOccurred": null,
     "update:onDisposing": null,
     "update:onEditCanceled": null,

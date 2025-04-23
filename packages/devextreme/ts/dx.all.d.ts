@@ -10084,6 +10084,21 @@ declare module DevExpress.ui {
      * [descr:dxCardView.isCardSelected(key)]
      */
     isCardSelected(key: TKey): boolean;
+
+    /**
+     * [descr:dxCardView.onContextMenuPreparing]
+     */
+    /**
+     * @docid
+     * @action
+     * @public
+     */
+    /**
+                              * [descr:dxCardView.onContextMenuPreparing]
+                              */
+                             (
+      e: DevExpress.ui.dxCardView.ContextMenuPreparingEvent<TCardData>
+    ) => void;
   }
   module dxCardView {
     /**
@@ -10242,6 +10257,42 @@ declare module DevExpress.ui {
          */
         newData: DevExpress.core.DeepPartial<TCardData>;
       };
+    /**
+     * [descr:ContextMenuPreparingEvent]
+     */
+    export type ContextMenuPreparingEvent<TCardData = unknown> =
+      DevExpress.common.core.events.EventInfo<dxCardView> & {
+        /**
+         * [descr:ContextMenuPreparingEvent.items]
+         */
+        items?: any[];
+        /**
+         * [descr:ContextMenuPreparingEvent.target]
+         */
+        readonly target: ContextMenuTarget;
+        /**
+         * [descr:ContextMenuPreparingEvent.targetElement]
+         */
+        readonly targetElement: DevExpress.core.DxElement;
+        /**
+         * [descr:ContextMenuPreparingEvent.columnIndex]
+         */
+        readonly columnIndex?: number;
+        /**
+         * [descr:ContextMenuPreparingEvent.column]
+         */
+        readonly column?: Column;
+        /**
+         * [descr:ContextMenuPreparingEvent.cardIndex]
+         */
+        readonly cardIndex?: number;
+        /**
+         * [descr:ContextMenuPreparingEvent.card]
+         */
+        readonly card?: TCardData;
+      };
+
+    export type ContextMenuTarget = 'toolbar' | 'headerPanel' | 'content';
     /**
      * [descr:EditCanceledEvent]
      */

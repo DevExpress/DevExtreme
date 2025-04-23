@@ -40,6 +40,8 @@ export {
   SelectionConfiguration,
   SelectionChangingEvent,
   SelectionChangedEvent,
+  ContextMenuTarget,
+  ContextMenuPreparingEvent,
   FocusedCardChanged,
   dxCardViewOptions,
   Properties,
