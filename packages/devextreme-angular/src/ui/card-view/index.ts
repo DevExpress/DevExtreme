@@ -853,7 +853,7 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
 
     /**
     
-     * [descr:dxCardView.onContextMenuPreparing]
+     * [descr:dxCardViewOptions.onContextMenuPreparing]
     
     
      */

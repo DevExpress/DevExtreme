@@ -10084,21 +10084,6 @@ declare module DevExpress.ui {
      * [descr:dxCardView.isCardSelected(key)]
      */
     isCardSelected(key: TKey): boolean;
-
-    /**
-     * [descr:dxCardView.onContextMenuPreparing]
-     */
-    /**
-     * @docid
-     * @action
-     * @public
-     */
-    /**
-                              * [descr:dxCardView.onContextMenuPreparing]
-                              */
-                             (
-      e: DevExpress.ui.dxCardView.ContextMenuPreparingEvent<TCardData>
-    ) => void;
   }
   module dxCardView {
     /**
@@ -10974,6 +10959,13 @@ declare module DevExpress.ui {
      */
     onFocusedCardChanged?: (
       e: DevExpress.ui.dxCardView.FocusedCardChanged
+    ) => void;
+
+    /**
+     * [descr:dxCardViewOptions.onContextMenuPreparing]
+     */
+    onContextMenuPreparing?: (
+      e: DevExpress.ui.dxCardView.ContextMenuPreparingEvent<TCardData>
     ) => void;
   }
   /**

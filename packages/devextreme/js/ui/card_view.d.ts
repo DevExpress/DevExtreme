@@ -1548,6 +1548,13 @@ export interface dxCardViewOptions<TCardData = unknown, TKey = unknown> extends 
     onFocusedCardChanged?: (e: FocusedCardChanged) => void;
 
     // #endregion
+
+    /**
+     * @docid
+     * @action
+     * @public
+     */
+    onContextMenuPreparing?: ((e: ContextMenuPreparingEvent<TCardData>) => void);
 }
 
 /** @public */
@@ -1793,13 +1800,6 @@ export default class dxCardView<TCardData = unknown, TKey = unknown> extends Wid
     isCardSelected(key: TKey): boolean;
 
     // #endregion
-
-    /**
-     * @docid
-     * @action
-     * @public
-     */
-    onContextMenuPreparing?: ((e: ContextMenuPreparingEvent<TCardData>) => void);
 }
 
 export {
