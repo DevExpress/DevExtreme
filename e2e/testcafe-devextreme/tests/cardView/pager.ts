@@ -64,7 +64,7 @@ test('Runtime filterValue change updates paging', async (t) => {
 
   await cardView.apiOption('filterValue', ['value', '=', '1']);
 
-  await testScreenshot(t, takeScreenshot, 'content-no-data.png', { element: cardView.element });
+  await testScreenshot(t, takeScreenshot, 'filter-value-edit-paging-update.png', { element: cardView.element });
 
   await t
     .expect(compareResults.isValid())
