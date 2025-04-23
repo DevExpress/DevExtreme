@@ -372,6 +372,8 @@
         "dxChat-typingMessageTwoUsers": "{0} og {1} skriver...",
         "dxChat-typingMessageThreeUsers": "{0}, {1} og {2} skriver...",
         "dxChat-typingMessageMultipleUsers": "{0} og andre skriver...",
+        "dxChat-editingEditMessage": "Rediger",
+        "dxChat-editingDeleteMessage": "Slet",
 
         "dxColorView-ariaRed": "Rød",
         "dxColorView-ariaGreen": "Grøn",
