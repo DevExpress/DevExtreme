@@ -1,10 +1,10 @@
 import { DeepPartial } from '../core';
 import {
     DataType,
-    Format,
     HorizontalAlignment,
  Mode, SelectAllMode, SingleMultipleOrNone, SortOrder, template, ValidationRule,
 } from '../common';
+import { Format } from '../common/core/localization';
 import { UserDefinedElement, DxElement } from '../core/element';
 import {
  ColumnChooser, ColumnCustomizeTextArg, ColumnHeaderFilter, DataChange, DataErrorOccurredInfo, FilterPanel, FilterType, HeaderFilter, Pager, ScrollingBase, SearchPanel, SelectionColumnDisplayMode, Sorting,
