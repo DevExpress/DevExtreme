@@ -144,3 +144,92 @@ test('Reordering of grouping column should not work when onKeyDown.args.handled 
     ],
   });
 });
+
+test('The group column should not be reordered when groupPanel.allowColumnDragging = false', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+  const firstGroupHeader = dataGrid.getGroupPanel().getHeader(0);
+
+  await t
+    .click(firstGroupHeader.element)
+    .pressKey('ctrl+right');
+
+  await takeScreenshot(
+    'reorder_group_column_when_group_panel_allowColumnDragging_is_false',
+    dataGrid.element,
+  );
+
+  await t.expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  await createWidget('dxDataGrid', {
+    dataSource: [{
+      field1: 'test1',
+      field2: 'test2',
+      field3: 'test3',
+      field4: 'test4',
+    }],
+    allowColumnReordering: true,
+    groupPanel: {
+      visible: true,
+      allowColumnDragging: false,
+    },
+    columns: [
+      {
+        dataField: 'field1',
+        groupIndex: 1,
+      },
+      'field2',
+      'field3',
+      {
+        dataField: 'field4',
+        groupIndex: 0,
+      },
+    ],
+  });
+});
+
+test('The group column should not be reordered when it has allowGrouping set to false', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+  const firstGroupHeader = dataGrid.getGroupPanel().getHeader(0);
+
+  await t
+    .click(firstGroupHeader.element)
+    .pressKey('ctrl+right');
+
+  await takeScreenshot(
+    'reorder_group_column_with_allowGrouping_is_false',
+    dataGrid.element,
+  );
+
+  await t.expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  await createWidget('dxDataGrid', {
+    dataSource: [{
+      field1: 'test1',
+      field2: 'test2',
+      field3: 'test3',
+      field4: 'test4',
+    }],
+    allowColumnReordering: true,
+    groupPanel: {
+      visible: true,
+      allowColumnDragging: true,
+    },
+    columns: [
+      {
+        dataField: 'field1',
+        groupIndex: 1,
+      },
+      'field2',
+      'field3',
+      {
+        dataField: 'field4',
+        groupIndex: 0,
+        allowGrouping: false,
+      },
+    ],
+  });
+});

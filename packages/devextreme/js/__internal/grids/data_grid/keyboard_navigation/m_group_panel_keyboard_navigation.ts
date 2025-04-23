@@ -20,11 +20,13 @@ export class GroupPanelKeyboardNavigationController extends KeyboardNavigationCo
   private headerPanel!: Views['headerPanel'];
 
   private isGroupColumnValidForReordering(groupColumn, direction: Direction): boolean {
-    const groupedColumns = this._columnsController.getGroupColumns();
+    const allowDragging = this.headerPanel.allowDragging(groupColumn);
 
-    if (!groupColumn) {
+    if (!allowDragging) {
       return false;
     }
+
+    const groupedColumns = this._columnsController.getGroupColumns();
 
     return direction === Direction.Next
       ? groupColumn.index !== groupedColumns[groupedColumns.length - 1].index

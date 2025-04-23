@@ -400,7 +400,7 @@ const isGroupPanelVisible = (groupPanelOptions): boolean => {
 
 const allowDragging = (groupPanelOptions, column): boolean => {
   const isVisible = isGroupPanelVisible(groupPanelOptions);
-  const canDrag = groupPanelOptions?.allowColumnDragging && column.allowGrouping;
+  const canDrag = groupPanelOptions?.allowColumnDragging && column?.allowGrouping;
 
   return isVisible && !!canDrag;
 };
@@ -516,7 +516,7 @@ export const GroupingHeaderPanelExtender = (Base: ModuleType<HeaderPanel>) => cl
     }
   }
 
-  protected allowDragging(column?): boolean {
+  public allowDragging(column): boolean {
     const groupPanelOptions = this.option('groupPanel');
 
     return allowDragging(groupPanelOptions, column);
