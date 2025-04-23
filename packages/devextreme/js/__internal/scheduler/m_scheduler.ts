@@ -66,7 +66,7 @@ import { hide as hideLoading, show as showLoading } from './m_loading';
 import { getRecurrenceProcessor } from './m_recurrence';
 import subscribes from './m_subscribes';
 import { utils } from './m_utils';
-import timeZoneUtils from './m_utils_time_zone';
+import timeZoneUtils, { type TimezoneLabel } from './m_utils_time_zone';
 import { SchedulerOptionsValidator, SchedulerOptionsValidatorErrorsHandler } from './options_validator/index';
 import { AgendaResourceProcessor } from './resources/m_agenda_resource_processor';
 import {
@@ -228,6 +228,8 @@ class Scheduler extends Widget<any> {
   _options: any;
 
   _editAppointmentData: any;
+
+  _timeZonesPromise!: Promise<TimezoneLabel[]>;
 
   private _optionsValidator!: SchedulerOptionsValidator;
 
@@ -1002,7 +1004,7 @@ class Scheduler extends Widget<any> {
   }
 
   _init() {
-    timeZoneUtils.cacheTimeZones();
+    this._timeZonesPromise = timeZoneUtils.cacheTimeZones();
     this._initExpressions({
       startDateExpr: this.option('startDateExpr'),
       endDateExpr: this.option('endDateExpr'),

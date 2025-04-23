@@ -341,23 +341,30 @@ const getTimeZones = (
   offset: calculateTimezoneByValue(timezoneId, date),
 }));
 
-// START getTimeZonesCache.ts
+const GET_TIMEZONES_BATCH_SIZE = 10;
 let timeZoneDataCache: TimezoneLabel[] = [];
-const cacheTimeZones = (
+let timeZoneDataCachePromise: Promise<TimezoneLabel[]> | undefined;
+const cacheTimeZones = async (
   date = new Date(),
-): Promise<void> => macroTaskArray.map(
-  timeZoneList.value,
-  (timezoneId) => ({
-    id: timezoneId,
-    title: getTimezoneTitle(timezoneId, date),
-  }),
-  10,
-).then((cache) => {
-  timeZoneDataCache = cache;
-});
+): Promise<TimezoneLabel[]> => {
+  if (timeZoneDataCachePromise) {
+    return timeZoneDataCachePromise;
+  }
+
+  timeZoneDataCachePromise = macroTaskArray.map(
+    timeZoneList.value,
+    (timezoneId) => ({
+      id: timezoneId,
+      title: getTimezoneTitle(timezoneId, date),
+    }),
+    GET_TIMEZONES_BATCH_SIZE,
+  );
+  timeZoneDataCache = await timeZoneDataCachePromise;
+
+  return timeZoneDataCache;
+};
 
 const getTimeZonesCache = (): TimezoneLabel[] => timeZoneDataCache;
-// END
 
 const utils = {
   getDaylightOffset,
