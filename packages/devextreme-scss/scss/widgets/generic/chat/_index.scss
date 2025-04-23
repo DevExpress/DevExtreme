@@ -73,6 +73,8 @@
 );
 @include chat-messagelist-contextmenu(
   $chat-messagelist-contextmenu-delete-button-color,
+  $chat-messagelist-contextmenu-delete-button-focused-color,
+  $chat-messagelist-contextmenu-delete-button-focused-bg,
 );
 @include chat-typingindicator(
   $chat-typingindicator-template,

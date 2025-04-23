@@ -979,6 +979,8 @@ class ContextMenu extends MenuBase {
         break;
       case 'closeOnOutsideClick':
       case 'hideOnOutsideClick':
+      case 'hideOnParentScroll':
+      case 'visualContainer':
         break;
       default:
         super._optionChanged(args);

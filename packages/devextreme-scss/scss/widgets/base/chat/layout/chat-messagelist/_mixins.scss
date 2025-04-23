@@ -72,11 +72,17 @@
 
 @mixin chat-messagelist-contextmenu(
   $delete-button-color,
+  $delete-button-focused-color,
+  $delete-button-focused-bg,
 ) {
   .dx-messagelist-context-menu-content {
     .dx-menu-item:has(.dx-icon-trash) {
       color: $delete-button-color;
+
+      &.dx-state-focused {
+        color: $delete-button-focused-color;
+        background-color: $delete-button-focused-bg;
+      }
     }
   }
 }
-
