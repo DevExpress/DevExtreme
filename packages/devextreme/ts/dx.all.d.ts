@@ -2749,9 +2749,12 @@ declare module DevExpress.common.core.environment {
     */
    export const devices: DevExpress.core.DevicesObject;
   /**
-   * [descr:utils.getTimeZones(date)]
+   * [descr:utils.getTimeZones(date, timeZones)]
    */
-  export function getTimeZones(date?: Date): Array<SchedulerTimeZone>;
+  export function getTimeZones(
+    date?: Date,
+    timeZones?: string[]
+  ): Array<SchedulerTimeZone>;
   /**
    * [descr:hideTopOverlay()]
    */
