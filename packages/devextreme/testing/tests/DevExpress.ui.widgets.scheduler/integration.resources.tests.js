@@ -426,7 +426,7 @@ QUnit.module('Integration: Resources', moduleConfig, () => {
         assert.equal(scheduler.instance.$element().find('.dx-scheduler-appointment').length, 2, 'Appointments are OK');
     });
 
-    QUnit.test('Resources should be loaded only once to calculate appts color', function(assert) {
+    QUnit.test('Resources should be loaded only once to calculate appts color and aria-description', function(assert) {
         const loadStub = sinon.stub().returns([
             { text: 'o1', id: 1 },
             { text: 'o2', id: 2 }
@@ -443,6 +443,11 @@ QUnit.module('Integration: Resources', moduleConfig, () => {
                     text: 'b',
                     startDate: new Date(2015, 4, 26, 5),
                     endDate: new Date(2015, 4, 26, 5, 30),
+                    ownerId: 2
+                }, {
+                    text: 'c',
+                    startDate: new Date(2015, 4, 26, 6),
+                    endDate: new Date(2015, 4, 26, 6, 30),
                     ownerId: 2
                 }]
             }),
