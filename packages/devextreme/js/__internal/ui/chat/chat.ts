@@ -4,7 +4,7 @@ import type { DataSourceOptions } from '@js/common/data';
 import registerComponent from '@js/core/component_registrator';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
-import { isDefined } from '@js/core/utils/type';
+import { isBoolean, isDefined, isPromise } from '@js/core/utils/type';
 import DataHelperMixin from '@js/data_helper';
 import type {
   Message,
@@ -22,6 +22,7 @@ import Widget from '@ts/core/widget/widget';
 import AlertList from '@ts/ui/chat/alertlist';
 import ConfirmationPopup from '@ts/ui/chat/confirmationpopup';
 import type {
+  MessageEditCanceledEvent as MessageBoxEditCanceledEvent,
   MessageEnteredEvent as MessageBoxMessageEnteredEvent,
   Properties as MessageBoxProperties,
   TypingStartEvent as MessageBoxTypingStartEvent,
@@ -56,6 +57,8 @@ class Chat extends Widget<Properties> {
   _typingEndAction?: (e: Partial<TypingEndEvent>) => void;
 
   _messageEditingStartAction?: (e: Partial<MessageEnteredEvent>) => void;
+
+  _messageEditCanceledAction?: (e: Partial<MessageEnteredEvent>) => void;
 
   _messageDeletingAction?: (e: Partial<MessageDeletingEvent>) => void;
 
@@ -103,6 +106,7 @@ class Chat extends Widget<Properties> {
 
     this._createMessageEnteredAction();
     this._createMessageEditingStartAction();
+    this._createMessageEditCanceledAction();
     this._createMessageDeletingAction();
     this._createMessageDeletedAction();
     this._createTypingStartAction();
@@ -260,10 +264,51 @@ class Chat extends Widget<Properties> {
     return null;
   }
 
+  _callCallbackIfNotCanceled(
+    cancelResult: boolean | PromiseLike<boolean>,
+    callback: () => void,
+    cancelCallback?: () => void,
+  ): void {
+    const invokeCallback = (cancel: boolean): void => {
+      const callbackToInvoke = cancel ? cancelCallback : callback;
+
+      callbackToInvoke?.();
+    };
+
+    if (isPromise(cancelResult)) {
+      cancelResult
+        .then(invokeCallback)
+        .catch(callback);
+    }
+
+    if (isBoolean(cancelResult)) {
+      invokeCallback(cancelResult);
+    }
+  }
+
   _messageEditingStartHandler(e: MessageEditingEvent): void {
     const { message, event } = e;
 
-    this._messageEditingStartAction?.({ message, event });
+    const messageEditingStartArgs = {
+      message,
+      event,
+      cancel: false,
+    };
+
+    this._messageEditingStartAction?.(messageEditingStartArgs);
+
+    this._callCallbackIfNotCanceled(
+      messageEditingStartArgs.cancel,
+      () => {
+        this._messageBox.showEditingPreview(e.message);
+      },
+    );
+  }
+
+  _messageEditCanceledHandler(e: MessageBoxEditCanceledEvent): void {
+    const { message, event } = e;
+
+    this._messageEditCanceledAction?.({ message, event });
   }
 
   _showDeleteConfirmationPopup(e: Pick<MessageDeletingEvent, 'message'>): void {
@@ -344,6 +389,9 @@ class Chat extends Widget<Properties> {
       onTypingEnd: () => {
         this._typingEndHandler();
       },
+      onMessageEditCanceled: (e) => {
+        this._messageEditCanceledHandler(e);
+      },
     };
 
     this._messageBox = this._createComponent($messageBox, MessageBox, configuration);
@@ -374,6 +422,13 @@ class Chat extends Widget<Properties> {
   _createMessageEditingStartAction(): void {
     this._messageEditingStartAction = this._createActionByOption(
       'onMessageEditingStart',
+      { excludeValidators: ['disabled'] },
+    );
+  }
+
+  _createMessageEditCanceledAction(): void {
+    this._messageEditCanceledAction = this._createActionByOption(
+      'onMessageEditCanceled',
       { excludeValidators: ['disabled'] },
     );
   }
@@ -484,6 +539,9 @@ class Chat extends Widget<Properties> {
         break;
       case 'onMessageEditingStart':
         this._createMessageEditingStartAction();
+        break;
+      case 'onMessageEditCanceled':
+        this._createMessageEditCanceledAction();
         break;
       case 'onMessageDeleting':
         this._createMessageDeletingAction();
