@@ -35,6 +35,7 @@
     "devextreme-quill": "1.7.2",
     "showdown": "^2.1.0",
     "inferno": "^7.4.9",
+    "inferno-create-element": "7.4.11",
     "inferno-hydrate": "^7.4.9",
     "jszip": "^3.10.1",
     "rrule": "^2.7.1",
