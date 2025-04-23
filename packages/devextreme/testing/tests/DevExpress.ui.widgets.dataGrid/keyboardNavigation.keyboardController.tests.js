@@ -36,7 +36,6 @@ QUnit.module('Keyboard controller', {
             element.fake && element.on(name) || on.apply(this, Array.prototype.slice.call(arguments, 0));
         };
         eventsEngine.off = function(element, name) {
-            debugger;
             element.fake && element.off(name) || off.apply(this, Array.prototype.slice.call(arguments, 0));
         };
         const that = this;

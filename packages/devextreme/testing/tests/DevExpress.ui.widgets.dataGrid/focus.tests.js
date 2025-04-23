@@ -2866,7 +2866,6 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
                 mode: 'batch'
             },
             onFocusedCellChanged: function(e) {
-                debugger;
                 ++focusedCellChangedCount;
                 assert.ok(e.row.isNewRow, 'Inserted row');
                 assert.equal(e.row.rowType, 'data', 'Row type');
