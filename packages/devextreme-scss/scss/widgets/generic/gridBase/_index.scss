@@ -817,6 +817,7 @@ $generic-grid-base-cell-input-height: round($generic-base-line-height * $generic
             color: $datagrid-row-focused-color;
           }
         }
+
         & > td:not(.dx-focused),
         & > tr > td:not(.dx-focused) {
           background-color: $datagrid-row-focused-bg;

@@ -1046,6 +1046,7 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
             color: $datagrid-row-focused-color;
           }
         }
+
         & > td:not(.dx-focused):not(.dx-cell-modified):not(.dx-#{$widget-name}-invalid) {
           background-color: $datagrid-row-focused-bg;
         }

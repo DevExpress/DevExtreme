@@ -1011,6 +1011,7 @@ $material-grid-base-group-panel-message-line-height: $material-button-text-line-
             color: $datagrid-row-focused-color;
           }
         }
+
         & > td:not(.dx-focused):not(.dx-cell-modified):not(.dx-#{$widget-name}-invalid) {
           background-color: $datagrid-row-focused-bg;
         }
