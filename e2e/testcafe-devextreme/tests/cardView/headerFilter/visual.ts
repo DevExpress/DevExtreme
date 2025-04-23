@@ -4,8 +4,7 @@ import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 import { testScreenshot } from '../../../helpers/themeUtils';
 
-// TODO: Unskip this fixture after markup will be stabilized
-fixture.skip`HeaderFilter.Visual`
+fixture`HeaderFilter.Visual`
   .page(url(__dirname, '../../container.html'));
 
 const CARD_VIEW_SELECTOR = '#container';
