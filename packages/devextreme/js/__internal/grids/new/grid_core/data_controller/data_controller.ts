@@ -151,17 +151,16 @@ export class DataController {
           }
 
           new ArrayStore(e.data).load(loadOptions).done((filteredData) => {
-            const totalCount = filteredData.length;
-            this._filteredItemCount.value = totalCount;
+            if (loadOptions.filter) {
+              this._filteredItemCount.value = filteredData.length;
+            }
 
             const pagedData = isDefined(e.skip) && isDefined(e.take)
               ? filteredData.slice(e.skip, e.skip + e.take)
               : filteredData;
 
             e.data = pagedData;
-
             e.extra = e.extra || {};
-            e.extra.totalCount = totalCount;
           }).fail((error) => {
             // @ts-expect-error
             e.data = new Deferred().reject(error);
@@ -261,7 +260,8 @@ export class DataController {
     this._items.value = items;
     this.pageIndex.value = dataSource.pageIndex();
     this.pageSize.value = dataSource.pageSize();
-    this._totalCount.value = this._filteredItemCount.peek() ?? dataSource.totalCount();
+    const filteredCount = this.filteredItemCount.peek();
+    this._totalCount.value = filteredCount > 0 ? filteredCount : dataSource.totalCount();
 
     // eslint-disable-next-line @typescript-eslint/no-floating-promises
     Promise.resolve().then(() => {
