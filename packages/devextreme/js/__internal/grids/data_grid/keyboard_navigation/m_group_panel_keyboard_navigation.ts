@@ -13,7 +13,7 @@ import { CLASSES as GROUPING_CLASSES } from '../grouping/const';
 import gridCore from '../m_core';
 
 export class GroupPanelKeyboardNavigationController extends KeyboardNavigationControllerCore {
-  private isNeedToHiddenFocus = false;
+  private isNeedToHiddenFocusAfterClick = false;
 
   private groupItemClickHandlerContext!: (event: any) => void;
 
@@ -29,14 +29,14 @@ export class GroupPanelKeyboardNavigationController extends KeyboardNavigationCo
     const groupedColumns = this._columnsController.getGroupColumns();
 
     return direction === Direction.Next
-      ? groupColumn.index !== groupedColumns[groupedColumns.length - 1].index
-      : groupColumn.index !== groupedColumns[0].index;
+      ? groupColumn.groupIndex !== groupedColumns.length - 1
+      : groupColumn.groupIndex !== 0;
   }
 
   private groupItemClickHandler(e) {
     const groupColumn: any = $(e.originalEvent.target).data('columnData');
 
-    this.isNeedToHiddenFocus = this._columnsController?.allowColumnSorting(groupColumn);
+    this.isNeedToHiddenFocusAfterClick = this._columnsController?.allowColumnSorting(groupColumn);
   }
 
   private unsubscribeFromGroupItemClick() {
@@ -63,6 +63,19 @@ export class GroupPanelKeyboardNavigationController extends KeyboardNavigationCo
       const direction = this.getDirectionByKeyName(e.keyName);
 
       if (this.isGroupColumnValidForReordering(groupColumn, direction)) {
+        /*
+          We need to add 2 to the index instead of 1,
+          because that's how normalization of these indexes works.
+
+          For example, we have columns with the following indexes:
+          0 1 2 3
+
+          We drag 1 to the right. Its index becomes 3.
+          0 2 3(1) 3(3)
+
+          After normalization of the indexes:
+          0 1(2) 2(1) 3(3)
+        */
         const newGroupIndex = direction === Direction.Next
           ? groupColumn.groupIndex + 2
           : groupColumn.groupIndex - 1;
@@ -112,12 +125,8 @@ export class GroupPanelKeyboardNavigationController extends KeyboardNavigationCo
       return;
     }
 
-    // eslint-disable-next-line default-case
-    switch (e.keyName) {
-      case 'leftArrow':
-      case 'rightArrow':
-        this.leftRightKeysHandler(e);
-        break;
+    if (e.keyName === 'leftArrow' || e.keyName === 'rightArrow') {
+      this.leftRightKeysHandler(e);
     }
   }
 
@@ -128,14 +137,14 @@ export class GroupPanelKeyboardNavigationController extends KeyboardNavigationCo
     this.unsubscribeFromGroupItemClick();
     this.subscribeToGroupItemClick();
 
-    if (!isNeedToFocus && this.isNeedToHiddenFocus) {
+    if (!isNeedToFocus && this.isNeedToHiddenFocusAfterClick) {
       const $focusElement = this._getFocusedCell();
 
       if ($focusElement?.length) {
         hiddenFocus($focusElement.get(0));
       }
 
-      this.isNeedToHiddenFocus = false;
+      this.isNeedToHiddenFocusAfterClick = false;
     }
   }
 

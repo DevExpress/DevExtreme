@@ -100,6 +100,19 @@ export class HeadersKeyboardNavigationController extends KeyboardNavigationContr
   }
 
   protected getNewVisibleIndex(visibleIndex, direction) {
+    /*
+      We need to add 2 to the index instead of 1,
+      because that's how normalization of these indexes works.
+
+      For example, we have columns with the following indexes:
+      0 1 2 3
+
+      We drag 1 to the right. Its index becomes 3.
+      0 2 3(1) 3(3)
+
+      After normalization of the indexes:
+      0 1(2) 2(1) 3(3)
+    */
     return direction === 'previous' ? visibleIndex - 1 : visibleIndex + 2;
   }
 
