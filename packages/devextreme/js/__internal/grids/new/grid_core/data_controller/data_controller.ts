@@ -151,15 +151,16 @@ export class DataController {
           }
 
           new ArrayStore(e.data).load(loadOptions).done((filteredData) => {
-            if (loadOptions.filter) {
+            if (Object.keys(loadOptions).length > 0) {
               this._filteredItemCount.value = filteredData.length;
+
+              const pagedData = isDefined(e.skip) && isDefined(e.take)
+                ? filteredData.slice(e.skip, e.skip + e.take)
+                : filteredData;
+
+              e.data = pagedData;
             }
 
-            const pagedData = isDefined(e.skip) && isDefined(e.take)
-              ? filteredData.slice(e.skip, e.skip + e.take)
-              : filteredData;
-
-            e.data = pagedData;
             e.extra = e.extra || {};
           }).fail((error) => {
             // @ts-expect-error
