@@ -5,7 +5,7 @@ exports[`Options KeyboardNavigation onFocusedCardChanged common API contract tes
   "cells": [
     {
       "column": {
-        "alignment": "left",
+        "alignment": "right",
         "allowEditing": true,
         "allowFiltering": true,
         "allowHeaderFiltering": false,
@@ -19,7 +19,7 @@ exports[`Options KeyboardNavigation onFocusedCardChanged common API contract tes
         "caption": "Id",
         "captionTemplate": undefined,
         "dataField": "id",
-        "dataType": "string",
+        "dataType": "number",
         "defaultSetCellValue": [Function],
         "editorOptions": {},
         "falseText": "false",

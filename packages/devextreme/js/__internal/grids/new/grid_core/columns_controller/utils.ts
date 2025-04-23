@@ -1,8 +1,13 @@
+import type { DataType, Format } from '@js/common';
 import { compileGetter } from '@js/core/utils/data';
 import { captionize } from '@js/core/utils/inflector';
-import { isDefined, isString } from '@js/core/utils/type';
+import {
+  isDefined,
+  isString, type,
+} from '@js/core/utils/type';
 import type { ComponentType } from 'inferno';
 
+import type { DataObject } from '../data_controller/types';
 import type { Template } from '../types';
 import type { ColumnProperties, ColumnSettings, PreNormalizedColumn } from './options';
 import { defaultColumnProperties, defaultColumnPropertiesByDataType } from './options';
@@ -15,16 +20,22 @@ type TemplateNormalizationFunc = <T>(
 function normalizeColumn(
   column: PreNormalizedColumn,
   templateNormalizationFunc: TemplateNormalizationFunc,
+  inferred?: { dataType?: DataType; format?: Format | undefined },
 ): Column {
+  const effectiveDataType = column.dataType ?? inferred?.dataType;
   const dataTypeDefault = defaultColumnPropertiesByDataType[
-    column.dataType ?? defaultColumnProperties.dataType
+    effectiveDataType ?? defaultColumnProperties.dataType
   ];
+
+  const effectiveFormat = column.format ?? inferred?.format;
 
   const caption = captionize(column.name);
 
   const colWithDefaults = {
     ...defaultColumnProperties,
     ...dataTypeDefault,
+    ...effectiveDataType && { dataType: effectiveDataType },
+    ...effectiveFormat !== undefined && { format: effectiveFormat },
     caption,
     ...column,
   };
@@ -97,8 +108,14 @@ export function normalizeVisibleIndexes(
 export function normalizeColumns(
   columns: PreNormalizedColumn[],
   templateNormalizationFunc: TemplateNormalizationFunc,
+  firstItemDataTypes?: Record<string, { dataType?: DataType; format: Format | undefined }> | null,
 ): Column[] {
-  const normalizedColumns = columns.map((c) => normalizeColumn(c, templateNormalizationFunc));
+  const normalizedColumns = columns.map((c) => {
+    const inferred = c.name ? firstItemDataTypes?.[c.name] : undefined;
+    const column = normalizeColumn(c, templateNormalizationFunc, inferred);
+
+    return column;
+  });
   return normalizedColumns;
 }
 
@@ -156,4 +173,33 @@ export function getColumnByIndexOrName(
   });
 
   return column;
+}
+
+export const getValueDataType = function (value: unknown): DataType {
+  let dataType: string | undefined = type(value);
+  if (dataType !== 'string' && dataType !== 'boolean' && dataType !== 'number' && dataType !== 'date' && dataType !== 'object') {
+    dataType = undefined;
+  }
+
+  return dataType as DataType;
+};
+
+export const getColumnFormat = function (column: Partial<Pick<Column, 'format' | 'dataType'>>): Format | undefined {
+  if (column.format) {
+    return column.format;
+  }
+
+  if (column.dataType === 'date' || column.dataType === 'datetime') {
+    return 'shortDate';
+  }
+
+  return undefined;
+};
+
+export function generateColumns(
+  firstItem: DataObject | Record<string, unknown>,
+): string[] {
+  if (!firstItem) { return []; }
+
+  return Object.keys(firstItem);
 }
