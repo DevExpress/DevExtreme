@@ -19,7 +19,11 @@ import type { WidgetOptions } from '@js/ui/widget/ui.widget';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
 import ContextMenu from '@ts/ui/context_menu/m_context_menu';
-import { ScrollView } from '@ts/ui/scroll_view/m_scroll_view';
+import type {
+  ScrollView as ScrollViewType,
+  ScrollViewServerSide as ScrollViewServerSideType,
+} from '@ts/ui/scroll_view/m_scroll_view';
+import ScrollView from '@ts/ui/scroll_view/m_scroll_view';
 import { getScrollTopMax } from '@ts/ui/scroll_view/utils/get_scroll_top_max';
 
 import type { DataChange } from '../collection/collection_widget.base';
@@ -95,7 +99,7 @@ class MessageList extends Widget<Properties> {
 
   private _isBottomReached!: boolean;
 
-  private _scrollView!: ScrollView;
+  private _scrollView!: ScrollViewType | ScrollViewServerSideType;
 
   private _typingIndicator!: TypingIndicator;
 

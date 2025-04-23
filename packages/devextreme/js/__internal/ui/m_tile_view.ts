@@ -22,7 +22,7 @@ import type {
   ScrollView as ScrollViewType,
   ScrollViewServerSide as ScrollViewServerSideType,
 } from '@ts/ui/scroll_view/m_scroll_view';
-import { ScrollView } from '@ts/ui/scroll_view/m_scroll_view';
+import ScrollView from '@ts/ui/scroll_view/m_scroll_view';
 
 import supportUtils from '../core/utils/m_support';
 
