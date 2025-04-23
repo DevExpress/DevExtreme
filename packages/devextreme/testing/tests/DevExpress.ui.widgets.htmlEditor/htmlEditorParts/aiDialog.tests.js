@@ -187,7 +187,7 @@ QUnit.module('AIDialog', moduleConfig, () => {
         assert.deepEqual(dropDownItem.options.items.map(i => i.id), ['insertAbove', 'insertBelow'], 'DropDown has correct items');
     });
 
-    QUnit.test('Should disable buttons while loading', function(assert) {
+    QUnit.test('Should display only stop button while loading', function(assert) {
         showAIDialog(this, {
             config: { currentCommand: 'translate' }
         });
@@ -195,13 +195,9 @@ QUnit.module('AIDialog', moduleConfig, () => {
         this.setDialogState('generating');
 
         const toolbarButtonItems = this.aiDialogPopup.option('toolbarItems').filter(item => ['dxButton', 'dxDropDownButton'].includes(item.widget));
-        const stopButtonItem = toolbarButtonItems.find(item => item.options.text === 'Stop');
-        const replaceButtonItem = toolbarButtonItems.find(item => item.options.text === 'Replace');
-        const copyButtonItem = toolbarButtonItems.find(item => item.options.text === 'Copy');
+        const buttonTexts = toolbarButtonItems.map(item => item.options.text);
 
-        assert.strictEqual(stopButtonItem.disabled, undefined, 'stop button is not disabled');
-        assert.strictEqual(replaceButtonItem.disabled, true, 'generate button is disabled');
-        assert.strictEqual(copyButtonItem.disabled, true, 'copy button not disabled');
+        assert.deepEqual(buttonTexts, ['Stop'], 'toolbar contains correct buttons for Ask AI mode');
     });
 
     QUnit.module('Ask AI', () => {
@@ -216,16 +212,14 @@ QUnit.module('AIDialog', moduleConfig, () => {
 
             const toolbarButtonItems = this.aiDialogPopup.option('toolbarItems').filter(item => item.widget === 'dxButton');
             const generateButtonItem = toolbarButtonItems.find(item => item.options.text === 'Generate');
-            const stopButtonItem = toolbarButtonItems.find(item => item.options.text === 'Stop');
             const buttonTexts = toolbarButtonItems.map(item => item.options.text);
 
             assert.strictEqual(promptTextAreaInstance.option('visible'), true, 'prompt TextArea is visible');
             assert.strictEqual(resultTextAreaInstance.option('visible'), false, 'result TextArea is hidden initially');
             assert.strictEqual(promptTextAreaInstance.option('readOnly'), false, 'prompt TextArea is not readOnly');
 
-            assert.deepEqual(buttonTexts, ['Stop', 'Generate'], 'toolbar contains correct buttons for Ask AI mode');
+            assert.deepEqual(buttonTexts, ['Generate'], 'toolbar contains correct buttons for Ask AI mode');
             assert.strictEqual(generateButtonItem.disabled, undefined, 'generate button is not disabled');
-            assert.strictEqual(stopButtonItem.disabled, true, 'stop button is disabled');
         });
 
         QUnit.test('Should render correct content after generation', function(assert) {
@@ -274,7 +268,7 @@ QUnit.module('AIDialog', moduleConfig, () => {
             assert.strictEqual(promptTextAreaInstance.option('readOnly'), false, 'prompt TextArea is not readOnly');
             assert.strictEqual(resultTextAreaInstance.option('visible'), false, 'result TextArea is hidden');
 
-            assert.deepEqual(buttonTexts, ['Stop', 'Generate'], 'toolbar reset to Ask AI state with correct buttons');
+            assert.deepEqual(buttonTexts, ['Generate'], 'toolbar reset to Ask AI state with correct buttons');
         });
 
         QUnit.test('Should reset fields when switching to a basic command', function(assert) {
@@ -316,7 +310,7 @@ QUnit.module('AIDialog', moduleConfig, () => {
             assert.strictEqual(resultTextAreaInstance.option('visible'), false, 'result TextArea is hidden');
             assert.strictEqual(optionSelectBoxInstance.option('visible'), false, 'option SelectBox hidden for askAI');
 
-            assert.deepEqual(buttonTexts, ['Stop', 'Generate'], 'toolbar contains correct buttons for Ask AI');
+            assert.deepEqual(buttonTexts, ['Generate'], 'toolbar contains correct buttons for Ask AI');
         });
     });
 });
