@@ -25,6 +25,7 @@ const inputs = {
 
 const getLibName =  (file) => file
     .replace(/^devextreme-angular-ui-/,'devextreme-angular/ui/')
+    .replace(/^devextreme-angular-common-ai-integration-/,'devextreme-angular-common-ai-integration/')
     .replace(/^devextreme-angular-/,'devextreme-angular/');
 
 export default Object.entries(inputs).map(([module, file]) =>

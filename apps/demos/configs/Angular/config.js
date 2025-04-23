@@ -180,6 +180,7 @@ window.config = {
 
     /* devextreme-angular umd maps */
     'devextreme-angular': 'bundles:devextreme-angular/devextreme-angular.umd.js',
+    'devextreme-angular/common/ai-integration': 'bundles:devextreme-angular/devextreme-angular-common-ai-integration.umd.js',
     'devextreme-angular/core': 'bundles:devextreme-angular/devextreme-angular-core.umd.js',
     'devextreme-angular/http': 'bundles:devextreme-angular/devextreme-angular-http.umd.js',
     ...componentNames.reduce((acc, name) => {
