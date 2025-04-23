@@ -20,6 +20,7 @@ const bundleConfig = {
       'devextreme/viz/*',
       'devextreme/viz/vector_map/*',
       'devextreme/common/*',
+      'devextreme/common/ai-integration/*',
       'devextreme/common/data/*',
       'devextreme/common/data/odata/*',
       'devextreme/common/export/*',
