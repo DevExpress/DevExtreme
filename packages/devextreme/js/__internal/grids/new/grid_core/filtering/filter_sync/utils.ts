@@ -18,21 +18,24 @@ export const getFilterValues = (filterConditions: unknown[]): any[] | undefined 
   return hasArrayValue ? value : [value];
 };
 
-export const getFilterType = (filterConditions: unknown[]): FilterType => {
+export const getFilterType = (filterConditions: unknown[]): FilterType | undefined => {
   if (filterConditions.length !== 1) {
-    return 'include';
+    return undefined;
   }
 
   const filterCondition = filterConditions[0];
 
   if (!filterCondition) {
-    return 'include';
+    return undefined;
   }
-  const selectedFilterOperation = filterConditions[1];
+  const selectedFilterOperation = filterCondition[1];
   switch (selectedFilterOperation) {
+    case 'anyof':
+    case '=':
+      return 'include';
     case 'noneof':
     case '<>':
       return 'exclude';
-    default: return 'include';
+    default: return undefined;
   }
 };

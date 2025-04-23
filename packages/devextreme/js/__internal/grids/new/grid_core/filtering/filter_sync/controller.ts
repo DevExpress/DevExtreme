@@ -11,7 +11,8 @@ import { FilterController } from '..';
 import { HeaderFilterController } from '../header_filter/index';
 import { getColumnIdentifier, isColumnFilterable } from '../header_filter/utils';
 import {
-  getFilterType, getFilterValues,
+  getFilterType,
+  getFilterValues,
 } from './utils';
 
 export class FilterSyncController {
@@ -66,7 +67,12 @@ export class FilterSyncController {
 
           const filterConditions = getMatchedConditions(filter, getColumnIdentifier(col as Column));
           const filterType = getFilterType(filterConditions);
-          const values = getFilterValues(filterConditions);
+          // eslint-disable-next-line @stylistic/max-len
+          // eslint-disable-next-line @typescript-eslint/init-declarations, @typescript-eslint/no-explicit-any
+          let values: any[] | undefined;
+          if (filterType) {
+            values = getFilterValues(filterConditions);
+          }
 
           return {
             ...col,
