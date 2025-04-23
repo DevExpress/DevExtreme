@@ -69,6 +69,7 @@ export const CLASS = {
   summaryTotal: 'dx-datagrid-summary-item',
   scrollableContainer: 'dx-scrollable-container',
   columnsSeparator: 'dx-datagrid-columns-separator',
+  dxLink: 'dx-link',
 };
 
 const E2E_ATTRIBUTES = {
@@ -298,6 +299,10 @@ export default class DataGrid extends Widget {
 
   getContextMenu(): ContextMenu {
     return new ContextMenu(this.body.find(`.${CLASS.contextMenu}.${this.addWidgetPrefix()}`));
+  }
+
+  getDxLink(element: Selector): Selector {
+    return element.find(`.${CLASS.dxLink}`);
   }
 
   async scrollTo(
