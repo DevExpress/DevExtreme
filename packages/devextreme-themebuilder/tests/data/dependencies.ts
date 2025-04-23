@@ -38,7 +38,7 @@ export const dependencies: FlatStylesDependencies = {
   gallery: [],
   toolbar: ['validation', 'button', 'loadindicator', 'loadpanel', 'scrollview', 'popup'],
   contextmenu: ['validation', 'button', 'loadindicator', 'textbox'],
-  htmleditor: ['validation', 'button', 'loadindicator', 'loadpanel', 'scrollview', 'popup', 'toolbar', 'textbox', 'list', 'checkbox', 'selectbox', 'numberbox', 'multiview', 'tabs', 'tabpanel', 'box', 'responsivebox', 'calendar', 'datebox', 'form', 'buttongroup', 'colorbox', 'progressbar', 'fileuploader', 'contextmenu', 'textarea', 'menu', 'dropdownbutton', 'treeview'],
+  htmleditor: ['validation', 'button', 'loadindicator', 'loadpanel', 'scrollview', 'popup', 'toolbar', 'textbox', 'list', 'checkbox', 'selectbox', 'numberbox', 'multiview', 'tabs', 'tabpanel', 'box', 'responsivebox', 'calendar', 'datebox', 'form', 'buttongroup', 'colorbox', 'progressbar', 'fileuploader', 'contextmenu', 'textarea', 'menu', 'dropdownbutton'],
   sortable: [],
   lookup: ['validation', 'button', 'loadindicator', 'textbox', 'popup', 'loadpanel', 'scrollview', 'list', 'popover'],
   map: [],
