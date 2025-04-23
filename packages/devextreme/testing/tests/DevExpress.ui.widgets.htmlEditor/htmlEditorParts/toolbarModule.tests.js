@@ -46,6 +46,7 @@ const DROPDOWNEDITOR_ICON_CLASS = 'dx-dropdowneditor-icon';
 const LIST_ITEM_CLASS = 'dx-list-item';
 const POPUP_TITLE_CLASS = 'dx-popup-title';
 const MENU_ITEM_CLASS = 'dx-menu-item';
+const MENU_CLASS = 'dx-menu';
 
 const BOLD_FORMAT_CLASS = 'dx-bold-format';
 const SIZE_FORMAT_CLASS = 'dx-size-format';
@@ -1577,6 +1578,17 @@ testModule('Toolbar AI menu', dialogAIModuleConfig, () => {
 
         const $menuItem = $(`.${MENU_ITEM_CLASS}`).last();
         assert.strictEqual($menuItem.text(), 'Custom command', 'custom command rendered in menu');
+    });
+
+    QUnit.test('root menu item is disabled if commands list is empty', function(assert) {
+        this.options.items = [{ name: 'ai', commands: [] }];
+        new Toolbar(this.quillMock, this.options);
+
+        openAIToolbarMenu(this.$element);
+
+        const menuInstance = $(`.${MENU_CLASS}`).dxMenu('instance');
+
+        assert.strictEqual(menuInstance.option('disabled'), true, 'menu is disabled');
     });
 });
 
