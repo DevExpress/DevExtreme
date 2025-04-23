@@ -7,49 +7,54 @@ import { checkOptions } from './axe_options';
 fixture.disablePageReloads`a11y - appointment`
   .page(url(__dirname, '../../../container.html'));
 
+const appointmentItem = {
+  text: 'App 1',
+  startDate: Date.UTC(2021, 1, 1, 12),
+  endDate: Date.UTC(2021, 1, 1, 13),
+};
+const currentDate = Date.UTC(2021, 1, 1);
+
 ['month', 'week', 'day'].forEach((currentView) => {
-  test(`appointment should have correct aria-label without grouping (${currentView})`, async (t) => {
+  test(`appointment should have correct aria-label without description (${currentView})`, async (t) => {
     const scheduler = new Scheduler('#container');
+    const appointment = scheduler.getAppointment('App 1');
 
     await t
-      .expect(
-        scheduler.getAppointment('App 1').element.attributes['aria-label'],
-      )
-      .eql(undefined);
+      .expect(appointment.getAriaLabel())
+      .eql('App 1: February 1, 2021, 12:00 PM - 1:00 PM')
+      .expect(await appointment.hasAriaDescription())
+      .notOk();
 
     await a11yCheck(t, checkOptions, '#container');
   }).before(async () => {
     await createWidget('dxScheduler', {
-      dataSource: [{
-        text: 'App 1',
-        startDate: new Date(2021, 1, 1, 12),
-        endDate: new Date(2021, 1, 1, 13),
-      }],
+      timeZone: 'UTC',
+      dataSource: [appointmentItem],
       currentView,
-      currentDate: new Date(2021, 1, 1),
+      currentDate,
     });
   });
 
   test(`appointment should have correct aria-label with one group (${currentView})`, async (t) => {
     const scheduler = new Scheduler('#container');
-
-    const attrs = await scheduler.getAppointment('App 1').element.attributes;
+    const appointment = scheduler.getAppointment('App 1');
 
     await t
-      .expect(attrs['aria-roledescription'])
-      .eql('February 1, 2021, Group: resource1, ');
+      .expect(appointment.getAriaLabel())
+      .eql('App 1: February 1, 2021, 12:00 PM - 1:00 PM')
+      .expect(await appointment.getAriaDescription())
+      .eql('Group: resource1; Group 1: resource1');
 
     await a11yCheck(t, checkOptions, '#container');
   }).before(async () => {
     await createWidget('dxScheduler', {
+      timeZone: 'UTC',
       dataSource: [{
-        text: 'App 1',
-        startDate: new Date(2021, 1, 1, 12),
-        endDate: new Date(2021, 1, 1, 13),
+        ...appointmentItem,
         groupId: 1,
       }],
       currentView,
-      currentDate: new Date(2021, 1, 1),
+      currentDate,
       groups: ['groupId'],
       resources: [
         {
@@ -58,6 +63,7 @@ fixture.disablePageReloads`a11y - appointment`
             text: 'resource1',
             id: 1,
           }],
+          label: 'Group 1',
         },
       ],
     });
@@ -65,25 +71,25 @@ fixture.disablePageReloads`a11y - appointment`
 
   test(`appointment should have correct aria-label with multiple group (${currentView})`, async (t) => {
     const scheduler = new Scheduler('#container');
-
-    const attrs = await scheduler.getAppointment('App 1').element.attributes;
+    const appointment = scheduler.getAppointment('App 1');
 
     await t
-      .expect(attrs['aria-roledescription'])
-      .eql('February 1, 2021, Group: resource11, resource21, ');
+      .expect(appointment.getAriaLabel())
+      .eql('App 1: February 1, 2021, 12:00 PM - 1:00 PM')
+      .expect(await appointment.getAriaDescription())
+      .eql('Group: resource11, resource21; Group 1: resource11; Group 2: resource21, resource22');
 
     await a11yCheck(t, checkOptions, '#container');
   }).before(async () => {
     await createWidget('dxScheduler', {
+      timeZone: 'UTC',
       dataSource: [{
-        text: 'App 1',
-        startDate: new Date(2021, 1, 1, 12),
-        endDate: new Date(2021, 1, 1, 13),
+        ...appointmentItem,
         groupId1: 1,
-        groupId2: 1,
+        groupId2: [1, 2],
       }],
       currentView,
-      currentDate: new Date(2021, 1, 1),
+      currentDate,
       groups: ['groupId1', 'groupId2'],
       resources: [
         {
@@ -92,13 +98,18 @@ fixture.disablePageReloads`a11y - appointment`
             text: 'resource11',
             id: 1,
           }],
+          label: 'Group 1',
         },
         {
           fieldExpr: 'groupId2',
           dataSource: [{
             text: 'resource21',
             id: 1,
+          }, {
+            text: 'resource22',
+            id: 2,
           }],
+          label: 'Group 2',
         },
       ],
     });
@@ -125,7 +136,7 @@ fixture.disablePageReloads`a11y - appointment`
         },
       ],
       currentView,
-      currentDate: new Date(2021, 3, 29),
+      currentDate: new Date('2021-04-29T18:30:00.000Z'),
       startDayHour: 9,
     });
   });
@@ -133,15 +144,10 @@ fixture.disablePageReloads`a11y - appointment`
   test('appointments should have right role', async (t) => {
     const scheduler = new Scheduler('#container');
     const appt = scheduler.getAppointment('Website Re-Design Plan');
-    const contentId = await appt.element.find('.dx-scheduler-appointment-content').getAttribute('id');
 
     await t
       .expect(appt.element.getAttribute('role'))
-      .eql('application');
-
-    await t
-      .expect(appt.element.getAttribute('aria-describedby'))
-      .eql(contentId);
+      .eql('button');
 
     await t
       .expect(appt.element.getAttribute('aria-activedescendant'))
@@ -159,7 +165,7 @@ fixture.disablePageReloads`a11y - appointment`
         },
       ],
       currentView,
-      currentDate: new Date(2021, 3, 29),
+      currentDate: new Date('2021-04-29T18:30:00.000Z'),
       startDayHour: 9,
     });
   });
@@ -168,22 +174,22 @@ fixture.disablePageReloads`a11y - appointment`
 [
   {
     currentView: 'week',
-    startDate: new Date(2021, 1, 1, 12),
-    endDate: new Date(2021, 1, 3, 13),
+    startDate: Date.UTC(2021, 1, 1, 12),
+    endDate: Date.UTC(2021, 1, 3, 13),
     labels: [
-      'February 1, 2021 - February 3, 2021 (1/3), ',
-      'February 1, 2021 - February 3, 2021 (2/3), ',
-      'February 1, 2021 - February 3, 2021 (3/3), ',
+      'App 1: February 1, 2021, 12:00 PM - February 3, 2021, 1:00 PM (1/3)',
+      'App 1: February 1, 2021, 12:00 PM - February 3, 2021, 1:00 PM (2/3)',
+      'App 1: February 1, 2021, 12:00 PM - February 3, 2021, 1:00 PM (3/3)',
     ],
   },
   {
     currentView: 'month',
-    startDate: new Date(2021, 1, 1, 12),
-    endDate: new Date(2021, 1, 17, 13),
+    startDate: Date.UTC(2021, 1, 1, 12),
+    endDate: Date.UTC(2021, 1, 17, 13),
     labels: [
-      'February 1, 2021 - February 17, 2021 (1/3), ',
-      'February 1, 2021 - February 17, 2021 (2/3), ',
-      'February 1, 2021 - February 17, 2021 (3/3), ',
+      'App 1: February 1, 2021, 12:00 PM - February 17, 2021, 1:00 PM (1/3)',
+      'App 1: February 1, 2021, 12:00 PM - February 17, 2021, 1:00 PM (2/3)',
+      'App 1: February 1, 2021, 12:00 PM - February 17, 2021, 1:00 PM (3/3)',
     ],
   },
 ].forEach(({
@@ -193,10 +199,9 @@ fixture.disablePageReloads`a11y - appointment`
     const scheduler = new Scheduler('#container');
 
     const apptLabels = await Promise.all([0, 1, 2].map(
-      async (i) => {
-        const appt = scheduler.getAppointment('App 1', i);
-        const attrs = await appt.element.attributes;
-        return attrs['aria-roledescription'];
+      (i) => {
+        const appointment = scheduler.getAppointment('App 1', i);
+        return appointment.getAriaLabel();
       },
     ));
 
@@ -207,6 +212,7 @@ fixture.disablePageReloads`a11y - appointment`
     await a11yCheck(t, checkOptions, '#container');
   }).before(async () => {
     await createWidget('dxScheduler', {
+      timeZone: 'UTC',
       dataSource: [{
         text: 'App 1',
         startDate,
@@ -214,7 +220,7 @@ fixture.disablePageReloads`a11y - appointment`
       }],
       allDayPanelMode: 'hidden',
       currentView,
-      currentDate: new Date(2021, 1, 1),
+      currentDate: Date.UTC(2021, 1, 1),
     });
   });
 });
@@ -409,11 +415,11 @@ test('Scheduler a11y: Appointment collector button doesn\'t have info about date
 
 test('appointment aria label should contain date with right timezone', async (t) => {
   const scheduler = new Scheduler('#container');
-  const appt = scheduler.getAppointmentByIndex(0);
+  const appointment = scheduler.getAppointmentByIndex(0);
 
   await t
-    .expect(appt.element.getAttribute('aria-roledescription'))
-    .eql('March 29, 2021, ');
+    .expect(appointment.getAriaLabel())
+    .eql('Install New Router in Dev Room: March 29, 2021, 2:30 PM - 3:30 PM');
 
   await a11yCheck(t, checkOptions, '#container');
 }).before(async () => {
