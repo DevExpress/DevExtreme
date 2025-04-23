@@ -24,9 +24,7 @@ const SELECT_BOX_CLASS = 'dx-selectbox';
 const moduleConfig = {
     beforeEach: function() {
         this.$element = $('#htmlEditor');
-
         this.aiDialog = new AIDialog(this.$element, {}, { container: this.$element });
-
         this.aiDialogPopup = this.aiDialog._popup;
 
         this.setDialogState = (state) => {
@@ -60,8 +58,8 @@ QUnit.module('AIDialog', moduleConfig, () => {
         assert.strictEqual(optionSelectBox.option('value'), 'english', 'correct option selected');
         assert.deepEqual(optionSelectBox.option('items'), ['english', 'german'], 'option SelectBox contains correct items');
         assert.strictEqual($textAreas.length, 2, 'TextAreas are rendered');
-        assert.strictEqual(resultTextAreaInstance.option('value'), 'Test text', 'result TextArea contains correct text');
-        assert.strictEqual(promptTextAreaInstance.option('value'), undefined, 'prompt TextArea contains correct text');
+        assert.strictEqual(resultTextAreaInstance.option('value'), '', 'result TextArea contains empty text');
+        assert.strictEqual(promptTextAreaInstance.option('value'), undefined, 'prompt TextArea contains empty text');
         assert.strictEqual(promptTextAreaInstance.option('visible'), false, 'prompt TextArea is hidden by default');
     });
 
@@ -122,7 +120,7 @@ QUnit.module('AIDialog', moduleConfig, () => {
             const hideSpy = sinon.spy(this.aiDialog, 'hide');
 
             showAIDialog(this).done(({ resultText, event }) => {
-                assert.strictEqual(resultText, 'Test text', 'resolved text is correct');
+                assert.strictEqual(resultText, '', 'resolved text is empty');
                 assert.strictEqual(event.itemData.id, mode, `operation is correct: ${mode}`);
                 assert.strictEqual(hideSpy.calledOnce, true, 'hide called');
                 done();
@@ -139,8 +137,13 @@ QUnit.module('AIDialog', moduleConfig, () => {
         }
 
         const clipboardStub = sinon.stub(navigator.clipboard, 'writeText');
+        const resultTextAreaInstance = this.$element
+            .find(`.${TEXT_AREA_CLASS}`).eq(1)
+            .dxTextArea('instance');
 
         showAIDialog(this);
+
+        resultTextAreaInstance.option({ value: 'Test text' });
 
         const $copyButton = findButtonByText(this.$element, 'Copy');
         $copyButton.trigger('dxclick');

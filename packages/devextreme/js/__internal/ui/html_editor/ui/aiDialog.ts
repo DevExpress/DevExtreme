@@ -72,6 +72,8 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
 
   private _commandOptionsList?: string[];
 
+  private _selectedText = '';
+
   private _resultText = '';
 
   private _askAIPrompt = '';
@@ -444,7 +446,7 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
   }: AIDialogShowPayload): Promise<AIDialogResult> | undefined {
     this._commandsMap = commandsMap;
     this._currentCommand = currentCommand;
-    this._resultText = text ?? '';
+    this._selectedText = text ?? '';
     this._commandOptionsList = commandsMap[currentCommand]?.options ?? [];
     this._currentOption = currentCommandOption;
     this._getCustomCommandPrompt = prompt;
