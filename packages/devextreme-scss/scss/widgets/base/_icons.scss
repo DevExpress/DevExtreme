@@ -148,7 +148,8 @@
 .dx-icon-arrowsortdown,
 .dx-icon-imagethumbnail,
 .dx-icon-sparkle,
-.dx-icon-servicebell {
+.dx-icon-servicebell,
+.dx-icon-restore {
   background-position: 0 0;
   background-repeat: no-repeat;
 }
@@ -512,6 +513,7 @@ $icons: (
     "fixcolumnleft":"\f17b",
     "stickcolumn":"\f17c",
     "fixcolumnright":"\f17d",
+    "restore":"\f196",
 );
 
 // stylelint-enable
