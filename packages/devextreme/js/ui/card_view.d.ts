@@ -4,7 +4,7 @@ import { UserDefinedElement, DxElement } from '../core/element';
 import {
  ColumnBase, ColumnChooser, DataChange, DataErrorOccurredInfo, FilterPanel, HeaderFilter, Pager, ScrollingBase, SearchPanel, Sorting,
 } from '../common/grids';
-import { DataSourceLike } from '../data/data_source';
+import DataSource, { DataSourceLike } from '../data/data_source';
 import Widget, { WidgetOptions } from './widget/ui.widget';
 import { Cancelable, EventInfo, NativeEventInfo } from '../events';
 import { dxToolbarItem, ToolbarItemLocation } from './toolbar';
@@ -1179,7 +1179,7 @@ export type Properties<TCardData = unknown, TKey = unknown> = dxCardViewOptions<
 * @namespace DevExpress.ui
 * @public
 */
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+
 export default class dxCardView<TCardData = unknown, TKey = unknown> extends Widget<Properties> {
     /**
      * @docid
@@ -1298,6 +1298,66 @@ export default class dxCardView<TCardData = unknown, TKey = unknown> extends Wid
      * @public
      */
     saveEditData(): void;
+
+    // #endregion
+
+    // #region DataController
+
+    /**
+     * @docid
+     * @publicName byKey()
+     * @public
+     */
+
+    byKey(key: TKey): TCardData;
+    /**
+     * @docid
+     * @publicName getDataSource()
+     * @public
+     */
+    getDataSource(): DataSource<TCardData, TKey>;
+    /**
+     * @docid
+     * @publicName keyOf(obj)
+     * @public
+     */
+    keyOf(obj: TCardData): TKey;
+    /**
+     * @docid
+     * @publicName pageCount()
+     * @public
+     */
+    pageCount(): number;
+    /**
+     * @docid
+     * @publicName pageIndex()
+     * @public
+     */
+    pageIndex(): number;
+    /**
+     * @docid
+     * @publicName pageIndex(value)
+     * @public
+     */
+    pageIndex(value: number): void;
+    /**
+     * @docid
+     * @publicName pageSize()
+     * @public
+     */
+    pageSize(): number;
+    /**
+     * @docid
+     * @publicName pageSize(value)
+     * @public
+     */
+    pageSize(value: number): void;
+    /**
+     * @docid
+     * @publicName totalCount()
+     * @public
+     */
+    totalCount(): number;
 
     // #endregion
 }

@@ -9931,9 +9931,9 @@ declare module DevExpress.ui {
     zoomLevel?: DevExpress.ui.dxCalendar.CalendarZoomLevel;
   }
   /**
-   * [descr:dxCardView]
-   */
-  export class dxCardView<
+    * [descr:dxCardView]
+    */
+   export class dxCardView<
     TCardData = unknown,
     TKey = unknown
   > extends Widget<DevExpress.ui.dxCardView.Properties> {
@@ -10014,6 +10014,43 @@ declare module DevExpress.ui {
      * [descr:dxCardView.saveEditData()]
      */
     saveEditData(): void;
+
+    /**
+      * [descr:dxCardView.byKey()]
+      */
+     byKey(key: TKey): TCardData;
+    /**
+     * [descr:dxCardView.getDataSource()]
+     */
+    getDataSource(): DevExpress.common.data.DataSource<TCardData, TKey>;
+    /**
+     * [descr:dxCardView.keyOf(obj)]
+     */
+    keyOf(obj: TCardData): TKey;
+    /**
+     * [descr:dxCardView.pageCount()]
+     */
+    pageCount(): number;
+    /**
+     * [descr:dxCardView.pageIndex()]
+     */
+    pageIndex(): number;
+    /**
+     * [descr:dxCardView.pageIndex(value)]
+     */
+    pageIndex(value: number): void;
+    /**
+     * [descr:dxCardView.pageSize()]
+     */
+    pageSize(): number;
+    /**
+     * [descr:dxCardView.pageSize(value)]
+     */
+    pageSize(value: number): void;
+    /**
+     * [descr:dxCardView.totalCount()]
+     */
+    totalCount(): number;
   }
   module dxCardView {
     /**
