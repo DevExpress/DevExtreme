@@ -15,7 +15,7 @@ export class HeadersKeyboardNavigationController extends KeyboardNavigationContr
   protected _columnHeadersView!: Views['columnHeadersView'];
 
   private isHeaderValidForReordering(column, direction, rowIndex): boolean {
-    const allowReordering = this._columnHeadersView.allowDragging(column);
+    const allowReordering = this._columnHeadersView.isReorderingEnabled(column);
 
     if (!allowReordering) {
       return false;

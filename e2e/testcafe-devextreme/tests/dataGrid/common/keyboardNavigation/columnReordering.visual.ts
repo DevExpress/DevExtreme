@@ -139,6 +139,38 @@ test('The column should not be reordered when it has allowReordering set to fals
   });
 });
 
+test('The column should not be reordered when allowColumnReordering is false and group panel is visible', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+  const firstHeaderCell = dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(0);
+
+  await t
+    .click(firstHeaderCell.element)
+    .pressKey('ctrl+right');
+
+  await takeScreenshot(
+    'reorder_column_when_allowColumnReordering_is_false_and_group_panel_is_visible',
+    dataGrid.element,
+  );
+
+  await t.expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  await createWidget('dxDataGrid', {
+    allowColumnReordering: false,
+    groupPanel: {
+      visible: true,
+      allowColumnDragging: true,
+    },
+    dataSource: [{
+      field1: 'test1',
+      field2: 'test2',
+      field3: 'test3',
+      field4: 'test4',
+    }],
+  });
+});
+
 // Fixed columns
 test('reorder fixed left column to right', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
