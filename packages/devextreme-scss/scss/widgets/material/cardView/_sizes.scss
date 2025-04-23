@@ -27,6 +27,8 @@ $cardview-material-gaps-8: null;
 $cardview-material-gaps-16: null;
 $cardview-material-gaps-24: null;
 
+$cardview-material-headerpanel-dropzone-height: null;
+$cardview-material-headerpanel-dropzone-top: null;
 $cardview-material-column-chooser-select-all-item-horizontal-padding: null;
 
 @if $size == "default" {
@@ -45,6 +47,8 @@ $cardview-material-column-chooser-select-all-item-horizontal-padding: null;
   $cardview-material-gaps-16: 16px;
   $cardview-material-gaps-24: 24px;
 
+  $cardview-material-headerpanel-dropzone-height: 48px;
+  $cardview-material-headerpanel-dropzone-top: 6px;
   $cardview-material-column-chooser-select-all-item-horizontal-padding: 19px;
 }
 @else if $size == "compact" {
@@ -63,6 +67,8 @@ $cardview-material-column-chooser-select-all-item-horizontal-padding: null;
   $cardview-material-gaps-16: 12px;
   $cardview-material-gaps-24: 16px;
 
+  $cardview-material-headerpanel-dropzone-height: 40px;
+  $cardview-material-headerpanel-dropzone-top: 4px;
   $cardview-material-column-chooser-select-all-item-horizontal-padding: 17px;
 }
 
@@ -71,6 +77,11 @@ $cardview-gap: $cardview-material-gaps-24 !default;
 $cardview-padding: $cardview-material-paddings-24 !default;
 
 $cardview-headerpanel-content-gap: $cardview-material-gaps-8 !default;
+
+$cardview-headerpanel-dropzone-height: $cardview-material-headerpanel-dropzone-height;
+$cardview-headerpanel-dropzone-top: -$cardview-material-headerpanel-dropzone-top;
+$cardview-dropzone-border-width: 1.5px !default;
+$cardview-dropzone-border-radius: $cardview-material-border-radius-8 !default;
 
 $cardview-header-item-border-width: 1px !default;
 $cardview-header-item-border-radius: 99px !default;

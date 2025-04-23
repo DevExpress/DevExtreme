@@ -18,6 +18,10 @@ $cardview-generic-background-color: null !default;
 $cardview-generic-header-filter-icon-empty-color: null !default;
 $cardview-generic-header-filter-icon-selected-color: null !default;
 
+$cardview-generic-dropzone-text-color: null !default;
+$cardview-generic-dropzone-background-color: null !default;
+$cardview-generic-dropzone-border-color: null !default;
+
 $cardview-generic-header-item-border-color: null !default;
 
 $cardview-generic-header-item-background-color: null !default;
@@ -51,6 +55,10 @@ $cardview-generic-card-background-color: null !default;
 
   $cardview-generic-header-filter-icon-empty-color: $base-text-color !default;
   $cardview-generic-header-filter-icon-selected-color: $base-accent !default;
+
+  $cardview-generic-dropzone-text-color: $base-accent !default;
+  $cardview-generic-dropzone-background-color: lighten(desaturate(adjust-hue($base-accent, 1), 7.32), 43.33) !default;
+  $cardview-generic-dropzone-border-color: $base-accent !default;
 
   $cardview-generic-header-item-background-color: darken($base-bg, 3.92)  !default;
   $cardview-generic-header-item-border-color: $base-border-color !default;
@@ -86,6 +94,10 @@ $cardview-generic-card-background-color: null !default;
   $cardview-generic-header-filter-icon-empty-color: $base-text-color !default;
   $cardview-generic-header-filter-icon-selected-color: $base-accent !default;
 
+  $cardview-generic-dropzone-text-color: $base-accent !default;
+  $cardview-generic-dropzone-background-color: darken(desaturate($base-accent, 44.18), 25.88) !default;
+  $cardview-generic-dropzone-border-color: $base-accent !default;
+
   $cardview-generic-header-item-background-color: lighten($base-bg, 3.92)  !default;
   $cardview-generic-header-item-border-color: $base-border-color !default;
   $cardview-generic-header-item-hovered-background-color: lighten($cardview-generic-header-item-background-color, 3.92) !default;
@@ -120,6 +132,10 @@ $cardview-generic-card-background-color: null !default;
   $cardview-generic-header-filter-icon-empty-color: $base-text-color !default;
   $cardview-generic-header-filter-icon-selected-color: $base-accent !default;
 
+  $cardview-generic-dropzone-text-color: $base-text-color !default;
+  $cardview-generic-dropzone-background-color: $base-accent !default;
+  $cardview-generic-dropzone-border-color: $base-text-color !default;
+
   $cardview-generic-header-item-background-color: $base-bg !default;
   $cardview-generic-header-item-border-color: $base-border-color !default;
   $cardview-generic-header-item-hovered-background-color: $cardview-generic-header-item-background-color !default;
@@ -152,6 +168,10 @@ $cardview-background-color: $cardview-generic-background-color !default;
 
 $cardview-header-filter-icon-empty-color: $cardview-generic-header-filter-icon-empty-color !default;
 $cardview-header-filter-icon-selected-color: $cardview-generic-header-filter-icon-selected-color !default;
+
+$cardview-dropzone-text-color: $cardview-generic-dropzone-text-color !default;
+$cardview-dropzone-background-color: $cardview-generic-dropzone-background-color !default;
+$cardview-dropzone-border-color: $cardview-generic-dropzone-border-color !default;
 
 $cardview-header-item-border-color: $cardview-generic-header-item-border-color !default;
 

@@ -17,6 +17,10 @@ $cardview-fluent-background-color: null !default;
 $cardview-fluent-header-filter-icon-empty-color: null !default;
 $cardview-fluent-header-filter-icon-selected-color: null !default;
 
+$cardview-fluent-dropzone-text-color: null !default;
+$cardview-fluent-dropzone-background-color: null !default;
+$cardview-fluent-dropzone-border-color: null !default;
+
 $cardview-fluent-header-item-border-color: null !default;
 $cardview-fluent-header-item-background-color: null !default;
 $cardview-fluent-header-item-hovered-background-color: null !default;
@@ -50,6 +54,10 @@ $cardview-fluent-card-background-color: null !default;
   $cardview-fluent-header-filter-icon-empty-color: $base-text-color !default;
   $cardview-fluent-header-filter-icon-selected-color: $base-accent !default;
 
+  $cardview-fluent-dropzone-text-color: $base-accent !default;
+  $cardview-fluent-dropzone-background-color: lighten(desaturate(adjust-hue($base-accent, 4), 11.38), 55.49) !default;
+  $cardview-fluent-dropzone-border-color: $base-accent !default;
+
   $cardview-fluent-header-item-border-color: $base-border-color !default;
   $cardview-fluent-header-item-background-color: darken($base-bg, 5.88) !default;
   $cardview-fluent-header-item-hovered-background-color: darken($cardview-fluent-header-item-background-color, 1.96) !default;
@@ -73,6 +81,7 @@ $cardview-fluent-card-background-color: null !default;
   $cardview-fluent-card-cover-noimage-icon-color: lighten($base-text-color, 23.92) !default;
 
   $cardview-fluent-card-selection-background-color: lighten(desaturate(adjust-hue($base-accent, 4), 11.38), 55.49) !default;
+  $cardview-fluent-dropzone-background-color: lighten(desaturate(adjust-hue($base-accent, 4), 11.38), 55.49) !default;
 
   $cardview-fluent-card-border-color: $base-border-color !default;
   $cardview-fluent-card-background-color: $base-bg !default;
@@ -83,6 +92,10 @@ $cardview-fluent-card-background-color: null !default;
 
   $cardview-fluent-header-filter-icon-empty-color: $base-text-color !default;
   $cardview-fluent-header-filter-icon-selected-color: $base-accent !default;
+
+  $cardview-fluent-dropzone-text-color: $base-accent !default;
+  $cardview-fluent-dropzone-background-color: darken(desaturate(adjust-hue($base-accent, -4), 14.69), 49.41) !default;
+  $cardview-fluent-dropzone-border-color: $base-accent !default;
 
   $cardview-fluent-header-item-border-color: $base-border-color !default;
   $cardview-fluent-header-item-background-color: darken($base-bg, 12.16) !default;
@@ -116,6 +129,10 @@ $cardview-background-color: $cardview-fluent-background-color !default;
 
 $cardview-header-filter-icon-empty-color: $cardview-fluent-header-filter-icon-empty-color !default;
 $cardview-header-filter-icon-selected-color: $cardview-fluent-header-filter-icon-selected-color !default;
+
+$cardview-dropzone-text-color: $cardview-fluent-dropzone-text-color !default;
+$cardview-dropzone-background-color: $cardview-fluent-dropzone-background-color !default;
+$cardview-dropzone-border-color: $cardview-fluent-dropzone-border-color !default;
 
 $cardview-header-item-border-color: $cardview-fluent-header-item-border-color !default;
 $cardview-header-item-background-color: $cardview-fluent-header-item-background-color !default;

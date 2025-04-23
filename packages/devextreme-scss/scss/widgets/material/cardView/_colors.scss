@@ -18,6 +18,10 @@ $cardview-material-background-color: null !default;
 $cardview-material-header-filter-icon-empty-color: null !default;
 $cardview-material-header-filter-icon-selected-color: null !default;
 
+$cardview-material-dropzone-text-color: null !default;
+$cardview-material-dropzone-background-color: null !default;
+$cardview-material-dropzone-border-color: null !default;
+
 $cardview-material-header-item-border-color: null !default;
 
 $cardview-material-header-item-background-color: null !default;
@@ -51,6 +55,10 @@ $cardview-material-card-background-color: null !default;
 
   $cardview-material-header-filter-icon-empty-color: $base-text-color !default;
   $cardview-material-header-filter-icon-selected-color: $base-accent !default;
+
+  $cardview-material-dropzone-text-color: $base-accent !default;
+  $cardview-material-dropzone-background-color: mix($base-accent, $base-bg, 8%) !default;
+  $cardview-material-dropzone-border-color: $base-accent !default;
 
   $cardview-material-header-item-background-color: darken($base-bg, 7.84)  !default;
   $cardview-material-header-item-border-color: $cardview-material-header-item-background-color !default;
@@ -86,6 +94,10 @@ $cardview-material-card-background-color: null !default;
   $cardview-material-header-filter-icon-empty-color: $base-text-color !default;
   $cardview-material-header-filter-icon-selected-color: $base-accent !default;
 
+  $cardview-material-dropzone-text-color: $base-accent !default;
+  $cardview-material-dropzone-background-color: mix(lighten($base-accent, 19.22), $base-bg, 8%) !default;
+  $cardview-material-dropzone-border-color: $base-accent !default;
+
   $cardview-material-header-item-background-color: lighten(desaturate($base-bg, 0.30), 8.04) !default;
   $cardview-material-header-item-border-color: $cardview-material-header-item-background-color!default;
   $cardview-material-header-item-hovered-background-color: lighten(desaturate($cardview-material-header-item-background-color, 3.47), 2.16) !default;
@@ -118,6 +130,10 @@ $cardview-background-color: $cardview-material-background-color !default;
 
 $cardview-header-filter-icon-empty-color: $cardview-material-header-filter-icon-empty-color !default;
 $cardview-header-filter-icon-selected-color: $cardview-material-header-filter-icon-selected-color !default;
+
+$cardview-dropzone-text-color: $cardview-material-dropzone-text-color !default;
+$cardview-dropzone-background-color: $cardview-material-dropzone-background-color !default;
+$cardview-dropzone-border-color: $cardview-material-dropzone-border-color !default;
 
 $cardview-header-item-border-color: $cardview-material-header-item-border-color !default;
 

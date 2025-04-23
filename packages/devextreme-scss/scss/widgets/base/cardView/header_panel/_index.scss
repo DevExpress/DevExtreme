@@ -10,3 +10,34 @@
 .dx-cardview-header-item-sorting {
   display: flex;
 }
+
+.dx-cardview-headers {
+  .dx-sortable {
+    position: relative;
+    overflow: visible;
+
+    .dx-cardview-dropzone {
+      width: 100%;
+      height: $cardview-headerpanel-dropzone-height;
+      line-height: $cardview-headerpanel-dropzone-height;
+      background-color: $cardview-dropzone-background-color;
+      text-align: center;
+      color: $cardview-dropzone-text-color;
+      position: absolute;
+      top: $cardview-headerpanel-dropzone-top;
+      left: 0;
+      border-width: $cardview-dropzone-border-width;
+      border-style: dashed;
+      border-color: $cardview-dropzone-border-color;
+      border-radius: $cardview-dropzone-border-radius;
+      pointer-events: none;
+      opacity: 0.0;
+      transition: opacity 0.3s ease;
+    }
+
+    .dx-cardview-dropzone-visible {
+      opacity: 1.0;
+      pointer-events: auto;
+    }
+  }
+}

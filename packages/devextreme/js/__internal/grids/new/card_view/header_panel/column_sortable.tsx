@@ -41,6 +41,7 @@ const ALLOWED_DRAGGING_DISTANCE = 20;
 const CLASS = {
   hidden: 'dx-hidden',
   dropzone: 'dx-cardview-dropzone',
+  dropzoneVisible: 'dx-cardview-dropzone-visible',
 };
 
 export class ColumnSortable extends Component<Props> {
@@ -201,7 +202,7 @@ export class ColumnSortable extends Component<Props> {
       const isToHeaderPanel = source !== 'header-panel-main';
       const isDropzoneVisible = !column.allowReordering && isToHeaderPanel;
 
-      $(this.dropzoneRef.current).toggleClass('visible', isDropzoneVisible);
+      $(this.dropzoneRef.current).toggleClass(CLASS.dropzoneVisible, isDropzoneVisible);
     }
   }
 
@@ -210,7 +211,7 @@ export class ColumnSortable extends Component<Props> {
       return;
     }
 
-    $(this.dropzoneRef.current).removeClass('visible');
+    $(this.dropzoneRef.current).removeClass(CLASS.dropzoneVisible);
   }
 
   private isColumnDraggable(column: Column): boolean {
