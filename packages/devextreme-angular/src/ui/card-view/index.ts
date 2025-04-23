@@ -50,6 +50,7 @@ import { DxoCardCoverModule } from 'devextreme-angular/ui/nested';
 import { DxoCardHeaderModule } from 'devextreme-angular/ui/nested';
 import { DxiItemModule } from 'devextreme-angular/ui/nested';
 import { DxiColumnModule } from 'devextreme-angular/ui/nested';
+import { DxoFormatModule } from 'devextreme-angular/ui/nested';
 import { DxoFormItemModule } from 'devextreme-angular/ui/nested';
 import { DxoLabelModule } from 'devextreme-angular/ui/nested';
 import { DxiValidationRuleModule } from 'devextreme-angular/ui/nested';
@@ -58,7 +59,6 @@ import { DxiChangeModule } from 'devextreme-angular/ui/nested';
 import { DxoFilterBuilderModule } from 'devextreme-angular/ui/nested';
 import { DxiCustomOperationModule } from 'devextreme-angular/ui/nested';
 import { DxiFieldModule } from 'devextreme-angular/ui/nested';
-import { DxoFormatModule } from 'devextreme-angular/ui/nested';
 import { DxoLookupModule } from 'devextreme-angular/ui/nested';
 import { DxoFilterOperationDescriptionsModule } from 'devextreme-angular/ui/nested';
 import { DxoGroupOperationDescriptionsModule } from 'devextreme-angular/ui/nested';
@@ -1510,6 +1510,7 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     DxoCardHeaderModule,
     DxiItemModule,
     DxiColumnModule,
+    DxoFormatModule,
     DxoFormItemModule,
     DxoLabelModule,
     DxiValidationRuleModule,
@@ -1518,7 +1519,6 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     DxoFilterBuilderModule,
     DxiCustomOperationModule,
     DxiFieldModule,
-    DxoFormatModule,
     DxoLookupModule,
     DxoFilterOperationDescriptionsModule,
     DxoGroupOperationDescriptionsModule,
@@ -1597,6 +1597,7 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     DxoCardHeaderModule,
     DxiItemModule,
     DxiColumnModule,
+    DxoFormatModule,
     DxoFormItemModule,
     DxoLabelModule,
     DxiValidationRuleModule,
@@ -1605,7 +1606,6 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     DxoFilterBuilderModule,
     DxiCustomOperationModule,
     DxiFieldModule,
-    DxoFormatModule,
     DxoLookupModule,
     DxoFilterOperationDescriptionsModule,
     DxoGroupOperationDescriptionsModule,

@@ -32985,7 +32985,7 @@ declare module DevExpress.ui.dxCardView {
     /**
      * [descr:ColumnProperties.format]
      */
-    format?: DevExpress.common.Format;
+    format?: DevExpress.common.core.localization.Format;
     /**
      * [descr:ColumnProperties.headerFilter]
      */

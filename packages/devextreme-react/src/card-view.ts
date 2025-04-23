@@ -384,7 +384,7 @@ type IColumnProps = React.PropsWithChildren<{
   filterType?: FilterType;
   filterValue?: any | undefined;
   filterValues?: Array<any>;
-  format?: CommonFormat;
+  format?: LocalizationFormat;
   formItem?: dxFormSimpleItem;
   headerFilter?: Record<string, any>;
   headerItemCssClass?: string;
@@ -439,6 +439,7 @@ const _componentColumn = (props: IColumnProps) => {
         CompareRule: { optionName: "validationRules", isCollectionItem: true },
         CustomRule: { optionName: "validationRules", isCollectionItem: true },
         EmailRule: { optionName: "validationRules", isCollectionItem: true },
+        format: { optionName: "format", isCollectionItem: false },
         formItem: { optionName: "formItem", isCollectionItem: false },
         NumericRule: { optionName: "validationRules", isCollectionItem: true },
         PatternRule: { optionName: "validationRules", isCollectionItem: true },
@@ -765,6 +766,7 @@ const FilterOperationDescriptions = Object.assign<typeof _componentFilterOperati
 });
 
 // owners:
+// Column
 // Field
 type IFormatProps = React.PropsWithChildren<{
   currency?: string;

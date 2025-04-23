@@ -18,8 +18,9 @@ import {
 
 
 import * as CommonTypes from 'devextreme/common';
-import { HorizontalAlignment, DataType, Format, SortOrder } from 'devextreme/common';
+import { HorizontalAlignment, DataType, SortOrder } from 'devextreme/common';
 import { FilterType } from 'devextreme/common/grids';
+import { Format } from 'devextreme/common/core/localization';
 import { dxFormSimpleItem } from 'devextreme/ui/form';
 
 import {

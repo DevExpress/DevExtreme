@@ -57,7 +57,7 @@ import {
  ToolbarItemLocation,
  ToolbarItemComponent,
  DataType,
- Format,
+ Format as CommonFormat,
  SortOrder,
  ComparisonOperator,
  Direction,
@@ -128,14 +128,14 @@ import {
  ShowTextMode,
 } from "devextreme/ui/toolbar";
 import {
+ Format,
+} from "devextreme/common/core/localization";
+import {
  dxFormSimpleItem,
  FormItemComponent,
  FormItemType,
  LabelLocation,
 } from "devextreme/ui/form";
-import {
- Format as LocalizationFormat,
-} from "devextreme/common/core/localization";
 import {
  event,
 } from "devextreme/events/events.types";
@@ -720,7 +720,7 @@ const DxColumnConfig = {
     filterType: String as PropType<FilterType>,
     filterValue: {},
     filterValues: Array as PropType<Array<any>>,
-    format: String as PropType<Format>,
+    format: [Object, String, Function] as PropType<Format | CommonFormat | (((value: number | Date) => string)) | Record<string, any> | string>,
     formItem: Object as PropType<dxFormSimpleItem | Record<string, any>>,
     headerFilter: Object as PropType<Record<string, any>>,
     headerItemCssClass: String,
@@ -749,6 +749,7 @@ const DxColumn = defineComponent(DxColumnConfig);
   CompareRule: { isCollectionItem: true, optionName: "validationRules" },
   CustomRule: { isCollectionItem: true, optionName: "validationRules" },
   EmailRule: { isCollectionItem: true, optionName: "validationRules" },
+  format: { isCollectionItem: false, optionName: "format" },
   formItem: { isCollectionItem: false, optionName: "formItem" },
   NumericRule: { isCollectionItem: true, optionName: "validationRules" },
   PatternRule: { isCollectionItem: true, optionName: "validationRules" },
@@ -935,7 +936,7 @@ const DxFieldConfig = {
     editorTemplate: {},
     falseText: String,
     filterOperations: Array as PropType<Array<FilterBuilderOperation | string>>,
-    format: [Object, String, Function] as PropType<LocalizationFormat | Format | (((value: number | Date) => string)) | Record<string, any> | string>,
+    format: [Object, String, Function] as PropType<Format | CommonFormat | (((value: number | Date) => string)) | Record<string, any> | string>,
     lookup: Object as PropType<Record<string, any>>,
     name: String,
     trueText: String
@@ -1087,7 +1088,7 @@ const DxFormatConfig = {
     formatter: Function as PropType<((value: number | Date) => string)>,
     parser: Function as PropType<((value: string) => number | Date)>,
     precision: Number,
-    type: String as PropType<Format | string>,
+    type: String as PropType<CommonFormat | string>,
     useCurrencyAccountingStyle: Boolean
   }
 };
