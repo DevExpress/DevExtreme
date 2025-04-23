@@ -18,7 +18,7 @@
 
     <script type="text/javascript" src="../artifacts/js/jquery.js"></script>
     <!-- HtmlEditor -->
-    <script type="text/javascript" src="../artifacts/js/dx-quill.min.js"></script>
+    <!-- <script type="text/javascript" src="../artifacts/js/dx-quill.min.js"></script> -->
 
     <!--<script type="text/javascript" src="../artifacts/js/cldr.js"></script>
     <script type="text/javascript" src="../artifacts/js/cldr/event.js"></script>
@@ -38,9 +38,9 @@
     <script type="text/javascript" src="../artifacts/js/jspdf.plugin.autotable.min.js"></script>
     -->
 
-    <script type="text/javascript" src="../artifacts/js/dx.ai-integration.debug.js" charset="utf-8"></script>
     <script type="text/javascript" src="../artifacts/js/dx.all.debug.js" charset="utf-8"></script>
     <script type="text/javascript" src="./themeSelector.js"></script>
+    <script type="text/javascript" src="../../../node_modules/axe-core/axe.min.js"></script>
 </head>
 <body class="dx-surface">
     <div role="main">
@@ -51,81 +51,10 @@
         <br />
         <div id="button"></div>
         <script>
-            const value = `The universe is a vast expanse of space filled with stars, planets, galaxies and mysteries that mankind has been trying to unravel since ancient times. It was born about 13.8 billion years ago as a result of the Big Bang, and has been continuously expanding ever since. The Universe is governed by fundamental laws of physics, but the deeper we look into it, the more paradoxes and unknowns we encounter: dark matter, dark energy, multiverses. We are just a speck of dust in this grandiose cosmos, but thanks to reason, imagination and science we are able to comprehend its beauty, harmony and immense mystery.`;
-
-            $(() => {
-                document.querySelector('dx-license')?.remove();
-
-                const aiIntegration = new DevExpress.aiIntegration({
-                    sendRequest({ prompt, onChunk }) {
-                        const promise = new Promise((resolve, reject) => {
-                            const aiResponse = [];
-
-                            setTimeout(() => {
-                                const chunk = 'Your ';
-                                aiResponse.push(chunk);
-                                onChunk(chunk);
-                            }, 500);
-
-                            setTimeout(() => {
-                                const chunk = 'request ';
-                                aiResponse.push(chunk);
-                                onChunk(chunk);
-                            }, 1000);
-
-                            setTimeout(() => {
-                                const chunk = 'has be';
-                                aiResponse.push(chunk);
-                                onChunk(chunk);
-                            }, 1500);
-
-                            setTimeout(() => {
-                                const chunk = 'en ';
-                                aiResponse.push(chunk);
-                                onChunk(chunk);
-                            }, 2000);
-
-                            setTimeout(() => {
-                                const chunk = 'completed';
-                                aiResponse.push(chunk);
-                                onChunk(chunk);
-                            }, 2500);
-
-                            setTimeout(() => {
-                                const chunk = ' successfully!';
-                                aiResponse.push(chunk);
-                                onChunk(chunk);
-                            }, 3000);
-
-                            const finalResponce = aiResponse.join(' ');
-
-                            resolve(finalResponce);
-                        });
-
-                        const result = {
-                            promise,
-                            abort: () => { console.warn('Your request has been aborted.') },
-                        };
-
-                        return result;
-                    },
-                });
-
-                $("#button").dxHtmlEditor({
-                    value,
-                    height: 400,
-                    aiIntegration,
-                    toolbar: {
-                        items: [
-                            'link',
-                            {
-                                name: 'ai',
-                                commands: [
-                                    'summarize',
-                                ],
-                            },
-                        ],
-                    },
+            $(function() {
+                $("#button").dxButton({
+                    text: 'Click me!',
+                    onClick: function() { alert("clicked"); }
                 });
             });
         </script>
