@@ -33,6 +33,7 @@ const POPUP_MAX_WIDTH = 460;
 const REPLACE_DROPDOWN_WIDTH = 150;
 const TEXT_AREA_MIN_HEIGHT = 64;
 const TEXT_AREA_MAX_HEIGHT = 128;
+const BUTTON_WIDTH = 100;
 
 enum DialogState {
   Initial = 'initial',
@@ -290,6 +291,7 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
       location: 'after',
       widget: 'dxButton',
       options: {
+        width: BUTTON_WIDTH,
         type: 'default',
         text: localizationMessage.format('dxHtmlEditor-aiGenerate'),
         stylingMode: 'contained',
@@ -305,6 +307,7 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
       location: 'after',
       widget: 'dxButton',
       options: {
+        width: BUTTON_WIDTH,
         type: 'default',
         stylingMode: 'contained',
         text: localizationMessage.format('dxHtmlEditor-aiStop'),
@@ -327,13 +330,11 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
         );
         break;
       case DialogState.Asking:
-        items.push(this._getStopButtonItem({ disabled: true }), this._getGenerateButtonItem());
+        items.push(this._getGenerateButtonItem());
         break;
       case DialogState.Generating:
         items.push(
           this._getStopButtonItem(),
-          this._getCopyButtonItem({ disabled: true }),
-          this._getReplaceButtonItem({ disabled: true }),
         );
         break;
       case DialogState.Error:
