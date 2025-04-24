@@ -63,8 +63,7 @@ import {
   DxContextToolbox,
   DxToolbox,
   DxPropertiesPanel,
-  DxGroup,
-  type DxDiagramTypes,
+  DxGroup
 } from 'devextreme-vue/diagram';
 import notify from 'devextreme/ui/notify';
 import { ArrayStore } from 'devextreme-vue/common/data';
@@ -74,7 +73,7 @@ const orgItemsDataSource = new ArrayStore({
   key: 'ID',
   data: service.getOrgItems(),
 });
-const shapes = ['team', 'employee'] as unknown as DxDiagramTypes.ShapeType[];
+const shapes = ['team', 'employee'];
 
 const itemStyleExpr = ({ Type }) => ({
   fill: {
