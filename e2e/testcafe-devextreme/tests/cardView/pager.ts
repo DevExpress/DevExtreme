@@ -4,7 +4,7 @@ import url from '../../helpers/getPageUrl';
 import { createWidget } from '../../helpers/createWidget';
 import { testScreenshot } from '../../helpers/themeUtils';
 
-async function createCardViewWithPager(): Promise<any> {
+async function createCardViewWithPager(config: any = {}): Promise<any> {
   const dataSource = Array.from({ length: 20 }, (_, i) => ({ text: i.toString(), value: i }));
   return createWidget('dxCardView', {
     dataSource,
@@ -25,6 +25,7 @@ async function createCardViewWithPager(): Promise<any> {
       showInfo: true,
       showNavigationButtons: true,
     },
+    ...config,
   });
 }
 fixture.disablePageReloads`Pager`
@@ -58,20 +59,22 @@ test('Page index interaction', async (t) => {
     .eql('Page 6 of 10 (20 items)');
 }).before(async () => createCardViewWithPager());
 
-test('Runtime filterValue change updates paging', async (t) => {
-  const cardView = new CardView('#container');
-  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+[true, false].forEach((remoteOperation) => {
+  test(`Runtime filterValue change updates paging when remoteOperations = ${remoteOperation}`, async (t) => {
+    const cardView = new CardView('#container');
+    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  await cardView.apiOption('filterValue', [
-    ['value', '=', '1'],
-    'or', ['value', '=', '2'],
-    'or', ['value', '=', '3'],
-    'or', ['value', '=', '4'],
-  ]);
+    await cardView.apiOption('filterValue', [
+      ['value', '=', '1'],
+      'or', ['value', '=', '2'],
+      'or', ['value', '=', '3'],
+      'or', ['value', '=', '4'],
+    ]);
 
-  await testScreenshot(t, takeScreenshot, 'filter-value-edit-paging-update.png', { element: cardView.element });
+    await testScreenshot(t, takeScreenshot, `filter-value-edit-paging-update-remoteOperations-${remoteOperation}.png`, { element: cardView.element });
 
-  await t
-    .expect(compareResults.isValid())
-    .ok(compareResults.errorMessages());
-}).before(async () => createCardViewWithPager());
+    await t
+      .expect(compareResults.isValid())
+      .ok(compareResults.errorMessages());
+  }).before(async () => createCardViewWithPager({ remoteOperations: remoteOperation }));
+});
