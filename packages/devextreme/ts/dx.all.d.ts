@@ -31905,31 +31905,62 @@ declare module DevExpress.ui.dxChat {
       | ((options: { component?: dxChat; message?: Message }) => boolean);
   };
   /**
+   * [descr:ImageMessage]
+   */
+  export type ImageMessage = MessageBase & {
+    /**
+     * [descr:ImageMessage.type]
+     */
+    type: 'image';
+    /**
+     * [descr:ImageMessage.src]
+     */
+    src: string;
+    /**
+     * [descr:ImageMessage.alt]
+     */
+    alt?: string;
+  };
+  /**
    * [descr:Message]
    */
-  export type Message = {
+  export type Message = TextMessage | ImageMessage;
+  /**
+   * [descr:MessageBase]
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  export type MessageBase = {
     /**
-     * [descr:Message.id]
+     * [descr:MessageBase.id]
      */
     id?: number | string;
     /**
-     * [descr:Message.timestamp]
+     * [descr:MessageBase.timestamp]
      */
     timestamp?: Date | number | string;
     /**
-     * [descr:Message.author]
+     * [descr:MessageBase.author]
      */
     author?: User;
+  };
+  /**
+   * [descr:TextMessage]
+   */
+  export type TextMessage = MessageBase & {
     /**
-     * [descr:Message.text]
+     * [descr:TextMessage.type]
+     */
+    type?: 'text';
+    /**
+     * [descr:TextMessage.text]
      */
     text?: string;
     /**
-     * [descr:Message.isEdited]
+     * [descr:TextMessage.isEdited]
      */
     isEdited?: boolean;
     /**
-     * [descr:Message.isDeleted]
+     * [descr:TextMessage.isDeleted]
      */
     isDeleted?: boolean;
   };

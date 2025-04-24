@@ -417,7 +417,6 @@ QUnit.module('Chat', () => {
                         allowDeleting: true,
                     }
                 });
-
                 const $bubbles = this.getBubbles();
                 $bubbles.eq(1).trigger('dxcontextmenu');
 

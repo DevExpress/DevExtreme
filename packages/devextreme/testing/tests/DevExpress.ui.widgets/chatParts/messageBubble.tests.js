@@ -32,7 +32,7 @@ QUnit.module('MessageBubble', moduleConfig, () => {
         });
 
         QUnit.test('should be rendered with passed text value', function(assert) {
-            this.reinit({ text: 'message text' });
+            this.reinit({ message: { text: 'message text', type: 'text' } });
 
             assert.strictEqual(this.$element.text(), 'message text');
         });
@@ -42,11 +42,21 @@ QUnit.module('MessageBubble', moduleConfig, () => {
 
             assert.strictEqual(this.$element.text(), messageLocalization.format('dxChat-deletedMessageText'));
         });
+
+        QUnit.test('should render an image with correct src', function(assert) {
+            const imageSrc = 'test image src';
+            this.reinit({ message: { src: imageSrc, type: 'image' } });
+
+            const $img = this.$element.find('img');
+
+            assert.strictEqual($img.length, 1, 'One <img> element is rendered');
+            assert.strictEqual($img.attr('src'), imageSrc, 'Image has correct src');
+        });
     });
 
     QUnit.module('Options', () => {
         QUnit.test('text option should be updatable at runtime', function(assert) {
-            this.instance.option('text', 'new message text');
+            this.instance.option('message', { text: 'new message text', type: 'text' });
 
             assert.strictEqual(this.$element.text(), 'new message text');
         });
@@ -82,7 +92,7 @@ QUnit.module('MessageBubble', moduleConfig, () => {
             const messageText = 'message text';
 
             this.reinit({
-                text: messageText,
+                message: { text: messageText, type: 'text' },
                 template: templateSpy,
             });
 
@@ -111,7 +121,7 @@ QUnit.module('MessageBubble', moduleConfig, () => {
             const messageText = 'message text';
 
             this.reinit({
-                text: messageText,
+                message: { text: messageText, type: 'text' },
                 template: templateSpy,
             });
 
@@ -126,7 +136,7 @@ QUnit.module('MessageBubble', moduleConfig, () => {
             };
 
             this.reinit({
-                text: 'text'
+                message: { text: 'text' }
             });
 
             assert.strictEqual(this.$element.text(), 'text', 'text is correct');

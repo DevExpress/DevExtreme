@@ -613,12 +613,15 @@ class MessageList extends Widget<Properties> {
       const $targetMessage = this._findMessageElementByKey(key);
 
       const bubble = MessageBubble.getInstance($targetMessage);
-      bubble.option(data);
+      bubble.option('message', data);
 
-      const isEdited = data.isEdited === true && !data.isDeleted;
-      const group = this._getMessageGroupByBubbleElement($targetMessage);
+      if (data.type === 'text') {
+        const $currentMessageGroup = $targetMessage.closest(`.${CHAT_MESSAGEGROUP_CLASS}`);
+        const group: MessageGroup = MessageGroup.getInstance($currentMessageGroup);
+        const isEdited = data.isEdited === true && !data.isDeleted;
 
-      group._updateMessageEditedText($targetMessage, isEdited);
+        group._updateMessageEditedText($targetMessage, isEdited);
+      }
     }
   }
 
@@ -772,7 +775,7 @@ class MessageList extends Widget<Properties> {
     changes.forEach((change) => {
       switch (change.type) {
         case 'update':
-          this._updateMessageByKey(change.key, change.data ?? {});
+          this._updateMessageByKey(change.key, change.data as Message ?? {});
           break;
         case 'insert': {
           const { items } = this.option();

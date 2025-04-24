@@ -508,6 +508,7 @@ class Chat extends Widget<Properties> {
     const message: Message = {
       timestamp: new Date(),
       author: user,
+      type: 'text',
       text,
     };
 
