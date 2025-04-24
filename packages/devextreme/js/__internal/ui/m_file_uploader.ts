@@ -489,25 +489,15 @@ class FileUploader extends Editor<FileUploaderProperties> {
   }
 
   _validateFileExtension(file) {
-    const allowedExtensions = this.option('allowedFileExtensions');
-    const accept = this.option('accept');
-    const allowedTypes = this._getAllowedFileTypes(accept);
+    const { allowedFileExtensions } = this.option();
+
     const fileExtension = file.value.name.substring(file.value.name.lastIndexOf('.')).toLowerCase();
-    // @ts-expect-error
-    if (accept?.length !== 0 && !this._isFileTypeAllowed(file.value, allowedTypes)) {
-      return false;
-    }
-    // @ts-expect-error
-    if (allowedExtensions?.length === 0) {
+
+    if (!allowedFileExtensions?.length) {
       return true;
     }
-    // @ts-expect-error
-    for (let i = 0; i < allowedExtensions.length; i++) {
-      if (fileExtension === allowedExtensions[i].toLowerCase()) {
-        return true;
-      }
-    }
-    return false;
+
+    return allowedFileExtensions.some((extension) => fileExtension === extension.toLowerCase());
   }
 
   _validateMaxFileSize(file): boolean {
@@ -931,7 +921,6 @@ class FileUploader extends Editor<FileUploaderProperties> {
   }
 
   _isInteractionDisabled() {
-    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
     return this.option('readOnly') || this.option('disabled');
   }
 
@@ -1129,35 +1118,6 @@ class FileUploader extends Editor<FileUploaderProperties> {
     }
   }
 
-  _getAllowedFileTypes(acceptSting) {
-    if (!acceptSting.length) {
-      return [];
-    }
-
-    return acceptSting.split(',').map((item) => item.trim());
-  }
-
-  _isFileTypeAllowed(file, allowedTypes) {
-    for (let i = 0, n = allowedTypes.length; i < n; i++) {
-      let allowedType = allowedTypes[i];
-
-      if (allowedType[0] === '.') {
-        allowedType = allowedType.replace('.', '\\.');
-
-        if (file.name.match(new RegExp(`${allowedType}$`, 'i'))) {
-          return true;
-        }
-      } else {
-        allowedType = allowedType.replace(new RegExp('\\*', 'g'), '');
-
-        if (file.type.match(new RegExp(allowedType, 'i'))) {
-          return true;
-        }
-      }
-    }
-    return false;
-  }
-
   _renderWrapper() {
     const $wrapper = $('<div>')
       .addClass(FILEUPLOADER_WRAPPER_CLASS)
@@ -1233,7 +1193,7 @@ class FileUploader extends Editor<FileUploaderProperties> {
   }
 
   _updateProgressBar(file, loadedFileData) {
-    file.progressBar && file.progressBar.option({
+    file.progressBar?.option({
       value: loadedFileData.loaded,
       showStatus: true,
     });
@@ -1659,7 +1619,7 @@ class FileUploadStrategyBase {
     }
 
     file.isAborted = true;
-    file.request && file.request.abort();
+    file.request?.abort();
 
     if (this._isCustomCallback('abortUpload')) {
       const abortUpload = this.fileUploader.option('abortUpload');
