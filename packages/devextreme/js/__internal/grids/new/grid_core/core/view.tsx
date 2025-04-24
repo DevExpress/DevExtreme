@@ -15,6 +15,8 @@ export abstract class View<T extends {}> {
 
   private readonly firstRender = true;
 
+  protected root?: HTMLDivElement;
+
   protected abstract component: ComponentType<T>;
 
   protected abstract getProps(): SubsGets<T>;
