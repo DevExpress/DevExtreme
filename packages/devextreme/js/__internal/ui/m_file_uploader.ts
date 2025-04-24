@@ -491,13 +491,11 @@ class FileUploader extends Editor<FileUploaderProperties> {
   _validateFileExtension(file) {
     const { allowedFileExtensions } = this.option();
 
-    const fileExtension = file.value.name.substring(file.value.name.lastIndexOf('.')).toLowerCase();
-
     if (!allowedFileExtensions?.length) {
       return true;
     }
 
-    return allowedFileExtensions.some((extension) => fileExtension === extension.toLowerCase());
+    return this._isFileExtensionAllowed(file.value, allowedFileExtensions);
   }
 
   _validateMaxFileSize(file): boolean {
@@ -512,6 +510,27 @@ class FileUploader extends Editor<FileUploaderProperties> {
     const minFileSize = this.option('minFileSize');
 
     return minFileSize > 0 ? fileSize >= minFileSize : true;
+  }
+
+  _isFileExtensionAllowed(file, allowedExtensions) {
+    for (let i = 0, n = allowedExtensions.length; i < n; i += 1) {
+      let allowedExtension = allowedExtensions[i];
+
+      if (allowedExtension[0] === '.') {
+        allowedExtension = allowedExtension.replace('.', '\\.');
+
+        if (file.name.match(new RegExp(`${allowedExtension}$`, 'i'))) {
+          return true;
+        }
+      } else {
+        allowedExtension = allowedExtension.replace(new RegExp('\\*', 'g'), '');
+
+        if (file.type.match(new RegExp(allowedExtension, 'i'))) {
+          return true;
+        }
+      }
+    }
+    return false;
   }
 
   _createBeforeSendAction() {
