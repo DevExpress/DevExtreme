@@ -56,8 +56,8 @@ $cardview-fluent-card-background-color: null !default;
   $cardview-fluent-nodata-text-color: lighten($base-text-color, 23.92) !default;
   $cardview-fluent-nodata-icon-container-background-color: darken($base-bg, 9.80) !default;
 
-  $cardview-fluent-card-content-field-value-highlight-color: $base-inverted-text-color !default;
-  $cardview-fluent-card-content-field-value-highlight-background: $base-accent !default;
+  $cardview-fluent-card-content-field-value-highlight-color: $base-text-color !default;
+  $cardview-fluent-card-content-field-value-highlight-background: $base-warning !default;
 
   $cardview-fluent-card-cover-background-color: #FFF !default;
 
@@ -86,8 +86,8 @@ $cardview-fluent-card-background-color: null !default;
   $cardview-fluent-nodata-text-color: darken($base-text-color, 32.16) !default;
   $cardview-fluent-nodata-icon-container-background-color: lighten($base-bg, 3.92) !default;
 
-  $cardview-fluent-card-content-field-value-highlight-color: $base-inverted-text-color !default;
-  $cardview-fluent-card-content-field-value-highlight-background: $base-accent !default;
+  $cardview-fluent-card-content-field-value-highlight-color: $base-text-color !default;
+  $cardview-fluent-card-content-field-value-highlight-background: $base-warning !default;
 
   $cardview-fluent-card-cover-background-color: #FFF !default;
 

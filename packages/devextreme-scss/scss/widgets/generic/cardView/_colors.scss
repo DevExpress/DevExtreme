@@ -58,8 +58,8 @@ $cardview-generic-card-background-color: null !default;
   $cardview-generic-nodata-text-color: $base-label-color !default;
   $cardview-generic-nodata-icon-container-background-color: darken($base-bg, 7.84) !default;
 
-  $cardview-generic-card-content-field-value-highlight-color: $base-inverted-text-color !default;
-  $cardview-generic-card-content-field-value-highlight-background: $base-accent !default;
+  $cardview-generic-card-content-field-value-highlight-color: $base-text-color !default;
+  $cardview-generic-card-content-field-value-highlight-background: $base-warning !default;
 
   $cardview-generic-card-cover-background-color: #FFF !default;
 
@@ -88,8 +88,8 @@ $cardview-generic-card-background-color: null !default;
   $cardview-generic-nodata-text-color: $base-label-color !default;
   $cardview-generic-nodata-icon-container-background-color: lighten(desaturate($base-bg, 0.30), 8.04) !default;
 
-  $cardview-generic-card-content-field-value-highlight-color: $base-inverted-text-color !default;
-  $cardview-generic-card-content-field-value-highlight-background: $base-accent !default;
+  $cardview-generic-card-content-field-value-highlight-color: $base-text-color !default;
+  $cardview-generic-card-content-field-value-highlight-background: $base-warning !default;
 
   $cardview-generic-card-cover-background-color: #FFF !default;
 
