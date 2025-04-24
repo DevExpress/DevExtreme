@@ -683,7 +683,7 @@ const columnHeadersViewExtender = (Base: ModuleType<ColumnHeadersView>) => class
     return items;
   }
 
-  protected allowDragging(column): boolean {
+  public allowDragging(column): boolean {
     const groupPanelOptions = this.option('groupPanel');
 
     return allowDragging(groupPanelOptions, column) || super.allowDragging(column);

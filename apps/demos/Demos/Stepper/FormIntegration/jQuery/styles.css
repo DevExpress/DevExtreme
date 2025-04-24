@@ -3,9 +3,9 @@
     flex-direction: column;
     justify-content: center;
     row-gap: 20px;
-    height: 480px;
+    height: 580px;
+    min-height: 480px;
     min-width: 620px;
-    padding: 40px 20px;
 }
 
 .content {
@@ -61,6 +61,7 @@
     color: var(--dx-color-icon);
 }
 
-.nav-buttons > *:not(:last-child) {
-    margin-right: 8px;
+.nav-buttons {
+    display: flex;
+    gap: 8px;
 }

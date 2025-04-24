@@ -145,7 +145,7 @@ const componentConfig = {
     tabIndex: Number,
     template: {},
     text: String,
-    type: String as PropType<ButtonType>,
+    type: String as PropType<ButtonType | string>,
     useItemTextAsTitle: Boolean,
     useSelectMode: Boolean,
     visible: Boolean,

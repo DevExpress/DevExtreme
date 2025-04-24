@@ -1,0 +1,7 @@
+@use '../variables' as *;
+
+.dx-cardview {
+  .dx-datagrid-filter-panel {
+    background-color: $cardview-background-color;
+  }
+}

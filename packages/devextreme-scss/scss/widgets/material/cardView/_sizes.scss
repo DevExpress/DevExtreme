@@ -1,0 +1,105 @@
+@use "../sizes" as *;
+@use '../../base/cardView/variables' as *;
+@use '../../base/cardView/header_panel/variables' as *;
+@use '../../base/cardView/header_panel/item/variables' as *;
+@use '../../base/cardView/content_view/content/card/variables' as *;
+@use '../../base/cardView/content_view/content/card/header/variables' as *;
+@use '../../base/cardView/content_view/content/card/cover/variables' as *;
+@use '../../base/cardView/content_view/content/card/content/variables' as *;
+@use '../../base/cardView/content_view/content/variables' as *;
+@use '../../base/cardView/content_view/no_data/variables' as *;
+@use '../../base/cardView/column_chooser/variables' as *;
+
+// adduse
+
+$cardview-material-sizes-64: null;
+$cardview-material-sizes-48: null;
+$cardview-material-sizes-40: null;
+$cardview-material-sizes-20: null;
+$cardview-material-paddings-24: null;
+$cardview-material-paddings-16: null;
+$cardview-material-paddings-12: null;
+$cardview-material-paddings-8: null;
+$cardview-material-paddings-6: null;
+$cardview-material-text-size-16: null;
+$cardview-material-border-radius-8: null;
+$cardview-material-gaps-8: null;
+$cardview-material-gaps-16: null;
+$cardview-material-gaps-24: null;
+
+$cardview-material-column-chooser-select-all-item-horizontal-padding: null;
+
+@if $size == "default" {
+  $cardview-material-sizes-64: 64px;
+  $cardview-material-sizes-48: 48px;
+  $cardview-material-sizes-40: 40px;
+  $cardview-material-sizes-20: 20px;
+  $cardview-material-paddings-24: 24px;
+  $cardview-material-paddings-16: 16px;
+  $cardview-material-paddings-12: 12px;
+  $cardview-material-paddings-8: 8px;
+  $cardview-material-paddings-6: 6px;
+  $cardview-material-text-size-16: 16px;
+  $cardview-material-border-radius-8: 8px;
+  $cardview-material-gaps-8: 8px;
+  $cardview-material-gaps-16: 16px;
+  $cardview-material-gaps-24: 24px;
+
+  $cardview-material-column-chooser-select-all-item-horizontal-padding: 19px;
+}
+@else if $size == "compact" {
+  $cardview-material-sizes-64: 48px;
+  $cardview-material-sizes-48: 32px;
+  $cardview-material-sizes-40: 32px;
+  $cardview-material-sizes-20: 16px;
+  $cardview-material-paddings-24: 16px;
+  $cardview-material-paddings-16: 12px;
+  $cardview-material-paddings-12: 6px;
+  $cardview-material-paddings-8: 8px;
+  $cardview-material-paddings-6: 4px;
+  $cardview-material-text-size-16: 14px;
+  $cardview-material-border-radius-8: 6px;
+  $cardview-material-gaps-8: 4px;
+  $cardview-material-gaps-16: 12px;
+  $cardview-material-gaps-24: 16px;
+
+  $cardview-material-column-chooser-select-all-item-horizontal-padding: 17px;
+}
+
+$cardview-border-radius: 16px !default;
+$cardview-gap: $cardview-material-gaps-24 !default;
+$cardview-padding: $cardview-material-paddings-24 !default;
+
+$cardview-headerpanel-content-gap: $cardview-material-gaps-8 !default;
+
+$cardview-header-item-border-width: 1px !default;
+$cardview-header-item-border-radius: 99px !default;
+$cardview-header-item-padding-horizontal: $cardview-material-paddings-16 !default;
+$cardview-header-item-padding-vertical: $cardview-material-paddings-8 !default;
+$cardview-header-item-line-height: $cardview-material-sizes-20 !default;
+$cardview-header-item-icon-size: $cardview-material-sizes-20 !default;
+
+$cardview-nodata-icon-container-size: $cardview-material-sizes-64 !default;
+$cardview-nodata-icon-container-margin: $cardview-material-paddings-12 !default;
+$cardview-nodata-icon-size: $cardview-material-sizes-40 !default;
+
+$cardview-content-column-gap: $cardview-material-gaps-16 !default;
+$cardview-content-row-gap: $cardview-material-gaps-16 !default;
+
+$cardview-card-border-size: 1px !default;
+$cardview-card-min-width: 250px !default;
+$cardview-card-border-radius: $cardview-material-border-radius-8 !default;
+
+$cardview-card-cover-noimage-icon-size: $cardview-material-sizes-48 !default;
+
+$cardview-card-content-padding-vertical: $cardview-material-paddings-12 !default;
+$cardview-card-content-padding-horizontal: $cardview-material-paddings-12 !default;
+$cardview-card-content-field-gap: 5px !default;
+$cardview-card-content-cell-padding-vertical: $cardview-material-paddings-6 !default;
+$cardview-card-content-cell-padding-horizontal: $cardview-material-paddings-12 !default;
+
+$cardview-card-header-text-size: $cardview-material-text-size-16 !default;
+$cardview-card-header-border-radius: $cardview-material-border-radius-8 !default;
+
+$cardview-column-chooser-empty-message-horizontal-padding: $cardview-material-paddings-24 !default;
+$cardview-column-chooser-select-all-item-horizontal-padding: $cardview-material-column-chooser-select-all-item-horizontal-padding !default;

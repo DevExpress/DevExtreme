@@ -806,7 +806,6 @@ $generic-grid-base-cell-input-height: round($generic-base-line-height * $generic
         & > td:not(.dx-focused),
         & > tr > td:not(.dx-focused),
         & .dx-command-edit:not(.dx-focused) .dx-link {
-          background-color: $datagrid-row-focused-bg;
           color: $datagrid-row-focused-color;
 
           .dx-texteditor-input {
@@ -817,6 +816,11 @@ $generic-grid-base-cell-input-height: round($generic-base-line-height * $generic
           & .dx-#{$widget-name}-group-closed {
             color: $datagrid-row-focused-color;
           }
+        }
+
+        & > td:not(.dx-focused),
+        & > tr > td:not(.dx-focused) {
+          background-color: $datagrid-row-focused-bg;
         }
 
         & .dx-command-edit .dx-link:focus {

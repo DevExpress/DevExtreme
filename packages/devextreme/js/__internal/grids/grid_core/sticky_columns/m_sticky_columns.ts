@@ -14,7 +14,7 @@ import type {
   ColumnsResizerViewController,
   DraggingHeaderViewController,
 } from '../columns_resizing_reordering/m_columns_resizing_reordering';
-import type { KeyboardNavigationController } from '../keyboard_navigation/m_keyboard_navigation';
+import type { HeadersKeyboardNavigationController } from '../keyboard_navigation/m_headers_keyboard_navigation';
 import {
   isAdaptiveItem,
   isGroupFooterRow,
@@ -795,15 +795,15 @@ const resizing = (Base: ModuleType<ResizingController>) => class ResizingStickyC
   }
 };
 
-const keyboardNavigation = (Base: ModuleType<KeyboardNavigationController>) => class KeyboardNavigationStickyColumnsExtender extends Base {
+const headersKeyboardNavigation = (Base: ModuleType<HeadersKeyboardNavigationController>) => class HeadersKeyboardNavigationStickyColumnsExtender extends Base {
   // TODO Salimov: Most likely, we will need to remove the subscription
   // for headers after we implement sticky headers (pqKdLLL1).
   // Perhaps the headers will be rendered in the same table with data cells.
   // And this code will no longer be needed.
-  protected headerTabKeyHandler({ originalEvent, shift }) {
+  protected tabKeyHandler({ originalEvent, shift }) {
     // @ts-expect-error columnHeadersView's method
     const hasStickyColumns = this._columnHeadersView?.hasStickyColumns();
-    const scrollable = this._rowsView?.getScrollable();
+    const scrollable = this.getView('rowsView')?.getScrollable();
 
     if (hasStickyColumns && scrollable) {
       const $cell = $(originalEvent.target).closest('td');
@@ -857,7 +857,7 @@ export const stickyColumnsModule = {
       draggingHeader,
       editorFactory,
       resizing,
-      keyboardNavigation,
+      headersKeyboardNavigation,
     },
   },
 };

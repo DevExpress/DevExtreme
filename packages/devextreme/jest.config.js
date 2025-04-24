@@ -6,6 +6,7 @@ module.exports = {
     moduleNameMapper: {
         '@js/(.*)': '<rootDir>/js/$1',
         '@ts/(.*)': '<rootDir>/js/__internal/$1',
+        '@preact/signals-core': '<rootDir>/node_modules/@preact/signals-core/dist/signals-core.js'
     },
     modulePathIgnorePatterns: [
         'node_modules'

@@ -139,6 +139,7 @@ export default function App() {
       <div className="content">
         <MultiView
           selectedIndex={selectedIndex}
+          focusStateEnabled={false}
           animationEnabled={false}
           swipeEnabled={false}
           height={300}

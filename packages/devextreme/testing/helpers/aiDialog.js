@@ -1,12 +1,12 @@
 import $ from 'jquery';
 
+const AI_DIALOG_CLASS = 'dx-aidialog';
+const AI_DIALOG_CONTROLS_CLASS = 'dx-aidialog-controls';
+const AI_DIALOG_CONTENT_CLASS = 'dx-aidialog-content';
 const DROP_DOWN_BUTTON_CLASS = 'dx-dropdownbutton';
 const BUTTON_CLASS = 'dx-button';
 const LIST_ITEM_CLASS = 'dx-list-item';
 const OVERLAY_CLASS = 'dx-overlay-content';
-const DIALOG_CLASS = 'dx-aidialog';
-const AI_DIALOG_CONTENT_CLASS = 'dx-aidialog-content';
-const AI_DIALOG_CONTROLS_CLASS = 'dx-aidialog-controls';
 const SELECT_BOX_CLASS = 'dx-selectbox';
 const TEXT_AREA_CLASS = 'dx-textarea';
 
@@ -44,7 +44,7 @@ const getDropDownButtonOption = (index) => {
 };
 
 const getDialogSelectBoxes = ($container) => {
-    const $wrapper = $container.find(`.${DIALOG_CLASS}`);
+    const $wrapper = $container.find(`.${AI_DIALOG_CLASS}`);
     const $aiContent = $wrapper.find(`.${AI_DIALOG_CONTENT_CLASS}`);
     const $controls = $aiContent.find(`.${AI_DIALOG_CONTROLS_CLASS}`);
     return $controls.find(`.${SELECT_BOX_CLASS}`);
@@ -70,7 +70,7 @@ export const clickActionButton = (insertionMode) => {
         insertBelow: 2,
     };
 
-    getDropDownButton($(`.${DIALOG_CLASS}`)).trigger(CLICK_EVENT_NAME);
+    getDropDownButton($(`.${AI_DIALOG_CLASS}`)).trigger(CLICK_EVENT_NAME);
     getDropDownButtonOption(insertionModeToIndexMap[insertionMode]).trigger(CLICK_EVENT_NAME);
 };
 
@@ -87,7 +87,7 @@ export const setResultText = (value) => {
     textAreaInstance.option('value', value);
 };
 
-export const getResultText = () => {
+export const getResultTextAreaValue = () => {
     const textAreaInstance = $(`.${TEXT_AREA_CLASS}`).eq(1).dxTextArea('instance');
     return textAreaInstance.option('value');
 };

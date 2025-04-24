@@ -19,6 +19,7 @@ import type { HeaderPanel } from '../header_panel/m_header_panel';
 import modules from '../m_modules';
 import type { ModuleType } from '../m_types';
 import { ColumnsView } from '../views/m_columns_view';
+import { defaultOptions } from './const';
 
 const COLUMN_CHOOSER_CLASS = 'column-chooser';
 const COLUMN_CHOOSER_BUTTON_CLASS = 'column-chooser-button';
@@ -590,7 +591,7 @@ const columns = (Base: ModuleType<ColumnsController>) => class ColumnsChooserCol
 };
 
 const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnChooserColumnHeadersExtender extends Base {
-  protected allowDragging(column) {
+  public allowDragging(column) {
     const isDragMode = !this._columnChooserView.isSelectMode();
     const isColumnChooserVisible = this._columnChooserView.isColumnChooserVisible();
 
@@ -600,29 +601,7 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnC
 
 export const columnChooserModule = {
   defaultOptions() {
-    return {
-      columnChooser: {
-        enabled: false,
-        search: {
-          enabled: false,
-          timeout: 500,
-          editorOptions: {},
-        },
-        selection: {
-          allowSelectAll: false,
-          selectByClick: false,
-          recursive: false,
-        },
-        position: undefined,
-        mode: 'dragAndDrop',
-        width: 250,
-        height: 260,
-        title: messageLocalization.format('dxDataGrid-columnChooserTitle'),
-        emptyPanelText: messageLocalization.format('dxDataGrid-columnChooserEmptyText'),
-        // TODO private option
-        container: undefined,
-      },
-    };
+    return defaultOptions;
   },
   controllers: {
     columnChooser: ColumnChooserController,

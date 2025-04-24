@@ -1,0 +1,10 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Options onDataErrorOccurred should be called when load error happens 1`] = `
+[
+  {
+    "component": Any<Object>,
+    "error": [Error: my error],
+  },
+]
+`;

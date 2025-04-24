@@ -205,14 +205,16 @@ describe('ResourceProcessor', () => {
         },
       ]);
 
-      await processor.getAppointmentResourcesValues({
-        ...appointment,
-        roomId: 1,
-      });
-      await processor.getAppointmentResourcesValues({
-        ...appointment,
-        roomId: 2,
-      });
+      await Promise.all([
+        processor.getAppointmentResourcesValues({
+          ...appointment,
+          roomId: 1,
+        }),
+        processor.getAppointmentResourcesValues({
+          ...appointment,
+          roomId: 2,
+        }),
+      ]);
       await processor.getAppointmentResourcesValues({
         ...appointment,
         roomId: 3,

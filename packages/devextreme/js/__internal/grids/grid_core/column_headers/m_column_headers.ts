@@ -215,7 +215,10 @@ export class ColumnHeadersView extends ColumnsView {
     if (options.row.rowType === 'header') {
       $cell.addClass(CELL_FOCUS_DISABLED_CLASS);
       if (!this._isLegacyKeyboardNavigation()) {
-        if (options.column && !options.column.type) {
+        const { column } = options;
+        const isCustomCommandColumn = this._columnsController.isCustomCommandColumn(column);
+
+        if (column && (!column.type || isCustomCommandColumn)) {
           $cell.attr('tabindex', this.option('tabindex') || 0);
         }
       }
@@ -517,7 +520,7 @@ export class ColumnHeadersView extends ColumnsView {
   /**
    * @extended: column_chooser
    */
-  protected allowDragging(column) {
+  public allowDragging(column) {
     const rowIndex = column && this._columnsController.getRowIndex(column.index);
     const columns = this.getColumns(rowIndex);
 

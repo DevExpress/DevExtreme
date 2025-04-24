@@ -2,12 +2,12 @@
 import messageLocalization from '@js/common/core/localization/message';
 import $ from '@js/core/renderer';
 import { getPathParts } from '@js/core/utils/data';
-import { extend } from '@js/core/utils/extend';
-import { isDefined, isString } from '@js/core/utils/type';
+import { isDefined } from '@js/core/utils/type';
 import type { Properties as ToolbarProperties } from '@js/ui/toolbar';
 import Toolbar from '@js/ui/toolbar';
 import type { EditingController } from '@ts/grids/grid_core/editing/m_editing';
 import type { HeaderFilterController } from '@ts/grids/grid_core/header_filter/m_header_filter';
+import { normalizeToolbarItems } from '@ts/grids/new/grid_core/toolbar/utils';
 
 import type { ModuleType } from '../m_types';
 import { ColumnsView } from '../views/m_columns_view';
@@ -72,7 +72,11 @@ export class HeaderPanel extends ColumnsView {
     };
 
     const userItems = userToolbarOptions?.items;
-    options.toolbarOptions.items = this._normalizeToolbarItems(options.toolbarOptions.items, userItems);
+    options.toolbarOptions.items = normalizeToolbarItems(
+      options.toolbarOptions.items,
+      userItems,
+      DEFAULT_TOOLBAR_ITEM_NAMES,
+    );
 
     this.executeAction('onToolbarPreparing', options);
 
@@ -82,51 +86,6 @@ export class HeaderPanel extends ColumnsView {
     }
 
     return options.toolbarOptions;
-  }
-
-  private _normalizeToolbarItems(defaultItems, userItems) {
-    defaultItems.forEach((button) => {
-      if (!DEFAULT_TOOLBAR_ITEM_NAMES.includes(button.name)) {
-        throw new Error(`Default toolbar item '${button.name}' is not added to DEFAULT_TOOLBAR_ITEM_NAMES`);
-      }
-    });
-
-    const defaultProps = {
-      location: 'after',
-    };
-
-    const isArray = Array.isArray(userItems);
-
-    if (!isDefined(userItems)) {
-      return defaultItems;
-    }
-
-    if (!isArray) {
-      userItems = [userItems];
-    }
-
-    const defaultButtonsByNames = {};
-    defaultItems.forEach((button) => {
-      defaultButtonsByNames[button.name] = button;
-    });
-
-    const normalizedItems = userItems.map((button) => {
-      if (isString(button)) {
-        button = { name: button };
-      }
-
-      if (isDefined(button.name)) {
-        if (isDefined(defaultButtonsByNames[button.name])) {
-          button = extend(true, {}, defaultButtonsByNames[button.name], button);
-        } else if (DEFAULT_TOOLBAR_ITEM_NAMES.includes(button.name)) {
-          button = { ...button, visible: false };
-        }
-      }
-
-      return extend(true, {}, defaultProps, button);
-    });
-
-    return isArray ? normalizedItems : normalizedItems[0];
   }
 
   protected _renderCore() {
@@ -217,7 +176,11 @@ export class HeaderPanel extends ColumnsView {
           this._invalidate();
         } else if (parts.length === 3) {
           // `toolbar.items[i]` case
-          const normalizedItem = this._normalizeToolbarItems(this._getToolbarItems(), args.value);
+          const normalizedItem = normalizeToolbarItems(
+            this._getToolbarItems(),
+            [args.value],
+            DEFAULT_TOOLBAR_ITEM_NAMES,
+          )[0];
           this._toolbar?.option(optionName, normalizedItem);
         } else if (parts.length >= 4) {
           // `toolbar.items[i].prop` case

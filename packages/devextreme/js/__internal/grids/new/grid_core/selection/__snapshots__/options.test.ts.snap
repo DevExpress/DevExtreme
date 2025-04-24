@@ -1,0 +1,79 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Options selectedCardKeys when given should set the select state of the item 1`] = `
+[
+  {
+    "cells": [],
+    "data": {
+      "id": 1,
+      "value": "test",
+    },
+    "index": 0,
+    "isSelected": true,
+    "key": 1,
+  },
+]
+`;
+
+exports[`Options selection allowSelectAll when it is false and selection mode is 'multiple' selection should not work 1`] = `[]`;
+
+exports[`Options selection allowSelectAll when it is true and selection mode is 'multiple' selection should not work 1`] = `
+[
+  {
+    "locateInMenu": "auto",
+    "location": "before",
+    "name": "selectAllButton",
+    "options": {
+      "disabled": false,
+      "icon": "selectall",
+      "onClick": [Function],
+      "text": "Select all",
+    },
+    "widget": "dxButton",
+  },
+  {
+    "locateInMenu": "auto",
+    "location": "before",
+    "name": "clearSelectionButton",
+    "options": {
+      "disabled": true,
+      "icon": "close",
+      "onClick": [Function],
+      "text": "Clear selection",
+    },
+    "widget": "dxButton",
+  },
+]
+`;
+
+exports[`Options selection allowSelectAll when it is true and selection mode isn't 'multiple' selection should not work 1`] = `[]`;
+
+exports[`Options selection mode when it is 'none' and the selectedCardKeys is specified selection should not apply 1`] = `
+[
+  {
+    "cells": [],
+    "data": {
+      "id": 1,
+      "value": "test",
+    },
+    "index": 0,
+    "isSelected": false,
+    "key": 1,
+  },
+]
+`;
+
+exports[`Options selection mode when it is 'none' selection should not work 1`] = `
+[
+  {
+    "cells": [],
+    "data": {
+      "id": 1,
+      "value": "test",
+    },
+    "index": 0,
+    "isSelected": false,
+    "key": 1,
+  },
+]
+`;

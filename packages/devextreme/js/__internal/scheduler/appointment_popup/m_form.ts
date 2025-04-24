@@ -11,12 +11,10 @@ import $ from '@js/core/renderer';
 import dateUtils from '@js/core/utils/date';
 import dateSerialization from '@js/core/utils/date_serialization';
 import { extend } from '@js/core/utils/extend';
-import type AbstractStore from '@js/data/abstract_store';
 import Form from '@js/ui/form';
 import { current, isFluent } from '@js/ui/themes';
 
 import { createAppointmentAdapter } from '../m_appointment_adapter';
-import type { TimezoneLabel } from '../m_utils_time_zone';
 import timeZoneUtils from '../m_utils_time_zone';
 
 const SCREEN_SIZE_OF_SINGLE_COLUMN = 600;
@@ -41,10 +39,11 @@ const E2E_TEST_CLASSES = {
   recurrenceSwitch: 'e2e-dx-scheduler-form-recurrence-switch',
 };
 
-const DEFAULT_TIMEZONE_EDITOR_DATA_SOURCE_OPTIONS = {
+const createTimeZoneDataSource = () => new DataSource({
+  store: timeZoneUtils.getTimeZonesCache(),
   paginate: true,
   pageSize: 10,
-};
+});
 
 const getStylingModeFunc = (): string | undefined => (isFluent(current()) ? 'filled' : undefined);
 
@@ -193,6 +192,7 @@ export class AppointmentForm {
         valueExpr: 'id',
         placeholder: noTzTitle,
         searchEnabled: true,
+        dataSource: createTimeZoneDataSource(),
         onValueChanged: (args) => {
           const { form } = this;
           const secondTimezoneEditor = form.getEditor(secondTimeZoneExpr);
@@ -428,59 +428,6 @@ export class AppointmentForm {
     editor && this.form.itemOption(editorPath, 'editorOptions', extend({}, editor.editorOptions, options));
   }
 
-  private scheduleTimezoneEditorDataSourceUpdate(
-    editorName: string,
-    dataSource: { store: () => AbstractStore; reload: () => void },
-    selectedTimezoneLabel: TimezoneLabel | null,
-    date: Date,
-  ): void {
-    timeZoneUtils.getTimeZoneLabelsAsyncBatch(date)
-      .catch(() => [] as TimezoneLabel[])
-      .then(async (timezones) => {
-        const store = dataSource.store();
-
-        await store.remove(selectedTimezoneLabel?.id);
-
-        // NOTE: Unfortunately, our store not support bulk operations
-        // So, we update it record-by-record
-        const insertPromises = timezones.reduce<Promise<void>[]>((result, timezone) => {
-          result.push(store.insert(timezone));
-          return result;
-        }, []);
-
-        // NOTE: We should wait for all insertions before reload
-        await Promise.all(insertPromises);
-
-        dataSource.reload();
-        // NOTE: We should re-assign dataSource to the editor
-        // to repaint this editor after dataSource update
-        this.setEditorOptions(editorName, 'Main', { dataSource });
-      }).catch(() => {});
-  }
-
-  private setupTimezoneEditorDataSource(
-    editorName: string,
-    selectedTimezoneId: string | null,
-    date: Date,
-  ): void {
-    const selectedTimezoneLabel = selectedTimezoneId
-      ? timeZoneUtils.getTimeZoneLabel(selectedTimezoneId, date)
-      : null;
-
-    const dataSource = new DataSource({
-      ...DEFAULT_TIMEZONE_EDITOR_DATA_SOURCE_OPTIONS,
-      store: selectedTimezoneLabel ? [selectedTimezoneLabel] : [],
-    });
-
-    this.setEditorOptions(editorName, 'Main', { dataSource });
-    this.scheduleTimezoneEditorDataSourceUpdate(
-      editorName,
-      dataSource,
-      selectedTimezoneLabel,
-      date,
-    );
-  }
-
   updateFormData(formData: Record<string, any>): void {
     this.isFormUpdating = true;
     this.form.option('formData', formData);
@@ -489,16 +436,9 @@ export class AppointmentForm {
     const { expr } = dataAccessors;
 
     const rawStartDate = dataAccessors.get('startDate', formData);
-    const rawEndDate = dataAccessors.get('endDate', formData);
-    const startDateTimezone = dataAccessors.get('startDateTimeZone', formData) ?? null;
-    const endDateTimezone = dataAccessors.get('endDateTimeZone', formData) ?? null;
 
     const allDay = dataAccessors.get('allDay', formData);
     const startDate = new Date(rawStartDate);
-    const endDate = new Date(rawEndDate);
-
-    this.setupTimezoneEditorDataSource(expr.startDateTimeZoneExpr, startDateTimezone, startDate);
-    this.setupTimezoneEditorDataSource(expr.endDateTimeZoneExpr, endDateTimezone, endDate);
 
     this.updateRecurrenceEditorStartDate(startDate, expr.recurrenceRuleExpr);
 
