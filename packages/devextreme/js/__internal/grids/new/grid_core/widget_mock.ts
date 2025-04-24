@@ -1,5 +1,6 @@
 import type { CompatibilityColumnsController } from './columns_controller/compatibility';
 import type { CompatibilityDataController } from './data_controller';
+import type { CompatibilityFilterSyncController } from './filtering/filter_sync/compatibility';
 import type { GridCoreNewBase } from './widget';
 
 export class WidgetMock {
@@ -8,11 +9,7 @@ export class WidgetMock {
   private readonly _controllers = {
     data: this.data,
     columns: this.columns,
-    filterSync: {
-      getCustomFilterOperations(): unknown[] {
-        return [];
-      },
-    },
+    filterSync: this.filterSync,
   };
 
   constructor(
@@ -20,6 +17,7 @@ export class WidgetMock {
     private readonly widget: GridCoreNewBase<any>,
     private readonly data: CompatibilityDataController,
     private readonly columns: CompatibilityColumnsController,
+    private readonly filterSync: CompatibilityFilterSyncController,
   ) {}
 
   public option(...args: unknown[]): unknown {

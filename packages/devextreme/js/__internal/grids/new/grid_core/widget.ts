@@ -16,7 +16,7 @@ import * as di from './di';
 import { EditingController } from './editing/controller';
 import { EditPopupView } from './editing/popup/view';
 import { ErrorController } from './error_controller/error_controller';
-import { FilterSyncController } from './filtering/filter_sync/index';
+import { CompatibilityFilterSyncController, FilterSyncController } from './filtering/filter_sync/index';
 import { ClearFilterVisitor } from './filtering/filter_visitors/clear_filter_visitor';
 import { GetAppliedFilterVisitor } from './filtering/filter_visitors/get_applied_filters_visitor';
 import { HeaderFilterController } from './filtering/header_filter/index';
@@ -95,6 +95,7 @@ export class GridCoreNewBase<
       this,
       this.diContext.get(DataControllerModule.CompatibilityDataController),
       this.diContext.get(CompatibilityColumnsController),
+      this.diContext.get(CompatibilityFilterSyncController),
     ));
   }
 

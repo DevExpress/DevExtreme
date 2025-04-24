@@ -18,6 +18,12 @@ export class FilterController {
 
   public readonly filterValueOption = this.options.twoWay('filterValue');
 
+  public readonly filterBuilderPopupOptions = this.options.oneWay('filterBuilderPopup');
+
+  public readonly filterPanelOptions = this.options.twoWay('filterPanel');
+
+  public readonly filterBuilderOptions = this.options.twoWay('filterBuilder');
+
   public readonly appliedFilters: Signal<AppliedFilters> = signal({});
 
   public static dependencies = [
