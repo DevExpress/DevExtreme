@@ -51,7 +51,7 @@ export class FilterController {
   private readonly appliedFilterExpressions = computed(
     () => getAppliedFilterExpressions(
       this.appliedFilters.value,
-      this.columnsController.visibleColumns.value,
+      this.columnsController.filterableColumns.value,
       this.customOperations.value,
     ),
   );
