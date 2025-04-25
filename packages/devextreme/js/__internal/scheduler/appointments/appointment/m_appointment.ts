@@ -198,8 +198,8 @@ export class Appointment extends DOMComponent<AppointmentProperties> {
 
           $element.attr('aria-describedby', id);
           $element.find(`.${APPOINTMENT_CONTENT_CLASSES.ARIA_DESCRIPTION}`)
-            .html(text)
-            .attr('id', id);
+            ?.text(text)
+            ?.attr('id', id);
         }
       });
   }
