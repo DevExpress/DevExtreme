@@ -94,9 +94,13 @@ export interface FieldInfo {
   highlightedText: HighlightedTextItem[] | null;
 
   index: number;
+
+  card: CardInfo;
 }
 
 export interface CardInfo {
+  columns: Column[];
+
   fields: FieldInfo[];
 
   key: Key;
@@ -106,4 +110,6 @@ export interface CardInfo {
   isSelected?: boolean;
 
   index: number;
+
+  values: unknown[];
 }
