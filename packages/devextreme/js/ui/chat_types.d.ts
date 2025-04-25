@@ -7,6 +7,8 @@ export {
   TypingEndEvent,
   User,
   Alert,
+  TextMessage,
+  ImageMessage,
   Message,
   MessageTemplateData,
   dxChatOptions,

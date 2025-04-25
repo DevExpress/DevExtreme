@@ -5,7 +5,7 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import dateSerialization from '@js/core/utils/date_serialization';
 import { isDate } from '@js/core/utils/type';
-import type { Message } from '@js/ui/chat';
+import type { User } from '@js/ui/chat';
 import type { WidgetOptions } from '@js/ui/widget/ui.widget';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
@@ -27,6 +27,12 @@ const CHAT_MESSAGEGROUP_CONTENT_CLASS = 'dx-chat-messagegroup-content';
 
 export type MessageGroupAlignment = 'start' | 'end';
 
+interface Message {
+  id?: number | string;
+  timestamp?: Date | number | string;
+  author?: User;
+  text?: string;
+}
 export interface Properties extends WidgetOptions<MessageGroup> {
   items: Message[];
   alignment: MessageGroupAlignment;
