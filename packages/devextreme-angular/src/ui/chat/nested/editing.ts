@@ -1,0 +1,82 @@
+/* tslint:disable:max-line-length */
+
+
+import {
+    Component,
+    OnInit,
+    OnDestroy,
+    NgModule,
+    Host,
+    SkipSelf,
+    Input
+} from '@angular/core';
+
+
+
+
+import { dxChat } from 'UNKNOWN_MODULE';
+import { Message } from 'devextreme/ui/chat';
+
+import {
+    NestedOptionHost,
+} from 'devextreme-angular/core';
+import { NestedOption } from 'devextreme-angular/core';
+
+
+@Component({
+    selector: 'dxo-chat-editing',
+    template: '',
+    styles: [''],
+    providers: [NestedOptionHost]
+})
+export class DxoChatEditingComponent extends NestedOption implements OnDestroy, OnInit  {
+    @Input()
+    get allowDeleting(): boolean | ((options: { component: dxChat, message: Message }) => boolean) {
+        return this._getOption('allowDeleting');
+    }
+    set allowDeleting(value: boolean | ((options: { component: dxChat, message: Message }) => boolean)) {
+        this._setOption('allowDeleting', value);
+    }
+
+    @Input()
+    get allowUpdating(): boolean | ((options: { component: dxChat, message: Message }) => boolean) {
+        return this._getOption('allowUpdating');
+    }
+    set allowUpdating(value: boolean | ((options: { component: dxChat, message: Message }) => boolean)) {
+        this._setOption('allowUpdating', value);
+    }
+
+
+    protected get _optionPath() {
+        return 'editing';
+    }
+
+
+    constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
+            @Host() optionHost: NestedOptionHost) {
+        super();
+        parentOptionHost.setNestedOption(this);
+        optionHost.setHost(this, this._fullOptionPath.bind(this));
+    }
+
+
+    ngOnInit() {
+        this._addRecreatedComponent();
+    }
+
+    ngOnDestroy() {
+        this._addRemovedOption(this._getOptionPath());
+    }
+
+
+}
+
+@NgModule({
+  declarations: [
+    DxoChatEditingComponent
+  ],
+  exports: [
+    DxoChatEditingComponent
+  ],
+})
+export class DxoChatEditingModule { }

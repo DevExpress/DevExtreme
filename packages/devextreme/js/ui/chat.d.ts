@@ -248,8 +248,6 @@ export type Editing = {
    * @docid
    * @default false
    * @type boolean|function
-   * @type_function_param1_field component:dxChat
-   * @type_function_param1_field message:Message
    * @public
    */
   allowUpdating?: boolean | ((options: { component?: dxChat; message?: Message }) => boolean);
@@ -257,8 +255,6 @@ export type Editing = {
    * @docid
    * @default false
    * @type boolean|function
-   * @type_function_param1_field component:dxChat
-   * @type_function_param1_field message:Message
    * @public
    */
   allowDeleting?: boolean | ((options: { component?: dxChat; message?: Message }) => boolean);
@@ -303,7 +299,6 @@ export interface dxChatOptions extends WidgetOptions<dxChat> {
     items?: Array<Message>;
     /**
      * @docid
-     * @type object
      * @public
      */
     editing?: Editing;

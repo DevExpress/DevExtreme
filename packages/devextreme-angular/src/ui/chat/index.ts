@@ -23,7 +23,7 @@ import {
 
 
 import DataSource from 'devextreme/data/data_source';
-import { Alert, Message, DisposingEvent, InitializedEvent, MessageDeletedEvent, MessageDeletingEvent, MessageEditCanceledEvent, MessageEditingStartEvent, MessageEnteredEvent, MessageUpdatedEvent, MessageUpdatingEvent, OptionChangedEvent, TypingEndEvent, TypingStartEvent, User } from 'devextreme/ui/chat';
+import { Alert, Message, Editing, DisposingEvent, InitializedEvent, MessageDeletedEvent, MessageDeletingEvent, MessageEditCanceledEvent, MessageEditingStartEvent, MessageEnteredEvent, MessageUpdatedEvent, MessageUpdatingEvent, OptionChangedEvent, TypingEndEvent, TypingStartEvent, User } from 'devextreme/ui/chat';
 import { DataSourceOptions } from 'devextreme/data/data_source';
 import { Store } from 'devextreme/data/store';
 import { Format } from 'devextreme/common/core/localization';
@@ -43,6 +43,7 @@ import {
 
 import { DxiAlertModule } from 'devextreme-angular/ui/nested';
 import { DxoDayHeaderFormatModule } from 'devextreme-angular/ui/nested';
+import { DxoEditingModule } from 'devextreme-angular/ui/nested';
 import { DxiItemModule } from 'devextreme-angular/ui/nested';
 import { DxoAuthorModule } from 'devextreme-angular/ui/nested';
 import { DxoMessageTimestampFormatModule } from 'devextreme-angular/ui/nested';
@@ -52,6 +53,7 @@ import { DxoUserModule } from 'devextreme-angular/ui/nested';
 import { DxiChatAlertModule } from 'devextreme-angular/ui/chat/nested';
 import { DxoChatAuthorModule } from 'devextreme-angular/ui/chat/nested';
 import { DxoChatDayHeaderFormatModule } from 'devextreme-angular/ui/chat/nested';
+import { DxoChatEditingModule } from 'devextreme-angular/ui/chat/nested';
 import { DxiChatItemModule } from 'devextreme-angular/ui/chat/nested';
 import { DxoChatMessageTimestampFormatModule } from 'devextreme-angular/ui/chat/nested';
 import { DxiChatTypingUserModule } from 'devextreme-angular/ui/chat/nested';
@@ -167,10 +169,10 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
     
      */
     @Input()
-    get editing(): Record<string, any> {
+    get editing(): Editing {
         return this._getOption('editing');
     }
-    set editing(value: Record<string, any>) {
+    set editing(value: Editing) {
         this._setOption('editing', value);
     }
 
@@ -551,7 +553,7 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() editingChange: EventEmitter<Record<string, any>>;
+    @Output() editingChange: EventEmitter<Editing>;
 
     /**
     
@@ -835,6 +837,7 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
   imports: [
     DxiAlertModule,
     DxoDayHeaderFormatModule,
+    DxoEditingModule,
     DxiItemModule,
     DxoAuthorModule,
     DxoMessageTimestampFormatModule,
@@ -843,6 +846,7 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
     DxiChatAlertModule,
     DxoChatAuthorModule,
     DxoChatDayHeaderFormatModule,
+    DxoChatEditingModule,
     DxiChatItemModule,
     DxoChatMessageTimestampFormatModule,
     DxiChatTypingUserModule,
@@ -857,6 +861,7 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
     DxChatComponent,
     DxiAlertModule,
     DxoDayHeaderFormatModule,
+    DxoEditingModule,
     DxiItemModule,
     DxoAuthorModule,
     DxoMessageTimestampFormatModule,
@@ -865,6 +870,7 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
     DxiChatAlertModule,
     DxoChatAuthorModule,
     DxoChatDayHeaderFormatModule,
+    DxoChatEditingModule,
     DxiChatItemModule,
     DxoChatMessageTimestampFormatModule,
     DxiChatTypingUserModule,
