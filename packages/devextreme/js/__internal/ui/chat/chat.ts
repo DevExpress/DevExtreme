@@ -1,5 +1,4 @@
 import { Guid } from '@js/common';
-import type { AsyncCancelable, EventInfo } from '@js/common/core/events';
 import messageLocalization from '@js/common/core/localization/message';
 import type { DataSourceOptions } from '@js/common/data';
 import registerComponent from '@js/core/component_registrator';
@@ -14,6 +13,7 @@ import type {
   TypingEndEvent,
   TypingStartEvent,
 } from '@js/ui/chat';
+import type dxChat from '@js/ui/chat';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
 import AlertList from '@ts/ui/chat/alertlist';
@@ -34,29 +34,7 @@ import type { DataChange } from '@ts/ui/collection/collection_widget.base';
 const CHAT_CLASS = 'dx-chat';
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 
-export type MessageDeletingEvent = AsyncCancelable & EventInfo<Chat> & {
-  readonly message: Message;
-};
-
-export type MessageEditingStartEvent = AsyncCancelable & EventInfo<Chat> & {
-  readonly message: Message;
-};
-export interface ChatProperties extends Properties {
-  editing: {
-    allowUpdating: boolean | ((options: {
-      component: Chat;
-      message: Message;
-    }) => boolean);
-    allowDeleting: boolean | ((options: {
-      component: Chat;
-      message: Message;
-    }) => boolean);
-  };
-  onMessageEditingStart?: (e: MessageEditingStartEvent) => void;
-  onMessageDeleting?: (e: MessageEditingStartEvent) => void;
-}
-
-class Chat extends Widget<ChatProperties> {
+class Chat extends Widget<Properties> {
   _messageBox!: MessageBox;
 
   _messageList!: MessageList;
@@ -73,7 +51,7 @@ class Chat extends Widget<ChatProperties> {
 
   _messageDeletingAction?: (e: Partial<MessageEnteredEvent>) => void;
 
-  _getDefaultOptions(): ChatProperties {
+  _getDefaultOptions(): Properties {
     return {
       ...super._getDefaultOptions(),
       showDayHeaders: true,
@@ -217,28 +195,36 @@ class Chat extends Widget<ChatProperties> {
 
   protected _allowEditAction(message: Message): boolean {
     const { editing } = this.option();
+    if (!editing) {
+      return false;
+    }
+
     const { allowUpdating } = editing;
 
     if (typeof allowUpdating === 'function') {
       return allowUpdating({
-        component: this,
+        component: this as unknown as dxChat,
         message,
       });
     }
-    return allowUpdating;
+    return allowUpdating ?? false;
   }
 
   protected _allowDeleteAction(message: Message): boolean {
     const { editing } = this.option();
+    if (!editing) {
+      return false;
+    }
+
     const { allowDeleting } = editing;
 
     if (typeof allowDeleting === 'function') {
       return allowDeleting({
-        component: this,
+        component: this as unknown as dxChat,
         message,
       });
     }
-    return allowDeleting;
+    return allowDeleting ?? false;
   }
 
   _getMessageTemplate(): MessageTemplate {
@@ -408,7 +394,7 @@ class Chat extends Widget<ChatProperties> {
     return $input;
   }
 
-  _optionChanged(args: OptionChanged<ChatProperties>): void {
+  _optionChanged(args: OptionChanged<Properties>): void {
     const { name, value } = args;
 
     switch (name) {
