@@ -5,7 +5,7 @@ import type { DataSourceOptions } from '@js/common/data';
 import registerComponent from '@js/core/component_registrator';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
-import { isDefined } from '@js/core/utils/type';
+import { isDefined, isPromise } from '@js/core/utils/type';
 import DataHelperMixin from '@js/data_helper';
 import type {
   Message,
@@ -23,6 +23,7 @@ import type {
   TypingStartEvent as MessageBoxTypingStartEvent,
 } from '@ts/ui/chat/messagebox';
 import MessageBox from '@ts/ui/chat/messagebox';
+import { MessageDeletePopup } from '@ts/ui/chat/messagedeletepopup';
 import type {
   MessageEditingEvent,
   MessageTemplate,
@@ -35,6 +36,10 @@ const CHAT_CLASS = 'dx-chat';
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 
 export type MessageDeletingEvent = AsyncCancelable & EventInfo<Chat> & {
+  readonly message: Message;
+};
+
+export type MessageDeletedEvent = EventInfo<Chat> & {
   readonly message: Message;
 };
 
@@ -53,7 +58,8 @@ export interface ChatProperties extends Properties {
     }) => boolean);
   };
   onMessageEditingStart?: (e: MessageEditingStartEvent) => void;
-  onMessageDeleting?: (e: MessageEditingStartEvent) => void;
+  onMessageDeleting?: (e: MessageDeletingEvent) => void;
+  onMessageDeleted?: (e: MessageDeletedEvent) => void;
 }
 
 class Chat extends Widget<ChatProperties> {
@@ -63,6 +69,8 @@ class Chat extends Widget<ChatProperties> {
 
   _alertList!: AlertList;
 
+  _deleteConfirmationPopup!: MessageDeletePopup;
+
   _messageEnteredAction?: (e: Partial<MessageEnteredEvent>) => void;
 
   _typingStartAction?: (e: Partial<TypingStartEvent>) => void;
@@ -71,7 +79,9 @@ class Chat extends Widget<ChatProperties> {
 
   _messageEditingStartAction?: (e: Partial<MessageEnteredEvent>) => void;
 
-  _messageDeletingAction?: (e: Partial<MessageEnteredEvent>) => void;
+  _messageDeletingAction?: (e: Partial<MessageDeletingEvent>) => void;
+
+  _messageDeletedAction?: (e: Partial<MessageDeletedEvent>) => void;
 
   _getDefaultOptions(): ChatProperties {
     return {
@@ -99,6 +109,8 @@ class Chat extends Widget<ChatProperties> {
       reloadOnChange: true,
       onTypingStart: undefined,
       onTypingEnd: undefined,
+      onMessageDeleting: undefined,
+      onMessageDeleted: undefined,
     };
   }
 
@@ -113,6 +125,7 @@ class Chat extends Widget<ChatProperties> {
     this._createMessageEnteredAction();
     this._createMessageEditingStartAction();
     this._createMessageDeletingAction();
+    this._createMessageDeletedAction();
     this._createTypingStartAction();
     this._createTypingEndAction();
   }
@@ -266,10 +279,67 @@ class Chat extends Widget<ChatProperties> {
     this._messageEditingStartAction?.({ message, event });
   }
 
-  _messageDeletingHandler(e: MessageEditingEvent): void {
-    const { message, event } = e;
+  _callCallbackByCanceled(
+    cancelResult: boolean | PromiseLike<boolean>,
+    callback: () => void,
+    cancelCallback?: () => void,
+  ): void {
+    const invokeCallback = (cancel: boolean): void => {
+      const callbackToInvoke = cancel ? cancelCallback : callback;
 
-    this._messageDeletingAction?.({ message, event });
+      callbackToInvoke?.();
+    };
+
+    if (isPromise(cancelResult)) {
+      cancelResult
+        .then(invokeCallback)
+        .catch(callback);
+    } else {
+      invokeCallback(Boolean(cancelResult));
+    }
+  }
+
+  _showDeleteConfirmationPopup(e: MessageEditingEvent): void {
+    if (!this._deleteConfirmationPopup) {
+      this._deleteConfirmationPopup = new MessageDeletePopup(this.$element(), {
+        message: messageLocalization.format('dxChat-editingDeleteMessageConfirmationPrompt'),
+        applyButtonLabel: messageLocalization.format('Yes'),
+        cancelButtonLabel: messageLocalization.format('No'),
+        onApplyButtonClick: (message: Message): void => {
+          this._messageDeletedAction?.({
+            component: this,
+            element: this.element(),
+            message,
+          });
+          this._focusTarget()[0].focus();
+        },
+        onCancelButtonClick: (): void => {
+          this._focusTarget()[0].focus();
+        },
+      });
+    }
+
+    this._deleteConfirmationPopup.show(e.message);
+  }
+
+  _messageDeletingHandler(e: MessageEditingEvent): void {
+    const { message } = e;
+
+    const messageDeletingArgs: MessageDeletingEvent = {
+      component: this,
+      element: this.element(),
+      message,
+      cancel: false,
+    };
+
+    this._messageDeletingAction?.(messageDeletingArgs);
+
+    this._callCallbackByCanceled(
+      messageDeletingArgs.cancel,
+      () => {
+        this._showDeleteConfirmationPopup(e);
+      },
+    );
   }
 
   _renderAlertList(): void {
@@ -345,6 +415,13 @@ class Chat extends Widget<ChatProperties> {
   _createMessageDeletingAction(): void {
     this._messageDeletingAction = this._createActionByOption(
       'onMessageDeleting',
+      { excludeValidators: ['disabled'] },
+    );
+  }
+
+  _createMessageDeletedAction(): void {
+    this._messageDeletedAction = this._createActionByOption(
+      'onMessageDeleted',
       { excludeValidators: ['disabled'] },
     );
   }
@@ -444,6 +521,9 @@ class Chat extends Widget<ChatProperties> {
         break;
       case 'onMessageDeleting':
         this._createMessageDeletingAction();
+        break;
+      case 'onMessageDeleted':
+        this._createMessageDeletedAction();
         break;
       case 'onTypingStart':
         this._createTypingStartAction();
