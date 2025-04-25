@@ -594,7 +594,7 @@ export function getFileUploaderBaseOptions() {
   return {
     value: [],
     name: FILE_UPLOADER_NAME,
-    accept: 'image/*',
+    allowedFileExtensions: ['image/*'],
     uploadMode: 'useButtons',
   };
 }
