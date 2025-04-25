@@ -140,7 +140,7 @@ QUnit.module('AIDialog', {}, () => {
             assert.strictEqual(toolbarItems.length, 4, '4 toolbar items rendered');
 
             const dropDownItem = toolbarItems.find(item => item.widget === 'dxDropDownButton');
-            assert.deepEqual(dropDownItem.options.items.map(i => i.id), ['replace', 'insertAbove', 'insertBelow'], 'DropDown has correct items');
+            assert.deepEqual(dropDownItem.options.items.map(i => i.id), ['insertAbove', 'insertBelow'], 'DropDown has correct items');
         });
     });
 
@@ -236,7 +236,7 @@ QUnit.module('AIDialog', {}, () => {
             });
         });
 
-        QUnit.test('should disable buttons while loading', function(assert) {
+        QUnit.test('Should display only stop button while loading', function(assert) {
             showAIDialog(this, {
                 config: { currentCommand: 'translate' },
             });
@@ -244,13 +244,9 @@ QUnit.module('AIDialog', {}, () => {
             this.setDialogState('generating');
 
             const toolbarButtonItems = getToolbarButtonItems(this.aiDialogPopup);
-            const stopButtonItem = toolbarButtonItems.find(item => item.options.text === 'Stop');
-            const replaceButtonItem = toolbarButtonItems.find(item => item.options.text === 'Replace');
-            const copyButtonItem = toolbarButtonItems.find(item => item.options.text === 'Copy');
+            const buttonTexts = toolbarButtonItems.map(item => item.options.text);
 
-            assert.strictEqual(stopButtonItem.disabled, undefined, 'stop button is not disabled');
-            assert.strictEqual(replaceButtonItem.disabled, true, 'generate button is disabled');
-            assert.strictEqual(copyButtonItem.disabled, true, 'copy button not disabled');
+            assert.deepEqual(buttonTexts, ['Stop'], 'toolbar contains correct buttons for Ask AI mode');
         });
 
         ['replace', 'insertAbove', 'insertBelow'].forEach((mode) => {
