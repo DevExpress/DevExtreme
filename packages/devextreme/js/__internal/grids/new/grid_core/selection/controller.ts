@@ -10,7 +10,7 @@ import { ShowCheckBoxesMode } from '@ts/grids/new/grid_core/selection/const';
 import Selection from '@ts/ui/selection/m_selection';
 
 import type { CardInfo } from '../columns_controller/types';
-import type { Key } from '../data_controller/types';
+import type { DataObject, Key } from '../data_controller/types';
 import { ItemsController } from '../items_controller/items_controller';
 import { OptionsController } from '../options_controller/options_controller';
 import { ToolbarController } from '../toolbar/controller';
@@ -344,12 +344,13 @@ export class SelectionController {
     return selectionHelper?.clearSelection();
   }
 
-  public getSelectedCards(): CardInfo[] {
+  public getSelectedCardsData(): DataObject[] {
     const selectedCardKey = this.getSelectedCardKeys();
 
     return selectedCardKey
       .map((key) => this.itemsController.getCardByKey(key))
-      .filter((item): item is CardInfo => !!item);
+      .filter((item): item is CardInfo => !!item)
+      .map((item) => item.data);
   }
 
   public getSelectedCardKeys(): Key[] {
