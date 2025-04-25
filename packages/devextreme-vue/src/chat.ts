@@ -170,7 +170,6 @@ const componentConfig = {
     (this as any).$_expectedChildren = {
       alert: { isCollectionItem: true, optionName: "alerts" },
       dayHeaderFormat: { isCollectionItem: false, optionName: "dayHeaderFormat" },
-      item: { isCollectionItem: true, optionName: "items" },
       messageTimestampFormat: { isCollectionItem: false, optionName: "messageTimestampFormat" },
       typingUser: { isCollectionItem: true, optionName: "typingUsers" },
       user: { isCollectionItem: false, optionName: "user" }
@@ -203,29 +202,6 @@ const DxAlert = defineComponent(DxAlertConfig);
 (DxAlert as any).$_optionName = "alerts";
 (DxAlert as any).$_isCollectionItem = true;
 
-const DxAuthorConfig = {
-  emits: {
-    "update:isActive": null,
-    "update:hoveredElement": null,
-    "update:avatarAlt": null,
-    "update:avatarUrl": null,
-    "update:id": null,
-    "update:name": null,
-  },
-  props: {
-    avatarAlt: String,
-    avatarUrl: String,
-    id: [Number, String],
-    name: String
-  }
-};
-
-prepareConfigurationComponentConfig(DxAuthorConfig);
-
-const DxAuthor = defineComponent(DxAuthorConfig);
-
-(DxAuthor as any).$_optionName = "author";
-
 const DxDayHeaderFormatConfig = {
   emits: {
     "update:isActive": null,
@@ -252,37 +228,6 @@ prepareConfigurationComponentConfig(DxDayHeaderFormatConfig);
 const DxDayHeaderFormat = defineComponent(DxDayHeaderFormatConfig);
 
 (DxDayHeaderFormat as any).$_optionName = "dayHeaderFormat";
-
-const DxItemConfig = {
-  emits: {
-    "update:isActive": null,
-    "update:hoveredElement": null,
-    "update:author": null,
-    "update:id": null,
-    "update:isDeleted": null,
-    "update:isEdited": null,
-    "update:text": null,
-    "update:timestamp": null,
-  },
-  props: {
-    author: Object as PropType<User | Record<string, any>>,
-    id: [Number, String],
-    isDeleted: Boolean,
-    isEdited: Boolean,
-    text: String,
-    timestamp: [Date, Number, String]
-  }
-};
-
-prepareConfigurationComponentConfig(DxItemConfig);
-
-const DxItem = defineComponent(DxItemConfig);
-
-(DxItem as any).$_optionName = "items";
-(DxItem as any).$_isCollectionItem = true;
-(DxItem as any).$_expectedChildren = {
-  author: { isCollectionItem: false, optionName: "author" }
-};
 
 const DxMessageTimestampFormatConfig = {
   emits: {
@@ -362,9 +307,7 @@ export default DxChat;
 export {
   DxChat,
   DxAlert,
-  DxAuthor,
   DxDayHeaderFormat,
-  DxItem,
   DxMessageTimestampFormat,
   DxTypingUser,
   DxUser

@@ -11,6 +11,7 @@ export const CHAT_MESSAGEBUBBLE_CLASS = 'dx-chat-messagebubble';
 export const CHAT_MESSAGEBUBBLE_DELETED_CLASS = 'dx-chat-messagebubble-deleted';
 export const CHAT_MESSAGEBUBBLE_CONTENT_CLASS = 'dx-chat-messagebubble-content';
 export const CHAT_MESSAGEBUBBLE_ICON_PROHIBITION_CLASS = `${ICON_CLASS}-cursorprohibition`;
+const CHAT_MESSAGEBUBBLE_HAS_IMAGE_CLASS = 'dx-has-image';
 const CHAT_MESSAGEBUBBLE_IMAGE_CLASS = 'dx-chat-messagebubble-image';
 
 export const MESSAGE_DATA_KEY = 'dxMessageData';
@@ -80,6 +81,7 @@ class MessageBubble extends Widget<Properties> {
 
     switch (message.type) {
       case 'image':
+        this.$element().addClass(CHAT_MESSAGEBUBBLE_HAS_IMAGE_CLASS);
         $('<img>')
           .attr('src', message.src)
           .attr('alt', message.alt ?? '')

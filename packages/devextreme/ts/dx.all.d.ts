@@ -31950,7 +31950,7 @@ declare module DevExpress.ui.dxChat {
     /**
      * [descr:TextMessage.type]
      */
-    type?: 'text';
+    type?: 'text' | undefined;
     /**
      * [descr:TextMessage.text]
      */

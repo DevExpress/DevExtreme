@@ -224,9 +224,10 @@ export type MessageBase = {
 export type TextMessage = MessageBase & {
     /**
      * @docid
+     * @default undefined
      * @public
      */
-    type?: 'text';
+    type?: 'text' | undefined;
     /**
      * @docid
      * @public
