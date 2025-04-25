@@ -32,6 +32,7 @@ test('popup with list', async (t) => {
     { A: 'A_3', B: 'B_3', C: 'C_3' },
     { A: 'A_4', B: 'B_4', C: 'C_4' },
   ],
+  columns: ['A', 'B', 'C'],
   headerFilter: {
     visible: true,
   },
@@ -61,6 +62,7 @@ test('popup with search', async (t) => {
     { A: 'A_3', B: 'B_3', C: 'C_3' },
     { A: 'A_4', B: 'B_4', C: 'C_4' },
   ],
+  columns: ['A', 'B', 'C'],
   headerFilter: {
     visible: true,
     search: {
