@@ -42,7 +42,7 @@ test('should support custom translations', async (t) => {
   columns: [
     {
       dataField: 'A',
-      calculateCellValue: () => undefined,
+      calculateFieldValue: () => undefined,
     },
     'B',
     'C',
