@@ -1409,7 +1409,9 @@ testComponentDefaults(ChatMessageBox,
 
 testComponentDefaults(ChatMessageBubble,
     {},
-    {}
+    {
+        text: '',
+    }
 );
 
 testComponentDefaults(ChatMessageGroup,
