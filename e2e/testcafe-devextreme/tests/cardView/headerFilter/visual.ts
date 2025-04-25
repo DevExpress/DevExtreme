@@ -4,8 +4,7 @@ import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 import { testScreenshot } from '../../../helpers/themeUtils';
 
-// TODO: Unskip this fixture after markup will be stabilized
-fixture.skip`HeaderFilter.Visual`
+fixture`HeaderFilter.Visual`
   .page(url(__dirname, '../../container.html'));
 
 const CARD_VIEW_SELECTOR = '#container';
@@ -33,6 +32,7 @@ test('popup with list', async (t) => {
     { A: 'A_3', B: 'B_3', C: 'C_3' },
     { A: 'A_4', B: 'B_4', C: 'C_4' },
   ],
+  columns: ['A', 'B', 'C'],
   headerFilter: {
     visible: true,
   },
@@ -62,6 +62,7 @@ test('popup with search', async (t) => {
     { A: 'A_3', B: 'B_3', C: 'C_3' },
     { A: 'A_4', B: 'B_4', C: 'C_4' },
   ],
+  columns: ['A', 'B', 'C'],
   headerFilter: {
     visible: true,
     search: {
