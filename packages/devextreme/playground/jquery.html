@@ -18,7 +18,7 @@
 
     <script type="text/javascript" src="../artifacts/js/jquery.js"></script>
     <!-- HtmlEditor -->
-    <script type="text/javascript" src="../artifacts/js/dx-quill.min.js"></script>
+    <!-- <script type="text/javascript" src="../artifacts/js/dx-quill.min.js"></script> -->
 
     <!--<script type="text/javascript" src="../artifacts/js/cldr.js"></script>
     <script type="text/javascript" src="../artifacts/js/cldr/event.js"></script>
@@ -39,7 +39,6 @@
     -->
 
     <script type="text/javascript" src="../artifacts/js/dx.all.debug.js" charset="utf-8"></script>
-    <script type="text/javascript" src="../artifacts/js/dx.ai-integration.debug.js" charset="utf-8"></script>
     <script type="text/javascript" src="./themeSelector.js"></script>
     <script type="text/javascript" src="../../../node_modules/axe-core/axe.min.js"></script>
 </head>
@@ -52,109 +51,10 @@
         <br />
         <div id="button"></div>
         <script>
-            const value = `The universe is a vast expanse of space filled with stars, planets, galaxies and mysteries that mankind has been trying to unravel since ancient times. It was born about 13.8 billion years ago as a result of the Big Bang, and has been continuously expanding ever since. The Universe is governed by fundamental laws of physics, but the deeper we look into it, the more paradoxes and unknowns we encounter: dark matter, dark energy, multiverses. We are just a speck of dust in this grandiose cosmos, but thanks to reason, imagination and science we are able to comprehend its beauty, harmony and immense mystery.`;
-
-            $(() => {
-                document.querySelector('dx-license')?.remove();
-
-                const openAIDialog = () => {
-                    const TOOLBAR_FORMAT_WIDGET_CLASS = 'dx-htmleditor-toolbar-format';
-                    const MENU_CLASS = 'dx-menu';
-                    const MENU_ITEM_CLASS = 'dx-menu-item';
-                    const SUBMENU_CLASS = 'dx-submenu';
-
-                    const $toolbarItem = $("#button").find(`.${TOOLBAR_FORMAT_WIDGET_CLASS} .${MENU_ITEM_CLASS}`);
-                    $toolbarItem.trigger('dxclick');
-
-                    const $menuItem = $(`.${MENU_ITEM_CLASS}`).last();
-                    $menuItem.trigger('dxclick');
-
-                    const $subMenuItem = $(`.${SUBMENU_CLASS}`);
-
-                    if ($subMenuItem.length) {
-                        $subMenuItem.trigger('dxclick');
-
-                        $options = $subMenuItem.find(`.${SUBMENU_CLASS} .${MENU_ITEM_CLASS}`);
-                        $options.trigger('dxclick');
-                    }
-                };
-
-                const aiIntegration = new DevExpress.aiIntegration({
-                    sendRequest({ prompt, onChunk }) {
-                        let resolver = null;
-
-                        const promise = new Promise((resolve, reject) => {
-                            resolver = resolve;
-
-                            const response = 'Your request has been completed successfully!';
-                            // const response = value;
-
-                            setTimeout(() => {
-                                resolver(response);
-                            }, 1000);
-
-                            // setTimeout(() => {
-                            //     reject('Just error');
-                            // }, 1000);
-                        });
-
-                        const result = {
-                            promise,
-                            abort: () => {
-                                resolver('');
-                                console.warn('Your request has been aborted.');
-                            },
-                        };
-
-                        return result;
-                    },
-                });
-
-                $("#button").dxHtmlEditor({
-                    value,
-                    height: 400,
-                    aiIntegration,
-                    toolbar: {
-                        items: [
-                            'link',
-                            {
-                                name: 'ai',
-                                commands: [
-                                    'askAI',
-                                    'summarize',
-                                    // 'shorten',
-
-                                    {
-                                        name: 'translate',
-                                        options: [
-                                            'german',
-                                            'chinese',
-                                        ],
-                                    },
-
-                                    {
-                                        name: 'custom',
-                                        text: 'This is custom',
-                                        options: [
-                                            'option 1',
-                                            'option 2',
-                                        ],
-                                        prompt: (param) => {
-                                            return `Custom prompt with ${param}`;
-                                        },
-                                    },
-
-                                    // {
-                                    //     name: 'custom',
-                                    //     text: 'No option custom',
-                                    //     prompt: () => {
-                                    //         return 'No option custom prompt';
-                                    //     },
-                                    // },
-                                ],
-                            },
-                        ],
-                    },
+            $(function() {
+                $("#button").dxButton({
+                    text: 'Click me!',
+                    onClick: function() { alert("clicked"); }
                 });
             });
         </script>

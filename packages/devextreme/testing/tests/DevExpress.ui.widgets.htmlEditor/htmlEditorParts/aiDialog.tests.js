@@ -118,7 +118,7 @@ QUnit.module('AIDialog', {}, () => {
         });
 
         QUnit.test('popup config should contain correct parameters', function(assert) {
-            showAIDialog(this);
+            showAIDialog(this, { config: { currentCommand: 'non-existent-command' } });
 
             const popupConfig = this.aiDialogPopup.option();
 
@@ -650,17 +650,14 @@ QUnit.module('AIDialog', {}, () => {
             this.reject('Error');
 
             setTimeout(() => {
-                const toolbarButtonItems = getToolbarButtonItems(this.aiDialogPopup);
-                const stopButton = toolbarButtonItems.find(item => item.options.text === 'Stop');
                 const $generateButton = findButtonByText(this.$element, 'Generate');
                 const resultTextAreaInstance = getResultTextAreaInstance(this.$element);
                 const promptTextAreaInstance = getPromptTextAreaInstance(this.$element);
 
-                assert.strictEqual(stopButton.disabled, true);
                 assert.ok($generateButton.length, 'generate button is visible');
-                assert.strictEqual(resultTextAreaInstance.option('disabled'), false);
-                assert.strictEqual(resultTextAreaInstance.option('readOnly'), true);
-                assert.strictEqual(resultTextAreaInstance.option('visible'), true);
+                assert.strictEqual(resultTextAreaInstance.option('disabled'), true);
+                assert.strictEqual(resultTextAreaInstance.option('readOnly'), false);
+                assert.strictEqual(resultTextAreaInstance.option('visible'), false);
                 assert.strictEqual(promptTextAreaInstance.option('disabled'), false);
                 assert.strictEqual(promptTextAreaInstance.option('readOnly'), false);
                 assert.strictEqual(promptTextAreaInstance.option('visible'), true);

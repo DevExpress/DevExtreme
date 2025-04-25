@@ -557,8 +557,8 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
       visible: true,
     });
     this._resultTextArea.option({
-      disabled: false,
-      readOnly: true,
+      disabled: true,
+      readOnly: false,
       value: undefined,
       visible: false,
     });
