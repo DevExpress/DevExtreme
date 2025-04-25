@@ -2,8 +2,7 @@ import React, { useCallback, useState } from 'react';
 import FilterBuilder, { type FilterBuilderTypes } from 'devextreme-react/filter-builder';
 import Button from 'devextreme-react/button';
 import DataGrid from 'devextreme-react/data-grid';
-import { DataSource } from 'devextreme-react/common/data';
-import { ODataStore } from 'devextreme-react/common/data';
+import { DataSource, ODataStore } from 'devextreme-react/common/data';
 import { filter, fields } from './data.ts';
 
 const dataSource = new DataSource({

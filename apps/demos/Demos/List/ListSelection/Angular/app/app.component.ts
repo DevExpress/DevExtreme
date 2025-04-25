@@ -1,8 +1,7 @@
 import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { DataSource } from 'devextreme-angular/common/data';
-import { ArrayStore } from 'devextreme-angular/common/data';
+import { DataSource, ArrayStore } from 'devextreme-angular/common/data';
 import { DxSelectBoxModule, DxCheckBoxModule } from 'devextreme-angular';
 import { SingleMultipleAllOrNone } from 'devextreme-angular/common';
 import { DxListModule, DxListTypes } from 'devextreme-angular/ui/list';

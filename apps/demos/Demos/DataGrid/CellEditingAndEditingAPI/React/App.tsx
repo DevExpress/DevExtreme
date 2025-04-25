@@ -3,8 +3,7 @@ import DataGrid, {
   Column, Editing, Paging, Selection, Lookup, Toolbar, Item, type DataGridTypes,
 } from 'devextreme-react/data-grid';
 import { Button } from 'devextreme-react/button';
-import { ArrayStore } from 'devextreme-react/common/data';
-import { DataSource } from 'devextreme-react/common/data';
+import { ArrayStore, DataSource } from 'devextreme-react/common/data';
 import { employees, states } from './data.ts';
 
 const dataSource = new DataSource({

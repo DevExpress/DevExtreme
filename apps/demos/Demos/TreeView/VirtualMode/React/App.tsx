@@ -1,8 +1,7 @@
 import React from 'react';
 import TreeView from 'devextreme-react/tree-view';
 
-import { DataSource } from 'devextreme-react/common/data';
-import { ODataStore } from 'devextreme-react/common/data';
+import { DataSource, ODataStore } from 'devextreme-react/common/data';
 
 const dataSource = new DataSource({
   store: new ODataStore({

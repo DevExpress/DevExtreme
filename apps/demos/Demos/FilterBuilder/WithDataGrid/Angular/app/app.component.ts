@@ -7,8 +7,7 @@ import {
   DxFilterBuilderModule,
 } from 'devextreme-angular';
 
-import { DataSource } from 'devextreme-angular/common/data';
-import { ODataStore } from 'devextreme-angular/common/data';
+import { DataSource, ODataStore } from 'devextreme-angular/common/data';
 import { Service } from './app.service';
 import type { Fields, Condition } from './app.service';
 

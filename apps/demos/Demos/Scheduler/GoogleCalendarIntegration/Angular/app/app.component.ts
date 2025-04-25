@@ -6,8 +6,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { lastValueFrom } from 'rxjs';
 import { DxSchedulerModule } from 'devextreme-angular';
-import { DataSource } from 'devextreme-angular/common/data';
-import { CustomStore } from 'devextreme-angular/common/data';
+import { DataSource, CustomStore } from 'devextreme-angular/common/data';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
