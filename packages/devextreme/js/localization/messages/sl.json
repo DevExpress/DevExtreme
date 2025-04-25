@@ -374,7 +374,7 @@
         "dxChat-typingMessageMultipleUsers": "{0} and others are typing...",
         "dxChat-editingEditMessage": "Uredi",
         "dxChat-editingDeleteMessage": "Briši",
-        "dxChat-editingDeleteMessageConfirmationPrompt": "Are you sure you want to delete this message?",
+        "dxChat-editingDeleteConfirmText": "Are you sure you want to delete this message?",
 
         "dxColorView-ariaRed": "Rdeča",
         "dxColorView-ariaGreen": "Zelena",

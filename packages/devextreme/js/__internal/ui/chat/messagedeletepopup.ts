@@ -26,7 +26,7 @@ interface MessageDeletePopupProperties {
   onCancelButtonClick?: () => void;
 }
 
-export class MessageDeletePopup {
+class MessageDeletePopup {
   _$container: dxElementWrapper;
 
   _popupConfig?: PopupProperties;
@@ -149,3 +149,5 @@ export class MessageDeletePopup {
       .catch(() => {});
   }
 }
+
+export default MessageDeletePopup;

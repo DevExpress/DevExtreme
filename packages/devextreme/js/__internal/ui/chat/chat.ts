@@ -304,7 +304,7 @@ class Chat extends Widget<ChatProperties> {
       this._deleteConfirmationPopup = new MessageDeletePopup(
         this.$element(),
         {
-          message: messageLocalization.format('dxChat-editingDeleteMessageConfirmationPrompt'),
+          message: messageLocalization.format('dxChat-editingDeleteConfirmText'),
           applyButtonLabel: messageLocalization.format('Yes'),
           cancelButtonLabel: messageLocalization.format('No'),
           onApplyButtonClick: (message: Message): void => {

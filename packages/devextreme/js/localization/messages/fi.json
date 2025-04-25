@@ -374,7 +374,7 @@
         "dxChat-typingMessageMultipleUsers": "{0} and others are typing...",
         "dxChat-editingEditMessage": "Muokkaa",
         "dxChat-editingDeleteMessage": "Poista",
-        "dxChat-editingDeleteMessageConfirmationPrompt": "Are you sure you want to delete this message?",
+        "dxChat-editingDeleteConfirmText": "Are you sure you want to delete this message?",
 
         "dxColorView-ariaRed": "Punainen",
         "dxColorView-ariaGreen": "Vihreä",
