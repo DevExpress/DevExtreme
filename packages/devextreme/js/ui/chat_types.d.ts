@@ -15,7 +15,7 @@ export {
   Alert,
   Message,
   MessageTemplateData,
-  MessageEditing,
+  Editing,
   dxChatOptions,
   Properties,
 } from './chat';

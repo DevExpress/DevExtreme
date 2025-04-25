@@ -243,7 +243,7 @@ export type MessageTemplateData = {
  * @namespace DevExpress.ui.dxChat
  * @public
  */
-export type MessageEditing = {
+export type Editing = {
   /**
    * @docid
    * @default false
@@ -302,7 +302,7 @@ export interface dxChatOptions extends WidgetOptions<dxChat> {
      * @type object
      * @public
      */
-    editing?: MessageEditing;
+    editing?: Editing;
     /**
      * @docid
      * @type string | Array<Message> | Store | DataSource | DataSourceOptions | null
