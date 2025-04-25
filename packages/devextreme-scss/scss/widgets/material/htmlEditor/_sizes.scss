@@ -6,15 +6,27 @@
 $material-toolbar-size-editor-width: null !default;
 $material-htmleditor-toolbar-padding: null !default;
 $material-html-editor-add-image-dialog-fileuploader-padding: null !default;
+$material-aidialog-selects-gap: null !default;
+$material-aidialog-content-gap: null !default;
+$material-aidialog-content-padding: null !default;
+$material-aidialog-toolbar-padding: null !default;
 
 @if $size == "default" {
   $material-toolbar-size-editor-width: 120px !default;
   $material-htmleditor-toolbar-padding: 16px !default;
   $material-html-editor-add-image-dialog-fileuploader-padding: 50px 40px;
+  $material-aidialog-selects-gap: 8px;
+  $material-aidialog-content-gap: 24px;
+  $material-aidialog-content-padding: 24px;
+  $material-aidialog-toolbar-padding: 16px 24px;
 }
 
 @else if $size == "compact" {
   $material-toolbar-size-editor-width: 90px !default;
   $material-htmleditor-toolbar-padding: 11px !default;
   $material-html-editor-add-image-dialog-fileuploader-padding: 40px 30px;
+  $material-aidialog-selects-gap: 8px;
+  $material-aidialog-content-gap: 16px;
+  $material-aidialog-content-padding: 16px;
+  $material-aidialog-toolbar-padding: 8px 16px;
 }
