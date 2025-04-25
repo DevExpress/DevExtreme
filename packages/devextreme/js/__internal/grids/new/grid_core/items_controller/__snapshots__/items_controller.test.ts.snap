@@ -2,6 +2,94 @@
 
 exports[`ItemsController createCardInfo should process data object to cardInfo using column configuration 1`] = `
 {
+  "columns": [
+    {
+      "alignment": "left",
+      "allowEditing": true,
+      "allowFiltering": true,
+      "allowHeaderFiltering": false,
+      "allowHiding": true,
+      "allowReordering": true,
+      "allowSearch": true,
+      "allowSorting": true,
+      "calculateCellValue": [Function],
+      "calculateDisplayValue": [Function],
+      "calculateFieldValue": [Function],
+      "calculateFilterExpression": [Function],
+      "caption": "A",
+      "captionTemplate": undefined,
+      "dataField": "a",
+      "dataType": "string",
+      "defaultSetFieldValue": [Function],
+      "editorOptions": {},
+      "falseText": "false",
+      "fieldTemplate": undefined,
+      "formItem": {},
+      "headerFilter": {
+        "allowSelectAll": true,
+        "height": 325,
+        "search": {
+          "editorOptions": {},
+          "enabled": false,
+          "mode": "contains",
+          "timeout": 500,
+        },
+        "width": 252,
+      },
+      "headerItemTemplate": undefined,
+      "name": "a",
+      "setFieldValue": [Function],
+      "showInColumnChooser": true,
+      "trueText": "true",
+      "validationRules": [],
+      "valueTemplate": undefined,
+      "visible": true,
+      "visibleIndex": 0,
+    },
+    {
+      "alignment": "left",
+      "allowEditing": true,
+      "allowFiltering": true,
+      "allowHeaderFiltering": false,
+      "allowHiding": true,
+      "allowReordering": true,
+      "allowSearch": true,
+      "allowSorting": true,
+      "calculateCellValue": [Function],
+      "calculateDisplayValue": [Function],
+      "calculateFieldValue": [Function],
+      "calculateFilterExpression": [Function],
+      "caption": "B",
+      "captionTemplate": undefined,
+      "dataField": "b",
+      "dataType": "string",
+      "defaultSetFieldValue": [Function],
+      "editorOptions": {},
+      "falseText": "false",
+      "fieldTemplate": undefined,
+      "formItem": {},
+      "headerFilter": {
+        "allowSelectAll": true,
+        "height": 325,
+        "search": {
+          "editorOptions": {},
+          "enabled": false,
+          "mode": "contains",
+          "timeout": 500,
+        },
+        "width": 252,
+      },
+      "headerItemTemplate": undefined,
+      "name": "b",
+      "setFieldValue": [Function],
+      "showInColumnChooser": true,
+      "trueText": "true",
+      "validationRules": [],
+      "valueTemplate": undefined,
+      "visible": true,
+      "visibleIndex": 1,
+    },
+  ],
   "data": {
     "a": "my a value",
     "b": "my b value",
@@ -9,6 +97,7 @@ exports[`ItemsController createCardInfo should process data object to cardInfo u
   },
   "fields": [
     {
+      "card": [Circular],
       "column": {
         "alignment": "left",
         "allowEditing": true,
@@ -18,6 +107,7 @@ exports[`ItemsController createCardInfo should process data object to cardInfo u
         "allowReordering": true,
         "allowSearch": true,
         "allowSorting": true,
+        "calculateCellValue": [Function],
         "calculateDisplayValue": [Function],
         "calculateFieldValue": [Function],
         "calculateFilterExpression": [Function],
@@ -58,6 +148,7 @@ exports[`ItemsController createCardInfo should process data object to cardInfo u
       "value": "my a value",
     },
     {
+      "card": [Circular],
       "column": {
         "alignment": "left",
         "allowEditing": true,
@@ -67,6 +158,7 @@ exports[`ItemsController createCardInfo should process data object to cardInfo u
         "allowReordering": true,
         "allowSearch": true,
         "allowSorting": true,
+        "calculateCellValue": [Function],
         "calculateDisplayValue": [Function],
         "calculateFieldValue": [Function],
         "calculateFilterExpression": [Function],
@@ -110,11 +202,103 @@ exports[`ItemsController createCardInfo should process data object to cardInfo u
   "index": 0,
   "isSelected": false,
   "key": 1,
+  "values": [
+    "my a value",
+    "my b value",
+  ],
 }
 `;
 
 exports[`ItemsController createCardInfo should process data object to cardInfo using column configuration 2`] = `
 {
+  "columns": [
+    {
+      "alignment": "left",
+      "allowEditing": true,
+      "allowFiltering": true,
+      "allowHeaderFiltering": false,
+      "allowHiding": true,
+      "allowReordering": true,
+      "allowSearch": true,
+      "allowSorting": true,
+      "calculateCellValue": [Function],
+      "calculateDisplayValue": [Function],
+      "calculateFieldValue": [Function],
+      "calculateFilterExpression": [Function],
+      "caption": "A",
+      "captionTemplate": undefined,
+      "dataField": "a",
+      "dataType": "string",
+      "defaultSetFieldValue": [Function],
+      "editorOptions": {},
+      "falseText": "false",
+      "fieldTemplate": undefined,
+      "formItem": {},
+      "headerFilter": {
+        "allowSelectAll": true,
+        "height": 325,
+        "search": {
+          "editorOptions": {},
+          "enabled": false,
+          "mode": "contains",
+          "timeout": 500,
+        },
+        "width": 252,
+      },
+      "headerItemTemplate": undefined,
+      "name": "a",
+      "setFieldValue": [Function],
+      "showInColumnChooser": true,
+      "trueText": "true",
+      "validationRules": [],
+      "valueTemplate": undefined,
+      "visible": true,
+      "visibleIndex": 0,
+    },
+    {
+      "alignment": "left",
+      "allowEditing": true,
+      "allowFiltering": true,
+      "allowHeaderFiltering": false,
+      "allowHiding": true,
+      "allowReordering": true,
+      "allowSearch": true,
+      "allowSorting": true,
+      "calculateCellValue": [Function],
+      "calculateDisplayValue": [Function],
+      "calculateFieldValue": [Function],
+      "calculateFilterExpression": [Function],
+      "caption": "B",
+      "captionTemplate": undefined,
+      "dataField": "b",
+      "dataType": "string",
+      "defaultSetFieldValue": [Function],
+      "editorOptions": {},
+      "falseText": "false",
+      "fieldTemplate": undefined,
+      "formItem": {},
+      "headerFilter": {
+        "allowSelectAll": true,
+        "height": 325,
+        "search": {
+          "editorOptions": {},
+          "enabled": false,
+          "mode": "contains",
+          "timeout": 500,
+        },
+        "width": 252,
+      },
+      "headerItemTemplate": undefined,
+      "name": "b",
+      "setFieldValue": [Function],
+      "showInColumnChooser": true,
+      "trueText": "true",
+      "validationRules": [],
+      "valueTemplate": undefined,
+      "visible": true,
+      "visibleIndex": 1,
+    },
+  ],
   "data": {
     "a": "my a value",
     "b": "my b value",
@@ -122,6 +306,7 @@ exports[`ItemsController createCardInfo should process data object to cardInfo u
   },
   "fields": [
     {
+      "card": [Circular],
       "column": {
         "alignment": "left",
         "allowEditing": true,
@@ -131,6 +316,7 @@ exports[`ItemsController createCardInfo should process data object to cardInfo u
         "allowReordering": true,
         "allowSearch": true,
         "allowSorting": true,
+        "calculateCellValue": [Function],
         "calculateDisplayValue": [Function],
         "calculateFieldValue": [Function],
         "calculateFilterExpression": [Function],
@@ -171,6 +357,7 @@ exports[`ItemsController createCardInfo should process data object to cardInfo u
       "value": "my a value",
     },
     {
+      "card": [Circular],
       "column": {
         "alignment": "left",
         "allowEditing": true,
@@ -180,6 +367,7 @@ exports[`ItemsController createCardInfo should process data object to cardInfo u
         "allowReordering": true,
         "allowSearch": true,
         "allowSorting": true,
+        "calculateCellValue": [Function],
         "calculateDisplayValue": [Function],
         "calculateFieldValue": [Function],
         "calculateFilterExpression": [Function],
@@ -223,12 +411,17 @@ exports[`ItemsController createCardInfo should process data object to cardInfo u
   "index": 0,
   "isSelected": true,
   "key": 1,
+  "values": [
+    "my a value",
+    "my b value",
+  ],
 }
 `;
 
 exports[`ItemsController setSelectionState should update the select state of the item 1`] = `
 [
   {
+    "columns": [],
     "data": {
       "a": "my a value",
       "id": 1,
@@ -237,6 +430,7 @@ exports[`ItemsController setSelectionState should update the select state of the
     "index": 0,
     "isSelected": true,
     "key": 1,
+    "values": [],
   },
 ]
 `;
