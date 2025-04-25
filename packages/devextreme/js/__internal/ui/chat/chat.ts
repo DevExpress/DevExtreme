@@ -301,22 +301,28 @@ class Chat extends Widget<ChatProperties> {
 
   _showDeleteConfirmationPopup(e: MessageEditingEvent): void {
     if (!this._deleteConfirmationPopup) {
-      this._deleteConfirmationPopup = new MessageDeletePopup(this.$element(), {
-        message: messageLocalization.format('dxChat-editingDeleteMessageConfirmationPrompt'),
-        applyButtonLabel: messageLocalization.format('Yes'),
-        cancelButtonLabel: messageLocalization.format('No'),
-        onApplyButtonClick: (message: Message): void => {
-          this._messageDeletedAction?.({
-            component: this,
-            element: this.element(),
-            message,
-          });
-          this._focusTarget()[0].focus();
+      this._deleteConfirmationPopup = new MessageDeletePopup(
+        this.$element(),
+        {
+          message: messageLocalization.format('dxChat-editingDeleteMessageConfirmationPrompt'),
+          applyButtonLabel: messageLocalization.format('Yes'),
+          cancelButtonLabel: messageLocalization.format('No'),
+          onApplyButtonClick: (message: Message): void => {
+            this._messageDeletedAction?.({
+              component: this,
+              element: this.element(),
+              message,
+            });
+            this._focusTarget()[0].focus();
+          },
+          onCancelButtonClick: (): void => {
+            this._focusTarget()[0].focus();
+          },
         },
-        onCancelButtonClick: (): void => {
-          this._focusTarget()[0].focus();
+        {
+          rtlEnabled: this.option().rtlEnabled,
         },
-      });
+      );
     }
 
     this._deleteConfirmationPopup.show(e.message);
