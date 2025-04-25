@@ -1377,6 +1377,8 @@ testComponentDefaults(Chat,
         onMessageEntered: undefined,
         onTypingStart: undefined,
         onTypingEnd: undefined,
+        onMessageDeleting: undefined,
+        onMessageDeleted: undefined,
         editing: {
             allowUpdating: false,
             allowDeleting: false,
@@ -1407,9 +1409,7 @@ testComponentDefaults(ChatMessageBox,
 
 testComponentDefaults(ChatMessageBubble,
     {},
-    {
-        text: '',
-    }
+    {}
 );
 
 testComponentDefaults(ChatMessageGroup,

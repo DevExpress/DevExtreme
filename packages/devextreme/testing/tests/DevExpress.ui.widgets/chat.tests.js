@@ -10,6 +10,7 @@ QUnit.testStart(() => {
 import './chatParts/avatar.tests.js';
 import './chatParts/messageBox.tests.js';
 import './chatParts/messageBubble.tests.js';
+import './chatParts/messageDeletePopup.tests.js';
 import './chatParts/messageGroup.tests.js';
 import './chatParts/messageList.tests.js';
 import './chatParts/alertList.tests.js';

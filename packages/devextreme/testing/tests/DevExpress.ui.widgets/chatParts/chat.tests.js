@@ -777,7 +777,7 @@ QUnit.module('Chat', () => {
             });
 
             QUnit.test('should get correct arguments after clicking the Delete button', function(assert) {
-                assert.expect(6);
+                assert.expect(5);
 
                 const items = [
                     { text: 'a', author: userFirst },
@@ -790,13 +790,12 @@ QUnit.module('Chat', () => {
                         allowDeleting: true
                     },
                     onMessageDeleting: (e) => {
-                        const { component, element, event, message } = e;
+                        const { component, element, message, cancel } = e;
 
                         assert.strictEqual(component, this.instance, 'e.component is correct');
                         assert.strictEqual(isRenderer(element), !!config().useJQuery, 'e.element uses correct renderer');
                         assert.strictEqual($(element).is(this.$element), true, 'e.element matches the widget root');
-                        assert.strictEqual(event.type, 'dxclick', 'e.event.type is correct');
-                        assert.strictEqual(event.target, $deleteButton.get(0), 'e.event.target is correct');
+                        assert.strictEqual(cancel, false, 'e.cancel is correct');
                         assert.strictEqual(message, items[1], 'e.message is correct');
                     },
                     items,
