@@ -40,7 +40,6 @@ const SCROLLVIEW_REACHBOTTOM_INDICATOR = 'dx-scrollview-scrollbottom';
 const SCROLLABLE_CONTENT = 'dx-scrollable-content';
 
 const MS_IN_DAY = 86400000;
-const SCROLLVIEW_TIMEOUT = 50;
 
 const getStringDate = (date) => {
     return dateLocalization.format(date, 'shortdate');
@@ -1426,9 +1425,9 @@ QUnit.module('MessageList', () => {
 
                         assert.roughEqual(scrollTop, scrollTopBefore, 1, 'scroll position should remain the same after updating typingUsers when not at the bottom');
                         done();
-                    }, SCROLLVIEW_TIMEOUT);
-                }, SCROLLVIEW_TIMEOUT);
-            }, SCROLLVIEW_TIMEOUT);
+                    }, this._resizeTimeout);
+                }, this._resizeTimeout);
+            }, this._resizeTimeout);
         });
 
         QUnit.test('should be scroll down if typingUsers changed at runtime, provided the content does not overflow before the typing indicator is displayed', function(assert) {
@@ -1619,9 +1618,9 @@ QUnit.module('MessageList', () => {
                         assert.notEqual(scrollTop, 0, 'scroll position should not be 0 after a new message is rendered');
                         assert.roughEqual(scrollTop, scrollTopBefore, 1, 'scroll position should be at the bottom after rendering the new message');
                         done();
-                    }, SCROLLVIEW_TIMEOUT);
-                }, SCROLLVIEW_TIMEOUT);
-            }, SCROLLVIEW_TIMEOUT);
+                    }, this._resizeTimeout);
+                }, this._resizeTimeout);
+            }, this._resizeTimeout);
         });
 
         QUnit.test('should be scrolled down after showing if was initially rendered inside an invisible element', function(assert) {
