@@ -23,7 +23,7 @@ import type {
   TypingStartEvent as MessageBoxTypingStartEvent,
 } from '@ts/ui/chat/messagebox';
 import MessageBox from '@ts/ui/chat/messagebox';
-import { MessageDeletePopup } from '@ts/ui/chat/messagedeletepopup';
+import MessageDeletePopup from '@ts/ui/chat/messagedeletepopup';
 import type {
   MessageEditingEvent,
   MessageTemplate,

@@ -5,9 +5,9 @@ import { extend } from '@js/core/utils/extend';
 import type { Message } from '@js/ui/chat';
 import Popup, { type Properties as PopupProperties, type ToolbarItem } from '@js/ui/popup';
 
-const CHAT_DELETE_CONFIRMATION_POPUP_CLASS_BASE = 'dx-chat-deleteconfirmation-popup';
-const CHAT_DELETE_CONFIRMATION_POPUP_WRAPPER_CLASS = `${CHAT_DELETE_CONFIRMATION_POPUP_CLASS_BASE}-wrapper`;
-const CHAT_DELETE_CONFIRMATION_POPUP_CONTENT_CLASS = `${CHAT_DELETE_CONFIRMATION_POPUP_CLASS_BASE}-content`;
+export const CHAT_DELETE_CONFIRMATION_POPUP_CLASS_BASE = 'dx-chat-deleteconfirmation-popup';
+export const CHAT_DELETE_CONFIRMATION_POPUP_WRAPPER_CLASS = `${CHAT_DELETE_CONFIRMATION_POPUP_CLASS_BASE}-wrapper`;
+export const CHAT_DELETE_CONFIRMATION_POPUP_CONTENT_CLASS = `${CHAT_DELETE_CONFIRMATION_POPUP_CLASS_BASE}-content`;
 
 const DX_BUTTON_CLASSNAME = 'dx-button';
 
@@ -68,7 +68,7 @@ class MessageDeletePopup {
       dragEnabled: false,
       hideOnOutsideClick: true,
       toolbarItems: this._getToolbarItems(),
-      contentTemplate: (container): void => this._getPopupContent(container),
+      contentTemplate: (container): void => this._getPopupContent($(container)),
       onShown: (e) => {
         const $firstButton = e.component
           .bottomToolbar()
@@ -77,7 +77,7 @@ class MessageDeletePopup {
         // @ts-expect-error
         eventsEngine.trigger($firstButton, 'focus');
       },
-      wrapperAttr: { class: CHAT_DELETE_CONFIRMATION_POPUP_WRAPPER_CLASS },
+      _wrapperClassExternal: CHAT_DELETE_CONFIRMATION_POPUP_WRAPPER_CLASS,
       focusStateEnabled: true,
       position: {
         my: 'center',
@@ -129,12 +129,11 @@ class MessageDeletePopup {
     ];
   }
 
-  _getPopupContent(container: dxElementWrapper): void {
-    const $popupContent = $('<div>')
+  _getPopupContent($container: dxElementWrapper): void {
+    $('<div>')
       .addClass(CHAT_DELETE_CONFIRMATION_POPUP_CONTENT_CLASS)
-      .text(this._deletePopupConfig.message);
-
-    container.append($popupContent);
+      .text(this._deletePopupConfig.message)
+      .appendTo($container);
   }
 
   show(message: Message): void {
