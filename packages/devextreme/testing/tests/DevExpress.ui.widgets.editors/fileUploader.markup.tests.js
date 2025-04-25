@@ -212,18 +212,26 @@ QUnit.module('multiple option', () => {
 });
 
 QUnit.module('option accept', () => {
-    QUnit.test('field accept should be rendered correctly', function(assert) {
+    QUnit.test('accept attr should be added on input on init', function(assert) {
+        const $fileUploader = $('#fileuploader').dxFileUploader({
+            accept: 'image/*'
+        });
+
+        const $fileInput = $fileUploader.find('.' + FILEUPLOADER_INPUT_CLASS);
+
+        assert.strictEqual($fileInput.prop('accept'), 'image/*', 'accept attr is added');
+    });
+
+    QUnit.test('accept attr should be updated on input at runtime', function(assert) {
         const $fileUploader = $('#fileuploader').dxFileUploader({
             accept: 'image/*'
         });
         const fileUploader = $fileUploader.dxFileUploader('instance');
-
         const $fileInput = $fileUploader.find('.' + FILEUPLOADER_INPUT_CLASS);
 
-        assert.equal($fileInput.prop('accept'), 'image/*', 'value was set to empty string');
-
         fileUploader.option('accept', 'video/*');
-        assert.equal($fileInput.prop('accept'), 'video/*', 'value was set to empty string');
+
+        assert.strictEqual($fileInput.prop('accept'), 'video/*', 'accept attr is updated');
     });
 });
 
