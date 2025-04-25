@@ -180,7 +180,12 @@ export type CardInfo<TCardData = unknown, TKey = unknown> = { // TODO: sync to i
      * @public
      * @docid
      */
-    index: Column[];
+    index: number;
+    /**
+     * @public
+     * @docid
+     */
+    columns: Column[];
     /**
      * @public
      * @docid

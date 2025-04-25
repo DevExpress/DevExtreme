@@ -32845,7 +32845,11 @@ declare module DevExpress.ui.dxCardView {
     /**
      * [descr:CardInfo.index]
      */
-    index: Column[];
+    index: number;
+    /**
+     * [descr:CardInfo.columns]
+     */
+    columns: Column[];
     /**
      * [descr:CardInfo.fields]
      */
