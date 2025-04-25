@@ -1,0 +1,200 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Options disabled when it is 'false' Toolbar should not be disabled 1`] = `
+<div>
+  <div
+    class="dx-toolbar dx-widget dx-visibility-change-handler dx-collection dx-toolbar-mini"
+    role="toolbar"
+  >
+    <div
+      class="dx-toolbar-items-container"
+    >
+      <div
+        class="dx-toolbar-before"
+        role="presentation"
+      />
+      <div
+        class="dx-toolbar-center"
+        role="presentation"
+      />
+      <div
+        class="dx-toolbar-after"
+        role="presentation"
+      />
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Options disabled when it is 'true' Toolbar should be disabled 1`] = `
+<div>
+  <div
+    aria-disabled="true"
+    class="dx-toolbar dx-widget dx-state-disabled dx-visibility-change-handler dx-collection dx-toolbar-mini"
+    role="toolbar"
+  >
+    <div
+      class="dx-toolbar-items-container"
+    >
+      <div
+        class="dx-toolbar-before"
+        role="presentation"
+      />
+      <div
+        class="dx-toolbar-center"
+        role="presentation"
+      />
+      <div
+        class="dx-toolbar-after"
+        role="presentation"
+      />
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Options items when these are not set Toolbar should be hidden 1`] = `
+<div>
+  
+</div>
+`;
+
+exports[`Options items when these are set Toolbar should be visible 1`] = `
+<div>
+  <div
+    class="dx-toolbar dx-widget dx-visibility-change-handler dx-collection"
+    role="toolbar"
+  >
+    <div
+      class="dx-toolbar-items-container"
+    >
+      <div
+        class="dx-toolbar-before"
+        role="presentation"
+      >
+        <div
+          class="dx-item dx-toolbar-item dx-toolbar-button"
+        >
+          <div
+            class="dx-item-content dx-toolbar-item-content"
+          >
+            <div
+              aria-label="button1"
+              class="dx-widget dx-button dx-button-mode-contained dx-button-normal dx-button-has-text"
+              role="button"
+              tabindex="0"
+            >
+              <div
+                class="dx-button-content"
+              >
+                <span
+                  class="dx-button-text"
+                >
+                  button1
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="dx-toolbar-center"
+        role="presentation"
+      />
+      <div
+        class="dx-toolbar-after"
+        role="presentation"
+      >
+        <div
+          class="dx-item dx-toolbar-item dx-toolbar-button"
+        >
+          <div
+            class="dx-item-content dx-toolbar-item-content"
+          >
+            <div
+              aria-label="button2"
+              class="dx-widget dx-button dx-button-mode-contained dx-button-normal dx-button-has-text"
+              role="button"
+              tabindex="0"
+            >
+              <div
+                class="dx-button-content"
+              >
+                <span
+                  class="dx-button-text"
+                >
+                  button2
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Options visilbe when changing it to 'false' at runtime Toolbar should be hidden 1`] = `
+<div>
+  
+</div>
+`;
+
+exports[`Options visilbe when changing it to 'true' at runtime Toolbar should be visible 1`] = `
+<div>
+  <div
+    class="dx-toolbar dx-widget dx-visibility-change-handler dx-collection dx-toolbar-mini"
+    role="toolbar"
+  >
+    <div
+      class="dx-toolbar-items-container"
+    >
+      <div
+        class="dx-toolbar-before"
+        role="presentation"
+      />
+      <div
+        class="dx-toolbar-center"
+        role="presentation"
+      />
+      <div
+        class="dx-toolbar-after"
+        role="presentation"
+      />
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Options visilbe when it is 'false' Toolbar should be hidden 1`] = `
+<div>
+  
+</div>
+`;
+
+exports[`Options visilbe when it is 'true' Toolbar should be visible 1`] = `
+<div>
+  <div
+    class="dx-toolbar dx-widget dx-visibility-change-handler dx-collection dx-toolbar-mini"
+    role="toolbar"
+  >
+    <div
+      class="dx-toolbar-items-container"
+    >
+      <div
+        class="dx-toolbar-before"
+        role="presentation"
+      />
+      <div
+        class="dx-toolbar-center"
+        role="presentation"
+      />
+      <div
+        class="dx-toolbar-after"
+        role="presentation"
+      />
+    </div>
+  </div>
+</div>
+`;

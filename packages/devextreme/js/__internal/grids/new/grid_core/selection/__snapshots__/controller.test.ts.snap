@@ -1,0 +1,91 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`SelectionController changeCardSelection when the control arg equal to false should update the select state of the item 1`] = `
+[
+  {
+    "cells": [],
+    "data": {
+      "id": 1,
+      "value": "test",
+    },
+    "index": 0,
+    "isSelected": true,
+    "key": 1,
+  },
+]
+`;
+
+exports[`SelectionController changeCardSelection when the control arg equal to true should update the select state of the item 1`] = `
+[
+  {
+    "cells": [],
+    "data": {
+      "id": 1,
+      "value": "test",
+    },
+    "index": 0,
+    "isSelected": false,
+    "key": 1,
+  },
+]
+`;
+
+exports[`SelectionController deselectCards should deselect item 1`] = `
+[
+  {
+    "cells": [],
+    "data": {
+      "id": 1,
+      "value": "test",
+    },
+    "index": 0,
+    "isSelected": false,
+    "key": 1,
+  },
+]
+`;
+
+exports[`SelectionController deselectCardsByIndexes should deselect item 1`] = `
+[
+  {
+    "cells": [],
+    "data": {
+      "id": 1,
+      "value": "test",
+    },
+    "index": 0,
+    "isSelected": false,
+    "key": 1,
+  },
+]
+`;
+
+exports[`SelectionController selectCards should select item 1`] = `
+[
+  {
+    "cells": [],
+    "data": {
+      "id": 1,
+      "value": "test",
+    },
+    "index": 0,
+    "isSelected": true,
+    "key": 1,
+  },
+]
+`;
+
+exports[`SelectionController selectCardsByIndexes should select item 1`] = `
+[
+  {
+    "cells": [],
+    "data": {
+      "id": 1,
+      "value": "test",
+    },
+    "index": 0,
+    "isSelected": true,
+    "key": 1,
+  },
+]
+`;

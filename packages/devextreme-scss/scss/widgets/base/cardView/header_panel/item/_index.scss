@@ -1,0 +1,39 @@
+@use '../../../icons' as *;
+@use './variables' as *;
+
+.dx-cardview-header-item {
+  display: flex;
+  align-items: center;
+  padding: ($cardview-header-item-padding-vertical - $cardview-header-item-border-width) $cardview-header-item-padding-horizontal;
+  min-width: fit-content;
+  user-select: none;
+  gap: $cardview-header-item-content-gap;
+  border: solid $cardview-header-item-border-width $cardview-header-item-border-color;
+  border-radius: $cardview-header-item-border-radius;
+  background-color: $cardview-header-item-background-color;
+  line-height: $cardview-header-item-line-height;
+  cursor: pointer;
+
+  &:hover {
+    background-color: $cardview-header-item-hovered-background-color;
+    border: solid $cardview-header-item-border-width $cardview-header-item-hovered-border-color;
+  }
+
+  .dx-icon-cursorprohibition {
+    color: $cardview-header-item-prohibition-icon-color;
+  }
+
+  .dx-icon {
+    font-size: $cardview-header-item-icon-size;
+  }
+}
+
+.dx-cardview {
+  .dx-header-filter-icon {
+    color: $cardview-header-filter-icon-empty-color;
+
+    &--selected {
+      color: $cardview-header-filter-icon-selected-color;
+    }
+  }
+}

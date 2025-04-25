@@ -71,7 +71,7 @@ test('The drag cell should be skipped when navigating from the header cell by ta
   + ' with buttons column and renderAsync: true', async (t) => {
   const treeList = new TreeList(TREE_LIST_SELECTOR);
   const expectedFocusedCell = treeList.getDataCell(0, 1);
-  const cellToStartNavigation = treeList.getHeaders().getHeaderRow(0).getHeaderCell(3);
+  const cellToStartNavigation = treeList.getHeaders().getHeaderRow(0).getHeaderCell(4);
 
   await t.click(cellToStartNavigation.element)
     .pressKey('tab')

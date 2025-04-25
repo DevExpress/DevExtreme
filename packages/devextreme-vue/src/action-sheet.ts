@@ -164,7 +164,7 @@ const DxItemConfig = {
     stylingMode: String as PropType<ButtonStyle>,
     template: {},
     text: String,
-    type: String as PropType<ButtonType>
+    type: String as PropType<ButtonType | string>
   }
 };
 

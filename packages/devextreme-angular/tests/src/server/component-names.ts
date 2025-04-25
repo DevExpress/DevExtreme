@@ -7,6 +7,7 @@ export const componentNames = [
     'bullet',
     'button',
     'calendar',
+    'card-view',
     'chart',
     'chat',
     'check-box',

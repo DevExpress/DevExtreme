@@ -2749,9 +2749,12 @@ declare module DevExpress.common.core.environment {
     */
    export const devices: DevExpress.core.DevicesObject;
   /**
-   * [descr:utils.getTimeZones(date)]
+   * [descr:utils.getTimeZones(date, timeZones)]
    */
-  export function getTimeZones(date?: Date): Array<SchedulerTimeZone>;
+  export function getTimeZones(
+    date?: Date,
+    timeZones?: string[]
+  ): Array<SchedulerTimeZone>;
   /**
    * [descr:hideTopOverlay()]
    */
@@ -9170,7 +9173,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxActionSheetItem.type]
      */
-    type?: DevExpress.common.ButtonType;
+    type?: DevExpress.common.ButtonType | string;
     /**
      * [descr:dxActionSheetItem.stylingMode]
      */
@@ -9657,7 +9660,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxButtonGroupItem.type]
      */
-    type?: DevExpress.common.ButtonType;
+    type?: DevExpress.common.ButtonType | string;
 
     /**
      * [descr:dxButtonGroupItem.elementAttr]
@@ -15481,7 +15484,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxDropDownButtonOptions.type]
      */
-    type?: DevExpress.common.ButtonType;
+    type?: DevExpress.common.ButtonType | string;
     /**
      * [descr:dxDropDownButtonOptions.useSelectMode]
      */

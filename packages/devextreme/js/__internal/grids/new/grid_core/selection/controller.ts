@@ -1,0 +1,385 @@
+/* eslint-disable @typescript-eslint/no-unsafe-return */
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
+
+import type { DeferredObj } from '@js/core/utils/deferred';
+import messageLocalization from '@js/localization/message';
+import type { ReadonlySignal } from '@preact/signals-core';
+import { computed, effect, signal } from '@preact/signals-core';
+import { DataController } from '@ts/grids/new/grid_core/data_controller/index';
+import { ShowCheckBoxesMode } from '@ts/grids/new/grid_core/selection/const';
+import Selection from '@ts/ui/selection/m_selection';
+
+import type { DataRow } from '../columns_controller/types';
+import type { Key } from '../data_controller/types';
+import { ItemsController } from '../items_controller/items_controller';
+import { OptionsController } from '../options_controller/options_controller';
+import { ToolbarController } from '../toolbar/controller';
+import { SelectionMode } from './const';
+import type {
+  SelectedCardKeys, SelectionEventInfo, SelectionOptions,
+} from './types';
+
+export class SelectionController {
+  public static dependencies = [
+    OptionsController,
+    DataController,
+    ItemsController,
+    ToolbarController,
+  ] as const;
+
+  private readonly selectedCardKeys = this.options.twoWay('selectedCardKeys');
+
+  private readonly selectionOption: ReadonlySignal<SelectionOptions> = this.options.oneWay('selection');
+
+  private readonly selectionHelper: ReadonlySignal<Selection | undefined>;
+
+  private readonly _isCheckBoxesRendered = signal<boolean>(false);
+
+  private readonly onSelectionChanging = this.options.action('onSelectionChanging');
+
+  private readonly onSelectionChanged = this.options.action('onSelectionChanged');
+
+  public readonly isCheckBoxesRendered = computed(() => {
+    const selectionMode = this.options.oneWay('selection.mode').value;
+    const showCheckBoxesMode = this.options.oneWay('selection.showCheckBoxesMode').value;
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    const _isCheckBoxesRendered = this._isCheckBoxesRendered.value;
+    if (selectionMode === SelectionMode.Multiple) {
+      switch (showCheckBoxesMode) {
+        case ShowCheckBoxesMode.Always:
+        case ShowCheckBoxesMode.OnClick:
+          return true;
+        case ShowCheckBoxesMode.OnLongTap:
+          return _isCheckBoxesRendered;
+        default:
+          return false;
+      }
+    }
+
+    return false;
+  });
+
+  public readonly _isCheckBoxesVisible = signal<boolean>(false);
+
+  public readonly isCheckBoxesVisible = computed(() => {
+    const { mode, showCheckBoxesMode } = this.selectionOption.value;
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    const _isCheckBoxesVisible = this._isCheckBoxesVisible.value;
+
+    if (mode === SelectionMode.Multiple) {
+      return showCheckBoxesMode !== ShowCheckBoxesMode.OnClick || _isCheckBoxesVisible;
+    }
+
+    return false;
+  });
+
+  public readonly needToHiddenCheckBoxes = computed(() => {
+    const { mode, showCheckBoxesMode } = this.selectionOption.value;
+    const isCheckBoxesVisible = this.isCheckBoxesVisible.value;
+
+    if (mode === SelectionMode.Multiple && showCheckBoxesMode === ShowCheckBoxesMode.OnClick) {
+      return !isCheckBoxesVisible;
+    }
+
+    return false;
+  });
+
+  public readonly allowSelectOnClick = computed(() => {
+    const { mode, showCheckBoxesMode } = this.selectionOption.value;
+
+    return mode !== SelectionMode.Multiple || showCheckBoxesMode !== ShowCheckBoxesMode.Always;
+  });
+
+  public readonly needToAddSelectionButtons = computed(() => {
+    const selectionMode = this.options.oneWay('selection.mode').value;
+    const allowSelectAll = this.options.oneWay('selection.allowSelectAll').value;
+    return selectionMode === SelectionMode.Multiple && allowSelectAll;
+  });
+
+  constructor(
+    private readonly options: OptionsController,
+    private readonly dataController: DataController,
+    private readonly itemsController: ItemsController,
+    private readonly toolbarController: ToolbarController,
+  ) {
+    this.selectionHelper = computed(() => {
+      const dataSource = this.dataController.dataSource.value;
+      const selectionOption = this.selectionOption.value;
+
+      if (selectionOption.mode === SelectionMode.None) {
+        return undefined;
+      }
+
+      const selectionConfig = this.getSelectionConfig(
+        dataSource,
+        selectionOption,
+      );
+
+      return new Selection(selectionConfig);
+    });
+
+    effect(() => {
+      const selectedCardKeys = this.selectedCardKeys.value;
+      const selectionOption = this.selectionOption.value;
+      if (selectionOption.mode !== SelectionMode.None) {
+        this.itemsController.setSelectionState(selectedCardKeys);
+
+        if (selectedCardKeys.length > 1) {
+          this._isCheckBoxesVisible.value = true;
+        } else if (selectedCardKeys.length === 0) {
+          this._isCheckBoxesVisible.value = false;
+        }
+      }
+    });
+
+    effect(() => {
+      const isLoaded = this.dataController.isLoaded.value;
+      if (isLoaded) {
+        const selectedCardKeys = this.selectedCardKeys.peek();
+
+        this.selectCards(selectedCardKeys);
+      }
+    });
+
+    effect(() => {
+      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+      this.dataController.items.value;
+      this.updateSelectionToolbarButtons(this.selectedCardKeys.value);
+    });
+  }
+
+  private getSelectionConfig(dataSource, selectionOption): object {
+    const selectedCardKeys = this.selectedCardKeys.peek();
+
+    return {
+      selectedKeys: selectedCardKeys,
+      mode: selectionOption.mode,
+      maxFilterLengthInRequest: selectionOption.maxFilterLengthInRequest,
+      ignoreDisabledItems: true,
+      key() {
+        return dataSource.key();
+      },
+      keyOf(item) {
+        return dataSource.store().keyOf(item);
+      },
+      dataFields() {
+        return dataSource.select();
+      },
+      load(options) {
+        return dataSource.store().load(options);
+      },
+      plainItems() {
+        return dataSource.items();
+      },
+      filter() {
+        // TODO Salimov: Need to take combined filter
+        return dataSource.filter();
+      },
+      totalCount: () => dataSource.totalCount(),
+      onSelectionChanging: this.selectionChanging.bind(this),
+      onSelectionChanged: this.selectionChanged.bind(this),
+    };
+  }
+
+  private getSelectionEventArgs(e): SelectionEventInfo {
+    return {
+      currentSelectedCardKeys: [...e.addedItemKeys],
+      currentDeselectedCardKeys: [...e.removedItemKeys],
+      selectedCardKeys: [...e.selectedItemKeys],
+      selectedCardsData: [...e.selectedItems],
+      isSelectAll: false,
+      isDeselectAll: false,
+    };
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  private selectionChanging(e: any): void {
+    if (e.addedItemKeys.length || e.removedItemKeys.length) {
+      const onSelectionChanging = this.onSelectionChanging.peek();
+      const eventArgs = {
+        ...this.getSelectionEventArgs(e),
+        cancel: false,
+      };
+
+      // @ts-expect-error
+      onSelectionChanging?.(eventArgs);
+      e.cancel = eventArgs.cancel;
+    }
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  private selectionChanged(e: any): void {
+    if (e.addedItemKeys.length || e.removedItemKeys.length) {
+      const onSelectionChanged = this.onSelectionChanged.peek();
+      const eventArgs = this.getSelectionEventArgs(e);
+
+      this.selectedCardKeys.value = [...e.selectedItemKeys];
+      // @ts-expect-error
+      onSelectionChanged?.(eventArgs);
+    }
+  }
+
+  private isOnePageSelectAll(): boolean {
+    const selectionOption = this.selectionOption.peek();
+
+    return selectionOption?.selectAllMode === 'page';
+  }
+
+  private isSelectAll(): boolean | undefined {
+    const selectionHelper = this.selectionHelper.peek();
+
+    return selectionHelper?.getSelectAllState(this.isOnePageSelectAll());
+  }
+
+  private updateSelectionToolbarButtons(
+    selectedCardKeys: SelectedCardKeys,
+  ) {
+    const isSelectAll = this.isSelectAll();
+    const isOnePageSelectAll = this.isOnePageSelectAll();
+
+    this.toolbarController.addDefaultItem(signal({
+      name: 'selectAllButton',
+      widget: 'dxButton',
+      options: {
+        icon: 'selectall',
+        onClick: () => {
+          this.selectAll();
+        },
+        disabled: !!isSelectAll,
+        text: messageLocalization.format('dxCardView-selectAll'),
+      },
+      location: 'before',
+      locateInMenu: 'auto',
+    }), this.needToAddSelectionButtons);
+    this.toolbarController.addDefaultItem(signal({
+      name: 'clearSelectionButton',
+      widget: 'dxButton',
+      options: {
+        icon: 'close',
+        onClick: () => {
+          this.deselectAll();
+        },
+        disabled: isOnePageSelectAll ? isSelectAll === false : selectedCardKeys.length === 0,
+        text: messageLocalization.format('dxCardView-clearSelection'),
+      },
+      location: 'before',
+      locateInMenu: 'auto',
+    }), this.needToAddSelectionButtons);
+  }
+
+  private getItemKeysByIndexes(indexes: number[]): Key[] {
+    const items = this.itemsController.items.peek();
+
+    return indexes
+      .map((index) => items[index]?.key)
+      .filter((key) => key !== undefined);
+  }
+
+  public changeCardSelection(
+    cardIndex: number,
+    options?: { control?: boolean; shift?: boolean },
+  ): void {
+    const selectionHelper = this.selectionHelper?.peek();
+    const isCheckBoxesVisible = this.isCheckBoxesVisible.peek();
+    const keys = options ?? {};
+
+    if (isCheckBoxesVisible) {
+      keys.control = isCheckBoxesVisible;
+    }
+
+    selectionHelper?.changeItemSelection(cardIndex, keys, false);
+  }
+
+  public selectCards(keys: Key[], preserve = false): DeferredObj<unknown> | undefined {
+    const selectionHelper = this.selectionHelper?.peek();
+
+    return selectionHelper?.selectedItemKeys(keys, preserve);
+  }
+
+  public selectCardsByIndexes(indexes: number[]): DeferredObj<unknown> | undefined {
+    const keys = this.getItemKeysByIndexes(indexes);
+
+    return this.selectCards(keys);
+  }
+
+  public deselectCards(keys: Key[]): DeferredObj<unknown> | undefined {
+    const selectionHelper = this.selectionHelper?.peek();
+
+    return selectionHelper?.selectedItemKeys(keys, true, true);
+  }
+
+  public deselectCardsByIndexes(indexes: number[]): DeferredObj<unknown> | undefined {
+    const keys = this.getItemKeysByIndexes(indexes);
+
+    return this.deselectCards(keys);
+  }
+
+  public isCardSelected(key: Key): boolean {
+    const selectedCardKeys = this.selectedCardKeys.peek();
+
+    return selectedCardKeys.includes(key);
+  }
+
+  public selectAll(): DeferredObj<unknown> | undefined {
+    const { mode } = this.selectionOption.peek();
+
+    if (mode !== SelectionMode.Multiple) {
+      return undefined;
+    }
+
+    const selectionHelper = this.selectionHelper.peek();
+
+    return selectionHelper?.selectAll(this.isOnePageSelectAll());
+  }
+
+  public deselectAll(): DeferredObj<unknown> | undefined {
+    const selectionHelper = this.selectionHelper.peek();
+
+    return selectionHelper?.deselectAll(this.isOnePageSelectAll());
+  }
+
+  public clearSelection(): DeferredObj<unknown> | undefined {
+    const selectionHelper = this.selectionHelper.peek();
+
+    return selectionHelper?.clearSelection();
+  }
+
+  public getSelectedCards(): DataRow[] {
+    const selectedCardKey = this.getSelectedCardKeys();
+
+    return selectedCardKey
+      .map((key) => this.itemsController.getRowByKey(key))
+      .filter((item): item is DataRow => !!item);
+  }
+
+  public getSelectedCardKeys(): Key[] {
+    return this.selectedCardKeys.peek();
+  }
+
+  private toggleSelectionCheckBoxes(): void {
+    const isCheckBoxesRendered = this._isCheckBoxesRendered.peek();
+
+    this._isCheckBoxesRendered.value = !isCheckBoxesRendered;
+  }
+
+  public updateSelectionCheckBoxesVisible(value: boolean): void {
+    this._isCheckBoxesVisible.value = value;
+  }
+
+  public processLongTap(row: DataRow): void {
+    const { mode, showCheckBoxesMode } = this.selectionOption.peek();
+
+    if (mode !== SelectionMode.None) {
+      if (showCheckBoxesMode === ShowCheckBoxesMode.OnLongTap) {
+        this.toggleSelectionCheckBoxes();
+      } else {
+        if (showCheckBoxesMode === ShowCheckBoxesMode.OnClick) {
+          this._isCheckBoxesVisible.value = true;
+        }
+        if (showCheckBoxesMode !== ShowCheckBoxesMode.Always) {
+          this.changeCardSelection(row.index, { control: true });
+        }
+      }
+    }
+  }
+}

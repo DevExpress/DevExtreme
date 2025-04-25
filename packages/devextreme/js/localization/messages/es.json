@@ -209,6 +209,8 @@
         "dxTreeList-ariaToolbar": "Tree list toolbar",
         "dxTreeList-editingAddRowToNode": "Añadir",
 
+        "dxCardView-ariaSearchInGrid": "Search in the card view",
+
         "dxPager-infoText": "Página {0} de {1} ({2} ítems)",
         "dxPager-pagesCountText": "de",
         "dxPager-pageSize": "Items per page: {0}",
@@ -352,6 +354,10 @@
         "dxCalendar-selectedDateRangeCount": "There are {0} selected date ranges",
         "dxCalendar-readOnlyLabel": "Read-only calendar",
 
+        "dxCardView-selectAll": "Select all",
+        "dxCardView-clearSelection": "Clear selection",
+        "dxCardView-cardNoImageAriaLabel": "No image",
+
         "dxAvatar-defaultImageAlt": "Avatar",
 
         "dxChat-elementAriaLabel": "Chat",
@@ -366,6 +372,8 @@
         "dxChat-typingMessageTwoUsers": "{0} and {1} are typing...",
         "dxChat-typingMessageThreeUsers": "{0}, {1} and {2} are typing...",
         "dxChat-typingMessageMultipleUsers": "{0} and others are typing...",
+        "dxChat-editingEditMessage": "Modificar",
+        "dxChat-editingDeleteMessage": "Eliminar",
 
         "dxColorView-ariaRed": "Rojo",
         "dxColorView-ariaGreen": "Verde",

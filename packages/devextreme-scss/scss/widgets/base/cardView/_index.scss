@@ -1,0 +1,24 @@
+@use './content_view';
+@use './header_panel';
+@use './filter_panel';
+@use './column_chooser';
+@use './variables' as *;
+
+// adduse
+
+.dx-cardview {
+  padding: $cardview-padding;
+  background-color: $cardview-background-color;
+  border-radius: $cardview-border-radius;
+}
+
+.dx-cardview-root-container {
+  display: flex;
+  flex-direction: column;
+  gap: $cardview-gap;
+  height: 100%;
+}
+
+.dx-cardview-exclude-flexbox {
+  position: absolute;
+}

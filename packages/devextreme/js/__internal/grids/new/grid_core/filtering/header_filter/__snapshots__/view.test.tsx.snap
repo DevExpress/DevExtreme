@@ -1,0 +1,9 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`HeaderFilter HeaderFilterPopupComponent should render 1`] = `
+<div>
+  <div
+    class="dx-cardview-exclude-flexbox"
+  />
+</div>
+`;

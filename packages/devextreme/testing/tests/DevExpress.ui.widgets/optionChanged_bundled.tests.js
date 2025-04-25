@@ -63,7 +63,8 @@ QUnit.module('OptionChanged', {
     }
 
     const excludedComponents = [
-        'dxLayoutManager'
+        'dxLayoutManager',
+        'dxCardView',
     ];
 
     const getDefaultOptions = function(componentName) {

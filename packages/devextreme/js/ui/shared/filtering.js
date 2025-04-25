@@ -31,11 +31,15 @@ const getGroupInterval = function(column) {
     }
 };
 
+const getNormalizedCalculateDisplayValue = function(column) {
+    return column.calculateDisplayValue?.context ? column.calculateDisplayValue : null;
+};
+
 export default (function() {
     const getFilterSelector = function(column, target) {
         let selector = column.dataField || column.selector;
         if(target === 'search') {
-            selector = column.displayField || column.calculateDisplayValue || selector;
+            selector = column.displayField || getNormalizedCalculateDisplayValue(column) || selector;
         }
         return selector;
     };

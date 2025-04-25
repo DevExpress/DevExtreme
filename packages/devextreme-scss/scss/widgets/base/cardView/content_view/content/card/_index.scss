@@ -1,0 +1,23 @@
+@use './header';
+@use './content';
+@use './cover';
+@use './variables' as *;
+
+.dx-cardview-card {
+  width: 100%;
+  min-width: var(--dx-cardview-card-min-width, $cardview-card-min-width);
+  max-width: var(--dx-cardview-card-max-width);
+  border: $cardview-card-border-size solid $cardview-card-border-color;
+  border-radius: $cardview-card-border-radius;
+  background-color: $cardview-card-background-color;
+  overflow: hidden;
+
+  & > div > :nth-child(2) {
+    border-top: none;
+  }
+}
+
+
+.dx-cardview-card-selection {
+  background-color: $cardview-card-selection-background-color;
+}

@@ -209,6 +209,8 @@
         "dxTreeList-ariaToolbar": "ツリー リストのツール バー",
         "dxTreeList-editingAddRowToNode": "追加",
 
+        "dxCardView-ariaSearchInGrid": "Search in the card view",
+
         "dxPager-infoText": "ページ {0} / {1} ({2} アイテム)",
         "dxPager-pagesCountText": "/",
         "dxPager-pageSize": "ページあたりのアイテム数: {0}",
@@ -352,6 +354,10 @@
         "dxCalendar-selectedDateRangeCount": "There are {0} selected date ranges",
         "dxCalendar-readOnlyLabel": "Read-only calendar",
 
+        "dxCardView-selectAll": "Select all",
+        "dxCardView-clearSelection": "Clear selection",
+        "dxCardView-cardNoImageAriaLabel": "No image",
+
         "dxAvatar-defaultImageAlt": "Avatar",
 
         "dxChat-elementAriaLabel": "Chat",
@@ -366,6 +372,8 @@
         "dxChat-typingMessageTwoUsers": "{0} and {1} are typing...",
         "dxChat-typingMessageThreeUsers": "{0}, {1} and {2} are typing...",
         "dxChat-typingMessageMultipleUsers": "{0} and others are typing...",
+        "dxChat-editingEditMessage": "編集",
+        "dxChat-editingDeleteMessage": "削除",
 
         "dxColorView-ariaRed": "赤",
         "dxColorView-ariaGreen": "緑",

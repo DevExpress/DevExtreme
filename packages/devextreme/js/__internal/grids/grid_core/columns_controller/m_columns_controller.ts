@@ -948,13 +948,19 @@ export class ColumnsController extends modules.Controller {
     }
   }
 
+  public allowColumnSorting(column) {
+    const sortingOptions = this.option('sorting');
+    const allowSorting = sortingOptions?.mode === 'single' || sortingOptions?.mode === 'multiple';
+
+    return allowSorting && column?.allowSorting;
+  }
+
   public changeSortOrder(columnIndex, sortOrder) {
     const that = this;
     const options: any = {};
     const sortingOptions = that.option('sorting');
-    const sortingMode = sortingOptions && sortingOptions.mode;
+    const sortingMode = sortingOptions?.mode;
     const needResetSorting = sortingMode === 'single' || !sortOrder;
-    const allowSorting = sortingMode === 'single' || sortingMode === 'multiple';
     const column = that._columns[columnIndex];
     const nextSortOrder = function (column) {
       if (sortOrder === 'ctrl') {
@@ -973,7 +979,7 @@ export class ColumnsController extends modules.Controller {
       return true;
     };
 
-    if (allowSorting && column && column.allowSorting) {
+    if (this.allowColumnSorting(column)) {
       if (needResetSorting && !isDefined(column.groupIndex)) {
         each(that._columns, function (index) {
           if (index !== columnIndex && this.sortOrder) {
@@ -1851,6 +1857,10 @@ export class ColumnsController extends modules.Controller {
     fixedPosition?: StickyPosition,
   ): boolean {
     return isFirstOrLastColumn(this, column, rowIndex, onlyWithinBandColumn, true, fixedPosition);
+  }
+
+  public isCustomCommandColumn(commandColumn): boolean {
+    return gridCoreUtils.isCustomCommandColumn(this._columns, commandColumn);
   }
 
   public getColumnId(column) {

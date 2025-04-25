@@ -1,0 +1,60 @@
+import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import CardView from 'devextreme-testcafe-models/cardView';
+import url from '../../helpers/getPageUrl';
+import { createWidget } from '../../helpers/createWidget';
+import { testScreenshot } from '../../helpers/themeUtils';
+
+fixture.disablePageReloads`CardView - HeaderPanel`
+  .page(url(__dirname, '../container.html'));
+
+test('default render', async (t) => {
+  const cardView = new CardView('#container');
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  await testScreenshot(t, takeScreenshot, 'cover-default-render.png', { element: cardView.element });
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => createWidget('dxCardView', {
+  width: 1000,
+  height: 600,
+  columns: ['Customer', 'Order Date'],
+  cardCover: {
+    imageExpr: (data) => data.Picture && `https://js.devexpress.com/jQuery/Demos/WidgetsGallery/JSDemos/${data.Picture}`,
+    altExpr: 'FirstName',
+  },
+  dataSource: [{
+    ID: 1,
+    FirstName: 'John',
+    LastName: 'Heart',
+    Prefix: 'Mr.',
+    Position: 'CEO',
+    Picture: 'images/employees/01.png',
+    BirthDate: '1964/03/16',
+    HireDate: '1995/01/15',
+    Notes: 'John has been in the Audio/Video industry since 1990. He has led DevAv as its CEO since 2003. When not working hard as the CEO, John loves to golf and bowl. He once bowled a perfect game of 300.',
+    Address: '351 S Hill St.',
+  }, {
+    ID: 2,
+    FirstName: 'Olivia',
+    LastName: 'Peyton',
+    Prefix: 'Mrs.',
+    Position: 'Sales Assistant',
+    BirthDate: '1981/06/03',
+    HireDate: '2012/05/14',
+    Notes: 'Olivia loves to sell. She has been selling DevAV products since 2012.  Olivia was homecoming queen in high school. She is expecting her first child in 6 months. Good Luck Olivia.',
+    Address: '807 W Paseo Del Mar',
+  }, {
+    ID: 3,
+    FirstName: 'Robert',
+    LastName: 'Reagan',
+    Prefix: 'Mr.',
+    Position: 'CMO',
+    Picture: 'images/employees/03.png',
+    BirthDate: '1974/09/07',
+    HireDate: '2002/11/08',
+    Notes: 'Robert was recently voted the CMO of the year by CMO Magazine. He is a proud member of the DevAV Management Team. Robert is a championship BBQ chef, so when you get the chance ask him for his secret recipe.',
+    Address: '4 Westmoreland Pl.',
+  }],
+}));

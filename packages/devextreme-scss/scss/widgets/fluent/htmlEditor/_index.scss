@@ -302,3 +302,16 @@
 .dx-formdialog.dx-dropdowneditor-overlay.dx-popup-wrapper .dx-overlay-content {
   box-shadow: $fluent-popup-content-shadow;
 }
+
+.dx-aidialog-controls {
+  gap: $fluent-aidialog-selects-gap;
+
+  .dx-selectbox {
+    max-width: calc(50% - $fluent-aidialog-selects-gap * 0.5);
+  }
+}
+
+.dx-aidialog-content {
+  padding: $fluent-aidialog-content-padding;
+  gap: $fluent-aidialog-content-gap;
+}

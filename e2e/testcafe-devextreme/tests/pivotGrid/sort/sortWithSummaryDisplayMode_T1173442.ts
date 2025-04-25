@@ -17,8 +17,8 @@ test('Should apply sort changes to the markup if the "summaryDisplayMode" is set
     'T1173442_before_sort_with_summary_display_mode.png',
     { element: pivotGrid.element },
   );
-  await t.click(pivotGrid.getColumnHeaderArea().getAction());
-  await t.click(pivotGrid.getRowHeaderArea().getAction());
+  await t.click(pivotGrid.getColumnHeaderArea().getField());
+  await t.click(pivotGrid.getRowHeaderArea().getField());
   await testScreenshot(
     t,
     takeScreenshot,

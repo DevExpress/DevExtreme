@@ -2,13 +2,14 @@ import { getOuterHeight } from '../core/utils/size';
 import devices from '../core/devices';
 import domAdapter from '../core/dom_adapter';
 import $ from '../core/renderer';
-import { Deferred } from '../core/utils/deferred';
+import { Deferred, when } from '../core/utils/deferred';
 import { parseHTML } from '../core/utils/html_parser';
 import { each } from '../core/utils/iterator';
 import readyCallbacks from '../core/utils/ready_callbacks';
 import { value as viewPortValue, changeCallback, originalViewPort } from '../core/utils/view_port';
 import { getWindow, hasWindow } from '../core/utils/window';
 import { themeReadyCallback } from './themes_callback';
+import { uiLayerInitialized } from '../__internal/core/utils/m_common';
 import errors from './widget/ui.errors';
 const window = getWindow();
 const ready = readyCallbacks.add;
@@ -278,7 +279,8 @@ function getCssClasses(themeName) {
 }
 
 let themeClasses;
-export function attachCssClasses(element, themeName) {
+
+function _attachCssClasses(element, themeName) {
     themeClasses = getCssClasses(themeName).join(' ');
     $(element).addClass(themeClasses);
 
@@ -302,8 +304,16 @@ export function attachCssClasses(element, themeName) {
     activateHairlines();
 }
 
+export function attachCssClasses(element, themeName) {
+    when(uiLayerInitialized).done(() => {
+        _attachCssClasses(element, themeName);
+    });
+}
+
 export function detachCssClasses(element) {
-    $(element).removeClass(themeClasses);
+    when(uiLayerInitialized).done(() => {
+        $(element).removeClass(themeClasses);
+    });
 }
 
 function themeReady(callback) {

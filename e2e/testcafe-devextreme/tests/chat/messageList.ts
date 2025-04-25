@@ -268,6 +268,43 @@ test('Messagelist options showDayHeaders, showUserName and showMessageTimestamp 
   });
 });
 
+test('Message list with editing context menu', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const chat = new Chat('#container');
+
+  await t
+    .rightClick(chat.getMessage(2))
+    .pressKey('down')
+    .pressKey('down');
+
+  await testScreenshot(t, takeScreenshot, 'Messagelist with editing context menu.png', { element: '#container' });
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  const userFirst = createUser(1, 'First');
+  const userSecond = createUser(2, 'Second');
+
+  const items = [
+    { author: userFirst, text: 'AAA' },
+    { author: userFirst, text: 'BBB' },
+    { author: userSecond, text: 'CCC' },
+  ];
+
+  return createWidget('dxChat', {
+    items,
+    editing: {
+      allowUpdating: true,
+      allowDeleting: true,
+    },
+    user: userSecond,
+    width: 400,
+    height: 600,
+    showDayHeaders: false,
+  });
+});
+
 fixture`ChatMessageList: dayHeaders`
   .page(url(__dirname, '../container.html'));
 
