@@ -1,4 +1,5 @@
-'use client'
+'use client';
+
 import * as React from 'react';
 
 import { memo, useContext, useLayoutEffect } from 'react';
