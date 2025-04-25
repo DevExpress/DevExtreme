@@ -43,7 +43,7 @@ const processItems = function (groupItems, field) {
 
   if (field.filterValues) {
     each(field.filterValues, (_, filterValue) => {
-      filterValues.push(Array.isArray(filterValue) ? filterValue.join('/') : filterValue && filterValue.valueOf());
+      filterValues.push(Array.isArray(filterValue) ? filterValue.join('/') : filterValue?.valueOf());
     });
   }
 
@@ -53,7 +53,7 @@ const processItems = function (groupItems, field) {
     const preparedFilterValueByText = isTree ? map(items, (item) => item.text).reverse().join('/') : item.text;
 
     item.value = isTree ? path.slice(0) : item.key || item.value;
-    const preparedFilterValue = isTree ? path.join('/') : item.value && item.value.valueOf();
+    const preparedFilterValue = isTree ? path.join('/') : item.value?.valueOf();
 
     if (item.children) {
       item.items = item.children;
@@ -133,8 +133,7 @@ export class FieldChooserBase extends mixinWidget {
   _refreshDataSource() {
     const dataSource = this.option('dataSource');
 
-    if (dataSource
-        && dataSource.fields && dataSource.load/* instanceof DX.ui.dxPivotGrid.DataSource */) {
+    if (dataSource?.fields && dataSource.load/* instanceof DX.ui.dxPivotGrid.DataSource */) {
       this._dataSource = dataSource;
     }
   }
@@ -189,6 +188,7 @@ export class FieldChooserBase extends mixinWidget {
             alignment: that.option('rtlEnabled') ? 'right' : 'left',
             sortOrder: field.sortOrder === 'desc' ? 'desc' : 'asc',
             allowSorting: field.allowSorting,
+            caption: field.caption || field.dataField,
           },
           showColumnLines,
         });
@@ -202,6 +202,7 @@ export class FieldChooserBase extends mixinWidget {
           filterValues: mainGroupField.filterValues,
           allowFiltering: mainGroupField.allowFiltering && !field.groupIndex,
           allowSorting: field.allowSorting,
+          caption: field.caption || field.dataField,
         },
         showColumnLines,
       });

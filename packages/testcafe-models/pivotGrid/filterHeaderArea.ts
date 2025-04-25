@@ -1,15 +1,16 @@
 import HeaderFilter from './headerFilter';
 
 const CLASSES = {
-  rowHeader: 'dx-area-description-cell',
+  header: 'dx-pivotgrid-fields-area',
   field: 'dx-area-field',
+  fieldButton: 'dx-header-filter',
 };
 
-export default class RowHeaderArea {
+export default class FilterHeaderArea {
   private readonly element: Selector;
 
   constructor(selector: Selector) {
-    this.element = selector.find(`.${CLASSES.rowHeader}`);
+    this.element = selector.find(`.${CLASSES.header}`);
   }
 
   getField(idx = 0): Selector {
