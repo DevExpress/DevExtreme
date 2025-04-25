@@ -89,15 +89,15 @@ QUnit.module('MessageBubble', moduleConfig, () => {
 
         QUnit.test('template render function should be called if it has been passed', function(assert) {
             const templateSpy = sinon.spy();
-            const messageText = 'message text';
+            const message = { text: 'message text', type: 'text' };
 
             this.reinit({
-                message: { text: messageText, type: 'text' },
+                message,
                 template: templateSpy,
             });
 
             assert.strictEqual(templateSpy.callCount, 1, 'template was rendered once');
-            assert.strictEqual(templateSpy.args[0][0], messageText, 'text argument is correct');
+            assert.deepEqual(templateSpy.args[0][0], message, 'message argument is correct');
             assert.strictEqual($(templateSpy.args[0][1]).get(0), this.$content.get(0), 'container element is correct');
         });
 
@@ -132,7 +132,7 @@ QUnit.module('MessageBubble', moduleConfig, () => {
 
         QUnit.test('template option should set message bubble content at runtime', function(assert) {
             const template = (data, container) => {
-                $('<h1>').text(`template text: ${data}`).appendTo(container);
+                $('<h1>').text(`template text: ${data.text}`).appendTo(container);
             };
 
             this.reinit({

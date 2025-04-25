@@ -125,9 +125,9 @@ class MessageGroup extends Widget<Properties> {
 
     const { messageTemplate } = this.option();
 
-    if (messageTemplate && (message.type === 'text' || !message.type)) {
-      options.template = (text, container): void => {
-        messageTemplate({ ...message, text }, container);
+    if (messageTemplate) {
+      options.template = (currentMessage, container): void => {
+        messageTemplate(currentMessage, container);
       };
     }
 
