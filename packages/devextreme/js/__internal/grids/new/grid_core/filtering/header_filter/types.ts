@@ -60,11 +60,6 @@ export interface HeaderFilterColumnOptions extends HeaderFilterBaseOptions {
   groupInterval?: number;
   // Specifies the header filter search options.
   search?: HeaderFilterSearchColumnOptions;
-  // Current column's filter values
-  // NOTE: Original DataGrid type not typed too:
-  // https://js.devexpress.com/jQuery/Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/columns/#filterValues
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  values?: any[];
 }
 
 export interface HeaderFilterRootOptions extends HeaderFilterBaseOptions {

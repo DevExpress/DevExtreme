@@ -23,6 +23,7 @@ type InheritedColumnProps =
   | 'showInColumnChooser'
   | 'validationRules'
   | 'allowEditing'
+  | 'filterValues'
   | 'editorOptions'
   | 'caption';
 
