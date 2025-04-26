@@ -11,7 +11,7 @@ import NestedOption from "./core/nested-option";
 
 import type { AnimationConfig, CollisionResolution, PositionConfig, AnimationState, AnimationType, CollisionResolutionCombination } from "devextreme/common/core/animation";
 import type { ValidationRuleType, HorizontalAlignment, VerticalAlignment, template, ToolbarItemLocation, ToolbarItemComponent, DataType, Format as CommonFormat, SortOrder, ComparisonOperator, Direction, PositionAlignment, Mode, DisplayMode, SingleMultipleOrNone, SelectAllMode } from "devextreme/common";
-import type { CardInfo, CardHeaderPredefinedToolbarItem, CardHeaderToolbarItem, FieldInfoType, Column as CardViewColumn, PredefinedToolbarItem, ToolbarItem as CardViewToolbarItem } from "devextreme/ui/card_view";
+import type { CardTemplateData, CardHeaderPredefinedToolbarItem, CardHeaderToolbarItem, FieldTemplateData, ColumnTemplateData, PredefinedToolbarItem, ToolbarItem as CardViewToolbarItem } from "devextreme/ui/card_view";
 import type { LocateInMenuMode, ShowTextMode } from "devextreme/ui/toolbar";
 import type { CollectionWidgetItem } from "devextreme/ui/collection/ui.collection_widget.base";
 import type { DataChangeType, FilterType, DataChange, PagerPageSize, SelectionColumnDisplayMode } from "devextreme/common/grids";
@@ -218,7 +218,7 @@ type ICardCoverProps = React.PropsWithChildren<{
   aspectRatio?: string;
   imageExpr?: ((data: any) => string) | string;
   maxHeight?: number;
-  template?: ((card: CardInfo, container: any) => string | any) | template;
+  template?: ((data: CardTemplateData, container: any) => string | any) | template;
   render?: (...params: any) => React.ReactNode;
   component?: React.ComponentType<any>;
 }>
@@ -244,7 +244,7 @@ const CardCover = Object.assign<typeof _componentCardCover, NestedComponentMeta>
 // CardView
 type ICardHeaderProps = React.PropsWithChildren<{
   items?: Array<CardHeaderPredefinedToolbarItem | CardHeaderToolbarItem>;
-  template?: ((card: CardInfo) => string | any) | template;
+  template?: ((data: CardTemplateData) => string | any) | template;
   visible?: boolean;
   render?: (...params: any) => React.ReactNode;
   component?: React.ComponentType<any>;
@@ -378,9 +378,9 @@ type IColumnProps = React.PropsWithChildren<{
   dataType?: DataType | undefined;
   editorOptions?: any;
   falseText?: string;
-  fieldCaptionTemplate?: ((card: FieldInfoType, container: any) => string | any) | template;
-  fieldTemplate?: ((card: FieldInfoType, container: any) => string | any) | template;
-  fieldValueTemplate?: ((card: FieldInfoType, container: any) => string | any) | template;
+  fieldCaptionTemplate?: ((data: FieldTemplateData, container: any) => string | any) | template;
+  fieldTemplate?: ((data: FieldTemplateData, container: any) => string | any) | template;
+  fieldValueTemplate?: ((data: FieldTemplateData, container: any) => string | any) | template;
   filterType?: FilterType;
   filterValue?: any | undefined;
   filterValues?: Array<any>;
@@ -388,7 +388,7 @@ type IColumnProps = React.PropsWithChildren<{
   formItem?: dxFormSimpleItem;
   headerFilter?: Record<string, any>;
   headerItemCssClass?: string;
-  headerItemTemplate?: ((column: CardViewColumn, container: any) => string | any) | template;
+  headerItemTemplate?: ((data: ColumnTemplateData, container: any) => string | any) | template;
   name?: string | undefined;
   setFieldValue?: ((newData: any, value: any, currentCardData: any) => any);
   showInColumnChooser?: boolean;
@@ -899,7 +899,7 @@ const GroupOperationDescriptions = Object.assign<typeof _componentGroupOperation
 type IHeaderPanelProps = React.PropsWithChildren<{
   dragging?: Record<string, any>;
   itemCssClass?: string;
-  itemTemplate?: ((column: CardViewColumn, container: any) => string | any) | template;
+  itemTemplate?: ((data: ColumnTemplateData, container: any) => string | any) | template;
   visible?: boolean;
   itemRender?: (...params: any) => React.ReactNode;
   itemComponent?: React.ComponentType<any>;

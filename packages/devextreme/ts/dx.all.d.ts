@@ -10206,6 +10206,12 @@ declare module DevExpress.ui {
           changes: DevExpress.common.grids.DataChange[];
         };
     /**
+     * [descr:CardTemplateData]
+     */
+    export type CardTemplateData = {
+      card: CardInfo;
+    };
+    /**
      * [descr:CardUpdatedEvent]
      */
     export type CardUpdatedEvent<
@@ -10242,6 +10248,12 @@ declare module DevExpress.ui {
          */
         newData: DevExpress.core.DeepPartial<TCardData>;
       };
+    /**
+     * [descr:ColumnTemplateData]
+     */
+    export type ColumnTemplateData<TCardData = unknown, TKey = unknown> = {
+      column: Column<TCardData, TKey>;
+    };
     /**
      * [descr:ContextMenuPreparingEvent]
      */
@@ -10395,6 +10407,12 @@ declare module DevExpress.ui {
     export type FieldPreparedEvent =
       DevExpress.common.core.events.EventInfo<dxCardView> & WithFieldInfo;
     /**
+     * [descr:FieldTemplateData]
+     */
+    export type FieldTemplateData = {
+      field: FieldInfoType;
+    };
+    /**
      * [descr:FieldValueClickEvent]
      */
     export type FieldValueClickEvent =
@@ -10453,7 +10471,7 @@ declare module DevExpress.ui {
       itemTemplate?:
         | template
         | ((
-            column: Column<TCardData, TKey>,
+            data: ColumnTemplateData<TCardData, TKey>,
             container: DevExpress.core.DxElement
           ) => string | DevExpress.core.UserDefinedElement);
       /**
@@ -10741,7 +10759,7 @@ declare module DevExpress.ui {
     cardTemplate?:
       | template
       | ((
-          card: DevExpress.ui.dxCardView.CardInfo,
+          data: DevExpress.ui.dxCardView.CardTemplateData,
           container: DevExpress.core.DxElement
         ) => string | DevExpress.core.UserDefinedElement);
     /**
@@ -10750,7 +10768,7 @@ declare module DevExpress.ui {
     cardContentTemplate?:
       | template
       | ((
-          card: DevExpress.ui.dxCardView.CardInfo,
+          data: DevExpress.ui.dxCardView.CardTemplateData,
           container: DevExpress.core.DxElement
         ) => string | DevExpress.core.UserDefinedElement);
     /**
@@ -10829,7 +10847,7 @@ declare module DevExpress.ui {
     cardFooterTemplate?:
       | template
       | ((
-          card: DevExpress.ui.dxCardView.CardInfo,
+          data: DevExpress.ui.dxCardView.CardTemplateData,
           container: DevExpress.core.DxElement
         ) => string | DevExpress.core.UserDefinedElement);
     /**
@@ -32802,7 +32820,7 @@ declare module DevExpress.ui.dxCardView {
     template?:
       | template
       | ((
-          card: CardInfo,
+          data: CardTemplateData,
           container: DevExpress.core.DxElement
         ) => string | DevExpress.core.UserDefinedElement);
   };
@@ -32823,7 +32841,9 @@ declare module DevExpress.ui.dxCardView {
      */
     template?:
       | template
-      | ((card: CardInfo) => string | DevExpress.core.UserDefinedElement);
+      | ((
+          data: CardTemplateData
+        ) => string | DevExpress.core.UserDefinedElement);
   };
   /**
    * [descr:CardHeaderToolbarItem]
@@ -33047,7 +33067,7 @@ declare module DevExpress.ui.dxCardView {
     fieldTemplate?:
       | template
       | ((
-          card: FieldInfoType,
+          data: FieldTemplateData,
           container: DevExpress.core.DxElement
         ) => string | DevExpress.core.UserDefinedElement);
     /**
@@ -33056,7 +33076,7 @@ declare module DevExpress.ui.dxCardView {
     fieldCaptionTemplate?:
       | template
       | ((
-          card: FieldInfoType,
+          data: FieldTemplateData,
           container: DevExpress.core.DxElement
         ) => string | DevExpress.core.UserDefinedElement);
     /**
@@ -33065,7 +33085,7 @@ declare module DevExpress.ui.dxCardView {
     fieldValueTemplate?:
       | template
       | ((
-          card: FieldInfoType,
+          data: FieldTemplateData,
           container: DevExpress.core.DxElement
         ) => string | DevExpress.core.UserDefinedElement);
     /**
@@ -33074,7 +33094,7 @@ declare module DevExpress.ui.dxCardView {
     headerItemTemplate?:
       | template
       | ((
-          column: Column<TCardData, TKey>,
+          data: ColumnTemplateData<TCardData, TKey>,
           container: DevExpress.core.DxElement
         ) => string | DevExpress.core.UserDefinedElement);
     /**

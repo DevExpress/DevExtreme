@@ -429,22 +429,22 @@ export type ColumnProperties<TCardData = unknown, TKey = unknown> = {
      * @public
      * @docid
      */
-    fieldTemplate?: template | ((card: FieldInfoType, container: DxElement) => string | UserDefinedElement);
+    fieldTemplate?: template | ((data: FieldTemplateData, container: DxElement) => string | UserDefinedElement);
     /**
      * @public
      * @docid
      */
-    fieldCaptionTemplate?: template | ((card: FieldInfoType, container: DxElement) => string | UserDefinedElement);
+    fieldCaptionTemplate?: template | ((data: FieldTemplateData, container: DxElement) => string | UserDefinedElement);
     /**
      * @public
      * @docid
      */
-    fieldValueTemplate?: template | ((card: FieldInfoType, container: DxElement) => string | UserDefinedElement);
+    fieldValueTemplate?: template | ((data: FieldTemplateData, container: DxElement) => string | UserDefinedElement);
     /**
      * @public
      * @docid
      */
-    headerItemTemplate?: template | ((column: Column<TCardData, TKey>, container: DxElement) => string | UserDefinedElement);
+    headerItemTemplate?: template | ((data: ColumnTemplateData<TCardData, TKey>, container: DxElement) => string | UserDefinedElement);
     /**
      * @public
      * @docid
@@ -498,7 +498,7 @@ export type HeaderPanel<TCardData = unknown, TKey = unknown> = {
      * @docid
      * @public
      */
-    itemTemplate?: template | ((column: Column<TCardData, TKey>, container: DxElement) => string | UserDefinedElement);
+    itemTemplate?: template | ((data: ColumnTemplateData<TCardData, TKey>, container: DxElement) => string | UserDefinedElement);
     /**
      * @docid
      * @public
@@ -657,6 +657,30 @@ export type CardHoverChangedEvent = EventInfo<dxCardView> & WithCardInfo & {
 };
 
 /**
+ * @public
+ * @docid
+ */
+export type FieldTemplateData = {
+    field: FieldInfoType;
+};
+
+/**
+ * @public
+ * @docid
+ */
+export type CardTemplateData = {
+    card: CardInfo;
+};
+
+/**
+ * @public
+ * @docid
+ */
+export type ColumnTemplateData<TCardData = unknown, TKey = unknown> = {
+    column: Column<TCardData, TKey>;
+};
+
+/**
  * @docid
  * @public
  * @namespace DevExpress.ui.dxCardView
@@ -686,7 +710,7 @@ export type CardCover<TCardData = unknown> = { // TODO: sync with impl
      * @docid
      * @public
      */
-    template?: template | ((card: CardInfo, container: DxElement) => string | UserDefinedElement);
+    template?: template | ((data: CardTemplateData, container: DxElement) => string | UserDefinedElement);
 };
 
 export type CardHeaderPredefinedToolbarItem = 'selectionCheckBox' | 'updateButton' | 'deleteButton';
@@ -731,7 +755,7 @@ export type CardHeader = { // TODO: sync with impl
      * @docid
      * @public
      */
-    template?: template | ((card: CardInfo) => string | UserDefinedElement);
+    template?: template | ((data: CardTemplateData) => string | UserDefinedElement);
 };
 
 // #endregion
@@ -1274,12 +1298,12 @@ export interface dxCardViewOptions<TCardData = unknown, TKey = unknown> extends 
      * @docid
      * @public
      */
-    cardTemplate?: template | ((card: CardInfo, container: DxElement) => string | UserDefinedElement);
+    cardTemplate?: template | ((data: CardTemplateData, container: DxElement) => string | UserDefinedElement);
     /**
      * @docid
      * @public
      */
-    cardContentTemplate?: template | ((card: CardInfo, container: DxElement) => string | UserDefinedElement);
+    cardContentTemplate?: template | ((data: CardTemplateData, container: DxElement) => string | UserDefinedElement);
     /**
      * @docid
      * @public
@@ -1367,7 +1391,7 @@ export interface dxCardViewOptions<TCardData = unknown, TKey = unknown> extends 
      * @docid
      * @public
      */
-    cardFooterTemplate?: template | ((card: CardInfo, container: DxElement) => string | UserDefinedElement);
+    cardFooterTemplate?: template | ((data: CardTemplateData, container: DxElement) => string | UserDefinedElement);
     /**
      * @docid
      * @public
