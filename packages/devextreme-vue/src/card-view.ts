@@ -30,9 +30,6 @@ import {
  FieldCaptionClickEvent,
  FieldCaptionDblClickEvent,
  FieldCaptionPreparedEvent,
- FieldClickEvent,
- FieldDblClickEvent,
- FieldPreparedEvent,
  FieldValueClickEvent,
  FieldValueDblClickEvent,
  FieldValuePreparedEvent,
@@ -198,9 +195,6 @@ type AccessibleOptions = Pick<Properties,
   "onFieldCaptionClick" |
   "onFieldCaptionDblClick" |
   "onFieldCaptionPrepared" |
-  "onFieldClick" |
-  "onFieldDblClick" |
-  "onFieldPrepared" |
   "onFieldValueClick" |
   "onFieldValueDblClick" |
   "onFieldValuePrepared" |
@@ -286,9 +280,6 @@ const componentConfig = {
     onFieldCaptionClick: Function as PropType<((e: FieldCaptionClickEvent) => void)>,
     onFieldCaptionDblClick: Function as PropType<((e: FieldCaptionDblClickEvent) => void)>,
     onFieldCaptionPrepared: Function as PropType<((e: FieldCaptionPreparedEvent) => void)>,
-    onFieldClick: Function as PropType<((e: FieldClickEvent) => void)>,
-    onFieldDblClick: Function as PropType<((e: FieldDblClickEvent) => void)>,
-    onFieldPrepared: Function as PropType<((e: FieldPreparedEvent) => void)>,
     onFieldValueClick: Function as PropType<((e: FieldValueClickEvent) => void)>,
     onFieldValueDblClick: Function as PropType<((e: FieldValueDblClickEvent) => void)>,
     onFieldValuePrepared: Function as PropType<((e: FieldValuePreparedEvent) => void)>,
@@ -370,9 +361,6 @@ const componentConfig = {
     "update:onFieldCaptionClick": null,
     "update:onFieldCaptionDblClick": null,
     "update:onFieldCaptionPrepared": null,
-    "update:onFieldClick": null,
-    "update:onFieldDblClick": null,
-    "update:onFieldPrepared": null,
     "update:onFieldValueClick": null,
     "update:onFieldValueDblClick": null,
     "update:onFieldValuePrepared": null,

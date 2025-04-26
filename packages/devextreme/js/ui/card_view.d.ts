@@ -578,30 +578,6 @@ export type CardPreparedEvent = EventInfo<dxCardView> & WithCardInfo;
  * @docid
  * @public
  * @type object
- * @inherits NativeEventInfo,WithFieldInfo
- */
-export type FieldClickEvent = NativeEventInfo<dxCardView, PointerEvent | MouseEvent | TouchEvent> & WithFieldInfo;
-
-/**
- * @docid
- * @public
- * @type object
- * @inherits NativeEventInfo,WithFieldInfo
- */
-export type FieldDblClickEvent = NativeEventInfo<dxCardView, PointerEvent | MouseEvent | TouchEvent> & WithFieldInfo;
-
-/**
- * @docid
- * @public
- * @type object
- * @inherits EventInfo,WithFieldInfo
-*/
-export type FieldPreparedEvent = EventInfo<dxCardView> & WithFieldInfo;
-
-/**
- * @docid
- * @public
- * @type object
  * @inherits NativeEventInfo,WithFieldCaptionInfo
  */
 export type FieldCaptionClickEvent = NativeEventInfo<dxCardView, PointerEvent | MouseEvent | TouchEvent> & WithFieldCaptionInfo;
@@ -1327,24 +1303,6 @@ export interface dxCardViewOptions<TCardData = unknown, TKey = unknown> extends 
      * @action
      */
     onCardPrepared?: (e: CardPreparedEvent) => void; // TODO: sync with impl
-    /**
-     * @docid
-     * @public
-     * @action
-     */
-    onFieldClick?: (e: FieldClickEvent) => void; // TODO: sync with impl
-    /**
-     * @docid
-     * @public
-     * @action
-     */
-    onFieldDblClick?: (e: FieldDblClickEvent) => void; // TODO: sync with impl
-    /**
-     * @docid
-     * @public
-     * @action
-     */
-    onFieldPrepared?: (e: FieldPreparedEvent) => void; // TODO: sync with impl
     /**
      * @docid
      * @public

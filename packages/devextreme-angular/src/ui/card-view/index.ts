@@ -24,7 +24,7 @@ import {
 export { ExplicitTypes } from 'devextreme/ui/card_view';
 
 import DataSource from 'devextreme/data/data_source';
-import { CardCover, CardHeader, ColumnProperties, Editing, HeaderPanel, CardClickEvent, CardDblClickEvent, CardHoverChangedEvent, CardInsertedEvent, CardInsertingEvent, CardPreparedEvent, CardRemovedEvent, CardRemovingEvent, CardSavedEvent, CardSavingEvent, CardUpdatedEvent, CardUpdatingEvent, ContextMenuPreparingEvent, EditCanceledEvent, EditCancelingEvent, EditingStartEvent, FieldCaptionClickEvent, FieldCaptionDblClickEvent, FieldCaptionPreparedEvent, FieldClickEvent, FieldDblClickEvent, FieldPreparedEvent, FieldValueClickEvent, FieldValueDblClickEvent, FieldValuePreparedEvent, FocusedCardChanged, InitNewCardEvent, SelectionChangedEvent, SelectionChangingEvent, Paging, RemoteOperations, SelectionConfiguration, Toolbar } from 'devextreme/ui/card_view';
+import { CardCover, CardHeader, ColumnProperties, Editing, HeaderPanel, CardClickEvent, CardDblClickEvent, CardHoverChangedEvent, CardInsertedEvent, CardInsertingEvent, CardPreparedEvent, CardRemovedEvent, CardRemovingEvent, CardSavedEvent, CardSavingEvent, CardUpdatedEvent, CardUpdatingEvent, ContextMenuPreparingEvent, EditCanceledEvent, EditCancelingEvent, EditingStartEvent, FieldCaptionClickEvent, FieldCaptionDblClickEvent, FieldCaptionPreparedEvent, FieldValueClickEvent, FieldValueDblClickEvent, FieldValuePreparedEvent, FocusedCardChanged, InitNewCardEvent, SelectionChangedEvent, SelectionChangingEvent, Paging, RemoteOperations, SelectionConfiguration, Toolbar } from 'devextreme/ui/card_view';
 import { Mode } from 'devextreme/common';
 import { DataSourceOptions } from 'devextreme/data/data_source';
 import { Store } from 'devextreme/data/store';
@@ -925,30 +925,6 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
 
     /**
     
-     * [descr:dxCardViewOptions.onFieldClick]
-    
-    
-     */
-    @Output() onFieldClick: EventEmitter<FieldClickEvent>;
-
-    /**
-    
-     * [descr:dxCardViewOptions.onFieldDblClick]
-    
-    
-     */
-    @Output() onFieldDblClick: EventEmitter<FieldDblClickEvent>;
-
-    /**
-    
-     * [descr:dxCardViewOptions.onFieldPrepared]
-    
-    
-     */
-    @Output() onFieldPrepared: EventEmitter<FieldPreparedEvent>;
-
-    /**
-    
      * [descr:dxCardViewOptions.onFieldValueClick]
     
     
@@ -1396,9 +1372,6 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
             { subscribe: 'fieldCaptionClick', emit: 'onFieldCaptionClick' },
             { subscribe: 'fieldCaptionDblClick', emit: 'onFieldCaptionDblClick' },
             { subscribe: 'fieldCaptionPrepared', emit: 'onFieldCaptionPrepared' },
-            { subscribe: 'fieldClick', emit: 'onFieldClick' },
-            { subscribe: 'fieldDblClick', emit: 'onFieldDblClick' },
-            { subscribe: 'fieldPrepared', emit: 'onFieldPrepared' },
             { subscribe: 'fieldValueClick', emit: 'onFieldValueClick' },
             { subscribe: 'fieldValueDblClick', emit: 'onFieldValueDblClick' },
             { subscribe: 'fieldValuePrepared', emit: 'onFieldValuePrepared' },

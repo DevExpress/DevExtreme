@@ -10385,28 +10385,6 @@ declare module DevExpress.ui {
       DevExpress.common.core.events.EventInfo<dxCardView> &
         WithFieldCaptionInfo;
     /**
-     * [descr:FieldClickEvent]
-     */
-    export type FieldClickEvent = DevExpress.common.core.events.NativeEventInfo<
-      dxCardView,
-      PointerEvent | MouseEvent | TouchEvent
-    > &
-      WithFieldInfo;
-    /**
-     * [descr:FieldDblClickEvent]
-     */
-    export type FieldDblClickEvent =
-      DevExpress.common.core.events.NativeEventInfo<
-        dxCardView,
-        PointerEvent | MouseEvent | TouchEvent
-      > &
-        WithFieldInfo;
-    /**
-     * [descr:FieldPreparedEvent]
-     */
-    export type FieldPreparedEvent =
-      DevExpress.common.core.events.EventInfo<dxCardView> & WithFieldInfo;
-    /**
      * [descr:FieldTemplateData]
      */
     export type FieldTemplateData = {
@@ -10620,20 +10598,6 @@ declare module DevExpress.ui {
       readonly fieldCaptionElement: DevExpress.core.DxElement;
     };
     /**
-     * [descr:WithFieldInfo]
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-     */
-    type WithFieldInfo = {
-      /**
-       * [descr:WithFieldInfo.field]
-       */
-      readonly field: FieldInfoType;
-      /**
-       * [descr:WithFieldInfo.fieldElement]
-       */
-      readonly fieldElement: DevExpress.core.DxElement;
-    };
-    /**
      * [descr:WithFieldValueInfo]
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
      */
@@ -10787,18 +10751,6 @@ declare module DevExpress.ui {
      * [descr:dxCardViewOptions.onCardPrepared]
      */
     onCardPrepared?: (e: DevExpress.ui.dxCardView.CardPreparedEvent) => void;
-    /**
-     * [descr:dxCardViewOptions.onFieldClick]
-     */
-    onFieldClick?: (e: DevExpress.ui.dxCardView.FieldClickEvent) => void;
-    /**
-     * [descr:dxCardViewOptions.onFieldDblClick]
-     */
-    onFieldDblClick?: (e: DevExpress.ui.dxCardView.FieldDblClickEvent) => void;
-    /**
-     * [descr:dxCardViewOptions.onFieldPrepared]
-     */
-    onFieldPrepared?: (e: DevExpress.ui.dxCardView.FieldPreparedEvent) => void;
     /**
      * [descr:dxCardViewOptions.onFieldCaptionClick]
      */
