@@ -167,7 +167,12 @@ export interface FieldInfoType { // TODO: rename to FieldInfo
      * @public
      * @docid
      */
-    card: CardInfo; // TODO: sync with impl
+    index: number;
+    /**
+     * @public
+     * @docid
+     */
+    card: CardInfo;
 }
 
 /**
@@ -175,7 +180,7 @@ export interface FieldInfoType { // TODO: rename to FieldInfo
  * @docid
  * @namespace DevExpress.ui.dxCardView
  */
-export type CardInfo<TCardData = unknown, TKey = unknown> = { // TODO: sync to impl
+export type CardInfo<TCardData = unknown, TKey = unknown> = {
     /**
      * @public
      * @docid
@@ -206,7 +211,7 @@ export type CardInfo<TCardData = unknown, TKey = unknown> = { // TODO: sync to i
      * @public
      * @docid
      */
-    isSelected: boolean;
+    isSelected?: boolean;
     /**
      * @public
      * @type Array<any>

@@ -32865,7 +32865,7 @@ declare module DevExpress.ui.dxCardView {
     /**
      * [descr:CardInfo.isSelected]
      */
-    isSelected: boolean;
+    isSelected?: boolean;
     /**
      * [descr:CardInfo.values]
      */
@@ -33103,6 +33103,10 @@ declare module DevExpress.ui.dxCardView {
      * [descr:FieldInfoType.column]
      */
     column: Column;
+    /**
+     * [descr:FieldInfoType.index]
+     */
+    index: number;
     /**
      * [descr:FieldInfoType.card]
      */
