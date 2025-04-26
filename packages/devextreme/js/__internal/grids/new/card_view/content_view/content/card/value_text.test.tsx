@@ -34,7 +34,7 @@ describe('Content View', () => {
 
       render(
         <ValueText field={field}
-                   cellHintEnabled={true}
+                   fieldHintEnabled={true}
         />,
         container,
       );

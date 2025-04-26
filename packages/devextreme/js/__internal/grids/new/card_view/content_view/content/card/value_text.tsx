@@ -4,7 +4,7 @@ import type { ComponentType } from 'inferno';
 export interface ValueTextProps {
   field: FieldInfo;
   template?: ComponentType<{ field: FieldInfo }>;
-  cellHintEnabled?: boolean;
+  fieldHintEnabled?: boolean;
 }
 
 const ROOT_CLASS = 'dx-cardview-field-value';
@@ -16,7 +16,7 @@ const CLASS = {
 export const ValueText = ({
   field,
   template: Template,
-  cellHintEnabled,
+  fieldHintEnabled,
 }: ValueTextProps): JSX.Element => {
   const classNames = [
     CLASS.root,
@@ -32,7 +32,7 @@ export const ValueText = ({
   return (
     <div
       className={classNames}
-      title={cellHintEnabled ? field.text : undefined}
+      title={fieldHintEnabled ? field.text : undefined}
     >
       {Template ? (
         <Template field={field}/>

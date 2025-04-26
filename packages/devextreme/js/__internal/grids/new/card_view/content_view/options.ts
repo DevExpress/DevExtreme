@@ -15,6 +15,7 @@ export interface Options extends Base.Options {
     aspectRatio?: string;
   };
   cardFooterTemplate?: Template<{ card: CardInfo }>;
+  fieldHintEnabled?: boolean;
 }
 
 export const defaultOptions = {
@@ -23,5 +24,6 @@ export const defaultOptions = {
   cardCover: {
     aspectRatio: '1 / 1',
   },
+  fieldHintEnabled: false,
   ...Base.defaultOptions,
 } satisfies Options;

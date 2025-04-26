@@ -86,6 +86,7 @@ export class ContentView extends ContentViewBase<ContentViewProps> {
         cardProps: {
           minWidth: this.cardMinWidth.value,
           maxWidth: this.options.oneWay('cardMaxWidth').value,
+          fieldHintEnabled: this.options.oneWay('fieldHintEnabled').value,
           isCheckBoxesRendered: this.selectionController.isCheckBoxesRendered.value,
           allowSelectOnClick: this.selectionController.allowSelectOnClick.value,
           onHold: this.onCardHold.bind(this),

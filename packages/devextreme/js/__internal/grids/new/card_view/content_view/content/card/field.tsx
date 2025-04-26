@@ -13,7 +13,7 @@ export const CLASSES = {
 };
 
 export interface FieldProps {
-  cellHintEnabled?: boolean;
+  fieldHintEnabled?: boolean;
   elementRef?: RefObject<HTMLDivElement>;
   captionTemplate?: ComponentType<{ field: FieldInfo }>;
   valueTemplate?: ComponentType<{ field: FieldInfo }>;
@@ -58,6 +58,7 @@ export class Field extends Component<FieldProps> {
           template={this.props.captionTemplate}
         />
         <ValueText
+          fieldHintEnabled={this.props.fieldHintEnabled}
           field={this.props.field}
           template={this.props.valueTemplate}
         />

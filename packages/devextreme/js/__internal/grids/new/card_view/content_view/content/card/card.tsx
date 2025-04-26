@@ -96,6 +96,8 @@ export interface CardProps {
   onDelete?: (key: Key) => void;
 
   footerTemplate?: ComponentType<{ card: CardInfo }>;
+
+  fieldHintEnabled?: boolean;
 }
 
 export class Card extends Component<CardProps> {
@@ -156,6 +158,7 @@ export class Card extends Component<CardProps> {
           <div className={CLASSES.content}>
             {this.props.card.fields.map((field) => (
               <Field
+                fieldHintEnabled={this.props.fieldHintEnabled}
                 field={field}
                 template={field.column.fieldTemplate}
                 captionTemplate={field.column.captionTemplate}
