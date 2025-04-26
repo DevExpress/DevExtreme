@@ -3,6 +3,7 @@ import ArrayStore from '@js/common/data/array_store';
 import { Deferred } from '@js/core/utils/deferred';
 import type { ReadonlySignal } from '@preact/signals-core';
 import { computed, effect, signal } from '@preact/signals-core';
+import { equalByValue } from '@ts/core/utils/m_common';
 import type { PromiseWithResolvers } from '@ts/core/utils/promise';
 import { createPromise } from '@ts/core/utils/promise';
 
@@ -198,7 +199,7 @@ export class DataController {
           dataSource.requireTotalCount(true);
           someParamChanged ||= true;
         }
-        if (dataSource.filter() !== displayFilter) {
+        if (!equalByValue(dataSource.filter(), displayFilter)) {
           dataSource.filter(displayFilter ?? null);
           someParamChanged ||= true;
         }
