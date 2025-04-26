@@ -60,8 +60,8 @@ export type Column = Pick<Required<ColumnBase>, InheritedColumnProps> & {
   editorTemplate?: unknown;
 
   fieldTemplate?: ComponentType<{ field: FieldInfo }>;
-  captionTemplate?: ComponentType<{ field: FieldInfo }>;
-  valueTemplate?: ComponentType<{ field: FieldInfo }>;
+  fieldCaptionTemplate?: ComponentType<{ field: FieldInfo }>;
+  fieldValueTemplate?: ComponentType<{ field: FieldInfo }>;
 
   headerItemTemplate?: ComponentType<{ column: Column }>;
 

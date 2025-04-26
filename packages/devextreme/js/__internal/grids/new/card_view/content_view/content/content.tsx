@@ -15,7 +15,6 @@ import type { RefObject } from 'inferno';
 import { Component, createRef } from 'inferno';
 
 import { Card } from './card/card';
-import type { CardHeaderItem } from './card/header';
 
 export interface ContentProps {
   items: CardInfo[];
@@ -42,7 +41,6 @@ export interface ContentProps {
   wordWrapEnabled: boolean;
 
   cardProps?: {
-    toolbar?: CardHeaderItem[];
     minWidth?: number;
     maxWidth?: number;
     selectCard: (card: CardInfo, options: SelectCardOptions) => void;

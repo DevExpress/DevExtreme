@@ -9,7 +9,7 @@ import { CardHeader, CLASSES } from './header';
 describe('CardHeader', () => {
   it('should render with default properties', () => {
     const container = document.createElement('div');
-    render(<CardHeader visible items={[{ location: 'before', text: 'Test Header' }]} />, container);
+    render(<CardHeader card={{} as any} visible items={[{ location: 'before', text: 'Test Header' }]} />, container);
 
     // Verify the rendered element
     const header = container.querySelector(`.${CLASSES.cardHeader}`);
@@ -23,7 +23,7 @@ describe('CardHeader', () => {
 
   it('should not render when visible is false', () => {
     const container = document.createElement('div');
-    render(<CardHeader visible={false} />, container);
+    render(<CardHeader card={{} as any} visible={false} />, container);
 
     // Verify the header is not rendered
     const header = container.querySelector(CLASSES.cardHeader);
@@ -50,15 +50,15 @@ describe('CardHeader', () => {
 
   it('should render with a custom template', () => {
     const container = document.createElement('div');
-    const CustomTemplate = (items: any[]) => (
-      <div className="custom-header">{items[0].text}</div>
+    const CustomTemplate = () => (
+      <div className="custom-header">Custom Header</div>
     );
 
     render(
       <CardHeader
         visible
+        card={{} as any}
         template={CustomTemplate}
-        items={[{ location: 'before', text: 'Custom Header' }]}
       />,
       container,
     );

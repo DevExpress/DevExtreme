@@ -1,7 +1,10 @@
 import { isCommandKeyPressed } from '@js/common/core/events/utils/index';
 import type { ValueChangedEvent } from '@js/ui/check_box';
+import type * as dxToolbar from '@js/ui/toolbar';
+import { isDefined } from '@ts/core/utils/m_type';
 import type { CardInfo } from '@ts/grids/new/grid_core/columns_controller/types';
 import { Toolbar } from '@ts/grids/new/grid_core/inferno_wrappers/toolbar';
+import type { ComponentType } from 'inferno';
 import { Component } from 'inferno';
 
 import type { SelectCardOptions } from '../../types';
@@ -16,23 +19,14 @@ export interface CheckBoxClickEvent {
   card: CardInfo;
 }
 
-export interface CardHeaderItem {
-  location: 'before' | 'after';
-  widget?: string;
-  text?: string;
-  cssClass?: string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  options?: any;
-}
-
 export interface CardHeaderProps {
-  items?: CardHeaderItem[];
+  items?: (string | dxToolbar.Item)[];
   allowUpdating?: boolean;
   allowDeleting?: boolean;
   visible?: boolean;
   captionExpr?: string;
-  template?: (items: CardHeaderItem[]) => JSX.Element;
-  card?: CardInfo;
+  template?: ComponentType<{ card: CardInfo }>;
+  card: CardInfo;
   isCheckBoxesRendered?: boolean;
   selectCard?: (card: CardInfo, options: SelectCardOptions) => void;
   onEdit?: () => void;
@@ -40,7 +34,7 @@ export interface CardHeaderProps {
 }
 
 export class CardHeader extends Component<CardHeaderProps> {
-  private getCheckBoxItem(): CardHeaderItem | null {
+  private getCheckBoxItem(): dxToolbar.Item | null {
     const { isCheckBoxesRendered, selectCard, card } = this.props;
 
     if (card && isCheckBoxesRendered) {
@@ -69,10 +63,10 @@ export class CardHeader extends Component<CardHeaderProps> {
 
   render(): JSX.Element | null {
     const {
-      visible = true,
+      visible: visibleProp,
       items = [],
       captionExpr,
-      template,
+      template: Template,
       card,
       allowUpdating,
       allowDeleting,
@@ -80,38 +74,37 @@ export class CardHeader extends Component<CardHeaderProps> {
       onDelete,
     } = this.props;
 
-    if (!visible) {
-      return null;
-    }
-
     const checkBoxItem = this.getCheckBoxItem();
 
-    const captionItem: CardHeaderItem | null = captionExpr && card?.[captionExpr]
+    const captionItem: dxToolbar.Item | null = captionExpr && card?.[captionExpr]
       ? { location: 'before', text: card[captionExpr] }
       : null;
 
-    const updateButton: CardHeaderItem | null = allowUpdating
+    const updateButton: dxToolbar.Item | null = allowUpdating
       ? { location: 'after', widget: 'dxButton', options: { icon: 'edit', onClick: onEdit, stylingMode: 'text' } }
       : null;
 
-    const deleteButton: CardHeaderItem | null = allowDeleting
+    const deleteButton: dxToolbar.Item | null = allowDeleting
       ? { location: 'after', widget: 'dxButton', options: { icon: 'remove', onClick: onDelete, stylingMode: 'text' } }
       : null;
 
     const finalItems = [checkBoxItem, captionItem, updateButton, deleteButton, ...items]
-      .filter((item): item is CardHeaderItem => !!item);
+      .filter((item): item is dxToolbar.Item => !!item);
 
-    if (template) {
-      return template(finalItems);
-    }
+    const visible = isDefined(visibleProp)
+      ? visibleProp
+      : !!finalItems.length;
 
-    if (!finalItems.length) {
+    if (!visible) {
       return <></>;
     }
 
     return (
       <div className={CLASSES.cardHeader}>
-        <Toolbar items={finalItems} />
+        {Template
+          ? <Template card={card}/>
+          : <Toolbar items={finalItems} />
+        }
       </div>
     );
   }

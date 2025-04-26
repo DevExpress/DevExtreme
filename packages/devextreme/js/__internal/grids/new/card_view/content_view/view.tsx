@@ -74,7 +74,6 @@ export class ContentView extends ContentViewBase<ContentViewProps> {
         navigationStrategy: this.navigationStrategy,
         isLoading: this.dataController.isReloading.value,
         needToHiddenCheckBoxes: this.selectionController.needToHiddenCheckBoxes.value,
-        fieldTemplate: this.options.template('fieldTemplate').value,
         cardsPerRow: this.cardsPerRow.value,
         onRowHeightChange: (height) => { this.rowHeight.value = height; },
         onFirstElementChange: (firstElement: HTMLDivElement | undefined): void => {
@@ -106,6 +105,8 @@ export class ContentView extends ContentViewBase<ContentViewProps> {
           allowUpdating: this.editingController.allowUpdating.value,
           allowDeleting: this.editingController.allowDeleting.value,
           footerTemplate: this.options.template('cardFooterTemplate').value,
+          template: this.options.template('cardTemplate').value,
+          contentTemplate: this.options.template('cardContentTemplate').value,
           cover: {
             imageExpr: this.processExpr(
               this.options.oneWay('cardCover.imageExpr').value,
@@ -115,6 +116,12 @@ export class ContentView extends ContentViewBase<ContentViewProps> {
             ),
             maxHeight: this.options.oneWay('cardCover.maxHeight').value,
             ratio: this.options.oneWay('cardCover.aspectRatio').value,
+            template: this.options.template('cardCover.template').value,
+          },
+          header: {
+            visible: this.options.oneWay('cardHeader.visible').value,
+            items: this.options.oneWay('cardHeader.items').value,
+            template: this.options.template('cardHeader.template').value,
           },
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           toolbar: this.options.oneWay('cardHeader.items').value as any,

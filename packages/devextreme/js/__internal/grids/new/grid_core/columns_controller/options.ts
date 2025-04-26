@@ -11,8 +11,8 @@ interface NonNormalizedColumnOptions {
   calculateDisplayValue: string | ((this: Column, data: unknown) => unknown);
   headerItemTemplate?: Template<{ column: Column }>;
   fieldTemplate?: Template<{ field: FieldInfo }>;
-  captionTemplate?: Template<{ field: FieldInfo }>;
-  valueTemplate?: Template<{ field: FieldInfo }>;
+  fieldCaptionTemplate?: Template<{ field: FieldInfo }>;
+  fieldValueTemplate?: Template<{ field: FieldInfo }>;
 }
 
 export type ColumnSettings = Partial<

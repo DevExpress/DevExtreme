@@ -24,32 +24,34 @@ const props = {
       alt: 'Card Cover',
     },
   },
-  toolbar: [
-    {
-      location: 'before',
-      widget: 'dxCheckBox',
-    },
-    {
-      location: 'before',
-      text: 'Card Header',
-    },
-    {
-      location: 'after',
-      widget: 'dxButton',
-      options: {
-        icon: 'edit',
-        stylingMode: 'text',
+  header: {
+    items: [
+      {
+        location: 'before',
+        widget: 'dxCheckBox',
       },
-    },
-    {
-      location: 'after',
-      widget: 'dxButton',
-      options: {
-        icon: 'trash',
-        stylingMode: 'text',
+      {
+        location: 'before',
+        text: 'Card Header',
       },
-    },
-  ],
+      {
+        location: 'after',
+        widget: 'dxButton',
+        options: {
+          icon: 'edit',
+          stylingMode: 'text',
+        },
+      },
+      {
+        location: 'after',
+        widget: 'dxButton',
+        options: {
+          icon: 'trash',
+          stylingMode: 'text',
+        },
+      },
+    ],
+  },
   cover: {
     imageExpr: compileGetter('img'),
     altExpr: compileGetter('alt'),
