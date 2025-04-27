@@ -5,7 +5,7 @@ import url from '../../helpers/getPageUrl';
 import { createWidget } from '../../helpers/createWidget';
 import { testScreenshot } from '../../helpers/themeUtils';
 
-fixture.disablePageReloads`ChatMessageBubble`.page(
+fixture.disablePageReloads`ChatConfirmationPopup`.page(
   url(__dirname, '../container.html'),
 );
 
@@ -45,5 +45,6 @@ test('Chat: confirmation popup', async (t) => {
     width: 400,
     height: 600,
     showDayHeaders: false,
+    rtlEnabled: true,
   });
 });
