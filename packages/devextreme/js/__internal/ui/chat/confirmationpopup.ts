@@ -1,4 +1,5 @@
 import eventsEngine from '@js/common/core/events/core/events_engine';
+import Guid from '@js/core/guid';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { extend } from '@js/core/utils/extend';
@@ -64,6 +65,11 @@ class ConfirmationPopup {
   }
 
   _getPopupConfig(): PopupProperties {
+    const messageId = new Guid().toString();
+    const $message = $('<div>')
+      .html(this._contentMessage)
+      .attr('id', messageId);
+
     return extend({
       width: POPUP_WIDTH,
       height: 'auto',
@@ -73,7 +79,12 @@ class ConfirmationPopup {
       dragEnabled: false,
       hideOnOutsideClick: true,
       toolbarItems: this._getToolbarItems(),
-      contentTemplate: this._contentMessage,
+      onContentReady(args) {
+        args.component.$content()
+          .append($message);
+
+        args.component.$overlayContent().attr('aria-labelledby', messageId);
+      },
       onShown: (e) => {
         const $firstButton = e.component
           .bottomToolbar()
