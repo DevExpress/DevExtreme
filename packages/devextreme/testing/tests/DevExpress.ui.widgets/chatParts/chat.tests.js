@@ -22,6 +22,7 @@ import { isRenderer } from 'core/utils/type';
 
 import config from 'core/config';
 import ArrayStore from 'common/data/array_store';
+import { CHAT_CONFIRMATION_POPUP_WRAPPER_CLASS } from '__internal/ui/chat/confirmationpopup';
 
 const CHAT_MESSAGEGROUP_CLASS = 'dx-chat-messagegroup';
 const CHAT_MESSAGELIST_CLASS = 'dx-chat-messagelist';
@@ -39,6 +40,10 @@ const CHAT_LAST_MESSAGEGROUP_ALIGNMENT_START_CLASS = 'dx-chat-last-messagegroup-
 const CHAT_LAST_MESSAGEGROUP_ALIGNMENT_END_CLASS = 'dx-chat-last-messagegroup-alignment-end';
 
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
+
+const DX_BUTTON_CLASSNAME = 'dx-button';
+
+const RTL_CLASS = 'dx-rtl';
 
 export const MOCK_COMPANION_USER_ID = 'COMPANION_USER_ID';
 export const MOCK_CURRENT_USER_ID = 'CURRENT_USER_ID';
@@ -567,6 +572,99 @@ QUnit.module('Chat', () => {
         });
     });
 
+    QUnit.module('Confirmation popup integration', moduleConfig, () => {
+        QUnit.test('passed rtlEnabled option value in Chat should be proxied to the Confirmation popup', function(assert) {
+            const items = [
+                { text: 'a', author: userFirst },
+                { text: 'b', author: userSecond },
+            ];
+
+            this.reinit({
+                user: userSecond,
+                editing: {
+                    allowDeleting: true
+                },
+                rtlEnabled: true,
+                items,
+            });
+
+            const $bubbles = this.getBubbles();
+            $bubbles.eq(1).trigger('dxcontextmenu');
+
+            const $deleteButton = this.getContextMenuItems().eq(0);
+            $deleteButton.trigger('dxclick');
+
+            const $popup = this.$element.closest('body').find(`.${CHAT_CONFIRMATION_POPUP_WRAPPER_CLASS}`);
+            assert.notStrictEqual($popup.find(`.${RTL_CLASS}`).length, 0, 'rtl class is passed to the popup');
+        });
+
+        QUnit.test('confirmation popup should have correct default values', function(assert) {
+            const items = [
+                { text: 'a', author: userFirst },
+                { text: 'b', author: userSecond },
+            ];
+
+            this.reinit({
+                user: userSecond,
+                editing: {
+                    allowDeleting: true
+                },
+                items,
+            });
+
+            const $bubbles = this.getBubbles();
+            $bubbles.eq(1).trigger('dxcontextmenu');
+
+            const $deleteButton = this.getContextMenuItems().eq(0);
+            $deleteButton.trigger('dxclick');
+
+            const $popup = this.$element.find('.dx-popup.dx-widget');
+            const popup = $popup.dxPopup('instance');
+
+            assert.propContains(popup.option(), {
+                showTitle: false,
+                showCloseButton: false,
+                shading: true,
+                dragEnabled: false,
+                hideOnOutsideClick: true,
+                resizeEnabled: false,
+                rtlEnabled: false,
+            }, 'confirmation popup has correct default options');
+        });
+
+        QUnit.test('input should be focused after message delete popup is closed', async function(assert) {
+            const items = [
+                { text: 'a', author: userFirst },
+                { text: 'b', author: userSecond },
+            ];
+
+            this.reinit({
+                user: userSecond,
+                editing: {
+                    allowDeleting: true
+                },
+                items,
+            });
+
+            const $bubbles = this.getBubbles();
+            $bubbles.eq(1).trigger('dxcontextmenu');
+
+            const $deleteButton = this.getContextMenuItems().eq(0);
+            $deleteButton.trigger('dxclick');
+
+            const $popup = this.$element.closest('body').find(`.${CHAT_CONFIRMATION_POPUP_WRAPPER_CLASS}`);
+            const $cancelButton = $popup.find(`.${DX_BUTTON_CLASSNAME}`).last();
+
+            const done = assert.async();
+            $cancelButton.trigger('dxclick');
+
+            setTimeout(() => {
+                assert.strictEqual(this.$textArea.hasClass(FOCUSED_STATE_CLASS), true, 'input is focused');
+                done();
+            }, 500);
+        });
+    });
+
     QUnit.module('Events', () => {
         QUnit.module('onMessageEntered', moduleConfig, () => {
             QUnit.test('should be called when the send button was clicked', function(assert) {
@@ -750,7 +848,7 @@ QUnit.module('Chat', () => {
         });
 
         QUnit.module('onMessageDeleting', moduleConfig, () => {
-            QUnit.test('should be called when the Edit button is clicked', function(assert) {
+            QUnit.test('should be called when the Delete button is clicked', function(assert) {
                 const onMessageDeleting = sinon.spy();
 
                 const items = [
@@ -834,6 +932,289 @@ QUnit.module('Chat', () => {
                 $deleteButton.trigger('dxclick');
 
                 assert.strictEqual(onMessageDeleting.callCount, 1);
+            });
+
+            QUnit.test('delete confirmation popup should not be shown if onMessageDeleting cancel returns true', function(assert) {
+                const items = [
+                    { text: 'a', author: userFirst },
+                    { text: 'b', author: userSecond },
+                ];
+
+                this.reinit({
+                    user: userSecond,
+                    editing: {
+                        allowDeleting: true
+                    },
+                    onMessageDeleting: () => true,
+                    items,
+                });
+
+                const $bubbles = this.getBubbles();
+                $bubbles.eq(1).trigger('dxcontextmenu');
+
+                const $deleteButton = this.getContextMenuItems().eq(0);
+                $deleteButton.trigger('dxclick');
+
+                const $popup = this.$element.find(`.${CHAT_CONFIRMATION_POPUP_WRAPPER_CLASS}`);
+
+                assert.strictEqual($popup.length, 0);
+            });
+
+            QUnit.test('delete confirmation popup should be shown if onMessageDeleting cancel returns false', function(assert) {
+                const items = [
+                    { text: 'a', author: userFirst },
+                    { text: 'b', author: userSecond },
+                ];
+
+                this.reinit({
+                    user: userSecond,
+                    editing: {
+                        allowDeleting: true
+                    },
+                    onMessageDeleting: (e) => {
+                        e.cancel = false;
+                    },
+                    items,
+                });
+
+                const $bubbles = this.getBubbles();
+                $bubbles.eq(1).trigger('dxcontextmenu');
+
+                const $deleteButton = this.getContextMenuItems().eq(0);
+                $deleteButton.trigger('dxclick');
+
+                const $popup = this.$element.closest('body').find(`.${CHAT_CONFIRMATION_POPUP_WRAPPER_CLASS}`);
+
+                assert.strictEqual($popup.length, 1);
+            });
+
+            QUnit.test('delete confirmation popup should be shown when onMessageDeleting cancel promise resolves with false', function(assert) {
+                const done = assert.async();
+
+                const items = [
+                    { text: 'a', author: userFirst },
+                    { text: 'b', author: userSecond },
+                ];
+
+                this.reinit({
+                    user: userSecond,
+                    editing: {
+                        allowDeleting: true
+                    },
+                    onMessageDeleting: (e) => {
+                        e.cancel = Promise.resolve(false);
+                    },
+                    items,
+                });
+
+                const $bubbles = this.getBubbles();
+                $bubbles.eq(1).trigger('dxcontextmenu');
+
+                const $deleteButton = this.getContextMenuItems().eq(0);
+                $deleteButton.trigger('dxclick');
+
+                setTimeout(() => {
+                    const $popup = this.$element.closest('body').find(`.${CHAT_CONFIRMATION_POPUP_WRAPPER_CLASS}`);
+                    assert.strictEqual($popup.length, 1);
+                    done();
+                });
+            });
+
+            QUnit.test('delete confirmation popup should not be shown when onMessageDeleting cancel promise resolves with true', function(assert) {
+                const done = assert.async();
+
+                const items = [
+                    { text: 'a', author: userFirst },
+                    { text: 'b', author: userSecond },
+                ];
+
+                this.reinit({
+                    user: userSecond,
+                    editing: {
+                        allowDeleting: true
+                    },
+                    onMessageDeleting: (e) => {
+                        e.cancel = Promise.resolve(true);
+                    },
+                    items,
+                });
+
+                const $bubbles = this.getBubbles();
+                $bubbles.eq(1).trigger('dxcontextmenu');
+
+                const $deleteButton = this.getContextMenuItems().eq(0);
+                $deleteButton.trigger('dxclick');
+
+                setTimeout(() => {
+                    const $popup = this.$element.closest('body').find(`.${CHAT_CONFIRMATION_POPUP_WRAPPER_CLASS}`);
+                    assert.strictEqual($popup.length, 0);
+                    done();
+                });
+            });
+
+            QUnit.test('delete confirmation popup should be shown when onMessageDeleting cancel promise rejects', function(assert) {
+                const done = assert.async();
+
+                const items = [
+                    { text: 'a', author: userFirst },
+                    { text: 'b', author: userSecond },
+                ];
+
+                this.reinit({
+                    user: userSecond,
+                    editing: {
+                        allowDeleting: true
+                    },
+                    onMessageDeleting: (e) => {
+                        e.cancel = Promise.reject();
+                    },
+                    items,
+                });
+
+                const $bubbles = this.getBubbles();
+                $bubbles.eq(1).trigger('dxcontextmenu');
+
+                const $deleteButton = this.getContextMenuItems().eq(0);
+                $deleteButton.trigger('dxclick');
+
+                setTimeout(() => {
+                    const $popup = this.$element.closest('body').find(`.${CHAT_CONFIRMATION_POPUP_WRAPPER_CLASS}`);
+                    assert.strictEqual($popup.length, 1);
+                    done();
+                });
+            });
+        });
+
+        QUnit.module('onMessageDeleted', moduleConfig, () => {
+            QUnit.test('should be called when the Delete button is clicked and user confirms deletion', function(assert) {
+                const onMessageDeleted = sinon.spy();
+
+                const items = [
+                    { text: 'a', author: userFirst },
+                    { text: 'b', author: userSecond },
+                ];
+
+                this.reinit({
+                    user: userSecond,
+                    editing: {
+                        allowDeleting: true
+                    },
+                    onMessageDeleted,
+                    items,
+                });
+
+                const $bubbles = this.getBubbles();
+                $bubbles.eq(1).trigger('dxcontextmenu');
+
+                const $deleteButton = this.getContextMenuItems().eq(0);
+                $deleteButton.trigger('dxclick');
+
+                const $popup = this.$element.closest('body').find(`.${CHAT_CONFIRMATION_POPUP_WRAPPER_CLASS}`);
+                const $applyButton = $popup.find(`.${DX_BUTTON_CLASSNAME}`).first();
+
+                $applyButton.trigger('dxclick');
+
+                assert.strictEqual(onMessageDeleted.callCount, 1);
+            });
+
+            QUnit.test('should not be called when the Delete button is clicked and user cancels deletion', function(assert) {
+                const onMessageDeleted = sinon.spy();
+
+                const items = [
+                    { text: 'a', author: userFirst },
+                    { text: 'b', author: userSecond },
+                ];
+
+                this.reinit({
+                    user: userSecond,
+                    editing: {
+                        allowDeleting: true
+                    },
+                    onMessageDeleted,
+                    items,
+                });
+
+                const $bubbles = this.getBubbles();
+                $bubbles.eq(1).trigger('dxcontextmenu');
+
+                const $deleteButton = this.getContextMenuItems().eq(0);
+                $deleteButton.trigger('dxclick');
+
+                const $popup = this.$element.closest('body').find(`.${CHAT_CONFIRMATION_POPUP_WRAPPER_CLASS}`);
+                const $applyButton = $popup.find(`.${DX_BUTTON_CLASSNAME}`).last();
+
+                $applyButton.trigger('dxclick');
+
+                assert.strictEqual(onMessageDeleted.callCount, 0);
+            });
+
+            QUnit.test('should get correct arguments after clicking the Apply button in the Delete Confirmation Popup', function(assert) {
+                assert.expect(4);
+
+                const items = [
+                    { text: 'a', author: userFirst },
+                    { text: 'b', author: userSecond },
+                ];
+
+                this.reinit({
+                    user: userSecond,
+                    editing: {
+                        allowDeleting: true
+                    },
+                    onMessageDeleted: (e) => {
+                        const { component, element, message } = e;
+
+                        assert.strictEqual(component, this.instance, 'e.component is correct');
+                        assert.strictEqual(isRenderer(element), !!config().useJQuery, 'e.element uses correct renderer');
+                        assert.strictEqual($(element).is(this.$element), true, 'e.element matches the widget root');
+                        assert.strictEqual(message, items[1], 'e.message is correct');
+                    },
+                    items,
+                });
+
+                const $bubbles = this.getBubbles();
+                $bubbles.eq(1).trigger('dxcontextmenu');
+
+                const $deleteButton = this.getContextMenuItems().eq(0);
+                $deleteButton.trigger('dxclick');
+
+                const $popup = this.$element.closest('body').find(`.${CHAT_CONFIRMATION_POPUP_WRAPPER_CLASS}`);
+                const $applyButton = $popup.find(`.${DX_BUTTON_CLASSNAME}`).first();
+
+                $applyButton.trigger('dxclick');
+            });
+
+            QUnit.test('should allow updating onMessageDeleted at runtime', function(assert) {
+                const items = [
+                    { text: 'a', author: userFirst },
+                    { text: 'b', author: userSecond },
+                ];
+
+                this.reinit({
+                    user: userSecond,
+                    editing: {
+                        allowDeleting: true
+                    },
+                    onMessageDeleted: () => {},
+                    items,
+                });
+
+                const onMessageDeleted = sinon.spy();
+
+                this.instance.option({ onMessageDeleted });
+
+                const $bubbles = this.getBubbles();
+                $bubbles.eq(1).trigger('dxcontextmenu');
+
+                const $deleteButton = this.getContextMenuItems().eq(0);
+                $deleteButton.trigger('dxclick');
+
+                const $popup = this.$element.closest('body').find(`.${CHAT_CONFIRMATION_POPUP_WRAPPER_CLASS}`);
+                const $applyButton = $popup.find(`.${DX_BUTTON_CLASSNAME}`).first();
+
+                $applyButton.trigger('dxclick');
+
+                assert.strictEqual(onMessageDeleted.callCount, 1);
             });
         });
 

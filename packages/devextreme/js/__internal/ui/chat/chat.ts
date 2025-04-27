@@ -5,7 +5,7 @@ import type { DataSourceOptions } from '@js/common/data';
 import registerComponent from '@js/core/component_registrator';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
-import { isDefined, isPromise } from '@js/core/utils/type';
+import { isDefined } from '@js/core/utils/type';
 import DataHelperMixin from '@js/data_helper';
 import type {
   Message,
@@ -14,16 +14,17 @@ import type {
   TypingEndEvent,
   TypingStartEvent,
 } from '@js/ui/chat';
+import { invokeConditionally } from '@ts/core/utils/conditional_invoke';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
 import AlertList from '@ts/ui/chat/alertlist';
+import ConfirmationPopup from '@ts/ui/chat/confirmationpopup';
 import type {
   MessageEnteredEvent as MessageBoxMessageEnteredEvent,
   Properties as MessageBoxProperties,
   TypingStartEvent as MessageBoxTypingStartEvent,
 } from '@ts/ui/chat/messagebox';
 import MessageBox from '@ts/ui/chat/messagebox';
-import MessageDeletePopup from '@ts/ui/chat/messagedeletepopup';
 import type {
   MessageEditingEvent,
   MessageTemplate,
@@ -69,7 +70,9 @@ class Chat extends Widget<ChatProperties> {
 
   _alertList!: AlertList;
 
-  _deleteConfirmationPopup!: MessageDeletePopup;
+  _deleteConfirmationPopup!: ConfirmationPopup;
+
+  _messageToDelete?: Message;
 
   _messageEnteredAction?: (e: Partial<MessageEnteredEvent>) => void;
 
@@ -279,53 +282,32 @@ class Chat extends Widget<ChatProperties> {
     this._messageEditingStartAction?.({ message, event });
   }
 
-  _callCallbackByCanceled(
-    cancelResult: boolean | PromiseLike<boolean>,
-    callback: () => void,
-    cancelCallback?: () => void,
-  ): void {
-    const invokeCallback = (cancel: boolean): void => {
-      const callbackToInvoke = cancel ? cancelCallback : callback;
-
-      callbackToInvoke?.();
-    };
-
-    if (isPromise(cancelResult)) {
-      cancelResult
-        .then(invokeCallback)
-        .catch(callback);
-    } else {
-      invokeCallback(Boolean(cancelResult));
-    }
-  }
-
   _showDeleteConfirmationPopup(e: MessageEditingEvent): void {
+    this._messageToDelete = e.message;
+
     if (!this._deleteConfirmationPopup) {
-      this._deleteConfirmationPopup = new MessageDeletePopup(
+      this._deleteConfirmationPopup = new ConfirmationPopup(
         this.$element(),
         {
-          message: messageLocalization.format('dxChat-editingDeleteConfirmText'),
-          applyButtonLabel: messageLocalization.format('Yes'),
-          cancelButtonLabel: messageLocalization.format('No'),
-          onApplyButtonClick: (message: Message): void => {
+          onApplyButtonClick: (): void => {
             this._messageDeletedAction?.({
               component: this,
               element: this.element(),
-              message,
+              message: this._messageToDelete,
             });
-            this._focusTarget()[0].focus();
-          },
-          onCancelButtonClick: (): void => {
-            this._focusTarget()[0].focus();
           },
         },
         {
           rtlEnabled: this.option().rtlEnabled,
+          onHidden: (): void => {
+            this._messageToDelete = undefined;
+            this._focusTarget()[0].focus();
+          },
         },
       );
     }
 
-    this._deleteConfirmationPopup.show(e.message);
+    this._deleteConfirmationPopup.show();
   }
 
   _messageDeletingHandler(e: MessageEditingEvent): void {
@@ -340,7 +322,7 @@ class Chat extends Widget<ChatProperties> {
 
     this._messageDeletingAction?.(messageDeletingArgs);
 
-    this._callCallbackByCanceled(
+    invokeConditionally(
       messageDeletingArgs.cancel,
       () => {
         this._showDeleteConfirmationPopup(e);
