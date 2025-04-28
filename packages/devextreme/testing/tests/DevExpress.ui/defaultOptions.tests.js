@@ -1377,6 +1377,7 @@ testComponentDefaults(Chat,
         onMessageEntered: undefined,
         onTypingStart: undefined,
         onTypingEnd: undefined,
+        onMessageEditingStart: undefined,
         onMessageDeleting: undefined,
         onMessageDeleted: undefined,
         editing: {

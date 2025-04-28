@@ -628,7 +628,7 @@ QUnit.module('Chat', () => {
             const $deleteButton = this.getContextMenuItems().eq(0);
             $deleteButton.trigger('dxclick');
 
-            const $popup = this.$element.closest('body').find(`.${CHAT_CONFIRMATION_POPUP_WRAPPER_CLASS}`);
+            const $popup = $(`.${CHAT_CONFIRMATION_POPUP_WRAPPER_CLASS}`);
             assert.notStrictEqual($popup.find(`.${RTL_CLASS}`).length, 0, 'rtl class is passed to the popup');
         });
 
@@ -652,7 +652,7 @@ QUnit.module('Chat', () => {
             const $deleteButton = this.getContextMenuItems().eq(0);
             $deleteButton.trigger('dxclick');
 
-            const $popup = this.$element.closest('body').find(`.${CHAT_CONFIRMATION_POPUP_WRAPPER_CLASS}`);
+            const $popup = $(`.${CHAT_CONFIRMATION_POPUP_WRAPPER_CLASS}`);
             const $cancelButton = $popup.find(`.${DX_BUTTON_CLASSNAME}`).last();
 
             const done = assert.async();
@@ -962,7 +962,7 @@ QUnit.module('Chat', () => {
                         $deleteButton.trigger('dxclick');
 
                         setTimeout(() => {
-                            const $popup = this.$element.closest('body').find(`.${CHAT_CONFIRMATION_POPUP_WRAPPER_CLASS}`);
+                            const $popup = $(`.${CHAT_CONFIRMATION_POPUP_WRAPPER_CLASS}`);
                             assert.strictEqual($popup.length === 0, cancel, `cancel = ${cancel}, isPromise = ${isPromise}`);
                             done();
                         });
@@ -995,7 +995,7 @@ QUnit.module('Chat', () => {
                 const $deleteButton = this.getContextMenuItems().eq(0);
                 $deleteButton.trigger('dxclick');
 
-                const $popup = this.$element.closest('body').find(`.${CHAT_CONFIRMATION_POPUP_WRAPPER_CLASS}`);
+                const $popup = $(`.${CHAT_CONFIRMATION_POPUP_WRAPPER_CLASS}`);
                 const $applyButton = $popup.find(`.${DX_BUTTON_CLASSNAME}`).first();
 
                 $applyButton.trigger('dxclick');
@@ -1026,7 +1026,7 @@ QUnit.module('Chat', () => {
                 const $deleteButton = this.getContextMenuItems().eq(0);
                 $deleteButton.trigger('dxclick');
 
-                const $popup = this.$element.closest('body').find(`.${CHAT_CONFIRMATION_POPUP_WRAPPER_CLASS}`);
+                const $popup = $(`.${CHAT_CONFIRMATION_POPUP_WRAPPER_CLASS}`);
                 const $applyButton = $popup.find(`.${DX_BUTTON_CLASSNAME}`).last();
 
                 $applyButton.trigger('dxclick');
@@ -1064,7 +1064,7 @@ QUnit.module('Chat', () => {
                 const $deleteButton = this.getContextMenuItems().eq(0);
                 $deleteButton.trigger('dxclick');
 
-                const $popup = this.$element.closest('body').find(`.${CHAT_CONFIRMATION_POPUP_WRAPPER_CLASS}`);
+                const $popup = $(`.${CHAT_CONFIRMATION_POPUP_WRAPPER_CLASS}`);
                 const $applyButton = $popup.find(`.${DX_BUTTON_CLASSNAME}`).first();
 
                 $applyButton.trigger('dxclick');
@@ -1095,7 +1095,7 @@ QUnit.module('Chat', () => {
                 const $deleteButton = this.getContextMenuItems().eq(0);
                 $deleteButton.trigger('dxclick');
 
-                const $popup = this.$element.closest('body').find(`.${CHAT_CONFIRMATION_POPUP_WRAPPER_CLASS}`);
+                const $popup = $(`.${CHAT_CONFIRMATION_POPUP_WRAPPER_CLASS}`);
                 const $applyButton = $popup.find(`.${DX_BUTTON_CLASSNAME}`).first();
 
                 $applyButton.trigger('dxclick');

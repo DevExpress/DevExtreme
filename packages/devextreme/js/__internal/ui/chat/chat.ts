@@ -87,6 +87,7 @@ class Chat extends Widget<Properties> {
       reloadOnChange: true,
       onTypingStart: undefined,
       onTypingEnd: undefined,
+      onMessageEditingStart: undefined,
       onMessageDeleting: undefined,
       onMessageDeleted: undefined,
     };
