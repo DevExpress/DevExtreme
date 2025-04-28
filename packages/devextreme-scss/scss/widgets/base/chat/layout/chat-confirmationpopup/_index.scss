@@ -1,22 +1,7 @@
-.dx-chat-delete-confirmation-popup-wrapper {
-  .dx-overlay-content {
-    padding: 16px 24px;
-
-    &.dx-popup-flex-height {
-      gap: 16px;
-    }
-
-    .dx-popup-bottom {
-      padding: 0;
-    }
-  }
-
-  .dx-popup-content {
-    padding: 0;
-  }
-
-  .dx-toolbar {
-    padding: 0;
+.dx-chat-confirmation-popup-wrapper {
+  .dx-toolbar.dx-popup-bottom .dx-toolbar-before,
+  .dx-toolbar.dx-popup-bottom .dx-toolbar-after {
+    width: 50%;
 
     .dx-button {
       width: 94px;

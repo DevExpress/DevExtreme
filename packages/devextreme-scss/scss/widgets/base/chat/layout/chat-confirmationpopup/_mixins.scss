@@ -1,0 +1,19 @@
+@mixin chat-confirmation-popup-content(
+  $content-bottom-padding,
+) {
+  .dx-chat-confirmation-popup-wrapper {
+    .dx-popup-content {
+      padding-bottom: $content-bottom-padding;
+    }
+  }
+}
+
+@mixin chat-confirmation-popup-toolbar(
+  $toolbar-padding,
+) {
+  .dx-chat-confirmation-popup-wrapper {
+    .dx-popup-bottom.dx-toolbar {
+      padding: $toolbar-padding;
+    }
+  }
+}

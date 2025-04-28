@@ -47,6 +47,7 @@ $chat-typingindicator-bubble-column-gap: 4px !default;
 $chat-typingindicator-circle-size: null !default;
 $chat-typingindicator-circle-size-center: null !default;
 $chat-typingindicator-circle-border-radius: 999em !default;
+$chat-confirmation-popup-toolbar-padding: null !default;
 
 @if $size == "default" {
   $chat-messagebox-buton-gap: 10px !default;
@@ -72,6 +73,8 @@ $chat-typingindicator-circle-border-radius: 999em !default;
   $chat-typingindicator-bubble-padding-block: 11px !default;
   $chat-typingindicator-bubble-padding-inline: 20px !default;
   $chat-typingindicator-padding: $chat-messagegroup-padding !default;
+
+  $chat-confirmation-popup-toolbar-padding: 0 24px 16px !default;
 }
 
 @else if $size == "compact" {
@@ -98,4 +101,6 @@ $chat-typingindicator-circle-border-radius: 999em !default;
   $chat-typingindicator-bubble-padding-block: 8px !default;
   $chat-typingindicator-bubble-padding-inline: 12px !default;
   $chat-typingindicator-padding: $chat-messagegroup-padding !default;
+
+  $chat-confirmation-popup-toolbar-padding: 0 16px 8px !default;
 }
