@@ -13,6 +13,7 @@ import type dxSelectBox from '@js/ui/select_box';
 import type { Properties as SelectBoxProperties } from '@js/ui/select_box';
 import SelectBox from '@js/ui/select_box';
 import TextArea from '@js/ui/text_area';
+import { current, isMaterial } from '@js/ui/themes';
 import type {
   AICommandExecutor,
   AICommandParamsMap,
@@ -338,7 +339,7 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
       location: 'after',
       widget: 'dxButton',
       options: {
-        width: BUTTON_WIDTH,
+        width: isMaterial(current()) ? 106 : 100,
         type: 'default',
         text: localizationMessage.format('dxHtmlEditor-aiGenerate'),
         stylingMode: 'contained',
