@@ -141,11 +141,11 @@ export type Toolbar = {
 // #region ColumnsController
 
 /**
- * @public
  * @docid
+ * @public
  * @namespace DevExpress.ui.dxCardView
  */
-export interface FieldInfoType { // TODO: rename to FieldInfo
+export type FieldInfoType = { // TODO: rename to FieldInfo
     /**
      * @public
      * @docid
@@ -178,7 +178,7 @@ export interface FieldInfoType { // TODO: rename to FieldInfo
      * @docid
      */
     card: CardInfo;
-}
+};
 
 /**
  * @public

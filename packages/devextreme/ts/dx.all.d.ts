@@ -33040,7 +33040,7 @@ declare module DevExpress.ui.dxCardView {
   /**
    * [descr:FieldInfoType]
    */
-  export interface FieldInfoType {
+  export type FieldInfoType = {
     /**
      * [descr:FieldInfoType.value]
      */
@@ -33065,7 +33065,7 @@ declare module DevExpress.ui.dxCardView {
      * [descr:FieldInfoType.card]
      */
     card: CardInfo;
-  }
+  };
   /**
    * [descr:Paging]
    */
