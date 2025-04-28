@@ -31,10 +31,10 @@ Step caption displayed next to the indicator.
 - [optional](/Documentation/ApiReference/UI_Components/dxStepper/Configuration/items/#optional)
 Adds an *(Optional)* label to the step.
 - [isValid](/Documentation/ApiReference/UI_Components/dxStepper/Configuration/items/#isValid)
-A visual validation indicator.
+Allows you to indicate that user input on the step results in validation errors.
 - [disabled](/Documentation/ApiReference/UI_Components/dxStepper/Configuration/items/#disabled)
 Deactivates the step.
 - [hint](/Documentation/ApiReference/UI_Components/dxStepper/Configuration/items/#hint)
-Adds a hint on hover.
+Tooltip text for the step.
 - [template](/Documentation/ApiReference/UI_Components/dxStepper/Configuration/items/#template)
 Allows you to customize the step. This property overrides all other step properties.
