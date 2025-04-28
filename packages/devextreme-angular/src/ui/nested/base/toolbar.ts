@@ -19,6 +19,13 @@ import { dxTreeListToolbarItem, TreeListPredefinedToolbarItem } from 'devextreme
     template: ''
 })
 export abstract class DxoToolbar extends NestedOption {
+    get disabled(): boolean {
+        return this._getOption('disabled');
+    }
+    set disabled(value: boolean) {
+        this._setOption('disabled', value);
+    }
+
     get items(): Array<PredefinedToolbarItem | any | { cssClass?: string | undefined, disabled?: boolean, html?: string, locateInMenu?: LocateInMenuMode, location?: ToolbarItemLocation, menuItemTemplate?: any, name?: PredefinedToolbarItem | string, options?: any, showText?: ShowTextMode, template?: any, text?: string, visible?: boolean, widget?: ToolbarItemComponent } | dxDataGridToolbarItem | DataGridPredefinedToolbarItem | dxFileManagerToolbarItem | FileManagerPredefinedToolbarItem | dxGanttToolbarItem | GanttPredefinedToolbarItem | dxHtmlEditorToolbarItem | HtmlEditorPredefinedToolbarItem | dxTreeListToolbarItem | TreeListPredefinedToolbarItem> {
         return this._getOption('items');
     }
@@ -26,11 +33,11 @@ export abstract class DxoToolbar extends NestedOption {
         this._setOption('items', value);
     }
 
-    get disabled(): boolean {
-        return this._getOption('disabled');
+    get multiline(): boolean {
+        return this._getOption('multiline');
     }
-    set disabled(value: boolean) {
-        this._setOption('disabled', value);
+    set multiline(value: boolean) {
+        this._setOption('multiline', value);
     }
 
     get visible(): boolean | undefined {
@@ -52,12 +59,5 @@ export abstract class DxoToolbar extends NestedOption {
     }
     set container(value: UserDefinedElement | string) {
         this._setOption('container', value);
-    }
-
-    get multiline(): boolean {
-        return this._getOption('multiline');
-    }
-    set multiline(value: boolean) {
-        this._setOption('multiline', value);
     }
 }

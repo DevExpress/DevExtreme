@@ -1489,7 +1489,10 @@ const To = Object.assign<typeof _componentTo, NestedComponentMeta>(_componentTo,
 // owners:
 // CardView
 type IToolbarProps = React.PropsWithChildren<{
+  disabled?: boolean;
   items?: Array<PredefinedToolbarItem | CardViewToolbarItem>;
+  multiline?: boolean;
+  visible?: boolean | undefined;
 }>
 const _componentToolbar = (props: IToolbarProps) => {
   return React.createElement(NestedOption<IToolbarProps>, {

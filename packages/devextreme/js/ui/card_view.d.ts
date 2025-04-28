@@ -108,6 +108,7 @@ export type ToolbarItem = dxToolbarItem & {
 /**
  * @docid
  * @public
+ * @namespace DevExpress.ui.dxCardView
  */
 export type Toolbar = {
     /**
@@ -116,16 +117,19 @@ export type Toolbar = {
      */
     items?: Array<PredefinedToolbarItem | ToolbarItem>;
     /**
+     * @docid
      * @default undefined
      * @public
      */
     visible?: boolean | undefined;
     /**
+     * @docid
      * @default false
      * @public
      */
     disabled?: boolean;
     /**
+     * @docid
      * @default false
      * @public
      */

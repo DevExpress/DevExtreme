@@ -32,12 +32,12 @@ import { DxiFileSelectionItemComponent } from './file-selection-item-dxi';
     styles: [''],
     providers: [NestedOptionHost],
     inputs: [
-        'items',
         'disabled',
+        'items',
+        'multiline',
         'visible',
         'fileSelectionItems',
-        'container',
-        'multiline'
+        'container'
     ]
 })
 export class DxoToolbarComponent extends DxoToolbar implements OnDestroy, OnInit  {

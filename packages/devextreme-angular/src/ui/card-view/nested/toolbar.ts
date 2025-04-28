@@ -35,11 +35,35 @@ import { DxiCardViewToolbarItemComponent } from './toolbar-item-dxi';
 })
 export class DxoCardViewToolbarComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
+    get disabled(): boolean {
+        return this._getOption('disabled');
+    }
+    set disabled(value: boolean) {
+        this._setOption('disabled', value);
+    }
+
+    @Input()
     get items(): Array<PredefinedToolbarItem | ToolbarItem> {
         return this._getOption('items');
     }
     set items(value: Array<PredefinedToolbarItem | ToolbarItem>) {
         this._setOption('items', value);
+    }
+
+    @Input()
+    get multiline(): boolean {
+        return this._getOption('multiline');
+    }
+    set multiline(value: boolean) {
+        this._setOption('multiline', value);
+    }
+
+    @Input()
+    get visible(): boolean | undefined {
+        return this._getOption('visible');
+    }
+    set visible(value: boolean | undefined) {
+        this._setOption('visible', value);
     }
 
 

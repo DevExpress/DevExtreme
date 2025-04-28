@@ -10550,18 +10550,6 @@ declare module DevExpress.ui {
        */
       showCheckBoxesMode?: DevExpress.common.grids.SelectionColumnDisplayMode;
     };
-    /**
-     * [descr:Toolbar]
-     */
-    export type Toolbar = {
-      /**
-       * [descr:Toolbar.items]
-       */
-      items?: Array<PredefinedToolbarItem | ToolbarItem>;
-      visible?: boolean | undefined;
-      disabled?: boolean;
-      multiline?: boolean;
-    };
 
     /**
      * [descr:WithCardInfo]
@@ -33115,6 +33103,27 @@ declare module DevExpress.ui.dxCardView {
      * [descr:RemoteOperations.grouping]
      */
     grouping?: boolean;
+  };
+  /**
+   * [descr:Toolbar]
+   */
+  export type Toolbar = {
+    /**
+     * [descr:Toolbar.items]
+     */
+    items?: Array<PredefinedToolbarItem | ToolbarItem>;
+    /**
+     * [descr:Toolbar.visible]
+     */
+    visible?: boolean | undefined;
+    /**
+     * [descr:Toolbar.disabled]
+     */
+    disabled?: boolean;
+    /**
+     * [descr:Toolbar.multiline]
+     */
+    multiline?: boolean;
   };
   /**
    * [descr:ToolbarItem]

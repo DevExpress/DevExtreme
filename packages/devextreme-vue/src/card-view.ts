@@ -1819,10 +1819,16 @@ const DxToolbarConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
+    "update:disabled": null,
     "update:items": null,
+    "update:multiline": null,
+    "update:visible": null,
   },
   props: {
-    items: Array as PropType<Array<PredefinedToolbarItem | ToolbarItem>>
+    disabled: Boolean,
+    items: Array as PropType<Array<PredefinedToolbarItem | ToolbarItem>>,
+    multiline: Boolean,
+    visible: Boolean
   }
 };
 
