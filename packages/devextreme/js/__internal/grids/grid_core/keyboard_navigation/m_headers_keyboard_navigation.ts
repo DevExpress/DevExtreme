@@ -168,8 +168,8 @@ const columnHeadersView = (
   }
 
   public getContextMenuItems(options) {
+    let items: any = super.getContextMenuItems(options);
     const { column, rowIndex } = options;
-    const items: any = super.getContextMenuItems(options) ?? [];
     const allowColumnReordering = this.isReorderingEnabled(options?.column);
 
     if (allowColumnReordering) {
@@ -184,6 +184,7 @@ const columnHeadersView = (
           headersKeyboardNavigationController.moveHeader(column, rowIndex, e.itemData?.value);
         };
 
+        items = items ?? [];
         items.push(
           {
             text: keyboardNavigationTexts?.movePrevious,
