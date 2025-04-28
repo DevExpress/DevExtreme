@@ -82,6 +82,7 @@ export type RemoteOperations = {
 
 // #region Toolbar
 
+/** @public */
 export type PredefinedToolbarItem = 'columnChooserButton' | 'searchPanel' | 'addCardButton' | 'selectAllButton' | 'clearSelectionButton';
 
 /**
@@ -689,6 +690,7 @@ export type CardCover<TCardData = unknown> = { // TODO: sync with impl
     template?: template | ((data: CardTemplateData, container: DxElement) => string | UserDefinedElement);
 };
 
+/** @public */
 export type CardHeaderPredefinedToolbarItem = 'selectionCheckBox' | 'updateButton' | 'deleteButton';
 
 /**

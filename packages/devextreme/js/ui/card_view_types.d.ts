@@ -1,6 +1,7 @@
 export {
   Paging,
   RemoteOperations,
+  PredefinedToolbarItem,
   ToolbarItem,
   Toolbar,
   FieldInfoType,
@@ -22,6 +23,7 @@ export {
   CardTemplateData,
   ColumnTemplateData,
   CardCover,
+  CardHeaderPredefinedToolbarItem,
   CardHeaderToolbarItem,
   CardHeader,
   Editing,
