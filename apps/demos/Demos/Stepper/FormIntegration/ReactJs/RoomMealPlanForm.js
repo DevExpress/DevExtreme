@@ -1,6 +1,6 @@
 import React, { memo } from 'react';
 import 'devextreme-react/select-box';
-import { Form, RequiredRule, SimpleItem } from 'devextreme-react/form';
+import { Form, SimpleItem } from 'devextreme-react/form';
 import { mealPlans, roomTypes } from './data.js';
 
 const RoomMealPlanForm = memo(({ formData, validationGroup }) => (

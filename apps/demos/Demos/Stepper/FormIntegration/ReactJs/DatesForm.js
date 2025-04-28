@@ -1,6 +1,6 @@
 import React, { memo } from 'react';
 import 'devextreme-react/date-range-box';
-import { Form, RequiredRule, SimpleItem } from 'devextreme-react/form';
+import { Form, SimpleItem } from 'devextreme-react/form';
 
 const DatesForm = memo(({ formData, validationGroup }) => (
   <React.Fragment>

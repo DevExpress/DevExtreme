@@ -22,15 +22,24 @@ const stepperConfigs = [
     fields: ['text'],
   },
 ];
-
 export default function Steppers({
   orientation, navigationMode, selectOnFocus, rtlMode,
 }) {
   return (
-    <>
-      {stepperConfigs.map(({ id, labelId, title, fields }) => (
-        <div key={id} className="stepper-wrapper">
-          <div id={labelId} className="stepper-label">{title}</div>
+    <React.Fragment>
+      {stepperConfigs.map(({
+        id, labelId, title, fields,
+      }) => (
+        <div
+          key={id}
+          className="stepper-wrapper"
+        >
+          <div
+            id={labelId}
+            className="stepper-label"
+          >
+            {title}
+          </div>
           <Stepper
             id={id}
             elementAttr={{ 'aria-labelledby': labelId }}
@@ -45,11 +54,16 @@ export default function Steppers({
                 acc[field] = step[field];
                 return acc;
               }, {});
-              return <Item key={index} {...itemProps} />;
+              return (
+                <Item
+                  key={index}
+                  {...itemProps}
+                />
+              );
             })}
           </Stepper>
         </div>
       ))}
-    </>
+    </React.Fragment>
   );
 }

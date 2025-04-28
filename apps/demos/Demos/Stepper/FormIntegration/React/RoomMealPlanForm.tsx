@@ -1,6 +1,6 @@
 import React, { FC, memo } from 'react';
 import 'devextreme-react/select-box';
-import { Form, RequiredRule, SimpleItem } from 'devextreme-react/form';
+import { Form, SimpleItem } from 'devextreme-react/form';
 
 import { FormProps } from './types.ts';
 import { mealPlans, roomTypes } from './data.ts';
