@@ -478,7 +478,7 @@ QUnit.module('AIDialog', {}, () => {
             $generateButton.trigger('dxclick');
 
             const param = this.executeStub.firstCall.args[0];
-            assert.strictEqual(param.text, 'Test text. User text', 'prompt included');
+            assert.strictEqual(param.text, 'Text: "Test text". User text', 'prompt included');
         });
 
         QUnit.test('optionSelectBox should be visible if custom command options are passed', function(assert) {

@@ -256,7 +256,7 @@ export const buildAICommandParams = <T extends AICommandNameExtended>(
       );
 
       const params = {
-        text: `${text}. ${userPrompt}`.trim(),
+        text: `Text: "${text}". ${userPrompt}`.trim(),
       };
 
       return params as AICommandParamsMap[T];
