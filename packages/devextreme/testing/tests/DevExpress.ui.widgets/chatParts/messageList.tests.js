@@ -1198,6 +1198,27 @@ QUnit.module('MessageList', () => {
             assert.strictEqual(actions[1].icon, 'trash', 'Delete action has the correct icon');
         });
 
+        QUnit.test('should be hidden after window resize', function(assert) {
+            this.reinit({
+                allowDeleting: () => true,
+                allowUpdating: () => true,
+                items: [
+                    { text: 'a', author: userFirst },
+                    { text: 'b', author: userSecond },
+                ],
+                currentUserId: userSecond.id,
+            });
+
+            const $bubbles = this.getBubbles();
+            $bubbles.eq(1).trigger('dxcontextmenu');
+
+            assert.strictEqual(this.contextMenu.option('visible'), true, 'context menu is visible');
+
+            this.$element.trigger('dxresize');
+
+            assert.strictEqual(this.contextMenu.option('visible'), false, 'context menu is hidden after window resize');
+        });
+
         [
             {
                 editingOptions: {
