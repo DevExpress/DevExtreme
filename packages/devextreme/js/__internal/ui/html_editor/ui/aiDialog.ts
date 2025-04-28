@@ -504,7 +504,7 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
   private _isCommandWithOptionsSelected(): boolean {
     if (
       this._currentCommand
-      && this._commandsMap[this._currentCommand].name === AI_DIALOG_CUSTOM_COMMAND_NAME) {
+      && this._commandsMap[this._currentCommand]?.name === AI_DIALOG_CUSTOM_COMMAND_NAME) {
       return Boolean(this._commandOptionsList?.length);
     }
 
@@ -654,9 +654,11 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
     this._executeAICommand();
   }
 
-  show({
-    currentCommand, currentCommandOption, commandsMap, text, prompt,
-  }: AIDialogShowPayload): Promise<AIDialogResult> | undefined {
+  show(payload: AIDialogShowPayload): Promise<AIDialogResult> | undefined {
+    const {
+      currentCommand, currentCommandOption, commandsMap, text, prompt,
+    } = payload;
+
     this._commandsMap = commandsMap;
     this._currentCommand = currentCommand;
     this._selectedText = text ?? '';

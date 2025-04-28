@@ -61,18 +61,20 @@ const integrationModuleConfig = {
         this.aiDialog = new AIDialog(this.$element, this.aiIntegration, { container: this.$element });
         this.aiDialogPopup = this.aiDialog._popup;
         this.commandsMap = buildDefaultCommandsMap();
-        this.promptStub1 = sinon.spy(this.commandsMap.custom, 'prompt');
+        this.promptStub1 = sinon.spy(this.commandsMap.custom0, 'prompt');
         this.promptStub2 = sinon.spy(this.commandsMap.custom2, 'prompt');
-        this.showDialog = (payload) => showAIDialog(
-            this,
-            {
-                config: {
-                    commandsMap: this.commandsMap,
-                    prompt: this.commandsMap[payload.currentCommand].prompt,
-                    ...payload,
+        this.showDialog = (payload) => {
+            showAIDialog(
+                this,
+                {
+                    config: {
+                        commandsMap: this.commandsMap,
+                        prompt: this.commandsMap[payload.currentCommand].prompt,
+                        ...payload,
+                    },
                 },
-            },
-        );
+            );
+        };
         this.getAbort = () => this.aiDialog._abort;
     },
     afterEach() {
@@ -482,15 +484,28 @@ QUnit.module('AIDialog', {}, () => {
         });
 
         QUnit.test('optionSelectBox should be visible if custom command options are passed', function(assert) {
-            this.showDialog({ currentCommand: 'custom', currentCommandOption: 'custom option' });
+            const commandsMap = {
+                custom0: { id: 'custom0', name: 'custom', text: 'Custom', options: ['Option 1', 'Option 2'] },
+            };
+            this.showDialog({ currentCommand: 'custom0', commandsMap, currentCommandOption: 'Option 1' });
 
             const optionSelectBox = getOptionSelectBoxInstance(this.$element);
 
             assert.ok(optionSelectBox.option('visible'), 'optionSelectBox is visible');
         });
 
+        QUnit.test('option SelectBox hidden for custom without options', function(assert) {
+
+            const optionSelectBox = getOptionSelectBoxInstance(this.$element);
+
+            assert.strictEqual(optionSelectBox.option('visible'), false, 'selectbox is hidden');
+        });
+
         QUnit.test('optionSelectBox should not be visible if custom command options are not passed', function(assert) {
-            this.showDialog({ currentCommand: 'custom2', currentCommandOption: undefined });
+            const commandsMap = {
+                custom2: { id: 'custom2', name: 'custom', text: 'Custom' },
+            };
+            this.showDialog({ currentCommand: 'custom2', commandsMap, currentCommandOption: undefined });
 
             const optionSelectBox = getOptionSelectBoxInstance(this.$element);
 
@@ -508,17 +523,17 @@ QUnit.module('AIDialog', {}, () => {
         });
 
         QUnit.test('custom command should use prompt function with correct param if options are passed', function(assert) {
-            this.showDialog({ currentCommand: 'custom', currentCommandOption: 'option 1' });
+            this.showDialog({ currentCommand: 'custom0', currentCommandOption: 'Option 1' });
 
             const param = this.promptStub1.firstCall.args[0];
             const result = this.promptStub1.firstCall.returnValue;
 
-            assert.strictEqual(param, 'option 1');
-            assert.strictEqual(result, 'Prompt with option 1');
+            assert.strictEqual(param, 'Option 1');
+            assert.strictEqual(result, 'Prompt with Option 1');
         });
     });
 
-    QUnit.module('Request lifecycle management', integrationModuleConfig, () => {
+    QUnit.module('request lifecycle management', integrationModuleConfig, () => {
         QUnit.test('stop should abort request', function(assert) {
             this.showDialog({ currentCommand: 'translate' });
 
@@ -584,7 +599,7 @@ QUnit.module('AIDialog', {}, () => {
         });
     });
 
-    QUnit.module('Dialog state handling', integrationModuleConfig, () => {
+    QUnit.module('dialog state handling', integrationModuleConfig, () => {
         QUnit.test('onComplete should update buttons and remove loadindicator', function(assert) {
             const done = assert.async();
 
@@ -697,20 +712,6 @@ QUnit.module('AIDialog', {}, () => {
                 assert.strictEqual(promptTextAreaInstance.option('disabled'), false, 'not disabled after');
                 done();
             });
-        });
-    });
-
-    QUnit.module('Custom Command Behavior', integrationModuleConfig, () => {
-        QUnit.test('option SelectBox hidden for custom without options', function(assert) {
-            const commandsMap = {
-                custom: { id: 'custom0', name: 'custom', text: 'Custom' },
-            };
-
-            this.showDialog({ currentCommand: 'custom', commandsMap });
-
-            const optionSelectBox = getOptionSelectBoxInstance(this.$element);
-
-            assert.strictEqual(optionSelectBox.option('visible'), false, 'selectbox is hidden');
         });
     });
 });

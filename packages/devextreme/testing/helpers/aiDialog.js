@@ -65,11 +65,11 @@ export const buildDefaultCommandsMap = () => ({
         name: 'askAI',
         text: 'Ask AI',
     },
-    custom: {
-        id: 'custom',
+    custom0: {
+        id: 'custom0',
         name: 'custom',
         text: 'Custom',
-        options: ['option 1', 'option 2'],
+        options: ['Option 1', 'Option 2'],
         prompt: (param) => `Prompt with ${param}`,
     },
     custom2: {
