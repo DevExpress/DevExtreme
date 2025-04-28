@@ -211,6 +211,11 @@ export class HeaderPanel extends ColumnsView {
   }
 
   public hasGroupedColumns(): any {}
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  public getContextMenuItems(options) {
+    return undefined;
+  }
 }
 
 const resizing = (Base: ModuleType<ResizingController>) => class HeaderPanelResizingExtender extends Base {
