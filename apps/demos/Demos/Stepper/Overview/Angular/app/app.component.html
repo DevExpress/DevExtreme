@@ -51,10 +51,7 @@
           [selectOnFocus]="selectOnFocus"
           [rtlEnabled]="rtlMode"
         >
-          <dxi-item
-            *ngFor="let step of steps"
-            [text]="step.text"
-          ></dxi-item>
+          <dxi-item *ngFor="let step of steps" [text]="step.text"></dxi-item>
         </dx-stepper>
       </div>
     </div>
