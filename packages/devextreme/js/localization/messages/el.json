@@ -290,6 +290,9 @@
         "dxScheduler-recurrenceAfter": "Μετά",
         "dxScheduler-recurrenceOn": "On",
 
+        "dxScheduler-recurrenceUntilDateLabel": "End date of repetition",
+        "dxScheduler-recurrenceOccurrenceLabel": "Repeat occurrence(s)",
+
         "dxScheduler-recurrenceRepeatMinutely": "minute(s)",
         "dxScheduler-recurrenceRepeatHourly": "hour(s)",
         "dxScheduler-recurrenceRepeatDaily": "μέρα(ες)",

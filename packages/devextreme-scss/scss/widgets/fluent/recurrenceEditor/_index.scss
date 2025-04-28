@@ -12,7 +12,6 @@
 $fluent-recurrence-number-box-margin: 11px;
 $fluent-recurrence-button-group-padding: 6px;
 $fluent-recurrence-radio-group-margin: 15px;
-$fluent-recurrence-date-box-mergin-left: 23px;
 
 .dx-recurrence-numberbox-interval {
   margin-right: $fluent-recurrence-number-box-margin;
@@ -38,10 +37,9 @@ $fluent-recurrence-date-box-mergin-left: 23px;
 }
 
 .dx-recurrence-datebox-until-date {
-  margin-left: $fluent-recurrence-date-box-mergin-left;
+  margin-top: $fluent-recurrence-until-date-box-top-margin;
 }
 
 .dx-recurrence-numberbox-repeat-count {
-  margin: 0 $fluent-recurrence-number-box-margin 0 $fluent-recurrence-number-box-margin;
+  margin-top: $fluent-recurrence-count-number-box-top-margin;
 }
-

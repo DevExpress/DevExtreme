@@ -290,6 +290,9 @@
         "dxScheduler-recurrenceAfter": "Etter",
         "dxScheduler-recurrenceOn": "På",
 
+        "dxScheduler-recurrenceUntilDateLabel": "End date of repetition",
+        "dxScheduler-recurrenceOccurrenceLabel": "Repeat occurrence(s)",
+
         "dxScheduler-recurrenceRepeatMinutely": "minutt(er)",
         "dxScheduler-recurrenceRepeatHourly": "time(r)",
         "dxScheduler-recurrenceRepeatDaily": "dag(er)",

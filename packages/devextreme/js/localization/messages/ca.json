@@ -290,6 +290,9 @@
         "dxScheduler-recurrenceAfter": "Després",
         "dxScheduler-recurrenceOn": "Al damunt de",
 
+        "dxScheduler-recurrenceUntilDateLabel": "End date of repetition",
+        "dxScheduler-recurrenceOccurrenceLabel": "Repeat occurrence(s)",
+
         "dxScheduler-recurrenceRepeatMinutely": "Minut (s)",
         "dxScheduler-recurrenceRepeatHourly": "hora (s)",
         "dxScheduler-recurrenceRepeatDaily": "dia (s)",

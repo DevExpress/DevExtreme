@@ -290,6 +290,9 @@
         "dxScheduler-recurrenceAfter": "Dopo",
         "dxScheduler-recurrenceOn": "Di",
 
+        "dxScheduler-recurrenceUntilDateLabel": "End date of repetition",
+        "dxScheduler-recurrenceOccurrenceLabel": "Repeat occurrence(s)",
+
         "dxScheduler-recurrenceRepeatMinutely": "minuto(u)",
         "dxScheduler-recurrenceRepeatHourly": "ora(e)",
         "dxScheduler-recurrenceRepeatDaily": "giorno(i)",

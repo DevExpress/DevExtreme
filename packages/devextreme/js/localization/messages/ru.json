@@ -290,6 +290,9 @@
         "dxScheduler-recurrenceAfter": "После",
         "dxScheduler-recurrenceOn": "Повторять до",
 
+        "dxScheduler-recurrenceUntilDateLabel": "End date of repetition",
+        "dxScheduler-recurrenceOccurrenceLabel": "Repeat occurrence(s)",
+
         "dxScheduler-recurrenceRepeatMinutely": "минут(минуты)",
         "dxScheduler-recurrenceRepeatHourly": "часов(часа)",
         "dxScheduler-recurrenceRepeatDaily": "дней(дня)",

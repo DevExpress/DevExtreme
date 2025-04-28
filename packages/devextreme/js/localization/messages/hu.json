@@ -290,6 +290,9 @@
         "dxScheduler-recurrenceAfter": "Után",
         "dxScheduler-recurrenceOn": "Ekkor",
 
+        "dxScheduler-recurrenceUntilDateLabel": "End date of repetition",
+        "dxScheduler-recurrenceOccurrenceLabel": "Repeat occurrence(s)",
+
         "dxScheduler-recurrenceRepeatMinutely": "perc(ek)",
         "dxScheduler-recurrenceRepeatHourly": "óra(k)",
         "dxScheduler-recurrenceRepeatDaily": "nap(ok)",

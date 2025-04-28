@@ -290,6 +290,9 @@
         "dxScheduler-recurrenceAfter": "بعد از",
         "dxScheduler-recurrenceOn": "بر",
 
+        "dxScheduler-recurrenceUntilDateLabel": "End date of repetition",
+        "dxScheduler-recurrenceOccurrenceLabel": "Repeat occurrence(s)",
+
         "dxScheduler-recurrenceRepeatMinutely": "دقیقه",
         "dxScheduler-recurrenceRepeatHourly": "ساعت",
         "dxScheduler-recurrenceRepeatDaily": "روز",

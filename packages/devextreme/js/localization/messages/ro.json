@@ -290,6 +290,9 @@
         "dxScheduler-recurrenceAfter": "După",
         "dxScheduler-recurrenceOn": "Pe",
 
+        "dxScheduler-recurrenceUntilDateLabel": "End date of repetition",
+        "dxScheduler-recurrenceOccurrenceLabel": "Repeat occurrence(s)",
+
         "dxScheduler-recurrenceRepeatMinutely": "minute(s)",
         "dxScheduler-recurrenceRepeatHourly": "ore(s)",
         "dxScheduler-recurrenceRepeatDaily": "zile(s)",
