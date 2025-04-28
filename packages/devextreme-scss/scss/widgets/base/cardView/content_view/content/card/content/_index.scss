@@ -48,11 +48,11 @@
     &--highlighted {
       color: $cardview-card-content-field-value-highlight-color;
       background: $cardview-card-content-field-value-highlight-background;
-      border-radius: 5px;
-      padding: 1px 3px;
-      font-weight: 500;
-      border: 2px solid lighten($cardview-card-content-field-value-highlight-background, 15%);
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+      border-radius: $cardview-card-content-field-value-highlight-border-radius;
+      padding: $cardview-card-content-field-value-highlight-padding;
+      font-weight: $cardview-card-content-field-value-highlight-font-weight;
+      border: $cardview-card-content-field-value-highlight-border;
+      box-shadow: $cardview-card-content-field-value-highlight-box-shadow;
     }
   }
 }

@@ -58,6 +58,11 @@ $cardview-fluent-card-background-color: null !default;
 
   $cardview-fluent-card-content-field-value-highlight-color: $base-text-color !default;
   $cardview-fluent-card-content-field-value-highlight-background: $base-warning !default;
+  $cardview-fluent-card-content-field-value-highlight-border: 2px solid lighten($cardview-card-content-field-value-highlight-background, 15%) !default;
+  $cardview-fluent-card-content-field-value-highlight-border-radius: 5px;
+  $cardview-fluent-card-content-field-value-highlight-padding: 1px 3px;
+  $cardview-fluent-card-content-field-value-highlight-font-weight: 500;
+  $cardview-fluent-card-content-field-value-highlight-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
 
   $cardview-fluent-card-cover-background-color: #FFF !default;
 
@@ -88,6 +93,11 @@ $cardview-fluent-card-background-color: null !default;
 
   $cardview-fluent-card-content-field-value-highlight-color: $base-text-color !default;
   $cardview-fluent-card-content-field-value-highlight-background: $base-warning !default;
+  $cardview-fluent-card-content-field-value-highlight-border: 2px solid lighten($cardview-card-content-field-value-highlight-background, 15%) !default;
+  $cardview-fluent-card-content-field-value-highlight-border-radius: 5px;
+  $cardview-fluent-card-content-field-value-highlight-padding: 1px 3px;
+  $cardview-fluent-card-content-field-value-highlight-font-weight: 500;
+  $cardview-fluent-card-content-field-value-highlight-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
 
   $cardview-fluent-card-cover-background-color: #FFF !default;
 
@@ -117,6 +127,11 @@ $cardview-nodata-icon-container-background-color: $cardview-fluent-nodata-icon-c
 
 $cardview-card-content-field-value-highlight-color: $cardview-fluent-card-content-field-value-highlight-color !default;
 $cardview-card-content-field-value-highlight-background: $cardview-fluent-card-content-field-value-highlight-background !default;
+$cardview-card-content-field-value-highlight-border: $cardview-fluent-card-content-field-value-highlight-background !default;
+$cardview-card-content-field-value-highlight-border-radius: $cardview-fluent-card-content-field-value-highlight-border-radius !default;
+$cardview-card-content-field-value-highlight-padding: $cardview-fluent-card-content-field-value-highlight-padding !default;
+$cardview-card-content-field-value-highlight-font-weight: $cardview-fluent-card-content-field-value-highlight-font-weight !default;
+$cardview-card-content-field-value-highlight-box-shadow: $cardview-fluent-card-content-field-value-highlight-box-shadow !default;
 
 $cardview-card-cover-background-color: $cardview-fluent-card-cover-background-color !default;
 
