@@ -1,0 +1,95 @@
+@use "../sizes" as *;
+@use '../../base/cardView/variables' as *;
+@use '../../base/cardView/header_panel/variables' as *;
+@use '../../base/cardView/header_panel/item/variables' as *;
+@use '../../base/cardView/content_view/content/card/variables' as *;
+@use '../../base/cardView/content_view/content/card/header/variables' as *;
+@use '../../base/cardView/content_view/content/card/cover/variables' as *;
+@use '../../base/cardView/content_view/content/card/content/variables' as *;
+@use '../../base/cardView/content_view/content/variables' as *;
+@use '../../base/cardView/content_view/no_data/variables' as *;
+@use '../../base/cardView/column_chooser/variables' as *;
+
+// adduse
+
+$cardview-fluent-sizes-64: null;
+$cardview-fluent-sizes-48: null;
+$cardview-fluent-sizes-40: null;
+$cardview-fluent-paddings-24: null;
+$cardview-fluent-paddings-12: null;
+$cardview-fluent-paddings-8: null;
+$cardview-fluent-paddings-6: null;
+$cardview-fluent-text-size-16: null;
+$cardview-fluent-border-radius-8: null;
+$cardview-fluent-gaps-16: null;
+$cardview-fluent-gaps-24: null;
+
+$cardview-fluent-column-chooser-select-all-item-horizontal-padding: null;
+
+@if $size == "default" {
+  $cardview-fluent-sizes-64: 64px;
+  $cardview-fluent-sizes-48: 48px;
+  $cardview-fluent-sizes-40: 40px;
+  $cardview-fluent-paddings-24: 24px;
+  $cardview-fluent-paddings-12: 12px;
+  $cardview-fluent-paddings-8: 8px;
+  $cardview-fluent-paddings-6: 6px;
+  $cardview-fluent-text-size-16: 16px;
+  $cardview-fluent-border-radius-8: 8px;
+  $cardview-fluent-gaps-16: 16px;
+  $cardview-fluent-gaps-24: 24px;
+
+  $cardview-fluent-column-chooser-select-all-item-horizontal-padding: 14px;
+}
+@else if $size == "compact" {
+  $cardview-fluent-sizes-64: 48px;
+  $cardview-fluent-sizes-48: 32px;
+  $cardview-fluent-sizes-40: 32px;
+  $cardview-fluent-paddings-24: 16px;
+  $cardview-fluent-paddings-12: 8px;
+  $cardview-fluent-paddings-8: 6px;
+  $cardview-fluent-paddings-6: 4px;
+  $cardview-fluent-text-size-16: 14px;
+  $cardview-fluent-border-radius-8: 6px;
+  $cardview-fluent-gaps-16: 12px;
+  $cardview-fluent-gaps-24: 16px;
+
+  $cardview-fluent-column-chooser-select-all-item-horizontal-padding: 12px;
+}
+
+$cardview-border-radius: 16px !default;
+$cardview-gap: $cardview-fluent-gaps-24 !default;
+$cardview-padding: $cardview-fluent-paddings-24 !default;
+
+$cardview-headerpanel-content-gap: 8px !default;
+
+$cardview-header-item-border-width: 1px !default;
+$cardview-header-item-border-radius: 6px !default;
+$cardview-header-item-padding-horizontal: $cardview-fluent-paddings-8 !default;
+$cardview-header-item-padding-vertical: $cardview-fluent-paddings-6 !default;
+$cardview-header-item-icon-size: $fluent-base-icon-size !default;
+
+$cardview-nodata-icon-container-size: $cardview-fluent-sizes-64 !default;
+$cardview-nodata-icon-container-margin: $cardview-fluent-paddings-12 !default;
+$cardview-nodata-icon-size: $cardview-fluent-sizes-40 !default;
+
+$cardview-content-column-gap: $cardview-fluent-gaps-16 !default;
+$cardview-content-row-gap: $cardview-fluent-gaps-16 !default;
+
+$cardview-card-border-size: 1px !default;
+$cardview-card-min-width: 250px !default;
+$cardview-card-border-radius: $cardview-fluent-border-radius-8 !default;
+
+$cardview-card-cover-noimage-icon-size: $cardview-fluent-sizes-48 !default;
+
+$cardview-card-content-padding-vertical: $cardview-fluent-paddings-12 !default;
+$cardview-card-content-padding-horizontal: $cardview-fluent-paddings-12 !default;
+$cardview-card-content-field-gap: 5px !default;
+$cardview-card-content-cell-padding-vertical: $cardview-fluent-paddings-6 !default;
+$cardview-card-content-cell-padding-horizontal: $cardview-fluent-paddings-12 !default;
+
+$cardview-card-header-text-size: $cardview-fluent-text-size-16 !default;
+$cardview-card-header-border-radius: $cardview-fluent-border-radius-8 !default;
+
+$cardview-column-chooser-empty-message-horizontal-padding: $cardview-fluent-paddings-24 !default;
+$cardview-column-chooser-select-all-item-horizontal-padding: $cardview-fluent-column-chooser-select-all-item-horizontal-padding !default;

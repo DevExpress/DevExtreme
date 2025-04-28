@@ -209,6 +209,8 @@
         "dxTreeList-ariaToolbar": "Trælisteværktøjslinje",
         "dxTreeList-editingAddRowToNode": "Tilføj",
 
+        "dxCardView-ariaSearchInGrid": "Search in the card view",
+
         "dxPager-infoText": "Side {0} af {1} ({2} elementer)",
         "dxPager-pagesCountText": "af",
         "dxPager-pageSize": "Elementer per side: {0}",
@@ -352,6 +354,10 @@
         "dxCalendar-selectedDateRangeCount": "Der er {0} valgte datointervaller",
         "dxCalendar-readOnlyLabel": "Skrivebeskyttet kalender",
 
+        "dxCardView-selectAll": "Select all",
+        "dxCardView-clearSelection": "Clear selection",
+        "dxCardView-cardNoImageAriaLabel": "No image",
+
         "dxAvatar-defaultImageAlt": "Avatar",
 
         "dxChat-elementAriaLabel": "Snak",
@@ -366,6 +372,8 @@
         "dxChat-typingMessageTwoUsers": "{0} og {1} skriver...",
         "dxChat-typingMessageThreeUsers": "{0}, {1} og {2} skriver...",
         "dxChat-typingMessageMultipleUsers": "{0} og andre skriver...",
+        "dxChat-editingEditMessage": "Rediger",
+        "dxChat-editingDeleteMessage": "Slet",
 
         "dxColorView-ariaRed": "Rød",
         "dxColorView-ariaGreen": "Grøn",

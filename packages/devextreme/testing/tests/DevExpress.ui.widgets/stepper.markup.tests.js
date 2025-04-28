@@ -10,8 +10,8 @@ import {
     STEPPER_HORIZONTAL_ORIENTATION_CLASS,
     STEP_INDICATOR_CLASS,
     STEP_TEXT_CLASS,
+    STEP_CAPTION_CLASS,
     STEP_LABEL_CLASS,
-    STEP_TITLE_CLASS,
     STEP_OPTIONAL_MARK_CLASS,
 } from '__internal/ui/stepper/stepper';
 import {
@@ -209,10 +209,10 @@ QUnit.module('Stepper markup', moduleConfig, () => {
         assert.strictEqual($stepText.children().eq(0).hasClass(`${ICON_CLASS}-${icon}`), true);
     });
 
-    QUnit.test(`Step content should contain step title with ${STEP_TITLE_CLASS} class if title option is set`, function(assert) {
+    QUnit.test(`Step content should contain step label with ${STEP_LABEL_CLASS} class if label option is set`, function(assert) {
         this.reinit({
             items: [{
-                title: 'test',
+                label: 'test',
             }],
         });
 
@@ -220,9 +220,9 @@ QUnit.module('Stepper markup', moduleConfig, () => {
         const $stepLabel = $stepContent.children().eq(1);
 
         assert.strictEqual($stepContent.children().length, 2);
-        assert.strictEqual($stepLabel.hasClass(STEP_LABEL_CLASS), true);
+        assert.strictEqual($stepLabel.hasClass(STEP_CAPTION_CLASS), true);
         assert.strictEqual($stepLabel.children().length, 1);
-        assert.strictEqual($stepLabel.children().eq(0).hasClass(STEP_TITLE_CLASS), true);
+        assert.strictEqual($stepLabel.children().eq(0).hasClass(STEP_LABEL_CLASS), true);
     });
 
     QUnit.test(`Step content should contain step optional mark with ${STEP_OPTIONAL_MARK_CLASS} class if optional=true`, function(assert) {
@@ -236,15 +236,15 @@ QUnit.module('Stepper markup', moduleConfig, () => {
         const $stepLabel = $stepContent.children().eq(1);
 
         assert.strictEqual($stepContent.children().length, 2);
-        assert.strictEqual($stepLabel.hasClass(STEP_LABEL_CLASS), true);
+        assert.strictEqual($stepLabel.hasClass(STEP_CAPTION_CLASS), true);
         assert.strictEqual($stepLabel.children().length, 1);
         assert.strictEqual($stepLabel.children().eq(0).hasClass(STEP_OPTIONAL_MARK_CLASS), true);
     });
 
-    QUnit.test('Step content should contain step title and optional mark if both set', function(assert) {
+    QUnit.test('Step content should contain step label and optional mark if both set', function(assert) {
         this.reinit({
             items: [{
-                title: 'test',
+                label: 'test',
                 optional: true,
             }],
         });
@@ -253,13 +253,13 @@ QUnit.module('Stepper markup', moduleConfig, () => {
         const $stepLabel = $stepContent.children().eq(1);
 
         assert.strictEqual($stepContent.children().length, 2);
-        assert.strictEqual($stepLabel.hasClass(STEP_LABEL_CLASS), true);
+        assert.strictEqual($stepLabel.hasClass(STEP_CAPTION_CLASS), true);
         assert.strictEqual($stepLabel.children().length, 2);
-        assert.strictEqual($stepLabel.children().eq(0).hasClass(STEP_TITLE_CLASS), true);
+        assert.strictEqual($stepLabel.children().eq(0).hasClass(STEP_LABEL_CLASS), true);
         assert.strictEqual($stepLabel.children().eq(1).hasClass(STEP_OPTIONAL_MARK_CLASS), true);
     });
 
-    QUnit.test(`Step content should update ${STEP_TITLE_CLASS} class after change title option at runtime`, function(assert) {
+    QUnit.test(`Step content should update ${STEP_LABEL_CLASS} class after change label option at runtime`, function(assert) {
         this.reinit({
             items: [{}],
         });
@@ -268,21 +268,21 @@ QUnit.module('Stepper markup', moduleConfig, () => {
 
         assert.strictEqual($stepContentBeforeChange.children().length, 1);
 
-        this.instance.option('items[0].title', 'Test title');
+        this.instance.option('items[0].label', 'Test label');
 
         const $stepContent = this.getStepByIndex(0).find(`.${STEP_CONTENT_CLASS}`);
         const $stepLabel = $stepContent.children().eq(1);
 
         assert.strictEqual($stepContent.children().length, 2);
-        assert.strictEqual($stepLabel.hasClass(STEP_LABEL_CLASS), true);
+        assert.strictEqual($stepLabel.hasClass(STEP_CAPTION_CLASS), true);
         assert.strictEqual($stepLabel.children().length, 1);
-        assert.strictEqual($stepLabel.children().eq(0).hasClass(STEP_TITLE_CLASS), true);
+        assert.strictEqual($stepLabel.children().eq(0).hasClass(STEP_LABEL_CLASS), true);
     });
 
     QUnit.test(`Step content should update ${STEP_OPTIONAL_MARK_CLASS} class after change optional option at runtime`, function(assert) {
         this.reinit({
             items: [{
-                title: 'Test',
+                label: 'Test',
             }],
         });
 
@@ -290,7 +290,7 @@ QUnit.module('Stepper markup', moduleConfig, () => {
         const $stepLabelBeforeChange = $stepContentBeforeChange.children().eq(1);
 
         assert.strictEqual($stepContentBeforeChange.children().length, 2);
-        assert.strictEqual($stepLabelBeforeChange.hasClass(STEP_LABEL_CLASS), true);
+        assert.strictEqual($stepLabelBeforeChange.hasClass(STEP_CAPTION_CLASS), true);
         assert.strictEqual($stepLabelBeforeChange.children().length, 1);
 
         this.instance.option('items[0].optional', true);
@@ -503,7 +503,7 @@ QUnit.module('Step.isValid', moduleConfig, () => {
                 items: [{
                     icon: 'test',
                     text: 'Step 1',
-                    title: 'Step title',
+                    label: 'Step label',
                 }],
             });
 
@@ -544,7 +544,7 @@ QUnit.module('Step.hint', moduleConfig, () => {
         assert.strictEqual(items.eq(4).attr('title'), 'NaN', 'Title is correctly set when hint is NaN');
     });
 
-    QUnit.test('Step title should update when the hint option value changes at runtime', function(assert) {
+    QUnit.test('Step label should update when the hint option value changes at runtime', function(assert) {
         this.reinit({
             items: [{ hint: 'Hint value' }]
         });
@@ -557,7 +557,7 @@ QUnit.module('Step.hint', moduleConfig, () => {
         assert.strictEqual(items.eq(0).attr('title'), 'New hint value', 'Title is updated when hint changes');
     });
 
-    QUnit.test('Step title should be removed when hint is set to undefined or null', function(assert) {
+    QUnit.test('Step label should be removed when hint is set to undefined or null', function(assert) {
         this.reinit({
             items: [{ hint: 'Initial hint' }]
         });

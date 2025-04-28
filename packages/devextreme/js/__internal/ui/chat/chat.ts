@@ -13,6 +13,7 @@ import type {
   TypingEndEvent,
   TypingStartEvent,
 } from '@js/ui/chat';
+import type dxChat from '@js/ui/chat';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
 import AlertList from '@ts/ui/chat/alertlist';
@@ -22,7 +23,11 @@ import type {
   TypingStartEvent as MessageBoxTypingStartEvent,
 } from '@ts/ui/chat/messagebox';
 import MessageBox from '@ts/ui/chat/messagebox';
-import type { MessageTemplate, Properties as MessageListProperties } from '@ts/ui/chat/messagelist';
+import type {
+  MessageEditingEvent,
+  MessageTemplate,
+  Properties as MessageListProperties,
+} from '@ts/ui/chat/messagelist';
 import MessageList from '@ts/ui/chat/messagelist';
 import type { DataChange } from '@ts/ui/collection/collection_widget.base';
 
@@ -42,11 +47,19 @@ class Chat extends Widget<Properties> {
 
   _typingEndAction?: (e: Partial<TypingEndEvent>) => void;
 
+  _messageEditingStartAction?: (e: Partial<MessageEnteredEvent>) => void;
+
+  _messageDeletingAction?: (e: Partial<MessageEnteredEvent>) => void;
+
   _getDefaultOptions(): Properties {
     return {
       ...super._getDefaultOptions(),
       showDayHeaders: true,
       activeStateEnabled: true,
+      editing: {
+        allowUpdating: false,
+        allowDeleting: false,
+      },
       focusStateEnabled: true,
       hoverStateEnabled: true,
       items: [],
@@ -76,6 +89,8 @@ class Chat extends Widget<Properties> {
     this._refreshDataSource();
 
     this._createMessageEnteredAction();
+    this._createMessageEditingStartAction();
+    this._createMessageDeletingAction();
     this._createTypingStartAction();
     this._createTypingEndAction();
   }
@@ -153,6 +168,8 @@ class Chat extends Widget<Properties> {
     const options: MessageListProperties = {
       items,
       currentUserId,
+      allowUpdating: (message: Message): boolean => this._allowEditAction(message),
+      allowDeleting: (message: Message): boolean => this._allowDeleteAction(message),
       messageTemplate: this._getMessageTemplate(),
       showDayHeaders,
       showAvatar,
@@ -162,9 +179,52 @@ class Chat extends Widget<Properties> {
       messageTimestampFormat,
       typingUsers,
       isLoading,
+      onMessageEditingStart: (e) => {
+        this._messageEditingStartHandler(e);
+      },
+      onMessageDeleting: (e) => {
+        this._messageDeletingHandler(e);
+      },
+      onKeyHandled: () => {
+        this.focus();
+      },
     };
 
     return options;
+  }
+
+  protected _allowEditAction(message: Message): boolean {
+    const { editing } = this.option();
+    if (!editing) {
+      return false;
+    }
+
+    const { allowUpdating } = editing;
+
+    if (typeof allowUpdating === 'function') {
+      return allowUpdating({
+        component: this as unknown as dxChat,
+        message,
+      });
+    }
+    return allowUpdating ?? false;
+  }
+
+  protected _allowDeleteAction(message: Message): boolean {
+    const { editing } = this.option();
+    if (!editing) {
+      return false;
+    }
+
+    const { allowDeleting } = editing;
+
+    if (typeof allowDeleting === 'function') {
+      return allowDeleting({
+        component: this as unknown as dxChat,
+        message,
+      });
+    }
+    return allowDeleting ?? false;
   }
 
   _getMessageTemplate(): MessageTemplate {
@@ -184,6 +244,18 @@ class Chat extends Widget<Properties> {
     }
 
     return null;
+  }
+
+  _messageEditingStartHandler(e: MessageEditingEvent): void {
+    const { message, event } = e;
+
+    this._messageEditingStartAction?.({ message, event });
+  }
+
+  _messageDeletingHandler(e: MessageEditingEvent): void {
+    const { message, event } = e;
+
+    this._messageDeletingAction?.({ message, event });
   }
 
   _renderAlertList(): void {
@@ -245,6 +317,20 @@ class Chat extends Widget<Properties> {
   _createMessageEnteredAction(): void {
     this._messageEnteredAction = this._createActionByOption(
       'onMessageEntered',
+      { excludeValidators: ['disabled'] },
+    );
+  }
+
+  _createMessageEditingStartAction(): void {
+    this._messageEditingStartAction = this._createActionByOption(
+      'onMessageEditingStart',
+      { excludeValidators: ['disabled'] },
+    );
+  }
+
+  _createMessageDeletingAction(): void {
+    this._messageDeletingAction = this._createActionByOption(
+      'onMessageDeleting',
       { excludeValidators: ['disabled'] },
     );
   }
@@ -323,6 +409,8 @@ class Chat extends Widget<Properties> {
         this._messageList.option('currentUserId', author?.id);
         break;
       }
+      case 'editing':
+        break;
       case 'items':
         this._messageList.option(name, value);
         this._updateMessageBoxAria();
@@ -336,6 +424,12 @@ class Chat extends Widget<Properties> {
         break;
       case 'onMessageEntered':
         this._createMessageEnteredAction();
+        break;
+      case 'onMessageEditingStart':
+        this._createMessageEditingStartAction();
+        break;
+      case 'onMessageDeleting':
+        this._createMessageDeletingAction();
         break;
       case 'onTypingStart':
         this._createTypingStartAction();

@@ -96,7 +96,6 @@ class DateBox extends DropDownEditor<DateBoxBaseProperties> {
       ...super._getDefaultOptions(),
       type: 'date',
       showAnalogClock: true,
-      // @ts-expect-error ts-error
       value: null,
       // @ts-expect-error ts-error
       displayFormat: null,

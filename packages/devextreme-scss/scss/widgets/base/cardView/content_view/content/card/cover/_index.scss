@@ -1,0 +1,30 @@
+@use './variables' as *;
+@use '../variables' as *;
+
+.dx-card-cover {
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  border-top: $cardview-card-border-size solid $cardview-card-border-color;
+  max-height: var(--dx-cardview-card-cover-max-height);
+  aspect-ratio: var(--dx-cardview-card-cover-ratio);
+  width: 100%;
+  background-color: $cardview-card-cover-background-color;
+
+  &-noimage {
+    background-color: $cardview-card-cover-noimage-background-color;
+    align-items: center;
+
+    .dx-icon-imagethumbnail {
+      font-size: $cardview-card-cover-noimage-icon-size;
+      color: $cardview-card-cover-noimage-icon-color;
+    }
+  }
+}
+
+.dx-card-cover-image {
+  object-fit: contain;
+  width: 100%;
+  height: 100%;
+}
+

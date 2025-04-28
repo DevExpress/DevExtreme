@@ -50,6 +50,8 @@ gridCore.registerModulesOrder([
   'columnsResizingReordering',
   'contextMenu',
   'keyboardNavigation',
+  'headersKeyboardNavigation',
+  'groupPanelKeyboardNavigation',
   'errorHandling',
   'summary',
   'columnFixing',

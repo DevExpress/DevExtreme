@@ -1,0 +1,43 @@
+@use './variables' as *;
+@use '../variables' as *;
+
+.dx-cardview-card-header {
+  .dx-toolbar {
+    padding: 0 12px;
+    border-radius: $cardview-card-header-border-radius;
+
+    .dx-toolbar-label {
+      font-size: $cardview-card-header-text-size;
+    }
+  }
+}
+
+.dx-cardview-card-selection {
+  .dx-toolbar {
+    background-color: $cardview-card-selection-background-color;
+  }
+}
+
+.dx-cardview-select-checkboxes-hidden .dx-cardview-card:not(.dx-cardview-card-selection) .dx-cardview-select-checkbox {
+  .dx-checkbox {
+    display: none;
+  }
+
+  .dx-toolbar-item-content::before {
+    content: '';
+    width: 20px;
+    height: 20px;
+    display: inline-block;
+    pointer-events: none;
+  }
+
+  .dx-toolbar-item-content:hover {
+    &::before {
+      display: none;
+    }
+
+    .dx-checkbox {
+      display: inline-block;
+    }
+  }
+}

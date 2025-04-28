@@ -31,6 +31,7 @@ import DropDownList from 'ui/drop_down_editor/ui.drop_down_list';
 import DropDownMenu from '__internal/ui/toolbar/internal/m_toolbar.menu';
 import TextEditor from 'ui/text_box/ui.text_editor';
 import Gallery from 'ui/gallery';
+import Informer from 'ui/informer';
 import Lookup from 'ui/lookup';
 import LoadIndicator from 'ui/load_indicator';
 import LoadPanel from 'ui/load_panel';
@@ -767,6 +768,19 @@ testComponentDefaults(Popup,
     }
 );
 
+testComponentDefaults(Informer,
+    {},
+    {
+        activeStateEnabled: false,
+        hoverStateEnabled: false,
+        focusStateEnabled: false,
+        contentAlignment: 'center',
+        icon: '',
+        showBackground: true,
+        text: '',
+    }
+);
+
 testComponentDefaults(Overlay,
     {},
     {
@@ -1363,6 +1377,10 @@ testComponentDefaults(Chat,
         onMessageEntered: undefined,
         onTypingStart: undefined,
         onTypingEnd: undefined,
+        editing: {
+            allowUpdating: false,
+            allowDeleting: false,
+        }
     }
 );
 
@@ -1412,6 +1430,8 @@ testComponentDefaults(ChatMessageList,
         isLoading: false,
         dayHeaderFormat: 'shortdate',
         messageTimestampFormat: 'shorttime',
+        allowUpdating: false,
+        allowDeleting: false,
     }
 );
 

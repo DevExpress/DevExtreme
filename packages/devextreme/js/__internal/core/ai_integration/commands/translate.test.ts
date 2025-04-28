@@ -5,7 +5,12 @@ import {
   it,
   jest,
 } from '@jest/globals';
-import type { AIProvider, RequestCallbacks, TranslateCommandParams } from '@js/common/ai-integration';
+import type {
+  AIProvider,
+  RequestCallbacks,
+  TranslateCommandParams,
+  TranslateCommandResult,
+} from '@js/common/ai-integration';
 import { TranslateCommand } from '@ts/core/ai_integration/commands/translate';
 import type { PromptData } from '@ts/core/ai_integration/core/prompt_manager';
 import { PromptManager } from '@ts/core/ai_integration/core/prompt_manager';
@@ -28,7 +33,7 @@ describe('TranslateCommand', () => {
   });
 
   describe('getTemplateName', () => {
-    it('returns name of template correctly', () => {
+    it('should return the name of the corresponding template', () => {
       // @ts-expect-error Access to protected property for a test
       const templateName = command.getTemplateName();
 
@@ -37,24 +42,19 @@ describe('TranslateCommand', () => {
   });
 
   describe('buildPromptData', () => {
-    it('forms PromptData with text and lang in user-section', () => {
+    it('should form PromptData with text in user section and lang in system section', () => {
       // @ts-expect-error Access to protected property for a test
       const promptData: PromptData = command.buildPromptData(params);
 
       expect(promptData).toEqual({
-        system: {
-          lang: 'French',
-        },
-        user: {
-          text: 'text to translate',
-          lang: 'French',
-        },
+        system: { lang: 'French' },
+        user: { text: 'text to translate' },
       });
     });
   });
 
   describe('parseResult', () => {
-    it('returns the string without changes', () => {
+    it('should return the string without changes', () => {
       const response = 'Translated text';
       // @ts-expect-error Access to protected property for a test
       const result = command.parseResult(response);
@@ -64,25 +64,35 @@ describe('TranslateCommand', () => {
   });
 
   describe('execute', () => {
-    it('correctly calls promptManager.buildPrompt and returns the abort function', () => {
-      const callbacks: RequestCallbacks = { onComplete: () => {} };
+    const callbacks: RequestCallbacks<TranslateCommandResult> = { onComplete: () => {} };
 
+    it('promptManager.buildPrompt should be called with parameters containing the passed values', () => {
       const buildPromptSpy = jest.spyOn(promptManager, 'buildPrompt');
+
+      command.execute(params, callbacks);
+
+      expect(buildPromptSpy).toHaveBeenCalledTimes(1);
+      expect(promptManager.buildPrompt).toHaveBeenCalledWith('translate', {
+        system: { lang: 'French' },
+        user: { text: 'text to translate' },
+      });
+    });
+
+    it('promptManager.buildPrompt should should return prompt with passed values', () => {
+      jest.spyOn(promptManager, 'buildPrompt');
+
+      command.execute(params, callbacks);
+
+      expect(promptManager.buildPrompt).toHaveReturnedWith({
+        system: 'Translate the text provided into French. Ensure the translation retains the original meaning and tone. Provide only the translated text in your response, without any additional formatting or commentary.',
+        user: 'text to translate',
+      });
+    });
+
+    it('should call provider.sendRequest once and return the abort function', () => {
       const sendRequestSpy = jest.spyOn(requestManager, 'sendRequest');
 
       const abort = command.execute(params, callbacks);
-
-      expect(buildPromptSpy).toHaveBeenCalledTimes(1);
-
-      expect(promptManager.buildPrompt).toHaveBeenCalledWith('translate', {
-        system: { lang: 'French' },
-        user: { text: 'text to translate', lang: 'French' },
-      });
-
-      expect(promptManager.buildPrompt).toHaveReturnedWith({
-        system: 'You are a translation assistant, who speaks French at a native level.',
-        user: 'Translate "text to translate" to French language.',
-      });
 
       expect(typeof abort).toBe('function');
       expect(sendRequestSpy).toHaveBeenCalledTimes(1);

@@ -32,8 +32,8 @@ export const STEPPER_HORIZONTAL_ORIENTATION_CLASS = 'dx-stepper-horizontal';
 export const STEPPER_VERTICAL_ORIENTATION_CLASS = 'dx-stepper-vertical';
 export const STEP_INDICATOR_CLASS = 'dx-step-indicator';
 export const STEP_TEXT_CLASS = 'dx-step-text';
+export const STEP_CAPTION_CLASS = 'dx-step-caption';
 export const STEP_LABEL_CLASS = 'dx-step-label';
-export const STEP_TITLE_CLASS = 'dx-step-title';
 export const STEP_OPTIONAL_MARK_CLASS = 'dx-step-optional-mark';
 
 export const STEPPER_ITEM_DATA_KEY = 'dxStepperItemData';
@@ -117,13 +117,13 @@ class Stepper extends CollectionWidgetAsync<StepperProperties> {
     return $indicatorElement;
   }
 
-  _getStepTitle(data: Item): dxElementWrapper {
-    const { title } = data;
+  _getStepLabel(data: Item): dxElementWrapper {
+    const { label } = data;
 
-    if (isDefined(title)) {
+    if (isDefined(label)) {
       return $('<div>')
-        .addClass(STEP_TITLE_CLASS)
-        .text(title);
+        .addClass(STEP_LABEL_CLASS)
+        .text(label);
     }
 
     return $();
@@ -143,19 +143,19 @@ class Stepper extends CollectionWidgetAsync<StepperProperties> {
     return $();
   }
 
-  _getStepLabel(data: Item): dxElementWrapper {
-    const $stepTitle = this._getStepTitle(data);
+  _getStepCaption(data: Item): dxElementWrapper {
+    const $stepLabel = this._getStepLabel(data);
     const $stepOptionalMark = this._getStepOptionalMark(data);
 
-    if ($stepTitle.length || $stepOptionalMark.length) {
-      const $stepLabel = $('<div>')
-        .addClass(STEP_LABEL_CLASS);
+    if ($stepLabel.length || $stepOptionalMark.length) {
+      const $stepCaption = $('<div>')
+        .addClass(STEP_CAPTION_CLASS);
 
-      $stepLabel
-        .append($stepTitle)
+      $stepCaption
+        .append($stepLabel)
         .append($stepOptionalMark);
 
-      return $stepLabel;
+      return $stepCaption;
     }
 
     return $();
@@ -163,7 +163,7 @@ class Stepper extends CollectionWidgetAsync<StepperProperties> {
 
   _prepareDefaultItemTemplate(data: Item, $container: dxElementWrapper): void {
     const $stepIndicator = this._getStepIndicator(data);
-    const $stepLabel = this._getStepLabel(data);
+    const $stepLabel = this._getStepCaption(data);
 
     $container
       .append($stepIndicator)
@@ -179,7 +179,7 @@ class Stepper extends CollectionWidgetAsync<StepperProperties> {
         data: Item,
       ) => {
         this._prepareDefaultItemTemplate(data, $container);
-      }, ['text', 'icon', 'title', 'isValid', 'optional'], this.option('integrationOptions.watchMethod')),
+      }, ['text', 'icon', 'label', 'isValid', 'optional'], this.option('integrationOptions.watchMethod')),
     });
   }
 

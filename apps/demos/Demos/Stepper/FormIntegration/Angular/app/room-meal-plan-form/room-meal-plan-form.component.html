@@ -1,0 +1,30 @@
+<p>
+  Review room types that can accommodate your group size and make your
+  selection. You can also choose a meal plan, whether it's breakfast only or
+  full board.
+</p>
+<dx-form
+  [(formData)]="formData"
+  [validationGroup]="validationGroup"
+  [colCount]="2"
+>
+  <dxi-item
+    [isRequired]="true"
+    dataField="roomType"
+    editorType="dxSelectBox"
+    [editorOptions]="roomSelectBoxOptions"
+    [label]="roomLabelOptions"
+  >
+    <dxi-validation-rule type="required"></dxi-validation-rule>
+  </dxi-item>
+
+  <dxi-item
+    [isRequired]="true"
+    dataField="mealPlan"
+    editorType="dxSelectBox"
+    [editorOptions]="mealSelectBoxOptions"
+    [label]="mealLabelOptions"
+  >
+    <dxi-validation-rule type="required"></dxi-validation-rule>
+  </dxi-item>
+</dx-form>

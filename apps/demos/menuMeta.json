@@ -4098,16 +4098,34 @@
       },
       {
         "Name": "Stepper",
+        "Breadcrumb": true,
         "Badge": "New",
         "Equivalents": "dxStepper, dx-stepper, stepper",
         "Demos": [
           {
             "Title": "Overview",
             "Name": "Overview",
+            "Equivalents": "stepper configuration, step settings, step options",
             "Widget": "Stepper",
-            "DemoType": "Web",
-            "Badge": "Roadmap",
-            "RoadmapSurveyUrl": "https://www.devexpress.com/support/surveys/devextreme-roadmap-stepper.xml"
+            "DocUrl": "",
+            "MvcDescription": "",
+            "NetCoreDescription": "",
+            "MvcAdditionalFiles": [],
+            "DemoType": "Web"
+          },
+          {
+            "Title": "Form Integration",
+            "Name": "FormIntegration",
+            "Equivalents": "multi-page form, wizard, multi-steps form, step validation",
+            "DocUrl": "",
+            "Widget": "Stepper",
+            "MvcDescription": "",
+            "NetCoreDescription": "",
+            "MvcAdditionalFiles": [
+              "/Models/SampleData/StepperData.cs",
+              "/ViewModels/StepperViewModel.cs"
+            ],
+            "DemoType": "Web"
           },
           {
             "Title": "Step Template",

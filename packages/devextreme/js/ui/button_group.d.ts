@@ -194,7 +194,7 @@ export interface dxButtonGroupItem extends CollectionWidgetItem {
      * @default 'normal'
      * @public
      */
-    type?: ButtonType;
+    type?: ButtonType | string;
 
     /**
      * @docid

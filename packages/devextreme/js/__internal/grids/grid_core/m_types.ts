@@ -189,6 +189,7 @@ export interface Controllers {
   focus: import('./focus/m_focus').FocusController;
   headerFilter: import('./header_filter/m_header_filter').HeaderFilterController;
   keyboardNavigation: import('./keyboard_navigation/m_keyboard_navigation').KeyboardNavigationController;
+  headersKeyboardNavigation: import('./keyboard_navigation/m_headers_keyboard_navigation').HeadersKeyboardNavigationController;
   resizing: import('./views/m_grid_view').ResizingController;
   selection: import('./selection/m_selection').SelectionController;
   validating: import('./validating/m_validating').ValidatingController;

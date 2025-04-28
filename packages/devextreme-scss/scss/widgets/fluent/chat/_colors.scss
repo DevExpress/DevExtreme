@@ -166,3 +166,7 @@ $chat-typingindicator-circle-bg-color: null !default;
 * $type color
 */
 $chat-typingindicator-bubble-bg-color: $chat-bubble-background-color-secondary !default;
+
+$chat-messagelist-contextmenu-delete-button-color: $base-danger !default;
+$chat-messagelist-contextmenu-delete-button-focused-color: $base-danger !default;
+$chat-messagelist-contextmenu-delete-button-focused-bg: $base-hover-bg !default;

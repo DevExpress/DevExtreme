@@ -31,13 +31,13 @@ import { current as currentTheme, isGeneric } from '@js/ui/themes';
 import MenuBase from '@ts/ui/context_menu/m_menu_base';
 
 const DX_MENU_CLASS = 'dx-menu';
-const DX_MENU_ITEM_CLASS = `${DX_MENU_CLASS}-item`;
+export const DX_MENU_ITEM_CLASS = `${DX_MENU_CLASS}-item`;
 const DX_MENU_ITEM_EXPANDED_CLASS = `${DX_MENU_ITEM_CLASS}-expanded`;
 const DX_MENU_PHONE_CLASS = 'dx-menu-phone-overlay';
 const DX_MENU_ITEMS_CONTAINER_CLASS = `${DX_MENU_CLASS}-items-container`;
 const DX_MENU_ITEM_WRAPPER_CLASS = `${DX_MENU_ITEM_CLASS}-wrapper`;
 const DX_SUBMENU_CLASS = 'dx-submenu';
-const DX_CONTEXT_MENU_CLASS = 'dx-context-menu';
+export const DX_CONTEXT_MENU_CLASS = 'dx-context-menu';
 const DX_HAS_CONTEXT_MENU_CLASS = 'dx-has-context-menu';
 const DX_STATE_DISABLED_CLASS = 'dx-state-disabled';
 const DX_STATE_FOCUSED_CLASS = 'dx-state-focused';
@@ -121,6 +121,8 @@ class ContextMenu extends MenuBase {
       onLeftLastItem: null,
       onCloseRootSubmenu: null,
       onExpandLastSubmenu: null,
+      hideOnParentScroll: true,
+      visualContainer: window,
     });
   }
 
@@ -553,8 +555,9 @@ class ContextMenu extends MenuBase {
       innerOverlay: true,
       hideOnOutsideClick: (e) => this._hideOnOutsideClickHandler(e),
       propagateOutsideClick: true,
-      hideOnParentScroll: true,
+      hideOnParentScroll: this.option('hideOnParentScroll'),
       deferRendering: false,
+      container: this.option('overlayContainer'),
       position: {
         // @ts-expect-error
         at: position.at,
@@ -562,6 +565,8 @@ class ContextMenu extends MenuBase {
         my: position.my,
         of: this._getTarget(),
         collision: 'flipfit',
+        boundary: this.option('visualContainer'),
+        boundaryOffset: this.option('boundaryOffset'),
       },
       shading: false,
       showTitle: false,
@@ -570,7 +575,7 @@ class ContextMenu extends MenuBase {
       onShown: this._overlayShownActionHandler.bind(this),
       onHiding: this._overlayHidingActionHandler.bind(this),
       onHidden: this._overlayHiddenActionHandler.bind(this),
-      visualContainer: window,
+      visualContainer: this.option('visualContainer'),
     };
     // @ts-expect-error
     return overlayOptions;
@@ -974,6 +979,8 @@ class ContextMenu extends MenuBase {
         break;
       case 'closeOnOutsideClick':
       case 'hideOnOutsideClick':
+      case 'hideOnParentScroll':
+      case 'visualContainer':
         break;
       default:
         super._optionChanged(args);

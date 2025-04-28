@@ -1,0 +1,35 @@
+::ng-deep .demo-container {
+  min-height: 580px;
+}
+
+::ng-deep demo-app {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  row-gap: 20px;
+  height: 580px;
+  min-width: 620px;
+}
+
+::ng-deep .content {
+  padding-inline: 40px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  row-gap: 20px;
+}
+
+::ng-deep .nav-panel {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+::ng-deep .current-step {
+  color: var(--dx-color-icon);
+}
+
+::ng-deep .nav-buttons {
+  display: flex;
+  gap: 8px;
+}

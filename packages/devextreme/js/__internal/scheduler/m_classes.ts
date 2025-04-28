@@ -21,6 +21,7 @@ export const APPOINTMENT_CONTENT_CLASSES = {
   APPOINTMENT_TITLE: 'dx-scheduler-appointment-title',
   APPOINTMENT_DATE: 'dx-scheduler-appointment-content-date',
   ALL_DAY_CONTENT: 'dx-scheduler-appointment-content-allday',
+  ARIA_DESCRIPTION: 'dx-scheduler-appointment-aria-description',
   ITEM: 'dx-scheduler-appointment',
   STRIP: 'dx-scheduler-appointment-strip',
 

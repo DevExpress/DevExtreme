@@ -23,8 +23,6 @@
   $chat-alerts-padding-inline,
   $chat-alert-padding-block,
   $chat-alerts-row-gap,
-  $chat-alert-icon-size,
-  $chat-alert-content-column-gap,
 );
 @include chat-messagebox(
   $chat-messagebox-padding,
@@ -71,6 +69,11 @@
   $chat-messagelist-day-header-padding-bottom,
   $chat-messagelist-day-header-first-padding-top,
   $chat-messagelist-day-header-font-size,
+);
+@include chat-messagelist-contextmenu(
+  $chat-messagelist-contextmenu-delete-button-color,
+  $chat-messagelist-contextmenu-delete-button-focused-color,
+  $chat-messagelist-contextmenu-delete-button-focused-bg,
 );
 @include chat-typingindicator(
   $chat-typingindicator-template,

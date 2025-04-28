@@ -262,7 +262,7 @@ const SKIPPED_TESTS = {
     ],
     VectorMap: [
       { demo: 'TooltipHTMLSupport', themes: [THEME.material] },
-    ]
+    ],
   },
   Vue: {
     Common: [
@@ -343,7 +343,7 @@ const SKIPPED_TESTS = {
     ],
     VectorMap: [
       { demo: 'TooltipHTMLSupport', themes: [THEME.material] },
-    ]
+    ],
   },
 };
 

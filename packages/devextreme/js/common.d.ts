@@ -187,6 +187,12 @@ export type DataType = 'string' | 'number' | 'date' | 'boolean' | 'object' | 'da
  * @public
  * @namespace DevExpress.common
  */
+export type DateLike = Date | number | string | null;
+
+/**
+ * @public
+ * @namespace DevExpress.common
+ */
 export type Direction = 'bottom' | 'left' | 'right' | 'top';
 
 /**

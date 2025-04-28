@@ -1,12 +1,12 @@
 import $ from 'jquery';
 
+const AI_DIALOG_CLASS = 'dx-aidialog';
+const AI_DIALOG_CONTROLS_CLASS = 'dx-aidialog-controls';
+const AI_DIALOG_CONTENT_CLASS = 'dx-aidialog-content';
 const DROP_DOWN_BUTTON_CLASS = 'dx-dropdownbutton';
 const BUTTON_CLASS = 'dx-button';
 const LIST_ITEM_CLASS = 'dx-list-item';
 const OVERLAY_CLASS = 'dx-overlay-content';
-const DIALOG_CLASS = 'dx-aidialog';
-const AI_DIALOG_CONTENT_CLASS = 'dx-aidialog-content';
-const AI_DIALOG_CONTROLS_CLASS = 'dx-aidialog-controls';
 const SELECT_BOX_CLASS = 'dx-selectbox';
 const TEXT_AREA_CLASS = 'dx-textarea';
 
@@ -36,7 +36,7 @@ const createCommandsMap = (isBasicCommand) => {
 };
 
 const getDropDownButton = ($container) => {
-    return $container.find(`.${DROP_DOWN_BUTTON_CLASS} .${BUTTON_CLASS}`).eq(0);
+    return $container.find(`.${DROP_DOWN_BUTTON_CLASS} .${BUTTON_CLASS}`);
 };
 
 const getDropDownButtonOption = (index) => {
@@ -44,13 +44,13 @@ const getDropDownButtonOption = (index) => {
 };
 
 const getDialogSelectBoxes = ($container) => {
-    const $wrapper = $container.find(`.${DIALOG_CLASS}`);
+    const $wrapper = $container.find(`.${AI_DIALOG_CLASS}`);
     const $aiContent = $wrapper.find(`.${AI_DIALOG_CONTENT_CLASS}`);
     const $controls = $aiContent.find(`.${AI_DIALOG_CONTROLS_CLASS}`);
     return $controls.find(`.${SELECT_BOX_CLASS}`);
 };
 
-export const showAiDialog = (instance, { isBasicCommand, config } = {}) => {
+export const showAIDialog = (instance, { isBasicCommand, config } = {}) => {
     const commandsMap = createCommandsMap(isBasicCommand);
     const payload = {
         currentCommand: 'translate',
@@ -64,13 +64,20 @@ export const showAiDialog = (instance, { isBasicCommand, config } = {}) => {
 };
 
 export const clickActionButton = (insertionMode) => {
+    const dropDownButtons = getDropDownButton($(`.${AI_DIALOG_CLASS}`));
+
+    if(insertionMode === 'replace') {
+        dropDownButtons.eq(0).trigger(CLICK_EVENT_NAME);
+
+        return;
+    }
+
     const insertionModeToIndexMap = {
-        replace: 0,
-        insertAbove: 1,
-        insertBelow: 2,
+        insertAbove: 0,
+        insertBelow: 1,
     };
 
-    getDropDownButton($(`.${DIALOG_CLASS}`)).trigger(CLICK_EVENT_NAME);
+    dropDownButtons.eq(1).trigger(CLICK_EVENT_NAME);
     getDropDownButtonOption(insertionModeToIndexMap[insertionMode]).trigger(CLICK_EVENT_NAME);
 };
 
@@ -83,11 +90,11 @@ export const getCommandSelectBoxInstance = ($container) => getDialogSelectBoxes(
 export const getOptionSelectBoxInstance = ($container) => getDialogSelectBoxes($container).eq(1).dxSelectBox('instance');
 
 export const setResultText = (value) => {
-    const textAreaInstance = $(`.${TEXT_AREA_CLASS}`).dxTextArea('instance');
+    const textAreaInstance = $(`.${TEXT_AREA_CLASS}`).eq(1).dxTextArea('instance');
     textAreaInstance.option('value', value);
 };
 
-export const getResultText = () => {
-    const textAreaInstance = $(`.${TEXT_AREA_CLASS}`).dxTextArea('instance');
+export const getResultTextAreaValue = () => {
+    const textAreaInstance = $(`.${TEXT_AREA_CLASS}`).eq(1).dxTextArea('instance');
     return textAreaInstance.option('value');
 };

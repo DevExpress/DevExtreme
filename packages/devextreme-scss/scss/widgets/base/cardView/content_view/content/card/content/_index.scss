@@ -1,0 +1,57 @@
+@use './variables' as *;
+@use '../variables' as *;
+
+.dx-cardview-card-content {
+  padding: ($cardview-card-content-padding-vertical - $cardview-card-content-field-gap) $cardview-card-content-padding-horizontal;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  border-spacing: $cardview-card-content-field-gap;
+  width: 100%;
+  border-top: $cardview-card-border-size solid $cardview-card-border-color;
+}
+
+.dx-cardview-field-template {
+  grid-column: span 2;
+}
+
+.dx-cardview-field-caption,
+.dx-cardview-field-value,
+.dx-cardview-field-template {
+  padding: $cardview-card-content-cell-padding-vertical $cardview-card-content-cell-padding-horizontal;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  .dx-cardview-word-wrap-enabled & {
+    white-space: normal;
+  }
+}
+
+.dx-cardview-field-caption {
+  font-weight: 600;
+}
+
+.dx-cardview-field-value {
+  &--text-align-right {
+    text-align: right;
+  }
+
+  &--text-align-left {
+    text-align: left;
+  }
+
+  &--text-align-center {
+    text-align: center;
+  }
+
+  &__text-part {
+    &--highlighted {
+      color: $cardview-card-content-field-value-highlight-color;
+      background: $cardview-card-content-field-value-highlight-background;
+      border-radius: $cardview-card-content-field-value-highlight-border-radius;
+      padding: $cardview-card-content-field-value-highlight-padding;
+      font-weight: $cardview-card-content-field-value-highlight-font-weight;
+      box-shadow: $cardview-card-content-field-value-highlight-box-shadow;
+    }
+  }
+}

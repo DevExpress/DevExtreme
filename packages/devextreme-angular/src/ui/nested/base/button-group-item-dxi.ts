@@ -98,10 +98,10 @@ export abstract class DxiButtonGroupItem extends CollectionNestedOption {
         this._setOption('stylingMode', value);
     }
 
-    get type(): ButtonType {
+    get type(): ButtonType | string {
         return this._getOption('type');
     }
-    set type(value: ButtonType) {
+    set type(value: ButtonType | string) {
         this._setOption('type', value);
     }
 
@@ -159,6 +159,20 @@ export abstract class DxiButtonGroupItem extends CollectionNestedOption {
     }
     set id(value: number | string | undefined) {
         this._setOption('id', value);
+    }
+
+    get isDeleted(): boolean {
+        return this._getOption('isDeleted');
+    }
+    set isDeleted(value: boolean) {
+        this._setOption('isDeleted', value);
+    }
+
+    get isEdited(): boolean {
+        return this._getOption('isEdited');
+    }
+    set isEdited(value: boolean) {
+        this._setOption('isEdited', value);
     }
 
     get timestamp(): Date | number | string {
@@ -259,10 +273,10 @@ export abstract class DxiButtonGroupItem extends CollectionNestedOption {
         this._setOption('itemType', value);
     }
 
-    get label(): { alignment?: HorizontalAlignment, location?: LabelLocation, showColon?: boolean, template?: any, text?: string | undefined, visible?: boolean } {
+    get label(): { alignment?: HorizontalAlignment, location?: LabelLocation, showColon?: boolean, template?: any, text?: string | undefined, visible?: boolean } | string {
         return this._getOption('label');
     }
-    set label(value: { alignment?: HorizontalAlignment, location?: LabelLocation, showColon?: boolean, template?: any, text?: string | undefined, visible?: boolean }) {
+    set label(value: { alignment?: HorizontalAlignment, location?: LabelLocation, showColon?: boolean, template?: any, text?: string | undefined, visible?: boolean } | string) {
         this._setOption('label', value);
     }
 

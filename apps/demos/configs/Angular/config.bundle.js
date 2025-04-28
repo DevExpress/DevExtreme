@@ -33,6 +33,7 @@ const bundleConfig = {
       'devextreme/common/core/environment/*',
       'devextreme/common/core/events/*',
       'devextreme/common/core/localization/*',
+      'devextreme/common/core/localization/globalize/*',
       'devextreme-angular',
       'devextreme-angular/*',
       'devextreme-angular/core/*',

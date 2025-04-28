@@ -39,8 +39,8 @@ import { getPublicElement } from '@ts/core/m_element';
 import type { ActionConfig } from '@ts/core/widget/component';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
-import type CollectionItem from '@ts/ui/collection/m_item';
-import CollectionWidgetItem from '@ts/ui/collection/m_item';
+import type CollectionItem from '@ts/ui/collection/item';
+import CollectionWidgetItem from '@ts/ui/collection/item';
 
 const COLLECTION_CLASS = 'dx-collection';
 const ITEM_CLASS = 'dx-item';

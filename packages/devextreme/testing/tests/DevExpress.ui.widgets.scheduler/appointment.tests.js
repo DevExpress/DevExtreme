@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import { Appointment } from '__internal/scheduler/appointments/m_appointment';
+import { Appointment } from '__internal/scheduler/appointments/appointment/m_appointment';
 import { Deferred } from 'core/utils/deferred';
 import fx from 'common/core/animation/fx';
 
