@@ -60,7 +60,7 @@ $cardview-generic-card-background-color: null !default;
 
   $cardview-generic-card-content-field-value-highlight-color: $base-text-color !default;
   $cardview-generic-card-content-field-value-highlight-background: $base-warning !default;
-  $cardview-generic-card-content-field-value-highlight-border: 2px solid lighten($cardview-card-content-field-value-highlight-background, 15%) !default;
+  $cardview-generic-card-content-field-value-highlight-border: 2px solid lighten($cardview-generic-card-content-field-value-highlight-background, 15%) !default;
   $cardview-generic-card-content-field-value-highlight-border-radius: 5px;
   $cardview-generic-card-content-field-value-highlight-padding: 1px 3px;
   $cardview-generic-card-content-field-value-highlight-font-weight: 500;
@@ -95,7 +95,7 @@ $cardview-generic-card-background-color: null !default;
 
   $cardview-generic-card-content-field-value-highlight-color: $base-text-color !default;
   $cardview-generic-card-content-field-value-highlight-background: $base-warning !default;
-  $cardview-generic-card-content-field-value-highlight-border: 2px solid lighten($cardview-card-content-field-value-highlight-background, 15%) !default;
+  $cardview-generic-card-content-field-value-highlight-border: 2px solid lighten($cardview-generic-card-content-field-value-highlight-background, 15%) !default;
   $cardview-generic-card-content-field-value-highlight-border-radius: 5px;
   $cardview-generic-card-content-field-value-highlight-padding: 1px 3px;
   $cardview-generic-card-content-field-value-highlight-font-weight: 500;
@@ -130,7 +130,7 @@ $cardview-generic-card-background-color: null !default;
 
   $cardview-generic-card-content-field-value-highlight-color: $base-inverted-text-color !default;
   $cardview-generic-card-content-field-value-highlight-background: $base-warning !default;
-  $cardview-generic-card-content-field-value-highlight-border: 2px solid lighten($cardview-card-content-field-value-highlight-background, 15%) !default;
+  $cardview-generic-card-content-field-value-highlight-border: 2px solid lighten($cardview-generic-card-content-field-value-highlight-background, 15%) !default;
   $cardview-generic-card-content-field-value-highlight-border-radius: 5px;
   $cardview-generic-card-content-field-value-highlight-padding: 1px 3px;
   $cardview-generic-card-content-field-value-highlight-font-weight: 500;
