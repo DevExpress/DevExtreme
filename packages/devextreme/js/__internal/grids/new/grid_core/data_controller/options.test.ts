@@ -59,13 +59,13 @@ describe('Options', () => {
         const { store, dataController } = setupForCacheEnabled({
           cacheEnabled: false,
         });
-        expect(store.load).toBeCalledTimes(1);
-
-        dataController.pageIndex.value = 1;
         expect(store.load).toBeCalledTimes(2);
 
-        dataController.pageIndex.value = 0;
+        dataController.pageIndex.value = 1;
         expect(store.load).toBeCalledTimes(3);
+
+        dataController.pageIndex.value = 0;
+        expect(store.load).toBeCalledTimes(4);
       });
     });
 
