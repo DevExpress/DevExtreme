@@ -10416,44 +10416,6 @@ declare module DevExpress.ui {
      */
     export type FocusedCardChanged =
       DevExpress.common.core.events.EventInfo<dxCardView> & WithCardInfo;
-
-    /**
-     * [descr:HeaderPanel]
-     */
-    export type HeaderPanel<TCardData = unknown, TKey = unknown> = {
-      /**
-       * [descr:HeaderPanel.dragging]
-       */
-      dragging?: Pick<
-        dxSortableOptions,
-        | 'dropFeedbackMode'
-        | 'scrollSpeed'
-        | 'scrollSensitivity'
-        | 'onDragChange'
-        | 'onDragEnd'
-        | 'onDragMove'
-        | 'onDragStart'
-        | 'onRemove'
-        | 'onReorder'
-      >;
-      /**
-       * [descr:HeaderPanel.visible]
-       */
-      visible?: boolean;
-      /**
-       * [descr:HeaderPanel.itemTemplate]
-       */
-      itemTemplate?:
-        | template
-        | ((
-            data: ColumnTemplateData<TCardData, TKey>,
-            container: DevExpress.core.DxElement
-          ) => string | DevExpress.core.UserDefinedElement);
-      /**
-       * [descr:HeaderPanel.itemCssClass]
-       */
-      itemCssClass?: string;
-    };
     /**
      * [descr:InitNewCardEvent]
      */
@@ -33065,6 +33027,44 @@ declare module DevExpress.ui.dxCardView {
      * [descr:FieldInfoType.card]
      */
     card: CardInfo;
+  };
+
+  /**
+   * [descr:HeaderPanel]
+   */
+  export type HeaderPanel<TCardData = unknown, TKey = unknown> = {
+    /**
+     * [descr:HeaderPanel.dragging]
+     */
+    dragging?: Pick<
+      dxSortableOptions,
+      | 'dropFeedbackMode'
+      | 'scrollSpeed'
+      | 'scrollSensitivity'
+      | 'onDragChange'
+      | 'onDragEnd'
+      | 'onDragMove'
+      | 'onDragStart'
+      | 'onRemove'
+      | 'onReorder'
+    >;
+    /**
+     * [descr:HeaderPanel.visible]
+     */
+    visible?: boolean;
+    /**
+     * [descr:HeaderPanel.itemTemplate]
+     */
+    itemTemplate?:
+      | template
+      | ((
+          data: ColumnTemplateData<TCardData, TKey>,
+          container: DevExpress.core.DxElement
+        ) => string | DevExpress.core.UserDefinedElement);
+    /**
+     * [descr:HeaderPanel.itemCssClass]
+     */
+    itemCssClass?: string;
   };
   /**
    * [descr:Paging]

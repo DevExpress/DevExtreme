@@ -484,6 +484,7 @@ export type Column<TCardData = unknown, TKey = unknown> = ColumnProperties<TCard
 /**
  * @docid
  * @public
+ * @namespace DevExpress.ui.dxCardView
  */
 export type HeaderPanel<TCardData = unknown, TKey = unknown> = {
     /**
