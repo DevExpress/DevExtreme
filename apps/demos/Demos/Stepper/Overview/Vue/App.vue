@@ -112,7 +112,7 @@ const stepperConfigs = [
   },
 ];
 
-function getItemProps(step: Step, fields: readonly (keyof Step)[]) {
+function getItemProps(step, fields) {
   return fields.reduce((acc, field) => {
     if (field in step) {
       acc[field] = step[field];
