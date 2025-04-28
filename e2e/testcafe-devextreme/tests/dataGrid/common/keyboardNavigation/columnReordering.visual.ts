@@ -70,28 +70,36 @@ const DATA_GRID_SELECTOR = '#container';
       }],
     });
   });
-});
 
-[true, false].forEach((allowColumnReordering) => {
-  test(`The column should ${!allowColumnReordering ? 'not' : ''} be reordered when allowColumnReordering is ${allowColumnReordering}`, async (t) => {
+  test(`reorder column to right via context menu when rtlEnabled = ${rtlEnabled}`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
     const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
-    const firstHeaderCell = dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(0);
+    const contextMenu = dataGrid.getContextMenu();
+    const headerRow = dataGrid.getHeaders().getHeaderRow(0);
+    const firstHeaderCell = headerRow.getHeaderCell(0);
 
-    await t
-      .click(firstHeaderCell.element)
-      .pressKey('ctrl+right');
+    await t.rightClick(firstHeaderCell.element);
 
     await takeScreenshot(
-      `reorder_column_when_allowColumnReordering_is_${allowColumnReordering}`,
+      `reorder_column_to_right_via_context_menu_when_rtlEnabled_=_${rtlEnabled}_1`,
       dataGrid.element,
     );
 
-    await t.expect(compareResults.isValid())
+    await t
+      .click(contextMenu.getItemByText('Move as next'));
+
+    await takeScreenshot(
+      `reorder_column_to_right_via_context_menu_when_rtlEnabled_=_${rtlEnabled}_2`,
+      dataGrid.element,
+    );
+
+    await t
+      .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
   }).before(async () => {
     await createWidget('dxDataGrid', {
-      allowColumnReordering,
+      allowColumnReordering: true,
+      rtlEnabled,
       dataSource: [{
         field1: 'test1',
         field2: 'test2',
@@ -99,6 +107,72 @@ const DATA_GRID_SELECTOR = '#container';
         field4: 'test4',
       }],
     });
+  });
+
+  test(`reorder column to left via context menu when rtlEnabled = ${rtlEnabled}`, async (t) => {
+    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+    const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+    const contextMenu = dataGrid.getContextMenu();
+    const headerRow = dataGrid.getHeaders().getHeaderRow(0);
+    const lastHeaderCell = headerRow.getHeaderCell(3);
+
+    await t.rightClick(lastHeaderCell.element);
+
+    await takeScreenshot(
+      `reorder_column_to_left_via_context_menu_when_rtlEnabled_=_${rtlEnabled}_1`,
+      dataGrid.element,
+    );
+
+    await t
+      .click(contextMenu.getItemByText('Move as previous'));
+
+    await takeScreenshot(
+      `reorder_column_to_left_via_context_menu_when_rtlEnabled_=_${rtlEnabled}_2`,
+      dataGrid.element,
+    );
+
+    await t
+      .expect(compareResults.isValid())
+      .ok(compareResults.errorMessages());
+  }).before(async () => {
+    await createWidget('dxDataGrid', {
+      allowColumnReordering: true,
+      rtlEnabled,
+      dataSource: [{
+        field1: 'test1',
+        field2: 'test2',
+        field3: 'test3',
+        field4: 'test4',
+      }],
+    });
+  });
+});
+
+test('The column should not be reordered when allowColumnReordering is false', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+  const firstHeaderCell = dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(0);
+
+  await t
+    .click(firstHeaderCell.element)
+    .pressKey('ctrl+right');
+
+  await takeScreenshot(
+    'reorder_column_when_allowColumnReordering_is_false',
+    dataGrid.element,
+  );
+
+  await t.expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  await createWidget('dxDataGrid', {
+    allowColumnReordering: false,
+    dataSource: [{
+      field1: 'test1',
+      field2: 'test2',
+      field3: 'test3',
+      field4: 'test4',
+    }],
   });
 });
 
@@ -162,6 +236,32 @@ test('The column should not be reordered when allowColumnReordering is false and
       visible: true,
       allowColumnDragging: true,
     },
+    dataSource: [{
+      field1: 'test1',
+      field2: 'test2',
+      field3: 'test3',
+      field4: 'test4',
+    }],
+  });
+});
+
+test('The context menu should not have items for column reordering when allowColumnReordering is false', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+  const firstHeaderCell = dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(0);
+
+  await t.rightClick(firstHeaderCell.element);
+
+  await takeScreenshot(
+    'reorder_column_via_context_menu_when_allowColumnReordering_is_false',
+    dataGrid.element,
+  );
+
+  await t.expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  await createWidget('dxDataGrid', {
+    allowColumnReordering: false,
     dataSource: [{
       field1: 'test1',
       field2: 'test2',
@@ -530,14 +630,194 @@ test('reorder fixed right column to right when there is a custom command column 
   });
 });
 
+test('reorder fixed left column to right via context menu', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+  const contextMenu = dataGrid.getContextMenu();
+  const firstFixedLeftHeader = dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(0);
+
+  await t.rightClick(firstFixedLeftHeader.element);
+
+  await takeScreenshot(
+    'reorder_fixed_left_column_to_right_via_context_menu_1',
+    dataGrid.element,
+  );
+
+  await t
+    .click(contextMenu.getItemByText('Move as next'));
+
+  await takeScreenshot(
+    'reorder_fixed_left_column_to_right_via_context_menu_2',
+    dataGrid.element,
+  );
+
+  await t.expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  await createWidget('dxDataGrid', {
+    columnWidth: 100,
+    allowColumnReordering: true,
+    dataSource: [{
+      field1: 'test1',
+      field2: 'test2',
+      field3: 'test3',
+      field4: 'test4',
+      field5: 'test5',
+      field6: 'test6',
+      field7: 'test7',
+      field8: 'test8',
+    }],
+    customizeColumns: (columns) => {
+      columns[0].fixed = true;
+      columns[7].fixed = true;
+    },
+  });
+});
+
+test('reorder fixed left column to left via context menu', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+  const contextMenu = dataGrid.getContextMenu();
+  const secondFixedLeftHeader = dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(1);
+
+  await t.rightClick(secondFixedLeftHeader.element);
+
+  await takeScreenshot(
+    'reorder_fixed_left_column_to_left_via_context_menu_1',
+    dataGrid.element,
+  );
+
+  await t
+    .click(contextMenu.getItemByText('Move as previous'));
+
+  await takeScreenshot(
+    'reorder_fixed_left_column_to_left_via_context_menu_2',
+    dataGrid.element,
+  );
+
+  await t.expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  await createWidget('dxDataGrid', {
+    columnWidth: 100,
+    allowColumnReordering: true,
+    dataSource: [{
+      field1: 'test1',
+      field2: 'test2',
+      field3: 'test3',
+      field4: 'test4',
+      field5: 'test5',
+      field6: 'test6',
+      field7: 'test7',
+      field8: 'test8',
+    }],
+    customizeColumns: (columns) => {
+      columns[0].fixed = true;
+      columns[7].fixed = true;
+    },
+  });
+});
+
+test('reorder fixed right column to right via context menu', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+  const contextMenu = dataGrid.getContextMenu();
+  const firstFixedRightHeader = dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(6);
+
+  await t.rightClick(firstFixedRightHeader.element);
+
+  await takeScreenshot(
+    'reorder_fixed_right_column_to_right_via_context_menu_1',
+    dataGrid.element,
+  );
+
+  await t
+    .click(contextMenu.getItemByText('Move as next'));
+
+  await takeScreenshot(
+    'reorder_fixed_right_column_to_right_via_context_menu_2',
+    dataGrid.element,
+  );
+
+  await t.expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  await createWidget('dxDataGrid', {
+    columnWidth: 100,
+    allowColumnReordering: true,
+    dataSource: [{
+      field1: 'test1',
+      field2: 'test2',
+      field3: 'test3',
+      field4: 'test4',
+      field5: 'test5',
+      field6: 'test6',
+      field7: 'test7',
+      field8: 'test8',
+    }],
+    customizeColumns: (columns) => {
+      columns[0].fixed = true;
+      columns[0].fixedPosition = 'right';
+      columns[7].fixed = true;
+      columns[7].fixedPosition = 'right';
+    },
+  });
+});
+
+test('reorder fixed right column to left via context menu', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+  const contextMenu = dataGrid.getContextMenu();
+  const secondFixedRightHeader = dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(7);
+
+  await t.rightClick(secondFixedRightHeader.element);
+
+  await takeScreenshot(
+    'reorder_fixed_right_column_to_left_via_context_menu_1',
+    dataGrid.element,
+  );
+
+  await t
+    .click(contextMenu.getItemByText('Move as previous'));
+
+  await takeScreenshot(
+    'reorder_fixed_right_column_to_left_via_context_menu_2',
+    dataGrid.element,
+  );
+
+  await t.expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  await createWidget('dxDataGrid', {
+    columnWidth: 100,
+    allowColumnReordering: true,
+    dataSource: [{
+      field1: 'test1',
+      field2: 'test2',
+      field3: 'test3',
+      field4: 'test4',
+      field5: 'test5',
+      field6: 'test6',
+      field7: 'test7',
+      field8: 'test8',
+    }],
+    customizeColumns: (columns) => {
+      columns[0].fixed = true;
+      columns[0].fixedPosition = 'right';
+      columns[7].fixed = true;
+      columns[7].fixedPosition = 'right';
+    },
+  });
+});
+
 // Band columns
 test('reorder band column to right', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
-  const firstFixedLeftHeader = dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(1);
+  const secondHeader = dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(1);
 
   await t
-    .click(firstFixedLeftHeader.element)
+    .click(secondHeader.element)
     .pressKey('ctrl+right')
     .pressKey('ctrl+right');
 
@@ -572,10 +852,10 @@ test('reorder band column to right', async (t) => {
 test('reorder band column to left', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
-  const firstFixedLeftHeader = dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(1);
+  const secondHeader = dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(1);
 
   await t
-    .click(firstFixedLeftHeader.element)
+    .click(secondHeader.element)
     .pressKey('ctrl+left')
     .pressKey('ctrl+left');
 
@@ -610,10 +890,10 @@ test('reorder band column to left', async (t) => {
 test('reorder nested column to left', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
-  const firstFixedLeftHeader = dataGrid.getHeaders().getHeaderRow(1).getHeaderCell(1);
+  const nestedSecondHeader = dataGrid.getHeaders().getHeaderRow(1).getHeaderCell(1);
 
   await t
-    .click(firstFixedLeftHeader.element)
+    .click(nestedSecondHeader.element)
     .pressKey('ctrl+left')
     .pressKey('ctrl+left');
 
@@ -648,10 +928,10 @@ test('reorder nested column to left', async (t) => {
 test('reorder nested column to right', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
-  const firstFixedLeftHeader = dataGrid.getHeaders().getHeaderRow(1).getHeaderCell(0);
+  const nestedFirstHeader = dataGrid.getHeaders().getHeaderRow(1).getHeaderCell(0);
 
   await t
-    .click(firstFixedLeftHeader.element)
+    .click(nestedFirstHeader.element)
     .pressKey('ctrl+right')
     .pressKey('ctrl+right');
 
@@ -725,10 +1005,10 @@ test('reorder fixed nested column to right', async (t) => {
 test('reorder fixed nested column to left', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
-  const firstFixedLeftHeader = dataGrid.getHeaders().getHeaderRow(1).getHeaderCell(1);
+  const secondFixedLeftHeader = dataGrid.getHeaders().getHeaderRow(1).getHeaderCell(1);
 
   await t
-    .click(firstFixedLeftHeader.element)
+    .click(secondFixedLeftHeader.element)
     .pressKey('ctrl+left')
     .pressKey('ctrl+left');
 
@@ -755,6 +1035,94 @@ test('reorder fixed nested column to left', async (t) => {
         caption: 'Band Column',
         fixed: true,
         fixedPosition: 'right',
+        columns: ['field2', 'field3'],
+      },
+      'field4',
+    ],
+  });
+});
+
+test('reorder nested column to left via context menu', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+  const contextMenu = dataGrid.getContextMenu();
+  const nestedSecondHeader = dataGrid.getHeaders().getHeaderRow(1).getHeaderCell(1);
+
+  await t.rightClick(nestedSecondHeader.element);
+
+  await takeScreenshot(
+    'reorder_nested_column_to_left_via_context_menu_1',
+    dataGrid.element,
+  );
+
+  await t
+    .click(contextMenu.getItemByText('Move as previous'));
+
+  await takeScreenshot(
+    'reorder_nested_column_to_left_via_context_menu_2',
+    dataGrid.element,
+  );
+
+  await t.expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  await createWidget('dxDataGrid', {
+    columnWidth: 100,
+    allowColumnReordering: true,
+    dataSource: [{
+      field1: 'test1',
+      field2: 'test2',
+      field3: 'test3',
+      field4: 'test4',
+    }],
+    columns: [
+      'field1',
+      {
+        caption: 'Band Column',
+        columns: ['field2', 'field3'],
+      },
+      'field4',
+    ],
+  });
+});
+
+test('reorder nested column to right via context menu', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+  const contextMenu = dataGrid.getContextMenu();
+  const nestedFirstHeader = dataGrid.getHeaders().getHeaderRow(1).getHeaderCell(0);
+
+  await t.rightClick(nestedFirstHeader.element);
+
+  await takeScreenshot(
+    'reorder_nested_column_to_right_via_context_menu_1',
+    dataGrid.element,
+  );
+
+  await t
+    .click(contextMenu.getItemByText('Move as next'));
+
+  await takeScreenshot(
+    'reorder_nested_column_to_right_via_context_menu_2',
+    dataGrid.element,
+  );
+
+  await t.expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  await createWidget('dxDataGrid', {
+    columnWidth: 100,
+    allowColumnReordering: true,
+    dataSource: [{
+      field1: 'test1',
+      field2: 'test2',
+      field3: 'test3',
+      field4: 'test4',
+    }],
+    columns: [
+      'field1',
+      {
+        caption: 'Band Column',
         columns: ['field2', 'field3'],
       },
       'field4',
@@ -929,6 +1297,56 @@ test('reorder a custom command column to left', async (t) => {
       'field3',
       'field4',
       { type: 'selection' },
+    ],
+  });
+});
+
+test('reorder a custom command column to right via context menu', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+  const contextMenu = dataGrid.getContextMenu();
+  const commandHeader = dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(0);
+
+  await t.rightClick(commandHeader.element);
+
+  await takeScreenshot(
+    'reorder_custom_command_column_to_right_via_context_menu_1',
+    dataGrid.element,
+  );
+
+  await t
+    .click(contextMenu.getItemByText('Move as next'));
+
+  await takeScreenshot(
+    'reorder_custom_command_column_to_right_via_context_menu_2',
+    dataGrid.element,
+  );
+
+  await t.expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  await createWidget('dxDataGrid', {
+    columnWidth: 100,
+    allowColumnReordering: true,
+    selection: {
+      mode: 'multiple',
+      allowSelectAll: false,
+      showCheckBoxesMode: 'always',
+    },
+    keyExpr: 'id',
+    dataSource: [{
+      id: 0,
+      field1: 'test1',
+      field2: 'test2',
+      field3: 'test3',
+      field4: 'test4',
+    }],
+    columns: [
+      { type: 'selection' },
+      'field1',
+      'field2',
+      'field3',
+      'field4',
     ],
   });
 });

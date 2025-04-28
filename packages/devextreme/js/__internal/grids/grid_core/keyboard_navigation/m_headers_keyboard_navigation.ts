@@ -1,57 +1,33 @@
+/* eslint-disable max-classes-per-file */
 import {
   isCommandKeyPressed,
 } from '@js/common/core/events/utils/index';
+import messageLocalization from '@js/common/core/localization/message';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { isDefined } from '@js/core/utils/type';
 
-import type { Views } from '../m_types';
+import type { ColumnHeadersView } from '../column_headers/m_column_headers';
+import type { ModuleType, Views } from '../m_types';
 import { StickyPosition } from '../sticky_columns/const';
 import { getColumnFixedPosition } from '../sticky_columns/utils';
-import { Direction } from './const';
+import { CONTEXT_MENU_MOVE_NEXT_ICON, CONTEXT_MENU_MOVE_PREVIOUS_ICON, Direction } from './const';
 import { KeyboardNavigationController as KeyboardNavigationControllerCore } from './m_keyboard_navigation_core';
 
 export class HeadersKeyboardNavigationController extends KeyboardNavigationControllerCore {
   protected _columnHeadersView!: Views['columnHeadersView'];
-
-  private isHeaderValidForReordering(column, direction, rowIndex): boolean {
-    const allowReordering = this._columnHeadersView.isReorderingEnabled(column);
-
-    if (!allowReordering) {
-      return false;
-    }
-
-    const draggableColumns = this.getDraggableColumns(column, rowIndex);
-    const isFirstColumn = column.index === draggableColumns[0].index;
-    const isLastColumn = column.index === draggableColumns[draggableColumns.length - 1].index;
-
-    return direction === Direction.Next ? !isLastColumn : !isFirstColumn;
-  }
 
   private leftRightKeysHandler(e): void {
     const { originalEvent } = e;
 
     if (isCommandKeyPressed(originalEvent)) {
       const $cell = $(originalEvent.target).closest('td');
+      const direction = this.getDirectionByKeyName(e.keyName);
       const rowIndex = this._getRowIndex($cell.parent());
       const column = this._getColumnByCellElement($cell, rowIndex);
-      const direction = this.getDirectionByKeyName(e.keyName);
 
       if (this.isHeaderValidForReordering(column, direction, rowIndex)) {
-        const visibleIndex = this._columnsController.getVisibleIndex(column.index, rowIndex);
-        const newVisibleIndex = this.getNewVisibleIndex(visibleIndex, direction);
-        const newFocusedColumnIndex = direction === Direction.Next
-          ? newVisibleIndex - 1
-          : newVisibleIndex;
-
-        this.isNeedToFocus = true;
-        this.setFocusedCellPosition(rowIndex, newFocusedColumnIndex);
-        this._columnsController.moveColumn(
-          { columnIndex: visibleIndex, rowIndex },
-          { columnIndex: newVisibleIndex, rowIndex },
-          'headers',
-          'headers',
-        );
+        this.moveHeader(column, rowIndex, direction);
       }
       originalEvent?.preventDefault();
     }
@@ -143,10 +119,120 @@ export class HeadersKeyboardNavigationController extends KeyboardNavigationContr
     super.init();
     this._columnHeadersView = this.getView('columnHeadersView');
   }
+
+  public isHeaderValidForReordering(column, direction, rowIndex): boolean {
+    const allowReordering = this._columnHeadersView.isReorderingEnabled(column);
+
+    if (!allowReordering) {
+      return false;
+    }
+
+    const draggableColumns = this.getDraggableColumns(column, rowIndex);
+    const isFirstColumn = column.index === draggableColumns[0].index;
+    const isLastColumn = column.index === draggableColumns[draggableColumns.length - 1].index;
+
+    return direction === Direction.Next ? !isLastColumn : !isFirstColumn;
+  }
+
+  public moveHeader(column, rowIndex, direction) {
+    const visibleIndex = this._columnsController.getVisibleIndex(column.index, rowIndex);
+    const newVisibleIndex = this.getNewVisibleIndex(visibleIndex, direction);
+    const newFocusedColumnIndex = direction === Direction.Next
+      ? newVisibleIndex - 1
+      : newVisibleIndex;
+
+    this.isNeedToFocus = true;
+    this.setFocusedCellPosition(rowIndex, newFocusedColumnIndex);
+    this._columnsController.moveColumn(
+      { columnIndex: visibleIndex, rowIndex },
+      { columnIndex: newVisibleIndex, rowIndex },
+      'headers',
+      'headers',
+    );
+  }
 }
 
+const columnHeadersView = (
+  Base: ModuleType<ColumnHeadersView>,
+) => class ColumnHeadersViewKeyboardNavigationExtender extends Base {
+  private isNeedToFocusHeader = false;
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  protected contextMenuHiddenHandler(e) {
+    const headersKeyboardNavigationController = this.getController('headersKeyboardNavigation');
+
+    if (this.isNeedToFocusHeader) {
+      headersKeyboardNavigationController?.restoreFocus();
+      this.isNeedToFocusHeader = false;
+    }
+  }
+
+  public getContextMenuItems(options) {
+    const { column, rowIndex } = options;
+    const items: any = super.getContextMenuItems(options) ?? [];
+    const allowColumnReordering = this.isReorderingEnabled(options?.column);
+
+    if (allowColumnReordering) {
+      const headersKeyboardNavigationController = this.getController('headersKeyboardNavigation');
+
+      if (headersKeyboardNavigationController) {
+        const keyboardNavigationTexts = this.option('keyboardNavigation.texts');
+        const leftDirection = headersKeyboardNavigationController.getDirectionByKeyName('leftArrow');
+        const rightDirection = headersKeyboardNavigationController.getDirectionByKeyName('rightArrow');
+        const onItemClick = (e) => {
+          this.isNeedToFocusHeader = true;
+          headersKeyboardNavigationController.moveHeader(column, rowIndex, e.itemData?.value);
+        };
+
+        items.push(
+          {
+            text: keyboardNavigationTexts?.movePrevious,
+            value: leftDirection,
+            beginGroup: true,
+            disabled: !headersKeyboardNavigationController.isHeaderValidForReordering(
+              column,
+              leftDirection,
+              rowIndex,
+            ),
+            icon: CONTEXT_MENU_MOVE_PREVIOUS_ICON,
+            onItemClick,
+          },
+          {
+            text: keyboardNavigationTexts?.moveNext,
+            value: rightDirection,
+            disabled: !headersKeyboardNavigationController.isHeaderValidForReordering(
+              column,
+              rightDirection,
+              rowIndex,
+            ),
+            icon: CONTEXT_MENU_MOVE_NEXT_ICON,
+            onItemClick,
+          },
+        );
+      }
+    }
+
+    return items;
+  }
+};
+
 export const headersKeyboardNavigationModule = {
+  defaultOptions() {
+    return {
+      keyboardNavigation: {
+        texts: {
+          moveNext: messageLocalization.format('dxDataGrid-keyboardNavigationMoveNext'),
+          movePrevious: messageLocalization.format('dxDataGrid-keyboardNavigationMovePrevious'),
+        },
+      },
+    };
+  },
   controllers: {
     headersKeyboardNavigation: HeadersKeyboardNavigationController,
+  },
+  extenders: {
+    views: {
+      columnHeadersView,
+    },
   },
 };

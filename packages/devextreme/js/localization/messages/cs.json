@@ -202,6 +202,8 @@
         "dxDataGrid-filterPanelClearFilter": "Smazat",
         "dxDataGrid-filterPanelFilterEnabledHint": "Povolit Filtr",
         "dxDataGrid-masterDetail": "Cell with details",
+        "dxDataGrid-keyboardNavigationMoveNext": "Move as next",
+        "dxDataGrid-keyboardNavigationMovePrevious": "Move as previous",
 
         "dxTreeList-ariaTreeList": "Tree list with {0} rows and {1} columns",
         "dxTreeList-ariaExpandableInstruction": "Press Ctrl + right arrow to expand the focused node and Ctrl + left arrow to collapse it",
