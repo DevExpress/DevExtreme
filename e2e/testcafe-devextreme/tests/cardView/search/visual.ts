@@ -57,7 +57,6 @@ test('highlighted search text', async (t) => {
   dataSource: DATA,
   columns: COLUMNS,
   searchPanel: {
-    highlightSearchText: true,
     visible: true,
     text: 'da',
   },
