@@ -11,6 +11,8 @@
 @use "../fileUploader/sizes" as *;
 @use "../toolbar/sizes" as *;
 @use "../common/mixins" as *;
+@use "../common/sizes" as *;
+@use "../../base/mixins" as *;
 @use "../../base/htmlEditor";
 
 // adduse
@@ -315,5 +317,9 @@
 
   .dx-button {
     min-width: auto;
+  }
+
+  .dx-pending-indicator {
+    @include dx-pending-indicator-centered($generic-pending-indicator-size);
   }
 }

@@ -10,8 +10,10 @@
 @use "../textEditor/colors" as *;
 @use "../toolbar/sizes" as *;
 @use "../common/mixins" as *;
+@use "../common/sizes" as *;
 @use "../fileUploader/sizes" as *;
 @use "../popup/sizes" as *;
+@use "../../base/mixins" as *;
 @use "../../base/htmlEditor";
 
 // adduse
@@ -365,5 +367,9 @@
   .dx-aidialog-content {
     padding: $material-aidialog-content-padding;
     gap: $material-aidialog-content-gap;
+  }
+
+  .dx-pending-indicator {
+    @include dx-pending-indicator-centered($material-invalid-badge-size);
   }
 }

@@ -109,7 +109,9 @@ function getFormatHandlers(module) {
 
 function prepareAITextTrasformHandler(module) {
   return (options): void => {
-    const { command, parentCommand, commandsMap } = options;
+    const {
+      command, parentCommand, commandsMap, prompt,
+    } = options;
 
     const { quill } = module;
     const selection = quill.getSelection();
@@ -121,6 +123,7 @@ function prepareAITextTrasformHandler(module) {
       currentCommandOption: parentCommand ? command : undefined,
       text,
       commandsMap,
+      prompt,
     };
 
     module.editorInstance.showAIDialog(aiDialogConfig)?.done(({
@@ -132,7 +135,7 @@ function prepareAITextTrasformHandler(module) {
       let textToInsert = resultText;
 
       switch (insertionMode) {
-        case 'replace':
+        case 'replace': {
           insertIndex = hasSelection ? selection.index : 0;
           quill.deleteText(
             insertIndex,
@@ -140,16 +143,16 @@ function prepareAITextTrasformHandler(module) {
             SILENT_ACTION,
           );
           break;
-
-        case 'insertAbove':
+        }
+        case 'insertAbove': {
           insertIndex = hasSelection ? selection.index : 0;
           textToInsert = `${resultText}\n`;
           break;
-
-        case 'insertBelow':
+        }
+        case 'insertBelow': {
           insertIndex = hasSelection ? selection.index + selection.length : quill.getLength();
           break;
-
+        }
         default:
           return;
       }
