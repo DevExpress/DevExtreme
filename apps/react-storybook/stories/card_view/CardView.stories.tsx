@@ -461,75 +461,30 @@ export const ColumnChooserSelectModeStory: Story = {
       }
     },
     'columnChooser.height': 300,
-    columns: [
-      {
-        dataField: 'id',
-        allowReordering: false,
-      },
-      {
-        dataField: 'firstName',
-        allowReordering: false,
-        allowHiding: false,
-      },
-      {
-        dataField: 'lastName',
-        showInColumnChooser: false,
-        allowHiding: false,
-      },
-      {
-        dataField: "email",
-        visible: false,
-      },
-      {
-        dataField: "gender",
-      },
-      {
-        dataField: "birthDate",
-      },
-    ]
+    'columnChooser.width': 250,
   },
 }
 
 export const ColumnChooserDragAndDropModeStory: Story = {
   ...DefaultMode,
   name: 'Column chooser \'dragAndDrop\' mode',
-  argTypes: {
-    columns: {
-      control: 'object',
-    }
-  },
   args: {
     ...DefaultMode.args,
     allowColumnReordering: true,
     'columnChooser.enabled': true,
     'columnChooser.mode': 'dragAndDrop',
-    'columnChooser.emptyPanelText': 'Drop a column here',
-    columns: [
-      {
-        dataField: 'id',
-        allowReordering: false,
-      },
-      {
-        dataField: 'firstName',
-        allowReordering: false,
-        allowHiding: false,
-      },
-      {
-        dataField: 'lastName',
-        showInColumnChooser: false,
-        allowHiding: false,
-      },
-      {
-        dataField: "email",
-        visible: false,
-      },
-      {
-        dataField: "gender",
-      },
-      {
-        dataField: "birthDate",
-      },      
-    ]
+    'columnChooser.title': 'Column chooser',
+    'columnChooser.sortOrder': undefined,
+    'columnChooser.search': {
+      enabled: true,
+      timeout: 0,
+      editorOptions: {
+        placeholder: 'search columns',
+      }
+    },
+    'columnChooser.height': 300,
+    'columnChooser.width': 250,
+    'columnChooser.emptyPanelText': 'Drag a column here to hide it',
   }
 }
 
