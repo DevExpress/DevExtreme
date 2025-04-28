@@ -28,7 +28,7 @@ const stepperConfigs = [
     id: 'customText',
     labelId: 'customTextLabel',
     title: 'Custom Text',
-    fields: ['text', 'optional'] as const,
+    fields: ['text'] as const,
   },
 ];
 
