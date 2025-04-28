@@ -157,3 +157,38 @@ test('Filter Row\'s Reset button does not work after a custom filter is set in F
     ],
   });
 });
+
+// T1287288
+test('Focus overlay should be visible in filter row when focusedRowEnabled is enabled (Fluent SaaS)', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const dataGrid = new DataGrid('#container');
+  const filterEditor = dataGrid.getFilterEditor(1, FilterTextBox);
+
+  await t
+    .click(dataGrid.getDataCell(0, 0).element)
+    .click(filterEditor.input)
+    // assert
+    .expect(filterEditor.input.focused)
+    .ok()
+    .expect(await takeScreenshot('filter-row-focus-overlay.png', dataGrid.element))
+    .ok()
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  await changeTheme('fluent.blue.light');
+
+  return createWidget('dxDataGrid', {
+    dataSource: [
+      { ID: 1, Field: 'Item 1' },
+      { ID: 2, Field: 'Item 2' },
+      { ID: 3, Field: 'Item 3' },
+    ],
+    keyExpr: 'ID',
+    focusedRowEnabled: true,
+    filterRow: { visible: true },
+    showBorders: true,
+    columns: ['ID', 'Field'],
+  });
+}).after(async () => {
+  await changeTheme('generic.light');
+});

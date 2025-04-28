@@ -21,6 +21,7 @@ const ROW_FOCUSED_CLASS = 'dx-row-focused';
 const FOCUSED_ROW_SELECTOR = `.dx-row.${ROW_FOCUSED_CLASS}`;
 const TABLE_POSTFIX_CLASS = 'table';
 const CELL_FOCUS_DISABLED_CLASS = 'dx-cell-focus-disabled';
+const FILTER_ROW_CLASS = 'filter-row';
 
 export class FocusController extends core.ViewController {
   // TODO getController
@@ -507,7 +508,9 @@ const editorFactory = (Base: ModuleType<EditorFactory>) => class FocusEditorFact
     const focusedRowEnabled = this.option('focusedRowEnabled');
     let $cell;
 
-    if (!focusedRowEnabled || !this._keyboardNavigationController?.isRowFocusType() || this._editingController.isEditing()) {
+    const isFilterRow = !!$element.closest(`.${this.addWidgetPrefix(FILTER_ROW_CLASS)}`).length;
+
+    if (!focusedRowEnabled || !this._keyboardNavigationController?.isRowFocusType() || this._editingController.isEditing() || isFilterRow) {
       super.renderFocusOverlay($element, isHideBorder);
     } else if (focusedRowEnabled) {
       const isRowElement = this._keyboardNavigationController._getElementType($element) === 'row';
