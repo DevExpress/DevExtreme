@@ -12,9 +12,7 @@
       editor-type="dxDateRangeBox"
       :editor-options="dateRangeBoxOptions"
       :label="labelOptions"
-    >
-      <DxRequiredRule/>
-    </DxSimpleItem>
+    />
   </DxForm>
 </template>
 

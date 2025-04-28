@@ -23,9 +23,7 @@ const DatesForm = memo(({ formData, validationGroup }) => (
           elementAttr: { id: 'datesPicker' },
         }}
         label={{ visible: false }}
-      >
-        <RequiredRule />
-      </SimpleItem>
+      />
     </Form>
   </React.Fragment>
 ));

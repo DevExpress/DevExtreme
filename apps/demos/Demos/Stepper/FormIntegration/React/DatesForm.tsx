@@ -20,9 +20,7 @@ const DatesForm: FC<FormProps> = memo(({ formData, validationGroup }) => (
           elementAttr: { id: 'datesPicker' },
         }}
         label={{ visible: false }}
-      >
-        <RequiredRule />
-      </SimpleItem>
+      />
     </Form>
   </>
 ));

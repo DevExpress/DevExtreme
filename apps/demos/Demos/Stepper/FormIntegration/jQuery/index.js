@@ -145,7 +145,6 @@ $(() => {
         },
         isRequired: true,
         label: { visible: false },
-        validationRules: [{ type: 'required' }],
       }],
     }),
   );
@@ -202,7 +201,6 @@ $(() => {
     const getSelectBoxOptions = (options) => ({
       editorType: 'dxSelectBox',
       isRequired: true,
-      validationRules: [{ type: 'required' }],
       ...options,
       label: {
         location: 'top',

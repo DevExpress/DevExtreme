@@ -21,9 +21,7 @@ const RoomMealPlanForm: FC<FormProps> = memo(({ formData, validationGroup }) => 
           items: roomTypes,
           elementAttr: { id: 'roomType' },
       }}
-      >
-        <RequiredRule />
-      </SimpleItem>
+      />
       <SimpleItem
         dataField='mealPlan'
         isRequired
@@ -33,9 +31,7 @@ const RoomMealPlanForm: FC<FormProps> = memo(({ formData, validationGroup }) => 
           items: mealPlans,
           elementAttr: { id: 'mealPlan' },
       }}
-      >
-        <RequiredRule />
-      </SimpleItem>
+      />
     </Form>
   </>
 ));

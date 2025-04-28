@@ -13,9 +13,7 @@
       editor-type="dxSelectBox"
       :editor-options="roomSelectBoxOptions"
       :label="roomLabelOptions"
-    >
-      <DxRequiredRule/>
-    </DxSimpleItem>
+    />
 
     <DxSimpleItem
       :is-required="true"
@@ -23,9 +21,7 @@
       editor-type="dxSelectBox"
       :editor-options="mealSelectBoxOptions"
       :label="mealLabelOptions"
-    >
-      <DxRequiredRule/>
-    </DxSimpleItem>
+    />
   </DxForm>
 </template>
 
