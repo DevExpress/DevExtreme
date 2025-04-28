@@ -44,6 +44,22 @@ export class DxiChatItemComponent extends CollectionNestedOption {
     }
 
     @Input()
+    get isDeleted(): boolean {
+        return this._getOption('isDeleted');
+    }
+    set isDeleted(value: boolean) {
+        this._setOption('isDeleted', value);
+    }
+
+    @Input()
+    get isEdited(): boolean {
+        return this._getOption('isEdited');
+    }
+    set isEdited(value: boolean) {
+        this._setOption('isEdited', value);
+    }
+
+    @Input()
     get text(): string {
         return this._getOption('text');
     }

@@ -205,7 +205,9 @@ export class HeaderPanel extends ColumnsView {
   /**
    * @extended: DataGrid's grouping
    */
-  protected allowDragging() {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  public allowDragging(column): boolean {
+    return false;
   }
 
   public hasGroupedColumns(): any {}

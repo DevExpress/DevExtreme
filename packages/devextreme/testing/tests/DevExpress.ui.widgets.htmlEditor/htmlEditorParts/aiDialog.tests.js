@@ -24,9 +24,7 @@ const SELECT_BOX_CLASS = 'dx-selectbox';
 const moduleConfig = {
     beforeEach: function() {
         this.$element = $('#htmlEditor');
-
         this.aiDialog = new AIDialog(this.$element, {}, { container: this.$element });
-
         this.aiDialogPopup = this.aiDialog._popup;
 
         this.setDialogState = (state) => {
@@ -60,8 +58,8 @@ QUnit.module('AIDialog', moduleConfig, () => {
         assert.strictEqual(optionSelectBox.option('value'), 'english', 'correct option selected');
         assert.deepEqual(optionSelectBox.option('items'), ['english', 'german'], 'option SelectBox contains correct items');
         assert.strictEqual($textAreas.length, 2, 'TextAreas are rendered');
-        assert.strictEqual(resultTextAreaInstance.option('value'), 'Test text', 'result TextArea contains correct text');
-        assert.strictEqual(promptTextAreaInstance.option('value'), undefined, 'prompt TextArea contains correct text');
+        assert.strictEqual(resultTextAreaInstance.option('value'), '', 'result TextArea contains empty text');
+        assert.strictEqual(promptTextAreaInstance.option('value'), undefined, 'prompt TextArea contains empty text');
         assert.strictEqual(promptTextAreaInstance.option('visible'), false, 'prompt TextArea is hidden by default');
     });
 
@@ -122,7 +120,7 @@ QUnit.module('AIDialog', moduleConfig, () => {
             const hideSpy = sinon.spy(this.aiDialog, 'hide');
 
             showAIDialog(this).done(({ resultText, event }) => {
-                assert.strictEqual(resultText, 'Test text', 'resolved text is correct');
+                assert.strictEqual(resultText, '', 'resolved text is empty');
                 assert.strictEqual(event.itemData.id, mode, `operation is correct: ${mode}`);
                 assert.strictEqual(hideSpy.calledOnce, true, 'hide called');
                 done();
@@ -139,8 +137,13 @@ QUnit.module('AIDialog', moduleConfig, () => {
         }
 
         const clipboardStub = sinon.stub(navigator.clipboard, 'writeText');
+        const resultTextAreaInstance = this.$element
+            .find(`.${TEXT_AREA_CLASS}`).eq(1)
+            .dxTextArea('instance');
 
         showAIDialog(this);
+
+        resultTextAreaInstance.option({ value: 'Test text' });
 
         const $copyButton = findButtonByText(this.$element, 'Copy');
         $copyButton.trigger('dxclick');
@@ -184,10 +187,10 @@ QUnit.module('AIDialog', moduleConfig, () => {
         assert.strictEqual(toolbarItems.length, 4, '4 toolbar items rendered');
 
         const dropDownItem = toolbarItems.find(item => item.widget === 'dxDropDownButton');
-        assert.deepEqual(dropDownItem.options.items.map(i => i.id), ['replace', 'insertAbove', 'insertBelow'], 'DropDown has correct items');
+        assert.deepEqual(dropDownItem.options.items.map(i => i.id), ['insertAbove', 'insertBelow'], 'DropDown has correct items');
     });
 
-    QUnit.test('Should disable buttons while loading', function(assert) {
+    QUnit.test('Should display only stop button while loading', function(assert) {
         showAIDialog(this, {
             config: { currentCommand: 'translate' }
         });
@@ -195,13 +198,9 @@ QUnit.module('AIDialog', moduleConfig, () => {
         this.setDialogState('generating');
 
         const toolbarButtonItems = this.aiDialogPopup.option('toolbarItems').filter(item => ['dxButton', 'dxDropDownButton'].includes(item.widget));
-        const stopButtonItem = toolbarButtonItems.find(item => item.options.text === 'Stop');
-        const replaceButtonItem = toolbarButtonItems.find(item => item.options.text === 'Replace');
-        const copyButtonItem = toolbarButtonItems.find(item => item.options.text === 'Copy');
+        const buttonTexts = toolbarButtonItems.map(item => item.options.text);
 
-        assert.strictEqual(stopButtonItem.disabled, undefined, 'stop button is not disabled');
-        assert.strictEqual(replaceButtonItem.disabled, true, 'generate button is disabled');
-        assert.strictEqual(copyButtonItem.disabled, true, 'copy button not disabled');
+        assert.deepEqual(buttonTexts, ['Stop'], 'toolbar contains correct buttons for Ask AI mode');
     });
 
     QUnit.module('Ask AI', () => {
@@ -216,16 +215,14 @@ QUnit.module('AIDialog', moduleConfig, () => {
 
             const toolbarButtonItems = this.aiDialogPopup.option('toolbarItems').filter(item => item.widget === 'dxButton');
             const generateButtonItem = toolbarButtonItems.find(item => item.options.text === 'Generate');
-            const stopButtonItem = toolbarButtonItems.find(item => item.options.text === 'Stop');
             const buttonTexts = toolbarButtonItems.map(item => item.options.text);
 
             assert.strictEqual(promptTextAreaInstance.option('visible'), true, 'prompt TextArea is visible');
             assert.strictEqual(resultTextAreaInstance.option('visible'), false, 'result TextArea is hidden initially');
             assert.strictEqual(promptTextAreaInstance.option('readOnly'), false, 'prompt TextArea is not readOnly');
 
-            assert.deepEqual(buttonTexts, ['Generate', 'Stop'], 'toolbar contains correct buttons for Ask AI mode');
+            assert.deepEqual(buttonTexts, ['Generate'], 'toolbar contains correct buttons for Ask AI mode');
             assert.strictEqual(generateButtonItem.disabled, undefined, 'generate button is not disabled');
-            assert.strictEqual(stopButtonItem.disabled, true, 'stop button is disabled');
         });
 
         QUnit.test('Should render correct content after generation', function(assert) {
@@ -248,7 +245,7 @@ QUnit.module('AIDialog', moduleConfig, () => {
             assert.strictEqual(promptTextAreaInstance.option('readOnly'), true, 'prompt TextArea is readOnly');
             assert.strictEqual(resultTextAreaInstance.option('visible'), true, 'result TextArea is visible');
 
-            assert.deepEqual(buttonTexts, ['Replace', 'Try again', 'Copy'], 'Toolbar contains correct buttons after generation');
+            assert.deepEqual(buttonTexts, ['Try again', 'Copy', 'Replace'], 'Toolbar contains correct buttons after generation');
             assert.strictEqual(replaceButtonItem.disabled, undefined, 'replace button is not disabled');
             assert.strictEqual(copyButtonItem.disabled, undefined, 'copy button is not disabled');
         });
@@ -274,7 +271,7 @@ QUnit.module('AIDialog', moduleConfig, () => {
             assert.strictEqual(promptTextAreaInstance.option('readOnly'), false, 'prompt TextArea is not readOnly');
             assert.strictEqual(resultTextAreaInstance.option('visible'), false, 'result TextArea is hidden');
 
-            assert.deepEqual(buttonTexts, ['Generate', 'Stop'], 'toolbar reset to Ask AI state with correct buttons');
+            assert.deepEqual(buttonTexts, ['Generate'], 'toolbar reset to Ask AI state with correct buttons');
         });
 
         QUnit.test('Should reset fields when switching to a basic command', function(assert) {
@@ -316,7 +313,7 @@ QUnit.module('AIDialog', moduleConfig, () => {
             assert.strictEqual(resultTextAreaInstance.option('visible'), false, 'result TextArea is hidden');
             assert.strictEqual(optionSelectBoxInstance.option('visible'), false, 'option SelectBox hidden for askAI');
 
-            assert.deepEqual(buttonTexts, ['Generate', 'Stop'], 'toolbar contains correct buttons for Ask AI');
+            assert.deepEqual(buttonTexts, ['Generate'], 'toolbar contains correct buttons for Ask AI');
         });
     });
 });

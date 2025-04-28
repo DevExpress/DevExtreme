@@ -196,7 +196,7 @@ function onNextButtonClick() {
 
 <style scoped>
 .demo-container {
-  min-height: 480px;
+  min-height: 580px;
 }
 
 #app {
@@ -204,7 +204,7 @@ function onNextButtonClick() {
   flex-direction: column;
   justify-content: center;
   row-gap: 20px;
-  height: 480px;
+  height: 580px;
   min-width: 620px;
 }
 

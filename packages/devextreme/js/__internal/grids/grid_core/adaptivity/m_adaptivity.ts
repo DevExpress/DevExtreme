@@ -1263,11 +1263,6 @@ const columns = (
     return super.getVisibleDataColumnsByBandColumn(bandColumnIndex)
       .filter((column) => column.visibleWidth !== HIDDEN_COLUMNS_WIDTH);
   }
-
-  public getUnfixedAndStickyColumns(rowIndex: number, ownerBand: number): any[] {
-    return super.getUnfixedAndStickyColumns(rowIndex, ownerBand)
-      .filter((col) => col.visibleWidth !== HIDDEN_COLUMNS_WIDTH);
-  }
 };
 
 const resizing = (Base: ModuleType<ResizingController>) => class AdaptivityResizingControllerExtender extends Base {
@@ -1316,14 +1311,22 @@ const headersKeyboardNavigation = (Base: ModuleType<HeadersKeyboardNavigationCon
     let visibleColumns = this._columnsController.getVisibleColumns();
 
     visibleColumns = direction === 'next'
-      ? visibleColumns.slice(newVisibleIndex - 1)
-      : visibleColumns.slice(0, newVisibleIndex).reverse();
+      ? visibleColumns.slice(visibleIndex + 1)
+      : visibleColumns.slice(0, visibleIndex).reverse();
 
     while (visibleColumns?.shift()?.visibleWidth === HIDDEN_COLUMNS_WIDTH) {
       newVisibleIndex += direction === 'next' ? 1 : -1;
     }
 
     return newVisibleIndex;
+  }
+
+  protected getDraggableColumns(
+    column,
+    rowIndex: number,
+  ): any[] {
+    return super.getDraggableColumns(column, rowIndex)
+      .filter((col) => col.visibleWidth !== HIDDEN_COLUMNS_WIDTH);
   }
 };
 

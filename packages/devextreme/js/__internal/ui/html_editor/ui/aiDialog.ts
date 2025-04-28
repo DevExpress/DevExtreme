@@ -1,9 +1,11 @@
+import '@js/ui/drop_down_button';
+
 import type { AIIntegration } from '@js/common/ai-integration';
 import localizationMessage from '@js/common/core/localization/message';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { extend } from '@js/core/utils/extend';
-import type { ItemClickEvent } from '@js/ui/drop_down_button_types';
+import type { ButtonClickEvent, ItemClickEvent } from '@js/ui/drop_down_button_types';
 import type { AICustomCommand } from '@js/ui/html_editor';
 import type { Properties as PopupProperties, ToolbarItem } from '@js/ui/popup';
 import type dxSelectBox from '@js/ui/select_box';
@@ -23,12 +25,15 @@ const AI_DIALOG_TITLE_CLASS = 'dx-aidialog-title';
 const AI_DIALOG_TITLE_TEXT_CLASS = 'dx-aidialog-title-text';
 const ICON_CLASS = 'dx-icon';
 const ICON_SPARKLE_CLASS = 'dx-icon-sparkle';
+const COPY_BUTTON_ICON = 'copy';
+const TRY_AGAIN_BUTTON_ICON = 'restore';
 
 const POPUP_MIN_WIDTH = 288;
 const POPUP_MAX_WIDTH = 460;
 const REPLACE_DROPDOWN_WIDTH = 150;
 const TEXT_AREA_MIN_HEIGHT = 64;
 const TEXT_AREA_MAX_HEIGHT = 128;
+const BUTTON_WIDTH = 100;
 
 enum DialogState {
   Initial = 'initial',
@@ -54,7 +59,7 @@ export interface AIDialogShowPayload {
 
 export interface AIDialogResult {
   resultText: string;
-  event: ItemClickEvent;
+  event: ItemClickEvent | ButtonClickEvent & ItemClickEvent['itemData'];
 }
 
 export default class AIDialog extends BaseDialog<AIDialogResult> {
@@ -71,6 +76,8 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
   private _currentOption?: string;
 
   private _commandOptionsList?: string[];
+
+  private _selectedText = '';
 
   private _resultText = '';
 
@@ -225,19 +232,23 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
   protected _getReplaceButtonItem(config?: ToolbarItem): ToolbarItem {
     return {
       toolbar: 'bottom',
-      location: 'before',
+      location: 'after',
       widget: 'dxDropDownButton',
       options: {
         text: localizationMessage.format('dxHtmlEditor-aiReplace'),
         stylingMode: 'contained',
         type: 'default',
+        splitButton: true,
+        useSelectMode: false,
         items: [
-          { id: ReplaceButtonActions.Replace, text: localizationMessage.format('dxHtmlEditor-aiReplace') },
           { id: ReplaceButtonActions.InsertAbove, text: localizationMessage.format('dxHtmlEditor-aiInsertAbove') },
           { id: ReplaceButtonActions.InsertBelow, text: localizationMessage.format('dxHtmlEditor-aiInsertBelow') },
         ],
         dropDownOptions: {
           width: REPLACE_DROPDOWN_WIDTH,
+        },
+        onButtonClick: (e: ButtonClickEvent): void => {
+          this.replaceButtonAction({ ...e, itemData: { id: ReplaceButtonActions.Replace } });
         },
         onItemClick: (e: ItemClickEvent) => this.replaceButtonAction(e),
       },
@@ -251,6 +262,8 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
       location: 'after',
       widget: 'dxButton',
       options: {
+        stylingMode: 'outlined',
+        icon: COPY_BUTTON_ICON,
         text: localizationMessage.format('dxHtmlEditor-aiCopy'),
         onClick: async (): Promise<void> => {
           await navigator?.clipboard?.writeText(this._resultText);
@@ -263,9 +276,11 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
   protected _getTryAgainButtonItem(): ToolbarItem {
     return {
       toolbar: 'bottom',
-      location: 'after',
+      location: 'before',
       widget: 'dxButton',
       options: {
+        stylingMode: 'outlined',
+        icon: TRY_AGAIN_BUTTON_ICON,
         text: localizationMessage.format('dxHtmlEditor-aiTryAgain'),
         onClick: () => this._retryAIRequest(),
       },
@@ -275,11 +290,12 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
   protected _getGenerateButtonItem(config?: ToolbarItem): ToolbarItem {
     return {
       toolbar: 'bottom',
-      location: 'before',
+      location: 'after',
       widget: 'dxButton',
       options: {
-        text: localizationMessage.format('dxHtmlEditor-aiGenerate'),
+        width: BUTTON_WIDTH,
         type: 'default',
+        text: localizationMessage.format('dxHtmlEditor-aiGenerate'),
         stylingMode: 'contained',
         onClick: () => this._generateAIResponse(),
       },
@@ -293,6 +309,9 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
       location: 'after',
       widget: 'dxButton',
       options: {
+        width: BUTTON_WIDTH,
+        type: 'default',
+        stylingMode: 'contained',
         text: localizationMessage.format('dxHtmlEditor-aiStop'),
         onClick: () => this._stopGeneration(),
       },
@@ -307,18 +326,16 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
       case DialogState.Initial:
       case DialogState.ResultReady:
         items.push(
-          this._getReplaceButtonItem(),
           this._getTryAgainButtonItem(),
           this._getCopyButtonItem(),
+          this._getReplaceButtonItem(),
         );
         break;
       case DialogState.Asking:
-        items.push(this._getGenerateButtonItem(), this._getStopButtonItem({ disabled: true }));
+        items.push(this._getGenerateButtonItem());
         break;
       case DialogState.Generating:
         items.push(
-          this._getReplaceButtonItem({ disabled: true }),
-          this._getCopyButtonItem({ disabled: true }),
           this._getStopButtonItem(),
         );
         break;
@@ -435,7 +452,7 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
     this._aiIntegration = aiIntegration;
   }
 
-  replaceButtonAction(event: ItemClickEvent): void {
+  replaceButtonAction(event: AIDialogResult['event']): void {
     this.hide(this._resultText, event);
   }
 
@@ -444,7 +461,7 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
   }: AIDialogShowPayload): Promise<AIDialogResult> | undefined {
     this._commandsMap = commandsMap;
     this._currentCommand = currentCommand;
-    this._resultText = text ?? '';
+    this._selectedText = text ?? '';
     this._commandOptionsList = commandsMap[currentCommand]?.options ?? [];
     this._currentOption = currentCommandOption;
     this._getCustomCommandPrompt = prompt;
@@ -457,7 +474,7 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
     return super.show();
   }
 
-  hide(resultText: string, event: ItemClickEvent): void {
+  hide(resultText: string, event: AIDialogResult['event']): void {
     this.deferred?.resolve({ resultText, event });
 
     super.hide();

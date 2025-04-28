@@ -497,7 +497,7 @@ QUnit.module('Keyboard controller', {
         };
 
         // act
-        navigationController._rowsViewKeyDownHandler({
+        navigationController.keyDownHandler({
             keyName: 'leftArrow',
             originalEvent: {
                 preventDefault: commonUtils.noop,
@@ -528,7 +528,7 @@ QUnit.module('Keyboard controller', {
         };
 
         // act
-        navigationController._rowsViewKeyDownHandler({
+        navigationController.keyDownHandler({
             keyName: 'leftArrow',
             originalEvent: {
                 preventDefault: commonUtils.noop,
@@ -563,7 +563,7 @@ QUnit.module('Keyboard controller', {
         navigationController._isLegacyNavigation = () => true;
 
         // act
-        navigationController._rowsViewKeyDownHandler({
+        navigationController.keyDownHandler({
             keyName: 'downArrow',
             originalEvent: {
                 preventDefault: commonUtils.noop,
@@ -598,7 +598,7 @@ QUnit.module('Keyboard controller', {
         navigationController._isLegacyNavigation = () => true;
 
         // act
-        navigationController._rowsViewKeyDownHandler({
+        navigationController.keyDownHandler({
             keyName: 'upArrow',
             originalEvent: {
                 preventDefault: commonUtils.noop,
@@ -750,7 +750,7 @@ QUnit.module('Keyboard controller', {
         assert.ok(onSpy.calledWith(document, 'visibilitychange'), 'subscribed to the "visibilitychange" event');
         assert.ok(onSpy.calledWith(element, 'focusin'), 'subscribed to the "focusin" event');
         assert.ok(onSpy.calledWith(element, CLICK_EVENT), 'subscribed to the "pointerdown" event');
-        assert.ok(keyboard._getProcessor(navigationController._rowsViewKeyDownListener), 'subscribed to the "keydown" event');
+        assert.ok(keyboard._getProcessor(navigationController.keyDownListener), 'subscribed to the "keydown" event');
 
         // arrange
         onSpy.resetHistory();
@@ -767,7 +767,7 @@ QUnit.module('Keyboard controller', {
         assert.ok(offSpy.calledWith(document, 'visibilitychange'), 'unsubscribed from the "visibilitychange" event');
         assert.ok(offSpy.calledWith(element, 'focusin'), 'unsubscribed from the "focusin" event');
         assert.ok(offSpy.calledWith(element, CLICK_EVENT), 'unsubscribed from the "pointerdown" event');
-        assert.notOk(keyboard._getProcessor(navigationController._rowsViewKeyDownListener), 'unsubscribed from the "keydown" event');
+        assert.notOk(keyboard._getProcessor(navigationController.keyDownListener), 'unsubscribed from the "keydown" event');
     });
 
     // T1178858
@@ -797,7 +797,7 @@ QUnit.module('Keyboard controller', {
         assert.notOk(onSpy.calledWith(document, 'visibilitychange'), 'not subscribed to the "visibilitychange" event');
         assert.notOk(onSpy.calledWith(element, 'focusin'), 'not subscribed to the "focusin" event');
         assert.notOk(onSpy.calledWith(element, CLICK_EVENT), 'not subscribed to the "pointerdown" event');
-        assert.notOk(keyboard._getProcessor(navigationController._rowsViewKeyDownListener), 'not subscribed to the "keydown" event');
+        assert.notOk(keyboard._getProcessor(navigationController.keyDownListener), 'not subscribed to the "keydown" event');
 
         // arrange
         onSpy.resetHistory();
@@ -813,7 +813,7 @@ QUnit.module('Keyboard controller', {
         assert.ok(onSpy.calledWith(document, 'visibilitychange'), 'subscribed to the "visibilitychange" event');
         assert.ok(onSpy.calledWith(element, 'focusin'), 'subscribed to the "focusin" event');
         assert.ok(onSpy.calledWith(element, CLICK_EVENT), 'subscribed to the "pointerdown" event');
-        assert.ok(keyboard._getProcessor(navigationController._rowsViewKeyDownListener), 'subscribed to the "keydown" event');
+        assert.ok(keyboard._getProcessor(navigationController.keyDownListener), 'subscribed to the "keydown" event');
     });
 
     QUnit.testInActiveWindow('Column headers view: Unsubscribe from events when changing the keyboardNavigation.enabled option to false', function(assert) {

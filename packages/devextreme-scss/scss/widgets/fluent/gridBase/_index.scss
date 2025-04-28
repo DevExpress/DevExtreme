@@ -1039,13 +1039,16 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
       &.dx-data-row {
         & > td:not(.dx-focused):not(.dx-cell-modified):not(.dx-#{$widget-name}-invalid),
         & .dx-command-edit .dx-link {
-          background-color: $datagrid-row-focused-bg;
           color: $datagrid-row-focused-color;
 
           & .dx-#{$widget-name}-group-opened,
           & .dx-#{$widget-name}-group-closed {
             color: $datagrid-row-focused-color;
           }
+        }
+
+        & > td:not(.dx-focused):not(.dx-cell-modified):not(.dx-#{$widget-name}-invalid) {
+          background-color: $datagrid-row-focused-bg;
         }
       }
 

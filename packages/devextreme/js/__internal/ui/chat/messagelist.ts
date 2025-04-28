@@ -328,7 +328,14 @@ class MessageList extends Widget<Properties> {
 
   _onContextMenuShowing(e: Cancelable & EventInfo<ContextMenu>): void {
     // @ts-expect-error ts-error
-    const { currentTarget } = e.jQEvent;
+    const { jQEvent } = e;
+
+    if (!isDefined(jQEvent)) {
+      e.cancel = true;
+      return;
+    }
+
+    const { currentTarget } = jQEvent;
 
     const message = this._getMessageData(currentTarget);
 
@@ -336,6 +343,7 @@ class MessageList extends Widget<Properties> {
 
     if (!items.length) {
       e.cancel = true;
+      return;
     }
 
     e.component.option('items', items);
@@ -719,6 +727,11 @@ class MessageList extends Widget<Properties> {
 
   _getEmptyView(): dxElementWrapper {
     return this._$content.find(`.${CHAT_MESSAGELIST_EMPTY_VIEW_CLASS}`);
+  }
+
+  _dimensionChanged(): void {
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
+    this._contextMenu?.hide();
   }
 
   _clean(): void {

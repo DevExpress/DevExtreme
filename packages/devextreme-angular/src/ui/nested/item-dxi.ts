@@ -58,6 +58,8 @@ import { DxiLocationComponent } from './location-dxi';
         'hint',
         'author',
         'id',
+        'isDeleted',
+        'isEdited',
         'timestamp',
         'beginGroup',
         'closeMenuOnClick',

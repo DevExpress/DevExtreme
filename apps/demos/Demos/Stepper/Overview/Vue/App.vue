@@ -192,7 +192,7 @@ function onNavigationModeClick(e: DxButtonGroupTypes.ItemClickEvent) {
 
 .stepper-demo {
   display: flex;
-  height: 700px;
+  height: 580px;
   gap: 20px;
 }
 
