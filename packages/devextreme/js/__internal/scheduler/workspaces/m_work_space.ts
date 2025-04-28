@@ -605,10 +605,30 @@ class SchedulerWorkSpace extends WidgetObserver {
       onScroll: () => {
         this._groupedStrategy.cache?.clear();
       },
+      // TODO (Scrollable:useKeyboard) -> remove this WA
+      //  after ScrollView private option "useKeyboard" will be extended to useNative: true
+      // NOTE: Scrollable container focusable by default
+      // To prevent scroll container focus in native mode we set tabindex -1 to container
+      // In simulated mode focusable behavior prevented by useKeyboard: false private option
+      onInitialized: ({ component }) => {
+        const useKeyboardDisabled = component.option('useKeyboard') === false;
+        const useNativeEnabled = component.option('useNative') === true;
+        if (useKeyboardDisabled && useNativeEnabled) {
+          $(component.container()).attr('tabindex', -1);
+        }
+      },
+      onOptionChanged: ({ fullName, value, component }) => {
+        const useKeyboardDisabled = component.option('useKeyboard') === false;
+        if (useKeyboardDisabled && fullName === 'useNative' && value === true) {
+          $(component.container()).attr('tabindex', -1);
+        }
+      },
     };
+
     if (this._needCreateCrossScrolling()) {
       config = extend(config, this._createCrossScrollingConfig(config));
     }
+
     if (this.isVirtualScrolling()
             && (this.virtualScrollingDispatcher.horizontalScrollingAllowed
                 || this.virtualScrollingDispatcher.height)) {
