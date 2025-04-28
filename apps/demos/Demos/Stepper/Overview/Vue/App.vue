@@ -1,120 +1,28 @@
 <template>
   <div class="stepper-demo">
     <div class="widget-container">
-      <div
-        class="widget-wrapper"
-        :class="'widget-wrapper-' + orientation"
-      >
-        <div class="stepper-wrapper">
-          <div
-            id="iconsLabel"
-            class="stepper-label"
-          >
-            Icons and Labels
+      <div :class="['widget-wrapper', 'widget-wrapper-' + orientation]">
+        <div
+          v-for="config in stepperConfigs"
+          :key="config.id"
+          class="stepper-wrapper"
+        >
+          <div :id="config.labelId" class="stepper-label">
+            {{ config.title }}
           </div>
           <DxStepper
-            id="icons"
-            :element-attr="{ 'aria-labelledby': 'iconsLabel' }"
+            :id="config.id"
+            :element-attr="{ 'aria-labelledby': config.labelId }"
             :selected-index="2"
-            :orientation="orientation as Orientation"
+            :orientation="orientation"
             :linear="navigationMode"
             :select-on-focus="selectOnFocus"
             :rtl-enabled="rtlMode"
           >
             <DxItem
-              :text="steps[0].text"
-              :label="steps[0].label"
-              :icon="steps[0].icon"
-            />
-            <DxItem
-              :text="steps[1].text"
-              :label="steps[1].label"
-              :icon="steps[1].icon"
-            />
-            <DxItem
-              :text="steps[2].text"
-              :label="steps[2].label"
-              :icon="steps[2].icon"
-              :optional="steps[2].optional"
-            />
-            <DxItem
-              :text="steps[3].text"
-              :label="steps[3].label"
-              :icon="steps[3].icon"
-            />
-            <DxItem
-              :text="steps[4].text"
-              :label="steps[4].label"
-              :icon="steps[4].icon"
-            />
-          </DxStepper>
-        </div>
-        <div class="stepper-wrapper">
-          <div
-            id="numbersLabel"
-            class="stepper-label"
-          >
-            Numbers and Labels
-          </div>
-          <DxStepper
-            id="numbers"
-            :element-attr="{ 'aria-labelledby': 'numbersLabel' }"
-            :selected-index="2"
-            :orientation="orientation as Orientation"
-            :linear="navigationMode"
-            :select-on-focus="selectOnFocus"
-            :rtl-enabled="rtlMode"
-          >
-
-            <DxItem
-              :label="steps[0].label"
-            />
-            <DxItem
-              :label="steps[1].label"
-            />
-            <DxItem
-              :label="steps[2].label"
-              :optional="steps[2].optional"
-            />
-            <DxItem
-              :label="steps[3].label"
-            />
-            <DxItem
-              :label="steps[4].label"
-            />
-          </DxStepper>
-        </div>
-        <div class="stepper-wrapper">
-          <div
-            id="customTextLabel"
-            class="stepper-label"
-          >
-            Custom Text
-          </div>
-          <DxStepper
-            id="customText"
-            :element-attr="{ 'aria-labelledby': 'customTextLabel' }"
-            :selected-index="2"
-            :orientation="orientation as Orientation"
-            :linear="navigationMode"
-            :select-on-focus="selectOnFocus"
-            :rtl-enabled="rtlMode"
-          >
-
-            <DxItem
-              :text="steps[0].text"
-            />
-            <DxItem
-              :text="steps[1].text"
-            />
-            <DxItem
-              :text="steps[2].text"
-            />
-            <DxItem
-              :text="steps[3].text"
-            />
-            <DxItem
-              :text="steps[4].text"
+              v-for="(step, index) in steps"
+              :key="index"
+              v-bind="getItemProps(step, config.fields)"
             />
           </DxStepper>
         </div>
@@ -123,7 +31,6 @@
 
     <div class="options">
       <div class="caption">Options</div>
-
       <div class="option">
         <div>Orientation</div>
         <DxButtonGroup
@@ -144,7 +51,7 @@
           @item-click="onNavigationModeClick"
         />
       </div>
-      <div class="option-separator"/>
+      <div class="option-separator" />
       <div class="option">
         <DxCheckBox
           id="selectOnFocus"
@@ -171,16 +78,54 @@ import DxCheckBox from 'devextreme-vue/check-box';
 import { type Orientation } from 'devextreme-react/common';
 import { steps, orientations, navigationModes } from './data.ts';
 
-const orientation = ref(orientations[0].value);
-const navigationMode = ref(navigationModes[0].value);
+const orientation = ref<Orientation>(orientations[0].value);
+const navigationMode = ref<boolean>(navigationModes[0].value);
 const selectOnFocus = ref(true);
 const rtlMode = ref(false);
+
 function onOrientationClick(e: DxButtonGroupTypes.ItemClickEvent) {
   orientation.value = e.itemData.value;
 }
 
 function onNavigationModeClick(e: DxButtonGroupTypes.ItemClickEvent) {
   navigationMode.value = e.itemData.value;
+}
+
+interface Step {
+  text?: string;
+  label?: string;
+  icon?: string;
+  optional?: boolean;
+}
+
+const stepperConfigs = [
+  {
+    id: 'icons',
+    labelId: 'iconsLabel',
+    title: 'Icons and Labels',
+    fields: ['label', 'icon', 'optional'] as const,
+  },
+  {
+    id: 'numbers',
+    labelId: 'numbersLabel',
+    title: 'Numbers and Labels',
+    fields: ['label', 'optional'] as const,
+  },
+  {
+    id: 'customText',
+    labelId: 'customTextLabel',
+    title: 'Custom Text',
+    fields: ['text', 'optional'] as const,
+  },
+];
+
+function getItemProps(step: Step, fields: readonly (keyof Step)[]) {
+  return fields.reduce((acc, field) => {
+    if (field in step) {
+      acc[field] = step[field];
+    }
+    return acc;
+  }, {} as Partial<Step>);
 }
 </script>
 
@@ -283,5 +228,4 @@ function onNavigationModeClick(e: DxButtonGroupTypes.ItemClickEvent) {
 .dx-buttongroup .dx-button {
   width: 50%;
 }
-
 </style>
