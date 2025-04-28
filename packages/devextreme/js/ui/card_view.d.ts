@@ -181,8 +181,8 @@ export type FieldInfoType = { // TODO: rename to FieldInfo
 };
 
 /**
- * @public
  * @docid
+ * @public
  * @namespace DevExpress.ui.dxCardView
  */
 export type CardInfo<TCardData = unknown, TKey = unknown> = {
@@ -219,7 +219,6 @@ export type CardInfo<TCardData = unknown, TKey = unknown> = {
     isSelected?: boolean;
     /**
      * @public
-     * @type Array<any>
      * @docid
      */
     values: any[];
