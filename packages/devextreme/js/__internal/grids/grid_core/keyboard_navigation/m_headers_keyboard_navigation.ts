@@ -176,9 +176,8 @@ const columnHeadersView = (
       const headersKeyboardNavigationController = this.getController('headersKeyboardNavigation');
 
       if (headersKeyboardNavigationController) {
+        const rtlEnabled = this.option('rtlEnabled');
         const keyboardNavigationTexts = this.option('keyboardNavigation.texts');
-        const leftDirection = headersKeyboardNavigationController.getDirectionByKeyName('leftArrow');
-        const rightDirection = headersKeyboardNavigationController.getDirectionByKeyName('rightArrow');
         const onItemClick = (e) => {
           this.isNeedToFocusHeader = true;
           headersKeyboardNavigationController.moveHeader(column, rowIndex, e.itemData?.value);
@@ -188,25 +187,25 @@ const columnHeadersView = (
         items.push(
           {
             text: keyboardNavigationTexts?.movePrevious,
-            value: leftDirection,
+            value: Direction.Previous,
             beginGroup: true,
             disabled: !headersKeyboardNavigationController.isHeaderValidForReordering(
               column,
-              leftDirection,
+              Direction.Previous,
               rowIndex,
             ),
-            icon: CONTEXT_MENU_MOVE_PREVIOUS_ICON,
+            icon: rtlEnabled ? CONTEXT_MENU_MOVE_NEXT_ICON : CONTEXT_MENU_MOVE_PREVIOUS_ICON,
             onItemClick,
           },
           {
             text: keyboardNavigationTexts?.moveNext,
-            value: rightDirection,
+            value: Direction.Next,
             disabled: !headersKeyboardNavigationController.isHeaderValidForReordering(
               column,
-              rightDirection,
+              Direction.Next,
               rowIndex,
             ),
-            icon: CONTEXT_MENU_MOVE_NEXT_ICON,
+            icon: rtlEnabled ? CONTEXT_MENU_MOVE_PREVIOUS_ICON : CONTEXT_MENU_MOVE_NEXT_ICON,
             onItemClick,
           },
         );
