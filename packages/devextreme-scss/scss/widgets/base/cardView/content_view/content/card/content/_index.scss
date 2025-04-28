@@ -49,9 +49,10 @@
       color: $cardview-card-content-field-value-highlight-color;
       background: $cardview-card-content-field-value-highlight-background;
       border-radius: 5px;
-      padding: 2px 3px;
+      padding: 1px 3px;
       font-weight: 500;
       border: 2px solid lighten($cardview-card-content-field-value-highlight-background, 15%);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
     }
   }
 }
