@@ -130,7 +130,7 @@ QUnit.module('AI dialog integration', {}, () => {
     });
 
     QUnit.module('action buttons', () => {
-        QUnit.test('replace without selected text should replece all text', function(assert) {
+        QUnit.test('replace without selected text should replace all text', function(assert) {
             const done = assert.async();
 
             setupHtmlEditorWithAi({

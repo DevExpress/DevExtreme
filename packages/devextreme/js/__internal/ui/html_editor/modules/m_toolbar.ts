@@ -412,8 +412,8 @@ if (Quill) {
               id,
               name: 'custom',
               text: command.text,
-              items: command.options?.map((raw: string) => {
-                const option = capitalize(raw);
+              items: command.options?.map((rawOptionName: string) => {
+                const option = capitalize(rawOptionName);
 
                 const result = {
                   parentCommand: id,

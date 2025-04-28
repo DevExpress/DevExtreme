@@ -3,6 +3,7 @@
 @use "../colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
+@use "../common/sizes" as *;
 @use "../../base/mixins" as *;
 @use "../../base/validation" as *;
 @use "../list/sizes" as *;
@@ -60,10 +61,6 @@ $badge-invalid-bg: $base-invalid-color;
 
 @mixin dx-pending-indicator-material() {
   @include dx-pending-indicator($material-invalid-badge-size);
-}
-
-@mixin dx-pending-indicator-centered-material() {
-  @include dx-pending-indicator-centered($material-invalid-badge-size);
 }
 
 @mixin dx-dropdownlist-list-appearance() {

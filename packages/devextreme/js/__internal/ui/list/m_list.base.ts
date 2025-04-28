@@ -34,9 +34,10 @@ import DataConverterMixin from '@ts/ui/shared/m_grouped_data_converter_mixin';
 
 import ListItem from './m_item';
 
+export const LIST_ITEM_CLASS = 'dx-list-item';
+
 const LIST_CLASS = 'dx-list';
 const LIST_ITEMS_CLASS = 'dx-list-items';
-const LIST_ITEM_CLASS = 'dx-list-item';
 const LIST_ITEM_SELECTOR = `.${LIST_ITEM_CLASS}`;
 const LIST_ITEM_ICON_CONTAINER_CLASS = 'dx-list-item-icon-container';
 const LIST_ITEM_ICON_CLASS = 'dx-list-item-icon';

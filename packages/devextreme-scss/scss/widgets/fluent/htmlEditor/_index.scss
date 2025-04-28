@@ -14,6 +14,7 @@
 @use "../common/sizes" as *;
 @use "../fileUploader/sizes" as *;
 @use "../popup/sizes" as *;
+@use "../../base/mixins" as *;
 @use "../../base/htmlEditor";
 
 // adduse
@@ -317,5 +318,5 @@
 }
 
 .dx-aidialog .dx-pending-indicator {
-  @include dx-pending-indicator-centered-fluent();
+  @include dx-pending-indicator-centered($fluent-invalid-badge-size);
 }

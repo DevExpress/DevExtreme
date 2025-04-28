@@ -27,8 +27,8 @@ import BaseDialog from './m_baseDialog';
 export const AI_DIALOG_CLASS = 'dx-aidialog';
 export const AI_DIALOG_CONTROLS_CLASS = 'dx-aidialog-controls';
 export const AI_DIALOG_CONTENT_CLASS = 'dx-aidialog-content';
+export const AI_DIALOG_LOAD_INDICATOR_CLASS = 'dx-pending-indicator';
 
-const AI_DIALOG_LOAD_INDICATOR_CLASS = 'dx-pending-indicator';
 const AI_DIALOG_TITLE_CLASS = 'dx-aidialog-title';
 const AI_DIALOG_TITLE_TEXT_CLASS = 'dx-aidialog-title-text';
 const ICON_CLASS = 'dx-icon';

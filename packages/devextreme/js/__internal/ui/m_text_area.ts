@@ -16,7 +16,8 @@ import type { OptionChanged } from '@ts/core/widget/types';
 import TextBox from '@ts/ui/text_box/m_text_box';
 import { allowScroll, prepareScrollData } from '@ts/ui/text_box/m_utils.scroll';
 
-const TEXTAREA_CLASS = 'dx-textarea';
+export const TEXTAREA_CLASS = 'dx-textarea';
+
 const TEXTEDITOR_INPUT_CLASS_AUTO_RESIZE = 'dx-texteditor-input-auto-resize';
 
 export interface TextAreaProperties extends Omit<Properties,
