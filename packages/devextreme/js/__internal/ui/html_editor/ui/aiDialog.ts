@@ -16,7 +16,6 @@ import TextArea from '@js/ui/text_area';
 import type {
   AICommandExecutor,
   AICommandParamsMap,
-  AICommandResultMap,
   CommandDefinition,
   CommandsMap,
 } from '@ts/ui/html_editor/utils/ai';
@@ -481,9 +480,7 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
       return;
     }
 
-    const callbacks: RequestCallbacks<
-      AICommandResultMap[typeof uiCommand]
-    > = this._getAICommandCallbacks();
+    const callbacks = this._getAICommandCallbacks();
     const params = this._getAICommandParams(uiCommand);
 
     this._isAICommandExecuted = true;

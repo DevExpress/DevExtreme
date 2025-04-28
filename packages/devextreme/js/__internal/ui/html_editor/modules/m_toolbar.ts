@@ -405,7 +405,8 @@ if (Quill) {
         if (typeof command === 'object') {
           if (command.name === 'custom') {
             const id = `custom${customCommandIndex}`;
-            const { prompt } = command as AICustomCommand;
+            const { prompt, options } = command as AICustomCommand;
+            const capitalized = options?.map(capitalize);
 
             const item = {
               id,
@@ -418,7 +419,7 @@ if (Quill) {
                   parentCommand: id,
                   id: option,
                   text: option,
-                  options: command.options.map(capitalize),
+                  options: capitalized,
                   prompt,
                 };
 
