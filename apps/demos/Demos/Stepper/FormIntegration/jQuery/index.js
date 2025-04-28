@@ -320,7 +320,7 @@ $(() => {
     animationEnabled: false,
     focusStateEnabled: false,
     swipeEnabled: false,
-    height: 300,
+    height: 400,
     items: multiViewItems,
   }).dxMultiView('instance');
 
