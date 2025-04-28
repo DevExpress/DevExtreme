@@ -18,7 +18,7 @@
 
     <script type="text/javascript" src="../artifacts/js/jquery.js"></script>
     <!-- HtmlEditor -->
-    <script type="text/javascript" src="../artifacts/js/dx-quill.min.js"></script>
+    <!-- <script type="text/javascript" src="../artifacts/js/dx-quill.min.js"></script> -->
 
     <!--<script type="text/javascript" src="../artifacts/js/cldr.js"></script>
     <script type="text/javascript" src="../artifacts/js/cldr/event.js"></script>
@@ -38,14 +38,7 @@
     <script type="text/javascript" src="../artifacts/js/jspdf.plugin.autotable.min.js"></script>
     -->
 
-    <script type="module">
-        import { AzureOpenAI } from "https://esm.sh/openai@4.73.1";
-  
-        window.AzureOpenAI = AzureOpenAI;
-      </script>
-
     <script type="text/javascript" src="../artifacts/js/dx.all.debug.js" charset="utf-8"></script>
-    <script type="text/javascript" src="../artifacts/js/dx.ai-integration.debug.js" charset="utf-8"></script>
     <script type="text/javascript" src="./themeSelector.js"></script>
     <script type="text/javascript" src="../../../node_modules/axe-core/axe.min.js"></script>
 </head>
@@ -55,111 +48,13 @@
 
         <select id="theme-selector" style="display: block;">
         </select>
-        
-
+        <br />
         <div id="button"></div>
         <script>
-            const deployment = 'gpt-4o-mini';
-            const apiVersion = '2024-02-01';
-            const endpoint = 'https://public-api.devexpress.com/demo-openai';
-            const apiKey = 'DEMO';
-            const value = `The universe is a vast expanse of space filled with stars, planets, galaxies and mysteries that mankind has been trying to unravel since ancient times. It was born about 13.8 billion years ago as a result of the Big Bang, and has been continuously expanding ever since. The Universe is governed by fundamental laws of physics, but the deeper we look into it, the more paradoxes and unknowns we encounter: dark matter, dark energy, multiverses. We are just a speck of dust in this grandiose cosmos, but thanks to reason, imagination and science we are able to comprehend its beauty, harmony and immense mystery.`;
-
-            $(() => {
-                document.querySelector('dx-license')?.remove();
-
-                const aiService = new AzureOpenAI({
-                    dangerouslyAllowBrowser: true,
-                    deployment,
-                    endpoint,
-                    apiVersion,
-                    apiKey,
-                });
-
-                async function getAIResponse(messages, signal) {
-                    const params = {
-                        messages,
-                        model: deployment,
-                        max_tokens: 1000,
-                        temperature: 0.7,
-                    };
-
-                    return aiService.chat.completions.create(params, { signal });
-                }
-
-                const aiIntegration = new DevExpress.aiIntegration({
-                    sendRequest({ prompt }) {
-                        const controller = new AbortController();
-                        const signal = controller.signal;
-
-                        const aiPrompt = [
-                            { role: 'system', content: prompt.system, },
-                            { role: 'user', content: prompt.user, },
-                        ];
-
-                        const promise = new Promise(async (resolve) => {
-                            const response = await getAIResponse(aiPrompt, signal);
-                            const result = response.choices[0].message?.content;
-
-                            resolve(result);
-                        });
-
-                        const result = {
-                            promise,
-                            abort: () => {
-                                controller.abort();
-                            },
-                        };
-
-                        return result;
-                    },
-                });
-
-                $("#button").dxHtmlEditor({
-                    value,
-                    height: 400,
-                    aiIntegration,
-                    toolbar: {
-                        items: [
-                            'link',
-                            {
-                                name: 'ai',
-                                commands: [
-                                    // 'askAI',
-                                    'summarize',
-                                    // 'shorten',
-
-                                    {
-                                        name: 'translate',
-                                        options: [
-                                            'german',
-                                            'chinese',
-                                        ],
-                                    },
-
-                                    {
-                                        name: 'custom',
-                                        text: 'This is custom',
-                                        options: [
-                                            'option 1',
-                                            'option 2',
-                                        ],
-                                        prompt: (param) => {
-                                            return `Custom prompt with ${param}`;
-                                        },
-                                    },
-
-                                    // {
-                                    //     name: 'custom',
-                                    //     text: 'No option custom',
-                                    //     prompt: () => {
-                                    //         return 'No option custom prompt';
-                                    //     },
-                                    // },
-                                ],
-                            },
-                        ],
-                    },
+            $(function() {
+                $("#button").dxButton({
+                    text: 'Click me!',
+                    onClick: function() { alert("clicked"); }
                 });
             });
         </script>

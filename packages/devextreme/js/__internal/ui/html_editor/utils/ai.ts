@@ -28,8 +28,8 @@ import type {
 } from '@js/ui/html_editor';
 import { capitalize } from '@ts/core/utils/capitalize';
 
-const AI_DIALOG_ASKAI_COMMAND_NAME = 'askAI';
-const AI_DIALOG_CUSTOM_COMMAND_NAME = 'custom';
+export const AI_DIALOG_ASKAI_COMMAND_NAME = 'askAI';
+export const AI_DIALOG_CUSTOM_COMMAND_NAME = 'custom';
 
 type CommandOption =
   | AIChangeStyleOption

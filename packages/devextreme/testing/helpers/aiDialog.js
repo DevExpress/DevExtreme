@@ -1,19 +1,15 @@
 import $ from 'jquery';
 
-import {
-    AI_DIALOG_LOAD_INDICATOR_CLASS,
-    AI_DIALOG_CLASS,
-    AI_DIALOG_CONTROLS_CLASS,
-    AI_DIALOG_CONTENT_CLASS,
-} from '__internal/ui/html_editor/ui/aiDialog';
-import {
-    DX_BUTTON_CLASS,
-    DROP_DOWN_BUTTON_CLASS,
-} from '__internal/ui/m_drop_down_button';
-import { LIST_ITEM_CLASS } from '__internal/ui/m_list.base';
-import { OVERLAY_CONTENT_CLASS } from '__internal/ui/overlay/m_overlay';
-import { SELECTBOX_CLASS } from '__internal/ui/m_select_box';
-import { TEXTAREA_CLASS } from '__internal/ui/m_text_area';
+const AI_DIALOG_LOAD_INDICATOR_CLASS = 'dx-pending-indicator';
+const AI_DIALOG_CLASS = 'dx-aidialog';
+const AI_DIALOG_CONTROLS_CLASS = 'dx-aidialog-controls';
+const AI_DIALOG_CONTENT_CLASS = 'dx-aidialog-content';
+const DROP_DOWN_BUTTON_CLASS = 'dx-dropdownbutton';
+const BUTTON_CLASS = 'dx-button';
+const LIST_ITEM_CLASS = 'dx-list-item';
+const OVERLAY_CONTENT_CLASS = 'dx-overlay-content';
+const SELECTBOX_CLASS = 'dx-selectbox';
+const TEXTAREA_CLASS = 'dx-textarea';
 
 const CLICK_EVENT_NAME = 'dxclick';
 
@@ -93,7 +89,7 @@ export const getToolbarButtonItems = (popup) => {
 };
 
 const getDropDownButton = ($container) => {
-    return $container.find(`.${DROP_DOWN_BUTTON_CLASS} .${DX_BUTTON_CLASS}`);
+    return $container.find(`.${DROP_DOWN_BUTTON_CLASS} .${BUTTON_CLASS}`);
 };
 
 const getDropDownButtonOption = (index) => {
@@ -139,7 +135,7 @@ export const clickActionButton = (insertionMode) => {
 };
 
 export function findButtonByText($container, text) {
-    return $container.find(`.${DX_BUTTON_CLASS}`).filter((_, element) => $(element).text() === text);
+    return $container.find(`.${BUTTON_CLASS}`).filter((_, element) => $(element).text() === text);
 }
 
 export const getCommandSelectBoxInstance = ($container) => getDialogSelectBoxes($container).eq(0).dxSelectBox('instance');

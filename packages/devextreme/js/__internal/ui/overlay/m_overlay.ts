@@ -40,14 +40,13 @@ import windowUtils from '../../core/utils/m_window';
 import { OVERLAY_POSITION_ALIASES, OverlayPositionController } from './m_overlay_position_controller';
 import * as zIndexPool from './m_z_index';
 
-export const OVERLAY_CONTENT_CLASS = 'dx-overlay-content';
-
 const ready = readyCallbacks.add;
 const window = windowUtils.getWindow();
 const viewPortChanged = changeCallback;
 
 const OVERLAY_CLASS = 'dx-overlay';
 const OVERLAY_WRAPPER_CLASS = 'dx-overlay-wrapper';
+const OVERLAY_CONTENT_CLASS = 'dx-overlay-content';
 const OVERLAY_SHADER_CLASS = 'dx-overlay-shader';
 const INNER_OVERLAY_CLASS = 'dx-inner-overlay';
 const INVISIBLE_STATE_CLASS = 'dx-state-invisible';

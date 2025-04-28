@@ -19,7 +19,12 @@ import type {
   CommandDefinition,
   CommandsMap,
 } from '@ts/ui/html_editor/utils/ai';
-import { buildAICommandParams, getAICommandName } from '@ts/ui/html_editor/utils/ai';
+import {
+  AI_DIALOG_ASKAI_COMMAND_NAME,
+  AI_DIALOG_CUSTOM_COMMAND_NAME,
+  buildAICommandParams,
+  getAICommandName,
+} from '@ts/ui/html_editor/utils/ai';
 import { TEXTEDITOR_INPUT_CONTAINER_CLASS } from '@ts/ui/text_box/m_text_editor.base';
 
 import BaseDialog from './m_baseDialog';
@@ -27,8 +32,8 @@ import BaseDialog from './m_baseDialog';
 export const AI_DIALOG_CLASS = 'dx-aidialog';
 export const AI_DIALOG_CONTROLS_CLASS = 'dx-aidialog-controls';
 export const AI_DIALOG_CONTENT_CLASS = 'dx-aidialog-content';
-export const AI_DIALOG_LOAD_INDICATOR_CLASS = 'dx-pending-indicator';
 
+const AI_DIALOG_LOAD_INDICATOR_CLASS = 'dx-pending-indicator';
 const AI_DIALOG_TITLE_CLASS = 'dx-aidialog-title';
 const AI_DIALOG_TITLE_TEXT_CLASS = 'dx-aidialog-title-text';
 const ICON_CLASS = 'dx-icon';
@@ -37,8 +42,6 @@ const COPY_BUTTON_ICON = 'copy';
 const TRY_AGAIN_BUTTON_ICON = 'restore';
 
 const AI_DIALOG_COMMANDS_WITH_OPTIONS = ['translate', 'changeStyle', 'changeTone'];
-const AI_DIALOG_ASKAI_COMMAND_NAME = 'askAI';
-const AI_DIALOG_CUSTOM_COMMAND_NAME = 'custom';
 
 const POPUP_MIN_WIDTH = 288;
 const POPUP_MAX_WIDTH = 460;
@@ -97,7 +100,7 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
 
   private _getCustomCommandPrompt?: AICustomCommand['prompt'];
 
-  private _isAICommandExecuted = false;
+  private _isAICommandExecuting = false;
 
   private _isAskAICommandSelected = false;
 
@@ -106,8 +109,6 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
   private _optionSelectBox!: SelectBox;
 
   private _promptTextArea!: TextArea;
-
-  private _resultText = '';
 
   private _resultTextArea!: TextArea;
 
@@ -168,7 +169,7 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
         this._setDialogState(this._getInitialDialogState());
 
         const shouldExecuteAICommand = !this._isAskAICommandSelected
-          && !this._isAICommandExecuted
+          && !this._isAICommandExecuting
           && this._isOpen();
 
         if (shouldExecuteAICommand) {
@@ -187,7 +188,7 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
       onValueChanged: (e): void => {
         this._currentOption = e.value;
 
-        if (!this._isAICommandExecuted && this._isOpen()) {
+        if (!this._isAICommandExecuting && this._isOpen()) {
           this._executeAICommand();
         }
       },
@@ -212,15 +213,11 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
   protected _renderResultTextArea($container: dxElementWrapper): void {
     const $textArea = $('<div>').appendTo($container);
     this._resultTextArea = new TextArea($textArea.get(0), {
-      value: this._resultText,
       minHeight: TEXT_AREA_MIN_HEIGHT,
       maxHeight: TEXT_AREA_MAX_HEIGHT,
       autoResizeEnabled: true,
       width: '100%',
       readOnly: true,
-      onValueChanged: (e): void => {
-        this._resultText = e.value;
-      },
     });
   }
 
@@ -311,8 +308,10 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
         stylingMode: 'outlined',
         icon: COPY_BUTTON_ICON,
         text: localizationMessage.format('dxHtmlEditor-aiCopy'),
-        onClick: async (): Promise<void> => {
-          await navigator?.clipboard?.writeText(this._resultText);
+        onClick: (): void => {
+          const { value } = this._resultTextArea.option();
+          // eslint-disable-next-line @typescript-eslint/no-floating-promises
+          navigator?.clipboard?.writeText(value ?? '');
         },
       },
       ...config,
@@ -420,7 +419,7 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
   }
 
   private _retryExecuteAICommand(): void {
-    this._resultText = '';
+    this._updateResults();
     this._executeAICommand();
   }
 
@@ -447,14 +446,13 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
     return params;
   }
 
-  private _updateResults(result: string): void {
-    this._resultText = result;
-    this._resultTextArea.option({ value: this._resultText });
+  private _updateResults(value = ''): void {
+    this._resultTextArea.option({ value });
   }
 
   private _processCommandCompletion(dialogState: DialogState): void {
     this._abort = undefined;
-    this._isAICommandExecuted = false;
+    this._isAICommandExecuting = false;
     this._setDialogState(dialogState);
   }
 
@@ -483,7 +481,7 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
     const callbacks = this._getAICommandCallbacks();
     const params = this._getAICommandParams(uiCommand);
 
-    this._isAICommandExecuted = true;
+    this._isAICommandExecuting = true;
     this._setDialogState(DialogState.Generating);
 
     const abort = (this._aiIntegration[aiCommandName] as unknown as AICommandExecutor<
@@ -515,7 +513,7 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
 
     this._commandChangeSuppressed = true;
     this._commandSelectBox.option({
-      disabled: this._isAICommandExecuted,
+      disabled: this._isAICommandExecuting,
       dataSource: commandsList,
       value: this._currentCommand,
     });
@@ -526,7 +524,7 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
     const hasOptions = this._isCommandWithOptionsSelected();
 
     this._optionSelectBox.option({
-      disabled: this._isAICommandExecuted,
+      disabled: this._isAICommandExecuting,
       visible: hasOptions,
       items: this._commandOptionsList ?? [],
       value: this._currentOption ?? this._commandOptionsList?.[0],
@@ -595,7 +593,6 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
         this._resultTextArea.option({
           disabled: false,
           readOnly: true,
-          value: this._resultText,
           visible: true,
         });
         break;
@@ -625,7 +622,8 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
   }
 
   private _replaceButtonAction(event: AIDialogResult['event']): void {
-    this.hide(this._resultText, event);
+    const { value } = this._resultTextArea.option();
+    this.hide(value ?? '', event);
   }
 
   private _disposeLoadIndicator(): void {

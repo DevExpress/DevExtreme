@@ -25,9 +25,8 @@ import type { ValueChangedEvent } from './editor/editor';
 
 // STYLE selectBox
 
-export const SELECTBOX_CLASS = 'dx-selectbox';
-
 const DISABLED_STATE_SELECTOR = '.dx-state-disabled';
+const SELECTBOX_CLASS = 'dx-selectbox';
 const SELECTBOX_POPUP_CLASS = 'dx-selectbox-popup';
 const SELECTBOX_CONTAINER_CLASS = 'dx-selectbox-container';
 const SELECTBOX_POPUP_WRAPPER_CLASS = 'dx-selectbox-popup-wrapper';
