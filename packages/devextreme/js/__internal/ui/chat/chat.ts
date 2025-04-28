@@ -8,13 +8,15 @@ import { isDefined } from '@js/core/utils/type';
 import DataHelperMixin from '@js/data_helper';
 import type {
   Message,
+  MessageDeletedEvent,
+  MessageDeletingEvent,
   MessageEnteredEvent,
   Properties,
   TypingEndEvent,
   TypingStartEvent,
 } from '@js/ui/chat';
-import { invokeConditionally } from '@ts/core/utils/conditional_invoke';
 import type dxChat from '@js/ui/chat';
+import { invokeConditionally } from '@ts/core/utils/conditional_invoke';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
 import AlertList from '@ts/ui/chat/alertlist';
@@ -263,7 +265,7 @@ class Chat extends Widget<Properties> {
     this._messageEditingStartAction?.({ message, event });
   }
 
-  _showDeleteConfirmationPopup(e: MessageEditingEvent): void {
+  _showDeleteConfirmationPopup(e: Pick<MessageDeletingEvent, 'message'>): void {
     this._messageToDelete = e.message;
 
     if (!this._deleteConfirmationPopup) {
@@ -272,8 +274,6 @@ class Chat extends Widget<Properties> {
         {
           onApplyButtonClick: (): void => {
             this._messageDeletedAction?.({
-              component: this,
-              element: this.element(),
               message: this._messageToDelete,
             });
           },
@@ -291,12 +291,10 @@ class Chat extends Widget<Properties> {
     this._deleteConfirmationPopup.show();
   }
 
-  _messageDeletingHandler(e: MessageEditingEvent): void {
+  _messageDeletingHandler(e: Pick<MessageDeletingEvent, 'message'>): void {
     const { message } = e;
 
-    const messageDeletingArgs: MessageDeletingEvent = {
-      component: this,
-      element: this.element(),
+    const messageDeletingArgs: Pick<MessageDeletingEvent, 'message' | 'cancel'> = {
       message,
       cancel: false,
     };
@@ -306,7 +304,7 @@ class Chat extends Widget<Properties> {
     invokeConditionally(
       messageDeletingArgs.cancel,
       () => {
-        this._showDeleteConfirmationPopup(e);
+        this._showDeleteConfirmationPopup(messageDeletingArgs);
       },
     );
   }

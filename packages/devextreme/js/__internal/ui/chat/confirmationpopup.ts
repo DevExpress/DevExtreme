@@ -13,8 +13,8 @@ const DX_BUTTON_CLASSNAME = 'dx-button';
 const POPUP_WIDTH = 240;
 
 const enum ConfirmationPopupButtonType {
-  APPLY = 'apply',
-  CANCEL = 'cancel',
+  APPLY,
+  CANCEL,
 }
 
 interface ConfirmationPopupProperties {
