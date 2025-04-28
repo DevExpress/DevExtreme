@@ -363,6 +363,8 @@
         "dxChat-elementAriaLabel": "Snak",
         "dxChat-textareaPlaceholder": "Skriv en besked",
         "dxChat-sendButtonAriaLabel": "Send",
+        "dxChat-cancelEditingButtonAriaLabel": "Annuller",
+        "dxChat-editingMessageCaption": "Edit Message",
         "dxChat-defaultUserName": "Ukendt bruger",
         "dxChat-messageListAriaLabel": "Meddelelsesliste",
         "dxChat-alertListAriaLabel": "Fejlliste",

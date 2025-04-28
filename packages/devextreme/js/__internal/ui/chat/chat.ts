@@ -91,6 +91,7 @@ class Chat extends Widget<Properties> {
       onTypingStart: undefined,
       onTypingEnd: undefined,
       onMessageEditingStart: undefined,
+      onMessageEditCanceled: undefined,
       onMessageDeleting: undefined,
       onMessageDeleted: undefined,
     };
@@ -285,11 +286,8 @@ class Chat extends Widget<Properties> {
   }
 
   _messageEditingStartHandler(e: MessageEditingEvent): void {
-    const { message, event } = e;
-
     const messageEditingStartArgs = {
-      message,
-      event,
+      message: e.message,
       cancel: false,
     };
 
@@ -304,9 +302,7 @@ class Chat extends Widget<Properties> {
   }
 
   _messageEditCanceledHandler(e: MessageBoxEditCanceledEvent): void {
-    const { message, event } = e;
-
-    this._messageEditCanceledAction?.({ message, event });
+    this._messageEditCanceledAction?.({ message: e.message });
   }
 
   _showDeleteConfirmationPopup(e: Pick<MessageDeletingEvent, 'message'>): void {

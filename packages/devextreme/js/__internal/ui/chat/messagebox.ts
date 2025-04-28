@@ -12,10 +12,10 @@ import TextArea from '@ts/ui/m_text_area';
 
 import type { EnterKeyEvent, InputEvent } from '../../../ui/text_area';
 
-const CHAT_MESSAGEBOX_CLASS = 'dx-chat-messagebox';
-const CHAT_MESSAGEBOX_WRAPPER_CLASS = 'dx-chat-messagebox-wrapper';
-const CHAT_MESSAGEBOX_TEXTAREA_CLASS = 'dx-chat-messagebox-textarea';
-const CHAT_MESSAGEBOX_BUTTON_CLASS = 'dx-chat-messagebox-button';
+export const CHAT_MESSAGEBOX_CLASS = 'dx-chat-messagebox';
+export const CHAT_MESSAGEBOX_WRAPPER_CLASS = 'dx-chat-messagebox-wrapper';
+export const CHAT_MESSAGEBOX_TEXTAREA_CLASS = 'dx-chat-messagebox-textarea';
+export const CHAT_MESSAGEBOX_BUTTON_CLASS = 'dx-chat-messagebox-button';
 
 export const TYPING_END_DELAY = 2000;
 
@@ -324,6 +324,7 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
   hideEditingPreview(): void {
     this._editingPreview.resetOption('text');
     this._textArea.clear();
+    this._textArea.focus();
   }
 }
 

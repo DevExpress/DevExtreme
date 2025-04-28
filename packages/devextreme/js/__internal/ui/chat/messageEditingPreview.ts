@@ -1,24 +1,22 @@
 import messageLocalization from '@js/common/core/localization/message';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
-import { noop } from '@js/core/utils/common';
 import type { ClickEvent } from '@js/ui/button';
 import Button from '@js/ui/button';
 import type { Properties as DOMComponentProperties } from '@ts/core/widget/dom_component';
 import DOMComponent from '@ts/core/widget/dom_component';
 import type { OptionChanged } from '@ts/core/widget/types';
 
-const CHAT_EDITING_PREVIEW_CLASS = 'dx-chat-editing-preview';
-const CHAT_EDITING_QUOTE_LINE_CLASS = 'dx-chat-editing-quote-line';
-const CHAT_EDITING_MESSAGE_CLASS = 'dx-chat-editing-message';
-const CHAT_EDITING_MESSAGE_CAPTION_CLASS = 'dx-chat-editing-message-caption';
-const CHAT_EDITING_MESSAGE_TEXT_CLASS = 'dx-chat-editing-message-text';
-const CHAT_CANCEL_EDITING_BUTTON_CLASS = 'dx-chat-cancel-editing-button';
+export const CHAT_EDITING_PREVIEW_CLASS = 'dx-chat-editing-preview';
+export const CHAT_EDITING_QUOTE_LINE_CLASS = 'dx-chat-editing-quote-line';
+export const CHAT_EDITING_MESSAGE_CLASS = 'dx-chat-editing-message';
+export const CHAT_EDITING_MESSAGE_CAPTION_CLASS = 'dx-chat-editing-message-caption';
+export const CHAT_EDITING_MESSAGE_TEXT_CLASS = 'dx-chat-editing-message-text';
+export const CHAT_CANCEL_EDITING_BUTTON_CLASS = 'dx-chat-cancel-editing-button';
 
 export interface Properties extends DOMComponentProperties<MessageEditingPreview> {
   text?: string;
-
-  onCancel: (e: ClickEvent) => void;
+  onCancel?: (e: ClickEvent) => void;
 }
 
 class MessageEditingPreview extends DOMComponent<MessageEditingPreview, Properties> {
@@ -30,7 +28,7 @@ class MessageEditingPreview extends DOMComponent<MessageEditingPreview, Properti
     return {
       ...super._getDefaultOptions(),
       text: '',
-      onCancel: noop,
+      onCancel: undefined,
     };
   }
 
@@ -67,8 +65,7 @@ class MessageEditingPreview extends DOMComponent<MessageEditingPreview, Properti
 
     $('<div>')
       .addClass(CHAT_EDITING_MESSAGE_CAPTION_CLASS)
-    // todo: localize
-      .text('Editing Message')
+      .text(messageLocalization.format('dxChat-editingMessageCaption'))
       .appendTo($message);
 
     this._messageText = $('<div>')
@@ -93,7 +90,6 @@ class MessageEditingPreview extends DOMComponent<MessageEditingPreview, Properti
       icon: 'remove',
       type: 'normal',
       stylingMode: 'text',
-      // todo: localize
       elementAttr: { 'aria-label': messageLocalization.format('dxChat-cancelEditingButtonAriaLabel') },
       onClick: onCancel,
     });
