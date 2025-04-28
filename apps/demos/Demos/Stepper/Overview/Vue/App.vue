@@ -14,7 +14,7 @@
             :id="config.id"
             :element-attr="{ 'aria-labelledby': config.labelId }"
             :selected-index="2"
-            :orientation="orientation"
+            :orientation="orientation as Orientation"
             :linear="navigationMode"
             :select-on-focus="selectOnFocus"
             :rtl-enabled="rtlMode"
@@ -78,8 +78,8 @@ import DxCheckBox from 'devextreme-vue/check-box';
 import { type Orientation } from 'devextreme-react/common';
 import { steps, orientations, navigationModes } from './data.ts';
 
-const orientation = ref<Orientation>(orientations[0].value);
-const navigationMode = ref<boolean>(navigationModes[0].value);
+const orientation = ref(orientations[0].value);
+const navigationMode = ref(navigationModes[0].value);
 const selectOnFocus = ref(true);
 const rtlMode = ref(false);
 
@@ -89,13 +89,6 @@ function onOrientationClick(e: DxButtonGroupTypes.ItemClickEvent) {
 
 function onNavigationModeClick(e: DxButtonGroupTypes.ItemClickEvent) {
   navigationMode.value = e.itemData.value;
-}
-
-interface Step {
-  text?: string;
-  label?: string;
-  icon?: string;
-  optional?: boolean;
 }
 
 const stepperConfigs = [
@@ -125,7 +118,7 @@ function getItemProps(step: Step, fields: readonly (keyof Step)[]) {
       acc[field] = step[field];
     }
     return acc;
-  }, {} as Partial<Step>);
+  }, {} as Record<string, unknown>);
 }
 </script>
 
