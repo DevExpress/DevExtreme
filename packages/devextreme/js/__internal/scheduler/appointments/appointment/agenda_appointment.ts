@@ -1,6 +1,5 @@
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
-import type { ResourceProcessor } from '@ts/scheduler/resources/resource_processor';
 
 import {
   APPOINTMENT_CONTENT_CLASSES,
@@ -10,11 +9,6 @@ import { Appointment } from './m_appointment';
 export class AgendaAppointment extends Appointment {
   get coloredElement(): dxElementWrapper {
     return this.$element().find(`.${APPOINTMENT_CONTENT_CLASSES.AGENDA_MARKER}`);
-  }
-
-  get resourceProcessor(): ResourceProcessor {
-    const getResourceProcessor = this.option('getResourceProcessor') as () => ResourceProcessor;
-    return getResourceProcessor();
   }
 
   _renderResourceList(): void {

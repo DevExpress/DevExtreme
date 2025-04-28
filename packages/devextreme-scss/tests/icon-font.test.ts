@@ -39,7 +39,7 @@ describe('Equals svg to font', () => {
     const countElementFluentFont = getCountElementInFont(`${BASE_PATH}/icons/dxiconsfluent.ttf`);
     const countElementFluentSvg = getCountElementInSvg(`${BASE_PATH}/images/icons/fluent`);
 
-    expect(countElementFluentFont).toBe(countElementFluentSvg + 1);
+    expect(countElementFluentFont).toBe(countElementFluentSvg);
   });
 
   test('check svg elements', () => {

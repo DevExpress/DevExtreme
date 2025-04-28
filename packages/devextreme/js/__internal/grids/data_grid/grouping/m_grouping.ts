@@ -20,14 +20,10 @@ import type { HeaderPanel } from '../../grid_core/header_panel/m_header_panel';
 import type { RowsView } from '../../grid_core/views/m_rows_view';
 import gridCore from '../m_core';
 import dataSourceAdapterProvider from '../m_data_source_adapter';
+import { CLASSES } from './const';
 import { GroupingHelper as CollapsedGroupingHelper } from './m_grouping_collapsed';
 import { GroupingHelper as ExpandedGroupingHelper } from './m_grouping_expanded';
 
-const DATAGRID_GROUP_PANEL_CLASS = 'dx-datagrid-group-panel';
-const DATAGRID_GROUP_PANEL_MESSAGE_CLASS = 'dx-group-panel-message';
-const DATAGRID_GROUP_PANEL_ITEM_CLASS = 'dx-group-panel-item';
-const DATAGRID_GROUP_PANEL_LABEL_CLASS = 'dx-toolbar-label';
-const DATAGRID_GROUP_PANEL_CONTAINER_CLASS = 'dx-toolbar-item';
 const DATAGRID_EXPAND_CLASS = 'dx-datagrid-expand';
 const DATAGRID_GROUP_ROW_CLASS = 'dx-group-row';
 const HEADER_FILTER_CLASS_SELECTOR = '.dx-header-filter';
@@ -102,7 +98,7 @@ const dataSourceAdapterExtender = (Base: ModuleType<DataSourceAdapter>) => class
       for (let i = 0; i < groups.length; i++) {
         if (groupIndex === undefined || groupIndex === i) {
           groups[i].isExpanded = isExpand;
-        } else if (group && group[i]) {
+        } else if (group?.[i]) {
           groups[i].isExpanded = group[i].isExpanded;
         }
       }
@@ -404,7 +400,7 @@ const isGroupPanelVisible = (groupPanelOptions): boolean => {
 
 const allowDragging = (groupPanelOptions, column): boolean => {
   const isVisible = isGroupPanelVisible(groupPanelOptions);
-  const canDrag = groupPanelOptions?.allowColumnDragging && column.allowGrouping;
+  const canDrag = groupPanelOptions?.allowColumnDragging && column?.allowGrouping;
 
   return isVisible && !!canDrag;
 };
@@ -421,7 +417,7 @@ export const GroupingHeaderPanelExtender = (Base: ModuleType<HeaderPanel>) => cl
       let isRendered = false;
       const toolbarItem = {
         template: () => {
-          const $groupPanel = $('<div>').addClass(DATAGRID_GROUP_PANEL_CLASS);
+          const $groupPanel = $('<div>').addClass(CLASSES.groupPanel);
           this._updateGroupPanelContent($groupPanel);
           registerKeyboardAction('groupPanel', this, $groupPanel, undefined, this._handleActionKeyDown.bind(this));
           return $groupPanel;
@@ -446,7 +442,7 @@ export const GroupingHeaderPanelExtender = (Base: ModuleType<HeaderPanel>) => cl
   private _handleActionKeyDown(args) {
     const { event } = args;
     const $target = $(event.target);
-    const groupColumnIndex = $target.closest(`.${DATAGRID_GROUP_PANEL_ITEM_CLASS}`).index();
+    const groupColumnIndex = $target.closest(`.${CLASSES.groupPanelItem}`).index();
     const column = this._columnsController.getGroupColumns()[groupColumnIndex];
     const columnIndex = column && column.index;
 
@@ -479,7 +475,7 @@ export const GroupingHeaderPanelExtender = (Base: ModuleType<HeaderPanel>) => cl
   private _createGroupPanelItem($rootElement, groupColumn) {
     const $groupPanelItem = $('<div>')
       .addClass(groupColumn.cssClass)
-      .addClass(DATAGRID_GROUP_PANEL_ITEM_CLASS)
+      .addClass(CLASSES.groupPanelItem)
       .data('columnData', groupColumn)
       .appendTo($rootElement)
       .text(groupColumn.caption);
@@ -492,7 +488,7 @@ export const GroupingHeaderPanelExtender = (Base: ModuleType<HeaderPanel>) => cl
   protected _columnOptionChanged(e?) {
     if (!this._requireReady && !gridCore.checkChanges(e.optionNames, ['width', 'visibleWidth'])) {
       const $toolbarElement = this.element();
-      const $groupPanel = $toolbarElement && $toolbarElement.find(`.${DATAGRID_GROUP_PANEL_CLASS}`);
+      const $groupPanel = $toolbarElement?.find(`.${CLASSES.groupPanel}`);
 
       if ($groupPanel && $groupPanel.length) {
         this._updateGroupPanelContent($groupPanel);
@@ -511,16 +507,16 @@ export const GroupingHeaderPanelExtender = (Base: ModuleType<HeaderPanel>) => cl
 
     if (groupPanelOptions.allowColumnDragging && !groupColumns.length) {
       $('<div>')
-        .addClass(DATAGRID_GROUP_PANEL_MESSAGE_CLASS)
+        .addClass(CLASSES.groupPanelMessage)
         .text(groupPanelOptions.emptyPanelText)
         .appendTo($groupPanel);
 
-      $groupPanel.closest(`.${DATAGRID_GROUP_PANEL_CONTAINER_CLASS}`).addClass(DATAGRID_GROUP_PANEL_LABEL_CLASS);
-      $groupPanel.closest(`.${DATAGRID_GROUP_PANEL_LABEL_CLASS}`).css('maxWidth', 'none');
+      $groupPanel.closest(`.${CLASSES.groupPanelContainer}`).addClass(CLASSES.groupPanelLabel);
+      $groupPanel.closest(`.${CLASSES.groupPanelLabel}`).css('maxWidth', 'none');
     }
   }
 
-  protected allowDragging(column?): boolean {
+  public allowDragging(column): boolean {
     const groupPanelOptions = this.option('groupPanel');
 
     return allowDragging(groupPanelOptions, column);
@@ -528,7 +524,7 @@ export const GroupingHeaderPanelExtender = (Base: ModuleType<HeaderPanel>) => cl
 
   public getColumnElements() {
     const $element = this.element();
-    return $element && $element.find(`.${DATAGRID_GROUP_PANEL_ITEM_CLASS}`);
+    return $element?.find(`.${CLASSES.groupPanelItem}`);
   }
 
   public getColumns() {
@@ -539,7 +535,7 @@ export const GroupingHeaderPanelExtender = (Base: ModuleType<HeaderPanel>) => cl
     const that = this;
     const $element = that.element();
 
-    if ($element && $element.find(`.${DATAGRID_GROUP_PANEL_CLASS}`).length) {
+    if ($element?.find(`.${CLASSES.groupPanel}`).length) {
       const offset = $element.offset();
 
       return {
@@ -557,7 +553,7 @@ export const GroupingHeaderPanelExtender = (Base: ModuleType<HeaderPanel>) => cl
   private getContextMenuItems(options) {
     const that = this;
     const contextMenuEnabled = that.option('grouping.contextMenuEnabled');
-    const $groupedColumnElement = $(options.targetElement).closest(`.${DATAGRID_GROUP_PANEL_ITEM_CLASS}`);
+    const $groupedColumnElement = $(options.targetElement).closest(`.${CLASSES.groupPanelItem}`);
     let items;
 
     if ($groupedColumnElement.length) {

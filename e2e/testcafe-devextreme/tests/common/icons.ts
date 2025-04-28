@@ -290,6 +290,8 @@ const iconSet = {
   imagethumbnail: '\f192',
   sparkle: '\f193',
   servicebell: '\f194',
+  dropzone: '\f195',
+  restore: '\f196',
 };
 
 fixture.disablePageReloads`Icons`

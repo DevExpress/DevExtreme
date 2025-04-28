@@ -15,7 +15,7 @@ test.meta({ unstable: true })('Header filter popup', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const pivotGrid = new PivotGrid(PIVOT_GRID_SELECTOR);
 
-  await t.click(pivotGrid.getColumnHeaderArea().getHeaderFilterIcon());
+  await t.click(pivotGrid.getColumnHeaderArea().getHeaderFilterIcon().element);
 
   await testScreenshot(t, takeScreenshot, 'headerFilter - before scroll.png');
 
@@ -59,7 +59,7 @@ test.meta({ unstable: true })('Header filter popup', async (t) => {
 test('[T1284200] Should handle dxList "selectAll" when has unselected items on the second page', async (t) => {
   const pivotGrid = new PivotGrid(PIVOT_GRID_SELECTOR);
 
-  const filterIconElement = pivotGrid.getColumnHeaderArea().getHeaderFilterIcon();
+  const filterIconElement = pivotGrid.getColumnHeaderArea().getHeaderFilterIcon().element;
   const headerFilter = new HeaderFilter();
   const list = headerFilter.getList();
 

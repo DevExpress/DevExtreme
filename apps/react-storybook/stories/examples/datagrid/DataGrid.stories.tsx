@@ -53,7 +53,6 @@ const columnOptions = {
             dataField: 'Country',
             fixed: true,
         },
-        'Country',
         'Area',
         'Population_Urban',
         'Population_Rural',
@@ -118,6 +117,24 @@ const columnOptions = {
             }],
         }],
     }],
+    groupColumns: [
+        'ID',
+        {
+            dataField: 'Country',
+            groupIndex: 0,
+        },
+        {
+            dataField: 'Area',
+            groupIndex: 1,
+        },
+        'Population_Urban',
+        'Population_Rural',
+        'Population_Total',
+        'GDP_Agriculture',
+        'GDP_Industry',
+        'GDP_Services',
+        'GDP_Total',
+    ],
 };
 
 const meta: Meta<typeof DataGrid> = {
@@ -226,6 +243,9 @@ export const ColumnReordering: Story = {
         columns: 'regularColumns',
         columnFixing: {
             enabled: false
+        },
+        groupPanel: {
+            visible: true,
         },
     }
   }

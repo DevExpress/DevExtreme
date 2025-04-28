@@ -1,0 +1,13 @@
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+<title>dropzone</title>
+<path d="M2 4c0-1.105 0.895-2 2-2h2v2h-2v2h-2v-2z"></path>
+<path d="M2 8v3h2v-3h-2z"></path>
+<path d="M4 13h-2v3h2v-3z"></path>
+<path d="M4 18h-2v2c0 1.105 0.895 2 2 2h2v-2h-2v-2z"></path>
+<path d="M8 20v2h3v-2h-3z"></path>
+<path d="M8 4h3v-2h-3v2z"></path>
+<path d="M13 2v2h3v-2h-3z"></path>
+<path d="M18 2v2h2v2h2v-2c0-1.105-0.895-2-2-2h-2z"></path>
+<path d="M22 8h-2v3h2v-3z"></path>
+<path d="M20.525 22.5l-4.275-4.275-1.25 3.775-3-10 10 3-3.775 1.25 4.275 4.275-1.975 1.975z"></path>
+</svg>

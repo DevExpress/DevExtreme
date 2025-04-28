@@ -1,6 +1,7 @@
 import '@js/ui/select_box';
 import '@ts/ui/color_box/m_color_view';
 import '@js/ui/number_box';
+import '@js/ui/menu';
 
 import eventsEngine from '@js/common/core/events/core/events_engine';
 import { addNamespace } from '@js/common/core/events/utils/index';
@@ -451,6 +452,7 @@ if (Quill) {
 
           this._formatHandlers[name](aiDialogOptions);
         },
+        disabled: !dataSource[0].items?.length,
       };
 
       return extend(true, {
