@@ -528,16 +528,6 @@ type WithCardInfo = {
 /**
  * @docid
  */
-type WithFieldInfo = {
-    /** @docid */
-    readonly field: FieldInfoType;
-    /** @docid */
-    readonly fieldElement: DxElement;
-};
-
-/**
- * @docid
- */
 type WithFieldCaptionInfo = {
     /** @docid */
     readonly field: FieldInfoType;
