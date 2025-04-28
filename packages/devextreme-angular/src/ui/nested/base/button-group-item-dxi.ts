@@ -273,10 +273,10 @@ export abstract class DxiButtonGroupItem extends CollectionNestedOption {
         this._setOption('itemType', value);
     }
 
-    get label(): { alignment?: HorizontalAlignment, location?: LabelLocation, showColon?: boolean, template?: any, text?: string | undefined, visible?: boolean } {
+    get label(): { alignment?: HorizontalAlignment, location?: LabelLocation, showColon?: boolean, template?: any, text?: string | undefined, visible?: boolean } | string {
         return this._getOption('label');
     }
-    set label(value: { alignment?: HorizontalAlignment, location?: LabelLocation, showColon?: boolean, template?: any, text?: string | undefined, visible?: boolean }) {
+    set label(value: { alignment?: HorizontalAlignment, location?: LabelLocation, showColon?: boolean, template?: any, text?: string | undefined, visible?: boolean } | string) {
         this._setOption('label', value);
     }
 
@@ -558,6 +558,20 @@ export abstract class DxiButtonGroupItem extends CollectionNestedOption {
     }
     set splitter(value: dxSplitterOptions | undefined) {
         this._setOption('splitter', value);
+    }
+
+    get isValid(): boolean {
+        return this._getOption('isValid');
+    }
+    set isValid(value: boolean) {
+        this._setOption('isValid', value);
+    }
+
+    get optional(): boolean {
+        return this._getOption('optional');
+    }
+    set optional(value: boolean) {
+        this._setOption('optional', value);
     }
 
     get heightRatio(): number {

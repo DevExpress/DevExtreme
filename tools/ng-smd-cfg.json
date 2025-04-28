@@ -1,11 +1,5 @@
 {
     "cli": {
         "artifacts": "./artifacts/internal-tools"
-    },
-    "mutations": [
-        {
-            "kind": "remove",
-            "uid": "/stepper:"
-        }
-    ]
+    }
 }
