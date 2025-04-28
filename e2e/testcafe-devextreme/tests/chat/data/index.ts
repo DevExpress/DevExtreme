@@ -67,3 +67,13 @@ export const generateMessages = (
 
   return messages;
 };
+
+export const generateImageMessage = (
+  user: User,
+  src: string,
+): any => ({
+  timestamp,
+  author: user,
+  type: 'image',
+  src,
+});
