@@ -502,7 +502,9 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
   }
 
   private _isCommandWithOptionsSelected(): boolean {
-    if (this._currentCommand === AI_DIALOG_CUSTOM_COMMAND_NAME) {
+    if (
+      this._currentCommand
+      && this._commandsMap[this._currentCommand].name === AI_DIALOG_CUSTOM_COMMAND_NAME) {
       return Boolean(this._commandOptionsList?.length);
     }
 

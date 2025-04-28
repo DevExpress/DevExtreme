@@ -401,7 +401,7 @@ if (Quill) {
     private _buildMenuItems(commands: AIToolbarItem['commands']) {
       let customCommandIndex = 0;
 
-      return commands?.map((command) => {
+      const items = commands?.map((command) => {
         if (typeof command === 'object') {
           if (command.name === 'custom') {
             const id = `custom${customCommandIndex}`;
@@ -437,6 +437,8 @@ if (Quill) {
 
         return this._createCommandMenuItem(command);
       });
+
+      return items;
     }
 
     _prepareAIMenuItemConfig(item: AIToolbarItem) {
