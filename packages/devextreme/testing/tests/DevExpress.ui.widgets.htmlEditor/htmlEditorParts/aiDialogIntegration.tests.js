@@ -201,7 +201,7 @@ QUnit.module('AI dialog integration', {}, () => {
 
             const resultText = getResultTextAreaValue();
 
-            assert.strictEqual(resultText, undefined, 'textarea does not contain text');
+            assert.strictEqual(resultText, '', 'textarea does not contain text');
         });
 
         QUnit.test('should not have any text inside it if part of the text is selected', function(assert) {
@@ -211,7 +211,7 @@ QUnit.module('AI dialog integration', {}, () => {
 
             const resultText = getResultTextAreaValue();
 
-            assert.strictEqual(resultText, undefined, 'textarea does not contain text');
+            assert.strictEqual(resultText, '', 'textarea does not contain text');
         });
     });
 

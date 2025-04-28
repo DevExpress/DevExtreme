@@ -169,9 +169,7 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
 
         this._setDialogState(this._getInitialDialogState());
 
-        const shouldExecuteAICommand = !this._isAskAICommandSelected
-          && !this._isAICommandExecuting
-          && this._isOpen();
+        const shouldExecuteAICommand = !this._isAskAICommandSelected && this._isOpen();
 
         if (shouldExecuteAICommand) {
           this._executeAICommand();
@@ -189,7 +187,7 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
       onValueChanged: (e): void => {
         this._currentOption = e.value;
 
-        if (!this._isAICommandExecuting && this._isOpen()) {
+        if (this._isOpen()) {
           this._executeAICommand();
         }
       },
