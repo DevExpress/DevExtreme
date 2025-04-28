@@ -1,0 +1,34 @@
+@mixin message-editing-preview(
+  $gap,
+  $message-row-gap,
+  $accent-color,
+  $caption-font-size,
+  $padding,
+  $border-width,
+  $border-radius,
+  $height,
+) {
+  .dx-chat-editing-preview {
+    gap: $gap;
+  }
+
+  .dx-chat-editing-message {
+    gap: $message-row-gap
+  }
+
+  .dx-chat-editing-message-caption {
+    font-size: $caption-font-size;
+    color: $accent-color;
+  }
+
+  .dx-chat-editing-message-text {
+    padding-bottom: $padding;
+  }
+
+  .dx-chat-editing-quote-line{
+    height: $height;
+    border-left-width: $border-width;
+    border-left-color: $accent-color;
+    border-radius: $border-radius;
+  }
+}

@@ -1,8 +1,13 @@
+.dx-chat-messagebox-wrapper {
+  display: flex;
+  flex-direction: column;
+  border-top-width: 1px;
+  border-top-style: solid;
+}
+
 .dx-chat-messagebox {
   display: flex;
   align-items: flex-end;
-  border-top-width: 1px;
-  border-top-style: solid;
 }
 
 .dx-chat-messagebox-textarea {

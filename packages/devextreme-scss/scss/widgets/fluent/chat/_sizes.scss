@@ -2,6 +2,7 @@
 @use "../textEditor/colors" as *;
 @use "../common/sizes" as *;
 @use "../sizes" as *;
+@use "../typography/sizes" as *;
 @use "../popup/sizes" as *;
 
 // adduse
@@ -14,6 +15,7 @@ $chat-messagebox-padding: null !default;
 $chat-messagebox-textarea-border-radius: $texteditor-input-border-radius !default;
 $chat-messagebox-gap: 8px !default;
 $chat-messagebox-buton-gap: 2px !default;
+$chat-message-editing-preview-gap: null !default;
 $chat-messagelist-padding: null !default;
 $chat-messagegroup-gap: 4px !default;
 $chat-messagegroup-padding: null !default;
@@ -28,6 +30,11 @@ $chat-alerts-padding-block: null !default;
 $chat-alerts-padding-inline: 8px !default;
 $chat-alerts-row-gap: null !default;
 $chat-alert-padding-block: null !default;
+
+$chat-message-editing-preview-caption-font-size: $fluent-xs-font-size !default;
+$chat-message-editing-preview-row-gap: null !default;
+$chat-message-editing-preview-border-width: 3px !default;
+$chat-message-editing-preview-border-radius: 8px !default;
 
 $chat-messagelist-empty-icon-box-size: null !default;
 $chat-messagelist-empty-icon-size: null !default;
@@ -67,6 +74,9 @@ $chat-confirmation-popup-toolbar-gap: null !default;
   $chat-alerts-row-gap: 2px !default;
   $chat-alert-padding-block: 6px !default;
 
+  $chat-message-editing-preview-gap: 12px !default;
+  $chat-message-editing-preview-row-gap: 4px !default;
+
   $chat-messagelist-empty-icon-box-size: 64px !default;
   $chat-messagelist-empty-icon-size: 40px !default;
   $chat-messagelist-empty-icon-margin-bottom: 12px !default;
@@ -95,6 +105,9 @@ $chat-confirmation-popup-toolbar-gap: null !default;
   $chat-alerts-row-gap: 2px !default;
   $chat-alert-padding-block: 5px !default;
 
+  $chat-message-editing-preview-gap: 8px !default;
+  $chat-message-editing-preview-row-gap: 2px !default;
+
   $chat-messagelist-empty-icon-box-size: 48px !default;
   $chat-messagelist-empty-icon-size: 32px !default;
   $chat-messagelist-empty-icon-margin-bottom: 14px !default;
@@ -111,3 +124,5 @@ $chat-confirmation-popup-toolbar-gap: null !default;
 
   $chat-confirmation-popup-toolbar-gap: 8px !default;
 }
+
+$chat-message-editing-preview-height: ($chat-message-editing-preview-caption-font-size + $fluent-base-font-size) * $fluent-line-height + $chat-message-editing-preview-row-gap;
