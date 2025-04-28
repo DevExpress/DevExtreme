@@ -125,6 +125,7 @@ class ConfirmationPopup {
           } else {
             this._onCancelButtonClick?.();
           }
+          // eslint-disable-next-line @typescript-eslint/no-floating-promises
           this._popup.hide();
         },
       },
@@ -139,6 +140,7 @@ class ConfirmationPopup {
   }
 
   show(): void {
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     this._popup.show();
   }
 }
