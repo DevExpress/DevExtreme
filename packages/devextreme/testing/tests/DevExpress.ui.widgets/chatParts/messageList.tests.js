@@ -1219,6 +1219,26 @@ QUnit.module('MessageList', () => {
             assert.strictEqual(this.contextMenu.option('visible'), false, 'context menu is hidden after window resize');
         });
 
+        QUnit.test('an error should not occur when showing if jQEvent is not passed', function(assert) {
+            this.reinit({
+                allowDeleting: () => true,
+                allowUpdating: () => true,
+                items: [
+                    { text: 'a', author: userFirst },
+                    { text: 'b', author: userSecond },
+                ],
+                currentUserId: userSecond.id,
+            });
+
+            try {
+                this.contextMenu.show();
+            } catch(e) {
+                assert.ok(false, `Error occurred: ${e.message}`);
+            } finally {
+                assert.strictEqual(this.contextMenu.option('visible'), false, 'context menu is hidden');
+            }
+        });
+
         [
             {
                 editingOptions: {
