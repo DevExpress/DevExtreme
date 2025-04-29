@@ -39,6 +39,8 @@ export class HeaderFilterViewController {
     element: Element,
     column: Column,
     onFilterCloseCallback?: () => void,
+    apply?: () => void,
+    // isFilterBuilder?: boolean,
   ): void {
     const rootDataSource = this.dataController.getStoreLoadAdapter();
     const rootHeaderFilterOptions = this.options.oneWay('headerFilter').peek();
@@ -75,25 +77,29 @@ export class HeaderFilterViewController {
           ? [...column.filterValues]
           : column.filterValues,
         apply(): void {
-          colsController.updateColumns(
-            (columns) => {
-              const index = getColumnIndexByName(columns, column.name);
-              const newColumns = [...columns];
+          if (apply) {
+            apply.call(this);
+          } else {
+            colsController.updateColumns(
+              (columns) => {
+                const index = getColumnIndexByName(columns, column.name);
+                const newColumns = [...columns];
 
-              newColumns[index] = {
-                ...newColumns[index],
-                headerFilter: {
-                  ...newColumns[index].headerFilter,
-                  // NOTE: Copy array because of mutations in legacy code
-                },
-                filterValues: Array.isArray(this.filterValues)
-                  ? [...this.filterValues]
-                  : this.filterValues,
-                filterType: this.filterType,
-              };
-              return newColumns;
-            },
-          );
+                newColumns[index] = {
+                  ...newColumns[index],
+                  headerFilter: {
+                    ...newColumns[index].headerFilter,
+                    // NOTE: Copy array because of mutations in legacy code
+                    values: Array.isArray(this.filterValues)
+                      ? [...this.filterValues]
+                      : this.filterValues,
+                  },
+                  filterType: this.filterType,
+                };
+                return newColumns;
+              },
+            );
+          }
 
           onFilterCloseCallback?.();
         },
@@ -103,6 +109,10 @@ export class HeaderFilterViewController {
         },
       },
     };
+  }
+
+  public closePopup(): void {
+    this.popupStateInternal.value = null;
   }
 
   private removeColumnFromFilters(

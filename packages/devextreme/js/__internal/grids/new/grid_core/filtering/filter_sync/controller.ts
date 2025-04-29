@@ -1,5 +1,6 @@
 // import type { ReadonlySignal } from '@preact/signals-core';
 // import { computed } from '@preact/signals-core';
+import { equalByValue } from '@js/core/utils/common';
 import { computed } from '@preact/signals-core';
 import { getMatchedConditions } from '@ts/filter_builder/m_utils';
 
@@ -107,7 +108,9 @@ export class FilterSyncController {
       }
       this.lockFromHeaderFilter();
 
-      this.filterController.filterValueOption.value = filter;
+      if (!equalByValue(filter, this.filterController.filterValueOption.value, { maxDepth: 5 })) {
+        this.filterController.filterValueOption.value = filter;
+      }
       this.unlockFromHeaderFilter();
     });
   }
