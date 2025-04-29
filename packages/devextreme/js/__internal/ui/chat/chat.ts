@@ -41,11 +41,6 @@ import type { DataChange } from '@ts/ui/collection/collection_widget.base';
 const CHAT_CLASS = 'dx-chat';
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 
-export enum MessageType {
-  Text = 'text',
-  Image = 'image',
-}
-
 class Chat extends Widget<Properties> {
   _messageBox!: MessageBox;
 
@@ -513,7 +508,6 @@ class Chat extends Widget<Properties> {
     const message: Message = {
       timestamp: new Date(),
       author: user,
-      type: MessageType.Text,
       text,
     };
 

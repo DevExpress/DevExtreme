@@ -7,8 +7,6 @@ import { ICON_CLASS } from '@ts/core/utils/m_icon';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
 
-import { MessageType } from './chat';
-
 export const CHAT_MESSAGEBUBBLE_CLASS = 'dx-chat-messagebubble';
 export const CHAT_MESSAGEBUBBLE_DELETED_CLASS = 'dx-chat-messagebubble-deleted';
 export const CHAT_MESSAGEBUBBLE_CONTENT_CLASS = 'dx-chat-messagebubble-content';
@@ -23,6 +21,11 @@ export interface Properties extends WidgetOptions<MessageBubble> {
   isDeleted: boolean;
   isEdited: boolean;
   template?: ((message: Message, container: Element) => void) | null;
+}
+
+export enum MessageType {
+  Text = 'text',
+  Image = 'image',
 }
 
 class MessageBubble extends Widget<Properties> {
