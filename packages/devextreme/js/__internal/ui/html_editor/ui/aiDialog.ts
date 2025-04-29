@@ -276,6 +276,7 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
       toolbar: 'bottom',
       location: 'after',
       widget: 'dxDropDownButton',
+      locateInMenu: 'auto',
       options: {
         text: localizationMessage.format('dxHtmlEditor-aiReplace'),
         stylingMode: 'contained',
@@ -303,6 +304,7 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
       toolbar: 'bottom',
       location: 'after',
       widget: 'dxButton',
+      locateInMenu: 'auto',
       options: {
         stylingMode: 'outlined',
         icon: COPY_BUTTON_ICON,
