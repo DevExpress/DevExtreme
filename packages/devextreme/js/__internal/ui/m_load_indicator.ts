@@ -14,6 +14,7 @@ import supportUtils from '../core/utils/m_support';
 const LOADINDICATOR_CLASS = 'dx-loadindicator';
 const LOADINDICATOR_WRAPPER_CLASS = 'dx-loadindicator-wrapper';
 const LOADINDICATOR_CONTENT_CLASS = 'dx-loadindicator-content';
+const LOADINDICATOR_CONTENT_CIRCLE_CLASS = 'dx-loadindicator-content-circle';
 const LOADINDICATOR_ICON_CLASS = 'dx-loadindicator-icon';
 const LOADINDICATOR_SEGMENT_CLASS = 'dx-loadindicator-segment';
 const LOADINDICATOR_SEGMENT_INNER_CLASS = 'dx-loadindicator-segment-inner';
@@ -24,7 +25,7 @@ export enum AnimationType {
 }
 
 const ANIMATION_TYPE_CLASSES = {
-  [AnimationType.Circle]: 'dx-loadindicator-content-circle',
+  [AnimationType.Circle]: LOADINDICATOR_CONTENT_CIRCLE_CLASS,
 } as const;
 
 export interface LoadIndicatorProperties extends Properties {
@@ -119,7 +120,7 @@ class LoadIndicator extends Widget<LoadIndicatorProperties> {
   }
 
   _renderIndicatorContent(): void {
-    const animationClass = this._getAnimationTypeContentClass();
+    const animationClass = this._getAnimationTypeContentClass() ?? '';
     const contentClasses = [LOADINDICATOR_CONTENT_CLASS, animationClass].join(' ');
 
     this._$content = $('<div>').addClass(contentClasses);
