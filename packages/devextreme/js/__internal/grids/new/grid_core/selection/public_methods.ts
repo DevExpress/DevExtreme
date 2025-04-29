@@ -2,8 +2,7 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import type { DeferredObj } from '@js/core/utils/deferred';
 
-import type { DataRow } from '../columns_controller/types';
-import type { Key } from '../data_controller/types';
+import type { DataObject, Key } from '../data_controller/types';
 import type { Constructor } from '../types';
 import type { GridCoreNewBase } from '../widget';
 
@@ -17,8 +16,8 @@ export function PublicMethods<TBase extends Constructor<GridCoreNewBase>>(GridCo
       return this.selectionController.getSelectedCardKeys();
     }
 
-    public getSelectedCards(): DataRow[] {
-      return this.selectionController.getSelectedCards();
+    public getSelectedCardsData(): DataObject[] {
+      return this.selectionController.getSelectedCardsData();
     }
 
     public selectCards(keys: Key[], preserve = false): DeferredObj<unknown> | undefined {

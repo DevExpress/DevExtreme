@@ -20,8 +20,8 @@ const mockOnClick = createMockCallback();
 const mockOnHold = createMockCallback();
 
 const props = {
-  row: {
-    cells: [
+  card: {
+    fields: [
       {
         column: {
           dataField: 'Name',

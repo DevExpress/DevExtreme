@@ -7,7 +7,7 @@ import { compileGetter } from '@js/core/utils/data';
 import { isDefined } from '@js/core/utils/type';
 import { computed, effect, signal } from '@preact/signals-core';
 import type { OptionsController } from '@ts/grids/new/card_view/options_controller';
-import type { DataRow } from '@ts/grids/new/grid_core/columns_controller/types';
+import type { CardInfo } from '@ts/grids/new/grid_core/columns_controller/types';
 import {
   NavigationStrategyMatrix,
 } from '@ts/grids/new/grid_core/keyboard_navigation/index';
@@ -74,7 +74,6 @@ export class ContentView extends ContentViewBase<ContentViewProps> {
         navigationStrategy: this.navigationStrategy,
         isLoading: this.dataController.isReloading.value,
         needToHiddenCheckBoxes: this.selectionController.needToHiddenCheckBoxes.value,
-        fieldTemplate: this.options.template('fieldTemplate').value,
         cardsPerRow: this.cardsPerRow.value,
         onRowHeightChange: (height) => { this.rowHeight.value = height; },
         onFirstElementChange: (firstElement: HTMLDivElement | undefined): void => {
@@ -86,6 +85,7 @@ export class ContentView extends ContentViewBase<ContentViewProps> {
         cardProps: {
           minWidth: this.cardMinWidth.value,
           maxWidth: this.options.oneWay('cardMaxWidth').value,
+          fieldHintEnabled: this.options.oneWay('fieldHintEnabled').value,
           isCheckBoxesRendered: this.selectionController.isCheckBoxesRendered.value,
           allowSelectOnClick: this.selectionController.allowSelectOnClick.value,
           onHold: this.onCardHold.bind(this),
@@ -95,16 +95,18 @@ export class ContentView extends ContentViewBase<ContentViewProps> {
           onPrepared: this.options.action('onCardPrepared').value,
           onEdit: (key: Key, returnFocusTo?: HTMLElement) => {
             this.keyboardNavigationController.setReturnFocusTo(returnFocusTo);
-            this.editingController.editRow(key);
+            this.editingController.editCard(key);
           },
           onDelete: (key: Key, returnFocusTo?: HTMLElement) => {
             this.keyboardNavigationController.setReturnFocusTo(returnFocusTo);
             // eslint-disable-next-line @typescript-eslint/no-floating-promises
-            this.editingController.deleteRow(key);
+            this.editingController.deleteCard(key);
           },
           allowUpdating: this.editingController.allowUpdating.value,
           allowDeleting: this.editingController.allowDeleting.value,
           footerTemplate: this.options.template('cardFooterTemplate').value,
+          template: this.options.template('cardTemplate').value,
+          contentTemplate: this.options.template('cardContentTemplate').value,
           cover: {
             imageExpr: this.processExpr(
               this.options.oneWay('cardCover.imageExpr').value,
@@ -113,7 +115,13 @@ export class ContentView extends ContentViewBase<ContentViewProps> {
               this.options.oneWay('cardCover.altExpr').value,
             ),
             maxHeight: this.options.oneWay('cardCover.maxHeight').value,
-            ratio: this.options.oneWay('cardCover.ratio').value,
+            ratio: this.options.oneWay('cardCover.aspectRatio').value,
+            template: this.options.template('cardCover.template').value,
+          },
+          header: {
+            visible: this.options.oneWay('cardHeader.visible').value,
+            items: this.options.oneWay('cardHeader.items').value,
+            template: this.options.template('cardHeader.template').value,
           },
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           toolbar: this.options.oneWay('cardHeader.items').value as any,
@@ -122,7 +130,7 @@ export class ContentView extends ContentViewBase<ContentViewProps> {
           onSearchFocus: () => {
             this.searchUIController.doUIAction('focusSearchTextBox');
           },
-          onFocusedCardChanged: (card: DataRow, cardIdx: number, element: HTMLElement) => {
+          onFocusedCardChanged: (card: CardInfo, cardIdx: number, element: HTMLElement) => {
             this.keyboardNavigationController.onFocusedCardChanged(card, cardIdx, element);
           },
         },
@@ -140,19 +148,19 @@ export class ContentView extends ContentViewBase<ContentViewProps> {
     return compileGetter(expr);
   }
 
-  private selectCard(row: DataRow, options: SelectCardOptions) {
+  private selectCard(card: CardInfo, options: SelectCardOptions) {
     if (options.needToUpdateCheckboxes) {
       this.selectionController.updateSelectionCheckBoxesVisible(true);
     }
 
-    this.selectionController.changeCardSelection(row.index, options);
+    this.selectionController.changeCardSelection(card.index, options);
   }
 
   private onCardHold(e: CardHoldEvent) {
-    this.selectionController.processLongTap(e.row);
+    this.selectionController.processLongTap(e.card);
   }
 
-  private showContextMenu(e: MouseEvent, card?: DataRow, cardIndex?: number): void {
+  private showContextMenu(e: MouseEvent, card?: CardInfo, cardIndex?: number): void {
     this.contextMenuController.show(e, 'content', { card, cardIndex });
   }
 

@@ -49,7 +49,7 @@ export class HeaderFilterViewController {
       {
         ...column,
         filterType: column.filterType,
-        filterValues: column.headerFilter?.values,
+        filterValues: column.filterValues,
       },
       // NOTE: Only text used from root options
       {
@@ -70,10 +70,10 @@ export class HeaderFilterViewController {
         dataSource: filterDataSourceOptions,
         filterType: column.filterType,
         // NOTE: Copy array because of mutations in legacy code
-        filterValues: Array.isArray(column.headerFilter?.values)
-          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-          ? [...column.headerFilter!.values]
-          : column.headerFilter?.values,
+        filterValues: Array.isArray(column.filterValues)
+
+          ? [...column.filterValues]
+          : column.filterValues,
         apply(): void {
           colsController.updateColumns(
             (columns) => {
@@ -85,10 +85,10 @@ export class HeaderFilterViewController {
                 headerFilter: {
                   ...newColumns[index].headerFilter,
                   // NOTE: Copy array because of mutations in legacy code
-                  values: Array.isArray(this.filterValues)
-                    ? [...this.filterValues]
-                    : this.filterValues,
                 },
+                filterValues: Array.isArray(this.filterValues)
+                  ? [...this.filterValues]
+                  : this.filterValues,
                 filterType: this.filterType,
               };
               return newColumns;

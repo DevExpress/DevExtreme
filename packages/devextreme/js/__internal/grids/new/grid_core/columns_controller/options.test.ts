@@ -123,27 +123,27 @@ describe('Options', () => {
     });
   });
 
-  describe('column[].calculateCellValue', () => {
-    it('should override value in DataRow', () => {
+  describe('column[].calculateFieldValue', () => {
+    it('should override value in CardInfo', () => {
       const { columnsController, itemsController } = setup({
         columns: [
-          { calculateCellValue: (data: any) => `${data.a} ${data.b}` },
+          { calculateFieldValue: (data: any) => `${data.a} ${data.b}` },
         ],
       });
 
       const dataObject = { a: 'a', b: 'b' };
       const columns = columnsController.columns.peek();
-      const dataRow = itemsController.createDataRow(dataObject, columns, 0);
+      const CardInfo = itemsController.createCardInfo(dataObject, columns, 0);
 
-      expect(dataRow.cells).toHaveLength(1);
-      expect(dataRow.cells[0].value).toBe('a b');
+      expect(CardInfo.fields).toHaveLength(1);
+      expect(CardInfo.fields[0].value).toBe('a b');
     });
 
     it('should take priority over dataField', () => {
       const { columnsController, itemsController } = setup({
         columns: [
           {
-            calculateCellValue: (data: any) => `${data.a} ${data.b}`,
+            calculateFieldValue: (data: any) => `${data.a} ${data.b}`,
             dataField: 'a',
           },
         ],
@@ -151,15 +151,15 @@ describe('Options', () => {
 
       const dataObject = { a: 'a', b: 'b' };
       const columns = columnsController.columns.peek();
-      const dataRow = itemsController.createDataRow(dataObject, columns, 0);
+      const CardInfo = itemsController.createCardInfo(dataObject, columns, 0);
 
-      expect(dataRow.cells).toHaveLength(1);
-      expect(dataRow.cells[0].value).toBe('a b');
+      expect(CardInfo.fields).toHaveLength(1);
+      expect(CardInfo.fields[0].value).toBe('a b');
     });
   });
 
   describe('column[].calculateDisplayValue', () => {
-    it('should override displayValue in DataRow', () => {
+    it('should override displayValue in CardInfo', () => {
       const { columnsController, itemsController } = setup({
         columns: [
           { calculateDisplayValue: (data: any) => `${data.a} ${data.b}` },
@@ -168,15 +168,15 @@ describe('Options', () => {
 
       const dataObject = { a: 'a', b: 'b' };
       const columns = columnsController.columns.peek();
-      const dataRow = itemsController.createDataRow(dataObject, columns, 0);
+      const CardInfo = itemsController.createCardInfo(dataObject, columns, 0);
 
-      expect(dataRow.cells).toHaveLength(1);
-      expect(dataRow.cells[0].displayValue).toBe('a b');
+      expect(CardInfo.fields).toHaveLength(1);
+      expect(CardInfo.fields[0].displayValue).toBe('a b');
     });
   });
 
   describe('column[].customizeText', () => {
-    it('should override text in DataRow', () => {
+    it('should override text in CardInfo', () => {
       const { columnsController, itemsController } = setup({
         columns: [
           {
@@ -188,10 +188,10 @@ describe('Options', () => {
 
       const dataObject = { a: 'a', b: 'b' };
       const columns = columnsController.columns.peek();
-      const dataRow = itemsController.createDataRow(dataObject, columns, 0);
+      const CardInfo = itemsController.createCardInfo(dataObject, columns, 0);
 
-      expect(dataRow.cells).toHaveLength(1);
-      expect(dataRow.cells[0].text).toBe('aa a aa');
+      expect(CardInfo.fields).toHaveLength(1);
+      expect(CardInfo.fields[0].text).toBe('aa a aa');
     });
   });
 
@@ -203,11 +203,11 @@ describe('Options', () => {
 
       const dataObject = { a: 'a text', b: 'b text' };
       const columns = columnsController.columns.peek();
-      const dataRow = itemsController.createDataRow(dataObject, columns, 0);
+      const CardInfo = itemsController.createCardInfo(dataObject, columns, 0);
 
-      expect(dataRow.cells).toHaveLength(2);
-      expect(dataRow.cells[0].text).toBe('a text');
-      expect(dataRow.cells[1].text).toBe('b text');
+      expect(CardInfo.fields).toHaveLength(2);
+      expect(CardInfo.fields[0].text).toBe('a text');
+      expect(CardInfo.fields[1].text).toBe('b text');
     });
   });
 
@@ -243,19 +243,16 @@ describe('Options', () => {
 
         const dataObject = { a: propName === 'trueText' };
         const columns = columnsController.columns.peek();
-        const dataRow = itemsController.createDataRow(dataObject, columns, 0);
+        const CardInfo = itemsController.createCardInfo(dataObject, columns, 0);
 
-        expect(dataRow.cells).toHaveLength(1);
-        // TODO: Confirm result. dataRow.cells[0].text
-        // returns the correct value if called correctly.
-        // This fails as we are parsing the value from createDataRow
-        expect(dataRow.cells[0].text).toBe(`my ${propName} text`);
+        expect(CardInfo.fields).toHaveLength(1);
+        expect(CardInfo.fields[0].text).toBe(`my ${propName} text`);
       });
     });
   });
 
   describe('column[].format', () => {
-    it('should affect dataRow text', () => {
+    it('should affect CardInfo text', () => {
       const { columnsController, itemsController } = setup({
         columns: [
           {
@@ -267,10 +264,10 @@ describe('Options', () => {
 
       const dataObject = { a: 123 };
       const columns = columnsController.columns.peek();
-      const dataRow = itemsController.createDataRow(dataObject, columns, 0);
+      const CardInfo = itemsController.createCardInfo(dataObject, columns, 0);
 
-      expect(dataRow.cells).toHaveLength(1);
-      expect(dataRow.cells[0].text).toBe('$123');
+      expect(CardInfo.fields).toHaveLength(1);
+      expect(CardInfo.fields[0].text).toBe('$123');
     });
   });
 });

@@ -110,7 +110,7 @@ test('list should contain all values from computed column', async (t) => {
   columns: [
     {
       caption: 'Computed',
-      calculateCellValue: (data) => `${data.A}_${data.B}`,
+      calculateFieldValue: (data) => `${data.A}_${data.B}`,
     },
   ],
   headerFilter: {
@@ -192,7 +192,7 @@ test('should update column options with filterType and values (regular selection
 
   await t
     .expect(columnOptions.filterType).eql(undefined)
-    .expect(columnOptions.headerFilter.values).eql(['A_0', 'A_1']);
+    .expect(columnOptions.filterValues).eql(['A_0', 'A_1']);
 
   await t.click(cardView.element);
 }).before(async () => {
@@ -234,7 +234,7 @@ test('should update column options with filterType and values (selectAll case #0
 
   await t
     .expect(columnOptions.filterType).eql('exclude')
-    .expect(columnOptions.headerFilter.values).eql(null);
+    .expect(columnOptions.filterValues).eql(null);
 
   await t.click(cardView.element);
 }).before(async () => createWidget('dxCardView', {
@@ -278,7 +278,7 @@ test('should update column options with filterType and values (selectAll case #1
 
   await t
     .expect(columnOptions.filterType).eql('exclude')
-    .expect(columnOptions.headerFilter.values).eql(['A_2', 'A_3']);
+    .expect(columnOptions.filterValues).eql(['A_2', 'A_3']);
 
   await t.click(cardView.element);
 }).before(async () => createWidget('dxCardView', {
@@ -329,9 +329,7 @@ test('should apply filter from options (type: "include" by default)', async (t) 
   columns: [
     {
       dataField: 'A',
-      headerFilter: {
-        values: ['A_0', 'A_1'],
-      },
+      filterValues: ['A_0', 'A_1'],
     },
     'B',
     'C',
@@ -375,9 +373,7 @@ test('should apply filter from options (type: "include")', async (t) => {
   columns: [
     {
       dataField: 'A',
-      headerFilter: {
-        values: ['A_0', 'A_1'],
-      },
+      filterValues: ['A_0', 'A_1'],
       filterType: 'include',
     },
     'B',
@@ -424,9 +420,7 @@ test('should apply filter from options (type: "exclude")', async (t) => {
   columns: [
     {
       dataField: 'A',
-      headerFilter: {
-        values: ['A_2', 'A_3', 'A_4'],
-      },
+      filterValues: ['A_2', 'A_3', 'A_4'],
       filterType: 'exclude',
     },
     'B',
@@ -515,7 +509,7 @@ test('should not update column options if popup cancel btn clicked', async (t) =
 
   await t
     .expect(columnOptions.filterType).eql(undefined)
-    .expect(columnOptions.headerFilter.values).eql(['A_4']);
+    .expect(columnOptions.filterValues).eql(['A_4']);
 
   await t.click(cardView.element);
 }).before(async () => createWidget('dxCardView', {
@@ -529,9 +523,7 @@ test('should not update column options if popup cancel btn clicked', async (t) =
   columns: [
     {
       dataField: 'A',
-      headerFilter: {
-        values: ['A_4'],
-      },
+      filterValues: ['A_4'],
     },
     'B',
     'C',

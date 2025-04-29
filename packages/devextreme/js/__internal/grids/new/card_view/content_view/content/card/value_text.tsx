@@ -1,10 +1,10 @@
-import type { Cell } from '@ts/grids/new/grid_core/columns_controller/types';
+import type { FieldInfo } from '@ts/grids/new/grid_core/columns_controller/types';
 import type { ComponentType } from 'inferno';
 
 export interface ValueTextProps {
-  cell: Cell;
-  template?: ComponentType<{ cell: Cell }>;
-  cellHintEnabled?: boolean;
+  field: FieldInfo;
+  template?: ComponentType<{ field: FieldInfo }>;
+  fieldHintEnabled?: boolean;
 }
 
 const ROOT_CLASS = 'dx-cardview-field-value';
@@ -14,28 +14,28 @@ const CLASS = {
 };
 
 export const ValueText = ({
-  cell,
+  field,
   template: Template,
-  cellHintEnabled,
+  fieldHintEnabled,
 }: ValueTextProps): JSX.Element => {
   const classNames = [
     CLASS.root,
-    `${CLASS.root}--text-align-${cell.column.alignment}`,
+    `${CLASS.root}--text-align-${field.column.alignment}`,
   ].join(' ');
 
-  const content = cell.highlightedText
-    ? cell.highlightedText.map(({ type, text: textPart }) => (
+  const content = field.highlightedText
+    ? field.highlightedText.map(({ type, text: textPart }) => (
       <span className={type === 'highlighted' ? CLASS.textPartHighlighted : ''}>{textPart}</span>
     ))
-    : cell.text;
+    : field.text;
 
   return (
     <div
       className={classNames}
-      title={cellHintEnabled ? cell.text : undefined}
+      title={fieldHintEnabled ? field.text : undefined}
     >
       {Template ? (
-        <Template cell={cell}/>
+        <Template field={field}/>
       ) : content}
     </div>
   );

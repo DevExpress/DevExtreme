@@ -189,7 +189,7 @@ describe('ContextMenu', () => {
         key: 10,
         index: 0,
         data: { id: 10, test: 'some value 1' },
-        cells: [{ value: 'some value 1' }],
+        fields: [{ value: 'some value 1' }],
       });
       expect(event.cardIndex).toEqual(0);
 

@@ -1,7 +1,7 @@
 import type { Item as ContextMenuItem, ItemClickEvent } from '@js/ui/context_menu';
 
 import { ColumnsController } from '../../grid_core/columns_controller/index';
-import type { Column, DataRow } from '../../grid_core/columns_controller/types';
+import type { CardInfo, Column } from '../../grid_core/columns_controller/types';
 import { BaseContextMenuController } from '../../grid_core/context_menu/controller';
 import { OptionsController } from '../options_controller';
 import type { ContextMenuPreparingEvent, ContextMenuTarget } from '.';
@@ -9,7 +9,7 @@ import type { ContextMenuPreparingEvent, ContextMenuTarget } from '.';
 export interface ContextInfo {
   column?: Column;
   columnIndex?: number;
-  card?: DataRow;
+  card?: CardInfo;
   cardIndex?: number;
 }
 
@@ -45,7 +45,7 @@ export class ContextMenuController
     }
 
     // @ts-expect-error
-    const event: ContextMenuPreparingEvent<DataRow> = {
+    const event: ContextMenuPreparingEvent<CardInfo> = {
       items: items.length > 0 ? items : undefined,
       target: view,
       targetElement: targetElement as HTMLElement,
