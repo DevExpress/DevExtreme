@@ -11,14 +11,14 @@ import Widget from '@ts/core/widget/widget';
 
 import supportUtils from '../core/utils/m_support';
 
-const LOADINDICATOR_CLASS = 'dx-loadindicator';
-const LOADINDICATOR_WRAPPER_CLASS = 'dx-loadindicator-wrapper';
-const LOADINDICATOR_CONTENT_CLASS = 'dx-loadindicator-content';
-const LOADINDICATOR_CONTENT_CIRCLE_CLASS = 'dx-loadindicator-content-circle';
-const LOADINDICATOR_ICON_CLASS = 'dx-loadindicator-icon';
-const LOADINDICATOR_SEGMENT_CLASS = 'dx-loadindicator-segment';
-const LOADINDICATOR_SEGMENT_INNER_CLASS = 'dx-loadindicator-segment-inner';
-const LOADINDICATOR_IMAGE_CLASS = 'dx-loadindicator-image';
+export const LOADINDICATOR_CLASS = 'dx-loadindicator';
+export const LOADINDICATOR_WRAPPER_CLASS = 'dx-loadindicator-wrapper';
+export const LOADINDICATOR_CONTENT_CLASS = 'dx-loadindicator-content';
+export const LOADINDICATOR_CONTENT_CIRCLE_CLASS = 'dx-loadindicator-content-circle';
+export const LOADINDICATOR_ICON_CLASS = 'dx-loadindicator-icon';
+export const LOADINDICATOR_SEGMENT_CLASS = 'dx-loadindicator-segment';
+export const LOADINDICATOR_SEGMENT_INNER_CLASS = 'dx-loadindicator-segment-inner';
+export const LOADINDICATOR_IMAGE_CLASS = 'dx-loadindicator-image';
 
 export enum AnimationType {
   Circle = 'circle',

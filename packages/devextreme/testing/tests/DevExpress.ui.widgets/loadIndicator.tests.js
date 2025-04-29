@@ -1,8 +1,16 @@
 import $ from 'jquery';
 import support from '__internal/core/utils/m_support';
 import messageLocalization from 'common/core/localization/message';
-import 'ui/load_indicator';
 
+import {
+    LOADINDICATOR_CLASS,
+    LOADINDICATOR_ICON,
+    LOADINDICATOR_CONTENT_CLASS,
+    LOADINDICATOR_SEGMENT,
+    LOADINDICATOR_IMAGE,
+} from '__internal/ui/m_load_indicator';
+
+import 'ui/load_indicator';
 import 'generic_light.css!';
 
 QUnit.testStart(function() {
@@ -11,12 +19,6 @@ QUnit.testStart(function() {
 
     $('#qunit-fixture').html(markup);
 });
-
-const LOADINDICATOR_CLASS = 'dx-loadindicator';
-const LOADINDICATOR_ICON = LOADINDICATOR_CLASS + '-icon';
-const LOADINDICATOR_CONTENT_CLASS = 'dx-loadindicator-content';
-const LOADINDICATOR_SEGMENT = LOADINDICATOR_CLASS + '-segment';
-const LOADINDICATOR_IMAGE = 'dx-loadindicator-image';
 
 QUnit.module('indicator with browser animation', {
     beforeEach: function() {

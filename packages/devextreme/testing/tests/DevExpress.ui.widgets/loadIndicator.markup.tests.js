@@ -1,8 +1,16 @@
 import $ from 'jquery';
 import support from '__internal/core/utils/m_support';
 
-import '__internal/ui/m_load_indicator';
+import {
+    LOADINDICATOR_CLASS,
+    LOADINDICATOR_ICON,
+    LOADINDICATOR_CONTENT_CLASS,
+    LOADINDICATOR_SEGMENT,
+    LOADINDICATOR_IMAGE,
+    LOADINDICATOR_WRAPPER_CLASS,
+} from '__internal/ui/m_load_indicator';
 
+import 'ui/load_indicator';
 import 'generic_light.css!';
 
 QUnit.testStart(function() {
@@ -11,13 +19,6 @@ QUnit.testStart(function() {
 
     $('#qunit-fixture').html(markup);
 });
-
-const LOADINDICATOR_CLASS = 'dx-loadindicator';
-const LOADINDICATOR_WRAPPER = LOADINDICATOR_CLASS + '-wrapper';
-const LOADINDICATOR_ICON = LOADINDICATOR_CLASS + '-icon';
-const LOADINDICATOR_CONTENT_CLASS = 'dx-loadindicator-content';
-const LOADINDICATOR_SEGMENT = LOADINDICATOR_CLASS + '-segment';
-const LOADINDICATOR_IMAGE = 'dx-loadindicator-image';
 
 const isIdenticalNamesInUrl = function(firstUrl, secondUrl) {
     let firstName = firstUrl.split('/');
@@ -29,7 +30,7 @@ const isIdenticalNamesInUrl = function(firstUrl, secondUrl) {
 
 QUnit.module('LoadIndicator markup', () => {
     QUnit.test('Basic markup initialization', function(assert) {
-        const $indicator = $('#loadIndicator').dxLoadIndicator(); const $indicatorWrapper = $indicator.find('.' + LOADINDICATOR_WRAPPER); const $indicatorContent = $indicator.find('.' + LOADINDICATOR_CONTENT_CLASS);
+        const $indicator = $('#loadIndicator').dxLoadIndicator(); const $indicatorWrapper = $indicator.find('.' + LOADINDICATOR_WRAPPER_CLASS); const $indicatorContent = $indicator.find('.' + LOADINDICATOR_CONTENT_CLASS);
 
         assert.ok($indicator.hasClass(LOADINDICATOR_CLASS), 'Load Indicator initialized');
         assert.equal($indicatorWrapper.length, 1, 'Wrapper has been added');
@@ -57,7 +58,7 @@ QUnit.module('Static load indicator', {
 }, () => {
     QUnit.test('basic render', function(assert) {
         const $indicator = $('#loadIndicator').dxLoadIndicator({ visible: false });
-        const $indicatorWrapper = $indicator.find(`.${LOADINDICATOR_WRAPPER}`);
+        const $indicatorWrapper = $indicator.find(`.${LOADINDICATOR_WRAPPER_CLASS}`);
 
         assert.notOk($indicatorWrapper.hasClass(`.${LOADINDICATOR_IMAGE}`), 'Image class not added');
         assert.strictEqual($indicator.find(`.${LOADINDICATOR_ICON}`).length, 0, 'Icon div not created');
@@ -71,7 +72,7 @@ QUnit.module('Static load indicator', {
             visible: true,
             indicatorSrc: url
         });
-        const $wrapper = $element.find('.' + LOADINDICATOR_WRAPPER);
+        const $wrapper = $element.find('.' + LOADINDICATOR_WRAPPER_CLASS);
         const instance = $('#loadIndicator').dxLoadIndicator('instance');
         const getBackgroundImage = function() { return $wrapper[0].style.backgroundImage; };
 
