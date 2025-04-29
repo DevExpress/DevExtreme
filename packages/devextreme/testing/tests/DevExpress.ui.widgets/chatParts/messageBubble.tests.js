@@ -43,19 +43,29 @@ QUnit.module('MessageBubble', moduleConfig, () => {
             assert.strictEqual(this.$element.text(), messageLocalization.format('dxChat-deletedMessageText'));
         });
 
-        QUnit.test('should render an image with correct src', function(assert) {
+        QUnit.test('should render an image with correct attributes', function(assert) {
             const imageSrc = 'test image src';
-            this.reinit({ message: { src: imageSrc, type: 'image' } });
+            const imageAlt = 'Image alt';
+            this.reinit({ message: { src: imageSrc, type: 'image', alt: imageAlt } });
 
             const $img = this.$element.find('img');
 
             assert.strictEqual($img.length, 1, 'One <img> element is rendered');
             assert.strictEqual($img.attr('src'), imageSrc, 'Image has correct src');
+            assert.strictEqual($img.attr('alt'), imageAlt, 'Image has correct default alt');
+        });
+
+        QUnit.test('should render an image with default alt', function(assert) {
+            this.reinit({ message: { src: '', type: 'image' } });
+
+            const $img = this.$element.find('img');
+
+            assert.strictEqual($img.attr('alt'), 'Image shared in chat', 'Image has correct default alt');
         });
     });
 
     QUnit.module('Options', () => {
-        QUnit.test('text option should be updatable at runtime', function(assert) {
+        QUnit.test('message option should be updatable at runtime', function(assert) {
             this.instance.option('message', { text: 'new message text', type: 'text' });
 
             assert.strictEqual(this.$element.text(), 'new message text');

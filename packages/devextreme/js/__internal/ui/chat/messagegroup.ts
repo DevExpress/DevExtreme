@@ -121,17 +121,9 @@ class MessageGroup extends Widget<Properties> {
   }
 
   _getMessageBubbleOptions(message: Message): MessageBubbleProperties {
-    const options: MessageBubbleProperties = { message };
-
     const { messageTemplate } = this.option();
 
-    if (messageTemplate) {
-      options.template = (currentMessage, container): void => {
-        messageTemplate(currentMessage, container);
-      };
-    }
-
-    return options;
+    return { template: messageTemplate, message };
   }
 
   _renderMessageBubbles(items: Message[]): void {
