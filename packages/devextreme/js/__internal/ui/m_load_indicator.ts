@@ -33,6 +33,11 @@ export interface LoadIndicatorProperties extends Properties {
   _animationType: AnimationType;
 }
 
+interface SegmentParams {
+  segmentCount: number;
+  segmentInner: boolean;
+}
+
 class LoadIndicator extends Widget<LoadIndicatorProperties> {
   _$wrapper!: dxElementWrapper;
 
@@ -132,25 +137,48 @@ class LoadIndicator extends Widget<LoadIndicatorProperties> {
     }
   }
 
-  _renderAnimationMarkup(): void {
-    const animatingSegmentInner = this.option('_animatingSegmentInner');
+  _getSegmentParams(): SegmentParams {
+    const {
+      _animationType: animationType,
+      _animatingSegmentCount: animatingSegmentCount,
+      _animatingSegmentInner: animatingSegmentInner,
+    } = this.option();
 
+    const segmentParams = {
+      [AnimationType.Circle]: {
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        segmentCount: animatingSegmentCount!,
+        segmentInner: !animatingSegmentInner,
+      },
+    };
+
+    return segmentParams[animationType];
+  }
+
+  _renderAnimationMarkup(): void {
     this._$indicator = $('<div>').addClass(LOADINDICATOR_ICON_CLASS);
     this._$content.append(this._$indicator);
 
-    // Indicator markup
-    // @ts-expect-error ts-error
-    for (let i = this.option('_animatingSegmentCount'); i >= 0; --i) {
+    const params = this._getSegmentParams();
+
+    this._renderSegments(params);
+  }
+
+  _renderSegments(params: SegmentParams): void {
+    const { segmentCount, segmentInner } = params;
+
+    for (let i = segmentCount - 1; i >= 0; i -= 1) {
       const $segment = $('<div>')
         .addClass(LOADINDICATOR_SEGMENT_CLASS)
-        // eslint-disable-next-line @typescript-eslint/restrict-plus-operands, @typescript-eslint/no-base-to-string
-        .addClass(LOADINDICATOR_SEGMENT_CLASS + i);
+        .addClass(`${LOADINDICATOR_SEGMENT_CLASS}${i}`);
 
-      if (animatingSegmentInner) {
-        $segment.append($('<div>').addClass(LOADINDICATOR_SEGMENT_INNER_CLASS));
+      if (segmentInner) {
+        const $segmentInner = $('<div>').addClass(LOADINDICATOR_SEGMENT_INNER_CLASS);
+
+        $segment.append($segmentInner);
       }
 
-      this._$indicator.append($segment);
+      this._$indicator?.append($segment);
     }
   }
 
