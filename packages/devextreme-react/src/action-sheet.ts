@@ -102,7 +102,7 @@ type IItemProps = React.PropsWithChildren<{
   stylingMode?: ButtonStyle;
   template?: ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string | any) | template;
   text?: string;
-  type?: ButtonType;
+  type?: ButtonType | string;
   render?: (...params: any) => React.ReactNode;
   component?: React.ComponentType<any>;
 }>
