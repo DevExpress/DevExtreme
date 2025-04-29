@@ -104,15 +104,18 @@ class LoadIndicator extends Widget<LoadIndicatorProperties> {
 
   _renderMarkup(): void {
     const { indicatorSrc } = this.option();
+    const isAnimationAvailable = supportUtils.animation();
+    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+    const shouldRenderImageMarkup = indicatorSrc || !isAnimationAvailable;
 
-    if (supportUtils.animation() && !indicatorSrc) {
-      this._renderMarkupForAnimation();
+    if (shouldRenderImageMarkup) {
+      this._renderImageMarkup();
     } else {
-      this._renderMarkupForImage();
+      this._renderAnimationMarkup();
     }
   }
 
-  _renderMarkupForAnimation(): void {
+  _renderAnimationMarkup(): void {
     const animatingSegmentInner = this.option('_animatingSegmentInner');
 
     this._$indicator = $('<div>').addClass(LOADINDICATOR_ICON_CLASS);
@@ -134,14 +137,14 @@ class LoadIndicator extends Widget<LoadIndicatorProperties> {
     }
   }
 
-  _renderMarkupForImage(): void {
+  _renderImageMarkup(): void {
     const { indicatorSrc } = this.option();
 
     if (indicatorSrc) {
       this._$wrapper.addClass(LOADINDICATOR_IMAGE_CLASS);
       this._$wrapper.css('backgroundImage', `url(${indicatorSrc})`);
     } else if (supportUtils.animation()) {
-      this._renderMarkupForAnimation();
+      this._renderAnimationMarkup();
     }
   }
 
