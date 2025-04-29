@@ -12,9 +12,9 @@ import type { ModuleType, Views } from '../m_types';
 import { StickyPosition } from '../sticky_columns/const';
 import { getColumnFixedPosition } from '../sticky_columns/utils';
 import { CONTEXT_MENU_MOVE_NEXT_ICON, CONTEXT_MENU_MOVE_PREVIOUS_ICON, Direction } from './const';
-import { KeyboardNavigationController as KeyboardNavigationControllerCore } from './m_keyboard_navigation_core';
+import { ColumnKeyboardNavigationController } from './m_column_keyboard_navigation_core';
 
-export class HeadersKeyboardNavigationController extends KeyboardNavigationControllerCore {
+export class HeadersKeyboardNavigationController extends ColumnKeyboardNavigationController {
   protected _columnHeadersView!: Views['columnHeadersView'];
 
   private leftRightKeysHandler(e): void {
@@ -27,7 +27,12 @@ export class HeadersKeyboardNavigationController extends KeyboardNavigationContr
       const column = this._getColumnByCellElement($cell, rowIndex);
 
       if (this.isHeaderValidForReordering(column, direction, rowIndex)) {
-        this.moveHeader(column, rowIndex, direction);
+        this.moveColumn({
+          column,
+          direction,
+          sourceLocation: 'headers',
+          targetLocation: 'headers',
+        });
       }
       originalEvent?.preventDefault();
     }
@@ -133,23 +138,6 @@ export class HeadersKeyboardNavigationController extends KeyboardNavigationContr
 
     return direction === Direction.Next ? !isLastColumn : !isFirstColumn;
   }
-
-  public moveHeader(column, rowIndex, direction) {
-    const visibleIndex = this._columnsController.getVisibleIndex(column.index, rowIndex);
-    const newVisibleIndex = this.getNewVisibleIndex(visibleIndex, direction);
-    const newFocusedColumnIndex = direction === Direction.Next
-      ? newVisibleIndex - 1
-      : newVisibleIndex;
-
-    this.isNeedToFocus = true;
-    this.setFocusedCellPosition(rowIndex, newFocusedColumnIndex);
-    this._columnsController.moveColumn(
-      { columnIndex: visibleIndex, rowIndex },
-      { columnIndex: newVisibleIndex, rowIndex },
-      'headers',
-      'headers',
-    );
-  }
 }
 
 const columnHeadersView = (
@@ -179,7 +167,13 @@ const columnHeadersView = (
         const rtlEnabled = this.option('rtlEnabled');
         const onItemClick = (e) => {
           this.isNeedToFocusHeader = true;
-          headersKeyboardNavigationController.moveHeader(column, rowIndex, e.itemData?.value);
+          headersKeyboardNavigationController.moveColumn({
+            column,
+            direction: e.itemData?.value,
+            sourceLocation: 'headers',
+            targetLocation: 'headers',
+            rowIndex,
+          });
         };
 
         items = items ?? [];

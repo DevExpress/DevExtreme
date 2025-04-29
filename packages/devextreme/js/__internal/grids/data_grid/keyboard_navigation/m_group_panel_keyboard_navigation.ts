@@ -9,13 +9,13 @@ import $ from '@js/core/renderer';
 import { hiddenFocus } from '@js/ui/shared/accessibility';
 import type { HeaderPanel } from '@ts/grids/grid_core/header_panel/m_header_panel';
 import { CONTEXT_MENU_MOVE_NEXT_ICON, CONTEXT_MENU_MOVE_PREVIOUS_ICON, Direction } from '@ts/grids/grid_core/keyboard_navigation/const';
-import { KeyboardNavigationController as KeyboardNavigationControllerCore } from '@ts/grids/grid_core/keyboard_navigation/m_keyboard_navigation_core';
+import { ColumnKeyboardNavigationController } from '@ts/grids/grid_core/keyboard_navigation/m_column_keyboard_navigation_core';
 import type { ModuleType, Views } from '@ts/grids/grid_core/m_types';
 
 import { CLASSES as GROUPING_CLASSES } from '../grouping/const';
 import gridCore from '../m_core';
 
-export class GroupPanelKeyboardNavigationController extends KeyboardNavigationControllerCore {
+export class GroupPanelKeyboardNavigationController extends ColumnKeyboardNavigationController {
   private isNeedToHiddenFocusAfterClick = false;
 
   private groupItemClickHandlerContext!: (event: any) => void;
@@ -48,11 +48,16 @@ export class GroupPanelKeyboardNavigationController extends KeyboardNavigationCo
     const { originalEvent } = e;
 
     if (isCommandKeyPressed(originalEvent)) {
-      const groupColumn: any = $(originalEvent.target).data('columnData');
+      const column: any = $(originalEvent.target).data('columnData');
       const direction = this.getDirectionByKeyName(e.keyName);
 
-      if (this.isGroupColumnValidForReordering(groupColumn, direction)) {
-        this.moveGroupColumn(groupColumn, direction);
+      if (this.isGroupColumnValidForReordering(column, direction)) {
+        this.moveColumn({
+          column,
+          direction,
+          sourceLocation: 'group',
+          targetLocation: 'group',
+        });
       }
 
       originalEvent?.preventDefault();
@@ -131,36 +136,6 @@ export class GroupPanelKeyboardNavigationController extends KeyboardNavigationCo
       ? groupColumn.groupIndex !== groupedColumns.length - 1
       : groupColumn.groupIndex !== 0;
   }
-
-  public moveGroupColumn(groupColumn, direction) {
-  /*
-    We need to add 2 to the index instead of 1,
-    because that's how normalization of these indexes works.
-
-    For example, we have columns with the following indexes:
-    0 1 2 3
-
-    We drag 1 to the right. Its index becomes 3.
-    0 2 3(1) 3(3)
-
-    After normalization of the indexes:
-    0 1(2) 2(1) 3(3)
-  */
-    const newGroupIndex = direction === Direction.Next
-      ? groupColumn.groupIndex + 2
-      : groupColumn.groupIndex - 1;
-    const newFocusedGroupColumnIndex = direction === Direction.Next
-      ? groupColumn.groupIndex + 1
-      : groupColumn.groupIndex - 1;
-
-    this.isNeedToFocus = true;
-    this.setFocusedCellPosition(0, newFocusedGroupColumnIndex);
-    this._columnsController.columnOption(
-      groupColumn.index,
-      'groupIndex',
-      newGroupIndex,
-    );
-  }
 }
 
 const headerPanel = (Base: ModuleType<HeaderPanel>) => class HeaderPanelKeyboardNavigationExtender extends Base {
@@ -188,7 +163,12 @@ const headerPanel = (Base: ModuleType<HeaderPanel>) => class HeaderPanelKeyboard
         const rtlEnabled = this.option('rtlEnabled');
         const onItemClick = (e) => {
           this.isNeedToFocusGroupColumn = true;
-          groupPanelKeyboardNavigationController.moveGroupColumn(column, e.itemData?.value);
+          groupPanelKeyboardNavigationController.moveColumn({
+            column: options.column,
+            direction: e.itemData?.value,
+            sourceLocation: 'group',
+            targetLocation: 'group',
+          });
         };
 
         items = items ?? [];
