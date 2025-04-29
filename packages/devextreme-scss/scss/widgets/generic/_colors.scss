@@ -136,7 +136,6 @@ $base-selected-border: null !default;
 $base-webwidget-hover-background: null !default;
 $base-grid-selection-background: null !default;
 $base-grid-selectedrow-border-color: null !default;
-// $loadindicator-image-ai-path: null !default;
 
 @if $color == "carmine" {
   $generic-color-postfix: ".carmine" !default;
@@ -365,7 +364,6 @@ $base-grid-selectedrow-border-color: null !default;
   $base-invalid-faded-border-color: color.change($base-invalid-color, $alpha: 0.4) !default;
 
   $scrollview-pulldown-path: data-uri('images/widgets/generic/color-schemes/light/pulldown.png') !default;
-  // $loadindicator-image-ai-path: data-uri('images/widgets/generic/color-schemes/light/loadindicator/exampleAIMetaphora.svg') !default;
 }
 
 @if $color == "softblue" {

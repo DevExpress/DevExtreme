@@ -10,7 +10,6 @@
 */
 $loadindicator-bg: null !default;
 $loadindicator-segment-shadow-color: null !default;
-// $loadindicator-image-ai-bg: null !default;
 
 
 @if $color == "carmine" {
@@ -47,7 +46,6 @@ $loadindicator-segment-shadow-color: null !default;
 @if $color == "light" {
   $loadindicator-bg: lighten($base-text-color, 17.5%) !default;
   $loadindicator-segment-shadow-color: color.change($base-shadow-color, $alpha: 0.2) !default;
-  // $loadindicator-image-ai-bg: data-uri('images/widgets/generic/color-schemes/light/loadindicator/exampleAIMetaphora.svg') !default;
 }
 
 @if $color == "softblue" {
