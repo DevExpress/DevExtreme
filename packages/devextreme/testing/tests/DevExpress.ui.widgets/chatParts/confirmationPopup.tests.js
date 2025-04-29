@@ -28,72 +28,66 @@ const moduleConfig = {
 };
 
 QUnit.module('ConfirmationPopup', moduleConfig, () => {
-    QUnit.test(
-        'Should execute onApplyButtonClick callback when apply button is clicked',
-        function(assert) {
-            assert.expect(1);
+    QUnit.test('Should execute onApplyButtonClick callback when apply button is clicked', function(assert) {
+        assert.expect(1);
 
-            const done = assert.async();
+        const done = assert.async();
 
-            this.reinit({
-                onApplyButtonClick: () => {
-                    assert.ok(true, 'onApplyButtonClick callback was executed');
-                    done();
-                },
-            });
-            this.instance.show();
+        this.reinit({
+            onApplyButtonClick: () => {
+                assert.ok(true, 'onApplyButtonClick callback was executed');
+                done();
+            },
+        });
+        this.instance.show();
 
-            const $buttons = this.$element.find(`.${BUTTON_CLASS}`);
-            $buttons.first().trigger('dxclick');
-        }
+        const $buttons = this.$element.find(`.${BUTTON_CLASS}`);
+        $buttons.first().trigger('dxclick');
+    }
     );
 
-    QUnit.test(
-        'Should execute onCancelButtonClick callback when cancel button is clicked',
-        function(assert) {
-            assert.expect(1);
+    QUnit.test('Should execute onCancelButtonClick callback when cancel button is clicked', function(assert) {
+        assert.expect(1);
 
-            const done = assert.async();
+        const done = assert.async();
 
-            this.reinit({
-                onCancelButtonClick: () => {
+        this.reinit({
+            onCancelButtonClick: () => {
+                assert.ok(
+                    true,
+                    'onCancelButtonClick callback was executed'
+                );
+                done();
+            },
+        });
+        this.instance.show();
+
+        const $buttons = this.$element.find(`.${BUTTON_CLASS}`);
+        $buttons.last().trigger('dxclick');
+    }
+    );
+
+    QUnit.test('Should hide popup when buttons clicked without callbacks', function(assert) {
+        assert.expect(1);
+
+        const done = assert.async();
+
+        this.reinit(
+            {},
+            {
+                onHidden: () => {
                     assert.ok(
                         true,
-                        'onCancelButtonClick callback was executed'
+                        'onHidden callback was executed when buttons clicked without callbacks'
                     );
                     done();
                 },
-            });
-            this.instance.show();
+            }
+        );
+        this.instance.show();
 
-            const $buttons = this.$element.find(`.${BUTTON_CLASS}`);
-            $buttons.last().trigger('dxclick');
-        }
-    );
-
-    QUnit.test(
-        'Should hide popup when buttons clicked without callbacks',
-        function(assert) {
-            assert.expect(1);
-
-            const done = assert.async();
-
-            this.reinit(
-                {},
-                {
-                    onHidden: () => {
-                        assert.ok(
-                            true,
-                            'onHidden callback was executed when buttons clicked without callbacks'
-                        );
-                        done();
-                    },
-                }
-            );
-            this.instance.show();
-
-            const $buttons = this.$element.find(`.${BUTTON_CLASS}`);
-            $buttons.first().trigger('dxclick');
-        }
+        const $buttons = this.$element.find(`.${BUTTON_CLASS}`);
+        $buttons.first().trigger('dxclick');
+    }
     );
 });

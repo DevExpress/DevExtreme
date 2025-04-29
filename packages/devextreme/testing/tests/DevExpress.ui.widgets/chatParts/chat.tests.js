@@ -914,6 +914,43 @@ QUnit.module('Chat', () => {
                 $deleteButton.trigger('dxclick');
             });
 
+            QUnit.test('should be able to delete several messages', function(assert) {
+                assert.expect(1);
+
+                const items = [
+                    { text: 'a', author: userFirst },
+                    { text: 'b', author: userSecond },
+                    { text: 'c', author: userSecond },
+                ];
+
+                const deletedMessages = [];
+
+                this.reinit({
+                    user: userSecond,
+                    editing: {
+                        allowDeleting: true
+                    },
+                    onMessageDeleting: (e) => {
+                        const { message } = e;
+                        deletedMessages.push(message);
+                    },
+                    items,
+                });
+
+                const deleteMessage = (messageIndex) => {
+                    const $bubbles = this.getBubbles();
+                    $bubbles.eq(messageIndex).trigger('dxcontextmenu');
+
+                    const $deleteButton = this.getContextMenuItems().eq(0);
+                    $deleteButton.trigger('dxclick');
+                };
+
+                deleteMessage(1);
+                deleteMessage(2);
+
+                assert.deepEqual(deletedMessages, [items[1], items[2]], 'Both messages were deleted');
+            });
+
             QUnit.test('should allow updating onMessageDeleting at runtime', function(assert) {
                 const items = [
                     { text: 'a', author: userFirst },
