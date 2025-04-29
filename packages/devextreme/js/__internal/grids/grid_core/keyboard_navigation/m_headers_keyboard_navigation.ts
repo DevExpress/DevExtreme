@@ -177,7 +177,6 @@ const columnHeadersView = (
 
       if (headersKeyboardNavigationController) {
         const rtlEnabled = this.option('rtlEnabled');
-        const keyboardNavigationTexts = this.option('keyboardNavigation.texts');
         const onItemClick = (e) => {
           this.isNeedToFocusHeader = true;
           headersKeyboardNavigationController.moveHeader(column, rowIndex, e.itemData?.value);
@@ -186,7 +185,7 @@ const columnHeadersView = (
         items = items ?? [];
         items.push(
           {
-            text: keyboardNavigationTexts?.movePrevious,
+            text: messageLocalization.format('dxDataGrid-keyboardNavigationMovePrevious'),
             value: Direction.Previous,
             beginGroup: true,
             disabled: !headersKeyboardNavigationController.isHeaderValidForReordering(
@@ -198,7 +197,7 @@ const columnHeadersView = (
             onItemClick,
           },
           {
-            text: keyboardNavigationTexts?.moveNext,
+            text: messageLocalization.format('dxDataGrid-keyboardNavigationMoveNext'),
             value: Direction.Next,
             disabled: !headersKeyboardNavigationController.isHeaderValidForReordering(
               column,
@@ -217,16 +216,6 @@ const columnHeadersView = (
 };
 
 export const headersKeyboardNavigationModule = {
-  defaultOptions() {
-    return {
-      keyboardNavigation: {
-        texts: {
-          moveNext: messageLocalization.format('dxDataGrid-keyboardNavigationMoveNext'),
-          movePrevious: messageLocalization.format('dxDataGrid-keyboardNavigationMovePrevious'),
-        },
-      },
-    };
-  },
   controllers: {
     headersKeyboardNavigation: HeadersKeyboardNavigationController,
   },

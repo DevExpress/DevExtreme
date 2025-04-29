@@ -4,6 +4,7 @@ import eventsEngine from '@js/common/core/events/core/events_engine';
 import {
   isCommandKeyPressed,
 } from '@js/common/core/events/utils/index';
+import messageLocalization from '@js/common/core/localization/message';
 import $ from '@js/core/renderer';
 import { hiddenFocus } from '@js/ui/shared/accessibility';
 import type { HeaderPanel } from '@ts/grids/grid_core/header_panel/m_header_panel';
@@ -185,7 +186,6 @@ const headerPanel = (Base: ModuleType<HeaderPanel>) => class HeaderPanelKeyboard
 
       if (groupPanelKeyboardNavigationController) {
         const rtlEnabled = this.option('rtlEnabled');
-        const keyboardNavigationTexts = this.option('keyboardNavigation.texts');
         const onItemClick = (e) => {
           this.isNeedToFocusGroupColumn = true;
           groupPanelKeyboardNavigationController.moveGroupColumn(column, e.itemData?.value);
@@ -194,7 +194,7 @@ const headerPanel = (Base: ModuleType<HeaderPanel>) => class HeaderPanelKeyboard
         items = items ?? [];
         items.push(
           {
-            text: keyboardNavigationTexts?.movePrevious,
+            text: messageLocalization.format('dxDataGrid-keyboardNavigationMovePrevious'),
             value: Direction.Previous,
             beginGroup: true,
             disabled: !groupPanelKeyboardNavigationController.isGroupColumnValidForReordering(
@@ -205,7 +205,7 @@ const headerPanel = (Base: ModuleType<HeaderPanel>) => class HeaderPanelKeyboard
             onItemClick,
           },
           {
-            text: keyboardNavigationTexts?.moveNext,
+            text: messageLocalization.format('dxDataGrid-keyboardNavigationMoveNext'),
             value: Direction.Next,
             disabled: !groupPanelKeyboardNavigationController.isGroupColumnValidForReordering(
               column,
