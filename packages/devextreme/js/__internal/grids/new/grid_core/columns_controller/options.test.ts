@@ -246,6 +246,9 @@ describe('Options', () => {
         const dataRow = itemsController.createDataRow(dataObject, columns, 0);
 
         expect(dataRow.cells).toHaveLength(1);
+        // TODO: Confirm result. dataRow.cells[0].text
+        // returns the correct value if called correctly.
+        // This fails as we are parsing the value from createDataRow
         expect(dataRow.cells[0].text).toBe(`my ${propName} text`);
       });
     });
