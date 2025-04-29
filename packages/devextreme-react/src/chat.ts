@@ -8,7 +8,7 @@ import dxChat, {
 import { Component as BaseComponent, IHtmlOptions, ComponentRef, NestedComponentMeta } from "./core/component";
 import NestedOption from "./core/nested-option";
 
-import type { Message, DisposingEvent, InitializedEvent, MessageDeletedEvent, MessageDeletingEvent, MessageEditCanceledEvent, MessageEditingStartEvent, MessageEnteredEvent, MessageUpdatedEvent, MessageUpdatingEvent, TypingEndEvent, TypingStartEvent } from "devextreme/ui/chat";
+import type { Message, DisposingEvent, InitializedEvent, MessageDeletedEvent, MessageDeletingEvent, MessageEditCanceledEvent, MessageEditingStartEvent, MessageEnteredEvent, MessageUpdatedEvent, MessageUpdatingEvent, TypingEndEvent, TypingStartEvent, User as ChatUser } from "devextreme/ui/chat";
 import type { Format } from "devextreme/common";
 
 type ReplaceFieldTypes<TSource, TReplacement> = {
@@ -63,6 +63,7 @@ const Chat = memo(
       const expectedChildren = useMemo(() => ({
         alert: { optionName: "alerts", isCollectionItem: true },
         dayHeaderFormat: { optionName: "dayHeaderFormat", isCollectionItem: false },
+        item: { optionName: "items", isCollectionItem: true },
         messageTimestampFormat: { optionName: "messageTimestampFormat", isCollectionItem: false },
         typingUser: { optionName: "typingUsers", isCollectionItem: true },
         user: { optionName: "user", isCollectionItem: false }
@@ -114,6 +115,27 @@ const Alert = Object.assign<typeof _componentAlert, NestedComponentMeta>(_compon
 });
 
 // owners:
+// Item
+type IAuthorProps = React.PropsWithChildren<{
+  avatarAlt?: string;
+  avatarUrl?: string;
+  id?: number | string;
+  name?: string;
+}>
+const _componentAuthor = (props: IAuthorProps) => {
+  return React.createElement(NestedOption<IAuthorProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "author",
+    },
+  });
+};
+
+const Author = Object.assign<typeof _componentAuthor, NestedComponentMeta>(_componentAuthor, {
+  componentType: "option",
+});
+
+// owners:
 // Chat
 type IDayHeaderFormatProps = React.PropsWithChildren<{
   currency?: string;
@@ -133,6 +155,30 @@ const _componentDayHeaderFormat = (props: IDayHeaderFormatProps) => {
 };
 
 const DayHeaderFormat = Object.assign<typeof _componentDayHeaderFormat, NestedComponentMeta>(_componentDayHeaderFormat, {
+  componentType: "option",
+});
+
+// owners:
+// Chat
+type IItemProps = React.PropsWithChildren<{
+  author?: ChatUser;
+  id?: number | string;
+  timestamp?: Date | number | string;
+}>
+const _componentItem = (props: IItemProps) => {
+  return React.createElement(NestedOption<IItemProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "items",
+      IsCollectionItem: true,
+      ExpectedChildren: {
+        author: { optionName: "author", isCollectionItem: false }
+      },
+    },
+  });
+};
+
+const Item = Object.assign<typeof _componentItem, NestedComponentMeta>(_componentItem, {
   componentType: "option",
 });
 
@@ -209,8 +255,12 @@ export {
   ChatRef,
   Alert,
   IAlertProps,
+  Author,
+  IAuthorProps,
   DayHeaderFormat,
   IDayHeaderFormatProps,
+  Item,
+  IItemProps,
   MessageTimestampFormat,
   IMessageTimestampFormatProps,
   TypingUser,

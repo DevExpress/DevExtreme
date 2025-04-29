@@ -83,14 +83,16 @@ class MessageBubble extends Widget<Properties> {
       case 'image':
         this.$element().addClass(CHAT_MESSAGEBUBBLE_HAS_IMAGE_CLASS);
         $('<img>')
-          .attr('src', message.src)
+          .attr('src', message.src ?? '')
           .attr('alt', message.alt ?? '')
           .addClass(CHAT_MESSAGEBUBBLE_IMAGE_CLASS)
           .appendTo($bubbleContainer);
         break;
       case 'text':
-      default:
         $bubbleContainer.text(message.text ?? '');
+        break;
+      default:
+        break;
     }
   }
 

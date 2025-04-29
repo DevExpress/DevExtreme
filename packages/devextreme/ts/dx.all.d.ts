@@ -31911,11 +31911,11 @@ declare module DevExpress.ui.dxChat {
     /**
      * [descr:ImageMessage.type]
      */
-    type: 'image';
+    type?: 'image';
     /**
      * [descr:ImageMessage.src]
      */
-    src: string;
+    src?: string;
     /**
      * [descr:ImageMessage.alt]
      */
