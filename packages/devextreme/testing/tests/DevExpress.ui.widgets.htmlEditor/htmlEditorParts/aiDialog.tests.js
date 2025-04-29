@@ -719,7 +719,7 @@ QUnit.module('AIDialog', {}, () => {
         });
     });
 
-    QUnit.module('button config should be correct for', {
+    QUnit.module('button config', {
         beforeEach: function() {
             integrationModuleConfig.beforeEach.apply(this);
 
@@ -749,7 +749,7 @@ QUnit.module('AIDialog', {}, () => {
             localization.locale(this.initialLocale);
         }
     }, () => {
-        QUnit.test('generate button', function(assert) {
+        QUnit.test('should be correct for generate button', function(assert) {
             showAIDialog(this, {
                 config: { currentCommand: 'askAI' }
             });
@@ -770,7 +770,7 @@ QUnit.module('AIDialog', {}, () => {
             assert.strictEqual(generateButtonOptions.width, BUTTON_WIDTH, 'width is 100 in non-Material');
         });
 
-        QUnit.test('generate button in Material theme', function(assert) {
+        QUnit.test('should have correct width for generate button in Material theme', function(assert) {
             const isMaterialStub = sinon.stub(themes, 'isMaterial');
 
             try {
@@ -789,7 +789,7 @@ QUnit.module('AIDialog', {}, () => {
             }
         });
 
-        QUnit.test('stop button', function(assert) {
+        QUnit.test('should be correct for stop button', function(assert) {
             showAIDialog(this, {
                 config: { currentCommand: 'translate' },
             });
@@ -810,7 +810,7 @@ QUnit.module('AIDialog', {}, () => {
             assert.strictEqual(stopButtonOptions.text, this.dictionary['dxHtmlEditor-aiStop'], 'text is localized');
         });
 
-        QUnit.test('copy button', function(assert) {
+        QUnit.test('should be correct for copy button', function(assert) {
             const done = assert.async();
 
             showAIDialog(this, {
@@ -839,7 +839,7 @@ QUnit.module('AIDialog', {}, () => {
             });
         });
 
-        QUnit.test('try again button', function(assert) {
+        QUnit.test('should be correct for try again button', function(assert) {
             const done = assert.async();
 
             showAIDialog(this, {
@@ -867,7 +867,7 @@ QUnit.module('AIDialog', {}, () => {
             });
         });
 
-        QUnit.test('replace button', function(assert) {
+        QUnit.test('should be correct for replace button', function(assert) {
             const done = assert.async();
 
             showAIDialog(this, {
