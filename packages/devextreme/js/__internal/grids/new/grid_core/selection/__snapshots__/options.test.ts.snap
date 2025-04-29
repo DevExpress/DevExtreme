@@ -6,7 +6,7 @@ exports[`Options selectedCardKeys when given should set the select state of the 
     "cells": [
       {
         "column": {
-          "alignment": "right",
+          "alignment": "left",
           "allowEditing": true,
           "allowFiltering": true,
           "allowHeaderFiltering": false,
@@ -155,7 +155,7 @@ exports[`Options selection mode when it is 'none' and the selectedCardKeys is sp
     "cells": [
       {
         "column": {
-          "alignment": "right",
+          "alignment": "left",
           "allowEditing": true,
           "allowFiltering": true,
           "allowHeaderFiltering": false,
@@ -271,7 +271,7 @@ exports[`Options selection mode when it is 'none' selection should not work 1`] 
     "cells": [
       {
         "column": {
-          "alignment": "right",
+          "alignment": "left",
           "allowEditing": true,
           "allowFiltering": true,
           "allowHeaderFiltering": false,

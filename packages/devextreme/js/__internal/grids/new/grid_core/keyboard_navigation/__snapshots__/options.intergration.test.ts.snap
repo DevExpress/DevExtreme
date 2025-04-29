@@ -5,7 +5,7 @@ exports[`Options KeyboardNavigation onFocusedCardChanged common API contract tes
   "cells": [
     {
       "column": {
-        "alignment": "right",
+        "alignment": "left",
         "allowEditing": true,
         "allowFiltering": true,
         "allowHeaderFiltering": false,

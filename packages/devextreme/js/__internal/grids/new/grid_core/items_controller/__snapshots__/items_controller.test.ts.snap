@@ -232,7 +232,7 @@ exports[`ItemsController setSelectionState should update the select state of the
     "cells": [
       {
         "column": {
-          "alignment": "right",
+          "alignment": "left",
           "allowEditing": true,
           "allowFiltering": true,
           "allowHeaderFiltering": false,

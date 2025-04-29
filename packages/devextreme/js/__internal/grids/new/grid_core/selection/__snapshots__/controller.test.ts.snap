@@ -6,7 +6,7 @@ exports[`SelectionController changeCardSelection when the control arg equal to f
     "cells": [
       {
         "column": {
-          "alignment": "right",
+          "alignment": "left",
           "allowEditing": true,
           "allowFiltering": true,
           "allowHeaderFiltering": false,
@@ -122,7 +122,7 @@ exports[`SelectionController changeCardSelection when the control arg equal to t
     "cells": [
       {
         "column": {
-          "alignment": "right",
+          "alignment": "left",
           "allowEditing": true,
           "allowFiltering": true,
           "allowHeaderFiltering": false,
@@ -238,7 +238,7 @@ exports[`SelectionController deselectCards should deselect item 1`] = `
     "cells": [
       {
         "column": {
-          "alignment": "right",
+          "alignment": "left",
           "allowEditing": true,
           "allowFiltering": true,
           "allowHeaderFiltering": false,
@@ -354,7 +354,7 @@ exports[`SelectionController deselectCardsByIndexes should deselect item 1`] = `
     "cells": [
       {
         "column": {
-          "alignment": "right",
+          "alignment": "left",
           "allowEditing": true,
           "allowFiltering": true,
           "allowHeaderFiltering": false,
@@ -470,7 +470,7 @@ exports[`SelectionController selectCards should select item 1`] = `
     "cells": [
       {
         "column": {
-          "alignment": "right",
+          "alignment": "left",
           "allowEditing": true,
           "allowFiltering": true,
           "allowHeaderFiltering": false,
@@ -586,7 +586,7 @@ exports[`SelectionController selectCardsByIndexes should select item 1`] = `
     "cells": [
       {
         "column": {
-          "alignment": "right",
+          "alignment": "left",
           "allowEditing": true,
           "allowFiltering": true,
           "allowHeaderFiltering": false,
