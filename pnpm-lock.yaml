@@ -407,8 +407,8 @@ importers:
         specifier: 4.2.0
         version: 4.2.0
       openai:
-        specifier: 4.87.3
-        version: 4.87.3(encoding@0.1.13)(ws@8.18.0)(zod@3.23.8)
+        specifier: 4.73.1
+        version: 4.73.1(encoding@0.1.13)(zod@3.23.8)
       plugin-typescript:
         specifier: 8.0.0
         version: 8.0.0(typescript@5.4.5)
@@ -13340,15 +13340,12 @@ packages:
     resolution: {integrity: sha512-7x81NCL719oNbsq/3mh+hVrAWmFuEYUqrq/Iw3kUzH8ReypT9QQ0BLoJS7/G9k6N81XjW4qHWtjWwe/9eLy1EQ==}
     engines: {node: '>=12'}
 
-  openai@4.87.3:
-    resolution: {integrity: sha512-d2D54fzMuBYTxMW8wcNmhT1rYKcTfMJ8t+4KjH2KtvYenygITiGBgHoIrzHwnDQWW+C5oCA+ikIR2jgPCFqcKQ==}
+  openai@4.73.1:
+    resolution: {integrity: sha512-nWImDJBcUsqrhy7yJScXB4+iqjzbUEgzfA3un/6UnHFdwWhjX24oztj69Ped/njABfOdLcO/F7CeWTI5dt8Xmg==}
     hasBin: true
     peerDependencies:
-      ws: ^8.18.0
       zod: ^3.23.8
     peerDependenciesMeta:
-      ws:
-        optional: true
       zod:
         optional: true
 
@@ -33360,7 +33357,7 @@ snapshots:
       is-docker: 2.2.1
       is-wsl: 2.2.0
 
-  openai@4.87.3(encoding@0.1.13)(ws@8.18.0)(zod@3.23.8):
+  openai@4.73.1(encoding@0.1.13)(zod@3.23.8):
     dependencies:
       '@types/node': 18.19.64
       '@types/node-fetch': 2.6.12
@@ -33370,7 +33367,6 @@ snapshots:
       formdata-node: 4.4.1
       node-fetch: 2.7.0(encoding@0.1.13)
     optionalDependencies:
-      ws: 8.18.0
       zod: 3.23.8
     transitivePeerDependencies:
       - encoding
