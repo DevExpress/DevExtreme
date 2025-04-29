@@ -318,5 +318,5 @@
 }
 
 .dx-aidialog .dx-pending-indicator {
-  @include dx-pending-indicator-centered($fluent-invalid-badge-size);
+  @include dx-pending-indicator-centered();
 }

@@ -13,6 +13,10 @@ import AIDialog, {
     TEXT_AREA_MIN_HEIGHT,
     TEXT_AREA_MAX_HEIGHT
 } from '__internal/ui/html_editor/ui/aiDialog';
+import {
+    ANIMATION_TYPE_CLASSES,
+    LOADINDICATOR_CONTENT_CLASS,
+} from '__internal/ui/m_load_indicator';
 import { AIIntegration } from '__internal/core/ai_integration/core/ai_integration';
 import { isPromise } from 'core/utils/type';
 import {
@@ -45,7 +49,6 @@ const moduleConfig = {
             sendRequest: () => ({ promise: this.promise }),
         }), { container: this.$element });
         this.aiDialogPopup = this.aiDialog._popup;
-
         this.setDialogState = (state) => {
             this.aiDialog['_setDialogState'](state);
         };
@@ -85,6 +88,7 @@ const integrationModuleConfig = {
                 },
             );
         };
+        this.setDialogState = (state) => this.aiDialog['_setDialogState'](state);
         this.getAbort = () => this.aiDialog._abort;
     },
     afterEach() {
@@ -252,7 +256,7 @@ QUnit.module('AIDialog', {}, () => {
             });
         });
 
-        QUnit.test('Should display only stop button while loading', function(assert) {
+        QUnit.test('should display only stop button while loading', function(assert) {
             showAIDialog(this, {
                 config: { currentCommand: 'translate' },
             });
@@ -687,6 +691,16 @@ QUnit.module('AIDialog', {}, () => {
 
                 done();
             }, 0);
+        });
+
+        QUnit.test('loadindicator animation should be sparkle', function(assert) {
+            showAIDialog(this);
+
+            this.setDialogState('generating');
+
+            const $loadIndicatorContent = this.$element.find(`.${LOADINDICATOR_CONTENT_CLASS}`);
+
+            assert.strictEqual($loadIndicatorContent.hasClass(ANIMATION_TYPE_CLASSES['sparkle']), true, 'animation type is sparkle');
         });
     });
 

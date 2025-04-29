@@ -133,13 +133,11 @@
   height: $indicator-size;
 }
 
-@mixin dx-pending-indicator-centered($indicator-size) {
+@mixin dx-pending-indicator-centered() {
   pointer-events: none;
   position: absolute;
   top: 50%;
   left: 50%;
-  width: $indicator-size;
-  height: $indicator-size;
   transform: translate(-50%, -50%);
 }
 

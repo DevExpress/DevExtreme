@@ -27,6 +27,8 @@ import {
   buildAICommandParams,
   getAICommandName,
 } from '@ts/ui/html_editor/utils/ai';
+import type { LoadIndicatorProperties } from '@ts/ui/m_load_indicator';
+import { AnimationType } from '@ts/ui/m_load_indicator';
 import { TEXTEDITOR_INPUT_CONTAINER_CLASS } from '@ts/ui/text_box/m_text_editor.base';
 
 import { isSmallScreen } from '../utils/small_screen';
@@ -263,7 +265,13 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
       .addClass(AI_DIALOG_LOAD_INDICATOR_CLASS)
       .appendTo($inputContainer);
 
-    this._loadIndicator = new LoadIndicator($indicatorElement[0]);
+    const options: LoadIndicatorProperties = {
+      _animationType: AnimationType.Sparkle,
+      width: 64,
+      height: 64,
+    };
+
+    this._loadIndicator = new LoadIndicator($indicatorElement[0], options);
   }
 
   protected _getPopupClass(): string {
