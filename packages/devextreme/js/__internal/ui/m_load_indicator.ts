@@ -152,8 +152,7 @@ class LoadIndicator extends Widget<LoadIndicatorProperties> {
       return;
     }
 
-    let width = this.option('width');
-    let height = this.option('height');
+    let { width, height } = this.option();
 
     if (width || height) {
       width = getWidth(this.$element());
