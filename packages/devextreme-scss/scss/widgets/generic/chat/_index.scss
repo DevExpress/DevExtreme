@@ -4,6 +4,7 @@
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../../base/chat/mixins" as *;
+@use "../popup/sizes" as *;
 
 // adduse
 
@@ -93,9 +94,9 @@
   $chat-typingindicator-circle-bg-color,
   $chat-typingindicator-circle-bg-color-center,
 );
-@include chat-confirmation-popup-content(
+@include chat-confirmation-popup(
   $chat-confirmation-popup-content-padding,
-);
-@include chat-confirmation-popup-toolbar-gap(
+  $generic-popup-toolbarbottom-padding,
+  $generic-popup-toolbarbottom-padding,
   $chat-confirmation-popup-toolbar-gap,
 );
