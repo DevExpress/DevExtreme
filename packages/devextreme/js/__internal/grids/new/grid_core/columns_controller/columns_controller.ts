@@ -150,7 +150,7 @@ export class ColumnsController {
     return result;
   }
 
-  public getColumnOptionsFromDataItem(
+  public setColumnOptionsFromDataItem(
     item: DataObject,
   ): void {
     if (this.columnsConfigurationFromData.value) {

@@ -244,7 +244,7 @@ export class DataController {
     const firstItem = items[0];
 
     if (firstItem) {
-      this.columnsController.getColumnOptionsFromDataItem(firstItem);
+      this.columnsController.setColumnOptionsFromDataItem(firstItem);
     }
 
     this._items.value = items;
