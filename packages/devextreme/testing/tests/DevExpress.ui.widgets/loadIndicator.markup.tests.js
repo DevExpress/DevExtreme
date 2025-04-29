@@ -3,10 +3,10 @@ import support from '__internal/core/utils/m_support';
 
 import {
     LOADINDICATOR_CLASS,
-    LOADINDICATOR_ICON,
+    LOADINDICATOR_ICON_CLASS,
     LOADINDICATOR_CONTENT_CLASS,
-    LOADINDICATOR_SEGMENT,
-    LOADINDICATOR_IMAGE,
+    LOADINDICATOR_SEGMENT_CLASS,
+    LOADINDICATOR_IMAGE_CLASS,
     LOADINDICATOR_WRAPPER_CLASS,
 } from '__internal/ui/m_load_indicator';
 
@@ -60,10 +60,10 @@ QUnit.module('Static load indicator', {
         const $indicator = $('#loadIndicator').dxLoadIndicator({ visible: false });
         const $indicatorWrapper = $indicator.find(`.${LOADINDICATOR_WRAPPER_CLASS}`);
 
-        assert.notOk($indicatorWrapper.hasClass(`.${LOADINDICATOR_IMAGE}`), 'Image class not added');
-        assert.strictEqual($indicator.find(`.${LOADINDICATOR_ICON}`).length, 0, 'Icon div not created');
-        assert.strictEqual($indicator.find(`.${LOADINDICATOR_SEGMENT}`).length, 0, '16 Segment not created');
-        assert.strictEqual($indicator.find(`.${LOADINDICATOR_SEGMENT}1`).length, 0, 'Numerated segment not created');
+        assert.notOk($indicatorWrapper.hasClass(`.${LOADINDICATOR_IMAGE_CLASS}`), 'Image class not added');
+        assert.strictEqual($indicator.find(`.${LOADINDICATOR_ICON_CLASS}`).length, 0, 'Icon div not created');
+        assert.strictEqual($indicator.find(`.${LOADINDICATOR_SEGMENT_CLASS}`).length, 0, '16 Segment not created');
+        assert.strictEqual($indicator.find(`.${LOADINDICATOR_SEGMENT_CLASS}1`).length, 0, 'Numerated segment not created');
     });
 
     QUnit.test('custom indicator', function(assert) {

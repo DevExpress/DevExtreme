@@ -168,7 +168,7 @@ class LoadIndicator extends Widget<LoadIndicatorProperties> {
   _renderSegments(params: SegmentParams): void {
     const { segmentCount, segmentInner } = params;
 
-    for (let i = segmentCount - 1; i >= 0; i -= 1) {
+    for (let i = segmentCount; i >= 0; i -= 1) {
       const $segment = $('<div>')
         .addClass(LOADINDICATOR_SEGMENT_CLASS)
         .addClass(`${LOADINDICATOR_SEGMENT_CLASS}${i}`);

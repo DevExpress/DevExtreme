@@ -4,10 +4,10 @@ import messageLocalization from 'common/core/localization/message';
 
 import {
     LOADINDICATOR_CLASS,
-    LOADINDICATOR_ICON,
+    LOADINDICATOR_ICON_CLASS,
     LOADINDICATOR_CONTENT_CLASS,
-    LOADINDICATOR_SEGMENT,
-    LOADINDICATOR_IMAGE,
+    LOADINDICATOR_SEGMENT_CLASS,
+    LOADINDICATOR_IMAGE_CLASS,
 } from '__internal/ui/m_load_indicator';
 
 import 'ui/load_indicator';
@@ -41,9 +41,9 @@ QUnit.module('indicator with browser animation', {
         const loadIndicator = $indicator.dxLoadIndicator('instance');
 
         assert.ok($indicator.hasClass(LOADINDICATOR_CLASS), 'Load Indicator initialized');
-        assert.strictEqual($indicator.find(`.${LOADINDICATOR_ICON}`).length, 1, 'Icon div created');
-        assert.strictEqual($indicator.find(`.${LOADINDICATOR_SEGMENT}`).length, loadIndicator.option('_animatingSegmentCount') + 1, 'Segments created');
-        assert.strictEqual($indicator.find(`.${LOADINDICATOR_SEGMENT}1`).length, 1, 'Numerated segment created');
+        assert.strictEqual($indicator.find(`.${LOADINDICATOR_ICON_CLASS}`).length, 1, 'Icon div created');
+        assert.strictEqual($indicator.find(`.${LOADINDICATOR_SEGMENT_CLASS}`).length, loadIndicator.option('_animatingSegmentCount') + 1, 'Segments created');
+        assert.strictEqual($indicator.find(`.${LOADINDICATOR_SEGMENT_CLASS}1`).length, 1, 'Numerated segment created');
         assert.strictEqual($indicator.find(`.${LOADINDICATOR_CONTENT_CLASS}`).length, 1, 'content is created');
     });
 
@@ -74,7 +74,7 @@ QUnit.module('Events', () => {
             visible: true,
             indicatorSrc: url,
             onContentReady: function(e) {
-                assert.ok($(e.element).find('.' + LOADINDICATOR_IMAGE).css('backgroundImage'));
+                assert.ok($(e.element).find('.' + LOADINDICATOR_IMAGE_CLASS).css('backgroundImage'));
                 assert.ok($(e.element).hasClass(LOADINDICATOR_CLASS));
             }
         });
