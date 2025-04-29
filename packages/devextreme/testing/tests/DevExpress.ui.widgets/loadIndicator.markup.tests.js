@@ -14,31 +14,37 @@ import 'ui/load_indicator';
 import 'generic_light.css!';
 
 QUnit.testStart(function() {
-    const markup =
-        '<div id="loadIndicator"></div>';
+    const markup = '<div id="loadIndicator"></div>';
 
     $('#qunit-fixture').html(markup);
 });
 
-const isIdenticalNamesInUrl = function(firstUrl, secondUrl) {
-    let firstName = firstUrl.split('/');
-    firstName = firstName[firstName.length - 1].replace(/\)/g, '').replace(/"/g, '');
-    let secondName = secondUrl.split('/');
-    secondName = secondName[secondName.length - 1];
+const isIdenticalNamesInUrl = (firstUrl, secondUrl) => {
+    const parts = firstUrl.split('/');
+    const firstName = parts[parts.length - 1]
+        .replace(/\)/g, '')
+        .replace(/"/g, '');
+
+    const parts2 = secondUrl.split('/');
+    const secondName = parts2[parts2.length - 1];
+
     return firstName === secondName;
 };
 
 QUnit.module('LoadIndicator markup', () => {
     QUnit.test('Basic markup initialization', function(assert) {
-        const $indicator = $('#loadIndicator').dxLoadIndicator(); const $indicatorWrapper = $indicator.find('.' + LOADINDICATOR_WRAPPER_CLASS); const $indicatorContent = $indicator.find('.' + LOADINDICATOR_CONTENT_CLASS);
+        const $indicator = $('#loadIndicator').dxLoadIndicator();
+        const $indicatorWrapper = $indicator.find(`.${LOADINDICATOR_WRAPPER_CLASS}`);
+        const $indicatorContent = $indicator.find(`.${LOADINDICATOR_CONTENT_CLASS}`);
 
         assert.ok($indicator.hasClass(LOADINDICATOR_CLASS), 'Load Indicator initialized');
-        assert.equal($indicatorWrapper.length, 1, 'Wrapper has been added');
-        assert.equal($indicatorContent.length, 1, 'Content is added');
+        assert.strictEqual($indicatorWrapper.length, 1, 'Wrapper has been added');
+        assert.strictEqual($indicatorContent.length, 1, 'Content is added');
     });
 
     QUnit.test('LoadIndicator width custom dimensions', function(assert) {
-        const $indicator = $('#loadIndicator').dxLoadIndicator({ width: 75, height: 75 }); const indicatorElement = $indicator.get(0);
+        const $indicator = $('#loadIndicator').dxLoadIndicator({ width: 75, height: 75 });
+        const indicatorElement = $indicator.get(0);
 
         assert.strictEqual(indicatorElement.style.width, '75px', 'outer width of the element must be equal to custom width');
         assert.strictEqual(indicatorElement.style.height, '75px', 'outer height of the element must be equal to custom width');
@@ -47,12 +53,10 @@ QUnit.module('LoadIndicator markup', () => {
 
 QUnit.module('Static load indicator', {
     beforeEach: function() {
-        // Override support styleProp
         this._defaultAnimation = support.animation;
         support.animation = function() { return false; };
     },
     afterEach: function() {
-        // Restoring support styleProp
         support.animation = this._defaultAnimation;
     }
 }, () => {
@@ -70,15 +74,18 @@ QUnit.module('Static load indicator', {
         const url = '../../testing/content/customLoadIndicator.png';
         const $element = $('#loadIndicator').dxLoadIndicator({
             visible: true,
-            indicatorSrc: url
+            indicatorSrc: url,
         });
-        const $wrapper = $element.find('.' + LOADINDICATOR_WRAPPER_CLASS);
+        const $wrapper = $element.find(`.${LOADINDICATOR_WRAPPER_CLASS}`);
         const instance = $('#loadIndicator').dxLoadIndicator('instance');
-        const getBackgroundImage = function() { return $wrapper[0].style.backgroundImage; };
 
-        assert.ok(isIdenticalNamesInUrl(getBackgroundImage(), url), 'custom indicator installed successfully as image');
+        const getBackgroundImage = () => $wrapper[0].style.backgroundImage;
+
+        assert.strictEqual(isIdenticalNamesInUrl(getBackgroundImage(), url), true, 'custom indicator installed successfully as image');
+
         instance.option('indicatorSrc', '');
-        assert.notStrictEqual(getBackgroundImage(), '', 'custom indicator changed successfully as image');
+
+        assert.strictEqual(getBackgroundImage(), 'none', 'custom indicator changed successfully as image');
     });
 });
 

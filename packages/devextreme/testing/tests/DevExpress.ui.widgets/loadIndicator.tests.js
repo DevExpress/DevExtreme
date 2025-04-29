@@ -22,12 +22,10 @@ QUnit.testStart(function() {
 
 QUnit.module('indicator with browser animation', {
     beforeEach: function() {
-        // Override support styleProp
         this._defaultAnimation = support.animation;
         support.animation = function() { return true; };
     },
     afterEach: function() {
-        // Restoring support styleProp
         support.animation = this._defaultAnimation;
     }
 }, () => {
@@ -81,7 +79,7 @@ QUnit.module('Events', () => {
     });
 });
 
-QUnit.module('accessability', () => {
+QUnit.module('accessibility', () => {
     QUnit.test('role on load indicator', function(assert) {
         const instance = $('#loadIndicator').dxLoadIndicator({ visible: true }).dxLoadIndicator('instance');
 
