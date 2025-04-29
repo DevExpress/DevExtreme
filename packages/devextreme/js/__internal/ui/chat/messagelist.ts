@@ -77,6 +77,7 @@ export interface Properties extends WidgetOptions<MessageList> {
   items: Message[];
   allowUpdating: ((message: Message) => boolean);
   allowDeleting: ((message: Message) => boolean);
+  isEditActionDisabled: ((message: Message) => boolean);
   currentUserId: number | string | undefined;
   showDayHeaders: boolean;
   messageTemplate?: MessageTemplate;
@@ -112,6 +113,7 @@ class MessageList extends Widget<Properties> {
       ...super._getDefaultOptions(),
       allowUpdating: () => false,
       allowDeleting: () => false,
+      isEditActionDisabled: () => false,
       items: [],
       currentUserId: '',
       showDayHeaders: true,
@@ -266,6 +268,7 @@ class MessageList extends Widget<Properties> {
     const {
       allowUpdating,
       allowDeleting,
+      isEditActionDisabled,
       onMessageEditingStart,
       onMessageDeleting,
     } = this.option();
@@ -279,6 +282,7 @@ class MessageList extends Widget<Properties> {
       buttons.push({
         icon: 'edit',
         text: editText,
+        disabled: isEditActionDisabled(message),
         onClick(e: ItemClick): void {
           onMessageEditingStart?.({ event: e.event, message });
         },

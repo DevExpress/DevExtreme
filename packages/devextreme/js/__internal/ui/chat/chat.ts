@@ -190,6 +190,7 @@ class Chat extends Widget<Properties> {
       currentUserId,
       allowUpdating: (message: Message): boolean => this._allowEditAction(message),
       allowDeleting: (message: Message): boolean => this._allowDeleteAction(message),
+      isEditActionDisabled: (message) => this._editingMessage === message,
       messageTemplate: this._getMessageTemplate(),
       showDayHeaders,
       showAvatar,
