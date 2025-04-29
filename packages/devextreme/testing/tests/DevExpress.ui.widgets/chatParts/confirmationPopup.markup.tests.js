@@ -27,7 +27,7 @@ const moduleConfig = {
 };
 
 QUnit.module('ConfirmationPopup', moduleConfig, () => {
-    QUnit.module('Render', moduleConfig, () => {
+    QUnit.module('Render', () => {
         QUnit.test('Should render confirmation popup content and toolbar with correct items', function(assert) {
             assert.expect(2);
 
