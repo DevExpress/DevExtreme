@@ -239,6 +239,7 @@ class LoadIndicator extends Widget<LoadIndicatorProperties> {
     switch (args.name) {
       case '_animatingSegmentCount':
       case '_animatingSegmentInner':
+      case '_animationType':
       case 'indicatorSrc':
         this._invalidate();
         break;
