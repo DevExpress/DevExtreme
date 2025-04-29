@@ -21,12 +21,10 @@ export const LOADINDICATOR_IMAGE_CLASS = 'dx-loadindicator-image';
 
 export enum AnimationType {
   Circle = 'circle',
-}
 
 export const ANIMATION_TYPE_CLASSES = {
   [AnimationType.Circle]: 'dx-loadindicator-content-circle',
 } as const;
-
 export interface LoadIndicatorProperties extends Properties {
   _animatingSegmentCount?: number;
   _animatingSegmentInner?: boolean;
