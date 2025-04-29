@@ -2402,29 +2402,6 @@ export type KeyboardNavigation = {
    * @default "none"
    */
   enterKeyDirection?: EnterKeyDirection;
-  /**
-   * @docid GridBaseOptions.keyboardNavigation.texts
-   * @type object
-   */
-  texts?: KeyboardNavigationTexts;
-};
-
-/**
- * @docid
- * @public
- * @namespace DevExpress.common.grids
- */
-export type KeyboardNavigationTexts = {
-  /**
-   * @docid GridBaseOptions.keyboardNavigation.texts.movePrevious
-   * @default "Move as previous"
-   */
-  movePrevious?: string;
-  /**
-   * @docid GridBaseOptions.keyboardNavigation.texts.moveNext
-   * @default "Move as next"
-   */
-  moveNext?: string;
 };
 
 /**

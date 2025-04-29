@@ -185,7 +185,7 @@ const columnHeadersView = (
         items = items ?? [];
         items.push(
           {
-            text: messageLocalization.format('dxDataGrid-keyboardNavigationMovePrevious'),
+            text: messageLocalization.format('dxDataGrid-moveColumnToTheLeft'),
             value: Direction.Previous,
             beginGroup: true,
             disabled: !headersKeyboardNavigationController.isHeaderValidForReordering(
@@ -197,7 +197,7 @@ const columnHeadersView = (
             onItemClick,
           },
           {
-            text: messageLocalization.format('dxDataGrid-keyboardNavigationMoveNext'),
+            text: messageLocalization.format('dxDataGrid-moveColumnToTheRight'),
             value: Direction.Next,
             disabled: !headersKeyboardNavigationController.isHeaderValidForReordering(
               column,

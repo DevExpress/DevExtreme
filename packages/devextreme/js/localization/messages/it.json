@@ -202,8 +202,8 @@
         "dxDataGrid-filterPanelClearFilter": "Cancella",
         "dxDataGrid-filterPanelFilterEnabledHint": "Attiva il filtro",
         "dxDataGrid-masterDetail": "Cell with details",
-        "dxDataGrid-keyboardNavigationMoveNext": "Move as next",
-        "dxDataGrid-keyboardNavigationMovePrevious": "Move as previous",
+        "dxDataGrid-moveColumnToTheRight": "Move to the right",
+        "dxDataGrid-moveColumnToTheLeft": "Move to the left",
 
         "dxTreeList-ariaTreeList": "Tree list with {0} rows and {1} columns",
         "dxTreeList-ariaExpandableInstruction": "Press Ctrl + right arrow to expand the focused node and Ctrl + left arrow to collapse it",

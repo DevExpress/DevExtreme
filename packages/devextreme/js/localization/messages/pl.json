@@ -202,8 +202,8 @@
         "dxDataGrid-filterPanelClearFilter": "Resetuj",
         "dxDataGrid-filterPanelFilterEnabledHint": "Aktywuj filtr",
         "dxDataGrid-masterDetail": "Cell with details",
-        "dxDataGrid-keyboardNavigationMoveNext": "Move as next",
-        "dxDataGrid-keyboardNavigationMovePrevious": "Move as previous",
+        "dxDataGrid-moveColumnToTheRight": "Move to the right",
+        "dxDataGrid-moveColumnToTheLeft": "Move to the left",
 
         "dxTreeList-ariaTreeList": "Lista strukturalna",
         "dxTreeList-ariaExpandableInstruction": "Press Ctrl + right arrow to expand the focused node and Ctrl + left arrow to collapse it",
