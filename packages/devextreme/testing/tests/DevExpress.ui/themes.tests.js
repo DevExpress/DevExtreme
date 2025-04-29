@@ -3,7 +3,6 @@
 import $ from 'jquery';
 import themes from 'ui/themes';
 import viewPortUtils from 'core/utils/view_port';
-import { uiLayerInitialized } from '__internal/core/utils/m_common';
 
 const viewPortChanged = viewPortUtils.changeCallback;
 
@@ -251,7 +250,6 @@ QUnit.module('dx-theme links', (hooks) => {
     let $frame;
     const frames = [];
     hooks.beforeEach(() => {
-        uiLayerInitialized.resolve();
         themes.setDefaultTimeout(100);
         $frame = $('<iframe></iframe>').appendTo('body');
         frames.push($frame);
@@ -607,11 +605,7 @@ QUnit.module('dx-theme links', (hooks) => {
     });
 });
 
-QUnit.module('misc', (hooks) => {
-    hooks.beforeEach(() => {
-        uiLayerInitialized.resolve();
-    });
-
+QUnit.module('misc', () => {
     const DX_HAIRLINES_CLASS = 'dx-hairlines';
 
     test('attachCssClasses', function(assert) {
