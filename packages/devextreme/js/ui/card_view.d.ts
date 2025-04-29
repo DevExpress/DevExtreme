@@ -1787,6 +1787,9 @@ export default class dxCardView<TCardData = unknown, TKey = unknown> extends Wid
     // #endregion
 }
 
+// usually imported / re-exports are right after heading imports,
+// plus, some of these types are already exported with direct declarations
+
 export {
     Sorting,
     Pager,
