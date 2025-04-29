@@ -1,6 +1,4 @@
-@mixin chat-confirmation-popup-content(
-  $padding,
-) {
+@mixin chat-confirmation-popup-content($padding) {
   .dx-chat-confirmation-popup-wrapper {
     .dx-popup-content {
       padding-bottom: $padding;
@@ -8,20 +6,18 @@
   }
 }
 
-@mixin chat-confirmation-popup-toolbar(
-  $padding: null,
-  $gap: null,
-) {
+@mixin chat-confirmation-popup-toolbar-padding($padding) {
   .dx-chat-confirmation-popup-wrapper {
     .dx-popup-bottom.dx-toolbar {
-      @if $padding != null {
-        padding: $padding;
-      }
+      padding: $padding;
     }
+  }
+}
+
+@mixin chat-confirmation-popup-toolbar-gap($gap) {
+  .dx-chat-confirmation-popup-wrapper {
     .dx-toolbar-items-container {
-      @if $gap != null {
-        gap: $gap;
-      }
+      gap: $gap;
     }
   }
 }

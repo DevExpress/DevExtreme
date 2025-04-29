@@ -96,7 +96,6 @@
 @include chat-confirmation-popup-content(
   $chat-confirmation-popup-content-padding,
 );
-@include chat-confirmation-popup-toolbar(
-  null,
+@include chat-confirmation-popup-toolbar-gap(
   $chat-confirmation-popup-toolbar-gap,
 );
