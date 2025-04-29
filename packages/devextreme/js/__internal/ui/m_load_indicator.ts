@@ -19,9 +19,18 @@ const LOADINDICATOR_SEGMENT_CLASS = 'dx-loadindicator-segment';
 const LOADINDICATOR_SEGMENT_INNER_CLASS = 'dx-loadindicator-segment-inner';
 const LOADINDICATOR_IMAGE_CLASS = 'dx-loadindicator-image';
 
+export enum AnimationType {
+  Circle = 'circle',
+}
+
+const ANIMATION_TYPE_CLASSES = {
+  [AnimationType.Circle]: 'dx-loadindicator-content-circle',
+} as const;
+
 export interface LoadIndicatorProperties extends Properties {
   _animatingSegmentCount?: number;
   _animatingSegmentInner?: boolean;
+  _animationType: AnimationType;
 }
 
 class LoadIndicator extends Widget<LoadIndicatorProperties> {
@@ -34,11 +43,12 @@ class LoadIndicator extends Widget<LoadIndicatorProperties> {
   _getDefaultOptions(): LoadIndicatorProperties {
     return {
       ...super._getDefaultOptions(),
-      indicatorSrc: '',
-      activeStateEnabled: false,
-      hoverStateEnabled: false,
       _animatingSegmentCount: 1,
       _animatingSegmentInner: false,
+      _animationType: AnimationType.Circle,
+      activeStateEnabled: false,
+      hoverStateEnabled: false,
+      indicatorSrc: '',
     };
   }
 
@@ -97,8 +107,17 @@ class LoadIndicator extends Widget<LoadIndicatorProperties> {
     this.$element().append(this._$wrapper);
   }
 
+  _getAnimationTypeContentClass(): (typeof ANIMATION_TYPE_CLASSES)[AnimationType] {
+    const { _animationType: animationType } = this.option();
+
+    return ANIMATION_TYPE_CLASSES[animationType];
+  }
+
   _renderIndicatorContent(): void {
-    this._$content = $('<div>').addClass(LOADINDICATOR_CONTENT_CLASS);
+    const animationClass = this._getAnimationTypeContentClass();
+    const contentClasses = [LOADINDICATOR_CONTENT_CLASS, animationClass].join(' ');
+
+    this._$content = $('<div>').addClass(contentClasses);
     this._$wrapper.append(this._$content);
   }
 
