@@ -81,6 +81,7 @@ createTestCafe(TESTCAFE_CONFIG)
         setShadowDom(args);
 
         componentFolder = componentFolder ? `${componentFolder}/**` : '**';
+
         if(fs.existsSync('./screenshots')) {
             fs.rmSync('./screenshots', { recursive: true });
         }

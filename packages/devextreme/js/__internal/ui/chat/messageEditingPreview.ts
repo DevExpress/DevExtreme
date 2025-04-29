@@ -8,11 +8,10 @@ import DOMComponent from '@ts/core/widget/dom_component';
 import type { OptionChanged } from '@ts/core/widget/types';
 
 export const CHAT_EDITING_PREVIEW_CLASS = 'dx-chat-editing-preview';
-export const CHAT_EDITING_QUOTE_LINE_CLASS = 'dx-chat-editing-quote-line';
-export const CHAT_EDITING_MESSAGE_CLASS = 'dx-chat-editing-message';
-export const CHAT_EDITING_MESSAGE_CAPTION_CLASS = 'dx-chat-editing-message-caption';
-export const CHAT_EDITING_MESSAGE_TEXT_CLASS = 'dx-chat-editing-message-text';
-export const CHAT_CANCEL_EDITING_BUTTON_CLASS = 'dx-chat-cancel-editing-button';
+export const CHAT_EDITING_PREVIEW_CONTENT_CLASS = 'dx-chat-editing-preview-content';
+export const CHAT_EDITING_PREVIEW_CAPTION_CLASS = 'dx-chat-editing-preview-caption';
+export const CHAT_EDITING_PREVIEW_TEXT_CLASS = 'dx-chat-editing-preview-text';
+export const CHAT_EDITING_PREVIEW_CANCEL_BUTTON_CLASS = 'dx-chat-editing-preview-cancel-button';
 
 export interface Properties extends DOMComponentProperties<MessageEditingPreview> {
   text?: string;
@@ -55,21 +54,17 @@ class MessageEditingPreview extends DOMComponent<MessageEditingPreview, Properti
   }
 
   _renderMessagePreview(): void {
-    $('<div>')
-      .addClass(CHAT_EDITING_QUOTE_LINE_CLASS)
-      .appendTo(this.element());
-
     const $message = $('<div>')
-      .addClass(CHAT_EDITING_MESSAGE_CLASS)
+      .addClass(CHAT_EDITING_PREVIEW_CONTENT_CLASS)
       .appendTo(this.element());
 
     $('<div>')
-      .addClass(CHAT_EDITING_MESSAGE_CAPTION_CLASS)
+      .addClass(CHAT_EDITING_PREVIEW_CAPTION_CLASS)
       .text(messageLocalization.format('dxChat-editingMessageCaption'))
       .appendTo($message);
 
     this._messageText = $('<div>')
-      .addClass(CHAT_EDITING_MESSAGE_TEXT_CLASS)
+      .addClass(CHAT_EDITING_PREVIEW_TEXT_CLASS)
       .appendTo($message);
   }
 
@@ -83,7 +78,7 @@ class MessageEditingPreview extends DOMComponent<MessageEditingPreview, Properti
     const { onCancel } = this.option();
 
     const $button = $('<div>')
-      .addClass(CHAT_CANCEL_EDITING_BUTTON_CLASS)
+      .addClass(CHAT_EDITING_PREVIEW_CANCEL_BUTTON_CLASS)
       .appendTo(this.element());
 
     this._closeButton = this._createComponent($button, Button, {
@@ -110,11 +105,12 @@ class MessageEditingPreview extends DOMComponent<MessageEditingPreview, Properti
       return;
     }
 
-    this._cleanContent();
+    this._remove();
   }
 
-  _cleanContent(): void {
-    this.$element().empty();
+  _remove(): void {
+    super._dispose();
+    this.$element().remove();
   }
 
   _optionChanged(args: OptionChanged<Properties>): void {

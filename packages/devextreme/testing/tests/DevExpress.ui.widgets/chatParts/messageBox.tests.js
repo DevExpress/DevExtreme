@@ -3,12 +3,14 @@ import keyboardMock from '../../../helpers/keyboardMock.js';
 import { isRenderer } from 'core/utils/type';
 import config from 'core/config';
 
-import MessageBox, { TYPING_END_DELAY } from '__internal/ui/chat/messagebox';
+import MessageBox, {
+    TYPING_END_DELAY,
+    CHAT_MESSAGEBOX_TEXTAREA_CLASS,
+    CHAT_MESSAGEBOX_BUTTON_CLASS,
+} from '__internal/ui/chat/messagebox';
 import TextArea from '__internal/ui/m_text_area';
 import Button from 'ui/button';
-
-const CHAT_MESSAGEBOX_TEXTAREA_CLASS = 'dx-chat-messagebox-textarea';
-const CHAT_MESSAGEBOX_BUTTON_CLASS = 'dx-chat-messagebox-button';
+import { CHAT_EDITING_PREVIEW_CLASS } from '__internal/ui/chat/messageEditingPreview';
 
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 
@@ -641,6 +643,44 @@ QUnit.module('MessageBox', moduleConfig, () => {
                 .keyUp('enter');
 
             assert.roughEqual(this.$textArea.height(), initialTextAreaHeight, 0.1, 'textarea height is restored');
+        });
+
+        QUnit.test('textarea should be cleared on escape key when some message is editing', function(assert) {
+            this.instance.option('editingText', 'test');
+
+            keyboardMock(this.$input)
+                .focus()
+                .type('some text')
+                .keyDown('esc')
+                .keyUp('esc');
+
+            assert.strictEqual(this.$input.val(), '');
+        });
+
+        QUnit.test('textarea should not be cleared on escape key when no message is editing', function(assert) {
+            keyboardMock(this.$input)
+                .focus()
+                .type('some text')
+                .keyDown('esc')
+                .keyUp('esc');
+
+            assert.strictEqual(this.$input.val(), 'some text');
+        });
+
+        QUnit.test('editing preview should be removed on escape key when some message is editing', function(assert) {
+            this.instance.option('editingText', 'test');
+
+            const getEditingPreview = () => this.$element.find(`.${CHAT_EDITING_PREVIEW_CLASS}`);
+
+            assert.strictEqual(getEditingPreview().length, 1, 'preview exists before escape pressed');
+
+            keyboardMock(this.$input)
+                .focus()
+                .type('some text')
+                .keyDown('esc')
+                .keyUp('esc');
+
+            assert.strictEqual(getEditingPreview().length, 0, 'preview removed after escape pressed');
         });
     });
 });

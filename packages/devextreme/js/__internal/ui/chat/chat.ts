@@ -22,7 +22,6 @@ import Widget from '@ts/core/widget/widget';
 import AlertList from '@ts/ui/chat/alertlist';
 import ConfirmationPopup from '@ts/ui/chat/confirmationpopup';
 import type {
-  MessageEditCanceledEvent as MessageBoxEditCanceledEvent,
   MessageEnteredEvent as MessageBoxMessageEnteredEvent,
   Properties as MessageBoxProperties,
   TypingStartEvent as MessageBoxTypingStartEvent,
@@ -45,6 +44,8 @@ class Chat extends Widget<Properties> {
   _messageList!: MessageList;
 
   _alertList!: AlertList;
+
+  _editingMessage: Message | null = null;
 
   _deleteConfirmationPopup!: ConfirmationPopup;
 
@@ -296,13 +297,17 @@ class Chat extends Widget<Properties> {
     this._callCallbackIfNotCanceled(
       messageEditingStartArgs.cancel,
       () => {
-        this._messageBox.showEditingPreview(e.message);
+        this._editingMessage = e.message;
+        this._messageBox.option('editingText', e.message.text);
       },
     );
   }
 
-  _messageEditCanceledHandler(e: MessageBoxEditCanceledEvent): void {
-    this._messageEditCanceledAction?.({ message: e.message });
+  _messageEditCanceledHandler(): void {
+    if (this._editingMessage) {
+      this._messageEditCanceledAction?.({ message: this._editingMessage });
+      this._editingMessage = null;
+    }
   }
 
   _showDeleteConfirmationPopup(e: Pick<MessageDeletingEvent, 'message'>): void {
@@ -383,8 +388,8 @@ class Chat extends Widget<Properties> {
       onTypingEnd: () => {
         this._typingEndHandler();
       },
-      onMessageEditCanceled: (e) => {
-        this._messageEditCanceledHandler(e);
+      onMessageEditCanceled: () => {
+        this._messageEditCanceledHandler();
       },
     };
 

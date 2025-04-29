@@ -1,11 +1,11 @@
-.dx-chat-messagebox-wrapper {
+.dx-chat-messagebox {
   display: flex;
   flex-direction: column;
   border-top-width: 1px;
   border-top-style: solid;
 }
 
-.dx-chat-messagebox {
+.dx-chat-messagebox-input-container {
   display: flex;
   align-items: flex-end;
 }

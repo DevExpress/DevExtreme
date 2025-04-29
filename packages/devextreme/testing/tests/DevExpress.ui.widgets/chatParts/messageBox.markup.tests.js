@@ -1,8 +1,8 @@
 import $ from 'jquery';
 
 import MessageBox, {
-    CHAT_MESSAGEBOX_WRAPPER_CLASS,
     CHAT_MESSAGEBOX_CLASS,
+    CHAT_MESSAGEBOX_INPUT_CONTAINER_CLASS,
     CHAT_MESSAGEBOX_TEXTAREA_CLASS,
     CHAT_MESSAGEBOX_BUTTON_CLASS,
 } from '__internal/ui/chat/messagebox';
@@ -31,15 +31,28 @@ const moduleConfig = {
 QUnit.module('MessageBox', moduleConfig, () => {
     QUnit.module('Classes', () => {
         QUnit.test('root element should have correct class', function(assert) {
-            assert.strictEqual(this.$element.hasClass(CHAT_MESSAGEBOX_WRAPPER_CLASS), true);
+            assert.strictEqual(this.$element.hasClass(CHAT_MESSAGEBOX_CLASS), true);
         });
 
-        QUnit.test('root element should contain element for editing preview and messagebox', function(assert) {
+        QUnit.test('root element should contain only input container by default', function(assert) {
             const $messageBoxContent = this.$element.children();
 
-            assert.strictEqual($messageBoxContent.length, 2, 'message box content has two elements');
-            assert.strictEqual($messageBoxContent.eq(0).hasClass(CHAT_EDITING_PREVIEW_CLASS), true, 'first child is editing preview');
-            assert.strictEqual($messageBoxContent.eq(1).hasClass(CHAT_MESSAGEBOX_CLASS), true, 'second child is messagebox');
+            assert.strictEqual($messageBoxContent.length, 1, 'message box content has one elements');
+            assert.strictEqual($messageBoxContent.eq(0).hasClass(CHAT_MESSAGEBOX_INPUT_CONTAINER_CLASS), true, 'message box contains input container');
+        });
+
+        QUnit.test('editing preview should appear and dispose in runtime by changing editingText option', function(assert) {
+            const getEditingPreview = () => this.$element.find(`.${CHAT_EDITING_PREVIEW_CLASS}`);
+
+            assert.strictEqual(getEditingPreview().length, 0, 'Be default editing preview not rendered');
+
+            this.instance.option('editingText', 'test');
+
+            assert.strictEqual(getEditingPreview().length, 1, 'Editing preview rendered after editingText set');
+
+            this.instance.option('editingText', undefined);
+
+            assert.strictEqual(getEditingPreview().length, 0, 'Editing preview rendered after editingText reset');
         });
 
         QUnit.test(`textarea field should have ${CHAT_MESSAGEBOX_TEXTAREA_CLASS} class`, function(assert) {

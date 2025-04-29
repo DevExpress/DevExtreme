@@ -1,6 +1,6 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import Chat from 'devextreme-testcafe-models/chat';
-import { getShortText, getLongText } from './data';
+import { getShortText, getLongText, createUser } from './data';
 import url from '../../helpers/getPageUrl';
 import { createWidget } from '../../helpers/createWidget';
 import { testScreenshot } from '../../helpers/themeUtils';
@@ -36,6 +36,49 @@ test('Chat: messagebox', async (t) => {
   await appendElementTo('#container', 'div', 'chat');
 
   return createWidget('dxChat', {
+    width: 400,
+    height: 600,
+  }, '#chat');
+});
+
+test('Chat: messagebox with editing preview', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  const chat = new Chat('#chat');
+
+  await t
+    .rightClick(chat.getMessage(0))
+    .pressKey('down')
+    .pressKey('enter');
+
+  await testScreenshot(t, takeScreenshot, 'Messagebox with editing preview', {
+    element: '#chat',
+    shouldTestInCompact: true,
+  });
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  await appendElementTo('#container', 'div', 'chat');
+
+  const userFirst = createUser(1, 'First');
+  const userSecond = createUser(2, 'Second');
+
+  const items = [{
+    author: userFirst,
+    text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+  }, {
+    author: userSecond,
+    text: 'Short message',
+  }];
+
+  return createWidget('dxChat', {
+    items,
+    user: userFirst,
+    editing: {
+      allowUpdating: true,
+    },
     width: 400,
     height: 600,
   }, '#chat');

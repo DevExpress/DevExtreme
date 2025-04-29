@@ -1,25 +1,29 @@
 .dx-chat-editing-preview {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
+  position: relative;
 }
 
-.dx-chat-editing-message {
+.dx-chat-editing-preview-content {
   display: flex;
   flex-direction: column;
   flex-grow: 1;
   min-width: 0;
 }
 
-.dx-chat-editing-message-caption {
+.dx-chat-editing-preview::before {
+  content: '';
+  height: 100%;
+  border-left-style: solid;
+  position: absolute;
+}
+
+.dx-chat-editing-preview-caption {
   font-weight: 500;
 }
 
-.dx-chat-editing-message-text {
+.dx-chat-editing-preview-text {
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
-}
-
-.dx-chat-editing-quote-line {
-  border-left-style: solid;
 }

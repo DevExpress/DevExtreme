@@ -13,7 +13,7 @@ import TextArea from '@ts/ui/m_text_area';
 import type { EnterKeyEvent, InputEvent } from '../../../ui/text_area';
 
 export const CHAT_MESSAGEBOX_CLASS = 'dx-chat-messagebox';
-export const CHAT_MESSAGEBOX_WRAPPER_CLASS = 'dx-chat-messagebox-wrapper';
+export const CHAT_MESSAGEBOX_INPUT_CONTAINER_CLASS = 'dx-chat-messagebox-input-container';
 export const CHAT_MESSAGEBOX_TEXTAREA_CLASS = 'dx-chat-messagebox-textarea';
 export const CHAT_MESSAGEBOX_BUTTON_CLASS = 'dx-chat-messagebox-button';
 
@@ -22,10 +22,6 @@ export const TYPING_END_DELAY = 2000;
 export type MessageEnteredEvent =
   NativeEventInfo<MessageBox, KeyboardEvent | PointerEvent | MouseEvent | TouchEvent> &
   { text?: string };
-
-export type MessageEditCanceledEvent =
-  NativeEventInfo<MessageBox, KeyboardEvent | PointerEvent | MouseEvent | TouchEvent> &
-  { message: Message };
 
 export type TypingStartEvent = NativeEventInfo<MessageBox, UIEvent & { target: HTMLInputElement }>;
 
@@ -42,7 +38,9 @@ export interface Properties extends DOMComponentProperties<MessageBox> {
 
   onTypingEnd?: (e: NativeEventInfo<MessageBox>) => void;
 
-  onMessageEditCanceled?: (e: MessageEditCanceledEvent) => void;
+  onMessageEditCanceled?: (e: NativeEventInfo<MessageBox>) => void;
+
+  editingText?: string;
 }
 
 class MessageBox extends DOMComponent<MessageBox, Properties> {
@@ -50,7 +48,7 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
 
   _button!: Button;
 
-  _editingPreview!: MessageEditingPreview;
+  _editingPreview!: MessageEditingPreview | null;
 
   _messageEnteredAction?: (e: Partial<MessageEnteredEvent>) => void;
 
@@ -58,7 +56,7 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
 
   _typingEndAction?: () => void;
 
-  _messageEditCanceledAction?: (e: Partial<MessageEditCanceledEvent>) => void;
+  _messageEditCanceledAction?: () => void;
 
   // eslint-disable-next-line no-restricted-globals
   _typingEndTimeoutId?: ReturnType<typeof setTimeout> | undefined;
@@ -75,6 +73,7 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
       onTypingStart: undefined,
       onTypingEnd: undefined,
       onMessageEditCanceled: undefined,
+      editingText: '',
     };
   }
 
@@ -88,17 +87,20 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
   }
 
   _initMarkup(): void {
-    $(this.element()).addClass(CHAT_MESSAGEBOX_WRAPPER_CLASS);
+    $(this.element()).addClass(CHAT_MESSAGEBOX_CLASS);
 
     super._initMarkup();
 
-    this._renderEditingPreview();
-    this._renderMessageBox();
+    if (this.option('editingText')) {
+      this._renderEditingPreview();
+    }
+
+    this._renderInputContainer();
   }
 
-  _renderMessageBox(): void {
+  _renderInputContainer(): void {
     const $messageBox = $('<div>')
-      .addClass(CHAT_MESSAGEBOX_CLASS)
+      .addClass(CHAT_MESSAGEBOX_INPUT_CONTAINER_CLASS)
       .appendTo(this.element());
 
     const $textArea = this._renderTextArea();
@@ -109,17 +111,19 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
       .append(sendButton);
   }
 
-  _renderEditingPreview(): dxElementWrapper {
-    const $editingPreview = $('<div>').appendTo(this.element());
+  _cancelMessageEdit(): void {
+    this.option('editingText', undefined);
+    this._messageEditCanceledAction?.();
+  }
+
+  _renderEditingPreview(): void {
+    const $editingPreview = $('<div>').prependTo(this.element());
+    const { editingText } = this.option();
 
     this._editingPreview = this._createComponent($editingPreview, MessageEditingPreview, {
-      onCancel: (e): void => {
-        this.hideEditingPreview();
-        this._messageEditCanceledAction?.({ event: e.event, message: this._editingMessage });
-      },
+      text: editingText,
+      onCancel: this._cancelMessageEdit.bind(this),
     });
-
-    return $editingPreview;
   }
 
   _renderTextArea(): dxElementWrapper {
@@ -158,6 +162,12 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
     this._textArea.registerKeyHandler('enter', (event: KeyboardEvent) => {
       if (!event.shiftKey && this._isValuableTextEntered()) {
         event.preventDefault();
+      }
+    });
+
+    this._textArea.registerKeyHandler('escape', () => {
+      if (this.option('editingText')) {
+        this._cancelMessageEdit();
       }
     });
 
@@ -295,6 +305,12 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
         this._createMessageEditCanceledAction();
 
         break;
+      case 'editingText':
+        this._updateEditingPreview(value);
+        this._textArea.option('value', value);
+        this._textArea.focus();
+
+        break;
       default:
         super._optionChanged(args);
     }
@@ -314,17 +330,16 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
     });
   }
 
-  showEditingPreview(message: Message): void {
-    this._editingMessage = message;
-    this._editingPreview.option('text', message.text);
-    this._textArea.option('value', message.text);
-    this._textArea.focus();
-  }
+  _updateEditingPreview(text: string | undefined): void {
+    if (this._editingPreview) {
+      this._editingPreview.option('text', text);
 
-  hideEditingPreview(): void {
-    this._editingPreview.resetOption('text');
-    this._textArea.clear();
-    this._textArea.focus();
+      if (!text) {
+        this._editingPreview = null;
+      }
+    } else {
+      this._renderEditingPreview();
+    }
   }
 }
 
