@@ -16,7 +16,8 @@ test('Chat: confirmation popup', async (t) => {
   await t.rightClick(chat.getMessage(2)).pressKey('down').pressKey('enter');
 
   await testScreenshot(t, takeScreenshot, 'Confirmation popup is shown.png', {
-    element: '#container', shouldTestInCompact: true,
+    element: '#container',
+    shouldTestInCompact: true,
   });
 
   await t.expect(compareResults.isValid()).ok(compareResults.errorMessages());
