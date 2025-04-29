@@ -1,5 +1,4 @@
 import $ from 'jquery';
-import themes from 'ui/themes';
 import localization from 'localization';
 import devices from '__internal/core/m_devices';
 import domAdapter from '__internal/core/m_dom_adapter';
@@ -771,26 +770,6 @@ QUnit.module('AIDialog', {}, () => {
                 type: 'default'
             });
             assert.strictEqual(generateButtonOptions.text, this.dictionary['dxHtmlEditor-aiGenerate'], 'text is localized');
-            assert.strictEqual(generateButtonOptions.width, BUTTON_WIDTH, 'width is 100 in non-Material');
-        });
-
-        QUnit.test('should have correct width for generate button in Material theme', function(assert) {
-            const isMaterialStub = sinon.stub(themes, 'isMaterial');
-
-            try {
-                isMaterialStub.returns(true);
-
-                showAIDialog(this, {
-                    config: { currentCommand: 'askAI' }
-                });
-
-                const generateToolbarItem = getToolbarButtonItems(this.aiDialogPopup)[0];
-                const generateButtonOptions = generateToolbarItem.options;
-
-                assert.strictEqual(generateButtonOptions.width, 106, 'width is 106 in Material');
-            } finally {
-                isMaterialStub.restore();
-            }
         });
 
         QUnit.test('should be correct for stop button', function(assert) {

@@ -13,7 +13,6 @@ import type dxSelectBox from '@js/ui/select_box';
 import type { Properties as SelectBoxProperties } from '@js/ui/select_box';
 import SelectBox from '@js/ui/select_box';
 import TextArea from '@js/ui/text_area';
-import { current, isMaterial } from '@js/ui/themes';
 import type {
   AICommandExecutor,
   AICommandParamsMap,
@@ -50,7 +49,6 @@ const POPUP_MAX_WIDTH = 460;
 export const TEXT_AREA_MIN_HEIGHT = 64;
 export const TEXT_AREA_MAX_HEIGHT = 128;
 export const REPLACE_DROPDOWN_WIDTH = 150;
-export const BUTTON_WIDTH = 100;
 
 enum DialogState {
   Initial = 'initial',
@@ -347,7 +345,6 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
       location: 'after',
       widget: 'dxButton',
       options: {
-        width: isMaterial(current()) ? 106 : 100,
         type: 'default',
         text: localizationMessage.format('dxHtmlEditor-aiGenerate'),
         stylingMode: 'contained',
@@ -362,7 +359,6 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
       location: 'after',
       widget: 'dxButton',
       options: {
-        width: BUTTON_WIDTH,
         type: 'default',
         stylingMode: 'contained',
         text: localizationMessage.format('dxHtmlEditor-aiStop'),
