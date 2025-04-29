@@ -43,7 +43,7 @@ QUnit.module('ConfirmationPopup', moduleConfig, () => {
     });
 
     QUnit.module('Accessibility', () => {
-        QUnit.test('Content should have id attr equal to overlay element "aria-labelledby"', function (assert) {
+        QUnit.test('Content should have id attr equal to overlay element "aria-labelledby"', function(assert) {
             assert.expect(1);
 
             this.instance.show();
