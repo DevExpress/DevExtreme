@@ -13,7 +13,7 @@ const moduleConfig = {
     beforeEach: function() {
         const init = () => {
             this.$element = $('#component');
-            this.instance = new ConfirmationPopup(this.$element, {}, { container: this.$element });
+            this.instance = new ConfirmationPopup(this.$element, { container: this.$element });
         };
 
         this.reinit = () => {

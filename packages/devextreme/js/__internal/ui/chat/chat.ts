@@ -278,8 +278,6 @@ class Chat extends Widget<Properties> {
               message: this._messageToDelete,
             });
           },
-        },
-        {
           rtlEnabled: this.option().rtlEnabled,
           onHidden: (): void => {
             this._messageToDelete = undefined;

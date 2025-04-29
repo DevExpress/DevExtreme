@@ -2,7 +2,6 @@
 @use "colors" as *;
 @use "sizes" as *;
 @use "../../base/chat/mixins" as *;
-@use "../popup/sizes" as *;
 
 // adduse
 
@@ -93,8 +92,8 @@
   $chat-typingindicator-circle-bg-color-center,
 );
 @include chat-confirmation-popup(
-  $fluent-popup-content-vertical-padding,
-  0 $fluent-popup-content-withtitle-top-padding $fluent-popup-content-withtitle-bottom-padding,
-  0 $fluent-popup-content-withtitle-top-padding $fluent-popup-content-withtitle-bottom-padding,
+  $chat-confirmation-popup-content-padding,
+  0 $chat-confirmation-popup-toolbar-padding-block,
+  $chat-confirmation-popup-toolbar-padding-inline,
   $chat-confirmation-popup-toolbar-gap,
 );

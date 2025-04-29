@@ -5,22 +5,21 @@ import { BUTTON_CLASS } from '__internal/ui/button/button';
 
 const moduleConfig = {
     beforeEach: function() {
-        const init = (confirmationPopupConfig = {}, popupConfig = {}) => {
+        const init = (config = {}) => {
             this.$element = $('#component');
             this.instance = new ConfirmationPopup(
                 this.$element,
-                confirmationPopupConfig,
                 {
                     container: this.$element,
-                    ...popupConfig,
+                    ...config,
                 }
             );
         };
 
-        this.reinit = (confirmationPopupConfig, popupConfig) => {
+        this.reinit = (config) => {
             this.instance.dispose();
             this.$element.empty();
-            init(confirmationPopupConfig, popupConfig);
+            init(config);
         };
 
         init();
@@ -73,7 +72,6 @@ QUnit.module('ConfirmationPopup', moduleConfig, () => {
         const done = assert.async();
 
         this.reinit(
-            {},
             {
                 onHidden: () => {
                     assert.ok(

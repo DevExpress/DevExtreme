@@ -12,29 +12,36 @@ const DX_BUTTON_CLASSNAME = 'dx-button';
 
 const POPUP_WIDTH = 240;
 
-interface ConfirmationPopupProperties {
+interface ConfirmationPopupActions {
   onApplyButtonClick?: () => void;
   onCancelButtonClick?: () => void;
 }
 
+type ConfirmationPopupProperties = PopupProperties & ConfirmationPopupActions;
+
 class ConfirmationPopup {
   _$container: dxElementWrapper;
 
-  _popupConfig?: PopupProperties;
-
-  _confirmationPopupConfig?: ConfirmationPopupProperties;
-
   _popup!: Popup;
+
+  _popupConfig?: ConfirmationPopupProperties;
+
+  _actions?: ConfirmationPopupActions;
 
   constructor(
     $container: dxElementWrapper,
-    confirmationPopupConfig?: ConfirmationPopupProperties,
-    popupConfig?: PopupProperties,
+    config?: ConfirmationPopupProperties,
   ) {
     this._$container = $container;
-    this._popupConfig = popupConfig;
 
-    this._confirmationPopupConfig = confirmationPopupConfig;
+    const { onApplyButtonClick, onCancelButtonClick, ...popupConfig } = config ?? {};
+
+    this._actions = {
+      onApplyButtonClick,
+      onCancelButtonClick,
+    };
+
+    this._popupConfig = popupConfig;
 
     this._renderPopup();
   }
@@ -96,7 +103,7 @@ class ConfirmationPopup {
         type: 'default',
         stylingMode: 'contained',
         onClick: (): void => {
-          this._confirmationPopupConfig?.onApplyButtonClick?.();
+          this._actions?.onApplyButtonClick?.();
           // eslint-disable-next-line @typescript-eslint/no-floating-promises
           this._popup.hide();
         },
@@ -114,7 +121,7 @@ class ConfirmationPopup {
         type: 'normal',
         stylingMode: 'outlined',
         onClick: (): void => {
-          this._confirmationPopupConfig?.onCancelButtonClick?.();
+          this._actions?.onCancelButtonClick?.();
           // eslint-disable-next-line @typescript-eslint/no-floating-promises
           this._popup.hide();
         },

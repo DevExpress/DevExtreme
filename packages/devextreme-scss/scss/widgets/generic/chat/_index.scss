@@ -96,7 +96,7 @@
 );
 @include chat-confirmation-popup(
   $chat-confirmation-popup-content-padding,
-  $generic-popup-toolbarbottom-padding,
-  $generic-popup-toolbarbottom-padding,
+  $chat-confirmation-popup-toolbar-padding-block,
+  $chat-confirmation-popup-toolbar-padding-inline,
   $chat-confirmation-popup-toolbar-gap,
 );

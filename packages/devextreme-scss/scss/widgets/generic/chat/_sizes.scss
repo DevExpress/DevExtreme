@@ -52,6 +52,8 @@ $chat-typingindicator-circle-size-center: null !default;
 $chat-typingindicator-circle-border-radius: 999em !default;
 
 $chat-confirmation-popup-content-padding: null !default;
+$chat-confirmation-popup-toolbar-padding-block: $generic-popup-toolbarbottom-padding !default;
+$chat-confirmation-popup-toolbar-padding-inline: $generic-popup-toolbarbottom-padding !default;
 $chat-confirmation-popup-toolbar-gap: null !default;
 
 @if $size == "default" {
