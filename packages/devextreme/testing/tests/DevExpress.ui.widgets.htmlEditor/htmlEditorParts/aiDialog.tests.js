@@ -330,7 +330,7 @@ QUnit.module('AIDialog', {}, () => {
                 const toolbarButtonItems = this.aiDialogPopup.option('toolbarItems').filter(item => ['dxButton', 'dxDropDownButton'].includes(item.widget));
                 const buttonTexts = toolbarButtonItems.map(item => item.options.text);
                 const replaceButtonItem = toolbarButtonItems.find(item => item.options.text === 'Replace');
-                const copyButtonItem = toolbarButtonItems.find(item => item.options.text === 'Copy');
+                const copyButtonItem = toolbarButtonItems.find(item => item.options.icon === 'copy');
 
                 assert.strictEqual(promptTextAreaInstance.option('readOnly'), true, 'prompt TextArea is readOnly');
                 assert.strictEqual(resultTextAreaInstance.option('visible'), true, 'result TextArea is visible');
@@ -1001,7 +1001,6 @@ QUnit.module('AIDialog', {}, () => {
                             height: '100%',
                             autoResizeEnabled: false,
                         });
-
 
                         done();
                     });
