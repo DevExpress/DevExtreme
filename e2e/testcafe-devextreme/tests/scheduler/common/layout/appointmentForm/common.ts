@@ -16,13 +16,13 @@ fixture`AppointmentForm screenshot tests`
 
     await t
       .doubleClick(scheduler.getDateTableCell(0, 0))
-      .expect(await takeScreenshot(`initial-form_${theme}.png`, scheduler.appointmentPopup.wrapper))
+      .expect(await takeScreenshot(`initial-form_${theme}.png`, scheduler.appointmentPopup.content))
       .ok()
 
       .click(appointmentPopup.allDayElement)
       .click(appointmentPopup.recurrenceElement)
 
-      .expect(await takeScreenshot(`allday-and-reccurence-form_${theme}.png`, scheduler.appointmentPopup.wrapper))
+      .expect(await takeScreenshot(`allday-and-reccurence-form_${theme}.png`, scheduler.appointmentPopup.content))
       .ok()
 
       .expect(compareResults.isValid())

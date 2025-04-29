@@ -567,7 +567,7 @@ class RecurrenceEditor extends Editor {
       editorType: 'dxNumberBox',
       editorOptions: {
         stylingMode: getStylingModeFunc(),
-        field: 'count',
+        field: 'repeatCount',
         format: `# ${messageLocalization.format('dxScheduler-recurrenceRepeatCount')}`,
         width: repeatInputWidth,
         min: 1,
@@ -606,7 +606,7 @@ class RecurrenceEditor extends Editor {
       editorType: 'dxDateBox',
       editorOptions: {
         stylingMode: getStylingModeFunc(),
-        field: 'until',
+        field: 'repeatUntil',
         value: repeatUntil,
         type: 'date',
         width: repeatInputWidth,
@@ -800,11 +800,11 @@ class RecurrenceEditor extends Editor {
 
   _changeRepeatCountValue() {
     const count = this._recurrenceRule.getRules().count || 1;
-    this._recurrenceForm.itemOption('repeatCount', 'value', count);
+    this._recurrenceForm.getEditor('repeatCount').option('value', count);
   }
 
   _changeRepeatUntilValue() {
-    this._recurrenceForm.itemOption('repeatUntil', 'value', this._getUntilValue());
+    this._recurrenceForm.getEditor('repeatUntil').option('value', this._getUntilValue());
   }
 
   _getUntilValue() {
