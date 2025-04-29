@@ -40,8 +40,10 @@ QUnit.module('ConfirmationPopup', moduleConfig, () => {
             assert.strictEqual($popupContent.length, 1, 'Confirmation popup content rendered');
             assert.strictEqual($buttons.length, 2, 'Confirmation popup buttons rendered');
         });
+    });
 
-        QUnit.test('Content should have id attr equal to overlay element "aria-labelledby"', function(assert) {
+    QUnit.module('Accessibility', () => {
+        QUnit.test('Content should have id attr equal to overlay element "aria-labelledby"', function (assert) {
             assert.expect(1);
 
             this.instance.show();
@@ -56,7 +58,7 @@ QUnit.module('ConfirmationPopup', moduleConfig, () => {
         });
     });
 
-    QUnit.module('Localization', moduleConfig, () => {
+    QUnit.module('Localization', () => {
         QUnit.test('Should check that message and button texts are properly localize', function(assert) {
             const defaultLocale = localization.locale();
 
