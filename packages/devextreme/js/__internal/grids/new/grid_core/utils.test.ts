@@ -108,7 +108,7 @@ describe('parseDateValue', () => {
   each`
       text                                      | format                  | expectedResult
       ${'7/15/2021'}                            | ${null}                 | ${new Date(2021, 6, 15)}
-      ${'7/15/2021, 8:45 PM'}                   | ${null}                 | ${new Date('2021-07-15T12:45:00.000Z')}
+      ${'7/15/2021, 8:45 PM'}                   | ${null}                 | ${new Date(2021, 6, 15, 20, 45)}
 `
     .it('should parse short dates without format', ({
       text,
