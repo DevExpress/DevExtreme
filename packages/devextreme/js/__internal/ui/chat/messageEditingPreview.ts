@@ -105,10 +105,10 @@ class MessageEditingPreview extends DOMComponent<MessageEditingPreview, Properti
       return;
     }
 
-    this._remove();
+    this._dispose();
   }
 
-  _remove(): void {
+  _dispose(): void {
     super._dispose();
     this.$element().remove();
   }

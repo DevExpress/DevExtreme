@@ -46,10 +46,8 @@ test('Chat: messagebox with editing preview', async (t) => {
 
   const chat = new Chat('#chat');
 
-  await t
-    .rightClick(chat.getMessage(0))
-    .pressKey('down')
-    .pressKey('enter');
+  await t.rightClick(chat.getMessage(0));
+  await t.click(chat.getContextMenuItem(0));
 
   await testScreenshot(t, takeScreenshot, 'Messagebox with editing preview', {
     element: '#chat',

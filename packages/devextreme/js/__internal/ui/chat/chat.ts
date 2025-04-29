@@ -45,7 +45,7 @@ class Chat extends Widget<Properties> {
 
   _alertList!: AlertList;
 
-  _editingMessage: Message | null = null;
+  _messageToEdit: Message | null = null;
 
   _deleteConfirmationPopup!: ConfirmationPopup;
 
@@ -190,7 +190,7 @@ class Chat extends Widget<Properties> {
       currentUserId,
       allowUpdating: (message: Message): boolean => this._allowEditAction(message),
       allowDeleting: (message: Message): boolean => this._allowDeleteAction(message),
-      isEditActionDisabled: (message) => this._editingMessage === message,
+      isEditActionDisabled: (message) => this._messageToEdit === message,
       messageTemplate: this._getMessageTemplate(),
       showDayHeaders,
       showAvatar,
@@ -298,16 +298,16 @@ class Chat extends Widget<Properties> {
     this._callCallbackIfNotCanceled(
       messageEditingStartArgs.cancel,
       () => {
-        this._editingMessage = e.message;
+        this._messageToEdit = e.message;
         this._messageBox.option('editingText', e.message.text);
       },
     );
   }
 
   _messageEditCanceledHandler(): void {
-    if (this._editingMessage) {
-      this._messageEditCanceledAction?.({ message: this._editingMessage });
-      this._editingMessage = null;
+    if (this._messageToEdit) {
+      this._messageEditCanceledAction?.({ message: this._messageToEdit });
+      this._messageToEdit = null;
     }
   }
 

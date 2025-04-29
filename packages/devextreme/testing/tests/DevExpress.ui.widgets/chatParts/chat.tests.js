@@ -19,6 +19,7 @@ import MessageBox, {
     CHAT_MESSAGEBOX_TEXTAREA_CLASS,
 } from '__internal/ui/chat/messagebox';
 import keyboardMock from '../../../helpers/keyboardMock.js';
+import pointerMock from '../../../helpers/pointerMock.js';
 import { DataSource } from 'common/data/data_source/data_source';
 import { CustomStore } from 'common/data/custom_store';
 import dataUtils from 'core/element_data';
@@ -30,7 +31,6 @@ import config from 'core/config';
 import ArrayStore from 'common/data/array_store';
 import MessageEditingPreview, {
     CHAT_EDITING_PREVIEW_CLASS,
-    CHAT_EDITING_PREVIEW_TEXT_CLASS,
     CHAT_EDITING_PREVIEW_CANCEL_BUTTON_CLASS,
 } from '__internal/ui/chat/messageEditingPreview';
 import { CHAT_CONFIRMATION_POPUP_WRAPPER_CLASS } from '__internal/ui/chat/confirmationpopup';
@@ -421,6 +421,34 @@ QUnit.module('Chat', () => {
 
                 assert.strictEqual(this.getContextMenu().option('visible'), false, 'context menu is hidden');
                 assert.strictEqual(this.$textArea.hasClass(FOCUSED_STATE_CLASS), true, 'input is focused');
+            });
+
+            QUnit.test('edit menu item should be disabled for message that is already editing', function(assert) {
+                this.reinit({
+                    focusStateEnabled: true,
+                    editing: {
+                        allowUpdating: true,
+                    },
+                    items: [
+                        { text: 'a', author: userFirst },
+                        { text: 'b', author: userSecond },
+                    ],
+                    user: userSecond,
+                });
+
+                const $bubbles = this.getBubbles();
+                $bubbles.eq(1).trigger('dxcontextmenu');
+
+                let editAction = this.getContextMenu().option('items')[0];
+                assert.strictEqual(editAction.disabled, false, 'Edit action is enabled');
+
+                const $editButton = this.getContextMenuItems().eq(0);
+                $editButton.trigger('dxclick');
+
+                $bubbles.eq(1).trigger('dxcontextmenu');
+
+                editAction = this.getContextMenu().option('items')[0];
+                assert.strictEqual(editAction.disabled, true, 'Edit action is disabled');
             });
         });
 
@@ -931,14 +959,13 @@ QUnit.module('Chat', () => {
             });
 
             QUnit.test('message box should have editing message text and focus after the Edit button is clicked and not cancelled', function(assert) {
-                const done = assert.async();
-
                 const items = [
                     { text: 'a', author: userFirst },
                     { text: 'b', author: userSecond },
                 ];
 
                 this.reinit({
+                    focusStateEnabled: true,
                     user: userSecond,
                     editing: {
                         allowUpdating: true
@@ -950,17 +977,13 @@ QUnit.module('Chat', () => {
                 $bubbles.eq(1).trigger('dxcontextmenu');
 
                 const $editButton = this.getContextMenuItems().eq(0);
-                $editButton.trigger('dxclick');
+                pointerMock($editButton).click();
 
+                const editingPreviewInstance = this.getMessageEditingPreviewInstance();
 
-                setTimeout(() => {
-                    const editingPreviewInstance = this.getMessageEditingPreviewInstance();
-
-                    assert.strictEqual(editingPreviewInstance.option('text'), 'b', 'editing preview contains editing message text');
-                    assert.strictEqual(this.textArea.option('value'), 'b', 'input contains editing message text');
-                    assert.strictEqual(this.$input.hasClass(FOCUSED_STATE_CLASS), true, 'input is focused');
-                    done();
-                });
+                assert.strictEqual(editingPreviewInstance.option('text'), 'b', 'editing preview contains editing message text');
+                assert.strictEqual(this.textArea.option('value'), 'b', 'input contains editing message text');
+                assert.strictEqual(this.$textArea.hasClass(FOCUSED_STATE_CLASS), true, 'input is focused');
             });
         });
 
@@ -1080,7 +1103,7 @@ QUnit.module('Chat', () => {
 
                 assert.strictEqual(this.getMessageEditingPreview().length, 0);
                 assert.strictEqual(this.$textArea.text(), '', 'input is empty');
-                assert.strictEqual(this.$input.hasClass(FOCUSED_STATE_CLASS), true, 'input is focused');
+                assert.strictEqual(this.$textArea.hasClass(FOCUSED_STATE_CLASS), true, 'input is focused');
             });
         });
 
