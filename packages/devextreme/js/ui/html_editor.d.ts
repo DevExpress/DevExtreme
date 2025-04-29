@@ -184,7 +184,7 @@ export interface AIToolbarItem extends Omit<dxToolbarItem, 'menuItemTemplate' | 
      * @docid
      * @public
      */
-    name: 'ai';
+    name?: 'ai';
     /**
      * @docid
      * @public
