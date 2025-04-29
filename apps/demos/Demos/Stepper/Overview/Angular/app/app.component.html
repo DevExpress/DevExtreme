@@ -13,33 +13,14 @@
           [rtlEnabled]="rtlMode"
         >
           <dxi-item
-            [text]="steps[0].text"
-            [label]="steps[0].label"
-            [icon]="steps[0].icon"
-          />
-          <dxi-item
-            [text]="steps[1].text"
-            [label]="steps[1].label"
-            [icon]="steps[1].icon"
-          />
-          <dxi-item
-            [text]="steps[2].text"
-            [label]="steps[2].label"
-            [icon]="steps[2].icon"
-            [optional]="steps[2].optional"
-          />
-          <dxi-item
-            [text]="steps[3].text"
-            [label]="steps[3].label"
-            [icon]="steps[3].icon"
-          />
-          <dxi-item
-            [text]="steps[4].text"
-            [label]="steps[4].label"
-            [icon]="steps[4].icon"
-          />
+            *ngFor="let step of steps"
+            [label]="step.label"
+            [icon]="step.icon"
+            [optional]="step.optional"
+          ></dxi-item>
         </dx-stepper>
       </div>
+
       <div class="stepper-wrapper">
         <div id="numbersLabel" class="stepper-label">Numbers and Labels</div>
         <dx-stepper
@@ -51,13 +32,14 @@
           [selectOnFocus]="selectOnFocus"
           [rtlEnabled]="rtlMode"
         >
-          <dxi-item [label]="steps[0].label" />
-          <dxi-item [label]="steps[1].label" />
-          <dxi-item [label]="steps[2].label" [optional]="steps[2].optional" />
-          <dxi-item [label]="steps[3].label" />
-          <dxi-item [label]="steps[4].label" />
+          <dxi-item
+            *ngFor="let step of steps"
+            [label]="step.label"
+            [optional]="step.optional"
+          ></dxi-item>
         </dx-stepper>
       </div>
+
       <div class="stepper-wrapper">
         <div id="customTextLabel" class="stepper-label">Custom Text</div>
         <dx-stepper
@@ -69,11 +51,7 @@
           [selectOnFocus]="selectOnFocus"
           [rtlEnabled]="rtlMode"
         >
-          <dxi-item [text]="steps[0].text" />
-          <dxi-item [text]="steps[1].text" />
-          <dxi-item [text]="steps[2].text" />
-          <dxi-item [text]="steps[3].text" />
-          <dxi-item [text]="steps[4].text" />
+          <dxi-item *ngFor="let step of steps" [text]="step.text"></dxi-item>
         </dx-stepper>
       </div>
     </div>

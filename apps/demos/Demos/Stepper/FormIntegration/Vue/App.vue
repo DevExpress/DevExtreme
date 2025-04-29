@@ -18,7 +18,7 @@
       :focus-state-enabled="false"
       :animation-enabled="false"
       :swipe-enabled="false"
-      :height="300"
+      :height="400"
     >
       <DxMultiViewItem>
         <template #default>
