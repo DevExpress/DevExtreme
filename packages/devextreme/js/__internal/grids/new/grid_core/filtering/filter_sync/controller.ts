@@ -26,10 +26,6 @@ export class FilterSyncController {
     HeaderFilterController,
   ] as const;
 
-  private syncLockFromFilterPanel = 0;
-
-  private syncLockFromHeaderFilter = 0;
-
   private isFirstLoad = true;
 
   public readonly filterSyncEnabled = computed(
@@ -55,10 +51,6 @@ export class FilterSyncController {
       if (!this.filterSyncEnabled.value) {
         return;
       }
-      if (this.isHeaderFilterLock()) {
-        return;
-      }
-      this.lockFromFilterPanel();
 
       const sourceColumns = this.columnsController.columns.peek();
 
@@ -88,8 +80,6 @@ export class FilterSyncController {
           };
         }),
       );
-
-      this.unlockFromFilterPanel();
     });
 
     // Sync from HeaderFilter to FilterPanel
@@ -103,27 +93,10 @@ export class FilterSyncController {
           return;
         }
       }
-      if (this.isFilterPanelLock()) {
-        return;
-      }
-      this.lockFromHeaderFilter();
 
       if (!equalByValue(filter, this.filterController.filterValueOption.value, { maxDepth: 5 })) {
         this.filterController.filterValueOption.value = filter;
       }
-      this.unlockFromHeaderFilter();
     });
   }
-
-  private readonly isFilterPanelLock = (): boolean => this.syncLockFromFilterPanel > 0;
-
-  private readonly isHeaderFilterLock = (): boolean => this.syncLockFromHeaderFilter > 0;
-
-  private readonly lockFromFilterPanel = (): void => { this.syncLockFromFilterPanel += 1; };
-
-  private readonly lockFromHeaderFilter = (): void => { this.syncLockFromHeaderFilter += 1; };
-
-  private readonly unlockFromFilterPanel = (): void => { this.syncLockFromFilterPanel -= 1; };
-
-  private readonly unlockFromHeaderFilter = (): void => { this.syncLockFromHeaderFilter -= 1; };
 }
