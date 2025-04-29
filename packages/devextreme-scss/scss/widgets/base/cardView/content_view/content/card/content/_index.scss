@@ -48,6 +48,10 @@
     &--highlighted {
       color: $cardview-card-content-field-value-highlight-color;
       background: $cardview-card-content-field-value-highlight-background;
+      border-radius: $cardview-card-content-field-value-highlight-border-radius;
+      padding: $cardview-card-content-field-value-highlight-padding;
+      font-weight: $cardview-card-content-field-value-highlight-font-weight;
+      box-shadow: $cardview-card-content-field-value-highlight-box-shadow;
     }
   }
 }

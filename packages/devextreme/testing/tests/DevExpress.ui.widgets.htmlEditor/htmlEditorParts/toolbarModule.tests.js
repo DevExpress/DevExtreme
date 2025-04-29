@@ -1452,11 +1452,83 @@ testModule('Toolbar AI menu', dialogAIModuleConfig, () => {
             currentCommand: 'summarize',
             currentCommandOption: undefined,
             text: 'Test',
-            commandsMap: { summarize: {
-                name: 'summarize',
-                options: undefined,
-                text: 'Summarize'
-            } },
+            prompt: undefined,
+            commandsMap: {
+                summarize: {
+                    id: 'summarize',
+                    name: 'summarize',
+                    options: undefined,
+                    text: 'Summarize',
+                },
+            },
+        }, 'Correct config passed to dialog');
+    });
+
+    QUnit.test('Should pass correct payload to dialog on item click if there is custom command', function(assert) {
+        const prompt = () => 'custom prompt';
+        this.options.items = [{ name: 'ai', commands: [{ name: 'custom', prompt }] }];
+
+        new Toolbar(this.quillMock, this.options);
+
+        const showSpy = sinon.spy(this.options.editorInstance, 'showAIDialog');
+
+        openAIDialog(this.$element);
+
+        assert.ok(showSpy.calledOnce, 'showAIDialog called');
+        assert.deepEqual(showSpy.firstCall.args[0], {
+            currentCommand: 'custom0',
+            currentCommandOption: undefined,
+            text: 'Test',
+            prompt,
+            commandsMap: {
+                custom0: {
+                    id: 'custom0',
+                    name: 'custom',
+                    options: undefined,
+                    text: 'Custom',
+                    prompt,
+                },
+            },
+        }, 'Correct config passed to dialog');
+    });
+
+    QUnit.test('Should pass correct payload to dialog on item click if there is custom command with options', function(assert) {
+        const prompt = (param) => `custom prompt with ${param}`;
+
+        this.options.items = [
+            {
+                name: 'ai',
+                commands: [
+                    {
+                        name: 'custom',
+                        options: ['option 1'],
+                        prompt,
+                    },
+                ],
+            },
+        ];
+
+        new Toolbar(this.quillMock, this.options);
+
+        const showSpy = sinon.spy(this.options.editorInstance, 'showAIDialog');
+
+        openAIDialog(this.$element);
+
+        assert.ok(showSpy.calledOnce, 'showAIDialog called');
+        assert.deepEqual(showSpy.firstCall.args[0], {
+            currentCommand: 'custom0',
+            currentCommandOption: 'Option 1',
+            text: 'Test',
+            prompt,
+            commandsMap: {
+                custom0: {
+                    id: 'custom0',
+                    name: 'custom',
+                    options: ['Option 1'],
+                    text: 'Custom',
+                    prompt,
+                },
+            },
         }, 'Correct config passed to dialog');
     });
 
