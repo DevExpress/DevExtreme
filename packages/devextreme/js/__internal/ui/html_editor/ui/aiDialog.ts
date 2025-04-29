@@ -28,6 +28,7 @@ import {
 } from '@ts/ui/html_editor/utils/ai';
 import { TEXTEDITOR_INPUT_CONTAINER_CLASS } from '@ts/ui/text_box/m_text_editor.base';
 
+import { isSmallScreen } from '../utils/small_screen';
 import BaseDialog from './m_baseDialog';
 
 export const AI_DIALOG_CLASS = 'dx-aidialog';
@@ -46,10 +47,10 @@ const AI_DIALOG_COMMANDS_WITH_OPTIONS = ['translate', 'changeStyle', 'changeTone
 
 const POPUP_MIN_WIDTH = 288;
 const POPUP_MAX_WIDTH = 460;
-const REPLACE_DROPDOWN_WIDTH = 150;
 const TEXT_AREA_MIN_HEIGHT = 64;
 const TEXT_AREA_MAX_HEIGHT = 128;
-const BUTTON_WIDTH = 100;
+export const REPLACE_DROPDOWN_WIDTH = 150;
+export const BUTTON_WIDTH = 100;
 
 enum DialogState {
   Initial = 'initial',
@@ -211,12 +212,20 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
 
   protected _renderResultTextArea($container: dxElementWrapper): void {
     const $textArea = $('<div>').appendTo($container);
-    this._resultTextArea = new TextArea($textArea.get(0), {
-      minHeight: TEXT_AREA_MIN_HEIGHT,
+    const screenSpecificOptions = isSmallScreen() ? {
+      maxHeight: '100%',
+      height: '100%',
+      autoResizeEnabled: false,
+    } : {
       maxHeight: TEXT_AREA_MAX_HEIGHT,
       autoResizeEnabled: true,
+    };
+
+    this._resultTextArea = new TextArea($textArea.get(0), {
+      minHeight: TEXT_AREA_MIN_HEIGHT,
       width: '100%',
       readOnly: true,
+      ...screenSpecificOptions,
     });
   }
 
@@ -299,7 +308,7 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
     };
   }
 
-  protected _getCopyButtonItem(config?: ToolbarItem): ToolbarItem {
+  protected _getCopyButtonItem(): ToolbarItem {
     return {
       toolbar: 'bottom',
       location: 'after',
@@ -315,7 +324,6 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
           navigator?.clipboard?.writeText(value ?? '');
         },
       },
-      ...config,
     };
   }
 
@@ -333,7 +341,7 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
     };
   }
 
-  protected _getGenerateButtonItem(config?: ToolbarItem): ToolbarItem {
+  protected _getGenerateButtonItem(): ToolbarItem {
     return {
       toolbar: 'bottom',
       location: 'after',
@@ -345,7 +353,6 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
         stylingMode: 'contained',
         onClick: () => this._executeAICommand(),
       },
-      ...config,
     };
   }
 
