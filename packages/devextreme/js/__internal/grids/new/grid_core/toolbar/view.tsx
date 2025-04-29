@@ -40,6 +40,7 @@ export class ToolbarView extends View<ToolbarProps> {
       visible: this.visible.value,
       items: this.controller.items.value,
       disabled: this.options.oneWay('toolbar.disabled').value,
+      multiline: this.options.oneWay('toolbar.multiline').value,
       showContextMenu: this.showContextMenu.bind(this),
     }));
   }

@@ -76,16 +76,16 @@ describe('ColumnProperties', () => {
       expect((props.items[0] as dxForm.SimpleItem).editorOptions?.someEditOption).toBe('someEditOptionValue');
     });
   });
-  describe('setCellValue', () => {
+  describe('setFieldValue', () => {
     it('should be used as callback for setting editor value', async () => {
-      const setCellValue = jest.fn<Column['setCellValue']>((newData: any, value) => {
+      const setFieldValue = jest.fn<Column['setFieldValue']>((newData: any, value) => {
         newData.mycustomfield = value;
       });
 
       const { editPopupView, editingController, getForm } = setup({
         columns: [{
           dataField: 'field1',
-          setCellValue,
+          setFieldValue,
         }, 'id'],
         dataSource: [{
           id: 1,
@@ -102,7 +102,7 @@ describe('ColumnProperties', () => {
       // @ts-expect-error private field
       await editPopupView.promises.waitForAll();
 
-      expect(setCellValue.mock.calls[0]).toMatchSnapshot();
+      expect(setFieldValue.mock.calls[0]).toMatchSnapshot();
       expect(editingController.changes.peek()).toMatchSnapshot();
     });
   });

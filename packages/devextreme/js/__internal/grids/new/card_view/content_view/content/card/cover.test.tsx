@@ -12,7 +12,7 @@ describe('Cover', () => {
       className: 'cover-image',
     };
 
-    render(<Cover {...props} />, container);
+    render(<Cover card={{} as any} {...props} />, container);
 
     const image = container.querySelector('img');
     expect(image).not.toBeNull();
@@ -26,7 +26,7 @@ describe('Cover', () => {
       const container = document.createElement('div');
       const props = {};
 
-      render(<Cover {...props} />, container);
+      render(<Cover card={{} as any} {...props} />, container);
       expect(container).toMatchSnapshot();
     });
   });

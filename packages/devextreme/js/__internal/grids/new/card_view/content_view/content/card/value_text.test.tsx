@@ -1,7 +1,7 @@
 import {
   describe, expect, it,
 } from '@jest/globals';
-import type { Cell } from '@ts/grids/new/grid_core/columns_controller/types';
+import type { FieldInfo } from '@ts/grids/new/grid_core/columns_controller/types';
 import { render } from 'inferno';
 
 import { ValueText } from './value_text';
@@ -11,12 +11,12 @@ describe('Content View', () => {
     it('should set root classes', () => {
       const container = document.createElement('div');
 
-      const cell = {
+      const field = {
         column: { alignment: 'center' }, text: 'TEST', highlightedText: null,
-      } as unknown as Cell;
+      } as unknown as FieldInfo;
 
       render(
-        <ValueText cell={cell}/>,
+        <ValueText field={field}/>,
         container,
       );
 
@@ -26,15 +26,15 @@ describe('Content View', () => {
     it('should add title attribute', () => {
       const container = document.createElement('div');
 
-      const cell = {
+      const field = {
         column: { alignment: 'center' },
         text: 'TEST',
         highlightedText: null,
-      } as unknown as Cell;
+      } as unknown as FieldInfo;
 
       render(
-        <ValueText cell={cell}
-                   cellHintEnabled={true}
+        <ValueText field={field}
+                   fieldHintEnabled={true}
         />,
         container,
       );
@@ -45,14 +45,14 @@ describe('Content View', () => {
     it('should render plain text if highlighted text is null', () => {
       const container = document.createElement('div');
 
-      const cell = {
+      const field = {
         column: { alignment: 'center' },
         text: 'TEST_TEXT',
         highlightedText: null,
-      } as unknown as Cell;
+      } as unknown as FieldInfo;
 
       render(
-        <ValueText cell={cell} />,
+        <ValueText field={field} />,
         container,
       );
 
@@ -62,7 +62,7 @@ describe('Content View', () => {
     it('should render highlighted text if passed', () => {
       const container = document.createElement('div');
 
-      const cell = {
+      const field = {
         column: { alignment: 'center' },
         text: 'TEST_TEXT',
         highlightedText: [
@@ -70,10 +70,10 @@ describe('Content View', () => {
           { type: 'highlighted', text: 'MATCH_PART' },
           { type: 'usual', text: ' USUAL_PART' },
         ],
-      } as unknown as Cell;
+      } as unknown as FieldInfo;
 
       render(
-        <ValueText cell={cell} />,
+        <ValueText field={field} />,
         container,
       );
 

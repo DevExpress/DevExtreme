@@ -3,14 +3,16 @@
 exports[`Options selectedCardKeys when given should set the select state of the item 1`] = `
 [
   {
-    "cells": [],
+    "columns": [],
     "data": {
       "id": 1,
       "value": "test",
     },
+    "fields": [],
     "index": 0,
     "isSelected": true,
     "key": 1,
+    "values": [],
   },
 ]
 `;
@@ -51,14 +53,16 @@ exports[`Options selection allowSelectAll when it is true and selection mode isn
 exports[`Options selection mode when it is 'none' and the selectedCardKeys is specified selection should not apply 1`] = `
 [
   {
-    "cells": [],
+    "columns": [],
     "data": {
       "id": 1,
       "value": "test",
     },
+    "fields": [],
     "index": 0,
     "isSelected": false,
     "key": 1,
+    "values": [],
   },
 ]
 `;
@@ -66,14 +70,16 @@ exports[`Options selection mode when it is 'none' and the selectedCardKeys is sp
 exports[`Options selection mode when it is 'none' selection should not work 1`] = `
 [
   {
-    "cells": [],
+    "columns": [],
     "data": {
       "id": 1,
       "value": "test",
     },
+    "fields": [],
     "index": 0,
     "isSelected": false,
     "key": 1,
+    "values": [],
   },
 ]
 `;

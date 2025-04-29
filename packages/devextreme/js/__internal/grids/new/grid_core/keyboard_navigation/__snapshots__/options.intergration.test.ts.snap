@@ -2,8 +2,58 @@
 
 exports[`Options KeyboardNavigation onFocusedCardChanged common API contract test 1`] = `
 {
-  "cells": [
+  "columns": [
     {
+      "alignment": "left",
+      "allowEditing": true,
+      "allowFiltering": true,
+      "allowHeaderFiltering": false,
+      "allowHiding": true,
+      "allowReordering": true,
+      "allowSearch": true,
+      "allowSorting": true,
+      "calculateCellValue": [Function],
+      "calculateDisplayValue": [Function],
+      "calculateFieldValue": [Function],
+      "calculateFilterExpression": [Function],
+      "caption": "Id",
+      "dataField": "id",
+      "dataType": "string",
+      "defaultSetFieldValue": [Function],
+      "editorOptions": {},
+      "falseText": "false",
+      "fieldCaptionTemplate": undefined,
+      "fieldTemplate": undefined,
+      "fieldValueTemplate": undefined,
+      "formItem": {},
+      "headerFilter": {
+        "allowSelectAll": true,
+        "height": 325,
+        "search": {
+          "editorOptions": {},
+          "enabled": false,
+          "mode": "contains",
+          "timeout": 500,
+        },
+        "width": 252,
+      },
+      "headerItemTemplate": undefined,
+      "headerPanelIndex": 0,
+      "name": "id",
+      "setFieldValue": [Function],
+      "showInColumnChooser": true,
+      "trueText": "true",
+      "validationRules": [],
+      "visible": true,
+      "visibleIndex": 0,
+    },
+  ],
+  "data": {
+    "id": 1,
+  },
+  "fields": [
+    {
+      "card": [Circular],
       "column": {
         "alignment": "left",
         "allowEditing": true,
@@ -15,15 +65,17 @@ exports[`Options KeyboardNavigation onFocusedCardChanged common API contract tes
         "allowSorting": true,
         "calculateCellValue": [Function],
         "calculateDisplayValue": [Function],
+        "calculateFieldValue": [Function],
         "calculateFilterExpression": [Function],
         "caption": "Id",
-        "captionTemplate": undefined,
         "dataField": "id",
         "dataType": "string",
-        "defaultSetCellValue": [Function],
+        "defaultSetFieldValue": [Function],
         "editorOptions": {},
         "falseText": "false",
+        "fieldCaptionTemplate": undefined,
         "fieldTemplate": undefined,
+        "fieldValueTemplate": undefined,
         "formItem": {},
         "headerFilter": {
           "allowSelectAll": true,
@@ -39,11 +91,10 @@ exports[`Options KeyboardNavigation onFocusedCardChanged common API contract tes
         "headerItemTemplate": undefined,
         "headerPanelIndex": 0,
         "name": "id",
-        "setCellValue": [Function],
+        "setFieldValue": [Function],
         "showInColumnChooser": true,
         "trueText": "true",
         "validationRules": [],
-        "valueTemplate": undefined,
         "visible": true,
         "visibleIndex": 0,
       },
@@ -54,11 +105,11 @@ exports[`Options KeyboardNavigation onFocusedCardChanged common API contract tes
       "value": 1,
     },
   ],
-  "data": {
-    "id": 1,
-  },
   "index": 1,
   "isSelected": false,
   "key": 1,
+  "values": [
+    1,
+  ],
 }
 `;

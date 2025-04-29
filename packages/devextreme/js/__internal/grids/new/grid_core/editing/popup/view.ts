@@ -55,15 +55,15 @@ export class EditPopupView extends View<Props> {
   );
 
   private readonly formData = computed(() => {
-    const editRow = this.editingController.editingRow.value;
-    return editRow?.data && { ...editRow.data };
+    const editCard = this.editingController.editingCard.value;
+    return editCard?.data && { ...editCard.data };
   });
 
   private readonly customizeItems = computed(
     () => (item: dxForm.SimpleItem): void => {
-      const editingRow = this.editingController.editingRow.value;
+      const editingCard = this.editingController.editingCard.value;
 
-      if (!editingRow) {
+      if (!editingCard) {
         return;
       }
 
@@ -74,12 +74,12 @@ export class EditPopupView extends View<Props> {
       item.editorOptions.onValueChanged = async ({ value }): Promise<void> => {
         const newData = {};
         await this.promises.add(
-          Promise.resolve(column.setCellValue.bind(column)(newData, value, editingRow.data)),
+          Promise.resolve(column.setFieldValue.bind(column)(newData, value, editingCard.data)),
         );
-        this.editingController.addChange(editingRow.key, newData);
+        this.editingController.addChange(editingCard.key, newData);
         this.formRef.current?.repaint();
       };
-      item.editorOptions.value = editingRow?.cells.find(
+      item.editorOptions.value = editingCard?.fields.find(
         (c) => c.column.name === column.name,
       )?.value;
     },
