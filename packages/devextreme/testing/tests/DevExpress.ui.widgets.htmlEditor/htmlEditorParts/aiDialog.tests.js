@@ -1,12 +1,16 @@
 import $ from 'jquery';
 import themes from 'ui/themes';
 import localization from 'localization';
+import devices from '__internal/core/m_devices';
+import domAdapter from '__internal/core/m_dom_adapter';
 import AIDialog, {
     AI_DIALOG_CLASS,
     AI_DIALOG_CONTROLS_CLASS,
     AI_DIALOG_CONTENT_CLASS,
     REPLACE_DROPDOWN_WIDTH,
-    BUTTON_WIDTH
+    BUTTON_WIDTH,
+    TEXT_AREA_MIN_HEIGHT,
+    TEXT_AREA_MAX_HEIGHT
 } from '__internal/ui/html_editor/ui/aiDialog';
 import { AIIntegration } from '__internal/core/ai_integration/core/ai_integration';
 import { isPromise } from 'core/utils/type';
@@ -83,6 +87,12 @@ const integrationModuleConfig = {
     },
     afterEach() {
         sinon.restore();
+    }
+};
+
+function assertConfig(assert, config, expectations) {
+    for(const key in expectations) {
+        assert.strictEqual(config[key], expectations[key], `${key}=expectations[key]`);
     }
 };
 
@@ -737,12 +747,6 @@ QUnit.module('AIDialog', {}, () => {
                 'ja': this.dictionary
             });
             localization.locale('ja');
-
-            this.assertConfig = (assert, config, expectations) => {
-                for(const key in expectations) {
-                    assert.strictEqual(config[key], expectations[key], `${key}=expectations[key]`);
-                }
-            };
         },
         afterEach: function() {
             integrationModuleConfig.afterEach.apply(this);
@@ -757,12 +761,12 @@ QUnit.module('AIDialog', {}, () => {
             const generateButtonItem = getToolbarButtonItems(this.aiDialogPopup)[0];
             const generateButtonOptions = generateButtonItem.options;
 
-            this.assertConfig(assert, generateButtonItem, {
+            assertConfig(assert, generateButtonItem, {
                 toolbar: 'bottom',
                 location: 'after',
                 widget: 'dxButton'
             });
-            this.assertConfig(assert, generateButtonOptions, {
+            assertConfig(assert, generateButtonOptions, {
                 stylingMode: 'contained',
                 type: 'default'
             });
@@ -797,12 +801,12 @@ QUnit.module('AIDialog', {}, () => {
             const stopToolbarItem = getToolbarButtonItems(this.aiDialogPopup)[0];
             const stopButtonOptions = stopToolbarItem.options;
 
-            this.assertConfig(assert, stopToolbarItem, {
+            assertConfig(assert, stopToolbarItem, {
                 toolbar: 'bottom',
                 location: 'after',
                 widget: 'dxButton'
             });
-            this.assertConfig(assert, stopButtonOptions, {
+            assertConfig(assert, stopButtonOptions, {
                 stylingMode: 'contained',
                 type: 'default',
                 width: BUTTON_WIDTH
@@ -823,13 +827,13 @@ QUnit.module('AIDialog', {}, () => {
                 const copyToolbarItem = getToolbarButtonItems(this.aiDialogPopup)[1];
                 const copyButtonOptions = copyToolbarItem.options;
 
-                this.assertConfig(assert, copyToolbarItem, {
+                assertConfig(assert, copyToolbarItem, {
                     toolbar: 'bottom',
                     location: 'after',
                     widget: 'dxButton',
                     locateInMenu: 'auto'
                 });
-                this.assertConfig(assert, copyButtonOptions, {
+                assertConfig(assert, copyButtonOptions, {
                     stylingMode: 'outlined',
                     icon: 'copy',
                 });
@@ -852,12 +856,12 @@ QUnit.module('AIDialog', {}, () => {
                 const tryAgainToolbarItem = getToolbarButtonItems(this.aiDialogPopup)[0];
                 const tryAgainButtonOptions = tryAgainToolbarItem.options;
 
-                this.assertConfig(assert, tryAgainToolbarItem, {
+                assertConfig(assert, tryAgainToolbarItem, {
                     toolbar: 'bottom',
                     location: 'before',
                     widget: 'dxButton',
                 });
-                this.assertConfig(assert, tryAgainButtonOptions, {
+                assertConfig(assert, tryAgainButtonOptions, {
                     stylingMode: 'outlined',
                     icon: 'restore',
                 });
@@ -880,19 +884,19 @@ QUnit.module('AIDialog', {}, () => {
                 const replaceToolbarItem = getToolbarButtonItems(this.aiDialogPopup)[2];
                 const replaceButtonOptions = replaceToolbarItem.options;
 
-                this.assertConfig(assert, replaceToolbarItem, {
+                assertConfig(assert, replaceToolbarItem, {
                     toolbar: 'bottom',
                     location: 'after',
                     widget: 'dxDropDownButton',
                     locateInMenu: 'auto'
                 });
-                this.assertConfig(assert, replaceButtonOptions, {
+                assertConfig(assert, replaceButtonOptions, {
                     stylingMode: 'contained',
                     type: 'default',
                     splitButton: true,
                     useSelectMode: false,
                 });
-                this.assertConfig(assert, replaceButtonOptions.dropDownOptions, {
+                assertConfig(assert, replaceButtonOptions.dropDownOptions, {
                     width: REPLACE_DROPDOWN_WIDTH
                 });
                 assert.strictEqual(replaceButtonOptions.text, this.dictionary['dxHtmlEditor-aiReplace'], 'text is localized');
@@ -905,6 +909,143 @@ QUnit.module('AIDialog', {}, () => {
                     text: this.dictionary['dxHtmlEditor-aiInsertBelow']
                 }];
                 assert.deepEqual(replaceButtonOptions.items, expectedDropDownItems, 'items in dropdown are correct');
+
+                done();
+            });
+        });
+    });
+
+    QUnit.module('textArea config', integrationModuleConfig, () => {
+        QUnit.test('is correct for result textArea', function(assert) {
+            const done = assert.async();
+
+            showAIDialog(this, {
+                config: { currentCommand: 'translate' },
+            });
+
+            this.resolve();
+
+            this.promise.then(() => {
+                const resultTextAreaInstance = getResultTextAreaInstance(this.$element);
+
+                assertConfig(assert, resultTextAreaInstance.option(), {
+                    minHeight: TEXT_AREA_MIN_HEIGHT,
+                    width: '100%',
+                    readOnly: true,
+                    maxHeight: TEXT_AREA_MAX_HEIGHT,
+                    autoResizeEnabled: true,
+                });
+
+                done();
+            });
+        });
+    });
+
+    QUnit.module('prompt textArea config', {
+        beforeEach: function() {
+            this.initialLocale = localization.locale();
+            this.localizedAskAiPlaceholder = 'custom placeholder';
+            localization.loadMessages({
+                'ja': {
+                    'dxHtmlEditor-aiAskPlaceholder': this.localizedAskAiPlaceholder
+                }
+            });
+            localization.locale('ja');
+            integrationModuleConfig.beforeEach.apply(this);
+        },
+        afterEach: function() {
+            localization.locale(this.initialLocale);
+            integrationModuleConfig.afterEach.apply(this);
+        }
+    }, () => {
+        QUnit.test('is correct', function(assert) {
+            showAIDialog(this, {
+                config: { currentCommand: 'askAI' },
+            });
+
+            const promptTextAreaInstance = getPromptTextAreaInstance(this.$element);
+
+            assertConfig(assert, promptTextAreaInstance.option(), {
+                minHeight: TEXT_AREA_MIN_HEIGHT,
+                maxHeight: TEXT_AREA_MAX_HEIGHT,
+                autoResizeEnabled: true,
+                width: '100%',
+                placeholder: this.localizedAskAiPlaceholder,
+            });
+        });
+    });
+
+    QUnit.module('result textArea config on phone', {
+        beforeEach: function() {
+            this.realDevice = devices.real();
+            devices.real({ deviceType: 'phone' });
+            integrationModuleConfig.beforeEach.apply(this);
+        },
+        afterEach: function() {
+            devices.real(this.realDevice);
+            integrationModuleConfig.afterEach.apply(this);
+        }
+    }, () => {
+        QUnit.test('is correct', function(assert) {
+            const done = assert.async();
+
+            showAIDialog(this, {
+                config: { currentCommand: 'translate' },
+            });
+
+            this.resolve();
+
+            this.promise.then(() => {
+                const resultTextAreaInstance = getResultTextAreaInstance(this.$element);
+
+                assertConfig(assert, resultTextAreaInstance.option(), {
+                    minHeight: TEXT_AREA_MIN_HEIGHT,
+                    width: '100%',
+                    readOnly: true,
+                    maxHeight: '100%',
+                    height: '100%',
+                    autoResizeEnabled: false,
+                });
+
+
+                done();
+            });
+        });
+    });
+
+    QUnit.module('result textArea config on small screen', {
+        beforeEach: function() {
+            this.getDocumentElementStub = sinon.stub(domAdapter, 'getDocumentElement');
+            this.getDocumentElementStub.returns({
+                clientWidth: 300
+            });
+            integrationModuleConfig.beforeEach.apply(this);
+        },
+        afterEach: function() {
+            this.getDocumentElementStub.restore();
+            integrationModuleConfig.afterEach.apply(this);
+        }
+    }, () => {
+        QUnit.test('is correct', function(assert) {
+            const done = assert.async();
+
+            showAIDialog(this, {
+                config: { currentCommand: 'translate' },
+            });
+
+            this.resolve();
+
+            this.promise.then(() => {
+                const resultTextAreaInstance = getResultTextAreaInstance(this.$element);
+
+                assertConfig(assert, resultTextAreaInstance.option(), {
+                    minHeight: TEXT_AREA_MIN_HEIGHT,
+                    width: '100%',
+                    readOnly: true,
+                    maxHeight: '100%',
+                    height: '100%',
+                    autoResizeEnabled: false,
+                });
 
                 done();
             });

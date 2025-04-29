@@ -47,8 +47,8 @@ const AI_DIALOG_COMMANDS_WITH_OPTIONS = ['translate', 'changeStyle', 'changeTone
 
 const POPUP_MIN_WIDTH = 288;
 const POPUP_MAX_WIDTH = 460;
-const TEXT_AREA_MIN_HEIGHT = 64;
-const TEXT_AREA_MAX_HEIGHT = 128;
+export const TEXT_AREA_MIN_HEIGHT = 64;
+export const TEXT_AREA_MAX_HEIGHT = 128;
 export const REPLACE_DROPDOWN_WIDTH = 150;
 export const BUTTON_WIDTH = 100;
 
