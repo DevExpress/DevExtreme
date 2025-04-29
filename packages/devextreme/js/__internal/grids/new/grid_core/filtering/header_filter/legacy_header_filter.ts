@@ -25,7 +25,7 @@ import { updateHeaderFilterItemSelectionState } from '@ts/grids/grid_core/header
 import gridCoreUtils from '@ts/grids/grid_core/m_utils';
 import type { Column } from '@ts/grids/new/grid_core/columns_controller/types';
 
-const getHeaderItemText = (
+export const getHeaderItemText = (
   displayValue,
   column,
   currentLevel,

@@ -1,11 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 import type { Signal } from '@preact/signals-core';
 import { computed, signal } from '@preact/signals-core';
-import { anyOf, noneOf } from '@ts/grids/grid_core/filter/m_filter_custom_operations';
 import gridCoreUtils from '@ts/grids/grid_core/m_utils';
 
 import { ColumnsController } from '../columns_controller/index';
 import { OptionsController } from '../options_controller/options_controller';
+import type { WidgetMock } from '../widget_mock';
+import { anyOf, noneOf } from './legacy_filter_custom_operations';
 import type { AppliedFilters } from './types';
 import { getAppliedFilterExpressions } from './utils';
 
@@ -33,8 +34,8 @@ export class FilterController {
 
   public readonly customOperations = computed(
     () => [
-      anyOf(null),
-      noneOf(null),
+      anyOf(this.gridGetter),
+      noneOf(this.gridGetter),
     ]
       .concat(this.filterBuilderCustomOperations.value)
       .filter((o) => o),
@@ -66,6 +67,10 @@ export class FilterController {
     private readonly options: OptionsController,
     private readonly columnsController: ColumnsController,
   ) { }
+
+  public widgetMockGetter = (): WidgetMock | null => null;
+
+  private readonly gridGetter = (): unknown => this.widgetMockGetter();
 
   public clearFilterCallback = (): void => {};
 

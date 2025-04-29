@@ -9,7 +9,7 @@ export class HeaderFilterController {
     ColumnsController,
   ] as const;
 
-  public readonly composedHeaderFilter: ReadonlySignal<unknown>;
+  public readonly composedHeaderFilter: ReadonlySignal<unknown[]>;
 
   constructor(
     private readonly columnsController: ColumnsController,

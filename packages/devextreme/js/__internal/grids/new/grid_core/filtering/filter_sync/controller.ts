@@ -48,6 +48,9 @@ export class FilterSyncController {
   ) {
     // Sync from FilterPanel to HeaderFilter
     this.filterController.filterPanelValue.subscribe((filter) => {
+      if (filter === undefined) {
+        return;
+      }
       if (!this.filterSyncEnabled.value) {
         return;
       }
@@ -89,20 +92,22 @@ export class FilterSyncController {
     });
 
     // Sync from HeaderFilter to FilterPanel
-    this.headerFilterController.composedHeaderFilter.subscribe((/* filter */) => {
+    this.headerFilterController.composedHeaderFilter.subscribe((filter) => {
       if (!this.filterSyncEnabled.value) {
         return;
       }
       if (this.isFirstLoad) {
         this.isFirstLoad = false;
-        return;
+        if (this.filterController.filterPanelValue.value || filter.length === 0) {
+          return;
+        }
       }
       if (this.isFilterPanelLock()) {
         return;
       }
       this.lockFromHeaderFilter();
 
-      // TODO: sync
+      this.filterController.filterValueOption.value = filter;
       this.unlockFromHeaderFilter();
     });
   }

@@ -19,7 +19,7 @@ import { ErrorController } from './error_controller/error_controller';
 import { CompatibilityFilterSyncController, FilterSyncController } from './filtering/filter_sync/index';
 import { ClearFilterVisitor } from './filtering/filter_visitors/clear_filter_visitor';
 import { GetAppliedFilterVisitor } from './filtering/filter_visitors/get_applied_filters_visitor';
-import { HeaderFilterController } from './filtering/header_filter/index';
+import { CompatibilityHeaderFilterController, HeaderFilterController } from './filtering/header_filter/index';
 import { HeaderFilterViewController } from './filtering/header_filter/view_controller';
 import * as FilterControllerModule from './filtering/index';
 import { ItemsController } from './items_controller/items_controller';
@@ -90,11 +90,16 @@ export class GridCoreNewBase<
     di.register(this.diContext);
   }
 
+  private _initWidgetMockRefs(): void {
+    this.filterController.widgetMockGetter = () => this.diContext.tryGet(WidgetMock);
+  }
+
   protected _initWidgetMock() {
     this.diContext.registerInstance(WidgetMock, new WidgetMock(
       this,
       this.diContext.get(DataControllerModule.CompatibilityDataController),
       this.diContext.get(CompatibilityColumnsController),
+      this.diContext.get(CompatibilityHeaderFilterController),
       this.diContext.get(CompatibilityFilterSyncController),
     ));
   }
@@ -131,6 +136,7 @@ export class GridCoreNewBase<
     this._registerDIContext();
     this._initWidgetMock();
     this._initDIContext();
+    this._initWidgetMockRefs();
   }
 
   protected _getDefaultOptions() {
