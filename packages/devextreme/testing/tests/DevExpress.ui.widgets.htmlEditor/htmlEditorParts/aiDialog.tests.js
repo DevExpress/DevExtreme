@@ -1,8 +1,12 @@
 import $ from 'jquery';
+import themes from 'ui/themes';
+import localization from 'localization';
 import AIDialog, {
     AI_DIALOG_CLASS,
     AI_DIALOG_CONTROLS_CLASS,
     AI_DIALOG_CONTENT_CLASS,
+    REPLACE_DROPDOWN_WIDTH,
+    BUTTON_WIDTH
 } from '__internal/ui/html_editor/ui/aiDialog';
 import { AIIntegration } from '__internal/core/ai_integration/core/ai_integration';
 import { isPromise } from 'core/utils/type';
@@ -710,6 +714,198 @@ QUnit.module('AIDialog', {}, () => {
 
             this.promise.then(() => {
                 assert.strictEqual(promptTextAreaInstance.option('disabled'), false, 'not disabled after');
+                done();
+            });
+        });
+    });
+
+    QUnit.module('button config should be correct for', {
+        beforeEach: function() {
+            integrationModuleConfig.beforeEach.apply(this);
+
+            this.initialLocale = localization.locale();
+            this.dictionary = {
+                'dxHtmlEditor-aiGenerate': 'custom generate',
+                'dxHtmlEditor-aiStop': 'custom stop',
+                'dxHtmlEditor-aiCopy': 'custom copy',
+                'dxHtmlEditor-aiTryAgain': 'custom try again',
+                'dxHtmlEditor-aiReplace': 'custom replace',
+                'dxHtmlEditor-aiInsertAbove': 'custom insert above',
+                'dxHtmlEditor-aiInsertBelow': 'custom insert below',
+            };
+            localization.loadMessages({
+                'ja': this.dictionary
+            });
+            localization.locale('ja');
+
+            this.assertConfig = (assert, config, expectations) => {
+                for(const key in expectations) {
+                    assert.strictEqual(config[key], expectations[key], `${key}=expectations[key]`);
+                }
+            };
+        },
+        afterEach: function() {
+            integrationModuleConfig.afterEach.apply(this);
+            localization.locale(this.initialLocale);
+        }
+    }, () => {
+        QUnit.test('generate button', function(assert) {
+            showAIDialog(this, {
+                config: { currentCommand: 'askAI' }
+            });
+
+            const generateButtonItem = getToolbarButtonItems(this.aiDialogPopup)[0];
+            const generateButtonOptions = generateButtonItem.options;
+
+            this.assertConfig(assert, generateButtonItem, {
+                toolbar: 'bottom',
+                location: 'after',
+                widget: 'dxButton'
+            });
+            this.assertConfig(assert, generateButtonOptions, {
+                stylingMode: 'contained',
+                type: 'default'
+            });
+            assert.strictEqual(generateButtonOptions.text, this.dictionary['dxHtmlEditor-aiGenerate'], 'text is localized');
+            assert.strictEqual(generateButtonOptions.width, BUTTON_WIDTH, 'width is 100 in non-Material');
+        });
+
+        QUnit.test('generate button in Material theme', function(assert) {
+            const isMaterialStub = sinon.stub(themes, 'isMaterial');
+
+            try {
+                isMaterialStub.returns(true);
+
+                showAIDialog(this, {
+                    config: { currentCommand: 'askAI' }
+                });
+
+                const generateToolbarItem = getToolbarButtonItems(this.aiDialogPopup)[0];
+                const generateButtonOptions = generateToolbarItem.options;
+
+                assert.strictEqual(generateButtonOptions.width, 106, 'width is 106 in Material');
+            } finally {
+                isMaterialStub.restore();
+            }
+        });
+
+        QUnit.test('stop button', function(assert) {
+            showAIDialog(this, {
+                config: { currentCommand: 'translate' },
+            });
+
+            const stopToolbarItem = getToolbarButtonItems(this.aiDialogPopup)[0];
+            const stopButtonOptions = stopToolbarItem.options;
+
+            this.assertConfig(assert, stopToolbarItem, {
+                toolbar: 'bottom',
+                location: 'after',
+                widget: 'dxButton'
+            });
+            this.assertConfig(assert, stopButtonOptions, {
+                stylingMode: 'contained',
+                type: 'default',
+                width: BUTTON_WIDTH
+            });
+            assert.strictEqual(stopButtonOptions.text, this.dictionary['dxHtmlEditor-aiStop'], 'text is localized');
+        });
+
+        QUnit.test('copy button', function(assert) {
+            const done = assert.async();
+
+            showAIDialog(this, {
+                config: { currentCommand: 'translate' },
+            });
+
+            this.resolve();
+
+            this.promise.then(() => {
+                const copyToolbarItem = getToolbarButtonItems(this.aiDialogPopup)[1];
+                const copyButtonOptions = copyToolbarItem.options;
+
+                this.assertConfig(assert, copyToolbarItem, {
+                    toolbar: 'bottom',
+                    location: 'after',
+                    widget: 'dxButton',
+                    locateInMenu: 'auto'
+                });
+                this.assertConfig(assert, copyButtonOptions, {
+                    stylingMode: 'outlined',
+                    icon: 'copy',
+                });
+                assert.strictEqual(copyButtonOptions.text, this.dictionary['dxHtmlEditor-aiCopy'], 'text is localized');
+
+                done();
+            });
+        });
+
+        QUnit.test('try again button', function(assert) {
+            const done = assert.async();
+
+            showAIDialog(this, {
+                config: { currentCommand: 'translate' },
+            });
+
+            this.resolve();
+
+            this.promise.then(() => {
+                const tryAgainToolbarItem = getToolbarButtonItems(this.aiDialogPopup)[0];
+                const tryAgainButtonOptions = tryAgainToolbarItem.options;
+
+                this.assertConfig(assert, tryAgainToolbarItem, {
+                    toolbar: 'bottom',
+                    location: 'before',
+                    widget: 'dxButton',
+                });
+                this.assertConfig(assert, tryAgainButtonOptions, {
+                    stylingMode: 'outlined',
+                    icon: 'restore',
+                });
+                assert.strictEqual(tryAgainButtonOptions.text, this.dictionary['dxHtmlEditor-aiTryAgain'], 'text is localized');
+
+                done();
+            });
+        });
+
+        QUnit.test('replace button', function(assert) {
+            const done = assert.async();
+
+            showAIDialog(this, {
+                config: { currentCommand: 'translate' },
+            });
+
+            this.resolve();
+
+            this.promise.then(() => {
+                const replaceToolbarItem = getToolbarButtonItems(this.aiDialogPopup)[2];
+                const replaceButtonOptions = replaceToolbarItem.options;
+
+                this.assertConfig(assert, replaceToolbarItem, {
+                    toolbar: 'bottom',
+                    location: 'after',
+                    widget: 'dxDropDownButton',
+                    locateInMenu: 'auto'
+                });
+                this.assertConfig(assert, replaceButtonOptions, {
+                    stylingMode: 'contained',
+                    type: 'default',
+                    splitButton: true,
+                    useSelectMode: false,
+                });
+                this.assertConfig(assert, replaceButtonOptions.dropDownOptions, {
+                    width: REPLACE_DROPDOWN_WIDTH
+                });
+                assert.strictEqual(replaceButtonOptions.text, this.dictionary['dxHtmlEditor-aiReplace'], 'text is localized');
+
+                const expectedDropDownItems = [{
+                    id: 'insertAbove',
+                    text: this.dictionary['dxHtmlEditor-aiInsertAbove']
+                }, {
+                    id: 'insertBelow',
+                    text: this.dictionary['dxHtmlEditor-aiInsertBelow']
+                }];
+                assert.deepEqual(replaceButtonOptions.items, expectedDropDownItems, 'items in dropdown are correct');
+
                 done();
             });
         });
