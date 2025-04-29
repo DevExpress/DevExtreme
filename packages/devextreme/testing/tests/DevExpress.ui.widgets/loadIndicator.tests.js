@@ -72,7 +72,7 @@ QUnit.module('Events', () => {
             visible: true,
             indicatorSrc: url,
             onContentReady: function(e) {
-                assert.ok($(e.element).find('.' + LOADINDICATOR_IMAGE_CLASS).css('backgroundImage'));
+                assert.ok($(e.element).find(`.${LOADINDICATOR_IMAGE_CLASS}`).css('backgroundImage'));
                 assert.ok($(e.element).hasClass(LOADINDICATOR_CLASS));
             }
         });

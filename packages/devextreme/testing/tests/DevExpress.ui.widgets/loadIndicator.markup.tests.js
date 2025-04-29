@@ -8,6 +8,7 @@ import {
     LOADINDICATOR_SEGMENT_CLASS,
     LOADINDICATOR_IMAGE_CLASS,
     LOADINDICATOR_WRAPPER_CLASS,
+    LOADINDICATOR_CONTENT_CIRCLE_CLASS,
 } from '__internal/ui/m_load_indicator';
 
 import 'ui/load_indicator';
@@ -86,6 +87,40 @@ QUnit.module('Static load indicator', {
         instance.option('indicatorSrc', '');
 
         assert.strictEqual(getBackgroundImage(), 'none', 'custom indicator changed successfully as image');
+    });
+
+    QUnit.module('animation type', function(assert) {
+        QUnit.test('content should have circle animation class by default', function(assert) {
+            const $element = $('#loadIndicator').dxLoadIndicator();
+            const $indicatorContent = $element.find(`.${LOADINDICATOR_CONTENT_CLASS}`);
+
+            assert.strictEqual($indicatorContent.hasClass(LOADINDICATOR_CONTENT_CIRCLE_CLASS), true, 'animation class has been added');
+        });
+
+        QUnit.test('content should not have any animation class if animation type is undefined', function(assert) {
+            const $element = $('#loadIndicator').dxLoadIndicator({ _animationType: undefined });
+
+            const $indicatorContent = $element.find(`.${LOADINDICATOR_CONTENT_CLASS}`);
+            const classCount = $indicatorContent[0].classList.length || 0;
+
+            assert.strictEqual(classCount, 1, 'animation classes has not been added');
+        });
+
+        QUnit.test('content should have circle animation class in runtime', function(assert) {
+            const instance = $('#loadIndicator')
+                .dxLoadIndicator({ _animationType: undefined })
+                .dxLoadIndicator('instance');
+
+            const $indicatorContent = instance.$element().find(`.${LOADINDICATOR_CONTENT_CLASS}`);
+            const classCount = $indicatorContent[0].classList.length || 0;
+
+            assert.strictEqual(classCount, 1, 'animation classes has not been added');
+
+            instance.option({ _animationType: 'circle' });
+
+            // To refactor
+            assert.strictEqual(instance.$element().find(`.${LOADINDICATOR_CONTENT_CLASS}`).hasClass(LOADINDICATOR_CONTENT_CIRCLE_CLASS), true, 'animation class has been added');
+        });
     });
 });
 
