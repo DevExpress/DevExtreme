@@ -506,17 +506,19 @@ const keyboardNavigation = (Base: ModuleType<KeyboardNavigationController>) => c
 const editorFactory = (Base: ModuleType<EditorFactory>) => class FocusEditorFactoryExtender extends Base {
   protected renderFocusOverlay($element, isHideBorder) {
     const focusedRowEnabled = this.option('focusedRowEnabled');
-    let $cell;
 
-    const isFilterRow = !!$element.closest(`.${this.addWidgetPrefix(FILTER_ROW_CLASS)}`).length;
-
-    if (!focusedRowEnabled || !this._keyboardNavigationController?.isRowFocusType() || this._editingController.isEditing() || isFilterRow) {
+    if (
+      !focusedRowEnabled
+      || !this._keyboardNavigationController?.isRowFocusType()
+      || this._editingController.isEditing()
+      || this._columnHeadersView.isFilterRowCell($element)
+    ) {
       super.renderFocusOverlay($element, isHideBorder);
     } else if (focusedRowEnabled) {
       const isRowElement = this._keyboardNavigationController._getElementType($element) === 'row';
 
       if (isRowElement && !$element.hasClass(ROW_FOCUSED_CLASS)) {
-        $cell = this._keyboardNavigationController.getFirstValidCellInRow($element);
+        const $cell = this._keyboardNavigationController.getFirstValidCellInRow($element);
         this._keyboardNavigationController.focus($cell);
       }
     }

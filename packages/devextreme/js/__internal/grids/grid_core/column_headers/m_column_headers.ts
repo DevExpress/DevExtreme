@@ -645,6 +645,11 @@ export class ColumnHeadersView extends ColumnsView {
       }
     }
   }
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  public isFilterRowCell($cell: dxElementWrapper): boolean {
+    return false;
+  }
 }
 
 export const columnHeadersModule = {
