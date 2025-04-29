@@ -92,6 +92,10 @@
   $chat-typingindicator-circle-bg-color,
   $chat-typingindicator-circle-bg-color-center,
 );
+@include chat-confirmation-popup-content(
+  $chat-confirmation-popup-content-padding,
+);
 @include chat-confirmation-popup-toolbar(
   $chat-confirmation-popup-toolbar-padding,
-)
+  $chat-confirmation-popup-toolbar-gap,
+);

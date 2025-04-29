@@ -13,17 +13,11 @@ test('Chat: confirmation popup', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const chat = new Chat('#container');
 
-  await t
-    .rightClick(chat.getMessage(2))
-    .pressKey('down')
-    .pressKey('enter');
+  await t.rightClick(chat.getMessage(2)).pressKey('down').pressKey('enter');
 
-  await testScreenshot(
-    t,
-    takeScreenshot,
-    'Confirmation popup is shown after delete button is clicked.png',
-    { element: '#container' },
-  );
+  await testScreenshot(t, takeScreenshot, 'Confirmation popup is shown.png', {
+    element: '#container', shouldTestInCompact: true,
+  });
 
   await t.expect(compareResults.isValid()).ok(compareResults.errorMessages());
 }).before(async () => {

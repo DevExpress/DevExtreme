@@ -530,6 +530,11 @@ class Chat extends Widget<Properties> {
   renderMessage(message: Message = {}): void {
     this._insertNewItem(message);
   }
+
+  _dispose(): void {
+    this._deleteConfirmationPopup?.dispose();
+    super._dispose();
+  }
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

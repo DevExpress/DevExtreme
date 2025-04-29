@@ -46,12 +46,12 @@ import { PopupPositionController } from './m_popup_position_controller';
 
 const window = windowUtils.getWindow();
 
-const POPUP_CLASS = 'dx-popup';
+export const POPUP_CLASS = 'dx-popup';
 const POPUP_WRAPPER_CLASS = 'dx-popup-wrapper';
 const POPUP_FULL_SCREEN_CLASS = 'dx-popup-fullscreen';
 const POPUP_FULL_SCREEN_WIDTH_CLASS = 'dx-popup-fullscreen-width';
 const POPUP_NORMAL_CLASS = 'dx-popup-normal';
-const POPUP_CONTENT_CLASS = 'dx-popup-content';
+export const POPUP_CONTENT_CLASS = 'dx-popup-content';
 export const POPUP_CONTENT_SCROLLABLE_CLASS = 'dx-popup-content-scrollable';
 
 const DISABLED_STATE_CLASS = 'dx-state-disabled';

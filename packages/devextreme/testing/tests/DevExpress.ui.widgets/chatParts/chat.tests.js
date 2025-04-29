@@ -8,7 +8,8 @@ import ContextMenu, {
     DX_MENU_ITEM_CLASS,
 } from '__internal/ui/context_menu/m_context_menu';
 import {
-    FOCUSED_STATE_CLASS
+    FOCUSED_STATE_CLASS,
+    WIDGET_CLASS,
 } from '__internal/core/widget/widget';
 import AlertList from '__internal/ui/chat/alertlist';
 import MessageBox, { TYPING_END_DELAY } from '__internal/ui/chat/messagebox';
@@ -16,13 +17,16 @@ import keyboardMock from '../../../helpers/keyboardMock.js';
 import { DataSource } from 'common/data/data_source/data_source';
 import { CustomStore } from 'common/data/custom_store';
 import dataUtils from 'core/element_data';
-import devices from '__internal/core/m_devices';
+import fx from 'common/core/animation/fx';
 
 import { isRenderer } from 'core/utils/type';
 
 import config from 'core/config';
 import ArrayStore from 'common/data/array_store';
 import { CHAT_CONFIRMATION_POPUP_WRAPPER_CLASS } from '__internal/ui/chat/confirmationpopup';
+import { POPUP_CLASS } from '__internal/ui/popup/m_popup';
+import { BUTTON_CLASS } from '__internal/ui/button/button';
+import { isDesktopDevice } from '../../../helpers/chat.js';
 
 const CHAT_MESSAGEGROUP_CLASS = 'dx-chat-messagegroup';
 const CHAT_MESSAGELIST_CLASS = 'dx-chat-messagelist';
@@ -40,8 +44,6 @@ const CHAT_LAST_MESSAGEGROUP_ALIGNMENT_START_CLASS = 'dx-chat-last-messagegroup-
 const CHAT_LAST_MESSAGEGROUP_ALIGNMENT_END_CLASS = 'dx-chat-last-messagegroup-alignment-end';
 
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
-
-const DX_BUTTON_CLASSNAME = 'dx-button';
 
 const RTL_CLASS = 'dx-rtl';
 
@@ -76,6 +78,8 @@ export const generateMessages = (length) => {
 const moduleConfig = {
     beforeEach: function() {
         const init = (options = {}) => {
+            fx.off = true;
+
             this.instance = new Chat($('#component'), options);
             this.$element = $(this.instance.$element());
 
@@ -104,6 +108,9 @@ const moduleConfig = {
         this.getContextMenuItems = () => $(this.getContextMenu().itemsContainer()).find(`.${DX_MENU_ITEM_CLASS}`);
 
         init();
+    },
+    afterEach: function() {
+        fx.off = false;
     }
 };
 
@@ -146,7 +153,7 @@ QUnit.module('Chat', () => {
             const $deleteButton = this.getContextMenuItems().eq(0);
             $deleteButton.trigger('dxclick');
 
-            const $popup = this.$element.find('.dx-popup.dx-widget');
+            const $popup = this.$element.find(`.${POPUP_CLASS}.${WIDGET_CLASS}`);
             const popup = $popup.dxPopup('instance');
 
             assert.propContains(popup.option(), {
@@ -375,7 +382,7 @@ QUnit.module('Chat', () => {
             });
 
             QUnit.testInActiveWindow('Contextmenu should be hidden and input focused after esc is pressed', function(assert) {
-                if(devices.real().deviceType !== 'desktop') {
+                if(!isDesktopDevice()) {
                     assert.ok(true, 'Test is not applicable for mobile devices');
                     return;
                 }
@@ -394,7 +401,7 @@ QUnit.module('Chat', () => {
                         allowDeleting: true,
                     }
                 });
-                debugger;
+
                 const $bubbles = this.getBubbles();
                 $bubbles.eq(1).trigger('dxcontextmenu');
 
@@ -632,7 +639,12 @@ QUnit.module('Chat', () => {
             assert.notStrictEqual($popup.find(`.${RTL_CLASS}`).length, 0, 'rtl class is passed to the popup');
         });
 
-        QUnit.test('input should be focused after message delete popup is closed', async function(assert) {
+        QUnit.testInActiveWindow('input should be focused after message delete popup is closed', function(assert) {
+            if(!isDesktopDevice()) {
+                assert.ok(true, 'Test is not applicable for mobile devices');
+                return;
+            }
+
             const items = [
                 { text: 'a', author: userFirst },
                 { text: 'b', author: userSecond },
@@ -653,15 +665,11 @@ QUnit.module('Chat', () => {
             $deleteButton.trigger('dxclick');
 
             const $popup = $(`.${CHAT_CONFIRMATION_POPUP_WRAPPER_CLASS}`);
-            const $cancelButton = $popup.find(`.${DX_BUTTON_CLASSNAME}`).last();
+            const $cancelButton = $popup.find(`.${BUTTON_CLASS}`).last();
 
-            const done = assert.async();
             $cancelButton.trigger('dxclick');
 
-            setTimeout(() => {
-                assert.strictEqual(this.$textArea.hasClass(FOCUSED_STATE_CLASS), true, 'input is focused');
-                done();
-            }, 500);
+            assert.strictEqual(this.$textArea.hasClass(FOCUSED_STATE_CLASS), true, 'input is focused');
         });
     });
 
@@ -996,7 +1004,7 @@ QUnit.module('Chat', () => {
                 $deleteButton.trigger('dxclick');
 
                 const $popup = $(`.${CHAT_CONFIRMATION_POPUP_WRAPPER_CLASS}`);
-                const $applyButton = $popup.find(`.${DX_BUTTON_CLASSNAME}`).first();
+                const $applyButton = $popup.find(`.${BUTTON_CLASS}`).first();
 
                 $applyButton.trigger('dxclick');
 
@@ -1027,7 +1035,7 @@ QUnit.module('Chat', () => {
                 $deleteButton.trigger('dxclick');
 
                 const $popup = $(`.${CHAT_CONFIRMATION_POPUP_WRAPPER_CLASS}`);
-                const $applyButton = $popup.find(`.${DX_BUTTON_CLASSNAME}`).last();
+                const $applyButton = $popup.find(`.${BUTTON_CLASS}`).last();
 
                 $applyButton.trigger('dxclick');
 
@@ -1065,7 +1073,7 @@ QUnit.module('Chat', () => {
                 $deleteButton.trigger('dxclick');
 
                 const $popup = $(`.${CHAT_CONFIRMATION_POPUP_WRAPPER_CLASS}`);
-                const $applyButton = $popup.find(`.${DX_BUTTON_CLASSNAME}`).first();
+                const $applyButton = $popup.find(`.${BUTTON_CLASS}`).first();
 
                 $applyButton.trigger('dxclick');
             });
@@ -1096,7 +1104,7 @@ QUnit.module('Chat', () => {
                 $deleteButton.trigger('dxclick');
 
                 const $popup = $(`.${CHAT_CONFIRMATION_POPUP_WRAPPER_CLASS}`);
-                const $applyButton = $popup.find(`.${DX_BUTTON_CLASSNAME}`).first();
+                const $applyButton = $popup.find(`.${BUTTON_CLASS}`).first();
 
                 $applyButton.trigger('dxclick');
 

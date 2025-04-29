@@ -12,11 +12,6 @@ const DX_BUTTON_CLASSNAME = 'dx-button';
 
 const POPUP_WIDTH = 240;
 
-const enum ConfirmationPopupButtonType {
-  APPLY,
-  CANCEL,
-}
-
 interface ConfirmationPopupProperties {
   onApplyButtonClick?: () => void;
   onCancelButtonClick?: () => void;
@@ -27,32 +22,19 @@ class ConfirmationPopup {
 
   _popupConfig?: PopupProperties;
 
-  _onApplyButtonClick?: () => void;
-
-  _onCancelButtonClick?: () => void;
+  _confirmationPopupConfig?: ConfirmationPopupProperties;
 
   _popup!: Popup;
 
-  _contentMessage!: string;
-
-  _applyButtonText!: string;
-
-  _cancelButtonText!: string;
-
   constructor(
     $container: dxElementWrapper,
-    confirmationPopupConfig: ConfirmationPopupProperties,
+    confirmationPopupConfig?: ConfirmationPopupProperties,
     popupConfig?: PopupProperties,
   ) {
     this._$container = $container;
     this._popupConfig = popupConfig;
 
-    this._onApplyButtonClick = confirmationPopupConfig.onApplyButtonClick;
-    this._onCancelButtonClick = confirmationPopupConfig.onCancelButtonClick;
-
-    this._contentMessage = messageLocalization.format('dxChat-editingDeleteConfirmText');
-    this._applyButtonText = messageLocalization.format('Yes');
-    this._cancelButtonText = messageLocalization.format('No');
+    this._confirmationPopupConfig = confirmationPopupConfig;
 
     this._renderPopup();
   }
@@ -67,7 +49,7 @@ class ConfirmationPopup {
   _getPopupConfig(): PopupProperties {
     const messageId = new Guid().toString();
     const $message = $('<div>')
-      .html(this._contentMessage)
+      .html(messageLocalization.format('dxChat-editingDeleteConfirmText'))
       .attr('id', messageId);
 
     return extend({
@@ -104,27 +86,35 @@ class ConfirmationPopup {
     }) as PopupProperties;
   }
 
-  _getPopupButtonConfig(buttonType: ConfirmationPopupButtonType): ToolbarItem {
-    const isConfirmButton = buttonType === ConfirmationPopupButtonType.APPLY;
-
-    const text = isConfirmButton
-      ? this._applyButtonText
-      : this._cancelButtonText;
-
+  _getApplyButtonConfig(): ToolbarItem {
     return {
       widget: 'dxButton',
       toolbar: 'bottom',
-      location: isConfirmButton ? 'before' : 'after',
+      location: 'before',
       options: {
-        text,
-        type: isConfirmButton ? 'default' : 'normal',
-        stylingMode: isConfirmButton ? 'contained' : 'outlined',
+        text: messageLocalization.format('Yes'),
+        type: 'default',
+        stylingMode: 'contained',
         onClick: (): void => {
-          if (isConfirmButton) {
-            this._onApplyButtonClick?.();
-          } else {
-            this._onCancelButtonClick?.();
-          }
+          this._confirmationPopupConfig?.onApplyButtonClick?.();
+          // eslint-disable-next-line @typescript-eslint/no-floating-promises
+          this._popup.hide();
+        },
+      },
+    };
+  }
+
+  _getCancelButtonConfig(): ToolbarItem {
+    return {
+      widget: 'dxButton',
+      toolbar: 'bottom',
+      location: 'after',
+      options: {
+        text: messageLocalization.format('No'),
+        type: 'normal',
+        stylingMode: 'outlined',
+        onClick: (): void => {
+          this._confirmationPopupConfig?.onCancelButtonClick?.();
           // eslint-disable-next-line @typescript-eslint/no-floating-promises
           this._popup.hide();
         },
@@ -134,14 +124,18 @@ class ConfirmationPopup {
 
   _getToolbarItems(): ToolbarItem[] {
     return [
-      this._getPopupButtonConfig(ConfirmationPopupButtonType.APPLY),
-      this._getPopupButtonConfig(ConfirmationPopupButtonType.CANCEL),
+      this._getApplyButtonConfig(),
+      this._getCancelButtonConfig(),
     ];
   }
 
   show(): void {
     // eslint-disable-next-line @typescript-eslint/no-floating-promises
     this._popup.show();
+  }
+
+  dispose(): void {
+    this._popup.dispose();
   }
 }
 

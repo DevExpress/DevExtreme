@@ -1,19 +1,27 @@
 @mixin chat-confirmation-popup-content(
-  $content-bottom-padding,
+  $padding,
 ) {
   .dx-chat-confirmation-popup-wrapper {
     .dx-popup-content {
-      padding-bottom: $content-bottom-padding;
+      padding-bottom: $padding;
     }
   }
 }
 
 @mixin chat-confirmation-popup-toolbar(
-  $toolbar-padding,
+  $padding: null,
+  $gap: null,
 ) {
   .dx-chat-confirmation-popup-wrapper {
     .dx-popup-bottom.dx-toolbar {
-      padding: $toolbar-padding;
+      @if $padding != null {
+        padding: $padding;
+      }
+    }
+    .dx-toolbar-items-container {
+      @if $gap != null {
+        gap: $gap;
+      }
     }
   }
 }
