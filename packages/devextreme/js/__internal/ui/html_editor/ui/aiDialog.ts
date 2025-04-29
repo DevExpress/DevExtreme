@@ -307,6 +307,7 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
   }
 
   protected _getCopyButtonItem(): ToolbarItem {
+    const text = isSmallScreen() ? undefined : localizationMessage.format('dxHtmlEditor-aiCopy');
     return {
       toolbar: 'bottom',
       location: 'after',
@@ -315,7 +316,7 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
       options: {
         stylingMode: 'outlined',
         icon: COPY_BUTTON_ICON,
-        text: localizationMessage.format('dxHtmlEditor-aiCopy'),
+        text,
         onClick: (): void => {
           const { value } = this._resultTextArea.option();
           // eslint-disable-next-line @typescript-eslint/no-floating-promises

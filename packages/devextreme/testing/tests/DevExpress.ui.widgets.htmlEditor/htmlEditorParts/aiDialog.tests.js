@@ -954,79 +954,78 @@ QUnit.module('AIDialog', {}, () => {
         });
     });
 
-    QUnit.module('result textArea config on phone', {
-        beforeEach: function() {
-            this.realDevice = devices.real();
-            devices.real({ deviceType: 'phone' });
-            integrationModuleConfig.beforeEach.apply(this);
-        },
-        afterEach: function() {
-            devices.real(this.realDevice);
-            integrationModuleConfig.afterEach.apply(this);
-        }
-    }, () => {
-        QUnit.test('is correct', function(assert) {
-            const done = assert.async();
+    QUnit.module('mobile layout', () => {
+        [{
+            name: 'phone',
+            beforeEach: function() {
+                this.realDevice = devices.real();
+                devices.real({ deviceType: 'phone' });
+                integrationModuleConfig.beforeEach.apply(this);
+            },
+            afterEach: function() {
+                devices.real(this.realDevice);
+                integrationModuleConfig.afterEach.apply(this);
+            }
+        }, {
+            name: 'small screen',
+            beforeEach: function() {
+                this.getDocumentElementStub = sinon.stub(domAdapter, 'getDocumentElement');
+                this.getDocumentElementStub.returns({
+                    clientWidth: 300
+                });
+                integrationModuleConfig.beforeEach.apply(this);
+            },
+            afterEach: function() {
+                this.getDocumentElementStub.restore();
+                integrationModuleConfig.afterEach.apply(this);
+            }
+        }].forEach(moduleConfig => {
+            QUnit.module(moduleConfig.name, moduleConfig, () => {
+                QUnit.test('result textArea config is correct', function(assert) {
+                    const done = assert.async();
 
-            showAIDialog(this, {
-                config: { currentCommand: 'translate' },
-            });
+                    showAIDialog(this, {
+                        config: { currentCommand: 'translate' },
+                    });
 
-            this.resolve();
+                    this.resolve();
 
-            this.promise.then(() => {
-                const resultTextAreaInstance = getResultTextAreaInstance(this.$element);
+                    this.promise.then(() => {
+                        const resultTextAreaInstance = getResultTextAreaInstance(this.$element);
 
-                assertConfig(assert, resultTextAreaInstance.option(), {
-                    minHeight: TEXT_AREA_MIN_HEIGHT,
-                    width: '100%',
-                    readOnly: true,
-                    maxHeight: '100%',
-                    height: '100%',
-                    autoResizeEnabled: false,
+                        assertConfig(assert, resultTextAreaInstance.option(), {
+                            minHeight: TEXT_AREA_MIN_HEIGHT,
+                            width: '100%',
+                            readOnly: true,
+                            maxHeight: '100%',
+                            height: '100%',
+                            autoResizeEnabled: false,
+                        });
+
+
+                        done();
+                    });
                 });
 
+                QUnit.test('copy button text is not shown', function(assert) {
+                    const done = assert.async();
 
-                done();
-            });
-        });
-    });
+                    showAIDialog(this, {
+                        config: { currentCommand: 'translate' },
+                    });
 
-    QUnit.module('result textArea config on small screen', {
-        beforeEach: function() {
-            this.getDocumentElementStub = sinon.stub(domAdapter, 'getDocumentElement');
-            this.getDocumentElementStub.returns({
-                clientWidth: 300
-            });
-            integrationModuleConfig.beforeEach.apply(this);
-        },
-        afterEach: function() {
-            this.getDocumentElementStub.restore();
-            integrationModuleConfig.afterEach.apply(this);
-        }
-    }, () => {
-        QUnit.test('is correct', function(assert) {
-            const done = assert.async();
+                    this.resolve();
 
-            showAIDialog(this, {
-                config: { currentCommand: 'translate' },
-            });
+                    this.promise.then(() => {
+                        const copyToolbarItem = getToolbarButtonItems(this.aiDialogPopup)[1];
+                        const copyButtonOptions = copyToolbarItem.options;
 
-            this.resolve();
+                        assert.strictEqual(copyButtonOptions.text, undefined, 'text is not passed');
+                        assert.strictEqual(copyButtonOptions.icon, 'copy', 'icon is passed');
 
-            this.promise.then(() => {
-                const resultTextAreaInstance = getResultTextAreaInstance(this.$element);
-
-                assertConfig(assert, resultTextAreaInstance.option(), {
-                    minHeight: TEXT_AREA_MIN_HEIGHT,
-                    width: '100%',
-                    readOnly: true,
-                    maxHeight: '100%',
-                    height: '100%',
-                    autoResizeEnabled: false,
+                        done();
+                    });
                 });
-
-                done();
             });
         });
     });
