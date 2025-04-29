@@ -107,18 +107,12 @@ const DATA_GRID_SELECTOR = '#container';
 
     await t.rightClick(firstGroupHeader.element);
 
-    await takeScreenshot(
-      `reorder_group_column_to_${rtlEnabled ? 'left' : 'right'}_via_context_menu_when_rtlEnabled_=_${rtlEnabled}_1`,
-      dataGrid.element,
-    );
+    await takeScreenshot(`reorder_group_column_to_${rtlEnabled ? 'left' : 'right'}_via_context_menu_when_rtlEnabled_=_${rtlEnabled}_1`);
 
     await t
       .click(contextMenu.getItemByText('Move as next'));
 
-    await takeScreenshot(
-      `reorder_group_column_to_${rtlEnabled ? 'left' : 'right'}_via_context_menu_when_rtlEnabled_=_${rtlEnabled}_2`,
-      dataGrid.element,
-    );
+    await takeScreenshot(`reorder_group_column_to_${rtlEnabled ? 'left' : 'right'}_via_context_menu_when_rtlEnabled_=_${rtlEnabled}_2`);
 
     await t.expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
@@ -157,18 +151,12 @@ const DATA_GRID_SELECTOR = '#container';
 
     await t.rightClick(lastGroupHeader.element);
 
-    await takeScreenshot(
-      `reorder_group_column_to_${rtlEnabled ? 'right' : 'left'}_via_context_menu_when_rtlEnabled_=_${rtlEnabled}_1`,
-      dataGrid.element,
-    );
+    await takeScreenshot(`reorder_group_column_to_${rtlEnabled ? 'right' : 'left'}_via_context_menu_when_rtlEnabled_=_${rtlEnabled}_1`);
 
     await t
       .click(contextMenu.getItemByText('Move as previous'));
 
-    await takeScreenshot(
-      `reorder_group_column_to_${rtlEnabled ? 'right' : 'left'}_via_context_menu_when_rtlEnabled_=_${rtlEnabled}_2`,
-      dataGrid.element,
-    );
+    await takeScreenshot(`reorder_group_column_to_${rtlEnabled ? 'right' : 'left'}_via_context_menu_when_rtlEnabled_=_${rtlEnabled}_2`);
 
     await t.expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
@@ -341,10 +329,7 @@ test('The context menu should not have items for column reordering when groupPan
 
   await t.rightClick(firstGroupHeader.element);
 
-  await takeScreenshot(
-    'reorder_group_column_via_context_menu_when_group_panel_allowColumnDragging_is_false',
-    dataGrid.element,
-  );
+  await takeScreenshot('reorder_group_column_via_context_menu_when_group_panel_allowColumnDragging_is_false');
 
   await t.expect(compareResults.isValid())
     .ok(compareResults.errorMessages());

@@ -80,18 +80,12 @@ const DATA_GRID_SELECTOR = '#container';
 
     await t.rightClick(firstHeaderCell.element);
 
-    await takeScreenshot(
-      `reorder_column_to_right_via_context_menu_when_rtlEnabled_=_${rtlEnabled}_1`,
-      dataGrid.element,
-    );
+    await takeScreenshot(`reorder_column_to_right_via_context_menu_when_rtlEnabled_=_${rtlEnabled}_1`);
 
     await t
       .click(contextMenu.getItemByText('Move as next'));
 
-    await takeScreenshot(
-      `reorder_column_to_right_via_context_menu_when_rtlEnabled_=_${rtlEnabled}_2`,
-      dataGrid.element,
-    );
+    await takeScreenshot(`reorder_column_to_right_via_context_menu_when_rtlEnabled_=_${rtlEnabled}_2`);
 
     await t
       .expect(compareResults.isValid())
@@ -118,18 +112,12 @@ const DATA_GRID_SELECTOR = '#container';
 
     await t.rightClick(lastHeaderCell.element);
 
-    await takeScreenshot(
-      `reorder_column_to_left_via_context_menu_when_rtlEnabled_=_${rtlEnabled}_1`,
-      dataGrid.element,
-    );
+    await takeScreenshot(`reorder_column_to_left_via_context_menu_when_rtlEnabled_=_${rtlEnabled}_1`);
 
     await t
       .click(contextMenu.getItemByText('Move as previous'));
 
-    await takeScreenshot(
-      `reorder_column_to_left_via_context_menu_when_rtlEnabled_=_${rtlEnabled}_2`,
-      dataGrid.element,
-    );
+    await takeScreenshot(`reorder_column_to_left_via_context_menu_when_rtlEnabled_=_${rtlEnabled}_2`);
 
     await t
       .expect(compareResults.isValid())
@@ -252,10 +240,7 @@ test('The context menu should not have items for column reordering when allowCol
 
   await t.rightClick(firstHeaderCell.element);
 
-  await takeScreenshot(
-    'reorder_column_via_context_menu_when_allowColumnReordering_is_false',
-    dataGrid.element,
-  );
+  await takeScreenshot('reorder_column_via_context_menu_when_allowColumnReordering_is_false');
 
   await t.expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
@@ -638,18 +623,12 @@ test('reorder fixed left column to right via context menu', async (t) => {
 
   await t.rightClick(firstFixedLeftHeader.element);
 
-  await takeScreenshot(
-    'reorder_fixed_left_column_to_right_via_context_menu_1',
-    dataGrid.element,
-  );
+  await takeScreenshot('reorder_fixed_left_column_to_right_via_context_menu_1');
 
   await t
     .click(contextMenu.getItemByText('Move as next'));
 
-  await takeScreenshot(
-    'reorder_fixed_left_column_to_right_via_context_menu_2',
-    dataGrid.element,
-  );
+  await takeScreenshot('reorder_fixed_left_column_to_right_via_context_menu_2');
 
   await t.expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
@@ -682,18 +661,12 @@ test('reorder fixed left column to left via context menu', async (t) => {
 
   await t.rightClick(secondFixedLeftHeader.element);
 
-  await takeScreenshot(
-    'reorder_fixed_left_column_to_left_via_context_menu_1',
-    dataGrid.element,
-  );
+  await takeScreenshot('reorder_fixed_left_column_to_left_via_context_menu_1');
 
   await t
     .click(contextMenu.getItemByText('Move as previous'));
 
-  await takeScreenshot(
-    'reorder_fixed_left_column_to_left_via_context_menu_2',
-    dataGrid.element,
-  );
+  await takeScreenshot('reorder_fixed_left_column_to_left_via_context_menu_2');
 
   await t.expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
@@ -726,18 +699,12 @@ test('reorder fixed right column to right via context menu', async (t) => {
 
   await t.rightClick(firstFixedRightHeader.element);
 
-  await takeScreenshot(
-    'reorder_fixed_right_column_to_right_via_context_menu_1',
-    dataGrid.element,
-  );
+  await takeScreenshot('reorder_fixed_right_column_to_right_via_context_menu_1');
 
   await t
     .click(contextMenu.getItemByText('Move as next'));
 
-  await takeScreenshot(
-    'reorder_fixed_right_column_to_right_via_context_menu_2',
-    dataGrid.element,
-  );
+  await takeScreenshot('reorder_fixed_right_column_to_right_via_context_menu_2');
 
   await t.expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
@@ -772,18 +739,12 @@ test('reorder fixed right column to left via context menu', async (t) => {
 
   await t.rightClick(secondFixedRightHeader.element);
 
-  await takeScreenshot(
-    'reorder_fixed_right_column_to_left_via_context_menu_1',
-    dataGrid.element,
-  );
+  await takeScreenshot('reorder_fixed_right_column_to_left_via_context_menu_1');
 
   await t
     .click(contextMenu.getItemByText('Move as previous'));
 
-  await takeScreenshot(
-    'reorder_fixed_right_column_to_left_via_context_menu_2',
-    dataGrid.element,
-  );
+  await takeScreenshot('reorder_fixed_right_column_to_left_via_context_menu_2');
 
   await t.expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
@@ -1050,18 +1011,12 @@ test('reorder nested column to left via context menu', async (t) => {
 
   await t.rightClick(nestedSecondHeader.element);
 
-  await takeScreenshot(
-    'reorder_nested_column_to_left_via_context_menu_1',
-    dataGrid.element,
-  );
+  await takeScreenshot('reorder_nested_column_to_left_via_context_menu_1');
 
   await t
     .click(contextMenu.getItemByText('Move as previous'));
 
-  await takeScreenshot(
-    'reorder_nested_column_to_left_via_context_menu_2',
-    dataGrid.element,
-  );
+  await takeScreenshot('reorder_nested_column_to_left_via_context_menu_2');
 
   await t.expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
@@ -1094,18 +1049,12 @@ test('reorder nested column to right via context menu', async (t) => {
 
   await t.rightClick(nestedFirstHeader.element);
 
-  await takeScreenshot(
-    'reorder_nested_column_to_right_via_context_menu_1',
-    dataGrid.element,
-  );
+  await takeScreenshot('reorder_nested_column_to_right_via_context_menu_1');
 
   await t
     .click(contextMenu.getItemByText('Move as next'));
 
-  await takeScreenshot(
-    'reorder_nested_column_to_right_via_context_menu_2',
-    dataGrid.element,
-  );
+  await takeScreenshot('reorder_nested_column_to_right_via_context_menu_2');
 
   await t.expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
@@ -1309,18 +1258,12 @@ test('reorder a custom command column to right via context menu', async (t) => {
 
   await t.rightClick(commandHeader.element);
 
-  await takeScreenshot(
-    'reorder_custom_command_column_to_right_via_context_menu_1',
-    dataGrid.element,
-  );
+  await takeScreenshot('reorder_custom_command_column_to_right_via_context_menu_1');
 
   await t
     .click(contextMenu.getItemByText('Move as next'));
 
-  await takeScreenshot(
-    'reorder_custom_command_column_to_right_via_context_menu_2',
-    dataGrid.element,
-  );
+  await takeScreenshot('reorder_custom_command_column_to_right_via_context_menu_2');
 
   await t.expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
