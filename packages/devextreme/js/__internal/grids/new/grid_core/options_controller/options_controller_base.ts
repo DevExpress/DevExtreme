@@ -48,8 +48,6 @@ export class OptionsController<
 
   private readonly internalOptions: Signal<TProps>;
 
-  private readonly lastChangedOption = signal<string | null>(null);
-
   constructor(
     private readonly component: Component<TProps>,
   ) {
@@ -74,8 +72,6 @@ export class OptionsController<
     this.updateIsControlledMode();
 
     const pathParts = getPathParts(fullName);
-
-    this.lastChangedOption.value = fullName;
 
     this.internalOptions.value = mergeOptionTrees(
       this.internalOptions.peek(),
@@ -176,9 +172,5 @@ export class OptionsController<
         },
       );
     });
-  }
-
-  public getLastChangedOption(): ReadonlySignal<string | null> {
-    return this.lastChangedOption;
   }
 }

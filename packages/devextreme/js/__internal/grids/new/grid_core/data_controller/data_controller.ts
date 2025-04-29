@@ -3,6 +3,7 @@ import ArrayStore from '@js/common/data/array_store';
 import { Deferred } from '@js/core/utils/deferred';
 import type { ReadonlySignal } from '@preact/signals-core';
 import { computed, effect, signal } from '@preact/signals-core';
+import { equalByValue } from '@ts/core/utils/m_common';
 import type { PromiseWithResolvers } from '@ts/core/utils/promise';
 import { createPromise } from '@ts/core/utils/promise';
 
@@ -100,6 +101,12 @@ export class DataController {
     private readonly sortingController: SortingController,
     private readonly filterController: FilterController,
   ) {
+    effect(() => {
+      if (this.dataSource.value) {
+        this.columnsController.resetColumnOptionsFromDataItem();
+      }
+    });
+
     effect(
       () => {
         const dataSource = this.dataSource.value;
@@ -192,6 +199,7 @@ export class DataController {
           dataSource.pageIndex(pageIndex);
           someParamChanged ||= true;
         }
+
         if (dataSource.pageSize() !== pageSize) {
           dataSource.pageSize(pageSize);
           someParamChanged ||= true;
@@ -201,15 +209,18 @@ export class DataController {
           dataSource.requireTotalCount(true);
           someParamChanged ||= true;
         }
-        if (dataSource.filter() !== displayFilter) {
+
+        if (!equalByValue(dataSource.filter(), displayFilter)) {
           dataSource.filter(displayFilter ?? null);
           someParamChanged ||= true;
         }
-        if (dataSource.paginate() !== pagingEnabled) {
+
+        if (!equalByValue(dataSource.paginate(), pagingEnabled)) {
           dataSource.paginate(pagingEnabled);
           someParamChanged ||= true;
         }
-        if (sortParameters && dataSource.sort() !== sortParameters) {
+
+        if (sortParameters && !equalByValue(dataSource.sort(), sortParameters)) {
           dataSource.sort(sortParameters);
           someParamChanged ||= true;
         }
@@ -230,9 +241,11 @@ export class DataController {
       items = updateItemsImmutable(items, e.changes, dataSource.store());
     }
 
-    const optionChanging = this.options.getLastChangedOption().peek();
+    const firstItem = items[0];
 
-    this.columnsController.setFirstItems(items[0], optionChanging);
+    if (firstItem) {
+      this.columnsController.getColumnOptionsFromDataItem(firstItem);
+    }
 
     this._items.value = items;
     this.pageIndex.value = dataSource.pageIndex();

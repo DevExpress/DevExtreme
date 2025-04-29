@@ -229,7 +229,7 @@ describe('Options', () => {
   });
 
   (['falseText', 'trueText'] as const).forEach((propName) => {
-    describe.skip(`column[].${propName}`, () => {
+    describe(`column[].${propName}`, () => {
       it('should be used as text for boolean column', () => {
         const { columnsController, itemsController } = setup({
           columns: [

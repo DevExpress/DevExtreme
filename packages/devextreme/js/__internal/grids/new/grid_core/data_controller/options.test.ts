@@ -54,8 +54,7 @@ describe('Options', () => {
       return { store, dataController };
     };
 
-    // TODO: DataSource extra requests issue
-    describe.skip('when it is false', () => {
+    describe('when it is false', () => {
       it('should skip caching requests', () => {
         const { store, dataController } = setupForCacheEnabled({
           cacheEnabled: false,

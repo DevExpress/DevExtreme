@@ -1,4 +1,4 @@
-import type { Format, SortOrder } from '@js/common';
+import type { DataType, Format, SortOrder } from '@js/common';
 import type { ColumnBase, FilterType } from '@js/common/grids';
 import type { DeepPartial } from '@js/core/index';
 import type * as dxForm from '@js/ui/form';
@@ -106,4 +106,14 @@ export interface DataRow {
   isSelected?: boolean;
 
   index: number;
+}
+
+export interface ColumnsConfigurationFromData {
+  dateFields: string[];
+  columns: Record<string, ColumnFromDataOptions>;
+}
+
+export interface ColumnFromDataOptions {
+  dataType?: DataType;
+  format?: Format;
 }

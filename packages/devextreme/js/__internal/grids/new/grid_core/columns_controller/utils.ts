@@ -11,7 +11,7 @@ import type { DataObject } from '../data_controller/types';
 import type { Template } from '../types';
 import type { ColumnProperties, ColumnSettings, PreNormalizedColumn } from './options';
 import { defaultColumnProperties, defaultColumnPropertiesByDataType } from './options';
-import type { Column } from './types';
+import type { Column, ColumnFromDataOptions, ColumnsConfigurationFromData } from './types';
 
 type TemplateNormalizationFunc = <T>(
   template: Template<T> | undefined
@@ -20,25 +20,25 @@ type TemplateNormalizationFunc = <T>(
 function normalizeColumn(
   column: PreNormalizedColumn,
   templateNormalizationFunc: TemplateNormalizationFunc,
-  columnTypesFromData?: { dataType?: DataType; format?: Format | undefined },
+  columnFromDataOptions?: ColumnFromDataOptions,
 ): Column {
-  const dataTypeDefaultName = columnTypesFromData?.dataType ?? defaultColumnProperties.dataType;
-  const dataTypeDefault = defaultColumnPropertiesByDataType[dataTypeDefaultName];
-
-  const columnFormat = column.format ?? columnTypesFromData?.format;
-
+  const dataType = column.dataType
+    ?? columnFromDataOptions?.dataType
+    ?? defaultColumnProperties.dataType;
+  const columnDataTypeDefaultOptions = defaultColumnPropertiesByDataType[dataType];
+  const columnFormat = column.format ?? columnFromDataOptions?.format;
   const caption = captionize(column.name);
 
   const colWithDefaults = {
     ...defaultColumnProperties,
-    ...dataTypeDefault,
+    ...columnDataTypeDefaultOptions,
     caption,
     ...column,
   };
 
   return {
     ...colWithDefaults,
-    dataType: column.dataType ?? dataTypeDefaultName,
+    dataType,
     ...!!columnFormat && { format: columnFormat },
     calculateDisplayValue: isString(colWithDefaults.calculateDisplayValue)
       ? compileGetter(colWithDefaults.calculateDisplayValue) as (data: unknown) => string
@@ -106,16 +106,16 @@ export function normalizeVisibleIndexes(
 export function normalizeColumns(
   columns: PreNormalizedColumn[],
   templateNormalizationFunc: TemplateNormalizationFunc,
-  firstItemDataTypes?: Record<string, { dataType?: DataType; format: Format | undefined }> | null,
+  columnsFromData?: Record<string, ColumnFromDataOptions>,
 ): Column[] {
   return columns.map((col) => {
-    const columnTypeFromData = firstItemDataTypes?.[col.name];
+    const columnFromDataOptions = columnsFromData?.[col.name];
 
-    return normalizeColumn(col, templateNormalizationFunc, columnTypeFromData);
+    return normalizeColumn(col, templateNormalizationFunc, columnFromDataOptions);
   });
 }
 
-export function preNormalizeColumns(columns: ColumnProperties[] | null): PreNormalizedColumn[] {
+export function preNormalizeColumns(columns: ColumnProperties[]): PreNormalizedColumn[] {
   const normalizedColumns = columns?.map((column): ColumnSettings => {
     if (typeof column === 'string') {
       return {
@@ -131,7 +131,6 @@ export function preNormalizeColumns(columns: ColumnProperties[] | null): PreNorm
     }));
 
   const visibleIndexes = getVisibleIndexes(
-    // @ts-expect-error
     normalizedColumns?.map((c) => c.visibleIndex),
   );
 
@@ -171,7 +170,9 @@ export function getColumnByIndexOrName(
   return column;
 }
 
-export const getValueDataType = function (value: unknown): DataType | undefined {
+export const getValueDataType = (
+  value: unknown,
+): DataType | undefined => {
   const dataType: string | undefined = type(value);
   const isUnknownDataType = dataType !== 'string'
     && dataType !== 'boolean'
@@ -184,7 +185,9 @@ export const getValueDataType = function (value: unknown): DataType | undefined 
     : dataType as DataType;
 };
 
-export const getColumnFormat = function (column: Partial<Pick<Column, 'format' | 'dataType'>>): Format | undefined {
+export const getColumnFormat = (
+  column: Partial<Pick<Column, 'format' | 'dataType'>>,
+): Format | undefined => {
   if (column.format) {
     return column.format;
   }
@@ -196,10 +199,21 @@ export const getColumnFormat = function (column: Partial<Pick<Column, 'format' |
   return undefined;
 };
 
-export function generateColumns(
-  firstItem: DataObject | null,
-): string[] | null {
-  if (!firstItem) { return []; }
+export const getColumnOptionsFromDataItem = (
+  dataItem: DataObject,
+): ColumnsConfigurationFromData => {
+  const dateFields = Object.keys(dataItem);
 
-  return Object.keys(firstItem);
-}
+  return {
+    dateFields,
+    columns: Object.entries(dataItem).reduce<Record<string, ColumnFromDataOptions>>((
+      result,
+      [key, value],
+    ) => {
+      const dataType = getValueDataType(value);
+      const format = getColumnFormat({ dataType });
+      result[key] = { dataType, format };
+      return result;
+    }, {}),
+  };
+};
