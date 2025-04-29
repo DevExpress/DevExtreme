@@ -93,8 +93,15 @@ export class FilterSyncController {
           return;
         }
       }
+      const areEqualByValue = equalByValue(
+        filter,
+        this.filterController.filterValueOption.value,
+        { maxDepth: 5 },
+      );
+      const areEqualByEmpty = filter.length === 0
+      && this.filterController.filterValueOption.value === null;
 
-      if (!equalByValue(filter, this.filterController.filterValueOption.value, { maxDepth: 5 })) {
+      if (!areEqualByValue && !areEqualByEmpty) {
         this.filterController.filterValueOption.value = filter;
       }
     });
