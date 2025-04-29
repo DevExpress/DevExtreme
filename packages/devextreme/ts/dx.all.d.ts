@@ -10357,6 +10357,9 @@ declare module DevExpress.ui {
          */
         key: TKey;
       };
+    export type ExplicitTypes<TCardData = unknown, TKey = unknown> = {
+      Properties: Properties<TCardData, TKey>;
+    };
     /**
      * [descr:FieldCaptionClickEvent]
      */

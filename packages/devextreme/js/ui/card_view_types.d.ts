@@ -46,7 +46,6 @@ export {
   ContextMenuPreparingEvent,
   FocusedCardChanged,
   dxCardViewOptions,
-  Properties,
   Sorting,
   Pager,
   PopupProperties,
@@ -54,4 +53,5 @@ export {
   ColumnChooser,
   SearchPanel,
   HeaderFilter,
+  Properties,
 } from './card_view';

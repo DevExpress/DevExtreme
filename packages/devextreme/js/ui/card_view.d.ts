@@ -1545,9 +1545,6 @@ export interface dxCardViewOptions<TCardData = unknown, TKey = unknown> extends 
     onContextMenuPreparing?: ((e: ContextMenuPreparingEvent<TCardData>) => void);
 }
 
-/** @public */
-export type Properties<TCardData = unknown, TKey = unknown> = dxCardViewOptions<TCardData, TKey>;
-
 /**
 * @docid
 * @inherits Widget
@@ -1801,6 +1798,10 @@ export {
     HeaderFilter,
 };
 
+/** @public */
 export type ExplicitTypes<TCardData = unknown, TKey = unknown> = {
     Properties: Properties<TCardData, TKey>;
 };
+
+/** @public */
+export type Properties<TCardData = unknown, TKey = unknown> = dxCardViewOptions<TCardData, TKey>;
