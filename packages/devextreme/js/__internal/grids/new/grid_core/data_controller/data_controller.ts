@@ -230,7 +230,9 @@ export class DataController {
       items = updateItemsImmutable(items, e.changes, dataSource.store());
     }
 
-    this.columnsController.setFirstItems(items[0]);
+    const optionChanging = this.options.getLastChangedOption().peek();
+
+    this.columnsController.setFirstItems(items[0], optionChanging);
 
     this._items.value = items;
     this.pageIndex.value = dataSource.pageIndex();

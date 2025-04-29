@@ -14,7 +14,7 @@ import {
 } from './utils';
 
 export class ColumnsController {
-  private readonly columnsConfiguration: ReadonlySignal<ColumnProperties[] | undefined>;
+  private readonly columnsConfiguration: ReadonlySignal<ColumnProperties[] | undefined | null>;
 
   private readonly headerFilterConfiguration: ReadonlySignal<HeaderFilterRootOptions | undefined>;
 
@@ -44,7 +44,8 @@ export class ColumnsController {
 
         if (!firstItems) return null;
 
-        const types: Record<string, { dataType: DataType; format: Format | undefined }> = {};
+        const types: Record<string, { dataType: DataType | undefined;
+          format: Format | undefined; }> = {};
 
         for (const [field, value] of Object.entries(firstItems)) {
           const dataType = getValueDataType(value);
@@ -59,12 +60,11 @@ export class ColumnsController {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     this.columnsSettings = signal(undefined as any);
     effect(() => {
-      const columnsConfiguration = this.columnsConfiguration.value;
-      const firstItems = this.firstItems.value;
-      this.columnsSettings.value = preNormalizeColumns(
-        columnsConfiguration
-        ?? generateColumns(firstItems as never),
-      );
+      const columnsConfigurationFromOptions = this.columnsConfiguration.value;
+      const firstItem = this.firstItems.value;
+      const columnsConfiguration = columnsConfigurationFromOptions ?? generateColumns(firstItem);
+
+      this.columnsSettings.value = preNormalizeColumns(columnsConfiguration);
     });
 
     this.columns = computed(() => {
@@ -157,12 +157,8 @@ export class ColumnsController {
     return result;
   }
 
-  public setFirstItems(item: Record<string, unknown> | null): void {
-    if (this.firstItems.value) { return; }
+  public setFirstItems(item: Record<string, unknown> | null, optionChanged?: string | null): void {
+    if (this.firstItems.value && optionChanged !== 'dataSource') { return; }
     this.firstItems.value = item;
-  }
-
-  public getFirstItems(): Record<string, unknown> | null {
-    return this.firstItems.peek();
   }
 }

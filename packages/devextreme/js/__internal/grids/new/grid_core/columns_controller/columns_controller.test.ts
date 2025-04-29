@@ -85,7 +85,6 @@ describe('ColumnsController', () => {
         columns: ['id', 'title'],
       });
 
-      // Set firstItems with extra fields that aren't in the config
       columnsController.setFirstItems({
         id: 1,
         title: 'Sample',

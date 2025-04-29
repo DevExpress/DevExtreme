@@ -75,7 +75,7 @@ Exclude<ColumnProperties, string>
 
   },
   number: {
-    alignment: 'right',
+
   },
   object: {
 
