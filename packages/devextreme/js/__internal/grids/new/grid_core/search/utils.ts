@@ -2,21 +2,19 @@
   @typescript-eslint/explicit-module-boundary-types,
   @typescript-eslint/no-explicit-any
 */
-import type { Format } from '@js/common';
-import dateLocalization from '@js/common/core/localization/date';
+
 import {
-  isDefined, isFunction, isNumeric, isString,
+  isFunction, isString,
 } from '@js/core/utils/type';
 import type { EventInfo, NativeEventInfo } from '@js/events';
 import messageLocalization from '@js/localization/message';
 import type { TextBoxInstance } from '@js/ui/text_box';
-import { strictParseNumber } from '@ts/grids/grid_core/columns_controller/m_columns_controller_utils';
 import gridCoreUtils from '@ts/grids/grid_core/m_utils';
 import type { TextBoxProperties } from '@ts/ui/text_box/m_text_box';
 
 import type { Column } from '../columns_controller/types';
 import type { PredefinedToolbarItem } from '../toolbar/types';
-import { addWidgetPrefix, getName } from '../utils';
+import { addWidgetPrefix, getName, parseValue } from '../utils';
 import type { HighlightedTextItem, HighlightTextOptions, SearchFieldProps } from './types';
 
 const HIGHLIGHT_SPLIT_SEPARATOR = '<--|-->';
@@ -75,57 +73,6 @@ export const allowSearch = (column: Column, searchVisibleColumnsOnly: boolean): 
   const allowSearchByVisibility = !searchVisibleColumnsOnly || column.visible;
   const allowSearchByConfig = column.allowSearch ?? column.allowFiltering;
   return allowSearchByDataField && allowSearchByVisibility && allowSearchByConfig;
-};
-
-export const parseNumberValue = (
-  text: string,
-  format?: Format,
-): unknown => {
-  switch (true) {
-    case isString(text) && !!format:
-      return strictParseNumber(text.trim(), format);
-    case isDefined(text) && isNumeric(text):
-      return Number(text);
-    default:
-      return undefined;
-  }
-};
-
-export const parseBooleanValue = (
-  text: string,
-  trueText?: string,
-  falseText?: string,
-): unknown => {
-  switch (true) {
-    case text === trueText:
-      return true;
-    case text === falseText:
-      return false;
-    default:
-      return undefined;
-  }
-};
-
-export const parseDateValue = (
-  text: string,
-  format?: Format,
-): unknown => {
-  // @ts-expect-error
-  const parsedValue = dateLocalization.parse(text, format);
-  return parsedValue ?? undefined;
-};
-
-export const parseValue = (column: Column, text: string): unknown => {
-  switch (true) {
-    case column.dataType === 'number':
-      return parseNumberValue(text, column.format);
-    case column.dataType === 'boolean':
-      return parseBooleanValue(text, column.trueText, column.falseText);
-    case gridCoreUtils.isDateType(column.dataType):
-      return parseDateValue(text, column.format);
-    default:
-      return text;
-  }
 };
 
 export const createFilterExpression = (
