@@ -21,7 +21,6 @@ const ROW_FOCUSED_CLASS = 'dx-row-focused';
 const FOCUSED_ROW_SELECTOR = `.dx-row.${ROW_FOCUSED_CLASS}`;
 const TABLE_POSTFIX_CLASS = 'table';
 const CELL_FOCUS_DISABLED_CLASS = 'dx-cell-focus-disabled';
-const FILTER_ROW_CLASS = 'filter-row';
 
 export class FocusController extends core.ViewController {
   // TODO getController

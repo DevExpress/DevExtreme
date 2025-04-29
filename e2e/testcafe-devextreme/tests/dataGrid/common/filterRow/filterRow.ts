@@ -5,6 +5,7 @@ import url from '../../../../helpers/getPageUrl';
 import { createWidget } from '../../../../helpers/createWidget';
 import { changeTheme } from '../../../../helpers/changeTheme';
 import { getNumberData, getData } from '../../helpers/generateDataSourceData';
+import { Themes } from '../../../../helpers/themes';
 
 fixture.disablePageReloads`FilterRow`
   .page(url(__dirname, '../../../container.html'));
@@ -170,12 +171,12 @@ test('Focus overlay should be visible in filter row when focusedRowEnabled is en
     // assert
     .expect(filterEditor.input.focused)
     .ok()
-    .expect(await takeScreenshot('filter-row-focus-overlay.png', dataGrid.element))
+    .expect(await takeScreenshot(`filter-row-focus-overlay (${Themes.fluentBlue}).png`, dataGrid.element))
     .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => {
-  await changeTheme('fluent.blue.light');
+  await changeTheme(Themes.fluentBlue);
 
   return createWidget('dxDataGrid', {
     dataSource: [
