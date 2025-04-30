@@ -4897,7 +4897,7 @@ test('Multiple DataGrids - Ctrl+Alt+Down from filter row should focus data row i
   await createWidget('dxDataGrid', {
     elementAttr: { id: 'grid1' },
     dataSource: getData(5, 2),
-    columns: ['ID', 'Name'],
+    columns: ['field_0', 'field_1'],
     filterRow: {
       visible: true,
     },
@@ -4906,7 +4906,7 @@ test('Multiple DataGrids - Ctrl+Alt+Down from filter row should focus data row i
   await createWidget('dxDataGrid', {
     elementAttr: { id: 'grid2' },
     dataSource: getData(5, 2),
-    columns: ['ID', 'Name'],
+    columns: ['field_0', 'field_1'],
     filterRow: {
       visible: true,
     },
