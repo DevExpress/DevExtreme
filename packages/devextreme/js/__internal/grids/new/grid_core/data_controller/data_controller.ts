@@ -130,6 +130,11 @@ export class DataController {
           );
         };
 
+        const getLoadOptionsWithoutLocalPaging = (loadOptions): unknown => {
+          const { skip, take, ...rest } = loadOptions;
+          return rest;
+        };
+
         const dataLoadedCallback = (e): void => {
           /*
             We use Deffered here because the code below is synchronous.
@@ -137,23 +142,17 @@ export class DataController {
           */
           const { operationId } = e;
           const loadOptions = { ...this.pendingLocalOperations[operationId] };
-          const tempLoadOptions = { ...loadOptions };
-          const { skip, take } = tempLoadOptions;
+          const { skip, take } = loadOptions;
+          const hasLocalPaging = isDefined(skip) && isDefined(take);
 
-          if (isDefined(skip)) {
-            e.skip = skip;
-            delete tempLoadOptions.skip;
-          }
-
-          if (isDefined(take)) {
-            e.take = take;
-            delete tempLoadOptions.take;
-          }
+          const tempLoadOptions = getLoadOptionsWithoutLocalPaging(loadOptions);
 
           new ArrayStore(e.data).load(tempLoadOptions).done((filteredData) => {
-            // remoteOperations is false
-            if (Object.keys(loadOptions).length > 0) {
-              this._filteredItemCount.value = filteredData.length;
+            this._filteredItemCount.value = filteredData.length;
+
+            if (hasLocalPaging) {
+              e.take = take;
+              e.skip = skip;
 
               new ArrayStore(e.data).load(loadOptions).done((newData) => {
                 e.extra = e.extra || {};
