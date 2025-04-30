@@ -65,17 +65,17 @@ export class FilterSyncController {
           const filterType = getFilterType(filterConditions);
           // eslint-disable-next-line @stylistic/max-len
           // eslint-disable-next-line @typescript-eslint/init-declarations, @typescript-eslint/no-explicit-any
-          let values: any[] | undefined;
+          let filterValues: any[] | undefined;
           if (filterType) {
-            values = getFilterValues(filterConditions);
+            filterValues = getFilterValues(filterConditions);
           }
 
           return {
             ...col,
             headerFilter: {
               ...col.headerFilter,
-              values,
             },
+            filterValues,
             filterType,
           };
         }),
@@ -84,14 +84,14 @@ export class FilterSyncController {
 
     // Sync from HeaderFilter to FilterPanel
     this.headerFilterController.composedHeaderFilter.subscribe((filter) => {
-      if (!this.filterSyncEnabled.value) {
-        return;
-      }
       if (this.isFirstLoad) {
         this.isFirstLoad = false;
         if (this.filterController.filterPanelValue.value || filter.length === 0) {
           return;
         }
+      }
+      if (!this.filterSyncEnabled.value) {
+        return;
       }
       const areEqualByValue = equalByValue(
         filter,
