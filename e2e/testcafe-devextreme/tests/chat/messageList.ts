@@ -185,17 +185,17 @@ test('Messagelist with loadindicator appearance on initial loading', async (t) =
   });
 });
 
-test('Messagelist with messageTemplate', async (t) => {
+test('Messagelist without messageTemplate', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const chat = new Chat('#container');
 
-  await testScreenshot(t, takeScreenshot, 'Messagelist with message template.png', { element: '#container' });
-
   await t
-    .typeText(chat.getInput(), 'New last message')
+    .rightClick(chat.getMessage(2))
+    .pressKey('down')
+    .pressKey('enter')
     .pressKey('enter');
 
-  await testScreenshot(t, takeScreenshot, 'Messagelist with message template after new message add.png', { element: '#container' });
+  await testScreenshot(t, takeScreenshot, 'Messagelist without message template after message is deleted.png', { element: '#container' });
 
   await t
     .expect(compareResults.isValid())
@@ -220,11 +220,77 @@ test('Messagelist with messageTemplate', async (t) => {
     width: 400,
     height: 600,
     showDayHeaders: false,
+    editing: {
+      allowDeleting: true,
+    },
     onMessageEntered: ({ component, message }) => {
       message.timestamp = undefined;
       component.renderMessage(message);
     },
-    messageTemplate: ({ message }, container) => {
+  });
+});
+
+test('Messagelist with messageTemplate', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const chat = new Chat('#container');
+
+  await testScreenshot(t, takeScreenshot, 'Messagelist with message template.png', { element: '#container' });
+
+  await t
+    .typeText(chat.getInput(), 'New last message')
+    .pressKey('enter');
+
+  await testScreenshot(t, takeScreenshot, 'Messagelist with message template after new message add.png', { element: '#container' });
+
+  await t
+    .typeText(chat.getInput(), 'New last message')
+    .pressKey('enter');
+
+  await testScreenshot(t, takeScreenshot, 'Messagelist with message template after new message add.png', { element: '#container' });
+
+  await t
+    .rightClick(chat.getMessage(2))
+    .pressKey('down')
+    .pressKey('enter')
+    .pressKey('enter');
+
+  await testScreenshot(t, takeScreenshot, 'Messagelist with message template after message is deleted.png', { element: '#container' });
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  const userFirst = createUser(1, 'First');
+  const userSecond = createUser(2, 'Second');
+  const items = [{
+    author: userFirst,
+    text: 'AAA',
+  }, {
+    author: userFirst,
+    text: 'BBB',
+  }, {
+    author: userSecond,
+    text: 'CCC',
+  }];
+
+  return createWidget('dxChat', {
+    items,
+    user: userFirst,
+    width: 400,
+    height: 600,
+    showDayHeaders: false,
+    editing: {
+      allowDeleting: true,
+    },
+    onMessageEntered: ({ component, message }) => {
+      message.timestamp = undefined;
+      component.renderMessage(message);
+    },
+    messageTemplate: ({ message, isDeleted }, container) => {
+      if (isDeleted) {
+        $('<div>').text(`${message.author.name} deleted this message`).appendTo(container);
+        return;
+      }
       $('<div>').text(`${message.author.name} says: ${message.text}`).appendTo(container);
     },
   });
