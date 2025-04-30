@@ -1851,7 +1851,7 @@ QUnit.module('Chat', () => {
             });
 
             this.reinit({
-                items: [{ text: 'CustomText' }],
+                dataSource: store,
                 messageTemplate: (data, $container) => {
                     if(data.message.isDeleted) {
                         $container.text(deletedMessageText);
@@ -1862,7 +1862,7 @@ QUnit.module('Chat', () => {
 
             this.clock.tick(timeout);
 
-            store.push([{ type: 'update', key: 2, data: { itDeleted: true } }]);
+            store.push([{ type: 'update', key: 1, data: { itDeleted: true } }]);
 
             this.clock.tick(timeout * 2);
 
