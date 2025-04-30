@@ -1,5 +1,6 @@
 import $ from '@js/core/renderer';
 import type * as SortableTypes from '@js/ui/sortable_types';
+import { combineClasses } from '@ts/core/utils/combine_classes';
 import type { ComponentType, InfernoNode } from 'inferno';
 import { Component, render } from 'inferno';
 
@@ -36,6 +37,8 @@ export interface Props extends Omit<SortableProps, 'onAdd' | 'onReorder' | 'drag
   columnDragTemplate?: ComponentType<{ column: Column; status?: Status; isDragging?: boolean }>;
 
   showDropzone?: boolean;
+
+  dropzoneText?: string;
 
   onPlaceholderPrepared?: (e) => void;
 }
@@ -141,10 +144,10 @@ export class ColumnSortable extends Component<Props> {
       this.renderDragTemplate(e.itemData);
     } : undefined;
 
-    const dropzoneClasses = [
-      CLASS.dropzone,
-      this.props.showDropzone ? CLASS.dropzoneVisible : '',
-    ].join(' ');
+    const dropzoneClasses = combineClasses({
+      [CLASS.dropzone]: true,
+      [CLASS.dropzoneVisible]: !!this.props.showDropzone,
+    });
 
     return (
       <Sortable
@@ -163,7 +166,7 @@ export class ColumnSortable extends Component<Props> {
       {this.props.children}
 
       <div className={dropzoneClasses} aria-hidden={this.props.showDropzone}>
-        Drop header item here
+        { this.props.dropzoneText }
       </div>
     </Sortable>
     );

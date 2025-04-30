@@ -1,6 +1,7 @@
 /* eslint-disable
   spellcheck/spell-checker
 */
+import messageLocalization from '@js/localization/message';
 import type { Column, VisibleColumn } from '@ts/grids/new/grid_core/columns_controller/types';
 import { Scrollable } from '@ts/grids/new/grid_core/inferno_wrappers/scrollable';
 import type { NavigationStrategyBase } from '@ts/grids/new/grid_core/keyboard_navigation/index';
@@ -84,6 +85,7 @@ export class HeaderPanel extends Component<HeaderPanelProps> {
           filter={`.${itemClasses.item}`}
           isColumnDraggable={sortableConfig.isColumnDraggable}
           showDropzone={sortableConfig.showDropzone}
+          dropzoneText={messageLocalization.format('dxCardView-headerPanelDropzoneText')}
           onPlaceholderPrepared={sortableConfig.onPlaceholderPrepared}
         >
           <Scrollable
