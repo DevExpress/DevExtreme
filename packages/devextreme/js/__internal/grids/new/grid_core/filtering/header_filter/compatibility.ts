@@ -29,7 +29,7 @@ export class CompatibilityHeaderFilterController {
       args.column,
       args.onHidden,
       args.apply,
-      // args.isFilterBuilder,
+      args.isFilterBuilder,
     );
   }
 

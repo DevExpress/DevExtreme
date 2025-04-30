@@ -40,7 +40,7 @@ export class HeaderFilterViewController {
     column: Column,
     onFilterCloseCallback?: () => void,
     apply?: () => void,
-    // isFilterBuilder?: boolean,
+    isFilterBuilder?: boolean,
   ): void {
     const rootDataSource = this.dataController.getStoreLoadAdapter();
     const rootHeaderFilterOptions = this.options.oneWay('headerFilter').peek();
@@ -68,6 +68,7 @@ export class HeaderFilterViewController {
       element,
       options: {
         type,
+        isFilterBuilder,
         headerFilter: { ...column.headerFilter },
         dataSource: filterDataSourceOptions,
         filterType: column.filterType,
