@@ -375,6 +375,7 @@
         "dxChat-editingEditMessage": "Editare",
         "dxChat-editingDeleteMessage": "Șterge",
         "dxChat-editingDeleteConfirmText": "Are you sure you want to delete this message?",
+        "dxChat-deletedMessageText": "This message was deleted",
 
         "dxColorView-ariaRed": "Roșu",
         "dxColorView-ariaGreen": "Verde",

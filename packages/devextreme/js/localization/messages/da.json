@@ -375,6 +375,7 @@
         "dxChat-editingEditMessage": "Rediger",
         "dxChat-editingDeleteMessage": "Slet",
         "dxChat-editingDeleteConfirmText": "Are you sure you want to delete this message?",
+        "dxChat-deletedMessageText": "This message was deleted",
 
         "dxColorView-ariaRed": "Rød",
         "dxColorView-ariaGreen": "Grøn",

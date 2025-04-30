@@ -38,8 +38,6 @@ export interface Properties extends WidgetOptions<MessageGroup> {
 }
 
 class MessageGroup extends Widget<Properties> {
-  private _lastBubble?: MessageBubble | null;
-
   _avatar?: Avatar;
 
   _$messageBubbleContainer!: dxElementWrapper;
@@ -191,12 +189,6 @@ class MessageGroup extends Widget<Properties> {
     const formattedTime = dateLocalization.format(deserializedDate, messageTimestampFormat);
 
     return formattedTime as string;
-  }
-
-  _clean(): void {
-    this._lastBubble = null;
-
-    super._clean();
   }
 
   _optionChanged(args: OptionChanged<Properties>): void {

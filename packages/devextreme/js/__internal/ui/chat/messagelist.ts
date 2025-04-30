@@ -339,6 +339,11 @@ class MessageList extends Widget<Properties> {
 
     const message = this._getMessageData(currentTarget);
 
+    if (message?.isDeleted) {
+      e.cancel = true;
+      return;
+    }
+
     const items = this._getContextMenuButtons(message);
 
     if (!items.length) {
