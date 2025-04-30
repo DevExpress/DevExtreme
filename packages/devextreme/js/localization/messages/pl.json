@@ -290,8 +290,8 @@
         "dxScheduler-recurrenceAfter": "Do",
         "dxScheduler-recurrenceOn": "Dnia",
 
-        "dxScheduler-recurrenceUntilDateLabel": "End date of repetition",
-        "dxScheduler-recurrenceOccurrenceLabel": "Repeat occurrence(s)",
+        "dxScheduler-recurrenceUntilDateLabel": "Date when repeat ends",
+        "dxScheduler-recurrenceOccurrenceLabel": "Number of occurrences",
 
         "dxScheduler-recurrenceRepeatMinutely": "Minuta(-y)",
         "dxScheduler-recurrenceRepeatHourly": "Godzina(-y)",

@@ -290,8 +290,8 @@
         "dxScheduler-recurrenceAfter": "Po",
         "dxScheduler-recurrenceOn": "Iki",
 
-        "dxScheduler-recurrenceUntilDateLabel": "End date of repetition",
-        "dxScheduler-recurrenceOccurrenceLabel": "Repeat occurrence(s)",
+        "dxScheduler-recurrenceUntilDateLabel": "Date when repeat ends",
+        "dxScheduler-recurrenceOccurrenceLabel": "Number of occurrences",
 
         "dxScheduler-recurrenceRepeatMinutely": "minutę(es)",
         "dxScheduler-recurrenceRepeatHourly": "valandą(as)",
