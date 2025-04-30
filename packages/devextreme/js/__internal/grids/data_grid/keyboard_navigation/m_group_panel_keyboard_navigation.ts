@@ -4,12 +4,11 @@ import eventsEngine from '@js/common/core/events/core/events_engine';
 import {
   isCommandKeyPressed,
 } from '@js/common/core/events/utils/index';
-import messageLocalization from '@js/common/core/localization/message';
 import $ from '@js/core/renderer';
 import { hiddenFocus } from '@js/ui/shared/accessibility';
 import type { HeaderPanel } from '@ts/grids/grid_core/header_panel/m_header_panel';
-import { CONTEXT_MENU_MOVE_NEXT_ICON, CONTEXT_MENU_MOVE_PREVIOUS_ICON, Direction } from '@ts/grids/grid_core/keyboard_navigation/const';
-import { ColumnKeyboardNavigationController } from '@ts/grids/grid_core/keyboard_navigation/m_column_keyboard_navigation_core';
+import { Direction } from '@ts/grids/grid_core/keyboard_navigation/const';
+import { ColumnContextMenuMixin, ColumnKeyboardNavigationController } from '@ts/grids/grid_core/keyboard_navigation/m_column_keyboard_navigation_core';
 import type { ModuleType, Views } from '@ts/grids/grid_core/m_types';
 
 import { CLASSES as GROUPING_CLASSES } from '../grouping/const';
@@ -51,17 +50,21 @@ export class GroupPanelKeyboardNavigationController extends ColumnKeyboardNaviga
       const column: any = $(originalEvent.target).data('columnData');
       const direction = this.getDirectionByKeyName(e.keyName);
 
-      if (this.isGroupColumnValidForReordering(column, direction)) {
+      if (this.isColumnValidForReordering(column, direction)) {
         this.moveColumn({
           column,
-          direction,
           sourceLocation: 'group',
           targetLocation: 'group',
+          direction,
         });
       }
 
       originalEvent?.preventDefault();
     }
+  }
+
+  protected getVisibleIndex(column) {
+    return column.groupIndex;
   }
 
   protected _getCell(cellPosition): any {
@@ -123,7 +126,7 @@ export class GroupPanelKeyboardNavigationController extends ColumnKeyboardNaviga
     super.init();
   }
 
-  public isGroupColumnValidForReordering(groupColumn, direction: Direction): boolean {
+  public isColumnValidForReordering(groupColumn, direction: Direction): boolean {
     const allowDragging = this.headerPanel.allowDragging(groupColumn);
 
     if (!allowDragging) {
@@ -138,64 +141,30 @@ export class GroupPanelKeyboardNavigationController extends ColumnKeyboardNaviga
   }
 }
 
-const headerPanel = (Base: ModuleType<HeaderPanel>) => class HeaderPanelKeyboardNavigationExtender extends Base {
-  private isNeedToFocusGroupColumn = false;
+const headerPanel = (Base: ModuleType<HeaderPanel>) => class HeaderPanelKeyboardNavigationExtender extends ColumnContextMenuMixin(Base) {
+  public getKeyboardNavigationController() {
+    return this.getController('groupPanelKeyboardNavigation');
+  }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  protected contextMenuHiddenHandler(e) {
-    const groupPanelKeyboardNavigationController = this.getController('groupPanelKeyboardNavigation');
-
-    if (this.isNeedToFocusGroupColumn) {
-      groupPanelKeyboardNavigationController?.restoreFocus();
-      this.isNeedToFocusGroupColumn = false;
-    }
+  public isColumnReorderingEnabled(column) {
+    return this.allowDragging(column);
   }
 
   public getContextMenuItems(options) {
     let items: any = super.getContextMenuItems(options);
-    const { column } = options;
-    const allowDragging = this.allowDragging(column);
+    const $groupedColumnElement = $(options.targetElement).closest(`.${GROUPING_CLASSES.groupPanelItem}`);
 
-    if (allowDragging) {
-      const groupPanelKeyboardNavigationController = this.getController('groupPanelKeyboardNavigation');
+    if (!$groupedColumnElement.length) {
+      return;
+    }
 
-      if (groupPanelKeyboardNavigationController) {
-        const rtlEnabled = this.option('rtlEnabled');
-        const onItemClick = (e) => {
-          this.isNeedToFocusGroupColumn = true;
-          groupPanelKeyboardNavigationController.moveColumn({
-            column: options.column,
-            direction: e.itemData?.value,
-            sourceLocation: 'group',
-            targetLocation: 'group',
-          });
-        };
+    options.column = $groupedColumnElement.data('columnData');
 
-        items = items ?? [];
-        items.push(
-          {
-            text: messageLocalization.format('dxDataGrid-moveColumnToTheLeft'),
-            value: Direction.Previous,
-            beginGroup: true,
-            disabled: !groupPanelKeyboardNavigationController.isGroupColumnValidForReordering(
-              column,
-              Direction.Previous,
-            ),
-            icon: rtlEnabled ? CONTEXT_MENU_MOVE_NEXT_ICON : CONTEXT_MENU_MOVE_PREVIOUS_ICON,
-            onItemClick,
-          },
-          {
-            text: messageLocalization.format('dxDataGrid-moveColumnToTheRight'),
-            value: Direction.Next,
-            disabled: !groupPanelKeyboardNavigationController.isGroupColumnValidForReordering(
-              column,
-              Direction.Next,
-            ),
-            icon: rtlEnabled ? CONTEXT_MENU_MOVE_PREVIOUS_ICON : CONTEXT_MENU_MOVE_NEXT_ICON,
-            onItemClick,
-          },
-        );
-      }
+    const moveColumnItems = this.getMoveColumnContextMenuItems(options);
+
+    if (moveColumnItems?.length) {
+      items = items ?? [];
+      items.push(...moveColumnItems);
     }
 
     return items;

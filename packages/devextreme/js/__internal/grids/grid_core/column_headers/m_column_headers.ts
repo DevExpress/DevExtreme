@@ -520,7 +520,7 @@ export class ColumnHeadersView extends ColumnsView {
   /**
    * @extended: column_chooser
    */
-  public isReorderingEnabled(column): boolean {
+  public isColumnReorderingEnabled(column): boolean {
     return column.allowReordering
       && (this.option('allowColumnReordering') ?? this._columnsController.isColumnOptionUsed('allowReordering'));
   }
@@ -529,7 +529,7 @@ export class ColumnHeadersView extends ColumnsView {
     const rowIndex = column && this._columnsController.getRowIndex(column.index);
     const columns = this.getColumns(rowIndex);
 
-    return this.isReorderingEnabled(column) && columns.length > 1;
+    return this.isColumnReorderingEnabled(column) && columns.length > 1;
   }
 
   protected getBoundingRect() {

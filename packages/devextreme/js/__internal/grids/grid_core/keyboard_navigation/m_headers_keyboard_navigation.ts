@@ -2,7 +2,6 @@
 import {
   isCommandKeyPressed,
 } from '@js/common/core/events/utils/index';
-import messageLocalization from '@js/common/core/localization/message';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { isDefined } from '@js/core/utils/type';
@@ -11,8 +10,8 @@ import type { ColumnHeadersView } from '../column_headers/m_column_headers';
 import type { ModuleType, Views } from '../m_types';
 import { StickyPosition } from '../sticky_columns/const';
 import { getColumnFixedPosition } from '../sticky_columns/utils';
-import { CONTEXT_MENU_MOVE_NEXT_ICON, CONTEXT_MENU_MOVE_PREVIOUS_ICON, Direction } from './const';
-import { ColumnKeyboardNavigationController } from './m_column_keyboard_navigation_core';
+import { Direction } from './const';
+import { ColumnContextMenuMixin, ColumnKeyboardNavigationController } from './m_column_keyboard_navigation_core';
 
 export class HeadersKeyboardNavigationController extends ColumnKeyboardNavigationController {
   protected _columnHeadersView!: Views['columnHeadersView'];
@@ -26,12 +25,12 @@ export class HeadersKeyboardNavigationController extends ColumnKeyboardNavigatio
       const rowIndex = this._getRowIndex($cell.parent());
       const column = this._getColumnByCellElement($cell, rowIndex);
 
-      if (this.isHeaderValidForReordering(column, direction, rowIndex)) {
+      if (this.isColumnValidForReordering(column, direction, rowIndex)) {
         this.moveColumn({
           column,
-          direction,
           sourceLocation: 'headers',
           targetLocation: 'headers',
+          direction,
         });
       }
       originalEvent?.preventDefault();
@@ -80,23 +79,6 @@ export class HeadersKeyboardNavigationController extends ColumnKeyboardNavigatio
     }
   }
 
-  protected getNewVisibleIndex(visibleIndex, direction) {
-    /*
-      We need to add 2 to the index instead of 1,
-      because that's how normalization of these indexes works.
-
-      For example, we have columns with the following indexes:
-      0 1 2 3
-
-      We drag 1 to the right. Its index becomes 3.
-      0 2 3(1) 3(3)
-
-      After normalization of the indexes:
-      0 1(2) 2(1) 3(3)
-    */
-    return direction === 'previous' ? visibleIndex - 1 : visibleIndex + 2;
-  }
-
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   protected tabKeyHandler(e): void {}
 
@@ -125,8 +107,8 @@ export class HeadersKeyboardNavigationController extends ColumnKeyboardNavigatio
     this._columnHeadersView = this.getView('columnHeadersView');
   }
 
-  public isHeaderValidForReordering(column, direction, rowIndex): boolean {
-    const allowReordering = this._columnHeadersView.isReorderingEnabled(column);
+  public isColumnValidForReordering(column, direction, rowIndex): boolean {
+    const allowReordering = this._columnHeadersView.isColumnReorderingEnabled(column);
 
     if (!allowReordering) {
       return false;
@@ -142,67 +124,18 @@ export class HeadersKeyboardNavigationController extends ColumnKeyboardNavigatio
 
 const columnHeadersView = (
   Base: ModuleType<ColumnHeadersView>,
-) => class ColumnHeadersViewKeyboardNavigationExtender extends Base {
-  private isNeedToFocusHeader = false;
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  protected contextMenuHiddenHandler(e) {
-    const headersKeyboardNavigationController = this.getController('headersKeyboardNavigation');
-
-    if (this.isNeedToFocusHeader) {
-      headersKeyboardNavigationController?.restoreFocus();
-      this.isNeedToFocusHeader = false;
-    }
+) => class ColumnHeadersViewKeyboardNavigationExtender extends ColumnContextMenuMixin(Base) {
+  public getKeyboardNavigationController() {
+    return this.getController('headersKeyboardNavigation');
   }
 
   public getContextMenuItems(options) {
     let items: any = super.getContextMenuItems(options);
-    const { column, rowIndex } = options;
-    const allowColumnReordering = this.isReorderingEnabled(options?.column);
+    const moveColumnItems = this.getMoveColumnContextMenuItems(options);
 
-    if (allowColumnReordering) {
-      const headersKeyboardNavigationController = this.getController('headersKeyboardNavigation');
-
-      if (headersKeyboardNavigationController) {
-        const rtlEnabled = this.option('rtlEnabled');
-        const onItemClick = (e) => {
-          this.isNeedToFocusHeader = true;
-          headersKeyboardNavigationController.moveColumn({
-            column,
-            direction: e.itemData?.value,
-            sourceLocation: 'headers',
-            targetLocation: 'headers',
-            rowIndex,
-          });
-        };
-
-        items = items ?? [];
-        items.push(
-          {
-            text: messageLocalization.format('dxDataGrid-moveColumnToTheLeft'),
-            value: Direction.Previous,
-            beginGroup: true,
-            disabled: !headersKeyboardNavigationController.isHeaderValidForReordering(
-              column,
-              Direction.Previous,
-              rowIndex,
-            ),
-            icon: rtlEnabled ? CONTEXT_MENU_MOVE_NEXT_ICON : CONTEXT_MENU_MOVE_PREVIOUS_ICON,
-            onItemClick,
-          },
-          {
-            text: messageLocalization.format('dxDataGrid-moveColumnToTheRight'),
-            value: Direction.Next,
-            disabled: !headersKeyboardNavigationController.isHeaderValidForReordering(
-              column,
-              Direction.Next,
-              rowIndex,
-            ),
-            icon: rtlEnabled ? CONTEXT_MENU_MOVE_PREVIOUS_ICON : CONTEXT_MENU_MOVE_NEXT_ICON,
-            onItemClick,
-          },
-        );
-      }
+    if (moveColumnItems?.length) {
+      items = items ?? [];
+      items.push(...moveColumnItems);
     }
 
     return items;
