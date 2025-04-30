@@ -331,6 +331,7 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
   }
 
   protected _getTryAgainButtonItem(): NamedToolbarItem {
+    const text = isSmallScreen() ? undefined : localizationMessage.format('dxHtmlEditor-aiTryAgain');
     return {
       name: 'tryAgain',
       toolbar: 'bottom',
@@ -339,7 +340,7 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
       options: {
         stylingMode: 'outlined',
         icon: TRY_AGAIN_BUTTON_ICON,
-        text: localizationMessage.format('dxHtmlEditor-aiTryAgain'),
+        text,
         onClick: () => this._retryExecuteAICommand(),
       },
     };

@@ -728,7 +728,6 @@ QUnit.module('AIDialog', {}, () => {
             this.dictionary = {
                 'dxHtmlEditor-aiGenerate': 'custom generate',
                 'dxHtmlEditor-aiStop': 'custom stop',
-                'dxHtmlEditor-aiTryAgain': 'custom try again',
                 'dxHtmlEditor-aiReplace': 'custom replace',
                 'dxHtmlEditor-aiInsertAbove': 'custom insert above',
                 'dxHtmlEditor-aiInsertBelow': 'custom insert below',
@@ -838,7 +837,6 @@ QUnit.module('AIDialog', {}, () => {
                     stylingMode: 'outlined',
                     icon: 'restore',
                 });
-                assert.strictEqual(tryAgainButtonOptions.text, this.dictionary['dxHtmlEditor-aiTryAgain'], 'text is localized');
 
                 done();
             });
@@ -958,6 +956,36 @@ QUnit.module('AIDialog', {}, () => {
                 done();
             });
         });
+
+        QUnit.test('tryAgain button text is shown and localized', function(assert) {
+            const localizedTryAgainText = 'custom copy';
+            const initialLocale = localization.locale();
+            localization.loadMessages({
+                'ja': {
+                    'dxHtmlEditor-aiTryAgain': localizedTryAgainText,
+                }
+            });
+            localization.locale('ja');
+
+            const done = assert.async();
+
+            showAIDialog(this, {
+                config: { currentCommand: 'translate' },
+            });
+
+            this.resolve();
+
+            this.promise.then(() => {
+                const bottomToolbarItems = getBottomToolbarItems(this.aiDialogPopup);
+                const tryAgainToolbarItem = getItemByName(bottomToolbarItems, 'tryAgain');
+                const tryAgainButtonOptions = tryAgainToolbarItem.options;
+
+                assert.strictEqual(tryAgainButtonOptions.text, localizedCopyText, 'text is localized');
+
+                localization.locale(initialLocale);
+                done();
+            });
+        });
     });
 
     QUnit.module('prompt textArea config', {
@@ -1062,6 +1090,27 @@ QUnit.module('AIDialog', {}, () => {
 
                         assert.strictEqual(copyButtonOptions.text, undefined, 'text is not passed');
                         assert.strictEqual(copyButtonOptions.icon, 'copy', 'icon is passed');
+
+                        done();
+                    });
+                });
+
+                QUnit.test('tryAgain button text is not shown', function(assert) {
+                    const done = assert.async();
+
+                    showAIDialog(this, {
+                        config: { currentCommand: 'translate' },
+                    });
+
+                    this.resolve();
+
+                    this.promise.then(() => {
+                        const bottomToolbarItems = getBottomToolbarItems(this.aiDialogPopup);
+                        const copyToolbarItem = getItemByName(bottomToolbarItems, 'tryAgain');
+                        const copyButtonOptions = copyToolbarItem.options;
+
+                        assert.strictEqual(copyButtonOptions.text, undefined, 'text is not passed');
+                        assert.strictEqual(copyButtonOptions.icon, 'restore', 'icon is passed');
 
                         done();
                     });
