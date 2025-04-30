@@ -248,8 +248,8 @@ test('Messagelist with deleted items and custom template', async (t) => {
     width: 400,
     height: 600,
     showDayHeaders: false,
-    messageTemplate: ({ message, isDeleted }, container) => {
-      if (isDeleted) {
+    messageTemplate: ({ message }, container) => {
+      if (message.isDeleted) {
         $('<div>').text(`${message.author.name} deleted this message`).appendTo(container);
         return;
       }
