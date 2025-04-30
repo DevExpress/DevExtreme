@@ -8,13 +8,7 @@
 // adduse
 
 .dx-loadindicator {
-  background-color: transparent;
   line-height: 100%;
-}
-
-.dx-loadindicator-content {
-  height: 100%;
-  width: 100%;
 }
 
 .dx-loadindicator-image {
@@ -24,15 +18,14 @@
 }
 
 .dx-loadindicator-icon {
-  position: absolute;
   height: 100%;
   width: 100%;
 }
 
 .dx-loadindicator-segment {
+  position: absolute;
   height: 100%;
   width: 100%;
-  position: absolute;
 }
 
 .dx-loadindicator-segment-inner {
@@ -50,6 +43,7 @@
   animation: dx-content-rotation 1568ms linear infinite;
 
   .dx-loadindicator-icon {
+    position: absolute;
     animation: dx-icon-rotation 5332ms cubic-bezier(0.4, 0, 0.2, 1) infinite both;
   }
 
@@ -104,66 +98,6 @@
       }
     }
   }
-}
-
-.dx-loadindicator-content-sparkle {
-  .dx-loadindicator-icon {
-    position: relative;
-  }
-
-  .dx-loadindicator-segment {
-    position: absolute;
-    width: 37.5%;
-    height: 37.5%;
-    aspect-ratio: 1;
-    background-color: #69AFF9;
-    clip-path: polygon(
-      48.76% 3.14%,
-      51.24% 3.14%,
-      63.93% 35.32%,
-      64.68% 36.07%,
-      96.86% 48.76%,
-      96.86% 51.24%,
-      64.68% 63.93%,
-      63.93% 64.68%,
-      51.24% 96.86%,
-      48.76% 96.86%,
-      36.07% 64.68%,
-      35.32% 63.93%,
-      3.14% 51.24%,
-      3.14% 48.76%,
-      35.32% 36.07%,
-      36.07% 35.32%,
-      48.76% 3.14%
-    );
-    transform-origin: center;
-    animation: dx-sparkle-scale 1.4s infinite linear;
-  }
-
-  .dx-loadindicator-segment0 {
-    left: 50%;
-    top: 9.375%;
-    animation-delay: 0s;
-  }
-
-  .dx-loadindicator-segment1 {
-    left: 9.375%;
-    top: 29.6875%;
-    animation-delay: 0.8s;
-  }
-
-  .dx-loadindicator-segment2 {
-    left: 40.625%;
-    top: 54.6875%;
-    animation-delay: 0.4s;
-  }
-}
-
-@keyframes dx-sparkle-scale {
-  0% { transform: scale(0.33); }
-  33% { transform: scale(1); }
-  66% { transform: scale(0.66); }
-  100% { transform: scale(0.33); }
 }
 
 @keyframes dx-content-rotation {
