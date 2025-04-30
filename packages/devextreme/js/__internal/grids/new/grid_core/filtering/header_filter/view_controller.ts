@@ -145,11 +145,13 @@ export class HeaderFilterViewController {
     const filtersWithoutCurrentColumn = this.removeColumnFromFilters(appliedFilters, column);
     const filterableColumns = this.columnsController.filterableColumns.peek();
     const customOperations = this.filterController.customOperations.peek();
+    const filterSyncEnabled = this.filterController.filterSyncEnabled.peek();
 
     const appliedFilterExpresssionsArray = getAppliedFilterExpressions(
       filtersWithoutCurrentColumn,
       filterableColumns,
       customOperations,
+      filterSyncEnabled,
     );
     return this.combineFilterExpressions(appliedFilterExpresssionsArray);
   }

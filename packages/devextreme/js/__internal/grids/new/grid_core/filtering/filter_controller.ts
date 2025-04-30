@@ -25,12 +25,23 @@ export class FilterController {
 
   public readonly filterBuilderOptions = this.options.twoWay('filterBuilder');
 
+  public readonly filterSyncEnabledOption = this.options.oneWay('filterSyncEnabled');
+
   public readonly appliedFilters: Signal<AppliedFilters> = signal({});
 
   public static dependencies = [
     OptionsController,
     ColumnsController,
   ] as const;
+
+  public readonly filterSyncEnabled = computed(
+    () => {
+      if (this.filterSyncEnabledOption.value === 'auto') {
+        return !!this.filterPanelVisible.value;
+      }
+      return !!this.filterSyncEnabledOption.value;
+    },
+  );
 
   public readonly customOperations = computed(
     () => [
@@ -54,6 +65,7 @@ export class FilterController {
       this.appliedFilters.value,
       this.columnsController.filterableColumns.value,
       this.customOperations.value,
+      this.filterSyncEnabled.value,
     ),
   );
 

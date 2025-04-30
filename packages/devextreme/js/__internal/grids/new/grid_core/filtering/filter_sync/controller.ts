@@ -1,7 +1,6 @@
 // import type { ReadonlySignal } from '@preact/signals-core';
 // import { computed } from '@preact/signals-core';
 import { equalByValue } from '@js/core/utils/common';
-import { computed } from '@preact/signals-core';
 import { getMatchedConditions } from '@ts/filter_builder/m_utils';
 
 import { ColumnsController } from '../../columns_controller';
@@ -19,8 +18,6 @@ import {
 const FILTER_OBJ_COMPARE_DEPTH = 6;
 
 export class FilterSyncController {
-  private readonly filterSyncEnabledOption = this.options.oneWay('filterSyncEnabled');
-
   public static dependencies = [
     OptionsController,
     ColumnsController,
@@ -31,15 +28,6 @@ export class FilterSyncController {
   private isFirstLoad = true;
 
   private previousComposedHeaderFilter: unknown[] | null = null;
-
-  public readonly filterSyncEnabled = computed(
-    () => {
-      if (this.filterSyncEnabledOption.value === 'auto') {
-        return !!this.filterController.filterPanelVisible.value;
-      }
-      return !!this.filterSyncEnabledOption.value;
-    },
-  );
 
   constructor(
     private readonly options: OptionsController,
@@ -52,7 +40,7 @@ export class FilterSyncController {
       if (filter === undefined) {
         return;
       }
-      if (!this.filterSyncEnabled.value) {
+      if (!this.filterController.filterSyncEnabled.value) {
         return;
       }
 
@@ -92,7 +80,7 @@ export class FilterSyncController {
           return;
         }
       }
-      if (!this.filterSyncEnabled.value) {
+      if (!this.filterController.filterSyncEnabled.value) {
         this.previousComposedHeaderFilter = filter;
         return;
       }
