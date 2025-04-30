@@ -4901,6 +4901,7 @@ test('Multiple DataGrids - Ctrl+Alt+Down from filter row should focus data row i
     filterRow: {
       visible: true,
     },
+    focusedRowEnabled: true,
   });
 
   await createWidget('dxDataGrid', {
@@ -4910,21 +4911,52 @@ test('Multiple DataGrids - Ctrl+Alt+Down from filter row should focus data row i
     filterRow: {
       visible: true,
     },
+    focusedRowEnabled: true,
   });
 
   const firstGrid = new DataGrid('#grid1');
+  await t.wait(100);
+
   const secondGrid = new DataGrid('#grid2');
+  await t.wait(100);
+
   const secondGridFilterRow = secondGrid.getHeaders().getFilterRow();
 
-  // act
+  // Check if both grids are ready
+  await t
+    .expect(firstGrid.isReady())
+    .ok('First grid is ready');
+
+  await t
+    .expect(secondGrid.isReady())
+    .ok('Second grid is ready');
+
+  // Act: Focus the filter cell in the second grid
   await t
     .click(secondGridFilterRow.getFilterCell(0).getEditorInput().element)
+    .expect(secondGridFilterRow.getFilterCell(0).getEditorInput().element.focused)
+    .ok('Filter cell input is focused');
+
+  // Add wait time to ensure stable focus state
+  await t.wait(100);
+
+  // Perform keyboard navigation
+  await t
     .pressKey('ctrl+alt+down');
 
-  // assert - focus should be on the data row of the second grid and not on the first grid
+  // Add wait time to ensure focus change is processed
+  await t.wait(100);
+
+  // Assert: Second grid should have the focused row, first grid should not
   await t
     .expect(secondGrid.getDataRow(0).isFocusedRow)
-    .ok('Second grid\'s first data row is focused')
+    .ok('Second grid data row is focused');
+
+  await t
     .expect(firstGrid.getDataRow(0).isFocusedRow)
-    .notOk('First grid\'s first data row is not focused');
+    .notOk('First grid data row is not focused');
+
+  await t
+    .expect(secondGrid.getDataCell(0, 0).isFocused)
+    .ok('Second grid data cell is focused');
 });
