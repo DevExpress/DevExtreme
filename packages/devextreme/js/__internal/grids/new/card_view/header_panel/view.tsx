@@ -6,6 +6,7 @@ import { KeyboardNavigationController, NavigationStrategyHorizontalList } from '
 
 import { ColumnChooserController, ColumnChooserView } from '../../grid_core/column_chooser/index';
 import type { Column } from '../../grid_core/columns_controller/types';
+import { FilterController } from '../../grid_core/filtering/filter_controller';
 import { HeaderFilterViewController } from '../../grid_core/filtering/header_filter/view_controller';
 import { SortingController } from '../../grid_core/sorting_controller/sorting_controller';
 import { ContextMenuController } from '../context_menu/index';
@@ -27,6 +28,7 @@ export class HeaderPanelView extends View<HeaderPanelProps> {
     HeaderFilterViewController,
     KeyboardNavigationController,
     ColumnChooserController,
+    FilterController,
     ColumnChooserView,
   ] as const;
 
@@ -43,6 +45,7 @@ export class HeaderPanelView extends View<HeaderPanelProps> {
     private readonly headerFilterViewController: HeaderFilterViewController,
     private readonly keyboardNavigationController: KeyboardNavigationController,
     private readonly columnChooserController: ColumnChooserController,
+    private readonly filterController: FilterController,
     private readonly columnChooserView: ColumnChooserView,
   ) {
     super();
@@ -84,6 +87,9 @@ export class HeaderPanelView extends View<HeaderPanelProps> {
       } as Partial<ColumnSortableProps>,
       showContextMenu: this.showContextMenu.bind(this),
       openColumnChooser: (): void => { this.columnChooserView.show(); },
+      syncFilterPanelValue: this.filterController.filterSyncEnabled
+        ? this.filterController.filterPanelValue.value
+        : null,
     }));
   }
 
