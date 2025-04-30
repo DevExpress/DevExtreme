@@ -64,6 +64,8 @@ enum ReplaceButtonActions {
   InsertBelow = 'insertBelow',
 }
 
+type NamedToolbarItem = ToolbarItem & { name: string };
+
 export interface AIDialogShowPayload {
   currentCommand: AICommandNameExtended;
   currentCommandOption?: string;
@@ -260,8 +262,9 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
     return AI_DIALOG_CLASS;
   }
 
-  protected _getTitleItem(): ToolbarItem {
+  protected _getTitleItem(): NamedToolbarItem {
     return {
+      name: 'title',
       toolbar: 'top',
       location: 'before',
       template: (data, index, titleElement): void => {
@@ -278,8 +281,9 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
     };
   }
 
-  protected _getReplaceButtonItem(config?: ToolbarItem): ToolbarItem {
+  protected _getReplaceButtonItem(): NamedToolbarItem {
     return {
+      name: 'replace',
       toolbar: 'bottom',
       location: 'after',
       widget: 'dxDropDownButton',
@@ -302,13 +306,13 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
         },
         onItemClick: (e: ItemClickEvent) => this._replaceButtonAction(e),
       },
-      ...config,
     };
   }
 
-  protected _getCopyButtonItem(): ToolbarItem {
+  protected _getCopyButtonItem(): NamedToolbarItem {
     const text = isSmallScreen() ? undefined : localizationMessage.format('dxHtmlEditor-aiCopy');
     return {
+      name: 'copy',
       toolbar: 'bottom',
       location: 'after',
       widget: 'dxButton',
@@ -326,8 +330,9 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
     };
   }
 
-  protected _getTryAgainButtonItem(): ToolbarItem {
+  protected _getTryAgainButtonItem(): NamedToolbarItem {
     return {
+      name: 'tryAgain',
       toolbar: 'bottom',
       location: 'before',
       widget: 'dxButton',
@@ -340,8 +345,9 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
     };
   }
 
-  protected _getGenerateButtonItem(): ToolbarItem {
+  protected _getGenerateButtonItem(): NamedToolbarItem {
     return {
+      name: 'generate',
       toolbar: 'bottom',
       location: 'after',
       widget: 'dxButton',
@@ -354,8 +360,9 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
     };
   }
 
-  protected _getStopButtonItem(config?: ToolbarItem): ToolbarItem {
+  protected _getStopButtonItem(): NamedToolbarItem {
     return {
+      name: 'stop',
       toolbar: 'bottom',
       location: 'after',
       widget: 'dxButton',
@@ -365,11 +372,10 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
         text: localizationMessage.format('dxHtmlEditor-aiStop'),
         onClick: () => this._stopAICommandExecution(),
       },
-      ...config,
     };
   }
 
-  private _getInitialToolbarItems(): ToolbarItem[] {
+  private _getInitialToolbarItems(): NamedToolbarItem[] {
     return [
       this._getTryAgainButtonItem(),
       this._getCopyButtonItem(),
@@ -377,8 +383,8 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
     ];
   }
 
-  protected _getToolbarItems(): ToolbarItem[] {
-    const items: ToolbarItem[] = [this._getTitleItem()];
+  protected _getToolbarItems(): NamedToolbarItem[] {
+    const items: NamedToolbarItem[] = [this._getTitleItem()];
 
     switch (this._dialogState) {
       case DialogState.Initial:

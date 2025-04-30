@@ -10,6 +10,7 @@ const LIST_ITEM_CLASS = 'dx-list-item';
 const OVERLAY_CONTENT_CLASS = 'dx-overlay-content';
 const SELECTBOX_CLASS = 'dx-selectbox';
 const TEXTAREA_CLASS = 'dx-textarea';
+const TOOLBAR_ITEM_CLASS = 'dx-toolbar-item';
 
 const CLICK_EVENT_NAME = 'dxclick';
 
@@ -84,8 +85,8 @@ export const getLoadIndicator = ($container) => {
     return $container.find(`.${AI_DIALOG_LOAD_INDICATOR_CLASS}`);
 };
 
-export const getToolbarButtonItems = (popup) => {
-    return popup.option('toolbarItems').filter(item => ['dxButton', 'dxDropDownButton'].includes(item.widget));
+export const getBottomToolbarItems = (popup) => {
+    return popup.option('toolbarItems').filter(item => item.toolbar === 'bottom');
 };
 
 const getDropDownButton = ($container) => {
@@ -134,9 +135,15 @@ export const clickActionButton = (insertionMode) => {
     getDropDownButtonOption(insertionModeToIndexMap[insertionMode]).trigger(CLICK_EVENT_NAME);
 };
 
-export function findButtonByText($container, text) {
-    return $container.find(`.${BUTTON_CLASS}`).filter((_, element) => $(element).text() === text);
-}
+export const getItemByName = (items, name) => items.find((items) => items.name === name);
+export const findButtonByName = ($container, name) => {
+    const $toolbarItems = $container.find(`.${TOOLBAR_ITEM_CLASS}`);
+    const targetToolbarItem = $toolbarItems.filter((_, toolbarItem) => {
+        const toolbarItemConfig = $(toolbarItem).data('dxToolbarItemDataKey');
+        return toolbarItemConfig && toolbarItemConfig.name === name;
+    });
+    return targetToolbarItem.eq(0).find(`.${BUTTON_CLASS}`);
+};
 
 export const getCommandSelectBoxInstance = ($container) => getDialogSelectBoxes($container).eq(0).dxSelectBox('instance');
 export const getOptionSelectBoxInstance = ($container) => getDialogSelectBoxes($container).eq(1).dxSelectBox('instance');
