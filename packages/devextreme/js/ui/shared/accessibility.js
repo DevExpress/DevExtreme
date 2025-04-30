@@ -83,7 +83,7 @@ function getActiveAccessibleElements(ariaLabel, viewElement) {
 function findFocusedViewElement(viewSelectors, element) {
     const root = element?.getRootNode() || domAdapter.getDocument();
 
-    const $closestWidgetContainer = $(element).closest('.dx-widget');
+    const $closestWidgetContainer = $(element).closest('.dx-datagrid');
     const searchContext = $closestWidgetContainer.length ? $closestWidgetContainer : $(root);
 
     for(const index in viewSelectors) {
