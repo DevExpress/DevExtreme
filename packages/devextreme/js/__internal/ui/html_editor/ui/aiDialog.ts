@@ -13,7 +13,8 @@ import type dxSelectBox from '@js/ui/select_box';
 import type { Properties as SelectBoxProperties } from '@js/ui/select_box';
 import SelectBox from '@js/ui/select_box';
 import TextArea from '@js/ui/text_area';
-import { current, isMaterial } from '@js/ui/themes';
+import { isCompact } from '@js/ui/themes';
+import { currentTheme } from '@js/viz/themes';
 import type {
   AICommandExecutor,
   AICommandParamsMap,
@@ -28,6 +29,7 @@ import {
 } from '@ts/ui/html_editor/utils/ai';
 import { TEXTEDITOR_INPUT_CONTAINER_CLASS } from '@ts/ui/text_box/m_text_editor.base';
 
+import { isSmallScreen } from '../utils/small_screen';
 import BaseDialog from './m_baseDialog';
 
 export const AI_DIALOG_CLASS = 'dx-aidialog';
@@ -46,10 +48,15 @@ const AI_DIALOG_COMMANDS_WITH_OPTIONS = ['translate', 'changeStyle', 'changeTone
 
 const POPUP_MIN_WIDTH = 288;
 const POPUP_MAX_WIDTH = 460;
-const REPLACE_DROPDOWN_WIDTH = 150;
-const TEXT_AREA_MIN_HEIGHT = 64;
-const TEXT_AREA_MAX_HEIGHT = 128;
-const BUTTON_WIDTH = 100;
+export const TEXT_AREA_MIN_HEIGHT = 64;
+export const TEXT_AREA_MAX_HEIGHT = 128;
+export const REPLACE_DROPDOWN_WIDTH = 150;
+export const ACTION_BUTTON_WIDTH = 110;
+export const COMPACT_ACTION_BUTTON_WIDTH = 100;
+
+function getActionButtonWidth(): number {
+  return isCompact(currentTheme()) ? COMPACT_ACTION_BUTTON_WIDTH : ACTION_BUTTON_WIDTH;
+}
 
 enum DialogState {
   Initial = 'initial',
@@ -64,6 +71,8 @@ enum ReplaceButtonActions {
   InsertAbove = 'insertAbove',
   InsertBelow = 'insertBelow',
 }
+
+type NamedToolbarItem = ToolbarItem & { name: string };
 
 export interface AIDialogShowPayload {
   currentCommand: AICommandNameExtended;
@@ -211,12 +220,20 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
 
   protected _renderResultTextArea($container: dxElementWrapper): void {
     const $textArea = $('<div>').appendTo($container);
-    this._resultTextArea = new TextArea($textArea.get(0), {
-      minHeight: TEXT_AREA_MIN_HEIGHT,
+    const screenSpecificOptions = isSmallScreen() ? {
+      maxHeight: '100%',
+      height: '100%',
+      autoResizeEnabled: false,
+    } : {
       maxHeight: TEXT_AREA_MAX_HEIGHT,
       autoResizeEnabled: true,
+    };
+
+    this._resultTextArea = new TextArea($textArea.get(0), {
+      minHeight: TEXT_AREA_MIN_HEIGHT,
       width: '100%',
       readOnly: true,
+      ...screenSpecificOptions,
     });
   }
 
@@ -253,8 +270,9 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
     return AI_DIALOG_CLASS;
   }
 
-  protected _getTitleItem(): ToolbarItem {
+  protected _getTitleItem(): NamedToolbarItem {
     return {
+      name: 'title',
       toolbar: 'top',
       location: 'before',
       template: (data, index, titleElement): void => {
@@ -271,11 +289,13 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
     };
   }
 
-  protected _getReplaceButtonItem(config?: ToolbarItem): ToolbarItem {
+  protected _getReplaceButtonItem(): NamedToolbarItem {
     return {
+      name: 'replace',
       toolbar: 'bottom',
       location: 'after',
       widget: 'dxDropDownButton',
+      locateInMenu: 'auto',
       options: {
         text: localizationMessage.format('dxHtmlEditor-aiReplace'),
         stylingMode: 'contained',
@@ -294,76 +314,81 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
         },
         onItemClick: (e: ItemClickEvent) => this._replaceButtonAction(e),
       },
-      ...config,
     };
   }
 
-  protected _getCopyButtonItem(config?: ToolbarItem): ToolbarItem {
+  protected _getCopyButtonItem(): NamedToolbarItem {
+    const text = isSmallScreen() ? undefined : localizationMessage.format('dxHtmlEditor-aiCopy');
     return {
+      name: 'copy',
       toolbar: 'bottom',
       location: 'after',
       widget: 'dxButton',
+      locateInMenu: 'auto',
       options: {
         stylingMode: 'outlined',
         icon: COPY_BUTTON_ICON,
-        text: localizationMessage.format('dxHtmlEditor-aiCopy'),
+        text,
         onClick: (): void => {
           const { value } = this._resultTextArea.option();
           // eslint-disable-next-line @typescript-eslint/no-floating-promises
           navigator?.clipboard?.writeText(value ?? '');
         },
       },
-      ...config,
     };
   }
 
-  protected _getTryAgainButtonItem(): ToolbarItem {
+  protected _getTryAgainButtonItem(): NamedToolbarItem {
+    const text = isSmallScreen() ? undefined : localizationMessage.format('dxHtmlEditor-aiTryAgain');
     return {
+      name: 'tryAgain',
       toolbar: 'bottom',
       location: 'before',
       widget: 'dxButton',
       options: {
         stylingMode: 'outlined',
         icon: TRY_AGAIN_BUTTON_ICON,
-        text: localizationMessage.format('dxHtmlEditor-aiTryAgain'),
+        text,
         onClick: () => this._retryExecuteAICommand(),
       },
     };
   }
 
-  protected _getGenerateButtonItem(config?: ToolbarItem): ToolbarItem {
+  protected _getGenerateButtonItem(): NamedToolbarItem {
+    const width = getActionButtonWidth();
     return {
+      name: 'generate',
       toolbar: 'bottom',
       location: 'after',
       widget: 'dxButton',
       options: {
-        width: isMaterial(current()) ? 106 : 100,
         type: 'default',
         text: localizationMessage.format('dxHtmlEditor-aiGenerate'),
         stylingMode: 'contained',
+        width,
         onClick: () => this._executeAICommand(),
       },
-      ...config,
     };
   }
 
-  protected _getStopButtonItem(config?: ToolbarItem): ToolbarItem {
+  protected _getStopButtonItem(): NamedToolbarItem {
+    const width = getActionButtonWidth();
     return {
+      name: 'stop',
       toolbar: 'bottom',
       location: 'after',
       widget: 'dxButton',
       options: {
-        width: BUTTON_WIDTH,
         type: 'default',
         stylingMode: 'contained',
         text: localizationMessage.format('dxHtmlEditor-aiStop'),
+        width,
         onClick: () => this._stopAICommandExecution(),
       },
-      ...config,
     };
   }
 
-  private _getInitialToolbarItems(): ToolbarItem[] {
+  private _getInitialToolbarItems(): NamedToolbarItem[] {
     return [
       this._getTryAgainButtonItem(),
       this._getCopyButtonItem(),
@@ -371,8 +396,8 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
     ];
   }
 
-  protected _getToolbarItems(): ToolbarItem[] {
-    const items: ToolbarItem[] = [this._getTitleItem()];
+  protected _getToolbarItems(): NamedToolbarItem[] {
+    const items: NamedToolbarItem[] = [this._getTitleItem()];
 
     switch (this._dialogState) {
       case DialogState.Initial:
