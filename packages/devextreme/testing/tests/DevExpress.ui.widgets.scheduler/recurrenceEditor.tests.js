@@ -480,7 +480,7 @@ module('Interval editor', () => {
         assert.equal(getIntervalEditor(instance).option('useLargeSpinButtons'), false, 'Interval editor has right useLargeSpinButtons');
         assert.equal(getIntervalEditor(instance).option('min'), 1, 'Interval editor has right min value');
         assert.equal(getIntervalEditor(instance).option('value'), 1, 'Interval editor hase right value');
-        assert.equal(getIntervalEditor(instance).option('width'), 70, 'Interval editor has right width');
+        assert.equal(getIntervalEditor(instance).option('width'), 90, 'Interval editor has right width');
     });
 
     test('Interval editor should have right css class', function(assert) {
