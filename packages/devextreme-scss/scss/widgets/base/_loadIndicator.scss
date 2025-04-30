@@ -99,20 +99,21 @@ $loadindicator-height: 32px;
       );
       transform-origin: center;
       transform: scale(0.33);
+      background-color: $bg-color3;
       animation: dx-sparkle-scale 1.4s infinite linear;
     }
   
     .dx-loadindicator-segment0 {
       left: 50%;
       top: 9.375%;
-      background-color: $bg-color1;
+      background-color: $bg-color3;
       animation-delay: 0s;
     }
   
     .dx-loadindicator-segment1 {
       left: 9.375%;
       top: 29.6875%;
-      background-color: $bg-color2;
+      background-color: $bg-color3;
       animation-delay: 0.8s;
     }
   
@@ -123,11 +124,23 @@ $loadindicator-height: 32px;
       animation-delay: 0.4s;
     }
   }
-}
 
-@keyframes dx-sparkle-scale {
-  0% { transform: scale(0.33); }
-  33% { transform: scale(1); }
-  66% { transform: scale(0.66); }
-  100% { transform: scale(0.33); }
+  @keyframes dx-sparkle-scale {
+    0% {
+      transform: scale(0.33);
+      background-color: $bg-color3;
+    }
+    33% {
+      transform: scale(1);
+      background-color: $bg-color1;
+    }
+    66% {
+      transform: scale(0.66);
+      background-color: $bg-color2;
+    }
+    100% {
+      transform: scale(0.33);
+      background-color: $bg-color3;
+    }
+  }
 }
