@@ -14,7 +14,6 @@ import supportUtils from '../core/utils/m_support';
 export const LOADINDICATOR_CLASS = 'dx-loadindicator';
 export const LOADINDICATOR_WRAPPER_CLASS = 'dx-loadindicator-wrapper';
 export const LOADINDICATOR_CONTENT_CLASS = 'dx-loadindicator-content';
-export const LOADINDICATOR_CONTENT_CIRCLE_CLASS = 'dx-loadindicator-content-circle';
 export const LOADINDICATOR_ICON_CLASS = 'dx-loadindicator-icon';
 export const LOADINDICATOR_SEGMENT_CLASS = 'dx-loadindicator-segment';
 export const LOADINDICATOR_SEGMENT_INNER_CLASS = 'dx-loadindicator-segment-inner';
@@ -24,8 +23,8 @@ export enum AnimationType {
   Circle = 'circle',
 }
 
-const ANIMATION_TYPE_CLASSES = {
-  [AnimationType.Circle]: LOADINDICATOR_CONTENT_CIRCLE_CLASS,
+export const ANIMATION_TYPE_CLASSES = {
+  [AnimationType.Circle]: 'dx-loadindicator-content-circle',
 } as const;
 
 export interface LoadIndicatorProperties extends Properties {

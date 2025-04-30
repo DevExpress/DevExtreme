@@ -8,7 +8,7 @@ import {
     LOADINDICATOR_SEGMENT_CLASS,
     LOADINDICATOR_IMAGE_CLASS,
     LOADINDICATOR_WRAPPER_CLASS,
-    LOADINDICATOR_CONTENT_CIRCLE_CLASS,
+    ANIMATION_TYPE_CLASSES,
 } from '__internal/ui/m_load_indicator';
 
 import 'ui/load_indicator';
@@ -94,7 +94,7 @@ QUnit.module('Static load indicator', {
             const $element = $('#loadIndicator').dxLoadIndicator();
             const $indicatorContent = $element.find(`.${LOADINDICATOR_CONTENT_CLASS}`);
 
-            assert.strictEqual($indicatorContent.hasClass(LOADINDICATOR_CONTENT_CIRCLE_CLASS), true, 'animation class has been added');
+            assert.strictEqual($indicatorContent.hasClass(ANIMATION_TYPE_CLASSES['circle']), true, 'animation class has been added');
         });
 
         QUnit.test('content should not have any animation class if animation type is undefined', function(assert) {
@@ -118,7 +118,7 @@ QUnit.module('Static load indicator', {
 
             instance.option({ _animationType: 'circle' });
 
-            assert.strictEqual(getContent().hasClass(LOADINDICATOR_CONTENT_CIRCLE_CLASS), true, 'animation class has been added');
+            assert.strictEqual(getContent().hasClass(ANIMATION_TYPE_CLASSES['circle']), true, 'animation class has been added');
         });
     });
 });
