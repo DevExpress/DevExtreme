@@ -13,13 +13,13 @@ export const CHAT_EDITING_PREVIEW_CAPTION_CLASS = 'dx-chat-editing-preview-capti
 export const CHAT_EDITING_PREVIEW_TEXT_CLASS = 'dx-chat-editing-preview-text';
 export const CHAT_EDITING_PREVIEW_CANCEL_BUTTON_CLASS = 'dx-chat-editing-preview-cancel-button';
 
-export interface Properties extends DOMComponentProperties<MessageEditingPreview> {
+export interface Properties extends DOMComponentProperties<MessageBoxEditingPreview> {
   text?: string;
   onCancel?: (e: ClickEvent) => void;
 }
 
-class MessageEditingPreview extends DOMComponent<MessageEditingPreview, Properties> {
-  _messageText!: dxElementWrapper;
+class MessageBoxEditingPreview extends DOMComponent<MessageBoxEditingPreview, Properties> {
+  _$messageText!: dxElementWrapper;
 
   _closeButton!: Button;
 
@@ -63,7 +63,7 @@ class MessageEditingPreview extends DOMComponent<MessageEditingPreview, Properti
       .text(messageLocalization.format('dxChat-editingMessageCaption'))
       .appendTo($message);
 
-    this._messageText = $('<div>')
+    this._$messageText = $('<div>')
       .addClass(CHAT_EDITING_PREVIEW_TEXT_CLASS)
       .appendTo($message);
   }
@@ -71,7 +71,7 @@ class MessageEditingPreview extends DOMComponent<MessageEditingPreview, Properti
   _updateText(): void {
     const { text = '' } = this.option();
 
-    this._messageText.text(text);
+    this._$messageText.text(text);
   }
 
   _renderCloseButton(): void {
@@ -126,4 +126,4 @@ class MessageEditingPreview extends DOMComponent<MessageEditingPreview, Properti
   }
 }
 
-export default MessageEditingPreview;
+export default MessageBoxEditingPreview;

@@ -21,7 +21,7 @@ import ChatMessageGroup from '__internal/ui/chat/messagegroup';
 import ChatMessageList from '__internal/ui/chat/messagelist';
 import ChatAlertList from '__internal/ui/chat/alertlist';
 import ChatTypingIndicator from '__internal/ui/chat/typingindicator';
-import ChatMessageEditingPreview from '__internal/ui/chat/messagedeletingpreview';
+import ChatMessageBoxEditingPreview from '__internal/ui/chat/messagebox_editing_preview';
 import DataGrid from 'ui/data_grid';
 import DateBox from 'ui/date_box';
 import DateRangeBox from 'ui/date_range_box';
@@ -1440,7 +1440,7 @@ testComponentDefaults(ChatTypingIndicator,
     }
 );
 
-testComponentDefaults(ChatMessageEditingPreview,
+testComponentDefaults(ChatMessageBoxEditingPreview,
     {},
     {
         text: '',

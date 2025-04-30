@@ -29,10 +29,10 @@ import { isRenderer } from 'core/utils/type';
 
 import config from 'core/config';
 import ArrayStore from 'common/data/array_store';
-import MessageEditingPreview, {
+import MessageBoxEditingPreview, {
     CHAT_EDITING_PREVIEW_CLASS,
     CHAT_EDITING_PREVIEW_CANCEL_BUTTON_CLASS,
-} from '__internal/ui/chat/messageEditingPreview';
+} from '__internal/ui/chat/messagebox_editing_preview';
 import { CHAT_CONFIRMATION_POPUP_WRAPPER_CLASS } from '__internal/ui/chat/confirmationpopup';
 import { POPUP_CLASS } from '__internal/ui/popup/m_popup';
 import { BUTTON_CLASS } from '__internal/ui/button/button';
@@ -114,8 +114,8 @@ const moduleConfig = {
         this.getBubblesContents = () => this.$element.find(`.${CHAT_MESSAGEBUBBLE_CONTENT_CLASS}`);
         this.getContextMenu = () => ContextMenu.getInstance(this.$element.find(`.${CHAT_MESSAGELIST_CONTEXT_MENU_CLASS}`));
         this.getContextMenuItems = () => $(this.getContextMenu().itemsContainer()).find(`.${DX_MENU_ITEM_CLASS}`);
-        this.getMessageEditingPreview = () => this.$element.find(`.${CHAT_EDITING_PREVIEW_CLASS}`);
-        this.getMessageEditingPreviewInstance = () => MessageEditingPreview.getInstance(this.$element.find(`.${CHAT_EDITING_PREVIEW_CLASS}`));
+        this.getMessageBoxEditingPreview = () => this.$element.find(`.${CHAT_EDITING_PREVIEW_CLASS}`);
+        this.getMessageBoxEditingPreviewInstance = () => MessageBoxEditingPreview.getInstance(this.$element.find(`.${CHAT_EDITING_PREVIEW_CLASS}`));
         this.getCancelEditingButton = () => this.$element.find(`.${CHAT_EDITING_PREVIEW_CANCEL_BUTTON_CLASS}`);
 
         init();
@@ -803,7 +803,7 @@ QUnit.module('Chat', () => {
                     $editButton.trigger('dxclick');
 
                     setTimeout(() => {
-                        assert.strictEqual(this.getMessageEditingPreview().length, cancel ? 0 : 1);
+                        assert.strictEqual(this.getMessageBoxEditingPreview().length, cancel ? 0 : 1);
                         done();
                     });
                 });
@@ -836,7 +836,7 @@ QUnit.module('Chat', () => {
             $editButton.trigger('dxclick');
 
             setTimeout(() => {
-                assert.strictEqual(this.getMessageEditingPreview().length, 1);
+                assert.strictEqual(this.getMessageBoxEditingPreview().length, 1);
                 done();
             });
         });
@@ -867,7 +867,7 @@ QUnit.module('Chat', () => {
             const $editButton = this.getContextMenuItems().eq(0);
             $editButton.trigger('dxclick');
 
-            const editingPreviewInstance = this.getMessageEditingPreviewInstance();
+            const editingPreviewInstance = this.getMessageBoxEditingPreviewInstance();
 
             assert.strictEqual(editingPreviewInstance.option('text'), 'b', 'editing preview contains editing message text');
             assert.strictEqual(this.textArea.option('value'), 'b', 'input contains editing message text');
@@ -1208,7 +1208,7 @@ QUnit.module('Chat', () => {
 
                 this.getCancelEditingButton().trigger('dxclick');
 
-                assert.strictEqual(this.getMessageEditingPreview().length, 0);
+                assert.strictEqual(this.getMessageBoxEditingPreview().length, 0);
                 assert.strictEqual(this.$textArea.text(), '', 'input is empty');
                 assert.strictEqual(this.$textArea.hasClass(FOCUSED_STATE_CLASS), true, 'input is focused');
             });

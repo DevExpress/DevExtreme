@@ -1,23 +1,20 @@
 @mixin message-editing-preview(
   $preview-padding,
-  $preview-border-padding,
   $message-row-gap,
   $accent-color,
   $caption-font-size,
   $padding,
   $border-width,
-  $border-radius,
   $cancel-button-color,
 ) {
   .dx-chat-editing-preview::before{
-    border-left-width: $border-width;
-    border-left-color: $accent-color;
-    border-radius: $border-radius;
+    width: $border-width;
+    background-color: $accent-color;
   }
 
   .dx-chat-editing-preview-content {
     gap: $message-row-gap;
-    padding-inline-start: $preview-border-padding;
+    padding-inline-start: $preview-padding + $border-width;
     padding-inline-end: $preview-padding;
   }
 
@@ -26,9 +23,11 @@
     color: $accent-color;
   }
 
-  .dx-button-mode-text.dx-chat-editing-preview-cancel-button {
-    .dx-icon {
-      color: $cancel-button-color;
+  .dx-chat-editing-preview-cancel-button {
+    &.dx-button-mode-text {
+      .dx-icon {
+        color: $cancel-button-color;
+      }
     }
   }
 }

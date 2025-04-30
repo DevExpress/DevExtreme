@@ -10,7 +10,7 @@ import MessageBox, {
 } from '__internal/ui/chat/messagebox';
 import TextArea from '__internal/ui/m_text_area';
 import Button from 'ui/button';
-import { CHAT_EDITING_PREVIEW_CLASS } from '__internal/ui/chat/messageEditingPreview';
+import { CHAT_EDITING_PREVIEW_CLASS } from '__internal/ui/chat/messagebox_editing_preview';
 
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 

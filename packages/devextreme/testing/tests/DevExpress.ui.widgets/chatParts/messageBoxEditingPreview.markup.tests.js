@@ -1,19 +1,19 @@
 import $ from 'jquery';
 
-import MessageEditingPreview, {
+import MessageBoxEditingPreview, {
     CHAT_EDITING_PREVIEW_CLASS,
     CHAT_EDITING_PREVIEW_CONTENT_CLASS,
     CHAT_EDITING_PREVIEW_CAPTION_CLASS,
     CHAT_EDITING_PREVIEW_TEXT_CLASS,
     CHAT_EDITING_PREVIEW_CANCEL_BUTTON_CLASS,
-} from '__internal/ui/chat/messageEditingPreview';
+} from '__internal/ui/chat/messagebox_editing_preview';
 
 const BUTTON_CLASS = 'dx-button';
 
 const moduleConfig = {
     beforeEach: function() {
         const init = (options = { text: 'test' }) => {
-            this.instance = new MessageEditingPreview($('#component'), options);
+            this.instance = new MessageBoxEditingPreview($('#component'), options);
             this.$element = $(this.instance.$element());
         };
 
@@ -27,7 +27,7 @@ const moduleConfig = {
     }
 };
 
-QUnit.module('MessageEditingPreview', moduleConfig, () => {
+QUnit.module('MessageBoxEditingPreview', moduleConfig, () => {
     QUnit.module('Classes', () => {
         QUnit.test('root element should have correct class', function(assert) {
             assert.strictEqual(this.$element.hasClass(CHAT_EDITING_PREVIEW_CLASS), true);

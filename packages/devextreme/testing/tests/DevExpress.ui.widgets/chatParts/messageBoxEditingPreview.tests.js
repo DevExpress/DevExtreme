@@ -1,18 +1,18 @@
 import $ from 'jquery';
 import localization from 'localization';
 
-import MessageEditingPreview, {
+import MessageBoxEditingPreview, {
     CHAT_EDITING_PREVIEW_TEXT_CLASS,
     CHAT_EDITING_PREVIEW_CANCEL_BUTTON_CLASS,
     CHAT_EDITING_PREVIEW_CAPTION_CLASS,
-} from '__internal/ui/chat/messageEditingPreview';
+} from '__internal/ui/chat/messagebox_editing_preview';
 import messageLocalization from 'common/core/localization/message';
 import Button from 'ui/button';
 
 const moduleConfig = {
     beforeEach: function() {
         const init = (options = { text: 'test' }) => {
-            this.instance = new MessageEditingPreview($('#component'), options);
+            this.instance = new MessageBoxEditingPreview($('#component'), options);
             this.$element = $(this.instance.$element());
 
             this.$cancelEditButton = this.$element.find(`.${CHAT_EDITING_PREVIEW_CANCEL_BUTTON_CLASS}`);
@@ -29,10 +29,10 @@ const moduleConfig = {
     }
 };
 
-QUnit.module('MessageEditingPreview', moduleConfig, () => {
+QUnit.module('MessageBoxEditingPreview', moduleConfig, () => {
     QUnit.module('Render', () => {
         QUnit.test('should be initialized with correct type', function(assert) {
-            assert.ok(this.instance instanceof MessageEditingPreview);
+            assert.ok(this.instance instanceof MessageBoxEditingPreview);
         });
 
         QUnit.test('cancel button should be initialized with the corresponding configuration', function(assert) {

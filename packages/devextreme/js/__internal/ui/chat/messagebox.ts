@@ -6,7 +6,7 @@ import Button from '@js/ui/button';
 import type { Properties as DOMComponentProperties } from '@ts/core/widget/dom_component';
 import DOMComponent from '@ts/core/widget/dom_component';
 import type { OptionChanged } from '@ts/core/widget/types';
-import MessageEditingPreview from '@ts/ui/chat/messageEditingPreview';
+import MessageBoxEditingPreview from '@ts/ui/chat/messagebox_editing_preview';
 import TextArea from '@ts/ui/m_text_area';
 
 import type { EnterKeyEvent, InputEvent } from '../../../ui/text_area';
@@ -48,7 +48,7 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
 
   _button!: Button;
 
-  _editingPreview!: MessageEditingPreview | null;
+  _editingPreview!: MessageBoxEditingPreview | null;
 
   _messageEnteredAction?: (e: Partial<MessageEnteredEvent>) => void;
 
@@ -118,9 +118,9 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
     const $editingPreview = $('<div>').prependTo(this.element());
     const { text } = this.option();
 
-    this._editingPreview = this._createComponent($editingPreview, MessageEditingPreview, {
+    this._editingPreview = this._createComponent($editingPreview, MessageBoxEditingPreview, {
       text,
-      onCancel: this._cancelMessageEdit.bind(this),
+      onCancel: () => this._cancelMessageEdit(),
     });
   }
 

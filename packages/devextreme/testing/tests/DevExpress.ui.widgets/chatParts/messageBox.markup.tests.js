@@ -6,7 +6,7 @@ import MessageBox, {
     CHAT_MESSAGEBOX_TEXTAREA_CLASS,
     CHAT_MESSAGEBOX_BUTTON_CLASS,
 } from '__internal/ui/chat/messagebox';
-import { CHAT_EDITING_PREVIEW_CLASS } from '__internal/ui/chat/messageEditingPreview';
+import { CHAT_EDITING_PREVIEW_CLASS } from '__internal/ui/chat/messagebox_editing_preview';
 
 const TEXTAREA_CLASS = 'dx-textarea';
 const BUTTON_CLASS = 'dx-button';
@@ -46,11 +46,11 @@ QUnit.module('MessageBox', moduleConfig, () => {
 
             assert.strictEqual(getEditingPreview().length, 0, 'Be default editing preview not rendered');
 
-            this.instance.option('editingText', 'test');
+            this.instance.option('text', 'test');
 
             assert.strictEqual(getEditingPreview().length, 1, 'Editing preview rendered after editingText set');
 
-            this.instance.option('editingText', undefined);
+            this.instance.option('text', undefined);
 
             assert.strictEqual(getEditingPreview().length, 0, 'Editing preview rendered after editingText reset');
         });
