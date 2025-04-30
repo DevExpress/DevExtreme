@@ -18,14 +18,14 @@ export class CompatibilityHeaderFilterController {
   }
 
   public showHeaderFilterMenuBase(args: {
-    element: Element;
+    columnElement: Element;
     column: Column;
     onHidden?: () => void;
     apply?: () => void;
     isFilterBuilder?: boolean;
   }): void {
     this.realHeaderFilterViewController.openPopup(
-      args.element,
+      args.columnElement,
       args.column,
       args.onHidden,
       args.apply,
