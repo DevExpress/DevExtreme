@@ -1306,8 +1306,8 @@ const resizing = (Base: ModuleType<ResizingController>) => class AdaptivityResiz
 };
 
 const headersKeyboardNavigation = (Base: ModuleType<HeadersKeyboardNavigationController>) => class AdaptivityHeadersKeyboardNavigationExtender extends Base {
-  protected getNewVisibleIndex(visibleIndex, direction) {
-    let newVisibleIndex = super.getNewVisibleIndex(visibleIndex, direction);
+  protected getNewVisibleIndex(visibleIndex, direction, sourceLocation, targetLocation) {
+    let newVisibleIndex = super.getNewVisibleIndex(visibleIndex, direction, sourceLocation, targetLocation);
     let visibleColumns = this._columnsController.getVisibleColumns();
 
     visibleColumns = direction === 'next'

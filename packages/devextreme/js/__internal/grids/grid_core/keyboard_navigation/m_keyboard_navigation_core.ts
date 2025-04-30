@@ -131,7 +131,14 @@ export class KeyboardNavigationController extends modules.ViewController {
     return offset;
   }
 
-  protected getNewVisibleIndex(visibleIndex: number, direction: string): number {
+  protected getNewVisibleIndex(
+    visibleIndex: number,
+    direction: string,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    sourceLocation?: string,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    targetLocation?: string,
+  ): number {
     return direction === 'previous' ? visibleIndex - 1 : visibleIndex + 1;
   }
 

@@ -60,3 +60,8 @@ export enum Direction {
   Next = 'next',
   Previous = 'previous',
 }
+
+export enum ViewName {
+  Group = 'group',
+  Headers = 'headers',
+}

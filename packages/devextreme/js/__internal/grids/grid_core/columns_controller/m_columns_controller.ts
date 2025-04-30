@@ -1438,7 +1438,7 @@ export class ColumnsController extends modules.Controller {
     that.endUpdate();
   }
 
-  private clearGrouping() {
+  public clearGrouping() {
     const that = this;
     const columnCount = this.columnCount();
 

@@ -550,36 +550,6 @@ export const GroupingHeaderPanelExtender = (Base: ModuleType<HeaderPanel>) => cl
     return 'group';
   }
 
-  public getContextMenuItems(options) {
-    const that = this;
-    const contextMenuEnabled = that.option('grouping.contextMenuEnabled');
-    const $groupedColumnElement = $(options.targetElement).closest(`.${CLASSES.groupPanelItem}`);
-    let items;
-
-    if ($groupedColumnElement.length) {
-      options.column = $groupedColumnElement.data('columnData');
-    }
-
-    if (contextMenuEnabled && options.column) {
-      const { column } = options;
-      const isGroupingAllowed = isDefined(column.allowGrouping) ? column.allowGrouping : true;
-
-      if (isGroupingAllowed) {
-        const isColumnGrouped = isDefined(column.groupIndex) && column.groupIndex > -1;
-        const groupingTexts: any = that.option('grouping.texts');
-        const onItemClick = onGroupingMenuItemClick.bind(that, column);
-
-        items = [
-          {
-            text: groupingTexts.ungroup, value: 'ungroup', disabled: !isColumnGrouped, onItemClick,
-          },
-          { text: groupingTexts.ungroupAll, value: 'ungroupAll', onItemClick },
-        ];
-      }
-    }
-    return items;
-  }
-
   public hasGroupedColumns(): boolean {
     return this._isGroupPanelVisible() && !!this.getColumns().length;
   }

@@ -3,7 +3,9 @@ import messageLocalization from '@js/common/core/localization/message';
 
 import type { ModuleType } from '../m_types';
 import type { ColumnsView } from '../views/m_columns_view';
-import { CONTEXT_MENU_MOVE_NEXT_ICON, CONTEXT_MENU_MOVE_PREVIOUS_ICON, Direction } from './const';
+import {
+  CONTEXT_MENU_MOVE_NEXT_ICON, CONTEXT_MENU_MOVE_PREVIOUS_ICON, Direction,
+} from './const';
 import { KeyboardNavigationController as KeyboardNavigationControllerCore } from './m_keyboard_navigation_core';
 
 export class ColumnKeyboardNavigationController extends KeyboardNavigationControllerCore {
@@ -13,18 +15,18 @@ export class ColumnKeyboardNavigationController extends KeyboardNavigationContro
 
   protected getNewVisibleIndex(visibleIndex, direction) {
     /*
-        We need to add 2 to the index instead of 1,
-        because that's how normalization of these indexes works.
+          We need to add 2 to the index instead of 1,
+          because that's how normalization of these indexes works.
 
-        For example, we have columns with the following indexes:
-        0 1 2 3
+          For example, we have columns with the following indexes:
+          0 1 2 3
 
-        We drag 1 to the right. Its index becomes 3.
-        0 2 3(1) 3(3)
+          We drag 1 to the right. Its index becomes 3.
+          0 2 3(1) 3(3)
 
-        After normalization of the indexes:
-        0 1(2) 2(1) 3(3)
-    */
+          After normalization of the indexes:
+          0 1(2) 2(1) 3(3)
+      */
     return direction === 'previous' ? visibleIndex - 1 : visibleIndex + 2;
   }
 
@@ -41,7 +43,7 @@ export class ColumnKeyboardNavigationController extends KeyboardNavigationContro
     rowIndex = 0,
   }) {
     const visibleIndex = this.getVisibleIndex(column, rowIndex);
-    const newVisibleIndex = this.getNewVisibleIndex(visibleIndex, direction);
+    const newVisibleIndex = this.getNewVisibleIndex(visibleIndex, direction, sourceLocation, targetLocation);
     const newFocusedColumnIndex = direction === Direction.Next
       ? newVisibleIndex - 1
       : newVisibleIndex;
