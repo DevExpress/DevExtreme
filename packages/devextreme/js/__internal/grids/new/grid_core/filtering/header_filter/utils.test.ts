@@ -327,6 +327,19 @@ describe('HeaderFilter', () => {
           result: [['ID1', 'anyof', [1, 2, 3]], 'and', ['ID2', 'anyof', ['test1', 'test2']]],
         },
         {
+          caseName: 'two columns have array values, one of them contain 1 item',
+          columns: [{
+            ...allowFilteringColumnConfig,
+            dataField: 'ID1',
+            filterValues: [1],
+          }, {
+            ...allowFilteringColumnConfig,
+            dataField: 'ID2',
+            filterValues: ['test1', 'test2'],
+          }] as unknown[],
+          result: [['ID1', '=', 1], 'and', ['ID2', 'anyof', ['test1', 'test2']]],
+        },
+        {
           caseName: 'it is prohibited to sort the first column',
           columns: [{
             dataField: 'ID1',

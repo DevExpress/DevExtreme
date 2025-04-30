@@ -71,10 +71,15 @@ export const getComposedHeaderFilter = (columns: Column[]): unknown[] => {
     .filter((col) => needCreateHeaderFilter(col));
   filterableColumns
     .forEach((col, index) => {
+      const { filterValues } = col;
+      let normalizedFilterValues = filterValues;
+      if (col.filterValues?.length === 1) {
+        [normalizedFilterValues] = filterValues;
+      }
       filterValue.push([
         getColumnName(col),
-        getFilterOperator(col.filterValues, col.filterType),
-        col.filterValues,
+        getFilterOperator(normalizedFilterValues, col.filterType),
+        normalizedFilterValues,
       ]);
       if (index < filterableColumns.length - 1) {
         filterValue.push('and');
