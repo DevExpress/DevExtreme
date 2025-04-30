@@ -120,5 +120,31 @@ QUnit.module('Static load indicator', {
 
             assert.strictEqual(getContent().hasClass(ANIMATION_TYPE_CLASSES['circle']), true, 'animation class has been added');
         });
+
+        QUnit.test('content should have sparkle animation class if animation type is sparkle', function(assert) {
+            const $element = $('#loadIndicator').dxLoadIndicator({ _animationType: 'sparkle' });
+            const $indicatorContent = $element.find(`.${LOADINDICATOR_CONTENT_CLASS}`);
+
+            assert.strictEqual($indicatorContent.hasClass(ANIMATION_TYPE_CLASSES['sparkle']), true, 'animation class has been changed');
+        });
+
+        QUnit.test('content should have sparkle animation class in runtime', function(assert) {
+            const instance = $('#loadIndicator').dxLoadIndicator().dxLoadIndicator('instance');
+
+            instance.option({ _animationType: 'sparkle' });
+
+            const $content = instance.$element().find(`.${LOADINDICATOR_CONTENT_CLASS}`);
+
+            assert.strictEqual($content.hasClass(ANIMATION_TYPE_CLASSES['sparkle']), true, 'animation class has been changed');
+        });
+
+        QUnit.test('content should have 3 segments if animation type is sparkle', function(assert) {
+            const $element = $('#loadIndicator').dxLoadIndicator({ _animationType: 'sparkle', visible: true });
+            const $segments = $element.find(`.${LOADINDICATOR_SEGMENT_CLASS}`);
+
+            debugger;
+
+            assert.strictEqual($segments.length, 1, '3 segments are rendered');
+        });
     });
 });

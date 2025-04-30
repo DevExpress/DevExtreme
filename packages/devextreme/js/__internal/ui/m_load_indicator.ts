@@ -166,6 +166,8 @@ class LoadIndicator extends Widget<LoadIndicatorProperties> {
 
     const params = this._getSegmentParams();
 
+    debugger;
+
     this._renderSegments(params);
   }
 
