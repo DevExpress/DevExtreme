@@ -1,19 +1,15 @@
 import messageLocalization from '@js/common/core/localization/message';
 import registerComponent from '@js/core/component_registrator';
-import devices from '@js/core/devices';
 import type { DefaultOptionsRule } from '@js/core/options/utils';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { getHeight, getWidth } from '@js/core/utils/size';
-import { getNavigator } from '@js/core/utils/window';
 import type { Properties } from '@js/ui/load_indicator';
 import { current, isGeneric, isMaterialBased } from '@js/ui/themes';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
 
 import supportUtils from '../core/utils/m_support';
-
-const navigator = getNavigator();
 
 const LOADINDICATOR_CLASS = 'dx-loadindicator';
 const LOADINDICATOR_WRAPPER_CLASS = 'dx-loadindicator-wrapper';
@@ -24,10 +20,7 @@ const LOADINDICATOR_SEGMENT_INNER_CLASS = 'dx-loadindicator-segment-inner';
 const LOADINDICATOR_IMAGE_CLASS = 'dx-loadindicator-image';
 
 export interface LoadIndicatorProperties extends Properties {
-  viaImage?: boolean;
-
   _animatingSegmentCount?: number;
-
   _animatingSegmentInner?: boolean;
 }
 
@@ -53,16 +46,6 @@ class LoadIndicator extends Widget<LoadIndicatorProperties> {
     const themeName = current();
 
     return super._defaultOptionsRules().concat([
-      {
-        device() {
-          const realDevice = devices.real();
-          const obsoleteAndroid = realDevice.platform === 'android' && !/chrome/i.test(navigator.userAgent);
-          return obsoleteAndroid;
-        },
-        options: {
-          viaImage: true,
-        },
-      },
       {
         device(): boolean {
           return isMaterialBased(themeName);
@@ -120,16 +103,17 @@ class LoadIndicator extends Widget<LoadIndicatorProperties> {
   }
 
   _renderMarkup(): void {
-    const { viaImage, indicatorSrc } = this.option();
+    const { indicatorSrc } = this.option();
+    const isAnimationAvailable = supportUtils.animation();
 
-    if (supportUtils.animation() && !viaImage && !indicatorSrc) { // B236922
-      this._renderMarkupForAnimation();
-    } else {
-      this._renderMarkupForImage();
+    if (indicatorSrc) {
+      this._renderImageMarkup();
+    } else if (isAnimationAvailable) {
+      this._renderAnimationMarkup();
     }
   }
 
-  _renderMarkupForAnimation(): void {
+  _renderAnimationMarkup(): void {
     const animatingSegmentInner = this.option('_animatingSegmentInner');
 
     this._$indicator = $('<div>').addClass(LOADINDICATOR_ICON_CLASS);
@@ -151,15 +135,11 @@ class LoadIndicator extends Widget<LoadIndicatorProperties> {
     }
   }
 
-  _renderMarkupForImage(): void {
+  _renderImageMarkup(): void {
     const { indicatorSrc } = this.option();
 
-    if (indicatorSrc) {
-      this._$wrapper.addClass(LOADINDICATOR_IMAGE_CLASS);
-      this._$wrapper.css('backgroundImage', `url(${indicatorSrc})`);
-    } else if (supportUtils.animation()) {
-      this._renderMarkupForAnimation();
-    }
+    this._$wrapper.addClass(LOADINDICATOR_IMAGE_CLASS);
+    this._$wrapper.css('backgroundImage', `url(${indicatorSrc})`);
   }
 
   _renderDimensions(): void {
@@ -172,8 +152,7 @@ class LoadIndicator extends Widget<LoadIndicatorProperties> {
       return;
     }
 
-    let width = this.option('width');
-    let height = this.option('height');
+    let { width, height } = this.option();
 
     if (width || height) {
       width = getWidth(this.$element());

@@ -56,10 +56,7 @@ QUnit.module('Static load indicator', {
     }
 }, () => {
     QUnit.test('basic render', function(assert) {
-        const $indicator = $('#loadIndicator').dxLoadIndicator({
-            visible: false,
-            viaImage: false,
-        });
+        const $indicator = $('#loadIndicator').dxLoadIndicator({ visible: false });
         const $indicatorWrapper = $indicator.find(`.${LOADINDICATOR_WRAPPER}`);
 
         assert.notOk($indicatorWrapper.hasClass(`.${LOADINDICATOR_IMAGE}`), 'Image class not added');
