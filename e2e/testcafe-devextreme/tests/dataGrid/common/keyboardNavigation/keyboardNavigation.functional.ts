@@ -4902,7 +4902,6 @@ test('Multiple DataGrids - Ctrl+Alt+Down from filter row should focus data row i
       visible: true,
     },
   });
-
   await createWidget('dxDataGrid', {
     elementAttr: { id: 'grid2' },
     dataSource: getData(5, 2),
