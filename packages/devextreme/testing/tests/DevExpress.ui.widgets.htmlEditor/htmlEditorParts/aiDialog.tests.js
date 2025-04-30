@@ -728,7 +728,6 @@ QUnit.module('AIDialog', {}, () => {
             this.dictionary = {
                 'dxHtmlEditor-aiGenerate': 'custom generate',
                 'dxHtmlEditor-aiStop': 'custom stop',
-                'dxHtmlEditor-aiCopy': 'custom copy',
                 'dxHtmlEditor-aiTryAgain': 'custom try again',
                 'dxHtmlEditor-aiReplace': 'custom replace',
                 'dxHtmlEditor-aiInsertAbove': 'custom insert above',
@@ -812,8 +811,6 @@ QUnit.module('AIDialog', {}, () => {
                     icon: 'copy',
                 });
 
-                assert.strictEqual(copyButtonOptions.text, this.dictionary['dxHtmlEditor-aiCopy'], 'text is localized');
-
                 done();
             });
         });
@@ -892,8 +889,23 @@ QUnit.module('AIDialog', {}, () => {
         });
     });
 
-    QUnit.module('textArea config', integrationModuleConfig, () => {
-        QUnit.test('is correct for result textArea', function(assert) {
+    QUnit.module('desktop specific', {
+        beforeEach: function() {
+            this.realDevice = devices.real();
+            this.getDocumentElementStub = sinon.stub(domAdapter, 'getDocumentElement');
+            this.getDocumentElementStub.returns({
+                clientWidth: 1000
+            });
+
+            integrationModuleConfig.beforeEach.apply(this);
+        },
+        afterEach: function() {
+            integrationModuleConfig.afterEach.apply(this);
+            devices.real(this.realDevice);
+            this.getDocumentElementStub.restore();
+        }
+    }, () => {
+        QUnit.test('result textArea  config is correct', function(assert) {
             const done = assert.async();
 
             showAIDialog(this, {
@@ -913,6 +925,36 @@ QUnit.module('AIDialog', {}, () => {
                     autoResizeEnabled: true,
                 });
 
+                done();
+            });
+        });
+
+        QUnit.test('copy button text is shown and localized', function(assert) {
+            const localizedCopyText = 'custom copy';
+            const initialLocale = localization.locale();
+            localization.loadMessages({
+                'ja': {
+                    'dxHtmlEditor-aiCopy': localizedCopyText,
+                }
+            });
+            localization.locale('ja');
+
+            const done = assert.async();
+
+            showAIDialog(this, {
+                config: { currentCommand: 'translate' },
+            });
+
+            this.resolve();
+
+            this.promise.then(() => {
+                const bottomToolbarItems = getBottomToolbarItems(this.aiDialogPopup);
+                const copyToolbarItem = getItemByName(bottomToolbarItems, 'copy');
+                const copyButtonOptions = copyToolbarItem.options;
+
+                assert.strictEqual(copyButtonOptions.text, localizedCopyText, 'text is localized');
+
+                localization.locale(initialLocale);
                 done();
             });
         });
