@@ -3,13 +3,13 @@
 import { equalByValue } from '@js/core/utils/common';
 import { getMatchedConditions } from '@ts/filter_builder/m_utils';
 
-import { ColumnsController } from '../../columns_controller';
+import { ColumnsController } from '../../columns_controller/index';
 import type { Column } from '../../columns_controller/types';
 import { getColumnByIndexOrName } from '../../columns_controller/utils';
 import { OptionsController } from '../../options_controller/options_controller';
-import { FilterController } from '..';
 import { HeaderFilterController } from '../header_filter/index';
 import { getColumnIdentifier, isColumnFilterable } from '../header_filter/utils';
+import { FilterController } from '../index';
 import {
   getFilterType,
   getFilterValues,
