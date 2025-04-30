@@ -147,9 +147,8 @@ class LoadIndicator extends Widget<LoadIndicatorProperties> {
 
     const segmentParams = {
       [AnimationType.Circle]: {
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        segmentCount: animatingSegmentCount!,
-        segmentInner: !animatingSegmentInner,
+        segmentCount: animatingSegmentCount ?? 0,
+        segmentInner: Boolean(animatingSegmentInner),
       },
     };
 
