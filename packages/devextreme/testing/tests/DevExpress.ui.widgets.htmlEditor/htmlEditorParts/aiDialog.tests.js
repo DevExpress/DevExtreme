@@ -7,7 +7,7 @@ import AIDialog, {
     AI_DIALOG_CONTROLS_CLASS,
     AI_DIALOG_CONTENT_CLASS,
     REPLACE_DROPDOWN_WIDTH,
-    BUTTON_WIDTH,
+    ACTION_BUTTON_WIDTH,
     TEXT_AREA_MIN_HEIGHT,
     TEXT_AREA_MAX_HEIGHT
 } from '__internal/ui/html_editor/ui/aiDialog';
@@ -758,7 +758,8 @@ QUnit.module('AIDialog', {}, () => {
             });
             assertConfig(assert, generateButtonOptions, {
                 stylingMode: 'contained',
-                type: 'default'
+                type: 'default',
+                width: ACTION_BUTTON_WIDTH,
             });
             assert.strictEqual(generateButtonOptions.text, this.dictionary['dxHtmlEditor-aiGenerate'], 'text is localized');
         });
@@ -780,7 +781,7 @@ QUnit.module('AIDialog', {}, () => {
             assertConfig(assert, stopButtonOptions, {
                 stylingMode: 'contained',
                 type: 'default',
-                width: BUTTON_WIDTH
+                width: ACTION_BUTTON_WIDTH,
             });
             assert.strictEqual(stopButtonOptions.text, this.dictionary['dxHtmlEditor-aiStop'], 'text is localized');
         });

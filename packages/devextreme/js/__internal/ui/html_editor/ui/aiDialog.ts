@@ -49,6 +49,7 @@ const POPUP_MAX_WIDTH = 460;
 export const TEXT_AREA_MIN_HEIGHT = 64;
 export const TEXT_AREA_MAX_HEIGHT = 128;
 export const REPLACE_DROPDOWN_WIDTH = 150;
+export const ACTION_BUTTON_WIDTH = 110;
 
 enum DialogState {
   Initial = 'initial',
@@ -356,6 +357,7 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
         type: 'default',
         text: localizationMessage.format('dxHtmlEditor-aiGenerate'),
         stylingMode: 'contained',
+        width: ACTION_BUTTON_WIDTH,
         onClick: () => this._executeAICommand(),
       },
     };
@@ -371,6 +373,7 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
         type: 'default',
         stylingMode: 'contained',
         text: localizationMessage.format('dxHtmlEditor-aiStop'),
+        width: ACTION_BUTTON_WIDTH,
         onClick: () => this._stopAICommandExecution(),
       },
     };
