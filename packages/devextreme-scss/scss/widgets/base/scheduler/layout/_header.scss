@@ -27,9 +27,12 @@ $arrow-down: "\f016";
 
 @mixin header-sizes(
   $height,
+  $padding,
   $item-padding,
   $border,
 ) {
+  padding: $padding;
+
   .dx-toolbar {
     &:not(.dx-toolbar-multiline) {
       @if $border {
@@ -39,19 +42,12 @@ $arrow-down: "\f016";
       }
     }
 
-    .dx-toolbar-item-content,
-    .dx-toolbar-menu-container {
-      padding: $item-padding;
+    .dx-toolbar-before .dx-toolbar-item-content {
+      padding-right: $item-padding;
     }
-
-    .dx-scheduler-navigator {
-      .dx-scheduler-navigator-caption {
-        min-width: 180px;
-
-        .dx-scheduler-adaptive & {
-          min-width: 140px;
-        }
-      }
+    .dx-toolbar-after .dx-toolbar-item-content,
+    .dx-toolbar-menu-container {
+      padding-left: $item-padding;
     }
   }
 }

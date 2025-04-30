@@ -90,6 +90,15 @@ $scheduler-popup-scrollable-content-padding: 20px;
   }
 }
 
+.dx-scheduler-view-switcher .dx-toolbar-item-auto-hide {
+  padding: 0;
+}
+.dx-scheduler-view-switcher-dropdown-button,
+.dx-scheduler-view-switcher-dropdown-button .dx-button-text {
+  width: 100%;
+  text-align: left;
+}
+
 .dx-scheduler-adaptive {
   @media (max-width: 450px) {
     .dx-scheduler-view-switcher-label {

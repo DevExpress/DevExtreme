@@ -378,6 +378,7 @@ $material-scheduler-agenda-time-panel-cell-padding: 8px;
 .dx-scheduler-header {
   @include header-sizes(
     $material-scheduler-header-height,
+    $material-scheduler-header-offset,
     $material-scheduler-toolbar-item-offset,
     baseScheduler.$scheduler-base-border,
   );
