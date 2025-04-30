@@ -123,6 +123,7 @@ class MessageGroup extends Widget<Properties> {
   _getMessageBubbleOptions(message: Message): MessageBubbleProperties {
     const options: MessageBubbleProperties = {
       text: message.text,
+      isDeleted: message.isDeleted,
     };
 
     const { messageTemplate } = this.option();

@@ -426,7 +426,7 @@ QUnit.module('Chat', () => {
                 assert.strictEqual(this.$textArea.hasClass(FOCUSED_STATE_CLASS), true, 'input is focused');
             });
 
-            QUnit.testInActiveWindow('Input focused after context menu is hidden', function(assert) {
+            QUnit.testInActiveWindow('Contextmenu should not be shown on deleted messages', function(assert) {
                 if(!isDesktopDevice()) {
                     assert.ok(true, 'Test is not applicable for mobile devices');
                     return;
@@ -2162,7 +2162,7 @@ QUnit.module('Chat', () => {
             assert.strictEqual(this.getBubbles().length, 1, 'new message should be rendered in list');
         });
 
-        QUnit.test('message text should be updated when using store.push({ type: "update", key: "message_id", data: { text: "new text"} })', function(assert) {
+        QUnit.test('message text should be updated when using store.push({ type: "update", key: "message_id", data: { text: "new text" } })', function(assert) {
             const messages = [{ id: 1, text: 'message_1' }, { id: 2, text: 'message_2' }, { id: 3, text: 'message_3' }];
             const timeout = 100;
 
@@ -2201,7 +2201,7 @@ QUnit.module('Chat', () => {
             assert.deepEqual(messageData, { id: 2, text: newBubbleText }, 'message bubble data was updated');
         });
 
-        QUnit.test('it should be possible to update item with key=0 using push api)', function(assert) {
+        QUnit.test('it should be possible to update item with key=0 using push api', function(assert) {
             const messages = [{ id: 0, text: 'message_0' }, { id: 1, text: 'message_1' }];
             const timeout = 100;
 
@@ -2228,7 +2228,7 @@ QUnit.module('Chat', () => {
             assert.strictEqual(this.getBubbles().eq(0).text(), 'updated text', 'message bubble text was updated');
         });
 
-        QUnit.test('it should be possible to update isEdited state of first message in group using push api)', function(assert) {
+        QUnit.test('it should be possible to update isEdited state of first message in group using push api', function(assert) {
             const messages = [{ id: 0, text: 'message_0' }, { id: 1, text: 'message_1' }];
             const timeout = 100;
 
@@ -2258,7 +2258,7 @@ QUnit.module('Chat', () => {
             assert.strictEqual($editedMessage.length, 1, 'edited text was added');
         });
 
-        QUnit.test('it should be possible to update isEdited state of not first message in group using push api)', function(assert) {
+        QUnit.test('it should be possible to update isEdited state of not first message in group using push api', function(assert) {
             const messages = [{ id: 0, text: 'message_0' }, { id: 1, text: 'message_1', isEdited: true }];
             const timeout = 100;
 

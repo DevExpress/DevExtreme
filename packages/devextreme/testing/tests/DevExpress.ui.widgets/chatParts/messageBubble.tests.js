@@ -42,6 +42,16 @@ QUnit.module('MessageBubble', moduleConfig, () => {
             assert.strictEqual(this.$element.text(), 'new message text');
         });
 
+        QUnit.test('isDeleted option should delete the message after being set at runtime', function(assert) {
+            const messageText = 'message text';
+
+            this.instance.option('text', messageText);
+
+            this.instance.option('isDeleted', true);
+
+            assert.notStrictEqual(this.$element.text(), messageText);
+        });
+
         QUnit.test('template render function should be called if it has been passed', function(assert) {
             const templateSpy = sinon.spy();
             const messageText = 'message text';
