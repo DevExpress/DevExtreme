@@ -30,7 +30,7 @@ const REPEAT_ON_EDITOR = 'dx-recurrence-repeat-on';
 const DAY_OF_MONTH = 'dx-recurrence-numberbox-day-of-month';
 const MONTH_OF_YEAR = 'dx-recurrence-selectbox-month-of-year';
 
-const recurrentEditorNumberBoxWidth = 70;
+const recurrentEditorNumberBoxWidth = 90;
 const repeatInputWidth = '100%';
 const recurrentEditorSelectBoxWidth = 120;
 const defaultRecurrenceTypeIndex = 1; // default daily recurrence
