@@ -220,7 +220,7 @@ QUnit.module('AIDialog', {}, () => {
             showAIDialog(this);
 
             this.promise.then(() => {
-                const $copyButton = findButtonByName(this.$element, 'copy');
+                const $copyButton = findButtonByName(this.aiDialogPopup, 'copy');
                 const resultTextAreaInstance = getResultTextAreaInstance(this.$element);
 
                 resultTextAreaInstance.option({ value: 'Test text' });
@@ -241,7 +241,7 @@ QUnit.module('AIDialog', {}, () => {
 
             this.promise.then(() => {
                 const generateSpy = sinon.spy(this.aiDialog, '_executeAICommand');
-                const $tryAgainButton = findButtonByName(this.$element, 'tryAgain');
+                const $tryAgainButton = findButtonByName(this.aiDialogPopup, 'tryAgain');
 
                 $tryAgainButton.trigger('dxclick');
 
@@ -318,7 +318,7 @@ QUnit.module('AIDialog', {}, () => {
                 },
             });
 
-            const $generateButton = findButtonByName(this.$element, 'generate');
+            const $generateButton = findButtonByName(this.aiDialogPopup, 'generate');
             $generateButton.trigger('dxclick');
 
             this.promise.then(() => {
@@ -347,7 +347,7 @@ QUnit.module('AIDialog', {}, () => {
 
             this.setDialogState('generating');
 
-            const $stopButton = findButtonByName(this.$element, 'stop');
+            const $stopButton = findButtonByName(this.aiDialogPopup, 'stop');
             $stopButton.trigger('dxclick');
 
             const promptTextAreaInstance = getPromptTextAreaInstance(this.$element);
@@ -486,7 +486,7 @@ QUnit.module('AIDialog', {}, () => {
 
             promptTextAreaInstance.option('value', prompt);
 
-            const $generateButton = findButtonByName(this.$element, 'generate');
+            const $generateButton = findButtonByName(this.aiDialogPopup, 'generate');
             $generateButton.trigger('dxclick');
 
             const param = this.executeStub.firstCall.args[0];
@@ -549,7 +549,7 @@ QUnit.module('AIDialog', {}, () => {
 
             assert.notOk(this.abortSpy.calledOnce, 'abort is not called');
 
-            const $stopButton = findButtonByName(this.$element, 'stop');
+            const $stopButton = findButtonByName(this.aiDialogPopup, 'stop');
             $stopButton.trigger('dxclick');
 
             assert.ok(this.abortSpy.calledOnce, 'abort is called');
@@ -560,7 +560,7 @@ QUnit.module('AIDialog', {}, () => {
 
             assert.strictEqual(getLoadIndicator(this.$element).length, 1, 'loadindicator is rendered');
 
-            const $stopButton = findButtonByName(this.$element, 'stop');
+            const $stopButton = findButtonByName(this.aiDialogPopup, 'stop');
             $stopButton.trigger('dxclick');
 
             assert.strictEqual(getLoadIndicator(this.$element).length, 0, 'loadindicator is removed');
@@ -576,7 +576,7 @@ QUnit.module('AIDialog', {}, () => {
             this.resolve('Response');
 
             this.promise.then(() => {
-                const $tryAgain = findButtonByName(this.$element, 'tryAgain');
+                const $tryAgain = findButtonByName(this.aiDialogPopup, 'tryAgain');
 
                 $tryAgain.trigger('dxclick');
 
@@ -664,13 +664,13 @@ QUnit.module('AIDialog', {}, () => {
 
             this.showDialog({ currentCommand: 'askAI' });
 
-            const $generateButton = findButtonByName(this.$element, 'generate');
+            const $generateButton = findButtonByName(this.aiDialogPopup, 'generate');
             $generateButton.trigger('dxclick');
 
             this.reject('Error');
 
             setTimeout(() => {
-                const $generateButton = findButtonByName(this.$element, 'generate');
+                const $generateButton = findButtonByName(this.aiDialogPopup, 'generate');
                 const resultTextAreaInstance = getResultTextAreaInstance(this.$element);
                 const promptTextAreaInstance = getPromptTextAreaInstance(this.$element);
 
@@ -705,7 +705,7 @@ QUnit.module('AIDialog', {}, () => {
             this.showDialog({ currentCommand: 'askAI' });
 
             const promptTextAreaInstance = getPromptTextAreaInstance(this.$element);
-            const generateButton = findButtonByName(this.$element, 'generate');
+            const generateButton = findButtonByName(this.aiDialogPopup, 'generate');
 
             generateButton.trigger('dxclick');
 
