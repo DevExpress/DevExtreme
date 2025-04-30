@@ -60,10 +60,10 @@ export class Item extends Component<ItemProps> {
     const Template = this.props.column.headerItemTemplate ?? this.props.template;
     const cssClass = `${CLASSES.item} ${this.props.column.headerItemCssClass ?? ''} ${this.props.cssClass ?? ''}`;
 
-    const { headerFilter, filterType } = this.props.column;
+    const { filterType, filterValues } = this.props.column;
 
     const hasHeaderFilterValue = filterType === 'exclude'
-      || !!headerFilter?.values?.length;
+      || !!filterValues?.length;
     const headerFilterIconClass = [
       CLASSES.headerFilter.iconEmpty,
       hasHeaderFilterValue ? CLASSES.headerFilter.iconFilled : '',

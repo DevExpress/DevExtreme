@@ -75,7 +75,7 @@ import { steps } from './data.ts';
   align-items: center;
   justify-content: center;
   row-gap: 16px;
-  height: 760px;
+  height: 580px;
   min-width: 320px;
 }
 

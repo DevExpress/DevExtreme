@@ -46,6 +46,7 @@ const DROPDOWNEDITOR_ICON_CLASS = 'dx-dropdowneditor-icon';
 const LIST_ITEM_CLASS = 'dx-list-item';
 const POPUP_TITLE_CLASS = 'dx-popup-title';
 const MENU_ITEM_CLASS = 'dx-menu-item';
+const MENU_CLASS = 'dx-menu';
 
 const BOLD_FORMAT_CLASS = 'dx-bold-format';
 const SIZE_FORMAT_CLASS = 'dx-size-format';
@@ -1451,11 +1452,83 @@ testModule('Toolbar AI menu', dialogAIModuleConfig, () => {
             currentCommand: 'summarize',
             currentCommandOption: undefined,
             text: 'Test',
-            commandsMap: { summarize: {
-                name: 'summarize',
-                options: undefined,
-                text: 'Summarize'
-            } },
+            prompt: undefined,
+            commandsMap: {
+                summarize: {
+                    id: 'summarize',
+                    name: 'summarize',
+                    options: undefined,
+                    text: 'Summarize',
+                },
+            },
+        }, 'Correct config passed to dialog');
+    });
+
+    QUnit.test('Should pass correct payload to dialog on item click if there is custom command', function(assert) {
+        const prompt = () => 'custom prompt';
+        this.options.items = [{ name: 'ai', commands: [{ name: 'custom', prompt }] }];
+
+        new Toolbar(this.quillMock, this.options);
+
+        const showSpy = sinon.spy(this.options.editorInstance, 'showAIDialog');
+
+        openAIDialog(this.$element);
+
+        assert.ok(showSpy.calledOnce, 'showAIDialog called');
+        assert.deepEqual(showSpy.firstCall.args[0], {
+            currentCommand: 'custom0',
+            currentCommandOption: undefined,
+            text: 'Test',
+            prompt,
+            commandsMap: {
+                custom0: {
+                    id: 'custom0',
+                    name: 'custom',
+                    options: undefined,
+                    text: 'Custom',
+                    prompt,
+                },
+            },
+        }, 'Correct config passed to dialog');
+    });
+
+    QUnit.test('Should pass correct payload to dialog on item click if there is custom command with options', function(assert) {
+        const prompt = (param) => `custom prompt with ${param}`;
+
+        this.options.items = [
+            {
+                name: 'ai',
+                commands: [
+                    {
+                        name: 'custom',
+                        options: ['option 1'],
+                        prompt,
+                    },
+                ],
+            },
+        ];
+
+        new Toolbar(this.quillMock, this.options);
+
+        const showSpy = sinon.spy(this.options.editorInstance, 'showAIDialog');
+
+        openAIDialog(this.$element);
+
+        assert.ok(showSpy.calledOnce, 'showAIDialog called');
+        assert.deepEqual(showSpy.firstCall.args[0], {
+            currentCommand: 'custom0',
+            currentCommandOption: 'Option 1',
+            text: 'Test',
+            prompt,
+            commandsMap: {
+                custom0: {
+                    id: 'custom0',
+                    name: 'custom',
+                    options: ['Option 1'],
+                    text: 'Custom',
+                    prompt,
+                },
+            },
         }, 'Correct config passed to dialog');
     });
 
@@ -1577,6 +1650,17 @@ testModule('Toolbar AI menu', dialogAIModuleConfig, () => {
 
         const $menuItem = $(`.${MENU_ITEM_CLASS}`).last();
         assert.strictEqual($menuItem.text(), 'Custom command', 'custom command rendered in menu');
+    });
+
+    QUnit.test('root menu item is disabled if commands list is empty', function(assert) {
+        this.options.items = [{ name: 'ai', commands: [] }];
+        new Toolbar(this.quillMock, this.options);
+
+        openAIToolbarMenu(this.$element);
+
+        const menuInstance = $(`.${MENU_CLASS}`).dxMenu('instance');
+
+        assert.strictEqual(menuInstance.option('disabled'), true, 'menu is disabled');
     });
 });
 

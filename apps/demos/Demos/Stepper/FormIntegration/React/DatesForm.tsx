@@ -1,6 +1,6 @@
 import React, { FC, memo } from 'react';
 import 'devextreme-react/date-range-box';
-import { Form, RequiredRule, SimpleItem, FormRef } from 'devextreme-react/form';
+import { Form, SimpleItem } from 'devextreme-react/form';
 
 import { FormProps } from './types.ts';
 
@@ -20,9 +20,7 @@ const DatesForm: FC<FormProps> = memo(({ formData, validationGroup }) => (
           elementAttr: { id: 'datesPicker' },
         }}
         label={{ visible: false }}
-      >
-        <RequiredRule />
-      </SimpleItem>
+      />
     </Form>
   </>
 ));

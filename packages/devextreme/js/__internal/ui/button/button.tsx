@@ -23,6 +23,8 @@ import { InkRipple } from './ink_ripple';
 import type { ButtonProps } from './props';
 import { defaultButtonProps } from './props';
 
+export const BUTTON_CLASS = 'dx-button';
+
 const stylingModes = ['outlined', 'text', 'contained'];
 
 const getCssClasses = (model): string => {
@@ -35,7 +37,7 @@ const getCssClasses = (model): string => {
   } = model;
   const isValidStylingMode = stylingMode && stylingModes.includes(stylingMode);
   const classesMap = {
-    'dx-button': true,
+    [BUTTON_CLASS]: true,
     [`dx-button-mode-${isValidStylingMode ? stylingMode : 'contained'}`]: true,
     [`dx-button-${type ?? 'normal'}`]: true,
     'dx-button-has-text': !!text,

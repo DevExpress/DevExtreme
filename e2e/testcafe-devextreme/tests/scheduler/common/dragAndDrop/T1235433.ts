@@ -7,91 +7,7 @@ import { scrollTo } from '../../helpers/utils';
 fixture.disablePageReloads`Scheduler Drag-and-Drop inside Group`
   .page(url(__dirname, '../../../container.html'));
 
-const dragAppointmentByCircle = async (
-  t: TestController,
-  appointment: Appointment,
-  description: string[],
-  times: string[],
-) => {
-  await t.drag(appointment.element, -200, 0)
-    .expect(appointment.date.roleDescription)
-    .contains(description[0])
-    .expect(appointment.date.time)
-    .eql(times[0]);
-
-  await t.drag(appointment.element, 0, 200)
-    .expect(appointment.date.roleDescription)
-    .contains(description[1])
-    .expect(appointment.date.time)
-    .eql(times[1]);
-
-  await t.drag(appointment.element, 200, 0)
-    .expect(appointment.date.roleDescription)
-    .contains(description[2])
-    .expect(appointment.date.time)
-    .eql(times[2]);
-
-  await t.drag(appointment.element, 0, -200)
-    .expect(appointment.date.roleDescription)
-    .contains(description[3])
-    .expect(appointment.date.time)
-    .eql(times[3]);
-};
-const appointmentDescriptions = [
-  'February 2, 2021, Group: Low Priority',
-  'February 2, 2021, Group: High Priority',
-  'February 2, 2021, Group: High Priority',
-  'February 2, 2021, Group: Low Priority',
-];
-const appointment1Times = ['9:00 AM - 10:00 AM', '9:00 AM - 10:00 AM', '10:00 AM - 11:00 AM', '10:00 AM - 11:00 AM'];
-const appointment2Times = ['4:00 PM - 5:15 PM', '4:00 PM - 5:15 PM', '5:00 PM - 6:15 PM', '5:00 PM - 6:15 PM'];
-
-test('T1235433: Scheduler - Drag-n-Drop works inside the group with virtual scrolling', async (t) => {
-  const scheduler = new Scheduler('#container');
-
-  await t.expect(scheduler.element.exists).ok();
-
-  await t.debug();
-
-  await dragAppointmentByCircle(t, scheduler.getAppointment('Book 1'), appointmentDescriptions, appointment1Times);
-  await scrollTo(1400, 0);
-  await dragAppointmentByCircle(t, scheduler.getAppointment('Book 2'), appointmentDescriptions, appointment2Times);
-
-  await t.click(scheduler.toolbar.viewSwitcher.getButton('Timeline Work Week').element)
-    .expect(scheduler.checkViewType('timelineWorkWeek'))
-    .ok();
-  await scrollTo(2400, 0);
-  await dragAppointmentByCircle(t, scheduler.getAppointment('Book 1'), appointmentDescriptions, appointment1Times);
-  await scrollTo(3400, 0);
-  await dragAppointmentByCircle(t, scheduler.getAppointment('Book 2'), appointmentDescriptions, appointment2Times);
-
-  await t.click(scheduler.toolbar.viewSwitcher.getButton('Timeline Month').element)
-    .expect(scheduler.checkViewType('timelineMonth'))
-    .ok();
-  await dragAppointmentByCircle(t, scheduler.getAppointment('Book 1'), [
-    'February 1, 2021, Group: Low Priority',
-    'February 1, 2021, Group: High Priority',
-    'February 2, 2021, Group: High Priority',
-    'February 2, 2021, Group: Low Priority',
-  ], [
-    appointment1Times[2],
-    appointment1Times[2],
-    appointment1Times[2],
-    appointment1Times[2],
-  ]);
-  await scrollTo(1000, 0);
-  await dragAppointmentByCircle(t, scheduler.getAppointment('Book 3'), [
-    'February 7, 2021, Group: Low Priority',
-    'February 7, 2021, Group: High Priority',
-    'February 8, 2021, Group: High Priority',
-    'February 8, 2021, Group: Low Priority',
-  ], [
-    appointment2Times[2],
-    appointment2Times[2],
-    appointment2Times[2],
-    appointment2Times[2],
-  ]);
-}).before(async () => createWidget('dxScheduler', {
+const createScheduler = (view: string) => createWidget('dxScheduler', {
   timeZone: 'America/Los_Angeles',
   dataSource: [
     {
@@ -111,8 +27,8 @@ test('T1235433: Scheduler - Drag-n-Drop works inside the group with virtual scro
       priority: 1,
     },
   ],
-  views: ['timelineDay', 'timelineWorkWeek', 'timelineMonth'],
-  currentView: 'timelineDay',
+  views: [view],
+  currentView: view,
   currentDate: new Date('2021-02-02T17:00:00.000Z'),
   firstDayOfWeek: 0,
   scrolling: { mode: 'virtual' },
@@ -130,4 +46,78 @@ test('T1235433: Scheduler - Drag-n-Drop works inside the group with virtual scro
     label: 'Priority',
   }],
   height: 580,
-}));
+});
+const dragAppointmentByCircle = async (
+  t: TestController,
+  appointment: Appointment,
+  label: string[],
+  description: string[],
+) => {
+  await t.drag(appointment.element, -200, 0);
+  await t.expect(appointment.getAriaLabel())
+    .contains(label[0])
+    .expect(await appointment.getAriaDescription())
+    .contains(description[0]);
+
+  await t.drag(appointment.element, 0, 200);
+  await t.expect(appointment.getAriaLabel())
+    .contains(label[1])
+    .expect(await appointment.getAriaDescription())
+    .contains(description[1]);
+
+  await t.drag(appointment.element, 200, 0);
+  await t.expect(appointment.getAriaLabel())
+    .contains(label[2])
+    .expect(await appointment.getAriaDescription())
+    .contains(description[2]);
+
+  await t.drag(appointment.element, 0, -200);
+  await t.expect(appointment.getAriaLabel())
+    .contains(label[3])
+    .expect(await appointment.getAriaDescription())
+    .contains(description[3]);
+};
+const appointmentDescriptions = ['Group: Low Priority', 'Group: High Priority', 'Group: High Priority', 'Group: Low Priority'];
+const appointment1Times = ['9:00 AM - 10:00 AM', '9:00 AM - 10:00 AM', '10:00 AM - 11:00 AM', '10:00 AM - 11:00 AM'];
+const appointment2Times = ['4:00 PM - 5:15 PM', '4:00 PM - 5:15 PM', '5:00 PM - 6:15 PM', '5:00 PM - 6:15 PM'];
+
+test('T1235433: Scheduler - Drag-n-Drop works inside the group with virtual scrolling (timelineDay)', async (t) => {
+  const scheduler = new Scheduler('#container');
+
+  await t.expect(scheduler.element.exists).ok();
+
+  await dragAppointmentByCircle(t, scheduler.getAppointment('Book 1'), appointment1Times, appointmentDescriptions);
+  await scrollTo(1400, 0);
+  await dragAppointmentByCircle(t, scheduler.getAppointment('Book 2'), appointment2Times, appointmentDescriptions);
+}).before(async () => createScheduler('timelineDay'));
+
+test('T1235433: Scheduler - Drag-n-Drop works inside the group with virtual scrolling (timelineWorkWeek)', async (t) => {
+  const scheduler = new Scheduler('#container');
+
+  await t.expect(scheduler.element.exists).ok();
+
+  await scrollTo(2400, 0);
+  await dragAppointmentByCircle(t, scheduler.getAppointment('Book 1'), appointment1Times, appointmentDescriptions);
+  await scrollTo(3400, 0);
+  await dragAppointmentByCircle(t, scheduler.getAppointment('Book 2'), appointment2Times, appointmentDescriptions);
+}).before(async () => createScheduler('timelineWorkWeek'));
+
+test('T1235433: Scheduler - Drag-n-Drop works inside the group with virtual scrolling (timelineMonth)', async (t) => {
+  const scheduler = new Scheduler('#container');
+
+  await t.expect(scheduler.element.exists).ok();
+
+  await dragAppointmentByCircle(t, scheduler.getAppointment('Book 1'), [
+    'February 1, 2021',
+    'February 1, 2021',
+    'February 2, 2021',
+    'February 2, 2021',
+  ], appointmentDescriptions);
+  await scrollTo(1000, 0);
+  await dragAppointmentByCircle(t, scheduler.getAppointment('Book 3'), [
+    'February 7, 2021',
+    'February 7, 2021',
+    'February 8, 2021',
+    'February 8, 2021',
+  ], appointmentDescriptions);
+}).before(async () => createScheduler('timelineMonth'));

@@ -16,9 +16,9 @@ test('Field panel items markup in the middle of the drag-n-drop', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   const pivotGrid = new PivotGrid(PIVOT_GRID_SELECTOR);
-  const columnFirstAction = pivotGrid.getColumnHeaderArea().getAction();
-  const rowFirstAction = pivotGrid.getRowHeaderArea().getAction();
-  const dataFirstAction = pivotGrid.getDataHeaderArea().getAction();
+  const columnFirstAction = pivotGrid.getColumnHeaderArea().getField();
+  const rowFirstAction = pivotGrid.getRowHeaderArea().getField();
+  const dataFirstAction = pivotGrid.getDataHeaderArea().getField();
 
   await MouseUpEvents.disable(MouseAction.dragToOffset);
 

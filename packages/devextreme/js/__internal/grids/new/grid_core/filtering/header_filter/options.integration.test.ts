@@ -257,7 +257,7 @@ describe('Options', () => {
         columns: [{
           dataField: 'A',
           // NOTE: WA for check "emptyValue" translation
-          calculateCellValue: (): null => null,
+          calculateFieldValue: (): null => null,
         }],
         headerFilter: {
           visible: true,
@@ -560,7 +560,7 @@ describe('Options', () => {
         ],
         columns: [{
           dataField: 'A',
-          headerFilter: { values: filterValues },
+          filterValues,
           filterType,
         }],
         headerFilter: {
@@ -614,7 +614,8 @@ describe('Options', () => {
             ],
             columns: [{
               dataField: 'A',
-              headerFilter: { dataSource, values: filterValues },
+              headerFilter: { dataSource },
+              filterValues,
               filterType,
             }],
             headerFilter: {

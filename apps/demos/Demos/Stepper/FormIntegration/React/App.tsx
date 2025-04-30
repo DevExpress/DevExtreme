@@ -157,7 +157,7 @@ export default function App () {
           focusStateEnabled={false}
           animationEnabled={false}
           swipeEnabled={false}
-          height={300}
+          height={400}
         >
           <Item render={renderDatesForm} />
           <Item render={renderGuestsForm} />

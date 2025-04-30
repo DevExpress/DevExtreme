@@ -49,13 +49,12 @@ describe('HeaderFilter', () => {
         const expectedHeaderFilter = {
           allowSearch: true,
           testRandomField: 'A',
-          values: expectedFilterValues,
         } as HeaderFilterColumnOptions;
 
         const { viewController } = setup();
         viewController.openPopup(
           {} as Element,
-          { headerFilter: expectedHeaderFilter } as Column,
+          { headerFilter: expectedHeaderFilter, filterValues: expectedFilterValues } as Column,
         );
 
         const state = viewController.popupState.peek();
@@ -65,9 +64,6 @@ describe('HeaderFilter', () => {
 
       it('should apply headerFilter to column options by callback call', () => {
         const expectedFilterValues = ['VAL_0', 'VAL_1', 'VAL_2'];
-        const expectedHeaderFilter = {
-          values: expectedFilterValues,
-        } as HeaderFilterColumnOptions;
 
         const { viewController, columnsController } = setup({
           headerFilter: { visible: true },
@@ -86,8 +82,8 @@ describe('HeaderFilter', () => {
 
         const updatedColumn = columnsController.columns.peek()[0];
 
-        expect(updatedColumn?.headerFilter)
-          .toMatchObject(expectedHeaderFilter as Record<string, unknown>);
+        expect(updatedColumn?.filterValues)
+          .toMatchObject(expectedFilterValues as unknown as Record<string, unknown>);
       });
 
       it('should save passed headerFilter values during update by callback call', () => {
@@ -104,8 +100,8 @@ describe('HeaderFilter', () => {
         const { viewController, columnsController } = setup({
           headerFilter: {
             ...expectedHeaderFilter,
-            values: 'test',
           },
+          filterValues: 'test',
           columns: [{ name: 'A' }],
         });
 

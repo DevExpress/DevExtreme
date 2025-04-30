@@ -13,6 +13,7 @@ export type ToolbarItems = (ToolbarItem | DefaultToolbarItem)[];
 
 export interface ToolbarProps {
   items?: ToolbarItems;
+  multiline?: boolean | undefined;
   visible?: boolean | undefined;
   disabled?: boolean;
   showContextMenu?: (event: KeyboardEvent | MouseEvent) => void;

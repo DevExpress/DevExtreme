@@ -31,6 +31,10 @@ $cardview-generic-nodata-icon-container-background-color: null !default;
 
 $cardview-generic-card-content-field-value-highlight-color: null !default;
 $cardview-generic-card-content-field-value-highlight-background: null !default;
+$cardview-generic-card-content-field-value-highlight-border-radius: null !default;
+$cardview-generic-card-content-field-value-highlight-padding: null !default;
+$cardview-generic-card-content-field-value-highlight-font-weight: null !default;
+$cardview-generic-card-content-field-value-highlight-box-shadow: null !default;
 
 $cardview-generic-card-cover-background-color: null !default;
 
@@ -58,8 +62,12 @@ $cardview-generic-card-background-color: null !default;
   $cardview-generic-nodata-text-color: $base-label-color !default;
   $cardview-generic-nodata-icon-container-background-color: darken($base-bg, 7.84) !default;
 
-  $cardview-generic-card-content-field-value-highlight-color: $base-inverted-text-color !default;
-  $cardview-generic-card-content-field-value-highlight-background: $base-accent !default;
+  $cardview-generic-card-content-field-value-highlight-color: $base-text-color !default;
+  $cardview-generic-card-content-field-value-highlight-background: $base-warning !default;
+  $cardview-generic-card-content-field-value-highlight-border-radius: 5px;
+  $cardview-generic-card-content-field-value-highlight-padding: .125em 0.2em;
+  $cardview-generic-card-content-field-value-highlight-font-weight: 500;
+  $cardview-generic-card-content-field-value-highlight-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
 
   $cardview-generic-card-cover-background-color: #FFF !default;
 
@@ -88,8 +96,12 @@ $cardview-generic-card-background-color: null !default;
   $cardview-generic-nodata-text-color: $base-label-color !default;
   $cardview-generic-nodata-icon-container-background-color: lighten(desaturate($base-bg, 0.30), 8.04) !default;
 
-  $cardview-generic-card-content-field-value-highlight-color: $base-inverted-text-color !default;
-  $cardview-generic-card-content-field-value-highlight-background: $base-accent !default;
+  $cardview-generic-card-content-field-value-highlight-color: $base-text-color !default;
+  $cardview-generic-card-content-field-value-highlight-background: $base-warning !default;
+  $cardview-generic-card-content-field-value-highlight-border-radius: 5px;
+  $cardview-generic-card-content-field-value-highlight-padding: .125em 0.2em;
+  $cardview-generic-card-content-field-value-highlight-font-weight: 500;
+  $cardview-generic-card-content-field-value-highlight-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
 
   $cardview-generic-card-cover-background-color: #FFF !default;
 
@@ -119,7 +131,11 @@ $cardview-generic-card-background-color: null !default;
   $cardview-generic-nodata-icon-container-background-color: $base-bg !default;
 
   $cardview-generic-card-content-field-value-highlight-color: $base-inverted-text-color !default;
-  $cardview-generic-card-content-field-value-highlight-background: $base-accent !default;
+  $cardview-generic-card-content-field-value-highlight-background: $base-warning !default;
+  $cardview-generic-card-content-field-value-highlight-border-radius: 5px;
+  $cardview-generic-card-content-field-value-highlight-padding: .125em 0.2em;
+  $cardview-generic-card-content-field-value-highlight-font-weight: 500;
+  $cardview-generic-card-content-field-value-highlight-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
 
   $cardview-generic-card-cover-background-color: #FFF !default;
 
@@ -150,6 +166,10 @@ $cardview-nodata-icon-container-background-color: $cardview-generic-nodata-icon-
 
 $cardview-card-content-field-value-highlight-color: $cardview-generic-card-content-field-value-highlight-color !default;
 $cardview-card-content-field-value-highlight-background: $cardview-generic-card-content-field-value-highlight-background !default;
+$cardview-card-content-field-value-highlight-border-radius: $cardview-generic-card-content-field-value-highlight-border-radius !default;
+$cardview-card-content-field-value-highlight-padding: $cardview-generic-card-content-field-value-highlight-padding !default;
+$cardview-card-content-field-value-highlight-font-weight: $cardview-generic-card-content-field-value-highlight-font-weight !default;
+$cardview-card-content-field-value-highlight-box-shadow: $cardview-generic-card-content-field-value-highlight-box-shadow !default;
 
 $cardview-card-cover-background-color: $cardview-generic-card-cover-background-color !default;
 

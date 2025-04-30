@@ -141,7 +141,7 @@ const clearRemoteOperations = () => ClientFunction(() => {
 
     await t
       .expect(columnOptions.filterType).eql(undefined)
-      .expect(columnOptions.headerFilter.values).eql(['A_0', 'A_1']);
+      .expect(columnOptions.filterValues).eql(['A_0', 'A_1']);
 
     await t.click(cardView.element);
   }).before(async (t) => {
@@ -188,7 +188,7 @@ const clearRemoteOperations = () => ClientFunction(() => {
 
     await t
       .expect(columnOptions.filterType).eql('exclude')
-      .expect(columnOptions.headerFilter.values).eql(null);
+      .expect(columnOptions.filterValues).eql(null);
 
     await t.click(cardView.element);
   }).before(async (t) => {
@@ -239,7 +239,7 @@ const clearRemoteOperations = () => ClientFunction(() => {
 
     await t
       .expect(columnOptions.filterType).eql('exclude')
-      .expect(columnOptions.headerFilter.values).eql(['A_2', 'A_3']);
+      .expect(columnOptions.filterValues).eql(['A_2', 'A_3']);
 
     await t.click(cardView.element);
   }).before(async (t) => {
@@ -299,9 +299,7 @@ const clearRemoteOperations = () => ClientFunction(() => {
       columns: [
         {
           dataField: 'A',
-          headerFilter: {
-            values: ['A_0', 'A_1'],
-          },
+          filterValues: ['A_0', 'A_1'],
         },
         'B',
         'C',
@@ -352,9 +350,7 @@ const clearRemoteOperations = () => ClientFunction(() => {
       columns: [
         {
           dataField: 'A',
-          headerFilter: {
-            values: ['A_0', 'A_1'],
-          },
+          filterValues: ['A_0', 'A_1'],
           filterType: 'include',
         },
         'B',
@@ -408,9 +404,7 @@ const clearRemoteOperations = () => ClientFunction(() => {
       columns: [
         {
           dataField: 'A',
-          headerFilter: {
-            values: ['A_2', 'A_3', 'A_4'],
-          },
+          filterValues: ['A_2', 'A_3', 'A_4'],
           filterType: 'exclude',
         },
         'B',
@@ -506,7 +500,7 @@ const clearRemoteOperations = () => ClientFunction(() => {
 
     await t
       .expect(columnOptions.filterType).eql(undefined)
-      .expect(columnOptions.headerFilter.values).eql(['A_4']);
+      .expect(columnOptions.filterValues).eql(['A_4']);
 
     await t.click(cardView.element);
   }).before(async (t) => {
@@ -522,9 +516,7 @@ const clearRemoteOperations = () => ClientFunction(() => {
       columns: [
         {
           dataField: 'A',
-          headerFilter: {
-            values: ['A_4'],
-          },
+          filterValues: ['A_4'],
         },
         'B',
         'C',

@@ -520,13 +520,16 @@ export class ColumnHeadersView extends ColumnsView {
   /**
    * @extended: column_chooser
    */
+  public isReorderingEnabled(column): boolean {
+    return column.allowReordering
+      && (this.option('allowColumnReordering') ?? this._columnsController.isColumnOptionUsed('allowReordering'));
+  }
+
   public allowDragging(column) {
     const rowIndex = column && this._columnsController.getRowIndex(column.index);
     const columns = this.getColumns(rowIndex);
 
-    const isReorderingEnabled = this.option('allowColumnReordering') ?? this._columnsController.isColumnOptionUsed('allowReordering');
-
-    return isReorderingEnabled && column.allowReordering && columns.length > 1;
+    return this.isReorderingEnabled(column) && columns.length > 1;
   }
 
   protected getBoundingRect() {
@@ -644,6 +647,11 @@ export class ColumnHeadersView extends ColumnsView {
         }
       }
     }
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  public isFilterRowCell($cell: dxElementWrapper): boolean {
+    return false;
   }
 }
 

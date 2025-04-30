@@ -24,7 +24,7 @@ export class HeaderFilterController {
   public clearHeaderFilters(): void {
     this.columnsController.updateColumns(
       (columns) => columns.map((col) => {
-        delete col.headerFilter?.values;
+        delete col.filterValues;
         delete col.filterType;
         return col;
       }),

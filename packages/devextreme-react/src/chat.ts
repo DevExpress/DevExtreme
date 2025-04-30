@@ -8,7 +8,7 @@ import dxChat, {
 import { Component as BaseComponent, IHtmlOptions, ComponentRef, NestedComponentMeta } from "./core/component";
 import NestedOption from "./core/nested-option";
 
-import type { Message, DisposingEvent, InitializedEvent, MessageEnteredEvent, TypingEndEvent, TypingStartEvent, User as ChatUser } from "devextreme/ui/chat";
+import type { Message, DisposingEvent, InitializedEvent, MessageDeletedEvent, MessageDeletingEvent, MessageEditCanceledEvent, MessageEditingStartEvent, MessageEnteredEvent, MessageUpdatedEvent, MessageUpdatingEvent, TypingEndEvent, TypingStartEvent, User as ChatUser } from "devextreme/ui/chat";
 import type { Format } from "devextreme/common";
 
 type ReplaceFieldTypes<TSource, TReplacement> = {
@@ -18,7 +18,13 @@ type ReplaceFieldTypes<TSource, TReplacement> = {
 type IChatOptionsNarrowedEvents = {
   onDisposing?: ((e: DisposingEvent) => void);
   onInitialized?: ((e: InitializedEvent) => void);
+  onMessageDeleted?: ((e: MessageDeletedEvent) => void) | undefined;
+  onMessageDeleting?: ((e: MessageDeletingEvent) => void) | undefined;
+  onMessageEditCanceled?: ((e: MessageEditCanceledEvent) => void) | undefined;
+  onMessageEditingStart?: ((e: MessageEditingStartEvent) => void) | undefined;
   onMessageEntered?: ((e: MessageEnteredEvent) => void) | undefined;
+  onMessageUpdated?: ((e: MessageUpdatedEvent) => void) | undefined;
+  onMessageUpdating?: ((e: MessageUpdatingEvent) => void) | undefined;
   onTypingEnd?: ((e: TypingEndEvent) => void) | undefined;
   onTypingStart?: ((e: TypingStartEvent) => void) | undefined;
 }
@@ -48,7 +54,7 @@ const Chat = memo(
       ), [baseRef.current]);
 
       const subscribableOptions = useMemo(() => (["items"]), []);
-      const independentEvents = useMemo(() => (["onDisposing","onInitialized","onMessageEntered","onTypingEnd","onTypingStart"]), []);
+      const independentEvents = useMemo(() => (["onDisposing","onInitialized","onMessageDeleted","onMessageDeleting","onMessageEditCanceled","onMessageEditingStart","onMessageEntered","onMessageUpdated","onMessageUpdating","onTypingEnd","onTypingStart"]), []);
 
       const defaults = useMemo(() => ({
         defaultItems: "items",
@@ -157,6 +163,8 @@ const DayHeaderFormat = Object.assign<typeof _componentDayHeaderFormat, NestedCo
 type IItemProps = React.PropsWithChildren<{
   author?: ChatUser;
   id?: number | string;
+  isDeleted?: boolean;
+  isEdited?: boolean;
   text?: string;
   timestamp?: Date | number | string;
 }>

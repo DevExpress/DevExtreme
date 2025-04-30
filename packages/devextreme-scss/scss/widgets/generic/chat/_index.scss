@@ -4,6 +4,7 @@
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../../base/chat/mixins" as *;
+@use "../popup/sizes" as *;
 
 // adduse
 
@@ -71,6 +72,11 @@
   $chat-messagelist-day-header-first-padding-top,
   $chat-messagelist-day-header-font-size,
 );
+@include chat-messagelist-contextmenu(
+  $chat-messagelist-contextmenu-delete-button-color,
+  $chat-messagelist-contextmenu-delete-button-focused-color,
+  $chat-messagelist-contextmenu-delete-button-focused-bg,
+);
 @include chat-typingindicator(
   $chat-typingindicator-template,
   $chat-typingindicator-padding,
@@ -87,4 +93,10 @@
   $chat-typingindicator-circle-border-radius,
   $chat-typingindicator-circle-bg-color,
   $chat-typingindicator-circle-bg-color-center,
+);
+@include chat-confirmation-popup(
+  $chat-confirmation-popup-content-padding,
+  $chat-confirmation-popup-toolbar-padding-block,
+  $chat-confirmation-popup-toolbar-padding-inline,
+  $chat-confirmation-popup-toolbar-gap,
 );

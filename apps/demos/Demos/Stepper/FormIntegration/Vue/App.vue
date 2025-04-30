@@ -18,7 +18,7 @@
       :focus-state-enabled="false"
       :animation-enabled="false"
       :swipe-enabled="false"
-      :height="300"
+      :height="400"
     >
       <DxMultiViewItem>
         <template #default>
@@ -196,7 +196,7 @@ function onNextButtonClick() {
 
 <style scoped>
 .demo-container {
-  min-height: 480px;
+  min-height: 580px;
 }
 
 #app {
@@ -204,7 +204,7 @@ function onNextButtonClick() {
   flex-direction: column;
   justify-content: center;
   row-gap: 20px;
-  height: 480px;
+  height: 580px;
   min-width: 620px;
 }
 

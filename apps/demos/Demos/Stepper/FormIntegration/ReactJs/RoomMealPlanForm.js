@@ -1,6 +1,6 @@
 import React, { memo } from 'react';
 import 'devextreme-react/select-box';
-import { Form, RequiredRule, SimpleItem } from 'devextreme-react/form';
+import { Form, SimpleItem } from 'devextreme-react/form';
 import { mealPlans, roomTypes } from './data.js';
 
 const RoomMealPlanForm = memo(({ formData, validationGroup }) => (
@@ -24,9 +24,7 @@ const RoomMealPlanForm = memo(({ formData, validationGroup }) => (
           items: roomTypes,
           elementAttr: { id: 'roomType' },
         }}
-      >
-        <RequiredRule />
-      </SimpleItem>
+      />
       <SimpleItem
         dataField="mealPlan"
         isRequired
@@ -36,9 +34,7 @@ const RoomMealPlanForm = memo(({ formData, validationGroup }) => (
           items: mealPlans,
           elementAttr: { id: 'mealPlan' },
         }}
-      >
-        <RequiredRule />
-      </SimpleItem>
+      />
     </Form>
   </React.Fragment>
 ));

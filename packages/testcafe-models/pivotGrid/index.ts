@@ -1,10 +1,11 @@
 import { ClientFunction, Selector } from 'testcafe';
 import type { WidgetName } from '../types';
 import Widget from '../internal/widget';
+import Popup from '../popup';
 import ColumnHeaderArea from './columnHeaderArea';
 import DataHeaderArea from './dataHeaderArea';
 import FieldChooser from './fieldChooser';
-import Popup from '../popup';
+import FilterHeaderArea from './filterHeaderArea';
 import Overlay from './overlay';
 import RowHeaderArea from './rowHeaderArea';
 import RowsArea from './rowsArea';
@@ -63,6 +64,10 @@ export default class PivotGrid extends Widget {
 
   getColumnHeaderArea(): ColumnHeaderArea {
     return new ColumnHeaderArea(this.element);
+  }
+
+  getFilterHeaderArea():FilterHeaderArea {
+    return new FilterHeaderArea(this.element);
   }
 
   getRowHeaderArea(): RowHeaderArea {

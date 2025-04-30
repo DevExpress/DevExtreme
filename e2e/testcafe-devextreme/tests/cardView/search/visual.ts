@@ -58,7 +58,7 @@ test('highlighted search text', async (t) => {
   columns: COLUMNS,
   searchPanel: {
     visible: true,
-    text: 'rt',
+    text: 'da',
   },
   height: 600,
 }));

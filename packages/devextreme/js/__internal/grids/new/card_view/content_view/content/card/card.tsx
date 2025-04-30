@@ -4,8 +4,9 @@
 */
 import { isCommandKeyPressed } from '@js/common/core/events/utils/index';
 import { off, on } from '@js/events/index';
+import type * as dxToolbar from '@js/ui/toolbar';
 import { combineClasses } from '@ts/core/utils/combine_classes';
-import type { DataRow } from '@ts/grids/new/grid_core/columns_controller/types';
+import type { CardInfo, FieldInfo } from '@ts/grids/new/grid_core/columns_controller/types';
 import type { DataObject, Key } from '@ts/grids/new/grid_core/data_controller/types';
 import { KbnFocusTrap } from '@ts/grids/new/grid_core/keyboard_navigation/index';
 import type { ComponentType, InfernoNode, RefObject } from 'inferno';
@@ -14,7 +15,6 @@ import { Component, createRef } from 'inferno';
 import type { SelectCardOptions } from '../../types';
 import { Cover } from './cover';
 import { Field } from './field';
-import type { CardHeaderItem } from './header';
 import { CardHeader } from './header';
 
 export const CLASSES = {
@@ -27,12 +27,12 @@ export const CLASSES = {
 
 export interface CardClickEvent {
   event?: MouseEvent;
-  row: DataRow;
+  card: CardInfo;
 }
 
 export interface CardHoverEvent {
   isHovered: boolean;
-  row: DataRow;
+  card: CardInfo;
 }
 
 export interface CardPreparedEvent {
@@ -40,36 +40,49 @@ export interface CardPreparedEvent {
 }
 
 export interface CardProps {
-  row: DataRow;
+  card: CardInfo;
 
   kbnEnabled: boolean;
 
   allowSelectOnClick?: boolean;
 
   cover?: {
+    template?: ComponentType<{ card: CardInfo }>;
+
     imageExpr?: (data: DataObject) => string;
 
     altExpr?: (data: DataObject) => string;
   };
 
   header?: {
+    template?: ComponentType<{ card: CardInfo }>;
+
     captionExpr?: (data: DataObject) => string;
+
+    visible?: boolean;
+
+    items?: (string | dxToolbar.Item)[];
   };
+
+  template?: ComponentType<{ card: CardInfo }>;
+
+  contentTemplate?: ComponentType<{ card: CardInfo }>;
+
+  footerTemplate?: ComponentType<{ card: CardInfo }>;
+
+  fieldTemplate?: ComponentType<{ field: FieldInfo }>;
+
+  fieldCaptionTemplate?: ComponentType<{ field: FieldInfo }>;
+
+  fieldValueTemplate?: ComponentType<{ field: FieldInfo }>;
 
   elementRef?: RefObject<HTMLDivElement>;
 
   tabIndex?: number;
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  fieldTemplate?: any;
-
   hoverStateEnabled?: boolean;
 
-  toolbar?: CardHeaderItem[];
-
   isCheckBoxesRendered?: boolean;
-
-  template?: (row: DataRow) => JSX.Element;
 
   onClick?: (event: CardClickEvent) => void;
 
@@ -83,9 +96,9 @@ export interface CardProps {
 
   onPrepared?: (event: CardPreparedEvent) => void;
 
-  onContextMenu?: (event: MouseEvent, card?: DataRow, cardIndex?: number) => void;
+  onContextMenu?: (event: MouseEvent, card?: CardInfo, cardIndex?: number) => void;
 
-  selectCard?: (row: DataRow, options: SelectCardOptions) => void;
+  selectCard?: (card: CardInfo, options: SelectCardOptions) => void;
 
   allowUpdating?: boolean;
 
@@ -95,7 +108,7 @@ export interface CardProps {
 
   onDelete?: (key: Key) => void;
 
-  footerTemplate?: ComponentType<{ card: DataRow }>;
+  fieldHintEnabled?: boolean;
 }
 
 export class Card extends Component<CardProps> {
@@ -109,20 +122,22 @@ export class Card extends Component<CardProps> {
     const {
       hoverStateEnabled,
       cover,
-      row,
+      card,
       footerTemplate: FooterTemplate,
+      template: Template,
+      contentTemplate: ContentTemplate,
     } = this.props;
 
     const className = combineClasses({
       [CLASSES.card]: true,
       [CLASSES.cardHover]: !!hoverStateEnabled,
-      [CLASSES.selectCard]: !!row.isSelected,
+      [CLASSES.selectCard]: !!card.isSelected,
     });
 
     const hasCover = cover?.imageExpr;
 
-    const imageSrc = cover?.imageExpr?.(this.props.row.data);
-    const alt = cover?.altExpr?.(this.props.row.data);
+    const imageSrc = cover?.imageExpr?.(this.props.card.data);
+    const alt = cover?.altExpr?.(this.props.card.data);
 
     return (
       <KbnFocusTrap
@@ -136,39 +151,53 @@ export class Card extends Component<CardProps> {
         onContextMenu={this.props.onContextMenu}
         onKeyDown={this.props.onKeyDown}
       >
-        <CardHeader
-          row={row}
-          items={this.props.toolbar ?? []}
-          isCheckBoxesRendered={this.props.isCheckBoxesRendered}
-          selectCard={this.props.selectCard}
-          onEdit={() => { this.props.onEdit?.(this.props.row.key); }}
-          onDelete={() => { this.props.onDelete?.(this.props.row.key); }}
-          allowUpdating={this.props.allowUpdating}
-          allowDeleting={this.props.allowDeleting}
-        />
-        {hasCover && (
-          <Cover
-            imageSrc={imageSrc}
-            alt={alt}
-          />
-        ) }
-        {!!this.props.row.cells.length && (
-          <div className={CLASSES.content}>
-            {this.props.row.cells.map((cell) => (
-              <Field
-                cell={cell}
-                template={cell.column.fieldTemplate}
-                captionTemplate={cell.column.captionTemplate}
-                valueTemplate={cell.column.valueTemplate}
+        {
+          Template
+            ? <Template card={card}/>
+            : (<>
+              <CardHeader
+                template={this.props.header?.template}
+                visible={this.props.header?.visible}
+                card={card}
+                items={this.props.header?.items ?? []}
+                isCheckBoxesRendered={this.props.isCheckBoxesRendered}
+                selectCard={this.props.selectCard}
+                onEdit={() => { this.props.onEdit?.(this.props.card.key); }}
+                onDelete={() => { this.props.onDelete?.(this.props.card.key); }}
+                allowUpdating={this.props.allowUpdating}
+                allowDeleting={this.props.allowDeleting}
               />
-            ))}
-          </div>
-        )}
-        {FooterTemplate && (
-          <div className={CLASSES.footer}>
-            <FooterTemplate card={row}/>
-          </div>
-        )}
+              {hasCover && (
+                <Cover
+                  card={card}
+                  template={this.props.cover?.template}
+                  imageSrc={imageSrc}
+                  alt={alt}
+                />
+              ) }
+              {!!this.props.card.fields.length && (
+                <div className={CLASSES.content}>
+                  {ContentTemplate
+                    ? <ContentTemplate card={card}/>
+                    : this.props.card.fields.map((field) => (
+                        <Field
+                          fieldHintEnabled={this.props.fieldHintEnabled}
+                          field={field}
+                          template={field.column.fieldTemplate}
+                          captionTemplate={field.column.fieldCaptionTemplate}
+                          valueTemplate={field.column.fieldValueTemplate}
+                        />
+                    ))
+                  }
+                </div>
+              )}
+              {FooterTemplate && (
+                <div className={CLASSES.footer}>
+                  <FooterTemplate card={card}/>
+                </div>
+              )}
+            </>)
+        }
       </KbnFocusTrap>
     );
   }
@@ -196,15 +225,15 @@ export class Card extends Component<CardProps> {
   }
 
   handleMouseEnter = (): void => {
-    const { onHoverChanged, row } = this.props;
+    const { onHoverChanged, card } = this.props;
 
-    onHoverChanged?.({ isHovered: true, row });
+    onHoverChanged?.({ isHovered: true, card });
   };
 
   handleMouseLeave = (): void => {
-    const { onHoverChanged, row } = this.props;
+    const { onHoverChanged, card } = this.props;
 
-    onHoverChanged?.({ isHovered: false, row });
+    onHoverChanged?.({ isHovered: false, card });
   };
 
   handleClick = (event: MouseEvent): void => {
@@ -212,25 +241,25 @@ export class Card extends Component<CardProps> {
       allowSelectOnClick,
       onClick,
       selectCard,
-      row,
+      card,
     } = this.props;
 
-    onClick?.({ event, row });
+    onClick?.({ event, card });
 
     if (allowSelectOnClick) {
-      selectCard?.(row, { control: isCommandKeyPressed(event), shift: event.shiftKey });
+      selectCard?.(card, { control: isCommandKeyPressed(event), shift: event.shiftKey });
     }
   };
 
   handleDoubleClick = (event: MouseEvent): void => {
-    const { onDblClick, row } = this.props;
-    onDblClick?.({ event, row });
+    const { onDblClick, card } = this.props;
+    onDblClick?.({ event, card });
   };
 
   handleHold = (event: MouseEvent): void => {
-    const { onHold, row } = this.props;
+    const { onHold, card } = this.props;
 
-    onHold?.({ event, row });
+    onHold?.({ event, card });
     event.stopPropagation();
   };
 }

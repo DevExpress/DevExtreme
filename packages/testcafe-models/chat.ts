@@ -10,6 +10,7 @@ const CLASS = {
   messageBoxButton: 'dx-chat-messagebox-button',
   scrollable: 'dx-scrollable',
   textArea: 'dx-textarea',
+  messageBubble: 'dx-chat-messagebubble'
 };
 
 export default class Chat extends Widget {
@@ -37,6 +38,10 @@ export default class Chat extends Widget {
   }
 
   getScrollable(): Scrollable {
-      return new Scrollable(this.element.find(`.${CLASS.scrollable}`));
+    return new Scrollable(this.element.find(`.${CLASS.scrollable}`));
+  }
+
+  getMessage(index: number): Selector {
+    return this.element.find(`.${CLASS.messageBubble}`).nth(index);
   }
 }

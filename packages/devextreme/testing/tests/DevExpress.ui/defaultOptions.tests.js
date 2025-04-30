@@ -555,20 +555,6 @@ testComponentDefaults(List,
     }
 );
 
-if(!(/chrome/i.test(navigator.userAgent))) {
-    testComponentDefaults(LoadIndicator,
-        {},
-        { viaImage: true },
-        function() {
-            this._originalRealDevice = devices.real();
-            devices.real({ platform: 'android', version: [4, 0] });
-        },
-        function() {
-            devices.real(this._originalRealDevice);
-        }
-    );
-}
-
 
 testComponentDefaults(Lookup,
     {},
@@ -1377,6 +1363,13 @@ testComponentDefaults(Chat,
         onMessageEntered: undefined,
         onTypingStart: undefined,
         onTypingEnd: undefined,
+        onMessageEditingStart: undefined,
+        onMessageDeleting: undefined,
+        onMessageDeleted: undefined,
+        editing: {
+            allowUpdating: false,
+            allowDeleting: false,
+        }
     }
 );
 
@@ -1426,6 +1419,8 @@ testComponentDefaults(ChatMessageList,
         isLoading: false,
         dayHeaderFormat: 'shortdate',
         messageTimestampFormat: 'shorttime',
+        allowUpdating: false,
+        allowDeleting: false,
     }
 );
 

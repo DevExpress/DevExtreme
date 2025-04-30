@@ -11,6 +11,8 @@
 @use "../fileUploader/sizes" as *;
 @use "../toolbar/sizes" as *;
 @use "../common/mixins" as *;
+@use "../common/sizes" as *;
+@use "../../base/mixins" as *;
 @use "../../base/htmlEditor";
 
 // adduse
@@ -296,5 +298,28 @@
   > .dx-draggable-dragging + .dx-htmleditor-highlighted-column,
   > .dx-draggable-dragging + .dx-htmleditor-highlighted-row {
     background-color: $htmleditor-cells-separator-bg;
+  }
+}
+
+.dx-aidialog {
+  .dx-aidialog-controls {
+    gap: $generic-aidialog-selects-gap;
+
+    .dx-selectbox {
+      max-width: calc(50% - $generic-aidialog-selects-gap * 0.5);
+    }
+  }
+
+  .dx-aidialog-content {
+    padding: $generic-aidialog-content-padding;
+    gap: $generic-aidialog-content-gap;
+  }
+
+  .dx-button {
+    min-width: auto;
+  }
+
+  .dx-pending-indicator {
+    @include dx-pending-indicator-centered($generic-pending-indicator-size);
   }
 }

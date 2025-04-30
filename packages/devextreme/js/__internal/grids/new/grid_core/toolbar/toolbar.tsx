@@ -26,7 +26,9 @@ export class ToolbarView extends Component<ToolbarViewProps> {
   }
 
   public render(): JSX.Element {
-    const { visible, items, disabled } = this.props;
+    const {
+      visible, items, disabled, multiline,
+    } = this.props;
 
     if (!visible) {
       return <></>;
@@ -38,6 +40,7 @@ export class ToolbarView extends Component<ToolbarViewProps> {
         visible={visible}
         items={items}
         disabled={disabled}
+        multiline={multiline}
         keyDownConfig={{
           'F10+shift': (event) => {
             this.props.showContextMenu?.(event);

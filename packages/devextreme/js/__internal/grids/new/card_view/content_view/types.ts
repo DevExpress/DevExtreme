@@ -1,4 +1,4 @@
-import type { DataRow } from '@ts/grids/new/grid_core/columns_controller/types';
+import type { CardInfo } from '@ts/grids/new/grid_core/columns_controller/types';
 
 export interface SelectCardOptions {
   control?: boolean;
@@ -8,5 +8,5 @@ export interface SelectCardOptions {
 
 export interface CardHoldEvent {
   event?: MouseEvent;
-  row: DataRow;
+  card: CardInfo;
 }

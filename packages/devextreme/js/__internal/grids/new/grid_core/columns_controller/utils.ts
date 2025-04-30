@@ -36,8 +36,10 @@ function normalizeColumn(
       : colWithDefaults.calculateDisplayValue,
     headerItemTemplate: templateNormalizationFunc(colWithDefaults.headerItemTemplate),
     fieldTemplate: templateNormalizationFunc(colWithDefaults.fieldTemplate),
-    captionTemplate: templateNormalizationFunc(colWithDefaults.captionTemplate),
-    valueTemplate: templateNormalizationFunc(colWithDefaults.valueTemplate),
+    fieldCaptionTemplate: templateNormalizationFunc(colWithDefaults.fieldCaptionTemplate),
+    fieldValueTemplate: templateNormalizationFunc(colWithDefaults.fieldValueTemplate),
+    // @ts-expect-error for compatibility
+    calculateCellValue: colWithDefaults.calculateFieldValue,
   };
 }
 

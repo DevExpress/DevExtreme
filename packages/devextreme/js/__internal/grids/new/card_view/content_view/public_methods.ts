@@ -4,7 +4,7 @@
 import type { DxElement } from '@js/core/element';
 import { getPublicElement } from '@js/core/element';
 import $ from '@js/core/renderer';
-import type { DataRow } from '@ts/grids/new/grid_core/columns_controller/types';
+import type { CardInfo } from '@ts/grids/new/grid_core/columns_controller/types';
 import type { Constructor } from '@ts/grids/new/grid_core/types';
 
 import * as Base from '../../grid_core/content_view/public_methods';
@@ -21,7 +21,7 @@ export function PublicMethods<T extends Constructor<CardViewBase>>(GridCore: T) 
       return getPublicElement(card);
     }
 
-    public getVisibleCards(): DataRow[] {
+    public getVisibleCards(): CardInfo[] {
       const itemsController = this.diContext.get(ItemsController);
       return itemsController.items.peek();
     }
