@@ -8,7 +8,8 @@ import ContextMenu, {
     DX_MENU_ITEM_CLASS,
 } from '__internal/ui/context_menu/m_context_menu';
 import {
-    FOCUSED_STATE_CLASS
+    FOCUSED_STATE_CLASS,
+    WIDGET_CLASS,
 } from '__internal/core/widget/widget';
 import AlertList from '__internal/ui/chat/alertlist';
 import MessageBox, { TYPING_END_DELAY } from '__internal/ui/chat/messagebox';
@@ -16,12 +17,16 @@ import keyboardMock from '../../../helpers/keyboardMock.js';
 import { DataSource } from 'common/data/data_source/data_source';
 import { CustomStore } from 'common/data/custom_store';
 import dataUtils from 'core/element_data';
-import devices from '__internal/core/m_devices';
+import fx from 'common/core/animation/fx';
 
 import { isRenderer } from 'core/utils/type';
 
 import config from 'core/config';
 import ArrayStore from 'common/data/array_store';
+import { CHAT_CONFIRMATION_POPUP_WRAPPER_CLASS } from '__internal/ui/chat/confirmationpopup';
+import { POPUP_CLASS } from '__internal/ui/popup/m_popup';
+import { BUTTON_CLASS } from '__internal/ui/button/button';
+import { isDesktopDevice } from '../../../helpers/chat.js';
 
 const CHAT_MESSAGEGROUP_CLASS = 'dx-chat-messagegroup';
 const CHAT_MESSAGELIST_CLASS = 'dx-chat-messagelist';
@@ -39,6 +44,8 @@ const CHAT_LAST_MESSAGEGROUP_ALIGNMENT_START_CLASS = 'dx-chat-last-messagegroup-
 const CHAT_LAST_MESSAGEGROUP_ALIGNMENT_END_CLASS = 'dx-chat-last-messagegroup-alignment-end';
 
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
+
+const RTL_CLASS = 'dx-rtl';
 
 export const MOCK_COMPANION_USER_ID = 'COMPANION_USER_ID';
 export const MOCK_CURRENT_USER_ID = 'CURRENT_USER_ID';
@@ -71,6 +78,8 @@ export const generateMessages = (length) => {
 const moduleConfig = {
     beforeEach: function() {
         const init = (options = {}) => {
+            fx.off = true;
+
             this.instance = new Chat($('#component'), options);
             this.$element = $(this.instance.$element());
 
@@ -99,6 +108,9 @@ const moduleConfig = {
         this.getContextMenuItems = () => $(this.getContextMenu().itemsContainer()).find(`.${DX_MENU_ITEM_CLASS}`);
 
         init();
+    },
+    afterEach: function() {
+        fx.off = false;
     }
 };
 
@@ -119,6 +131,40 @@ QUnit.module('Chat', () => {
 
         QUnit.test('User id should be generated as a string if user has not been set', function(assert) {
             assert.strictEqual(typeof this.instance.option('user.id') === 'string', true);
+        });
+
+        QUnit.test('confirmation popup should have correct default values', function(assert) {
+            const items = [
+                { text: 'a', author: userFirst },
+                { text: 'b', author: userSecond },
+            ];
+
+            this.reinit({
+                user: userSecond,
+                editing: {
+                    allowDeleting: true
+                },
+                items,
+            });
+
+            const $bubbles = this.getBubbles();
+            $bubbles.eq(1).trigger('dxcontextmenu');
+
+            const $deleteButton = this.getContextMenuItems().eq(0);
+            $deleteButton.trigger('dxclick');
+
+            const $popup = this.$element.find(`.${POPUP_CLASS}.${WIDGET_CLASS}`);
+            const popup = $popup.dxPopup('instance');
+
+            assert.propContains(popup.option(), {
+                showTitle: false,
+                showCloseButton: false,
+                shading: true,
+                dragEnabled: false,
+                hideOnOutsideClick: true,
+                resizeEnabled: false,
+                rtlEnabled: false,
+            }, 'confirmation popup has correct default options');
         });
     });
 
@@ -336,7 +382,7 @@ QUnit.module('Chat', () => {
             });
 
             QUnit.testInActiveWindow('Contextmenu should be hidden and input focused after esc is pressed', function(assert) {
-                if(devices.real().deviceType !== 'desktop') {
+                if(!isDesktopDevice()) {
                     assert.ok(true, 'Test is not applicable for mobile devices');
                     return;
                 }
@@ -355,7 +401,7 @@ QUnit.module('Chat', () => {
                         allowDeleting: true,
                     }
                 });
-                debugger;
+
                 const $bubbles = this.getBubbles();
                 $bubbles.eq(1).trigger('dxcontextmenu');
 
@@ -567,6 +613,66 @@ QUnit.module('Chat', () => {
         });
     });
 
+    QUnit.module('Confirmation popup integration', moduleConfig, () => {
+        QUnit.test('passed rtlEnabled option value in Chat should be proxied to the Confirmation popup', function(assert) {
+            const items = [
+                { text: 'a', author: userFirst },
+                { text: 'b', author: userSecond },
+            ];
+
+            this.reinit({
+                user: userSecond,
+                editing: {
+                    allowDeleting: true
+                },
+                rtlEnabled: true,
+                items,
+            });
+
+            const $bubbles = this.getBubbles();
+            $bubbles.eq(1).trigger('dxcontextmenu');
+
+            const $deleteButton = this.getContextMenuItems().eq(0);
+            $deleteButton.trigger('dxclick');
+
+            const $popup = $(`.${CHAT_CONFIRMATION_POPUP_WRAPPER_CLASS}`);
+            assert.notStrictEqual($popup.find(`.${RTL_CLASS}`).length, 0, 'rtl class is passed to the popup');
+        });
+
+        QUnit.testInActiveWindow('input should be focused after message delete popup is closed', function(assert) {
+            if(!isDesktopDevice()) {
+                assert.ok(true, 'Test is not applicable for mobile devices');
+                return;
+            }
+
+            const items = [
+                { text: 'a', author: userFirst },
+                { text: 'b', author: userSecond },
+            ];
+
+            this.reinit({
+                user: userSecond,
+                editing: {
+                    allowDeleting: true
+                },
+                items,
+            });
+
+            const $bubbles = this.getBubbles();
+            $bubbles.eq(1).trigger('dxcontextmenu');
+
+            const $deleteButton = this.getContextMenuItems().eq(0);
+            $deleteButton.trigger('dxclick');
+
+            const $popup = $(`.${CHAT_CONFIRMATION_POPUP_WRAPPER_CLASS}`);
+            const $cancelButton = $popup.find(`.${BUTTON_CLASS}`).last();
+
+            $cancelButton.trigger('dxclick');
+
+            assert.strictEqual(this.$textArea.hasClass(FOCUSED_STATE_CLASS), true, 'input is focused');
+        });
+    });
+
     QUnit.module('Events', () => {
         QUnit.module('onMessageEntered', moduleConfig, () => {
             QUnit.test('should be called when the send button was clicked', function(assert) {
@@ -750,7 +856,7 @@ QUnit.module('Chat', () => {
         });
 
         QUnit.module('onMessageDeleting', moduleConfig, () => {
-            QUnit.test('should be called when the Edit button is clicked', function(assert) {
+            QUnit.test('should be called when the Delete button is clicked', function(assert) {
                 const onMessageDeleting = sinon.spy();
 
                 const items = [
@@ -777,7 +883,7 @@ QUnit.module('Chat', () => {
             });
 
             QUnit.test('should get correct arguments after clicking the Delete button', function(assert) {
-                assert.expect(6);
+                assert.expect(5);
 
                 const items = [
                     { text: 'a', author: userFirst },
@@ -790,13 +896,12 @@ QUnit.module('Chat', () => {
                         allowDeleting: true
                     },
                     onMessageDeleting: (e) => {
-                        const { component, element, event, message } = e;
+                        const { component, element, message, cancel } = e;
 
                         assert.strictEqual(component, this.instance, 'e.component is correct');
                         assert.strictEqual(isRenderer(element), !!config().useJQuery, 'e.element uses correct renderer');
                         assert.strictEqual($(element).is(this.$element), true, 'e.element matches the widget root');
-                        assert.strictEqual(event.type, 'dxclick', 'e.event.type is correct');
-                        assert.strictEqual(event.target, $deleteButton.get(0), 'e.event.target is correct');
+                        assert.strictEqual(cancel, false, 'e.cancel is correct');
                         assert.strictEqual(message, items[1], 'e.message is correct');
                     },
                     items,
@@ -807,6 +912,43 @@ QUnit.module('Chat', () => {
 
                 const $deleteButton = this.getContextMenuItems().eq(0);
                 $deleteButton.trigger('dxclick');
+            });
+
+            QUnit.test('should be able to delete several messages', function(assert) {
+                assert.expect(1);
+
+                const items = [
+                    { text: 'a', author: userFirst },
+                    { text: 'b', author: userSecond },
+                    { text: 'c', author: userSecond },
+                ];
+
+                const deletedMessages = [];
+
+                this.reinit({
+                    user: userSecond,
+                    editing: {
+                        allowDeleting: true
+                    },
+                    onMessageDeleting: (e) => {
+                        const { message } = e;
+                        deletedMessages.push(message);
+                    },
+                    items,
+                });
+
+                const deleteMessage = (messageIndex) => {
+                    const $bubbles = this.getBubbles();
+                    $bubbles.eq(messageIndex).trigger('dxcontextmenu');
+
+                    const $deleteButton = this.getContextMenuItems().eq(0);
+                    $deleteButton.trigger('dxclick');
+                };
+
+                deleteMessage(1);
+                deleteMessage(2);
+
+                assert.deepEqual(deletedMessages, [items[1], items[2]], 'Both messages were deleted');
             });
 
             QUnit.test('should allow updating onMessageDeleting at runtime', function(assert) {
@@ -835,6 +977,175 @@ QUnit.module('Chat', () => {
                 $deleteButton.trigger('dxclick');
 
                 assert.strictEqual(onMessageDeleting.callCount, 1);
+            });
+
+            [false, true].forEach((isPromise) => {
+                [false, true].forEach((cancel) => {
+                    QUnit.test(`delete confirmation popup should appear based on onMessageDeleting cancel (isPromise=${isPromise}, cancel=${cancel})`, function(assert) {
+                        const done = assert.async();
+
+                        const items = [
+                            { text: 'a', author: userFirst },
+                            { text: 'b', author: userSecond },
+                        ];
+
+                        this.reinit({
+                            user: userSecond,
+                            editing: {
+                                allowDeleting: true
+                            },
+                            onMessageDeleting: (e) => {
+                                e.cancel = isPromise ? Promise.resolve(cancel) : cancel;
+                            },
+                            items,
+                        });
+
+                        const $bubbles = this.getBubbles();
+                        $bubbles.eq(1).trigger('dxcontextmenu');
+
+                        const $deleteButton = this.getContextMenuItems().eq(0);
+                        $deleteButton.trigger('dxclick');
+
+                        setTimeout(() => {
+                            const $popup = $(`.${CHAT_CONFIRMATION_POPUP_WRAPPER_CLASS}`);
+                            assert.strictEqual($popup.length === 0, cancel, `cancel = ${cancel}, isPromise = ${isPromise}`);
+                            done();
+                        });
+                    });
+                });
+            });
+        });
+
+        QUnit.module('onMessageDeleted', moduleConfig, () => {
+            QUnit.test('should be called when the Delete button is clicked and user confirms deletion', function(assert) {
+                const onMessageDeleted = sinon.spy();
+
+                const items = [
+                    { text: 'a', author: userFirst },
+                    { text: 'b', author: userSecond },
+                ];
+
+                this.reinit({
+                    user: userSecond,
+                    editing: {
+                        allowDeleting: true
+                    },
+                    onMessageDeleted,
+                    items,
+                });
+
+                const $bubbles = this.getBubbles();
+                $bubbles.eq(1).trigger('dxcontextmenu');
+
+                const $deleteButton = this.getContextMenuItems().eq(0);
+                $deleteButton.trigger('dxclick');
+
+                const $popup = $(`.${CHAT_CONFIRMATION_POPUP_WRAPPER_CLASS}`);
+                const $applyButton = $popup.find(`.${BUTTON_CLASS}`).first();
+
+                $applyButton.trigger('dxclick');
+
+                assert.strictEqual(onMessageDeleted.callCount, 1);
+            });
+
+            QUnit.test('should not be called when the Delete button is clicked and user cancels deletion', function(assert) {
+                const onMessageDeleted = sinon.spy();
+
+                const items = [
+                    { text: 'a', author: userFirst },
+                    { text: 'b', author: userSecond },
+                ];
+
+                this.reinit({
+                    user: userSecond,
+                    editing: {
+                        allowDeleting: true
+                    },
+                    onMessageDeleted,
+                    items,
+                });
+
+                const $bubbles = this.getBubbles();
+                $bubbles.eq(1).trigger('dxcontextmenu');
+
+                const $deleteButton = this.getContextMenuItems().eq(0);
+                $deleteButton.trigger('dxclick');
+
+                const $popup = $(`.${CHAT_CONFIRMATION_POPUP_WRAPPER_CLASS}`);
+                const $applyButton = $popup.find(`.${BUTTON_CLASS}`).last();
+
+                $applyButton.trigger('dxclick');
+
+                assert.strictEqual(onMessageDeleted.callCount, 0);
+            });
+
+            QUnit.test('should get correct arguments after clicking the Apply button in the Delete Confirmation Popup', function(assert) {
+                assert.expect(4);
+
+                const items = [
+                    { text: 'a', author: userFirst },
+                    { text: 'b', author: userSecond },
+                ];
+
+                this.reinit({
+                    user: userSecond,
+                    editing: {
+                        allowDeleting: true
+                    },
+                    onMessageDeleted: (e) => {
+                        const { component, element, message } = e;
+
+                        assert.strictEqual(component, this.instance, 'e.component is correct');
+                        assert.strictEqual(isRenderer(element), !!config().useJQuery, 'e.element uses correct renderer');
+                        assert.strictEqual($(element).is(this.$element), true, 'e.element matches the widget root');
+                        assert.strictEqual(message, items[1], 'e.message is correct');
+                    },
+                    items,
+                });
+
+                const $bubbles = this.getBubbles();
+                $bubbles.eq(1).trigger('dxcontextmenu');
+
+                const $deleteButton = this.getContextMenuItems().eq(0);
+                $deleteButton.trigger('dxclick');
+
+                const $popup = $(`.${CHAT_CONFIRMATION_POPUP_WRAPPER_CLASS}`);
+                const $applyButton = $popup.find(`.${BUTTON_CLASS}`).first();
+
+                $applyButton.trigger('dxclick');
+            });
+
+            QUnit.test('should allow updating onMessageDeleted at runtime', function(assert) {
+                const items = [
+                    { text: 'a', author: userFirst },
+                    { text: 'b', author: userSecond },
+                ];
+
+                this.reinit({
+                    user: userSecond,
+                    editing: {
+                        allowDeleting: true
+                    },
+                    onMessageDeleted: () => {},
+                    items,
+                });
+
+                const onMessageDeleted = sinon.spy();
+
+                this.instance.option({ onMessageDeleted });
+
+                const $bubbles = this.getBubbles();
+                $bubbles.eq(1).trigger('dxcontextmenu');
+
+                const $deleteButton = this.getContextMenuItems().eq(0);
+                $deleteButton.trigger('dxclick');
+
+                const $popup = $(`.${CHAT_CONFIRMATION_POPUP_WRAPPER_CLASS}`);
+                const $applyButton = $popup.find(`.${BUTTON_CLASS}`).first();
+
+                $applyButton.trigger('dxclick');
+
+                assert.strictEqual(onMessageDeleted.callCount, 1);
             });
         });
 
