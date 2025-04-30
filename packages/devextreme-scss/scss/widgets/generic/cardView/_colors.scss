@@ -57,7 +57,7 @@ $cardview-generic-card-background-color: null !default;
   $cardview-generic-header-filter-icon-selected-color: $base-accent !default;
 
   $cardview-generic-dropzone-text-color: $base-accent !default;
-  $cardview-generic-dropzone-background-color: lighten(desaturate(adjust-hue($base-accent, 1), 7.32), 43.33) !default;
+  $cardview-generic-dropzone-background-color: lighten(desaturate(adjust-hue(#337ab7, 2), 6.41), 48.63) !default;
   $cardview-generic-dropzone-border-color: $base-accent !default;
 
   $cardview-generic-header-item-background-color: darken($base-bg, 3.92)  !default;
@@ -82,7 +82,7 @@ $cardview-generic-card-background-color: null !default;
   $cardview-generic-card-cover-noimage-background-color: darken($base-bg, 7.84) !default;
   $cardview-generic-card-cover-noimage-icon-color: lighten($base-text-color, 38.43) !default;
 
-  $cardview-generic-card-selection-background-color: lighten(desaturate(adjust-hue($base-accent, 1), 7.32), 43.33) !default;
+  $cardview-generic-card-selection-background-color: lighten(desaturate(adjust-hue(#337ab7, 2), 6.41), 48.63) !default;
 
   $cardview-generic-card-border-color: $base-border-color !default;
   $cardview-generic-card-background-color: $base-bg !default;
@@ -95,7 +95,7 @@ $cardview-generic-card-background-color: null !default;
   $cardview-generic-header-filter-icon-selected-color: $base-accent !default;
 
   $cardview-generic-dropzone-text-color: $base-accent !default;
-  $cardview-generic-dropzone-background-color: darken(desaturate($base-accent, 44.18), 25.88) !default;
+  $cardview-generic-dropzone-background-color: darken(desaturate(adjust-hue(#1ca8dd, 1), 60.34), 29.41) !default;
   $cardview-generic-dropzone-border-color: $base-accent !default;
 
   $cardview-generic-header-item-background-color: lighten($base-bg, 3.92)  !default;
@@ -120,7 +120,7 @@ $cardview-generic-card-background-color: null !default;
   $cardview-generic-card-cover-noimage-background-color: lighten(desaturate($base-bg, 0.30), 8.04) !default;
   $cardview-generic-card-cover-noimage-icon-color: darken($base-text-color, 38.04)  !default;
 
-  $cardview-generic-card-selection-background-color: darken(desaturate($base-accent, 44.18), 25.88) !default;
+  $cardview-generic-card-selection-background-color: darken(desaturate(adjust-hue(#1ca8dd, 1), 60.34), 29.41) !default;
 
   $cardview-generic-card-border-color: $base-border-color !default;
   $cardview-generic-card-background-color: $base-bg !default;
