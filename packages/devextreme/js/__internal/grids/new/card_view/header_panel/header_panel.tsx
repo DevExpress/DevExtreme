@@ -2,12 +2,14 @@
   spellcheck/spell-checker
 */
 import messageLocalization from '@js/localization/message';
+import type dxSortable from '@js/ui/sortable';
+import type * as SortableTypes from '@js/ui/sortable_types';
 import type { Column, VisibleColumn } from '@ts/grids/new/grid_core/columns_controller/types';
 import { Scrollable } from '@ts/grids/new/grid_core/inferno_wrappers/scrollable';
 import type { NavigationStrategyBase } from '@ts/grids/new/grid_core/keyboard_navigation/index';
 import { KbnNavigationContainer, withKbnNavigationItem, withKeyDownHandler } from '@ts/grids/new/grid_core/keyboard_navigation/index';
 import type { ComponentType } from 'inferno';
-import { Component } from 'inferno';
+import { Component, createRef } from 'inferno';
 
 import type { Props as ColumnSortableProps } from './column_sortable';
 import { ColumnSortable } from './column_sortable';
@@ -57,6 +59,10 @@ export interface HeaderPanelProps {
 }
 
 export class HeaderPanel extends Component<HeaderPanelProps> {
+  private readonly containerRef = createRef<HTMLDivElement>();
+
+  private readonly sortableRef = createRef<dxSortable>();
+
   public render(): JSX.Element {
     const HeaderItem = this.props.kbnEnabled
       ? ItemWithKbn
@@ -72,6 +78,7 @@ export class HeaderPanel extends Component<HeaderPanelProps> {
       <div
         className={CLASSES.headers}
         onContextMenu={this.props.showContextMenu}
+        ref={this.containerRef}
       >
         <ColumnSortable
           {...this.props.draggingOptions}
@@ -87,6 +94,10 @@ export class HeaderPanel extends Component<HeaderPanelProps> {
           showDropzone={sortableConfig.showDropzone}
           dropzoneText={messageLocalization.format('dxCardView-headerPanelDropzoneText')}
           onPlaceholderPrepared={sortableConfig.onPlaceholderPrepared}
+          onInitialized={(e: SortableTypes.InitializedEvent) => {
+            const container = this.containerRef.current ?? undefined;
+            e.component?.option('container', container);
+          }}
         >
           <Scrollable
             direction='horizontal'

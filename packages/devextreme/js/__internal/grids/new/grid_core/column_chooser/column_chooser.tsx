@@ -4,10 +4,11 @@ import type {
   Properties as PopupProperties, ShowingEvent,
 } from '@js/ui/popup';
 import type dxPopup from '@js/ui/popup';
+import type * as SortableTypes from '@js/ui/sortable_types';
 import type { Properties as TreeViewProperties } from '@js/ui/tree_view';
 import type dxTreeView from '@js/ui/tree_view';
 import {
-  Component, type RefObject,
+  Component, createRef, type RefObject,
 } from 'inferno';
 
 import type { Props as ColumnSortableProps } from '../../card_view/header_panel/column_sortable';
@@ -60,6 +61,8 @@ export interface ColumnChooserProps {
 }
 
 export class ColumnChooser extends Component<ColumnChooserProps> {
+  private readonly containerRef = createRef<HTMLDivElement>();
+
   public render(): JSX.Element {
     const {
       visible, popupConfig, popupRef, sortableConfig,
@@ -74,6 +77,7 @@ export class ColumnChooser extends Component<ColumnChooserProps> {
     return (
       <Popup
         componentRef={popupRef}
+        elementRef={this.containerRef}
         visible={true}
         shading={false}
         dragEnabled={true}
@@ -105,6 +109,10 @@ export class ColumnChooser extends Component<ColumnChooserProps> {
           onDragStart={sortableConfig.onDragStart}
           onDragEnd={sortableConfig.onDragEnd}
           onPlaceholderPrepared={sortableConfig.onPlaceholderPrepared}
+          onInitialized={(e: SortableTypes.InitializedEvent) => {
+            const container = this.props.popupRef.current?.element();
+            e.component?.option('container', container);
+          }}
         >
           { treeView }
         </ColumnSortable>
