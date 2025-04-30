@@ -98,12 +98,8 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
       .addClass(CHAT_MESSAGEBOX_INPUT_CONTAINER_CLASS)
       .appendTo(this.element());
 
-    const $textArea = this._renderTextArea();
-    const sendButton = this._renderButton();
-
-    $messageBox
-      .append($textArea)
-      .append(sendButton);
+    this._renderTextArea($messageBox);
+    this._renderButton($messageBox);
   }
 
   _cancelMessageEdit(): void {
@@ -124,7 +120,7 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
     });
   }
 
-  _renderTextArea(): dxElementWrapper {
+  _renderTextArea($parent: dxElementWrapper): void {
     const {
       activeStateEnabled,
       focusStateEnabled,
@@ -132,6 +128,8 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
     } = this.option();
 
     const $textArea = $('<div>').addClass(CHAT_MESSAGEBOX_TEXTAREA_CLASS);
+
+    $parent.append($textArea);
 
     this._textArea = this._createComponent($textArea, TextArea, {
       activeStateEnabled,
@@ -168,11 +166,9 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
         this._cancelMessageEdit();
       }
     });
-
-    return $textArea;
   }
 
-  _renderButton(): dxElementWrapper {
+  _renderButton($parent: dxElementWrapper): void {
     const {
       activeStateEnabled,
       focusStateEnabled,
@@ -180,6 +176,8 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
     } = this.option();
 
     const $button = $('<div>').addClass(CHAT_MESSAGEBOX_BUTTON_CLASS);
+
+    $parent.append($button);
 
     this._button = this._createComponent($button, Button, {
       activeStateEnabled,
@@ -194,8 +192,6 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
         this._sendHandler(e);
       },
     });
-
-    return $button;
   }
 
   _createMessageEnteredAction(): void {

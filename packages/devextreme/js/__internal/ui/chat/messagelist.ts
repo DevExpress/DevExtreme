@@ -323,9 +323,6 @@ class MessageList extends Widget<Properties> {
     this._contextMenu.registerKeyHandler(ESCAPE_KEY, () => {
       // eslint-disable-next-line @typescript-eslint/no-floating-promises
       this._contextMenu.hide();
-
-      const { onContextMenuHidden } = this.option();
-      onContextMenuHidden?.();
     });
 
     $contextMenu.appendTo(this.$element());
