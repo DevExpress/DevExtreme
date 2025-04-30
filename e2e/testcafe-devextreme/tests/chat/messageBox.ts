@@ -49,7 +49,7 @@ test('Chat: messagebox with editing preview', async (t) => {
   await t.rightClick(chat.getMessage(0));
   await t.click(chat.getContextMenuItem(0));
 
-  await testScreenshot(t, takeScreenshot, 'Messagebox with editing preview', {
+  await testScreenshot(t, takeScreenshot, 'Messagebox with editing preview.png', {
     element: '#chat',
     shouldTestInCompact: true,
   });

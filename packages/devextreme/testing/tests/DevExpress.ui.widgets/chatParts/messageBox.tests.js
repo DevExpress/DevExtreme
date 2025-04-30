@@ -646,7 +646,7 @@ QUnit.module('MessageBox', moduleConfig, () => {
         });
 
         QUnit.test('textarea should be cleared on escape key when some message is editing', function(assert) {
-            this.instance.option('editingText', 'test');
+            this.instance.option('text', 'test');
 
             keyboardMock(this.$input)
                 .focus()
@@ -668,7 +668,7 @@ QUnit.module('MessageBox', moduleConfig, () => {
         });
 
         QUnit.test('editing preview should be removed on escape key when some message is editing', function(assert) {
-            this.instance.option('editingText', 'test');
+            this.instance.option('text', 'test');
 
             const getEditingPreview = () => this.$element.find(`.${CHAT_EDITING_PREVIEW_CLASS}`);
 

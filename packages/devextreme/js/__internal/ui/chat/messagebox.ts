@@ -3,7 +3,6 @@ import messageLocalization from '@js/common/core/localization/message';
 import $, { type dxElementWrapper } from '@js/core/renderer';
 import type { ClickEvent } from '@js/ui/button';
 import Button from '@js/ui/button';
-import type { Message } from '@js/ui/chat';
 import type { Properties as DOMComponentProperties } from '@ts/core/widget/dom_component';
 import DOMComponent from '@ts/core/widget/dom_component';
 import type { OptionChanged } from '@ts/core/widget/types';
@@ -18,6 +17,7 @@ export const CHAT_MESSAGEBOX_TEXTAREA_CLASS = 'dx-chat-messagebox-textarea';
 export const CHAT_MESSAGEBOX_BUTTON_CLASS = 'dx-chat-messagebox-button';
 
 export const TYPING_END_DELAY = 2000;
+const ESCAPE_KEY = 'escape';
 
 export type MessageEnteredEvent =
   NativeEventInfo<MessageBox, KeyboardEvent | PointerEvent | MouseEvent | TouchEvent> &
@@ -38,9 +38,9 @@ export interface Properties extends DOMComponentProperties<MessageBox> {
 
   onTypingEnd?: (e: NativeEventInfo<MessageBox>) => void;
 
-  onMessageEditCanceled?: (e: NativeEventInfo<MessageBox>) => void;
+  onMessageEditCanceled?: () => void;
 
-  editingText?: string;
+  text?: string;
 }
 
 class MessageBox extends DOMComponent<MessageBox, Properties> {
@@ -56,12 +56,8 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
 
   _typingEndAction?: () => void;
 
-  _messageEditCanceledAction?: () => void;
-
   // eslint-disable-next-line no-restricted-globals
   _typingEndTimeoutId?: ReturnType<typeof setTimeout> | undefined;
-
-  _editingMessage?: Message;
 
   _getDefaultOptions(): Properties {
     return {
@@ -73,7 +69,7 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
       onTypingStart: undefined,
       onTypingEnd: undefined,
       onMessageEditCanceled: undefined,
-      editingText: '',
+      text: '',
     };
   }
 
@@ -83,7 +79,6 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
     this._createMessageEnteredAction();
     this._createTypingStartAction();
     this._createTypingEndAction();
-    this._createMessageEditCanceledAction();
   }
 
   _initMarkup(): void {
@@ -91,7 +86,7 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
 
     super._initMarkup();
 
-    if (this.option('editingText')) {
+    if (this.option('text')) {
       this._renderEditingPreview();
     }
 
@@ -112,16 +107,19 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
   }
 
   _cancelMessageEdit(): void {
-    this.option('editingText', undefined);
-    this._messageEditCanceledAction?.();
+    const { onMessageEditCanceled } = this.option();
+
+    this.option('text', undefined);
+    this._textArea.focus();
+    onMessageEditCanceled?.();
   }
 
   _renderEditingPreview(): void {
     const $editingPreview = $('<div>').prependTo(this.element());
-    const { editingText } = this.option();
+    const { text } = this.option();
 
     this._editingPreview = this._createComponent($editingPreview, MessageEditingPreview, {
-      text: editingText,
+      text,
       onCancel: this._cancelMessageEdit.bind(this),
     });
   }
@@ -165,8 +163,8 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
       }
     });
 
-    this._textArea.registerKeyHandler('escape', () => {
-      if (this.option('editingText')) {
+    this._textArea.registerKeyHandler(ESCAPE_KEY, () => {
+      if (this.option('text')) {
         this._cancelMessageEdit();
       }
     });
@@ -217,13 +215,6 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
   _createTypingEndAction(): void {
     this._typingEndAction = this._createActionByOption(
       'onTypingEnd',
-      { excludeValidators: ['disabled'] },
-    );
-  }
-
-  _createMessageEditCanceledAction(): void {
-    this._messageEditCanceledAction = this._createActionByOption(
-      'onMessageEditCanceled',
       { excludeValidators: ['disabled'] },
     );
   }
@@ -301,14 +292,9 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
         this._createTypingEndAction();
 
         break;
-      case 'onMessageEditCanceled':
-        this._createMessageEditCanceledAction();
-
-        break;
-      case 'editingText':
+      case 'text':
         this._updateEditingPreview(value);
-        this._textArea.option('value', value);
-        this._textArea.focus();
+        this._updateInputContainer(value);
 
         break;
       default:
@@ -340,6 +326,14 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
     } else {
       this._renderEditingPreview();
     }
+  }
+
+  _updateInputContainer(value: string | undefined): void {
+    this._textArea.option('value', value);
+
+    const shouldButtonBeDisabled = !this._isValuableTextEntered();
+
+    this._toggleButtonDisableState(shouldButtonBeDisabled);
   }
 }
 

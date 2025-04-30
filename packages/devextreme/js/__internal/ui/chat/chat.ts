@@ -207,7 +207,7 @@ class Chat extends Widget<Properties> {
       onMessageDeleting: (e) => {
         this._messageDeletingHandler(e);
       },
-      onKeyHandled: () => {
+      onContextMenuHidden: () => {
         this.focus();
       },
     };
@@ -269,6 +269,10 @@ class Chat extends Widget<Properties> {
   }
 
   _messageEditingStartHandler(e: MessageEditingEvent): void {
+    if (this._messageToEdit) {
+      this._messageEditCanceledAction?.({ message: this._messageToEdit });
+    }
+
     const messageEditingStartArgs = {
       message: e.message,
       cancel: false,
@@ -279,8 +283,8 @@ class Chat extends Widget<Properties> {
     invokeConditionally(
       messageEditingStartArgs.cancel,
       () => {
+        this._messageBox.option('text', e.message.text);
         this._messageToEdit = e.message;
-        this._messageBox.option('editingText', e.message.text);
       },
     );
   }

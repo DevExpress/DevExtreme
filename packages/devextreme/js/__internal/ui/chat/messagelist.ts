@@ -90,7 +90,7 @@ export interface Properties extends WidgetOptions<MessageList> {
   showMessageTimestamp: boolean;
   onMessageEditingStart?: (e: MessageEditingEvent) => void;
   onMessageDeleting?: (e: MessageEditingEvent) => void;
-  onKeyHandled?: (e: KeyboardEvent) => void;
+  onContextMenuHidden?: () => void;
 }
 
 class MessageList extends Widget<Properties> {
@@ -309,6 +309,7 @@ class MessageList extends Widget<Properties> {
       onShowing: (e) => {
         this._onContextMenuShowing(e);
       },
+      onHidden: this.option('onContextMenuHidden'),
       elementAttr: {
         class: CHAT_MESSAGELIST_CONTEXT_MENU_CLASS,
       },
@@ -319,12 +320,12 @@ class MessageList extends Widget<Properties> {
       boundaryOffset: { h: 16 },
     });
 
-    this._contextMenu.registerKeyHandler(ESCAPE_KEY, (event: KeyboardEvent) => {
+    this._contextMenu.registerKeyHandler(ESCAPE_KEY, () => {
       // eslint-disable-next-line @typescript-eslint/no-floating-promises
       this._contextMenu.hide();
 
-      const { onKeyHandled } = this.option();
-      onKeyHandled?.(event);
+      const { onContextMenuHidden } = this.option();
+      onContextMenuHidden?.();
     });
 
     $contextMenu.appendTo(this.$element());
@@ -351,6 +352,7 @@ class MessageList extends Widget<Properties> {
     }
 
     e.component.option('items', items);
+    e.element.focus();
   }
 
   _renderScrollView(): void {
