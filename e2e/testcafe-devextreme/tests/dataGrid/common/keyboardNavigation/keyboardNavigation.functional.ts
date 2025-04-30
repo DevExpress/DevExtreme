@@ -4892,7 +4892,7 @@ test('Grids a11y: Fix the header filter and the column chooser focus issue and u
   });
 
 // T1285421
-test('Multiple DataGrids - Ctrl+Down from filter row should focus data row in the same grid', async (t) => {
+test('Multiple DataGrids - Ctrl+Alt+Down from filter row should focus data row in the same grid', async (t) => {
   // arrange - create two DataGrids
   await createWidget('dxDataGrid', {
     elementAttr: { id: 'grid1' },
@@ -4919,7 +4919,7 @@ test('Multiple DataGrids - Ctrl+Down from filter row should focus data row in th
   // act
   await t
     .click(secondGridFilterRow.getFilterCell(0).getEditorInput().element)
-    .pressKey('ctrl+down');
+    .pressKey('ctrl+alt+down');
 
   // assert - focus should be on the data row of the second grid and not on the first grid
   await t
