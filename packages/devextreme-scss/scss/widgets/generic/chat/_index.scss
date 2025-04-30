@@ -41,6 +41,8 @@
   $chat-bubble-color-primary,
   $chat-bubble-background-color-primary,
   $chat-bubble-container-gap,
+  $chat-bubble-delete-icon-size,
+  $chat-bubble-delete-icon-padding-right,
 );
 @include chat-messagegroup(
   $chat-messagegroup-gap,

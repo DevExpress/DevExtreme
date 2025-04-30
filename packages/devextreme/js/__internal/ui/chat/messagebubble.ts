@@ -1,11 +1,15 @@
 import { getPublicElement } from '@js/core/element';
 import $ from '@js/core/renderer';
 import type { WidgetOptions } from '@js/ui/widget/ui.widget';
+import { ICON_CLASS } from '@ts/core/utils/m_icon';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
 
 export const CHAT_MESSAGEBUBBLE_CLASS = 'dx-chat-messagebubble';
 const CHAT_MESSAGEBUBBLE_CONTENT_CLASS = 'dx-chat-messagebubble-content';
+export const CHAT_MESSAGEBUBBLE_DELETED_CLASS = 'dx-chat-messagebubble-deleted';
+export const CHAT_MESSAGEBUBBLE_ICON_CLASS = ICON_CLASS;
+export const CHAT_MESSAGEBUBBLE_ICON_PROHIBITION_CLASS = `${CHAT_MESSAGEBUBBLE_ICON_CLASS}-cursorprohibition`;
 
 export interface Properties extends WidgetOptions<MessageBubble> {
   text?: string;

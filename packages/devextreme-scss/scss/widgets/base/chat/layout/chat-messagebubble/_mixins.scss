@@ -6,6 +6,8 @@
   $color-primary,
   $background-color-primary,
   $bubble-container-gap,
+  $bubble-delete-icon-size,
+  $bubble-delete-icon-padding-right,
 ) {
   .dx-chat-messagegroup-content {
     row-gap: $bubble-container-gap;
@@ -14,6 +16,15 @@
   .dx-chat-messagebubble {
     padding: $padding;
     border-radius: $border-radius;
+
+    .dx-chat-messagebubble-content {
+      &.dx-chat-messagebubble-deleted {
+        .dx-icon {
+          font-size: $bubble-delete-icon-size;
+          padding-right: $bubble-delete-icon-padding-right;
+        }
+      }
+    }
   }
 
   .dx-chat-messagegroup-alignment-start {

@@ -383,6 +383,7 @@
         "dxChat-editingEditMessage": "Rediģēt",
         "dxChat-editingDeleteMessage": "Dzēst",
         "dxChat-editingDeleteConfirmText": "Are you sure you want to delete this message?",
+        "dxChat-deletedMessageText": "This message was deleted",
 
         "dxColorView-ariaRed": "Sarkans",
         "dxColorView-ariaGreen": "Zaļš",
