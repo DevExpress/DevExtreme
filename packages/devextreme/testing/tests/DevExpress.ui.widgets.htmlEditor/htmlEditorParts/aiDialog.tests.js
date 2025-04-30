@@ -894,6 +894,7 @@ QUnit.module('AIDialog', {}, () => {
     QUnit.module('desktop specific', {
         beforeEach: function() {
             this.realDevice = devices.real();
+            devices.real({ deviceType: 'desktop' });
             this.getDocumentElementStub = sinon.stub(domAdapter, 'getDocumentElement');
             this.getDocumentElementStub.returns({
                 clientWidth: 1000
