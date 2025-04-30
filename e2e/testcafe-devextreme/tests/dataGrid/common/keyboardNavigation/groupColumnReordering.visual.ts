@@ -111,7 +111,7 @@ const DATA_GRID_SELECTOR = '#container';
     await takeScreenshot(`reorder_group_column_to_${rtlEnabled ? 'left' : 'right'}_via_context_menu_when_rtlEnabled_=_${rtlEnabled}_1`);
 
     await t
-      .click(contextMenu.getItemByText('Move as next'));
+      .click(contextMenu.getItemByText('Move to the right'));
 
     await takeScreenshot(`reorder_group_column_to_${rtlEnabled ? 'left' : 'right'}_via_context_menu_when_rtlEnabled_=_${rtlEnabled}_2`);
 
@@ -155,7 +155,7 @@ const DATA_GRID_SELECTOR = '#container';
     await takeScreenshot(`reorder_group_column_to_${rtlEnabled ? 'right' : 'left'}_via_context_menu_when_rtlEnabled_=_${rtlEnabled}_1`);
 
     await t
-      .click(contextMenu.getItemByText('Move as previous'));
+      .click(contextMenu.getItemByText('Move to the left'));
 
     await takeScreenshot(`reorder_group_column_to_${rtlEnabled ? 'right' : 'left'}_via_context_menu_when_rtlEnabled_=_${rtlEnabled}_2`);
 

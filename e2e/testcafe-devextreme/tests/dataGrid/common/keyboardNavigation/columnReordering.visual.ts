@@ -84,7 +84,7 @@ const DATA_GRID_SELECTOR = '#container';
     await takeScreenshot(`reorder_column_to_right_via_context_menu_when_rtlEnabled_=_${rtlEnabled}_1`);
 
     await t
-      .click(contextMenu.getItemByText('Move as next'));
+      .click(contextMenu.getItemByText('Move to the right'));
 
     await takeScreenshot(`reorder_column_to_right_via_context_menu_when_rtlEnabled_=_${rtlEnabled}_2`);
 
@@ -116,7 +116,7 @@ const DATA_GRID_SELECTOR = '#container';
     await takeScreenshot(`reorder_column_to_left_via_context_menu_when_rtlEnabled_=_${rtlEnabled}_1`);
 
     await t
-      .click(contextMenu.getItemByText('Move as previous'));
+      .click(contextMenu.getItemByText('Move to the left'));
 
     await takeScreenshot(`reorder_column_to_left_via_context_menu_when_rtlEnabled_=_${rtlEnabled}_2`);
 
@@ -627,7 +627,7 @@ safeSizeTest('reorder fixed left column to right via context menu', async (t) =>
   await takeScreenshot('reorder_fixed_left_column_to_right_via_context_menu_1');
 
   await t
-    .click(contextMenu.getItemByText('Move as next'));
+    .click(contextMenu.getItemByText('Move to the right'));
 
   await takeScreenshot('reorder_fixed_left_column_to_right_via_context_menu_2');
 
@@ -665,7 +665,7 @@ safeSizeTest('reorder fixed left column to left via context menu', async (t) => 
   await takeScreenshot('reorder_fixed_left_column_to_left_via_context_menu_1');
 
   await t
-    .click(contextMenu.getItemByText('Move as previous'));
+    .click(contextMenu.getItemByText('Move to the left'));
 
   await takeScreenshot('reorder_fixed_left_column_to_left_via_context_menu_2');
 
@@ -703,7 +703,7 @@ safeSizeTest('reorder fixed right column to right via context menu', async (t) =
   await takeScreenshot('reorder_fixed_right_column_to_right_via_context_menu_1');
 
   await t
-    .click(contextMenu.getItemByText('Move as next'));
+    .click(contextMenu.getItemByText('Move to the right'));
 
   await takeScreenshot('reorder_fixed_right_column_to_right_via_context_menu_2');
 
@@ -743,7 +743,7 @@ safeSizeTest('reorder fixed right column to left via context menu', async (t) =>
   await takeScreenshot('reorder_fixed_right_column_to_left_via_context_menu_1');
 
   await t
-    .click(contextMenu.getItemByText('Move as previous'));
+    .click(contextMenu.getItemByText('Move to the left'));
 
   await takeScreenshot('reorder_fixed_right_column_to_left_via_context_menu_2');
 
@@ -1015,7 +1015,7 @@ safeSizeTest('reorder nested column to left via context menu', async (t) => {
   await takeScreenshot('reorder_nested_column_to_left_via_context_menu_1');
 
   await t
-    .click(contextMenu.getItemByText('Move as previous'));
+    .click(contextMenu.getItemByText('Move to the left'));
 
   await takeScreenshot('reorder_nested_column_to_left_via_context_menu_2');
 
@@ -1053,7 +1053,7 @@ safeSizeTest('reorder nested column to right via context menu', async (t) => {
   await takeScreenshot('reorder_nested_column_to_right_via_context_menu_1');
 
   await t
-    .click(contextMenu.getItemByText('Move as next'));
+    .click(contextMenu.getItemByText('Move to the right'));
 
   await takeScreenshot('reorder_nested_column_to_right_via_context_menu_2');
 
@@ -1262,7 +1262,7 @@ safeSizeTest('reorder a custom command column to right via context menu', async 
   await takeScreenshot('reorder_custom_command_column_to_right_via_context_menu_1');
 
   await t
-    .click(contextMenu.getItemByText('Move as next'));
+    .click(contextMenu.getItemByText('Move to the right'));
 
   await takeScreenshot('reorder_custom_command_column_to_right_via_context_menu_2');
 
