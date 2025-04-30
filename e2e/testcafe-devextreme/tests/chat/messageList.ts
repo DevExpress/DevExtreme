@@ -293,12 +293,12 @@ test('Messagelist with messageTemplate', async (t) => {
     width: 400,
     height: 600,
     showDayHeaders: false,
-    editing: {
-      allowDeleting: true,
-    },
     onMessageEntered: ({ component, message }) => {
       message.timestamp = undefined;
       component.renderMessage(message);
+    },
+    messageTemplate: ({ message }, container) => {
+      $('<div>').text(`${message.author.name} says: ${message.text}`).appendTo(container);
     },
   });
 });
