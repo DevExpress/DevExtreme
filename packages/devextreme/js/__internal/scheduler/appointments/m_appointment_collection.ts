@@ -542,8 +542,9 @@ class SchedulerAppointments extends CollectionWidget {
 
   _createItemByTemplate(itemTemplate, renderArgs) {
     const { itemData, container, index } = renderArgs;
+    const parent = $(container).parent();
 
-    container.parent().prepend(
+    parent.prepend(
       $('<span>')
         .addClass(APPOINTMENT_CONTENT_CLASSES.ARIA_DESCRIPTION)
         .attr('hidden', true),
@@ -552,7 +553,7 @@ class SchedulerAppointments extends CollectionWidget {
     return itemTemplate.render({
       model: {
         appointmentData: itemData,
-        targetedAppointmentData: this.invoke('getTargetedAppointmentData', itemData, $(container).parent()),
+        targetedAppointmentData: this.invoke('getTargetedAppointmentData', itemData, parent),
       },
       container,
       index,
