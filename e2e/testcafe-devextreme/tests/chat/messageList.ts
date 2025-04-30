@@ -185,17 +185,10 @@ test('Messagelist with loadindicator appearance on initial loading', async (t) =
   });
 });
 
-test('Messagelist without messageTemplate', async (t) => {
+test('Messagelist with deleted items', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-  const chat = new Chat('#container');
 
-  await t
-    .rightClick(chat.getMessage(1))
-    .pressKey('down')
-    .pressKey('enter')
-    .pressKey('enter');
-
-  await testScreenshot(t, takeScreenshot, 'Messagelist without message template after message is deleted.png', { element: '#container' });
+  await testScreenshot(t, takeScreenshot, 'Messagelist without message template and with deleted messages.png', { element: '#container' });
 
   await t
     .expect(compareResults.isValid())
@@ -204,43 +197,63 @@ test('Messagelist without messageTemplate', async (t) => {
   const userFirst = createUser(1, 'First');
   const userSecond = createUser(2, 'Second');
   const items = [{
-    id: 1,
     author: userFirst,
     text: 'AAA',
   }, {
-    id: 2,
     author: userFirst,
     text: 'BBB',
+    isDeleted: true,
   }, {
-    id: 3,
     author: userSecond,
     text: 'CCC',
+    isDeleted: true,
   }];
 
-  const store = new (window as any).DevExpress.data.CustomStore({
-    key: 'id',
-    load: () => new Promise<Message[]>((resolve) => {
-      resolve(items);
-    }),
-  });
-
   return createWidget('dxChat', {
-    dataSource: store,
+    items,
     user: userFirst,
     width: 400,
     height: 600,
     showDayHeaders: false,
-    editing: {
-      allowDeleting: true,
-    },
-    onMessageDeleted: ({ message }) => {
-      store.push([
-        {
-          type: 'update',
-          key: message.id,
-          data: { isDeleted: true },
-        },
-      ]);
+  });
+});
+
+test('Messagelist with deleted items and custom template', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  await testScreenshot(t, takeScreenshot, 'Messagelist with message template and deleted messages.png', { element: '#container' });
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  const userFirst = createUser(1, 'First');
+  const userSecond = createUser(2, 'Second');
+  const items = [{
+    author: userFirst,
+    text: 'AAA',
+  }, {
+    author: userFirst,
+    text: 'BBB',
+    isDeleted: true,
+  }, {
+    author: userSecond,
+    text: 'CCC',
+    isDeleted: true,
+  }];
+
+  return createWidget('dxChat', {
+    items,
+    user: userFirst,
+    width: 400,
+    height: 600,
+    showDayHeaders: false,
+    messageTemplate: ({ message, isDeleted }, container) => {
+      if (isDeleted) {
+        $('<div>').text(`${message.author.name} deleted this message`).appendTo(container);
+        return;
+      }
+      $('<div>').text(message.text).appendTo(container);
     },
   });
 });
@@ -258,39 +271,21 @@ test('Messagelist with messageTemplate', async (t) => {
   await testScreenshot(t, takeScreenshot, 'Messagelist with message template after new message add.png', { element: '#container' });
 
   await t
-    .rightClick(chat.getMessage(2))
-    .pressKey('down')
-    .pressKey('enter')
-    .pressKey('enter');
-
-  await testScreenshot(t, takeScreenshot, 'Messagelist with message template after message is deleted.png', { element: '#container' });
-
-  await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => {
   const userFirst = createUser(1, 'First');
   const userSecond = createUser(2, 'Second');
   const items = [{
-    id: 1,
     author: userFirst,
     text: 'AAA',
   }, {
-    id: 2,
     author: userFirst,
     text: 'BBB',
   }, {
-    id: 3,
     author: userSecond,
     text: 'CCC',
   }];
-
-  const store = new (window as any).DevExpress.data.CustomStore({
-    key: 'id',
-    load: () => new Promise<Message[]>((resolve) => {
-      resolve(items);
-    }),
-  });
 
   return createWidget('dxChat', {
     items,
@@ -304,22 +299,6 @@ test('Messagelist with messageTemplate', async (t) => {
     onMessageEntered: ({ component, message }) => {
       message.timestamp = undefined;
       component.renderMessage(message);
-    },
-    messageTemplate: ({ message, isDeleted }, container) => {
-      if (isDeleted) {
-        $('<div>').text(`${message.author.name} deleted this message`).appendTo(container);
-        return;
-      }
-      $('<div>').text(`${message.author.name} says: ${message.text}`).appendTo(container);
-    },
-    onMessageDeleted: ({ message }) => {
-      store.push([
-        {
-          type: 'update',
-          key: message.id,
-          data: { isDeleted: true },
-        },
-      ]);
     },
   });
 });
