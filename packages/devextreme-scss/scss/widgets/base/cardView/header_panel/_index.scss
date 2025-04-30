@@ -32,7 +32,7 @@
       border-radius: $cardview-dropzone-border-radius;
       pointer-events: none;
       opacity: 0.0;
-      transition: opacity 0.3s ease;
+      transition: opacity 0.3s ease-out;
     }
 
     .dx-cardview-dropzone-visible {
