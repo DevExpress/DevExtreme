@@ -83,9 +83,12 @@ function getActiveAccessibleElements(ariaLabel, viewElement) {
 function findFocusedViewElement(viewSelectors, element) {
     const root = element?.getRootNode() || domAdapter.getDocument();
 
+    const $closestWidgetContainer = $(element).closest('.dx-widget');
+    const searchContext = $closestWidgetContainer.length ? $closestWidgetContainer : $(root);
+
     for(const index in viewSelectors) {
         const selector = viewSelectors[index];
-        const $focusViewElement = $(root).find(selector).first();
+        const $focusViewElement = searchContext.find(selector).first();
 
         if($focusViewElement.length) {
             return $focusViewElement;
