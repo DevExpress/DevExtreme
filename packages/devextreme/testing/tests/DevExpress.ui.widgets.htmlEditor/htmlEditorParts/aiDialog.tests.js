@@ -741,6 +741,7 @@ QUnit.module('AIDialog', {}, () => {
         },
         afterEach: function() {
             integrationModuleConfig.afterEach.apply(this);
+
             localization.locale(this.initialLocale);
         }
     }, () => {
@@ -902,11 +903,12 @@ QUnit.module('AIDialog', {}, () => {
         },
         afterEach: function() {
             integrationModuleConfig.afterEach.apply(this);
+
             devices.real(this.realDevice);
             this.getDocumentElementStub.restore();
         }
     }, () => {
-        QUnit.test('result textArea  config is correct', function(assert) {
+        QUnit.test('result textArea config is correct', function(assert) {
             const done = assert.async();
 
             showAIDialog(this, {
@@ -1131,6 +1133,7 @@ QUnit.module('compact', {
     },
     afterEach: function() {
         integrationModuleConfig.afterEach.apply(this);
+
         this.isCompactStub.restore();
     }
 }, () => {
@@ -1143,7 +1146,7 @@ QUnit.module('compact', {
         const generateToolbarItem = getItemByName(bottomToolbarItems, 'generate');
         const generateButtonOptions = generateToolbarItem.options;
 
-        assert.strictEqual(generateButtonOptions.width, COMPACT_ACTION_BUTTON_WIDTH, 'width=100px');
+        assert.strictEqual(generateButtonOptions.width, COMPACT_ACTION_BUTTON_WIDTH, 'width is specific');
     });
 
     QUnit.test('stop button should have special width', function(assert) {
@@ -1155,6 +1158,6 @@ QUnit.module('compact', {
         const stopToolbarItem = getItemByName(bottomToolbarItems, 'stop');
         const stopButtonOptions = stopToolbarItem.options;
 
-        assert.strictEqual(stopButtonOptions.width, COMPACT_ACTION_BUTTON_WIDTH, 'width=100px');
+        assert.strictEqual(stopButtonOptions.width, COMPACT_ACTION_BUTTON_WIDTH, 'width is specific');
     });
 });
