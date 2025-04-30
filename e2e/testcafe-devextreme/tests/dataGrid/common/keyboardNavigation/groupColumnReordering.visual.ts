@@ -2,6 +2,7 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import url from '../../../../helpers/getPageUrl';
 import { createWidget } from '../../../../helpers/createWidget';
+import { safeSizeTest } from '../../../../helpers/safeSizeTest';
 
 fixture
   .disablePageReloads`Keyboard Navigation - Group Column Reordering`
@@ -99,7 +100,7 @@ const DATA_GRID_SELECTOR = '#container';
     });
   });
 
-  test(`reorder group column to ${rtlEnabled ? 'left' : 'right'} via context menu when rtlEnabled = ${rtlEnabled}`, async (t) => {
+  safeSizeTest(`reorder group column to ${rtlEnabled ? 'left' : 'right'} via context menu when rtlEnabled = ${rtlEnabled}`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
     const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
     const contextMenu = dataGrid.getContextMenu();
@@ -143,7 +144,7 @@ const DATA_GRID_SELECTOR = '#container';
     });
   });
 
-  test(`reorder group column to ${rtlEnabled ? 'right' : 'left'} via context menu when rtlEnabled = ${rtlEnabled}`, async (t) => {
+  safeSizeTest(`reorder group column to ${rtlEnabled ? 'right' : 'left'} via context menu when rtlEnabled = ${rtlEnabled}`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
     const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
     const contextMenu = dataGrid.getContextMenu();
@@ -322,7 +323,7 @@ test('The group column should not be reordered when it has allowGrouping set to 
   });
 });
 
-test('The context menu should not have items for column reordering when groupPanel.allowColumnDragging = false', async (t) => {
+safeSizeTest('The context menu should not have items for column reordering when groupPanel.allowColumnDragging = false', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
   const firstGroupHeader = dataGrid.getGroupPanel().getHeader(0);
