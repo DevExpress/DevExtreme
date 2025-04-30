@@ -146,18 +146,19 @@ class LoadIndicator extends Widget<LoadIndicatorProperties> {
       _animatingSegmentInner: animatingSegmentInner,
     } = this.option();
 
-    const segmentParams = {
-      [AnimationType.Circle]: {
-        segmentCount: animatingSegmentCount ?? 0,
-        segmentInner: Boolean(animatingSegmentInner),
-      },
-      [AnimationType.Sparkle]: {
-        segmentCount: 2,
-        segmentInner: false,
-      },
-    };
-
-    return segmentParams[animationType];
+    switch (animationType) {
+      case AnimationType.Sparkle:
+        return {
+          segmentCount: 2,
+          segmentInner: false,
+        };
+      case AnimationType.Circle:
+      default:
+        return {
+          segmentCount: animatingSegmentCount ?? 0,
+          segmentInner: Boolean(animatingSegmentInner),
+        };
+    }
   }
 
   _renderAnimationMarkup(): void {
@@ -165,8 +166,6 @@ class LoadIndicator extends Widget<LoadIndicatorProperties> {
     this._$content.append(this._$indicator);
 
     const params = this._getSegmentParams();
-
-    debugger;
 
     this._renderSegments(params);
   }
