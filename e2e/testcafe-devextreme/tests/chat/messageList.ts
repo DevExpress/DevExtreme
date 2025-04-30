@@ -190,7 +190,7 @@ test('Messagelist without messageTemplate', async (t) => {
   const chat = new Chat('#container');
 
   await t
-    .rightClick(chat.getMessage(2))
+    .rightClick(chat.getMessage(1))
     .pressKey('down')
     .pressKey('enter')
     .pressKey('enter');
@@ -204,18 +204,28 @@ test('Messagelist without messageTemplate', async (t) => {
   const userFirst = createUser(1, 'First');
   const userSecond = createUser(2, 'Second');
   const items = [{
+    id: 1,
     author: userFirst,
     text: 'AAA',
   }, {
+    id: 2,
     author: userFirst,
     text: 'BBB',
   }, {
+    id: 3,
     author: userSecond,
     text: 'CCC',
   }];
 
+  const store = new (window as any).DevExpress.data.CustomStore({
+    key: 'id',
+    load: () => new Promise<Message[]>((resolve) => {
+      resolve(items);
+    }),
+  });
+
   return createWidget('dxChat', {
-    items,
+    dataSource: store,
     user: userFirst,
     width: 400,
     height: 600,
@@ -223,9 +233,14 @@ test('Messagelist without messageTemplate', async (t) => {
     editing: {
       allowDeleting: true,
     },
-    onMessageEntered: ({ component, message }) => {
-      message.timestamp = undefined;
-      component.renderMessage(message);
+    onMessageDeleted: ({ message }) => {
+      store.push([
+        {
+          type: 'update',
+          key: message.id,
+          data: { isDeleted: true },
+        },
+      ]);
     },
   });
 });
@@ -257,15 +272,25 @@ test('Messagelist with messageTemplate', async (t) => {
   const userFirst = createUser(1, 'First');
   const userSecond = createUser(2, 'Second');
   const items = [{
+    id: 1,
     author: userFirst,
     text: 'AAA',
   }, {
+    id: 2,
     author: userFirst,
     text: 'BBB',
   }, {
+    id: 3,
     author: userSecond,
     text: 'CCC',
   }];
+
+  const store = new (window as any).DevExpress.data.CustomStore({
+    key: 'id',
+    load: () => new Promise<Message[]>((resolve) => {
+      resolve(items);
+    }),
+  });
 
   return createWidget('dxChat', {
     items,
@@ -286,6 +311,15 @@ test('Messagelist with messageTemplate', async (t) => {
         return;
       }
       $('<div>').text(`${message.author.name} says: ${message.text}`).appendTo(container);
+    },
+    onMessageDeleted: ({ message }) => {
+      store.push([
+        {
+          type: 'update',
+          key: message.id,
+          data: { isDeleted: true },
+        },
+      ]);
     },
   });
 });
