@@ -25,23 +25,24 @@ export interface Props extends Omit<SortableProps, 'onAdd' | 'onReorder' | 'drag
 
   getColumnByIndex: (index: number) => Column;
 
+  isColumnDraggable?: (column: Column) => boolean;
+
   visibleColumns: VisibleColumn[];
 
-  allowDragging: boolean;
+  allowDragging?: boolean;
 
-  columnChooserDragModeOpened?: boolean;
-
-  onColumnMove: (column: Column, toIndex: number, draggingData: DraggingColumnData) => void;
+  onColumnMove?: (column: Column, toIndex: number, draggingData: DraggingColumnData) => void;
 
   columnDragTemplate?: ComponentType<{ column: Column; status?: Status; isDragging?: boolean }>;
 
   showDropzone?: boolean;
+
+  onPlaceholderPrepared?: (e) => void;
 }
 
 const ALLOWED_DRAGGING_DISTANCE = 20;
 
 const CLASS = {
-  hidden: 'dx-hidden',
   dropzone: 'dx-cardview-dropzone',
   dropzoneVisible: 'dx-cardview-dropzone-visible',
 };
@@ -51,7 +52,7 @@ export class ColumnSortable extends Component<Props> {
 
   private readonly onDragStart = (e: SortableTypes.DragStartEvent): void => {
     const column = this.props.getColumnByIndex(e.fromIndex);
-    const isDraggable = this.isColumnDraggable(column);
+    const isDraggable = this.props.isColumnDraggable?.(column) ?? true;
 
     if (!isDraggable) {
       e.cancel = true;
@@ -75,20 +76,6 @@ export class ColumnSortable extends Component<Props> {
     this.props.onDragStart?.(e);
   };
 
-  private readonly onPlaceholderPrepared = (e): void => {
-    const $placeholderElement = $(e.placeholderElement);
-
-    if (this.props.source === 'column-chooser') {
-      $placeholderElement.addClass(CLASS.hidden);
-    }
-
-    if (this.props.source === 'header-panel-main') {
-      const { column } = e.itemData as DraggingColumnData;
-
-      $placeholderElement.toggleClass(CLASS.hidden, !column.allowReordering);
-    }
-  };
-
   private readonly onDragMove = (e: SortableTypes.DragMoveEvent): void => {
     // @ts-expect-error
     const destination = e.toComponent.option('_source') as ColumnSortableArea;
@@ -109,7 +96,7 @@ export class ColumnSortable extends Component<Props> {
       return;
     }
 
-    this.props.onColumnMove(e.itemData.column, e.toIndex, e.itemData);
+    this.props.onColumnMove?.(e.itemData.column, e.toIndex, e.itemData);
   };
 
   // TODO: move all none-native approaches to sortable wrapper
@@ -136,14 +123,13 @@ export class ColumnSortable extends Component<Props> {
       source,
       getColumnByIndex,
       allowDragging,
-      columnChooserDragModeOpened,
       onColumnMove,
       columnDragTemplate,
       dropFeedbackMode,
       ...restProps
     } = this.props;
 
-    const needSortable = allowDragging || columnChooserDragModeOpened;
+    const needSortable = allowDragging ?? true;
 
     if (!needSortable) {
       return this.props.children;
@@ -172,7 +158,7 @@ export class ColumnSortable extends Component<Props> {
         dragTemplate={dragTemplate}
         // @ts-expect-error
         _source={source}
-        onPlaceholderPrepared={this.onPlaceholderPrepared}
+        onPlaceholderPrepared={this.props.onPlaceholderPrepared}
       >
       {this.props.children}
 
@@ -181,20 +167,6 @@ export class ColumnSortable extends Component<Props> {
       </div>
     </Sortable>
     );
-  }
-
-  private isColumnDraggable(column: Column): boolean {
-    if (this.props.source === 'header-panel-main') {
-      const canBeHidden = column.allowHiding && !!this.props.columnChooserDragModeOpened;
-
-      return column.allowReordering || canBeHidden;
-    }
-
-    if (this.props.source === 'column-chooser') {
-      return true;
-    }
-
-    return false;
   }
 
   private getDraggingStatus(e: SortableTypes.DragMoveEvent): Status {

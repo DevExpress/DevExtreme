@@ -8,7 +8,7 @@ import { KbnNavigationContainer, withKbnNavigationItem, withKeyDownHandler } fro
 import type { ComponentType } from 'inferno';
 import { Component } from 'inferno';
 
-import type { DraggingColumnData } from './column_sortable';
+import type { Props as ColumnSortableProps } from './column_sortable';
 import { ColumnSortable } from './column_sortable';
 import { CLASSES as itemClasses, Item } from './item';
 import type { DraggingOptions } from './options';
@@ -26,12 +26,6 @@ export interface HeaderPanelProps {
   kbnEnabled: boolean;
 
   navigationStrategy: NavigationStrategyBase;
-
-  onColumnMove: (column: Column, toIndex: number, draggingData: DraggingColumnData) => void;
-
-  allowColumnReordering: boolean;
-
-  columnChooserDragModeOpened: boolean;
 
   showSortIndexes: boolean;
 
@@ -51,7 +45,7 @@ export interface HeaderPanelProps {
 
   draggingOptions?: DraggingOptions;
 
-  showDropzone?: boolean;
+  sortableConfig: Partial<ColumnSortableProps>;
 
   showContextMenu: (
     event: KeyboardEvent | MouseEvent,
@@ -71,6 +65,8 @@ export class HeaderPanel extends Component<HeaderPanelProps> {
       return <></>;
     }
 
+    const { sortableConfig } = this.props;
+
     return (
       <div
         className={CLASSES.headers}
@@ -81,13 +77,14 @@ export class HeaderPanel extends Component<HeaderPanelProps> {
           source="header-panel-main"
           getColumnByIndex={(index) => this.props.visibleColumns[index]}
           visibleColumns={this.props.visibleColumns}
-          allowDragging={this.props.allowColumnReordering}
-          columnChooserDragModeOpened={this.props.columnChooserDragModeOpened}
-          onColumnMove={this.props.onColumnMove}
+          allowDragging={sortableConfig.allowDragging}
+          onColumnMove={sortableConfig.onColumnMove}
           columnDragTemplate={Item}
           itemOrientation="horizontal"
           filter={`.${itemClasses.item}`}
-          showDropzone={this.props.showDropzone}
+          isColumnDraggable={sortableConfig.isColumnDraggable}
+          showDropzone={sortableConfig.showDropzone}
+          onPlaceholderPrepared={sortableConfig.onPlaceholderPrepared}
         >
           <Scrollable
             direction='horizontal'

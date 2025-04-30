@@ -1,3 +1,4 @@
+import $ from '@js/core/renderer';
 import type * as SortableTypes from '@js/ui/sortable_types';
 import type { Item as TreeViewItemProperties, SelectionChangedEvent } from '@js/ui/tree_view';
 import { computed, type ReadonlySignal, signal } from '@preact/signals-core';
@@ -8,6 +9,10 @@ import { ColumnsController } from '../columns_controller/columns_controller';
 import type { Column } from '../columns_controller/types';
 import { getColumnIndexByName } from '../columns_controller/utils';
 import { OptionsController } from '../options_controller/options_controller';
+
+const CLASS = {
+  hidden: 'dx-hidden',
+};
 
 export class ColumnChooserController {
   public static dependencies = [ColumnsController, OptionsController] as const;
@@ -80,5 +85,14 @@ export class ColumnChooserController {
 
   public onDragEnd = (): void => {
     this.draggingItem.value = null;
+  };
+
+  public isColumnDraggable = (column: Column): boolean => column.allowHiding;
+
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+  public onPlaceholderPrepared = (e): void => {
+    const $placeholderElement = $(e.placeholderElement);
+
+    $placeholderElement.addClass(CLASS.hidden);
   };
 }

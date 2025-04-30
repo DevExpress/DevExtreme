@@ -4,13 +4,13 @@ import type {
   Properties as PopupProperties, ShowingEvent,
 } from '@js/ui/popup';
 import type dxPopup from '@js/ui/popup';
-import type * as SortableTypes from '@js/ui/sortable_types';
 import type { Properties as TreeViewProperties } from '@js/ui/tree_view';
 import type dxTreeView from '@js/ui/tree_view';
 import {
   Component, type RefObject,
 } from 'inferno';
 
+import type { Props as ColumnSortableProps } from '../../card_view/header_panel/column_sortable';
 import { ColumnSortable } from '../../card_view/header_panel/column_sortable';
 import { Item } from '../../card_view/header_panel/item';
 import type { Column, VisibleColumn } from '../columns_controller/types';
@@ -56,14 +56,14 @@ export interface ColumnChooserProps {
 
   treeViewDragAndDropModeConfig: TreeViewProperties;
 
-  onDragStart: (e: SortableTypes.DragStartEvent) => void;
-
-  onDragEnd: (e: SortableTypes.DragEndEvent) => void;
+  sortableConfig: Partial<ColumnSortableProps>;
 }
 
 export class ColumnChooser extends Component<ColumnChooserProps> {
   public render(): JSX.Element {
-    const { visible, popupConfig, popupRef } = this.props;
+    const {
+      visible, popupConfig, popupRef, sortableConfig,
+    } = this.props;
 
     if (!visible) {
       return <></>;
@@ -97,12 +97,14 @@ export class ColumnChooser extends Component<ColumnChooserProps> {
           source='column-chooser'
           filter={`.${CLASS.treeviewItem}`}
           getColumnByIndex={this.getColumnByIndex}
+          isColumnDraggable={sortableConfig.isColumnDraggable}
           visibleColumns={this.props.visibleColumns}
           allowDragging={!this.isSelectMode()}
           columnDragTemplate={Item}
           onColumnMove={this.props.onColumnMove}
-          onDragStart={this.props.onDragStart}
-          onDragEnd={this.props.onDragEnd}
+          onDragStart={sortableConfig.onDragStart}
+          onDragEnd={sortableConfig.onDragEnd}
+          onPlaceholderPrepared={sortableConfig.onPlaceholderPrepared}
         >
           { treeView }
         </ColumnSortable>

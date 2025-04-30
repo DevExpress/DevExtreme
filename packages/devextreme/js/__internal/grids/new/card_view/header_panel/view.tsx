@@ -4,13 +4,14 @@ import { ColumnsController } from '@ts/grids/new/grid_core/columns_controller/co
 import { View } from '@ts/grids/new/grid_core/core/view';
 import { KeyboardNavigationController, NavigationStrategyHorizontalList } from '@ts/grids/new/grid_core/keyboard_navigation/index';
 
-import { ColumnChooserController, ColumnChooserView } from '../../grid_core/column_chooser/index';
+import { ColumnChooserController } from '../../grid_core/column_chooser/index';
 import type { Column } from '../../grid_core/columns_controller/types';
 import { HeaderFilterViewController } from '../../grid_core/filtering/header_filter/view_controller';
 import { SortingController } from '../../grid_core/sorting_controller/sorting_controller';
 import { ContextMenuController } from '../context_menu/index';
 import { OptionsController } from '../options_controller';
-import type { DraggingColumnData } from './column_sortable';
+import type { Props as ColumnSortableProps } from './column_sortable';
+import { HeaderPanelController } from './controller';
 import type { HeaderPanelProps } from './header_panel';
 import { HeaderPanel } from './header_panel';
 
@@ -18,29 +19,41 @@ export class HeaderPanelView extends View<HeaderPanelProps> {
   protected component = HeaderPanel;
 
   public static dependencies = [
+    HeaderPanelController,
     ContextMenuController,
     SortingController,
     ColumnsController,
     OptionsController,
     HeaderFilterViewController,
     KeyboardNavigationController,
-    ColumnChooserView,
     ColumnChooserController,
   ] as const;
 
   private readonly navigationStrategy = new NavigationStrategyHorizontalList();
 
+  private readonly showDropzone: ReadonlySignal<boolean>;
+
   constructor(
+    private readonly headerPanelController: HeaderPanelController,
     private readonly contextMenuController: ContextMenuController,
     private readonly sortingController: SortingController,
     private readonly columnsController: ColumnsController,
     private readonly options: OptionsController,
     private readonly headerFilterViewController: HeaderFilterViewController,
     private readonly keyboardNavigationController: KeyboardNavigationController,
-    private readonly columnChooserView: ColumnChooserView,
     private readonly columnChooserController: ColumnChooserController,
   ) {
     super();
+
+    this.showDropzone = computed((): boolean => {
+      const column = this.columnChooserController.draggingItem.value?.column;
+
+      if (!column) {
+        return false;
+      }
+
+      return !column.allowReordering;
+    });
   }
 
   protected override getProps(): ReadonlySignal<HeaderPanelProps> {
@@ -48,9 +61,6 @@ export class HeaderPanelView extends View<HeaderPanelProps> {
       visibleColumns: this.columnsController.visibleColumns.value,
       kbnEnabled: this.keyboardNavigationController.enabled.value,
       navigationStrategy: this.navigationStrategy,
-      onColumnMove: this.onColumnMove.bind(this),
-      allowColumnReordering: this.columnsController.allowColumnReordering.value,
-      columnChooserDragModeOpened: this.columnChooserView.dragModeOpened.value,
       showSortIndexes: this.sortingController.showSortIndexes.value,
       onColumnSort: this.onColumnSort.bind(this),
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -60,59 +70,15 @@ export class HeaderPanelView extends View<HeaderPanelProps> {
       visible: this.options.oneWay('headerPanel.visible').value,
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       draggingOptions: this.options.oneWay('headerPanel.dragging').value as any,
-      showDropzone: computed((): boolean => {
-        const column = this.columnChooserController.draggingItem.value?.column;
-
-        if (!column) {
-          return false;
-        }
-
-        return !column.allowReordering;
-      }).value,
+      sortableConfig: {
+        allowDragging: this.columnsController.allowColumnReordering.value,
+        onColumnMove: this.headerPanelController.onColumnMove,
+        showDropzone: this.showDropzone.value,
+        isColumnDraggable: this.headerPanelController.isColumnDraggable,
+        onPlaceholderPrepared: this.headerPanelController.onPlaceholderPrepared,
+      } as Partial<ColumnSortableProps>,
       showContextMenu: this.showContextMenu.bind(this),
     }));
-  }
-
-  public onColumnMove(
-    column: Column,
-    toIndex: number,
-    draggingColumnData: DraggingColumnData,
-  ): void {
-    const { columnAfter } = draggingColumnData;
-    const needPreserveOrder = !column.allowReordering;
-
-    if (needPreserveOrder) {
-      this.columnsController.columnOption(column, 'visible', true);
-      return;
-    }
-
-    if (columnAfter === undefined) {
-      const columnsCount = this.columnsController.columns.peek().length;
-
-      this.columnsController.columnOption(column, 'visible', true);
-      this.columnsController.columnOption(column, 'visibleIndex', columnsCount);
-
-      return;
-    }
-
-    this.columnsController.updateColumns((columns) => {
-      const newColumns = [...columns];
-
-      newColumns.forEach((oldColumn, index) => {
-        const updatedColumn = { ...oldColumn };
-
-        if (oldColumn.name === column.name) {
-          updatedColumn.visibleIndex = columnAfter.visibleIndex;
-          updatedColumn.visible = true;
-        } else if (oldColumn.visibleIndex >= columnAfter.visibleIndex) {
-          updatedColumn.visibleIndex = oldColumn.visibleIndex + 1;
-        }
-
-        newColumns[index] = updatedColumn;
-      });
-
-      return newColumns;
-    });
   }
 
   public onColumnSort(column: Column, event: KeyboardEvent | MouseEvent): void {
