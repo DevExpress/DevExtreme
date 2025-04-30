@@ -16,6 +16,8 @@ import {
   getFilterValues,
 } from './utils';
 
+const FILTER_OBJ_COMPARE_DEPTH = 6;
+
 export class FilterSyncController {
   private readonly filterSyncEnabledOption = this.options.oneWay('filterSyncEnabled');
 
@@ -27,6 +29,8 @@ export class FilterSyncController {
   ] as const;
 
   private isFirstLoad = true;
+
+  private previousComposedHeaderFilter: unknown[] | null = null;
 
   public readonly filterSyncEnabled = computed(
     () => {
@@ -72,9 +76,6 @@ export class FilterSyncController {
 
           return {
             ...col,
-            headerFilter: {
-              ...col.headerFilter,
-            },
             filterValues,
             filterType,
           };
@@ -87,23 +88,38 @@ export class FilterSyncController {
       if (this.isFirstLoad) {
         this.isFirstLoad = false;
         if (this.filterController.filterPanelValue.value || filter.length === 0) {
+          this.previousComposedHeaderFilter = filter;
           return;
         }
       }
       if (!this.filterSyncEnabled.value) {
+        this.previousComposedHeaderFilter = filter;
         return;
       }
       const areEqualByValue = equalByValue(
         filter,
         this.filterController.filterValueOption.value,
-        { maxDepth: 5 },
+        {
+          maxDepth: FILTER_OBJ_COMPARE_DEPTH,
+          strict: true,
+        },
+      );
+      const areEqualByPrevious = equalByValue(
+        filter,
+        this.previousComposedHeaderFilter,
+        {
+          maxDepth: FILTER_OBJ_COMPARE_DEPTH,
+          strict: true,
+        },
       );
       const areEqualByEmpty = filter.length === 0
       && this.filterController.filterValueOption.value === null;
 
-      if (!areEqualByValue && !areEqualByEmpty) {
+      if (!areEqualByValue && !areEqualByEmpty && !areEqualByPrevious) {
         this.filterController.filterValueOption.value = filter;
       }
+
+      this.previousComposedHeaderFilter = filter;
     });
   }
 }
