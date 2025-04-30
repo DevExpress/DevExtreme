@@ -4,18 +4,19 @@ import type { DataSourceOptions } from '@js/common/data';
 import registerComponent from '@js/core/component_registrator';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
-import { isDefined, isPromise } from '@js/core/utils/type';
+import { isDefined } from '@js/core/utils/type';
 import DataHelperMixin from '@js/data_helper';
+import type dxChat from '@js/ui/chat';
 import type {
   Message,
   MessageDeletedEvent,
   MessageDeletingEvent,
+  MessageEditingStartEvent,
   MessageEnteredEvent,
   Properties,
   TypingEndEvent,
   TypingStartEvent,
 } from '@js/ui/chat';
-import type dxChat from '@js/ui/chat';
 import { invokeConditionally } from '@ts/core/utils/conditional_invoke';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
@@ -57,7 +58,7 @@ class Chat extends Widget<Properties> {
 
   _typingEndAction?: (e: Partial<TypingEndEvent>) => void;
 
-  _messageEditingStartAction?: (e: Partial<MessageEnteredEvent>) => void;
+  _messageEditingStartAction?: (e: Partial<MessageEditingStartEvent>) => void;
 
   _messageEditCanceledAction?: (e: Partial<MessageEnteredEvent>) => void;
 
@@ -267,26 +268,6 @@ class Chat extends Widget<Properties> {
     return null;
   }
 
-  _callCallbackIfNotCanceled(
-    cancelResult: boolean | PromiseLike<boolean>,
-    callback: () => void,
-    cancelCallback?: () => void,
-  ): void {
-    const invokeCallback = (cancel: boolean): void => {
-      const callbackToInvoke = cancel ? cancelCallback : callback;
-
-      callbackToInvoke?.();
-    };
-
-    if (isPromise(cancelResult)) {
-      cancelResult
-        .then(invokeCallback)
-        .catch(callback);
-    } else {
-      invokeCallback(Boolean(cancelResult));
-    }
-  }
-
   _messageEditingStartHandler(e: MessageEditingEvent): void {
     const messageEditingStartArgs = {
       message: e.message,
@@ -295,7 +276,7 @@ class Chat extends Widget<Properties> {
 
     this._messageEditingStartAction?.(messageEditingStartArgs);
 
-    this._callCallbackIfNotCanceled(
+    invokeConditionally(
       messageEditingStartArgs.cancel,
       () => {
         this._messageToEdit = e.message;
