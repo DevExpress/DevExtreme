@@ -13,7 +13,8 @@ export class ColumnKeyboardNavigationController extends KeyboardNavigationContro
     return this._columnsController.getVisibleIndex(column.index, rowIndex);
   }
 
-  protected getNewVisibleIndex(visibleIndex, direction) {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  protected getNewVisibleIndex(visibleIndex, direction, sourceLocation, targetLocation) {
     /*
           We need to add 2 to the index instead of 1,
           because that's how normalization of these indexes works.
@@ -43,7 +44,12 @@ export class ColumnKeyboardNavigationController extends KeyboardNavigationContro
     rowIndex = 0,
   }) {
     const visibleIndex = this.getVisibleIndex(column, rowIndex);
-    const newVisibleIndex = this.getNewVisibleIndex(visibleIndex, direction, sourceLocation, targetLocation);
+    const newVisibleIndex = this.getNewVisibleIndex(
+      visibleIndex,
+      direction,
+      sourceLocation,
+      targetLocation,
+    );
     const newFocusedColumnIndex = direction === Direction.Next
       ? newVisibleIndex - 1
       : newVisibleIndex;
