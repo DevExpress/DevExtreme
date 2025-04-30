@@ -11,17 +11,31 @@ import Widget from '@ts/core/widget/widget';
 
 import supportUtils from '../core/utils/m_support';
 
-const LOADINDICATOR_CLASS = 'dx-loadindicator';
-const LOADINDICATOR_WRAPPER_CLASS = 'dx-loadindicator-wrapper';
-const LOADINDICATOR_CONTENT_CLASS = 'dx-loadindicator-content';
-const LOADINDICATOR_ICON_CLASS = 'dx-loadindicator-icon';
-const LOADINDICATOR_SEGMENT_CLASS = 'dx-loadindicator-segment';
-const LOADINDICATOR_SEGMENT_INNER_CLASS = 'dx-loadindicator-segment-inner';
-const LOADINDICATOR_IMAGE_CLASS = 'dx-loadindicator-image';
+export const LOADINDICATOR_CLASS = 'dx-loadindicator';
+export const LOADINDICATOR_WRAPPER_CLASS = 'dx-loadindicator-wrapper';
+export const LOADINDICATOR_CONTENT_CLASS = 'dx-loadindicator-content';
+export const LOADINDICATOR_ICON_CLASS = 'dx-loadindicator-icon';
+export const LOADINDICATOR_SEGMENT_CLASS = 'dx-loadindicator-segment';
+export const LOADINDICATOR_SEGMENT_INNER_CLASS = 'dx-loadindicator-segment-inner';
+export const LOADINDICATOR_IMAGE_CLASS = 'dx-loadindicator-image';
+
+export enum AnimationType {
+  Circle = 'circle',
+}
+
+export const ANIMATION_TYPE_CLASSES = {
+  [AnimationType.Circle]: 'dx-loadindicator-content-circle',
+} as const;
 
 export interface LoadIndicatorProperties extends Properties {
   _animatingSegmentCount?: number;
   _animatingSegmentInner?: boolean;
+  _animationType: AnimationType;
+}
+
+interface SegmentParams {
+  segmentCount: number;
+  segmentInner: boolean;
 }
 
 class LoadIndicator extends Widget<LoadIndicatorProperties> {
@@ -34,11 +48,12 @@ class LoadIndicator extends Widget<LoadIndicatorProperties> {
   _getDefaultOptions(): LoadIndicatorProperties {
     return {
       ...super._getDefaultOptions(),
-      indicatorSrc: '',
-      activeStateEnabled: false,
-      hoverStateEnabled: false,
       _animatingSegmentCount: 1,
       _animatingSegmentInner: false,
+      _animationType: AnimationType.Circle,
+      activeStateEnabled: false,
+      hoverStateEnabled: false,
+      indicatorSrc: '',
     };
   }
 
@@ -97,8 +112,17 @@ class LoadIndicator extends Widget<LoadIndicatorProperties> {
     this.$element().append(this._$wrapper);
   }
 
+  _getAnimationTypeContentClass(): (typeof ANIMATION_TYPE_CLASSES)[AnimationType] {
+    const { _animationType: animationType } = this.option();
+
+    return ANIMATION_TYPE_CLASSES[animationType];
+  }
+
   _renderIndicatorContent(): void {
-    this._$content = $('<div>').addClass(LOADINDICATOR_CONTENT_CLASS);
+    const animationClass = this._getAnimationTypeContentClass() ?? '';
+    const contentClasses = [LOADINDICATOR_CONTENT_CLASS, animationClass].join(' ');
+
+    this._$content = $('<div>').addClass(contentClasses);
     this._$wrapper.append(this._$content);
   }
 
@@ -113,25 +137,47 @@ class LoadIndicator extends Widget<LoadIndicatorProperties> {
     }
   }
 
-  _renderAnimationMarkup(): void {
-    const animatingSegmentInner = this.option('_animatingSegmentInner');
+  _getSegmentParams(): SegmentParams {
+    const {
+      _animationType: animationType,
+      _animatingSegmentCount: animatingSegmentCount,
+      _animatingSegmentInner: animatingSegmentInner,
+    } = this.option();
 
+    const segmentParams = {
+      [AnimationType.Circle]: {
+        segmentCount: animatingSegmentCount ?? 0,
+        segmentInner: Boolean(animatingSegmentInner),
+      },
+    };
+
+    return segmentParams[animationType];
+  }
+
+  _renderAnimationMarkup(): void {
     this._$indicator = $('<div>').addClass(LOADINDICATOR_ICON_CLASS);
     this._$content.append(this._$indicator);
 
-    // Indicator markup
-    // @ts-expect-error ts-error
-    for (let i = this.option('_animatingSegmentCount'); i >= 0; --i) {
+    const params = this._getSegmentParams();
+
+    this._renderSegments(params);
+  }
+
+  _renderSegments(params: SegmentParams): void {
+    const { segmentCount, segmentInner } = params;
+
+    for (let i = segmentCount; i >= 0; i -= 1) {
       const $segment = $('<div>')
         .addClass(LOADINDICATOR_SEGMENT_CLASS)
-        // eslint-disable-next-line @typescript-eslint/restrict-plus-operands, @typescript-eslint/no-base-to-string
-        .addClass(LOADINDICATOR_SEGMENT_CLASS + i);
+        .addClass(`${LOADINDICATOR_SEGMENT_CLASS}${i}`);
 
-      if (animatingSegmentInner) {
-        $segment.append($('<div>').addClass(LOADINDICATOR_SEGMENT_INNER_CLASS));
+      if (segmentInner) {
+        const $segmentInner = $('<div>').addClass(LOADINDICATOR_SEGMENT_INNER_CLASS);
+
+        $segment.append($segmentInner);
       }
 
-      this._$indicator.append($segment);
+      this._$indicator?.append($segment);
     }
   }
 
@@ -192,6 +238,7 @@ class LoadIndicator extends Widget<LoadIndicatorProperties> {
     switch (args.name) {
       case '_animatingSegmentCount':
       case '_animatingSegmentInner':
+      case '_animationType':
       case 'indicatorSrc':
         this._invalidate();
         break;
