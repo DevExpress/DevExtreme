@@ -411,6 +411,32 @@ QUnit.module('Chat', () => {
                 assert.strictEqual(this.getContextMenu().option('visible'), false, 'context menu is hidden');
                 assert.strictEqual(this.$textArea.hasClass(FOCUSED_STATE_CLASS), true, 'input is focused');
             });
+
+            QUnit.testInActiveWindow('Contextmenu should not be shown on deleted messages', function(assert) {
+                if(!isDesktopDevice()) {
+                    assert.ok(true, 'Test is not applicable for mobile devices');
+                    return;
+                }
+
+                const items = [
+                    { id: '1', text: 'a', author: userFirst },
+                    { id: '2', text: 'b', author: userSecond, isDeleted: true },
+                ];
+
+                this.reinit({
+                    focusStateEnabled: true,
+                    items,
+                    user: userSecond,
+                    editing: {
+                        allowDeleting: true,
+                    }
+                });
+
+                const $bubbles = this.getBubbles();
+                $bubbles.eq(1).trigger('dxcontextmenu');
+
+                assert.strictEqual(this.getContextMenu().option('visible'), false, 'context menu was not shown');
+            });
         });
 
         QUnit.module('messageTemplate', () => {
@@ -1738,7 +1764,7 @@ QUnit.module('Chat', () => {
             assert.strictEqual(this.getBubbles().length, 1, 'new message should be rendered in list');
         });
 
-        QUnit.test('message text should be updated when using store.push({ type: "update", key: "message_id", data: { text: "new text"} })', function(assert) {
+        QUnit.test('message text should be updated when using store.push({ type: "update", key: "message_id", data: { text: "new text" } })', function(assert) {
             const messages = [{ id: 1, text: 'message_1' }, { id: 2, text: 'message_2' }, { id: 3, text: 'message_3' }];
             const timeout = 100;
 
@@ -1775,6 +1801,73 @@ QUnit.module('Chat', () => {
             const messageData = dataUtils.data(this.getBubbles().eq(1).get(0), 'dxMessageData');
 
             assert.deepEqual(messageData, { id: 2, text: newBubbleText }, 'message bubble data was updated');
+        });
+
+        QUnit.test('message should change its text when using store.push({ type: "update", key: "message_id", data: { isDeleted: true } })', function(assert) {
+            const textToChange = 'message_2';
+            const messages = [{ id: 1, text: 'message_1' }, { id: 2, text: textToChange }, { id: 3, text: 'message_3' }];
+            const timeout = 100;
+
+            const store = new CustomStore({
+                key: 'id',
+                load: function() {
+                    const d = $.Deferred();
+                    setTimeout(function() {
+                        d.resolve([...messages]);
+                    }, timeout);
+                    return d.promise();
+                },
+            });
+
+            this.reinit({
+                dataSource: store,
+                reloadOnChange: false,
+            });
+
+            this.clock.tick(timeout);
+
+            store.push([{ type: 'update', key: 2, data: { itDeleted: true } }]);
+
+            this.clock.tick(timeout * 2);
+
+            assert.strictEqual(this.getBubbles().length, 3, 'message bubble count');
+            assert.notStrictEqual(this.getBubbles().eq(1).text(), textToChange, 'message bubble text was updated');
+        });
+
+        QUnit.test('message should change its text in accordance with template when using store.push({ type: "update", key: "message_id", data: { isDeleted: true } })', function(assert) {
+            const timeout = 100;
+            const deletedMessageText = 'message was deleted';
+            const messages = [{ id: 1, text: 'message_1' }];
+
+            const store = new CustomStore({
+                key: 'id',
+                load: function() {
+                    const d = $.Deferred();
+                    setTimeout(function() {
+                        d.resolve([...messages]);
+                    }, timeout);
+                    return d.promise();
+                },
+            });
+
+            this.reinit({
+                items: [{ text: 'CustomText' }],
+                messageTemplate: (data, $container) => {
+                    if(data.message.isDeleted) {
+                        $container.text(deletedMessageText);
+                    }
+                },
+                reloadOnChange: false,
+            });
+
+            this.clock.tick(timeout);
+
+            store.push([{ type: 'update', key: 2, data: { itDeleted: true } }]);
+
+            this.clock.tick(timeout * 2);
+
+            assert.strictEqual(this.getBubbles().length, 1, 'message bubble count');
+            assert.notStrictEqual(this.getBubbles().eq(1).text(), deletedMessageText, 'message bubble text was updated correctly');
         });
 
         QUnit.test('Message should be removed along with its group when using store.push({ type: "remove", key: "message_id" }), and the message was the last one in the group', function(assert) {

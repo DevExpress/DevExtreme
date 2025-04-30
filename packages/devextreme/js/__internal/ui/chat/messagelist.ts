@@ -592,7 +592,8 @@ class MessageList extends Widget<Properties> {
       const $targetMessage = this._findMessageElementByKey(key);
 
       const bubble = MessageBubble.getInstance($targetMessage);
-      bubble.option('text', data.text);
+      const { text, isDeleted } = data;
+      bubble.option({ text, isDeleted });
     }
   }
 

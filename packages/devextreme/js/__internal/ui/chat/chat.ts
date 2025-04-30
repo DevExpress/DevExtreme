@@ -27,11 +27,6 @@ import type {
   TypingStartEvent as MessageBoxTypingStartEvent,
 } from '@ts/ui/chat/messagebox';
 import MessageBox from '@ts/ui/chat/messagebox';
-import {
-  CHAT_MESSAGEBUBBLE_DELETED_CLASS,
-  CHAT_MESSAGEBUBBLE_ICON_CLASS,
-  CHAT_MESSAGEBUBBLE_ICON_PROHIBITION_CLASS,
-} from '@ts/ui/chat/messagebubble';
 import type {
   MessageEditingEvent,
   MessageTemplate,
@@ -246,39 +241,6 @@ class Chat extends Widget<Properties> {
     return allowDeleting ?? false;
   }
 
-  _getDefaultMessageTemplate(): MessageTemplate {
-    const defaultMessageTemplate = (data, $container): void => {
-      if (data.message.isDeleted) {
-        const icon = $('<span>')
-          .addClass(CHAT_MESSAGEBUBBLE_ICON_CLASS)
-          .addClass(CHAT_MESSAGEBUBBLE_ICON_PROHIBITION_CLASS);
-
-        const deletedMessage = $('<span>')
-          .text(messageLocalization.format('dxChat-deletedMessageText'));
-
-        $container
-          .addClass(CHAT_MESSAGEBUBBLE_DELETED_CLASS)
-          .append(icon)
-          .append(deletedMessage);
-      } else {
-        const $text = $('<div>').text(data.message.text);
-        $container.append($text);
-      }
-    };
-
-    return (message, $container) => {
-      const template = this._getTemplate(defaultMessageTemplate);
-
-      template.render({
-        container: $container,
-        model: {
-          component: this,
-          message,
-        },
-      });
-    };
-  }
-
   _getMessageTemplate(): MessageTemplate {
     const { messageTemplate } = this.option();
     if (messageTemplate) {
@@ -295,7 +257,7 @@ class Chat extends Widget<Properties> {
       };
     }
 
-    return this._getDefaultMessageTemplate();
+    return null;
   }
 
   _messageEditingStartHandler(e: MessageEditingEvent): void {
