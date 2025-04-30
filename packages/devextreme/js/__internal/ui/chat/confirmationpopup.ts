@@ -5,10 +5,9 @@ import $ from '@js/core/renderer';
 import { extend } from '@js/core/utils/extend';
 import messageLocalization from '@js/localization/message';
 import Popup, { type Properties as PopupProperties, type ToolbarItem } from '@js/ui/popup';
+import { BUTTON_CLASS } from '@ts/ui/button/button';
 
 export const CHAT_CONFIRMATION_POPUP_WRAPPER_CLASS = 'dx-chat-confirmation-popup-wrapper';
-
-const DX_BUTTON_CLASSNAME = 'dx-button';
 
 const POPUP_WIDTH = 240;
 
@@ -77,7 +76,7 @@ class ConfirmationPopup {
       onShown: (e) => {
         const $firstButton = e.component
           .bottomToolbar()
-          .find(`.${DX_BUTTON_CLASSNAME}`)
+          .find(`.${BUTTON_CLASS}`)
           .first();
         // @ts-expect-error
         eventsEngine.trigger($firstButton, 'focus');
