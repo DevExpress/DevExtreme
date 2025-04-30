@@ -13,7 +13,7 @@ export class AgendaAppointment extends Appointment {
 
   _renderResourceList(): void {
     // eslint-disable-next-line no-void
-    void this.resourceProcessor
+    void this.resourceManager
       .getAppointmentResourcesValues(this.rawAppointment)
       .then((list) => {
         const parent = this.$element().find(`.${APPOINTMENT_CONTENT_CLASSES.APPOINTMENT_CONTENT_DETAILS}`);

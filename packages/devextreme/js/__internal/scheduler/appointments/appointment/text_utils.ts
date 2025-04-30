@@ -3,8 +3,7 @@ import messageLocalization from '@js/common/core/localization/message';
 import { isDefined } from '@js/core/utils/type';
 import { PathTimeZoneConversion } from '@ts/scheduler/r1/timezone_calculator/const';
 
-import { getPathToLeaf } from '../../resources/m_utils';
-import type { AppointmentProperties, LoadedResource } from './m_types';
+import type { AppointmentProperties } from './m_types';
 
 const localizeDate = (date: Date): string => `${dateLocalization.format(date, 'monthAndDay')}, ${dateLocalization.format(date, 'year')}`;
 
@@ -64,24 +63,6 @@ export const getReducedIconTooltip = (options: AppointmentProperties): string =>
   const endDateText = localizeDate(getDate(options, 'endDate'));
 
   return `${tooltipLabel}: ${endDateText}`;
-};
-
-export const getGroupTexts = (
-  groupIndex: number,
-  loadedResources: LoadedResource[],
-): string[] => {
-  if (!loadedResources?.length) {
-    return [];
-  }
-
-  const idPath: (string | number)[] = getPathToLeaf(groupIndex, loadedResources);
-  const textPath = idPath.map(
-    (id, index) => loadedResources[index].items.find(
-      (item) => item.id === id,
-    )?.text,
-  ).filter(Boolean);
-
-  return textPath as string[];
 };
 
 const getGroupText = (options: AppointmentProperties): string => {

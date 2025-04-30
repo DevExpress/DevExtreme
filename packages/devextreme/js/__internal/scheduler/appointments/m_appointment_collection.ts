@@ -24,6 +24,7 @@ import {
 } from '@js/core/utils/type';
 import CollectionWidget from '@js/ui/collection/ui.collection_widget.edit';
 import { dateUtilsTs } from '@ts/core/utils/date';
+import { getAppointmentGroupValues } from '@ts/scheduler/utils/resource_manager/appointment_groups_utils';
 
 import { APPOINTMENT_SETTINGS_KEY } from '../constants';
 import { createAppointmentAdapter } from '../m_appointment_adapter';
@@ -32,9 +33,9 @@ import { getRecurrenceProcessor } from '../m_recurrence';
 import timeZoneUtils from '../m_utils_time_zone';
 import type { AppointmentViewModel } from '../types';
 import type { AppointmentDataAccessor } from '../utils';
+import { getGroupTexts } from '../utils/resource_manager/group_utils';
 import { AgendaAppointment } from './appointment/agenda_appointment';
 import { Appointment } from './appointment/m_appointment';
-import { getGroupTexts } from './appointment/text_utils';
 import { getAppointmentTakesSeveralDays, sortAppointmentsByStartDate } from './data_provider/m_utils';
 import { createAgendaAppointmentLayout, createAppointmentLayout } from './m_appointment_layout';
 import { getAppointmentDateRange } from './resizing/m_core';
@@ -593,10 +594,11 @@ class SchedulerAppointments extends CollectionWidget {
 
       this._processVirtualAppointment(settings, element, rawAppointment, deferredColor);
     } else {
+      const { groupsLeafs, resourceById } = this.option('getResourceManager')();
       const config: any = {
         data: rawAppointment,
         groupIndex: settings.groupIndex,
-        groupTexts: getGroupTexts(settings.groupIndex, this.option('getLoadedResources')()),
+        groupTexts: getGroupTexts(groupsLeafs, resourceById, settings.groupIndex),
         observer: this.option('observer'),
         geometry,
         direction: settings.direction || 'vertical',
@@ -616,8 +618,6 @@ class SchedulerAppointments extends CollectionWidget {
         dataAccessors: this.dataAccessors,
         timeZoneCalculator: this.option('timeZoneCalculator'),
         getAppointmentColor: this.option('getAppointmentColor'),
-        getResourceDataAccessors: this.option('getResourceDataAccessors'),
-        getResourceProcessor: this.option('getResourceProcessor'),
         getResizableStep: this.option('getResizableStep'),
       };
 
@@ -630,15 +630,15 @@ class SchedulerAppointments extends CollectionWidget {
   }
 
   _applyResourceDataAttr($appointment) {
-    const dataAccessors = this.option('getResourceDataAccessors')();
+    const { resources } = this.option('getResourceManager')();
     const rawAppointment = (this as any)._getItemData($appointment);
+    const appointmentGroups = getAppointmentGroupValues(rawAppointment, resources);
 
-    each(dataAccessors.getter, (key: any) => {
-      const value = dataAccessors.getter[key](rawAppointment);
-      if (isDefined(value)) {
-        const prefix = `data-${normalizeKey(key.toLowerCase())}-`;
+    Object.entries(appointmentGroups).forEach(([resourceIndex, resourceIds]) => {
+      if (resourceIds.length) {
+        const prefix = `data-${normalizeKey(resourceIndex.toLowerCase())}-`;
 
-        wrapToArray(value).forEach((value) => $appointment.attr(prefix + normalizeKey(value), true));
+        resourceIds.forEach((value) => $appointment.attr(prefix + normalizeKey(value), true));
       }
     });
   }

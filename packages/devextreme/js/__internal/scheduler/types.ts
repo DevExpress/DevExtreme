@@ -1,7 +1,6 @@
-import type { Appointment, Properties } from '@js/ui/scheduler';
+import type { Appointment } from '@js/ui/scheduler';
 
-export type ResourcesConfig = Required<Properties>['resources'];
-export type ResourceConfig = ResourcesConfig[number];
+import type { ResourceLoader } from './utils/loader/resource_loader';
 
 export type Direction = 'vertical' | 'horizontal';
 export type GroupOrientation = 'vertical' | 'horizontal';
@@ -149,7 +148,7 @@ export interface ViewDataProviderOptions {
   startCellIndex: number;
   groupOrientation: GroupOrientation;
   groupByDate: boolean;
-  groups: Group[];
+  groups: ResourceLoader[];
   isProvideVirtualCellsWidth: boolean;
   isAllDayPanelVisible: boolean;
   selectedCells?: unknown;

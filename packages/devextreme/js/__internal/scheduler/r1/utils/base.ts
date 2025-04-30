@@ -16,8 +16,6 @@ import type {
   FilterItemType,
   GetDateForHeaderText,
   GetDateForHeaderTextOptions,
-  Group,
-  GroupItem,
   GroupOrientation,
   GroupPanelData,
   GroupRenderItem,
@@ -25,6 +23,8 @@ import type {
   ViewDataProviderType,
   ViewType,
 } from '../../types';
+import type { ResourceLoader } from '../../utils/loader/resource_loader';
+import type { GroupLeaf } from '../../utils/resource_manager/types';
 
 const toMs = dateUtils.dateToMilliseconds;
 const DAY_HOURS = 24;
@@ -103,7 +103,7 @@ export const getOverflowIndicatorColor = (color: string, colors: string[]): stri
     : undefined
 );
 
-export const getVerticalGroupCountClass = (groups: Group[]): string | undefined => {
+export const getVerticalGroupCountClass = (groups: unknown[]): string | undefined => {
   switch (groups?.length) {
     case 1:
       return VERTICAL_GROUP_COUNT_CLASSES[0];
@@ -202,12 +202,12 @@ export const getHeaderCellText = (
 };
 
 export const isVerticalGroupingApplied = (
-  groups: Group[],
+  groups: unknown[],
   groupOrientation?: GroupOrientation,
 ): boolean => groupOrientation === VERTICAL_GROUP_ORIENTATION
   && !!groups.length;
 
-export const getGroupCount = (groups: Group[]): number => {
+export const getGroupCount = (groups: ResourceLoader[]): number => {
   let result = 0;
 
   for (let i = 0, len = groups.length; i < len; i += 1) {
@@ -221,14 +221,14 @@ export const getGroupCount = (groups: Group[]): number => {
   return result;
 };
 
+// TODO(9): Get rid of it as soon as you can. More parameters then needed
 export const getHorizontalGroupCount = (
-  groups: Group[],
+  groupLeafs: GroupLeaf[],
   groupOrientation: GroupOrientation,
 ): number => {
-  const groupCount = getGroupCount(groups) || 1;
-  const isVerticalGrouping = isVerticalGroupingApplied(groups, groupOrientation);
+  const isVerticalGrouping = isVerticalGroupingApplied(groupLeafs, groupOrientation);
 
-  return isVerticalGrouping ? 1 : groupCount;
+  return isVerticalGrouping ? 1 : groupLeafs.length;
 };
 
 export const isTimelineView = (
@@ -288,10 +288,9 @@ export const getViewStartByOptions = (
 };
 
 export const calculateIsGroupedAllDayPanel = (
-  groups: Group[],
+  groups: unknown[],
   groupOrientation: GroupOrientation,
   isAllDayPanelVisible: boolean,
-
 ): boolean => isVerticalGroupingApplied(groups, groupOrientation) && isAllDayPanelVisible;
 
 export const calculateViewStartDate = (
@@ -369,12 +368,12 @@ export const getCalculatedFirstDayOfWeek = (
   : dateLocalization.firstDayOfWeekIndex());
 
 export const isHorizontalGroupingApplied = (
-  groups: Group[],
+  groups: unknown[],
   groupOrientation?: GroupOrientation,
 ): boolean => groupOrientation === HORIZONTAL_GROUP_ORIENTATION && !!groups.length;
 
 export const isGroupingByDate = (
-  groups: Group[],
+  groups: unknown[],
   groupOrientation: GroupOrientation | undefined,
   groupByDate: boolean,
 ): boolean => {
@@ -462,25 +461,25 @@ export const extendGroupItemsForGroupingByDate = (
   }), []) as GroupRenderItem[][];
 
 export const getGroupPanelData = (
-  groups: Group[],
+  groupResources: ResourceLoader[],
   columnCountPerGroup: number,
   groupByDate: boolean,
   baseColSpan: number,
 ): GroupPanelData => {
   let repeatCount = 1;
-  let groupPanelItems = groups.map((group: Group) => {
+  let groupPanelItems = groupResources.map((group) => {
     const result = [] as GroupRenderItem[];
-    const { name: resourceName, items, data } = group;
+    const { resourceName, items, data } = group;
 
     for (let iterator = 0; iterator < repeatCount; iterator += 1) {
-      result.push(...items.map(({ id, text, color }: GroupItem, index: number) => ({
+      result.push(...items.map(({ id, text, color }, index) => ({
         id,
         text,
         color,
         key: `${iterator}_${resourceName}_${id}`,
         resourceName,
         data: data?.[index],
-      })));
+      }) as GroupRenderItem));
     }
 
     repeatCount *= items.length;

@@ -69,6 +69,7 @@ export class AppointmentDataProvider {
   initFilterStrategy(): void {
     const filterOptions = {
       resources: this.options.resources,
+      getResourceManager: this.options.getResourceManager,
       dataAccessors: this.dataAccessors,
       startDayHour: this.options.startDayHour,
       endDayHour: this.options.endDayHour,

@@ -1,17 +1,10 @@
 import type { Orientation } from '@js/common';
+import type { DeferredObj } from '@js/core/utils/deferred';
 import type { TimeZoneCalculator } from '@ts/scheduler/r1/timezone_calculator/calculator';
-import type { ResourceProcessor } from '@ts/scheduler/resources/resource_processor';
 import type { SafeAppointment } from '@ts/scheduler/types';
 import type { AppointmentDataAccessor } from '@ts/scheduler/utils/data_accessor/appointment_data_accessor';
+import type { ResourceManager } from '@ts/scheduler/utils/resource_manager/resource_manager';
 
-export interface LoadedResource {
-  data: Record<string, unknown>[];
-  items: {
-    id: number | string;
-    text: string;
-  }[];
-  name: string;
-}
 export interface AppointmentProperties extends Record<string, unknown> {
   data: SafeAppointment;
   groupIndex?: number;
@@ -34,8 +27,7 @@ export interface AppointmentProperties extends Record<string, unknown> {
 
   dataAccessors: AppointmentDataAccessor;
   timeZoneCalculator: TimeZoneCalculator;
-  getAppointmentColor: (config: any) => any;
-  getResourceDataAccessors: () => any;
-  getResourceProcessor: () => ResourceProcessor;
+  getAppointmentColor: (config: any) => DeferredObj<string | undefined>;
+  getResourceManager: () => ResourceManager;
   getResizableStep: () => number;
 }

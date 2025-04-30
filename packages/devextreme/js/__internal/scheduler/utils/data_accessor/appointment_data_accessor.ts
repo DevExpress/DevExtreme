@@ -21,10 +21,6 @@ const isDateField = (field: string): boolean => field === 'startDate' || field =
 export class AppointmentDataAccessor extends DataAccessor<Appointment, KnownFields> {
   public expr!: IFieldExpr;
 
-  // TODO(3): resources data accessor sets inside scheduler. Move logic to this class
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  public resources: any;
-
   constructor(
     fields: IFieldExpr,
     protected forceIsoDateParsing = true,

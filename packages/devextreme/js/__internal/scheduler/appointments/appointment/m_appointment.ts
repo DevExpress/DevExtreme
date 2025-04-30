@@ -9,7 +9,7 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { extend } from '@js/core/utils/extend';
 import Resizable from '@js/ui/resizable';
-import type { ResourceProcessor } from '@ts/scheduler/resources/resource_processor';
+import type { ResourceManager } from '@ts/scheduler/utils/resource_manager/resource_manager';
 import { hide, show } from '@ts/ui/tooltip/m_tooltip';
 
 import {
@@ -48,8 +48,8 @@ export class Appointment extends DOMComponent<AppointmentProperties> {
     return this.option('data');
   }
 
-  get resourceProcessor(): ResourceProcessor {
-    return this.option('getResourceProcessor')();
+  get resourceManager(): ResourceManager {
+    return this.option('getResourceManager')();
   }
 
   get dataAccessors(): AppointmentDataAccessor {

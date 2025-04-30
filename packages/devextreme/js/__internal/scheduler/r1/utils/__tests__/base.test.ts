@@ -484,8 +484,8 @@ describe('getSkippedHoursInRange', () => {
 });
 
 describe('getGroupPanelData', () => {
-  const groupsBase = [{
-    name: 'group 1',
+  const groupsBase: any = [{
+    resourceName: 'group 1',
     items: [{
       text: 'item 1', id: 1, color: 'color 1',
     }, {
@@ -497,7 +497,7 @@ describe('getGroupPanelData', () => {
       text: 'item 2', id: 2, color: 'color 2',
     }],
   }, {
-    name: 'group 2',
+    resourceName: 'group 2',
     items: [{
       text: 'item 3', id: 1, color: 'color 3',
     }, {
@@ -518,32 +518,32 @@ describe('getGroupPanelData', () => {
         groupPanelItems: [[{
           ...groupsBase[0].items[0],
           data: groupsBase[0].data[0],
-          resourceName: groupsBase[0].name,
+          resourceName: groupsBase[0].resourceName,
           key: '0_group 1_1',
         }, {
           ...groupsBase[0].items[1],
           data: groupsBase[0].data[1],
-          resourceName: groupsBase[0].name,
+          resourceName: groupsBase[0].resourceName,
           key: '0_group 1_2',
         }], [{
           ...groupsBase[1].items[0],
           data: groupsBase[1].data[0],
-          resourceName: groupsBase[1].name,
+          resourceName: groupsBase[1].resourceName,
           key: '0_group 2_1',
         }, {
           ...groupsBase[1].items[1],
           data: groupsBase[1].data[1],
-          resourceName: groupsBase[1].name,
+          resourceName: groupsBase[1].resourceName,
           key: '0_group 2_2',
         }, {
           ...groupsBase[1].items[0],
           data: groupsBase[1].data[0],
-          resourceName: groupsBase[1].name,
+          resourceName: groupsBase[1].resourceName,
           key: '1_group 2_1',
         }, {
           ...groupsBase[1].items[1],
           data: groupsBase[1].data[1],
-          resourceName: groupsBase[1].name,
+          resourceName: groupsBase[1].resourceName,
           key: '1_group 2_2',
         }]],
         baseColSpan: 3,
