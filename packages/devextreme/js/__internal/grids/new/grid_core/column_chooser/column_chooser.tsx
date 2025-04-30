@@ -4,6 +4,7 @@ import type {
   Properties as PopupProperties, ShowingEvent,
 } from '@js/ui/popup';
 import type dxPopup from '@js/ui/popup';
+import type * as SortableTypes from '@js/ui/sortable_types';
 import type { Properties as TreeViewProperties } from '@js/ui/tree_view';
 import type dxTreeView from '@js/ui/tree_view';
 import {
@@ -54,6 +55,10 @@ export interface ColumnChooserProps {
   treeViewSelectModeConfig: TreeViewProperties;
 
   treeViewDragAndDropModeConfig: TreeViewProperties;
+
+  onDragStart: (e: SortableTypes.DragStartEvent) => void;
+
+  onDragEnd: (e: SortableTypes.DragEndEvent) => void;
 }
 
 export class ColumnChooser extends Component<ColumnChooserProps> {
@@ -96,6 +101,8 @@ export class ColumnChooser extends Component<ColumnChooserProps> {
           allowDragging={!this.isSelectMode()}
           columnDragTemplate={Item}
           onColumnMove={this.props.onColumnMove}
+          onDragStart={this.props.onDragStart}
+          onDragEnd={this.props.onDragEnd}
         >
           { treeView }
         </ColumnSortable>

@@ -154,6 +154,9 @@ export class ColumnChooserView extends View<ColumnChooserProps> {
 
       treeViewSelectModeConfig: this.selectModeConfig.value,
       treeViewDragAndDropModeConfig: this.dragAndDropModeConfig.value,
+
+      onDragStart: this.columnChooserController.onDragStart,
+      onDragEnd: this.columnChooserController.onDragEnd,
     }));
   }
 

@@ -1,7 +1,7 @@
 import $ from '@js/core/renderer';
 import type * as SortableTypes from '@js/ui/sortable_types';
 import type { ComponentType, InfernoNode } from 'inferno';
-import { Component, createRef, render } from 'inferno';
+import { Component, render } from 'inferno';
 
 import type { Column, VisibleColumn } from '../../grid_core/columns_controller/types';
 import type { Props as SortableProps } from '../../grid_core/inferno_wrappers/sortable';
@@ -34,6 +34,8 @@ export interface Props extends Omit<SortableProps, 'onAdd' | 'onReorder' | 'drag
   onColumnMove: (column: Column, toIndex: number, draggingData: DraggingColumnData) => void;
 
   columnDragTemplate?: ComponentType<{ column: Column; status?: Status; isDragging?: boolean }>;
+
+  showDropzone?: boolean;
 }
 
 const ALLOWED_DRAGGING_DISTANCE = 20;
@@ -47,17 +49,16 @@ const CLASS = {
 export class ColumnSortable extends Component<Props> {
   private dragItemContainer?: Element;
 
-  private readonly dropzoneRef = createRef<HTMLDivElement>();
-
   private readonly onDragStart = (e: SortableTypes.DragStartEvent): void => {
     const column = this.props.getColumnByIndex(e.fromIndex);
-    const { source } = this.props;
     const isDraggable = this.isColumnDraggable(column);
 
     if (!isDraggable) {
       e.cancel = true;
       return;
     }
+
+    const { source } = this.props;
 
     e.itemData = {
       column,
@@ -70,14 +71,8 @@ export class ColumnSortable extends Component<Props> {
       ...e.itemData,
       ...this.getNeighborColumns(e),
     };
-  };
 
-  private readonly onDragEnter = (e): void => {
-    this.showDropzoneIfNeed(e.itemData);
-  };
-
-  private readonly onDragLeave = (): void => {
-    this.hideDropzone();
+    this.props.onDragStart?.(e);
   };
 
   private readonly onPlaceholderPrepared = (e): void => {
@@ -110,8 +105,6 @@ export class ColumnSortable extends Component<Props> {
   private readonly onColumnMove = (
     e: SortableTypes.AddEvent | SortableTypes.ReorderEvent,
   ): void => {
-    this.hideDropzone();
-
     if (e.itemData.status === 'forbid') {
       return;
     }
@@ -162,7 +155,10 @@ export class ColumnSortable extends Component<Props> {
       this.renderDragTemplate(e.itemData);
     } : undefined;
 
-    const needDropzone = this.props.source === 'header-panel-main';
+    const dropzoneClasses = [
+      CLASS.dropzone,
+      this.props.showDropzone ? CLASS.dropzoneVisible : '',
+    ].join(' ');
 
     return (
       <Sortable
@@ -176,42 +172,15 @@ export class ColumnSortable extends Component<Props> {
         dragTemplate={dragTemplate}
         // @ts-expect-error
         _source={source}
-        onDragEnter={this.onDragEnter}
-        onDragLeave={this.onDragLeave}
         onPlaceholderPrepared={this.onPlaceholderPrepared}
       >
       {this.props.children}
 
-      { needDropzone
-         && <div className={CLASS.dropzone} ref={this.dropzoneRef}>
-          Drop header item here
-        </div>
-      }
+      <div className={dropzoneClasses} aria-hidden={this.props.showDropzone}>
+        Drop header item here
+      </div>
     </Sortable>
     );
-  }
-
-  private showDropzoneIfNeed(itemData: DraggingColumnData): void {
-    if (!this.dropzoneRef.current) {
-      return;
-    }
-
-    const { column, source } = itemData;
-
-    if (this.props.source === 'header-panel-main') {
-      const isToHeaderPanel = source !== 'header-panel-main';
-      const isDropzoneVisible = !column.allowReordering && isToHeaderPanel;
-
-      $(this.dropzoneRef.current).toggleClass(CLASS.dropzoneVisible, isDropzoneVisible);
-    }
-  }
-
-  private hideDropzone(): void {
-    if (!this.dropzoneRef.current) {
-      return;
-    }
-
-    $(this.dropzoneRef.current).removeClass(CLASS.dropzoneVisible);
   }
 
   private isColumnDraggable(column: Column): boolean {

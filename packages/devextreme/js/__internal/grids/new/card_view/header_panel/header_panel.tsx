@@ -51,6 +51,8 @@ export interface HeaderPanelProps {
 
   draggingOptions?: DraggingOptions;
 
+  showDropzone?: boolean;
+
   showContextMenu: (
     event: KeyboardEvent | MouseEvent,
     column?: Column,
@@ -77,14 +79,15 @@ export class HeaderPanel extends Component<HeaderPanelProps> {
         <ColumnSortable
           {...this.props.draggingOptions}
           source="header-panel-main"
-          visibleColumns={this.props.visibleColumns}
           getColumnByIndex={(index) => this.props.visibleColumns[index]}
+          visibleColumns={this.props.visibleColumns}
           allowDragging={this.props.allowColumnReordering}
           columnChooserDragModeOpened={this.props.columnChooserDragModeOpened}
           onColumnMove={this.props.onColumnMove}
           columnDragTemplate={Item}
           itemOrientation="horizontal"
           filter={`.${itemClasses.item}`}
+          showDropzone={this.props.showDropzone}
         >
           <Scrollable
             direction='horizontal'

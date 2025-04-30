@@ -1,7 +1,9 @@
+import type * as SortableTypes from '@js/ui/sortable_types';
 import type { Item as TreeViewItemProperties, SelectionChangedEvent } from '@js/ui/tree_view';
-import { computed, type ReadonlySignal } from '@preact/signals-core';
+import { computed, type ReadonlySignal, signal } from '@preact/signals-core';
 import { sortColumns } from '@ts/grids/grid_core/columns_controller/m_columns_controller_utils';
 
+import type { DraggingColumnData } from '../../card_view/header_panel/column_sortable';
 import { ColumnsController } from '../columns_controller/columns_controller';
 import type { Column } from '../columns_controller/types';
 import { getColumnIndexByName } from '../columns_controller/utils';
@@ -13,6 +15,8 @@ export class ColumnChooserController {
   public readonly chooserColumns: ReadonlySignal<Column[]>;
 
   public readonly items: ReadonlySignal<TreeViewItemProperties[]>;
+
+  public readonly draggingItem = signal<DraggingColumnData | null>(null);
 
   constructor(
     private readonly columnsController: ColumnsController,
@@ -28,8 +32,8 @@ export class ColumnChooserController {
           chooserColumns = chooserColumns.filter((column) => !column.visible);
         }
 
-        chooserColumns = chooserColumns.filter((column) => column.showInColumnChooser);
-        chooserColumns = sortColumns(chooserColumns, sortOrder);
+        chooserColumns = chooserColumns.filter((column: Column) => column.showInColumnChooser);
+        chooserColumns = sortColumns(chooserColumns, sortOrder) as Column[];
 
         return chooserColumns;
       },
@@ -68,5 +72,13 @@ export class ColumnChooserController {
 
   public onColumnMove = (column: Column): void => {
     this.columnsController.columnOption(column, 'visible', false);
+  };
+
+  public onDragStart = (e: SortableTypes.DragStartEvent): void => {
+    this.draggingItem.value = e.itemData as DraggingColumnData;
+  };
+
+  public onDragEnd = (): void => {
+    this.draggingItem.value = null;
   };
 }

@@ -4,7 +4,7 @@ import { ColumnsController } from '@ts/grids/new/grid_core/columns_controller/co
 import { View } from '@ts/grids/new/grid_core/core/view';
 import { KeyboardNavigationController, NavigationStrategyHorizontalList } from '@ts/grids/new/grid_core/keyboard_navigation/index';
 
-import { ColumnChooserView } from '../../grid_core/column_chooser/index';
+import { ColumnChooserController, ColumnChooserView } from '../../grid_core/column_chooser/index';
 import type { Column } from '../../grid_core/columns_controller/types';
 import { HeaderFilterViewController } from '../../grid_core/filtering/header_filter/view_controller';
 import { SortingController } from '../../grid_core/sorting_controller/sorting_controller';
@@ -25,6 +25,7 @@ export class HeaderPanelView extends View<HeaderPanelProps> {
     HeaderFilterViewController,
     KeyboardNavigationController,
     ColumnChooserView,
+    ColumnChooserController,
   ] as const;
 
   private readonly navigationStrategy = new NavigationStrategyHorizontalList();
@@ -37,6 +38,7 @@ export class HeaderPanelView extends View<HeaderPanelProps> {
     private readonly headerFilterViewController: HeaderFilterViewController,
     private readonly keyboardNavigationController: KeyboardNavigationController,
     private readonly columnChooserView: ColumnChooserView,
+    private readonly columnChooserController: ColumnChooserController,
   ) {
     super();
   }
@@ -58,6 +60,15 @@ export class HeaderPanelView extends View<HeaderPanelProps> {
       visible: this.options.oneWay('headerPanel.visible').value,
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       draggingOptions: this.options.oneWay('headerPanel.dragging').value as any,
+      showDropzone: computed((): boolean => {
+        const column = this.columnChooserController.draggingItem.value?.column;
+
+        if (!column) {
+          return false;
+        }
+
+        return !column.allowReordering;
+      }).value,
       showContextMenu: this.showContextMenu.bind(this),
     }));
   }
