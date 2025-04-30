@@ -116,7 +116,7 @@ export interface CardInfo {
 }
 
 export interface ColumnsConfigurationFromData {
-  dateFields: string[];
+  dataFields: string[];
   columns: Record<string, ColumnFromDataOptions>;
 }
 

@@ -48,7 +48,7 @@ export class ColumnsController {
 
     effect(() => {
       const columnsConfigurationFromOptions = this.columnsConfiguration.value;
-      const columnsConfigurationFromData = this.columnsConfigurationFromData.value?.dateFields;
+      const columnsConfigurationFromData = this.columnsConfigurationFromData.value?.dataFields;
       const columnsConfiguration = columnsConfigurationFromOptions
         ?? columnsConfigurationFromData
         ?? [];

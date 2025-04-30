@@ -204,10 +204,10 @@ export const getColumnFormat = (
 export const getColumnOptionsFromDataItem = (
   dataItem: DataObject,
 ): ColumnsConfigurationFromData => {
-  const dateFields = Object.keys(dataItem);
+  const dataFields = Object.keys(dataItem);
 
   return {
-    dateFields,
+    dataFields,
     columns: Object.entries(dataItem).reduce<Record<string, ColumnFromDataOptions>>((
       result,
       [key, value],
