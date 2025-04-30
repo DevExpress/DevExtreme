@@ -52,10 +52,9 @@
         <div id="button"></div>
         <script>
             $(function() {
-                $('#button').dxLoadIndicator({
-                    width: 64,
-                    height: 64,
-                    _animationType: 'sparkle',
+                $("#button").dxButton({
+                    text: 'Click me!',
+                    onClick: function() { alert("clicked"); }
                 });
             });
         </script>
