@@ -3,7 +3,7 @@
 @use "../colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
-@use "../../base/loadIndicator";
+@use "../../base/loadIndicator" as *;
 
 // adduse
 
@@ -101,6 +101,12 @@
     }
   }
 }
+
+@include loadindicator-animation-sparkle(
+  $load-indicator-animation-sparkle-bg-color1,
+  $load-indicator-animation-sparkle-bg-color2,
+  $load-indicator-animation-sparkle-bg-color3
+);
 
 @keyframes dx-content-rotation {
   to { transform: rotate(360deg); }
