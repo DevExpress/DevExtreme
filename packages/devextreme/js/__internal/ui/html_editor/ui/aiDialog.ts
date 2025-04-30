@@ -13,6 +13,8 @@ import type dxSelectBox from '@js/ui/select_box';
 import type { Properties as SelectBoxProperties } from '@js/ui/select_box';
 import SelectBox from '@js/ui/select_box';
 import TextArea from '@js/ui/text_area';
+import { isCompact } from '@js/ui/themes';
+import { currentTheme } from '@js/viz/themes';
 import type {
   AICommandExecutor,
   AICommandParamsMap,
@@ -50,6 +52,11 @@ export const TEXT_AREA_MIN_HEIGHT = 64;
 export const TEXT_AREA_MAX_HEIGHT = 128;
 export const REPLACE_DROPDOWN_WIDTH = 150;
 export const ACTION_BUTTON_WIDTH = 110;
+export const COMPACT_ACTION_BUTTON_WIDTH = 100;
+
+function getActionButtonWidth(): number {
+  return isCompact(currentTheme()) ? COMPACT_ACTION_BUTTON_WIDTH : ACTION_BUTTON_WIDTH;
+}
 
 enum DialogState {
   Initial = 'initial',
@@ -348,6 +355,7 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
   }
 
   protected _getGenerateButtonItem(): NamedToolbarItem {
+    const width = getActionButtonWidth();
     return {
       name: 'generate',
       toolbar: 'bottom',
@@ -357,13 +365,14 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
         type: 'default',
         text: localizationMessage.format('dxHtmlEditor-aiGenerate'),
         stylingMode: 'contained',
-        width: ACTION_BUTTON_WIDTH,
+        width,
         onClick: () => this._executeAICommand(),
       },
     };
   }
 
   protected _getStopButtonItem(): NamedToolbarItem {
+    const width = getActionButtonWidth();
     return {
       name: 'stop',
       toolbar: 'bottom',
@@ -373,7 +382,7 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
         type: 'default',
         stylingMode: 'contained',
         text: localizationMessage.format('dxHtmlEditor-aiStop'),
-        width: ACTION_BUTTON_WIDTH,
+        width,
         onClick: () => this._stopAICommandExecution(),
       },
     };

@@ -1,6 +1,7 @@
 import $ from 'jquery';
 import localization from 'localization';
 import devices from '__internal/core/m_devices';
+import themes from 'ui/themes';
 import domAdapter from '__internal/core/m_dom_adapter';
 import AIDialog, {
     AI_DIALOG_CLASS,
@@ -8,6 +9,7 @@ import AIDialog, {
     AI_DIALOG_CONTENT_CLASS,
     REPLACE_DROPDOWN_WIDTH,
     ACTION_BUTTON_WIDTH,
+    COMPACT_ACTION_BUTTON_WIDTH,
     TEXT_AREA_MIN_HEIGHT,
     TEXT_AREA_MAX_HEIGHT
 } from '__internal/ui/html_editor/ui/aiDialog';
@@ -981,7 +983,7 @@ QUnit.module('AIDialog', {}, () => {
                 const tryAgainToolbarItem = getItemByName(bottomToolbarItems, 'tryAgain');
                 const tryAgainButtonOptions = tryAgainToolbarItem.options;
 
-                assert.strictEqual(tryAgainButtonOptions.text, localizedCopyText, 'text is localized');
+                assert.strictEqual(tryAgainButtonOptions.text, localizedTryAgainText, 'text is localized');
 
                 localization.locale(initialLocale);
                 done();
@@ -1118,5 +1120,41 @@ QUnit.module('AIDialog', {}, () => {
                 });
             });
         });
+    });
+});
+
+QUnit.module('compact', {
+    beforeEach: function() {
+        this.isCompactStub = sinon.stub(themes, 'isCompact').returns(true);
+
+        integrationModuleConfig.beforeEach.apply(this);
+    },
+    afterEach: function() {
+        integrationModuleConfig.afterEach.apply(this);
+        this.isCompactStub.restore();
+    }
+}, () => {
+    QUnit.test('generate button should have special width', function(assert) {
+        showAIDialog(this, {
+            config: { currentCommand: 'askAI' },
+        });
+
+        const bottomToolbarItems = getBottomToolbarItems(this.aiDialogPopup);
+        const generateToolbarItem = getItemByName(bottomToolbarItems, 'generate');
+        const generateButtonOptions = generateToolbarItem.options;
+
+        assert.strictEqual(generateButtonOptions.width, COMPACT_ACTION_BUTTON_WIDTH, 'width=100px');
+    });
+
+    QUnit.test('stop button should have special width', function(assert) {
+        showAIDialog(this, {
+            config: { currentCommand: 'translate' },
+        });
+
+        const bottomToolbarItems = getBottomToolbarItems(this.aiDialogPopup);
+        const stopToolbarItem = getItemByName(bottomToolbarItems, 'stop');
+        const stopButtonOptions = stopToolbarItem.options;
+
+        assert.strictEqual(stopButtonOptions.width, COMPACT_ACTION_BUTTON_WIDTH, 'width=100px');
     });
 });
