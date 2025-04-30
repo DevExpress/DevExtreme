@@ -137,32 +137,29 @@ export class DataController {
           */
           const { operationId } = e;
           const loadOptions = { ...this.pendingLocalOperations[operationId] };
-
-          const { skip, take } = loadOptions;
+          const tempLoadOptions = { ...loadOptions };
+          const { skip, take } = tempLoadOptions;
 
           if (isDefined(skip)) {
             e.skip = skip;
-            delete loadOptions.skip;
+            delete tempLoadOptions.skip;
           }
 
           if (isDefined(take)) {
             e.take = take;
-            delete loadOptions.take;
+            delete tempLoadOptions.take;
           }
 
-          new ArrayStore(e.data).load(loadOptions).done((filteredData) => {
+          new ArrayStore(e.data).load(tempLoadOptions).done((filteredData) => {
             // remoteOperations is false
             if (Object.keys(loadOptions).length > 0) {
               this._filteredItemCount.value = filteredData.length;
 
-              const pagedData = isDefined(e.skip) && isDefined(e.take)
-                ? filteredData.slice(e.skip, e.skip + e.take)
-                : filteredData;
-
-              e.data = pagedData;
+              new ArrayStore(e.data).load(loadOptions).done((newData) => {
+                e.extra = e.extra || {};
+                e.data = newData;
+              });
             }
-
-            e.extra = e.extra || {};
           }).fail((error) => {
             // @ts-expect-error
             e.data = new Deferred().reject(error);
