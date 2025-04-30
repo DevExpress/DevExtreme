@@ -89,7 +89,7 @@ QUnit.module('Static load indicator', {
         assert.strictEqual(getBackgroundImage(), 'none', 'custom indicator changed successfully as image');
     });
 
-    QUnit.module('animation type', function(assert) {
+    QUnit.module('animation type', () => {
         QUnit.test('content should have circle animation class by default', function(assert) {
             const $element = $('#loadIndicator').dxLoadIndicator();
             const $indicatorContent = $element.find(`.${LOADINDICATOR_CONTENT_CLASS}`);
@@ -111,16 +111,14 @@ QUnit.module('Static load indicator', {
                 .dxLoadIndicator({ _animationType: undefined })
                 .dxLoadIndicator('instance');
 
-            const $indicatorContent = instance.$element().find(`.${LOADINDICATOR_CONTENT_CLASS}`);
-            const classCount = $indicatorContent[0].classList.length || 0;
+            const getContent = () => instance.$element().find(`.${LOADINDICATOR_CONTENT_CLASS}`);
+            const classCount = getContent()[0].classList.length || 0;
 
             assert.strictEqual(classCount, 1, 'animation classes has not been added');
 
             instance.option({ _animationType: 'circle' });
 
-            // To refactor
-            assert.strictEqual(instance.$element().find(`.${LOADINDICATOR_CONTENT_CLASS}`).hasClass(LOADINDICATOR_CONTENT_CIRCLE_CLASS), true, 'animation class has been added');
+            assert.strictEqual(getContent().hasClass(LOADINDICATOR_CONTENT_CIRCLE_CLASS), true, 'animation class has been added');
         });
     });
 });
-
