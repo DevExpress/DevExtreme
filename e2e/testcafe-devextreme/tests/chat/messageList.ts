@@ -243,12 +243,6 @@ test('Messagelist with messageTemplate', async (t) => {
   await testScreenshot(t, takeScreenshot, 'Messagelist with message template after new message add.png', { element: '#container' });
 
   await t
-    .typeText(chat.getInput(), 'New last message')
-    .pressKey('enter');
-
-  await testScreenshot(t, takeScreenshot, 'Messagelist with message template after new message add.png', { element: '#container' });
-
-  await t
     .rightClick(chat.getMessage(2))
     .pressKey('down')
     .pressKey('enter')
