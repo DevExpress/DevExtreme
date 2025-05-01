@@ -19,7 +19,6 @@
     .dx-cardview-dropzone {
       width: 100%;
       height: $cardview-headerpanel-dropzone-height;
-      line-height: $cardview-headerpanel-dropzone-height;
       background-color: $cardview-dropzone-background-color;
       text-align: center;
       color: $cardview-dropzone-text-color;
@@ -33,6 +32,10 @@
       pointer-events: none;
       opacity: 0.0;
       transition: opacity 0.3s ease-out;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
     }
 
     .dx-cardview-dropzone-visible {

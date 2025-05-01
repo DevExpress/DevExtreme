@@ -42,22 +42,31 @@ export class ContentView extends Component<ContentViewProps> {
     return (
       <div className={CLASSES.contentView} ref={this.containerRef}>
         <LoadPanel {...this.props.loadPanelProps} />
-        {this.props.noDataTextProps.visible && <NoDataText {...this.props.noDataTextProps} />}
-        <Scrollable
-          ref={this.scrollableRef}
-          componentRef={this.props.scrollableRef}
-          {...this.props.scrollableProps}
-        >
-          {this.props.children!}
-        </Scrollable>
+
+        {
+          this.props.noDataTextProps.visible
+            ? <NoDataText {...this.props.noDataTextProps} />
+            : (
+            <Scrollable
+              ref={this.scrollableRef}
+              componentRef={this.props.scrollableRef}
+              {...this.props.scrollableProps}
+            >
+              {this.props.children!}
+            </Scrollable>
+            )
+        }
+
         <ErrorRow {...this.props.errorRowProps} />
       </div>
     );
   }
 
   private updateSizesInfo(): void {
-    const clientHeight = this.scrollableRef.current!.clientHeight();
-    this.props?.onViewportHeightChange?.(clientHeight);
+    if (this.scrollableRef.current) {
+      const clientHeight = this.scrollableRef.current.clientHeight();
+      this.props?.onViewportHeightChange?.(clientHeight);
+    }
   }
 
   public componentDidMount(): void {

@@ -21,8 +21,13 @@ import { OptionsController } from '../options_controller/options_controller';
 
 export abstract class ContentView<TProps extends {}> extends View<TProps> {
   private readonly isNoData = computed(
-    () => !this.dataController.isLoading.value
-      && this.dataController.items.value.length === 0,
+    () => {
+      const { isLoading, items } = this.dataController;
+      const isEmptyDataLoaded = !isLoading.value && items.value.length === 0;
+      const isNoVisibleColumns = this.columnsController.visibleColumns.value.length === 0;
+
+      return isEmptyDataLoaded || isNoVisibleColumns;
+    },
   );
 
   public readonly scrollableRef = createRef<dxScrollable>();
