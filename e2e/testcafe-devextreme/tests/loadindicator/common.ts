@@ -17,9 +17,6 @@ fixture.disablePageReloads`LoadIndicator`
 
     await testScreenshot(t, takeScreenshot, `LoadIndicator with ${animationType} animation.png`, {
       element: '#container',
-      compactCallBack: async () => {
-        await loadIndicator.repaint();
-      },
     });
 
     const darkTheme = getFullThemeName().replace('light', 'dark');
