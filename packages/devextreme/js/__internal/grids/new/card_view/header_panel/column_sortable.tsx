@@ -46,6 +46,7 @@ export interface Props extends Omit<SortableProps, 'onAdd' | 'onReorder' | 'drag
 const ALLOWED_DRAGGING_DISTANCE = 20;
 
 const CLASS = {
+  widget: 'dx-widget',
   dropzone: 'dx-cardview-dropzone',
   dropzoneVisible: 'dx-cardview-dropzone-visible',
 };
@@ -77,6 +78,11 @@ export class ColumnSortable extends Component<Props> {
     };
 
     this.props.onDragStart?.(e);
+  };
+
+  private readonly onDraggableElementShown = (e): void => {
+    // add dx-widget for correct font
+    $(e.dragElement).addClass(CLASS.widget);
   };
 
   private readonly onDragMove = (e: SortableTypes.DragMoveEvent): void => {
@@ -162,10 +168,11 @@ export class ColumnSortable extends Component<Props> {
         // @ts-expect-error
         _source={source}
         onPlaceholderPrepared={this.props.onPlaceholderPrepared}
+        onDraggableElementShown={this.onDraggableElementShown}
       >
       {this.props.children}
 
-      <div className={dropzoneClasses} aria-hidden={this.props.showDropzone}>
+      <div className={dropzoneClasses}>
         { this.props.dropzoneText }
       </div>
     </Sortable>

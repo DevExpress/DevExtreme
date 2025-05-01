@@ -1,7 +1,7 @@
 import $ from '@js/core/renderer';
 
-import { ColumnChooserView } from '../../grid_core/column_chooser';
-import { ColumnsController } from '../../grid_core/columns_controller';
+import { ColumnChooserView } from '../../grid_core/column_chooser/index';
+import { ColumnsController } from '../../grid_core/columns_controller/index';
 import type { Column } from '../../grid_core/columns_controller/types';
 import type { DraggingColumnData } from './column_sortable';
 

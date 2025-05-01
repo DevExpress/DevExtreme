@@ -34,8 +34,6 @@ test('headerPanel dragging column when it has sorting and headerFilter', async (
 }));
 
 test('dropzone appears in headerPanel when drag from columnChooser a column with allowReordering: false', async (t) => {
-  await t.setTestSpeed(0.3);
-
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   const cardView = new CardView('#container');

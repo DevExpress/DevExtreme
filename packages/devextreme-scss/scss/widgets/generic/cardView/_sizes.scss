@@ -48,7 +48,7 @@ $cardview-generic-column-chooser-select-all-item-horizontal-padding: null;
   $cardview-generic-gaps-20: 20px;
 
   $cardview-generic-headerpanel-dropzone-height: 36px;
-  $cardview-generic-headerpanel-dropzone-top: 0px;
+  $cardview-generic-headerpanel-dropzone-top: 0;
   $cardview-generic-column-chooser-select-all-item-horizontal-padding: 10px;
 }
 @else if $size == "compact" {
@@ -68,7 +68,7 @@ $cardview-generic-column-chooser-select-all-item-horizontal-padding: null;
   $cardview-generic-gaps-20: 16px;
 
   $cardview-generic-headerpanel-dropzone-height: 26px;
-  $cardview-generic-headerpanel-dropzone-top: 0px;
+  $cardview-generic-headerpanel-dropzone-top: 0;
   $cardview-generic-column-chooser-select-all-item-horizontal-padding: 6px;
 }
 
