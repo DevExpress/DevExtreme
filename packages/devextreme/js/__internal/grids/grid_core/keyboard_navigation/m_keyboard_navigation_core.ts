@@ -135,8 +135,6 @@ export class KeyboardNavigationController extends modules.ViewController {
     visibleIndex: number,
     direction: string,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    sourceLocation?: string,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     targetLocation?: string,
   ): number {
     return direction === 'previous' ? visibleIndex - 1 : visibleIndex + 1;
@@ -221,10 +219,6 @@ export class KeyboardNavigationController extends modules.ViewController {
 
     this.unsubscribeFromFocusinEvent();
     this.subscribeToFocusinEvent();
-    if (this.isNeedToFocus) {
-      this.restoreFocus();
-      this.isNeedToFocus = false;
-    }
   }
 
   public init() {
@@ -284,12 +278,6 @@ export class KeyboardNavigationController extends modules.ViewController {
 
   public _getFocusedCell() {
     return $(this._getCell(this._focusedCellPosition));
-  }
-
-  public restoreFocus() {
-    const $focusElement = this._getFocusedCell();
-    // @ts-expect-error
-    eventsEngine.trigger($focusElement, 'focus');
   }
 
   public getDirectionByKeyName(keyName: string): Direction {

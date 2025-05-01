@@ -15,6 +15,31 @@ interface ColumnContextMenuMixinRequirements extends ColumnsView {
 }
 
 export const ColumnContextMenuMixin = <T extends ModuleType<ColumnContextMenuMixinRequirements>>(Base: T) => class ColumnContextMenuMixin extends Base {
+  protected isNeedToFocusColumn = false;
+
+  private onContextMenuHiddenContext!: (event: Event) => void;
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  private onContextMenuHidden(e) {
+    if (this.isNeedToFocusColumn) {
+      const keyboardNavigationController = this.getKeyboardNavigationController?.();
+
+      keyboardNavigationController?.restoreViewFocus();
+      this.isNeedToFocusColumn = false;
+    }
+  }
+
+  public init() {
+    super.init();
+
+    const contextMenuController = this.getController('contextMenu');
+    this.onContextMenuHiddenContext = this.onContextMenuHiddenContext
+      || this.onContextMenuHidden.bind(this);
+
+    contextMenuController.contextMenuHidden.remove(this.onContextMenuHiddenContext);
+    contextMenuController.contextMenuHidden.add(this.onContextMenuHiddenContext);
+  }
+
   public getMoveColumnContextMenuItems(options): any {
     const items: any = [];
     const { column, rowIndex } = options;
@@ -27,6 +52,7 @@ export const ColumnContextMenuMixin = <T extends ModuleType<ColumnContextMenuMix
         const rtlEnabled = this.option('rtlEnabled');
         const viewName = this.getName();
         const onItemClick = (e) => {
+          this.isNeedToFocusColumn = true;
           keyboardNavigationController.moveColumn({
             column,
             sourceLocation: viewName,

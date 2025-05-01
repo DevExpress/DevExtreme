@@ -41,6 +41,20 @@ export class GroupPanelKeyboardNavigationController extends ColumnKeyboardNaviga
     }
   }
 
+  private backspaceOrDelKeysHandler(e): void {
+    const { originalEvent } = e;
+    const column: any = $(originalEvent.target).data('columnData');
+    const contextMenuEnabled = this.option('grouping.contextMenuEnabled');
+
+    if (column && contextMenuEnabled) {
+      this.moveColumn({
+        column,
+        sourceLocation: 'group',
+        targetLocation: 'headers',
+      });
+    }
+  }
+
   private leftRightKeysHandler(e): void {
     const { originalEvent } = e;
 
@@ -65,12 +79,30 @@ export class GroupPanelKeyboardNavigationController extends ColumnKeyboardNaviga
     return column.groupIndex;
   }
 
-  protected getNewVisibleIndex(visibleIndex, direction, sourceLocation, targetLocation) {
+  protected getNewVisibleIndex(visibleIndex, direction, targetLocation) {
     if (targetLocation === ViewName.Headers) {
       return -1;
     }
 
-    return super.getNewVisibleIndex(visibleIndex, direction, sourceLocation, targetLocation);
+    return super.getNewVisibleIndex(visibleIndex, direction, targetLocation);
+  }
+
+  protected getNewFocusedColumnIndex(
+    newVisibleIndex: number,
+    direction: Direction,
+    targetLocation: string,
+  ) {
+    if (targetLocation === ViewName.Headers) {
+      const groupColumns = this._columnsController.getGroupColumns();
+
+      return newVisibleIndex === groupColumns.length - 1 ? newVisibleIndex - 1 : newVisibleIndex;
+    }
+
+    return super.getNewFocusedColumnIndex(
+      newVisibleIndex,
+      direction,
+      targetLocation,
+    );
   }
 
   protected _getCell(cellPosition): any {
@@ -104,6 +136,8 @@ export class GroupPanelKeyboardNavigationController extends ColumnKeyboardNaviga
 
     if (e.keyName === 'leftArrow' || e.keyName === 'rightArrow') {
       this.leftRightKeysHandler(e);
+    } else if (e.keyName === 'backspace' || e.keyName === 'del') {
+      this.backspaceOrDelKeysHandler(e);
     }
   }
 
@@ -125,10 +159,17 @@ export class GroupPanelKeyboardNavigationController extends ColumnKeyboardNaviga
     }
   }
 
+  public getFirstFocusableVisibleIndex(): number {
+    const columns = this.headerPanel?.getColumns();
+
+    return columns?.length ? 0 : -1;
+  }
+
   public init(): void {
     this.headerPanel = this.getView('headerPanel');
     this.groupItemClickHandlerContext = this.groupItemClickHandlerContext
       ?? this.groupItemClickHandler.bind(this);
+
     super.init();
   }
 
@@ -144,6 +185,11 @@ export class GroupPanelKeyboardNavigationController extends ColumnKeyboardNaviga
     return direction === Direction.Next
       ? groupColumn.groupIndex !== groupedColumns.length - 1
       : groupColumn.groupIndex !== 0;
+  }
+
+  public ungroupAllColumns(): void {
+    this.isNeedToFocus = true;
+    this._columnsController.clearGrouping();
   }
 }
 

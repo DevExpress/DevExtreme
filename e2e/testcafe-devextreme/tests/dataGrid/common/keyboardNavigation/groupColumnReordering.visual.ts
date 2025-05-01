@@ -10,7 +10,7 @@ fixture
 
 const DATA_GRID_SELECTOR = '#container';
 
-// Group columns
+// Move grouped columns
 [true, false].forEach((rtlEnabled) => {
   test(`reorder group column when ${rtlEnabled ? 'left' : 'right'} arrow is pressed when rtlEnabled = ${rtlEnabled}`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
@@ -353,6 +353,449 @@ safeSizeTest('The context menu should not have items for column reordering when 
         groupIndex: 1,
       },
       'field2',
+      'field3',
+      {
+        dataField: 'field4',
+        groupIndex: 0,
+      },
+    ],
+  });
+});
+
+// Ungroup columns
+test('Ungroup second column when pressing Backspace', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+  const secondGroupedHeader = dataGrid.getGroupPanel().getHeader(1);
+
+  await t
+    .click(secondGroupedHeader.element)
+    .pressKey('backspace');
+
+  await takeScreenshot(
+    'ungroup_second_column_when_pressing_backspace',
+    dataGrid.element,
+  );
+
+  await t.expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  await createWidget('dxDataGrid', {
+    dataSource: [{
+      field1: 'test1',
+      field2: 'test2',
+      field3: 'test3',
+      field4: 'test4',
+    }],
+    grouping: {
+      contextMenuEnabled: true,
+    },
+    groupPanel: {
+      visible: true,
+    },
+    columns: [
+      {
+        dataField: 'field1',
+        groupIndex: 1,
+      },
+      {
+        dataField: 'field2',
+        groupIndex: 2,
+      },
+      'field3',
+      {
+        dataField: 'field4',
+        groupIndex: 0,
+      },
+    ],
+  });
+});
+
+test('Ungroup last column when pressing Backspace', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+  const lastGroupedHeader = dataGrid.getGroupPanel().getHeader(2);
+
+  await t
+    .click(lastGroupedHeader.element)
+    .pressKey('backspace');
+
+  await takeScreenshot(
+    'ungroup_last_column_when_pressing_backspace',
+    dataGrid.element,
+  );
+
+  await t.expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  await createWidget('dxDataGrid', {
+    dataSource: [{
+      field1: 'test1',
+      field2: 'test2',
+      field3: 'test3',
+      field4: 'test4',
+    }],
+    grouping: {
+      contextMenuEnabled: true,
+    },
+    groupPanel: {
+      visible: true,
+    },
+    columns: [
+      {
+        dataField: 'field1',
+        groupIndex: 1,
+      },
+      {
+        dataField: 'field2',
+        groupIndex: 2,
+      },
+      'field3',
+      {
+        dataField: 'field4',
+        groupIndex: 0,
+      },
+    ],
+  });
+});
+
+test('Ungroup a single grouped column when pressing Backspace', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+  const groupedHeader = dataGrid.getGroupPanel().getHeader(0);
+
+  await t
+    .click(groupedHeader.element)
+    .pressKey('backspace');
+
+  await takeScreenshot(
+    'ungroup_single_column_when_pressing_backspace',
+    dataGrid.element,
+  );
+
+  await t.expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  await createWidget('dxDataGrid', {
+    dataSource: [{
+      field1: 'test1',
+      field2: 'test2',
+      field3: 'test3',
+      field4: 'test4',
+    }],
+    grouping: {
+      contextMenuEnabled: true,
+    },
+    groupPanel: {
+      visible: true,
+    },
+    columns: [
+      'field1',
+      'field2',
+      'field3',
+      {
+        dataField: 'field4',
+        groupIndex: 0,
+      },
+    ],
+  });
+});
+
+test('Ungroup second column via context menu', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+  const contextMenu = dataGrid.getContextMenu();
+  const secondGroupedHeader = dataGrid.getGroupPanel().getHeader(1);
+
+  await t.rightClick(secondGroupedHeader.element);
+
+  await takeScreenshot(
+    'ungroup_second_column_via_context_menu_1',
+    dataGrid.element,
+  );
+
+  await t
+    .click(contextMenu.getItemByText('Ungroup'));
+
+  await takeScreenshot(
+    'ungroup_second_column_via_context_menu_2',
+    dataGrid.element,
+  );
+
+  await t.expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  await createWidget('dxDataGrid', {
+    dataSource: [{
+      field1: 'test1',
+      field2: 'test2',
+      field3: 'test3',
+      field4: 'test4',
+    }],
+    grouping: {
+      contextMenuEnabled: true,
+    },
+    groupPanel: {
+      visible: true,
+    },
+    columns: [
+      {
+        dataField: 'field1',
+        groupIndex: 1,
+      },
+      {
+        dataField: 'field2',
+        groupIndex: 2,
+      },
+      'field3',
+      {
+        dataField: 'field4',
+        groupIndex: 0,
+      },
+    ],
+  });
+});
+
+test('Ungroup last column via context menu', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+  const contextMenu = dataGrid.getContextMenu();
+  const lastGroupedHeader = dataGrid.getGroupPanel().getHeader(2);
+
+  await t.rightClick(lastGroupedHeader.element);
+
+  await takeScreenshot(
+    'ungroup_last_column_via_context_menu_1',
+    dataGrid.element,
+  );
+
+  await t
+    .click(contextMenu.getItemByText('Ungroup'));
+
+  await takeScreenshot(
+    'ungroup_last_column_via_context_menu_2',
+    dataGrid.element,
+  );
+
+  await t.expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  await createWidget('dxDataGrid', {
+    dataSource: [{
+      field1: 'test1',
+      field2: 'test2',
+      field3: 'test3',
+      field4: 'test4',
+    }],
+    grouping: {
+      contextMenuEnabled: true,
+    },
+    groupPanel: {
+      visible: true,
+    },
+    columns: [
+      {
+        dataField: 'field1',
+        groupIndex: 1,
+      },
+      {
+        dataField: 'field2',
+        groupIndex: 2,
+      },
+      'field3',
+      {
+        dataField: 'field4',
+        groupIndex: 0,
+      },
+    ],
+  });
+});
+
+test('Ungroup a single grouped column via context menu', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+  const contextMenu = dataGrid.getContextMenu();
+  const groupedHeader = dataGrid.getGroupPanel().getHeader(0);
+
+  await t.rightClick(groupedHeader.element);
+
+  await takeScreenshot(
+    'ungroup_single_column_via_context_menu_1',
+    dataGrid.element,
+  );
+
+  await t
+    .click(contextMenu.getItemByText('Ungroup'));
+
+  await takeScreenshot(
+    'ungroup_single_column_via_context_menu_2',
+    dataGrid.element,
+  );
+
+  await t.expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  await createWidget('dxDataGrid', {
+    dataSource: [{
+      field1: 'test1',
+      field2: 'test2',
+      field3: 'test3',
+      field4: 'test4',
+    }],
+    grouping: {
+      contextMenuEnabled: true,
+    },
+    groupPanel: {
+      visible: true,
+    },
+    columns: [
+      'field1',
+      'field2',
+      'field3',
+      {
+        dataField: 'field4',
+        groupIndex: 0,
+      },
+    ],
+  });
+});
+
+test('Ungroup column when pressing Delete', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+  const firstGroupHeader = dataGrid.getGroupPanel().getHeader(0);
+
+  await t
+    .click(firstGroupHeader.element)
+    .pressKey('delete');
+
+  await takeScreenshot(
+    'ungroup_column_when_pressing_delete',
+    dataGrid.element,
+  );
+
+  await t.expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  await createWidget('dxDataGrid', {
+    dataSource: [{
+      field1: 'test1',
+      field2: 'test2',
+      field3: 'test3',
+      field4: 'test4',
+    }],
+    grouping: {
+      contextMenuEnabled: true,
+    },
+    groupPanel: {
+      visible: true,
+    },
+    columns: [
+      {
+        dataField: 'field1',
+        groupIndex: 1,
+      },
+      'field2',
+      'field3',
+      {
+        dataField: 'field4',
+        groupIndex: 0,
+      },
+    ],
+  });
+});
+
+test('Ungroup a single grouped column when pressing Backspace if there is command column', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+  const groupedHeader = dataGrid.getGroupPanel().getHeader(0);
+
+  await t
+    .click(groupedHeader.element)
+    .pressKey('backspace');
+
+  await takeScreenshot(
+    'ungroup_single_column_on_backspace_when_there_is_command_column',
+    dataGrid.element,
+  );
+
+  await t.expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  await createWidget('dxDataGrid', {
+    dataSource: [{
+      field1: 'test1',
+      field2: 'test2',
+      field3: 'test3',
+      field4: 'test4',
+    }],
+    selection: {
+      mode: 'multiple',
+    },
+    grouping: {
+      contextMenuEnabled: true,
+    },
+    groupPanel: {
+      visible: true,
+    },
+    columns: [
+      'field1',
+      'field2',
+      'field3',
+      {
+        dataField: 'field4',
+        groupIndex: 0,
+      },
+    ],
+  });
+});
+
+test('Ungroup all columns via context menu', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+  const contextMenu = dataGrid.getContextMenu();
+  const firstGroupedHeader = dataGrid.getGroupPanel().getHeader(0);
+
+  await t.rightClick(firstGroupedHeader.element);
+
+  await takeScreenshot(
+    'ungroup_all_columns_via_context_menu_1',
+    dataGrid.element,
+  );
+
+  await t
+    .click(contextMenu.getItemByText('Ungroup All'));
+
+  await takeScreenshot(
+    'ungroup_all_columns_via_context_menu_2',
+    dataGrid.element,
+  );
+
+  await t.expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  await createWidget('dxDataGrid', {
+    dataSource: [{
+      field1: 'test1',
+      field2: 'test2',
+      field3: 'test3',
+      field4: 'test4',
+    }],
+    grouping: {
+      contextMenuEnabled: true,
+    },
+    groupPanel: {
+      visible: true,
+    },
+    columns: [
+      {
+        dataField: 'field1',
+        groupIndex: 1,
+      },
+      {
+        dataField: 'field2',
+        groupIndex: 2,
+      },
       'field3',
       {
         dataField: 'field4',

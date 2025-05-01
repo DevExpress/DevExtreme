@@ -17,8 +17,14 @@ const viewName = {
 const VIEW_NAMES = ['columnHeadersView', 'rowsView', 'footerView', 'headerPanel'] as const;
 
 export class ContextMenuController extends modules.ViewController {
+  public contextMenuHidden: any;
+
   public init() {
     this.createAction('onContextMenuPreparing');
+  }
+
+  protected callbackNames() {
+    return ['contextMenuHidden'];
   }
 
   public getContextMenuItems(dxEvent) {
@@ -70,6 +76,10 @@ export class ContextMenuController extends modules.ViewController {
     return menuItems;
   }
 
+  public fireContextMenuHidden(e) {
+    this.contextMenuHidden.fire(e);
+  }
+
   /**
    * @extended: selection
    */
@@ -86,12 +96,8 @@ export class ContextMenuView extends modules.View {
     this._contextMenuController = this.getController('contextMenu');
   }
 
-  protected contextMenuHiddenHandler(e) {
-    each(VIEW_NAMES, (_, viewName) => {
-      const view = this.getView(viewName);
-
-      view?.contextMenuHiddenHandler?.(e);
-    });
+  protected hiddenEventHandler(e) {
+    this._contextMenuController?.fireContextMenuHidden(e);
   }
 
   protected _renderCore() {
@@ -119,7 +125,7 @@ export class ContextMenuView extends modules.View {
         onItemClick(params) {
           params.itemData?.onItemClick?.(params);
         },
-        onHidden: this.contextMenuHiddenHandler.bind(this),
+        onHidden: this.hiddenEventHandler.bind(this),
         cssClass: this.getWidgetContainerClass(),
         // @ts-expect-error
         target: this.component.$element(),

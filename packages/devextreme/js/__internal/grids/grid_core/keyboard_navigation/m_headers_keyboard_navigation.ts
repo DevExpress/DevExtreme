@@ -9,6 +9,7 @@ import type { Views } from '../m_types';
 import { StickyPosition } from '../sticky_columns/const';
 import { getColumnFixedPosition } from '../sticky_columns/utils';
 import { Direction } from './const';
+import { ColumnFocusDispatcher } from './m_column_focus_dispatcher';
 import { ColumnKeyboardNavigationController } from './m_column_keyboard_navigation_core';
 
 export class HeadersKeyboardNavigationController extends ColumnKeyboardNavigationController {
@@ -118,10 +119,20 @@ export class HeadersKeyboardNavigationController extends ColumnKeyboardNavigatio
 
     return direction === Direction.Next ? !isLastColumn : !isFirstColumn;
   }
+
+  public getFirstFocusableVisibleIndex(): number {
+    const visibleColumns = this._columnsController.getVisibleColumns();
+    const firstFocusableVisibleIndex: number = visibleColumns.findIndex(
+      (column) => !column.type || this._columnsController.isCustomCommandColumn(column),
+    );
+
+    return firstFocusableVisibleIndex ?? -1;
+  }
 }
 
 export const headersKeyboardNavigationModule = {
   controllers: {
     headersKeyboardNavigation: HeadersKeyboardNavigationController,
+    columnFocusDispatcher: ColumnFocusDispatcher,
   },
 };

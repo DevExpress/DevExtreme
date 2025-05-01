@@ -500,6 +500,7 @@ export const GroupingHeaderPanelExtender = (
         const isColumnGrouped = isDefined(column.groupIndex) && column.groupIndex > -1;
         const groupingTexts: any = this.option('grouping.texts');
         const onItemClick = (e) => {
+          this.isNeedToFocusColumn = true;
           if (e.itemData?.value === 'ungroup') {
             keyboardNavigationController.moveColumn({
               column,
@@ -507,7 +508,7 @@ export const GroupingHeaderPanelExtender = (
               targetLocation: 'headers',
             });
           } else if (e.itemData?.value === 'ungroupAll') {
-            this._columnsController.clearGrouping();
+            keyboardNavigationController.ungroupAllColumns();
           }
         };
 
@@ -693,6 +694,7 @@ const GroupingRowsViewExtender = (Base: ModuleType<RowsView>) => class GroupingR
 const columnHeadersViewExtender = (Base: ModuleType<ColumnHeadersView>) => class GroupingHeadersViewExtender extends Base {
   public getContextMenuItems(options) {
     const that = this;
+    const groupItems: any[] = [];
     const contextMenuEnabled = that.option('grouping.contextMenuEnabled');
     let items: any[] | undefined = super.getContextMenuItems(options);
 
@@ -704,21 +706,28 @@ const columnHeadersViewExtender = (Base: ModuleType<ColumnHeadersView>) => class
         const isColumnGrouped = isDefined(column.groupIndex) && column.groupIndex > -1;
         const onItemClick = onGroupingMenuItemClick.bind(that, column);
 
-        // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-        items = items || [];
-        items.push({
+        groupItems.push({
           text: groupingTexts.groupByThisColumn, value: 'group', beginGroup: true, disabled: isColumnGrouped, onItemClick,
         });
 
         if (column.showWhenGrouped) {
-          items.push({
+          groupItems.push({
             text: groupingTexts.ungroup, value: 'ungroup', disabled: !isColumnGrouped, onItemClick,
           });
         }
 
-        items.push({ text: groupingTexts.ungroupAll, value: 'ungroupAll', onItemClick });
+        groupItems.push({ text: groupingTexts.ungroupAll, value: 'ungroupAll', onItemClick });
       }
     }
+
+    if (groupItems.length) {
+      items = items ?? [];
+
+      const clearSortingItemIndex = items.findIndex((item) => item.name === 'clearSorting') + 1;
+
+      items.splice(clearSortingItemIndex, 0, ...groupItems);
+    }
+
     return items;
   }
 
