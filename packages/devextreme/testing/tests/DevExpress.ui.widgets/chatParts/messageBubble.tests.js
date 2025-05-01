@@ -34,6 +34,12 @@ QUnit.module('MessageBubble', moduleConfig, () => {
 
             assert.strictEqual(this.$element.text(), 'message text');
         });
+
+        QUnit.test('bubble should be rendered with default text if isDeleted is true', function(assert) {
+            this.reinit({ isDeleted: true });
+
+            assert.strictEqual(this.$element.text(), messageLocalization.format('dxChat-deletedMessageText'));
+        });
     });
 
     QUnit.module('Options', () => {
@@ -44,7 +50,6 @@ QUnit.module('MessageBubble', moduleConfig, () => {
         });
 
         QUnit.test('isDeleted option should delete the message after being set at runtime', function(assert) {
-            this.instance.option('text', 'some text');
             this.instance.option('isDeleted', true);
 
             assert.strictEqual(this.$element.text(), messageLocalization.format('dxChat-deletedMessageText'));
