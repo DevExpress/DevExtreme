@@ -4913,6 +4913,7 @@ test('Multiple DataGrids - Ctrl+Alt+Down from filter row should focus data row i
   await t
     .click(secondGrid.getDataRow(0).getDataCell(0).element)
     .pressKey('ctrl+alt+up')
+    // eslint-disable-next-line max-len
     .expect(secondGrid.getHeaders().getFilterRow().getFilterCell(0).getEditorInput().element.focused)
     .ok('Filter cell input is focused')
     .expect(firstGrid.getHeaders().getFilterRow().getFilterCell(0).getEditorInput().element.focused)
