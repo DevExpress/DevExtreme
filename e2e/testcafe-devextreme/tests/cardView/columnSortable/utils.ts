@@ -5,6 +5,7 @@ import TreeView from 'devextreme-testcafe-models/treeView';
 export const SELECTORS = {
   dragging: '.dx-sortable-dragging',
   treeView: '.dx-cardview-column-chooser .dx-treeview',
+  treeViewItem: '.dx-treeview-item',
 };
 
 export const triggerDragStart = ClientFunction((selector) => {
@@ -31,6 +32,21 @@ export const triggerDragStart = ClientFunction((selector) => {
   element.dispatchEvent(mouseMoveEvent);
 });
 
+export const triggerDragEnd = ClientFunction(() => {
+  const element = document.querySelector(SELECTORS.dragging)!;
+
+  const { top, left } = element.getBoundingClientRect();
+
+  const mouseUpEvent = new MouseEvent('mouseup', {
+    bubbles: true,
+    cancelable: true,
+    clientX: left,
+    clientY: top,
+  });
+
+  element.dispatchEvent(mouseUpEvent);
+});
+
 export const getColumnItem = (
   cardView: CardView,
   index: number,
@@ -44,7 +60,7 @@ export const getColumnItem = (
   }
 
   const treeView = new TreeView(columnChooser.element.find(SELECTORS.treeView));
-  const column = treeView.getNodeItem(index);
+  const column = treeView.getNodeItem(index).find(SELECTORS.treeViewItem);
 
   return column;
 };
