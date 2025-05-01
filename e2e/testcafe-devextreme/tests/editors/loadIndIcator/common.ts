@@ -6,6 +6,9 @@ import { getFullThemeName, testScreenshot } from '../../../helpers/themeUtils';
 import { insertStylesheetRulesToPage } from '../../../helpers/domUtils';
 
 const LOADINDICATOR_SEGMENT_CLASS = 'dx-loadindicator-segment';
+const LOADINDICATOR_CONTENT_CLASS = 'dx-loadindicator-content';
+const LOADINDICATOR_ICON_CLASS = 'dx-loadindicator-icon';
+const LOADINDICATOR_SEGMENT_INNER_CLASS = 'dx-loadindicator-segment-inner';
 
 fixture.disablePageReloads`LoadIndicator`
   .page(url(__dirname, '../../container.html'));
@@ -17,6 +20,9 @@ fixture.disablePageReloads`LoadIndicator`
 
     await testScreenshot(t, takeScreenshot, `LoadIndicator with ${animationType} animation.png`, {
       element: '#container',
+      themeChanged: async () => {
+        await loadIndicator.repaint();
+      },
     });
 
     const darkTheme = getFullThemeName().replace('light', 'dark');
@@ -33,7 +39,15 @@ fixture.disablePageReloads`LoadIndicator`
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
   }).before(async () => {
-    await insertStylesheetRulesToPage(`.${LOADINDICATOR_SEGMENT_CLASS} { animation: none !important; }`);
+    await insertStylesheetRulesToPage(`
+      .${LOADINDICATOR_SEGMENT_CLASS},
+      .${LOADINDICATOR_CONTENT_CLASS},
+      .${LOADINDICATOR_ICON_CLASS},
+      .${LOADINDICATOR_SEGMENT_INNER_CLASS} {
+        animation: none !important;
+        opacity: 1 !important;
+      }
+    `);
 
     return createWidget('dxLoadIndicator', {
       width: 128,
