@@ -148,17 +148,17 @@ export class DataController {
           const tempLoadOptions = getLoadOptionsWithoutLocalPaging(loadOptions);
 
           new ArrayStore(e.data).load(tempLoadOptions).done((filteredData) => {
+            e.extra = e.extra || {};
+
             if (hasLocalPaging) {
               this._filteredItemCount.value = filteredData.length;
               e.take = take;
               e.skip = skip;
 
               new ArrayStore(e.data).load(loadOptions).done((newData) => {
-                e.extra = e.extra || {};
                 e.data = newData;
               });
             } else {
-              e.extra = e.extra || {};
               e.data = filteredData;
             }
           }).fail((error) => {
