@@ -32239,7 +32239,7 @@ declare module DevExpress.ui.dxHtmlEditor {
     /**
      * [descr:AIToolbarItem.name]
      */
-    name?: 'ai';
+    name: 'ai';
     /**
      * [descr:AIToolbarItem.commands]
      */
