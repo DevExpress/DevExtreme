@@ -15,7 +15,9 @@ fixture.disablePageReloads`LoadIndicator`
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
     const loadIndicator = new LoadIndicator('#container');
 
-    await testScreenshot(t, takeScreenshot, `LoadIndicator with ${animationType} animation.png`, { element: '#container' });
+    await testScreenshot(t, takeScreenshot, `LoadIndicator with ${animationType} animation.png`, {
+      element: '#container',
+    });
 
     const darkTheme = getFullThemeName().replace('light', 'dark');
 
