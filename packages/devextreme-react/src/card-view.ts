@@ -9,9 +9,9 @@ import dxCardView, {
 import { Component as BaseComponent, IHtmlOptions, ComponentRef, NestedComponentMeta } from "./core/component";
 import NestedOption from "./core/nested-option";
 
+import type { CardClickEvent, CardDblClickEvent, CardInsertedEvent, CardInsertingEvent, CardPreparedEvent, CardRemovedEvent, CardRemovingEvent, CardSavedEvent, CardSavingEvent, CardUpdatedEvent, CardUpdatingEvent, ContextMenuPreparingEvent, EditCanceledEvent, EditCancelingEvent, EditingStartEvent, FieldCaptionClickEvent, FieldCaptionDblClickEvent, FieldCaptionPreparedEvent, FieldValueClickEvent, FieldValueDblClickEvent, FieldValuePreparedEvent, InitNewCardEvent, SelectionChangingEvent, CardTemplateData, CardHeaderPredefinedToolbarItem, CardHeaderToolbarItem, FieldTemplateData, ColumnTemplateData, PredefinedToolbarItem, ToolbarItem as CardViewToolbarItem } from "devextreme/ui/card_view";
 import type { AnimationConfig, CollisionResolution, PositionConfig, AnimationState, AnimationType, CollisionResolutionCombination } from "devextreme/common/core/animation";
 import type { ValidationRuleType, HorizontalAlignment, VerticalAlignment, template, ToolbarItemLocation, ToolbarItemComponent, DataType, Format as CommonFormat, SortOrder, ComparisonOperator, Direction, PositionAlignment, Mode, DisplayMode, SingleMultipleOrNone, SelectAllMode } from "devextreme/common";
-import type { CardTemplateData, CardHeaderPredefinedToolbarItem, CardHeaderToolbarItem, FieldTemplateData, ColumnTemplateData, PredefinedToolbarItem, ToolbarItem as CardViewToolbarItem } from "devextreme/ui/card_view";
 import type { LocateInMenuMode, ShowTextMode } from "devextreme/ui/toolbar";
 import type { CollectionWidgetItem } from "devextreme/ui/collection/ui.collection_widget.base";
 import type { DataChangeType, FilterType, DataChange, PagerPageSize, SelectionColumnDisplayMode } from "devextreme/common/grids";
@@ -27,7 +27,37 @@ import type dxForm from "devextreme/ui/form";
 
 import type * as CommonTypes from "devextreme/common";
 
-type ICardViewOptions<TCardData = any, TKey = any> = React.PropsWithChildren<Properties<TCardData, TKey> & IHtmlOptions & {
+type ReplaceFieldTypes<TSource, TReplacement> = {
+  [P in keyof TSource]: P extends keyof TReplacement ? TReplacement[P] : TSource[P];
+}
+
+type ICardViewOptionsNarrowedEvents<TCardData = any, TKey = any> = {
+  onCardClick?: ((e: CardClickEvent) => void);
+  onCardDblClick?: ((e: CardDblClickEvent) => void);
+  onCardInserted?: ((e: CardInsertedEvent<TCardData>) => void);
+  onCardInserting?: ((e: CardInsertingEvent<TCardData>) => void);
+  onCardPrepared?: ((e: CardPreparedEvent) => void);
+  onCardRemoved?: ((e: CardRemovedEvent<TCardData, TKey>) => void);
+  onCardRemoving?: ((e: CardRemovingEvent<TCardData, TKey>) => void);
+  onCardSaved?: ((e: CardSavedEvent) => void);
+  onCardSaving?: ((e: CardSavingEvent) => void);
+  onCardUpdated?: ((e: CardUpdatedEvent<TCardData, TKey>) => void);
+  onCardUpdating?: ((e: CardUpdatingEvent<TCardData, TKey>) => void);
+  onContextMenuPreparing?: ((e: ContextMenuPreparingEvent<TCardData>) => void);
+  onEditCanceled?: ((e: EditCanceledEvent) => void);
+  onEditCanceling?: ((e: EditCancelingEvent) => void);
+  onEditingStart?: ((e: EditingStartEvent<TCardData, TKey>) => void);
+  onFieldCaptionClick?: ((e: FieldCaptionClickEvent) => void);
+  onFieldCaptionDblClick?: ((e: FieldCaptionDblClickEvent) => void);
+  onFieldCaptionPrepared?: ((e: FieldCaptionPreparedEvent) => void);
+  onFieldValueClick?: ((e: FieldValueClickEvent) => void);
+  onFieldValueDblClick?: ((e: FieldValueDblClickEvent) => void);
+  onFieldValuePrepared?: ((e: FieldValuePreparedEvent) => void);
+  onInitNewCard?: ((e: InitNewCardEvent<TCardData>) => void);
+  onSelectionChanging?: ((e: SelectionChangingEvent<TCardData, TKey>) => void);
+}
+
+type ICardViewOptions<TCardData = any, TKey = any> = React.PropsWithChildren<ReplaceFieldTypes<Properties<TCardData, TKey>, ICardViewOptionsNarrowedEvents<TCardData, TKey>> & IHtmlOptions & {
   dataSource?: Properties<TCardData, TKey>["dataSource"];
   cardContentRender?: (...params: any) => React.ReactNode;
   cardContentComponent?: React.ComponentType<any>;

@@ -546,7 +546,7 @@ type WithFieldValueInfo = {
 };
 
 /**
- * @docid
+ * @docid _ui_card_view_CardClickEvent
  * @public
  * @type object
  * @inherits NativeEventInfo,WithCardInfo
@@ -554,7 +554,7 @@ type WithFieldValueInfo = {
 export type CardClickEvent = NativeEventInfo<dxCardView, PointerEvent | MouseEvent | TouchEvent> & WithCardInfo;
 
 /**
- * @docid
+ * @docid _ui_card_view_CardDblClickEvent
  * @public
  * @type object
  * @inherits NativeEventInfo,WithCardInfo
@@ -562,7 +562,7 @@ export type CardClickEvent = NativeEventInfo<dxCardView, PointerEvent | MouseEve
 export type CardDblClickEvent = NativeEventInfo<dxCardView, PointerEvent | MouseEvent | TouchEvent> & WithCardInfo;
 
 /**
- * @docid
+ * @docid _ui_card_view_CardPreparedEvent
  * @public
  * @type object
  * @inherits EventInfo,WithCardInfo
@@ -570,7 +570,7 @@ export type CardDblClickEvent = NativeEventInfo<dxCardView, PointerEvent | Mouse
 export type CardPreparedEvent = EventInfo<dxCardView> & WithCardInfo;
 
 /**
- * @docid
+ * @docid _ui_card_view_FieldCaptionClickEvent
  * @public
  * @type object
  * @inherits NativeEventInfo,WithFieldCaptionInfo
@@ -578,7 +578,7 @@ export type CardPreparedEvent = EventInfo<dxCardView> & WithCardInfo;
 export type FieldCaptionClickEvent = NativeEventInfo<dxCardView, PointerEvent | MouseEvent | TouchEvent> & WithFieldCaptionInfo;
 
 /**
- * @docid
+ * @docid _ui_card_view_FieldCaptionDblClickEvent
  * @public
  * @type object
  * @inherits NativeEventInfo,WithFieldCaptionInfo
@@ -586,14 +586,15 @@ export type FieldCaptionClickEvent = NativeEventInfo<dxCardView, PointerEvent | 
 export type FieldCaptionDblClickEvent = NativeEventInfo<dxCardView, PointerEvent | MouseEvent | TouchEvent> & WithFieldCaptionInfo;
 
 /**
- * @docid
+ * @docid _ui_card_view_FieldValuePreparedEvent
  * @public
  * @type object
  * @inherits EventInfo,WithFieldValueInfo
-*/
+ */
 export type FieldValuePreparedEvent = EventInfo<dxCardView> & WithFieldValueInfo;
+
 /**
- * @docid
+ * @docid _ui_card_view_FieldValueClickEvent
  * @public
  * @type object
  * @inherits NativeEventInfo,WithFieldValueInfo
@@ -601,7 +602,7 @@ export type FieldValuePreparedEvent = EventInfo<dxCardView> & WithFieldValueInfo
 export type FieldValueClickEvent = NativeEventInfo<dxCardView, PointerEvent | MouseEvent | TouchEvent> & WithFieldValueInfo;
 
 /**
- * @docid
+ * @docid _ui_card_view_FieldValueDblClickEvent
  * @public
  * @type object
  * @inherits NativeEventInfo,WithFieldValueInfo
@@ -609,21 +610,21 @@ export type FieldValueClickEvent = NativeEventInfo<dxCardView, PointerEvent | Mo
 export type FieldValueDblClickEvent = NativeEventInfo<dxCardView, PointerEvent | MouseEvent | TouchEvent> & WithFieldValueInfo;
 
 /**
- * @docid
+ * @docid _ui_card_view_FieldCaptionPreparedEvent
  * @public
  * @type object
  * @inherits EventInfo,WithFieldCaptionInfo
-*/
+ */
 export type FieldCaptionPreparedEvent = EventInfo<dxCardView> & WithFieldCaptionInfo;
 
 /**
- * @docid
+ * @docid _ui_card_view_CardHoverChangedEvent
  * @public
  * @type object
  * @inherits EventInfo,WithCardInfo
  */
 export type CardHoverChangedEvent = EventInfo<dxCardView> & WithCardInfo & {
-    /** @docid */
+    /** @docid _ui_card_view_CardHoverChangedEvent.eventType */
     eventType: string;
 };
 
@@ -791,189 +792,218 @@ export type Editing<TCardData=unknown, TKey=unknown> = { // TODO: sync with impl
 };
 
 /**
- * @docid
+ * @docid _ui_card_view_EditCanceledEvent
  * @public
+ * @type object
  * @inherits EventInfo
  */
 export type EditCanceledEvent = EventInfo<dxCardView> & {
+    /**
+     * @docid _ui_card_view_EditCanceledEvent.changes
+     */
     changes: DataChange[];
 };
+
 /**
- * @docid
+ * @docid _ui_card_view_EditCancelingEvent
  * @public
+ * @type object
  * @inherits EventInfo,Cancelable
  */
 export type EditCancelingEvent = EventInfo<dxCardView> & Cancelable & {
+    /**
+     * @docid _ui_card_view_EditCancelingEvent.changes
+     */
     changes: DataChange[];
 };
+
 /**
- * @docid
+ * @docid _ui_card_view_EditingStartEvent
  * @public
+ * @type object
  * @inherits EventInfo,Cancelable
  */
 export type EditingStartEvent<TCardData = unknown, TKey = unknown> = EventInfo<dxCardView> & Cancelable & {
     /**
-     * @docid
+     * @docid _ui_card_view_EditingStartEvent.data
      * @type object
      * @public
      */
     data: TCardData;
     /**
-     * @docid
+     * @docid _ui_card_view_EditingStartEvent.key
      * @public
      * @type any
      */
     key: TKey;
 };
+
 /**
- * @docid
+ * @docid _ui_card_view_InitNewCardEvent
  * @public
+ * @type object
  * @inherits EventInfo
  */
 export type InitNewCardEvent<TCardData = unknown> = EventInfo<dxCardView> & {
     /**
-     * @docid
+     * @docid _ui_card_view_InitNewCardEvent.data
      * @public
      * @type object
      */
     data: DeepPartial<TCardData>;
     /**
-     * @docid
+     * @docid _ui_card_view_InitNewCardEvent.promise
      * @type Promise<void>
      * @public
      */
     promise?: PromiseLike<void>;
 };
+
 /**
- * @docid
+ * @docid _ui_card_view_CardInsertedEvent
  * @public
+ * @type object
  * @inherits EventInfo
  */
 export type CardInsertedEvent<TCardData = unknown> = EventInfo<dxCardView> & {
     /**
-     * @docid
+     * @docid _ui_card_view_CardInsertedEvent.data
      * @public
      * @type object
      */
     data: DeepPartial<TCardData>;
 };
+
 /**
- * @docid
+ * @docid _ui_card_view_CardInsertingEvent
  * @public
+ * @type object
  * @inherits EventInfo,Cancelable
  */
 export type CardInsertingEvent<TCardData = unknown> = EventInfo<dxCardView> & Cancelable & {
     /**
-     * @docid
+     * @docid _ui_card_view_CardInsertingEvent.data
      * @public
      * @type object
      */
     data: DeepPartial<TCardData>;
 };
+
 /**
- * @docid
+ * @docid _ui_card_view_CardRemovedEvent
  * @public
+ * @type object
  * @inherits EventInfo
  */
 export type CardRemovedEvent<TCardData = unknown, TKey = unknown> = EventInfo<dxCardView> & {
     /**
-     * @docid
+     * @docid _ui_card_view_CardRemovedEvent.data
      * @public
      */
     data: TCardData;
     /**
-     * @docid
+     * @docid _ui_card_view_CardRemovedEvent.key
      * @public
      * @type any
      */
     key: TKey;
 };
+
 /**
- * @docid
+ * @docid _ui_card_view_CardRemovingEvent
  * @public
+ * @type object
  * @inherits EventInfo,Cancelable
  */
 export type CardRemovingEvent<TCardData = unknown, TKey = unknown> = EventInfo<dxCardView> & Cancelable & {
     /**
-     * @docid
+     * @docid _ui_card_view_CardRemovingEvent.data
      * @public
      */
     data: TCardData;
     /**
-     * @docid
+     * @docid _ui_card_view_CardRemovingEvent.key
      * @public
      * @type any
      */
     key: TKey;
 };
+
 /**
- * @docid
+ * @docid _ui_card_view_CardUpdatedEvent
  * @public
+ * @type object
  * @inherits EventInfo
  */
 export type CardUpdatedEvent<TCardData = unknown, TKey = unknown> = EventInfo<dxCardView> & {
     /**
-     * @docid
+     * @docid _ui_card_view_CardUpdatedEvent.data
      * @public
      */
     data: TCardData;
     /**
-     * @docid
+     * @docid _ui_card_view_CardUpdatedEvent.key
      * @public
      * @type any
      */
     key: TKey;
 };
+
 /**
- * @docid
+ * @docid _ui_card_view_CardUpdatingEvent
  * @public
+ * @type object
  * @inherits EventInfo,Cancelable
  */
 export type CardUpdatingEvent<TCardData = unknown, TKey = unknown> = EventInfo<dxCardView> & Cancelable & {
     /**
-     * @docid
+     * @docid _ui_card_view_CardUpdatingEvent.key
      * @public
      * @type any
      */
     key: TKey;
     /**
-     * @docid
+     * @docid _ui_card_view_CardUpdatingEvent.oldData
      * @public
      */
     oldData: TCardData;
     /**
-     * @docid
+     * @docid _ui_card_view_CardUpdatingEvent.newData
      * @public
      * @type object
      */
     newData: DeepPartial<TCardData>;
 };
+
 /**
- * @docid
+ * @docid _ui_card_view_CardSavedEvent
  * @public
+ * @type object
  * @inherits EventInfo
  */
 export type CardSavedEvent = EventInfo<dxCardView> & {
     /**
-     * @docid
+     * @docid _ui_card_view_CardSavedEvent.changes
      * @public
      */
     changes: DataChange[];
 };
+
 /**
- * @docid
+ * @docid _ui_card_view_CardSavingEvent
  * @public
+ * @type object
  * @inherits EventInfo,Cancelable
  */
 export type CardSavingEvent = EventInfo<dxCardView> & Cancelable & {
     /**
-     * @docid
+     * @docid _ui_card_view_CardSavingEvent.promise
      * @type Promise<void>
      * @public
      */
     promise?: PromiseLike<void>;
     /**
-     * @docid
+     * @docid _ui_card_view_CardSavingEvent.changes
      * @public
      */
     changes: DataChange[];
@@ -1011,56 +1041,58 @@ export type SelectionConfiguration = {
 };
 
 /**
- * @docid
+ * @docid _ui_card_view_SelectionChangingEvent
  * @public
+ * @type object
  * @inherits EventInfo,Cancelable
  */
 export type SelectionChangingEvent<TCardData = unknown, TKey = unknown> = EventInfo<dxCardView> & Cancelable & {
     /**
-     * @docid
+     * @docid _ui_card_view_SelectionChangingEvent.selectedCardsData
      * @public
      */
     selectedCardsData: Array<TCardData>;
     /**
-     * @docid
+     * @docid _ui_card_view_SelectionChangingEvent.selectedCardKeys
      * @public
      */
     selectedCardKeys: Array<TKey>;
     /**
-     * @docid
+     * @docid _ui_card_view_SelectionChangingEvent.currentSelectedCardKeys
      * @public
      */
     currentSelectedCardKeys: Array<TKey>;
     /**
-     * @docid
+     * @docid _ui_card_view_SelectionChangingEvent.currentDeselectedCardKeys
      * @public
      */
     currentDeselectedCardKeys: Array<TKey>;
-
 };
+
 /**
- * @docid
+ * @docid _ui_card_view_SelectionChangedEvent
  * @public
+ * @type object
  * @inherits EventInfo
  */
 export type SelectionChangedEvent<TCardData = unknown, TKey = unknown> = EventInfo<dxCardView> & {
     /**
-     * @docid
+     * @docid _ui_card_view_SelectionChangedEvent.selectedCardsData
      * @public
      */
     selectedCardsData: Array<TCardData>;
     /**
-     * @docid
+     * @docid _ui_card_view_SelectionChangedEvent.selectedCardKeys
      * @public
      */
     selectedCardKeys: Array<TKey>;
     /**
-     * @docid
+     * @docid _ui_card_view_SelectionChangedEvent.currentSelectedCardKeys
      * @public
      */
     currentSelectedCardKeys: Array<TKey>;
     /**
-     * @docid
+     * @docid _ui_card_view_SelectionChangedEvent.currentDeselectedCardKeys
      * @public
      */
     currentDeselectedCardKeys: Array<TKey>;
@@ -1074,43 +1106,44 @@ export type SelectionChangedEvent<TCardData = unknown, TKey = unknown> = EventIn
 export type ContextMenuTarget = 'toolbar' | 'headerPanel' | 'content';
 
 /**
+ * @docid _ui_card_view_ContextMenuPreparingEvent
  * @public
- * @docid
+ * @type object
  * @inherits EventInfo
  */
 export type ContextMenuPreparingEvent<TCardData = unknown> = EventInfo<dxCardView> & {
   /**
-   * @docid
+   * @docid _ui_card_view_ContextMenuPreparingEvent.items
    * @public
    */
   items?: any[];
   /**
-   * @docid
+   * @docid _ui_card_view_ContextMenuPreparingEvent.target
    * @public
    */
   readonly target: ContextMenuTarget;
   /**
-   * @docid
+   * @docid _ui_card_view_ContextMenuPreparingEvent.targetElement
    * @public
    */
   readonly targetElement: DxElement;
   /**
-   * @docid
+   * @docid _ui_card_view_ContextMenuPreparingEvent.columnIndex
    * @public
    */
   readonly columnIndex?: number;
   /**
-   * @docid
+   * @docid _ui_card_view_ContextMenuPreparingEvent.column
    * @public
    */
   readonly column?: Column;
   /**
-   * @docid
+   * @docid _ui_card_view_ContextMenuPreparingEvent.cardIndex
    * @public
    */
   readonly cardIndex?: number;
   /**
-   * @docid
+   * @docid _ui_card_view_ContextMenuPreparingEvent.card
    * @public
    */
   readonly card?: TCardData;
@@ -1121,8 +1154,9 @@ export type ContextMenuPreparingEvent<TCardData = unknown> = EventInfo<dxCardVie
 // #region KBN
 
 /**
- * @docid
+ * @docid _ui_card_view_FocusedCardChanged
  * @public
+ * @type object
  * @inherits EventInfo,WithCardInfo
  */
 export type FocusedCardChanged = EventInfo<dxCardView> & WithCardInfo;
@@ -1156,7 +1190,7 @@ export interface dxCardViewOptions<TCardData = unknown, TKey = unknown> extends 
      * @default undefined
      * @public
      */
-    keyExpr?: string | string[];
+    keyExpr?: string | string[]; // can be undefined because of default?
     /**
      * @docid
      * @default "auto"
@@ -1284,60 +1318,70 @@ export interface dxCardViewOptions<TCardData = unknown, TKey = unknown> extends 
     /**
      * @docid
      * @public
+     * @type_function_param1 e:{ui/card_view:CardClickEvent}
      * @action
      */
     onCardClick?: (e: CardClickEvent) => void; // TODO: sync with impl
     /**
      * @docid
      * @public
+     * @type_function_param1 e:{ui/card_view:CardDblClickEvent}
      * @action
      */
     onCardDblClick?: (e: CardDblClickEvent) => void; // TODO: sync with impl
     /**
      * @docid
      * @public
+     * @type_function_param1 e:{ui/card_view:CardPreparedEvent}
      * @action
      */
     onCardPrepared?: (e: CardPreparedEvent) => void; // TODO: sync with impl
     /**
      * @docid
      * @public
+     * @type_function_param1 e:{ui/card_view:FieldCaptionClickEvent}
      * @action
      */
     onFieldCaptionClick?: (e: FieldCaptionClickEvent) => void; // TODO: sync with impl
     /**
      * @docid
      * @public
+     * @type_function_param1 e:{ui/card_view:FieldCaptionDblClickEvent}
      * @action
      */
     onFieldCaptionDblClick?: (e: FieldCaptionDblClickEvent) => void; // TODO: sync with impl
     /**
      * @docid
      * @public
+     * @type_function_param1 e:{ui/card_view:FieldCaptionPreparedEvent}
      * @action
      */
     onFieldCaptionPrepared?: (e: FieldCaptionPreparedEvent) => void; // TODO: sync with impl
     /**
      * @docid
      * @public
+     * @type_function_param1 e:{ui/card_view:FieldValueClickEvent}
      * @action
      */
     onFieldValueClick?: (e: FieldValueClickEvent) => void; // TODO: sync with impl
     /**
      * @docid
      * @public
+     * @type_function_param1 e:{ui/card_view:FieldValueDblClickEvent}
      * @action
      */
     onFieldValueDblClick?: (e: FieldValueDblClickEvent) => void; // TODO: sync with impl
     /**
      * @docid
      * @public
+     * @type_function_param1 e:{ui/card_view:FieldValuePreparedEvent}
      * @action
      */
     onFieldValuePrepared?: (e: FieldValuePreparedEvent) => void; // TODO: sync with impl
     /**
      * @docid
      * @public
+     * @type_function_param1 e:{ui/card_view:CardHoverChangedEvent}
      * @action
      */
     onCardHoverChanged?: (e: CardHoverChangedEvent) => void; // TODO: sync with impl
@@ -1426,72 +1470,84 @@ export interface dxCardViewOptions<TCardData = unknown, TKey = unknown> extends 
     /**
      * @docid
      * @public
+     * @type_function_param1 e:{ui/card_view:EditCanceledEvent}
      * @action
      */
     onEditCanceled?: (e: EditCanceledEvent) => void;
     /**
      * @docid
      * @public
+     * @type_function_param1 e:{ui/card_view:EditCancelingEvent}
      * @action
      */
     onEditCanceling?: (e: EditCancelingEvent) => void;
     /**
      * @docid
      * @public
+     * @type_function_param1 e:{ui/card_view:EditingStartEvent}
      * @action
      */
     onEditingStart?: (e: EditingStartEvent) => void;
     /**
      * @docid
      * @public
+     * @type_function_param1 e:{ui/card_view:InitNewCardEvent}
      * @action
      */
     onInitNewCard?: (e: InitNewCardEvent<TCardData>) => void;
     /**
      * @docid
      * @public
+     * @type_function_param1 e:{ui/card_view:CardInsertedEvent}
      * @action
      */
     onCardInserted?: (e: CardInsertedEvent) => void;
     /**
      * @docid
      * @public
+     * @type_function_param1 e:{ui/card_view:CardInsertingEvent}
      * @action
      */
     onCardInserting?: (e: CardInsertingEvent) => void;
     /**
      * @docid
      * @public
+     * @type_function_param1 e:{ui/card_view:CardRemovedEvent}
      * @action
      */
     onCardRemoved?: (e: CardRemovedEvent) => void;
     /**
      * @docid
      * @public
+     * @type_function_param1 e:{ui/card_view:CardRemovingEvent}
      * @action
      */
     onCardRemoving?: (e: CardRemovingEvent) => void;
     /**
      * @docid
      * @public
+     * @type_function_param1 e:{ui/card_view:CardUpdatedEvent}
      * @action
      */
     onCardUpdated?: (e: CardUpdatedEvent) => void;
     /**
      * @docid
      * @public
+     * @type_function_param1 e:{ui/card_view:CardUpdatingEvent}
      * @action
      */
     onCardUpdating?: (e: CardUpdatingEvent) => void;
     /**
      * @docid
      * @public
+     * @type_function_param1 e:{ui/card_view:CardSavedEvent}
      * @action
      */
     onCardSaved?: (e: CardSavedEvent) => void;
     /**
      * @docid
      * @public
+     * @type_function_param1 e:{ui/card_view:CardSavingEvent}
      * @action
      */
     onCardSaving?: (e: CardSavingEvent) => void;
@@ -1513,12 +1569,14 @@ export interface dxCardViewOptions<TCardData = unknown, TKey = unknown> extends 
     selection?: SelectionConfiguration;
     /**
      * @docid
+     * @type_function_param1 e:{ui/card_view:SelectionChangingEvent}
      * @action
      * @public
      */
     onSelectionChanging?: (e: SelectionChangingEvent) => void;
     /**
      * @docid
+     * @type_function_param1 e:{ui/card_view:SelectionChangedEvent}
      * @action
      * @public
      */
@@ -1530,6 +1588,7 @@ export interface dxCardViewOptions<TCardData = unknown, TKey = unknown> extends 
 
     /**
      * @docid
+     * @type_function_param1 e:{ui/card_view:FocusedCardChanged}
      * @action
      * @public
      */
@@ -1539,6 +1598,7 @@ export interface dxCardViewOptions<TCardData = unknown, TKey = unknown> extends 
 
     /**
      * @docid
+     * @type_function_param1 e:{ui/card_view:ContextMenuPreparingEvent}
      * @action
      * @public
      */

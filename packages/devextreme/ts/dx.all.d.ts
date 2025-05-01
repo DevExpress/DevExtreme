@@ -10087,7 +10087,7 @@ declare module DevExpress.ui {
   }
   module dxCardView {
     /**
-     * [descr:CardClickEvent]
+     * [descr:_ui_card_view_CardClickEvent]
      */
     export type CardClickEvent = DevExpress.common.core.events.NativeEventInfo<
       dxCardView,
@@ -10095,7 +10095,7 @@ declare module DevExpress.ui {
     > &
       WithCardInfo;
     /**
-     * [descr:CardDblClickEvent]
+     * [descr:_ui_card_view_CardDblClickEvent]
      */
     export type CardDblClickEvent =
       DevExpress.common.core.events.NativeEventInfo<
@@ -10108,60 +10108,60 @@ declare module DevExpress.ui {
       | 'updateButton'
       | 'deleteButton';
     /**
-     * [descr:CardHoverChangedEvent]
+     * [descr:_ui_card_view_CardHoverChangedEvent]
      */
     export type CardHoverChangedEvent =
       DevExpress.common.core.events.EventInfo<dxCardView> &
         WithCardInfo & {
           /**
-           * [descr:CardHoverChangedEvent.eventType]
+           * [descr:_ui_card_view_CardHoverChangedEvent.eventType]
            */
           eventType: string;
         };
     /**
-     * [descr:CardInsertedEvent]
+     * [descr:_ui_card_view_CardInsertedEvent]
      */
     export type CardInsertedEvent<TCardData = unknown> =
       DevExpress.common.core.events.EventInfo<dxCardView> & {
         /**
-         * [descr:CardInsertedEvent.data]
+         * [descr:_ui_card_view_CardInsertedEvent.data]
          */
         data: DevExpress.core.DeepPartial<TCardData>;
       };
     /**
-     * [descr:CardInsertingEvent]
+     * [descr:_ui_card_view_CardInsertingEvent]
      */
     export type CardInsertingEvent<TCardData = unknown> =
       DevExpress.common.core.events.EventInfo<dxCardView> &
         DevExpress.common.core.events.Cancelable & {
           /**
-           * [descr:CardInsertingEvent.data]
+           * [descr:_ui_card_view_CardInsertingEvent.data]
            */
           data: DevExpress.core.DeepPartial<TCardData>;
         };
     /**
-     * [descr:CardPreparedEvent]
+     * [descr:_ui_card_view_CardPreparedEvent]
      */
     export type CardPreparedEvent =
       DevExpress.common.core.events.EventInfo<dxCardView> & WithCardInfo;
     /**
-     * [descr:CardRemovedEvent]
+     * [descr:_ui_card_view_CardRemovedEvent]
      */
     export type CardRemovedEvent<
       TCardData = unknown,
       TKey = unknown
     > = DevExpress.common.core.events.EventInfo<dxCardView> & {
       /**
-       * [descr:CardRemovedEvent.data]
+       * [descr:_ui_card_view_CardRemovedEvent.data]
        */
       data: TCardData;
       /**
-       * [descr:CardRemovedEvent.key]
+       * [descr:_ui_card_view_CardRemovedEvent.key]
        */
       key: TKey;
     };
     /**
-     * [descr:CardRemovingEvent]
+     * [descr:_ui_card_view_CardRemovingEvent]
      */
     export type CardRemovingEvent<
       TCardData = unknown,
@@ -10169,36 +10169,36 @@ declare module DevExpress.ui {
     > = DevExpress.common.core.events.EventInfo<dxCardView> &
       DevExpress.common.core.events.Cancelable & {
         /**
-         * [descr:CardRemovingEvent.data]
+         * [descr:_ui_card_view_CardRemovingEvent.data]
          */
         data: TCardData;
         /**
-         * [descr:CardRemovingEvent.key]
+         * [descr:_ui_card_view_CardRemovingEvent.key]
          */
         key: TKey;
       };
     /**
-     * [descr:CardSavedEvent]
+     * [descr:_ui_card_view_CardSavedEvent]
      */
     export type CardSavedEvent =
       DevExpress.common.core.events.EventInfo<dxCardView> & {
         /**
-         * [descr:CardSavedEvent.changes]
+         * [descr:_ui_card_view_CardSavedEvent.changes]
          */
         changes: DevExpress.common.grids.DataChange[];
       };
     /**
-     * [descr:CardSavingEvent]
+     * [descr:_ui_card_view_CardSavingEvent]
      */
     export type CardSavingEvent =
       DevExpress.common.core.events.EventInfo<dxCardView> &
         DevExpress.common.core.events.Cancelable & {
           /**
-           * [descr:CardSavingEvent.promise]
+           * [descr:_ui_card_view_CardSavingEvent.promise]
            */
           promise?: PromiseLike<void>;
           /**
-           * [descr:CardSavingEvent.changes]
+           * [descr:_ui_card_view_CardSavingEvent.changes]
            */
           changes: DevExpress.common.grids.DataChange[];
         };
@@ -10209,23 +10209,23 @@ declare module DevExpress.ui {
       card: CardInfo;
     };
     /**
-     * [descr:CardUpdatedEvent]
+     * [descr:_ui_card_view_CardUpdatedEvent]
      */
     export type CardUpdatedEvent<
       TCardData = unknown,
       TKey = unknown
     > = DevExpress.common.core.events.EventInfo<dxCardView> & {
       /**
-       * [descr:CardUpdatedEvent.data]
+       * [descr:_ui_card_view_CardUpdatedEvent.data]
        */
       data: TCardData;
       /**
-       * [descr:CardUpdatedEvent.key]
+       * [descr:_ui_card_view_CardUpdatedEvent.key]
        */
       key: TKey;
     };
     /**
-     * [descr:CardUpdatingEvent]
+     * [descr:_ui_card_view_CardUpdatingEvent]
      */
     export type CardUpdatingEvent<
       TCardData = unknown,
@@ -10233,15 +10233,15 @@ declare module DevExpress.ui {
     > = DevExpress.common.core.events.EventInfo<dxCardView> &
       DevExpress.common.core.events.Cancelable & {
         /**
-         * [descr:CardUpdatingEvent.key]
+         * [descr:_ui_card_view_CardUpdatingEvent.key]
          */
         key: TKey;
         /**
-         * [descr:CardUpdatingEvent.oldData]
+         * [descr:_ui_card_view_CardUpdatingEvent.oldData]
          */
         oldData: TCardData;
         /**
-         * [descr:CardUpdatingEvent.newData]
+         * [descr:_ui_card_view_CardUpdatingEvent.newData]
          */
         newData: DevExpress.core.DeepPartial<TCardData>;
       };
@@ -10252,54 +10252,60 @@ declare module DevExpress.ui {
       column: Column<TCardData, TKey>;
     };
     /**
-     * [descr:ContextMenuPreparingEvent]
+     * [descr:_ui_card_view_ContextMenuPreparingEvent]
      */
     export type ContextMenuPreparingEvent<TCardData = unknown> =
       DevExpress.common.core.events.EventInfo<dxCardView> & {
         /**
-         * [descr:ContextMenuPreparingEvent.items]
+         * [descr:_ui_card_view_ContextMenuPreparingEvent.items]
          */
         items?: any[];
         /**
-         * [descr:ContextMenuPreparingEvent.target]
+         * [descr:_ui_card_view_ContextMenuPreparingEvent.target]
          */
         readonly target: ContextMenuTarget;
         /**
-         * [descr:ContextMenuPreparingEvent.targetElement]
+         * [descr:_ui_card_view_ContextMenuPreparingEvent.targetElement]
          */
         readonly targetElement: DevExpress.core.DxElement;
         /**
-         * [descr:ContextMenuPreparingEvent.columnIndex]
+         * [descr:_ui_card_view_ContextMenuPreparingEvent.columnIndex]
          */
         readonly columnIndex?: number;
         /**
-         * [descr:ContextMenuPreparingEvent.column]
+         * [descr:_ui_card_view_ContextMenuPreparingEvent.column]
          */
         readonly column?: Column;
         /**
-         * [descr:ContextMenuPreparingEvent.cardIndex]
+         * [descr:_ui_card_view_ContextMenuPreparingEvent.cardIndex]
          */
         readonly cardIndex?: number;
         /**
-         * [descr:ContextMenuPreparingEvent.card]
+         * [descr:_ui_card_view_ContextMenuPreparingEvent.card]
          */
         readonly card?: TCardData;
       };
 
     export type ContextMenuTarget = 'toolbar' | 'headerPanel' | 'content';
     /**
-     * [descr:EditCanceledEvent]
+     * [descr:_ui_card_view_EditCanceledEvent]
      */
     export type EditCanceledEvent =
       DevExpress.common.core.events.EventInfo<dxCardView> & {
+        /**
+         * [descr:_ui_card_view_EditCanceledEvent.changes]
+         */
         changes: DevExpress.common.grids.DataChange[];
       };
     /**
-     * [descr:EditCancelingEvent]
+     * [descr:_ui_card_view_EditCancelingEvent]
      */
     export type EditCancelingEvent =
       DevExpress.common.core.events.EventInfo<dxCardView> &
         DevExpress.common.core.events.Cancelable & {
+          /**
+           * [descr:_ui_card_view_EditCancelingEvent.changes]
+           */
           changes: DevExpress.common.grids.DataChange[];
         };
 
@@ -10341,7 +10347,7 @@ declare module DevExpress.ui {
       popup?: DevExpress.ui.dxPopup.Properties;
     };
     /**
-     * [descr:EditingStartEvent]
+     * [descr:_ui_card_view_EditingStartEvent]
      */
     export type EditingStartEvent<
       TCardData = unknown,
@@ -10349,11 +10355,11 @@ declare module DevExpress.ui {
     > = DevExpress.common.core.events.EventInfo<dxCardView> &
       DevExpress.common.core.events.Cancelable & {
         /**
-         * [descr:EditingStartEvent.data]
+         * [descr:_ui_card_view_EditingStartEvent.data]
          */
         data: TCardData;
         /**
-         * [descr:EditingStartEvent.key]
+         * [descr:_ui_card_view_EditingStartEvent.key]
          */
         key: TKey;
       };
@@ -10361,7 +10367,7 @@ declare module DevExpress.ui {
       Properties: Properties<TCardData, TKey>;
     };
     /**
-     * [descr:FieldCaptionClickEvent]
+     * [descr:_ui_card_view_FieldCaptionClickEvent]
      */
     export type FieldCaptionClickEvent =
       DevExpress.common.core.events.NativeEventInfo<
@@ -10370,7 +10376,7 @@ declare module DevExpress.ui {
       > &
         WithFieldCaptionInfo;
     /**
-     * [descr:FieldCaptionDblClickEvent]
+     * [descr:_ui_card_view_FieldCaptionDblClickEvent]
      */
     export type FieldCaptionDblClickEvent =
       DevExpress.common.core.events.NativeEventInfo<
@@ -10379,7 +10385,7 @@ declare module DevExpress.ui {
       > &
         WithFieldCaptionInfo;
     /**
-     * [descr:FieldCaptionPreparedEvent]
+     * [descr:_ui_card_view_FieldCaptionPreparedEvent]
      */
     export type FieldCaptionPreparedEvent =
       DevExpress.common.core.events.EventInfo<dxCardView> &
@@ -10391,7 +10397,7 @@ declare module DevExpress.ui {
       field: FieldInfoType;
     };
     /**
-     * [descr:FieldValueClickEvent]
+     * [descr:_ui_card_view_FieldValueClickEvent]
      */
     export type FieldValueClickEvent =
       DevExpress.common.core.events.NativeEventInfo<
@@ -10400,7 +10406,7 @@ declare module DevExpress.ui {
       > &
         WithFieldValueInfo;
     /**
-     * [descr:FieldValueDblClickEvent]
+     * [descr:_ui_card_view_FieldValueDblClickEvent]
      */
     export type FieldValueDblClickEvent =
       DevExpress.common.core.events.NativeEventInfo<
@@ -10409,27 +10415,27 @@ declare module DevExpress.ui {
       > &
         WithFieldValueInfo;
     /**
-     * [descr:FieldValuePreparedEvent]
+     * [descr:_ui_card_view_FieldValuePreparedEvent]
      */
     export type FieldValuePreparedEvent =
       DevExpress.common.core.events.EventInfo<dxCardView> & WithFieldValueInfo;
 
     /**
-     * [descr:FocusedCardChanged]
+     * [descr:_ui_card_view_FocusedCardChanged]
      */
     export type FocusedCardChanged =
       DevExpress.common.core.events.EventInfo<dxCardView> & WithCardInfo;
     /**
-     * [descr:InitNewCardEvent]
+     * [descr:_ui_card_view_InitNewCardEvent]
      */
     export type InitNewCardEvent<TCardData = unknown> =
       DevExpress.common.core.events.EventInfo<dxCardView> & {
         /**
-         * [descr:InitNewCardEvent.data]
+         * [descr:_ui_card_view_InitNewCardEvent.data]
          */
         data: DevExpress.core.DeepPartial<TCardData>;
         /**
-         * [descr:InitNewCardEvent.promise]
+         * [descr:_ui_card_view_InitNewCardEvent.promise]
          */
         promise?: PromiseLike<void>;
       };
@@ -10445,31 +10451,31 @@ declare module DevExpress.ui {
       TKey = unknown
     > = dxCardViewOptions<TCardData, TKey>;
     /**
-     * [descr:SelectionChangedEvent]
+     * [descr:_ui_card_view_SelectionChangedEvent]
      */
     export type SelectionChangedEvent<
       TCardData = unknown,
       TKey = unknown
     > = DevExpress.common.core.events.EventInfo<dxCardView> & {
       /**
-       * [descr:SelectionChangedEvent.selectedCardsData]
+       * [descr:_ui_card_view_SelectionChangedEvent.selectedCardsData]
        */
       selectedCardsData: Array<TCardData>;
       /**
-       * [descr:SelectionChangedEvent.selectedCardKeys]
+       * [descr:_ui_card_view_SelectionChangedEvent.selectedCardKeys]
        */
       selectedCardKeys: Array<TKey>;
       /**
-       * [descr:SelectionChangedEvent.currentSelectedCardKeys]
+       * [descr:_ui_card_view_SelectionChangedEvent.currentSelectedCardKeys]
        */
       currentSelectedCardKeys: Array<TKey>;
       /**
-       * [descr:SelectionChangedEvent.currentDeselectedCardKeys]
+       * [descr:_ui_card_view_SelectionChangedEvent.currentDeselectedCardKeys]
        */
       currentDeselectedCardKeys: Array<TKey>;
     };
     /**
-     * [descr:SelectionChangingEvent]
+     * [descr:_ui_card_view_SelectionChangingEvent]
      */
     export type SelectionChangingEvent<
       TCardData = unknown,
@@ -10477,19 +10483,19 @@ declare module DevExpress.ui {
     > = DevExpress.common.core.events.EventInfo<dxCardView> &
       DevExpress.common.core.events.Cancelable & {
         /**
-         * [descr:SelectionChangingEvent.selectedCardsData]
+         * [descr:_ui_card_view_SelectionChangingEvent.selectedCardsData]
          */
         selectedCardsData: Array<TCardData>;
         /**
-         * [descr:SelectionChangingEvent.selectedCardKeys]
+         * [descr:_ui_card_view_SelectionChangingEvent.selectedCardKeys]
          */
         selectedCardKeys: Array<TKey>;
         /**
-         * [descr:SelectionChangingEvent.currentSelectedCardKeys]
+         * [descr:_ui_card_view_SelectionChangingEvent.currentSelectedCardKeys]
          */
         currentSelectedCardKeys: Array<TKey>;
         /**
-         * [descr:SelectionChangingEvent.currentDeselectedCardKeys]
+         * [descr:_ui_card_view_SelectionChangingEvent.currentDeselectedCardKeys]
          */
         currentDeselectedCardKeys: Array<TKey>;
       };
