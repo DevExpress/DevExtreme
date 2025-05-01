@@ -8,6 +8,7 @@ import { each } from '@js/core/utils/iterator';
 import { getHeight } from '@js/core/utils/size';
 import { isDefined, isString } from '@js/core/utils/type';
 import { restoreFocus, setTabIndex } from '@js/ui/shared/accessibility';
+import { ColumnContextMenuMixin } from '@ts/grids/grid_core/context_menu/m_column_context_menu_mixin';
 import type { DataController } from '@ts/grids/grid_core/data_controller/m_data_controller';
 import type DataSourceAdapter from '@ts/grids/grid_core/data_source_adapter/m_data_source_adapter';
 import { registerKeyboardAction } from '@ts/grids/grid_core/m_accessibility';
@@ -405,7 +406,9 @@ const allowDragging = (groupPanelOptions, column): boolean => {
   return isVisible && !!canDrag;
 };
 
-export const GroupingHeaderPanelExtender = (Base: ModuleType<HeaderPanel>) => class GroupingHeaderPanelExtender extends Base {
+export const GroupingHeaderPanelExtender = (
+  Base: ModuleType<HeaderPanel>,
+) => class GroupingHeaderPanelExtender extends ColumnContextMenuMixin(Base) {
   protected _getToolbarItems() {
     const items = super._getToolbarItems();
 
@@ -485,6 +488,41 @@ export const GroupingHeaderPanelExtender = (Base: ModuleType<HeaderPanel>) => cl
     return $groupPanelItem;
   }
 
+  private getGroupAndUngroupItems(options) {
+    const { column } = options;
+    const contextMenuEnabled = this.option('grouping.contextMenuEnabled');
+
+    if (contextMenuEnabled && column) {
+      const keyboardNavigationController = this.getKeyboardNavigationController();
+      const isGroupingAllowed = isDefined(column.allowGrouping) ? column.allowGrouping : true;
+
+      if (isGroupingAllowed) {
+        const isColumnGrouped = isDefined(column.groupIndex) && column.groupIndex > -1;
+        const groupingTexts: any = this.option('grouping.texts');
+        const onItemClick = (e) => {
+          if (e.itemData?.value === 'ungroup') {
+            keyboardNavigationController.moveColumn({
+              column,
+              sourceLocation: 'group',
+              targetLocation: 'headers',
+            });
+          } else if (e.itemData?.value === 'ungroupAll') {
+            this._columnsController.clearGrouping();
+          }
+        };
+
+        return [
+          {
+            text: groupingTexts.ungroup, value: 'ungroup', disabled: !isColumnGrouped, onItemClick,
+          },
+          { text: groupingTexts.ungroupAll, value: 'ungroupAll', onItemClick },
+        ];
+      }
+    }
+
+    return [];
+  }
+
   protected _columnOptionChanged(e?) {
     if (!this._requireReady && !gridCore.checkChanges(e.optionNames, ['width', 'visibleWidth'])) {
       const $toolbarElement = this.element();
@@ -561,6 +599,41 @@ export const GroupingHeaderPanelExtender = (Base: ModuleType<HeaderPanel>) => cl
     } else {
       super.optionChanged(args);
     }
+  }
+
+  public getKeyboardNavigationController() {
+    return this.getController('groupPanelKeyboardNavigation');
+  }
+
+  public isColumnReorderingEnabled(column) {
+    return this.allowDragging(column);
+  }
+
+  public getContextMenuItems(options) {
+    let items: any = super.getContextMenuItems(options);
+    const $groupedColumnElement = $(options.targetElement).closest(`.${CLASSES.groupPanelItem}`);
+
+    if (!$groupedColumnElement.length) {
+      return;
+    }
+
+    options.column = $groupedColumnElement.data('columnData');
+
+    const groupAndUngroupItems = this.getGroupAndUngroupItems(options);
+
+    if (groupAndUngroupItems?.length) {
+      items = items ?? [];
+      items.push(...groupAndUngroupItems);
+    }
+
+    const moveColumnItems = this.getMoveColumnContextMenuItems(options);
+
+    if (moveColumnItems?.length) {
+      items = items ?? [];
+      items.push(...moveColumnItems);
+    }
+
+    return items;
   }
 };
 

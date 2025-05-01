@@ -1,16 +1,13 @@
-/* eslint-disable max-classes-per-file */
 import { name as clickEventName } from '@js/common/core/events/click';
 import eventsEngine from '@js/common/core/events/core/events_engine';
 import {
   isCommandKeyPressed,
 } from '@js/common/core/events/utils/index';
 import $ from '@js/core/renderer';
-import { isDefined } from '@js/core/utils/type';
 import { hiddenFocus } from '@js/ui/shared/accessibility';
-import type { HeaderPanel } from '@ts/grids/grid_core/header_panel/m_header_panel';
 import { Direction, ViewName } from '@ts/grids/grid_core/keyboard_navigation/const';
-import { ColumnContextMenuMixin, ColumnKeyboardNavigationController } from '@ts/grids/grid_core/keyboard_navigation/m_column_keyboard_navigation_core';
-import type { ModuleType, Views } from '@ts/grids/grid_core/m_types';
+import { ColumnKeyboardNavigationController } from '@ts/grids/grid_core/keyboard_navigation/m_column_keyboard_navigation_core';
+import type { Views } from '@ts/grids/grid_core/m_types';
 
 import { CLASSES as GROUPING_CLASSES } from '../grouping/const';
 import gridCore from '../m_core';
@@ -150,85 +147,8 @@ export class GroupPanelKeyboardNavigationController extends ColumnKeyboardNaviga
   }
 }
 
-const headerPanel = (Base: ModuleType<HeaderPanel>) => class HeaderPanelKeyboardNavigationExtender extends ColumnContextMenuMixin(Base) {
-  private getGroupAndUngroupItems(options) {
-    const { column } = options;
-    const contextMenuEnabled = this.option('grouping.contextMenuEnabled');
-
-    if (contextMenuEnabled && column) {
-      const keyboardNavigationController = this.getKeyboardNavigationController();
-      const isGroupingAllowed = isDefined(column.allowGrouping) ? column.allowGrouping : true;
-
-      if (isGroupingAllowed) {
-        const isColumnGrouped = isDefined(column.groupIndex) && column.groupIndex > -1;
-        const groupingTexts: any = this.option('grouping.texts');
-        const onItemClick = (e) => {
-          if (e.itemData?.value === 'ungroup') {
-            keyboardNavigationController.moveColumn({
-              column,
-              sourceLocation: 'group',
-              targetLocation: 'headers',
-            });
-          } else if (e.itemData?.value === 'ungroupAll') {
-            this._columnsController.clearGrouping();
-          }
-        };
-
-        return [
-          {
-            text: groupingTexts.ungroup, value: 'ungroup', disabled: !isColumnGrouped, onItemClick,
-          },
-          { text: groupingTexts.ungroupAll, value: 'ungroupAll', onItemClick },
-        ];
-      }
-    }
-
-    return [];
-  }
-
-  public getKeyboardNavigationController() {
-    return this.getController('groupPanelKeyboardNavigation');
-  }
-
-  public isColumnReorderingEnabled(column) {
-    return this.allowDragging(column);
-  }
-
-  public getContextMenuItems(options) {
-    let items: any = super.getContextMenuItems(options);
-    const $groupedColumnElement = $(options.targetElement).closest(`.${GROUPING_CLASSES.groupPanelItem}`);
-
-    if (!$groupedColumnElement.length) {
-      return;
-    }
-
-    options.column = $groupedColumnElement.data('columnData');
-
-    const groupAndUngroupItems = this.getGroupAndUngroupItems(options);
-
-    if (groupAndUngroupItems?.length) {
-      items = items ?? [];
-      items.push(...groupAndUngroupItems);
-    }
-
-    const moveColumnItems = this.getMoveColumnContextMenuItems(options);
-
-    if (moveColumnItems?.length) {
-      items = items ?? [];
-      items.push(...moveColumnItems);
-    }
-
-    return items;
-  }
-};
-
 gridCore.registerModule('groupPanelKeyboardNavigation', {
   controllers: {
     groupPanelKeyboardNavigation: GroupPanelKeyboardNavigationController,
-  },
-  extenders: {
-    views: {
-      headerPanel,
-    },
   },
 });

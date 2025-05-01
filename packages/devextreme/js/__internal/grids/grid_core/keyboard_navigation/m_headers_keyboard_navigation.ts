@@ -1,4 +1,3 @@
-/* eslint-disable max-classes-per-file */
 import {
   isCommandKeyPressed,
 } from '@js/common/core/events/utils/index';
@@ -6,12 +5,11 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { isDefined } from '@js/core/utils/type';
 
-import type { ColumnHeadersView } from '../column_headers/m_column_headers';
-import type { ModuleType, Views } from '../m_types';
+import type { Views } from '../m_types';
 import { StickyPosition } from '../sticky_columns/const';
 import { getColumnFixedPosition } from '../sticky_columns/utils';
 import { Direction } from './const';
-import { ColumnContextMenuMixin, ColumnKeyboardNavigationController } from './m_column_keyboard_navigation_core';
+import { ColumnKeyboardNavigationController } from './m_column_keyboard_navigation_core';
 
 export class HeadersKeyboardNavigationController extends ColumnKeyboardNavigationController {
   protected _columnHeadersView!: Views['columnHeadersView'];
@@ -122,33 +120,8 @@ export class HeadersKeyboardNavigationController extends ColumnKeyboardNavigatio
   }
 }
 
-const columnHeadersView = (
-  Base: ModuleType<ColumnHeadersView>,
-) => class ColumnHeadersViewKeyboardNavigationExtender extends ColumnContextMenuMixin(Base) {
-  public getKeyboardNavigationController() {
-    return this.getController('headersKeyboardNavigation');
-  }
-
-  public getContextMenuItems(options) {
-    let items: any = super.getContextMenuItems(options);
-    const moveColumnItems = this.getMoveColumnContextMenuItems(options);
-
-    if (moveColumnItems?.length) {
-      items = items ?? [];
-      items.push(...moveColumnItems);
-    }
-
-    return items;
-  }
-};
-
 export const headersKeyboardNavigationModule = {
   controllers: {
     headersKeyboardNavigation: HeadersKeyboardNavigationController,
-  },
-  extenders: {
-    views: {
-      columnHeadersView,
-    },
   },
 };
