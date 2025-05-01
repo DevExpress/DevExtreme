@@ -211,8 +211,6 @@
         "dxTreeList-ariaToolbar": "Barra de ferramentas da lista de árvores",
         "dxTreeList-editingAddRowToNode": "Adicionar",
 
-        "dxCardView-ariaSearchInGrid": "Search in the card view",
-
         "dxPager-infoText": "Página {0} de {1} ({2} itens)",
         "dxPager-pagesCountText": "de",
         "dxPager-pageSize": "Itens por página: {0}",
@@ -359,6 +357,12 @@
         "dxCalendar-selectedDateRangeCount": "Há {0} intervalos de datas selecionados",
         "dxCalendar-readOnlyLabel": "Calendário somente leitura",
 
+        "dxCardView-ariaSearchInGrid": "Search in the card view",
+        "dxCardView-ariaHeaderItemLabel": "Field name {0}",
+        "dxCardView-ariaHeaderItemSortingAscendingLabel": "sorted in ascending order",
+        "dxCardView-ariaHeaderItemSortingDescendingLabel": "sorted in descending order",
+        "dxCardView-ariaHeaderItemSortingIndexLabel": "sort index {0}",
+        "dxCardView-ariaHeaderHasHeaderFilterLabel": "has applied header filter",
         "dxCardView-selectAll": "Select all",
         "dxCardView-clearSelection": "Clear selection",
         "dxCardView-cardNoImageAriaLabel": "No image",
