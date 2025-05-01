@@ -175,7 +175,7 @@ export class ColumnSortable extends Component<Props> {
 
       <div className={dropzoneClasses}>
         <Icon name='dropzone'/>
-        <span>${this.props.dropzoneText}</span>
+        <span>{this.props.dropzoneText}</span>
       </div>
     </Sortable>
     );
