@@ -5,6 +5,56 @@ const MENU_CLASS = 'dx-menu';
 const MENU_ITEM_CLASS = 'dx-menu-item';
 const SUBMENU_CLASS = 'dx-submenu';
 
+export const defaultAITranslateOptions = [
+    'Arabic',
+    'Chinese',
+    'English',
+    'French',
+    'German',
+    'Japanese',
+    'Spanish'
+];
+
+export const defaultAIChangeToneOptions = [
+    'Professional',
+    'Casual',
+    'Straightforward',
+    'Confident',
+    'Friendly'
+];
+
+export const defaultAIChangeStyleOptions = [
+    'Formal',
+    'Informal',
+    'Technical',
+    'Business',
+    'Creative',
+    'Journalistic',
+    'Academic',
+    'Persuasive',
+    'Narrative',
+    'Expository',
+    'Descriptive',
+    'Conversational'
+];
+
+export const defaultAICommands = [
+    'summarize',
+    'proofread',
+    'expand',
+    'shorten',
+    'changeStyle',
+    'changeTone',
+    'translate',
+    'askAI'
+];
+
+export const defaultAIOptions = {
+    translate: defaultAITranslateOptions,
+    changeTone: defaultAIChangeToneOptions,
+    changeStyle: defaultAIChangeStyleOptions,
+};
+
 export const getMenuItems = ($element) => {
     const $menu = $element.find(`.${MENU_CLASS}`);
     const menuInstance = $menu.dxMenu('instance');

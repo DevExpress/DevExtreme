@@ -1,14 +1,32 @@
 import $ from 'jquery';
 
 import 'ui/html_editor';
-
-import { openAIDialog } from '../../../helpers/aiToolbarMenu.js';
+import {
+    openAIDialog,
+    openAIToolbarMenu,
+    getMenuItems,
+    defaultAICommands,
+    defaultAIOptions
+} from '../../../helpers/aiToolbarMenu.js';
 import {
     clickActionButton,
     setResultText,
     getResultTextAreaValue,
 } from '../../../helpers/aiDialog.js';
 import { AI_DIALOG_CLASS } from '__internal/ui/html_editor/ui/aiDialog';
+import { logger } from 'core/utils/console';
+
+const MENU_ITEM_CLASS = 'dx-menu-item';
+const MENU_CLASS = 'dx-menu';
+const DISABLED_STATE_CLASS = 'dx-state-disabled';
+
+const HTML_EDITOR_MISSING_AI_INTEGRATION_WARNING = `W1026 - AI feature is enabled. Pass the \"aiIntegration\" property.
+
+For additional information on this warning message, see: https://js.devexpress.com/error/25_1/W1026`;
+
+const HTML_EDITOR_MISSING_PROMPT_WARNING = `W1027 - Prompt should be specified for custom command.
+
+For additional information on this warning message, see: https://js.devexpress.com/error/25_1/W1027`;
 
 const setupHtmlEditorWithAi = (config) => {
     return $('#htmlEditor').dxHtmlEditor({
@@ -33,6 +51,228 @@ const getAIDialogElement = ($htmlEditor) => {
 };
 
 QUnit.module('AI dialog integration', {}, () => {
+    QUnit.module('toolbar', () => {
+        QUnit.test('Should pass correct payload to dialog on item click', function(assert) {
+            const instance = setupHtmlEditorWithAi();
+
+            const showSpy = sinon.spy(instance, 'showAIDialog');
+
+            openAIDialog($('#htmlEditor'));
+
+            assert.ok(showSpy.calledOnce, 'showAIDialog called');
+            assert.deepEqual(showSpy.firstCall.args[0], {
+                currentCommand: 'summarize',
+                currentCommandOption: undefined,
+                text: 'Test value\n',
+                prompt: undefined,
+                commandsMap: {
+                    summarize: {
+                        id: 'summarize',
+                        name: 'summarize',
+                        options: undefined,
+                        text: 'Summarize',
+                    },
+                },
+            }, 'Correct config passed to dialog');
+        });
+
+        QUnit.test('Should pass correct payload to dialog on item click if there is custom command', function(assert) {
+            const prompt = {};
+            const instance = setupHtmlEditorWithAi({ toolbar: { items: [{ name: 'ai', commands: [{ name: 'custom', prompt }] }] } });
+            const showSpy = sinon.spy(instance, 'showAIDialog');
+
+            openAIDialog($('#htmlEditor'));
+
+            assert.ok(showSpy.calledOnce, 'showAIDialog called');
+            assert.deepEqual(showSpy.firstCall.args[0], {
+                currentCommand: 'custom0',
+                currentCommandOption: undefined,
+                text: 'Test value\n',
+                prompt,
+                commandsMap: {
+                    custom0: {
+                        id: 'custom0',
+                        name: 'custom',
+                        options: undefined,
+                        text: 'Custom',
+                        prompt,
+                    },
+                },
+            }, 'Correct config passed to dialog');
+        });
+
+        QUnit.test('Should pass correct payload to dialog on item click if there is custom command with options', function(assert) {
+            const prompt = (param) => `custom prompt with ${param}`;
+            const instance = setupHtmlEditorWithAi({ toolbar: { items: [
+                {
+                    name: 'ai',
+                    commands: [
+                        {
+                            name: 'custom',
+                            options: ['option 1'],
+                            prompt,
+                        },
+                    ],
+                },
+            ] } });
+            const showSpy = sinon.spy(instance, 'showAIDialog');
+
+            openAIDialog($('#htmlEditor'));
+
+            assert.ok(showSpy.calledOnce, 'showAIDialog called');
+            assert.deepEqual(showSpy.firstCall.args[0], {
+                currentCommand: 'custom0',
+                currentCommandOption: 'Option 1',
+                text: 'Test value\n',
+                prompt,
+                commandsMap: {
+                    custom0: {
+                        id: 'custom0',
+                        name: 'custom',
+                        options: ['Option 1'],
+                        text: 'Custom',
+                        prompt,
+                    },
+                },
+            }, 'Correct config passed to dialog');
+        });
+
+        QUnit.test('showAIDialog is not called on root menu item click (with submenu)', function(assert) {
+            const instance = setupHtmlEditorWithAi();
+            const showSpy = sinon.spy(instance, 'showAIDialog');
+
+            openAIToolbarMenu($('#htmlEditor'));
+
+            const $rootItem = $(`${MENU_CLASS} .${MENU_ITEM_CLASS}`).eq(0);
+            $rootItem.trigger('dxclick');
+
+            assert.strictEqual(showSpy.callCount, 0, 'showAIDialog is not called on root item click');
+        });
+
+        ['ai', { name: 'ai' }].forEach(item => {
+            const itemType = typeof item === 'object' ? 'object' : 'string';
+
+            QUnit.test(`default commands, default options, AI item is passed as ${itemType}`, function(assert) {
+                setupHtmlEditorWithAi({ toolbar: { items: [item] } });
+                const menuItems = getMenuItems($('#htmlEditor'));
+                const commandNames = menuItems.map(command => command.id);
+
+                assert.deepEqual(commandNames, defaultAICommands, 'commands match default list');
+
+                Object.entries(defaultAIOptions).forEach(([commandName, defaultOptions]) => {
+                    const command = menuItems.find((command) => command.id === commandName);
+                    const options = command.items.map((option) => option.id);
+                    assert.deepEqual(options, defaultOptions, `Options for "${commandName}" match defaults`);
+                });
+            });
+        });
+
+        QUnit.test('specific commands, default options', function(assert) {
+            setupHtmlEditorWithAi({ toolbar: { items: [{ name: 'ai', commands: ['translate', 'changeStyle', 'changeTone'] }] } });
+
+            const menuItems = getMenuItems($('#htmlEditor'));
+            const commandNames = menuItems.map(command => command.id);
+
+            assert.strictEqual(menuItems.length, 3, 'only specified commands rendered');
+            assert.deepEqual(commandNames, ['translate', 'changeStyle', 'changeTone'], 'commands match specified list');
+
+            Object.entries(defaultAIOptions).forEach(([commandName, defaultOptions]) => {
+                const command = menuItems.find((command) => command.id === commandName);
+                const actualOptions = command.items.map((option) => option.id);
+                assert.deepEqual(actualOptions, defaultOptions, `Options for "${commandName}" match defaults`);
+            });
+        });
+
+        QUnit.test('specific commands, specific options', function(assert) {
+            const commandOptions = ['English', 'Spanish'];
+            setupHtmlEditorWithAi({ toolbar: { items: [{ name: 'ai', commands: [{ name: 'translate', options: commandOptions }] }] } });
+
+            const menuItems = getMenuItems($('#htmlEditor'));
+            const commandNames = menuItems.map(command => command.id);
+
+            const translateCommand = menuItems.find(command => command.id === 'translate');
+            const translateOptions = translateCommand.items.map(option => option.id);
+
+            assert.deepEqual(commandNames, ['translate'], 'commands match specified list');
+            assert.deepEqual(translateOptions, commandOptions, 'only specified options rendered');
+        });
+
+        QUnit.test('empty commands', function(assert) {
+            setupHtmlEditorWithAi({ toolbar: { items: [{ name: 'ai', commands: [] }] } });
+
+            const menuItems = getMenuItems($('#htmlEditor'));
+            const commandNames = menuItems.map(command => command.id);
+
+            assert.deepEqual(commandNames, [], 'empty commands list in menu');
+        });
+
+        QUnit.test('empty command options', function(assert) {
+            setupHtmlEditorWithAi({ toolbar: { items: [{ name: 'ai', commands: [{ name: 'translate', options: [] }] }] } });
+
+            const menuItems = getMenuItems($('#htmlEditor'));
+
+            const translateCommand = menuItems.find(command => command.id === 'translate');
+            const translateOptions = translateCommand.items.map(option => option.id);
+
+            assert.deepEqual(translateOptions, [], 'empty command options in menu');
+        });
+
+        QUnit.test('custom command text', function(assert) {
+            setupHtmlEditorWithAi({ toolbar: { items: [{ name: 'ai', commands: [{ name: 'summarize', text: 'Summarize name' }] }] } });
+
+            openAIToolbarMenu($('#htmlEditor'));
+
+            const $menuItem = $(`.${MENU_ITEM_CLASS}`).last();
+            assert.strictEqual($menuItem.text(), 'Summarize name', 'custom command text rendered in menu');
+        });
+
+        QUnit.test('custom command', function(assert) {
+            setupHtmlEditorWithAi({ toolbar: { items: [{
+                name: 'ai',
+                commands: [{
+                    name: 'custom',
+                    text: 'Custom command',
+                    prompt: () => {}
+                }]
+            }] } });
+
+            openAIToolbarMenu($('#htmlEditor'));
+
+            const $menuItem = $(`.${MENU_ITEM_CLASS}`).last();
+            assert.strictEqual($menuItem.text(), 'Custom command', 'custom command rendered in menu');
+        });
+
+        QUnit.test('custom command with no prompt', function(assert) {
+            const warnSpy = sinon.spy(logger, 'warn');
+
+            setupHtmlEditorWithAi({ toolbar: { items: [{
+                name: 'ai',
+                commands: [{
+                    name: 'custom',
+                    text: 'Custom command',
+                }]
+            }] } });
+
+            openAIToolbarMenu($('#htmlEditor'));
+
+            const $menuItem = $(`.${MENU_ITEM_CLASS}`).last();
+
+            assert.strictEqual($menuItem.hasClass(DISABLED_STATE_CLASS), true, 'custom command is disabled');
+            assert.strictEqual(warnSpy.firstCall.args[0], HTML_EDITOR_MISSING_PROMPT_WARNING, 'correct warning message is logged');
+            warnSpy.restore();
+        });
+
+        QUnit.test('root menu item is disabled if commands list is empty', function(assert) {
+            setupHtmlEditorWithAi({ toolbar: { items: [{ name: 'ai', commands: [] }] } });
+
+            openAIToolbarMenu($('#htmlEditor'));
+
+            const menuInstance = $(`.${MENU_CLASS}`).dxMenu('instance');
+
+            assert.strictEqual(menuInstance.option('disabled'), true, 'menu is disabled');
+        });
+    });
+
     QUnit.module('render', () => {
         ['ai', { name: 'ai' }].forEach(aiToolbarItem => {
             QUnit.test(`should be rendered if aiIntegration and ai toolbar item (as ${typeof aiToolbarItem}) are passed`, function(assert) {
@@ -125,6 +365,22 @@ QUnit.module('AI dialog integration', {}, () => {
                 });
 
                 assert.strictEqual(result, undefined, 'showAIDialog returns undefined');
+            });
+
+            ['ai', { name: 'ai' }].forEach(aiToolbarItem => {
+                QUnit.test(`should log a warning if aiIntegration is not passed but ai toolbar item is passed as ${typeof aiToolbarItem}`, function(assert) {
+                    const warnSpy = sinon.spy(logger, 'warn');
+
+                    setupHtmlEditorWithAi({
+                        toolbar: {
+                            items: [aiToolbarItem],
+                        },
+                        aiIntegration: null,
+                    });
+
+                    assert.strictEqual(warnSpy.lastCall.args[0], HTML_EDITOR_MISSING_AI_INTEGRATION_WARNING, 'correct warning message is logged');
+                    warnSpy.restore();
+                });
             });
         });
     });
