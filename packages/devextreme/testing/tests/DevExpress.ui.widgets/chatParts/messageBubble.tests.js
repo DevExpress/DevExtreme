@@ -1,4 +1,5 @@
 import $ from 'jquery';
+import messageLocalization from 'common/core/localization/message';
 
 import MessageBubble from '__internal/ui/chat/messagebubble';
 
@@ -43,13 +44,10 @@ QUnit.module('MessageBubble', moduleConfig, () => {
         });
 
         QUnit.test('isDeleted option should delete the message after being set at runtime', function(assert) {
-            const messageText = 'message text';
-
-            this.instance.option('text', messageText);
-
+            this.instance.option('text', 'some text');
             this.instance.option('isDeleted', true);
 
-            assert.notStrictEqual(this.$element.text(), messageText);
+            assert.strictEqual(this.$element.text(), messageLocalization.format('dxChat-deletedMessageText'));
         });
 
         QUnit.test('template render function should be called if it has been passed', function(assert) {
