@@ -7,6 +7,7 @@ import { SearchController } from '@ts/grids/new/grid_core/search/index';
 
 import type { CardInfo, Column, FieldInfo } from '../columns_controller/types';
 import type { DataObject, Key } from '../data_controller/types';
+import { parseValue } from '../utils';
 
 export class ItemsController {
   private readonly selectedCardKeys = signal<Key[]>([]);
@@ -65,7 +66,10 @@ export class ItemsController {
       const value = column.calculateFieldValue(data);
       const displayValue = column.calculateDisplayValue(data);
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const formattedText = formatHelper.format(displayValue as any, column.format);
+      const formattedText = formatHelper.format(
+        parseValue(column, displayValue as string) as never,
+        column.format,
+      );
       const text = column.customizeText
         ? column.customizeText({ value: displayValue, valueText: formattedText })
         : formattedText;

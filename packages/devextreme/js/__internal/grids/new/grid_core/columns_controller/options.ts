@@ -58,7 +58,6 @@ DataType,
 Exclude<ColumnProperties, string>
 > = {
   boolean: {
-    alignment: 'center',
     customizeText({ value }): string {
       return value
         ? this.trueText
@@ -75,7 +74,7 @@ Exclude<ColumnProperties, string>
 
   },
   number: {
-    alignment: 'right',
+
   },
   object: {
 

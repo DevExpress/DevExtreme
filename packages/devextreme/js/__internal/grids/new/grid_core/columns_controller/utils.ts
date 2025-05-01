@@ -1,12 +1,17 @@
+import type { DataType, Format } from '@js/common';
 import { compileGetter } from '@js/core/utils/data';
 import { captionize } from '@js/core/utils/inflector';
-import { isDefined, isString } from '@js/core/utils/type';
+import {
+  isDefined,
+  isString, type,
+} from '@js/core/utils/type';
 import type { ComponentType } from 'inferno';
 
+import type { DataObject } from '../data_controller/types';
 import type { Template } from '../types';
 import type { ColumnProperties, ColumnSettings, PreNormalizedColumn } from './options';
 import { defaultColumnProperties, defaultColumnPropertiesByDataType } from './options';
-import type { Column } from './types';
+import type { Column, ColumnFromDataOptions, ColumnsConfigurationFromData } from './types';
 
 type TemplateNormalizationFunc = <T>(
   template: Template<T> | undefined
@@ -15,22 +20,26 @@ type TemplateNormalizationFunc = <T>(
 function normalizeColumn(
   column: PreNormalizedColumn,
   templateNormalizationFunc: TemplateNormalizationFunc,
+  columnFromDataOptions?: ColumnFromDataOptions,
 ): Column {
-  const dataTypeDefault = defaultColumnPropertiesByDataType[
-    column.dataType ?? defaultColumnProperties.dataType
-  ];
-
+  const dataType = column.dataType
+    ?? columnFromDataOptions?.dataType
+    ?? defaultColumnProperties.dataType;
+  const columnDataTypeDefaultOptions = defaultColumnPropertiesByDataType[dataType];
+  const columnFormat = column.format ?? columnFromDataOptions?.format;
   const caption = captionize(column.name);
 
   const colWithDefaults = {
     ...defaultColumnProperties,
-    ...dataTypeDefault,
+    ...columnDataTypeDefaultOptions,
     caption,
     ...column,
   };
 
   return {
     ...colWithDefaults,
+    dataType,
+    ...!!columnFormat && { format: columnFormat },
     calculateDisplayValue: isString(colWithDefaults.calculateDisplayValue)
       ? compileGetter(colWithDefaults.calculateDisplayValue) as (data: unknown) => string
       : colWithDefaults.calculateDisplayValue,
@@ -99,32 +108,35 @@ export function normalizeVisibleIndexes(
 export function normalizeColumns(
   columns: PreNormalizedColumn[],
   templateNormalizationFunc: TemplateNormalizationFunc,
+  columnsFromData?: Record<string, ColumnFromDataOptions>,
 ): Column[] {
-  const normalizedColumns = columns.map((c) => normalizeColumn(c, templateNormalizationFunc));
-  return normalizedColumns;
+  return columns.map((col) => {
+    const columnFromDataOptions = columnsFromData?.[col.name];
+
+    return normalizeColumn(col, templateNormalizationFunc, columnFromDataOptions);
+  });
 }
 
 export function preNormalizeColumns(columns: ColumnProperties[]): PreNormalizedColumn[] {
-  const normalizedColumns = columns
-    .map((column): ColumnSettings => {
-      if (typeof column === 'string') {
-        return {
-          dataField: column,
-        };
-      }
+  const normalizedColumns = columns?.map((column): ColumnSettings => {
+    if (typeof column === 'string') {
+      return {
+        dataField: column,
+      };
+    }
 
-      return column;
-    })
+    return column;
+  })
     .map((column, index) => ({
       ...column,
       name: column.name ?? column.dataField ?? `column-${index}`,
     }));
 
   const visibleIndexes = getVisibleIndexes(
-    normalizedColumns.map((c) => c.visibleIndex),
+    normalizedColumns?.map((c) => c.visibleIndex),
   );
 
-  normalizedColumns.forEach((_, i) => {
+  normalizedColumns?.forEach((_, i) => {
     normalizedColumns[i].visibleIndex = visibleIndexes[i];
   });
 
@@ -159,3 +171,51 @@ export function getColumnByIndexOrName(
 
   return column;
 }
+
+export const getValueDataType = (
+  value: unknown,
+): DataType | undefined => {
+  const dataType: string | undefined = type(value);
+  const isUnknownDataType = dataType !== 'string'
+    && dataType !== 'boolean'
+    && dataType !== 'number'
+    && dataType !== 'date'
+    && dataType !== 'object';
+
+  return isUnknownDataType
+    ? undefined
+    : dataType as DataType;
+};
+
+export const getColumnFormat = (
+  column: Partial<Pick<Column, 'format' | 'dataType'>>,
+): Format | undefined => {
+  if (column.format) {
+    return column.format;
+  }
+
+  if (column.dataType === 'date' || column.dataType === 'datetime') {
+    return 'shortDate';
+  }
+
+  return undefined;
+};
+
+export const getColumnOptionsFromDataItem = (
+  dataItem: DataObject,
+): ColumnsConfigurationFromData => {
+  const dataFields = Object.keys(dataItem);
+
+  return {
+    dataFields,
+    columns: Object.entries(dataItem).reduce<Record<string, ColumnFromDataOptions>>((
+      result,
+      [key, value],
+    ) => {
+      const dataType = getValueDataType(value);
+      const format = getColumnFormat({ dataType });
+      result[key] = { dataType, format };
+      return result;
+    }, {}),
+  };
+};

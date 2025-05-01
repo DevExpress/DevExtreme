@@ -3,9 +3,11 @@ import ArrayStore from '@js/common/data/array_store';
 import { Deferred } from '@js/core/utils/deferred';
 import type { ReadonlySignal } from '@preact/signals-core';
 import { computed, effect, signal } from '@preact/signals-core';
+import { equalByValue } from '@ts/core/utils/m_common';
 import type { PromiseWithResolvers } from '@ts/core/utils/promise';
 import { createPromise } from '@ts/core/utils/promise';
 
+import { ColumnsController } from '../columns_controller/columns_controller';
 import { FilterController } from '../filtering/filter_controller';
 import { OptionsController } from '../options_controller/options_controller';
 import { SortingController } from '../sorting_controller/sorting_controller';
@@ -21,6 +23,8 @@ import {
   normalizeRemoteOptions,
   updateItemsImmutable,
 } from './utils';
+
+const FILTER_OBJ_COMPARE_DEPTH = 6;
 
 export class DataController {
   private readonly pendingLocalOperations = {};
@@ -87,16 +91,24 @@ export class DataController {
   );
 
   public static dependencies = [
+    ColumnsController,
     OptionsController,
     SortingController,
     FilterController,
   ] as const;
 
   constructor(
+    private readonly columnsController: ColumnsController,
     private readonly options: OptionsController,
     private readonly sortingController: SortingController,
     private readonly filterController: FilterController,
   ) {
+    effect(() => {
+      if (this.dataSource.value) {
+        this.columnsController.resetColumnOptionsFromDataItem();
+      }
+    });
+
     effect(
       () => {
         const dataSource = this.dataSource.value;
@@ -189,6 +201,7 @@ export class DataController {
           dataSource.pageIndex(pageIndex);
           someParamChanged ||= true;
         }
+
         if (dataSource.pageSize() !== pageSize) {
           dataSource.pageSize(pageSize);
           someParamChanged ||= true;
@@ -198,15 +211,25 @@ export class DataController {
           dataSource.requireTotalCount(true);
           someParamChanged ||= true;
         }
-        if (dataSource.filter() !== displayFilter) {
+
+        if (!equalByValue(
+          dataSource.filter(),
+          displayFilter,
+          {
+            maxDepth: FILTER_OBJ_COMPARE_DEPTH,
+            strict: true,
+          },
+        )) {
           dataSource.filter(displayFilter ?? null);
           someParamChanged ||= true;
         }
-        if (dataSource.paginate() !== pagingEnabled) {
+
+        if (!equalByValue(dataSource.paginate(), pagingEnabled)) {
           dataSource.paginate(pagingEnabled);
           someParamChanged ||= true;
         }
-        if (sortParameters && dataSource.sort() !== sortParameters) {
+
+        if (sortParameters && !equalByValue(dataSource.sort(), sortParameters)) {
           dataSource.sort(sortParameters);
           someParamChanged ||= true;
         }
@@ -225,6 +248,12 @@ export class DataController {
     if (e?.changes) {
       items = this._items.peek();
       items = updateItemsImmutable(items, e.changes, dataSource.store());
+    }
+
+    const firstItem = items[0];
+
+    if (firstItem) {
+      this.columnsController.setColumnOptionsFromDataItem(firstItem);
     }
 
     this._items.value = items;
