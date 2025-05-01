@@ -1,14 +1,14 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import LoadIndicator from 'devextreme-testcafe-models/loadindicator';
-import url from '../../helpers/getPageUrl';
-import { createWidget } from '../../helpers/createWidget';
-import { getFullThemeName, testScreenshot } from '../../helpers/themeUtils';
-import { insertStylesheetRulesToPage } from '../../helpers/domUtils';
+import url from '../../../helpers/getPageUrl';
+import { createWidget } from '../../../helpers/createWidget';
+import { getFullThemeName, testScreenshot } from '../../../helpers/themeUtils';
+import { insertStylesheetRulesToPage } from '../../../helpers/domUtils';
 
 const LOADINDICATOR_SEGMENT_CLASS = 'dx-loadindicator-segment';
 
 fixture.disablePageReloads`LoadIndicator`
-  .page(url(__dirname, '../container.html'));
+  .page(url(__dirname, '../../container.html'));
 
 ['circle', 'sparkle'].forEach((animationType) => {
   test(`LoadIndicator: start stage of the ${animationType} animation`, async (t) => {
