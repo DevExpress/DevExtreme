@@ -33,14 +33,40 @@ test('headerPanel dragging column when it has sorting and headerFilter', async (
   }],
 }));
 
+test('dropzone appear in headerPanel when drag from columnChooser a column', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  const cardView = new CardView('#container');
+  const columnElement = getColumnItem(cardView, 0, 'columnChooser');
+
+  await cardView.apiShowColumnChooser();
+
+  await triggerDragStart(columnElement);
+  await t.wait(500); // wait for dropzone animation to finish
+  await testScreenshot(t, takeScreenshot, 'card-view_column-sortable_empty-header-panel_dropzone_1.png', { element: cardView.element });
+
+  await triggerDragEnd();
+  await t.wait(500); // wait for dropzone animation to finish
+  await testScreenshot(t, takeScreenshot, 'card-view_column-sortable_empty-header-panel_dropzone_2.png', { element: cardView.element });
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => createWidget('dxCardView', {
+  allowColumnReordering: true,
+  height: 600,
+  columns: [
+    { dataField: 'Column 1', visible: false },
+  ],
+}));
+
 test('dropzone appears in headerPanel when drag from columnChooser a column with allowReordering: false', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   const cardView = new CardView('#container');
+  const columnElement = getColumnItem(cardView, 0, 'columnChooser');
 
   await cardView.apiShowColumnChooser();
-
-  const columnElement = getColumnItem(cardView, 0, 'columnChooser');
 
   await triggerDragStart(columnElement);
   await t.wait(500); // wait for dropzone animation to finish

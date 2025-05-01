@@ -24,6 +24,7 @@ $cardview-fluent-border-radius-8: null;
 $cardview-fluent-gaps-16: null;
 $cardview-fluent-gaps-24: null;
 
+$cardview-fluent-headerpanel-text-empty-line-height: null;
 $cardview-fluent-headerpanel-dropzone-height: null;
 $cardview-fluent-headerpanel-dropzone-top: null;
 $cardview-fluent-column-chooser-select-all-item-horizontal-padding: null;
@@ -41,6 +42,7 @@ $cardview-fluent-column-chooser-select-all-item-horizontal-padding: null;
   $cardview-fluent-gaps-16: 16px;
   $cardview-fluent-gaps-24: 24px;
 
+  $cardview-fluent-headerpanel-text-empty-line-height: 32px;
   $cardview-fluent-headerpanel-dropzone-height: 44px;
   $cardview-fluent-headerpanel-dropzone-top: -6px;
   $cardview-fluent-column-chooser-select-all-item-horizontal-padding: 14px;
@@ -58,6 +60,7 @@ $cardview-fluent-column-chooser-select-all-item-horizontal-padding: null;
   $cardview-fluent-gaps-16: 12px;
   $cardview-fluent-gaps-24: 16px;
 
+  $cardview-fluent-headerpanel-text-empty-line-height: 24px;
   $cardview-fluent-headerpanel-dropzone-height: 32px;
   $cardview-fluent-headerpanel-dropzone-top: -4px;
   $cardview-fluent-column-chooser-select-all-item-horizontal-padding: 12px;
@@ -68,6 +71,7 @@ $cardview-gap: $cardview-fluent-gaps-24 !default;
 $cardview-padding: $cardview-fluent-paddings-24 !default;
 
 $cardview-headerpanel-content-gap: 8px !default;
+$cardview-headerpanel-text-empty-line-height: $cardview-fluent-headerpanel-text-empty-line-height !default;
 
 $cardview-headerpanel-dropzone-height: $cardview-fluent-headerpanel-dropzone-height;
 $cardview-headerpanel-dropzone-top: $cardview-fluent-headerpanel-dropzone-top;

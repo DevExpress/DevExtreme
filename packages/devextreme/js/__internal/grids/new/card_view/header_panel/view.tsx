@@ -4,7 +4,7 @@ import { ColumnsController } from '@ts/grids/new/grid_core/columns_controller/co
 import { View } from '@ts/grids/new/grid_core/core/view';
 import { KeyboardNavigationController, NavigationStrategyHorizontalList } from '@ts/grids/new/grid_core/keyboard_navigation/index';
 
-import { ColumnChooserController } from '../../grid_core/column_chooser/index';
+import { ColumnChooserController, ColumnChooserView } from '../../grid_core/column_chooser/index';
 import type { Column } from '../../grid_core/columns_controller/types';
 import { HeaderFilterViewController } from '../../grid_core/filtering/header_filter/view_controller';
 import { SortingController } from '../../grid_core/sorting_controller/sorting_controller';
@@ -27,6 +27,7 @@ export class HeaderPanelView extends View<HeaderPanelProps> {
     HeaderFilterViewController,
     KeyboardNavigationController,
     ColumnChooserController,
+    ColumnChooserView,
   ] as const;
 
   private readonly navigationStrategy = new NavigationStrategyHorizontalList();
@@ -42,17 +43,19 @@ export class HeaderPanelView extends View<HeaderPanelProps> {
     private readonly headerFilterViewController: HeaderFilterViewController,
     private readonly keyboardNavigationController: KeyboardNavigationController,
     private readonly columnChooserController: ColumnChooserController,
+    private readonly columnChooserView: ColumnChooserView,
   ) {
     super();
 
     this.showDropzone = computed((): boolean => {
       const column = this.columnChooserController.draggingItem.value?.column;
+      const allColumnsHidden = this.columnsController.visibleColumns.value.length === 0;
 
       if (!column) {
         return false;
       }
 
-      return !column.allowReordering;
+      return !column.allowReordering || allColumnsHidden;
     });
   }
 
@@ -78,6 +81,7 @@ export class HeaderPanelView extends View<HeaderPanelProps> {
         onPlaceholderPrepared: this.headerPanelController.onPlaceholderPrepared,
       } as Partial<ColumnSortableProps>,
       showContextMenu: this.showContextMenu.bind(this),
+      openColumnChooser: (): void => { this.columnChooserView.show(); },
     }));
   }
 

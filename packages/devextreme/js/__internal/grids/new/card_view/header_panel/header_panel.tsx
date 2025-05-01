@@ -15,8 +15,10 @@ import { CLASSES as itemClasses, Item } from './item';
 import type { DraggingOptions } from './options';
 
 export const CLASSES = {
+  link: 'dx-link',
   headers: 'dx-cardview-headers',
   content: 'dx-cardview-headerpanel-content',
+  headerPanelTextEmpty: 'dx-cardview-headerpanel-text-empty',
 };
 
 const ItemWithKbn = withKbnNavigationItem(withKeyDownHandler(Item));
@@ -54,7 +56,23 @@ export interface HeaderPanelProps {
     columnIndex?: number,
     onMenuCloseCallback?: () => void,
   ) => void;
+
+  openColumnChooser: () => void;
 }
+
+const EmptyHeaderPanelText = (props: { openColumnChooser: () => void }): JSX.Element => {
+  const text = messageLocalization.format('dxCardView-emptyHeaderPanelText');
+  const columnChooserText = messageLocalization.format('dxCardView-emptyHeaderPanelColumnChooserText');
+  const [leftPart, rightPart] = text.split('{0}');
+
+  return (
+    <span className={CLASSES.headerPanelTextEmpty}>
+      {leftPart}
+      <a className={CLASSES.link} onClick={props.openColumnChooser}>{columnChooserText}</a>
+      {rightPart}
+    </span>
+  );
+};
 
 export class HeaderPanel extends Component<HeaderPanelProps> {
   public render(): JSX.Element {
@@ -101,6 +119,9 @@ export class HeaderPanel extends Component<HeaderPanelProps> {
               navigationStrategy={this.props.navigationStrategy}
             >
               <div className={CLASSES.content}>
+                {this.props.visibleColumns.length === 0 && (
+                  <EmptyHeaderPanelText openColumnChooser={this.props.openColumnChooser}/>
+                )}
                 {this.props.visibleColumns.map((column, idx) => (
                   <HeaderItem
                     navigationIdx={idx}

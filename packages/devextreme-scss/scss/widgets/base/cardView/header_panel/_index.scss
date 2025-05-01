@@ -40,4 +40,8 @@
       pointer-events: auto;
     }
   }
+
+  .dx-cardview-headerpanel-text-empty {
+    line-height: $cardview-headerpanel-text-empty-line-height;
+  }
 }

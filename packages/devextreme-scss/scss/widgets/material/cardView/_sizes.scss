@@ -27,6 +27,7 @@ $cardview-material-gaps-8: null;
 $cardview-material-gaps-16: null;
 $cardview-material-gaps-24: null;
 
+$cardview-material-headerpanel-text-empty-line-height: null;
 $cardview-material-headerpanel-dropzone-height: null;
 $cardview-material-headerpanel-dropzone-top: null;
 $cardview-material-column-chooser-select-all-item-horizontal-padding: null;
@@ -47,6 +48,7 @@ $cardview-material-column-chooser-select-all-item-horizontal-padding: null;
   $cardview-material-gaps-16: 16px;
   $cardview-material-gaps-24: 24px;
 
+  $cardview-material-headerpanel-text-empty-line-height: 36px;
   $cardview-material-headerpanel-dropzone-height: 44px;
   $cardview-material-headerpanel-dropzone-top: -4px;
   $cardview-material-column-chooser-select-all-item-horizontal-padding: 19px;
@@ -67,6 +69,7 @@ $cardview-material-column-chooser-select-all-item-horizontal-padding: null;
   $cardview-material-gaps-16: 12px;
   $cardview-material-gaps-24: 16px;
 
+  $cardview-material-headerpanel-text-empty-line-height: 32px;
   $cardview-material-headerpanel-dropzone-height: 38px;
   $cardview-material-headerpanel-dropzone-top: -3px;
   $cardview-material-column-chooser-select-all-item-horizontal-padding: 17px;
@@ -77,6 +80,7 @@ $cardview-gap: $cardview-material-gaps-24 !default;
 $cardview-padding: $cardview-material-paddings-24 !default;
 
 $cardview-headerpanel-content-gap: $cardview-material-gaps-8 !default;
+$cardview-headerpanel-text-empty-line-height: $cardview-material-headerpanel-text-empty-line-height !default;
 
 $cardview-headerpanel-dropzone-height: $cardview-material-headerpanel-dropzone-height;
 $cardview-headerpanel-dropzone-top: $cardview-material-headerpanel-dropzone-top;

@@ -51,6 +51,21 @@ const CLASS = {
   dropzoneVisible: 'dx-cardview-dropzone-visible',
 };
 
+const DropzoneIcon = (): JSX.Element => (
+  <svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0 2C0 1.17157 0.671573 0.5 1.5 0.5H3V2H1.5V3.5H0V2Z" />
+    <path d="M0 5V7.25H1.5V5H0Z" />
+    <path d="M1.5 8.75H0V11H1.5V8.75Z"/>
+    <path d="M1.5 12.5H0V14C0 14.8284 0.671573 15.5 1.5 15.5H3V14H1.5V12.5Z" />
+    <path d="M4.5 14V15.5H6.75V14H4.5Z" />
+    <path d="M4.5 2H6.75V0.5H4.5V2Z" />
+    <path d="M8.25 0.5V2H10.5V0.5H8.25Z" />
+    <path d="M12 0.5V2H13.5V3.5H15V2C15 1.17157 14.3284 0.5 13.5 0.5H12Z" />
+    <path d="M15 5H13.5V7.25H15V5Z" />
+    <path d="M13.8937 15.875L10.6875 12.6688L9.75 15.5L7.5 8L15 10.25L12.1688 11.1875L15.375 14.3937L13.8937 15.875Z" />
+  </svg>
+);
+
 export class ColumnSortable extends Component<Props> {
   private dragItemContainer?: Element;
 
@@ -173,6 +188,7 @@ export class ColumnSortable extends Component<Props> {
       {this.props.children}
 
       <div className={dropzoneClasses}>
+        <DropzoneIcon/>
         { this.props.dropzoneText }
       </div>
     </Sortable>
