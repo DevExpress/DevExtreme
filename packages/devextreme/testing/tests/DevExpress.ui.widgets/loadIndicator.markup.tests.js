@@ -1,5 +1,6 @@
 import $ from 'jquery';
 import support from '__internal/core/utils/m_support';
+import themes from 'ui/themes';
 
 import {
     LOADINDICATOR_CLASS,
@@ -98,11 +99,14 @@ QUnit.module('animation type', () => {
         assert.strictEqual($indicatorContent.hasClass(ANIMATION_TYPE_CLASSES['circle']), true, 'animation class has been added');
     });
 
-    QUnit.test('content should have 8 segments if animation type is circle by default', function(assert) {
+    QUnit.test('content should have correct count of segments if animation type is circle by default', function(assert) {
+        const isMaterialBased = themes.isMaterialBased();
+
         const $element = $('#loadIndicator').dxLoadIndicator();
         const $segments = $element.find(`.${LOADINDICATOR_SEGMENT_CLASS}`);
+        const expectedCount = isMaterialBased ? 2 : 8;
 
-        assert.strictEqual($segments.length, 8, '8 segments are rendered');
+        assert.strictEqual($segments.length, expectedCount, `${expectedCount} segments are rendered`);
     });
 
     QUnit.test('content should not have any animation class if animation type is undefined', function(assert) {
