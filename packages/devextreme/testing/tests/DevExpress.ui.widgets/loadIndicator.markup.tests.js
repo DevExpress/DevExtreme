@@ -1,6 +1,6 @@
 import $ from 'jquery';
+import { hasWindow } from 'core/utils/window';
 import support from '__internal/core/utils/m_support';
-import themes from 'ui/themes';
 
 import {
     LOADINDICATOR_CLASS,
@@ -100,11 +100,9 @@ QUnit.module('animation type', () => {
     });
 
     QUnit.test('content should have correct count of segments if animation type is circle by default', function(assert) {
-        const isMaterialBased = themes.isMaterialBased();
-
         const $element = $('#loadIndicator').dxLoadIndicator();
         const $segments = $element.find(`.${LOADINDICATOR_SEGMENT_CLASS}`);
-        const expectedCount = isMaterialBased ? 2 : 8;
+        const expectedCount = hasWindow() ? 8 : 2;
 
         assert.strictEqual($segments.length, expectedCount, `${expectedCount} segments are rendered`);
     });
