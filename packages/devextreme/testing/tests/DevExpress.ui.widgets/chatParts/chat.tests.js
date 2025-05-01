@@ -27,6 +27,7 @@ import { CHAT_CONFIRMATION_POPUP_WRAPPER_CLASS } from '__internal/ui/chat/confir
 import { POPUP_CLASS } from '__internal/ui/popup/m_popup';
 import { BUTTON_CLASS } from '__internal/ui/button/button';
 import { isDesktopDevice } from '../../../helpers/chat.js';
+import messageLocalization from 'common/core/localization/message';
 
 const CHAT_MESSAGEGROUP_CLASS = 'dx-chat-messagegroup';
 const CHAT_MESSAGELIST_CLASS = 'dx-chat-messagelist';
@@ -1826,12 +1827,12 @@ QUnit.module('Chat', () => {
 
             this.clock.tick(timeout);
 
-            store.push([{ type: 'update', key: 2, data: { itDeleted: true } }]);
+            store.push([{ type: 'update', key: 2, data: { isDeleted: true } }]);
 
             this.clock.tick(timeout * 2);
 
             assert.strictEqual(this.getBubbles().length, 3, 'message bubble count');
-            assert.notStrictEqual(this.getBubbles().eq(1).text(), textToChange, 'message bubble text was updated');
+            assert.strictEqual(this.getBubbles().eq(1).text(), messageLocalization.format('dxChat-deletedMessageText'), 'message bubble text was updated');
         });
 
         QUnit.test('message should change its text in accordance with template when using store.push({ type: "update", key: "message_id", data: { isDeleted: true } })', function(assert) {
@@ -1852,9 +1853,9 @@ QUnit.module('Chat', () => {
 
             this.reinit({
                 dataSource: store,
-                messageTemplate: (data, $container) => {
+                messageTemplate: (data, container) => {
                     if(data.message.isDeleted) {
-                        $container.text(deletedMessageText);
+                        $('<p>').text(deletedMessageText).appendTo(container);
                     }
                 },
                 reloadOnChange: false,
@@ -1862,12 +1863,12 @@ QUnit.module('Chat', () => {
 
             this.clock.tick(timeout);
 
-            store.push([{ type: 'update', key: 1, data: { itDeleted: true } }]);
+            store.push([{ type: 'update', key: 1, data: { isDeleted: true } }]);
 
             this.clock.tick(timeout * 2);
 
             assert.strictEqual(this.getBubbles().length, 1, 'message bubble count');
-            assert.notStrictEqual(this.getBubbles().eq(1).text(), deletedMessageText, 'message bubble text was updated correctly');
+            assert.strictEqual(this.getBubbles().eq(0).text(), deletedMessageText, 'message bubble text was updated correctly');
         });
 
         QUnit.test('Message should be removed along with its group when using store.push({ type: "remove", key: "message_id" }), and the message was the last one in the group', function(assert) {
