@@ -1551,7 +1551,6 @@ export interface dxCardViewOptions<TCardData = unknown, TKey = unknown> extends 
 * @namespace DevExpress.ui
 * @public
 */
-
 export default class dxCardView<TCardData = unknown, TKey = unknown> extends Widget<Properties> {
     /**
      * @docid
@@ -1663,7 +1662,7 @@ export default class dxCardView<TCardData = unknown, TKey = unknown> extends Wid
      * @publicName hasEditData()
      * @public
      */
-    hasEditData(): void;
+    hasEditData(): void; // boolean?
     /**
      * @docid
      * @publicName saveEditData()

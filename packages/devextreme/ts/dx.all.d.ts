@@ -9931,9 +9931,9 @@ declare module DevExpress.ui {
     zoomLevel?: DevExpress.ui.dxCalendar.CalendarZoomLevel;
   }
   /**
-    * [descr:dxCardView]
-    */
-   export class dxCardView<
+   * [descr:dxCardView]
+   */
+  export class dxCardView<
     TCardData = unknown,
     TKey = unknown
   > extends Widget<DevExpress.ui.dxCardView.Properties> {
