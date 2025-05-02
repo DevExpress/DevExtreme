@@ -178,11 +178,13 @@ export function selectView(viewName, instance, event) {
         const viewNames = Object.keys(viewItemSelectorMap);
         let viewItemIndex = viewNames.indexOf(viewName);
 
+        const instanceComponentElement = instance.component.element();
+
         while(viewItemIndex >= 0 && viewItemIndex < viewNames.length) {
             viewItemIndex = keyName === 'upArrow' ? --viewItemIndex : ++viewItemIndex;
             const viewName = viewNames[viewItemIndex];
             const viewSelectors = viewItemSelectorMap[viewName];
-            const $focusViewElement = findFocusedViewElement(instance.component.element(), viewSelectors, event.target);
+            const $focusViewElement = findFocusedViewElement(instanceComponentElement, viewSelectors, event.target);
             if($focusViewElement && $focusViewElement.length) {
                 $focusViewElement.attr('tabindex', instance.option('tabindex') || 0);
                 eventsEngine.trigger($focusViewElement, 'focus');
