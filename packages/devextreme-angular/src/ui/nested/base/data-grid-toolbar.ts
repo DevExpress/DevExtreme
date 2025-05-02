@@ -5,14 +5,11 @@ import {
     Component,
 } from '@angular/core';
 
-import { ToolbarItemComponent, ToolbarItemLocation } from 'devextreme/common';
 import { UserDefinedElement } from 'devextreme/core/element';
 import { DataGridPredefinedToolbarItem, dxDataGridToolbarItem } from 'devextreme/ui/data_grid';
 import { dxFileManagerToolbarItem, FileManagerPredefinedToolbarItem } from 'devextreme/ui/file_manager';
 import { dxGanttToolbarItem, GanttPredefinedToolbarItem } from 'devextreme/ui/gantt';
 import { dxHtmlEditorToolbarItem, HtmlEditorPredefinedToolbarItem } from 'devextreme/ui/html_editor';
-import { DateNavigatorItemProperties, SchedulerPredefinedToolbarItem } from 'devextreme/ui/scheduler';
-import { LocateInMenuMode, ShowTextMode } from 'devextreme/ui/toolbar';
 import { dxTreeListToolbarItem, TreeListPredefinedToolbarItem } from 'devextreme/ui/tree_list';
 
 @Component({
@@ -26,10 +23,10 @@ export abstract class DxoDataGridToolbar extends NestedOption {
         this._setOption('disabled', value);
     }
 
-    get items(): Array<dxDataGridToolbarItem | DataGridPredefinedToolbarItem | dxFileManagerToolbarItem | FileManagerPredefinedToolbarItem | dxGanttToolbarItem | GanttPredefinedToolbarItem | dxHtmlEditorToolbarItem | HtmlEditorPredefinedToolbarItem | SchedulerPredefinedToolbarItem | any | { cssClass?: string | undefined, disabled?: boolean, html?: string, locateInMenu?: LocateInMenuMode, location?: ToolbarItemLocation, menuItemTemplate?: any, name?: SchedulerPredefinedToolbarItem, options?: DateNavigatorItemProperties | any, showText?: ShowTextMode, template?: any, text?: string, visible?: boolean, widget?: ToolbarItemComponent } | dxTreeListToolbarItem | TreeListPredefinedToolbarItem> {
+    get items(): Array<dxDataGridToolbarItem | DataGridPredefinedToolbarItem | dxFileManagerToolbarItem | FileManagerPredefinedToolbarItem | dxGanttToolbarItem | GanttPredefinedToolbarItem | dxHtmlEditorToolbarItem | HtmlEditorPredefinedToolbarItem | dxTreeListToolbarItem | TreeListPredefinedToolbarItem> {
         return this._getOption('items');
     }
-    set items(value: Array<dxDataGridToolbarItem | DataGridPredefinedToolbarItem | dxFileManagerToolbarItem | FileManagerPredefinedToolbarItem | dxGanttToolbarItem | GanttPredefinedToolbarItem | dxHtmlEditorToolbarItem | HtmlEditorPredefinedToolbarItem | SchedulerPredefinedToolbarItem | any | { cssClass?: string | undefined, disabled?: boolean, html?: string, locateInMenu?: LocateInMenuMode, location?: ToolbarItemLocation, menuItemTemplate?: any, name?: SchedulerPredefinedToolbarItem, options?: DateNavigatorItemProperties | any, showText?: ShowTextMode, template?: any, text?: string, visible?: boolean, widget?: ToolbarItemComponent } | dxTreeListToolbarItem | TreeListPredefinedToolbarItem>) {
+    set items(value: Array<dxDataGridToolbarItem | DataGridPredefinedToolbarItem | dxFileManagerToolbarItem | FileManagerPredefinedToolbarItem | dxGanttToolbarItem | GanttPredefinedToolbarItem | dxHtmlEditorToolbarItem | HtmlEditorPredefinedToolbarItem | dxTreeListToolbarItem | TreeListPredefinedToolbarItem>) {
         this._setOption('items', value);
     }
 
