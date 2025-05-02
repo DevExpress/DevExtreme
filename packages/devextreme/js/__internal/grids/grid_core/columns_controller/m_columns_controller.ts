@@ -706,7 +706,7 @@ export class ColumnsController extends modules.Controller {
     const isDataColumnsInvisible = !this.hasVisibleDataColumns();
 
     if (isDataColumnsInvisible && this._columns.length) {
-      visibleColumns[visibleColumns.length - 1].push({ command: 'empty' });
+      visibleColumns[visibleColumns.length - 1].push({ command: 'empty', type: 'empty' });
     }
 
     return visibleColumns;

@@ -58,11 +58,11 @@ export class HeadersKeyboardNavigationController extends ColumnKeyboardNavigatio
     return visibleColumns.filter((column) => !column.fixed || column.fixedPosition === StickyPosition.Sticky);
   }
 
-  protected keyDownHandler(e): void {
+  protected keyDownHandler(e): boolean {
     const isHandled = this.processOnKeyDown(e);
 
     if (isHandled) {
-      return;
+      return true;
     }
 
     // eslint-disable-next-line default-case
@@ -76,6 +76,8 @@ export class HeadersKeyboardNavigationController extends ColumnKeyboardNavigatio
         this.leftRightKeysHandler(e);
         break;
     }
+
+    return false;
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -101,6 +103,15 @@ export class HeadersKeyboardNavigationController extends ColumnKeyboardNavigatio
     return '.dx-header-row > td';
   }
 
+  protected getFocusableColumns(): any[] {
+    const visibleColumns = this._columnsController.getVisibleColumns();
+
+    return visibleColumns.filter(
+      (column) => !isDefined(column.type)
+        || this._columnsController.isCustomCommandColumn(column),
+    );
+  }
+
   public init(): void {
     super.init();
     this._columnHeadersView = this.getView('columnHeadersView');
@@ -121,12 +132,13 @@ export class HeadersKeyboardNavigationController extends ColumnKeyboardNavigatio
   }
 
   public getFirstFocusableVisibleIndex(): number {
-    const visibleColumns = this._columnsController.getVisibleColumns();
-    const firstFocusableVisibleIndex: number = visibleColumns.findIndex(
-      (column) => !column.type || this._columnsController.isCustomCommandColumn(column),
-    );
+    const focusableColumns = this.getFocusableColumns();
 
-    return firstFocusableVisibleIndex ?? -1;
+    if (focusableColumns?.length) {
+      return this._columnsController.getVisibleIndex(focusableColumns[0].index);
+    }
+
+    return -1;
   }
 }
 

@@ -1321,6 +1321,11 @@ const headersKeyboardNavigation = (Base: ModuleType<HeadersKeyboardNavigationCon
     return newVisibleIndex;
   }
 
+  protected getFocusableColumns(): any[] {
+    return super.getFocusableColumns()
+      .filter((col) => col.visibleWidth !== HIDDEN_COLUMNS_WIDTH);
+  }
+
   protected getDraggableColumns(
     column,
     rowIndex: number,

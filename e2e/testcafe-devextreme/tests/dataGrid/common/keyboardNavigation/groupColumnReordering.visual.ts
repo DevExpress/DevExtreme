@@ -804,3 +804,138 @@ test('Ungroup all columns via context menu', async (t) => {
     ],
   });
 });
+
+// Group columns
+test('Group second column when pressing ctrl + g', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+  const secondHeader = dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(1);
+
+  await t
+    .click(secondHeader.element)
+    .pressKey('ctrl+g');
+
+  await takeScreenshot(
+    'group_second_column_via_keyboard',
+    dataGrid.element,
+  );
+
+  await t.expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  await createWidget('dxDataGrid', {
+    dataSource: [{
+      field1: 'test1',
+      field2: 'test2',
+      field3: 'test3',
+    }],
+    grouping: {
+      contextMenuEnabled: true,
+    },
+    groupPanel: {
+      visible: true,
+    },
+  });
+});
+
+test('Group last column when pressing ctrl + g', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+  const lastHeader = dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(2);
+
+  await t
+    .click(lastHeader.element)
+    .pressKey('ctrl+g');
+
+  await takeScreenshot(
+    'group_last_column_via_keyboard',
+    dataGrid.element,
+  );
+
+  await t.expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  await createWidget('dxDataGrid', {
+    dataSource: [{
+      field1: 'test1',
+      field2: 'test2',
+      field3: 'test3',
+    }],
+    grouping: {
+      contextMenuEnabled: true,
+    },
+    groupPanel: {
+      visible: true,
+    },
+  });
+});
+
+test('Group a single column when pressing ctrl + g', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+  const lastHeader = dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(0);
+
+  await t
+    .click(lastHeader.element)
+    .pressKey('ctrl+g');
+
+  await takeScreenshot(
+    'group_single_column_via_keyboard',
+    dataGrid.element,
+  );
+
+  await t.expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  await createWidget('dxDataGrid', {
+    dataSource: [{
+      field1: 'test1',
+    }],
+    grouping: {
+      contextMenuEnabled: true,
+    },
+    groupPanel: {
+      visible: true,
+    },
+  });
+});
+
+test('Group column when pressing ctrl + g if showWheGrouped is enabled', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+  const secondHeader = dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(1);
+
+  await t
+    .click(secondHeader.element)
+    .pressKey('ctrl+g');
+
+  await takeScreenshot(
+    'group_column_via_keyboard_when_showWheGrouped_is_true',
+    dataGrid.element,
+  );
+
+  await t.expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  await createWidget('dxDataGrid', {
+    dataSource: [{
+      field1: 'test1',
+      field2: 'test2',
+      field3: 'test3',
+    }],
+    columns: [
+      'field1',
+      {
+        dataField: 'field2',
+        showWhenGrouped: true,
+      },
+      'field2',
+    ],
+    grouping: {
+      contextMenuEnabled: true,
+    },
+    groupPanel: {
+      visible: true,
+    },
+  });
+});

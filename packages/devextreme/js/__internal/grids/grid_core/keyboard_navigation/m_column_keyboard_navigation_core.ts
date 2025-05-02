@@ -8,7 +8,7 @@ import { KeyboardNavigationController as KeyboardNavigationControllerCore } from
 export class ColumnKeyboardNavigationController extends KeyboardNavigationControllerCore {
   public columnFocusDispatcher!: ColumnFocusDispatcher;
 
-  protected getVisibleIndex(column, rowIndex = 0) {
+  protected getVisibleIndex(column, rowIndex?) {
     return this._columnsController.getVisibleIndex(column.index, rowIndex);
   }
 
