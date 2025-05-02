@@ -69,7 +69,7 @@ test('DataGrid - Validation message gets cut off in Fluent and Material themes (
 }).before(async () => {
   await createWidget('dxDataGrid', {
     dataSource: [
-      { FirstName: 'n' },
+      { A: 'n' },
     ],
     width: 800,
     editing: {
@@ -77,7 +77,7 @@ test('DataGrid - Validation message gets cut off in Fluent and Material themes (
       allowUpdating: true,
     },
     columns: [{
-      dataField: 'FirstName',
+      dataField: 'A',
       validationRules: [{ type: 'required', message: 'sampletextsampletextsampletextsampletextsampletextsampletextsampletextsampletext' }],
     },
     ],
