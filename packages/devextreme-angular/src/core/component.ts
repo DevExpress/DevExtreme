@@ -16,6 +16,9 @@ import {
   AfterContentChecked,
   AfterViewInit,
   AfterViewChecked,
+  createNgModule,
+  inject,
+  Injector,
 } from '@angular/core';
 
 import { isPlatformServer } from '@angular/common';
@@ -35,6 +38,8 @@ import {
   ICollectionNestedOptionContainer,
   CollectionNestedOptionContainerImpl,
 } from './nested-option';
+
+import { DxIntegrationModule } from './integration';
 
 config({
   buyNowLink: 'https://go.devexpress.com/Licensing_Installer_Watermark_DevExtremeAngular.aspx',
@@ -225,6 +230,10 @@ export abstract class DxComponent implements OnChanges, OnInit, DoCheck, AfterCo
     private readonly transferState: TransferState,
     @Inject(PLATFORM_ID) private readonly platformId: any,
   ) {
+    if (!DxIntegrationModule.initialized) {
+      createNgModule(DxIntegrationModule, inject(Injector));
+    }
+
     this.templates = [];
     templateHost.setHost(this);
     this._collectionContainerImpl = new CollectionNestedOptionContainerImpl(this._setOption.bind(this));
