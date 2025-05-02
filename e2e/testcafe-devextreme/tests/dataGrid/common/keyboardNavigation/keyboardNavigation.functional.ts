@@ -4898,7 +4898,7 @@ const getDataGridProps = () => ({
 });
 
 // T1285421
-test.only('Multiple DataGrids - Ctrl+Up/Down from filter row should focus data row in the same grid', async (t) => {
+test('Multiple DataGrids - Ctrl+Up/Down from filter row should focus data row in the same grid', async (t) => {
   const firstGrid = new DataGrid('#container');
   const secondGrid = new DataGrid('#otherContainer');
 
