@@ -309,7 +309,7 @@ QUnit.module('MessageBox', moduleConfig, () => {
     });
 
     QUnit.module('onMessageEditCanceled event', () => {
-        QUnit.test('should be fired when the cancel button is clicked', function(assert) {
+        QUnit.test('should be fired when the Cancel button is clicked and editing is active', function(assert) {
             const onMessageEditCanceled = sinon.stub();
 
             this.reinit({ onMessageEditCanceled, text: 'editing text' });
@@ -320,10 +320,10 @@ QUnit.module('MessageBox', moduleConfig, () => {
 
             this.getCancelButton().trigger('dxclick');
 
-            assert.strictEqual(onMessageEditCanceled.callCount, 1);
+            assert.strictEqual(onMessageEditCanceled.callCount, 1, 'Event fired once on cancel');
         });
 
-        QUnit.test('should not be fired when the cancel button is clicked and text option value is empty', function(assert) {
+        QUnit.test('should not be fired when the Cancel button is clicked and text option is empty', function(assert) {
             const onMessageEditCanceled = sinon.stub();
 
             this.reinit({ onMessageEditCanceled });
@@ -334,14 +334,13 @@ QUnit.module('MessageBox', moduleConfig, () => {
 
             this.getCancelButton().trigger('dxclick');
 
-            assert.strictEqual(onMessageEditCanceled.callCount, 0);
+            assert.strictEqual(onMessageEditCanceled.callCount, 0, 'Event was not fired because text was not set');
         });
 
-        QUnit.test('should be fired when the escape is pressed', function(assert) {
+        QUnit.test('should be fired when Escape key is pressed during editing', function(assert) {
             const onMessageEditCanceled = sinon.stub();
 
             this.reinit({ onMessageEditCanceled });
-
             this.instance.option('text', 'test');
 
             keyboardMock(this.$input)
@@ -349,12 +348,12 @@ QUnit.module('MessageBox', moduleConfig, () => {
                 .type('some text')
                 .press('esc');
 
-            assert.strictEqual(onMessageEditCanceled.callCount, 1);
+            assert.strictEqual(onMessageEditCanceled.callCount, 1, 'Event fired once on Escape press');
         });
     });
 
     QUnit.module('onMessageUpdating event', () => {
-        QUnit.test('should be fired when the send button is clicked and text option value is defined', function(assert) {
+        QUnit.test('should be fired when the Send button is clicked and text is defined', function(assert) {
             const onMessageUpdating = sinon.stub();
 
             this.reinit({ onMessageUpdating, text: 'edited text' });
@@ -365,10 +364,10 @@ QUnit.module('MessageBox', moduleConfig, () => {
 
             this.$sendButton.trigger('dxclick');
 
-            assert.strictEqual(onMessageUpdating.callCount, 1);
+            assert.strictEqual(onMessageUpdating.callCount, 1, 'Event fired once on send with defined text');
         });
 
-        QUnit.test('should be fired when the send button is clicked and text option value is empty', function(assert) {
+        QUnit.test('should not be fired when the Send button is clicked and text option is empty', function(assert) {
             const onMessageUpdating = sinon.stub();
 
             this.reinit({ onMessageUpdating });
@@ -379,7 +378,7 @@ QUnit.module('MessageBox', moduleConfig, () => {
 
             this.$sendButton.trigger('dxclick');
 
-            assert.strictEqual(onMessageUpdating.callCount, 0);
+            assert.strictEqual(onMessageUpdating.callCount, 0, 'Event was not fired because text option was not set');
         });
     });
 
@@ -752,29 +751,28 @@ QUnit.module('MessageBox', moduleConfig, () => {
             assert.strictEqual(this.$input.val(), 'some text');
         });
 
-        QUnit.test('editing preview should be removed on escape key when some message is editing', function(assert) {
+        QUnit.test('Editing preview should be cleared when Escape key is pressed during editing', function(assert) {
             this.instance.option('text', 'test');
 
             const editingPreview = this.getEditingPreviewInstance();
-            assert.strictEqual(editingPreview.option('text'), 'test', 'text is passed');
+            assert.strictEqual(editingPreview.option('text'), 'test', 'Initial text is set in editing preview');
 
             keyboardMock(this.$input)
                 .focus()
                 .type('some text')
                 .press('esc');
 
-            assert.strictEqual(editingPreview.option('text'), '', 'text is passed after esc key is pressed');
+            assert.strictEqual(editingPreview.option('text'), '', 'Editing preview text is cleared after pressing Escape');
         });
 
-        QUnit.test('text option should be passed to editing preview after change it at runtime', function(assert) {
+        QUnit.test('Text option should update editing preview when changed at runtime', function(assert) {
             this.instance.option('text', 'new text value');
 
             const editingPreview = this.getEditingPreviewInstance();
-
-            assert.strictEqual(editingPreview.option('text'), 'new text value', 'text is passed to editing preview');
+            assert.strictEqual(editingPreview.option('text'), 'new text value', 'Updated text is reflected in editing preview');
         });
 
-        QUnit.testInActiveWindow('textarea should be focused after press escape key', function(assert) {
+        QUnit.testInActiveWindow('Textarea should be focused after pressing Escape key', function(assert) {
             this.instance.option('text', 'test');
 
             keyboardMock(this.$input)
@@ -782,26 +780,26 @@ QUnit.module('MessageBox', moduleConfig, () => {
                 .type('some text')
                 .press('esc');
 
-            assert.strictEqual(this.$textArea.hasClass(FOCUSED_STATE_CLASS), true, 'textarea is focused');
+            assert.strictEqual(this.$textArea.hasClass(FOCUSED_STATE_CLASS), true, 'Textarea is focused after Escape press');
         });
 
-        QUnit.testInActiveWindow('textarea should not be focused after click on send button if text option is not empty', function(assert) {
+        QUnit.testInActiveWindow('Textarea should not be focused after clicking Send button if text is not empty', function(assert) {
             this.instance.option('text', 'test');
 
             this.$sendButton.trigger('dxclick');
 
-            assert.strictEqual(this.$textArea.hasClass(FOCUSED_STATE_CLASS), false, 'textarea is not focused');
+            assert.strictEqual(this.$textArea.hasClass(FOCUSED_STATE_CLASS), false, 'Textarea is not focused after send');
         });
 
-        QUnit.test('editing preview and input should be cleared after edit cancel button is clicked', function(assert) {
+        QUnit.test('Editing preview and textarea should be cleared after clicking the cancel button', function(assert) {
             this.reinit({ text: 'edited text' });
 
             const editingPreview = this.getEditingPreviewInstance();
 
             this.getCancelButton().trigger('dxclick');
 
-            assert.strictEqual(this.textArea.option('text'), '', 'textarea is empty');
-            assert.strictEqual(editingPreview.option('text'), '', 'editingPreview is empty');
+            assert.strictEqual(this.textArea.option('text'), '', 'Textarea is cleared after cancel');
+            assert.strictEqual(editingPreview.option('text'), '', 'Editing preview is cleared after cancel');
         });
     });
 });

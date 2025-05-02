@@ -55,37 +55,36 @@ QUnit.module('EditingPreview', moduleConfig, () => {
             assert.strictEqual($button.hasClass(CHAT_EDITING_PREVIEW_CANCEL_BUTTON_CLASS), true);
         });
 
-        QUnit.test('editing preview should not be appear if text is empty', function(assert) {
+        QUnit.test('Editing preview should not appear when text is empty', function(assert) {
             this.reinit({
                 text: ''
             });
 
-            assert.strictEqual(this.$element.parent().get(0), undefined, 'preview element is detached');
+            assert.strictEqual(this.$element.parent().get(0), undefined, 'Preview element is not attached to DOM when text is empty');
         });
 
-        QUnit.test('editing preview should appear and dispose in runtime by changing text option', function(assert) {
+        QUnit.test('Editing preview should appear and be removed at runtime when text option changes', function(assert) {
             const done = assert.async();
 
             this.instance.option('text', 'test');
-            assert.strictEqual(this.$element.length, 1, 'preview is rendred after text is set');
+            assert.strictEqual(this.$element.length, 1, 'Preview is rendered after setting non-empty text');
 
             this.instance.option('text', '');
 
             setTimeout(() => {
-                assert.strictEqual(this.$element.parent().get(0), undefined, 'preview element is detached');
-
+                assert.strictEqual(this.$element.parent().get(0), undefined, 'Preview element is removed after setting text to empty');
                 done();
             }, ANIMATION_TIMEOUT);
         });
 
-        QUnit.test('editing preview should have hiding class after change text to empty string', function(assert) {
+        QUnit.test('Editing preview should receive hiding class when text is changed to empty', function(assert) {
             this.instance.option('text', 'test');
 
-            assert.strictEqual(this.$element.hasClass(CHAT_EDITING_PREVIEW_HIDING_CLASS), false, 'hiding class is not added');
+            assert.strictEqual(this.$element.hasClass(CHAT_EDITING_PREVIEW_HIDING_CLASS), false, 'Hiding class is not applied initially');
 
             this.instance.option('text', '');
 
-            assert.strictEqual(this.$element.hasClass(CHAT_EDITING_PREVIEW_HIDING_CLASS), true, 'hiding class is added');
+            assert.strictEqual(this.$element.hasClass(CHAT_EDITING_PREVIEW_HIDING_CLASS), true, 'Hiding class is applied after clearing text');
         });
     });
 

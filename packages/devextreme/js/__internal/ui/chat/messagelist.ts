@@ -312,9 +312,6 @@ class MessageList extends Widget<Properties> {
       elementAttr: {
         class: CHAT_MESSAGELIST_CONTEXT_MENU_CLASS,
       },
-      wrapperAttr: {
-        style: 'height: 100%;',
-      },
       cssClass: CHAT_MESSAGELIST_CONTEXT_MENU_CONTENT_CLASS,
       hideOnParentScroll: false,
       overlayContainer: this._scrollView.container(),

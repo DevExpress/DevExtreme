@@ -64,32 +64,31 @@ QUnit.module('EditingPreview', moduleConfig, () => {
     });
 
     QUnit.module('onCancel', () => {
-        QUnit.test('should be fired after click on cancel button', function(assert) {
+        QUnit.test('should be called after clicking the cancel button', function(assert) {
             const onCancel = sinon.spy();
 
             this.reinit({
                 text: 'message text',
-                onCancel
+                onCancel,
             });
 
             this.$cancelEditButton.trigger('dxclick');
 
-            assert.strictEqual(onCancel.callCount, 1, 'onCancel was called');
+            assert.strictEqual(onCancel.callCount, 1, 'onCancel was called once after cancel button click');
         });
 
-        QUnit.test('should be updated after change at runtime', function(assert) {
+        QUnit.test('should be updated dynamically at runtime', function(assert) {
             this.reinit({
                 text: 'message text',
-                onCancel: () => {}
+                onCancel: () => {},
             });
 
             const onCancel = sinon.spy();
-
             this.instance.option('onCancel', onCancel);
 
             this.$cancelEditButton.trigger('dxclick');
 
-            assert.strictEqual(onCancel.callCount, 1, 'onCancel was updated');
+            assert.strictEqual(onCancel.callCount, 1, 'Runtime-updated onCancel handler was called');
         });
     });
 
