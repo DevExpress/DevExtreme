@@ -62,9 +62,9 @@ export class DataController {
 
   public readonly isLoading = signal(false);
 
-  private readonly _filteredItemCount = signal(0);
+  private readonly _filteredItemCount = signal<number | null>(0);
 
-  public readonly filteredItemCount: ReadonlySignal<number> = this._filteredItemCount;
+  public readonly filteredItemCount: ReadonlySignal<number | null> = this._filteredItemCount;
 
   public readonly pageCount = computed(
     () => Math.ceil(
@@ -160,6 +160,7 @@ export class DataController {
               });
             } else {
               e.data = filteredData;
+              this._filteredItemCount.value = null;
             }
           }).fail((error) => {
             // @ts-expect-error
@@ -261,7 +262,7 @@ export class DataController {
     this.pageIndex.value = dataSource.pageIndex();
     this.pageSize.value = dataSource.pageSize();
     const filteredCount = this.filteredItemCount.peek();
-    this._totalCount.value = filteredCount > 0 ? filteredCount : dataSource.totalCount();
+    this._totalCount.value = filteredCount ?? dataSource.totalCount();
 
     // eslint-disable-next-line @typescript-eslint/no-floating-promises
     Promise.resolve().then(() => {
