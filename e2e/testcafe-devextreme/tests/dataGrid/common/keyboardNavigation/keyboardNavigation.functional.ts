@@ -4910,23 +4910,23 @@ test('Multiple DataGrids - Ctrl+Up/Down from filter row should focus data row in
     .ok('Second grid is ready');
 
   const firstDataGridFilterCell = firstGrid
-    .getHeaders().getFilterRow().getFilterCell(0).getEditorInput();
+    .getHeaders().getFilterRow().getFilterCell(0).getEditorInput().element;
   const secondDataGridFilterCell = secondGrid
-    .getHeaders().getFilterRow().getFilterCell(0).getEditorInput();
-  const firstGridDataCell = firstGrid.getDataRow(0).getDataCell(0);
-  const secondGridDataCell = secondGrid.getDataRow(0).getDataCell(0);
+    .getHeaders().getFilterRow().getFilterCell(0).getEditorInput().element;
+  const firstGridDataCell = firstGrid.getDataRow(0).getDataCell(0).element;
+  const secondGridDataCell = secondGrid.getDataRow(0).getDataCell(0).element;
 
   await t
     .click(secondGridDataCell.element)
     .pressKey('ctrl+up')
-    .expect(secondDataGridFilterCell.element.focused)
+    .expect(secondDataGridFilterCell.focused)
     .ok('Second grid filter cell is focused')
-    .expect(firstDataGridFilterCell.element.focused)
+    .expect(firstDataGridFilterCell.focused)
     .notOk('First grid data filter cell is not focused')
     .pressKey('ctrl+down')
-    .expect(secondGridDataCell.element.focused)
+    .expect(secondGridDataCell.focused)
     .ok('Second grid data cell is focused')
-    .expect(firstGridDataCell.element.focused)
+    .expect(firstGridDataCell.focused)
     .notOk('First grid data cell is not focused');
 }).before(async () => {
   await createWidget('dxDataGrid', getDataGridProps());
