@@ -6,7 +6,6 @@ import MessageBox, {
     CHAT_MESSAGEBOX_TEXTAREA_CLASS,
     CHAT_MESSAGEBOX_BUTTON_CLASS,
 } from '__internal/ui/chat/messagebox';
-import { CHAT_EDITING_PREVIEW_CLASS } from '__internal/ui/chat/messagebox_editing_preview';
 
 const TEXTAREA_CLASS = 'dx-textarea';
 const BUTTON_CLASS = 'dx-button';
@@ -39,20 +38,6 @@ QUnit.module('MessageBox', moduleConfig, () => {
 
             assert.strictEqual($messageBoxContent.length, 1, 'message box content has one elements');
             assert.strictEqual($messageBoxContent.eq(0).hasClass(CHAT_MESSAGEBOX_INPUT_CONTAINER_CLASS), true, 'message box contains input container');
-        });
-
-        QUnit.test('editing preview should appear and dispose in runtime by changing editingText option', function(assert) {
-            const getEditingPreview = () => this.$element.find(`.${CHAT_EDITING_PREVIEW_CLASS}`);
-
-            assert.strictEqual(getEditingPreview().length, 0, 'Be default editing preview not rendered');
-
-            this.instance.option('text', 'test');
-
-            assert.strictEqual(getEditingPreview().length, 1, 'Editing preview rendered after editingText set');
-
-            this.instance.option('text', undefined);
-
-            assert.strictEqual(getEditingPreview().length, 0, 'Editing preview rendered after editingText reset');
         });
 
         QUnit.test(`textarea field should have ${CHAT_MESSAGEBOX_TEXTAREA_CLASS} class`, function(assert) {
