@@ -299,7 +299,7 @@ export interface dxChatOptions extends WidgetOptions<dxChat> {
     items?: Array<Message>;
     /**
      * @docid
-     * @type object
+     * @default { allowUpdating: false, allowDeleting: false  }
      * @public
      */
     editing?: Editing;
