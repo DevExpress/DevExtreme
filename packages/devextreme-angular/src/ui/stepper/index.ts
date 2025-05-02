@@ -57,8 +57,10 @@ import { DxiStepperItemComponent } from 'devextreme-angular/ui/stepper/nested';
  */
 @Component({
     selector: 'dx-stepper',
+    standalone: true,
     template: '',
     host: { ngSkipHydration: 'true' },
+    imports: [ DxIntegrationModule ],
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -641,13 +643,11 @@ export class DxStepperComponent<TItem = any, TKey = any> extends DxComponent imp
 
 @NgModule({
   imports: [
+    DxStepperComponent,
     DxiItemModule,
     DxiStepperItemModule,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxStepperComponent
   ],
   exports: [
     DxStepperComponent,
@@ -657,6 +657,8 @@ export class DxStepperComponent<TItem = any, TKey = any> extends DxComponent imp
   ]
 })
 export class DxStepperModule { }
+
+export * from 'devextreme-angular/ui/stepper/nested';
 
 import type * as DxStepperTypes from "devextreme/ui/stepper_types";
 export { DxStepperTypes };

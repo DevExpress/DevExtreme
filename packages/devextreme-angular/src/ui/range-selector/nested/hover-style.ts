@@ -17,6 +17,7 @@ import {
 import { DashStyle, ChartsColor, HatchDirection } from 'devextreme/common/charts';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
@@ -24,8 +25,10 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-range-selector-hover-style',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxoRangeSelectorHoverStyleComponent extends NestedOption implements OnDestroy, OnInit  {
@@ -111,7 +114,7 @@ export class DxoRangeSelectorHoverStyleComponent extends NestedOption implements
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoRangeSelectorHoverStyleComponent
   ],
   exports: [

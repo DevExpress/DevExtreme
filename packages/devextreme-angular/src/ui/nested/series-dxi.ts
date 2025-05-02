@@ -14,6 +14,7 @@ import {
 
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxiChartSeries } from './base/chart-series-dxi';
@@ -21,8 +22,10 @@ import { DxiChartSeries } from './base/chart-series-dxi';
 
 @Component({
     selector: 'dxi-series',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost],
     inputs: [
         'aggregation',
@@ -94,7 +97,7 @@ export class DxiSeriesComponent extends DxiChartSeries {
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiSeriesComponent
   ],
   exports: [

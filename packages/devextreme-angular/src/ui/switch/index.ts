@@ -59,8 +59,10 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
  */
 @Component({
     selector: 'dx-switch',
+    standalone: true,
     template: '',
     host: { ngSkipHydration: 'true' },
+    imports: [ DxIntegrationModule ],
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -714,11 +716,9 @@ export class DxSwitchComponent extends DxComponent implements OnDestroy, Control
 
 @NgModule({
   imports: [
+    DxSwitchComponent,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxSwitchComponent
   ],
   exports: [
     DxSwitchComponent,
@@ -726,6 +726,7 @@ export class DxSwitchComponent extends DxComponent implements OnDestroy, Control
   ]
 })
 export class DxSwitchModule { }
+
 
 import type * as DxSwitchTypes from "devextreme/ui/switch_types";
 export { DxSwitchTypes };

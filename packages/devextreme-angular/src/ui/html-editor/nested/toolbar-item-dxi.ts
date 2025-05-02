@@ -21,6 +21,7 @@ import { LocateInMenuMode, ShowTextMode } from 'devextreme/ui/toolbar';
 import { ToolbarItemLocation, ToolbarItemComponent } from 'devextreme/common';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
     extractTemplate,
     DxTemplateDirective,
@@ -32,8 +33,10 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxi-html-editor-toolbar-item',
+    standalone: true,
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost, DxTemplateHost]
 })
 export class DxiHtmlEditorToolbarItemComponent extends CollectionNestedOption implements AfterViewInit,
@@ -200,7 +203,7 @@ export class DxiHtmlEditorToolbarItemComponent extends CollectionNestedOption im
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiHtmlEditorToolbarItemComponent
   ],
   exports: [

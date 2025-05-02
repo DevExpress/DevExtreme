@@ -43,8 +43,10 @@ import {
  */
 @Component({
     selector: 'dx-button',
+    standalone: true,
     template: '<ng-content></ng-content>',
     host: { ngSkipHydration: 'true' },
+    imports: [ DxIntegrationModule ],
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -531,11 +533,9 @@ export class DxButtonComponent extends DxComponent implements OnDestroy {
 
 @NgModule({
   imports: [
+    DxButtonComponent,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxButtonComponent
   ],
   exports: [
     DxButtonComponent,
@@ -543,6 +543,7 @@ export class DxButtonComponent extends DxComponent implements OnDestroy {
   ]
 })
 export class DxButtonModule { }
+
 
 import type * as DxButtonTypes from "devextreme/ui/button_types";
 export { DxButtonTypes };

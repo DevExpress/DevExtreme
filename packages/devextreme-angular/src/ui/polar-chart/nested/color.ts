@@ -16,6 +16,7 @@ import {
 
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
@@ -23,8 +24,10 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-polar-chart-color',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxoPolarChartColorComponent extends NestedOption implements OnDestroy, OnInit  {
@@ -70,7 +73,7 @@ export class DxoPolarChartColorComponent extends NestedOption implements OnDestr
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoPolarChartColorComponent
   ],
   exports: [

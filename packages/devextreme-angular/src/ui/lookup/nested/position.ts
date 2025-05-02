@@ -18,6 +18,7 @@ import { PositionAlignment, HorizontalAlignment, VerticalAlignment } from 'devex
 import { CollisionResolutionCombination, CollisionResolution } from 'devextreme/common/core/animation';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
@@ -25,8 +26,10 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-lookup-position',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxoLookupPositionComponent extends NestedOption implements OnDestroy, OnInit  {
@@ -112,7 +115,7 @@ export class DxoLookupPositionComponent extends NestedOption implements OnDestro
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoLookupPositionComponent
   ],
   exports: [

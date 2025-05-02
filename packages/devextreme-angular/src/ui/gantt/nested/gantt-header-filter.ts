@@ -18,6 +18,7 @@ import { HeaderFilterSearchConfig } from 'devextreme/common/grids';
 import { dxGanttHeaderFilterTexts } from 'devextreme/ui/gantt';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
@@ -25,8 +26,10 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-gantt-gantt-header-filter',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxoGanttGanttHeaderFilterComponent extends NestedOption implements OnDestroy, OnInit  {
@@ -120,7 +123,7 @@ export class DxoGanttGanttHeaderFilterComponent extends NestedOption implements 
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoGanttGanttHeaderFilterComponent
   ],
   exports: [

@@ -18,6 +18,7 @@ import { Font } from 'devextreme/common/charts';
 import { Format } from 'devextreme/common/core/localization';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
@@ -25,8 +26,10 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-linear-gauge-text',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxoLinearGaugeTextComponent extends NestedOption implements OnDestroy, OnInit  {
@@ -88,7 +91,7 @@ export class DxoLinearGaugeTextComponent extends NestedOption implements OnDestr
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoLinearGaugeTextComponent
   ],
   exports: [

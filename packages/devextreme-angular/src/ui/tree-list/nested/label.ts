@@ -22,6 +22,7 @@ import { HorizontalAlignment } from 'devextreme/common';
 import { LabelLocation } from 'devextreme/ui/form';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
     extractTemplate,
     DxTemplateDirective,
@@ -33,8 +34,10 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-tree-list-label',
+    standalone: true,
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost, DxTemplateHost]
 })
 export class DxoTreeListLabelComponent extends NestedOption implements AfterViewInit, OnDestroy, OnInit,
@@ -125,7 +128,7 @@ export class DxoTreeListLabelComponent extends NestedOption implements AfterView
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoTreeListLabelComponent
   ],
   exports: [

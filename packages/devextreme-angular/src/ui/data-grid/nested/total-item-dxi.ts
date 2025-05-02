@@ -17,6 +17,7 @@ import { SummaryType } from 'devextreme/common/grids';
 import { Format } from 'devextreme/common/core/localization';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
@@ -24,8 +25,10 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxi-data-grid-total-item',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxiDataGridTotalItemComponent extends CollectionNestedOption {
@@ -131,7 +134,7 @@ export class DxiDataGridTotalItemComponent extends CollectionNestedOption {
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiDataGridTotalItemComponent
   ],
   exports: [

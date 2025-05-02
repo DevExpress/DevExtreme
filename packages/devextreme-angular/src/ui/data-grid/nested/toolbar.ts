@@ -20,6 +20,7 @@ import {
 import { DataGridPredefinedToolbarItem, dxDataGridToolbarItem } from 'devextreme/ui/data_grid';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
@@ -28,8 +29,10 @@ import { DxiDataGridItemComponent } from './item-dxi';
 
 @Component({
     selector: 'dxo-data-grid-toolbar',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxoDataGridToolbarComponent extends NestedOption implements OnDestroy, OnInit  {
@@ -91,7 +94,7 @@ export class DxoDataGridToolbarComponent extends NestedOption implements OnDestr
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoDataGridToolbarComponent
   ],
   exports: [

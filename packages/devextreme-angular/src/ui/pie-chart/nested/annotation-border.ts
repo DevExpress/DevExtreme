@@ -17,6 +17,7 @@ import {
 import { DashStyle } from 'devextreme/common/charts';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
@@ -24,8 +25,10 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-pie-chart-annotation-border',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxoPieChartAnnotationBorderComponent extends NestedOption implements OnDestroy, OnInit  {
@@ -103,7 +106,7 @@ export class DxoPieChartAnnotationBorderComponent extends NestedOption implement
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoPieChartAnnotationBorderComponent
   ],
   exports: [

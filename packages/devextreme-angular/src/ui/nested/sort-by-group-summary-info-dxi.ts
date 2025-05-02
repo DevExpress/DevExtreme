@@ -15,6 +15,7 @@ import {
 import { SortOrder } from 'devextreme/common';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
@@ -22,8 +23,10 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxi-sort-by-group-summary-info',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxiSortByGroupSummaryInfoComponent extends CollectionNestedOption {
@@ -73,7 +76,7 @@ export class DxiSortByGroupSummaryInfoComponent extends CollectionNestedOption {
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiSortByGroupSummaryInfoComponent
   ],
   exports: [

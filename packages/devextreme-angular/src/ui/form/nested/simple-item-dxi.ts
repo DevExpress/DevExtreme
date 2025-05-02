@@ -24,6 +24,7 @@ import { FormItemComponent, FormItemType, LabelLocation } from 'devextreme/ui/fo
 import { HorizontalAlignment } from 'devextreme/common';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
     extractTemplate,
     DxTemplateDirective,
@@ -45,8 +46,10 @@ import { DxiFormValidationRuleComponent } from './validation-rule-dxi';
 
 @Component({
     selector: 'dxi-form-simple-item',
+    standalone: true,
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost, DxTemplateHost]
 })
 export class DxiFormSimpleItemComponent extends CollectionNestedOption implements AfterViewInit,
@@ -277,7 +280,7 @@ export class DxiFormSimpleItemComponent extends CollectionNestedOption implement
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiFormSimpleItemComponent
   ],
   exports: [

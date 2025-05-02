@@ -18,6 +18,7 @@ import { HorizontalAlignment } from 'devextreme/common';
 import { Format } from 'devextreme/common/core/localization';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
@@ -25,8 +26,10 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxi-chart-series',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxiChartSeriesComponent extends CollectionNestedOption {
@@ -372,7 +375,7 @@ export class DxiChartSeriesComponent extends CollectionNestedOption {
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiChartSeriesComponent
   ],
   exports: [

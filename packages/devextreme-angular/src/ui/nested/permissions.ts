@@ -16,6 +16,7 @@ import {
 
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
@@ -23,8 +24,10 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-permissions',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxoPermissionsComponent extends NestedOption implements OnDestroy, OnInit  {
@@ -110,7 +113,7 @@ export class DxoPermissionsComponent extends NestedOption implements OnDestroy, 
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoPermissionsComponent
   ],
   exports: [

@@ -16,6 +16,7 @@ import {
 
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxoGaugeIndicator } from './base/gauge-indicator';
@@ -23,8 +24,10 @@ import { DxoGaugeIndicator } from './base/gauge-indicator';
 
 @Component({
     selector: 'dxo-subvalue-indicator',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost],
     inputs: [
         'arrowLength',
@@ -75,7 +78,7 @@ export class DxoSubvalueIndicatorComponent extends DxoGaugeIndicator implements 
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoSubvalueIndicatorComponent
   ],
   exports: [

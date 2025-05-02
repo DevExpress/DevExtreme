@@ -67,8 +67,10 @@ import { DxoLoadPanelToModule } from 'devextreme-angular/ui/load-panel/nested';
  */
 @Component({
     selector: 'dx-load-panel',
+    standalone: true,
     template: '',
     host: { ngSkipHydration: 'true' },
+    imports: [ DxIntegrationModule ],
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -731,6 +733,7 @@ export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
 
 @NgModule({
   imports: [
+    DxLoadPanelComponent,
     DxoAnimationModule,
     DxoHideModule,
     DxoFromModule,
@@ -755,9 +758,6 @@ export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
     DxoLoadPanelToModule,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxLoadPanelComponent
   ],
   exports: [
     DxLoadPanelComponent,
@@ -787,6 +787,8 @@ export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
   ]
 })
 export class DxLoadPanelModule { }
+
+export * from 'devextreme-angular/ui/load-panel/nested';
 
 import type * as DxLoadPanelTypes from "devextreme/ui/load_panel_types";
 export { DxLoadPanelTypes };

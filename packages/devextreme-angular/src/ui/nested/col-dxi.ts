@@ -14,6 +14,7 @@ import {
 
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
@@ -21,8 +22,10 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxi-col',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxiColComponent extends CollectionNestedOption {
@@ -80,7 +83,7 @@ export class DxiColComponent extends CollectionNestedOption {
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiColComponent
   ],
   exports: [

@@ -17,6 +17,7 @@ import { DataSourceOptions } from 'devextreme/data/data_source';
 import { Store } from 'devextreme/data/store';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
@@ -24,8 +25,10 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxi-scheduler-resource',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxiSchedulerResourceComponent extends CollectionNestedOption {
@@ -115,7 +118,7 @@ export class DxiSchedulerResourceComponent extends CollectionNestedOption {
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiSchedulerResourceComponent
   ],
   exports: [

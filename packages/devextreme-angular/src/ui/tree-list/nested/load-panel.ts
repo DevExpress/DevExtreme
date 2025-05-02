@@ -17,6 +17,7 @@ import {
 import { Mode } from 'devextreme/common';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
@@ -24,8 +25,10 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-tree-list-load-panel',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxoTreeListLoadPanelComponent extends NestedOption implements OnDestroy, OnInit  {
@@ -127,7 +130,7 @@ export class DxoTreeListLoadPanelComponent extends NestedOption implements OnDes
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoTreeListLoadPanelComponent
   ],
   exports: [

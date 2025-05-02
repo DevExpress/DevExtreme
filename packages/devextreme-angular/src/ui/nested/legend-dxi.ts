@@ -17,6 +17,7 @@ import { DashStyle, Font } from 'devextreme/common/charts';
 import { VectorMapMarkerShape } from 'devextreme/viz/vector_map';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
@@ -24,8 +25,10 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxi-legend',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxiLegendComponent extends CollectionNestedOption {
@@ -251,7 +254,7 @@ export class DxiLegendComponent extends CollectionNestedOption {
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiLegendComponent
   ],
   exports: [

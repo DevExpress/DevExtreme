@@ -15,6 +15,7 @@ import {
 import { ChartsColor, DashStyle } from 'devextreme/common/charts';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
@@ -22,8 +23,10 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxi-pane',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxiPaneComponent extends CollectionNestedOption {
@@ -81,7 +84,7 @@ export class DxiPaneComponent extends CollectionNestedOption {
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiPaneComponent
   ],
   exports: [

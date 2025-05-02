@@ -19,6 +19,7 @@ import {
 
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxoFileManagerContextMenu } from './base/file-manager-context-menu';
@@ -28,8 +29,10 @@ import { DxiItemComponent } from './item-dxi';
 
 @Component({
     selector: 'dxo-context-menu',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost],
     inputs: [
         'commands',
@@ -80,7 +83,7 @@ export class DxoContextMenuComponent extends DxoFileManagerContextMenu implement
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoContextMenuComponent
   ],
   exports: [

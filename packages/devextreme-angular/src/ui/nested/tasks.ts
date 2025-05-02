@@ -18,6 +18,7 @@ import { Store } from 'devextreme/data';
 import DataSource, { Options as DataSourceOptions } from 'devextreme/data/data_source';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
@@ -25,8 +26,10 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-tasks',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxoTasksComponent extends NestedOption implements OnDestroy, OnInit  {
@@ -120,7 +123,7 @@ export class DxoTasksComponent extends NestedOption implements OnDestroy, OnInit
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoTasksComponent
   ],
   exports: [

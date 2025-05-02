@@ -30,6 +30,7 @@ import { PositionAlignment } from 'devextreme/common';
 import { dxPopupToolbarItem } from 'devextreme/ui/popup';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
@@ -38,8 +39,10 @@ import { DxiAutocompleteToolbarItemComponent } from './toolbar-item-dxi';
 
 @Component({
     selector: 'dxo-autocomplete-drop-down-options',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxoAutocompleteDropDownOptionsComponent extends NestedOption implements OnDestroy, OnInit  {
@@ -504,7 +507,7 @@ export class DxoAutocompleteDropDownOptionsComponent extends NestedOption implem
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoAutocompleteDropDownOptionsComponent
   ],
   exports: [

@@ -18,6 +18,7 @@ import { Font } from 'devextreme/common/charts';
 import { HorizontalAlignment, VerticalEdge } from 'devextreme/common';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
@@ -25,8 +26,10 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-vector-map-legend-title',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxoVectorMapLegendTitleComponent extends NestedOption implements OnDestroy, OnInit  {
@@ -112,7 +115,7 @@ export class DxoVectorMapLegendTitleComponent extends NestedOption implements On
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoVectorMapLegendTitleComponent
   ],
   exports: [

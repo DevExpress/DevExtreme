@@ -54,8 +54,10 @@ import { DxiValidationSummaryItemComponent } from 'devextreme-angular/ui/validat
  */
 @Component({
     selector: 'dx-validation-summary',
+    standalone: true,
     template: '',
     host: { ngSkipHydration: 'true' },
+    imports: [ DxIntegrationModule ],
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -294,13 +296,11 @@ export class DxValidationSummaryComponent<TItem = any, TKey = any> extends DxCom
 
 @NgModule({
   imports: [
+    DxValidationSummaryComponent,
     DxiItemModule,
     DxiValidationSummaryItemModule,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxValidationSummaryComponent
   ],
   exports: [
     DxValidationSummaryComponent,
@@ -310,6 +310,8 @@ export class DxValidationSummaryComponent<TItem = any, TKey = any> extends DxCom
   ]
 })
 export class DxValidationSummaryModule { }
+
+export * from 'devextreme-angular/ui/validation-summary/nested';
 
 import type * as DxValidationSummaryTypes from "devextreme/ui/validation_summary_types";
 export { DxValidationSummaryTypes };

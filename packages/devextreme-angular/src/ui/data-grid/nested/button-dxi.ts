@@ -20,6 +20,7 @@ import dxDataGrid from 'devextreme/ui/data_grid';
 import { dxDataGridColumn, dxDataGridRowObject, DataGridPredefinedColumnButton, ColumnButtonClickEvent } from 'devextreme/ui/data_grid';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
     extractTemplate,
     DxTemplateDirective,
@@ -31,8 +32,10 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxi-data-grid-button',
+    standalone: true,
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost, DxTemplateHost]
 })
 export class DxiDataGridButtonComponent extends CollectionNestedOption implements AfterViewInit,
@@ -143,7 +146,7 @@ export class DxiDataGridButtonComponent extends CollectionNestedOption implement
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiDataGridButtonComponent
   ],
   exports: [

@@ -16,6 +16,7 @@ import {
 
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
@@ -23,8 +24,10 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-chart-minor-tick',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxoChartMinorTickComponent extends NestedOption implements OnDestroy, OnInit  {
@@ -102,7 +105,7 @@ export class DxoChartMinorTickComponent extends NestedOption implements OnDestro
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoChartMinorTickComponent
   ],
   exports: [

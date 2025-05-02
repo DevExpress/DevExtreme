@@ -30,6 +30,7 @@ import { PositionAlignment } from 'devextreme/common';
 import { dxPopupToolbarItem } from 'devextreme/ui/popup';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
@@ -38,8 +39,10 @@ import { DxiTreeListToolbarItemComponent } from './toolbar-item-dxi';
 
 @Component({
     selector: 'dxo-tree-list-filter-builder-popup',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxoTreeListFilterBuilderPopupComponent extends NestedOption implements OnDestroy, OnInit  {
@@ -504,7 +507,7 @@ export class DxoTreeListFilterBuilderPopupComponent extends NestedOption impleme
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoTreeListFilterBuilderPopupComponent
   ],
   exports: [

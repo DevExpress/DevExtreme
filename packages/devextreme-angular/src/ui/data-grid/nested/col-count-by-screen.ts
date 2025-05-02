@@ -16,6 +16,7 @@ import {
 
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
@@ -23,8 +24,10 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-data-grid-col-count-by-screen',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxoDataGridColCountByScreenComponent extends NestedOption implements OnDestroy, OnInit  {
@@ -86,7 +89,7 @@ export class DxoDataGridColCountByScreenComponent extends NestedOption implement
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoDataGridColCountByScreenComponent
   ],
   exports: [

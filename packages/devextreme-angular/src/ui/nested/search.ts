@@ -16,6 +16,7 @@ import {
 
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxoColumnChooserSearchConfig } from './base/column-chooser-search-config';
@@ -23,8 +24,10 @@ import { DxoColumnChooserSearchConfig } from './base/column-chooser-search-confi
 
 @Component({
     selector: 'dxo-search',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost],
     inputs: [
         'editorOptions',
@@ -61,7 +64,7 @@ export class DxoSearchComponent extends DxoColumnChooserSearchConfig implements 
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoSearchComponent
   ],
   exports: [

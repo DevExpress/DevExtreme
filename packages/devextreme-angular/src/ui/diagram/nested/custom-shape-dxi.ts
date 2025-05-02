@@ -22,6 +22,7 @@ import { DOCUMENT } from '@angular/common';
 import { ShapeType } from 'devextreme/ui/diagram';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
     extractTemplate,
     DxTemplateDirective,
@@ -34,8 +35,10 @@ import { DxiDiagramConnectionPointComponent } from './connection-point-dxi';
 
 @Component({
     selector: 'dxi-diagram-custom-shape',
+    standalone: true,
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost, DxTemplateHost]
 })
 export class DxiDiagramCustomShapeComponent extends CollectionNestedOption implements AfterViewInit,
@@ -386,7 +389,7 @@ export class DxiDiagramCustomShapeComponent extends CollectionNestedOption imple
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiDiagramCustomShapeComponent
   ],
   exports: [

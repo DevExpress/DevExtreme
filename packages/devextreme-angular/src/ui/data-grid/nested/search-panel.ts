@@ -18,6 +18,7 @@ import {
 
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
@@ -25,8 +26,10 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-data-grid-search-panel',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxoDataGridSearchPanelComponent extends NestedOption implements OnDestroy, OnInit  {
@@ -123,7 +126,7 @@ export class DxoDataGridSearchPanelComponent extends NestedOption implements OnD
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoDataGridSearchPanelComponent
   ],
   exports: [

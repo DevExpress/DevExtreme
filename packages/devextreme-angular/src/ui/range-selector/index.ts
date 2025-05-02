@@ -197,9 +197,11 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
  */
 @Component({
     selector: 'dx-range-selector',
+    standalone: true,
     template: '',
     styles: [ ' :host {  display: block; }'],
     host: { ngSkipHydration: 'true' },
+    imports: [ DxIntegrationModule ],
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -908,6 +910,7 @@ export class DxRangeSelectorComponent extends DxComponent implements OnDestroy, 
 
 @NgModule({
   imports: [
+    DxRangeSelectorComponent,
     DxoBackgroundModule,
     DxoImageModule,
     DxoBehaviorModule,
@@ -1040,9 +1043,6 @@ export class DxRangeSelectorComponent extends DxComponent implements OnDestroy, 
     DxoRangeSelectorWidthModule,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxRangeSelectorComponent
   ],
   exports: [
     DxRangeSelectorComponent,
@@ -1180,6 +1180,8 @@ export class DxRangeSelectorComponent extends DxComponent implements OnDestroy, 
   ]
 })
 export class DxRangeSelectorModule { }
+
+export * from 'devextreme-angular/ui/range-selector/nested';
 
 import type * as DxRangeSelectorTypes from "devextreme/viz/range_selector_types";
 export { DxRangeSelectorTypes };

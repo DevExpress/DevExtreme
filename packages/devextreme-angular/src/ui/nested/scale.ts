@@ -24,6 +24,7 @@ import { CircularGaugeElementOrientation, CircularGaugeLabelOverlap } from 'deve
 import { AxisScale } from 'devextreme/viz/range_selector';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
@@ -32,8 +33,10 @@ import { DxiBreakComponent } from './break-dxi';
 
 @Component({
     selector: 'dxo-scale',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxoScaleComponent extends NestedOption implements OnDestroy, OnInit  {
@@ -359,7 +362,7 @@ export class DxoScaleComponent extends NestedOption implements OnDestroy, OnInit
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoScaleComponent
   ],
   exports: [

@@ -101,8 +101,10 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
  */
 @Component({
     selector: 'dx-date-box',
+    standalone: true,
     template: '',
     host: { ngSkipHydration: 'true' },
+    imports: [ DxIntegrationModule ],
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -1598,6 +1600,7 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
 
 @NgModule({
   imports: [
+    DxDateBoxComponent,
     DxiButtonModule,
     DxoOptionsModule,
     DxoCalendarOptionsModule,
@@ -1633,9 +1636,6 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
     DxiDateBoxToolbarItemModule,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxDateBoxComponent
   ],
   exports: [
     DxDateBoxComponent,
@@ -1676,6 +1676,8 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
   ]
 })
 export class DxDateBoxModule { }
+
+export * from 'devextreme-angular/ui/date-box/nested';
 
 import type * as DxDateBoxTypes from "devextreme/ui/date_box_types";
 export { DxDateBoxTypes };

@@ -16,6 +16,7 @@ import {
 
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxoChartCommonSeriesSettings } from './base/chart-common-series-settings';
@@ -23,8 +24,10 @@ import { DxoChartCommonSeriesSettings } from './base/chart-common-series-setting
 
 @Component({
     selector: 'dxo-stackedbar',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost],
     inputs: [
         'aggregation',
@@ -118,7 +121,7 @@ export class DxoStackedbarComponent extends DxoChartCommonSeriesSettings impleme
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoStackedbarComponent
   ],
   exports: [
