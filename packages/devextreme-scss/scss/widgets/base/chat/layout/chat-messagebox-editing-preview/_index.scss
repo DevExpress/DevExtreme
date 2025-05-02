@@ -1,0 +1,30 @@
+.dx-chat-editing-preview {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.dx-chat-editing-preview-content {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  flex-basis: 0;
+  min-width: 0;
+}
+
+.dx-chat-editing-preview::before {
+  content: '';
+  height: 100%;
+  border-radius: 999em;
+  position: absolute;
+}
+
+.dx-chat-editing-preview-caption {
+  font-weight: 500;
+}
+
+.dx-chat-editing-preview-text {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}

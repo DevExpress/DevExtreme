@@ -6,16 +6,17 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { isDefined } from '@js/core/utils/type';
 import DataHelperMixin from '@js/data_helper';
+import type dxChat from '@js/ui/chat';
 import type {
   Message,
   MessageDeletedEvent,
   MessageDeletingEvent,
+  MessageEditingStartEvent,
   MessageEnteredEvent,
   Properties,
   TypingEndEvent,
   TypingStartEvent,
 } from '@js/ui/chat';
-import type dxChat from '@js/ui/chat';
 import { invokeConditionally } from '@ts/core/utils/conditional_invoke';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
@@ -45,6 +46,8 @@ class Chat extends Widget<Properties> {
 
   _alertList!: AlertList;
 
+  _messageToEdit: Message | null = null;
+
   _deleteConfirmationPopup!: ConfirmationPopup;
 
   _messageToDelete?: Message;
@@ -55,7 +58,9 @@ class Chat extends Widget<Properties> {
 
   _typingEndAction?: (e: Partial<TypingEndEvent>) => void;
 
-  _messageEditingStartAction?: (e: Partial<MessageEnteredEvent>) => void;
+  _messageEditingStartAction?: (e: Partial<MessageEditingStartEvent>) => void;
+
+  _messageEditCanceledAction?: (e: Partial<MessageEnteredEvent>) => void;
 
   _messageDeletingAction?: (e: Partial<MessageDeletingEvent>) => void;
 
@@ -88,6 +93,7 @@ class Chat extends Widget<Properties> {
       onTypingStart: undefined,
       onTypingEnd: undefined,
       onMessageEditingStart: undefined,
+      onMessageEditCanceled: undefined,
       onMessageDeleting: undefined,
       onMessageDeleted: undefined,
     };
@@ -103,6 +109,7 @@ class Chat extends Widget<Properties> {
 
     this._createMessageEnteredAction();
     this._createMessageEditingStartAction();
+    this._createMessageEditCanceledAction();
     this._createMessageDeletingAction();
     this._createMessageDeletedAction();
     this._createTypingStartAction();
@@ -184,6 +191,7 @@ class Chat extends Widget<Properties> {
       currentUserId,
       allowUpdating: (message: Message): boolean => this._allowEditAction(message),
       allowDeleting: (message: Message): boolean => this._allowDeleteAction(message),
+      isEditActionDisabled: (message) => this._messageToEdit === message,
       messageTemplate: this._getMessageTemplate(),
       showDayHeaders,
       showAvatar,
@@ -199,7 +207,7 @@ class Chat extends Widget<Properties> {
       onMessageDeleting: (e) => {
         this._messageDeletingHandler(e);
       },
-      onKeyHandled: () => {
+      onContextMenuHidden: () => {
         this.focus();
       },
     };
@@ -261,9 +269,31 @@ class Chat extends Widget<Properties> {
   }
 
   _messageEditingStartHandler(e: MessageEditingEvent): void {
-    const { message, event } = e;
+    if (this._messageToEdit) {
+      this._messageEditCanceledAction?.({ message: this._messageToEdit });
+    }
 
-    this._messageEditingStartAction?.({ message, event });
+    const messageEditingStartArgs = {
+      message: e.message,
+      cancel: false,
+    };
+
+    this._messageEditingStartAction?.(messageEditingStartArgs);
+
+    invokeConditionally(
+      messageEditingStartArgs.cancel,
+      () => {
+        this._messageBox.option('text', e.message.text);
+        this._messageToEdit = e.message;
+      },
+    );
+  }
+
+  _messageEditCanceledHandler(): void {
+    if (this._messageToEdit) {
+      this._messageEditCanceledAction?.({ message: this._messageToEdit });
+      this._messageToEdit = null;
+    }
   }
 
   _showDeleteConfirmationPopup(e: Pick<MessageDeletingEvent, 'message'>): void {
@@ -344,6 +374,9 @@ class Chat extends Widget<Properties> {
       onTypingEnd: () => {
         this._typingEndHandler();
       },
+      onMessageEditCanceled: () => {
+        this._messageEditCanceledHandler();
+      },
     };
 
     this._messageBox = this._createComponent($messageBox, MessageBox, configuration);
@@ -374,6 +407,13 @@ class Chat extends Widget<Properties> {
   _createMessageEditingStartAction(): void {
     this._messageEditingStartAction = this._createActionByOption(
       'onMessageEditingStart',
+      { excludeValidators: ['disabled'] },
+    );
+  }
+
+  _createMessageEditCanceledAction(): void {
+    this._messageEditCanceledAction = this._createActionByOption(
+      'onMessageEditCanceled',
       { excludeValidators: ['disabled'] },
     );
   }
@@ -484,6 +524,9 @@ class Chat extends Widget<Properties> {
         break;
       case 'onMessageEditingStart':
         this._createMessageEditingStartAction();
+        break;
+      case 'onMessageEditCanceled':
+        this._createMessageEditCanceledAction();
         break;
       case 'onMessageDeleting':
         this._createMessageDeletingAction();

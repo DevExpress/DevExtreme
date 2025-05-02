@@ -77,6 +77,7 @@ export interface Properties extends WidgetOptions<MessageList> {
   items: Message[];
   allowUpdating: ((message: Message) => boolean);
   allowDeleting: ((message: Message) => boolean);
+  isEditActionDisabled: ((message: Message) => boolean);
   currentUserId: number | string | undefined;
   showDayHeaders: boolean;
   messageTemplate?: MessageTemplate;
@@ -89,7 +90,7 @@ export interface Properties extends WidgetOptions<MessageList> {
   showMessageTimestamp: boolean;
   onMessageEditingStart?: (e: MessageEditingEvent) => void;
   onMessageDeleting?: (e: MessageEditingEvent) => void;
-  onKeyHandled?: (e: KeyboardEvent) => void;
+  onContextMenuHidden?: () => void;
 }
 
 class MessageList extends Widget<Properties> {
@@ -112,6 +113,7 @@ class MessageList extends Widget<Properties> {
       ...super._getDefaultOptions(),
       allowUpdating: () => false,
       allowDeleting: () => false,
+      isEditActionDisabled: () => false,
       items: [],
       currentUserId: '',
       showDayHeaders: true,
@@ -266,6 +268,7 @@ class MessageList extends Widget<Properties> {
     const {
       allowUpdating,
       allowDeleting,
+      isEditActionDisabled,
       onMessageEditingStart,
       onMessageDeleting,
     } = this.option();
@@ -279,6 +282,7 @@ class MessageList extends Widget<Properties> {
       buttons.push({
         icon: 'edit',
         text: editText,
+        disabled: isEditActionDisabled(message),
         onClick(e: ItemClick): void {
           onMessageEditingStart?.({ event: e.event, message });
         },
@@ -305,6 +309,7 @@ class MessageList extends Widget<Properties> {
       onShowing: (e) => {
         this._onContextMenuShowing(e);
       },
+      onHidden: this.option('onContextMenuHidden'),
       elementAttr: {
         class: CHAT_MESSAGELIST_CONTEXT_MENU_CLASS,
       },
@@ -315,12 +320,9 @@ class MessageList extends Widget<Properties> {
       boundaryOffset: { h: 16 },
     });
 
-    this._contextMenu.registerKeyHandler(ESCAPE_KEY, (event: KeyboardEvent) => {
+    this._contextMenu.registerKeyHandler(ESCAPE_KEY, () => {
       // eslint-disable-next-line @typescript-eslint/no-floating-promises
       this._contextMenu.hide();
-
-      const { onKeyHandled } = this.option();
-      onKeyHandled?.(event);
     });
 
     $contextMenu.appendTo(this.$element());
@@ -347,6 +349,7 @@ class MessageList extends Widget<Properties> {
     }
 
     e.component.option('items', items);
+    e.element.focus();
   }
 
   _renderScrollView(): void {
