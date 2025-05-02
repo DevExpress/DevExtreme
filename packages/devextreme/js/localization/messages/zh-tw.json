@@ -374,6 +374,7 @@
         "dxChat-typingMessageMultipleUsers": "{0} and others are typing...",
         "dxChat-editingEditMessage": "編輯",
         "dxChat-editingDeleteMessage": "刪除",
+        "dxChat-editingDeleteConfirmText": "Are you sure you want to delete this message?",
 
         "dxColorView-ariaRed": "紅色",
         "dxColorView-ariaGreen": "綠色",

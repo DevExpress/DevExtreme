@@ -374,6 +374,7 @@
         "dxChat-typingMessageMultipleUsers": "{0} and others are typing...",
         "dxChat-editingEditMessage": "Modificar",
         "dxChat-editingDeleteMessage": "Eliminar",
+        "dxChat-editingDeleteConfirmText": "Are you sure you want to delete this message?",
 
         "dxColorView-ariaRed": "Rojo",
         "dxColorView-ariaGreen": "Verde",

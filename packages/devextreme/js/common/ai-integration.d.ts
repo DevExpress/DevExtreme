@@ -27,11 +27,6 @@ export type RequestParams = {
    * @public
    */
   prompt: Prompt;
-  /**
-   * @docid
-   * @public
-   */
-  onChunk: (chunk: string) => void;
 };
 
 /**

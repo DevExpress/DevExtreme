@@ -24,6 +24,8 @@ import {
   updateItemsImmutable,
 } from './utils';
 
+const FILTER_OBJ_COMPARE_DEPTH = 6;
+
 export class DataController {
   private readonly pendingLocalOperations = {};
 
@@ -210,7 +212,14 @@ export class DataController {
           someParamChanged ||= true;
         }
 
-        if (!equalByValue(dataSource.filter(), displayFilter)) {
+        if (!equalByValue(
+          dataSource.filter(),
+          displayFilter,
+          {
+            maxDepth: FILTER_OBJ_COMPARE_DEPTH,
+            strict: true,
+          },
+        )) {
           dataSource.filter(displayFilter ?? null);
           someParamChanged ||= true;
         }

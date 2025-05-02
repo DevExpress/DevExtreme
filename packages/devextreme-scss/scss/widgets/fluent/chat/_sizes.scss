@@ -2,6 +2,7 @@
 @use "../textEditor/colors" as *;
 @use "../common/sizes" as *;
 @use "../sizes" as *;
+@use "../popup/sizes" as *;
 
 // adduse
 
@@ -50,6 +51,11 @@ $chat-typingindicator-circle-size: null !default;
 $chat-typingindicator-circle-size-center: null !default;
 $chat-typingindicator-circle-border-radius: 999em !default;
 
+$chat-confirmation-popup-content-padding: $fluent-popup-content-vertical-padding !default;
+$chat-confirmation-popup-toolbar-padding-block: $fluent-popup-content-withtitle-bottom-padding !default;
+$chat-confirmation-popup-toolbar-padding-inline: $fluent-popup-content-withtitle-top-padding !default;
+$chat-confirmation-popup-toolbar-gap: null !default;
+
 @if $size == "default" {
   $chat-bubble-border-radius: $fluent-base-border-radius * 3 !default;
   $chat-bubble-padding: 8px 12px !default;
@@ -74,6 +80,8 @@ $chat-typingindicator-circle-border-radius: 999em !default;
   $chat-typingindicator-bubble-padding-inline: 20px !default;
   $chat-typingindicator-padding: $chat-messagegroup-padding !default;
   $chat-typingindicator-bubble-border-radius: $chat-bubble-border-radius !default;
+
+  $chat-confirmation-popup-toolbar-gap: 16px !default;
 }
 
 @else if $size == "compact" {
@@ -100,4 +108,6 @@ $chat-typingindicator-circle-border-radius: 999em !default;
   $chat-typingindicator-bubble-padding-inline: 12px !default;
   $chat-typingindicator-padding: $chat-messagegroup-padding !default;
   $chat-typingindicator-bubble-border-radius: $chat-bubble-border-radius !default;
+
+  $chat-confirmation-popup-toolbar-gap: 8px !default;
 }
