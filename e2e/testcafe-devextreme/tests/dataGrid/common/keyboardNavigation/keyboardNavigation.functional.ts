@@ -4898,7 +4898,7 @@ const getDataGridProps = () => ({
 });
 
 // T1285421
-test.only('Multiple DataGrids - Ctrl+Down from filter row should focus data row in the same grid', async (t) => {
+test.only('Multiple DataGrids - Ctrl+Up/Down from filter row should focus data row in the same grid', async (t) => {
   const firstGrid = new DataGrid('#container');
   const secondGrid = new DataGrid('#otherContainer');
 
@@ -4917,18 +4917,17 @@ test.only('Multiple DataGrids - Ctrl+Down from filter row should focus data row 
   const secondGridDataCell = secondGrid.getDataRow(0).getDataCell(0);
 
   await t
-    .click(secondGrid.getDataRow(0).getDataCell(0).element)
+    .click(secondGridDataCell.element)
     .pressKey('ctrl+up')
-    // eslint-disable-next-line max-len
-    .expect(secondDataGridFilterCell)
-    .ok('Filter cell input is focused')
+    .expect(secondDataGridFilterCell.element.focused)
+    .ok('Second grid filter cell is focused')
     .expect(firstDataGridFilterCell.element.focused)
-    .notOk('Filter cell input in the first grid is not focused')
+    .notOk('First grid data filter cell is not focused')
     .pressKey('ctrl+down')
-    .expect(firstGridDataCell.element.focused)
-    .ok('Data cell in the second grid is focused')
     .expect(secondGridDataCell.element.focused)
-    .notOk('Data cell in the first grid is not focused');
+    .ok('Second grid data cell is focused')
+    .expect(firstGridDataCell.element.focused)
+    .notOk('First grid data cell is not focused');
 }).before(async () => {
   await createWidget('dxDataGrid', getDataGridProps());
   await createWidget('dxDataGrid', getDataGridProps(), '#otherContainer');
