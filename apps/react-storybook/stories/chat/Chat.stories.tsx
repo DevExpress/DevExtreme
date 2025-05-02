@@ -21,6 +21,8 @@ import { Popup } from 'devextreme-react/popup';
 import HTMLReactParser from 'html-react-parser';
 
 import './styles.css';
+import { Guid } from 'devextreme-react/cjs/common';
+import { Message } from 'devextreme/artifacts/npm/devextreme/ui/chat';
 
 const meta: Meta<typeof Chat> = {
     title: 'Components/Chat',
@@ -344,6 +346,9 @@ export const PopupIntegration: Story = {
                 visible={true}
                 showCloseButton={false}
                 title="Chat title"
+                wrapperAttr={{
+                    class: 'chat-popup-integration'
+                }}
                 position={{
                     my: 'right bottom',
                     at: 'right bottom',
@@ -588,3 +593,118 @@ export const AIBotIntegration: Story = {
         );
     }
 }
+
+export const Editing: Story = {
+    args: {
+        user: firstAuthor,
+        activeStateEnabled: true,
+        hoverStateEnabled: true,
+        focusStateEnabled: true,
+        width: "600px",
+        height: "600px",
+        allowDeleting: true,
+        allowUpdating: true,
+        useCustomMessageRender: false, // добавлено
+    },
+    argTypes: {
+        user: {
+            control: 'select',
+            options: [firstAuthor.name, secondAuthor.name],
+            mapping: {
+                [firstAuthor.name]: firstAuthor,
+                [secondAuthor.name]: secondAuthor,
+            },
+            defaultValue: firstAuthor.name,
+        },
+        useCustomMessageRender: {
+            control: 'boolean',
+            name: 'Use Custom Message Renderer',
+        },
+    },
+    render: ({
+        width,
+        height,
+        user,
+        activeStateEnabled,
+        hoverStateEnabled,
+        focusStateEnabled,
+        allowDeleting,
+        allowUpdating,
+        useCustomMessageRender, // добавлено
+    }) => {
+        const messages = [...initialMessages];
+        messages.map(item => item.id = `dx-${new Guid()}`);
+        messages[4].isDeleted = true;
+        messages[5].isDeleted = true;
+        messages[6].isDeleted = true;
+
+        const messagesRef = React.useRef([...messages]);
+
+        const dataSource = useMemo(() => new DataSource({
+            store: new CustomStore({
+                load: () => new Promise(resolve => setTimeout(() => resolve([...messagesRef.current]), 500)),
+                insert: (message) => {
+                    message.id = `dx-${new Guid()}`;
+                    messagesRef.current.push(message);
+                    return new Promise<void>(resolve => setTimeout(resolve, 200));
+                },
+                key: 'id',
+            }),
+            paginate: false,
+        }), []);
+
+        const onUndoClick = useCallback((message: Message) => {
+            const store = dataSource.store();
+            console.log('3');
+            store.push([{ type: 'update', key: message.id, data: { isDeleted: false, text: message.text } }]);
+        }, [dataSource]);
+
+        const messageRender = useCallback(({ message }) => {
+            if(message.isDeleted === true) {
+                return (
+                <div className="dx-chat-messagebubble-content dx-chat-messagebubble-deleted" style={{ display: 'flex', gap: 8 }}>
+                    <div className="dx-icon dx-icon-cursorprohibition"></div>
+                    <div>This message was deleted</div>
+                    <a href="#" onClick={(e) => {
+                        e.preventDefault();
+                        onUndoClick(message);
+                    }}>Undo</a>
+                </div>);
+            }
+
+            return <div>{message.text}</div>;
+        }, []);
+
+        return (
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                <Chat
+                    editing={{ allowDeleting, allowUpdating }}
+                    width={width}
+                    height={height}
+                    dataSource={dataSource}
+                    reloadOnChange={false}
+                    user={user}
+                    onMessageEntered={(e) => {
+                        e.component.getDataSource().store().push([{ type: 'insert', data: e.message }]);
+                    }}
+                    onMessageEditingStart={(e) => console.log('onMessageEditingStart', e)}
+                    onMessageEditCanceled={(e) => console.log('onMessageEditCancelled', e)}
+                    onMessageDeleting={(e) => console.log('onMessageDeleting', e)}
+                    onMessageDeleted={(e) => {
+                        console.log('onMessageDeleted', e);
+                        e.component.getDataSource().store().push([{ type: 'update', key: e.message.id, data: { isDeleted: true } }]);
+                    }}
+                    onMessageUpdating={(e) => console.log('onMessageUpdating', e)}
+                    onMessageUpdated={(e) => {
+                        console.log('onMessageUpdated', e);
+                        e.component.getDataSource().store().push([{ type: 'update', key: e.message.id, data: { text: e.text } }]);
+                    }}
+                    activeStateEnabled={activeStateEnabled}
+                    focusStateEnabled={focusStateEnabled}
+                    hoverStateEnabled={hoverStateEnabled}
+                    {...(useCustomMessageRender && { messageRender })} 
+                />
+            </div>
+        );
+    }
+};
