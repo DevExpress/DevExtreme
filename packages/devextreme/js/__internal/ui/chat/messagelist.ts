@@ -588,6 +588,12 @@ class MessageList extends Widget<Properties> {
 
       const bubble = MessageBubble.getInstance($targetMessage);
       bubble.option('text', data.text);
+
+      const $currentMessageGroup = $targetMessage.closest(`.${CHAT_MESSAGEGROUP_CLASS}`);
+      const group: MessageGroup = MessageGroup.getInstance($currentMessageGroup);
+      const isEdited = data.isEdited === true && !data.isDeleted;
+
+      group._updateMessageEditedText($targetMessage, isEdited);
     }
   }
 
