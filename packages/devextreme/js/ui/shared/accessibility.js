@@ -81,7 +81,7 @@ function getActiveAccessibleElements(ariaLabel, viewElement) {
 }
 
 function findFocusedViewElement(rootElement, viewSelectors, element) {
-    const root = rootElement || element?.getRootNode() || domAdapter.getDocument();
+    const root = rootElement ?? element?.getRootNode() ?? domAdapter.getDocument();
 
     if(!root) { return; }
 
