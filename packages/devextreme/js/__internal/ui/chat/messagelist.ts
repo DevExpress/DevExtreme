@@ -90,7 +90,7 @@ export interface Properties extends WidgetOptions<MessageList> {
   showMessageTimestamp: boolean;
   onMessageEditingStart?: (e: MessageEditingEvent) => void;
   onMessageDeleting?: (e: MessageEditingEvent) => void;
-  onContextMenuHidden?: () => void;
+  onEscapeKeyPressed?: (e: KeyboardEvent) => void;
 }
 
 class MessageList extends Widget<Properties> {
@@ -283,7 +283,7 @@ class MessageList extends Widget<Properties> {
         icon: 'edit',
         text: editText,
         disabled: isEditActionDisabled(message),
-        onClick(e: ItemClick): void {
+        onClick: (e: ItemClick): void => {
           onMessageEditingStart?.({ event: e.event, message });
         },
       });
@@ -309,20 +309,22 @@ class MessageList extends Widget<Properties> {
       onShowing: (e) => {
         this._onContextMenuShowing(e);
       },
-      onHidden: this.option('onContextMenuHidden'),
       elementAttr: {
         class: CHAT_MESSAGELIST_CONTEXT_MENU_CLASS,
       },
       cssClass: CHAT_MESSAGELIST_CONTEXT_MENU_CONTENT_CLASS,
       hideOnParentScroll: false,
-      overlayContainer: this._scrollView.content(),
+      overlayContainer: this._scrollView.container(),
       visualContainer: this._scrollView.container(),
       boundaryOffset: { h: 16 },
     });
 
-    this._contextMenu.registerKeyHandler(ESCAPE_KEY, () => {
+    this._contextMenu.registerKeyHandler(ESCAPE_KEY, (event: KeyboardEvent) => {
       // eslint-disable-next-line @typescript-eslint/no-floating-promises
       this._contextMenu.hide();
+
+      const { onEscapeKeyPressed } = this.option();
+      onEscapeKeyPressed?.(event);
     });
 
     $contextMenu.appendTo(this.$element());

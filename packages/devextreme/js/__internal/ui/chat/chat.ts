@@ -13,6 +13,8 @@ import type {
   MessageDeletingEvent,
   MessageEditingStartEvent,
   MessageEnteredEvent,
+  MessageUpdatedEvent,
+  MessageUpdatingEvent,
   Properties,
   TypingEndEvent,
   TypingStartEvent,
@@ -46,7 +48,7 @@ class Chat extends Widget<Properties> {
 
   _alertList!: AlertList;
 
-  _messageToEdit: Message | null = null;
+  _messageToEdit?: Message;
 
   _deleteConfirmationPopup!: ConfirmationPopup;
 
@@ -65,6 +67,10 @@ class Chat extends Widget<Properties> {
   _messageDeletingAction?: (e: Partial<MessageDeletingEvent>) => void;
 
   _messageDeletedAction?: (e: Partial<MessageDeletedEvent>) => void;
+
+  _messageUpdatingAction?: (e: Partial<MessageUpdatingEvent>) => void;
+
+  _messageUpdatedAction?: (e: Partial<MessageUpdatedEvent>) => void;
 
   _getDefaultOptions(): Properties {
     return {
@@ -112,6 +118,8 @@ class Chat extends Widget<Properties> {
     this._createMessageEditCanceledAction();
     this._createMessageDeletingAction();
     this._createMessageDeletedAction();
+    this._createMessageUpdatingAction();
+    this._createMessageUpdatedAction();
     this._createTypingStartAction();
     this._createTypingEndAction();
   }
@@ -207,7 +215,7 @@ class Chat extends Widget<Properties> {
       onMessageDeleting: (e) => {
         this._messageDeletingHandler(e);
       },
-      onContextMenuHidden: () => {
+      onEscapeKeyPressed: () => {
         this.focus();
       },
     };
@@ -292,7 +300,7 @@ class Chat extends Widget<Properties> {
   _messageEditCanceledHandler(): void {
     if (this._messageToEdit) {
       this._messageEditCanceledAction?.({ message: this._messageToEdit });
-      this._messageToEdit = null;
+      this._messageToEdit = undefined;
     }
   }
 
@@ -304,6 +312,12 @@ class Chat extends Widget<Properties> {
         this.$element(),
         {
           onApplyButtonClick: (): void => {
+            if (this._messageToEdit === this._messageToDelete) {
+              this._messageBox.option('text', '');
+              this._messageEditCanceledAction?.({ message: this._messageToEdit });
+              this._messageToEdit = undefined;
+            }
+
             this._messageDeletedAction?.({
               message: this._messageToDelete,
             });
@@ -334,6 +348,28 @@ class Chat extends Widget<Properties> {
       messageDeletingArgs.cancel,
       () => {
         this._showDeleteConfirmationPopup(messageDeletingArgs);
+      },
+    );
+  }
+
+  _messageUpdatingHandler(e: { text: string }): void {
+    const { text } = e;
+
+    const eventArgs: MessageUpdatingEvent = {
+      // @ts-expect-error
+      message: this._messageToEdit,
+      text,
+      cancel: false,
+    };
+
+    this._messageUpdatingAction?.(eventArgs);
+
+    invokeConditionally(
+      eventArgs.cancel,
+      () => {
+        this._messageBox.option('text', '');
+        this._messageUpdatedAction?.(eventArgs);
+        this._messageToEdit = undefined;
       },
     );
   }
@@ -376,6 +412,9 @@ class Chat extends Widget<Properties> {
       },
       onMessageEditCanceled: () => {
         this._messageEditCanceledHandler();
+      },
+      onMessageUpdating: (e) => {
+        this._messageUpdatingHandler(e);
       },
     };
 
@@ -428,6 +467,20 @@ class Chat extends Widget<Properties> {
   _createMessageDeletedAction(): void {
     this._messageDeletedAction = this._createActionByOption(
       'onMessageDeleted',
+      { excludeValidators: ['disabled'] },
+    );
+  }
+
+  _createMessageUpdatingAction(): void {
+    this._messageUpdatingAction = this._createActionByOption(
+      'onMessageUpdating',
+      { excludeValidators: ['disabled'] },
+    );
+  }
+
+  _createMessageUpdatedAction(): void {
+    this._messageUpdatedAction = this._createActionByOption(
+      'onMessageUpdated',
       { excludeValidators: ['disabled'] },
     );
   }
@@ -521,6 +574,12 @@ class Chat extends Widget<Properties> {
         break;
       case 'onMessageEntered':
         this._createMessageEnteredAction();
+        break;
+      case 'onMessageUpdating':
+        this._createMessageEditCanceledAction();
+        break;
+      case 'onMessageUpdated':
+        this._createMessageEditCanceledAction();
         break;
       case 'onMessageEditingStart':
         this._createMessageEditingStartAction();

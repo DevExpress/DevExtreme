@@ -8,17 +8,18 @@ import DOMComponent from '@ts/core/widget/dom_component';
 import type { OptionChanged } from '@ts/core/widget/types';
 
 export const CHAT_EDITING_PREVIEW_CLASS = 'dx-chat-editing-preview';
+export const CHAT_EDITING_PREVIEW_HIDING_CLASS = 'dx-chat-editing-preview-hiding';
 export const CHAT_EDITING_PREVIEW_CONTENT_CLASS = 'dx-chat-editing-preview-content';
 export const CHAT_EDITING_PREVIEW_CAPTION_CLASS = 'dx-chat-editing-preview-caption';
 export const CHAT_EDITING_PREVIEW_TEXT_CLASS = 'dx-chat-editing-preview-text';
 export const CHAT_EDITING_PREVIEW_CANCEL_BUTTON_CLASS = 'dx-chat-editing-preview-cancel-button';
 
-export interface Properties extends DOMComponentProperties<MessageBoxEditingPreview> {
+export interface Properties extends DOMComponentProperties<EditingPreview> {
   text?: string;
   onCancel?: (e: ClickEvent) => void;
 }
 
-class MessageBoxEditingPreview extends DOMComponent<MessageBoxEditingPreview, Properties> {
+class EditingPreview extends DOMComponent<EditingPreview, Properties> {
   _$messageText!: dxElementWrapper;
 
   _closeButton!: Button;
@@ -39,12 +40,14 @@ class MessageBoxEditingPreview extends DOMComponent<MessageBoxEditingPreview, Pr
 
   _initMarkup(): void {
     super._initMarkup();
-
     const { text } = this.option();
 
     if (text) {
       this._renderContent();
+      return;
     }
+
+    this._cleanContent();
   }
 
   _renderContent(): void {
@@ -86,7 +89,9 @@ class MessageBoxEditingPreview extends DOMComponent<MessageBoxEditingPreview, Pr
       type: 'normal',
       stylingMode: 'text',
       elementAttr: { 'aria-label': messageLocalization.format('dxChat-cancelEditingButtonAriaLabel') },
-      onClick: onCancel,
+      onClick: (e) => {
+        onCancel?.(e);
+      },
     });
   }
 
@@ -105,7 +110,11 @@ class MessageBoxEditingPreview extends DOMComponent<MessageBoxEditingPreview, Pr
       return;
     }
 
-    this._cleanContent();
+    this.$element().get(0).addEventListener('animationend', () => {
+      this._cleanContent();
+    }, { once: true });
+
+    this.$element().addClass(CHAT_EDITING_PREVIEW_HIDING_CLASS);
   }
 
   _cleanContent(): void {
@@ -114,11 +123,14 @@ class MessageBoxEditingPreview extends DOMComponent<MessageBoxEditingPreview, Pr
   }
 
   _optionChanged(args: OptionChanged<Properties>): void {
-    const { name, previousValue } = args;
+    const { name, value, previousValue } = args;
 
     switch (name) {
       case 'text':
         this._processTextUpdate(previousValue);
+        break;
+      case 'onCancel':
+        this._closeButton.option('onClick', value);
         break;
       default:
         super._optionChanged(args);
@@ -126,4 +138,4 @@ class MessageBoxEditingPreview extends DOMComponent<MessageBoxEditingPreview, Pr
   }
 }
 
-export default MessageBoxEditingPreview;
+export default EditingPreview;

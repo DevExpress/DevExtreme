@@ -6,7 +6,7 @@ import Button from '@js/ui/button';
 import type { Properties as DOMComponentProperties } from '@ts/core/widget/dom_component';
 import DOMComponent from '@ts/core/widget/dom_component';
 import type { OptionChanged } from '@ts/core/widget/types';
-import MessageBoxEditingPreview from '@ts/ui/chat/messagebox_editing_preview';
+import EditingPreview from '@ts/ui/chat/editing_preview';
 import TextArea from '@ts/ui/m_text_area';
 
 import type { EnterKeyEvent, InputEvent } from '../../../ui/text_area';
@@ -40,6 +40,8 @@ export interface Properties extends DOMComponentProperties<MessageBox> {
 
   onMessageEditCanceled?: () => void;
 
+  onMessageUpdating?: (e: { text: string }) => void;
+
   text?: string;
 }
 
@@ -48,7 +50,7 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
 
   _button!: Button;
 
-  _editingPreview!: MessageBoxEditingPreview | null;
+  _editingPreview!: EditingPreview | null;
 
   _messageEnteredAction?: (e: Partial<MessageEnteredEvent>) => void;
 
@@ -69,6 +71,7 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
       onTypingStart: undefined,
       onTypingEnd: undefined,
       onMessageEditCanceled: undefined,
+      onMessageUpdating: undefined,
       text: '',
     };
   }
@@ -105,7 +108,7 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
   _cancelMessageEdit(): void {
     const { onMessageEditCanceled } = this.option();
 
-    this.option('text', undefined);
+    this.option('text', '');
     this._textArea.focus();
     onMessageEditCanceled?.();
   }
@@ -114,7 +117,11 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
     const $editingPreview = $('<div>').prependTo(this.element());
     const { text } = this.option();
 
-    this._editingPreview = this._createComponent($editingPreview, MessageBoxEditingPreview, {
+    $editingPreview.get(0).addEventListener('animationend', () => {
+      this._textArea.focus();
+    }, { once: true });
+
+    this._editingPreview = this._createComponent($editingPreview, EditingPreview, {
       text,
       onCancel: () => this._cancelMessageEdit(),
     });
@@ -246,7 +253,17 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
     this._clearTypingEndTimeout();
     this._typingEndAction?.();
 
-    const { text } = this._textArea.option();
+    const { text = '' } = this._textArea.option();
+
+    const { text: previewText } = this.option();
+
+    if (previewText) {
+      const { onMessageUpdating } = this.option();
+
+      onMessageUpdating?.({ text });
+
+      return;
+    }
 
     this._textArea.reset();
     this._toggleButtonDisableState(true);

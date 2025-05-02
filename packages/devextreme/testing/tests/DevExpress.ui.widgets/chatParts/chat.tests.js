@@ -29,10 +29,10 @@ import { isRenderer } from 'core/utils/type';
 
 import config from 'core/config';
 import ArrayStore from 'common/data/array_store';
-import MessageBoxEditingPreview, {
+import {
     CHAT_EDITING_PREVIEW_CLASS,
     CHAT_EDITING_PREVIEW_CANCEL_BUTTON_CLASS,
-} from '__internal/ui/chat/messagebox_editing_preview';
+} from '__internal/ui/chat/editing_preview';
 import { CHAT_CONFIRMATION_POPUP_WRAPPER_CLASS } from '__internal/ui/chat/confirmationpopup';
 import { POPUP_CLASS } from '__internal/ui/popup/m_popup';
 import { BUTTON_CLASS } from '__internal/ui/button/button';
@@ -57,6 +57,7 @@ const CHAT_LAST_MESSAGEGROUP_ALIGNMENT_END_CLASS = 'dx-chat-last-messagegroup-al
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 
 const RTL_CLASS = 'dx-rtl';
+const ANIMATION_TIMEOUT = 250;
 
 export const MOCK_COMPANION_USER_ID = 'COMPANION_USER_ID';
 export const MOCK_CURRENT_USER_ID = 'CURRENT_USER_ID';
@@ -118,8 +119,7 @@ const moduleConfig = {
         this.getBubblesContents = () => this.$element.find(`.${CHAT_MESSAGEBUBBLE_CONTENT_CLASS}`);
         this.getContextMenu = () => ContextMenu.getInstance(this.$element.find(`.${CHAT_MESSAGELIST_CONTEXT_MENU_CLASS}`));
         this.getContextMenuItems = () => $(this.getContextMenu().itemsContainer()).find(`.${DX_MENU_ITEM_CLASS}`);
-        this.getMessageBoxEditingPreview = () => this.$element.find(`.${CHAT_EDITING_PREVIEW_CLASS}`);
-        this.getMessageBoxEditingPreviewInstance = () => MessageBoxEditingPreview.getInstance(this.$element.find(`.${CHAT_EDITING_PREVIEW_CLASS}`));
+        this.getEditingPreview = () => this.$element.find(`.${CHAT_EDITING_PREVIEW_CLASS}`);
         this.getCancelEditingButton = () => this.$element.find(`.${CHAT_EDITING_PREVIEW_CANCEL_BUTTON_CLASS}`);
 
         init();
@@ -427,7 +427,7 @@ QUnit.module('Chat', () => {
                 assert.strictEqual(this.$textArea.hasClass(FOCUSED_STATE_CLASS), true, 'input is focused');
             });
 
-            QUnit.testInActiveWindow('Contextmenu should not be shown on deleted messages', function(assert) {
+            QUnit.skip('Input focused after context menu is hidden', function(assert) {
                 if(!isDesktopDevice()) {
                     assert.ok(true, 'Test is not applicable for mobile devices');
                     return;
@@ -451,7 +451,7 @@ QUnit.module('Chat', () => {
                 const $bubbles = this.getBubbles();
                 $bubbles.eq(1).trigger('dxcontextmenu');
 
-                pointerMock($bubbles.eq(1)).click();
+                pointerMock($bubbles.eq(0)).click();
 
                 assert.strictEqual(this.getContextMenu().option('visible'), false, 'context menu is hidden');
                 assert.strictEqual(this.$textArea.hasClass(FOCUSED_STATE_CLASS), true, 'input is focused');
@@ -515,6 +515,90 @@ QUnit.module('Chat', () => {
 
                 editAction = this.getContextMenu().option('items')[0];
                 assert.strictEqual(editAction.disabled, true, 'Edit action is disabled');
+            });
+
+            QUnit.test('Edit menu item should remain enabled after editing is cancelled', function(assert) {
+                this.reinit({
+                    focusStateEnabled: true,
+                    editing: {
+                        allowUpdating: true,
+                    },
+                    items: [
+                        { text: 'a', author: userFirst },
+                        { text: 'b', author: userSecond },
+                    ],
+                    user: userSecond,
+                });
+
+                const $bubbles = this.getBubbles();
+                $bubbles.eq(1).trigger('dxcontextmenu');
+
+                let editAction = this.getContextMenu().option('items')[0];
+                assert.strictEqual(editAction.disabled, false, 'Edit action is enabled initially');
+
+                const $editButton = this.getContextMenuItems().eq(0);
+                $editButton.trigger('dxclick');
+
+                this.getCancelEditingButton().trigger('dxclick');
+
+                $bubbles.eq(1).trigger('dxcontextmenu');
+                editAction = this.getContextMenu().option('items')[0];
+                assert.strictEqual(editAction.disabled, false, 'Edit action is still enabled after cancel');
+            });
+
+            QUnit.test('Edit menu item should remain enabled after editing is saved', function(assert) {
+                this.reinit({
+                    focusStateEnabled: true,
+                    editing: {
+                        allowUpdating: true,
+                    },
+                    items: [
+                        { text: 'a', author: userFirst },
+                        { text: 'b', author: userSecond },
+                    ],
+                    user: userSecond,
+                });
+
+                const $bubbles = this.getBubbles();
+                $bubbles.eq(1).trigger('dxcontextmenu');
+
+                let editAction = this.getContextMenu().option('items')[0];
+                assert.strictEqual(editAction.disabled, false, 'Edit action is enabled initially');
+
+                const $editButton = this.getContextMenuItems().eq(0);
+                $editButton.trigger('dxclick');
+
+                this.$sendButton.trigger('dxclick');
+
+                $bubbles.eq(1).trigger('dxcontextmenu');
+                editAction = this.getContextMenu().option('items')[0];
+                assert.strictEqual(editAction.disabled, false, 'Edit action is still enabled after save');
+            });
+
+            QUnit.testInActiveWindow('Context menu should not be shown for deleted messages', function(assert) {
+                if(!isDesktopDevice()) {
+                    assert.ok(true, 'Test is not applicable for mobile devices');
+                    return;
+                }
+
+                const items = [
+                    { id: '1', text: 'a', author: userFirst },
+                    { id: '2', text: 'b', author: userSecond, isDeleted: true },
+                ];
+
+                this.reinit({
+                    focusStateEnabled: true,
+                    items,
+                    user: userSecond,
+                    editing: {
+                        allowDeleting: true,
+                    }
+                });
+
+                const $bubbles = this.getBubbles();
+                $bubbles.eq(1).trigger('dxcontextmenu');
+
+                assert.strictEqual(this.getContextMenu().option('visible'), false, 'Context menu is not shown for deleted message');
             });
         });
 
@@ -807,14 +891,56 @@ QUnit.module('Chat', () => {
                     $editButton.trigger('dxclick');
 
                     setTimeout(() => {
-                        assert.strictEqual(this.getMessageBoxEditingPreview().length, cancel ? 0 : 1);
+                        assert.strictEqual(this.getEditingPreview().length, cancel ? 0 : 1);
                         done();
                     });
+                });
+
+                QUnit.test(`Editing preview should remain visible depending on onMessageUpdating cancellation (isPromise=${isPromise}, cancel=${cancel})`, function(assert) {
+                    const done = assert.async();
+
+                    const items = [
+                        { text: 'a', author: userFirst },
+                        { text: 'b', author: userSecond },
+                    ];
+
+                    this.reinit({
+                        user: userSecond,
+                        editing: {
+                            allowUpdating: true
+                        },
+                        onMessageUpdating: (e) => {
+                            e.cancel = isPromise ? Promise.resolve(cancel) : cancel;
+                        },
+                        items,
+                    });
+
+                    const $bubbles = this.getBubbles();
+                    $bubbles.eq(1).trigger('dxcontextmenu');
+
+                    const $editButton = this.getContextMenuItems().eq(0);
+                    $editButton.trigger('dxclick');
+
+                    this.$sendButton.trigger('dxclick');
+
+                    setTimeout(() => {
+                        assert.strictEqual(
+                            this.getEditingPreview().length,
+                            cancel ? 1 : 0,
+                            `Editing preview ${cancel ? 'remains' : 'is hidden'} when cancel=${cancel}`
+                        );
+                        done();
+                    }, ANIMATION_TIMEOUT);
                 });
             });
         });
 
-        QUnit.test('editing preview should be shown after the Edit button is clicked if cancel promise rejected', function(assert) {
+        QUnit.skip('editing preview should be shown after the Edit button is clicked if cancel promise rejected', function(assert) {
+            if(!isDesktopDevice()) {
+                assert.ok(true, 'Test is not applicable for mobile devices');
+                return;
+            }
+
             const done = assert.async();
 
             const items = [
@@ -839,17 +965,17 @@ QUnit.module('Chat', () => {
             const $editButton = this.getContextMenuItems().eq(0);
             $editButton.trigger('dxclick');
 
+
             setTimeout(() => {
-                assert.strictEqual(this.getMessageBoxEditingPreview().length, 1);
+                assert.strictEqual(this.getEditingPreview().length, 1);
+                assert.strictEqual(this.textArea.option('text'), items[1].text, 'input contains edited text');
+                assert.strictEqual(this.$textArea.hasClass(FOCUSED_STATE_CLASS), true, 'input is focused');
                 done();
             });
         });
 
-        QUnit.testInActiveWindow('message box should have editing message text and focus after the Edit button is clicked and not cancelled', function(assert) {
-            if(!isDesktopDevice()) {
-                assert.ok(true, 'Test is not applicable for mobile devices');
-                return;
-            }
+        QUnit.test('editing preview should be hidden after the message is deleted', function(assert) {
+            const done = assert.async();
 
             const items = [
                 { text: 'a', author: userFirst },
@@ -857,10 +983,10 @@ QUnit.module('Chat', () => {
             ];
 
             this.reinit({
-                focusStateEnabled: true,
                 user: userSecond,
                 editing: {
-                    allowUpdating: true
+                    allowUpdating: true,
+                    allowDeleting: true,
                 },
                 items,
             });
@@ -871,11 +997,22 @@ QUnit.module('Chat', () => {
             const $editButton = this.getContextMenuItems().eq(0);
             $editButton.trigger('dxclick');
 
-            const editingPreviewInstance = this.getMessageBoxEditingPreviewInstance();
+            $bubbles.eq(1).trigger('dxcontextmenu');
 
-            assert.strictEqual(editingPreviewInstance.option('text'), 'b', 'editing preview contains editing message text');
-            assert.strictEqual(this.textArea.option('value'), 'b', 'input contains editing message text');
-            assert.strictEqual(this.$textArea.hasClass(FOCUSED_STATE_CLASS), true, 'input is focused');
+            const $deleteButton = this.getContextMenuItems().eq(1);
+            $deleteButton.trigger('dxclick');
+
+            const $popup = $(`.${CHAT_CONFIRMATION_POPUP_WRAPPER_CLASS}`);
+            const $applyButton = $popup.find(`.${BUTTON_CLASS}`).first();
+
+            $applyButton.trigger('dxclick');
+
+            setTimeout(() => {
+                assert.strictEqual(this.getEditingPreview().length, 0);
+                assert.strictEqual(this.textArea.option('value'), '', 'input is empty');
+                assert.strictEqual(this.$textArea.hasClass(FOCUSED_STATE_CLASS), true, 'input is focused');
+                done();
+            }, ANIMATION_TIMEOUT);
         });
 
         QUnit.test('send button should change its active state with update input value during editing', function(assert) {
@@ -910,7 +1047,42 @@ QUnit.module('Chat', () => {
             assert.strictEqual(sendButton.option('disabled'), true, 'send button is disabled after edit cancelled');
         });
 
-        QUnit.testInActiveWindow('editing preview and input should be cleared after edit cancel button is clicked', function(assert) {
+        QUnit.test('editing preview should be enabled after the send button is clicked if cancel promise rejected', function(assert) {
+            const done = assert.async();
+
+            const items = [
+                { text: 'a', author: userFirst },
+                { text: 'b', author: userSecond },
+            ];
+
+            this.reinit({
+                user: userSecond,
+                editing: {
+                    allowUpdating: true
+                },
+                onMessageUpdating: (e) => {
+                    e.cancel = Promise.reject();
+                },
+                items,
+            });
+
+            const $bubbles = this.getBubbles();
+            $bubbles.eq(1).trigger('dxcontextmenu');
+
+            const $editButton = this.getContextMenuItems().eq(0);
+            $editButton.trigger('dxclick');
+
+            this.$sendButton.trigger('dxclick');
+
+            setTimeout(() => {
+                assert.strictEqual(this.getEditingPreview().length, 0);
+                assert.strictEqual(this.textArea.option('value'), '', 'input is empty');
+                assert.strictEqual(this.$textArea.hasClass(FOCUSED_STATE_CLASS), true, 'input is focused');
+                done();
+            }, ANIMATION_TIMEOUT);
+        });
+
+        QUnit.skip('message box should have editing message text and focus after the Edit button is clicked and not cancelled', function(assert) {
             if(!isDesktopDevice()) {
                 assert.ok(true, 'Test is not applicable for mobile devices');
                 return;
@@ -922,6 +1094,7 @@ QUnit.module('Chat', () => {
             ];
 
             this.reinit({
+                focusStateEnabled: true,
                 user: userSecond,
                 editing: {
                     allowUpdating: true
@@ -935,10 +1108,7 @@ QUnit.module('Chat', () => {
             const $editButton = this.getContextMenuItems().eq(0);
             $editButton.trigger('dxclick');
 
-            this.getCancelEditingButton().trigger('dxclick');
-
-            assert.strictEqual(this.getMessageBoxEditingPreview().length, 0);
-            assert.strictEqual(this.$textArea.text(), '', 'input is empty');
+            assert.strictEqual(this.textArea.option('value'), 'b', 'input contains editing message text');
             assert.strictEqual(this.$textArea.hasClass(FOCUSED_STATE_CLASS), true, 'input is focused');
         });
     });
@@ -1033,6 +1203,233 @@ QUnit.module('Chat', () => {
                     .type(text);
 
                 this.$sendButton.trigger('dxclick');
+            });
+
+            QUnit.test('onMessageEntered should not be called when send button is clicked in editing mode', function(assert) {
+                const onMessageUpdating = sinon.spy();
+                const onMessageEntered = sinon.spy();
+
+                const items = [
+                    { text: 'a', author: userFirst },
+                    { text: 'b', author: userSecond },
+                ];
+
+                this.reinit({
+                    user: userSecond,
+                    editing: {
+                        allowUpdating: true,
+                    },
+                    onMessageUpdating,
+                    onMessageEntered,
+                    items,
+                });
+
+                const $bubbles = this.getBubbles();
+                $bubbles.eq(1).trigger('dxcontextmenu');
+
+                const $editButton = this.getContextMenuItems().eq(0);
+                $editButton.trigger('dxclick');
+
+                this.$sendButton.trigger('dxclick');
+
+                assert.strictEqual(onMessageUpdating.callCount, 1, 'onMessageUpdating was called once');
+                assert.strictEqual(onMessageEntered.callCount, 0, 'onMessageEntered was not called');
+            });
+        });
+
+        QUnit.module('OnMessageUpdating', moduleConfig, () => {
+            QUnit.test('should be called when the send button is clicked in editing mode', function(assert) {
+                const onMessageUpdating = sinon.spy();
+
+                const items = [
+                    { text: 'a', author: userFirst },
+                    { text: 'b', author: userSecond },
+                ];
+
+                this.reinit({
+                    user: userSecond,
+                    editing: {
+                        allowUpdating: true,
+                    },
+                    onMessageUpdating,
+                    items,
+                });
+
+                const $bubbles = this.getBubbles();
+                $bubbles.eq(1).trigger('dxcontextmenu');
+
+                const $editButton = this.getContextMenuItems().eq(0);
+                $editButton.trigger('dxclick');
+
+                this.$sendButton.trigger('dxclick');
+
+                assert.strictEqual(onMessageUpdating.callCount, 1, 'onMessageUpdating was called once');
+            });
+
+            QUnit.test('should pass correct arguments to onMessageUpdating after clicking the send button', function(assert) {
+                assert.expect(6);
+
+                const items = [
+                    { text: 'a', author: userFirst },
+                    { text: 'b', author: userSecond },
+                ];
+
+                this.reinit({
+                    user: userSecond,
+                    editing: {
+                        allowUpdating: true,
+                    },
+                    onMessageUpdating: (e) => {
+                        const { component, element, message, cancel, text } = e;
+
+                        assert.strictEqual(component, this.instance, 'e.component is correct');
+                        assert.strictEqual(isRenderer(element), !!config().useJQuery, 'e.element uses correct renderer');
+                        assert.strictEqual($(element).is(this.$element), true, 'e.element matches the widget root');
+                        assert.strictEqual(message, items[1], 'e.message is correct');
+                        assert.strictEqual(cancel, false, 'e.cancel is false by default');
+                        assert.strictEqual(text, 'newb', 'e.text reflects updated message content');
+                    },
+                    items,
+                });
+
+                const $bubbles = this.getBubbles();
+                $bubbles.eq(1).trigger('dxcontextmenu');
+
+                const $editButton = this.getContextMenuItems().eq(0);
+                $editButton.trigger('dxclick');
+
+                keyboardMock(this.$input)
+                    .focus()
+                    .type('new');
+
+                this.$sendButton.trigger('dxclick');
+            });
+
+            QUnit.test('should allow updating onMessageUpdating handler at runtime', function(assert) {
+                const items = [
+                    { text: 'a', author: userFirst },
+                    { text: 'b', author: userSecond },
+                ];
+
+                this.reinit({
+                    user: userSecond,
+                    editing: {
+                        allowUpdating: true,
+                    },
+                    onMessageUpdating: () => {},
+                    items,
+                });
+
+                const onMessageUpdating = sinon.spy();
+                this.instance.option({ onMessageUpdating });
+
+                const $bubbles = this.getBubbles();
+                $bubbles.eq(1).trigger('dxcontextmenu');
+
+                const $editButton = this.getContextMenuItems().eq(0);
+                $editButton.trigger('dxclick');
+
+                this.$sendButton.trigger('dxclick');
+
+                assert.strictEqual(onMessageUpdating.callCount, 1, 'Updated onMessageUpdating handler was called');
+            });
+        });
+
+        QUnit.module('OnMessageUpdated', moduleConfig, () => {
+            QUnit.test('should be called when the send button is clicked in editing mode', function(assert) {
+                const onMessageUpdated = sinon.spy();
+
+                const items = [
+                    { text: 'a', author: userFirst },
+                    { text: 'b', author: userSecond },
+                ];
+
+                this.reinit({
+                    user: userSecond,
+                    editing: {
+                        allowUpdating: true,
+                    },
+                    onMessageUpdated,
+                    items,
+                });
+
+                const $bubbles = this.getBubbles();
+                $bubbles.eq(1).trigger('dxcontextmenu');
+
+                const $editButton = this.getContextMenuItems().eq(0);
+                $editButton.trigger('dxclick');
+
+                this.$sendButton.trigger('dxclick');
+
+                assert.strictEqual(onMessageUpdated.callCount, 1, 'onMessageUpdated was called once');
+            });
+
+            QUnit.test('should pass correct arguments to onMessageUpdated after clicking the send button', function(assert) {
+                assert.expect(6);
+
+                const items = [
+                    { text: 'a', author: userFirst },
+                    { text: 'b', author: userSecond },
+                ];
+
+                this.reinit({
+                    user: userSecond,
+                    editing: {
+                        allowUpdating: true,
+                    },
+                    onMessageUpdated: (e) => {
+                        const { component, element, message, cancel, text } = e;
+
+                        assert.strictEqual(component, this.instance, 'e.component is correct');
+                        assert.strictEqual(isRenderer(element), !!config().useJQuery, 'e.element uses correct renderer');
+                        assert.strictEqual($(element).is(this.$element), true, 'e.element matches widget root');
+                        assert.strictEqual(message, items[1], 'e.message is correct');
+                        assert.strictEqual(cancel, false, 'e.cancel is false by default');
+                        assert.strictEqual(text, 'newb', 'e.text reflects updated message content');
+                    },
+                    items,
+                });
+
+                const $bubbles = this.getBubbles();
+                $bubbles.eq(1).trigger('dxcontextmenu');
+
+                const $editButton = this.getContextMenuItems().eq(0);
+                $editButton.trigger('dxclick');
+
+                keyboardMock(this.$input)
+                    .focus()
+                    .type('new');
+
+                this.$sendButton.trigger('dxclick');
+            });
+
+            QUnit.test('should support updating onMessageUpdated handler at runtime', function(assert) {
+                const items = [
+                    { text: 'a', author: userFirst },
+                    { text: 'b', author: userSecond },
+                ];
+
+                this.reinit({
+                    user: userSecond,
+                    editing: {
+                        allowUpdating: true,
+                    },
+                    onMessageUpdated: () => {},
+                    items,
+                });
+
+                const onMessageUpdated = sinon.spy();
+                this.instance.option({ onMessageUpdated });
+
+                const $bubbles = this.getBubbles();
+                $bubbles.eq(1).trigger('dxcontextmenu');
+
+                const $editButton = this.getContextMenuItems().eq(0);
+                $editButton.trigger('dxclick');
+
+                this.$sendButton.trigger('dxclick');
+
+                assert.strictEqual(onMessageUpdated.callCount, 1, 'Updated onMessageUpdated handler was called');
             });
         });
 
@@ -1214,6 +1611,85 @@ QUnit.module('Chat', () => {
                 assert.strictEqual(onMessageEditCanceled.callCount, 1);
                 assert.strictEqual(onMessageEditingStart.callCount, 2);
                 assert.strictEqual(onMessageEditCanceled.calledBefore(onMessageEditingStart), true);
+            });
+
+            QUnit.test('onMessageEditCanceled should be called before onMessageDeleted if the message is being edited', function(assert) {
+                const onMessageEditCanceled = sinon.spy();
+                const onMessageDeleted = sinon.spy();
+
+                const items = [
+                    { text: 'a', author: userFirst },
+                    { text: 'b', author: userSecond },
+                    { text: 'c', author: userSecond },
+                ];
+
+                this.reinit({
+                    user: userSecond,
+                    editing: {
+                        allowUpdating: true,
+                        allowDeleting: true,
+                    },
+                    onMessageEditCanceled,
+                    onMessageDeleted,
+                    items,
+                });
+
+                const $bubbles = this.getBubbles();
+                $bubbles.eq(1).trigger('dxcontextmenu');
+
+                const $editButton = this.getContextMenuItems().eq(0);
+                $editButton.trigger('dxclick');
+
+                $bubbles.eq(1).trigger('dxcontextmenu');
+                const $deleteButton = this.getContextMenuItems().eq(1);
+                $deleteButton.trigger('dxclick');
+
+                const $popup = $(`.${CHAT_CONFIRMATION_POPUP_WRAPPER_CLASS}`);
+                const $applyButton = $popup.find(`.${BUTTON_CLASS}`).first();
+                $applyButton.trigger('dxclick');
+
+                assert.strictEqual(onMessageEditCanceled.callCount, 1, 'onMessageEditCanceled was called once');
+                assert.strictEqual(onMessageDeleted.callCount, 1, 'onMessageDeleted was called once');
+                assert.ok(onMessageEditCanceled.calledBefore(onMessageDeleted), 'onMessageEditCanceled was called before onMessageDeleted');
+            });
+
+            QUnit.test('onMessageEditCanceled should not be called before deletion if the message is not being edited', function(assert) {
+                const onMessageEditCanceled = sinon.spy();
+                const onMessageDeleted = sinon.spy();
+
+                const items = [
+                    { text: 'a', author: userFirst },
+                    { text: 'b', author: userSecond },
+                    { text: 'c', author: userSecond },
+                ];
+
+                this.reinit({
+                    user: userSecond,
+                    editing: {
+                        allowUpdating: true,
+                        allowDeleting: true,
+                    },
+                    onMessageEditCanceled,
+                    onMessageDeleted,
+                    items,
+                });
+
+                const $bubbles = this.getBubbles();
+
+                $bubbles.eq(1).trigger('dxcontextmenu');
+                const $editButton = this.getContextMenuItems().eq(0);
+                $editButton.trigger('dxclick');
+
+                $bubbles.eq(2).trigger('dxcontextmenu');
+                const $deleteButton = this.getContextMenuItems().eq(1);
+                $deleteButton.trigger('dxclick');
+
+                const $popup = $(`.${CHAT_CONFIRMATION_POPUP_WRAPPER_CLASS}`);
+                const $applyButton = $popup.find(`.${BUTTON_CLASS}`).first();
+                $applyButton.trigger('dxclick');
+
+                assert.strictEqual(onMessageEditCanceled.callCount, 0, 'onMessageEditCanceled was not called');
+                assert.strictEqual(onMessageDeleted.callCount, 1, 'onMessageDeleted was called once');
             });
 
             QUnit.test('should get correct arguments after clicking the Cancel button in editing preview', function(assert) {

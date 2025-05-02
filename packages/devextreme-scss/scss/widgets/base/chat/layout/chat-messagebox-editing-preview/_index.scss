@@ -2,6 +2,15 @@
   display: flex;
   align-items: center;
   position: relative;
+  animation: dx-messagebox-editing-preview-fadein 0.25s ease-out;
+
+  &.dx-chat-editing-preview-hiding {
+    animation: dx-messagebox-editing-preview-fadeout 0.1s ease-out;
+  }
+
+  .dx-chat-editing-preview-text {
+    animation: dx-messagebox-editing-preview-fadein 0.25s ease-out;
+  }
 }
 
 .dx-chat-editing-preview-content {
@@ -27,4 +36,24 @@
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
+}
+
+@keyframes dx-messagebox-editing-preview-fadein {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes dx-messagebox-editing-preview-fadeout {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+  }
 }

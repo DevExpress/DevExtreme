@@ -106,6 +106,7 @@
   $chat-message-editing-preview-cancel-button-color,
 );
 @include chat-confirmation-popup(
+  $chat-border-radius,
   $chat-confirmation-popup-content-padding,
   $chat-confirmation-popup-toolbar-padding-block,
   $chat-confirmation-popup-toolbar-padding-inline,

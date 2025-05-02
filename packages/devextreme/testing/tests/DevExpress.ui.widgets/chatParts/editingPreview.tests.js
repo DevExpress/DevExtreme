@@ -1,18 +1,18 @@
 import $ from 'jquery';
 import localization from 'localization';
 
-import MessageBoxEditingPreview, {
+import EditingPreview, {
     CHAT_EDITING_PREVIEW_TEXT_CLASS,
     CHAT_EDITING_PREVIEW_CANCEL_BUTTON_CLASS,
     CHAT_EDITING_PREVIEW_CAPTION_CLASS,
-} from '__internal/ui/chat/messagebox_editing_preview';
+} from '__internal/ui/chat/editing_preview';
 import messageLocalization from 'common/core/localization/message';
 import Button from 'ui/button';
 
 const moduleConfig = {
     beforeEach: function() {
         const init = (options = { text: 'test' }) => {
-            this.instance = new MessageBoxEditingPreview($('#component'), options);
+            this.instance = new EditingPreview($('#component'), options);
             this.$element = $(this.instance.$element());
 
             this.$cancelEditButton = this.$element.find(`.${CHAT_EDITING_PREVIEW_CANCEL_BUTTON_CLASS}`);
@@ -29,10 +29,10 @@ const moduleConfig = {
     }
 };
 
-QUnit.module('MessageBoxEditingPreview', moduleConfig, () => {
+QUnit.module('EditingPreview', moduleConfig, () => {
     QUnit.module('Render', () => {
         QUnit.test('should be initialized with correct type', function(assert) {
-            assert.ok(this.instance instanceof MessageBoxEditingPreview);
+            assert.ok(this.instance instanceof EditingPreview);
         });
 
         QUnit.test('cancel button should be initialized with the corresponding configuration', function(assert) {
@@ -60,6 +60,35 @@ QUnit.module('MessageBoxEditingPreview', moduleConfig, () => {
             this.instance.option('text', updatedText);
 
             assert.deepEqual($messageText.text(), updatedText, 'Message text was updated');
+        });
+    });
+
+    QUnit.module('onCancel', () => {
+        QUnit.test('should be called after clicking the cancel button', function(assert) {
+            const onCancel = sinon.spy();
+
+            this.reinit({
+                text: 'message text',
+                onCancel,
+            });
+
+            this.$cancelEditButton.trigger('dxclick');
+
+            assert.strictEqual(onCancel.callCount, 1, 'onCancel was called once after cancel button click');
+        });
+
+        QUnit.test('should be updated dynamically at runtime', function(assert) {
+            this.reinit({
+                text: 'message text',
+                onCancel: () => {},
+            });
+
+            const onCancel = sinon.spy();
+            this.instance.option('onCancel', onCancel);
+
+            this.$cancelEditButton.trigger('dxclick');
+
+            assert.strictEqual(onCancel.callCount, 1, 'Runtime-updated onCancel handler was called');
         });
     });
 
