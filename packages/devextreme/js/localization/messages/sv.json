@@ -202,6 +202,8 @@
         "dxDataGrid-filterPanelClearFilter": "Rensa",
         "dxDataGrid-filterPanelFilterEnabledHint": "Aktivera filter",
         "dxDataGrid-masterDetail": "Cell with details",
+        "dxDataGrid-moveColumnToTheRight": "Move to the right",
+        "dxDataGrid-moveColumnToTheLeft": "Move to the left",
 
         "dxTreeList-ariaTreeList": "Tree list with {0} rows and {1} columns",
         "dxTreeList-ariaExpandableInstruction": "Press Ctrl + right arrow to expand the focused node and Ctrl + left arrow to collapse it",

@@ -244,8 +244,12 @@ export const ColumnReordering: Story = {
         columnFixing: {
             enabled: false
         },
+        grouping: {
+            contextMenuEnabled: true,
+        },
         groupPanel: {
             visible: true,
+            allowColumnDragging: true,
         },
     }
   }

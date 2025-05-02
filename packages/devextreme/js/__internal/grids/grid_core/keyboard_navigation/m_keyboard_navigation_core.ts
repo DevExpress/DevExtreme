@@ -59,23 +59,6 @@ export class KeyboardNavigationController extends modules.ViewController {
     }
   }
 
-  protected getDirectionByKeyName(keyName: string): Direction {
-    const rtlEnabled = this.option('rtlEnabled');
-
-    switch (keyName) {
-      case 'leftArrow': {
-        return rtlEnabled ? Direction.Next : Direction.Previous;
-      }
-      case 'rightArrow': {
-        return rtlEnabled ? Direction.Previous : Direction.Next;
-        break;
-      }
-      default: {
-        return Direction.Next;
-      }
-    }
-  }
-
   protected getFocusedViewElement() {
     return this.getFocusedView()?.element();
   }
@@ -231,13 +214,9 @@ export class KeyboardNavigationController extends modules.ViewController {
 
     this.unsubscribeFromFocusinEvent();
     this.subscribeToFocusinEvent();
-
     if (this.isNeedToFocus) {
-      const $focusElement = this._getFocusedCell();
-
+      this.restoreFocus();
       this.isNeedToFocus = false;
-      // @ts-expect-error
-      eventsEngine.trigger($focusElement, 'focus');
     }
   }
 
@@ -298,5 +277,28 @@ export class KeyboardNavigationController extends modules.ViewController {
 
   public _getFocusedCell() {
     return $(this._getCell(this._focusedCellPosition));
+  }
+
+  public restoreFocus() {
+    const $focusElement = this._getFocusedCell();
+    // @ts-expect-error
+    eventsEngine.trigger($focusElement, 'focus');
+  }
+
+  public getDirectionByKeyName(keyName: string): Direction {
+    const rtlEnabled = this.option('rtlEnabled');
+
+    switch (keyName) {
+      case 'leftArrow': {
+        return rtlEnabled ? Direction.Next : Direction.Previous;
+      }
+      case 'rightArrow': {
+        return rtlEnabled ? Direction.Previous : Direction.Next;
+        break;
+      }
+      default: {
+        return Direction.Next;
+      }
+    }
   }
 }
