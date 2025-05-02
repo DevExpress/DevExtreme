@@ -2,8 +2,9 @@ import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../../../helpers/getPageUrl';
 import { createWidget } from '../../../../helpers/createWidget';
-import { safeSizeTest } from '../../../../helpers/safeSizeTest';
 import { testScreenshot } from '../../../../helpers/themeUtils';
+import { Themes } from '../../../../helpers/themes';
+import { changeTheme } from '../../../../helpers/changeTheme';
 
 fixture.disablePageReloads`Validation`
   .page(url(__dirname, '../../../container.html'));
@@ -52,34 +53,45 @@ fixture.disablePageReloads`Validation`
     }],
   }));
 });
+[
+  Themes.genericLight,
+  Themes.genericDark,
+  Themes.materialBlue,
+  Themes.materialBlueDark,
+  Themes.fluentBlue,
+  Themes.fluentBlueDark,
+].forEach((theme) => {
+  test('DataGrid - Validation message gets cut off in Fluent and Material themes (T1285387)', async (t) => {
+    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+    const dataGrid = new DataGrid('#container');
+    const dataCellEditLink = dataGrid.getDataCell(0, 1).getLinkEdit();
 
-test('DataGrid - Validation message gets cut off in Fluent and Material themes (T1285387)', async (t) => {
-  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-  const dataGrid = new DataGrid('#container');
-  const dataCellEditLink = dataGrid.getDataCell(0, 1).getLinkEdit();
+    await t.click(dataCellEditLink);
+    await t.pressKey('backspace enter');
 
-  await t.click(dataCellEditLink);
-  await t.pressKey('backspace enter');
+    await testScreenshot(t, takeScreenshot, `Invalid-message-word-wrapping-${theme}`, { element: dataGrid.element });
 
-  await testScreenshot(t, takeScreenshot, 'Invalid_message_word_wrapping', { element: dataGrid.element });
-
-  await t
-    .expect(compareResults.isValid())
-    .ok(compareResults.errorMessages());
-}).before(async () => {
-  await createWidget('dxDataGrid', {
-    dataSource: [
-      { A: 'n' },
-    ],
-    width: 800,
-    editing: {
-      mode: 'form',
-      allowUpdating: true,
-    },
-    columns: [{
-      dataField: 'A',
-      validationRules: [{ type: 'required', message: 'sampletextsampletextsampletextsampletextsampletextsampletextsampletextsampletext' }],
-    },
-    ],
+    await t
+      .expect(compareResults.isValid())
+      .ok(compareResults.errorMessages());
+  }).before(async () => {
+    await changeTheme(theme);
+    await createWidget('dxDataGrid', {
+      dataSource: [
+        { A: 'n' },
+      ],
+      width: 800,
+      editing: {
+        mode: 'form',
+        allowUpdating: true,
+      },
+      columns: [{
+        dataField: 'A',
+        validationRules: [{ type: 'required', message: 'sampletextsampletextsampletextsampletextsampletextsampletextsampletextsampletext' }],
+      },
+      ],
+    });
+  }).after(async () => {
+    await changeTheme(Themes.genericLight);
   });
 });
