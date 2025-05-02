@@ -1,8 +1,8 @@
 export {
-  GroupItem,
-  isGroupItemsArray,
-  isItemsArray,
-  isLoadResultObject,
-  LoadResult,
-  LoadResultObject,
-} from 'devextreme/common/data/custom-store';
+    GroupItem,
+    isGroupItemsArray,
+    isItemsArray,
+    isLoadResultObject,
+    LoadResult,
+    LoadResultObject,
+} from "devextreme/common/data/custom-store";
