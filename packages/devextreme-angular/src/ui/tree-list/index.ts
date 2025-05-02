@@ -2205,6 +2205,7 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
         this.setupChanges('columns', changes);
         this.setupChanges('dataSource', changes);
         this.setupChanges('expandedRowKeys', changes);
+        this.setupChanges('filterValue', changes);
         this.setupChanges('selectedRowKeys', changes);
     }
 
@@ -2218,6 +2219,7 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
         this._idh.doCheck('columns');
         this._idh.doCheck('dataSource');
         this._idh.doCheck('expandedRowKeys');
+        this._idh.doCheck('filterValue');
         this._idh.doCheck('selectedRowKeys');
         this._watcherHelper.checkWatchers();
         super.ngDoCheck();
