@@ -32,7 +32,7 @@ export interface ContentProps {
 
   onRowHeightChange?: (value: number) => void;
 
-  showContextMenu?: (e: MouseEvent, card?: CardInfo, cardIndex?: number) => void;
+  showCardContextMenu?: (e: MouseEvent, card?: CardInfo, cardIndex?: number) => void;
 
   cardsPerRow?: number;
 
@@ -136,8 +136,7 @@ export class Content extends Component<ContentProps> {
         <div
           ref={this.containerRef}
           style={this.getCssVariables()}
-          className={className}
-          onContextMenu={this.props.showContextMenu}>
+          className={className}>
           {this.props.items.map((item, idx) => (
             <CardItem
               {...this.props.cardProps}
@@ -191,7 +190,7 @@ export class Content extends Component<ContentProps> {
               caughtEventPreventDefault={true}
               card={item}
               onContextMenu={(e) => {
-                this.props.showContextMenu?.(e, item, idx);
+                this.props.showCardContextMenu?.(e, item, idx);
               }}
               onFocusMoved={(newIdx, element) => {
                 this.onCardFocusMoved(newIdx, element);

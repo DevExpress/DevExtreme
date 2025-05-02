@@ -80,7 +80,7 @@ export class ContentView extends ContentViewBase<ContentViewProps> {
           this.keyboardNavigationController.setFirstCardElement(firstElement);
         },
         onPageChange: this.onPageChange.bind(this),
-        showContextMenu: this.showContextMenu.bind(this),
+        showCardContextMenu: this.showCardContextMenu.bind(this),
         wordWrapEnabled: this.options.oneWay('wordWrapEnabled').value,
         cardProps: {
           minWidth: this.cardMinWidth.value,
@@ -99,7 +99,7 @@ export class ContentView extends ContentViewBase<ContentViewProps> {
           },
           onDelete: (key: Key, returnFocusTo?: HTMLElement) => {
             this.keyboardNavigationController.setReturnFocusTo(returnFocusTo);
-            // eslint-disable-next-line @typescript-eslint/no-floating-promises
+
             this.editingController.deleteCard(key);
           },
           allowUpdating: this.editingController.allowUpdating.value,
@@ -160,7 +160,7 @@ export class ContentView extends ContentViewBase<ContentViewProps> {
     this.selectionController.processLongTap(e.card);
   }
 
-  private showContextMenu(e: MouseEvent, card?: CardInfo, cardIndex?: number): void {
+  private showCardContextMenu(e: MouseEvent, card?: CardInfo, cardIndex?: number): void {
     this.contextMenuController.show(e, 'content', { card, cardIndex });
   }
 

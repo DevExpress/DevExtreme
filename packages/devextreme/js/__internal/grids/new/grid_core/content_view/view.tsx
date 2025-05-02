@@ -108,7 +108,12 @@ export abstract class ContentView<TProps extends {}> extends View<TProps> {
         showScrollbar: showScrollbar.value,
         useNative: useNativeConfig.value === 'auto' ? undefined : useNativeConfig.value,
       },
+      showContextMenu: this.showContextMenu.bind(this),
     };
+  }
+
+  private showContextMenu(e: MouseEvent): void {
+    this.contextMenuController.show(e, 'content');
   }
 
   private onScroll(e: ScrollEventInfo<unknown>): void {

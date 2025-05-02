@@ -3,7 +3,6 @@ import CardView from 'devextreme-testcafe-models/cardView';
 import TreeView from 'devextreme-testcafe-models/treeView';
 
 export const SELECTORS = {
-  dragging: '.dx-sortable-dragging',
   treeView: '.dx-cardview-column-chooser .dx-treeview',
   treeViewItem: '.dx-treeview-item',
 };
@@ -32,8 +31,8 @@ export const triggerDragStart = ClientFunction((selector) => {
   element.dispatchEvent(mouseMoveEvent);
 });
 
-export const triggerDragEnd = ClientFunction(() => {
-  const element = document.querySelector(SELECTORS.dragging)!;
+export const triggerDragEnd = ClientFunction((selector) => {
+  const element = selector() as Element;
 
   const { top, left } = element.getBoundingClientRect();
 

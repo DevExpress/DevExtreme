@@ -31,6 +31,8 @@ export interface ContentViewProps {
   onWidthChange?: (value: number) => void;
 
   scrollableRef?: RefObject<dxScrollable>;
+
+  showContextMenu?: (e: MouseEvent) => void;
 }
 
 export class ContentView extends Component<ContentViewProps> {
@@ -40,7 +42,11 @@ export class ContentView extends Component<ContentViewProps> {
 
   public render(): JSX.Element {
     return (
-      <div className={CLASSES.contentView} ref={this.containerRef}>
+      <div
+        className={CLASSES.contentView}
+        ref={this.containerRef}
+        oncontextmenu={this.props.showContextMenu}
+      >
         <LoadPanel {...this.props.loadPanelProps} />
 
         {

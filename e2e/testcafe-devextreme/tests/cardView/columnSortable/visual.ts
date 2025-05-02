@@ -45,7 +45,7 @@ test('dropzone appear in headerPanel when drag from columnChooser a column', asy
   await t.wait(500); // wait for dropzone animation to finish
   await testScreenshot(t, takeScreenshot, 'card-view_column-sortable_empty-header-panel_dropzone_1.png', { element: cardView.element });
 
-  await triggerDragEnd();
+  await triggerDragEnd(columnElement);
   await t.wait(500); // wait for dropzone animation to finish
   await testScreenshot(t, takeScreenshot, 'card-view_column-sortable_empty-header-panel_dropzone_2.png', { element: cardView.element });
 
@@ -72,7 +72,7 @@ test('dropzone appears in headerPanel when drag from columnChooser a column with
   await t.wait(500); // wait for dropzone animation to finish
   await testScreenshot(t, takeScreenshot, 'card-view_column-sortable_header-panel_dropzone_1.png', { element: cardView.element });
 
-  await triggerDragEnd();
+  await triggerDragEnd(columnElement);
   await t.wait(500); // wait for dropzone animation to finish
   await testScreenshot(t, takeScreenshot, 'card-view_column-sortable_header-panel_dropzone_2.png', { element: cardView.element });
 
