@@ -80,7 +80,7 @@ export type RecurrenceEditMode = 'dialog' | 'occurrence' | 'series';
 /** @public */
 export type ViewType = 'agenda' | 'day' | 'month' | 'timelineDay' | 'timelineMonth' | 'timelineWeek' | 'timelineWorkWeek' | 'week' | 'workWeek';
 /** @public */
-export type SchedulerPredefinedToolbarItem = 'dateNavigator' | 'viewSwitcher';
+export type SchedulerPredefinedToolbarItem = 'today' | 'dateNavigator' | 'viewSwitcher';
 /** @public */
 export type SchedulerPredefinedDateNavigatorItem = 'prev' | 'next' | 'dateInterval';
 

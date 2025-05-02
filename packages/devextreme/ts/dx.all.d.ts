@@ -24872,6 +24872,7 @@ declare module DevExpress.ui {
       | 'next'
       | 'dateInterval';
     export type SchedulerPredefinedToolbarItem =
+      | 'today'
       | 'dateNavigator'
       | 'viewSwitcher';
     /**
