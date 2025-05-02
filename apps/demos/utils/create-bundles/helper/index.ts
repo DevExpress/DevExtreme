@@ -9,7 +9,7 @@ import { createHash } from 'crypto';
 import { version as DX_Version } from 'devextreme/package.json';
 import { Demo, Framework } from './types';
 import { resourceLinks } from './external-resource-metadata';
-import gitHubIgnored from '../../visual-tests/github-ignored-list' 
+import gitHubIgnored from '../../visual-tests/github-ignored-list.mjs';
 
 export const isSkipDemo = (demo: Demo) => {
   const { Widget, Name } = demo;
