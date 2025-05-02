@@ -84,8 +84,8 @@ export const getLoadIndicator = ($container) => {
     return $container.find(`.${AI_DIALOG_LOAD_INDICATOR_CLASS}`);
 };
 
-export const getToolbarButtonItems = (popup) => {
-    return popup.option('toolbarItems').filter(item => ['dxButton', 'dxDropDownButton'].includes(item.widget));
+export const getBottomToolbarItems = (popup) => {
+    return popup.option('toolbarItems').filter(item => item.toolbar === 'bottom');
 };
 
 const getDropDownButton = ($container) => {
@@ -134,9 +134,12 @@ export const clickActionButton = (insertionMode) => {
     getDropDownButtonOption(insertionModeToIndexMap[insertionMode]).trigger(CLICK_EVENT_NAME);
 };
 
-export function findButtonByText($container, text) {
-    return $container.find(`.${BUTTON_CLASS}`).filter((_, element) => $(element).text() === text);
-}
+export const getItemByName = (items, name) => items.find((items) => items.name === name);
+export const findButtonByName = (popup, name) => {
+    const buttonIndex = getBottomToolbarItems(popup).findIndex((item) => item.name === name);
+    const $bottomToolbar = popup.bottomToolbar();
+    return $($bottomToolbar.find(`.${BUTTON_CLASS}`).eq(buttonIndex));
+};
 
 export const getCommandSelectBoxInstance = ($container) => getDialogSelectBoxes($container).eq(0).dxSelectBox('instance');
 export const getOptionSelectBoxInstance = ($container) => getDialogSelectBoxes($container).eq(1).dxSelectBox('instance');

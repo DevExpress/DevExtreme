@@ -320,6 +320,6 @@
   }
 
   .dx-pending-indicator {
-    @include dx-pending-indicator-centered($generic-pending-indicator-size);
+    @include dx-pending-indicator-centered();
   }
 }

@@ -1,20 +1,23 @@
 import type { NativeEventInfo } from '@js/common/core/events';
 import messageLocalization from '@js/common/core/localization/message';
-import $ from '@js/core/renderer';
+import $, { type dxElementWrapper } from '@js/core/renderer';
 import type { ClickEvent } from '@js/ui/button';
 import Button from '@js/ui/button';
 import type { Properties as DOMComponentProperties } from '@ts/core/widget/dom_component';
 import DOMComponent from '@ts/core/widget/dom_component';
 import type { OptionChanged } from '@ts/core/widget/types';
+import MessageBoxEditingPreview from '@ts/ui/chat/messagebox_editing_preview';
 import TextArea from '@ts/ui/m_text_area';
 
 import type { EnterKeyEvent, InputEvent } from '../../../ui/text_area';
 
-const CHAT_MESSAGEBOX_CLASS = 'dx-chat-messagebox';
-const CHAT_MESSAGEBOX_TEXTAREA_CLASS = 'dx-chat-messagebox-textarea';
-const CHAT_MESSAGEBOX_BUTTON_CLASS = 'dx-chat-messagebox-button';
+export const CHAT_MESSAGEBOX_CLASS = 'dx-chat-messagebox';
+export const CHAT_MESSAGEBOX_INPUT_CONTAINER_CLASS = 'dx-chat-messagebox-input-container';
+export const CHAT_MESSAGEBOX_TEXTAREA_CLASS = 'dx-chat-messagebox-textarea';
+export const CHAT_MESSAGEBOX_BUTTON_CLASS = 'dx-chat-messagebox-button';
 
 export const TYPING_END_DELAY = 2000;
+const ESCAPE_KEY = 'escape';
 
 export type MessageEnteredEvent =
   NativeEventInfo<MessageBox, KeyboardEvent | PointerEvent | MouseEvent | TouchEvent> &
@@ -34,12 +37,18 @@ export interface Properties extends DOMComponentProperties<MessageBox> {
   onTypingStart?: (e: TypingStartEvent) => void;
 
   onTypingEnd?: (e: NativeEventInfo<MessageBox>) => void;
+
+  onMessageEditCanceled?: () => void;
+
+  text?: string;
 }
 
 class MessageBox extends DOMComponent<MessageBox, Properties> {
   _textArea!: TextArea;
 
   _button!: Button;
+
+  _editingPreview!: MessageBoxEditingPreview | null;
 
   _messageEnteredAction?: (e: Partial<MessageEnteredEvent>) => void;
 
@@ -59,6 +68,8 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
       onMessageEntered: undefined,
       onTypingStart: undefined,
       onTypingEnd: undefined,
+      onMessageEditCanceled: undefined,
+      text: '',
     };
   }
 
@@ -75,20 +86,50 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
 
     super._initMarkup();
 
-    this._renderTextArea();
-    this._renderButton();
+    if (this.option('text')) {
+      this._renderEditingPreview();
+    }
+
+    this._renderInputContainer();
   }
 
-  _renderTextArea(): void {
+  _renderInputContainer(): void {
+    const $messageBox = $('<div>')
+      .addClass(CHAT_MESSAGEBOX_INPUT_CONTAINER_CLASS)
+      .appendTo(this.element());
+
+    this._renderTextArea($messageBox);
+    this._renderButton($messageBox);
+  }
+
+  _cancelMessageEdit(): void {
+    const { onMessageEditCanceled } = this.option();
+
+    this.option('text', undefined);
+    this._textArea.focus();
+    onMessageEditCanceled?.();
+  }
+
+  _renderEditingPreview(): void {
+    const $editingPreview = $('<div>').prependTo(this.element());
+    const { text } = this.option();
+
+    this._editingPreview = this._createComponent($editingPreview, MessageBoxEditingPreview, {
+      text,
+      onCancel: () => this._cancelMessageEdit(),
+    });
+  }
+
+  _renderTextArea($parent: dxElementWrapper): void {
     const {
       activeStateEnabled,
       focusStateEnabled,
       hoverStateEnabled,
     } = this.option();
 
-    const $textArea = $('<div>')
-      .addClass(CHAT_MESSAGEBOX_TEXTAREA_CLASS)
-      .appendTo(this.element());
+    const $textArea = $('<div>').addClass(CHAT_MESSAGEBOX_TEXTAREA_CLASS);
+
+    $parent.append($textArea);
 
     this._textArea = this._createComponent($textArea, TextArea, {
       activeStateEnabled,
@@ -119,18 +160,24 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
         event.preventDefault();
       }
     });
+
+    this._textArea.registerKeyHandler(ESCAPE_KEY, () => {
+      if (this.option('text')) {
+        this._cancelMessageEdit();
+      }
+    });
   }
 
-  _renderButton(): void {
+  _renderButton($parent: dxElementWrapper): void {
     const {
       activeStateEnabled,
       focusStateEnabled,
       hoverStateEnabled,
     } = this.option();
 
-    const $button = $('<div>')
-      .addClass(CHAT_MESSAGEBOX_BUTTON_CLASS)
-      .appendTo(this.element());
+    const $button = $('<div>').addClass(CHAT_MESSAGEBOX_BUTTON_CLASS);
+
+    $parent.append($button);
 
     this._button = this._createComponent($button, Button, {
       activeStateEnabled,
@@ -241,6 +288,11 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
         this._createTypingEndAction();
 
         break;
+      case 'text':
+        this._updateEditingPreview(value);
+        this._updateInputContainer(value);
+
+        break;
       default:
         super._optionChanged(args);
     }
@@ -258,6 +310,26 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
         'aria-labelledby': emptyViewId,
       },
     });
+  }
+
+  _updateEditingPreview(text: string | undefined): void {
+    if (this._editingPreview) {
+      this._editingPreview.option('text', text);
+
+      if (!text) {
+        this._editingPreview = null;
+      }
+    } else {
+      this._renderEditingPreview();
+    }
+  }
+
+  _updateInputContainer(value: string | undefined): void {
+    this._textArea.option('value', value);
+
+    const shouldButtonBeDisabled = !this._isValuableTextEntered();
+
+    this._toggleButtonDisableState(shouldButtonBeDisabled);
   }
 }
 

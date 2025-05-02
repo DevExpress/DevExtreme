@@ -21,10 +21,12 @@ export const LOADINDICATOR_IMAGE_CLASS = 'dx-loadindicator-image';
 
 export enum AnimationType {
   Circle = 'circle',
+  Sparkle = 'sparkle',
 }
 
 export const ANIMATION_TYPE_CLASSES = {
   [AnimationType.Circle]: 'dx-loadindicator-content-circle',
+  [AnimationType.Sparkle]: 'dx-loadindicator-content-sparkle',
 } as const;
 
 export interface LoadIndicatorProperties extends Properties {
@@ -144,14 +146,19 @@ class LoadIndicator extends Widget<LoadIndicatorProperties> {
       _animatingSegmentInner: animatingSegmentInner,
     } = this.option();
 
-    const segmentParams = {
-      [AnimationType.Circle]: {
-        segmentCount: animatingSegmentCount ?? 0,
-        segmentInner: Boolean(animatingSegmentInner),
-      },
-    };
-
-    return segmentParams[animationType];
+    switch (animationType) {
+      case AnimationType.Sparkle:
+        return {
+          segmentCount: 2,
+          segmentInner: false,
+        };
+      case AnimationType.Circle:
+      default:
+        return {
+          segmentCount: animatingSegmentCount ?? 0,
+          segmentInner: Boolean(animatingSegmentInner),
+        };
+    }
   }
 
   _renderAnimationMarkup(): void {

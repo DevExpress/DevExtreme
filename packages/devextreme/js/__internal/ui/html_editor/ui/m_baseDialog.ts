@@ -1,22 +1,13 @@
-import devices from '@js/core/devices';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred } from '@js/core/utils/deferred';
-import {
-  // @ts-expect-error
-  getCurrentScreenFactor,
-  hasWindow,
-} from '@js/core/utils/window';
 import type { Properties as PopupProperties } from '@js/ui/popup';
 import Popup from '@js/ui/popup';
 
-const DROPDOWN_EDITOR_OVERLAY_CLASS = 'dx-dropdowneditor-overlay';
+import { isSmallScreen } from '../utils/small_screen';
 
-const isSmallScreen = (): boolean => {
-  const screenFactor = hasWindow() ? getCurrentScreenFactor() : null;
-  return devices.real().deviceType === 'phone' || screenFactor === 'xs';
-};
+const DROPDOWN_EDITOR_OVERLAY_CLASS = 'dx-dropdowneditor-overlay';
 abstract class BaseDialog<T = unknown> {
   _$container: dxElementWrapper;
 

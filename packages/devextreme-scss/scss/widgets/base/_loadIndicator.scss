@@ -1,7 +1,5 @@
 @use "sass:math";
 
-// @use "../base/mixins" as *;
-
 // adduse
 
 $loadindicator-width: 32px;
@@ -43,13 +41,8 @@ $loadindicator-height: 32px;
   animation: dx-loadindicator-icon-custom-rotate 1.5s infinite linear;
 
   @keyframes dx-loadindicator-icon-custom-rotate {
-    from {
-      transform: rotate(0deg);
-    }
-
-    to {
-      transform: rotate(360deg);
-    }
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
   }
 }
 
@@ -72,4 +65,85 @@ $loadindicator-height: 32px;
   width: 100%;
   height: 100%;
   position: relative;
+}
+
+@mixin loadindicator-animation-sparkle(
+  $bg-color1,
+  $bg-color2,
+  $bg-color3
+) {
+  .dx-loadindicator-content-sparkle {
+    .dx-loadindicator-segment {
+      position: absolute;
+      width: 37.5%;
+      height: 37.5%;
+      aspect-ratio: 1;
+      clip-path: polygon(
+        48.76% 3.14%,
+        51.24% 3.14%,
+        63.93% 35.32%,
+        64.68% 36.07%,
+        96.86% 48.76%,
+        96.86% 51.24%,
+        64.68% 63.93%,
+        63.93% 64.68%,
+        51.24% 96.86%,
+        48.76% 96.86%,
+        36.07% 64.68%,
+        35.32% 63.93%,
+        3.14% 51.24%,
+        3.14% 48.76%,
+        35.32% 36.07%,
+        36.07% 35.32%,
+        48.76% 3.14%
+      );
+      transform-origin: center;
+      transform: scale(0.33);
+      background-color: $bg-color3;
+      animation: dx-sparkle-scale 1.4s infinite linear;
+    }
+
+    .dx-loadindicator-segment0 {
+      left: 50%;
+      top: 9.375%;
+      background-color: $bg-color3;
+      animation-delay: 0s;
+    }
+
+    .dx-loadindicator-segment1 {
+      left: 9.375%;
+      top: 29.6875%;
+      background-color: $bg-color3;
+      animation-delay: 0.8s;
+    }
+
+    .dx-loadindicator-segment2 {
+      left: 40.625%;
+      top: 54.6875%;
+      background-color: $bg-color3;
+      animation-delay: 0.4s;
+    }
+  }
+
+  @keyframes dx-sparkle-scale {
+    0% {
+      transform: scale(0.33);
+      background-color: $bg-color3;
+    }
+
+    33% {
+      transform: scale(1);
+      background-color: $bg-color1;
+    }
+
+    66% {
+      transform: scale(0.66);
+      background-color: $bg-color2;
+    }
+
+    100% {
+      transform: scale(0.33);
+      background-color: $bg-color3;
+    }
+  }
 }

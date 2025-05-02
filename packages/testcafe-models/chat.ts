@@ -10,7 +10,9 @@ const CLASS = {
   messageBoxButton: 'dx-chat-messagebox-button',
   scrollable: 'dx-scrollable',
   textArea: 'dx-textarea',
-  messageBubble: 'dx-chat-messagebubble'
+  messageBubble: 'dx-chat-messagebubble',
+  contextMenuContent: 'dx-messagelist-context-menu-content',
+  menuItem: 'dx-menu-item',
 };
 
 export default class Chat extends Widget {
@@ -43,5 +45,13 @@ export default class Chat extends Widget {
 
   getMessage(index: number): Selector {
     return this.element.find(`.${CLASS.messageBubble}`).nth(index);
+  }
+
+  getContextMenuContent(): Selector {
+    return this.element.find(`.${CLASS.contextMenuContent}`);
+  }
+
+  getContextMenuItem(index: number): Selector {
+    return (this.getContextMenuContent()).find(`.${CLASS.menuItem}`).nth(index);
   }
 }
