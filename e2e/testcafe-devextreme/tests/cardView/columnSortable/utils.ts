@@ -3,6 +3,7 @@ import CardView from 'devextreme-testcafe-models/cardView';
 import TreeView from 'devextreme-testcafe-models/treeView';
 
 export const SELECTORS = {
+  dragging: '.dx-sortable-dragging',
   treeView: '.dx-cardview-column-chooser .dx-treeview',
   treeViewItem: '.dx-treeview-item',
 };
