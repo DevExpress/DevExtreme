@@ -1,4 +1,5 @@
 import $ from '@js/core/renderer';
+import messageLocalization from '@js/localization/message';
 import type * as SortableTypes from '@js/ui/sortable_types';
 import { combineClasses } from '@ts/core/utils/combine_classes';
 import type { ComponentType, InfernoNode } from 'inferno';
@@ -38,8 +39,6 @@ export interface Props extends Omit<SortableProps, 'onAdd' | 'onReorder' | 'drag
   columnDragTemplate?: ComponentType<{ column: Column; status?: Status; isDragging?: boolean }>;
 
   showDropzone?: boolean;
-
-  dropzoneText?: string;
 
   onPlaceholderPrepared?: (e) => void;
 }
@@ -175,7 +174,7 @@ export class ColumnSortable extends Component<Props> {
 
       <div className={dropzoneClasses}>
         <Icon name='dropzone'/>
-        <span>{this.props.dropzoneText}</span>
+        <span>{messageLocalization.format('dxCardView-headerItemDropZoneText')}</span>
       </div>
     </Sortable>
     );

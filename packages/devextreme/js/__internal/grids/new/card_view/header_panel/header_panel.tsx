@@ -103,7 +103,6 @@ export class HeaderPanel extends Component<HeaderPanelProps> {
           filter={`.${itemClasses.item}`}
           isColumnDraggable={sortableConfig.isColumnDraggable}
           showDropzone={sortableConfig.showDropzone}
-          dropzoneText={messageLocalization.format('dxCardView-headerPanelDropzoneText')}
           onPlaceholderPrepared={sortableConfig.onPlaceholderPrepared}
         >
           <Scrollable
