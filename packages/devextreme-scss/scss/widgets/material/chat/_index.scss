@@ -49,6 +49,8 @@
   $chat-information-author-name-color,
   $chat-information-timestamp-color,
   $chat-information-gap,
+  $chat-information-icon-size,
+  $chat-information-edited-gap,
 );
 @include chat-messagelist-empty(
   $chat-messagelist-padding,

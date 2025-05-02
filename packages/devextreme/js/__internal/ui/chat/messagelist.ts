@@ -586,11 +586,17 @@ class MessageList extends Widget<Properties> {
   }
 
   _updateMessageByKey(key: string | number | undefined, data: Message): void {
-    if (key) {
+    if (isDefined(key)) {
       const $targetMessage = this._findMessageElementByKey(key);
 
       const bubble = MessageBubble.getInstance($targetMessage);
       bubble.option('text', data.text);
+
+      const $currentMessageGroup = $targetMessage.closest(`.${CHAT_MESSAGEGROUP_CLASS}`);
+      const group: MessageGroup = MessageGroup.getInstance($currentMessageGroup);
+      const isEdited = data.isEdited === true && !data.isDeleted;
+
+      group._updateMessageEditedText($targetMessage, isEdited);
     }
   }
 
