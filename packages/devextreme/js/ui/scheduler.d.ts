@@ -1147,14 +1147,14 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
 }
 
 /**
- * @docid DateNavigatorItemProperties
+ * @docid
  * @inherits dxButtonGroupOptions
  * @namespace DevExpress.ui.dxScheduler
  * @public
  */
 export type DateNavigatorItemProperties = dxButtonGroupOptions & {
   /**
-   * @docid DateNavigatorItemProperties.items
+   * @docid
    * @type Array<dxButtonGroupItem,Enums.SchedulerPredefinedDateNavigatorItem>
    * @public
    */
@@ -1162,24 +1162,24 @@ export type DateNavigatorItemProperties = dxButtonGroupOptions & {
 };
 
 /**
- * @docid ToolbarItem
+ * @docid
  * @inherits dxToolbarItem
  * @namespace DevExpress.ui.dxScheduler
  * @public
  */
 export type ToolbarItem = dxToolbarItem & {
   /**
-   * @docid ToolbarItem.name
+   * @docid
    * @public
    */
   name?: SchedulerPredefinedToolbarItem;
   /**
-   * @docid ToolbarItem.options
+   * @docid
    * @public
    */
   options?: DateNavigatorItemProperties | Object;
   /**
-   * @docid ToolbarItem.location
+   * @docid
    * @public
    */
   location?: ToolbarItemLocation;
@@ -1187,29 +1187,29 @@ export type ToolbarItem = dxToolbarItem & {
 
 /**
  * @public
- * @docid Toolbar
+ * @docid
  * @namespace DevExpress.ui.dxScheduler
  */
 export type Toolbar = {
   /**
-   * @docid Toolbar.items
+   * @docid
    * @public
    */
   items?: Array<SchedulerPredefinedToolbarItem | ToolbarItem>;
   /**
-   * @docid Toolbar.visible
+   * @docid
    * @default undefined
    * @public
    */
   visible?: boolean | undefined;
   /**
-   * @docid Toolbar.multiline
+   * @docid
    * @default false
    * @public
    */
   multiline?: boolean;
   /**
-   * @docid Toolbar.disabled
+   * @docid
    * @default false
    * @public
    */
