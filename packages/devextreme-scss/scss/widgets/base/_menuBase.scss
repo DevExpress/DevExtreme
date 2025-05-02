@@ -50,8 +50,7 @@
         display: inline;
         vertical-align: middle;
         white-space: nowrap;
-
-        @include dx-overflow();
+        text-overflow: ellipsis;
       }
 
       .dx-menu-item-text-with-url {
