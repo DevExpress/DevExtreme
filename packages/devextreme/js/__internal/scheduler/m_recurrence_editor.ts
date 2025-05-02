@@ -445,8 +445,8 @@ class RecurrenceEditor extends Editor {
       colSpan: 1,
       itemType: 'group',
       items: [
-        this._renderRepeatUntilEditor(),
-        this._renderRepeatCountEditor(),
+        this._getRepeatUntilEditorOptions(),
+        this._getRepeatCountEditorOptions(),
       ],
     }];
   }
@@ -460,7 +460,7 @@ class RecurrenceEditor extends Editor {
       labelLocation: 'top',
     });
 
-    this._visibleRepeatEndInputs();
+    this._changeRepeatEndInputsVisibility();
   }
 
   getRecurrenceForm() {
@@ -526,13 +526,13 @@ class RecurrenceEditor extends Editor {
   _repeatEndValueChangedHandler(args) {
     const { value } = args;
 
-    this._visibleRepeatEndInputs(value);
+    this._changeRepeatEndInputsVisibility(value);
 
     if (value === 'until') {
       this._recurrenceRule.makeRule(value, this._getUntilValue());
     }
     if (value === 'count') {
-      this._recurrenceRule.makeRule(value, this._recurrenceForm.option('formData.repeatCount'));
+      this._recurrenceRule.makeRule(value, this._recurrenceForm.option('formData.count'));
     }
     if (value === 'never') {
       this._recurrenceRule.makeRule('count', '');
@@ -542,38 +542,38 @@ class RecurrenceEditor extends Editor {
     this._changeEditorValue();
   }
 
-  _visibleRepeatEndInputs(value = this._recurrenceRule.getRepeatEndRule()) {
+  _changeRepeatEndInputsVisibility(value = this._recurrenceRule.getRepeatEndRule()) {
     if (value === 'until') {
-      this._recurrenceForm.itemOption('repeatUntil', 'visible', true);
-      this._recurrenceForm.itemOption('repeatCount', 'visible', false);
+      this._recurrenceForm.itemOption('until', 'visible', true);
+      this._recurrenceForm.itemOption('count', 'visible', false);
     }
     if (value === 'count') {
-      this._recurrenceForm.itemOption('repeatUntil', 'visible', false);
-      this._recurrenceForm.itemOption('repeatCount', 'visible', true);
+      this._recurrenceForm.itemOption('until', 'visible', false);
+      this._recurrenceForm.itemOption('count', 'visible', true);
     }
     if (value === 'never') {
-      this._recurrenceForm.itemOption('repeatUntil', 'visible', false);
-      this._recurrenceForm.itemOption('repeatCount', 'visible', false);
+      this._recurrenceForm.itemOption('until', 'visible', false);
+      this._recurrenceForm.itemOption('count', 'visible', false);
     }
   }
 
-  _renderRepeatCountEditor() {
-    const repeatCount = this._recurrenceRule.getRules().count || 1;
+  _getRepeatCountEditorOptions() {
+    const count = this._recurrenceRule.getRules().count || 1;
 
     return {
-      dataField: 'repeatCount',
+      dataField: 'count',
       cssClass: REPEAT_COUNT_EDITOR,
       label: { visible: false },
       editorType: 'dxNumberBox',
       editorOptions: {
         stylingMode: getStylingModeFunc(),
-        field: 'repeatCount',
+        field: 'count',
         format: `# ${messageLocalization.format('dxScheduler-recurrenceRepeatCount')}`,
         width: repeatInputWidth,
         min: 1,
         showSpinButtons: true,
         useLargeSpinButtons: false,
-        value: repeatCount,
+        value: count,
         onValueChanged: this._repeatCountValueChangeHandler.bind(this),
         inputAttr: { 'aria-label': messageLocalization.format('dxScheduler-recurrenceOccurrenceLabel') },
       },
@@ -596,18 +596,18 @@ class RecurrenceEditor extends Editor {
     return dateUtils.setToDayEnd(date);
   }
 
-  _renderRepeatUntilEditor() {
-    const repeatUntil = this._getUntilValue();
+  _getRepeatUntilEditorOptions() {
+    const until = this._getUntilValue();
 
     return {
-      dataField: 'repeatUntil',
+      dataField: 'until',
       label: { visible: false },
       cssClass: REPEAT_UNTIL_DATE_EDITOR,
       editorType: 'dxDateBox',
       editorOptions: {
         stylingMode: getStylingModeFunc(),
-        field: 'repeatUntil',
-        value: repeatUntil,
+        field: 'until',
+        value: until,
         type: 'date',
         width: repeatInputWidth,
         onValueChanged: this._repeatUntilValueChangeHandler.bind(this),
@@ -690,7 +690,7 @@ class RecurrenceEditor extends Editor {
         this._recurrenceRule.makeRules(args.value);
 
         this._changeRepeatIntervalLabel();
-        this._visibleRepeatEndInputs();
+        this._changeRepeatEndInputsVisibility();
         this._changeEditorsValue(this._recurrenceRule.getRules());
 
         // @ts-expect-error
@@ -713,8 +713,8 @@ class RecurrenceEditor extends Editor {
 
           this._weekEditor.option('items', itemsButtonGroup);
         }
-        if (this._recurrenceForm.itemOption('repeatUntil').visible) {
-          this._recurrenceForm.getEditor('repeatUntil').option('calendarOptions.firstDayOfWeek', this._getFirstDayOfWeek());
+        if (this._recurrenceForm.itemOption('until').visible) {
+          this._recurrenceForm.getEditor('until').option('calendarOptions.firstDayOfWeek', this._getFirstDayOfWeek());
         }
         break;
       default:
@@ -800,11 +800,11 @@ class RecurrenceEditor extends Editor {
 
   _changeRepeatCountValue() {
     const count = this._recurrenceRule.getRules().count || 1;
-    this._recurrenceForm.getEditor('repeatCount').option('value', count);
+    this._recurrenceForm.getEditor('count').option('value', count);
   }
 
   _changeRepeatUntilValue() {
-    this._recurrenceForm.getEditor('repeatUntil').option('value', this._getUntilValue());
+    this._recurrenceForm.getEditor('until').option('value', this._getUntilValue());
   }
 
   _getUntilValue() {
