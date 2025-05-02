@@ -92,29 +92,39 @@ const columns = {
     },
   ],
   remoteHeaderFilter: [
-  {
-    dataField: "OrderNumber",
-    alignment: 'right',
-    dataType: "number",
-  },
-  {
-    dataField: "OrderDate", 
-    dataType: 'date',
-    calculateDisplayValue: (data) => {
-      return new Date(data.OrderDate).toDateString();
-    }
-  },
-  "StoreCity",
-  "StoreState",
-  "Employee",
-  {
-    dataField: "SaleAmount",
-    dataType: "number",
-    headerFilter: {
-      groupInterval: 1000,
-    }
-  },
-],
+    {
+      dataField: "OrderNumber",
+      alignment: 'right',
+      dataType: "number",
+    },
+    {
+      dataField: "OrderDate", 
+      dataType: 'date',
+      calculateDisplayValue: (data) => {
+        return new Date(data.OrderDate).toDateString();
+      }
+    },
+    "StoreCity",
+    "StoreState",
+    "Employee",
+    {
+      dataField: "SaleAmount",
+      dataType: "number",
+      headerFilter: {
+        groupInterval: 1000,
+      }
+    },
+  ],
+  columnChooser: [
+    {
+      dataField: 'id',
+      allowReordering: false,
+    },
+    'firstName',
+    'lastName',
+    'gender',
+    'birthDate',
+  ],
 }
 
 
