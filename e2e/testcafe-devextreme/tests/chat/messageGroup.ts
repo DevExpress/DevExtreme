@@ -170,3 +170,26 @@ test('Messagegroup scenarios in RTL mode', async (t) => {
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 });
+
+test('MessageGroup with edited messages', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  await testScreenshot(t, takeScreenshot, 'MessageGroup with edited messages.png', { element: '#chat' });
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  await appendElementTo('#container', 'div', 'chat');
+
+  const userFirst = createUser(1, 'First');
+  const userSecond = createUser(2, 'Second');
+  const items = generateMessages(2, userFirst, userSecond, false, false, 2, 2, true);
+
+  return createWidget('dxChat', {
+    width: 400,
+    height: 600,
+    user: userSecond,
+    items,
+  }, '#chat');
+});

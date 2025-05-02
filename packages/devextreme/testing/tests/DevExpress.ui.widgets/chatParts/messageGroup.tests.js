@@ -3,11 +3,13 @@ import $ from 'jquery';
 import MessageGroup from '__internal/ui/chat/messagegroup';
 import ChatAvatar from '__internal/ui/chat/avatar';
 import dateLocalization from 'common/core/localization/date';
+import localization from 'localization';
 
 const AVATAR_CLASS = 'dx-avatar';
 const CHAT_MESSAGEGROUP_TIME_CLASS = 'dx-chat-messagegroup-time';
 const CHAT_MESSAGEBUBBLE_CLASS = 'dx-chat-messagebubble';
 const CHAT_MESSAGEGROUP_AUTHOR_NAME_CLASS = 'dx-chat-messagegroup-author-name';
+const CHAT_MESSAGE_EDITED_TEXT_CLASS = 'dx-chat-message-edited-text';
 
 const getStringTime = (time) => {
     return dateLocalization.format(time, 'shorttime');
@@ -304,6 +306,33 @@ QUnit.module('MessageGroup', moduleConfig, () => {
 
             assert.strictEqual(messageTemplate.callCount, 1, 'messageTemplate function was called on bubble template render');
             assert.deepEqual(messageTemplate.lastCall.args[0], message, 'messageTemplate function was called with correct data');
+        });
+    });
+
+    QUnit.module('localization', moduleConfig, () => {
+        QUnit.test('Edited text should be localized', function(assert) {
+            const defaultLocale = localization.locale();
+
+            const localizedEmptyListMessageText = 'edytowany';
+
+            try {
+                localization.loadMessages({
+                    'pl': {
+                        'dxChat-editedMessageText': localizedEmptyListMessageText,
+                    }
+                });
+                localization.locale('pl');
+
+                this.reinit({
+                    items: [{ isEdited: true }]
+                });
+
+                const $editedText = this.$element.find(`.${CHAT_MESSAGE_EDITED_TEXT_CLASS}`);
+
+                assert.strictEqual($editedText.text(), 'edytowany', 'edited text is localized');
+            } finally {
+                localization.locale(defaultLocale);
+            }
         });
     });
 });

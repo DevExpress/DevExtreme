@@ -39,6 +39,9 @@ const CHAT_MESSAGEBOX_TEXTAREA_CLASS = 'dx-chat-messagebox-textarea';
 const CHAT_MESSAGELIST_EMPTY_VIEW_CLASS = 'dx-chat-messagelist-empty-view';
 const SCROLLVIEW_REACHBOTTOM_INDICATOR = 'dx-scrollview-scrollbottom';
 const CHAT_MESSAGELIST_DAY_HEADER_CLASS = 'dx-chat-messagelist-day-header';
+const CHAT_MESSAGEGROUP_INFORMATION_CLASS = 'dx-chat-messagegroup-information';
+const CHAT_MESSAGEGROUP_CONTENT_CLASS = 'dx-chat-messagegroup-content';
+const CHAT_MESSAGE_EDITED_CLASS = 'dx-chat-message-edited';
 
 const CHAT_LAST_MESSAGEGROUP_ALIGNMENT_START_CLASS = 'dx-chat-last-messagegroup-alignment-start';
 const CHAT_LAST_MESSAGEGROUP_ALIGNMENT_END_CLASS = 'dx-chat-last-messagegroup-alignment-end';
@@ -1802,6 +1805,71 @@ QUnit.module('Chat', () => {
             this.clock.tick(timeout * 2);
 
             assert.strictEqual(this.getBubbles().eq(0).text(), 'updated text', 'message bubble text was updated');
+        });
+
+        QUnit.test('it should be possible to update isEdited state of first message in group using push api)', function(assert) {
+            const messages = [{ id: 0, text: 'message_0' }, { id: 1, text: 'message_1' }];
+            const timeout = 100;
+
+            const store = new CustomStore({
+                key: 'id',
+                load: function() {
+                    const d = $.Deferred();
+                    setTimeout(function() {
+                        d.resolve([...messages]);
+                    }, timeout);
+                    return d.promise();
+                },
+            });
+
+            this.reinit({
+                dataSource: store,
+                reloadOnChange: false,
+            });
+
+            this.clock.tick(timeout);
+            store.push([{ type: 'update', key: 0, data: { ...messages[0], isEdited: true } }]);
+            this.clock.tick(timeout * 2);
+
+            const $information = this.$element.find(`.${CHAT_MESSAGEGROUP_INFORMATION_CLASS}`);
+            const $editedMessage = $information.find(`.${CHAT_MESSAGE_EDITED_CLASS}`);
+
+            assert.strictEqual($editedMessage.length, 1, 'edited text was added');
+        });
+
+        QUnit.test('it should be possible to update isEdited state of not first message in group using push api)', function(assert) {
+            const messages = [{ id: 0, text: 'message_0' }, { id: 1, text: 'message_1', isEdited: true }];
+            const timeout = 100;
+
+            const store = new CustomStore({
+                key: 'id',
+                load: function() {
+                    const d = $.Deferred();
+                    setTimeout(function() {
+                        d.resolve([...messages]);
+                    }, timeout);
+                    return d.promise();
+                },
+            });
+
+            this.reinit({
+                dataSource: store,
+                reloadOnChange: false,
+            });
+
+            this.clock.tick(timeout);
+
+            const $groupContent = this.$element.find(`.${CHAT_MESSAGEGROUP_CONTENT_CLASS}`);
+            let $editedMessage = $groupContent.find(`.${CHAT_MESSAGE_EDITED_CLASS}`);
+
+            assert.strictEqual($editedMessage.length, 1, 'edited text was added on init');
+
+            store.push([{ type: 'update', key: 1, data: { ...messages[1], isEdited: false } }]);
+            this.clock.tick(timeout * 2);
+
+            $editedMessage = $groupContent.find(`.${CHAT_MESSAGE_EDITED_CLASS}`);
+
+            assert.strictEqual($editedMessage.length, 0, 'edited text was removed at runtime');
         });
 
         QUnit.test('Message should be removed along with its group when using store.push({ type: "remove", key: "message_id" }), and the message was the last one in the group', function(assert) {
