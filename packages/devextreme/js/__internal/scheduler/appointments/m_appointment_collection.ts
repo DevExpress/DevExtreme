@@ -433,11 +433,6 @@ class SchedulerAppointments extends CollectionWidget {
       ? createAgendaAppointmentLayout(formatText, config)
       : createAppointmentLayout(formatText, config));
 
-    $container.parent().prepend(
-      $('<span>')
-        .addClass(APPOINTMENT_CONTENT_CLASSES.ARIA_DESCRIPTION)
-        .attr('hidden', true),
-    );
     if (!this.isAgendaView) {
       $container.parent().prepend(
         $('<div>').addClass(APPOINTMENT_CONTENT_CLASSES.STRIP),
@@ -547,11 +542,18 @@ class SchedulerAppointments extends CollectionWidget {
 
   _createItemByTemplate(itemTemplate, renderArgs) {
     const { itemData, container, index } = renderArgs;
+    const parent = $(container).parent();
+
+    parent.prepend(
+      $('<span>')
+        .addClass(APPOINTMENT_CONTENT_CLASSES.ARIA_DESCRIPTION)
+        .attr('hidden', true),
+    );
 
     return itemTemplate.render({
       model: {
         appointmentData: itemData,
-        targetedAppointmentData: this.invoke('getTargetedAppointmentData', itemData, $(container).parent()),
+        targetedAppointmentData: this.invoke('getTargetedAppointmentData', itemData, parent),
       },
       container,
       index,

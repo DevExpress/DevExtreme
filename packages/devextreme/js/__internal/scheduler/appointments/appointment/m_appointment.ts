@@ -195,11 +195,12 @@ export class Appointment extends DOMComponent<AppointmentProperties> {
       .then((text) => {
         if (text) {
           const id = `dx-${new Guid()}`;
+          const $description = $element.find(`.${APPOINTMENT_CONTENT_CLASSES.ARIA_DESCRIPTION}`);
 
-          $element.attr('aria-describedby', id);
-          $element.find(`.${APPOINTMENT_CONTENT_CLASSES.ARIA_DESCRIPTION}`)
-            ?.text(text)
-            ?.attr('id', id);
+          if ($description) {
+            $element.attr('aria-describedby', id);
+            $description.text(text).attr('id', id);
+          }
         }
       });
   }
