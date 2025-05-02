@@ -363,6 +363,8 @@
         "dxChat-elementAriaLabel": "Chat",
         "dxChat-textareaPlaceholder": "Digite uma mensagem",
         "dxChat-sendButtonAriaLabel": "Enviar",
+        "dxChat-cancelEditingButtonAriaLabel": "Cancelar",
+        "dxChat-editingMessageCaption": "Edit Message",
         "dxChat-defaultUserName": "Usuário desconhecido",
         "dxChat-messageListAriaLabel": "Lista de mensagens",
         "dxChat-alertListAriaLabel": "Lista de erros",

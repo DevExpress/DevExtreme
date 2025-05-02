@@ -8,6 +8,10 @@
   .dx-chat-messagebox {
     padding: $padding;
     border-top-color: $border-color;
+    gap: $padding;
+  }
+
+  .dx-chat-messagebox-input-container {
     gap: $gap;
   }
 
