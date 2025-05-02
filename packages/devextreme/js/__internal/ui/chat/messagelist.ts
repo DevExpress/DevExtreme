@@ -583,7 +583,7 @@ class MessageList extends Widget<Properties> {
   }
 
   _updateMessageByKey(key: string | number | undefined, data: Message): void {
-    if (key) {
+    if (isDefined(key)) {
       const $targetMessage = this._findMessageElementByKey(key);
 
       const bubble = MessageBubble.getInstance($targetMessage);

@@ -1777,6 +1777,33 @@ QUnit.module('Chat', () => {
             assert.deepEqual(messageData, { id: 2, text: newBubbleText }, 'message bubble data was updated');
         });
 
+        QUnit.test('it should be possible to update item with key=0 using push api)', function(assert) {
+            const messages = [{ id: 0, text: 'message_0' }, { id: 1, text: 'message_1' }];
+            const timeout = 100;
+
+            const store = new CustomStore({
+                key: 'id',
+                load: function() {
+                    const d = $.Deferred();
+                    setTimeout(function() {
+                        d.resolve([...messages]);
+                    }, timeout);
+                    return d.promise();
+                },
+            });
+
+            this.reinit({
+                dataSource: store,
+                reloadOnChange: false,
+            });
+
+            this.clock.tick(timeout);
+            store.push([{ type: 'update', key: 0, data: { text: 'updated text' } }]);
+            this.clock.tick(timeout * 2);
+
+            assert.strictEqual(this.getBubbles().eq(0).text(), 'updated text', 'message bubble text was updated');
+        });
+
         QUnit.test('Message should be removed along with its group when using store.push({ type: "remove", key: "message_id" }), and the message was the last one in the group', function(assert) {
             const messages = [{ id: 1, text: 'message_1', author: userFirst }, { id: 2, text: 'message_2', author: userSecond }];
             const timeout = 100;
