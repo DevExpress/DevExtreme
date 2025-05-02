@@ -80,20 +80,12 @@ function getActiveAccessibleElements(ariaLabel, viewElement) {
     return $activeElements;
 }
 
-function findFocusedViewElement(viewSelectors, element, altKey) {
-    const root = element?.getRootNode() || domAdapter.getDocument();
-    const $closestWidgetContainer = $(element).closest('.dx-datagrid, .dx-treelist');
-
-    // When Alt key is pressed, we must restrict search to the current container only
-    if(altKey && !$closestWidgetContainer.length) {
-        return null;
-    }
-
-    const searchContext = $closestWidgetContainer.length ? $closestWidgetContainer : $(root);
+function findFocusedViewElement(rootElement, viewSelectors, element) {
+    const root = rootElement || element?.getRootNode() || domAdapter.getDocument();
 
     for(const index in viewSelectors) {
         const selector = viewSelectors[index];
-        const $focusViewElement = searchContext.find(selector).first();
+        const $focusViewElement = $(root).find(selector).first();
 
         if($focusViewElement.length) {
             return $focusViewElement;
@@ -188,11 +180,7 @@ export function selectView(viewName, instance, event) {
             viewItemIndex = keyName === 'upArrow' ? --viewItemIndex : ++viewItemIndex;
             const viewName = viewNames[viewItemIndex];
             const viewSelectors = viewItemSelectorMap[viewName];
-
-            // T1285596: When Alt key is also pressed, we ensure navigation happens only within the current DataGrid
-            // This prevents navigation from affecting other DataGrids when multiple are present on the same page
-            const $focusViewElement = findFocusedViewElement(viewSelectors, event.target, event.altKey);
-
+            const $focusViewElement = findFocusedViewElement(instanceTest.component.element(), viewSelectors, event.target);
             if($focusViewElement && $focusViewElement.length) {
                 $focusViewElement.attr('tabindex', instance.option('tabindex') || 0);
                 eventsEngine.trigger($focusViewElement, 'focus');
