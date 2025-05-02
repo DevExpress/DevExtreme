@@ -292,6 +292,9 @@
         "dxScheduler-recurrenceAfter": "Po",
         "dxScheduler-recurrenceOn": "Zap",
 
+        "dxScheduler-recurrenceUntilDateLabel": "Date when repeat ends",
+        "dxScheduler-recurrenceOccurrenceLabel": "Number of occurrences",
+
         "dxScheduler-recurrenceRepeatMinutely": "minut(u)",
         "dxScheduler-recurrenceRepeatHourly": "hodin(u)",
         "dxScheduler-recurrenceRepeatDaily": "dní",

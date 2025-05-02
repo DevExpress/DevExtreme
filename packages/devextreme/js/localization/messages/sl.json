@@ -292,6 +292,9 @@
         "dxScheduler-recurrenceAfter": "Po",
         "dxScheduler-recurrenceOn": "Vklopljeno",
 
+        "dxScheduler-recurrenceUntilDateLabel": "Date when repeat ends",
+        "dxScheduler-recurrenceOccurrenceLabel": "Number of occurrences",
+
         "dxScheduler-recurrenceRepeatMinutely": "minute(s)",
         "dxScheduler-recurrenceRepeatHourly": "hour(s)",
         "dxScheduler-recurrenceRepeatDaily": "dan/dni",

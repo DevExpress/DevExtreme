@@ -292,6 +292,9 @@
         "dxScheduler-recurrenceAfter": "Po",
         "dxScheduler-recurrenceOn": "Iki",
 
+        "dxScheduler-recurrenceUntilDateLabel": "Date when repeat ends",
+        "dxScheduler-recurrenceOccurrenceLabel": "Number of occurrences",
+
         "dxScheduler-recurrenceRepeatMinutely": "minutę(es)",
         "dxScheduler-recurrenceRepeatHourly": "valandą(as)",
         "dxScheduler-recurrenceRepeatDaily": "dieną(as)",

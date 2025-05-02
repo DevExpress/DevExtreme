@@ -292,6 +292,9 @@
         "dxScheduler-recurrenceAfter": "Pēc",
         "dxScheduler-recurrenceOn": "On",
 
+        "dxScheduler-recurrenceUntilDateLabel": "Date when repeat ends",
+        "dxScheduler-recurrenceOccurrenceLabel": "Number of occurrences",
+
         "dxScheduler-recurrenceRepeatMinutely": "minūte(s)",
         "dxScheduler-recurrenceRepeatHourly": "stunda(s)",
         "dxScheduler-recurrenceRepeatDaily": "diena(s)",

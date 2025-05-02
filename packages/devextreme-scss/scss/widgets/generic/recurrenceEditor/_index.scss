@@ -25,3 +25,11 @@ $generic-recurrence-number-box-margin-right: 11px;
 .dx-recurrence-numberbox-interval-label {
   margin-top: $generic-recurrence-interval-number-box-margin-top;
 }
+
+.dx-recurrence-datebox-until-date {
+  margin-top: $generic-recurrence-until-date-box-top-margin;
+}
+
+.dx-recurrence-numberbox-repeat-count {
+  margin-top: $generic-recurrence-count-number-box-top-margin;
+}

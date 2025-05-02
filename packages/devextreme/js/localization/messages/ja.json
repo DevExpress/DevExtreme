@@ -292,6 +292,9 @@
         "dxScheduler-recurrenceAfter": "次の発生回数後に終了",
         "dxScheduler-recurrenceOn": "リピート解除の日付",
 
+        "dxScheduler-recurrenceUntilDateLabel": "Date when repeat ends",
+        "dxScheduler-recurrenceOccurrenceLabel": "Number of occurrences",
+
         "dxScheduler-recurrenceRepeatMinutely": "分ごと",
         "dxScheduler-recurrenceRepeatHourly": "時間ごと",
         "dxScheduler-recurrenceRepeatDaily": "日後",
