@@ -7,6 +7,14 @@
   width: auto;
   word-break: break-word;
   white-space: break-spaces;
+
+  .dx-chat-messagebubble-content {
+    &.dx-chat-messagebubble-deleted {
+      display: flex;
+      align-items: flex-end;
+      font-style: italic;
+    }
+  }
 }
 
 .dx-chat-messagegroup-alignment-start {

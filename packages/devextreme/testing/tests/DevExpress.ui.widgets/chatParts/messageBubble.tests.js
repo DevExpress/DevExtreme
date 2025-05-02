@@ -1,4 +1,5 @@
 import $ from 'jquery';
+import messageLocalization from 'common/core/localization/message';
 
 import MessageBubble from '__internal/ui/chat/messagebubble';
 
@@ -33,6 +34,12 @@ QUnit.module('MessageBubble', moduleConfig, () => {
 
             assert.strictEqual(this.$element.text(), 'message text');
         });
+
+        QUnit.test('bubble should be rendered with default text if isDeleted is true', function(assert) {
+            this.reinit({ isDeleted: true });
+
+            assert.strictEqual(this.$element.text(), messageLocalization.format('dxChat-deletedMessageText'));
+        });
     });
 
     QUnit.module('Options', () => {
@@ -40,6 +47,12 @@ QUnit.module('MessageBubble', moduleConfig, () => {
             this.instance.option('text', 'new message text');
 
             assert.strictEqual(this.$element.text(), 'new message text');
+        });
+
+        QUnit.test('isDeleted option should delete the message after being set at runtime', function(assert) {
+            this.instance.option('isDeleted', true);
+
+            assert.strictEqual(this.$element.text(), messageLocalization.format('dxChat-deletedMessageText'));
         });
 
         QUnit.test('template render function should be called if it has been passed', function(assert) {
