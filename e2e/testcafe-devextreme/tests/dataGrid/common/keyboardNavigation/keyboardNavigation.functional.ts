@@ -4917,7 +4917,7 @@ test('Multiple DataGrids - Ctrl+Up/Down from filter row should focus data row in
   const secondGridDataCell = secondGrid.getDataRow(0).getDataCell(0).element;
 
   await t
-    .click(secondGridDataCell.element)
+    .click(secondGridDataCell)
     .pressKey('ctrl+up')
     .expect(secondDataGridFilterCell.focused)
     .ok('Second grid filter cell is focused')
