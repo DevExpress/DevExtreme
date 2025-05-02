@@ -102,8 +102,10 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
  */
 @Component({
     selector: 'dx-autocomplete',
+    standalone: true,
     template: '',
     host: { ngSkipHydration: 'true' },
+    imports: [ DxIntegrationModule ],
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -1553,6 +1555,7 @@ export class DxAutocompleteComponent extends DxComponent implements OnDestroy, C
 
 @NgModule({
   imports: [
+    DxAutocompleteComponent,
     DxiButtonModule,
     DxoOptionsModule,
     DxoDropDownOptionsModule,
@@ -1586,9 +1589,6 @@ export class DxAutocompleteComponent extends DxComponent implements OnDestroy, C
     DxiAutocompleteToolbarItemModule,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxAutocompleteComponent
   ],
   exports: [
     DxAutocompleteComponent,
@@ -1627,6 +1627,8 @@ export class DxAutocompleteComponent extends DxComponent implements OnDestroy, C
   ]
 })
 export class DxAutocompleteModule { }
+
+export * from 'devextreme-angular/ui/autocomplete/nested';
 
 import type * as DxAutocompleteTypes from "devextreme/ui/autocomplete_types";
 export { DxAutocompleteTypes };

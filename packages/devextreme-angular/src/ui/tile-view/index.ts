@@ -57,8 +57,10 @@ import { DxiTileViewItemComponent } from 'devextreme-angular/ui/tile-view/nested
  */
 @Component({
     selector: 'dx-tile-view',
+    standalone: true,
     template: '',
     host: { ngSkipHydration: 'true' },
+    imports: [ DxIntegrationModule ],
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -683,13 +685,11 @@ export class DxTileViewComponent<TItem = any, TKey = any> extends DxComponent im
 
 @NgModule({
   imports: [
+    DxTileViewComponent,
     DxiItemModule,
     DxiTileViewItemModule,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxTileViewComponent
   ],
   exports: [
     DxTileViewComponent,
@@ -699,6 +699,8 @@ export class DxTileViewComponent<TItem = any, TKey = any> extends DxComponent im
   ]
 })
 export class DxTileViewModule { }
+
+export * from 'devextreme-angular/ui/tile-view/nested';
 
 import type * as DxTileViewTypes from "devextreme/ui/tile_view_types";
 export { DxTileViewTypes };

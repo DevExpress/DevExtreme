@@ -16,6 +16,7 @@ import {
 
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxoAnimationState } from './base/animation-state';
@@ -23,8 +24,10 @@ import { DxoAnimationState } from './base/animation-state';
 
 @Component({
     selector: 'dxo-to',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost],
     inputs: [
         'left',
@@ -61,7 +64,7 @@ export class DxoToComponent extends DxoAnimationState implements OnDestroy, OnIn
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoToComponent
   ],
   exports: [

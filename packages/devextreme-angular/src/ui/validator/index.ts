@@ -76,8 +76,10 @@ import { DxiValidatorValidationRuleComponent } from 'devextreme-angular/ui/valid
  */
 @Component({
     selector: 'dx-validator',
+    standalone: true,
     template: '',
     host: { ngSkipHydration: 'true' },
+    imports: [ DxIntegrationModule ],
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -437,6 +439,7 @@ export class DxValidatorComponent extends DxComponentExtension implements OnDest
 
 @NgModule({
   imports: [
+    DxValidatorComponent,
     DxoAdapterModule,
     DxiValidationRuleModule,
     DxoValidatorAdapterModule,
@@ -452,9 +455,6 @@ export class DxValidatorComponent extends DxComponentExtension implements OnDest
     DxiValidatorValidationRuleModule,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxValidatorComponent
   ],
   exports: [
     DxValidatorComponent,
@@ -475,6 +475,8 @@ export class DxValidatorComponent extends DxComponentExtension implements OnDest
   ]
 })
 export class DxValidatorModule { }
+
+export * from 'devextreme-angular/ui/validator/nested';
 
 import type * as DxValidatorTypes from "devextreme/ui/validator_types";
 export { DxValidatorTypes };

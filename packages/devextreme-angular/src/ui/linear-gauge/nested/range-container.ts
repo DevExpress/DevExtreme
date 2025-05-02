@@ -21,6 +21,7 @@ import { ChartsColor, Palette, PaletteExtensionMode } from 'devextreme/common/ch
 import { HorizontalAlignment, VerticalAlignment } from 'devextreme/common';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
@@ -29,8 +30,10 @@ import { DxiLinearGaugeRangeComponent } from './range-dxi';
 
 @Component({
     selector: 'dxo-linear-gauge-range-container',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxoLinearGaugeRangeContainerComponent extends NestedOption implements OnDestroy, OnInit  {
@@ -132,7 +135,7 @@ export class DxoLinearGaugeRangeContainerComponent extends NestedOption implemen
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoLinearGaugeRangeContainerComponent
   ],
   exports: [

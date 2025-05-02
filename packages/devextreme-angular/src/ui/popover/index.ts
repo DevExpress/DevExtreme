@@ -80,8 +80,10 @@ import { DxiPopoverToolbarItemComponent } from 'devextreme-angular/ui/popover/ne
  */
 @Component({
     selector: 'dx-popover',
+    standalone: true,
     template: '<ng-content></ng-content>',
     host: { ngSkipHydration: 'true' },
+    imports: [ DxIntegrationModule ],
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -896,6 +898,7 @@ export class DxPopoverComponent extends DxComponent implements OnDestroy, OnChan
 
 @NgModule({
   imports: [
+    DxPopoverComponent,
     DxoAnimationModule,
     DxoHideModule,
     DxoFromModule,
@@ -925,9 +928,6 @@ export class DxPopoverComponent extends DxComponent implements OnDestroy, OnChan
     DxiPopoverToolbarItemModule,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxPopoverComponent
   ],
   exports: [
     DxPopoverComponent,
@@ -962,6 +962,8 @@ export class DxPopoverComponent extends DxComponent implements OnDestroy, OnChan
   ]
 })
 export class DxPopoverModule { }
+
+export * from 'devextreme-angular/ui/popover/nested';
 
 import type * as DxPopoverTypes from "devextreme/ui/popover_types";
 export { DxPopoverTypes };

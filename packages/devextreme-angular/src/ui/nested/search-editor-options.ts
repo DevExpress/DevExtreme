@@ -21,6 +21,7 @@ import {
 
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxoTextBoxOptions } from './base/text-box-options';
@@ -29,8 +30,10 @@ import { DxiButtonComponent } from './button-dxi';
 
 @Component({
     selector: 'dxo-search-editor-options',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost],
     inputs: [
         'accessKey',
@@ -144,7 +147,7 @@ export class DxoSearchEditorOptionsComponent extends DxoTextBoxOptions implement
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoSearchEditorOptionsComponent
   ],
   exports: [

@@ -16,6 +16,7 @@ import {
 
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxoColumnChooserSelectionConfig } from './base/column-chooser-selection-config';
@@ -23,8 +24,10 @@ import { DxoColumnChooserSelectionConfig } from './base/column-chooser-selection
 
 @Component({
     selector: 'dxo-selection',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost],
     inputs: [
         'allowSelectAll',
@@ -64,7 +67,7 @@ export class DxoSelectionComponent extends DxoColumnChooserSelectionConfig imple
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoSelectionComponent
   ],
   exports: [

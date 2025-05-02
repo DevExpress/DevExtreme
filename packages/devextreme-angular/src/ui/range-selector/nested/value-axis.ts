@@ -18,6 +18,7 @@ import { ChartAxisScale } from 'devextreme/viz/range_selector';
 import { ChartsDataType } from 'devextreme/common/charts';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
@@ -25,8 +26,10 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-range-selector-value-axis',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxoRangeSelectorValueAxisComponent extends NestedOption implements OnDestroy, OnInit  {
@@ -104,7 +107,7 @@ export class DxoRangeSelectorValueAxisComponent extends NestedOption implements 
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoRangeSelectorValueAxisComponent
   ],
   exports: [

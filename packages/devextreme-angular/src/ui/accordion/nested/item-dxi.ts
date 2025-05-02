@@ -18,6 +18,7 @@ import { DOCUMENT } from '@angular/common';
 
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
     extractTemplate,
     DxTemplateDirective,
@@ -29,8 +30,10 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxi-accordion-item',
+    standalone: true,
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost, DxTemplateHost]
 })
 export class DxiAccordionItemComponent extends CollectionNestedOption implements AfterViewInit,
@@ -133,7 +136,7 @@ export class DxiAccordionItemComponent extends CollectionNestedOption implements
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiAccordionItemComponent
   ],
   exports: [

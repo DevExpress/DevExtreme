@@ -100,9 +100,11 @@ import { DxoLinearGaugeWidthModule } from 'devextreme-angular/ui/linear-gauge/ne
  */
 @Component({
     selector: 'dx-linear-gauge',
+    standalone: true,
     template: '',
     styles: [ ' :host {  display: block; }'],
     host: { ngSkipHydration: 'true' },
+    imports: [ DxIntegrationModule ],
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -706,6 +708,7 @@ export class DxLinearGaugeComponent extends DxComponent implements OnDestroy, On
 
 @NgModule({
   imports: [
+    DxLinearGaugeComponent,
     DxoAnimationModule,
     DxoExportModule,
     DxoGeometryModule,
@@ -758,9 +761,6 @@ export class DxLinearGaugeComponent extends DxComponent implements OnDestroy, On
     DxoLinearGaugeWidthModule,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxLinearGaugeComponent
   ],
   exports: [
     DxLinearGaugeComponent,
@@ -818,6 +818,8 @@ export class DxLinearGaugeComponent extends DxComponent implements OnDestroy, On
   ]
 })
 export class DxLinearGaugeModule { }
+
+export * from 'devextreme-angular/ui/linear-gauge/nested';
 
 import type * as DxLinearGaugeTypes from "devextreme/viz/linear_gauge_types";
 export { DxLinearGaugeTypes };

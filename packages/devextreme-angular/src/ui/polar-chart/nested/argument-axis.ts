@@ -21,6 +21,7 @@ import { ChartsDataType, DashStyle, Font, DiscreteAxisDivisionMode, ArgumentAxis
 import { Format } from 'devextreme/common/core/localization';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
@@ -30,8 +31,10 @@ import { DxiPolarChartStripComponent } from './strip-dxi';
 
 @Component({
     selector: 'dxo-polar-chart-argument-axis',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxoPolarChartArgumentAxisComponent extends NestedOption implements OnDestroy, OnInit  {
@@ -325,7 +328,7 @@ export class DxoPolarChartArgumentAxisComponent extends NestedOption implements 
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoPolarChartArgumentAxisComponent
   ],
   exports: [

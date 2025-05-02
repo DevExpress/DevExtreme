@@ -20,6 +20,7 @@ import {
 import { dxHtmlEditorTableContextMenuItem, HtmlEditorPredefinedContextMenuItem } from 'devextreme/ui/html_editor';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
@@ -29,8 +30,10 @@ import { DxiHtmlEditorTableContextMenuItemComponent } from './table-context-menu
 
 @Component({
     selector: 'dxo-html-editor-table-context-menu',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxoHtmlEditorTableContextMenuComponent extends NestedOption implements OnDestroy, OnInit  {
@@ -92,7 +95,7 @@ export class DxoHtmlEditorTableContextMenuComponent extends NestedOption impleme
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoHtmlEditorTableContextMenuComponent
   ],
   exports: [

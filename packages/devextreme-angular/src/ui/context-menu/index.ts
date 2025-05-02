@@ -87,8 +87,10 @@ import { DxiContextMenuItemComponent } from 'devextreme-angular/ui/context-menu/
  */
 @Component({
     selector: 'dx-context-menu',
+    standalone: true,
     template: '',
     host: { ngSkipHydration: 'true' },
+    imports: [ DxIntegrationModule ],
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -949,6 +951,7 @@ export class DxContextMenuComponent<TKey = any> extends DxComponent implements O
 
 @NgModule({
   imports: [
+    DxContextMenuComponent,
     DxoAnimationModule,
     DxoHideModule,
     DxoFromModule,
@@ -981,9 +984,6 @@ export class DxContextMenuComponent<TKey = any> extends DxComponent implements O
     DxoContextMenuToModule,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxContextMenuComponent
   ],
   exports: [
     DxContextMenuComponent,
@@ -1021,6 +1021,8 @@ export class DxContextMenuComponent<TKey = any> extends DxComponent implements O
   ]
 })
 export class DxContextMenuModule { }
+
+export * from 'devextreme-angular/ui/context-menu/nested';
 
 import type * as DxContextMenuTypes from "devextreme/ui/context_menu_types";
 export { DxContextMenuTypes };

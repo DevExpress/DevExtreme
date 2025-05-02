@@ -16,6 +16,7 @@ import {
 
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxoFormat } from './base/format';
@@ -23,8 +24,10 @@ import { DxoFormat } from './base/format';
 
 @Component({
     selector: 'dxo-value-format',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost],
     inputs: [
         'currency',
@@ -62,7 +65,7 @@ export class DxoValueFormatComponent extends DxoFormat implements OnDestroy, OnI
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoValueFormatComponent
   ],
   exports: [
