@@ -20,6 +20,7 @@ import {
 import { SchedulerPredefinedToolbarItem, ToolbarItem } from 'devextreme/ui/scheduler';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
@@ -29,8 +30,10 @@ import { DxiSchedulerToolbarItemComponent } from './toolbar-item-dxi';
 
 @Component({
     selector: 'dxo-scheduler-toolbar',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxoSchedulerToolbarComponent extends NestedOption implements OnDestroy, OnInit  {
@@ -108,7 +111,7 @@ export class DxoSchedulerToolbarComponent extends NestedOption implements OnDest
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoSchedulerToolbarComponent
   ],
   exports: [

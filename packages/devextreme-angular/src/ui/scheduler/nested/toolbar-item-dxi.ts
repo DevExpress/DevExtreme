@@ -21,6 +21,7 @@ import { ToolbarItemLocation, ToolbarItemComponent } from 'devextreme/common';
 import { SchedulerPredefinedToolbarItem, DateNavigatorItemProperties } from 'devextreme/ui/scheduler';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
     extractTemplate,
     DxTemplateDirective,
@@ -32,8 +33,10 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxi-scheduler-toolbar-item',
+    standalone: true,
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost, DxTemplateHost]
 })
 export class DxiSchedulerToolbarItemComponent extends CollectionNestedOption implements AfterViewInit,
@@ -176,7 +179,7 @@ export class DxiSchedulerToolbarItemComponent extends CollectionNestedOption imp
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiSchedulerToolbarItemComponent
   ],
   exports: [

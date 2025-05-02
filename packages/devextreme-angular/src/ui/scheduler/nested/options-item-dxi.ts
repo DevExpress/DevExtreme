@@ -19,6 +19,7 @@ import { DOCUMENT } from '@angular/common';
 import { ButtonType } from 'devextreme/common';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
     extractTemplate,
     DxTemplateDirective,
@@ -30,8 +31,10 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxi-scheduler-options-item',
+    standalone: true,
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost, DxTemplateHost]
 })
 export class DxiSchedulerOptionsItemComponent extends CollectionNestedOption implements AfterViewInit,
@@ -134,7 +137,7 @@ export class DxiSchedulerOptionsItemComponent extends CollectionNestedOption imp
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiSchedulerOptionsItemComponent
   ],
   exports: [
