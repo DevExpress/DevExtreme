@@ -592,6 +592,13 @@ class MessageList extends Widget<Properties> {
     return result;
   }
 
+  _getMessageGroupByBubbleElement($bubble: dxElementWrapper): MessageGroup {
+    const $currentMessageGroup = $bubble.closest(`.${CHAT_MESSAGEGROUP_CLASS}`);
+    const group: MessageGroup = MessageGroup.getInstance($currentMessageGroup);
+
+    return group;
+  }
+
   _updateMessageByKey(key: string | number | undefined, data: Message): void {
     if (isDefined(key)) {
       const $targetMessage = this._findMessageElementByKey(key);
@@ -600,9 +607,8 @@ class MessageList extends Widget<Properties> {
       const { text, isDeleted } = data;
       bubble.option({ text, isDeleted });
 
-      const $currentMessageGroup = $targetMessage.closest(`.${CHAT_MESSAGEGROUP_CLASS}`);
-      const group: MessageGroup = MessageGroup.getInstance($currentMessageGroup);
       const isEdited = data.isEdited === true && !data.isDeleted;
+      const group = this._getMessageGroupByBubbleElement($targetMessage);
 
       group._updateMessageEditedText($targetMessage, isEdited);
     }
@@ -619,10 +625,7 @@ class MessageList extends Widget<Properties> {
       return;
     }
 
-    const $currentMessageGroup = $targetMessage.closest(`.${CHAT_MESSAGEGROUP_CLASS}`);
-
-    const group: MessageGroup = MessageGroup.getInstance($currentMessageGroup);
-
+    const group = this._getMessageGroupByBubbleElement($targetMessage);
     const { items } = group.option();
     const newItems = items.filter((item) => item.id !== key);
 

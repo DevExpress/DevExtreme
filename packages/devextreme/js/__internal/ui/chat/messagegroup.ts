@@ -25,6 +25,7 @@ const CHAT_MESSAGEGROUP_TIME_CLASS = 'dx-chat-messagegroup-time';
 const CHAT_MESSAGEGROUP_AUTHOR_NAME_CLASS = 'dx-chat-messagegroup-author-name';
 const CHAT_MESSAGEGROUP_CONTENT_CLASS = 'dx-chat-messagegroup-content';
 const CHAT_MESSAGE_EDITED_CLASS = 'dx-chat-message-edited';
+const CHAT_MESSAGE_EDITED_HIDING_CLASS = 'dx-chat-message-edited-hiding';
 const CHAT_MESSAGE_EDITED_ICON_CLASS = 'dx-chat-message-edited-icon';
 const CHAT_MESSAGE_EDITED_TEXT_CLASS = 'dx-chat-message-edited-text';
 
@@ -65,7 +66,7 @@ class MessageGroup extends Widget<Properties> {
       .removeClass(CHAT_MESSAGEGROUP_ALIGNMENT_START_CLASS)
       .removeClass(CHAT_MESSAGEGROUP_ALIGNMENT_END_CLASS);
 
-    const alignmentClass = alignment === 'start'
+    const alignmentClass = this._isAlignmentStart(alignment)
       ? CHAT_MESSAGEGROUP_ALIGNMENT_START_CLASS
       : CHAT_MESSAGEGROUP_ALIGNMENT_END_CLASS;
 
@@ -87,7 +88,7 @@ class MessageGroup extends Widget<Properties> {
       return;
     }
 
-    if (showAvatar && alignment === 'start') {
+    if (showAvatar && this._isAlignmentStart(alignment)) {
       this._renderAvatar();
     }
 
@@ -156,6 +157,7 @@ class MessageGroup extends Widget<Properties> {
   _renderMessageGroupInformation(message: Message): void {
     const { alignment, showUserName, showMessageTimestamp } = this.option();
     const { timestamp, author, isEdited } = message;
+    const isAlignmentStart = this._isAlignmentStart(alignment);
 
     this.$element().find(`.${CHAT_MESSAGEGROUP_INFORMATION_CLASS}`).remove();
 
@@ -164,7 +166,7 @@ class MessageGroup extends Widget<Properties> {
 
     if (showUserName) {
       const authorName = author?.name ?? messageLocalization.format('dxChat-defaultUserName');
-      const authorNameText = alignment === 'start' ? authorName : '';
+      const authorNameText = this._isAlignmentStart(alignment) ? authorName : '';
 
       $('<div>')
         .addClass(CHAT_MESSAGEGROUP_AUTHOR_NAME_CLASS)
@@ -172,7 +174,7 @@ class MessageGroup extends Widget<Properties> {
         .appendTo($information);
     }
 
-    if (isEdited && alignment === 'end') {
+    if (isEdited && !isAlignmentStart) {
       $information.append(this._createEditedElement());
     }
 
@@ -189,7 +191,7 @@ class MessageGroup extends Widget<Properties> {
       }
     }
 
-    if (isEdited && alignment === 'start') {
+    if (isEdited && isAlignmentStart) {
       $information.append(this._createEditedElement());
     }
 
@@ -216,10 +218,32 @@ class MessageGroup extends Widget<Properties> {
 
   _updateMessageEditedText($message: dxElementWrapper, isEdited = false): void {
     const $firstMessage = this._$messageBubbleContainer.find(`.${CHAT_MESSAGEBUBBLE_CLASS}`).first();
+    const removeWithAnimation = ($editedElement: dxElementWrapper): void => {
+      $editedElement.get(0).addEventListener('animationend', () => {
+        $editedElement.remove();
+      }, { once: true });
+
+      $editedElement.addClass(CHAT_MESSAGE_EDITED_HIDING_CLASS);
+    };
 
     if ($message.is($firstMessage)) {
       const items = this.option('items');
-      this._renderMessageGroupInformation(items[0]);
+      const $information = this.$element().find(`.${CHAT_MESSAGEGROUP_INFORMATION_CLASS}`);
+      const $edited = $information.find(`.${CHAT_MESSAGE_EDITED_CLASS}`);
+
+      if ($edited.length && isEdited) {
+        return;
+      }
+
+      if ($edited.length && !isEdited) {
+        removeWithAnimation($edited);
+
+        return;
+      }
+
+      if (isEdited) {
+        this._renderMessageGroupInformation(items[0]);
+      }
 
       return;
     }
@@ -227,13 +251,21 @@ class MessageGroup extends Widget<Properties> {
     const $prevElement = $message.prev();
 
     if ($prevElement.hasClass(CHAT_MESSAGE_EDITED_CLASS)) {
-      $prevElement.remove();
+      if (!isEdited) {
+        removeWithAnimation($prevElement);
+      }
+
+      return;
     }
 
     if (isEdited) {
       const $edited = this._createEditedElement();
       $edited.insertBefore($message);
     }
+  }
+
+  _isAlignmentStart(alignment: string): boolean {
+    return alignment === 'start';
   }
 
   _shouldAddTimeValue(timestamp: Date | string | number | undefined): boolean {
