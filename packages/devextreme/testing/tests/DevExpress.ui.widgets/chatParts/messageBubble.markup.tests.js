@@ -4,7 +4,7 @@ import localization from 'localization';
 import MessageBubble, {
     CHAT_MESSAGEBUBBLE_CLASS,
     CHAT_MESSAGEBUBBLE_CONTENT_CLASS,
-    CHAT_MESSAGEBUBBLE_DELETED_CLASS
+    CHAT_MESSAGEBUBBLE_DELETED_CLASS,
 } from '__internal/ui/chat/messagebubble';
 
 const moduleConfig = {
