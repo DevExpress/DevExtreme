@@ -21,6 +21,7 @@ import { DOCUMENT } from '@angular/common';
 
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
     extractTemplate,
     DxTemplateDirective,
@@ -35,8 +36,10 @@ import { DxiLocationComponent } from './location-dxi';
 
 @Component({
     selector: 'dxi-item',
+    standalone: true,
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost, DxTemplateHost],
     inputs: [
         'disabled',
@@ -192,7 +195,7 @@ export class DxiItemComponent extends DxiButtonGroupItem implements AfterViewIni
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiItemComponent
   ],
   exports: [

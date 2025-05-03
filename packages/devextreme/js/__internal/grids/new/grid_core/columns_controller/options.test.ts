@@ -223,8 +223,8 @@ describe('Options', () => {
       const columns = columnsController.columns.peek();
 
       expect(columns).toHaveLength(2);
-      expect(columns[0].alignment).toMatchInlineSnapshot('"right"');
-      expect(columns[1].alignment).toMatchInlineSnapshot('"center"');
+      expect(columns[0].alignment).toMatchInlineSnapshot('"left"');
+      expect(columns[1].alignment).toMatchInlineSnapshot('"left"');
     });
   });
 

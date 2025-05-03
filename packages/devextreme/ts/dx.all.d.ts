@@ -996,10 +996,6 @@ declare module DevExpress.aiIntegration {
      * [descr:RequestParams.prompt]
      */
     prompt: Prompt;
-    /**
-     * [descr:RequestParams.onChunk]
-     */
-    onChunk: (chunk: string) => void;
   };
   /**
    * [descr:Response]

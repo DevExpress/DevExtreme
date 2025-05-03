@@ -21,6 +21,7 @@ import ChatMessageGroup from '__internal/ui/chat/messagegroup';
 import ChatMessageList from '__internal/ui/chat/messagelist';
 import ChatAlertList from '__internal/ui/chat/alertlist';
 import ChatTypingIndicator from '__internal/ui/chat/typingindicator';
+import ChatMessageBoxEditingPreview from '__internal/ui/chat/messagebox_editing_preview';
 import DataGrid from 'ui/data_grid';
 import DateBox from 'ui/date_box';
 import DateRangeBox from 'ui/date_range_box';
@@ -554,20 +555,6 @@ testComponentDefaults(List,
         support.nativeScrolling = this._supportNativeScrolling;
     }
 );
-
-if(!(/chrome/i.test(navigator.userAgent))) {
-    testComponentDefaults(LoadIndicator,
-        {},
-        { viaImage: true },
-        function() {
-            this._originalRealDevice = devices.real();
-            devices.real({ platform: 'android', version: [4, 0] });
-        },
-        function() {
-            devices.real(this._originalRealDevice);
-        }
-    );
-}
 
 
 testComponentDefaults(Lookup,
@@ -1378,6 +1365,7 @@ testComponentDefaults(Chat,
         onTypingStart: undefined,
         onTypingEnd: undefined,
         onMessageEditingStart: undefined,
+        onMessageEditCanceled: undefined,
         onMessageDeleting: undefined,
         onMessageDeleted: undefined,
         editing: {
@@ -1449,6 +1437,14 @@ testComponentDefaults(ChatTypingIndicator,
     {},
     {
         typingUsers: [],
+    }
+);
+
+testComponentDefaults(ChatMessageBoxEditingPreview,
+    {},
+    {
+        text: '',
+        onCancel: undefined,
     }
 );
 

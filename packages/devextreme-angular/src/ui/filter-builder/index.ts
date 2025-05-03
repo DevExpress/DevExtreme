@@ -76,8 +76,10 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
  */
 @Component({
     selector: 'dx-filter-builder',
+    standalone: true,
     template: '',
     host: { ngSkipHydration: 'true' },
+    imports: [ DxIntegrationModule ],
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -703,6 +705,7 @@ export class DxFilterBuilderComponent extends DxComponent implements OnDestroy, 
 
 @NgModule({
   imports: [
+    DxFilterBuilderComponent,
     DxiCustomOperationModule,
     DxiFieldModule,
     DxoFormatModule,
@@ -717,9 +720,6 @@ export class DxFilterBuilderComponent extends DxComponent implements OnDestroy, 
     DxoFilterBuilderLookupModule,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxFilterBuilderComponent
   ],
   exports: [
     DxFilterBuilderComponent,
@@ -739,6 +739,8 @@ export class DxFilterBuilderComponent extends DxComponent implements OnDestroy, 
   ]
 })
 export class DxFilterBuilderModule { }
+
+export * from 'devextreme-angular/ui/filter-builder/nested';
 
 import type * as DxFilterBuilderTypes from "devextreme/ui/filter_builder_types";
 export { DxFilterBuilderTypes };

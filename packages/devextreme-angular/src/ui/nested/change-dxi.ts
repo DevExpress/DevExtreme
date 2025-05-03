@@ -14,6 +14,7 @@ import {
 
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxiDataChange } from './base/data-change-dxi';
@@ -21,8 +22,10 @@ import { DxiDataChange } from './base/data-change-dxi';
 
 @Component({
     selector: 'dxi-change',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost],
     inputs: [
         'data',
@@ -55,7 +58,7 @@ export class DxiChangeComponent extends DxiDataChange {
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiChangeComponent
   ],
   exports: [

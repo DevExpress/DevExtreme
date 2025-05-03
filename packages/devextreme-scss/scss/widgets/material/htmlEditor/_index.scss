@@ -370,6 +370,6 @@
   }
 
   .dx-pending-indicator {
-    @include dx-pending-indicator-centered($material-invalid-badge-size);
+    @include dx-pending-indicator-centered();
   }
 }

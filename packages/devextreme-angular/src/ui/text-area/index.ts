@@ -59,8 +59,10 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
  */
 @Component({
     selector: 'dx-text-area',
+    standalone: true,
     template: '',
     host: { ngSkipHydration: 'true' },
+    imports: [ DxIntegrationModule ],
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -1014,11 +1016,9 @@ export class DxTextAreaComponent extends DxComponent implements OnDestroy, Contr
 
 @NgModule({
   imports: [
+    DxTextAreaComponent,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxTextAreaComponent
   ],
   exports: [
     DxTextAreaComponent,
@@ -1026,6 +1026,7 @@ export class DxTextAreaComponent extends DxComponent implements OnDestroy, Contr
   ]
 })
 export class DxTextAreaModule { }
+
 
 import type * as DxTextAreaTypes from "devextreme/ui/text_area_types";
 export { DxTextAreaTypes };

@@ -20,6 +20,7 @@ import {
 import { Command, CustomCommand, PanelVisibility } from 'devextreme/ui/diagram';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
@@ -28,8 +29,10 @@ import { DxiDiagramTabComponent } from './tab-dxi';
 
 @Component({
     selector: 'dxo-diagram-properties-panel',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxoDiagramPropertiesPanelComponent extends NestedOption implements OnDestroy, OnInit  {
@@ -83,7 +86,7 @@ export class DxoDiagramPropertiesPanelComponent extends NestedOption implements 
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoDiagramPropertiesPanelComponent
   ],
   exports: [

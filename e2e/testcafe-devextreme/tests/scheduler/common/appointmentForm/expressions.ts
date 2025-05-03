@@ -566,7 +566,7 @@ test(
 
     await takeScreenshot(
       'form_recurrence-editor-first-opening_nested-expr.png',
-      scheduler.appointmentPopup.form,
+      scheduler.appointmentPopup.content,
     );
 
     await t.expect(compareResults.isValid())

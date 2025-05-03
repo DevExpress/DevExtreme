@@ -18,6 +18,7 @@ import { DashStyle, Font } from 'devextreme/common/charts';
 import { MapLayerElement } from 'devextreme/viz/vector_map';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
@@ -25,8 +26,10 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-vector-map-tooltip',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxoVectorMapTooltipComponent extends NestedOption implements OnDestroy, OnInit  {
@@ -168,7 +171,7 @@ export class DxoVectorMapTooltipComponent extends NestedOption implements OnDest
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoVectorMapTooltipComponent
   ],
   exports: [

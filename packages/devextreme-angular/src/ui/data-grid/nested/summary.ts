@@ -23,6 +23,7 @@ import { Format } from 'devextreme/common/core/localization';
 import { HorizontalAlignment } from 'devextreme/common';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
@@ -32,8 +33,10 @@ import { DxiDataGridTotalItemComponent } from './total-item-dxi';
 
 @Component({
     selector: 'dxo-data-grid-summary',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxoDataGridSummaryComponent extends NestedOption implements OnDestroy, OnInit  {
@@ -127,7 +130,7 @@ export class DxoDataGridSummaryComponent extends NestedOption implements OnDestr
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoDataGridSummaryComponent
   ],
   exports: [

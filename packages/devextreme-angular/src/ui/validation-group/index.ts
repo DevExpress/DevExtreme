@@ -42,8 +42,10 @@ import {
  */
 @Component({
     selector: 'dx-validation-group',
+    standalone: true,
     template: '<ng-content></ng-content>',
     host: { ngSkipHydration: 'true' },
+    imports: [ DxIntegrationModule ],
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -176,11 +178,9 @@ export class DxValidationGroupComponent extends DxComponent implements OnDestroy
 
 @NgModule({
   imports: [
+    DxValidationGroupComponent,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxValidationGroupComponent
   ],
   exports: [
     DxValidationGroupComponent,
@@ -188,6 +188,7 @@ export class DxValidationGroupComponent extends DxComponent implements OnDestroy
   ]
 })
 export class DxValidationGroupModule { }
+
 
 import type * as DxValidationGroupTypes from "devextreme/ui/validation_group_types";
 export { DxValidationGroupTypes };

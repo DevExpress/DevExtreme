@@ -202,6 +202,8 @@
         "dxDataGrid-filterPanelClearFilter": "クリア",
         "dxDataGrid-filterPanelFilterEnabledHint": "フィルターの有効化",
         "dxDataGrid-masterDetail": "Cell with details",
+        "dxDataGrid-moveColumnToTheRight": "Move to the right",
+        "dxDataGrid-moveColumnToTheLeft": "Move to the left",
 
         "dxTreeList-ariaTreeList": "{0} 行と {1} 列のツリー リスト",
         "dxTreeList-ariaExpandableInstruction": "Press Ctrl + right arrow to expand the focused node and Ctrl + left arrow to collapse it",
@@ -290,6 +292,9 @@
         "dxScheduler-recurrenceAfter": "次の発生回数後に終了",
         "dxScheduler-recurrenceOn": "リピート解除の日付",
 
+        "dxScheduler-recurrenceUntilDateLabel": "Date when repeat ends",
+        "dxScheduler-recurrenceOccurrenceLabel": "Number of occurrences",
+
         "dxScheduler-recurrenceRepeatMinutely": "分ごと",
         "dxScheduler-recurrenceRepeatHourly": "時間ごと",
         "dxScheduler-recurrenceRepeatDaily": "日後",
@@ -363,6 +368,8 @@
         "dxChat-elementAriaLabel": "Chat",
         "dxChat-textareaPlaceholder": "Type a message",
         "dxChat-sendButtonAriaLabel": "Send",
+        "dxChat-cancelEditingButtonAriaLabel": "キャンセル",
+        "dxChat-editingMessageCaption": "Edit Message",
         "dxChat-defaultUserName": "Unknown User",
         "dxChat-messageListAriaLabel": "Message list",
         "dxChat-alertListAriaLabel": "Error list",
@@ -372,6 +379,7 @@
         "dxChat-typingMessageTwoUsers": "{0} and {1} are typing...",
         "dxChat-typingMessageThreeUsers": "{0}, {1} and {2} are typing...",
         "dxChat-typingMessageMultipleUsers": "{0} and others are typing...",
+        "dxChat-editedMessageText": "Edited",
         "dxChat-editingEditMessage": "編集",
         "dxChat-editingDeleteMessage": "削除",
         "dxChat-editingDeleteConfirmText": "Are you sure you want to delete this message?",

@@ -19,6 +19,7 @@ import { ChartsAxisLabelOverlap, DashStyle, DiscreteAxisDivisionMode, Font, Labe
 import { AggregatedPointsPosition, ChartLabelDisplayMode } from 'devextreme/viz/chart';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
@@ -26,8 +27,10 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-common-axis-settings',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxoCommonAxisSettingsComponent extends NestedOption implements OnDestroy, OnInit  {
@@ -233,7 +236,7 @@ export class DxoCommonAxisSettingsComponent extends NestedOption implements OnDe
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoCommonAxisSettingsComponent
   ],
   exports: [

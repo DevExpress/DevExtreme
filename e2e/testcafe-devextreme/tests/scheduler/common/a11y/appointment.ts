@@ -13,8 +13,9 @@ const appointmentItem = {
   endDate: Date.UTC(2021, 1, 1, 13),
 };
 const currentDate = Date.UTC(2021, 1, 1);
+const appointmentTemplate = ({ appointmentData }) => `<div>${appointmentData.text}</div>`;
 
-['month', 'week', 'day'].forEach((currentView) => {
+['month', 'week', 'day', 'agenda'].forEach((currentView) => {
   test(`appointment should have correct aria-label without description (${currentView})`, async (t) => {
     const scheduler = new Scheduler('#container');
     const appointment = scheduler.getAppointment('App 1');
@@ -30,6 +31,27 @@ const currentDate = Date.UTC(2021, 1, 1);
     await createWidget('dxScheduler', {
       timeZone: 'UTC',
       dataSource: [appointmentItem],
+      currentView,
+      currentDate,
+    });
+  });
+
+  test(`appointment with template should have correct aria-label without description (${currentView})`, async (t) => {
+    const scheduler = new Scheduler('#container');
+    const appointment = scheduler.getAppointment('App 1');
+
+    await t
+      .expect(appointment.getAriaLabel())
+      .eql('App 1: February 1, 2021, 12:00 PM - 1:00 PM')
+      .expect(await appointment.hasAriaDescription())
+      .notOk();
+
+    await a11yCheck(t, checkOptions, '#container');
+  }).before(async () => {
+    await createWidget('dxScheduler', {
+      timeZone: 'UTC',
+      dataSource: [appointmentItem],
+      appointmentTemplate,
       currentView,
       currentDate,
     });
@@ -53,6 +75,41 @@ const currentDate = Date.UTC(2021, 1, 1);
         ...appointmentItem,
         groupId: 1,
       }],
+      currentView,
+      currentDate,
+      groups: ['groupId'],
+      resources: [
+        {
+          fieldExpr: 'groupId',
+          dataSource: [{
+            text: 'resource1',
+            id: 1,
+          }],
+          label: 'Group 1',
+        },
+      ],
+    });
+  });
+
+  test(`appointment with template should have correct aria-label and description (${currentView})`, async (t) => {
+    const scheduler = new Scheduler('#container');
+    const appointment = scheduler.getAppointment('App 1');
+
+    await t
+      .expect(appointment.getAriaLabel())
+      .eql('App 1: February 1, 2021, 12:00 PM - 1:00 PM')
+      .expect(await appointment.getAriaDescription())
+      .eql('Group: resource1; Group 1: resource1');
+
+    await a11yCheck(t, checkOptions, '#container');
+  }).before(async () => {
+    await createWidget('dxScheduler', {
+      timeZone: 'UTC',
+      dataSource: [{
+        ...appointmentItem,
+        groupId: 1,
+      }],
+      appointmentTemplate,
       currentView,
       currentDate,
       groups: ['groupId'],
@@ -115,7 +172,7 @@ const currentDate = Date.UTC(2021, 1, 1);
     });
   });
 
-  test('appointments should have accessible info about reccurence', async (t) => {
+  test(`appointments should have accessible info about reccurence (${currentView})`, async (t) => {
     const scheduler = new Scheduler('#container');
     const recurrenceIcon = scheduler.getAppointment('Website Re-Design Plan').getRecurrenceElement();
 
@@ -141,7 +198,7 @@ const currentDate = Date.UTC(2021, 1, 1);
     });
   });
 
-  test('appointments should have right role', async (t) => {
+  test(`appointments should have right role (${currentView})`, async (t) => {
     const scheduler = new Scheduler('#container');
     const appt = scheduler.getAppointment('Website Re-Design Plan');
 

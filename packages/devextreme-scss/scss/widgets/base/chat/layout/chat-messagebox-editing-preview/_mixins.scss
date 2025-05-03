@@ -1,0 +1,33 @@
+@mixin message-editing-preview(
+  $preview-padding,
+  $message-row-gap,
+  $accent-color,
+  $caption-font-size,
+  $padding,
+  $border-width,
+  $cancel-button-color,
+) {
+  .dx-chat-editing-preview::before{
+    width: $border-width;
+    background-color: $accent-color;
+  }
+
+  .dx-chat-editing-preview-content {
+    gap: $message-row-gap;
+    padding-inline-start: $preview-padding + $border-width;
+    padding-inline-end: $preview-padding;
+  }
+
+  .dx-chat-editing-preview-caption {
+    font-size: $caption-font-size;
+    color: $accent-color;
+  }
+
+  .dx-chat-editing-preview-cancel-button {
+    &.dx-button-mode-text {
+      .dx-icon {
+        color: $cancel-button-color;
+      }
+    }
+  }
+}

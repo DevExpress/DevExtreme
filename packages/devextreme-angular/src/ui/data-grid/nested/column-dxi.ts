@@ -27,6 +27,7 @@ import { DataSourceOptions } from 'devextreme/data/data_source';
 import { Store } from 'devextreme/data/store';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
@@ -45,8 +46,10 @@ import { DxiDataGridValidationRuleComponent } from './validation-rule-dxi';
 
 @Component({
     selector: 'dxi-data-grid-column',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxiDataGridColumnComponent extends CollectionNestedOption {
@@ -731,7 +734,7 @@ export class DxiDataGridColumnComponent extends CollectionNestedOption {
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiDataGridColumnComponent
   ],
   exports: [

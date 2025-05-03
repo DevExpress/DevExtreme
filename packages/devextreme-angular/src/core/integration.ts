@@ -93,7 +93,10 @@ let doInjections = (document: any, ngZone: NgZone, xhrFactory: XhrFactory) => {
 
 @NgModule({})
 export class DxIntegrationModule {
+  static initialized = false;
+
   constructor(@Inject(DOCUMENT) document: any, ngZone: NgZone, @Optional() xhrFactory: XhrFactory) {
     doInjections(document, ngZone, xhrFactory);
+    DxIntegrationModule.initialized = true;
   }
 }

@@ -17,6 +17,7 @@ import {
 import { ExportFormat } from 'devextreme/common';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
@@ -24,8 +25,10 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-circular-gauge-export',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxoCircularGaugeExportComponent extends NestedOption implements OnDestroy, OnInit  {
@@ -111,7 +114,7 @@ export class DxoCircularGaugeExportComponent extends NestedOption implements OnD
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoCircularGaugeExportComponent
   ],
   exports: [

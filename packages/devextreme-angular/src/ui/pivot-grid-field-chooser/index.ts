@@ -57,8 +57,10 @@ import { DxoPivotGridFieldChooserTextsModule } from 'devextreme-angular/ui/pivot
  */
 @Component({
     selector: 'dx-pivot-grid-field-chooser',
+    standalone: true,
     template: '',
     host: { ngSkipHydration: 'true' },
+    imports: [ DxIntegrationModule ],
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -617,6 +619,7 @@ export class DxPivotGridFieldChooserComponent extends DxComponent implements OnD
 
 @NgModule({
   imports: [
+    DxPivotGridFieldChooserComponent,
     DxoHeaderFilterModule,
     DxoSearchModule,
     DxoTextsModule,
@@ -627,9 +630,6 @@ export class DxPivotGridFieldChooserComponent extends DxComponent implements OnD
     DxoPivotGridFieldChooserTextsModule,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxPivotGridFieldChooserComponent
   ],
   exports: [
     DxPivotGridFieldChooserComponent,
@@ -645,6 +645,8 @@ export class DxPivotGridFieldChooserComponent extends DxComponent implements OnD
   ]
 })
 export class DxPivotGridFieldChooserModule { }
+
+export * from 'devextreme-angular/ui/pivot-grid-field-chooser/nested';
 
 import type * as DxPivotGridFieldChooserTypes from "devextreme/ui/pivot_grid_field_chooser_types";
 export { DxPivotGridFieldChooserTypes };

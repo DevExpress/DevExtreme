@@ -26,6 +26,7 @@ import { Store } from 'devextreme/data/store';
 import { TabsIconPosition, TabsStyle, Position } from 'devextreme/common';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
@@ -35,8 +36,10 @@ import { DxiFormTabPanelOptionsItemComponent } from './tab-panel-options-item-dx
 
 @Component({
     selector: 'dxo-form-tab-panel-options',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxoFormTabPanelOptionsComponent extends NestedOption implements OnDestroy, OnInit  {
@@ -461,7 +464,7 @@ export class DxoFormTabPanelOptionsComponent extends NestedOption implements OnD
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoFormTabPanelOptionsComponent
   ],
   exports: [

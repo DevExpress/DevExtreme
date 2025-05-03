@@ -18,6 +18,7 @@ import { DOCUMENT } from '@angular/common';
 
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
     extractTemplate,
     DxTemplateDirective,
@@ -29,8 +30,10 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxi-multi-view-item',
+    standalone: true,
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost, DxTemplateHost]
 })
 export class DxiMultiViewItemComponent extends CollectionNestedOption implements AfterViewInit,
@@ -109,7 +112,7 @@ export class DxiMultiViewItemComponent extends CollectionNestedOption implements
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiMultiViewItemComponent
   ],
   exports: [

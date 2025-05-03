@@ -26,6 +26,7 @@ import { dxTabPanelOptions } from 'devextreme/ui/tab_panel';
 import { dxButtonOptions } from 'devextreme/ui/button';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
     extractTemplate,
     DxTemplateDirective,
@@ -48,8 +49,10 @@ import { DxiFormValidationRuleComponent } from './validation-rule-dxi';
 
 @Component({
     selector: 'dxi-form-item',
+    standalone: true,
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost, DxTemplateHost]
 })
 export class DxiFormItemComponent extends CollectionNestedOption implements AfterViewInit,
@@ -432,7 +435,7 @@ export class DxiFormItemComponent extends CollectionNestedOption implements Afte
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiFormItemComponent
   ],
   exports: [

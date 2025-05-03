@@ -22,6 +22,7 @@ import { ClickEvent, ContentReadyEvent, DisposingEvent, InitializedEvent, Option
 import { ButtonStyle, ButtonType } from 'devextreme/common';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
     extractTemplate,
     DxTemplateDirective,
@@ -33,8 +34,10 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-number-box-options',
+    standalone: true,
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost, DxTemplateHost]
 })
 export class DxoNumberBoxOptionsComponent extends NestedOption implements AfterViewInit, OnDestroy, OnInit,
@@ -269,7 +272,7 @@ export class DxoNumberBoxOptionsComponent extends NestedOption implements AfterV
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoNumberBoxOptionsComponent
   ],
   exports: [

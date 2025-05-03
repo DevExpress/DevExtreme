@@ -59,8 +59,10 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
  */
 @Component({
     selector: 'dx-recurrence-editor',
+    standalone: true,
     template: '',
     host: { ngSkipHydration: 'true' },
+    imports: [ DxIntegrationModule ],
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -651,11 +653,9 @@ export class DxRecurrenceEditorComponent extends DxComponent implements OnDestro
 
 @NgModule({
   imports: [
+    DxRecurrenceEditorComponent,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxRecurrenceEditorComponent
   ],
   exports: [
     DxRecurrenceEditorComponent,
@@ -663,6 +663,7 @@ export class DxRecurrenceEditorComponent extends DxComponent implements OnDestro
   ]
 })
 export class DxRecurrenceEditorModule { }
+
 
 import type * as DxRecurrenceEditorTypes from "devextreme/ui/recurrence_editor_types";
 export { DxRecurrenceEditorTypes };

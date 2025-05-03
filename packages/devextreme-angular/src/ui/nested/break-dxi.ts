@@ -14,6 +14,7 @@ import {
 
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxiVizScaleBreak } from './base/viz-scale-break-dxi';
@@ -21,8 +22,10 @@ import { DxiVizScaleBreak } from './base/viz-scale-break-dxi';
 
 @Component({
     selector: 'dxi-break',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost],
     inputs: [
         'endValue',
@@ -52,7 +55,7 @@ export class DxiBreakComponent extends DxiVizScaleBreak {
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiBreakComponent
   ],
   exports: [

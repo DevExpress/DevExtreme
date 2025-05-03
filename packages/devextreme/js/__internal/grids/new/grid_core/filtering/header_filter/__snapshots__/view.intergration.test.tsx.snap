@@ -52,7 +52,7 @@ exports[`HeaderFilter View integration should render popup with list by default 
                         class="dx-loadindicator-wrapper"
                       >
                         <div
-                          class="dx-loadindicator-content"
+                          class="dx-loadindicator-content dx-loadindicator-content-circle"
                         >
                           <div
                             class="dx-loadindicator-icon"
@@ -331,7 +331,7 @@ exports[`HeaderFilter View integration should render popup with list by default 
                         class="dx-loadindicator-wrapper"
                       >
                         <div
-                          class="dx-loadindicator-content"
+                          class="dx-loadindicator-content dx-loadindicator-content-circle"
                         >
                           <div
                             class="dx-loadindicator-icon"
@@ -530,7 +530,7 @@ exports[`HeaderFilter View integration should render popup with tree list if dat
                         class="dx-loadindicator-wrapper"
                       >
                         <div
-                          class="dx-loadindicator-content"
+                          class="dx-loadindicator-content dx-loadindicator-content-circle"
                         >
                           <div
                             class="dx-loadindicator-icon"
@@ -809,7 +809,7 @@ exports[`HeaderFilter View integration should render popup with tree list if dat
                         class="dx-loadindicator-wrapper"
                       >
                         <div
-                          class="dx-loadindicator-content"
+                          class="dx-loadindicator-content dx-loadindicator-content-circle"
                         >
                           <div
                             class="dx-loadindicator-icon"

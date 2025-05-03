@@ -16,6 +16,7 @@ import {
 
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxoButtonOptions } from './base/button-options';
@@ -23,8 +24,10 @@ import { DxoButtonOptions } from './base/button-options';
 
 @Component({
     selector: 'dxo-options',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost],
     inputs: [
         'accessKey',
@@ -80,7 +83,7 @@ export class DxoOptionsComponent extends DxoButtonOptions implements OnDestroy, 
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoOptionsComponent
   ],
   exports: [

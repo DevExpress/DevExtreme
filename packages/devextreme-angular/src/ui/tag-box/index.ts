@@ -102,8 +102,10 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
  */
 @Component({
     selector: 'dx-tag-box',
+    standalone: true,
     template: '',
     host: { ngSkipHydration: 'true' },
+    imports: [ DxIntegrationModule ],
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -1853,6 +1855,7 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
 
 @NgModule({
   imports: [
+    DxTagBoxComponent,
     DxiButtonModule,
     DxoOptionsModule,
     DxoDropDownOptionsModule,
@@ -1886,9 +1889,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
     DxiTagBoxToolbarItemModule,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxTagBoxComponent
   ],
   exports: [
     DxTagBoxComponent,
@@ -1927,6 +1927,8 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
   ]
 })
 export class DxTagBoxModule { }
+
+export * from 'devextreme-angular/ui/tag-box/nested';
 
 import type * as DxTagBoxTypes from "devextreme/ui/tag_box_types";
 export { DxTagBoxTypes };

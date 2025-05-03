@@ -20,6 +20,7 @@ import {
 import { Command, CustomCommand } from 'devextreme/ui/diagram';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
@@ -28,8 +29,10 @@ import { DxiDiagramCommandComponent } from './command-dxi';
 
 @Component({
     selector: 'dxo-diagram-history-toolbar',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxoDiagramHistoryToolbarComponent extends NestedOption implements OnDestroy, OnInit  {
@@ -83,7 +86,7 @@ export class DxoDiagramHistoryToolbarComponent extends NestedOption implements O
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoDiagramHistoryToolbarComponent
   ],
   exports: [

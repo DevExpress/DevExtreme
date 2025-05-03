@@ -18,6 +18,7 @@ import { ApplyChangesMode } from 'devextreme/common/grids';
 import { FieldChooserLayout } from 'devextreme/common';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
@@ -25,8 +26,10 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-pivot-grid-field-chooser',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxoPivotGridFieldChooserComponent extends NestedOption implements OnDestroy, OnInit  {
@@ -128,7 +131,7 @@ export class DxoPivotGridFieldChooserComponent extends NestedOption implements O
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoPivotGridFieldChooserComponent
   ],
   exports: [

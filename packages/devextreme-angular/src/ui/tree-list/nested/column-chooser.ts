@@ -19,6 +19,7 @@ import { PositionConfig } from 'devextreme/common/core/animation';
 import { SortOrder } from 'devextreme/common';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
@@ -26,8 +27,10 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-tree-list-column-chooser',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxoTreeListColumnChooserComponent extends NestedOption implements OnDestroy, OnInit  {
@@ -161,7 +164,7 @@ export class DxoTreeListColumnChooserComponent extends NestedOption implements O
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoTreeListColumnChooserComponent
   ],
   exports: [
