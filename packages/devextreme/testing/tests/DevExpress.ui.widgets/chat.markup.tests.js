@@ -9,11 +9,11 @@ QUnit.testStart(() => {
 
 import './chatParts/avatar.markup.tests.js';
 import './chatParts/messageBox.markup.tests.js';
-import './chatParts/messageBoxEditingPreview.markup.tests.js';
 import './chatParts/messageBubble.markup.tests.js';
 import './chatParts/confirmationPopup.markup.tests.js';
 import './chatParts/messageGroup.markup.tests.js';
 import './chatParts/messageList.markup.tests.js';
 import './chatParts/alertList.markup.tests.js';
 import './chatParts/typingIndicator.markup.tests.js';
+import './chatParts/editingPreview.markup.tests.js';
 import './chatParts/chat.markup.tests.js';
