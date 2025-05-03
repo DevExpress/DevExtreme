@@ -47,6 +47,7 @@ const ALLOWED_DRAGGING_DISTANCE = 20;
 
 const CLASS = {
   widget: 'dx-widget',
+  columnSortable: 'dx-cardview-column-sortable',
   dropzone: 'dx-cardview-dropzone',
   dropzoneVisible: 'dx-cardview-dropzone-visible',
 };
@@ -83,6 +84,7 @@ export class ColumnSortable extends Component<Props> {
   private readonly onDraggableElementShown = (e): void => {
     // add dx-widget for correct font
     $(e.dragElement).addClass(CLASS.widget);
+    $(e.dragElement).addClass(CLASS.columnSortable);
   };
 
   private readonly onDragMove = (e: SortableTypes.DragMoveEvent): void => {

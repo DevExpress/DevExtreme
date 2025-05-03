@@ -54,7 +54,7 @@ export class ColumnChooserView extends View<ColumnChooserProps> {
   private readonly popupToolbarItems: ReadonlySignal<ToolbarItem[]> = computed(() => {
     const title = this.options.oneWay('columnChooser.title').value;
     const items = [
-      { text: title, toolbar: 'top', location: this.isMaterialOrGeneric() ? 'before' : 'center' },
+      { text: title, toolbar: 'top', location: 'before' },
     ] as ToolbarItem[];
 
     if (!this.isMaterialOrGeneric()) {

@@ -48,3 +48,7 @@
     line-height: $cardview-headerpanel-text-empty-line-height;
   }
 }
+
+.dx-sortable-dragging.dx-cardview-column-sortable {
+  opacity: 1.0;
+}
