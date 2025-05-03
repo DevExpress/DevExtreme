@@ -47,8 +47,9 @@ class MessageBubble extends Widget<Properties> {
       isDeleted = false,
       template,
     } = this.option();
-    const $bubbleContainer = $(this.element()).find(`.${CHAT_MESSAGEBUBBLE_CONTENT_CLASS}`);
+    this.$element().removeClass(CHAT_MESSAGEBUBBLE_DELETED_CLASS);
 
+    const $bubbleContainer = $(this.element()).find(`.${CHAT_MESSAGEBUBBLE_CONTENT_CLASS}`);
     $bubbleContainer.empty();
 
     if (template) {
