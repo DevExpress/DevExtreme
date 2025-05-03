@@ -595,8 +595,7 @@ class MessageList extends Widget<Properties> {
       const $targetMessage = this._findMessageElementByKey(key);
 
       const bubble = MessageBubble.getInstance($targetMessage);
-      const { text, isDeleted } = data;
-      bubble.option({ text, isDeleted });
+      bubble.option(data);
 
       const $currentMessageGroup = $targetMessage.closest(`.${CHAT_MESSAGEGROUP_CLASS}`);
       const group: MessageGroup = MessageGroup.getInstance($currentMessageGroup);
