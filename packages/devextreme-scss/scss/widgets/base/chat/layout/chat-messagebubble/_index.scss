@@ -8,10 +8,10 @@
   word-break: break-word;
   white-space: break-spaces;
 
-  .dx-chat-messagebubble-content {
-    &.dx-chat-messagebubble-deleted {
+  &.dx-chat-messagebubble-deleted {
+    .dx-chat-messagebubble-content {
       display: flex;
-      align-items: flex-end;
+      align-items: center;
       font-style: italic;
     }
   }
