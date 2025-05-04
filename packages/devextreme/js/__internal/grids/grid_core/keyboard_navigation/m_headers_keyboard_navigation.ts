@@ -30,6 +30,7 @@ export class HeadersKeyboardNavigationController extends ColumnKeyboardNavigatio
           sourceLocation: 'headers',
           targetLocation: 'headers',
           direction,
+          rowIndex,
         });
       }
       originalEvent?.preventDefault();
