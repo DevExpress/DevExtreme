@@ -650,8 +650,6 @@ export const Editing: Story = {
                 load: () => new Promise(resolve => setTimeout(() => resolve([...messagesRef.current]), 500)),
                 insert: (message) => {
                     message.id = `dx-${new Guid()}`;
-                    console.log('message', message);
-                    console.log('user', user);
                     if (message.author.id === user?.id) {
                         message.author = {
                             ...message.author,
