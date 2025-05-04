@@ -101,7 +101,7 @@ export const Overview: Story = {
         focusStateEnabled,
     }) => {
         const [messages, setMessages] = useState(items);
-        
+
         const onMessageEntered = useCallback(({ message }) => {
             const updatedMessages = [...messages, message];
 
@@ -630,13 +630,18 @@ export const Editing: Story = {
         focusStateEnabled,
         allowDeleting,
         allowUpdating,
-        useCustomMessageRender, // добавлено
+        useCustomMessageRender,
     }) => {
-        const messages = [...initialMessages];
-        messages.map(item => item.id = `dx-${new Guid()}`);
-        messages[4].isDeleted = true;
-        messages[5].isDeleted = true;
-        messages[6].isDeleted = true;
+        const messages = useMemo(() => {
+            const initial = initialMessages.map(item => ({
+                ...item,
+                id: `dx-${new Guid()}`,
+            }));
+            initial[4].isDeleted = true;
+            initial[5].isDeleted = true;
+            initial[6].isDeleted = true;
+            return initial;
+        }, [initialMessages]);
 
         const messagesRef = React.useRef([...messages]);
 
@@ -645,35 +650,45 @@ export const Editing: Story = {
                 load: () => new Promise(resolve => setTimeout(() => resolve([...messagesRef.current]), 500)),
                 insert: (message) => {
                     message.id = `dx-${new Guid()}`;
+                    console.log('message', message);
+                    console.log('user', user);
+                    if (message.author.id === user?.id) {
+                        message.author = {
+                            ...message.author,
+                            ...user,
+                        }
+                    }
                     messagesRef.current.push(message);
                     return new Promise<void>(resolve => setTimeout(resolve, 200));
                 },
                 key: 'id',
             }),
             paginate: false,
-        }), []);
+        }), [user]);
 
         const onUndoClick = useCallback((message: Message) => {
             const store = dataSource.store();
-            console.log('3');
-            store.push([{ type: 'update', key: message.id, data: { isDeleted: false, text: message.text } }]);
+            store.push([{ type: 'update', key: message.id, data: { isDeleted: false } }]);
         }, [dataSource]);
 
         const messageRender = useCallback(({ message }) => {
             if(message.isDeleted === true) {
                 return (
-                <div className="dx-chat-messagebubble-content dx-chat-messagebubble-deleted" style={{ display: 'flex', gap: 8 }}>
-                    <div className="dx-icon dx-icon-cursorprohibition"></div>
-                    <div>This message was deleted</div>
-                    <a href="#" onClick={(e) => {
-                        e.preventDefault();
-                        onUndoClick(message);
-                    }}>Undo</a>
-                </div>);
+                    <div className="dx-chat-messagebubble-content dx-chat-messagebubble-deleted" style={{ display: 'flex', gap: 4 }}>
+                        <div className="dx-icon dx-icon-cursorprohibition"></div>
+                        <div>This message was deleted</div>
+                        { user?.id === message.author.id &&
+                            <a href="#" onClick={(e) => {
+                                e.preventDefault();
+                                onUndoClick(message);
+                            }}>Undo</a>
+                        }
+                    </div>
+                );
             }
 
             return <div>{message.text}</div>;
-        }, []);
+        }, [user]);
 
         return (
             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
@@ -682,7 +697,7 @@ export const Editing: Story = {
                     width={width}
                     height={height}
                     dataSource={dataSource}
-                    reloadOnChange={false}
+                    reloadOnChange={true}
                     user={user}
                     onMessageEntered={(e) => {
                         e.component.getDataSource().store().push([{ type: 'insert', data: e.message }]);
