@@ -1,19 +1,31 @@
 import eventsEngine from '@js/common/core/events/core/events_engine';
 import $ from '@js/core/renderer';
 
-import { Direction } from './const';
+import { Direction, ViewName } from './const';
 import type { ColumnFocusDispatcher } from './m_column_focus_dispatcher';
 import { KeyboardNavigationController as KeyboardNavigationControllerCore } from './m_keyboard_navigation_core';
 
 export class ColumnKeyboardNavigationController extends KeyboardNavigationControllerCore {
+  private contentReadyHandlerContext!: (e?: any) => void;
+
   public columnFocusDispatcher!: ColumnFocusDispatcher;
 
-  protected getVisibleIndex(column, rowIndex?) {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  private contentReadyHandler(e?: any) {
+    this.component.off('contentReady', this.contentReadyHandlerContext);
+    this.restoreViewFocus();
+  }
+
+  protected getVisibleIndex(column, rowIndex?): number {
     return this._columnsController.getVisibleIndex(column.index, rowIndex);
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  protected getNewVisibleIndex(visibleIndex, direction, targetLocation) {
+  protected getNewVisibleIndex(
+    visibleIndex: number,
+    direction: Direction,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    targetLocation: ViewName,
+  ): number {
     /*
           We need to add 2 to the index instead of 1,
           because that's how normalization of these indexes works.
@@ -33,9 +45,10 @@ export class ColumnKeyboardNavigationController extends KeyboardNavigationContro
   protected getNewFocusedColumnIndex(
     newVisibleIndex: number,
     direction: Direction,
+    targetLocation: string,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    targetLocation?: string,
-  ) {
+    showWhenGrouped = false,
+  ): number {
     return direction === Direction.Next ? newVisibleIndex - 1 : newVisibleIndex;
   }
 
@@ -43,13 +56,9 @@ export class ColumnKeyboardNavigationController extends KeyboardNavigationContro
     super.renderCompleted(e);
 
     if (this.isNeedToFocus) {
-      const restoreViewFocus = () => {
-        this.component.off('contentReady', restoreViewFocus);
-        this.restoreViewFocus();
-        this.isNeedToFocus = false;
-      };
-
-      this.component.on('contentReady', restoreViewFocus);
+      this.component.off('contentReady', this.contentReadyHandlerContext);
+      this.component.on('contentReady', this.contentReadyHandlerContext);
+      this.isNeedToFocus = false;
     }
   }
 
@@ -62,8 +71,9 @@ export class ColumnKeyboardNavigationController extends KeyboardNavigationContro
     super.init();
 
     this.columnFocusDispatcher = this.getController('columnFocusDispatcher');
-
     this.columnFocusDispatcher?.registerKeyboardNavigationController(this);
+    this.contentReadyHandlerContext = this.contentReadyHandlerContext
+      ?? this.contentReadyHandler.bind(this);
   }
 
   public moveColumn({
@@ -73,6 +83,7 @@ export class ColumnKeyboardNavigationController extends KeyboardNavigationContro
     direction = Direction.Next,
     rowIndex = 0,
   }) {
+    const isGrouping = sourceLocation === ViewName.Headers && targetLocation === ViewName.Group;
     const visibleIndex = this.getVisibleIndex(column, rowIndex);
     const newVisibleIndex = this.getNewVisibleIndex(
       visibleIndex,
@@ -80,9 +91,10 @@ export class ColumnKeyboardNavigationController extends KeyboardNavigationContro
       targetLocation,
     );
     const newFocusedColumnIndex = this.getNewFocusedColumnIndex(
-      newVisibleIndex >= 0 ? newVisibleIndex : visibleIndex,
+      !isGrouping && newVisibleIndex >= 0 ? newVisibleIndex : visibleIndex,
       direction,
       targetLocation,
+      column.showWhenGrouped,
     );
 
     this.isNeedToFocus = true;

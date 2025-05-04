@@ -42,49 +42,41 @@ const headersKeyboardNavigation = (
     return false;
   }
 
-  protected getNewFocusedColumnIndex(visibleIndex, direction, targetLocation): number {
+  protected getNewVisibleIndex(visibleIndex, direction, targetLocation): number {
     if (targetLocation === ViewName.Group) {
+      return this._columnsController.getGroupColumns()?.length ?? 0;
+    }
+
+    return super.getNewVisibleIndex(visibleIndex, direction, targetLocation);
+  }
+
+  protected getNewFocusedColumnIndex(
+    visibleIndex: number,
+    direction: Direction,
+    targetLocation: ViewName,
+    showWhenGrouped?: boolean,
+  ): number {
+    if (targetLocation === ViewName.Group) {
+      if (showWhenGrouped) {
+        return visibleIndex + 1;
+      }
+
       const focusableColumns = this.getFocusableColumns();
       const lastFocusableColumn = focusableColumns[focusableColumns.length - 1];
 
       if (visibleIndex === this._columnsController.getVisibleIndex(lastFocusableColumn.index)) {
-        return super.getNewVisibleIndex(visibleIndex, Direction.Previous, targetLocation) + 1;
+        return this.getNewVisibleIndex(visibleIndex, Direction.Previous, ViewName.Headers) + 1;
       }
 
-      return super.getNewVisibleIndex(visibleIndex, Direction.Next, targetLocation) - 1;
+      return this.getNewVisibleIndex(visibleIndex, Direction.Next, ViewName.Headers) - 1;
     }
 
-    return super.getNewFocusedColumnIndex(visibleIndex, direction, targetLocation);
-  }
-
-  public moveColumn(options) {
-    const {
-      column,
-      sourceLocation,
+    return super.getNewFocusedColumnIndex(
+      visibleIndex,
+      direction,
       targetLocation,
-      rowIndex = 0,
-    } = options;
-
-    if (targetLocation === ViewName.Group) {
-      const visibleIndex = this.getVisibleIndex(column, rowIndex);
-      const newVisibleIndex = this._columnsController.getGroupColumns()?.length ?? 0;
-      const newFocusedColumnIndex = column.showWhenGrouped ? visibleIndex + 1 : this.getNewFocusedColumnIndex(
-        visibleIndex,
-        Direction.Next,
-        targetLocation,
-      );
-
-      this.isNeedToFocus = true;
-      this.setFocusedCellPosition(rowIndex, newFocusedColumnIndex);
-      this._columnsController.moveColumn(
-        { columnIndex: visibleIndex, rowIndex },
-        { columnIndex: newVisibleIndex, rowIndex },
-        sourceLocation,
-        targetLocation,
-      );
-    } else {
-      super.moveColumn(options);
-    }
+      showWhenGrouped,
+    );
   }
 };
 

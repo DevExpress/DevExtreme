@@ -75,11 +75,15 @@ export class GroupPanelKeyboardNavigationController extends ColumnKeyboardNaviga
     }
   }
 
-  protected getVisibleIndex(column) {
+  protected getVisibleIndex(column): number {
     return column.groupIndex;
   }
 
-  protected getNewVisibleIndex(visibleIndex, direction, targetLocation) {
+  protected getNewVisibleIndex(
+    visibleIndex: number,
+    direction: Direction,
+    targetLocation: ViewName,
+  ): number {
     if (targetLocation === ViewName.Headers) {
       return -1;
     }
@@ -88,20 +92,22 @@ export class GroupPanelKeyboardNavigationController extends ColumnKeyboardNaviga
   }
 
   protected getNewFocusedColumnIndex(
-    newVisibleIndex: number,
+    visibleIndex: number,
     direction: Direction,
     targetLocation: string,
-  ) {
+    showWhenGrouped?: boolean,
+  ): number {
     if (targetLocation === ViewName.Headers) {
       const groupColumns = this._columnsController.getGroupColumns();
 
-      return newVisibleIndex === groupColumns.length - 1 ? newVisibleIndex - 1 : newVisibleIndex;
+      return visibleIndex === groupColumns.length - 1 ? visibleIndex - 1 : visibleIndex;
     }
 
     return super.getNewFocusedColumnIndex(
-      newVisibleIndex,
+      visibleIndex,
       direction,
       targetLocation,
+      showWhenGrouped,
     );
   }
 
