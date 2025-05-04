@@ -36,8 +36,8 @@ export const ColumnContextMenuMixin = <T extends ModuleType<ColumnContextMenuMix
     this.onContextMenuHiddenContext = this.onContextMenuHiddenContext
       || this.onContextMenuHidden.bind(this);
 
-    contextMenuController.contextMenuHidden.remove(this.onContextMenuHiddenContext);
-    contextMenuController.contextMenuHidden.add(this.onContextMenuHiddenContext);
+    contextMenuController?.contextMenuHidden.remove(this.onContextMenuHiddenContext);
+    contextMenuController?.contextMenuHidden.add(this.onContextMenuHiddenContext);
   }
 
   public getMoveColumnContextMenuItems(options): any {
