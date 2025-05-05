@@ -427,7 +427,7 @@ QUnit.module('Chat', () => {
                 assert.strictEqual(this.$textArea.hasClass(FOCUSED_STATE_CLASS), true, 'input is focused');
             });
 
-            QUnit.skip('Input focused after context menu is hidden', function(assert) {
+            QUnit.testInActiveWindow('Input not focused after context menu is hidden by outside click', function(assert) {
                 if(!isDesktopDevice()) {
                     assert.ok(true, 'Test is not applicable for mobile devices');
                     return;
@@ -454,7 +454,7 @@ QUnit.module('Chat', () => {
                 pointerMock($bubbles.eq(0)).click();
 
                 assert.strictEqual(this.getContextMenu().option('visible'), false, 'context menu is hidden');
-                assert.strictEqual(this.$textArea.hasClass(FOCUSED_STATE_CLASS), true, 'input is focused');
+                assert.strictEqual(this.$textArea.hasClass(FOCUSED_STATE_CLASS), false, 'input is focused');
             });
 
             QUnit.testInActiveWindow('Input should be blurred after context menu is shown', function(assert) {
@@ -935,7 +935,7 @@ QUnit.module('Chat', () => {
             });
         });
 
-        QUnit.skip('editing preview should be shown after the Edit button is clicked if cancel promise rejected', function(assert) {
+        QUnit.testInActiveWindow('editing preview should be shown after the Edit button is clicked if cancel promise rejected', function(assert) {
             if(!isDesktopDevice()) {
                 assert.ok(true, 'Test is not applicable for mobile devices');
                 return;
@@ -1082,7 +1082,7 @@ QUnit.module('Chat', () => {
             }, ANIMATION_TIMEOUT);
         });
 
-        QUnit.skip('message box should have editing message text and focus after the Edit button is clicked and not cancelled', function(assert) {
+        QUnit.testInActiveWindow('message box should have editing message text and focus after the Edit button is clicked and not cancelled', function(assert) {
             if(!isDesktopDevice()) {
                 assert.ok(true, 'Test is not applicable for mobile devices');
                 return;
@@ -1107,6 +1107,37 @@ QUnit.module('Chat', () => {
 
             const $editButton = this.getContextMenuItems().eq(0);
             $editButton.trigger('dxclick');
+
+            assert.strictEqual(this.textArea.option('value'), 'b', 'input contains editing message text');
+            assert.strictEqual(this.$textArea.hasClass(FOCUSED_STATE_CLASS), true, 'input is focused');
+        });
+
+        QUnit.testInActiveWindow('message box should have editing message text and focus after the Edit was triggered from keyboard', function(assert) {
+            if(!isDesktopDevice()) {
+                assert.ok(true, 'Test is not applicable for mobile devices');
+                return;
+            }
+
+            const items = [
+                { text: 'a', author: userFirst },
+                { text: 'b', author: userSecond },
+            ];
+
+            this.reinit({
+                focusStateEnabled: true,
+                user: userSecond,
+                editing: {
+                    allowUpdating: true
+                },
+                items,
+            });
+
+            const $bubbles = this.getBubbles();
+            $bubbles.eq(1).trigger('dxcontextmenu');
+
+            keyboardMock(this.getContextMenu().itemsContainer())
+                .press('down')
+                .press('enter');
 
             assert.strictEqual(this.textArea.option('value'), 'b', 'input contains editing message text');
             assert.strictEqual(this.$textArea.hasClass(FOCUSED_STATE_CLASS), true, 'input is focused');
