@@ -25,7 +25,7 @@ import {
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
-import { DxoEditing } from './base/editing';
+import { DxoCardViewEditing } from './base/card-view-editing';
 import { DxiChangeComponent } from './change-dxi';
 
 
@@ -78,7 +78,7 @@ import { DxiChangeComponent } from './change-dxi';
         'allowTimeZoneEditing'
     ]
 })
-export class DxoEditingComponent extends DxoEditing implements OnDestroy, OnInit  {
+export class DxoEditingComponent extends DxoCardViewEditing implements OnDestroy, OnInit  {
 
     /**
     

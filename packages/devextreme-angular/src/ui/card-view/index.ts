@@ -24,7 +24,7 @@ import {
 export { ExplicitTypes } from 'devextreme/ui/card_view';
 
 import DataSource from 'devextreme/data/data_source';
-import { CardCover, CardHeader, ColumnProperties, Editing, HeaderPanel, CardClickEvent, CardDblClickEvent, CardHoverChangedEvent, CardInsertedEvent, CardInsertingEvent, CardPreparedEvent, CardRemovedEvent, CardRemovingEvent, CardSavedEvent, CardSavingEvent, CardUpdatedEvent, CardUpdatingEvent, ContextMenuPreparingEvent, EditCanceledEvent, EditCancelingEvent, EditingStartEvent, FieldCaptionClickEvent, FieldCaptionDblClickEvent, FieldCaptionPreparedEvent, FieldValueClickEvent, FieldValueDblClickEvent, FieldValuePreparedEvent, FocusedCardChanged, InitNewCardEvent, SelectionChangedEvent, SelectionChangingEvent, Paging, RemoteOperations, SelectionConfiguration, Toolbar } from 'devextreme/ui/card_view';
+import { CardCover, CardHeader, ColumnProperties, dxCardViewEditing, HeaderPanel, CardClickEvent, CardDblClickEvent, CardHoverChangedEvent, CardInsertedEvent, CardInsertingEvent, CardPreparedEvent, CardRemovedEvent, CardRemovingEvent, CardSavedEvent, CardSavingEvent, CardUpdatedEvent, CardUpdatingEvent, ContextMenuPreparingEvent, EditCanceledEvent, EditCancelingEvent, EditingStartEvent, FieldCaptionClickEvent, FieldCaptionDblClickEvent, FieldCaptionPreparedEvent, FieldValueClickEvent, FieldValueDblClickEvent, FieldValuePreparedEvent, FocusedCardChanged, InitNewCardEvent, SelectionChangedEvent, SelectionChangingEvent, Paging, RemoteOperations, SelectionConfiguration, Toolbar } from 'devextreme/ui/card_view';
 import { Mode } from 'devextreme/common';
 import { DataSourceOptions } from 'devextreme/data/data_source';
 import { Store } from 'devextreme/data/store';
@@ -352,10 +352,10 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     
      */
     @Input()
-    get editing(): Editing {
+    get editing(): dxCardViewEditing {
         return this._getOption('editing');
     }
-    set editing(value: Editing) {
+    set editing(value: dxCardViewEditing) {
         this._setOption('editing', value);
     }
 
@@ -1107,7 +1107,7 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() editingChange: EventEmitter<Editing>;
+    @Output() editingChange: EventEmitter<dxCardViewEditing>;
 
     /**
     

@@ -12,7 +12,7 @@ import { Properties as dxPopupOptions } from 'devextreme/ui/popup';
 @Component({
     template: ''
 })
-export abstract class DxoEditing extends NestedOption {
+export abstract class DxoCardViewEditing extends NestedOption {
     get allowAdding(): boolean | Function {
         return this._getOption('allowAdding');
     }

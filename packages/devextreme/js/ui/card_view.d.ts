@@ -735,56 +735,66 @@ export type CardHeader = { // TODO: sync with impl
 
 // #region Editing
 
+// Conflicts with recently introduced chat.d.ts Editing after merge
+// Use a computed / parent-based docids until agreement
+// Specified docid similar to other grids
+
 /**
- * @docid
+ * @namespace DevExpress.ui
+ * @deprecated Use Editing instead
+ */
+export type dxCardViewEditing<TCardData=unknown, TKey=unknown> = Editing<TCardData, TKey>;
+
+/**
+ * @docid dxCardViewEditing
  * @public
  */
 export type Editing<TCardData=unknown, TKey=unknown> = { // TODO: sync with impl
     /**
-     * @docid
+     * @docid dxCardViewEditing.allowAdding
      * @public
      * @default false
      */
     allowAdding?: boolean;
     /**
-     * @docid
+     * @docid dxCardViewEditing.allowDeleting
      * @public
      * @default false
      */
     allowDeleting?: boolean;
     /**
-     * @docid
+     * @docid dxCardViewEditing.allowUpdating
      * @public
      * @default false
      */
     allowUpdating?: boolean;
     /**
-     * @docid
+     * @docid dxCardViewEditing.changes
      * @public
      * @default []
      */
     changes?: DataChange<TCardData, TKey>[];
     /**
-     * @docid
+     * @docid dxCardViewEditing.confirmDelete
      * @public
      * @default true
      */
     confirmDelete?: boolean;
     /**
-     * @docid
+     * @docid dxCardViewEditing.editCardKey
      * @public
      * @type any
      * @default null
      */
     editCardKey?: TKey | null;
     /**
-     * @docid
+     * @docid dxCardViewEditing.form
      * @public
      * @type object
      */
     form?: FormProperties;
     /**
-     * @docid
+     * @docid dxCardViewEditing.popup
      * @public
      * @type object
      */
@@ -1464,6 +1474,7 @@ export interface dxCardViewOptions<TCardData = unknown, TKey = unknown> extends 
 
     /**
      * @docid
+     * @type dxCardViewEditing
      * @public
      */
     editing?: Editing<TCardData, TKey>;

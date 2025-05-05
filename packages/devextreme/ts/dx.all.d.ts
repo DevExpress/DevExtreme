@@ -10307,41 +10307,40 @@ declare module DevExpress.ui {
            */
           changes: DevExpress.common.grids.DataChange[];
         };
-
     /**
-     * [descr:Editing]
+     * [descr:dxCardViewEditing]
      */
     export type Editing<TCardData = unknown, TKey = unknown> = {
       /**
-       * [descr:Editing.allowAdding]
+       * [descr:dxCardViewEditing.allowAdding]
        */
       allowAdding?: boolean;
       /**
-       * [descr:Editing.allowDeleting]
+       * [descr:dxCardViewEditing.allowDeleting]
        */
       allowDeleting?: boolean;
       /**
-       * [descr:Editing.allowUpdating]
+       * [descr:dxCardViewEditing.allowUpdating]
        */
       allowUpdating?: boolean;
       /**
-       * [descr:Editing.changes]
+       * [descr:dxCardViewEditing.changes]
        */
       changes?: DevExpress.common.grids.DataChange<TCardData, TKey>[];
       /**
-       * [descr:Editing.confirmDelete]
+       * [descr:dxCardViewEditing.confirmDelete]
        */
       confirmDelete?: boolean;
       /**
-       * [descr:Editing.editCardKey]
+       * [descr:dxCardViewEditing.editCardKey]
        */
       editCardKey?: TKey | null;
       /**
-       * [descr:Editing.form]
+       * [descr:dxCardViewEditing.form]
        */
       form?: DevExpress.ui.dxForm.Properties;
       /**
-       * [descr:Editing.popup]
+       * [descr:dxCardViewEditing.popup]
        */
       popup?: DevExpress.ui.dxPopup.Properties;
     };
@@ -10564,6 +10563,15 @@ declare module DevExpress.ui {
       readonly fieldValueElement: DevExpress.core.DxElement;
     };
   }
+
+  /**
+   * @deprecated Use DevExpress.ui.dxCardView.Editing instead
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  export type dxCardViewEditing<
+    TCardData = unknown,
+    TKey = unknown
+  > = DevExpress.ui.dxCardView.Editing<TCardData, TKey>;
 
   /**
    * [descr:dxCardViewOptions]
