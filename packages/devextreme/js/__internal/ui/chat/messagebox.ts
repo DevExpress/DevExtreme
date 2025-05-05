@@ -117,10 +117,6 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
     const $editingPreview = $('<div>').prependTo(this.element());
     const { text } = this.option();
 
-    $editingPreview.get(0).addEventListener('animationend', () => {
-      this._textArea.focus();
-    }, { once: true });
-
     this._editingPreview = this._createComponent($editingPreview, EditingPreview, {
       text,
       onCancel: () => this._cancelMessageEdit(),

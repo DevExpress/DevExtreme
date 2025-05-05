@@ -211,6 +211,8 @@ class Chat extends Widget<Properties> {
       isLoading,
       onMessageEditingStart: (e) => {
         this._messageEditingStartHandler(e);
+
+        return () => this.focus();
       },
       onMessageDeleting: (e) => {
         this._messageDeletingHandler(e);
