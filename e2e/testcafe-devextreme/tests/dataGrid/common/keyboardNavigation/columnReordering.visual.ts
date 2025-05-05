@@ -1487,7 +1487,7 @@ test('Auto scroll to the right when column reordering via keyboard', async (t) =
 test('Auto scroll to the left when column reordering via keyboard', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
-  const lastHeaderCell = dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(10);
+  const lastHeaderCell = dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(9);
 
   await dataGrid.scrollTo(t, { x: 1200 });
 
