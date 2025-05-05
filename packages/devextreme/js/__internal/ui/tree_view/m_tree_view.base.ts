@@ -320,6 +320,7 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties> 
         break;
       case 'showCheckBoxesMode':
         this._checkBoxModeChange(value, previousValue);
+        this._invalidate();
         break;
       case 'scrollDirection':
         this.getScrollable().option('direction', value);
