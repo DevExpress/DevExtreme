@@ -37,7 +37,7 @@ import { CHAT_CONFIRMATION_POPUP_WRAPPER_CLASS } from '__internal/ui/chat/confir
 import { POPUP_CLASS } from '__internal/ui/popup/m_popup';
 import { BUTTON_CLASS } from '__internal/ui/button/button';
 import { isDesktopDevice } from '../../../helpers/chat.js';
-import messageLocalization from 'common/core/localization/message';
+import MessageBubble from '__internal/ui/chat/messagebubble';
 
 const CHAT_MESSAGEGROUP_CLASS = 'dx-chat-messagegroup';
 const CHAT_MESSAGELIST_CLASS = 'dx-chat-messagelist';
@@ -3147,6 +3147,56 @@ QUnit.module('Chat', () => {
 
             $indicator = this.$element.find(`.${SCROLLVIEW_REACHBOTTOM_INDICATOR}`);
             assert.strictEqual($indicator.is(':visible'), false, 'loading indicator is hidden');
+        });
+
+        QUnit.test('should update only the necessary changes if the new Message object is passed to store.push', function(assert) {
+            const initialMessageData = { text: 'message_1', isDeleted: false };
+            const messages = [
+                { id: 1, ...initialMessageData },
+                { id: 2, text: 'message_2' }
+            ];
+            const timeout = 400;
+
+            const store = new CustomStore({
+                key: 'id',
+                load: function() {
+                    const d = $.Deferred();
+                    setTimeout(function() {
+                        d.resolve(messages);
+                    }, timeout);
+                    return d.promise();
+                },
+            });
+
+            this.reinit({ dataSource: store });
+
+            this.clock.tick(timeout);
+
+            const bubble = MessageBubble.getInstance(this.getBubbles().eq(0));
+            const updateContentSpy = sinon.spy(bubble, '_updateContent');
+
+            [
+                { config: {}, expected: { optionChangedCallCount: 0 } },
+                { config: { ...initialMessageData }, expected: { optionChangedCallCount: 0 } },
+                { config: { text: 'new text 1', isDeleted: false }, expected: { optionChangedCallCount: 1 } },
+                { config: { text: 'new text 1', isDeleted: true }, expected: { optionChangedCallCount: 1 } },
+                { config: { text: 'new text 2', isDeleted: true }, expected: { optionChangedCallCount: 1 } },
+                { config: { text: 'new text 3', isDeleted: false }, expected: { optionChangedCallCount: 2 } },
+            ].forEach(testConfig => {
+                const { config, expected } = testConfig;
+                store.push([{ type: 'update', key: 1, data: config }]);
+
+                this.clock.tick(timeout);
+
+                assert.strictEqual(
+                    updateContentSpy.callCount,
+                    expected.optionChangedCallCount,
+                    `bubble's _updateContent was called ${expected.optionChangedCallCount} time(s) for changes: ${JSON.stringify(config)}`
+                );
+                updateContentSpy.resetHistory();
+            });
+
+            updateContentSpy.restore();
         });
     });
 });

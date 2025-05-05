@@ -7,8 +7,8 @@ import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
 
 export const CHAT_MESSAGEBUBBLE_CLASS = 'dx-chat-messagebubble';
-export const CHAT_MESSAGEBUBBLE_CONTENT_CLASS = 'dx-chat-messagebubble-content';
 export const CHAT_MESSAGEBUBBLE_DELETED_CLASS = 'dx-chat-messagebubble-deleted';
+export const CHAT_MESSAGEBUBBLE_CONTENT_CLASS = 'dx-chat-messagebubble-content';
 export const CHAT_MESSAGEBUBBLE_ICON_PROHIBITION_CLASS = `${ICON_CLASS}-cursorprohibition`;
 
 export interface Properties extends WidgetOptions<MessageBubble> {
@@ -47,8 +47,9 @@ class MessageBubble extends Widget<Properties> {
       isDeleted = false,
       template,
     } = this.option();
-    const $bubbleContainer = $(this.element()).find(`.${CHAT_MESSAGEBUBBLE_CONTENT_CLASS}`);
+    this.$element().removeClass(CHAT_MESSAGEBUBBLE_DELETED_CLASS);
 
+    const $bubbleContainer = $(this.element()).find(`.${CHAT_MESSAGEBUBBLE_CONTENT_CLASS}`);
     $bubbleContainer.empty();
 
     if (template) {
@@ -58,6 +59,8 @@ class MessageBubble extends Widget<Properties> {
     }
 
     if (isDeleted) {
+      this.$element().addClass(CHAT_MESSAGEBUBBLE_DELETED_CLASS);
+
       const icon = $('<div>')
         .addClass(ICON_CLASS)
         .addClass(CHAT_MESSAGEBUBBLE_ICON_PROHIBITION_CLASS);
@@ -66,7 +69,6 @@ class MessageBubble extends Widget<Properties> {
         .text(messageLocalization.format('dxChat-deletedMessageText'));
 
       $bubbleContainer
-        .addClass(CHAT_MESSAGEBUBBLE_DELETED_CLASS)
         .append(icon)
         .append(deletedMessage);
 
