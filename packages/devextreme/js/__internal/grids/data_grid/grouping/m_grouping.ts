@@ -748,7 +748,7 @@ gridCore.registerModule('grouping', {
       grouping: {
         autoExpandAll: true,
         allowCollapsing: true,
-        contextMenuEnabled: false,
+        contextMenuEnabled: true,
         expandMode: 'buttonClick',
         texts: {
           groupContinuesMessage: messageLocalization.format('dxDataGrid-groupContinuesMessage'),
