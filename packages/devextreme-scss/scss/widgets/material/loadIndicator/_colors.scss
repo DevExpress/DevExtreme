@@ -9,27 +9,9 @@
 * $type color
 */
 $load-indicator-segment-bg-color: $base-accent !default;
-
-/**
-* $name 20. Indicator sparkle animation background color 1
-* $type color
-*/
 $load-indicator-animation-sparkle-bg-color1: null !default;
-
-
-/**
-* $name 21. Indicator sparkle animation background color 2
-* $type color
-*/
 $load-indicator-animation-sparkle-bg-color2: null !default;
-
-
-/**
-* $name 22. Indicator sparkle animation background color 3
-* $type color
-*/
 $load-indicator-animation-sparkle-bg-color3: null !default;
-
 
 @if $mode == "light" {
   $load-indicator-animation-sparkle-bg-color1: lighten(desaturate($base-accent, 3.66), 12.94) !default;
