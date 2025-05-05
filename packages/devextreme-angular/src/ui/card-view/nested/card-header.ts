@@ -24,6 +24,7 @@ import { DOCUMENT } from '@angular/common';
 import { CardHeaderPredefinedToolbarItem, CardHeaderToolbarItem } from 'devextreme/ui/card_view';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
     extractTemplate,
     DxTemplateDirective,
@@ -37,8 +38,10 @@ import { DxiCardViewItemComponent } from './item-dxi';
 
 @Component({
     selector: 'dxo-card-view-card-header',
+    standalone: true,
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost, DxTemplateHost]
 })
 export class DxoCardViewCardHeaderComponent extends NestedOption implements AfterViewInit, OnDestroy, OnInit,
@@ -121,7 +124,7 @@ export class DxoCardViewCardHeaderComponent extends NestedOption implements Afte
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoCardViewCardHeaderComponent
   ],
   exports: [

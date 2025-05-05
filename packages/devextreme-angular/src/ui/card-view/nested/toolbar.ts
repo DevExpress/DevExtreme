@@ -20,6 +20,7 @@ import {
 import { PredefinedToolbarItem, ToolbarItem } from 'devextreme/ui/card_view';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
@@ -29,8 +30,10 @@ import { DxiCardViewToolbarItemComponent } from './toolbar-item-dxi';
 
 @Component({
     selector: 'dxo-card-view-toolbar',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxoCardViewToolbarComponent extends NestedOption implements OnDestroy, OnInit  {
@@ -108,7 +111,7 @@ export class DxoCardViewToolbarComponent extends NestedOption implements OnDestr
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoCardViewToolbarComponent
   ],
   exports: [

@@ -18,6 +18,7 @@ import { SingleMultipleOrNone, SelectAllMode } from 'devextreme/common';
 import { SelectionColumnDisplayMode } from 'devextreme/common/grids';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
@@ -25,8 +26,10 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-card-view-selection',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxoCardViewSelectionComponent extends NestedOption implements OnDestroy, OnInit  {
@@ -88,7 +91,7 @@ export class DxoCardViewSelectionComponent extends NestedOption implements OnDes
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoCardViewSelectionComponent
   ],
   exports: [

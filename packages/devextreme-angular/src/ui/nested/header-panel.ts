@@ -16,6 +16,7 @@ import {
 
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxoHeaderPanel } from './base/header-panel';
@@ -23,8 +24,10 @@ import { DxoHeaderPanel } from './base/header-panel';
 
 @Component({
     selector: 'dxo-header-panel',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost],
     inputs: [
         'dragging',
@@ -60,7 +63,7 @@ export class DxoHeaderPanelComponent extends DxoHeaderPanel implements OnDestroy
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoHeaderPanelComponent
   ],
   exports: [

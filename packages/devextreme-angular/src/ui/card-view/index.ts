@@ -138,8 +138,10 @@ import { DxiCardViewColumnComponent } from 'devextreme-angular/ui/card-view/nest
  */
 @Component({
     selector: 'dx-card-view',
+    standalone: true,
     template: '',
     host: { ngSkipHydration: 'true' },
+    imports: [ DxIntegrationModule ],
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -1447,6 +1449,7 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
         super.ngOnChanges(changes);
         this.setupChanges('columns', changes);
         this.setupChanges('dataSource', changes);
+        this.setupChanges('filterValue', changes);
         this.setupChanges('keyExpr', changes);
         this.setupChanges('selectedCardKeys', changes);
     }
@@ -1460,6 +1463,7 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     ngDoCheck() {
         this._idh.doCheck('columns');
         this._idh.doCheck('dataSource');
+        this._idh.doCheck('filterValue');
         this._idh.doCheck('keyExpr');
         this._idh.doCheck('selectedCardKeys');
         this._watcherHelper.checkWatchers();
@@ -1479,6 +1483,7 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
 
 @NgModule({
   imports: [
+    DxCardViewComponent,
     DxoCardCoverModule,
     DxoCardHeaderModule,
     DxiItemModule,
@@ -1560,9 +1565,6 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     DxiCardViewValidationRuleModule,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxCardViewComponent
   ],
   exports: [
     DxCardViewComponent,
@@ -1649,6 +1651,8 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
   ]
 })
 export class DxCardViewModule { }
+
+export * from 'devextreme-angular/ui/card-view/nested';
 
 import type * as DxCardViewTypes from "devextreme/ui/card_view_types";
 export { DxCardViewTypes };

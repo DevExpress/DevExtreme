@@ -24,6 +24,7 @@ import { Format } from 'devextreme/common/core/localization';
 import { dxFormSimpleItem } from 'devextreme/ui/form';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
@@ -41,8 +42,10 @@ import { DxiCardViewValidationRuleComponent } from './validation-rule-dxi';
 
 @Component({
     selector: 'dxi-card-view-column',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxiCardViewColumnComponent extends CollectionNestedOption {
@@ -511,7 +514,7 @@ export class DxiCardViewColumnComponent extends CollectionNestedOption {
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiCardViewColumnComponent
   ],
   exports: [

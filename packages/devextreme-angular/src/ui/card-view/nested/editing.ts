@@ -20,6 +20,7 @@ import {
 import { DataChange } from 'devextreme/common/grids';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
@@ -28,8 +29,10 @@ import { DxiCardViewChangeComponent } from './change-dxi';
 
 @Component({
     selector: 'dxo-card-view-editing',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxoCardViewEditingComponent extends NestedOption implements OnDestroy, OnInit  {
@@ -131,7 +134,7 @@ export class DxoCardViewEditingComponent extends NestedOption implements OnDestr
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoCardViewEditingComponent
   ],
   exports: [

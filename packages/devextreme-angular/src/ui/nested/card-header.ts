@@ -19,6 +19,7 @@ import {
 
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxoCardHeader } from './base/card-header';
@@ -27,8 +28,10 @@ import { DxiItemComponent } from './item-dxi';
 
 @Component({
     selector: 'dxo-card-header',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost],
     inputs: [
         'items',
@@ -71,7 +74,7 @@ export class DxoCardHeaderComponent extends DxoCardHeader implements OnDestroy, 
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoCardHeaderComponent
   ],
   exports: [

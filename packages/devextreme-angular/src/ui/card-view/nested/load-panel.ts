@@ -22,6 +22,7 @@ import { ContentReadyEvent, DisposingEvent, HiddenEvent, HidingEvent, Initialize
 import { PositionAlignment } from 'devextreme/common';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
@@ -29,8 +30,10 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-card-view-load-panel',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxoCardViewLoadPanelComponent extends NestedOption implements OnDestroy, OnInit  {
@@ -351,7 +354,7 @@ export class DxoCardViewLoadPanelComponent extends NestedOption implements OnDes
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoCardViewLoadPanelComponent
   ],
   exports: [

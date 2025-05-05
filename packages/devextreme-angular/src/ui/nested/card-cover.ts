@@ -16,6 +16,7 @@ import {
 
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxoCardCover } from './base/card-cover';
@@ -23,8 +24,10 @@ import { DxoCardCover } from './base/card-cover';
 
 @Component({
     selector: 'dxo-card-cover',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost],
     inputs: [
         'altExpr',
@@ -61,7 +64,7 @@ export class DxoCardCoverComponent extends DxoCardCover implements OnDestroy, On
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoCardCoverComponent
   ],
   exports: [

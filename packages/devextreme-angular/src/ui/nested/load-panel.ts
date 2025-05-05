@@ -1,5 +1,6 @@
 /* tslint:disable:max-line-length */
 
+/* tslint:disable:use-input-property-decorator */
 
 import {
     Component,
@@ -8,19 +9,21 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input
+    Output,
+    EventEmitter
 } from '@angular/core';
 
 
 
 
-import { Mode } from 'devextreme/common';
+import { PositionAlignment } from 'devextreme/common';
+import { PositionConfig } from 'devextreme/common/core/animation';
 
 import {
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
-import { NestedOption } from 'devextreme-angular/core';
+import { DxoLoadPanelOptions } from './base/load-panel-options';
 
 
 @Component({
@@ -29,82 +32,61 @@ import { NestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [NestedOptionHost],
+    inputs: [
+        'animation',
+        'closeOnOutsideClick',
+        'container',
+        'deferRendering',
+        'delay',
+        'focusStateEnabled',
+        'height',
+        'hideOnOutsideClick',
+        'hideOnParentScroll',
+        'hint',
+        'hoverStateEnabled',
+        'indicatorSrc',
+        'maxHeight',
+        'maxWidth',
+        'message',
+        'minHeight',
+        'minWidth',
+        'onContentReady',
+        'onDisposing',
+        'onHidden',
+        'onHiding',
+        'onInitialized',
+        'onOptionChanged',
+        'onShowing',
+        'onShown',
+        'position',
+        'rtlEnabled',
+        'shading',
+        'shadingColor',
+        'showIndicator',
+        'showPane',
+        'visible',
+        'width',
+        'wrapperAttr',
+        'enabled',
+        'text'
+    ]
 })
-export class DxoLoadPanelComponent extends NestedOption implements OnDestroy, OnInit  {
-    @Input()
-    get enabled(): Mode | boolean {
-        return this._getOption('enabled');
-    }
-    set enabled(value: Mode | boolean) {
-        this._setOption('enabled', value);
-    }
+export class DxoLoadPanelComponent extends DxoLoadPanelOptions implements OnDestroy, OnInit  {
 
-    @Input()
-    get height(): number | string {
-        return this._getOption('height');
-    }
-    set height(value: number | string) {
-        this._setOption('height', value);
-    }
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
+    @Output() positionChange: EventEmitter<PositionAlignment | PositionConfig | Function>;
 
-    @Input()
-    get indicatorSrc(): string {
-        return this._getOption('indicatorSrc');
-    }
-    set indicatorSrc(value: string) {
-        this._setOption('indicatorSrc', value);
-    }
-
-    @Input()
-    get shading(): boolean {
-        return this._getOption('shading');
-    }
-    set shading(value: boolean) {
-        this._setOption('shading', value);
-    }
-
-    @Input()
-    get shadingColor(): string {
-        return this._getOption('shadingColor');
-    }
-    set shadingColor(value: string) {
-        this._setOption('shadingColor', value);
-    }
-
-    @Input()
-    get showIndicator(): boolean {
-        return this._getOption('showIndicator');
-    }
-    set showIndicator(value: boolean) {
-        this._setOption('showIndicator', value);
-    }
-
-    @Input()
-    get showPane(): boolean {
-        return this._getOption('showPane');
-    }
-    set showPane(value: boolean) {
-        this._setOption('showPane', value);
-    }
-
-    @Input()
-    get text(): string {
-        return this._getOption('text');
-    }
-    set text(value: string) {
-        this._setOption('text', value);
-    }
-
-    @Input()
-    get width(): number | string {
-        return this._getOption('width');
-    }
-    set width(value: number | string) {
-        this._setOption('width', value);
-    }
-
-
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
+    @Output() visibleChange: EventEmitter<boolean>;
     protected get _optionPath() {
         return 'loadPanel';
     }
@@ -113,6 +95,12 @@ export class DxoLoadPanelComponent extends NestedOption implements OnDestroy, On
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
+
+        this._createEventEmitters([
+            { emit: 'positionChange' },
+            { emit: 'visibleChange' }
+        ]);
+
         parentOptionHost.setNestedOption(this);
         optionHost.setHost(this, this._fullOptionPath.bind(this));
     }

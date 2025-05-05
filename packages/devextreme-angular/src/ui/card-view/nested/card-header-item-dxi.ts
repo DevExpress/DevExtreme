@@ -21,6 +21,7 @@ import { ToolbarItemLocation, ToolbarItemComponent } from 'devextreme/common';
 import { CardHeaderPredefinedToolbarItem } from 'devextreme/ui/card_view';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
     extractTemplate,
     DxTemplateDirective,
@@ -32,8 +33,10 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxi-card-view-card-header-item',
+    standalone: true,
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost, DxTemplateHost]
 })
 export class DxiCardViewCardHeaderItemComponent extends CollectionNestedOption implements AfterViewInit,
@@ -176,7 +179,7 @@ export class DxiCardViewCardHeaderItemComponent extends CollectionNestedOption i
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiCardViewCardHeaderItemComponent
   ],
   exports: [
