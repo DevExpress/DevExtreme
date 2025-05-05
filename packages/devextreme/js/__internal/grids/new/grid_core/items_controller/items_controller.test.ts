@@ -118,6 +118,19 @@ describe('ItemsController', () => {
       const columns = columnsController.columns.peek();
       expect(columns[0].dataType).toBe('boolean');
     });
+
+    it('should format datetime value using shortDateShortTime format', () => {
+      const dateObject = new Date('2025-05-05T14:30:00Z');
+      const { columnsController, itemsController } = setup({
+        columns: [{ dataField: 'a', dataType: 'datetime' }],
+        dataSource: [{ a: dateObject }],
+      });
+
+      const columns = columnsController.columns.peek();
+      const CardInfo = itemsController.createCardInfo({ a: dateObject }, columns, 0);
+
+      expect(CardInfo.fields[0].text).toMatch('5/5/2025, 10:30 PM');
+    });
   });
 
   describe('setSelectionState', () => {
