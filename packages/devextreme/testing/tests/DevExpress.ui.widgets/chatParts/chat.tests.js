@@ -3176,19 +3176,23 @@ QUnit.module('Chat', () => {
             const updateContentSpy = sinon.spy(bubble, '_updateContent');
 
             [
-                { optionsChanged: 0 },
-                { ...initialMessageData, optionsChanged: 0 },
-                { text: 'new text 1', isDeleted: false, optionsChanged: 1 },
-                { text: 'new text 1', isDeleted: true, optionsChanged: 1 },
-                { text: 'new text 2', isDeleted: true, optionsChanged: 1 },
-                { text: 'new text 3', isDeleted: false, optionsChanged: 2 },
-            ].forEach(dataToChange => {
-                const { optionsChanged, ...data } = dataToChange;
-                store.push([{ type: 'update', key: 1, data }]);
+                { config: {}, expected: { optionChangedCallCount: 0 } },
+                { config: { ...initialMessageData }, expected: { optionChangedCallCount: 0 } },
+                { config: { text: 'new text 1', isDeleted: false }, expected: { optionChangedCallCount: 1 } },
+                { config: { text: 'new text 1', isDeleted: true }, expected: { optionChangedCallCount: 1 } },
+                { config: { text: 'new text 2', isDeleted: true }, expected: { optionChangedCallCount: 1 } },
+                { config: { text: 'new text 3', isDeleted: false }, expected: { optionChangedCallCount: 2 } },
+            ].forEach(testConfig => {
+                const { config, expected } = testConfig;
+                store.push([{ type: 'update', key: 1, data: config }]);
 
                 this.clock.tick(timeout);
 
-                assert.strictEqual(updateContentSpy.callCount, optionsChanged, `bubble's _updateContent was called ${optionsChanged} time(s) for changes: ${JSON.stringify(data)}`);
+                assert.strictEqual(
+                    updateContentSpy.callCount,
+                    expected.optionChangedCallCount,
+                    `bubble's _updateContent was called ${expected.optionChangedCallCount} time(s) for changes: ${JSON.stringify(config)}`
+                );
                 updateContentSpy.resetHistory();
             });
 
