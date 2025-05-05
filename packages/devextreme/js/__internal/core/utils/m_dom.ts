@@ -82,9 +82,13 @@ export const extractTemplateMarkup = (element) => {
 };
 
 export const normalizeTemplateElement = (element) => {
-  let $element = isDefined(element) && (element.nodeType || isRenderer(element))
-    ? $(element)
-    : $('<div>').html(element).contents();
+  let $element = $();
+
+  if (isDefined(element) && (element.nodeType || isRenderer(element))) {
+    $element = $(element);
+  } else if (typeof element === 'string') {
+    $element = $('<div>').html(element).contents();
+  }
 
   if ($element.length === 1) {
     if ($element.is('script')) {
