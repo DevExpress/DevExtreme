@@ -67,14 +67,6 @@
     &.dx-menu-item-has-submenu > .dx-menu-item-content {
       padding-inline-end: $fluent-menu-item-with-icon-horizontal-padding;
     }
-
-    &.dx-menu-item-has-text {
-      &.dx-menu-item-has-icon {
-        .dx-icon {
-          margin-inline-end: $fluent-menu-icon-to-text-offset;
-        }
-      }
-    }
   }
 
   &.dx-overlay-content.dx-state-focused {
