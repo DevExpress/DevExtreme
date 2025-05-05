@@ -21,13 +21,13 @@ const moduleConfig = {
         };
 
         init();
-    }
+    },
 };
 
 QUnit.module('MessageBubble', moduleConfig, () => {
     QUnit.module('Classes', moduleConfig, () => {
         QUnit.test('root element should have correct class', function(assert) {
-            assert.ok(this.$element.hasClass(CHAT_MESSAGEBUBBLE_CLASS));
+            assert.strictEqual(this.$element.hasClass(CHAT_MESSAGEBUBBLE_CLASS), true, 'root element has correct messagebubble class');
         });
 
         QUnit.test('root element should have a child content element with correct class', function(assert) {
@@ -37,10 +37,12 @@ QUnit.module('MessageBubble', moduleConfig, () => {
             assert.strictEqual($content.parent().is(this.$element), true, 'content element is direct child of root element');
         });
 
-        QUnit.test('root element should have a correct class after deletion', function(assert) {
+        QUnit.test('root element should switch classes when deletion and undo happens', function(assert) {
             this.instance.option('isDeleted', true);
+            assert.strictEqual(this.$element.hasClass(CHAT_MESSAGEBUBBLE_DELETED_CLASS), true, 'root element has correct deleted class');
 
-            assert.ok(this.$element.hasClass(CHAT_MESSAGEBUBBLE_DELETED_CLASS), 'root element has correct class');
+            this.instance.option('isDeleted', false);
+            assert.strictEqual(this.$element.hasClass(CHAT_MESSAGEBUBBLE_DELETED_CLASS), false, 'root element has correct class after undo');
         });
     });
 
