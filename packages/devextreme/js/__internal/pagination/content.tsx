@@ -33,6 +33,7 @@ export interface PaginationContentProps extends PaginationProps {
   allowedPageSizesRef?: RefObject<HTMLDivElement>;
   pagesRef?: RefObject<HTMLElement>;
   infoTextRef?: RefObject<HTMLDivElement>;
+  _getParentComponentRootNode?: () => void;
 }
 
 export const PaginationContentDefaultProps: PaginationContentProps = {
@@ -101,8 +102,7 @@ export class PaginationContent extends InfernoComponent<PaginationContentProps> 
       element: (): HTMLElement | null => this.getWidgetRootElement(),
       // NOTE: Fix of the T1285596
       //
-      // 1) For Pagination used inside the DataGrid pass DataGrid's instance
-      // to a11y shared utils.
+      // 1) For Pagination used inside the DataGrid
       // In this case the instance element should be
       // DataGrid for correct keyboard shortcuts handling.
       //
@@ -110,8 +110,9 @@ export class PaginationContent extends InfernoComponent<PaginationContentProps> 
       // In this case the element should be Pagination root node
       //
       // See the ui/shared/accessibility.js "selectView" util function for more details.
-      component: this.props._parentComponentInstance
-      ?? { element: () => this.getWidgetRootElement() },
+      component: this.props._getParentComponentRootNode
+        ? { element: () => this.props._getParentComponentRootNode?.() }
+        : { element: () => this.getWidgetRootElement() },
 
       _createActionByOption: () => (e: any) => {
         this.props.onKeyDown?.(e);

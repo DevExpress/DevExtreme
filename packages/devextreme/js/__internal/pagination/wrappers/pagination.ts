@@ -60,7 +60,7 @@ export default class Pagination extends PaginationWrapper {
         'hoverStateEnabled',
 
         '_skipValidation',
-        '_parentComponentInstance',
+        '_getParentComponentRootNode',
       ],
     };
   }
