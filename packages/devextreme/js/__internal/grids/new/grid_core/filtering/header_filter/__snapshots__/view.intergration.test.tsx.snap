@@ -482,19 +482,22 @@ exports[`HeaderFilter View integration should render popup with tree list if dat
 <div
   class="dx-overlay-wrapper dx-popup-wrapper dx-header-filter-menu"
   data-bind="dxControlsDescendantBindings: true"
-  style="z-index: 1501;"
+  style="z-index: 1501; position: absolute; width: 0px; height: 0px; left: 0px; top: 0px; transform: translate(0px, 0px);"
 >
   <div
     aria-label="Filter options"
     class="dx-overlay-content dx-popup-normal dx-resizable dx-dropdowneditor-overlay"
     role="dialog"
-    style="width: 252px; height: 325px; visibility: hidden; z-index: 1501;"
+    style="width: 252px; height: 325px; z-index: 1501; left: 0px; top: 0px; transform: translate(0px, 0px)scale(0.55); transition-property: none;"
   >
     <div
       class="dx-popup-content"
+      style="height: 0px; min-height: auto; max-height: auto;"
     >
       <div
-        class="dx-scrollable dx-scrollview dx-visibility-change-handler dx-scrollable-vertical dx-scrollable-simulated dx-list-select-decorator-enabled dx-list"
+        aria-roledescription="List"
+        class="dx-scrollable dx-scrollview dx-visibility-change-handler dx-scrollable-vertical dx-scrollable-simulated dx-list-select-decorator-enabled dx-list dx-widget dx-collection"
+        role="group"
       >
         <div
           class="dx-scrollable-wrapper"
@@ -562,16 +565,237 @@ exports[`HeaderFilter View integration should render popup with tree list if dat
               </div>
               <div
                 class="dx-scrollview-content"
+                role="application"
+                tabindex="0"
               >
                 <div
+                  aria-label="Select All, Not checked"
+                  class="dx-list-select-all"
+                >
+                  <div
+                    aria-checked="false"
+                    aria-invalid="false"
+                    aria-label="Select All"
+                    aria-readonly="false"
+                    class="dx-widget dx-checkbox dx-list-select-all-checkbox"
+                    role="checkbox"
+                  >
+                    <input
+                      type="hidden"
+                      value="false"
+                    />
+                    <div
+                      class="dx-checkbox-container"
+                    >
+                      <span
+                        class="dx-checkbox-icon"
+                      />
+                      
+                    </div>
+                  </div>
+                  <div
+                    class="dx-list-select-all-label"
+                  >
+                    Select All
+                  </div>
+                </div>
+                <div
+                  aria-label="Items"
                   class="dx-list-items"
-                />
+                  role="listbox"
+                >
+                  <div
+                    aria-label="A_0"
+                    aria-selected="false"
+                    class="dx-item dx-list-item"
+                    role="option"
+                  >
+                    <div
+                      class="dx-list-item-before-bag dx-list-select-checkbox-container"
+                    >
+                      <div
+                        aria-checked="false"
+                        aria-invalid="false"
+                        aria-label="Check state"
+                        aria-readonly="false"
+                        class="dx-widget dx-checkbox dx-list-select-checkbox"
+                        role="checkbox"
+                      >
+                        <input
+                          type="hidden"
+                          value="false"
+                        />
+                        <div
+                          class="dx-checkbox-container"
+                        >
+                          <span
+                            class="dx-checkbox-icon"
+                          />
+                          
+                        </div>
+                      </div>
+                    </div>
+                    <div
+                      class="dx-item-content dx-list-item-content"
+                    >
+                      A_0
+                    </div>
+                  </div>
+                  <div
+                    aria-label="A_1"
+                    aria-selected="false"
+                    class="dx-item dx-list-item"
+                    role="option"
+                  >
+                    <div
+                      class="dx-list-item-before-bag dx-list-select-checkbox-container"
+                    >
+                      <div
+                        aria-checked="false"
+                        aria-invalid="false"
+                        aria-label="Check state"
+                        aria-readonly="false"
+                        class="dx-widget dx-checkbox dx-list-select-checkbox"
+                        role="checkbox"
+                      >
+                        <input
+                          type="hidden"
+                          value="false"
+                        />
+                        <div
+                          class="dx-checkbox-container"
+                        >
+                          <span
+                            class="dx-checkbox-icon"
+                          />
+                          
+                        </div>
+                      </div>
+                    </div>
+                    <div
+                      class="dx-item-content dx-list-item-content"
+                    >
+                      A_1
+                    </div>
+                  </div>
+                  <div
+                    aria-label="A_2"
+                    aria-selected="false"
+                    class="dx-item dx-list-item"
+                    role="option"
+                  >
+                    <div
+                      class="dx-list-item-before-bag dx-list-select-checkbox-container"
+                    >
+                      <div
+                        aria-checked="false"
+                        aria-invalid="false"
+                        aria-label="Check state"
+                        aria-readonly="false"
+                        class="dx-widget dx-checkbox dx-list-select-checkbox"
+                        role="checkbox"
+                      >
+                        <input
+                          type="hidden"
+                          value="false"
+                        />
+                        <div
+                          class="dx-checkbox-container"
+                        >
+                          <span
+                            class="dx-checkbox-icon"
+                          />
+                          
+                        </div>
+                      </div>
+                    </div>
+                    <div
+                      class="dx-item-content dx-list-item-content"
+                    >
+                      A_2
+                    </div>
+                  </div>
+                  <div
+                    aria-label="A_3"
+                    aria-selected="false"
+                    class="dx-item dx-list-item"
+                    role="option"
+                  >
+                    <div
+                      class="dx-list-item-before-bag dx-list-select-checkbox-container"
+                    >
+                      <div
+                        aria-checked="false"
+                        aria-invalid="false"
+                        aria-label="Check state"
+                        aria-readonly="false"
+                        class="dx-widget dx-checkbox dx-list-select-checkbox"
+                        role="checkbox"
+                      >
+                        <input
+                          type="hidden"
+                          value="false"
+                        />
+                        <div
+                          class="dx-checkbox-container"
+                        >
+                          <span
+                            class="dx-checkbox-icon"
+                          />
+                          
+                        </div>
+                      </div>
+                    </div>
+                    <div
+                      class="dx-item-content dx-list-item-content"
+                    >
+                      A_3
+                    </div>
+                  </div>
+                  <div
+                    aria-label="A_4"
+                    aria-selected="false"
+                    class="dx-item dx-list-item"
+                    role="option"
+                  >
+                    <div
+                      class="dx-list-item-before-bag dx-list-select-checkbox-container"
+                    >
+                      <div
+                        aria-checked="false"
+                        aria-invalid="false"
+                        aria-label="Check state"
+                        aria-readonly="false"
+                        class="dx-widget dx-checkbox dx-list-select-checkbox"
+                        role="checkbox"
+                      >
+                        <input
+                          type="hidden"
+                          value="false"
+                        />
+                        <div
+                          class="dx-checkbox-container"
+                        >
+                          <span
+                            class="dx-checkbox-icon"
+                          />
+                          
+                        </div>
+                      </div>
+                    </div>
+                    <div
+                      class="dx-item-content dx-list-item-content"
+                    >
+                      A_4
+                    </div>
+                  </div>
+                </div>
               </div>
               <div
                 class="dx-scrollview-bottom-pocket"
               >
                 <div
-                  class="dx-scrollview-scrollbottom"
+                  class="dx-scrollview-scrollbottom dx-state-invisible"
                 >
                   <div
                     class="dx-scrollview-scrollbottom-indicator"
