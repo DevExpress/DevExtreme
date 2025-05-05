@@ -6,7 +6,6 @@ import {
 import messageLocalization from '@js/common/core/localization/message';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
-import { noop } from '@js/core/utils/common';
 import type { DeferredObj } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
@@ -144,7 +143,8 @@ class TextEditorMask<
   }
 
   _attachMouseWheelEventHandlers(): void {
-    const hasMouseWheelHandler = this._onMouseWheel !== noop;
+    const hasMouseWheelHandler = this._onMouseWheel
+    && this._onMouseWheel !== TextEditorMask.prototype._onMouseWheel;
 
     if (!hasMouseWheelHandler) {
       return;
