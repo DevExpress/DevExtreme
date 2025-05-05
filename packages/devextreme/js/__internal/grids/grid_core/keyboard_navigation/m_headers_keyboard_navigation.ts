@@ -91,7 +91,15 @@ export class HeadersKeyboardNavigationController extends ColumnKeyboardNavigatio
   }
 
   protected _getCell(cellPosition): dxElementWrapper {
-    return this._columnHeadersView?.getCell(cellPosition);
+    const columnIndexOffset = this.getColumnIndexOffset(cellPosition.columnIndex);
+    const columnIndex = cellPosition.columnIndex >= 0
+      ? cellPosition.columnIndex - columnIndexOffset
+      : -1;
+
+    return this._columnHeadersView?.getCell({
+      rowIndex: cellPosition.rowIndex,
+      columnIndex,
+    });
   }
 
   protected getFocusedView(): any {
@@ -171,6 +179,13 @@ export class HeadersKeyboardNavigationController extends ColumnKeyboardNavigatio
           scrollPadding,
           this.addWidgetPrefix('table'),
         );
+
+        const isNeedToRenderVirtualColumns = this._columnsController
+          ?.isNeedToRenderVirtualColumns(scrollPosition);
+
+        if (isNeedToRenderVirtualColumns) {
+          this.needToRestoreFocus = true;
+        }
 
         scrollable.scrollTo({ x: scrollPosition });
       }

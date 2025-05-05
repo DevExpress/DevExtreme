@@ -1892,6 +1892,14 @@ export class ColumnsController extends modules.Controller {
   public isVirtualMode(): boolean {
     return false;
   }
+
+  /**
+   * @extended: virtual_column
+   */
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  public isNeedToRenderVirtualColumns(scrollPosition: number): boolean {
+    return false;
+  }
 }
 
 export const columnsControllerModule: Module = {

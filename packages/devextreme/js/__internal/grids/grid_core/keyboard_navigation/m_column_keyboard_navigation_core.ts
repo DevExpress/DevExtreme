@@ -18,7 +18,10 @@ export class ColumnKeyboardNavigationController extends KeyboardNavigationContro
       return column.groupIndex as number;
     }
 
-    return this._columnsController.getVisibleIndex(column.index, rowIndex);
+    const visibleIndex = this._columnsController.getVisibleIndex(column.index, rowIndex);
+    const columnIndexOffset = this.getColumnIndexOffset(visibleIndex);
+
+    return visibleIndex >= 0 ? visibleIndex + columnIndexOffset : -1;
   }
 
   protected getNewVisibleIndex(
