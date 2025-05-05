@@ -672,7 +672,15 @@ export const Editing: Story = {
         const messageRender = useCallback(({ message }) => {
             if(message.isDeleted === true) {
                 return (
-                    <div className="dx-chat-messagebubble-content dx-chat-messagebubble-deleted" style={{ display: 'flex', gap: 4 }}>
+                    <div
+                        className="dx-chat-messagebubble-content dx-chat-messagebubble-deleted"
+                        style={{
+                            display: 'flex',
+                            gap: 4,
+                            alignItems: 'center',
+                            fontStyle: 'italic',
+                        }}
+                    >
                         <div className="dx-icon dx-icon-cursorprohibition"></div>
                         <div>This message was deleted</div>
                         { user?.id === message.author.id &&
