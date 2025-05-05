@@ -11,10 +11,10 @@ import {
 
 const I18N_EN = {
   getFieldName: (colName: string): string => `Field name ${colName}`,
-  sortOrderAsc: 'sorted in ascending order',
-  sortOrderDesc: 'sorted in descending order',
-  getSortIdx: (idx?: number): string => `sort index ${idx}`,
-  withHeaderFilter: 'has applied header filter',
+  sortOrderAsc: 'Sorted in ascending order',
+  sortOrderDesc: 'Sorted in descending order',
+  getSortIdx: (idx?: number): string => `Sort index ${idx}`,
+  withHeaderFilter: 'Header filter applied',
 };
 
 describe('HeaderPanel', () => {
