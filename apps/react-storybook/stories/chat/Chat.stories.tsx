@@ -604,7 +604,7 @@ export const Editing: Story = {
         height: "600px",
         allowDeleting: true,
         allowUpdating: true,
-        useCustomMessageRender: false, // добавлено
+        useCustomMessageRender: false,
     },
     argTypes: {
         user: {
