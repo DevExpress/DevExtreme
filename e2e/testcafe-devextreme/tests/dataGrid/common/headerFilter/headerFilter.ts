@@ -316,3 +316,45 @@ test('[T1284200] Should handle dxList "selectAll" when has unselected items on t
     visible: true,
   },
 }));
+
+test('Header filter search input loses focus on first key in datetime columns (T1284663)', async (t) => {
+  const dataGrid = new DataGrid('#container');
+  const headerCell = dataGrid.getHeaders()
+    .getHeaderRow(0)
+    .getHeaderCell(0);
+  const filterIconElement = headerCell.getFilterIcon();
+  const headerFilter = new HeaderFilter();
+
+  await t
+    .click(filterIconElement)
+    .pressKey('1');
+
+  await t.wait(1500);
+
+  const searchInput = headerFilter.getSearchInput();
+
+  await t
+    .expect(searchInput.focused)
+    .ok();
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: [{
+    id: 1,
+    DeliveryDate: '2017/04/13 9:00',
+  }],
+  headerFilter: {
+    visible: true,
+  },
+  keyExpr: 'id',
+  columns: [{
+    dataField: 'DeliveryDate',
+    dataType: 'date',
+    headerFilter: {
+      dataSource: [
+        { text: 'March 11, 2025', value: '2025-03-11T00:00:00' },
+        { text: 'March 2, 2025', value: '2025-03-02T00:00:00' },
+        { text: 'February 3, 2025', value: '2025-02-03T00:00:00' },
+      ],
+      search: { enabled: true },
+    },
+  }],
+}));
