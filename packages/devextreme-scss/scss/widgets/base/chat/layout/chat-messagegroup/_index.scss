@@ -28,7 +28,7 @@
 }
 
 .dx-chat-messagegroup-time {
-  @include dx-overflow();
+  white-space: nowrap;
 }
 
 .dx-chat-messagegroup-alignment-start {
