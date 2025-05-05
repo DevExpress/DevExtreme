@@ -16,6 +16,7 @@ import {
 
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxoChartCommonSeriesSettings } from './base/chart-common-series-settings';
@@ -23,8 +24,10 @@ import { DxoChartCommonSeriesSettings } from './base/chart-common-series-setting
 
 @Component({
     selector: 'dxo-rangearea',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost],
     inputs: [
         'aggregation',
@@ -117,7 +120,7 @@ export class DxoRangeareaComponent extends DxoChartCommonSeriesSettings implemen
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoRangeareaComponent
   ],
   exports: [

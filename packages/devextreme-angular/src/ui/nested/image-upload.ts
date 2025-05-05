@@ -19,6 +19,7 @@ import {
 
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxoHtmlEditorImageUpload } from './base/html-editor-image-upload';
@@ -27,8 +28,10 @@ import { DxiTabComponent } from './tab-dxi';
 
 @Component({
     selector: 'dxo-image-upload',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost],
     inputs: [
         'fileUploaderOptions',
@@ -73,7 +76,7 @@ export class DxoImageUploadComponent extends DxoHtmlEditorImageUpload implements
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoImageUploadComponent
   ],
   exports: [

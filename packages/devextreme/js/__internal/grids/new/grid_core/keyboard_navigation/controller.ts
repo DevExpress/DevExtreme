@@ -1,7 +1,7 @@
 /* eslint-disable spellcheck/spell-checker */
 import { getPublicElement } from '@js/core/element';
 import $ from '@js/core/renderer';
-import type { DataRow } from '@ts/grids/new/grid_core/columns_controller/types';
+import type { CardInfo } from '@ts/grids/new/grid_core/columns_controller/types';
 import type { EventWithHandled } from '@ts/grids/new/grid_core/core/events/index';
 import { OptionsController } from '@ts/grids/new/grid_core/options_controller/options_controller';
 
@@ -49,7 +49,7 @@ export class KeyboardNavigationController {
     });
   }
 
-  public onFocusedCardChanged(card: DataRow, cardIdx: number, element: HTMLElement): void {
+  public onFocusedCardChanged(card: CardInfo, cardIdx: number, element: HTMLElement): void {
     const action = this.options.action('onFocusedCardChanged').peek();
     action({
       cardIndex: cardIdx,

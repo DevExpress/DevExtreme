@@ -205,10 +205,17 @@ export class HeaderPanel extends ColumnsView {
   /**
    * @extended: DataGrid's grouping
    */
-  protected allowDragging() {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  public allowDragging(column): boolean {
+    return false;
   }
 
   public hasGroupedColumns(): any {}
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  public getContextMenuItems(options) {
+    return undefined;
+  }
 }
 
 const resizing = (Base: ModuleType<ResizingController>) => class HeaderPanelResizingExtender extends Base {

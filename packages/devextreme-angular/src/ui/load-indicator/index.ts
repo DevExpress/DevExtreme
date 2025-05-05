@@ -42,8 +42,10 @@ import {
  */
 @Component({
     selector: 'dx-load-indicator',
+    standalone: true,
     template: '',
     host: { ngSkipHydration: 'true' },
+    imports: [ DxIntegrationModule ],
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -269,11 +271,9 @@ export class DxLoadIndicatorComponent extends DxComponent implements OnDestroy {
 
 @NgModule({
   imports: [
+    DxLoadIndicatorComponent,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxLoadIndicatorComponent
   ],
   exports: [
     DxLoadIndicatorComponent,
@@ -281,6 +281,7 @@ export class DxLoadIndicatorComponent extends DxComponent implements OnDestroy {
   ]
 })
 export class DxLoadIndicatorModule { }
+
 
 import type * as DxLoadIndicatorTypes from "devextreme/ui/load_indicator_types";
 export { DxLoadIndicatorTypes };

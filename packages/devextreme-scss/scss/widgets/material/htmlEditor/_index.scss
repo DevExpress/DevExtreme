@@ -10,8 +10,10 @@
 @use "../textEditor/colors" as *;
 @use "../toolbar/sizes" as *;
 @use "../common/mixins" as *;
+@use "../common/sizes" as *;
 @use "../fileUploader/sizes" as *;
 @use "../popup/sizes" as *;
+@use "../../base/mixins" as *;
 @use "../../base/htmlEditor";
 
 // adduse
@@ -340,5 +342,34 @@
 .dx-formdialog.dx-dropdowneditor-overlay.dx-popup-wrapper {
   .dx-overlay-content {
     box-shadow: $material-popup-overlay-content-shadow;
+  }
+}
+
+.dx-aidialog {
+  .dx-toolbar.dx-popup-bottom {
+    padding: $material-aidialog-toolbar-padding;
+  }
+
+  .dx-formdialog.dx-dropdowneditor-overlay.dx-popup-wrapper {
+    .dx-overlay-content {
+      box-shadow: $material-popup-overlay-content-shadow;
+    }
+  }
+
+  .dx-aidialog-controls {
+    gap: $material-aidialog-selects-gap;
+
+    .dx-selectbox {
+      max-width: calc(50% - $material-aidialog-selects-gap * 0.5);
+    }
+  }
+
+  .dx-aidialog-content {
+    padding: $material-aidialog-content-padding;
+    gap: $material-aidialog-content-gap;
+  }
+
+  .dx-pending-indicator {
+    @include dx-pending-indicator-centered();
   }
 }

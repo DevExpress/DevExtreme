@@ -16,6 +16,7 @@ import {
 
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxoPager } from './base/pager';
@@ -23,8 +24,10 @@ import { DxoPager } from './base/pager';
 
 @Component({
     selector: 'dxo-pager',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost],
     inputs: [
         'allowedPageSizes',
@@ -64,7 +67,7 @@ export class DxoPagerComponent extends DxoPager implements OnDestroy, OnInit  {
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoPagerComponent
   ],
   exports: [

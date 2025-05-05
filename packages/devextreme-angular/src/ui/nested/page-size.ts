@@ -21,6 +21,7 @@ import {
 
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
@@ -29,8 +30,10 @@ import { DxiItemComponent } from './item-dxi';
 
 @Component({
     selector: 'dxo-page-size',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxoPageSizeComponent extends NestedOption implements OnDestroy, OnInit  {
@@ -111,7 +114,7 @@ export class DxoPageSizeComponent extends NestedOption implements OnDestroy, OnI
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoPageSizeComponent
   ],
   exports: [

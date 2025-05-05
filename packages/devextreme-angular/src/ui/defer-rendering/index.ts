@@ -62,8 +62,10 @@ import { DxoDeferRenderingToModule } from 'devextreme-angular/ui/defer-rendering
  */
 @Component({
     selector: 'dx-defer-rendering',
+    standalone: true,
     template: '',
     host: { ngSkipHydration: 'true' },
+    imports: [ DxIntegrationModule ],
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -496,6 +498,7 @@ export class DxDeferRenderingComponent extends DxComponent implements OnDestroy 
 
 @NgModule({
   imports: [
+    DxDeferRenderingComponent,
     DxoAnimationModule,
     DxoFromModule,
     DxoPositionModule,
@@ -516,9 +519,6 @@ export class DxDeferRenderingComponent extends DxComponent implements OnDestroy 
     DxoDeferRenderingToModule,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxDeferRenderingComponent
   ],
   exports: [
     DxDeferRenderingComponent,
@@ -544,6 +544,8 @@ export class DxDeferRenderingComponent extends DxComponent implements OnDestroy 
   ]
 })
 export class DxDeferRenderingModule { }
+
+export * from 'devextreme-angular/ui/defer-rendering/nested';
 
 import type * as DxDeferRenderingTypes from "devextreme/ui/defer_rendering_types";
 export { DxDeferRenderingTypes };

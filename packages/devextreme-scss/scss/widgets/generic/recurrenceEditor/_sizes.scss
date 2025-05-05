@@ -2,12 +2,18 @@
 
 // adduse
 
+$generic-recurrence-until-date-box-top-margin: null !default;
+$generic-recurrence-count-number-box-top-margin: null !default;
 $generic-recurrence-interval-number-box-margin-top: null !default;
 
 @if $size == "default" {
-  $generic-recurrence-interval-number-box-margin-top: 25px !default;
+  $generic-recurrence-until-date-box-top-margin: 30px !default;
+  $generic-recurrence-count-number-box-top-margin: 66px !default;
+  $generic-recurrence-interval-number-box-margin-top: 31px !default;
 }
 
 @else if $size == "compact" {
-  $generic-recurrence-interval-number-box-margin-top: 18px !default;
+  $generic-recurrence-until-date-box-top-margin: 28px !default;
+  $generic-recurrence-count-number-box-top-margin: 56px !default;
+  $generic-recurrence-interval-number-box-margin-top: 23px !default;
 }

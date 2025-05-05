@@ -1,6 +1,6 @@
 import type { Column } from '../columns_controller/types';
 
-export const defaultSetCellValue: Column['setCellValue'] = function (newData, value) {
+export const defaultSetFieldValue: Column['setFieldValue'] = function (newData, value) {
   // eslint-disable-next-line @typescript-eslint/no-this-alias
   const column = this;
   const { dataField } = column;

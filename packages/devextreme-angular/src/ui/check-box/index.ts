@@ -59,8 +59,10 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
  */
 @Component({
     selector: 'dx-check-box',
+    standalone: true,
     template: '',
     host: { ngSkipHydration: 'true' },
+    imports: [ DxIntegrationModule ],
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -735,11 +737,9 @@ export class DxCheckBoxComponent extends DxComponent implements OnDestroy, Contr
 
 @NgModule({
   imports: [
+    DxCheckBoxComponent,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxCheckBoxComponent
   ],
   exports: [
     DxCheckBoxComponent,
@@ -747,6 +747,7 @@ export class DxCheckBoxComponent extends DxComponent implements OnDestroy, Contr
   ]
 })
 export class DxCheckBoxModule { }
+
 
 import type * as DxCheckBoxTypes from "devextreme/ui/check_box_types";
 export { DxCheckBoxTypes };

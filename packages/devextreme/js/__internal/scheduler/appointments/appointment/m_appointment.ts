@@ -2,20 +2,19 @@ import { move } from '@js/common/core/animation/translator';
 import eventsEngine from '@js/common/core/events/core/events_engine';
 import pointerEvents from '@js/common/core/events/pointer';
 import { addNamespace } from '@js/common/core/events/utils/index';
-import dateLocalization from '@js/common/core/localization/date';
-import messageLocalization from '@js/common/core/localization/message';
 import registerComponent from '@js/core/component_registrator';
 import DOMComponent from '@js/core/dom_component';
 import Guid from '@js/core/guid';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { extend } from '@js/core/utils/extend';
-import { isDefined } from '@js/core/utils/type';
 import Resizable from '@js/ui/resizable';
+import type { ResourceProcessor } from '@ts/scheduler/resources/resource_processor';
 import { hide, show } from '@ts/ui/tooltip/m_tooltip';
 
 import {
   ALL_DAY_APPOINTMENT_CLASS,
+  APPOINTMENT_CONTENT_CLASSES,
   APPOINTMENT_DRAG_SOURCE_CLASS,
   APPOINTMENT_HAS_RESOURCE_COLOR_CLASS,
   DIRECTION_APPOINTMENT_CLASSES,
@@ -27,6 +26,12 @@ import {
 } from '../../m_classes';
 import { getRecurrenceProcessor } from '../../m_recurrence';
 import type { AppointmentDataAccessor } from '../../utils';
+import type { AppointmentProperties } from './m_types';
+import {
+  getAriaDescription,
+  getAriaLabel,
+  getReducedIconTooltip,
+} from './text_utils';
 
 const DEFAULT_HORIZONTAL_HANDLES = 'left right';
 const DEFAULT_VERTICAL_HANDLES = 'top bottom';
@@ -34,7 +39,7 @@ const DEFAULT_VERTICAL_HANDLES = 'top bottom';
 const REDUCED_APPOINTMENT_POINTERENTER_EVENT_NAME = addNamespace(pointerEvents.enter, 'dxSchedulerAppointment');
 const REDUCED_APPOINTMENT_POINTERLEAVE_EVENT_NAME = addNamespace(pointerEvents.leave, 'dxSchedulerAppointment');
 
-export class Appointment extends DOMComponent {
+export class Appointment extends DOMComponent<AppointmentProperties> {
   get coloredElement(): any {
     return this.$element();
   }
@@ -43,8 +48,12 @@ export class Appointment extends DOMComponent {
     return this.option('data');
   }
 
+  get resourceProcessor(): ResourceProcessor {
+    return this.option('getResourceProcessor')();
+  }
+
   get dataAccessors(): AppointmentDataAccessor {
-    return this.option('dataAccessors') as AppointmentDataAccessor;
+    return this.option('dataAccessors');
   }
 
   _getDefaultOptions() {
@@ -69,7 +78,7 @@ export class Appointment extends DOMComponent {
   }
 
   notifyObserver(subject, args) {
-    const observer: any = this.option('observer');
+    const observer = this.option('observer');
     if (observer) {
       observer.fire(subject, args);
     }
@@ -77,7 +86,7 @@ export class Appointment extends DOMComponent {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   invoke(funcName: string) {
-    const observer: any = this.option('observer');
+    const observer = this.option('observer');
 
     if (observer) {
       return observer.fire.apply(observer, arguments);
@@ -152,8 +161,8 @@ export class Appointment extends DOMComponent {
     this._renderDragSourceClass();
     this._renderDirection();
 
-    (this.$element() as any).data('dxAppointmentStartDate', this.option('startDate'));
-    (this.$element() as any).attr('role', 'application');
+    this.$element().data('dxAppointmentStartDate', this.option('startDate'));
+    this.$element().attr('role', 'button');
 
     this._renderRecurrenceClass();
     this._renderResizable();
@@ -167,8 +176,7 @@ export class Appointment extends DOMComponent {
       groupIndex: this.option('groupIndex'),
       groups: this.option('groups'),
     };
-
-    const deferredColor = (this.option('getAppointmentColor') as any)(appointmentConfig);
+    const deferredColor = this.option('getAppointmentColor')(appointmentConfig);
 
     deferredColor.done((color) => {
       if (color) {
@@ -178,46 +186,23 @@ export class Appointment extends DOMComponent {
     });
   }
 
-  _getGroupText() {
-    const groupTexts = this.option('groupTexts') as string[];
-    if (!groupTexts?.length) {
-      return '';
-    }
-
-    const groupText = groupTexts.join(', ');
-    // @ts-expect-error
-    return messageLocalization.format('dxScheduler-appointmentAriaLabel-group', groupText);
-  }
-
-  _getDateText(): string {
-    const startDateText = this._localizeDate(this._getStartDate());
-    const endDateText = this._localizeDate(this._getEndDate());
-
-    const dateText = startDateText === endDateText
-      ? `${startDateText}`
-      : `${startDateText} - ${endDateText}`;
-
-    // @ts-expect-error
-    const { partIndex, partTotalCount } = this.option();
-    const partText = isDefined(partIndex) ? ` (${partIndex + 1}/${partTotalCount})` : '';
-
-    return `${dateText}${partText}`;
-  }
-
   _renderAriaLabel(): void {
     const $element: dxElementWrapper = this.$element();
-    const ariaLabel = [
-      this._getDateText(),
-      this._getGroupText(),
-    ]
-      .filter((label) => !!label)
-      .join(', ');
-    $element.attr('aria-roledescription', `${ariaLabel}, `);
+    $element.attr('aria-label', getAriaLabel(this.option()));
 
-    const id = `dx-${new Guid()}`;
+    // eslint-disable-next-line no-void
+    void getAriaDescription(this.option())
+      .then((text) => {
+        if (text) {
+          const id = `dx-${new Guid()}`;
+          const $description = $element.find(`.${APPOINTMENT_CONTENT_CLASSES.ARIA_DESCRIPTION}`);
 
-    $element.attr('aria-describedby', id);
-    $element.find('.dx-item-content').attr('id', id);
+          if ($description) {
+            $element.attr('aria-describedby', id);
+            $description.text(text).attr('id', id);
+          }
+        }
+      });
   }
 
   _renderAppointmentGeometry(): void {
@@ -256,54 +241,22 @@ export class Appointment extends DOMComponent {
     this._renderAppointmentReducedIcon();
   }
 
-  _localizeDate(date) {
-    return `${dateLocalization.format(date, 'monthAndDay')}, ${dateLocalization.format(date, 'year')}`;
-  }
-
   _renderAppointmentReducedIcon() {
     const $icon = $('<div>')
       .addClass(REDUCED_APPOINTMENT_ICON)
       .appendTo(this.$element());
 
-    const endDate = this._getEndDate();
-    const tooltipLabel = messageLocalization.format('dxScheduler-editorLabelEndDate');
-    const tooltipText = [tooltipLabel, ': ', this._localizeDate(endDate)].join('');
-
     eventsEngine.off($icon, REDUCED_APPOINTMENT_POINTERENTER_EVENT_NAME);
     eventsEngine.on($icon, REDUCED_APPOINTMENT_POINTERENTER_EVENT_NAME, () => {
       show({
         target: $icon,
-        content: tooltipText,
+        content: getReducedIconTooltip(this.option()),
       });
     });
     eventsEngine.off($icon, REDUCED_APPOINTMENT_POINTERLEAVE_EVENT_NAME);
     eventsEngine.on($icon, REDUCED_APPOINTMENT_POINTERLEAVE_EVENT_NAME, () => {
       hide();
     });
-  }
-
-  _getDate(propName: 'endDate' | 'startDate') {
-    const result = this.dataAccessors.get(propName, this.rawAppointment);
-
-    if (!result) {
-      return result;
-    }
-
-    const date = new Date(result);
-    const timeZoneCalculator = this.option('timeZoneCalculator') as any;
-
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-    return timeZoneCalculator
-      ? timeZoneCalculator.createDate(date, { path: 'toGrid' })
-      : date;
-  }
-
-  _getEndDate() {
-    return this._getDate('endDate');
-  }
-
-  _getStartDate() {
-    return this._getDate('startDate');
   }
 
   _renderAllDayClass() {
@@ -355,4 +308,4 @@ export class Appointment extends DOMComponent {
   }
 }
 
-registerComponent('dxSchedulerAppointment', Appointment);
+registerComponent('dxSchedulerAppointment', Appointment as any);

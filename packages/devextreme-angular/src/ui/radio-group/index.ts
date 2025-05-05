@@ -69,8 +69,10 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
  */
 @Component({
     selector: 'dx-radio-group',
+    standalone: true,
     template: '',
     host: { ngSkipHydration: 'true' },
+    imports: [ DxIntegrationModule ],
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -828,13 +830,11 @@ export class DxRadioGroupComponent extends DxComponent implements OnDestroy, Con
 
 @NgModule({
   imports: [
+    DxRadioGroupComponent,
     DxiItemModule,
     DxiRadioGroupItemModule,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxRadioGroupComponent
   ],
   exports: [
     DxRadioGroupComponent,
@@ -844,6 +844,8 @@ export class DxRadioGroupComponent extends DxComponent implements OnDestroy, Con
   ]
 })
 export class DxRadioGroupModule { }
+
+export * from 'devextreme-angular/ui/radio-group/nested';
 
 import type * as DxRadioGroupTypes from "devextreme/ui/radio_group_types";
 export { DxRadioGroupTypes };

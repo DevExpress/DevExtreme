@@ -3,7 +3,7 @@
 import type { EventInfo } from '@js/common/core/events';
 import type { DxElement } from '@js/core/element';
 
-import type { Column, DataRow } from '../../grid_core/columns_controller/types';
+import type { CardInfo, Column } from '../../grid_core/columns_controller/types';
 
 export type ContextMenuTarget = 'toolbar' | 'headerPanel' | 'content';
 
@@ -25,6 +25,6 @@ export type ContextMenuPreparingEvent<TCardData = unknown, TKey = unknown>
   readonly card?: TCardData;
 };
 
-export interface Options<TRowData = DataRow, TKey = unknown> {
-  onContextMenuPreparing?: (args: ContextMenuPreparingEvent<TRowData, TKey>) => void;
+export interface Options<TCardData = CardInfo, TKey = unknown> {
+  onContextMenuPreparing?: (args: ContextMenuPreparingEvent<TCardData, TKey>) => void;
 }

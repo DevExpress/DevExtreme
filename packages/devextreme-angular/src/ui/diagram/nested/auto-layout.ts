@@ -18,6 +18,7 @@ import { Orientation } from 'devextreme/common';
 import { DataLayoutType } from 'devextreme/ui/diagram';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
@@ -25,8 +26,10 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-diagram-auto-layout',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxoDiagramAutoLayoutComponent extends NestedOption implements OnDestroy, OnInit  {
@@ -72,7 +75,7 @@ export class DxoDiagramAutoLayoutComponent extends NestedOption implements OnDes
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoDiagramAutoLayoutComponent
   ],
   exports: [

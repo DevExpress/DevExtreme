@@ -94,8 +94,10 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
  */
 @Component({
     selector: 'dx-color-box',
+    standalone: true,
     template: '',
     host: { ngSkipHydration: 'true' },
+    imports: [ DxIntegrationModule ],
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -1265,6 +1267,7 @@ export class DxColorBoxComponent extends DxComponent implements OnDestroy, Contr
 
 @NgModule({
   imports: [
+    DxColorBoxComponent,
     DxiButtonModule,
     DxoOptionsModule,
     DxoDropDownOptionsModule,
@@ -1296,9 +1299,6 @@ export class DxColorBoxComponent extends DxComponent implements OnDestroy, Contr
     DxiColorBoxToolbarItemModule,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxColorBoxComponent
   ],
   exports: [
     DxColorBoxComponent,
@@ -1335,6 +1335,8 @@ export class DxColorBoxComponent extends DxComponent implements OnDestroy, Contr
   ]
 })
 export class DxColorBoxModule { }
+
+export * from 'devextreme-angular/ui/color-box/nested';
 
 import type * as DxColorBoxTypes from "devextreme/ui/color_box_types";
 export { DxColorBoxTypes };

@@ -1,10 +1,21 @@
+import eventsEngine from '@js/common/core/events/core/events_engine';
+import { keyboard } from '@js/common/core/events/short';
 import $ from '@js/core/renderer';
 
 import modules from '../m_modules';
 import type { Controllers, OptionChanged } from '../m_types';
+import { Direction } from './const';
 import { isElementDefined, isFixedColumnIndexOffsetRequired } from './m_keyboard_navigation_utils';
 
 export class KeyboardNavigationController extends modules.ViewController {
+  private keyDownListener: any;
+
+  protected isNeedToFocus = false;
+
+  protected renderCompletedWithContext!: (e: any) => void;
+
+  protected focusinHandlerContext!: (event: any) => void;
+
   protected _columnsController!: Controllers['columns'];
 
   public _focusedCellPosition: any;
@@ -33,6 +44,70 @@ export class KeyboardNavigationController extends modules.ViewController {
 
     return columnIndex;
   }
+
+  private unsubscribeFromKeyDownEvent(): void {
+    if (this.keyDownListener) {
+      keyboard.off(this.keyDownListener);
+    }
+  }
+
+  private subscribeToKeyDownEvent(): void {
+    const $focusedViewElement = this.getFocusedViewElement();
+
+    if ($focusedViewElement) {
+      this.keyDownListener = keyboard.on($focusedViewElement, null, (e) => this.keyDownHandler(e));
+    }
+  }
+
+  protected getFocusedViewElement() {
+    return this.getFocusedView()?.element();
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  protected keyDownHandler(e): void {}
+
+  protected initKeyDownHandler(): void {
+    this.unsubscribeFromKeyDownEvent();
+    this.subscribeToKeyDownEvent();
+  }
+
+  private unsubscribeFromFocusinEvent(): void {
+    const $focusedView = this.getFocusedViewElement();
+
+    if ($focusedView) {
+      eventsEngine.off($focusedView, 'focusin', this.focusinHandlerContext);
+    }
+  }
+
+  private subscribeToFocusinEvent(): void {
+    const $focusedView = this.getFocusedViewElement();
+    const focusinSelector = this.getFocusinSelector();
+
+    if ($focusedView) {
+      eventsEngine.on($focusedView, 'focusin', focusinSelector, this.focusinHandlerContext);
+    }
+  }
+
+  protected getFocusinSelector(): string {
+    return '';
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  protected focusinHandler(e): void {}
+
+  protected initHandlers(): void {
+    const focusedView = this.getFocusedView();
+    this.unsubscribeFromKeyDownEvent();
+
+    focusedView?.renderCompleted?.remove(this.renderCompletedWithContext);
+
+    if (this.isKeyboardEnabled()) {
+      focusedView?.renderCompleted?.add(this.renderCompletedWithContext);
+    }
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  protected getFocusedView(): any {}
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   protected _getCell(cellPosition): any {}
@@ -133,6 +208,18 @@ export class KeyboardNavigationController extends modules.ViewController {
     return position;
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  protected renderCompleted(e: any): void {
+    this.initKeyDownHandler();
+
+    this.unsubscribeFromFocusinEvent();
+    this.subscribeToFocusinEvent();
+    if (this.isNeedToFocus) {
+      this.restoreFocus();
+      this.isNeedToFocus = false;
+    }
+  }
+
   public init() {
     this._columnsController = this.getController('columns');
     this._focusedCellPosition = {};
@@ -140,6 +227,16 @@ export class KeyboardNavigationController extends modules.ViewController {
     if (this.isKeyboardEnabled()) {
       this.createAction('onKeyDown');
     }
+
+    this.renderCompletedWithContext = this.renderCompletedWithContext
+      ?? this.renderCompleted.bind(this);
+    this.focusinHandlerContext = this.focusinHandlerContext ?? this.focusinHandler.bind(this);
+
+    this.initHandlers();
+  }
+
+  public dispose(): void {
+    keyboard.off(this.keyDownListener);
   }
 
   /**
@@ -180,5 +277,28 @@ export class KeyboardNavigationController extends modules.ViewController {
 
   public _getFocusedCell() {
     return $(this._getCell(this._focusedCellPosition));
+  }
+
+  public restoreFocus() {
+    const $focusElement = this._getFocusedCell();
+    // @ts-expect-error
+    eventsEngine.trigger($focusElement, 'focus');
+  }
+
+  public getDirectionByKeyName(keyName: string): Direction {
+    const rtlEnabled = this.option('rtlEnabled');
+
+    switch (keyName) {
+      case 'leftArrow': {
+        return rtlEnabled ? Direction.Next : Direction.Previous;
+      }
+      case 'rightArrow': {
+        return rtlEnabled ? Direction.Previous : Direction.Next;
+        break;
+      }
+      default: {
+        return Direction.Next;
+      }
+    }
   }
 }

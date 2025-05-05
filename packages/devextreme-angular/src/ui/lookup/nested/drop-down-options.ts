@@ -26,6 +26,7 @@ import { Position } from 'devextreme/common';
 import { dxPopupToolbarItem } from 'devextreme/ui/popup';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
@@ -34,8 +35,10 @@ import { DxiLookupToolbarItemComponent } from './toolbar-item-dxi';
 
 @Component({
     selector: 'dxo-lookup-drop-down-options',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxoLookupDropDownOptionsComponent extends NestedOption implements OnDestroy, OnInit  {
@@ -428,7 +431,7 @@ export class DxoLookupDropDownOptionsComponent extends NestedOption implements O
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoLookupDropDownOptionsComponent
   ],
   exports: [

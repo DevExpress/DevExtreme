@@ -17,6 +17,7 @@ import {
 import { SearchMode } from 'devextreme/common';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
@@ -24,8 +25,10 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-pivot-grid-field-chooser-search',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxoPivotGridFieldChooserSearchComponent extends NestedOption implements OnDestroy, OnInit  {
@@ -87,7 +90,7 @@ export class DxoPivotGridFieldChooserSearchComponent extends NestedOption implem
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoPivotGridFieldChooserSearchComponent
   ],
   exports: [

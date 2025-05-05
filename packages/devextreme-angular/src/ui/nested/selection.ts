@@ -16,6 +16,7 @@ import {
 
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxoSelectionConfiguration } from './base/selection-configuration';
@@ -23,8 +24,10 @@ import { DxoSelectionConfiguration } from './base/selection-configuration';
 
 @Component({
     selector: 'dxo-selection',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost],
     inputs: [
         'allowSelectAll',
@@ -64,7 +67,7 @@ export class DxoSelectionComponent extends DxoSelectionConfiguration implements 
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoSelectionComponent
   ],
   exports: [

@@ -14,6 +14,7 @@ export interface AppointmentResource {
   values: string[];
 }
 
+// TODO(6): merge it with main resource loading to load resource only once
 const loadResource = (dataSourceConfig: ResourceConfig['dataSource']): Promise<Record<string, unknown>[]> => {
   if (!dataSourceConfig) {
     return Promise.resolve([]);

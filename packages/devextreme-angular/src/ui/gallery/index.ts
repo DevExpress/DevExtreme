@@ -56,8 +56,10 @@ import { DxiGalleryItemComponent } from 'devextreme-angular/ui/gallery/nested';
  */
 @Component({
     selector: 'dx-gallery',
+    standalone: true,
     template: '',
     host: { ngSkipHydration: 'true' },
+    imports: [ DxIntegrationModule ],
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -838,13 +840,11 @@ export class DxGalleryComponent<TItem = any, TKey = any> extends DxComponent imp
 
 @NgModule({
   imports: [
+    DxGalleryComponent,
     DxiItemModule,
     DxiGalleryItemModule,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxGalleryComponent
   ],
   exports: [
     DxGalleryComponent,
@@ -854,6 +854,8 @@ export class DxGalleryComponent<TItem = any, TKey = any> extends DxComponent imp
   ]
 })
 export class DxGalleryModule { }
+
+export * from 'devextreme-angular/ui/gallery/nested';
 
 import type * as DxGalleryTypes from "devextreme/ui/gallery_types";
 export { DxGalleryTypes };

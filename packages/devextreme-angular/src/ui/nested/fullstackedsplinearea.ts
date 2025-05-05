@@ -16,6 +16,7 @@ import {
 
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxoChartCommonSeriesSettings } from './base/chart-common-series-settings';
@@ -23,8 +24,10 @@ import { DxoChartCommonSeriesSettings } from './base/chart-common-series-setting
 
 @Component({
     selector: 'dxo-fullstackedsplinearea',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost],
     inputs: [
         'aggregation',
@@ -117,7 +120,7 @@ export class DxoFullstackedsplineareaComponent extends DxoChartCommonSeriesSetti
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoFullstackedsplineareaComponent
   ],
   exports: [

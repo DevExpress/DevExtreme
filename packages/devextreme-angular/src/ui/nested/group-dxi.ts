@@ -18,6 +18,7 @@ import {
 import { Command, CustomCommand, ShapeCategory, ShapeType, ToolboxDisplayMode } from 'devextreme/ui/diagram';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
@@ -26,8 +27,10 @@ import { DxiCommandComponent } from './command-dxi';
 
 @Component({
     selector: 'dxi-group',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxiGroupComponent extends CollectionNestedOption {
@@ -109,7 +112,7 @@ export class DxiGroupComponent extends CollectionNestedOption {
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiGroupComponent
   ],
   exports: [

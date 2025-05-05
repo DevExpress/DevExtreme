@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`ColumnProperties setCellValue should be used as callback for setting editor value 1`] = `
+exports[`ColumnProperties setFieldValue should be used as callback for setting editor value 1`] = `
 [
   {
     "mycustomfield": "qwe",
@@ -13,7 +13,7 @@ exports[`ColumnProperties setCellValue should be used as callback for setting ed
 ]
 `;
 
-exports[`ColumnProperties setCellValue should be used as callback for setting editor value 2`] = `
+exports[`ColumnProperties setFieldValue should be used as callback for setting editor value 2`] = `
 [
   {
     "data": {

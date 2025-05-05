@@ -57,8 +57,10 @@ import { DxiTabPanelItemComponent } from 'devextreme-angular/ui/tab-panel/nested
  */
 @Component({
     selector: 'dx-tab-panel',
+    standalone: true,
     template: '',
     host: { ngSkipHydration: 'true' },
+    imports: [ DxIntegrationModule ],
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -917,13 +919,11 @@ export class DxTabPanelComponent<TItem = any, TKey = any> extends DxComponent im
 
 @NgModule({
   imports: [
+    DxTabPanelComponent,
     DxiItemModule,
     DxiTabPanelItemModule,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxTabPanelComponent
   ],
   exports: [
     DxTabPanelComponent,
@@ -933,6 +933,8 @@ export class DxTabPanelComponent<TItem = any, TKey = any> extends DxComponent im
   ]
 })
 export class DxTabPanelModule { }
+
+export * from 'devextreme-angular/ui/tab-panel/nested';
 
 import type * as DxTabPanelTypes from "devextreme/ui/tab_panel_types";
 export { DxTabPanelTypes };

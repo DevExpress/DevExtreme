@@ -161,7 +161,7 @@ export class AIIntegration implements IAIIntegration {
   }
 
   public shorten(
-    params: SummarizeCommandParams,
+    params: ShortenCommandParams,
     callbacks: RequestCallbacks<ShortenCommandResult>,
   ): () => void {
     return this.executeCommand(

@@ -23,6 +23,7 @@ import { PositionAlignment } from 'devextreme/common';
 import { PositionConfig } from 'devextreme/common/core/animation';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxoPopupOptions } from './base/popup-options';
@@ -31,8 +32,10 @@ import { DxiToolbarItemComponent } from './toolbar-item-dxi';
 
 @Component({
     selector: 'dxo-filter-builder-popup',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost],
     inputs: [
         'accessKey',
@@ -156,7 +159,7 @@ export class DxoFilterBuilderPopupComponent extends DxoPopupOptions implements O
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoFilterBuilderPopupComponent
   ],
   exports: [

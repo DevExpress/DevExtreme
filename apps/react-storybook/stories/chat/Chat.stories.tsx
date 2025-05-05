@@ -349,6 +349,7 @@ export const PopupIntegration: Story = {
                     at: 'right bottom',
                     offset: '-20 -20',
                 }}
+                wrapperAttr={{ class: 'chat-popup-wrapper' }}
             >
                 <Chat
                     width={width}

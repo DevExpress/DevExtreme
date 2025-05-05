@@ -1,4 +1,6 @@
-import type { DataRow } from '../../grid_core/columns_controller/types';
+import type * as dxToolbar from '@js/ui/toolbar';
+
+import type { CardInfo } from '../../grid_core/columns_controller/types';
 import * as Base from '../../grid_core/content_view/options';
 import type { DataObject } from '../../grid_core/data_controller/types';
 import type { Template } from '../../grid_core/types';
@@ -9,19 +11,30 @@ export interface Options extends Base.Options {
   cardMaxWidth?: number;
   wordWrapEnabled?: boolean;
   cardCover?: {
+    template?: Template<{ card: CardInfo }>;
     imageExpr?: string | ((data: DataObject) => string);
     altExpr?: string | ((data: DataObject) => string);
     maxHeight?: number;
-    ratio?: string;
+    aspectRatio?: string;
   };
-  cardFooterTemplate?: Template<{ card: DataRow }>;
+  cardHeader?: {
+    template?: Template<{ card: CardInfo }>;
+    visible?: boolean;
+    items?: (string | dxToolbar.Item)[];
+  };
+
+  cardTemplate?: Template<{ card: CardInfo }>;
+  cardContentTemplate?: Template<{ card: CardInfo }>;
+  cardFooterTemplate?: Template<{ card: CardInfo }>;
+  fieldHintEnabled?: boolean;
 }
 
 export const defaultOptions = {
   wordWrapEnabled: false,
   cardsPerRow: 3,
   cardCover: {
-    ratio: '1 / 1',
+    aspectRatio: '1 / 1',
   },
+  fieldHintEnabled: false,
   ...Base.defaultOptions,
 } satisfies Options;

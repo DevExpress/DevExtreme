@@ -23,6 +23,7 @@ import { TextBoxPredefinedButton, TextEditorButton, LabelMode, MaskMode, EditorS
 import { TextBoxType, ChangeEvent, ContentReadyEvent, CopyEvent, CutEvent, DisposingEvent, EnterKeyEvent, FocusInEvent, FocusOutEvent, InitializedEvent, InputEvent, KeyDownEvent, KeyUpEvent, OptionChangedEvent, PasteEvent, ValueChangedEvent } from 'devextreme/ui/text_box';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
@@ -31,8 +32,10 @@ import { DxiTreeViewButtonComponent } from './button-dxi';
 
 @Component({
     selector: 'dxo-tree-view-search-editor-options',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxoTreeViewSearchEditorOptionsComponent extends NestedOption implements OnDestroy, OnInit  {
@@ -521,7 +524,7 @@ export class DxoTreeViewSearchEditorOptionsComponent extends NestedOption implem
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoTreeViewSearchEditorOptionsComponent
   ],
   exports: [

@@ -4,16 +4,13 @@ import '@js/ui/radio_group';
 import dateLocalization from '@js/common/core/localization/date';
 import messageLocalization from '@js/common/core/localization/message';
 import registerComponent from '@js/core/component_registrator';
-import Guid from '@js/core/guid';
 import $ from '@js/core/renderer';
 import dateUtils from '@js/core/utils/date';
 import { extend } from '@js/core/utils/extend';
 import { isDefined } from '@js/core/utils/type';
 import ButtonGroup from '@js/ui/button_group';
-import DateBox from '@js/ui/date_box';
 import Editor from '@js/ui/editor/editor';
 import Form from '@js/ui/form';
-import NumberBox from '@js/ui/number_box';
 import { current, isFluent } from '@js/ui/themes';
 import { PathTimeZoneConversion } from '@ts/scheduler/r1/timezone_calculator/index';
 
@@ -23,7 +20,6 @@ const RECURRENCE_EDITOR = 'dx-recurrence-editor';
 const LABEL_POSTFIX = '-label';
 const WRAPPER_POSTFIX = '-wrapper';
 const RECURRENCE_EDITOR_CONTAINER = 'dx-recurrence-editor-container';
-const REPEAT_END_EDITOR = 'dx-recurrence-repeat-end';
 const REPEAT_END_TYPE_EDITOR = 'dx-recurrence-radiogroup-repeat-type';
 const REPEAT_COUNT_EDITOR = 'dx-recurrence-numberbox-repeat-count';
 const REPEAT_UNTIL_DATE_EDITOR = 'dx-recurrence-datebox-until-date';
@@ -34,7 +30,8 @@ const REPEAT_ON_EDITOR = 'dx-recurrence-repeat-on';
 const DAY_OF_MONTH = 'dx-recurrence-numberbox-day-of-month';
 const MONTH_OF_YEAR = 'dx-recurrence-selectbox-month-of-year';
 
-const recurrentEditorNumberBoxWidth = 70;
+const recurrentEditorNumberBoxWidth = 90;
+const repeatInputWidth = '100%';
 const recurrentEditorSelectBoxWidth = 120;
 const defaultRecurrenceTypeIndex = 1; // default daily recurrence
 
@@ -143,23 +140,11 @@ class RecurrenceEditor extends Editor {
 
   _weekEditor: any;
 
-  _repeatCountEditor: any;
-
-  _repeatUntilDate: any;
-
   _editors!: any[];
 
   _$repeatOnWeek: any;
 
   _recurrenceForm: any;
-
-  _$repeatCountEditor: any;
-
-  _$repeatDateEditor: any;
-
-  _freqEditor: any;
-
-  _switchEditor: any;
 
   _getDefaultOptions() {
     // @ts-expect-error
@@ -216,12 +201,6 @@ class RecurrenceEditor extends Editor {
         case 'byday':
           editor = this._weekEditor;
           break;
-        case 'count':
-          editor = this._repeatCountEditor;
-          break;
-        case 'until':
-          editor = this._repeatUntilDate;
-          break;
         default:
           break;
       }
@@ -246,6 +225,7 @@ class RecurrenceEditor extends Editor {
       },
       {
         itemType: 'group',
+        colCount: 2,
         items: this._createRepeatEndEditor(),
       },
     ];
@@ -435,6 +415,11 @@ class RecurrenceEditor extends Editor {
     const repeatType = this._recurrenceRule.getRepeatEndRule();
 
     return [{
+      colSpan: 2,
+      template: messageLocalization.format('dxScheduler-recurrenceEnd'),
+    }, {
+      colSpan: 1,
+      label: { visible: false },
       dataField: 'repeatEnd',
       editorType: 'dxRadioGroup',
       editorOptions: {
@@ -444,23 +429,25 @@ class RecurrenceEditor extends Editor {
         field: 'repeatEnd',
         itemTemplate: (itemData) => {
           if (itemData.type === 'count') {
-            return this._renderRepeatCountEditor();
+            return messageLocalization.format('dxScheduler-recurrenceAfter');
           }
           if (itemData.type === 'until') {
-            return this._renderRepeatUntilEditor();
+            return messageLocalization.format('dxScheduler-recurrenceOn');
           }
 
-          return this._renderDefaultRepeatEnd();
+          return messageLocalization.format('dxScheduler-recurrenceNever');
         },
         layout: 'vertical',
-        elementAttr: {
-          class: REPEAT_END_TYPE_EDITOR,
-        },
+        elementAttr: { class: REPEAT_END_TYPE_EDITOR },
         onValueChanged: (args) => this._repeatEndValueChangedHandler(args),
       },
-      label: {
-        text: messageLocalization.format('dxScheduler-recurrenceEnd'),
-      },
+    }, {
+      colSpan: 1,
+      itemType: 'group',
+      items: [
+        this._getRepeatUntilEditorOptions(),
+        this._getRepeatCountEditorOptions(),
+      ],
     }];
   }
 
@@ -473,14 +460,7 @@ class RecurrenceEditor extends Editor {
       labelLocation: 'top',
     });
 
-    this._disableRepeatEndParts();
-  }
-
-  _setAriaDescribedBy(editor, $label) {
-    const labelId = `label-${new Guid()}`;
-
-    editor.setAria('describedby', labelId);
-    editor.setAria('id', labelId, $label);
+    this._changeRepeatEndInputsVisibility();
   }
 
   getRecurrenceForm() {
@@ -543,27 +523,16 @@ class RecurrenceEditor extends Editor {
     return String(monthByRule);
   }
 
-  _renderDefaultRepeatEnd() {
-    const $editorTemplate = $('<div>').addClass(REPEAT_END_EDITOR + WRAPPER_POSTFIX);
-
-    $('<div>')
-      .text(messageLocalization.format('dxScheduler-recurrenceNever'))
-      .addClass(REPEAT_END_EDITOR + LABEL_POSTFIX)
-      .appendTo($editorTemplate);
-
-    return $editorTemplate;
-  }
-
   _repeatEndValueChangedHandler(args) {
     const { value } = args;
 
-    this._disableRepeatEndParts(value);
+    this._changeRepeatEndInputsVisibility(value);
 
     if (value === 'until') {
       this._recurrenceRule.makeRule(value, this._getUntilValue());
     }
     if (value === 'count') {
-      this._recurrenceRule.makeRule(value, this._repeatCountEditor.option('value'));
+      this._recurrenceRule.makeRule(value, this._recurrenceForm.option('formData.count'));
     }
     if (value === 'never') {
       this._recurrenceRule.makeRule('count', '');
@@ -573,52 +542,42 @@ class RecurrenceEditor extends Editor {
     this._changeEditorValue();
   }
 
-  _disableRepeatEndParts(value = this._recurrenceRule.getRepeatEndRule()) {
+  _changeRepeatEndInputsVisibility(value = this._recurrenceRule.getRepeatEndRule()) {
     if (value === 'until') {
-      this._repeatCountEditor.option('disabled', true);
-      this._repeatUntilDate.option('disabled', false);
+      this._recurrenceForm.itemOption('until', 'visible', true);
+      this._recurrenceForm.itemOption('count', 'visible', false);
     }
     if (value === 'count') {
-      this._repeatCountEditor.option('disabled', false);
-      this._repeatUntilDate.option('disabled', true);
+      this._recurrenceForm.itemOption('until', 'visible', false);
+      this._recurrenceForm.itemOption('count', 'visible', true);
     }
     if (value === 'never') {
-      this._repeatCountEditor.option('disabled', true);
-      this._repeatUntilDate.option('disabled', true);
+      this._recurrenceForm.itemOption('until', 'visible', false);
+      this._recurrenceForm.itemOption('count', 'visible', false);
     }
   }
 
-  _renderRepeatCountEditor() {
-    const repeatCount = this._recurrenceRule.getRules().count || 1;
-    const $editorWrapper = $('<div>').addClass(REPEAT_END_EDITOR + WRAPPER_POSTFIX);
+  _getRepeatCountEditorOptions() {
+    const count = this._recurrenceRule.getRules().count || 1;
 
-    $('<div>')
-      .text(messageLocalization.format('dxScheduler-recurrenceAfter'))
-      .addClass(REPEAT_END_EDITOR + LABEL_POSTFIX)
-      .appendTo($editorWrapper);
-
-    this._$repeatCountEditor = $('<div>')
-      .addClass(REPEAT_COUNT_EDITOR)
-      .appendTo($editorWrapper);
-
-    $('<div>')
-      .text(messageLocalization.format('dxScheduler-recurrenceRepeatCount'))
-      .addClass(REPEAT_END_EDITOR + LABEL_POSTFIX)
-      .appendTo($editorWrapper);
-
-    this._repeatCountEditor = this._createComponent(this._$repeatCountEditor, NumberBox, {
-      stylingMode: getStylingModeFunc(),
-      field: 'count',
-      format: '#',
-      width: recurrentEditorNumberBoxWidth,
-      min: 1,
-      showSpinButtons: true,
-      useLargeSpinButtons: false,
-      value: repeatCount,
-      onValueChanged: this._repeatCountValueChangeHandler.bind(this),
-    });
-
-    return $editorWrapper;
+    return {
+      dataField: 'count',
+      cssClass: REPEAT_COUNT_EDITOR,
+      label: { visible: false },
+      editorType: 'dxNumberBox',
+      editorOptions: {
+        stylingMode: getStylingModeFunc(),
+        field: 'count',
+        format: `# ${messageLocalization.format('dxScheduler-recurrenceRepeatCount')}`,
+        width: repeatInputWidth,
+        min: 1,
+        showSpinButtons: true,
+        useLargeSpinButtons: false,
+        value: count,
+        onValueChanged: this._repeatCountValueChangeHandler.bind(this),
+        inputAttr: { 'aria-label': messageLocalization.format('dxScheduler-recurrenceOccurrenceLabel') },
+      },
+    };
   }
 
   _repeatCountValueChangeHandler(args) {
@@ -637,32 +596,28 @@ class RecurrenceEditor extends Editor {
     return dateUtils.setToDayEnd(date);
   }
 
-  _renderRepeatUntilEditor() {
-    const repeatUntil = this._getUntilValue();
-    const $editorWrapper = $('<div>').addClass(REPEAT_END_EDITOR + WRAPPER_POSTFIX);
+  _getRepeatUntilEditorOptions() {
+    const until = this._getUntilValue();
 
-    $('<div>')
-      .text(messageLocalization.format('dxScheduler-recurrenceOn'))
-      .addClass(REPEAT_END_EDITOR + LABEL_POSTFIX)
-      .appendTo($editorWrapper);
-
-    this._$repeatDateEditor = $('<div>')
-      .addClass(REPEAT_UNTIL_DATE_EDITOR)
-      .appendTo($editorWrapper);
-
-    this._repeatUntilDate = this._createComponent(this._$repeatDateEditor, DateBox, {
-      stylingMode: getStylingModeFunc(),
-      field: 'until',
-      value: repeatUntil,
-      type: 'date',
-      onValueChanged: this._repeatUntilValueChangeHandler.bind(this),
-      calendarOptions: {
-        firstDayOfWeek: this._getFirstDayOfWeek(),
+    return {
+      dataField: 'until',
+      label: { visible: false },
+      cssClass: REPEAT_UNTIL_DATE_EDITOR,
+      editorType: 'dxDateBox',
+      editorOptions: {
+        stylingMode: getStylingModeFunc(),
+        field: 'until',
+        value: until,
+        type: 'date',
+        width: repeatInputWidth,
+        onValueChanged: this._repeatUntilValueChangeHandler.bind(this),
+        calendarOptions: {
+          firstDayOfWeek: this._getFirstDayOfWeek(),
+        },
+        useMaskBehavior: true,
+        inputAttr: { 'aria-label': messageLocalization.format('dxScheduler-recurrenceUntilDateLabel') },
       },
-      useMaskBehavior: true,
-    });
-
-    return $editorWrapper;
+    };
   }
 
   _repeatUntilValueChangeHandler(args) {
@@ -727,9 +682,7 @@ class RecurrenceEditor extends Editor {
     switch (args.name) {
       case 'readOnly':
         this._recurrenceForm?.option('readOnly', args.value);
-        this._repeatCountEditor?.option('readOnly', args.value);
         this._weekEditor?.option('readOnly', args.value);
-        this._repeatUntilDate?.option('readOnly', args.value);
         // @ts-expect-error
         super._optionChanged(args);
         break;
@@ -737,7 +690,7 @@ class RecurrenceEditor extends Editor {
         this._recurrenceRule.makeRules(args.value);
 
         this._changeRepeatIntervalLabel();
-        this._disableRepeatEndParts();
+        this._changeRepeatEndInputsVisibility();
         this._changeEditorsValue(this._recurrenceRule.getRules());
 
         // @ts-expect-error
@@ -760,8 +713,8 @@ class RecurrenceEditor extends Editor {
 
           this._weekEditor.option('items', itemsButtonGroup);
         }
-        if (this._$repeatDateEditor) {
-          this._repeatUntilDate.option('calendarOptions.firstDayOfWeek', this._getFirstDayOfWeek());
+        if (this._recurrenceForm.itemOption('until').visible) {
+          this._recurrenceForm.getEditor('until').option('calendarOptions.firstDayOfWeek', this._getFirstDayOfWeek());
         }
         break;
       default:
@@ -847,11 +800,11 @@ class RecurrenceEditor extends Editor {
 
   _changeRepeatCountValue() {
     const count = this._recurrenceRule.getRules().count || 1;
-    this._repeatCountEditor.option('value', count);
+    this._recurrenceForm.getEditor('count').option('value', count);
   }
 
   _changeRepeatUntilValue() {
-    this._repeatUntilDate.option('value', this._getUntilValue());
+    this._recurrenceForm.getEditor('until').option('value', this._getUntilValue());
   }
 
   _getUntilValue() {
@@ -868,16 +821,6 @@ class RecurrenceEditor extends Editor {
       ? PathTimeZoneConversion.fromSourceToAppointment : PathTimeZoneConversion.fromSourceToGrid;
 
     return (this.option('timeZoneCalculator') as any).createDate(untilDate, { path, appointmentTimeZone });
-  }
-
-  toggle() {
-    this._freqEditor.focus();
-  }
-
-  setAria(...args) {
-    if (this._switchEditor) {
-      this._switchEditor.setAria(args[0], args[1]);
-    }
   }
 }
 

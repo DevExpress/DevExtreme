@@ -2,6 +2,7 @@ import {
   describe, expect, it, jest,
 } from '@jest/globals';
 
+import { DataController } from '../data_controller';
 import { getContext } from '../di.test_utils';
 import { ItemsController } from '../items_controller/items_controller';
 import type { Options } from '../options';
@@ -21,6 +22,7 @@ const setup = (config: Options = {}) => {
     optionsController: context.get(OptionsControllerMock),
     selectionController: context.get(SelectionController),
     itemsController: context.get(ItemsController),
+    dataController: context.get(DataController),
   };
 };
 
@@ -184,19 +186,19 @@ describe('SelectionController', () => {
     });
   });
 
-  describe('getSelectedCards', () => {
-    it('should return the selected card keys', () => {
+  describe('getSelectedCardsData', () => {
+    it('should return the selected cards data', () => {
       const {
         selectionController,
-        itemsController,
+        dataController,
       } = setup({
         keyExpr: 'id',
         dataSource: [{ id: 1, value: 'test' }],
         selectedCardKeys: [1],
       });
 
-      expect(selectionController.getSelectedCards())
-        .toEqual(itemsController.items.peek());
+      expect(selectionController.getSelectedCardsData())
+        .toEqual(dataController.items.peek());
     });
   });
 

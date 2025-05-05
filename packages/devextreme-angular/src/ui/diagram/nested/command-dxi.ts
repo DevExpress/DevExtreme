@@ -19,6 +19,7 @@ import { Command, CustomCommand } from 'devextreme/ui/diagram';
 import { ToolbarItemLocation } from 'devextreme/common';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
@@ -27,8 +28,10 @@ import { DxiDiagramItemComponent } from './item-dxi';
 
 @Component({
     selector: 'dxi-diagram-command',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxiDiagramCommandComponent extends CollectionNestedOption {
@@ -102,7 +105,7 @@ export class DxiDiagramCommandComponent extends CollectionNestedOption {
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiDiagramCommandComponent
   ],
   exports: [

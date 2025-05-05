@@ -5,5 +5,8 @@ export interface Options {
 }
 
 export const defaultOptions = {
-  toolbar: {},
+  toolbar: {
+    multiline: false,
+    disabled: false,
+  },
 } satisfies Options;

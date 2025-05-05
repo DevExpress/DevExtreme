@@ -18,6 +18,7 @@ import { DragDirection, DragHighlight } from 'devextreme/common';
 import { UserDefinedElement } from 'devextreme/core/element';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
@@ -25,8 +26,10 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-row-dragging',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxoRowDraggingComponent extends NestedOption implements OnDestroy, OnInit  {
@@ -240,7 +243,7 @@ export class DxoRowDraggingComponent extends NestedOption implements OnDestroy, 
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoRowDraggingComponent
   ],
   exports: [

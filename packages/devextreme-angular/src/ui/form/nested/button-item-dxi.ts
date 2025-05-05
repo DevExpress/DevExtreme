@@ -17,6 +17,7 @@ import { HorizontalAlignment, VerticalAlignment } from 'devextreme/common';
 import { FormItemType } from 'devextreme/ui/form';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
@@ -24,8 +25,10 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxi-form-button-item',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxiFormButtonItemComponent extends CollectionNestedOption {
@@ -123,7 +126,7 @@ export class DxiFormButtonItemComponent extends CollectionNestedOption {
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiFormButtonItemComponent
   ],
   exports: [

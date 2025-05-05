@@ -19,6 +19,7 @@ import { chartPointObject } from 'devextreme/viz/chart';
 import { Format } from 'devextreme/common/core/localization';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
@@ -26,8 +27,10 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-chart-vertical-line',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxoChartVerticalLineComponent extends NestedOption implements OnDestroy, OnInit  {
@@ -105,7 +108,7 @@ export class DxoChartVerticalLineComponent extends NestedOption implements OnDes
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoChartVerticalLineComponent
   ],
   exports: [

@@ -1,4 +1,4 @@
-import type { Format, SortOrder } from '@js/common';
+import type { DataType, Format, SortOrder } from '@js/common';
 import type { ColumnBase, FilterType } from '@js/common/grids';
 import type { DeepPartial } from '@js/core/index';
 import type * as dxForm from '@js/ui/form';
@@ -23,6 +23,7 @@ type InheritedColumnProps =
   | 'showInColumnChooser'
   | 'validationRules'
   | 'allowEditing'
+  | 'filterValues'
   | 'editorOptions'
   | 'caption';
 
@@ -38,7 +39,7 @@ export type Column = Pick<Required<ColumnBase>, InheritedColumnProps> & {
 
   name: string;
 
-  calculateCellValue: (this: Column, data: unknown) => unknown;
+  calculateFieldValue: (this: Column, data: unknown) => unknown;
 
   calculateDisplayValue: (this: Column, data: unknown) => unknown;
 
@@ -59,9 +60,9 @@ export type Column = Pick<Required<ColumnBase>, InheritedColumnProps> & {
 
   editorTemplate?: unknown;
 
-  fieldTemplate?: ComponentType<{ cell: Cell }>;
-  captionTemplate?: ComponentType<{ cell: Cell }>;
-  valueTemplate?: ComponentType<{ cell: Cell }>;
+  fieldTemplate?: ComponentType<{ field: FieldInfo }>;
+  fieldCaptionTemplate?: ComponentType<{ field: FieldInfo }>;
+  fieldValueTemplate?: ComponentType<{ field: FieldInfo }>;
 
   headerItemTemplate?: ComponentType<{ column: Column }>;
 
@@ -72,17 +73,17 @@ export type Column = Pick<Required<ColumnBase>, InheritedColumnProps> & {
   // header filter options for specific column.
   headerFilter?: HeaderFilterColumnOptions;
 
-  setCellValue: (
+  setFieldValue: (
     this: Column, newData: DeepPartial<DataObject>, value: unknown, currentRowData: DataObject
   ) => (void | Promise<void>);
-  defaultSetCellValue: Column['setCellValue'];
+  defaultSetFieldValue: Column['setFieldValue'];
 
   filterType?: FilterType;
 };
 
 export type VisibleColumn = Column & { headerPanelIndex: number };
 
-export interface Cell {
+export interface FieldInfo {
   value: unknown;
 
   displayValue: unknown;
@@ -94,10 +95,14 @@ export interface Cell {
   highlightedText: HighlightedTextItem[] | null;
 
   index: number;
+
+  card: CardInfo;
 }
 
-export interface DataRow {
-  cells: Cell[];
+export interface CardInfo {
+  columns: Column[];
+
+  fields: FieldInfo[];
 
   key: Key;
 
@@ -106,4 +111,16 @@ export interface DataRow {
   isSelected?: boolean;
 
   index: number;
+
+  values: unknown[];
+}
+
+export interface ColumnsConfigurationFromData {
+  dataFields: string[];
+  columns: Record<string, ColumnFromDataOptions>;
+}
+
+export interface ColumnFromDataOptions {
+  dataType?: DataType;
+  format?: Format;
 }

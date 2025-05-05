@@ -2,11 +2,11 @@ import { describe, expect, it } from '@jest/globals';
 import type { DataSourceLike } from '@js/data/data_source';
 import type { Column } from '@ts/grids/new/grid_core/columns_controller/types';
 import type {
-  HeaderFilterColumnOptions,
   HeaderFilterRootOptions,
 } from '@ts/grids/new/grid_core/filtering/header_filter/types';
 import each from 'jest-each';
 
+import type { ColumnSettings } from '../../columns_controller/options';
 import * as utils from './utils';
 
 describe('HeaderFilter', () => {
@@ -54,26 +54,30 @@ describe('HeaderFilter', () => {
       it.each<{
         caseName: string;
         root: HeaderFilterRootOptions;
-        col: HeaderFilterColumnOptions;
-        result: HeaderFilterColumnOptions;
+        col: ColumnSettings;
+        result: ColumnSettings;
       }>([
         {
           caseName: 'not take uniq properties from root',
           root: { visible: true, texts: {} },
           col: {},
-          result: { search: {} },
+          result: { headerFilter: { search: {} } },
         },
         {
           caseName: 'take uniq properties from column',
           root: {},
           col: {
-            dataSource: { test: 'TEST_DS' } as DataSourceLike<unknown>,
-            values: ['A', 'B', 'C'],
+            headerFilter: {
+              dataSource: { test: 'TEST_DS' } as DataSourceLike<unknown>,
+            },
+            filterValues: ['A', 'B', 'C'],
           },
           result: {
-            dataSource: { test: 'TEST_DS' } as DataSourceLike<unknown>,
-            values: ['A', 'B', 'C'],
-            search: {},
+            headerFilter: {
+              dataSource: { test: 'TEST_DS' } as DataSourceLike<unknown>,
+              search: {},
+            },
+            filterValues: ['A', 'B', 'C'],
           },
         },
         {
@@ -83,7 +87,9 @@ describe('HeaderFilter', () => {
           },
           col: {},
           result: {
-            allowSelectAll: true, width: 150, height: 150, search: {},
+            headerFilter: {
+              allowSelectAll: true, width: 150, height: 150, search: {},
+            },
           },
         },
         {
@@ -92,10 +98,14 @@ describe('HeaderFilter', () => {
             allowSelectAll: true, width: 150, height: 150,
           },
           col: {
-            allowSelectAll: false, width: 200, height: 200,
+            headerFilter: {
+              allowSelectAll: false, width: 200, height: 200,
+            },
           },
           result: {
-            allowSelectAll: false, width: 200, height: 200, search: {},
+            headerFilter: {
+              allowSelectAll: false, width: 200, height: 200, search: {},
+            },
           },
         },
         {
@@ -107,8 +117,10 @@ describe('HeaderFilter', () => {
           },
           col: {},
           result: {
-            search: {
-              enabled: true, editorOptions: { optA: 'A' }, mode: 'equals', timeout: 999,
+            headerFilter: {
+              search: {
+                enabled: true, editorOptions: { optA: 'A' }, mode: 'equals', timeout: 999,
+              },
             },
           },
         },
@@ -120,13 +132,17 @@ describe('HeaderFilter', () => {
             },
           },
           col: {
-            search: {
-              enabled: false, editorOptions: { optA: 'B' }, mode: 'contains', timeout: 100,
+            headerFilter: {
+              search: {
+                enabled: false, editorOptions: { optA: 'B' }, mode: 'contains', timeout: 100,
+              },
             },
           },
           result: {
-            search: {
-              enabled: false, editorOptions: { optA: 'B' }, mode: 'contains', timeout: 100,
+            headerFilter: {
+              search: {
+                enabled: false, editorOptions: { optA: 'B' }, mode: 'contains', timeout: 100,
+              },
             },
           },
         },
@@ -134,19 +150,19 @@ describe('HeaderFilter', () => {
           caseName: 'take uniq properties from columns search',
           root: {},
           col: {
-            search: { searchExpr: '123_TEST' },
+            headerFilter: { search: { searchExpr: '123_TEST' } },
           },
           result: {
-            search: { searchExpr: '123_TEST' },
+            headerFilter: { search: { searchExpr: '123_TEST' } },
           },
         },
       ])('$caseName: should correctly merge options', ({ root, col, result }) => {
         const mergedOptions = utils.mergeColumnHeaderFilterOptions(
-          { headerFilter: col } as Column,
+          col as Column,
           root,
         );
 
-        expect(mergedOptions.headerFilter).toStrictEqual(result);
+        expect(mergedOptions).toMatchObject(result);
       });
     });
 
@@ -240,23 +256,23 @@ describe('HeaderFilter', () => {
       column                                                      | expectedResult
       ${{
         ...allowFilteringColumnConfig,
-        headerFilter: { values: [] },
+        filterValues: [],
       }}                                                          | ${false}
       ${{
         ...allowFilteringColumnConfig,
-        headerFilter: { values: [1, 2, 3] },
+        filterValues: [1, 2, 3],
       }}                                                          | ${true}
       ${{
         ...allowFilteringColumnConfig,
-        headerFilter: { values: null },
+        filterValues: null,
       }}                                                          | ${false}
       ${{
         ...allowFilteringColumnConfig,
-        headerFilter: { values: 'test' },
+        filterValues: 'test',
       }}                                                          | ${true}
       ${{
         ...allowFilteringColumnConfig,
-        headerFilter: { values: [null] },
+        filterValues: [null],
       }}                                                          | ${true}
 `
         .it('should check if there are selected values', ({
@@ -280,11 +296,11 @@ describe('HeaderFilter', () => {
           columns: [{
             ...allowFilteringColumnConfig,
             dataField: 'ID1',
-            headerFilter: { values: 'test' },
+            filterValues: 'test',
           }, {
             ...allowFilteringColumnConfig,
             dataField: 'ID2',
-            headerFilter: { values: 'test2' },
+            filterValues: 'test2',
           }] as unknown[],
           result: [['ID1', '=', 'test'], 'and', ['ID2', '=', 'test2']],
         },
@@ -293,7 +309,7 @@ describe('HeaderFilter', () => {
           columns: [{
             ...allowFilteringColumnConfig,
             dataField: 'ID1',
-            headerFilter: { values: 'test' },
+            filterValues: 'test',
           }] as unknown[],
           result: [['ID1', '=', 'test']],
         },
@@ -302,11 +318,11 @@ describe('HeaderFilter', () => {
           columns: [{
             ...allowFilteringColumnConfig,
             dataField: 'ID1',
-            headerFilter: { values: [1, 2, 3] },
+            filterValues: [1, 2, 3],
           }, {
             ...allowFilteringColumnConfig,
             dataField: 'ID2',
-            headerFilter: { values: ['test1', 'test2'] },
+            filterValues: ['test1', 'test2'],
           }] as unknown[],
           result: [['ID1', 'anyof', [1, 2, 3]], 'and', ['ID2', 'anyof', ['test1', 'test2']]],
         },
@@ -314,11 +330,11 @@ describe('HeaderFilter', () => {
           caseName: 'it is prohibited to sort the first column',
           columns: [{
             dataField: 'ID1',
-            headerFilter: { values: [1, 2, 3] },
+            filterValues: [1, 2, 3],
           }, {
             ...allowFilteringColumnConfig,
             dataField: 'ID2',
-            headerFilter: { values: ['test1', 'test2'] },
+            filterValues: ['test1', 'test2'],
           }] as unknown[],
           result: [['ID2', 'anyof', ['test1', 'test2']]],
         },
@@ -327,12 +343,12 @@ describe('HeaderFilter', () => {
           columns: [{
             ...allowFilteringColumnConfig,
             dataField: 'ID1',
-            headerFilter: { values: [1, 2, 3] },
+            filterValues: [1, 2, 3],
             filterType: 'exclude',
           }, {
             ...allowFilteringColumnConfig,
             dataField: 'ID2',
-            headerFilter: { values: 'test1' },
+            filterValues: 'test1',
             filterType: 'exclude',
           }] as unknown[],
           result: [['ID1', 'noneof', [1, 2, 3]], 'and', ['ID2', '<>', 'test1']],

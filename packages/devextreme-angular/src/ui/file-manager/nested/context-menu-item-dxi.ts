@@ -18,6 +18,7 @@ import {
 import { dxFileManagerContextMenuItem, FileManagerPredefinedContextMenuItem } from 'devextreme/ui/file_manager';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
@@ -26,8 +27,10 @@ import { DxiFileManagerItemComponent } from './item-dxi';
 
 @Component({
     selector: 'dxi-file-manager-context-menu-item',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxiFileManagerContextMenuItemComponent extends CollectionNestedOption {
@@ -141,7 +144,7 @@ export class DxiFileManagerContextMenuItemComponent extends CollectionNestedOpti
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiFileManagerContextMenuItemComponent
   ],
   exports: [

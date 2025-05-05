@@ -19,6 +19,7 @@ import { HorizontalEdge, VerticalEdge } from 'devextreme/common';
 import { Format } from 'devextreme/common/core/localization';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
@@ -26,8 +27,10 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-circular-gauge-subvalue-indicator',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxoCircularGaugeSubvalueIndicatorComponent extends NestedOption implements OnDestroy, OnInit  {
@@ -209,7 +212,7 @@ export class DxoCircularGaugeSubvalueIndicatorComponent extends NestedOption imp
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoCircularGaugeSubvalueIndicatorComponent
   ],
   exports: [

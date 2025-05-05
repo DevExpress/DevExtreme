@@ -1,0 +1,8 @@
+This demo uses DevExtreme Stepper to implement navigation in the hotel registration UI. Input controls on each step are organized with the help of [MultiView](/Documentation/Guide/UI_Components/MultiView/Overview/) and [Form](/Documentation/Guide/UI_Components/Form/Overview/) components. Form and Stepper display input validation results when a user navigates to the next step.
+<!--split-->
+
+To see how validation works, try to navigate to the second step without specifying *Check-in* and *Check-out* dates. Since these fields are required, validation fails and the first step's status changes to [invalid](/Documentation/ApiReference/UI_Components/dxStepper/Configuration/items/#isValid). The icon turns red and displays an exclamation mark. The [DateRangeBox](/Documentation/Guide/UI_Components/DateRangeBox/Getting_Started_with_DateRangeBox/) component also displays an error icon.  
+
+Review demo code for validation implementation details. The `moveNext` function and Stepper's [onSelectionChanging](/Documentation/ApiReference/UI_Components/dxStepper/Configuration/#onSelectionChanging) event handler trigger a validation check through the `getValidationResult` function. This means that a user can either tap the "Next" button or select the next step to validate the Form and Stepper. DateRangeBox and Stepper both display validation errors since they belong to the same [validation group](/Documentation/ApiReference/UI_Components/dxValidationGroup/). 
+
+After fixing validation errors, you can proceed to the next step. A checkmark shows when a step is valid. 

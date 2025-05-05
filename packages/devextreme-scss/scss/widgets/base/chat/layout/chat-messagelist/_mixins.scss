@@ -8,8 +8,14 @@
   $day-header-font-size,
 ) {
   .dx-chat-messagelist {
-    .dx-scrollable-content {
-      padding-inline: $padding;
+    > .dx-scrollable {
+      > .dx-scrollable-wrapper {
+        > .dx-scrollable-container {
+          > .dx-scrollable-content {
+            padding-inline: $padding;
+          }
+        }
+      }
     }
   }
 
@@ -61,5 +67,31 @@
   .dx-chat-messagelist-empty-prompt {
     font-size: $messagelist-empty-prompt-font-size;
     color: $messagelist-empty-prompt-color;
+  }
+}
+
+@mixin chat-messagelist-contextmenu(
+  $delete-button-color,
+  $delete-button-focused-color,
+  $delete-button-focused-bg,
+) {
+  .dx-messagelist-context-menu-content {
+    .dx-menu-item:has(.dx-icon-trash) {
+      color: $delete-button-color;
+
+      &.dx-state-focused {
+        color: $delete-button-focused-color;
+        background-color: $delete-button-focused-bg;
+      }
+    }
+  }
+
+  .dx-chat-messagelist {
+    .dx-scrollable-container {
+      > .dx-overlay-wrapper {
+        max-width: 100%;
+        max-height: 100%;
+      }
+    }
   }
 }

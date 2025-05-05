@@ -10,6 +10,10 @@ export interface RequestManagerCallbacks {
   onError?: (error: Error) => void;
 }
 
+export type RequestManagerParams = RequestParams & {
+  onChunk?: (chunk: string) => void;
+};
+
 export class RequestManager {
   private readonly provider: AIProvider;
 
@@ -19,16 +23,23 @@ export class RequestManager {
 
   public sendRequest(prompt: Prompt, callbacks: RequestManagerCallbacks): () => void {
     if (typeof this.provider.sendRequest === 'function') {
-      const params: RequestParams = {
+      let aborted = false;
+
+      const params: RequestManagerParams = {
         prompt,
-        onChunk: (chunk: string): void => { callbacks?.onChunk?.(chunk); },
+        onChunk: (chunk: string): void => { if (!aborted) { callbacks?.onChunk?.(chunk); } },
       };
 
-      const { promise, abort } = this.provider.sendRequest(params);
+      const { promise, abort: abortRequest } = this.provider.sendRequest(params);
 
       promise
-        .then((response) => { callbacks?.onComplete?.(response); })
-        .catch((e) => { callbacks?.onError?.(e); });
+        .then((response) => { if (!aborted) { callbacks?.onComplete?.(response); } })
+        .catch((e) => { if (!aborted) { callbacks?.onError?.(e); } });
+
+      const abort = (): void => {
+        aborted = true;
+        abortRequest?.();
+      };
 
       return abort;
     }

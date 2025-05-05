@@ -29,19 +29,17 @@ export class SortingController {
   public readonly orderedSortedColumns: ReadonlySignal<Column[]> = computed(() => {
     const columns = this.sortedColumns.value;
     const mode = this.mode.value;
-    if (mode !== 'multiple' && this.areColumnsInitialized) {
-      return columns;
-    }
     const result = columns.sort(sortOrderDelegate);
+
+    if (mode !== 'multiple' && this.areColumnsInitialized) {
+      return result;
+    }
 
     if (!this.areColumnsInitialized) {
       this.areColumnsInitialized = true;
 
-      let counter = 0;
-      result.forEach((c) => {
-        this.columnsController.columnOption(c, 'sortIndex', counter);
-        counter += 1;
-        return c;
+      result.forEach((col, idx) => {
+        this.columnsController.columnOption(col, 'sortIndex', idx);
       });
     }
 

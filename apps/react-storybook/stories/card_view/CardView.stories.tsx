@@ -86,7 +86,7 @@ const columns = {
     {
       dataField: 'birthDate',
       dataType: 'date',
-      calculateCellValue: (data) => {
+      calculateFieldValue: (data) => {
         return new Date(data.birthDate);
       },
       calculateDisplayValue: (data) => {
@@ -103,7 +103,7 @@ const columns = {
   {
     dataField: "OrderDate", 
     dataType: 'date',
-    calculateCellValue: (data) => {
+    calculateFieldValue: (data) => {
       return new Date(data.OrderDate);
     },
     calculateDisplayValue: (data) => {

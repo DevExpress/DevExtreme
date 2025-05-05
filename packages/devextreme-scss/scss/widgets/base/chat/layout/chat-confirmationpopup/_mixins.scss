@@ -1,0 +1,24 @@
+@mixin chat-confirmation-popup(
+  $border-radius,
+  $content-padding-bottom,
+  $toolbar-padding-block,
+  $toolbar-padding-inline,
+  $toolbar-gap
+) {
+  .dx-chat-confirmation-popup-wrapper {
+    border-radius: $border-radius;
+
+    .dx-popup-content {
+      padding-bottom: $content-padding-bottom;
+    }
+
+    .dx-popup-bottom.dx-toolbar {
+      padding-block: $toolbar-padding-block;
+      padding-inline: $toolbar-padding-inline;
+    }
+
+    .dx-toolbar-items-container {
+      gap: $toolbar-gap;
+    }
+  }
+}

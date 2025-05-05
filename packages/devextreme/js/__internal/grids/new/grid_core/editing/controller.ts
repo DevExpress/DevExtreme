@@ -18,7 +18,7 @@ export class EditingController {
   // todo: fix typing, remove explicit type here
   public readonly changes: Signal<Change[]> = this.options.twoWay('editing.changes');
 
-  public readonly editRowKey = this.options.twoWay('editing.editCardKey');
+  public readonly editCardKey = this.options.twoWay('editing.editCardKey');
 
   public allowDeleting = this.options.twoWay('editing.allowDeleting');
 
@@ -54,16 +54,16 @@ export class EditingController {
 
   private readonly onSaved = this.options.action('onSaved');
 
-  public readonly editingRow = computed(() => {
-    const editRowKey = this.editRowKey.value;
+  public readonly editingCard = computed(() => {
+    const editCardKey = this.editCardKey.value;
     const items = this.itemsController.items.value;
     const changes = this.changes.value;
 
-    if (!isDefined(editRowKey)) {
+    if (!isDefined(editCardKey)) {
       return null;
     }
 
-    const oldItem = this.itemsController.findItemByKey(items, editRowKey)!;
+    const oldItem = this.itemsController.findItemByKey(items, editCardKey)!;
     const newData = applyChanges(
       [oldItem.data],
       changes,
@@ -73,7 +73,7 @@ export class EditingController {
       },
     )[0];
 
-    const newItem = this.itemsController.createDataRow(
+    const newItem = this.itemsController.createCardInfo(
       newData,
       this.columnController.columns.peek(),
       oldItem.index,
@@ -95,17 +95,17 @@ export class EditingController {
     private readonly kbn: KeyboardNavigationController,
   ) {}
 
-  public editRow(key: Key): void {
+  public editCard(key: Key): void {
     const eventArgs = {
       cancel: false,
       key,
-      data: this.itemsController.getRowByKey(key)!.data,
+      data: this.itemsController.getCardByKey(key)!.data,
     };
 
     this.onEditingStart.peek()(eventArgs);
 
     if (!eventArgs.cancel) {
-      this.editRowKey.value = key;
+      this.editCardKey.value = key;
     }
   }
 
@@ -124,7 +124,7 @@ export class EditingController {
 
     this.itemsController.additionalItems.value = [
       ...this.itemsController.additionalItems.peek(),
-      this.itemsController.createDataRow(
+      this.itemsController.createCardInfo(
         eventArgs.data,
         this.columnController.columns.peek(),
         -1,
@@ -136,7 +136,7 @@ export class EditingController {
     this.changes.value = [
       ...this.changes.peek(), { type: 'insert', key: newItemKey, data: {} },
     ];
-    this.editRowKey.value = newItemKey;
+    this.editCardKey.value = newItemKey;
   }
 
   private async confirmDelete(): Promise<boolean> {
@@ -154,7 +154,7 @@ export class EditingController {
     return result;
   }
 
-  public async deleteRow(key: Key): Promise<void> {
+  public async deleteCard(key: Key): Promise<void> {
     const confirmStatus = await this.confirmDelete();
 
     if (!confirmStatus) {
@@ -174,7 +174,7 @@ export class EditingController {
 
   private clear(): void {
     this.changes.value = [];
-    this.editRowKey.value = null;
+    this.editCardKey.value = null;
     this.itemsController.additionalItems.value = [];
   }
 
@@ -235,7 +235,7 @@ export class EditingController {
       switch (change.type) {
         case 'update': {
           const updatingArgs = {
-            oldData: this.itemsController.getRowByKey(change.key)!.data,
+            oldData: this.itemsController.getCardByKey(change.key)!.data,
             newData: change.data,
             cancel: false,
             key: change.key,

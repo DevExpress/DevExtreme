@@ -2,7 +2,6 @@
 import { name as clickEventName } from '@js/common/core/events/click';
 import eventsEngine from '@js/common/core/events/core/events_engine';
 import pointerEvents from '@js/common/core/events/pointer';
-import { keyboard } from '@js/common/core/events/short';
 import {
   addNamespace,
   createEvent,
@@ -100,11 +99,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
 
   private focusedHandlerWithContext!: ($element: dxElementWrapper) => void;
 
-  private rowsViewRenderCompletedWithContext!: (e: any) => void;
-
-  private rowsViewFocusHandlerContext!: (event: any) => void;
-
-  private rowsViewFocusOutHandlerContext!: (event: Event) => void;
+  private focusOutHandlerContext!: (event: Event) => void;
 
   public _isNeedScroll: any;
 
@@ -117,8 +112,6 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
   private _documentClickHandler: any;
 
   private _pointerEventAction: any;
-
-  private _rowsViewKeyDownListener: any;
 
   private focusType: any;
 
@@ -144,8 +137,6 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
 
   // #region Initialization
   public init() {
-    super.init();
-
     this._dataController = this.getController('data');
     this._selectionController = this.getController('selection');
     this._editingController = this.getController('editing');
@@ -156,14 +147,14 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
     this._columnResizerController = this.getController('columnsResizer');
     this._rowsView = this.getView('rowsView');
 
+    super.init();
+
     this._memoFireFocusedCellChanged = memoize(this._memoFireFocusedCellChanged.bind(this), { compareType: 'value' });
     this._memoFireFocusedRowChanged = memoize(this._memoFireFocusedRowChanged.bind(this), { compareType: 'value' });
 
     this.focusedHandlerWithContext = this.focusedHandlerWithContext || this.focusedHandler.bind(this);
-    this.rowsViewRenderCompletedWithContext = this.rowsViewRenderCompletedWithContext || this.rowsViewRenderCompleted.bind(this);
-    this.rowsViewFocusHandlerContext = this.rowsViewFocusHandlerContext || this.rowsViewFocusHandler.bind(this);
-    this.rowsViewFocusOutHandlerContext = this.rowsViewFocusOutHandlerContext
-      ?? this.rowsViewFocusOutHandler.bind(this);
+    this.focusOutHandlerContext = this.focusOutHandlerContext
+      ?? this.focusOutHandler.bind(this);
 
     this._updateFocusTimeout = null;
     this._fastEditingStarted = false;
@@ -177,14 +168,12 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
       this._editorFactory?.focused.remove(this.focusedHandlerWithContext);
     }
 
-    this.initRowsViewHandlers();
     this.initDocumentHandlers();
   }
 
   public dispose() {
     super.dispose();
     this._resetFocusedView();
-    keyboard.off(this._rowsViewKeyDownListener);
     eventsEngine.off(
       domAdapter.getDocument(),
       addNamespace(pointerEvents.down, 'dxDataGridKeyboardNavigation'),
@@ -209,7 +198,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
     }
   }
 
-  protected rowsViewFocusHandler(event: any): void {
+  protected focusinHandler(event: any): void {
     const $element = $(event.target);
     const isRelatedTargetInRowsView = $(event.relatedTarget).closest(
       this._rowsView.element(),
@@ -242,25 +231,25 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
     }
   }
 
-  protected rowsViewFocusOutHandler(): void {
+  protected focusOutHandler(): void {
     this._toggleInertAttr(false);
   }
 
   protected subscribeToRowsViewFocusEvent(): void {
     const $rowsView = this._rowsView?.element();
 
-    eventsEngine.on($rowsView, 'focusin', this.rowsViewFocusHandlerContext);
-    eventsEngine.on($rowsView, 'focusout', this.rowsViewFocusOutHandlerContext);
+    eventsEngine.on($rowsView, 'focusin', this.focusinHandlerContext);
+    eventsEngine.on($rowsView, 'focusout', this.focusOutHandlerContext);
   }
 
   protected unsubscribeFromRowsViewFocusEvent(): void {
     const $rowsView = this._rowsView?.element();
 
-    eventsEngine.off($rowsView, 'focusin', this.rowsViewFocusHandlerContext);
-    eventsEngine.off($rowsView, 'focusout', this.rowsViewFocusOutHandlerContext);
+    eventsEngine.off($rowsView, 'focusin', this.focusinHandlerContext);
+    eventsEngine.off($rowsView, 'focusout', this.focusOutHandlerContext);
   }
 
-  protected rowsViewRenderCompleted(e: any): void {
+  protected renderCompleted(e: any): void {
     const $rowsView = this._rowsView.element();
     const isFullUpdate = !e || e.changeType === 'refresh';
     const isFocusedViewCorrect = this._focusedView && this._focusedView.name === this._rowsView.name;
@@ -275,7 +264,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
     this.subscribeToRowsViewFocusEvent();
 
     this.initPointerEventHandler();
-    this.initRowsViewKeyDownHandler();
+    this.initKeyDownHandler();
     this._setRowsViewAttributes();
 
     if (isFocusedViewCorrect && isFocusedElementCorrect) {
@@ -303,16 +292,10 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
     return true;
   }
 
-  private initRowsViewHandlers(): void {
+  protected initHandlers(): void {
     this.unsubscribeFromRowsViewFocusEvent();
     this.unsubscribeFromPointerEvent();
-    this.unsubscribeFromRowsViewKeyDownEvent();
-
-    this._rowsView?.renderCompleted?.remove(this.rowsViewRenderCompletedWithContext);
-
-    if (this.isKeyboardEnabled()) {
-      this._rowsView.renderCompleted.add(this.rowsViewRenderCompletedWithContext);
-    }
+    super.initHandlers();
   }
 
   private initDocumentHandlers(): void {
@@ -403,21 +386,6 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
     this.subscribeToPointerEvent();
   }
 
-  private unsubscribeFromRowsViewKeyDownEvent(): void {
-    keyboard.off(this._rowsViewKeyDownListener);
-  }
-
-  private subscribeToRowsViewKeyDownEvent(): void {
-    const $rowsView = this._getRowsViewElement();
-
-    this._rowsViewKeyDownListener = keyboard.on($rowsView, null, (e) => this._rowsViewKeyDownHandler(e));
-  }
-
-  private initRowsViewKeyDownHandler(): void {
-    this._rowsViewKeyDownListener && this.unsubscribeFromRowsViewKeyDownEvent();
-    this.subscribeToRowsViewKeyDownEvent();
-  }
-
   // #endregion Initialization
 
   // #region Options
@@ -442,7 +410,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
 
   // #region Key_Handlers
 
-  private _rowsViewKeyDownHandler(e) {
+  protected keyDownHandler(e) {
     let needStopPropagation = true;
     this._isNeedFocus = true;
     this._isNeedScroll = true;
@@ -1344,8 +1312,8 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
     element && this._focusElement($(element), isHighlighted);
   }
 
-  private getFocusedView() {
-    return this._focusedView;
+  protected getFocusedView(): any {
+    return this.getView('rowsView');
   }
 
   public setupFocusedView() {
@@ -1392,9 +1360,9 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
   }
 
   private _getFocusedViewByElement($element) {
-    const view = this.getFocusedView();
-    const $view = view && $(view.element());
-    return $element && $element.closest($view).length !== 0;
+    const $view = $(this._focusedView?.element());
+
+    return $element?.closest($view).length !== 0;
   }
 
   private _focusView() {

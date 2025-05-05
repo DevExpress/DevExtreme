@@ -16,6 +16,7 @@ import {
 
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxoAnimationConfig } from './base/animation-config';
@@ -23,8 +24,10 @@ import { DxoAnimationConfig } from './base/animation-config';
 
 @Component({
     selector: 'dxo-animation',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost],
     inputs: [
         'hide',
@@ -70,7 +73,7 @@ export class DxoAnimationComponent extends DxoAnimationConfig implements OnDestr
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoAnimationComponent
   ],
   exports: [

@@ -21,6 +21,7 @@ import {
 
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxoFilterBuilderOptions } from './base/filter-builder-options';
@@ -30,8 +31,10 @@ import { DxiFieldComponent } from './field-dxi';
 
 @Component({
     selector: 'dxo-filter-builder',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost],
     inputs: [
         'accessKey',
@@ -117,7 +120,7 @@ export class DxoFilterBuilderComponent extends DxoFilterBuilderOptions implement
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoFilterBuilderComponent
   ],
   exports: [

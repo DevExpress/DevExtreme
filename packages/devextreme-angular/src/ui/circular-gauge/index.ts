@@ -98,9 +98,11 @@ import { DxoCircularGaugeValueIndicatorModule } from 'devextreme-angular/ui/circ
  */
 @Component({
     selector: 'dx-circular-gauge',
+    standalone: true,
     template: '',
     styles: [ ' :host {  display: block; }'],
     host: { ngSkipHydration: 'true' },
+    imports: [ DxIntegrationModule ],
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -725,6 +727,7 @@ export class DxCircularGaugeComponent extends DxComponent implements OnDestroy, 
 
 @NgModule({
   imports: [
+    DxCircularGaugeComponent,
     DxoAnimationModule,
     DxoExportModule,
     DxoGeometryModule,
@@ -775,9 +778,6 @@ export class DxCircularGaugeComponent extends DxComponent implements OnDestroy, 
     DxoCircularGaugeValueIndicatorModule,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxCircularGaugeComponent
   ],
   exports: [
     DxCircularGaugeComponent,
@@ -833,6 +833,8 @@ export class DxCircularGaugeComponent extends DxComponent implements OnDestroy, 
   ]
 })
 export class DxCircularGaugeModule { }
+
+export * from 'devextreme-angular/ui/circular-gauge/nested';
 
 import type * as DxCircularGaugeTypes from "devextreme/viz/circular_gauge_types";
 export { DxCircularGaugeTypes };

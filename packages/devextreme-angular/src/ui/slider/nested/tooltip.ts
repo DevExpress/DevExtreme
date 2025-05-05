@@ -18,6 +18,7 @@ import { Format } from 'devextreme/common/core/localization';
 import { VerticalEdge, TooltipShowMode } from 'devextreme/common';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
@@ -25,8 +26,10 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-slider-tooltip',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxoSliderTooltipComponent extends NestedOption implements OnDestroy, OnInit  {
@@ -88,7 +91,7 @@ export class DxoSliderTooltipComponent extends NestedOption implements OnDestroy
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoSliderTooltipComponent
   ],
   exports: [

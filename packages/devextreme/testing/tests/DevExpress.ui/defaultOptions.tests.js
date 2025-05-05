@@ -21,6 +21,7 @@ import ChatMessageGroup from '__internal/ui/chat/messagegroup';
 import ChatMessageList from '__internal/ui/chat/messagelist';
 import ChatAlertList from '__internal/ui/chat/alertlist';
 import ChatTypingIndicator from '__internal/ui/chat/typingindicator';
+import ChatEditingPreview from '__internal/ui/chat/editing_preview';
 import DataGrid from 'ui/data_grid';
 import DateBox from 'ui/date_box';
 import DateRangeBox from 'ui/date_range_box';
@@ -554,20 +555,6 @@ testComponentDefaults(List,
         support.nativeScrolling = this._supportNativeScrolling;
     }
 );
-
-if(!(/chrome/i.test(navigator.userAgent))) {
-    testComponentDefaults(LoadIndicator,
-        {},
-        { viaImage: true },
-        function() {
-            this._originalRealDevice = devices.real();
-            devices.real({ platform: 'android', version: [4, 0] });
-        },
-        function() {
-            devices.real(this._originalRealDevice);
-        }
-    );
-}
 
 
 testComponentDefaults(Lookup,
@@ -1377,6 +1364,14 @@ testComponentDefaults(Chat,
         onMessageEntered: undefined,
         onTypingStart: undefined,
         onTypingEnd: undefined,
+        onMessageEditingStart: undefined,
+        onMessageEditCanceled: undefined,
+        onMessageDeleting: undefined,
+        onMessageDeleted: undefined,
+        editing: {
+            allowUpdating: false,
+            allowDeleting: false,
+        }
     }
 );
 
@@ -1398,6 +1393,8 @@ testComponentDefaults(ChatMessageBox,
         onMessageEntered: undefined,
         onTypingStart: undefined,
         onTypingEnd: undefined,
+        onMessageEditCanceled: undefined,
+        onMessageUpdating: undefined,
     }
 );
 
@@ -1405,6 +1402,7 @@ testComponentDefaults(ChatMessageBubble,
     {},
     {
         text: '',
+        isDeleted: false,
     }
 );
 
@@ -1426,6 +1424,8 @@ testComponentDefaults(ChatMessageList,
         isLoading: false,
         dayHeaderFormat: 'shortdate',
         messageTimestampFormat: 'shorttime',
+        allowUpdating: false,
+        allowDeleting: false,
     }
 );
 
@@ -1440,6 +1440,14 @@ testComponentDefaults(ChatTypingIndicator,
     {},
     {
         typingUsers: [],
+    }
+);
+
+testComponentDefaults(ChatEditingPreview,
+    {},
+    {
+        text: '',
+        onCancel: undefined,
     }
 );
 
