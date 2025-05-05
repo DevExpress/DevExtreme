@@ -86,7 +86,7 @@ export const normalizeTemplateElement = (element) => {
 
   if (isDefined(element) && (element.nodeType || isRenderer(element))) {
     $element = $(element);
-  } else if (typeof element === 'string') {
+  } else if (typeof element !== 'object') {
     $element = $('<div>').html(element).contents();
   }
 
