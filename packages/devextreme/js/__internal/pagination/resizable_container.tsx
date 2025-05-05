@@ -137,6 +137,8 @@ export class ResizableContainer extends InfernoComponent<ResizableContainerProps
       className,
       displayMode,
       isGridCompatibilityMode,
+      // eslint-disable-next-line @typescript-eslint/naming-convention
+      _parentComponentInstance,
       hasKnownLastPage,
       infoText,
       label,
@@ -178,6 +180,7 @@ export class ResizableContainer extends InfernoComponent<ResizableContainerProps
       pageIndexChangedInternal,
       pageSizeChangedInternal,
       isGridCompatibilityMode,
+      _parentComponentInstance,
       className,
       showInfo,
       infoText,
