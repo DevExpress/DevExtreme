@@ -88,7 +88,7 @@ export interface Properties extends WidgetOptions<MessageList> {
   showAvatar: boolean;
   showUserName: boolean;
   showMessageTimestamp: boolean;
-  onMessageEditingStart?: (e: MessageEditingEvent) => void;
+  onMessageEditingStart?: (e: MessageEditingEvent) => () => void;
   onMessageDeleting?: (e: MessageEditingEvent) => void;
   onEscapeKeyPressed?: (e: KeyboardEvent) => void;
 }
@@ -284,7 +284,14 @@ class MessageList extends Widget<Properties> {
         text: editText,
         disabled: isEditActionDisabled(message),
         onClick: (e: ItemClick): void => {
-          onMessageEditingStart?.({ event: e.event, message });
+          const onMessageEditStarted = onMessageEditingStart?.({ event: e.event, message });
+
+          const onContextMenuHidden = (): void => {
+            this._contextMenu.off('hidden', onContextMenuHidden);
+            onMessageEditStarted?.();
+          };
+
+          this._contextMenu.on('hidden', onContextMenuHidden);
         },
       });
     }
