@@ -100,6 +100,7 @@ export class ContentView extends ContentViewBase<ContentViewProps> {
           onDelete: (key: Key, returnFocusTo?: HTMLElement) => {
             this.keyboardNavigationController.setReturnFocusTo(returnFocusTo);
 
+            // eslint-disable-next-line @typescript-eslint/no-floating-promises
             this.editingController.deleteCard(key);
           },
           allowUpdating: this.editingController.allowUpdating.value,
