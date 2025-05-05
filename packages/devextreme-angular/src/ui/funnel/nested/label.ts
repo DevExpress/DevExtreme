@@ -20,6 +20,7 @@ import { Format } from 'devextreme/common/core/localization';
 import { HorizontalEdge } from 'devextreme/common';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
@@ -27,8 +28,10 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-funnel-label',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxoFunnelLabelComponent extends NestedOption implements OnDestroy, OnInit  {
@@ -162,7 +165,7 @@ export class DxoFunnelLabelComponent extends NestedOption implements OnDestroy, 
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoFunnelLabelComponent
   ],
   exports: [

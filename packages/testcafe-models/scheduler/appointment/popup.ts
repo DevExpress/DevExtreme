@@ -4,6 +4,7 @@ export const CLASS = {
   appointmentPopup: 'dx-scheduler-appointment-popup',
   popup: 'dx-popup',
   popupWrapper: 'dx-popup-wrapper',
+  popupContent: 'dx-overlay-content',
   cancelButton: 'dx-popup-cancel.dx-button',
   stateInvisible: 'dx-state-invisible',
   recurrenceEditor: 'dx-recurrence-editor',
@@ -41,6 +42,8 @@ export default class AppointmentPopup {
   form = Selector(`.${CLASS.form}`);
 
   wrapper = Selector(`.${CLASS.popupWrapper}.${CLASS.appointmentPopup}`);
+
+  content = Selector(`.${CLASS.popupWrapper}.${CLASS.appointmentPopup} .${CLASS.popupContent}`);
 
   subjectElement = this.wrapper.find(SELECTORS.textInput);
 

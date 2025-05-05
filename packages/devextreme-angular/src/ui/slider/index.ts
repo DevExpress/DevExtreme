@@ -66,8 +66,10 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
  */
 @Component({
     selector: 'dx-slider',
+    standalone: true,
     template: '',
     host: { ngSkipHydration: 'true' },
+    imports: [ DxIntegrationModule ],
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -847,6 +849,7 @@ export class DxSliderComponent extends DxComponent implements OnDestroy, Control
 
 @NgModule({
   imports: [
+    DxSliderComponent,
     DxoLabelModule,
     DxoFormatModule,
     DxoTooltipModule,
@@ -855,9 +858,6 @@ export class DxSliderComponent extends DxComponent implements OnDestroy, Control
     DxoSliderTooltipModule,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxSliderComponent
   ],
   exports: [
     DxSliderComponent,
@@ -871,6 +871,8 @@ export class DxSliderComponent extends DxComponent implements OnDestroy, Control
   ]
 })
 export class DxSliderModule { }
+
+export * from 'devextreme-angular/ui/slider/nested';
 
 import type * as DxSliderTypes from "devextreme/ui/slider_types";
 export { DxSliderTypes };

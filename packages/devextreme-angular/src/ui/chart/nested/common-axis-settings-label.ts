@@ -23,6 +23,7 @@ import { ChartLabelDisplayMode } from 'devextreme/viz/chart';
 import { Font, ChartsAxisLabelOverlap, RelativePosition, TextOverflow, WordWrap } from 'devextreme/common/charts';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
     extractTemplate,
     DxTemplateDirective,
@@ -34,8 +35,10 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-chart-common-axis-settings-label',
+    standalone: true,
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost, DxTemplateHost]
 })
 export class DxoChartCommonAxisSettingsLabelComponent extends NestedOption implements AfterViewInit, OnDestroy, OnInit,
@@ -174,7 +177,7 @@ export class DxoChartCommonAxisSettingsLabelComponent extends NestedOption imple
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoChartCommonAxisSettingsLabelComponent
   ],
   exports: [

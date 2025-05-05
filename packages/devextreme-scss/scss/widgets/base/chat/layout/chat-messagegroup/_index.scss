@@ -16,6 +16,11 @@
   @include dx-overflow();
 }
 
+.dx-chat-message-edited {
+  display: flex;
+  align-items: center;
+}
+
 .dx-chat-messagegroup-time {
   white-space: nowrap;
 }

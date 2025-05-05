@@ -19,7 +19,7 @@ test('dxNumberBox should not allow to enter not integer chars(T1002864)', async 
     .typeText(appointmentPopup.repeatEveryElement, '.,2', { speed: 0.5 });
 
   await t
-    .expect(await takeScreenshot('dx-number-boxes-not-integer-chars.png', scheduler.appointmentPopup.wrapper))
+    .expect(await takeScreenshot('dx-number-boxes-not-integer-chars.png', scheduler.appointmentPopup.content))
     .ok();
 
   await t

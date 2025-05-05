@@ -19,6 +19,7 @@ import { dxFunnelItem, FunnelLegendItem } from 'devextreme/viz/funnel';
 import { HorizontalAlignment, Position, Orientation, VerticalEdge } from 'devextreme/common';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
@@ -26,8 +27,10 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-funnel-legend',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxoFunnelLegendComponent extends NestedOption implements OnDestroy, OnInit  {
@@ -233,7 +236,7 @@ export class DxoFunnelLegendComponent extends NestedOption implements OnDestroy,
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoFunnelLegendComponent
   ],
   exports: [

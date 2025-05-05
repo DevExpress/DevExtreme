@@ -19,6 +19,7 @@ import {
 
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxoHtmlEditorTableContextMenu } from './base/html-editor-table-context-menu';
@@ -27,8 +28,10 @@ import { DxiItemComponent } from './item-dxi';
 
 @Component({
     selector: 'dxo-table-context-menu',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost],
     inputs: [
         'enabled',
@@ -70,7 +73,7 @@ export class DxoTableContextMenuComponent extends DxoHtmlEditorTableContextMenu 
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoTableContextMenuComponent
   ],
   exports: [

@@ -65,9 +65,11 @@ import { DxoSparklineTooltipModule } from 'devextreme-angular/ui/sparkline/neste
  */
 @Component({
     selector: 'dx-sparkline',
+    standalone: true,
     template: '',
     styles: [ ' :host {  display: block; }'],
     host: { ngSkipHydration: 'true' },
+    imports: [ DxIntegrationModule ],
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -860,6 +862,7 @@ export class DxSparklineComponent extends DxComponent implements OnDestroy, OnCh
 
 @NgModule({
   imports: [
+    DxSparklineComponent,
     DxoMarginModule,
     DxoSizeModule,
     DxoTooltipModule,
@@ -876,9 +879,6 @@ export class DxSparklineComponent extends DxComponent implements OnDestroy, OnCh
     DxoSparklineTooltipModule,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxSparklineComponent
   ],
   exports: [
     DxSparklineComponent,
@@ -900,6 +900,8 @@ export class DxSparklineComponent extends DxComponent implements OnDestroy, OnCh
   ]
 })
 export class DxSparklineModule { }
+
+export * from 'devextreme-angular/ui/sparkline/nested';
 
 import type * as DxSparklineTypes from "devextreme/viz/sparkline_types";
 export { DxSparklineTypes };

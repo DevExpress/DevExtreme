@@ -11,6 +11,10 @@ const CHAT_MESSAGEGROUP_INFORMATION_CLASS = 'dx-chat-messagegroup-information';
 const CHAT_MESSAGEGROUP_TIME_CLASS = 'dx-chat-messagegroup-time';
 const CHAT_MESSAGEGROUP_AUTHOR_NAME_CLASS = 'dx-chat-messagegroup-author-name';
 const CHAT_MESSAGEBUBBLE_CLASS = 'dx-chat-messagebubble';
+const CHAT_MESSAGEGROUP_CONTENT_CLASS = 'dx-chat-messagegroup-content';
+const CHAT_MESSAGE_EDITED_CLASS = 'dx-chat-message-edited';
+const CHAT_MESSAGE_EDITED_ICON_CLASS = 'dx-chat-message-edited-icon';
+const CHAT_MESSAGE_EDITED_TEXT_CLASS = 'dx-chat-message-edited-text';
 
 const moduleConfig = {
     beforeEach: function() {
@@ -185,6 +189,47 @@ QUnit.module('MessageGroup', moduleConfig, () => {
             const $time = this.$element.find(`.${CHAT_MESSAGEGROUP_TIME_CLASS}`);
 
             assert.strictEqual($time.length, 1);
+        });
+
+        QUnit.test('message edited element should include edited icon and edited text', function(assert) {
+            this.reinit({
+                items: [{ isEdited: true }],
+            });
+
+            const $editedMessage = this.$element.find(`.${CHAT_MESSAGE_EDITED_CLASS}`);
+            const $editedIcon = $editedMessage.find(`.${CHAT_MESSAGE_EDITED_ICON_CLASS}`);
+            const $editedText = $editedMessage.find(`.${CHAT_MESSAGE_EDITED_TEXT_CLASS}`);
+
+            assert.strictEqual($editedIcon.length, 1, 'edited icon is rendered');
+            assert.strictEqual($editedText.length, 1, 'edited text is rendered');
+        });
+
+        QUnit.test('message edited element should be rendered inside information element if first item has isEdited=true', function(assert) {
+            this.reinit({
+                items: [{ isEdited: true }],
+            });
+
+            const $information = this.$element.find(`.${CHAT_MESSAGEGROUP_INFORMATION_CLASS}`);
+            const $groupContent = this.$element.find(`.${CHAT_MESSAGEGROUP_CONTENT_CLASS}`);
+            const $editedTextInInformation = $information.find(`.${CHAT_MESSAGE_EDITED_CLASS}`);
+            const $editedTextInGroupContent = $groupContent.find(`.${CHAT_MESSAGE_EDITED_CLASS}`);
+
+            assert.strictEqual($editedTextInInformation.length, 1, 'message edited element is rendered inside information element');
+            assert.strictEqual($editedTextInGroupContent.length, 0, 'message edited element is not rendered inside group content element');
+        });
+
+        QUnit.test('message edited element should be rendered inside group content element if item with isEdited=true is not first in group', function(assert) {
+            this.reinit({
+                items: [{}, { isEdited: true }],
+            });
+
+            const $information = this.$element.find(`.${CHAT_MESSAGEGROUP_INFORMATION_CLASS}`);
+            const $groupContent = this.$element.find(`.${CHAT_MESSAGEGROUP_CONTENT_CLASS}`);
+            const $editedTextInInformation = $information.find(`.${CHAT_MESSAGE_EDITED_CLASS}`);
+            const $editedTextInGroupContent = $groupContent.find(`.${CHAT_MESSAGE_EDITED_CLASS}`);
+
+            assert.strictEqual($editedTextInInformation.length, 0, 'message edited element is not rendered inside information element');
+            assert.strictEqual($editedTextInGroupContent.length, 1, 'message edited element is rendered inside group content element');
         });
     });
 

@@ -119,7 +119,6 @@ module('GetEditorByField', () => {
         { field: 'byday', isNecessarily: false, editorType: ButtonGroup, freq: 'FREQ=WEEKLY' },
         { field: 'bymonth', isNecessarily: false, editorType: SelectBox, freq: 'FREQ=YEARLY' },
         { field: 'bymonthday', isNecessarily: false, editorType: NumberBox, freq: 'FREQ=MONTHLY' }
-
     ];
 
     cases.forEach((config) => {
@@ -280,48 +279,48 @@ module('Repeat-end editor', () => {
     test('Recurrence repeat-type editor should be rendered with right inner editors', function(assert) {
         const instance = createInstance({ value: 'FREQ=WEEKLY;COUNT=10' });
 
-        const $repeatCount = getRepeatEndEditor(instance).$element().find('.' + REPEAT_COUNT_EDITOR);
-        const $repeatUntilDate = getRepeatEndEditor(instance).$element().find('.' + REPEAT_DATE_EDITOR);
+        const $repeatCount = instance.$element().find('.' + REPEAT_COUNT_EDITOR);
+        const $repeatUntilDate = instance.$element().find('.' + REPEAT_DATE_EDITOR);
 
-        assert.equal($repeatCount.length, 1, 'repeatCount editor was rendered');
-        assert.equal($repeatUntilDate.length, 1, 'repeatUntilDate editor was rendered');
+        assert.equal($repeatCount.length, 1, 'count editor was rendered');
+        assert.equal($repeatUntilDate.length, 0, 'repeatUntilDate editor was rendered');
     });
 
-    test('Recurrence editor parts should be disabled if needed, recurrenceString changing', function(assert) {
+    test('Recurrence editor parts should be hidden if needed, recurrenceString changing', function(assert) {
         const instance = createInstance({ value: 'FREQ=WEEKLY' });
 
-        const $repeatCount = getRepeatEndEditor(instance).$element().find('.' + REPEAT_COUNT_EDITOR);
-        const $repeatUntilDate = getRepeatEndEditor(instance).$element().find('.' + REPEAT_DATE_EDITOR);
+        const $repeatCount = () => instance.$element().find('.' + REPEAT_COUNT_EDITOR);
+        const $repeatUntilDate = () => instance.$element().find('.' + REPEAT_DATE_EDITOR);
 
-        assert.ok($repeatCount.hasClass('dx-state-disabled'), 'repeat-count editor is disabled');
-        assert.ok($repeatUntilDate.hasClass('dx-state-disabled'), 'repeat-until editor is disabled');
+        assert.equal($repeatCount().length, 0, 'repeat-count editor is invisible');
+        assert.equal($repeatUntilDate().length, 0, 'repeat-until editor is invisible');
 
         instance.option('value', 'FREQ=WEEKLY;COUNT=10');
 
-        assert.ok(!$repeatCount.hasClass('dx-state-disabled'), 'repeat-count editor is not disabled');
-        assert.ok($repeatUntilDate.hasClass('dx-state-disabled'), 'repeat-until editor is disabled');
+        assert.equal($repeatCount().length, 1, 'repeat-count editor is visible');
+        assert.equal($repeatUntilDate().length, 0, 'repeat-until editor is invisible');
 
         instance.option('value', 'FREQ=WEEKLY;UNTIL=20151107');
 
-        assert.ok($repeatCount.hasClass('dx-state-disabled'), 'repeat-count editor is disabled');
-        assert.ok(!$repeatUntilDate.hasClass('dx-state-disabled'), 'repeat-until editor is not disabled');
+        assert.equal($repeatCount().length, 0, 'repeat-count editor is invisible');
+        assert.equal($repeatUntilDate().length, 1, 'repeat-until editor is visible');
     });
 
-    test('Recurrence editor parts should be disabled if needed, repeat-end editor value changing', function(assert) {
+    test('Recurrence editor parts should be hidden if needed, repeat-end editor value changing', function(assert) {
         const instance = createInstance({ value: 'FREQ=WEEKLY;COUNT=10' });
 
-        const $repeatCount = getRepeatEndEditor(instance).$element().find('.' + REPEAT_COUNT_EDITOR);
-        const $repeatUntilDate = getRepeatEndEditor(instance).$element().find('.' + REPEAT_DATE_EDITOR);
+        const $repeatCount = () => instance.$element().find('.' + REPEAT_COUNT_EDITOR);
+        const $repeatUntilDate = () => instance.$element().find('.' + REPEAT_DATE_EDITOR);
 
         getRepeatEndEditor(instance).option('value', 'until');
 
-        assert.ok($repeatCount.hasClass('dx-state-disabled'), 'repeat-count editor is disabled');
-        assert.ok(!$repeatUntilDate.hasClass('dx-state-disabled'), 'repeat-until editor is not disabled');
+        assert.equal($repeatCount().length, 0, 'repeat-count editor is invisible');
+        assert.equal($repeatUntilDate().length, 1, 'repeat-until editor is visible');
 
         getRepeatEndEditor(instance).option('value', 'count');
 
-        assert.ok(!$repeatCount.hasClass('dx-state-disabled'), 'repeat-count editor is not disabled');
-        assert.ok($repeatUntilDate.hasClass('dx-state-disabled'), 'repeat-until editor is disabled');
+        assert.equal($repeatCount().length, 1, 'repeat-count editor is visible');
+        assert.equal($repeatUntilDate().length, 0, 'repeat-until editor is invisible');
     });
 
     test('Recurrence editor should correctly process values from repeat-end editor', function(assert) {
@@ -338,48 +337,40 @@ module('Repeat-end editor', () => {
 
     test('Recurrence repeat-count editor should be rendered with right defaults', function(assert) {
         const instance = createInstance({ value: 'FREQ=WEEKLY' });
+        const count = instance.getEditorByField('count');
 
-        const $repeatCount = getRepeatEndEditor(instance).$element().find('.' + REPEAT_COUNT_EDITOR);
-        const repeatCount = $repeatCount.dxNumberBox('instance');
-
-        assert.equal(repeatCount.option('showSpinButtons'), true, 'numberBox has right min value');
-        assert.equal(repeatCount.option('useLargeSpinButtons'), false, 'numberBox have right useLargeSpinButtons');
-        assert.equal(repeatCount.option('min'), 1, 'numberBox has right min value');
-        assert.equal(repeatCount.option('value'), 1, 'numberBox has right value');
-        assert.equal(repeatCount.option('width'), 70, 'numberBox has right width');
+        assert.equal(count.option('showSpinButtons'), true, 'numberBox has right min value');
+        assert.equal(count.option('useLargeSpinButtons'), false, 'numberBox have right useLargeSpinButtons');
+        assert.equal(count.option('min'), 1, 'numberBox has right min value');
+        assert.equal(count.option('value'), 1, 'numberBox has right value');
+        assert.equal(count.option('width'), '100%', 'numberBox has right width');
     });
 
     test('Recurrence repeat-count editor should process rules correctly', function(assert) {
         const instance = createInstance({ value: 'FREQ=WEEKLY' });
-
-        const $repeatCount = getRepeatEndEditor(instance).$element().find('.' + REPEAT_COUNT_EDITOR);
-        const repeatCount = $repeatCount.dxNumberBox('instance');
+        const count = instance.getEditorByField('count');
 
         ['FREQ=WEEKLY;COUNT=10', 'FREQ=WEEKLY;COUNT=12'].forEach((recurrenceString) => {
             instance.option('value', recurrenceString);
 
             const ruleParts = recurrenceString.split(';');
-            assert.equal(repeatCount.option('value'), ruleParts[1].split('=')[1], 'value of repeat-count editor is correct');
+            assert.equal(count.option('value'), ruleParts[1].split('=')[1], 'value of repeat-count editor is correct');
         });
     });
 
     test('Recurrence editor should correctly process values from repeat-count editor', function(assert) {
         const instance = createInstance({ value: 'FREQ=WEEKLY;COUNT=1' });
-
-        const $repeatCount = getRepeatEndEditor(instance).$element().find('.' + REPEAT_COUNT_EDITOR);
-        const repeatCount = $repeatCount.dxNumberBox('instance');
+        const count = instance.getEditorByField('count');
 
         [10, 12].forEach((value) => {
-            repeatCount.option('value', value);
+            count.option('value', value);
             assert.equal(instance.option('value'), `FREQ=WEEKLY;COUNT=${value}`, `Recurrence editor has right value=${value}`);
         });
     });
 
     test('Recurrence repeat-until editor should be rendered with right defaults', function(assert) {
         const instance = createInstance({ value: 'FREQ=WEEKLY;UNTIL=20151007', firstDayOfWeek: 2 });
-
-        const $repeatUntilDate = getRepeatEndEditor(instance).$element().find('.' + REPEAT_DATE_EDITOR);
-        const untilDate = $repeatUntilDate.dxDateBox('instance');
+        const untilDate = instance.getEditorByField('until');
 
         assert.equal(untilDate.option('type'), 'date', 'dateBox has right type');
         assert.deepEqual(untilDate.option('calendarOptions'), { firstDayOfWeek: 2 }, 'dateBox has right calendarOptions');
@@ -388,9 +379,7 @@ module('Repeat-end editor', () => {
 
     test('Recurrence repeat-until editor should process rules correctly', function(assert) {
         const instance = createInstance({ value: 'FREQ=WEEKLY;UNTIL=20151007' });
-
-        const $repeatUntilDate = getRepeatEndEditor(instance).$element().find('.' + REPEAT_DATE_EDITOR);
-        const untilDate = $repeatUntilDate.dxDateBox('instance');
+        const untilDate = instance.getEditorByField('until');
 
         ['FREQ=WEEKLY;UNTIL=20151107', 'FREQ=WEEKLY;UNTIL=20201107'].forEach((recurrenceString) => {
             instance.option('value', recurrenceString);
@@ -402,9 +391,7 @@ module('Repeat-end editor', () => {
 
     test('Recurrence editor should correctly process values from until-date editor', function(assert) {
         const instance = createInstance({ value: 'FREQ=WEEKLY;UNTIL=20151007' });
-
-        const $repeatUntilDate = getRepeatEndEditor(instance).$element().find('.' + REPEAT_DATE_EDITOR);
-        const untilDate = $repeatUntilDate.dxDateBox('instance');
+        const untilDate = instance.getEditorByField('until');
 
         [new Date(2015, 11, 7), new Date(2020, 11, 7)].forEach((date) => {
             untilDate.option('value', date);
@@ -452,9 +439,7 @@ module('Repeat-end editor', () => {
                     timeZoneCalculator,
                     getStartDateTimeZone: () => startDateTimeZone
                 });
-
-                const $repeatUntilDate = getRepeatEndEditor(instance).$element().find('.' + REPEAT_DATE_EDITOR);
-                const untilDate = $repeatUntilDate.dxDateBox('instance');
+                const untilDate = instance.getEditorByField('until');
 
                 assert.deepEqual(untilDate.option('value'), new Date('2023-06-16 23:59:59'), 'dateBox has right value');
             });
@@ -472,8 +457,7 @@ module('Repeat-end editor', () => {
                 });
                 assert.deepEqual(timeZoneCalculatorSpy.getCall(0).args[1], { ...result, path: 'to' + result.path });
 
-                const $repeatUntilDate = getRepeatEndEditor(instance).$element().find('.' + REPEAT_DATE_EDITOR);
-                const untilDate = $repeatUntilDate.dxDateBox('instance');
+                const untilDate = instance.getEditorByField('until');
 
                 untilDate.option('value', new Date('2023-06-16 23:59:59'));
 
@@ -496,7 +480,7 @@ module('Interval editor', () => {
         assert.equal(getIntervalEditor(instance).option('useLargeSpinButtons'), false, 'Interval editor has right useLargeSpinButtons');
         assert.equal(getIntervalEditor(instance).option('min'), 1, 'Interval editor has right min value');
         assert.equal(getIntervalEditor(instance).option('value'), 1, 'Interval editor hase right value');
-        assert.equal(getIntervalEditor(instance).option('width'), 70, 'Interval editor has right width');
+        assert.equal(getIntervalEditor(instance).option('width'), 90, 'Interval editor has right width');
     });
 
     test('Interval editor should have right css class', function(assert) {
@@ -850,9 +834,7 @@ module('FirstDayOfWeek setting', () => {
 
     test('Repeat-until dateBox should have right firstDayOfWeek', function(assert) {
         const instance = createInstance({ firstDayOfWeek: 5, value: 'FREQ=WEEKLY;UNTIL=20151007' });
-
-        const $untilDate = instance.$element().find('.' + REPEAT_DATE_EDITOR);
-        const untilDate = $untilDate.dxDateBox('instance');
+        const untilDate = instance.getEditorByField('until');
 
         assert.equal(untilDate.option('calendarOptions.firstDayOfWeek'), 5, 'First day of the week is ok');
     });
@@ -860,9 +842,7 @@ module('FirstDayOfWeek setting', () => {
     test('Repeat-until dateBox should have right firstDayOfWeek after firstDayOfWeek option changing', function(assert) {
         const instance = createInstance({ firstDayOfWeek: 5, value: 'FREQ=WEEKLY;UNTIL=20151007' });
         instance.option('firstDayOfWeek', 1);
-
-        const $untilDate = instance.$element().find('.' + REPEAT_DATE_EDITOR);
-        const untilDate = $untilDate.dxDateBox('instance');
+        const untilDate = instance.getEditorByField('until');
 
         assert.equal(untilDate.option('calendarOptions.firstDayOfWeek'), 1, 'First day of the week is ok');
     });
@@ -888,12 +868,11 @@ module('FirstDayOfWeek setting', () => {
         const instance = createInstance({ value: 'FREQ=WEEKLY;BYDAY=SU,TU;COUNT=3' });
 
         instance.option('value', '');
-
         instance.option('value', 'FREQ=WEEKLY;BYDAY=SU,TU;COUNT=3');
 
-        const repeatCount = instance.$element().find('.' + REPEAT_COUNT_EDITOR).eq(0).dxNumberBox('instance');
+        const count = instance.getEditorByField('count');
 
-        assert.equal(repeatCount.option('value'), 3, 'Value was processed correctly');
+        assert.equal(count.option('value'), 3, 'Value was processed correctly');
     });
 });
 

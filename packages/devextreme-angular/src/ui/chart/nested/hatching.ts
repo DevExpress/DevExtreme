@@ -17,6 +17,7 @@ import {
 import { HatchDirection } from 'devextreme/common/charts';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
@@ -24,8 +25,10 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-chart-hatching',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxoChartHatchingComponent extends NestedOption implements OnDestroy, OnInit  {
@@ -87,7 +90,7 @@ export class DxoChartHatchingComponent extends NestedOption implements OnDestroy
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoChartHatchingComponent
   ],
   exports: [

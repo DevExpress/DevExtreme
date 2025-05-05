@@ -87,8 +87,10 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
  */
 @Component({
     selector: 'dx-html-editor',
+    standalone: true,
     template: '<ng-content></ng-content>',
     host: { ngSkipHydration: 'true' },
+    imports: [ DxIntegrationModule ],
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -1009,6 +1011,7 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
 
 @NgModule({
   imports: [
+    DxHtmlEditorComponent,
     DxoConverterModule,
     DxoImageUploadModule,
     DxoFileUploaderOptionsModule,
@@ -1035,9 +1038,6 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
     DxoHtmlEditorVariablesModule,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxHtmlEditorComponent
   ],
   exports: [
     DxHtmlEditorComponent,
@@ -1069,6 +1069,8 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
   ]
 })
 export class DxHtmlEditorModule { }
+
+export * from 'devextreme-angular/ui/html-editor/nested';
 
 import type * as DxHtmlEditorTypes from "devextreme/ui/html_editor_types";
 export { DxHtmlEditorTypes };

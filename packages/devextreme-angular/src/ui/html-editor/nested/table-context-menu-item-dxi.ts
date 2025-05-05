@@ -22,6 +22,7 @@ import { DOCUMENT } from '@angular/common';
 import { dxHtmlEditorTableContextMenuItem, HtmlEditorPredefinedContextMenuItem } from 'devextreme/ui/html_editor';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
     extractTemplate,
     DxTemplateDirective,
@@ -34,8 +35,10 @@ import { DxiHtmlEditorItemComponent } from './item-dxi';
 
 @Component({
     selector: 'dxi-html-editor-table-context-menu-item',
+    standalone: true,
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost, DxTemplateHost]
 })
 export class DxiHtmlEditorTableContextMenuItemComponent extends CollectionNestedOption implements AfterViewInit,
@@ -170,7 +173,7 @@ export class DxiHtmlEditorTableContextMenuItemComponent extends CollectionNested
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiHtmlEditorTableContextMenuItemComponent
   ],
   exports: [

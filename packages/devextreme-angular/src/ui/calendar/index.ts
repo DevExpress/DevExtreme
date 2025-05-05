@@ -59,8 +59,10 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
  */
 @Component({
     selector: 'dx-calendar',
+    standalone: true,
     template: '',
     host: { ngSkipHydration: 'true' },
+    imports: [ DxIntegrationModule ],
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -961,11 +963,9 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
 
 @NgModule({
   imports: [
+    DxCalendarComponent,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxCalendarComponent
   ],
   exports: [
     DxCalendarComponent,
@@ -973,6 +973,7 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
   ]
 })
 export class DxCalendarModule { }
+
 
 import type * as DxCalendarTypes from "devextreme/ui/calendar_types";
 export { DxCalendarTypes };

@@ -90,9 +90,11 @@ import { DxoTreeMapTreeMapborderModule } from 'devextreme-angular/ui/tree-map/ne
  */
 @Component({
     selector: 'dx-tree-map',
+    standalone: true,
     template: '',
     styles: [ ' :host {  display: block; }'],
     host: { ngSkipHydration: 'true' },
+    imports: [ DxIntegrationModule ],
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -858,6 +860,7 @@ export class DxTreeMapComponent extends DxComponent implements OnDestroy, OnChan
 
 @NgModule({
   imports: [
+    DxTreeMapComponent,
     DxoColorizerModule,
     DxoExportModule,
     DxoGroupModule,
@@ -898,9 +901,6 @@ export class DxTreeMapComponent extends DxComponent implements OnDestroy, OnChan
     DxoTreeMapTreeMapborderModule,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxTreeMapComponent
   ],
   exports: [
     DxTreeMapComponent,
@@ -946,6 +946,8 @@ export class DxTreeMapComponent extends DxComponent implements OnDestroy, OnChan
   ]
 })
 export class DxTreeMapModule { }
+
+export * from 'devextreme-angular/ui/tree-map/nested';
 
 import type * as DxTreeMapTypes from "devextreme/viz/tree_map_types";
 export { DxTreeMapTypes };

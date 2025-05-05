@@ -67,8 +67,10 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
  */
 @Component({
     selector: 'dx-text-box',
+    standalone: true,
     template: '',
     host: { ngSkipHydration: 'true' },
+    imports: [ DxIntegrationModule ],
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -1166,15 +1168,13 @@ export class DxTextBoxComponent extends DxComponent implements OnDestroy, Contro
 
 @NgModule({
   imports: [
+    DxTextBoxComponent,
     DxiButtonModule,
     DxoOptionsModule,
     DxiTextBoxButtonModule,
     DxoTextBoxOptionsModule,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxTextBoxComponent
   ],
   exports: [
     DxTextBoxComponent,
@@ -1186,6 +1186,8 @@ export class DxTextBoxComponent extends DxComponent implements OnDestroy, Contro
   ]
 })
 export class DxTextBoxModule { }
+
+export * from 'devextreme-angular/ui/text-box/nested';
 
 import type * as DxTextBoxTypes from "devextreme/ui/text_box_types";
 export { DxTextBoxTypes };

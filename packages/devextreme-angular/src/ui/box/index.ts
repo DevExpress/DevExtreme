@@ -57,8 +57,10 @@ import { DxiBoxItemComponent } from 'devextreme-angular/ui/box/nested';
  */
 @Component({
     selector: 'dx-box',
+    standalone: true,
     template: '',
     host: { ngSkipHydration: 'true' },
+    imports: [ DxIntegrationModule ],
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -515,14 +517,12 @@ export class DxBoxComponent<TItem = any, TKey = any> extends DxComponent impleme
 
 @NgModule({
   imports: [
+    DxBoxComponent,
     DxiItemModule,
     DxoBoxModule,
     DxiBoxItemModule,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxBoxComponent
   ],
   exports: [
     DxBoxComponent,
@@ -533,6 +533,8 @@ export class DxBoxComponent<TItem = any, TKey = any> extends DxComponent impleme
   ]
 })
 export class DxBoxModule { }
+
+export * from 'devextreme-angular/ui/box/nested';
 
 import type * as DxBoxTypes from "devextreme/ui/box_types";
 export { DxBoxTypes };

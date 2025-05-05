@@ -43,8 +43,10 @@ import {
  */
 @Component({
     selector: 'dx-drawer',
+    standalone: true,
     template: '<ng-content></ng-content>',
     host: { ngSkipHydration: 'true' },
+    imports: [ DxIntegrationModule ],
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -534,11 +536,9 @@ export class DxDrawerComponent extends DxComponent implements OnDestroy {
 
 @NgModule({
   imports: [
+    DxDrawerComponent,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxDrawerComponent
   ],
   exports: [
     DxDrawerComponent,
@@ -546,6 +546,7 @@ export class DxDrawerComponent extends DxComponent implements OnDestroy {
   ]
 })
 export class DxDrawerModule { }
+
 
 import type * as DxDrawerTypes from "devextreme/ui/drawer_types";
 export { DxDrawerTypes };

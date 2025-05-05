@@ -101,8 +101,10 @@ import { DxiGanttStripLineComponent } from 'devextreme-angular/ui/gantt/nested';
  */
 @Component({
     selector: 'dx-gantt',
+    standalone: true,
     template: '',
     host: { ngSkipHydration: 'true' },
+    imports: [ DxIntegrationModule ],
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -1349,6 +1351,7 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
 
 @NgModule({
   imports: [
+    DxGanttComponent,
     DxiColumnModule,
     DxoFormatModule,
     DxoHeaderFilterModule,
@@ -1396,9 +1399,6 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
     DxoGanttValidationModule,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxGanttComponent
   ],
   exports: [
     DxGanttComponent,
@@ -1451,6 +1451,8 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
   ]
 })
 export class DxGanttModule { }
+
+export * from 'devextreme-angular/ui/gantt/nested';
 
 import type * as DxGanttTypes from "devextreme/ui/gantt_types";
 export { DxGanttTypes };

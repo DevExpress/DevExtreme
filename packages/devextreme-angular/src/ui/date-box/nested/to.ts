@@ -17,6 +17,7 @@ import {
 import { PositionConfig } from 'devextreme/common/core/animation';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
@@ -24,8 +25,10 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-date-box-to',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxoDateBoxToComponent extends NestedOption implements OnDestroy, OnInit  {
@@ -95,7 +98,7 @@ export class DxoDateBoxToComponent extends NestedOption implements OnDestroy, On
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoDateBoxToComponent
   ],
   exports: [

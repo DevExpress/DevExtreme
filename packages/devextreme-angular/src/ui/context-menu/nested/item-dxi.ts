@@ -22,6 +22,7 @@ import { DOCUMENT } from '@angular/common';
 import { dxContextMenuItem } from 'devextreme/ui/context_menu';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
     extractTemplate,
     DxTemplateDirective,
@@ -33,8 +34,10 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxi-context-menu-item',
+    standalone: true,
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost, DxTemplateHost]
 })
 export class DxiContextMenuItemComponent extends CollectionNestedOption implements AfterViewInit,
@@ -161,7 +164,7 @@ export class DxiContextMenuItemComponent extends CollectionNestedOption implemen
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiContextMenuItemComponent
   ],
   exports: [

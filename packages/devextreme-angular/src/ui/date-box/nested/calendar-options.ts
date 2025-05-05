@@ -20,6 +20,7 @@ import { DisabledDate, CalendarZoomLevel, DisposingEvent, InitializedEvent, Opti
 import { FirstDayOfWeek, ValidationMessageMode, Position, ValidationStatus } from 'devextreme/common';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
@@ -27,8 +28,10 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-date-box-calendar-options',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxoDateBoxCalendarOptionsComponent extends NestedOption implements OnDestroy, OnInit  {
@@ -397,7 +400,7 @@ export class DxoDateBoxCalendarOptionsComponent extends NestedOption implements 
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoDateBoxCalendarOptionsComponent
   ],
   exports: [

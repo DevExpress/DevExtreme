@@ -14,6 +14,7 @@ import {
 
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxiUser } from './base/user-dxi';
@@ -21,8 +22,10 @@ import { DxiUser } from './base/user-dxi';
 
 @Component({
     selector: 'dxi-typing-user',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost],
     inputs: [
         'avatarAlt',
@@ -54,7 +57,7 @@ export class DxiTypingUserComponent extends DxiUser {
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiTypingUserComponent
   ],
   exports: [

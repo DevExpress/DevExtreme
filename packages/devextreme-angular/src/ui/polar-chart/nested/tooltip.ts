@@ -18,6 +18,7 @@ import { Format } from 'devextreme/common/core/localization';
 import { DashStyle, Font } from 'devextreme/common/charts';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
@@ -25,8 +26,10 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-polar-chart-tooltip',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxoPolarChartTooltipComponent extends NestedOption implements OnDestroy, OnInit  {
@@ -200,7 +203,7 @@ export class DxoPolarChartTooltipComponent extends NestedOption implements OnDes
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoPolarChartTooltipComponent
   ],
   exports: [

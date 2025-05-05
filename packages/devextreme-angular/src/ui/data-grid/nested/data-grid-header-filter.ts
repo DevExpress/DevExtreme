@@ -17,6 +17,7 @@ import {
 import { HeaderFilterSearchConfig } from 'devextreme/common/grids';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
@@ -24,8 +25,10 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-data-grid-data-grid-header-filter',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxoDataGridDataGridHeaderFilterComponent extends NestedOption implements OnDestroy, OnInit  {
@@ -119,7 +122,7 @@ export class DxoDataGridDataGridHeaderFilterComponent extends NestedOption imple
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoDataGridDataGridHeaderFilterComponent
   ],
   exports: [

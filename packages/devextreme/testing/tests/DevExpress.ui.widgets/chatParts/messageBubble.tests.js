@@ -1,4 +1,5 @@
 import $ from 'jquery';
+import messageLocalization from 'common/core/localization/message';
 
 import MessageBubble from '__internal/ui/chat/messagebubble';
 
@@ -33,6 +34,12 @@ QUnit.module('MessageBubble', moduleConfig, () => {
 
             assert.strictEqual(this.$element.text(), 'message text');
         });
+
+        QUnit.test('bubble should be rendered with default text if isDeleted is true', function(assert) {
+            this.reinit({ isDeleted: true });
+
+            assert.strictEqual(this.$element.text(), messageLocalization.format('dxChat-deletedMessageText'));
+        });
     });
 
     QUnit.module('Options', () => {
@@ -40,6 +47,18 @@ QUnit.module('MessageBubble', moduleConfig, () => {
             this.instance.option('text', 'new message text');
 
             assert.strictEqual(this.$element.text(), 'new message text');
+        });
+
+        QUnit.test('bubble should be render with default text if isDeleted is true', function(assert) {
+            this.reinit({ isDeleted: true });
+
+            assert.strictEqual(this.$element.text(), messageLocalization.format('dxChat-deletedMessageText'));
+        });
+
+        QUnit.test('isDeleted option should change the message text after change at runtime', function(assert) {
+            this.instance.option('isDeleted', true);
+
+            assert.strictEqual(this.$element.text(), messageLocalization.format('dxChat-deletedMessageText'));
         });
 
         QUnit.test('template render function should be called if it has been passed', function(assert) {
@@ -54,6 +73,21 @@ QUnit.module('MessageBubble', moduleConfig, () => {
             assert.strictEqual(templateSpy.callCount, 1, 'template was rendered once');
             assert.strictEqual(templateSpy.args[0][0], messageText, 'text argument is correct');
             assert.strictEqual($(templateSpy.args[0][1]).get(0), this.$content.get(0), 'container element is correct');
+        });
+
+        QUnit.test('template should be called after change text option at runtime', function(assert) {
+            const templateSpy = sinon.spy();
+            const messageText = 'message text';
+
+            this.reinit({
+                text: messageText,
+                template: templateSpy,
+            });
+
+            assert.strictEqual(templateSpy.callCount, 1, 'template was rendered once');
+
+            this.instance.option('text', 'new message text');
+            assert.strictEqual(templateSpy.callCount, 2, 'template was rendered');
         });
 
         QUnit.test('default markup should be restored after reseting the template option at runtime', function(assert) {

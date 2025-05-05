@@ -69,7 +69,7 @@ QUnit.module('Informer', moduleConfig, () => {
 
             const $icon = this.$element.find(`.${INFORMER_ICON_CLASS}`);
             const $content = $icon.children();
-            debugger;
+
             assert.strictEqual($content.prop('tagName'), 'I', 'i tag is rendered');
             assert.strictEqual($content.hasClass('dx-icon-sun'), true, 'dx-sun class is added');
         });

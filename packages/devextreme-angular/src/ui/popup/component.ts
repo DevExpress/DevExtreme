@@ -76,8 +76,10 @@ import { DxiPopupToolbarItemComponent } from 'devextreme-angular/ui/popup/nested
  */
 @Component({
     selector: 'dx-popup',
+    standalone: true,
     template: '<ng-content></ng-content>',
     host: { ngSkipHydration: 'true' },
+    imports: [ DxIntegrationModule ],
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -1045,6 +1047,7 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
 
 @NgModule({
   imports: [
+    DxPopupComponent,
     DxoAnimationModule,
     DxoHideModule,
     DxoFromModule,
@@ -1070,9 +1073,6 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
     DxiPopupToolbarItemModule,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxPopupComponent
   ],
   exports: [
     DxPopupComponent,
@@ -1103,6 +1103,8 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
   ]
 })
 export class DxPopupModule { }
+
+export * from 'devextreme-angular/ui/popup/nested';
 
 import type * as DxPopupTypes from "devextreme/ui/popup_types";
 export { DxPopupTypes };

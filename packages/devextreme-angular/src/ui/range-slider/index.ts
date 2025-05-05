@@ -66,8 +66,10 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
  */
 @Component({
     selector: 'dx-range-slider',
+    standalone: true,
     template: '',
     host: { ngSkipHydration: 'true' },
+    imports: [ DxIntegrationModule ],
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -912,6 +914,7 @@ export class DxRangeSliderComponent extends DxComponent implements OnDestroy, Co
 
 @NgModule({
   imports: [
+    DxRangeSliderComponent,
     DxoLabelModule,
     DxoFormatModule,
     DxoTooltipModule,
@@ -920,9 +923,6 @@ export class DxRangeSliderComponent extends DxComponent implements OnDestroy, Co
     DxoRangeSliderTooltipModule,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxRangeSliderComponent
   ],
   exports: [
     DxRangeSliderComponent,
@@ -936,6 +936,8 @@ export class DxRangeSliderComponent extends DxComponent implements OnDestroy, Co
   ]
 })
 export class DxRangeSliderModule { }
+
+export * from 'devextreme-angular/ui/range-slider/nested';
 
 import type * as DxRangeSliderTypes from "devextreme/ui/range_slider_types";
 export { DxRangeSliderTypes };

@@ -18,6 +18,7 @@ import { HorizontalAlignment } from 'devextreme/common';
 import { Font, TextOverflow, WordWrap } from 'devextreme/common/charts';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
@@ -25,8 +26,10 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-chart-common-axis-settings-title',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxoChartCommonAxisSettingsTitleComponent extends NestedOption implements OnDestroy, OnInit  {
@@ -96,7 +99,7 @@ export class DxoChartCommonAxisSettingsTitleComponent extends NestedOption imple
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoChartCommonAxisSettingsTitleComponent
   ],
   exports: [

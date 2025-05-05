@@ -70,8 +70,10 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
  */
 @Component({
     selector: 'dx-number-box',
+    standalone: true,
     template: '',
     host: { ngSkipHydration: 'true' },
+    imports: [ DxIntegrationModule ],
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -1148,6 +1150,7 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
 
 @NgModule({
   imports: [
+    DxNumberBoxComponent,
     DxiButtonModule,
     DxoOptionsModule,
     DxoFormatModule,
@@ -1156,9 +1159,6 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
     DxoNumberBoxOptionsModule,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxNumberBoxComponent
   ],
   exports: [
     DxNumberBoxComponent,
@@ -1172,6 +1172,8 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
   ]
 })
 export class DxNumberBoxModule { }
+
+export * from 'devextreme-angular/ui/number-box/nested';
 
 import type * as DxNumberBoxTypes from "devextreme/ui/number_box_types";
 export { DxNumberBoxTypes };

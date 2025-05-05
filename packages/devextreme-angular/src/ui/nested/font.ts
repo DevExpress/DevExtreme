@@ -16,6 +16,7 @@ import {
 
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxoVizFont } from './base/viz-font';
@@ -23,8 +24,10 @@ import { DxoVizFont } from './base/viz-font';
 
 @Component({
     selector: 'dxo-font',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost],
     inputs: [
         'color',
@@ -61,7 +64,7 @@ export class DxoFontComponent extends DxoVizFont implements OnDestroy, OnInit  {
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoFontComponent
   ],
   exports: [
