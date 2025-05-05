@@ -5,11 +5,18 @@
 $fluent-context-menu-horizontal-padding: null !default;
 $fluent-context-menu-container-vertical-padding: 4px !default;
 $fluent-context-menu-border-radius: $base-border-radius !default;
+$fluent-context-menu-item-border-radius: $base-border-radius !default;
+$fluent-context-menu-items-container-padding: 4px !default;
+$fluent-context-menu-items-container-gap: 2px !default;
+$fluent-context-menu-item-content-gap: null !default;
+$fluent-context-menu-item-text-padding-inline: 2px !default;
 
 @if $size == "default" {
-  $fluent-context-menu-horizontal-padding: 12px !default;
+  $fluent-context-menu-horizontal-padding: 6px !default;
+  $fluent-context-menu-item-content-gap: 6px !default;
 }
 
 @else if $size == "compact" {
-  $fluent-context-menu-horizontal-padding: 8px !default;
+  $fluent-context-menu-horizontal-padding: 4px !default;
+  $fluent-context-menu-item-content-gap: 4px !default;
 }
