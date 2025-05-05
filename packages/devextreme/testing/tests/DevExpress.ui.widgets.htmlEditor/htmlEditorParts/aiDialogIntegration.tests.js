@@ -20,11 +20,11 @@ const MENU_ITEM_CLASS = 'dx-menu-item';
 const MENU_CLASS = 'dx-menu';
 const DISABLED_STATE_CLASS = 'dx-state-disabled';
 
-const HTML_EDITOR_MISSING_AI_INTEGRATION_WARNING = `W1026 - AI feature is enabled. Pass the \"aiIntegration\" property.
+const HTML_EDITOR_MISSING_AI_INTEGRATION_WARNING = `W1026 - The \'ai\' toolbar item is defined, but aiIntegration is missing.
 
 For additional information on this warning message, see: https://js.devexpress.com/error/25_1/W1026`;
 
-const HTML_EDITOR_MISSING_PROMPT_WARNING = `W1027 - Prompt should be specified for custom command.
+const HTML_EDITOR_MISSING_PROMPT_WARNING = `W1027 - A prompt should be specified for a custom command.
 
 For additional information on this warning message, see: https://js.devexpress.com/error/25_1/W1027`;
 
@@ -378,7 +378,7 @@ QUnit.module('AI dialog integration', {}, () => {
                         aiIntegration: null,
                     });
 
-                    assert.strictEqual(warnSpy.lastCall.args[0], HTML_EDITOR_MISSING_AI_INTEGRATION_WARNING, 'correct warning message is logged');
+                    assert.strictEqual(warnSpy.firstCall.args[0], HTML_EDITOR_MISSING_AI_INTEGRATION_WARNING, 'correct warning message is logged');
                     warnSpy.restore();
                 });
             });

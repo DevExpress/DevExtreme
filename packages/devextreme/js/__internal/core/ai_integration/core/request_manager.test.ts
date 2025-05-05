@@ -10,7 +10,7 @@ import type { RequestManagerParams } from '@ts/core/ai_integration/core/request_
 import { RequestManager } from '@ts/core/ai_integration/core/request_manager';
 import { Provider } from '@ts/core/ai_integration/test_utils/provider_mock';
 
-const INVALID_SEND_REQUEST_ERROR_MESSAGE = 'E0122 - AIIntegration: missed sendRequest property.';
+const INVALID_SEND_REQUEST_ERROR_MESSAGE = 'E0122 - AIIntegration: The sendRequest method is missing.';
 
 describe('RequestManager', () => {
   let provider = null as unknown as AIProvider;

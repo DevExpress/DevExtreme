@@ -368,9 +368,9 @@ export default errorUtils(errors.ERROR_MESSAGES, {
     /**
      * @name ErrorsUIWidgets.W1026
      */
-    W1026: 'AI feature is enabled. Pass the "aiIntegration" property.',
+    W1026: 'The \'ai\' toolbar item is defined, but aiIntegration is missing.',
     /**
      * @name ErrorsUIWidgets.W1027
      */
-    W1027: 'Prompt should be specified for custom command.',
+    W1027: 'A prompt should be specified for a custom command.',
 });
