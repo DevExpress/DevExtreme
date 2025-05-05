@@ -4890,3 +4890,45 @@ test('Grids a11y: Fix the header filter and the column chooser focus issue and u
       },
     });
   });
+
+const getDataGridProps = () => ({
+  dataSource: getData(5, 2),
+  columns: ['field_0', 'field_1'],
+  filterRow: { visible: true },
+});
+
+// T1285421
+test('Multiple DataGrids - Ctrl+Up/Down from filter row should focus data row in the same grid', async (t) => {
+  const firstGrid = new DataGrid('#container');
+  const secondGrid = new DataGrid('#otherContainer');
+
+  // Ensure both grids are ready
+  await t
+    .expect(firstGrid.isReady())
+    .ok('First grid is ready')
+    .expect(secondGrid.isReady())
+    .ok('Second grid is ready');
+
+  const firstDataGridFilterCell = firstGrid
+    .getHeaders().getFilterRow().getFilterCell(0).getEditorInput().element;
+  const secondDataGridFilterCell = secondGrid
+    .getHeaders().getFilterRow().getFilterCell(0).getEditorInput().element;
+  const firstGridDataCell = firstGrid.getDataRow(0).getDataCell(0).element;
+  const secondGridDataCell = secondGrid.getDataRow(0).getDataCell(0).element;
+
+  await t
+    .click(secondGridDataCell)
+    .pressKey('ctrl+up')
+    .expect(secondDataGridFilterCell.focused)
+    .ok('Second grid filter cell is focused')
+    .expect(firstDataGridFilterCell.focused)
+    .notOk('First grid data filter cell is not focused')
+    .pressKey('ctrl+down')
+    .expect(secondGridDataCell.focused)
+    .ok('Second grid data cell is focused')
+    .expect(firstGridDataCell.focused)
+    .notOk('First grid data cell is not focused');
+}).before(async () => {
+  await createWidget('dxDataGrid', getDataGridProps());
+  await createWidget('dxDataGrid', getDataGridProps(), '#otherContainer');
+});
