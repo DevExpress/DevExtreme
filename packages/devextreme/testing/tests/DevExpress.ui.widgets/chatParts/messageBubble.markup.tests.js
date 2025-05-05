@@ -21,13 +21,13 @@ const moduleConfig = {
         };
 
         init();
-    }
+    },
 };
 
 QUnit.module('MessageBubble', moduleConfig, () => {
     QUnit.module('Classes', moduleConfig, () => {
         QUnit.test('root element should have correct class', function(assert) {
-            assert.strictEqual(this.$element.hasClass(CHAT_MESSAGEBUBBLE_CLASS), true);
+            assert.strictEqual(this.$element.hasClass(CHAT_MESSAGEBUBBLE_CLASS), true, 'root element has correct messagebubble class');
         });
 
         QUnit.test('root element should have a child content element with correct class', function(assert) {
@@ -37,13 +37,12 @@ QUnit.module('MessageBubble', moduleConfig, () => {
             assert.strictEqual($content.parent().is(this.$element), true, 'content element is direct child of root element');
         });
 
-        QUnit.test('root element should have a child content element with correct class after deletion', function(assert) {
+        QUnit.test('root element should switch classes when deletion and undo happens', function(assert) {
             this.instance.option('isDeleted', true);
+            assert.strictEqual(this.$element.hasClass(CHAT_MESSAGEBUBBLE_DELETED_CLASS), true, 'root element has deleted class');
 
-            const $content = this.$element.find(`.${CHAT_MESSAGEBUBBLE_DELETED_CLASS}`);
-
-            assert.strictEqual($content.length, 1, 'content element exist');
-            assert.strictEqual($content.parent().is(this.$element), true, 'content element is direct child of root element');
+            this.instance.option('isDeleted', false);
+            assert.strictEqual(this.$element.hasClass(CHAT_MESSAGEBUBBLE_DELETED_CLASS), false, 'root element does not have deleted class');
         });
     });
 
@@ -65,7 +64,7 @@ QUnit.module('MessageBubble', moduleConfig, () => {
 
                 this.instance.option('isDeleted', true);
 
-                const $content = this.$element.find(`.${CHAT_MESSAGEBUBBLE_DELETED_CLASS}`);
+                const $content = this.$element.find(`.${CHAT_MESSAGEBUBBLE_CONTENT_CLASS}`);
                 assert.strictEqual($content.text(), deletedMessageText, 'deleted text is correct');
             } finally {
                 localization.locale(defaultLocale);

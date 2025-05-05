@@ -267,8 +267,8 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
 
     const options: LoadIndicatorProperties = {
       _animationType: AnimationType.Sparkle,
-      width: 64,
-      height: 64,
+      width: 48,
+      height: 48,
     };
 
     this._loadIndicator = new LoadIndicator($indicatorElement[0], options);
