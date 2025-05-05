@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useEffect, useMemo } from 'react';
 import { Chat, ChatTypes } from 'devextreme-react/chat'
-import { Button } from "devextreme-react";
+import { Button, Toast } from 'devextreme-react';
 import type { Meta, StoryObj } from '@storybook/react';
 import DataSource from 'devextreme/data/data_source';
 import CustomStore from 'devextreme/data/custom_store';
@@ -17,7 +17,7 @@ import {
     regenerationMessage, 
     assistant,
 } from './data';
-import { Popup } from 'devextreme-react/popup';
+import { Popup, ToolbarItem } from 'devextreme-react/popup';
 import HTMLReactParser from 'html-react-parser';
 
 import './styles.css';
@@ -605,6 +605,9 @@ export const Editing: Story = {
         allowDeleting: true,
         allowUpdating: true,
         useCustomMessageRender: false,
+        cancelMessageEditingStart: false,
+        cancelMessageDeleting: false,
+        allowOnlyLatinTextOnEdit: false,
     },
     argTypes: {
         user: {
@@ -620,6 +623,18 @@ export const Editing: Story = {
             control: 'boolean',
             name: 'Use Custom Message Renderer',
         },
+        cancelMessageEditingStart: {
+            control: 'boolean',
+            name: 'Emulate Message Editing Cancellation',
+        },
+        cancelMessageDeleting: {
+            control: 'boolean',
+            name: 'Emulate Message Deleting Cancellation',
+        },
+        allowOnlyLatinTextOnEdit: {
+            control: 'boolean',
+            name: 'Allow only latin letters in message editing',
+        }
     },
     render: ({
         width,
@@ -631,6 +646,9 @@ export const Editing: Story = {
         allowDeleting,
         allowUpdating,
         useCustomMessageRender,
+        cancelMessageEditingStart,
+        cancelMessageDeleting,
+        allowOnlyLatinTextOnEdit,
     }) => {
         const messages = useMemo(() => {
             const initial = initialMessages.map(item => ({
@@ -642,6 +660,11 @@ export const Editing: Story = {
             initial[6].isDeleted = true;
             return initial;
         }, [initialMessages]);
+
+        const [toastConfig, setToastConfig] = useState({
+            visible: false,
+            message: '',
+        });
 
         const messagesRef = React.useRef([...messages]);
 
@@ -696,6 +719,23 @@ export const Editing: Story = {
             return <div>{message.text}</div>;
         }, [user]);
 
+        const showToast = (message: string) => {
+            setToastConfig({
+                visible: true,
+                message,
+            });
+        };
+
+        const onToastHiding = () => {
+            setToastConfig({
+                visible: false,
+                message: '',
+            });
+        };
+
+        const validateMessage = (message: string) =>
+            message.match(/^[a-zA-Z0-9.,!? ]+$/);
+
         return (
             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                 <Chat
@@ -708,22 +748,47 @@ export const Editing: Story = {
                     onMessageEntered={(e) => {
                         e.component.getDataSource().store().push([{ type: 'insert', data: e.message }]);
                     }}
-                    onMessageEditingStart={(e) => console.log('onMessageEditingStart', e)}
+                    onMessageEditingStart={async (e) => {
+                        console.log('onMessageEditingStart', e)
+                        if (cancelMessageEditingStart) {
+                            showToast('Message editing not allowed');
+                            e.cancel = true;
+                        }
+                    }}
                     onMessageEditCanceled={(e) => console.log('onMessageEditCancelled', e)}
-                    onMessageDeleting={(e) => console.log('onMessageDeleting', e)}
+                    onMessageDeleting={(e) => {
+                        console.log('onMessageDeleting', e)
+                        if (cancelMessageDeleting) {
+                            showToast('Message deleting was canceled');
+                            e.cancel = true;
+                        }
+                    }}
                     onMessageDeleted={(e) => {
                         console.log('onMessageDeleted', e);
                         e.component.getDataSource().store().push([{ type: 'update', key: e.message.id, data: { isDeleted: true } }]);
                     }}
-                    onMessageUpdating={(e) => console.log('onMessageUpdating', e)}
+                    onMessageUpdating={async (e) => {
+                        console.log('onMessageUpdating', e);
+                        if (allowOnlyLatinTextOnEdit) {
+                            if (!validateMessage(e.text ?? '')) {
+                                showToast('Only latin allowed in message');
+                                e.cancel = true;
+                            }
+                        }
+                    }}
                     onMessageUpdated={(e) => {
                         console.log('onMessageUpdated', e);
-                        e.component.getDataSource().store().push([{ type: 'update', key: e.message.id, data: { text: e.text } }]);
+                        e.component.getDataSource().store().push([{ type: 'update', key: e.message.id, data: { text: e.text, isEdited: true } }]);
                     }}
                     activeStateEnabled={activeStateEnabled}
                     focusStateEnabled={focusStateEnabled}
                     hoverStateEnabled={hoverStateEnabled}
                     {...(useCustomMessageRender && { messageRender })} 
+                />
+                <Toast
+                    {...toastConfig}
+                    onHiding={onToastHiding}
+                    displayTime={600}
                 />
             </div>
         );
