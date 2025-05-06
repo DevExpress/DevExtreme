@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <title>DevExtreme jQuery Example</title>
 
@@ -18,7 +19,7 @@
 
     <script type="text/javascript" src="../artifacts/js/jquery.js"></script>
     <!-- HtmlEditor -->
-    <!-- <script type="text/javascript" src="../artifacts/js/dx-quill.min.js"></script> -->
+    <script type="text/javascript" src="../artifacts/js/dx-quill.min.js"></script>
 
     <!--<script type="text/javascript" src="../artifacts/js/cldr.js"></script>
     <script type="text/javascript" src="../artifacts/js/cldr/event.js"></script>
@@ -39,9 +40,11 @@
     -->
 
     <script type="text/javascript" src="../artifacts/js/dx.all.debug.js" charset="utf-8"></script>
+    <!-- <script type="text/javascript" src="../artifacts/js/dx.ai-integration.debug.js" charset="utf-8"></script> -->
     <script type="text/javascript" src="./themeSelector.js"></script>
     <script type="text/javascript" src="../../../node_modules/axe-core/axe.min.js"></script>
 </head>
+
 <body class="dx-surface">
     <div role="main">
         <h1 style="position: fixed; left: 0; top: 0; clip: rect(1px, 1px, 1px, 1px);">Test header</h1>
@@ -49,12 +52,157 @@
         <select id="theme-selector" style="display: block;">
         </select>
         <br />
+        <!-- <div id="button4"></div>
+        <div id="button3"></div>
+        <div id="button2"></div> -->
         <div id="button"></div>
         <script>
-            $(function() {
-                $("#button").dxButton({
-                    text: 'Click me!',
-                    onClick: function() { alert("clicked"); }
+            const value = 'The universe is a vast expanse of space filled with stars, planets, galaxies and mysteries that mankind has been trying to unravel since ancient times. It was born about 13.8 billion years ago as a result of the Big Bang, and has been continuously expanding ever since. The Universe is governed by fundamental laws of physics, but the deeper we look into it, the more paradoxes and unknowns we encounter: dark matter, dark energy, multiverses. We are just a speck of dust in this grandiose cosmos, but thanks to reason, imagination and science we are able to comprehend its beauty, harmony and immense mystery.';
+
+            $(() => {
+                // const POPUP_MIN_WIDTH = 288;
+                // const POPUP_MAX_WIDTH = 460;
+
+                // const popup = $("#button4").dxPopup({
+                //     visible: true,
+                //     minWidth: POPUP_MIN_WIDTH,
+                //     maxWidth: POPUP_MAX_WIDTH,
+                //     height: 'auto',
+                //     shading: true,
+                //     shadingColor: 'transparent',
+                //     dragEnabled: true,
+                //     toolbarItems: [
+                //         {
+                //             name: 'replace',
+                //             toolbar: 'bottom',
+                //             location: 'after',
+                //             widget: 'dxDropDownButton',
+                //             locateInMenu: 'auto',
+                //             options: {
+                //                 text: 'Replace',
+                //                 stylingMode: 'contained',
+                //                 type: 'default',
+                //                 splitButton: true,
+                //                 useSelectMode: false,
+                //                 items: [
+                //                     { text: 'Insert before' },
+                //                     { text: 'Insert above' },
+                //                 ],
+                //                 onButtonClick: (e) => {
+                //                     console.log(document.activeElement);
+                //                     popup.hide();
+                //                     console.log(document.activeElement);
+                //                 },
+                //                 onItemClick: () => {
+                //                     console.log(document.activeElement);
+                //                 },
+                //             },
+                //         }
+                //     ],
+                //     hideOnOutsideClick: true,
+                //     focusStateEnabled: true,
+                //     showCloseButton: true,
+                // }).dxPopup('instance');
+
+                // $("#button3").dxToolbar({
+                //     items: [
+                //         {
+                //             widget: 'dxDropDownButton',
+                //             location: 'before',
+                //             options: {
+                //                 text: 'Replace',
+                //                 stylingMode: 'contained',
+                //                 type: 'default',
+                //                 splitButton: true,
+                //                 useSelectMode: false,
+                //                 items: [
+                //                     { text: 'Insert before' },
+                //                     { text: 'Insert above' },
+                //                 ],
+                //                 onButtonClick: () => {
+                //                     console.log(document.activeElement);
+                //                 },
+                //                 onItemClick: () => {
+                //                     console.log(document.activeElement);
+                //                 },
+                //             },
+                //         },
+                //     ],
+                // });
+
+                // $("#button2").dxDropDownButton({
+                //     text: 'Replace',
+                //     splitButton: true,
+                //     useSelectMode: false,
+                //     items: [
+                //         { text: 'Insert before' },
+                //         { text: 'Insert above' },
+                //     ],
+                //     onButtonClick: () => {
+                //         console.log(document.activeElement);
+                //     },
+                //     onItemClick: () => {
+                //         console.log(document.activeElement);
+                //     },
+                // });
+
+                // const aiIntegration = new DevExpress.aiIntegration({
+                //     sendRequest({ prompt }) {
+                //         const promise = new Promise((resolve) => {
+                //             setTimeout(() => {
+                //                 resolve('Text to insert');
+                //             }, 0);
+                //         });
+
+                //         const result = {
+                //             promise,
+                //             abort: () => { },
+                //         };
+
+                //         return result;
+                //     },
+                // });
+
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter') {
+                        console.warn('Next is from document.addEventListener');
+                        console.log(document.activeElement);
+                        console.log(e);
+                    }
+                });
+
+                const htmlEditor = $("#button").dxHtmlEditor({
+                    value,
+                    height: 400,
+                    // aiIntegration,
+                    toolbar: {
+                        items: [
+                            'link',
+                            // 'ai',
+                        ],
+                    },
+                    // onValueChanged: (e) => {
+                        // debugger
+                        // if (e.value === '<p><br></p><p><br></p>') {
+                        //     debugger
+                        // }
+                        // console.log(document.activeElement)
+                    // },
+                }).dxHtmlEditor('instance');
+
+                // htmlEditor.registerKeyHandler('enter', () => {
+                //     console.log(document.activeElement)
+                // });
+
+                // htmlEditor._quillInstance.root.addEventListener('keydown', (e) => {
+                //     debugger
+                //     if (e.key === 'Enter') {
+                //         debugger
+                //     }
+                // });
+
+                htmlEditor._quillInstance.on('text-change', (delta, oldDelta, source) => {
+                    console.log({ delta, oldDelta, source });
                 });
             });
         </script>
