@@ -29,7 +29,7 @@ test('Should not reset the recurrence editor value after the repeat toggling', a
   await t.click(popup.recurrenceElement);
   await t.click(popup.recurrenceElement);
 
-  await takeScreenshot('recurrence-editor_after-hide.png', popup.form);
+  await takeScreenshot('recurrence-editor_after-hide.png', popup.content);
 
   await t.expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
@@ -55,7 +55,7 @@ test('Should reset the recurrence editor value after the popup reopening', async
   await t.doubleClick(cell);
   await t.click(popup.recurrenceElement);
 
-  await takeScreenshot('recurrence-editor_after-popup-reopen.png', popup.form);
+  await takeScreenshot('recurrence-editor_after-popup-reopen.png', popup.content);
 
   await t.expect(compareResults.isValid())
     .ok(compareResults.errorMessages());

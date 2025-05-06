@@ -53,8 +53,10 @@ import { DxiButtonGroupItemComponent } from 'devextreme-angular/ui/button-group/
  */
 @Component({
     selector: 'dx-button-group',
+    standalone: true,
     template: '',
     host: { ngSkipHydration: 'true' },
+    imports: [ DxIntegrationModule ],
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -600,13 +602,11 @@ export class DxButtonGroupComponent extends DxComponent implements OnDestroy, On
 
 @NgModule({
   imports: [
+    DxButtonGroupComponent,
     DxiItemModule,
     DxiButtonGroupItemModule,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxButtonGroupComponent
   ],
   exports: [
     DxButtonGroupComponent,
@@ -616,6 +616,8 @@ export class DxButtonGroupComponent extends DxComponent implements OnDestroy, On
   ]
 })
 export class DxButtonGroupModule { }
+
+export * from 'devextreme-angular/ui/button-group/nested';
 
 import type * as DxButtonGroupTypes from "devextreme/ui/button_group_types";
 export { DxButtonGroupTypes };

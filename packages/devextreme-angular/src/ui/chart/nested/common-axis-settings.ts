@@ -19,6 +19,7 @@ import { ScaleBreakLineStyle, DashStyle, Font, RelativePosition, DiscreteAxisDiv
 import { HorizontalAlignment, Position, VerticalAlignment } from 'devextreme/common';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
@@ -26,8 +27,10 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-chart-common-axis-settings',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxoChartCommonAxisSettingsComponent extends NestedOption implements OnDestroy, OnInit  {
@@ -233,7 +236,7 @@ export class DxoChartCommonAxisSettingsComponent extends NestedOption implements
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoChartCommonAxisSettingsComponent
   ],
   exports: [

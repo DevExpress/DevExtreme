@@ -154,9 +154,10 @@ export default function App () {
       <div className="content">
         <MultiView
           selectedIndex={selectedIndex}
+          focusStateEnabled={false}
           animationEnabled={false}
           swipeEnabled={false}
-          height={300}
+          height={400}
         >
           <Item render={renderDatesForm} />
           <Item render={renderGuestsForm} />

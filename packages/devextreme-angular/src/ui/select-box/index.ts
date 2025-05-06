@@ -102,8 +102,10 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
  */
 @Component({
     selector: 'dx-select-box',
+    standalone: true,
     template: '',
     host: { ngSkipHydration: 'true' },
+    imports: [ DxIntegrationModule ],
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -1711,6 +1713,7 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
 
 @NgModule({
   imports: [
+    DxSelectBoxComponent,
     DxiButtonModule,
     DxoOptionsModule,
     DxoDropDownOptionsModule,
@@ -1744,9 +1747,6 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
     DxiSelectBoxToolbarItemModule,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxSelectBoxComponent
   ],
   exports: [
     DxSelectBoxComponent,
@@ -1785,6 +1785,8 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
   ]
 })
 export class DxSelectBoxModule { }
+
+export * from 'devextreme-angular/ui/select-box/nested';
 
 import type * as DxSelectBoxTypes from "devextreme/ui/select_box_types";
 export { DxSelectBoxTypes };

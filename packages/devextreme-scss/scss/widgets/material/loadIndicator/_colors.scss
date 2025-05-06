@@ -9,3 +9,18 @@
 * $type color
 */
 $load-indicator-segment-bg-color: $base-accent !default;
+$load-indicator-animation-sparkle-bg-color1: null !default;
+$load-indicator-animation-sparkle-bg-color2: null !default;
+$load-indicator-animation-sparkle-bg-color3: null !default;
+
+@if $mode == "light" {
+  $load-indicator-animation-sparkle-bg-color1: lighten(desaturate($base-accent, 3.66), 12.94) !default;
+  $load-indicator-animation-sparkle-bg-color2: lighten(desaturate($base-accent, 3.68), 25.88) !default;
+  $load-indicator-animation-sparkle-bg-color3: lighten(saturate(adjust-hue($base-accent, -1), 5.90), 34.31) !default;
+}
+
+@else if $mode == "dark" {
+  $load-indicator-animation-sparkle-bg-color1: lighten(desaturate($base-accent, 3.66), 12.94) !default;
+  $load-indicator-animation-sparkle-bg-color2: lighten(desaturate($base-accent, 3.68), 25.88) !default;
+  $load-indicator-animation-sparkle-bg-color3: lighten(saturate(adjust-hue($base-accent, -1), 5.90), 34.31) !default;
+}

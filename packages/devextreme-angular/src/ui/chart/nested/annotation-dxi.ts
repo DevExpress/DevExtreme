@@ -20,6 +20,7 @@ import { DashStyle, Font, TextOverflow, AnnotationType, WordWrap } from 'devextr
 import { dxChartAnnotationConfig } from 'devextreme/viz/chart';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
     extractTemplate,
     DxTemplateDirective,
@@ -31,8 +32,10 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxi-chart-annotation',
+    standalone: true,
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost, DxTemplateHost]
 })
 export class DxiChartAnnotationComponent extends CollectionNestedOption implements AfterViewInit,
@@ -327,7 +330,7 @@ export class DxiChartAnnotationComponent extends CollectionNestedOption implemen
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiChartAnnotationComponent
   ],
   exports: [

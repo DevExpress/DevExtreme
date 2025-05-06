@@ -25,6 +25,7 @@ import { LocateInMenuMode, ShowTextMode } from 'devextreme/ui/toolbar';
 import { ToolbarItemLocation, ToolbarItemComponent } from 'devextreme/common';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
     extractTemplate,
     DxTemplateDirective,
@@ -37,8 +38,10 @@ import { DxiGanttContextMenuItemItemComponent } from './context-menu-item-item-d
 
 @Component({
     selector: 'dxi-gantt-item',
+    standalone: true,
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost, DxTemplateHost]
 })
 export class DxiGanttItemComponent extends CollectionNestedOption implements AfterViewInit,
@@ -245,7 +248,7 @@ export class DxiGanttItemComponent extends CollectionNestedOption implements Aft
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiGanttItemComponent
   ],
   exports: [

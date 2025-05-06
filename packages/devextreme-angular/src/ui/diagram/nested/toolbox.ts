@@ -20,6 +20,7 @@ import {
 import { ShapeCategory, ToolboxDisplayMode, ShapeType, PanelVisibility } from 'devextreme/ui/diagram';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
@@ -29,8 +30,10 @@ import { DxiDiagramToolboxGroupComponent } from './toolbox-group-dxi';
 
 @Component({
     selector: 'dxo-diagram-toolbox',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxoDiagramToolboxComponent extends NestedOption implements OnDestroy, OnInit  {
@@ -116,7 +119,7 @@ export class DxoDiagramToolboxComponent extends NestedOption implements OnDestro
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoDiagramToolboxComponent
   ],
   exports: [

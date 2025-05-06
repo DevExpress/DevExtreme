@@ -17,6 +17,7 @@ import {
 import { Format } from 'devextreme/common';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
@@ -24,8 +25,10 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-linear-gauge-format',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxoLinearGaugeFormatComponent extends NestedOption implements OnDestroy, OnInit  {
@@ -103,7 +106,7 @@ export class DxoLinearGaugeFormatComponent extends NestedOption implements OnDes
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoLinearGaugeFormatComponent
   ],
   exports: [

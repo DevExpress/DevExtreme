@@ -17,6 +17,7 @@ import {
 import { Format } from 'devextreme/common';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
@@ -24,8 +25,10 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-sparkline-format',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxoSparklineFormatComponent extends NestedOption implements OnDestroy, OnInit  {
@@ -103,7 +106,7 @@ export class DxoSparklineFormatComponent extends NestedOption implements OnDestr
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoSparklineFormatComponent
   ],
   exports: [

@@ -30,7 +30,6 @@
   background: radial-gradient(circle closest-side at center, $start-color $start-position, $end-color $end-position);
 }
 
-/* flex */
 @mixin flex-container($direction: row, $wrap: wrap) {
   display: flex;
   flex-flow: $direction $wrap;
@@ -132,6 +131,14 @@
   margin-top: math.div(-$indicator-size, 2);
   width: $indicator-size;
   height: $indicator-size;
+}
+
+@mixin dx-pending-indicator-centered() {
+  pointer-events: none;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
 $overlay-zindex: 1000;

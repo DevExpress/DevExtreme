@@ -1,0 +1,537 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Applying options when allowedPageSizes = 'auto' calculates pageSizes by pageSize 1`] = `
+<div>
+  <div
+    aria-label="Page navigation"
+    class="dx-widget dx-pagination"
+    role="navigation"
+  >
+    <div
+      class="dx-page-sizes"
+    >
+      <div
+        aria-label="Items per page: 3"
+        class="dx-page-size dx-first-child"
+        role="button"
+        tabindex="0"
+      >
+        3
+      </div>
+      <div
+        aria-label="Items per page: 6"
+        class="dx-page-size dx-selection"
+        role="button"
+        tabindex="0"
+      >
+        6
+      </div>
+      <div
+        aria-label="Items per page: 12"
+        class="dx-page-size"
+        role="button"
+        tabindex="0"
+      >
+        12
+      </div>
+    </div>
+    <div
+      class="dx-pages"
+      style="visibility: hidden;"
+    >
+      <div
+        class="dx-page-indexes"
+      >
+        <div
+          aria-label="Page 1"
+          class="dx-page"
+          role="button"
+          tabindex="0"
+        >
+          1
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Applying options when allowedPageSizes with custom values displays custom values 1`] = `
+<div>
+  <div
+    aria-label="Page navigation"
+    class="dx-widget dx-pagination"
+    role="navigation"
+  >
+    <div
+      class="dx-page-sizes"
+    >
+      <div
+        aria-label="Items per page: 4"
+        class="dx-page-size dx-first-child"
+        role="button"
+        tabindex="0"
+      >
+        4
+      </div>
+      <div
+        aria-label="Items per page: 10"
+        class="dx-page-size"
+        role="button"
+        tabindex="0"
+      >
+        10
+      </div>
+      <div
+        aria-label="Items per page: 20"
+        class="dx-page-size"
+        role="button"
+        tabindex="0"
+      >
+        20
+      </div>
+    </div>
+    <div
+      class="dx-pages"
+    >
+      <div
+        class="dx-page-indexes"
+      >
+        <div
+          aria-label="Page 1"
+          class="dx-page"
+          role="button"
+          tabindex="0"
+        >
+          1
+        </div>
+        <div
+          aria-label="Page 2"
+          class="dx-page"
+          role="button"
+          tabindex="0"
+        >
+          2
+        </div>
+        <div
+          aria-label="Page 3"
+          class="dx-page"
+          role="button"
+          tabindex="0"
+        >
+          3
+        </div>
+        <div
+          aria-label="Page 4"
+          class="dx-page"
+          role="button"
+          tabindex="0"
+        >
+          4
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Applying options when changing a visible to 'false' at runtime Pager should be hidden 1`] = `
+<div>
+  
+</div>
+`;
+
+exports[`Applying options when changing a visible to 'true' at runtime Pager should be visible 1`] = `
+<div>
+  <div
+    aria-label="Page navigation"
+    class="dx-widget dx-pagination"
+    role="navigation"
+  >
+    <div
+      class="dx-page-sizes"
+    >
+      <div
+        aria-label="Items per page: 3"
+        class="dx-page-size dx-first-child"
+        role="button"
+        tabindex="0"
+      >
+        3
+      </div>
+      <div
+        aria-label="Items per page: 6"
+        class="dx-page-size dx-selection"
+        role="button"
+        tabindex="0"
+      >
+        6
+      </div>
+      <div
+        aria-label="Items per page: 12"
+        class="dx-page-size"
+        role="button"
+        tabindex="0"
+      >
+        12
+      </div>
+    </div>
+    <div
+      class="dx-pages"
+      style="visibility: hidden;"
+    >
+      <div
+        class="dx-page-indexes"
+      >
+        <div
+          aria-label="Page 1"
+          class="dx-page"
+          role="button"
+          tabindex="0"
+        >
+          1
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Applying options when changing an allowedPageSizes to custom values at runtime applies custom values 1`] = `
+<div>
+  <div
+    aria-label="Page navigation"
+    class="dx-widget dx-pagination"
+    role="navigation"
+  >
+    <div
+      class="dx-page-sizes"
+    >
+      <div
+        aria-label="Items per page: 4"
+        class="dx-page-size dx-first-child"
+        role="button"
+        tabindex="0"
+      >
+        4
+      </div>
+      <div
+        aria-label="Items per page: 10"
+        class="dx-page-size"
+        role="button"
+        tabindex="0"
+      >
+        10
+      </div>
+      <div
+        aria-label="Items per page: 20"
+        class="dx-page-size"
+        role="button"
+        tabindex="0"
+      >
+        20
+      </div>
+    </div>
+    <div
+      class="dx-pages"
+    >
+      <div
+        class="dx-page-indexes"
+      >
+        <div
+          aria-label="Page 1"
+          class="dx-page"
+          role="button"
+          tabindex="0"
+        >
+          1
+        </div>
+        <div
+          aria-label="Page 2"
+          class="dx-page"
+          role="button"
+          tabindex="0"
+        >
+          2
+        </div>
+        <div
+          aria-label="Page 3"
+          class="dx-page"
+          role="button"
+          tabindex="0"
+        >
+          3
+        </div>
+        <div
+          aria-label="Page 4"
+          class="dx-page"
+          role="button"
+          tabindex="0"
+        >
+          4
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Applying options when visible = 'auto' and pageCount <= 1 Pager should be hidden 1`] = `
+<div>
+  
+</div>
+`;
+
+exports[`Applying options when visible = 'auto' and pageCount > 1 Pager should be visible 1`] = `
+<div>
+  <div
+    aria-label="Page navigation"
+    class="dx-widget dx-pagination"
+    role="navigation"
+  >
+    <div
+      class="dx-page-sizes"
+    >
+      <div
+        aria-label="Items per page: 3"
+        class="dx-page-size dx-first-child"
+        role="button"
+        tabindex="0"
+      >
+        3
+      </div>
+      <div
+        aria-label="Items per page: 6"
+        class="dx-page-size dx-selection"
+        role="button"
+        tabindex="0"
+      >
+        6
+      </div>
+      <div
+        aria-label="Items per page: 12"
+        class="dx-page-size"
+        role="button"
+        tabindex="0"
+      >
+        12
+      </div>
+    </div>
+    <div
+      class="dx-pages"
+    >
+      <div
+        class="dx-page-indexes"
+      >
+        <div
+          aria-label="Page 1"
+          class="dx-page"
+          role="button"
+          tabindex="0"
+        >
+          1
+        </div>
+        <div
+          aria-label="Page 2"
+          class="dx-page"
+          role="button"
+          tabindex="0"
+        >
+          2
+        </div>
+        <div
+          aria-label="Page 3"
+          class="dx-page"
+          role="button"
+          tabindex="0"
+        >
+          3
+        </div>
+        <div
+          aria-label="Page 4"
+          class="dx-page"
+          role="button"
+          tabindex="0"
+        >
+          4
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Applying options when visible = 'false' Pager should be hidden 1`] = `
+<div>
+  
+</div>
+`;
+
+exports[`Applying options when visible = 'true' Pager should be visible 1`] = `
+<div>
+  <div
+    aria-label="Page navigation"
+    class="dx-widget dx-pagination"
+    role="navigation"
+  >
+    <div
+      class="dx-page-sizes"
+    >
+      <div
+        aria-label="Items per page: 3"
+        class="dx-page-size dx-first-child"
+        role="button"
+        tabindex="0"
+      >
+        3
+      </div>
+      <div
+        aria-label="Items per page: 6"
+        class="dx-page-size dx-selection"
+        role="button"
+        tabindex="0"
+      >
+        6
+      </div>
+      <div
+        aria-label="Items per page: 12"
+        class="dx-page-size"
+        role="button"
+        tabindex="0"
+      >
+        12
+      </div>
+    </div>
+    <div
+      class="dx-pages"
+    >
+      <div
+        class="dx-page-indexes"
+      >
+        <div
+          aria-label="Page 1"
+          class="dx-page"
+          role="button"
+          tabindex="0"
+        >
+          1
+        </div>
+        <div
+          aria-label="Page 2"
+          class="dx-page"
+          role="button"
+          tabindex="0"
+        >
+          2
+        </div>
+        <div
+          aria-label="Page 3"
+          class="dx-page"
+          role="button"
+          tabindex="0"
+        >
+          3
+        </div>
+        <div
+          aria-label="Page 4"
+          class="dx-page"
+          role="button"
+          tabindex="0"
+        >
+          4
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`render PagerView with options 1`] = `
+<div>
+  <div
+    aria-label="Page navigation"
+    class="dx-widget dx-pagination"
+    role="navigation"
+  >
+    <div
+      class="dx-page-sizes"
+    >
+      <div
+        aria-label="Items per page: 3"
+        class="dx-page-size dx-first-child"
+        role="button"
+        tabindex="0"
+      >
+        3
+      </div>
+      <div
+        aria-label="Items per page: 6"
+        class="dx-page-size dx-selection"
+        role="button"
+        tabindex="0"
+      >
+        6
+      </div>
+      <div
+        aria-label="Items per page: 12"
+        class="dx-page-size"
+        role="button"
+        tabindex="0"
+      >
+        12
+      </div>
+    </div>
+    <div
+      class="dx-pages"
+    >
+      <div
+        class="dx-page-indexes"
+      >
+        <div
+          aria-label="Page 1"
+          class="dx-page"
+          role="button"
+          tabindex="0"
+        >
+          1
+        </div>
+        <div
+          aria-label="Page 2"
+          class="dx-page"
+          role="button"
+          tabindex="0"
+        >
+          2
+        </div>
+        <div
+          aria-current="page"
+          aria-label="Page 3"
+          class="dx-page dx-selection"
+          role="button"
+          tabindex="0"
+        >
+          3
+        </div>
+        <div
+          aria-label="Page 4"
+          class="dx-page"
+          role="button"
+          tabindex="0"
+        >
+          4
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`render empty PagerView 1`] = `
+<div>
+  <div
+    aria-label="Page navigation"
+    class="dx-widget dx-pagination"
+    role="navigation"
+  />
+</div>
+`;

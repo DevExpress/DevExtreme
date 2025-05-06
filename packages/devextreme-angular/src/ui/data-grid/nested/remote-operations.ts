@@ -16,6 +16,7 @@ import {
 
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
@@ -23,8 +24,10 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-data-grid-remote-operations',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxoDataGridRemoteOperationsComponent extends NestedOption implements OnDestroy, OnInit  {
@@ -102,7 +105,7 @@ export class DxoDataGridRemoteOperationsComponent extends NestedOption implement
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoDataGridRemoteOperationsComponent
   ],
   exports: [

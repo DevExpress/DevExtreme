@@ -218,8 +218,10 @@ import { DxiDataGridSortByGroupSummaryInfoComponent } from 'devextreme-angular/u
  */
 @Component({
     selector: 'dx-data-grid',
+    standalone: true,
     template: '',
     host: { ngSkipHydration: 'true' },
+    imports: [ DxIntegrationModule ],
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -2244,8 +2246,10 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
         super.ngOnChanges(changes);
         this.setupChanges('columns', changes);
         this.setupChanges('dataSource', changes);
+        this.setupChanges('filterValue', changes);
         this.setupChanges('keyExpr', changes);
         this.setupChanges('selectedRowKeys', changes);
+        this.setupChanges('selectionFilter', changes);
         this.setupChanges('sortByGroupSummaryInfo', changes);
     }
 
@@ -2258,8 +2262,10 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
     ngDoCheck() {
         this._idh.doCheck('columns');
         this._idh.doCheck('dataSource');
+        this._idh.doCheck('filterValue');
         this._idh.doCheck('keyExpr');
         this._idh.doCheck('selectedRowKeys');
+        this._idh.doCheck('selectionFilter');
         this._idh.doCheck('sortByGroupSummaryInfo');
         this._watcherHelper.checkWatchers();
         super.ngDoCheck();
@@ -2278,6 +2284,7 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
 @NgModule({
   imports: [
+    DxDataGridComponent,
     DxoColumnChooserModule,
     DxoPositionModule,
     DxoAtModule,
@@ -2431,9 +2438,6 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
     DxoDataGridValueFormatModule,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxDataGridComponent
   ],
   exports: [
     DxDataGridComponent,
@@ -2592,6 +2596,8 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
   ]
 })
 export class DxDataGridModule { }
+
+export * from 'devextreme-angular/ui/data-grid/nested';
 
 import type * as DxDataGridTypes from "devextreme/ui/data_grid_types";
 export { DxDataGridTypes };

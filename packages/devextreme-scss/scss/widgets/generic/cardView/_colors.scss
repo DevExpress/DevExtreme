@@ -1,0 +1,184 @@
+@use '../colors' as *;
+@use '../../base/cardView/variables' as *;
+@use '../../base/cardView/header_panel/variables' as *;
+@use '../../base/cardView/header_panel/item/variables' as *;
+@use '../../base/cardView/content_view/content/card/variables' as *;
+@use '../../base/cardView/content_view/content/card/header/variables' as *;
+@use '../../base/cardView/content_view/content/card/cover/variables' as *;
+@use '../../base/cardView/content_view/content/card/content/variables' as *;
+@use '../../base/cardView/content_view/content/variables' as *;
+@use '../../base/cardView/content_view/no_data/variables' as *;
+@use '../../base/cardView/column_chooser/variables' as *;
+@use "sass:color";
+
+// adduse
+
+$cardview-generic-background-color: null !default;
+
+$cardview-generic-header-filter-icon-empty-color: null !default;
+$cardview-generic-header-filter-icon-selected-color: null !default;
+
+$cardview-generic-header-item-border-color: null !default;
+
+$cardview-generic-header-item-background-color: null !default;
+$cardview-generic-header-item-hovered-background-color: null !default;
+$cardview-generic-header-item-hovered-border-color: null !default;
+
+$cardview-generic-header-item-prohibition-icon-color: null !default;
+
+$cardview-generic-nodata-text-color: null !default;
+$cardview-generic-nodata-icon-container-background-color: null !default;
+
+$cardview-generic-card-content-field-value-highlight-color: null !default;
+$cardview-generic-card-content-field-value-highlight-background: null !default;
+$cardview-generic-card-content-field-value-highlight-border-radius: null !default;
+$cardview-generic-card-content-field-value-highlight-padding: null !default;
+$cardview-generic-card-content-field-value-highlight-font-weight: null !default;
+$cardview-generic-card-content-field-value-highlight-box-shadow: null !default;
+
+$cardview-generic-card-cover-background-color: null !default;
+
+$cardview-generic-card-cover-noimage-background-color: null !default;
+$cardview-generic-card-cover-noimage-icon-color: null !default;
+
+$cardview-generic-card-selection-background-color: null !default;
+
+$cardview-generic-card-border-color: null !default;
+$cardview-generic-card-background-color: null !default;
+
+@if $color == 'light' or $color == 'carmine' or $color == 'softblue' or $color == 'greenmist' {
+  $cardview-generic-background-color: $base-bg !default;
+
+  $cardview-generic-header-filter-icon-empty-color: $base-text-color !default;
+  $cardview-generic-header-filter-icon-selected-color: $base-accent !default;
+
+  $cardview-generic-header-item-background-color: darken($base-bg, 3.92)  !default;
+  $cardview-generic-header-item-border-color: $base-border-color !default;
+  $cardview-generic-header-item-hovered-background-color: darken($cardview-generic-header-item-background-color, 3.92) !default;
+  $cardview-generic-header-item-hovered-border-color: darken($cardview-generic-header-item-hovered-background-color, 10.59) !default;
+
+  $cardview-generic-header-item-prohibition-icon-color: $base-danger !default;
+
+  $cardview-generic-nodata-text-color: $base-label-color !default;
+  $cardview-generic-nodata-icon-container-background-color: darken($base-bg, 7.84) !default;
+
+  $cardview-generic-card-content-field-value-highlight-color: $base-text-color !default;
+  $cardview-generic-card-content-field-value-highlight-background: $base-warning !default;
+  $cardview-generic-card-content-field-value-highlight-border-radius: 5px;
+  $cardview-generic-card-content-field-value-highlight-padding: .125em 0.2em;
+  $cardview-generic-card-content-field-value-highlight-font-weight: 500;
+  $cardview-generic-card-content-field-value-highlight-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+
+  $cardview-generic-card-cover-background-color: #FFF !default;
+
+  $cardview-generic-card-cover-noimage-background-color: darken($base-bg, 7.84) !default;
+  $cardview-generic-card-cover-noimage-icon-color: lighten($base-text-color, 38.43) !default;
+
+  $cardview-generic-card-selection-background-color: lighten(desaturate(adjust-hue($base-accent, 1), 7.32), 43.33) !default;
+
+  $cardview-generic-card-border-color: $base-border-color !default;
+  $cardview-generic-card-background-color: $base-bg !default;
+}
+
+@if $color == "dark" or $color == "darkviolet" or $color == "darkmoon" {
+  $cardview-generic-background-color: $base-bg !default;
+
+  $cardview-generic-header-filter-icon-empty-color: $base-text-color !default;
+  $cardview-generic-header-filter-icon-selected-color: $base-accent !default;
+
+  $cardview-generic-header-item-background-color: lighten($base-bg, 3.92)  !default;
+  $cardview-generic-header-item-border-color: $base-border-color !default;
+  $cardview-generic-header-item-hovered-background-color: lighten($cardview-generic-header-item-background-color, 3.92) !default;
+  $cardview-generic-header-item-hovered-border-color: lighten($cardview-generic-header-item-border-color, 10.20) !default;
+
+  $cardview-generic-header-item-prohibition-icon-color: $base-danger !default;
+
+  $cardview-generic-nodata-text-color: $base-label-color !default;
+  $cardview-generic-nodata-icon-container-background-color: lighten(desaturate($base-bg, 0.30), 8.04) !default;
+
+  $cardview-generic-card-content-field-value-highlight-color: $base-text-color !default;
+  $cardview-generic-card-content-field-value-highlight-background: $base-warning !default;
+  $cardview-generic-card-content-field-value-highlight-border-radius: 5px;
+  $cardview-generic-card-content-field-value-highlight-padding: .125em 0.2em;
+  $cardview-generic-card-content-field-value-highlight-font-weight: 500;
+  $cardview-generic-card-content-field-value-highlight-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+
+  $cardview-generic-card-cover-background-color: #FFF !default;
+
+  $cardview-generic-card-cover-noimage-background-color: lighten(desaturate($base-bg, 0.30), 8.04) !default;
+  $cardview-generic-card-cover-noimage-icon-color: darken($base-text-color, 38.04)  !default;
+
+  $cardview-generic-card-selection-background-color: darken(desaturate($base-accent, 44.18), 25.88) !default;
+
+  $cardview-generic-card-border-color: $base-border-color !default;
+  $cardview-generic-card-background-color: $base-bg !default;
+}
+
+@if $color == "contrast" {
+  $cardview-generic-background-color: $base-bg !default;
+
+  $cardview-generic-header-filter-icon-empty-color: $base-text-color !default;
+  $cardview-generic-header-filter-icon-selected-color: $base-accent !default;
+
+  $cardview-generic-header-item-background-color: $base-bg !default;
+  $cardview-generic-header-item-border-color: $base-border-color !default;
+  $cardview-generic-header-item-hovered-background-color: $cardview-generic-header-item-background-color !default;
+  $cardview-generic-header-item-hovered-border-color: $cardview-generic-header-item-border-color !default;
+
+  $cardview-generic-header-item-prohibition-icon-color: $base-danger !default;
+
+  $cardview-generic-nodata-text-color: $base-label-color !default;
+  $cardview-generic-nodata-icon-container-background-color: $base-bg !default;
+
+  $cardview-generic-card-content-field-value-highlight-color: $base-inverted-text-color !default;
+  $cardview-generic-card-content-field-value-highlight-background: $base-warning !default;
+  $cardview-generic-card-content-field-value-highlight-border-radius: 5px;
+  $cardview-generic-card-content-field-value-highlight-padding: .125em 0.2em;
+  $cardview-generic-card-content-field-value-highlight-font-weight: 500;
+  $cardview-generic-card-content-field-value-highlight-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+
+  $cardview-generic-card-cover-background-color: #FFF !default;
+
+  $cardview-generic-card-cover-noimage-background-color: $base-bg !default;
+  $cardview-generic-card-cover-noimage-icon-color: $base-text-color !default;
+
+  $cardview-generic-card-selection-background-color: $base-accent !default;
+
+  $cardview-generic-card-border-color: $base-border-color !default;
+  $cardview-generic-card-background-color: $base-bg !default;
+}
+
+$cardview-background-color: $cardview-generic-background-color !default;
+
+$cardview-header-filter-icon-empty-color: $cardview-generic-header-filter-icon-empty-color !default;
+$cardview-header-filter-icon-selected-color: $cardview-generic-header-filter-icon-selected-color !default;
+
+$cardview-header-item-border-color: $cardview-generic-header-item-border-color !default;
+
+$cardview-header-item-background-color: $cardview-generic-header-item-background-color !default;
+$cardview-header-item-hovered-background-color: $cardview-generic-header-item-hovered-background-color !default;
+$cardview-header-item-hovered-border-color: $cardview-generic-header-item-hovered-border-color !default;
+
+$cardview-header-item-prohibition-icon-color: $cardview-generic-header-item-prohibition-icon-color !default;
+
+$cardview-nodata-text-color: $cardview-generic-nodata-text-color !default;
+$cardview-nodata-icon-container-background-color: $cardview-generic-nodata-icon-container-background-color !default;
+
+$cardview-card-content-field-value-highlight-color: $cardview-generic-card-content-field-value-highlight-color !default;
+$cardview-card-content-field-value-highlight-background: $cardview-generic-card-content-field-value-highlight-background !default;
+$cardview-card-content-field-value-highlight-border-radius: $cardview-generic-card-content-field-value-highlight-border-radius !default;
+$cardview-card-content-field-value-highlight-padding: $cardview-generic-card-content-field-value-highlight-padding !default;
+$cardview-card-content-field-value-highlight-font-weight: $cardview-generic-card-content-field-value-highlight-font-weight !default;
+$cardview-card-content-field-value-highlight-box-shadow: $cardview-generic-card-content-field-value-highlight-box-shadow !default;
+
+$cardview-card-cover-background-color: $cardview-generic-card-cover-background-color !default;
+
+$cardview-card-cover-noimage-background-color: $cardview-generic-card-cover-noimage-background-color !default;
+$cardview-card-cover-noimage-icon-color: $cardview-generic-card-cover-noimage-icon-color !default;
+
+$cardview-card-selection-background-color: $cardview-generic-card-selection-background-color !default;
+
+$cardview-card-border-color: $cardview-generic-card-border-color !default;
+$cardview-card-background-color: $cardview-generic-card-background-color !default;
+
+$cardview-columnchooser-message-color: lighten($base-text-color, 26%) !default;

@@ -82,8 +82,10 @@ import { DxiDropDownButtonItemComponent } from 'devextreme-angular/ui/drop-down-
  */
 @Component({
     selector: 'dx-drop-down-button',
+    standalone: true,
     template: '',
     host: { ngSkipHydration: 'true' },
+    imports: [ DxIntegrationModule ],
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -463,10 +465,10 @@ export class DxDropDownButtonComponent extends DxComponent implements OnDestroy,
     
      */
     @Input()
-    get type(): ButtonType {
+    get type(): ButtonType | string {
         return this._getOption('type');
     }
-    set type(value: ButtonType) {
+    set type(value: ButtonType | string) {
         this._setOption('type', value);
     }
 
@@ -792,7 +794,7 @@ export class DxDropDownButtonComponent extends DxComponent implements OnDestroy,
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() typeChange: EventEmitter<ButtonType>;
+    @Output() typeChange: EventEmitter<ButtonType | string>;
 
     /**
     
@@ -951,6 +953,7 @@ export class DxDropDownButtonComponent extends DxComponent implements OnDestroy,
 
 @NgModule({
   imports: [
+    DxDropDownButtonComponent,
     DxoDropDownOptionsModule,
     DxoAnimationModule,
     DxoHideModule,
@@ -980,9 +983,6 @@ export class DxDropDownButtonComponent extends DxComponent implements OnDestroy,
     DxiDropDownButtonToolbarItemModule,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxDropDownButtonComponent
   ],
   exports: [
     DxDropDownButtonComponent,
@@ -1017,6 +1017,8 @@ export class DxDropDownButtonComponent extends DxComponent implements OnDestroy,
   ]
 })
 export class DxDropDownButtonModule { }
+
+export * from 'devextreme-angular/ui/drop-down-button/nested';
 
 import type * as DxDropDownButtonTypes from "devextreme/ui/drop_down_button_types";
 export { DxDropDownButtonTypes };

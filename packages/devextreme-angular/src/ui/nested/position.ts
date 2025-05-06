@@ -16,6 +16,7 @@ import {
 
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxoPositionConfig } from './base/position-config';
@@ -23,8 +24,10 @@ import { DxoPositionConfig } from './base/position-config';
 
 @Component({
     selector: 'dxo-position',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost],
     inputs: [
         'at',
@@ -63,7 +66,7 @@ export class DxoPositionComponent extends DxoPositionConfig implements OnDestroy
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoPositionComponent
   ],
   exports: [

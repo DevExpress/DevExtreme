@@ -1,0 +1,26 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Content View Caption should render template with title 1`] = `
+<div>
+  <div
+    class="dx-cardview-field-caption"
+  >
+    <div
+      test-template="true"
+    >
+      TEST_TITLE
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Content View Caption should render title 1`] = `
+<div>
+  <div
+    class="dx-cardview-field-caption"
+  >
+    TEST_TITLE
+    :
+  </div>
+</div>
+`;

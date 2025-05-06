@@ -17,6 +17,7 @@ import {
     NativeEventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
+    AsyncCancelable,
 } from '../common/core/events';
 import DataSource, { DataSourceLike } from '../data/data_source';
 
@@ -75,6 +76,76 @@ export type TypingStartEvent = NativeEventInfo<dxChat, UIEvent & { target: HTMLI
 export type TypingEndEvent = EventInfo<dxChat> & {
     /** @docid _ui_chat_TypingEndEvent.user */
     readonly user: User;
+};
+
+/**
+ * @docid _ui_chat_MessageDeletingEvent
+ * @public
+ * @type object
+ * @inherits AsyncCancelable,EventInfo
+ */
+export type MessageDeletingEvent = AsyncCancelable & EventInfo<dxChat> & {
+  /** @docid _ui_chat_MessageDeletingEvent.message */
+  readonly message: Message;
+};
+
+/**
+ * @docid _ui_chat_MessageDeletedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
+export type MessageDeletedEvent = EventInfo<dxChat> & {
+  /** @docid _ui_chat_MessageDeletedEvent.message */
+  readonly message: Message;
+};
+
+/**
+ * @docid _ui_chat_MessageEditingStartEvent
+ * @public
+ * @type object
+ * @inherits AsyncCancelable,EventInfo
+ */
+export type MessageEditingStartEvent = AsyncCancelable & EventInfo<dxChat> & {
+  /** @docid _ui_chat_MessageEditingStartEvent.message */
+  readonly message: Message;
+};
+
+/**
+ * @docid _ui_chat_MessageEditCanceledEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
+export type MessageEditCanceledEvent = EventInfo<dxChat> & {
+  /** @docid _ui_chat_MessageEditCanceledEvent.message */
+  readonly message: Message;
+};
+
+/**
+ * @docid _ui_chat_MessageUpdatingEvent
+ * @public
+ * @type object
+ * @inherits AsyncCancelable,EventInfo
+ */
+export type MessageUpdatingEvent = AsyncCancelable & EventInfo<dxChat> & {
+  /** @docid _ui_chat_MessageUpdatingEvent.message */
+  readonly message: Message;
+  /** @docid _ui_chat_MessageUpdatingEvent.text */
+  readonly text: string;
+};
+
+/**
+ * @docid _ui_chat_MessageUpdatedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
+export type MessageUpdatedEvent = EventInfo<dxChat> & {
+  /** @docid _ui_chat_MessageUpdatedEvent.message */
+  readonly message: Message;
+  /** @docid _ui_chat_MessageUpdatedEvent.text */
+  readonly text: string;
 };
 
 /**
@@ -149,12 +220,44 @@ export type Message = {
      * @public
      */
     text?: string;
+    /**
+     * @docid
+     * @public
+     */
+    isEdited?: boolean;
+    /**
+     * @docid
+     * @public
+     */
+    isDeleted?: boolean;
 };
 
 /** @public */
 export type MessageTemplateData = {
     readonly component: dxChat;
     readonly message?: Message;
+};
+
+/**
+ * @docid
+ * @namespace DevExpress.ui.dxChat
+ * @public
+ */
+export type Editing = {
+  /**
+   * @docid
+   * @default false
+   * @type boolean|function
+   * @public
+   */
+  allowUpdating?: boolean | ((options: { component?: dxChat; message?: Message }) => boolean);
+  /**
+   * @docid
+   * @default false
+   * @type boolean|function
+   * @public
+   */
+  allowDeleting?: boolean | ((options: { component?: dxChat; message?: Message }) => boolean);
 };
 
 /**
@@ -194,6 +297,12 @@ export interface dxChatOptions extends WidgetOptions<dxChat> {
      * @public
      */
     items?: Array<Message>;
+    /**
+     * @docid
+     * @type object
+     * @public
+     */
+    editing?: Editing;
     /**
      * @docid
      * @type string | Array<Message> | Store | DataSource | DataSourceOptions | null
@@ -286,6 +395,54 @@ export interface dxChatOptions extends WidgetOptions<dxChat> {
      * @public
      */
     onTypingEnd?: ((e: TypingEndEvent) => void) | undefined;
+    /**
+     * @docid
+     * @default undefined
+     * @type_function_param1 e:{ui/chat:MessageDeletingEvent}
+     * @action
+     * @public
+     */
+    onMessageDeleting?: ((e: MessageDeletingEvent) => void) | undefined;
+    /**
+     * @docid
+     * @default undefined
+     * @type_function_param1 e:{ui/chat:MessageDeletedEvent}
+     * @action
+     * @public
+     */
+    onMessageDeleted?: ((e: MessageDeletedEvent) => void) | undefined;
+    /**
+     * @docid
+     * @default undefined
+     * @type_function_param1 e:{ui/chat:MessageEditingStartEvent}
+     * @action
+     * @public
+     */
+    onMessageEditingStart?: ((e: MessageEditingStartEvent) => void) | undefined;
+    /**
+     * @docid
+     * @default undefined
+     * @type_function_param1 e:{ui/chat:MessageEditCanceledEvent}
+     * @action
+     * @public
+     */
+    onMessageEditCanceled?: ((e: MessageEditCanceledEvent) => void) | undefined;
+    /**
+     * @docid
+     * @default undefined
+     * @type_function_param1 e:{ui/chat:MessageUpdatingEvent}
+     * @action
+     * @public
+     */
+    onMessageUpdating?: ((e: MessageUpdatingEvent) => void) | undefined;
+    /**
+     * @docid
+     * @default undefined
+     * @type_function_param1 e:{ui/chat:MessageUpdatedEvent}
+     * @action
+     * @public
+     */
+    onMessageUpdated?: ((e: MessageUpdatedEvent) => void) | undefined;
 }
 
 /**
@@ -322,7 +479,9 @@ import { CheckedEvents } from '../core';
 
 type FilterOutHidden<T> = Omit<T, 'onContentReady' | 'onFocusIn' | 'onFocusOut' >;
 
-type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>, 'onMessageEntered' | 'onTypingStart' | 'onTypingEnd'>;
+type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>, 'onMessageEntered'
+  | 'onTypingStart' | 'onTypingEnd' | 'onMessageDeleting' | 'onMessageDeleted'
+  | 'onMessageEditingStart' | 'onMessageEditCanceled' | 'onMessageUpdating' | 'onMessageUpdated'>;
 
 /**
 * @hidden

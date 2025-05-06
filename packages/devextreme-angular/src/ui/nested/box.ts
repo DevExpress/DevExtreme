@@ -22,6 +22,7 @@ import {
 import { Properties as dxBoxOptions } from 'devextreme/ui/box';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxoBoxOptions } from './base/box-options';
@@ -30,8 +31,10 @@ import { DxiItemComponent } from './item-dxi';
 
 @Component({
     selector: 'dxo-box',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost],
     inputs: [
         'align',
@@ -104,7 +107,7 @@ export class DxoBoxComponent extends DxoBoxOptions implements OnDestroy, OnInit 
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoBoxComponent
   ],
   exports: [

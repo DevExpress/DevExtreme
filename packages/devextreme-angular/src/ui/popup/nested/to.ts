@@ -17,6 +17,7 @@ import {
 import { PositionConfig } from 'devextreme/common/core/animation';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
@@ -24,8 +25,10 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-popup-to',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxoPopupToComponent extends NestedOption implements OnDestroy, OnInit  {
@@ -95,7 +98,7 @@ export class DxoPopupToComponent extends NestedOption implements OnDestroy, OnIn
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoPopupToComponent
   ],
   exports: [

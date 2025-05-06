@@ -18,6 +18,7 @@ import {
 import { Command, CustomCommand } from 'devextreme/ui/diagram';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
@@ -28,8 +29,10 @@ import { DxiDiagramTabGroupComponent } from './tab-group-dxi';
 
 @Component({
     selector: 'dxi-diagram-tab',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxiDiagramTabComponent extends CollectionNestedOption {
@@ -103,7 +106,7 @@ export class DxiDiagramTabComponent extends CollectionNestedOption {
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiDiagramTabComponent
   ],
   exports: [

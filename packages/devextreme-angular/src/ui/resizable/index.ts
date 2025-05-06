@@ -42,8 +42,10 @@ import {
  */
 @Component({
     selector: 'dx-resizable',
+    standalone: true,
     template: '<ng-content></ng-content>',
     host: { ngSkipHydration: 'true' },
+    imports: [ DxIntegrationModule ],
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -371,11 +373,9 @@ export class DxResizableComponent extends DxComponent implements OnDestroy {
 
 @NgModule({
   imports: [
+    DxResizableComponent,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxResizableComponent
   ],
   exports: [
     DxResizableComponent,
@@ -383,6 +383,7 @@ export class DxResizableComponent extends DxComponent implements OnDestroy {
   ]
 })
 export class DxResizableModule { }
+
 
 import type * as DxResizableTypes from "devextreme/ui/resizable_types";
 export { DxResizableTypes };

@@ -18,6 +18,7 @@ import { Font, LabelOverlap } from 'devextreme/common/charts';
 import { Format } from 'devextreme/common/core/localization';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
@@ -25,8 +26,10 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-polar-chart-axis-label',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxoPolarChartAxisLabelComponent extends NestedOption implements OnDestroy, OnInit  {
@@ -112,7 +115,7 @@ export class DxoPolarChartAxisLabelComponent extends NestedOption implements OnD
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoPolarChartAxisLabelComponent
   ],
   exports: [

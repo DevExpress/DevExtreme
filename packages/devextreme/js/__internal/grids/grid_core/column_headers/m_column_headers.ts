@@ -215,7 +215,10 @@ export class ColumnHeadersView extends ColumnsView {
     if (options.row.rowType === 'header') {
       $cell.addClass(CELL_FOCUS_DISABLED_CLASS);
       if (!this._isLegacyKeyboardNavigation()) {
-        if (options.column && !options.column.type) {
+        const { column } = options;
+        const isCustomCommandColumn = this._columnsController.isCustomCommandColumn(column);
+
+        if (column && (!column.type || isCustomCommandColumn)) {
           $cell.attr('tabindex', this.option('tabindex') || 0);
         }
       }
@@ -517,13 +520,16 @@ export class ColumnHeadersView extends ColumnsView {
   /**
    * @extended: column_chooser
    */
-  protected allowDragging(column) {
+  public isReorderingEnabled(column): boolean {
+    return column.allowReordering
+      && (this.option('allowColumnReordering') ?? this._columnsController.isColumnOptionUsed('allowReordering'));
+  }
+
+  public allowDragging(column) {
     const rowIndex = column && this._columnsController.getRowIndex(column.index);
     const columns = this.getColumns(rowIndex);
 
-    const isReorderingEnabled = this.option('allowColumnReordering') ?? this._columnsController.isColumnOptionUsed('allowReordering');
-
-    return isReorderingEnabled && column.allowReordering && columns.length > 1;
+    return this.isReorderingEnabled(column) && columns.length > 1;
   }
 
   protected getBoundingRect() {
@@ -641,6 +647,11 @@ export class ColumnHeadersView extends ColumnsView {
         }
       }
     }
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  public isFilterRowCell($cell: dxElementWrapper): boolean {
+    return false;
   }
 }
 

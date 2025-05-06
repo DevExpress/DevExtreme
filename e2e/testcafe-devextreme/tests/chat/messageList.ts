@@ -185,6 +185,79 @@ test('Messagelist with loadindicator appearance on initial loading', async (t) =
   });
 });
 
+test('Messagelist with deleted items', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  await testScreenshot(t, takeScreenshot, 'Messagelist without message template and with deleted messages.png', { element: '#container' });
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  const userFirst = createUser(1, 'First');
+  const userSecond = createUser(2, 'Second');
+  const items = [{
+    author: userFirst,
+    text: 'AAA',
+  }, {
+    author: userFirst,
+    text: 'BBB',
+    isDeleted: true,
+  }, {
+    author: userSecond,
+    text: 'CCC',
+    isDeleted: true,
+  }];
+
+  return createWidget('dxChat', {
+    items,
+    user: userFirst,
+    width: 400,
+    height: 600,
+    showDayHeaders: false,
+  });
+});
+
+test('Messagelist with deleted items and custom template', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  await testScreenshot(t, takeScreenshot, 'Messagelist with message template and deleted messages.png', { element: '#container' });
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  const userFirst = createUser(1, 'First');
+  const userSecond = createUser(2, 'Second');
+  const items = [{
+    author: userFirst,
+    text: 'AAA',
+  }, {
+    author: userFirst,
+    text: 'BBB',
+    isDeleted: true,
+  }, {
+    author: userSecond,
+    text: 'CCC',
+    isDeleted: true,
+  }];
+
+  return createWidget('dxChat', {
+    items,
+    user: userFirst,
+    width: 400,
+    height: 600,
+    showDayHeaders: false,
+    messageTemplate: ({ message }, container) => {
+      if (message.isDeleted) {
+        $('<div>').text(`${message.author.name} deleted this message`).appendTo(container);
+        return;
+      }
+      $('<div>').text(message.text).appendTo(container);
+    },
+  });
+});
+
 test('Messagelist with messageTemplate', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const chat = new Chat('#container');
@@ -265,6 +338,43 @@ test('Messagelist options showDayHeaders, showUserName and showMessageTimestamp 
     showDayHeaders: false,
     showUserName: false,
     showMessageTimestamp: false,
+  });
+});
+
+test('Message list with editing context menu', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const chat = new Chat('#container');
+
+  await t
+    .rightClick(chat.getMessage(2))
+    .pressKey('down')
+    .pressKey('down');
+
+  await testScreenshot(t, takeScreenshot, 'Messagelist with editing context menu.png', { element: '#container' });
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  const userFirst = createUser(1, 'First');
+  const userSecond = createUser(2, 'Second');
+
+  const items = [
+    { author: userFirst, text: 'AAA' },
+    { author: userFirst, text: 'BBB' },
+    { author: userSecond, text: 'CCC' },
+  ];
+
+  return createWidget('dxChat', {
+    items,
+    editing: {
+      allowUpdating: true,
+      allowDeleting: true,
+    },
+    user: userSecond,
+    width: 400,
+    height: 600,
+    showDayHeaders: false,
   });
 });
 

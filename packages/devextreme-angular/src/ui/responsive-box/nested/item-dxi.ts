@@ -21,6 +21,7 @@ import { DOCUMENT } from '@angular/common';
 
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
     extractTemplate,
     DxTemplateDirective,
@@ -33,8 +34,10 @@ import { DxiResponsiveBoxLocationComponent } from './location-dxi';
 
 @Component({
     selector: 'dxi-responsive-box-item',
+    standalone: true,
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost, DxTemplateHost]
 })
 export class DxiResponsiveBoxItemComponent extends CollectionNestedOption implements AfterViewInit,
@@ -129,7 +132,7 @@ export class DxiResponsiveBoxItemComponent extends CollectionNestedOption implem
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiResponsiveBoxItemComponent
   ],
   exports: [

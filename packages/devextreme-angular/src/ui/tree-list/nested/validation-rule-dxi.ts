@@ -15,6 +15,7 @@ import {
 import { ValidationRuleType, ComparisonOperator } from 'devextreme/common';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
@@ -22,8 +23,10 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxi-tree-list-validation-rule',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxiTreeListValidationRuleComponent extends CollectionNestedOption {
@@ -137,7 +140,7 @@ export class DxiTreeListValidationRuleComponent extends CollectionNestedOption {
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiTreeListValidationRuleComponent
   ],
   exports: [

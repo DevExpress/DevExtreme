@@ -56,8 +56,10 @@ import { DxiMultiViewItemComponent } from 'devextreme-angular/ui/multi-view/nest
  */
 @Component({
     selector: 'dx-multi-view',
+    standalone: true,
     template: '',
     host: { ngSkipHydration: 'true' },
+    imports: [ DxIntegrationModule ],
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -712,13 +714,11 @@ export class DxMultiViewComponent<TItem = any, TKey = any> extends DxComponent i
 
 @NgModule({
   imports: [
+    DxMultiViewComponent,
     DxiItemModule,
     DxiMultiViewItemModule,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxMultiViewComponent
   ],
   exports: [
     DxMultiViewComponent,
@@ -728,6 +728,8 @@ export class DxMultiViewComponent<TItem = any, TKey = any> extends DxComponent i
   ]
 })
 export class DxMultiViewModule { }
+
+export * from 'devextreme-angular/ui/multi-view/nested';
 
 import type * as DxMultiViewTypes from "devextreme/ui/multi_view_types";
 export { DxMultiViewTypes };

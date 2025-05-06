@@ -778,6 +778,10 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
 
     return super.getColumnElements(index, bandColumnIndex);
   }
+
+  public isFilterRowCell($cell): boolean {
+    return !!$cell.closest(`.${this.addWidgetPrefix(FILTER_ROW_CLASS)}`).length;
+  }
 };
 
 const data = (Base: ModuleType<DataController>) => class DataControllerFilterRowExtender extends Base {

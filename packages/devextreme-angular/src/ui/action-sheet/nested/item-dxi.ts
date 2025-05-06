@@ -20,6 +20,7 @@ import { NativeEventInfo } from 'devextreme/common/core/events';
 import { ButtonStyle, ButtonType } from 'devextreme/common';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
     extractTemplate,
     DxTemplateDirective,
@@ -31,8 +32,10 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxi-action-sheet-item',
+    standalone: true,
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost, DxTemplateHost]
 })
 export class DxiActionSheetItemComponent extends CollectionNestedOption implements AfterViewInit,
@@ -86,10 +89,10 @@ export class DxiActionSheetItemComponent extends CollectionNestedOption implemen
     }
 
     @Input()
-    get type(): ButtonType {
+    get type(): ButtonType | string {
         return this._getOption('type');
     }
-    set type(value: ButtonType) {
+    set type(value: ButtonType | string) {
         this._setOption('type', value);
     }
 
@@ -127,7 +130,7 @@ export class DxiActionSheetItemComponent extends CollectionNestedOption implemen
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiActionSheetItemComponent
   ],
   exports: [

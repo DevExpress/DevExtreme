@@ -87,9 +87,11 @@ import { DxoBarGaugeTooltipBorderModule } from 'devextreme-angular/ui/bar-gauge/
  */
 @Component({
     selector: 'dx-bar-gauge',
+    standalone: true,
     template: '',
     styles: [ ' :host {  display: block; }'],
     host: { ngSkipHydration: 'true' },
+    imports: [ DxIntegrationModule ],
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -821,6 +823,7 @@ export class DxBarGaugeComponent extends DxComponent implements OnDestroy, OnCha
 
 @NgModule({
   imports: [
+    DxBarGaugeComponent,
     DxoAnimationModule,
     DxoExportModule,
     DxoGeometryModule,
@@ -861,9 +864,6 @@ export class DxBarGaugeComponent extends DxComponent implements OnDestroy, OnCha
     DxoBarGaugeTooltipBorderModule,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxBarGaugeComponent
   ],
   exports: [
     DxBarGaugeComponent,
@@ -909,6 +909,8 @@ export class DxBarGaugeComponent extends DxComponent implements OnDestroy, OnCha
   ]
 })
 export class DxBarGaugeModule { }
+
+export * from 'devextreme-angular/ui/bar-gauge/nested';
 
 import type * as DxBarGaugeTypes from "devextreme/viz/bar_gauge_types";
 export { DxBarGaugeTypes };

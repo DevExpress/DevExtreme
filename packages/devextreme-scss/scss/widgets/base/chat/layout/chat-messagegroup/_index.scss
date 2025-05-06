@@ -1,4 +1,5 @@
 @use "../../../mixins" as *;
+@use "../chat" as *;
 
 .dx-chat-messagegroup {
   display: grid;
@@ -14,6 +15,16 @@
 
 .dx-chat-messagegroup-author-name {
   @include dx-overflow();
+}
+
+.dx-chat-message-edited {
+  display: flex;
+  align-items: center;
+  animation: dx-chat-animation-fadein 0.25s ease-out;
+
+  &.dx-chat-message-edited-hiding {
+    animation: dx-chat-animation-fadeout 0.1s ease-out;
+  }
 }
 
 .dx-chat-messagegroup-time {

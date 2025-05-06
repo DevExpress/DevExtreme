@@ -20,16 +20,16 @@ import type { KeyboardNavigationController } from './m_keyboard_navigation';
 export const keyboardNavigationScrollableA11yExtender = (Base: ModuleType<KeyboardNavigationController>): ModuleType<KeyboardNavigationController> => class ScrollableA11yExtender extends Base {
   private _$firstNotFixedCell: dxElementWrapper | undefined;
 
-  protected rowsViewFocusHandler(event: any): void {
+  protected focusinHandler(event: any): void {
     const $target = $(event.target);
 
     this.translateFocusIfNeed(event, $target);
 
-    super.rowsViewFocusHandler(event);
+    super.focusinHandler(event);
   }
 
-  protected rowsViewFocusOutHandler(): void {
-    super.rowsViewFocusOutHandler();
+  protected focusOutHandler(): void {
+    super.focusOutHandler();
     this.makeScrollableFocusableIfNeed();
   }
 
@@ -54,11 +54,11 @@ export const keyboardNavigationScrollableA11yExtender = (Base: ModuleType<Keyboa
     }
   }
 
-  protected rowsViewRenderCompleted(e: any): void {
+  protected renderCompleted(e: any): void {
     this._$firstNotFixedCell = this.getFirstNotFixedCell();
     this.makeScrollableFocusableIfNeed();
 
-    super.rowsViewRenderCompleted(e);
+    super.renderCompleted(e);
   }
 
   public _focus($cell: any, disableFocus?: any, skipFocusEvent?: any): void {

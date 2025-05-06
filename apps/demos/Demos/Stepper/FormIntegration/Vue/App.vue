@@ -9,14 +9,16 @@
       :icon="item.icon"
       :is-valid="item.isValid"
       :hint="item.hint"
+      :optional="item.optional"
     />
   </DxStepper>
   <div class="content">
     <DxMultiView
       v-model:selected-index="selectedIndex"
+      :focus-state-enabled="false"
       :animation-enabled="false"
       :swipe-enabled="false"
-      :height="300"
+      :height="400"
     >
       <DxMultiViewItem>
         <template #default>
@@ -194,13 +196,16 @@ function onNextButtonClick() {
 
 <style scoped>
 .demo-container {
+  min-height: 580px;
+}
+
+#app {
   display: flex;
   flex-direction: column;
   justify-content: center;
   row-gap: 20px;
-  height: 480px;
+  height: 580px;
   min-width: 620px;
-  padding: 40px 20px;
 }
 
 .content {
@@ -256,7 +261,8 @@ function onNextButtonClick() {
   color: var(--dx-color-icon);
 }
 
-.nav-buttons > *:not(:last-child) {
-  margin-right: 8px;
+.nav-buttons {
+  display: flex;
+  gap: 8px;
 }
 </style>

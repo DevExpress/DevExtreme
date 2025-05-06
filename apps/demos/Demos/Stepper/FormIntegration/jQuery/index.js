@@ -48,7 +48,7 @@ $(() => {
 
     resetStepperState();
     formData = getInitialFormData();
-    stepContent.option('items', multiViewItems);
+    stepContent.repaint();
     $('.current-step').append(`Step <span class="selected-index">1</span> of <span class="step-count">${stepsCount}</span>`);
   };
 
@@ -145,7 +145,6 @@ $(() => {
         },
         isRequired: true,
         label: { visible: false },
-        validationRules: [{ type: 'required' }],
       }],
     }),
   );
@@ -172,7 +171,6 @@ $(() => {
         formData,
         validationGroup: validationGroups[1],
         colCount: 3,
-        colCountByScreen: { xs: 3 },
         items: [
           getNumberBoxOptions({
             dataField: 'adultsCount',
@@ -203,7 +201,6 @@ $(() => {
     const getSelectBoxOptions = (options) => ({
       editorType: 'dxSelectBox',
       isRequired: true,
-      validationRules: [{ type: 'required' }],
       ...options,
       label: {
         location: 'top',
@@ -217,7 +214,6 @@ $(() => {
         formData,
         validationGroup: validationGroups[2],
         colCount: 2,
-        colCountByScreen: { xs: 2 },
         items: [
           getSelectBoxOptions({
             dataField: 'roomType',
@@ -320,8 +316,9 @@ $(() => {
 
   const stepContent = $('#stepContent').dxMultiView({
     animationEnabled: false,
+    focusStateEnabled: false,
     swipeEnabled: false,
-    height: 300,
+    height: 400,
     items: multiViewItems,
   }).dxMultiView('instance');
 

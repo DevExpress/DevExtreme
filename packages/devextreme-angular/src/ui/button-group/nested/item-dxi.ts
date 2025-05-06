@@ -19,6 +19,7 @@ import { DOCUMENT } from '@angular/common';
 import { ButtonType } from 'devextreme/common';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
     extractTemplate,
     DxTemplateDirective,
@@ -30,8 +31,10 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxi-button-group-item',
+    standalone: true,
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost, DxTemplateHost]
 })
 export class DxiButtonGroupItemComponent extends CollectionNestedOption implements AfterViewInit,
@@ -85,10 +88,10 @@ export class DxiButtonGroupItemComponent extends CollectionNestedOption implemen
     }
 
     @Input()
-    get type(): ButtonType {
+    get type(): ButtonType | string {
         return this._getOption('type');
     }
-    set type(value: ButtonType) {
+    set type(value: ButtonType | string) {
         this._setOption('type', value);
     }
 
@@ -134,7 +137,7 @@ export class DxiButtonGroupItemComponent extends CollectionNestedOption implemen
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiButtonGroupItemComponent
   ],
   exports: [

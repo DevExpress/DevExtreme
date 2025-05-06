@@ -16,6 +16,7 @@ import {
 
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
@@ -23,8 +24,10 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-data-prepare-settings',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxoDataPrepareSettingsComponent extends NestedOption implements OnDestroy, OnInit  {
@@ -78,7 +81,7 @@ export class DxoDataPrepareSettingsComponent extends NestedOption implements OnD
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoDataPrepareSettingsComponent
   ],
   exports: [

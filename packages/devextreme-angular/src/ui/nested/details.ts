@@ -20,6 +20,7 @@ import {
 import { dxFileManagerDetailsColumn } from 'devextreme/ui/file_manager';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
@@ -28,8 +29,10 @@ import { DxiColumnComponent } from './column-dxi';
 
 @Component({
     selector: 'dxo-details',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxoDetailsComponent extends NestedOption implements OnDestroy, OnInit  {
@@ -75,7 +78,7 @@ export class DxoDetailsComponent extends NestedOption implements OnDestroy, OnIn
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoDetailsComponent
   ],
   exports: [

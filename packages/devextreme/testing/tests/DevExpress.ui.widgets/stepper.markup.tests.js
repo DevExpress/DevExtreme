@@ -114,6 +114,23 @@ QUnit.module('Stepper markup', moduleConfig, () => {
         assert.strictEqual(this.getStepByIndex(2).hasClass(STEP_SELECTED_CLASS), true);
     });
 
+    QUnit.test(`Selected step should have ${STEP_SELECTED_CLASS} class after change selectionChanging was cancelled and Step.isValid changed`, function(assert) {
+        this.reinit({
+            items: [{}, {}, {}],
+            selectedIndex: 0,
+            onSelectionChanging: (e) => {
+                e.cancel = true;
+                e.component.option('items[0].isValid', false);
+            },
+        });
+
+        this.getStepByIndex(1).trigger('dxclick');
+
+        assert.strictEqual(this.getStepByIndex(0).hasClass(STEP_SELECTED_CLASS), true, 'First step has selected class');
+        assert.strictEqual(this.getStepByIndex(1).hasClass(STEP_SELECTED_CLASS), false, 'Second step has not selected class');
+        assert.strictEqual(this.getStepByIndex(2).hasClass(STEP_SELECTED_CLASS), false, 'Third step has not selected class');
+    });
+
     QUnit.module('Completed steps', () => {
         QUnit.test(`Steps before selected should have ${STEP_COMPLETED_CLASS} class by default`, function(assert) {
             this.reinit({

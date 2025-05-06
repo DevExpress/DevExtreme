@@ -23,6 +23,7 @@ import type { WidgetOptions } from '@js/ui/widget/ui.widget';
 import DOMComponent from './dom_component';
 import type { OptionChanged } from './types';
 
+export const WIDGET_CLASS = 'dx-widget';
 const DISABLED_STATE_CLASS = 'dx-state-disabled';
 export const FOCUSED_STATE_CLASS = 'dx-state-focused';
 export const HOVER_STATE_CLASS = 'dx-state-hover';
@@ -169,7 +170,7 @@ class Widget<
   _initMarkup(): void {
     const { disabled, visible } = this.option();
 
-    this.$element().addClass('dx-widget');
+    this.$element().addClass(WIDGET_CLASS);
 
     this._toggleDisabledState(disabled);
     this._toggleVisibility(visible);

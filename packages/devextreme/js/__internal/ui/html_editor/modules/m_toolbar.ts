@@ -1,6 +1,7 @@
 import '@js/ui/select_box';
 import '@ts/ui/color_box/m_color_view';
 import '@js/ui/number_box';
+import '@js/ui/menu';
 
 import eventsEngine from '@js/common/core/events/core/events_engine';
 import { addNamespace } from '@js/common/core/events/utils/index';
@@ -20,8 +21,12 @@ import errors from '@js/ui/widget/ui.errors';
 import { capitalize } from '@ts/core/utils/capitalize';
 import Quill from 'devextreme-quill';
 
+import type { CommandsMap } from '../utils/ai';
 import {
-  buildCommandsMap, defaultCommandNames, getDefaultOptionsByCommand,
+  buildCommandsMap,
+  defaultCommandNames,
+  getDefaultOptionsByCommand,
+  hasInvalidCustomCommand,
 } from '../utils/ai';
 import { getTableFormats, TABLE_OPERATIONS } from '../utils/m_table_helper';
 import {
@@ -379,10 +384,12 @@ if (Quill) {
       text?: string,
       commandOptions?: string[],
     ) {
-      const options = commandOptions ?? getDefaultOptionsByCommand(command)?.map(capitalize);
+      const options = commandOptions?.map(capitalize)
+        ?? getDefaultOptionsByCommand(command)?.map(capitalize);
 
-      return {
+      const item = {
         id: command,
+        name: command,
         text: text ?? defaultCommandNames[command],
         items: options?.map((option) => ({
           id: option,
@@ -391,24 +398,44 @@ if (Quill) {
           options: options?.map(capitalize),
         })),
       };
+
+      return item;
     }
 
     private _buildMenuItems(commands: AIToolbarItem['commands']) {
-      return commands?.map((command) => {
+      let customCommandIndex = 0;
+
+      const items = commands?.map((command) => {
         if (typeof command === 'object') {
           if (command.name === 'custom') {
-            return {
-              id: 'custom',
+            const id = `custom${customCommandIndex}`;
+            const { prompt, options } = command as AICustomCommand;
+            const capitalized = options?.map(capitalize);
+
+            const item = {
+              id,
+              name: 'custom',
               text: command.text,
-              items: command.options?.map((option) => ({
-                parentCommand: 'custom',
-                id: option,
-                text: option,
-                options: command.options.map(capitalize),
-                prompt,
-              })),
-              prompt: (command as AICustomCommand).prompt,
+              items: command.options?.map((rawOptionName: string) => {
+                const option = capitalize(rawOptionName);
+
+                const result = {
+                  parentCommand: id,
+                  id: option,
+                  text: option,
+                  options: capitalized,
+                  prompt,
+                };
+
+                return result;
+              }),
+              disabled: !prompt,
+              prompt,
             };
+
+            customCommandIndex += 1;
+
+            return item;
           }
 
           return this._createCommandMenuItem(command.name, command.text, command.options);
@@ -416,6 +443,20 @@ if (Quill) {
 
         return this._createCommandMenuItem(command);
       });
+
+      return items;
+    }
+
+    _validateAIToolbarItemConfig(commandsMap: CommandsMap): void {
+      const { aiIntegration } = this.editorInstance.option();
+
+      if (!aiIntegration) {
+        errors.log('W1026');
+      }
+
+      if (hasInvalidCustomCommand(commandsMap)) {
+        errors.log('W1027');
+      }
     }
 
     _prepareAIMenuItemConfig(item: AIToolbarItem) {
@@ -427,11 +468,16 @@ if (Quill) {
       const commandsMap = buildCommandsMap(commands);
       const menuItems = this._buildMenuItems(commands);
 
+      this._validateAIToolbarItemConfig(commandsMap);
+
       const dataSource = [{
         id: 'root',
         icon: 'sparkle',
         items: menuItems,
       }];
+
+      const { aiIntegration } = this.editorInstance.option();
+      const isMenuDisabled = !dataSource[0].items?.length || !aiIntegration;
 
       const options = {
         dataSource,
@@ -451,6 +497,7 @@ if (Quill) {
 
           this._formatHandlers[name](aiDialogOptions);
         },
+        disabled: isMenuDisabled,
       };
 
       return extend(true, {

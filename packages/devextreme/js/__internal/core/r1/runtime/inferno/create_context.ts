@@ -1,13 +1,13 @@
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
+/* eslint-disable func-names */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 /* eslint-disable no-plusplus */
-/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import { Component } from 'inferno';
 
 let contextId = 0;
-export const createContext = function<T>(defaultValue: T): { id: number;
-  Provider: any;
-  defaultValue: unknown; } {
+export const createContext = function<T>(defaultValue: T) {
   const id = contextId++;
 
   return {

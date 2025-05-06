@@ -1,0 +1,12 @@
+
+@use './item';
+@use './variables' as *;
+
+.dx-cardview-headerpanel-content {
+  display: flex;
+  gap: $cardview-headerpanel-content-gap;
+}
+
+.dx-cardview-header-item-sorting {
+  display: flex;
+}

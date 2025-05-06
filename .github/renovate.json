@@ -14,6 +14,12 @@
     "rebaseWhen": "conflicted",
     "packageRules": [
         {
+            "matchPackageNames": [
+                "openai"
+            ],
+            "enabled": false
+        },
+        {
             "groupName": "CLDR",
             "matchPackageNames": [
                 "cldr-{/,}**"

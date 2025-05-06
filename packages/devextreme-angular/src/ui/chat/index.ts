@@ -23,7 +23,7 @@ import {
 
 
 import DataSource from 'devextreme/data/data_source';
-import { Alert, Message, DisposingEvent, InitializedEvent, MessageEnteredEvent, OptionChangedEvent, TypingEndEvent, TypingStartEvent, User } from 'devextreme/ui/chat';
+import { Alert, Message, DisposingEvent, InitializedEvent, MessageDeletedEvent, MessageDeletingEvent, MessageEditCanceledEvent, MessageEditingStartEvent, MessageEnteredEvent, MessageUpdatedEvent, MessageUpdatingEvent, OptionChangedEvent, TypingEndEvent, TypingStartEvent, User } from 'devextreme/ui/chat';
 import { DataSourceOptions } from 'devextreme/data/data_source';
 import { Store } from 'devextreme/data/store';
 import { Format } from 'devextreme/common/core/localization';
@@ -72,8 +72,10 @@ import { DxiChatTypingUserComponent } from 'devextreme-angular/ui/chat/nested';
  */
 @Component({
     selector: 'dx-chat',
+    standalone: true,
     template: '',
     host: { ngSkipHydration: 'true' },
+    imports: [ DxIntegrationModule ],
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -159,6 +161,19 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
     }
     set disabled(value: boolean) {
         this._setOption('disabled', value);
+    }
+
+
+    /**
+     * [descr:dxChatOptions.editing]
+    
+     */
+    @Input()
+    get editing(): Record<string, any> {
+        return this._getOption('editing');
+    }
+    set editing(value: Record<string, any>) {
+        this._setOption('editing', value);
     }
 
 
@@ -413,11 +428,59 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
 
     /**
     
+     * [descr:dxChatOptions.onMessageDeleted]
+    
+    
+     */
+    @Output() onMessageDeleted: EventEmitter<MessageDeletedEvent>;
+
+    /**
+    
+     * [descr:dxChatOptions.onMessageDeleting]
+    
+    
+     */
+    @Output() onMessageDeleting: EventEmitter<MessageDeletingEvent>;
+
+    /**
+    
+     * [descr:dxChatOptions.onMessageEditCanceled]
+    
+    
+     */
+    @Output() onMessageEditCanceled: EventEmitter<MessageEditCanceledEvent>;
+
+    /**
+    
+     * [descr:dxChatOptions.onMessageEditingStart]
+    
+    
+     */
+    @Output() onMessageEditingStart: EventEmitter<MessageEditingStartEvent>;
+
+    /**
+    
      * [descr:dxChatOptions.onMessageEntered]
     
     
      */
     @Output() onMessageEntered: EventEmitter<MessageEnteredEvent>;
+
+    /**
+    
+     * [descr:dxChatOptions.onMessageUpdated]
+    
+    
+     */
+    @Output() onMessageUpdated: EventEmitter<MessageUpdatedEvent>;
+
+    /**
+    
+     * [descr:dxChatOptions.onMessageUpdating]
+    
+    
+     */
+    @Output() onMessageUpdating: EventEmitter<MessageUpdatingEvent>;
 
     /**
     
@@ -484,6 +547,13 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
     
      */
     @Output() disabledChange: EventEmitter<boolean>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
+    @Output() editingChange: EventEmitter<Record<string, any>>;
 
     /**
     
@@ -678,7 +748,13 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
         this._createEventEmitters([
             { subscribe: 'disposing', emit: 'onDisposing' },
             { subscribe: 'initialized', emit: 'onInitialized' },
+            { subscribe: 'messageDeleted', emit: 'onMessageDeleted' },
+            { subscribe: 'messageDeleting', emit: 'onMessageDeleting' },
+            { subscribe: 'messageEditCanceled', emit: 'onMessageEditCanceled' },
+            { subscribe: 'messageEditingStart', emit: 'onMessageEditingStart' },
             { subscribe: 'messageEntered', emit: 'onMessageEntered' },
+            { subscribe: 'messageUpdated', emit: 'onMessageUpdated' },
+            { subscribe: 'messageUpdating', emit: 'onMessageUpdating' },
             { subscribe: 'optionChanged', emit: 'onOptionChanged' },
             { subscribe: 'typingEnd', emit: 'onTypingEnd' },
             { subscribe: 'typingStart', emit: 'onTypingStart' },
@@ -688,6 +764,7 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
             { emit: 'dataSourceChange' },
             { emit: 'dayHeaderFormatChange' },
             { emit: 'disabledChange' },
+            { emit: 'editingChange' },
             { emit: 'elementAttrChange' },
             { emit: 'focusStateEnabledChange' },
             { emit: 'heightChange' },
@@ -758,6 +835,7 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
 
 @NgModule({
   imports: [
+    DxChatComponent,
     DxiAlertModule,
     DxoDayHeaderFormatModule,
     DxiItemModule,
@@ -774,9 +852,6 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
     DxoChatUserModule,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxChatComponent
   ],
   exports: [
     DxChatComponent,
@@ -798,6 +873,8 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
   ]
 })
 export class DxChatModule { }
+
+export * from 'devextreme-angular/ui/chat/nested';
 
 import type * as DxChatTypes from "devextreme/ui/chat_types";
 export { DxChatTypes };

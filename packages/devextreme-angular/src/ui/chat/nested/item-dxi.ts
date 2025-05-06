@@ -15,6 +15,7 @@ import {
 import { User } from 'devextreme/ui/chat';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
@@ -22,8 +23,10 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxi-chat-item',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxiChatItemComponent extends CollectionNestedOption {
@@ -41,6 +44,22 @@ export class DxiChatItemComponent extends CollectionNestedOption {
     }
     set id(value: number | string) {
         this._setOption('id', value);
+    }
+
+    @Input()
+    get isDeleted(): boolean {
+        return this._getOption('isDeleted');
+    }
+    set isDeleted(value: boolean) {
+        this._setOption('isDeleted', value);
+    }
+
+    @Input()
+    get isEdited(): boolean {
+        return this._getOption('isEdited');
+    }
+    set isEdited(value: boolean) {
+        this._setOption('isEdited', value);
     }
 
     @Input()
@@ -81,7 +100,7 @@ export class DxiChatItemComponent extends CollectionNestedOption {
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiChatItemComponent
   ],
   exports: [

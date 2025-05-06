@@ -16,6 +16,7 @@ import {
 
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxoUser } from './base/user';
@@ -23,8 +24,10 @@ import { DxoUser } from './base/user';
 
 @Component({
     selector: 'dxo-author',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost],
     inputs: [
         'avatarAlt',
@@ -60,7 +63,7 @@ export class DxoAuthorComponent extends DxoUser implements OnDestroy, OnInit  {
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoAuthorComponent
   ],
   exports: [

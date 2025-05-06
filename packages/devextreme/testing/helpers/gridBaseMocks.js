@@ -667,7 +667,9 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
 
             getHeaderContentAlignment: function(columnAlignment) {
                 return columnAlignment;
-            }
+            },
+
+            isCustomCommandColumn: commonUtils.noop,
         };
     };
 
@@ -943,6 +945,8 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
         });
 
         that.NAME = 'dx' + nameWidget;
+
+        that.element = () => $('#container');
 
         that.focus = commonUtils.noop;
 

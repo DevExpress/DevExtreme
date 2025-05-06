@@ -86,6 +86,14 @@ export class ContextMenuView extends modules.View {
     this._contextMenuController = this.getController('contextMenu');
   }
 
+  protected contextMenuHiddenHandler(e) {
+    each(VIEW_NAMES, (_, viewName) => {
+      const view = this.getView(viewName);
+
+      view?.contextMenuHiddenHandler?.(e);
+    });
+  }
+
   protected _renderCore() {
     const $element = this.element().addClass(CONTEXT_MENU);
 
@@ -111,7 +119,7 @@ export class ContextMenuView extends modules.View {
         onItemClick(params) {
           params.itemData?.onItemClick?.(params);
         },
-
+        onHidden: this.contextMenuHiddenHandler.bind(this),
         cssClass: this.getWidgetContainerClass(),
         // @ts-expect-error
         target: this.component.$element(),

@@ -16,6 +16,7 @@ import {
 
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
@@ -23,8 +24,10 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-range-selector-data-prepare-settings',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxoRangeSelectorDataPrepareSettingsComponent extends NestedOption implements OnDestroy, OnInit  {
@@ -78,7 +81,7 @@ export class DxoRangeSelectorDataPrepareSettingsComponent extends NestedOption i
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoRangeSelectorDataPrepareSettingsComponent
   ],
   exports: [

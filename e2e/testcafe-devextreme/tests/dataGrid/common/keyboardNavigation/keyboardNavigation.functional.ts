@@ -4,6 +4,7 @@ import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import CommandCell from 'devextreme-testcafe-models/dataGrid/commandCell';
 import { ClassNames } from 'devextreme-testcafe-models/dataGrid/classNames';
 import HeaderFilter from 'devextreme-testcafe-models/dataGrid/headers/headerFilter';
+import Pager from 'devextreme-testcafe-models/pagination';
 import { createWidget } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
 import { getData } from '../../helpers/generateDataSourceData';
@@ -854,7 +855,11 @@ test('Edit - The first command cell should be focused using Tab (T884646)', asyn
   // header row
   await t
     .pressKey('tab')
-    .expect(headerRow.getHeaderCell(1).element.focused).ok();
+    .expect(headerRow.getHeaderCell(0).element.focused)
+    .ok()
+    .pressKey('tab')
+    .expect(headerRow.getHeaderCell(1).element.focused)
+    .ok();
 
   // data row
   await t
@@ -896,7 +901,11 @@ test('Edit - The first command cell should be focused using Tab (T884646)', asyn
   // header row
   await t
     .pressKey('shift+tab')
-    .expect(headerRow.getHeaderCell(1).element.focused).ok();
+    .expect(headerRow.getHeaderCell(1).element.focused)
+    .ok()
+    .pressKey('shift+tab')
+    .expect(headerRow.getHeaderCell(0).element.focused)
+    .ok();
 
   // focus BODY
   await t
@@ -979,7 +988,13 @@ test('Adaptive - Hidden cells should not be focused using Tab (T887014)', async 
   // header row
   await t
     .pressKey('tab')
-    .expect(headerRow.getHeaderCell(1).element.focused).ok()
+    .expect(headerRow.getHeaderCell(0).element.focused)
+    .ok()
+    .expect(headerRow.getHeaderCell(0).element.hasAttribute('tabindex'))
+    .ok()
+    .pressKey('tab')
+    .expect(headerRow.getHeaderCell(1).element.focused)
+    .ok()
     .expect(headerRow.getHeaderCell(1).element.hasAttribute('tabindex'))
     .ok()
     .expect(headerRow.getHeaderCell(2).isHidden)
@@ -1047,6 +1062,11 @@ test('Adaptive - Hidden cells should not be focused using Tab (T887014)', async 
     .expect(headerRow.getHeaderCell(1).element.focused)
     .ok()
     .expect(headerRow.getHeaderCell(1).element.hasAttribute('tabindex'))
+    .ok()
+    .pressKey('shift+tab')
+    .expect(headerRow.getHeaderCell(0).element.focused)
+    .ok()
+    .expect(headerRow.getHeaderCell(0).element.hasAttribute('tabindex'))
     .ok();
 
   // focus BODY
@@ -2170,7 +2190,10 @@ test('Empty row should lose focus on Tab (T941246)', async (t) => {
 
     async function checkNavigationOfAllCells(): Promise<void> {
       await t
-        .click(headers.getHeaderRow(0).getHeaderCell(1).element)
+        .click(headers.getHeaderRow(0, isCommandColumnFixed).getHeaderCell(0).element)
+        .expect(headers.getHeaderRow(0, isCommandColumnFixed).getHeaderCell(0).element.focused)
+        .ok()
+        .pressKey('tab')
         .expect(headers.getHeaderRow(0).getHeaderCell(1).element.focused)
         .ok()
         .pressKey('tab')
@@ -2252,7 +2275,10 @@ test('Empty row should lose focus on Tab (T941246)', async (t) => {
 
     async function checkNavigationOfAllCells(): Promise<void> {
       await t
-        .click(headers.getHeaderRow(0).getHeaderCell(1).element)
+        .click(headers.getHeaderRow(0, isCommandColumnFixed).getHeaderCell(0).element)
+        .expect(headers.getHeaderRow(0, isCommandColumnFixed).getHeaderCell(0).element.focused)
+        .ok()
+        .pressKey('tab')
         .expect(headers.getHeaderRow(0).getHeaderCell(1).element.focused)
         .ok()
         .pressKey('tab')
@@ -2339,7 +2365,16 @@ test('Empty row should lose focus on Tab (T941246)', async (t) => {
         .pressKey('tab')
         .expect(headers.getHeaderRow(0).getHeaderCell(1).element.focused)
         .ok()
-        .pressKey('tab')
+        .pressKey('tab');
+
+      if (!isCommandColumnFixed) {
+        await t
+          .expect(headers.getHeaderRow(0).getHeaderCell(2).element.focused)
+          .ok()
+          .pressKey('tab');
+      }
+
+      await t
         .expect(dataGrid.getDataCell(0, 0).element.focused)
         .ok()
         .pressKey('tab')
@@ -2424,7 +2459,16 @@ test('Empty row should lose focus on Tab (T941246)', async (t) => {
         .pressKey('tab')
         .expect(headers.getHeaderRow(0).getHeaderCell(1).element.focused)
         .ok()
-        .pressKey('tab')
+        .pressKey('tab');
+
+      if (!isCommandColumnFixed) {
+        await t
+          .expect(headers.getHeaderRow(0).getHeaderCell(2).element.focused)
+          .ok()
+          .pressKey('tab');
+      }
+
+      await t
         .expect(dataGrid.getDataCell(0, 0).element.focused)
         .ok()
         .pressKey('tab')
@@ -2491,7 +2535,16 @@ test('Empty row should lose focus on Tab (T941246)', async (t) => {
         .pressKey('tab')
         .expect(headers.getHeaderRow(0).getHeaderCell(1).element.focused)
         .ok()
-        .pressKey('tab')
+        .pressKey('tab');
+
+      if (!isCommandColumnFixed) {
+        await t
+          .expect(headers.getHeaderRow(0).getHeaderCell(2).element.focused)
+          .ok()
+          .pressKey('tab');
+      }
+
+      await t
         .expect(dataGrid.getDataCell(0, 0).element.focused)
         .ok()
         .pressKey('tab')
@@ -4334,7 +4387,7 @@ test('DataGrid - Cell focus in edit mode does not work correctly if a cell has a
 
 test('DataGrid - Cell focus works incorrectly if the command column has a disabled native button element (T1179207)', async (t) => {
   await t
-    .pressKey('tab tab tab tab tab tab')
+    .pressKey('tab tab tab tab tab tab tab')
 
     .expect(Selector(':focus').tagName)
     .eql('td')
@@ -4838,3 +4891,123 @@ test('Grids a11y: Fix the header filter and the column chooser focus issue and u
       },
     });
   });
+
+const getDataGridProps = () => ({
+  dataSource: getData(5, 2),
+  columns: ['field_0', 'field_1'],
+  filterRow: { visible: true },
+});
+
+// T1285421
+test('Multiple DataGrids - Ctrl+Up/Down from filter row should focus data row in the same grid', async (t) => {
+  const firstGrid = new DataGrid('#container');
+  const secondGrid = new DataGrid('#otherContainer');
+
+  // Ensure both grids are ready
+  await t
+    .expect(firstGrid.isReady())
+    .ok('First grid is ready')
+    .expect(secondGrid.isReady())
+    .ok('Second grid is ready');
+
+  const firstDataGridFilterCell = firstGrid
+    .getHeaders().getFilterRow().getFilterCell(0).getEditorInput().element;
+  const secondDataGridFilterCell = secondGrid
+    .getHeaders().getFilterRow().getFilterCell(0).getEditorInput().element;
+  const firstGridDataCell = firstGrid.getDataRow(0).getDataCell(0).element;
+  const secondGridDataCell = secondGrid.getDataRow(0).getDataCell(0).element;
+
+  await t
+    .click(secondGridDataCell)
+    .pressKey('ctrl+up')
+    .expect(secondDataGridFilterCell.focused)
+    .ok('Second grid filter cell is focused')
+    .expect(firstDataGridFilterCell.focused)
+    .notOk('First grid data filter cell is not focused')
+    .pressKey('ctrl+down')
+    .expect(secondGridDataCell.focused)
+    .ok('Second grid data cell is focused')
+    .expect(firstGridDataCell.focused)
+    .notOk('First grid data cell is not focused');
+}).before(async () => {
+  await createWidget('dxDataGrid', getDataGridProps());
+  await createWidget('dxDataGrid', getDataGridProps(), '#otherContainer');
+});
+
+test('DataGrid + standalone Pagination - Ctrl+Up on focused standalone Pagination should not move focus to the DataGrid', async (t) => {
+  const dataGrid = new DataGrid('#container');
+  const pager = new Pager('#otherContainer');
+
+  const pagerElement = pager.getPageSize(0).element;
+
+  await t
+    .click(pagerElement)
+    .expect(pagerElement.focused)
+    .ok()
+    .pressKey('ctrl+up')
+    .expect(pagerElement.focused)
+    .ok()
+    .expect(dataGrid.getDataRow(0).isFocusedRow)
+    .notOk();
+}).before(async () => {
+  await createWidget('dxDataGrid', {
+    dataSource: [
+      { id: 1, name: 'Name 1' },
+      { id: 2, name: 'Name 2' },
+      { id: 3, name: 'Name 3' },
+    ],
+    keyExpr: 'id',
+    focusedRowEnabled: true,
+  });
+
+  await createWidget('dxPagination', {
+    pageCount: 3,
+    pageSize: 1,
+    visible: true,
+    showPageSizeSelector: true,
+    allowedPageSizes: [1, 2, 3],
+  }, '#otherContainer');
+});
+
+test('DataGrid with Pagination in master detail - Ctrl+Up on focused standalone Pagination should not move focus to the DataGrid', async (t) => {
+  const dataGrid = new DataGrid('#container');
+  const pager = new Pager('#masterDetailPager');
+
+  const pagerElement = pager.getPageSize(0).element;
+
+  await t
+    .click(pagerElement)
+    .expect(pagerElement.focused)
+    .ok()
+    .pressKey('ctrl+up')
+    .expect(dataGrid.getDataRow(0).isFocusedRow)
+    .notOk();
+}).before(async () => {
+  await createWidget('dxDataGrid', {
+    dataSource: [
+      { id: 1, name: 'Name 1' },
+    ],
+    keyExpr: 'id',
+    focusedRowEnabled: true,
+    selection: {
+      mode: 'single',
+    },
+    masterDetail: {
+      autoExpandAll: true,
+      enabled: true,
+      template: (container) => {
+        $('<div>')
+          .attr('id', 'masterDetailPager')
+          .appendTo(container)
+          // @ts-expect-error dx.all.d.ts typings are missing
+          .dxPagination({
+            pageCount: 3,
+            pageSize: 1,
+            visible: true,
+            showPageSizeSelector: true,
+            allowedPageSizes: [1, 2, 3],
+          });
+      },
+    },
+  });
+});

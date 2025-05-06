@@ -1,6 +1,7 @@
 @use "sass:color";
 @use "../sizes" as *;
 @use "../colors" as *;
+@use "../textEditor/colors" as *;
 
 // adduse
 
@@ -16,6 +17,8 @@ $chat-background-color: $base-bg !default;
 */
 $chat-border-color: $base-border-color !default;
 $chat-messagebox-border-color: $chat-border-color !default;
+$chat-message-editing-preview-accent-color: $base-accent !default;
+$chat-message-editing-preview-cancel-button-color: $texteditor-label-color !default;
 
 /**
 * $name 30. Text color
@@ -166,3 +169,7 @@ $chat-typingindicator-circle-bg-color: null !default;
 * $type color
 */
 $chat-typingindicator-bubble-bg-color: $chat-bubble-background-color-secondary !default;
+
+$chat-messagelist-contextmenu-delete-button-color: $base-danger !default;
+$chat-messagelist-contextmenu-delete-button-focused-color: $base-danger !default;
+$chat-messagelist-contextmenu-delete-button-focused-bg: $base-hover-bg !default;

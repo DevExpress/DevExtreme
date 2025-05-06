@@ -26,6 +26,7 @@ import { dxFormOptions } from 'devextreme/ui/form';
 import { dxPopupOptions } from 'devextreme/ui/popup';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
@@ -34,8 +35,10 @@ import { DxiTreeListChangeComponent } from './change-dxi';
 
 @Component({
     selector: 'dxo-tree-list-editing',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxoTreeListEditingComponent extends NestedOption implements OnDestroy, OnInit  {
@@ -220,7 +223,7 @@ export class DxoTreeListEditingComponent extends NestedOption implements OnDestr
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoTreeListEditingComponent
   ],
   exports: [

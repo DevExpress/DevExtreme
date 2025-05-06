@@ -65,7 +65,7 @@ test('The drag cell should be skipped when navigating from the header cell by ta
   + ' with buttons column and renderAsync: true', async (t) => {
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
   const expectedFocusedCell = dataGrid.getDataCell(0, 1);
-  const cellToStartNavigation = dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(3);
+  const cellToStartNavigation = dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(4);
 
   await t.click(cellToStartNavigation.element)
     .pressKey('tab')

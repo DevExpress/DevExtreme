@@ -996,10 +996,6 @@ declare module DevExpress.aiIntegration {
      * [descr:RequestParams.prompt]
      */
     prompt: Prompt;
-    /**
-     * [descr:RequestParams.onChunk]
-     */
-    onChunk: (chunk: string) => void;
   };
   /**
    * [descr:Response]
@@ -2749,9 +2745,12 @@ declare module DevExpress.common.core.environment {
     */
    export const devices: DevExpress.core.DevicesObject;
   /**
-   * [descr:utils.getTimeZones(date)]
+   * [descr:utils.getTimeZones(date, timeZones)]
    */
-  export function getTimeZones(date?: Date): Array<SchedulerTimeZone>;
+  export function getTimeZones(
+    date?: Date,
+    timeZones?: string[]
+  ): Array<SchedulerTimeZone>;
   /**
    * [descr:hideTopOverlay()]
    */
@@ -9170,7 +9169,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxActionSheetItem.type]
      */
-    type?: DevExpress.common.ButtonType;
+    type?: DevExpress.common.ButtonType | string;
     /**
      * [descr:dxActionSheetItem.stylingMode]
      */
@@ -9657,7 +9656,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxButtonGroupItem.type]
      */
-    type?: DevExpress.common.ButtonType;
+    type?: DevExpress.common.ButtonType | string;
 
     /**
      * [descr:dxButtonGroupItem.elementAttr]
@@ -9963,6 +9962,48 @@ declare module DevExpress.ui {
     export type InitializedEvent =
       DevExpress.common.core.events.InitializedEventInfo<dxChat>;
     /**
+     * [descr:_ui_chat_MessageDeletedEvent]
+     */
+    export type MessageDeletedEvent =
+      DevExpress.common.core.events.EventInfo<dxChat> & {
+        /**
+         * [descr:_ui_chat_MessageDeletedEvent.message]
+         */
+        readonly message: Message;
+      };
+    /**
+     * [descr:_ui_chat_MessageDeletingEvent]
+     */
+    export type MessageDeletingEvent =
+      DevExpress.common.core.events.AsyncCancelable &
+        DevExpress.common.core.events.EventInfo<dxChat> & {
+          /**
+           * [descr:_ui_chat_MessageDeletingEvent.message]
+           */
+          readonly message: Message;
+        };
+    /**
+     * [descr:_ui_chat_MessageEditCanceledEvent]
+     */
+    export type MessageEditCanceledEvent =
+      DevExpress.common.core.events.EventInfo<dxChat> & {
+        /**
+         * [descr:_ui_chat_MessageEditCanceledEvent.message]
+         */
+        readonly message: Message;
+      };
+    /**
+     * [descr:_ui_chat_MessageEditingStartEvent]
+     */
+    export type MessageEditingStartEvent =
+      DevExpress.common.core.events.AsyncCancelable &
+        DevExpress.common.core.events.EventInfo<dxChat> & {
+          /**
+           * [descr:_ui_chat_MessageEditingStartEvent.message]
+           */
+          readonly message: Message;
+        };
+    /**
      * [descr:_ui_chat_MessageEnteredEvent]
      */
     export type MessageEnteredEvent =
@@ -9979,6 +10020,35 @@ declare module DevExpress.ui {
       readonly component: dxChat;
       readonly message?: Message;
     };
+    /**
+     * [descr:_ui_chat_MessageUpdatedEvent]
+     */
+    export type MessageUpdatedEvent =
+      DevExpress.common.core.events.EventInfo<dxChat> & {
+        /**
+         * [descr:_ui_chat_MessageUpdatedEvent.message]
+         */
+        readonly message: Message;
+        /**
+         * [descr:_ui_chat_MessageUpdatedEvent.text]
+         */
+        readonly text: string;
+      };
+    /**
+     * [descr:_ui_chat_MessageUpdatingEvent]
+     */
+    export type MessageUpdatingEvent =
+      DevExpress.common.core.events.AsyncCancelable &
+        DevExpress.common.core.events.EventInfo<dxChat> & {
+          /**
+           * [descr:_ui_chat_MessageUpdatingEvent.message]
+           */
+          readonly message: Message;
+          /**
+           * [descr:_ui_chat_MessageUpdatingEvent.text]
+           */
+          readonly text: string;
+        };
     /**
      * [descr:_ui_chat_OptionChangedEvent]
      */
@@ -10035,6 +10105,10 @@ declare module DevExpress.ui {
      * [descr:dxChatOptions.items]
      */
     items?: Array<DevExpress.ui.dxChat.Message>;
+    /**
+     * [descr:dxChatOptions.editing]
+     */
+    editing?: DevExpress.ui.dxChat.Editing;
     /**
      * [descr:dxChatOptions.dataSource]
      */
@@ -10102,6 +10176,42 @@ declare module DevExpress.ui {
      */
     onTypingEnd?:
       | ((e: DevExpress.ui.dxChat.TypingEndEvent) => void)
+      | undefined;
+    /**
+     * [descr:dxChatOptions.onMessageDeleting]
+     */
+    onMessageDeleting?:
+      | ((e: DevExpress.ui.dxChat.MessageDeletingEvent) => void)
+      | undefined;
+    /**
+     * [descr:dxChatOptions.onMessageDeleted]
+     */
+    onMessageDeleted?:
+      | ((e: DevExpress.ui.dxChat.MessageDeletedEvent) => void)
+      | undefined;
+    /**
+     * [descr:dxChatOptions.onMessageEditingStart]
+     */
+    onMessageEditingStart?:
+      | ((e: DevExpress.ui.dxChat.MessageEditingStartEvent) => void)
+      | undefined;
+    /**
+     * [descr:dxChatOptions.onMessageEditCanceled]
+     */
+    onMessageEditCanceled?:
+      | ((e: DevExpress.ui.dxChat.MessageEditCanceledEvent) => void)
+      | undefined;
+    /**
+     * [descr:dxChatOptions.onMessageUpdating]
+     */
+    onMessageUpdating?:
+      | ((e: DevExpress.ui.dxChat.MessageUpdatingEvent) => void)
+      | undefined;
+    /**
+     * [descr:dxChatOptions.onMessageUpdated]
+     */
+    onMessageUpdated?:
+      | ((e: DevExpress.ui.dxChat.MessageUpdatedEvent) => void)
       | undefined;
   }
   /**
@@ -15371,7 +15481,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxDropDownButtonOptions.type]
      */
-    type?: DevExpress.common.ButtonType;
+    type?: DevExpress.common.ButtonType | string;
     /**
      * [descr:dxDropDownButtonOptions.useSelectMode]
      */
@@ -31758,6 +31868,23 @@ declare module DevExpress.ui.dxChat {
     message?: string;
   };
   /**
+   * [descr:Editing]
+   */
+  export type Editing = {
+    /**
+     * [descr:Editing.allowUpdating]
+     */
+    allowUpdating?:
+      | boolean
+      | ((options: { component?: dxChat; message?: Message }) => boolean);
+    /**
+     * [descr:Editing.allowDeleting]
+     */
+    allowDeleting?:
+      | boolean
+      | ((options: { component?: dxChat; message?: Message }) => boolean);
+  };
+  /**
    * [descr:Message]
    */
   export type Message = {
@@ -31777,6 +31904,14 @@ declare module DevExpress.ui.dxChat {
      * [descr:Message.text]
      */
     text?: string;
+    /**
+     * [descr:Message.isEdited]
+     */
+    isEdited?: boolean;
+    /**
+     * [descr:Message.isDeleted]
+     */
+    isDeleted?: boolean;
   };
   /**
    * [descr:User]

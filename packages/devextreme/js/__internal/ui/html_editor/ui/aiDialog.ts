@@ -1,34 +1,64 @@
-import type { AIIntegration } from '@js/common/ai-integration';
+import '@js/ui/drop_down_button';
+
+import type { AIIntegration, RequestCallbacks } from '@js/common/ai-integration';
 import localizationMessage from '@js/common/core/localization/message';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { extend } from '@js/core/utils/extend';
-import type { ItemClickEvent } from '@js/ui/drop_down_button_types';
-import type { AICustomCommand } from '@js/ui/html_editor';
+import type { ButtonClickEvent, ItemClickEvent } from '@js/ui/drop_down_button_types';
+import type { AICommandNameExtended, AICustomCommand } from '@js/ui/html_editor';
+import LoadIndicator from '@js/ui/load_indicator';
 import type { Properties as PopupProperties, ToolbarItem } from '@js/ui/popup';
 import type dxSelectBox from '@js/ui/select_box';
 import type { Properties as SelectBoxProperties } from '@js/ui/select_box';
 import SelectBox from '@js/ui/select_box';
 import TextArea from '@js/ui/text_area';
+import { isCompact } from '@js/ui/themes';
+import { currentTheme } from '@js/viz/themes';
+import type {
+  AICommandExecutor,
+  AICommandParamsMap,
+  CommandDefinition,
+  CommandsMap,
+} from '@ts/ui/html_editor/utils/ai';
+import {
+  AI_DIALOG_ASKAI_COMMAND_NAME,
+  AI_DIALOG_CUSTOM_COMMAND_NAME,
+  buildAICommandParams,
+  getAICommandName,
+} from '@ts/ui/html_editor/utils/ai';
+import type { LoadIndicatorProperties } from '@ts/ui/m_load_indicator';
+import { AnimationType } from '@ts/ui/m_load_indicator';
+import { TEXTEDITOR_INPUT_CONTAINER_CLASS } from '@ts/ui/text_box/m_text_editor.base';
 
-import type { CommandDefinition, CommandsMap } from '../utils/ai';
+import { isSmallScreen } from '../utils/small_screen';
 import BaseDialog from './m_baseDialog';
 
-const AI_DIALOG_COMMANDS_WITH_OPTIONS = ['translate', 'changeStyle', 'changeTone', 'custom'];
+export const AI_DIALOG_CLASS = 'dx-aidialog';
+export const AI_DIALOG_CONTROLS_CLASS = 'dx-aidialog-controls';
+export const AI_DIALOG_CONTENT_CLASS = 'dx-aidialog-content';
 
-const AI_DIALOG_CLASS = 'dx-aidialog';
-const AI_DIALOG_CONTROLS_CLASS = 'dx-aidialog-controls';
-const AI_DIALOG_CONTENT_CLASS = 'dx-aidialog-content';
+const AI_DIALOG_LOAD_INDICATOR_CLASS = 'dx-pending-indicator';
 const AI_DIALOG_TITLE_CLASS = 'dx-aidialog-title';
 const AI_DIALOG_TITLE_TEXT_CLASS = 'dx-aidialog-title-text';
 const ICON_CLASS = 'dx-icon';
 const ICON_SPARKLE_CLASS = 'dx-icon-sparkle';
+const COPY_BUTTON_ICON = 'copy';
+const TRY_AGAIN_BUTTON_ICON = 'restore';
+
+const AI_DIALOG_COMMANDS_WITH_OPTIONS = ['translate', 'changeStyle', 'changeTone'];
 
 const POPUP_MIN_WIDTH = 288;
 const POPUP_MAX_WIDTH = 460;
-const REPLACE_DROPDOWN_WIDTH = 150;
-const TEXT_AREA_MIN_HEIGHT = 64;
-const TEXT_AREA_MAX_HEIGHT = 128;
+export const TEXT_AREA_MIN_HEIGHT = 64;
+export const TEXT_AREA_MAX_HEIGHT = 128;
+export const REPLACE_DROPDOWN_WIDTH = 150;
+export const ACTION_BUTTON_WIDTH = 110;
+export const COMPACT_ACTION_BUTTON_WIDTH = 100;
+
+function getActionButtonWidth(): number {
+  return isCompact(currentTheme()) ? COMPACT_ACTION_BUTTON_WIDTH : ACTION_BUTTON_WIDTH;
+}
 
 enum DialogState {
   Initial = 'initial',
@@ -44,8 +74,10 @@ enum ReplaceButtonActions {
   InsertBelow = 'insertBelow',
 }
 
+type NamedToolbarItem = ToolbarItem & { name: string };
+
 export interface AIDialogShowPayload {
-  currentCommand: string;
+  currentCommand: AICommandNameExtended;
   currentCommandOption?: string;
   text?: string;
   commandsMap: CommandsMap;
@@ -54,43 +86,49 @@ export interface AIDialogShowPayload {
 
 export interface AIDialogResult {
   resultText: string;
-  event: ItemClickEvent;
+  event: ItemClickEvent | ButtonClickEvent & ItemClickEvent['itemData'];
 }
 
 export default class AIDialog extends BaseDialog<AIDialogResult> {
-  private _dialogState: DialogState = DialogState.Initial;
+  private _abort?: () => void;
 
-  private _isAskAICommandSelected = false;
-
-  private readonly _aiIntegration?: AIIntegration;
-
-  private _commandsMap: CommandsMap = {};
-
-  private _currentCommand?: string;
-
-  private _currentOption?: string;
-
-  private _commandOptionsList?: string[];
-
-  private _resultText = '';
+  private _aiIntegration: AIIntegration;
 
   private _askAIPrompt = '';
 
-  private _getCustomCommandPrompt?: AICustomCommand['prompt'];
+  private _commandChangeSuppressed = false;
+
+  private _commandOptionsList?: string[];
 
   private _commandSelectBox!: dxSelectBox;
 
-  private _optionSelectBox!: SelectBox;
+  private _commandsMap: CommandsMap = {};
 
-  private _resultTextArea!: TextArea;
+  private _currentCommand?: AICommandNameExtended;
+
+  private _currentOption?: string;
+
+  private _dialogState: DialogState = DialogState.Initial;
+
+  private _getCustomCommandPrompt?: AICustomCommand['prompt'];
+
+  private _isAICommandExecuting = false;
+
+  private _isAskAICommandSelected = false;
+
+  private _loadIndicator?: LoadIndicator;
+
+  private _optionSelectBox!: SelectBox;
 
   private _promptTextArea!: TextArea;
 
-  private _commandChangeSuppressed = false;
+  private _resultTextArea!: TextArea;
+
+  private _selectedText = '';
 
   constructor(
     $container: dxElementWrapper,
-    aiIntegration?: AIIntegration,
+    aiIntegration: AIIntegration,
     popupConfig?: PopupProperties,
   ) {
     super($container, popupConfig);
@@ -136,11 +174,17 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
         this._currentCommand = e.value;
         this._commandOptionsList = this._commandsMap[e.value]?.options ?? [];
         this._currentOption = this._commandOptionsList?.[0];
-
-        this._isAskAICommandSelected = e.value === 'askAI';
+        this._isAskAICommandSelected = e.value === AI_DIALOG_ASKAI_COMMAND_NAME;
         this._askAIPrompt = '';
+        this._getCustomCommandPrompt = this._commandsMap[e.value]?.prompt;
 
         this._setDialogState(this._getInitialDialogState());
+
+        const shouldExecuteAICommand = !this._isAskAICommandSelected && this._isOpen();
+
+        if (shouldExecuteAICommand) {
+          this._executeAICommand();
+        }
       },
     } as SelectBoxProperties);
   }
@@ -153,6 +197,10 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
       visible: this._isCommandWithOptionsSelected(),
       onValueChanged: (e): void => {
         this._currentOption = e.value;
+
+        if (this._isOpen()) {
+          this._executeAICommand();
+        }
       },
     } as SelectBoxProperties);
   }
@@ -174,16 +222,20 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
 
   protected _renderResultTextArea($container: dxElementWrapper): void {
     const $textArea = $('<div>').appendTo($container);
-    this._resultTextArea = new TextArea($textArea.get(0), {
-      value: this._resultText,
-      minHeight: TEXT_AREA_MIN_HEIGHT,
+    const screenSpecificOptions = isSmallScreen() ? {
+      maxHeight: '100%',
+      height: '100%',
+      autoResizeEnabled: false,
+    } : {
       maxHeight: TEXT_AREA_MAX_HEIGHT,
       autoResizeEnabled: true,
+    };
+
+    this._resultTextArea = new TextArea($textArea.get(0), {
+      minHeight: TEXT_AREA_MIN_HEIGHT,
       width: '100%',
       readOnly: true,
-      onValueChanged: (e): void => {
-        this._resultText = e.value;
-      },
+      ...screenSpecificOptions,
     });
   }
 
@@ -200,12 +252,35 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
     this._renderResultTextArea($contentElem);
   }
 
+  private _renderLoadIndicator(): void {
+    if (this._loadIndicator) {
+      return;
+    }
+
+    const $inputContainer = this._resultTextArea
+      .$element()
+      .find(`.${TEXTEDITOR_INPUT_CONTAINER_CLASS}`);
+
+    const $indicatorElement = $('<div>')
+      .addClass(AI_DIALOG_LOAD_INDICATOR_CLASS)
+      .appendTo($inputContainer);
+
+    const options: LoadIndicatorProperties = {
+      _animationType: AnimationType.Sparkle,
+      width: 48,
+      height: 48,
+    };
+
+    this._loadIndicator = new LoadIndicator($indicatorElement[0], options);
+  }
+
   protected _getPopupClass(): string {
     return AI_DIALOG_CLASS;
   }
 
-  protected _getTitleItem(): ToolbarItem {
+  protected _getTitleItem(): NamedToolbarItem {
     return {
+      name: 'title',
       toolbar: 'top',
       location: 'before',
       template: (data, index, titleElement): void => {
@@ -222,108 +297,135 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
     };
   }
 
-  protected _getReplaceButtonItem(config?: ToolbarItem): ToolbarItem {
+  protected _getReplaceButtonItem(): NamedToolbarItem {
     return {
+      name: 'replace',
       toolbar: 'bottom',
-      location: 'before',
+      location: 'after',
       widget: 'dxDropDownButton',
+      locateInMenu: 'auto',
       options: {
         text: localizationMessage.format('dxHtmlEditor-aiReplace'),
         stylingMode: 'contained',
         type: 'default',
+        splitButton: true,
+        useSelectMode: false,
         items: [
-          { id: ReplaceButtonActions.Replace, text: localizationMessage.format('dxHtmlEditor-aiReplace') },
           { id: ReplaceButtonActions.InsertAbove, text: localizationMessage.format('dxHtmlEditor-aiInsertAbove') },
           { id: ReplaceButtonActions.InsertBelow, text: localizationMessage.format('dxHtmlEditor-aiInsertBelow') },
         ],
         dropDownOptions: {
           width: REPLACE_DROPDOWN_WIDTH,
         },
-        onItemClick: (e: ItemClickEvent) => this.replaceButtonAction(e),
+        onButtonClick: (e: ButtonClickEvent): void => {
+          this._replaceButtonAction({ ...e, itemData: { id: ReplaceButtonActions.Replace } });
+        },
+        onItemClick: (e: ItemClickEvent) => this._replaceButtonAction(e),
       },
-      ...config,
     };
   }
 
-  protected _getCopyButtonItem(config?: ToolbarItem): ToolbarItem {
+  protected _getCopyButtonItem(): NamedToolbarItem {
+    const text = isSmallScreen() ? undefined : localizationMessage.format('dxHtmlEditor-aiCopy');
     return {
+      name: 'copy',
       toolbar: 'bottom',
       location: 'after',
       widget: 'dxButton',
+      locateInMenu: 'auto',
       options: {
-        text: localizationMessage.format('dxHtmlEditor-aiCopy'),
-        onClick: async (): Promise<void> => {
-          await navigator?.clipboard?.writeText(this._resultText);
+        stylingMode: 'outlined',
+        icon: COPY_BUTTON_ICON,
+        text,
+        onClick: (): void => {
+          const { value } = this._resultTextArea.option();
+          // eslint-disable-next-line @typescript-eslint/no-floating-promises
+          navigator?.clipboard?.writeText(value ?? '');
         },
       },
-      ...config,
     };
   }
 
-  protected _getTryAgainButtonItem(): ToolbarItem {
+  protected _getTryAgainButtonItem(): NamedToolbarItem {
+    const text = isSmallScreen() ? undefined : localizationMessage.format('dxHtmlEditor-aiTryAgain');
     return {
-      toolbar: 'bottom',
-      location: 'after',
-      widget: 'dxButton',
-      options: {
-        text: localizationMessage.format('dxHtmlEditor-aiTryAgain'),
-        onClick: () => this._retryAIRequest(),
-      },
-    };
-  }
-
-  protected _getGenerateButtonItem(config?: ToolbarItem): ToolbarItem {
-    return {
+      name: 'tryAgain',
       toolbar: 'bottom',
       location: 'before',
       widget: 'dxButton',
       options: {
-        text: localizationMessage.format('dxHtmlEditor-aiGenerate'),
-        type: 'default',
-        stylingMode: 'contained',
-        onClick: () => this._generateAIResponse(),
+        stylingMode: 'outlined',
+        icon: TRY_AGAIN_BUTTON_ICON,
+        text,
+        onClick: () => this._retryExecuteAICommand(),
       },
-      ...config,
     };
   }
 
-  protected _getStopButtonItem(config?: ToolbarItem): ToolbarItem {
+  protected _getGenerateButtonItem(): NamedToolbarItem {
+    const width = getActionButtonWidth();
     return {
+      name: 'generate',
       toolbar: 'bottom',
       location: 'after',
       widget: 'dxButton',
       options: {
-        text: localizationMessage.format('dxHtmlEditor-aiStop'),
-        onClick: () => this._stopGeneration(),
+        type: 'default',
+        text: localizationMessage.format('dxHtmlEditor-aiGenerate'),
+        stylingMode: 'contained',
+        width,
+        onClick: () => this._executeAICommand(),
       },
-      ...config,
     };
   }
 
-  protected _getToolbarItems(): ToolbarItem[] {
-    const items: ToolbarItem[] = [this._getTitleItem()];
+  protected _getStopButtonItem(): NamedToolbarItem {
+    const width = getActionButtonWidth();
+    return {
+      name: 'stop',
+      toolbar: 'bottom',
+      location: 'after',
+      widget: 'dxButton',
+      options: {
+        type: 'default',
+        stylingMode: 'contained',
+        text: localizationMessage.format('dxHtmlEditor-aiStop'),
+        width,
+        onClick: () => this._stopAICommandExecution(),
+      },
+    };
+  }
+
+  private _getInitialToolbarItems(): NamedToolbarItem[] {
+    return [
+      this._getTryAgainButtonItem(),
+      this._getCopyButtonItem(),
+      this._getReplaceButtonItem(),
+    ];
+  }
+
+  protected _getToolbarItems(): NamedToolbarItem[] {
+    const items: NamedToolbarItem[] = [this._getTitleItem()];
 
     switch (this._dialogState) {
       case DialogState.Initial:
       case DialogState.ResultReady:
-        items.push(
-          this._getReplaceButtonItem(),
-          this._getTryAgainButtonItem(),
-          this._getCopyButtonItem(),
-        );
+        items.push(...this._getInitialToolbarItems());
         break;
       case DialogState.Asking:
-        items.push(this._getGenerateButtonItem(), this._getStopButtonItem({ disabled: true }));
+        items.push(this._getGenerateButtonItem());
         break;
       case DialogState.Generating:
-        items.push(
-          this._getReplaceButtonItem({ disabled: true }),
-          this._getCopyButtonItem({ disabled: true }),
-          this._getStopButtonItem(),
-        );
+        items.push(this._getStopButtonItem());
         break;
-      case DialogState.Error:
+      case DialogState.Error: {
+        if (this._isAskAICommandSelected) {
+          items.push(this._getGenerateButtonItem());
+        } else {
+          items.push(...this._getInitialToolbarItems());
+        }
         break;
+      }
       default:
         break;
     }
@@ -341,28 +443,98 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
     this._refreshOptionSelectBox();
     this._refreshTextAreas();
     this._refreshToolbarItems();
+    this._refreshLoadIndicator();
   }
 
   private _refreshToolbarItems(): void {
     this._popup.option('toolbarItems', this._getToolbarItems());
   }
 
-  private _retryAIRequest(): void {
-    this._generateAIResponse();
+  private _retryExecuteAICommand(): void {
+    this._updateResults();
+    this._executeAICommand();
   }
 
-  private _generateAIResponse(): void {
-    // TODO: implement with AI integration
+  private _getAICommandParams(
+    uiCommand: AICommandNameExtended,
+  ): AICommandParamsMap[AICommandNameExtended] {
+    const {
+      _askAIPrompt: askAIPrompt,
+      _currentOption: option,
+      _getCustomCommandPrompt: getCustomPrompt,
+      _selectedText: text,
+    } = this;
+
+    const uiCommandName = this._commandsMap[uiCommand].name;
+
+    const params = buildAICommandParams<AICommandNameExtended>(
+      uiCommandName,
+      askAIPrompt,
+      option,
+      getCustomPrompt,
+      text,
+    );
+
+    return params;
+  }
+
+  private _updateResults(value = ''): void {
+    this._resultTextArea.option({ value });
+  }
+
+  private _processCommandCompletion(dialogState: DialogState): void {
+    this._abort = undefined;
+    this._isAICommandExecuting = false;
+    this._setDialogState(dialogState);
+  }
+
+  private _getAICommandCallbacks<T>(): RequestCallbacks<T> {
+    const callbacks = {
+      onComplete: (finalResponse: T): void => {
+        this._updateResults(String(finalResponse));
+        this._processCommandCompletion(DialogState.ResultReady);
+      },
+      onError: (): void => {
+        this._processCommandCompletion(DialogState.Error);
+      },
+    };
+
+    return callbacks;
+  }
+
+  private _executeAICommand(): void {
+    const { _currentCommand: uiCommand } = this;
+    const aiCommandName = uiCommand && getAICommandName(this._commandsMap[uiCommand]?.name);
+
+    if (!(aiCommandName && this._aiIntegration[aiCommandName])) {
+      return;
+    }
+
+    const callbacks = this._getAICommandCallbacks();
+    const params = this._getAICommandParams(uiCommand);
+
+    this._isAICommandExecuting = true;
     this._setDialogState(DialogState.Generating);
-    this._setDialogState(DialogState.ResultReady);
+
+    const abort = (this._aiIntegration[aiCommandName] as unknown as AICommandExecutor<
+      typeof uiCommand
+    >)(params, callbacks);
+
+    this._abort = abort;
   }
 
-  private _stopGeneration(): void {
-    // TODO: implement actual cancellation of AI request
-    this._setDialogState(this._getInitialDialogState());
+  private _stopAICommandExecution(): void {
+    this._abort?.();
+    this._processCommandCompletion(this._getInitialDialogState());
   }
 
   private _isCommandWithOptionsSelected(): boolean {
+    if (
+      this._currentCommand
+      && this._commandsMap[this._currentCommand]?.name === AI_DIALOG_CUSTOM_COMMAND_NAME) {
+      return Boolean(this._commandOptionsList?.length);
+    }
+
     return AI_DIALOG_COMMANDS_WITH_OPTIONS.includes(this._currentCommand ?? '');
   }
 
@@ -373,6 +545,7 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
 
     this._commandChangeSuppressed = true;
     this._commandSelectBox.option({
+      disabled: this._isAICommandExecuting,
       dataSource: commandsList,
       value: this._currentCommand,
     });
@@ -383,47 +556,96 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
     const hasOptions = this._isCommandWithOptionsSelected();
 
     this._optionSelectBox.option({
+      disabled: this._isAICommandExecuting,
       visible: hasOptions,
       items: this._commandOptionsList ?? [],
       value: this._currentOption ?? this._commandOptionsList?.[0],
     });
   }
 
+  private _setTextAreasInitialState(): void {
+    this._promptTextArea.option({
+      disabled: true,
+      readOnly: false,
+      value: undefined,
+      visible: false,
+    });
+    this._resultTextArea.option({
+      disabled: false,
+      readOnly: true,
+      value: undefined,
+      visible: true,
+    });
+  }
+
+  private _setTextAreasAskingState(): void {
+    this._promptTextArea.option({
+      disabled: false,
+      readOnly: false,
+      value: this._askAIPrompt,
+      visible: true,
+    });
+    this._resultTextArea.option({
+      disabled: true,
+      readOnly: false,
+      value: undefined,
+      visible: false,
+    });
+  }
+
   private _refreshTextAreas(): void {
     switch (this._dialogState) {
       case DialogState.Initial:
-        this._promptTextArea.option({ visible: false });
-        this._resultTextArea.option({
-          visible: true,
-          value: this._resultText,
-        });
+        this._setTextAreasInitialState();
         break;
       case DialogState.Asking:
-        this._promptTextArea.option({
-          visible: true,
-          value: this._askAIPrompt,
-          readOnly: false,
-        });
-        this._resultTextArea.option({ visible: false });
+        this._setTextAreasAskingState();
         break;
       case DialogState.Generating:
-        this._promptTextArea.option({ readOnly: true });
+        this._promptTextArea.option({
+          disabled: true,
+          readOnly: false,
+          value: this._askAIPrompt,
+          visible: this._isAskAICommandSelected,
+        });
         this._resultTextArea.option({
+          disabled: true,
+          readOnly: false,
+          value: undefined,
           visible: true,
-          value: this._resultText,
         });
         break;
       case DialogState.ResultReady:
+        this._promptTextArea.option({
+          disabled: !this._isAskAICommandSelected,
+          readOnly: true,
+          value: this._askAIPrompt,
+          visible: this._isAskAICommandSelected,
+        });
         this._resultTextArea.option({
+          disabled: false,
+          readOnly: true,
           visible: true,
-          value: this._resultText,
         });
         break;
-      case DialogState.Error:
-        // TODO Implement with adding errors UI
+      case DialogState.Error: {
+        if (this._isAskAICommandSelected) {
+          this._setTextAreasAskingState();
+        } else {
+          this._setTextAreasInitialState();
+        }
         break;
+      }
       default:
         break;
+    }
+  }
+
+  private _refreshLoadIndicator(): void {
+    if (this._dialogState === DialogState.Generating) {
+      this._renderLoadIndicator();
+    } else {
+      this._disposeLoadIndicator();
     }
   }
 
@@ -431,30 +653,62 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
     return this._isAskAICommandSelected ? DialogState.Asking : DialogState.Initial;
   }
 
-  replaceButtonAction(event: ItemClickEvent): void {
-    this.hide(this._resultText, event);
+  private _replaceButtonAction(event: AIDialogResult['event']): void {
+    const { value } = this._resultTextArea.option();
+    this.hide(value ?? '', event);
   }
 
-  show({
-    currentCommand, currentCommandOption, commandsMap, text, prompt,
-  }: AIDialogShowPayload): Promise<AIDialogResult> | undefined {
+  private _disposeLoadIndicator(): void {
+    if (!this._loadIndicator) {
+      return;
+    }
+
+    this._loadIndicator.dispose();
+    this._loadIndicator.$element().remove();
+    this._loadIndicator = undefined;
+  }
+
+  private _isOpen(): boolean {
+    const { visible } = this._popup.option();
+
+    return visible as boolean;
+  }
+
+  updateAIIntegration(aiIntegration: AIIntegration): void {
+    this._abort?.();
+    this._processCommandCompletion(this._getInitialDialogState());
+    this._aiIntegration = aiIntegration;
+    this._executeAICommand();
+  }
+
+  show(payload: AIDialogShowPayload): Promise<AIDialogResult> | undefined {
+    const {
+      currentCommand, currentCommandOption, commandsMap, text, prompt,
+    } = payload;
+
     this._commandsMap = commandsMap;
     this._currentCommand = currentCommand;
-    this._resultText = text ?? '';
+    this._selectedText = text ?? '';
     this._commandOptionsList = commandsMap[currentCommand]?.options ?? [];
     this._currentOption = currentCommandOption;
     this._getCustomCommandPrompt = prompt;
-
-    this._isAskAICommandSelected = currentCommand === 'askAI';
+    this._isAskAICommandSelected = currentCommand === AI_DIALOG_ASKAI_COMMAND_NAME;
     this._askAIPrompt = '';
 
     this._setDialogState(this._getInitialDialogState());
 
+    if (!this._isAskAICommandSelected) {
+      this._executeAICommand();
+    }
+
     return super.show();
   }
 
-  hide(resultText: string, event: ItemClickEvent): void {
+  hide(resultText: string, event: AIDialogResult['event']): void {
     this.deferred?.resolve({ resultText, event });
+
+    this._abort?.();
+    this._processCommandCompletion(this._getInitialDialogState());
 
     super.hide();
   }

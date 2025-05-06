@@ -16,6 +16,7 @@ import {
 
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
@@ -23,8 +24,10 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-bar-gauge-margin',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxoBarGaugeMarginComponent extends NestedOption implements OnDestroy, OnInit  {
@@ -86,7 +89,7 @@ export class DxoBarGaugeMarginComponent extends NestedOption implements OnDestro
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoBarGaugeMarginComponent
   ],
   exports: [

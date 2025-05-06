@@ -194,8 +194,10 @@ import { DxiTreeListColumnComponent } from 'devextreme-angular/ui/tree-list/nest
  */
 @Component({
     selector: 'dx-tree-list',
+    standalone: true,
     template: '',
     host: { ngSkipHydration: 'true' },
+    imports: [ DxIntegrationModule ],
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -2203,6 +2205,7 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
         this.setupChanges('columns', changes);
         this.setupChanges('dataSource', changes);
         this.setupChanges('expandedRowKeys', changes);
+        this.setupChanges('filterValue', changes);
         this.setupChanges('selectedRowKeys', changes);
     }
 
@@ -2216,6 +2219,7 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
         this._idh.doCheck('columns');
         this._idh.doCheck('dataSource');
         this._idh.doCheck('expandedRowKeys');
+        this._idh.doCheck('filterValue');
         this._idh.doCheck('selectedRowKeys');
         this._watcherHelper.checkWatchers();
         super.ngDoCheck();
@@ -2234,6 +2238,7 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
 
 @NgModule({
   imports: [
+    DxTreeListComponent,
     DxoColumnChooserModule,
     DxoPositionModule,
     DxoAtModule,
@@ -2366,9 +2371,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     DxiTreeListValidationRuleModule,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxTreeListComponent
   ],
   exports: [
     DxTreeListComponent,
@@ -2506,6 +2508,8 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
   ]
 })
 export class DxTreeListModule { }
+
+export * from 'devextreme-angular/ui/tree-list/nested';
 
 import type * as DxTreeListTypes from "devextreme/ui/tree_list_types";
 export { DxTreeListTypes };

@@ -3,6 +3,7 @@ import CheckBox from '../checkBox';
 const CLASS = {
   focused: 'dx-state-focused',
   checkbox: 'dx-checkbox',
+  expandButton: 'dx-treeview-toggle-item-visibility',
 };
 
 export default class TreeViewNode {
@@ -18,5 +19,9 @@ export default class TreeViewNode {
 
   public getCheckBox(): CheckBox {
     return new CheckBox(this.element.find(`.${CLASS.checkbox}`));
+  }
+
+  public getExpandButton(): Selector {
+    return this.element.find(`.${CLASS.expandButton}`);
   }
 }

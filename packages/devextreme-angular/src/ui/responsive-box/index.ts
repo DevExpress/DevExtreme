@@ -66,8 +66,10 @@ import { DxiResponsiveBoxRowComponent } from 'devextreme-angular/ui/responsive-b
  */
 @Component({
     selector: 'dx-responsive-box',
+    standalone: true,
     template: '',
     host: { ngSkipHydration: 'true' },
+    imports: [ DxIntegrationModule ],
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -581,6 +583,7 @@ export class DxResponsiveBoxComponent<TItem = any, TKey = any> extends DxCompone
 
 @NgModule({
   imports: [
+    DxResponsiveBoxComponent,
     DxiColModule,
     DxiItemModule,
     DxiLocationModule,
@@ -591,9 +594,6 @@ export class DxResponsiveBoxComponent<TItem = any, TKey = any> extends DxCompone
     DxiResponsiveBoxRowModule,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxResponsiveBoxComponent
   ],
   exports: [
     DxResponsiveBoxComponent,
@@ -609,6 +609,8 @@ export class DxResponsiveBoxComponent<TItem = any, TKey = any> extends DxCompone
   ]
 })
 export class DxResponsiveBoxModule { }
+
+export * from 'devextreme-angular/ui/responsive-box/nested';
 
 import type * as DxResponsiveBoxTypes from "devextreme/ui/responsive_box_types";
 export { DxResponsiveBoxTypes };

@@ -12,6 +12,7 @@ const componentNames = [
   'button-group',
   'button',
   'calendar',
+  'card-view',
   'chart',
   'chat',
   'check-box',

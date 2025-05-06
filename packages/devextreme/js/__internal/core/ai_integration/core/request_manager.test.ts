@@ -6,8 +6,11 @@ import {
   jest,
 } from '@jest/globals';
 import type { AIProvider, Prompt } from '@js/common/ai-integration';
-import { ERROR_MESSAGES, RequestManager } from '@ts/core/ai_integration/core/request_manager';
+import type { RequestManagerParams } from '@ts/core/ai_integration/core/request_manager';
+import { RequestManager } from '@ts/core/ai_integration/core/request_manager';
 import { Provider } from '@ts/core/ai_integration/test_utils/provider_mock';
+
+const INVALID_SEND_REQUEST_ERROR_MESSAGE = 'E0122 - AIIntegration: The sendRequest method is missing.';
 
 describe('RequestManager', () => {
   let provider = null as unknown as AIProvider;
@@ -23,21 +26,17 @@ describe('RequestManager', () => {
       // @ts-expect-error Access to protected property for a test
       expect(requestManager.provider).toBe(provider);
     });
+
+    it('should throw an error when constructed with invalid sendRequest method', () => {
+      const invalidProvider = {} as AIProvider;
+
+      const createRequestManager = (): RequestManager => new RequestManager(invalidProvider);
+
+      expect(createRequestManager).toThrow(INVALID_SEND_REQUEST_ERROR_MESSAGE);
+    });
   });
 
   describe('sendRequest', () => {
-    describe('if the provider does not have a valid sendRequest method', () => {
-      it('should throw an error', () => {
-        const aIProvider = {} as AIProvider;
-
-        requestManager = new RequestManager(aIProvider);
-
-        expect(() => {
-          requestManager.sendRequest({ user: 'test' }, {});
-        }).toThrow(ERROR_MESSAGES.METHOD_NOT_IMPLEMENTED);
-      });
-    });
-
     it('should call provider.sendRequest with the propmpt and onChunk once', () => {
       const prompt: Prompt = { user: 'User', system: 'System' };
       const onChunk = jest.fn();
@@ -113,8 +112,8 @@ describe('RequestManager', () => {
       });
     });
 
-    it('should return the abort function that returned from sendRequest', () => {
-      const abort = (): void => {};
+    it('should call the abort function that returned from sendRequest', () => {
+      const abort = jest.fn();
 
       const sendRequestSpy = jest.spyOn(provider, 'sendRequest');
 
@@ -125,7 +124,9 @@ describe('RequestManager', () => {
 
       const abortRequest = requestManager.sendRequest({ user: 'user' }, {});
 
-      expect(abortRequest).toBe(abort);
+      abortRequest();
+
+      expect(abort).toHaveBeenCalledTimes(1);
     });
 
     it('should work correctly with no definition of callbacks', () => {
@@ -138,6 +139,73 @@ describe('RequestManager', () => {
       expect(() => {
         requestManager.sendRequest({ user: 'test' }, { onChunk: () => {} });
       }).not.toThrow();
+    });
+
+    describe('if abort is called', () => {
+      it('should not forward chunks', () => {
+        const onChunkSpy = jest.fn();
+
+        let capturedParams = undefined as unknown as RequestManagerParams;
+
+        jest.spyOn(provider, 'sendRequest').mockImplementation((params) => {
+          capturedParams = params;
+
+          return {
+            promise: Promise.resolve(''),
+            abort: (): void => {},
+          };
+        });
+
+        const abort = requestManager.sendRequest({ user: 'test' }, { onChunk: onChunkSpy });
+
+        abort();
+
+        capturedParams?.onChunk?.('chunk');
+
+        expect(onChunkSpy).not.toHaveBeenCalled();
+      });
+
+      it('should not call onComplete', async () => {
+        let resolvePromise: (response: string) => void = () => {};
+
+        const promise = new Promise<string>((resolve) => { resolvePromise = resolve; });
+
+        jest.spyOn(provider, 'sendRequest').mockReturnValue({
+          promise,
+          abort: (): void => {},
+        });
+
+        const onCompleteSpy = jest.fn();
+        const abort = requestManager.sendRequest({ user: 'user' }, { onComplete: onCompleteSpy });
+
+        abort();
+        resolvePromise('resolve');
+
+        await promise;
+
+        expect(onCompleteSpy).not.toHaveBeenCalled();
+      });
+
+      it('should not call onError', async () => {
+        let rejectPromise: (e: Error) => void = () => {};
+
+        const promise = new Promise<string>((_, reject) => { rejectPromise = reject; });
+
+        jest.spyOn(provider, 'sendRequest').mockReturnValue({
+          promise,
+          abort: (): void => {},
+        });
+
+        const onErrorSpy = jest.fn();
+        const abort = requestManager.sendRequest({ user: 'user' }, { onError: onErrorSpy });
+
+        abort();
+        rejectPromise(new Error('error'));
+
+        await new Promise(process.nextTick);
+
+        expect(onErrorSpy).not.toHaveBeenCalled();
+      });
     });
   });
 });

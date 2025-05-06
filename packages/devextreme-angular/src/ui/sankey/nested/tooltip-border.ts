@@ -17,6 +17,7 @@ import {
 import { DashStyle } from 'devextreme/common/charts';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
@@ -24,8 +25,10 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-sankey-tooltip-border',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxoSankeyTooltipBorderComponent extends NestedOption implements OnDestroy, OnInit  {
@@ -95,7 +98,7 @@ export class DxoSankeyTooltipBorderComponent extends NestedOption implements OnD
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoSankeyTooltipBorderComponent
   ],
   exports: [

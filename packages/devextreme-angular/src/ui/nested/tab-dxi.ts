@@ -21,6 +21,7 @@ import { DOCUMENT } from '@angular/common';
 
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
     extractTemplate,
     DxTemplateDirective,
@@ -35,8 +36,10 @@ import { DxiGroupComponent } from './group-dxi';
 
 @Component({
     selector: 'dxi-tab',
+    standalone: true,
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost, DxTemplateHost],
     inputs: [
         'alignItemLabels',
@@ -114,7 +117,7 @@ export class DxiTabComponent extends DxiHtmlEditorImageUploadTabItem implements 
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiTabComponent
   ],
   exports: [

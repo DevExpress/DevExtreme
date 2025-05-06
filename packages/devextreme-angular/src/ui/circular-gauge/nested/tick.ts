@@ -16,6 +16,7 @@ import {
 
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
@@ -23,8 +24,10 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-circular-gauge-tick',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxoCircularGaugeTickComponent extends NestedOption implements OnDestroy, OnInit  {
@@ -94,7 +97,7 @@ export class DxoCircularGaugeTickComponent extends NestedOption implements OnDes
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoCircularGaugeTickComponent
   ],
   exports: [

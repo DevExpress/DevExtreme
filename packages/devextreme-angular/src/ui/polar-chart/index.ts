@@ -178,9 +178,11 @@ import { DxiPolarChartSeriesComponent } from 'devextreme-angular/ui/polar-chart/
  */
 @Component({
     selector: 'dx-polar-chart',
+    standalone: true,
     template: '',
     styles: [ ' :host {  display: block; }'],
     host: { ngSkipHydration: 'true' },
+    imports: [ DxIntegrationModule ],
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -1278,6 +1280,7 @@ export class DxPolarChartComponent extends DxComponent implements OnDestroy, OnC
 
 @NgModule({
   imports: [
+    DxPolarChartComponent,
     DxoAdaptiveLayoutModule,
     DxoAnimationModule,
     DxiAnnotationModule,
@@ -1399,9 +1402,6 @@ export class DxPolarChartComponent extends DxComponent implements OnDestroy, OnC
     DxoPolarChartWholeRangeModule,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxPolarChartComponent
   ],
   exports: [
     DxPolarChartComponent,
@@ -1528,6 +1528,8 @@ export class DxPolarChartComponent extends DxComponent implements OnDestroy, OnC
   ]
 })
 export class DxPolarChartModule { }
+
+export * from 'devextreme-angular/ui/polar-chart/nested';
 
 import type * as DxPolarChartTypes from "devextreme/viz/polar_chart_types";
 export { DxPolarChartTypes };
