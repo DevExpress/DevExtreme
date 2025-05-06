@@ -4994,18 +4994,8 @@ test('DataGrid with Pagination in master detail - Ctrl+Up on focused standalone 
     selection: {
       mode: 'single',
     },
-    onSelectionChanged(e) {
-      e.component.collapseAll(-1);
-      // eslint-disable-next-line @typescript-eslint/no-floating-promises
-      e.component.expandRow(e.currentSelectedRowKeys[0]);
-    },
-    onContentReady(e) {
-      if (!e.component.getSelectedRowKeys().length) {
-        // eslint-disable-next-line @typescript-eslint/no-floating-promises
-        e.component.selectRowsByIndexes([0]);
-      }
-    },
     masterDetail: {
+      autoExpandAll: true,
       enabled: true,
       template: ClientFunction((container) => {
         $('<div>')
