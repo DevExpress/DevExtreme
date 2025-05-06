@@ -27,7 +27,8 @@ function normalizeColumn(
     ?? defaultColumnProperties.dataType;
   const columnDataTypeDefaultOptions = defaultColumnPropertiesByDataType[dataType];
   const columnFormat = column.format
-    ?? columnDataTypeDefaultOptions?.format;
+    ?? columnDataTypeDefaultOptions?.format
+    ?? columnFromDataOptions?.format;
   const caption = captionize(column.name);
 
   const colWithDefaults = {
