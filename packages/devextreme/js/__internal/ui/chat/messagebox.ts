@@ -115,9 +115,17 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
 
   _renderEditingPreview(): void {
     const $editingPreview = $('<div>').prependTo(this.element());
-    const { text } = this.option();
+    const {
+      activeStateEnabled,
+      focusStateEnabled,
+      hoverStateEnabled,
+      text,
+    } = this.option();
 
     this._editingPreview = this._createComponent($editingPreview, EditingPreview, {
+      activeStateEnabled,
+      focusStateEnabled,
+      hoverStateEnabled,
       text,
       onCancel: () => this._cancelMessageEdit(),
     });
@@ -286,7 +294,7 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
       case 'hoverStateEnabled': {
         this._button.option(name, value);
         this._textArea.option(name, value);
-
+        this._editingPreview?.option(name, value);
         break;
       }
       case 'onMessageEntered':
