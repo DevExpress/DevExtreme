@@ -21,7 +21,12 @@ import type { HeaderPanel } from '../../grid_core/header_panel/m_header_panel';
 import type { RowsView } from '../../grid_core/views/m_rows_view';
 import gridCore from '../m_core';
 import dataSourceAdapterProvider from '../m_data_source_adapter';
-import { CLASSES } from './const';
+import {
+  CLASSES,
+  CONTEXT_MENU_GROUP_BY_COLUMN_ICON_NAME,
+  CONTEXT_MENU_UNGROUP_ALL_COLUMNS_ICON_NAME,
+  CONTEXT_MENU_UNGROUP_COLUMN_ICON_NAME,
+} from './const';
 import { GroupingHelper as CollapsedGroupingHelper } from './m_grouping_collapsed';
 import { GroupingHelper as ExpandedGroupingHelper } from './m_grouping_expanded';
 
@@ -512,9 +517,11 @@ export const GroupingHeaderPanelExtender = (
 
         return [
           {
-            text: groupingTexts.ungroup, value: 'ungroup', disabled: !isColumnGrouped, onItemClick,
+            text: groupingTexts.ungroup, value: 'ungroup', disabled: !isColumnGrouped, onItemClick, icon: CONTEXT_MENU_UNGROUP_COLUMN_ICON_NAME,
           },
-          { text: groupingTexts.ungroupAll, value: 'ungroupAll', onItemClick },
+          {
+            text: groupingTexts.ungroupAll, value: 'ungroupAll', onItemClick, icon: CONTEXT_MENU_UNGROUP_ALL_COLUMNS_ICON_NAME,
+          },
         ];
       }
     }
@@ -659,8 +666,12 @@ const GroupingRowsViewExtender = (Base: ModuleType<RowsView>) => class GroupingR
         items = [];
 
         items.push(
-          { text: groupingTexts.ungroup, value: 'ungroup', onItemClick },
-          { text: groupingTexts.ungroupAll, value: 'ungroupAll', onItemClick },
+          {
+            text: groupingTexts.ungroup, value: 'ungroup', onItemClick, icon: CONTEXT_MENU_UNGROUP_COLUMN_ICON_NAME,
+          },
+          {
+            text: groupingTexts.ungroupAll, value: 'ungroupAll', onItemClick, icon: CONTEXT_MENU_UNGROUP_ALL_COLUMNS_ICON_NAME,
+          },
         );
       }
     }
@@ -711,16 +722,18 @@ const columnHeadersViewExtender = (Base: ModuleType<ColumnHeadersView>) => class
         const onItemClick = onGroupingMenuItemClick.bind(that, column, rowIndex);
 
         groupItems.push({
-          text: groupingTexts.groupByThisColumn, value: 'group', beginGroup: true, disabled: isColumnGrouped, onItemClick,
+          text: groupingTexts.groupByThisColumn, value: 'group', beginGroup: true, disabled: isColumnGrouped, onItemClick, icon: CONTEXT_MENU_GROUP_BY_COLUMN_ICON_NAME,
         });
 
         if (column.showWhenGrouped) {
           groupItems.push({
-            text: groupingTexts.ungroup, value: 'ungroup', disabled: !isColumnGrouped, onItemClick,
+            text: groupingTexts.ungroup, value: 'ungroup', disabled: !isColumnGrouped, onItemClick, icon: CONTEXT_MENU_UNGROUP_COLUMN_ICON_NAME,
           });
         }
 
-        groupItems.push({ text: groupingTexts.ungroupAll, value: 'ungroupAll', onItemClick });
+        groupItems.push({
+          text: groupingTexts.ungroupAll, value: 'ungroupAll', onItemClick, icon: CONTEXT_MENU_UNGROUP_ALL_COLUMNS_ICON_NAME,
+        });
       }
     }
 
