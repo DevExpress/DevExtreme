@@ -2802,6 +2802,55 @@ QUnit.module('Chat', () => {
             assert.strictEqual($editedMessage.length, 1, 'edited text was added at runtime');
         });
 
+        QUnit.test('it should be possible to update isEdited state of new message added using push api', function(assert) {
+            const messages = [];
+            const timeout = 100;
+
+            const store = new CustomStore({
+                key: 'id',
+                load: function() {
+                    const d = $.Deferred();
+                    setTimeout(function() {
+                        d.resolve([...messages]);
+                    }, timeout);
+                    return d.promise();
+                },
+                insert: (message) => {
+                    const d = $.Deferred();
+
+                    setTimeout(() => {
+                        messages.push(message);
+                        d.resolve();
+                    });
+
+                    return d.promise();
+                },
+            });
+
+            this.reinit({
+                dataSource: store,
+                reloadOnChange: false,
+            });
+
+            this.clock.tick(timeout);
+
+            store.push([{ type: 'insert', data: { id: 1, text: 'inserted message' } }]);
+
+            this.clock.tick(timeout);
+
+            let $editedMessage = this.$element.find(`.${CHAT_MESSAGE_EDITED_CLASS}`);
+
+            assert.strictEqual($editedMessage.length, 0, 'there is no edited messages');
+
+            store.push([{ type: 'update', key: 1, data: { isEdited: true } }]);
+
+            this.clock.tick(timeout);
+
+            $editedMessage = this.$element.find(`.${CHAT_MESSAGE_EDITED_CLASS}`);
+
+            assert.strictEqual($editedMessage.length, 1, 'there is an edited message');
+        });
+
         [
             {
                 scenario: 'in information element',

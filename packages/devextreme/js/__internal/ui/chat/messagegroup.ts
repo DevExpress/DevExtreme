@@ -4,7 +4,7 @@ import messageLocalization from '@js/common/core/localization/message';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import dateSerialization from '@js/core/utils/date_serialization';
-import { isDate } from '@js/core/utils/type';
+import { isDate, isDefined } from '@js/core/utils/type';
 import type { Message } from '@js/ui/chat';
 import type { WidgetOptions } from '@js/ui/widget/ui.widget';
 import type { OptionChanged } from '@ts/core/widget/types';
@@ -60,13 +60,11 @@ class MessageGroup extends Widget<Properties> {
   }
 
   _updateAlignmentClass(): void {
-    const { alignment } = this.option();
-
     $(this.element())
       .removeClass(CHAT_MESSAGEGROUP_ALIGNMENT_START_CLASS)
       .removeClass(CHAT_MESSAGEGROUP_ALIGNMENT_END_CLASS);
 
-    const alignmentClass = this._isAlignmentStart(alignment)
+    const alignmentClass = this._isAlignmentStart()
       ? CHAT_MESSAGEGROUP_ALIGNMENT_START_CLASS
       : CHAT_MESSAGEGROUP_ALIGNMENT_END_CLASS;
 
@@ -75,7 +73,7 @@ class MessageGroup extends Widget<Properties> {
   }
 
   _initMarkup(): void {
-    const { alignment, items, showAvatar } = this.option();
+    const { items, showAvatar } = this.option();
 
     $(this.element())
       .addClass(CHAT_MESSAGEGROUP_CLASS);
@@ -88,7 +86,7 @@ class MessageGroup extends Widget<Properties> {
       return;
     }
 
-    if (showAvatar && this._isAlignmentStart(alignment)) {
+    if (showAvatar && this._isAlignmentStart()) {
       this._renderAvatar();
     }
 
@@ -154,10 +152,13 @@ class MessageGroup extends Widget<Properties> {
     this._$messageBubbleContainer.appendTo(this.element());
   }
 
-  _renderMessageGroupInformation(message: Message): void {
-    const { alignment, showUserName, showMessageTimestamp } = this.option();
-    const { timestamp, author, isEdited } = message;
-    const isAlignmentStart = this._isAlignmentStart(alignment);
+  _renderMessageGroupInformation(message: Message, shouldRenderEditedMessage?: boolean): void {
+    const { showUserName, showMessageTimestamp } = this.option();
+    const { timestamp, author } = message;
+    const isEdited = isDefined(shouldRenderEditedMessage)
+      ? shouldRenderEditedMessage
+      : message.isEdited;
+    const isAlignmentStart = this._isAlignmentStart();
 
     this.$element().find(`.${CHAT_MESSAGEGROUP_INFORMATION_CLASS}`).remove();
 
@@ -166,7 +167,7 @@ class MessageGroup extends Widget<Properties> {
 
     if (showUserName) {
       const authorName = author?.name ?? messageLocalization.format('dxChat-defaultUserName');
-      const authorNameText = this._isAlignmentStart(alignment) ? authorName : '';
+      const authorNameText = isAlignmentStart ? authorName : '';
 
       $('<div>')
         .addClass(CHAT_MESSAGEGROUP_AUTHOR_NAME_CLASS)
@@ -242,7 +243,7 @@ class MessageGroup extends Widget<Properties> {
       }
 
       if (isEdited) {
-        this._renderMessageGroupInformation(items[0]);
+        this._renderMessageGroupInformation(items[0], true);
       }
 
       return;
@@ -264,7 +265,9 @@ class MessageGroup extends Widget<Properties> {
     }
   }
 
-  _isAlignmentStart(alignment: string): boolean {
+  _isAlignmentStart(): boolean {
+    const { alignment } = this.option();
+
     return alignment === 'start';
   }
 
