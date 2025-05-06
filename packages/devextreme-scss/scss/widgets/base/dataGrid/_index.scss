@@ -204,13 +204,13 @@ $datagrid-text-stub-background-image-path: null !default;
     color: $datagrid-base-color;
   }
 
-  .dx-error-row {
+  .dx-error-row, .dx-invalid-message {
     td {
       color: $datagrid-row-error-color;
       padding: 0;
     }
 
-    .dx-error-message {
+    .dx-error-message, .dx-overlay-content {
       @include dx-datagrid-error-message();
     }
   }

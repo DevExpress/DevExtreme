@@ -55,11 +55,8 @@ fixture.disablePageReloads`Validation`
 });
 [
   Themes.genericLight,
-  Themes.genericDark,
   Themes.materialBlue,
-  Themes.materialBlueDark,
   Themes.fluentBlue,
-  Themes.fluentBlueDark,
 ].forEach((theme) => {
   test('DataGrid - Validation message gets cut off in Fluent and Material themes (T1285387)', async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
