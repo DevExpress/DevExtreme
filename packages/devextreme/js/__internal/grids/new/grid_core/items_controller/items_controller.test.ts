@@ -1,4 +1,5 @@
 import { describe, expect, it } from '@jest/globals';
+import formatHelper from '@js/format_helper';
 
 import { ColumnsController } from '../columns_controller/columns_controller';
 import { DataController } from '../data_controller';
@@ -129,7 +130,9 @@ describe('ItemsController', () => {
       const columns = columnsController.columns.peek();
       const CardInfo = itemsController.createCardInfo({ a: dateObject }, columns, 0);
 
-      expect(CardInfo.fields[0].text).toMatch('5/5/2025, 10:30 PM');
+      const expectedResult = formatHelper.format(dateObject, 'shortDateShortTime');
+
+      expect(CardInfo.fields[0].text).toMatch(expectedResult);
     });
   });
 
