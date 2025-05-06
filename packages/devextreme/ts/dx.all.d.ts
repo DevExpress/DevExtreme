@@ -31942,6 +31942,10 @@ declare module DevExpress.ui.dxChat {
      * [descr:MessageBase.author]
      */
     author?: User;
+    /**
+     * [descr:MessageBase.isDeleted]
+     */
+    isDeleted?: boolean;
   };
   /**
    * [descr:TextMessage]
@@ -31959,10 +31963,6 @@ declare module DevExpress.ui.dxChat {
      * [descr:TextMessage.isEdited]
      */
     isEdited?: boolean;
-    /**
-     * [descr:TextMessage.isDeleted]
-     */
-    isDeleted?: boolean;
   };
   /**
    * [descr:User]
