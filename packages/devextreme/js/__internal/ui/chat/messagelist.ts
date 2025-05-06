@@ -28,13 +28,15 @@ import { getScrollTopMax } from '@ts/ui/scroll_view/utils/get_scroll_top_max';
 
 import type { DataChange } from '../collection/collection_widget.base';
 import { isElementVisible } from '../splitter/utils/layout';
-import MessageBubble, { CHAT_MESSAGEBUBBLE_CLASS } from './messagebubble';
+import MessageBubble, {
+  CHAT_MESSAGEBUBBLE_CLASS,
+  MESSAGE_DATA_KEY,
+} from './messagebubble';
 import type { MessageGroupAlignment } from './messagegroup';
 import MessageGroup, {
   CHAT_MESSAGEGROUP_ALIGNMENT_END_CLASS,
   CHAT_MESSAGEGROUP_ALIGNMENT_START_CLASS,
   CHAT_MESSAGEGROUP_CLASS,
-  MESSAGE_DATA_KEY,
 } from './messagegroup';
 import TypingIndicator from './typingindicator';
 

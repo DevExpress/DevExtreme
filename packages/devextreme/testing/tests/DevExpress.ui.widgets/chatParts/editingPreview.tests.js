@@ -37,6 +37,9 @@ QUnit.module('EditingPreview', moduleConfig, () => {
 
         QUnit.test('cancel button should be initialized with the corresponding configuration', function(assert) {
             const expectedOptions = {
+                activeStateEnabled: true,
+                focusStateEnabled: true,
+                hoverStateEnabled: true,
                 icon: 'remove',
                 type: 'normal',
                 stylingMode: 'text',
@@ -45,6 +48,23 @@ QUnit.module('EditingPreview', moduleConfig, () => {
 
             Object.entries(expectedOptions).forEach(([key, value]) => {
                 assert.deepEqual(value, this.cancelEditButton.option(key), `${key} value is correct`);
+            });
+        });
+
+        QUnit.test('state options of cancel button should be updated at runtime', function(assert) {
+            const options = {
+                activeStateEnabled: false,
+                focusStateEnabled: false,
+                hoverStateEnabled: false,
+            };
+
+            this.instance.option({
+                ...options,
+                text: 'message text'
+            });
+
+            Object.entries(options).forEach(([key, value]) => {
+                assert.strictEqual(this.cancelEditButton.option(key), false, `cancel button ${key} option value is correct`);
             });
         });
     });
