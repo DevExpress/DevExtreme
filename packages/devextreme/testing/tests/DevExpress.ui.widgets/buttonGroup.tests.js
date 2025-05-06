@@ -458,6 +458,22 @@ QUnit.module('Events', () => {
     });
 });
 
+QUnit.module('Keyboard navigation', () => {
+    QUnit.test('Enter key press event should be default prevented', function(assert) {
+        assert.expect(1);
+
+        const $element = $('#buttonGroup').dxButtonGroup({ items: [{ text: 'button 1' }] });
+
+        $element.on('keydown', (e) => {
+            if(e.key === 'Enter') {
+                assert.ok(e.isDefaultPrevented(), 'event is prevented');
+            }
+        });
+
+        keyboardMock($element).press('enter');
+    });
+});
+
 if(devices.current().deviceType === 'desktop') {
     registerKeyHandlerTestHelper.runTests({
         createWidget: ($element, options) => $element.dxButtonGroup(
