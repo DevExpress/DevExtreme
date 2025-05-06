@@ -38,7 +38,7 @@ QUnit.module('MessageBubble', moduleConfig, () => {
         });
 
         QUnit.test('bubble should be rendered with default text if isDeleted is true', function(assert) {
-            this.reinit({ isDeleted: true });
+            this.reinit({ message: { isDeleted: true } });
 
             assert.strictEqual(this.$element.text(), messageLocalization.format('dxChat-deletedMessageText'));
         });
@@ -72,13 +72,13 @@ QUnit.module('MessageBubble', moduleConfig, () => {
         });
 
         QUnit.test('bubble should be render with default text if isDeleted is true', function(assert) {
-            this.reinit({ isDeleted: true });
+            this.reinit({ message: { isDeleted: true } });
 
             assert.strictEqual(this.$element.text(), messageLocalization.format('dxChat-deletedMessageText'));
         });
 
         QUnit.test('isDeleted option should change the message text after change at runtime', function(assert) {
-            this.instance.option('isDeleted', true);
+            this.instance.option('message', { isDeleted: true });
 
             assert.strictEqual(this.$element.text(), messageLocalization.format('dxChat-deletedMessageText'));
         });
@@ -116,13 +116,13 @@ QUnit.module('MessageBubble', moduleConfig, () => {
             const messageText = 'message text';
 
             this.reinit({
-                text: messageText,
+                message: { text: messageText },
                 template: templateSpy,
             });
 
             assert.strictEqual(templateSpy.callCount, 1, 'template was rendered once');
 
-            this.instance.option('text', 'new message text');
+            this.instance.option('message', 'new message text');
             assert.strictEqual(templateSpy.callCount, 2, 'template was rendered');
         });
 

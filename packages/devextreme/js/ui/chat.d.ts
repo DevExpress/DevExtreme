@@ -216,6 +216,11 @@ export type MessageBase = {
      * @public
      */
     author?: User;
+    /**
+     * @docid
+     * @public
+     */
+    isDeleted?: boolean;
 };
 
 /**
@@ -231,7 +236,7 @@ export type TextMessage = MessageBase & {
      * @default undefined
      * @public
      */
-    type?: 'text' | undefined;
+    type?: 'text';
     /**
      * @docid
      * @public
@@ -242,11 +247,6 @@ export type TextMessage = MessageBase & {
      * @public
      */
     isEdited?: boolean;
-    /**
-     * @docid
-     * @public
-     */
-    isDeleted?: boolean;
 };
 
 /**

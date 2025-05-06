@@ -13,7 +13,7 @@ import { isElementInDom } from '@js/core/utils/dom';
 import { getHeight } from '@js/core/utils/size';
 import { isDate, isDefined } from '@js/core/utils/type';
 import type { DxEvent } from '@js/events';
-import type { Message, User } from '@js/ui/chat';
+import type { Message, TextMessage, User } from '@js/ui/chat';
 import type { Item as ContextMenuItem } from '@js/ui/context_menu';
 import type { WidgetOptions } from '@js/ui/widget/ui.widget';
 import type { OptionChanged } from '@ts/core/widget/types';
@@ -72,6 +72,11 @@ export type ItemClick = NativeEventInfo<ContextMenu, KeyboardEvent | MouseEvent 
 
 export interface MessageEditingEvent {
   event: DxEvent<KeyboardEvent | MouseEvent | PointerEvent> | undefined;
+  message: TextMessage;
+}
+
+export interface MessageDeletingEvent {
+  event: DxEvent<KeyboardEvent | MouseEvent | PointerEvent> | undefined;
   message: Message;
 }
 
@@ -91,7 +96,7 @@ export interface Properties extends WidgetOptions<MessageList> {
   showUserName: boolean;
   showMessageTimestamp: boolean;
   onMessageEditingStart?: (e: MessageEditingEvent) => () => void;
-  onMessageDeleting?: (e: MessageEditingEvent) => void;
+  onMessageDeleting?: (e: MessageDeletingEvent) => void;
   onEscapeKeyPressed?: (e: KeyboardEvent) => void;
 }
 
@@ -280,13 +285,15 @@ class MessageList extends Widget<Properties> {
 
     const buttons: ContextMenuItem[] = [];
 
-    if (allowUpdating(message)) {
+    if (allowUpdating(message) && message.type !== 'image') {
       buttons.push({
         icon: 'edit',
         text: editText,
         disabled: isEditActionDisabled(message),
         onClick: (e: ItemClick): void => {
-          const onMessageEditStarted = onMessageEditingStart?.({ event: e.event, message });
+          const onMessageEditStarted = onMessageEditingStart?.({
+            event: e.event, message: message as TextMessage,
+          });
 
           const onContextMenuHidden = (): void => {
             this._contextMenu.off('hidden', onContextMenuHidden);
@@ -615,10 +622,10 @@ class MessageList extends Widget<Properties> {
       const bubble = MessageBubble.getInstance($targetMessage);
       bubble.option('message', data);
 
-      if (data.type === 'text') {
+      if (data.type !== 'image') {
         const $currentMessageGroup = $targetMessage.closest(`.${CHAT_MESSAGEGROUP_CLASS}`);
         const group: MessageGroup = MessageGroup.getInstance($currentMessageGroup);
-        const isEdited = data.isEdited === true && !data.isDeleted;
+        const isEdited = (data as TextMessage).isEdited === true && !data.isDeleted;
 
         group._updateMessageEditedText($targetMessage, isEdited);
       }

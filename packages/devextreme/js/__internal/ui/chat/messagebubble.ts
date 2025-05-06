@@ -58,6 +58,7 @@ class MessageBubble extends Widget<Properties> {
       template,
       message,
     } = this.option();
+
     this.$element().removeClass(CHAT_MESSAGEBUBBLE_DELETED_CLASS);
 
     const $bubbleContainer = $(this.element()).find(`.${CHAT_MESSAGEBUBBLE_CONTENT_CLASS}`);
@@ -69,7 +70,7 @@ class MessageBubble extends Widget<Properties> {
       return;
     }
 
-    if (message.type === 'text' && message.isDeleted) {
+    if (message.isDeleted) {
       const icon = $('<div>')
         .addClass(ICON_CLASS)
         .addClass(CHAT_MESSAGEBUBBLE_ICON_PROHIBITION_CLASS);
