@@ -780,9 +780,9 @@ QUnit.module('AIDialog', {}, () => {
                     keyboardMock($replaceButton).press('enter');
 
                     assert.ok(true, 'There is no error');
-                    done();
                 } catch(e) {
                     assert.ok(false, `Error is raised: ${e.message}`);
+                } finally {
                     done();
                 }
             });
