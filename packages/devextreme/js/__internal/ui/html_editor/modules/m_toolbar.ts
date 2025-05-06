@@ -482,9 +482,10 @@ if (Quill) {
       const options = {
         dataSource,
         onItemClick: (e): void => {
-          const { itemData } = e;
+          const { itemData, component } = e;
 
           if (itemData.items?.length) {
+            component.resetOption('focusedElement');
             return;
           }
 
