@@ -68,7 +68,9 @@ exports[`ColumnProperties headerItemCssClass should override content of headerPa
         <div
           class="dx-icon dx-icon-dropzone"
         />
-        <span />
+        <span>
+          Drop the header item here
+        </span>
       </div>
     </div>
   </div>
@@ -205,7 +207,9 @@ exports[`Options headerPanel visible when it is true should show headerPanel 1`]
         <div
           class="dx-icon dx-icon-dropzone"
         />
-        <span />
+        <span>
+          Drop the header item here
+        </span>
       </div>
     </div>
   </div>
