@@ -1516,7 +1516,7 @@ export const validatingRowsViewExtender = (Base: ModuleType<RowsView>) => class 
     super.updateFreeSpaceRowHeight($table);
 
     if ($tooltipContent && $tooltipContent.length) {
-      $rowElements = that._getRowElements();
+      $rowElements = that._getRowElements().filter(':visible');
       $freeSpaceRowElements = that._getFreeSpaceRowElements($table);
       $freeSpaceRowElement = $freeSpaceRowElements.first();
 

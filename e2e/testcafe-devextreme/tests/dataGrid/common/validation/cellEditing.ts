@@ -1,4 +1,5 @@
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
+import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../../../helpers/getPageUrl';
 import { createWidget } from '../../../../helpers/createWidget';
 
@@ -49,3 +50,35 @@ fixture.disablePageReloads`Validation`
     }],
   }));
 });
+
+test('DataGrid - Validation message is hidden if there is only one Master-Detail row and the row is collapsed (T1287261)', async (t) => {
+  const dataGrid = new DataGrid('#container');
+  const cellToggle = dataGrid.getDataCell(0, 0).element;
+  const textCell = dataGrid.getDataCell(0, 2);
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  await t
+    .click(textCell.element)
+    .selectText(textCell.getEditor().element)
+    .pressKey('backspace enter')
+    .click(cellToggle)
+    .click(cellToggle)
+    .click(textCell.element);
+
+  await t
+    .expect(await takeScreenshot('validation-message-shown-after-master-detail-collapse.png', dataGrid.element))
+    .ok()
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: [
+    { ID: 1, Text: 'Item 1' },
+  ],
+  keyExpr: 'ID',
+  columns: ['ID', {
+    dataField: 'Text',
+    validationRules: [{ type: 'required' }],
+  }],
+  editing: { mode: 'batch', allowUpdating: true },
+  masterDetail: { enabled: true },
+}));
