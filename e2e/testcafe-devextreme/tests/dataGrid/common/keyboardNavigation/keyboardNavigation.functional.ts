@@ -4979,7 +4979,7 @@ test('DataGrid with Pagination in master detail - Ctrl+Up on focused standalone 
     .click(pagerElement)
     .expect(pagerElement.focused)
     .ok()
-    .pressKey('ctrl+alt+up')
+    .pressKey('ctrl+up')
     .expect(pagerElement.focused)
     .ok()
     .expect(dataGrid.getDataRow(0).isFocusedRow)
