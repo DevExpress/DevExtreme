@@ -11,13 +11,13 @@ test('default render', async (t) => {
   const cardView = new CardView('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  await testScreenshot(t, takeScreenshot, 'header-panel.png', { element: cardView.getHeaderPanel().element });
+  await testScreenshot(t, takeScreenshot, 'header-panel.png', { element: cardView.element });
 
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => createWidget('dxCardView', {
-  width: 500,
+  width: 400,
   height: 600,
   columns: ['Customer', 'Order Date'],
 }));
