@@ -12,33 +12,12 @@ import { SelectionSensitivity } from 'devextreme/ui/data_grid';
 @Component({
     template: ''
 })
-export abstract class DxoSelectionConfiguration extends NestedOption {
+export abstract class DxoColumnChooserSelectionConfig extends NestedOption {
     get allowSelectAll(): boolean {
         return this._getOption('allowSelectAll');
     }
     set allowSelectAll(value: boolean) {
         this._setOption('allowSelectAll', value);
-    }
-
-    get mode(): SingleMultipleOrNone {
-        return this._getOption('mode');
-    }
-    set mode(value: SingleMultipleOrNone) {
-        this._setOption('mode', value);
-    }
-
-    get selectAllMode(): SelectAllMode {
-        return this._getOption('selectAllMode');
-    }
-    set selectAllMode(value: SelectAllMode) {
-        this._setOption('selectAllMode', value);
-    }
-
-    get showCheckBoxesMode(): SelectionColumnDisplayMode {
-        return this._getOption('showCheckBoxesMode');
-    }
-    set showCheckBoxesMode(value: SelectionColumnDisplayMode) {
-        this._setOption('showCheckBoxesMode', value);
     }
 
     get recursive(): boolean {
@@ -62,10 +41,31 @@ export abstract class DxoSelectionConfiguration extends NestedOption {
         this._setOption('deferred', value);
     }
 
+    get mode(): SingleMultipleOrNone {
+        return this._getOption('mode');
+    }
+    set mode(value: SingleMultipleOrNone) {
+        this._setOption('mode', value);
+    }
+
+    get selectAllMode(): SelectAllMode {
+        return this._getOption('selectAllMode');
+    }
+    set selectAllMode(value: SelectAllMode) {
+        this._setOption('selectAllMode', value);
+    }
+
     get sensitivity(): SelectionSensitivity {
         return this._getOption('sensitivity');
     }
     set sensitivity(value: SelectionSensitivity) {
         this._setOption('sensitivity', value);
+    }
+
+    get showCheckBoxesMode(): SelectionColumnDisplayMode {
+        return this._getOption('showCheckBoxesMode');
+    }
+    set showCheckBoxesMode(value: SelectionColumnDisplayMode) {
+        this._setOption('showCheckBoxesMode', value);
     }
 }

@@ -103,46 +103,6 @@ export class DxoLabelComponent extends NestedOption implements AfterViewInit, On
     }
 
     @Input()
-    get alignment(): HorizontalAlignment | undefined {
-        return this._getOption('alignment');
-    }
-    set alignment(value: HorizontalAlignment | undefined) {
-        this._setOption('alignment', value);
-    }
-
-    @Input()
-    get location(): LabelLocation {
-        return this._getOption('location');
-    }
-    set location(value: LabelLocation) {
-        this._setOption('location', value);
-    }
-
-    @Input()
-    get showColon(): boolean {
-        return this._getOption('showColon');
-    }
-    set showColon(value: boolean) {
-        this._setOption('showColon', value);
-    }
-
-    @Input()
-    get template(): any | undefined {
-        return this._getOption('template');
-    }
-    set template(value: any | undefined) {
-        this._setOption('template', value);
-    }
-
-    @Input()
-    get text(): string | undefined {
-        return this._getOption('text');
-    }
-    set text(value: string | undefined) {
-        this._setOption('text', value);
-    }
-
-    @Input()
     get horizontalAlignment(): HorizontalAlignment | HorizontalEdge {
         return this._getOption('horizontalAlignment');
     }
@@ -159,11 +119,27 @@ export class DxoLabelComponent extends NestedOption implements AfterViewInit, On
     }
 
     @Input()
+    get text(): string | undefined {
+        return this._getOption('text');
+    }
+    set text(value: string | undefined) {
+        this._setOption('text', value);
+    }
+
+    @Input()
     get verticalAlignment(): VerticalAlignment {
         return this._getOption('verticalAlignment');
     }
     set verticalAlignment(value: VerticalAlignment) {
         this._setOption('verticalAlignment', value);
+    }
+
+    @Input()
+    get alignment(): HorizontalAlignment | undefined {
+        return this._getOption('alignment');
+    }
+    set alignment(value: HorizontalAlignment | undefined) {
+        this._setOption('alignment', value);
     }
 
     @Input()
@@ -212,6 +188,14 @@ export class DxoLabelComponent extends NestedOption implements AfterViewInit, On
     }
     set staggeringSpacing(value: number) {
         this._setOption('staggeringSpacing', value);
+    }
+
+    @Input()
+    get template(): any | undefined {
+        return this._getOption('template');
+    }
+    set template(value: any | undefined) {
+        this._setOption('template', value);
     }
 
     @Input()
@@ -316,6 +300,22 @@ export class DxoLabelComponent extends NestedOption implements AfterViewInit, On
     }
     set useRangeColors(value: boolean) {
         this._setOption('useRangeColors', value);
+    }
+
+    @Input()
+    get location(): LabelLocation {
+        return this._getOption('location');
+    }
+    set location(value: LabelLocation) {
+        this._setOption('location', value);
+    }
+
+    @Input()
+    get showColon(): boolean {
+        return this._getOption('showColon');
+    }
+    set showColon(value: boolean) {
+        this._setOption('showColon', value);
     }
 
     @Input()

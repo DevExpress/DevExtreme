@@ -17,11 +17,11 @@ import { dxTreeListColumn, dxTreeListColumnButton, TreeListCommandColumnType, Tr
 @Component({
     template: ''
 })
-export abstract class DxiColumnProperties extends CollectionNestedOption {
-    get alignment(): HorizontalAlignment | undefined | string {
+export abstract class DxiDataGridColumn extends CollectionNestedOption {
+    get alignment(): HorizontalAlignment | string | undefined {
         return this._getOption('alignment');
     }
-    set alignment(value: HorizontalAlignment | undefined | string) {
+    set alignment(value: HorizontalAlignment | string | undefined) {
         this._setOption('alignment', value);
     }
 
@@ -32,11 +32,32 @@ export abstract class DxiColumnProperties extends CollectionNestedOption {
         this._setOption('allowEditing', value);
     }
 
+    get allowExporting(): boolean {
+        return this._getOption('allowExporting');
+    }
+    set allowExporting(value: boolean) {
+        this._setOption('allowExporting', value);
+    }
+
     get allowFiltering(): boolean {
         return this._getOption('allowFiltering');
     }
     set allowFiltering(value: boolean) {
         this._setOption('allowFiltering', value);
+    }
+
+    get allowFixing(): boolean {
+        return this._getOption('allowFixing');
+    }
+    set allowFixing(value: boolean) {
+        this._setOption('allowFixing', value);
+    }
+
+    get allowGrouping(): boolean {
+        return this._getOption('allowGrouping');
+    }
+    set allowGrouping(value: boolean) {
+        this._setOption('allowGrouping', value);
     }
 
     get allowHeaderFiltering(): boolean {
@@ -60,6 +81,13 @@ export abstract class DxiColumnProperties extends CollectionNestedOption {
         this._setOption('allowReordering', value);
     }
 
+    get allowResizing(): boolean {
+        return this._getOption('allowResizing');
+    }
+    set allowResizing(value: boolean) {
+        this._setOption('allowResizing', value);
+    }
+
     get allowSearch(): boolean {
         return this._getOption('allowSearch');
     }
@@ -72,251 +100,6 @@ export abstract class DxiColumnProperties extends CollectionNestedOption {
     }
     set allowSorting(value: boolean) {
         this._setOption('allowSorting', value);
-    }
-
-    get calculateDisplayValue(): Function | string {
-        return this._getOption('calculateDisplayValue');
-    }
-    set calculateDisplayValue(value: Function | string) {
-        this._setOption('calculateDisplayValue', value);
-    }
-
-    get calculateFieldValue(): Function {
-        return this._getOption('calculateFieldValue');
-    }
-    set calculateFieldValue(value: Function) {
-        this._setOption('calculateFieldValue', value);
-    }
-
-    get calculateFilterExpression(): Function {
-        return this._getOption('calculateFilterExpression');
-    }
-    set calculateFilterExpression(value: Function) {
-        this._setOption('calculateFilterExpression', value);
-    }
-
-    get calculateSortValue(): Function | string {
-        return this._getOption('calculateSortValue');
-    }
-    set calculateSortValue(value: Function | string) {
-        this._setOption('calculateSortValue', value);
-    }
-
-    get caption(): string | undefined {
-        return this._getOption('caption');
-    }
-    set caption(value: string | undefined) {
-        this._setOption('caption', value);
-    }
-
-    get customizeText(): Function {
-        return this._getOption('customizeText');
-    }
-    set customizeText(value: Function) {
-        this._setOption('customizeText', value);
-    }
-
-    get dataField(): string | undefined {
-        return this._getOption('dataField');
-    }
-    set dataField(value: string | undefined) {
-        this._setOption('dataField', value);
-    }
-
-    get dataType(): DataType | undefined {
-        return this._getOption('dataType');
-    }
-    set dataType(value: DataType | undefined) {
-        this._setOption('dataType', value);
-    }
-
-    get editorOptions(): any {
-        return this._getOption('editorOptions');
-    }
-    set editorOptions(value: any) {
-        this._setOption('editorOptions', value);
-    }
-
-    get falseText(): string {
-        return this._getOption('falseText');
-    }
-    set falseText(value: string) {
-        this._setOption('falseText', value);
-    }
-
-    get fieldCaptionTemplate(): any {
-        return this._getOption('fieldCaptionTemplate');
-    }
-    set fieldCaptionTemplate(value: any) {
-        this._setOption('fieldCaptionTemplate', value);
-    }
-
-    get fieldTemplate(): any {
-        return this._getOption('fieldTemplate');
-    }
-    set fieldTemplate(value: any) {
-        this._setOption('fieldTemplate', value);
-    }
-
-    get fieldValueTemplate(): any {
-        return this._getOption('fieldValueTemplate');
-    }
-    set fieldValueTemplate(value: any) {
-        this._setOption('fieldValueTemplate', value);
-    }
-
-    get filterType(): FilterType {
-        return this._getOption('filterType');
-    }
-    set filterType(value: FilterType) {
-        this._setOption('filterType', value);
-    }
-
-    get filterValue(): any | undefined {
-        return this._getOption('filterValue');
-    }
-    set filterValue(value: any | undefined) {
-        this._setOption('filterValue', value);
-    }
-
-    get filterValues(): Array<any> {
-        return this._getOption('filterValues');
-    }
-    set filterValues(value: Array<any>) {
-        this._setOption('filterValues', value);
-    }
-
-    get format(): Format | string {
-        return this._getOption('format');
-    }
-    set format(value: Format | string) {
-        this._setOption('format', value);
-    }
-
-    get formItem(): SimpleItem {
-        return this._getOption('formItem');
-    }
-    set formItem(value: SimpleItem) {
-        this._setOption('formItem', value);
-    }
-
-    get headerFilter(): any | { allowSearch?: boolean, allowSelectAll?: boolean, dataSource?: Store | DataSourceOptions | Function | null | undefined | Array<any>, groupInterval?: HeaderFilterGroupInterval | number | undefined, height?: number | string | undefined, search?: ColumnHeaderFilterSearchConfig, searchMode?: SearchMode, width?: number | string | undefined } {
-        return this._getOption('headerFilter');
-    }
-    set headerFilter(value: any | { allowSearch?: boolean, allowSelectAll?: boolean, dataSource?: Store | DataSourceOptions | Function | null | undefined | Array<any>, groupInterval?: HeaderFilterGroupInterval | number | undefined, height?: number | string | undefined, search?: ColumnHeaderFilterSearchConfig, searchMode?: SearchMode, width?: number | string | undefined }) {
-        this._setOption('headerFilter', value);
-    }
-
-    get headerItemCssClass(): string {
-        return this._getOption('headerItemCssClass');
-    }
-    set headerItemCssClass(value: string) {
-        this._setOption('headerItemCssClass', value);
-    }
-
-    get headerItemTemplate(): any {
-        return this._getOption('headerItemTemplate');
-    }
-    set headerItemTemplate(value: any) {
-        this._setOption('headerItemTemplate', value);
-    }
-
-    get name(): string | undefined {
-        return this._getOption('name');
-    }
-    set name(value: string | undefined) {
-        this._setOption('name', value);
-    }
-
-    get setFieldValue(): Function {
-        return this._getOption('setFieldValue');
-    }
-    set setFieldValue(value: Function) {
-        this._setOption('setFieldValue', value);
-    }
-
-    get showInColumnChooser(): boolean {
-        return this._getOption('showInColumnChooser');
-    }
-    set showInColumnChooser(value: boolean) {
-        this._setOption('showInColumnChooser', value);
-    }
-
-    get sortIndex(): number | undefined {
-        return this._getOption('sortIndex');
-    }
-    set sortIndex(value: number | undefined) {
-        this._setOption('sortIndex', value);
-    }
-
-    get sortingMethod(): Function | undefined {
-        return this._getOption('sortingMethod');
-    }
-    set sortingMethod(value: Function | undefined) {
-        this._setOption('sortingMethod', value);
-    }
-
-    get sortOrder(): SortOrder | undefined | string {
-        return this._getOption('sortOrder');
-    }
-    set sortOrder(value: SortOrder | undefined | string) {
-        this._setOption('sortOrder', value);
-    }
-
-    get trueText(): string {
-        return this._getOption('trueText');
-    }
-    set trueText(value: string) {
-        this._setOption('trueText', value);
-    }
-
-    get validationRules(): Array<RequiredRule | NumericRule | RangeRule | StringLengthRule | CustomRule | CompareRule | PatternRule | EmailRule | AsyncRule> {
-        return this._getOption('validationRules');
-    }
-    set validationRules(value: Array<RequiredRule | NumericRule | RangeRule | StringLengthRule | CustomRule | CompareRule | PatternRule | EmailRule | AsyncRule>) {
-        this._setOption('validationRules', value);
-    }
-
-    get visible(): boolean {
-        return this._getOption('visible');
-    }
-    set visible(value: boolean) {
-        this._setOption('visible', value);
-    }
-
-    get visibleIndex(): number | undefined {
-        return this._getOption('visibleIndex');
-    }
-    set visibleIndex(value: number | undefined) {
-        this._setOption('visibleIndex', value);
-    }
-
-    get allowExporting(): boolean {
-        return this._getOption('allowExporting');
-    }
-    set allowExporting(value: boolean) {
-        this._setOption('allowExporting', value);
-    }
-
-    get allowFixing(): boolean {
-        return this._getOption('allowFixing');
-    }
-    set allowFixing(value: boolean) {
-        this._setOption('allowFixing', value);
-    }
-
-    get allowGrouping(): boolean {
-        return this._getOption('allowGrouping');
-    }
-    set allowGrouping(value: boolean) {
-        this._setOption('allowGrouping', value);
-    }
-
-    get allowResizing(): boolean {
-        return this._getOption('allowResizing');
-    }
-    set allowResizing(value: boolean) {
-        this._setOption('allowResizing', value);
     }
 
     get autoExpandGroup(): boolean {
@@ -340,11 +123,39 @@ export abstract class DxiColumnProperties extends CollectionNestedOption {
         this._setOption('calculateCellValue', value);
     }
 
+    get calculateDisplayValue(): Function | string {
+        return this._getOption('calculateDisplayValue');
+    }
+    set calculateDisplayValue(value: Function | string) {
+        this._setOption('calculateDisplayValue', value);
+    }
+
+    get calculateFilterExpression(): Function {
+        return this._getOption('calculateFilterExpression');
+    }
+    set calculateFilterExpression(value: Function) {
+        this._setOption('calculateFilterExpression', value);
+    }
+
     get calculateGroupValue(): Function | string {
         return this._getOption('calculateGroupValue');
     }
     set calculateGroupValue(value: Function | string) {
         this._setOption('calculateGroupValue', value);
+    }
+
+    get calculateSortValue(): Function | string {
+        return this._getOption('calculateSortValue');
+    }
+    set calculateSortValue(value: Function | string) {
+        this._setOption('calculateSortValue', value);
+    }
+
+    get caption(): string | undefined {
+        return this._getOption('caption');
+    }
+    set caption(value: string | undefined) {
+        this._setOption('caption', value);
     }
 
     get cellTemplate(): any {
@@ -368,11 +179,39 @@ export abstract class DxiColumnProperties extends CollectionNestedOption {
         this._setOption('cssClass', value);
     }
 
+    get customizeText(): Function {
+        return this._getOption('customizeText');
+    }
+    set customizeText(value: Function) {
+        this._setOption('customizeText', value);
+    }
+
+    get dataField(): string | undefined {
+        return this._getOption('dataField');
+    }
+    set dataField(value: string | undefined) {
+        this._setOption('dataField', value);
+    }
+
+    get dataType(): DataType | undefined {
+        return this._getOption('dataType');
+    }
+    set dataType(value: DataType | undefined) {
+        this._setOption('dataType', value);
+    }
+
     get editCellTemplate(): any {
         return this._getOption('editCellTemplate');
     }
     set editCellTemplate(value: any) {
         this._setOption('editCellTemplate', value);
+    }
+
+    get editorOptions(): any {
+        return this._getOption('editorOptions');
+    }
+    set editorOptions(value: any) {
+        this._setOption('editorOptions', value);
     }
 
     get encodeHtml(): boolean {
@@ -382,11 +221,39 @@ export abstract class DxiColumnProperties extends CollectionNestedOption {
         this._setOption('encodeHtml', value);
     }
 
+    get falseText(): string {
+        return this._getOption('falseText');
+    }
+    set falseText(value: string) {
+        this._setOption('falseText', value);
+    }
+
     get filterOperations(): Array<FilterOperation | string> {
         return this._getOption('filterOperations');
     }
     set filterOperations(value: Array<FilterOperation | string>) {
         this._setOption('filterOperations', value);
+    }
+
+    get filterType(): FilterType {
+        return this._getOption('filterType');
+    }
+    set filterType(value: FilterType) {
+        this._setOption('filterType', value);
+    }
+
+    get filterValue(): any | undefined {
+        return this._getOption('filterValue');
+    }
+    set filterValue(value: any | undefined) {
+        this._setOption('filterValue', value);
+    }
+
+    get filterValues(): Array<any> {
+        return this._getOption('filterValues');
+    }
+    set filterValues(value: Array<any>) {
+        this._setOption('filterValues', value);
     }
 
     get fixed(): boolean {
@@ -401,6 +268,20 @@ export abstract class DxiColumnProperties extends CollectionNestedOption {
     }
     set fixedPosition(value: FixedPosition | undefined) {
         this._setOption('fixedPosition', value);
+    }
+
+    get format(): Format | string {
+        return this._getOption('format');
+    }
+    set format(value: Format | string) {
+        this._setOption('format', value);
+    }
+
+    get formItem(): SimpleItem {
+        return this._getOption('formItem');
+    }
+    set formItem(value: SimpleItem) {
+        this._setOption('formItem', value);
     }
 
     get groupCellTemplate(): any {
@@ -422,6 +303,13 @@ export abstract class DxiColumnProperties extends CollectionNestedOption {
     }
     set headerCellTemplate(value: any) {
         this._setOption('headerCellTemplate', value);
+    }
+
+    get headerFilter(): { allowSearch?: boolean, allowSelectAll?: boolean, dataSource?: Store | DataSourceOptions | Function | null | undefined | Array<any>, groupInterval?: HeaderFilterGroupInterval | number | undefined, height?: number | string | undefined, search?: ColumnHeaderFilterSearchConfig, searchMode?: SearchMode, width?: number | string | undefined } {
+        return this._getOption('headerFilter');
+    }
+    set headerFilter(value: { allowSearch?: boolean, allowSelectAll?: boolean, dataSource?: Store | DataSourceOptions | Function | null | undefined | Array<any>, groupInterval?: HeaderFilterGroupInterval | number | undefined, height?: number | string | undefined, search?: ColumnHeaderFilterSearchConfig, searchMode?: SearchMode, width?: number | string | undefined }) {
+        this._setOption('headerFilter', value);
     }
 
     get hidingPriority(): number | undefined {
@@ -450,6 +338,13 @@ export abstract class DxiColumnProperties extends CollectionNestedOption {
     }
     set minWidth(value: number | undefined) {
         this._setOption('minWidth', value);
+    }
+
+    get name(): string | undefined {
+        return this._getOption('name');
+    }
+    set name(value: string | undefined) {
+        this._setOption('name', value);
     }
 
     get ownerBand(): number | undefined {
@@ -487,6 +382,13 @@ export abstract class DxiColumnProperties extends CollectionNestedOption {
         this._setOption('showEditorAlways', value);
     }
 
+    get showInColumnChooser(): boolean {
+        return this._getOption('showInColumnChooser');
+    }
+    set showInColumnChooser(value: boolean) {
+        this._setOption('showInColumnChooser', value);
+    }
+
     get showWhenGrouped(): boolean {
         return this._getOption('showWhenGrouped');
     }
@@ -494,11 +396,60 @@ export abstract class DxiColumnProperties extends CollectionNestedOption {
         this._setOption('showWhenGrouped', value);
     }
 
+    get sortIndex(): number | undefined {
+        return this._getOption('sortIndex');
+    }
+    set sortIndex(value: number | undefined) {
+        this._setOption('sortIndex', value);
+    }
+
+    get sortingMethod(): Function | undefined {
+        return this._getOption('sortingMethod');
+    }
+    set sortingMethod(value: Function | undefined) {
+        this._setOption('sortingMethod', value);
+    }
+
+    get sortOrder(): SortOrder | string | undefined {
+        return this._getOption('sortOrder');
+    }
+    set sortOrder(value: SortOrder | string | undefined) {
+        this._setOption('sortOrder', value);
+    }
+
+    get trueText(): string {
+        return this._getOption('trueText');
+    }
+    set trueText(value: string) {
+        this._setOption('trueText', value);
+    }
+
     get type(): DataGridCommandColumnType | TreeListCommandColumnType {
         return this._getOption('type');
     }
     set type(value: DataGridCommandColumnType | TreeListCommandColumnType) {
         this._setOption('type', value);
+    }
+
+    get validationRules(): Array<RequiredRule | NumericRule | RangeRule | StringLengthRule | CustomRule | CompareRule | PatternRule | EmailRule | AsyncRule> {
+        return this._getOption('validationRules');
+    }
+    set validationRules(value: Array<RequiredRule | NumericRule | RangeRule | StringLengthRule | CustomRule | CompareRule | PatternRule | EmailRule | AsyncRule>) {
+        this._setOption('validationRules', value);
+    }
+
+    get visible(): boolean {
+        return this._getOption('visible');
+    }
+    set visible(value: boolean) {
+        this._setOption('visible', value);
+    }
+
+    get visibleIndex(): number | undefined {
+        return this._getOption('visibleIndex');
+    }
+    set visibleIndex(value: number | undefined) {
+        this._setOption('visibleIndex', value);
     }
 
     get width(): number | string | undefined {

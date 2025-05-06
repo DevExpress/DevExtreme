@@ -22,7 +22,7 @@ import {
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
-import { DxoToolbar } from './base/toolbar';
+import { DxoDataGridToolbar } from './base/data-grid-toolbar';
 import { DxiItemComponent } from './item-dxi';
 import { DxiFileSelectionItemComponent } from './file-selection-item-dxi';
 
@@ -37,13 +37,13 @@ import { DxiFileSelectionItemComponent } from './file-selection-item-dxi';
     inputs: [
         'disabled',
         'items',
-        'multiline',
         'visible',
         'fileSelectionItems',
-        'container'
+        'container',
+        'multiline'
     ]
 })
-export class DxoToolbarComponent extends DxoToolbar implements OnDestroy, OnInit  {
+export class DxoToolbarComponent extends DxoDataGridToolbar implements OnDestroy, OnInit  {
 
     protected get _optionPath() {
         return 'toolbar';
