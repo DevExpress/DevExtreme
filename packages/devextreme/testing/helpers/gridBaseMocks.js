@@ -944,6 +944,8 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
 
         that.NAME = 'dx' + nameWidget;
 
+        that.element = () => $('#container');
+
         that.focus = commonUtils.noop;
 
         that.setAria = function(name, value, $target) {
