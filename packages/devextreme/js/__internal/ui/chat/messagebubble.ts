@@ -71,6 +71,8 @@ class MessageBubble extends Widget<Properties> {
     }
 
     if (message.isDeleted) {
+      this.$element().addClass(CHAT_MESSAGEBUBBLE_DELETED_CLASS);
+
       const icon = $('<div>')
         .addClass(ICON_CLASS)
         .addClass(CHAT_MESSAGEBUBBLE_ICON_PROHIBITION_CLASS);

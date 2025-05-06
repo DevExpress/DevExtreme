@@ -600,6 +600,28 @@ QUnit.module('Chat', () => {
 
                 assert.strictEqual(this.getContextMenu().option('visible'), false, 'Context menu is not shown for deleted message');
             });
+
+            QUnit.test('Edit menu item should not be shown for image messages', function(assert) {
+                this.reinit({
+                    focusStateEnabled: true,
+                    editing: {
+                        allowUpdating: true,
+                    },
+                    items: [
+                        { type: 'image', src: 'image.jpg', author: userSecond },
+                    ],
+                    user: userSecond,
+                });
+
+                const $bubbles = this.getBubbles();
+
+                $bubbles.trigger('dxcontextmenu');
+
+                const contextMenuItems = this.getContextMenu().option('items');
+                const editItem = contextMenuItems.find((item) => item.text === 'Edit');
+
+                assert.strictEqual(editItem, undefined, 'Edit menu item is not shown for image message');
+            });
         });
 
         QUnit.module('messageTemplate', () => {
