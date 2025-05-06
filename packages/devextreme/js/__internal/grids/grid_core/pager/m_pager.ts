@@ -99,6 +99,7 @@ export class PagerView extends modules.View {
       hasKnownLastPage: dataController.hasKnownLastPage(),
       rtlEnabled: that.option('rtlEnabled'),
       isGridCompatibilityMode: true,
+      _getParentComponentRootNode: () => this.component.element(),
       _skipValidation: true,
       pageIndexChanged(pageIndex) {
         if (dataController.pageIndex() !== pageIndex - 1) {
