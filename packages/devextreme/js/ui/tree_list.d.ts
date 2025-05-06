@@ -31,6 +31,7 @@ import {
     AdaptiveDetailRowPreparingInfo,
     ColumnBase,
     ColumnButtonBase,
+    ContextMenuTarget,
     DataChangeInfo,
     DataErrorOccurredInfo,
     DragDropInfo,
@@ -123,6 +124,7 @@ export {
     ColumnHeaderFilterSearchConfig,
     ColumnLookup,
     ColumnResizeMode,
+    ContextMenuTarget,
     DataChange,
     DataChangeType,
     DataRenderMode,
@@ -238,9 +240,6 @@ export type CellPreparedEvent<TRowData = any, TKey = any> = EventInfo<dxTreeList
  * @inherits EventInfo
  */
 export type ContentReadyEvent<TRowData = any, TKey = any> = EventInfo<dxTreeList<TRowData, TKey>>;
-
-/** @public */
-export type ContextMenuTarget = 'toolbar' | 'header' | 'content' | 'footer';
 
 /**
  * @docid _ui_tree_list_ContextMenuPreparingEvent

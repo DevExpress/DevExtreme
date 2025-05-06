@@ -43,6 +43,7 @@ import {
     AdaptiveDetailRowPreparingInfo,
     ColumnBase as ComponentColumnBase,
     ColumnButtonBase as ComponentColumnButtonBase,
+    ContextMenuTarget,
     EditingBase as ComponentEditingBase,
     EditingTextsBase as ComponentEditingTextsBase,
     DataChangeInfo,
@@ -109,6 +110,7 @@ export {
     ColumnHeaderFilterSearchConfig,
     ColumnLookup,
     ColumnResizeMode,
+    ContextMenuTarget,
     DataChange,
     DataChangeType,
     DataRenderMode,
@@ -447,9 +449,6 @@ export type CellPreparedEvent<TRowData = any, TKey = any> = EventInfo<dxDataGrid
  * @inherits EventInfo
  */
 export type ContentReadyEvent<TRowData = any, TKey = any> = EventInfo<dxDataGrid<TRowData, TKey>>;
-
-/** @public */
-export type ContextMenuTarget = 'toolbar' | 'header' | 'content' | 'footer';
 
 /**
  * @docid _ui_data_grid_ContextMenuPreparingEvent

@@ -16,6 +16,7 @@ export {
     ColumnHeaderFilterSearchConfig,
     ColumnLookup,
     ColumnResizeMode,
+    ContextMenuTarget,
     DataChange,
     DataChangeInfo,
     DataChangeType,

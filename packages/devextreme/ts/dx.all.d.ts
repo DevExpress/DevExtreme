@@ -4937,6 +4937,7 @@ declare module DevExpress.common.grids {
     calculateCellValue?: (rowData: any) => any;
   };
   export type ColumnResizeMode = 'nextColumn' | 'widget';
+  export type ContextMenuTarget = 'toolbar' | 'header' | 'content' | 'footer';
   /**
    * [descr:DataChange]
    */
@@ -11223,7 +11224,7 @@ declare module DevExpress.ui {
       /**
        * [descr:_ui_data_grid_ContextMenuPreparingEvent.target]
        */
-      readonly target: ContextMenuTarget;
+      readonly target: DevExpress.common.grids.ContextMenuTarget;
       /**
        * [descr:_ui_data_grid_ContextMenuPreparingEvent.targetElement]
        */
@@ -11245,7 +11246,6 @@ declare module DevExpress.ui {
        */
       readonly row?: Row<TRowData, TKey>;
     };
-    export type ContextMenuTarget = 'toolbar' | 'header' | 'content' | 'footer';
     export type CustomSummaryInfo<TRowData = any, TKey = any> = {
       readonly component: dxDataGrid<TRowData, TKey>;
       readonly name?: string;
@@ -29278,7 +29278,7 @@ declare module DevExpress.ui {
       /**
        * [descr:_ui_tree_list_ContextMenuPreparingEvent.target]
        */
-      readonly target: ContextMenuTarget;
+      readonly target: DevExpress.common.grids.ContextMenuTarget;
       /**
        * [descr:_ui_tree_list_ContextMenuPreparingEvent.targetElement]
        */
@@ -29300,7 +29300,6 @@ declare module DevExpress.ui {
        */
       readonly row?: Row<TRowData, TKey>;
     };
-    export type ContextMenuTarget = 'toolbar' | 'header' | 'content' | 'footer';
     /**
      * [descr:_ui_tree_list_DataErrorOccurredEvent]
      */
