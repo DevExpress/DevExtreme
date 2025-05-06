@@ -12,10 +12,11 @@ import Widget from '@ts/core/widget/widget';
 
 import Avatar from './avatar';
 import type { Properties as MessageBubbleProperties } from './messagebubble';
-import MessageBubble, { CHAT_MESSAGEBUBBLE_CLASS } from './messagebubble';
+import MessageBubble, {
+  CHAT_MESSAGEBUBBLE_CLASS,
+  MESSAGE_DATA_KEY,
+} from './messagebubble';
 import type { MessageTemplate } from './messagelist';
-
-export const MESSAGE_DATA_KEY = 'dxMessageData';
 
 export const CHAT_MESSAGEGROUP_CLASS = 'dx-chat-messagegroup';
 export const CHAT_MESSAGEGROUP_ALIGNMENT_START_CLASS = 'dx-chat-messagegroup-alignment-start';

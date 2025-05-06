@@ -11,9 +11,12 @@ export const CHAT_MESSAGEBUBBLE_DELETED_CLASS = 'dx-chat-messagebubble-deleted';
 export const CHAT_MESSAGEBUBBLE_CONTENT_CLASS = 'dx-chat-messagebubble-content';
 export const CHAT_MESSAGEBUBBLE_ICON_PROHIBITION_CLASS = `${ICON_CLASS}-cursorprohibition`;
 
+export const MESSAGE_DATA_KEY = 'dxMessageData';
+
 export interface Properties extends WidgetOptions<MessageBubble> {
   text?: string;
   isDeleted?: boolean;
+  isEdited?: boolean;
   template?: ((text: string, container: Element) => void) | null;
 }
 
@@ -23,6 +26,7 @@ class MessageBubble extends Widget<Properties> {
       ...super._getDefaultOptions(),
       text: '',
       isDeleted: false,
+      isEdited: false,
       template: null,
     };
   }
@@ -78,14 +82,27 @@ class MessageBubble extends Widget<Properties> {
     $bubbleContainer.text(text);
   }
 
+  _updateMessageData(property: string, value: string | boolean | undefined): void {
+    const messageData = this.$element().data(MESSAGE_DATA_KEY) || {};
+
+    messageData[property] = value;
+    this.$element().data(MESSAGE_DATA_KEY, messageData);
+  }
+
   _optionChanged(args: OptionChanged<Properties>): void {
-    const { name } = args;
+    const { name, value } = args;
 
     switch (name) {
       case 'text':
       case 'isDeleted':
+        this._updateMessageData(name, value);
+        this._updateContent();
+        break;
       case 'template':
         this._updateContent();
+        break;
+      case 'isEdited':
+        this._updateMessageData(name, value);
         break;
       default:
         super._optionChanged(args);
