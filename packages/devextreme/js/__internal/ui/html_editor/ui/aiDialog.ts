@@ -737,7 +737,6 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
     this.deferred?.resolve({ resultText, event });
 
     this._abort?.();
-    /** Add test for there is no error */
     this._processCommandCompletion();
 
     super.hide();

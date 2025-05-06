@@ -40,7 +40,7 @@
     -->
 
     <script type="text/javascript" src="../artifacts/js/dx.all.debug.js" charset="utf-8"></script>
-    <!-- <script type="text/javascript" src="../artifacts/js/dx.ai-integration.debug.js" charset="utf-8"></script> -->
+    <script type="text/javascript" src="../artifacts/js/dx.ai-integration.debug.js" charset="utf-8"></script>
     <script type="text/javascript" src="./themeSelector.js"></script>
     <script type="text/javascript" src="../../../node_modules/axe-core/axe.min.js"></script>
 </head>
@@ -146,48 +146,47 @@
                 //     },
                 // });
 
-                // const aiIntegration = new DevExpress.aiIntegration({
-                //     sendRequest({ prompt }) {
-                //         const promise = new Promise((resolve) => {
-                //             setTimeout(() => {
-                //                 resolve('Text to insert');
-                //             }, 0);
-                //         });
+                const aiIntegration = new DevExpress.aiIntegration({
+                    sendRequest({ prompt }) {
+                        const promise = new Promise((resolve) => {
+                            setTimeout(() => {
+                                resolve('Text to insert');
+                            }, 0);
+                        });
 
-                //         const result = {
-                //             promise,
-                //             abort: () => { },
-                //         };
+                        const result = {
+                            promise,
+                            abort: () => { },
+                        };
 
-                //         return result;
-                //     },
-                // });
-
-                document.addEventListener('keydown', (e) => {
-                    if (e.key === 'Enter') {
-                        console.warn('Next is from document.addEventListener');
-                        console.log(document.activeElement);
-                        console.log(e);
-                    }
+                        return result;
+                    },
                 });
+
+                // document.addEventListener('keydown', (e) => {
+                //     if (e.key === 'Enter') {
+                //         console.warn('Next is from document.addEventListener');
+                //         console.log(document.activeElement);
+                //         console.log(e);
+                //     }
+                // });
 
                 const htmlEditor = $("#button").dxHtmlEditor({
                     value,
                     height: 400,
-                    // aiIntegration,
+                    aiIntegration,
                     toolbar: {
                         items: [
-                            'link',
-                            // 'ai',
+                            // 'link',
+                            'ai',
                         ],
                     },
-                    // onValueChanged: (e) => {
-                        // debugger
+                    onValueChanged: (e) => {
                         // if (e.value === '<p><br></p><p><br></p>') {
                         //     debugger
                         // }
-                        // console.log(document.activeElement)
-                    // },
+                        console.log(document.activeElement)
+                    },
                 }).dxHtmlEditor('instance');
 
                 // htmlEditor.registerKeyHandler('enter', () => {
@@ -201,9 +200,9 @@
                 //     }
                 // });
 
-                htmlEditor._quillInstance.on('text-change', (delta, oldDelta, source) => {
-                    console.log({ delta, oldDelta, source });
-                });
+                // htmlEditor._quillInstance.on('text-change', (delta, oldDelta, source) => {
+                //     console.log({ delta, oldDelta, source });
+                // });
             });
         </script>
     </div>

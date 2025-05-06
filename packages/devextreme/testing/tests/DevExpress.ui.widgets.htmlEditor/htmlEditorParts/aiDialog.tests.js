@@ -13,6 +13,7 @@ import AIDialog, {
     TEXT_AREA_MIN_HEIGHT,
     TEXT_AREA_MAX_HEIGHT
 } from '__internal/ui/html_editor/ui/aiDialog';
+import { BUTTON_GROUP_CLASS } from '__internal/ui/m_button_group';
 import {
     ANIMATION_TYPE_CLASSES,
     LOADINDICATOR_CONTENT_CLASS,
@@ -105,7 +106,7 @@ function assertConfig(assert, config, expectations) {
 };
 
 QUnit.module('AIDialog', {}, () => {
-    QUnit.module('rendering and initial State', moduleConfig, () => {
+    QUnit.module('rendering and initial state', moduleConfig, () => {
         QUnit.test('should render AI dialog content with correct values', function(assert) {
             showAIDialog(this);
 
@@ -293,7 +294,7 @@ QUnit.module('AIDialog', {}, () => {
         });
     });
 
-    QUnit.module('Ask AI command', moduleConfig, () => {
+    QUnit.module('askAI command', moduleConfig, () => {
         QUnit.test('should render correct UI', function(assert) {
             showAIDialog(this, {
                 config: { currentCommand: 'askAI' }
@@ -757,6 +758,36 @@ QUnit.module('AIDialog', {}, () => {
             const $loadIndicatorContent = this.$element.find(`.${LOADINDICATOR_CONTENT_CLASS}`);
 
             assert.strictEqual($loadIndicatorContent.hasClass(ANIMATION_TYPE_CLASSES['sparkle']), true, 'animation type is sparkle');
+        });
+
+        QUnit.test('should not change state on hide', function(assert) {
+            showAIDialog(this);
+
+            this.setDialogState('generating');
+            this.aiDialog.hide();
+
+            assert.strictEqual(getLoadIndicator(this.$element).length, 1, 'indicator is not removed');
+        });
+
+        QUnit.test('should not throw an error if the Enter key was pressed on the replace button', function(assert) {
+            const done = assert.async();
+
+            showAIDialog(this);
+
+            this.promise.then(() => {
+                try {
+                    const $replaceButton = this.$element.find(`.${BUTTON_GROUP_CLASS}`);
+                    keyboardMock($replaceButton).press('enter');
+
+                    assert.ok(true, 'There is no error');
+                    done();
+                } catch(e) {
+                    assert.ok(false, `Error is raised: ${e.message}`);
+                    done();
+                }
+            });
+
+            this.resolve('');
         });
     });
 
@@ -1227,41 +1258,41 @@ QUnit.module('AIDialog', {}, () => {
             });
         });
     });
-});
 
-QUnit.module('compact', {
-    beforeEach: function() {
-        this.isCompactStub = sinon.stub(themes, 'isCompact').returns(true);
+    QUnit.module('compact theme', {
+        beforeEach() {
+            this.isCompactStub = sinon.stub(themes, 'isCompact').returns(true);
 
-        integrationModuleConfig.beforeEach.apply(this);
-    },
-    afterEach: function() {
-        integrationModuleConfig.afterEach.apply(this);
+            integrationModuleConfig.beforeEach.apply(this);
+        },
+        afterEach() {
+            integrationModuleConfig.afterEach.apply(this);
 
-        this.isCompactStub.restore();
-    }
-}, () => {
-    QUnit.test('generate button should have special width', function(assert) {
-        showAIDialog(this, {
-            config: { currentCommand: 'askAI' },
+            this.isCompactStub.restore();
+        },
+    }, () => {
+        QUnit.test('generate button should have special width', function(assert) {
+            showAIDialog(this, {
+                config: { currentCommand: 'askAI' },
+            });
+
+            const bottomToolbarItems = getBottomToolbarItems(this.aiDialogPopup);
+            const generateToolbarItem = getItemByName(bottomToolbarItems, 'generate');
+            const generateButtonOptions = generateToolbarItem.options;
+
+            assert.strictEqual(generateButtonOptions.width, COMPACT_ACTION_BUTTON_WIDTH, 'width is specific');
         });
 
-        const bottomToolbarItems = getBottomToolbarItems(this.aiDialogPopup);
-        const generateToolbarItem = getItemByName(bottomToolbarItems, 'generate');
-        const generateButtonOptions = generateToolbarItem.options;
+        QUnit.test('stop button should have special width', function(assert) {
+            showAIDialog(this, {
+                config: { currentCommand: 'translate' },
+            });
 
-        assert.strictEqual(generateButtonOptions.width, COMPACT_ACTION_BUTTON_WIDTH, 'width is specific');
-    });
+            const bottomToolbarItems = getBottomToolbarItems(this.aiDialogPopup);
+            const stopToolbarItem = getItemByName(bottomToolbarItems, 'stop');
+            const stopButtonOptions = stopToolbarItem.options;
 
-    QUnit.test('stop button should have special width', function(assert) {
-        showAIDialog(this, {
-            config: { currentCommand: 'translate' },
+            assert.strictEqual(stopButtonOptions.width, COMPACT_ACTION_BUTTON_WIDTH, 'width is specific');
         });
-
-        const bottomToolbarItems = getBottomToolbarItems(this.aiDialogPopup);
-        const stopToolbarItem = getItemByName(bottomToolbarItems, 'stop');
-        const stopButtonOptions = stopToolbarItem.options;
-
-        assert.strictEqual(stopButtonOptions.width, COMPACT_ACTION_BUTTON_WIDTH, 'width is specific');
     });
 });
