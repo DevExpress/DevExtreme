@@ -4,6 +4,7 @@ import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import CommandCell from 'devextreme-testcafe-models/dataGrid/commandCell';
 import { ClassNames } from 'devextreme-testcafe-models/dataGrid/classNames';
 import HeaderFilter from 'devextreme-testcafe-models/dataGrid/headers/headerFilter';
+import Pager from 'devextreme-testcafe-models/pagination';
 import { createWidget } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
 import { getData } from '../../helpers/generateDataSourceData';
@@ -4890,3 +4891,123 @@ test('Grids a11y: Fix the header filter and the column chooser focus issue and u
       },
     });
   });
+
+const getDataGridProps = () => ({
+  dataSource: getData(5, 2),
+  columns: ['field_0', 'field_1'],
+  filterRow: { visible: true },
+});
+
+// T1285421
+test('Multiple DataGrids - Ctrl+Up/Down from filter row should focus data row in the same grid', async (t) => {
+  const firstGrid = new DataGrid('#container');
+  const secondGrid = new DataGrid('#otherContainer');
+
+  // Ensure both grids are ready
+  await t
+    .expect(firstGrid.isReady())
+    .ok('First grid is ready')
+    .expect(secondGrid.isReady())
+    .ok('Second grid is ready');
+
+  const firstDataGridFilterCell = firstGrid
+    .getHeaders().getFilterRow().getFilterCell(0).getEditorInput().element;
+  const secondDataGridFilterCell = secondGrid
+    .getHeaders().getFilterRow().getFilterCell(0).getEditorInput().element;
+  const firstGridDataCell = firstGrid.getDataRow(0).getDataCell(0).element;
+  const secondGridDataCell = secondGrid.getDataRow(0).getDataCell(0).element;
+
+  await t
+    .click(secondGridDataCell)
+    .pressKey('ctrl+up')
+    .expect(secondDataGridFilterCell.focused)
+    .ok('Second grid filter cell is focused')
+    .expect(firstDataGridFilterCell.focused)
+    .notOk('First grid data filter cell is not focused')
+    .pressKey('ctrl+down')
+    .expect(secondGridDataCell.focused)
+    .ok('Second grid data cell is focused')
+    .expect(firstGridDataCell.focused)
+    .notOk('First grid data cell is not focused');
+}).before(async () => {
+  await createWidget('dxDataGrid', getDataGridProps());
+  await createWidget('dxDataGrid', getDataGridProps(), '#otherContainer');
+});
+
+test('DataGrid + standalone Pagination - Ctrl+Up on focused standalone Pagination should not move focus to the DataGrid', async (t) => {
+  const dataGrid = new DataGrid('#container');
+  const pager = new Pager('#otherContainer');
+
+  const pagerElement = pager.getPageSize(0).element;
+
+  await t
+    .click(pagerElement)
+    .expect(pagerElement.focused)
+    .ok()
+    .pressKey('ctrl+up')
+    .expect(pagerElement.focused)
+    .ok()
+    .expect(dataGrid.getDataRow(0).isFocusedRow)
+    .notOk();
+}).before(async () => {
+  await createWidget('dxDataGrid', {
+    dataSource: [
+      { id: 1, name: 'Name 1' },
+      { id: 2, name: 'Name 2' },
+      { id: 3, name: 'Name 3' },
+    ],
+    keyExpr: 'id',
+    focusedRowEnabled: true,
+  });
+
+  await createWidget('dxPagination', {
+    pageCount: 3,
+    pageSize: 1,
+    visible: true,
+    showPageSizeSelector: true,
+    allowedPageSizes: [1, 2, 3],
+  }, '#otherContainer');
+});
+
+test('DataGrid with Pagination in master detail - Ctrl+Up on focused standalone Pagination should not move focus to the DataGrid', async (t) => {
+  const dataGrid = new DataGrid('#container');
+  const pager = new Pager('#masterDetailPager');
+
+  const pagerElement = pager.getPageSize(0).element;
+
+  await t
+    .click(pagerElement)
+    .expect(pagerElement.focused)
+    .ok()
+    .pressKey('ctrl+up')
+    .expect(dataGrid.getDataRow(0).isFocusedRow)
+    .notOk();
+}).before(async () => {
+  await createWidget('dxDataGrid', {
+    dataSource: [
+      { id: 1, name: 'Name 1' },
+    ],
+    keyExpr: 'id',
+    focusedRowEnabled: true,
+    selection: {
+      mode: 'single',
+    },
+    masterDetail: {
+      autoExpandAll: true,
+      enabled: true,
+      template: (container) => {
+        $('<div>')
+          .attr('id', 'masterDetailPager')
+          .appendTo(container)
+          // @ts-expect-error dx.all.d.ts typings are missing
+          .dxPagination({
+            pageCount: 3,
+            pageSize: 1,
+            visible: true,
+            showPageSizeSelector: true,
+            allowedPageSizes: [1, 2, 3],
+          });
+      },
+    },
+  });
+});
