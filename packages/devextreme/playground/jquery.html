@@ -43,43 +43,21 @@
     <script type="text/javascript" src="../../../node_modules/axe-core/axe.min.js"></script>
 </head>
 <body class="dx-surface">
-    <div role="main">
-        <h1 style="position: fixed; left: 0; top: 0; clip: rect(1px, 1px, 1px, 1px);">Test header</h1>
+<div role="main">
+    <h1 style="position: fixed; left: 0; top: 0; clip: rect(1px, 1px, 1px, 1px);">Test header</h1>
 
-        <select id="theme-selector" style="display: block;">
-        </select>
-        <br />
-        <h3>DataGrid</h3>
-        <div id="grid"></div>
-        <h3>Standalone pagination</h3>
-        <div id="pagination"></div>
-        <script>
-            $(function() {
-                $("#grid").dxDataGrid({
-                    dataSource: new Array(100)
-                        .fill(null)
-                        .map((_, idx) => ({
-                            id: idx,
-                            A: `A_${idx}`,
-                            B: `B_${idx}`,
-                        })),
-                    keyExpr: 'id',
-                    paging: {
-                        pageSize: 1,
-                    }
-                });
-
-                $("#pagination")
-                    .dxPagination({
-                        showInfo: true,
-                        showNavigationButtons: true,
-                        allowedPageSizes: [4, 6],
-                        itemCount: 1000,
-                        pageIndex: 1,
-                        pageSize: 4,
-                    });
+    <select id="theme-selector" style="display: block;">
+    </select>
+    <br />
+    <div id="button"></div>
+    <script>
+        $(function() {
+            $("#button").dxButton({
+                text: 'Click me!',
+                onClick: function() { alert("clicked"); }
             });
-        </script>
-    </div>
+        });
+    </script>
+</div>
 </body>
 </html>
