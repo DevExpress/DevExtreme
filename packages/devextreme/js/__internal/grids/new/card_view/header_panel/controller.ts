@@ -17,14 +17,14 @@ export class HeaderPanelController {
     private readonly columnChooserView: ColumnChooserView,
   ) { }
 
-  public canReorder(column: Column): boolean {
-    const allowColumnReordering = this.columnsController.allowColumnReordering.value;
+  private canReorder(column: Column): boolean {
+    const allowColumnReordering = this.columnsController.allowColumnReordering.peek();
 
     return allowColumnReordering && column.allowReordering;
   }
 
   public isColumnDraggable = (column: Column): boolean => {
-    const canHide = column.allowHiding && this.columnChooserView.dragModeOpened.value;
+    const canHide = column.allowHiding && this.columnChooserView.dragModeOpened.peek();
     const canReorder = this.canReorder(column);
 
     return canReorder || canHide;
@@ -36,8 +36,7 @@ export class HeaderPanelController {
     draggingColumnData: DraggingColumnData,
   ): void => {
     const { columnAfter } = draggingColumnData;
-    const allowColumnReordering = this.columnsController.allowColumnReordering.value;
-    const needPreserveOrder = !(allowColumnReordering && column.allowReordering);
+    const needPreserveOrder = !this.canReorder(column);
 
     if (needPreserveOrder) {
       this.columnsController.columnOption(column, 'visible', true);

@@ -48,6 +48,7 @@ export class HeaderPanelView extends View<HeaderPanelProps> {
     super();
 
     this.showDropzone = computed((): boolean => {
+      const allowReordering = this.columnsController.allowColumnReordering.value;
       const column = this.columnChooserController.draggingItem.value?.column;
 
       if (!column) {
@@ -55,7 +56,7 @@ export class HeaderPanelView extends View<HeaderPanelProps> {
       }
 
       const allColumnsHidden = this.columnsController.visibleColumns.value.length === 0;
-      const canReorder = this.headerPanelController.canReorder(column);
+      const canReorder = allowReordering && column.allowReordering;
 
       return !canReorder || allColumnsHidden;
     });

@@ -23,8 +23,6 @@ test('default render', async (t) => {
 }));
 
 test('headerPanel column chooser link opens column chooser on click', async (t) => {
-  await t.setTestSpeed(0.3);
-
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const cardView = new CardView('#container');
   const headerPanel = cardView.getHeaderPanel();
