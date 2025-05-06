@@ -3,7 +3,6 @@ import { getPublicElement } from '@js/core/element';
 import $ from '@js/core/renderer';
 import type { WidgetOptions } from '@js/ui/widget/ui.widget';
 import { ICON_CLASS } from '@ts/core/utils/m_icon';
-import { isDefined } from '@ts/core/utils/m_type';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
 
@@ -83,7 +82,7 @@ class MessageBubble extends Widget<Properties> {
     $bubbleContainer.text(text);
   }
 
-  _updateMessageData(property: string, value: string | boolean | undefined) {
+  _updateMessageData(property: string, value: string | boolean | undefined): void {
     const messageData = this.$element().data(MESSAGE_DATA_KEY) || {};
 
     messageData[property] = value;
@@ -103,6 +102,7 @@ class MessageBubble extends Widget<Properties> {
         this._updateContent();
         break;
       case 'isEdited':
+        this._updateMessageData(name, value);
         break;
       default:
         super._optionChanged(args);
