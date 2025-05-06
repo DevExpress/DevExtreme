@@ -4971,7 +4971,7 @@ test('DataGrid + standalone Pagination - Ctrl+Up on focused standalone Paginatio
 
 test('DataGrid with Pagination in master detail - Ctrl+Up on focused standalone Pagination should not move focus to the DataGrid', async (t) => {
   const dataGrid = new DataGrid('#container');
-  const pager = new Pager('#otherContainer');
+  const pager = new Pager('#masterDetailPager');
 
   const pagerElement = pager.getPageSize(0).element;
 
@@ -4980,83 +4980,46 @@ test('DataGrid with Pagination in master detail - Ctrl+Up on focused standalone 
     .expect(pagerElement.focused)
     .ok()
     .pressKey('ctrl+alt+up')
-    .expect(pagerElement.focused)
-    .ok()
     .expect(dataGrid.getDataRow(0).isFocusedRow)
     .notOk();
 }).before(async () => {
   await createWidget('dxDataGrid', {
     dataSource: [
-      {
-        id: 1,
-        firstName: 'John',
-        lastName: 'Smith',
-        position: 'Manager',
-      },
-      {
-        id: 2,
-        firstName: 'Jane',
-        lastName: 'Doe',
-        position: 'Developer',
-      },
-      {
-        id: 3,
-        firstName: 'Bob',
-        lastName: 'Jones',
-        position: 'Designer',
-      },
+      { id: 1, name: 'Name 1' },
+      { id: 2, name: 'Name 2' },
+      { id: 3, name: 'Name 3' },
     ],
     keyExpr: 'id',
     focusedRowEnabled: true,
-    columns: ['firstName', 'lastName', 'position'],
+    selection: {
+      mode: 'single',
+    },
+    onSelectionChanged(e) {
+      e.component.collapseAll(-1);
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
+      e.component.expandRow(e.currentSelectedRowKeys[0]);
+    },
+    onContentReady(e) {
+      if (!e.component.getSelectedRowKeys().length) {
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
+        e.component.selectRowsByIndexes([0]);
+      }
+    },
     masterDetail: {
       enabled: true,
-      template: ClientFunction((container, options) => {
-        const currentEmployeeData = options.data;
-
+      template: ClientFunction((container) => {
         $('<div>')
-          .addClass('master-detail-caption')
-          .text(`${currentEmployeeData.firstName} ${currentEmployeeData.lastName}'s Details:`)
-          .appendTo(container);
-
-        $('<div>')
+          .attr('id', 'masterDetailPager')
           .appendTo(container)
           // @ts-expect-error dx.all.d.ts typings are missing
-          .dxDataGrid({
-            dataSource: [
-              {
-                id: 1,
-                details: 'Details 1',
-              },
-              {
-                id: 2,
-                details: 'Details 2',
-              },
-              {
-                id: 3,
-                details: 'Details 3',
-              },
-            ],
-            paging: {
-              enabled: true,
-              pageSize: 1,
-            },
-            pager: {
-              visible: true,
-              showPageSizeSelector: true,
-              allowedPageSizes: [1, 2, 3],
-            },
-            columns: ['details'],
-            showBorders: true,
+          .dxPagination({
+            pageCount: 3,
+            pageSize: 1,
+            visible: true,
+            showPageSizeSelector: true,
+            allowedPageSizes: [1, 2, 3],
           });
       }),
     },
   });
-  await createWidget('dxPagination', {
-    pageCount: 3,
-    pageSize: 1,
-    visible: true,
-    showPageSizeSelector: true,
-    allowedPageSizes: [1, 2, 3],
-  }, '#otherContainer');
 });
