@@ -62,6 +62,8 @@ export default errorUtils({
 
   E0121: 'The \'customItem\' parameter of the \'onCustomItemCreating\' function is empty or contains invalid data. Assign a custom object or a Promise that is resolved after the item is created.',
 
+  E0122: 'AIIntegration: The sendRequest method is missing.',
+
   W0000: '\'{0}\' is deprecated in {1}. {2}',
 
   W0001: '{0} - \'{1}\' option is deprecated in {2}. {3}',
