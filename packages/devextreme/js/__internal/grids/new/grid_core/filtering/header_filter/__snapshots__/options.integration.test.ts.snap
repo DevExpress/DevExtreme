@@ -3567,60 +3567,74 @@ exports[`Options HeaderFilter visible: false 1`] = `
   class="dx-cardview-headers"
 >
   <div
-    class="dx-scrollable dx-visibility-change-handler dx-scrollable-horizontal dx-scrollable-simulated"
+    class="dx-sortable"
   >
     <div
-      class="dx-scrollable-wrapper"
+      class="dx-scrollable dx-visibility-change-handler dx-scrollable-horizontal dx-scrollable-simulated"
     >
       <div
-        class="dx-scrollable-container"
+        class="dx-scrollable-wrapper"
       >
         <div
-          class="dx-scrollable-content"
-          style="left: 0px; top: 0px; transform: none;"
+          class="dx-scrollable-container"
         >
           <div
-            data-dx-focus-container="true"
+            class="dx-scrollable-content"
+            style="left: 0px; top: 0px; transform: none;"
           >
             <div
-              data-dx-focus-decoy="true"
-              tabindex="0"
-            />
-            <div
-              class="dx-cardview-headerpanel-content"
+              data-dx-focus-container="true"
             >
               <div
-                class="dx-cardview-header-item  "
+                data-dx-focus-decoy="true"
                 tabindex="0"
+              />
+              <div
+                class="dx-cardview-headerpanel-content"
               >
-                A
                 <div
-                  class="dx-icon dx-icon-filter dx-header-filter-icon "
-                />
+                  class="dx-cardview-header-item  "
+                  tabindex="0"
+                >
+                  A
+                  <div
+                    class="dx-icon dx-icon-filter dx-header-filter-icon "
+                  />
+                </div>
               </div>
+              <div
+                data-dx-focus-decoy="true"
+                tabindex="0"
+              />
             </div>
-            <div
-              data-dx-focus-decoy="true"
-              tabindex="0"
-            />
           </div>
-        </div>
-        <div
-          class="dx-scrollable-scrollbar dx-widget dx-scrollbar-horizontal"
-          style="display: none;"
-        >
           <div
-            class="dx-scrollable-scroll dx-state-invisible"
+            class="dx-scrollable-scrollbar dx-widget dx-scrollbar-horizontal"
+            style="display: none;"
           >
             <div
-              class="dx-scrollable-scroll-content"
-            />
+              class="dx-scrollable-scroll dx-state-invisible"
+            >
+              <div
+                class="dx-scrollable-scroll-content"
+              />
+            </div>
           </div>
         </div>
       </div>
     </div>
+    
+    <div
+      class="dx-cardview-dropzone"
+    >
+      <div
+        class="dx-icon dx-icon-dropzone"
+      />
+      <span>
+        Drop the header item here
+      </span>
+    </div>
   </div>
-  
 </div>
 `;
 
@@ -3629,60 +3643,74 @@ exports[`Options HeaderFilter visible: true 1`] = `
   class="dx-cardview-headers"
 >
   <div
-    class="dx-scrollable dx-visibility-change-handler dx-scrollable-horizontal dx-scrollable-simulated"
+    class="dx-sortable"
   >
     <div
-      class="dx-scrollable-wrapper"
+      class="dx-scrollable dx-visibility-change-handler dx-scrollable-horizontal dx-scrollable-simulated"
     >
       <div
-        class="dx-scrollable-container"
+        class="dx-scrollable-wrapper"
       >
         <div
-          class="dx-scrollable-content"
-          style="left: 0px; top: 0px; transform: none;"
+          class="dx-scrollable-container"
         >
           <div
-            data-dx-focus-container="true"
+            class="dx-scrollable-content"
+            style="left: 0px; top: 0px; transform: none;"
           >
             <div
-              data-dx-focus-decoy="true"
-              tabindex="0"
-            />
-            <div
-              class="dx-cardview-headerpanel-content"
+              data-dx-focus-container="true"
             >
               <div
-                class="dx-cardview-header-item  "
+                data-dx-focus-decoy="true"
                 tabindex="0"
+              />
+              <div
+                class="dx-cardview-headerpanel-content"
               >
-                A
                 <div
-                  class="dx-icon dx-icon-filter dx-header-filter-icon "
-                />
+                  class="dx-cardview-header-item  "
+                  tabindex="0"
+                >
+                  A
+                  <div
+                    class="dx-icon dx-icon-filter dx-header-filter-icon "
+                  />
+                </div>
               </div>
+              <div
+                data-dx-focus-decoy="true"
+                tabindex="0"
+              />
             </div>
-            <div
-              data-dx-focus-decoy="true"
-              tabindex="0"
-            />
           </div>
-        </div>
-        <div
-          class="dx-scrollable-scrollbar dx-widget dx-scrollbar-horizontal"
-          style="display: none;"
-        >
           <div
-            class="dx-scrollable-scroll dx-state-invisible"
+            class="dx-scrollable-scrollbar dx-widget dx-scrollbar-horizontal"
+            style="display: none;"
           >
             <div
-              class="dx-scrollable-scroll-content"
-            />
+              class="dx-scrollable-scroll dx-state-invisible"
+            >
+              <div
+                class="dx-scrollable-scroll-content"
+              />
+            </div>
           </div>
         </div>
       </div>
     </div>
+    
+    <div
+      class="dx-cardview-dropzone"
+    >
+      <div
+        class="dx-icon dx-icon-dropzone"
+      />
+      <span>
+        Drop the header item here
+      </span>
+    </div>
   </div>
-  
 </div>
 `;
 
@@ -3691,59 +3719,73 @@ exports[`Options HeaderFilter visible: undefined 1`] = `
   class="dx-cardview-headers"
 >
   <div
-    class="dx-scrollable dx-visibility-change-handler dx-scrollable-horizontal dx-scrollable-simulated"
+    class="dx-sortable"
   >
     <div
-      class="dx-scrollable-wrapper"
+      class="dx-scrollable dx-visibility-change-handler dx-scrollable-horizontal dx-scrollable-simulated"
     >
       <div
-        class="dx-scrollable-container"
+        class="dx-scrollable-wrapper"
       >
         <div
-          class="dx-scrollable-content"
-          style="left: 0px; top: 0px; transform: none;"
+          class="dx-scrollable-container"
         >
           <div
-            data-dx-focus-container="true"
+            class="dx-scrollable-content"
+            style="left: 0px; top: 0px; transform: none;"
           >
             <div
-              data-dx-focus-decoy="true"
-              tabindex="0"
-            />
-            <div
-              class="dx-cardview-headerpanel-content"
+              data-dx-focus-container="true"
             >
               <div
-                class="dx-cardview-header-item  "
+                data-dx-focus-decoy="true"
                 tabindex="0"
+              />
+              <div
+                class="dx-cardview-headerpanel-content"
               >
-                A
                 <div
-                  class="dx-icon dx-icon-filter dx-header-filter-icon "
-                />
+                  class="dx-cardview-header-item  "
+                  tabindex="0"
+                >
+                  A
+                  <div
+                    class="dx-icon dx-icon-filter dx-header-filter-icon "
+                  />
+                </div>
               </div>
+              <div
+                data-dx-focus-decoy="true"
+                tabindex="0"
+              />
             </div>
-            <div
-              data-dx-focus-decoy="true"
-              tabindex="0"
-            />
           </div>
-        </div>
-        <div
-          class="dx-scrollable-scrollbar dx-widget dx-scrollbar-horizontal"
-          style="display: none;"
-        >
           <div
-            class="dx-scrollable-scroll dx-state-invisible"
+            class="dx-scrollable-scrollbar dx-widget dx-scrollbar-horizontal"
+            style="display: none;"
           >
             <div
-              class="dx-scrollable-scroll-content"
-            />
+              class="dx-scrollable-scroll dx-state-invisible"
+            >
+              <div
+                class="dx-scrollable-scroll-content"
+              />
+            </div>
           </div>
         </div>
       </div>
     </div>
+    
+    <div
+      class="dx-cardview-dropzone"
+    >
+      <div
+        class="dx-icon dx-icon-dropzone"
+      />
+      <span>
+        Drop the header item here
+      </span>
+    </div>
   </div>
-  
 </div>
 `;
