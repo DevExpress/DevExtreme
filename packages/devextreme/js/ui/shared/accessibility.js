@@ -80,12 +80,16 @@ function getActiveAccessibleElements(ariaLabel, viewElement) {
     return $activeElements;
 }
 
-function findFocusedViewElement(viewSelectors, element) {
-    const root = element?.getRootNode() || domAdapter.getDocument();
+function findFocusedViewElement(instanceRootDomNode, viewSelectors, element) {
+    const root = instanceRootDomNode ?? element?.getRootNode() ?? domAdapter.getDocument();
+
+    if(!root) { return; }
+
+    const $root = $(root);
 
     for(const index in viewSelectors) {
         const selector = viewSelectors[index];
-        const $focusViewElement = $(root).find(selector).first();
+        const $focusViewElement = $root.find(selector).first();
 
         if($focusViewElement.length) {
             return $focusViewElement;
@@ -176,11 +180,13 @@ export function selectView(viewName, instance, event) {
         const viewNames = Object.keys(viewItemSelectorMap);
         let viewItemIndex = viewNames.indexOf(viewName);
 
+        const instanceRootDomNode = instance?.component?.element?.();
+
         while(viewItemIndex >= 0 && viewItemIndex < viewNames.length) {
             viewItemIndex = keyName === 'upArrow' ? --viewItemIndex : ++viewItemIndex;
             const viewName = viewNames[viewItemIndex];
             const viewSelectors = viewItemSelectorMap[viewName];
-            const $focusViewElement = findFocusedViewElement(viewSelectors, event.target);
+            const $focusViewElement = findFocusedViewElement(instanceRootDomNode, viewSelectors, event.target);
             if($focusViewElement && $focusViewElement.length) {
                 $focusViewElement.attr('tabindex', instance.option('tabindex') || 0);
                 eventsEngine.trigger($focusViewElement, 'focus');
