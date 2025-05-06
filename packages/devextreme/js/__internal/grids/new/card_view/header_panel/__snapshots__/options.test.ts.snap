@@ -8,57 +8,69 @@ exports[`ColumnProperties headerItemCssClass should override content of headerPa
     class="dx-cardview-headers"
   >
     <div
-      class="dx-scrollable dx-visibility-change-handler dx-scrollable-horizontal dx-scrollable-simulated"
+      class="dx-sortable"
     >
       <div
-        class="dx-scrollable-wrapper"
+        class="dx-scrollable dx-visibility-change-handler dx-scrollable-horizontal dx-scrollable-simulated"
       >
         <div
-          class="dx-scrollable-container"
+          class="dx-scrollable-wrapper"
         >
           <div
-            class="dx-scrollable-content"
-            style="left: 0px; top: 0px; transform: none;"
+            class="dx-scrollable-container"
           >
             <div
-              data-dx-focus-container="true"
+              class="dx-scrollable-content"
+              style="left: 0px; top: 0px; transform: none;"
             >
               <div
-                data-dx-focus-decoy="true"
-                tabindex="0"
-              />
-              <div
-                class="dx-cardview-headerpanel-content"
+                data-dx-focus-container="true"
               >
                 <div
-                  class="dx-cardview-header-item my-css-class "
+                  data-dx-focus-decoy="true"
                   tabindex="0"
+                />
+                <div
+                  class="dx-cardview-headerpanel-content"
                 >
-                  Column 1
+                  <div
+                    class="dx-cardview-header-item my-css-class "
+                    tabindex="0"
+                  >
+                    Column 1
+                  </div>
                 </div>
+                <div
+                  data-dx-focus-decoy="true"
+                  tabindex="0"
+                />
               </div>
-              <div
-                data-dx-focus-decoy="true"
-                tabindex="0"
-              />
             </div>
-          </div>
-          <div
-            class="dx-scrollable-scrollbar dx-widget dx-scrollbar-horizontal"
-            style="display: none;"
-          >
             <div
-              class="dx-scrollable-scroll dx-state-invisible"
+              class="dx-scrollable-scrollbar dx-widget dx-scrollbar-horizontal"
+              style="display: none;"
             >
               <div
-                class="dx-scrollable-scroll-content"
-              />
+                class="dx-scrollable-scroll dx-state-invisible"
+              >
+                <div
+                  class="dx-scrollable-scroll-content"
+                />
+              </div>
             </div>
           </div>
         </div>
       </div>
+      
+      <div
+        class="dx-cardview-dropzone"
+      >
+        <div
+          class="dx-icon dx-icon-dropzone"
+        />
+        <span />
+      </div>
     </div>
-    
   </div>
 </div>
 `;
@@ -133,57 +145,69 @@ exports[`Options headerPanel visible when it is true should show headerPanel 1`]
     class="dx-cardview-headers"
   >
     <div
-      class="dx-scrollable dx-visibility-change-handler dx-scrollable-horizontal dx-scrollable-simulated"
+      class="dx-sortable"
     >
       <div
-        class="dx-scrollable-wrapper"
+        class="dx-scrollable dx-visibility-change-handler dx-scrollable-horizontal dx-scrollable-simulated"
       >
         <div
-          class="dx-scrollable-container"
+          class="dx-scrollable-wrapper"
         >
           <div
-            class="dx-scrollable-content"
-            style="left: 0px; top: 0px; transform: none;"
+            class="dx-scrollable-container"
           >
             <div
-              data-dx-focus-container="true"
+              class="dx-scrollable-content"
+              style="left: 0px; top: 0px; transform: none;"
             >
               <div
-                data-dx-focus-decoy="true"
-                tabindex="0"
-              />
-              <div
-                class="dx-cardview-headerpanel-content"
+                data-dx-focus-container="true"
               >
                 <div
-                  class="dx-cardview-header-item  "
+                  data-dx-focus-decoy="true"
                   tabindex="0"
+                />
+                <div
+                  class="dx-cardview-headerpanel-content"
                 >
-                  Column 1
+                  <div
+                    class="dx-cardview-header-item  "
+                    tabindex="0"
+                  >
+                    Column 1
+                  </div>
                 </div>
+                <div
+                  data-dx-focus-decoy="true"
+                  tabindex="0"
+                />
               </div>
-              <div
-                data-dx-focus-decoy="true"
-                tabindex="0"
-              />
             </div>
-          </div>
-          <div
-            class="dx-scrollable-scrollbar dx-widget dx-scrollbar-horizontal"
-            style="display: none;"
-          >
             <div
-              class="dx-scrollable-scroll dx-state-invisible"
+              class="dx-scrollable-scrollbar dx-widget dx-scrollbar-horizontal"
+              style="display: none;"
             >
               <div
-                class="dx-scrollable-scroll-content"
-              />
+                class="dx-scrollable-scroll dx-state-invisible"
+              >
+                <div
+                  class="dx-scrollable-scroll-content"
+                />
+              </div>
             </div>
           </div>
         </div>
       </div>
+      
+      <div
+        class="dx-cardview-dropzone"
+      >
+        <div
+          class="dx-icon dx-icon-dropzone"
+        />
+        <span />
+      </div>
     </div>
-    
   </div>
 </div>
 `;
