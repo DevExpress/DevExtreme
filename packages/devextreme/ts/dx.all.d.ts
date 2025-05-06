@@ -32179,11 +32179,11 @@ declare module DevExpress.ui.dxHtmlEditor {
    * [descr:AICommand]
    */
   export type AICommand =
-    | AICommandBase<'summarize', any>
-    | AICommandBase<'proofread', any>
-    | AICommandBase<'expand', any>
-    | AICommandBase<'shorten', any>
-    | AICommandBase<'askAI', any>
+    | AICommandBase<'summarize', never>
+    | AICommandBase<'proofread', never>
+    | AICommandBase<'expand', never>
+    | AICommandBase<'shorten', never>
+    | AICommandBase<'askAI', never>
     | AIChangeStyleCommand
     | AIChangeToneCommand
     | AITranslateCommand
@@ -32199,7 +32199,7 @@ declare module DevExpress.ui.dxHtmlEditor {
     /**
      * [descr:AICommandBase.name]
      */
-    name: AICommandNameExtended;
+    name: CommandName;
     /**
      * [descr:AICommandBase.text]
      */

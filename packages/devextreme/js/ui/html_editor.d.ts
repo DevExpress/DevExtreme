@@ -96,13 +96,13 @@ export type AICommandNameExtended = AICommandName | 'custom';
  * @namespace DevExpress.ui.dxHtmlEditor
  */
 export interface AICommandBase<
-    CommandName extends AICommandNameExtended, // eslint-disable-line @typescript-eslint/no-unused-vars
+    CommandName extends AICommandNameExtended,
     CommandOptions = undefined> {
     /**
      * @docid
      * @public
      */
-    name: AICommandNameExtended;
+    name: CommandName;
     /**
      * @docid
      * @public
@@ -164,11 +164,11 @@ export interface AICustomCommand extends AICommandBase<'custom', string[]> {
  * @namespace DevExpress.ui.dxHtmlEditor
  */
 export type AICommand =
-    | AICommandBase<'summarize', any>
-    | AICommandBase<'proofread', any>
-    | AICommandBase<'expand', any>
-    | AICommandBase<'shorten', any>
-    | AICommandBase<'askAI', any>
+    | AICommandBase<'summarize', never>
+    | AICommandBase<'proofread', never>
+    | AICommandBase<'expand', never>
+    | AICommandBase<'shorten', never>
+    | AICommandBase<'askAI', never>
     | AIChangeStyleCommand
     | AIChangeToneCommand
     | AITranslateCommand
