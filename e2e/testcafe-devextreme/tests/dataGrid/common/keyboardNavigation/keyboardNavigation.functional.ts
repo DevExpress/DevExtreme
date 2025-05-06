@@ -4,6 +4,7 @@ import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import CommandCell from 'devextreme-testcafe-models/dataGrid/commandCell';
 import { ClassNames } from 'devextreme-testcafe-models/dataGrid/classNames';
 import HeaderFilter from 'devextreme-testcafe-models/dataGrid/headers/headerFilter';
+import Pager from 'devextreme-testcafe-models/pagination';
 import { createWidget } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
 import { getData } from '../../helpers/generateDataSourceData';
@@ -4931,4 +4932,131 @@ test('Multiple DataGrids - Ctrl+Up/Down from filter row should focus data row in
 }).before(async () => {
   await createWidget('dxDataGrid', getDataGridProps());
   await createWidget('dxDataGrid', getDataGridProps(), '#otherContainer');
+});
+
+test('DataGrid + standalone Pagination - Ctrl+Up on focused standalone Pagination should not move focus to the DataGrid', async (t) => {
+  const dataGrid = new DataGrid('#container');
+  const pager = new Pager('#otherContainer');
+
+  const pagerElement = pager.getPageSize(0).element;
+
+  await t
+    .click(pagerElement)
+    .expect(pagerElement.focused)
+    .ok()
+    .pressKey('ctrl+up')
+    .expect(pagerElement.focused)
+    .ok()
+    .expect(dataGrid.getDataRow(0).isFocusedRow)
+    .notOk();
+}).before(async () => {
+  await createWidget('dxDataGrid', {
+    dataSource: [
+      { id: 1, name: 'Name 1' },
+      { id: 2, name: 'Name 2' },
+      { id: 3, name: 'Name 3' },
+    ],
+    keyExpr: 'id',
+    focusedRowEnabled: true,
+  });
+
+  await createWidget('dxPagination', {
+    pageCount: 3,
+    pageSize: 1,
+    visible: true,
+    showPageSizeSelector: true,
+    allowedPageSizes: [1, 2, 3],
+  }, '#otherContainer');
+});
+
+test('DataGrid with Pagination in master detail - Ctrl+Up on focused standalone Pagination should not move focus to the DataGrid', async (t) => {
+  const dataGrid = new DataGrid('#container');
+  const pager = new Pager('#otherContainer');
+
+  const pagerElement = pager.getPageSize(0).element;
+
+  await t
+    .click(pagerElement)
+    .expect(pagerElement.focused)
+    .ok()
+    .pressKey('ctrl+alt+up')
+    .expect(pagerElement.focused)
+    .ok()
+    .expect(dataGrid.getDataRow(0).isFocusedRow)
+    .notOk();
+}).before(async () => {
+  await createWidget('dxDataGrid', {
+    dataSource: [
+      {
+        id: 1,
+        firstName: 'John',
+        lastName: 'Smith',
+        position: 'Manager',
+      },
+      {
+        id: 2,
+        firstName: 'Jane',
+        lastName: 'Doe',
+        position: 'Developer',
+      },
+      {
+        id: 3,
+        firstName: 'Bob',
+        lastName: 'Jones',
+        position: 'Designer',
+      },
+    ],
+    keyExpr: 'id',
+    focusedRowEnabled: true,
+    columns: ['firstName', 'lastName', 'position'],
+    masterDetail: {
+      enabled: true,
+      template: ClientFunction((container, options) => {
+        const currentEmployeeData = options.data;
+
+        $('<div>')
+          .addClass('master-detail-caption')
+          .text(`${currentEmployeeData.firstName} ${currentEmployeeData.lastName}'s Details:`)
+          .appendTo(container);
+
+        $('<div>')
+          .appendTo(container)
+          // @ts-expect-error dx.all.d.ts typings are missing
+          .dxDataGrid({
+            dataSource: [
+              {
+                id: 1,
+                details: 'Details 1',
+              },
+              {
+                id: 2,
+                details: 'Details 2',
+              },
+              {
+                id: 3,
+                details: 'Details 3',
+              },
+            ],
+            paging: {
+              enabled: true,
+              pageSize: 1,
+            },
+            pager: {
+              visible: true,
+              showPageSizeSelector: true,
+              allowedPageSizes: [1, 2, 3],
+            },
+            columns: ['details'],
+            showBorders: true,
+          });
+      }),
+    },
+  });
+  await createWidget('dxPagination', {
+    pageCount: 3,
+    pageSize: 1,
+    visible: true,
+    showPageSizeSelector: true,
+    allowedPageSizes: [1, 2, 3],
+  }, '#otherContainer');
 });
