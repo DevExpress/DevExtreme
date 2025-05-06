@@ -16,111 +16,68 @@ import {
 fixture.disablePageReloads`CardView - ColumnSortable.Functional`
   .page(url(__dirname, '../../container.html'));
 
-test('headerPanel column is draggable when allowReodering: true', async (t) => {
-  const cardView = new CardView('#container');
-  const columnElement = cardView.getHeaders().getHeaderItemNth(0).element;
+[
+  { allowColumnReordering: false, allowReordering: false, result: false },
+  { allowColumnReordering: false, allowReordering: true, result: false },
+  { allowColumnReordering: true, allowReordering: false, result: false },
+  { allowColumnReordering: true, allowReordering: true, result: true },
+].forEach(({ allowColumnReordering, allowReordering, result }) => {
+  test(`header column is draggable: ${result}, when allowColumnReordering: ${allowColumnReordering}, allowReordering: ${allowReordering}`, async (t) => {
+    const cardView = new CardView('#container');
+    const columnElement = cardView.getHeaders().getHeaderItemNth(0).element;
 
-  await triggerDragStart(columnElement);
+    await triggerDragStart(columnElement);
 
-  const draggingElement = Selector(SELECTORS.dragging);
+    const draggingElement = Selector(SELECTORS.dragging);
 
-  await t.expect(draggingElement.exists).ok();
-}).before(async () => createWidget('dxCardView', {
-  allowColumnReordering: true,
-  columns: [{
-    dataField: 'test',
-    allowReordering: true,
-  }],
-}));
+    if (result) {
+      await t.expect(draggingElement.exists).ok();
+    } else {
+      await t.expect(draggingElement.exists).notOk();
+    }
+  }).before(async () => createWidget('dxCardView', {
+    allowColumnReordering,
+    columns: [{
+      dataField: 'test',
+      allowReordering,
+    }],
+  }));
+});
 
-test('headerPanel column is not draggable when allowReodering: false', async (t) => {
-  const cardView = new CardView('#container');
-  const columnElement = cardView.getHeaders().getHeaderItemNth(0).element;
+[
+  { columnChooserMode: 'dragAndDrop', allowHiding: false, result: false },
+  { columnChooserMode: 'dragAndDrop', allowHiding: true, result: true },
+  { columnChooserMode: 'select', allowHiding: false, result: false },
+  { columnChooserMode: 'select', allowHiding: true, result: false },
+].forEach(({ columnChooserMode, allowHiding, result }) => {
+  test(`headerPanel column is draggable: ${result}, when allowReodering: false, allowHiding: ${allowHiding}, columnChooserMode: ${columnChooserMode}`, async (t) => {
+    const cardView = new CardView('#container');
+    const columnElement = cardView.getHeaders().getHeaderItemNth(0).element;
 
-  await triggerDragStart(columnElement);
+    await cardView.apiShowColumnChooser();
 
-  const draggingElement = Selector(SELECTORS.dragging);
+    await triggerDragStart(columnElement);
 
-  await t.expect(draggingElement.exists).notOk();
-}).before(async () => createWidget('dxCardView', {
-  allowColumnReordering: true,
-  columns: [{
-    dataField: 'test',
-    allowReordering: false,
-  }],
-}));
+    const draggingElement = Selector(SELECTORS.dragging);
 
-test('headerPanel column is draggable when allowReodering: false, allowHiding: true and column chooser is open in \'dragAndDrop\' mode', async (t) => {
-  const cardView = new CardView('#container');
-  const columnElement = cardView.getHeaders().getHeaderItemNth(0).element;
-
-  await cardView.apiShowColumnChooser();
-
-  await triggerDragStart(columnElement);
-
-  const draggingElement = Selector(SELECTORS.dragging);
-
-  await t.expect(draggingElement.exists).ok();
-}).before(async () => createWidget('dxCardView', {
-  allowColumnReordering: true,
-  columns: [{
-    dataField: 'test',
-    allowReordering: false,
-    allowHiding: true,
-  }],
-  columnChooser: {
-    enabled: true,
-    mode: 'dragAndDrop',
-  },
-}));
-
-test('headerPanel column is not draggable when allowReodering: false, allowHiding: false and column chooser is open in \'dragAndDrop\' mode', async (t) => {
-  const cardView = new CardView('#container');
-  const columnElement = cardView.getHeaders().getHeaderItemNth(0).element;
-
-  await cardView.apiShowColumnChooser();
-
-  await triggerDragStart(columnElement);
-
-  const draggingElement = Selector(SELECTORS.dragging);
-
-  await t.expect(draggingElement.exists).notOk();
-}).before(async () => createWidget('dxCardView', {
-  allowColumnReordering: true,
-  columns: [{
-    dataField: 'test',
-    allowReordering: false,
-    allowHiding: false,
-  }],
-  columnChooser: {
-    enabled: true,
-    mode: 'dragAndDrop',
-  },
-}));
-
-test('headerPanel column is not draggable when allowReodering: false, allowHiding: true and column chooser is open in \'select\' mode', async (t) => {
-  const cardView = new CardView('#container');
-  const columnElement = cardView.getHeaders().getHeaderItemNth(0).element;
-
-  await cardView.apiShowColumnChooser();
-
-  await triggerDragStart(columnElement);
-
-  const draggingElement = Selector(SELECTORS.dragging);
-
-  await t.expect(draggingElement.exists).notOk();
-}).before(async () => createWidget('dxCardView', {
-  allowColumnReordering: true,
-  columns: [{
-    dataField: 'test',
-    allowReordering: false,
-    allowHiding: true,
-  }],
-  columnChooser: {
-    enabled: true,
-    mode: 'select',
-  },
-}));
+    if (result) {
+      await t.expect(draggingElement.exists).ok();
+    } else {
+      await t.expect(draggingElement.exists).notOk();
+    }
+  }).before(async () => createWidget('dxCardView', {
+    allowColumnReordering: true,
+    columns: [{
+      dataField: 'test',
+      allowReordering: false,
+      allowHiding,
+    }],
+    columnChooser: {
+      enabled: true,
+      mode: columnChooserMode,
+    },
+  }));
+});
 
 [0, 1, 2, 3].forEach((columnIndex) => {
   [0, 1, 2, 3, 4].forEach((gapIndex) => {

@@ -17,10 +17,17 @@ export class HeaderPanelController {
     private readonly columnChooserView: ColumnChooserView,
   ) { }
 
-  public isColumnDraggable = (column: Column): boolean => {
-    const canBeHidden = column.allowHiding && this.columnChooserView.dragModeOpened.value;
+  public canReorder(column: Column): boolean {
+    const allowColumnReordering = this.columnsController.allowColumnReordering.value;
 
-    return column.allowReordering || canBeHidden;
+    return allowColumnReordering && column.allowReordering;
+  }
+
+  public isColumnDraggable = (column: Column): boolean => {
+    const canHide = column.allowHiding && this.columnChooserView.dragModeOpened.value;
+    const canReorder = this.canReorder(column);
+
+    return canReorder || canHide;
   };
 
   public onColumnMove = (
@@ -29,7 +36,8 @@ export class HeaderPanelController {
     draggingColumnData: DraggingColumnData,
   ): void => {
     const { columnAfter } = draggingColumnData;
-    const needPreserveOrder = !column.allowReordering;
+    const allowColumnReordering = this.columnsController.allowColumnReordering.value;
+    const needPreserveOrder = !(allowColumnReordering && column.allowReordering);
 
     if (needPreserveOrder) {
       this.columnsController.columnOption(column, 'visible', true);
@@ -70,7 +78,8 @@ export class HeaderPanelController {
     const $placeholderElement = $(e.placeholderElement);
 
     const { column } = e.itemData as DraggingColumnData;
+    const canReorder = this.canReorder(column);
 
-    $placeholderElement.toggleClass(CLASS.hidden, !column.allowReordering);
+    $placeholderElement.toggleClass(CLASS.hidden, !canReorder);
   };
 }

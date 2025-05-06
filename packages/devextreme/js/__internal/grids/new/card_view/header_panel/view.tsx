@@ -49,13 +49,15 @@ export class HeaderPanelView extends View<HeaderPanelProps> {
 
     this.showDropzone = computed((): boolean => {
       const column = this.columnChooserController.draggingItem.value?.column;
-      const allColumnsHidden = this.columnsController.visibleColumns.value.length === 0;
 
       if (!column) {
         return false;
       }
 
-      return !column.allowReordering || allColumnsHidden;
+      const allColumnsHidden = this.columnsController.visibleColumns.value.length === 0;
+      const canReorder = this.headerPanelController.canReorder(column);
+
+      return !canReorder || allColumnsHidden;
     });
   }
 
@@ -74,7 +76,6 @@ export class HeaderPanelView extends View<HeaderPanelProps> {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       draggingOptions: this.options.oneWay('headerPanel.dragging').value as any,
       sortableConfig: {
-        allowDragging: this.columnsController.allowColumnReordering.value,
         onColumnMove: this.headerPanelController.onColumnMove,
         showDropzone: this.showDropzone.value,
         isColumnDraggable: this.headerPanelController.isColumnDraggable,

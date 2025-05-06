@@ -96,7 +96,7 @@ export class HeaderPanel extends Component<HeaderPanelProps> {
           source="header-panel-main"
           getColumnByIndex={(index) => this.props.visibleColumns[index]}
           visibleColumns={this.props.visibleColumns}
-          allowDragging={sortableConfig.allowDragging}
+          allowDragging={true}
           onColumnMove={sortableConfig.onColumnMove}
           columnDragTemplate={Item}
           itemOrientation="horizontal"

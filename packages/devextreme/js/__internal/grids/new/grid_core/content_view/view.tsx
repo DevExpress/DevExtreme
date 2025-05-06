@@ -5,8 +5,8 @@
 import type dxScrollable from '@js/ui/scroll_view/ui.scrollable';
 import type { ScrollEventInfo } from '@js/ui/scroll_view/ui.scrollable';
 import { computed, signal } from '@preact/signals-core';
-import { ContextMenuController } from '@ts/grids/new/card_view/context_menu/index';
 import { ColumnsController } from '@ts/grids/new/grid_core/columns_controller/columns_controller';
+import { BaseContextMenuController } from '@ts/grids/new/grid_core/context_menu/controller';
 import { View } from '@ts/grids/new/grid_core/core/view';
 import { DataController } from '@ts/grids/new/grid_core/data_controller/index';
 import { ErrorController } from '@ts/grids/new/grid_core/error_controller/error_controller';
@@ -48,7 +48,7 @@ export abstract class ContentView<TProps extends {}> extends View<TProps> {
     SelectionController,
     ItemsController,
     EditingController,
-    ContextMenuController,
+    BaseContextMenuController,
     SearchUIController,
     KeyboardNavigationController,
   ] as const;
@@ -61,7 +61,7 @@ export abstract class ContentView<TProps extends {}> extends View<TProps> {
     protected readonly selectionController: SelectionController,
     protected readonly itemsController: ItemsController,
     protected readonly editingController: EditingController,
-    protected readonly contextMenuController: ContextMenuController,
+    protected readonly contextMenuController: BaseContextMenuController,
     protected readonly searchUIController: SearchUIController,
     protected readonly keyboardNavigationController: KeyboardNavigationController,
   ) {
