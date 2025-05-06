@@ -52,6 +52,7 @@ const AI_DIALOG_COMMANDS_WITH_OPTIONS = ['translate', 'changeStyle', 'changeTone
 
 const POPUP_MIN_WIDTH = 288;
 const POPUP_MAX_WIDTH = 460;
+const LOADINDICATOR_SIZE = 48;
 export const TEXT_AREA_MIN_HEIGHT = 64;
 export const TEXT_AREA_MAX_HEIGHT = 128;
 export const REPLACE_DROPDOWN_WIDTH = 150;
@@ -272,8 +273,8 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
 
     const options: LoadIndicatorProperties = {
       _animationType: AnimationType.Sparkle,
-      width: 48,
-      height: 48,
+      width: LOADINDICATOR_SIZE,
+      height: LOADINDICATOR_SIZE,
     };
 
     this._loadIndicator = new LoadIndicator($indicatorElement[0], options);
@@ -501,10 +502,13 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
     this._resultTextArea.option({ value });
   }
 
-  private _processCommandCompletion(dialogState: DialogState): void {
+  private _processCommandCompletion(dialogState?: DialogState): void {
     this._abort = undefined;
     this._isAICommandExecuting = false;
-    this._setDialogState(dialogState);
+
+    if (dialogState) {
+      this._setDialogState(dialogState);
+    }
   }
 
   private _getAICommandCallbacks<T>(): RequestCallbacks<T> {
@@ -729,11 +733,12 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
     return super.show();
   }
 
-  hide(resultText: string, event: AIDialogResult['event']): void {
+  hide(resultText: AIDialogResult['resultText'], event: AIDialogResult['event']): void {
     this.deferred?.resolve({ resultText, event });
 
     this._abort?.();
-    this._processCommandCompletion(this._getInitialDialogState());
+    /** Add test for there is no error */
+    this._processCommandCompletion();
 
     super.hide();
   }

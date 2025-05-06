@@ -121,6 +121,11 @@ class ButtonCollection extends CollectionWidget<ButtonCollectionProperties> {
     return this._focusTarget();
   }
 
+  _enterKeyHandler(e: KeyboardEvent & { originalEvent: KeyboardEvent }): void {
+    e.originalEvent.preventDefault();
+    super._enterKeyHandler(e);
+  }
+
   _refreshContent(): void {
     this._prepareContent();
     this._renderContent();
