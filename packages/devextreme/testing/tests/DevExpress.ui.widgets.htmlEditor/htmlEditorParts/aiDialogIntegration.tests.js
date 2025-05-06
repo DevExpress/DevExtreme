@@ -14,19 +14,11 @@ import {
     getResultTextAreaValue,
 } from '../../../helpers/aiDialog.js';
 import { AI_DIALOG_CLASS } from '__internal/ui/html_editor/ui/aiDialog';
-import { logger } from 'core/utils/console';
+import uiErrors from 'ui/widget/ui.errors';
 
 const MENU_ITEM_CLASS = 'dx-menu-item';
 const MENU_CLASS = 'dx-menu';
 const DISABLED_STATE_CLASS = 'dx-state-disabled';
-
-const HTML_EDITOR_MISSING_AI_INTEGRATION_WARNING = `W1026 - The \'ai\' toolbar item is defined, but aiIntegration is missing.
-
-For additional information on this warning message, see: https://js.devexpress.com/error/25_1/W1026`;
-
-const HTML_EDITOR_MISSING_PROMPT_WARNING = `W1027 - A prompt should be specified for a custom command.
-
-For additional information on this warning message, see: https://js.devexpress.com/error/25_1/W1027`;
 
 const setupHtmlEditorWithAi = (config) => {
     return $('#htmlEditor').dxHtmlEditor({
@@ -167,7 +159,7 @@ QUnit.module('AI dialog integration', {}, () => {
             });
         });
 
-        QUnit.test('specific commands, default options', function(assert) {
+        QUnit.test('should pass specific commands, default options to menu', function(assert) {
             setupHtmlEditorWithAi({ toolbar: { items: [{ name: 'ai', commands: ['translate', 'changeStyle', 'changeTone'] }] } });
 
             const menuItems = getMenuItems($('#htmlEditor'));
@@ -183,7 +175,7 @@ QUnit.module('AI dialog integration', {}, () => {
             });
         });
 
-        QUnit.test('specific commands, specific options', function(assert) {
+        QUnit.test('should pass specific commands, specific options to menu', function(assert) {
             const commandOptions = ['English', 'Spanish'];
             setupHtmlEditorWithAi({ toolbar: { items: [{ name: 'ai', commands: [{ name: 'translate', options: commandOptions }] }] } });
 
@@ -197,7 +189,7 @@ QUnit.module('AI dialog integration', {}, () => {
             assert.deepEqual(translateOptions, commandOptions, 'only specified options rendered');
         });
 
-        QUnit.test('empty commands', function(assert) {
+        QUnit.test('should pass empty commands to menu if commands are empty', function(assert) {
             setupHtmlEditorWithAi({ toolbar: { items: [{ name: 'ai', commands: [] }] } });
 
             const menuItems = getMenuItems($('#htmlEditor'));
@@ -206,7 +198,7 @@ QUnit.module('AI dialog integration', {}, () => {
             assert.deepEqual(commandNames, [], 'empty commands list in menu');
         });
 
-        QUnit.test('empty command options', function(assert) {
+        QUnit.test('should pass empty command options to menu if options are empty', function(assert) {
             setupHtmlEditorWithAi({ toolbar: { items: [{ name: 'ai', commands: [{ name: 'translate', options: [] }] }] } });
 
             const menuItems = getMenuItems($('#htmlEditor'));
@@ -217,7 +209,7 @@ QUnit.module('AI dialog integration', {}, () => {
             assert.deepEqual(translateOptions, [], 'empty command options in menu');
         });
 
-        QUnit.test('custom command text', function(assert) {
+        QUnit.test('should render specified command text', function(assert) {
             setupHtmlEditorWithAi({ toolbar: { items: [{ name: 'ai', commands: [{ name: 'summarize', text: 'Summarize name' }] }] } });
 
             openAIToolbarMenu($('#htmlEditor'));
@@ -226,7 +218,7 @@ QUnit.module('AI dialog integration', {}, () => {
             assert.strictEqual($menuItem.text(), 'Summarize name', 'custom command text rendered in menu');
         });
 
-        QUnit.test('custom command', function(assert) {
+        QUnit.test('should render custom command in menu', function(assert) {
             setupHtmlEditorWithAi({ toolbar: { items: [{
                 name: 'ai',
                 commands: [{
@@ -242,9 +234,7 @@ QUnit.module('AI dialog integration', {}, () => {
             assert.strictEqual($menuItem.text(), 'Custom command', 'custom command rendered in menu');
         });
 
-        QUnit.test('custom command with no prompt', function(assert) {
-            const warnSpy = sinon.spy(logger, 'warn');
-
+        QUnit.test('should disable custom command menu item if no prompt is specified', function(assert) {
             setupHtmlEditorWithAi({ toolbar: { items: [{
                 name: 'ai',
                 commands: [{
@@ -258,8 +248,6 @@ QUnit.module('AI dialog integration', {}, () => {
             const $menuItem = $(`.${MENU_ITEM_CLASS}`).last();
 
             assert.strictEqual($menuItem.hasClass(DISABLED_STATE_CLASS), true, 'custom command is disabled');
-            assert.strictEqual(warnSpy.firstCall.args[0], HTML_EDITOR_MISSING_PROMPT_WARNING, 'correct warning message is logged');
-            warnSpy.restore();
         });
 
         QUnit.test('root menu item is disabled if commands list is empty', function(assert) {
@@ -365,22 +353,6 @@ QUnit.module('AI dialog integration', {}, () => {
                 });
 
                 assert.strictEqual(result, undefined, 'showAIDialog returns undefined');
-            });
-
-            ['ai', { name: 'ai' }].forEach(aiToolbarItem => {
-                QUnit.test(`should log a warning if aiIntegration is not passed but ai toolbar item is passed as ${typeof aiToolbarItem}`, function(assert) {
-                    const warnSpy = sinon.spy(logger, 'warn');
-
-                    setupHtmlEditorWithAi({
-                        toolbar: {
-                            items: [aiToolbarItem],
-                        },
-                        aiIntegration: null,
-                    });
-
-                    assert.strictEqual(warnSpy.firstCall.args[0], HTML_EDITOR_MISSING_AI_INTEGRATION_WARNING, 'correct warning message is logged');
-                    warnSpy.restore();
-                });
             });
         });
     });
@@ -488,6 +460,41 @@ QUnit.module('AI dialog integration', {}, () => {
             openAIDialog($('#htmlEditor'));
             setResultText('Inserted value');
             clickActionButton('replace');
+        });
+    });
+
+    QUnit.module('Warnings', {
+        beforeEach: function() {
+            sinon.spy(uiErrors, 'log');
+
+        },
+        afterEach: function() {
+            uiErrors.log.restore();
+        }
+    }, () => {
+        ['ai', { name: 'ai' }].forEach(aiToolbarItem => {
+            QUnit.test(`W1026 warning should be logged if if aiIntegration is not passed but ai toolbar item is passed as ${typeof aiToolbarItem}`, function(assert) {
+                setupHtmlEditorWithAi({
+                    toolbar: {
+                        items: [aiToolbarItem],
+                    },
+                    aiIntegration: null,
+                });
+
+                assert.deepEqual(uiErrors.log.lastCall.args, ['W1026'], 'logged with correct args');
+            });
+        });
+
+        QUnit.test('W1027 warning should be logged if prompt is not specified for a custom command', function(assert) {
+            setupHtmlEditorWithAi({ toolbar: { items: [{
+                name: 'ai',
+                commands: [{
+                    name: 'custom',
+                    text: 'Custom command',
+                }]
+            }] } });
+
+            assert.deepEqual(uiErrors.log.lastCall.args, ['W1027'], 'logged with correct args');
         });
     });
 });

@@ -24,9 +24,9 @@ import Quill from 'devextreme-quill';
 import type { CommandsMap } from '../utils/ai';
 import {
   buildCommandsMap,
-  containsCustomCommandWithoutPrompt,
   defaultCommandNames,
   getDefaultOptionsByCommand,
+  hasInvalidCustomCommand,
 } from '../utils/ai';
 import { getTableFormats, TABLE_OPERATIONS } from '../utils/m_table_helper';
 import {
@@ -454,7 +454,7 @@ if (Quill) {
         errors.log('W1026');
       }
 
-      if (containsCustomCommandWithoutPrompt(commandsMap)) {
+      if (hasInvalidCustomCommand(commandsMap)) {
         errors.log('W1027');
       }
     }
