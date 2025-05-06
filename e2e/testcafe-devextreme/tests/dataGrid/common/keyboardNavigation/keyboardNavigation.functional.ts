@@ -4986,8 +4986,6 @@ test('DataGrid with Pagination in master detail - Ctrl+Up on focused standalone 
   await createWidget('dxDataGrid', {
     dataSource: [
       { id: 1, name: 'Name 1' },
-      { id: 2, name: 'Name 2' },
-      { id: 3, name: 'Name 3' },
     ],
     keyExpr: 'id',
     focusedRowEnabled: true,
@@ -4997,7 +4995,7 @@ test('DataGrid with Pagination in master detail - Ctrl+Up on focused standalone 
     masterDetail: {
       autoExpandAll: true,
       enabled: true,
-      template: ClientFunction((container) => {
+      template: (container) => {
         $('<div>')
           .attr('id', 'masterDetailPager')
           .appendTo(container)
@@ -5009,7 +5007,7 @@ test('DataGrid with Pagination in master detail - Ctrl+Up on focused standalone 
             showPageSizeSelector: true,
             allowedPageSizes: [1, 2, 3],
           });
-      }),
+      },
     },
   });
 });
