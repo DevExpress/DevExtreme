@@ -768,6 +768,7 @@ $generic-grid-base-cell-input-height: round($generic-base-line-height * $generic
       border-top: 1px solid $datagrid-cell-removed-border-color;
       color: $datagrid-cell-removed-text-color;
     }
+
     .dx-row-removed:not(:first-child) > td {
       border-bottom: 1px solid $datagrid-cell-removed-border-color;
       padding-bottom: $generic-grid-base-cell-padding - 1px;
