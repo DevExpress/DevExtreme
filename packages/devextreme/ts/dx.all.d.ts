@@ -31932,6 +31932,8 @@ declare module DevExpress.ui.dxChat {
      * [descr:Message.isDeleted]
      */
     isDeleted?: boolean;
+
+    [key: string]: any;
   };
   /**
    * [descr:User]
