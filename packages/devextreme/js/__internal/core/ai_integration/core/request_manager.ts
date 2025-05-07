@@ -1,8 +1,5 @@
 import type { AIProvider, Prompt, RequestParams } from '@js/common/ai-integration';
-
-export const ERROR_MESSAGES = {
-  METHOD_NOT_IMPLEMENTED: 'No method for queries has been implemented',
-};
+import errors from '@js/core/errors';
 
 export interface RequestManagerCallbacks {
   onChunk?: (chunk: string) => void;
@@ -19,31 +16,34 @@ export class RequestManager {
 
   constructor(provider: AIProvider) {
     this.provider = provider;
+    this.validateProvider();
+  }
+
+  private validateProvider(): void {
+    if (typeof this.provider.sendRequest !== 'function') {
+      throw errors.Error('E0122');
+    }
   }
 
   public sendRequest(prompt: Prompt, callbacks: RequestManagerCallbacks): () => void {
-    if (typeof this.provider.sendRequest === 'function') {
-      let aborted = false;
+    let aborted = false;
 
-      const params: RequestManagerParams = {
-        prompt,
-        onChunk: (chunk: string): void => { if (!aborted) { callbacks?.onChunk?.(chunk); } },
-      };
+    const params: RequestManagerParams = {
+      prompt,
+      onChunk: (chunk: string): void => { if (!aborted) { callbacks?.onChunk?.(chunk); } },
+    };
 
-      const { promise, abort: abortRequest } = this.provider.sendRequest(params);
+    const { promise, abort: abortRequest } = this.provider.sendRequest(params);
 
-      promise
-        .then((response) => { if (!aborted) { callbacks?.onComplete?.(response); } })
-        .catch((e) => { if (!aborted) { callbacks?.onError?.(e); } });
+    promise
+      .then((response) => { if (!aborted) { callbacks?.onComplete?.(response); } })
+      .catch((e) => { if (!aborted) { callbacks?.onError?.(e); } });
 
-      const abort = (): void => {
-        aborted = true;
-        abortRequest?.();
-      };
+    const abort = (): void => {
+      aborted = true;
+      abortRequest?.();
+    };
 
-      return abort;
-    }
-
-    throw new Error(ERROR_MESSAGES.METHOD_NOT_IMPLEMENTED);
+    return abort;
   }
 }
