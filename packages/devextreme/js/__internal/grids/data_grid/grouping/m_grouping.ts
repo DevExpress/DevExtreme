@@ -618,7 +618,7 @@ export const GroupingHeaderPanelExtender = (
       return;
     }
 
-    options.column = $groupedColumnElement.data('columnData');
+    options.column = this._columnsController.columnOption(`groupIndex:${$groupedColumnElement.index()}`);
 
     const groupAndUngroupItems = this.getGroupAndUngroupItems(options);
 

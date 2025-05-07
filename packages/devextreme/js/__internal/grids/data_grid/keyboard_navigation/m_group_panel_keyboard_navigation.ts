@@ -20,7 +20,8 @@ export class GroupPanelKeyboardNavigationController extends ColumnKeyboardNaviga
   private headerPanel!: Views['headerPanel'];
 
   private groupItemClickHandler(e) {
-    const groupColumn: any = $(e.originalEvent.target).data('columnData');
+    const $groupedColumnElement = $(e.originalEvent.target);
+    const groupColumn = this._columnsController.columnOption(`groupIndex:${$groupedColumnElement.index()}`);
 
     this.isNeedToHiddenFocusAfterClick = this._columnsController?.allowColumnSorting(groupColumn);
   }
@@ -43,7 +44,8 @@ export class GroupPanelKeyboardNavigationController extends ColumnKeyboardNaviga
 
   private backspaceOrDelKeysHandler(e): void {
     const { originalEvent } = e;
-    const column: any = $(originalEvent.target).data('columnData');
+    const $groupedColumnElement = $(originalEvent.target);
+    const column = this._columnsController.columnOption(`groupIndex:${$groupedColumnElement.index()}`);
     const contextMenuEnabled = this.option('grouping.contextMenuEnabled');
 
     if (column && contextMenuEnabled) {
@@ -59,10 +61,11 @@ export class GroupPanelKeyboardNavigationController extends ColumnKeyboardNaviga
     const { originalEvent } = e;
 
     if (isCommandKeyPressed(originalEvent)) {
-      const column: any = $(originalEvent.target).data('columnData');
+      const $groupedColumnElement = $(originalEvent.target);
+      const column = this._columnsController.columnOption(`groupIndex:${$groupedColumnElement.index()}`);
       const direction = this.getDirectionByKeyName(e.keyName);
 
-      if (this.isColumnValidForReordering(column, direction)) {
+      if (this.canReorderColumn(column, direction)) {
         this.moveColumn({
           column,
           sourceLocation: 'group',
@@ -179,7 +182,7 @@ export class GroupPanelKeyboardNavigationController extends ColumnKeyboardNaviga
     super.init();
   }
 
-  public isColumnValidForReordering(groupColumn, direction: Direction): boolean {
+  public canReorderColumn(groupColumn, direction: Direction): boolean {
     const allowDragging = this.headerPanel.allowDragging(groupColumn);
 
     if (!allowDragging) {

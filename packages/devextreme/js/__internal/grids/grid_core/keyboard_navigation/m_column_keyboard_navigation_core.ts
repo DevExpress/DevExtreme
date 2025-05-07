@@ -63,7 +63,7 @@ export class ColumnKeyboardNavigationController extends KeyboardNavigationContro
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  public isColumnValidForReordering(column, direction, rowIndex): boolean {
+  public canReorderColumn(column, direction, rowIndex): boolean {
     return false;
   }
 

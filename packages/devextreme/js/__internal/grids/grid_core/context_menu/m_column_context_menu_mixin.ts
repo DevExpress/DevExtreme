@@ -41,55 +41,51 @@ export const ColumnContextMenuMixin = <T extends ModuleType<ColumnContextMenuMix
   }
 
   public getMoveColumnContextMenuItems(options): any {
-    const items: any = [];
     const { column, rowIndex } = options;
     const allowColumnReordering = this.isColumnReorderingEnabled?.(options?.column);
+    const keyboardNavigationController = this.getKeyboardNavigationController?.();
 
-    if (allowColumnReordering) {
-      const keyboardNavigationController = this.getKeyboardNavigationController?.();
-
-      if (keyboardNavigationController) {
-        const rtlEnabled = this.option('rtlEnabled');
-        const viewName = this.getName();
-        const onItemClick = (e) => {
-          this.isNeedToFocusColumn = true;
-          keyboardNavigationController.moveColumn({
-            column,
-            sourceLocation: viewName,
-            targetLocation: viewName,
-            direction: e.itemData?.value,
-            rowIndex,
-          });
-        };
-
-        items.push(
-          {
-            text: messageLocalization.format('dxDataGrid-moveColumnToTheLeft'),
-            value: Direction.Previous,
-            beginGroup: true,
-            disabled: !keyboardNavigationController.isColumnValidForReordering(
-              column,
-              Direction.Previous,
-              rowIndex,
-            ),
-            icon: rtlEnabled ? CONTEXT_MENU_MOVE_NEXT_ICON_NAME : CONTEXT_MENU_MOVE_PREVIOUS_ICON_NAME,
-            onItemClick,
-          },
-          {
-            text: messageLocalization.format('dxDataGrid-moveColumnToTheRight'),
-            value: Direction.Next,
-            disabled: !keyboardNavigationController.isColumnValidForReordering(
-              column,
-              Direction.Next,
-              rowIndex,
-            ),
-            icon: rtlEnabled ? CONTEXT_MENU_MOVE_PREVIOUS_ICON_NAME : CONTEXT_MENU_MOVE_NEXT_ICON_NAME,
-            onItemClick,
-          },
-        );
-      }
+    if (!allowColumnReordering || !keyboardNavigationController) {
+      return [];
     }
 
-    return items;
+    const rtlEnabled = this.option('rtlEnabled');
+    const viewName = this.getName();
+    const onItemClick = (e) => {
+      this.isNeedToFocusColumn = true;
+      keyboardNavigationController.moveColumn({
+        column,
+        sourceLocation: viewName,
+        targetLocation: viewName,
+        direction: e.itemData?.value,
+        rowIndex,
+      });
+    };
+
+    return [
+      {
+        text: messageLocalization.format('dxDataGrid-moveColumnToTheLeft'),
+        value: Direction.Previous,
+        beginGroup: true,
+        disabled: !keyboardNavigationController.canReorderColumn(
+          column,
+          Direction.Previous,
+          rowIndex,
+        ),
+        icon: rtlEnabled ? CONTEXT_MENU_MOVE_NEXT_ICON_NAME : CONTEXT_MENU_MOVE_PREVIOUS_ICON_NAME,
+        onItemClick,
+      },
+      {
+        text: messageLocalization.format('dxDataGrid-moveColumnToTheRight'),
+        value: Direction.Next,
+        disabled: !keyboardNavigationController.canReorderColumn(
+          column,
+          Direction.Next,
+          rowIndex,
+        ),
+        icon: rtlEnabled ? CONTEXT_MENU_MOVE_PREVIOUS_ICON_NAME : CONTEXT_MENU_MOVE_NEXT_ICON_NAME,
+        onItemClick,
+      },
+    ];
   }
 };

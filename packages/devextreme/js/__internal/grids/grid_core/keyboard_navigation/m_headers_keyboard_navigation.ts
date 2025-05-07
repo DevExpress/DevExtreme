@@ -24,7 +24,7 @@ export class HeadersKeyboardNavigationController extends ColumnKeyboardNavigatio
       const rowIndex = this._getRowIndex($cell.parent());
       const column = this._getColumnByCellElement($cell, rowIndex);
 
-      if (this.isColumnValidForReordering(column, direction, rowIndex)) {
+      if (this.canReorderColumn(column, direction, rowIndex)) {
         this.moveColumn({
           column,
           sourceLocation: 'headers',
@@ -118,7 +118,7 @@ export class HeadersKeyboardNavigationController extends ColumnKeyboardNavigatio
     this._columnHeadersView = this.getView('columnHeadersView');
   }
 
-  public isColumnValidForReordering(column, direction, rowIndex): boolean {
+  public canReorderColumn(column, direction, rowIndex): boolean {
     const allowReordering = this._columnHeadersView.isColumnReorderingEnabled(column);
 
     if (!allowReordering) {

@@ -910,7 +910,7 @@ test('Group column when pressing ctrl + g if showWheGrouped is enabled', async (
     .pressKey('ctrl+g');
 
   await takeScreenshot(
-    'group_column_via_keyboard_when_showWheGrouped_is_true',
+    'group_column_via_keyboard_when_showWhenGrouped_is_true',
     dataGrid.element,
   );
 
