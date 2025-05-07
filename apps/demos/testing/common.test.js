@@ -25,7 +25,7 @@ import { createMdReport, createTestCafeReport } from '../utils/axe-reporter/repo
 import knownWarnings from './known-warnings.json';
 import skipJsErrorsComponents from './skip-js-errors-components.json';
 
-import { gitHubIgnored } from '../utils/visual-tests/github-ignored-list.mjs';
+import { gitHubIgnored } from '../utils/visual-tests/github-ignored-list';
 
 const execCode = ClientFunction((code) => {
   // eslint-disable-next-line no-eval
