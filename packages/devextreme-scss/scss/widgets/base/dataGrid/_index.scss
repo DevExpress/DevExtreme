@@ -209,7 +209,7 @@ $datagrid-text-stub-background-image-path: null !default;
     color: $datagrid-base-color;
   }
 
-  .dx-error-row, .dx-invalid-message {
+  .dx-error-row {
     td {
       color: $datagrid-row-error-color;
       padding: 0;
@@ -218,7 +218,9 @@ $datagrid-text-stub-background-image-path: null !default;
     .dx-error-message {
       @include dx-datagrid-error-message();
     }
+  }
 
+  .dx-invalid-message {
     .dx-overlay-content {
       @include dx-datagrid-error-popup();
     }
