@@ -32,6 +32,8 @@ $cardview-material-headerpanel-dropzone-height: null;
 $cardview-material-headerpanel-dropzone-top: null;
 $cardview-material-column-chooser-select-all-item-horizontal-padding: null;
 
+$cardview-material-content-card-cover-max-height-default: null;
+
 @if $size == "default" {
   $cardview-material-sizes-64: 64px;
   $cardview-material-sizes-48: 48px;
@@ -52,6 +54,8 @@ $cardview-material-column-chooser-select-all-item-horizontal-padding: null;
   $cardview-material-headerpanel-dropzone-height: 44px;
   $cardview-material-headerpanel-dropzone-top: -4px;
   $cardview-material-column-chooser-select-all-item-horizontal-padding: 19px;
+
+  $cardview-material-content-card-cover-max-height-default: 180px;
 }
 @else if $size == "compact" {
   $cardview-material-sizes-64: 48px;
@@ -73,6 +77,8 @@ $cardview-material-column-chooser-select-all-item-horizontal-padding: null;
   $cardview-material-headerpanel-dropzone-height: 38px;
   $cardview-material-headerpanel-dropzone-top: -3px;
   $cardview-material-column-chooser-select-all-item-horizontal-padding: 17px;
+
+  $cardview-material-content-card-cover-max-height-default: 140px;
 }
 
 $cardview-border-radius: 16px !default;
@@ -120,3 +126,5 @@ $cardview-card-header-border-radius: $cardview-material-border-radius-8 !default
 
 $cardview-column-chooser-empty-message-horizontal-padding: $cardview-material-paddings-24 !default;
 $cardview-column-chooser-select-all-item-horizontal-padding: $cardview-material-column-chooser-select-all-item-horizontal-padding !default;
+
+$cardview-content-card-cover-max-height-default: $cardview-material-content-card-cover-max-height-default !default;
