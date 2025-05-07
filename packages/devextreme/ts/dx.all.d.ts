@@ -10108,7 +10108,26 @@ declare module DevExpress.ui {
     /**
      * [descr:dxChatOptions.editing]
      */
-    editing?: DevExpress.ui.dxChat.Editing;
+    editing?: {
+      /**
+       * [descr:dxChatOptions.editing.allowUpdating]
+       */
+      allowUpdating?:
+        | boolean
+        | ((options: {
+            component?: dxChat;
+            message?: DevExpress.ui.dxChat.Message;
+          }) => boolean);
+      /**
+       * [descr:dxChatOptions.editing.allowDeleting]
+       */
+      allowDeleting?:
+        | boolean
+        | ((options: {
+            component?: dxChat;
+            message?: DevExpress.ui.dxChat.Message;
+          }) => boolean);
+    };
     /**
      * [descr:dxChatOptions.dataSource]
      */
@@ -31886,23 +31905,6 @@ declare module DevExpress.ui.dxChat {
      * [descr:Alert.message]
      */
     message?: string;
-  };
-  /**
-   * [descr:Editing]
-   */
-  export type Editing = {
-    /**
-     * [descr:Editing.allowUpdating]
-     */
-    allowUpdating?:
-      | boolean
-      | ((options: { component?: dxChat; message?: Message }) => boolean);
-    /**
-     * [descr:Editing.allowDeleting]
-     */
-    allowDeleting?:
-      | boolean
-      | ((options: { component?: dxChat; message?: Message }) => boolean);
   };
   /**
    * [descr:Message]
