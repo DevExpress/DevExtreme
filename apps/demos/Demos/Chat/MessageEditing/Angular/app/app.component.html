@@ -1,0 +1,43 @@
+<div class="demo-container">
+  <div class="chat-container">
+    <dx-chat
+      #chat
+      [height]="600"
+      [dataSource]="dataSource"
+      [editing]="editingOptions"
+      [reloadOnChange]="false"
+      [user]="currentUser"
+      (onMessageEntered)="onMessageEntered($event)"
+      (onMessageDeleted)="onMessageDeleted($event)"
+      (onMessageUpdated)="onMessageUpdated($event)"
+    ></dx-chat>
+  </div>
+
+  <div class="options">
+    <div class="caption">Options</div>
+  
+    <div class="option">
+      <span>Allow Editing:</span>
+      <dx-select-box
+        [items]="editingStrategies"
+        displayExpr="text"
+        valueExpr="key"
+        [value]="selectedEditingStrategy"
+        [inputAttr]="alloUpdatingLabel"
+        (onValueChanged)="onEditingStrategyChange($event, 'allowUpdating')"
+      ></dx-select-box>
+    </div>
+  
+    <div class="option">
+      <span>Allow Deleting:</span>
+      <dx-select-box
+        [items]="editingStrategies"
+        displayExpr="text"
+        valueExpr="key"
+        [value]="selectedDeletingStrategy"
+        [inputAttr]="allowDeletingLabel"
+        (onValueChanged)="onEditingStrategyChange($event, 'allowDeleting')"
+      ></dx-select-box>
+    </div>
+  </div>
+</div>
