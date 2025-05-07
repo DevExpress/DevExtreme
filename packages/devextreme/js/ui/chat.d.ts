@@ -277,21 +277,18 @@ export interface dxChatOptions extends WidgetOptions<dxChat> {
     items?: Array<Message>;
     /**
      * @docid
-     * @type object
      * @public
      */
     editing?: {
       /**
        * @docid
        * @default false
-       * @type boolean|function
        * @public
       */
       allowUpdating?: boolean | ((options: { component?: dxChat; message?: Message }) => boolean);
       /**
        * @docid
        * @default false
-       * @type boolean|function
        * @public
        */
       allowDeleting?: boolean | ((options: { component?: dxChat; message?: Message }) => boolean);
