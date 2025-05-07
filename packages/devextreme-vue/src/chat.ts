@@ -3,9 +3,11 @@ import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 import Chat, { Properties } from "devextreme/ui/chat";
 import  DataSource from "devextreme/data/data_source";
+import  dxChat from "devextreme/ui/chat";
 import {
  Alert,
  Message,
+ MessageEditing,
  DisposingEvent,
  InitializedEvent,
  MessageDeletedEvent,
@@ -86,7 +88,7 @@ const componentConfig = {
     dataSource: [Array, Object, String] as PropType<Array<Message> | DataSource | DataSourceOptions | null | Store | string | Record<string, any>>,
     dayHeaderFormat: [Object, String, Function] as PropType<Format | CommonFormat | (((value: number | Date) => string)) | Record<string, any> | string>,
     disabled: Boolean,
-    editing: Object as PropType<Record<string, any>>,
+    editing: Object as PropType<MessageEditing | Record<string, any>>,
     elementAttr: Object as PropType<Record<string, any>>,
     focusStateEnabled: Boolean,
     height: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
@@ -170,6 +172,7 @@ const componentConfig = {
     (this as any).$_expectedChildren = {
       alert: { isCollectionItem: true, optionName: "alerts" },
       dayHeaderFormat: { isCollectionItem: false, optionName: "dayHeaderFormat" },
+      editing: { isCollectionItem: false, optionName: "editing" },
       item: { isCollectionItem: true, optionName: "items" },
       messageTimestampFormat: { isCollectionItem: false, optionName: "messageTimestampFormat" },
       typingUser: { isCollectionItem: true, optionName: "typingUsers" },
@@ -252,6 +255,25 @@ prepareConfigurationComponentConfig(DxDayHeaderFormatConfig);
 const DxDayHeaderFormat = defineComponent(DxDayHeaderFormatConfig);
 
 (DxDayHeaderFormat as any).$_optionName = "dayHeaderFormat";
+
+const DxEditingConfig = {
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:allowDeleting": null,
+    "update:allowUpdating": null,
+  },
+  props: {
+    allowDeleting: [Boolean, Function] as PropType<boolean | (((options: { component: dxChat, message: Message }) => boolean))>,
+    allowUpdating: [Boolean, Function] as PropType<boolean | (((options: { component: dxChat, message: Message }) => boolean))>
+  }
+};
+
+prepareConfigurationComponentConfig(DxEditingConfig);
+
+const DxEditing = defineComponent(DxEditingConfig);
+
+(DxEditing as any).$_optionName = "editing";
 
 const DxItemConfig = {
   emits: {
@@ -364,6 +386,7 @@ export {
   DxAlert,
   DxAuthor,
   DxDayHeaderFormat,
+  DxEditing,
   DxItem,
   DxMessageTimestampFormat,
   DxTypingUser,
