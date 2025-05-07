@@ -28,6 +28,7 @@ export interface PromiseType<T> { }
 /**
  * @docid
  * @type Promise<void>
+ * @hidden
  * @namespace DevExpress.core.utils
  */
 
