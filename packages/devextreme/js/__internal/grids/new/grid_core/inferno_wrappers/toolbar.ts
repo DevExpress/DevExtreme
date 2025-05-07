@@ -32,7 +32,8 @@ export class Toolbar extends InfernoWrapper<ToolbarProps, dxToolbar> {
                 const prevOptions = prevItem[key];
                 const currentOptions = item[key];
                 Object.keys(currentOptions).forEach((option) => {
-                  const isOptionChanged = currentOptions[option] !== prevOptions[option];
+                  const isOptionChanged = !prevOptions?.[option]
+                    || currentOptions?.[option] !== prevOptions[option];
                   const isExcludedOption = excludedStateOptions.includes(option);
                   if (isOptionChanged && !isExcludedOption) {
                     this.component?.option(`items[${index}].${key}.${option}`, props.items![index][key][option]);
