@@ -15,7 +15,7 @@ import { View } from '../core/view';
 import { OptionsController } from '../options_controller/options_controller';
 import { ToolbarController } from '../toolbar/controller';
 import type { PredefinedToolbarItem } from '../toolbar/types';
-import { addWidgetPrefix } from '../utils';
+import { addWidgetPrefix } from '../utils/common';
 import type { ColumnChooserProps } from './column_chooser';
 import { CLASS, ColumnChooser } from './column_chooser';
 import { ColumnChooserController } from './controller';

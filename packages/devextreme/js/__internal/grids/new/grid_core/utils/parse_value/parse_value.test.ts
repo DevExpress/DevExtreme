@@ -6,13 +6,13 @@ import {
   parseDateValue,
   parseNumberValue,
   parseValue,
-} from './utils';
+} from './parse_value';
 
 describe('Parsing value', () => {
   describe('parseBooleanValue', () => {
     each`
             text           | trueText  | falseText | expectedResult
-            ${'test'}      | ${null}   | ${null}   | ${undefined} 
+            ${'test'}      | ${null}   | ${null}   | ${undefined}
             ${'test2'}     | ${'test'} | ${null}   | ${undefined}
             ${'test3'}     | ${null}   | ${'test2'}| ${undefined}
     `
