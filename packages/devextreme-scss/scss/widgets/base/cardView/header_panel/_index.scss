@@ -2,10 +2,6 @@
 @use './item';
 @use './variables' as *;
 
-.dx-cardview-headers {
-  margin: $cardview-headerpanel-vertical-margin 0;
-}
-
 .dx-cardview-headerpanel-content {
   display: flex;
   gap: $cardview-headerpanel-content-gap;
@@ -16,6 +12,8 @@
 }
 
 .dx-cardview-headers {
+  margin: $cardview-headerpanel-vertical-margin 0;
+
   .dx-sortable {
     position: relative;
     overflow: visible;
