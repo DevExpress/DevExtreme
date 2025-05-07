@@ -1,1 +1,1 @@
-export { default } from '../../__internal/events/core/m_keyboard_processor';
+export { default } from '../../common/core/events/core/keyboard_processor';

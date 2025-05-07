@@ -5,7 +5,7 @@ import DataGrid, {
   Export,
   Selection,
   Paging,
-  DataGridTypes,
+  type DataGridTypes,
   Pager,
 } from 'devextreme-react/data-grid';
 import { jsPDF } from 'jspdf';

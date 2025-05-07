@@ -2,7 +2,7 @@ import dateUtils from 'core/utils/date';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import 'generic_light.css!';
 import $ from 'jquery';
-import dateLocalization from 'localization/date';
+import dateLocalization from 'common/core/localization/date';
 
 import '__internal/scheduler/workspaces/m_work_space_day';
 import '__internal/scheduler/workspaces/m_work_space_week';

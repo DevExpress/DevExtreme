@@ -2,7 +2,6 @@
   $template,
   $padding,
   $row-gap,
-  $column-gap,
   $font-size,
   $color,
   $bubble-padding-block,
@@ -20,14 +19,13 @@
     grid-template-columns: $template;
     padding-bottom: $padding;
     row-gap: $row-gap;
-    column-gap: $column-gap;
   }
 
   .dx-chat-typingindicator-text {
     font-size: $font-size;
     color: $color;
   }
-  
+
   .dx-chat-typingindicator-bubble {
     padding-block: $bubble-padding-block;
     padding-inline: $bubble-padding-inline;

@@ -6,9 +6,9 @@
   </div>
 </template>
 <script setup lang="ts">
-withDefaults(defineProps<{
-  itemData?: Record<string, any>
-}>(), {
-  itemData: () => ({}),
-});
+import { type ContactInfo } from './data';
+
+defineProps<{
+  itemData?: ContactInfo
+}>();
 </script>

@@ -1,7 +1,10 @@
-import '@js/events/click';
-import '@js/events/core/emitter.feedback';
-import '@js/events/hover';
+import '@js/common/core/events/click';
+import '@js/common/core/events/core/emitter.feedback';
+import '@js/common/core/events/hover';
 
+import {
+  active, focus, hover, keyboard,
+} from '@js/common/core/events/short';
 import Action from '@js/core/action';
 import devices from '@js/core/devices';
 import type { DefaultOptionsRule } from '@js/core/options/utils';
@@ -13,9 +16,7 @@ import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import { isDefined, isPlainObject } from '@js/core/utils/type';
 import { compare as compareVersions } from '@js/core/utils/version';
-import {
-  active, focus, hover, keyboard,
-} from '@js/events/short';
+import type { DxEvent } from '@js/events';
 import { focusable as focusableSelector } from '@js/ui/widget/selectors';
 import type { WidgetOptions } from '@js/ui/widget/ui.widget';
 
@@ -23,7 +24,7 @@ import DOMComponent from './dom_component';
 import type { OptionChanged } from './types';
 
 const DISABLED_STATE_CLASS = 'dx-state-disabled';
-const FOCUSED_STATE_CLASS = 'dx-state-focused';
+export const FOCUSED_STATE_CLASS = 'dx-state-focused';
 const INVISIBLE_STATE_CLASS = 'dx-state-invisible';
 
 function setAttribute(name, value, target): void {
@@ -47,21 +48,20 @@ export interface Properties<TComponent = any> extends WidgetOptions<TComponent> 
 class Widget<
   TProperties extends Properties = Properties,
 > extends DOMComponent<Widget<TProperties>, TProperties> {
-  private readonly _feedbackHideTimeout = 400;
+  public _activeStateUnit!: string;
+
+  public _feedbackHideTimeout = 400;
 
   private readonly _feedbackShowTimeout = 30;
 
-  private _contentReadyAction?: ((event?: Record<string, unknown>) => void) | null;
-
-  private readonly _activeStateUnit!: string;
+  _contentReadyAction?: ((event?: Record<string, unknown>) => void) | null;
 
   private _keyboardListenerId?: string | null;
 
   private _isReady?: boolean;
 
-  // eslint-disable-next-line max-len
-  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types, @typescript-eslint/explicit-function-return-type
-  static getOptionsFromContainer({ name, fullName, value }) {
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+  static getOptionsFromContainer({ name, fullName, value }): Record<string, unknown> {
     let options = {};
 
     if (name === fullName) {
@@ -204,7 +204,7 @@ class Widget<
       .done(() => (!this._disposed ? this._fireContentReadyAction() : void 0));
   }
 
-  _renderContentImpl(): void {}
+  _renderContentImpl(): Promise<void> | void {}
 
   _fireContentReadyAction(): Promise<void> | DeferredObj<void> | void {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
@@ -265,8 +265,9 @@ class Widget<
     return this._getActiveElement();
   }
 
-  _isFocusTarget(element: Element): boolean {
+  _isFocusTarget(element: Element | undefined): boolean {
     const focusTargets = $(this._focusTarget()).toArray();
+    // @ts-expect-error ts-error
     return focusTargets.includes(element);
   }
 
@@ -305,8 +306,7 @@ class Widget<
     return this._focusTarget();
   }
 
-  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-  _focusInHandler(event): void {
+  _focusInHandler(event: DxEvent): void {
     if (!event.isDefaultPrevented()) {
       this._createActionByOption('onFocusIn', {
         beforeExecute: () => this._updateFocusState(event, true),
@@ -315,8 +315,7 @@ class Widget<
     }
   }
 
-  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-  _focusOutHandler(event): void {
+  _focusOutHandler(event: DxEvent): void {
     if (!event.isDefaultPrevented()) {
       this._createActionByOption('onFocusOut', {
         beforeExecute: () => this._updateFocusState(event, false),
@@ -548,7 +547,7 @@ class Widget<
     this.$element().toggleClass('dx-state-independent', ignoreParentReadOnly);
   }
 
-  _setWidgetOption(widgetName: 'string', args: Record<string, unknown>): void {
+  _setWidgetOption(widgetName: string, args: Record<string, unknown>): void {
     if (!this[widgetName]) {
       return;
     }
@@ -683,7 +682,7 @@ class Widget<
     focus.trigger(this._focusTarget());
   }
 
-  registerKeyHandler(key: string, handler: () => void): void {
+  registerKeyHandler(key: string, handler: (event?) => void): void {
     const currentKeys = this._supportedKeys();
 
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return, max-len

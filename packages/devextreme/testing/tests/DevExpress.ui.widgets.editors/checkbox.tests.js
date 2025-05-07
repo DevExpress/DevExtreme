@@ -3,7 +3,10 @@ import devices from '__internal/core/m_devices';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import { validateGroup } from 'ui/validation_engine';
 import dxCheckBox from 'ui/check_box';
-import { normalizeKeyName } from 'events/utils/index';
+import { normalizeKeyName } from 'common/core/events/utils/index';
+// eslint-disable-next-line spellcheck/spell-checker
+import { rerender } from 'inferno';
+
 
 import 'generic_light.css!';
 import 'ui/validator';
@@ -122,6 +125,8 @@ QUnit.module('Checkbox', function() {
                 validateGroup();
                 instance.focus();
                 clock.tick(200);
+                // eslint-disable-next-line spellcheck/spell-checker
+                rerender();
 
                 const message = $checkBox.find('.dx-overlay-wrapper.dx-invalid-message').get(0);
 

@@ -1,19 +1,23 @@
+import type { TextEditorButton as PublicTextEditorButton, TextEditorButtonLocation } from '@js/common';
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
-import { extend } from '@js/core/utils/extend';
+import type dxButton from '@js/ui/button';
 import errors from '@js/ui/widget/ui.errors';
 
+import type TextEditorBase from '../m_text_editor.base';
+import type TextEditorButton from './m_button';
 import CustomButton from './m_custom';
 
 const TEXTEDITOR_BUTTONS_CONTAINER_CLASS = 'dx-texteditor-buttons-container';
 
-function checkButtonInfo(buttonInfo) {
-  const checkButtonType = () => {
+function checkButtonInfo(buttonInfo: PublicTextEditorButton): void {
+  const checkButtonType = (): void => {
     if (!buttonInfo || typeof buttonInfo !== 'object' || Array.isArray(buttonInfo)) {
       throw errors.Error('E1053');
     }
   };
 
-  const checkLocation = () => {
+  const checkLocation = (): void => {
     const { location } = buttonInfo;
 
     if ('location' in buttonInfo && location !== 'after' && location !== 'before') {
@@ -21,13 +25,13 @@ function checkButtonInfo(buttonInfo) {
     }
   };
 
-  const checkNameIsDefined = () => {
+  const checkNameIsDefined = (): void => {
     if (!('name' in buttonInfo)) {
       throw errors.Error('E1054');
     }
   };
 
-  const checkNameIsString = () => {
+  const checkNameIsString = (): void => {
     const { name } = buttonInfo;
 
     if (typeof name !== 'string') {
@@ -41,33 +45,45 @@ function checkButtonInfo(buttonInfo) {
   checkLocation();
 }
 
-function checkNamesUniqueness(existingNames, newName) {
-  if (existingNames.indexOf(newName) !== -1) {
+function checkNamesUniqueness(
+  existingNames: (string | PublicTextEditorButton)[],
+  newName: string | PublicTextEditorButton,
+): void {
+  if (existingNames.includes(newName)) {
     throw errors.Error('E1055', newName);
   }
 
   existingNames.push(newName);
 }
 
-function isPredefinedButtonName(name, predefinedButtonsInfo) {
+function isPredefinedButtonName(
+  name: string | undefined,
+  predefinedButtonsInfo: PublicTextEditorButton[],
+): boolean {
   return !!predefinedButtonsInfo.find((info) => info.name === name);
 }
 
-export default class TextEditorButtonCollection {
-  buttons!: any[];
+export type TextEditorButtonInfo = PublicTextEditorButton & { Ctor: CustomButton };
 
-  editor?: any;
+export default class TextEditorButtonCollection<
+  TComponent extends TextEditorBase = TextEditorBase,
+> {
+  buttons!: TextEditorButton[];
 
-  defaultButtonsInfo?: any;
+  editor!: TComponent;
 
-  constructor(editor, defaultButtonsInfo) {
+  defaultButtonsInfo!: TextEditorButtonInfo[];
+
+  constructor(editor: TComponent, defaultButtonsInfo: TextEditorButtonInfo[]) {
     this.buttons = [];
     this.defaultButtonsInfo = defaultButtonsInfo;
     this.editor = editor;
   }
 
-  _compileButtonInfo(buttons) {
-    const names = [];
+  _compileButtonInfo(
+    buttons: (string | PublicTextEditorButton)[],
+  ): TextEditorButtonInfo[] {
+    const names: (string | TextEditorButtonInfo)[] = [];
 
     return buttons.map((button) => {
       const isStringButton = typeof button === 'string';
@@ -75,10 +91,14 @@ export default class TextEditorButtonCollection {
       if (!isStringButton) {
         checkButtonInfo(button);
       }
-      const isDefaultButton = isStringButton || isPredefinedButtonName(button.name, this.defaultButtonsInfo);
+      const isDefaultButton = isStringButton
+        || isPredefinedButtonName(button.name, this.defaultButtonsInfo);
 
       if (isDefaultButton) {
-        const defaultButtonInfo = this.defaultButtonsInfo.find(({ name }) => name === button || name === button.name);
+        const defaultButtonInfo = this.defaultButtonsInfo.find(
+          // @ts-expect-error ts-error
+          ({ name }) => name === button || name === button.name,
+        );
 
         if (!defaultButtonInfo) {
           throw errors.Error('E1056', this.editor.NAME, button);
@@ -89,40 +109,48 @@ export default class TextEditorButtonCollection {
         return defaultButtonInfo;
       }
       const { name } = button;
-
+      // @ts-expect-error @ts-error
       checkNamesUniqueness(names, name);
 
-      return extend(button, { Ctor: CustomButton });
+      return { ...button, Ctor: CustomButton } as unknown as TextEditorButtonInfo;
     });
   }
 
-  _createButton(buttonsInfo) {
+  _createButton(buttonsInfo: TextEditorButtonInfo): TextEditorButton {
     const { Ctor, options, name } = buttonsInfo;
-    const button = new Ctor(name, this.editor, options);
+    // @ts-expect-error ts-error
+    const button: TextEditorButton = new Ctor(name, this.editor, options);
 
     this.buttons.push(button);
 
     return button;
   }
 
-  _renderButtons(buttons, $container, targetLocation) {
-    let $buttonsContainer = null;
+  _renderButtons(
+    buttons: (string | PublicTextEditorButton)[] | undefined,
+    $container: dxElementWrapper,
+    targetLocation: TextEditorButtonLocation,
+  ): dxElementWrapper | null {
+    let $buttonsContainer: dxElementWrapper | null = null;
     const buttonsInfo = buttons ? this._compileButtonInfo(buttons) : this.defaultButtonsInfo;
-    const getButtonsContainer = () => {
-      // @ts-expect-error
+    const getButtonsContainer = (): dxElementWrapper => {
       $buttonsContainer = $buttonsContainer ?? $('<div>')
         .addClass(TEXTEDITOR_BUTTONS_CONTAINER_CLASS);
 
-      targetLocation === 'before' ? $container.prepend($buttonsContainer) : $container.append($buttonsContainer);
+      if (targetLocation === 'before') {
+        $container.prepend($buttonsContainer);
+      } else {
+        $container.append($buttonsContainer);
+      }
 
       return $buttonsContainer;
     };
 
-    buttonsInfo.forEach((buttonsInfo) => {
-      const { location = 'after' } = buttonsInfo;
+    buttonsInfo.forEach((buttonInfo) => {
+      const { location = 'after' } = buttonInfo;
 
       if (location === targetLocation) {
-        this._createButton(buttonsInfo)
+        this._createButton(buttonInfo)
           .render(getButtonsContainer());
       }
     });
@@ -130,28 +158,34 @@ export default class TextEditorButtonCollection {
     return $buttonsContainer;
   }
 
-  clean() {
+  clean(): void {
     this.buttons.forEach((button) => button.dispose());
     this.buttons = [];
   }
 
-  getButton(buttonName) {
+  getButton(buttonName: string): dxButton | null | undefined {
     const button = this.buttons.find(({ name }) => name === buttonName);
 
-    return button && button.instance;
+    return button?.instance;
   }
 
-  renderAfterButtons(buttons, $container) {
+  renderAfterButtons(
+    buttons: (string | PublicTextEditorButton)[] | undefined,
+    $container: dxElementWrapper,
+  ): dxElementWrapper | null {
     return this._renderButtons(buttons, $container, 'after');
   }
 
-  renderBeforeButtons(buttons, $container) {
+  renderBeforeButtons(
+    buttons: (string | PublicTextEditorButton)[] | undefined,
+    $container: dxElementWrapper,
+  ): dxElementWrapper | null {
     return this._renderButtons(buttons, $container, 'before');
   }
 
-  updateButtons(names) {
+  updateButtons(names?: string[]): void {
     this.buttons.forEach((button) => {
-      if (!names || names.indexOf(button.name) !== -1) {
+      if (!names || names.includes(button.name)) {
         button.update();
       }
     });

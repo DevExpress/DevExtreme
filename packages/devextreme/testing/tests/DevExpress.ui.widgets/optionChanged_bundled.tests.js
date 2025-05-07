@@ -3,9 +3,9 @@ import $ from 'jquery';
 import { Component } from 'core/component';
 import devices from '__internal/core/m_devices';
 import GoogleStaticProvider from '__internal/ui/map/m_provider.google_static';
-import fx from 'animation/fx';
+import fx from 'common/core/animation/fx';
 import executeAsyncMock from '../../helpers/executeAsyncMock.js';
-import { DataSource } from 'data/data_source/data_source';
+import { DataSource } from 'common/data/data_source/data_source';
 
 import '../../helpers/ignoreQuillTimers.js';
 import 'bundles/modules/parts/widgets-web';

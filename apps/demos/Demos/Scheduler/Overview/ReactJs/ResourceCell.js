@@ -16,7 +16,10 @@ const ResourceCell = (props) => {
       >
         <h2>{text}</h2>
       </div>
-      <div className="avatar">
+      <div
+        className="avatar"
+        title={text}
+      >
         <img
           src={avatar}
           alt={`${text} photo`}

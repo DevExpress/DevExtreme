@@ -13,6 +13,8 @@ export class Marker {
 }
 
 export type APIKey = {
+  azure?: string;
+  
   bing?: string;
 
   google?: string;
@@ -44,7 +46,10 @@ const markers: Marker[] = [{
     text: 'Fifth Avenue',
   },
 }, {
-  location: 'Brooklyn Bridge,New York,NY',
+  location: {
+    lat: 40.705748,
+    lng: -73.996299,
+  },
   tooltip: {
     isShown: false,
     text: 'Brooklyn Bridge',

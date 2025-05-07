@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/prefer-nullish-coalescing */
 /* eslint-disable max-classes-per-file */
 /* eslint-disable @typescript-eslint/method-signature-style */
+import messageLocalization from '@js/common/core/localization/message';
 import type { Component } from '@js/core/component';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
@@ -10,7 +11,6 @@ import { grep } from '@js/core/utils/common';
 import { each } from '@js/core/utils/iterator';
 import { isFunction } from '@js/core/utils/type';
 import { hasWindow } from '@js/core/utils/window';
-import messageLocalization from '@js/localization/message';
 import errors from '@js/ui/widget/ui.errors';
 
 import type {

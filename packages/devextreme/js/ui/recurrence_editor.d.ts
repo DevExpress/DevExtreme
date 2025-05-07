@@ -7,7 +7,7 @@ import {
     InitializedEventInfo,
     ChangedOptionInfo,
     NativeEventInfo,
-} from '../events/index';
+} from '../common/core/events';
 
 /**
  * @docid _ui_recurrence_editor_ContentReadyEvent

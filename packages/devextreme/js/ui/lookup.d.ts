@@ -5,7 +5,9 @@ import {
 
 import {
     template,
-} from '../core/templates/template';
+    ApplyValueMode,
+    PageLoadMode,
+} from '../common';
 
 import {
     EventInfo,
@@ -13,7 +15,7 @@ import {
     InitializedEventInfo,
     ChangedOptionInfo,
     ItemInfo,
-} from '../events/index';
+} from '../common/core/events';
 
 import {
     ValueChangedInfo,
@@ -35,11 +37,6 @@ import {
 import {
     TitleRenderedInfo,
 } from './popup';
-
-import {
-    ApplyValueMode,
-    PageLoadMode,
-} from '../common';
 
 export {
     ApplyValueMode,

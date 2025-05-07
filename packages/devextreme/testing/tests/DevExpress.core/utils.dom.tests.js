@@ -3,7 +3,7 @@ import domUtils from '__internal/core/utils/m_dom';
 import support from '__internal/core/utils/m_support';
 import styleUtils from 'core/utils/style';
 import devices from '__internal/core/m_devices';
-import initMobileViewport from 'mobile/init_mobile_viewport';
+import initMobileViewport from 'common/core/environment/init_mobile_viewport';
 import keyboardMock from '../../helpers/keyboardMock.js';
 
 QUnit.module('createMarkup');

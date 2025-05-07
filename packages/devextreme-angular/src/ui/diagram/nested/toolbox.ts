@@ -17,13 +17,14 @@ import {
 
 
 
-import { PanelVisibility, ShapeCategory, ShapeType, ToolboxDisplayMode } from 'devextreme/ui/diagram';
+import { ShapeCategory, ToolboxDisplayMode, ShapeType, PanelVisibility } from 'devextreme/ui/diagram';
 
 import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
 import { DxiDiagramGroupComponent } from './group-dxi';
+import { DxiDiagramToolboxGroupComponent } from './toolbox-group-dxi';
 
 
 @Component({
@@ -34,10 +35,10 @@ import { DxiDiagramGroupComponent } from './group-dxi';
 })
 export class DxoDiagramToolboxComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get groups(): Array<ShapeCategory | any | { category?: ShapeCategory | string, displayMode?: ToolboxDisplayMode, expanded?: boolean, shapes?: Array<ShapeType | string>, title?: string }> {
+    get groups(): { category?: ShapeCategory | string, displayMode?: ToolboxDisplayMode, expanded?: boolean, shapes?: Array<ShapeType>, title?: string }[] {
         return this._getOption('groups');
     }
-    set groups(value: Array<ShapeCategory | any | { category?: ShapeCategory | string, displayMode?: ToolboxDisplayMode, expanded?: boolean, shapes?: Array<ShapeType | string>, title?: string }>) {
+    set groups(value: { category?: ShapeCategory | string, displayMode?: ToolboxDisplayMode, expanded?: boolean, shapes?: Array<ShapeType>, title?: string }[]) {
         this._setOption('groups', value);
     }
 
@@ -84,6 +85,14 @@ export class DxoDiagramToolboxComponent extends NestedOption implements OnDestro
         return this._getOption('groups');
     }
     set groupsChildren(value) {
+        this.setChildren('groups', value);
+    }
+
+    @ContentChildren(forwardRef(() => DxiDiagramToolboxGroupComponent))
+    get toolboxGroupsChildren(): QueryList<DxiDiagramToolboxGroupComponent> {
+        return this._getOption('groups');
+    }
+    set toolboxGroupsChildren(value) {
         this.setChildren('groups', value);
     }
 

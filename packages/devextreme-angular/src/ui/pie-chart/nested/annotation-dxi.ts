@@ -5,29 +5,38 @@ import {
     Component,
     NgModule,
     Host,
+    ElementRef,
+    Renderer2,
+    Inject,
+    AfterViewInit,
     SkipSelf,
     Input
 } from '@angular/core';
 
+import { DOCUMENT } from '@angular/common';
 
 
-
-import { AnnotationType, DashStyle, Font, TextOverflow, WordWrap } from 'devextreme/common/charts';
-import { PieChartAnnotationLocation } from 'devextreme/viz/pie_chart';
+import { DashStyle, Font, TextOverflow, AnnotationType, WordWrap } from 'devextreme/common/charts';
+import { dxPieChartAnnotationConfig, PieChartAnnotationLocation } from 'devextreme/viz/pie_chart';
 
 import {
     NestedOptionHost,
+    extractTemplate,
+    DxTemplateDirective,
+    IDxTemplateHost,
+    DxTemplateHost
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
 
 
 @Component({
     selector: 'dxi-pie-chart-annotation',
-    template: '',
-    styles: [''],
-    providers: [NestedOptionHost]
+    template: '<ng-content></ng-content>',
+    styles: [':host { display: block; }'],
+    providers: [NestedOptionHost, DxTemplateHost]
 })
-export class DxiPieChartAnnotationComponent extends CollectionNestedOption {
+export class DxiPieChartAnnotationComponent extends CollectionNestedOption implements AfterViewInit,
+    IDxTemplateHost {
     @Input()
     get allowDragging(): boolean {
         return this._getOption('allowDragging');
@@ -77,10 +86,10 @@ export class DxiPieChartAnnotationComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get customizeTooltip(): Function | undefined {
+    get customizeTooltip(): ((annotation: dxPieChartAnnotationConfig | any) => Record<string, any>) | undefined {
         return this._getOption('customizeTooltip');
     }
-    set customizeTooltip(value: Function | undefined) {
+    set customizeTooltip(value: ((annotation: dxPieChartAnnotationConfig | any) => Record<string, any>) | undefined) {
         this._setOption('customizeTooltip', value);
     }
 
@@ -197,10 +206,10 @@ export class DxiPieChartAnnotationComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get template(): any | undefined {
+    get template(): any {
         return this._getOption('template');
     }
-    set template(value: any | undefined) {
+    set template(value: any) {
         this._setOption('template', value);
     }
 
@@ -229,10 +238,10 @@ export class DxiPieChartAnnotationComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get tooltipTemplate(): any | undefined {
+    get tooltipTemplate(): any {
         return this._getOption('tooltipTemplate');
     }
-    set tooltipTemplate(value: any | undefined) {
+    set tooltipTemplate(value: any) {
         this._setOption('tooltipTemplate', value);
     }
 
@@ -283,10 +292,22 @@ export class DxiPieChartAnnotationComponent extends CollectionNestedOption {
 
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
-            @Host() optionHost: NestedOptionHost) {
+            @Host() optionHost: NestedOptionHost,
+            private renderer: Renderer2,
+            @Inject(DOCUMENT) private document: any,
+            @Host() templateHost: DxTemplateHost,
+            private element: ElementRef) {
         super();
         parentOptionHost.setNestedOption(this);
         optionHost.setHost(this, this._fullOptionPath.bind(this));
+        templateHost.setHost(this);
+    }
+
+    setTemplate(template: DxTemplateDirective) {
+        this.template = template;
+    }
+    ngAfterViewInit() {
+        extractTemplate(this, this.element, this.renderer, this.document);
     }
 
 

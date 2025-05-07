@@ -19,11 +19,11 @@
     &.dx-state-hover {
       background-color: $tabs-tab-bg-color-hover-primary;
     }
-  
+
     &.dx-state-focused {
       background-color: $tabs-tab-bg-color-focus-primary;
     }
-  
+
     &.dx-state-active {
       background-color: $tabs-tab-bg-color-active-primary;
     }
@@ -47,7 +47,7 @@
       &.dx-state-hover {
         @include dx-tabs-indicator-background($tabs-tab-border-color-hover);
       }
-  
+
       &.dx-state-active {
         @include dx-tabs-indicator-background($tabs-tab-border-color-active);
       }
@@ -92,7 +92,7 @@
       &.dx-state-hover {
         @include dx-tabs-indicator-background($tabs-tab-border-color-hover);
       }
-  
+
       &.dx-state-active {
         @include dx-tabs-indicator-background($tabs-tab-border-color-active);
       }

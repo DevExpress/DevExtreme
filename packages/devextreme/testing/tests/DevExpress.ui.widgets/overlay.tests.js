@@ -1,7 +1,7 @@
 import { getWidth, getHeight, getOuterWidth } from 'core/utils/size';
-import fx from 'animation/fx';
-import positionUtils from 'animation/position';
-import { locate } from 'animation/translator';
+import fx from 'common/core/animation/fx';
+import positionUtils from 'common/core/animation/position';
+import { locate } from 'common/core/animation/translator';
 import 'generic_light.css!';
 import config from 'core/config';
 import devices from '__internal/core/m_devices';
@@ -9,10 +9,10 @@ import { Template } from 'core/templates/template';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import { isRenderer } from 'core/utils/type';
 import { value as viewPort } from 'core/utils/view_port';
-import eventsEngine from 'events/core/events_engine';
-import visibilityChange, { triggerHidingEvent, triggerShownEvent } from 'events/visibility_change';
+import eventsEngine from 'common/core/events/core/events_engine';
+import visibilityChange, { triggerHidingEvent, triggerShownEvent } from 'common/core/events/visibility_change';
 import $ from 'jquery';
-import { hideCallback as hideTopOverlayCallback } from 'mobile/hide_callback';
+import { hideCallback as hideTopOverlayCallback } from 'common/core/environment/hide_callback';
 import errors from 'core/errors';
 import uiErrors from 'ui/widget/ui.errors';
 import Overlay from 'ui/overlay/ui.overlay';
@@ -3445,6 +3445,57 @@ testModule('focus policy', {
         keyboardMock($tabbableDiv).press('tab');
 
         assert.strictEqual(contentFocusHandler.callCount, 1, 'focus has been triggered once from keyboardMock');
+    });
+
+    test('tab behavior should remain default when event.target is removed from DOM (T1248343)', function(assert) {
+        const overlay = new Overlay($('<div>').appendTo('#qunit-fixture'), {
+            visible: true,
+            shading: true,
+            contentTemplate: $('<div>')
+                .append('<input class="templateField">')
+                .append('<input class="anotherField">')
+                .append('<input class="thirdField">'),
+        });
+
+        const $content = $(overlay.$content());
+        const $templateField = $content.find('.templateField');
+        const $anotherField = $content.find('.anotherField');
+
+        $templateField.trigger('focus');
+
+        assert.strictEqual(getActiveElement(), $templateField.get(0), 'templatedField is focused');
+
+        $templateField.remove();
+
+        $anotherField.trigger('focus');
+
+        const tabEvent = $.Event('keydown', { key: 'Tab', shiftKey: false, target: $templateField.get(0) });
+
+        $(document).trigger(tabEvent);
+        assert.strictEqual(tabEvent.isDefaultPrevented(), false, 'event is not prevented');
+    });
+
+    test('tab event is prevented when removed target was outside overlay', function(assert) {
+        const overlay = new Overlay($('<div>').appendTo('#qunit-fixture'), {
+            visible: true,
+            shading: true,
+            contentTemplate: $('<div>')
+                .append('<input class="templateField">')
+        });
+
+        const $content = $(overlay.$content());
+        const $templateField = $content.find('.templateField');
+        const $outerField = $('<input class="outerField">').appendTo('#qunit-fixture');
+        $outerField.trigger('focus');
+        assert.strictEqual(getActiveElement(), $outerField.get(0), 'outerField is focused');
+
+        $outerField.remove();
+
+        const tabEventOutside = $.Event('keydown', { key: 'Tab', shiftKey: false, target: $outerField.get(0) });
+        $(document).trigger(tabEventOutside);
+
+        assert.strictEqual(tabEventOutside.isDefaultPrevented(), true, 'event is prevented when target removed outside overlay');
+        assert.strictEqual(getActiveElement(), $templateField.get(0), 'focus is returned to Popup');
     });
 });
 

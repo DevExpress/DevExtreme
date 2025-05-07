@@ -1,5 +1,5 @@
 import React, { useCallback, useRef } from 'react';
-import Scheduler, { Resource, SchedulerTypes, SchedulerRef } from 'devextreme-react/scheduler';
+import Scheduler, { Resource, type SchedulerTypes, SchedulerRef } from 'devextreme-react/scheduler';
 import SpeedDialAction from 'devextreme-react/speed-dial-action';
 import { data, priorities } from './data.ts';
 

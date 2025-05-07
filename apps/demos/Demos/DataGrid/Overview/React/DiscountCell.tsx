@@ -3,7 +3,7 @@ import React from 'react';
 import Bullet, {
   Font, Margin, Size, Tooltip,
 } from 'devextreme-react/bullet';
-import { DataGridTypes } from 'devextreme-react/data-grid';
+import { type DataGridTypes } from 'devextreme-react/data-grid';
 
 const customizeTooltip = (data) => ({
   text: `${parseInt(data.value, 10)}%`,

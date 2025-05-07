@@ -237,6 +237,10 @@
             cursor: pointer;
             touch-action: pinch-zoom;
           }
+
+          &.dx-#{$widget-name}-draggable-column {
+            opacity: 0.5;
+          }
         }
       }
     }
@@ -315,6 +319,10 @@
   .dx-#{$widget-name}-action,
   .dx-#{$widget-name}-drag-action {
     cursor: pointer;
+  }
+
+  .dx-#{$widget-name}-draggable-column {
+    opacity: 0.5;
   }
 
   .dx-data-row.dx-state-hover {
@@ -525,6 +533,9 @@
         min-width: $grid-command-expand-column-width;
         max-width: $grid-command-expand-column-width;
 
+        /* NOTE: z-index of group row in sticky mode is 2 */
+        z-index: 3;
+
         @include user-select(none);
       }
 
@@ -616,6 +627,7 @@
   .dx-#{$widget-name}-headers {
     position: relative;
     outline: 0;
+    min-height: 1px;
 
     @include user-select(none);
   }
@@ -1071,7 +1083,7 @@
       border-collapse: separate;
     }
 
-    .dx-focused-fixed-cell {
+    .dx-focused-fixed-element {
       z-index: 3;
     }
 

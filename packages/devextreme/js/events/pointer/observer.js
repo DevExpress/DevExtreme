@@ -1,1 +1,1 @@
-export { default } from '../../__internal/events/pointer/m_observer';
+export { default } from '../../common/core/events/pointer/observer';

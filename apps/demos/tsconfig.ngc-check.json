@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "skipLibCheck": true,
+    "skipDefaultLibCheck": true,
+    "strict": false,
+    "verbatimModuleSyntax": true,
+    "module": "ESNext",
+    "moduleResolution": "Node",
+    "lib": ["es2022", "DOM", "DOM.Iterable"]
+  },
+  "angularCompilerOptions": {
+    "strictTemplates": true,
+    "fullTemplateTypeCheck": true
+  },
+
+  "include": [
+    "Demos/**/Angular/**/*.ts"
+  ]
+}

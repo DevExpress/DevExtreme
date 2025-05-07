@@ -1,6 +1,3 @@
-type messageLocalizationType = {
-    getFormatter(name: string): () => string;
-    format(name: string): string;
-};
-declare const messageLocalization: messageLocalizationType;
+import messageLocalization from '../common/core/localization/message';
+
 export default messageLocalization;

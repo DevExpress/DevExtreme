@@ -43,6 +43,10 @@ gulp.task(GEN_RUN, (done) => {
             generateReexports: true,
             generateCustomTypes: true,
         },
+        templatingOptions: {
+            quotes: 'double',
+            excplicitIndexInImports: true,
+        },
     });
 
     done();
@@ -96,7 +100,9 @@ gulp.task(NPM_PREPARE_MODULES, (done) => {
   const packParamsForFolders = [
     ['common'],
     ['core', ['template', 'config', 'nested-option', 'component', 'extension-component']],
+    ['common/core'],
     ['common/data'],
+    ['common/export'],
   ];
   const modulesImportsFromIndex = fs.readFileSync(
     config.npm.dist + 'esm/index.js',
@@ -110,7 +116,7 @@ gulp.task(NPM_PREPARE_MODULES, (done) => {
     return ['', [moduleFileName], moduleFilePath];
   });
 
-  [...packParamsForFolders, ...packParamsForModules].forEach(
+  [ ...packParamsForModules, ...packParamsForFolders].forEach(
     ([folder, moduleFileNames, moduleFilePath]) =>
       makeModule(folder, moduleFileNames, moduleFilePath)
   );

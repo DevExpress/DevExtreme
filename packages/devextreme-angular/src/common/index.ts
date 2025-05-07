@@ -5,9 +5,12 @@ export {
     ButtonType,
     CompareRule,
     ComparisonOperator,
+    config,
     CustomRule,
     DataStructure,
     DataType,
+    DateLike,
+    DefaultOptionsRule,
     Direction,
     DisplayMode,
     DragDirection,
@@ -18,8 +21,10 @@ export {
     ExportFormat,
     FieldChooserLayout,
     FirstDayOfWeek,
+    FloatingActionButtonDirection,
     Format,
     GlobalConfig,
+    Guid,
     HorizontalAlignment,
     HorizontalEdge,
     LabelMode,
@@ -29,7 +34,6 @@ export {
     Orientation,
     PageLoadMode,
     PageOrientation,
-    PagerBase,
     PatternRule,
     Position,
     PositionAlignment,
@@ -41,6 +45,7 @@ export {
     ScrollMode,
     SearchMode,
     SelectAllMode,
+    setTemplateEngine,
     SimplifiedSearchMode,
     SingleMultipleAllOrNone,
     SingleMultipleOrNone,
@@ -54,6 +59,7 @@ export {
     SubmenuShowMode,
     TabsIconPosition,
     TabsStyle,
+    template,
     TextBoxPredefinedButton,
     TextEditorButton,
     TextEditorButtonLocation,
@@ -68,3 +74,9 @@ export {
     VerticalAlignment,
     VerticalEdge,
 } from 'devextreme/common';
+
+export * as Charts from './charts';
+export * as Core from './core/index';
+export * as Data from './data';
+export * as Export from './export/index';
+export * as Grids from './grids';

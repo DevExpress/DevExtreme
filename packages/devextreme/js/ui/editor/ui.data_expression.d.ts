@@ -5,7 +5,7 @@ import {
 
 import {
     template,
-} from '../../core/templates/template';
+} from '../../common';
 
 import DataSource, { DataSourceLike } from '../../data/data_source';
 
@@ -33,7 +33,7 @@ export interface DataExpressionMixinOptions<T = DataExpressionMixin> {
      * @type_function_param1 item:object
      * @public
      */
-    displayExpr?: string | ((item: any) => string);
+    displayExpr?: string | ((item: any) => string) | undefined;
     /**
      * @docid
      * @default "item"

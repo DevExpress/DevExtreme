@@ -1317,7 +1317,7 @@ export const resizing = (Base: ModuleType<ResizingController>) => class VirtualS
   }
 
   private hasResizeTimeout() {
-    return !!this._resizeTimeout;
+    return isDefined(this._resizeTimeout);
   }
 
   public resize(): DeferredObj<unknown> {
@@ -1605,7 +1605,7 @@ export const rowsView = (Base: ModuleType<RowsView>) => class VirtualScrollingRo
     return correctedRowHeights;
   }
 
-  private _updateContentPosition(isRender?) {
+  protected _updateContentPosition(isRender?) {
     const rowHeight = this._rowHeight || 20;
 
     this._dataController
@@ -1613,6 +1613,11 @@ export const rowsView = (Base: ModuleType<RowsView>) => class VirtualScrollingRo
       .viewportItemSize(rowHeight);
 
     if (isVirtualMode(this) || gridCoreUtils.isVirtualRowRendering(this)) {
+      const isEmptyRows = this._dataController.isEmpty();
+      if (isEmptyRows) {
+        return;
+      }
+
       if (!isRender) {
         this._updateContentItemSizes();
       }
@@ -1783,10 +1788,15 @@ export const rowsView = (Base: ModuleType<RowsView>) => class VirtualScrollingRo
     super.setLoading.call(this, isLoading, messageText);
   }
 
+  private isGridDragging() {
+    return this.component.option('isDragging');
+  }
+
   // NOTE: warning won't be thrown if height was specified and then removed,
   // because for some reason `_hasHeight` is not updated properly in this case
   private throwHeightWarningIfNeed() {
-    if (this._hasHeight === undefined) {
+    const isGridDragging = this.isGridDragging();
+    if (this._hasHeight === undefined || isGridDragging) {
       return;
     }
 

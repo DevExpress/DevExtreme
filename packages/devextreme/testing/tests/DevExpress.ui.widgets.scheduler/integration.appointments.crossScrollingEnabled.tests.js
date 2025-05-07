@@ -1,6 +1,6 @@
 import $ from 'jquery';
-import translator from 'animation/translator';
-import fx from 'animation/fx';
+import translator from 'common/core/animation/translator';
+import fx from 'common/core/animation/fx';
 import pointerMock from '../../helpers/pointerMock.js';
 import devices from '__internal/core/m_devices';
 import { initTestMarkup, createWrapper } from '../../helpers/scheduler/helpers.js';

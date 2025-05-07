@@ -715,6 +715,23 @@ QUnit.module('typing', moduleConfig, () => {
 
         assert.deepEqual(keyboard.caret(), { start: 4, end: 4 }, 'caret position is correct');
     });
+
+    QUnit.test('does not remove extra characters in front (T1237175)', function(assert) {
+        const $textEditor = $('#texteditor').dxTextEditor({
+            mask: '000',
+            value: '123'
+        });
+
+        const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        const keyboard = keyboardMock($input, true);
+
+        keyboard
+            .caret(0)
+            .type('9');
+
+        assert.strictEqual($input.val(), '923', 'only replaced character is removed');
+        assert.deepEqual(keyboard.caret(), { start: 1, end: 1 }, 'caret position is correct');
+    });
 });
 
 QUnit.module('backspace key', moduleConfig, () => {

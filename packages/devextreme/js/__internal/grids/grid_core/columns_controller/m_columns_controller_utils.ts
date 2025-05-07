@@ -1,4 +1,5 @@
 /* eslint-disable prefer-destructuring */
+import numberLocalization from '@js/common/core/localization/number';
 import { normalizeIndexes } from '@js/core/utils/array';
 import { equalByValue } from '@js/core/utils/common';
 import { compileGetter, compileSetter } from '@js/core/utils/data';
@@ -11,7 +12,6 @@ import {
   isDefined, isFunction, isNumeric, isObject, isString, type,
 } from '@js/core/utils/type';
 import variableWrapper from '@js/core/utils/variable_wrapper';
-import numberLocalization from '@js/localization/number';
 
 import { HIDDEN_COLUMNS_WIDTH } from '../adaptivity/const';
 import gridCoreUtils from '../m_utils';
@@ -681,7 +681,7 @@ export const columnOptionCore = function (that: ColumnsController, column, optio
       that._checkColumns();
     }
 
-    if (!isDefined(prevValue) && !isDefined(value) && optionName.indexOf('buffer') !== 0) {
+    if (!isDefined(prevValue) && !isDefined(value) && optionName.indexOf('buffer') !== 0 && notFireEvent !== false) {
       notFireEvent = true;
     }
 

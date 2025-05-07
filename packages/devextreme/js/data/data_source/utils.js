@@ -1,1 +1,2 @@
-export * from '../../__internal/data/data_source/m_utils';
+// eslint-disable-next-line import/export
+export * from '../../common/data/data_source/utils';

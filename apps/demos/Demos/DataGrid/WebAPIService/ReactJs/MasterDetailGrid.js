@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import DataGrid from 'devextreme-react/data-grid';
 import { createStore } from 'devextreme-aspnet-data-nojquery';
 
-const url = 'https://js.devexpress.com/Demos/Mvc/api/DataGridWebApi';
+const url = 'https://js.devexpress.com/Demos/NetCore/api/DataGridWebApi';
 const getMasterDetailGridDataSource = (id) => ({
   store: createStore({
     loadUrl: `${url}/OrderDetails`,

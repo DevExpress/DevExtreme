@@ -1,11 +1,11 @@
 const $ = require('jquery');
 const noop = require('core/utils/common').noop;
-const scrollEvents = require('events/gesture/emitter.gesture.scroll');
-const GestureEmitter = require('events/gesture/emitter.gesture');
-const eventUtils = require('events/utils/index');
+const scrollEvents = require('common/core/events/gesture/emitter.gesture.scroll');
+const GestureEmitter = require('common/core/events/gesture/emitter.gesture');
+const eventUtils = require('common/core/events/utils/index');
 const devices = require('core/devices');
 const compareVersions = require('core/utils/version').compare;
-const animationFrame = require('animation/frame');
+const animationFrame = require('common/core/animation/frame');
 const pointerMock = require('../../helpers/pointerMock.js');
 
 QUnit.testStart(function() {

@@ -4,7 +4,7 @@ $(() => {
       const parentId = parent ? parent.itemData.id : '';
 
       return $.ajax({
-        url: 'https://js.devexpress.com/Demos/Mvc/api/TreeViewData',
+        url: 'https://js.devexpress.com/Demos/NetCore/api/TreeViewData',
         dataType: 'json',
         data: { parentId },
       });

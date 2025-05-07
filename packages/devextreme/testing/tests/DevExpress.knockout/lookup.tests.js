@@ -1,5 +1,5 @@
 const $ = require('jquery');
-const fx = require('animation/fx');
+const fx = require('common/core/animation/fx');
 const executeAsyncMock = require('../../helpers/executeAsyncMock.js');
 const ko = require('knockout');
 

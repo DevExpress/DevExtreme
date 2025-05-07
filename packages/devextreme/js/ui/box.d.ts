@@ -6,7 +6,7 @@ import {
     InitializedEventInfo,
     ChangedOptionInfo,
     ItemInfo,
-} from '../events/index';
+} from '../common/core/events';
 
 import CollectionWidget, {
     CollectionWidgetItem,
@@ -169,9 +169,9 @@ export interface dxBoxItem<TKey = any> extends CollectionWidgetItem {
      * @docid
      * @default undefined
      * @public
-     * @type dxBoxOptions
+     * @type dxBoxOptions | undefined
      */
-    box?: dxBoxOptions<any, TKey>;
+    box?: dxBoxOptions<any, TKey> | undefined;
     /**
      * @docid
      * @default 0

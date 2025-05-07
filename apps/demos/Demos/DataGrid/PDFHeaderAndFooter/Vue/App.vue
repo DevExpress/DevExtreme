@@ -1,4 +1,7 @@
 <template>
+  <div id="long-title">
+    <h3>Country Area, Population, and GDP Structure</h3>
+  </div>
   <DxDataGrid
     id="grid"
     key-expr="ID"
@@ -56,7 +59,7 @@
 </template>
 
 <script setup lang="ts">
-import DxDataGrid, { DxColumn, DxExport, DxDataGridTypes } from 'devextreme-vue/data-grid';
+import DxDataGrid, { DxColumn, DxExport, type DxDataGridTypes } from 'devextreme-vue/data-grid';
 import { jsPDF } from 'jspdf';
 import { exportDataGrid } from 'devextreme/pdf_exporter';
 import { countries } from './data.ts';
@@ -113,7 +116,7 @@ const onExporting = (e: DxDataGridTypes.ExportingEvent) => {
   line-height: 0;
 }
 
-.long-title h3 {
+#long-title h3 {
   font-family:
     'Segoe UI Light',
     'Helvetica Neue Light',

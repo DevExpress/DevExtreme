@@ -1,5 +1,5 @@
 <div class="list-container">
-  <dx-list [dataSource]="products" height="100%">
+  <dx-list [dataSource]="products" height="100%" displayExpr="Name">
     <div *dxTemplate="let item of 'item'">
       <div class="product">
         <img alt="{{ item.Name }}" src="{{ item.ImageSrc }}" />

@@ -229,7 +229,7 @@
 import { ref } from 'vue';
 import DxSelectBox from 'devextreme-vue/select-box';
 import DxCheckBox from 'devextreme-vue/check-box';
-import { DxTextBox, DxButton as DxTextBoxButton } from 'devextreme-vue/text-box';
+import { DxTextBox, DxButton as DxTextBoxButton, type DxTextBoxTypes } from 'devextreme-vue/text-box';
 import DxDateBox from 'devextreme-vue/date-box';
 import DxDateRangeBox from 'devextreme-vue/date-range-box';
 import DxButton from 'devextreme-vue/button';
@@ -255,8 +255,8 @@ const phoneRules = ref({
 });
 const password = ref('');
 const confirmPassword = ref('');
-const passwordMode = ref('password');
-const confirmPasswordMode = ref('password');
+const passwordMode = ref<DxTextBoxTypes.TextBoxType>('password');
+const confirmPasswordMode = ref<DxTextBoxTypes.TextBoxType>('password');
 const passwordButton = ref({
   icon: 'eyeopen',
   stylingMode: 'text',

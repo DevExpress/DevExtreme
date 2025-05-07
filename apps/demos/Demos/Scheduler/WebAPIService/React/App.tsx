@@ -1,16 +1,16 @@
 import React from 'react';
 
-import Scheduler, { SchedulerTypes } from 'devextreme-react/scheduler';
+import Scheduler, { type SchedulerTypes } from 'devextreme-react/scheduler';
 
 import * as AspNetData from 'devextreme-aspnet-data-nojquery';
 
-const url = 'https://js.devexpress.com/Demos/Mvc/api/SchedulerData';
+const url = 'https://js.devexpress.com/Demos/NetCore/api/SchedulerData';
 const dataSource = AspNetData.createStore({
   key: 'AppointmentId',
-  loadUrl: `${url}/Get`,
-  insertUrl: `${url}/Post`,
-  updateUrl: `${url}/Put`,
-  deleteUrl: `${url}/Delete`,
+  loadUrl: url,
+  insertUrl: url,
+  updateUrl: url,
+  deleteUrl: url,
   onBeforeSend(_, ajaxOptions) {
     ajaxOptions.xhrFields = { withCredentials: true };
   },

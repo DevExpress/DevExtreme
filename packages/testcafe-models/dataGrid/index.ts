@@ -68,6 +68,7 @@ export const CLASS = {
   dialogWrapper: 'dx-dialog-wrapper',
   summaryTotal: 'dx-datagrid-summary-item',
   scrollableContainer: 'dx-scrollable-container',
+  columnsSeparator: 'dx-datagrid-columns-separator',
 };
 
 const E2E_ATTRIBUTES = {
@@ -237,6 +238,10 @@ export default class DataGrid extends Widget {
 
   getSearchBox(): TextBox {
     return new TextBox(this.element.find(`.${CLASS.searchBox}`));
+  }
+
+  getColumnsSeparator(): TextBox {
+    return new TextBox(this.element.find(`.${CLASS.columnsSeparator}`));
   }
 
   getOverlay(): Overlay {
@@ -410,6 +415,15 @@ export default class DataGrid extends Widget {
 
   getColumnChooserButton(): Selector {
     return this.element.find(`.${this.addWidgetPrefix(CLASS.columnChooserButton)}`);
+  }
+
+  apiFilter(filter: any[]): Promise<void> {
+    const { getInstance } = this;
+
+    return ClientFunction(
+      () => (getInstance() as any).filter(filter),
+      { dependencies: { getInstance, filter } },
+    )();
   }
 
   apiClearFilter(): Promise<void> {
@@ -661,6 +675,33 @@ export default class DataGrid extends Widget {
       },
     )();
   }
+
+  apiSearchByText(text: string): Promise<void> {
+    const { getInstance } = this;
+
+    return ClientFunction(
+      () => (getInstance() as DataGridInstance).searchByText(text),
+      {
+        dependencies: {
+          getInstance, text
+        },
+      },
+    )();
+  }
+
+  apiNavigateToRow(key: any): Promise<any> {
+    const { getInstance } = this;
+
+    return ClientFunction(
+      () => (getInstance() as DataGridInstance).navigateToRow(key),
+      {
+        dependencies: {
+          getInstance, key
+        },
+      },
+    )();
+  }
+
   moveRow(rowIndex: number, x: number, y: number, isStart = false): Promise<void> {
     const { getInstance } = this;
 
@@ -682,7 +723,7 @@ export default class DataGrid extends Widget {
     )();
   }
 
-  resizeHeader(columnIndex: number, offset: number, isRightBoundary = false): Promise<void>  {
+  resizeHeader(columnIndex: number, offset: number, needToTriggerPointerUp = true): Promise<void>  {
     const { getInstance } = this;
 
     return ClientFunction(
@@ -691,13 +732,16 @@ export default class DataGrid extends Widget {
         const $gridElement = $(gridInstance.element());
         const columnHeadersView = gridInstance.getView('columnHeadersView');
         const $header = $(columnHeadersView.getHeaderElement(columnIndex));
-        const headerOffset = $header.get(0).getBoundingClientRect();
-        const offsetX = isRightBoundary ? headerOffset.right : headerOffset.left;
+        const headerOffset = $header.offset();
+        const offsetX = headerOffset.left;
 
         triggerPointerMove($(document), offsetX, headerOffset.top + 1);
         triggerPointerDown($gridElement, offsetX, headerOffset.top + 1);
         triggerPointerMove($(document), offsetX + offset, headerOffset.top + 1);
-        triggerPointerUp($(document), offsetX + offset, headerOffset.top + 1);
+
+        if (needToTriggerPointerUp) {
+          triggerPointerUp($(document), offsetX + offset, headerOffset.top + 1);
+        }
       },
       {
         dependencies: {
@@ -707,7 +751,7 @@ export default class DataGrid extends Widget {
           triggerPointerUp,
           columnIndex,
           offset,
-          isRightBoundary,
+          needToTriggerPointerUp,
         },
       },
     )();

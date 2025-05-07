@@ -1,6 +1,6 @@
 import { BaseInfernoComponent } from '@devextreme/runtime/inferno';
 import type { JSXTemplate } from '@devextreme-generator/declarations';
-import { getTemplate } from '@ts/core/r1/utils/index';
+import { PublicTemplate } from '@ts/scheduler/r1/components/templates/index';
 import { Fragment } from 'inferno';
 
 import { combineClasses } from '../../../../core/r1/utils/render_utils';
@@ -35,8 +35,6 @@ export class DateTableBody extends BaseInfernoComponent<DateTableBodyProps> {
       [DATE_TABLE_ROW_CLASS]: true,
       'dx-scheduler-cell-sizes-vertical': addVerticalSizesClassToRows,
     });
-    const CellTemplateComponent = getTemplate(cellTemplate);
-    const DataCellTemplateComponent = getTemplate(dataCellTemplate);
 
     return (
       <>
@@ -53,7 +51,7 @@ export class DateTableBody extends BaseInfernoComponent<DateTableBodyProps> {
                   isGroupedAllDayPanel && <AllDayPanelTableBody
                     viewData={allDayPanel ?? AllDayPanelTableBodyDefaultProps.viewData}
                     viewContext={viewContext}
-                    dataCellTemplate={DataCellTemplateComponent}
+                    dataCellTemplate={dataCellTemplate}
                     isVerticalGroupOrientation={true}
                     leftVirtualCellWidth={viewData.leftVirtualCellWidth
                       ?? AllDayPanelTableBodyDefaultProps.leftVirtualCellWidth}
@@ -95,24 +93,26 @@ export class DateTableBody extends BaseInfernoComponent<DateTableBodyProps> {
                             startDate,
                             text,
                             today,
-                          }) => CellTemplateComponent({
-                            key: cellKey,
-                            viewContext,
-                            isFirstGroupCell,
-                            isLastGroupCell,
-                            startDate,
-                            endDate,
-                            groups,
-                            groupIndex: cellGroupIndex,
-                            index: cellIndex,
-                            dataCellTemplate: DataCellTemplateComponent,
-                            text,
-                            today,
-                            otherMonth,
-                            firstDayOfMonth,
-                            isSelected,
-                            isFocused,
-                          }))
+                          }) => <PublicTemplate
+                            template={cellTemplate}
+                            templateProps={{
+                              key: cellKey,
+                              viewContext,
+                              isFirstGroupCell,
+                              isLastGroupCell,
+                              startDate,
+                              endDate,
+                              groups,
+                              groupIndex: cellGroupIndex,
+                              index: cellIndex,
+                              dataCellTemplate,
+                              text,
+                              today,
+                              otherMonth,
+                              firstDayOfMonth,
+                              isSelected,
+                              isFocused,
+                            } as CellTemplateProps} />)
                         }
                       </Row>
                   ))

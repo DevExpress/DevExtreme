@@ -11,6 +11,15 @@ const Form = React.forwardRef((_, ref) => (
       height="420px"
     >
       <path
+        opacity="1"
+        d="M 0 0 L 820 0 L 820 420 L 0 420 L 0 0"
+        stroke="#999999"
+        strokeWidth="1"
+        strokeLinecap="butt"
+        fill="white"
+        strokeLinejoin="miter"
+      ></path>
+      <path
         d="M 13 407 L 128 407 L 232 39 L 13 39"
         fill="#6D39C3"
       ></path>
@@ -69,15 +78,6 @@ const Form = React.forwardRef((_, ref) => (
           custom elements
         </tspan>
       </text>
-      <path
-        opacity="0.8"
-        d="M 0 0 L 820 0 L 820 420 L 0 420 L 0 0"
-        stroke="#999999"
-        strokeWidth="1"
-        strokeLinecap="butt"
-        fill="none"
-        strokeLinejoin="miter"
-      ></path>
     </svg>
   </div>
 ));

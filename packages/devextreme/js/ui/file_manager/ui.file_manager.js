@@ -4,7 +4,7 @@ import { isDefined, isEmptyObject, isFunction, type } from '../../core/utils/typ
 import { Deferred, when } from '../../core/utils/deferred';
 import { ensureDefined, equalByValue } from '../../core/utils/common';
 
-import messageLocalization from '../../localization/message';
+import messageLocalization from '../../common/core/localization/message';
 
 import registerComponent from '../../core/component_registrator';
 import Widget from '../widget/ui.widget';

@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react';
-import ActionSheet, { ActionSheetTypes } from 'devextreme-react/action-sheet';
-import List, { ListTypes } from 'devextreme-react/list';
+import ActionSheet, { type ActionSheetTypes } from 'devextreme-react/action-sheet';
+import List, { type ListTypes } from 'devextreme-react/list';
 
 import notify from 'devextreme/ui/notify';
 

@@ -94,6 +94,10 @@ const JS_VENDORS = [
     },
     {
         path: 'devextreme-quill/dist/dx-quill.min.js'
+    },
+    {
+        path: 'devextreme-aspnet-data/js/dx.aspnet.data.js',
+        skipUglify: true,
     }
 ];
 
@@ -113,6 +117,10 @@ gulp.task('vendor-js', function() {
         const dest = vendor.dir ? `${DESTINATION_JS_PATH}/${vendor.dir}` : DESTINATION_JS_PATH;
         const stream = gulp.src(vendorSource, sourceConfig)
             .pipe(gulp.dest(dest));
+
+        if(vendor.skipUglify) {
+            return stream;
+        }
 
         if(vendor.noUglyFile) {
             return stream

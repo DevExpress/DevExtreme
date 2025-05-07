@@ -1,1 +1,1 @@
-export { default } from '../../__internal/events/pointer/m_mouse_and_touch';
+export { default } from '../../common/core/events/pointer/mouse_and_touch';

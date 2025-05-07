@@ -1,10 +1,10 @@
-import fx from 'animation/fx';
+import fx from 'common/core/animation/fx';
 import Color from 'color';
 import config from 'core/config';
 import { noop } from 'core/utils/common';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import { isRenderer } from 'core/utils/type';
-import { DataSource } from 'data/data_source/data_source';
+import { DataSource } from 'common/data/data_source/data_source';
 
 import $ from 'jquery';
 import dxScheduler from '__internal/scheduler/m_scheduler';

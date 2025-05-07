@@ -2,8 +2,6 @@ import Box from '../__internal/ui/m_box';
 
 export default Box;
 
-// STYLE box
-
 /**
  * @name dxBoxOptions.activeStateEnabled
  * @hidden

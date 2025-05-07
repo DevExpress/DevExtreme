@@ -1,15 +1,15 @@
 import $ from 'jquery';
-import ArrayStore from 'data/array_store';
+import ArrayStore from 'common/data/array_store';
 import Autocomplete from 'ui/autocomplete';
 import config from 'core/config';
 import devices from '__internal/core/m_devices';
 import executeAsyncMock from '../../helpers/executeAsyncMock.js';
-import fx from 'animation/fx';
+import fx from 'common/core/animation/fx';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import pointerMock from '../../helpers/pointerMock.js';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import { isRenderer } from 'core/utils/type';
-import { normalizeKeyName } from 'events/utils/index';
+import { normalizeKeyName } from 'common/core/events/utils/index';
 import { getHeight, getOuterHeight } from 'core/utils/size';
 
 import 'generic_light.css!';

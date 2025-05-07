@@ -1,4 +1,8 @@
 /* eslint-disable prefer-destructuring */
+import dateLocalization from '@js/common/core/localization/date';
+import messageLocalization from '@js/common/core/localization/message';
+import { DataSource } from '@js/common/data/data_source/data_source';
+import { normalizeDataSourceOptions } from '@js/common/data/data_source/utils';
 import type { ColumnBase } from '@js/common/grids';
 import config from '@js/core/config';
 import $ from '@js/core/renderer';
@@ -14,10 +18,6 @@ import {
 } from '@js/core/utils/type';
 import variableWrapper from '@js/core/utils/variable_wrapper';
 import Store from '@js/data/abstract_store';
-import { DataSource } from '@js/data/data_source/data_source';
-import { normalizeDataSourceOptions } from '@js/data/data_source/utils';
-import dateLocalization from '@js/localization/date';
-import messageLocalization from '@js/localization/message';
 import filterUtils from '@js/ui/shared/filtering';
 import errors from '@js/ui/widget/ui.errors';
 import inflector from '@ts/core/utils/m_inflector';
@@ -314,7 +314,7 @@ export class ColumnsController extends modules.Controller {
   }
 
   public publicMethods() {
-    return ['addColumn', 'deleteColumn', 'columnOption', 'columnCount', 'clearSorting', 'clearGrouping', 'getVisibleColumns', 'getVisibleColumnIndex'];
+    return ['addColumn', 'deleteColumn', 'columnOption', 'columnCount', 'clearSorting', 'clearGrouping', 'getVisibleColumns', 'getVisibleColumnIndex', 'getColumns'];
   }
 
   public applyDataSource(dataSource, forceApplying?, isApplyingUserState?) {
@@ -502,6 +502,7 @@ export class ColumnsController extends modules.Controller {
     return 0;
   }
 
+  // TODO: Need to rename this method to getFixedColumns after removing old fixed columns implementation
   public getStickyColumns(rowIndex?: number): any[] {
     const visibleColumns = this.getVisibleColumns(rowIndex, true);
 
@@ -530,7 +531,7 @@ export class ColumnsController extends modules.Controller {
           const prevColumn = visibleColumns[j - 1];
           const column = visibleColumns[j];
 
-          if (!column.fixed) {
+          if (!column.fixed || column.fixedPosition === StickyPosition.Sticky) {
             if (i === 0) {
               if (column.isBand && column.colspan) {
                 transparentColspan += column.colspan;
@@ -1245,6 +1246,8 @@ export class ColumnsController extends modules.Controller {
   }
 
   private _updateChanges(dataSource, parameters) {
+    const langParams = dataSource?.loadOptions?.()?.langParams;
+
     if (dataSource) {
       this.updateColumnDataTypes(dataSource);
       this._dataSourceApplied = true;
@@ -1258,7 +1261,7 @@ export class ColumnsController extends modules.Controller {
     }
 
     if (this._dataController
-      && !gridCoreUtils.equalFilterParameters(parameters.filtering, this._dataController.getCombinedFilter())) {
+      && !gridCoreUtils.equalFilterParameters(parameters.filtering, this._dataController.getCombinedFilter(), langParams)) {
       updateColumnChanges(this, 'filtering');
     }
     updateColumnChanges(this, 'columns');
@@ -1266,7 +1269,6 @@ export class ColumnsController extends modules.Controller {
 
   public updateSortingGrouping(dataSource, fromDataSource?) {
     const that = this;
-    let sortParameters;
     let isColumnsChanged;
     const updateSortGroupParameterIndexes = function (columns, sortParameters, indexParameterName) {
       each(columns, (index, column) => {
@@ -1303,10 +1305,14 @@ export class ColumnsController extends modules.Controller {
       });
     };
     if (dataSource) {
-      sortParameters = gridCoreUtils.normalizeSortingInfo(dataSource.sort());
+      const sortParameters = gridCoreUtils.normalizeSortingInfo(dataSource.sort());
       const groupParameters = gridCoreUtils.normalizeSortingInfo(dataSource.group());
       const columnsGroupParameters = that.getGroupDataSourceParameters();
       const columnsSortParameters = that.getSortDataSourceParameters();
+      const changeTypes = this._columnChanges?.changeTypes;
+      const sortingChanged = !gridCoreUtils.equalSortParameters(sortParameters, columnsSortParameters);
+      const needToApplySortingFromDataSource = fromDataSource && !changeTypes?.sorting;
+      const needToApplyGroupingFromDataSource = fromDataSource && !changeTypes?.grouping;
       const groupingChanged = !gridCoreUtils.equalSortParameters(groupParameters, columnsGroupParameters, true);
       const groupExpandingChanged = !groupingChanged && !gridCoreUtils.equalSortParameters(groupParameters, columnsGroupParameters);
 
@@ -1322,7 +1328,7 @@ export class ColumnsController extends modules.Controller {
         assignColumns(that, createColumnsFromOptions(that, that._columns));
       }
 
-      if ((fromDataSource || (!columnsGroupParameters && !that._hasUserState)) && (groupingChanged || groupExpandingChanged)) {
+      if ((needToApplyGroupingFromDataSource || (!columnsGroupParameters && !that._hasUserState)) && (groupingChanged || groupExpandingChanged)) {
         /// #DEBUG
         that.__groupingUpdated = true;
         /// #ENDDEBUG
@@ -1333,7 +1339,8 @@ export class ColumnsController extends modules.Controller {
           isColumnsChanged = true;
         }
       }
-      if ((fromDataSource || (!columnsSortParameters && !that._hasUserState)) && !gridCoreUtils.equalSortParameters(sortParameters, columnsSortParameters)) {
+
+      if ((needToApplySortingFromDataSource || (!columnsSortParameters && !that._hasUserState)) && sortingChanged) {
         /// #DEBUG
         that.__sortingUpdated = true;
         /// #ENDDEBUG
@@ -1781,6 +1788,15 @@ export class ColumnsController extends modules.Controller {
     return result;
   }
 
+  public getVisibleDataColumnsByBandColumn(bandColumnIndex: number) {
+    const that = this;
+    const bandColumnsCache = that.getBandColumnsCache();
+    const result = this.getChildrenByBandColumn(bandColumnIndex, bandColumnsCache.columnChildrenByIndex);
+
+    return result
+      .filter((column) => !column.isBand && column.visible);
+  }
+
   public isParentBandColumn(columnIndex, bandColumnIndex) {
     let result = false;
     const column = this._columns[columnIndex];
@@ -1861,6 +1877,10 @@ export class ColumnsController extends modules.Controller {
     }
 
     return columnAlignment;
+  }
+
+  public isVirtualMode(): boolean {
+    return false;
   }
 }
 

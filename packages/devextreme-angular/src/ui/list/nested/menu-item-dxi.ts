@@ -27,10 +27,10 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 })
 export class DxiListMenuItemComponent extends CollectionNestedOption {
     @Input()
-    get action(): Function {
+    get action(): ((itemElement: any, itemData: any) => void) {
         return this._getOption('action');
     }
-    set action(value: Function) {
+    set action(value: ((itemElement: any, itemData: any) => void)) {
         this._setOption('action', value);
     }
 

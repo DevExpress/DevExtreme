@@ -1,9 +1,9 @@
 /* eslint-disable max-classes-per-file */
+import messageLocalization from '@js/common/core/localization/message';
 import $ from '@js/core/renderer';
 import { getPathParts } from '@js/core/utils/data';
 import { extend } from '@js/core/utils/extend';
 import { isDefined, isString } from '@js/core/utils/type';
-import messageLocalization from '@js/localization/message';
 import type { Properties as ToolbarProperties } from '@js/ui/toolbar';
 import Toolbar from '@js/ui/toolbar';
 import type { EditingController } from '@ts/grids/grid_core/editing/m_editing';
@@ -214,8 +214,7 @@ export class HeaderPanel extends ColumnsView {
       } else if (parts[1] === 'items') {
         if (parts.length === 2) {
           // `toolbar.items` case
-          const toolbarOptions = this._getToolbarOptions();
-          this._toolbar?.option('items', toolbarOptions.items);
+          this._invalidate();
         } else if (parts.length === 3) {
           // `toolbar.items[i]` case
           const normalizedItem = this._normalizeToolbarItems(this._getToolbarItems(), args.value);

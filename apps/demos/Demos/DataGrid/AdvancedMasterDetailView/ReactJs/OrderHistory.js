@@ -9,7 +9,7 @@ import {
 } from 'devextreme-react/data-grid';
 import { createStore } from 'devextreme-aspnet-data-nojquery';
 
-const url = 'https://js.devexpress.com/Demos/Mvc/api/DataGridAdvancedMasterDetailView';
+const url = 'https://js.devexpress.com/Demos/NetCore/api/DataGridAdvancedMasterDetailView';
 const OrderHistory = ({ productId }) => {
   const [orderHistoryStore, setOrderHistoryStore] = useState(null);
   useEffect(() => {

@@ -8,11 +8,11 @@ import dxScheduler, {
 import { Component as BaseComponent, IHtmlOptions, ComponentRef, NestedComponentMeta } from "./core/component";
 import NestedOption from "./core/nested-option";
 
-import type { AppointmentAddedEvent, AppointmentAddingEvent, AppointmentClickEvent, AppointmentContextMenuEvent, AppointmentDblClickEvent, AppointmentDeletedEvent, AppointmentDeletingEvent, AppointmentFormOpeningEvent, AppointmentRenderedEvent, AppointmentTooltipShowingEvent, AppointmentUpdatedEvent, AppointmentUpdatingEvent, CellClickEvent, CellContextMenuEvent, ContentReadyEvent, DisposingEvent, InitializedEvent, AppointmentTemplateData, AppointmentTooltipTemplateData, dxSchedulerScrolling } from "devextreme/ui/scheduler";
-import type { event } from "devextreme/events/index";
+import type { ViewType, AppointmentAddedEvent, AppointmentAddingEvent, AppointmentClickEvent, AppointmentContextMenuEvent, AppointmentDblClickEvent, AppointmentDeletedEvent, AppointmentDeletingEvent, AppointmentFormOpeningEvent, AppointmentRenderedEvent, AppointmentTooltipShowingEvent, AppointmentUpdatedEvent, AppointmentUpdatingEvent, CellClickEvent, CellContextMenuEvent, ContentReadyEvent, DisposingEvent, InitializedEvent, AllDayPanelMode, AppointmentTemplateData, AppointmentTooltipTemplateData, CellAppointmentsLimit, dxSchedulerScrolling } from "devextreme/ui/scheduler";
+import type { event } from "devextreme/events/events.types";
 import type { DataSourceOptions } from "devextreme/data/data_source";
 import type { Store } from "devextreme/data/store";
-import type { template } from "devextreme/core/templates/template";
+import type { ScrollMode, template, FirstDayOfWeek, Orientation } from "devextreme/common";
 
 import type dxSortable from "devextreme/ui/sortable";
 import type dxDraggable from "devextreme/ui/draggable";
@@ -60,9 +60,9 @@ type ISchedulerOptions = React.PropsWithChildren<ReplaceFieldTypes<Properties, I
   timeCellRender?: (...params: any) => React.ReactNode;
   timeCellComponent?: React.ComponentType<any>;
   defaultCurrentDate?: Date | number | string;
-  defaultCurrentView?: "agenda" | "day" | "month" | "timelineDay" | "timelineMonth" | "timelineWeek" | "timelineWorkWeek" | "week" | "workWeek";
+  defaultCurrentView?: string | ViewType;
   onCurrentDateChange?: (value: Date | number | string) => void;
-  onCurrentViewChange?: (value: "agenda" | "day" | "month" | "timelineDay" | "timelineMonth" | "timelineWeek" | "timelineWorkWeek" | "week" | "workWeek") => void;
+  onCurrentViewChange?: (value: string | ViewType) => void;
 }>
 
 interface SchedulerRef {
@@ -162,8 +162,8 @@ const Scheduler = memo(
 // Scheduler
 type IAppointmentDraggingProps = React.PropsWithChildren<{
   autoScroll?: boolean;
-  data?: any;
-  group?: string;
+  data?: any | undefined;
+  group?: string | undefined;
   onAdd?: ((e: { component: dxScheduler, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable, toData: any }) => void);
   onDragEnd?: ((e: { cancel: boolean, component: dxScheduler, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable, toData: any, toItemData: any }) => void);
   onDragMove?: ((e: { cancel: boolean, component: dxScheduler, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable, toData: any }) => void);
@@ -238,7 +238,7 @@ const Resource = Object.assign<typeof _componentResource, NestedComponentMeta>(_
 // Scheduler
 // View
 type IScrollingProps = React.PropsWithChildren<{
-  mode?: "standard" | "virtual";
+  mode?: ScrollMode;
 }>
 const _componentScrolling = (props: IScrollingProps) => {
   return React.createElement(NestedOption<IScrollingProps>, {
@@ -257,7 +257,7 @@ const Scrolling = Object.assign<typeof _componentScrolling, NestedComponentMeta>
 // Scheduler
 type IViewProps = React.PropsWithChildren<{
   agendaDuration?: number;
-  allDayPanelMode?: "all" | "allDay" | "hidden";
+  allDayPanelMode?: AllDayPanelMode;
   appointmentCollectorTemplate?: ((data: { appointmentCount: number, isCompact: boolean }, collectorElement: any) => string | any) | template;
   appointmentTemplate?: ((model: AppointmentTemplateData | { appointmentData: Record<string, any>, targetedAppointmentData: Record<string, any> }, itemIndex: number, contentElement: any) => string | any) | template;
   appointmentTooltipTemplate?: ((model: AppointmentTooltipTemplateData | { appointmentData: Record<string, any>, targetedAppointmentData: Record<string, any> }, itemIndex: number, contentElement: any) => string | any) | template;
@@ -266,20 +266,20 @@ type IViewProps = React.PropsWithChildren<{
   dateCellTemplate?: ((itemData: any, itemIndex: number, itemElement: any) => string | any) | template;
   dropDownAppointmentTemplate?: ((itemData: any, itemIndex: number, contentElement: any) => string | any) | template;
   endDayHour?: number;
-  firstDayOfWeek?: 0 | 1 | 2 | 3 | 4 | 5 | 6;
+  firstDayOfWeek?: FirstDayOfWeek | undefined;
   groupByDate?: boolean;
-  groupOrientation?: "horizontal" | "vertical";
+  groupOrientation?: Orientation;
   groups?: Array<string>;
   intervalCount?: number;
-  maxAppointmentsPerCell?: number | "auto" | "unlimited";
-  name?: string;
+  maxAppointmentsPerCell?: CellAppointmentsLimit | number;
+  name?: string | undefined;
   offset?: number;
   resourceCellTemplate?: ((itemData: any, itemIndex: number, itemElement: any) => string | any) | template;
   scrolling?: dxSchedulerScrolling;
-  startDate?: Date | number | string;
+  startDate?: Date | number | string | undefined;
   startDayHour?: number;
   timeCellTemplate?: ((itemData: any, itemIndex: number, itemElement: any) => string | any) | template;
-  type?: "agenda" | "day" | "month" | "timelineDay" | "timelineMonth" | "timelineWeek" | "timelineWorkWeek" | "week" | "workWeek";
+  type?: undefined | ViewType;
   appointmentCollectorRender?: (...params: any) => React.ReactNode;
   appointmentCollectorComponent?: React.ComponentType<any>;
   appointmentRender?: (...params: any) => React.ReactNode;

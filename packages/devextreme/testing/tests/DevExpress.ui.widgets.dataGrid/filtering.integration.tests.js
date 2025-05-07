@@ -1,10 +1,10 @@
 import $ from 'jquery';
-import { EdmLiteral } from 'data/odata/utils';
+import { EdmLiteral } from 'common/data/odata/utils';
 import commonUtils from 'core/utils/common';
 import devices from '__internal/core/m_devices';
-import ArrayStore from 'data/array_store';
+import ArrayStore from 'common/data/array_store';
 import gridCoreUtils from '__internal/grids/grid_core/m_utils';
-import fx from 'animation/fx';
+import fx from 'common/core/animation/fx';
 import DataGridWrapper from '../../helpers/wrappers/dataGridWrappers.js';
 import { createDataGrid, baseModuleConfig } from '../../helpers/dataGridHelper.js';
 import { getEmulatorStyles } from '../../helpers/stylesHelper.js';
@@ -74,8 +74,9 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         assert.notOk(subMenu._isVisible(), 'submenu is hidden');
     });
 
-    // T860356
-    QUnit.test('Filter row\'s menu icons and text should have different colors', function(assert) {
+    // T860356 - Deprecated change
+    // T1257970 - New change for Contrast Accessibility WCAG Standard
+    QUnit.test('Filter row\'s menu icons and text should have similar colors', function(assert) {
         // arrange
         const filterRowWrapper = dataGridWrapper.filterRow;
 
@@ -104,7 +105,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         for(let i = 0; i < $items.length; i++) {
             $currentItem = $items.eq(i);
 
-            assert.notEqual($currentItem.find('.dx-menu-item-text').css('color'), $currentItem.find('.dx-icon').css('color'), 'colors are different');
+            assert.equal($currentItem.find('.dx-menu-item-text').css('color'), $currentItem.find('.dx-icon').css('color'), 'colors are similar');
         }
     });
 

@@ -4,14 +4,14 @@ import Box from 'ui/box';
 import Calendar from 'ui/calendar';
 import DateBox from 'ui/date_box';
 import config from 'core/config';
-import dateLocalization from 'localization/date';
+import dateLocalization from 'common/core/localization/date';
 import dateSerialization from 'core/utils/date_serialization';
 import dateUtils from 'core/utils/date';
 import devices from '__internal/core/m_devices';
-import fx from 'animation/fx';
+import fx from 'common/core/animation/fx';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import { getActiveElement } from '../../helpers/shadowDom.js';
-import messageLocalization from 'localization/message';
+import messageLocalization from 'common/core/localization/message';
 import localization from 'localization';
 import ja from 'localization/messages/ja.json!';
 import pointerMock from '../../helpers/pointerMock.js';
@@ -20,7 +20,7 @@ import typeUtils from 'core/utils/type';
 import uiDateUtils from '__internal/ui/date_box/m_date_utils';
 import { noop } from 'core/utils/common';
 import { logger } from 'core/utils/console';
-import { normalizeKeyName } from 'events/utils/index';
+import { normalizeKeyName } from 'common/core/events/utils/index';
 import browser from 'core/utils/browser';
 
 import '../../helpers/calendarFixtures.js';
@@ -69,6 +69,7 @@ const LIST_CLASS = 'dx-list';
 const CLEAR_BUTTON_AREA_CLASS = 'dx-clear-button-area';
 const CALENDAR_CELL_CLASS = 'dx-calendar-cell';
 const CALENDAR_TODAY_BUTTON_CLASS = 'dx-calendar-today-button';
+const CALENDAR_CAPTION_BUTTON_CLASS = 'dx-calendar-caption-button';
 const CALENDAR_NAVIGATOR_PREVIOUS_VIEW_CLASS = 'dx-calendar-navigator-previous-view';
 const DROPDOWNEDITOR_OVERLAY_CLASS = 'dx-dropdowneditor-overlay';
 const NUMBERBOX_CLASS = 'dx-numberbox';
@@ -245,6 +246,46 @@ QUnit.module('datebox tests', moduleConfig, () => {
         const expectedButtonsNumber = devices.real().deviceType === 'desktop' ? 0 : 1;
 
         assert.equal($dropDownButton.length, expectedButtonsNumber, 'correct readOnly value');
+    });
+
+    QUnit.test('Datebox should set min/max attributes to datetime input in localized datetime format (T1252602)', function(assert) {
+        const $dateBox = $('#dateBox').dxDateBox({
+            type: 'datetime',
+            pickerType: 'native',
+            value: new Date(2024, 8, 15, 16, 54, 10),
+            min: new Date(2024, 8, 10, 16, 54, 14),
+            max: new Date(2024, 8, 27, 16, 54, 15)
+        });
+
+        const $input = $dateBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        assert.equal($input.attr('min'), '2024-09-10T16:54:14', 'minimum date set correctly');
+        assert.equal($input.attr('max'), '2024-09-27T16:54:15', 'maximum date set correctly');
+    });
+
+    QUnit.test('Datebox should set min/max attributes to time input in localized time format (T1252602)', function(assert) {
+        const $dateBox = $('#dateBox').dxDateBox({
+            type: 'time',
+            pickerType: 'native',
+            value: new Date(2024, 8, 10, 16, 30),
+            min: new Date(2024, 8, 10, 12, 0, 14),
+            max: new Date(2024, 8, 10, 18, 0, 15)
+        });
+        const $input = $dateBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        assert.equal($input.attr('min'), '12:00:14', 'minimum time set correctly');
+        assert.equal($input.attr('max'), '18:00:15', 'maximum time set correctly');
+    });
+
+    QUnit.test('Datebox should set min/max attributes to date input in localized date format (T1252602)', function(assert) {
+        const $dateBox = $('#dateBox').dxDateBox({
+            type: 'date',
+            pickerType: 'native',
+            value: new Date(2024, 8, 15),
+            min: new Date(2024, 8, 10),
+            max: new Date(2024, 8, 20)
+        });
+        const $input = $dateBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        assert.equal($input.attr('min'), '2024-09-10', 'minimum date set correctly');
+        assert.equal($input.attr('max'), '2024-09-20', 'maximum date set correctly');
     });
 
     QUnit.test('Datebox should set min and max attributes to the native input (T258860) after option changed', function(assert) {
@@ -6107,6 +6148,24 @@ QUnit.module('DateBox number and string value support', {
         });
     });
 
+    QUnit.test('should not throw any errors after clicking on the navigator caption button if the value is an empty string (T1257679)', function(assert) {
+        const dateBox = $('#dateBox').dxDateBox({
+            type: 'date',
+            pickerType: 'calendar',
+            value: '',
+            opened: true,
+        }).dxDateBox('instance');
+
+        try {
+            const $navigatorCaptionButton = dateBox._popup.$wrapper().find(`.${CALENDAR_CAPTION_BUTTON_CLASS}`);
+
+            $($navigatorCaptionButton).trigger('dxclick');
+        } catch(e) {
+            assert.ok(false, `error: ${e.message}`);
+        } finally {
+            assert.ok(true, 'there is no error');
+        }
+    });
 });
 
 testModule('native picker', function() {

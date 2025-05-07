@@ -49,9 +49,7 @@ jobs:
             ${{ runner.os }}-pnpm-store
 
       - name: Install dependencies
-        run: |
-          corepack enable
-          pnpm install
+        run: pnpm install
 
       - name: Setup git config
         run: |
@@ -59,7 +57,7 @@ jobs:
           git config --global user.name "DX Robot"
 
       - name: Bump version
-        run: pnpm run all:update-version -- ${{ inputs.version }}
+        run: pnpm run all:update-version ${{ inputs.version }}
 
       - name: Commit changes and make PR
         env:

@@ -6,9 +6,9 @@
 </template>
 <script setup lang="ts">
 withDefaults(defineProps<{
-  itemData?: object
+  itemData?: Record<string, any>
 }>(), {
-  itemData: () => {},
+  itemData: () => ({} as Record<string, any>),
 });
 </script>
 <style scoped>

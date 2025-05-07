@@ -30,10 +30,10 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoSankeyNodeComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get border(): { color?: string, visible?: boolean, width?: number } {
+    get border(): { color?: string | undefined, visible?: boolean | undefined, width?: number | undefined } {
         return this._getOption('border');
     }
-    set border(value: { color?: string, visible?: boolean, width?: number }) {
+    set border(value: { color?: string | undefined, visible?: boolean | undefined, width?: number | undefined }) {
         this._setOption('border', value);
     }
 

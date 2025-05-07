@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import 'ui/file_manager';
-import fx from 'animation/fx';
+import fx from 'common/core/animation/fx';
 import { FileManagerWrapper, createTestFileSystem, isDesktopDevice } from '../../../helpers/fileManagerHelpers.js';
 
 const { test } = QUnit;

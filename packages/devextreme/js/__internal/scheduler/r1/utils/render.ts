@@ -1,7 +1,7 @@
 import type { Properties } from 'csstype';
 
 import { combineClasses } from '../../../core/r1/utils/render_utils';
-import type { ViewType } from '../types';
+import type { ViewType } from '../../types';
 
 type CSSAttributes = Properties<string | number>;
 

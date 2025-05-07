@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import TagBox, { TagBoxTypes } from 'devextreme-react/tag-box';
+import TagBox, { type TagBoxTypes } from 'devextreme-react/tag-box';
 import { categories, categoryLabel } from './data.ts';
 
 // eslint-disable-next-line no-unused-vars

@@ -19,7 +19,7 @@ class CalendarSingleSelectionStrategy extends CalendarSelectionStrategy {
     this.dateValue(selectedValue, e);
   }
 
-  updateAriaSelected(value, previousValue) {
+  updateAriaSelected(value?, previousValue?) {
     value ??= [this.dateOption('value')];
     previousValue ??= [];
 
@@ -27,7 +27,13 @@ class CalendarSingleSelectionStrategy extends CalendarSelectionStrategy {
   }
 
   getDefaultCurrentDate() {
-    return this.dateOption('value');
+    const date = this.dateOption('value');
+
+    if (date === '') {
+      return new Date();
+    }
+
+    return date;
   }
 
   restoreValue(): void {

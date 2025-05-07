@@ -19,10 +19,10 @@ import {
 import { DOCUMENT } from '@angular/common';
 
 
-import { ToolbarItemComponent, ToolbarItemLocation } from 'devextreme/common';
 import { dxContextMenuItem } from 'devextreme/ui/context_menu';
 import { GanttPredefinedContextMenuItem, GanttPredefinedToolbarItem } from 'devextreme/ui/gantt';
 import { LocateInMenuMode, ShowTextMode } from 'devextreme/ui/toolbar';
+import { ToolbarItemLocation, ToolbarItemComponent } from 'devextreme/common';
 
 import {
     NestedOptionHost,
@@ -32,6 +32,7 @@ import {
     DxTemplateHost
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
+import { DxiGanttContextMenuItemItemComponent } from './context-menu-item-item-dxi';
 
 
 @Component({
@@ -199,6 +200,14 @@ export class DxiGanttItemComponent extends CollectionNestedOption implements Aft
         return 'items';
     }
 
+
+    @ContentChildren(forwardRef(() => DxiGanttContextMenuItemItemComponent))
+    get contextMenuItemItemsChildren(): QueryList<DxiGanttContextMenuItemItemComponent> {
+        return this._getOption('items');
+    }
+    set contextMenuItemItemsChildren(value) {
+        this.setChildren('items', value);
+    }
 
     @ContentChildren(forwardRef(() => DxiGanttItemComponent))
     get itemsChildren(): QueryList<DxiGanttItemComponent> {

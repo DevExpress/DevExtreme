@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import {
-  TreeList, Column, SearchPanel, TreeListTypes,
+  TreeList, Column, SearchPanel, type TreeListTypes,
 } from 'devextreme-react/tree-list';
 import SelectBox from 'devextreme-react/select-box';
 import { employees, filterLabel } from './data.ts';

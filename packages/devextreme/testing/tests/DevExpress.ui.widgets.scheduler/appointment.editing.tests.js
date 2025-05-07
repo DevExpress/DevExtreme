@@ -1,10 +1,10 @@
 import { getOuterWidth, getOuterHeight } from 'core/utils/size';
 import $ from 'jquery';
 import { noop } from 'core/utils/common';
-import fx from 'animation/fx';
+import fx from 'common/core/animation/fx';
 import pointerMock from '../../helpers/pointerMock.js';
 import { hide } from '__internal/ui/tooltip/m_tooltip';
-import { DataSource } from 'data/data_source/data_source';
+import { DataSource } from 'common/data/data_source/data_source';
 import { Deferred } from 'core/utils/deferred';
 import {
     initTestMarkup,

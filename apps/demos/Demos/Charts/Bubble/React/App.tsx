@@ -10,7 +10,7 @@ import {
   Border,
   Tooltip,
   Export,
-  ChartTypes,
+  type ChartTypes,
 } from 'devextreme-react/chart';
 import { dataSource } from './data.ts';
 

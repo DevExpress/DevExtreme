@@ -1,4 +1,4 @@
-import type { GetDateForHeaderText } from '../types';
+import type { GetDateForHeaderText } from '../../types';
 import { getValidCellDateForLocalTimeFormat } from './base';
 
 export const getDateForHeaderText: GetDateForHeaderText = (

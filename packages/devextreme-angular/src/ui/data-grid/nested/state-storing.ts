@@ -38,10 +38,10 @@ export class DxoDataGridStateStoringComponent extends NestedOption implements On
     }
 
     @Input()
-    get customSave(): Function {
+    get customSave(): ((gridState: any) => void) {
         return this._getOption('customSave');
     }
-    set customSave(value: Function) {
+    set customSave(value: ((gridState: any) => void)) {
         this._setOption('customSave', value);
     }
 

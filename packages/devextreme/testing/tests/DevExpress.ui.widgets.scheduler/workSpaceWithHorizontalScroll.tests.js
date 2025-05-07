@@ -1,6 +1,6 @@
 import { getOuterWidth } from 'core/utils/size';
 import devices from '__internal/core/m_devices';
-import { triggerHidingEvent, triggerResizeEvent, triggerShownEvent } from 'events/visibility_change';
+import { triggerHidingEvent, triggerResizeEvent, triggerShownEvent } from 'common/core/events/visibility_change';
 import 'generic_light.css!';
 import $ from 'jquery';
 import '__internal/scheduler/m_scheduler';

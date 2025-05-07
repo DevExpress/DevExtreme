@@ -9,3 +9,4 @@
 .github
 publish-demos
 coverage
+utils/**/template.html

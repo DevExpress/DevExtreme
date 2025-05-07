@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import 'ui/file_manager';
-import fx from 'animation/fx';
+import fx from 'common/core/animation/fx';
 import { FileManagerWrapper, createTestFileSystem, Consts } from '../../../helpers/fileManagerHelpers.js';
 import { implementationsMap, getOuterWidth } from 'core/utils/size';
 

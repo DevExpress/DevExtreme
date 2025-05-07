@@ -26,7 +26,7 @@
 </template>
 <script setup lang="ts">
 import { ref } from 'vue';
-import DxScheduler, { DxSchedulerTypes } from 'devextreme-vue/scheduler';
+import DxScheduler, { type DxSchedulerTypes } from 'devextreme-vue/scheduler';
 import { DxRadioGroup } from 'devextreme-vue/radio-group';
 import { data } from './data.ts';
 

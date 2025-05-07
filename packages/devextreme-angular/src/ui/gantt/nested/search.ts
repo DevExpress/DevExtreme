@@ -54,10 +54,10 @@ export class DxoGanttSearchComponent extends NestedOption implements OnDestroy, 
     }
 
     @Input()
-    get searchExpr(): Function | string | undefined | Array<Function | string> {
+    get searchExpr(): Array<Function | string> | Function | string | undefined {
         return this._getOption('searchExpr');
     }
-    set searchExpr(value: Function | string | undefined | Array<Function | string>) {
+    set searchExpr(value: Array<Function | string> | Function | string | undefined) {
         this._setOption('searchExpr', value);
     }
 

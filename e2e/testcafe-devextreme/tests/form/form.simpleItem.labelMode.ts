@@ -17,30 +17,32 @@ fixture.disablePageReloads`Form`
         test(testName, async (t) => {
           const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-          await waitFont();
-
           await testScreenshot(t, takeScreenshot, `${testName}.png`, { element: '#container' });
 
           await t
             .expect(compareResults.isValid())
             .ok(compareResults.errorMessages());
-        }).before(async () => createWidget('dxForm', {
-          width: 200,
-          rtlEnabled,
-          labelMode,
-          showOptionalMark,
-          optionalMark: 'opt',
-          requiredMark: '**',
-          formData: {
-            item1: 'some value',
-          },
-          items: [
-            { itemType: 'empty' },
-            { dataField: 'item1', isRequired: true },
-            { dataField: 'item2', isRequired: true },
-            { dataField: 'item3', isRequired: false },
-          ],
-        }));
+        }).before(async () => {
+          await waitFont();
+
+          return createWidget('dxForm', {
+            width: 200,
+            rtlEnabled,
+            labelMode,
+            showOptionalMark,
+            optionalMark: 'opt',
+            requiredMark: '**',
+            formData: {
+              item1: 'some value',
+            },
+            items: [
+              { itemType: 'empty' },
+              { dataField: 'item1', isRequired: true },
+              { dataField: 'item2', isRequired: true },
+              { dataField: 'item3', isRequired: false },
+            ],
+          });
+        });
       });
     });
   });

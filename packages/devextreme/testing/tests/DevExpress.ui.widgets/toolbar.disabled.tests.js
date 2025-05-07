@@ -2,7 +2,7 @@ import $ from 'jquery';
 import 'ui/toolbar';
 import 'ui/toolbar/ui.toolbar.base';
 
-import eventsEngine from 'events/core/events_engine';
+import eventsEngine from 'common/core/events/core/events_engine';
 
 import 'ui/button_group';
 import 'ui/text_box';
@@ -17,7 +17,7 @@ import 'ui/menu';
 
 import devices from '__internal/core/m_devices';
 
-import fx from 'animation/fx';
+import fx from 'common/core/animation/fx';
 
 const moduleConfig = {
     beforeEach: function() {

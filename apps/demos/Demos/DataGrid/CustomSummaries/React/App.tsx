@@ -1,6 +1,6 @@
 import React from 'react';
 import DataGrid, {
-  Column, Selection, Paging, Summary, TotalItem, DataGridTypes,
+  Column, Selection, Paging, Summary, TotalItem, type DataGridTypes,
 } from 'devextreme-react/data-grid';
 import { orders } from './data.ts';
 

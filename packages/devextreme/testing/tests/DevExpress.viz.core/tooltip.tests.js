@@ -1208,7 +1208,7 @@ QUnit.test('Show. W/o params. Template', function(assert) {
     // act
     const result = this.tooltip.show(formatObject, { x: 100, y: 200, offset: 300 }, eventData, undefined, callback);
 
-    assert.strictEqual(result, undefined);
+    assert.strictEqual(result, true);
     assert.deepEqual(this.eventTrigger.lastCall.args, ['tooltipShown', eventData], 'event is triggered');
 
     assert.deepEqual(this.tooltip._state, {
@@ -1416,7 +1416,7 @@ QUnit.test('Call template if empty text', function(assert) {
     // act
     const result = this.tooltip.show(formatObject, { x: 100, y: 200, offset: 300 }, eventData, undefined, callback);
 
-    assert.strictEqual(result, undefined);
+    assert.strictEqual(result, true);
     assert.deepEqual(this.eventTrigger.lastCall.args, ['tooltipShown', eventData], 'event is triggered');
 
     assert.equal(this.options.contentTemplate.callCount, 1);

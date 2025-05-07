@@ -7,15 +7,12 @@ import {
     EventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
-} from '../events/index';
+} from '../common/core/events';
 
 import {
     AnimationConfig,
-} from '../animation/fx';
-
-import {
     PositionConfig,
-} from '../animation/position';
+} from '../common/core/animation';
 
 import dxOverlay, {
     dxOverlayAnimation,
@@ -108,7 +105,7 @@ export interface dxLoadPanelOptions extends dxOverlayOptions<dxLoadPanel> {
      * @default undefined
      * @public
      */
-    container?: string | UserDefinedElement;
+    container?: string | UserDefinedElement | undefined;
     /**
      * @docid
      * @default 0

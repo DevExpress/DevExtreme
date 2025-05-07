@@ -1,10 +1,10 @@
 import React, { useCallback, useState } from 'react';
 
-import ColorBox, { ColorBoxTypes } from 'devextreme-react/color-box';
-import NumberBox, { NumberBoxTypes } from 'devextreme-react/number-box';
-import SelectBox, { SelectBoxTypes } from 'devextreme-react/select-box';
-import Switch, { SwitchTypes } from 'devextreme-react/switch';
-import TextBox, { TextBoxTypes } from 'devextreme-react/text-box';
+import ColorBox, { type ColorBoxTypes } from 'devextreme-react/color-box';
+import NumberBox, { type NumberBoxTypes } from 'devextreme-react/number-box';
+import SelectBox, { type SelectBoxTypes } from 'devextreme-react/select-box';
+import Switch, { type SwitchTypes } from 'devextreme-react/switch';
+import TextBox, { type TextBoxTypes } from 'devextreme-react/text-box';
 
 import Logo from './Logo.tsx';
 

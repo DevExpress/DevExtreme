@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, ButtonTypes } from 'devextreme-react/button';
+import { Button, type ButtonTypes } from 'devextreme-react/button';
 import notify from 'devextreme/ui/notify';
 
 const onClick = (e: ButtonTypes.ClickEvent) => {

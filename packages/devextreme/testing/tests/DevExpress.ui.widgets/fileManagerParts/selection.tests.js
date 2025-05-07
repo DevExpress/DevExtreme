@@ -1,7 +1,7 @@
 import $ from 'jquery';
 const { test } = QUnit;
 import 'ui/file_manager';
-import fx from 'animation/fx';
+import fx from 'common/core/animation/fx';
 import { FileManagerWrapper, createTestFileSystem, isDesktopDevice } from '../../../helpers/fileManagerHelpers.js';
 import { triggerCellClick } from '../../../helpers/fileManager/events.js';
 

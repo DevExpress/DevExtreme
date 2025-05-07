@@ -14,8 +14,8 @@ import {
 
 
 
-import { ChartsDataType } from 'devextreme/common/charts';
 import { ChartAxisScale } from 'devextreme/viz/range_selector';
+import { ChartsDataType } from 'devextreme/common/charts';
 
 import {
     NestedOptionHost,

@@ -1,5 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable max-classes-per-file */
+import eventsEngine from '@js/common/core/events/core/events_engine';
+import pointerEvents from '@js/common/core/events/pointer';
+import messageLocalization from '@js/common/core/localization/message';
+import { createObjectWithChanges } from '@js/common/data/array_utils';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import browser from '@js/core/utils/browser';
@@ -14,10 +18,6 @@ import {
 } from '@js/core/utils/size';
 import { encodeHtml } from '@js/core/utils/string';
 import { isDefined, isEmptyObject, isObject } from '@js/core/utils/type';
-import { createObjectWithChanges } from '@js/data/array_utils';
-import eventsEngine from '@js/events/core/events_engine';
-import pointerEvents from '@js/events/pointer';
-import messageLocalization from '@js/localization/message';
 import Button from '@js/ui/button';
 import LoadIndicator from '@js/ui/load_indicator';
 import Overlay from '@js/ui/overlay/ui.overlay';
@@ -844,7 +844,7 @@ export const validatingEditingExtender = (Base: ModuleType<EditingController>) =
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   protected _beforeSaveEditData(change, editIndex?) {
     let result: any = super._beforeSaveEditData.apply(this, arguments as any);
-    const validationData = this._validatingController._getValidationData(change?.key);
+    const validationData = this._validatingController._getValidationData(change?.key, true);
 
     if (change) {
       const isValid = change.type === 'remove' || validationData.isValid;
@@ -1092,12 +1092,13 @@ export const validatingEditorFactoryExtender = (Base: ModuleType<EditorFactory>)
       return;
     }
 
-    // do not render tooltip if it is already rendered
+    // do not recreate tooltip if it is already created
     if ($container.find($tooltipElement).length) {
+      this._revertTooltip?.repaint();
       return;
     }
 
-    const $overlayContainer = $container.closest(`.${this.addWidgetPrefix(CONTENT_CLASS)}`).parent();
+    const $overlayContainer = this.getRevertButtonContainer($container);
     const revertTooltipClass = this.addWidgetPrefix(REVERT_TOOLTIP_CLASS);
 
     $tooltipElement?.remove();
@@ -1140,9 +1141,10 @@ export const validatingEditorFactoryExtender = (Base: ModuleType<EditorFactory>)
         boundary: this._rowsView.element(),
         of: $container,
       },
-      onPositioned: this._positionedHandler.bind(this),
+      onPositioned: this.overlayPositionedHandler.bind(this),
     };
 
+    // @ts-expect-error ts-error
     this._revertTooltip = new Overlay($tooltipElement, tooltipOptions);
   }
 
@@ -1172,29 +1174,13 @@ export const validatingEditorFactoryExtender = (Base: ModuleType<EditorFactory>)
     }
   }
 
-  private _positionedHandler(e, isOverlayVisible) {
-    if (!e.component.__skipPositionProcessing) {
-      const isRevertButton = $(e.element).hasClass(this.addWidgetPrefix(REVERT_TOOLTIP_CLASS));
-      const needRepaint = !isRevertButton && this._rowsView.updateFreeSpaceRowHeight();
-      const normalizedPosition = this._normalizeValidationMessagePositionAndMaxWidth(e, isRevertButton, isOverlayVisible);
-
-      e.component.__skipPositionProcessing = !!(needRepaint || normalizedPosition);
-
-      if (normalizedPosition) {
-        e.component.option(normalizedPosition);
-      } else if (needRepaint) {
-        e.component.repaint();
-      }
-    }
-  }
-
   private _showValidationMessage($cell, messages, alignment) {
     const editorPopup = $cell.find('.dx-dropdowneditor-overlay').data('dxPopup');
     const isOverlayVisible = editorPopup && editorPopup.option('visible');
     const myPosition = isOverlayVisible ? 'top right' : `top ${alignment}`;
     const atPosition = isOverlayVisible ? 'top left' : `bottom ${alignment}`;
 
-    const $overlayContainer = this.getValidationOverlayContainer($cell);
+    const $overlayContainer = this.getValidationMessageContainer($cell);
 
     let errorMessageText = '';
     messages && messages.forEach((message) => {
@@ -1239,7 +1225,7 @@ export const validatingEditorFactoryExtender = (Base: ModuleType<EditorFactory>)
         of: $cell,
       },
       onPositioned: (e) => {
-        this._positionedHandler(e, isOverlayVisible);
+        this.overlayPositionedHandler(e, isOverlayVisible);
         this._shiftValidationMessageIfNeed(e.component.$content(), $cell);
       },
     };
@@ -1249,6 +1235,14 @@ export const validatingEditorFactoryExtender = (Base: ModuleType<EditorFactory>)
     // @ts-expect-error
     // eslint-disable-next-line no-new
     new Overlay($overlayElement, overlayOptions);
+  }
+
+  private getValidationMessages(): dxElementWrapper {
+    return this._rowsView.element()?.find(this._getValidationMessagesSelector());
+  }
+
+  private getRevertButton(): dxElementWrapper {
+    return $(this._revertTooltip?.element());
   }
 
   private _hideValidationMessage() {
@@ -1303,6 +1297,27 @@ export const validatingEditorFactoryExtender = (Base: ModuleType<EditorFactory>)
     if (contentOffset.top === revertContentOffset.top && contentOffset.left + getWidth($content) > revertContentOffset.left) {
       const left = getWidth($revertContent) + PADDING_BETWEEN_TOOLTIPS;
       $content.css('left', revertContentOffset.left < $cell.offset().left ? -left : left);
+    }
+  }
+
+  protected getOverlayBaseZIndex(): number {
+    // @ts-expect-error
+    return Overlay.baseZIndex() as number;
+  }
+
+  protected overlayPositionedHandler(e, isOverlayVisible) {
+    if (!e.component.__skipPositionProcessing) {
+      const isRevertButton = $(e.element).hasClass(this.addWidgetPrefix(REVERT_TOOLTIP_CLASS));
+      const needRepaint = !isRevertButton && this._rowsView.updateFreeSpaceRowHeight();
+      const normalizedPosition = this._normalizeValidationMessagePositionAndMaxWidth(e, isRevertButton, isOverlayVisible);
+
+      e.component.__skipPositionProcessing = !!(needRepaint || normalizedPosition);
+
+      if (normalizedPosition) {
+        e.component.option(normalizedPosition);
+      } else if (needRepaint) {
+        e.component.repaint();
+      }
     }
   }
 
@@ -1441,8 +1456,19 @@ export const validatingEditorFactoryExtender = (Base: ModuleType<EditorFactory>)
     return gridCoreUtils.getWidgetInstance($editor);
   }
 
-  protected getValidationOverlayContainer($cell: dxElementWrapper): dxElementWrapper {
+  protected getValidationMessageContainer($cell: dxElementWrapper): dxElementWrapper {
     return $cell.closest(`.${this.addWidgetPrefix(CONTENT_CLASS)}`);
+  }
+
+  protected getRevertButtonContainer($cell: dxElementWrapper): dxElementWrapper {
+    return $cell.closest(`.${this.addWidgetPrefix(CONTENT_CLASS)}`).parent();
+  }
+
+  public hasOverlayElements(): boolean {
+    const $validationMessageElements = this.getValidationMessages();
+    const $revertButtonElement = this.getRevertButton();
+
+    return super.hasOverlayElements() || !!$validationMessageElements?.length || !!$revertButtonElement?.length;
   }
 };
 

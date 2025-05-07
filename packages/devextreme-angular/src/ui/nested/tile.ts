@@ -30,10 +30,10 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoTileComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get border(): { color?: string, width?: number } {
+    get border(): { color?: string | undefined, width?: number | undefined } {
         return this._getOption('border');
     }
-    set border(value: { color?: string, width?: number }) {
+    set border(value: { color?: string | undefined, width?: number | undefined }) {
         this._setOption('border', value);
     }
 
@@ -62,10 +62,10 @@ export class DxoTileComponent extends NestedOption implements OnDestroy, OnInit 
     }
 
     @Input()
-    get selectionStyle(): { border?: { color?: string, width?: number | undefined }, color?: string | undefined } {
+    get selectionStyle(): { border?: { color?: string | undefined, width?: number | undefined }, color?: string | undefined } {
         return this._getOption('selectionStyle');
     }
-    set selectionStyle(value: { border?: { color?: string, width?: number | undefined }, color?: string | undefined }) {
+    set selectionStyle(value: { border?: { color?: string | undefined, width?: number | undefined }, color?: string | undefined }) {
         this._setOption('selectionStyle', value);
     }
 

@@ -229,6 +229,15 @@ $fluent-list-item-border: $fluent-list-item-border-width solid $list-border-colo
       .dx-list-item {
         @include item-states();
       }
+
+      .dx-list-group-header {
+        @include item-states();
+
+        &.dx-state-hover {
+          background-color: $list-item-hover-bg;
+          color: $list-item-hover-color;
+        }
+      }
     }
   }
 
@@ -258,7 +267,7 @@ $fluent-list-item-border: $fluent-list-item-border-width solid $list-border-colo
         color: $list-group-color;
       }
     }
-    
+
     &:last-of-type {
       .dx-list-item {
         &:last-of-type {
@@ -291,11 +300,11 @@ $fluent-list-item-border: $fluent-list-item-border-width solid $list-border-colo
 
     .dx-list-group-header-indicator {
       color: $list-header-indicator-color;
-     
+
       .dx-list-collapsible-groups & {
         display: flex;
         align-items: center;
-        
+
         @include dx-icon(chevrondown);
         @include dx-icon-sizing($fluent-base-icon-size);
       }
@@ -397,6 +406,7 @@ $fluent-list-item-border: $fluent-list-item-border-width solid $list-border-colo
     &.dx-list-select-checkbox-container,
     &.dx-list-select-radiobutton-container {
       display: flex;
+      flex-shrink: 0;
       width: $fluent-list-item-height;
       justify-content: center;
       align-items: center;
@@ -454,7 +464,7 @@ $fluent-list-item-border: $fluent-list-item-border-width solid $list-border-colo
       @include dx-icon(dragvertical);
 
       color: $list-icon-color;
-      
+
       @include dx-icon-sizing($fluent-base-icon-size);
     }
   }

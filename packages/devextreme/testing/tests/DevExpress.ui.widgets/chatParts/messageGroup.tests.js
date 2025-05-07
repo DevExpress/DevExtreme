@@ -2,7 +2,7 @@ import $ from 'jquery';
 
 import MessageGroup from '__internal/ui/chat/messagegroup';
 import ChatAvatar from '__internal/ui/chat/avatar';
-import dateLocalization from 'localization/date';
+import dateLocalization from 'common/core/localization/date';
 
 const AVATAR_CLASS = 'dx-avatar';
 const CHAT_MESSAGEGROUP_TIME_CLASS = 'dx-chat-messagegroup-time';
@@ -22,6 +22,7 @@ const moduleConfig = {
             this.getAvatar = () => this.$element.find(`.${AVATAR_CLASS}`);
             this.getUsername = () => this.$element.find(`.${CHAT_MESSAGEGROUP_AUTHOR_NAME_CLASS}`);
             this.getMessageTimestamp = () => this.$element.find(`.${CHAT_MESSAGEGROUP_TIME_CLASS}`);
+            this.getBubbles = () => this.$element.find(`.${CHAT_MESSAGEBUBBLE_CLASS}`);
         };
 
         this.reinit = (options) => {
@@ -286,6 +287,23 @@ QUnit.module('MessageGroup', moduleConfig, () => {
 
                 assert.strictEqual(this.invalidateStub.callCount, 1);
             });
+        });
+
+        QUnit.test('messageTemplate should be called on bubble template call', function(assert) {
+            const messageTemplate = sinon.stub();
+            const message = {
+                text: 'CustomText',
+                timestamp: 1234567,
+                author: { name: 'someName', id: 'someId' },
+            };
+
+            this.reinit({
+                items: [message],
+                messageTemplate,
+            });
+
+            assert.strictEqual(messageTemplate.callCount, 1, 'messageTemplate function was called on bubble template render');
+            assert.deepEqual(messageTemplate.lastCall.args[0], message, 'messageTemplate function was called with correct data');
         });
     });
 });

@@ -1,7 +1,6 @@
+import { normalizeSortingInfo } from '@js/common/data/utils';
 import $ from '@js/core/renderer';
 import { when } from '@js/core/utils/deferred';
-// @ts-expect-error
-import { normalizeSortingInfo } from '@js/data/utils';
 
 import gridCore from '../m_core';
 

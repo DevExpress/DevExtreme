@@ -24,7 +24,7 @@ import { computed } from 'vue';
 const props = withDefaults(defineProps<{
   pointInfo: Record<string, any>
 }>(), {
-  pointInfo: () => ({}),
+  pointInfo: () => ({} as Record<string, any>),
 });
 const volume = computed<{value : number}>(() => props.pointInfo.points.filter(({ seriesName }) => seriesName === 'Volume')[0]);
 const prices = computed<Record<string, any>>(() => props.pointInfo.points.filter(({ seriesName }) => seriesName !== 'Volume')[0]);

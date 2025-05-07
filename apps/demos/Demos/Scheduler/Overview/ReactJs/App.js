@@ -17,7 +17,7 @@ const App = () => (
     views={views}
     defaultCurrentView="month"
     defaultCurrentDate={currentDate}
-    height={600}
+    height={710}
     showAllDayPanel={true}
     firstDayOfWeek={1}
     startDayHour={8}

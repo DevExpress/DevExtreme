@@ -5,7 +5,7 @@
 
     if(typeof define === 'function' && define.amd) {
         define(function(require, exports, module) {
-            root.DevExpress.data.testing.ErrorHandlingHelper = module.exports = factory(require('jquery'), require('core/class'), require('data/errors'));
+            root.DevExpress.data.testing.ErrorHandlingHelper = module.exports = factory(require('jquery'), require('core/class'), require('common/data/errors'));
         });
     } else {
         root.DevExpress.data.testing.ErrorHandlingHelper = factory(window.jQuery, DevExpress.Class, DevExpress.data);

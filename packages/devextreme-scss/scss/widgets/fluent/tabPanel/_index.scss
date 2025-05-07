@@ -24,41 +24,49 @@
 }
 
 .dx-tabpanel-tabs-position-top {
-  .dx-tabs {
-    border-bottom: 1px solid $base-border-color;
+  > .dx-tabpanel-tabs {
+    .dx-tabs {
+      border-bottom: 1px solid $base-border-color;
 
-    @at-root #{selector-append(".dx-empty-collection", &)} {
-      border-bottom: none;
+      @at-root #{selector-append(".dx-empty-collection", &)} {
+        border-bottom: none;
+      }
     }
   }
 }
 
 .dx-tabpanel-tabs-position-bottom {
-  .dx-tabs {
-    border-top: 1px solid $base-border-color;
+  > .dx-tabpanel-tabs {
+    .dx-tabs {
+      border-top: 1px solid $base-border-color;
 
-    @at-root #{selector-append(".dx-empty-collection", &)} {
-      border-top: none;
+      @at-root #{selector-append(".dx-empty-collection", &)} {
+        border-top: none;
+      }
     }
   }
 }
 
 .dx-tabpanel-tabs-position-left {
-  .dx-tabs {
-    border-right: 1px solid $base-border-color;
+  > .dx-tabpanel-tabs {
+    .dx-tabs {
+      border-right: 1px solid $base-border-color;
 
-    @at-root #{selector-append(".dx-empty-collection", &)} {
-      border-right: none;
+      @at-root #{selector-append(".dx-empty-collection", &)} {
+        border-right: none;
+      }
     }
   }
 }
 
 .dx-tabpanel-tabs-position-right {
-  .dx-tabs {
-    border-left: 1px solid $base-border-color;
+  > .dx-tabpanel-tabs {
+    .dx-tabs {
+      border-left: 1px solid $base-border-color;
 
-    @at-root #{selector-append(".dx-empty-collection", &)} {
-      border-left: none;
+      @at-root #{selector-append(".dx-empty-collection", &)} {
+        border-left: none;
+      }
     }
   }
 }

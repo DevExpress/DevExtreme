@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react';
-import CheckBox, { CheckBoxTypes } from 'devextreme-react/check-box';
-import TabPanel, { TabPanelTypes } from 'devextreme-react/tab-panel';
+import CheckBox, { type CheckBoxTypes } from 'devextreme-react/check-box';
+import TabPanel, { type TabPanelTypes } from 'devextreme-react/tab-panel';
 import { multiViewItems as companies } from './data.ts';
 import CompanyItem from './CompanyItem.tsx';
 

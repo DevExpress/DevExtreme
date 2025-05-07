@@ -5,13 +5,14 @@ import {
 } from '../core/element';
 
 import {
-    DxEvent,
     Cancelable,
     EventInfo,
     NativeEventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
-} from '../events/index';
+} from '../common/core/events';
+
+import { DxEvent } from '../events';
 
 import {
     Column as TreeListColumn,
@@ -31,17 +32,14 @@ import {
 
 import {
     template,
-} from '../core/templates/template';
-
-import {
-    DxPromise,
-} from '../core/utils/deferred';
-
-import {
     FirstDayOfWeek,
     SingleMultipleOrNone,
     ToolbarItemLocation,
 } from '../common';
+
+import {
+    DxPromise,
+} from '../core/utils/deferred';
 
 import {
     HeaderFilterSearchConfig,
@@ -518,7 +516,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @default undefined
      * @public
      */
-    columns?: Array<Column | string>;
+    columns?: Array<Column | string> | undefined;
     /**
      * @docid
      * @default null
@@ -944,7 +942,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @default undefined
      * @public
      */
-    selectedRowKey?: any;
+    selectedRowKey?: any | undefined;
     /**
      * @docid
      * @default true
@@ -980,7 +978,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @default undefined
      * @public
      */
-    firstDayOfWeek?: FirstDayOfWeek;
+    firstDayOfWeek?: FirstDayOfWeek | undefined;
     /**
      * @docid
      * @default null
@@ -1432,25 +1430,25 @@ export interface dxGanttStripLine {
      * @default undefined
      * @public
      */
-    cssClass?: string;
+    cssClass?: string | undefined;
     /**
      * @docid
      * @default undefined
      * @public
      */
-    end?: Date | number | string | (() => Date | number | string);
+    end?: Date | number | string | (() => Date | number | string) | undefined;
     /**
      * @docid
      * @default undefined
      * @public
      */
-    start?: Date | number | string | (() => Date | number | string);
+    start?: Date | number | string | (() => Date | number | string) | undefined;
     /**
      * @docid
      * @default undefined
      * @public
      */
-    title?: string;
+    title?: string | undefined;
 }
 
 /**

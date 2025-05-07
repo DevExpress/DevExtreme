@@ -7,8 +7,7 @@ import { adjust } from '@js/core/utils/math';
 import {
   isDate, isDefined, isNumeric, isObject, isString,
 } from '@js/core/utils/type';
-
-import { toMilliseconds } from '../../../renovation/ui/common/utils/date/index';
+import { toMilliseconds } from '@ts/utils/toMilliseconds';
 
 const DAYS_IN_WEEK = 7;
 const THURSDAY_WEEK_NUMBER = 4;
@@ -461,6 +460,26 @@ const sameCentury = function (date1, date2) {
   return date1 && date2 && startCenturyDate1 === startCenturyDate2;
 };
 
+const sameDatesArrays = (arr1: Date[], arr2: Date[]): boolean => {
+  if (!Array.isArray(arr1) || !Array.isArray(arr2) || arr1.length !== arr2.length) {
+    return false;
+  }
+
+  return arr1.every((date1, index) => {
+    const date2 = arr2[index];
+
+    if ([date1, date2].some((date) => date !== null && !(date instanceof Date))) {
+      return false;
+    }
+
+    if (date1 instanceof Date && date2 instanceof Date) {
+      return sameDate(date1, date2);
+    }
+
+    return date1 === date2;
+  });
+};
+
 function getFirstDecadeInCentury(date) {
   return date && date.getFullYear() - date.getFullYear() % 100;
 }
@@ -473,14 +492,24 @@ const getShortDateFormat = function () {
   return 'yyyy/MM/dd';
 };
 
-const getFirstMonthDate = function (date) {
+const getFirstMonthDate = function (date, offset = 0) {
   if (!isDefined(date)) return;
-  return createDateWithFullYear(date.getFullYear(), date.getMonth(), 1);
+
+  const currentDate = new Date(date.getTime());
+  const month = currentDate.getMonth() + offset;
+  currentDate.setMonth(month);
+
+  return createDateWithFullYear(currentDate.getFullYear(), month, 1);
 };
 
-const getLastMonthDate = function (date) {
+const getLastMonthDate = function (date, offset = 0) {
   if (!isDefined(date)) return;
-  return createDateWithFullYear(date.getFullYear(), date.getMonth() + 1, 0);
+
+  const currentDate = new Date(date.getTime());
+  const month = currentDate.getMonth() + offset;
+  currentDate.setMonth(month);
+
+  return createDateWithFullYear(currentDate.getFullYear(), month + 1, 0);
 };
 
 function getFirstWeekDate(date, firstDayOfWeek) {
@@ -760,6 +789,7 @@ const dateUtils = {
   sameDecade,
   sameCentury,
   sameView,
+  sameDatesArrays,
   getDifferenceInMonth,
   getDifferenceInMonthForCells,
   getFirstYearInDecade,

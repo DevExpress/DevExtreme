@@ -113,16 +113,18 @@
 </template>
 <script setup lang="ts">
 import {
-  DxForm, DxItem, DxLabel, DxGroupItem,
+  DxForm, DxItem, DxLabel, DxGroupItem
 } from 'devextreme-vue/form';
+import { type ValidationRule } from 'devextreme-vue/common';
 import service from './data.ts';
 import 'devextreme-vue/text-area';
+
 import LabelTemplate from './LabelTemplate.vue';
 import LabelNotesTemplate from './LabelNotesTemplate.vue';
 
 const employee = service.getEmployee();
 const positions = service.getPositions();
-const validationRules = {
+const validationRules: Record<string, ValidationRule[]> = {
   position: [
     { type: 'required', message: 'Position is required.' },
   ],

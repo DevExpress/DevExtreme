@@ -1,10 +1,10 @@
 import { getOuterHeight, getOuterWidth, getWidth, getHeight } from 'core/utils/size';
 import $ from 'jquery';
 import { createWrapper, initTestMarkup } from '../../helpers/scheduler/helpers.js';
-import translator from 'animation/translator';
-import fx from 'animation/fx';
+import translator from 'common/core/animation/translator';
+import fx from 'common/core/animation/fx';
 import pointerMock from '../../helpers/pointerMock.js';
-import { DataSource } from 'data/data_source/data_source';
+import { DataSource } from 'common/data/data_source/data_source';
 import dataUtils from 'core/element_data';
 import timeZoneUtils from '__internal/scheduler/m_utils_time_zone';
 

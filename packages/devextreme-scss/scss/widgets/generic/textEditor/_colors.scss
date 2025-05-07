@@ -134,6 +134,6 @@ $texteditor-label-transition:
 $texteditor-label-color: $texteditor-placeholder-color;
 
 :root {
-  --dx-texteditor-color-text: #{$texteditor-color}; 
+  --dx-texteditor-color-text: #{$texteditor-color};
   --dx-texteditor-color-label: #{$texteditor-label-color};
 }

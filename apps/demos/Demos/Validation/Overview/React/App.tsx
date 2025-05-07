@@ -3,10 +3,10 @@ import React, {
 } from 'react';
 import SelectBox from 'devextreme-react/select-box';
 import CheckBox from 'devextreme-react/check-box';
-import { TextBox, Button as TextBoxButton, TextBoxTypes } from 'devextreme-react/text-box';
+import { TextBox, Button as TextBoxButton, type TextBoxTypes } from 'devextreme-react/text-box';
 import DateBox from 'devextreme-react/date-box';
 import DateRangeBox from 'devextreme-react/date-range-box';
-import Button, { ButtonTypes } from 'devextreme-react/button';
+import Button, { type ButtonTypes } from 'devextreme-react/button';
 import ValidationSummary from 'devextreme-react/validation-summary';
 import {
   Validator,

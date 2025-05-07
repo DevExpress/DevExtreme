@@ -19,7 +19,7 @@ type Direction = Parameters<typeof notify>[1]['direction'];
 
 let modulePrefix = '';
 // @ts-ignore
-if (window && window.config.packageConfigPaths) {
+if (window && window.config?.packageConfigPaths) {
   modulePrefix = '/app';
 }
 

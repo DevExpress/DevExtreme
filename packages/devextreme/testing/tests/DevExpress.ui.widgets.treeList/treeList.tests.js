@@ -16,14 +16,14 @@ import $ from 'jquery';
 import { noop } from 'core/utils/common';
 import devices from '__internal/core/m_devices';
 import { getOuterHeight } from 'core/utils/size';
-import fx from 'animation/fx';
-import { DataSource } from 'data/data_source/data_source';
+import fx from 'common/core/animation/fx';
+import { DataSource } from 'common/data/data_source/data_source';
 import { TreeListWrapper } from '../../helpers/wrappers/dataGridWrappers.js';
-import ArrayStore from 'data/array_store';
+import ArrayStore from 'common/data/array_store';
 import TreeList from '__internal/grids/tree_list/m_widget';
 import pointerMock from '../../helpers/pointerMock.js';
 import { CLICK_EVENT } from '../../helpers/grid/keyboardNavigationHelper.js';
-import { createEvent } from 'events/utils/index';
+import { createEvent } from 'common/core/events/utils/index';
 
 fx.off = true;
 
@@ -283,14 +283,14 @@ QUnit.module('Initialization', defaultModuleConfig, () => {
         this.clock.tick(10);
 
         // act
-        navigationController._keyDownHandler({ keyName: 'rightArrow', key: 'ArrowRight', ctrl: true, originalEvent: $.Event('keydown', { target: treeList.getCellElement(1, 0), ctrlKey: true }) });
+        navigationController._rowsViewKeyDownHandler({ keyName: 'rightArrow', key: 'ArrowRight', ctrl: true, originalEvent: $.Event('keydown', { target: treeList.getCellElement(1, 0), ctrlKey: true }) });
         this.clock.tick(10);
 
         // assert
         assert.ok(treeList.isRowExpanded(2), 'second row is expanded');
 
         // act
-        navigationController._keyDownHandler({ keyName: 'leftArrow', key: 'ArrowLeft', ctrl: true, originalEvent: $.Event('keydown', { target: treeList.getCellElement(1, 0), ctrlKey: true }) });
+        navigationController._rowsViewKeyDownHandler({ keyName: 'leftArrow', key: 'ArrowLeft', ctrl: true, originalEvent: $.Event('keydown', { target: treeList.getCellElement(1, 0), ctrlKey: true }) });
         this.clock.tick(10);
 
         // assert

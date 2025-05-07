@@ -1,7 +1,6 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { Selector } from 'testcafe';
 import Scrollable from 'devextreme-testcafe-models/scrollView/internal/scrollable';
-import { ScrollableDirection } from 'devextreme/renovation/ui/scroll_view/common/types';
 import { isMaterialBased } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
@@ -16,6 +15,7 @@ const testFixture = () => {
 
 testFixture()`Scrollable_visibility_integration`
   .page(url(__dirname, '../../container.html'));
+type ScrollableDirection = 'both' | 'horizontal' | 'vertical';
 
 (['both'] as ScrollableDirection[]).forEach((direction) => {
   [false, true].forEach((useNative) => {

@@ -3,10 +3,10 @@ import '__internal/scheduler/m_scheduler';
 
 import $ from 'jquery';
 import pointerMock from '../../helpers/pointerMock.js';
-import fx from 'animation/fx';
-import { DataSource } from 'data/data_source/data_source';
+import fx from 'common/core/animation/fx';
+import { DataSource } from 'common/data/data_source/data_source';
 
-import CustomStore from 'data/custom_store';
+import { CustomStore } from 'common/data/custom_store';
 import { SchedulerTestWrapper } from '../../helpers/scheduler/helpers.js';
 
 QUnit.testStart(function() {

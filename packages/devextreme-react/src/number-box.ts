@@ -10,7 +10,7 @@ import NestedOption from "./core/nested-option";
 
 import type { ChangeEvent, ContentReadyEvent, CopyEvent, CutEvent, DisposingEvent, EnterKeyEvent, FocusInEvent, FocusOutEvent, InitializedEvent, InputEvent, KeyDownEvent, KeyUpEvent, PasteEvent, ValueChangedEvent } from "devextreme/ui/number_box";
 import type { ContentReadyEvent as ButtonContentReadyEvent, DisposingEvent as ButtonDisposingEvent, InitializedEvent as ButtonInitializedEvent, dxButtonOptions, ClickEvent, OptionChangedEvent } from "devextreme/ui/button";
-import type { template } from "devextreme/core/templates/template";
+import type { TextEditorButtonLocation, Format as CommonFormat, ButtonStyle, template, ButtonType } from "devextreme/common";
 
 type ReplaceFieldTypes<TSource, TReplacement> = {
   [P in keyof TSource]: P extends keyof TReplacement ? TReplacement[P] : TSource[P];
@@ -86,9 +86,9 @@ const NumberBox = memo(
 // owners:
 // NumberBox
 type IButtonProps = React.PropsWithChildren<{
-  location?: "after" | "before";
-  name?: string;
-  options?: dxButtonOptions;
+  location?: TextEditorButtonLocation;
+  name?: string | undefined;
+  options?: dxButtonOptions | undefined;
 }>
 const _componentButton = (props: IButtonProps) => {
   return React.createElement(NestedOption<IButtonProps>, {
@@ -114,7 +114,7 @@ type IFormatProps = React.PropsWithChildren<{
   formatter?: ((value: number | Date) => string);
   parser?: ((value: string) => number | Date);
   precision?: number;
-  type?: "billions" | "currency" | "day" | "decimal" | "exponential" | "fixedPoint" | "largeNumber" | "longDate" | "longTime" | "millions" | "millisecond" | "month" | "monthAndDay" | "monthAndYear" | "percent" | "quarter" | "quarterAndYear" | "shortDate" | "shortTime" | "thousands" | "trillions" | "year" | "dayOfWeek" | "hour" | "longDateLongTime" | "minute" | "second" | "shortDateShortTime";
+  type?: CommonFormat | string;
   useCurrencyAccountingStyle?: boolean;
 }>
 const _componentFormat = (props: IFormatProps) => {
@@ -133,14 +133,14 @@ const Format = Object.assign<typeof _componentFormat, NestedComponentMeta>(_comp
 // owners:
 // Button
 type IOptionsProps = React.PropsWithChildren<{
-  accessKey?: string;
+  accessKey?: string | undefined;
   activeStateEnabled?: boolean;
   bindingOptions?: Record<string, any>;
   disabled?: boolean;
   elementAttr?: Record<string, any>;
   focusStateEnabled?: boolean;
-  height?: (() => number | string) | number | string;
-  hint?: string;
+  height?: (() => number | string) | number | string | undefined;
+  hint?: string | undefined;
   hoverStateEnabled?: boolean;
   icon?: string;
   onClick?: ((e: ClickEvent) => void);
@@ -149,15 +149,15 @@ type IOptionsProps = React.PropsWithChildren<{
   onInitialized?: ((e: ButtonInitializedEvent) => void);
   onOptionChanged?: ((e: OptionChangedEvent) => void);
   rtlEnabled?: boolean;
-  stylingMode?: "text" | "outlined" | "contained";
+  stylingMode?: ButtonStyle;
   tabIndex?: number;
   template?: ((buttonData: { icon: string, text: string }, contentElement: any) => string | any) | template;
   text?: string;
-  type?: "danger" | "default" | "normal" | "success";
+  type?: ButtonType | string;
   useSubmitBehavior?: boolean;
-  validationGroup?: string;
+  validationGroup?: string | undefined;
   visible?: boolean;
-  width?: (() => number | string) | number | string;
+  width?: (() => number | string) | number | string | undefined;
   render?: (...params: any) => React.ReactNode;
   component?: React.ComponentType<any>;
 }>

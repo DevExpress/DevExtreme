@@ -55,7 +55,7 @@
 
 <script setup lang="ts">
 import {
-  DxDataGrid, DxColumn, DxPaging, DxEditing, DxRequiredRule, DxRangeRule, DxDataGridTypes,
+  DxDataGrid, DxColumn, DxPaging, DxEditing, DxRequiredRule, DxRangeRule, type DxDataGridTypes,
 } from 'devextreme-vue/data-grid';
 
 import * as AspNetData from 'devextreme-aspnet-data-nojquery';

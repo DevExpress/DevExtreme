@@ -24,7 +24,7 @@ import {
 } from '@angular/core';
 
 
-import { ContentReadyEvent, DisposingEvent, dxFilterBuilderCustomOperation, dxFilterBuilderField, EditorPreparedEvent, EditorPreparingEvent, GroupOperation, InitializedEvent, OptionChangedEvent, ValueChangedEvent } from 'devextreme/ui/filter_builder';
+import { dxFilterBuilderCustomOperation, dxFilterBuilderField, GroupOperation, ContentReadyEvent, DisposingEvent, EditorPreparedEvent, EditorPreparingEvent, InitializedEvent, OptionChangedEvent, ValueChangedEvent } from 'devextreme/ui/filter_builder';
 
 import DxFilterBuilder from 'devextreme/ui/filter_builder';
 
@@ -52,10 +52,10 @@ import { DxoGroupOperationDescriptionsModule } from 'devextreme-angular/ui/neste
 
 import { DxiFilterBuilderCustomOperationModule } from 'devextreme-angular/ui/filter-builder/nested';
 import { DxiFilterBuilderFieldModule } from 'devextreme-angular/ui/filter-builder/nested';
-import { DxoFilterBuilderFormatModule } from 'devextreme-angular/ui/filter-builder/nested';
-import { DxoFilterBuilderLookupModule } from 'devextreme-angular/ui/filter-builder/nested';
 import { DxoFilterBuilderFilterOperationDescriptionsModule } from 'devextreme-angular/ui/filter-builder/nested';
+import { DxoFilterBuilderFormatModule } from 'devextreme-angular/ui/filter-builder/nested';
 import { DxoFilterBuilderGroupOperationDescriptionsModule } from 'devextreme-angular/ui/filter-builder/nested';
+import { DxoFilterBuilderLookupModule } from 'devextreme-angular/ui/filter-builder/nested';
 
 import { DxiCustomOperationComponent } from 'devextreme-angular/ui/nested';
 import { DxiFieldComponent } from 'devextreme-angular/ui/nested';
@@ -77,6 +77,7 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
 @Component({
     selector: 'dx-filter-builder',
     template: '',
+    host: { ngSkipHydration: 'true' },
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -158,10 +159,10 @@ export class DxFilterBuilderComponent extends DxComponent implements OnDestroy, 
     
      */
     @Input()
-    get elementAttr(): any {
+    get elementAttr(): Record<string, any> {
         return this._getOption('elementAttr');
     }
-    set elementAttr(value: any) {
+    set elementAttr(value: Record<string, any>) {
         this._setOption('elementAttr', value);
     }
 
@@ -223,10 +224,10 @@ export class DxFilterBuilderComponent extends DxComponent implements OnDestroy, 
     
      */
     @Input()
-    get groupOperations(): any | Array<GroupOperation> {
+    get groupOperations(): Array<GroupOperation> {
         return this._getOption('groupOperations');
     }
-    set groupOperations(value: any | Array<GroupOperation>) {
+    set groupOperations(value: Array<GroupOperation>) {
         this._setOption('groupOperations', value);
     }
 
@@ -236,10 +237,10 @@ export class DxFilterBuilderComponent extends DxComponent implements OnDestroy, 
     
      */
     @Input()
-    get height(): number | Function | string | undefined {
+    get height(): (() => number | string) | number | string | undefined {
         return this._getOption('height');
     }
-    set height(value: number | Function | string | undefined) {
+    set height(value: (() => number | string) | number | string | undefined) {
         this._setOption('height', value);
     }
 
@@ -314,10 +315,10 @@ export class DxFilterBuilderComponent extends DxComponent implements OnDestroy, 
     
      */
     @Input()
-    get value(): any {
+    get value(): Array<any> | Function | string {
         return this._getOption('value');
     }
-    set value(value: any) {
+    set value(value: Array<any> | Function | string) {
         this._setOption('value', value);
     }
 
@@ -340,10 +341,10 @@ export class DxFilterBuilderComponent extends DxComponent implements OnDestroy, 
     
      */
     @Input()
-    get width(): number | Function | string | undefined {
+    get width(): (() => number | string) | number | string | undefined {
         return this._getOption('width');
     }
-    set width(value: number | Function | string | undefined) {
+    set width(value: (() => number | string) | number | string | undefined) {
         this._setOption('width', value);
     }
 
@@ -443,7 +444,7 @@ export class DxFilterBuilderComponent extends DxComponent implements OnDestroy, 
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() elementAttrChange: EventEmitter<any>;
+    @Output() elementAttrChange: EventEmitter<Record<string, any>>;
 
     /**
     
@@ -478,14 +479,14 @@ export class DxFilterBuilderComponent extends DxComponent implements OnDestroy, 
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() groupOperationsChange: EventEmitter<any | Array<GroupOperation>>;
+    @Output() groupOperationsChange: EventEmitter<Array<GroupOperation>>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() heightChange: EventEmitter<number | Function | string | undefined>;
+    @Output() heightChange: EventEmitter<(() => number | string) | number | string | undefined>;
 
     /**
     
@@ -527,7 +528,7 @@ export class DxFilterBuilderComponent extends DxComponent implements OnDestroy, 
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() valueChange: EventEmitter<any>;
+    @Output() valueChange: EventEmitter<Array<any> | Function | string>;
 
     /**
     
@@ -541,7 +542,7 @@ export class DxFilterBuilderComponent extends DxComponent implements OnDestroy, 
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() widthChange: EventEmitter<number | Function | string | undefined>;
+    @Output() widthChange: EventEmitter<(() => number | string) | number | string | undefined>;
 
     /**
     
@@ -561,8 +562,7 @@ export class DxFilterBuilderComponent extends DxComponent implements OnDestroy, 
         return this._getOption('customOperations');
     }
     set customOperationsChildren(value) {
-        this.setContentChildren('customOperations', value, 'DxiFilterBuilderCustomOperationComponent');
-        this.setChildren('customOperations', value);
+        this._setChildren('customOperations', value, 'DxiFilterBuilderCustomOperationComponent');
     }
 
     @ContentChildren(DxiFilterBuilderFieldComponent)
@@ -570,8 +570,7 @@ export class DxFilterBuilderComponent extends DxComponent implements OnDestroy, 
         return this._getOption('fields');
     }
     set fieldsChildren(value) {
-        this.setContentChildren('fields', value, 'DxiFilterBuilderFieldComponent');
-        this.setChildren('fields', value);
+        this._setChildren('fields', value, 'DxiFilterBuilderFieldComponent');
     }
 
 
@@ -580,9 +579,7 @@ export class DxFilterBuilderComponent extends DxComponent implements OnDestroy, 
         return this._getOption('customOperations');
     }
     set customOperationsLegacyChildren(value) {
-        if (this.checkContentChildren('customOperations', value, 'DxiCustomOperationComponent')) {
-           this.setChildren('customOperations', value);
-        }
+        this._setChildren('customOperations', value, 'DxiCustomOperationComponent');
     }
 
     @ContentChildren(DxiFieldComponent)
@@ -590,9 +587,7 @@ export class DxFilterBuilderComponent extends DxComponent implements OnDestroy, 
         return this._getOption('fields');
     }
     set fieldsLegacyChildren(value) {
-        if (this.checkContentChildren('fields', value, 'DxiFieldComponent')) {
-           this.setChildren('fields', value);
-        }
+        this._setChildren('fields', value, 'DxiFieldComponent');
     }
 
 
@@ -714,10 +709,10 @@ export class DxFilterBuilderComponent extends DxComponent implements OnDestroy, 
     DxoGroupOperationDescriptionsModule,
     DxiFilterBuilderCustomOperationModule,
     DxiFilterBuilderFieldModule,
-    DxoFilterBuilderFormatModule,
-    DxoFilterBuilderLookupModule,
     DxoFilterBuilderFilterOperationDescriptionsModule,
+    DxoFilterBuilderFormatModule,
     DxoFilterBuilderGroupOperationDescriptionsModule,
+    DxoFilterBuilderLookupModule,
     DxIntegrationModule,
     DxTemplateModule
   ],
@@ -734,10 +729,10 @@ export class DxFilterBuilderComponent extends DxComponent implements OnDestroy, 
     DxoGroupOperationDescriptionsModule,
     DxiFilterBuilderCustomOperationModule,
     DxiFilterBuilderFieldModule,
-    DxoFilterBuilderFormatModule,
-    DxoFilterBuilderLookupModule,
     DxoFilterBuilderFilterOperationDescriptionsModule,
+    DxoFilterBuilderFormatModule,
     DxoFilterBuilderGroupOperationDescriptionsModule,
+    DxoFilterBuilderLookupModule,
     DxTemplateModule
   ]
 })

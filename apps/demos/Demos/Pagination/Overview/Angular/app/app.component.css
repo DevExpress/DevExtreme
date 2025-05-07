@@ -1,0 +1,100 @@
+body {
+  overflow-x: hidden;
+}
+
+.demo-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.container {
+  min-width: 720px;
+  width: 100%;
+}
+
+::ng-deep .employees {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  min-height: 644px;
+  padding-bottom: 24px;
+}
+
+::ng-deep employee-card {
+  width: 100%;
+  max-height: 312px;
+  align-self: stretch;
+  overflow: hidden;
+  border: var(--dx-border-width) solid var(--dx-color-border);
+  border-radius: var(--dx-border-radius);
+  background-color: var(--dx-component-color-bg);
+}
+
+::ng-deep .employees.employees--forth employee-card {
+  min-width: 250px;
+  width: 390px;
+  flex-basis: calc(50% - 10px);
+}
+
+::ng-deep .employees.employees--six employee-card {
+  flex-basis: calc(33.3% - 12.5px);
+}
+
+::ng-deep .employees__img-wrapper {
+  height: 180px;
+  position: relative;
+  overflow: hidden;
+  border-bottom: var(--dx-border-width) solid var(--dx-color-border);
+  background-color: #fff;
+}
+
+::ng-deep .employees__img {
+  display: block;
+  height: 220px;
+  position: absolute;
+  content: "";
+  left: 50%;
+  top: 0;
+  transform: translateX(-50%);
+}
+
+::ng-deep .employees__info {
+  padding: 24px;
+}
+
+::ng-deep .employees__info-row {
+  margin-bottom: 8px;
+  text-wrap: nowrap;
+}
+
+::ng-deep .employees__info-label {
+  display: inline-block;
+  font-weight: 600;
+  vertical-align: middle;
+}
+
+::ng-deep .employees.employees--forth .employees__info-label {
+  width: 160px;
+}
+
+::ng-deep .employees.employees--six .employees__info-label {
+  width: 80px;
+}
+
+::ng-deep .employees__info-value {
+  display: inline-block;
+  text-wrap: nowrap;
+  text-overflow: ellipsis;
+  vertical-align: middle;
+  overflow: hidden;
+  white-space:nowrap
+}
+
+::ng-deep .employees.employees--forth .employees__info-value {
+  max-width: 180px;
+}
+
+::ng-deep .employees.employees--six .employees__info-value {
+  max-width: 120px;
+}

@@ -9,9 +9,9 @@ QUnit.testStart(function() {
 
 require('generic_light.css!');
 
-const fx = require('animation/fx');
-const dragEvents = require('events/drag');
-const DataSource = require('data/data_source/data_source').DataSource;
+const fx = require('common/core/animation/fx');
+const dragEvents = require('common/core/events/drag');
+const DataSource = require('common/data/data_source/data_source').DataSource;
 
 require('__internal/scheduler/m_scheduler');
 require('ui/drop_down_button');

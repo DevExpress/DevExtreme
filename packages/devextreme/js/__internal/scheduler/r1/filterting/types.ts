@@ -1,9 +1,9 @@
-import type { DataAccessorType } from '../types';
+import type { AppointmentDataAccessor } from '@ts/scheduler/utils';
 
 export type DateFilterType = string | string[] | (string | Date)[][];
 
 export interface RemoteFilterOptions {
-  dataAccessors: DataAccessorType;
+  dataAccessors: AppointmentDataAccessor;
   dataSourceFilter?: unknown[];
   dateSerializationFormat?: string;
   forceIsoDateParsing?: boolean;

@@ -1,6 +1,6 @@
 import 'ui/tree_list';
 import { baseModuleConfig } from '../../helpers/dataGridHelper.js';
-import ArrayStore from 'data/array_store';
+import ArrayStore from 'common/data/array_store';
 import $ from 'jquery';
 
 QUnit.testStart(function() {

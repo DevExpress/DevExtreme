@@ -1,1 +1,1 @@
-export { default } from '../../__internal/events/core/m_hook_touch_props';
+export { default } from '../../common/core/events/core/hook_touch_props';

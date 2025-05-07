@@ -2,7 +2,7 @@ import $ from 'jquery';
 
 import ToolbarBase from '__internal/ui/toolbar/m_toolbar.base';
 
-import fx from 'animation/fx';
+import fx from 'common/core/animation/fx';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import themes from 'ui/themes';
 import { deferUpdate } from 'core/utils/common';

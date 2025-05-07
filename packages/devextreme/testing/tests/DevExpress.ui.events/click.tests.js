@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import { noop } from 'core/utils/common';
-import clickEvent from 'events/click';
+import clickEvent from 'common/core/events/click';
 import domUtils from '__internal/core/utils/m_dom';
 import support from '__internal/core/utils/m_support';
 import devices from '__internal/core/m_devices';

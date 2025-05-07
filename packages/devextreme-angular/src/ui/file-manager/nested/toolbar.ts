@@ -25,6 +25,7 @@ import {
 import { NestedOption } from 'devextreme-angular/core';
 import { DxiFileManagerFileSelectionItemComponent } from './file-selection-item-dxi';
 import { DxiFileManagerItemComponent } from './item-dxi';
+import { DxiFileManagerToolbarItemComponent } from './toolbar-item-dxi';
 
 
 @Component({
@@ -69,6 +70,14 @@ export class DxoFileManagerToolbarComponent extends NestedOption implements OnDe
         return this._getOption('items');
     }
     set itemsChildren(value) {
+        this.setChildren('items', value);
+    }
+
+    @ContentChildren(forwardRef(() => DxiFileManagerToolbarItemComponent))
+    get toolbarItemsChildren(): QueryList<DxiFileManagerToolbarItemComponent> {
+        return this._getOption('items');
+    }
+    set toolbarItemsChildren(value) {
         this.setChildren('items', value);
     }
 

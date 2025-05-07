@@ -6,7 +6,7 @@ import {
 
 import {
     template,
-} from '../core/templates/template';
+} from '../common';
 
 import {
     DxPromise,
@@ -18,7 +18,7 @@ import {
     InitializedEventInfo,
     ChangedOptionInfo,
     ItemInfo,
-} from '../events/index';
+} from '../common/core/events';
 
 import CollectionWidget, {
     CollectionWidgetItem,
@@ -156,7 +156,7 @@ export interface dxAccordionOptions<
      * @default undefined
      * @public
      */
-    height?: number | string | (() => number | string);
+    height?: number | string | (() => number | string) | undefined;
     /**
      * @docid
      * @default true

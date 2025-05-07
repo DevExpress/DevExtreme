@@ -6,7 +6,9 @@ import {
 
 import {
     template,
-} from '../core/templates/template';
+    ToolbarItemLocation,
+    ToolbarItemComponent,
+} from '../common';
 
 import {
     EventInfo,
@@ -14,12 +16,7 @@ import {
     InitializedEventInfo,
     ChangedOptionInfo,
     ItemInfo,
-} from '../events/index';
-
-import {
-    ToolbarItemLocation,
-    ToolbarItemComponent,
-} from '../common';
+} from '../common/core/events';
 
 import CollectionWidget, {
     CollectionWidgetItem,
@@ -168,7 +165,7 @@ export interface dxToolbarItem extends CollectionWidgetItem {
      * @default undefined
      * @public
      */
-    cssClass?: string;
+    cssClass?: string | undefined;
     /**
      * @docid
      * @default 'never'

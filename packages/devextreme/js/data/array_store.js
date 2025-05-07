@@ -1,1 +1,3 @@
-export { default } from '../__internal/data/m_array_store';
+import ArrayStore from '../common/data/array_store';
+
+export default ArrayStore;

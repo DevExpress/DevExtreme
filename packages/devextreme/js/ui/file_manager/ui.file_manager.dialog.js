@@ -1,7 +1,7 @@
 import $ from '../../core/renderer';
 import { extend } from '../../core/utils/extend';
 import { isDefined } from '../../core/utils/type';
-import messageLocalization from '../../localization/message';
+import messageLocalization from '../../common/core/localization/message';
 
 import Widget from '../widget/ui.widget';
 import Popup from '../popup/ui.popup';

@@ -63,3 +63,40 @@ test('ContextMenu items render', async (t) => {
     },
   }, '#contextMenu');
 });
+
+test('ContextMenu selected focused item', async (t) => {
+  const contextMenu = new ContextMenu('#contextMenu');
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  await contextMenu.show();
+
+  await t.pressKey('down');
+
+  const screenshotName = 'ContextMenu selected focused item.png';
+
+  await testScreenshot(t, takeScreenshot, screenshotName, { element: '#container' });
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  await appendElementTo('#container', 'div', 'contextMenu');
+  await setStyleAttribute(Selector('#container'), 'width: 150px; height: 200px;');
+
+  await insertStylesheetRulesToPage('.custom-class { border: 2px solid green !important; }');
+
+  const menuItems = [
+    { text: 'remove', icon: 'remove', selected: true },
+    { text: 'user', icon: 'user' },
+    { text: 'coffee', icon: 'coffee' },
+  ] as Item[];
+
+  return createWidget('dxContextMenu', {
+    cssClass: 'custom-class',
+    items: menuItems,
+    target: 'body',
+    position: {
+      offset: '10 10',
+    },
+  }, '#contextMenu');
+});

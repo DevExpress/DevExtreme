@@ -1,6 +1,6 @@
 import $ from 'jquery';
-import fx from 'animation/fx';
-import { DataSource } from 'data/data_source/data_source';
+import fx from 'common/core/animation/fx';
+import { DataSource } from 'common/data/data_source/data_source';
 import dataUtils from 'core/element_data';
 import {
     initTestMarkup,

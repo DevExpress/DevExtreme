@@ -1,6 +1,6 @@
 import { createWrapper, initTestMarkup } from '../../helpers/scheduler/helpers.js';
-import fx from 'animation/fx';
-import CustomStore from 'data/custom_store';
+import fx from 'common/core/animation/fx';
+import { CustomStore } from 'common/data/custom_store';
 
 const moduleConfig = {
     beforeEach() {

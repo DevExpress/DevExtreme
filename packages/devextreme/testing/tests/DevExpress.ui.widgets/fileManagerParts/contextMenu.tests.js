@@ -1,8 +1,8 @@
 import $ from 'jquery';
 const { test } = QUnit;
 import 'ui/file_manager';
-import fx from 'animation/fx';
-import pointerEvents from 'events/pointer';
+import fx from 'common/core/animation/fx';
+import pointerEvents from 'common/core/events/pointer';
 import { Consts, FileManagerWrapper, createTestFileSystem, isDesktopDevice } from '../../../helpers/fileManagerHelpers.js';
 
 const moduleConfig = {

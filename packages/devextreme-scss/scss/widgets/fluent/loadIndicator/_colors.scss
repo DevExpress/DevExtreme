@@ -27,5 +27,5 @@ $load-indicator-inner-segment-border-color: null !default;
 }
 
 @if $mode == "dark" {
-  $load-indicator-inner-segment-border-color: $base-accent-selected !default; 
+  $load-indicator-inner-segment-border-color: $base-accent-selected !default;
 }

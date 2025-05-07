@@ -2,7 +2,7 @@ import React, { useCallback, useState } from 'react';
 import ODataStore from 'devextreme/data/odata/store';
 import DataGrid, {
   Column,
-  DataGridTypes,
+  type DataGridTypes,
   Grouping,
   GroupPanel,
   Pager,

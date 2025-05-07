@@ -1,11 +1,11 @@
 import $ from 'jquery';
 import { noop } from 'core/utils/common';
-import swipeEvents from 'events/swipe';
+import swipeEvents from 'common/core/events/swipe';
 import mathUtils from 'core/utils/math';
 import domUtils from '__internal/core/utils/m_dom';
 import Action from '__internal/core/m_action';
 import devices from '__internal/core/m_devices';
-import GestureEmitter from 'events/gesture/emitter.gesture';
+import GestureEmitter from 'common/core/events/gesture/emitter.gesture';
 import pointerMock from '../../helpers/pointerMock.js';
 
 QUnit.testStart(function() {

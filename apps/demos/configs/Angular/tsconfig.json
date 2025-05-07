@@ -1,8 +1,14 @@
 {
   "compilerOptions": {
-    "target": "ES2015",
+    "target": "ES2022",
     "experimentalDecorators": true,
     "esModuleInterop": true,
     "moduleResolution": "node",
-  }
+    "skipLibCheck": true,
+    "baseUrl": "./",
+    "paths": {
+      "@angular/*": [ "../../../../node_modules/@angular/*"]
+    },
+  },
+  "include": ["**/*", "../../../../utils/create-bundles/Angular/polyfill.ts"]
 }

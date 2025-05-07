@@ -1,5 +1,5 @@
 const $ = require('jquery');
-const dblclickEvent = require('events/dblclick');
+const dblclickEvent = require('common/core/events/dblclick');
 const { dblClick } = require('__internal/events/m_dblclick');
 const pointerMock = require('../../helpers/pointerMock.js');
 
@@ -39,7 +39,7 @@ QUnit.test('dxdblclick should not be handled on a usual dxclick even if dblClick
     const el = $('#element');
     const handler = sinon.stub();
 
-    // emulate calling .off('dxdblclick') before import 'events/dblclick' (T1208575)
+    // emulate calling .off('dxdblclick') before import 'common/core/events/dblclick' (T1208575)
     dblClick.remove();
 
     el.off(dblclickEvent.name);

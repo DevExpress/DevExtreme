@@ -1,10 +1,10 @@
 import $ from 'jquery';
 import renderer from 'core/renderer';
-import eventsEngine from 'events/core/events_engine';
-import fx from 'animation/fx';
-import translator from 'animation/translator';
-import animationFrame from 'animation/frame';
-import positionUtils from 'animation/position';
+import eventsEngine from 'common/core/events/core/events_engine';
+import fx from 'common/core/animation/fx';
+import translator from 'common/core/animation/translator';
+import animationFrame from 'common/core/animation/frame';
+import positionUtils from 'common/core/animation/position';
 import support from '__internal/core/utils/m_support';
 
 QUnit.testStart(function() {

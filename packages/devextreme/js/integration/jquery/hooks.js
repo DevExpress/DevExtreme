@@ -5,9 +5,9 @@ const useJQuery = useJQueryFn();
 import { compare as compareVersion } from '../../core/utils/version';
 import { each } from '../../core/utils/iterator';
 import { isNumeric } from '../../core/utils/type';
-import { setEventFixMethod } from '../../events/utils/index';
-import registerEvent from '../../events/core/event_registrator';
-import hookTouchProps from '../../events/core/hook_touch_props';
+import { setEventFixMethod } from '../../common/core/events/utils/index';
+import registerEvent from '../../common/core/events/core/event_registrator';
+import hookTouchProps from '../../common/core/events/core/hook_touch_props';
 
 if(useJQuery) {
     if(compareVersion(jQuery.fn.jquery, [3]) < 0) {

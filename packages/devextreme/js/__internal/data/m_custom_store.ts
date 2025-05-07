@@ -1,22 +1,18 @@
+import arrayQuery from '@js/common/data/array_query';
+import { applyBatch } from '@js/common/data/array_utils';
+import { errors } from '@js/common/data/errors';
+import storeHelper from '@js/common/data/store_helper';
+import {
+  errorMessageFromXhr as errorMessageFromXhrUtility,
+  keysEqual,
+  XHR_ERROR_UNLOAD,
+} from '@js/common/data/utils';
 import config from '@js/core/config';
 import $ from '@js/core/renderer';
 // @ts-expect-error
 import { Deferred, fromPromise, when } from '@js/core/utils/deferred';
 import { isFunction } from '@js/core/utils/type';
 import Store from '@js/data/abstract_store';
-import arrayQuery from '@js/data/array_query';
-import { applyBatch } from '@js/data/array_utils';
-// @ts-expect-error
-import { errors } from '@js/data/errors';
-import storeHelper from '@js/data/store_helper';
-import {
-  // @ts-expect-error
-  errorMessageFromXhr as errorMessageFromXhrUtility,
-  // @ts-expect-error
-  keysEqual,
-  // @ts-expect-error
-  XHR_ERROR_UNLOAD,
-} from '@js/data/utils';
 
 const TOTAL_COUNT = 'totalCount';
 const LOAD = 'load';
@@ -228,6 +224,7 @@ function runRawLoadWithKey(pendingDeferred, store, key) {
     pendingDeferred.reject(errors.Error('E4009'));
   });
 }
+
 // @ts-expect-error
 const CustomStore = Store.inherit({
   ctor(options) {

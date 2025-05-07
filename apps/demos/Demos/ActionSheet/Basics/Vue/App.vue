@@ -45,7 +45,7 @@ const showCancelButton = ref(true);
 function showActionSheet() {
   isActionSheetVisible.value = true;
 }
-function showClickNotification(buttonName) {
+function showClickNotification(buttonName: string) {
   notify(`The "${buttonName}" button is clicked.`);
 }
 </script>

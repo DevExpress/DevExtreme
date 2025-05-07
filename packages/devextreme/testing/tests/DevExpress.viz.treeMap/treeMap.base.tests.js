@@ -1,7 +1,7 @@
 const $ = require('jquery');
 const common = require('./commonParts/common.js');
 const themeModule = require('viz/themes');
-const DataSource = require('data/data_source/data_source').DataSource;
+const DataSource = require('common/data/data_source/data_source').DataSource;
 
 function createDataSource(value) {
     return new DataSource({

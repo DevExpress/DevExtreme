@@ -1,7 +1,1 @@
-import { compileGetter, compileSetter } from './core/utils/data';
-
-
-export {
-    compileGetter,
-    compileSetter
-};
+export { compileGetter, compileSetter } from './common/data';

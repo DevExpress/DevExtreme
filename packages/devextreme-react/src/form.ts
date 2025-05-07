@@ -8,10 +8,10 @@ import dxForm, {
 import { Component as BaseComponent, IHtmlOptions, ComponentRef, NestedComponentMeta } from "./core/component";
 import NestedOption from "./core/nested-option";
 
-import type { ContentReadyEvent, DisposingEvent, EditorEnterKeyEvent, InitializedEvent, dxFormButtonItem, dxFormEmptyItem, dxFormGroupItem, dxFormSimpleItem, dxFormTabbedItem } from "devextreme/ui/form";
+import type { ContentReadyEvent, DisposingEvent, EditorEnterKeyEvent, InitializedEvent, FormItemType, dxFormButtonItem, dxFormEmptyItem, dxFormGroupItem, dxFormSimpleItem, dxFormTabbedItem, FormItemComponent, LabelLocation } from "devextreme/ui/form";
 import type { ContentReadyEvent as ButtonContentReadyEvent, DisposingEvent as ButtonDisposingEvent, InitializedEvent as ButtonInitializedEvent, dxButtonOptions, ClickEvent, OptionChangedEvent } from "devextreme/ui/button";
 import type { ContentReadyEvent as TabPanelContentReadyEvent, DisposingEvent as TabPanelDisposingEvent, InitializedEvent as TabPanelInitializedEvent, OptionChangedEvent as TabPanelOptionChangedEvent, dxTabPanelOptions, dxTabPanelItem, ItemClickEvent, ItemContextMenuEvent, ItemHoldEvent, ItemRenderedEvent, SelectionChangedEvent, SelectionChangingEvent, TitleClickEvent, TitleHoldEvent, TitleRenderedEvent } from "devextreme/ui/tab_panel";
-import type { template } from "devextreme/core/templates/template";
+import type { ValidationRuleType, HorizontalAlignment, VerticalAlignment, ButtonStyle, template, ButtonType, ComparisonOperator, TabsIconPosition, TabsStyle, Position } from "devextreme/common";
 import type { CollectionWidgetItem } from "devextreme/ui/collection/ui.collection_widget.base";
 import type { DataSourceOptions } from "devextreme/data/data_source";
 import type { Store } from "devextreme/data/store";
@@ -92,7 +92,7 @@ type IAsyncRuleProps = React.PropsWithChildren<{
   ignoreEmptyValue?: boolean;
   message?: string;
   reevaluate?: boolean;
-  type?: "required" | "numeric" | "range" | "stringLength" | "custom" | "compare" | "pattern" | "email" | "async";
+  type?: ValidationRuleType;
   validationCallback?: ((options: { column: Record<string, any>, data: Record<string, any>, formItem: Record<string, any>, rule: Record<string, any>, validator: Record<string, any>, value: string | number }) => any);
 }>
 const _componentAsyncRule = (props: IAsyncRuleProps) => {
@@ -115,15 +115,15 @@ const AsyncRule = Object.assign<typeof _componentAsyncRule, NestedComponentMeta>
 // owners:
 // Form
 type IButtonItemProps = React.PropsWithChildren<{
-  buttonOptions?: dxButtonOptions;
-  colSpan?: number;
-  cssClass?: string;
-  horizontalAlignment?: "center" | "left" | "right";
-  itemType?: "empty" | "group" | "simple" | "tabbed" | "button";
-  name?: string;
-  verticalAlignment?: "bottom" | "center" | "top";
+  buttonOptions?: dxButtonOptions | undefined;
+  colSpan?: number | undefined;
+  cssClass?: string | undefined;
+  horizontalAlignment?: HorizontalAlignment;
+  itemType?: FormItemType;
+  name?: string | undefined;
+  verticalAlignment?: VerticalAlignment;
   visible?: boolean;
-  visibleIndex?: number;
+  visibleIndex?: number | undefined;
 }>
 const _componentButtonItem = (props: IButtonItemProps) => {
   return React.createElement(NestedOption<IButtonItemProps>, {
@@ -148,14 +148,14 @@ const ButtonItem = Object.assign<typeof _componentButtonItem, NestedComponentMet
 // owners:
 // ButtonItem
 type IButtonOptionsProps = React.PropsWithChildren<{
-  accessKey?: string;
+  accessKey?: string | undefined;
   activeStateEnabled?: boolean;
   bindingOptions?: Record<string, any>;
   disabled?: boolean;
   elementAttr?: Record<string, any>;
   focusStateEnabled?: boolean;
-  height?: (() => number | string) | number | string;
-  hint?: string;
+  height?: (() => number | string) | number | string | undefined;
+  hint?: string | undefined;
   hoverStateEnabled?: boolean;
   icon?: string;
   onClick?: ((e: ClickEvent) => void);
@@ -164,15 +164,15 @@ type IButtonOptionsProps = React.PropsWithChildren<{
   onInitialized?: ((e: ButtonInitializedEvent) => void);
   onOptionChanged?: ((e: OptionChangedEvent) => void);
   rtlEnabled?: boolean;
-  stylingMode?: "text" | "outlined" | "contained";
+  stylingMode?: ButtonStyle;
   tabIndex?: number;
   template?: ((buttonData: { icon: string, text: string }, contentElement: any) => string | any) | template;
   text?: string;
-  type?: "danger" | "default" | "normal" | "success";
+  type?: ButtonType | string;
   useSubmitBehavior?: boolean;
-  validationGroup?: string;
+  validationGroup?: string | undefined;
   visible?: boolean;
-  width?: (() => number | string) | number | string;
+  width?: (() => number | string) | number | string | undefined;
   render?: (...params: any) => React.ReactNode;
   component?: React.ComponentType<any>;
 }>
@@ -199,10 +199,10 @@ const ButtonOptions = Object.assign<typeof _componentButtonOptions, NestedCompon
 // GroupItem
 // Tab
 type IColCountByScreenProps = React.PropsWithChildren<{
-  lg?: number;
-  md?: number;
-  sm?: number;
-  xs?: number;
+  lg?: number | undefined;
+  md?: number | undefined;
+  sm?: number | undefined;
+  xs?: number | undefined;
 }>
 const _componentColCountByScreen = (props: IColCountByScreenProps) => {
   return React.createElement(NestedOption<IColCountByScreenProps>, {
@@ -221,10 +221,10 @@ const ColCountByScreen = Object.assign<typeof _componentColCountByScreen, Nested
 // SimpleItem
 type ICompareRuleProps = React.PropsWithChildren<{
   comparisonTarget?: (() => any);
-  comparisonType?: "!=" | "!==" | "<" | "<=" | "==" | "===" | ">" | ">=";
+  comparisonType?: ComparisonOperator;
   ignoreEmptyValue?: boolean;
   message?: string;
-  type?: "required" | "numeric" | "range" | "stringLength" | "custom" | "compare" | "pattern" | "email" | "async";
+  type?: ValidationRuleType;
 }>
 const _componentCompareRule = (props: ICompareRuleProps) => {
   return React.createElement(NestedOption<ICompareRuleProps>, {
@@ -249,7 +249,7 @@ type ICustomRuleProps = React.PropsWithChildren<{
   ignoreEmptyValue?: boolean;
   message?: string;
   reevaluate?: boolean;
-  type?: "required" | "numeric" | "range" | "stringLength" | "custom" | "compare" | "pattern" | "email" | "async";
+  type?: ValidationRuleType;
   validationCallback?: ((options: { column: Record<string, any>, data: Record<string, any>, formItem: Record<string, any>, rule: Record<string, any>, validator: Record<string, any>, value: string | number }) => boolean);
 }>
 const _componentCustomRule = (props: ICustomRuleProps) => {
@@ -274,7 +274,7 @@ const CustomRule = Object.assign<typeof _componentCustomRule, NestedComponentMet
 type IEmailRuleProps = React.PropsWithChildren<{
   ignoreEmptyValue?: boolean;
   message?: string;
-  type?: "required" | "numeric" | "range" | "stringLength" | "custom" | "compare" | "pattern" | "email" | "async";
+  type?: ValidationRuleType;
 }>
 const _componentEmailRule = (props: IEmailRuleProps) => {
   return React.createElement(NestedOption<IEmailRuleProps>, {
@@ -296,12 +296,12 @@ const EmailRule = Object.assign<typeof _componentEmailRule, NestedComponentMeta>
 // owners:
 // Form
 type IEmptyItemProps = React.PropsWithChildren<{
-  colSpan?: number;
-  cssClass?: string;
-  itemType?: "empty" | "group" | "simple" | "tabbed" | "button";
-  name?: string;
+  colSpan?: number | undefined;
+  cssClass?: string | undefined;
+  itemType?: FormItemType;
+  name?: string | undefined;
   visible?: boolean;
-  visibleIndex?: number;
+  visibleIndex?: number | undefined;
 }>
 const _componentEmptyItem = (props: IEmptyItemProps) => {
   return React.createElement(NestedOption<IEmptyItemProps>, {
@@ -324,23 +324,23 @@ const EmptyItem = Object.assign<typeof _componentEmptyItem, NestedComponentMeta>
 // Form
 type IGroupItemProps = React.PropsWithChildren<{
   alignItemLabels?: boolean;
-  caption?: string;
+  caption?: string | undefined;
   captionTemplate?: ((data: { caption: string, component: dxForm, name: string }, itemElement: any) => string | any) | template;
   colCount?: number;
   colCountByScreen?: Record<string, any> | {
-    lg?: number;
-    md?: number;
-    sm?: number;
-    xs?: number;
+    lg?: number | undefined;
+    md?: number | undefined;
+    sm?: number | undefined;
+    xs?: number | undefined;
   };
-  colSpan?: number;
-  cssClass?: string;
+  colSpan?: number | undefined;
+  cssClass?: string | undefined;
   items?: Array<dxFormButtonItem | dxFormEmptyItem | dxFormGroupItem | dxFormSimpleItem | dxFormTabbedItem>;
-  itemType?: "empty" | "group" | "simple" | "tabbed" | "button";
-  name?: string;
+  itemType?: FormItemType;
+  name?: string | undefined;
   template?: ((data: { component: dxForm, formData: Record<string, any> }, itemElement: any) => string | any) | template;
   visible?: boolean;
-  visibleIndex?: number;
+  visibleIndex?: number | undefined;
   captionRender?: (...params: any) => React.ReactNode;
   captionComponent?: React.ComponentType<any>;
   render?: (...params: any) => React.ReactNode;
@@ -388,57 +388,57 @@ type IItemProps = React.PropsWithChildren<{
   text?: string;
   title?: string;
   visible?: boolean;
-  colSpan?: number;
-  cssClass?: string;
-  dataField?: string;
-  editorOptions?: any;
-  editorType?: "dxAutocomplete" | "dxCalendar" | "dxCheckBox" | "dxColorBox" | "dxDateBox" | "dxDateRangeBox" | "dxDropDownBox" | "dxHtmlEditor" | "dxLookup" | "dxNumberBox" | "dxRadioGroup" | "dxRangeSlider" | "dxSelectBox" | "dxSlider" | "dxSwitch" | "dxTagBox" | "dxTextArea" | "dxTextBox";
-  helpText?: string;
-  isRequired?: boolean;
-  itemType?: "empty" | "group" | "simple" | "tabbed" | "button";
+  colSpan?: number | undefined;
+  cssClass?: string | undefined;
+  dataField?: string | undefined;
+  editorOptions?: any | undefined;
+  editorType?: FormItemComponent;
+  helpText?: string | undefined;
+  isRequired?: boolean | undefined;
+  itemType?: FormItemType;
   label?: Record<string, any> | {
-    alignment?: "center" | "left" | "right";
-    location?: "left" | "right" | "top";
+    alignment?: HorizontalAlignment;
+    location?: LabelLocation;
     showColon?: boolean;
     template?: ((itemData: { component: dxForm, dataField: string, editorOptions: any, editorType: string, name: string, text: string }, itemElement: any) => string | any) | template;
-    text?: string;
+    text?: string | undefined;
     visible?: boolean;
   };
-  name?: string;
+  name?: string | undefined;
   validationRules?: Array<CommonTypes.ValidationRule>;
-  visibleIndex?: number;
+  visibleIndex?: number | undefined;
   alignItemLabels?: boolean;
-  caption?: string;
+  caption?: string | undefined;
   captionTemplate?: ((data: { caption: string, component: dxForm, name: string }, itemElement: any) => string | any) | template;
   colCount?: number;
   colCountByScreen?: Record<string, any> | {
-    lg?: number;
-    md?: number;
-    sm?: number;
-    xs?: number;
+    lg?: number | undefined;
+    md?: number | undefined;
+    sm?: number | undefined;
+    xs?: number | undefined;
   };
   items?: Array<dxFormButtonItem | dxFormEmptyItem | dxFormGroupItem | dxFormSimpleItem | dxFormTabbedItem>;
-  tabPanelOptions?: dxTabPanelOptions;
+  tabPanelOptions?: dxTabPanelOptions | undefined;
   tabs?: Array<Record<string, any>> | {
     alignItemLabels?: boolean;
-    badge?: string;
+    badge?: string | undefined;
     colCount?: number;
     colCountByScreen?: Record<string, any> | {
-      lg?: number;
-      md?: number;
-      sm?: number;
-      xs?: number;
+      lg?: number | undefined;
+      md?: number | undefined;
+      sm?: number | undefined;
+      xs?: number | undefined;
     };
     disabled?: boolean;
-    icon?: string;
+    icon?: string | undefined;
     items?: Array<dxFormButtonItem | dxFormEmptyItem | dxFormGroupItem | dxFormSimpleItem | dxFormTabbedItem>;
-    tabTemplate?: ((tabData: any, tabIndex: number, tabElement: any) => any) | template;
-    template?: ((tabData: any, tabIndex: number, tabElement: any) => any) | template;
-    title?: string;
+    tabTemplate?: ((tabData: any, tabIndex: number, tabElement: any) => any) | template | undefined;
+    template?: ((tabData: any, tabIndex: number, tabElement: any) => any) | template | undefined;
+    title?: string | undefined;
   }[];
-  buttonOptions?: dxButtonOptions;
-  horizontalAlignment?: "center" | "left" | "right";
-  verticalAlignment?: "bottom" | "center" | "top";
+  buttonOptions?: dxButtonOptions | undefined;
+  horizontalAlignment?: HorizontalAlignment;
+  verticalAlignment?: VerticalAlignment;
   tabRender?: (...params: any) => React.ReactNode;
   tabComponent?: React.ComponentType<any>;
   render?: (...params: any) => React.ReactNode;
@@ -452,6 +452,23 @@ const _componentItem = (props: IItemProps) => {
     elementDescriptor: {
       OptionName: "items",
       IsCollectionItem: true,
+      ExpectedChildren: {
+        AsyncRule: { optionName: "validationRules", isCollectionItem: true },
+        buttonOptions: { optionName: "buttonOptions", isCollectionItem: false },
+        colCountByScreen: { optionName: "colCountByScreen", isCollectionItem: false },
+        CompareRule: { optionName: "validationRules", isCollectionItem: true },
+        CustomRule: { optionName: "validationRules", isCollectionItem: true },
+        EmailRule: { optionName: "validationRules", isCollectionItem: true },
+        label: { optionName: "label", isCollectionItem: false },
+        NumericRule: { optionName: "validationRules", isCollectionItem: true },
+        PatternRule: { optionName: "validationRules", isCollectionItem: true },
+        RangeRule: { optionName: "validationRules", isCollectionItem: true },
+        RequiredRule: { optionName: "validationRules", isCollectionItem: true },
+        StringLengthRule: { optionName: "validationRules", isCollectionItem: true },
+        tab: { optionName: "tabs", isCollectionItem: true },
+        tabPanelOptions: { optionName: "tabPanelOptions", isCollectionItem: false },
+        validationRule: { optionName: "validationRules", isCollectionItem: true }
+      },
       TemplateProps: [{
         tmplOption: "tabTemplate",
         render: "tabRender",
@@ -476,11 +493,11 @@ const Item = Object.assign<typeof _componentItem, NestedComponentMeta>(_componen
 // owners:
 // SimpleItem
 type ILabelProps = React.PropsWithChildren<{
-  alignment?: "center" | "left" | "right";
-  location?: "left" | "right" | "top";
+  alignment?: HorizontalAlignment;
+  location?: LabelLocation;
   showColon?: boolean;
   template?: ((itemData: { component: dxForm, dataField: string, editorOptions: any, editorType: string, name: string, text: string }, itemElement: any) => string | any) | template;
-  text?: string;
+  text?: string | undefined;
   visible?: boolean;
   render?: (...params: any) => React.ReactNode;
   component?: React.ComponentType<any>;
@@ -508,7 +525,7 @@ const Label = Object.assign<typeof _componentLabel, NestedComponentMeta>(_compon
 type INumericRuleProps = React.PropsWithChildren<{
   ignoreEmptyValue?: boolean;
   message?: string;
-  type?: "required" | "numeric" | "range" | "stringLength" | "custom" | "compare" | "pattern" | "email" | "async";
+  type?: ValidationRuleType;
 }>
 const _componentNumericRule = (props: INumericRuleProps) => {
   return React.createElement(NestedOption<INumericRuleProps>, {
@@ -533,7 +550,7 @@ type IPatternRuleProps = React.PropsWithChildren<{
   ignoreEmptyValue?: boolean;
   message?: string;
   pattern?: RegExp | string;
-  type?: "required" | "numeric" | "range" | "stringLength" | "custom" | "compare" | "pattern" | "email" | "async";
+  type?: ValidationRuleType;
 }>
 const _componentPatternRule = (props: IPatternRuleProps) => {
   return React.createElement(NestedOption<IPatternRuleProps>, {
@@ -560,7 +577,7 @@ type IRangeRuleProps = React.PropsWithChildren<{
   message?: string;
   min?: Date | number | string;
   reevaluate?: boolean;
-  type?: "required" | "numeric" | "range" | "stringLength" | "custom" | "compare" | "pattern" | "email" | "async";
+  type?: ValidationRuleType;
 }>
 const _componentRangeRule = (props: IRangeRuleProps) => {
   return React.createElement(NestedOption<IRangeRuleProps>, {
@@ -584,7 +601,7 @@ const RangeRule = Object.assign<typeof _componentRangeRule, NestedComponentMeta>
 type IRequiredRuleProps = React.PropsWithChildren<{
   message?: string;
   trim?: boolean;
-  type?: "required" | "numeric" | "range" | "stringLength" | "custom" | "compare" | "pattern" | "email" | "async";
+  type?: ValidationRuleType;
 }>
 const _componentRequiredRule = (props: IRequiredRuleProps) => {
   return React.createElement(NestedOption<IRequiredRuleProps>, {
@@ -606,27 +623,27 @@ const RequiredRule = Object.assign<typeof _componentRequiredRule, NestedComponen
 // owners:
 // Form
 type ISimpleItemProps = React.PropsWithChildren<{
-  colSpan?: number;
-  cssClass?: string;
-  dataField?: string;
-  editorOptions?: any;
-  editorType?: "dxAutocomplete" | "dxCalendar" | "dxCheckBox" | "dxColorBox" | "dxDateBox" | "dxDateRangeBox" | "dxDropDownBox" | "dxHtmlEditor" | "dxLookup" | "dxNumberBox" | "dxRadioGroup" | "dxRangeSlider" | "dxSelectBox" | "dxSlider" | "dxSwitch" | "dxTagBox" | "dxTextArea" | "dxTextBox";
-  helpText?: string;
-  isRequired?: boolean;
-  itemType?: "empty" | "group" | "simple" | "tabbed" | "button";
+  colSpan?: number | undefined;
+  cssClass?: string | undefined;
+  dataField?: string | undefined;
+  editorOptions?: any | undefined;
+  editorType?: FormItemComponent;
+  helpText?: string | undefined;
+  isRequired?: boolean | undefined;
+  itemType?: FormItemType;
   label?: Record<string, any> | {
-    alignment?: "center" | "left" | "right";
-    location?: "left" | "right" | "top";
+    alignment?: HorizontalAlignment;
+    location?: LabelLocation;
     showColon?: boolean;
     template?: ((itemData: { component: dxForm, dataField: string, editorOptions: any, editorType: string, name: string, text: string }, itemElement: any) => string | any) | template;
-    text?: string;
+    text?: string | undefined;
     visible?: boolean;
   };
-  name?: string;
+  name?: string | undefined;
   template?: ((data: { component: dxForm, dataField: string, editorOptions: Record<string, any>, editorType: string, name: string }, itemElement: any) => string | any) | template;
   validationRules?: Array<CommonTypes.ValidationRule>;
   visible?: boolean;
-  visibleIndex?: number;
+  visibleIndex?: number | undefined;
   render?: (...params: any) => React.ReactNode;
   component?: React.ComponentType<any>;
 }>
@@ -673,7 +690,7 @@ type IStringLengthRuleProps = React.PropsWithChildren<{
   message?: string;
   min?: number;
   trim?: boolean;
-  type?: "required" | "numeric" | "range" | "stringLength" | "custom" | "compare" | "pattern" | "email" | "async";
+  type?: ValidationRuleType;
 }>
 const _componentStringLengthRule = (props: IStringLengthRuleProps) => {
   return React.createElement(NestedOption<IStringLengthRuleProps>, {
@@ -696,20 +713,20 @@ const StringLengthRule = Object.assign<typeof _componentStringLengthRule, Nested
 // TabbedItem
 type ITabProps = React.PropsWithChildren<{
   alignItemLabels?: boolean;
-  badge?: string;
+  badge?: string | undefined;
   colCount?: number;
   colCountByScreen?: Record<string, any> | {
-    lg?: number;
-    md?: number;
-    sm?: number;
-    xs?: number;
+    lg?: number | undefined;
+    md?: number | undefined;
+    sm?: number | undefined;
+    xs?: number | undefined;
   };
   disabled?: boolean;
-  icon?: string;
+  icon?: string | undefined;
   items?: Array<dxFormButtonItem | dxFormEmptyItem | dxFormGroupItem | dxFormSimpleItem | dxFormTabbedItem>;
-  tabTemplate?: ((tabData: any, tabIndex: number, tabElement: any) => any) | template;
-  template?: ((tabData: any, tabIndex: number, tabElement: any) => any) | template;
-  title?: string;
+  tabTemplate?: ((tabData: any, tabIndex: number, tabElement: any) => any) | template | undefined;
+  template?: ((tabData: any, tabIndex: number, tabElement: any) => any) | template | undefined;
+  title?: string | undefined;
   tabRender?: (...params: any) => React.ReactNode;
   tabComponent?: React.ComponentType<any>;
   render?: (...params: any) => React.ReactNode;
@@ -744,30 +761,30 @@ const Tab = Object.assign<typeof _componentTab, NestedComponentMeta>(_componentT
 // owners:
 // Form
 type ITabbedItemProps = React.PropsWithChildren<{
-  colSpan?: number;
-  cssClass?: string;
-  itemType?: "empty" | "group" | "simple" | "tabbed" | "button";
-  name?: string;
-  tabPanelOptions?: dxTabPanelOptions;
+  colSpan?: number | undefined;
+  cssClass?: string | undefined;
+  itemType?: FormItemType;
+  name?: string | undefined;
+  tabPanelOptions?: dxTabPanelOptions | undefined;
   tabs?: Array<Record<string, any>> | {
     alignItemLabels?: boolean;
-    badge?: string;
+    badge?: string | undefined;
     colCount?: number;
     colCountByScreen?: Record<string, any> | {
-      lg?: number;
-      md?: number;
-      sm?: number;
-      xs?: number;
+      lg?: number | undefined;
+      md?: number | undefined;
+      sm?: number | undefined;
+      xs?: number | undefined;
     };
     disabled?: boolean;
-    icon?: string;
+    icon?: string | undefined;
     items?: Array<dxFormButtonItem | dxFormEmptyItem | dxFormGroupItem | dxFormSimpleItem | dxFormTabbedItem>;
-    tabTemplate?: ((tabData: any, tabIndex: number, tabElement: any) => any) | template;
-    template?: ((tabData: any, tabIndex: number, tabElement: any) => any) | template;
-    title?: string;
+    tabTemplate?: ((tabData: any, tabIndex: number, tabElement: any) => any) | template | undefined;
+    template?: ((tabData: any, tabIndex: number, tabElement: any) => any) | template | undefined;
+    title?: string | undefined;
   }[];
   visible?: boolean;
-  visibleIndex?: number;
+  visibleIndex?: number | undefined;
 }>
 const _componentTabbedItem = (props: ITabbedItemProps) => {
   return React.createElement(NestedOption<ITabbedItemProps>, {
@@ -793,7 +810,7 @@ const TabbedItem = Object.assign<typeof _componentTabbedItem, NestedComponentMet
 // owners:
 // TabbedItem
 type ITabPanelOptionsProps = React.PropsWithChildren<{
-  accessKey?: string;
+  accessKey?: string | undefined;
   activeStateEnabled?: boolean;
   animationEnabled?: boolean;
   bindingOptions?: Record<string, any>;
@@ -802,10 +819,10 @@ type ITabPanelOptionsProps = React.PropsWithChildren<{
   disabled?: boolean;
   elementAttr?: Record<string, any>;
   focusStateEnabled?: boolean;
-  height?: (() => number | string) | number | string;
-  hint?: string;
+  height?: (() => number | string) | number | string | undefined;
+  hint?: string | undefined;
   hoverStateEnabled?: boolean;
-  iconPosition?: "top" | "end" | "bottom" | "start";
+  iconPosition?: TabsIconPosition;
   itemHoldTimeout?: number;
   items?: Array<any | dxTabPanelItem | string>;
   itemTemplate?: ((itemData: any, itemIndex: number, itemElement: any) => string | any) | template;
@@ -832,12 +849,12 @@ type ITabPanelOptionsProps = React.PropsWithChildren<{
   selectedIndex?: number;
   selectedItem?: any;
   showNavButtons?: boolean;
-  stylingMode?: "primary" | "secondary";
+  stylingMode?: TabsStyle;
   swipeEnabled?: boolean;
   tabIndex?: number;
-  tabsPosition?: "bottom" | "left" | "right" | "top";
+  tabsPosition?: Position;
   visible?: boolean;
-  width?: (() => number | string) | number | string;
+  width?: (() => number | string) | number | string | undefined;
   defaultItems?: Array<any | dxTabPanelItem | string>;
   onItemsChange?: (value: Array<any | dxTabPanelItem | string>) => void;
   defaultSelectedIndex?: number;
@@ -925,14 +942,14 @@ const TabPanelOptionsItem = Object.assign<typeof _componentTabPanelOptionsItem, 
 type IValidationRuleProps = React.PropsWithChildren<{
   message?: string;
   trim?: boolean;
-  type?: "required" | "numeric" | "range" | "stringLength" | "custom" | "compare" | "pattern" | "email" | "async";
+  type?: ValidationRuleType;
   ignoreEmptyValue?: boolean;
   max?: Date | number | string;
   min?: Date | number | string;
   reevaluate?: boolean;
   validationCallback?: ((options: { column: Record<string, any>, data: Record<string, any>, formItem: Record<string, any>, rule: Record<string, any>, validator: Record<string, any>, value: string | number }) => boolean);
   comparisonTarget?: (() => any);
-  comparisonType?: "!=" | "!==" | "<" | "<=" | "==" | "===" | ">" | ">=";
+  comparisonType?: ComparisonOperator;
   pattern?: RegExp | string;
 }>
 const _componentValidationRule = (props: IValidationRuleProps) => {

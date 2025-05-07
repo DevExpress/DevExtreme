@@ -8,11 +8,12 @@ import {
     NativeEventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
-} from '../events/index';
+} from '../common/core/events';
 
 import {
     template,
-} from '../core/templates/template';
+    ApplyValueMode,
+} from '../common';
 
 import dxDropDownEditor, {
     dxDropDownEditorOptions,
@@ -26,10 +27,6 @@ import {
 import {
     Properties as PopupProperties,
 } from './popup';
-
-import {
-    ApplyValueMode,
-} from '../common';
 
 /**
  * @docid _ui_color_box_ChangeEvent

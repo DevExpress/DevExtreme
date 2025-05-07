@@ -13,10 +13,11 @@
 <script setup lang="ts">
 import { products } from './data.ts';
 
+type itemType = typeof products[0];
 withDefaults(defineProps<{
-  item?: typeof products[0]
+  item?: itemType
 }>(), {
-  item: () => ({}),
+  item: () => ({} as itemType),
 });
 
 function currency(data) {

@@ -6,8 +6,8 @@ import Chart, {
   ValueAxis,
   BreakStyle,
 } from 'devextreme-react/chart';
-import SelectBox, { SelectBoxTypes } from 'devextreme-react/select-box';
-import CheckBox, { CheckBoxTypes } from 'devextreme-react/check-box';
+import SelectBox, { type SelectBoxTypes } from 'devextreme-react/select-box';
+import CheckBox, { type CheckBoxTypes } from 'devextreme-react/check-box';
 import { dataSource, lineStyleLabel, maxCountLabel } from './data.ts';
 
 const lineStyles: ('straight' | 'waved')[] = ['waved', 'straight'];

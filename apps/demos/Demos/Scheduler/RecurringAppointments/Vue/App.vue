@@ -16,7 +16,7 @@
   </DxScheduler>
 </template>
 <script setup lang="ts">
-import { DxScheduler, DxResource, DxSchedulerTypes } from 'devextreme-vue/scheduler';
+import { DxScheduler, DxResource, type DxSchedulerTypes } from 'devextreme-vue/scheduler';
 import { data, resourcesData } from './data.ts';
 
 const views: DxSchedulerTypes.ViewType[] = ['day', 'week', 'month'];

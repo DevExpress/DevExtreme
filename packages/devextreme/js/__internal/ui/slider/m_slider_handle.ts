@@ -1,15 +1,30 @@
+import type { TooltipShowMode, VerticalEdge } from '@js/common';
 import $ from '@js/core/renderer';
-import { extend } from '@js/core/utils/extend';
-import Widget from '@js/ui/widget/ui.widget';
-
-import SliderTooltip from './m_slider_tooltip';
+import type { Format } from '@js/localization';
+import type { OptionChanged } from '@ts/core/widget/types';
+import type { Properties as WidgetProperties } from '@ts/core/widget/widget';
+import Widget from '@ts/core/widget/widget';
+import SliderTooltip from '@ts/ui/slider/m_slider_tooltip';
 
 const SLIDER_HANDLE_CLASS = 'dx-slider-handle';
 
-// @ts-expect-error
-const SliderHandle = Widget.inherit({
-  _getDefaultOptions() {
-    return extend(this.callBase(), {
+export interface SliderHandlerProperties extends WidgetProperties {
+  value?: number;
+
+  tooltip?: {
+    enabled?: boolean;
+    format?: Format;
+    position?: VerticalEdge;
+    showMode?: TooltipShowMode;
+  };
+}
+
+class SliderHandle extends Widget<SliderHandlerProperties> {
+  _sliderTooltip?: SliderTooltip | null;
+
+  _getDefaultOptions(): SliderHandlerProperties {
+    return {
+      ...super._getDefaultOptions(),
       hoverStateEnabled: false,
       value: 0,
       tooltip: {
@@ -18,11 +33,11 @@ const SliderHandle = Widget.inherit({
         position: 'top',
         showMode: 'onHover',
       },
-    });
-  },
+    };
+  }
 
-  _initMarkup() {
-    this.callBase();
+  _initMarkup(): void {
+    super._initMarkup();
     this.$element().addClass(SLIDER_HANDLE_CLASS);
 
     this.setAria({
@@ -31,18 +46,18 @@ const SliderHandle = Widget.inherit({
       valuenow: this.option('value'),
       label: 'Slider',
     });
-  },
+  }
 
-  _render() {
-    this.callBase();
+  _render(): void {
+    super._render();
     this._renderTooltip();
-  },
+  }
 
-  _renderTooltip() {
+  _renderTooltip(): void {
     const { tooltip, value } = this.option();
     const {
       position, format, enabled, showMode,
-    } = tooltip;
+    } = tooltip ?? {};
 
     const $sliderTooltip = $('<div>');
     this._sliderTooltip = this._createComponent($sliderTooltip, SliderTooltip, {
@@ -55,22 +70,21 @@ const SliderHandle = Widget.inherit({
       format,
       value,
     });
-  },
+  }
 
-  _clean() {
-    this.callBase();
+  _clean(): void {
+    super._clean();
     this._sliderTooltip = null;
-  },
+  }
 
-  _updateTooltipOptions(args) {
-    // @ts-expect-error
+  _updateTooltipOptions(args): void {
     const tooltipOptions = Widget.getOptionsFromContainer(args);
-
+    // @ts-expect-error ts-error
     this._setWidgetOption('_sliderTooltip', [tooltipOptions]);
     this._sliderTooltip?.option('visible', tooltipOptions.enabled);
-  },
+  }
 
-  _optionChanged(args) {
+  _optionChanged(args: OptionChanged<SliderHandlerProperties>): void {
     const { name, value } = args;
     switch (name) {
       case 'value': {
@@ -82,17 +96,17 @@ const SliderHandle = Widget.inherit({
         this._updateTooltipOptions(args);
         break;
       default:
-        this.callBase(args);
+        super._optionChanged(args);
     }
-  },
+  }
 
-  updateTooltipPosition() {
+  updateTooltipPosition(): void {
     this._sliderTooltip?.updatePosition();
-  },
+  }
 
-  repaint() {
+  repaint(): void {
     this._sliderTooltip?.repaint();
-  },
-});
+  }
+}
 
 export default SliderHandle;

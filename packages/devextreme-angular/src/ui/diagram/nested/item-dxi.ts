@@ -12,8 +12,8 @@ import {
 
 
 
-import { ToolbarItemLocation } from 'devextreme/common';
 import { Command, CustomCommand } from 'devextreme/ui/diagram';
+import { ToolbarItemLocation } from 'devextreme/common';
 
 import {
     NestedOptionHost,
@@ -37,10 +37,10 @@ export class DxiDiagramItemComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get items(): Array<CustomCommand | Command> {
+    get items(): Array<Command | CustomCommand> {
         return this._getOption('items');
     }
-    set items(value: Array<CustomCommand | Command>) {
+    set items(value: Array<Command | CustomCommand>) {
         this._setOption('items', value);
     }
 

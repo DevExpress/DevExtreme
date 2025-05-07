@@ -12,7 +12,7 @@ import RangeSelector, {
   Margin,
   Scale,
   Behavior,
-  RangeSelectorTypes,
+  type RangeSelectorTypes,
 } from 'devextreme-react/range-selector';
 import { VisualRange } from 'devextreme-react/common/charts';
 import { zoomingData } from './data.ts';

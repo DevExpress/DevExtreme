@@ -14,8 +14,8 @@ import {
 
 
 
-import { HorizontalAlignment, VerticalEdge } from 'devextreme/common';
 import { Font, TextOverflow, WordWrap } from 'devextreme/common/charts';
+import { HorizontalAlignment, VerticalEdge } from 'devextreme/common';
 
 import {
     NestedOptionHost,
@@ -47,10 +47,10 @@ export class DxoPieChartTitleComponent extends NestedOption implements OnDestroy
     }
 
     @Input()
-    get margin(): { bottom?: number, left?: number, right?: number, top?: number } | number {
+    get margin(): number | { bottom?: number, left?: number, right?: number, top?: number } {
         return this._getOption('margin');
     }
-    set margin(value: { bottom?: number, left?: number, right?: number, top?: number } | number) {
+    set margin(value: number | { bottom?: number, left?: number, right?: number, top?: number }) {
         this._setOption('margin', value);
     }
 
@@ -63,10 +63,10 @@ export class DxoPieChartTitleComponent extends NestedOption implements OnDestroy
     }
 
     @Input()
-    get subtitle(): string | { font?: Font, offset?: number, text?: string } | { font?: Font, offset?: number, text?: string, textOverflow?: TextOverflow, wordWrap?: WordWrap } {
+    get subtitle(): string | { font?: Font, offset?: number, text?: string, textOverflow?: TextOverflow, wordWrap?: WordWrap } {
         return this._getOption('subtitle');
     }
-    set subtitle(value: string | { font?: Font, offset?: number, text?: string } | { font?: Font, offset?: number, text?: string, textOverflow?: TextOverflow, wordWrap?: WordWrap }) {
+    set subtitle(value: string | { font?: Font, offset?: number, text?: string, textOverflow?: TextOverflow, wordWrap?: WordWrap }) {
         this._setOption('subtitle', value);
     }
 

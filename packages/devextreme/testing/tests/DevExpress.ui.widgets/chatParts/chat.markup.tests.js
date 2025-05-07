@@ -3,10 +3,9 @@ import $ from 'jquery';
 import Chat from 'ui/chat';
 
 const CHAT_CLASS = 'dx-chat';
-const CHAT_HEADER_CLASS = 'dx-chat-header';
 const CHAT_MESSAGEBOX_CLASS = 'dx-chat-messagebox';
 const CHAT_MESSAGELIST_CLASS = 'dx-chat-messagelist';
-const CHAT_ERRORLIST_CLASS = 'dx-chat-errorlist';
+const CHAT_ALERTLIST_CLASS = 'dx-chat-alertlist';
 const CHAT_MESSAGELIST_EMPTY_VIEW_CLASS = 'dx-chat-messagelist-empty-view';
 const CHAT_TYPINGINDICATOR_CLASS = 'dx-chat-typingindicator';
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
@@ -30,46 +29,6 @@ const moduleConfig = {
 
 QUnit.module('Chat', moduleConfig, () => {
     QUnit.module('Render', () => {
-        QUnit.test('Header should be rendered if title is not empty', function(assert) {
-            this.reinit({ title: 'custom' });
-
-            const $header = this.$element.find(`.${CHAT_HEADER_CLASS}`);
-
-            assert.strictEqual($header.length, 1);
-        });
-
-        QUnit.test('Header should not be rendered if title is empty', function(assert) {
-            const $header = this.$element.find(`.${CHAT_HEADER_CLASS}`);
-
-            assert.strictEqual($header.length, 0);
-        });
-
-        QUnit.test('Header should be rendered if title is not empty on init and in runtime', function(assert) {
-            this.reinit({ title: 'custom' });
-            this.instance.option({ title: 'new custom' });
-
-            const $header = this.$element.find(`.${CHAT_HEADER_CLASS}`);
-
-            assert.strictEqual($header.length, 1);
-        });
-
-        QUnit.test('Header should be rendered if title is empty on init and not empty in runtime', function(assert) {
-            this.instance.option({ title: 'new custom' });
-
-            const $header = this.$element.find(`.${CHAT_HEADER_CLASS}`);
-
-            assert.strictEqual($header.length, 1);
-        });
-
-        QUnit.test('Header should be removed if title is empty in runtime', function(assert) {
-            this.reinit({ title: 'custom' });
-            this.instance.option({ title: '' });
-
-            const $header = this.$element.find(`.${CHAT_HEADER_CLASS}`);
-
-            assert.strictEqual($header.length, 0);
-        });
-
         QUnit.test('Message list should be rendered', function(assert) {
             const $messageList = this.$element.find(`.${CHAT_MESSAGELIST_CLASS}`);
 
@@ -83,9 +42,9 @@ QUnit.module('Chat', moduleConfig, () => {
         });
 
         QUnit.test('Error list should be rendered', function(assert) {
-            const $errorList = this.$element.find(`.${CHAT_ERRORLIST_CLASS}`);
+            const $alertList = this.$element.find(`.${CHAT_ALERTLIST_CLASS}`);
 
-            assert.strictEqual($errorList.length, 1);
+            assert.strictEqual($alertList.length, 1);
         });
 
         QUnit.test('TypingIndicator element should be rendered', function(assert) {

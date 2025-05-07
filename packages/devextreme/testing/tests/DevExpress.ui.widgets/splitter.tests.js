@@ -1,13 +1,13 @@
 import $ from 'jquery';
 import Splitter from 'ui/splitter';
-import fx from 'animation/fx';
+import fx from 'common/core/animation/fx';
 import pointerMock from '../../helpers/pointerMock.js';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import { isRenderer, isNumeric } from 'core/utils/type';
 import config from 'core/config';
-import { createEvent } from 'events/utils/index';
-import { name as DOUBLE_CLICK_EVENT } from 'events/double_click';
-import { name as CLICK_EVENT } from 'events/click';
+import { createEvent } from 'common/core/events/utils/index';
+import { name as DOUBLE_CLICK_EVENT } from 'common/core/events/double_click';
+import { name as CLICK_EVENT } from 'common/core/events/click';
 
 import 'generic_light.css!';
 
@@ -729,6 +729,24 @@ QUnit.module('Pane sizing', moduleConfig, () => {
         items: [{ }, { collapsed: true }],
         expectedLayout: ['100', '0'],
     }, {
+        items: [{ maxSize: '75%' }, { collapsed: true }],
+        expectedLayout: ['100', '0'],
+    }, {
+        items: [{ collapsed: true }, { visible: false }, { maxSize: '75%' }],
+        expectedLayout: ['0', '0', '100'],
+    }, {
+        items: [{ maxSize: '75%' }, { visible: false }, { collapsed: true }],
+        expectedLayout: ['100', '0', '0'],
+    }, {
+        items: [{ visible: false }, { collapsed: true }, { maxSize: '75%' }, { visible: false }],
+        expectedLayout: ['0', '0', '100', '0'],
+    }, {
+        items: [{ visible: false }, { maxSize: '75%' }, { visible: false }, { collapsed: true }, { visible: false }],
+        expectedLayout: ['0', '100', '0', '0', '0'],
+    }, {
+        items: [{ collapsed: true }, { maxSize: '75%' }],
+        expectedLayout: ['0', '100'],
+    }, {
         items: [{ collapsed: true }, { collapsed: true }, { collapsed: true }],
         expectedLayout: ['0', '0', '0'],
     }, {
@@ -773,6 +791,8 @@ QUnit.module('Pane sizing', moduleConfig, () => {
         { position: 'prev', expectedLayout: ['0', '100'], items: [{ maxSize: '75%', collapsible: true }, { collapsible: true }] },
         { position: 'prev', expectedLayout: ['0', '100'], items: [{ maxSize: '75%', collapsible: true }, { collapsible: true }] },
         { position: 'prev', expectedLayout: ['0', '100'], items: [{ maxSize: '75%', collapsible: true }, { collapsible: true }] },
+        { position: 'prev', expectedLayout: ['50', '50'], items: [{ maxSize: '75%', collapsible: false }, { collapsed: true, collapsible: true }] },
+        { position: 'next', expectedLayout: ['50', '50'], items: [{ collapsed: true, collapsible: true }, { maxSize: '75%', collapsible: false }] },
         { position: 'prev', expectedLayout: ['10.0806', '89.9194'], items: [{ collapsible: true, collapsedSize: 100 }, { collapsible: true, collapsedSize: 100 }] },
         { position: 'next', expectedLayout: ['89.9194', '10.0806'], items: [{ collapsible: true, collapsedSize: 100 }, { collapsible: true, collapsedSize: 100 }] },
         { position: 'next', expectedLayout: ['100', '0'], items: [{ minSize: '15%', collapsible: true }, { collapsible: true }] },
@@ -1240,7 +1260,7 @@ QUnit.module('Pane sizing', moduleConfig, () => {
         assert.strictEqual($leftPane.css('width'), '0px');
     });
 
-    QUnit.skip('The splitter panes should maintain the correct ratio after being rendered inside an invisible element and display correctly when shown (T1241434)', function(assert) {
+    QUnit.test('The splitter panes should maintain the correct ratio after being rendered inside an invisible element and display correctly when shown (T1241434)', function(assert) {
         const done = assert.async();
         $('#splitterParentContainer').css('display', 'none');
 
@@ -1255,15 +1275,16 @@ QUnit.module('Pane sizing', moduleConfig, () => {
 
             $('#splitterParentContainer').css('display', 'block');
 
+            const resizeObserverTimeout = 50;
             setTimeout(() => {
                 this.assertLayout(['30.4054', '69.5946']);
 
                 done();
-            }, 10);
+            }, resizeObserverTimeout);
         });
     });
 
-    QUnit.skip('The splitter panes should maintain the correct ratio after being initialized on a detached element and then attached to the DOM (T1241434)', function(assert) {
+    QUnit.test('The splitter panes should maintain the correct ratio after being initialized on a detached element and then attached to the DOM (T1241434)', function(assert) {
         const done = assert.async();
         const $splitter = $('<div id="splitterDetached">');
 
@@ -1278,12 +1299,352 @@ QUnit.module('Pane sizing', moduleConfig, () => {
 
             $splitter.appendTo('#splitterParentContainer');
 
+            const resizeObserverTimeout = 50;
             setTimeout(() => {
                 this.assertLayout(['30.4054', '69.5946']);
 
                 done();
-            }, 10);
+            }, resizeObserverTimeout);
         });
+    });
+
+    QUnit.test('The splitter pane can safely collapse if the total size layout calculation error is less than three decimal places (T1262088)', function(assert) {
+        this.reinit({
+            width: 733.67,
+            height: 200,
+            items: [ { collapsible: true }, { collapsible: true }, { collapsible: true }],
+        });
+
+        this.assertLayout(['33.3333', '33.3333', '33.3333']);
+
+        this.instance._layout = [33.3338502509, 33.3338502509, 33.3338502509];
+
+        const $resizeHandle = this.getResizeHandles().first();
+        const $collapsePrevButton = this.getCollapsePrevButton($resizeHandle);
+
+        $collapsePrevButton.trigger('dxclick');
+
+        this.assertLayout(['0', '66.6677', '33.3339']);
+    });
+});
+
+QUnit.module('Pane visibility', moduleConfig, () => {
+    ['horizontal', 'vertical'].forEach(orientation => {
+        [{
+            dataSource: [{ visible: true }],
+            scenarios: [{
+                paneIndex: 0,
+                visible: false,
+                expected: {
+                    layout: ['100'],
+                    itemSizes: [1000],
+                    handlesCount: 0
+                }
+            }, {
+                paneIndex: 0,
+                visible: true,
+                expected: {
+                    layout: ['100'],
+                    itemSizes: [1000],
+                    handlesCount: 0
+                }
+            }]
+        }, {
+            dataSource: [{ visible: true }, { visible: true }],
+            scenarios: [{
+                paneIndex: 0,
+                visible: false,
+                expected: {
+                    layout: ['0', '100'],
+                    itemSizes: [0, 1000],
+                    handlesCount: 0
+                }
+            }, {
+                paneIndex: 0,
+                visible: true,
+                expected: {
+                    layout: ['50', '50'],
+                    itemSizes: [496, 496],
+                    handlesCount: 1
+                }
+            }]
+        }, {
+            dataSource: [{ visible: true }, { visible: false }],
+            scenarios: [{
+                paneIndex: 1,
+                visible: true,
+                expected: {
+                    layout: ['50', '50'],
+                    itemSizes: [496, 496],
+                    handlesCount: 1
+                }
+            }, {
+                paneIndex: 1,
+                visible: false,
+                expected: {
+                    layout: ['100', '0'],
+                    itemSizes: [1000, 0],
+                    handlesCount: 0
+                }
+            }]
+        }, {
+            dataSource: [{ visible: true }, { visible: true }],
+            scenarios: [{
+                paneIndex: 1,
+                visible: false,
+                expected: {
+                    layout: ['100', '0'],
+                    itemSizes: [1000, 0],
+                    handlesCount: 0
+                }
+            }, {
+                paneIndex: 1,
+                visible: true,
+                expected: {
+                    layout: ['50', '50'],
+                    itemSizes: [496, 496],
+                    handlesCount: 1
+                }
+            }]
+        }, {
+            dataSource: [{ size: '200px' }, { size: '500px' }, {}],
+            scenarios: [{
+                paneIndex: 1,
+                visible: true,
+                expected: {
+                    layout: ['20.3252', '50.813', '28.8618'],
+                    itemSizes: [200, 500, 284],
+                    handlesCount: 2
+                }
+            }, {
+                paneIndex: 1,
+                visible: false,
+                expected: {
+                    layout: ['20.3252', '0', '79.6748'],
+                    itemSizes: [201.625, 0, 790.375],
+                    handlesCount: 1
+                }
+            }, {
+                paneIndex: 1,
+                visible: true,
+                expected: {
+                    layout: ['20.3252', '50.813', '28.8618'],
+                    itemSizes: [200, 500, 284],
+                    handlesCount: 2
+                }
+            }]
+        }, {
+            dataSource: [{ size: '200px' }, { size: '500px' }, { visible: false }],
+            scenarios: [{
+                paneIndex: 2,
+                visible: true,
+                expected: {
+                    layout: ['20.1613', '39.9194', '39.9194'],
+                    itemSizes: [198.391, 392.805, 392.805],
+                    handlesCount: 2
+                }
+            }]
+        }, {
+            dataSource: [{ size: '200px' }, { size: '600px' }, {}],
+            scenarios: [{
+                paneIndex: 2,
+                visible: false,
+                expected: {
+                    layout: ['20.3252', '79.6748', 0],
+                    itemSizes: [201.625, 790.375, 0],
+                    handlesCount: 1
+                }
+            }, {
+                paneIndex: 2,
+                visible: true,
+                expected: {
+                    layout: ['20.3252', '60.9756', '18.6992'],
+                    itemSizes: [200, 600, 184],
+                    handlesCount: 2
+                }
+            }]
+        }, {
+            dataSource: [{ }, { visible: true }, { }],
+            scenarios: [{
+                paneIndex: 1,
+                visible: false,
+                expected: {
+                    layout: ['33.3333', '0', '66.6667'],
+                    itemSizes: [330.664, 0, 661.336],
+                    handlesCount: 1
+                }
+            },
+            {
+                paneIndex: 1,
+                visible: true,
+                expected: {
+                    layout: ['33.3333', '33.3333', '33.3333'],
+                    itemSizes: [328, 328, 328],
+                    handlesCount: 2
+                }
+            }]
+        }, {
+            dataSource: [{ visible: false }, { }, { }],
+            scenarios: [{
+                paneIndex: 0,
+                visible: true,
+                expected: {
+                    layout: ['25', '25', '50'],
+                    itemSizes: [246, 246, 492],
+                    handlesCount: 2
+                }
+            }]
+        }, {
+            dataSource: [{ visible: true, minSize: '100px' }, { }, { }],
+            scenarios: [{
+                paneIndex: 0,
+                visible: false,
+                expected: {
+                    layout: ['0', '66.6667', '33.3333'],
+                    itemSizes: [0, 661.336, 330.664],
+                    handlesCount: 1
+                }
+            }]
+        }, {
+            dataSource: [{ visible: false, maxSize: '100px' }, { }, { }],
+            scenarios: [{
+                paneIndex: 0,
+                visible: true,
+                expected: {
+                    layout: ['10.1626', '39.8374', '50'],
+                    itemSizes: [100, 392, 492],
+                    handlesCount: 2
+                }
+            }]
+        }, {
+            dataSource: [{ visible: false, size: '100px' }, { size: 250 }, { }, { size: 200 }],
+            scenarios: [{
+                paneIndex: 2,
+                visible: false,
+                expected: {
+                    layout: ['0', '25.4065', '0', '74.5935'],
+                    itemSizes: [0, 252.031, 0, 739.969],
+                    handlesCount: 1
+                }
+            }, {
+                paneIndex: 3,
+                visible: false,
+                expected: {
+                    layout: ['0', '100', '0', '0'],
+                    itemSizes: [0, 1000, 0, 0],
+                    handlesCount: 0
+                }
+            }, {
+                paneIndex: 3,
+                visible: true,
+                expected: {
+                    layout: ['0', '25.4065', '0', '74.5935'],
+                    itemSizes: [0, 252.031, 0, 739.969],
+                    handlesCount: 1
+                }
+            }, {
+                paneIndex: 2,
+                visible: true,
+                expected: {
+                    layout: ['0', '25.4065', '54.2683', '20.3252'],
+                    itemSizes: [0, 250, 534, 200],
+                    handlesCount: 2
+                }
+            }]
+        }, {
+            dataSource: [{ visible: true, size: '100px' }, { }, { size: 250, resizable: false }, { size: 200 }],
+            scenarios: [{
+                paneIndex: 1,
+                visible: false,
+                expected: {
+                    layout: ['10.1215', '0', '69.6356', '20.2429'],
+                    itemSizes: [100.812, 0, 693.57, 201.617],
+                    handlesCount: 2
+                }
+            }]
+        }, {
+            dataSource: [{ visible: true, size: '100px' }, { }, { size: 100, maxSize: 250 }, { size: 200 }],
+            scenarios: [{
+                paneIndex: 1,
+                visible: false,
+                expected: {
+                    layout: ['10.2459', '0', '69.2623', '20.4918'],
+                    itemSizes: [100.812, 0, 681.539, 201.617],
+                    handlesCount: 2
+                }
+            }]
+        }].forEach(({ dataSource, scenarios }) => {
+            QUnit.test(`Size distribution after changing pane.visibility at runtime, dataSource: ${JSON.stringify(dataSource)}, ${orientation} orientation`, function(assert) {
+                this.reinit({
+                    orientation,
+                    dataSource: dataSource
+                });
+
+                scenarios.forEach(({ paneIndex, visible, expected }) => {
+                    this.instance.option(`items[${paneIndex}].visible`, visible);
+
+                    const { layout, itemSizes, handlesCount } = expected;
+                    this.assertLayout(layout);
+                    this.checkItemSizes(itemSizes);
+
+                    assert.strictEqual(this.getResizeHandles().length, handlesCount, 'resize handles count');
+                });
+            });
+        });
+
+        QUnit.test('Changing pane visibility does not trigger full rerender (T1267030)', function(assert) {
+            this.reinit({
+                orientation,
+                dataSource: [{}, {}, {}]
+            });
+
+            const initialPaneId = this.getPanes().eq(0).attr('id');
+
+            this.instance.option('items[2].visible', false);
+
+            assert.strictEqual(initialPaneId, this.getPanes().eq(0).attr('id'), 'neighbour pane was not rerendered');
+        });
+    });
+});
+
+QUnit.module('Pane.template', moduleConfig, () => {
+    QUnit.test('ResizeHandle should not be duplicated when changing the template option at runtime (T1279224)', function(assert) {
+        const firstPaneTemplate = () => $('<div>').text('Pane 1');
+        const secondPaneTemplate = () => $('<div>').text('Pane 2');
+
+        this.reinit({
+            dataSource: [{
+                template: firstPaneTemplate
+            }, {
+                template: secondPaneTemplate
+            }]
+        });
+
+        this.instance.option({
+            'items[0].template': secondPaneTemplate,
+            'items[1].template': firstPaneTemplate,
+        });
+
+        assert.strictEqual(this.getResizeHandles().length, 1);
+    });
+
+    QUnit.test('Layout should restore the distribution when changing the template option at runtime (T1279224)', function(assert) {
+        const firstPaneTemplate = () => $('<div>').text('Pane 1');
+        const secondPaneTemplate = () => $('<div>').text('Pane 2');
+
+        this.reinit({
+            dataSource: [{
+                size: '300px',
+                template: firstPaneTemplate
+            }, {
+                template: secondPaneTemplate
+            }]
+        });
+
+        this.instance.option('items[0].template', secondPaneTemplate);
+
+        this.checkItemSizes([300, 692]);
+        this.assertLayout(['30.2419', '69.7581']);
     });
 });
 
@@ -1510,9 +1871,7 @@ QUnit.module('Resizing', moduleConfig, () => {
                 dataSource: [{ visible: false }, { }]
             });
 
-            const resizeHandles = this.$element.find(`.${RESIZE_HANDLE_CLASS}`);
-
-            assert.strictEqual(resizeHandles.length, 0);
+            assert.strictEqual(this.getResizeHandles(false).length, 0);
         });
 
         QUnit.test(`splitter should have 3 resize handles if 4 out of 6 are visible, ${orientation} orientation`, function(assert) {
@@ -1521,9 +1880,7 @@ QUnit.module('Resizing', moduleConfig, () => {
                 dataSource: [{ }, { }, { visible: false }, { }, { }, { visible: false }]
             });
 
-            const resizeHandles = this.$element.find(`.${RESIZE_HANDLE_CLASS}`);
-
-            assert.strictEqual(resizeHandles.length, 3);
+            assert.strictEqual(this.getResizeHandles(false).length, 3);
         });
 
         [
@@ -2579,6 +2936,59 @@ QUnit.module('Visibility of control elements', {
 
             assert.ok($resizeHandleIcon.hasClass(STATE_INVISIBLE_CLASS), 'resize handle icon is invisible');
         });
+    });
+
+    [{
+        dataSource: [{ visible: false, collapsible: false, }, { collapsible: true }],
+        scenarios: [{
+            paneIndex: 0,
+            visible: true,
+            expectedVisibleIcons: [{ prev: false, resize: true, next: true }]
+        }, ]
+    }, {
+        dataSource: [{ visible: false, resizable: false, collapsible: false }, { collapsible: false }],
+        scenarios: [{
+            paneIndex: 0,
+            visible: true,
+            expectedVisibleIcons: [{ prev: false, resize: false, next: false }]
+        }, ]
+    }, {
+        dataSource: [{ visible: false }, { }, { }],
+        scenarios: [{
+            paneIndex: 0,
+            visible: true,
+            expectedVisibleIcons: [{ prev: false, resize: true, next: false }, { prev: false, resize: true, next: false }]
+        }]
+    }].forEach(({ dataSource, scenarios }) => {
+        QUnit.test(`Control elements visibility distribution after changing pane.visibility at runtime, dataSource: ${JSON.stringify(dataSource)}`, function(assert) {
+            this.reinit({
+                dataSource: dataSource
+            });
+
+            scenarios.forEach(({ paneIndex, visible, expectedVisibleIcons }) => {
+                this.instance.option(`items[${paneIndex}].visible`, visible);
+
+                this.checkIconsVisibility(expectedVisibleIcons);
+            });
+        });
+    });
+
+    QUnit.test('ResizeHandle control elements visibility should be updated when changing the template option at runtime (T1279224)', function(assert) {
+        const firstPaneTemplate = () => $('<div>').text('Pane 1');
+        const secondPaneTemplate = () => $('<div>').text('Pane 2');
+
+        this.reinit({
+            dataSource: [{
+                template: firstPaneTemplate
+            }, {
+                template: secondPaneTemplate,
+                collapsible: true,
+            }]
+        });
+
+        this.instance.option('items[0].template', secondPaneTemplate);
+
+        this.checkIconsVisibility([{ prev: false, resize: true, next: true }]);
     });
 });
 

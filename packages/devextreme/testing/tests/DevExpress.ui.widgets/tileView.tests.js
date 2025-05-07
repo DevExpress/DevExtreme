@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import globalConfig from 'core/config';
 import keyboardMock from '../../helpers/keyboardMock.js';
-import { DataSource } from 'data/data_source/data_source';
+import { DataSource } from 'common/data/data_source/data_source';
 import { isRenderer } from 'core/utils/type';
 import { deferUpdate } from 'core/utils/common';
 

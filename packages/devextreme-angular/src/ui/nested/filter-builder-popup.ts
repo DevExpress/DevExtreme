@@ -19,8 +19,8 @@ import {
 
 
 
-import { PositionConfig } from 'devextreme/animation/position';
 import { PositionAlignment } from 'devextreme/common';
+import { PositionConfig } from 'devextreme/common/core/animation';
 
 import {
     NestedOptionHost,

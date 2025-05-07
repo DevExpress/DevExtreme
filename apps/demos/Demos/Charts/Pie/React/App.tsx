@@ -5,7 +5,7 @@ import PieChart, {
   Connector,
   Size,
   Export,
-  PieChartTypes,
+  type PieChartTypes,
 } from 'devextreme-react/pie-chart';
 import { areas } from './data.ts';
 

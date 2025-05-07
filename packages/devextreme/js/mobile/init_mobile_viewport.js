@@ -1,2 +1,3 @@
-import { initMobileViewport } from './init_mobile_viewport/init_mobile_viewport';
+import { initMobileViewport } from '../common/core/environment';
+
 export default initMobileViewport;

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import {
-  TreeList, Column, ColumnChooser, ColumnChooserSearch, ColumnChooserSelection, Position, TreeListTypes,
+  TreeList, Column, ColumnChooser, ColumnChooserSearch, ColumnChooserSelection, Position, type TreeListTypes,
 } from 'devextreme-react/tree-list';
 import { SelectBox } from 'devextreme-react/select-box';
 import { CheckBox } from 'devextreme-react/check-box';

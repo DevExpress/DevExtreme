@@ -32,6 +32,7 @@ $generic-grid-base-checkbox-icon-size: 16px;
 $generic-grid-base-checkbox-indeterminate-icon-size: 6px;
 $grid-masterdetail-padding: 20px;
 $generic-grid-base-group-panel-message-line-height: $generic-button-text-line-height;
+$generic-grid-base-cell-input-height: round($generic-base-line-height * $generic-base-font-size) + 2 * $generic-grid-base-cell-padding;
 
 @mixin dx-set-checkbox-border-color-as-background() {
   @if $generic-color-postfix == ".contrast" {
@@ -200,7 +201,7 @@ $generic-grid-base-group-panel-message-line-height: $generic-button-text-line-he
           min-width: 20px;
         }
       }
-      
+
       .dx-command-edit-with-icons {
         .dx-link {
           @include dx-icon-sizing($generic-command-edit-icon-size);
@@ -230,6 +231,13 @@ $generic-grid-base-group-panel-message-line-height: $generic-button-text-line-he
         line-height: $generic-base-inline-block-height;
       }
     }
+
+    .dx-#{$widget-name}-drop-highlight {
+      & > td {
+        background-color: $datagrid-drop-highlight-bg;
+        color: $datagrid-drop-highlight-color;
+      }
+    }
   }
 
   .dx-#{$widget-name}-edit-popup .dx-error-message {
@@ -240,7 +248,7 @@ $generic-grid-base-group-panel-message-line-height: $generic-button-text-line-he
   .dx-#{$widget-name}-rowsview {
     .dx-texteditor-input {
       padding: $generic-grid-base-cell-padding;
-      min-height: round($generic-base-line-height * $generic-base-font-size) + 2 * $generic-grid-base-cell-padding;
+      min-height: $generic-grid-base-cell-input-height;
     }
 
     .dx-numberbox,
@@ -412,13 +420,6 @@ $generic-grid-base-group-panel-message-line-height: $generic-button-text-line-he
     background-color: transparent;
   }
 
-  .dx-#{$widget-name}-drop-highlight {
-    & > td {
-      background-color: $datagrid-drop-highlight-bg;
-      color: $datagrid-drop-highlight-color;
-    }
-  }
-
   .dx-#{$widget-name}-focus-overlay {
     border: 2px solid $datagrid-focused-border-color;
   }
@@ -488,10 +489,16 @@ $generic-grid-base-group-panel-message-line-height: $generic-button-text-line-he
     color: $datagrid-columnchooser-item-color;
     font-weight: $datagrid-columnchooser-font-weight;
     touch-action: pinch-zoom;
-    border-bottom: $datagrid-border;
 
-    .dx-#{$widget-name}-content {
-      margin-bottom: -1px;
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      right: 0;
+      pointer-events: none;
+      border-bottom: $datagrid-border;
     }
 
     .dx-#{$widget-name}-table {
@@ -704,7 +711,7 @@ $generic-grid-base-group-panel-message-line-height: $generic-button-text-line-he
         padding: $grid-masterdetail-padding;
       }
       > .dx-#{$widget-name}-group-space,
-      .dx-master-detail-cell {
+      .dx-master-detail-cell:not(.dx-row-lines) {
         border-top: $datagrid-border;
         border-bottom: $datagrid-border;
       }
@@ -799,7 +806,6 @@ $generic-grid-base-group-panel-message-line-height: $generic-button-text-line-he
         & > td:not(.dx-focused),
         & > tr > td:not(.dx-focused),
         & .dx-command-edit:not(.dx-focused) .dx-link {
-          background-color: $datagrid-row-focused-bg;
           color: $datagrid-row-focused-color;
 
           .dx-texteditor-input {
@@ -810,6 +816,11 @@ $generic-grid-base-group-panel-message-line-height: $generic-button-text-line-he
           & .dx-#{$widget-name}-group-closed {
             color: $datagrid-row-focused-color;
           }
+        }
+
+        & > td:not(.dx-focused),
+        & > tr > td:not(.dx-focused) {
+          background-color: $datagrid-row-focused-bg;
         }
 
         & .dx-command-edit .dx-link:focus {
@@ -1012,13 +1023,38 @@ $generic-grid-base-group-panel-message-line-height: $generic-button-text-line-he
   }
 
   .dx-#{$widget-name}-rowsview.dx-#{$widget-name}-sticky-columns {
-    .dx-row:not(.dx-row-lines) > td:not(.dx-editor-cell, .dx-master-detail-cell) {
+    .dx-data-row:not(.dx-row-lines, .dx-edit-row, .dx-selection, .dx-row-focused) > td:not(.dx-editor-cell, .dx-master-detail-cell) {
       padding-top: $generic-grid-base-cell-padding + 1px;
+    }
+
+    .dx-row.dx-selection:not(.dx-edit-row):not(.dx-row-lines) > td:not(.dx-editor-cell, .dx-master-detail-cell),
+    .dx-row.dx-row-focused:not(.dx-edit-row):not(.dx-row-lines) > td:not(.dx-editor-cell, .dx-master-detail-cell) {
+      padding-bottom: $generic-grid-base-cell-padding - 1px;
+    }
+
+    .dx-row.dx-edit-row > td.dx-command-edit {
+      padding-top: $generic-grid-base-cell-padding - 1px;
+    }
+
+    .dx-row.dx-edit-row > td:not(.dx-master-detail-cell) .dx-texteditor-input {
+      padding-bottom: $generic-grid-base-cell-padding - 1px;
+      min-height: $generic-grid-base-cell-input-height - 2px;
+    }
+
+    .dx-data-row td:not(.dx-command-expand, .dx-editor-cell) {
+      .dx-row.dx-group-row + &, .dx-row.dx-master-detail-row + & {
+        padding-top: $generic-grid-base-cell-padding;
+      }
     }
 
     .dx-row.dx-row-lines.dx-edit-row > td {
       border-top-width: 0;
     }
+  }
+
+  .dx-#{$widget-name}-sticky-columns .dx-#{$widget-name}-draggable-column {
+    opacity: 1;
+    color: $datagrid-draggable-column-text-color;
   }
 
   .dx-rtl {

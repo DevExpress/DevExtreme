@@ -1,4 +1,4 @@
-import fx from 'animation/fx';
+import fx from 'common/core/animation/fx';
 import $ from 'jquery';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import { createWrapper, initTestMarkup } from '../../helpers/scheduler/helpers.js';

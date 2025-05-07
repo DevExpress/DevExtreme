@@ -13,19 +13,19 @@
 ) {
   .dx-scrollbar-hoverable {
     background-color: $scrollable-scrollbar-bg;
-  
+
     &.dx-state-hover,
     &.dx-scrollable-scrollbar-active {
       background-color: $scrollable-scrollbar-active-bg;
     }
-  
+
     &.dx-scrollable-scrollbar-active .dx-scrollable-scroll-content {
       background-color: $scrollable-scroll-active-bg;
     }
-  
+
     .dx-scrollable-scroll.dx-state-invisible {
       opacity: 1;
-  
+
       .dx-scrollable-scroll-content {
         background-color: transparent;
       }
@@ -44,31 +44,31 @@
       width: $scrollbar-size-thin;
       padding-inline-end: $scrollbar-scroll-boundary-padding;
     }
-  
+
     &.dx-scrollbar-hoverable {
       width: $scrollbar-size-thin;
       transition: width 0.2s linear 0.15s, background-color 0.2s linear 0.15s;
-  
+
       .dx-scrollable-scroll {
         transition: background-color 0.5s linear 1s, width 0.2s linear 150ms;
-  
+
         .dx-scrollable-scroll-content {
           transition: background-color 0.15s linear 0.15s;
         }
-  
+
         &.dx-state-invisible {
           transition: background-color 0.5s linear 1s, width 0.2s linear 0.15s;
-  
+
           .dx-scrollable-scroll-content {
             transition: background-color 0.5s linear 1s;
           }
         }
       }
-  
+
       &.dx-state-hover,
       &.dx-scrollable-scrollbar-active {
         width: $scrollbar-size;
-  
+
         .dx-scrollable-scroll {
           width: $scrollbar-size;
         }
@@ -87,31 +87,31 @@
       height: $scrollbar-size-thin;
       padding-bottom: $scrollbar-scroll-boundary-padding;
     }
-  
+
     &.dx-scrollbar-hoverable {
       height: $scrollbar-size-thin;
       transition: height 0.2s linear 0.15s, background-color 0.2s linear 0.15s;
-  
+
       .dx-scrollable-scroll {
         transition: background-color 0.5s linear 1s, height 0.2s linear 0.15s;
-  
+
         .dx-scrollable-scroll-content {
           transition: background-color 0.15s linear 0.15s;
         }
-  
+
         &.dx-state-invisible {
           transition: background-color 0.5s linear 1s, height 0.2s linear 0.15s;
-  
+
           .dx-scrollable-scroll-content {
             transition: background-color 0.5s linear 1s;
           }
         }
       }
-  
+
       &.dx-state-hover,
       &.dx-scrollable-scrollbar-active {
         height: $scrollbar-size;
-  
+
         .dx-scrollable-scroll {
           height: $scrollbar-size;
         }
@@ -133,7 +133,7 @@
           }
         }
       }
-  
+
       &.dx-rtl,
       .dx-rtl & {
         > .dx-scrollable-wrapper {
@@ -146,7 +146,7 @@
         }
       }
     }
-  
+
     &.dx-scrollable-horizontal,
     &.dx-scrollable-both {
       > .dx-scrollable-wrapper {

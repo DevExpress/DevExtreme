@@ -1,10 +1,15 @@
+import { type DxChartTypes } from 'devextreme-vue/chart';
+
 export const aggregationIntervals = [
   { displayName: 'One week', interval: 'week' },
   { displayName: 'Two weeks', interval: { weeks: 2 } },
   { displayName: 'Month', interval: 'month' },
 ];
 
-export const aggregationFunctions = [
+export const aggregationFunctions: {
+  displayName: string,
+  func: DxChartTypes.ChartSeriesAggregationMethod,
+}[] = [
   { displayName: 'Average', func: 'avg' },
   { displayName: 'Minimum', func: 'min' },
   { displayName: 'Maximum', func: 'max' },

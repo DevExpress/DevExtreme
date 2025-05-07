@@ -1,5 +1,5 @@
+import dateLocalization from '@js/common/core/localization/date';
 import dateUtils from '@js/core/utils/date';
-import dateLocalization from '@js/localization/date';
 import {
   getToday, isFirstCellInMonthWithIntervalCount, monthUtils, setOptionHour,
 } from '@ts/scheduler/r1/utils/index';

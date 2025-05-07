@@ -151,6 +151,8 @@
 }();
 
 (function setupShadowDomMode() {
+    const SHADOW_ROOT_SELECTOR = '.shadow-container';
+
     function getRoot() {
         return document.querySelector('#qunit-fixture').shadowRoot;
     }
@@ -182,7 +184,8 @@
                 top: 0!important;
                 left: 0!important;
             }
-            :scope .shadow-container {
+
+            ${SHADOW_ROOT_SELECTOR} {
                 position: absolute;
                 top: -10000px;
                 left: -10000px;
@@ -190,7 +193,7 @@
                 height: 1000px;
             }
 
-            :scope .shadow-container.qunit-fixture-visible {
+            ${SHADOW_ROOT_SELECTOR}.qunit-fixture-visible {
                 position: fixed !important;
                 left: 0 !important;
                 top: 0 !important;
@@ -202,8 +205,8 @@
     }
 
     function clearShadowRootTree() {
-        const container = get(':scope div')[0];
-        const style = get(':scope style')[0];
+        const container = get(SHADOW_ROOT_SELECTOR)[0];
+        const style = get(SHADOW_ROOT_SELECTOR)[0];
 
         jQuery(container).remove();
         jQuery(style).remove();
@@ -221,6 +224,7 @@
         jQueryInit = jQuery.fn.init;
 
         jQuery.fn.init = function(selector, context, root) {
+            const shadowRoot = getRoot().host;
             const result = new jQueryInit(selector, context, root);
             const resultElement = result.get(0);
 
@@ -228,8 +232,8 @@
                 return new jQueryInit(get(selector), context, root);
             }
 
-            if(resultElement === getRoot().host) {
-                return new jQueryInit(get(':scope div')[0], context, root);
+            if(resultElement === shadowRoot) {
+                return new jQueryInit(get(SHADOW_ROOT_SELECTOR)[0], context, root);
             }
 
             return result;

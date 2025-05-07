@@ -1,2 +1,2 @@
-import DataController from './__internal/data_controller';
+import DataController from './__internal/data/data_controller/data_controller';
 export default DataController;

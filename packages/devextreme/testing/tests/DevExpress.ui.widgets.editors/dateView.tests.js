@@ -1,10 +1,10 @@
-import fx from 'animation/fx';
-import translator from 'animation/translator';
+import fx from 'common/core/animation/fx';
+import translator from 'common/core/animation/translator';
 import devices from '__internal/core/m_devices';
-import { triggerShownEvent } from 'events/visibility_change';
+import { triggerShownEvent } from 'common/core/events/visibility_change';
 import 'generic_light.css!';
 import $ from 'jquery';
-import dateLocalization from 'localization/date';
+import dateLocalization from 'common/core/localization/date';
 import '__internal/ui/date_box/m_date_view';
 import '__internal/ui/date_box/m_date_view_roller';
 import executeAsyncMock from '../../helpers/executeAsyncMock.js';

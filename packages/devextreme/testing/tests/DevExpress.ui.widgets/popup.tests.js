@@ -10,7 +10,7 @@ import {
 
 import $ from 'jquery';
 import devices from '__internal/core/m_devices';
-import fx from 'animation/fx';
+import fx from 'common/core/animation/fx';
 import { value as viewPort } from 'core/utils/view_port';
 import pointerMock from '../../helpers/pointerMock.js';
 import keyboardMock from '../../helpers/keyboardMock.js';
@@ -23,8 +23,12 @@ import windowUtils from '__internal/core/utils/m_window';
 import uiErrors from 'ui/widget/ui.errors';
 import themes from 'ui/themes';
 import executeAsyncMock from '../../helpers/executeAsyncMock.js';
-import visibilityChangeUtils from 'events/visibility_change';
+import visibilityChangeUtils from 'common/core/events/visibility_change';
 import domAdapter from '__internal/core/m_dom_adapter';
+import {
+    TEMPLATE_WRAPPER_CLASS,
+    POPUP_CONTENT_SCROLLABLE_CLASS,
+} from '__internal/ui/popup/m_popup';
 
 import 'generic_light.css!';
 import 'ui/popup';
@@ -37,7 +41,6 @@ const IS_IOS_DEVICE = devices.real().platform === 'ios';
 const IS_OLD_SAFARI = IS_SAFARI && compareVersions(browser.version, [11]) < 0;
 const PREVENT_SAFARI_SCROLLING_CLASS = 'dx-prevent-safari-scrolling';
 
-const POPUP_CONTENT_SCROLLABLE_CLASS = 'dx-popup-content-scrollable';
 const TOOLBAR_LABEL_CLASS = 'dx-toolbar-label';
 
 themes.setDefaultTimeout(0);
@@ -60,7 +63,7 @@ QUnit.testStart(function() {
 
     if(fixtureRoot.getRootNode().host) {
         style += '\
-            :scope div.shadow-container {\
+            div.shadow-container {\
                 width: 100% !important;\
                 height: 100% !important;\
             }\
@@ -694,7 +697,7 @@ QUnit.module('dimensions', {
                     'title': {
                         render: function(args) {
                             const $element = $('<span>')
-                                .addClass('dx-template-wrapper')
+                                .addClass(TEMPLATE_WRAPPER_CLASS)
                                 .text('text');
 
                             return $element.get(0);
@@ -1073,6 +1076,45 @@ QUnit.module('options changed callbacks', {
         assert.ok($popup.hasClass(POPUP_CONTENT_INHERIT_HEIGHT_CLASS), 'has POPUP_CONTENT_INHERIT_HEIGHT_CLASS with auto width');
     });
 
+    QUnit.test('template wrapper element inherits maxHeight and minHeight styles from parent when popup dimensions are auto (T1259619)', function(assert) {
+        const popup = $('#popup').dxPopup({
+            visible: true,
+            height: 'auto',
+            width: 'auto',
+            showTitle: false,
+            contentTemplate() {
+                return $('<div>')
+                    .addClass('templateWrapper')
+                    .text('testContent');
+            }
+        }).dxPopup('instance');
+
+        const $templateWrapper = popup.$content().find('.templateWrapper');
+        const maxHeight = $templateWrapper.css('maxHeight');
+        const minHeight = $templateWrapper.css('minHeight');
+
+        assert.strictEqual(maxHeight, 'none', 'maxHeight is inherited correctly');
+        assert.strictEqual(minHeight, '0px', 'minHeight is inherited correctly');
+    });
+
+    QUnit.test('Template wrapper element uses "display: flow-root" to prevent the appearance of scrollbar (T1253645)', function(assert) {
+        const popup = $('#popup').dxPopup({
+            visible: true,
+            width: 300,
+            height: 300,
+            showTitle: false,
+            contentTemplate() {
+                return $('<div>')
+                    .addClass(TEMPLATE_WRAPPER_CLASS)
+                    .append('<p>test content</p>');
+            }
+        }).dxPopup('instance');
+
+        const $templateWrapper = popup.$content().find(`.${TEMPLATE_WRAPPER_CLASS}`);
+        const overflow = $templateWrapper.css('display');
+
+        assert.strictEqual(overflow, 'flow-root', 'overflow property is set to hidden');
+    });
 
     QUnit.test('popup height should support TreeView with Search if height = auto (T724029)', function(assert) {
         if(IS_OLD_SAFARI) {

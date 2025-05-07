@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import FileManager, {
-  Permissions, ItemView, FileManagerTypes, IItemViewProps,
+  Permissions, ItemView, type FileManagerTypes, IItemViewProps,
 } from 'devextreme-react/file-manager';
 import { fileItems } from './data.ts';
 

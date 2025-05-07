@@ -93,7 +93,7 @@
 import { ref } from 'vue';
 import {
   DxFileManager, DxPermissions, DxToolbar, DxContextMenu, DxItem,
-  DxFileSelectionItem, DxItemView, DxDetails, DxColumn,
+  DxFileSelectionItem, DxItemView, DxDetails, DxColumn, type DxFileManagerTypes,
 } from 'devextreme-vue/file-manager';
 import { fileItems, getItemInfo } from './data.ts';
 
@@ -101,7 +101,7 @@ const newFileMenuOptions = getNewFileMenuOptions();
 const changeCategoryMenuOptions = getChangeCategoryMenuOptions();
 const fileManager = ref();
 
-function onItemClick({ itemData, viewArea, fileSystemItem }) {
+function onItemClick({ itemData, viewArea, fileSystemItem }: DxFileManagerTypes.ContextMenuItemClickEvent) {
   let updated = false;
   const { extension, category } = getItemInfo(itemData.text)
 

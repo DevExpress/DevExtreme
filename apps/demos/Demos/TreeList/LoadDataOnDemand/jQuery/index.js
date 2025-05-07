@@ -3,9 +3,9 @@ $(() => {
     dataSource: {
       load(options) {
         return $.ajax({
-          url: 'https://js.devexpress.com/Demos/Mvc/api/treeListData',
+          url: 'https://js.devexpress.com/Demos/NetCore/api/treeListData',
           dataType: 'json',
-          data: { parentIds: options.parentIds },
+          data: { parentIds: options.parentIds.join(",") },
         }).then((result) => ({
           data: result,
         }));

@@ -1,7 +1,7 @@
+import eventsEngine from '@js/common/core/events/core/events_engine';
+import { addNamespace, normalizeKeyName } from '@js/common/core/events/utils/index';
 import Class from '@js/core/class';
 import $ from '@js/core/renderer';
-import eventsEngine from '@js/events/core/events_engine';
-import { addNamespace, normalizeKeyName } from '@js/events/utils/index';
 
 const COMPOSITION_START_EVENT = 'compositionstart';
 const COMPOSITION_END_EVENT = 'compositionend';

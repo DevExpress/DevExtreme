@@ -1,10 +1,23 @@
+import {
+    Format,
+} from '../common/core/localization';
+
+import {
+    UserDefinedElement,
+    DxElement,
+} from '../core/element';
+
+import {
+    template,
+} from '../common';
+
 import Widget, { WidgetOptions } from './widget/ui.widget';
 import {
     EventInfo,
     NativeEventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
-} from '../events/index';
+} from '../common/core/events';
 import DataSource, { DataSourceLike } from '../data/data_source';
 
 /**
@@ -32,13 +45,13 @@ export type InitializedEvent = InitializedEventInfo<dxChat>;
 export type OptionChangedEvent = EventInfo<dxChat> & ChangedOptionInfo;
 
 /**
- * @docid _ui_chat_MessageSendEvent
+ * @docid _ui_chat_MessageEnteredEvent
  * @public
  * @type object
  * @inherits NativeEventInfo
  */
-export type MessageSendEvent = NativeEventInfo<dxChat, KeyboardEvent | PointerEvent | MouseEvent | TouchEvent> & {
-    /** @docid _ui_chat_MessageSendEvent.message */
+export type MessageEnteredEvent = NativeEventInfo<dxChat, KeyboardEvent | PointerEvent | MouseEvent | TouchEvent> & {
+    /** @docid _ui_chat_MessageEnteredEvent.message */
     readonly message?: Message;
 };
 
@@ -77,19 +90,16 @@ export type User = {
     id?: number | string;
     /**
      * @docid
-     * @default ''
      * @public
      */
     name?: string;
     /**
      * @docid
-     * @default ''
      * @public
      */
     avatarUrl?: string;
     /**
      * @docid
-     * @default undefined
      * @public
      */
     avatarAlt?: string;
@@ -100,7 +110,7 @@ export type User = {
  * @namespace DevExpress.ui.dxChat
  * @public
  */
-export type ChatError = {
+export type Alert = {
     /**
      * @docid
      * @public
@@ -108,7 +118,6 @@ export type ChatError = {
     id?: number | string;
     /**
      * @docid
-     * @default ''
      * @public
      */
     message?: string;
@@ -122,28 +131,30 @@ export type ChatError = {
 export type Message = {
     /**
      * @docid
-     * @default undefined
+     * @public
+     */
+    id?: number | string;
+    /**
+     * @docid
      * @public
      */
     timestamp?: Date | number | string;
     /**
      * @docid
-     * @default undefined
      * @public
      */
     author?: User;
     /**
      * @docid
-     * @default ''
      * @public
      */
     text?: string;
-    /**
-     * @docid
-     * @default false
-     * @public
-     */
-    typing?: boolean;
+};
+
+/** @public */
+export type MessageTemplateData = {
+    readonly component: dxChat;
+    readonly message?: Message;
 };
 
 /**
@@ -192,10 +203,41 @@ export interface dxChatOptions extends WidgetOptions<dxChat> {
     dataSource?: DataSourceLike<Message> | null;
     /**
      * @docid
-     * @default undefined
+     * @default 'shortdate'
      * @public
      */
-    errors?: Array<ChatError>;
+    dayHeaderFormat?: Format;
+    /**
+     * @docid
+     * @default true
+     * @public
+     */
+    reloadOnChange?: boolean;
+    /**
+     * @docid
+     * @default []
+     * @public
+     */
+    alerts?: Array<Alert>;
+    /**
+     * @docid
+     * @default null
+     * @type_function_return string|Element|jQuery
+     * @public
+     */
+    messageTemplate?: template | null | ((data: MessageTemplateData, messageBubbleElement: DxElement) => string | UserDefinedElement);
+    /**
+     * @docid
+     * @default 'shorttime'
+     * @public
+     */
+    messageTimestampFormat?: Format;
+    /**
+     * @docid
+     * @default []
+     * @public
+     */
+    typingUsers?: Array<User>;
     /**
      * @docid
      * @default true
@@ -223,11 +265,11 @@ export interface dxChatOptions extends WidgetOptions<dxChat> {
     /**
      * @docid
      * @default undefined
-     * @type_function_param1 e:{ui/chat:MessageSendEvent}
+     * @type_function_param1 e:{ui/chat:MessageEnteredEvent}
      * @action
      * @public
      */
-    onMessageSend?: ((e: MessageSendEvent) => void);
+    onMessageEntered?: ((e: MessageEnteredEvent) => void) | undefined;
     /**
      * @docid
      * @default undefined
@@ -235,7 +277,7 @@ export interface dxChatOptions extends WidgetOptions<dxChat> {
      * @action
      * @public
      */
-    onTypingStart?: ((e: TypingEndEvent) => void);
+    onTypingStart?: ((e: TypingEndEvent) => void) | undefined ;
     /**
      * @docid
      * @default undefined
@@ -243,7 +285,7 @@ export interface dxChatOptions extends WidgetOptions<dxChat> {
      * @action
      * @public
      */
-    onTypingEnd?: ((e: TypingEndEvent) => void);
+    onTypingEnd?: ((e: TypingEndEvent) => void) | undefined;
 }
 
 /**
@@ -280,7 +322,7 @@ import { CheckedEvents } from '../core';
 
 type FilterOutHidden<T> = Omit<T, 'onContentReady' | 'onFocusIn' | 'onFocusOut' >;
 
-type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>, 'onMessageSend' | 'onTypingStart' | 'onTypingEnd'>;
+type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>, 'onMessageEntered' | 'onTypingStart' | 'onTypingEnd'>;
 
 /**
 * @hidden

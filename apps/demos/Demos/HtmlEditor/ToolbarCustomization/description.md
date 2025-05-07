@@ -1,2 +1,2 @@
-This demo shows how to&nbsp;add a&nbsp;custom control to&nbsp;the toolbar. The **Show markup** button opens a&nbsp;popup that displays the HtmlEditor&rsquo;s output markup.
+This demo shows how to add a custom control to the toolbar. The **Show markup** button opens a popup that displays the HTML Editor's output markup.
 <!--split-->

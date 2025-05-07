@@ -6,13 +6,14 @@ import {
 import {
     UserDefinedElement,
     DxElement,
+    InternalElement,
 } from './element';
 
 import {
     ChangedOptionInfo,
     EventInfo,
     InitializedEventInfo,
-} from '../events/index';
+} from '../common/core/events';
 
 import { TemplateManager } from './template_manager';
 import { FunctionTemplate } from './templates/function_template';
@@ -49,7 +50,7 @@ export interface DOMComponentOptions<TComponent> extends ComponentOptions<
      * @default undefined
      * @public
      */
-    height?: number | string | (() => number | string);
+    height?: number | string | (() => number | string) | undefined;
     /**
      * @docid
      * @action
@@ -77,7 +78,7 @@ export interface DOMComponentOptions<TComponent> extends ComponentOptions<
      * @default undefined
      * @public
      */
-    width?: number | string | (() => number | string);
+    width?: number | string | (() => number | string) | undefined;
 }
 /**
  * @docid
@@ -89,7 +90,7 @@ export interface DOMComponentOptions<TComponent> extends ComponentOptions<
 export default class DOMComponent<TProperties = Properties> extends Component<TProperties> {
     _templateManager: TemplateManager;
 
-    _cancelOptionChange?: string;
+    _cancelOptionChange?: string | boolean;
 
     constructor(element: UserDefinedElement, options?: TProperties);
 
@@ -129,7 +130,7 @@ export default class DOMComponent<TProperties = Properties> extends Component<TP
      */
     element(): DxElement;
 
-    $element(): UserDefinedElement;
+    $element(): InternalElement<Element>;
     _getTemplate(template: unknown): FunctionTemplate;
     _invalidate(): void;
     _refresh(): void;

@@ -6,10 +6,10 @@ import {
 } from '@angular/core';
 
 import { AsyncRule, CompareRule, CustomRule, DataType, EmailRule, HorizontalAlignment, NumericRule, PatternRule, RangeRule, RequiredRule, SearchMode, SortOrder, StringLengthRule } from 'devextreme/common';
+import { Format } from 'devextreme/common/core/localization';
 import { ColumnHeaderFilterSearchConfig, FilterOperation, FilterType, FixedPosition, HeaderFilterGroupInterval, SelectedFilterOperation } from 'devextreme/common/grids';
 import { Store } from 'devextreme/data';
 import { Options as DataSourceOptions } from 'devextreme/data/data_source';
-import { Format } from 'devextreme/localization';
 import { DataGridCommandColumnType, DataGridPredefinedColumnButton, dxDataGridColumn, dxDataGridColumnButton } from 'devextreme/ui/data_grid';
 import { SimpleItem } from 'devextreme/ui/form';
 import { dxTreeListColumn, dxTreeListColumnButton, TreeListCommandColumnType, TreeListPredefinedColumnButton } from 'devextreme/ui/tree_list';

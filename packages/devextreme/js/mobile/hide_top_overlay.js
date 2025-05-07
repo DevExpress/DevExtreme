@@ -1,5 +1,3 @@
-import { hideCallback } from './hide_callback';
+import { hideTopOverlay } from '../common/core/environment';
 
-export default function() {
-    return hideCallback.fire();
-}
+export default hideTopOverlay;

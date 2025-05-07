@@ -31,7 +31,7 @@ class CalendarMultiSelectionStrategy extends CalendarSelectionStrategy {
     this.dateValue(value, e);
   }
 
-  updateAriaSelected(value, previousValue) {
+  updateAriaSelected(value?, previousValue?) {
     value ??= this.dateOption('value');
     previousValue ??= [];
 
@@ -39,7 +39,7 @@ class CalendarMultiSelectionStrategy extends CalendarSelectionStrategy {
   }
 
   getDefaultCurrentDate() {
-    const dates = this.dateOption('value').filter((value) => value);
+    const dates = this.dateOption('value').filter(Boolean);
     return this._getLowestDateInArray(dates);
   }
 

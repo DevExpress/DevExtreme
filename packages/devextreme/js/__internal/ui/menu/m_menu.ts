@@ -1,4 +1,8 @@
-import type { PositionConfig } from '@js/animation/position';
+import type { PositionConfig } from '@js/common/core/animation';
+import eventsEngine from '@js/common/core/events/core/events_engine';
+import { end as hoverEventEnd } from '@js/common/core/events/hover';
+import pointerEvents from '@js/common/core/events/pointer';
+import { addNamespace } from '@js/common/core/events/utils/index';
 import registerComponent from '@js/core/component_registrator';
 import { getPublicElement } from '@js/core/element';
 import type { dxElementWrapper } from '@js/core/renderer';
@@ -8,10 +12,6 @@ import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import { getOuterWidth } from '@js/core/utils/size';
 import { isDefined, isObject, isPlainObject } from '@js/core/utils/type';
-import eventsEngine from '@js/events/core/events_engine';
-import { end as hoverEventEnd } from '@js/events/hover';
-import pointerEvents from '@js/events/pointer';
-import { addNamespace } from '@js/events/utils/index';
 import Button from '@js/ui/button';
 import type { Item } from '@js/ui/menu';
 import type { Properties as OverlayProperties } from '@js/ui/overlay';
@@ -78,8 +78,6 @@ class Menu extends MenuBase {
 
   _hoveredRootItem?: dxElementWrapper;
 
-  _actions?: any;
-
   _showSubmenuTimer?: any;
 
   _hideSubmenuTimer?: any;
@@ -136,11 +134,11 @@ class Menu extends MenuBase {
   }
 
   _focusTarget(): dxElementWrapper {
-    // @ts-expect-error
     return this.$element();
   }
 
-  _isMenuHorizontal() {
+  _isMenuHorizontal(): boolean {
+    // @ts-expect-error
     return this.option('orientation') === 'horizontal';
   }
 
@@ -232,12 +230,12 @@ class Menu extends MenuBase {
     }
   }
 
-  _isAdaptivityEnabled() {
+  _isAdaptivityEnabled(): boolean {
+    // @ts-expect-error
     return this.option('adaptivityEnabled') && this.option('orientation') === 'horizontal';
   }
 
   _updateItemsWidthCache(): void {
-    // @ts-expect-error
     const $menuItems = this.$element().find('ul').first().children('li')
       .children(`.${DX_MENU_ITEM_CLASS}`);
     this._menuItemsWidth = this._getSummaryItemsSize('width', $menuItems, true);
@@ -268,11 +266,10 @@ class Menu extends MenuBase {
   _initMarkup(): void {
     // @ts-expect-error
     this._visibleSubmenu = null;
-    // @ts-expect-error
+
     this.$element().addClass(DX_MENU_CLASS);
 
     super._initMarkup();
-    // @ts-expect-error
     this._addCustomCssClass(this.$element());
 
     this.setAria('role', 'menubar');
@@ -311,7 +308,7 @@ class Menu extends MenuBase {
     super._focusOutHandler(e);
   }
 
-  _renderHamburgerButton(): Element {
+  _renderHamburgerButton(): dxElementWrapper {
     // @ts-expect-error
     this._hamburger = new Button($('<div>').addClass(DX_ADAPTIVE_HAMBURGER_BUTTON_CLASS), {
       icon: 'menu',
@@ -334,14 +331,11 @@ class Menu extends MenuBase {
   }
 
   _toggleHamburgerActiveState(state) {
-    // @ts-expect-error
     this._hamburger && this._hamburger.$element().toggleClass(DX_STATE_ACTIVE_CLASS, state);
   }
 
-  _toggleAdaptiveMode(state) {
-    // @ts-expect-error
+  _toggleAdaptiveMode(state: boolean): void {
     const $menuItemsContainer = this.$element().find(`.${DX_MENU_HORIZONTAL_CLASS}`);
-    // @ts-expect-error
     const $adaptiveElements = this.$element().find(`.${DX_ADAPTIVE_MODE_CLASS}`);
 
     if (state) {
@@ -352,8 +346,9 @@ class Menu extends MenuBase {
     }
 
     this._setAriaRole(state);
-
+    // @ts-expect-error
     $menuItemsContainer.toggle(!state);
+    // @ts-expect-error
     $adaptiveElements.toggle(state);
   }
 
@@ -387,7 +382,6 @@ class Menu extends MenuBase {
 
     return {
       _ignoreFunctionValueDeprecation: true,
-      // @ts-expect-error
       maxHeight: () => getElementMaxHeightByWindow(this.$element()),
       deferRendering: false,
       shading: false,
@@ -431,6 +425,7 @@ class Menu extends MenuBase {
     });
 
     return extend(menuOptions, {
+      // @ts-expect-error
       dataSource: this.getDataSource(),
       animationEnabled: !!this.option('animation'),
       onItemClick: this._treeviewItemClickHandler.bind(this),
@@ -471,7 +466,6 @@ class Menu extends MenuBase {
     this._$adaptiveContainer.append($hamburger);
     this._$adaptiveContainer.append(this._overlay.$element());
 
-    // @ts-expect-error
     this.$element().append(this._$adaptiveContainer);
 
     this._updateItemsWidthCache();
@@ -634,7 +628,6 @@ class Menu extends MenuBase {
   }
 
   _clearRootSelection(): void {
-    // @ts-expect-error
     const $prevSelectedItem = this.$element().find(`.${DX_MENU_ITEMS_CONTAINER_CLASS}`).first().children()
       .children()
       .filter(`.${this._selectedItemClass()}`);
@@ -771,7 +764,6 @@ class Menu extends MenuBase {
 
     const $submenu = $rootItem.children(`.${DX_CONTEXT_MENU_CLASS}`);
 
-    // @ts-expect-error
     return $submenu.length && Submenu.getInstance($submenu);
   }
 
@@ -954,6 +946,7 @@ class Menu extends MenuBase {
       return submenu;
     }
     itemData = itemData ?? this._getItemData($itemElement);
+
     const node = this._dataAdapter.getNodeByItem(itemData);
     // @ts-expect-error
     return this._hasChildren(node) && this._renderSubmenuItems(node, $itemElement);
@@ -974,6 +967,7 @@ class Menu extends MenuBase {
 
     if (this._visibleSubmenu) {
       if (this._visibleSubmenu === currentSubmenu) {
+        // @ts-expect-error
         if (this.option('showFirstSubmenuMode') === 'onClick') this._hideSubmenu(this._visibleSubmenu);
         return;
       }
@@ -1045,11 +1039,10 @@ class Menu extends MenuBase {
 
   unselectItem(itemElement): void {
     this._hideSubmenu(this._visibleSubmenu);
-    super.selectItem(itemElement);
+    super.unselectItem(itemElement);
   }
 }
 
-// @ts-expect-error
 registerComponent('dxMenu', Menu);
 
 export default Menu;

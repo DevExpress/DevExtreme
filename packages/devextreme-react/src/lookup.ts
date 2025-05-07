@@ -10,12 +10,12 @@ import NestedOption from "./core/nested-option";
 
 import type { ClosedEvent, ContentReadyEvent, DisposingEvent, InitializedEvent, ItemClickEvent, OpenedEvent, PageLoadingEvent, PullRefreshEvent, ScrollEvent, ValueChangedEvent } from "devextreme/ui/lookup";
 import type { ContentReadyEvent as PopoverContentReadyEvent, DisposingEvent as PopoverDisposingEvent, InitializedEvent as PopoverInitializedEvent, HiddenEvent, HidingEvent, OptionChangedEvent, ShowingEvent, ShownEvent, TitleRenderedEvent } from "devextreme/ui/popover";
-import type { AnimationConfig, AnimationState } from "devextreme/animation/fx";
-import type { event } from "devextreme/events/index";
-import type { template } from "devextreme/core/templates/template";
-import type { PositionConfig } from "devextreme/animation/position";
-import type { dxPopupToolbarItem } from "devextreme/ui/popup";
+import type { AnimationConfig, CollisionResolution, PositionConfig, AnimationState, AnimationType, CollisionResolutionCombination } from "devextreme/common/core/animation";
+import type { HorizontalAlignment, VerticalAlignment, template, Position as CommonPosition, Direction, PositionAlignment, ToolbarItemLocation, ToolbarItemComponent } from "devextreme/common";
+import type { event } from "devextreme/events/events.types";
+import type { dxPopupToolbarItem, ToolbarLocation } from "devextreme/ui/popup";
 import type { CollectionWidgetItem } from "devextreme/ui/collection/ui.collection_widget.base";
+import type { LocateInMenuMode, ShowTextMode } from "devextreme/ui/toolbar";
 
 type ReplaceFieldTypes<TSource, TReplacement> = {
   [P in keyof TSource]: P extends keyof TReplacement ? TReplacement[P] : TSource[P];
@@ -138,8 +138,8 @@ const Animation = Object.assign<typeof _componentAnimation, NestedComponentMeta>
 // owners:
 // Position
 type IAtProps = React.PropsWithChildren<{
-  x?: "center" | "left" | "right";
-  y?: "bottom" | "center" | "top";
+  x?: HorizontalAlignment;
+  y?: VerticalAlignment;
 }>
 const _componentAt = (props: IAtProps) => {
   return React.createElement(NestedOption<IAtProps>, {
@@ -176,8 +176,8 @@ const BoundaryOffset = Object.assign<typeof _componentBoundaryOffset, NestedComp
 // owners:
 // Position
 type ICollisionProps = React.PropsWithChildren<{
-  x?: "fit" | "flip" | "flipfit" | "none";
-  y?: "fit" | "flip" | "flipfit" | "none";
+  x?: CollisionResolution;
+  y?: CollisionResolution;
 }>
 const _componentCollision = (props: ICollisionProps) => {
   return React.createElement(NestedOption<ICollisionProps>, {
@@ -201,19 +201,19 @@ type IDropDownOptionsProps = React.PropsWithChildren<{
   };
   bindingOptions?: Record<string, any>;
   closeOnOutsideClick?: boolean | ((event: event) => boolean);
-  container?: any | string;
+  container?: any | string | undefined;
   contentTemplate?: ((contentElement: any) => string | any) | template;
   deferRendering?: boolean;
   disabled?: boolean;
   enableBodyScroll?: boolean;
   height?: (() => number | string) | number | string;
-  hideEvent?: Record<string, any> | string | {
-    delay?: number;
-    name?: string;
+  hideEvent?: Record<string, any> | string | undefined | {
+    delay?: number | undefined;
+    name?: string | undefined;
   };
   hideOnOutsideClick?: boolean | ((event: event) => boolean);
   hideOnParentScroll?: boolean;
-  hint?: string;
+  hint?: string | undefined;
   hoverStateEnabled?: boolean;
   maxHeight?: (() => number | string) | number | string;
   maxWidth?: (() => number | string) | number | string;
@@ -228,17 +228,17 @@ type IDropDownOptionsProps = React.PropsWithChildren<{
   onShowing?: ((e: ShowingEvent) => void);
   onShown?: ((e: ShownEvent) => void);
   onTitleRendered?: ((e: TitleRenderedEvent) => void);
-  position?: PositionConfig | "bottom" | "left" | "right" | "top";
+  position?: CommonPosition | PositionConfig;
   rtlEnabled?: boolean;
   shading?: boolean;
   shadingColor?: string;
   showCloseButton?: boolean;
-  showEvent?: Record<string, any> | string | {
-    delay?: number;
-    name?: string;
+  showEvent?: Record<string, any> | string | undefined | {
+    delay?: number | undefined;
+    name?: string | undefined;
   };
   showTitle?: boolean;
-  target?: any | string;
+  target?: any | string | undefined;
   title?: string;
   titleTemplate?: ((titleElement: any) => string | any) | template;
   toolbarItems?: Array<dxPopupToolbarItem>;
@@ -247,8 +247,8 @@ type IDropDownOptionsProps = React.PropsWithChildren<{
   wrapperAttr?: any;
   defaultHeight?: (() => number | string) | number | string;
   onHeightChange?: (value: (() => number | string) | number | string) => void;
-  defaultPosition?: PositionConfig | "bottom" | "left" | "right" | "top";
-  onPositionChange?: (value: PositionConfig | "bottom" | "left" | "right" | "top") => void;
+  defaultPosition?: CommonPosition | PositionConfig;
+  onPositionChange?: (value: CommonPosition | PositionConfig) => void;
   defaultVisible?: boolean;
   onVisibleChange?: (value: boolean) => void;
   defaultWidth?: (() => number | string) | number | string;
@@ -295,6 +295,7 @@ const DropDownOptions = Object.assign<typeof _componentDropDownOptions, NestedCo
 
 // owners:
 // Hide
+// Show
 type IFromProps = React.PropsWithChildren<{
   left?: number;
   opacity?: number;
@@ -323,14 +324,14 @@ const From = Object.assign<typeof _componentFrom, NestedComponentMeta>(_componen
 type IHideProps = React.PropsWithChildren<{
   complete?: (($element: any, config: AnimationConfig) => void);
   delay?: number;
-  direction?: "bottom" | "left" | "right" | "top";
+  direction?: Direction | undefined;
   duration?: number;
   easing?: string;
   from?: AnimationState;
-  staggerDelay?: number;
+  staggerDelay?: number | undefined;
   start?: (($element: any, config: AnimationConfig) => void);
   to?: AnimationState;
-  type?: "css" | "fade" | "fadeIn" | "fadeOut" | "pop" | "slide" | "slideIn" | "slideOut";
+  type?: AnimationType;
 }>
 const _componentHide = (props: IHideProps) => {
   return React.createElement(NestedOption<IHideProps>, {
@@ -352,8 +353,8 @@ const Hide = Object.assign<typeof _componentHide, NestedComponentMeta>(_componen
 // owners:
 // DropDownOptions
 type IHideEventProps = React.PropsWithChildren<{
-  delay?: number;
-  name?: string;
+  delay?: number | undefined;
+  name?: string | undefined;
 }>
 const _componentHideEvent = (props: IHideEventProps) => {
   return React.createElement(NestedOption<IHideEventProps>, {
@@ -401,8 +402,8 @@ const Item = Object.assign<typeof _componentItem, NestedComponentMeta>(_componen
 // owners:
 // Position
 type IMyProps = React.PropsWithChildren<{
-  x?: "center" | "left" | "right";
-  y?: "bottom" | "center" | "top";
+  x?: HorizontalAlignment;
+  y?: VerticalAlignment;
 }>
 const _componentMy = (props: IMyProps) => {
   return React.createElement(NestedOption<IMyProps>, {
@@ -438,24 +439,25 @@ const Offset = Object.assign<typeof _componentOffset, NestedComponentMeta>(_comp
 
 // owners:
 // From
+// To
 // DropDownOptions
 type IPositionProps = React.PropsWithChildren<{
-  at?: Record<string, any> | "bottom" | "center" | "left" | "left bottom" | "left top" | "right" | "right bottom" | "right top" | "top" | {
-    x?: "center" | "left" | "right";
-    y?: "bottom" | "center" | "top";
+  at?: Record<string, any> | PositionAlignment | {
+    x?: HorizontalAlignment;
+    y?: VerticalAlignment;
   };
   boundary?: any | string;
   boundaryOffset?: Record<string, any> | string | {
     x?: number;
     y?: number;
   };
-  collision?: Record<string, any> | "fit" | "fit flip" | "fit flipfit" | "fit none" | "flip" | "flip fit" | "flip none" | "flipfit" | "flipfit fit" | "flipfit none" | "none" | "none fit" | "none flip" | "none flipfit" | {
-    x?: "fit" | "flip" | "flipfit" | "none";
-    y?: "fit" | "flip" | "flipfit" | "none";
+  collision?: CollisionResolutionCombination | Record<string, any> | {
+    x?: CollisionResolution;
+    y?: CollisionResolution;
   };
-  my?: Record<string, any> | "bottom" | "center" | "left" | "left bottom" | "left top" | "right" | "right bottom" | "right top" | "top" | {
-    x?: "center" | "left" | "right";
-    y?: "bottom" | "center" | "top";
+  my?: Record<string, any> | PositionAlignment | {
+    x?: HorizontalAlignment;
+    y?: VerticalAlignment;
   };
   of?: any | string;
   offset?: Record<string, any> | string | {
@@ -468,6 +470,13 @@ const _componentPosition = (props: IPositionProps) => {
     ...props,
     elementDescriptor: {
       OptionName: "position",
+      ExpectedChildren: {
+        at: { optionName: "at", isCollectionItem: false },
+        boundaryOffset: { optionName: "boundaryOffset", isCollectionItem: false },
+        collision: { optionName: "collision", isCollectionItem: false },
+        my: { optionName: "my", isCollectionItem: false },
+        offset: { optionName: "offset", isCollectionItem: false }
+      },
     },
   });
 };
@@ -481,20 +490,24 @@ const Position = Object.assign<typeof _componentPosition, NestedComponentMeta>(_
 type IShowProps = React.PropsWithChildren<{
   complete?: (($element: any, config: AnimationConfig) => void);
   delay?: number;
-  direction?: "bottom" | "left" | "right" | "top";
+  direction?: Direction | undefined;
   duration?: number;
   easing?: string;
   from?: AnimationState;
-  staggerDelay?: number;
+  staggerDelay?: number | undefined;
   start?: (($element: any, config: AnimationConfig) => void);
   to?: AnimationState;
-  type?: "css" | "fade" | "fadeIn" | "fadeOut" | "pop" | "slide" | "slideIn" | "slideOut";
+  type?: AnimationType;
 }>
 const _componentShow = (props: IShowProps) => {
   return React.createElement(NestedOption<IShowProps>, {
     ...props,
     elementDescriptor: {
       OptionName: "show",
+      ExpectedChildren: {
+        from: { optionName: "from", isCollectionItem: false },
+        to: { optionName: "to", isCollectionItem: false }
+      },
     },
   });
 };
@@ -506,8 +519,8 @@ const Show = Object.assign<typeof _componentShow, NestedComponentMeta>(_componen
 // owners:
 // DropDownOptions
 type IShowEventProps = React.PropsWithChildren<{
-  delay?: number;
-  name?: string;
+  delay?: number | undefined;
+  name?: string | undefined;
 }>
 const _componentShowEvent = (props: IShowEventProps) => {
   return React.createElement(NestedOption<IShowEventProps>, {
@@ -524,6 +537,7 @@ const ShowEvent = Object.assign<typeof _componentShowEvent, NestedComponentMeta>
 
 // owners:
 // Hide
+// Show
 type IToProps = React.PropsWithChildren<{
   left?: number;
   opacity?: number;
@@ -536,6 +550,9 @@ const _componentTo = (props: IToProps) => {
     ...props,
     elementDescriptor: {
       OptionName: "to",
+      ExpectedChildren: {
+        position: { optionName: "position", isCollectionItem: false }
+      },
     },
   });
 };
@@ -547,19 +564,19 @@ const To = Object.assign<typeof _componentTo, NestedComponentMeta>(_componentTo,
 // owners:
 // DropDownOptions
 type IToolbarItemProps = React.PropsWithChildren<{
-  cssClass?: string;
+  cssClass?: string | undefined;
   disabled?: boolean;
   html?: string;
-  locateInMenu?: "always" | "auto" | "never";
-  location?: "after" | "before" | "center";
+  locateInMenu?: LocateInMenuMode;
+  location?: ToolbarItemLocation;
   menuItemTemplate?: (() => string | any) | template;
   options?: any;
-  showText?: "always" | "inMenu";
+  showText?: ShowTextMode;
   template?: ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string | any) | template;
   text?: string;
-  toolbar?: "bottom" | "top";
+  toolbar?: ToolbarLocation;
   visible?: boolean;
-  widget?: "dxAutocomplete" | "dxButton" | "dxButtonGroup" | "dxCheckBox" | "dxDateBox" | "dxDropDownButton" | "dxMenu" | "dxSelectBox" | "dxSwitch" | "dxTabs" | "dxTextBox";
+  widget?: ToolbarItemComponent;
   menuItemRender?: (...params: any) => React.ReactNode;
   menuItemComponent?: React.ComponentType<any>;
   render?: (...params: any) => React.ReactNode;

@@ -14,6 +14,7 @@ import {
 
 
 
+import { ChartSeries } from 'devextreme/viz/common';
 
 import {
     NestedOptionHost,
@@ -29,10 +30,10 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoChartSeriesTemplateComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get customizeSeries(): Function {
+    get customizeSeries(): ((seriesName: any) => ChartSeries) {
         return this._getOption('customizeSeries');
     }
-    set customizeSeries(value: Function) {
+    set customizeSeries(value: ((seriesName: any) => ChartSeries)) {
         this._setOption('customizeSeries', value);
     }
 

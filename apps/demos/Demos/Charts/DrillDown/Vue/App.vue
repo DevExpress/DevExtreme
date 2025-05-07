@@ -32,7 +32,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import DxTreeMap, {
-  DxSize, DxTitle, DxColorizer, DxTreeMapTypes,
+  DxSize, DxTitle, DxColorizer, type DxTreeMapTypes,
 } from 'devextreme-vue/tree-map';
 import { citiesPopulation } from './data.ts';
 

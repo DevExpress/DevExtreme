@@ -3,14 +3,12 @@ import { Selector as $ } from 'testcafe';
 import { runManualTest } from '../../../utils/visual-tests/matrix-test-helper';
 import { testScreenshot } from '../../../utils/visual-tests/helpers/theme-utils';
 
-// NOTE: very unstable
-fixture.skip('VectorMap.TooltipHTMLSupport')
-  .page('http://localhost:8080/')
+fixture('VectorMap.TooltipHTMLSupport')
   .before(async (ctx) => {
     ctx.initialWindowSize = [900, 700];
   });
 
-runManualTest('VectorMap', 'TooltipHTMLSupport', ['jQuery', 'React', 'Vue', 'Angular'], (test) => {
+runManualTest('VectorMap', 'TooltipHTMLSupport', (test) => {
   test('Tooltip', async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 

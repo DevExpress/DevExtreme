@@ -1,11 +1,11 @@
 const $ = require('jquery');
 const ko = require('knockout');
-const registerEvent = require('events/core/event_registrator');
-const dragEvents = require('events/drag');
-const clickEvent = require('events/click');
-const holdEvent = require('events/hold');
-const pointerEvents = require('events/pointer');
-const swipeEvents = require('events/swipe');
+const registerEvent = require('common/core/events/core/event_registrator');
+const dragEvents = require('common/core/events/drag');
+const clickEvent = require('common/core/events/click');
+const holdEvent = require('common/core/events/hold');
+const pointerEvents = require('common/core/events/pointer');
+const swipeEvents = require('common/core/events/swipe');
 
 require('integration/knockout');
 

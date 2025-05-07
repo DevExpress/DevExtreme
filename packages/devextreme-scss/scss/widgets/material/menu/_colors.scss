@@ -24,16 +24,18 @@ $menu-popup-border-color: $base-border-color !default;
 $menu-separator-bg: $base-border-color !default;
 $menu-item-selected-color: $base-text-color !default;
 $menu-item-link-color: $base-link-color !default;
-$menu-item-focused-selected-bg: color.change($base-focus-bg, $alpha: 0.7) !default;
+$menu-item-focused-selected-bg: null !default;
 $menu-container-shadow-color: null !default;
 
 @if $mode == "light" {
   $menu-item-selected-bg: lighten($base-text-color, 88%) !default;
+  $menu-item-focused-selected-bg: color.change(#000, $alpha: 0.14) !default;
   $menu-container-shadow-color: color.change($base-shadow-color, $alpha: 0.2) !default;
 }
 
 @if $mode == "dark" {
   $menu-item-selected-bg: lighten($base-bg, 8%) !default;
+  $menu-item-focused-selected-bg: color.change(#fff, $alpha: 0.14) !default;
   $menu-container-shadow-color: color.change($base-shadow-color, $alpha: 0.4) !default;
 }
 

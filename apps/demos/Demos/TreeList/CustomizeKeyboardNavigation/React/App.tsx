@@ -4,7 +4,7 @@ import TreeList, {
   Column,
   Editing,
   KeyboardNavigation,
-  TreeListTypes,
+  type TreeListTypes,
 } from 'devextreme-react/tree-list';
 import SelectBox from 'devextreme-react/select-box';
 import CheckBox from 'devextreme-react/check-box';

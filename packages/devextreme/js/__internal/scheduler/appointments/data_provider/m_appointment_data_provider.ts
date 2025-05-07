@@ -1,12 +1,21 @@
 import config from '@js/core/config';
 import { combineRemoteFilter } from '@ts/scheduler/r1/filterting/index';
+import type { AppointmentDataItem, SafeAppointment } from '@ts/scheduler/types';
+import type { AppointmentDataAccessor } from '@ts/scheduler/utils';
 
 import { AppointmentDataSource } from './m_appointment_data_source';
-import { AppointmentFilterBaseStrategy, AppointmentFilterVirtualStrategy } from './m_appointment_filter';
+import { AppointmentFilterBaseStrategy } from './m_appointment_filter';
+import { AppointmentFilterVirtualStrategy } from './m_appointment_filter_virtual';
 
-const FilterStrategies = {
-  virtual: 'virtual',
-  standard: 'standard',
+type FilterStrategy = (AppointmentFilterBaseStrategy | AppointmentFilterVirtualStrategy) & {
+  constructor: (AppointmentFilterBaseStrategy | AppointmentFilterVirtualStrategy)['constructor'] & {
+    strategyName: string;
+  };
+};
+
+const FilterStrategyMap = {
+  [AppointmentFilterVirtualStrategy.strategyName]: AppointmentFilterVirtualStrategy,
+  [AppointmentFilterBaseStrategy.strategyName]: AppointmentFilterBaseStrategy,
 };
 
 export class AppointmentDataProvider {
@@ -14,13 +23,13 @@ export class AppointmentDataProvider {
 
   dataSource: any;
 
-  dataAccessors: any;
+  dataAccessors: AppointmentDataAccessor;
 
   timeZoneCalculator: any;
 
   appointmentDataSource: AppointmentDataSource;
 
-  filterStrategy: any;
+  filterStrategy!: FilterStrategy;
 
   constructor(options) {
     this.options = options;
@@ -29,7 +38,6 @@ export class AppointmentDataProvider {
     this.timeZoneCalculator = this.options.timeZoneCalculator;
 
     this.appointmentDataSource = new AppointmentDataSource(this.dataSource);
-
     this.initFilterStrategy();
   }
 
@@ -41,21 +49,24 @@ export class AppointmentDataProvider {
     return !!this.dataSource;
   }
 
-  get filterStrategyName() {
+  get filterStrategyName(): string {
     return this.options.getIsVirtualScrolling()
-      ? FilterStrategies.virtual
-      : FilterStrategies.standard;
+      ? AppointmentFilterVirtualStrategy.strategyName
+      : AppointmentFilterBaseStrategy.strategyName;
   }
 
-  getFilterStrategy() {
-    if (!this.filterStrategy || this.filterStrategy.strategyName !== this.filterStrategyName) {
+  getFilterStrategy(): AppointmentFilterBaseStrategy | AppointmentFilterVirtualStrategy {
+    if (
+      !this.filterStrategy
+      || this.filterStrategy.constructor.strategyName !== this.filterStrategyName
+    ) {
       this.initFilterStrategy();
     }
 
     return this.filterStrategy;
   }
 
-  initFilterStrategy() {
+  initFilterStrategy(): void {
     const filterOptions = {
       resources: this.options.resources,
       dataAccessors: this.dataAccessors,
@@ -74,25 +85,24 @@ export class AppointmentDataProvider {
       viewDataProvider: this.options.getViewDataProvider,
       allDayPanelMode: this.options.allDayPanelMode,
     };
+    const strategy = new FilterStrategyMap[this.filterStrategyName](filterOptions);
 
-    this.filterStrategy = this.filterStrategyName === FilterStrategies.virtual
-      ? new AppointmentFilterVirtualStrategy(filterOptions)
-      : new AppointmentFilterBaseStrategy(filterOptions);
+    this.filterStrategy = strategy as FilterStrategy;
   }
 
-  setDataSource(dataSource) {
+  setDataSource(dataSource): void {
     this.dataSource = dataSource;
     this.initFilterStrategy();
     this.appointmentDataSource.setDataSource(this.dataSource);
   }
 
-  updateDataAccessors(dataAccessors) {
+  updateDataAccessors(dataAccessors): void {
     this.dataAccessors = dataAccessors;
     this.initFilterStrategy();
   }
 
   // Filter mapping
-  filter(preparedItems) {
+  filter(preparedItems: AppointmentDataItem[]): SafeAppointment[] {
     return this.getFilterStrategy().filter(preparedItems);
   }
 
@@ -121,10 +131,6 @@ export class AppointmentDataProvider {
 
   filterLoadedAppointments(filterOption, preparedItems) {
     return this.getFilterStrategy().filterLoadedAppointments(filterOption, preparedItems);
-  }
-
-  calculateAppointmentEndDate(isAllDay, startDate) {
-    return this.getFilterStrategy().calculateAppointmentEndDate(isAllDay, startDate);
   }
 
   // Appointment data source mappings

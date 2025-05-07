@@ -29,8 +29,7 @@ export function show(options) {
 }
 
 export function hide() {
-  // todo: hot fix for case without viewport
-
+  // hot fix for case without viewport
   if (!loading) {
     // @ts-expect-error
     return new Deferred().resolve();

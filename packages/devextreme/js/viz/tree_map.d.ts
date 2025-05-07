@@ -7,14 +7,15 @@ import {
 
 import {
     template,
-} from '../core/templates/template';
+    SingleMultipleOrNone,
+} from '../common';
 
 import {
     EventInfo,
     NativeEventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
-} from '../events/index';
+} from '../common/core/events';
 
 import BaseWidget, {
     BaseWidgetMargin,
@@ -24,10 +25,6 @@ import BaseWidget, {
     ExportInfo,
     IncidentInfo,
 } from './core/base_widget';
-
-import {
-    SingleMultipleOrNone,
-} from '../common';
 
 import {
     Palette,
@@ -211,7 +208,7 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
        * @docid
        * @default undefined
        */
-      colorCodeField?: string;
+      colorCodeField?: string | undefined;
       /**
        * @docid
        * @default false
@@ -236,7 +233,7 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
        * @docid
        * @default undefined
        */
-      type?: TreeMapColorizerType;
+      type?: TreeMapColorizerType | undefined;
     };
     /**
      * @docid
@@ -258,12 +255,12 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
          * @docid
          * @default "#d3d3d3"
          */
-        color?: string;
+        color?: string | undefined;
         /**
          * @docid
          * @default 1
          */
-        width?: number;
+        width?: number | undefined;
       };
       /**
        * @docid
@@ -279,12 +276,12 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
        * @docid
        * @default undefined
        */
-      headerHeight?: number;
+      headerHeight?: number | undefined;
       /**
        * @docid
        * @default undefined
        */
-      hoverEnabled?: boolean;
+      hoverEnabled?: boolean | undefined;
       /**
        * @docid
        */
@@ -297,18 +294,18 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
            * @docid
            * @default undefined
            */
-          color?: string;
+          color?: string | undefined;
           /**
            * @docid
            * @default undefined
            */
-          width?: number;
+          width?: number | undefined;
         };
         /**
          * @docid
          * @default undefined
          */
-        color?: string;
+        color?: string | undefined;
       };
       /**
        * @docid
@@ -343,18 +340,18 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
            * @docid
            * @default "#232323"
            */
-          color?: string;
+          color?: string | undefined;
           /**
            * @docid
            * @default undefined
            */
-          width?: number;
+          width?: number | undefined;
         };
         /**
          * @docid
          * @default undefined
          */
-        color?: string;
+        color?: string | undefined;
       };
     };
     /**
@@ -362,13 +359,13 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
      * @default undefined
      * @public
      */
-    hoverEnabled?: boolean;
+    hoverEnabled?: boolean | undefined;
     /**
      * @docid
      * @default undefined
      * @public
      */
-    idField?: string;
+    idField?: string | undefined;
     /**
      * @docid
      * @default false
@@ -406,7 +403,7 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
      * @default undefined
      * @public
      */
-    maxDepth?: number;
+    maxDepth?: number | undefined;
     /**
      * @docid
      * @default null
@@ -467,13 +464,13 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
      * @default undefined
      * @public
      */
-    parentField?: string;
+    parentField?: string | undefined;
     /**
      * @docid
      * @default undefined
      * @public
      */
-    selectionMode?: SingleMultipleOrNone;
+    selectionMode?: SingleMultipleOrNone | undefined;
     /**
      * @docid
      * @public
@@ -487,12 +484,12 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
          * @docid
          * @default "#000000"
          */
-        color?: string;
+        color?: string | undefined;
         /**
          * @docid
          * @default 1
          */
-        width?: number;
+        width?: number | undefined;
       };
       /**
        * @docid
@@ -511,18 +508,18 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
            * @docid
            * @default undefined
            */
-          color?: string;
+          color?: string | undefined;
           /**
            * @docid
            * @default undefined
            */
-          width?: number;
+          width?: number | undefined;
         };
         /**
          * @docid
          * @default undefined
          */
-        color?: string;
+        color?: string | undefined;
       };
       /**
        * @docid
@@ -562,18 +559,18 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
            * @docid
            * @default "#232323"
            */
-          color?: string;
+          color?: string | undefined;
           /**
            * @docid
            * @default undefined
            */
-          width?: number;
+          width?: number | undefined;
         };
         /**
          * @docid
          * @default undefined
          */
-        color?: string;
+        color?: string | undefined;
       };
     };
     /**
@@ -600,14 +597,14 @@ export type Tooltip = BaseWidgetTooltip & {
      * @default undefined
      * @public
      */
-    contentTemplate?: template | ((info: { value?: number; valueText?: string; node?: dxTreeMapNode }, element: DxElement) => string | UserDefinedElement);
+    contentTemplate?: template | ((info: { value?: number; valueText?: string; node?: dxTreeMapNode }, element: DxElement) => string | UserDefinedElement) | undefined;
     /**
      * @docid dxTreeMapOptions.tooltip.customizeTooltip
      * @default undefined
      * @type_function_return object
      * @public
      */
-    customizeTooltip?: ((info: { value?: number; valueText?: string; node?: dxTreeMapNode }) => any);
+    customizeTooltip?: ((info: { value?: number; valueText?: string; node?: dxTreeMapNode }) => any) | undefined;
 };
 /**
  * @docid

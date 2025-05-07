@@ -1,10 +1,7 @@
 import {
     AnimationConfig,
-} from '../animation/fx';
-
-import {
     PositionConfig,
-} from '../animation/position';
+} from '../common/core/animation';
 
 import {
     UserDefinedElement,
@@ -15,12 +12,13 @@ import {
 } from '../core/utils/deferred';
 
 import {
-    DxEvent,
     Cancelable,
     EventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
-} from '../events/index';
+} from '../common/core/events';
+
+import { DxEvent } from '../events';
 
 import dxPopup, {
     dxPopupAnimation,
@@ -140,13 +138,13 @@ export interface dxPopoverOptions<TComponent> extends dxPopupOptions<TComponent>
        * @docid
        * @default undefined
        */
-      delay?: number;
+      delay?: number | undefined;
       /**
        * @docid
        * @default undefined
        */
-      name?: string;
-    } | string;
+      name?: string | undefined;
+    } | string | undefined;
     /**
      * @docid
      * @type boolean | function
@@ -183,13 +181,13 @@ export interface dxPopoverOptions<TComponent> extends dxPopupOptions<TComponent>
        * @docid
        * @default undefined
        */
-      delay?: number;
+      delay?: number | undefined;
       /**
        * @docid
        * @default undefined
        */
-      name?: string;
-    } | string;
+      name?: string | undefined;
+    } | string | undefined;
     /**
      * @docid
      * @default false
@@ -201,7 +199,7 @@ export interface dxPopoverOptions<TComponent> extends dxPopupOptions<TComponent>
      * @default undefined
      * @public
      */
-    target?: string | UserDefinedElement;
+    target?: string | UserDefinedElement | undefined;
     /**
      * @docid
      * @default "auto"

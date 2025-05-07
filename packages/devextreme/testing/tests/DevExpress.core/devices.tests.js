@@ -1,4 +1,5 @@
 import '../../helpers/includeThemesLinks.js';
+import 'ui/button';
 
 import $ from 'jquery';
 import domAdapter from '__internal/core/m_dom_adapter';
@@ -220,6 +221,20 @@ QUnit.test('attach css classes', function(assert) {
     }
 });
 
+QUnit.test('attach css classes side effect', function(assert) {
+    const attachCssClassesSpy = sinon.spy(devices, 'attachCssClasses');
+
+    assert.ok(!viewPort.value() || !viewPort.value()[0].className.includes('dx-device-'));
+    assert.strictEqual(attachCssClassesSpy.callCount, 0);
+
+    $('<div>').dxButton({
+        text: 'Foo',
+    });
+
+    assert.strictEqual(attachCssClassesSpy.callCount, 1);
+    assert.ok(viewPort.value()[0].className.includes('dx-device-'));
+});
+
 QUnit.test('attach css classes (dx-device-mobile)', function(assert) {
     const originalCurrentDevice = devices.current();
 
@@ -293,6 +308,7 @@ QUnit.test('move classes from previous viewport to new viewport', function(asser
         devices.real({ platform: 'ios', version: [7, 1] });
         devices.attachCssClasses($element);
 
+        $('<div>').dxButton({ text: 'Foo' });
         const $newElement = $('<div>');
 
         viewPortChanged.fire($newElement, $element);

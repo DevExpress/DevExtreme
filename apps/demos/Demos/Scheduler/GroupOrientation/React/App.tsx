@@ -12,7 +12,7 @@ const App = () => (
     timeZone="America/Los_Angeles"
     dataSource={data}
     groups={groups}
-    defaultCurrentView={'Vertical Grouping' as any}
+    defaultCurrentView={'Vertical Grouping'}
     defaultCurrentDate={currentDate}
     startDayHour={9}
     endDayHour={16}

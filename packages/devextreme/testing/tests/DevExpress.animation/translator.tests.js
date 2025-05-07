@@ -1,5 +1,5 @@
 const $ = require('jquery');
-const translator = require('animation/translator');
+const translator = require('common/core/animation/translator');
 const styleUtils = require('core/utils/style');
 const transformStyle = styleUtils.styleProp('transform');
 

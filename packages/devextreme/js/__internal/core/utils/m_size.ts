@@ -188,9 +188,9 @@ export const getVerticalOffsets = function (element, withMargins) {
 
 export const getVisibleHeight = function (element) {
   if (element) {
-    const boundingClientRect = element.getBoundingClientRect();
+    const boundingClientRect = element.getBoundingClientRect?.();
 
-    if (boundingClientRect.height) {
+    if (boundingClientRect?.height) {
       return boundingClientRect.height;
     }
   }

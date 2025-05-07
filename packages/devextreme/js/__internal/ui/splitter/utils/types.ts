@@ -1,3 +1,4 @@
+import type { dxElementWrapper } from '@js/core/renderer';
 import type {
   ItemCollapsedEvent, ItemExpandedEvent, Properties, ResizeEndEvent, ResizeEvent, ResizeStartEvent,
 } from '@js/ui/splitter';
@@ -18,7 +19,7 @@ export interface ResizeOffset {
 }
 
 export interface RenderQueueItem {
-  itemContent: Element;
+  itemContent: dxElementWrapper;
   splitterConfig: Properties;
 }
 

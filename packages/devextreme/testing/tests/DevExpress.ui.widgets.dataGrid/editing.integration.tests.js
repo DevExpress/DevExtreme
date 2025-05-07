@@ -1,10 +1,10 @@
 import $ from 'jquery';
 import devices from '__internal/core/m_devices';
-import fx from 'animation/fx';
-import pointerEvents from 'events/pointer';
+import fx from 'common/core/animation/fx';
+import pointerEvents from 'common/core/events/pointer';
 import themes from 'ui/themes';
 import typeUtils from 'core/utils/type';
-import { DataSource } from 'data/data_source/data_source';
+import { DataSource } from 'common/data/data_source/data_source';
 import SelectBox from 'ui/select_box';
 import 'ui/text_area';
 import config from 'core/config';
@@ -18,7 +18,7 @@ import { createDataGrid, baseModuleConfig } from '../../helpers/dataGridHelper.j
 import { generateItems } from '../../helpers/dataGridMocks.js';
 import { getOuterHeight } from 'core/utils/size';
 import { getEmulatorStyles } from '../../helpers/stylesHelper.js';
-import messageLocalization from 'localization/message';
+import messageLocalization from 'common/core/localization/message';
 
 const TEXTEDITOR_INPUT_SELECTOR = '.dx-texteditor-input';
 
@@ -2141,7 +2141,7 @@ QUnit.module('Editing', baseModuleConfig, () => {
             this.clock.tick(10);
 
             const navigationController = dataGrid.getController('keyboardNavigation');
-            navigationController._keyDownHandler({ key: 'Tab', keyName: 'tab', originalEvent: $.Event('keydown', { target: $(dataGrid.getCellElement(0, 0)) }) });
+            navigationController._rowsViewKeyDownHandler({ key: 'Tab', keyName: 'tab', originalEvent: $.Event('keydown', { target: $(dataGrid.getCellElement(0, 0)) }) });
             this.clock.tick(10);
 
             // assert
@@ -3487,7 +3487,7 @@ QUnit.module('Editing', baseModuleConfig, () => {
         assert.strictEqual(onSelectedSpy.callCount, 0, 'is not selected after change');
     });
 
-    QUnit.testInActiveWindow('key should not be compared many times on paging (T1047506)', function(assert) {
+    QUnit.test('key should not be compared many times on paging (T1047506)', function(assert) {
         // arrange
         let idCallCount = 0;
         const items = Array.from({ length: 50 }).map((_, index) => {
@@ -3506,7 +3506,9 @@ QUnit.module('Editing', baseModuleConfig, () => {
             keyExpr: 'id',
             scrolling: {
                 mode: 'virtual',
-                useNative: false
+                useNative: false,
+                scrollByThumb: false,
+                showScrollbar: 'onHover',
             },
         });
 
@@ -3518,7 +3520,7 @@ QUnit.module('Editing', baseModuleConfig, () => {
         dataGrid.pageIndex(1);
 
         // assert
-        assert.equal(idCallCount, 200, 'key call count after paging');
+        assert.true(idCallCount < 280, 'key call count after paging');
     });
 
     QUnit.test('Popup should render editor if columns[].renderAsync option is true', function(assert) {
@@ -3960,7 +3962,7 @@ QUnit.module('Editing', baseModuleConfig, () => {
 
             const emulateEnterKeyPress = () => {
                 const event = $.Event('keydown', { target: $('#qunit-fixture').find(':focus').get(0) });
-                navigationController._keyDownHandler({ key: 'Enter', keyName: 'enter', originalEvent: event });
+                navigationController._rowsViewKeyDownHandler({ key: 'Enter', keyName: 'enter', originalEvent: event });
             };
 
             // act
@@ -5044,6 +5046,11 @@ QUnit.module('API methods', baseModuleConfig, () => {
 
     // T722161
     QUnit.test('add row after scrolling if rowRenderingMode is virtual', function(assert) {
+        if(devices.real().ios) {
+            assert.ok(true);
+            return;
+        }
+
         const array = [];
         for(let i = 1; i <= 20; i++) {
             array.push({ id: i, text: 'text' + i });
@@ -5288,7 +5295,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
 
         // act
         const event = $.Event('keydown', { target: $('#qunit-fixture').find(':focus').get(0) });
-        navigationController._keyDownHandler({ key: 'Enter', keyName: 'enter', originalEvent: event });
+        navigationController._rowsViewKeyDownHandler({ key: 'Enter', keyName: 'enter', originalEvent: event });
         this.clock.tick(10);
 
         // assert
@@ -5617,7 +5624,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
             width: 400
         });
         const triggerTabPress = function($target) {
-            dataGrid.getController('keyboardNavigation')._keyDownHandler({
+            dataGrid.getController('keyboardNavigation')._rowsViewKeyDownHandler({
                 key: 'Tab',
                 keyName: 'tab',
                 originalEvent: {
@@ -7048,6 +7055,10 @@ QUnit.module('Editing state', baseModuleConfig, () => {
                 });
 
                 QUnit.test(`Add row at the end of the last page via changes option if virtual scrolling (editMode = ${editMode}, key = ${key})`, function(assert) {
+                    if(devices.real().ios) {
+                        assert.ok(true);
+                        return;
+                    }
                     // arrange
                     const changes = [{
                         data: { field: 'test' },

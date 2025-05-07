@@ -1,8 +1,8 @@
+import messageLocalization from '@js/common/core/localization/message';
+import { DataSource } from '@js/common/data/data_source/data_source';
 import $ from '@js/core/renderer';
 import { Deferred } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
-import { DataSource } from '@js/data/data_source/data_source';
-import messageLocalization from '@js/localization/message';
 import errors from '@js/ui/widget/ui.errors';
 import {
   getFilterExpression, isCondition, isGroup, renderValueText,

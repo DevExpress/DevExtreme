@@ -1247,6 +1247,34 @@ QUnit.test('lineargradient with rotation angle', function(assert) {
     });
 });
 
+QUnit.test('lineargradient with undefined rotation angle', function(assert) {
+    const done = assert.async();
+    const markup = testingMarkupStart +
+        '<defs>' +
+
+        '<linearGradient id="testlineargradient1">' +
+        '<stop offset="0%" stop-color="red"></stop>' +
+        '<stop offset="100%" stop-color="blue"></stop>' +
+        '</linearGradient>' +
+
+        '</defs>' +
+        '<path d="M 0 0 C 10 10 20 20 30 20 Z" fill="url(#testlineargradient1)" opacity="0.3"></path>' +
+        '<path d="M 0 0 C 10 10 20 20 30 20 Z" fill="url(#testlineargradient2)" opacity="0.3"></path>' +
+        testingMarkupEnd;
+
+    const imageBlob = getData(markup);
+    const context = window.CanvasRenderingContext2D.prototype;
+
+    $.when(imageBlob).done(() => {
+        try {
+            assert.strictEqual(context.rotate.callCount, 1, 'rotate call count');
+            assert.strictEqual(context.rotate.getCall(0).args[0], 0);
+        } finally {
+            done();
+        }
+    });
+});
+
 QUnit.test('radialgradient', function(assert) {
     const done = assert.async();
     const markup = testingMarkupStart +

@@ -1,7 +1,34 @@
 export { ExplicitTypes } from "devextreme/ui/splitter";
-import Splitter, { Properties } from "devextreme/ui/splitter";
+import { PropType } from "vue";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
+import Splitter, { Properties } from "devextreme/ui/splitter";
+import  DataSource from "devextreme/data/data_source";
+import {
+ dxSplitterItem,
+ ContentReadyEvent,
+ DisposingEvent,
+ InitializedEvent,
+ ItemClickEvent,
+ ItemCollapsedEvent,
+ ItemContextMenuEvent,
+ ItemExpandedEvent,
+ ItemRenderedEvent,
+ OptionChangedEvent,
+ ResizeEvent,
+ ResizeEndEvent,
+ ResizeStartEvent,
+ dxSplitterOptions,
+} from "devextreme/ui/splitter";
+import {
+ DataSourceOptions,
+} from "devextreme/common/data";
+import {
+ Store,
+} from "devextreme/data/store";
+import {
+ Orientation,
+} from "devextreme/common";
 import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
@@ -39,30 +66,30 @@ interface DxSplitter extends AccessibleOptions {
 const componentConfig = {
   props: {
     allowKeyboardNavigation: Boolean,
-    dataSource: {},
+    dataSource: [Array, Object, String] as PropType<Array<dxSplitterItem> | DataSource | DataSourceOptions | null | Store | string | Record<string, any>>,
     disabled: Boolean,
-    elementAttr: Object,
-    height: [Function, Number, String],
+    elementAttr: Object as PropType<Record<string, any>>,
+    height: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
     hoverStateEnabled: Boolean,
-    items: Array,
+    items: Array as PropType<Array<dxSplitterItem>>,
     itemTemplate: {},
-    onContentReady: Function,
-    onDisposing: Function,
-    onInitialized: Function,
-    onItemClick: Function,
-    onItemCollapsed: Function,
-    onItemContextMenu: Function,
-    onItemExpanded: Function,
-    onItemRendered: Function,
-    onOptionChanged: Function,
-    onResize: Function,
-    onResizeEnd: Function,
-    onResizeStart: Function,
-    orientation: String,
+    onContentReady: Function as PropType<((e: ContentReadyEvent) => void)>,
+    onDisposing: Function as PropType<((e: DisposingEvent) => void)>,
+    onInitialized: Function as PropType<((e: InitializedEvent) => void)>,
+    onItemClick: Function as PropType<((e: ItemClickEvent) => void)>,
+    onItemCollapsed: Function as PropType<((e: ItemCollapsedEvent) => void)>,
+    onItemContextMenu: Function as PropType<((e: ItemContextMenuEvent) => void)>,
+    onItemExpanded: Function as PropType<((e: ItemExpandedEvent) => void)>,
+    onItemRendered: Function as PropType<((e: ItemRenderedEvent) => void)>,
+    onOptionChanged: Function as PropType<((e: OptionChangedEvent) => void)>,
+    onResize: Function as PropType<((e: ResizeEvent) => void)>,
+    onResizeEnd: Function as PropType<((e: ResizeEndEvent) => void)>,
+    onResizeStart: Function as PropType<((e: ResizeStartEvent) => void)>,
+    orientation: String as PropType<Orientation>,
     rtlEnabled: Boolean,
     separatorSize: Number,
     visible: Boolean,
-    width: [Function, Number, String]
+    width: [Function, Number, String] as PropType<((() => number | string)) | number | string>
   },
   emits: {
     "update:isActive": null,
@@ -136,7 +163,7 @@ const DxItemConfig = {
     minSize: [Number, String],
     resizable: Boolean,
     size: [Number, String],
-    splitter: Object,
+    splitter: Object as PropType<dxSplitterOptions | Record<string, any>>,
     template: {},
     text: String,
     visible: Boolean

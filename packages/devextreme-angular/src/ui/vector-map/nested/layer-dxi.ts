@@ -12,11 +12,12 @@ import {
 
 
 
-import { SingleMultipleOrNone } from 'devextreme/common';
+import DataSource from 'devextreme/data/data_source';
+import { MapLayerElement, VectorMapMarkerType, VectorMapLayerType } from 'devextreme/viz/vector_map';
+import { DataSourceOptions } from 'devextreme/data/data_source';
+import { Store } from 'devextreme/data/store';
 import { Font, Palette } from 'devextreme/common/charts';
-import { Store } from 'devextreme/data';
-import DataSource, { Options as DataSourceOptions } from 'devextreme/data/data_source';
-import { VectorMapLayerType, VectorMapMarkerType } from 'devextreme/viz/vector_map';
+import { SingleMultipleOrNone } from 'devextreme/common';
 
 import {
     NestedOptionHost,
@@ -72,10 +73,10 @@ export class DxiVectorMapLayerComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get customize(): Function {
+    get customize(): ((elements: Array<MapLayerElement>) => void) {
         return this._getOption('customize');
     }
-    set customize(value: Function) {
+    set customize(value: ((elements: Array<MapLayerElement>) => void)) {
         this._setOption('customize', value);
     }
 
@@ -88,10 +89,10 @@ export class DxiVectorMapLayerComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get dataSource(): Store | DataSource | DataSourceOptions | any | null | string | Array<any> {
+    get dataSource(): Array<any> | DataSource | DataSourceOptions | null | Record<string, any> | Store | string {
         return this._getOption('dataSource');
     }
-    set dataSource(value: Store | DataSource | DataSourceOptions | any | null | string | Array<any>) {
+    set dataSource(value: Array<any> | DataSource | DataSourceOptions | null | Record<string, any> | Store | string) {
         this._setOption('dataSource', value);
     }
 
@@ -176,10 +177,10 @@ export class DxiVectorMapLayerComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get palette(): Palette | string | Array<string> {
+    get palette(): Array<string> | Palette {
         return this._getOption('palette');
     }
-    set palette(value: Palette | string | Array<string>) {
+    set palette(value: Array<string> | Palette) {
         this._setOption('palette', value);
     }
 

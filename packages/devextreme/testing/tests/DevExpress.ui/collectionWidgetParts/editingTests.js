@@ -1,8 +1,8 @@
 import $ from 'jquery';
 import CollectionWidget from 'ui/collection/ui.collection_widget.edit';
-import { DataSource } from 'data/data_source/data_source';
-import ArrayStore from 'data/array_store';
-import CustomStore from 'data/custom_store';
+import { DataSource } from 'common/data/data_source/data_source';
+import ArrayStore from 'common/data/array_store';
+import { CustomStore } from 'common/data/custom_store';
 import executeAsyncMock from '../../../helpers/executeAsyncMock.js';
 import keyboardMock from '../../../helpers/keyboardMock.js';
 

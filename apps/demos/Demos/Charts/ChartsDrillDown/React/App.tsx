@@ -4,7 +4,7 @@ import {
   Series,
   Legend,
   ValueAxis,
-  ChartTypes,
+  type ChartTypes,
 } from 'devextreme-react/chart';
 import { Button } from 'devextreme-react/button';
 import service from './data.ts';

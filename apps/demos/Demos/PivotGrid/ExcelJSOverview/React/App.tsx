@@ -3,7 +3,7 @@ import React from 'react';
 import PivotGrid, {
   FieldChooser,
   Export,
-  PivotGridTypes,
+  type PivotGridTypes,
 } from 'devextreme-react/pivot-grid';
 import PivotGridDataSource from 'devextreme/ui/pivot_grid/data_source';
 import { Workbook } from 'exceljs';

@@ -5,7 +5,7 @@ import {
 import { createStore } from 'devextreme-aspnet-data-nojquery';
 import MasterDetailView from './MasterDetailView.js';
 
-const url = 'https://js.devexpress.com/Demos/Mvc/api/DataGridAdvancedMasterDetailView';
+const url = 'https://js.devexpress.com/Demos/NetCore/api/DataGridAdvancedMasterDetailView';
 const suppliersData = createStore({
   key: 'SupplierID',
   loadUrl: `${url}/GetSuppliers`,

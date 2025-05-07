@@ -1,4 +1,5 @@
 <template>
+  <p>Click this text and press <b>Tab</b></p>
   <DxDataGrid
     :data-source="employees"
     :show-borders="true"

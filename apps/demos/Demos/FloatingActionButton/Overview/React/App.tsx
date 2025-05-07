@@ -2,10 +2,10 @@ import React, { useCallback, useRef, useState } from 'react';
 import config from 'devextreme/core/config';
 import repaintFloatingActionButton from 'devextreme/ui/speed_dial_action/repaint_floating_action_button';
 import DataGrid, {
-  Column, Editing, Lookup, Texts, Selection, DataGridTypes,
+  Column, Editing, Lookup, Texts, Selection, type DataGridTypes,
 } from 'devextreme-react/data-grid';
 import { SpeedDialAction } from 'devextreme-react/speed-dial-action';
-import { SelectBox, SelectBoxTypes } from 'devextreme-react/select-box';
+import { SelectBox, type SelectBoxTypes } from 'devextreme-react/select-box';
 import {
   employees, states, directions, directionLabel,
 } from './data.ts';

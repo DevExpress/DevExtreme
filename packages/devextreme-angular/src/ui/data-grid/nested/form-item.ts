@@ -7,6 +7,10 @@ import {
     OnDestroy,
     NgModule,
     Host,
+    ElementRef,
+    Renderer2,
+    Inject,
+    AfterViewInit,
     SkipSelf,
     Input,
     ContentChildren,
@@ -14,26 +18,41 @@ import {
     QueryList
 } from '@angular/core';
 
+import { DOCUMENT } from '@angular/common';
 
 
-
-import { AsyncRule, CompareRule, CustomRule, EmailRule, HorizontalAlignment, NumericRule, PatternRule, RangeRule, RequiredRule, StringLengthRule } from 'devextreme/common';
+import * as CommonTypes from 'devextreme/common';
 import { FormItemComponent, FormItemType, LabelLocation } from 'devextreme/ui/form';
+import { HorizontalAlignment } from 'devextreme/common';
 
 import {
     NestedOptionHost,
+    extractTemplate,
+    DxTemplateDirective,
+    IDxTemplateHost,
+    DxTemplateHost
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
+import { DxiDataGridAsyncRuleComponent } from './async-rule-dxi';
+import { DxiDataGridCompareRuleComponent } from './compare-rule-dxi';
+import { DxiDataGridCustomRuleComponent } from './custom-rule-dxi';
+import { DxiDataGridEmailRuleComponent } from './email-rule-dxi';
+import { DxiDataGridNumericRuleComponent } from './numeric-rule-dxi';
+import { DxiDataGridPatternRuleComponent } from './pattern-rule-dxi';
+import { DxiDataGridRangeRuleComponent } from './range-rule-dxi';
+import { DxiDataGridRequiredRuleComponent } from './required-rule-dxi';
+import { DxiDataGridStringLengthRuleComponent } from './string-length-rule-dxi';
 import { DxiDataGridValidationRuleComponent } from './validation-rule-dxi';
 
 
 @Component({
     selector: 'dxo-data-grid-form-item',
-    template: '',
-    styles: [''],
-    providers: [NestedOptionHost]
+    template: '<ng-content></ng-content>',
+    styles: [':host { display: block; }'],
+    providers: [NestedOptionHost, DxTemplateHost]
 })
-export class DxoDataGridFormItemComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoDataGridFormItemComponent extends NestedOption implements AfterViewInit, OnDestroy, OnInit,
+    IDxTemplateHost {
     @Input()
     get colSpan(): number | undefined {
         return this._getOption('colSpan');
@@ -123,10 +142,10 @@ export class DxoDataGridFormItemComponent extends NestedOption implements OnDest
     }
 
     @Input()
-    get validationRules(): Array<RequiredRule | NumericRule | RangeRule | StringLengthRule | CustomRule | CompareRule | PatternRule | EmailRule | AsyncRule> {
+    get validationRules(): Array<CommonTypes.ValidationRule> {
         return this._getOption('validationRules');
     }
-    set validationRules(value: Array<RequiredRule | NumericRule | RangeRule | StringLengthRule | CustomRule | CompareRule | PatternRule | EmailRule | AsyncRule>) {
+    set validationRules(value: Array<CommonTypes.ValidationRule>) {
         this._setOption('validationRules', value);
     }
 
@@ -152,6 +171,78 @@ export class DxoDataGridFormItemComponent extends NestedOption implements OnDest
     }
 
 
+    @ContentChildren(forwardRef(() => DxiDataGridAsyncRuleComponent))
+    get asyncRulesChildren(): QueryList<DxiDataGridAsyncRuleComponent> {
+        return this._getOption('validationRules');
+    }
+    set asyncRulesChildren(value) {
+        this.setChildren('validationRules', value);
+    }
+
+    @ContentChildren(forwardRef(() => DxiDataGridCompareRuleComponent))
+    get compareRulesChildren(): QueryList<DxiDataGridCompareRuleComponent> {
+        return this._getOption('validationRules');
+    }
+    set compareRulesChildren(value) {
+        this.setChildren('validationRules', value);
+    }
+
+    @ContentChildren(forwardRef(() => DxiDataGridCustomRuleComponent))
+    get customRulesChildren(): QueryList<DxiDataGridCustomRuleComponent> {
+        return this._getOption('validationRules');
+    }
+    set customRulesChildren(value) {
+        this.setChildren('validationRules', value);
+    }
+
+    @ContentChildren(forwardRef(() => DxiDataGridEmailRuleComponent))
+    get emailRulesChildren(): QueryList<DxiDataGridEmailRuleComponent> {
+        return this._getOption('validationRules');
+    }
+    set emailRulesChildren(value) {
+        this.setChildren('validationRules', value);
+    }
+
+    @ContentChildren(forwardRef(() => DxiDataGridNumericRuleComponent))
+    get numericRulesChildren(): QueryList<DxiDataGridNumericRuleComponent> {
+        return this._getOption('validationRules');
+    }
+    set numericRulesChildren(value) {
+        this.setChildren('validationRules', value);
+    }
+
+    @ContentChildren(forwardRef(() => DxiDataGridPatternRuleComponent))
+    get patternRulesChildren(): QueryList<DxiDataGridPatternRuleComponent> {
+        return this._getOption('validationRules');
+    }
+    set patternRulesChildren(value) {
+        this.setChildren('validationRules', value);
+    }
+
+    @ContentChildren(forwardRef(() => DxiDataGridRangeRuleComponent))
+    get rangeRulesChildren(): QueryList<DxiDataGridRangeRuleComponent> {
+        return this._getOption('validationRules');
+    }
+    set rangeRulesChildren(value) {
+        this.setChildren('validationRules', value);
+    }
+
+    @ContentChildren(forwardRef(() => DxiDataGridRequiredRuleComponent))
+    get requiredRulesChildren(): QueryList<DxiDataGridRequiredRuleComponent> {
+        return this._getOption('validationRules');
+    }
+    set requiredRulesChildren(value) {
+        this.setChildren('validationRules', value);
+    }
+
+    @ContentChildren(forwardRef(() => DxiDataGridStringLengthRuleComponent))
+    get stringLengthRulesChildren(): QueryList<DxiDataGridStringLengthRuleComponent> {
+        return this._getOption('validationRules');
+    }
+    set stringLengthRulesChildren(value) {
+        this.setChildren('validationRules', value);
+    }
+
     @ContentChildren(forwardRef(() => DxiDataGridValidationRuleComponent))
     get validationRulesChildren(): QueryList<DxiDataGridValidationRuleComponent> {
         return this._getOption('validationRules');
@@ -161,10 +252,22 @@ export class DxoDataGridFormItemComponent extends NestedOption implements OnDest
     }
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
-            @Host() optionHost: NestedOptionHost) {
+            @Host() optionHost: NestedOptionHost,
+            private renderer: Renderer2,
+            @Inject(DOCUMENT) private document: any,
+            @Host() templateHost: DxTemplateHost,
+            private element: ElementRef) {
         super();
         parentOptionHost.setNestedOption(this);
         optionHost.setHost(this, this._fullOptionPath.bind(this));
+        templateHost.setHost(this);
+    }
+
+    setTemplate(template: DxTemplateDirective) {
+        this.template = template;
+    }
+    ngAfterViewInit() {
+        extractTemplate(this, this.element, this.renderer, this.document);
     }
 
 

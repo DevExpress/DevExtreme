@@ -1,0 +1,44 @@
+<div class="demo-container">
+  <dx-chat
+    [class.dx-chat-disabled]="isDisabled"
+    [dataSource]="dataSource"
+    [reloadOnChange]="false"
+    [showAvatar]="false"
+    [showDayHeaders]="false"
+    [user]="user"
+    height="710"
+    [typingUsers]="typingUsers$ | async"
+    [alerts]="alerts$ | async"
+    (onMessageEntered)="onMessageEntered($event)"
+    messageTemplate="messageTemplate"
+  >
+    <div *dxTemplate="let data of 'messageTemplate'">
+      <ng-container *ngIf="data.message.text === regenerationText">
+        <span>{{ regenerationText }}</span>
+      </ng-container>
+      <ng-container *ngIf="data.message.text !== regenerationText">
+        <div
+          class="dx-chat-messagebubble-text"
+          [innerHTML]="convertToHtml(data.message)"
+        >
+        </div>
+        <div class="dx-bubble-button-container">
+          <dx-button
+            [icon]="copyButtonIcon"
+            stylingMode="text"
+            hint="Copy"
+            (onClick)="onCopyButtonClick(data.message)"
+          >
+          </dx-button>
+          <dx-button
+            icon="refresh"
+            stylingMode="text"
+            hint="Regenerate"
+            (onClick)="onRegenerateButtonClick()"
+          >
+          </dx-button>
+        </div>
+      </ng-container>
+    </div>
+  </dx-chat>
+</div>

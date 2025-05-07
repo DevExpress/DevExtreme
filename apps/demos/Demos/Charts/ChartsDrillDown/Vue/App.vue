@@ -30,6 +30,7 @@ import {
   DxLegend,
 } from 'devextreme-vue/chart';
 import { DxButton } from 'devextreme-vue/button';
+import { type SeriesPoint } from 'devextreme-vue/common/charts';
 import service from './data.ts';
 
 const isFirstLevel = ref(true);
@@ -39,10 +40,10 @@ const colors = ['#6babac', '#e55253'];
 function customizePoint() {
   return {
     color: colors[Number(isFirstLevel.value)],
-    hoverStyle: !isFirstLevel.value ? {
-      hatching: 'none',
-    } : {},
-  };
+    hoverStyle:  {
+      ...!isFirstLevel.value ? { hatching: 'none' } : {},
+    }
+  } as SeriesPoint;
 }
 function onPointClick({ target }) {
   if (isFirstLevel.value) {

@@ -1,5 +1,5 @@
 $(() => {
-  const URL = 'https://js.devexpress.com/Demos/Mvc/api/DataGridBatchUpdateWebApi';
+  const URL = 'https://js.devexpress.com/Demos/NetCore/api/DataGridWebApi';
 
   $('#gridContainer').dxDataGrid({
     dataSource: DevExpress.data.AspNet.createStore({
@@ -25,7 +25,8 @@ $(() => {
       e.cancel = true;
 
       if (e.changes.length) {
-        e.promise = sendBatchRequest(`${URL}/Batch`, e.changes).done(() => {
+        const changes = normalizeChanges(e.changes);
+        e.promise = sendBatchRequest(`${URL}/Batch`, changes).done(() => {
           e.component.refresh(true).done(() => {
             e.component.cancelEditData();
           });
@@ -50,6 +51,29 @@ $(() => {
       dataField: 'Freight',
     }],
   });
+
+  function normalizeChanges(changes) {
+    return changes.map(c => {
+      switch (c.type) {
+        case 'insert':
+          return {
+            type: c.type,
+            data: c.data,
+          };
+        case 'update':
+          return {
+            type: c.type,
+            key: c.key,
+            data: c.data,
+          };
+        case 'remove':
+          return {
+            type: c.type,
+            key: c.key,
+          };
+      }
+    });
+  }
 
   function sendBatchRequest(url, changes) {
     const d = $.Deferred();

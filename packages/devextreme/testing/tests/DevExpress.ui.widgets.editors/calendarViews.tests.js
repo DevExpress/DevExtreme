@@ -4,10 +4,10 @@ import dateUtils from 'core/utils/date';
 import BaseView from '__internal/ui/calendar/m_calendar.base_view';
 import Views from '__internal/ui/calendar/m_calendar.views';
 import pointerMock from '../../helpers/pointerMock.js';
-import fx from 'animation/fx';
+import fx from 'common/core/animation/fx';
 import dateSerialization from 'core/utils/date_serialization';
-import dateLocalization from 'localization/date';
-import messageLocalization from 'localization/message';
+import dateLocalization from 'common/core/localization/date';
+import messageLocalization from 'common/core/localization/message';
 
 import 'ui/calendar';
 

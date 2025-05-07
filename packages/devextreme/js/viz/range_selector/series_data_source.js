@@ -218,8 +218,8 @@ SeriesDataSource.prototype = {
             }
 
             if(isNumeric(rangeVisibleSizeY)) {
-                valRange.maxVisible = valRange.maxVisible ? valRange.maxVisible + rangeVisibleSizeY * maxIndent : undefined;
-                valRange.minVisible = valRange.minVisible ? valRange.minVisible - rangeVisibleSizeY * minIndent : undefined;
+                valRange.maxVisible = isDefined(valRange.maxVisible) ? valRange.maxVisible + rangeVisibleSizeY * maxIndent : undefined;
+                valRange.minVisible = isDefined(valRange.minVisible) ? valRange.minVisible - rangeVisibleSizeY * minIndent : undefined;
             }
             valRange.invert = valueAxis.inverted;
         }

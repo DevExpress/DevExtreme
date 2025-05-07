@@ -4,7 +4,7 @@ import {
 } from 'react';
 
 import { IExpectedChild, IOptionDescriptor } from './configuration/react/element';
-import { IConfigNode } from './configuration/config-node';
+import { IConfigNode, ITemplate } from './configuration/config-node';
 
 export interface UpdateLocker {
   lock: () => void;
@@ -19,11 +19,16 @@ export const RestoreTreeContext: Context<(() => void) | undefined> = createConte
 export interface NestedOptionContextContent {
   parentExpectedChildren: Record<string, IExpectedChild> | undefined;
   parentFullName: string;
+  parentType: 'component' | 'option';
   onChildOptionsReady: (
     configNode: IConfigNode,
     optionDescriptor: IOptionDescriptor,
     childUpdateToken: symbol,
     optionComponentKey: number
+  ) => void;
+  onNamedTemplateReady: (
+    template: ITemplate | null,
+    childUpdateToken: symbol,
   ) => void;
   getOptionComponentKey: () => number;
   treeUpdateToken: symbol;
@@ -33,14 +38,16 @@ export const NestedOptionContext = createContext<NestedOptionContextContent>({
   parentExpectedChildren: {},
   parentFullName: '',
   onChildOptionsReady: () => undefined,
+  onNamedTemplateReady: () => undefined,
   getOptionComponentKey: () => 0,
   treeUpdateToken: Symbol('initial tree update token'),
+  parentType: 'component',
 });
 
-export interface TemplateDiscoveryContextContent {
-  discoveryRendering: boolean;
+export interface TemplateRenderContextContent {
+  isTemplateRendering?: boolean;
 }
 
-export const TemplateDiscoveryContext = createContext<TemplateDiscoveryContextContent>({
-  discoveryRendering: false,
+export const TemplateRenderingContext = createContext<TemplateRenderContextContent>({
+  isTemplateRendering: false,
 });

@@ -1,4 +1,4 @@
-const messageLocalization = require('localization/message');
+const messageLocalization = require('common/core/localization/message');
 const localization = require('localization');
 
 const dictionaries = {};

@@ -54,6 +54,8 @@
         "dxList-selectAll-indeterminate": "Half-checked",
         "dxList-selectAll-checked": "Checked",
         "dxList-selectAll-notChecked": "Not checked",
+        "dxList-ariaRoleDescription": "List",
+        "dxList-listAriaLabel-itemContent": "List item content",
 
         "dxScrollView-pullingDownText": "Húzza le a frissítéshez...",
         "dxScrollView-pulledDownText": "Engedje el a frissítéshez...",
@@ -157,11 +159,11 @@
         "dxDataGrid-summarySum": "Összeg: {0}",
         "dxDataGrid-summarySumOtherColumn": "{1} összege: {0}",
         "dxDataGrid-summaryCount": "Darabszám: {0}",
-        "dxDataGrid-columnFixingFix": "Rögzítés",
-        "dxDataGrid-columnFixingUnfix": "Feloldás",
-        "dxDataGrid-columnFixingLeftPosition": "Balra",
-        "dxDataGrid-columnFixingRightPosition": "Jobbra",
-        "dxDataGrid-columnFixingStickyPosition": "Stick in place",
+        "dxDataGrid-columnFixingFix": "Set Fixed Position",
+        "dxDataGrid-columnFixingUnfix": "Unfix",
+        "dxDataGrid-columnFixingLeftPosition": "Left",
+        "dxDataGrid-columnFixingRightPosition": "Right",
+        "dxDataGrid-columnFixingStickyPosition": "Sticky",
         "dxDataGrid-exportTo": "Exportálás",
         "dxDataGrid-exportToExcel": "Exportálás Excel fájlba",
         "dxDataGrid-exporting": "Exportálás...",
@@ -249,8 +251,14 @@
         "dxPivotGrid-rowFieldArea": "Húzza a sormezőket ide",
         "dxPivotGrid-filterFieldArea": "Húzza a szűrőmezőket ide",
 
+        "dxScheduler-ariaLabel": "Scheduler. {0} view",
+
+
         "dxScheduler-appointmentAriaLabel-group": "Group: {0}",
         "dxScheduler-appointmentAriaLabel-recurring": "Recurring appointment",
+
+        "dxScheduler-appointmentListAriaLabel": "Appointment list",
+
 
         "dxScheduler-editorLabelTitle": "Tárgy",
         "dxScheduler-editorLabelStartDate": "Kezdés dátuma",
@@ -300,6 +308,8 @@
         "dxScheduler-recurrenceRepeatCount": "előfordulás(ok)",
         "dxScheduler-allDay": "Egész nap",
 
+        "dxScheduler-ariaEditForm": "Edit form",
+
         "dxScheduler-confirmRecurrenceEditTitle": "Edit Recurring Appointment",
         "dxScheduler-confirmRecurrenceDeleteTitle": "Delete Recurring Appointment",
 
@@ -346,7 +356,7 @@
         "dxChat-sendButtonAriaLabel": "Send",
         "dxChat-defaultUserName": "Unknown User",
         "dxChat-messageListAriaLabel": "Message list",
-        "dxChat-errorListAriaLabel": "Error list",
+        "dxChat-alertListAriaLabel": "Error list",
         "dxChat-emptyListMessage": "There are no messages in this chat",
         "dxChat-emptyListPrompt": "Write your first message",
         "dxChat-typingMessageSingleUser": "{0} is typing...",
@@ -364,6 +374,7 @@
         "dxTagBox-allSelected": "Összes kiválasztva ({0})",
         "dxTagBox-moreSelected": "{0} több",
         "dxTagBox-tagRoleDescription": "Tag. Press the delete button to remove this tag",
+        "dxTagBox-ariaRoleDescription": "Tag box",
 
         "vizExport-printingButtonText": "Nyomtatás",
         "vizExport-titleMenuText": "Exportálás/Nyomtatás",
@@ -785,6 +796,7 @@
         "dxMultiView-itemAriaRoleDescription": "View",
         "dxMultiView-itemAriaLabel": "{0} of {1}",
 
-        "dxSplitter-resizeHandleAriaLabel": "Split bar"
+        "dxSplitter-resizeHandleAriaLabel": "Split bar",
+        "dxSplitter-resizeHandleAriaRoleDescription": "Separator"
     }
 }

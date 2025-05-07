@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { TreeList, Column, TreeListTypes } from 'devextreme-react/tree-list';
+import { TreeList, Column, type TreeListTypes } from 'devextreme-react/tree-list';
 import { SelectBox } from 'devextreme-react/select-box';
 import { employees, columnResizingModeLabel } from './data.ts';
 

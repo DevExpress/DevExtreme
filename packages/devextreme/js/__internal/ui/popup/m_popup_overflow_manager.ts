@@ -5,15 +5,17 @@ import { isDefined } from '@js/core/utils/type';
 
 import windowUtils from '../../core/utils/m_window';
 
-const overflowManagerMock: {
+export interface OverflowManager {
   setOverflow: () => void;
   restoreOverflow: () => void;
-} = {
+}
+
+const overflowManagerMock: OverflowManager = {
   setOverflow: noop,
   restoreOverflow: noop,
 };
 
-export const createBodyOverflowManager = (): typeof overflowManagerMock => {
+export const createBodyOverflowManager = (): OverflowManager => {
   if (!windowUtils.hasWindow()) {
     return overflowManagerMock;
   }

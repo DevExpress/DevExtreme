@@ -60,6 +60,17 @@ QUnit.module('Button', function() {
             assert.ok(this.element.hasClass(BUTTON_HAS_TEXT_CLASS, 'button with text has text class'));
         });
 
+        QUnit.test('no error should be raised when hovering if svg icon is used (T1266442)', function(assert) {
+            this.instance.option('icon', '<svg></svg>');
+            try {
+                this.element.trigger('dxhoverstart');
+            } catch(e) {
+                assert.ok(false, `error is handled: ${e}`);
+            }
+
+            assert.ok(this.element.hasClass('dx-state-hover'), 'hovered class is added');
+        });
+
         QUnit.test('onClick', function(assert) {
             const clickHandler = sinon.spy();
 
@@ -388,24 +399,6 @@ QUnit.module('Button', function() {
 
             keyboard.keyDown('space');
             assert.equal(clickFired, 2, 'press space on button call click action');
-        });
-
-        QUnit.test('click event is fired on "enter" press', function(assert) {
-            const $element = $('#button').dxButton({
-                focusStateEnabled: true
-            });
-            const handler = sinon.spy();
-
-            $element.on('click', handler);
-
-            const keyboard = keyboardMock($element);
-
-            $element.trigger('focusin');
-            keyboard.keyDown('enter');
-            assert.strictEqual(handler.callCount, 1, 'press enter on button call click action');
-
-            keyboard.keyDown('space');
-            assert.strictEqual(handler.callCount, 2, 'press space on button call click action');
         });
 
         QUnit.test('arguments on key press', function(assert) {

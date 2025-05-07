@@ -2,11 +2,11 @@ SystemJS.config({
     meta: {
         './localization.base.tests.js': {
             deps: [
-                'localization/globalize/core',
-                'localization/globalize/number',
-                'localization/globalize/currency',
-                'localization/globalize/date',
-                'localization/globalize/message'
+                'common/core/localization/globalize/core',
+                'common/core/localization/globalize/number',
+                'common/core/localization/globalize/currency',
+                'common/core/localization/globalize/date',
+                'common/core/localization/globalize/message'
             ]
         }
     },
@@ -29,19 +29,19 @@ define(function(require, exports, module) {
         require('devextreme-cldr-data/da.json!json')
     ];
 
-    require('localization/globalize/core');
-    require('localization/globalize/number');
-    require('localization/globalize/currency');
-    require('localization/globalize/date');
-    require('localization/globalize/message');
+    require('common/core/localization/globalize/core');
+    require('common/core/localization/globalize/number');
+    require('common/core/localization/globalize/currency');
+    require('common/core/localization/globalize/date');
+    require('common/core/localization/globalize/message');
 
     const generateExpectedDate = require('../../helpers/dateHelper.js').generateDate;
 
     const $ = require('jquery');
     const Globalize = require('globalize');
-    const numberLocalization = require('localization/number');
-    const dateLocalization = require('localization/date');
-    const messageLocalization = require('localization/message');
+    const numberLocalization = require('common/core/localization/number');
+    const dateLocalization = require('common/core/localization/date');
+    const messageLocalization = require('common/core/localization/message');
     const config = require('core/config');
 
     const ExcelJSLocalizationFormatTests = require('../DevExpress.exporter/exceljsParts/exceljs.format.tests.js');

@@ -10,7 +10,7 @@ import {
     InitializedEventInfo,
     ChangedOptionInfo,
     ItemInfo,
-} from '../events/index';
+} from '../common/core/events';
 
 import {
     CollectionWidgetItem,
@@ -333,6 +333,8 @@ export interface MenuBasePlainItem extends CollectionWidgetItem {
    * @public
    */
   visible?: boolean;
+
+  [key: string]: any;
 }
 
 /**

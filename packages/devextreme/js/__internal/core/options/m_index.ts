@@ -245,7 +245,7 @@ export class Options {
     return Object.prototype.hasOwnProperty.call(this._deprecated, name);
   }
 
-  cache(name, options) {
+  cache(name, options?: Record<string, unknown>) {
     const isGetter = arguments.length < 2;
 
     if (isGetter) {

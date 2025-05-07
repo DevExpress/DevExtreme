@@ -1,4 +1,4 @@
-name: GitHub Pages Publish
+name: Publishing to GitHub Pages step 3 (to prod)
 
 on:
   workflow_dispatch:

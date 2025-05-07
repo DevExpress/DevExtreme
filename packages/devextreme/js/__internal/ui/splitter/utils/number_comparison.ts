@@ -1,4 +1,4 @@
-import { toFixed } from '@js/localization/utils';
+import { toFixed } from '@js/common/core/localization/utils';
 
 export const PRECISION = 10;
 

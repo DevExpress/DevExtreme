@@ -19,7 +19,6 @@ const baseView = <T extends ModuleType<ColumnsView>>(Base: T) => class BaseViewV
   protected _needToSetCellWidths() {
     let result = super._needToSetCellWidths();
 
-    // @ts-expect-error
     if (!result && this._columnsController.isVirtualMode()) {
       const columns = this._columnsController.getColumns();
 
@@ -51,7 +50,7 @@ const rowsView = (Base: ModuleType<RowsView>) => class VirtualColumnsRowsViewExt
     }
 
     // @ts-expect-error
-    that._columnsController.setScrollPosition(left);
+    that._columnsController.setScrollPosition(left, e.event);
   }
 
   protected _renderCore(e) {
@@ -59,11 +58,15 @@ const rowsView = (Base: ModuleType<RowsView>) => class VirtualColumnsRowsViewExt
       const $contentElement = this._findContentElement();
       const fixedColumns = this._columnsController?.getFixedColumns();
       const useNativeScrolling = this._scrollable?.option('useNative');
+      const legacyMode = this.option('columnFixing.legacyMode');
 
       if (fixedColumns?.length) {
-        $contentElement.css({
-          minHeight: useNativeScrolling ? getHeight($contentElement) : gridCoreUtils.getContentHeightLimit(browser),
-        });
+        // TODO: remove the condition when legacyMode is removed
+        if (legacyMode && !useNativeScrolling) {
+          $contentElement.css({ minHeight: gridCoreUtils.getContentHeightLimit(browser) });
+        } else {
+          $contentElement.css({ minHeight: getHeight($contentElement) });
+        }
 
         const resizeCompletedHandler = () => {
           this.resizeCompleted.remove(resizeCompletedHandler);
@@ -84,7 +87,6 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class Virtual
     // @ts-expect-error
     const deferred = super._renderCore.apply(this, arguments);
 
-    // @ts-expect-error
     if (this._columnsController.isVirtualMode()) {
       this._updateScrollLeftPosition();
     }
@@ -179,11 +181,13 @@ const columns = (Base: ModuleType<ColumnsController>) => class VirtualColumnsCon
     return this.option('scrolling.columnPageSize');
   }
 
-  private _fireColumnsChanged() {
+  private _fireColumnsChanged(event?) {
     const date: any = new Date();
     this.columnsChanged.fire({
       optionNames: { all: true, length: 1 },
-      changeTypes: { columns: true, virtualColumnsScrolling: true, length: 2 },
+      changeTypes: {
+        columns: true, virtualColumnsScrolling: true, length: 2, event,
+      },
     });
     this._renderTime = (new Date()) as any - date;
   }
@@ -200,29 +204,25 @@ const columns = (Base: ModuleType<ColumnsController>) => class VirtualColumnsCon
     return scrollingTimeout;
   }
 
-  private setScrollPosition(position) {
+  private setScrollPosition(position, event?) {
     const scrollingTimeout = this.getScrollingTimeout();
 
     if (scrollingTimeout > 0) {
       clearTimeout(this._changedTimeout);
 
       this._changedTimeout = setTimeout(() => {
-        this._setScrollPositionCore(position);
+        this._setScrollPositionCore(position, event);
       }, scrollingTimeout);
     } else {
-      this._setScrollPositionCore(position);
+      this._setScrollPositionCore(position, event);
     }
-  }
-
-  private isVirtualMode() {
-    return hasWindow() && this.option('scrolling.columnRenderingMode') === 'virtual';
   }
 
   private resize() {
     this._setScrollPositionCore(this._position);
   }
 
-  private _setScrollPositionCore(position) {
+  private _setScrollPositionCore(position, event?) {
     const that = this;
 
     if (that.isVirtualMode()) {
@@ -234,7 +234,7 @@ const columns = (Base: ModuleType<ColumnsController>) => class VirtualColumnsCon
       if (needColumnsChanged) {
         that._beginPageIndex = beginPageIndex;
         that._endPageIndex = endPageIndex;
-        that._fireColumnsChanged();
+        that._fireColumnsChanged(event);
       }
     }
   }
@@ -330,6 +330,10 @@ const columns = (Base: ModuleType<ColumnsController>) => class VirtualColumnsCon
       offset = this._beginPageIndex * this.getColumnPageSize() - leftFixedColumnCount - 1;
     }
     return offset > 0 ? offset : 0;
+  }
+
+  public isVirtualMode(): boolean {
+    return hasWindow() && this.option('scrolling.columnRenderingMode') === 'virtual';
   }
 };
 

@@ -31,10 +31,10 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoLinkComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get border(): { color?: string, visible?: boolean, width?: number } {
+    get border(): { color?: string | undefined, visible?: boolean | undefined, width?: number | undefined } {
         return this._getOption('border');
     }
-    set border(value: { color?: string, visible?: boolean, width?: number }) {
+    set border(value: { color?: string | undefined, visible?: boolean | undefined, width?: number | undefined }) {
         this._setOption('border', value);
     }
 
@@ -55,10 +55,10 @@ export class DxoLinkComponent extends NestedOption implements OnDestroy, OnInit 
     }
 
     @Input()
-    get hoverStyle(): { border?: { color?: string | undefined, visible?: boolean | undefined, width?: number | undefined }, color?: string | undefined, hatching?: { direction?: HatchDirection, opacity?: number, step?: number, width?: number }, opacity?: number } {
+    get hoverStyle(): { border?: { color?: string | undefined, visible?: boolean | undefined, width?: number | undefined }, color?: string | undefined, hatching?: { direction?: HatchDirection, opacity?: number, step?: number, width?: number }, opacity?: number | undefined } {
         return this._getOption('hoverStyle');
     }
-    set hoverStyle(value: { border?: { color?: string | undefined, visible?: boolean | undefined, width?: number | undefined }, color?: string | undefined, hatching?: { direction?: HatchDirection, opacity?: number, step?: number, width?: number }, opacity?: number }) {
+    set hoverStyle(value: { border?: { color?: string | undefined, visible?: boolean | undefined, width?: number | undefined }, color?: string | undefined, hatching?: { direction?: HatchDirection, opacity?: number, step?: number, width?: number }, opacity?: number | undefined }) {
         this._setOption('hoverStyle', value);
     }
 

@@ -1,4 +1,4 @@
-import { DataGridTypes } from 'devextreme-react/data-grid';
+import { type DataGridTypes } from 'devextreme-react/data-grid';
 import React from 'react';
 
 const PriceCell = (cell: DataGridTypes.ColumnCellTemplateData) => (

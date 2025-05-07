@@ -1,10 +1,10 @@
 import { getOuterWidth, getOuterHeight } from 'core/utils/size';
 import $ from 'jquery';
 import { initTestMarkup, createWrapper } from '../../helpers/scheduler/helpers.js';
-import translator from 'animation/translator';
+import translator from 'common/core/animation/translator';
 import Color from 'color';
-import fx from 'animation/fx';
-import { DataSource } from 'data/data_source/data_source';
+import fx from 'common/core/animation/fx';
+import { DataSource } from 'common/data/data_source/data_source';
 
 import '__internal/scheduler/m_scheduler';
 import 'generic_light.css!';

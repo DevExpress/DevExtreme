@@ -1,5 +1,5 @@
+import callbacks from '@js/common/core/events/core/event_registrator_callbacks';
 import { each } from '@js/core/utils/iterator';
-import callbacks from '@js/events/core/event_registrator_callbacks';
 
 const registerEvent = function (name, eventObject) {
   const strategy: any = {};

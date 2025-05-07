@@ -1,5 +1,4 @@
 import * as sass from 'sass-embedded';
-import less from 'less';
 import { promises as fs, existsSync } from 'fs';
 import bootstrap5meta from '../data/bootstrap-metadata/bootstrap5-metadata';
 
@@ -50,15 +49,6 @@ export default class BootstrapExtractor {
     });
   }
 
-  static async lessRender(input: string): Promise<string> {
-    return new Promise((resolve, reject) => {
-      less.render(
-        input,
-        (error, result) => (error ? reject(error.message) : resolve(result.css)),
-      );
-    });
-  }
-
   static convertRemToPx(cssValue: string): string {
     const remValueRegex = /(\d*?\.?\d+?)rem([;\s])?/g;
     const replaceHandler = (_match: string, value: string, separator: string): string => {
@@ -87,21 +77,17 @@ export default class BootstrapExtractor {
     }
 
     const result = `${functions}
-${variables.replace('@import "variables-dark";', '')}
+${variables}
 ${variablesDark}
 ${this.input}
 ${this.getSetterServiceCode('!default')}
 ${this.getCollectorServiceCode()}`;
 
-    return result;
+    return this.removeImports(result);
   }
 
-  async lessProcessor(): Promise<string> {
-    return Promise.resolve(
-      this.getSetterServiceCode()
-      + this.input
-      + this.getCollectorServiceCode(),
-    );
+  removeImports(content: string): string {
+    return content.replace(/^@import "variables-dark";.*$/gm, '');
   }
 
   getFilePath(fileName: string): string {

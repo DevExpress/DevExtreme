@@ -1,2 +1,3 @@
-import { TransitionExecutor } from './transition_executor/transition_executor';
+import { TransitionExecutor } from '../common/core/animation';
+
 export default TransitionExecutor;

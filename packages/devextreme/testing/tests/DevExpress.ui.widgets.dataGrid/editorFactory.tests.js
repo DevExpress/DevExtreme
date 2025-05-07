@@ -39,7 +39,7 @@ import 'ui/tag_box';
 import TextArea from 'ui/text_area';
 
 import executeAsyncMock from '../../helpers/executeAsyncMock.js';
-import dateLocalization from 'localization/date';
+import dateLocalization from 'common/core/localization/date';
 import browser from 'core/utils/browser';
 import devices from '__internal/core/m_devices';
 import SelectBox from 'ui/select_box';

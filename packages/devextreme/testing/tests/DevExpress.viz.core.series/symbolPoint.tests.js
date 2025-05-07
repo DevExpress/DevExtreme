@@ -1705,6 +1705,36 @@ QUnit.test('Non-circle to circle', function(assert) {
     assert.deepEqual(point.graphic.stub('append').lastCall.args[0], this.group);
 });
 
+QUnit.test('Point should be changed to a circle if updateOption() arises several times before redraw (T1284076)', function(assert) {
+    this.options.symbol = 'square';
+    const point = createPoint(this.series, { argument: 1, value: 1 }, this.options);
+
+    point.translate();
+    point.draw(this.renderer, this.groups);
+
+    const newOptions = $.extend(true, {}, this.options, { symbol: 'circle' });
+    point.updateOptions(newOptions);
+    point.updateOptions(newOptions);
+    point.translate();
+    point.draw(this.renderer, this.groups);
+
+    assert.ok(point.graphic);
+    assert.equal(point.graphic.typeOfNode, 'circle');
+
+    assert.equal(this.renderer.stub('path').callCount, 1);
+    assert.deepEqual(this.renderer.stub('path').firstCall.args[0], []);
+    assert.deepEqual(this.renderer.stub('path').firstCall.args[1], 'area');
+
+    assert.equal(this.renderer.stub('circle').callCount, 1);
+    assert.deepEqual(this.renderer.stub('circle').firstCall.args, []);
+    assert.equal(point.graphic.stub('attr').lastCall.args[0].translateX, 11);
+    assert.equal(point.graphic.stub('attr').lastCall.args[0].translateY, 22);
+    assert.equal(point.graphic.stub('attr').lastCall.args[0].r, 6);
+    assert.equal(point.graphic, this.renderer.stub('circle').firstCall.returnValue);
+
+    assert.deepEqual(point.graphic.stub('append').lastCall.args[0], this.group);
+});
+
 QUnit.test('Non-image to image (image option is string)', function(assert) {
     this.options.symbol = 'circle';
     const point = createPoint(this.series, { argument: 1, value: 1 }, this.options);

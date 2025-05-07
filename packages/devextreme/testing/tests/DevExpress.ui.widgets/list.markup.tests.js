@@ -278,6 +278,9 @@ if(devices.real().deviceType === 'desktop') {
                         items: [{ text: 'Item_1' }, { text: 'Item_2' }, { text: 'Item_3' }],
                     }, options))
             });
+            const localizedRoleDescription = 'My Custom List';
+            localization.loadMessages({ 'en': { 'dxList-ariaRoleDescription': localizedRoleDescription } });
+
             this.clock = sinon.useFakeTimers();
             this.expectedContainerAttrs = {
                 tabindex: '0',
@@ -289,7 +292,7 @@ if(devices.real().deviceType === 'desktop') {
             };
             this.expectedListAttrs = {
                 role: 'group',
-                'aria-roledescription': 'list',
+                'aria-roledescription': localizedRoleDescription,
             };
         },
         afterEach: function() {
@@ -486,6 +489,87 @@ QUnit.module('decorators markup', {}, () => {
         const $deleteToggleIcon = $item.find(`.${TOGGLE_DELETE_SWITCH_ICON_CLASS}`).get(0);
 
         assert.notStrictEqual(window.getComputedStyle($deleteToggleIcon).backgroundImage, 'none', 'background image is defined');
+    });
+
+    QUnit.module('list item aria-label should be equal to item text (T1248422, T1285078)', {
+        beforeEach: function() {
+            const init = (options = {}) => {
+                this.$element = $('#list').dxList(options);
+                this.instance = this.$element.dxList('instance');
+            };
+
+            init();
+
+            this.reinit = (options) => {
+                this.instance.dispose();
+
+                init(options);
+            };
+
+            this.getItem = () => this.$element.find(`.${LIST_ITEM_CLASS}`).eq(0);
+
+            this.checkAriaLabel = (assert, updatedItems, expectedAriaLabel) => {
+                const { selectionMode, showSelectionControls } = this.instance.option();
+                const isSelectionActive = selectionMode !== 'none' && showSelectionControls;
+
+                assert.strictEqual(this.getItem().attr('aria-label'), isSelectionActive ? (expectedAriaLabel || 'item 1') : undefined, 'aria-label is correct on init');
+
+                this.instance.option({ items: updatedItems });
+
+                assert.strictEqual(this.getItem().attr('aria-label'), isSelectionActive ? (expectedAriaLabel || 'item 2') : undefined, 'aria-label is correct if items were changed in runtime');
+            };
+        },
+    }, () => {
+        [true, false].forEach(showSelectionControls => {
+            [ 'multiple', 'single', 'all', 'none' ].forEach(selectionMode => {
+                QUnit.test(`showSelectionControls is ${showSelectionControls}, selectionMode is ${selectionMode}, items is string, displayExpr is not specified`, function(assert) {
+                    this.reinit({
+                        showSelectionControls,
+                        selectionMode,
+                        items: ['item 1'],
+                        displayExpr: null,
+                    });
+
+                    this.checkAriaLabel(assert, ['item 2']);
+                });
+
+                QUnit.test(`showSelectionControls is ${showSelectionControls}, selectionMode is ${selectionMode}, items is object, displayExpr is not specified`, function(assert) {
+                    this.reinit({
+                        showSelectionControls,
+                        selectionMode,
+                        items: [{ text: 'item 1' }],
+                        displayExpr: null,
+                    });
+
+                    this.checkAriaLabel(assert, [{ text: 'item 2' }]);
+                });
+
+                QUnit.test(`showSelectionControls is ${showSelectionControls}, selectionMode is ${selectionMode}, items is an object with a missing default field, displayExpr is not specified (T1285078)`, function(assert) {
+                    const localizedAriaLabelItemContent = 'custom-content';
+                    localization.loadMessages({ 'en': { 'dxList-listAriaLabel-itemContent': localizedAriaLabelItemContent } });
+
+                    this.reinit({
+                        showSelectionControls,
+                        selectionMode,
+                        items: [{ custom: 'item 1' }],
+                        displayExpr: null,
+                    });
+
+                    this.checkAriaLabel(assert, [{ custom: 'item 2' }], localizedAriaLabelItemContent);
+                });
+
+                QUnit.test(`showSelectionControls is ${showSelectionControls}, selectionMode is ${selectionMode}, items is object, displayExpr is specified`, function(assert) {
+                    this.reinit({
+                        showSelectionControls,
+                        selectionMode,
+                        items: [{ custom: 'item 1' }],
+                        displayExpr: 'custom',
+                    });
+
+                    this.checkAriaLabel(assert, [{ custom: 'item 2' }]);
+                });
+            });
+        });
     });
 
     QUnit.test('list item markup, item select decorator', function(assert) {

@@ -15,7 +15,7 @@ const Legend = vizMocks.Legend;
 const ChartTitle = vizMocks.Title;
 const Axis = vizMocks.stubClass(axisModule.Axis);
 const Range = vizMocks.stubClass(rangeModule.Range);
-const DataSource = require('data/data_source/data_source').DataSource;
+const DataSource = require('common/data/data_source/data_source').DataSource;
 const DataSourceMock = vizMocks.stubClass(DataSource);
 
 require('viz/chart');

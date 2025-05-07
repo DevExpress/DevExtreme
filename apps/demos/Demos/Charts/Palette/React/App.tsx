@@ -3,7 +3,7 @@ import PieChart, {
   Series,
   Legend,
 } from 'devextreme-react/pie-chart';
-import SelectBox, { SelectBoxTypes } from 'devextreme-react/select-box';
+import SelectBox, { type SelectBoxTypes } from 'devextreme-react/select-box';
 import { getPalette } from 'devextreme/viz/palette';
 import {
   paletteCollection, paletteExtensionModes, dataSource, paletteLabel, paletteExtensionLabel,

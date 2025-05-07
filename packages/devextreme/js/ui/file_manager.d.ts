@@ -13,7 +13,7 @@ import {
     NativeEventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
-} from '../events/index';
+} from '../common/core/events';
 
 import FileSystemItem from '../file_management/file_system_item';
 
@@ -31,9 +31,6 @@ import Widget, {
 
 import {
     template,
-} from '../core/templates/template';
-
-import {
     DataType,
     SingleOrMultiple,
     HorizontalAlignment,
@@ -834,7 +831,7 @@ export interface dxFileManagerContextMenuItem extends dxContextMenuItem {
      * @default undefined
      * @public
      */
-    visible?: boolean;
+    visible?: boolean | undefined;
     /**
      * @docid
      * @hidden
@@ -897,7 +894,7 @@ export interface dxFileManagerToolbarItem extends dxToolbarItem {
      * @default undefined
      * @public
      */
-    visible?: boolean;
+    visible?: boolean | undefined;
     /**
      * @docid
      * @hidden
@@ -923,7 +920,7 @@ export interface dxFileManagerToolbarItem extends dxToolbarItem {
 export interface dxFileManagerDetailsColumn {
     /**
      * @docid
-     * @type Enums.HorizontalAlignment
+     * @type Enums.HorizontalAlignment | undefined
      * @default undefined
      * @acceptValues undefined
      * @public
@@ -934,40 +931,40 @@ export interface dxFileManagerDetailsColumn {
      * @default undefined
      * @public
      */
-    caption?: string;
+    caption?: string | undefined;
     /**
      * @docid
      * @default undefined
      * @public
      */
-    cssClass?: string;
+    cssClass?: string | undefined;
     /**
      * @docid
      * @default undefined
      * @public
      */
-    dataField?: string;
+    dataField?: string | undefined;
     /**
      * @docid
      * @default undefined
      * @public
      */
-    dataType?: DataType;
+    dataType?: DataType | undefined;
     /**
      * @docid
      * @default undefined
      * @public
      */
-    hidingPriority?: number;
+    hidingPriority?: number | undefined;
     /**
      * @docid
      * @default undefined
      * @public
      */
-    sortIndex?: number;
+    sortIndex?: number | undefined;
     /**
      * @docid
-     * @type Enums.SortOrder
+     * @type Enums.SortOrder | undefined
      * @default undefined
      * @acceptValues undefined
      * @public
@@ -984,13 +981,13 @@ export interface dxFileManagerDetailsColumn {
      * @default undefined
      * @public
      */
-    visibleIndex?: number;
+    visibleIndex?: number | undefined;
     /**
      * @docid
      * @default undefined
      * @public
      */
-    width?: number | string;
+    width?: number | string | undefined;
 }
 
 /** @public */

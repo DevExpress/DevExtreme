@@ -2,8 +2,8 @@ import $ from 'jquery';
 import SliderTooltip from '__internal/ui/slider/m_slider_tooltip';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import pointerMock from '../../helpers/pointerMock.js';
-import fx from 'animation/fx';
-import { normalizeKeyName } from 'events/utils/index';
+import fx from 'common/core/animation/fx';
+import { normalizeKeyName } from 'common/core/events/utils/index';
 
 import 'ui/range_slider';
 import 'ui/number_box';

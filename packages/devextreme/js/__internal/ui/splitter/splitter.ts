@@ -1,4 +1,5 @@
 import type { Orientation } from '@js/common';
+import { lock } from '@js/common/core/events/core/emitter.feedback';
 import registerComponent from '@js/core/component_registrator';
 import domAdapter from '@js/core/dom_adapter';
 import { getPublicElement } from '@js/core/element';
@@ -15,7 +16,6 @@ import {
 } from '@js/core/utils/size';
 import { isDefined, isObject } from '@js/core/utils/type';
 import { hasWindow } from '@js/core/utils/window';
-import { lock } from '@js/events/core/emitter.feedback';
 import type {
   Item,
   ItemCollapsedEvent,
@@ -25,9 +25,11 @@ import type {
   ResizeEvent,
   ResizeStartEvent,
 } from '@js/ui/splitter';
-import CollectionWidget from '@ts/ui/collection/live_update';
+import type { OptionChanged } from '@ts/core/widget/types';
+import type { ItemRenderInfo, PostprocessRenderItemInfo } from '@ts/ui/collection/collection_widget.base';
+import CollectionWidgetLiveUpdate from '@ts/ui/collection/m_collection_widget.live_update';
 
-import type { TypedCollectionWidgetOptions } from '../collection/base';
+import type { CollectionWidgetEditProperties } from '../collection/m_collection_widget.edit';
 import type ResizeHandle from './resize_handle';
 import type { ResizeHandleOptions } from './resize_handle';
 import { RESIZE_HANDLE_CLASS } from './resize_handle';
@@ -96,8 +98,8 @@ export interface Properties<
   TKey = any,
 > extends PublicProperties<TItem, TKey>,
   Omit<
-  TypedCollectionWidgetOptions<Splitter, TItem, TKey>,
-  keyof PublicProperties<TItem, TKey> & keyof TypedCollectionWidgetOptions<Splitter, TItem, TKey>
+  CollectionWidgetEditProperties<Splitter, TItem, TKey>,
+  keyof PublicProperties<TItem, TKey> & keyof CollectionWidgetEditProperties<Splitter, TItem, TKey>
   > {
   _renderQueue?: RenderQueueItem[];
 }
@@ -107,12 +109,14 @@ interface PaneCache {
   direction: CollapseExpandDirection;
 }
 
-class Splitter extends CollectionWidget<Properties> {
+class Splitter extends CollectionWidgetLiveUpdate<Properties> {
   static ItemClass = SplitterItem;
 
   private _renderQueue: RenderQueueItem[] = [];
 
   private _panesCacheSize: (PaneCache | undefined)[] = [];
+
+  private _panesCacheSizeVisible: (PaneCache | undefined)[] = [];
 
   private _savedCollapsingEvent?: InteractionEvent;
 
@@ -169,6 +173,7 @@ class Splitter extends CollectionWidget<Properties> {
   }
 
   _initializeRenderQueue(): void {
+    // @ts-expect-error
     this._renderQueue = this.option('_renderQueue') ?? [];
   }
 
@@ -177,7 +182,7 @@ class Splitter extends CollectionWidget<Properties> {
   }
 
   _pushItemToRenderQueue(
-    itemContent: Element,
+    itemContent: dxElementWrapper,
     splitterConfig: Properties,
   ): void {
     this._renderQueue.push({ itemContent, splitterConfig });
@@ -195,6 +200,8 @@ class Splitter extends CollectionWidget<Properties> {
     super._initMarkup();
 
     this._panesCacheSize = [];
+    this._panesCacheSizeVisible = [];
+
     this._attachResizeObserverSubscription();
   }
 
@@ -312,51 +319,58 @@ class Splitter extends CollectionWidget<Properties> {
   }
 
   _getItemInstance($item: dxElementWrapper): SplitterItem {
-    // @ts-expect-error badly typed base class
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-    return Splitter.ItemClass.getInstance($item);
+    return SplitterItem.getInstance<SplitterItem>($item);
   }
 
   _updateResizeHandlesResizableState(): void {
     this._getResizeHandles().forEach((resizeHandle) => {
-      const $resizeHandle = (resizeHandle.$element() as unknown) as dxElementWrapper;
+      this._updateResizeHandleResizableState(resizeHandle);
+    });
+  }
 
-      const $leftItem = this._getResizeHandleLeftItem($resizeHandle);
-      const $rightItem = this._getResizeHandleRightItem($resizeHandle);
-      const leftItemData = this._getItemData($leftItem);
-      const rightItemData = this._getItemData($rightItem);
-      const resizable = leftItemData.resizable !== false
+  _updateResizeHandleResizableState(resizeHandle: ResizeHandle): void {
+    const $resizeHandle = resizeHandle.$element();
+
+    const $leftItem = this._getResizeHandleLeftItem($resizeHandle);
+    const $rightItem = this._getResizeHandleRightItem($resizeHandle);
+    const leftItemData = this._getItemData($leftItem);
+    const rightItemData = this._getItemData($rightItem);
+
+    const resizable = leftItemData.resizable !== false
         && rightItemData.resizable !== false
         && leftItemData.collapsed !== true
         && rightItemData.collapsed !== true;
 
-      resizeHandle.option('resizable', resizable);
+    resizeHandle.option('resizable', resizable);
 
-      resizeHandle.option('disabled', resizeHandle.isInactive());
-    });
+    resizeHandle.option('disabled', resizeHandle.isInactive());
   }
 
   _updateResizeHandlesCollapsibleState(): void {
     this._getResizeHandles().forEach((resizeHandle) => {
-      const $resizeHandle = $(resizeHandle.element());
-
-      const $leftItem = this._getResizeHandleLeftItem($resizeHandle);
-      const $rightItem = this._getResizeHandleRightItem($resizeHandle);
-      const leftItemData = this._getItemData($leftItem);
-      const rightItemData = this._getItemData($rightItem);
-
-      const showCollapsePrev = rightItemData.collapsed === true
-        ? rightItemData.collapsible === true && leftItemData.collapsed !== true
-        : leftItemData.collapsible === true && leftItemData.collapsed !== true;
-
-      const showCollapseNext = leftItemData.collapsed === true
-        ? leftItemData.collapsible === true
-        : rightItemData.collapsible === true && rightItemData.collapsed !== true;
-
-      resizeHandle.option({ showCollapsePrev, showCollapseNext });
-
-      resizeHandle.option('disabled', resizeHandle.isInactive());
+      this._updateResizeHandleCollapsibleState(resizeHandle);
     });
+  }
+
+  _updateResizeHandleCollapsibleState(resizeHandle: ResizeHandle): void {
+    const $resizeHandle = $(resizeHandle.element());
+
+    const $leftItem = this._getResizeHandleLeftItem($resizeHandle);
+    const $rightItem = this._getResizeHandleRightItem($resizeHandle);
+    const leftItemData = this._getItemData($leftItem);
+    const rightItemData = this._getItemData($rightItem);
+
+    const showCollapsePrev = rightItemData.collapsed === true
+      ? rightItemData.collapsible === true && leftItemData.collapsed !== true
+      : leftItemData.collapsible === true && leftItemData.collapsed !== true;
+
+    const showCollapseNext = leftItemData.collapsed === true
+      ? leftItemData.collapsible === true
+      : rightItemData.collapsible === true && rightItemData.collapsed !== true;
+
+    resizeHandle.option({ showCollapsePrev, showCollapseNext });
+
+    resizeHandle.option('disabled', resizeHandle.isInactive());
   }
 
   _updateNestedSplitterOption(optionName: string, optionValue: unknown): void {
@@ -386,7 +400,6 @@ class Splitter extends CollectionWidget<Properties> {
   }
 
   _getItemDataByIndex(index: number): Item {
-    // @ts-expect-error badly typed base class
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return this._editStrategy.getItemDataByIndex(index);
   }
@@ -503,12 +516,14 @@ class Splitter extends CollectionWidget<Properties> {
           return;
         }
 
+        const { orientation: currentOrientation } = this.option();
+
         const newLayout = getNextLayout(
           this._currentLayout ?? [],
           calculateDelta(
             // @ts-expect-error ts-error
             event.offset,
-            this.option('orientation'),
+            currentOrientation,
             rtlEnabled,
             this._currentOnePxRatio,
           ),
@@ -532,6 +547,7 @@ class Splitter extends CollectionWidget<Properties> {
           event,
           handleElement: getPublicElement<HTMLElement>($resizeHandle),
         };
+
         // eslint-disable-next-line @typescript-eslint/no-floating-promises
         this._feedbackDeferred?.resolve();
         this._toggleActiveState($resizeHandle, false);
@@ -601,11 +617,12 @@ class Splitter extends CollectionWidget<Properties> {
 
   _createItemByTemplate(
     itemTemplate: { source: () => unknown },
-    args: { itemData: Item },
+    args: ItemRenderInfo<Item>,
   ): unknown {
     const { itemData } = args;
 
     if (itemData.splitter) {
+      this._onItemTemplateRendered(itemTemplate, args)();
       return itemTemplate.source
         ? itemTemplate.source()
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -615,7 +632,7 @@ class Splitter extends CollectionWidget<Properties> {
     return super._createItemByTemplate(itemTemplate, args);
   }
 
-  _postprocessRenderItem(args: { itemData: Item; itemContent: Element }): void {
+  _postprocessRenderItem(args: PostprocessRenderItemInfo<Item>): void {
     const splitterConfig = args.itemData.splitter;
     if (!splitterConfig) {
       return;
@@ -625,7 +642,9 @@ class Splitter extends CollectionWidget<Properties> {
   }
 
   _isHorizontalOrientation(): boolean {
-    return this.option('orientation') === ORIENTATION.horizontal;
+    const { orientation } = this.option();
+
+    return orientation === ORIENTATION.horizontal;
   }
 
   _toggleOrientationClass(): void {
@@ -634,7 +653,12 @@ class Splitter extends CollectionWidget<Properties> {
       .toggleClass(VERTICAL_ORIENTATION_CLASS, !this._isHorizontalOrientation());
   }
 
-  _itemOptionChanged(item: Item, property: string, value: unknown, prevValue: unknown): void {
+  _itemOptionChanged(
+    item: Item,
+    property: keyof Item,
+    value: unknown,
+    prevValue: unknown,
+  ): void {
     switch (property) {
       case 'size':
       case 'maxSize':
@@ -645,24 +669,117 @@ class Splitter extends CollectionWidget<Properties> {
         this._applyStylesFromLayout(this.getLayout());
         this._updateItemSizes();
         break;
-      case 'collapsed':
-        this._itemCollapsedOptionChanged(item, value as boolean, prevValue as boolean);
+      case 'collapsed': {
+        type PropertyType = Item[typeof property];
+
+        this._itemCollapsedOptionChanged(item, value as PropertyType, prevValue as PropertyType);
         break;
+      }
       case 'resizable':
         this._updateResizeHandlesResizableState();
         break;
       case 'collapsible':
         this._updateResizeHandlesCollapsibleState();
         break;
-      case 'visible':
-        this._invalidate();
+      case 'visible': {
+        type PropertyType = Item[typeof property];
+
+        super._itemOptionChanged(item, property, value, prevValue);
+
+        this._itemVisibleOptionChanged(item, value as PropertyType, prevValue as PropertyType);
+        break;
+      }
+      case 'template':
+        super._itemOptionChanged(item, property, value, prevValue);
+
+        this._applyStylesFromLayout(this.getLayout());
+        this._updateResizeHandles();
         break;
       default:
         super._itemOptionChanged(item, property, value, prevValue);
     }
   }
 
-  _itemCollapsedOptionChanged(item: Item, value: boolean, prevValue: boolean): void {
+  _itemVisibleOptionChanged(item: Item, value = true, prevValue = true): void {
+    if (Boolean(prevValue) === Boolean(value)) {
+      return;
+    }
+
+    const { direction, paneIndex } = this._getDistributionData(item, value);
+
+    this._updateResizeHandles();
+
+    if (paneIndex && paneIndex < 0) { return; }
+
+    this._updateItemsRestrictions();
+
+    const collapsedDelta = this._getCollapseDelta(
+      item,
+      !value,
+      this._panesCacheSizeVisible,
+      direction,
+    );
+
+    this._itemRestrictions.forEach((pane) => {
+      pane.maxSize = undefined;
+      pane.resizable = undefined;
+    });
+
+    this._layout = getNextLayout(
+      this.getLayout(),
+      collapsedDelta,
+      paneIndex,
+      this._itemRestrictions,
+    );
+
+    this._applyStylesFromLayout(this.getLayout());
+    this._updateItemSizes();
+  }
+
+  _getDistributionData(item: Item, value: boolean | undefined): {
+    direction: CollapseExpandDirection;
+    paneIndex: number;
+  } {
+    const itemIndex = this._getIndexByItem(item);
+    const $item = $(this._itemElements()[itemIndex]);
+    const { items = [] } = this.option();
+
+    const isLastVisible = itemIndex >= findLastIndexOfVisibleItem(items);
+
+    const direction = isLastVisible === (value === false)
+      ? CollapseExpandDirection.Next
+      : CollapseExpandDirection.Previous;
+
+    const paneIndex = this._getPaneIndexByElement(
+      isLastVisible ? this._getResizeHandleLeftItem($item) : $item,
+    );
+
+    return { direction, paneIndex };
+  }
+
+  _updateResizeHandles(): void {
+    this._iterateItems((_, itemElement) => {
+      const item = this._getItemInstance($(itemElement));
+
+      item.updateResizeHandle();
+
+      const resizeHandle = item.getResizeHandle();
+      if (resizeHandle) {
+        this._updateResizeHandleResizableState(resizeHandle);
+        this._updateResizeHandleCollapsibleState(resizeHandle);
+      }
+    });
+  }
+
+  _getPaneIndexByElement(
+    $element: dxElementWrapper,
+  ): number {
+    const itemData = this._getItemData($element);
+
+    return this._getIndexByItem(itemData);
+  }
+
+  _itemCollapsedOptionChanged(item: Item, value?: boolean, prevValue?: boolean): void {
     if (Boolean(value) === Boolean(prevValue)) {
       return;
     }
@@ -716,13 +833,16 @@ class Splitter extends CollectionWidget<Properties> {
 
     this._updateItemsRestrictions();
 
-    const collapsedDelta = this._getCollapseDelta(item, value);
+    const collapsedDelta = this._getCollapseDelta(
+      item,
+      value,
+      this._panesCacheSize,
+      this._collapseDirection,
+    );
 
-    this._itemRestrictions.map((pane) => {
+    this._itemRestrictions.forEach((pane) => {
       pane.maxSize = undefined;
       pane.resizable = undefined;
-
-      return item;
     });
 
     this._layout = getNextLayout(
@@ -772,7 +892,12 @@ class Splitter extends CollectionWidget<Properties> {
     return 0;
   }
 
-  _getCollapseDelta(item: Item, newCollapsedState: boolean): number {
+  _getCollapseDelta(
+    item: Item,
+    newCollapsedState: boolean | undefined,
+    panesCacheSize: (PaneCache | undefined)[],
+    direction?: CollapseExpandDirection,
+  ): number {
     const itemIndex = this._getIndexByItem(item);
 
     const { collapsedSize = 0, minSize = 0, maxSize = 100 } = this._itemRestrictions[itemIndex];
@@ -783,30 +908,30 @@ class Splitter extends CollectionWidget<Properties> {
       const targetPaneSize = collapsedSize;
 
       if (currentPaneSize > targetPaneSize) {
-        this._panesCacheSize[itemIndex] = {
+        panesCacheSize[itemIndex] = {
           size: currentPaneSize,
-          direction: this._collapseDirection === CollapseExpandDirection.Next
+          direction: direction === CollapseExpandDirection.Next
             ? CollapseExpandDirection.Previous
             : CollapseExpandDirection.Next,
         };
       }
 
-      const delta = this._collapseDirection === CollapseExpandDirection.Previous
+      const delta = direction === CollapseExpandDirection.Previous
         ? targetPaneSize - currentPaneSize
         : currentPaneSize - targetPaneSize;
 
       return delta;
     }
 
-    const paneCache = this._panesCacheSize[itemIndex];
-    this._panesCacheSize[itemIndex] = undefined;
+    const paneCache = panesCacheSize[itemIndex];
+    panesCacheSize[itemIndex] = undefined;
 
     let targetPaneSize = 0;
 
-    if (paneCache && paneCache.direction === this._collapseDirection) {
+    if (paneCache && paneCache.direction === direction) {
       targetPaneSize = paneCache.size - collapsedSize;
     } else {
-      targetPaneSize = this._collapseDirection === CollapseExpandDirection.Previous
+      targetPaneSize = direction === CollapseExpandDirection.Previous
         ? this._calculateExpandToLeftSize(itemIndex - 1)
         : this._calculateExpandToRightSize(itemIndex + 1);
     }
@@ -817,7 +942,7 @@ class Splitter extends CollectionWidget<Properties> {
 
     adjustedSize = Math.min(maxSize, adjustedSize);
 
-    const deltaSign = this._collapseDirection === CollapseExpandDirection.Previous ? -1 : 1;
+    const deltaSign = direction === CollapseExpandDirection.Previous ? -1 : 1;
 
     const delta = adjustedSize * deltaSign;
 
@@ -899,7 +1024,6 @@ class Splitter extends CollectionWidget<Properties> {
 
   _updateItemOption(path: string, value: unknown, silent = false): void {
     if (silent) {
-      // @ts-expect-error badly typed base class
       this._options.silent(path, value);
     } else {
       this.option(path, value);
@@ -947,7 +1071,7 @@ class Splitter extends CollectionWidget<Properties> {
     this._layout = this._getDefaultLayoutBasedOnSize();
   }
 
-  _optionChanged(args: Record<string, unknown>): void {
+  _optionChanged(args: OptionChanged<Properties>): void {
     const { name, value } = args;
 
     switch (name) {
@@ -1000,7 +1124,6 @@ class Splitter extends CollectionWidget<Properties> {
   }
 }
 
-// @ts-expect-error ts-error
 registerComponent('dxSplitter', Splitter);
 
 export default Splitter;

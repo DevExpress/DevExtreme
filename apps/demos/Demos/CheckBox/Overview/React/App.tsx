@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react';
-import { CheckBox, CheckBoxTypes } from 'devextreme-react/check-box';
+import { CheckBox, type CheckBoxTypes } from 'devextreme-react/check-box';
 
 const checkedLabel = { 'aria-label': 'Checked' };
 const uncheckedLabel = { 'aria-label': 'Unchecked' };

@@ -38,9 +38,14 @@ window.config = {
       'esModule': true,
     },
     /**/
+    'openai': {
+      'esModule': true,
+    },
   },
   paths: {
     'npm:': '../../../node_modules/',
+    'bundles:': '../../../../bundles/',
+    'externals:': '../../../../bundles/externals/',
   },
   defaultExtension: 'js',
   map: {
@@ -58,11 +63,6 @@ window.config = {
 
     /** devextreme-aspnet-data-nojquery */
     'devextreme-aspnet-data-nojquery': 'npm:devextreme-aspnet-data-nojquery/index.js',
-    /**/
-
-    /** showdown&turndown */
-    'showdown': 'npm:showdown/dist/showdown.js',
-    'turndown': 'npm:turndown/lib/turndown.browser.umd.js',
     /**/
 
     /** html-react-parser */
@@ -102,9 +102,7 @@ window.config = {
     /**/
 
     /** canvg */
-    'stackblur-canvas': 'npm:stackblur-canvas/dist/stackblur.min.js',
-    'rgbcolor': 'npm:rgbcolor/index.js',
-    'canvg': 'npm:canvg/dist/browser/canvg.min.js',
+    'canvg': 'externals:canvg.bundle.js',
     /**/
 
     /** whatwg-fetch */
@@ -121,7 +119,25 @@ window.config = {
 
     'devextreme': 'npm:devextreme/cjs',
     'devextreme-react': 'npm:devextreme-react/cjs',
+
+    /** jszip */
     'jszip': 'npm:jszip/dist/jszip.min.js',
+    /**/
+
+    /** unified */
+    'unified': 'externals:unified/unified.bundle.js',
+    'remark-parse': 'externals:unified/remark-parse.bundle.js',
+    'remark-rehype': 'externals:unified/remark-rehype.bundle.js',
+    'remark-stringify': 'externals:unified/remark-stringify.bundle.js',
+    'rehype-parse': 'externals:unified/rehype-parse.bundle.js',
+    'rehype-remark': 'externals:unified/rehype-remark.bundle.js',
+    'rehype-stringify': 'externals:unified/rehype-stringify.bundle.js',
+    /**/
+
+    /** openai */
+    'openai': 'externals:openai.bundle.js',
+    /**/
+
     'devextreme-quill': 'npm:devextreme-quill/dist/dx-quill.min.js',
     'devexpress-diagram': 'npm:devexpress-diagram/dist/dx-diagram.js',
     'devexpress-gantt': 'npm:devexpress-gantt/dist/dx-gantt.js',
@@ -152,6 +168,9 @@ window.config = {
       main: 'index.js',
     },
     'devextreme/events/utils': {
+      main: 'index',
+    },
+    'devextreme/common/core/events/utils': {
       main: 'index',
     },
     'devextreme/localization/messages': {

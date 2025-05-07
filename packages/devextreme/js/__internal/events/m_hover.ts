@@ -1,9 +1,9 @@
+import registerEvent from '@js/common/core/events/core/event_registrator';
+import eventsEngine from '@js/common/core/events/core/events_engine';
+import pointerEvents from '@js/common/core/events/pointer';
+import { addNamespace, fireEvent, isTouchEvent } from '@js/common/core/events/utils/index';
 import Class from '@js/core/class';
 import { data as elementData, removeData } from '@js/core/element_data';
-import registerEvent from '@js/events/core/event_registrator';
-import eventsEngine from '@js/events/core/events_engine';
-import pointerEvents from '@js/events/pointer';
-import { addNamespace, fireEvent, isTouchEvent } from '@js/events/utils/index';
 import devices from '@ts/core/m_devices';
 
 const HOVERSTART_NAMESPACE = 'dxHoverStart';

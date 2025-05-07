@@ -3,10 +3,10 @@ import 'generic_light.css!';
 import $ from 'jquery';
 import 'ui/data_grid';
 import commonUtils from 'core/utils/common';
-import { createEvent } from 'events/utils/index';
+import { createEvent } from 'common/core/events/utils/index';
 import typeUtils from 'core/utils/type';
-import pointerEvents from 'events/pointer';
-import eventsEngine from 'events/core/events_engine';
+import pointerEvents from 'common/core/events/pointer';
+import eventsEngine from 'common/core/events/core/events_engine';
 import {
     setupDataGridModules,
     MockDataController,

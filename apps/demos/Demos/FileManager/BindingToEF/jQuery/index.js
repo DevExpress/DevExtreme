@@ -1,6 +1,6 @@
 $(() => {
   const provider = new DevExpress.fileManagement.RemoteFileSystemProvider({
-    endpointUrl: 'https://js.devexpress.com/Demos/Mvc/api/file-manager-db',
+    endpointUrl: 'https://js.devexpress.com/Demos/NetCore/api/file-manager-db',
   });
 
   $('#file-manager').dxFileManager({

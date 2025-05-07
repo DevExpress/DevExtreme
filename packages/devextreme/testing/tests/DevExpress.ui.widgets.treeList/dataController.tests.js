@@ -1,9 +1,9 @@
 import '__internal/grids/tree_list/m_widget';
 import $ from 'jquery';
-import { DataSource } from 'data/data_source/data_source';
-import ArrayStore from 'data/array_store';
+import { DataSource } from 'common/data/data_source/data_source';
+import ArrayStore from 'common/data/array_store';
 import Guid from 'core/guid';
-import query from 'data/query';
+import query from 'common/data/query';
 import { setupTreeListModules } from '../../helpers/treeListMocks.js';
 
 const createDataSource = function(data, storeOptions, dataSourceOptions) {

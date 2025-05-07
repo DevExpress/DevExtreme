@@ -1,7 +1,6 @@
 .dx-chat-messagegroup-content {
   display: flex;
   flex-direction: column;
-  max-width: 70%;
 }
 
 .dx-chat-messagebubble {
@@ -25,6 +24,7 @@
 .dx-chat-messagegroup-alignment-end {
   .dx-chat-messagegroup-content {
     align-items: flex-end;
+    max-width: 82.5%;
   }
 
   .dx-chat-messagebubble {

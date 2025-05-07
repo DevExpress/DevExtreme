@@ -1,7 +1,7 @@
 /* global currentAssert */
 
 const $ = require('jquery');
-const animationFrame = require('animation/frame');
+const animationFrame = require('common/core/animation/frame');
 const commonUtils = require('core/utils/common');
 const typeUtils = require('core/utils/type');
 const animationModule = require('viz/core/renderers/animation');

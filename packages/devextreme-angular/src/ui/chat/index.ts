@@ -22,9 +22,11 @@ import {
 } from '@angular/core';
 
 
-import { Store } from 'devextreme/data';
-import DataSource, { Options as DataSourceOptions } from 'devextreme/data/data_source';
-import { ChatError, DisposingEvent, InitializedEvent, Message, MessageSendEvent, OptionChangedEvent, TypingEndEvent, TypingStartEvent, User } from 'devextreme/ui/chat';
+import DataSource from 'devextreme/data/data_source';
+import { Alert, Message, DisposingEvent, InitializedEvent, MessageEnteredEvent, OptionChangedEvent, TypingEndEvent, TypingStartEvent, User } from 'devextreme/ui/chat';
+import { DataSourceOptions } from 'devextreme/data/data_source';
+import { Store } from 'devextreme/data/store';
+import { Format } from 'devextreme/common/core/localization';
 
 import DxChat from 'devextreme/ui/chat';
 
@@ -39,21 +41,29 @@ import {
     WatcherHelper
 } from 'devextreme-angular/core';
 
-import { DxiErrorModule } from 'devextreme-angular/ui/nested';
+import { DxiAlertModule } from 'devextreme-angular/ui/nested';
+import { DxoDayHeaderFormatModule } from 'devextreme-angular/ui/nested';
 import { DxiItemModule } from 'devextreme-angular/ui/nested';
 import { DxoAuthorModule } from 'devextreme-angular/ui/nested';
+import { DxoMessageTimestampFormatModule } from 'devextreme-angular/ui/nested';
+import { DxiTypingUserModule } from 'devextreme-angular/ui/nested';
 import { DxoUserModule } from 'devextreme-angular/ui/nested';
 
-import { DxiChatErrorModule } from 'devextreme-angular/ui/chat/nested';
-import { DxiChatItemModule } from 'devextreme-angular/ui/chat/nested';
+import { DxiChatAlertModule } from 'devextreme-angular/ui/chat/nested';
 import { DxoChatAuthorModule } from 'devextreme-angular/ui/chat/nested';
+import { DxoChatDayHeaderFormatModule } from 'devextreme-angular/ui/chat/nested';
+import { DxiChatItemModule } from 'devextreme-angular/ui/chat/nested';
+import { DxoChatMessageTimestampFormatModule } from 'devextreme-angular/ui/chat/nested';
+import { DxiChatTypingUserModule } from 'devextreme-angular/ui/chat/nested';
 import { DxoChatUserModule } from 'devextreme-angular/ui/chat/nested';
 
-import { DxiErrorComponent } from 'devextreme-angular/ui/nested';
+import { DxiAlertComponent } from 'devextreme-angular/ui/nested';
 import { DxiItemComponent } from 'devextreme-angular/ui/nested';
+import { DxiTypingUserComponent } from 'devextreme-angular/ui/nested';
 
-import { DxiChatErrorComponent } from 'devextreme-angular/ui/chat/nested';
+import { DxiChatAlertComponent } from 'devextreme-angular/ui/chat/nested';
 import { DxiChatItemComponent } from 'devextreme-angular/ui/chat/nested';
+import { DxiChatTypingUserComponent } from 'devextreme-angular/ui/chat/nested';
 
 
 /**
@@ -63,6 +73,7 @@ import { DxiChatItemComponent } from 'devextreme-angular/ui/chat/nested';
 @Component({
     selector: 'dx-chat',
     template: '',
+    host: { ngSkipHydration: 'true' },
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -100,15 +111,41 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
 
 
     /**
+     * [descr:dxChatOptions.alerts]
+    
+     */
+    @Input()
+    get alerts(): Array<Alert> {
+        return this._getOption('alerts');
+    }
+    set alerts(value: Array<Alert>) {
+        this._setOption('alerts', value);
+    }
+
+
+    /**
      * [descr:dxChatOptions.dataSource]
     
      */
     @Input()
-    get dataSource(): Store | DataSource | DataSourceOptions | null | string | Array<Message> {
+    get dataSource(): Array<Message> | DataSource | DataSourceOptions | null | Store | string {
         return this._getOption('dataSource');
     }
-    set dataSource(value: Store | DataSource | DataSourceOptions | null | string | Array<Message>) {
+    set dataSource(value: Array<Message> | DataSource | DataSourceOptions | null | Store | string) {
         this._setOption('dataSource', value);
+    }
+
+
+    /**
+     * [descr:dxChatOptions.dayHeaderFormat]
+    
+     */
+    @Input()
+    get dayHeaderFormat(): Format {
+        return this._getOption('dayHeaderFormat');
+    }
+    set dayHeaderFormat(value: Format) {
+        this._setOption('dayHeaderFormat', value);
     }
 
 
@@ -130,24 +167,11 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
     
      */
     @Input()
-    get elementAttr(): any {
+    get elementAttr(): Record<string, any> {
         return this._getOption('elementAttr');
     }
-    set elementAttr(value: any) {
+    set elementAttr(value: Record<string, any>) {
         this._setOption('elementAttr', value);
-    }
-
-
-    /**
-     * [descr:dxChatOptions.errors]
-    
-     */
-    @Input()
-    get errors(): Array<ChatError> {
-        return this._getOption('errors');
-    }
-    set errors(value: Array<ChatError>) {
-        this._setOption('errors', value);
     }
 
 
@@ -169,10 +193,10 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
     
      */
     @Input()
-    get height(): number | Function | string | undefined {
+    get height(): (() => number | string) | number | string | undefined {
         return this._getOption('height');
     }
-    set height(value: number | Function | string | undefined) {
+    set height(value: (() => number | string) | number | string | undefined) {
         this._setOption('height', value);
     }
 
@@ -213,6 +237,45 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
     }
     set items(value: Array<Message>) {
         this._setOption('items', value);
+    }
+
+
+    /**
+     * [descr:dxChatOptions.messageTemplate]
+    
+     */
+    @Input()
+    get messageTemplate(): any {
+        return this._getOption('messageTemplate');
+    }
+    set messageTemplate(value: any) {
+        this._setOption('messageTemplate', value);
+    }
+
+
+    /**
+     * [descr:dxChatOptions.messageTimestampFormat]
+    
+     */
+    @Input()
+    get messageTimestampFormat(): Format {
+        return this._getOption('messageTimestampFormat');
+    }
+    set messageTimestampFormat(value: Format) {
+        this._setOption('messageTimestampFormat', value);
+    }
+
+
+    /**
+     * [descr:dxChatOptions.reloadOnChange]
+    
+     */
+    @Input()
+    get reloadOnChange(): boolean {
+        return this._getOption('reloadOnChange');
+    }
+    set reloadOnChange(value: boolean) {
+        this._setOption('reloadOnChange', value);
     }
 
 
@@ -282,6 +345,19 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
 
 
     /**
+     * [descr:dxChatOptions.typingUsers]
+    
+     */
+    @Input()
+    get typingUsers(): Array<User> {
+        return this._getOption('typingUsers');
+    }
+    set typingUsers(value: Array<User>) {
+        this._setOption('typingUsers', value);
+    }
+
+
+    /**
      * [descr:dxChatOptions.user]
     
      */
@@ -312,10 +388,10 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
     
      */
     @Input()
-    get width(): number | Function | string | undefined {
+    get width(): (() => number | string) | number | string | undefined {
         return this._getOption('width');
     }
-    set width(value: number | Function | string | undefined) {
+    set width(value: (() => number | string) | number | string | undefined) {
         this._setOption('width', value);
     }
 
@@ -337,11 +413,11 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
 
     /**
     
-     * [descr:dxChatOptions.onMessageSend]
+     * [descr:dxChatOptions.onMessageEntered]
     
     
      */
-    @Output() onMessageSend: EventEmitter<MessageSendEvent>;
+    @Output() onMessageEntered: EventEmitter<MessageEnteredEvent>;
 
     /**
     
@@ -386,7 +462,21 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() dataSourceChange: EventEmitter<Store | DataSource | DataSourceOptions | null | string | Array<Message>>;
+    @Output() alertsChange: EventEmitter<Array<Alert>>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
+    @Output() dataSourceChange: EventEmitter<Array<Message> | DataSource | DataSourceOptions | null | Store | string>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
+    @Output() dayHeaderFormatChange: EventEmitter<Format>;
 
     /**
     
@@ -400,14 +490,7 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() elementAttrChange: EventEmitter<any>;
-
-    /**
-    
-     * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
-     */
-    @Output() errorsChange: EventEmitter<Array<ChatError>>;
+    @Output() elementAttrChange: EventEmitter<Record<string, any>>;
 
     /**
     
@@ -421,7 +504,7 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() heightChange: EventEmitter<number | Function | string | undefined>;
+    @Output() heightChange: EventEmitter<(() => number | string) | number | string | undefined>;
 
     /**
     
@@ -443,6 +526,27 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
     
      */
     @Output() itemsChange: EventEmitter<Array<Message>>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
+    @Output() messageTemplateChange: EventEmitter<any>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
+    @Output() messageTimestampFormatChange: EventEmitter<Format>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
+    @Output() reloadOnChangeChange: EventEmitter<boolean>;
 
     /**
     
@@ -484,6 +588,13 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
+    @Output() typingUsersChange: EventEmitter<Array<User>>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
     @Output() userChange: EventEmitter<User>;
 
     /**
@@ -498,18 +609,17 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() widthChange: EventEmitter<number | Function | string | undefined>;
+    @Output() widthChange: EventEmitter<(() => number | string) | number | string | undefined>;
 
 
 
 
-    @ContentChildren(DxiChatErrorComponent)
-    get errorsChildren(): QueryList<DxiChatErrorComponent> {
-        return this._getOption('errors');
+    @ContentChildren(DxiChatAlertComponent)
+    get alertsChildren(): QueryList<DxiChatAlertComponent> {
+        return this._getOption('alerts');
     }
-    set errorsChildren(value) {
-        this.setContentChildren('errors', value, 'DxiChatErrorComponent');
-        this.setChildren('errors', value);
+    set alertsChildren(value) {
+        this._setChildren('alerts', value, 'DxiChatAlertComponent');
     }
 
     @ContentChildren(DxiChatItemComponent)
@@ -517,19 +627,24 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
         return this._getOption('items');
     }
     set itemsChildren(value) {
-        this.setContentChildren('items', value, 'DxiChatItemComponent');
-        this.setChildren('items', value);
+        this._setChildren('items', value, 'DxiChatItemComponent');
+    }
+
+    @ContentChildren(DxiChatTypingUserComponent)
+    get typingUsersChildren(): QueryList<DxiChatTypingUserComponent> {
+        return this._getOption('typingUsers');
+    }
+    set typingUsersChildren(value) {
+        this._setChildren('typingUsers', value, 'DxiChatTypingUserComponent');
     }
 
 
-    @ContentChildren(DxiErrorComponent)
-    get errorsLegacyChildren(): QueryList<DxiErrorComponent> {
-        return this._getOption('errors');
+    @ContentChildren(DxiAlertComponent)
+    get alertsLegacyChildren(): QueryList<DxiAlertComponent> {
+        return this._getOption('alerts');
     }
-    set errorsLegacyChildren(value) {
-        if (this.checkContentChildren('errors', value, 'DxiErrorComponent')) {
-           this.setChildren('errors', value);
-        }
+    set alertsLegacyChildren(value) {
+        this._setChildren('alerts', value, 'DxiAlertComponent');
     }
 
     @ContentChildren(DxiItemComponent)
@@ -537,9 +652,15 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
         return this._getOption('items');
     }
     set itemsLegacyChildren(value) {
-        if (this.checkContentChildren('items', value, 'DxiItemComponent')) {
-           this.setChildren('items', value);
-        }
+        this._setChildren('items', value, 'DxiItemComponent');
+    }
+
+    @ContentChildren(DxiTypingUserComponent)
+    get typingUsersLegacyChildren(): QueryList<DxiTypingUserComponent> {
+        return this._getOption('typingUsers');
+    }
+    set typingUsersLegacyChildren(value) {
+        this._setChildren('typingUsers', value, 'DxiTypingUserComponent');
     }
 
 
@@ -557,26 +678,31 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
         this._createEventEmitters([
             { subscribe: 'disposing', emit: 'onDisposing' },
             { subscribe: 'initialized', emit: 'onInitialized' },
-            { subscribe: 'messageSend', emit: 'onMessageSend' },
+            { subscribe: 'messageEntered', emit: 'onMessageEntered' },
             { subscribe: 'optionChanged', emit: 'onOptionChanged' },
             { subscribe: 'typingEnd', emit: 'onTypingEnd' },
             { subscribe: 'typingStart', emit: 'onTypingStart' },
             { emit: 'accessKeyChange' },
             { emit: 'activeStateEnabledChange' },
+            { emit: 'alertsChange' },
             { emit: 'dataSourceChange' },
+            { emit: 'dayHeaderFormatChange' },
             { emit: 'disabledChange' },
             { emit: 'elementAttrChange' },
-            { emit: 'errorsChange' },
             { emit: 'focusStateEnabledChange' },
             { emit: 'heightChange' },
             { emit: 'hintChange' },
             { emit: 'hoverStateEnabledChange' },
             { emit: 'itemsChange' },
+            { emit: 'messageTemplateChange' },
+            { emit: 'messageTimestampFormatChange' },
+            { emit: 'reloadOnChangeChange' },
             { emit: 'rtlEnabledChange' },
             { emit: 'showAvatarChange' },
             { emit: 'showDayHeadersChange' },
             { emit: 'showMessageTimestampChange' },
             { emit: 'showUserNameChange' },
+            { emit: 'typingUsersChange' },
             { emit: 'userChange' },
             { emit: 'visibleChange' },
             { emit: 'widthChange' }
@@ -598,9 +724,10 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
 
     ngOnChanges(changes: SimpleChanges) {
         super.ngOnChanges(changes);
+        this.setupChanges('alerts', changes);
         this.setupChanges('dataSource', changes);
-        this.setupChanges('errors', changes);
         this.setupChanges('items', changes);
+        this.setupChanges('typingUsers', changes);
     }
 
     setupChanges(prop: string, changes: SimpleChanges) {
@@ -610,9 +737,10 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
     }
 
     ngDoCheck() {
+        this._idh.doCheck('alerts');
         this._idh.doCheck('dataSource');
-        this._idh.doCheck('errors');
         this._idh.doCheck('items');
+        this._idh.doCheck('typingUsers');
         this._watcherHelper.checkWatchers();
         super.ngDoCheck();
         super.clearChangedOptions();
@@ -630,13 +758,19 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
 
 @NgModule({
   imports: [
-    DxiErrorModule,
+    DxiAlertModule,
+    DxoDayHeaderFormatModule,
     DxiItemModule,
     DxoAuthorModule,
+    DxoMessageTimestampFormatModule,
+    DxiTypingUserModule,
     DxoUserModule,
-    DxiChatErrorModule,
-    DxiChatItemModule,
+    DxiChatAlertModule,
     DxoChatAuthorModule,
+    DxoChatDayHeaderFormatModule,
+    DxiChatItemModule,
+    DxoChatMessageTimestampFormatModule,
+    DxiChatTypingUserModule,
     DxoChatUserModule,
     DxIntegrationModule,
     DxTemplateModule
@@ -646,13 +780,19 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
   ],
   exports: [
     DxChatComponent,
-    DxiErrorModule,
+    DxiAlertModule,
+    DxoDayHeaderFormatModule,
     DxiItemModule,
     DxoAuthorModule,
+    DxoMessageTimestampFormatModule,
+    DxiTypingUserModule,
     DxoUserModule,
-    DxiChatErrorModule,
-    DxiChatItemModule,
+    DxiChatAlertModule,
     DxoChatAuthorModule,
+    DxoChatDayHeaderFormatModule,
+    DxiChatItemModule,
+    DxoChatMessageTimestampFormatModule,
+    DxiChatTypingUserModule,
     DxoChatUserModule,
     DxTemplateModule
   ]

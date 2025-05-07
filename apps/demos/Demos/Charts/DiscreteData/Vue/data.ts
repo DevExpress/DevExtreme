@@ -1,4 +1,6 @@
-export const types = ['scatter', 'line', 'area', 'bar', 'stackedbar'];
+import { type DxPolarChartTypes } from 'devextreme-vue/polar-chart';
+
+export const types:DxPolarChartTypes.PolarChartSeriesType[] = ['scatter', 'line', 'area', 'bar', 'stackedbar'];
 
 export const dataSource = [{
   arg: 'January',

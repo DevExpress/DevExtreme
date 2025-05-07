@@ -31,6 +31,7 @@ const RTM_MIN_PATCH_VERSION = 3;
 const KEY_SPLITTER = '.';
 
 const BUY_NOW_LINK = 'https://go.devexpress.com/Licensing_Installer_Watermark_DevExtremeJQuery.aspx';
+const LICENSING_DOC_LINK = 'https://go.devexpress.com/Licensing_Documentation_DevExtremeJQuery.aspx';
 
 const GENERAL_ERROR: Token = { kind: TokenKind.corrupted, error: 'general' };
 const VERIFICATION_ERROR: Token = { kind: TokenKind.corrupted, error: 'verification' };
@@ -177,7 +178,9 @@ export function validateLicense(licenseKey: string, versionStr: string = fullVer
   }
 
   if (error && !internal) {
-    showTrialPanel(config().buyNowLink ?? BUY_NOW_LINK, fullVersion);
+    const buyNowLink = config().buyNowLink ?? BUY_NOW_LINK;
+    const licensingDocLink = config().licensingDocLink ?? LICENSING_DOC_LINK;
+    showTrialPanel(buyNowLink, licensingDocLink, fullVersion);
   }
 
   const preview = isPreview(version.patch);

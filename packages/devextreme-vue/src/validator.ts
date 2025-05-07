@@ -1,6 +1,18 @@
-import Validator, { Properties } from "devextreme/ui/validator";
+import { PropType } from "vue";
 import { defineComponent } from "vue";
 import { prepareExtensionComponentConfig } from "./core/index";
+import Validator, { Properties } from "devextreme/ui/validator";
+import {
+ DisposingEvent,
+ InitializedEvent,
+ OptionChangedEvent,
+ ValidatedEvent,
+} from "devextreme/ui/validator";
+import {
+ ValidationRuleType,
+ ComparisonOperator,
+} from "devextreme/common";
+import  * as CommonTypes from "devextreme/common";
 import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
@@ -23,17 +35,17 @@ interface DxValidator extends AccessibleOptions {
 
 const componentConfig = {
   props: {
-    adapter: Object,
-    elementAttr: Object,
-    height: [Function, Number, String],
+    adapter: Object as PropType<Record<string, any>>,
+    elementAttr: Object as PropType<Record<string, any>>,
+    height: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
     name: String,
-    onDisposing: Function,
-    onInitialized: Function,
-    onOptionChanged: Function,
-    onValidated: Function,
+    onDisposing: Function as PropType<((e: DisposingEvent) => void)>,
+    onInitialized: Function as PropType<((e: InitializedEvent) => void)>,
+    onOptionChanged: Function as PropType<((e: OptionChangedEvent) => void)>,
+    onValidated: Function as PropType<((validatedInfo: ValidatedEvent) => void)>,
     validationGroup: String,
-    validationRules: Array,
-    width: [Function, Number, String]
+    validationRules: Array as PropType<Array<CommonTypes.ValidationRule>>,
+    width: [Function, Number, String] as PropType<((() => number | string)) | number | string>
   },
   emits: {
     "update:isActive": null,
@@ -91,12 +103,12 @@ const DxAdapterConfig = {
     "update:validationRequestsCallbacks": null,
   },
   props: {
-    applyValidationResults: Function,
-    bypass: Function,
-    focus: Function,
-    getValue: Function,
-    reset: Function,
-    validationRequestsCallbacks: Array
+    applyValidationResults: Function as PropType<(() => void)>,
+    bypass: Function as PropType<(() => void)>,
+    focus: Function as PropType<(() => void)>,
+    getValue: Function as PropType<(() => void)>,
+    reset: Function as PropType<(() => void)>,
+    validationRequestsCallbacks: Array as PropType<Array<(() => void)>>
   }
 };
 
@@ -120,8 +132,8 @@ const DxAsyncRuleConfig = {
     ignoreEmptyValue: Boolean,
     message: String,
     reevaluate: Boolean,
-    type: String,
-    validationCallback: Function
+    type: String as PropType<ValidationRuleType>,
+    validationCallback: Function as PropType<((options: { column: Record<string, any>, data: Record<string, any>, formItem: Record<string, any>, rule: Record<string, any>, validator: Record<string, any>, value: string | number }) => any)>
   }
 };
 
@@ -146,11 +158,11 @@ const DxCompareRuleConfig = {
     "update:type": null,
   },
   props: {
-    comparisonTarget: Function,
-    comparisonType: String,
+    comparisonTarget: Function as PropType<(() => any)>,
+    comparisonType: String as PropType<ComparisonOperator>,
     ignoreEmptyValue: Boolean,
     message: String,
-    type: String
+    type: String as PropType<ValidationRuleType>
   }
 };
 
@@ -178,8 +190,8 @@ const DxCustomRuleConfig = {
     ignoreEmptyValue: Boolean,
     message: String,
     reevaluate: Boolean,
-    type: String,
-    validationCallback: Function
+    type: String as PropType<ValidationRuleType>,
+    validationCallback: Function as PropType<((options: { column: Record<string, any>, data: Record<string, any>, formItem: Record<string, any>, rule: Record<string, any>, validator: Record<string, any>, value: string | number }) => boolean)>
   }
 };
 
@@ -204,7 +216,7 @@ const DxEmailRuleConfig = {
   props: {
     ignoreEmptyValue: Boolean,
     message: String,
-    type: String
+    type: String as PropType<ValidationRuleType>
   }
 };
 
@@ -229,7 +241,7 @@ const DxNumericRuleConfig = {
   props: {
     ignoreEmptyValue: Boolean,
     message: String,
-    type: String
+    type: String as PropType<ValidationRuleType>
   }
 };
 
@@ -256,7 +268,7 @@ const DxPatternRuleConfig = {
     ignoreEmptyValue: Boolean,
     message: String,
     pattern: [RegExp, String],
-    type: String
+    type: String as PropType<ValidationRuleType>
   }
 };
 
@@ -287,7 +299,7 @@ const DxRangeRuleConfig = {
     message: String,
     min: [Date, Number, String],
     reevaluate: Boolean,
-    type: String
+    type: String as PropType<ValidationRuleType>
   }
 };
 
@@ -312,7 +324,7 @@ const DxRequiredRuleConfig = {
   props: {
     message: String,
     trim: Boolean,
-    type: String
+    type: String as PropType<ValidationRuleType>
   }
 };
 
@@ -343,7 +355,7 @@ const DxStringLengthRuleConfig = {
     message: String,
     min: Number,
     trim: Boolean,
-    type: String
+    type: String as PropType<ValidationRuleType>
   }
 };
 
@@ -374,8 +386,8 @@ const DxValidationRuleConfig = {
     "update:validationCallback": null,
   },
   props: {
-    comparisonTarget: Function,
-    comparisonType: String,
+    comparisonTarget: Function as PropType<(() => any)>,
+    comparisonType: String as PropType<ComparisonOperator>,
     ignoreEmptyValue: Boolean,
     max: [Date, Number, String],
     message: String,
@@ -383,8 +395,8 @@ const DxValidationRuleConfig = {
     pattern: [RegExp, String],
     reevaluate: Boolean,
     trim: Boolean,
-    type: String,
-    validationCallback: Function
+    type: String as PropType<ValidationRuleType>,
+    validationCallback: Function as PropType<((options: { column: Record<string, any>, data: Record<string, any>, formItem: Record<string, any>, rule: Record<string, any>, validator: Record<string, any>, value: string | number }) => boolean)>
   }
 };
 

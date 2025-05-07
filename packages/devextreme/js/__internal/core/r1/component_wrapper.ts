@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/ban-types */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable class-methods-use-this */
-import '@js/events/click';
-import '@js/events/core/emitter.feedback';
-import '@js/events/hover';
+import '@js/common/core/events/click';
+import '@js/common/core/events/core/emitter.feedback';
+import '@js/common/core/events/hover';
 
 import domAdapter from '@js/core/dom_adapter';
 import DOMComponent from '@js/core/dom_component';
@@ -21,8 +21,8 @@ import {
   createRef,
 } from 'inferno';
 
+import KeyboardProcessor from '../../../common/core/events/core/keyboard_processor';
 import renderer from '../../../core/inferno_renderer';
-import KeyboardProcessor from '../../../events/core/keyboard_processor';
 import type { TemplateModel } from './template_wrapper';
 import { buildTemplateArgs, TemplateWrapper } from './template_wrapper';
 import type { Option, TemplateComponent } from './types';

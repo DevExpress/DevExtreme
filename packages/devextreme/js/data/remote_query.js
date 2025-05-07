@@ -1,1 +1,1 @@
-export { default } from '../__internal/data/m_remote_query';
+export { default } from '../common/data/remote_query';

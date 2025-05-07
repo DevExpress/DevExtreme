@@ -7,7 +7,7 @@ import { hasWindow } from '@js/core/utils/window';
 import { DateTableMonthComponent } from '@ts/scheduler/r1/components/index';
 import { formatWeekday, monthUtils } from '@ts/scheduler/r1/utils/index';
 
-import { VIEWS } from '../m_constants';
+import { VIEWS } from '../constants';
 import { utils } from '../m_utils';
 import SchedulerWorkSpace from './m_work_space_indicator';
 
@@ -45,8 +45,11 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
     };
   }
 
-  // TODO: temporary fix, in the future, if we replace table layout on div layout, getCellWidth method need remove. Details in T712431
-  // TODO: there is a test for this bug, when changing the layout, the test will also be useless
+  /**
+   * TODO: temporary fix, in the future, if we replace table layout on div layout,
+   *   getCellWidth method need remove. Details in T712431 there is a test for this bug,
+   *   when changing the layout, the test will also be useless
+   */
   getCellWidth() {
     return this.cache.get('cellWidth', () => {
       const DAYS_IN_WEEK = 7;
@@ -153,9 +156,9 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
     }
   }
 
-  _toggleAllDayVisibility() { return noop(); }
+  _updateAllDayVisibility() { return noop(); }
 
-  _changeAllDayVisibility() { return noop(); }
+  _updateAllDayHeight() { return noop(); }
 
   // --------------
   // These methods should be deleted when we get rid of old render

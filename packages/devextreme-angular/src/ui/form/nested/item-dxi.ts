@@ -19,10 +19,11 @@ import {
 import { DOCUMENT } from '@angular/common';
 
 
-import { AsyncRule, CompareRule, CustomRule, EmailRule, HorizontalAlignment, NumericRule, PatternRule, RangeRule, RequiredRule, StringLengthRule, VerticalAlignment } from 'devextreme/common';
-import { Properties as dxButtonOptions } from 'devextreme/ui/button';
-import { ButtonItem, EmptyItem, FormItemComponent, FormItemType, GroupItem, LabelLocation, SimpleItem, TabbedItem } from 'devextreme/ui/form';
-import { Properties as dxTabPanelOptions } from 'devextreme/ui/tab_panel';
+import * as CommonTypes from 'devextreme/common';
+import { FormItemComponent, FormItemType, LabelLocation, dxFormButtonItem, dxFormEmptyItem, dxFormGroupItem, dxFormSimpleItem, dxFormTabbedItem } from 'devextreme/ui/form';
+import { HorizontalAlignment, VerticalAlignment } from 'devextreme/common';
+import { dxTabPanelOptions } from 'devextreme/ui/tab_panel';
+import { dxButtonOptions } from 'devextreme/ui/button';
 
 import {
     NestedOptionHost,
@@ -32,8 +33,17 @@ import {
     DxTemplateHost
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
-import { DxiFormValidationRuleComponent } from './validation-rule-dxi';
+import { DxiFormAsyncRuleComponent } from './async-rule-dxi';
+import { DxiFormCompareRuleComponent } from './compare-rule-dxi';
+import { DxiFormCustomRuleComponent } from './custom-rule-dxi';
+import { DxiFormEmailRuleComponent } from './email-rule-dxi';
+import { DxiFormNumericRuleComponent } from './numeric-rule-dxi';
+import { DxiFormPatternRuleComponent } from './pattern-rule-dxi';
+import { DxiFormRangeRuleComponent } from './range-rule-dxi';
+import { DxiFormRequiredRuleComponent } from './required-rule-dxi';
+import { DxiFormStringLengthRuleComponent } from './string-length-rule-dxi';
 import { DxiFormTabComponent } from './tab-dxi';
+import { DxiFormValidationRuleComponent } from './validation-rule-dxi';
 
 
 @Component({
@@ -44,6 +54,78 @@ import { DxiFormTabComponent } from './tab-dxi';
 })
 export class DxiFormItemComponent extends CollectionNestedOption implements AfterViewInit,
     IDxTemplateHost {
+    @Input()
+    get badge(): string {
+        return this._getOption('badge');
+    }
+    set badge(value: string) {
+        this._setOption('badge', value);
+    }
+
+    @Input()
+    get disabled(): boolean {
+        return this._getOption('disabled');
+    }
+    set disabled(value: boolean) {
+        this._setOption('disabled', value);
+    }
+
+    @Input()
+    get html(): string {
+        return this._getOption('html');
+    }
+    set html(value: string) {
+        this._setOption('html', value);
+    }
+
+    @Input()
+    get icon(): string {
+        return this._getOption('icon');
+    }
+    set icon(value: string) {
+        this._setOption('icon', value);
+    }
+
+    @Input()
+    get tabTemplate(): any {
+        return this._getOption('tabTemplate');
+    }
+    set tabTemplate(value: any) {
+        this._setOption('tabTemplate', value);
+    }
+
+    @Input()
+    get template(): any {
+        return this._getOption('template');
+    }
+    set template(value: any) {
+        this._setOption('template', value);
+    }
+
+    @Input()
+    get text(): string {
+        return this._getOption('text');
+    }
+    set text(value: string) {
+        this._setOption('text', value);
+    }
+
+    @Input()
+    get title(): string {
+        return this._getOption('title');
+    }
+    set title(value: string) {
+        this._setOption('title', value);
+    }
+
+    @Input()
+    get visible(): boolean {
+        return this._getOption('visible');
+    }
+    set visible(value: boolean) {
+        this._setOption('visible', value);
+    }
+
     @Input()
     get colSpan(): number | undefined {
         return this._getOption('colSpan');
@@ -125,27 +207,11 @@ export class DxiFormItemComponent extends CollectionNestedOption implements Afte
     }
 
     @Input()
-    get template(): any {
-        return this._getOption('template');
-    }
-    set template(value: any) {
-        this._setOption('template', value);
-    }
-
-    @Input()
-    get validationRules(): Array<RequiredRule | NumericRule | RangeRule | StringLengthRule | CustomRule | CompareRule | PatternRule | EmailRule | AsyncRule> {
+    get validationRules(): Array<CommonTypes.ValidationRule> {
         return this._getOption('validationRules');
     }
-    set validationRules(value: Array<RequiredRule | NumericRule | RangeRule | StringLengthRule | CustomRule | CompareRule | PatternRule | EmailRule | AsyncRule>) {
+    set validationRules(value: Array<CommonTypes.ValidationRule>) {
         this._setOption('validationRules', value);
-    }
-
-    @Input()
-    get visible(): boolean {
-        return this._getOption('visible');
-    }
-    set visible(value: boolean) {
-        this._setOption('visible', value);
     }
 
     @Input()
@@ -197,10 +263,10 @@ export class DxiFormItemComponent extends CollectionNestedOption implements Afte
     }
 
     @Input()
-    get items(): Array<SimpleItem | GroupItem | TabbedItem | EmptyItem | ButtonItem> {
+    get items(): Array<dxFormButtonItem | dxFormEmptyItem | dxFormGroupItem | dxFormSimpleItem | dxFormTabbedItem> {
         return this._getOption('items');
     }
-    set items(value: Array<SimpleItem | GroupItem | TabbedItem | EmptyItem | ButtonItem>) {
+    set items(value: Array<dxFormButtonItem | dxFormEmptyItem | dxFormGroupItem | dxFormSimpleItem | dxFormTabbedItem>) {
         this._setOption('items', value);
     }
 
@@ -213,67 +279,11 @@ export class DxiFormItemComponent extends CollectionNestedOption implements Afte
     }
 
     @Input()
-    get tabs(): Array<any | { alignItemLabels?: boolean, badge?: string | undefined, colCount?: number, colCountByScreen?: { lg?: number | undefined, md?: number | undefined, sm?: number | undefined, xs?: number | undefined }, disabled?: boolean, icon?: string | undefined, items?: Array<SimpleItem | GroupItem | TabbedItem | EmptyItem | ButtonItem>, tabTemplate?: any | undefined, template?: any | undefined, title?: string | undefined }> {
+    get tabs(): { alignItemLabels?: boolean, badge?: string | undefined, colCount?: number, colCountByScreen?: { lg?: number | undefined, md?: number | undefined, sm?: number | undefined, xs?: number | undefined }, disabled?: boolean, icon?: string | undefined, items?: Array<dxFormButtonItem | dxFormEmptyItem | dxFormGroupItem | dxFormSimpleItem | dxFormTabbedItem>, tabTemplate?: any, template?: any, title?: string | undefined }[] {
         return this._getOption('tabs');
     }
-    set tabs(value: Array<any | { alignItemLabels?: boolean, badge?: string | undefined, colCount?: number, colCountByScreen?: { lg?: number | undefined, md?: number | undefined, sm?: number | undefined, xs?: number | undefined }, disabled?: boolean, icon?: string | undefined, items?: Array<SimpleItem | GroupItem | TabbedItem | EmptyItem | ButtonItem>, tabTemplate?: any | undefined, template?: any | undefined, title?: string | undefined }>) {
+    set tabs(value: { alignItemLabels?: boolean, badge?: string | undefined, colCount?: number, colCountByScreen?: { lg?: number | undefined, md?: number | undefined, sm?: number | undefined, xs?: number | undefined }, disabled?: boolean, icon?: string | undefined, items?: Array<dxFormButtonItem | dxFormEmptyItem | dxFormGroupItem | dxFormSimpleItem | dxFormTabbedItem>, tabTemplate?: any, template?: any, title?: string | undefined }[]) {
         this._setOption('tabs', value);
-    }
-
-    @Input()
-    get badge(): string {
-        return this._getOption('badge');
-    }
-    set badge(value: string) {
-        this._setOption('badge', value);
-    }
-
-    @Input()
-    get disabled(): boolean {
-        return this._getOption('disabled');
-    }
-    set disabled(value: boolean) {
-        this._setOption('disabled', value);
-    }
-
-    @Input()
-    get html(): string {
-        return this._getOption('html');
-    }
-    set html(value: string) {
-        this._setOption('html', value);
-    }
-
-    @Input()
-    get icon(): string {
-        return this._getOption('icon');
-    }
-    set icon(value: string) {
-        this._setOption('icon', value);
-    }
-
-    @Input()
-    get tabTemplate(): any {
-        return this._getOption('tabTemplate');
-    }
-    set tabTemplate(value: any) {
-        this._setOption('tabTemplate', value);
-    }
-
-    @Input()
-    get text(): string {
-        return this._getOption('text');
-    }
-    set text(value: string) {
-        this._setOption('text', value);
-    }
-
-    @Input()
-    get title(): string {
-        return this._getOption('title');
-    }
-    set title(value: string) {
-        this._setOption('title', value);
     }
 
     @Input()
@@ -306,20 +316,76 @@ export class DxiFormItemComponent extends CollectionNestedOption implements Afte
     }
 
 
-    @ContentChildren(forwardRef(() => DxiFormValidationRuleComponent))
-    get validationRulesChildren(): QueryList<DxiFormValidationRuleComponent> {
+    @ContentChildren(forwardRef(() => DxiFormAsyncRuleComponent))
+    get asyncRulesChildren(): QueryList<DxiFormAsyncRuleComponent> {
         return this._getOption('validationRules');
     }
-    set validationRulesChildren(value) {
+    set asyncRulesChildren(value) {
         this.setChildren('validationRules', value);
     }
 
-    @ContentChildren(forwardRef(() => DxiFormItemComponent))
-    get itemsChildren(): QueryList<DxiFormItemComponent> {
-        return this._getOption('items');
+    @ContentChildren(forwardRef(() => DxiFormCompareRuleComponent))
+    get compareRulesChildren(): QueryList<DxiFormCompareRuleComponent> {
+        return this._getOption('validationRules');
     }
-    set itemsChildren(value) {
-        this.setChildren('items', value);
+    set compareRulesChildren(value) {
+        this.setChildren('validationRules', value);
+    }
+
+    @ContentChildren(forwardRef(() => DxiFormCustomRuleComponent))
+    get customRulesChildren(): QueryList<DxiFormCustomRuleComponent> {
+        return this._getOption('validationRules');
+    }
+    set customRulesChildren(value) {
+        this.setChildren('validationRules', value);
+    }
+
+    @ContentChildren(forwardRef(() => DxiFormEmailRuleComponent))
+    get emailRulesChildren(): QueryList<DxiFormEmailRuleComponent> {
+        return this._getOption('validationRules');
+    }
+    set emailRulesChildren(value) {
+        this.setChildren('validationRules', value);
+    }
+
+    @ContentChildren(forwardRef(() => DxiFormNumericRuleComponent))
+    get numericRulesChildren(): QueryList<DxiFormNumericRuleComponent> {
+        return this._getOption('validationRules');
+    }
+    set numericRulesChildren(value) {
+        this.setChildren('validationRules', value);
+    }
+
+    @ContentChildren(forwardRef(() => DxiFormPatternRuleComponent))
+    get patternRulesChildren(): QueryList<DxiFormPatternRuleComponent> {
+        return this._getOption('validationRules');
+    }
+    set patternRulesChildren(value) {
+        this.setChildren('validationRules', value);
+    }
+
+    @ContentChildren(forwardRef(() => DxiFormRangeRuleComponent))
+    get rangeRulesChildren(): QueryList<DxiFormRangeRuleComponent> {
+        return this._getOption('validationRules');
+    }
+    set rangeRulesChildren(value) {
+        this.setChildren('validationRules', value);
+    }
+
+    @ContentChildren(forwardRef(() => DxiFormRequiredRuleComponent))
+    get requiredRulesChildren(): QueryList<DxiFormRequiredRuleComponent> {
+        return this._getOption('validationRules');
+    }
+    set requiredRulesChildren(value) {
+        this.setChildren('validationRules', value);
+    }
+
+    @ContentChildren(forwardRef(() => DxiFormStringLengthRuleComponent))
+    get stringLengthRulesChildren(): QueryList<DxiFormStringLengthRuleComponent> {
+        return this._getOption('validationRules');
+    }
+    set stringLengthRulesChildren(value) {
+        this.setChildren('validationRules', value);
     }
 
     @ContentChildren(forwardRef(() => DxiFormTabComponent))
@@ -328,6 +394,14 @@ export class DxiFormItemComponent extends CollectionNestedOption implements Afte
     }
     set tabsChildren(value) {
         this.setChildren('tabs', value);
+    }
+
+    @ContentChildren(forwardRef(() => DxiFormValidationRuleComponent))
+    get validationRulesChildren(): QueryList<DxiFormValidationRuleComponent> {
+        return this._getOption('validationRules');
+    }
+    set validationRulesChildren(value) {
+        this.setChildren('validationRules', value);
     }
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,

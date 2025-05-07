@@ -2,15 +2,12 @@ import Guid from '@js/core/guid';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import type { Item } from '@js/ui/splitter';
-import CollectionWidgetItem from '@ts/ui/collection/m_item';
+import CollectionWidgetItem from '@ts/ui/collection/item';
 
 import ResizeHandle from './resize_handle';
 import type Splitter from './splitter';
 
-// @ts-expect-error dxClass inheritance issue
-class SplitterItem extends CollectionWidgetItem {
-  private readonly _$element?: dxElementWrapper;
-
+class SplitterItem extends CollectionWidgetItem<Item> {
   _owner: Splitter;
 
   _rawData?: Item;
@@ -24,19 +21,20 @@ class SplitterItem extends CollectionWidgetItem {
     },
     rawData: Item,
   ) {
+    // @ts-expect-error
     super($element, options, rawData);
 
     this._owner = options.owner;
   }
 
   _renderResizeHandle(): void {
-    if (this._rawData?.visible !== false && !this.isLast()) {
+    if (this._shouldHaveResizeHandle()) {
       const id = `dx_${new Guid()}`;
 
       this._setIdAttr(id);
 
       const config = this._owner._getResizeHandleConfig(id);
-      // @ts-expect-error
+
       this._resizeHandle = this._owner._createComponent($('<div>'), ResizeHandle, config);
 
       if (this._resizeHandle && this._$element) {
@@ -45,11 +43,30 @@ class SplitterItem extends CollectionWidgetItem {
     }
   }
 
+  _shouldHaveResizeHandle(): boolean {
+    return this._rawData?.visible !== false && !this.isLast();
+  }
+
+  updateResizeHandle(): void {
+    if (this._shouldHaveResizeHandle()) {
+      if (this.getResizeHandle()) return;
+      this._renderResizeHandle();
+    } else {
+      this._removeIdAttr();
+      this._removeResizeHandle();
+    }
+  }
+
   _setIdAttr(id: string): void {
-    this._$element?.attr('id', id);
+    this._$element.attr('id', id);
+  }
+
+  _removeIdAttr(): void {
+    this._$element.attr('id', null);
   }
 
   getIndex(): number {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return this._owner._getIndexByItemData(this._rawData);
   }
 
@@ -57,8 +74,19 @@ class SplitterItem extends CollectionWidgetItem {
     return this._resizeHandle;
   }
 
+  _removeResizeHandle(): void {
+    this.getResizeHandle()?.$element().remove();
+    delete this._resizeHandle;
+  }
+
   isLast(): boolean {
     return this._owner._isLastVisibleItem(this.getIndex());
+  }
+
+  _dispose(): void {
+    this._removeResizeHandle();
+
+    super._dispose();
   }
 }
 

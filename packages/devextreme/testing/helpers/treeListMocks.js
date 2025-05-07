@@ -12,7 +12,7 @@ if(typeof define === 'function' && define.amd) {
             require('__internal/core/utils/m_dom'),
             require('__internal/core/utils/m_common'),
             require('__internal/core/utils/m_type'),
-            require('data/array_store'),
+            require('common/data/array_store'),
             'TreeList'
         );
     });
@@ -26,7 +26,7 @@ if(typeof define === 'function' && define.amd) {
         DevExpress.require('__internal/core/utils/m_dom'),
         DevExpress.require('__internal/core/utils/m_common'),
         DevExpress.require('__internal/core/utils/m_type'),
-        DevExpress.require('data/array_store'),
+        DevExpress.require('common/data/array_store'),
         'TreeList'
     ));
 }

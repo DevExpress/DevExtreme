@@ -1,5 +1,5 @@
+import eventsEngine from '@js/common/core/events/core/events_engine';
 import $ from '@js/core/renderer';
-import eventsEngine from '@js/events/core/events_engine';
 
 const triggerVisibilityChangeEvent = function (eventName) {
   const VISIBILITY_CHANGE_SELECTOR = '.dx-visibility-change-handler';

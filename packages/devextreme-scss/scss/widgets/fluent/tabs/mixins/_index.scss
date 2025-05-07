@@ -50,7 +50,7 @@
 
 @mixin dx-tabs-indicator-secondary {
   @include dx-tabs-indicator();
-  
+
   &::after {
     border-radius: $fluent-indicator-border-radius-secondary;
   }

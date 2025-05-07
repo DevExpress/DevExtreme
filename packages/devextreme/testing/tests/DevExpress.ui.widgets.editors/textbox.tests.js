@@ -75,7 +75,7 @@ QUnit.module('common', {}, () => {
             const instance = $('#textbox').dxTextBox('instance');
 
             inFocus = element.find('.dx-texteditor-input').is(':focus');
-            assert.ok(!inFocus, 'at start  input has not focused');
+            assert.ok(!inFocus, 'at start input has not focused');
 
             instance.focus();
             assert.ok(inFocus, 'when call \'focus\' method, then focus on input');
@@ -98,7 +98,7 @@ QUnit.module('common', {}, () => {
         assert.strictEqual(editor.option('isValid'), true, 'editor state is valid after reset');
     });
 
-    QUnit.test('reset should clear input value', function(assert) {
+    QUnit.test('reset should clear input value if value was not changed', function(assert) {
         const instance = $('#textbox').dxTextBox().dxTextBox('instance');
         const $input = $(`.${INPUT_CLASS}`);
         const keyboard = keyboardMock($input);

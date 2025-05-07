@@ -1,1 +1,1 @@
-export { default } from '../../__internal/events/gesture/m_swipeable';
+export { default } from '../../common/core/events/gesture/swipeable';

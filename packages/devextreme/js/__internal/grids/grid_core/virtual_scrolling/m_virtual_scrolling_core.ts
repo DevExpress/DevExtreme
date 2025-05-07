@@ -1,4 +1,5 @@
-import positionUtils from '@js/animation/position';
+import positionUtils from '@js/common/core/animation/position';
+import eventsEngine from '@js/common/core/events/core/events_engine';
 import $ from '@js/core/renderer';
 import browser from '@js/core/utils/browser';
 import Callbacks from '@js/core/utils/callbacks';
@@ -6,7 +7,6 @@ import { Deferred } from '@js/core/utils/deferred';
 import { each } from '@js/core/utils/iterator';
 import { isDefined } from '@js/core/utils/type';
 import { getWindow } from '@js/core/utils/window';
-import eventsEngine from '@js/events/core/events_engine';
 
 import gridCoreUtils from '../m_utils';
 import { VirtualDataLoader } from '../virtual_data_loader/m_virtual_data_loader';
@@ -27,7 +27,6 @@ function subscribeToExternalScrollers($element, scrollChangedHandler, $targetEle
 
   function getElementOffset(scrollable) {
     const $scrollableElement = scrollable.element ? scrollable.$element() : scrollable;
-    // @ts-expect-error
     const scrollableOffset = positionUtils.offset($scrollableElement);
 
     if (!scrollableOffset) {

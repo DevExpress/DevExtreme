@@ -88,9 +88,9 @@ export const BaseGauge = BaseWidget.inherit({
     },
 
     _cleanCore: function() {
-        const that = this;
-        that._tracker.deactivate();
-        that._cleanContent();
+        this._tracker.deactivate();
+        this._noAnimation = false;
+        this._cleanContent();
     },
 
     _renderCore: function() {

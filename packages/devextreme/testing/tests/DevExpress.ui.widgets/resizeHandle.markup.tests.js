@@ -2,9 +2,9 @@ import $ from 'jquery';
 
 import 'ui/splitter';
 
-import fx from 'animation/fx';
+import fx from 'common/core/animation/fx';
 import ResizeHandle from '__internal/ui/splitter/resize_handle';
-import messageLocalization from 'localization/message';
+import messageLocalization from 'common/core/localization/message';
 
 QUnit.testStart(function() {
     const markup =
@@ -377,6 +377,8 @@ QUnit.module('Aria attributes', moduleConfig, () => {
     QUnit.test('aria-roledescription attribute should be set correctly', function(assert) {
         this.reinit({ });
 
-        assert.strictEqual(this.$element.attr('aria-roledescription'), 'separator');
+        const localizedRoleDescriptionAttribute = messageLocalization.format('dxSplitter-resizeHandleAriaRoleDescription');
+
+        assert.strictEqual(this.$element.attr('aria-roledescription'), localizedRoleDescriptionAttribute);
     });
 });

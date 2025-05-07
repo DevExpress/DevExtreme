@@ -1,5 +1,5 @@
 const $ = require('jquery');
-const pointerEvents = require('events/pointer');
+const pointerEvents = require('common/core/events/pointer');
 const trackerModule = require('viz/range_selector/tracker');
 
 QUnit.testStart(function() {

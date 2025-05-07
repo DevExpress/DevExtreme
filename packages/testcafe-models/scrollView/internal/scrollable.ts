@@ -1,5 +1,4 @@
 import { ClientFunction, Selector } from 'testcafe';
-import { DIRECTION_VERTICAL, DIRECTION_HORIZONTAL } from 'devextreme/renovation/ui/scroll_view/common/consts';
 
 import Widget from '../../internal/widget';
 import Scrollbar from './scrollbar';
@@ -10,6 +9,9 @@ const CLASS = {
   scrollableContainer: 'dx-scrollable-container',
   scrollableContent: 'dx-scrollable-content',
 };
+
+const DIRECTION_VERTICAL = 'vertical';
+const DIRECTION_HORIZONTAL = 'horizontal';
 
 export default class Scrollable extends Widget {
   scrollbar: Scrollbar;

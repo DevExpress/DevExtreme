@@ -1,11 +1,10 @@
+import dataQuery from '@js/common/data/query';
+import storeHelper from '@js/common/data/store_helper';
+import { keysEqual } from '@js/common/data/utils';
 import { toComparable } from '@js/core/utils/data';
 import { Deferred, when } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
-import dataQuery from '@js/data/query';
-import storeHelper from '@js/data/store_helper';
-// @ts-expect-error
-import { keysEqual } from '@js/data/utils';
 
 import dataGridCore from '../m_core';
 import { createGroupFilter } from '../m_utils';
@@ -288,6 +287,7 @@ export class GroupingHelper extends GroupingHelperCore {
 
     if (groupCount) {
       let { data } = options;
+      // @ts-expect-error
       const query = dataQuery(data);
       storeHelper.multiLevelGroup(query, groups).enumerate().done((groupedData) => {
         data = groupedData;

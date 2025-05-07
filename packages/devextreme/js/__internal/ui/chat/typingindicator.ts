@@ -1,12 +1,10 @@
+import messageLocalization from '@js/common/core/localization/message';
 import type { Properties as DOMComponentProperties } from '@js/core/dom_component';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
-import messageLocalization from '@js/localization/message';
 import type { User } from '@js/ui/chat';
 import DOMComponent from '@ts/core/widget/dom_component';
 import type { OptionChanged } from '@ts/core/widget/types';
-
-import Avatar from './avatar';
 
 const CHAT_TYPINGINDICATOR_CLASS = 'dx-chat-typingindicator';
 const CHAT_TYPINGINDICATOR_CONTENT_CLASS = 'dx-chat-typingindicator-content';
@@ -48,7 +46,6 @@ class TypingIndicator extends DOMComponent<TypingIndicator, Properties> {
 
   _renderContent(): void {
     this._renderContentElement();
-    this._renderAvatar();
     this._renderTextElement();
     this._updateText();
     this._renderBubble();
@@ -58,14 +55,6 @@ class TypingIndicator extends DOMComponent<TypingIndicator, Properties> {
     this._$content = $('<div>')
       .addClass(CHAT_TYPINGINDICATOR_CONTENT_CLASS)
       .appendTo(this.element());
-  }
-
-  _renderAvatar(): void {
-    if (this._$content) {
-      const $avatar = $('<div>').appendTo(this._$content);
-
-      this._createComponent($avatar, Avatar, { name: '' });
-    }
   }
 
   _renderTextElement(): void {

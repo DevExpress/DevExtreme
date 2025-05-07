@@ -1171,10 +1171,15 @@ Axis.prototype = {
 
         if(!this.isArgumentAxis) {
             const viewport = this.getViewport();
-            if(!isDefined(viewport.startValue) &&
-                !isDefined(viewport.endValue) &&
-                !isDefined(viewport.length)) {
-                return RESET;
+            const isViewportNotDefined = !isDefined(viewport.startValue) && !isDefined(viewport.endValue) && !isDefined(viewport.length);
+
+            if(isViewportNotDefined) {
+                const visualRange = this.visualRange();
+                const isVisualRangeNotDefined = !isDefined(visualRange.startValue) && !isDefined(visualRange.endValue);
+
+                if(isVisualRangeNotDefined) {
+                    return RESET;
+                }
             }
         }
 

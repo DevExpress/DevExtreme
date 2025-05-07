@@ -4,15 +4,17 @@
     <title>{{demo_title}}</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+    {{additional_css}}
     <link href="{{css_bundle_path}}" rel="stylesheet" />
     <script src="../../../../scripts/{{init_theme}}"></script>
+    {{custom_css}}
   </head>
-  <body>
+  <body class="dx-viewport">
     <div id="app"></div>
 
     <script type="application/javascript">
-      DXDemoTheme("{{dx_version}}");
+      DXDemoTheme();
       window.addEventListener("load", () => {
         const scriptBundle = document.createElement("script");
         scriptBundle.src = "./{{js_bundle_path}}";
@@ -20,5 +22,6 @@
         document.head.appendChild(scriptBundle);
       });
     </script>
+    <script src="https://cdn.jsdelivr.net/npm/iframe-resizer@4.3.11/js/iframeResizer.contentWindow.min.js"></script>
   </body>
 </html>

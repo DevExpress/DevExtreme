@@ -1,7 +1,7 @@
+import EventsEngine from '@js/common/core/events/core/events_engine';
+import { addNamespace } from '@js/common/core/events/utils/index';
 import browser from '@js/core/utils/browser';
 import { clipboardText as getClipboardText } from '@js/core/utils/dom';
-import EventsEngine from '@js/events/core/events_engine';
-import { addNamespace } from '@js/events/utils/index';
 
 const MASK_EVENT_NAMESPACE = 'dxMask';
 const BLUR_EVENT = 'blur beforedeactivate';
@@ -109,7 +109,7 @@ export default class MaskStrategy {
   }
 
   _handleBackwardDeleteInputEvent() {
-    this._clearSelectedText();
+    this._clearSelectedText(true);
 
     const caret = this._editorCaret();
     this.editor.setForwardDirection();
@@ -122,9 +122,10 @@ export default class MaskStrategy {
     }
   }
 
-  _clearSelectedText() {
-    // eslint-disable-next-line no-unsafe-optional-chaining
-    const length = (this._prevCaret?.end - this._prevCaret?.start) || 1;
+  _clearSelectedText(isDeleteInputEvent?: boolean): void {
+    const selectionLength = this._prevCaret && (this._prevCaret.end - this._prevCaret.start);
+    const length = selectionLength || Number(isDeleteInputEvent);
+
     const caret = this._editorCaret();
 
     if (!this._isAutoFill()) {

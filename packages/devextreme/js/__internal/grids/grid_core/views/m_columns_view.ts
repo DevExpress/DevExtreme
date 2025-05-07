@@ -1,4 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+import { name as clickEventName } from '@js/common/core/events/click';
+import eventsEngine from '@js/common/core/events/core/events_engine';
+import { name as dblclickEvent } from '@js/common/core/events/double_click';
+import pointerEvents from '@js/common/core/events/pointer';
+import { removeEvent } from '@js/common/core/events/remove';
 import domAdapter from '@js/core/dom_adapter';
 import { getPublicElement } from '@js/core/element';
 import { data as elementData } from '@js/core/element_data';
@@ -21,11 +26,6 @@ import {
   isRenderer, isString,
 } from '@js/core/utils/type';
 import { getWindow, hasWindow } from '@js/core/utils/window';
-import { name as clickEventName } from '@js/events/click';
-import eventsEngine from '@js/events/core/events_engine';
-import { name as dblclickEvent } from '@js/events/double_click';
-import pointerEvents from '@js/events/pointer';
-import { removeEvent } from '@js/events/remove';
 import supportUtils from '@ts/core/utils/m_support';
 import type { AdaptiveColumnsController } from '@ts/grids/grid_core/adaptivity/m_adaptivity';
 import type { ColumnChooserController, ColumnChooserView } from '@ts/grids/grid_core/column_chooser/m_column_chooser';
@@ -718,6 +718,9 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     if (!$root || $root.parent().length) {
       this.renderDelayedTemplates(e);
     }
+
+    // @ts-expect-error
+    return new Deferred().resolve();
   }
 
   /**
@@ -822,18 +825,33 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
   /**
    * @extended: editing
    */
-  protected _setCellAriaAttributes($cell, cellOptions, options?) {
-    if (cellOptions.rowType !== 'freeSpace') {
-      this.setAria('role', 'gridcell', $cell);
-      if (options?.row?.node?.hasChildren) {
-        const { row } = options;
-        this.setAria('expanded', row.isExpanded, $cell);
-      }
+  protected _setCellAriaAttributes(
+    $cell: dxElementWrapper,
+    cellOptions: { rowType: 'freeSpace' | 'group'; columnIndex: number },
+    options?: any,
+  ): void {
+    const { row } = options;
+    const isFreeSpaceRow = cellOptions.rowType === 'freeSpace';
+    const isGroupRow = cellOptions.rowType === 'group';
+    const rowHasChildren = row?.node?.hasChildren;
 
-      const columnIndexOffset = this._columnsController.getColumnIndexOffset();
-      const ariaColIndex = cellOptions.columnIndex + columnIndexOffset + 1;
-      this.setAria('colindex', ariaColIndex, $cell);
+    if (isFreeSpaceRow) {
+      return;
     }
+
+    this.setAria('role', 'gridcell', $cell);
+
+    if (rowHasChildren) {
+      this.setAria('expanded', row.isExpanded, $cell);
+    }
+
+    const columnIndexOffset = this._columnsController.getColumnIndexOffset();
+    // NOTE: Group rows always visible and their aria column idx shouldn't be shifted
+    const ariaColIndex = isGroupRow
+      ? cellOptions.columnIndex + 1
+      : cellOptions.columnIndex + columnIndexOffset + 1;
+
+    this.setAria('colindex', ariaColIndex, $cell);
   }
 
   protected _renderCell($row, options) {
@@ -1099,7 +1117,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     const result = new Deferred();
     const needWaitAsyncTemplates = forceWaiting || this.needWaitAsyncTemplates();
 
-    if (!needWaitAsyncTemplates) {
+    if (!needWaitAsyncTemplates || !isDefined(this._templateDeferreds)) {
       return result.resolve();
     }
 
@@ -1119,6 +1137,9 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     return result.promise();
   }
 
+  /**
+   * @extended: sticky_columns, rows_view
+   */
   protected _updateContent($newTableElement, change, isFixedTableRendering?) {
     return this.waitAsyncTemplates().done(() => {
       this._removeContent(isFixedTableRendering);
@@ -1198,20 +1219,10 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     styleProps: CSSStyleDeclaration,
     $row: dxElementWrapper,
     visibleCellIndex: number,
-    includeGroupCell: boolean,
   ) {
-    const groupSelector = includeGroupCell
-      ? `td[aria-colindex='${visibleCellIndex + 1}']`
-      : `td[aria-colindex='${visibleCellIndex + 1}']:not(.${GROUP_CELL_CLASS})`;
-
-    let $cell = $row.hasClass(GROUP_ROW_CLASS)
-      ? $row.find(groupSelector)
+    const $cell = $row.hasClass(GROUP_ROW_CLASS)
+      ? $row.find(`td[aria-colindex='${visibleCellIndex + 1}']:not(.${GROUP_CELL_CLASS})`)
       : $row.find('td').eq(visibleCellIndex);
-
-    if ($cell.is(`.${GROUP_CELL_CLASS}`)) {
-      // @ts-expect-error
-      $cell = $cell.add($cell.find(`.${this.addWidgetPrefix(GROUP_ROW_CONTAINER)}`));
-    }
 
     for (let i = 0; i < $cell.length; i += 1) {
       const cell = $cell.get(i) as HTMLElement;
@@ -1224,7 +1235,6 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     styleProps: CSSStyleDeclaration,
     columnIndex: number,
     rowIndex?: number,
-    includeGroupCell = false,
   ) {
     const $tableElement = this.getTableElement();
 
@@ -1235,13 +1245,13 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     const $rows = $tableElement.children().children('.dx-row').not(`.${DETAIL_ROW_CLASS}`);
 
     if (isDefined(rowIndex)) {
-      this.setCellPropertiesCore(styleProps, $rows.eq(rowIndex), columnIndex, includeGroupCell);
+      this.setCellPropertiesCore(styleProps, $rows.eq(rowIndex), columnIndex);
     } else {
       for (let rowIndex = 0; rowIndex < $rows.length; rowIndex++) {
         const visibleIndex = this.getVisibleColumnIndex(columnIndex, rowIndex);
 
         if (visibleIndex >= 0) {
-          this.setCellPropertiesCore(styleProps, $rows.eq(rowIndex), visibleIndex, includeGroupCell);
+          this.setCellPropertiesCore(styleProps, $rows.eq(rowIndex), visibleIndex);
         }
       }
     }

@@ -1,11 +1,12 @@
 // eslint-disable-next-line max-classes-per-file
+import eventsEngine from '@js/common/core/events/core/events_engine';
+import { addNamespace } from '@js/common/core/events/utils/index';
 import $ from '@js/core/renderer';
 import { getWidth } from '@js/core/utils/size';
-import eventsEngine from '@js/events/core/events_engine';
-import { addNamespace } from '@js/events/utils';
 // eslint-disable-next-line @typescript-eslint/consistent-type-imports
 import type { DateBoxBase, Properties } from '@js/ui/date_box';
 import DateBox from '@js/ui/date_box';
+import type { DateLike } from '@js/ui/date_range_box_types';
 import type Popup from '@js/ui/popup';
 
 import { getDeserializedDate, monthDifference } from './m_date_range.utils';
@@ -20,7 +21,7 @@ export interface MultiselectDateBoxProperties extends Properties {
 }
 
 declare class ExtendedDateBox extends DateBoxBase<MultiselectDateBoxProperties> {
-  reset(value?: Date | number | string | null): void;
+  reset(value?: DateLike): void;
 }
 
 const TypedDateBox: typeof ExtendedDateBox = DateBox as any;

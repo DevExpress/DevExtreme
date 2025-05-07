@@ -1,7 +1,7 @@
 import '@js/ui/context_menu';
 
-import type { PositionConfig } from '@js/animation/position';
-import animationPosition from '@js/animation/position';
+import type { PositionConfig } from '@js/common/core/animation';
+import animationPosition from '@js/common/core/animation/position';
 import { getPublicElement } from '@js/core/element';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
@@ -32,14 +32,14 @@ class Submenu extends ContextMenu {
     });
   }
 
-  _initDataAdapter() {
+  _initDataAdapter(): void {
     this._dataAdapter = this.option('_dataAdapter');
     if (!this._dataAdapter) {
       super._initDataAdapter();
     }
   }
 
-  _renderContentImpl() {
+  _renderContentImpl(): void {
     this._renderContextMenuOverlay();
     super._renderContentImpl();
 
@@ -48,7 +48,7 @@ class Submenu extends ContextMenu {
     this._renderDelimiter();
   }
 
-  _renderDelimiter() {
+  _renderDelimiter(): void {
     this.$contentDelimiter = $('<div>')
       .appendTo(this._itemContainer())
       .addClass(DX_CONTEXT_MENU_CONTENT_DELIMITER_CLASS);
@@ -73,6 +73,7 @@ class Submenu extends ContextMenu {
   }
 
   _isMenuHorizontal(): boolean {
+    // @ts-expect-error
     return this.option('orientation') === 'horizontal';
   }
 
@@ -178,7 +179,6 @@ class Submenu extends ContextMenu {
       position.offset = '2.5 0';
       position.at = position.my = 'right bottom';
     }
-    // @ts-expect-error
     animationPosition.setup(this.$contentDelimiter, position);
   }
 

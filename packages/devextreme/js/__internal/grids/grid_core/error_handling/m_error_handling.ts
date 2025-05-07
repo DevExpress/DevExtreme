@@ -1,9 +1,9 @@
 /* eslint-disable max-classes-per-file */
+import { name as clickEventName } from '@js/common/core/events/click';
+import eventsEngine from '@js/common/core/events/core/events_engine';
+import messageLocalization from '@js/common/core/localization/message';
 import $ from '@js/core/renderer';
 import { each } from '@js/core/utils/iterator';
-import { name as clickEventName } from '@js/events/click';
-import eventsEngine from '@js/events/core/events_engine';
-import messageLocalization from '@js/localization/message';
 import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/m_columns_controller';
 import type { ResizingController } from '@ts/grids/grid_core/views/m_grid_view';
 

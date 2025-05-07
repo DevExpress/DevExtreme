@@ -1,6 +1,6 @@
+import messageLocalization from '@js/common/core/localization/message';
 import $ from '@js/core/renderer';
 import { isDefined } from '@js/core/utils/type';
-import messageLocalization from '@js/localization/message';
 import type { ModuleType } from '@ts/grids/grid_core/m_types';
 
 const SORT_CLASS = 'dx-sort';

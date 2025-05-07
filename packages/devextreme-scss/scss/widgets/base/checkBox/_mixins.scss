@@ -29,7 +29,7 @@
   .dx-checkbox-icon {
     .dx-checkbox-indeterminate & {
       color: $color;
-    
+
       @include dx-checkbox-icon-centered($icon-height, $icon-width);
 
       &::before {

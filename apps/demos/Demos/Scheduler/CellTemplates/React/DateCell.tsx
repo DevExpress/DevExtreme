@@ -1,5 +1,5 @@
 import React from 'react';
-import { SchedulerTypes } from 'devextreme-react/scheduler';
+import { type SchedulerTypes } from 'devextreme-react/scheduler';
 import Utils from './utils.ts';
 
 interface DateCellProps {

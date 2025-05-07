@@ -18,7 +18,6 @@ export function updateVersion(version: string | undefined): void {
       .concat([rootWorkspacePath]);
 
   sh.sed('-i', /"version": ".*"/, `"version": "${version}"`, workspacesPaths);
-  sh.sed('-i', /"devextreme(-angular|-react|-vue|-dist)?": ".*"/, `"devextreme$1": "~${version}"`, workspacesPaths);
 
   sh.exec('pnpm install --no-frozen-lockfile');
 }

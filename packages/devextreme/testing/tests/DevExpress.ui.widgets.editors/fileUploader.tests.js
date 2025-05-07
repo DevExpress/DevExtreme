@@ -1,5 +1,7 @@
 import $ from 'jquery';
 import FileUploader from 'ui/file_uploader';
+import 'ui/drop_down_button';
+import 'ui/button_group';
 import devices from '__internal/core/m_devices';
 import { Deferred } from 'core/utils/deferred';
 import keyboardMock from '../../helpers/keyboardMock.js';
@@ -20,6 +22,7 @@ QUnit.testStart(function() {
 const internals = FileUploader.__internals;
 
 const FILEUPLOADER_EMPTY_CLASS = 'dx-fileuploader-empty';
+const FILEUPLOADER_INVALID_CLASS = 'dx-fileuploader-invalid';
 
 const FILEUPLOADER_CONTENT_CLASS = 'dx-fileuploader-content';
 const FILEUPLOADER_INPUT_WRAPPER_CLASS = 'dx-fileuploader-input-wrapper';
@@ -38,7 +41,7 @@ const FILEUPLOADER_CANCEL_BUTTON_CLASS = 'dx-fileuploader-cancel-button';
 const FILEUPLOADER_UPLOAD_BUTTON_CLASS = 'dx-fileuploader-upload-button';
 const FILEUPLOADER_FILE_STATUS_MESSAGE_CLASS = 'dx-fileuploader-file-status-message';
 
-const FILEUPLOADER_INVALID_CLASS = 'dx-fileuploader-invalid';
+const BUTTON_GROUP_CLASS = 'dx-buttongroup';
 
 const FILEUPLOADER_AFTER_LOAD_DELAY = 500;
 
@@ -836,16 +839,16 @@ QUnit.module('custom uploading', moduleConfig, () => {
 
     QUnit.test('set custom dialog trigger attaches click event handler on targets', function(assert) {
         const instance = $('#fileuploader').dxFileUploader().dxFileUploader('instance');
-        sinon.stub(instance, '_attachSelectFileDialogHandler');
+        sinon.stub(instance, '_attachSelectFileDialogHandlers');
 
         instance.option('dialogTrigger', '.pic');
 
-        assert.strictEqual(instance._attachSelectFileDialogHandler.callCount, 1, 'attachHandlers method called');
-        const items = instance._attachSelectFileDialogHandler.args[0];
+        assert.strictEqual(instance._attachSelectFileDialogHandlers.callCount, 1, 'attachHandlers method called');
+        const items = instance._attachSelectFileDialogHandlers.args[0];
         assert.strictEqual(items.length, 1, 'attachHandlers args is valid');
         assert.strictEqual(items[0], '.pic', 'attachHandlers args is valid');
 
-        instance._attachSelectFileDialogHandler.restore();
+        instance._attachSelectFileDialogHandlers.restore();
     });
 
     QUnit.test('it is possible to drop files using custom dropzone', function(assert) {
@@ -2039,8 +2042,8 @@ QUnit.module('option change', moduleConfig, () => {
         const customDropZone = $('<div>').addClass('dropZone').appendTo('#qunit-fixture');
         const customDialogTrigger = $('<div>').addClass('trigger').appendTo('#qunit-fixture');
         const instance = $('#fileuploader').dxFileUploader().dxFileUploader('instance');
-        sinon.stub(instance, '_attachSelectFileDialogHandler');
-        sinon.stub(instance, '_detachSelectFileDialogHandler');
+        sinon.stub(instance, '_attachSelectFileDialogHandlers');
+        sinon.stub(instance, '_detachSelectFileDialogHandlers');
         sinon.stub(instance, '_attachDragEventHandlers');
         sinon.stub(instance, '_detachDragEventHandlers');
 
@@ -2050,13 +2053,13 @@ QUnit.module('option change', moduleConfig, () => {
             dropZone: '.dropZone'
         });
         this.clock.tick(100);
-        instance._detachSelectFileDialogHandler.reset();
+        instance._detachSelectFileDialogHandlers.reset();
         instance._detachDragEventHandlers.reset();
 
-        assert.ok(instance._attachSelectFileDialogHandler.callCount >= 1, '_attachSelectFileDialogHandler method called');
-        let items = instance._attachSelectFileDialogHandler.args[0];
-        assert.strictEqual(items.length, 1, '_attachSelectFileDialogHandler args is valid');
-        assert.strictEqual(items[0], '.trigger', '_attachSelectFileDialogHandler args is valid');
+        assert.ok(instance._attachSelectFileDialogHandlers.callCount >= 1, '_attachSelectFileDialogHandlers method called');
+        let items = instance._attachSelectFileDialogHandlers.args[0];
+        assert.strictEqual(items.length, 1, '_attachSelectFileDialogHandlers args is valid');
+        assert.strictEqual(items[0], '.trigger', '_attachSelectFileDialogHandlers args is valid');
 
         assert.ok(instance._attachDragEventHandlers.callCount >= 1, '_attachDragEventHandlers method called');
         items = instance._attachDragEventHandlers.args[0];
@@ -2065,18 +2068,18 @@ QUnit.module('option change', moduleConfig, () => {
 
         instance.dispose();
 
-        assert.strictEqual(instance._detachSelectFileDialogHandler.callCount, 1, '_detachSelectFileDialogHandler method called');
-        items = instance._detachSelectFileDialogHandler.args[0] || [];
-        assert.strictEqual(items.length, 1, '_detachSelectFileDialogHandler args is valid');
-        assert.strictEqual(items[0], '.trigger', '_detachSelectFileDialogHandler args is valid');
+        assert.strictEqual(instance._detachSelectFileDialogHandlers.callCount, 1, '_detachSelectFileDialogHandlers method called');
+        items = instance._detachSelectFileDialogHandlers.args[0] || [];
+        assert.strictEqual(items.length, 1, '_detachSelectFileDialogHandlers args is valid');
+        assert.strictEqual(items[0], '.trigger', '_detachSelectFileDialogHandlers args is valid');
 
         assert.strictEqual(instance._detachDragEventHandlers.callCount, 1, '_detachDragEventHandlers method called');
         items = instance._detachDragEventHandlers.args[0] || [];
         assert.strictEqual(items.length, 1, '_detachDragEventHandlers args is valid');
         assert.strictEqual(items[0], '.dropZone', '_detachDragEventHandlers args is valid');
 
-        instance._attachSelectFileDialogHandler.restore();
-        instance._detachSelectFileDialogHandler.restore();
+        instance._attachSelectFileDialogHandlers.restore();
+        instance._detachSelectFileDialogHandlers.restore();
         instance._attachDragEventHandlers.restore();
         instance._detachDragEventHandlers.restore();
         customDropZone.remove();
@@ -4200,17 +4203,21 @@ QUnit.module('readOnly option', moduleConfig, () => {
         assert.ok($cancelButtons.eq(1).hasClass('dx-state-disabled'), '2nd button is disabled');
     });
 
-    QUnit.test('dialogTrigger should be unable to call _selectButtonClickHandler', function(assert) {
-        const instance = $('#fileuploader').dxFileUploader({
+    QUnit.test('File selection does not open if component is read-only', function(assert) {
+        const $element = $('#fileuploader').dxFileUploader({
             readOnly: true,
-            uploadMode: 'useButtons'
-        }).dxFileUploader('instance');
-        sinon.stub(instance, '_selectButtonClickHandler').callsFake(() => instance._selectFileDialogHandler());
+            uploadMode: 'useButtons',
+        });
+        const instance = $element.dxFileUploader('instance');
 
-        instance._selectButtonClickHandler();
-        assert.strictEqual(instance._selectButtonClickHandler.returnValues[0], false, 'selectFile method not called');
+        instance._selectFileDialogClickHandler();
 
-        instance._selectButtonClickHandler.restore();
+        const fileUploaderInputClickSpy = sinon.spy();
+        const $fileUploaderInput = $element.find(`.${FILEUPLOADER_INPUT_CLASS}`);
+
+        $fileUploaderInput.on('click', fileUploaderInputClickSpy);
+
+        assert.strictEqual(fileUploaderInputClickSpy.callCount, 0, 'selectFile method not called');
     });
 
     QUnit.test('uploading events can be fired (successful upload)', function(assert) {
@@ -4355,38 +4362,33 @@ QUnit.module('readOnly option', moduleConfig, () => {
         $fileUploader.find('.dx-fileuploader-input-wrapper').trigger('dragenter');
         assert.notOk($fileUploader.hasClass('dx-fileuploader-dragover'), 'drag event was not handled for input wrapper element');
     });
-
 });
 
-QUnit.module('dxButton integration', moduleConfig, () => {
-    QUnit.test('dialog should be shown after press enter key on dxButton (T1178836)', function(assert) {
-        if(devices.real().deviceType !== 'desktop') {
-            assert.ok(true, 'keyboard is not supported for not generic devices');
-            return;
-        }
+QUnit.module('integration of dx button components via dialogTrigger', moduleConfig, () => {
+    ['enter', 'space'].forEach(keyName => {
+        ['dxButton', 'dxButtonGroup', 'dxDropDownButton'].forEach(component => {
+            QUnit.test(`dialog should be shown after press ${keyName} key on ${component} (T1178836, T1256752)`, function(assert) {
+                if(devices.real().deviceType !== 'desktop') {
+                    assert.ok(true, 'keyboard is not supported for not generic devices');
+                    return;
+                }
 
-        const $customDialogTrigger = $('<div>').appendTo('#qunit-fixture');
+                const $dialogTrigger = $('<div>')[component]().appendTo('#qunit-fixture');
 
-        $customDialogTrigger.dxButton({
-            text: 'button'
+                $('#fileuploader').dxFileUploader({ dialogTrigger: $dialogTrigger });
+
+                const $fileUploaderInput = $(`.${FILEUPLOADER_INPUT_CLASS}`);
+                const $focusTarget = component === 'dxButton' ? $dialogTrigger : $(`.${BUTTON_GROUP_CLASS}`);
+
+                const fileUploaderInputClickSpy = sinon.spy();
+                const keyboard = keyboardMock($focusTarget);
+
+                $fileUploaderInput.on('click', fileUploaderInputClickSpy);
+
+                keyboard.keyUp(keyName);
+
+                assert.strictEqual(fileUploaderInputClickSpy.calledOnce, true, 'click on input fired once');
+            });
         });
-
-        const instance = $('#fileuploader').dxFileUploader({
-            dialogTrigger: $customDialogTrigger,
-            visible: false
-        }).dxFileUploader('instance');
-        const spy = sinon.spy();
-
-        $(`.${FILEUPLOADER_INPUT_CLASS}`).on('click', spy);
-
-        instance.option({
-            uploadMode: 'useButtons',
-        });
-        assert.strictEqual(spy.callCount, 0, 'click on input not fired');
-
-        const keyboard = keyboardMock($customDialogTrigger);
-        keyboard.keyDown('enter');
-
-        assert.strictEqual(spy.callCount, 1, 'click on input fired');
     });
 });

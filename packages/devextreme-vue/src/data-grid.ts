@@ -1,7 +1,193 @@
 export { ExplicitTypes } from "devextreme/ui/data_grid";
-import DataGrid, { Properties } from "devextreme/ui/data_grid";
+import { PropType } from "vue";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
+import DataGrid, { Properties } from "devextreme/ui/data_grid";
+import  DataSource from "devextreme/data/data_source";
+import  dxDataGrid from "devextreme/ui/data_grid";
+import  dxOverlay from "devextreme/ui/overlay";
+import  DOMComponent from "devextreme/core/dom_component";
+import  dxPopup from "devextreme/ui/popup";
+import  dxSortable from "devextreme/ui/sortable";
+import  dxDraggable from "devextreme/ui/draggable";
+import {
+ ColumnResizeMode,
+ Pager,
+ DataChangeType,
+ FilterOperation,
+ FilterType,
+ FixedPosition,
+ SelectedFilterOperation,
+ ColumnChooserMode,
+ ColumnChooserSearchConfig,
+ ColumnChooserSelectionConfig,
+ HeaderFilterGroupInterval,
+ ColumnHeaderFilterSearchConfig,
+ HeaderFilterSearchConfig,
+ SelectionColumnDisplayMode,
+ DataChange,
+ GridsEditMode,
+ NewRowPosition,
+ GridsEditRefreshMode,
+ StartEditAction,
+ GridBase,
+ ApplyFilterMode,
+ GroupExpandMode,
+ SummaryType,
+ EnterKeyAction,
+ EnterKeyDirection,
+ PagerPageSize,
+ DataRenderMode,
+ StateStoreType,
+} from "devextreme/common/grids";
+import {
+ dxDataGridColumn,
+ AdaptiveDetailRowPreparingEvent,
+ CellClickEvent,
+ CellDblClickEvent,
+ CellHoverChangedEvent,
+ CellPreparedEvent,
+ ContentReadyEvent,
+ ContextMenuPreparingEvent,
+ DataErrorOccurredEvent,
+ DisposingEvent,
+ EditCanceledEvent,
+ EditCancelingEvent,
+ EditingStartEvent,
+ EditorPreparedEvent,
+ EditorPreparingEvent,
+ ExportingEvent,
+ FocusedCellChangedEvent,
+ FocusedCellChangingEvent,
+ FocusedRowChangedEvent,
+ FocusedRowChangingEvent,
+ InitializedEvent,
+ InitNewRowEvent,
+ KeyDownEvent,
+ OptionChangedEvent,
+ RowClickEvent,
+ RowCollapsedEvent,
+ RowCollapsingEvent,
+ RowDblClickEvent,
+ RowExpandedEvent,
+ RowExpandingEvent,
+ RowInsertedEvent,
+ RowInsertingEvent,
+ RowPreparedEvent,
+ RowRemovedEvent,
+ RowRemovingEvent,
+ RowUpdatedEvent,
+ RowUpdatingEvent,
+ RowValidatingEvent,
+ SavedEvent,
+ SavingEvent,
+ SelectionChangedEvent,
+ ToolbarPreparingEvent,
+ dxDataGridToolbar,
+ dxDataGridRowObject,
+ DataGridPredefinedColumnButton,
+ ColumnButtonClickEvent,
+ dxDataGridColumnButton,
+ DataGridCommandColumnType,
+ SelectionSensitivity,
+ DataGridExportFormat,
+ DataGridPredefinedToolbarItem,
+ DataGridScrollMode,
+ dxDataGridToolbarItem,
+} from "devextreme/ui/data_grid";
+import {
+ Mode,
+ ValidationRuleType,
+ HorizontalAlignment,
+ VerticalAlignment,
+ DataType,
+ Format as CommonFormat,
+ SortOrder,
+ SearchMode,
+ ComparisonOperator,
+ SingleMultipleOrNone,
+ SelectAllMode,
+ PositionAlignment,
+ Direction,
+ ToolbarItemLocation,
+ ToolbarItemComponent,
+ DisplayMode,
+ DragDirection,
+ DragHighlight,
+ ScrollbarMode,
+} from "devextreme/common";
+import {
+ DataSourceOptions,
+} from "devextreme/common/data";
+import {
+ Store,
+} from "devextreme/data/store";
+import {
+ dxFilterBuilderOptions,
+ dxFilterBuilderField,
+ FieldInfo,
+ FilterBuilderOperation,
+ dxFilterBuilderCustomOperation,
+ GroupOperation,
+ ContentReadyEvent as FilterBuilderContentReadyEvent,
+ DisposingEvent as FilterBuilderDisposingEvent,
+ EditorPreparedEvent as FilterBuilderEditorPreparedEvent,
+ EditorPreparingEvent as FilterBuilderEditorPreparingEvent,
+ InitializedEvent as FilterBuilderInitializedEvent,
+ OptionChangedEvent as FilterBuilderOptionChangedEvent,
+ ValueChangedEvent,
+} from "devextreme/ui/filter_builder";
+import {
+ dxPopupOptions,
+ dxPopupToolbarItem,
+ ToolbarLocation,
+} from "devextreme/ui/popup";
+import {
+ PagerBase,
+} from "devextreme/ui/pagination";
+import {
+ AnimationConfig,
+ CollisionResolution,
+ PositionConfig,
+ AnimationState,
+ AnimationType,
+ CollisionResolutionCombination,
+} from "devextreme/common/core/animation";
+import {
+ Format,
+} from "devextreme/common/core/localization";
+import {
+ dxFormSimpleItem,
+ dxFormOptions,
+ dxFormGroupItem,
+ dxFormTabbedItem,
+ dxFormEmptyItem,
+ dxFormButtonItem,
+ LabelLocation,
+ FormLabelMode,
+ ContentReadyEvent as FormContentReadyEvent,
+ DisposingEvent as FormDisposingEvent,
+ EditorEnterKeyEvent,
+ FieldDataChangedEvent,
+ InitializedEvent as FormInitializedEvent,
+ OptionChangedEvent as FormOptionChangedEvent,
+ FormItemComponent,
+ FormItemType,
+} from "devextreme/ui/form";
+import {
+ event,
+} from "devextreme/events/events.types";
+import {
+ EventInfo,
+} from "devextreme/common/core/events";
+import {
+ Component,
+} from "devextreme/core/component";
+import {
+ LocateInMenuMode,
+ ShowTextMode,
+} from "devextreme/ui/toolbar";
+import  * as CommonTypes from "devextreme/common";
 import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
@@ -137,113 +323,113 @@ const componentConfig = {
     cacheEnabled: Boolean,
     cellHintEnabled: Boolean,
     columnAutoWidth: Boolean,
-    columnChooser: Object,
-    columnFixing: Object,
+    columnChooser: Object as PropType<Record<string, any>>,
+    columnFixing: Object as PropType<Record<string, any>>,
     columnHidingEnabled: Boolean,
     columnMinWidth: Number,
-    columnResizingMode: String,
-    columns: Array,
-    columnWidth: [Number, String],
-    customizeColumns: Function,
+    columnResizingMode: String as PropType<ColumnResizeMode>,
+    columns: Array as PropType<Array<dxDataGridColumn | string>>,
+    columnWidth: [String, Number] as PropType<Mode | number>,
+    customizeColumns: Function as PropType<((columns: Array<dxDataGridColumn>) => void)>,
     dataRowTemplate: {},
-    dataSource: {},
+    dataSource: [Array, Object, String] as PropType<Array<any> | DataSource | DataSourceOptions | null | Store | string | Record<string, any>>,
     dateSerializationFormat: String,
     disabled: Boolean,
-    editing: Object,
-    elementAttr: Object,
+    editing: Object as PropType<Record<string, any>>,
+    elementAttr: Object as PropType<Record<string, any>>,
     errorRowEnabled: Boolean,
-    export: Object,
-    filterBuilder: Object,
-    filterBuilderPopup: Object,
-    filterPanel: Object,
-    filterRow: Object,
-    filterSyncEnabled: [Boolean, String],
-    filterValue: [Array, Function, String],
+    export: Object as PropType<Record<string, any>>,
+    filterBuilder: Object as PropType<dxFilterBuilderOptions | Record<string, any>>,
+    filterBuilderPopup: Object as PropType<dxPopupOptions<any> | Record<string, any>>,
+    filterPanel: Object as PropType<Record<string, any>>,
+    filterRow: Object as PropType<Record<string, any>>,
+    filterSyncEnabled: [Boolean, String] as PropType<boolean | Mode>,
+    filterValue: [Array, Function, String] as PropType<Array<any> | ((() => any)) | string>,
     focusedColumnIndex: Number,
     focusedRowEnabled: Boolean,
     focusedRowIndex: Number,
     focusedRowKey: {},
-    grouping: Object,
-    groupPanel: Object,
-    headerFilter: Object,
-    height: [Function, Number, String],
+    grouping: Object as PropType<Record<string, any>>,
+    groupPanel: Object as PropType<Record<string, any>>,
+    headerFilter: Object as PropType<Record<string, any>>,
+    height: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
     highlightChanges: Boolean,
     hint: String,
     hoverStateEnabled: Boolean,
-    keyboardNavigation: Object,
-    keyExpr: [Array, String],
-    loadPanel: Object,
-    masterDetail: Object,
+    keyboardNavigation: Object as PropType<Record<string, any>>,
+    keyExpr: [Array, String] as PropType<Array<string> | string>,
+    loadPanel: Object as PropType<Record<string, any>>,
+    masterDetail: Object as PropType<Record<string, any>>,
     noDataText: String,
-    onAdaptiveDetailRowPreparing: Function,
-    onCellClick: Function,
-    onCellDblClick: Function,
-    onCellHoverChanged: Function,
-    onCellPrepared: Function,
-    onContentReady: Function,
-    onContextMenuPreparing: Function,
-    onDataErrorOccurred: Function,
-    onDisposing: Function,
-    onEditCanceled: Function,
-    onEditCanceling: Function,
-    onEditingStart: Function,
-    onEditorPrepared: Function,
-    onEditorPreparing: Function,
-    onExporting: Function,
-    onFocusedCellChanged: Function,
-    onFocusedCellChanging: Function,
-    onFocusedRowChanged: Function,
-    onFocusedRowChanging: Function,
-    onInitialized: Function,
-    onInitNewRow: Function,
-    onKeyDown: Function,
-    onOptionChanged: Function,
-    onRowClick: Function,
-    onRowCollapsed: Function,
-    onRowCollapsing: Function,
-    onRowDblClick: Function,
-    onRowExpanded: Function,
-    onRowExpanding: Function,
-    onRowInserted: Function,
-    onRowInserting: Function,
-    onRowPrepared: Function,
-    onRowRemoved: Function,
-    onRowRemoving: Function,
-    onRowUpdated: Function,
-    onRowUpdating: Function,
-    onRowValidating: Function,
-    onSaved: Function,
-    onSaving: Function,
-    onSelectionChanged: Function,
-    onToolbarPreparing: Function,
-    pager: Object,
-    paging: Object,
-    remoteOperations: [Boolean, Object, String],
+    onAdaptiveDetailRowPreparing: Function as PropType<((e: AdaptiveDetailRowPreparingEvent) => void)>,
+    onCellClick: Function as PropType<((e: CellClickEvent) => void)>,
+    onCellDblClick: Function as PropType<((e: CellDblClickEvent) => void)>,
+    onCellHoverChanged: Function as PropType<((e: CellHoverChangedEvent) => void)>,
+    onCellPrepared: Function as PropType<((e: CellPreparedEvent) => void)>,
+    onContentReady: Function as PropType<((e: ContentReadyEvent) => void)>,
+    onContextMenuPreparing: Function as PropType<((e: ContextMenuPreparingEvent) => void)>,
+    onDataErrorOccurred: Function as PropType<((e: DataErrorOccurredEvent) => void)>,
+    onDisposing: Function as PropType<((e: DisposingEvent) => void)>,
+    onEditCanceled: Function as PropType<((e: EditCanceledEvent) => void)>,
+    onEditCanceling: Function as PropType<((e: EditCancelingEvent) => void)>,
+    onEditingStart: Function as PropType<((e: EditingStartEvent) => void)>,
+    onEditorPrepared: Function as PropType<((e: EditorPreparedEvent) => void)>,
+    onEditorPreparing: Function as PropType<((e: EditorPreparingEvent) => void)>,
+    onExporting: Function as PropType<((e: ExportingEvent) => void)>,
+    onFocusedCellChanged: Function as PropType<((e: FocusedCellChangedEvent) => void)>,
+    onFocusedCellChanging: Function as PropType<((e: FocusedCellChangingEvent) => void)>,
+    onFocusedRowChanged: Function as PropType<((e: FocusedRowChangedEvent) => void)>,
+    onFocusedRowChanging: Function as PropType<((e: FocusedRowChangingEvent) => void)>,
+    onInitialized: Function as PropType<((e: InitializedEvent) => void)>,
+    onInitNewRow: Function as PropType<((e: InitNewRowEvent) => void)>,
+    onKeyDown: Function as PropType<((e: KeyDownEvent) => void)>,
+    onOptionChanged: Function as PropType<((e: OptionChangedEvent) => void)>,
+    onRowClick: Function as PropType<((e: RowClickEvent) => void)>,
+    onRowCollapsed: Function as PropType<((e: RowCollapsedEvent) => void)>,
+    onRowCollapsing: Function as PropType<((e: RowCollapsingEvent) => void)>,
+    onRowDblClick: Function as PropType<((e: RowDblClickEvent) => void)>,
+    onRowExpanded: Function as PropType<((e: RowExpandedEvent) => void)>,
+    onRowExpanding: Function as PropType<((e: RowExpandingEvent) => void)>,
+    onRowInserted: Function as PropType<((e: RowInsertedEvent) => void)>,
+    onRowInserting: Function as PropType<((e: RowInsertingEvent) => void)>,
+    onRowPrepared: Function as PropType<((e: RowPreparedEvent) => void)>,
+    onRowRemoved: Function as PropType<((e: RowRemovedEvent) => void)>,
+    onRowRemoving: Function as PropType<((e: RowRemovingEvent) => void)>,
+    onRowUpdated: Function as PropType<((e: RowUpdatedEvent) => void)>,
+    onRowUpdating: Function as PropType<((e: RowUpdatingEvent) => void)>,
+    onRowValidating: Function as PropType<((e: RowValidatingEvent) => void)>,
+    onSaved: Function as PropType<((e: SavedEvent) => void)>,
+    onSaving: Function as PropType<((e: SavingEvent) => void)>,
+    onSelectionChanged: Function as PropType<((e: SelectionChangedEvent) => void)>,
+    onToolbarPreparing: Function as PropType<((e: ToolbarPreparingEvent) => void)>,
+    pager: Object as PropType<Pager | Record<string, any> | PagerBase>,
+    paging: Object as PropType<Record<string, any>>,
+    remoteOperations: [Boolean, String, Object] as PropType<boolean | Mode | Record<string, any>>,
     renderAsync: Boolean,
     repaintChangesOnly: Boolean,
     rowAlternationEnabled: Boolean,
-    rowDragging: Object,
+    rowDragging: Object as PropType<Record<string, any>>,
     rowTemplate: {},
     rtlEnabled: Boolean,
-    scrolling: Object,
-    searchPanel: Object,
-    selectedRowKeys: Array,
-    selection: Object,
-    selectionFilter: [Array, Function, String],
+    scrolling: Object as PropType<Record<string, any>>,
+    searchPanel: Object as PropType<Record<string, any>>,
+    selectedRowKeys: Array as PropType<Array<any>>,
+    selection: Object as PropType<Record<string, any>>,
+    selectionFilter: [Array, Function, String] as PropType<Array<any> | ((() => any)) | string>,
     showBorders: Boolean,
     showColumnHeaders: Boolean,
     showColumnLines: Boolean,
     showRowLines: Boolean,
-    sortByGroupSummaryInfo: Array,
-    sorting: Object,
-    stateStoring: Object,
-    summary: Object,
+    sortByGroupSummaryInfo: Array as PropType<Array<Record<string, any>>>,
+    sorting: Object as PropType<Record<string, any>>,
+    stateStoring: Object as PropType<Record<string, any>>,
+    summary: Object as PropType<Record<string, any>>,
     syncLookupFilterValues: Boolean,
     tabIndex: Number,
-    toolbar: Object,
+    toolbar: Object as PropType<dxDataGridToolbar | Record<string, any>>,
     twoWayBindingEnabled: Boolean,
     visible: Boolean,
-    width: [Function, Number, String],
+    width: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
     wordWrapEnabled: Boolean
   },
   emits: {
@@ -421,8 +607,8 @@ const DxAnimationConfig = {
     "update:show": null,
   },
   props: {
-    hide: [Object, Number, String],
-    show: [Object, Number, String]
+    hide: [Object, Number, String] as PropType<AnimationConfig | number | Record<string, any> | string>,
+    show: [Object, Number, String] as PropType<AnimationConfig | number | Record<string, any> | string>
   }
 };
 
@@ -450,8 +636,8 @@ const DxAsyncRuleConfig = {
     ignoreEmptyValue: Boolean,
     message: String,
     reevaluate: Boolean,
-    type: String,
-    validationCallback: Function
+    type: String as PropType<ValidationRuleType>,
+    validationCallback: Function as PropType<((options: { column: Record<string, any>, data: Record<string, any>, formItem: Record<string, any>, rule: Record<string, any>, validator: Record<string, any>, value: string | number }) => any)>
   }
 };
 
@@ -473,8 +659,8 @@ const DxAtConfig = {
     "update:y": null,
   },
   props: {
-    x: String,
-    y: String
+    x: String as PropType<HorizontalAlignment>,
+    y: String as PropType<VerticalAlignment>
   }
 };
 
@@ -519,14 +705,14 @@ const DxButtonConfig = {
   },
   props: {
     cssClass: String,
-    disabled: [Boolean, Function],
+    disabled: [Boolean, Function] as PropType<boolean | (((options: { column: dxDataGridColumn, component: dxDataGrid, row: dxDataGridRowObject }) => boolean))>,
     hint: String,
     icon: String,
-    name: String,
-    onClick: Function,
+    name: String as PropType<DataGridPredefinedColumnButton | string>,
+    onClick: Function as PropType<((e: ColumnButtonClickEvent) => void)>,
     template: {},
     text: String,
-    visible: [Boolean, Function]
+    visible: [Boolean, Function] as PropType<boolean | (((options: { column: dxDataGridColumn, component: dxDataGrid, row: dxDataGridRowObject }) => boolean))>
   }
 };
 
@@ -550,7 +736,7 @@ const DxChangeConfig = {
     data: {},
     insertAfterKey: {},
     insertBeforeKey: {},
-    type: String
+    type: String as PropType<DataChangeType>
   }
 };
 
@@ -592,8 +778,8 @@ const DxCollisionConfig = {
     "update:y": null,
   },
   props: {
-    x: String,
-    y: String
+    x: String as PropType<CollisionResolution>,
+    y: String as PropType<CollisionResolution>
   }
 };
 
@@ -672,7 +858,7 @@ const DxColumnConfig = {
     "update:width": null,
   },
   props: {
-    alignment: String,
+    alignment: String as PropType<HorizontalAlignment>,
     allowEditing: Boolean,
     allowExporting: Boolean,
     allowFiltering: Boolean,
@@ -685,53 +871,53 @@ const DxColumnConfig = {
     allowSearch: Boolean,
     allowSorting: Boolean,
     autoExpandGroup: Boolean,
-    buttons: Array,
-    calculateCellValue: Function,
-    calculateDisplayValue: [Function, String],
-    calculateFilterExpression: Function,
-    calculateGroupValue: [Function, String],
-    calculateSortValue: [Function, String],
+    buttons: Array as PropType<Array<DataGridPredefinedColumnButton | dxDataGridColumnButton>>,
+    calculateCellValue: Function as PropType<((rowData: any) => any)>,
+    calculateDisplayValue: [Function, String] as PropType<(((rowData: any) => any)) | string>,
+    calculateFilterExpression: Function as PropType<((filterValue: any, selectedFilterOperation: string | null, target: string) => string | (() => any) | Array<any>)>,
+    calculateGroupValue: [Function, String] as PropType<(((rowData: any) => any)) | string>,
+    calculateSortValue: [Function, String] as PropType<(((rowData: any) => any)) | string>,
     caption: String,
     cellTemplate: {},
-    columns: Array,
+    columns: Array as PropType<Array<dxDataGridColumn | string>>,
     cssClass: String,
-    customizeText: Function,
+    customizeText: Function as PropType<((cellInfo: { groupInterval: string | number, target: string, value: any, valueText: string }) => string)>,
     dataField: String,
-    dataType: String,
+    dataType: String as PropType<DataType>,
     editCellTemplate: {},
     editorOptions: {},
     encodeHtml: Boolean,
     falseText: String,
-    filterOperations: Array,
-    filterType: String,
+    filterOperations: Array as PropType<Array<FilterOperation | string>>,
+    filterType: String as PropType<FilterType>,
     filterValue: {},
-    filterValues: Array,
+    filterValues: Array as PropType<Array<any>>,
     fixed: Boolean,
-    fixedPosition: String,
-    format: [Object, Function, String],
-    formItem: Object,
+    fixedPosition: String as PropType<FixedPosition>,
+    format: [Object, String, Function] as PropType<Format | CommonFormat | (((value: number | Date) => string)) | Record<string, any> | string>,
+    formItem: Object as PropType<dxFormSimpleItem | Record<string, any>>,
     groupCellTemplate: {},
     groupIndex: Number,
     headerCellTemplate: {},
-    headerFilter: Object,
+    headerFilter: Object as PropType<Record<string, any>>,
     hidingPriority: Number,
     isBand: Boolean,
-    lookup: Object,
+    lookup: Object as PropType<Record<string, any>>,
     minWidth: Number,
     name: String,
     ownerBand: Number,
     renderAsync: Boolean,
-    selectedFilterOperation: String,
-    setCellValue: Function,
+    selectedFilterOperation: String as PropType<SelectedFilterOperation>,
+    setCellValue: Function as PropType<((newData: any, value: any, currentRowData: any) => any)>,
     showEditorAlways: Boolean,
     showInColumnChooser: Boolean,
     showWhenGrouped: Boolean,
     sortIndex: Number,
-    sortingMethod: Function,
-    sortOrder: String,
+    sortingMethod: Function as PropType<((value1: any, value2: any) => number)>,
+    sortOrder: String as PropType<SortOrder>,
     trueText: String,
-    type: String,
-    validationRules: Array,
+    type: String as PropType<DataGridCommandColumnType>,
+    validationRules: Array as PropType<Array<CommonTypes.ValidationRule>>,
     visible: Boolean,
     visibleIndex: Number,
     width: [Number, String]
@@ -788,12 +974,12 @@ const DxColumnChooserConfig = {
     emptyPanelText: String,
     enabled: Boolean,
     height: [Number, String],
-    mode: String,
-    position: Object,
-    search: Object,
+    mode: String as PropType<ColumnChooserMode>,
+    position: Object as PropType<PositionConfig | Record<string, any>>,
+    search: Object as PropType<ColumnChooserSearchConfig | Record<string, any>>,
     searchTimeout: Number,
-    selection: Object,
-    sortOrder: String,
+    selection: Object as PropType<ColumnChooserSelectionConfig | Record<string, any>>,
+    sortOrder: String as PropType<SortOrder>,
     title: String,
     width: [Number, String]
   }
@@ -864,8 +1050,8 @@ const DxColumnFixingConfig = {
   },
   props: {
     enabled: Boolean,
-    icons: Object,
-    texts: Object
+    icons: Object as PropType<Record<string, any>>,
+    texts: Object as PropType<Record<string, any>>
   }
 };
 
@@ -921,11 +1107,11 @@ const DxColumnHeaderFilterConfig = {
   props: {
     allowSearch: Boolean,
     allowSelectAll: Boolean,
-    dataSource: {},
-    groupInterval: [Number, String],
+    dataSource: [Array, Object, Function] as PropType<Array<any> | DataSourceOptions | (((options: { component: Record<string, any>, dataSource: DataSourceOptions | null }) => void)) | null | Store | Record<string, any>>,
+    groupInterval: [String, Number] as PropType<HeaderFilterGroupInterval | number>,
     height: [Number, String],
-    search: Object,
-    searchMode: String,
+    search: Object as PropType<ColumnHeaderFilterSearchConfig | HeaderFilterSearchConfig | Record<string, any>>,
+    searchMode: String as PropType<SearchMode>,
     width: [Number, String]
   }
 };
@@ -953,8 +1139,8 @@ const DxColumnHeaderFilterSearchConfig = {
   props: {
     editorOptions: {},
     enabled: Boolean,
-    mode: String,
-    searchExpr: [Array, Function, String],
+    mode: String as PropType<SearchMode>,
+    searchExpr: [Array, Function, String] as PropType<(Array<(() => any) | string>) | ((() => any)) | string>,
     timeout: Number
   }
 };
@@ -977,9 +1163,9 @@ const DxColumnLookupConfig = {
   },
   props: {
     allowClearing: Boolean,
-    calculateCellValue: Function,
-    dataSource: {},
-    displayExpr: [Function, String],
+    calculateCellValue: Function as PropType<((rowData: any) => any)>,
+    dataSource: [Array, Object, Function] as PropType<Array<any> | DataSourceOptions | (((options: { data: Record<string, any>, key: any }) => Array<any> | Store | DataSourceOptions)) | null | Store | Record<string, any>>,
+    displayExpr: [Function, String] as PropType<(((data: any) => string)) | string>,
     valueExpr: String
   }
 };
@@ -1001,11 +1187,11 @@ const DxCompareRuleConfig = {
     "update:type": null,
   },
   props: {
-    comparisonTarget: Function,
-    comparisonType: String,
+    comparisonTarget: Function as PropType<(() => any)>,
+    comparisonType: String as PropType<ComparisonOperator>,
     ignoreEmptyValue: Boolean,
     message: String,
-    type: String
+    type: String as PropType<ValidationRuleType>
   }
 };
 
@@ -1052,10 +1238,10 @@ const DxCustomOperationConfig = {
     "update:name": null,
   },
   props: {
-    calculateFilterExpression: Function,
+    calculateFilterExpression: Function as PropType<((filterValue: any, field: dxFilterBuilderField) => string | (() => any) | Array<any>)>,
     caption: String,
-    customizeText: Function,
-    dataTypes: Array,
+    customizeText: Function as PropType<((fieldInfo: FieldInfo) => string)>,
+    dataTypes: Array as PropType<Array<DataType>>,
     editorTemplate: {},
     hasValue: Boolean,
     icon: String,
@@ -1084,8 +1270,8 @@ const DxCustomRuleConfig = {
     ignoreEmptyValue: Boolean,
     message: String,
     reevaluate: Boolean,
-    type: String,
-    validationCallback: Function
+    type: String as PropType<ValidationRuleType>,
+    validationCallback: Function as PropType<((options: { column: Record<string, any>, data: Record<string, any>, formItem: Record<string, any>, rule: Record<string, any>, validator: Record<string, any>, value: string | number }) => boolean)>
   }
 };
 
@@ -1116,9 +1302,9 @@ const DxDataGridHeaderFilterConfig = {
     allowSearch: Boolean,
     allowSelectAll: Boolean,
     height: [Number, String],
-    search: Object,
+    search: Object as PropType<HeaderFilterSearchConfig | Record<string, any>>,
     searchTimeout: Number,
-    texts: Object,
+    texts: Object as PropType<Record<string, any>>,
     visible: Boolean,
     width: [Number, String]
   }
@@ -1148,7 +1334,7 @@ const DxDataGridHeaderFilterSearchConfig = {
   props: {
     editorOptions: {},
     enabled: Boolean,
-    mode: String,
+    mode: String as PropType<SearchMode>,
     timeout: Number
   }
 };
@@ -1194,10 +1380,10 @@ const DxDataGridSelectionConfig = {
   props: {
     allowSelectAll: Boolean,
     deferred: Boolean,
-    mode: String,
-    selectAllMode: String,
-    sensitivity: String,
-    showCheckBoxesMode: String
+    mode: String as PropType<SingleMultipleOrNone>,
+    selectAllMode: String as PropType<SelectAllMode>,
+    sensitivity: String as PropType<SelectionSensitivity>,
+    showCheckBoxesMode: String as PropType<SelectionColumnDisplayMode>
   }
 };
 
@@ -1230,19 +1416,19 @@ const DxEditingConfig = {
   },
   props: {
     allowAdding: Boolean,
-    allowDeleting: [Boolean, Function],
-    allowUpdating: [Boolean, Function],
-    changes: Array,
+    allowDeleting: [Boolean, Function] as PropType<boolean | (((options: { component: dxDataGrid, row: dxDataGridRowObject }) => boolean))>,
+    allowUpdating: [Boolean, Function] as PropType<boolean | (((options: { component: dxDataGrid, row: dxDataGridRowObject }) => boolean))>,
+    changes: Array as PropType<Array<DataChange>>,
     confirmDelete: Boolean,
     editColumnName: String,
     editRowKey: {},
-    form: Object,
-    mode: String,
-    newRowPosition: String,
-    popup: Object,
-    refreshMode: String,
+    form: Object as PropType<dxFormOptions | Record<string, any>>,
+    mode: String as PropType<GridsEditMode>,
+    newRowPosition: String as PropType<NewRowPosition>,
+    popup: Object as PropType<dxPopupOptions<any> | Record<string, any>>,
+    refreshMode: String as PropType<GridsEditRefreshMode>,
     selectTextOnEditStart: Boolean,
-    startEditAction: String,
+    startEditAction: String as PropType<StartEditAction>,
     texts: {},
     useIcons: Boolean
   }
@@ -1309,7 +1495,7 @@ const DxEmailRuleConfig = {
   props: {
     ignoreEmptyValue: Boolean,
     message: String,
-    type: String
+    type: String as PropType<ValidationRuleType>
   }
 };
 
@@ -1335,8 +1521,8 @@ const DxExportConfig = {
   props: {
     allowExportSelectedData: Boolean,
     enabled: Boolean,
-    formats: Array,
-    texts: Object
+    formats: Array as PropType<Array<DataGridExportFormat | string>>,
+    texts: Object as PropType<Record<string, any>>
   }
 };
 
@@ -1390,17 +1576,17 @@ const DxFieldConfig = {
     "update:trueText": null,
   },
   props: {
-    calculateFilterExpression: Function,
+    calculateFilterExpression: Function as PropType<((filterValue: any, selectedFilterOperation: string) => string | (() => any) | Array<any>)>,
     caption: String,
-    customizeText: Function,
+    customizeText: Function as PropType<((fieldInfo: FieldInfo) => string)>,
     dataField: String,
-    dataType: String,
+    dataType: String as PropType<DataType>,
     editorOptions: {},
     editorTemplate: {},
     falseText: String,
-    filterOperations: Array,
-    format: [Object, Function, String],
-    lookup: Object,
+    filterOperations: Array as PropType<Array<FilterBuilderOperation | string>>,
+    format: [Object, String, Function] as PropType<Format | CommonFormat | (((value: number | Date) => string)) | Record<string, any> | string>,
+    lookup: Object as PropType<Record<string, any>>,
     name: String,
     trueText: String
   }
@@ -1429,9 +1615,9 @@ const DxFieldLookupConfig = {
   },
   props: {
     allowClearing: Boolean,
-    dataSource: [Array, Object],
-    displayExpr: [Function, String],
-    valueExpr: [Function, String]
+    dataSource: [Array, Object] as PropType<Array<any> | DataSourceOptions | Store | Record<string, any>>,
+    displayExpr: [Function, String] as PropType<(((data: any) => string)) | string>,
+    valueExpr: [Function, String] as PropType<(((data: any) => string | number | boolean)) | string>
   }
 };
 
@@ -1478,31 +1664,31 @@ const DxFilterBuilderConfig = {
     accessKey: String,
     activeStateEnabled: Boolean,
     allowHierarchicalFields: Boolean,
-    bindingOptions: Object,
-    customOperations: Array,
+    bindingOptions: Object as PropType<Record<string, any>>,
+    customOperations: Array as PropType<Array<dxFilterBuilderCustomOperation>>,
     disabled: Boolean,
-    elementAttr: Object,
-    fields: Array,
-    filterOperationDescriptions: Object,
+    elementAttr: Object as PropType<Record<string, any>>,
+    fields: Array as PropType<Array<dxFilterBuilderField>>,
+    filterOperationDescriptions: Object as PropType<Record<string, any>>,
     focusStateEnabled: Boolean,
-    groupOperationDescriptions: Object,
-    groupOperations: Array,
-    height: [Function, Number, String],
+    groupOperationDescriptions: Object as PropType<Record<string, any>>,
+    groupOperations: Array as PropType<Array<GroupOperation>>,
+    height: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
     hint: String,
     hoverStateEnabled: Boolean,
     maxGroupLevel: Number,
-    onContentReady: Function,
-    onDisposing: Function,
-    onEditorPrepared: Function,
-    onEditorPreparing: Function,
-    onInitialized: Function,
-    onOptionChanged: Function,
-    onValueChanged: Function,
+    onContentReady: Function as PropType<((e: FilterBuilderContentReadyEvent) => void)>,
+    onDisposing: Function as PropType<((e: FilterBuilderDisposingEvent) => void)>,
+    onEditorPrepared: Function as PropType<((e: FilterBuilderEditorPreparedEvent) => void)>,
+    onEditorPreparing: Function as PropType<((e: FilterBuilderEditorPreparingEvent) => void)>,
+    onInitialized: Function as PropType<((e: FilterBuilderInitializedEvent) => void)>,
+    onOptionChanged: Function as PropType<((e: FilterBuilderOptionChangedEvent) => void)>,
+    onValueChanged: Function as PropType<((e: ValueChangedEvent) => void)>,
     rtlEnabled: Boolean,
     tabIndex: Number,
-    value: [Array, Function, String],
+    value: [Array, Function, String] as PropType<Array<any> | ((() => any)) | string>,
     visible: Boolean,
-    width: [Function, Number, String]
+    width: [Function, Number, String] as PropType<((() => number | string)) | number | string>
   }
 };
 
@@ -1575,9 +1761,9 @@ const DxFilterBuilderPopupConfig = {
   },
   props: {
     accessKey: String,
-    animation: Object,
-    bindingOptions: Object,
-    closeOnOutsideClick: [Boolean, Function],
+    animation: Object as PropType<Record<string, any>>,
+    bindingOptions: Object as PropType<Record<string, any>>,
+    closeOnOutsideClick: [Boolean, Function] as PropType<boolean | (((event: event) => boolean))>,
     container: {},
     contentTemplate: {},
     deferRendering: Boolean,
@@ -1588,28 +1774,28 @@ const DxFilterBuilderPopupConfig = {
     enableBodyScroll: Boolean,
     focusStateEnabled: Boolean,
     fullScreen: Boolean,
-    height: [Function, Number, String],
-    hideOnOutsideClick: [Boolean, Function],
+    height: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
+    hideOnOutsideClick: [Boolean, Function] as PropType<boolean | (((event: event) => boolean))>,
     hideOnParentScroll: Boolean,
     hint: String,
     hoverStateEnabled: Boolean,
-    maxHeight: [Function, Number, String],
-    maxWidth: [Function, Number, String],
-    minHeight: [Function, Number, String],
-    minWidth: [Function, Number, String],
-    onContentReady: Function,
-    onDisposing: Function,
-    onHidden: Function,
-    onHiding: Function,
-    onInitialized: Function,
-    onOptionChanged: Function,
-    onResize: Function,
-    onResizeEnd: Function,
-    onResizeStart: Function,
-    onShowing: Function,
-    onShown: Function,
-    onTitleRendered: Function,
-    position: [Function, Object, String],
+    maxHeight: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
+    maxWidth: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
+    minHeight: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
+    minWidth: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
+    onContentReady: Function as PropType<((e: EventInfo<any>) => void)>,
+    onDisposing: Function as PropType<((e: EventInfo<any>) => void)>,
+    onHidden: Function as PropType<((e: EventInfo<any>) => void)>,
+    onHiding: Function as PropType<((e: { cancel: boolean | any, component: dxOverlay<any>, element: any, model: any }) => void)>,
+    onInitialized: Function as PropType<((e: { component: Component<any>, element: any }) => void)>,
+    onOptionChanged: Function as PropType<((e: { component: DOMComponent, element: any, fullName: string, model: any, name: string, previousValue: any, value: any }) => void)>,
+    onResize: Function as PropType<((e: { component: dxPopup, element: any, event: event, height: number, model: any, width: number }) => void)>,
+    onResizeEnd: Function as PropType<((e: { component: dxPopup, element: any, event: event, height: number, model: any, width: number }) => void)>,
+    onResizeStart: Function as PropType<((e: { component: dxPopup, element: any, event: event, height: number, model: any, width: number }) => void)>,
+    onShowing: Function as PropType<((e: { cancel: boolean | any, component: dxOverlay<any>, element: any, model: any }) => void)>,
+    onShown: Function as PropType<((e: EventInfo<any>) => void)>,
+    onTitleRendered: Function as PropType<((e: { component: dxPopup, element: any, model: any, titleElement: any }) => void)>,
+    position: [Function, String, Object] as PropType<((() => void)) | PositionAlignment | PositionConfig | Record<string, any>>,
     resizeEnabled: Boolean,
     restorePosition: Boolean,
     rtlEnabled: Boolean,
@@ -1620,9 +1806,9 @@ const DxFilterBuilderPopupConfig = {
     tabIndex: Number,
     title: String,
     titleTemplate: {},
-    toolbarItems: Array,
+    toolbarItems: Array as PropType<Array<dxPopupToolbarItem>>,
     visible: Boolean,
-    width: [Function, Number, String],
+    width: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
     wrapperAttr: {}
   }
 };
@@ -1632,6 +1818,11 @@ prepareConfigurationComponentConfig(DxFilterBuilderPopupConfig);
 const DxFilterBuilderPopup = defineComponent(DxFilterBuilderPopupConfig);
 
 (DxFilterBuilderPopup as any).$_optionName = "filterBuilderPopup";
+(DxFilterBuilderPopup as any).$_expectedChildren = {
+  animation: { isCollectionItem: false, optionName: "animation" },
+  position: { isCollectionItem: false, optionName: "position" },
+  toolbarItem: { isCollectionItem: true, optionName: "toolbarItems" }
+};
 
 const DxFilterOperationDescriptionsConfig = {
   emits: {
@@ -1684,9 +1875,9 @@ const DxFilterPanelConfig = {
     "update:visible": null,
   },
   props: {
-    customizeText: Function,
+    customizeText: Function as PropType<((e: { component: GridBase, filterValue: Record<string, any>, text: string }) => string)>,
     filterEnabled: Boolean,
-    texts: Object,
+    texts: Object as PropType<Record<string, any>>,
     visible: Boolean
   }
 };
@@ -1737,11 +1928,11 @@ const DxFilterRowConfig = {
     "update:visible": null,
   },
   props: {
-    applyFilter: String,
+    applyFilter: String as PropType<ApplyFilterMode>,
     applyFilterText: String,
     betweenEndText: String,
     betweenStartText: String,
-    operationDescriptions: Object,
+    operationDescriptions: Object as PropType<Record<string, any>>,
     resetOperationText: String,
     showAllText: String,
     showOperationChooser: Boolean,
@@ -1809,34 +2000,34 @@ const DxFormConfig = {
     activeStateEnabled: Boolean,
     alignItemLabels: Boolean,
     alignItemLabelsInAllGroups: Boolean,
-    bindingOptions: Object,
-    colCount: [Number, String],
-    colCountByScreen: Object,
-    customizeItem: Function,
+    bindingOptions: Object as PropType<Record<string, any>>,
+    colCount: [String, Number] as PropType<Mode | number>,
+    colCountByScreen: Object as PropType<Record<string, any>>,
+    customizeItem: Function as PropType<((item: dxFormSimpleItem | dxFormGroupItem | dxFormTabbedItem | dxFormEmptyItem | dxFormButtonItem) => void)>,
     disabled: Boolean,
-    elementAttr: Object,
+    elementAttr: Object as PropType<Record<string, any>>,
     focusStateEnabled: Boolean,
     formData: {},
-    height: [Function, Number, String],
+    height: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
     hint: String,
     hoverStateEnabled: Boolean,
     isDirty: Boolean,
-    items: Array,
-    labelLocation: String,
-    labelMode: String,
+    items: Array as PropType<Array<dxFormButtonItem | dxFormEmptyItem | dxFormGroupItem | dxFormSimpleItem | dxFormTabbedItem>>,
+    labelLocation: String as PropType<LabelLocation>,
+    labelMode: String as PropType<FormLabelMode>,
     minColWidth: Number,
-    onContentReady: Function,
-    onDisposing: Function,
-    onEditorEnterKey: Function,
-    onFieldDataChanged: Function,
-    onInitialized: Function,
-    onOptionChanged: Function,
+    onContentReady: Function as PropType<((e: FormContentReadyEvent) => void)>,
+    onDisposing: Function as PropType<((e: FormDisposingEvent) => void)>,
+    onEditorEnterKey: Function as PropType<((e: EditorEnterKeyEvent) => void)>,
+    onFieldDataChanged: Function as PropType<((e: FieldDataChangedEvent) => void)>,
+    onInitialized: Function as PropType<((e: FormInitializedEvent) => void)>,
+    onOptionChanged: Function as PropType<((e: FormOptionChangedEvent) => void)>,
     optionalMark: String,
     readOnly: Boolean,
     requiredMark: String,
     requiredMessage: String,
     rtlEnabled: Boolean,
-    screenByWidth: Function,
+    screenByWidth: Function as PropType<(() => void)>,
     scrollingEnabled: Boolean,
     showColonAfterLabel: Boolean,
     showOptionalMark: Boolean,
@@ -1845,7 +2036,7 @@ const DxFormConfig = {
     tabIndex: Number,
     validationGroup: String,
     visible: Boolean,
-    width: [Function, Number, String]
+    width: [Function, Number, String] as PropType<((() => number | string)) | number | string>
   }
 };
 
@@ -1871,10 +2062,10 @@ const DxFormatConfig = {
   },
   props: {
     currency: String,
-    formatter: Function,
-    parser: Function,
+    formatter: Function as PropType<((value: number | Date) => string)>,
+    parser: Function as PropType<((value: string) => number | Date)>,
     precision: Number,
-    type: String,
+    type: String as PropType<CommonFormat | string>,
     useCurrencyAccountingStyle: Boolean
   }
 };
@@ -1909,14 +2100,14 @@ const DxFormItemConfig = {
     cssClass: String,
     dataField: String,
     editorOptions: {},
-    editorType: String,
+    editorType: String as PropType<FormItemComponent>,
     helpText: String,
     isRequired: Boolean,
-    itemType: String,
-    label: Object,
+    itemType: String as PropType<FormItemType>,
+    label: Object as PropType<Record<string, any>>,
     name: String,
     template: {},
-    validationRules: Array,
+    validationRules: Array as PropType<Array<CommonTypes.ValidationRule>>,
     visible: Boolean,
     visibleIndex: Number
   }
@@ -1954,7 +2145,7 @@ const DxFromConfig = {
   props: {
     left: Number,
     opacity: Number,
-    position: Object,
+    position: Object as PropType<PositionConfig | Record<string, any>>,
     scale: Number,
     top: Number
   }
@@ -1983,8 +2174,8 @@ const DxGroupingConfig = {
     allowCollapsing: Boolean,
     autoExpandAll: Boolean,
     contextMenuEnabled: Boolean,
-    expandMode: String,
-    texts: Object
+    expandMode: String as PropType<GroupExpandMode>,
+    texts: Object as PropType<Record<string, any>>
   }
 };
 
@@ -2041,14 +2232,14 @@ const DxGroupItemConfig = {
   props: {
     alignByColumn: Boolean,
     column: String,
-    customizeText: Function,
+    customizeText: Function as PropType<((itemInfo: { value: string | number | Date, valueText: string }) => string)>,
     displayFormat: String,
     name: String,
     showInColumn: String,
     showInGroupFooter: Boolean,
     skipEmptyValues: Boolean,
-    summaryType: String,
-    valueFormat: [Object, Function, String]
+    summaryType: String as PropType<string | SummaryType>,
+    valueFormat: [Object, String, Function] as PropType<Format | CommonFormat | (((value: number | Date) => string)) | Record<string, any> | string>
   }
 };
 
@@ -2096,7 +2287,7 @@ const DxGroupPanelConfig = {
   props: {
     allowColumnDragging: Boolean,
     emptyPanelText: String,
-    visible: [Boolean, String]
+    visible: [Boolean, String] as PropType<boolean | Mode>
   }
 };
 
@@ -2125,13 +2316,13 @@ const DxHeaderFilterConfig = {
   props: {
     allowSearch: Boolean,
     allowSelectAll: Boolean,
-    dataSource: {},
-    groupInterval: [Number, String],
+    dataSource: [Array, Object, Function] as PropType<Array<any> | DataSourceOptions | (((options: { component: Record<string, any>, dataSource: DataSourceOptions | null }) => void)) | null | Store | Record<string, any>>,
+    groupInterval: [String, Number] as PropType<HeaderFilterGroupInterval | number>,
     height: [Number, String],
-    search: Object,
-    searchMode: String,
+    search: Object as PropType<ColumnHeaderFilterSearchConfig | HeaderFilterSearchConfig | Record<string, any>>,
+    searchMode: String as PropType<SearchMode>,
     searchTimeout: Number,
-    texts: Object,
+    texts: Object as PropType<Record<string, any>>,
     visible: Boolean,
     width: [Number, String]
   }
@@ -2142,6 +2333,11 @@ prepareConfigurationComponentConfig(DxHeaderFilterConfig);
 const DxHeaderFilter = defineComponent(DxHeaderFilterConfig);
 
 (DxHeaderFilter as any).$_optionName = "headerFilter";
+(DxHeaderFilter as any).$_expectedChildren = {
+  columnHeaderFilterSearch: { isCollectionItem: false, optionName: "search" },
+  dataGridHeaderFilterSearch: { isCollectionItem: false, optionName: "search" },
+  dataGridHeaderFilterTexts: { isCollectionItem: false, optionName: "texts" }
+};
 
 const DxHideConfig = {
   emits: {
@@ -2159,16 +2355,16 @@ const DxHideConfig = {
     "update:type": null,
   },
   props: {
-    complete: Function,
+    complete: Function as PropType<(($element: any, config: AnimationConfig) => void)>,
     delay: Number,
-    direction: String,
+    direction: String as PropType<Direction>,
     duration: Number,
     easing: String,
-    from: Object,
+    from: Object as PropType<AnimationState | Record<string, any>>,
     staggerDelay: Number,
-    start: Function,
-    to: Object,
-    type: String
+    start: Function as PropType<(($element: any, config: AnimationConfig) => void)>,
+    to: Object as PropType<AnimationState | Record<string, any>>,
+    type: String as PropType<AnimationType>
   }
 };
 
@@ -2229,16 +2425,16 @@ const DxItemConfig = {
     cssClass: String,
     disabled: Boolean,
     html: String,
-    locateInMenu: String,
-    location: String,
+    locateInMenu: String as PropType<LocateInMenuMode>,
+    location: String as PropType<ToolbarItemLocation>,
     menuItemTemplate: {},
-    name: String,
+    name: String as PropType<DataGridPredefinedToolbarItem | string>,
     options: {},
-    showText: String,
+    showText: String as PropType<ShowTextMode>,
     template: {},
     text: String,
     visible: Boolean,
-    widget: String
+    widget: String as PropType<ToolbarItemComponent>
   }
 };
 
@@ -2261,8 +2457,8 @@ const DxKeyboardNavigationConfig = {
   props: {
     editOnKeyPress: Boolean,
     enabled: Boolean,
-    enterKeyAction: String,
-    enterKeyDirection: String
+    enterKeyAction: String as PropType<EnterKeyAction>,
+    enterKeyDirection: String as PropType<EnterKeyDirection>
   }
 };
 
@@ -2284,8 +2480,8 @@ const DxLabelConfig = {
     "update:visible": null,
   },
   props: {
-    alignment: String,
-    location: String,
+    alignment: String as PropType<HorizontalAlignment>,
+    location: String as PropType<LabelLocation>,
     showColon: Boolean,
     template: {},
     text: String,
@@ -2314,7 +2510,7 @@ const DxLoadPanelConfig = {
     "update:width": null,
   },
   props: {
-    enabled: [Boolean, String],
+    enabled: [Boolean, String] as PropType<boolean | Mode>,
     height: [Number, String],
     indicatorSrc: String,
     shading: Boolean,
@@ -2344,10 +2540,10 @@ const DxLookupConfig = {
   },
   props: {
     allowClearing: Boolean,
-    calculateCellValue: Function,
-    dataSource: {},
-    displayExpr: [Function, String],
-    valueExpr: [String, Function]
+    calculateCellValue: Function as PropType<((rowData: any) => any)>,
+    dataSource: [Array, Object, Function] as PropType<Array<any> | DataSourceOptions | (((options: { data: Record<string, any>, key: any }) => Array<any> | Store | DataSourceOptions)) | null | Store | Record<string, any>>,
+    displayExpr: [Function, String] as PropType<(((data: any) => string)) | string>,
+    valueExpr: [String, Function] as PropType<string | (((data: any) => string | number | boolean))>
   }
 };
 
@@ -2386,8 +2582,8 @@ const DxMyConfig = {
     "update:y": null,
   },
   props: {
-    x: String,
-    y: String
+    x: String as PropType<HorizontalAlignment>,
+    y: String as PropType<VerticalAlignment>
   }
 };
 
@@ -2408,7 +2604,7 @@ const DxNumericRuleConfig = {
   props: {
     ignoreEmptyValue: Boolean,
     message: String,
-    type: String
+    type: String as PropType<ValidationRuleType>
   }
 };
 
@@ -2492,14 +2688,14 @@ const DxPagerConfig = {
     "update:visible": null,
   },
   props: {
-    allowedPageSizes: [Array, String],
-    displayMode: String,
+    allowedPageSizes: [Array, String] as PropType<(Array<number | PagerPageSize>) | Mode>,
+    displayMode: String as PropType<DisplayMode>,
     infoText: String,
     label: String,
     showInfo: Boolean,
     showNavigationButtons: Boolean,
     showPageSizeSelector: Boolean,
-    visible: [Boolean, String]
+    visible: [Boolean, String] as PropType<boolean | Mode>
   }
 };
 
@@ -2543,7 +2739,7 @@ const DxPatternRuleConfig = {
     ignoreEmptyValue: Boolean,
     message: String,
     pattern: [RegExp, String],
-    type: String
+    type: String as PropType<ValidationRuleType>
   }
 };
 
@@ -2614,9 +2810,9 @@ const DxPopupConfig = {
   },
   props: {
     accessKey: String,
-    animation: Object,
-    bindingOptions: Object,
-    closeOnOutsideClick: [Boolean, Function],
+    animation: Object as PropType<Record<string, any>>,
+    bindingOptions: Object as PropType<Record<string, any>>,
+    closeOnOutsideClick: [Boolean, Function] as PropType<boolean | (((event: event) => boolean))>,
     container: {},
     contentTemplate: {},
     deferRendering: Boolean,
@@ -2627,28 +2823,28 @@ const DxPopupConfig = {
     enableBodyScroll: Boolean,
     focusStateEnabled: Boolean,
     fullScreen: Boolean,
-    height: [Function, Number, String],
-    hideOnOutsideClick: [Boolean, Function],
+    height: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
+    hideOnOutsideClick: [Boolean, Function] as PropType<boolean | (((event: event) => boolean))>,
     hideOnParentScroll: Boolean,
     hint: String,
     hoverStateEnabled: Boolean,
-    maxHeight: [Function, Number, String],
-    maxWidth: [Function, Number, String],
-    minHeight: [Function, Number, String],
-    minWidth: [Function, Number, String],
-    onContentReady: Function,
-    onDisposing: Function,
-    onHidden: Function,
-    onHiding: Function,
-    onInitialized: Function,
-    onOptionChanged: Function,
-    onResize: Function,
-    onResizeEnd: Function,
-    onResizeStart: Function,
-    onShowing: Function,
-    onShown: Function,
-    onTitleRendered: Function,
-    position: [Function, Object, String],
+    maxHeight: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
+    maxWidth: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
+    minHeight: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
+    minWidth: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
+    onContentReady: Function as PropType<((e: EventInfo<any>) => void)>,
+    onDisposing: Function as PropType<((e: EventInfo<any>) => void)>,
+    onHidden: Function as PropType<((e: EventInfo<any>) => void)>,
+    onHiding: Function as PropType<((e: { cancel: boolean | any, component: dxOverlay<any>, element: any, model: any }) => void)>,
+    onInitialized: Function as PropType<((e: { component: Component<any>, element: any }) => void)>,
+    onOptionChanged: Function as PropType<((e: { component: DOMComponent, element: any, fullName: string, model: any, name: string, previousValue: any, value: any }) => void)>,
+    onResize: Function as PropType<((e: { component: dxPopup, element: any, event: event, height: number, model: any, width: number }) => void)>,
+    onResizeEnd: Function as PropType<((e: { component: dxPopup, element: any, event: event, height: number, model: any, width: number }) => void)>,
+    onResizeStart: Function as PropType<((e: { component: dxPopup, element: any, event: event, height: number, model: any, width: number }) => void)>,
+    onShowing: Function as PropType<((e: { cancel: boolean | any, component: dxOverlay<any>, element: any, model: any }) => void)>,
+    onShown: Function as PropType<((e: EventInfo<any>) => void)>,
+    onTitleRendered: Function as PropType<((e: { component: dxPopup, element: any, model: any, titleElement: any }) => void)>,
+    position: [Function, String, Object] as PropType<((() => void)) | PositionAlignment | PositionConfig | Record<string, any>>,
     resizeEnabled: Boolean,
     restorePosition: Boolean,
     rtlEnabled: Boolean,
@@ -2659,9 +2855,9 @@ const DxPopupConfig = {
     tabIndex: Number,
     title: String,
     titleTemplate: {},
-    toolbarItems: Array,
+    toolbarItems: Array as PropType<Array<dxPopupToolbarItem>>,
     visible: Boolean,
-    width: [Function, Number, String],
+    width: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
     wrapperAttr: {}
   }
 };
@@ -2690,13 +2886,13 @@ const DxPositionConfig = {
     "update:offset": null,
   },
   props: {
-    at: [Object, String],
+    at: [Object, String] as PropType<Record<string, any> | PositionAlignment>,
     boundary: {},
-    boundaryOffset: [Object, String],
-    collision: [Object, String],
-    my: [Object, String],
+    boundaryOffset: [Object, String] as PropType<Record<string, any> | string>,
+    collision: [String, Object] as PropType<CollisionResolutionCombination | Record<string, any>>,
+    my: [Object, String] as PropType<Record<string, any> | PositionAlignment>,
     of: {},
-    offset: [Object, String]
+    offset: [Object, String] as PropType<Record<string, any> | string>
   }
 };
 
@@ -2705,6 +2901,13 @@ prepareConfigurationComponentConfig(DxPositionConfig);
 const DxPosition = defineComponent(DxPositionConfig);
 
 (DxPosition as any).$_optionName = "position";
+(DxPosition as any).$_expectedChildren = {
+  at: { isCollectionItem: false, optionName: "at" },
+  boundaryOffset: { isCollectionItem: false, optionName: "boundaryOffset" },
+  collision: { isCollectionItem: false, optionName: "collision" },
+  my: { isCollectionItem: false, optionName: "my" },
+  offset: { isCollectionItem: false, optionName: "offset" }
+};
 
 const DxRangeRuleConfig = {
   emits: {
@@ -2723,7 +2926,7 @@ const DxRangeRuleConfig = {
     message: String,
     min: [Date, Number, String],
     reevaluate: Boolean,
-    type: String
+    type: String as PropType<ValidationRuleType>
   }
 };
 
@@ -2775,7 +2978,7 @@ const DxRequiredRuleConfig = {
   props: {
     message: String,
     trim: Boolean,
-    type: String
+    type: String as PropType<ValidationRuleType>
   }
 };
 
@@ -2823,21 +3026,21 @@ const DxRowDraggingConfig = {
     autoScroll: Boolean,
     boundary: {},
     container: {},
-    cursorOffset: [Object, String],
+    cursorOffset: [Object, String] as PropType<Record<string, any> | string>,
     data: {},
-    dragDirection: String,
+    dragDirection: String as PropType<DragDirection>,
     dragTemplate: {},
-    dropFeedbackMode: String,
+    dropFeedbackMode: String as PropType<DragHighlight>,
     filter: String,
     group: String,
     handle: String,
-    onAdd: Function,
-    onDragChange: Function,
-    onDragEnd: Function,
-    onDragMove: Function,
-    onDragStart: Function,
-    onRemove: Function,
-    onReorder: Function,
+    onAdd: Function as PropType<((e: { component: GridBase, dropInsideItem: boolean, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, fromIndex: number, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable, toData: any, toIndex: number }) => void)>,
+    onDragChange: Function as PropType<((e: { cancel: boolean, component: GridBase, dropInsideItem: boolean, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, fromIndex: number, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable, toData: any, toIndex: number }) => void)>,
+    onDragEnd: Function as PropType<((e: { cancel: boolean, component: GridBase, dropInsideItem: boolean, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, fromIndex: number, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable, toData: any, toIndex: number }) => void)>,
+    onDragMove: Function as PropType<((e: { cancel: boolean, component: GridBase, dropInsideItem: boolean, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, fromIndex: number, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable, toData: any, toIndex: number }) => void)>,
+    onDragStart: Function as PropType<((e: { cancel: boolean, component: GridBase, event: event, fromData: any, fromIndex: number, itemData: any, itemElement: any }) => void)>,
+    onRemove: Function as PropType<((e: { component: GridBase, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, fromIndex: number, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable, toData: any, toIndex: number }) => void)>,
+    onReorder: Function as PropType<((e: { component: GridBase, dropInsideItem: boolean, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, fromIndex: number, itemData: any, itemElement: any, promise: any, toComponent: dxSortable | dxDraggable, toData: any, toIndex: number }) => void)>,
     scrollSensitivity: Number,
     scrollSpeed: Number,
     showDragIcons: Boolean
@@ -2868,15 +3071,15 @@ const DxScrollingConfig = {
     "update:useNative": null,
   },
   props: {
-    columnRenderingMode: String,
-    mode: String,
+    columnRenderingMode: String as PropType<DataRenderMode>,
+    mode: String as PropType<DataGridScrollMode>,
     preloadEnabled: Boolean,
     renderAsync: Boolean,
-    rowRenderingMode: String,
+    rowRenderingMode: String as PropType<DataRenderMode>,
     scrollByContent: Boolean,
     scrollByThumb: Boolean,
-    showScrollbar: String,
-    useNative: [Boolean, String]
+    showScrollbar: String as PropType<ScrollbarMode>,
+    useNative: [Boolean, String] as PropType<boolean | Mode>
   }
 };
 
@@ -2899,8 +3102,8 @@ const DxSearchConfig = {
   props: {
     editorOptions: {},
     enabled: Boolean,
-    mode: String,
-    searchExpr: [Array, Function, String],
+    mode: String as PropType<SearchMode>,
+    searchExpr: [Array, Function, String] as PropType<(Array<(() => any) | string>) | ((() => any)) | string>,
     timeout: Number
   }
 };
@@ -2956,12 +3159,12 @@ const DxSelectionConfig = {
   props: {
     allowSelectAll: Boolean,
     deferred: Boolean,
-    mode: String,
+    mode: String as PropType<SingleMultipleOrNone>,
     recursive: Boolean,
-    selectAllMode: String,
+    selectAllMode: String as PropType<SelectAllMode>,
     selectByClick: Boolean,
-    sensitivity: String,
-    showCheckBoxesMode: String
+    sensitivity: String as PropType<SelectionSensitivity>,
+    showCheckBoxesMode: String as PropType<SelectionColumnDisplayMode>
   }
 };
 
@@ -2987,16 +3190,16 @@ const DxShowConfig = {
     "update:type": null,
   },
   props: {
-    complete: Function,
+    complete: Function as PropType<(($element: any, config: AnimationConfig) => void)>,
     delay: Number,
-    direction: String,
+    direction: String as PropType<Direction>,
     duration: Number,
     easing: String,
-    from: Object,
+    from: Object as PropType<AnimationState | Record<string, any>>,
     staggerDelay: Number,
-    start: Function,
-    to: Object,
-    type: String
+    start: Function as PropType<(($element: any, config: AnimationConfig) => void)>,
+    to: Object as PropType<AnimationState | Record<string, any>>,
+    type: String as PropType<AnimationType>
   }
 };
 
@@ -3005,6 +3208,10 @@ prepareConfigurationComponentConfig(DxShowConfig);
 const DxShow = defineComponent(DxShowConfig);
 
 (DxShow as any).$_optionName = "show";
+(DxShow as any).$_expectedChildren = {
+  from: { isCollectionItem: false, optionName: "from" },
+  to: { isCollectionItem: false, optionName: "to" }
+};
 
 const DxSortByGroupSummaryInfoConfig = {
   emits: {
@@ -3016,7 +3223,7 @@ const DxSortByGroupSummaryInfoConfig = {
   },
   props: {
     groupColumn: String,
-    sortOrder: String,
+    sortOrder: String as PropType<SortOrder>,
     summaryItem: [Number, String]
   }
 };
@@ -3042,7 +3249,7 @@ const DxSortingConfig = {
     ascendingText: String,
     clearText: String,
     descendingText: String,
-    mode: String,
+    mode: String as PropType<SingleMultipleOrNone>,
     showSortIndexes: Boolean
   }
 };
@@ -3065,12 +3272,12 @@ const DxStateStoringConfig = {
     "update:type": null,
   },
   props: {
-    customLoad: Function,
-    customSave: Function,
+    customLoad: Function as PropType<(() => any)>,
+    customSave: Function as PropType<((gridState: any) => void)>,
     enabled: Boolean,
     savingTimeout: Number,
     storageKey: String,
-    type: String
+    type: String as PropType<StateStoreType>
   }
 };
 
@@ -3097,7 +3304,7 @@ const DxStringLengthRuleConfig = {
     message: String,
     min: Number,
     trim: Boolean,
-    type: String
+    type: String as PropType<ValidationRuleType>
   }
 };
 
@@ -3123,12 +3330,12 @@ const DxSummaryConfig = {
     "update:totalItems": null,
   },
   props: {
-    calculateCustomSummary: Function,
-    groupItems: Array,
+    calculateCustomSummary: Function as PropType<((options: { component: dxDataGrid, groupIndex: number, name: string, summaryProcess: string, totalValue: any, value: any }) => void)>,
+    groupItems: Array as PropType<Array<Record<string, any>>>,
     recalculateWhileEditing: Boolean,
     skipEmptyValues: Boolean,
-    texts: Object,
-    totalItems: Array
+    texts: Object as PropType<Record<string, any>>,
+    totalItems: Array as PropType<Array<Record<string, any>>>
   }
 };
 
@@ -3283,7 +3490,7 @@ const DxToConfig = {
   props: {
     left: Number,
     opacity: Number,
-    position: Object,
+    position: Object as PropType<PositionConfig | Record<string, any>>,
     scale: Number,
     top: Number
   }
@@ -3294,6 +3501,9 @@ prepareConfigurationComponentConfig(DxToConfig);
 const DxTo = defineComponent(DxToConfig);
 
 (DxTo as any).$_optionName = "to";
+(DxTo as any).$_expectedChildren = {
+  position: { isCollectionItem: false, optionName: "position" }
+};
 
 const DxToolbarConfig = {
   emits: {
@@ -3305,7 +3515,7 @@ const DxToolbarConfig = {
   },
   props: {
     disabled: Boolean,
-    items: Array,
+    items: Array as PropType<Array<DataGridPredefinedToolbarItem | dxDataGridToolbarItem>>,
     visible: Boolean
   }
 };
@@ -3341,16 +3551,16 @@ const DxToolbarItemConfig = {
     cssClass: String,
     disabled: Boolean,
     html: String,
-    locateInMenu: String,
-    location: String,
+    locateInMenu: String as PropType<LocateInMenuMode>,
+    location: String as PropType<ToolbarItemLocation>,
     menuItemTemplate: {},
     options: {},
-    showText: String,
+    showText: String as PropType<ShowTextMode>,
     template: {},
     text: String,
-    toolbar: String,
+    toolbar: String as PropType<ToolbarLocation>,
     visible: Boolean,
-    widget: String
+    widget: String as PropType<ToolbarItemComponent>
   }
 };
 
@@ -3377,16 +3587,16 @@ const DxTotalItemConfig = {
     "update:valueFormat": null,
   },
   props: {
-    alignment: String,
+    alignment: String as PropType<HorizontalAlignment>,
     column: String,
     cssClass: String,
-    customizeText: Function,
+    customizeText: Function as PropType<((itemInfo: { value: string | number | Date, valueText: string }) => string)>,
     displayFormat: String,
     name: String,
     showInColumn: String,
     skipEmptyValues: Boolean,
-    summaryType: String,
-    valueFormat: [Object, Function, String]
+    summaryType: String as PropType<string | SummaryType>,
+    valueFormat: [Object, String, Function] as PropType<Format | CommonFormat | (((value: number | Date) => string)) | Record<string, any> | string>
   }
 };
 
@@ -3417,8 +3627,8 @@ const DxValidationRuleConfig = {
     "update:validationCallback": null,
   },
   props: {
-    comparisonTarget: Function,
-    comparisonType: String,
+    comparisonTarget: Function as PropType<(() => any)>,
+    comparisonType: String as PropType<ComparisonOperator>,
     ignoreEmptyValue: Boolean,
     max: [Date, Number, String],
     message: String,
@@ -3426,8 +3636,8 @@ const DxValidationRuleConfig = {
     pattern: [RegExp, String],
     reevaluate: Boolean,
     trim: Boolean,
-    type: String,
-    validationCallback: Function
+    type: String as PropType<ValidationRuleType>,
+    validationCallback: Function as PropType<((options: { column: Record<string, any>, data: Record<string, any>, formItem: Record<string, any>, rule: Record<string, any>, validator: Record<string, any>, value: string | number }) => boolean)>
   }
 };
 
@@ -3454,10 +3664,10 @@ const DxValueFormatConfig = {
   },
   props: {
     currency: String,
-    formatter: Function,
-    parser: Function,
+    formatter: Function as PropType<((value: number | Date) => string)>,
+    parser: Function as PropType<((value: string) => number | Date)>,
     precision: Number,
-    type: String,
+    type: String as PropType<CommonFormat | string>,
     useCurrencyAccountingStyle: Boolean
   }
 };

@@ -1,3 +1,8 @@
+import {
+  beforeEach,
+  describe, expect, it, jest,
+} from '@jest/globals';
+
 import type { ScrollableInstance } from './scroll';
 import { getMemoizeScrollTo } from './scroll';
 

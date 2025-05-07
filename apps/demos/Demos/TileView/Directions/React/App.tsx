@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react';
-import TileView, { TileViewTypes } from 'devextreme-react/tile-view';
-import SelectBox, { SelectBoxTypes } from 'devextreme-react/select-box';
+import TileView, { type TileViewTypes } from 'devextreme-react/tile-view';
+import SelectBox, { type SelectBoxTypes } from 'devextreme-react/select-box';
 import RenderHomeItem from './HomeItem.tsx';
 import { homes, directionLabel } from './data.ts';
 

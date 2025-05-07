@@ -1,7 +1,8 @@
 import registerComponent from '@js/core/component_registrator';
 import type { dxElementWrapper } from '@js/core/renderer';
+import type { OptionChanged } from '@ts/core/widget/types';
 
-import type { Properties as ToolbarBaseProperties } from './m_toolbar.base';
+import type { ToolbarBaseProperties } from './m_toolbar.base';
 import ToolbarBase from './m_toolbar.base';
 import { toggleItemFocusableElementTabIndex } from './m_toolbar.utils';
 import { MultiLineStrategy } from './strategy/m_toolbar.multiline';
@@ -118,7 +119,6 @@ class Toolbar extends ToolbarBase {
   }
 
   _arrangeItems(): void {
-    // @ts-expect-error
     if (this.$element().is(':hidden')) {
       return;
     }
@@ -158,7 +158,7 @@ class Toolbar extends ToolbarBase {
     return itemData.location === undefined || itemData.locateInMenu === 'never';
   }
 
-  _optionChanged(args: Record<string, unknown>): void {
+  _optionChanged(args: OptionChanged<Properties>): void {
     const { name, value } = args;
 
     this._layoutStrategy._optionChanged(name, value);
@@ -182,11 +182,11 @@ class Toolbar extends ToolbarBase {
   }
 
   // it is not public
-  updateDimensions() {
+  updateDimensions(): void {
     this._dimensionChanged();
   }
 }
-// @ts-expect-error
+
 registerComponent('dxToolbar', Toolbar);
 
 export default Toolbar;

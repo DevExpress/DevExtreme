@@ -30,7 +30,7 @@
 </template>
 <script setup lang="ts">
 import {
-  DxChart, DxSeries, DxCommonSeriesSettings, DxPoint, DxLegend, DxChartTypes,
+  DxChart, DxSeries, DxCommonSeriesSettings, DxPoint, DxLegend, type DxChartTypes,
 } from 'devextreme-vue/chart';
 import { dataSource } from './data.ts';
 import MarkerTemplate from './MarkerTemplate.vue';

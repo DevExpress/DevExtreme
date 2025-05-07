@@ -10,7 +10,7 @@ if (!/localhost/.test(document.location.host)) {
 
 let modulePrefix = '';
 // @ts-ignore
-if (window && window.config.packageConfigPaths) {
+if (window && window.config?.packageConfigPaths) {
   modulePrefix = '/app';
 }
 
@@ -26,6 +26,8 @@ export class AppComponent {
   constructor(service: Service) {
     this.employees = service.getEmployees();
   }
+
+  calculateCellValue = ({ Title, FirstName, LastName }) => [Title, FirstName, LastName].join(' ');
 }
 
 @NgModule({

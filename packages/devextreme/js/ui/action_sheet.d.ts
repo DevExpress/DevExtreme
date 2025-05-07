@@ -14,7 +14,7 @@ import {
     InitializedEventInfo,
     ChangedOptionInfo,
     ItemInfo,
-} from '../events/index';
+} from '../common/core/events';
 
 import CollectionWidget, {
     CollectionWidgetItem,
@@ -244,7 +244,7 @@ export interface dxActionSheetItem<TKey = any> extends CollectionWidgetItem {
      * @default 'normal'
      * @public
      */
-    type?: ButtonType;
+    type?: ButtonType | string;
     /**
      * @docid
      * @default 'outlined'

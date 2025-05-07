@@ -1,10 +1,9 @@
 import type { InfernoEffect } from '@devextreme/runtime/inferno';
 import { createReRenderEffect, InfernoWrapperComponent } from '@devextreme/runtime/inferno';
 import type { JSXTemplate, RefObject } from '@devextreme-generator/declarations';
-import { getTemplate } from '@ts/core/r1/utils/index';
 import { Fragment } from 'inferno';
 
-import type { GroupOrientation, TimePanelData } from '../../types';
+import type { GroupOrientation, TimePanelData } from '../../../types';
 import type { DateTimeCellTemplateProps, DefaultProps, PropsWithViewContext } from '../types';
 import { AllDayPanelTitle } from './all_day_panel_title';
 import { CellBase, CellBaseDefaultProps } from './cell';
@@ -46,7 +45,6 @@ export class TimePanelTable extends InfernoWrapperComponent<TimePanelTableProps>
       topVirtualRowHeight,
       bottomVirtualRowHeight,
     } = timePanelData;
-    const TimeCellTemplateComponent = getTemplate(timeCellTemplate);
 
     return (
       // @ts-ignore
@@ -116,7 +114,7 @@ export class TimePanelTable extends InfernoWrapperComponent<TimePanelTableProps>
                       isFirstGroupCell={isFirstGroupCell}
                       isLastGroupCell={isLastGroupCell}
                       index={cellIndex}
-                      timeCellTemplate={TimeCellTemplateComponent}
+                      timeCellTemplate={timeCellTemplate}
                       highlighted={highlighted}
                     />
                   </Row>

@@ -2,9 +2,9 @@ import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { DxCheckBoxModule } from 'devextreme-angular';
-import { DxDataGridModule, DxDataGridTypes } from 'devextreme-angular/ui/data-grid';
+import { DxDataGridModule, type DxDataGridTypes } from 'devextreme-angular/ui/data-grid';
 import {
-  Service, Employee, Task, Status,
+  Service, type Employee, type Task, type Status,
 } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
@@ -13,7 +13,7 @@ if (!/localhost/.test(document.location.host)) {
 
 let modulePrefix = '';
 // @ts-ignore
-if (window && window.config.packageConfigPaths) {
+if (window && window.config?.packageConfigPaths) {
   modulePrefix = '/app';
 }
 

@@ -69,7 +69,7 @@ import {
   DxSummary,
   DxSortByGroupSummaryInfo,
   DxTotalItem,
-  DxDataGridTypes,
+  type DxDataGridTypes,
 } from 'devextreme-vue/data-grid';
 import { exportDataGrid } from 'devextreme/pdf_exporter';
 import { jsPDF } from 'jspdf';

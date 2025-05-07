@@ -128,7 +128,8 @@ $fluent-dropdowneditor-invalid-badge-size: $fluent-invalid-badge-size + $fluent-
   }
 
   .dx-list-group-header,
-  .dx-list-item-content {
+  .dx-list-item-content,
+  .dx-list-select-all-label {
     font-size: $fluent-dropdowneditor-list-font-size;
     line-height: $fluent-dropdowneditor-list-line-height;
   }

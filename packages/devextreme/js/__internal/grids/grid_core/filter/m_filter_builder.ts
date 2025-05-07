@@ -1,6 +1,6 @@
+import messageLocalization from '@js/common/core/localization/message';
 import $ from '@js/core/renderer';
 import { extend } from '@js/core/utils/extend';
-import messageLocalization from '@js/localization/message';
 import FilterBuilder from '@js/ui/filter_builder';
 import Popup from '@js/ui/popup/ui.popup';
 import ScrollView from '@js/ui/scroll_view';

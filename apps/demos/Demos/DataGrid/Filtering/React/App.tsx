@@ -2,17 +2,17 @@ import React, { useCallback, useRef, useState } from 'react';
 import DataGrid, {
   Column, FilterRow, HeaderFilter, Search, SearchPanel, Pager,
 } from 'devextreme-react/data-grid';
-import SelectBox, { SelectBoxTypes } from 'devextreme-react/select-box';
-import CheckBox, { CheckBoxTypes } from 'devextreme-react/check-box';
+import SelectBox, { type SelectBoxTypes } from 'devextreme-react/select-box';
+import CheckBox, { type CheckBoxTypes } from 'devextreme-react/check-box';
 
 import { orders } from './data.ts';
 
-const saleAmountEditorOptions = { 
-  format: 'currency', 
-  showClearButton: true, 
+const saleAmountEditorOptions = {
+  format: 'currency',
+  showClearButton: true,
   inputAttr: {
     'aria-label': 'Filter cell',
-  }, 
+  },
 };
 const filterLabel = { 'aria-label': 'Filter' };
 

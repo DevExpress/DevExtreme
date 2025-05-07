@@ -1,9 +1,9 @@
 import { getOuterHeight } from 'core/utils/size';
-import dragEvents from 'events/drag';
+import dragEvents from 'common/core/events/drag';
 import 'generic_light.css!';
 import $ from 'jquery';
 import resizeCallbacks from 'core/utils/resize_callbacks';
-import dateLocalization from 'localization/date';
+import dateLocalization from 'common/core/localization/date';
 
 import '__internal/scheduler/workspaces/m_work_space_day';
 const CELL_CLASS = 'dx-scheduler-date-table-cell';

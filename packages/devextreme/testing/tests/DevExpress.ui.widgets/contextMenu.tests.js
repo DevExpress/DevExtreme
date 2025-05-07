@@ -4,13 +4,14 @@ import domAdapter from '__internal/core/m_dom_adapter';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import support from '__internal/core/utils/m_support';
 import { implementationsMap, getWidth, getHeight } from 'core/utils/size';
-import fx from 'animation/fx';
+import fx from 'common/core/animation/fx';
 import ContextMenu from 'ui/context_menu';
-import { addNamespace } from 'events/utils/index';
-import contextMenuEvent from 'events/contextmenu';
-import holdEvent from 'events/hold';
+import { addNamespace } from 'common/core/events/utils/index';
+import contextMenuEvent from 'common/core/events/contextmenu';
+import holdEvent from 'common/core/events/hold';
 import { isFunction, isRenderer } from 'core/utils/type';
 import config from 'core/config';
+import themes from 'ui/themes';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import ariaAccessibilityTestHelper from '../../helpers/ariaAccessibilityTestHelper.js';
 
@@ -270,6 +271,59 @@ QUnit.module('Rendering', moduleConfig, () => {
         const $icon = instance.itemsContainer().find(`.${DX_MENU_ITEM_CLASS} .${DX_ICON_CLASS}`);
 
         assert.strictEqual($icon.attr('alt'), 'dxContextMenu item icon');
+    });
+
+    QUnit.test('contextMenu maxHeight should not include border width if no theme is specified (T1258002)', function(assert) {
+        const stub = sinon.stub(themes, 'current').returns('none');
+
+        try {
+            const contextMenu = new ContextMenu(this.$element, {
+                items: [{ text: 'Test Item' }],
+                visible: true
+            });
+
+            const overlayMaxHeight = contextMenu.itemsContainer().css('maxHeight');
+            const contentHeight = $(`.${DX_CONTEXT_MENU_ITEMS_CONTAINER_CLASS}`).outerHeight();
+
+            assert.strictEqual(overlayMaxHeight, `${contentHeight}px`, 'overlay maxHeight does not include border width');
+        } finally {
+            stub.restore();
+        }
+    });
+});
+
+QUnit.module('Repaint', moduleConfig, () => {
+    QUnit.test('On repaint all submenus should be hidden without console errors (T1257288)', function(assert) {
+        if(!isDeviceDesktop(assert)) {
+            return;
+        }
+
+        const instance = new ContextMenu(this.$element, {
+            items: [{ text: 'Item 1', items: [{ text: 'Item 11' }, { text: 'Item 12' }] }],
+            visible: true,
+            showSubmenuMode: { name: 'onHover', delay: 0 },
+            onItemClick: (e) => e.component.repaint(),
+        });
+
+        const $itemsContainer = instance.itemsContainer();
+        const $rootItem = $itemsContainer.find(`.${DX_MENU_ITEM_CLASS}`).eq(0);
+
+        $($itemsContainer).trigger($.Event('dxhoverstart', { target: $rootItem.get(0) }));
+        this.clock.tick(0);
+
+        const $submenus = $(`.${DX_SUBMENU_CLASS}`);
+        const $nestedSubmenu = $submenus.eq(1);
+        const $nestedSubmenuItem = $nestedSubmenu.find(`.${DX_MENU_ITEM_CLASS}`).eq(0);
+
+        assert.strictEqual($submenus.length, 2, 'Nested submenu is shown');
+
+        try {
+            $($nestedSubmenuItem).trigger('dxclick');
+
+            assert.ok(true, 'No errors were thrown');
+        } catch(e) {
+            assert.ok(false, `Error: ${e.message}`);
+        }
     });
 });
 
@@ -1105,6 +1159,30 @@ QUnit.module('Showing and hiding submenus', moduleConfig, () => {
         assert.equal(submenus.length, 2, 'submenu was rendered');
         assert.ok(submenus.eq(1).is(':visible'), 'submenu was expanded');
         assert.ok($rootItem.hasClass(DX_MENU_ITEM_EXPANDED_CLASS), 'expanded class was not removed');
+    });
+
+    [0, { show: 0 }].forEach((delay) => {
+        QUnit.test(`submenu should be shown synchronously if showSubmenuMode.delay=${JSON.stringify(delay)} (T1247739)`, function(assert) {
+            if(!isDeviceDesktop(assert)) {
+                return;
+            }
+
+            const instance = new ContextMenu(this.$element, {
+                items: [{ text: 1, items: [{ text: 11 }] }],
+                visible: true,
+                showSubmenuMode: { name: 'onHover', delay },
+            });
+
+            const $itemsContainer = instance.itemsContainer();
+            const $rootItem = $itemsContainer.find(`.${DX_MENU_ITEM_CLASS}`).eq(0);
+
+            $($itemsContainer).trigger($.Event('dxhoverstart', { target: $rootItem.get(0) }));
+
+            const $submenus = $rootItem.find(`.${DX_SUBMENU_CLASS}`);
+
+            assert.strictEqual($submenus.length, 1, 'submenu was rendered');
+            assert.strictEqual($submenus.eq(0).is(':visible'), true, 'submenu was expanded');
+        });
     });
 
     QUnit.test('context menu should not blink after second hover on root item', function(assert) {

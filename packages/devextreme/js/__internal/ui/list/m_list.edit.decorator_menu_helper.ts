@@ -1,5 +1,4 @@
 const EditDecoratorMenuHelperMixin = {
-
   _menuEnabled() {
     return !!this._menuItems().length;
   },

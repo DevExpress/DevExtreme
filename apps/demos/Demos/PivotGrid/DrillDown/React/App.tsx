@@ -2,7 +2,7 @@ import React, { useCallback, useRef, useState } from 'react';
 import {
   PivotGrid,
   FieldChooser,
-  PivotGridTypes,
+  type PivotGridTypes,
 } from 'devextreme-react/pivot-grid';
 import { DataGrid, Column, DataGridRef } from 'devextreme-react/data-grid';
 import { Popup } from 'devextreme-react/popup';

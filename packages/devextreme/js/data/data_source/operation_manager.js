@@ -1,1 +1,1 @@
-export { default } from '../../__internal/data/data_source/m_operation_manager';
+export { default } from '../../common/data/data_source/operation_manager';

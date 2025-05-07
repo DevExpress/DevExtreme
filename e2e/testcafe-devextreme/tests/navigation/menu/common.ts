@@ -87,6 +87,50 @@ test('Menu items render', async (t) => {
   return createWidget('dxMenu', { items: menuItems, cssClass: 'custom-class' }, '#menu');
 });
 
+test('Menu selected focused item', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  const menu = new Menu();
+
+  await t
+    .click(menu.getItem(0))
+    .pressKey('down');
+
+  await testScreenshot(t, takeScreenshot, 'Menu selected focused item.png', {
+    element: '#container',
+  });
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  await appendElementTo('#container', 'div', 'menu');
+  await setAttribute('#container', 'style', 'box-sizing: border-box; width: 200px; height: 200px; padding: 8px;');
+
+  await insertStylesheetRulesToPage('.custom-class { border: 2px solid green !important }');
+
+  const menuItems = [
+    {
+      text: 'remove',
+      icon: 'remove',
+      items: [
+        {
+          text: 'user',
+          icon: 'user',
+          selected: true,
+        },
+        {
+          text: 'save',
+          icon: 'save',
+        },
+      ],
+    },
+    { text: 'user', icon: 'user' },
+  ] as Item[];
+
+  return createWidget('dxMenu', { items: menuItems, cssClass: 'custom-class' }, '#menu');
+});
+
 safeSizeTest('Menu delimiter appearance when orientation is horizontal', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const menu = new Menu();

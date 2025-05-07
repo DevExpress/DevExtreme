@@ -3,7 +3,7 @@ import {
     NativeEventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
-} from '../events/index';
+} from '../common/core/events';
 
 import {
     TextEditorButton,
@@ -178,13 +178,13 @@ export interface dxNumberBoxOptions extends dxTextEditorOptions<dxNumberBox> {
      * @default undefined
      * @public
      */
-    max?: number;
+    max?: number | undefined;
     /**
      * @docid
      * @default undefined
      * @public
      */
-    min?: number;
+    min?: number | undefined;
     /**
      * @docid
      * @default "text"

@@ -45,13 +45,14 @@
 </template>
 <script setup lang="ts">
 import { ref } from 'vue';
+type Annotation = Record<'data', Record<string, unknown>>;
 
 const props = withDefaults(defineProps<{
-  annotation?: Record<'data', Record<string, unknown>>
+  annotation?: Annotation
 }>(), {
-  annotation: () => ({}),
+  annotation: () => ({} as Annotation),
 });
-const data = ref(props.annotation.data);
+const data = ref<Record<string, any>>(props.annotation.data);
 const getImagePath = () => `../../../../images/flags/${data.value.name.replace(/\s/, '')}.svg`;
 const formatNumber = new Intl.NumberFormat('en-US', {
   minimumFractionDigits: 0,

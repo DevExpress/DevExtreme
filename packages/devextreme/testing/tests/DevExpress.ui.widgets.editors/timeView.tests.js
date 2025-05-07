@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import dateLocalization from 'localization/date';
+import dateLocalization from 'common/core/localization/date';
 import keyboardMock from '../../helpers/keyboardMock.js';
 
 import 'ui/date_box/ui.time_view';

@@ -16,6 +16,7 @@ import {
 
 
 
+import { GridBase } from 'devextreme/common/grids';
 
 import {
     NestedOptionHost,
@@ -31,10 +32,10 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoDataGridFilterPanelComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get customizeText(): Function {
+    get customizeText(): ((e: { component: GridBase, filterValue: Record<string, any>, text: string }) => string) {
         return this._getOption('customizeText');
     }
-    set customizeText(value: Function) {
+    set customizeText(value: ((e: { component: GridBase, filterValue: Record<string, any>, text: string }) => string)) {
         this._setOption('customizeText', value);
     }
 

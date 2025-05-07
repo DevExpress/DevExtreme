@@ -1,12 +1,3 @@
-type Pointer = {
-    down: 'dxpointerdown';
-    up: 'dxpointerup';
-    move: 'dxpointermove';
-    cancel: 'dxpointercancel';
-    enter: 'dxpointerenter';
-    leave: 'dxpointerleave';
-    over: 'dxpointerover';
-    out: 'dxpointerout';
-};
-declare const pointer: Pointer;
+import pointer from '../common/core/events/pointer';
+
 export default pointer;

@@ -9,11 +9,11 @@ import devices from '__internal/core/m_devices';
 import { version } from 'core/version';
 import errors from 'core/errors';
 import gridCore from '__internal/grids/data_grid/m_core';
-import { DataSource } from 'data/data_source/data_source';
-import ArrayStore from 'data/array_store';
-import messageLocalization from 'localization/message';
+import { DataSource } from 'common/data/data_source/data_source';
+import ArrayStore from 'common/data/array_store';
+import messageLocalization from 'common/core/localization/message';
 import { setTemplateEngine } from 'core/templates/template_engine_registry';
-import fx from 'animation/fx';
+import fx from 'common/core/animation/fx';
 import config from 'core/config';
 import ajaxMock from '../../helpers/ajaxMock.js';
 import DataGridWrapper from '../../helpers/wrappers/dataGridWrappers.js';
@@ -1044,7 +1044,8 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
         // assert
         assert.equal(toolbarItemOffset, $(dataGrid.$element()).find('.dx-datagrid-search-panel').offset().top, 'toolbar search panel is aligned');
-        assert.roughEqual(toolbarItemOffset, $(dataGrid.$element()).find('.dx-toolbar .dx-datebox').offset().top, 0.51, 'toolbar custom item is aligned');
+        // NOTE: Changed during Chrome133 update from 0.51 -> 1.51
+        assert.roughEqual(toolbarItemOffset, $(dataGrid.$element()).find('.dx-toolbar .dx-datebox').offset().top, 1.51, 'toolbar custom item is aligned');
     });
 
     QUnit.test('Column caption should have correct width when sorting is disabled (T1009923)', function(assert) {
@@ -2879,7 +2880,7 @@ QUnit.module('Assign options', baseModuleConfig, () => {
         dataGrid.option('toolbar.visible', false);
 
         // assert
-        assert.ok($toolbar.hasClass('dx-state-invisible'), 'toolbar is hidden');
+        assert.ok($toolbar.parent().hasClass('dx-hidden'), 'toolbar is hidden');
 
         // act
         dataGrid.option('toolbar.disabled', true);

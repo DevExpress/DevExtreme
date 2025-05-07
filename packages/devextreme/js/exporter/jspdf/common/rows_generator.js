@@ -1,6 +1,6 @@
 import { isDate, isDefined, isNumeric } from '../../../core/utils/type';
-import dateLocalization from '../../../localization/date';
-import numberLocalization from '../../../localization/number';
+import dateLocalization from '../../../common/core/localization/date';
+import numberLocalization from '../../../common/core/localization/number';
 import { toPdfUnit } from './pdf_utils';
 
 const defaultStyles = {

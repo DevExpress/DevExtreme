@@ -1,13 +1,10 @@
 import $ from 'jquery';
 
 import TypingIndicator from '__internal/ui/chat/typingindicator';
-import Avatar from '__internal/ui/chat/avatar';
 
 const CHAT_TYPINGINDICATOR_TEXT_CLASS = 'dx-chat-typingindicator-text';
 const CHAT_TYPINGINDICATOR_BUBBLE_CLASS = 'dx-chat-typingindicator-bubble';
 const CHAT_TYPINGINDICATOR_CIRCLE_CLASS = 'dx-chat-typingindicator-circle';
-
-const AVATAR_CLASS = 'dx-avatar';
 
 const moduleConfig = {
     beforeEach: function() {
@@ -16,12 +13,10 @@ const moduleConfig = {
 
             this.$element = $(this.instance.$element());
 
-            this.getAvatarElement = () => this.$element.find(`.${AVATAR_CLASS}`);
             this.getTextElement = () => this.$element.find(`.${CHAT_TYPINGINDICATOR_TEXT_CLASS}`);
             this.getBubbleElement = () => this.$element.find(`.${CHAT_TYPINGINDICATOR_BUBBLE_CLASS}`);
             this.getCircleElement = () => this.$element.find(`.${CHAT_TYPINGINDICATOR_CIRCLE_CLASS}`);
 
-            this.$avatar = this.getAvatarElement();
             this.$text = this.getTextElement();
             this.$bubble = this.getBubbleElement();
             this.$circles = this.getCircleElement();
@@ -38,16 +33,6 @@ const moduleConfig = {
 };
 
 QUnit.module('TypingIndicator', moduleConfig, () => {
-    QUnit.module('Avatar integration', () => {
-        QUnit.test('should have correct name option', function(assert) {
-            this.reinit({ typingUsers: [{}] });
-
-            const avatar = Avatar.getInstance(this.$avatar);
-
-            assert.strictEqual(avatar.option('name'), '');
-        });
-    });
-
     QUnit.module('Render', () => {
         QUnit.test('should be initialized with correct type', function(assert) {
             assert.ok(this.instance instanceof TypingIndicator);
@@ -111,7 +96,6 @@ QUnit.module('TypingIndicator', moduleConfig, () => {
 
                 this.instance.option({ typingUsers: [{ name: 'Alice' }] });
 
-                assert.strictEqual(this.getAvatarElement().length, 1, 'Avatar is rendered');
                 assert.strictEqual(this.getTextElement().length, 1, 'Text is rendered');
                 assert.strictEqual(this.getBubbleElement().length, 1, 'Bubble is rendered');
                 assert.strictEqual(this.getCircleElement().length, 3, 'Circles are rendered');

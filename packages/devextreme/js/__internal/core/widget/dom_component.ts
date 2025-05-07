@@ -1,3 +1,4 @@
+import { resize as resizeEvent, visibility as visibilityEvents } from '@js/common/core/events/short';
 import config from '@js/core/config';
 import type { DOMComponentOptions } from '@js/core/dom_component';
 import { getPublicElement } from '@js/core/element';
@@ -14,9 +15,9 @@ import windowResizeCallbacks from '@js/core/utils/resize_callbacks';
 import { addShadowDomStyles } from '@js/core/utils/shadow_dom';
 import { isDefined, isFunction, isString } from '@js/core/utils/type';
 import { hasWindow } from '@js/core/utils/window';
-import { resize as resizeEvent, visibility as visibilityEvents } from '@js/events/short';
 import license, { peekValidationPerformed } from '@ts/core/license/license_validation';
 import TemplateManagerModule from '@ts/core/m_template_manager';
+import { uiLayerInitialized } from '@ts/core/utils/m_common';
 
 import { Component } from './component';
 import type { OptionChanged } from './types';
@@ -52,7 +53,7 @@ class DOMComponent<
   private _requireRefresh?: boolean;
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  private _templateManager?: any;
+  _templateManager!: any;
 
   // eslint-disable-next-line max-len
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type, @typescript-eslint/explicit-module-boundary-types
@@ -98,6 +99,8 @@ class DOMComponent<
     if (!validationAlreadyPerformed && peekValidationPerformed()) {
       config({ licenseKey: '' });
     }
+
+    uiLayerInitialized.resolve();
   }
 
   _createElement(element: Element): void {
@@ -332,7 +335,7 @@ class DOMComponent<
     element: string | HTMLElement | dxElementWrapper,
     component: string | (new (...args) => TTComponent),
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    componentConfiguration: TTComponent extends Component<any, infer TTProperties>
+    componentConfiguration?: TTComponent extends Component<any, infer TTProperties>
       ? TTProperties
       : Record<string, unknown>,
   ): TTComponent {
@@ -493,7 +496,7 @@ class DOMComponent<
     return this._$element;
   }
 
-  element(): Element {
+  element(): HTMLElement {
     const $element = this.$element();
 
     return getPublicElement($element);

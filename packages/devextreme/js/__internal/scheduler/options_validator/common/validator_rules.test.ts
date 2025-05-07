@@ -1,4 +1,8 @@
 import {
+  afterEach, beforeEach,
+  describe, expect, it, jest,
+} from '@jest/globals';
+import {
   mustBeDivisibleBy,
   mustBeGreaterThan,
   mustBeInRange,
@@ -9,11 +13,7 @@ import {
 import * as validationFunctions from './validation_functions';
 
 describe('mustBeInteger', () => {
-  let mock: jest.SpyInstance<unknown> | null = null;
-
-  beforeEach(() => {
-    mock = jest.spyOn(validationFunctions, 'isInteger');
-  });
+  const mock = jest.spyOn(validationFunctions, 'isInteger');
 
   afterEach(() => {
     mock?.mockReset();
@@ -49,11 +49,7 @@ describe('mustBeInteger', () => {
 });
 
 describe('mustBeGreaterThan', () => {
-  let mock: jest.SpyInstance<unknown> | null = null;
-
-  beforeEach(() => {
-    mock = jest.spyOn(validationFunctions, 'greaterThan');
-  });
+  const mock = jest.spyOn(validationFunctions, 'greaterThan');
 
   afterEach(() => {
     mock?.mockReset();
@@ -101,11 +97,7 @@ describe('mustBeGreaterThan', () => {
 });
 
 describe('mustBeLessThan', () => {
-  let mock: jest.SpyInstance<unknown> | null = null;
-
-  beforeEach(() => {
-    mock = jest.spyOn(validationFunctions, 'lessThan');
-  });
+  const mock = jest.spyOn(validationFunctions, 'lessThan');
 
   afterEach(() => {
     mock?.mockReset();
@@ -153,11 +145,7 @@ describe('mustBeLessThan', () => {
 });
 
 describe('mustBeInRange', () => {
-  let mock: jest.SpyInstance<unknown> | null = null;
-
-  beforeEach(() => {
-    mock = jest.spyOn(validationFunctions, 'inRange');
-  });
+  const mock = jest.spyOn(validationFunctions, 'inRange');
 
   afterEach(() => {
     mock?.mockReset();
@@ -196,7 +184,7 @@ describe('mustBeInRange', () => {
 });
 
 describe('mustBeDivisibleBy', () => {
-  let mock: jest.SpyInstance<unknown> | null = null;
+  let mock = jest.spyOn(validationFunctions, 'divisibleBy');
 
   beforeEach(() => {
     mock = jest.spyOn(validationFunctions, 'divisibleBy');

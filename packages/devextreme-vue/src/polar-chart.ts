@@ -1,6 +1,85 @@
-import PolarChart, { Properties } from "devextreme/viz/polar_chart";
+import { PropType } from "vue";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
+import PolarChart, { Properties } from "devextreme/viz/polar_chart";
+import  DataSource from "devextreme/data/data_source";
+import {
+ dxPolarChartAnnotationConfig,
+ dxPolarChartCommonAnnotationConfig,
+ ArgumentAxisClickEvent,
+ DisposingEvent,
+ DoneEvent,
+ DrawnEvent,
+ ExportedEvent,
+ ExportingEvent,
+ FileSavingEvent,
+ IncidentOccurredEvent,
+ InitializedEvent,
+ LegendClickEvent,
+ OptionChangedEvent,
+ PointClickEvent,
+ PointHoverChangedEvent,
+ PointSelectionChangedEvent,
+ SeriesClickEvent,
+ SeriesHoverChangedEvent,
+ SeriesSelectionChangedEvent,
+ TooltipHiddenEvent,
+ TooltipShownEvent,
+ ZoomEndEvent,
+ ZoomStartEvent,
+ PolarChartSeries,
+ PolarChartSeriesType,
+ ValueAxisVisualRangeUpdateMode,
+} from "devextreme/viz/polar_chart";
+import {
+ SeriesLabel,
+ SeriesPoint,
+ Palette,
+ PaletteExtensionMode,
+ LabelOverlap,
+ Theme,
+ AnimationEaseMode,
+ Font,
+ TextOverflow,
+ AnnotationType,
+ WordWrap,
+ DashStyle,
+ ChartsDataType,
+ DiscreteAxisDivisionMode,
+ ArgumentAxisHoverMode,
+ TimeInterval,
+ AxisScaleType,
+ ChartsColor,
+ SeriesHoverMode,
+ SeriesSelectionMode,
+ RelativePosition,
+ HatchDirection,
+ LegendItem,
+ LegendHoverMode,
+ PointInteractionMode,
+ PointSymbol,
+ ValueErrorBarDisplayMode,
+ ValueErrorBarType,
+} from "devextreme/common/charts";
+import {
+ DataSourceOptions,
+} from "devextreme/common/data";
+import {
+ Store,
+} from "devextreme/data/store";
+import {
+ SingleOrMultiple,
+ Format,
+ ExportFormat,
+ HorizontalAlignment,
+ Position,
+ Orientation,
+ VerticalEdge,
+} from "devextreme/common";
+import {
+ Format as LocalizationFormat,
+} from "devextreme/common/core/localization";
+import  * as CommonChartTypes from "devextreme/common/charts";
 import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
@@ -71,65 +150,65 @@ interface DxPolarChart extends AccessibleOptions {
 
 const componentConfig = {
   props: {
-    adaptiveLayout: Object,
-    animation: [Boolean, Object],
-    annotations: Array,
-    argumentAxis: Object,
+    adaptiveLayout: Object as PropType<Record<string, any>>,
+    animation: [Boolean, Object] as PropType<boolean | Record<string, any>>,
+    annotations: Array as PropType<Array<any | dxPolarChartAnnotationConfig>>,
+    argumentAxis: Object as PropType<Record<string, any>>,
     barGroupPadding: Number,
     barGroupWidth: Number,
-    commonAnnotationSettings: Object,
-    commonAxisSettings: Object,
-    commonSeriesSettings: Object,
+    commonAnnotationSettings: Object as PropType<dxPolarChartCommonAnnotationConfig | Record<string, any>>,
+    commonAxisSettings: Object as PropType<Record<string, any>>,
+    commonSeriesSettings: Object as PropType<Record<string, any>>,
     containerBackgroundColor: String,
-    customizeAnnotation: Function,
-    customizeLabel: Function,
-    customizePoint: Function,
-    dataPrepareSettings: Object,
-    dataSource: {},
+    customizeAnnotation: Function as PropType<((annotation: dxPolarChartAnnotationConfig | any) => dxPolarChartAnnotationConfig)>,
+    customizeLabel: Function as PropType<((pointInfo: any) => SeriesLabel)>,
+    customizePoint: Function as PropType<((pointInfo: any) => SeriesPoint)>,
+    dataPrepareSettings: Object as PropType<Record<string, any>>,
+    dataSource: [Array, Object, String] as PropType<Array<any> | DataSource | DataSourceOptions | null | Store | string | Record<string, any>>,
     disabled: Boolean,
-    elementAttr: Object,
-    export: Object,
-    legend: Object,
-    loadingIndicator: Object,
-    margin: Object,
+    elementAttr: Object as PropType<Record<string, any>>,
+    export: Object as PropType<Record<string, any>>,
+    legend: Object as PropType<Record<string, any>>,
+    loadingIndicator: Object as PropType<Record<string, any>>,
+    margin: Object as PropType<Record<string, any>>,
     negativesAsZeroes: Boolean,
-    onArgumentAxisClick: Function,
-    onDisposing: Function,
-    onDone: Function,
-    onDrawn: Function,
-    onExported: Function,
-    onExporting: Function,
-    onFileSaving: Function,
-    onIncidentOccurred: Function,
-    onInitialized: Function,
-    onLegendClick: Function,
-    onOptionChanged: Function,
-    onPointClick: Function,
-    onPointHoverChanged: Function,
-    onPointSelectionChanged: Function,
-    onSeriesClick: Function,
-    onSeriesHoverChanged: Function,
-    onSeriesSelectionChanged: Function,
-    onTooltipHidden: Function,
-    onTooltipShown: Function,
-    onZoomEnd: Function,
-    onZoomStart: Function,
-    palette: [Array, String],
-    paletteExtensionMode: String,
+    onArgumentAxisClick: Function as PropType<((e: ArgumentAxisClickEvent) => void)>,
+    onDisposing: Function as PropType<((e: DisposingEvent) => void)>,
+    onDone: Function as PropType<((e: DoneEvent) => void)>,
+    onDrawn: Function as PropType<((e: DrawnEvent) => void)>,
+    onExported: Function as PropType<((e: ExportedEvent) => void)>,
+    onExporting: Function as PropType<((e: ExportingEvent) => void)>,
+    onFileSaving: Function as PropType<((e: FileSavingEvent) => void)>,
+    onIncidentOccurred: Function as PropType<((e: IncidentOccurredEvent) => void)>,
+    onInitialized: Function as PropType<((e: InitializedEvent) => void)>,
+    onLegendClick: Function as PropType<((e: LegendClickEvent) => void)>,
+    onOptionChanged: Function as PropType<((e: OptionChangedEvent) => void)>,
+    onPointClick: Function as PropType<((e: PointClickEvent) => void)>,
+    onPointHoverChanged: Function as PropType<((e: PointHoverChangedEvent) => void)>,
+    onPointSelectionChanged: Function as PropType<((e: PointSelectionChangedEvent) => void)>,
+    onSeriesClick: Function as PropType<((e: SeriesClickEvent) => void)>,
+    onSeriesHoverChanged: Function as PropType<((e: SeriesHoverChangedEvent) => void)>,
+    onSeriesSelectionChanged: Function as PropType<((e: SeriesSelectionChangedEvent) => void)>,
+    onTooltipHidden: Function as PropType<((e: TooltipHiddenEvent) => void)>,
+    onTooltipShown: Function as PropType<((e: TooltipShownEvent) => void)>,
+    onZoomEnd: Function as PropType<((e: ZoomEndEvent) => void)>,
+    onZoomStart: Function as PropType<((e: ZoomStartEvent) => void)>,
+    palette: [Array, String] as PropType<Array<string> | Palette>,
+    paletteExtensionMode: String as PropType<PaletteExtensionMode>,
     pathModified: Boolean,
-    pointSelectionMode: String,
+    pointSelectionMode: String as PropType<SingleOrMultiple>,
     redrawOnResize: Boolean,
-    resolveLabelOverlapping: String,
+    resolveLabelOverlapping: String as PropType<LabelOverlap>,
     rtlEnabled: Boolean,
-    series: [Array, Object],
-    seriesSelectionMode: String,
-    seriesTemplate: Object,
-    size: Object,
-    theme: String,
-    title: [Object, String],
-    tooltip: Object,
+    series: [Array, Object] as PropType<Array<PolarChartSeries> | PolarChartSeries | Record<string, any>>,
+    seriesSelectionMode: String as PropType<SingleOrMultiple>,
+    seriesTemplate: Object as PropType<Record<string, any>>,
+    size: Object as PropType<Record<string, any>>,
+    theme: String as PropType<Theme>,
+    title: [Object, String] as PropType<Record<string, any> | string>,
+    tooltip: Object as PropType<Record<string, any>>,
     useSpiderWeb: Boolean,
-    valueAxis: Object
+    valueAxis: Object as PropType<Record<string, any>>
   },
   emits: {
     "update:isActive": null,
@@ -263,7 +342,7 @@ const DxAnimationConfig = {
   },
   props: {
     duration: Number,
-    easing: String,
+    easing: String as PropType<AnimationEaseMode>,
     enabled: Boolean,
     maxPointCountSupported: Number
   }
@@ -319,14 +398,14 @@ const DxAnnotationConfig = {
     argument: [Date, Number, String],
     arrowLength: Number,
     arrowWidth: Number,
-    border: Object,
+    border: Object as PropType<Record<string, any>>,
     color: String,
-    customizeTooltip: Function,
+    customizeTooltip: Function as PropType<((annotation: dxPolarChartAnnotationConfig | any) => Record<string, any>)>,
     data: {},
     description: String,
-    font: Object,
+    font: Object as PropType<Font | Record<string, any>>,
     height: Number,
-    image: [Object, String],
+    image: [Object, String] as PropType<Record<string, any> | string>,
     name: String,
     offsetX: Number,
     offsetY: Number,
@@ -335,16 +414,16 @@ const DxAnnotationConfig = {
     paddingTopBottom: Number,
     radius: Number,
     series: String,
-    shadow: Object,
+    shadow: Object as PropType<Record<string, any>>,
     template: {},
     text: String,
-    textOverflow: String,
+    textOverflow: String as PropType<TextOverflow>,
     tooltipEnabled: Boolean,
     tooltipTemplate: {},
-    type: String,
+    type: String as PropType<AnnotationType>,
     value: [Date, Number, String],
     width: Number,
-    wordWrap: String,
+    wordWrap: String as PropType<WordWrap>,
     x: Number,
     y: Number
   }
@@ -378,7 +457,7 @@ const DxAnnotationBorderConfig = {
   props: {
     color: String,
     cornerRadius: Number,
-    dashStyle: String,
+    dashStyle: String as PropType<DashStyle>,
     opacity: Number,
     visible: Boolean,
     width: Number
@@ -429,34 +508,34 @@ const DxArgumentAxisConfig = {
   },
   props: {
     allowDecimals: Boolean,
-    argumentType: String,
+    argumentType: String as PropType<ChartsDataType>,
     axisDivisionFactor: Number,
-    categories: Array,
+    categories: Array as PropType<Array<Date | number | string>>,
     color: String,
-    constantLines: Array,
-    constantLineStyle: Object,
-    discreteAxisDivisionMode: String,
+    constantLines: Array as PropType<Array<Record<string, any>>>,
+    constantLineStyle: Object as PropType<Record<string, any>>,
+    discreteAxisDivisionMode: String as PropType<DiscreteAxisDivisionMode>,
     endOnTick: Boolean,
     firstPointOnStartAngle: Boolean,
-    grid: Object,
-    hoverMode: String,
+    grid: Object as PropType<Record<string, any>>,
+    hoverMode: String as PropType<ArgumentAxisHoverMode>,
     inverted: Boolean,
-    label: Object,
+    label: Object as PropType<Record<string, any>>,
     linearThreshold: Number,
     logarithmBase: Number,
-    minorGrid: Object,
-    minorTick: Object,
+    minorGrid: Object as PropType<Record<string, any>>,
+    minorTick: Object as PropType<Record<string, any>>,
     minorTickCount: Number,
-    minorTickInterval: [Number, Object, String],
+    minorTickInterval: [Number, Object, String] as PropType<number | Record<string, any> | TimeInterval>,
     opacity: Number,
     originValue: Number,
     period: Number,
     startAngle: Number,
-    strips: Array,
-    stripStyle: Object,
-    tick: Object,
-    tickInterval: [Number, Object, String],
-    type: String,
+    strips: Array as PropType<Array<Record<string, any>>>,
+    stripStyle: Object as PropType<Record<string, any>>,
+    tick: Object as PropType<Record<string, any>>,
+    tickInterval: [Number, Object, String] as PropType<number | Record<string, any> | TimeInterval>,
+    type: String as PropType<AxisScaleType>,
     visible: Boolean,
     width: Number
   }
@@ -551,10 +630,10 @@ const DxArgumentFormatConfig = {
   },
   props: {
     currency: String,
-    formatter: Function,
-    parser: Function,
+    formatter: Function as PropType<((value: number | Date) => string)>,
+    parser: Function as PropType<((value: string) => number | Date)>,
     precision: Number,
-    type: String,
+    type: String as PropType<Format | string>,
     useCurrencyAccountingStyle: Boolean
   }
 };
@@ -578,12 +657,12 @@ const DxAxisLabelConfig = {
     "update:visible": null,
   },
   props: {
-    customizeHint: Function,
-    customizeText: Function,
-    font: Object,
-    format: [Object, Function, String],
+    customizeHint: Function as PropType<((argument: { value: Date | number | string, valueText: string }) => string)>,
+    customizeText: Function as PropType<((argument: { value: Date | number | string, valueText: string }) => string)>,
+    font: Object as PropType<Font | Record<string, any>>,
+    format: [Object, String, Function] as PropType<LocalizationFormat | Format | (((value: number | Date) => string)) | Record<string, any> | string>,
     indentFromAxis: Number,
-    overlappingBehavior: String,
+    overlappingBehavior: String as PropType<LabelOverlap>,
     visible: Boolean
   }
 };
@@ -593,6 +672,10 @@ prepareConfigurationComponentConfig(DxAxisLabelConfig);
 const DxAxisLabel = defineComponent(DxAxisLabelConfig);
 
 (DxAxisLabel as any).$_optionName = "label";
+(DxAxisLabel as any).$_expectedChildren = {
+  font: { isCollectionItem: false, optionName: "font" },
+  format: { isCollectionItem: false, optionName: "format" }
+};
 
 const DxBorderConfig = {
   emits: {
@@ -608,7 +691,7 @@ const DxBorderConfig = {
   props: {
     color: String,
     cornerRadius: Number,
-    dashStyle: String,
+    dashStyle: String as PropType<DashStyle>,
     opacity: Number,
     visible: Boolean,
     width: Number
@@ -683,14 +766,14 @@ const DxCommonAnnotationSettingsConfig = {
     argument: [Date, Number, String],
     arrowLength: Number,
     arrowWidth: Number,
-    border: Object,
+    border: Object as PropType<Record<string, any>>,
     color: String,
-    customizeTooltip: Function,
+    customizeTooltip: Function as PropType<((annotation: dxPolarChartAnnotationConfig | any) => Record<string, any>)>,
     data: {},
     description: String,
-    font: Object,
+    font: Object as PropType<Font | Record<string, any>>,
     height: Number,
-    image: [Object, String],
+    image: [Object, String] as PropType<Record<string, any> | string>,
     offsetX: Number,
     offsetY: Number,
     opacity: Number,
@@ -698,16 +781,16 @@ const DxCommonAnnotationSettingsConfig = {
     paddingTopBottom: Number,
     radius: Number,
     series: String,
-    shadow: Object,
+    shadow: Object as PropType<Record<string, any>>,
     template: {},
     text: String,
-    textOverflow: String,
+    textOverflow: String as PropType<TextOverflow>,
     tooltipEnabled: Boolean,
     tooltipTemplate: {},
-    type: String,
+    type: String as PropType<AnnotationType>,
     value: [Date, Number, String],
     width: Number,
-    wordWrap: String,
+    wordWrap: String as PropType<WordWrap>,
     x: Number,
     y: Number
   }
@@ -718,6 +801,13 @@ prepareConfigurationComponentConfig(DxCommonAnnotationSettingsConfig);
 const DxCommonAnnotationSettings = defineComponent(DxCommonAnnotationSettingsConfig);
 
 (DxCommonAnnotationSettings as any).$_optionName = "commonAnnotationSettings";
+(DxCommonAnnotationSettings as any).$_expectedChildren = {
+  annotationBorder: { isCollectionItem: false, optionName: "border" },
+  border: { isCollectionItem: false, optionName: "border" },
+  font: { isCollectionItem: false, optionName: "font" },
+  image: { isCollectionItem: false, optionName: "image" },
+  shadow: { isCollectionItem: false, optionName: "shadow" }
+};
 
 const DxCommonAxisSettingsConfig = {
   emits: {
@@ -742,17 +832,17 @@ const DxCommonAxisSettingsConfig = {
   props: {
     allowDecimals: Boolean,
     color: String,
-    constantLineStyle: Object,
-    discreteAxisDivisionMode: String,
+    constantLineStyle: Object as PropType<Record<string, any>>,
+    discreteAxisDivisionMode: String as PropType<DiscreteAxisDivisionMode>,
     endOnTick: Boolean,
-    grid: Object,
+    grid: Object as PropType<Record<string, any>>,
     inverted: Boolean,
-    label: Object,
-    minorGrid: Object,
-    minorTick: Object,
+    label: Object as PropType<Record<string, any>>,
+    minorGrid: Object as PropType<Record<string, any>>,
+    minorTick: Object as PropType<Record<string, any>>,
     opacity: Number,
-    stripStyle: Object,
-    tick: Object,
+    stripStyle: Object as PropType<Record<string, any>>,
+    tick: Object as PropType<Record<string, any>>,
     visible: Boolean,
     width: Number
   }
@@ -767,8 +857,12 @@ const DxCommonAxisSettings = defineComponent(DxCommonAxisSettingsConfig);
   commonAxisSettingsLabel: { isCollectionItem: false, optionName: "label" },
   commonAxisSettingsMinorTick: { isCollectionItem: false, optionName: "minorTick" },
   commonAxisSettingsTick: { isCollectionItem: false, optionName: "tick" },
+  constantLineStyle: { isCollectionItem: false, optionName: "constantLineStyle" },
+  grid: { isCollectionItem: false, optionName: "grid" },
   label: { isCollectionItem: false, optionName: "label" },
+  minorGrid: { isCollectionItem: false, optionName: "minorGrid" },
   minorTick: { isCollectionItem: false, optionName: "minorTick" },
+  stripStyle: { isCollectionItem: false, optionName: "stripStyle" },
   tick: { isCollectionItem: false, optionName: "tick" }
 };
 
@@ -782,9 +876,9 @@ const DxCommonAxisSettingsLabelConfig = {
     "update:visible": null,
   },
   props: {
-    font: Object,
+    font: Object as PropType<Font | Record<string, any>>,
     indentFromAxis: Number,
-    overlappingBehavior: String,
+    overlappingBehavior: String as PropType<LabelOverlap>,
     visible: Boolean
   }
 };
@@ -794,6 +888,9 @@ prepareConfigurationComponentConfig(DxCommonAxisSettingsLabelConfig);
 const DxCommonAxisSettingsLabel = defineComponent(DxCommonAxisSettingsLabelConfig);
 
 (DxCommonAxisSettingsLabel as any).$_optionName = "label";
+(DxCommonAxisSettingsLabel as any).$_expectedChildren = {
+  font: { isCollectionItem: false, optionName: "font" }
+};
 
 const DxCommonAxisSettingsMinorTickConfig = {
   emits: {
@@ -886,28 +983,28 @@ const DxCommonSeriesSettingsConfig = {
     bar: {},
     barPadding: Number,
     barWidth: Number,
-    border: Object,
+    border: Object as PropType<Record<string, any>>,
     closed: Boolean,
-    color: [Object, String],
-    dashStyle: String,
-    hoverMode: String,
-    hoverStyle: Object,
+    color: [Object, String] as PropType<ChartsColor | string | Record<string, any>>,
+    dashStyle: String as PropType<DashStyle>,
+    hoverMode: String as PropType<SeriesHoverMode>,
+    hoverStyle: Object as PropType<Record<string, any>>,
     ignoreEmptyPoints: Boolean,
-    label: Object,
+    label: Object as PropType<Record<string, any>>,
     line: {},
     maxLabelCount: Number,
     minBarSize: Number,
     opacity: Number,
-    point: Object,
+    point: Object as PropType<Record<string, any>>,
     scatter: {},
-    selectionMode: String,
-    selectionStyle: Object,
+    selectionMode: String as PropType<SeriesSelectionMode>,
+    selectionStyle: Object as PropType<Record<string, any>>,
     showInLegend: Boolean,
     stack: String,
     stackedbar: {},
     tagField: String,
-    type: String,
-    valueErrorBar: Object,
+    type: String as PropType<PolarChartSeriesType>,
+    valueErrorBar: Object as PropType<Record<string, any>>,
     valueField: String,
     visible: Boolean,
     width: Number
@@ -945,10 +1042,10 @@ const DxCommonSeriesSettingsHoverStyleConfig = {
     "update:width": null,
   },
   props: {
-    border: Object,
-    color: [Object, String],
-    dashStyle: String,
-    hatching: Object,
+    border: Object as PropType<Record<string, any>>,
+    color: [Object, String] as PropType<ChartsColor | string | Record<string, any>>,
+    dashStyle: String as PropType<DashStyle>,
+    hatching: Object as PropType<Record<string, any>>,
     highlight: Boolean,
     width: Number
   }
@@ -984,15 +1081,15 @@ const DxCommonSeriesSettingsLabelConfig = {
     "update:visible": null,
   },
   props: {
-    argumentFormat: [Object, Function, String],
+    argumentFormat: [Object, String, Function] as PropType<LocalizationFormat | Format | (((value: number | Date) => string)) | Record<string, any> | string>,
     backgroundColor: String,
-    border: Object,
-    connector: Object,
-    customizeText: Function,
+    border: Object as PropType<Record<string, any>>,
+    connector: Object as PropType<Record<string, any>>,
+    customizeText: Function as PropType<((pointInfo: any) => string)>,
     displayFormat: String,
-    font: Object,
-    format: [Object, Function, String],
-    position: String,
+    font: Object as PropType<Font | Record<string, any>>,
+    format: [Object, String, Function] as PropType<LocalizationFormat | Format | (((value: number | Date) => string)) | Record<string, any> | string>,
+    position: String as PropType<RelativePosition>,
     rotationAngle: Number,
     showForZeroValues: Boolean,
     visible: Boolean
@@ -1025,10 +1122,10 @@ const DxCommonSeriesSettingsSelectionStyleConfig = {
     "update:width": null,
   },
   props: {
-    border: Object,
-    color: [Object, String],
-    dashStyle: String,
-    hatching: Object,
+    border: Object as PropType<Record<string, any>>,
+    color: [Object, String] as PropType<ChartsColor | string | Record<string, any>>,
+    dashStyle: String as PropType<DashStyle>,
+    hatching: Object as PropType<Record<string, any>>,
     highlight: Boolean,
     width: Number
   }
@@ -1081,10 +1178,10 @@ const DxConstantLineConfig = {
   },
   props: {
     color: String,
-    dashStyle: String,
+    dashStyle: String as PropType<DashStyle>,
     displayBehindSeries: Boolean,
     extendAxis: Boolean,
-    label: Object,
+    label: Object as PropType<Record<string, any>>,
     value: [Date, Number, String],
     width: Number
   }
@@ -1096,6 +1193,9 @@ const DxConstantLine = defineComponent(DxConstantLineConfig);
 
 (DxConstantLine as any).$_optionName = "constantLines";
 (DxConstantLine as any).$_isCollectionItem = true;
+(DxConstantLine as any).$_expectedChildren = {
+  label: { isCollectionItem: false, optionName: "label" }
+};
 
 const DxConstantLineLabelConfig = {
   emits: {
@@ -1106,7 +1206,7 @@ const DxConstantLineLabelConfig = {
     "update:visible": null,
   },
   props: {
-    font: Object,
+    font: Object as PropType<Font | Record<string, any>>,
     text: String,
     visible: Boolean
   }
@@ -1117,6 +1217,9 @@ prepareConfigurationComponentConfig(DxConstantLineLabelConfig);
 const DxConstantLineLabel = defineComponent(DxConstantLineLabelConfig);
 
 (DxConstantLineLabel as any).$_optionName = "label";
+(DxConstantLineLabel as any).$_expectedChildren = {
+  font: { isCollectionItem: false, optionName: "font" }
+};
 
 const DxConstantLineStyleConfig = {
   emits: {
@@ -1129,8 +1232,8 @@ const DxConstantLineStyleConfig = {
   },
   props: {
     color: String,
-    dashStyle: String,
-    label: Object,
+    dashStyle: String as PropType<DashStyle>,
+    label: Object as PropType<Record<string, any>>,
     width: Number
   }
 };
@@ -1141,7 +1244,6 @@ const DxConstantLineStyle = defineComponent(DxConstantLineStyleConfig);
 
 (DxConstantLineStyle as any).$_optionName = "constantLineStyle";
 (DxConstantLineStyle as any).$_expectedChildren = {
-  constantLineStyleLabel: { isCollectionItem: false, optionName: "label" },
   label: { isCollectionItem: false, optionName: "label" }
 };
 
@@ -1153,7 +1255,7 @@ const DxConstantLineStyleLabelConfig = {
     "update:visible": null,
   },
   props: {
-    font: Object,
+    font: Object as PropType<Font | Record<string, any>>,
     visible: Boolean
   }
 };
@@ -1163,6 +1265,9 @@ prepareConfigurationComponentConfig(DxConstantLineStyleLabelConfig);
 const DxConstantLineStyleLabel = defineComponent(DxConstantLineStyleLabelConfig);
 
 (DxConstantLineStyleLabel as any).$_optionName = "label";
+(DxConstantLineStyleLabel as any).$_expectedChildren = {
+  font: { isCollectionItem: false, optionName: "font" }
+};
 
 const DxDataPrepareSettingsConfig = {
   emits: {
@@ -1175,7 +1280,7 @@ const DxDataPrepareSettingsConfig = {
   props: {
     checkTypeForAllData: Boolean,
     convertToAxisDataType: Boolean,
-    sortingMethod: [Boolean, Function]
+    sortingMethod: [Boolean, Function] as PropType<boolean | (((a: { arg: Date | number | string, val: Date | number | string }, b: { arg: Date | number | string, val: Date | number | string }) => number))>
   }
 };
 
@@ -1201,10 +1306,10 @@ const DxExportConfig = {
     backgroundColor: String,
     enabled: Boolean,
     fileName: String,
-    formats: Array,
+    formats: Array as PropType<Array<ExportFormat>>,
     margin: Number,
     printingEnabled: Boolean,
-    svgToCanvas: Function
+    svgToCanvas: Function as PropType<((svg: any, canvas: any) => any)>
   }
 };
 
@@ -1252,10 +1357,10 @@ const DxFormatConfig = {
   },
   props: {
     currency: String,
-    formatter: Function,
-    parser: Function,
+    formatter: Function as PropType<((value: number | Date) => string)>,
+    parser: Function as PropType<((value: string) => number | Date)>,
     precision: Number,
-    type: String,
+    type: String as PropType<Format | string>,
     useCurrencyAccountingStyle: Boolean
   }
 };
@@ -1299,7 +1404,7 @@ const DxHatchingConfig = {
     "update:width": null,
   },
   props: {
-    direction: String,
+    direction: String as PropType<HatchDirection>,
     opacity: Number,
     step: Number,
     width: Number
@@ -1325,10 +1430,10 @@ const DxHoverStyleConfig = {
     "update:width": null,
   },
   props: {
-    border: Object,
-    color: [Object, String],
-    dashStyle: String,
-    hatching: Object,
+    border: Object as PropType<Record<string, any>>,
+    color: [Object, String] as PropType<ChartsColor | string | Record<string, any>>,
+    dashStyle: String as PropType<DashStyle>,
+    hatching: Object as PropType<Record<string, any>>,
     highlight: Boolean,
     size: Number,
     width: Number
@@ -1340,6 +1445,13 @@ prepareConfigurationComponentConfig(DxHoverStyleConfig);
 const DxHoverStyle = defineComponent(DxHoverStyleConfig);
 
 (DxHoverStyle as any).$_optionName = "hoverStyle";
+(DxHoverStyle as any).$_expectedChildren = {
+  border: { isCollectionItem: false, optionName: "border" },
+  color: { isCollectionItem: false, optionName: "color" },
+  hatching: { isCollectionItem: false, optionName: "hatching" },
+  pointBorder: { isCollectionItem: false, optionName: "border" },
+  seriesBorder: { isCollectionItem: false, optionName: "border" }
+};
 
 const DxImageConfig = {
   emits: {
@@ -1384,18 +1496,18 @@ const DxLabelConfig = {
     "update:visible": null,
   },
   props: {
-    argumentFormat: [Object, Function, String],
+    argumentFormat: [Object, String, Function] as PropType<LocalizationFormat | Format | (((value: number | Date) => string)) | Record<string, any> | string>,
     backgroundColor: String,
-    border: Object,
-    connector: Object,
-    customizeHint: Function,
-    customizeText: Function,
+    border: Object as PropType<Record<string, any>>,
+    connector: Object as PropType<Record<string, any>>,
+    customizeHint: Function as PropType<((argument: { value: Date | number | string, valueText: string }) => string)>,
+    customizeText: Function as PropType<((argument: { value: Date | number | string, valueText: string }) => string)>,
     displayFormat: String,
-    font: Object,
-    format: [Object, Function, String],
+    font: Object as PropType<Font | Record<string, any>>,
+    format: [Object, String, Function] as PropType<LocalizationFormat | Format | (((value: number | Date) => string)) | Record<string, any> | string>,
     indentFromAxis: Number,
-    overlappingBehavior: String,
-    position: String,
+    overlappingBehavior: String as PropType<LabelOverlap>,
+    position: String as PropType<RelativePosition>,
     rotationAngle: Number,
     showForZeroValues: Boolean,
     text: String,
@@ -1408,6 +1520,14 @@ prepareConfigurationComponentConfig(DxLabelConfig);
 const DxLabel = defineComponent(DxLabelConfig);
 
 (DxLabel as any).$_optionName = "label";
+(DxLabel as any).$_expectedChildren = {
+  argumentFormat: { isCollectionItem: false, optionName: "argumentFormat" },
+  border: { isCollectionItem: false, optionName: "border" },
+  connector: { isCollectionItem: false, optionName: "connector" },
+  font: { isCollectionItem: false, optionName: "font" },
+  format: { isCollectionItem: false, optionName: "format" },
+  seriesBorder: { isCollectionItem: false, optionName: "border" }
+};
 
 const DxLegendConfig = {
   emits: {
@@ -1439,27 +1559,27 @@ const DxLegendConfig = {
   },
   props: {
     backgroundColor: String,
-    border: Object,
+    border: Object as PropType<Record<string, any>>,
     columnCount: Number,
     columnItemSpacing: Number,
-    customizeHint: Function,
-    customizeItems: Function,
-    customizeText: Function,
-    font: Object,
-    horizontalAlignment: String,
-    hoverMode: String,
-    itemsAlignment: String,
-    itemTextPosition: String,
-    margin: [Number, Object],
+    customizeHint: Function as PropType<((seriesInfo: { seriesColor: string, seriesIndex: number, seriesName: any }) => string)>,
+    customizeItems: Function as PropType<((items: Array<LegendItem>) => Array<LegendItem>)>,
+    customizeText: Function as PropType<((seriesInfo: { seriesColor: string, seriesIndex: number, seriesName: any }) => string)>,
+    font: Object as PropType<Font | Record<string, any>>,
+    horizontalAlignment: String as PropType<HorizontalAlignment>,
+    hoverMode: String as PropType<LegendHoverMode>,
+    itemsAlignment: String as PropType<HorizontalAlignment>,
+    itemTextPosition: String as PropType<Position>,
+    margin: [Number, Object] as PropType<number | Record<string, any>>,
     markerSize: Number,
     markerTemplate: {},
-    orientation: String,
+    orientation: String as PropType<Orientation>,
     paddingLeftRight: Number,
     paddingTopBottom: Number,
     rowCount: Number,
     rowItemSpacing: Number,
-    title: [Object, String],
-    verticalAlignment: String,
+    title: [Object, String] as PropType<Record<string, any> | string>,
+    verticalAlignment: String as PropType<VerticalEdge>,
     visible: Boolean
   }
 };
@@ -1491,13 +1611,13 @@ const DxLegendTitleConfig = {
     "update:verticalAlignment": null,
   },
   props: {
-    font: Object,
-    horizontalAlignment: String,
-    margin: Object,
+    font: Object as PropType<Font | Record<string, any>>,
+    horizontalAlignment: String as PropType<HorizontalAlignment>,
+    margin: Object as PropType<Record<string, any>>,
     placeholderSize: Number,
-    subtitle: [Object, String],
+    subtitle: [Object, String] as PropType<Record<string, any> | string>,
     text: String,
-    verticalAlignment: String
+    verticalAlignment: String as PropType<VerticalEdge>
   }
 };
 
@@ -1522,7 +1642,7 @@ const DxLegendTitleSubtitleConfig = {
     "update:text": null,
   },
   props: {
-    font: Object,
+    font: Object as PropType<Font | Record<string, any>>,
     offset: Number,
     text: String
   }
@@ -1583,7 +1703,7 @@ const DxLoadingIndicatorConfig = {
   props: {
     backgroundColor: String,
     enabled: Boolean,
-    font: Object,
+    font: Object as PropType<Font | Record<string, any>>,
     show: Boolean,
     text: String
   }
@@ -1753,15 +1873,15 @@ const DxPointConfig = {
     "update:visible": null,
   },
   props: {
-    border: Object,
-    color: [Object, String],
-    hoverMode: String,
-    hoverStyle: Object,
-    image: [Object, String],
-    selectionMode: String,
-    selectionStyle: Object,
+    border: Object as PropType<Record<string, any>>,
+    color: [Object, String] as PropType<ChartsColor | string | Record<string, any>>,
+    hoverMode: String as PropType<PointInteractionMode>,
+    hoverStyle: Object as PropType<Record<string, any>>,
+    image: [Object, String] as PropType<Record<string, any> | string>,
+    selectionMode: String as PropType<PointInteractionMode>,
+    selectionStyle: Object as PropType<Record<string, any>>,
     size: Number,
-    symbol: String,
+    symbol: String as PropType<PointSymbol>,
     visible: Boolean
   }
 };
@@ -1776,9 +1896,6 @@ const DxPoint = defineComponent(DxPointConfig);
   color: { isCollectionItem: false, optionName: "color" },
   hoverStyle: { isCollectionItem: false, optionName: "hoverStyle" },
   image: { isCollectionItem: false, optionName: "image" },
-  pointBorder: { isCollectionItem: false, optionName: "border" },
-  pointHoverStyle: { isCollectionItem: false, optionName: "hoverStyle" },
-  pointSelectionStyle: { isCollectionItem: false, optionName: "selectionStyle" },
   selectionStyle: { isCollectionItem: false, optionName: "selectionStyle" }
 };
 
@@ -1812,8 +1929,8 @@ const DxPointHoverStyleConfig = {
     "update:size": null,
   },
   props: {
-    border: Object,
-    color: [Object, String],
+    border: Object as PropType<Record<string, any>>,
+    color: [Object, String] as PropType<ChartsColor | string | Record<string, any>>,
     size: Number
   }
 };
@@ -1838,8 +1955,8 @@ const DxPointSelectionStyleConfig = {
     "update:size": null,
   },
   props: {
-    border: Object,
-    color: [Object, String],
+    border: Object as PropType<Record<string, any>>,
+    color: [Object, String] as PropType<ChartsColor | string | Record<string, any>>,
     size: Number
   }
 };
@@ -1870,15 +1987,15 @@ const DxPolarChartTitleConfig = {
     "update:wordWrap": null,
   },
   props: {
-    font: Object,
-    horizontalAlignment: String,
-    margin: [Number, Object],
+    font: Object as PropType<Font | Record<string, any>>,
+    horizontalAlignment: String as PropType<HorizontalAlignment>,
+    margin: [Number, Object] as PropType<number | Record<string, any>>,
     placeholderSize: Number,
-    subtitle: [Object, String],
+    subtitle: [Object, String] as PropType<Record<string, any> | string>,
     text: String,
-    textOverflow: String,
-    verticalAlignment: String,
-    wordWrap: String
+    textOverflow: String as PropType<TextOverflow>,
+    verticalAlignment: String as PropType<VerticalEdge>,
+    wordWrap: String as PropType<WordWrap>
   }
 };
 
@@ -1905,11 +2022,11 @@ const DxPolarChartTitleSubtitleConfig = {
     "update:wordWrap": null,
   },
   props: {
-    font: Object,
+    font: Object as PropType<Font | Record<string, any>>,
     offset: Number,
     text: String,
-    textOverflow: String,
-    wordWrap: String
+    textOverflow: String as PropType<TextOverflow>,
+    wordWrap: String as PropType<WordWrap>
   }
 };
 
@@ -1935,10 +2052,10 @@ const DxSelectionStyleConfig = {
     "update:width": null,
   },
   props: {
-    border: Object,
-    color: [Object, String],
-    dashStyle: String,
-    hatching: Object,
+    border: Object as PropType<Record<string, any>>,
+    color: [Object, String] as PropType<ChartsColor | string | Record<string, any>>,
+    dashStyle: String as PropType<DashStyle>,
+    hatching: Object as PropType<Record<string, any>>,
     highlight: Boolean,
     size: Number,
     width: Number
@@ -1950,6 +2067,13 @@ prepareConfigurationComponentConfig(DxSelectionStyleConfig);
 const DxSelectionStyle = defineComponent(DxSelectionStyleConfig);
 
 (DxSelectionStyle as any).$_optionName = "selectionStyle";
+(DxSelectionStyle as any).$_expectedChildren = {
+  border: { isCollectionItem: false, optionName: "border" },
+  color: { isCollectionItem: false, optionName: "color" },
+  hatching: { isCollectionItem: false, optionName: "hatching" },
+  pointBorder: { isCollectionItem: false, optionName: "border" },
+  seriesBorder: { isCollectionItem: false, optionName: "border" }
+};
 
 const DxSeriesConfig = {
   emits: {
@@ -1987,27 +2111,27 @@ const DxSeriesConfig = {
     argumentField: String,
     barPadding: Number,
     barWidth: Number,
-    border: Object,
+    border: Object as PropType<Record<string, any>>,
     closed: Boolean,
-    color: [Object, String],
-    dashStyle: String,
-    hoverMode: String,
-    hoverStyle: Object,
+    color: [Object, String] as PropType<ChartsColor | string | Record<string, any>>,
+    dashStyle: String as PropType<DashStyle>,
+    hoverMode: String as PropType<SeriesHoverMode>,
+    hoverStyle: Object as PropType<Record<string, any>>,
     ignoreEmptyPoints: Boolean,
-    label: Object,
+    label: Object as PropType<Record<string, any>>,
     maxLabelCount: Number,
     minBarSize: Number,
     name: String,
     opacity: Number,
-    point: Object,
-    selectionMode: String,
-    selectionStyle: Object,
+    point: Object as PropType<Record<string, any>>,
+    selectionMode: String as PropType<SeriesSelectionMode>,
+    selectionStyle: Object as PropType<Record<string, any>>,
     showInLegend: Boolean,
     stack: String,
     tag: {},
     tagField: String,
-    type: String,
-    valueErrorBar: Object,
+    type: String as PropType<PolarChartSeriesType>,
+    valueErrorBar: Object as PropType<Record<string, any>>,
     valueField: String,
     visible: Boolean,
     width: Number
@@ -2020,6 +2144,19 @@ const DxSeries = defineComponent(DxSeriesConfig);
 
 (DxSeries as any).$_optionName = "series";
 (DxSeries as any).$_isCollectionItem = true;
+(DxSeries as any).$_expectedChildren = {
+  border: { isCollectionItem: false, optionName: "border" },
+  color: { isCollectionItem: false, optionName: "color" },
+  commonSeriesSettingsHoverStyle: { isCollectionItem: false, optionName: "hoverStyle" },
+  commonSeriesSettingsLabel: { isCollectionItem: false, optionName: "label" },
+  commonSeriesSettingsSelectionStyle: { isCollectionItem: false, optionName: "selectionStyle" },
+  hoverStyle: { isCollectionItem: false, optionName: "hoverStyle" },
+  label: { isCollectionItem: false, optionName: "label" },
+  point: { isCollectionItem: false, optionName: "point" },
+  selectionStyle: { isCollectionItem: false, optionName: "selectionStyle" },
+  seriesBorder: { isCollectionItem: false, optionName: "border" },
+  valueErrorBar: { isCollectionItem: false, optionName: "valueErrorBar" }
+};
 
 const DxSeriesBorderConfig = {
   emits: {
@@ -2032,7 +2169,7 @@ const DxSeriesBorderConfig = {
   },
   props: {
     color: String,
-    dashStyle: String,
+    dashStyle: String as PropType<DashStyle>,
     visible: Boolean,
     width: Number
   }
@@ -2052,7 +2189,7 @@ const DxSeriesTemplateConfig = {
     "update:nameField": null,
   },
   props: {
-    customizeSeries: Function,
+    customizeSeries: Function as PropType<((seriesName: any) => PolarChartSeries)>,
     nameField: String
   }
 };
@@ -2119,7 +2256,7 @@ const DxStripConfig = {
   props: {
     color: String,
     endValue: [Date, Number, String],
-    label: Object,
+    label: Object as PropType<Record<string, any>>,
     startValue: [Date, Number, String]
   }
 };
@@ -2130,6 +2267,9 @@ const DxStrip = defineComponent(DxStripConfig);
 
 (DxStrip as any).$_optionName = "strips";
 (DxStrip as any).$_isCollectionItem = true;
+(DxStrip as any).$_expectedChildren = {
+  label: { isCollectionItem: false, optionName: "label" }
+};
 
 const DxStripLabelConfig = {
   emits: {
@@ -2139,7 +2279,7 @@ const DxStripLabelConfig = {
     "update:text": null,
   },
   props: {
-    font: Object,
+    font: Object as PropType<Font | Record<string, any>>,
     text: String
   }
 };
@@ -2149,6 +2289,9 @@ prepareConfigurationComponentConfig(DxStripLabelConfig);
 const DxStripLabel = defineComponent(DxStripLabelConfig);
 
 (DxStripLabel as any).$_optionName = "label";
+(DxStripLabel as any).$_expectedChildren = {
+  font: { isCollectionItem: false, optionName: "font" }
+};
 
 const DxStripStyleConfig = {
   emits: {
@@ -2157,7 +2300,7 @@ const DxStripStyleConfig = {
     "update:label": null,
   },
   props: {
-    label: Object
+    label: Object as PropType<Record<string, any>>
   }
 };
 
@@ -2167,8 +2310,7 @@ const DxStripStyle = defineComponent(DxStripStyleConfig);
 
 (DxStripStyle as any).$_optionName = "stripStyle";
 (DxStripStyle as any).$_expectedChildren = {
-  label: { isCollectionItem: false, optionName: "label" },
-  stripStyleLabel: { isCollectionItem: false, optionName: "label" }
+  label: { isCollectionItem: false, optionName: "label" }
 };
 
 const DxStripStyleLabelConfig = {
@@ -2178,7 +2320,7 @@ const DxStripStyleLabelConfig = {
     "update:font": null,
   },
   props: {
-    font: Object
+    font: Object as PropType<Font | Record<string, any>>
   }
 };
 
@@ -2187,6 +2329,9 @@ prepareConfigurationComponentConfig(DxStripStyleLabelConfig);
 const DxStripStyleLabel = defineComponent(DxStripStyleLabelConfig);
 
 (DxStripStyleLabel as any).$_optionName = "label";
+(DxStripStyleLabel as any).$_expectedChildren = {
+  font: { isCollectionItem: false, optionName: "font" }
+};
 
 const DxSubtitleConfig = {
   emits: {
@@ -2199,11 +2344,11 @@ const DxSubtitleConfig = {
     "update:wordWrap": null,
   },
   props: {
-    font: Object,
+    font: Object as PropType<Font | Record<string, any>>,
     offset: Number,
     text: String,
-    textOverflow: String,
-    wordWrap: String
+    textOverflow: String as PropType<TextOverflow>,
+    wordWrap: String as PropType<WordWrap>
   }
 };
 
@@ -2212,6 +2357,9 @@ prepareConfigurationComponentConfig(DxSubtitleConfig);
 const DxSubtitle = defineComponent(DxSubtitleConfig);
 
 (DxSubtitle as any).$_optionName = "subtitle";
+(DxSubtitle as any).$_expectedChildren = {
+  font: { isCollectionItem: false, optionName: "font" }
+};
 
 const DxTickConfig = {
   emits: {
@@ -2288,15 +2436,15 @@ const DxTitleConfig = {
     "update:wordWrap": null,
   },
   props: {
-    font: Object,
-    horizontalAlignment: String,
-    margin: [Object, Number],
+    font: Object as PropType<Font | Record<string, any>>,
+    horizontalAlignment: String as PropType<HorizontalAlignment>,
+    margin: [Object, Number] as PropType<Record<string, any> | number>,
     placeholderSize: Number,
-    subtitle: [Object, String],
+    subtitle: [Object, String] as PropType<Record<string, any> | string>,
     text: String,
-    textOverflow: String,
-    verticalAlignment: String,
-    wordWrap: String
+    textOverflow: String as PropType<TextOverflow>,
+    verticalAlignment: String as PropType<VerticalEdge>,
+    wordWrap: String as PropType<WordWrap>
   }
 };
 
@@ -2305,6 +2453,12 @@ prepareConfigurationComponentConfig(DxTitleConfig);
 const DxTitle = defineComponent(DxTitleConfig);
 
 (DxTitle as any).$_optionName = "title";
+(DxTitle as any).$_expectedChildren = {
+  font: { isCollectionItem: false, optionName: "font" },
+  legendTitleSubtitle: { isCollectionItem: false, optionName: "subtitle" },
+  margin: { isCollectionItem: false, optionName: "margin" },
+  polarChartTitleSubtitle: { isCollectionItem: false, optionName: "subtitle" }
+};
 
 const DxTooltipConfig = {
   emits: {
@@ -2330,22 +2484,22 @@ const DxTooltipConfig = {
     "update:zIndex": null,
   },
   props: {
-    argumentFormat: [Object, Function, String],
+    argumentFormat: [Object, String, Function] as PropType<LocalizationFormat | Format | (((value: number | Date) => string)) | Record<string, any> | string>,
     arrowLength: Number,
-    border: Object,
+    border: Object as PropType<Record<string, any>>,
     color: String,
     container: {},
     contentTemplate: {},
     cornerRadius: Number,
-    customizeTooltip: Function,
+    customizeTooltip: Function as PropType<((pointInfo: any) => Record<string, any>)>,
     enabled: Boolean,
-    font: Object,
-    format: [Object, Function, String],
+    font: Object as PropType<Font | Record<string, any>>,
+    format: [Object, String, Function] as PropType<LocalizationFormat | Format | (((value: number | Date) => string)) | Record<string, any> | string>,
     interactive: Boolean,
     opacity: Number,
     paddingLeftRight: Number,
     paddingTopBottom: Number,
-    shadow: Object,
+    shadow: Object as PropType<Record<string, any>>,
     shared: Boolean,
     zIndex: Number
   }
@@ -2377,7 +2531,7 @@ const DxTooltipBorderConfig = {
   },
   props: {
     color: String,
-    dashStyle: String,
+    dashStyle: String as PropType<DashStyle>,
     opacity: Number,
     visible: Boolean,
     width: Number
@@ -2432,37 +2586,37 @@ const DxValueAxisConfig = {
   props: {
     allowDecimals: Boolean,
     axisDivisionFactor: Number,
-    categories: Array,
+    categories: Array as PropType<Array<Date | number | string>>,
     color: String,
-    constantLines: Array,
-    constantLineStyle: Object,
-    discreteAxisDivisionMode: String,
+    constantLines: Array as PropType<Array<Record<string, any>>>,
+    constantLineStyle: Object as PropType<Record<string, any>>,
+    discreteAxisDivisionMode: String as PropType<DiscreteAxisDivisionMode>,
     endOnTick: Boolean,
-    grid: Object,
+    grid: Object as PropType<Record<string, any>>,
     inverted: Boolean,
-    label: Object,
+    label: Object as PropType<Record<string, any>>,
     linearThreshold: Number,
     logarithmBase: Number,
     maxValueMargin: Number,
-    minorGrid: Object,
-    minorTick: Object,
+    minorGrid: Object as PropType<Record<string, any>>,
+    minorTick: Object as PropType<Record<string, any>>,
     minorTickCount: Number,
-    minorTickInterval: [Number, Object, String],
+    minorTickInterval: [Number, Object, String] as PropType<number | Record<string, any> | TimeInterval>,
     minValueMargin: Number,
-    minVisualRangeLength: [Number, Object, String],
+    minVisualRangeLength: [Number, Object, String] as PropType<number | Record<string, any> | TimeInterval>,
     opacity: Number,
     showZero: Boolean,
-    strips: Array,
-    stripStyle: Object,
-    tick: Object,
-    tickInterval: [Number, Object, String],
-    type: String,
+    strips: Array as PropType<Array<Record<string, any>>>,
+    stripStyle: Object as PropType<Record<string, any>>,
+    tick: Object as PropType<Record<string, any>>,
+    tickInterval: [Number, Object, String] as PropType<number | Record<string, any> | TimeInterval>,
+    type: String as PropType<AxisScaleType>,
     valueMarginsEnabled: Boolean,
-    valueType: String,
+    valueType: String as PropType<ChartsDataType>,
     visible: Boolean,
-    visualRange: [Array, Object],
-    visualRangeUpdateMode: String,
-    wholeRange: [Array, Object],
+    visualRange: [Array, Object] as PropType<(Array<Date | number | string>) | CommonChartTypes.VisualRange | Record<string, any>>,
+    visualRangeUpdateMode: String as PropType<ValueAxisVisualRangeUpdateMode>,
+    wholeRange: [Array, Object] as PropType<(Array<Date | number | string>) | CommonChartTypes.VisualRange | Record<string, any>>,
     width: Number
   }
 };
@@ -2474,12 +2628,18 @@ const DxValueAxis = defineComponent(DxValueAxisConfig);
 (DxValueAxis as any).$_optionName = "valueAxis";
 (DxValueAxis as any).$_expectedChildren = {
   axisLabel: { isCollectionItem: false, optionName: "label" },
+  commonAxisSettingsMinorTick: { isCollectionItem: false, optionName: "minorTick" },
   commonAxisSettingsTick: { isCollectionItem: false, optionName: "tick" },
   constantLine: { isCollectionItem: true, optionName: "constantLines" },
+  constantLineStyle: { isCollectionItem: false, optionName: "constantLineStyle" },
+  grid: { isCollectionItem: false, optionName: "grid" },
   label: { isCollectionItem: false, optionName: "label" },
+  minorGrid: { isCollectionItem: false, optionName: "minorGrid" },
+  minorTick: { isCollectionItem: false, optionName: "minorTick" },
   minorTickInterval: { isCollectionItem: false, optionName: "minorTickInterval" },
   minVisualRangeLength: { isCollectionItem: false, optionName: "minVisualRangeLength" },
   strip: { isCollectionItem: true, optionName: "strips" },
+  stripStyle: { isCollectionItem: false, optionName: "stripStyle" },
   tick: { isCollectionItem: false, optionName: "tick" },
   tickInterval: { isCollectionItem: false, optionName: "tickInterval" },
   visualRange: { isCollectionItem: false, optionName: "visualRange" },
@@ -2502,13 +2662,13 @@ const DxValueErrorBarConfig = {
   },
   props: {
     color: String,
-    displayMode: String,
+    displayMode: String as PropType<ValueErrorBarDisplayMode>,
     edgeLength: Number,
     highValueField: String,
     lineWidth: Number,
     lowValueField: String,
     opacity: Number,
-    type: String,
+    type: String as PropType<ValueErrorBarType>,
     value: Number
   }
 };
@@ -2529,7 +2689,7 @@ const DxVisualRangeConfig = {
   },
   props: {
     endValue: [Date, Number, String],
-    length: [Number, Object, String],
+    length: [Number, Object, String] as PropType<number | Record<string, any> | TimeInterval>,
     startValue: [Date, Number, String]
   }
 };
@@ -2553,7 +2713,7 @@ const DxWholeRangeConfig = {
   },
   props: {
     endValue: [Date, Number, String],
-    length: [Number, Object, String],
+    length: [Number, Object, String] as PropType<number | Record<string, any> | TimeInterval>,
     startValue: [Date, Number, String]
   }
 };
@@ -2563,6 +2723,9 @@ prepareConfigurationComponentConfig(DxWholeRangeConfig);
 const DxWholeRange = defineComponent(DxWholeRangeConfig);
 
 (DxWholeRange as any).$_optionName = "wholeRange";
+(DxWholeRange as any).$_expectedChildren = {
+  length: { isCollectionItem: false, optionName: "length" }
+};
 
 export default DxPolarChart;
 export {

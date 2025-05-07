@@ -6,11 +6,11 @@ import typeUtils from 'core/utils/type';
 import { format } from 'core/utils/string';
 import config from 'core/config';
 import devices from '__internal/core/m_devices';
-import { DataSource } from 'data/data_source/data_source';
+import { DataSource } from 'common/data/data_source/data_source';
 import dataGridMocks from '../../helpers/dataGridMocks.js';
 import { findShadowHostOrDocument } from '../../helpers/dataGridHelper.js';
-import dateLocalization from 'localization/date';
-import messageLocalization from 'localization/message';
+import dateLocalization from 'common/core/localization/date';
+import messageLocalization from 'common/core/localization/message';
 import { addShadowDomStyles } from 'core/utils/shadow_dom.js';
 
 import 'ui/data_grid';
@@ -2607,7 +2607,7 @@ QUnit.module('Headers with band columns', {
         assert.strictEqual(this.columnsController.getVisibleColumns(1)[0].sortOrder, 'asc', 'sort order of the first cell of the second row');
     });
 
-    QUnit.test('setRowsOpacity for band column', function(assert) {
+    QUnit.test('set rows opacity for band column', function(assert) {
         // arrange
         const $testElement = $('#container');
 
@@ -2616,7 +2616,7 @@ QUnit.module('Headers with band columns', {
         this.columnHeadersView.render($testElement);
 
         // act
-        this.columnHeadersView.setRowsOpacity(1, '0.5');
+        this.columnHeadersView.toggleDraggableColumnClass(1, true);
 
         const $cellElements = $testElement.find('td');
 

@@ -1,4 +1,4 @@
-import pointerEvents from 'events/pointer';
+import pointerEvents from 'common/core/events/pointer';
 
 export const triggerCellClick = ($cell, singleSelection) => {
     $cell

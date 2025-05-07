@@ -1,13 +1,13 @@
 $(() => {
-  const url = 'https://js.devexpress.com/Demos/Mvc/api/SchedulerData';
+  const url = 'https://js.devexpress.com/Demos/NetCore/api/SchedulerData';
   $('#scheduler').dxScheduler({
     timeZone: 'America/Los_Angeles',
     dataSource: DevExpress.data.AspNet.createStore({
       key: 'AppointmentId',
-      loadUrl: `${url}/Get`,
-      insertUrl: `${url}/Post`,
-      updateUrl: `${url}/Put`,
-      deleteUrl: `${url}/Delete`,
+      loadUrl: url,
+      insertUrl: url,
+      updateUrl: url,
+      deleteUrl: url,
       onBeforeSend(method, ajaxOptions) {
         ajaxOptions.xhrFields = { withCredentials: true };
       },

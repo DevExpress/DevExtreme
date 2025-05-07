@@ -7,7 +7,7 @@
       :markers="markersData"
       v-model:routes="routes"
       width="100%"
-      provider="bing"
+      provider="azure"
       :api-key="apiKey"
     />
     <div class="options">
@@ -36,23 +36,23 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import DxMap from 'devextreme-vue/map';
-import DxSelectBox from 'devextreme-vue/select-box';
+import DxSelectBox, { type DxSelectBoxTypes } from 'devextreme-vue/select-box';
 import { markersData, routesData } from './data.ts';
 
 const routes = ref(routesData);
 const routeModes = ['driving', 'walking'];
 const routeColors = ['blue', 'green', 'red'];
 const apiKey = {
-  bing: 'Aq3LKP2BOmzWY47TZoT1YdieypN_rB6RY9FqBfx-MDCKjvvWBbT68R51xwbL-AqC',
+  azure: '6N8zuPkBsnfwniNAJkldM3cUgm3lXg3y9gkIKy59benICnnepK4DJQQJ99AIACYeBjFllM6LAAAgAZMPGFXE',
 };
 
-function updateRoutesMode({ value: mode }) {
+function updateRoutesMode({ value: mode }: DxSelectBoxTypes.ValueChangedEvent) {
   routes.value = routesData.map((item) => {
     item.mode = mode;
     return item;
   });
 }
-function updateRoutesColor({ value: color }) {
+function updateRoutesColor({ value: color }: DxSelectBoxTypes.ValueChangedEvent) {
   routes.value = routesData.map((item) => {
     item.color = color;
     return item;

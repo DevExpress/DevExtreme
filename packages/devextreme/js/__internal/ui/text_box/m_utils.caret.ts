@@ -3,6 +3,8 @@ import domAdapter from '@js/core/dom_adapter';
 import $ from '@js/core/renderer';
 import { isDefined } from '@js/core/utils/type';
 
+export interface CaretRange { start: number; end: number }
+
 const {
   ios,
   // @ts-expect-error
@@ -11,7 +13,7 @@ const {
 // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
 const isFocusingOnCaretChange = ios || mac;
 
-const getCaret = function (input) {
+const getCaret = (input: HTMLInputElement): CaretRange => {
   let range;
 
   try {
@@ -29,7 +31,7 @@ const getCaret = function (input) {
   return range;
 };
 
-const setCaret = function (input, position) {
+const setCaret = (input, position) => {
   const body = domAdapter.getBody();
   if (!body.contains(input) && !body.contains(input.getRootNode().host)) {
     return;
@@ -40,8 +42,9 @@ const setCaret = function (input, position) {
     input.selectionEnd = position.end;
   } catch (e) { /* empty */ }
 };
-
-const caret = function (input, position?: any, force = false) {
+// @ts-expect-error
+// eslint-disable-next-line @typescript-eslint/no-invalid-void-type
+const caret = (input, position?: any, force = false): CaretRange | undefined => {
   input = $(input).get(0);
 
   if (!isDefined(position)) {

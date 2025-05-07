@@ -1,4 +1,7 @@
 /* eslint-disable max-classes-per-file */
+import eventsEngine from '@js/common/core/events/core/events_engine';
+import { normalizeKeyName } from '@js/common/core/events/utils/index';
+import messageLocalization from '@js/common/core/localization/message';
 import registerComponent from '@js/core/component_registrator';
 import domAdapter from '@js/core/dom_adapter';
 import Guid from '@js/core/guid';
@@ -6,9 +9,6 @@ import $ from '@js/core/renderer';
 import { when } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { isDefined } from '@js/core/utils/type';
-import eventsEngine from '@js/events/core/events_engine';
-import { normalizeKeyName } from '@js/events/utils/index';
-import messageLocalization from '@js/localization/message';
 import Popup from '@js/ui/popup/ui.popup';
 import EditorFactoryMixin from '@js/ui/shared/ui.editor_factory_mixin';
 import TreeView from '@js/ui/tree_view';
@@ -250,8 +250,7 @@ class FilterBuilder extends Widget<any> {
     return action && action(options);
   }
 
-  _initMarkup() {
-    // @ts-expect-error
+  _initMarkup(): void {
     this.$element().addClass(FILTER_BUILDER_CLASS);
     // @ts-expect-error
     super._initMarkup();
@@ -391,11 +390,8 @@ class FilterBuilder extends Widget<any> {
   _createButtonWithMenu(options) {
     const that = this;
     const removeMenu = function () {
-      // @ts-expect-error
       that.$element().find(`.${ACTIVE_CLASS}`).removeClass(ACTIVE_CLASS).attr('aria-expanded', 'false');
-      // @ts-expect-error
       that.$element().find('.dx-overlay .dx-treeview').remove();
-      // @ts-expect-error
       that.$element().find('.dx-overlay').remove();
     };
     const rtlEnabled = this.option('rtlEnabled');
@@ -524,6 +520,7 @@ class FilterBuilder extends Widget<any> {
     const getFullCaption = function (item, items) {
       return allowHierarchicalFields ? getCaptionWithParents(item, items) : item.caption;
     };
+    condition[0] = item.name || item.dataField;
 
     const $fieldButton = this._createButtonWithMenu({
       caption: getFullCaption(item, items),
@@ -868,7 +865,7 @@ class FilterBuilder extends Widget<any> {
       visible: true,
       focusStateEnabled: false,
       preventScrollEvents: false,
-      hideOnParentScroll: this.option('closePopupOnTargetScroll'),
+      container: $popup,
       hideOnOutsideClick: true,
       onShown: options.popup.onShown,
       shading: false,
@@ -876,6 +873,7 @@ class FilterBuilder extends Widget<any> {
       height: 'auto',
       showTitle: false,
       _wrapperClassExternal: options.menu.cssClass,
+      _ignorePreventScrollEventsDeprecation: true,
     });
   }
 

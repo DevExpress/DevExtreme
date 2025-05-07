@@ -51,7 +51,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import DxScheduler, { DxResource, DxSchedulerTypes } from 'devextreme-vue/scheduler';
+import DxScheduler, { DxResource, type DxSchedulerTypes } from 'devextreme-vue/scheduler';
 import Query from 'devextreme/data/query';
 import AppointmentTemplate from './AppointmentTemplate.vue';
 import AppointmentTooltipTemplate from './AppointmentTooltipTemplate.vue';

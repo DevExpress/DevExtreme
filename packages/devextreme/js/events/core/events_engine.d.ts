@@ -1,11 +1,3 @@
-type EventsEngineType = {
-    on(element: any, eventName: any, handler: any, options?: any): void;
-    off(element: any, eventName?: any, handler?: any): void;
-    one(element: any, eventName: any, handler: any, options?: any): void;
-    set(eventEngine: any): void;
-    triggerHandler(element: any, opts: Record<string, unknown>): void;
-};
+import eventsEngine from '../../common/core/events/core/events_engine';
 
-declare const eventsEngine: EventsEngineType;
-export declare function set(eventEngine: any): void;
 export default eventsEngine;

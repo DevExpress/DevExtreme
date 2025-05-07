@@ -35,11 +35,12 @@ import {
   DxArgumentAxis,
   DxLegend,
   DxLabel,
+  type DxChartTypes,
 } from 'devextreme-vue/chart';
 import DxSelectBox from 'devextreme-vue/select-box';
 import { overlappingModes, population } from './data.ts';
 
-const currentMode = ref(overlappingModes[0]);
+const currentMode = ref<DxChartTypes.ChartsAxisLabelOverlap>(overlappingModes[0]);
 </script>
 <style>
 #chart {

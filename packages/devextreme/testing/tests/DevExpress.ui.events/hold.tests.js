@@ -1,5 +1,5 @@
 const $ = require('jquery');
-const holdEvent = require('events/hold');
+const holdEvent = require('common/core/events/hold');
 const pointerMock = require('../../helpers/pointerMock.js');
 
 QUnit.testStart(function() {

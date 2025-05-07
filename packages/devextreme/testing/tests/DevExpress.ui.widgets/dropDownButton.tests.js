@@ -3,11 +3,11 @@ import $ from 'jquery';
 import DropDownButton from 'ui/drop_down_button';
 import typeUtils, { isRenderer } from 'core/utils/type';
 import config from 'core/config';
-import eventsEngine from 'events/core/events_engine';
+import eventsEngine from 'common/core/events/core/events_engine';
 import keyboardMock from '../../helpers/keyboardMock.js';
-import ArrayStore from 'data/array_store';
-import { DataSource } from 'data/data_source/data_source';
-import CustomStore from 'data/custom_store';
+import ArrayStore from 'common/data/array_store';
+import { DataSource } from 'common/data/data_source/data_source';
+import { CustomStore } from 'common/data/custom_store';
 import { extend } from 'core/utils/extend';
 import devices from '__internal/core/m_devices';
 

@@ -79,3 +79,5 @@ export { DxValidationGroup } from "./validation-group";
 export { DxValidationSummary } from "./validation-summary";
 export { DxValidator } from "./validator";
 export { DxVectorMap } from "./vector-map";
+
+export * as Common from "./common/index";

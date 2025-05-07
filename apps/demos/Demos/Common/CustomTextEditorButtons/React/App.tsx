@@ -1,9 +1,9 @@
 import React, { useCallback, useMemo, useState } from 'react';
 
-import { TextBox, Button as TextBoxButton, TextBoxTypes } from 'devextreme-react/text-box';
-import { NumberBox, Button as NumberBoxButton, NumberBoxTypes } from 'devextreme-react/number-box';
-import { DateBox, Button as DateBoxButton, DateBoxTypes } from 'devextreme-react/date-box';
-import { ButtonTypes } from 'devextreme-react/button';
+import { TextBox, Button as TextBoxButton, type TextBoxTypes } from 'devextreme-react/text-box';
+import { NumberBox, Button as NumberBoxButton, type NumberBoxTypes } from 'devextreme-react/number-box';
+import { DateBox, Button as DateBoxButton, type DateBoxTypes } from 'devextreme-react/date-box';
+import { type ButtonTypes } from 'devextreme-react/button';
 
 const millisecondsInDay = 24 * 60 * 60 * 1000;
 const currencyLabel = { 'aria-label': 'Multi Currency' };

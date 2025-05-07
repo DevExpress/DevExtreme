@@ -8,7 +8,7 @@ import {
 const modes = ['driving', 'walking'];
 const routeColors = ['blue', 'green', 'red'];
 const apiKey = {
-  bing: 'Aq3LKP2BOmzWY47TZoT1YdieypN_rB6RY9FqBfx-MDCKjvvWBbT68R51xwbL-AqC',
+  azure: '6N8zuPkBsnfwniNAJkldM3cUgm3lXg3y9gkIKy59benICnnepK4DJQQJ99AIACYeBjFllM6LAAAgAZMPGFXE',
 };
 export default function App() {
   const [routes, setRoutes] = useState(routesData);
@@ -43,7 +43,7 @@ export default function App() {
         controls={true}
         markers={markersData}
         routes={routes}
-        provider="bing"
+        provider="azure"
         apiKey={apiKey}
       />
       <div className="options">

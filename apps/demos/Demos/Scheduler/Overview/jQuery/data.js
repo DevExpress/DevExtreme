@@ -1,15 +1,15 @@
 const employees = [{
   text: 'John Heart',
   id: 1,
-  color: '#56ca85',
-  avatar: '../../../../images/gym/coach-man.png',
+  color: 'var(--background-color-1)',
+  avatar: '../../../../images/employees/19.png',
   age: 27,
   discipline: 'ABS, Fitball, StepFit',
 }, {
-  text: 'Sandra Johnson',
+  text: 'Greta Sims',
   id: 2,
-  color: '#ff9747',
-  avatar: '../../../../images/gym/coach-woman.png',
+  color: 'var(--background-color-2)',
+  avatar: '../../../../images/employees/31.png',
   age: 25,
   discipline: 'ABS, Fitball, StepFit',
 }];

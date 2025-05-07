@@ -10,6 +10,7 @@ import {
   useMemo,
   memo,
   FC,
+  MutableRefObject,
 } from 'react';
 
 import { createPortal } from 'react-dom';
@@ -25,9 +26,9 @@ const createHiddenNode = (
   const style = { display: 'none' };
   switch (containerNodeName) {
     case 'TABLE':
-      return <tbody style={style} ref={ref}></tbody>;
+      return <tbody style={style} ref={ref} />;
     case 'TBODY':
-      return <tr style={style} ref={ref}></tr>;
+      return <tr style={style} ref={ref} />;
     default:
       return React.createElement(defaultElement, { style, ref });
   }
@@ -82,17 +83,15 @@ const TemplateWrapperComponent: FC<TemplateWrapperProps> = ({
     }
 
     return () => {
-      if (element.current) {
-        container.appendChild(element.current);
-      }
+      const safeAppend = (child?: MutableRefObject<HTMLElement | undefined>) => {
+        if (child?.current && container && !container.contains(child.current)) {
+          container.appendChild(child.current);
+        }
+      };
 
-      if (hiddenNodeElement.current) {
-        container.appendChild(hiddenNodeElement.current);
-      }
-
-      if (removalListenerElement.current) {
-        container.appendChild(removalListenerElement.current);
-      }
+      safeAppend(element);
+      safeAppend(hiddenNodeElement);
+      safeAppend(removalListenerElement);
 
       if (el) {
         events.off(el, DX_REMOVE_EVENT, onTemplateRemoved);

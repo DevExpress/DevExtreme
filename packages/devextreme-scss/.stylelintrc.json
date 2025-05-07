@@ -33,6 +33,8 @@
         "selector-not-notation": null,
         "keyframe-selector-notation": null,
         "media-feature-range-notation": null,
+        "no-eol-whitespace": true,
+        "no-missing-end-of-source-newline": true,
 
         "scss/at-else-empty-line-before": null,
         "scss/at-if-closing-brace-newline-after": null,

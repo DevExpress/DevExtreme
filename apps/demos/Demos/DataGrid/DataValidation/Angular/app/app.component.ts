@@ -13,7 +13,7 @@ if (!/localhost/.test(document.location.host)) {
 
 let modulePrefix = '';
 // @ts-ignore
-if (window && window.config.packageConfigPaths) {
+if (window && window.config?.packageConfigPaths) {
   modulePrefix = '/app';
 }
 
@@ -27,7 +27,7 @@ export class AppComponent {
   pattern = /^\(\d{3}\) \d{3}-\d{4}$/i;
 
   constructor(private httpClient: HttpClient) {
-    const url = 'https://js.devexpress.com/Demos/Mvc/api/DataGridEmployeesValidation';
+    const url = 'https://js.devexpress.com/Demos/NetCore/api/DataGridEmployeesValidation';
 
     this.dataSource = AspNetData.createStore({
       key: 'ID',
@@ -42,7 +42,7 @@ export class AppComponent {
   }
 
   asyncValidation = async (params: Record<string, unknown> & { data: Record<string, unknown> }) => {
-    const emailValidationUrl = 'https://js.devexpress.com/Demos/Mvc/RemoteValidation/CheckUniqueEmailAddress';
+    const emailValidationUrl = 'https://js.devexpress.com/Demos/NetCore/RemoteValidation/CheckUniqueEmailAddress';
 
     const result = await lastValueFrom(this.httpClient.post(emailValidationUrl, {
       id: params.data.ID,

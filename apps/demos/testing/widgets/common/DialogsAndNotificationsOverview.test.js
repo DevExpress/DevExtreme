@@ -6,17 +6,12 @@ import { testScreenshot } from '../../../utils/visual-tests/helpers/theme-utils'
 const IMAGES_CONTAINER_CLASS = 'images';
 const ITEM_CONTENT_CLASS = 'item-content';
 
-// NOTE: this test is broken
-// TestCafe cannot interact with the <circle cx="0" cy="0" r="8" stroke-width="4"
-// transform="translate(207,272.87511500032093)" fill="#ffffff" stroke="#f5564a"></circle>
-// element because another element obstructs it.
-fixture.skip('Common.DialogsAndNotificationsOverview')
-  .page('http://localhost:8080/')
+fixture('Common.DialogsAndNotificationsOverview')
   .before(async (ctx) => {
     ctx.initialWindowSize = [900, 600];
   });
 
-runManualTest('Common', 'DialogsAndNotificationsOverview', ['jQuery', 'React', 'Vue', 'Angular'], (test) => {
+runManualTest('Common', 'DialogsAndNotificationsOverview', (test) => {
   test('DialogsAndNotificationsOverview', async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 

@@ -38,7 +38,6 @@ QUnit.module('bing provider', {
         this.abortDirectionsUpdate = false;
 
         BingProvider.remapConstant(fakeURL);
-        BingProvider.prototype._geocodedLocations = {};
 
         $.ajaxSetup({ jsonp: false });
 

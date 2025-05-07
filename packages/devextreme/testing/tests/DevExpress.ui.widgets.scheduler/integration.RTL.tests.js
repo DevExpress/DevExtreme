@@ -1,6 +1,6 @@
-import fx from 'animation/fx';
+import fx from 'common/core/animation/fx';
 import { createWrapper, initTestMarkup, isDesktopEnvironment } from '../../helpers/scheduler/helpers.js';
-import translator from 'animation/translator';
+import translator from 'common/core/animation/translator';
 
 import '__internal/scheduler/m_scheduler';
 import 'generic_light.css!';

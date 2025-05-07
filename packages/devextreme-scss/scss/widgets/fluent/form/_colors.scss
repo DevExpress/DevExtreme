@@ -23,7 +23,7 @@ $form-field-mark-color: $form-field-item-color !default;
   @if $color == "blue" {
     $form-field-item-color: $base-text-color !default;
   }
-  
+
   @if $color == "saas" {
     $form-field-item-color: $base-label-color !default;
   }

@@ -17,10 +17,10 @@ import pointerMock from '../../helpers/pointerMock.js';
 import nativePointerMock from '../../helpers/nativePointerMock.js';
 import { setupDataGridModules, MockDataController, MockColumnsController, MockSelectionController, getCells, generateItems } from '../../helpers/dataGridMocks.js';
 import { findShadowHostOrDocument } from '../../helpers/dataGridHelper.js';
-import numberLocalization from 'localization/number';
+import numberLocalization from 'common/core/localization/number';
 import virtualScrollingCore from '__internal/grids/grid_core/virtual_scrolling/m_virtual_scrolling_core';
-import ODataStore from 'data/odata/store';
-import ArrayStore from 'data/array_store';
+import ODataStore from 'common/data/odata/store';
+import ArrayStore from 'common/data/array_store';
 
 const expandCellTemplate = gridCoreUtils.getExpandCellTemplate();
 
@@ -3153,7 +3153,7 @@ QUnit.module('Rows view', {
         rowsView.render(testElement);
 
         // act
-        rowsView.setRowsOpacity(1, 0.5);
+        rowsView.toggleDraggableColumnClass(1, true);
         const cells = getCells(testElement);
 
         // assert
@@ -3186,7 +3186,7 @@ QUnit.module('Rows view', {
         rowsView.render($testElement);
 
         // act
-        rowsView.setRowsOpacity(0, 0.5);
+        rowsView.toggleDraggableColumnClass(0, true);
         const $cells = getCells($testElement);
 
         // assert
@@ -4059,7 +4059,7 @@ QUnit.module('Rows view', {
         sinon.spy(rowsView, '_getRowElements');
 
         // act
-        rowsView.setRowsOpacity(0, 0.01);
+        rowsView.toggleDraggableColumnClass(0, true);
 
         // assert
         assert.ok(rowsView._getRowElements.calledOnce, 'GetRowsElements method should called once');

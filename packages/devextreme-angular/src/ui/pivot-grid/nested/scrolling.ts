@@ -14,7 +14,7 @@ import {
 
 
 
-import { Mode, ScrollMode } from 'devextreme/common';
+import { ScrollMode, Mode } from 'devextreme/common';
 
 import {
     NestedOptionHost,
@@ -38,10 +38,10 @@ export class DxoPivotGridScrollingComponent extends NestedOption implements OnDe
     }
 
     @Input()
-    get useNative(): Mode | boolean {
+    get useNative(): boolean | Mode {
         return this._getOption('useNative');
     }
-    set useNative(value: Mode | boolean) {
+    set useNative(value: boolean | Mode) {
         this._setOption('useNative', value);
     }
 

@@ -11,7 +11,7 @@ let stubSelectStrategy;
 let StubMapLayerElement;
 let StubProxy;
 const projectionModule = require('viz/vector_map/projection.main');
-const DataSource = require('data/data_source/data_source').DataSource;
+const DataSource = require('common/data/data_source/data_source').DataSource;
 const baseThemeManagerModule = require('viz/core/base_theme_manager');
 const vizMocks = require('../../helpers/vizMocks.js');
 

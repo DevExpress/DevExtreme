@@ -56,10 +56,10 @@ export class DxiResponsiveBoxItemComponent extends CollectionNestedOption implem
     }
 
     @Input()
-    get location(): Array<any | { col?: number, colspan?: number | undefined, row?: number, rowspan?: number | undefined, screen?: string | undefined }> {
+    get location(): { col?: number, colspan?: number | undefined, row?: number, rowspan?: number | undefined, screen?: string | undefined }[] {
         return this._getOption('location');
     }
-    set location(value: Array<any | { col?: number, colspan?: number | undefined, row?: number, rowspan?: number | undefined, screen?: string | undefined }>) {
+    set location(value: { col?: number, colspan?: number | undefined, row?: number, rowspan?: number | undefined, screen?: string | undefined }[]) {
         this._setOption('location', value);
     }
 
@@ -94,10 +94,10 @@ export class DxiResponsiveBoxItemComponent extends CollectionNestedOption implem
 
 
     @ContentChildren(forwardRef(() => DxiResponsiveBoxLocationComponent))
-    get locationChildren(): QueryList<DxiResponsiveBoxLocationComponent> {
+    get locationsChildren(): QueryList<DxiResponsiveBoxLocationComponent> {
         return this._getOption('location');
     }
-    set locationChildren(value) {
+    set locationsChildren(value) {
         this.setChildren('location', value);
     }
 

@@ -1,10 +1,10 @@
 const $ = require('jquery');
-const TouchStrategy = require('events/pointer/touch');
-const registerEvent = require('events/core/event_registrator');
+const TouchStrategy = require('common/core/events/pointer/touch');
+const registerEvent = require('common/core/events/core/event_registrator');
 const nativePointerMock = require('../../../helpers/nativePointerMock.js');
 const noop = require('core/utils/common').noop;
 const special = require('../../../helpers/eventHelper.js').special;
-const eventsEngine = require('events/core/events_engine');
+const eventsEngine = require('common/core/events/core/events_engine');
 
 QUnit.module('touch events', {
     beforeEach: function() {

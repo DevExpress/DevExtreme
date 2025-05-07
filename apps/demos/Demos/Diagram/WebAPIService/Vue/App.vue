@@ -33,7 +33,7 @@ import {
 } from 'devextreme-vue/diagram';
 import { createStore } from 'devextreme-aspnet-data-nojquery';
 
-const url = 'https://js.devexpress.com/Demos/Mvc/api/DiagramEmployees';
+const url = 'https://js.devexpress.com/Demos/NetCore/api/DiagramEmployees';
 const dataSource = createStore({
   key: 'ID',
   loadUrl: `${url}/Employees`,

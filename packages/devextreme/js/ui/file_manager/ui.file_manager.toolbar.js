@@ -3,7 +3,7 @@ import $ from '../../core/renderer';
 import { extend } from '../../core/utils/extend';
 import { isDefined, isString } from '../../core/utils/type';
 import { ensureDefined } from '../../core/utils/common';
-import messageLocalization from '../../localization/message';
+import messageLocalization from '../../common/core/localization/message';
 import { extendAttributes } from './ui.file_manager.common';
 import { isCompact, isFluent, isMaterial } from '../themes';
 

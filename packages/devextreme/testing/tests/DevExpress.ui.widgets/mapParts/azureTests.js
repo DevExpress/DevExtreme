@@ -4,6 +4,7 @@ import $ from 'jquery';
 import { MARKERS, ROUTES } from './utils.js';
 import AzureProvider from '__internal/ui/map/m_provider.dynamic.azure';
 import ajaxMock from '../../../helpers/ajaxMock.js';
+import errors from 'ui/widget/ui.errors';
 
 import 'ui/map';
 
@@ -28,19 +29,23 @@ const prepareTestingAzureProvider = () => {
 const moduleConfig = {
     beforeEach: function() {
         const fakeURL = '/fakeAzureUrl';
+        let azureMockCreated = false;
 
         AzureProvider.remapConstant(fakeURL);
-        AzureProvider.prototype._geocodedLocations = {};
 
         ajaxMock.setup({
             url: fakeURL,
             callback: () => {
-                $.getScript({
-                    url: '../../packages/devextreme/testing/helpers/forMap/azureMock.js',
-                    scriptAttrs: { nonce: 'qunit-test' }
-                }).done(() => {
-                    prepareTestingAzureProvider();
-                });
+                if(!azureMockCreated) {
+                    azureMockCreated = true;
+
+                    $.getScript({
+                        url: '../../packages/devextreme/testing/helpers/forMap/azureMock.js',
+                        scriptAttrs: { nonce: 'qunit-test' },
+                    }).done(() => {
+                        prepareTestingAzureProvider();
+                    });
+                }
             },
             responseText: {
                 success: true,
@@ -86,12 +91,13 @@ QUnit.module('map loading', moduleConfig, () => {
             setTimeout(function() {
                 $('#map').dxMap({
                     provider: 'azure',
-                    onReady: $.proxy(() => {
-                        assert.ok(window.atlas.Map.customFlag, 'map loaded without getting script');
-
-                        done();
-                    }, this)
                 });
+
+                setTimeout(() => {
+                    assert.ok(window.atlas.Map.customFlag, 'map loaded without getting script');
+
+                    done();
+                }, 50);
             });
         });
     });
@@ -142,6 +148,19 @@ QUnit.module('map loading', moduleConfig, () => {
                 done();
             }
         });
+    });
+
+    QUnit.test('map should add ready event handler to call map ready callback', function(assert) {
+        const done = assert.async();
+
+        $('#map').dxMap({
+            provider: 'azure',
+            onReady: () => {
+                assert.strictEqual(atlas.readyCallbackCalled, true, 'map ready callback was called');
+
+                done();
+            }
+        }).dxMap('instance');
     });
 });
 
@@ -404,11 +423,11 @@ QUnit.module('basic options', moduleConfig, () => {
         }).dxMap('instance');
 
         mapReadyDeferred.done(() => {
-            assert.strictEqual(atlas.addedControls, 4, 'four controls are added');
+            assert.strictEqual(atlas.addedControls, 6, 'two copyright and four map controls are added');
             assert.strictEqual(atlas.controlOptions.position, 'top-right', 'controls position is correct');
 
             map.option('onUpdated', () => {
-                assert.strictEqual(atlas.addedControls, 0, 'controls are removed');
+                assert.strictEqual(atlas.addedControls, 2, 'only two copyright controls remains');
 
                 done();
             });
@@ -561,6 +580,24 @@ QUnit.module('Markers', moduleConfig, () => {
                 assert.strictEqual(atlas.addedPopups[0] instanceof atlas.Popup, true, 'Popup class is correct');
                 assert.deepEqual(atlas.popupOptions.position, [20, 10], 'Popup position is correct');
                 assert.deepEqual(popupText, marker.tooltip, 'Popup text is correct');
+
+                done();
+            }
+        });
+    });
+
+    QUnit.test('It should be possible to pass a markup to marker tooltip.text option', function(assert) {
+        const done = assert.async();
+        const marker = { location: [10, 20], tooltip: { text: '<b>Austin</b>, Texas' } };
+        $('#map').dxMap({
+            provider: 'azure',
+            markers: [marker],
+            onReady: () => {
+                const $popupContent = $(atlas.popupOptions.content);
+                const $b = $popupContent.find('b');
+
+                assert.strictEqual($b.length, 1, '<b> element is passed to Popup');
+                assert.strictEqual($b.text(), 'Austin', 'text is correct');
 
                 done();
             }
@@ -947,6 +984,99 @@ QUnit.module('Routes', moduleConfig, () => {
 
                 done();
             }
+        });
+    });
+
+    QUnit.test('Should log an error if get route request failed', function(assert) {
+        const done = assert.async();
+        const mapReadyDeferred = $.Deferred();
+
+        const map = $('#map').dxMap({
+            provider: 'azure',
+            onReady: () => {
+                mapReadyDeferred.resolve();
+            },
+        }).dxMap('instance');
+
+        const errorStub = sinon.stub(errors, 'log');
+
+        mapReadyDeferred.done(() => {
+            ajaxMock.clear();
+            ajaxMock.setup({
+                url: '/fakeAzureUrl',
+                responseText: {
+                    routes: [{
+                        legs: {
+                            length: 1,
+                        },
+                    }],
+                },
+            });
+
+            map.addRoute(ROUTES[0]).done(() => {
+                const message = errorStub.args[0][1].message;
+
+                assert.ok(errorStub.withArgs('W1006').calledOnce, 'warning is logged');
+                assert.strictEqual(message, 'route.legs.flatMap is not a function', 'warning message text is correct');
+
+                errorStub.restore();
+                done();
+            });
+        });
+    });
+
+    QUnit.module('Postponed map ready', {
+        beforeEach: function() {
+            window.postponeMapReadyPromise = true;
+        },
+        afterEach: function() {
+            delete window.postponeMapReadyPromise;
+        }
+    }, () => {
+        QUnit.test('Route should not be added on init before map ready promise is resolved', function(assert) {
+            const done = assert.async();
+            const onRouteAdded = sinon.stub();
+
+            $('#map').dxMap({
+                provider: 'azure',
+                onReady: () => {
+                    assert.strictEqual(onRouteAdded.callCount, 1, 'route was added after map is ready');
+
+                    done();
+                },
+                onRouteAdded,
+                routes: [ROUTES[0]],
+            });
+
+            setTimeout(() => {
+                assert.strictEqual(onRouteAdded.callCount, 0, 'route was not added before map is ready');
+
+                atlas.mapReadyResolve();
+            }, 100);
+        });
+
+        QUnit.test('Add route method should not be called before map ready promise is resolved', function(assert) {
+            const done = assert.async();
+            const onRouteAdded = sinon.stub();
+
+            const map = $('#map').dxMap({
+                provider: 'azure',
+                onReady: () => {
+                    assert.strictEqual(onRouteAdded.callCount, 1, 'route was added after map is ready');
+
+                    done();
+                },
+                onRouteAdded,
+                routes: [ROUTES[0]],
+            }).dxMap('instance');
+
+            map.addRoute(ROUTES[0]);
+
+            setTimeout(() => {
+                assert.strictEqual(onRouteAdded.callCount, 0, 'route was not added before map is ready');
+
+                atlas.mapReadyResolve();
+            }, 100);
         });
     });
 });

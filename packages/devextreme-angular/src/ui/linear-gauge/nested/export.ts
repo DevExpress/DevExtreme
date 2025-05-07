@@ -54,10 +54,10 @@ export class DxoLinearGaugeExportComponent extends NestedOption implements OnDes
     }
 
     @Input()
-    get formats(): any | Array<ExportFormat> {
+    get formats(): Array<ExportFormat> {
         return this._getOption('formats');
     }
-    set formats(value: any | Array<ExportFormat>) {
+    set formats(value: Array<ExportFormat>) {
         this._setOption('formats', value);
     }
 
@@ -78,10 +78,10 @@ export class DxoLinearGaugeExportComponent extends NestedOption implements OnDes
     }
 
     @Input()
-    get svgToCanvas(): Function | undefined {
+    get svgToCanvas(): ((svg: any, canvas: any) => any) | undefined {
         return this._getOption('svgToCanvas');
     }
-    set svgToCanvas(value: Function | undefined) {
+    set svgToCanvas(value: ((svg: any, canvas: any) => any) | undefined) {
         this._setOption('svgToCanvas', value);
     }
 

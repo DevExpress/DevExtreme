@@ -7,7 +7,7 @@
       v-model:markers="markers"
       v-model:marker-icon-src="markersIcon"
       width="100%"
-      provider="bing"
+      provider="azure"
       :api-key="apiKey"
     />
     <div class="options">
@@ -38,7 +38,7 @@ import { markersData } from './data.ts';
 const markerUrl = 'https://js.devexpress.com/Demos/WidgetsGallery/JSDemos/images/maps/map-marker.png';
 const markersIcon = ref(markerUrl);
 const apiKey = {
-  bing: 'Aq3LKP2BOmzWY47TZoT1YdieypN_rB6RY9FqBfx-MDCKjvvWBbT68R51xwbL-AqC',
+  azure: '6N8zuPkBsnfwniNAJkldM3cUgm3lXg3y9gkIKy59benICnnepK4DJQQJ99AIACYeBjFllM6LAAAgAZMPGFXE',
 };
 const markers = ref(markersData);
 function useCustomMarkers(data) {

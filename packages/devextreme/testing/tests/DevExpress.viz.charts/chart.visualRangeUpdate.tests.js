@@ -2881,7 +2881,8 @@ QUnit.test('AdjustOnZoom true - show adjusted value range for every argument ran
     let [chart, onOptionChanged] = this.createChart({
         adjustOnZoom: true,
         dataSource,
-        argumentAxis: { visualRange: [2, 4] }
+        argumentAxis: { visualRange: [2, 4] },
+        valueAxis: { visualRangeUpdateMode: 'reset' },
     });
     onOptionChanged.resetHistory();
 
@@ -2955,7 +2956,8 @@ QUnit.test('AdjustOnZoom false - show full value range for every argument range 
     let [chart, onOptionChanged] = this.createChart({
         adjustOnZoom: false,
         dataSource,
-        argumentAxis: { visualRange: [2, 4] }
+        argumentAxis: { visualRange: [2, 4] },
+        valueAxis: { visualRangeUpdateMode: 'reset' },
     });
     onOptionChanged.resetHistory();
 

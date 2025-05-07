@@ -1,6 +1,6 @@
 import { initTestMarkup, createWrapper, isDesktopEnvironment, CLASSES } from '../../helpers/scheduler/helpers.js';
 import pointerMock from '../../helpers/pointerMock.js';
-import fx from 'animation/fx';
+import fx from 'common/core/animation/fx';
 import timeZoneUtils from '__internal/scheduler/m_utils_time_zone';
 import { getRecurrenceProcessor } from '__internal/scheduler/m_recurrence';
 

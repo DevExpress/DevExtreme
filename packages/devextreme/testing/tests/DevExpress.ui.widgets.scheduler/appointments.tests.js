@@ -3,23 +3,22 @@ import 'generic_light.css!';
 
 import pointerMock from '../../helpers/pointerMock.js';
 import keyboardMock from '../../helpers/keyboardMock.js';
+import { mockDataAccessor } from '../../helpers/scheduler/mockDataAccessor.js';
 
 import $ from 'jquery';
 import '__internal/scheduler/workspaces/m_work_space_week';
 import VerticalAppointmentsStrategy from '__internal/scheduler/appointments/rendering_strategies/m_strategy_vertical';
 import HorizontalMonthAppointmentsStrategy from '__internal/scheduler/appointments/rendering_strategies/m_strategy_horizontal_month';
 import SchedulerAppointments from '__internal/scheduler/appointments/m_appointment_collection';
-import eventsEngine from 'events/core/events_engine';
-import dblclickEvent from 'events/dblclick';
-import translator from 'animation/translator';
-import dataCoreUtils from 'core/utils/data';
+import eventsEngine from 'common/core/events/core/events_engine';
+import dblclickEvent from 'common/core/events/dblclick';
+import translator from 'common/core/animation/translator';
 import commonUtils from 'core/utils/common';
-import typeUtils, { isRenderer } from 'core/utils/type';
+import { isRenderer } from 'core/utils/type';
 import config from 'core/config';
 import Resizable from 'ui/resizable';
-import fx from 'animation/fx';
-import { DataSource } from 'data/data_source/data_source';
-import { ExpressionUtils } from '__internal/scheduler/m_expression_utils';
+import fx from 'common/core/animation/fx';
+import { DataSource } from 'common/data/data_source/data_source';
 import { Deferred } from 'core/utils/deferred';
 import { createExpressions } from '__internal/scheduler/resources/m_utils';
 import { AppointmentDataProvider } from '__internal/scheduler/appointments/data_provider/m_appointment_data_provider.js';
@@ -45,35 +44,7 @@ const keyboardNavigationConfig = {
     cellWidth: 100,
     cellHeight: 30,
 };
-
-const compileGetter = dataCoreUtils.compileGetter;
-const compileSetter = dataCoreUtils.compileSetter;
-const dataAccessors = {
-    getter: {
-        startDate: compileGetter('startDate'),
-        endDate: compileGetter('endDate'),
-        allDay: compileGetter('allDay'),
-        text: compileGetter('text'),
-        recurrenceRule: compileGetter('recurrenceRule')
-    },
-    setter: {
-        startDate: compileSetter('startDate'),
-        endDate: compileSetter('endDate'),
-        allDay: compileSetter('allDay'),
-        text: compileSetter('text'),
-        recurrenceRule: compileSetter('recurrenceRule')
-    }
-};
-
-ExpressionUtils.getField = (_, field, obj) => {
-    if(typeUtils.isDefined(dataAccessors.getter[field])) {
-        return dataAccessors.getter[field](obj);
-    }
-};
-
-ExpressionUtils.setField = (_, field, obj, value) => {
-    return dataAccessors.setter[field](obj, value);
-};
+const dataAccessors = mockDataAccessor;
 
 const createSubscribes = (coordinates, cellWidth, cellHeight) => ({
     createAppointmentSettings: () => coordinates,
@@ -128,7 +99,7 @@ const createInstance = (options, subscribesConfig) => {
         timeZoneCalculator: createTimeZoneCalculator(),
         getResources: () => [],
         getLoadedResources: () => [],
-        getAgendaResourceProcessor: () => ({}),
+        getResourceProcessor: () => ({}),
         getAppointmentColor: () => new Deferred(),
         getResourceDataAccessors: () => createExpressions([]),
         dataAccessors,
@@ -288,17 +259,14 @@ QUnit.module('Appointments', moduleOptions, () => {
 
         instance.option('items', [
             {
-                itemData:
-                {
+                itemData: {
                     text: 'Appointment 1',
                     startDate: new Date(2015, 1, 9, 8),
                     endDate: new Date(2015, 1, 9, 9)
                 },
-                settings: [
-                    {
-                        height: 30
-                    }
-                ]
+                settings: [{ height: 30 }],
+                needRepaint: true,
+                needRemove: false,
             }
         ]);
 
@@ -471,7 +439,9 @@ QUnit.module('Appointments', moduleOptions, () => {
                 endDate: new Date(2015, 1, 9, 9),
                 allDay: true
             },
-            settings: [{ allDay: true }]
+            settings: [{ allDay: true }],
+            needRepaint: true,
+            needRemove: false,
         };
 
         const instance = createInstance({}, testConfig);
@@ -540,6 +510,7 @@ QUnit.module('Appointments', moduleOptions, () => {
             appointmentDataProvider: {
                 appointmentTakesAllDay: commonUtils.noop,
             },
+            dataAccessors: mockDataAccessor,
             allDayPanelMode: 'all',
             cellDurationInMinutes: 30,
             cellHeight: 50
@@ -549,7 +520,7 @@ QUnit.module('Appointments', moduleOptions, () => {
         assert.strictEqual(deltaTime, -1800000, 'Delta time is OK');
     });
 
-    QUnit.test('Scheduler appointment should have aria-role \'button\'', function(assert) {
+    QUnit.test('Scheduler appointment should have aria-role \'application\'', function(assert) {
         const item = {
             itemData: {
                 text: 'Appointment 1',
@@ -565,7 +536,7 @@ QUnit.module('Appointments', moduleOptions, () => {
 
         const $appointment = instance.$element().find('.dx-scheduler-appointment');
 
-        assert.equal($appointment.attr('role'), 'button', 'role is right');
+        assert.equal($appointment.attr('role'), 'application', 'role is right');
     });
 
     QUnit.test('Split appointment by day', function(assert) {
@@ -650,7 +621,9 @@ QUnit.module('Appointments Actions', moduleOptions, () => {
                 { top: 0, left: 0, height: 10, sortedIndex: 0, width: 10, count: 1, index: 0, allDay: false, appointmentReduced: null },
                 { top: 10, left: 10, height: 10, sortedIndex: 0, width: 10, count: 1, index: 0 },
                 { top: 20, left: 20, height: 10, sortedIndex: 0, width: 10, count: 1, index: 0 }
-            ]
+            ],
+            needRepaint: true,
+            needRemove: false,
         };
 
         const instance = createInstance({}, testConfig);

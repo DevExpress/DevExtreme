@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from 'react';
-import CheckBox, { CheckBoxTypes } from 'devextreme-react/check-box';
-import SelectBox, { SelectBoxTypes } from 'devextreme-react/select-box';
-import TextArea, { TextAreaTypes } from 'devextreme-react/text-area';
+import CheckBox, { type CheckBoxTypes } from 'devextreme-react/check-box';
+import SelectBox, { type SelectBoxTypes } from 'devextreme-react/select-box';
+import TextArea, { type TextAreaTypes } from 'devextreme-react/text-area';
 
 import service from './data.ts';
 

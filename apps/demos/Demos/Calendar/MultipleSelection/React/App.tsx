@@ -2,7 +2,7 @@ import React, { useCallback, useRef, useState } from 'react';
 import CheckBox from 'devextreme-react/check-box';
 import SelectBox from 'devextreme-react/select-box';
 import Button from 'devextreme-react/button';
-import Calendar, { CalendarTypes } from 'devextreme-react/calendar';
+import Calendar, { type CalendarTypes } from 'devextreme-react/calendar';
 
 const selectionModes = ['single', 'multiple', 'range'];
 const selectionModeLabel = { 'aria-label': 'Selection Mode' };

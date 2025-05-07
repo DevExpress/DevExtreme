@@ -6,7 +6,10 @@ import {
 
 import {
     template,
-} from '../core/templates/template';
+    Position,
+    TabsIconPosition,
+    TabsStyle,
+} from '../common';
 
 import {
     EventInfo,
@@ -14,13 +17,7 @@ import {
     InitializedEventInfo,
     ChangedOptionInfo,
     ItemInfo,
-} from '../events/index';
-
-import {
-    Position,
-    TabsIconPosition,
-    TabsStyle,
-} from '../common';
+} from '../common/core/events';
 
 import CollectionWidget, {
     SelectionChangeInfo,

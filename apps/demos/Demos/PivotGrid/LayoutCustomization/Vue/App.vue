@@ -45,14 +45,15 @@
 import { ref } from 'vue';
 import DxPivotGrid, {
   DxFieldChooser,
+  type DxPivotGridTypes,
 } from 'devextreme-vue/pivot-grid';
 import PivotGridDataSource from 'devextreme/ui/pivot_grid/data_source';
 import DxCheckBox from 'devextreme-vue/check-box';
 import sales from './data.ts';
 
-const showTotalsPrior = ref('none');
-const dataFieldArea = ref('column');
-const rowHeaderLayout = ref('tree');
+const showTotalsPrior = ref<DxPivotGridTypes.PivotGridTotalDisplayMode>('none');
+const dataFieldArea = ref<DxPivotGridTypes.PivotGridDataFieldArea>('column');
+const rowHeaderLayout = ref<DxPivotGridTypes.PivotGridRowHeaderLayout>('tree');
 const dataSource = new PivotGridDataSource({
   fields: [{
     caption: 'Region',

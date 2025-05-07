@@ -621,7 +621,46 @@ QUnit.module('dxPivotGrid DataController', moduleConfig, () => {
         ]], 'Columns Info');
     });
 
-    QUnit.test('columnsInfo and rowsInfo without dimension fields when showGrandTotals is disabled on dataField level only for one field.', function(assert) {
+    QUnit.test('dataFieldArea: column, hasDimensionFields: true; columnsInfo and rowsInfo when showGrandTotals is disabled only for one field', function(assert) {
+        const dataController = new DataController({
+            dataSource: {
+                fields: [
+                    { area: 'column' }, { area: 'row' },
+                    { dataField: 'sum', caption: 'Sum', format: 'fixedPoint', area: 'data', showGrandTotals: false },
+                    { dataField: 'avg', caption: 'Avg', format: 'fixedPoint', area: 'data' }
+                ],
+                columns: [{ value: 'column 1' }],
+                rows: [{ value: 'row 1' }]
+            },
+            texts: texts,
+            dataFieldArea: 'column'
+        });
+
+        assert.deepEqual(
+            dataController.getColumnsInfo(),
+            [[
+                { type: 'D', text: 'column 1', path: [ 'column 1' ], colspan: 2 },
+                { type: 'GT', text: 'Grand Total', }
+            ],
+            [
+                { type: 'D', text: 'Sum', path: ['column 1'], dataIndex: 0, isLast: true },
+                { type: 'D', text: 'Avg', path: ['column 1'], dataIndex: 1, isLast: true },
+                { type: 'GT', text: 'Avg', dataIndex: 1, isLast: true }
+            ]],
+            'Columns Info'
+        );
+
+        assert.deepEqual(
+            dataController.getRowsInfo(),
+            [
+                [{ type: 'D', text: 'row 1', path: ['row 1'], isLast: true }],
+                [{ type: 'GT', text: 'Grand Total', isLast: true }]
+            ],
+            'Rows Info'
+        );
+    });
+
+    QUnit.test('dataFieldArea: column, hasDimensionFields: false; columnsInfo and rowsInfo when showGrandTotals is disabled only for one field', function(assert) {
         const dataController = new DataController({
             dataSource: {
                 fields: [
@@ -631,29 +670,99 @@ QUnit.module('dxPivotGrid DataController', moduleConfig, () => {
                 columns: [],
                 rows: []
             },
-            texts: texts
+            texts: texts,
+            dataFieldArea: 'column'
         });
 
-        assert.deepEqual(dataController.getColumnsInfo(), [[
-            {
-                text: 'Grand Total',
-                type: 'GT'
-            }],
+        assert.deepEqual(
+            dataController.getColumnsInfo(),
+            [
+                [{ type: 'GT', text: 'Grand Total', }],
+                [{ type: 'GT', text: 'Avg', dataIndex: 1, isLast: true }]
+            ],
+            'Columns Info'
+        );
 
-        [{
-            dataIndex: 1,
-            isLast: true,
-            text: 'Avg',
-            type: 'GT'
-        }]], 'Columns Info');
+        assert.deepEqual(
+            dataController.getRowsInfo(),
+            [
+                [{ type: 'GT', text: 'Grand Total', isLast: true, }]
+            ],
+            'Rows Info'
+        );
+    });
 
-        assert.deepEqual(dataController.getRowsInfo(), [[
-            {
-                isLast: true,
-                text: 'Grand Total',
-                type: 'GT'
-            }
-        ]], 'Rows Info');
+    QUnit.test('dataFieldArea: row, hasDimensionFields: true; columnsInfo and rowsInfo when showGrandTotals is disabled only for one field', function(assert) {
+        const dataController = new DataController({
+            dataSource: {
+                fields: [
+                    { area: 'column' }, { area: 'row' },
+                    { dataField: 'sum', caption: 'Sum', format: 'fixedPoint', area: 'data', showGrandTotals: false },
+                    { dataField: 'avg', caption: 'Avg', format: 'fixedPoint', area: 'data' }
+                ],
+                columns: [{ value: 'column 1' }],
+                rows: [{ value: 'row 1' }]
+            },
+            texts: texts,
+            dataFieldArea: 'row'
+        });
+
+        assert.deepEqual(
+            dataController.getColumnsInfo(),
+            [[
+                { type: 'D', text: 'column 1', path: ['column 1'], isLast: true },
+                { type: 'GT', text: 'Grand Total', isLast: true }
+            ]],
+            'Columns Info'
+        );
+
+        assert.deepEqual(
+            dataController.getRowsInfo(),
+            [[
+                { type: 'D', text: 'row 1', path: ['row 1'], rowspan: 2 },
+                { type: 'D', text: 'Sum', path: ['row 1'], dataIndex: 0, isLast: true }
+            ],
+            [
+                { type: 'D', text: 'Avg', path: ['row 1'], dataIndex: 1, isLast: true }
+            ],
+            [
+                { type: 'GT', text: 'Grand Total' },
+                { type: 'GT', text: 'Avg', dataIndex: 1, isLast: true }
+            ]],
+            'Rows Info'
+        );
+    });
+
+    QUnit.test('dataFieldArea: row, hasDimensionFields: false; columnsInfo and rowsInfo when showGrandTotals is disabled only for one field', function(assert) {
+        const dataController = new DataController({
+            dataSource: {
+                fields: [
+                    { dataField: 'sum', caption: 'Sum', format: 'fixedPoint', area: 'data', showGrandTotals: false },
+                    { dataField: 'avg', caption: 'Avg', format: 'fixedPoint', area: 'data' }
+                ],
+                columns: [],
+                rows: []
+            },
+            texts: texts,
+            dataFieldArea: 'row'
+        });
+
+        assert.deepEqual(
+            dataController.getColumnsInfo(),
+            [
+                [{ type: 'GT', text: 'Grand Total', isLast: true }]
+            ],
+            'Columns Info'
+        );
+
+        assert.deepEqual(
+            dataController.getRowsInfo(),
+            [[
+                { type: 'GT', text: 'Grand Total', },
+                { type: 'GT', text: 'Avg', dataIndex: 1, isLast: true }
+            ]],
+            'Rows Info'
+        );
     });
 
     QUnit.test('T541266. No dublicate cells in Chrome 60', function(assert) {
@@ -673,54 +782,6 @@ QUnit.module('dxPivotGrid DataController', moduleConfig, () => {
 
         assert.equal(rowsInfo[0].length, 2);
         assert.equal(rowsInfo[5].length, 3);
-    });
-
-    QUnit.test('columnsInfo and rowsInfo without dimension fields when showGrandTotals is disabled on dataField level only for one field and dataFieldArea = row', function(assert) {
-        const dataController = new DataController({
-            dataSource: {
-                fields: [
-                    { dataField: 'sum', caption: 'Sum', format: 'fixedPoint', area: 'data', showGrandTotals: false },
-                    { dataField: 'avg', caption: 'Avg', format: 'fixedPoint', area: 'data' }
-                ],
-                columns: [],
-                rows: []
-            },
-            texts: texts,
-            dataFieldArea: 'row'
-        });
-
-        assert.deepEqual(dataController.getRowsInfo(), [
-            [
-                {
-                    text: 'Grand Total',
-                    type: 'GT',
-                    rowspan: 2
-                },
-                {
-                    dataIndex: 0,
-                    isLast: true,
-                    text: 'Sum',
-                    type: 'GT'
-                },
-            ],
-            [
-                {
-                    dataIndex: 1,
-                    isLast: true,
-                    text: 'Avg',
-                    type: 'GT'
-                }
-
-            ]
-        ], 'Rows Info');
-
-        assert.deepEqual(dataController.getColumnsInfo(), [[
-            {
-                isLast: true,
-                text: 'Grand Total',
-                type: 'GT'
-            }
-        ]], 'Columns Info');
     });
 
     // B234872

@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import TreeViewTestWrapper from '../../helpers/TreeViewTestHelper.js';
 import { noop } from 'core/utils/common';
-import fx from 'animation/fx';
+import fx from 'common/core/animation/fx';
 import { DATA } from './treeViewParts/testData.js';
 import { makeSlowDataSource } from './treeViewParts/testUtils.js';
 import 'ui/tree_view';

@@ -1,7 +1,5 @@
 import timeZoneUtils from '__internal/scheduler/m_utils_time_zone';
 import timeZoneDataUtils from '__internal/scheduler/timezones/m_utils_timezones_data';
-import { utils } from '__internal/scheduler/m_utils';
-import { replaceWrongEndDate } from '__internal/scheduler/appointments/data_provider/m_utils';
 import { oldGetTimeZone } from './getTimeZone.old.list.js';
 import config from 'core/config';
 
@@ -71,56 +69,6 @@ module('Time zone utils', {}, () => {
         endDate.setFullYear(nowDate.getFullYear(), 6, 1);
 
         assert.equal(hasDST, startDate.getTimezoneOffset() !== endDate.getTimezoneOffset(), 'function should return valid result');
-    });
-});
-
-module('Date utils', () => {
-    test('"replaceWrongEndDate" should process endDate correctly', function(assert) {
-        [
-            {
-                data: {
-                    startDate: new Date(2019, 4, 3, 12),
-                    allDay: false
-                },
-                expectedEndDate: new Date(2019, 4, 3, 12, 30)
-            },
-            {
-                data: {
-                    startDate: new Date(2019, 4, 3, 12),
-                    allDay: false,
-                    endDate: new Date('string')
-                },
-                expectedEndDate: new Date(2019, 4, 3, 12, 30)
-            },
-            {
-                data: {
-                    startDate: new Date(2019, 4, 3, 12),
-                    allDay: true
-                },
-                expectedEndDate: new Date(2019, 4, 3, 23, 59)
-            }
-        ].forEach(testCase => {
-            const dataAccessors = utils.dataAccessors.create(
-                {
-                    startDate: 'startDate',
-                    endDate: 'endDate',
-                    allDay: 'allDay',
-                },
-                undefined,
-                true
-            );
-
-            replaceWrongEndDate(
-                testCase.data,
-                new Date(2019, 4, 3, 12),
-                testCase.data.endDate,
-                30,
-                dataAccessors
-            );
-
-            assert.equal(testCase.data.endDate.getHours(), testCase.expectedEndDate.getHours(), 'replaced endDate is ok');
-            assert.equal(testCase.data.endDate.getMinutes(), testCase.expectedEndDate.getMinutes(), 'replaced endDate is ok');
-        });
     });
 });
 

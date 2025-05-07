@@ -14,7 +14,7 @@ export const markup = `
         Formatted Text Editor (HTML Editor)
     </h2>
     <br>
-    <p>DevExtreme JavaScript HTML Editor is a client-side WYSIWYG text editor that allows its users to format textual and visual content and store it as HTML or Markdown.</p>
+    <p>DevExtreme JavaScript HTML Editor is a client-side WYSIWYG text editor that allows its users to format textual and visual content and store it as HTML.</p>
     <p>Supported features:</p>
     <ul>
         <li>Inline formats:
@@ -33,7 +33,6 @@ export const markup = `
             </ul>
         </li>
         <li>Custom formats</li>
-        <li>HTML and Markdown support</li>
         <li>Mail-merge placeholders (for example, %username%)</li>
         <li>Adaptive toolbar for working images, links, and color formats</li>
         <li>Image upload: drag-and-drop images onto the form, select files from the file system, or specify a URL.</li>

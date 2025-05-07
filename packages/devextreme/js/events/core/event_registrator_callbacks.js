@@ -1,3 +1,1 @@
-import MemorizedCallbacks from '../../core/memorized_callbacks';
-
-export default new MemorizedCallbacks();
+export { default } from '../../common/core/events/core/event_registrator_callbacks';

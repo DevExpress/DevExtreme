@@ -1,10 +1,11 @@
 @mixin chat-messagebubble(
   $padding,
   $border-radius,
+  $color-secondary,
   $background-color-secondary,
   $color-primary,
   $background-color-primary,
-  $bubble-container-gap
+  $bubble-container-gap,
 ) {
   .dx-chat-messagegroup-content {
     row-gap: $bubble-container-gap;
@@ -17,18 +18,19 @@
 
   .dx-chat-messagegroup-alignment-start {
     .dx-chat-messagebubble {
+      color: $color-secondary;
       background-color: $background-color-secondary;
 
       &:first-child {
         border-start-start-radius: $border-radius;
       }
-  
+
       &:last-child {
         border-end-start-radius: $border-radius;
       }
     }
   }
-  
+
   .dx-chat-messagegroup-alignment-end {
     .dx-chat-messagebubble {
       color: $color-primary;

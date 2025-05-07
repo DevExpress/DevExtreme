@@ -1,6 +1,6 @@
 const $ = require('jquery');
 const TagBox = require('ui/tag_box');
-const fx = require('animation/fx');
+const fx = require('common/core/animation/fx');
 const ko = require('knockout');
 
 require('integration/knockout');

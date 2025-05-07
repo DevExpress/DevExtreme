@@ -6,7 +6,6 @@ export * from './collision';
 export * from './drop-down-options';
 export * from './from';
 export * from './hide';
-export * from './item-dxi';
 export * from './my';
 export * from './offset';
 export * from './options';

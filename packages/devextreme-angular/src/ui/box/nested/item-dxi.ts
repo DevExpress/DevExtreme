@@ -16,7 +16,7 @@ import {
 import { DOCUMENT } from '@angular/common';
 
 
-import { Properties as dxBoxOptions } from 'devextreme/ui/box';
+import { dxBoxOptions } from 'devextreme/ui/box';
 
 import {
     NestedOptionHost,

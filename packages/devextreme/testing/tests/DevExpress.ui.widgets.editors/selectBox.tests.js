@@ -4,15 +4,16 @@ import SelectBox from 'ui/select_box';
 import devices from '__internal/core/m_devices';
 import pointerMock from '../../helpers/pointerMock.js';
 import keyboardMock from '../../helpers/keyboardMock.js';
-import { DataSource } from 'data/data_source/data_source';
-import ArrayStore from 'data/array_store';
-import CustomStore from 'data/custom_store';
-import fx from 'animation/fx';
+import { DataSource } from 'common/data/data_source/data_source';
+import ArrayStore from 'common/data/array_store';
+import { CustomStore } from 'common/data/custom_store';
+import fx from 'common/core/animation/fx';
 import { isRenderer } from 'core/utils/type';
 import errors from 'core/errors';
 import config from 'core/config';
 import ariaAccessibilityTestHelper from '../../helpers/ariaAccessibilityTestHelper.js';
-import { normalizeKeyName } from 'events/utils/index';
+import { normalizeKeyName } from 'common/core/events/utils/index';
+import messageLocalization from 'common/core/localization/message';
 
 import 'generic_light.css!';
 import 'ui/validator';
@@ -21,35 +22,33 @@ const EMPTY_MESSAGE_CLASS = 'dx-empty-message';
 
 QUnit.testStart(() => {
     const markup =
-        '<div id="qunit-fixture">\
-            <div id="selectBox"></div>\
-            \
-            <div id="selectBoxWithItemTemplate">\
-                <div data-options="dxTemplate: { name: \'item\'}">\
-                    itemTemplate\
-                </div>\
+        '<div id="selectBox"></div>\
+        \
+        <div id="selectBoxWithItemTemplate">\
+            <div data-options="dxTemplate: { name: \'item\'}">\
+                itemTemplate\
             </div>\
-            \
-            <div id="selectBoxFieldTemplateWithoutTextBox">\
-                <div data-options="dxTemplate: { name: \'field\' }">\
-                    <span>test</span>\
-                </div>\
+        </div>\
+        \
+        <div id="selectBoxFieldTemplateWithoutTextBox">\
+            <div data-options="dxTemplate: { name: \'field\' }">\
+                <span>test</span>\
             </div>\
+        </div>\
 \
-            <div id="selectBoxFieldTemplate">\
-                <div data-options="dxTemplate: { name: \'field\' }">\
-                    fieldTemplate\
-                </div>\
-                <div data-options="dxTemplate: { name: \'item\'}">\
-                    itemTemplate\
-                </div>\
+        <div id="selectBoxFieldTemplate">\
+            <div data-options="dxTemplate: { name: \'field\' }">\
+                fieldTemplate\
             </div>\
-            \
-            <div id="selectBoxWithoutScrollWrapper">\
-                <div id="selectBoxWithoutScroll"></div>\
+            <div data-options="dxTemplate: { name: \'item\'}">\
+                itemTemplate\
             </div>\
-            <div id="test-container"></div>\
-        </div>';
+        </div>\
+        \
+        <div id="selectBoxWithoutScrollWrapper">\
+            <div id="selectBoxWithoutScroll"></div>\
+        </div>\
+        <div id="test-container"></div>';
 
     $('#qunit-fixture').html(markup);
 
@@ -104,7 +103,6 @@ const moduleSetup = {
 };
 
 QUnit.module('hidden input', moduleSetup, () => {
-
     QUnit.test('the hidden input should get correct value on widget value change', function(assert) {
         const $element = $('#selectBox').dxSelectBox({
             items: [1, 2, 3],
@@ -157,7 +155,6 @@ QUnit.module('hidden input', moduleSetup, () => {
 });
 
 QUnit.module('functionality', moduleSetup, () => {
-
     QUnit.test('value can be set to "null"', function(assert) {
         const $element = $('#selectBox').dxSelectBox({
             items: ['first', 'second', 'third'],
@@ -1579,7 +1576,6 @@ QUnit.module('widget options', moduleSetup, () => {
 });
 
 QUnit.module('clearButton', moduleSetup, () => {
-
     QUnit.test('"clear" button click should not open selectbox', function(assert) {
         const $element = $('#selectBox').dxSelectBox({
             items: [1, 2, 3],
@@ -1757,7 +1753,6 @@ QUnit.module('clearButton', moduleSetup, () => {
 });
 
 QUnit.module('showSelectionControls', moduleSetup, () => {
-
     QUnit.test('showSelectionControls is true', function(assert) {
         $('#selectBox').dxSelectBox({
             items: [1],
@@ -1788,7 +1783,6 @@ QUnit.module('showSelectionControls', moduleSetup, () => {
 });
 
 QUnit.module('editing', moduleSetup, () => {
-
     QUnit.test('readOnly option with searchEnabled', function(assert) {
         const $selectBox = $('#selectBox').dxSelectBox({
             items: ['item1', 'item2', 'text3'],
@@ -2383,6 +2377,24 @@ QUnit.module('editing', moduleSetup, () => {
             .press('enter');
 
         assert.equal(onCustomItemCreating.callCount, 0, 'action has not been called');
+    });
+
+    QUnit.test('onCustomItemCreating should not be called when customItemCreateEvent is equal to empty string and component loses focus (T1269852)', function(assert) {
+        const onCustomItemCreating = sinon.stub();
+
+        const $selectBox = $('#selectBox').dxSelectBox({
+            acceptCustomValue: true,
+            customItemCreateEvent: '',
+            onCustomItemCreating: onCustomItemCreating,
+        });
+
+        const $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const keyboard = keyboardMock($input);
+
+        keyboard.type('t');
+        $input.trigger('focusout');
+
+        assert.strictEqual(onCustomItemCreating.callCount, 0, 'action has not been called');
     });
 
     QUnit.test('onCustomItemCreating should not be called more then once even when there is value change handler call inside of event handler (T893205)', function(assert) {
@@ -4195,7 +4207,6 @@ QUnit.module('search substitution', {
     });
 });
 
-
 QUnit.module('Scrolling', {
     beforeEach: function() {
         fx.off = true;
@@ -4390,10 +4401,44 @@ QUnit.module('Async tests', {}, () => {
             this.clock.restore();
         }
     });
+
+    QUnit.test('List should have correct size when async templates are used (T1216113)', function(assert) {
+        const clock = sinon.useFakeTimers();
+        const templateRenderingTimeout = 10;
+
+        $('#selectBox').dxSelectBox({
+            items: [1, 2],
+            templatesRenderAsynchronously: true,
+            opened: true,
+            integrationOptions: {
+                templates: {
+                    'item': {
+                        render({ model, container, onRendered }) {
+                            setTimeout(() => {
+                                const $item = $(`<div>${model}</div>`);
+                                $item.css('height', 50);
+                                $item.appendTo(container);
+
+                                onRendered();
+                            }, templateRenderingTimeout);
+                        }
+                    }
+                }
+            },
+        });
+
+        clock.tick(templateRenderingTimeout);
+
+        const overlayContentHeight = $(`.${OVERLAY_CONTENT_CLASS}`).height();
+        const listItemsHeight = $(`.${LIST_ITEMS_CLASS}`).height();
+
+        assert.roughEqual(overlayContentHeight, listItemsHeight, 5, 'popup height is more than rendered list items height');
+
+        clock.restore();
+    });
 });
 
 QUnit.module('regressions', moduleSetup, () => {
-
     QUnit.test('dataSource null reference error', function(assert) {
         assert.expect(0);
 
@@ -4720,7 +4765,6 @@ QUnit.module('regressions', moduleSetup, () => {
 });
 
 QUnit.module('hide on blur', moduleSetup, () => {
-
     QUnit.testInActiveWindow('selectbox does not hide self after input blur', function(assert) {
         const $selectBox = $('#selectBoxWithoutScroll').dxSelectBox({
             dataSource: [100, 200, 300]
@@ -5474,7 +5518,6 @@ QUnit.module('keyboard navigation', moduleSetup, () => {
 });
 
 QUnit.module('keyboard navigation "TAB" button', moduleSetup, () => {
-
     QUnit.test('T309987 - item should not be changed on the "tab" press', function(assert) {
         const items = ['first', 'second'];
         const value = items[1];
@@ -5954,7 +5997,6 @@ QUnit.module('acceptCustomValue mode', moduleSetup, () => {
     });
 });
 
-
 QUnit.module('focus policy', {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
@@ -6172,13 +6214,15 @@ if(devices.real().deviceType === 'desktop') {
                     searchMode: 'contains',
                 });
 
+                const localizedRoleDescription = messageLocalization.format('dxList-ariaRoleDescription');
+
                 const listAttributes = {
                     id: helper.widget._listId,
                     role: 'group',
-                    'aria-roledescription': 'list'
+                    'aria-roledescription': localizedRoleDescription,
                 };
 
-                helper.checkAttributes(helper.widget._list.$element(), listAttributes, 'list');
+                helper.checkAttributes(helper.widget._list.$element(), listAttributes, localizedRoleDescription);
 
                 const $listItemContainer = helper.widget._list.$element().find(`.${SCROLLVIEW_CONTENT_CLASS}`);
                 helper.checkAttributes($listItemContainer, { role: 'application' }, 'scrollview content');
@@ -6522,7 +6566,6 @@ QUnit.module('displayExpr', moduleSetup, () => {
         });
     });
 });
-
 
 QUnit.module('The "customItemCreateEvent" option warning', {
     beforeEach: function() {

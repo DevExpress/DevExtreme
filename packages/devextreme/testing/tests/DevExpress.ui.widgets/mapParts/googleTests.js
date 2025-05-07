@@ -36,7 +36,6 @@ QUnit.module('google provider', {
         const fakeURL = '/fakeGoogleUrl';
 
         GoogleProvider.remapConstant(fakeURL);
-        GoogleProvider.prototype._geocodedLocations = {};
 
         ajaxMock.setup({
             url: fakeURL,

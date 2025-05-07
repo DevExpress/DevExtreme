@@ -1,7 +1,7 @@
 import $ from 'jquery';
-import eventsEngine from 'events/core/events_engine';
+import eventsEngine from 'common/core/events/core/events_engine';
 import keyboardMock from '../../helpers/keyboardMock.js';
-import registerEvent from 'events/core/event_registrator';
+import registerEvent from 'common/core/events/core/event_registrator';
 import { compare as compareVersion } from 'core/utils/version';
 
 QUnit.module('base');

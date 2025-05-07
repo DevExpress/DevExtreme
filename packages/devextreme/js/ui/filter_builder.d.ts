@@ -6,14 +6,15 @@ import {
 
 import {
     template,
-} from '../core/templates/template';
+    DataType,
+} from '../common';
 
 import {
     Cancelable,
     EventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
-} from '../events/index';
+} from '../common/core/events';
 
 import Widget, {
     WidgetOptions,
@@ -22,10 +23,6 @@ import Widget, {
 import {
     Format,
 } from '../localization';
-
-import {
-    DataType,
-} from '../common';
 
 export {
     DataType,
@@ -306,7 +303,7 @@ export interface dxFilterBuilderOptions extends WidgetOptions<dxFilterBuilder> {
      * @default undefined
      * @public
      */
-    maxGroupLevel?: number;
+    maxGroupLevel?: number | undefined;
     /**
      * @docid
      * @type_function_param1 e:{ui/filter_builder:EditorPreparedEvent}
@@ -362,6 +359,29 @@ export default class dxFilterBuilder extends Widget<dxFilterBuilderOptions> {
 export type CustomOperation = dxFilterBuilderCustomOperation;
 
 /**
+ * @docid
+ * @public
+ */
+export type FieldInfo = {
+  /**
+   * @docid
+   * @public
+   */
+  value?: string | number | Date;
+  /**
+   * @docid
+   * @public
+   */
+  valueText?: string;
+  /**
+   * @docid
+   * @public
+   * @type dxFilterBuilderField
+   */
+  field?: Field;
+};
+
+/**
  * @namespace DevExpress.ui
  * @deprecated Use the CustomOperation type instead
  */
@@ -378,19 +398,18 @@ export interface dxFilterBuilderCustomOperation {
      * @default undefined
      * @public
      */
-    caption?: string;
+    caption?: string | undefined;
     /**
      * @docid
-     * @type_function_param1_field field:dxFilterBuilderField:optional
      * @public
      */
-    customizeText?: ((fieldInfo: { value?: string | number | Date; valueText?: string; field?: Field }) => string);
+    customizeText?: ((fieldInfo: FieldInfo) => string);
     /**
      * @docid
      * @default undefined
      * @public
      */
-    dataTypes?: Array<DataType>;
+    dataTypes?: Array<DataType> | undefined;
     /**
      * @docid
      * @type_function_param1 conditionInfo:object
@@ -410,13 +429,13 @@ export interface dxFilterBuilderCustomOperation {
      * @default undefined
      * @public
      */
-    icon?: string;
+    icon?: string | undefined;
     /**
      * @docid
      * @default undefined
      * @public
      */
-    name?: string;
+    name?: string | undefined;
 }
 
 export type FilterLookupDataSource<T> = Exclude<DataSourceLike<T>, string | DataSource>;
@@ -445,18 +464,18 @@ export interface dxFilterBuilderField {
      * @default undefined
      * @public
      */
-    caption?: string;
+    caption?: string | undefined;
     /**
      * @docid
      * @public
      */
-    customizeText?: ((fieldInfo: { value?: string | number | Date; valueText?: string }) => string);
+    customizeText?: ((fieldInfo: FieldInfo) => string);
     /**
      * @docid
      * @default undefined
      * @public
      */
-    dataField?: string;
+    dataField?: string | undefined;
     /**
      * @docid
      * @default "string"
@@ -508,28 +527,28 @@ export interface dxFilterBuilderField {
       /**
        * @docid
        * @default undefined
-       * @type Array<any> | Store | DataSourceOptions
+       * @type Array<any> | Store | DataSourceOptions | undefined
        */
-      dataSource?: FilterLookupDataSource<any> | null;
+      dataSource?: FilterLookupDataSource<any> | null | undefined;
       /**
        * @docid
        * @default undefined
        * @type_function_param1 data:object
        */
-      displayExpr?: string | ((data: any) => string);
+      displayExpr?: string | ((data: any) => string) | undefined;
       /**
        * @docid
        * @default undefined
        * @type_function_param1 data:object
        */
-      valueExpr?: string | ((data: any) => string | number | boolean);
+      valueExpr?: string | ((data: any) => string | number | boolean) | undefined;
     };
     /**
      * @docid
      * @default undefined
      * @public
      */
-    name?: string;
+    name?: string | undefined;
     /**
      * @docid
      * @default "true"

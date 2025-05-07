@@ -1,8 +1,8 @@
 const $ = require('jquery');
 const noop = require('core/utils/common').noop;
-const dragEvents = require('events/drag');
+const dragEvents = require('common/core/events/drag');
 const support = require('core/utils/support');
-const GestureEmitter = require('events/gesture/emitter.gesture');
+const GestureEmitter = require('common/core/events/gesture/emitter.gesture');
 const dropTargets = dragEvents.dropTargets;
 const pointerMock = require('../../helpers/pointerMock.js');
 

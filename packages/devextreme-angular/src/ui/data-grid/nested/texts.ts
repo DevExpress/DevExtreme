@@ -29,46 +29,6 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoDataGridTextsComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get fix(): string {
-        return this._getOption('fix');
-    }
-    set fix(value: string) {
-        this._setOption('fix', value);
-    }
-
-    @Input()
-    get leftPosition(): string {
-        return this._getOption('leftPosition');
-    }
-    set leftPosition(value: string) {
-        this._setOption('leftPosition', value);
-    }
-
-    @Input()
-    get rightPosition(): string {
-        return this._getOption('rightPosition');
-    }
-    set rightPosition(value: string) {
-        this._setOption('rightPosition', value);
-    }
-
-    @Input()
-    get stickyPosition(): string {
-        return this._getOption('stickyPosition');
-    }
-    set stickyPosition(value: string) {
-        this._setOption('stickyPosition', value);
-    }
-
-    @Input()
-    get unfix(): string {
-        return this._getOption('unfix');
-    }
-    set unfix(value: string) {
-        this._setOption('unfix', value);
-    }
-
-    @Input()
     get addRow(): string {
         return this._getOption('addRow');
     }
@@ -181,30 +141,6 @@ export class DxoDataGridTextsComponent extends NestedOption implements OnDestroy
     }
 
     @Input()
-    get clearFilter(): string {
-        return this._getOption('clearFilter');
-    }
-    set clearFilter(value: string) {
-        this._setOption('clearFilter', value);
-    }
-
-    @Input()
-    get createFilter(): string {
-        return this._getOption('createFilter');
-    }
-    set createFilter(value: string) {
-        this._setOption('createFilter', value);
-    }
-
-    @Input()
-    get filterEnabledHint(): string {
-        return this._getOption('filterEnabledHint');
-    }
-    set filterEnabledHint(value: string) {
-        this._setOption('filterEnabledHint', value);
-    }
-
-    @Input()
     get groupByThisColumn(): string {
         return this._getOption('groupByThisColumn');
     }
@@ -242,30 +178,6 @@ export class DxoDataGridTextsComponent extends NestedOption implements OnDestroy
     }
     set ungroupAll(value: string) {
         this._setOption('ungroupAll', value);
-    }
-
-    @Input()
-    get cancel(): string {
-        return this._getOption('cancel');
-    }
-    set cancel(value: string) {
-        this._setOption('cancel', value);
-    }
-
-    @Input()
-    get emptyValue(): string {
-        return this._getOption('emptyValue');
-    }
-    set emptyValue(value: string) {
-        this._setOption('emptyValue', value);
-    }
-
-    @Input()
-    get ok(): string {
-        return this._getOption('ok');
-    }
-    set ok(value: string) {
-        this._setOption('ok', value);
     }
 
     @Input()
@@ -338,6 +250,94 @@ export class DxoDataGridTextsComponent extends NestedOption implements OnDestroy
     }
     set sumOtherColumn(value: string) {
         this._setOption('sumOtherColumn', value);
+    }
+
+    @Input()
+    get fix(): string {
+        return this._getOption('fix');
+    }
+    set fix(value: string) {
+        this._setOption('fix', value);
+    }
+
+    @Input()
+    get leftPosition(): string {
+        return this._getOption('leftPosition');
+    }
+    set leftPosition(value: string) {
+        this._setOption('leftPosition', value);
+    }
+
+    @Input()
+    get rightPosition(): string {
+        return this._getOption('rightPosition');
+    }
+    set rightPosition(value: string) {
+        this._setOption('rightPosition', value);
+    }
+
+    @Input()
+    get stickyPosition(): string {
+        return this._getOption('stickyPosition');
+    }
+    set stickyPosition(value: string) {
+        this._setOption('stickyPosition', value);
+    }
+
+    @Input()
+    get unfix(): string {
+        return this._getOption('unfix');
+    }
+    set unfix(value: string) {
+        this._setOption('unfix', value);
+    }
+
+    @Input()
+    get clearFilter(): string {
+        return this._getOption('clearFilter');
+    }
+    set clearFilter(value: string) {
+        this._setOption('clearFilter', value);
+    }
+
+    @Input()
+    get createFilter(): string {
+        return this._getOption('createFilter');
+    }
+    set createFilter(value: string) {
+        this._setOption('createFilter', value);
+    }
+
+    @Input()
+    get filterEnabledHint(): string {
+        return this._getOption('filterEnabledHint');
+    }
+    set filterEnabledHint(value: string) {
+        this._setOption('filterEnabledHint', value);
+    }
+
+    @Input()
+    get cancel(): string {
+        return this._getOption('cancel');
+    }
+    set cancel(value: string) {
+        this._setOption('cancel', value);
+    }
+
+    @Input()
+    get emptyValue(): string {
+        return this._getOption('emptyValue');
+    }
+    set emptyValue(value: string) {
+        this._setOption('emptyValue', value);
+    }
+
+    @Input()
+    get ok(): string {
+        return this._getOption('ok');
+    }
+    set ok(value: string) {
+        this._setOption('ok', value);
     }
 
 

@@ -1,6 +1,6 @@
 import $ from 'jquery';
-import { getTranslateValues } from 'renovation/ui/scroll_view/utils/get_translate_values';
-import animationFrame from 'animation/frame';
+import { getTranslateValues } from '__internal/ui/scroll_view/utils/get_translate_values';
+import animationFrame from 'common/core/animation/frame';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import pointerMock from '../../../helpers/pointerMock.js';
 
@@ -453,7 +453,6 @@ QUnit.test('bounce is disabled', function(assert) {
         useNative: false,
         bounceEnabled: false,
         inertiaEnabled: false,
-
         onBounce: function() {
             assert.ok(false, 'bounce action was not fired');
         }
@@ -479,11 +478,9 @@ QUnit.test('inertia stopped on the bound when bounce is disabled', function(asse
     $scrollable.dxScrollable({
         useNative: false,
         bounceEnabled: false,
-
         onBounce: function() {
             assert.ok(false, 'bounce action was not fired');
         },
-
         onEnd: function() {
             const location = getScrollOffset($scrollable);
             assert.equal(location.top, 0, 'content stopped on the bound');

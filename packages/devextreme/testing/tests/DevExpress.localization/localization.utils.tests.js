@@ -1,4 +1,4 @@
-import { toFixed } from 'localization/utils';
+import { toFixed } from 'common/core/localization/utils';
 
 const { module: testModule, test } = QUnit;
 

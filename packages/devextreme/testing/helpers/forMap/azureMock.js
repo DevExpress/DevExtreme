@@ -4,6 +4,7 @@
             if(options) {
                 atlas.optionsSpecified = true;
                 atlas.options = options;
+                atlas.addedControls = 2;
             }
 
             this.events = {
@@ -18,6 +19,16 @@
 
                     if(eventName === 'move') {
                         atlas.moveActionCallback = callbackFun;
+                    }
+
+                    if(eventName === 'ready') {
+                        atlas.readyCallbackCalled = true;
+
+                        if(!window.postponeMapReadyPromise) {
+                            callbackFun();
+                        } else {
+                            atlas.mapReadyResolve = callbackFun;
+                        }
                     }
                 },
                 remove: (eventName) => {
@@ -53,7 +64,7 @@
             };
             this.controls = {
                 add: (controls, options) => {
-                    atlas.addedControls = controls.length;
+                    atlas.addedControls += controls.length;
                     atlas.controlOptions = options;
                 },
                 remove: (controls) => {

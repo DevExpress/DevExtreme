@@ -94,11 +94,11 @@ const min = new Date(now.setDate(1));
 const max = new Date(now.setDate(lastDay));
 const selectedDays = computed(() => convertRangeToDays(currentValue.value));
 
-function convertRangeToDays([startDate, endDate]) {
+function convertRangeToDays([startDate, endDate]: Date[]) {
   let daysCount = 0;
 
   if (startDate && endDate) {
-    daysCount = Math.floor(Math.abs((endDate - startDate) / msInDay)) + 1;
+    daysCount = Math.floor(Math.abs((endDate.getTime() - startDate.getTime()) / msInDay)) + 1;
   }
   return daysCount;
 }

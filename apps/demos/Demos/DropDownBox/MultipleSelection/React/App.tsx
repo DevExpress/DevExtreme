@@ -1,12 +1,12 @@
 import React, { useCallback, useRef, useState } from 'react';
-import DropDownBox, { DropDownBoxTypes } from 'devextreme-react/drop-down-box';
+import DropDownBox, { type DropDownBoxTypes } from 'devextreme-react/drop-down-box';
 import TreeView, { TreeViewRef } from 'devextreme-react/tree-view';
 import DataGrid, {
   Selection,
   Paging,
   FilterRow,
   Scrolling,
-  DataGridTypes,
+  type DataGridTypes,
 } from 'devextreme-react/data-grid';
 import CustomStore from 'devextreme/data/custom_store';
 import 'whatwg-fetch';

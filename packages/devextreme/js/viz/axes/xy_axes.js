@@ -204,7 +204,9 @@ function generateAutoBreaks({ logarithmBase, type, maxAutoBreakCount }, series, 
 
     let minDiff = RANGE_RATIO * visibleRange;
 
-    const ranges = generateRangesOnPoints(sortedAllPoints, edgePoints, getRange).sort((a, b) => b.length - a.length);
+    const ranges = generateRangesOnPoints(sortedAllPoints, edgePoints, getRange)
+        .filter(({ length }) => !!length)
+        .sort((a, b) => b.length - a.length);
     const epsilon = _math.min.apply(null, ranges.map(r => r.length)) / 1000;
     const _maxAutoBreakCount = isDefined(maxAutoBreakCount) ? _math.min(maxAutoBreakCount, ranges.length) : ranges.length;
 

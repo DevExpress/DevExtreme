@@ -123,8 +123,10 @@ const sources = (src, dist, distGlob) => (() => merge(
 
                 pkg.name = 'devextreme';
                 pkg.version = ctx.version;
+
                 delete pkg.devDependencies;
                 delete pkg.publishConfig;
+                delete pkg.scripts;
 
                 file.contents = Buffer.from(JSON.stringify(pkg, null, 2));
                 callback(null, file);
@@ -138,7 +140,7 @@ const sources = (src, dist, distGlob) => (() => merge(
         .pipe(gulp.dest(`${dist}/dist`)),
 
     gulp
-        .src('README.md')
+        .src('../../README.md')
         .pipe(gulp.dest(dist)),
 
     stringSrc('.npmignore', 'dist/js\ndist/ts\n!dist/css\n!/scss/bundles/*.scss\nproject.json')

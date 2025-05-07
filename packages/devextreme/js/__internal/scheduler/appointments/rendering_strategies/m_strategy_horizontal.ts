@@ -1,7 +1,6 @@
 import dateUtils from '@js/core/utils/date';
 import { getSkippedHoursInRange } from '@ts/scheduler/r1/utils/index';
 
-import { ExpressionUtils } from '../../m_expression_utils';
 import BaseAppointmentsStrategy from './m_strategy_base';
 
 const DEFAULT_APPOINTMENT_HEIGHT = 60;
@@ -17,7 +16,7 @@ class HorizontalRenderingStrategy extends BaseAppointmentsStrategy {
 
   calculateAppointmentWidth(appointment, position) {
     const cellWidth = this.cellWidth || this.getAppointmentMinSize();
-    const allDay = ExpressionUtils.getField(this.dataAccessors, 'allDay', appointment);
+    const allDay = this.dataAccessors.get('allDay', appointment);
     const {
       startDate,
       endDate,
@@ -110,7 +109,7 @@ class HorizontalRenderingStrategy extends BaseAppointmentsStrategy {
   }
 
   isAllDay(appointmentData) {
-    return ExpressionUtils.getField(this.dataAccessors, 'allDay', appointmentData);
+    return Boolean(this.dataAccessors.get('allDay', appointmentData));
   }
 
   _isItemsCross(firstItem, secondItem) {

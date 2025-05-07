@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo, useState } from 'react';
-import Drawer, { DrawerTypes } from 'devextreme-react/drawer';
+import Drawer, { type DrawerTypes } from 'devextreme-react/drawer';
 import RadioGroup from 'devextreme-react/radio-group';
 import Toolbar from 'devextreme-react/toolbar';
 import HTMLReactParser from 'html-react-parser';

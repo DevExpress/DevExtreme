@@ -86,10 +86,10 @@ export class DxoPolarChartValueErrorBarComponent extends NestedOption implements
     }
 
     @Input()
-    get type(): ValueErrorBarType | undefined {
+    get type(): undefined | ValueErrorBarType {
         return this._getOption('type');
     }
-    set type(value: ValueErrorBarType | undefined) {
+    set type(value: undefined | ValueErrorBarType) {
         this._setOption('type', value);
     }
 

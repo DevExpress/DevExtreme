@@ -13,7 +13,7 @@ import {
   Widget,
   WidgetClass,
 } from './test-component';
-import { TemplateDiscoveryContext } from '../contexts';
+import { TemplateRenderingContext } from '../contexts';
 
 
 jest.useFakeTimers();
@@ -125,6 +125,10 @@ describe('rendering', () => {
     it('correctly sets the buy now link', () => {
       expect(config().buyNowLink).toBe('https://go.devexpress.com/Licensing_Installer_Watermark_DevExtremeReact.aspx');
     });
+
+    it('correctly sets the help link', () => {
+      expect(config().licensingDocLink).toBe('https://go.devexpress.com/Licensing_Documentation_DevExtremeReact.aspx');
+    });
   });
 
   describe('nested full components', () => {
@@ -145,7 +149,7 @@ describe('rendering', () => {
       testingLib.configure({ reactStrictMode: true });
 
       const InnerComponent = () => {
-        const { discoveryRendering: isTemplateTested } = React.useContext(TemplateDiscoveryContext);
+        const { isTemplateRendering: isTemplateTested } = React.useContext(TemplateRenderingContext);
 
         return (
           <TestComponent isTemplateTested={isTemplateTested}>
@@ -202,7 +206,7 @@ describe('rendering', () => {
     expect(createPortalFn.mock.calls.some(call => {
       const reactElement = call[0] as unknown as React.ReactElement;
 
-      return reactElement.type !== TemplateDiscoveryContext.Provider
+      return reactElement.type !== TemplateRenderingContext.Provider
     })).toBeFalsy();
   });
 
@@ -231,7 +235,7 @@ describe('rendering', () => {
     expect(createPortalFn.mock.calls.filter(call => {
       const reactElement = call[0] as unknown as React.ReactElement;
 
-      return reactElement.type !== TemplateDiscoveryContext.Provider
+      return reactElement.type !== TemplateRenderingContext.Provider
     }).length).toEqual(1);
   });
 
@@ -256,8 +260,8 @@ describe('rendering', () => {
       </TestComponent>,
     );
 
-    expect(WidgetClass.mock.instances.length).toBe(3);
-    expect(WidgetClass.mock.instances[2]).toEqual({});
+    expect(WidgetClass.mock.instances.length).toBe(2);
+    expect(WidgetClass.mock.instances[1]).toEqual({});
   });
 
   it('clears nested option in strict mode', () => {
@@ -268,7 +272,7 @@ describe('rendering', () => {
         </TestComponent>
       </React.StrictMode>,
     );
-    expect(Widget.clearExtensions).toHaveBeenCalledTimes(6);
+    expect(Widget.clearExtensions).toHaveBeenCalledTimes(4);
   });
 
   it('do not pass children to options', () => {

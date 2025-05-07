@@ -10,7 +10,7 @@ $warning-color: null !default;
 @if $mode == "light" {
   $warning-color: $base-text-color !default;
 }
-  
+
 @if $mode == "dark" {
   $warning-color: $base-inverted-text-color !default;
 }

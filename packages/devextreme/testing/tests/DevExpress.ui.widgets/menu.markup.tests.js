@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import fx from 'animation/fx';
+import fx from 'common/core/animation/fx';
 
 import Menu from '__internal/ui/menu/m_menu';
 import '__internal/ui/menu/m_submenu';

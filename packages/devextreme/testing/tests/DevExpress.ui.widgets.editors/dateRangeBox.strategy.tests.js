@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import fx from 'animation/fx';
+import fx from 'common/core/animation/fx';
 import dataUtils from 'core/element_data';
 import devices from 'core/devices.js';
 import keyboardMock from '../../helpers/keyboardMock.js';

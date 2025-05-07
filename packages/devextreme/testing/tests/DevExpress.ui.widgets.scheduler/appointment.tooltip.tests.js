@@ -1,4 +1,4 @@
-import fx from 'animation/fx';
+import fx from 'common/core/animation/fx';
 import {
     initTestMarkup,
     createWrapper

@@ -1,4 +1,10 @@
 /* eslint-disable max-classes-per-file */
+import { name as clickEventName } from '@js/common/core/events/click';
+import eventsEngine from '@js/common/core/events/core/events_engine';
+import holdEvent from '@js/common/core/events/hold';
+import { addNamespace, isCommandKeyPressed } from '@js/common/core/events/utils/index';
+import messageLocalization from '@js/common/core/localization/message';
+import { applyBatch } from '@js/common/data/array_utils';
 import $ from '@js/core/renderer';
 import { equalByValue } from '@js/core/utils/common';
 import type { DeferredObj } from '@js/core/utils/deferred';
@@ -6,12 +12,6 @@ import { Deferred } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import { isDefined } from '@js/core/utils/type';
-import { applyBatch } from '@js/data/array_utils';
-import { name as clickEventName } from '@js/events/click';
-import eventsEngine from '@js/events/core/events_engine';
-import holdEvent from '@js/events/hold';
-import { addNamespace, isCommandKeyPressed } from '@js/events/utils/index';
-import messageLocalization from '@js/localization/message';
 import errors from '@js/ui/widget/ui.errors';
 import supportUtils from '@ts/core/utils/m_support';
 import type { ColumnHeadersView } from '@ts/grids/grid_core/column_headers/m_column_headers';

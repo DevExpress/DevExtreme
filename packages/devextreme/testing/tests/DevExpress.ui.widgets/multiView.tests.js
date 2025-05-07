@@ -1,11 +1,11 @@
-import fx from 'animation/fx';
-import translator from 'animation/translator';
+import fx from 'common/core/animation/fx';
+import translator from 'common/core/animation/translator';
 import 'generic_light.css!';
 import config from 'core/config';
 import devices from '__internal/core/m_devices';
 import { isRenderer } from 'core/utils/type';
-import Swipeable from 'events/gesture/swipeable';
-import { triggerShownEvent } from 'events/visibility_change';
+import Swipeable from 'common/core/events/gesture/swipeable';
+import { triggerShownEvent } from 'common/core/events/visibility_change';
 import $ from 'jquery';
 import 'ui/multi_view';
 import { animation } from '__internal/ui/multi_view/m_multi_view.animation';
@@ -502,6 +502,37 @@ QUnit.module('interaction via swipe', {
             const $itemContainer = this.$multiView.find(`.${MULTIVIEW_ITEM_CONTAINER_CLASS}`);
             assert.strictEqual(position($itemContainer), 0, 'container position is restored to initial');
         });
+    });
+
+    QUnit.test('there should not be infinite loop if try swiping when all items are hidden', function(assert) {
+        const $multiView = $('#multiView').dxMultiView({
+            items: [
+                { text: '1', visible: false },
+                { text: '2', visible: false },
+                { text: '3', visible: false },
+            ],
+            selectedIndex: 2,
+            loop: true,
+            swipeEnabled: true
+        });
+        const instance = $multiView.dxMultiView('instance');
+        const pointer = pointerMock($multiView);
+
+        const isItemVisibleStub = sinon.stub(instance, '_isItemVisible').callsFake(() => {
+            if(isItemVisibleStub.callCount === 20) {
+                assert.ok(false, 'infinite loop detected');
+                return true;
+            }
+            return false;
+        });
+
+        try {
+            pointer.start().swipeStart().swipe(-0.5).swipeEnd(-1);
+
+            assert.ok(true, 'no infinite loop');
+        } catch(error) {
+            isItemVisibleStub.restore();
+        }
     });
 
     QUnit.test('when only one item is visible, swipe action does not move the current visible item', function(assert) {

@@ -8,12 +8,11 @@ import dxFilterBuilder, {
 import { Component as BaseComponent, IHtmlOptions, ComponentRef, NestedComponentMeta } from "./core/component";
 import NestedOption from "./core/nested-option";
 
-import type { ContentReadyEvent, DisposingEvent, EditorPreparedEvent, EditorPreparingEvent, InitializedEvent, ValueChangedEvent, dxFilterBuilderField } from "devextreme/ui/filter_builder";
-import type { template } from "devextreme/core/templates/template";
+import type { ContentReadyEvent, DisposingEvent, EditorPreparedEvent, EditorPreparingEvent, InitializedEvent, ValueChangedEvent, dxFilterBuilderField, FieldInfo, FilterBuilderOperation } from "devextreme/ui/filter_builder";
+import type { DataType, template, Format as CommonFormat } from "devextreme/common";
+import type { Format as LocalizationFormat } from "devextreme/common/core/localization";
 import type { DataSourceOptions } from "devextreme/data/data_source";
 import type { Store } from "devextreme/data/store";
-
-import type * as LocalizationTypes from "devextreme/localization";
 
 type ReplaceFieldTypes<TSource, TReplacement> = {
   [P in keyof TSource]: P extends keyof TReplacement ? TReplacement[P] : TSource[P];
@@ -85,13 +84,13 @@ const FilterBuilder = memo(
 // FilterBuilder
 type ICustomOperationProps = React.PropsWithChildren<{
   calculateFilterExpression?: ((filterValue: any, field: dxFilterBuilderField) => string | (() => any) | Array<any>);
-  caption?: string;
-  customizeText?: ((fieldInfo: { field: dxFilterBuilderField, value: string | number | Date, valueText: string }) => string);
-  dataTypes?: Array<"string" | "number" | "date" | "boolean" | "object" | "datetime">;
+  caption?: string | undefined;
+  customizeText?: ((fieldInfo: FieldInfo) => string);
+  dataTypes?: Array<DataType> | undefined;
   editorTemplate?: ((conditionInfo: { field: dxFilterBuilderField, setValue: (() => void), value: string | number | Date }, container: any) => string | any) | template;
   hasValue?: boolean;
-  icon?: string;
-  name?: string;
+  icon?: string | undefined;
+  name?: string | undefined;
   editorRender?: (...params: any) => React.ReactNode;
   editorComponent?: React.ComponentType<any>;
 }>
@@ -118,22 +117,22 @@ const CustomOperation = Object.assign<typeof _componentCustomOperation, NestedCo
 // FilterBuilder
 type IFieldProps = React.PropsWithChildren<{
   calculateFilterExpression?: ((filterValue: any, selectedFilterOperation: string) => string | (() => any) | Array<any>);
-  caption?: string;
-  customizeText?: ((fieldInfo: { value: string | number | Date, valueText: string }) => string);
-  dataField?: string;
-  dataType?: "string" | "number" | "date" | "boolean" | "object" | "datetime";
+  caption?: string | undefined;
+  customizeText?: ((fieldInfo: FieldInfo) => string);
+  dataField?: string | undefined;
+  dataType?: DataType;
   editorOptions?: any;
   editorTemplate?: ((conditionInfo: { field: dxFilterBuilderField, filterOperation: string, setValue: (() => void), value: string | number | Date }, container: any) => string | any) | template;
   falseText?: string;
-  filterOperations?: Array<"=" | "<>" | "<" | "<=" | ">" | ">=" | "contains" | "endswith" | "isblank" | "isnotblank" | "notcontains" | "startswith" | "between" | string>;
-  format?: LocalizationTypes.Format;
+  filterOperations?: Array<FilterBuilderOperation | string>;
+  format?: LocalizationFormat;
   lookup?: Record<string, any> | {
     allowClearing?: boolean;
-    dataSource?: Array<any> | DataSourceOptions | Store;
-    displayExpr?: ((data: any) => string) | string;
-    valueExpr?: ((data: any) => string | number | boolean) | string;
+    dataSource?: Array<any> | DataSourceOptions | Store | undefined;
+    displayExpr?: ((data: any) => string) | string | undefined;
+    valueExpr?: ((data: any) => string | number | boolean) | string | undefined;
   };
-  name?: string;
+  name?: string | undefined;
   trueText?: string;
   editorRender?: (...params: any) => React.ReactNode;
   editorComponent?: React.ComponentType<any>;
@@ -198,7 +197,7 @@ type IFormatProps = React.PropsWithChildren<{
   formatter?: ((value: number | Date) => string);
   parser?: ((value: string) => number | Date);
   precision?: number;
-  type?: "billions" | "currency" | "day" | "decimal" | "exponential" | "fixedPoint" | "largeNumber" | "longDate" | "longTime" | "millions" | "millisecond" | "month" | "monthAndDay" | "monthAndYear" | "percent" | "quarter" | "quarterAndYear" | "shortDate" | "shortTime" | "thousands" | "trillions" | "year" | "dayOfWeek" | "hour" | "longDateLongTime" | "minute" | "second" | "shortDateShortTime";
+  type?: CommonFormat | string;
   useCurrencyAccountingStyle?: boolean;
 }>
 const _componentFormat = (props: IFormatProps) => {
@@ -239,9 +238,9 @@ const GroupOperationDescriptions = Object.assign<typeof _componentGroupOperation
 // Field
 type ILookupProps = React.PropsWithChildren<{
   allowClearing?: boolean;
-  dataSource?: Array<any> | DataSourceOptions | Store;
-  displayExpr?: ((data: any) => string) | string;
-  valueExpr?: ((data: any) => string | number | boolean) | string;
+  dataSource?: Array<any> | DataSourceOptions | Store | undefined;
+  displayExpr?: ((data: any) => string) | string | undefined;
+  valueExpr?: ((data: any) => string | number | boolean) | string | undefined;
 }>
 const _componentLookup = (props: ILookupProps) => {
   return React.createElement(NestedOption<ILookupProps>, {

@@ -1,18 +1,15 @@
+import { getPublicElement } from '@js/core/element';
 import $ from '@js/core/renderer';
-import type { User } from '@js/ui/chat';
 import type { WidgetOptions } from '@js/ui/widget/ui.widget';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
 
-import type Chat from './chat';
-
-const CHAT_MESSAGEBUBBLE_CLASS = 'dx-chat-messagebubble';
+export const CHAT_MESSAGEBUBBLE_CLASS = 'dx-chat-messagebubble';
+const CHAT_MESSAGEBUBBLE_CONTENT_CLASS = 'dx-chat-messagebubble-content';
 
 export interface Properties extends WidgetOptions<MessageBubble> {
   text?: string;
-  // eslint-disable-next-line
-  template?: null | any;
-  templateData?: { component?: Chat; isLast?: boolean; author?: User };
+  template?: ((text: string, container: Element) => void) | null;
 }
 
 class MessageBubble extends Widget<Properties> {
@@ -21,13 +18,17 @@ class MessageBubble extends Widget<Properties> {
       ...super._getDefaultOptions(),
       text: '',
       template: null,
-      templateData: {},
     };
   }
 
   _initMarkup(): void {
-    $(this.element())
-      .addClass(CHAT_MESSAGEBUBBLE_CLASS);
+    const $element = $(this.element());
+
+    $element.addClass(CHAT_MESSAGEBUBBLE_CLASS);
+
+    $('<div>')
+      .addClass(CHAT_MESSAGEBUBBLE_CONTENT_CLASS)
+      .appendTo($element);
 
     super._initMarkup();
 
@@ -36,27 +37,20 @@ class MessageBubble extends Widget<Properties> {
 
   _updateContent(): void {
     const {
-      text = '', template = null, templateData,
+      text = '',
+      template,
     } = this.option();
+    const $bubbleContainer = $(this.element()).find(`.${CHAT_MESSAGEBUBBLE_CONTENT_CLASS}`);
+
+    $bubbleContainer.empty();
 
     if (template) {
-      $(this.element()).empty();
-
-      const messageTemplate = this._getTemplateByOption('template');
-      const data = {
-        text,
-        ...templateData,
-      };
-
-      messageTemplate.render({
-        container: this.element(),
-        model: data,
-      });
+      template(text, getPublicElement($bubbleContainer));
 
       return;
     }
 
-    $(this.element()).text(text);
+    $bubbleContainer.text(text);
   }
 
   _optionChanged(args: OptionChanged<Properties>): void {
@@ -65,7 +59,6 @@ class MessageBubble extends Widget<Properties> {
     switch (name) {
       case 'text':
       case 'template':
-      case 'templateData':
         this._updateContent();
         break;
       default:

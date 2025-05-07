@@ -34,10 +34,10 @@ import { DxiDiagramCommandComponent } from './command-dxi';
 })
 export class DxoDiagramContextMenuComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get commands(): Array<CustomCommand | Command> {
+    get commands(): Array<Command | CustomCommand> {
         return this._getOption('commands');
     }
-    set commands(value: Array<CustomCommand | Command>) {
+    set commands(value: Array<Command | CustomCommand>) {
         this._setOption('commands', value);
     }
 

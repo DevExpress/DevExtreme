@@ -6,7 +6,7 @@ import {
     EventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
-} from '../events/index';
+} from '../common/core/events';
 
 import {
     FileSavingEventInfo,
@@ -16,7 +16,7 @@ import {
 
 import {
     template,
-} from '../core/templates/template';
+} from '../common';
 
 import {
     BaseGauge,
@@ -141,7 +141,7 @@ export interface dxCircularGaugeOptions extends BaseGaugeOptions<dxCircularGauge
      * @type_function_return string|SVGElement|jQuery
      * @public
      */
-    centerTemplate?: template | ((component: dxCircularGauge, element: SVGGElement) => string | UserDefinedElement<SVGElement>);
+    centerTemplate?: template | ((component: dxCircularGauge, element: SVGGElement) => string | UserDefinedElement<SVGElement>) | undefined;
     /**
      * @docid
      * @type object

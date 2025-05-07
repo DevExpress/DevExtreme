@@ -1,17 +1,18 @@
 import $ from 'jquery';
-import fx from 'animation/fx';
+import fx from 'common/core/animation/fx';
 import devices from '__internal/core/m_devices';
 import dataUtils from 'core/element_data';
 import config from 'core/config';
 import browser from 'core/utils/browser';
 import errors from 'core/errors';
 import { isFunction, isRenderer } from 'core/utils/type';
-import { normalizeKeyName } from 'events/utils/index';
+import { normalizeKeyName } from 'common/core/events/utils/index';
+import messageLocalization from 'common/core/localization/message';
 
-import ArrayStore from 'data/array_store';
-import CustomStore from 'data/custom_store';
-import Query from 'data/query';
-import { DataSource } from 'data/data_source/data_source';
+import ArrayStore from 'common/data/array_store';
+import { CustomStore } from 'common/data/custom_store';
+import Query from 'common/data/query';
+import { DataSource } from 'common/data/data_source/data_source';
 
 import themes from 'ui/themes';
 import Lookup from 'ui/lookup';
@@ -3016,6 +3017,28 @@ QUnit.module('keyboard navigation', {
         assert.ok(instance.option('opened'), 'popup is opened');
     });
 
+    QUnit.test('lookup value should not be changed after pressing tab', function(assert) {
+        if(devices.real().deviceType !== 'desktop') {
+            assert.ok(true, 'test does not actual for mobile devices');
+            return;
+        }
+
+        const $element = $('#widget').dxLookup({
+            opened: true,
+            items: [1, 2, 3],
+            focusStateEnabled: true,
+            searchEnabled: false,
+        });
+        const instance = $element.dxLookup('instance');
+        const $input = $(instance.field());
+        const keyboard = keyboardMock($input);
+
+        $input.trigger('focusin');
+        keyboard.keyDown('tab');
+
+        assert.strictEqual(instance.option('value'), null, 'Lookup input field has no value');
+    });
+
     QUnit.testInActiveWindow('lookup item should be selected after \'enter\' key pressing', function(assert) {
         if(devices.real().deviceType !== 'desktop') {
             assert.ok(true, 'test does not actual for mobile devices');
@@ -3376,6 +3399,45 @@ QUnit.module('dataSource integration', {
 
         assert.ok($loadPanel.is(':visible'), 'load panel is visible');
     });
+
+    QUnit.test('load panel should be displayed if search value length exceed minSearchLength and showDataBeforeSearch=false, (T1215813)', function(assert) {
+        const loadDelay = 1000;
+        const timeoutDelay = 100;
+        const instance = this.$element.dxLookup({
+            dataSource: {
+                load: () => {
+                    const d = new $.Deferred();
+
+                    setTimeout(() => {
+                        d.resolve([]);
+                    }, loadDelay);
+
+                    return d;
+                }
+            },
+            searchEnabled: true,
+            showDataBeforeSearch: false,
+            minSearchLength: 3,
+            searchTimeout: timeoutDelay,
+            useNativeScrolling: false,
+            opened: true
+        }).dxLookup('instance');
+
+        const $content = $(instance.content());
+        const $input = $content.find(`.${LOOKUP_SEARCH_CLASS} .${TEXTEDITOR_INPUT_CLASS}`);
+        const $loadPanel = $content.find(`.${SCROLL_VIEW_LOAD_PANEL_CLASS}`);
+        const keyboard = keyboardMock($input);
+
+        keyboard.type('abc');
+        this.clock.tick(timeoutDelay + loadDelay / 2);
+        assert.ok($loadPanel.is(':visible'), 'load panel is visible');
+        this.clock.tick(loadDelay / 2);
+        assert.ok($loadPanel.is(':hidden'), 'load panel is not visible when loading has been finished');
+
+        keyboard.press('backspace');
+        this.clock.tick(loadDelay / 2);
+        assert.ok($loadPanel.is(':hidden'), 'load panel is not visible if value length less than minSearchLength)');
+    });
 });
 
 
@@ -3515,6 +3577,8 @@ if(devices.real().deviceType === 'desktop') {
                     searchEnabled
                 });
 
+                const localizedRoleDescription = messageLocalization.format('dxList-ariaRoleDescription');
+
                 const $field = helper.$widget.find(`.${LOOKUP_FIELD_CLASS}`);
                 const $list = $(`.${LIST_CLASS}`);
                 const $input = helper.widget._popup.$content().find(`.${TEXTEDITOR_INPUT_CLASS}`);
@@ -3522,7 +3586,7 @@ if(devices.real().deviceType === 'desktop') {
                 const listAttributes = {
                     id: helper.widget._listId,
                     role: 'group',
-                    'aria-roledescription': 'list'
+                    'aria-roledescription': localizedRoleDescription
                 };
 
                 const listItemContainerAttributes = {
@@ -3546,7 +3610,7 @@ if(devices.real().deviceType === 'desktop') {
                     id: helper.widget._popupContentId,
                 };
 
-                helper.checkAttributes($list, listAttributes, 'list');
+                helper.checkAttributes($list, listAttributes, localizedRoleDescription);
                 helper.checkAttributes($list.find(`.${SCROLL_VIEW_CONTENT_CLASS}`), listItemContainerAttributes, 'scrollview content');
                 helper.checkAttributes($field, fieldAttributes, 'field');
                 helper.checkAttributes(helper.$widget, widgetAttributes, 'widget');

@@ -1,11 +1,11 @@
-import fx from 'animation/fx';
+import fx from 'common/core/animation/fx';
 import $ from 'jquery';
 import pointerMock from '../../helpers/pointerMock.js';
 import browser from 'core/utils/browser';
-import { DataSource } from 'data/data_source/data_source';
-import translator from 'animation/translator';
+import { DataSource } from 'common/data/data_source/data_source';
+import translator from 'common/core/animation/translator';
 import config from 'core/config';
-import dragEvents from 'events/drag';
+import dragEvents from 'common/core/events/drag';
 import dataUtils from 'core/element_data';
 import Color from 'color';
 import {
@@ -2776,10 +2776,10 @@ module('Appointment dragging', {
 
                         const dataSourceItem = this.instance.option('dataSource').items()[0];
 
-                        assert.equal(dataSourceItem.text, updatedItem.text, 'New data is correct');
-                        assert.equal(dataSourceItem.AllDay, updatedItem.AllDay, 'New data is correct');
-                        assert.deepEqual(dataSourceItem.startDate, updatedItem.startDate, 'New data is correct');
-                        assert.deepEqual(dataSourceItem.endDate, updatedItem.endDate, 'New data is correct');
+                        assert.equal(dataSourceItem.text, updatedItem.text, 'New data (text) is correct');
+                        assert.equal(dataSourceItem.AllDay, updatedItem.AllDay, 'New data (AllDay) is correct');
+                        assert.deepEqual(dataSourceItem.startDate, updatedItem.startDate, 'New data (startDate) is correct');
+                        assert.deepEqual(dataSourceItem.endDate, updatedItem.endDate, 'New data (endDate) is correct');
                     } finally {
                         config().forceIsoDateParsing = defaultForceIsoDateParsing;
                     }

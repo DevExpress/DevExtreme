@@ -98,10 +98,10 @@ export abstract class DxiButtonGroupItem extends CollectionNestedOption {
         this._setOption('stylingMode', value);
     }
 
-    get type(): ButtonType {
+    get type(): ButtonType | string {
         return this._getOption('type');
     }
-    set type(value: ButtonType) {
+    set type(value: ButtonType | string) {
         this._setOption('type', value);
     }
 
@@ -147,25 +147,25 @@ export abstract class DxiButtonGroupItem extends CollectionNestedOption {
         this._setOption('hint', value);
     }
 
-    get author(): User | undefined {
+    get author(): User {
         return this._getOption('author');
     }
-    set author(value: User | undefined) {
+    set author(value: User) {
         this._setOption('author', value);
     }
 
-    get timestamp(): Date | number | string | undefined {
-        return this._getOption('timestamp');
+    get id(): number | string | undefined {
+        return this._getOption('id');
     }
-    set timestamp(value: Date | number | string | undefined) {
-        this._setOption('timestamp', value);
+    set id(value: number | string | undefined) {
+        this._setOption('id', value);
     }
 
-    get typing(): boolean {
-        return this._getOption('typing');
+    get timestamp(): Date | number | string {
+        return this._getOption('timestamp');
     }
-    set typing(value: boolean) {
-        this._setOption('typing', value);
+    set timestamp(value: Date | number | string) {
+        this._setOption('timestamp', value);
     }
 
     get beginGroup(): boolean {
@@ -572,13 +572,6 @@ export abstract class DxiButtonGroupItem extends CollectionNestedOption {
     }
     set hasItems(value: boolean | undefined) {
         this._setOption('hasItems', value);
-    }
-
-    get id(): number | string | undefined {
-        return this._getOption('id');
-    }
-    set id(value: number | string | undefined) {
-        this._setOption('id', value);
     }
 
     get parentId(): number | string | undefined {

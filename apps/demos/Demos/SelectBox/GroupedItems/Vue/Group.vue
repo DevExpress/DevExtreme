@@ -13,8 +13,12 @@ withDefaults(defineProps<{
 </script>
 <style scoped>
   .custom-icon .icon {
-    font-size: 17px;
     color: #f05b41;
-    margin-right: 2px;
+  }
+
+  .custom-icon {
+    display: flex;
+    align-items: center;
+    gap: 4px;
   }
 </style>

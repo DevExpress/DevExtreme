@@ -16,14 +16,14 @@ cldrData.forEach(localeCldrData => {
     Globalize.load(localeCldrData);
 });
 
-require('localization/globalize/core');
-require('localization/globalize/number');
-require('localization/globalize/currency');
-require('localization/globalize/date');
-require('localization/globalize/message');
+require('common/core/localization/globalize/core');
+require('common/core/localization/globalize/number');
+require('common/core/localization/globalize/currency');
+require('common/core/localization/globalize/date');
+require('common/core/localization/globalize/message');
 
 const $ = require('jquery');
-const dateLocalization = require('localization/date');
+const dateLocalization = require('common/core/localization/date');
 
 require('ui/date_box');
 require('viz/chart');

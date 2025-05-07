@@ -1,0 +1,23 @@
+<dx-html-editor [height]="300" [converter]="converter" [(value)]="valueContent">
+  <dxo-toolbar>
+    <dxi-item name="undo"></dxi-item>
+    <dxi-item name="redo"></dxi-item>
+    <dxi-item name="separator"></dxi-item>
+    <dxi-item name="bold"></dxi-item>
+    <dxi-item name="italic"></dxi-item>
+    <dxi-item name="separator"></dxi-item>
+    <dxi-item
+      name="header"
+      [acceptedValues]="[false, 1, 2, 3, 4, 5]"
+      [options]="{ inputAttr: { 'aria-label': 'Header' } }"
+    ></dxi-item>
+    <dxi-item name="separator"></dxi-item>
+    <dxi-item name="orderedList"></dxi-item>
+    <dxi-item name="bulletList"></dxi-item>
+  </dxo-toolbar>
+</dx-html-editor>
+
+<div class="options">
+  <div class="value-title"> Markdown Preview </div>
+  <div class="value-content" tabindex="0">{{ valueContent }}</div>
+</div>

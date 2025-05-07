@@ -1,4 +1,5 @@
 /* eslint-disable max-classes-per-file */
+import messageLocalization from '@js/common/core/localization/message';
 import devices from '@js/core/devices';
 import $ from '@js/core/renderer';
 import { deferUpdate } from '@js/core/utils/common';
@@ -6,7 +7,6 @@ import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import { getOuterHeight, getOuterWidth } from '@js/core/utils/size';
 import { isDefined } from '@js/core/utils/type';
-import messageLocalization from '@js/localization/message';
 import Button from '@js/ui/button';
 import Popup from '@js/ui/popup/ui.popup';
 // @ts-expect-error
@@ -181,6 +181,7 @@ export class ColumnChooserView extends ColumnsView {
         }
       },
       container: columnChooserOptions.container,
+      _loopFocus: true,
     };
 
     if (isGenericTheme || isMaterial) {
@@ -577,13 +578,6 @@ const headerPanel = (Base: ModuleType<HeaderPanel>) => class ColumnChooserHeader
       default:
         super.optionChanged(args);
     }
-  }
-
-  public isVisible() {
-    const that = this;
-    const columnChooserEnabled = that.option('columnChooser.enabled')!;
-
-    return super.isVisible() || columnChooserEnabled;
   }
 };
 

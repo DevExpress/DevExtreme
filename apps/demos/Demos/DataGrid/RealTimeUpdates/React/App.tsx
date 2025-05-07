@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import DataGrid, {
-  Column, Summary, TotalItem, MasterDetail, Paging, DataGridTypes,
+  Column, Summary, TotalItem, MasterDetail, Paging, type DataGridTypes,
 } from 'devextreme-react/data-grid';
-import { Slider, SliderTypes, Tooltip } from 'devextreme-react/slider';
+import { Slider, type SliderTypes, Tooltip } from 'devextreme-react/slider';
 import DataSource from 'devextreme/data/data_source';
 import {
   productsStore, ordersStore, getOrderCount, addOrder, Product,

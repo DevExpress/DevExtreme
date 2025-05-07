@@ -65,7 +65,7 @@ export function addShadowDomStyles($element) {
 }
 
 function isPositionInElementRectangle(element, x, y) {
-  const rect = element.getBoundingClientRect();
+  const rect = element.getBoundingClientRect?.();
 
   return rect && x >= rect.left && x < rect.right && y >= rect.top && y < rect.bottom;
 }

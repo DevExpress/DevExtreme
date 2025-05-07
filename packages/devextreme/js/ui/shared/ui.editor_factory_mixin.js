@@ -1,5 +1,5 @@
 import $ from '../../core/renderer';
-import eventsEngine from '../../events/core/events_engine';
+import eventsEngine from '../../common/core/events/core/events_engine';
 import { isDefined, isObject, isFunction } from '../../core/utils/type';
 import variableWrapper from '../../core/utils/variable_wrapper';
 import { compileGetter } from '../../core/utils/data';
@@ -7,8 +7,8 @@ import browser from '../../core/utils/browser';
 import { extend } from '../../core/utils/extend';
 import devices from '../../core/devices';
 import { getPublicElement } from '../../core/element';
-import { normalizeDataSourceOptions } from '../../data/data_source/utils';
-import { normalizeKeyName } from '../../events/utils/index';
+import { normalizeDataSourceOptions } from '../../common/data/data_source/utils';
+import { normalizeKeyName } from '../../common/core/events/utils/index';
 
 const { isWrapped } = variableWrapper;
 

@@ -4,8 +4,8 @@ import dxTreeList from '../tree_list';
 import { getBoundingRect } from '../../core/utils/position';
 import { isDefined } from '../../core/utils/type';
 import { GanttHelper } from './ui.gantt.helper';
-import { DataSource } from '../../data/data_source/data_source';
-import ArrayStore from '../../data/array_store';
+import DataSource from '../../common/data/data_source';
+import ArrayStore from '../../common/data/array_store';
 import { compileGetter } from '../../core/utils/data';
 import { GanttTreeListNodesState } from './ui.gantt.treelist.nodes_state';
 
@@ -109,7 +109,7 @@ export class GanttTreeList {
         if(e.row?.rowType === 'data') {
             this.setOption('selectedRowKeys', [e.row.data[this._gantt.option('tasks.keyExpr')]]);
         }
-        e.items = [];
+
         const info = {
             cancel: false,
             event: e.event,
@@ -118,6 +118,7 @@ export class GanttTreeList {
             position: { x: e.event.pageX, y: e.event.pageY }
         };
         this._gantt._showPopupMenu(info);
+        e.event.preventDefault();
     }
 
     _getHeight() {

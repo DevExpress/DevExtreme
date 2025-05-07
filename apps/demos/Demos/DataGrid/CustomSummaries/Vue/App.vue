@@ -56,7 +56,7 @@ import {
   DxSelection,
   DxSummary,
   DxTotalItem,
-  DxDataGridTypes,
+  type DxDataGridTypes,
 } from 'devextreme-vue/data-grid';
 import { orders } from './data.ts';
 

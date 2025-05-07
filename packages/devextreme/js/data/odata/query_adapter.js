@@ -1,1 +1,2 @@
-export * from '../../__internal/data/odata/m_query_adapter';
+// eslint-disable-next-line import/export
+export * from '../../common/data/odata/query_adapter';

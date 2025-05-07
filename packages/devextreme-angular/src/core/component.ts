@@ -38,6 +38,7 @@ import {
 
 config({
   buyNowLink: 'https://go.devexpress.com/Licensing_Installer_Watermark_DevExtremeAngular.aspx',
+  licensingDocLink: 'https://go.devexpress.com/Licensing_Documentation_DevExtremeAngular.aspx',
 });
 
 let serverStateKey;
@@ -209,6 +210,13 @@ export abstract class DxComponent implements OnChanges, OnInit, DoCheck, AfterCo
     }
   }
 
+  protected _setChildren(propertyName, value, className) {
+    if (this.checkContentChildren(propertyName, value, className)) {
+      this.setContentChildren(propertyName, value, className);
+      this.setChildren(propertyName, value);
+    }
+  }
+
   constructor(
     protected element: ElementRef,
     private readonly ngZone: NgZone,
@@ -292,7 +300,7 @@ export abstract class DxComponent implements OnChanges, OnInit, DoCheck, AfterCo
   contentChildren = {};
 
   checkContentChildren<T>(propertyName: string, items: QueryList<T>, className: string) {
-    if (this.contentChildren[propertyName]) {
+    if (this.contentChildren[propertyName] && this.contentChildren[propertyName] !== className) {
       if (items.length > 0) {
         if (console && console.warn) {
           console.warn(`In ${this.constructor.name}, 

@@ -18,7 +18,7 @@ const layoutManagerModule = require('viz/chart_components/layout_manager');
 const LayoutManager = vizMocks.stubClass(layoutManagerModule.LayoutManager);
 let validateData; // It lives outside of a test context because of "resetMocksInChart" which lives outside of a test context
 const dataValidatorModule = require('viz/components/data_validator');
-const CustomStore = require('data/custom_store');
+const CustomStore = require('common/data/custom_store').CustomStore;
 const chartThemeManagerModule = require('viz/components/chart_theme_manager');
 const scrollBarModule = require('viz/chart_components/scroll_bar');
 const ScrollBar = scrollBarModule.ScrollBar;

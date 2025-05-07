@@ -1,1 +1,1 @@
-export { default } from '../__internal/data/m_array_query';
+export { default } from '../common/data/array_query';

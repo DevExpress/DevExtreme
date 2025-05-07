@@ -1,9 +1,9 @@
-import { move } from '@js/animation/translator';
+import { move } from '@js/common/core/animation/translator';
 import $ from '@js/core/renderer';
 import { ensureDefined } from '@js/core/utils/common';
 import { camelize } from '@js/core/utils/inflector';
 import { getWidth } from '@js/core/utils/size';
-import Overlay from '@js/ui/overlay/ui.overlay';
+import Overlay from '@ts/ui/overlay/m_overlay';
 
 import { animation } from './m_drawer.animation';
 import DrawerStrategy from './m_drawer.rendering.strategy';

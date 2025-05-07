@@ -6,13 +6,18 @@ import {
 
 import {
     template,
-} from '../core/templates/template';
+    DataStructure,
+    Mode,
+    ScrollMode,
+    SingleMultipleOrNone,
+    ToolbarItemLocation,
+} from '../common';
 
 import {
     DxPromise,
 } from '../core/utils/deferred';
 
-import DataSource from '../data/data_source';
+import { DataSource } from '../common/data';
 
 import {
     Cancelable,
@@ -20,15 +25,7 @@ import {
     NativeEventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
-} from '../events/index';
-
-import {
-    DataStructure,
-    Mode,
-    ScrollMode,
-    SingleMultipleOrNone,
-    ToolbarItemLocation,
-} from '../common';
+} from '../common/core/events';
 
 import {
     AdaptiveDetailRowPreparingInfo,
@@ -903,7 +900,7 @@ export type dxTreeListOptions<TRowData = any, TKey = any> = Omit<GridBaseOptions
      * @default undefined
      * @public
      */
-    columns?: Array<Column<TRowData, TKey> | string>;
+    columns?: Array<Column<TRowData, TKey> | string> | undefined;
     /**
      * @docid
      * @type_function_param1 columns:Array<dxTreeListColumn>
@@ -1140,11 +1137,11 @@ export type dxTreeListOptions<TRowData = any, TKey = any> = Omit<GridBaseOptions
     selection?: Selection;
     /**
      * @docid
-     * @type dxTreeListToolbar
+     * @type dxTreeListToolbar | undefined
      * @default undefined
      * @public
      */
-    toolbar?: Toolbar;
+    toolbar?: Toolbar | undefined;
 };
 
 /**
@@ -1522,7 +1519,7 @@ export type Toolbar = {
      * @default undefined
      * @public
      */
-    visible?: boolean;
+    visible?: boolean | undefined;
     /**
      * @docid dxTreeListToolbar.disabled
      * @default false
@@ -1562,7 +1559,7 @@ export interface dxTreeListColumn<TRowData = any, TKey = any> extends ColumnBase
      * @default undefined
      * @public
      */
-    columns?: Array<Column<TRowData, TKey> | string>;
+    columns?: Array<Column<TRowData, TKey> | string> | undefined;
     /**
      * @docid dxTreeListColumn.editCellTemplate
      * @type_function_param2 cellInfo:object

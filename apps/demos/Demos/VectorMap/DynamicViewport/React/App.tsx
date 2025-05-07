@@ -1,5 +1,5 @@
 import React, { useCallback, useRef, useState } from 'react';
-import VectorMap, { Layer, ControlBar, VectorMapTypes } from 'devextreme-react/vector-map';
+import VectorMap, { Layer, ControlBar, type VectorMapTypes } from 'devextreme-react/vector-map';
 import TextBox from 'devextreme-react/text-box';
 import SelectBox from 'devextreme-react/select-box';
 import * as mapsData from 'devextreme-dist/js/vectormap-data/world.js';

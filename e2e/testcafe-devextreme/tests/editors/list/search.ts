@@ -1,4 +1,5 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import List from 'devextreme-testcafe-models/list';
 import { testScreenshot } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
@@ -8,8 +9,19 @@ fixture.disablePageReloads`Search`
 
 test('List with search bar appearance', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const list = new List('#container');
 
-  await testScreenshot(t, takeScreenshot, 'List with search bar appearance.png', { element: '#container' });
+  await testScreenshot(t, takeScreenshot, 'List with search and multiple selection.png', {
+    element: '#container',
+    shouldTestInCompact: true,
+  });
+
+  await list.option('selectionMode', 'single');
+
+  await testScreenshot(t, takeScreenshot, 'List with search and single selection.png', {
+    element: '#container',
+    shouldTestInCompact: true,
+  });
 
   await t
     .expect(compareResults.isValid())

@@ -1,15 +1,30 @@
 /* globals Intl */
+// TODO(Refactoring): move this module to ./utils directory
 import errors from '@js/core/errors';
 import { dateUtilsTs } from '@ts/core/utils/date';
+import { macroTaskArray } from '@ts/scheduler/utils/index';
 
 import dateUtils from '../../core/utils/date';
 import DateAdapter from './m_date_adapter';
 import timeZoneDataUtils from './timezones/m_utils_timezones_data';
 import timeZoneList from './timezones/timezone_list';
 
+export interface TimezoneLabel {
+  /** uniq timezone id, e.g: 'America/Los_Angeles' */
+  id: string;
+  /** timezone display string, e.g: '(GMT -08:00) America - Los Angeles' */
+  title?: string;
+}
+
+export interface TimezoneData extends TimezoneLabel {
+  /** timezone offset in hours */
+  offset?: number;
+}
+
 const toMs = dateUtils.dateToMilliseconds;
 const MINUTES_IN_HOUR = 60;
 const MS_IN_MINUTE = 60000;
+const GET_TIMEZONES_BATCH_SIZE = 20;
 const GMT = 'GMT';
 const offsetFormatRegexp = /^GMT(?:[+-]\d{2}:\d{2})?$/;
 
@@ -38,12 +53,6 @@ const createDateFromUTCWithLocalOffset = (date) => {
   return result.source;
 };
 
-const getTimeZones = (date = new Date()) => timeZoneList.value.map((tz) => ({
-  offset: calculateTimezoneByValue(tz, date),
-  title: getTimezoneTitle(tz, date),
-  id: tz,
-}));
-
 const createUTCDate = (date) => new Date(Date.UTC(
   date.getUTCFullYear(),
   date.getUTCMonth(),
@@ -59,8 +68,6 @@ const getTimezoneOffsetChangeInMs = (startDate, endDate, updatedStartDate, updat
 const getDaylightOffset = (startDate, endDate) => new Date(startDate).getTimezoneOffset() - new Date(endDate).getTimezoneOffset();
 
 const getDaylightOffsetInMs = (startDate, endDate) => getDaylightOffset(startDate, endDate) * toMs('minute');
-
-const isValidDate = (date: Date) => date instanceof Date && !isNaN(date.valueOf());
 
 const calculateTimezoneByValueOld = (timezone: string, date = new Date()): number | undefined => {
   const customTimezones = timeZoneDataUtils.getTimeZonesOld();
@@ -102,7 +109,7 @@ const calculateTimezoneByValue = (timeZone: string | undefined, date = new Date(
     return undefined;
   }
 
-  if (!isValidDate(date)) {
+  if (!dateUtilsTs.isValidDate(date)) {
     return undefined;
   }
 
@@ -149,7 +156,7 @@ const getOffsetNamePart = (offset: string): string => {
 };
 
 const getTimezoneTitle = (timeZone: string, date = new Date()): string | undefined => {
-  if (!isValidDate(date)) {
+  if (!dateUtilsTs.isValidDate(date)) {
     return '';
   }
 
@@ -292,7 +299,7 @@ const isEqualLocalTimeZoneByDeclaration = (timeZoneName: string, date: Date): bo
   return false;
 };
 
-// TODO: Getting two dates in january or june is the standard mechanism for determining that an offset has occurred.
+// Getting two dates in january or june is the standard mechanism for determining that an offset has occurred.
 const getExtremeDates = () => {
   const nowDate = new Date(Date.now());
 
@@ -327,6 +334,33 @@ const addOffsetsWithoutDST = (date: Date, ...offsets: number[]): Date => {
     : newDate;
 };
 
+const getTimeZoneLabelsAsyncBatch = (
+  date = new Date(),
+): Promise<TimezoneLabel[]> => macroTaskArray.map(
+  timeZoneList.value,
+  (timezoneId) => ({
+    id: timezoneId,
+    title: getTimezoneTitle(timezoneId, date),
+  }),
+  GET_TIMEZONES_BATCH_SIZE,
+);
+
+const getTimeZoneLabel = (
+  timezoneId: string,
+  date = new Date(),
+): TimezoneLabel => ({
+  id: timezoneId,
+  title: getTimezoneTitle(timezoneId, date),
+});
+
+const getTimeZones = (
+  date = new Date(),
+): TimezoneData[] => timeZoneList.value.map((timezoneId) => ({
+  id: timezoneId,
+  title: getTimezoneTitle(timezoneId, date),
+  offset: calculateTimezoneByValue(timezoneId, date),
+}));
+
 const utils = {
   getDaylightOffset,
   getDaylightOffsetInMs,
@@ -348,10 +382,13 @@ const utils = {
   hasDSTInLocalTimeZone,
   isEqualLocalTimeZone,
   isEqualLocalTimeZoneByDeclaration,
-  getTimeZones,
 
   setOffsetsToDate,
   addOffsetsWithoutDST,
+
+  getTimeZoneLabelsAsyncBatch,
+  getTimeZoneLabel,
+  getTimeZones,
 };
 
 export default utils;

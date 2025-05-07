@@ -18,7 +18,7 @@ import RangeSelector, {
   Series as RsSeries,
   Aggregation as RsAggregation,
   Behavior,
-  RangeSelectorTypes,
+  type RangeSelectorTypes,
 } from 'devextreme-react/range-selector';
 import { dataSource } from './data.ts';
 

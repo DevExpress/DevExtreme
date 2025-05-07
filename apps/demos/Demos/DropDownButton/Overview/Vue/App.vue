@@ -80,7 +80,7 @@
             fontSize: fontSize,
             color: color,
             lineHeight: lineHeight
-          }"
+          } as CSSProperties"
         >Lorem ipsum dolor sit amet, consectetur adipiscing elit,
           sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
           Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris
@@ -93,7 +93,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, type CSSProperties } from 'vue';
 import DxDropDownButton from 'devextreme-vue/drop-down-button';
 import DxToolbar from 'devextreme-vue/toolbar';
 import notify from 'devextreme/ui/notify';

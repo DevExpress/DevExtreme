@@ -1,8 +1,8 @@
+import Emitter from '@js/common/core/events/core/emitter';
+import registerEmitter from '@js/common/core/events/core/emitter_registrator';
+import { hasTouches } from '@js/common/core/events/utils/index';
 import * as iteratorUtils from '@js/core/utils/iterator';
 import { fitIntoRange, sign as mathSign } from '@js/core/utils/math';
-import Emitter from '@js/events/core/emitter';
-import registerEmitter from '@js/events/core/emitter_registrator';
-import { hasTouches } from '@js/events/utils/index';
 
 interface EventAlias {
   name: string;

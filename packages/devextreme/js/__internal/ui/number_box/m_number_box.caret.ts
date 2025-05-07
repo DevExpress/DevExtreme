@@ -1,6 +1,6 @@
+import number from '@js/common/core/localization/number';
 import { escapeRegExp } from '@js/core/utils/common';
 import { fitIntoRange } from '@js/core/utils/math';
-import number from '@js/localization/number';
 
 import { getNthOccurrence, getRealSeparatorIndex, splitByIndex } from './m_utils';
 

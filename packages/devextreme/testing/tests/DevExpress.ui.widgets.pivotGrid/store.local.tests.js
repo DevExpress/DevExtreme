@@ -1,5 +1,5 @@
 import '../../content/orders.js';
-import 'data/odata/store';
+import 'common/data/odata/store';
 
 import $ from 'jquery';
 import { noop } from 'core/utils/common';

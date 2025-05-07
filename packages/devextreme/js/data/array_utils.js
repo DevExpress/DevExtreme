@@ -1,1 +1,2 @@
-export * from '../__internal/data/m_array_utils';
+// eslint-disable-next-line import/export
+export * from '../common/data/array_utils';

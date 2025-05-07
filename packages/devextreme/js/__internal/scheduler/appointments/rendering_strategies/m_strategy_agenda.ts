@@ -1,10 +1,10 @@
 import dateUtils from '@js/core/utils/date';
 import { each } from '@js/core/utils/iterator';
+import type { SafeAppointment } from '@ts/scheduler/types';
 
 import { createAppointmentAdapter } from '../../m_appointment_adapter';
-import { ExpressionUtils } from '../../m_expression_utils';
 import { groupAppointmentsByResources } from '../../resources/m_utils';
-import { getAppointmentTakesSeveralDays, replaceWrongEndDate } from '../data_provider/m_utils';
+import { getAppointmentTakesSeveralDays } from '../data_provider/m_utils';
 import BaseRenderingStrategy from './m_strategy_base';
 
 class AgendaRenderingStrategy extends BaseRenderingStrategy {
@@ -44,7 +44,7 @@ class AgendaRenderingStrategy extends BaseRenderingStrategy {
     );
   }
 
-  createTaskPositionMap(appointments) {
+  createTaskPositionMap(appointments: SafeAppointment[]) {
     let height;
     let appointmentsByResources;
 
@@ -105,8 +105,7 @@ class AgendaRenderingStrategy extends BaseRenderingStrategy {
     return result;
   }
 
-  _calculateGroupIndex(apptIndex, appointmentsByResources) {
-    let resultInd;
+  _calculateGroupIndex(apptIndex, appointmentsByResources): number | undefined {
     let counter = 0;
 
     // eslint-disable-next-line
@@ -114,14 +113,13 @@ class AgendaRenderingStrategy extends BaseRenderingStrategy {
       const countApptInGroup = appointmentsByResources[i].length;
 
       if (apptIndex >= counter && apptIndex < counter + countApptInGroup) {
-        resultInd = Number(i);
-        break;
+        return Number(i);
       }
 
       counter += countApptInGroup;
     }
 
-    return resultInd;
+    return undefined;
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -186,15 +184,7 @@ class AgendaRenderingStrategy extends BaseRenderingStrategy {
   getCollectorTopOffset() {
   }
 
-  // From subscribe
-  replaceWrongAppointmentEndDate(rawAppointment, startDate, endDate) {
-    const adapter = createAppointmentAdapter(rawAppointment, this.dataAccessors, this.timeZoneCalculator);
-
-    replaceWrongEndDate(adapter, startDate, endDate, this.cellDuration, this.dataAccessors);
-  }
-
-  // TODO: get rid of an extra 'needClearSettings' argument
-  calculateRows(appointments, agendaDuration, currentDate, needClearSettings?) {
+  calculateRows(appointments, agendaDuration, currentDate) {
     this._rows = [];
     currentDate = dateUtils.trimTime(new Date(currentDate));
 
@@ -213,14 +203,8 @@ class AgendaRenderingStrategy extends BaseRenderingStrategy {
       }
 
       each(currentAppointments, (index, appointment) => {
-        const startDate = ExpressionUtils.getField(this.dataAccessors, 'startDate', appointment);
-        const endDate = ExpressionUtils.getField(this.dataAccessors, 'endDate', appointment);
-
-        this.replaceWrongAppointmentEndDate(appointment, startDate, endDate);
-
-        needClearSettings && delete appointment.settings;
-
         const result = this.instance.getAppointmentsInstance()._processRecurrenceAppointment(appointment, index, false);
+
         appts.parts = appts.parts.concat(result.parts);
         appts.indexes = appts.indexes.concat(result.indexes);
       });
@@ -243,7 +227,7 @@ class AgendaRenderingStrategy extends BaseRenderingStrategy {
 
           const adapter = createAppointmentAdapter(currentAppointments[j], this.dataAccessors, this.timeZoneCalculator);
           const appointmentIsLong = getAppointmentTakesSeveralDays(adapter);
-          const appointmentIsRecurrence = ExpressionUtils.getField(this.dataAccessors, 'recurrenceRule', currentAppointments[j]);
+          const appointmentIsRecurrence = this.dataAccessors.get('recurrenceRule', currentAppointments[j]);
 
           if (this.instance.fire('dayHasAppointment', day, appointmentData, true) || (!appointmentIsRecurrence && appointmentIsLong && this.instance.fire('dayHasAppointment', day, currentAppointments[j], true))) {
             groupResult[i] += 1;

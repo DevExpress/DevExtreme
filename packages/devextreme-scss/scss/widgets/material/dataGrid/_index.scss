@@ -71,6 +71,8 @@
     display: inline-block;
     position: sticky;
     background-color: $datagrid-group-row-bg;
+    max-width: 100%;
+    overflow: clip;
   }
 
   .dx-row.dx-group-row:first-child {
@@ -128,10 +130,28 @@
   }
 
   & > td {
-    background-color: $datagrid-summary-bg;
     border-top: $datagrid-border;
+    background-color: $datagrid-summary-bg;
     border-left-width: 0;
     border-right-width: 0;
+  }
+}
+
+.dx-datagrid-sticky-columns {
+  .dx-row.dx-datagrid-group-footer > td {
+    border-bottom: $datagrid-border;
+  }
+
+  .dx-row.dx-row-lines, .dx-row.dx-group-row, .dx-datagrid-group-footer, .dx-edit-row {
+    &+.dx-datagrid-group-footer, &+.dx-row.dx-group-row, &+.dx-master-detail-row, &+.dx-edit-row {
+      td {
+        border-top: none;
+      }
+    }
+  }
+
+  .dx-row.dx-group-row:first-child td {
+    padding-top: $material-grid-base-cell-vertical-padding;
   }
 }
 

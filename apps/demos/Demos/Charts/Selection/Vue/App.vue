@@ -52,7 +52,7 @@ import DxChart, {
   DxValueAxis,
   DxLegend,
   DxExport,
-  DxChartTypes,
+  type DxChartTypes,
 } from 'devextreme-vue/chart';
 import { exportData } from './data.ts';
 

@@ -1,7 +1,7 @@
 import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { DxDataGridModule } from 'devextreme-angular';
+import { DxDataGridModule, DxTextAreaModule } from 'devextreme-angular';
 import { Service, Employee, State } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
@@ -10,7 +10,7 @@ if (!/localhost/.test(document.location.host)) {
 
 let modulePrefix = '';
 // @ts-ignore
-if (window && window.config.packageConfigPaths) {
+if (window && window.config?.packageConfigPaths) {
   modulePrefix = '/app';
 }
 
@@ -35,6 +35,7 @@ export class AppComponent {
   imports: [
     BrowserModule,
     DxDataGridModule,
+    DxTextAreaModule,
   ],
   declarations: [AppComponent],
   bootstrap: [AppComponent],

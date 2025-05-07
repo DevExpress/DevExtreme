@@ -29,8 +29,8 @@ const props = withDefaults(defineProps<{
   employee: Record<string, any>
   showInfo: Function
 }>(), {
-  employee: () => ({}),
-  showInfo: () => ({}),
+  employee: () => ({} as Record<string, any>),
+  showInfo: () => (() => {}),
 });
 function showEmployeeInfo() {
   props.showInfo(props.employee);

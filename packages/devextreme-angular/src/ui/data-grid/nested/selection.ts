@@ -14,9 +14,9 @@ import {
 
 
 
-import { SelectAllMode, SingleMultipleOrNone } from 'devextreme/common';
-import { SelectionColumnDisplayMode } from 'devextreme/common/grids';
+import { SingleMultipleOrNone, SelectAllMode } from 'devextreme/common';
 import { SelectionSensitivity } from 'devextreme/ui/data_grid';
+import { SelectionColumnDisplayMode } from 'devextreme/common/grids';
 
 import {
     NestedOptionHost,
@@ -37,22 +37,6 @@ export class DxoDataGridSelectionComponent extends NestedOption implements OnDes
     }
     set allowSelectAll(value: boolean) {
         this._setOption('allowSelectAll', value);
-    }
-
-    @Input()
-    get recursive(): boolean {
-        return this._getOption('recursive');
-    }
-    set recursive(value: boolean) {
-        this._setOption('recursive', value);
-    }
-
-    @Input()
-    get selectByClick(): boolean {
-        return this._getOption('selectByClick');
-    }
-    set selectByClick(value: boolean) {
-        this._setOption('selectByClick', value);
     }
 
     @Input()
@@ -93,6 +77,22 @@ export class DxoDataGridSelectionComponent extends NestedOption implements OnDes
     }
     set showCheckBoxesMode(value: SelectionColumnDisplayMode) {
         this._setOption('showCheckBoxesMode', value);
+    }
+
+    @Input()
+    get recursive(): boolean {
+        return this._getOption('recursive');
+    }
+    set recursive(value: boolean) {
+        this._setOption('recursive', value);
+    }
+
+    @Input()
+    get selectByClick(): boolean {
+        return this._getOption('selectByClick');
+    }
+    set selectByClick(value: boolean) {
+        this._setOption('selectByClick', value);
     }
 
 

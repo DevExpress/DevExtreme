@@ -1,50 +1,19 @@
 import $ from 'jquery';
-import dataCoreUtils from 'core/utils/data';
-import typeUtils from 'core/utils/type';
 import { Deferred } from 'core/utils/deferred';
-import fx from 'animation/fx';
+import fx from 'common/core/animation/fx';
 
 import '__internal/scheduler/m_scheduler';
-import { ExpressionUtils } from '__internal/scheduler/m_expression_utils';
 import { createExpressions } from '__internal/scheduler/resources/m_utils';
 
-const { module, test, testStart } = QUnit;
+import { mockDataAccessor } from '../../helpers/scheduler/mockDataAccessor.js';
 
-const compileGetter = dataCoreUtils.compileGetter;
-const compileSetter = dataCoreUtils.compileSetter;
+const { module, test, testStart } = QUnit;
 
 testStart(function() {
     $('#qunit-fixture').html('<div id="scheduler-appointments"></div>\
         <div id="allDayContainer"></div>\
         <div id="fixedContainer"></div>');
 });
-
-const dataAccessors = {
-    getter: {
-        startDate: compileGetter('startDate'),
-        endDate: compileGetter('endDate'),
-        allDay: compileGetter('allDay'),
-        text: compileGetter('text'),
-        recurrenceRule: compileGetter('recurrenceRule')
-    },
-    setter: {
-        startDate: compileSetter('startDate'),
-        endDate: compileSetter('endDate'),
-        allDay: compileSetter('allDay'),
-        text: compileSetter('text'),
-        recurrenceRule: compileSetter('recurrenceRule')
-    }
-};
-
-ExpressionUtils.getField = (_, field, obj) => {
-    if(typeUtils.isDefined(dataAccessors.getter[field])) {
-        return dataAccessors.getter[field](obj);
-    }
-};
-
-ExpressionUtils.setField = (_, field, obj, value) => {
-    return dataAccessors.setter[field](obj, value);
-};
 
 const createInstance = (options) => {
     const observer = {
@@ -67,6 +36,7 @@ const createInstance = (options) => {
     return $('#scheduler-appointments').dxSchedulerAppointments({
         observer,
         ...options,
+        dataAccessors: mockDataAccessor,
         getResources: () => [],
         getLoadedResources: () => [],
         getAppointmentColor: () => new Deferred(),
@@ -94,7 +64,9 @@ module('Vertical Strategy', moduleOptions, () => {
                 endDate: new Date(2015, 1, 9, 12),
                 allDay: true
             },
-            settings: [{ width: 40, height: 100, allDay: true }]
+            settings: [{ width: 40, height: 100, allDay: true }],
+            needRepaint: true,
+            needRemove: false,
         }, {
             itemData: {
                 text: 'Appointment 2',
@@ -102,7 +74,9 @@ module('Vertical Strategy', moduleOptions, () => {
                 endDate: new Date(2015, 1, 9, 12),
                 allDay: true
             },
-            settings: [{ width: 40, height: 100, allDay: true }]
+            settings: [{ width: 40, height: 100, allDay: true }],
+            needRepaint: true,
+            needRemove: false,
         }];
 
         const instance = createInstance({
@@ -123,7 +97,9 @@ module('Vertical Strategy', moduleOptions, () => {
                 endDate: new Date(2015, 1, 9, 12),
                 allDay: true
             },
-            settings: [{ count: 1, index: 0, width: 35, height: 100, allDay: true, empty: true }]
+            settings: [{ count: 1, index: 0, width: 35, height: 100, allDay: true, empty: true }],
+            needRepaint: true,
+            needRemove: false,
         }, {
             itemData: {
                 text: 'Appointment 2',
@@ -131,7 +107,9 @@ module('Vertical Strategy', moduleOptions, () => {
                 endDate: new Date(2015, 1, 9, 12),
                 allDay: true
             },
-            settings: [{ count: 1, index: 0, width: 35, height: 100, allDay: true, empty: true }]
+            settings: [{ count: 1, index: 0, width: 35, height: 100, allDay: true, empty: true }],
+            needRepaint: true,
+            needRemove: false,
         }];
 
         const instance = createInstance({
@@ -157,13 +135,17 @@ module('Vertical All Day Strategy', moduleOptions, () => {
                 startDate: new Date(),
                 allDay: true
             },
-            settings: [{ count: 1, index: 0, width: 40, height: 100, allDay: true }]
+            settings: [{ count: 1, index: 0, width: 40, height: 100, allDay: true }],
+            needRepaint: true,
+            needRemove: false,
         }, {
             itemData: {
                 text: 'Appointment 2',
                 startDate: new Date()
             },
-            settings: [{ count: 1, index: 0, width: 40, height: 100 }]
+            settings: [{ count: 1, index: 0, width: 40, height: 100 }],
+            needRepaint: true,
+            needRemove: false,
         }];
 
         instance.option('items', items);
@@ -178,7 +160,9 @@ module('Vertical All Day Strategy', moduleOptions, () => {
                 text: 'Appointment 1',
                 startDate: new Date()
             },
-            settings: [{ count: 1, index: 0, width: 40, height: 100 }]
+            settings: [{ count: 1, index: 0, width: 40, height: 100 }],
+            needRepaint: true,
+            needRemove: false,
         }];
 
         const instance = createInstance({
@@ -196,7 +180,9 @@ module('Vertical All Day Strategy', moduleOptions, () => {
                 startDate: new Date(),
                 allDay: true
             },
-            settings: [{ count: 1, index: 0, width: 40, height: 100, allDay: true }]
+            settings: [{ count: 1, index: 0, width: 40, height: 100, allDay: true }],
+            needRepaint: true,
+            needRemove: false,
         }]
         );
 

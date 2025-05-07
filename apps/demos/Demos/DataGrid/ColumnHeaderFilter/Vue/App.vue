@@ -57,7 +57,7 @@
 import {
   DxDataGrid, DxHeaderFilter, DxSearch, DxColumn,
 } from 'devextreme-vue/data-grid';
-import { DxTextBoxTypes } from 'devextreme-vue/text-box';
+import { type DxTextBoxTypes } from 'devextreme-vue/text-box';
 import { employees } from './data.ts';
 
 const searchExpr = ['City', 'State'];

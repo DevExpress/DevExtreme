@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import { DataSource } from 'data/data_source/data_source';
+import { DataSource } from 'common/data/data_source/data_source';
 import { isFunction, isRenderer } from 'core/utils/type';
 import { noop } from 'core/utils/common';
 import config from 'core/config';
@@ -7,22 +7,21 @@ import devices from '__internal/core/m_devices';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import errors from 'ui/widget/ui.errors';
 import executeAsyncMock from '../../../helpers/executeAsyncMock.js';
-import fx from 'animation/fx';
-import holdEvent from 'events/hold';
+import fx from 'common/core/animation/fx';
+import holdEvent from 'common/core/events/hold';
 import keyboardMock from '../../../helpers/keyboardMock.js';
 import pointerMock from '../../../helpers/pointerMock.js';
 import registerComponent from 'core/component_registrator';
-import swipeEvents from 'events/swipe';
+import swipeEvents from 'common/core/events/swipe';
 import themes from 'ui/themes';
-import ArrayStore from 'data/array_store';
-import CustomStore from 'data/custom_store';
+import ArrayStore from 'common/data/array_store';
+import { CustomStore } from 'common/data/custom_store';
 import DOMComponent from 'core/dom_component';
 import List from 'ui/list';
 import { setScrollView } from '__internal/ui/list/m_list.base';
 import ScrollView from 'ui/scroll_view';
-import eventsEngine from 'events/core/events_engine';
+import eventsEngine from 'common/core/events/core/events_engine';
 import ariaAccessibilityTestHelper from '../../../helpers/ariaAccessibilityTestHelper.js';
-import { reorderingPointerMock } from './utils.js';
 
 const LIST_ITEM_CLASS = 'dx-list-item';
 const LIST_ITEMS_CLASS = 'dx-list-items';
@@ -43,6 +42,7 @@ const LIST_ITEM_SELECTED_CLASS = 'dx-list-item-selected';
 const STATIC_DELETE_BUTTON_CLASS = 'dx-list-static-delete-button';
 const TOGGLE_DELETE_SWITCH_CLASS = 'dx-list-toggle-delete-switch';
 const SWITCHABLE_DELETE_BUTTON_CLASS = 'dx-list-switchable-delete-button';
+const SCROLLVIEW_CONTENT_CLASS = 'dx-scrollview-content';
 const FOCUSED_STATE_CLASS = 'dx-state-focused';
 
 const isDeviceDesktop = function(assert) {
@@ -144,7 +144,24 @@ const ScrollViewMock = DOMComponent.inherit({
 
     _useTemplates() {
         return false;
-    }
+    },
+
+    _createActions() {
+        this._tryRefreshPocketState();
+    },
+
+    _tryRefreshPocketState() {
+        this._pageLoading = !!this.option('onReachBottom');
+    },
+
+    _optionChanged(args) {
+        switch(args.name) {
+            case 'onPullDown':
+            case 'onReachBottom':
+                this._createActions();
+                break;
+        }
+    },
 });
 
 const showListSlideMenu = ($list) => {
@@ -200,30 +217,61 @@ QUnit.module('collapsible groups', moduleSetup, () => {
         assert.ok(!$element.hasClass(LIST_COLLAPSIBLE_GROUPS_CLASS), 'collapsible groups class is present');
     });
 
-    QUnit.test('focus should move to first group\'s item when group expands', function(assert) {
+    QUnit.test('the first header should get focus when focusin, collapsibleGroups: true', function(assert) {
         const $element = this.element.dxList({
-            items: [{ key: 'a', items: ['11', '12'] }, { key: 'b', items: ['21', '22'] }],
+            items: [
+                { key: 'a', items: ['11', '12'] },
+                { key: 'b', items: ['21', '22'] },
+            ],
             grouped: true,
             focusStateEnabled: true,
-            collapsibleGroups: true
+            collapsibleGroups: true,
         });
-
-        const $headers = $element.find(`.${LIST_GROUP_HEADER_CLASS}`);
-        const $items = $element.find(`.${LIST_ITEM_CLASS}`);
-
         const instance = $element.dxList('instance');
+        const $headers = $element.find(`.${LIST_GROUP_HEADER_CLASS}`);
+
+        instance.focus();
+
+        assert.ok($headers.eq(0).hasClass(FOCUSED_STATE_CLASS), 'first header is focused');
+    });
+
+    QUnit.test('the first header should be focused after click, if collapsibleGroups: true', function(assert) {
+        const $element = this.element.dxList({
+            items: [
+                { key: 'a', items: ['11', '12'] },
+                { key: 'b', items: ['21', '22'] },
+            ],
+            grouped: true,
+            focusStateEnabled: true,
+            collapsibleGroups: true,
+        });
+        const $headers = $element.find(`.${LIST_GROUP_HEADER_CLASS}`);
+
         $element.trigger('focusin');
 
+        $headers.eq(0).trigger('dxclick');
+        assert.strictEqual($headers.eq(0).hasClass(FOCUSED_STATE_CLASS), true, 'first header is focused');
 
-        $headers.eq(1).trigger('dxclick');
-        $headers.eq(1).trigger('dxclick');
+        $headers.eq(0).trigger('dxclick');
+        assert.strictEqual($headers.eq(0).hasClass(FOCUSED_STATE_CLASS), true, 'first header is still focused');
+    });
 
-        const secondGroupItemIsFocused = $items.eq(2).hasClass(FOCUSED_STATE_CLASS);
-        const firstItemIsFocused = $items.eq(0).hasClass(FOCUSED_STATE_CLASS);
+    QUnit.test('the first header should not get focus when focusin if collapsibleGroups changes from true to false in runtime', function(assert) {
+        const $element = this.element.dxList({
+            items: [
+                { key: 'a', items: ['11', '12'] },
+                { key: 'b', items: ['21', '22'] },
+            ],
+            grouped: true,
+            focusStateEnabled: true,
+            collapsibleGroups: true,
+        });
+        const instance = $element.dxList('instance');
 
-        assert.equal(isRenderer(instance.option('focusedElement')), !!config().useJQuery, 'focusedElement is correct');
-        assert.ok(secondGroupItemIsFocused, 'first item of the second group is focused');
-        assert.notOk(firstItemIsFocused, 'first item of the first group lost focus');
+        instance.option({ collapsibleGroups: false });
+
+        instance.focus();
+        assert.notOk($element.find(`.${LIST_GROUP_HEADER_CLASS}`).eq(0).hasClass(FOCUSED_STATE_CLASS), 'first header is not focused');
     });
 
     QUnit.test('focus class should not be added to any item when expanding group via api', function(assert) {
@@ -243,24 +291,29 @@ QUnit.module('collapsible groups', moduleSetup, () => {
         assert.notOk(firstItemIsFocused, 'first item has not focused class');
     });
 
-    QUnit.test('focus class should not be added to first group item when focusStateEnabled is false', function(assert) {
-        const $element = this.element.dxList({
-            items: [{ key: 'a', items: ['11', '12'] }, { key: 'b', items: ['21', '22'] }],
-            grouped: true,
-            focusStateEnabled: false,
-            collapsibleGroups: true
+    [true, false].forEach(focusStateEnabled => {
+        QUnit.test(`focus class should not be added to first group item when focusStateEnabled: ${focusStateEnabled}`, function(assert) {
+            const $element = this.element.dxList({
+                focusStateEnabled,
+                items: [
+                    { key: 'a', items: ['11', '12'] },
+                    { key: 'b', items: ['21', '22'] },
+                ],
+                grouped: true,
+                collapsibleGroups: true,
+            });
+
+            const $headers = $element.find(`.${LIST_GROUP_HEADER_CLASS}`);
+            const $items = $element.find(`.${LIST_ITEM_CLASS}`);
+
+            $element.trigger('focusin');
+
+            $headers.eq(1)
+                .trigger('dxclick')
+                .trigger('dxclick');
+
+            assert.strictEqual($items.eq(2).hasClass(FOCUSED_STATE_CLASS), false, 'first item of the second group is not focused');
         });
-
-        const $headers = $element.find(`.${LIST_GROUP_HEADER_CLASS}`);
-        const $items = $element.find(`.${LIST_ITEM_CLASS}`);
-
-        $element.trigger('focusin');
-        $headers.eq(1).trigger('dxclick');
-        $headers.eq(1).trigger('dxclick');
-
-        const secondGroupItemIsFocused = $items.eq(2).hasClass(FOCUSED_STATE_CLASS);
-
-        assert.notOk(secondGroupItemIsFocused, 'first item of the second group is focused');
     });
 
     QUnit.test('group body should be collapsed by click on header', function(assert) {
@@ -1138,6 +1191,21 @@ QUnit.module('options changed', moduleSetup, () => {
         assert.ok(scrollView._pageLoading, 'scrollBottom div is visible');
         assert.equal($list.find('.dx-empty-message').length, 0, 'empty message was not rendered');
     });
+
+    QUnit.test('LoadIndicator should not be shown on dataSource runtime change with repaintChangesOnly=true (T1249958)', function(assert) {
+        const $list = $('#list').dxList({
+            dataSource: ['one', 'two', 'tree'],
+            repaintChangesOnly: true,
+            useNativeScrolling: true,
+        });
+        const instance = $list.dxList('instance');
+        const scrollView = $list.dxScrollView('instance');
+
+        instance.option('dataSource', ['four', 'five', 'six']);
+
+        assert.strictEqual(scrollView._pageLoading, false, 'scrollBottom div is hidden');
+    });
+
 
     QUnit.test('list should be able to change grouped option to false after dataSource option', function(assert) {
         const $element = $('#list').dxList({
@@ -3646,6 +3714,54 @@ QUnit.module('regressions', moduleSetup, () => {
 
         assert.equal(count, 1);
     });
+
+    QUnit.test('Selection: item selected correctly on async render with tree structure (T1269855)', function(assert) {
+        this.clock.restore();
+        const done = assert.async();
+
+        const data = [
+            { id: 1, name: 'Item 1_1', group: 'group_1' },
+            { id: 2, name: 'Item 1_2', group: 'group_1' },
+            { id: 3, name: 'Item 1_3', group: 'group_1' },
+            { id: 4, name: 'Item 2_1', group: 'group_2' },
+        ];
+
+        const dataSource = new DataSource({
+            store: new ArrayStore({ data, key: 'id' }),
+            group: 'group',
+        });
+
+        const instance = new List($('#list'), {
+            dataSource,
+            grouped: true,
+            templatesRenderAsynchronously: true,
+            integrationOptions: {
+                templates: {
+                    'item': {
+                        render: function({ model, container, onRendered }) {
+                            setTimeout(function() {
+                                const $item = $(`<div>${model.name}</div>`);
+                                $item.appendTo(container);
+
+                                onRendered();
+                            }, 100);
+                        }
+                    },
+                }
+            },
+            selectionMode: 'single',
+            selectedItemKeys: [data[0].id],
+        });
+
+        instance.option('_onItemsRendered', () => {
+            const listElement = instance.element();
+            const $firstGroup = $(listElement).find(`.${LIST_GROUP_CLASS}`).eq(0);
+            const $firstItemInFirstGroup = $firstGroup.find(`.${LIST_ITEM_CLASS}`).eq(0);
+
+            assert.ok($firstItemInFirstGroup.hasClass(LIST_ITEM_SELECTED_CLASS), 'First item in first group should be selected');
+            done();
+        });
+    });
 });
 
 QUnit.module('widget sizing render', {}, () => {
@@ -3674,6 +3790,233 @@ QUnit.module('keyboard navigation', {
         this.clock.restore();
     }
 }, () => {
+    QUnit.test('focus should move from last group list item to group header if collapsibleGroups: true', function(assert) {
+        const $element = $('#list').dxList({
+            items: [
+                { key: 'a', items: [1] },
+                { key: 'b', items: [2] },
+            ],
+            grouped: true,
+            focusStateEnabled: true,
+            collapsibleGroups: true,
+        });
+
+        const $items = $element.find(`.${LIST_ITEM_CLASS}`);
+        const $headers = $element.find(`.${LIST_GROUP_HEADER_CLASS}`);
+
+        const keyboard = getListKeyboard($element);
+
+        keyboard.keyDown('down');
+
+        assert.ok($headers.eq(0).hasClass(FOCUSED_STATE_CLASS));
+
+        keyboard.keyDown('down');
+
+        assert.notOk($headers.eq(0).hasClass(FOCUSED_STATE_CLASS));
+        assert.ok($items.eq(0).hasClass(FOCUSED_STATE_CLASS));
+
+        keyboard.keyDown('down');
+
+        assert.ok($headers.eq(1).hasClass(FOCUSED_STATE_CLASS));
+    });
+
+    QUnit.test('group should be collapsed after pressing enter key on group header', function(assert) {
+        const $element = $('#list').dxList({
+            items: [
+                { key: 'a', items: ['11', '12'] },
+                { key: 'b', items: ['21', '22'] },
+            ],
+            grouped: true,
+            focusStateEnabled: true,
+            collapsibleGroups: true,
+        });
+        const keyboard = getListKeyboard($element);
+        const $group = $element.find(`.${LIST_GROUP_CLASS}`).eq(0);
+
+        keyboard
+            .keyDown('down')
+            .keyDown('enter');
+
+        assert.strictEqual($group.hasClass(LIST_GROUP_COLLAPSED_CLASS), true, 'first group is collapsed');
+
+        keyboard.keyDown('enter');
+
+        assert.strictEqual($group.hasClass(LIST_GROUP_COLLAPSED_CLASS), false, 'first group is collapsed');
+    });
+
+    QUnit.test('the first header should be focused after pressing enter key, if collapsibleGroups: true', function(assert) {
+        const $element = $('#list').dxList({
+            items: [
+                { key: 'a', items: ['11', '12'] },
+                { key: 'b', items: ['21', '22'] },
+            ],
+            grouped: true,
+            focusStateEnabled: true,
+            collapsibleGroups: true,
+        });
+        const keyboard = getListKeyboard($element);
+        const $headers = $element.find(`.${LIST_GROUP_HEADER_CLASS}`);
+
+        keyboard
+            .keyDown('down')
+            .keyDown('enter');
+
+        assert.strictEqual($headers.eq(0).hasClass(FOCUSED_STATE_CLASS), true, 'first header is focused');
+
+        keyboard.keyDown('enter');
+
+        assert.strictEqual($headers.eq(0).hasClass(FOCUSED_STATE_CLASS), true, 'first header is still focused');
+    });
+
+    QUnit.test('Pressing the Enter key on the group header should not fire onItemClick', function(assert) {
+        const onItemClickStub = sinon.stub();
+
+        const $element = $('#list').dxList({
+            items: [{ key: 'a', items: ['11', '12'] }],
+            grouped: true,
+            focusStateEnabled: true,
+            collapsibleGroups: true,
+            onItemClick: onItemClickStub,
+        });
+        const keyboard = getListKeyboard($element);
+
+        keyboard
+            .keyDown('down')
+            .keyDown('enter');
+
+        assert.strictEqual(onItemClickStub.callCount, 0, 'onItemClick is not called');
+    });
+
+    QUnit.test('focus should not move to group header if collapsibleGroups: false', function(assert) {
+        const $element = $('#list').dxList({
+            items: [
+                { key: 'a', items: [1] },
+                { key: 'b', items: [2] },
+            ],
+            grouped: true,
+            focusStateEnabled: true,
+            collapsibleGroups: false,
+        });
+
+        const $items = $element.find(`.${LIST_ITEM_CLASS}`);
+        const $headers = $element.find(`.${LIST_GROUP_HEADER_CLASS}`);
+
+        const keyboard = getListKeyboard($element);
+
+        keyboard.keyDown('down');
+
+        assert.notOk($headers.eq(0).hasClass(FOCUSED_STATE_CLASS));
+        assert.ok($items.eq(0).hasClass(FOCUSED_STATE_CLASS));
+
+        keyboard.keyDown('down');
+
+        assert.notOk($headers.eq(1).hasClass(FOCUSED_STATE_CLASS));
+        assert.ok($items.eq(1).hasClass(FOCUSED_STATE_CLASS));
+
+        keyboard.keyDown('down');
+
+        assert.notOk($headers.eq(0).hasClass(FOCUSED_STATE_CLASS));
+        assert.ok($items.eq(0).hasClass(FOCUSED_STATE_CLASS));
+    });
+
+    QUnit.test('The focus should move from the first to the second header if the first group was collapsed', function(assert) {
+        const $element = $('#list').dxList({
+            items: [
+                { key: 'a', items: [1] },
+                { key: 'b', items: [2] },
+            ],
+            grouped: true,
+            focusStateEnabled: true,
+            collapsibleGroups: true,
+        });
+
+        const $headers = $element.find(`.${LIST_GROUP_HEADER_CLASS}`);
+
+        $headers.eq(0).trigger('dxclick');
+
+        assert.ok($headers.eq(0).hasClass(FOCUSED_STATE_CLASS));
+
+        const keyboard = getListKeyboard($element);
+
+        keyboard.keyDown('down');
+
+        assert.notOk($headers.eq(0).hasClass(FOCUSED_STATE_CLASS));
+        assert.ok($headers.eq(1).hasClass(FOCUSED_STATE_CLASS));
+    });
+
+    QUnit.test('header id should not be changed or reset when focusing the header', function(assert) {
+        const $element = $('#list').dxList({
+            items: [
+                { key: 'a', items: [1] },
+                { key: 'b', items: [2] },
+            ],
+            grouped: true,
+            focusStateEnabled: true,
+            collapsibleGroups: true,
+        });
+
+        const $header = $element.find(`.${LIST_GROUP_HEADER_CLASS}`).eq(0);
+        const initialHeaderId = $header.attr('id');
+
+        $header.trigger('dxclick');
+
+        const finalHeaderId = $header.attr('id');
+
+        assert.strictEqual(finalHeaderId, initialHeaderId, 'header id is not changed');
+        assert.strictEqual(finalHeaderId !== undefined, true, 'header id is not undefined');
+    });
+
+    QUnit.test('header id should not be changed or reset when focusing the next element', function(assert) {
+        const $element = $('#list').dxList({
+            items: [
+                { key: 'a', items: [1] },
+                { key: 'b', items: [2] },
+            ],
+            grouped: true,
+            focusStateEnabled: true,
+            collapsibleGroups: true,
+        });
+
+        const keyboard = getListKeyboard($element);
+        const $items = $element.find(`.${LIST_ITEM_CLASS}`);
+        const $header = $element.find(`.${LIST_GROUP_HEADER_CLASS}`).eq(0);
+        const initialHeaderId = $header.attr('id');
+
+        keyboard
+            .keyDown('down')
+            .keyDown('down');
+
+        const finalHeaderId = $header.attr('id');
+
+        assert.strictEqual($items.eq(0).hasClass(FOCUSED_STATE_CLASS), true, '1st list item is focused');
+        assert.strictEqual(finalHeaderId, initialHeaderId, 'header id is not changed');
+        assert.strictEqual(finalHeaderId !== undefined, true, 'header id is not undefined');
+    });
+
+    QUnit.test('header id should be equivalent to content aria-activedescendant when focusing the header', function(assert) {
+        const $element = $('#list').dxList({
+            items: [
+                { key: 'a', items: [1] },
+                { key: 'b', items: [2] },
+            ],
+            grouped: true,
+            focusStateEnabled: true,
+            collapsibleGroups: true,
+        });
+
+        const keyboard = getListKeyboard($element);
+
+        const $content = $element.find(`.${SCROLLVIEW_CONTENT_CLASS}`);
+        const $header = $element.find(`.${LIST_GROUP_HEADER_CLASS}`).eq(0);
+
+        keyboard.keyDown('down');
+
+        const contentActivedescendant = $content.attr('aria-activedescendant');
+        const headerId = $header.attr('id');
+
+        assert.strictEqual(headerId === contentActivedescendant, true, 'header id is equal to content aria-activedescendant');
+    });
+
     QUnit.test('list scroll to focused item after press up/down arrows', function(assert) {
         assert.expect(2);
 
@@ -3971,6 +4314,46 @@ QUnit.module('keyboard navigation', {
         assert.ok(secondItemIsFocused, 'focused item change to last visible item on new page');
     });
 
+    QUnit.test('focus should be moved to selectedItem after focusing of grouped list (T1278005)', function(assert) {
+        const list = $('#list').dxList({
+            selectedItemKeys: [5],
+            keyExpr: 'id',
+            items: [{
+                key: 'a',
+                items: [
+                    { id: 1, text: '1' },
+                    { id: 2, text: '2' },
+                    { id: 3, text: '3' },
+                ] }, {
+                key: 'b',
+                items: [
+                    { id: 4, text: '4' },
+                    { id: 5, text: '5' },
+                    { id: 6, text: '6' },
+                ] },
+            ],
+            grouped: true,
+            focusStateEnabled: true,
+            collapsibleGroups: false,
+            selectionMode: 'multiple',
+            showSelectionControls: false,
+        }).dxList('instance');
+
+        const $element = $(list.element());
+
+        const keyboard = getListKeyboard($element);
+        list.focus();
+
+        const $items = $element.find(`.${LIST_ITEM_CLASS}`);
+
+        assert.strictEqual($items.eq(4).hasClass(FOCUSED_STATE_CLASS), true, 'focused class is added to selected item');
+
+        keyboard.keyDown('down');
+
+        assert.strictEqual($items.eq(4).hasClass(FOCUSED_STATE_CLASS), false, 'focused class is removed');
+        assert.strictEqual($items.eq(5).hasClass(FOCUSED_STATE_CLASS), true, 'next item is focused');
+    });
+
     QUnit.test('list should attach keyboard events even if focusStateEnabled is false when the widget\'s onKeyboardHandled is defined', function(assert) {
         const handler = sinon.stub();
         const $element = $('#list');
@@ -4129,8 +4512,7 @@ QUnit.module('Search', () => {
         assert.deepEqual(instance.option('items')[0], expectedValue, 'items');
     });
 
-    // T582179
-    QUnit.test('Selection should not be cleared after searching', function(assert) {
+    QUnit.test('Selection should not be cleared after searching (T582179)', function(assert) {
         const $element = $('#list').dxList({
             dataSource: [1, 2, 3],
             searchEnabled: true,
@@ -4251,60 +4633,6 @@ if(devices.real().deviceType === 'desktop') {
                 helper.checkAttributes(helper.getListContainer(), this.expectedItemsContainerAttrs);
                 helper.checkItemsAttributes([0, 1, 2], { attributes: ['aria-selected'], focusedItemIndex: 1, role: 'option' });
             });
-        });
-    });
-}
-
-if(QUnit.urlParams['nojquery'] && QUnit.urlParams['shadowDom']) {
-    QUnit.module('ShadowDOM', {
-        beforeEach: function() {
-            this.clock = sinon.useFakeTimers();
-
-            this.$list = $('#list').dxList({
-                items: ['One', 'Two', 'Three'],
-                itemDragging: { allowReordering: true },
-                focusStateEnabled: true,
-            });
-
-            this.root = $('#list')[0].getRootNode();
-        },
-
-        afterEach: function() {
-            this.clock.restore();
-        },
-
-        getItems: function() {
-            return this.$list.find(`.${LIST_ITEM_CLASS}`);
-        },
-
-        createEvent: function(eventName) {
-            return $.Event(eventName, {
-                originalEvent: {
-                    type: eventName,
-                    target: { shadowRoot: this.root },
-                    path: [ this.getItems().eq(1)[0] ],
-                    changedTouches: [{}]
-                }
-            });
-        },
-    }, () => {
-        QUnit.test('drag item', function(assert) {
-            const pointer = reorderingPointerMock(this.getItems().first());
-
-            pointer.dragStart().drag(34).dragEnd();
-
-            const orderedItems = this.getItems().toArray().map(e => e.innerText.trim());
-
-            assert.deepEqual(orderedItems, ['Two', 'Three', 'One']);
-        });
-
-        QUnit.test('focus item', function(assert) {
-            $(this.root).trigger(this.createEvent('mousedown'));
-            $(this.root).trigger(this.createEvent('touchstart'));
-
-            this.clock.tick(10);
-
-            assert.ok(this.getItems().eq(1).hasClass(FOCUSED_STATE_CLASS));
         });
     });
 }
@@ -4484,5 +4812,190 @@ QUnit.module('Accessibility', () => {
         pointerMock($item2).start().swipeEnd(1);
         $switchableButton = $(`.${SWITCHABLE_DELETE_BUTTON_CLASS}`);
         checkButtonAttributes(assert, $switchableButton);
+    });
+
+    [true, false].forEach(collapsibleGroups => {
+        QUnit.test(`Grouped list items element should have correct aria if collapsibleGroups: ${collapsibleGroups}`, function(assert) {
+            const $element = $('#list').dxList({
+                dataSource: [{ key: 1, items: [1] }],
+                grouped: true,
+                collapsibleGroups,
+            });
+
+            const $listItems = $element.find(`.${LIST_ITEMS_CLASS}`);
+
+            const expectedListItemsAria = {
+                role: collapsibleGroups ? undefined : 'listbox',
+                'aria-label': collapsibleGroups ? undefined : 'Items',
+            };
+
+            assert.strictEqual($listItems.attr('role'), expectedListItemsAria.role, 'role is correct');
+            assert.strictEqual($listItems.attr('aria-label'), expectedListItemsAria['aria-label'], 'aria-label is correct');
+        });
+
+        QUnit.test(`Group element should have correct aria if collapsibleGroups: ${collapsibleGroups}`, function(assert) {
+            const $element = $('#list').dxList({
+                dataSource: [{ key: 1, items: [1] }],
+                grouped: true,
+                collapsibleGroups,
+            });
+
+            const $groupElement = $element.find(`.${LIST_GROUP_CLASS}`);
+            const $headerElement = $groupElement.find(`.${LIST_GROUP_HEADER_CLASS}`);
+
+            const expectedGroupAria = {
+                role: collapsibleGroups ? undefined : 'group',
+                'aria-labelledby': collapsibleGroups ? undefined : $headerElement.attr('id'),
+            };
+
+            assert.strictEqual($groupElement.attr('role'), expectedGroupAria.role, 'role is correct');
+            assert.strictEqual($groupElement.attr('aria-labelledby'), expectedGroupAria['aria-labelledby'], 'aria-labelledby is correct');
+        });
+
+        QUnit.test(`Group header element should have correct aria if collapsibleGroups: ${collapsibleGroups}`, function(assert) {
+            const $element = $('#list').dxList({
+                dataSource: [{ key: 1, items: [1] }],
+                grouped: true,
+                collapsibleGroups,
+            });
+
+            const $groupHeader = $element.find(`.${LIST_GROUP_HEADER_CLASS}`);
+
+            const expectedGroupHeaderAria = {
+                role: collapsibleGroups ? 'button' : undefined,
+                'aria-expanded': collapsibleGroups ? 'true' : undefined,
+                'aria-controls': collapsibleGroups ? true : false,
+            };
+
+            assert.strictEqual($groupHeader.attr('role'), expectedGroupHeaderAria.role, 'role is correct');
+            assert.strictEqual($groupHeader.attr('aria-expanded'), expectedGroupHeaderAria['aria-expanded'], 'aria-expanded is correct');
+            assert.strictEqual(!!$groupHeader.attr('aria-controls'), expectedGroupHeaderAria['aria-controls'], 'aria-controls is correct');
+        });
+
+        QUnit.test(`Group body element should have correct aria if collapsibleGroups: ${collapsibleGroups}`, function(assert) {
+            const $element = $('#list').dxList({
+                dataSource: [{ key: 1, items: [1] }],
+                grouped: true,
+                collapsibleGroups,
+            });
+
+            const $groupBody = $element.find(`.${LIST_GROUP_BODY_CLASS}`);
+            const $headerElement = $element.find(`.${LIST_GROUP_HEADER_CLASS}`);
+
+            const expectedGroupBodyAria = {
+                role: collapsibleGroups ? 'listbox' : undefined,
+                'aria-labelledby': collapsibleGroups ? $headerElement.attr('id') : undefined,
+            };
+
+            assert.strictEqual($groupBody.attr('role'), expectedGroupBodyAria.role, 'role is correct');
+            assert.strictEqual($groupBody.attr('aria-labelledby'), expectedGroupBodyAria['aria-labelledby'], 'aria-labelledby is correct');
+        });
+
+        QUnit.test(`Grouped list items element should have correct aria if collapsibleGroups is changed in runtime, init value: ${collapsibleGroups}`, function(assert) {
+            const $element = $('#list').dxList({
+                dataSource: [{ key: 1, items: [1] }],
+                grouped: true,
+                collapsibleGroups,
+            });
+            const instance = $element.dxList('instance');
+
+            instance.option('collapsibleGroups', !collapsibleGroups);
+
+            const $listItems = $element.find(`.${LIST_ITEMS_CLASS}`);
+
+            const expectedListItemsAria = {
+                role: collapsibleGroups ? 'listbox' : undefined,
+                'aria-label': collapsibleGroups ? 'Items' : undefined,
+            };
+
+            assert.strictEqual($listItems.attr('role'), expectedListItemsAria.role, 'role is correct');
+            assert.strictEqual($listItems.attr('aria-label'), expectedListItemsAria['aria-label'], 'aria-label is correct');
+        });
+
+        QUnit.test(`Group element should have correct aria if collapsibleGroups is changed in runtime, init value: ${collapsibleGroups}`, function(assert) {
+            const $element = $('#list').dxList({
+                dataSource: [{ key: 1, items: [1] }],
+                grouped: true,
+                collapsibleGroups,
+            });
+            const instance = $element.dxList('instance');
+
+            instance.option('collapsibleGroups', !collapsibleGroups);
+
+            const $groupElement = $element.find(`.${LIST_GROUP_CLASS}`);
+            const $headerElement = $groupElement.find(`.${LIST_GROUP_HEADER_CLASS}`);
+
+            const expectedGroupAria = {
+                role: collapsibleGroups ? 'group' : undefined,
+                'aria-labelledby': collapsibleGroups ? $headerElement.attr('id') : undefined,
+            };
+
+            assert.strictEqual($groupElement.attr('role'), expectedGroupAria.role, 'role is correct');
+            assert.strictEqual($groupElement.attr('aria-labelledby'), expectedGroupAria['aria-labelledby'], 'aria-labelledby is correct');
+        });
+
+        QUnit.test(`Group header element should have correct aria if collapsibleGroups is changed in runtime, init value: ${collapsibleGroups}`, function(assert) {
+            const $element = $('#list').dxList({
+                dataSource: [{ key: 1, items: [1] }],
+                grouped: true,
+                collapsibleGroups,
+            });
+            const instance = $element.dxList('instance');
+
+            instance.option('collapsibleGroups', !collapsibleGroups);
+
+            const $groupElement = $element.find(`.${LIST_GROUP_CLASS}`);
+            const $groupHeader = $groupElement.find(`.${LIST_GROUP_HEADER_CLASS}`);
+            const $groupBody = $groupElement.find(`.${LIST_GROUP_BODY_CLASS}`);
+
+            const expectedGroupHeaderAria = {
+                role: collapsibleGroups ? undefined : 'button',
+                'aria-expanded': collapsibleGroups ? undefined : 'true',
+                'aria-controls': collapsibleGroups ? undefined : $groupBody.attr('id'),
+            };
+
+            assert.strictEqual($groupHeader.attr('role'), expectedGroupHeaderAria.role, 'role is correct');
+            assert.strictEqual($groupHeader.attr('aria-expanded'), expectedGroupHeaderAria['aria-expanded'], 'aria-expanded is correct');
+            assert.strictEqual($groupHeader.attr('aria-controls'), expectedGroupHeaderAria['aria-controls'], 'aria-controls is correct');
+        });
+
+        QUnit.test(`Group body element should have correct aria if collapsibleGroups is changed in runtime, init value: ${collapsibleGroups}`, function(assert) {
+            const $element = $('#list').dxList({
+                dataSource: [{ key: 1, items: [1] }],
+                grouped: true,
+                collapsibleGroups,
+            });
+            const instance = $element.dxList('instance');
+
+            instance.option('collapsibleGroups', !collapsibleGroups);
+
+            const $groupBody = $element.find(`.${LIST_GROUP_BODY_CLASS}`);
+            const $headerElement = $element.find(`.${LIST_GROUP_HEADER_CLASS}`);
+
+            const expectedGroupBodyAria = {
+                role: collapsibleGroups ? undefined : 'listbox',
+                'aria-labelledby': collapsibleGroups ? undefined : $headerElement.attr('id'),
+            };
+
+            assert.strictEqual($groupBody.attr('role'), expectedGroupBodyAria.role, 'role is correct');
+            assert.strictEqual($groupBody.attr('aria-labelledby'), expectedGroupBodyAria['aria-labelledby'], 'aria-labelledby is correct');
+        });
+    });
+
+    QUnit.test('Group header element should have correct aria-expanded after click if collapsibleGroups: true', function(assert) {
+        const $element = $('#list').dxList({
+            dataSource: [{ key: 1, items: [1] }],
+            grouped: true,
+            collapsibleGroups: true,
+        });
+
+        const $groupHeader = $element.find(`.${LIST_GROUP_HEADER_CLASS}`);
+        assert.strictEqual($groupHeader.attr('aria-expanded'), 'true', 'aria-expanded is correct');
+
+        $groupHeader.trigger('dxclick');
+        assert.strictEqual($groupHeader.attr('aria-expanded'), 'false', 'aria-expanded is changed');
+
+        $groupHeader.trigger('dxclick');
+        assert.strictEqual($groupHeader.attr('aria-expanded'), 'true', 'aria-expanded is changed');
     });
 });

@@ -1,8 +1,8 @@
 import { getWindow } from '../../core/utils/window';
 import gridCoreUtils from '../../__internal/grids/grid_core/m_utils';
 import { isDate, isDefined, isNumeric } from '../../core/utils/type';
-import dateLocalization from '../../localization/date';
-import numberLocalization from '../../localization/number';
+import dateLocalization from '../../common/core/localization/date';
+import numberLocalization from '../../common/core/localization/number';
 
 const window = getWindow();
 const TREELIST_EMPTY_SPACE = 'dx-treelist-empty-space';

@@ -1,5 +1,5 @@
 import devices from '__internal/core/m_devices';
-import visibilityChange from 'events/visibility_change';
+import visibilityChange from 'common/core/events/visibility_change';
 import 'generic_light.css!';
 import $ from 'jquery';
 import 'ui/data_grid';

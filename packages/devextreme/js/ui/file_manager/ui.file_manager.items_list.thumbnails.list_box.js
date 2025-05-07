@@ -2,11 +2,11 @@ import { getOuterWidth, getOuterHeight, getInnerWidth, getInnerHeight } from '..
 import $ from '../../core/renderer';
 import { extend } from '../../core/utils/extend';
 import { isDefined } from '../../core/utils/type';
-import { Deferred, when } from '../../core/utils/deferred';
+import { Deferred } from '../../core/utils/deferred';
 
-import holdEvent from '../../events/hold';
-import { addNamespace, isCommandKeyPressed } from '../../events/utils/index';
-import eventsEngine from '../../events/core/events_engine';
+import holdEvent from '../../common/core/events/hold';
+import { addNamespace, isCommandKeyPressed } from '../../common/core/events/utils/index';
+import eventsEngine from '../../common/core/events/core/events_engine';
 
 import { BindableTemplate } from '../../core/templates/bindable_template';
 
@@ -284,7 +284,6 @@ class FileManagerThumbnailListBox extends CollectionWidget {
         const removedItemKeys = args.removedItemKeys;
 
         if(this._rendered && (addedItemKeys.length || removedItemKeys.length)) {
-            const selectionChangePromise = this._selectionChangePromise;
             if(!this._rendering) {
                 const addedSelection = [];
                 let normalizedIndex;
@@ -309,7 +308,7 @@ class FileManagerThumbnailListBox extends CollectionWidget {
                 this._updateSelection(addedSelection, removedSelection);
             }
 
-            when(selectionChangePromise).done(() => this._fireSelectionChangeEvent(args));
+            this._fireSelectionChangeEvent(args);
         }
     }
 

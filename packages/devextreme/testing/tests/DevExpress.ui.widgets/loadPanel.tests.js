@@ -1,9 +1,9 @@
 import { getOuterWidth, getOuterHeight } from 'core/utils/size';
 import $ from 'jquery';
 import keyboardMock from '../../helpers/keyboardMock.js';
-import messageLocalization from 'localization/message';
+import messageLocalization from 'common/core/localization/message';
 import uiErrors from 'ui/widget/ui.errors';
-import fx from 'animation/fx';
+import fx from 'common/core/animation/fx';
 
 import 'generic_light.css!';
 import 'ui/load_panel';

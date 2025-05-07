@@ -1,8 +1,8 @@
-require('localization/globalize/core');
-require('localization/globalize/number');
-require('localization/globalize/currency');
-require('localization/globalize/date');
-require('localization/globalize/message');
+require('common/core/localization/globalize/core');
+require('common/core/localization/globalize/number');
+require('common/core/localization/globalize/currency');
+require('common/core/localization/globalize/date');
+require('common/core/localization/globalize/message');
 const cldrData = [
     require('devextreme-cldr-data/fr.json!json')
 ];

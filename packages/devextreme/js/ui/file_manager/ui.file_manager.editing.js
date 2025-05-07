@@ -5,7 +5,7 @@ import { each } from '../../core/utils/iterator';
 import { format } from '../../core/utils/string';
 import { isDefined } from '../../core/utils/type';
 
-import messageLocalization from '../../localization/message';
+import messageLocalization from '../../common/core/localization/message';
 
 import Widget from '../widget/ui.widget';
 

@@ -1,10 +1,12 @@
 import { Selector } from 'testcafe';
+import Toolbar from '../toolbar';
 
 const CLASS = {
   overlayWrapper: 'dx-overlay-wrapper',
   overlayContent: 'dx-overlay-content',
   invalidMessage: 'dx-invalid-message',
   revertTooltip: 'dx-datagrid-revert-tooltip',
+  toolbar: 'dx-toolbar',
   checkbox: 'dx-checkbox',
 };
 
@@ -13,8 +15,10 @@ export class Overlay {
 
   content: Selector;
 
-  constructor(id?: Selector) {
-    this.element = id ?? Selector(`.${CLASS.overlayWrapper}`);
+  constructor(id?: Selector, index?: number) {
+    this.element = id 
+      ? (index ? id.nth(index) : id) 
+      : Selector(`.${CLASS.overlayWrapper}`).nth(index ? index : 0);
 
     this.content = this.element.find(`.${CLASS.overlayContent}`);
   }
@@ -29,5 +33,9 @@ export class Overlay {
 
   getPopupCheckbox(): Selector {
     return this.element.find(`.${CLASS.overlayContent} .${CLASS.checkbox}`);
+  }
+
+  getToolbar(idx?: number): Toolbar {
+    return new Toolbar(this.element.find(`.${CLASS.toolbar}`).nth(idx ? idx : 0));
   }
 }

@@ -23,9 +23,10 @@ import {
 
 export { ExplicitTypes } from 'devextreme/ui/gallery';
 
-import { Store } from 'devextreme/data';
-import DataSource, { Options as DataSourceOptions } from 'devextreme/data/data_source';
-import { ContentReadyEvent, DisposingEvent, dxGalleryItem, InitializedEvent, ItemClickEvent, ItemContextMenuEvent, ItemHoldEvent, ItemRenderedEvent, OptionChangedEvent, SelectionChangedEvent } from 'devextreme/ui/gallery';
+import DataSource from 'devextreme/data/data_source';
+import { dxGalleryItem, ContentReadyEvent, DisposingEvent, InitializedEvent, ItemClickEvent, ItemContextMenuEvent, ItemHoldEvent, ItemRenderedEvent, OptionChangedEvent, SelectionChangedEvent } from 'devextreme/ui/gallery';
+import { DataSourceOptions } from 'devextreme/data/data_source';
+import { Store } from 'devextreme/data/store';
 
 import DxGallery from 'devextreme/ui/gallery';
 
@@ -56,6 +57,7 @@ import { DxiGalleryItemComponent } from 'devextreme-angular/ui/gallery/nested';
 @Component({
     selector: 'dx-gallery',
     template: '',
+    host: { ngSkipHydration: 'true' },
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -110,10 +112,10 @@ export class DxGalleryComponent<TItem = any, TKey = any> extends DxComponent imp
     
      */
     @Input()
-    get dataSource(): Store | DataSource | DataSourceOptions | null | string | Array<dxGalleryItem | string | any> {
+    get dataSource(): Array<any | dxGalleryItem | string> | DataSource | DataSourceOptions | null | Store | string {
         return this._getOption('dataSource');
     }
-    set dataSource(value: Store | DataSource | DataSourceOptions | null | string | Array<dxGalleryItem | string | any>) {
+    set dataSource(value: Array<any | dxGalleryItem | string> | DataSource | DataSourceOptions | null | Store | string) {
         this._setOption('dataSource', value);
     }
 
@@ -136,10 +138,10 @@ export class DxGalleryComponent<TItem = any, TKey = any> extends DxComponent imp
     
      */
     @Input()
-    get elementAttr(): any {
+    get elementAttr(): Record<string, any> {
         return this._getOption('elementAttr');
     }
-    set elementAttr(value: any) {
+    set elementAttr(value: Record<string, any>) {
         this._setOption('elementAttr', value);
     }
 
@@ -162,10 +164,10 @@ export class DxGalleryComponent<TItem = any, TKey = any> extends DxComponent imp
     
      */
     @Input()
-    get height(): number | Function | string | undefined {
+    get height(): (() => number | string) | number | string | undefined {
         return this._getOption('height');
     }
-    set height(value: number | Function | string | undefined) {
+    set height(value: (() => number | string) | number | string | undefined) {
         this._setOption('height', value);
     }
 
@@ -240,10 +242,10 @@ export class DxGalleryComponent<TItem = any, TKey = any> extends DxComponent imp
     
      */
     @Input()
-    get items(): Array<string | any | { disabled?: boolean, html?: string, imageAlt?: string, imageSrc?: string, template?: any, text?: string }> {
+    get items(): Array<any | dxGalleryItem | string> {
         return this._getOption('items');
     }
-    set items(value: Array<string | any | { disabled?: boolean, html?: string, imageAlt?: string, imageSrc?: string, template?: any, text?: string }>) {
+    set items(value: Array<any | dxGalleryItem | string>) {
         this._setOption('items', value);
     }
 
@@ -422,10 +424,10 @@ export class DxGalleryComponent<TItem = any, TKey = any> extends DxComponent imp
     
      */
     @Input()
-    get width(): number | Function | string | undefined {
+    get width(): (() => number | string) | number | string | undefined {
         return this._getOption('width');
     }
-    set width(value: number | Function | string | undefined) {
+    set width(value: (() => number | string) | number | string | undefined) {
         this._setOption('width', value);
     }
 
@@ -540,7 +542,7 @@ export class DxGalleryComponent<TItem = any, TKey = any> extends DxComponent imp
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() dataSourceChange: EventEmitter<Store | DataSource | DataSourceOptions | null | string | Array<dxGalleryItem | string | any>>;
+    @Output() dataSourceChange: EventEmitter<Array<any | dxGalleryItem | string> | DataSource | DataSourceOptions | null | Store | string>;
 
     /**
     
@@ -554,7 +556,7 @@ export class DxGalleryComponent<TItem = any, TKey = any> extends DxComponent imp
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() elementAttrChange: EventEmitter<any>;
+    @Output() elementAttrChange: EventEmitter<Record<string, any>>;
 
     /**
     
@@ -568,7 +570,7 @@ export class DxGalleryComponent<TItem = any, TKey = any> extends DxComponent imp
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() heightChange: EventEmitter<number | Function | string | undefined>;
+    @Output() heightChange: EventEmitter<(() => number | string) | number | string | undefined>;
 
     /**
     
@@ -610,7 +612,7 @@ export class DxGalleryComponent<TItem = any, TKey = any> extends DxComponent imp
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() itemsChange: EventEmitter<Array<string | any | { disabled?: boolean, html?: string, imageAlt?: string, imageSrc?: string, template?: any, text?: string }>>;
+    @Output() itemsChange: EventEmitter<Array<any | dxGalleryItem | string>>;
 
     /**
     
@@ -708,7 +710,7 @@ export class DxGalleryComponent<TItem = any, TKey = any> extends DxComponent imp
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() widthChange: EventEmitter<number | Function | string | undefined>;
+    @Output() widthChange: EventEmitter<(() => number | string) | number | string | undefined>;
 
     /**
     
@@ -725,8 +727,7 @@ export class DxGalleryComponent<TItem = any, TKey = any> extends DxComponent imp
         return this._getOption('items');
     }
     set itemsChildren(value) {
-        this.setContentChildren('items', value, 'DxiGalleryItemComponent');
-        this.setChildren('items', value);
+        this._setChildren('items', value, 'DxiGalleryItemComponent');
     }
 
 
@@ -735,9 +736,7 @@ export class DxGalleryComponent<TItem = any, TKey = any> extends DxComponent imp
         return this._getOption('items');
     }
     set itemsLegacyChildren(value) {
-        if (this.checkContentChildren('items', value, 'DxiItemComponent')) {
-           this.setChildren('items', value);
-        }
+        this._setChildren('items', value, 'DxiItemComponent');
     }
 
 

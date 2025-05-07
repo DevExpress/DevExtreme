@@ -2,6 +2,20 @@
 /* eslint-disable @typescript-eslint/no-type-alias */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 import {
+  Store,
+  DataSource,
+  CustomStore,
+  ArrayStore,
+  ODataStore,
+  LocalStore,
+} from 'devextreme/common/data';
+
+import {
+  DataSourceOptionsStub,
+  DataSourceLike,
+} from 'devextreme/data/data_source';
+
+import {
   AnotherType,
   ANY,
   toAssertion,
@@ -10,16 +24,6 @@ import {
   notNever,
   SomeType,
 } from '../consts';
-
-import DataSource, {
-  DataSourceLike,
-  DataSourceOptionsStub,
-} from 'devextreme/data/data_source';
-import CustomStore from 'devextreme/data/custom_store';
-import ArrayStore from 'devextreme/data/array_store';
-import ODataStore from 'devextreme/data/odata/store';
-import LocalStore from 'devextreme/data/local_store';
-import { Store } from 'devextreme/data/index';
 
 export function promiseResolveAcceptsMultipleArguments() {
   const callback: (a: any, b: any) => void = ANY;

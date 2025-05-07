@@ -1,8 +1,8 @@
-import { eventData as _eventData } from '../../events/utils/index';
+import { eventData as _eventData } from '../../common/core/events/utils/index';
 import domAdapter from '../../core/dom_adapter';
-import { name as clickEventName } from '../../events/click';
-import pointer from '../../events/pointer';
-import eventsEngine from '../../events/core/events_engine';
+import { name as clickEventName } from '../../common/core/events/click';
+import pointer from '../../common/core/events/pointer';
+import eventsEngine from '../../common/core/events/core/events_engine';
 
 const downPointerEventName = pointer.down;
 const movePointerEventName = pointer.move;

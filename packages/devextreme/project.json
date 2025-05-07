@@ -21,8 +21,8 @@
         "{projectRoot}/artifacts",
         "!{projectRoot}/artifacts/css",
         "{projectRoot}/js/bundles/dx.custom.js",
-        "{projectRoot}/js/localization/cldr-data",
-        "{projectRoot}/js/localization/default_messages.js",
+        "{projectRoot}/js/common/core/localization/cldr-data",
+        "{projectRoot}/js/common/core/localization/default_messages.js",
         "{projectRoot}/js/renovation/**/*.j.tsx",
         "{projectRoot}/testing/tests/Renovation/widgets.json"
       ]
@@ -64,8 +64,8 @@
         "{projectRoot}/artifacts",
         "!{projectRoot}/artifacts/css",
         "{projectRoot}/js/bundles/dx.custom.js",
-        "{projectRoot}/js/localization/cldr-data",
-        "{projectRoot}/js/localization/default_messages.js",
+        "{projectRoot}/js/common/core/localization/cldr-data",
+        "{projectRoot}/js/common/core/localization/default_messages.js",
         "{projectRoot}/js/renovation/**/*.j.tsx",
         "{projectRoot}/testing/tests/Renovation/widgets.json"
       ],

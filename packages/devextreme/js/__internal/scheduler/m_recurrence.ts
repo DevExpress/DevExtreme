@@ -296,16 +296,15 @@ class RecurrenceProcessor {
         .map((rule) => this.getDateByAsciiString(rule));
 
       exceptionDates.forEach((date) => {
-        if (options.getPostProcessedException) {
-          date = options.getPostProcessedException(date);
-        }
-
-        const utcDate = timeZoneUtils.setOffsetsToDate(
+        const rruleTimezoneOffsets = typeof options.getExceptionDateTimezoneOffsets === 'function'
+          ? options.getExceptionDateTimezoneOffsets(date)
+          : [-timeZoneUtils.getClientTimezoneOffset(date), options.appointmentTimezoneOffset];
+        const exceptionDateInPseudoUtc = timeZoneUtils.setOffsetsToDate(
           date,
-          [-timeZoneUtils.getClientTimezoneOffset(date), options.appointmentTimezoneOffset],
+          rruleTimezoneOffsets,
         );
 
-        this.rRuleSet!.exdate(utcDate);
+        this.rRuleSet!.exdate(exceptionDateInPseudoUtc);
       });
     }
   }

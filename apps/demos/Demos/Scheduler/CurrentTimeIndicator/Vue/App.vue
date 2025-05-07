@@ -67,7 +67,7 @@
 </template>
 <script setup lang="ts">
 import { ref } from 'vue';
-import DxScheduler, { DxResource, DxSchedulerTypes } from 'devextreme-vue/scheduler';
+import DxScheduler, { DxResource, type DxSchedulerTypes } from 'devextreme-vue/scheduler';
 import { DxSwitch } from 'devextreme-vue/switch';
 import { DxNumberBox } from 'devextreme-vue/number-box';
 import AppointmentTemplate from './AppointmentTemplate.vue';

@@ -5,6 +5,10 @@ import {
     Component,
     NgModule,
     Host,
+    ElementRef,
+    Renderer2,
+    Inject,
+    AfterViewInit,
     SkipSelf,
     Input,
     ContentChildren,
@@ -12,24 +16,29 @@ import {
     QueryList
 } from '@angular/core';
 
-
+import { DOCUMENT } from '@angular/common';
 
 
 import { dxTreeViewItem } from 'devextreme/ui/tree_view';
 
 import {
     NestedOptionHost,
+    extractTemplate,
+    DxTemplateDirective,
+    IDxTemplateHost,
+    DxTemplateHost
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
 
 
 @Component({
     selector: 'dxi-tree-view-item',
-    template: '',
-    styles: [''],
-    providers: [NestedOptionHost]
+    template: '<ng-content></ng-content>',
+    styles: [':host { display: block; }'],
+    providers: [NestedOptionHost, DxTemplateHost]
 })
-export class DxiTreeViewItemComponent extends CollectionNestedOption {
+export class DxiTreeViewItemComponent extends CollectionNestedOption implements AfterViewInit,
+    IDxTemplateHost {
     @Input()
     get disabled(): boolean {
         return this._getOption('disabled');
@@ -141,10 +150,22 @@ export class DxiTreeViewItemComponent extends CollectionNestedOption {
     }
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
-            @Host() optionHost: NestedOptionHost) {
+            @Host() optionHost: NestedOptionHost,
+            private renderer: Renderer2,
+            @Inject(DOCUMENT) private document: any,
+            @Host() templateHost: DxTemplateHost,
+            private element: ElementRef) {
         super();
         parentOptionHost.setNestedOption(this);
         optionHost.setHost(this, this._fullOptionPath.bind(this));
+        templateHost.setHost(this);
+    }
+
+    setTemplate(template: DxTemplateDirective) {
+        this.template = template;
+    }
+    ngAfterViewInit() {
+        extractTemplate(this, this.element, this.renderer, this.document);
     }
 
 

@@ -40,14 +40,14 @@
 </template>
 <script setup lang="ts">
 import { ref } from 'vue';
-import { DxLookup, DxDropDownOptions } from 'devextreme-vue/lookup';
+import { DxLookup, DxDropDownOptions, type DxLookupTypes } from 'devextreme-vue/lookup';
 import { DxSelectBox } from 'devextreme-vue/select-box';
 import { employees } from './data.ts';
 
 const items = employees;
 const selectedValue = ref(null);
-const applyValueModes = ref(['instantly', 'useButtons']);
-const applyValueMode = ref('instantly');
+const applyValueModes: DxLookupTypes.ApplyValueMode[] = ['instantly', 'useButtons'];
+const applyValueMode = ref(applyValueModes[0]);
 
 const getDisplayExpr = ({ FirstName = '', LastName = '' } = {}) => `${FirstName} ${LastName}`.trim();
 function setSelectedValue(e) {

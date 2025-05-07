@@ -1,4 +1,4 @@
-import fx from 'animation/fx';
+import fx from 'common/core/animation/fx';
 import config from 'core/config';
 import devices from '__internal/core/m_devices';
 import dataUtils from 'core/element_data';
@@ -9,11 +9,11 @@ import { Deferred } from 'core/utils/deferred';
 import { getHeight, getWidth, setWidth, getOffset } from 'core/utils/size';
 import typeUtils from 'core/utils/type';
 import { addShadowDomStyles } from 'core/utils/shadow_dom';
-import eventsEngine from 'events/core/events_engine';
-import pointerEvents from 'events/pointer';
-import { name as clickEventName } from 'events/click';
-import { name as dblClickEventName } from 'events/dblclick';
-import { triggerResizeEvent } from 'events/visibility_change';
+import eventsEngine from 'common/core/events/core/events_engine';
+import pointerEvents from 'common/core/events/pointer';
+import { name as clickEventName } from 'common/core/events/click';
+import { name as dblClickEventName } from 'common/core/events/dblclick';
+import { triggerResizeEvent } from 'common/core/events/visibility_change';
 import 'generic_light.css!';
 import $ from 'jquery';
 import 'ui/autocomplete';
@@ -29,7 +29,7 @@ import { getCells, generateItems, MockColumnsController, MockDataController, set
 import pointerMock from '../../helpers/pointerMock.js';
 import DataGridWrapper from '../../helpers/wrappers/dataGridWrappers.js';
 import { findShadowHostOrDocument } from '../../helpers/dataGridHelper.js';
-import { DataSource } from 'data/data_source/data_source';
+import { DataSource } from 'common/data/data_source/data_source';
 
 QUnit.testStart(function() {
     const markup =

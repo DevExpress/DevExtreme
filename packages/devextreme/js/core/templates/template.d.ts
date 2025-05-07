@@ -1,6 +1,6 @@
-import {
-    UserDefinedElement,
-} from '../element';
+export type {
+    template,
+} from '../../common';
 
 /**
  * @docid
@@ -26,10 +26,3 @@ export type dxTemplate = Template;
 export class Template {
     constructor(options?: dxTemplateOptions);
 }
-
-/**
- * @docid
- * @section Common
- * @public
- */
-export type template = string | Function | UserDefinedElement;

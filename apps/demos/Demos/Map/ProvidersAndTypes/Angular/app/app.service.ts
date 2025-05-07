@@ -7,6 +7,8 @@ export class MapSetting {
 }
 
 export type APIKey = {
+  azure?: string;
+
   bing?: string;
 
   google?: string;
@@ -25,9 +27,24 @@ const mapTypes: MapSetting[] = [{
   name: 'Hybrid Map',
 }];
 
+const mapProviders: MapSetting[] = [{
+  key: 'azure',
+  name: 'Azure',
+}, {
+  key: 'google',
+  name: 'Google',
+}, {
+  key: 'bing',
+  name: 'Bing',
+}];
+
 @Injectable()
 export class Service {
   getMapTypes(): MapSetting[] {
     return mapTypes;
+  }
+
+  getMapProviders(): MapSetting[] {
+    return mapProviders;
   }
 }

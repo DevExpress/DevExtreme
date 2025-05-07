@@ -1,5 +1,6 @@
 import '../data_source/m_data_source';
 
+import localizationMessage from '@js/common/core/localization/message';
 import registerComponent from '@js/core/component_registrator';
 import $ from '@js/core/renderer';
 import { extend } from '@js/core/utils/extend';
@@ -7,7 +8,6 @@ import { getImageContainer } from '@js/core/utils/icon';
 import { each } from '@js/core/utils/iterator';
 import { isDefined } from '@js/core/utils/type';
 import { hasWindow as hasWindowFn } from '@js/core/utils/window';
-import localizationMessage from '@js/localization/message';
 import ContextMenu from '@js/ui/context_menu';
 import TreeView from '@js/ui/tree_view';
 

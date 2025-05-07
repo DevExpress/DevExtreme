@@ -2,7 +2,7 @@ const $ = require('jquery');
 const noop = require('core/utils/common').noop;
 const vizMocks = require('../../helpers/vizMocks.js');
 const Tracker = require('viz/gauges/tracker');
-const pointerEvents = require('events/pointer');
+const pointerEvents = require('common/core/events/pointer');
 
 QUnit.module('Tracker', {
     beforeEach: function() {

@@ -1,5 +1,4 @@
-// @ts-expect-error
-import { normalizeSortingInfo } from '@js/data/utils';
+import { normalizeSortingInfo } from '@js/common/data/utils';
 import gridCoreUtils from '@ts/grids/grid_core/m_utils';
 
 export function createGroupFilter(path, storeLoadOptions) {

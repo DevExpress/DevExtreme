@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import fx from 'animation/fx';
+import fx from 'common/core/animation/fx';
 import Toolbar from 'ui/toolbar';
 
 const BUTTON_CLASS = 'dx-button';

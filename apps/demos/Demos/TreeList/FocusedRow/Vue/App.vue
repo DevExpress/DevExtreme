@@ -78,12 +78,12 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import {
-  DxTreeList, DxColumn, DxLookup, DxTreeListTypes,
+  DxTreeList, DxColumn, DxLookup, type DxTreeListTypes,
 } from 'devextreme-vue/tree-list';
 import DxNumberBox from 'devextreme-vue/number-box';
 import { createStore } from 'devextreme-aspnet-data-nojquery';
 
-const url = 'https://js.devexpress.com/Demos/Mvc/api/TreeListTasks';
+const url = 'https://js.devexpress.com/Demos/NetCore/api/TreeListTasks';
 const taskSubject = ref('');
 const taskAssigned = ref('');
 const startDate = ref('');
@@ -103,7 +103,7 @@ const taskEmployees = createStore({
 });
 const focusedRowKey = ref(45);
 
-function onFocusedRowChanged(e: DxTreeListTypes.FocusedCellChangedEvent) {
+function onFocusedRowChanged(e: DxTreeListTypes.FocusedRowChangedEvent) {
   const rowData = e.row && e.row.data;
   let cellValue;
   let assigned;

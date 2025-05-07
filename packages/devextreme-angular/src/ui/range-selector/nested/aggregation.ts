@@ -14,7 +14,7 @@ import {
 
 
 
-import { ChartSeriesAggregationMethod } from 'devextreme/viz/chart';
+import { chartPointAggregationInfoObject, chartSeriesObject, ChartSeriesAggregationMethod } from 'devextreme/viz/chart';
 
 import {
     NestedOptionHost,
@@ -30,10 +30,10 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoRangeSelectorAggregationComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get calculate(): Function | undefined {
+    get calculate(): ((aggregationInfo: chartPointAggregationInfoObject, series: chartSeriesObject) => Record<string, any> | Array<Record<string, any>>) | undefined {
         return this._getOption('calculate');
     }
-    set calculate(value: Function | undefined) {
+    set calculate(value: ((aggregationInfo: chartPointAggregationInfoObject, series: chartSeriesObject) => Record<string, any> | Array<Record<string, any>>) | undefined) {
         this._setOption('calculate', value);
     }
 

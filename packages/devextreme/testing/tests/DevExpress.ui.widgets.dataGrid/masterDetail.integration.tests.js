@@ -1,6 +1,6 @@
 import typeUtils from 'core/utils/type';
 import config from 'core/config';
-import pointerEvents from 'events/pointer';
+import pointerEvents from 'common/core/events/pointer';
 import commonUtils from 'core/utils/common';
 import { createDataGrid, baseModuleConfig } from '../../helpers/dataGridHelper.js';
 import $ from 'jquery';

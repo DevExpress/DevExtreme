@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import { locate } from 'animation/translator';
+import { locate } from 'common/core/animation/translator';
 import devices from '__internal/core/m_devices';
 import pointerMock from '../../helpers/pointerMock.js';
 import dataUtils from 'core/element_data';

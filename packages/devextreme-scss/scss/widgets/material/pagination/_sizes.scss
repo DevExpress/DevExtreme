@@ -13,11 +13,11 @@ $material-pagination-light-pagesizes-min-width: null !default;
 $material-pagination-light-pageindex-min-width: null !default;
 
 @if $size == "default" {
-  $material-pagination-light-pagesizes-min-width: 62px !default;
-  $material-pagination-light-pageindex-min-width: 32px !default;
+  $material-pagination-light-pagesizes-min-width: 72px !default;
+  $material-pagination-light-pageindex-min-width: 42px !default;
 }
 
 @else if $size == "compact" {
-  $material-pagination-light-pagesizes-min-width: 42px !default;
+  $material-pagination-light-pagesizes-min-width: 52px !default;
   $material-pagination-light-pageindex-min-width: 27px !default;
 }

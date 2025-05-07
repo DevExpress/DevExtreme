@@ -23,6 +23,7 @@ import {
 import { CollectionNestedOption } from 'devextreme-angular/core';
 import { DxiDiagramCommandComponent } from './command-dxi';
 import { DxiDiagramGroupComponent } from './group-dxi';
+import { DxiDiagramTabGroupComponent } from './tab-group-dxi';
 
 
 @Component({
@@ -33,18 +34,18 @@ import { DxiDiagramGroupComponent } from './group-dxi';
 })
 export class DxiDiagramTabComponent extends CollectionNestedOption {
     @Input()
-    get commands(): Array<CustomCommand | Command> {
+    get commands(): Array<Command | CustomCommand> {
         return this._getOption('commands');
     }
-    set commands(value: Array<CustomCommand | Command>) {
+    set commands(value: Array<Command | CustomCommand>) {
         this._setOption('commands', value);
     }
 
     @Input()
-    get groups(): Array<any | { commands?: Array<CustomCommand | Command>, title?: string }> {
+    get groups(): { commands?: Array<Command | CustomCommand>, title?: string }[] {
         return this._getOption('groups');
     }
-    set groups(value: Array<any | { commands?: Array<CustomCommand | Command>, title?: string }>) {
+    set groups(value: { commands?: Array<Command | CustomCommand>, title?: string }[]) {
         this._setOption('groups', value);
     }
 
@@ -75,6 +76,14 @@ export class DxiDiagramTabComponent extends CollectionNestedOption {
         return this._getOption('groups');
     }
     set groupsChildren(value) {
+        this.setChildren('groups', value);
+    }
+
+    @ContentChildren(forwardRef(() => DxiDiagramTabGroupComponent))
+    get tabGroupsChildren(): QueryList<DxiDiagramTabGroupComponent> {
+        return this._getOption('groups');
+    }
+    set tabGroupsChildren(value) {
         this.setChildren('groups', value);
     }
 

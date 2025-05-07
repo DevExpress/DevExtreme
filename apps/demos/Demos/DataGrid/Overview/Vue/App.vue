@@ -77,7 +77,7 @@ import {
   DxPager,
   DxPaging,
   DxSearchPanel,
-  DxDataGridTypes,
+  type DxDataGridTypes,
 } from 'devextreme-vue/data-grid';
 import DataSource from 'devextreme/data/data_source';
 import 'devextreme/data/odata/store';

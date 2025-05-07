@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import config from 'core/config';
 import repaintFloatingActionButton from 'ui/speed_dial_action/repaint_floating_action_button';
-import fx from 'animation/fx';
+import fx from 'common/core/animation/fx';
 
 import 'ui/speed_dial_action';
 import 'generic_light.css!';

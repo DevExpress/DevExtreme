@@ -1,5 +1,8 @@
 /* eslint-disable @typescript-eslint/prefer-nullish-coalescing */
 /* eslint-disable @typescript-eslint/no-unused-vars */
+import eventsEngine from '@js/common/core/events/core/events_engine';
+import { removeEvent } from '@js/common/core/events/remove';
+import messageLocalization from '@js/common/core/localization/message';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import browser from '@js/core/utils/browser';
@@ -13,9 +16,6 @@ import { isEmpty } from '@js/core/utils/string';
 import { setHeight } from '@js/core/utils/style';
 import { isDefined, isNumeric, isString } from '@js/core/utils/type';
 import { getWindow, hasWindow } from '@js/core/utils/window';
-import eventsEngine from '@js/events/core/events_engine';
-import { removeEvent } from '@js/events/remove';
-import messageLocalization from '@js/localization/message';
 import Scrollable from '@js/ui/scroll_view/ui.scrollable';
 import type { ColumnHeadersView } from '@ts/grids/grid_core/column_headers/m_column_headers';
 import type {
@@ -27,6 +27,7 @@ import type { KeyboardNavigationController } from '@ts/grids/grid_core/keyboard_
 import type { ValidatingController } from '@ts/grids/grid_core/validating/m_validating';
 import type { ResizingController } from '@ts/grids/grid_core/views/m_grid_view';
 
+import { CLASSES as REORDERING_CLASSES } from '../columns_resizing_reordering/const';
 import type { EditingController } from '../editing/m_editing';
 import type { EditorFactory } from '../editor_factory/m_editor_factory';
 import gridCoreUtils from '../m_utils';
@@ -40,13 +41,13 @@ const GROUP_ROW_CLASS = 'dx-group-row';
 const GROUP_CELL_CLASS = 'dx-group-cell';
 const DATA_ROW_CLASS = 'dx-data-row';
 const FREE_SPACE_CLASS = 'dx-freespace-row';
-const ROW_LINES_CLASS = 'dx-row-lines';
 const COLUMN_LINES_CLASS = 'dx-column-lines';
 const ROW_ALTERNATION_CLASS = 'dx-row-alt';
 const LAST_ROW_BORDER = 'dx-last-row-border';
 const EMPTY_CLASS = 'dx-empty';
 const ROW_INSERTED_ANIMATION_CLASS = 'row-inserted-animation';
 const CONTENT_FIXED_CLASS = 'content-fixed';
+export const ROW_LINES_CLASS = 'dx-row-lines';
 
 const LOADPANEL_HIDE_TIMEOUT = 200;
 
@@ -675,7 +676,7 @@ export class RowsView extends ColumnsView {
     this.executeAction('onRowDblClick', extend({}, e, item));
   }
 
-  private _getColumnsCountBeforeGroups(columns) {
+  protected _getColumnsCountBeforeGroups(columns) {
     for (let i = 0; i < columns.length; i++) {
       if (columns[i].type === 'groupExpand') {
         return i;
@@ -733,6 +734,7 @@ export class RowsView extends ColumnsView {
         expandColumn = {
           command: 'expand',
           cssClass: columns[i].cssClass,
+          fixed: columns[i].fixed,
         };
       }
 
@@ -923,7 +925,7 @@ export class RowsView extends ColumnsView {
     return parameters;
   }
 
-  public _setRowsOpacityCore($rows, visibleColumns, columnIndex, value) {
+  protected _toggleDraggableSourceColumnClass($rows, visibleColumns, columnIndex, value) {
     const columnsController = this._columnsController;
     const columns = columnsController.getColumns();
     const column = columns && columns[columnIndex];
@@ -933,7 +935,11 @@ export class RowsView extends ColumnsView {
       if (!$(row).hasClass(GROUP_ROW_CLASS)) {
         for (let i = 0; i < visibleColumns.length; i++) {
           if (isNumeric(columnID) && columnsController.isParentBandColumn(visibleColumns[i].index, columnID) || visibleColumns[i].index === columnIndex) {
-            $rows.eq(rowIndex).children().eq(i).css({ opacity: value });
+            $rows.eq(rowIndex)
+              .children()
+              .eq(i)
+              .toggleClass(this.addWidgetPrefix(REORDERING_CLASSES.draggableColumn), value);
+
             if (!isNumeric(columnID)) {
               break;
             }
@@ -1260,9 +1266,9 @@ export class RowsView extends ColumnsView {
   /**
    * @extended: column_fixing
    */
-  public setRowsOpacity(columnIndex, value) {
+  public toggleDraggableColumnClass(columnIndex, value) {
     const $rows = this._getRowElements().not(`.${GROUP_ROW_CLASS}`) || [];
-    this._setRowsOpacityCore($rows, this.getColumns(), columnIndex, value);
+    this._toggleDraggableSourceColumnClass($rows, this.getColumns(), columnIndex, value);
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

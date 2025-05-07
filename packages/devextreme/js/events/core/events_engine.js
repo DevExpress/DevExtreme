@@ -1,1 +1,1 @@
-export { default } from '../../__internal/events/core/m_events_engine';
+export { default } from '../../common/core/events/core/events_engine';

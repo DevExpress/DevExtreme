@@ -6,23 +6,20 @@ import {
 
 import {
     template,
-} from '../core/templates/template';
+    Orientation,
+    PageOrientation,
+    ToolbarItemLocation,
+} from '../common';
 
 import {
   EventInfo,
   InitializedEventInfo,
   ChangedOptionInfo,
-} from '../events/index';
+} from '../common/core/events';
 
 import Widget, {
     WidgetOptions,
 } from './widget/ui.widget';
-
-import {
-    Orientation,
-    PageOrientation,
-    ToolbarItemLocation,
-} from '../common';
 
 /**
  * @public
@@ -527,22 +524,22 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
        * @docid
        * @default undefined
        */
-      shapeMinWidth?: number;
+      shapeMinWidth?: number | undefined;
       /**
        * @docid
        * @default undefined
        */
-      shapeMaxWidth?: number;
+      shapeMaxWidth?: number | undefined;
       /**
        * @docid
        * @default undefined
        */
-      shapeMinHeight?: number;
+      shapeMinHeight?: number | undefined;
       /**
        * @docid
        * @default undefined
        */
-      shapeMaxHeight?: number;
+      shapeMaxHeight?: number | undefined;
     };
     /**
      * @docid
@@ -606,7 +603,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
        * @docid
        * @default undefined
        */
-      customDataExpr?: string | ((data: any, value?: any) => any);
+      customDataExpr?: string | ((data: any, value?: any) => any) | undefined;
       /**
        * @docid
        * @default null
@@ -622,12 +619,12 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
        * @docid
        * @default undefined
        */
-      fromLineEndExpr?: string | ((data: any, value?: any) => any);
+      fromLineEndExpr?: string | ((data: any, value?: any) => any) | undefined;
       /**
        * @docid
        * @default undefined
        */
-      fromPointIndexExpr?: string | ((data: any, value?: any) => any);
+      fromPointIndexExpr?: string | ((data: any, value?: any) => any) | undefined;
       /**
        * @docid
        * @default "id"
@@ -637,32 +634,32 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
        * @docid
        * @default undefined
        */
-      lineTypeExpr?: string | ((data: any, value?: any) => any);
+      lineTypeExpr?: string | ((data: any, value?: any) => any) | undefined;
       /**
        * @docid
        * @default undefined
        */
-      lockedExpr?: string | ((data: any, value?: any) => any);
+      lockedExpr?: string | ((data: any, value?: any) => any) | undefined;
       /**
        * @docid
        * @default undefined
        */
-      pointsExpr?: string | ((data: any, value?: any) => any);
+      pointsExpr?: string | ((data: any, value?: any) => any) | undefined;
       /**
        * @docid
        * @default undefined
        */
-      styleExpr?: string | ((data: any, value?: any) => any);
+      styleExpr?: string | ((data: any, value?: any) => any) | undefined;
       /**
        * @docid
        * @default undefined
        */
-      textExpr?: string | ((data: any, value?: any) => any);
+      textExpr?: string | ((data: any, value?: any) => any) | undefined;
       /**
        * @docid
        * @default undefined
        */
-      textStyleExpr?: string | ((data: any, value?: any) => any);
+      textStyleExpr?: string | ((data: any, value?: any) => any) | undefined;
       /**
        * @docid
        * @default "to"
@@ -672,17 +669,17 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
        * @docid
        * @default undefined
        */
-      toLineEndExpr?: string | ((data: any, value?: any) => any);
+      toLineEndExpr?: string | ((data: any, value?: any) => any) | undefined;
       /**
        * @docid
        * @default undefined
        */
-      toPointIndexExpr?: string | ((data: any, value?: any) => any);
+      toPointIndexExpr?: string | ((data: any, value?: any) => any) | undefined;
       /**
        * @docid
        * @default undefined
        */
-      zIndexExpr?: string | ((data: any, value?: any) => any);
+      zIndexExpr?: string | ((data: any, value?: any) => any) | undefined;
     };
     /**
      * @docid
@@ -750,12 +747,12 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
        * @docid
        * @default undefined
        */
-       containerChildrenExpr?: string | ((data: any, value?: any) => any);
+       containerChildrenExpr?: string | ((data: any, value?: any) => any) | undefined;
        /**
        * @docid
        * @default undefined
        */
-      customDataExpr?: string | ((data: any, value?: any) => any);
+      customDataExpr?: string | ((data: any, value?: any) => any) | undefined;
       /**
        * @docid
        * @default null
@@ -766,17 +763,17 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
        * @docid
        * @default undefined
        */
-      heightExpr?: string | ((data: any, value?: any) => any);
+      heightExpr?: string | ((data: any, value?: any) => any) | undefined;
       /**
        * @docid
        * @default undefined
        */
-      imageUrlExpr?: string | ((data: any, value?: any) => any);
+      imageUrlExpr?: string | ((data: any, value?: any) => any) | undefined;
       /**
        * @docid
        * @default undefined
        */
-      itemsExpr?: string | ((data: any, value?: any) => any);
+      itemsExpr?: string | ((data: any, value?: any) => any) | undefined;
       /**
        * @docid
        * @default "id"
@@ -786,22 +783,22 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
        * @docid
        * @default undefined
        */
-      leftExpr?: string | ((data: any, value?: any) => any);
+      leftExpr?: string | ((data: any, value?: any) => any) | undefined;
       /**
        * @docid
        * @default undefined
        */
-      lockedExpr?: string | ((data: any, value?: any) => any);
+      lockedExpr?: string | ((data: any, value?: any) => any) | undefined;
       /**
        * @docid
        * @default undefined
        */
-      parentKeyExpr?: string | ((data: any, value?: any) => any);
+      parentKeyExpr?: string | ((data: any, value?: any) => any) | undefined;
       /**
        * @docid
        * @default undefined
        */
-      styleExpr?: string | ((data: any, value?: any) => any);
+      styleExpr?: string | ((data: any, value?: any) => any) | undefined;
       /**
        * @docid
        * @default "text"
@@ -811,12 +808,12 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
        * @docid
        * @default undefined
        */
-      textStyleExpr?: string | ((data: any, value?: any) => any);
+      textStyleExpr?: string | ((data: any, value?: any) => any) | undefined;
       /**
        * @docid
        * @default undefined
        */
-      topExpr?: string | ((data: any, value?: any) => any);
+      topExpr?: string | ((data: any, value?: any) => any) | undefined;
       /**
        * @docid
        * @default "type"
@@ -826,12 +823,12 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
        * @docid
        * @default undefined
        */
-      widthExpr?: string | ((data: any, value?: any) => any);
+      widthExpr?: string | ((data: any, value?: any) => any) | undefined;
       /**
        * @docid
        * @default undefined
        */
-      zIndexExpr?: string | ((data: any, value?: any) => any);
+      zIndexExpr?: string | ((data: any, value?: any) => any) | undefined;
     };
     /**
      * @docid
@@ -1096,7 +1093,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
        * @docid
        * @default undefined
        */
-      width?: number;
+      width?: number | undefined;
     };
     /**
      * @docid
@@ -1126,7 +1123,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
        * @default undefined
        * @fires dxDiagramOptions.onOptionChanged
        */
-      value?: number;
+      value?: number | undefined;
     };
 }
 /**

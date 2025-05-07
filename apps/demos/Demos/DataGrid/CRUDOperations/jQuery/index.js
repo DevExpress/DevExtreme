@@ -1,5 +1,5 @@
 $(() => {
-  const URL = 'https://js.devexpress.com/Demos/Mvc/api/DataGridWebApi';
+  const URL = 'https://js.devexpress.com/Demos/NetCore/api/DataGridWebApi';
 
   const ordersStore = new DevExpress.data.CustomStore({
     key: 'OrderID',

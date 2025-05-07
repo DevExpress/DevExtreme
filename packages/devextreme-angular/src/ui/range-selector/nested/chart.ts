@@ -17,7 +17,8 @@ import {
 
 
 
-import { ChartsDataType, Palette, PaletteExtensionMode } from 'devextreme/common/charts';
+import { dxChartCommonSeriesSettings } from 'devextreme/viz/chart';
+import { Palette, PaletteExtensionMode, ChartsDataType } from 'devextreme/common/charts';
 import { ChartSeries } from 'devextreme/viz/common';
 import { ChartAxisScale } from 'devextreme/viz/range_selector';
 
@@ -60,18 +61,18 @@ export class DxoRangeSelectorChartComponent extends NestedOption implements OnDe
     }
 
     @Input()
-    get commonSeriesSettings(): any {
+    get commonSeriesSettings(): dxChartCommonSeriesSettings {
         return this._getOption('commonSeriesSettings');
     }
-    set commonSeriesSettings(value: any) {
+    set commonSeriesSettings(value: dxChartCommonSeriesSettings) {
         this._setOption('commonSeriesSettings', value);
     }
 
     @Input()
-    get dataPrepareSettings(): { checkTypeForAllData?: boolean, convertToAxisDataType?: boolean, sortingMethod?: boolean | Function } {
+    get dataPrepareSettings(): { checkTypeForAllData?: boolean, convertToAxisDataType?: boolean, sortingMethod?: boolean | ((a: { arg: Date | number | string, val: Date | number | string }, b: { arg: Date | number | string, val: Date | number | string }) => number) } {
         return this._getOption('dataPrepareSettings');
     }
-    set dataPrepareSettings(value: { checkTypeForAllData?: boolean, convertToAxisDataType?: boolean, sortingMethod?: boolean | Function }) {
+    set dataPrepareSettings(value: { checkTypeForAllData?: boolean, convertToAxisDataType?: boolean, sortingMethod?: boolean | ((a: { arg: Date | number | string, val: Date | number | string }, b: { arg: Date | number | string, val: Date | number | string }) => number) }) {
         this._setOption('dataPrepareSettings', value);
     }
 
@@ -100,10 +101,10 @@ export class DxoRangeSelectorChartComponent extends NestedOption implements OnDe
     }
 
     @Input()
-    get palette(): Palette | string | Array<string> {
+    get palette(): Array<string> | Palette {
         return this._getOption('palette');
     }
-    set palette(value: Palette | string | Array<string>) {
+    set palette(value: Array<string> | Palette) {
         this._setOption('palette', value);
     }
 
@@ -116,18 +117,18 @@ export class DxoRangeSelectorChartComponent extends NestedOption implements OnDe
     }
 
     @Input()
-    get series(): ChartSeries | any | undefined | Array<ChartSeries | any> {
+    get series(): Array<ChartSeries> | ChartSeries | undefined {
         return this._getOption('series');
     }
-    set series(value: ChartSeries | any | undefined | Array<ChartSeries | any>) {
+    set series(value: Array<ChartSeries> | ChartSeries | undefined) {
         this._setOption('series', value);
     }
 
     @Input()
-    get seriesTemplate(): { customizeSeries?: Function, nameField?: string } {
+    get seriesTemplate(): any {
         return this._getOption('seriesTemplate');
     }
-    set seriesTemplate(value: { customizeSeries?: Function, nameField?: string }) {
+    set seriesTemplate(value: any) {
         this._setOption('seriesTemplate', value);
     }
 

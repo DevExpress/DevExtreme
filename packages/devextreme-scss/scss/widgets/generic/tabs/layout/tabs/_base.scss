@@ -44,7 +44,7 @@
   background-color: $tabs-tab-bg;
   border-block-start: $generic-tabs-border-transparent;
   border-block-end: $generic-tabs-border-transparent;
-  
+
   @include dx-tabs-after-mixin(true);
   @include dx-tabs-border-mixin(
     $generic-tabs-border,

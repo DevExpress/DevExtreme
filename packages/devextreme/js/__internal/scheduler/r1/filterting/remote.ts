@@ -2,8 +2,8 @@ import { equalByValue } from '@js/core/utils/common';
 import dateSerialization from '@js/core/utils/date_serialization';
 import { extend } from '@js/core/utils/extend';
 import { isDefined, isString } from '@js/core/utils/type';
+import type { AppointmentDataAccessor } from '@ts/scheduler/utils';
 
-import type { DataAccessorType } from '../types';
 import { getDatesWithoutTime } from '../utils/index';
 import type {
   CombineRemoteFilterType,
@@ -23,7 +23,7 @@ class RemoteFilterCombiner {
     this.options = options;
   }
 
-  get dataAccessors(): DataAccessorType { return this.options.dataAccessors; }
+  get dataAccessors(): AppointmentDataAccessor { return this.options.dataAccessors; }
 
   get dataSourceFilter(): unknown[] | undefined { return this.options.dataSourceFilter; }
 

@@ -155,7 +155,7 @@ $generic-texteditor-invalid-badge-size: $generic-invalid-badge-size + 2 * $gener
   }
 
   @include validation-icon-position();
-  
+
   &.dx-validation-pending {
     .dx-texteditor-input {
       padding-inline-end: $generic-texteditor-invalid-badge-size;
@@ -285,7 +285,7 @@ $generic-texteditor-invalid-badge-size: $generic-invalid-badge-size + 2 * $gener
   $generic-texteditor-filled-input-with-label-bottom-padding,
   $generic-texteditor-label-outside-font-size,
   $generic-texteditor-label-outside-height,
-); 
+);
 @include dx-editor-underlined(
   $texteditor-label-transition,
   $generic-texteditor-label-size,

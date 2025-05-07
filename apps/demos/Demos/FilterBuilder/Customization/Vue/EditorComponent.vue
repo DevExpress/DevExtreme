@@ -15,7 +15,7 @@ import { categories } from './data.ts';
 const props = withDefaults(defineProps<{
   conditionInfo?: Record<string, any>
 }>(), {
-  conditionInfo: () => ({}),
+  conditionInfo: () => ({} as Record<string, any>),
 });
 
 function onValueChanged(e) {

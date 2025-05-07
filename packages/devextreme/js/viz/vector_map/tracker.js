@@ -1,9 +1,9 @@
-import eventsEngine from '../../events/core/events_engine';
+import eventsEngine from '../../common/core/events/core/events_engine';
 import { getNavigator, hasProperty } from '../../core/utils/window';
 import domAdapter from '../../core/dom_adapter';
 import { makeEventEmitter } from './event_emitter';
-import { addNamespace } from '../../events/utils/index';
-import { name as wheelEventName } from '../../events/core/wheel';
+import { addNamespace } from '../../common/core/events/utils/index';
+import { name as wheelEventName } from '../../common/core/events/core/wheel';
 import { parseScalar } from '../core/utils';
 
 const navigator = getNavigator();

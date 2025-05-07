@@ -1,13 +1,13 @@
 import { getOuterHeight, getHeight } from 'core/utils/size';
-import fx from 'animation/fx';
+import fx from 'common/core/animation/fx';
 import config from 'core/config';
 import dataUtils from 'core/element_data';
 import { isRenderer } from 'core/utils/type';
-import CustomStore from 'data/custom_store';
-import { DataSource } from 'data/data_source/data_source';
+import { CustomStore } from 'common/data/custom_store';
+import { DataSource } from 'common/data/data_source/data_source';
 import timeZoneDataUtils from '__internal/scheduler/timezones/m_utils_timezones_data';
 
-import { triggerHidingEvent, triggerShownEvent } from 'events/visibility_change';
+import { triggerHidingEvent, triggerShownEvent } from 'common/core/events/visibility_change';
 import 'generic_light.css!';
 import $ from 'jquery';
 import { getTimeZones } from 'time_zone_utils';

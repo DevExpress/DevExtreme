@@ -1,6 +1,6 @@
 import $ from '../../core/renderer';
 import { extend } from '../../core/utils/extend';
-import messageLocalization from '../../localization/message';
+import messageLocalization from '../../common/core/localization/message';
 import { isDefined } from '../../core/utils/type';
 import LoadPanel from '../../ui/load_panel';
 import gridUtils from '../../__internal/grids/grid_core/m_utils';

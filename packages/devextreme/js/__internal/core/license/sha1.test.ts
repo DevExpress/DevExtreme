@@ -1,3 +1,7 @@
+import {
+  describe, expect, it,
+} from '@jest/globals';
+
 import { bytesToHex } from './byte_utils';
 import { preprocess, sha1 } from './sha1';
 

@@ -1,3 +1,4 @@
+import eventsEngine from '@js/common/core/events/core/events_engine';
 import devices from '@js/core/devices';
 import domAdapter from '@js/core/dom_adapter';
 import DOMComponent from '@js/core/dom_component';
@@ -11,7 +12,6 @@ import {
   isDefined, isFunction, isNumeric, isObject as _isObject, type,
 } from '@js/core/utils/type';
 import { getWindow, hasWindow } from '@js/core/utils/window';
-import eventsEngine from '@js/events/core/events_engine';
 import { BaseThemeManager } from '@js/viz/core/base_theme_manager';
 import {
   createEventTrigger,
@@ -271,6 +271,11 @@ const baseWidget = isServerSide ? getEmptyComponent() : (DOMComponent as any).in
 
     let syncRendering = true;
     when.apply(this, items).done(() => {
+      const isGroupInDom = !groups[0]?.element || !!$(groups[0].element.closest('svg')).length;
+      if (!isGroupInDom) {
+        return;
+      }
+
       if (syncRendering) {
         this._setGroupsVisibility(groups, 'visible');
         return;

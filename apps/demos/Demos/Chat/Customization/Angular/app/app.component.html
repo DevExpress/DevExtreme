@@ -1,0 +1,79 @@
+<div class="demo-container">
+  <div class="chat-container">
+    <dx-chat
+      #chat
+      [height]="710"
+      [user]="currentUser"
+      [items]="messages$ | async"
+      [showAvatar]="true"
+      [showUserName]="true"
+      [showDayHeaders]="true"
+      [showMessageTimestamp]="true"
+      [dayHeaderFormat]="dayHeaderFormats[0]"
+      [messageTimestampFormat]="messageTimestampFormats[0]"
+      [disabled]="false"
+      (onMessageEntered)="onMessageEntered($event)"
+    >
+    </dx-chat>
+  </div>
+
+  <div class="options">
+    <div class="caption">Options</div>
+
+    <div class="option">
+      <dx-check-box text="Avatar" [(value)]="chat.showAvatar"></dx-check-box>
+    </div>
+
+    <div class="option">
+      <dx-check-box
+        text="User Name"
+        [(value)]="chat.showUserName"
+      ></dx-check-box>
+    </div>
+
+    <div class="option-separator"></div>
+
+    <div class="option">
+      <dx-check-box
+        text="Day Headers"
+        [(value)]="chat.showDayHeaders"
+      ></dx-check-box>
+    </div>
+
+    <div class="option">
+      <span>Day Header Format:</span>
+      <dx-select-box
+        [items]="dayHeaderFormats"
+        [(value)]="chat.dayHeaderFormat"
+        [inputAttr]="dayHeaderLabel"
+      ></dx-select-box>
+    </div>
+
+    <div class="option-separator"></div>
+
+    <div class="option">
+      <dx-check-box
+        text="Message Timestamp"
+        [(value)]="chat.showMessageTimestamp"
+      ></dx-check-box>
+    </div>
+
+    <div class="option">
+      <span>Message Timestamp Format:</span>
+      <dx-select-box
+        [items]="messageTimestampFormats"
+        [(value)]="chat.messageTimestampFormat"
+        [inputAttr]="messageTimestampLabel"
+      ></dx-select-box>
+    </div>
+
+    <div class="option-separator"></div>
+
+    <div class="option">
+      <dx-check-box
+        text="Disable Chat"
+        [(value)]="chat.disabled"
+      ></dx-check-box>
+    </div>
+  </div>
+</div>

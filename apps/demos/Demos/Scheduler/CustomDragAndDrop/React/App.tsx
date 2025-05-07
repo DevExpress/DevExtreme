@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from 'react';
 
-import Scheduler, { AppointmentDragging, SchedulerTypes } from 'devextreme-react/scheduler';
-import Draggable, { DraggableTypes } from 'devextreme-react/draggable';
+import Scheduler, { AppointmentDragging, type SchedulerTypes } from 'devextreme-react/scheduler';
+import Draggable, { type DraggableTypes } from 'devextreme-react/draggable';
 import ScrollView from 'devextreme-react/scroll-view';
 
 import { Task, appointments as defaultAppointments, tasks as defaultTasks } from './data.ts';

@@ -3,7 +3,7 @@ import VectorMap, {
   ITooltipProps,
   Layer,
   Tooltip,
-  VectorMapTypes,
+  type VectorMapTypes,
 } from 'devextreme-react/vector-map';
 
 import Button from 'devextreme-react/button';

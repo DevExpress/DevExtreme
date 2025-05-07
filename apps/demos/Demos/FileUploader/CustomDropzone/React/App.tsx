@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react';
-import FileUploader, { FileUploaderTypes } from 'devextreme-react/file-uploader';
+import FileUploader, { type FileUploaderTypes } from 'devextreme-react/file-uploader';
 import ProgressBar from 'devextreme-react/progress-bar';
 
 const allowedFileExtensions = ['.jpg', '.jpeg', '.gif', '.png'];

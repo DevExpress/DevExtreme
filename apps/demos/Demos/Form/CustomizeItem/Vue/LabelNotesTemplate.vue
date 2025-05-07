@@ -25,7 +25,7 @@ import { DxTooltip } from 'devextreme-vue/tooltip';
 withDefaults(defineProps<{
   data?: Record<string, any>
 }>(), {
-  data: () => ({}),
+  data: () => ({} as Record<string, any>),
 });
 </script>
 <style scoped>

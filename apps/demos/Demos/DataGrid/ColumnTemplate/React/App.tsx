@@ -1,5 +1,5 @@
 import React from 'react';
-import DataGrid, { Column, DataGridTypes } from 'devextreme-react/data-grid';
+import DataGrid, { Column, type DataGridTypes } from 'devextreme-react/data-grid';
 
 import { employees } from './data.ts';
 

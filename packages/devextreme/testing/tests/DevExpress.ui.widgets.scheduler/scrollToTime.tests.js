@@ -1,5 +1,5 @@
 import { getOuterHeight, getOuterWidth } from 'core/utils/size';
-import fx from 'animation/fx';
+import fx from 'common/core/animation/fx';
 import errors from 'ui/widget/ui.errors';
 import { createWrapper, initTestMarkup } from '../../helpers/scheduler/helpers.js';
 

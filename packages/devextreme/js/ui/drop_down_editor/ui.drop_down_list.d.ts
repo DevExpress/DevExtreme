@@ -5,15 +5,16 @@ import {
 
 import {
     template,
-} from '../../core/templates/template';
+    SimplifiedSearchMode,
+} from '../../common';
 
-import DataSource from '../../data/data_source';
+import { DataSource } from '../../common/data';
 
 import {
     EventInfo,
     NativeEventInfo,
     ItemInfo,
-} from '../../events/index';
+} from '../../common/core/events';
 
 import {
     ValueChangedInfo,
@@ -26,10 +27,6 @@ import {
 import dxDropDownEditor, {
     dxDropDownEditorOptions,
 } from './ui.drop_down_editor';
-
-import {
-    SimplifiedSearchMode,
-} from '../../common';
 
 /**
  * @docid _ui_drop_down_editor_ui_drop_down_list_SelectionChangedInfo
@@ -56,7 +53,7 @@ export interface dxDropDownListOptions<TComponent> extends DataExpressionMixinOp
      * @ref
      * @public
      */
-    displayValue?: string;
+    displayValue?: string | undefined;
     /**
      * @docid
      * @default "group"

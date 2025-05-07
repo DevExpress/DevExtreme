@@ -109,11 +109,11 @@ export class ContextMenuView extends modules.View {
           }
         },
         onItemClick(params) {
-          // @ts-expect-error
           params.itemData?.onItemClick?.(params);
         },
 
         cssClass: this.getWidgetContainerClass(),
+        // @ts-expect-error
         target: this.component.$element(),
       },
     );

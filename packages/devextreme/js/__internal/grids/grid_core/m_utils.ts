@@ -1,5 +1,9 @@
 // @ts-check
 
+import eventsEngine from '@js/common/core/events/core/events_engine';
+import DataSource from '@js/common/data/data_source';
+import { normalizeDataSourceOptions } from '@js/common/data/data_source/utils';
+import { normalizeSortingInfo as normalizeSortingInfoUtility } from '@js/common/data/utils';
 import $ from '@js/core/renderer';
 import { equalByValue } from '@js/core/utils/common';
 import { toComparable } from '@js/core/utils/data';
@@ -12,14 +16,10 @@ import { format } from '@js/core/utils/string';
 import { isDefined, isFunction, isString } from '@js/core/utils/type';
 import variableWrapper from '@js/core/utils/variable_wrapper';
 import { getWindow } from '@js/core/utils/window';
-import { DataSource } from '@js/data/data_source/data_source';
-import { normalizeDataSourceOptions } from '@js/data/data_source/utils';
-// @ts-expect-error
-import { normalizeSortingInfo as normalizeSortingInfoUtility } from '@js/data/utils';
-import eventsEngine from '@js/events/core/events_engine';
 import formatHelper from '@js/format_helper';
 import LoadPanel from '@js/ui/load_panel';
 import sharedFiltering from '@js/ui/shared/filtering';
+import type { ColumnPoint } from '@ts/grids/grid_core/m_types';
 
 const DATAGRID_SELECTION_DISABLED_CLASS = 'dx-selection-disabled';
 const DATAGRID_GROUP_OPENED_CLASS = 'dx-datagrid-group-opened';
@@ -135,13 +135,13 @@ const getWidgetInstance = function ($element) {
   return widgetName && editorData[widgetName];
 };
 
-const equalFilterParameters = function (filter1, filter2) {
+const equalFilterParameters = function (filter1, filter2, langParams?) {
   if (Array.isArray(filter1) && Array.isArray(filter2)) {
     if (filter1.length !== filter2.length) {
       return false;
     }
     for (let i = 0; i < filter1.length; i++) {
-      if (!equalFilterParameters(filter1[i], filter2[i])) {
+      if (!equalFilterParameters(filter1[i], filter2[i], langParams)) {
         return false;
       }
     }
@@ -149,22 +149,20 @@ const equalFilterParameters = function (filter1, filter2) {
     return true;
   } if (isFunction(filter1) && filter1.columnIndex >= 0 && isFunction(filter2) && filter2.columnIndex >= 0) {
     return filter1.columnIndex === filter2.columnIndex
-      && toComparable(filter1.filterValue) === toComparable(filter2.filterValue)
-      && toComparable(filter1.selectedFilterOperation) === toComparable(filter2.selectedFilterOperation);
+      && toComparable(filter1.filterValue, undefined, langParams) === toComparable(filter2.filterValue, undefined, langParams)
+      && toComparable(filter1.selectedFilterOperation, undefined, langParams) === toComparable(filter2.selectedFilterOperation, undefined, langParams);
   }
-  return toComparable(filter1) == toComparable(filter2); // eslint-disable-line eqeqeq
+  return toComparable(filter1, undefined, langParams) == toComparable(filter2, undefined, langParams); // eslint-disable-line eqeqeq
 };
 
-const createPoint = function (options): Record<string, any> {
-  return {
-    index: options.index,
-    columnIndex: options.columnIndex,
-    x: options.x,
-    y: options.y,
-  };
-};
+const createPoint = <T extends ColumnPoint>(options: T): ColumnPoint => ({
+  index: options.index,
+  columnIndex: options.columnIndex,
+  x: options.x,
+  y: options.y,
+});
 
-const addPointIfNeed = function (points, pointProps, pointCreated): void {
+const addPointIfNeed = <T extends ColumnPoint> (points: ColumnPoint[], pointProps: T, pointCreated: (point: T) => boolean): void => {
   let notCreatePoint = false;
 
   if (pointCreated) {
@@ -440,35 +438,40 @@ export default {
     return (!sortParameters1 || !sortParameters1.length) === (!sortParameters2 || !sortParameters2.length);
   },
 
-  getPointsByColumns(items, pointCreated, isVertical?, startColumnIndex = 0, needToCheckPrevPoint = false) {
-    const result: any[] = [];
+  getPointsByColumns<T extends ColumnPoint>(items, pointCreated: (point: T) => boolean, isVertical = false, startColumnIndex = 0, needToCheckPrevPoint = false): ColumnPoint[] {
+    const result: ColumnPoint[] = [];
     const cellsLength: number = items.length;
-    let item;
-    let offset;
+    let $item;
+    let offset: { left: number; top: number } = { left: 0, top: 0 };
+    let itemRect: { width: number; height: number } = { width: 0, height: 0 };
     let columnIndex = startColumnIndex;
     let rtlEnabled;
 
     for (let i = 0; i <= cellsLength; i++) {
       if (i < cellsLength) {
-        item = items[i];
-        offset = getBoundingRect(item);
-        // @ts-expect-error
-        rtlEnabled = $(item).css('direction') === 'rtl';
+        $item = items.eq(i);
+        offset = $item.offset();
+        itemRect = getBoundingRect($item.get(0));
+        rtlEnabled = $item.css('direction') === 'rtl';
       }
+
+      const offsetRight = offset.left + itemRect.width;
+      const offsetBottom = offset.top + itemRect.height;
 
       const pointProps: any = {
         index: columnIndex,
         columnIndex,
-        item,
-        x: !isVertical && rtlEnabled !== (i === cellsLength)
-          ? offset?.right ?? 0
-          : offset?.left ?? 0,
-        y: isVertical && i === cellsLength ? offset?.bottom ?? 0 : offset?.top ?? 0,
+        item: $item?.get(0),
+        x: !isVertical && rtlEnabled !== (i === cellsLength) ? offsetRight : offset.left,
+        y: isVertical && i === cellsLength ? offsetBottom : offset.top,
       };
 
       if (!isVertical && i > 0) {
-        const prevItemOffset = getBoundingRect(items[i - 1]);
-        const prevItemOffsetX = rtlEnabled ? prevItemOffset.left : prevItemOffset.right;
+        const prevItemOffset: { left: number; top: number } = items.eq(i - 1).offset();
+        const { width: prevItemWidth }: { width: number } = getBoundingRect(items[i - 1]);
+        const prevItemOffsetX = rtlEnabled
+          ? prevItemOffset.left
+          : prevItemOffset.left + prevItemWidth;
 
         if (prevItemOffset.top < pointProps.y) {
           pointProps.y = prevItemOffset.top;

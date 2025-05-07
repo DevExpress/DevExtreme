@@ -30,9 +30,9 @@
   </div>
 </template>
 <script setup lang="ts">
-withDefaults(defineProps<{
-  itemData?: Record<string, any>
-}>(), {
-  itemData: () => ({}),
-});
+import { type CompanyData } from './data';
+
+defineProps<{
+  itemData?: CompanyData
+}>();
 </script>

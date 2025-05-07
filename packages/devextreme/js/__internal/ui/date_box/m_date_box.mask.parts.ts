@@ -1,7 +1,7 @@
+import { getPatternSetters } from '@js/common/core/localization/ldml/date.parser';
 import { noop } from '@js/core/utils/common';
 import { extend } from '@js/core/utils/extend';
 import { fitIntoRange } from '@js/core/utils/math';
-import { getPatternSetters } from '@js/localization/ldml/date.parser';
 
 const monthGetter = (date) => date.getMonth() + 1;
 

@@ -1,13 +1,12 @@
-import '@js/data/odata/query_adapter';
+import '@js/common/data/odata/query_adapter';
 
+import { errors } from '@js/common/data/errors';
+import RequestDispatcher from '@js/common/data/odata/request_dispatcher';
+import query from '@js/common/data/query';
 import config from '@js/core/config';
 import { Deferred, when } from '@js/core/utils/deferred';
 import { isDefined } from '@js/core/utils/type';
 import Store from '@js/data/abstract_store';
-// @ts-expect-error
-import { errors } from '@js/data/errors';
-import RequestDispatcher from '@js/data/odata/request_dispatcher';
-import query from '@js/data/query';
 
 import {
   convertPrimitiveValue,
@@ -41,6 +40,7 @@ const mergeFieldTypesWithKeyType = (fieldTypes, keyType) => {
 
   return result;
 };
+
 // @ts-expect-error
 const ODataStore = Store.inherit({
 
@@ -129,6 +129,7 @@ const ODataStore = Store.inherit({
       }
     }
 
+    // @ts-expect-error
     return query(url, queryOptions);
   },
 

@@ -37,7 +37,7 @@ The DevExtreme website includes "Getting Started" guides for every aspect of Dev
 - [Demo Gallery](https://js.devexpress.com/Demos/WidgetsGallery)
 - [Responsive UI Templates](https://js.devexpress.com/Templates/UITemplates)
 - [Documentation](https://js.devexpress.com/Documentation)
-- [Examples on GitHub](https://github.com/DevExpress/DevExtreme-examples)
+- [Examples on GitHub](https://github.com/DevExpress-Examples)
 - [YouTube videos](https://www.youtube.com/playlist?list=PL8h4jt35t1wjGvgflbHEH_e3b23AA30-z)
 
 ## Contributing

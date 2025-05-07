@@ -1,12 +1,15 @@
 import {
-  AfterViewInit,
-  Component, ComponentRef,
+  OnInit,
+  Component,
+  ComponentRef,
   ElementRef,
   Inject,
   NgZone,
   PLATFORM_ID,
-  TransferState, Type,
+  TransferState,
+  Type,
   ViewChild,
+  ViewContainerRef,
 } from '@angular/core';
 import {
   DxTemplateHost,
@@ -15,21 +18,19 @@ import {
   WatcherHelper,
 } from 'devextreme-angular/core';
 import { DxPopupComponent, DxPopupTypes } from '../component';
-import { DxServicePopupInsertionDirective } from './insertion.directive';
 
 @Component({
   standalone: true,
-  imports: [DxServicePopupInsertionDirective],
   providers: [
     DxTemplateHost,
     WatcherHelper,
     NestedOptionHost,
     IterableDifferHelper,
   ],
-  template: '<ng-template popup-content-insertion></ng-template>',
+  template: `<ng-container #dxPopupContentContainer></ng-container>`,
 })
-export class PopupServiceComponent<T> extends DxPopupComponent implements AfterViewInit {
-  @ViewChild(DxServicePopupInsertionDirective) contentInsertion: DxServicePopupInsertionDirective;
+export class PopupServiceComponent<T> extends DxPopupComponent implements OnInit {
+  @ViewChild('dxPopupContentContainer', { read: ViewContainerRef, static: true }) contentContainer!: ViewContainerRef;
 
   contentRef: ComponentRef<T>;
 
@@ -48,13 +49,13 @@ export class PopupServiceComponent<T> extends DxPopupComponent implements AfterV
     super(elementRef, ngZone, templateHost, _watcherHelper, _idh, optionHost, transferState, platformId);
   }
 
-  ngAfterViewInit() {
-    super.ngAfterViewInit();
+  ngOnInit() {
+    super.ngOnInit();
 
-    if(this.popupOptions) {
-      this.instance.option(this.popupOptions)
+    if (this.popupOptions) {
+      this.instance.option(this.popupOptions);
     }
 
-    this.contentRef = this.contentInsertion?.viewContainerRef.createComponent(this.contentComponent);
+    this.contentRef = this.contentContainer.createComponent(this.contentComponent);
   }
 }

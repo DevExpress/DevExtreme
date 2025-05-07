@@ -2,8 +2,8 @@ import $ from 'jquery';
 import common, { createSankey, environment } from './commonParts/common.js';
 import trackerModule from 'viz/sankey/tracker';
 import tooltipModule from 'viz/core/tooltip';
-import { name as clickEventName } from 'events/click';
-import pointerEvents from 'events/pointer';
+import { name as clickEventName } from 'common/core/events/click';
+import pointerEvents from 'common/core/events/pointer';
 import { setTooltipCustomOptions } from 'viz/sankey/tooltip';
 import domAdapter from '__internal/core/m_dom_adapter';
 

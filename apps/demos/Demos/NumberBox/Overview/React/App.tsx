@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react';
-import { NumberBox, NumberBoxTypes } from 'devextreme-react/number-box';
+import { NumberBox, type NumberBoxTypes } from 'devextreme-react/number-box';
 
 const simpleLabel = { 'aria-label': 'Simple' };
 const withSpinAndButtonsLabel = { 'aria-label': 'With Spin And Buttons' };

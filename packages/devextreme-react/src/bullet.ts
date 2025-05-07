@@ -9,10 +9,9 @@ import { Component as BaseComponent, IHtmlOptions, ComponentRef, NestedComponent
 import NestedOption from "./core/nested-option";
 
 import type { DisposingEvent, DrawnEvent, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, TooltipHiddenEvent, TooltipShownEvent } from "devextreme/viz/bullet";
-import type { template } from "devextreme/core/templates/template";
-import type { Font as ChartsFont } from "devextreme/common/charts";
-
-import type * as LocalizationTypes from "devextreme/localization";
+import type { DashStyle, Font as ChartsFont } from "devextreme/common/charts";
+import type { Format as CommonFormat, template } from "devextreme/common";
+import type { Format as LocalizationFormat } from "devextreme/common/core/localization";
 
 type ReplaceFieldTypes<TSource, TReplacement> = {
   [P in keyof TSource]: P extends keyof TReplacement ? TReplacement[P] : TSource[P];
@@ -75,8 +74,8 @@ const Bullet = memo(
 // Tooltip
 type IBorderProps = React.PropsWithChildren<{
   color?: string;
-  dashStyle?: "dash" | "dot" | "longDash" | "solid";
-  opacity?: number;
+  dashStyle?: DashStyle;
+  opacity?: number | undefined;
   visible?: boolean;
   width?: number;
 }>
@@ -122,7 +121,7 @@ type IFormatProps = React.PropsWithChildren<{
   formatter?: ((value: number | Date) => string);
   parser?: ((value: string) => number | Date);
   precision?: number;
-  type?: "billions" | "currency" | "day" | "decimal" | "exponential" | "fixedPoint" | "largeNumber" | "longDate" | "longTime" | "millions" | "millisecond" | "month" | "monthAndDay" | "monthAndYear" | "percent" | "quarter" | "quarterAndYear" | "shortDate" | "shortTime" | "thousands" | "trillions" | "year" | "dayOfWeek" | "hour" | "longDateLongTime" | "minute" | "second" | "shortDateShortTime";
+  type?: CommonFormat | string;
   useCurrencyAccountingStyle?: boolean;
 }>
 const _componentFormat = (props: IFormatProps) => {
@@ -184,8 +183,8 @@ const Shadow = Object.assign<typeof _componentShadow, NestedComponentMeta>(_comp
 // owners:
 // Bullet
 type ISizeProps = React.PropsWithChildren<{
-  height?: number;
-  width?: number;
+  height?: number | undefined;
+  width?: number | undefined;
 }>
 const _componentSize = (props: ISizeProps) => {
   return React.createElement(NestedOption<ISizeProps>, {
@@ -206,21 +205,21 @@ type ITooltipProps = React.PropsWithChildren<{
   arrowLength?: number;
   border?: Record<string, any> | {
     color?: string;
-    dashStyle?: "dash" | "dot" | "longDash" | "solid";
-    opacity?: number;
+    dashStyle?: DashStyle;
+    opacity?: number | undefined;
     visible?: boolean;
     width?: number;
   };
   color?: string;
-  container?: any | string;
-  contentTemplate?: ((pointsInfo: any, element: any) => string | any) | template;
+  container?: any | string | undefined;
+  contentTemplate?: ((pointsInfo: any, element: any) => string | any) | template | undefined;
   cornerRadius?: number;
-  customizeTooltip?: ((pointsInfo: any) => Record<string, any>);
+  customizeTooltip?: ((pointsInfo: any) => Record<string, any>) | undefined;
   enabled?: boolean;
   font?: ChartsFont;
-  format?: LocalizationTypes.Format;
+  format?: LocalizationFormat | undefined;
   interactive?: boolean;
-  opacity?: number;
+  opacity?: number | undefined;
   paddingLeftRight?: number;
   paddingTopBottom?: number;
   shadow?: Record<string, any> | {
@@ -230,7 +229,7 @@ type ITooltipProps = React.PropsWithChildren<{
     offsetY?: number;
     opacity?: number;
   };
-  zIndex?: number;
+  zIndex?: number | undefined;
   contentRender?: (...params: any) => React.ReactNode;
   contentComponent?: React.ComponentType<any>;
 }>

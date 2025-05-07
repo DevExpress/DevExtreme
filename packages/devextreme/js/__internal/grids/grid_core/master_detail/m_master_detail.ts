@@ -1,4 +1,5 @@
 /* eslint-disable max-classes-per-file */
+import messageLocalization from '@js/common/core/localization/message';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 // @ts-expect-error
@@ -7,7 +8,6 @@ import { Deferred, when } from '@js/core/utils/deferred';
 import { each } from '@js/core/utils/iterator';
 import { getHeight, getWidth } from '@js/core/utils/size';
 import { isDefined } from '@js/core/utils/type';
-import messageLocalization from '@js/localization/message';
 import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/m_columns_controller';
 import type { DataController } from '@ts/grids/grid_core/data_controller/m_data_controller';
 import type { ModuleType } from '@ts/grids/grid_core/m_types';

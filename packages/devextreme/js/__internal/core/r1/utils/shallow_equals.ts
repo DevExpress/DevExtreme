@@ -5,5 +5,14 @@ export const shallowEquals = (
   if (Object.keys(firstObject).length !== Object.keys(secondObject).length) {
     return false;
   }
-  return Object.keys(firstObject).every((key) => firstObject[key] === secondObject[key]);
+
+  return Object.entries(firstObject).every(([key, firstValue]) => {
+    const secondValue = secondObject[key];
+
+    if (firstValue instanceof Date && secondValue instanceof Date) {
+      return firstValue.getTime() === secondValue.getTime();
+    }
+
+    return firstValue === secondValue;
+  });
 };

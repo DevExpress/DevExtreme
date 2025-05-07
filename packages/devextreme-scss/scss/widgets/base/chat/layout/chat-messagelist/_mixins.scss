@@ -5,6 +5,7 @@
   $day-header-color,
   $day-header-padding-bottom,
   $day-header-first-padding-top,
+  $day-header-font-size,
 ) {
   .dx-chat-messagelist {
     .dx-scrollable-content {
@@ -15,6 +16,7 @@
   .dx-chat-messagelist-day-header {
     padding-bottom: $day-header-padding-bottom;
     color: $day-header-color;
+    font-size: $day-header-font-size;
 
     &:first-child {
       padding-top: $day-header-first-padding-top;

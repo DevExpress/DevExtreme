@@ -1,4 +1,4 @@
-const url = 'https://js.devexpress.com/Demos/Mvc/api/DataGridWebApi';
+const url = 'https://js.devexpress.com/Demos/NetCore/api/DataGridWebApi';
 
 const dataSource = DevExpress.data.AspNet.createStore({
   key: 'OrderID',

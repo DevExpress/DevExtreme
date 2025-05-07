@@ -3,11 +3,11 @@ import { getWindow } from '../../core/utils/window';
 import { patchFontOptions } from './utils';
 import { HIDDEN_FOR_EXPORT } from '../../core/utils/svg';
 import { export as _export, image as imageExporter, svg as svgExporter, pdf as pdfExporter } from '../../exporter';
-import messageLocalization from '../../localization/message';
+import messageLocalization from '../../common/core/localization/message';
 import { isDefined } from '../../core/utils/type';
 import { getTheme } from '../themes';
-import { start as hoverEventStart, end as hoverEventEnd } from '../../events/hover';
-import pointerEvents from '../../events/pointer';
+import { start as hoverEventStart, end as hoverEventEnd } from '../../common/core/events/hover';
+import pointerEvents from '../../common/core/events/pointer';
 import { logger } from '../../core/utils/console';
 import { getWidth } from '../../core/utils/size';
 import { Renderer } from './renderers/renderer';
@@ -308,7 +308,7 @@ export let combineMarkups = function(widgets, options = { }) {
         const rowInfo = row.reduce((r, item, colIndex) => {
             const size = item.getSize();
             const backgroundColor = item.option('backgroundColor') || getTheme(item.option('theme')).backgroundColor;
-            const node = item.element()
+            const node = $(item.element())
                 .find('svg')
                 .get(0)
                 .cloneNode(true);

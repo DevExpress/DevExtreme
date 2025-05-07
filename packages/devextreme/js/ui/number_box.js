@@ -2,8 +2,6 @@ import NumberBox from '../__internal/ui/number_box/m_number_box';
 
 export default NumberBox;
 
-// STYLE numberBox
-
 /**
  * @name dxNumberBoxOptions.mask
  * @hidden

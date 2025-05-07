@@ -11,7 +11,7 @@ import NestedOption from "./core/nested-option";
 
 import type { dxSplitterItem, ContentReadyEvent, DisposingEvent, InitializedEvent, ItemClickEvent, ItemCollapsedEvent, ItemContextMenuEvent, ItemExpandedEvent, ItemRenderedEvent, ResizeEvent, ResizeEndEvent, ResizeStartEvent, dxSplitterOptions } from "devextreme/ui/splitter";
 import type { CollectionWidgetItem } from "devextreme/ui/collection/ui.collection_widget.base";
-import type { template } from "devextreme/core/templates/template";
+import type { template } from "devextreme/common";
 
 type ReplaceFieldTypes<TSource, TReplacement> = {
   [P in keyof TSource]: P extends keyof TReplacement ? TReplacement[P] : TSource[P];
@@ -96,13 +96,13 @@ const Splitter = memo(
 // Splitter
 type IItemProps = React.PropsWithChildren<{
   collapsed?: boolean;
-  collapsedSize?: number | string;
+  collapsedSize?: number | string | undefined;
   collapsible?: boolean;
-  maxSize?: number | string;
-  minSize?: number | string;
+  maxSize?: number | string | undefined;
+  minSize?: number | string | undefined;
   resizable?: boolean;
-  size?: number | string;
-  splitter?: dxSplitterOptions;
+  size?: number | string | undefined;
+  splitter?: dxSplitterOptions | undefined;
   template?: ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string | any) | template;
   text?: string;
   visible?: boolean;

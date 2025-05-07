@@ -1,11 +1,19 @@
+/* eslint-disable @typescript-eslint/prefer-for-of */
 /* eslint-disable @typescript-eslint/no-unused-vars, max-classes-per-file */
+import { name as clickEventName } from '@js/common/core/events/click';
+import eventsEngine from '@js/common/core/events/core/events_engine';
+import pointerEvents from '@js/common/core/events/pointer';
+import { removeEvent } from '@js/common/core/events/remove';
+import { addNamespace } from '@js/common/core/events/utils/index';
+import messageLocalization from '@js/common/core/localization/message';
+import { createObjectWithChanges } from '@js/common/data/array_utils';
 import type { GridsEditMode } from '@js/common/grids';
 import devices from '@js/core/devices';
 import domAdapter from '@js/core/dom_adapter';
 import Guid from '@js/core/guid';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
-import { equalByValue } from '@js/core/utils/common';
+import { equalByValue, getKeyHash } from '@js/core/utils/common';
 import type { DeferredObj } from '@js/core/utils/deferred';
 // @ts-expect-error
 import { Deferred, fromPromise, when } from '@js/core/utils/deferred';
@@ -17,13 +25,6 @@ import {
   isDefined, isEmptyObject,
   isFunction, isObject,
 } from '@js/core/utils/type';
-import { createObjectWithChanges } from '@js/data/array_utils';
-import { name as clickEventName } from '@js/events/click';
-import eventsEngine from '@js/events/core/events_engine';
-import pointerEvents from '@js/events/pointer';
-import { removeEvent } from '@js/events/remove';
-import { addNamespace } from '@js/events/utils/index';
-import messageLocalization from '@js/localization/message';
 import { confirm } from '@js/ui/dialog';
 import { current, isFluent } from '@js/ui/themes';
 import domUtils from '@ts/core/utils/m_dom';
@@ -131,7 +132,7 @@ class EditingControllerImpl extends modules.ViewController {
 
   protected _saveEditorHandler: any;
 
-  private _internalState: any;
+  private _internalState!: Map<unknown, any>;
 
   protected _refocusEditCell: any;
 
@@ -193,7 +194,7 @@ class EditingControllerImpl extends modules.ViewController {
     this._updateEditButtons();
 
     if (!this._internalState) {
-      this._internalState = [];
+      this._internalState = new Map();
     }
 
     this.component._optionsByReference[EDITING_EDITROWKEY_OPTION_NAME] = true;
@@ -268,11 +269,12 @@ class EditingControllerImpl extends modules.ViewController {
     const needReset = changes?.length;
     if (needReset) {
       this._silentOption(EDITING_CHANGES_OPTION_NAME, []);
+      this._internalState.clear();
     }
   }
 
   private _getInternalData(key) {
-    return this._internalState.filter((item) => equalByValue(item.key, key))[0];
+    return this._internalState.get(getKeyHash(key));
   }
 
   public _addInternalData(params) {
@@ -282,7 +284,7 @@ class EditingControllerImpl extends modules.ViewController {
       return extend(internalData, params);
     }
 
-    this._internalState.push(params);
+    this._internalState.set(getKeyHash(params.key), params);
     return params;
   }
 
@@ -1329,22 +1331,19 @@ class EditingControllerImpl extends modules.ViewController {
   }
 
   private _removeInternalData(key) {
-    const internalData = this._getInternalData(key);
-    const index = this._internalState.indexOf(internalData);
-
-    if (index > -1) {
-      this._internalState.splice(index, 1);
-    }
+    this._internalState.delete(getKeyHash(key));
   }
 
   private _updateInsertAfterOrBeforeKeys(changes, index) {
     const removeChange = changes[index];
 
     changes.forEach((change) => {
-      const insertAfterOrBeforeKey = this._getInsertAfterOrBeforeKey(change);
+      if (change.type === DATA_EDIT_DATA_INSERT_TYPE) {
+        const insertAfterOrBeforeKey = this._getInsertAfterOrBeforeKey(change);
 
-      if (equalByValue(insertAfterOrBeforeKey, removeChange.key)) {
-        change[isDefined(change.insertAfterKey) ? 'insertAfterKey' : 'insertBeforeKey'] = this._getInsertAfterOrBeforeKey(removeChange);
+        if (equalByValue(insertAfterOrBeforeKey, removeChange.key)) {
+          change[isDefined(change.insertAfterKey) ? 'insertAfterKey' : 'insertBeforeKey'] = this._getInsertAfterOrBeforeKey(removeChange);
+        }
       }
     });
   }
@@ -1684,7 +1683,8 @@ class EditingControllerImpl extends modules.ViewController {
 
   private _processSaveEditDataResult(results) {
     let hasSavedData = false;
-    const changes = [...this.getChanges()];
+    const originalChanges = this.getChanges();
+    const changes = [...originalChanges];
     const changesLength = changes.length;
 
     for (let i = 0; i < results.length; i++) {
@@ -1704,6 +1704,9 @@ class EditingControllerImpl extends modules.ViewController {
         }
       } else if (this._processRemove(changes, editIndex, cancel)) {
         hasSavedData = !cancel;
+        const removedChangeIndex = gridCoreUtils.getIndexByKey(results[i].key, originalChanges);
+
+        this._updateInsertAfterOrBeforeKeys(originalChanges, removedChangeIndex);
       }
     }
 
@@ -1770,8 +1773,7 @@ class EditingControllerImpl extends modules.ViewController {
     return deferred.promise();
   }
 
-  // @ts-expect-error
-  private _resolveAfterSave(deferred, { cancel, error } = {}) {
+  private _resolveAfterSave(deferred, { cancel = undefined, error = undefined } = {}) {
     // @ts-expect-error
     when(this._afterSaveEditData(cancel)).done(() => {
       deferred.resolve(error);
@@ -1860,7 +1862,6 @@ class EditingControllerImpl extends modules.ViewController {
     }).done(() => {
       this._resolveAfterSave(deferred);
     }).fail((error) => {
-      // @ts-expect-error
       this._resolveAfterSave(deferred, { error });
     });
   }
@@ -2154,7 +2155,6 @@ class EditingControllerImpl extends modules.ViewController {
     setTimeout(() => {
       // NOTE: if the editForm is enabled then we need to search for focused element in the document root
       // otherwise we need to search for element in the shadow dom
-      // @ts-expect-error
       const elementContainer = this._editForm?.element() || this.component.$element().get(0);
       const $focusedElement = $(domAdapter.getActiveElement(elementContainer));
       const columnIndex = this._rowsView.getCellIndex($focusedElement, row.rowIndex);
@@ -2872,13 +2872,6 @@ const headerPanel = (Base: ModuleType<HeaderPanel>) => class HeaderPanelEditingE
     const editButtonItems = this._editingController.prepareEditButtons(this);
 
     return editButtonItems.concat(items);
-  }
-
-  public isVisible() {
-    const editingOptions = this._editingController.option('editing');
-
-    // @ts-expect-error
-    return super.isVisible() || editingOptions?.allowAdding;
   }
 };
 

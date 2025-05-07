@@ -1,6 +1,6 @@
 import dateUtils from '@js/core/utils/date';
 
-import { VIEWS } from '../../m_constants';
+import { VIEWS } from '../../constants';
 import { ViewDataGenerator } from './m_view_data_generator';
 import { ViewDataGeneratorDay } from './m_view_data_generator_day';
 // eslint-disable-next-line import/no-cycle

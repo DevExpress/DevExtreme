@@ -4,7 +4,7 @@ import { extend } from '@js/core/utils/extend';
 import readyCallbacks from '@js/core/utils/ready_callbacks';
 import type { Properties } from '@js/ui/speed_dial_action';
 import swatchContainer from '@js/ui/widget/swatch_container';
-import Widget from '@ts/ui/widget';
+import Widget from '@ts/core/widget/widget';
 
 import { disposeAction, initAction } from './m_speed_dial_main_item';
 
@@ -84,13 +84,11 @@ class SpeedDialAction extends Widget<Properties> {
   }
 
   _dispose() {
-    // @ts-expect-error
     disposeAction(this._options.silent('id'));
     super._dispose();
   }
 }
 
-// @ts-expect-error
 registerComponent('dxSpeedDialAction', SpeedDialAction);
 
 export default SpeedDialAction;

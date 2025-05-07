@@ -3,7 +3,7 @@ import TreeMap, {
   Colorizer, Tooltip, ITreeMapOptions, ITooltipProps,
 } from 'devextreme-react/tree-map';
 import { TreeMapLayoutAlgorithm } from 'devextreme/viz/tree_map';
-import SelectBox, { SelectBoxTypes } from 'devextreme-react/select-box';
+import SelectBox, { type SelectBoxTypes } from 'devextreme-react/select-box';
 import { populationByAge, algorithmLabel } from './data.ts';
 
 const algorithms: (TreeMapLayoutAlgorithm | 'custom')[] = ['sliceanddice', 'squarified', 'strip', 'custom'];

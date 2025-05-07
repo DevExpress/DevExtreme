@@ -129,10 +129,10 @@ export class DxiDiagramCustomShapeComponent extends CollectionNestedOption imple
     }
 
     @Input()
-    get connectionPoints(): Array<any | { x?: number, y?: number }> {
+    get connectionPoints(): { x?: number, y?: number }[] {
         return this._getOption('connectionPoints');
     }
-    set connectionPoints(value: Array<any | { x?: number, y?: number }>) {
+    set connectionPoints(value: { x?: number, y?: number }[]) {
         this._setOption('connectionPoints', value);
     }
 
@@ -249,34 +249,34 @@ export class DxiDiagramCustomShapeComponent extends CollectionNestedOption imple
     }
 
     @Input()
-    get templateHeight(): number {
+    get templateHeight(): any {
         return this._getOption('templateHeight');
     }
-    set templateHeight(value: number) {
+    set templateHeight(value: any) {
         this._setOption('templateHeight', value);
     }
 
     @Input()
-    get templateLeft(): number {
+    get templateLeft(): any {
         return this._getOption('templateLeft');
     }
-    set templateLeft(value: number) {
+    set templateLeft(value: any) {
         this._setOption('templateLeft', value);
     }
 
     @Input()
-    get templateTop(): number {
+    get templateTop(): any {
         return this._getOption('templateTop');
     }
-    set templateTop(value: number) {
+    set templateTop(value: any) {
         this._setOption('templateTop', value);
     }
 
     @Input()
-    get templateWidth(): number {
+    get templateWidth(): any {
         return this._getOption('templateWidth');
     }
-    set templateWidth(value: number) {
+    set templateWidth(value: any) {
         this._setOption('templateWidth', value);
     }
 

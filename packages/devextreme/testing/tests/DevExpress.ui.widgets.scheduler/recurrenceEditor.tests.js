@@ -8,7 +8,7 @@ import ButtonGroup from 'ui/button_group';
 import DateBox from 'ui/date_box';
 import { getRecurrenceProcessor } from '__internal/scheduler/m_recurrence';
 import { createTimeZoneCalculator } from '__internal/scheduler/r1/timezone_calculator/index.js';
-import dateLocalization from 'localization/date';
+import dateLocalization from 'common/core/localization/date';
 
 const FREQUENCY_EDITOR = 'dx-recurrence-selectbox-freq';
 const REPEAT_COUNT_EDITOR = 'dx-recurrence-numberbox-repeat-count';

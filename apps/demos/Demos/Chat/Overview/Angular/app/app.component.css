@@ -1,0 +1,12 @@
+.demo-container {
+  display: flex;
+  gap: 20px;
+}
+
+::ng-deep .dx-chat {
+  height: 710px;
+}
+
+::ng-deep .dx-avatar {
+  border: 1px solid var(--dx-color-border);
+}

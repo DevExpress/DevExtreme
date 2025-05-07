@@ -1,8 +1,8 @@
 import React, { useCallback, useState } from 'react';
 
-import Scheduler, { Resource, SchedulerTypes } from 'devextreme-react/scheduler';
+import Scheduler, { Resource, type SchedulerTypes } from 'devextreme-react/scheduler';
 
-import RadioGroup, { RadioGroupTypes } from 'devextreme-react/radio-group';
+import RadioGroup, { type RadioGroupTypes } from 'devextreme-react/radio-group';
 
 import {
   data, assignees, rooms, priorities, resourcesList,

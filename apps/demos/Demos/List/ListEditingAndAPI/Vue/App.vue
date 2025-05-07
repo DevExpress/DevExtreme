@@ -32,11 +32,11 @@
 import { ref } from 'vue';
 import DxSelectBox from 'devextreme-vue/select-box';
 import DxCheckBox from 'devextreme-vue/check-box';
-import DxList from 'devextreme-vue/list';
+import DxList, { type DxListTypes } from 'devextreme-vue/list';
 import { tasks } from './data.ts';
 
 const allowDeletion = ref(false);
-const itemDeleteMode = ref('toggle');
+const itemDeleteMode = ref<DxListTypes.ItemDeleteMode>('toggle');
 </script>
 <style>
 .options {

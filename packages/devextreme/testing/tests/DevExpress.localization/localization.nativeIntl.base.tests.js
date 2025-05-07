@@ -1,6 +1,6 @@
-import dateLocalization from 'localization/date';
-import numberLocalization from 'localization/number';
-import { locale } from 'localization/core';
+import dateLocalization from 'common/core/localization/date';
+import numberLocalization from 'common/core/localization/number';
+import { locale } from 'common/core/localization/core';
 
 locale('en');
 

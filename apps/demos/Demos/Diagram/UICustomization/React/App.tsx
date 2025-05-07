@@ -11,7 +11,7 @@ import {
   Tab,
   Toolbox,
   ViewToolbar,
-  DiagramTypes,
+  type DiagramTypes,
 } from 'devextreme-react/diagram';
 import { confirm } from 'devextreme/ui/dialog';
 import 'whatwg-fetch';

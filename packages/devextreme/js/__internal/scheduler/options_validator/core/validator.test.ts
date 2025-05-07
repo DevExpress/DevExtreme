@@ -1,3 +1,7 @@
+import {
+  describe, expect, it, jest,
+} from '@jest/globals';
+
 import { Validator } from './validator';
 
 interface TestWidgetOptions {
@@ -53,7 +57,7 @@ describe('Validator', () => {
       ({ A }) => A,
       [
         firstFailedRule,
-        jest.fn(() => true),
+        jest.fn(() => true as const),
         secondFailedRule,
       ],
     );

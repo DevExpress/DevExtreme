@@ -4,7 +4,7 @@ import RemoteFileSystemProvider from 'devextreme/file_management/remote_provider
 import { Popup } from 'devextreme-react/popup';
 
 const remoteProvider = new RemoteFileSystemProvider({
-  endpointUrl: 'https://js.devexpress.com/Demos/Mvc/api/file-manager-file-system-images',
+  endpointUrl: 'https://js.devexpress.com/Demos/NetCore/api/file-manager-file-system-images',
 });
 export default function App() {
   const [currentPath, setCurrentPath] = useState('Widescreen');

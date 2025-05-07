@@ -12,7 +12,7 @@ if (!/localhost/.test(document.location.host)) {
 
 let modulePrefix = '';
 // @ts-ignore
-if (window && window.config.packageConfigPaths) {
+if (window && window.config?.packageConfigPaths) {
   modulePrefix = '/app';
 }
 
@@ -51,7 +51,7 @@ export class AppComponent {
 
   setStateValue(this: DxDataGridTypes.Column, newData: Employee, value: number, currentRowData: Employee) {
     newData.CityID = null;
-    this.defaultSetCellValue(newData, value, currentRowData);
+    this.defaultSetCellValue?.(newData, value, currentRowData);
   }
 }
 

@@ -18,7 +18,7 @@ const App = () => (
   <Scheduler
     dataSource={appointments}
     height={730}
-    defaultCurrentView={'Timeline' as any}
+    defaultCurrentView={'Timeline'}
     defaultCurrentDate={currentDate}
     startDayHour={startDayHour}
     endDayHour={endDayHour}

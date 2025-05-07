@@ -43,15 +43,15 @@ $generic-h6-font-size: null !default;
 }
 
 :root {
-  --dx-font-size-heading-1: #{$generic-h1-font-size}; 
-  --dx-font-size-heading-2: #{$generic-h2-font-size}; 
-  --dx-font-size-heading-3: #{$generic-h3-font-size}; 
-  --dx-font-size-heading-4: #{$generic-h4-font-size}; 
-  --dx-font-size-heading-5: #{$generic-h5-font-size}; 
+  --dx-font-size-heading-1: #{$generic-h1-font-size};
+  --dx-font-size-heading-2: #{$generic-h2-font-size};
+  --dx-font-size-heading-3: #{$generic-h3-font-size};
+  --dx-font-size-heading-4: #{$generic-h4-font-size};
+  --dx-font-size-heading-5: #{$generic-h5-font-size};
   --dx-font-size-heading-6: #{$generic-h6-font-size};
-  --dx-font-size-xl: #{$generic-xl-font-size}; 
-  --dx-font-size-lg: #{$generic-l-font-size}; 
-  --dx-font-size-md: #{$generic-m-font-size}; 
-  --dx-font-size-sm: #{$generic-s-font-size}; 
-  --dx-font-size-xs: #{$generic-xs-font-size}; 
+  --dx-font-size-xl: #{$generic-xl-font-size};
+  --dx-font-size-lg: #{$generic-l-font-size};
+  --dx-font-size-md: #{$generic-m-font-size};
+  --dx-font-size-sm: #{$generic-s-font-size};
+  --dx-font-size-xs: #{$generic-xs-font-size};
 }

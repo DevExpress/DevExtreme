@@ -1,3 +1,5 @@
+import { DataSource } from '@js/common/data/data_source/data_source';
+import { normalizeDataSourceOptions } from '@js/common/data/data_source/utils';
 import { wrapToArray } from '@js/core/utils/array';
 import { equalByValue } from '@js/core/utils/common';
 import { compileGetter, compileSetter } from '@js/core/utils/data';
@@ -6,13 +8,12 @@ import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import { deepExtendArraySafe } from '@js/core/utils/object';
 import { isDefined } from '@js/core/utils/type';
-import { DataSource } from '@js/data/data_source/data_source';
-import { normalizeDataSourceOptions } from '@js/data/data_source/utils';
 import { current, isFluent } from '@js/ui/themes';
 import { getGroupCount, hasResourceValue } from '@ts/scheduler/r1/utils/index';
+import type { AppointmentDataAccessor } from '@ts/scheduler/utils';
 
-export const getValueExpr = (resource) => resource.valueExpr || 'id';
-export const getDisplayExpr = (resource) => resource.displayExpr || 'text';
+export const getIdExpr = (resource) => resource.valueExpr || 'id';
+export const getTextExpr = (resource) => resource.displayExpr || 'text';
 export const getFieldExpr = (resource) => resource.fieldExpr || resource.field;
 
 export const getWrappedDataSource = (dataSource) => {
@@ -101,7 +102,6 @@ export const getPathToLeaf = (leafIndex, groups) => {
   return makeBranch(leaf).reverse();
 };
 
-// TODO rework
 export const getCellGroups = (groupIndex, groups) => {
   const result: any = [];
 
@@ -159,8 +159,8 @@ export const createResourceEditorModel = (resources, loadedResources) => resourc
   return {
     editorOptions: {
       dataSource: dataSource.length ? dataSource : getWrappedDataSource(resource.dataSource),
-      displayExpr: getDisplayExpr(resource),
-      valueExpr: getValueExpr(resource),
+      displayExpr: getTextExpr(resource),
+      valueExpr: getIdExpr(resource),
       stylingMode: isFluent(current()) ? 'filled' : 'outlined',
     },
     dataField,
@@ -207,7 +207,7 @@ export const getOrLoadResourceItem = (resources, resourceLoaderMap, field, value
       && isDefined(resource.dataSource))
     .forEach((resource) => {
       const wrappedDataSource: any = getWrappedDataSource(resource.dataSource);
-      const valueExpr = getValueExpr(resource);
+      const valueExpr = getIdExpr(resource);
 
       if (!resourceLoaderMap.has(field)) {
         resourceLoaderMap.set(field, wrappedDataSource.load());
@@ -355,7 +355,7 @@ export const reduceResourcesTree = (getDataAccessors, tree, existingAppointments
       }
     });
 
-    if (ok && node.children && node.children.length) {
+    if (ok && node.children?.length) {
       reduceResourcesTree(getDataAccessors, node.children, existingAppointments, _result[index]);
     }
   });
@@ -364,7 +364,7 @@ export const reduceResourcesTree = (getDataAccessors, tree, existingAppointments
 };
 
 export const getResourcesDataByGroups = (loadedResources, resources, groups) => {
-  if (!groups || !groups.length) {
+  if (!groups?.length) {
     return loadedResources;
   }
 
@@ -388,7 +388,7 @@ export const getResourcesDataByGroups = (loadedResources, resources, groups) => 
     } = currentResource;
 
     const resource = filterResources(resources, [resourceName])[0] || {};
-    const valueExpr = getValueExpr(resource);
+    const valueExpr = getIdExpr(resource);
     const filteredItems: any = [];
     const filteredData: any = [];
 
@@ -490,8 +490,8 @@ export const createExpressions = (resources: any = []) => {
 };
 
 const getTransformedResourceData = (resource, data) => {
-  const valueGetter: any = compileGetter(getValueExpr(resource));
-  const displayGetter: any = compileGetter(getDisplayExpr(resource));
+  const valueGetter: any = compileGetter(getIdExpr(resource));
+  const displayGetter: any = compileGetter(getTextExpr(resource));
 
   return data.map((item) => {
     const result: any = {
@@ -499,7 +499,7 @@ const getTransformedResourceData = (resource, data) => {
       text: displayGetter(item),
     };
 
-    if (item.color) { // TODO for passed tests
+    if (item.color) { // for tests
       result.color = item.color;
     }
 
@@ -551,7 +551,11 @@ export const loadResources = (groups, resources, resourceLoaderMap) => {
   return result.promise();
 };
 
-export const getNormalizedResources = (rawAppointment, dataAccessors, resources) => {
+export const getNormalizedResources = (
+  rawAppointment,
+  dataAccessors: AppointmentDataAccessor,
+  resources,
+) => {
   const result = {};
 
   each(dataAccessors.resources.getter, (fieldName) => {

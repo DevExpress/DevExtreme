@@ -20,9 +20,9 @@ export type Xor<T1, T2 = never, T3 = never, T4 = never, T5 = never, T6 = never, 
   | Seal<T9, KeysOf<T1, T2, T3, T4, T5, T6, T7, T8>>;
 
 export type Scalar = undefined | null | string | String | number | Number | bigint | BigInteger | boolean | Boolean | Date | Function | Symbol | Array<unknown>;
-export type DeepPartial<T> = T extends Scalar ? T : {
+export type DeepPartial<T> = T | (T extends Scalar ? T : {
   [P in keyof T]?: DeepPartial<T[P]>;
-};
+});
 
 type ItemType<T> = T extends (infer TItem)[] ? TItem : T;
 type Property<T, TPropName extends string> = T extends Partial<Record<TPropName, infer TValue>> ? TValue : never;

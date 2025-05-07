@@ -24,9 +24,9 @@ import {
 } from '@angular/core';
 
 
-import { EditorStyle, LabelMode, Position, TextEditorButton, ValidationMessageMode, ValidationStatus } from 'devextreme/common';
-import { Format } from 'devextreme/localization';
-import { ChangeEvent, ContentReadyEvent, CopyEvent, CutEvent, DisposingEvent, EnterKeyEvent, FocusInEvent, FocusOutEvent, InitializedEvent, InputEvent, KeyDownEvent, KeyUpEvent, NumberBoxPredefinedButton, NumberBoxType, OptionChangedEvent, PasteEvent, ValueChangedEvent } from 'devextreme/ui/number_box';
+import { NumberBoxPredefinedButton, NumberBoxType, ChangeEvent, ContentReadyEvent, CopyEvent, CutEvent, DisposingEvent, EnterKeyEvent, FocusInEvent, FocusOutEvent, InitializedEvent, InputEvent, KeyDownEvent, KeyUpEvent, OptionChangedEvent, PasteEvent, ValueChangedEvent } from 'devextreme/ui/number_box';
+import { TextEditorButton, LabelMode, EditorStyle, ValidationMessageMode, Position, ValidationStatus } from 'devextreme/common';
+import { Format } from 'devextreme/common/core/localization';
 
 import DxNumberBox from 'devextreme/ui/number_box';
 
@@ -50,8 +50,8 @@ import { DxoOptionsModule } from 'devextreme-angular/ui/nested';
 import { DxoFormatModule } from 'devextreme-angular/ui/nested';
 
 import { DxiNumberBoxButtonModule } from 'devextreme-angular/ui/number-box/nested';
-import { DxoNumberBoxOptionsModule } from 'devextreme-angular/ui/number-box/nested';
 import { DxoNumberBoxFormatModule } from 'devextreme-angular/ui/number-box/nested';
+import { DxoNumberBoxOptionsModule } from 'devextreme-angular/ui/number-box/nested';
 
 import { DxiButtonComponent } from 'devextreme-angular/ui/nested';
 
@@ -71,6 +71,7 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
 @Component({
     selector: 'dx-number-box',
     template: '',
+    host: { ngSkipHydration: 'true' },
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -139,10 +140,10 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
     
      */
     @Input()
-    get elementAttr(): any {
+    get elementAttr(): Record<string, any> {
         return this._getOption('elementAttr');
     }
-    set elementAttr(value: any) {
+    set elementAttr(value: Record<string, any>) {
         this._setOption('elementAttr', value);
     }
 
@@ -165,10 +166,10 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
     
      */
     @Input()
-    get format(): Format | string {
+    get format(): Format {
         return this._getOption('format');
     }
-    set format(value: Format | string) {
+    set format(value: Format) {
         this._setOption('format', value);
     }
 
@@ -178,10 +179,10 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
     
      */
     @Input()
-    get height(): number | Function | string | undefined {
+    get height(): (() => number | string) | number | string | undefined {
         return this._getOption('height');
     }
-    set height(value: number | Function | string | undefined) {
+    set height(value: (() => number | string) | number | string | undefined) {
         this._setOption('height', value);
     }
 
@@ -581,10 +582,10 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
     
      */
     @Input()
-    get width(): number | Function | string | undefined {
+    get width(): (() => number | string) | number | string | undefined {
         return this._getOption('width');
     }
-    set width(value: number | Function | string | undefined) {
+    set width(value: (() => number | string) | number | string | undefined) {
         this._setOption('width', value);
     }
 
@@ -741,7 +742,7 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() elementAttrChange: EventEmitter<any>;
+    @Output() elementAttrChange: EventEmitter<Record<string, any>>;
 
     /**
     
@@ -755,14 +756,14 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() formatChange: EventEmitter<Format | string>;
+    @Output() formatChange: EventEmitter<Format>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() heightChange: EventEmitter<number | Function | string | undefined>;
+    @Output() heightChange: EventEmitter<(() => number | string) | number | string | undefined>;
 
     /**
     
@@ -979,7 +980,7 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() widthChange: EventEmitter<number | Function | string | undefined>;
+    @Output() widthChange: EventEmitter<(() => number | string) | number | string | undefined>;
 
     /**
     
@@ -999,8 +1000,7 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
         return this._getOption('buttons');
     }
     set buttonsChildren(value) {
-        this.setContentChildren('buttons', value, 'DxiNumberBoxButtonComponent');
-        this.setChildren('buttons', value);
+        this._setChildren('buttons', value, 'DxiNumberBoxButtonComponent');
     }
 
 
@@ -1009,9 +1009,7 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
         return this._getOption('buttons');
     }
     set buttonsLegacyChildren(value) {
-        if (this.checkContentChildren('buttons', value, 'DxiButtonComponent')) {
-           this.setChildren('buttons', value);
-        }
+        this._setChildren('buttons', value, 'DxiButtonComponent');
     }
 
 
@@ -1154,8 +1152,8 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
     DxoOptionsModule,
     DxoFormatModule,
     DxiNumberBoxButtonModule,
-    DxoNumberBoxOptionsModule,
     DxoNumberBoxFormatModule,
+    DxoNumberBoxOptionsModule,
     DxIntegrationModule,
     DxTemplateModule
   ],
@@ -1168,8 +1166,8 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
     DxoOptionsModule,
     DxoFormatModule,
     DxiNumberBoxButtonModule,
-    DxoNumberBoxOptionsModule,
     DxoNumberBoxFormatModule,
+    DxoNumberBoxOptionsModule,
     DxTemplateModule
   ]
 })

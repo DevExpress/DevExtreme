@@ -1,5 +1,5 @@
 const $ = require('jquery');
-const animationFrame = require('animation/frame');
+const animationFrame = require('common/core/animation/frame');
 const typeUtils = require('core/utils/type');
 
 QUnit.module('animation frame');

@@ -1,3 +1,8 @@
+import registerEvent from '@js/common/core/events/core/event_registrator';
+import eventsEngine from '@js/common/core/events/core/events_engine';
+import { name as wheelEventName } from '@js/common/core/events/core/wheel';
+import pointerEvents from '@js/common/core/events/pointer';
+import { addNamespace, isMouseEvent } from '@js/common/core/events/utils/index';
 import Class from '@js/core/class';
 import domAdapter from '@js/core/dom_adapter';
 import { data as elementData } from '@js/core/element_data';
@@ -5,11 +10,6 @@ import $ from '@js/core/renderer';
 import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import readyCallbacks from '@js/core/utils/ready_callbacks';
-import registerEvent from '@js/events/core/event_registrator';
-import eventsEngine from '@js/events/core/events_engine';
-import { name as wheelEventName } from '@js/events/core/wheel';
-import pointerEvents from '@js/events/pointer';
-import { addNamespace, isMouseEvent } from '@js/events/utils/index';
 
 const MANAGER_EVENT = 'dxEventManager';
 const EMITTER_DATA = 'dxEmitter';

@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import ArrayStore from 'data/array_store';
+import ArrayStore from 'common/data/array_store';
 import config from 'core/config';
 import ErrorHandlingHelper from '../../helpers/data.errorHandlingHelper.js';
 

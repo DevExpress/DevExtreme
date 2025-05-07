@@ -1,8 +1,8 @@
 import $ from 'jquery';
 import pointerMock from '../../helpers/pointerMock.js';
 import keyboardMock from '../../helpers/keyboardMock.js';
-import fx from 'animation/fx';
-import { normalizeKeyName } from 'events/utils/index';
+import fx from 'common/core/animation/fx';
+import { normalizeKeyName } from 'common/core/events/utils/index';
 
 import 'generic_light.css!';
 import 'ui/switch';

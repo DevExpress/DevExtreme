@@ -2,7 +2,7 @@ import $ from 'jquery';
 import commonUtils from 'core/utils/common';
 import devices from '__internal/core/m_devices';
 import browser from 'core/utils/browser';
-import pointerEvents from 'events/pointer';
+import pointerEvents from 'common/core/events/pointer';
 import DataGridWrapper from '../../helpers/wrappers/dataGridWrappers.js';
 import { createDataGrid, baseModuleConfig } from '../../helpers/dataGridHelper.js';
 import { getHeight, getWidth } from 'core/utils/size';
@@ -990,7 +990,7 @@ QUnit.module('Scrolling', baseModuleConfig, () => {
         scrollable.scrollTo(100.7);
 
         // assert
-        assert.equal(scrollable.scrollLeft(), 100.7);
+        assert.equal(scrollable.scrollLeft(), 100);
         assert.equal($(scrollable.container()).scrollLeft(), 100);
 
         const $headersScrollable = $dataGrid.find('.dx-datagrid-headers' + ' .dx-datagrid-scroll-container').first();

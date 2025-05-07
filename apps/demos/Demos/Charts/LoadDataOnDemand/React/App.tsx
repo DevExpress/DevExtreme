@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import DataSource from 'devextreme/data/data_source';
 import {
   Chart,
-  ChartTypes,
+  type ChartTypes,
   ZoomAndPan,
   ScrollBar,
   ArgumentAxis,

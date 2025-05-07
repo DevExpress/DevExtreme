@@ -30,7 +30,7 @@
         <span>Total Count</span>
       </div>
     </dxi-item>
-    <dxi-item location="before">
+    <dxi-item location="before" locateInMenu="auto">
       <div *dxTemplate>
         <dx-select-box
           width="225"
@@ -44,20 +44,20 @@
         </dx-select-box>
       </div>
     </dxi-item>
-    <dxi-item location="before">
-      <div *dxTemplate>
-        <dx-button
-          [text]="this.expandAll ? 'Collapse All' : 'Expand All'"
-          width="136"
-          (onClick)="toggleExpandAll()"
-        >
-        </dx-button>
-      </div>
+    <dxi-item
+      location="before"
+      locateInMenu="auto"
+      widget="dxButton"
+      [options]="toggleButtonOptions"
+    >
     </dxi-item>
-    <dxi-item location="after">
-      <div *dxTemplate>
-        <dx-button icon="refresh" (onClick)="refreshDataGrid()"> </dx-button>
-      </div>
+    <dxi-item
+      location="after"
+      locateInMenu="auto"
+      showText="inMenu"
+      widget="dxButton"
+      [options]="refreshButtonOptions"
+    >
     </dxi-item>
     <dxi-item name="columnChooserButton"></dxi-item>
   </dxo-toolbar>

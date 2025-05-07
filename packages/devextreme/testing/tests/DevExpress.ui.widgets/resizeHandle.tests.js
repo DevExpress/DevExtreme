@@ -1,10 +1,10 @@
 import $ from 'jquery';
-import fx from 'animation/fx';
+import fx from 'common/core/animation/fx';
 import { isRenderer } from 'core/utils/type';
 import config from 'core/config';
 import pointerMock from '../../helpers/pointerMock.js';
 import ResizeHandle from '__internal/ui/splitter/resize_handle';
-import { name as DOUBLE_CLICK_EVENT } from 'events/double_click';
+import { name as DOUBLE_CLICK_EVENT } from 'common/core/events/double_click';
 
 import 'generic_light.css!';
 

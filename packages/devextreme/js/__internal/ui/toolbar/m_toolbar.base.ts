@@ -1,4 +1,4 @@
-import fx from '@js/animation/fx';
+import { fx } from '@js/common/core/animation';
 import registerComponent from '@js/core/component_registrator';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
@@ -13,10 +13,11 @@ import {
   // @ts-expect-error
   waitWebFont,
 } from '@js/ui/themes';
-import type { Item, Properties as PublicProperties } from '@js/ui/toolbar';
-import AsyncCollectionWidget from '@ts/ui/collection/async';
+import type { Item, Properties } from '@js/ui/toolbar';
+import type { OptionChanged } from '@ts/core/widget/types';
+import type { CollectionWidgetBaseProperties } from '@ts/ui/collection/collection_widget.base';
+import CollectionWidgetAsync from '@ts/ui/collection/m_collection_widget.async';
 
-import type { TypedCollectionWidgetOptions } from '../collection/base';
 import { TOOLBAR_CLASS } from './m_constants';
 
 const TOOLBAR_BEFORE_CLASS = 'dx-toolbar-before';
@@ -39,19 +40,24 @@ const ANIMATION_TIMEOUT = 15;
 
 type ItemLike = string | Item | any;
 
-export interface Properties<
+export interface ToolbarBaseProperties<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   TItem extends ItemLike = any,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   TKey = any,
-> extends PublicProperties<TItem, TKey>,
+> extends Properties<TItem, TKey>,
   Omit<
-  TypedCollectionWidgetOptions<ToolbarBase, TItem, TKey>,
-  keyof PublicProperties<TItem, TKey> & keyof TypedCollectionWidgetOptions<ToolbarBase, TItem, TKey>
+  CollectionWidgetBaseProperties<ToolbarBase, TItem, TKey>,
+  keyof Properties<TItem, TKey> & keyof CollectionWidgetBaseProperties<ToolbarBase, TItem, TKey>
   > {
+  grouped: boolean;
+  renderAs: 'topToolbar';
+  useFlatButtons: boolean;
+  useDefaultButtons: boolean;
+  compactMode: boolean;
 }
 
-class ToolbarBase extends AsyncCollectionWidget<Properties> {
+class ToolbarBase extends CollectionWidgetAsync<ToolbarBaseProperties> {
   _$toolbarItemsContainer?: any;
 
   _$beforeSection?: dxElementWrapper;
@@ -62,6 +68,7 @@ class ToolbarBase extends AsyncCollectionWidget<Properties> {
 
   _waitParentAnimationTimeout?: any;
 
+  // @ts-expect-error
   _getSynchronizableOptionsForCreateComponent(): string[] {
     return super._getSynchronizableOptionsForCreateComponent().filter((item) => item !== 'disabled');
   }
@@ -109,7 +116,6 @@ class ToolbarBase extends AsyncCollectionWidget<Properties> {
       this._getTemplate('dx-polymorph-widget').render({
         container: $container,
         model: rawModel,
-        // @ts-expect-error
         parent: this,
       });
     }, ['text', 'html', 'widget', 'options'], this.option('integrationOptions.watchMethod'));
@@ -120,10 +126,9 @@ class ToolbarBase extends AsyncCollectionWidget<Properties> {
     });
   }
 
-  _getDefaultOptions(): Properties {
+  _getDefaultOptions(): ToolbarBaseProperties {
     return {
       ...super._getDefaultOptions(),
-      // @ts-expect-error
       renderAs: 'topToolbar',
       grouped: false,
       useFlatButtons: false,
@@ -180,7 +185,6 @@ class ToolbarBase extends AsyncCollectionWidget<Properties> {
 
   _render(): void {
     super._render();
-    this._renderItemsAsync();
 
     this._updateDimensionsInMaterial();
   }
@@ -191,7 +195,6 @@ class ToolbarBase extends AsyncCollectionWidget<Properties> {
 
   _renderToolbar(): void {
     this.$element()
-      // @ts-expect-error
       .addClass(TOOLBAR_CLASS);
 
     this._$toolbarItemsContainer = $('<div>')
@@ -387,12 +390,13 @@ class ToolbarBase extends AsyncCollectionWidget<Properties> {
   }
 
   _getToolbarItems(): Item[] {
+    // @ts-expect-error
     return this.option('items') ?? [];
   }
 
   _renderContentImpl(): void {
     const items = this._getToolbarItems();
-    // @ts-expect-error
+
     this.$element().toggleClass(TOOLBAR_MINI_CLASS, items.length === 0);
 
     if (this._renderedItemsCount) {
@@ -408,7 +412,7 @@ class ToolbarBase extends AsyncCollectionWidget<Properties> {
 
   _clean(): void {
     this._$toolbarItemsContainer.children().empty();
-    // @ts-expect-error
+
     this.$element().empty();
 
     delete this._$beforeSection;
@@ -440,7 +444,7 @@ class ToolbarBase extends AsyncCollectionWidget<Properties> {
     this._arrangeItems();
   }
 
-  _optionChanged(args: Record<string, unknown>): void {
+  _optionChanged(args: OptionChanged<ToolbarBaseProperties>): void {
     const { name } = args;
 
     switch (name) {
@@ -498,9 +502,9 @@ class ToolbarBase extends AsyncCollectionWidget<Properties> {
 
       // eslint-disable-next-line @typescript-eslint/naming-convention
       const _checkWebFontForLabelsLoaded = () => {
-        // @ts-expect-error
         const $labels = this.$element().find(`.${TOOLBAR_LABEL_CLASS}`);
         const promises = [];
+        // @ts-expect-error
         $labels.each((_, label) => {
           const text = $(label).text();
           // @ts-expect-error
@@ -518,7 +522,7 @@ class ToolbarBase extends AsyncCollectionWidget<Properties> {
     }
   }
 }
-// @ts-expect-error
+
 registerComponent('dxToolbarBase', ToolbarBase);
 
 export default ToolbarBase;

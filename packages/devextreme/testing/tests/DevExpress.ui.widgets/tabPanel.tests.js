@@ -1,4 +1,4 @@
-import fx from 'animation/fx';
+import fx from 'common/core/animation/fx';
 import config from 'core/config';
 import devices from '__internal/core/m_devices';
 import { deferUpdate } from 'core/utils/common';
@@ -10,7 +10,7 @@ import TabPanel from 'ui/tab_panel';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import pointerMock from '../../helpers/pointerMock.js';
 import registerKeyHandlerTestHelper from '../../helpers/registerKeyHandlerTestHelper.js';
-import translator from 'animation/translator';
+import translator from 'common/core/animation/translator';
 
 
 QUnit.testStart(() => {
@@ -1119,6 +1119,27 @@ QUnit.module('keyboard navigation', {
         assert.equal(isRenderer(this.instance.option('focusedElement')), !!config().useJQuery, 'focusedElement is correct');
         assert.equal(tabsFocusedIndex, 1, 'second tabs element has been focused');
         assert.equal(tabsFocusedIndex, $(this.instance.option('focusedElement')).index(), 'multiView focused element is equal tabs focused element');
+    });
+
+    QUnit.test('looping should work on keyboard navigation after loop runtime change to true and swipe', function(assert) {
+        if(devices.real().deviceType !== 'desktop') {
+            assert.ok(true, 'no kbn on mobile devices');
+            return;
+        }
+
+        this.instance.option({
+            items: [1, 2, 3],
+            loop: false,
+            swipeEnabled: true,
+        });
+        this.instance.option('loop', true);
+        const pointer = pointerMock(this.$element);
+        const keyDownEvent = $.Event('keydown', { key: 'ArrowRight' });
+
+        pointer.start().swipeStart().swipe(-0.5).swipeEnd(-1);
+        this.$element.trigger(keyDownEvent).trigger(keyDownEvent);
+
+        assert.strictEqual(this.instance.option('selectedIndex'), 0, 'loop comes back to first element');
     });
 
     if(devices.current().deviceType === 'desktop') {

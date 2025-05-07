@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react';
-import FilterBuilder, { FilterBuilderTypes } from 'devextreme-react/filter-builder';
+import FilterBuilder, { type FilterBuilderTypes } from 'devextreme-react/filter-builder';
 import Button from 'devextreme-react/button';
 import DataGrid from 'devextreme-react/data-grid';
 import DataSource from 'devextreme/data/data_source';

@@ -1,4 +1,4 @@
-import fx from '@js/animation/fx';
+import { fx } from '@js/common/core/animation';
 import { camelize } from '@js/core/utils/inflector';
 
 export const animation = {

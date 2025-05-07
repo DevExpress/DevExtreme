@@ -29,7 +29,7 @@ const CLASS = {
 export default class Appointment {
   element: Selector;
 
-  date: { time: Promise<string> };
+  date: { time: Promise<string>; roleDescription: Promise<string | null> };
 
   resizableHandle: { left: Selector; right: Selector; top: Selector; bottom: Selector };
 
@@ -57,12 +57,13 @@ export default class Appointment {
 
   constructor(scheduler: Selector, index = 0, title?: string) {
     const element = scheduler.find(`.${CLASS.appointment}`);
-    this.element = (title ? element.withAttribute('title', title) : element).nth(index);
+    this.element = (title ? element.withText(title) : element).nth(index);
 
     const appointmentContentDate = this.element.find(`.${CLASS.appointmentContentDate}`);
 
     this.date = {
       time: appointmentContentDate.nth(0).innerText,
+      roleDescription: this.element.getAttribute('aria-roledescription'),
     };
 
     this.resizableHandle = {

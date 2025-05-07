@@ -1,7 +1,7 @@
 import { DataSourceLike } from '../../data/data_source';
 import {
     AnimationConfig,
-} from '../../animation/fx';
+} from '../../common/core/animation';
 
 import HierarchicalCollectionWidget, {
     HierarchicalCollectionWidgetOptions,

@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
-import messageLocalization from '@js/localization/message';
+import messageLocalization from '@js/common/core/localization/message';
 
 import type { PaginationConfigContextValue } from '../common/pagination_config_context';
 import { PaginationConfigContext } from '../common/pagination_config_context';

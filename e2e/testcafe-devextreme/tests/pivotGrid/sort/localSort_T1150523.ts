@@ -53,7 +53,7 @@ test('Should sort without DataSource reload if scrolling mode isn\'t virtual', a
   await t.addRequestHooks(requestLogger);
   const initialRequestCount = await requestLogger.count(() => true);
 
-  await t.click(pivotGrid.getColumnHeaderArea().getAction());
+  await t.click(pivotGrid.getColumnHeaderArea().getField());
 
   const afterSortRequestCount = await requestLogger.count(() => true);
   const requestCount = afterSortRequestCount - initialRequestCount;
@@ -94,7 +94,7 @@ test.meta({ unstable: true })('Should sort with DataSource reload if scrolling m
   await t.addRequestHooks(requestLogger);
   const initialRequestCount = await requestLogger.count(() => true);
 
-  await t.click(pivotGrid.getColumnHeaderArea().getAction());
+  await t.click(pivotGrid.getColumnHeaderArea().getField());
 
   const afterSortRequestCount = await requestLogger.count(() => true);
   const requestCount = afterSortRequestCount - initialRequestCount;

@@ -16,6 +16,7 @@
         :height="250"
         :selected-row-keys="getSelectedRowKeys(currentValue)"
         :hover-state-enabled="true"
+        :on-context-menu-preparing="onContextMenuPreparing"
         :on-selection-changed="onSelectionChanged"
         :focused-row-enabled="true"
         :focused-row-key="currentValue"
@@ -41,9 +42,9 @@ import {
   DxSelection,
   DxScrolling,
   DxColumn,
-  DxDataGridTypes,
+  type DxDataGridTypes,
 } from 'devextreme-vue/data-grid';
-import DxDropDownBox, { DxDropDownBoxTypes } from 'devextreme-vue/drop-down-box';
+import DxDropDownBox, { type DxDropDownBoxTypes } from 'devextreme-vue/drop-down-box';
 import CustomStore from 'devextreme/data/custom_store';
 
 const props = defineProps<{
@@ -61,6 +62,9 @@ function getSelectedRowKeys<T>(value: T | null): T[] {
   return value !== null && value !== undefined ? [value] : [];
 }
 
+const onContextMenuPreparing = (e: DxDataGridTypes.ContextMenuPreparingEvent) => {
+  e.items = [];
+};
 const onSelectionChanged = (e: DxDataGridTypes.SelectionChangedEvent) => {
   currentValue.value = e.selectedRowKeys[0];
 

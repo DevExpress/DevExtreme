@@ -1,12 +1,12 @@
+import registerEmitter from '@js/common/core/events/core/emitter_registrator';
+import registerEvent from '@js/common/core/events/core/event_registrator';
+import GestureEmitter from '@js/common/core/events/gesture/emitter.gesture';
+import { eventData as eData, fireEvent } from '@js/common/core/events/utils/index';
 import { data as elementData, removeData } from '@js/core/element_data';
 import $ from '@js/core/renderer';
 import { wrapToArray } from '@js/core/utils/array';
 import { contains } from '@js/core/utils/dom';
 import * as iteratorUtils from '@js/core/utils/iterator';
-import registerEmitter from '@js/events/core/emitter_registrator';
-import registerEvent from '@js/events/core/event_registrator';
-import GestureEmitter from '@js/events/gesture/emitter.gesture';
-import { eventData as eData, fireEvent } from '@js/events/utils/index';
 
 const DRAG_START_EVENT = 'dxdragstart';
 const DRAG_EVENT = 'dxdrag';

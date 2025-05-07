@@ -1,8 +1,8 @@
+import queryAdapters from '@js/common/data/query_adapters';
 import config from '@js/core/config';
 import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import { isFunction } from '@js/core/utils/type';
-import queryAdapters from '@js/data/query_adapters';
 
 import { errors } from '../m_errors';
 import {

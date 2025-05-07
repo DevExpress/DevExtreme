@@ -1,4 +1,7 @@
 <template>
+  <div id="long-title">
+    <h3>Country Area, Population, and GDP Structure</h3>
+  </div>
   <DxDataGrid
     id="grid"
     :data-source="countries"
@@ -54,7 +57,7 @@
 
 <script setup lang="ts">
 import DxDataGrid, {
-  DxColumn, DxExport, DxDataGridTypes,
+  DxColumn, DxExport, type DxDataGridTypes,
 } from 'devextreme-vue/data-grid';
 import { Workbook } from 'exceljs';
 // Our demo infrastructure requires us to use 'file-saver-es'.
@@ -111,7 +114,7 @@ const onExporting = (e: DxDataGridTypes.ExportingEvent) => {
   line-height: 0;
 }
 
-.long-title h3 {
+#long-title h3 {
   font-family:
     'Segoe UI Light',
     'Helvetica Neue Light',

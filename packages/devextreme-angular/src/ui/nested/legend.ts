@@ -16,7 +16,7 @@ import {
 
 import { HorizontalAlignment, Orientation, Position, VerticalEdge } from 'devextreme/common';
 import { DashStyle, Font, LegendHoverMode, RelativePosition } from 'devextreme/common/charts';
-import { Format } from 'devextreme/localization';
+import { Format } from 'devextreme/common/core/localization';
 import { PieChartLegendHoverMode } from 'devextreme/viz/pie_chart';
 
 import {

@@ -1,5 +1,6 @@
+import query from '@js/common/data/query';
 import dateUtils from '@js/core/utils/date';
-import query from '@js/data/query';
+import type { SafeAppointment } from '@ts/scheduler/types';
 
 import { sortAppointmentsByStartDate } from '../data_provider/m_utils';
 import HorizontalAppointmentsStrategy from './m_strategy_horizontal';
@@ -53,7 +54,7 @@ class HorizontalMonthLineRenderingStrategy extends HorizontalAppointmentsStrateg
     return false;
   }
 
-  createTaskPositionMap(items, skipSorting) {
+  createTaskPositionMap(items: SafeAppointment[], skipSorting) {
     if (!skipSorting) {
       sortAppointmentsByStartDate(items, this.dataAccessors);
     }
@@ -65,6 +66,7 @@ class HorizontalMonthLineRenderingStrategy extends HorizontalAppointmentsStrateg
     let result = super._getSortedPositions(map);
 
     if (!skipSorting) {
+      // @ts-expect-error
       result = query(result).sortBy('top').thenBy('left').thenBy('cellPosition')
         .thenBy('i')
         .toArray();

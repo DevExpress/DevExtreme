@@ -1,23 +1,48 @@
 $(() => {
   $('#employees').dxTreeList({
     dataSource: employees,
-    allowColumnReordering: true,
     keyExpr: 'ID',
     parentIdExpr: 'Head_ID',
-    columns: [{
-      dataField: 'Full_Name',
-      allowReordering: false,
-    }, {
-      dataField: 'Title',
-      caption: 'Position',
-    }, 'City', 'State', 'Mobile_Phone', {
-      dataField: 'Hire_Date',
-      dataType: 'date',
-    },
-    ],
-    showRowLines: true,
-    showBorders: true,
+    allowColumnReordering: true,
     columnAutoWidth: true,
-    expandedRowKeys: [1],
+    showBorders: true,
+    columnFixing: {
+      enabled: true,
+    },
+    showRowLines: true,
+    autoExpandAll: true,
+    columns: [
+      {
+        caption: 'Employee',
+        fixed: true,
+        calculateCellValue(data) {
+          return [data.Title,
+            data.FirstName, data.LastName]
+            .join(' ');
+        }, 
+      },
+      {
+        dataField: 'Position',
+        alignment: 'right',
+        fixed: true,
+      },
+      'Address',
+      'City',
+      'Zipcode',
+      'State',
+      'Department',
+      {
+        dataField: 'BirthDate',
+        dataType: 'date',
+      },
+      {
+        dataField: 'HireDate',
+        dataType: 'date',
+      },
+      'HomePhone',
+      'MobilePhone',
+      'Email',
+      'Skype',
+    ],
   });
 });

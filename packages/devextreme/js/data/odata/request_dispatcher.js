@@ -1,1 +1,1 @@
-export { default } from '../../__internal/data/odata/m_request_dispatcher';
+export { default } from '../../common/data/odata/request_dispatcher';

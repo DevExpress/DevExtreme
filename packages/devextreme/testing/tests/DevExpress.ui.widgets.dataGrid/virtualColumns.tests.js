@@ -2,7 +2,7 @@ import $ from 'jquery';
 import dataGridMocks from '../../helpers/dataGridMocks.js';
 import 'ui/data_grid';
 import 'generic_light.css!';
-import { DataSource } from 'data/data_source/data_source';
+import { DataSource } from 'common/data/data_source/data_source';
 import dataSourceAdapter from '__internal/grids/data_grid/m_data_source_adapter';
 import { getOuterWidth } from 'core/utils/size';
 
@@ -34,10 +34,6 @@ const setupModule = function() {
             columnWidth: 50,
             columns: this.columns
         }, options));
-    };
-
-    this.getColumns = function(parameterNames) {
-        return this.columnsController.getColumns();
     };
 
     this.getFixedColumns = function(parameterNames) {
@@ -385,7 +381,7 @@ QUnit.module('Scrolling', { beforeEach: setupModule, afterEach: teardownModule }
         this.columnsController.columnsChanged.add(e => {
             assert.deepEqual(e, {
                 optionNames: { all: true, length: 1 },
-                changeTypes: { columns: true, virtualColumnsScrolling: true, length: 2 }
+                changeTypes: { columns: true, virtualColumnsScrolling: true, length: 2, event: undefined }
             }, 'columnsChanged args');
             columnsChangedPositions.push(pos);
         });
@@ -413,7 +409,7 @@ QUnit.module('Scrolling', { beforeEach: setupModule, afterEach: teardownModule }
         this.columnsController.columnsChanged.add(e => {
             assert.deepEqual(e, {
                 optionNames: { all: true, length: 1 },
-                changeTypes: { columns: true, virtualColumnsScrolling: true, length: 2 }
+                changeTypes: { columns: true, virtualColumnsScrolling: true, length: 2, event: undefined }
             }, 'columnsChanged args');
             columnsChangedPositions.push(pos);
         });
@@ -535,10 +531,6 @@ const setupRenderingModule = function() {
             columns: this.columns,
             dataSource: [{}]
         }, options));
-    };
-
-    this.getColumns = function(parameterNames) {
-        return this.columnsController.getColumns();
     };
 
     this.clock = sinon.useFakeTimers();

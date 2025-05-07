@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-misused-promises */
 import Color from '@js/color';
 import ajax from '@js/core/utils/ajax';
 import { noop } from '@js/core/utils/common';
@@ -28,8 +29,13 @@ const msMapsLoaded = function () {
 };
 
 let msMapsLoader;
+class BingProvider extends DynamicProvider {
+  _providerClickHandler?: any;
 
-const BingProvider = DynamicProvider.inherit({
+  _providerViewChangeHandler?: any;
+
+  _preventZoomChangeEvent?: boolean;
+
   _mapType(type) {
     const mapTypes = {
       roadmap: Microsoft.Maps.MapTypeId.road,
@@ -38,7 +44,7 @@ const BingProvider = DynamicProvider.inherit({
     };
     // @ts-expect-error
     return mapTypes[type] || mapTypes.road;
-  },
+  }
 
   _movementMode(type) {
     const movementTypes = {
@@ -46,7 +52,7 @@ const BingProvider = DynamicProvider.inherit({
       walking: Microsoft.Maps.Directions.RouteMode.walking,
     };
     return movementTypes[type] || movementTypes.driving;
-  },
+  }
 
   _resolveLocation(location) {
     return new Promise((resolve) => {
@@ -59,9 +65,8 @@ const BingProvider = DynamicProvider.inherit({
         });
       }
     });
-  },
+  }
 
-  _geocodedLocations: {},
   _geocodeLocationImpl(location) {
     return new Promise((resolve) => {
       if (!isDefined(location)) {
@@ -87,14 +92,14 @@ const BingProvider = DynamicProvider.inherit({
 
       searchManager.geocode(searchRequest);
     });
-  },
+  }
 
   _normalizeLocation(location) {
     return {
       lat: location.latitude,
       lng: location.longitude,
     };
-  },
+  }
 
   _normalizeLocationRect(locationRect) {
     const northWest = this._normalizeLocation(locationRect.getNorthwest());
@@ -110,7 +115,7 @@ const BingProvider = DynamicProvider.inherit({
         lng: northWest.lng,
       },
     };
-  },
+  }
 
   _loadImpl() {
     return new Promise((resolve) => {
@@ -140,7 +145,7 @@ const BingProvider = DynamicProvider.inherit({
         Microsoft.Maps.loadModule('Microsoft.Maps.Directions', { callback: resolve });
       }),
     ]));
-  },
+  }
 
   _loadMapScript() {
     return new Promise((resolve) => {
@@ -157,13 +162,13 @@ const BingProvider = DynamicProvider.inherit({
         window[BING_MAP_READY] = undefined;
       }
     });
-  },
+  }
 
   _init() {
     this._createMap();
 
     return Promise.resolve();
-  },
+  }
 
   _createMap() {
     const controls = this._option('controls');
@@ -175,12 +180,12 @@ const BingProvider = DynamicProvider.inherit({
       showMapTypeSelector: controls,
       showScalebar: controls,
     });
-  },
+  }
 
   _attachHandlers() {
     this._providerViewChangeHandler = Microsoft.Maps.Events.addHandler(this._map, 'viewchange', this._viewChangeHandler.bind(this));
     this._providerClickHandler = Microsoft.Maps.Events.addHandler(this._map, 'click', this._clickActionHandler.bind(this));
-  },
+  }
 
   _viewChangeHandler() {
     const bounds = this._map.getBounds();
@@ -192,13 +197,13 @@ const BingProvider = DynamicProvider.inherit({
     if (!this._preventZoomChangeEvent) {
       this._option('zoom', this._map.getZoom());
     }
-  },
+  }
 
   _clickActionHandler(e) {
     if (e.targetType === 'map') {
       this._fireClickAction({ location: this._normalizeLocation(e.location) });
     }
-  },
+  }
 
   updateDimensions() {
     const $container = this._$container;
@@ -209,7 +214,7 @@ const BingProvider = DynamicProvider.inherit({
     });
 
     return Promise.resolve();
-  },
+  }
 
   updateMapType() {
     const type = this._option('type');
@@ -222,7 +227,7 @@ const BingProvider = DynamicProvider.inherit({
     });
 
     return Promise.resolve();
-  },
+  }
 
   updateBounds() {
     return Promise.all([
@@ -237,7 +242,7 @@ const BingProvider = DynamicProvider.inherit({
         bounds,
       });
     });
-  },
+  }
 
   updateCenter() {
     return this._resolveLocation(this._option('center')).then((center) => {
@@ -246,7 +251,7 @@ const BingProvider = DynamicProvider.inherit({
         center,
       });
     });
-  },
+  }
 
   updateZoom() {
     this._map.setView({
@@ -255,12 +260,13 @@ const BingProvider = DynamicProvider.inherit({
     });
 
     return Promise.resolve();
-  },
+  }
 
   updateControls() {
     this.clean();
+    // @ts-expect-error ts-error
     return this.render.apply(this, arguments);
-  },
+  }
 
   _renderMarker(options) {
     return this._resolveLocation(options.location).then((location) => {
@@ -308,7 +314,7 @@ const BingProvider = DynamicProvider.inherit({
         handler,
       };
     });
-  },
+  }
 
   _renderTooltip(location, options) {
     if (!options) {
@@ -326,7 +332,7 @@ const BingProvider = DynamicProvider.inherit({
     infobox.setMap(this._map);
 
     return infobox;
-  },
+  }
 
   _destroyMarker(marker) {
     this._map.entities.remove(marker.marker);
@@ -336,7 +342,7 @@ const BingProvider = DynamicProvider.inherit({
     if (marker.handler) {
       Microsoft.Maps.Events.removeHandler(marker.handler);
     }
-  },
+  }
 
   _renderRoute(options) {
     return Promise.all(map(options.locations, (point) => this._resolveLocation(point))).then((locations) => new Promise((resolve) => {
@@ -400,11 +406,11 @@ const BingProvider = DynamicProvider.inherit({
 
       direction.calculateDirections();
     }));
-  },
+  }
 
   _destroyRoute(routeObject) {
     routeObject.instance.dispose();
-  },
+  }
 
   _fitBounds() {
     this._updateBounds();
@@ -435,16 +441,16 @@ const BingProvider = DynamicProvider.inherit({
     }
 
     return Promise.resolve();
-  },
+  }
 
-  _extendBounds(location) {
+  _extendBounds(location): void {
     if (this._bounds) {
       // eslint-disable-next-line max-len, new-cap
       this._bounds = new Microsoft.Maps.LocationRect.fromLocations(this._bounds.getNorthwest(), this._bounds.getSoutheast(), location);
     } else {
       this._bounds = new Microsoft.Maps.LocationRect(location, MIN_LOCATION_RECT_LENGTH, MIN_LOCATION_RECT_LENGTH);
     }
-  },
+  }
 
   clean() {
     if (this._map) {
@@ -458,11 +464,11 @@ const BingProvider = DynamicProvider.inherit({
     }
 
     return Promise.resolve();
-  },
-
-});
+  }
+}
 
 /// #DEBUG
+// @ts-expect-error ts-error
 BingProvider.remapConstant = function (newValue) {
   BING_URL_V8 = newValue;
 };

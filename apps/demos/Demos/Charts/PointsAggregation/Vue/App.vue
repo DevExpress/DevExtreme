@@ -116,13 +116,14 @@ import DxChart, {
   DxLegend,
   DxLabel,
   DxTooltip,
+  type DxChartTypes
 } from 'devextreme-vue/chart';
 import DxCheckBox from 'devextreme-vue/check-box';
 import DxSelectBox from 'devextreme-vue/select-box';
 import { weatherData, aggregationFunctions, aggregationIntervals } from './data.ts';
 
 const useAggregation = ref(true);
-const currentFunction = ref(aggregationFunctions[0].func);
+const currentFunction = ref<DxChartTypes.ChartSeriesAggregationMethod>(aggregationFunctions[0].func);
 const currentInterval = ref(aggregationIntervals[0].interval);
 
 function calculateRangeArea({ data, intervalStart, intervalEnd }) {

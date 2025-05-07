@@ -34,6 +34,7 @@ import { ref } from 'vue';
 import {
   DxPivotGrid,
   DxFieldChooser,
+  type DxPivotGridTypes,
 } from 'devextreme-vue/pivot-grid';
 import {
   DxSelectBox,
@@ -62,8 +63,8 @@ const dataSource = {
     cube: 'Adventure Works',
   },
 };
-const applyChangesModes = ['instantly', 'onDemand'];
-const applyChangesMode = ref<string>('instantly');
+const applyChangesModes: DxPivotGridTypes.ApplyChangesMode[] = ['instantly', 'onDemand'];
+const applyChangesMode = ref(applyChangesModes[0]);
 </script>
 <style>
 .options {

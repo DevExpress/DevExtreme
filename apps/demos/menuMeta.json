@@ -71,6 +71,7 @@
             ],
             "MvcDocUrl": "https://docs.devexpress.com/DevExtremeAspNetMvc/400704/concepts/data-binding",
             "NetCoreDocUrl": "https://docs.devexpress.com/AspNetCore/400575/concepts/devextreme-based-controls/data-binding",
+            "NoPreloaded": "Max callstack exceeded",
             "DemoType": "Web"
           },
           {
@@ -89,6 +90,7 @@
               "Stock.cs",
               "StockTicker.cs"
             ],
+            "NoPreloaded": "uses DevExtreme which is not defined",
             "DemoType": "Web"
           },
           {
@@ -134,6 +136,7 @@
             "MvcAdditionalFiles": [
               "/Models/DataService/Sale.cs"
             ],
+            "NoPreloaded": "Max callstack exceeded",
             "DemoType": "Web"
           },
           {
@@ -243,6 +246,7 @@
               "/Models/SampleData/CustomEditorsTasks.cs",
               "/Scripts/data/statuses.js"
             ],
+            "NoPreloaded": "Max callstack exceeded",
             "DemoType": "Web"
           },
           {
@@ -258,6 +262,7 @@
             ],
             "MvcDocUrl": "https://docs.devexpress.com/DevExtremeAspNetMvc/400705/concepts/client-side-data-validation#overview",
             "NetCoreDocUrl": "https://docs.devexpress.com/AspNetCore/400576/concepts/devextreme-based-controls/client-side-data-validation#overview",
+            "NoPreloaded": "Max callstack exceeded",
             "DemoType": "Web",
             "Modules": "devextreme-aspnet-data-nojquery"
           },
@@ -284,6 +289,7 @@
             "Title": "Collaborative Editing",
             "Name": "CollaborativeEditing",
             "Widget": "DataGrid",
+            "NoPreloaded": "Max callstack exceeded",
             "DemoType": "Web",
             "Equivalents": "signalr, real time, live update",
             "Modules": "devextreme-aspnet-data-nojquery,signalr",
@@ -336,6 +342,7 @@
             "Name": "BatchUpdateRequest",
             "DocUrl": "",
             "Widget": "DataGrid",
+            "NoPreloaded": "Max callstack exceeded",
             "DemoType": "Web",
             "Equivalents": "",
             "Modules": "whatwg-fetch,devextreme-aspnet-data-nojquery",
@@ -354,6 +361,7 @@
             "Name": "EditStateManagement",
             "DocUrl": "",
             "Widget": "DataGrid",
+            "NoPreloaded": "Max callstack exceeded",
             "DemoType": "Web",
             "Equivalents": "",
             "Modules": "whatwg-fetch,vuex",
@@ -371,6 +379,7 @@
             "NetCoreDescription": "",
             "MvcAdditionalFiles": [],
             "Modules": "devextreme-aspnet-data-nojquery",
+            "NoPreloaded": "Max callstack exceeded",
             "DemoType": "Web"
           }
         ]
@@ -397,6 +406,7 @@
             "MvcAdditionalFiles": [
               "/Models/DataService/Sale.cs"
             ],
+            "NoPreloaded": "Max callstack exceeded",
             "DemoType": "Web",
             "Modules": "devextreme-aspnet-data-nojquery"
           }
@@ -433,6 +443,7 @@
             "Title": "Filtering API",
             "Name": "FilteringAPI",
             "Widget": "DataGrid",
+            "NoPreloaded": "Vue doesnt work",
             "DemoType": "Web"
           },
           {
@@ -491,6 +502,7 @@
             "Title": "Remote Reordering",
             "Name": "RemoteReordering",
             "Widget": "DataGrid",
+            "NoPreloaded": "Max callstack exceeded",
             "DemoType": "Web",
             "Modules": "devextreme-aspnet-data-nojquery",
             "MvcAdditionalFiles": [
@@ -568,17 +580,6 @@
         "Equivalents": "",
         "Demos": [
           {
-            "Title": "Column Customization",
-            "Name": "ColumnCustomization",
-            "Equivalents": "column chooser, fixed column, frozen column, pinned column, column fixing",
-            "Widget": "DataGrid",
-            "MvcAdditionalFiles": [
-              "/Models/DataGrid/Employee.cs",
-              "/Models/SampleData/DataGridEmployees.cs"
-            ],
-            "DemoType": "Web"
-          },
-          {
             "Title": "Columns based on a Data Source",
             "Name": "ColumnsBasedOnADataSource",
             "Widget": "DataGrid",
@@ -597,7 +598,18 @@
             "MvcAdditionalFiles": [
               "/Models/SampleData/CountriesPopulationAndGDP.cs"
             ],
+            "NoPreloaded": "Vue doesnt work",
             "DemoType": "Web"
+          },
+          {
+            "Title": "Column Reordering",
+            "Name": "ColumnReordering",
+            "Widget": "DataGrid",
+            "MvcAdditionalFiles": [
+              "/Scripts/data/employeeData.js"
+            ],
+            "DemoType": "Web",
+            "Badge": "New"
           },
           {
             "Title": "Column Resizing",
@@ -607,6 +619,17 @@
               "/Scripts/data/customers.js"
             ],
             "DemoType": "Web"
+          },
+          {
+            "Title": "Fixed and Sticky Columns",
+            "Name": "FixedAndStickyColumns",
+            "Widget": "DataGrid",
+            "MvcAdditionalFiles": [
+              "/Models/DataGrid/Employee.cs",
+              "/Models/SampleData/DataGridEmployees.cs"
+            ],
+            "DemoType": "Web",
+            "Badge": "New"
           },
           {
             "Title": "Command Column Customization",
@@ -671,6 +694,7 @@
               "/Models/EuropeanCountry.cs",
               "/Models/SampleData/EuropeanCountries.cs"
             ],
+            "NoPreloaded": "Vue doesnt work",
             "DemoType": "Web"
           }
         ]
@@ -698,6 +722,7 @@
               "/Models/DataGrid/Employee.cs",
               "/Models/SampleData/DataGridEmployees.cs"
             ],
+            "NoPreloaded": "localization package",
             "DemoType": "Web"
           },
           {
@@ -724,6 +749,7 @@
               "/Models/Intraday.cs",
               "/Models/SampleData/IntradayData.cs"
             ],
+            "NoPreloaded": "localization package",
             "DemoType": "Web"
           },
           {
@@ -823,6 +849,7 @@
             "MvcAdditionalFiles": [
               "/Controllers/ApiControllers/DataGridAdvancedMasterDetailViewController.cs"
             ],
+            "NoPreloaded": "Max callstack exceeded",
             "DemoType": "Web"
           }
         ]
@@ -1518,16 +1545,6 @@
         "Equivalents": "",
         "Demos": [
           {
-            "Title": "Column Chooser",
-            "Name": "ColumnChooser",
-            "Widget": "TreeList",
-            "MvcAdditionalFiles": [
-              "/Models/TreeList/Employee.cs",
-              "/Models/SampleData/TreeListEmployees.cs"
-            ],
-            "DemoType": "Web"
-          },
-          {
             "Title": "Column Reordering",
             "Name": "Reordering",
             "Widget": "TreeList",
@@ -1535,7 +1552,8 @@
               "/Models/TreeList/Employee.cs",
               "/Models/SampleData/TreeListEmployees.cs"
             ],
-            "DemoType": "Web"
+            "DemoType": "Web",
+            "Badge": "Updated"
           },
           {
             "Title": "Column Resizing",
@@ -1548,9 +1566,20 @@
             "DemoType": "Web"
           },
           {
-            "Title": "Column Fixing",
+            "Title": "Fixed and Sticky Columns",
             "Name": "ColumnFixing",
             "Equivalents": "fixed column, frozen column, pinned column",
+            "Widget": "TreeList",
+            "MvcAdditionalFiles": [
+              "/Models/TreeList/Employee.cs",
+              "/Models/SampleData/TreeListEmployees.cs"
+            ],
+            "DemoType": "Web",
+            "Badge": "Updated"
+          },
+          {
+            "Title": "Column Chooser",
+            "Name": "ColumnChooser",
             "Widget": "TreeList",
             "MvcAdditionalFiles": [
               "/Models/TreeList/Employee.cs",
@@ -1603,6 +1632,28 @@
             "DocUrl": "Guide/UI_Components/TreeList/Keyboard_Support/",
             "Widget": "TreeList",
             "DemoType": "Web"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "Name": "Card View",
+    "Equivalents": "dxCardView, dx-cardview, cardview",
+    "Badge": "Roadmap",
+    "Groups": [
+      {
+        "Name": "Overview",
+        "Equivalents": "",
+        "Badge": "Roadmap",
+        "Demos": [
+          {
+            "Title": "Overview",
+            "Name": "Overview",
+            "Widget": "CardView",
+            "DemoType": "Web",
+            "Badge": "Roadmap",
+            "RoadmapSurveyUrl": "https://www.devexpress.com/support/surveys/devextreme-roadmap-cardview.xml"
           }
         ]
       }
@@ -1883,6 +1934,14 @@
             "DemoType": "Web"
           },
           {
+            "Title": "Toolbar Customization",
+            "Name": "ToolbarCustomization",
+            "Widget": "Scheduler",
+            "DemoType": "Web",
+            "Badge": "Roadmap",
+            "RoadmapSurveyUrl": "https://www.devexpress.com/support/surveys/devextreme-roadmap-toolbar-customization.xml"
+          },
+          {
             "Title": "Disabled Date/Time Ranges",
             "Name": "CellTemplates",
             "Widget": "Scheduler",
@@ -1981,32 +2040,6 @@
         ]
       },
       {
-        "Name": "Output Formats",
-        "Equivalents": "",
-        "Demos": [
-          {
-            "Title": "Output Formats",
-            "Name": "OutputFormats",
-            "Widget": "HtmlEditor",
-            "DemoType": "Web",
-            "Modules": "showdown&turndown"
-          }
-        ]
-      },
-      {
-        "Name": "Toolbar Customization",
-        "Equivalents": "",
-        "Demos": [
-          {
-            "Title": "Toolbar Customization",
-            "Name": "ToolbarCustomization",
-            "DocUrl": "Guide/UI_Components/HtmlEditor/Toolbar/Built-In_Controls/",
-            "Widget": "HtmlEditor",
-            "DemoType": "Web"
-          }
-        ]
-      },
-      {
         "Name": "Mentions",
         "Equivalents": "",
         "Demos": [
@@ -2033,6 +2066,134 @@
             "MvcDescription": "",
             "NetCoreDescription": "",
             "MvcAdditionalFiles": [],
+            "DemoType": "Web"
+          }
+        ]
+      },
+      {
+        "Name": "AI-powered Text Editing",
+        "Equivalents": "AI, text editing, text editor",
+        "Demos": [
+          {
+            "Title": "AI-powered Text Editing",
+            "Name": "AITextEditing",
+            "Widget": "HtmlEditor",
+            "DemoType": "Web",
+            "Badge": "Roadmap",
+            "RoadmapSurveyUrl": "https://www.devexpress.com/support/surveys/devextreme-roadmap-ai.xml"
+          }
+        ]
+      },
+      {
+        "Name": "Markdown Support",
+        "Equivalents": "",
+        "Demos": [
+          {
+            "Title": "Markdown Support",
+            "Name": "MarkdownSupport",
+            "Widget": "HtmlEditor",
+            "DemoType": "Web",
+            "Modules": "unified",
+            "Badge": "Updated"
+          }
+        ]
+      },
+      {
+        "Name": "Toolbar Customization",
+        "Equivalents": "",
+        "Demos": [
+          {
+            "Title": "Toolbar Customization",
+            "Name": "ToolbarCustomization",
+            "DocUrl": "Guide/UI_Components/HtmlEditor/Toolbar/Built-In_Controls/",
+            "Widget": "HtmlEditor",
+            "DemoType": "Web"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "Name": "Chat",
+    "Breadcrumb": true,
+    "Equivalents": "dxChat, dx-chat, chat",
+    "Badge": "New",
+    "Groups": [
+      {
+        "Name": "Overview",
+        "Equivalents": "Human-to-Human Interaction, Peer-to-Peer Communication, P2P",
+        "Demos": [
+          {
+            "Title": "Overview",
+            "Name": "Overview",
+            "DocUrl": "Guide/UI_Components/Chat/Overview/",
+            "Widget": "Chat",
+            "DemoType": "Web",
+            "MvcAdditionalFiles": [
+              "/Models/SampleData/ChatData.cs",
+              "/Models/Chat/User.cs",
+              "/Models/Chat/Message.cs",
+              "/ViewModels/ChatViewModel.cs"
+            ]
+          }
+        ]
+      },
+      {
+        "Name": "Message Editing",
+        "Equivalents": "Editing",
+        "Demos": [
+          {
+            "Title": "Message Editing",
+            "Name": "MessageEditing",
+            "Widget": "Chat",
+            "DemoType": "Web",
+            "Badge": "Roadmap",
+            "RoadmapSurveyUrl": "https://www.devexpress.com/support/surveys/devextreme-roadmap-messages.xml"
+          }
+        ]
+      },
+      {
+        "Name": "Image Rendering",
+        "Equivalents": "",
+        "Demos": [
+          {
+            "Title": "Image Rendering",
+            "Name": "ImageRendering",
+            "Widget": "Chat",
+            "DemoType": "Web",
+            "Badge": "Roadmap",
+            "RoadmapSurveyUrl": "https://www.devexpress.com/support/surveys/devextreme-roadmap-image-rendering.xml"
+          }
+        ]
+      },
+      {
+        "Name": "Customization",
+        "Equivalents": "Settings, Options",
+        "Demos": [
+          {
+            "Title": "Customization",
+            "Name": "Customization",
+            "DocUrl": "Guide/UI_Components/Chat/Customization/",
+            "Widget": "Chat",
+            "DemoType": "Web",
+            "MvcAdditionalFiles": [
+              "/Models/SampleData/ChatData.cs",
+              "/Models/Chat/User.cs",
+              "/Models/Chat/Message.cs",
+              "/ViewModels/ChatViewModel.cs"
+            ]
+          }
+        ]
+      },
+      {
+        "Name": "AI and Chatbot Integration",
+        "Equivalents": "AI, Chatbot, Assistant",
+        "Demos": [
+          {
+            "Title": "AI and Chatbot Integration",
+            "Name": "AIAndChatbotIntegration",
+            "Widget": "Chat",
+            "Modules": "html-react-parser,openai,unified",
             "DemoType": "Web"
           }
         ]
@@ -2275,7 +2436,7 @@
     "Groups": [
       {
         "Name": "Overview",
-        "Equivalents": "",
+        "Equivalents": "Human-to-Human Interaction, Peer-to-Peer Communication, P2P",
         "Demos": [
           {
             "Title": "Overview",
@@ -3958,6 +4119,37 @@
         ]
       },
       {
+        "Name": "Stepper",
+        "Equivalents": "dxStepper, dx-stepper",
+        "Demos": [
+          {
+            "Title": "Overview",
+            "Name": "Overview",
+            "Widget": "Stepper",
+            "DemoType": "Web",
+            "Badge": "Roadmap",
+            "RoadmapSurveyUrl": "https://www.devexpress.com/support/surveys/devextreme-roadmap-stepper.xml"
+          }
+        ]
+      },
+      {
+        "Name": "Pagination",
+        "Equivalents": "",
+        "Demos": [
+          {
+            "Title": "Overview",
+            "Name": "Overview",
+            "DocUrl": "",
+            "Widget": "Pagination",
+            "MvcDescription": "",
+            "NetCoreDescription": "",
+            "MvcAdditionalFiles": [],
+            "DemoType": "Web",
+            "Badge": "New"
+          }
+        ]
+      },
+      {
         "Name": "Tree View",
         "Breadcrumb": true,
         "Equivalents": "TreeView, TreeList, dxTreeView, dx-tree-view",
@@ -5389,19 +5581,22 @@
           {
             "Title": "Providers and Types",
             "Name": "ProvidersAndTypes",
-            "Widget": "Map"
+            "Widget": "Map",
+            "Badge": "Updated"
           },
           {
             "Title": "Markers",
             "Name": "Markers",
             "DocUrl": "Guide/UI_Components/Map/Configure_Markers/",
-            "Widget": "Map"
+            "Widget": "Map",
+            "Badge": "Updated"
           },
           {
             "Title": "Routes",
             "Name": "Routes",
             "DocUrl": "Guide/UI_Components/Map/Configure_Routes/",
-            "Widget": "Map"
+            "Widget": "Map",
+            "Badge": "Updated"
           }
         ]
       },

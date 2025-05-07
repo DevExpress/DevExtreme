@@ -20,7 +20,7 @@ import { DOCUMENT } from '@angular/common';
 
 import { HorizontalAlignment, HorizontalEdge, Position, VerticalAlignment, VerticalEdge } from 'devextreme/common';
 import { ChartsAxisLabelOverlap, DashStyle, Font, LabelOverlap, LabelPosition, RelativePosition, TextOverflow, WordWrap } from 'devextreme/common/charts';
-import { Format } from 'devextreme/localization';
+import { Format } from 'devextreme/common/core/localization';
 import { LabelLocation } from 'devextreme/ui/form';
 import { ChartLabelDisplayMode } from 'devextreme/viz/chart';
 import { CircularGaugeLabelOverlap } from 'devextreme/viz/circular_gauge';
@@ -228,10 +228,10 @@ export class DxoLabelComponent extends NestedOption implements AfterViewInit, On
     }
 
     @Input()
-    get border(): { color?: string, dashStyle?: DashStyle, visible?: boolean, width?: number } | { color?: string, visible?: boolean, width?: number } {
+    get border(): { color?: string | undefined, dashStyle?: DashStyle | undefined, visible?: boolean, width?: number } | { color?: string, dashStyle?: DashStyle, visible?: boolean, width?: number } | { color?: string | undefined, visible?: boolean | undefined, width?: number | undefined } {
         return this._getOption('border');
     }
-    set border(value: { color?: string, dashStyle?: DashStyle, visible?: boolean, width?: number } | { color?: string, visible?: boolean, width?: number }) {
+    set border(value: { color?: string | undefined, dashStyle?: DashStyle | undefined, visible?: boolean, width?: number } | { color?: string, dashStyle?: DashStyle, visible?: boolean, width?: number } | { color?: string | undefined, visible?: boolean | undefined, width?: number | undefined }) {
         this._setOption('border', value);
     }
 

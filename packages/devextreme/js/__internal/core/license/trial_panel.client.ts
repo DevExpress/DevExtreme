@@ -29,6 +29,7 @@ const componentNames = {
 };
 const attributeNames = {
   buyNow: 'buy-now',
+  licensingDoc: 'licensing-doc',
   version: 'version',
 };
 const commonStyles = {
@@ -186,7 +187,9 @@ class DxLicense extends SafeHTMLElement {
     contentContainer.style.cssText = this._contentStyles;
     contentContainer.append(
       this._createSpan('For evaluation purposes only. Redistribution prohibited. Please '),
-      this._createLink('purchase a license', this.getAttribute(attributeNames.buyNow) as string),
+      this._createLink('register', this.getAttribute(attributeNames.licensingDoc) as string),
+      this._createSpan(' an existing license or '),
+      this._createLink('purchase a new license', this.getAttribute(attributeNames.buyNow) as string),
       this._createSpan(` to continue use of DevExpress product libraries (v${this.getAttribute(attributeNames.version)}).`),
     );
     return contentContainer;
@@ -254,6 +257,11 @@ class DxLicenseTrigger extends SafeHTMLElement {
         this.getAttribute(attributeNames.buyNow) as string,
       );
 
+      license.setAttribute(
+        attributeNames.licensingDoc,
+        this.getAttribute(attributeNames.licensingDoc) as string,
+      );
+
       license.setAttribute(DATA_PERMANENT_ATTRIBUTE, 'true');
 
       document.body.prepend(license);
@@ -277,6 +285,7 @@ export function registerCustomComponents(customStyles?: CustomTrialPanelStyles):
 
 export function renderTrialPanel(
   buyNowUrl: string,
+  licensingDocUrl: string,
   version: string,
   customStyles?: CustomTrialPanelStyles,
 ): void {
@@ -285,6 +294,7 @@ export function renderTrialPanel(
   const trialPanelTrigger = document.createElement(componentNames.trigger);
 
   trialPanelTrigger.setAttribute(attributeNames.buyNow, buyNowUrl);
+  trialPanelTrigger.setAttribute(attributeNames.licensingDoc, licensingDocUrl);
   trialPanelTrigger.setAttribute(attributeNames.version, version);
 
   document.body.appendChild(trialPanelTrigger);

@@ -29,18 +29,18 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoHtmlEditorConverterComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get fromHtml(): Function {
+    get fromHtml(): ((value: string) => string) {
         return this._getOption('fromHtml');
     }
-    set fromHtml(value: Function) {
+    set fromHtml(value: ((value: string) => string)) {
         this._setOption('fromHtml', value);
     }
 
     @Input()
-    get toHtml(): Function {
+    get toHtml(): ((value: string) => string) {
         return this._getOption('toHtml');
     }
-    set toHtml(value: Function) {
+    set toHtml(value: ((value: string) => string)) {
         this._setOption('toHtml', value);
     }
 

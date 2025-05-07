@@ -30,7 +30,7 @@ import DxPieChart, {
   DxLabel,
   DxConnector,
   DxExport,
-  DxPieChartTypes,
+  type DxPieChartTypes,
 } from 'devextreme-vue/pie-chart';
 import { areas } from './data.ts';
 

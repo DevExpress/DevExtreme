@@ -7,7 +7,7 @@ import { generateRowsInfo, getBaseTableStyle } from './rows_generator';
 import { splitByPages } from './rows_splitting';
 import { drawCellsContent, drawCellsLines, drawGridLines, getDocumentStyles, setDocumentStyles, addNewPage } from './draw_utils';
 import { applyRtl, applyWordWrap, toPdfUnit } from './pdf_utils';
-import messageLocalization from '../../../localization/message';
+import messageLocalization from '../../../common/core/localization/message';
 import { ExportLoadPanel } from '../../common/export_load_panel';
 import { hasWindow } from '../../../core/utils/window';
 

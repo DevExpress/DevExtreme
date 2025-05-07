@@ -5,8 +5,8 @@ import 'generic_light.css!';
 import 'ui/data_grid';
 
 import { setupDataGridModules } from '../../helpers/dataGridMocks.js';
-import ArrayStore from 'data/array_store';
-import messageLocalization from 'localization/message';
+import ArrayStore from 'common/data/array_store';
+import messageLocalization from 'common/core/localization/message';
 import { prepareItems } from '__internal/grids/grid_core/m_export';
 
 QUnit.testStart(function() {

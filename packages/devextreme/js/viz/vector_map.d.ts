@@ -7,14 +7,17 @@ import {
 
 import {
     template,
-} from '../core/templates/template';
+    HorizontalAlignment,
+    SingleMultipleOrNone,
+    VerticalEdge,
+} from '../common';
 
 import {
     EventInfo,
     NativeEventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
-} from '../events/index';
+} from '../common/core/events';
 
 import {
     Format,
@@ -44,12 +47,6 @@ import {
     Palette,
     Font,
 } from '../common/charts';
-
-import {
-    HorizontalAlignment,
-    SingleMultipleOrNone,
-    VerticalEdge,
-} from '../common';
 
 export {
     SingleMultipleOrNone,
@@ -447,7 +444,7 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
        * @docid
        * @default undefined
        */
-      colorGroupingField?: string;
+      colorGroupingField?: string | undefined;
       /**
        * @docid
        * @default undefined
@@ -462,7 +459,7 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
        * @docid
        * @default undefined
        */
-      dataField?: string;
+      dataField?: string | undefined;
       /**
        * @docid
        * @type object|Store|DataSource|DataSourceOptions|string|Array<any>|null
@@ -576,7 +573,7 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
        * @docid
        * @default undefined
        */
-      sizeGroupingField?: string;
+      sizeGroupingField?: string | undefined;
       /**
        * @docid
        * @default undefined
@@ -595,7 +592,7 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
      * @default undefined
      * @public
      */
-    legends?: Array<Legend>;
+    legends?: Array<Legend> | undefined;
     /**
      * @docid
      * @type object
@@ -726,7 +723,7 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
      * @notUsedInTheme
      * @public
      */
-    customizeAnnotation?: ((annotation: dxVectorMapAnnotationConfig | any) => dxVectorMapAnnotationConfig);
+    customizeAnnotation?: ((annotation: dxVectorMapAnnotationConfig | any) => dxVectorMapAnnotationConfig) | undefined;
 }
 
 /**
@@ -741,7 +738,7 @@ export interface dxVectorMapAnnotationConfig extends dxVectorMapCommonAnnotation
      * @default undefined
      * @public
      */
-    name?: string;
+    name?: string | undefined;
 }
 
 /**
@@ -764,21 +761,21 @@ export interface dxVectorMapCommonAnnotationConfig extends BaseWidgetAnnotationC
      * @notUsedInTheme
      * @public
      */
-    customizeTooltip?: ((annotation: dxVectorMapAnnotationConfig | any) => any);
+    customizeTooltip?: ((annotation: dxVectorMapAnnotationConfig | any) => any) | undefined;
     /**
      * @docid
      * @default undefined
      * @type_function_return string|SVGElement|jQuery
      * @public
      */
-    template?: template | ((annotation: dxVectorMapAnnotationConfig | any, element: SVGGElement) => string | UserDefinedElement<SVGElement>);
+    template?: template | ((annotation: dxVectorMapAnnotationConfig | any, element: SVGGElement) => string | UserDefinedElement<SVGElement>) | undefined;
     /**
      * @docid
      * @type_function_return string|Element|jQuery
      * @default undefined
      * @public
      */
-    tooltipTemplate?: template | ((annotation: dxVectorMapAnnotationConfig | any, element: DxElement) => string | UserDefinedElement);
+    tooltipTemplate?: template | ((annotation: dxVectorMapAnnotationConfig | any, element: DxElement) => string | UserDefinedElement) | undefined;
 }
 
 /**
@@ -816,7 +813,7 @@ export type Legend = BaseLegend & {
      * @default undefined
      * @public
      */
-    markerColor?: string;
+    markerColor?: string | undefined;
     /**
      * @docid dxVectorMapOptions.legends.markerShape
      * @default "square"
@@ -836,7 +833,7 @@ export type Legend = BaseLegend & {
      * @type_function_return string|SVGElement|jQuery
      * @public
      */
-    markerTemplate?: template | ((legendItem: LegendItem, element: SVGGElement) => string | UserDefinedElement<SVGElement>);
+    markerTemplate?: template | ((legendItem: LegendItem, element: SVGGElement) => string | UserDefinedElement<SVGElement>) | undefined;
     /**
      * @docid dxVectorMapOptions.legends.source
      * @notUsedInTheme
@@ -866,7 +863,7 @@ export type Tooltip = BaseWidgetTooltip & {
      * @default undefined
      * @public
      */
-    contentTemplate?: template | ((info: MapLayerElement, element: DxElement) => string | UserDefinedElement);
+    contentTemplate?: template | ((info: MapLayerElement, element: DxElement) => string | UserDefinedElement) | undefined;
     /**
      * @docid dxVectorMapOptions.tooltip.customizeTooltip
      * @type_function_return object
@@ -874,7 +871,7 @@ export type Tooltip = BaseWidgetTooltip & {
      * @notUsedInTheme
      * @public
      */
-    customizeTooltip?: ((info: MapLayerElement) => any);
+    customizeTooltip?: ((info: MapLayerElement) => any) | undefined;
     /**
      * @docid dxVectorMapOptions.tooltip.format
      * @hidden

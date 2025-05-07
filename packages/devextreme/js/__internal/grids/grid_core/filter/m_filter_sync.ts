@@ -122,9 +122,13 @@ const updateFilterRowCondition = function (columnsController, column, condition)
   const filterValue = condition?.[2];
   const filterOperations = column.filterOperations || column.defaultFilterOperations;
 
-  if ((!filterOperations || filterOperations.indexOf(selectedFilterOperation) >= 0 || selectedFilterOperation === column.defaultFilterOperation)
-          && FILTER_ROW_OPERATIONS.includes(selectedFilterOperation) && filterValue !== null) {
-    if (selectedFilterOperation === column.defaultFilterOperation && !isDefined(column.selectedFilterOperation)) {
+  const selectedOperationExists = !filterOperations || filterOperations.indexOf(selectedFilterOperation) >= 0;
+  const defaultOperationSelected = selectedFilterOperation === column.defaultFilterOperation;
+  const builtInOperationSelected = FILTER_ROW_OPERATIONS.includes(selectedFilterOperation);
+  const filterValueNotNullOrEmpty = filterValue !== null && filterValue !== '';
+
+  if ((selectedOperationExists || defaultOperationSelected) && builtInOperationSelected && filterValueNotNullOrEmpty) {
+    if (defaultOperationSelected && !isDefined(column.selectedFilterOperation)) {
       selectedFilterOperation = column.selectedFilterOperation;
     }
     filterRowOptions = {

@@ -1,6 +1,6 @@
 import $ from '../../core/renderer';
 import Widget from '../widget/ui.widget';
-import messageLocalization from '../../localization/message';
+import messageLocalization from '../../common/core/localization/message';
 
 import Popup from '../popup/ui.popup';
 import { extend } from '../../core/utils/extend';

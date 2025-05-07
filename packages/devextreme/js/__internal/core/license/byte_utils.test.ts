@@ -1,4 +1,6 @@
 /* eslint-disable max-len */
+import { describe, expect, it } from '@jest/globals';
+
 import {
   base64ToBytes,
   bytesToHex,

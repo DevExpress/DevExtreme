@@ -5,8 +5,10 @@ import domAdapter from '__internal/core/m_dom_adapter';
 import resizeCallbacks from '__internal/core/utils/m_resize_callbacks';
 import typeUtils from 'core/utils/type';
 import { extend } from 'core/utils/extend';
-import visibilityEventsModule from 'events/visibility_change';
-import { EDITORS_WITHOUT_LABELS } from '__internal/ui/form/m_form.layout_manager.utils';
+import visibilityEventsModule from 'common/core/events/visibility_change';
+import {
+    EDITORS_WITHOUT_LABELS,
+} from '__internal/ui/form/m_form.layout_manager.utils';
 import 'generic_light.css!';
 import $ from 'jquery';
 import 'ui/autocomplete';
@@ -20,6 +22,10 @@ import 'ui/range_slider';
 import windowModule from '__internal/core/utils/m_window';
 import Form from 'ui/form';
 import TextEditorBase from 'ui/text_box/ui.text_editor.base.js';
+import {
+    TEXTEDITOR_INPUT_CLASS
+} from '__internal/ui/text_box/m_text_editor.base';
+
 
 import {
     FIELD_ITEM_CLASS,
@@ -42,14 +48,11 @@ import {
     renderLabel,
 } from '__internal/ui/form/components/m_label';
 
-const EDITOR_LABEL_CLASS = 'dx-texteditor-label';
-const EDITOR_INPUT_CLASS = 'dx-texteditor-input';
-const FIELD_ITEM_HELP_TEXT_CLASS = 'dx-field-item-help-text';
-
 import { TOOLBAR_CLASS } from '__internal/ui/toolbar/m_constants';
 
 import 'ui/html_editor';
 import '../../helpers/ignoreQuillTimers.js';
+import pointerMock from '../../helpers/pointerMock.js';
 import 'ui/lookup';
 import 'ui/radio_group';
 import 'ui/tag_box';
@@ -60,12 +63,18 @@ import themes from 'ui/themes';
 import registerKeyHandlerTestHelper from '../../helpers/registerKeyHandlerTestHelper.js';
 import responsiveBoxScreenMock from '../../helpers/responsiveBoxScreenMock.js';
 import { isDefined } from 'core/utils/type.js';
+import { TABPANEL_CLASS } from '__internal/ui/tab_panel/tab_panel';
 
 const INVALID_CLASS = 'dx-invalid';
 const FORM_GROUP_CONTENT_CLASS = 'dx-form-group-content';
 const MULTIVIEW_ITEM_CONTENT_CLASS = 'dx-multiview-item-content';
 const LAST_COL_CLASS = 'dx-last-col';
 const SLIDER_LABEL = 'dx-slider-label';
+const EDITOR_LABEL_CLASS = 'dx-texteditor-label';
+const EDITOR_INPUT_CLASS = 'dx-texteditor-input';
+const FIELD_ITEM_HELP_TEXT_CLASS = 'dx-field-item-help-text';
+const DROP_DOWN_EDITOR_BUTTON_CLASS = 'dx-dropdowneditor-button';
+const TEXTBOX_CLASS = 'dx-textbox';
 
 QUnit.testStart(function() {
     const markup =
@@ -93,9 +102,9 @@ if(device.current().deviceType === 'desktop') {
     });
 }
 
-QUnit.testInActiveWindow('Form\'s inputs saves value on refresh', function(assert) {
+QUnit.testInActiveWindow('Form\'s textbox input saves value on refresh (T404958)', function(assert) {
     let screen = 'md';
-    const $formContainer = $('#form').dxForm({
+    const $form = $('#form').dxForm({
         screenByWidth: function() {
             return screen;
         },
@@ -111,7 +120,7 @@ QUnit.testInActiveWindow('Form\'s inputs saves value on refresh', function(asser
         ]
     });
 
-    $('#form input')
+    $form.find(`.${TEXTEDITOR_INPUT_CLASS}`)
         .first()
         .focus()
         .val('test');
@@ -119,9 +128,40 @@ QUnit.testInActiveWindow('Form\'s inputs saves value on refresh', function(asser
     screen = 'sm';
     resizeCallbacks.fire();
 
-    const formData = $formContainer.dxForm('instance').option('formData');
+    const formData = $form.dxForm('instance').option('formData');
 
-    assert.deepEqual(formData, { name: 'test' }, 'value updates');
+    assert.deepEqual(formData, { name: 'test' }, 'textbox value updates');
+});
+
+QUnit.testInActiveWindow('Form\'s textarea input saves value on refresh (T404958)', function(assert) {
+    let screen = 'md';
+    const $form = $('#form').dxForm({
+        screenByWidth: function() {
+            return screen;
+        },
+        colCountByScreen: {
+            sm: 1,
+            md: 2
+        },
+        items: [
+            {
+                dataField: 'name',
+                editorType: 'dxTextArea'
+            }
+        ]
+    });
+
+    $form.find(`.${TEXTEDITOR_INPUT_CLASS}`)
+        .first()
+        .focus()
+        .val('test');
+
+    screen = 'sm';
+    resizeCallbacks.fire();
+
+    const formData = $form.dxForm('instance').option('formData');
+
+    assert.deepEqual(formData, { name: 'test' }, 'textarea value updates');
 });
 
 QUnit.test('Check field width on render form with colspan', function(assert) {
@@ -644,7 +684,7 @@ QUnit.test('Check aria-labelledby attribute for editors label', function(assert)
 });
 
 QUnit.test('field1.required -> form.validate() -> form.option("onFieldDataChanged", "newHandler") -> check form is not re-rendered (T1014577)', function(assert) {
-    const checkEditorIsInvalid = (form) => form.$element().find('.dx-textbox').hasClass(INVALID_CLASS);
+    const checkEditorIsInvalid = (form) => form.$element().find(`.${TEXTBOX_CLASS}`).hasClass(INVALID_CLASS);
     const form = $('#form').dxForm({
         formData: { field1: '' },
         items: [ {
@@ -1855,8 +1895,8 @@ QUnit.test('Align with "" required mark, T1031458', function(assert) {
         }]
     });
 
-    const $labelText = $testContainer.find('.dx-field-item-label-text');
-    const $textBox = $testContainer.find('.dx-textbox');
+    const $labelText = $testContainer.find(`.${FIELD_ITEM_LABEL_TEXT_CLASS}`);
+    const $textBox = $testContainer.find(`.${TEXTBOX_CLASS}`);
 
     assert.roughEqual(getWidth($labelText), 11, 3, 'labelsContent.width');
     assert.roughEqual($textBox.offset().left, $labelText.offset().left + 25, 3, 'textBox.left');
@@ -1872,8 +1912,8 @@ QUnit.test('Align with " " required mark, T1031458', function(assert) {
         }]
     });
 
-    const $labelText = $testContainer.find('.dx-field-item-label-text');
-    const $textBox = $testContainer.find('.dx-textbox');
+    const $labelText = $testContainer.find(`.${FIELD_ITEM_LABEL_TEXT_CLASS}`);
+    const $textBox = $testContainer.find(`.${TEXTBOX_CLASS}`);
 
     assert.roughEqual(getWidth($labelText), 11, 3, 'labelsContent.width');
     assert.roughEqual($textBox.offset().left, $labelText.offset().left + 25, 3, 'textBox.left');
@@ -1889,8 +1929,8 @@ QUnit.test('Align with "!" required mark, T1031458', function(assert) {
         }]
     });
 
-    const $labelText = $testContainer.find('.dx-field-item-label-text');
-    const $textBox = $testContainer.find('.dx-textbox');
+    const $labelText = $testContainer.find(`.${FIELD_ITEM_LABEL_TEXT_CLASS}`);
+    const $textBox = $testContainer.find(`.${TEXTBOX_CLASS}`);
 
     assert.roughEqual(getWidth($labelText), 11, 3, 'labelsContent.width');
     assert.roughEqual($textBox.offset().left, $labelText.offset().left + 29, 3, 'textBox.left');
@@ -1906,8 +1946,8 @@ QUnit.test('Align with "×" required mark, T1031458', function(assert) {
         }]
     });
 
-    const $labelText = $testContainer.find('.dx-field-item-label-text');
-    const $textBox = $testContainer.find('.dx-textbox');
+    const $labelText = $testContainer.find(`.${FIELD_ITEM_LABEL_TEXT_CLASS}`);
+    const $textBox = $testContainer.find(`.${TEXTBOX_CLASS}`);
 
     assert.roughEqual(getWidth($labelText), 11, 3, 'labelsContent.width');
     assert.roughEqual($textBox.offset().left, $labelText.offset().left + 35, 3, 'textBox.left');
@@ -4471,6 +4511,25 @@ QUnit.test('TagBox.SelectionChanged is raised once if formData is wrapped into a
 
         assert.strictEqual(form.option('isDirty'), false, 'pristine after setting initial value');
     });
+
+    QUnit.test(`form should not be marked as dirty after calling the reset(editorsData) method and resetting ${editorData[0]} to initial value, which is equal to the current value (T1279884)`, function(assert) {
+        const editorName = editorData[0];
+        const newEditorValue = editorData[1];
+        const initialFormData = editorData[2];
+
+        const form = $('#form').dxForm({
+            formData: initialFormData,
+            items: [{ dataField: editorName, editorType: editorName }]
+        }).dxForm('instance');
+
+        form.updateData(editorName, newEditorValue);
+
+        assert.strictEqual(form.option('isDirty'), true, 'is dirty after update');
+
+        form.reset({ [editorName]: newEditorValue });
+
+        assert.strictEqual(form.option('isDirty'), false, 'pristine after setting initial value');
+    });
 });
 
 QUnit.test('nested form items should affect isDirty', function(assert) {
@@ -4538,6 +4597,137 @@ QUnit.test('form should be dirty when some editors are dirty', function(assert) 
     form.updateData('Address', originalAddress);
 
     assert.strictEqual(form.option('isDirty'), false, 'form is not dirty when all editors are back to pristine');
+});
+
+[true, false].forEach((openOnFieldClick) => {
+    [true, false, undefined].forEach((hideOnOutsideClick) => {
+        QUnit.test(`Opened DropDownList must hide on input label click, openOnFieldClick: ${openOnFieldClick}, hideOnOutsideClick: ${hideOnOutsideClick} (T1257945)`, function(assert) {
+            const dropDownOptions = hideOnOutsideClick === undefined ? {} : { hideOnOutsideClick };
+            const $form = $('#form').dxForm({
+                formData: { CustomerID: 'VINET' },
+                items: [{
+                    itemType: 'group',
+                    colCount: 2,
+                    items: [{
+                        dataField: 'CustomerID',
+                        editorType: 'dxSelectBox',
+                        editorOptions: {
+                            items: ['VINET', 'VALUE', 'VINS'],
+                            value: '',
+                            openOnFieldClick,
+                            dropDownOptions,
+                        },
+                    }],
+                }],
+            });
+
+            const $dropDownButton = $form.find(`.${DROP_DOWN_EDITOR_BUTTON_CLASS}`);
+
+            pointerMock($dropDownButton).click();
+
+            const editorInstance = $form.dxForm('instance').getEditor('CustomerID');
+
+            assert.true(editorInstance.option('opened'), 'drop down list is visible');
+
+            const $label = $form.find(`.${FIELD_ITEM_LABEL_TEXT_CLASS}`);
+
+            pointerMock($label).click();
+
+            // NOTE: In the real environment, clicking the label triggers a click on the editor,
+            // toggling the popup visibility if openOnFieldClick=true.
+            // This assertion only takes hideOnOutsideClick into account
+            switch(hideOnOutsideClick) {
+                case true:
+                    assert.false(editorInstance.option('opened'), 'drop down list is hidden by outside click');
+                    break;
+                case false:
+                    assert.true(editorInstance.option('opened'), `drop down list ${openOnFieldClick ? 'is hidden by triggered input click' : 'is visible'}`);
+                    break;
+                default:
+                    assert.strictEqual(editorInstance.option('opened'), openOnFieldClick, `drop down list is hidden by ${openOnFieldClick ? 'triggered input click' : 'outside click'}`);
+            }
+        });
+    });
+});
+
+QUnit.test('DropDownEditor popup must toggle on input or dropDownButton click if openOnFieldClick = true', function(assert) {
+    const $form = $('#form').dxForm({
+        formData: { CustomerID: 'VINET' },
+        items: [{
+            itemType: 'group',
+            colCount: 2,
+            items: [{
+                dataField: 'CustomerID',
+                editorType: 'dxSelectBox',
+                editorOptions: {
+                    items: ['VINET', 'VALUE', 'VINS'],
+                    value: '',
+                    openOnFieldClick: true,
+                },
+            }],
+        }],
+    });
+
+    const $dropDownEditorInput = $form.find(`.${EDITOR_INPUT_CLASS}`);
+    const $dropDownButton = $form.find(`.${DROP_DOWN_EDITOR_BUTTON_CLASS}`);
+
+    pointerMock($dropDownEditorInput).click();
+
+    const editorInstance = $form.dxForm('instance').getEditor('CustomerID');
+
+    assert.true(editorInstance.option('opened'), 'drop down list is visible');
+
+    pointerMock($dropDownEditorInput).click();
+
+    assert.false(editorInstance.option('opened'), 'drop down list is hidden');
+
+    pointerMock($dropDownButton).click();
+
+    assert.true(editorInstance.option('opened'), 'drop down list is visible');
+
+    pointerMock($dropDownButton).click();
+
+    assert.false(editorInstance.option('opened'), 'drop down list is hidden');
+});
+
+QUnit.test('DropDownEditor popup must toggle on dropDownButton click if openOnFieldClick = false', function(assert) {
+    const $form = $('#form').dxForm({
+        formData: { CustomerID: 'VINET' },
+        items: [{
+            itemType: 'group',
+            colCount: 2,
+            items: [{
+                dataField: 'CustomerID',
+                editorType: 'dxSelectBox',
+                editorOptions: {
+                    items: ['VINET', 'VALUE', 'VINS'],
+                    value: '',
+                    openOnFieldClick: false,
+                },
+            }],
+        }],
+    });
+
+    const $dropDownEditorInput = $form.find(`.${EDITOR_INPUT_CLASS}`);
+    const $dropDownButton = $form.find(`.${DROP_DOWN_EDITOR_BUTTON_CLASS}`);
+
+    pointerMock($dropDownEditorInput).click();
+
+    const editorInstance = $form.dxForm('instance').getEditor('CustomerID');
+
+    assert.false(editorInstance.option('opened'), 'drop down list is hidden');
+
+    pointerMock($dropDownButton).click();
+
+    assert.true(editorInstance.option('opened'), 'drop down list is visible');
+
+    pointerMock($dropDownEditorInput).click();
+
+    assert.true(editorInstance.option('opened'), 'drop down list is visible');
+
+    pointerMock($dropDownButton).click();
+
+    assert.false(editorInstance.option('opened'), 'drop down list is hidden');
 });
 
 QUnit.module('reset', () => {
@@ -4783,39 +4973,124 @@ QUnit.module('reset', () => {
         assert.strictEqual(summaryItemsAfterValidate.length, 2, 'form has validation summary after validation');
     });
 
-    QUnit.test('DropDownBox should not lose its value if form resized (T1196835)', function(assert) {
-        let screen = 'lg';
+    [
+        'dxSelectBox',
+        'dxDropDownBox'
+    ].forEach((editorType) => {
+        QUnit.test(`Focused ${editorType} should not lose its value when the form is resized (T1196835)`, function(assert) {
+            let screen = 'lg';
 
-        const value = 'VINET';
-        const text = 'Vins et alcools Chevalier (France)';
-        const $form = $('#form').dxForm({
-            formData: { CustomerID: value },
-            screenByWidth: function() { return screen; },
-            colCountByScreen: {
-                sm: 1,
-                lg: 2
-            },
-            items: [
-                {
-                    itemType: 'simple',
-                    cssClass: 'test-ddbox',
-                    dataField: 'CustomerID',
-                    editorOptions: {
-                        displayExpr: 'Text',
-                        valueExpr: 'Value',
-                        showClearButton: true,
-                        dataSource: [{ Value: value, Text: text }],
-                    },
-                    editorType: 'dxDropDownBox',
+            const name = 'VINET';
+            const value = 'Vins et alcools Chevalier (France)';
+            const form = $('#form').dxForm({
+                formData: { name: name },
+                screenByWidth: function() { return screen; },
+                colCountByScreen: {
+                    sm: 1,
+                    lg: 2
                 },
-            ]
+                items: [
+                    {
+                        itemType: 'simple',
+                        dataField: 'name',
+                        editorOptions: {
+                            displayExpr: 'Text',
+                            valueExpr: 'Value',
+                            showClearButton: true,
+                            dataSource: [{ Value: name, Text: value }],
+                        },
+                        editorType,
+                    },
+                ]
+            }).dxForm('instance');
+
+            const dropDownEditor = form.getEditor('name');
+
+            screen = 'sm';
+            dropDownEditor.focus();
+            resizeCallbacks.fire();
+
+            assert.strictEqual($(form.getEditor('name').field()).val(), value, `${editorType} contains expected value`);
         });
-        const $input = $form.find(`.test-ddbox .${EDITOR_INPUT_CLASS}`);
 
-        screen = 'sm';
-        $input.focus();
-        resizeCallbacks.fire();
+        QUnit.test(`Focused ${editorType} inside a tabbed item should not lose its value when the form is resized (T1196835)`, function(assert) {
+            let screen = 'lg';
 
-        assert.strictEqual($input.val(), text, 'ddBox contain correct value');
+            const name = 'VINET';
+            const value = 'Vins et alcools Chevalier (France)';
+            const form = $('#form').dxForm({
+                formData: { name: name },
+                screenByWidth: function() { return screen; },
+                colCountByScreen: {
+                    sm: 1,
+                    lg: 2
+                },
+                items: [{
+                    itemType: 'tabbed',
+                    tabs: [{
+                        title: 'Phone',
+                        colCount: 1,
+                        items: [{
+                            itemType: 'simple',
+                            dataField: 'name',
+                            editorOptions: {
+                                displayExpr: 'Text',
+                                valueExpr: 'Value',
+                                showClearButton: true,
+                                dataSource: [{ Value: name, Text: value }],
+                            },
+                            editorType,
+                        }],
+                    }],
+                }],
+            }).dxForm('instance');
+
+            const dropDownEditor = form.getEditor('name');
+
+            screen = 'sm';
+            dropDownEditor.focus();
+            resizeCallbacks.fire();
+
+            assert.strictEqual($(form.getEditor('name').field()).val(), value, `${editorType} contains expected value`);
+        });
+
+        QUnit.test(`${editorType} inside a tabbed item and focused tab should not lose its value when the form is resized (T1196835)`, function(assert) {
+            let screen = 'lg';
+
+            const name = 'VINET';
+            const value = 'Vins et alcools Chevalier (France)';
+            const form = $('#form').dxForm({
+                formData: { name: name },
+                screenByWidth: function() { return screen; },
+                colCountByScreen: {
+                    sm: 1,
+                    lg: 2
+                },
+                items: [{
+                    itemType: 'tabbed',
+                    tabs: [{
+                        title: 'Phone',
+                        colCount: 1,
+                        items: [{
+                            itemType: 'simple',
+                            dataField: 'name',
+                            editorOptions: {
+                                displayExpr: 'Text',
+                                valueExpr: 'Value',
+                                showClearButton: true,
+                                dataSource: [{ Value: name, Text: value }],
+                            },
+                            editorType,
+                        }],
+                    }],
+                }],
+            }).dxForm('instance');
+
+            screen = 'sm';
+            $(form.element()).find(`.${TABPANEL_CLASS}`).focus();
+            resizeCallbacks.fire();
+
+            assert.strictEqual($(form.getEditor('name').field()).val(), value, `${editorType} contains expected value`);
+        });
     });
 });

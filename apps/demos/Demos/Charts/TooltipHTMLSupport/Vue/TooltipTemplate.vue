@@ -22,7 +22,7 @@
 withDefaults(defineProps<{
   info?: Record<string, any>
 }>(), {
-  info: () => ({}),
+  info: () => ({} as Record<string, any>),
 });
 
 const getImagePath = ({ data }) => `../../../../images/flags/${data.name.replace(/\s/, '')}.svg`;

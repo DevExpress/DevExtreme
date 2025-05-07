@@ -331,9 +331,9 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     this._createWorkSpaceScrollableElements();
   }
 
-  _toggleAllDayVisibility() { return noop(); }
+  _updateAllDayVisibility() { return noop(); }
 
-  _changeAllDayVisibility() { return noop(); }
+  _updateAllDayHeight() { return noop(); }
 
   _getDateHeaderTemplate() {
     return this.option('timeCellTemplate');

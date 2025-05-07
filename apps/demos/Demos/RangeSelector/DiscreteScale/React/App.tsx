@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react';
-import RangeSelector, { Chart, RangeSelectorTypes, Series } from 'devextreme-react/range-selector';
+import RangeSelector, { Chart, type RangeSelectorTypes, Series } from 'devextreme-react/range-selector';
 import { dataSource } from './data.ts';
 
 const formatNumber = new Intl.NumberFormat('en-US', { minimumFractionDigits: 0 }).format;

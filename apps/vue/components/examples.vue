@@ -28,6 +28,9 @@
   <text-box-example/>
   <br/>
   <validator-example/>
+  <br/>
+  <check-box-example/>
+  <br/>
 </template>
   
 <script>
@@ -46,7 +49,8 @@ import ScrollViewExample from "./scroll-view-example";
 import TabPanelExample from "./tab-panel-example";
 import TextBoxExample from "./text-box-example";
 import ValidatorExample from "./validation-example";
-  
+import CheckBoxExample from "./check-box-example";
+
 export default {
   components: {
     AccessingInstanceExample,
@@ -63,7 +67,8 @@ export default {
     ScrollViewExample,
     TabPanelExample,
     TextBoxExample,
-    ValidatorExample
+    ValidatorExample,
+    CheckBoxExample
   }
 };
 </script>

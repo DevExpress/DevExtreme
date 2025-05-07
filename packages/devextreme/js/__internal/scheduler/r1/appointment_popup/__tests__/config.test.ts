@@ -1,3 +1,7 @@
+import {
+  afterAll,
+  describe, expect, it, jest,
+} from '@jest/globals';
 import devices from '@js/core/devices';
 
 import {
@@ -9,7 +13,7 @@ import {
 } from '../config';
 
 jest.mock('../../../../../core/utils/size', () => ({
-  ...jest.requireActual('../../../../../core/utils/size'),
+  ...jest.requireActual<any>('../../../../../core/utils/size'),
   getWidth: (): number => window.innerWidth,
 }));
 

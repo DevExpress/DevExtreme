@@ -50,7 +50,7 @@
 </template>
 <script setup lang="ts">
 import { computed, ref } from 'vue';
-import DxMenu from 'devextreme-vue/menu';
+import DxMenu, { type DxMenuTypes } from 'devextreme-vue/menu';
 import DxCheckBox from 'devextreme-vue/check-box';
 import DxSelectBox from 'devextreme-vue/select-box';
 import service from './data.ts';
@@ -67,7 +67,7 @@ const selectedFirstSubmenuModes = ref(showSubmenuModes[1].name);
 const showFirstSubmenuModes = computed(() => showSubmenuModes.find(
   ({ name }) => selectedFirstSubmenuModes.value === name,
 ));
-const orientation = ref('horizontal');
+const orientation = ref<DxMenuTypes.Orientation>('horizontal');
 const hideSubmenuOnMouseLeave = ref(false);
 const currentProduct = ref(null);
 

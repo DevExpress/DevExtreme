@@ -14,8 +14,8 @@ import {
 
 
 
-import { FieldChooserLayout } from 'devextreme/common';
 import { ApplyChangesMode } from 'devextreme/common/grids';
+import { FieldChooserLayout } from 'devextreme/common';
 
 import {
     NestedOptionHost,

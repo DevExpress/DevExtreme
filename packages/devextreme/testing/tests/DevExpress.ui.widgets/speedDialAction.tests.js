@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import config from 'core/config';
-import fx from 'animation/fx';
+import fx from 'common/core/animation/fx';
 import SpeedDialItem from '__internal/ui/speed_dial_action/m_speed_dial_item';
 import { logger } from 'core/utils/console';
 

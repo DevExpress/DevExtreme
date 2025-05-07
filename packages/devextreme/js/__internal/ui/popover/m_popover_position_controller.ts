@@ -1,12 +1,12 @@
-import positionUtils from '@js/animation/position';
+import positionUtils from '@js/common/core/animation/position';
 import type { dxElementWrapper } from '@js/core/renderer';
 // @ts-expect-error
 import { pairToObject } from '@js/core/utils/common';
 import { extend } from '@js/core/utils/extend';
 import { getHeight, getWidth } from '@js/core/utils/size';
 import { isDefined, isString } from '@js/core/utils/type';
-import { borderWidthStyles } from '@js/renovation/ui/resizable/utils';
 import { OverlayPositionController } from '@ts/ui/overlay/m_overlay_position_controller';
+import { borderWidthStyles } from '@ts/ui/resizable/utils';
 
 const WEIGHT_OF_SIDES = {
   left: -1,
@@ -93,9 +93,7 @@ class PopoverPositionController extends OverlayPositionController {
   }
 
   _isPopoverInside(): boolean {
-    // @ts-expect-error
     const my = positionUtils.setup.normalizeAlign(this._position.my);
-    // @ts-expect-error
     const at = positionUtils.setup.normalizeAlign(this._position.at);
 
     return my.h === at.h && my.v === at.v;
@@ -110,9 +108,7 @@ class PopoverPositionController extends OverlayPositionController {
   }
 
   _getDisplaySide(position) {
-    // @ts-expect-error
     const my = positionUtils.setup.normalizeAlign(position.my);
-    // @ts-expect-error
     const at = positionUtils.setup.normalizeAlign(position.at);
 
     const weightSign = WEIGHT_OF_SIDES[my.h] === WEIGHT_OF_SIDES[at.h] && WEIGHT_OF_SIDES[my.v] === WEIGHT_OF_SIDES[at.v] ? -1 : 1;

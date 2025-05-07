@@ -15,7 +15,7 @@ type FirstArgument<T> = T extends (...args: any) => any ? Parameters<T>[0]: neve
 
 let modulePrefix = '';
 // @ts-ignore
-if (window && window.config.packageConfigPaths) {
+if (window && window.config?.packageConfigPaths) {
   modulePrefix = '/app';
 }
 

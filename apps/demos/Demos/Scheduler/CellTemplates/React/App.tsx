@@ -1,7 +1,7 @@
 /* eslint-disable func-style */
 import React, { useCallback, useMemo, useState } from 'react';
 
-import Scheduler, { SchedulerTypes } from 'devextreme-react/scheduler';
+import Scheduler, { type SchedulerTypes } from 'devextreme-react/scheduler';
 import notify from 'devextreme/ui/notify';
 import { FormRef } from 'devextreme-react/form';
 import { data, holidays } from './data.ts';

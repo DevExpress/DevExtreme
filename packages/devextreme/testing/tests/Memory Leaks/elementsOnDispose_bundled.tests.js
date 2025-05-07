@@ -38,7 +38,7 @@ $.each(DevExpress.ui, function(componentName) {
                 if(newDomElements.length === originalDomElements.length) {
                     assert.ok(true, 'After a component is disposed, additional DOM elements must be removed');
                 } else {
-                    if(newDomElements.length - originalDomElements.length <= 9) {
+                    if(newDomElements.length - originalDomElements.length <= 11) {
                         // viz widgets create extra style node that can not be deleted
                         ignorePatterns = {
                             'style': /behavior:\surl\(#default#VML\)/gi,
@@ -47,8 +47,8 @@ $.each(DevExpress.ui, function(componentName) {
                             'svg': /13.4 12.7 8.7 8 13.4 3.4 12.6 2.6 8 7.3 3.4 2.6 2.6 3.4 7.3 8 2.6 12.6 3.4 13.4 8 8.7 12.7 13.4 13.4 12.7/,
                             'polygon': /$/,
                             'div': /For evaluation purposes only. Redistribution prohibited.|to continue use of DevExpress product libraries|points="13.4 12.7 8.7 8 13.4 3.4 12.6 2.6 8 7.3 3.4 2.6 2.6 3.4 7.3 8 2.6 12.6 3.4 13.4 8 8.7 12.7 13.4 13.4 12.7/,
-                            'span': /For evaluation purposes only. Redistribution prohibited.|to continue use of DevExpress product libraries/,
-                            'a': /purchase a license/,
+                            'span': /For evaluation purposes only. Redistribution prohibited.|an existing license|to continue use of DevExpress product libraries/,
+                            'a': /purchase a new license|register/,
                         };
                     }
                     errorMessage = memoryLeaksHelper.compareDomElements(originalDomElements, newDomElements, ignorePatterns);

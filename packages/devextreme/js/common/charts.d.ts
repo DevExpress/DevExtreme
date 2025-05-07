@@ -142,13 +142,13 @@ export type ScaleBreak = {
     * @default undefined
     * @public
     */
-    endValue?: number | Date | string;
+    endValue?: number | Date | string | undefined;
     /**
     * @docid
     * @default undefined
     * @public
     */
-    startValue?: number | Date | string;
+    startValue?: number | Date | string | undefined;
 };
 
 /**
@@ -219,7 +219,7 @@ export type TimeIntervalConfig = number | {
     weeks?: number;
     /** @docid VizTimeInterval.years */
     years?: number;
-} | TimeInterval;
+} | TimeInterval | undefined;
 
 /**
  * @public
@@ -247,11 +247,11 @@ export type VisualRange = {
     * @fires BaseWidgetOptions.onOptionChanged
     * @public
     */
-    endValue?: number | Date | string;
+    endValue?: number | Date | string | undefined;
     /**
     * @docid
     * @inherits VizTimeInterval
-    * @type number|object|Enums.TimeInterval
+    * @type number|object|Enums.TimeInterval|undefined
     * @default undefined
     * @public
     */
@@ -262,7 +262,7 @@ export type VisualRange = {
     * @fires BaseWidgetOptions.onOptionChanged
     * @public
     */
-    startValue?: number | Date | string;
+    startValue?: number | Date | string | undefined;
 };
 
 /**
@@ -295,13 +295,13 @@ export type ChartsColor = {
      * @default undefined
      * @public
      */
-    base?: string;
+    base?: string | undefined;
     /**
      * @docid
      * @default undefined
      * @public
      */
-    fillId?: string;
+    fillId?: string | undefined;
 };
 
 /**
@@ -331,13 +331,13 @@ export type GradientColor = {
    * @default undefined
    * @public
    */
-    offset: number | string;
+    offset: number | string | undefined;
    /**
    * @docid
    * @default undefined
    * @public
    */
-    color: string;
+    color: string | undefined;
 };
 
 /**
@@ -393,7 +393,7 @@ export interface SeriesPoint {
        * @default undefined
        * @propertyOf dxChartSeriesTypes.LineSeries,dxChartSeriesTypes.StackedLineSeries,dxChartSeriesTypes.FullStackedLineSeries,dxChartSeriesTypes.StackedSplineSeries,dxChartSeriesTypes.FullStackedSplineSeries,dxChartSeriesTypes.SplineSeries,dxChartSeriesTypes.StepLineSeries,dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.StackedSplineAreaSeries,dxChartSeriesTypes.FullStackedSplineAreaSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.ScatterSeries
        */
-      color?: string;
+      color?: string | undefined;
       /**
        * @docid dxChartSeriesTypes.CommonSeries.point.border.visible
        * @default false
@@ -413,7 +413,7 @@ export interface SeriesPoint {
      * @propertyOf dxChartSeriesTypes.LineSeries,dxChartSeriesTypes.StackedLineSeries,dxChartSeriesTypes.FullStackedLineSeries,dxChartSeriesTypes.StackedSplineSeries,dxChartSeriesTypes.FullStackedSplineSeries,dxChartSeriesTypes.SplineSeries,dxChartSeriesTypes.StepLineSeries,dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.StackedSplineAreaSeries,dxChartSeriesTypes.FullStackedSplineAreaSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.ScatterSeries
      * @public
      */
-    color?: string | ChartsColor;
+    color?: string | ChartsColor | undefined;
     /**
      * @docid dxChartSeriesTypes.CommonSeries.point.hoverMode
      * @default 'onlyPoint'
@@ -437,7 +437,7 @@ export interface SeriesPoint {
          * @default undefined
          * @propertyOf dxChartSeriesTypes.LineSeries,dxChartSeriesTypes.StackedLineSeries,dxChartSeriesTypes.FullStackedLineSeries,dxChartSeriesTypes.StackedSplineSeries,dxChartSeriesTypes.FullStackedSplineSeries,dxChartSeriesTypes.SplineSeries,dxChartSeriesTypes.StepLineSeries,dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.StackedSplineAreaSeries,dxChartSeriesTypes.FullStackedSplineAreaSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.ScatterSeries
          */
-        color?: string;
+        color?: string | undefined;
         /**
          * @docid dxChartSeriesTypes.CommonSeries.point.hoverStyle.border.visible
          * @default true
@@ -456,13 +456,13 @@ export interface SeriesPoint {
        * @default undefined
        * @propertyOf dxChartSeriesTypes.LineSeries,dxChartSeriesTypes.StackedLineSeries,dxChartSeriesTypes.FullStackedLineSeries,dxChartSeriesTypes.StackedSplineSeries,dxChartSeriesTypes.FullStackedSplineSeries,dxChartSeriesTypes.SplineSeries,dxChartSeriesTypes.StepLineSeries,dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.StackedSplineAreaSeries,dxChartSeriesTypes.FullStackedSplineAreaSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.ScatterSeries
        */
-      color?: string | ChartsColor;
+      color?: string | ChartsColor | undefined;
       /**
        * @docid dxChartSeriesTypes.CommonSeries.point.hoverStyle.size
        * @default undefined
        * @propertyOf dxChartSeriesTypes.LineSeries,dxChartSeriesTypes.StackedLineSeries,dxChartSeriesTypes.FullStackedLineSeries,dxChartSeriesTypes.StackedSplineSeries,dxChartSeriesTypes.FullStackedSplineSeries,dxChartSeriesTypes.SplineSeries,dxChartSeriesTypes.StepLineSeries,dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.StackedSplineAreaSeries,dxChartSeriesTypes.FullStackedSplineAreaSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.ScatterSeries
        */
-      size?: number;
+      size?: number | undefined;
     };
     /**
      * @docid dxChartSeriesTypes.CommonSeries.point.image
@@ -470,7 +470,7 @@ export interface SeriesPoint {
      * @propertyOf dxChartSeriesTypes.LineSeries,dxChartSeriesTypes.StackedLineSeries,dxChartSeriesTypes.FullStackedLineSeries,dxChartSeriesTypes.StackedSplineSeries,dxChartSeriesTypes.FullStackedSplineSeries,dxChartSeriesTypes.SplineSeries,dxChartSeriesTypes.StepLineSeries,dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.StackedSplineAreaSeries,dxChartSeriesTypes.FullStackedSplineAreaSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.ScatterSeries
      * @public
      */
-    image?: string | {
+    image?: string | undefined | {
       /**
        * @docid dxChartSeriesTypes.CommonSeries.point.image.height
        * @default 30
@@ -482,32 +482,32 @@ export interface SeriesPoint {
          * @default undefined
          * @propertyOf dxChartSeriesTypes.RangeAreaSeries
          */
-        rangeMaxPoint?: number;
+        rangeMaxPoint?: number | undefined;
         /**
          * @docid dxChartSeriesTypes.CommonSeries.point.image.height.rangeMinPoint
          * @default undefined
          * @propertyOf dxChartSeriesTypes.RangeAreaSeries
          */
-        rangeMinPoint?: number;
+        rangeMinPoint?: number | undefined;
       };
       /**
        * @docid dxChartSeriesTypes.CommonSeries.point.image.url
        * @default undefined
        * @propertyOf dxChartSeriesTypes.LineSeries,dxChartSeriesTypes.StackedLineSeries,dxChartSeriesTypes.FullStackedLineSeries,dxChartSeriesTypes.StackedSplineSeries,dxChartSeriesTypes.FullStackedSplineSeries,dxChartSeriesTypes.SplineSeries,dxChartSeriesTypes.StepLineSeries,dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.StackedSplineAreaSeries,dxChartSeriesTypes.FullStackedSplineAreaSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.ScatterSeries
        */
-      url?: string | {
+      url?: string | undefined | {
         /**
          * @docid dxChartSeriesTypes.CommonSeries.point.image.url.rangeMaxPoint
          * @default undefined
          * @propertyOf dxChartSeriesTypes.RangeAreaSeries
          */
-        rangeMaxPoint?: string;
+        rangeMaxPoint?: string | undefined;
         /**
          * @docid dxChartSeriesTypes.CommonSeries.point.image.url.rangeMinPoint
          * @default undefined
          * @propertyOf dxChartSeriesTypes.RangeAreaSeries
          */
-        rangeMinPoint?: string;
+        rangeMinPoint?: string | undefined;
       };
       /**
        * @docid dxChartSeriesTypes.CommonSeries.point.image.width
@@ -520,13 +520,13 @@ export interface SeriesPoint {
          * @default undefined
          * @propertyOf dxChartSeriesTypes.RangeAreaSeries
          */
-        rangeMaxPoint?: number;
+        rangeMaxPoint?: number | undefined;
         /**
          * @docid dxChartSeriesTypes.CommonSeries.point.image.width.rangeMinPoint
          * @default undefined
          * @propertyOf dxChartSeriesTypes.RangeAreaSeries
          */
-        rangeMinPoint?: number;
+        rangeMinPoint?: number | undefined;
       };
     };
     /**
@@ -552,7 +552,7 @@ export interface SeriesPoint {
          * @default undefined
          * @propertyOf dxChartSeriesTypes.LineSeries,dxChartSeriesTypes.StackedLineSeries,dxChartSeriesTypes.FullStackedLineSeries,dxChartSeriesTypes.StackedSplineSeries,dxChartSeriesTypes.FullStackedSplineSeries,dxChartSeriesTypes.SplineSeries,dxChartSeriesTypes.StepLineSeries,dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.StackedSplineAreaSeries,dxChartSeriesTypes.FullStackedSplineAreaSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.ScatterSeries
          */
-        color?: string;
+        color?: string | undefined;
         /**
          * @docid dxChartSeriesTypes.CommonSeries.point.selectionStyle.border.visible
          * @default true
@@ -571,13 +571,13 @@ export interface SeriesPoint {
        * @default undefined
        * @propertyOf dxChartSeriesTypes.LineSeries,dxChartSeriesTypes.StackedLineSeries,dxChartSeriesTypes.FullStackedLineSeries,dxChartSeriesTypes.StackedSplineSeries,dxChartSeriesTypes.FullStackedSplineSeries,dxChartSeriesTypes.SplineSeries,dxChartSeriesTypes.StepLineSeries,dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.StackedSplineAreaSeries,dxChartSeriesTypes.FullStackedSplineAreaSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.ScatterSeries
        */
-      color?: string | ChartsColor;
+      color?: string | ChartsColor | undefined;
       /**
        * @docid dxChartSeriesTypes.CommonSeries.point.selectionStyle.size
        * @default undefined
        * @propertyOf dxChartSeriesTypes.LineSeries,dxChartSeriesTypes.StackedLineSeries,dxChartSeriesTypes.FullStackedLineSeries,dxChartSeriesTypes.StackedSplineSeries,dxChartSeriesTypes.FullStackedSplineSeries,dxChartSeriesTypes.SplineSeries,dxChartSeriesTypes.StepLineSeries,dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.StackedSplineAreaSeries,dxChartSeriesTypes.FullStackedSplineAreaSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.ScatterSeries
        */
-      size?: number;
+      size?: number | undefined;
     };
     /**
      * @docid dxChartSeriesTypes.CommonSeries.point.size
@@ -618,13 +618,13 @@ export interface SeriesLabel {
      * @default undefined
      * @public
      */
-    argumentFormat?: Format;
+    argumentFormat?: Format | undefined;
     /**
      * @docid dxChartSeriesTypes.CommonSeries.label.backgroundColor
      * @default undefined
      * @public
      */
-    backgroundColor?: string;
+    backgroundColor?: string | undefined;
     /**
      * @docid dxChartSeriesTypes.CommonSeries.label.border
      * @public
@@ -634,12 +634,12 @@ export interface SeriesLabel {
        * @docid dxChartSeriesTypes.CommonSeries.label.border.color
        * @default  '#d3d3d3'
        */
-      color?: string;
+      color?: string | undefined;
       /**
        * @docid dxChartSeriesTypes.CommonSeries.label.border.dashStyle
        * @default 'solid'
        */
-      dashStyle?: DashStyle;
+      dashStyle?: DashStyle | undefined;
       /**
        * @docid dxChartSeriesTypes.CommonSeries.label.border.visible
        * @default false
@@ -662,7 +662,7 @@ export interface SeriesLabel {
        * @default undefined
        * @propertyOf dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.BarSeries,dxChartSeriesTypes.BubbleSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.FullStackedBarSeries,dxChartSeriesTypes.FullStackedLineSeries,dxChartSeriesTypes.LineSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.RangeBarSeries,dxChartSeriesTypes.ScatterSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.SplineSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.StackedBarSeries,dxChartSeriesTypes.StackedLineSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.StackedSplineAreaSeries,dxChartSeriesTypes.FullStackedSplineAreaSeries,dxChartSeriesTypes.StackedSplineSeries,dxChartSeriesTypes.FullStackedSplineSeries,dxChartSeriesTypes.StepLineSeries
        */
-      color?: string;
+      color?: string | undefined;
       /**
        * @docid dxChartSeriesTypes.CommonSeries.label.connector.visible
        * @default false
@@ -695,7 +695,7 @@ export interface SeriesLabel {
      * @default undefined
      * @public
      */
-    format?: Format;
+    format?: Format | undefined;
     /**
      * @docid dxChartSeriesTypes.CommonSeries.label.horizontalOffset
      * @default 0
@@ -739,7 +739,7 @@ export interface SeriesLabel {
      * @default undefined
      * @public
      */
-     displayFormat?: string;
+     displayFormat?: string | undefined;
 }
 
 /**

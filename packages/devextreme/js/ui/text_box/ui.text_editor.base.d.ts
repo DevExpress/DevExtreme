@@ -1,6 +1,6 @@
 import {
     NativeEventInfo,
-} from '../../events/index';
+} from '../../common/core/events';
 
 import dxButton from '../button';
 

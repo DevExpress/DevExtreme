@@ -1,12 +1,15 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import Chat from 'devextreme-testcafe-models/chat';
 import { ClientFunction } from 'testcafe';
-import { User } from 'devextreme/ui/chat';
+import { Message, User } from 'devextreme/ui/chat';
 import TabPanel from 'devextreme-testcafe-models/tabPanel';
 import { createUser, generateMessages, getLongText } from './data';
 import url from '../../helpers/getPageUrl';
 import { createWidget } from '../../helpers/createWidget';
 import { testScreenshot } from '../../helpers/themeUtils';
+import { insertStylesheetRulesToPage } from '../../helpers/domUtils';
+
+const waitFont = ClientFunction(() => (window as any).DevExpress.ui.themes.waitWebFont('Item123somevalu*op ', 400));
 
 fixture.disablePageReloads`ChatMessageList`
   .page(url(__dirname, '../container.html'));
@@ -105,7 +108,7 @@ test('Messagelist appearance with scrollbar', async (t) => {
     width: 400,
     height: 600,
     showDayHeaders: false,
-    onMessageSend: (e) => {
+    onMessageEntered: (e) => {
       const { component, message } = e;
 
       component.renderMessage(message);
@@ -115,7 +118,6 @@ test('Messagelist appearance with scrollbar', async (t) => {
 
 test('Messagelist should scrolled to the latest messages after being rendered inside an invisible element', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-
   const tabPanel = new TabPanel('#container');
 
   await t
@@ -152,54 +154,40 @@ test('Messagelist should scrolled to the latest messages after being rendered in
   });
 });
 
-test('Messagelist with date headers', async (t) => {
+test('Messagelist with loadindicator appearance on initial loading', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  await testScreenshot(t, takeScreenshot, 'Messagelist with date headers.png', { element: '#container' });
+  await testScreenshot(t, takeScreenshot, 'Messagelist loadindicator position on initial loading.png', { element: '#container' });
 
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => {
-  const userFirst = createUser(1, 'First');
-  const userSecond = createUser(2, 'Second');
-  const msInDay = 86400000;
-  const today = new Date().setHours(7, 22, 0, 0);
-  const yesterday = today - msInDay;
+  await insertStylesheetRulesToPage('.dx-loadindicator-content, .dx-loadindicator-icon, .dx-loadindicator-segment, .dx-loadindicator-segment-inner { animation-play-state: paused !important; }');
 
-  const items = [{
-    timestamp: new Date('05.01.2024'),
-    author: userFirst,
-    text: 'AAA',
-  }, {
-    timestamp: new Date('06.01.2024'),
-    author: userFirst,
-    text: 'BBB',
-  }, {
-    timestamp: new Date('06.01.2024'),
-    author: userSecond,
-    text: 'CCC',
-  }, {
-    timestamp: yesterday,
-    author: userSecond,
-    text: 'DDD',
-  }, {
-    timestamp: today,
-    author: userFirst,
-    text: 'EEE',
-  }];
+  await waitFont();
 
-  return createWidget('dxChat', {
-    items,
-    user: userSecond,
-    width: 400,
-    height: 600,
+  await createWidget('dxChat', () => {
+    const data: Message[] = [];
+
+    return {
+      dataSource: new (window as any).DevExpress.data.CustomStore({
+        key: 'id',
+        load: () => new Promise<Message[]>((resolve) => {
+          setTimeout(() => {
+            resolve(data);
+          }, 3000);
+        }),
+      }),
+      width: 400,
+      height: 600,
+    };
   });
 });
 
 test('Messagelist with messageTemplate', async (t) => {
-  const chat = new Chat('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const chat = new Chat('#container');
 
   await testScreenshot(t, takeScreenshot, 'Messagelist with message template.png', { element: '#container' });
 
@@ -232,18 +220,110 @@ test('Messagelist with messageTemplate', async (t) => {
     width: 400,
     height: 600,
     showDayHeaders: false,
-    onMessageSend: ({ component, message }) => {
+    onMessageEntered: ({ component, message }) => {
       message.timestamp = undefined;
       component.renderMessage(message);
     },
-    messageTemplate: ({ text, author, isLast }, container) => {
-      if (isLast) {
-        $('<div>').text('Last message template').appendTo(container);
-
-        return;
-      }
-
-      $('<div>').text(`${author.name} says: ${text}`).appendTo(container);
+    messageTemplate: ({ message }, container) => {
+      $('<div>').text(`${message.author.name} says: ${message.text}`).appendTo(container);
     },
   });
+});
+
+test('Messagelist options showDayHeaders, showUserName and showMessageTimestamp set to false work', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  await testScreenshot(
+    t,
+    takeScreenshot,
+    'Messagelist with showDayHeaders, showUserName and showMessageTimestamp options set to false.png',
+    { element: '#container' },
+  );
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  const userFirst = createUser(1, 'First');
+  const userSecond = createUser(2, 'Second');
+  const items = [{
+    author: userFirst,
+    text: 'AAA',
+  }, {
+    author: userFirst,
+    text: 'BBB',
+  }, {
+    author: userSecond,
+    text: 'CCC',
+  }];
+
+  return createWidget('dxChat', {
+    items,
+    user: userFirst,
+    width: 400,
+    height: 600,
+    showDayHeaders: false,
+    showUserName: false,
+    showMessageTimestamp: false,
+  });
+});
+
+fixture`ChatMessageList: dayHeaders`
+  .page(url(__dirname, '../container.html'));
+
+test.clientScripts([
+  { module: 'mockdate' },
+  { content: 'window.MockDate = MockDate;' },
+])('Messagelist with date headers', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  await testScreenshot(t, takeScreenshot, 'Messagelist with date headers.png', { element: '#container' });
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  await ClientFunction(() => {
+    (window as any).MockDate.set('2024/10/27');
+  })();
+
+  const userFirst = createUser(1, 'First');
+  const userSecond = createUser(2, 'Second');
+  const msInDay = 86400000;
+  const today = new Date('2024/10/27').setHours(7, 22, 0, 0);
+  const yesterday = today - msInDay;
+
+  const items = [{
+    timestamp: new Date('05.01.2024'),
+    author: userFirst,
+    text: 'AAA',
+  }, {
+    timestamp: new Date('06.01.2024'),
+    author: userFirst,
+    text: 'BBB',
+  }, {
+    timestamp: new Date('06.01.2024'),
+    author: userSecond,
+    text: 'CCC',
+  }, {
+    timestamp: yesterday,
+    author: userSecond,
+    text: 'DDD',
+  }, {
+    timestamp: today,
+    author: userFirst,
+    text: 'EEE',
+  }];
+
+  return createWidget('dxChat', {
+    items,
+    user: userSecond,
+    width: 400,
+    height: 600,
+  });
+}).after(async () => {
+  await ClientFunction(() => {
+    (window as any).MockDate.reset();
+    delete (window as any).MockDate;
+  })();
 });

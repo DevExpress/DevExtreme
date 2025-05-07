@@ -16,7 +16,7 @@
 import * as AspNetData from 'devextreme-aspnet-data-nojquery';
 import Grid from './Grid.vue';
 
-const url = 'https://js.devexpress.com/Demos/Mvc/api/DnDBetweenGrids';
+const url = 'https://js.devexpress.com/Demos/NetCore/api/DnDBetweenGrids';
 
 const tasksStore = AspNetData.createStore({
   key: 'ID',

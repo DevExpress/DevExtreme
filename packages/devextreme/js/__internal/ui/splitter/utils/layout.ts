@@ -1,4 +1,5 @@
 import type { Orientation } from '@js/common';
+import { toFixed } from '@js/common/core/localization/utils';
 import type { dxElementWrapper } from '@js/core/renderer';
 import {
   getHeight,
@@ -8,7 +9,6 @@ import {
   normalizeStyleProp, styleProp,
 } from '@js/core/utils/style';
 import { isDefined, isNumeric, isString } from '@js/core/utils/type';
-import { toFixed } from '@js/localization/utils';
 import type { Item } from '@js/ui/splitter';
 
 import { compareNumbersWithPrecision, PRECISION } from './number_comparison';
@@ -34,6 +34,17 @@ export function findLastIndexOfVisibleItem(items: Item[]): number {
 export function findLastIndexOfNonCollapsedItem(items: Item[]): number {
   for (let i = items.length - 1; i >= 0; i -= 1) {
     if (items[i].collapsed !== true) {
+      return i;
+    }
+  }
+  return -1;
+}
+
+export function findLastVisibleExpandedItemIndex(items: Item[]): number {
+  for (let i = items.length - 1; i >= 0; i -= 1) {
+    const { collapsed, visible } = items[i];
+
+    if (collapsed !== true && visible !== false) {
       return i;
     }
   }
@@ -209,8 +220,7 @@ export function getNextLayout(
   }
 
   const totalSize = nextLayout.reduce((total, size) => size + total, 0);
-
-  if (!(compareNumbersWithPrecision(totalSize, 100, 3) === 0)) {
+  if (!(compareNumbersWithPrecision(totalSize, 100, 2) === 0)) {
     return currentLayout;
   }
 

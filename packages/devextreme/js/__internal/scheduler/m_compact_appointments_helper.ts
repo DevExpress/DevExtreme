@@ -1,12 +1,12 @@
-import { locate, move } from '@js/animation/translator';
+import { locate, move } from '@js/common/core/animation/translator';
+import dateLocalization from '@js/common/core/localization/date';
+import messageLocalization from '@js/common/core/localization/message';
 import $ from '@js/core/renderer';
 import { FunctionTemplate } from '@js/core/templates/function_template';
-import dateLocalization from '@js/localization/date';
-import messageLocalization from '@js/localization/message';
 import Button from '@js/ui/button';
 
+import { APPOINTMENT_SETTINGS_KEY, LIST_ITEM_CLASS, LIST_ITEM_DATA_KEY } from './constants';
 import { createAppointmentAdapter } from './m_appointment_adapter';
-import { LIST_ITEM_CLASS, LIST_ITEM_DATA_KEY } from './m_constants';
 import { AppointmentTooltipInfo } from './m_data_structures';
 
 const APPOINTMENT_COLLECTOR_CLASS = 'dx-scheduler-appointment-collector';
@@ -76,6 +76,7 @@ export class CompactAppointmentsHelper {
       dragBehavior: options.allowDrag && this._createTooltipDragBehavior($appointmentCollector).bind(this),
       dropDownAppointmentTemplate: this.instance.option().dropDownAppointmentTemplate, // TODO deprecated option
       isButtonClick: true,
+      _loopFocus: true,
     };
   }
 
@@ -147,7 +148,7 @@ export class CompactAppointmentsHelper {
       .toggleClass(COMPACT_APPOINTMENT_COLLECTOR_CLASS, isCompact)
       .appendTo($container);
 
-    result.data('dxAppointmentSettings', { sortedIndex });
+    result.data(APPOINTMENT_SETTINGS_KEY, { sortedIndex });
 
     this._setPosition(result, coordinates);
 
@@ -200,10 +201,13 @@ export class CompactAppointmentsHelper {
   }
 
   _getDateText(appointment) {
-    const startDate = this._getStartDate(appointment);
-    const endDate = this._getEndDate(appointment);
-    const startDateText = startDate ? this._localizeDate(startDate) : '';
-    const endDateText = endDate ? this._localizeDate(endDate) : '';
+    const adapter = createAppointmentAdapter(
+      appointment,
+      this.instance._dataAccessors,
+      this.instance.timeZoneCalculator,
+    );
+    const startDateText = adapter.startDate ? this._localizeDate(adapter.startDate) : '';
+    const endDateText = adapter.endDate ? this._localizeDate(adapter.endDate) : '';
 
     const dateText = startDateText === endDateText
       ? `${startDateText}`

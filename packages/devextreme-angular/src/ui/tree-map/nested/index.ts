@@ -3,6 +3,7 @@ export * from './colorizer';
 export * from './export';
 export * from './font';
 export * from './format';
+export * from './group-label';
 export * from './group';
 export * from './hover-style';
 export * from './label';
@@ -12,7 +13,10 @@ export * from './selection-style';
 export * from './shadow';
 export * from './size';
 export * from './subtitle';
+export * from './tile-label';
 export * from './tile';
 export * from './title';
+export * from './tooltip-border';
 export * from './tooltip';
+export * from './tree-mapborder';
 

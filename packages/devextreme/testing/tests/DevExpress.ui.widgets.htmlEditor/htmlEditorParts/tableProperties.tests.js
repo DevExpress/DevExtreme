@@ -1,5 +1,6 @@
 import $ from 'jquery';
 import 'ui/html_editor';
+import localization from 'localization';
 
 import { getFormatHandlers } from '__internal/ui/html_editor/utils/m_toolbar_helper';
 
@@ -1134,4 +1135,34 @@ module('Table properties forms', {
         });
     });
 
+    module('Localization', {
+        beforeEach: function() {
+            this.messages = {
+                'de': {
+                    'dxHtmlEditor-borderStyleNone': 'Test',
+                }
+            };
+            localization.loadMessages(this.messages);
+            localization.locale('de');
+        },
+        afterEach: function() {
+            localization.locale('en');
+        }
+    }, () => {
+        test('borderStyle selectbox items are localized even if messages are loaded at runtime (T1234032)', function(assert) {
+            this.createWidget();
+
+            const $tableElement = this.$element.find('table').eq(0);
+
+            showCellPropertiesForm(this.instance, $tableElement);
+
+            this.clock.tick(10);
+
+            const formBorderItem = this.getFormInstance().option('items')[0];
+            const borderStyleEditor = formBorderItem.items[0];
+            const firstListItem = borderStyleEditor.editorOptions.items[0];
+
+            assert.strictEqual(firstListItem.value, 'Test', 'borderStyleEditor is correctly localized');
+        });
+    });
 });

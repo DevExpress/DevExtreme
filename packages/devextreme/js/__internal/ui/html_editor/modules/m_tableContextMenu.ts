@@ -1,11 +1,11 @@
+import eventsEngine from '@js/common/core/events/core/events_engine';
+import { addNamespace } from '@js/common/core/events/utils/index';
+import localizationMessage from '@js/common/core/localization/message';
 import $ from '@js/core/renderer';
 import { extend } from '@js/core/utils/extend';
 import { camelize, titleize } from '@js/core/utils/inflector';
 import { each } from '@js/core/utils/iterator';
 import { isObject, isString } from '@js/core/utils/type';
-import eventsEngine from '@js/events/core/events_engine';
-import { addNamespace } from '@js/events/utils/index';
-import localizationMessage from '@js/localization/message';
 import type { Item } from '@js/ui/context_menu';
 import ContextMenu from '@js/ui/context_menu';
 import Quill from 'devextreme-quill';
@@ -69,6 +69,12 @@ if (Quill) {
 
     _detachEvents() {
       eventsEngine.off(this.editorInstance._getContent(), CONTEXT_MENU_EVENT);
+    }
+
+    _onContextMenuInitialized(e) {
+      e.component.registerKeyHandler('escape', () => {
+        this.editorInstance.focus();
+      });
     }
 
     _createContextMenu(items) {
@@ -160,6 +166,9 @@ if (Quill) {
         target: this._quillContainer,
         showEvent: null,
         hideOnParentScroll: false,
+        onInitialized: (e) => {
+          this._onContextMenuInitialized(e);
+        },
         items: customItems,
       };
     }

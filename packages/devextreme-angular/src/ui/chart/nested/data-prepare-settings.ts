@@ -45,10 +45,10 @@ export class DxoChartDataPrepareSettingsComponent extends NestedOption implement
     }
 
     @Input()
-    get sortingMethod(): boolean | Function {
+    get sortingMethod(): boolean | ((a: any, b: any) => number) {
         return this._getOption('sortingMethod');
     }
-    set sortingMethod(value: boolean | Function) {
+    set sortingMethod(value: boolean | ((a: any, b: any) => number)) {
         this._setOption('sortingMethod', value);
     }
 

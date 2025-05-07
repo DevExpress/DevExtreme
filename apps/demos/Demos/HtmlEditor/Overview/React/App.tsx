@@ -5,8 +5,8 @@ import HtmlEditor, {
   ImageUpload,
   Item,
 } from 'devextreme-react/html-editor';
-import CheckBox, { CheckBoxTypes } from 'devextreme-react/check-box';
-import SelectBox, { SelectBoxTypes } from 'devextreme-react/select-box';
+import CheckBox, { type CheckBoxTypes } from 'devextreme-react/check-box';
+import SelectBox, { type SelectBoxTypes } from 'devextreme-react/select-box';
 import { markup, tabs, tabLabel } from './data.ts';
 
 const sizeValues = ['8pt', '10pt', '12pt', '14pt', '18pt', '24pt', '36pt'];

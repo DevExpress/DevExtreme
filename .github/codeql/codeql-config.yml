@@ -2,8 +2,10 @@ name: "DevExtreme CodeQL config"
 paths-ignore:
   # all published sources are located in artifacts/npm/**, so we can disable following paths:
   - "/artifacts/**"
-  - "/packages/devextreme/artifacts/js/**"
-  - "/packages/devextreme/artifacts/transpiled/**"
-  - "/packages/devextreme/artifacts/transpiled-esm-npm/**"
-  - "/packages/devextreme/artifacts/transpiled-renovation/**"
-  - "/packages/devextreme/artifacts/transpiled-renovation-npm/**"
+  - "/packages/devextreme/artifacts/transpiled/**"                # not prod code  
+  - "/packages/devextreme/artifacts/transpiled-esm-npm/**"        # not prod code
+  - "/packages/devextreme/artifacts/transpiled-renovation/**"     # not prod code
+  - "/packages/devextreme/artifacts/transpiled-renovation-npm/**" # not prod code
+  - "/packages/devextreme/artifacts/npm/devextreme-dist/**"       # same as artifacts/js, removed to optimize
+  - "/packages/devextreme/artifacts/npm/devextreme/cjs/**"        # same as npm/devextreme/esm/**, removed to optimize
+  - "/packages/devextreme-angular/dist/**"                        # not prod code 

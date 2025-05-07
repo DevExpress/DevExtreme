@@ -5,6 +5,13 @@ export const actionSheetItems = [
   { text: 'Delete' },
 ];
 
+export type ContactInfo = {
+  name: string,
+  phone: string,
+  email: string,
+  category: string
+};
+
 export const contacts = [
   {
     name: 'Barbara J. Coggins', phone: '512-964-2757', email: 'BarbaraJCoggins@rhyta.com', category: 'Family',

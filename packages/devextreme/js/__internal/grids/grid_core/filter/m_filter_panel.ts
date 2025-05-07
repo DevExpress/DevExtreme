@@ -1,10 +1,10 @@
 /* eslint-disable max-classes-per-file */
+import eventsEngine from '@js/common/core/events/core/events_engine';
+import messageLocalization from '@js/common/core/localization/message';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { Deferred, when } from '@js/core/utils/deferred';
 import { isDefined } from '@js/core/utils/type';
-import eventsEngine from '@js/events/core/events_engine';
-import messageLocalization from '@js/localization/message';
 import CheckBox from '@js/ui/check_box';
 import inflector from '@ts/core/utils/m_inflector';
 import {

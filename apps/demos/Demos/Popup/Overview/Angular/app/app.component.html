@@ -30,27 +30,27 @@
     container=".dx-viewport"
     [(visible)]="popupVisible"
   >
-    <dxi-toolbar-item
+    <dxi-popup-toolbar-item
       widget="dxButton"
       toolbar="top"
       locateInMenu="always"
       [options]="moreInfoButtonOptions"
     >
-    </dxi-toolbar-item>
-    <dxi-toolbar-item
+    </dxi-popup-toolbar-item>
+    <dxi-popup-toolbar-item
       widget="dxButton"
       toolbar="bottom"
       location="before"
       [options]="emailButtonOptions"
     >
-    </dxi-toolbar-item>
-    <dxi-toolbar-item
+    </dxi-popup-toolbar-item>
+    <dxi-popup-toolbar-item
       widget="dxButton"
       toolbar="bottom"
       location="after"
       [options]="closeButtonOptions"
     >
-    </dxi-toolbar-item>
+    </dxi-popup-toolbar-item>
     <dxo-position at="bottom" my="center" [of]="positionOf" collision="fit">
     </dxo-position>
     <div *dxTemplate="let data of 'content'">

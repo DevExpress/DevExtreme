@@ -1,6 +1,6 @@
 import gridCore from '__internal/grids/data_grid/m_core';
-import ArrayStore from 'data/array_store';
-import { DataSource } from 'data/data_source/data_source';
+import ArrayStore from 'common/data/array_store';
+import { DataSource } from 'common/data/data_source/data_source';
 import commonUtils from 'core/utils/common';
 import typeUtils from 'core/utils/type';
 import config from 'core/config';

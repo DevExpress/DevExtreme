@@ -1,1 +1,3 @@
-export { default } from '../../__internal/data/odata/m_context';
+import ODataContext from '../../common/data/odata/context';
+
+export default ODataContext;

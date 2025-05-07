@@ -498,14 +498,36 @@ testModule('API', moduleConfig, () => {
     });
 
     testModule('converter option', () => {
-        test('toHtml and fromHtml should be called once after value option changed', function(assert) {
+        ['v', ''].forEach(initValue => {
+            test(`toHtml and fromHtml must be called the correct number of times on init if value is '${initValue}'`, function(assert) {
+                const converter = {
+                    toHtml: sinon.stub().callsFake((e) => e),
+                    fromHtml: sinon.stub().callsFake((e) => e),
+                };
+
+                this.options = {
+                    converter,
+                    value: initValue,
+                };
+
+                this.createEditor();
+
+                assert.strictEqual(this.options.converter.toHtml.callCount, 1);
+                assert.strictEqual(this.options.converter.fromHtml.callCount, 0);
+            });
+        });
+
+        test('toHtml and fromHtml must be called the correct number of times after value option changed', function(assert) {
             const converter = {
-                toHtml: sinon.stub(),
-                fromHtml: sinon.stub(),
+                toHtml: sinon.stub().callsFake((e) => e),
+                fromHtml: sinon.stub().callsFake((e) => e),
             };
             this.options = { converter };
 
             this.createEditor();
+
+            converter.toHtml.resetHistory();
+            converter.fromHtml.resetHistory();
 
             this.instance.option('value', 'new value');
 
@@ -519,8 +541,8 @@ testModule('API', moduleConfig, () => {
             const done = assert.async();
 
             const converter = {
-                toHtml: sinon.stub(),
-                fromHtml: sinon.stub(),
+                toHtml: sinon.stub().callsFake((e) => e),
+                fromHtml: sinon.stub().callsFake((e) => e),
             };
 
             this.options = {
@@ -534,6 +556,9 @@ testModule('API', moduleConfig, () => {
             };
 
             this.createEditor();
+
+            converter.toHtml.resetHistory();
+            converter.fromHtml.resetHistory();
 
             this.instance.focus();
 
@@ -635,35 +660,43 @@ testModule('API', moduleConfig, () => {
 
         test('converter option runtime change should update html converter', function(assert) {
             const firstConverter = {
-                toHtml: sinon.stub(),
-                fromHtml: sinon.stub(),
+                toHtml: (e) => e,
+                fromHtml: (e) => e,
             };
 
             const secondConverter = {
-                toHtml: sinon.stub(),
-                fromHtml: sinon.stub(),
+                toHtml: sinon.stub().callsFake((e) => e),
+                fromHtml: sinon.stub().callsFake((e) => e),
             };
 
             const instance = $('#htmlEditor').dxHtmlEditor({
                 converter: firstConverter,
+                value: 'value',
             }).dxHtmlEditor('instance');
 
             instance.option('converter', secondConverter);
-            instance.option('value', 'new value');
 
-            assert.strictEqual(firstConverter.toHtml.callCount, 0);
-            assert.strictEqual(firstConverter.fromHtml.callCount, 0);
             assert.strictEqual(secondConverter.toHtml.callCount, 1);
             assert.strictEqual(secondConverter.fromHtml.callCount, 1);
         });
 
-        test('The converter methods get the correct parameters', function(assert) {
+        test('toHtml gets the correct parameters on init', function(assert) {
             const converter = {
                 toHtml: (value) => {
                     assert.strictEqual(value, 'new value');
 
                     return value;
                 },
+            };
+
+            this.options = { converter, value: 'new value' };
+
+            this.createEditor();
+        });
+
+        test('fromHtml gets the correct parameters on runtime', function(assert) {
+            const converter = {
+                toHtml: (value) => value,
                 fromHtml: (value) => {
                     assert.strictEqual(value, '<p>new value</p>');
 
@@ -706,6 +739,34 @@ testModule('API', moduleConfig, () => {
             this.instance.option('value', 'new value');
 
             assert.strictEqual(this.instance.option('value'), '**NEW VALUE**');
+        });
+
+        [
+            { returnedValue: { value: 'value' }, expectedValue: '[object Object]' },
+            { returnedValue: ['string', { object: 'object' }], expectedValue: 'string,[object Object]' },
+            { returnedValue: NaN, expectedValue: 'NaN' },
+            { returnedValue: true, expectedValue: 'true' },
+            { returnedValue: false, expectedValue: 'false' },
+            { returnedValue: null, expectedValue: '' },
+            { returnedValue: undefined, expectedValue: '' },
+            { returnedValue: 4, expectedValue: '4' },
+            { returnedValue: Infinity, expectedValue: 'Infinity' },
+            { returnedValue: -Infinity, expectedValue: '-Infinity' },
+        ].forEach(({ returnedValue, expectedValue }) => {
+            test(`The value should be handled correctly if fromHtml returns an unexpected value: ${returnedValue}`, function(assert) {
+                const instance = $('#htmlEditor').dxHtmlEditor({
+                    converter: {
+                        toHtml: e => e,
+                        fromHtml: () => returnedValue,
+                    },
+                }).dxHtmlEditor('instance');
+
+                instance.option('value', 'new value');
+
+                const { value } = instance.option();
+
+                assert.strictEqual(value, expectedValue);
+            });
         });
     });
 });

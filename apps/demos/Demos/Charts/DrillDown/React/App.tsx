@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import TreeMap, {
-  Size, Title, Colorizer, TreeMapTypes,
+  Size, Title, Colorizer, type TreeMapTypes,
 } from 'devextreme-react/tree-map';
 
 import { DrillInfo, citiesPopulation } from './data.ts';

@@ -1,4 +1,4 @@
-import { LoadOptions as BaseLoadOptions } from './index';
+import { LoadOptions as BaseLoadOptions } from '../common/data';
 
-/** @deprecated Use LoadOptions from 'devextreme/data' instead */
+/** @deprecated Use LoadOptions from common/data instead */
 export interface LoadOptions extends BaseLoadOptions { }

@@ -5,4 +5,13 @@
 $material-datebox-overlay-item-margin: 16px !default;
 $material-datebox-overlay-item-margin-adaptive: 18px !default;
 $material-datebox-popup-content-margin: 0 34px !default;
-$material-datebox-input-min-height: 33px !default;
+$datebox-input-min-height-device-ios: $material-base-inline-widget-height !default;
+$datebox-input-line-height-device-ios: null !default;
+
+@if $size == "default" {
+  $datebox-input-line-height-device-ios: normal !default;
+}
+
+@else if $size == "compact" {
+  $datebox-input-line-height-device-ios: 1.1667 !default;
+}

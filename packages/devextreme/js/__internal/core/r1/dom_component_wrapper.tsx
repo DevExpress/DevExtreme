@@ -5,8 +5,8 @@ import {
   hasTemplate, InfernoComponent, InfernoEffect, renderTemplate,
 } from '@devextreme/runtime/inferno';
 import type { ComponentClass } from '@js/core/dom_component';
-import { getUpdatedOptions } from '@js/renovation/ui/common/utils/get_updated_options';
-import type { DisposeEffectReturn } from '@js/renovation/utils/effect_return';
+import type { DisposeEffectReturn } from '@ts/core/r1/utils/effect_return';
+import { getUpdatedOptions } from '@ts/core/r1/utils/get_updated_options';
 import type { RefObject } from 'inferno';
 import { createRef } from 'inferno';
 
@@ -67,7 +67,7 @@ export class DomComponentWrapper extends InfernoComponent<DomComponentWrapperPro
       <div
         ref={this.widgetRef}
         className={this.props.componentProps.className}
-        {...this.props}
+        {...this.getRestAttributes()}
       />
     );
   }
@@ -122,6 +122,15 @@ export class DomComponentWrapper extends InfernoComponent<DomComponentWrapperPro
       this.instance.endUpdate();
     }
     this.prevProps = this.getProperties();
+  }
+
+  getRestAttributes(): any {
+    const {
+      componentProps, componentType, templateNames,
+      ...restAttr
+    } = this.props;
+
+    return restAttr;
   }
 
   getProperties(): any {

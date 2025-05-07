@@ -1,1 +1,1 @@
-export const name = 'dxclick';
+export * from '../common/core/events/click';

@@ -1,13 +1,13 @@
 /* eslint-disable max-classes-per-file */
+import eventsEngine from '@js/common/core/events/core/events_engine';
+import { normalizeKeyName } from '@js/common/core/events/utils/index';
+import messageLocalization from '@js/common/core/localization/message';
 import $ from '@js/core/renderer';
 import { equalByValue } from '@js/core/utils/common';
 import { extend } from '@js/core/utils/extend';
 import { each, map } from '@js/core/utils/iterator';
 import { getOuterWidth } from '@js/core/utils/size';
 import { isDefined } from '@js/core/utils/type';
-import eventsEngine from '@js/events/core/events_engine';
-import { normalizeKeyName } from '@js/events/utils/index';
-import messageLocalization from '@js/localization/message';
 import Editor from '@js/ui/editor/editor';
 import Menu from '@js/ui/menu';
 import Overlay from '@js/ui/overlay/ui.overlay';
@@ -622,7 +622,9 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
           options[isOnClickMode ? 'bufferedSelectedFilterOperation' : 'selectedFilterOperation'] = column.defaultSelectedFilterOperation || null;
         }
 
-        that._columnsController.columnOption(column.index, options);
+        const isResetFilterOperation = !properties.itemData?.name;
+        const isNotFireEvent = isResetFilterOperation ? false : undefined;
+        that._columnsController.columnOption(column.index, options, undefined, isNotFireEvent);
         that._applyFilterViewController.setHighLight($editorContainer, true);
 
         if (!selectedFilterOperation) {
@@ -774,6 +776,10 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
     }
 
     return super.getColumnElements(index, bandColumnIndex);
+  }
+
+  public isFilterRowCell($cell): boolean {
+    return !!$cell.closest(`.${this.addWidgetPrefix(FILTER_ROW_CLASS)}`).length;
   }
 };
 
@@ -1012,10 +1018,6 @@ const headerPanel = (Base: ModuleType<HeaderPanel>) => class FilterRowHeaderPane
 
   private enableApplyButton(value) {
     this.setToolbarItemDisabled('applyFilterButton', !value);
-  }
-
-  public isVisible() {
-    return super.isVisible() || this._isShowApplyFilterButton();
   }
 };
 

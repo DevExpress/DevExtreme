@@ -1,5 +1,13 @@
 /* eslint-disable max-classes-per-file */
-import fx from '@js/animation/fx';
+import { fx } from '@js/common/core/animation';
+import eventsEngine from '@js/common/core/events/core/events_engine';
+import {
+  end as dragEventEnd,
+  move as dragEventMove,
+  start as dragEventStart,
+} from '@js/common/core/events/drag';
+import pointerEvents from '@js/common/core/events/pointer';
+import { addNamespace, eventData as getEventData, isTouchEvent } from '@js/common/core/events/utils/index';
 import domAdapter from '@js/core/dom_adapter';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
@@ -12,17 +20,9 @@ import {
   setHeight, setWidth,
 } from '@js/core/utils/size';
 import { isDefined, isObject, isString } from '@js/core/utils/type';
-import eventsEngine from '@js/events/core/events_engine';
-import {
-  end as dragEventEnd,
-  move as dragEventMove,
-  start as dragEventStart,
-} from '@js/events/drag';
-import pointerEvents from '@js/events/pointer';
-import { addNamespace, eventData as getEventData, isTouchEvent } from '@js/events/utils/index';
 import swatchContainer from '@js/ui/widget/swatch_container';
 import type { EditorFactory } from '@ts/grids/grid_core/editor_factory/m_editor_factory';
-import type { ModuleType } from '@ts/grids/grid_core/m_types';
+import type { ColumnPoint, ModuleType } from '@ts/grids/grid_core/m_types';
 import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
 
 import type { ColumnChooserView } from '../column_chooser/m_column_chooser';
@@ -32,6 +32,7 @@ import type { HeaderPanel } from '../header_panel/m_header_panel';
 import modules from '../m_modules';
 import gridCoreUtils from '../m_utils';
 import type { PagerView } from '../pager/m_pager';
+import { CLASSES } from './const';
 
 const COLUMNS_SEPARATOR_CLASS = 'columns-separator';
 const COLUMNS_SEPARATOR_TRANSPARENT = 'columns-separator-transparent';
@@ -49,7 +50,6 @@ const MODULE_NAMESPACE = 'dxDataGridResizingReordering';
 
 const COLUMNS_SEPARATOR_TOUCH_TRACKER_WIDTH = 10;
 const DRAGGING_DELTA = 5;
-const COLUMN_OPACITY = 0.5;
 
 const allowResizing = function (that) {
   // TODO getController
@@ -570,7 +570,7 @@ export class DraggingHeaderView extends modules.View {
         columns: targetDraggingPanel.getColumns(rowIndex),
         columnElements,
         isVerticalOrientation,
-        startColumnIndex: targetLocation === 'headers' && $(columnElements[0]).index(),
+        startColumnIndex: targetLocation === 'headers' ? $(columnElements[0]).index() : 0,
       }));
 
       pointsByTarget[targetLocation] = pointsByColumns;
@@ -754,6 +754,16 @@ export class ColumnsResizerViewController extends modules.ViewController {
     return null;
   }
 
+  protected getSeparatorOffsetX($cell: dxElementWrapper): number {
+    const isNextColumnMode = isNextColumnResizingMode(this);
+    const rtlEnabled = this.option('rtlEnabled');
+    const isRtlParentStyle = this._isRtlParentStyle();
+    const outerWidth: number = $cell[0].getBoundingClientRect().width;
+    const cellOffset: number = $cell.offset()?.left ?? 0;
+
+    return cellOffset + ((isNextColumnMode || isRtlParentStyle) && rtlEnabled ? 0 : outerWidth);
+  }
+
   private _moveSeparator(args) {
     const e = args.event;
     const that = e.data;
@@ -763,7 +773,6 @@ export class ColumnsResizerViewController extends modules.ViewController {
     const parentOffset = that._$parentContainer.offset();
     const parentOffsetLeft = parentOffset.left;
     const eventData = getEventData(e);
-    const rtlEnabled = that.option('rtlEnabled');
     const isRtlParentStyle = this._isRtlParentStyle();
     const isDragging = that._draggingHeaderView?.isDragging();
 
@@ -771,10 +780,11 @@ export class ColumnsResizerViewController extends modules.ViewController {
       if ((parentOffsetLeft <= eventData.x || !isNextColumnMode && isRtlParentStyle) && (!isNextColumnMode || eventData.x <= parentOffsetLeft + getWidth(that._$parentContainer))) {
         if (that._updateColumnsWidthIfNeeded(eventData.x)) {
           const $cell = that._columnHeadersView.getColumnElements().eq(that._resizingInfo.currentColumnIndex);
-          const cell = $cell[0];
-          if (cell) {
-            const outerWidth = cell.getBoundingClientRect().width;
-            that._columnsSeparatorView.moveByX($cell.offset().left + ((isNextColumnMode || isRtlParentStyle) && rtlEnabled ? 0 : outerWidth));
+
+          if ($cell.length) {
+            const offsetX = this.getSeparatorOffsetX($cell);
+
+            that._columnsSeparatorView.moveByX(offsetX);
             that._tablePositionController.update(that._targetPoint.y);
             e.preventDefault();
           }
@@ -904,27 +914,60 @@ export class ColumnsResizerViewController extends modules.ViewController {
     }
   }
 
+  private _generateColumnsTopYIndex(needToCheckPrevPoint = false) {
+    const that = this;
+    const rowCount = that._columnsController.getRowCount();
+    const topYMap: Record<number, number> = {};
+    const pointCreated = (point: ColumnPoint): boolean => {
+      const x = Math.ceil(point.x);
+
+      if (!topYMap[x]) {
+        topYMap[x] = point.y;
+      }
+
+      return true;
+    };
+
+    for (let rowIndex = 0; rowIndex < rowCount - 1; rowIndex++) {
+      const cells = that._columnHeadersView.getColumnElements(rowIndex);
+
+      if (cells && cells.length > 0) {
+        gridCoreUtils.getPointsByColumns(cells, pointCreated, false, 0, needToCheckPrevPoint);
+      }
+    }
+
+    return topYMap;
+  }
+
   /**
    * @extended: column_fixing
    * @protected
    */
   protected _generatePointsByColumns(needToCheckPrevPoint = false) {
     const that = this;
+    const topYMap = that._generateColumnsTopYIndex(needToCheckPrevPoint);
     const columns = that._columnsController ? that._columnsController.getVisibleColumns() : [];
     const cells = that._columnHeadersView.getColumnElements();
-    let pointsByColumns: any = [];
+    const correctColumnY = (point: ColumnPoint): ColumnPoint => {
+      const x = Math.ceil(point.x);
 
+      if (topYMap[x]) {
+        point.y = topYMap[x];
+      }
+
+      return point;
+    };
+
+    that._pointsByColumns = [];
     if (cells && cells.length > 0) {
-      pointsByColumns = gridCoreUtils.getPointsByColumns(
+      that._pointsByColumns = gridCoreUtils.getPointsByColumns(
         cells,
-        (point) => that._pointCreated(point, cells.length, columns),
+        (point) => that._pointCreated(correctColumnY(point), cells.length, columns),
         false,
         0,
         needToCheckPrevPoint,
       );
     }
-
-    that._pointsByColumns = pointsByColumns;
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -1484,11 +1527,11 @@ export class DraggingHeaderViewController extends modules.ViewController {
     const rowsView = this._rowsView;
 
     if (sourceColumnElement) {
-      sourceColumnElement.css({ opacity: COLUMN_OPACITY });
+      sourceColumnElement.addClass(this.addWidgetPrefix(CLASSES.draggableColumn));
 
       if (sourceLocation === 'headers') {
-        headersView && headersView.setRowsOpacity(sourceIndex, COLUMN_OPACITY);
-        rowsView && rowsView.setRowsOpacity(sourceIndex, COLUMN_OPACITY);
+        headersView && headersView.toggleDraggableColumnClass(sourceIndex, true);
+        rowsView && rowsView.toggleDraggableColumnClass(sourceIndex, true);
       }
     }
   }
@@ -1534,9 +1577,9 @@ export class DraggingHeaderViewController extends modules.ViewController {
     const { sourceColumnElement } = parameters;
 
     if (sourceColumnElement) {
-      sourceColumnElement.css({ opacity: '' });
-      this._columnHeadersView.setRowsOpacity(parameters.sourceIndex, '');
-      this._rowsView.setRowsOpacity(parameters.sourceIndex, '');
+      sourceColumnElement.removeClass(this.addWidgetPrefix(CLASSES.draggableColumn));
+      this._columnHeadersView.toggleDraggableColumnClass(parameters.sourceIndex, false);
+      this._rowsView.toggleDraggableColumnClass(parameters.sourceIndex, false);
       this._columnHeadersView.element().find(`.${HEADER_ROW_CLASS}`).removeClass(this.addWidgetPrefix(HEADERS_DROP_HIGHLIGHT_CLASS));
     }
 

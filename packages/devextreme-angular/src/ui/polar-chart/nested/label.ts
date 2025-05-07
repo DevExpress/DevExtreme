@@ -14,8 +14,8 @@ import {
 
 
 
-import { DashStyle, Font, LabelOverlap, RelativePosition } from 'devextreme/common/charts';
-import { Format } from 'devextreme/localization';
+import { Font, LabelOverlap, DashStyle, RelativePosition } from 'devextreme/common/charts';
+import { Format } from 'devextreme/common/core/localization';
 
 import {
     NestedOptionHost,
@@ -55,26 +55,26 @@ export class DxoPolarChartLabelComponent extends NestedOption implements OnDestr
     }
 
     @Input()
-    get customizeHint(): Function {
+    get customizeHint(): ((argument: { value: Date | number | string, valueText: string }) => string) {
         return this._getOption('customizeHint');
     }
-    set customizeHint(value: Function) {
+    set customizeHint(value: ((argument: { value: Date | number | string, valueText: string }) => string)) {
         this._setOption('customizeHint', value);
     }
 
     @Input()
-    get customizeText(): Function {
+    get customizeText(): ((argument: { value: Date | number | string, valueText: string }) => string) {
         return this._getOption('customizeText');
     }
-    set customizeText(value: Function) {
+    set customizeText(value: ((argument: { value: Date | number | string, valueText: string }) => string)) {
         this._setOption('customizeText', value);
     }
 
     @Input()
-    get format(): Format | string | undefined {
+    get format(): Format | undefined {
         return this._getOption('format');
     }
-    set format(value: Format | string | undefined) {
+    set format(value: Format | undefined) {
         this._setOption('format', value);
     }
 
@@ -95,10 +95,10 @@ export class DxoPolarChartLabelComponent extends NestedOption implements OnDestr
     }
 
     @Input()
-    get argumentFormat(): Format | string | undefined {
+    get argumentFormat(): Format | undefined {
         return this._getOption('argumentFormat');
     }
-    set argumentFormat(value: Format | string | undefined) {
+    set argumentFormat(value: Format | undefined) {
         this._setOption('argumentFormat', value);
     }
 
@@ -111,10 +111,10 @@ export class DxoPolarChartLabelComponent extends NestedOption implements OnDestr
     }
 
     @Input()
-    get border(): { color?: string, dashStyle?: DashStyle, visible?: boolean, width?: number } {
+    get border(): { color?: string | undefined, dashStyle?: DashStyle | undefined, visible?: boolean, width?: number } {
         return this._getOption('border');
     }
-    set border(value: { color?: string, dashStyle?: DashStyle, visible?: boolean, width?: number }) {
+    set border(value: { color?: string | undefined, dashStyle?: DashStyle | undefined, visible?: boolean, width?: number }) {
         this._setOption('border', value);
     }
 

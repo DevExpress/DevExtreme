@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import DataGrid, {
-  Scrolling, Pager, Paging, DataGridTypes,
+  Scrolling, Pager, Paging, type DataGridTypes,
 } from 'devextreme-react/data-grid';
 import SelectBox from 'devextreme-react/select-box';
 import CheckBox from 'devextreme-react/check-box';

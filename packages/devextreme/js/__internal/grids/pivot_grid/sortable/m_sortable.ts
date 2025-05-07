@@ -1,3 +1,13 @@
+import eventsEngine from '@js/common/core/events/core/events_engine';
+import {
+  drop as dragEventDrop,
+  end as dragEventEnd,
+  enter as dragEventEnter,
+  leave as dragEventLeave,
+  move as dragEventMove,
+  start as dragEventStart,
+} from '@js/common/core/events/drag';
+import { addNamespace } from '@js/common/core/events/utils/index';
 import registerComponent from '@js/core/component_registrator';
 import domAdapter from '@js/core/dom_adapter';
 import DOMComponent from '@js/core/dom_component';
@@ -9,16 +19,6 @@ import {
   setWidth,
 } from '@js/core/utils/size';
 import { isDefined } from '@js/core/utils/type';
-import eventsEngine from '@js/events/core/events_engine';
-import {
-  drop as dragEventDrop,
-  end as dragEventEnd,
-  enter as dragEventEnter,
-  leave as dragEventLeave,
-  move as dragEventMove,
-  start as dragEventStart,
-} from '@js/events/drag';
-import { addNamespace } from '@js/events/utils/index';
 import swatchContainer from '@js/ui/widget/swatch_container';
 
 const { getSwatchContainer } = swatchContainer;

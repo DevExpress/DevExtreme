@@ -1,3 +1,5 @@
+import { errors } from '@js/common/data/errors';
+import { keysEqual, rejectedPromise, trivialPromise } from '@js/common/data/utils';
 import config from '@js/core/config';
 import Guid from '@js/core/guid';
 import { compileGetter } from '@js/core/utils/data';
@@ -6,10 +8,6 @@ import { deepExtendArraySafe } from '@js/core/utils/object';
 import {
   isDefined, isEmptyObject, isObject, isPlainObject,
 } from '@js/core/utils/type';
-// @ts-expect-error
-import { errors } from '@js/data/errors';
-// @ts-expect-error
-import { keysEqual, rejectedPromise, trivialPromise } from '@js/data/utils';
 
 function hasKey(target, keyOrKeys) {
   let key;
@@ -143,6 +141,7 @@ function applyBatch({
 }
 
 function getErrorResult(isBatch, logError, errorCode) {
+  // @ts-expect-error
   return !isBatch ? rejectedPromise(errors.Error(errorCode)) : logError && errors.log(errorCode);
 }
 
@@ -188,6 +187,7 @@ function update(keyInfo, array, key, data, isBatch, immutable, logError) {
       if (immutable === true && isDefined(target)) {
         const newTarget = createObjectWithChanges(target, data);
         array[index] = newTarget;
+        // @ts-expect-error
         return !isBatch && trivialPromise(newTarget, key);
       }
     }
@@ -198,8 +198,10 @@ function update(keyInfo, array, key, data, isBatch, immutable, logError) {
   deepExtendArraySafe(target, data, extendComplexObject, false, true, true);
   if (!isBatch) {
     if (config().useLegacyStoreResult) {
+      // @ts-expect-error
       return trivialPromise(key, data);
     }
+    // @ts-expect-error
     return trivialPromise(target, key);
   }
 }
@@ -232,6 +234,7 @@ function insert(keyInfo, array, data, index, isBatch, logError, skipCopying) {
   setDataByKeyMapValue(array, keyValue, obj);
 
   if (!isBatch) {
+    // @ts-expect-error
     return trivialPromise(config().useLegacyStoreResult ? data : obj, keyValue);
   }
 }
@@ -243,6 +246,7 @@ function remove(keyInfo, array, key, isBatch, logError) {
     setDataByKeyMapValue(array, key, null);
   }
   if (!isBatch) {
+    // @ts-expect-error
     return trivialPromise(key);
   } if (index < 0) {
     return getErrorResult(isBatch, logError, 'E4009');

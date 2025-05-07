@@ -12,9 +12,9 @@ import {
 
 
 
-import { HorizontalAlignment, Orientation, Position, VerticalEdge } from 'devextreme/common';
 import { DashStyle, Font } from 'devextreme/common/charts';
-import { VectorMapMarkerShape } from 'devextreme/viz/vector_map';
+import { VectorMapLegendItem, VectorMapMarkerShape } from 'devextreme/viz/vector_map';
+import { HorizontalAlignment, Position, Orientation, VerticalEdge } from 'devextreme/common';
 
 import {
     NestedOptionHost,
@@ -62,26 +62,26 @@ export class DxiVectorMapLegendComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get customizeHint(): Function {
+    get customizeHint(): ((itemInfo: { color: string, end: number, index: number, size: number, start: number }) => string) {
         return this._getOption('customizeHint');
     }
-    set customizeHint(value: Function) {
+    set customizeHint(value: ((itemInfo: { color: string, end: number, index: number, size: number, start: number }) => string)) {
         this._setOption('customizeHint', value);
     }
 
     @Input()
-    get customizeItems(): Function {
+    get customizeItems(): ((items: Array<VectorMapLegendItem>) => Array<VectorMapLegendItem>) {
         return this._getOption('customizeItems');
     }
-    set customizeItems(value: Function) {
+    set customizeItems(value: ((items: Array<VectorMapLegendItem>) => Array<VectorMapLegendItem>)) {
         this._setOption('customizeItems', value);
     }
 
     @Input()
-    get customizeText(): Function {
+    get customizeText(): ((itemInfo: { color: string, end: number, index: number, size: number, start: number }) => string) {
         return this._getOption('customizeText');
     }
-    set customizeText(value: Function) {
+    set customizeText(value: ((itemInfo: { color: string, end: number, index: number, size: number, start: number }) => string)) {
         this._setOption('customizeText', value);
     }
 
@@ -150,10 +150,10 @@ export class DxiVectorMapLegendComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get markerTemplate(): any | undefined {
+    get markerTemplate(): any {
         return this._getOption('markerTemplate');
     }
-    set markerTemplate(value: any | undefined) {
+    set markerTemplate(value: any) {
         this._setOption('markerTemplate', value);
     }
 

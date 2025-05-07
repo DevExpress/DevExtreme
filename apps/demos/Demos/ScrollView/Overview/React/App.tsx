@@ -1,7 +1,7 @@
 import React, { useCallback, useRef, useState } from 'react';
-import ScrollView, { ScrollViewTypes } from 'devextreme-react/scroll-view';
+import ScrollView, { type ScrollViewTypes } from 'devextreme-react/scroll-view';
 import SelectBox from 'devextreme-react/select-box';
-import CheckBox, { CheckBoxTypes } from 'devextreme-react/check-box';
+import CheckBox, { type CheckBoxTypes } from 'devextreme-react/check-box';
 import service from './data.ts';
 
 type UpdateContentArgs = ScrollViewTypes.PullDownEvent | ScrollViewTypes.ReachBottomEvent;

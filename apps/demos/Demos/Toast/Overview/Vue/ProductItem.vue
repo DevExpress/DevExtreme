@@ -21,7 +21,7 @@ type Product = typeof products[0];
 const props = withDefaults(defineProps<{
   product: Product,
 }>(), {
-  product: () => ({}),
+  product: () => ({} as Product),
 });
 
 const emit = defineEmits(['checked']);

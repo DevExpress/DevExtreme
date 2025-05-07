@@ -2,7 +2,7 @@ import $ from 'jquery';
 
 import 'generic_light.css!';
 import 'ui/data_grid';
-import { createEvent } from 'events/utils/index';
+import { createEvent } from 'common/core/events/utils/index';
 import { setupDataGridModules } from '../../helpers/dataGridMocks.js';
 import {
     CLICK_EVENT,
@@ -12,7 +12,7 @@ import {
     focusCell,
     dataGridWrapper } from '../../helpers/grid/keyboardNavigationHelper.js';
 
-import fx from 'animation/fx';
+import fx from 'common/core/animation/fx';
 
 QUnit.testStart(function() {
     const markup = `

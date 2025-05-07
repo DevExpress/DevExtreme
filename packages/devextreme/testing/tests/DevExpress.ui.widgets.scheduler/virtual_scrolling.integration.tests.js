@@ -4,7 +4,7 @@ import { getWindow } from 'core/utils/window';
 
 import 'generic_light.css!';
 
-import { DataSource } from 'data/data_source/data_source';
+import { DataSource } from 'common/data/data_source/data_source';
 import {
     createWrapper,
     initTestMarkup,

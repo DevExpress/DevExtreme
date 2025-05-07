@@ -1,10 +1,10 @@
 import $ from '../../core/renderer';
-import eventsEngine from '../../events/core/events_engine';
+import eventsEngine from '../../common/core/events/core/events_engine';
 // eslint-disable-next-line no-restricted-imports
 import ko from 'knockout';
 import { isPlainObject } from '../../core/utils/type';
-import eventRegistratorCallbacks from '../../events/core/event_registrator_callbacks';
-import { addNamespace } from '../../events/utils/index';
+import eventRegistratorCallbacks from '../../common/core/events/core/event_registrator_callbacks';
+import { addNamespace } from '../../common/core/events/utils/index';
 
 if(ko) {
     eventRegistratorCallbacks.add(function(name) {

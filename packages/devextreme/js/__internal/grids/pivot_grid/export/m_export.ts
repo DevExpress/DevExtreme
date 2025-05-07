@@ -1,3 +1,4 @@
+import localizationNumber from '@js/common/core/localization/number';
 import Class from '@js/core/class';
 import { Deferred, when } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
@@ -6,7 +7,6 @@ import { getDefaultAlignment } from '@js/core/utils/position';
 import { isDefined, isFunction } from '@js/core/utils/type';
 import { hasWindow } from '@js/core/utils/window';
 import formatHelper from '@js/format_helper';
-import localizationNumber from '@js/localization/number';
 import { prepareItems } from '@ts/grids/grid_core/m_export';
 
 const DEFAULT_DATA_TYPE = 'string';

@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  TreeList, Editing, Column, RequiredRule, Lookup, TreeListTypes,
+  TreeList, Editing, Column, RequiredRule, Lookup, type TreeListTypes,
 } from 'devextreme-react/tree-list';
 import { tasks, employees } from './data.ts';
 

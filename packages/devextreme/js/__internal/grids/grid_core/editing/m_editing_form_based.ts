@@ -1,4 +1,6 @@
 /* eslint-disable max-classes-per-file */
+import eventsEngine from '@js/common/core/events/core/events_engine';
+import { removeEvent } from '@js/common/core/events/remove';
 import devices from '@js/core/devices';
 import Guid from '@js/core/guid';
 import type { dxElementWrapper } from '@js/core/renderer';
@@ -9,8 +11,6 @@ import { isElementInDom } from '@js/core/utils/dom';
 import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import { isDefined, isString } from '@js/core/utils/type';
-import eventsEngine from '@js/events/core/events_engine';
-import { removeEvent } from '@js/events/remove';
 import Button from '@js/ui/button';
 import Form from '@js/ui/form';
 import Popup from '@js/ui/popup/ui.popup';

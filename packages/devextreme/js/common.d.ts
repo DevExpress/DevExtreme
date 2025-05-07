@@ -1,13 +1,21 @@
-import { PositionConfig } from './animation/position';
+import { PositionConfig } from './common/core/animation';
 import type {
   OmitInternal,
 } from './core';
-import { FloatingActionButtonDirection } from './core/config';
+
+import {
+  Device,
+} from './common/core/environment';
+
+import {
+  DeepPartial,
+} from './core';
 
 import type dxDraggable from './ui/draggable';
 import type dxScrollable from './ui/scroll_view/ui.scrollable';
 import type dxSortable from './ui/sortable';
 import type { Properties as ButtonProperties } from './ui/button';
+import { UserDefinedElement } from './core/element';
 
 /**
  * @public
@@ -179,6 +187,12 @@ export type DataType = 'string' | 'number' | 'date' | 'boolean' | 'object' | 'da
  * @public
  * @namespace DevExpress.common
  */
+export type DateLike = Date | number | string | null;
+
+/**
+ * @public
+ * @namespace DevExpress.common
+ */
 export type Direction = 'bottom' | 'left' | 'right' | 'top';
 
 /**
@@ -289,7 +303,7 @@ export type GlobalConfig = {
    * @default undefined
    * @public
    */
-  editorStylingMode?: EditorStyle;
+  editorStylingMode?: EditorStyle | undefined;
   /**
    * @docid
    * @public
@@ -388,6 +402,7 @@ export type GlobalConfig = {
    */
   licenseKey?: string;
   buyNowLink?: string;
+  licensingDocLink?: string;
 };
 
 /**
@@ -754,14 +769,14 @@ export type TextEditorButton = {
    * @docid
    * @default undefined
    */
-  name?: string;
+  name?: string | undefined;
   /**
    * @public
    * @docid
-   * @type dxButtonOptions
+   * @type dxButtonOptions | undefined
    * @default undefined
    */
-  options?: ButtonProperties;
+  options?: ButtonProperties | undefined;
 };
 
 /**
@@ -846,44 +861,66 @@ export type DisplayMode = 'adaptive' | 'compact' | 'full';
 
 /**
  * @docid
- * @hidden
- * @namespace DevExpress.common
+ * @namespace DevExpress.data
+ * @public
  */
-export type PagerBase = {
+export class Guid {
+  constructor();
+  constructor(value: string);
   /**
    * @docid
+   * @publicName toString()
    * @public
-   * @default "adaptive"
    */
-  displayMode?: DisplayMode;
+  toString(): string;
   /**
    * @docid
+   * @publicName valueOf()
    * @public
-   * @default "Page {0} of {1} ({2} items)"
    */
-  infoText?: string;
-  /**
-   * @docid
-   * @public
-   * @default false
-   */
-  showInfo?: boolean;
-  /**
-   * @docid
-   * @public
-   * @default false
-   */
-  showNavigationButtons?: boolean;
-  /**
-   * @docid
-   * @public
-   * @default false
-   */
-  showPageSizeSelector?: boolean;
-  /**
-   * @docid
-   * @public
-   * @default "Page Navigation"
-   */
-  label?: string;
+  valueOf(): string;
+}
+
+/**
+* @docid
+* @public
+*/
+export type DefaultOptionsRule<T> = {
+  device?: Device | Device[] | ((device: Device) => boolean);
+  options: DeepPartial<T>;
 };
+
+/** @public */
+export type FloatingActionButtonDirection = 'auto' | 'up' | 'down';
+
+/**
+ * @docid
+ * @publicName config()
+ * @namespace DevExpress
+ * @public
+ */
+export function config(): GlobalConfig;
+
+/**
+ * @docid
+ * @publicName config(config)
+ * @namespace DevExpress
+ * @public
+ */
+// eslint-disable-next-line @typescript-eslint/no-shadow
+export function config(config: GlobalConfig): void;
+
+/**
+ * @docid
+ * @section Common
+ * @public
+ */
+export type template = string | Function | UserDefinedElement;
+
+/**
+ * @docid
+ * @publicName setTemplateEngine(options)
+ * @namespace DevExpress
+ * @public
+ */
+export function setTemplateEngine(templateEngineOptions: { compile?: Function; render?: Function }): void;

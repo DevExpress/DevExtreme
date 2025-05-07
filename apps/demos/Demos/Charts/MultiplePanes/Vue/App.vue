@@ -9,7 +9,7 @@
     <DxSeries
       pane="topPane"
       color="#b0daff"
-      type="rangeArea"
+      type="rangearea"
       range-value1-field="minT"
       range-value2-field="maxT"
       name="Monthly Temperature Ranges, °C"

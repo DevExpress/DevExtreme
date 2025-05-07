@@ -1,15 +1,14 @@
+import type { NativeEventInfo } from '@js/common/core/events';
+import messageLocalization from '@js/common/core/localization/message';
 import $ from '@js/core/renderer';
-import type { NativeEventInfo } from '@js/events';
-import messageLocalization from '@js/localization/message';
 import type { ClickEvent } from '@js/ui/button';
 import Button from '@js/ui/button';
 import type { Properties as DOMComponentProperties } from '@ts/core/widget/dom_component';
 import DOMComponent from '@ts/core/widget/dom_component';
 import type { OptionChanged } from '@ts/core/widget/types';
+import TextArea from '@ts/ui/m_text_area';
 
 import type { EnterKeyEvent, InputEvent } from '../../../ui/text_area';
-import type dxTextArea from '../../../ui/text_area';
-import TextArea from '../m_text_area';
 
 const CHAT_MESSAGEBOX_CLASS = 'dx-chat-messagebox';
 const CHAT_MESSAGEBOX_TEXTAREA_CLASS = 'dx-chat-messagebox-textarea';
@@ -17,7 +16,7 @@ const CHAT_MESSAGEBOX_BUTTON_CLASS = 'dx-chat-messagebox-button';
 
 export const TYPING_END_DELAY = 2000;
 
-export type MessageSendEvent =
+export type MessageEnteredEvent =
   NativeEventInfo<MessageBox, KeyboardEvent | PointerEvent | MouseEvent | TouchEvent> &
   { text?: string };
 
@@ -30,7 +29,7 @@ export interface Properties extends DOMComponentProperties<MessageBox> {
 
   hoverStateEnabled?: boolean;
 
-  onMessageSend?: (e: MessageSendEvent) => void;
+  onMessageEntered?: (e: MessageEnteredEvent) => void;
 
   onTypingStart?: (e: TypingStartEvent) => void;
 
@@ -38,11 +37,11 @@ export interface Properties extends DOMComponentProperties<MessageBox> {
 }
 
 class MessageBox extends DOMComponent<MessageBox, Properties> {
-  _textArea!: dxTextArea;
+  _textArea!: TextArea;
 
   _button!: Button;
 
-  _messageSendAction?: (e: Partial<MessageSendEvent>) => void;
+  _messageEnteredAction?: (e: Partial<MessageEnteredEvent>) => void;
 
   _typingStartAction?: (e: Partial<TypingStartEvent>) => void;
 
@@ -57,7 +56,7 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
       activeStateEnabled: true,
       focusStateEnabled: true,
       hoverStateEnabled: true,
-      onMessageSend: undefined,
+      onMessageEntered: undefined,
       onTypingStart: undefined,
       onTypingEnd: undefined,
     };
@@ -66,7 +65,7 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
   _init(): void {
     super._init();
 
-    this._createMessageSendAction();
+    this._createMessageEnteredAction();
     this._createTypingStartAction();
     this._createTypingEndAction();
   }
@@ -148,9 +147,9 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
     });
   }
 
-  _createMessageSendAction(): void {
-    this._messageSendAction = this._createActionByOption(
-      'onMessageSend',
+  _createMessageEnteredAction(): void {
+    this._messageEnteredAction = this._createActionByOption(
+      'onMessageEntered',
       { excludeValidators: ['disabled'] },
     );
   }
@@ -205,7 +204,7 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
     this._textArea.reset();
     this._toggleButtonDisableState(true);
 
-    this._messageSendAction?.({ text, event: e.event });
+    this._messageEnteredAction?.({ text, event: e.event });
   }
 
   _toggleButtonDisableState(state: boolean): void {
@@ -230,8 +229,8 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
 
         break;
       }
-      case 'onMessageSend':
-        this._createMessageSendAction();
+      case 'onMessageEntered':
+        this._createMessageEnteredAction();
 
         break;
       case 'onTypingStart':

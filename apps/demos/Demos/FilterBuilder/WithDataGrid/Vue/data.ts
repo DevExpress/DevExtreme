@@ -1,3 +1,5 @@
+import { type DxFilterBuilderTypes } from 'devextreme-vue/filter-builder';
+
 export const filter = [
   ['Product_Current_Inventory', '<>', 0],
   'or',
@@ -8,13 +10,13 @@ export const filter = [
   ],
 ];
 
-export const fields = [
+export const fields: DxFilterBuilderTypes.Field[] = [
   {
     caption: 'ID',
-    width: 50,
     dataField: 'Product_ID',
     dataType: 'number',
-  }, {
+    width: 50,
+  } as DxFilterBuilderTypes.Field, {
     dataField: 'Product_Name',
     dataType: 'string',
   }, {

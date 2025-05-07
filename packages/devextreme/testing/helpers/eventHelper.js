@@ -1,4 +1,4 @@
-import registerEventCallbacks from 'events/core/event_registrator_callbacks';
+import registerEventCallbacks from 'common/core/events/core/event_registrator_callbacks';
 
 export const special = {};
 

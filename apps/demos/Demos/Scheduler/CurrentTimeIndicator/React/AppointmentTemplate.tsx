@@ -1,6 +1,6 @@
 import React from 'react';
 import Query from 'devextreme/data/query';
-import { SchedulerTypes } from 'devextreme-react/scheduler';
+import { type SchedulerTypes } from 'devextreme-react/scheduler';
 import { moviesData } from './data.ts';
 
 type AppointmentTemplateProps = {

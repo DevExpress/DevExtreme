@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import TreeViewTestWrapper from '../../helpers/TreeViewTestHelper.js';
 import { Deferred } from 'core/utils/deferred';
-import CustomStore from 'data/custom_store';
+import { CustomStore } from 'common/data/custom_store';
 import { DATA, data2 } from './treeViewParts/testData.js';
 import localization from 'localization';
 import 'ui/tree_view';

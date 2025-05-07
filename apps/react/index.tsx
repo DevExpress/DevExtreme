@@ -15,3 +15,20 @@ themes.initialized(() => {
         </React.StrictMode>
     );
 });
+
+// for React 17
+// import 'devextreme/dist/css/dx.common.css';
+// import 'devextreme/dist/css/dx.light.css';
+
+// import React from 'react';
+// import ReactDOM from 'react-dom';
+// import themes from 'devextreme/ui/themes';
+
+// import App from './App';
+
+// themes.initialized(() => {
+//     ReactDOM.render(
+//         <App />,
+//         document.getElementById('app')
+//     );
+// });

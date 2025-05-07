@@ -3,11 +3,10 @@ import {
 } from '../../core/utils/deferred';
 
 import {
+    DataSource,
     Store,
     StoreOptions,
-} from '../../data/index';
-
-import DataSource from '../../data/data_source';
+} from '../../common/data';
 
 import {
     Format,

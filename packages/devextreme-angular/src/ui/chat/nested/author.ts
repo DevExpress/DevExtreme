@@ -29,10 +29,10 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoChatAuthorComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get avatarAlt(): string | undefined {
+    get avatarAlt(): string {
         return this._getOption('avatarAlt');
     }
-    set avatarAlt(value: string | undefined) {
+    set avatarAlt(value: string) {
         this._setOption('avatarAlt', value);
     }
 

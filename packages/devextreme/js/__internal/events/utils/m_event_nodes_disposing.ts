@@ -1,5 +1,5 @@
-import eventsEngine from '@js/events/core/events_engine';
-import { removeEvent } from '@js/events/remove';
+import eventsEngine from '@js/common/core/events/core/events_engine';
+import { removeEvent } from '@js/common/core/events/remove';
 
 function nodesByEvent(event) {
   return event && [

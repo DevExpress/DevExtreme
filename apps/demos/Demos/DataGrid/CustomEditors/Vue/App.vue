@@ -99,15 +99,15 @@ import {
   DxColumn,
   DxLookup,
   DxRequiredRule,
-  DxDataGridTypes,
+  type DxDataGridTypes,
   DxPager,
 } from 'devextreme-vue/data-grid';
 import { createStore } from 'devextreme-aspnet-data-nojquery';
 import EmployeeDropDownBoxComponent from './EmployeeDropDownBoxComponent.vue';
 import EmployeeTagBoxComponent from './EmployeeTagBoxComponent.vue';
-import { statuses, Task } from './data.ts';
+import { statuses, type Task } from './data.ts';
 
-const url = 'https://js.devexpress.com/Demos/Mvc/api/CustomEditors';
+const url = 'https://js.devexpress.com/Demos/NetCore/api/DataGridCustomEditors';
 
 const employees = createStore({
   key: 'ID',
@@ -144,13 +144,13 @@ const onRowInserted = (e: DxDataGridTypes.RowInsertedEvent) => {
 };
 
 function calculateFilterExpression(
-  column: DxDataGridTypes.Column,
+  this: DxDataGridTypes.Column,
   filterValue: any,
-  selectedFilterOperations: string | null,
+  selectedFilterOperations: string,
   target: string,
-) {
+): any {
   if (target === 'search' && typeof filterValue === 'string') {
-    return [column.dataField, 'contains', filterValue];
+    return [this.dataField, 'contains', filterValue];
   }
 
   return (rowData: Task) => (rowData.AssignedEmployee || []).includes(filterValue);

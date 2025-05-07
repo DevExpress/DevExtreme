@@ -12,6 +12,7 @@ export {
   CustomOperationEditorTemplate,
   FieldEditorTemplate,
   CustomOperation,
+  FieldInfo,
   Field,
   Properties,
 } from './filter_builder';

@@ -4,8 +4,8 @@ import devices from '__internal/core/m_devices';
 import Color from 'color';
 import pointerMock from '../../helpers/pointerMock.js';
 import keyboardMock from '../../helpers/keyboardMock.js';
-import fx from 'animation/fx';
-import { normalizeKeyName } from 'events/utils/index';
+import fx from 'common/core/animation/fx';
+import { normalizeKeyName } from 'common/core/events/utils/index';
 
 import 'generic_light.css!';
 import 'ui/color_box';
@@ -498,6 +498,21 @@ QUnit.module('Color Box', {
         colorBox.option('value', 'rgba(100, 0, 0, 75)');
         this.updateColorInput('red', 100);
         assert.equal(colorBox.option('value'), 'rgba(100, 0, 0, 1)');
+    });
+
+    QUnit.test('In "instantly" mode value should not throw an error when invalid value is set (T1274981)', function(assert) {
+        try {
+            const colorBox = showColorBox.call(this, {
+                applyValueMode: 'instantly',
+            }).dxColorBox('instance');
+
+            colorBox.option('value', 'invalid');
+            assert.strictEqual(colorBox.option('value'), '#000000');
+
+            assert.ok(true, 'no errors');
+        } catch(e) {
+            assert.ok(false, `The '${e.message}' is raised`);
+        }
     });
 
 

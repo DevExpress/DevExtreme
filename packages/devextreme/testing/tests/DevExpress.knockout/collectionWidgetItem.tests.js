@@ -2,7 +2,7 @@ import $ from 'jquery';
 import ko from 'knockout';
 import registerComponent from 'core/component_registrator';
 import CollectionWidget from 'ui/collection/ui.collection_widget.edit';
-import CollectionWidgetItem from '__internal/ui/collection/m_item';
+import CollectionWidgetItem from '__internal/ui/collection/item';
 
 import 'integration/knockout';
 

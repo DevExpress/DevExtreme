@@ -1,4 +1,4 @@
-import devices from '@js/core/devices';
+import devices from '@js/common/core/environment/devices';
 import domAdapter from '@js/core/dom_adapter';
 import callOnce from '@js/core/utils/call_once';
 import { styleProp, stylePropPrefix } from '@js/core/utils/style';
@@ -19,7 +19,6 @@ const supportProp = function (prop) {
 };
 
 const isNativeScrollingSupported = function () {
-  // @ts-expect-error mac doesnt exist in public type
   const { platform, mac: isMac } = devices.real();
   const isNativeScrollDevice = platform === 'ios' || platform === 'android' || isMac;
 

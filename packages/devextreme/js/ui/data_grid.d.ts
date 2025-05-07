@@ -1,5 +1,4 @@
-import DataSource, {
-} from '../data/data_source';
+import { DataSource } from '../common/data';
 
 import {
   UserDefinedElement,
@@ -13,7 +12,13 @@ import {
 
 import {
     template,
-} from '../core/templates/template';
+    HorizontalAlignment,
+    Mode,
+    Scrollable,
+    SelectAllMode,
+    SortOrder,
+    ToolbarItemLocation,
+} from '../common';
 
 import {
     Cancelable,
@@ -21,7 +26,7 @@ import {
     NativeEventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
-} from '../events/index';
+} from '../common/core/events';
 
 import {
     dxToolbarItem,
@@ -33,15 +38,6 @@ import Widget, {
 import {
   Format,
 } from '../localization';
-
-import {
-    HorizontalAlignment,
-    Mode,
-    Scrollable,
-    SelectAllMode,
-    SortOrder,
-    ToolbarItemLocation,
-} from '../common';
 
 import {
     AdaptiveDetailRowPreparingInfo,
@@ -1168,7 +1164,7 @@ export type dxDataGridOptions<TRowData = any, TKey = any> = Omit<GridBaseOptions
      * @default undefined
      * @public
      */
-    columns?: Array<Column<TRowData, TKey> | string>;
+    columns?: Array<Column<TRowData, TKey> | string> | undefined;
     /**
      * @docid
      * @type_function_param1 columns:Array<dxDataGridColumn>
@@ -1204,7 +1200,7 @@ export type dxDataGridOptions<TRowData = any, TKey = any> = Omit<GridBaseOptions
      * @default undefined
      * @public
      */
-    keyExpr?: string | Array<string>;
+    keyExpr?: string | Array<string> | undefined;
     /**
      * @docid
      * @type object
@@ -1423,7 +1419,7 @@ export type dxDataGridOptions<TRowData = any, TKey = any> = Omit<GridBaseOptions
      * @default undefined
      * @public
      */
-    sortByGroupSummaryInfo?: Array<SortByGroupSummaryInfoItem>;
+    sortByGroupSummaryInfo?: Array<SortByGroupSummaryInfoItem> | undefined;
     /**
      * @docid
      * @type object
@@ -1432,11 +1428,11 @@ export type dxDataGridOptions<TRowData = any, TKey = any> = Omit<GridBaseOptions
     summary?: Summary<TRowData, TKey>;
     /**
      * @docid
-     * @type dxDataGridToolbar
+     * @type dxDataGridToolbar | undefined
      * @default undefined
      * @public
      */
-    toolbar?: Toolbar;
+    toolbar?: Toolbar | undefined;
 };
 
 /**
@@ -1616,18 +1612,18 @@ export type SortByGroupSummaryInfoItem = {
      * @docid dxDataGridOptions.sortByGroupSummaryInfo.groupColumn
      * @default undefined
      */
-    groupColumn?: string;
+    groupColumn?: string | undefined;
     /**
      * @docid dxDataGridOptions.sortByGroupSummaryInfo.sortOrder
      * @default undefined
      * @acceptValues undefined
      */
-    sortOrder?: SortOrder;
+    sortOrder?: SortOrder | undefined;
     /**
      * @docid dxDataGridOptions.sortByGroupSummaryInfo.summaryItem
      * @default undefined
      */
-    summaryItem?: string | number;
+    summaryItem?: string | number | undefined;
 };
 
 /** @public */
@@ -1663,7 +1659,7 @@ export type Summary<TRowData = any, TKey = any> = {
    * @type Array<object>
    * @default undefined
    */
-  groupItems?: Array<SummaryGroupItem>;
+  groupItems?: Array<SummaryGroupItem> | undefined;
   /**
    * @docid dxDataGridOptions.summary.recalculateWhileEditing
    * @default false
@@ -1684,7 +1680,7 @@ export type Summary<TRowData = any, TKey = any> = {
    * @type Array<object>
    * @default undefined
    */
-  totalItems?: Array<SummaryTotalItem>;
+  totalItems?: Array<SummaryTotalItem> | undefined;
 };
 
 /** @public */
@@ -1707,7 +1703,7 @@ export type SummaryGroupItem = {
      * @docid dxDataGridOptions.summary.groupItems.column
      * @default undefined
      */
-    column?: string;
+    column?: string | undefined;
     /**
      * @docid dxDataGridOptions.summary.groupItems.customizeText
      * @type_function_param1 itemInfo:object
@@ -1717,17 +1713,17 @@ export type SummaryGroupItem = {
      * @docid dxDataGridOptions.summary.groupItems.displayFormat
      * @default undefined
      */
-    displayFormat?: string;
+    displayFormat?: string | undefined;
     /**
      * @docid dxDataGridOptions.summary.groupItems.name
      * @default undefined
      */
-    name?: string;
+    name?: string | undefined;
     /**
      * @docid dxDataGridOptions.summary.groupItems.showInColumn
      * @default undefined
      */
-    showInColumn?: string;
+    showInColumn?: string | undefined;
     /**
      * @docid dxDataGridOptions.summary.groupItems.showInGroupFooter
      * @default false
@@ -1741,12 +1737,12 @@ export type SummaryGroupItem = {
      * @docid dxDataGridOptions.summary.groupItems.summaryType
      * @default undefined
      */
-    summaryType?: SummaryType | string;
+    summaryType?: SummaryType | string | undefined;
     /**
      * @docid dxDataGridOptions.summary.groupItems.valueFormat
      * @default undefined
      */
-    valueFormat?: Format;
+    valueFormat?: Format | undefined;
 };
 
 /**
@@ -1758,17 +1754,17 @@ export type SummaryTotalItem = {
    * @docid dxDataGridOptions.summary.totalItems.alignment
    * @default undefined
    */
-  alignment?: HorizontalAlignment;
+  alignment?: HorizontalAlignment | undefined;
   /**
    * @docid dxDataGridOptions.summary.totalItems.column
    * @default undefined
    */
-  column?: string;
+  column?: string | undefined;
   /**
    * @docid dxDataGridOptions.summary.totalItems.cssClass
    * @default undefined
    */
-  cssClass?: string;
+  cssClass?: string | undefined;
   /**
    * @docid dxDataGridOptions.summary.totalItems.customizeText
    * @type_function_param1 itemInfo:object
@@ -1778,17 +1774,17 @@ export type SummaryTotalItem = {
    * @docid dxDataGridOptions.summary.totalItems.displayFormat
    * @default undefined
    */
-  displayFormat?: string;
+  displayFormat?: string | undefined;
   /**
    * @docid dxDataGridOptions.summary.totalItems.name
    * @default undefined
    */
-  name?: string;
+  name?: string | undefined;
   /**
    * @docid dxDataGridOptions.summary.totalItems.showInColumn
    * @default undefined
    */
-  showInColumn?: string;
+  showInColumn?: string | undefined;
   /**
    * @docid dxDataGridOptions.summary.totalItems.skipEmptyValues
    */
@@ -1797,12 +1793,12 @@ export type SummaryTotalItem = {
    * @docid dxDataGridOptions.summary.totalItems.summaryType
    * @default undefined
    */
-  summaryType?: SummaryType | string;
+  summaryType?: SummaryType | string | undefined;
   /**
    * @docid dxDataGridOptions.summary.totalItems.valueFormat
    * @default undefined
    */
-  valueFormat?: Format;
+  valueFormat?: Format | undefined;
 };
 
 /**
@@ -1897,7 +1893,7 @@ export type Toolbar = {
    * @default undefined
    * @public
    */
-  visible?: boolean;
+  visible?: boolean | undefined;
   /**
    * @docid dxDataGridToolbar.disabled
    * @default false
@@ -2259,7 +2255,7 @@ export interface dxDataGridColumn<TRowData = any, TKey = any> extends ColumnBase
      * @default undefined
      * @public
      */
-    columns?: Array<Column<TRowData, TKey> | string>;
+    columns?: Array<Column<TRowData, TKey> | string> | undefined;
     /**
      * @docid dxDataGridColumn.editCellTemplate
      * @type_function_param2 cellInfo:object
@@ -2286,7 +2282,7 @@ export interface dxDataGridColumn<TRowData = any, TKey = any> extends ColumnBase
      * @fires dxDataGridOptions.onOptionChanged
      * @public
      */
-    groupIndex?: number;
+    groupIndex?: number | undefined;
     /**
      * @docid dxDataGridColumn.headerCellTemplate
      * @type_function_param2 headerInfo:object

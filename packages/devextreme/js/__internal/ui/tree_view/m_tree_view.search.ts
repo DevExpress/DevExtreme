@@ -11,7 +11,7 @@ searchBoxMixin.setEditorClass(TextBox);
 
 const WIDGET_CLASS = 'dx-treeview';
 const NODE_CONTAINER_CLASS = `${WIDGET_CLASS}-node-container`;
-
+// @ts-expect-error ts-error
 const TreeViewSearch = TreeViewBase.inherit(searchBoxMixin).inherit({
   _addWidgetPrefix(className) {
     return `${WIDGET_CLASS}-${className}`;

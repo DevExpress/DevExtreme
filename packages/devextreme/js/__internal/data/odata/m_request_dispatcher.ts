@@ -1,7 +1,6 @@
-import '@js/data/odata/query_adapter';
+import '@js/common/data/odata/query_adapter';
 
-// @ts-expect-error
-import { sendRequest } from '@js/data/odata/utils';
+import { sendRequest } from '@js/common/data/odata/utils';
 
 const DEFAULT_PROTOCOL_VERSION = 4;
 

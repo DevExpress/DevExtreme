@@ -5,7 +5,7 @@ import $ from 'jquery';
 import 'ui/data_grid';
 
 import commonUtils from 'core/utils/common';
-import pointerEvents from 'events/pointer';
+import pointerEvents from 'common/core/events/pointer';
 import { setupDataGridModules } from '../../helpers/dataGridMocks.js';
 import { getActiveElement } from '../../helpers/shadowDom.js';
 import {

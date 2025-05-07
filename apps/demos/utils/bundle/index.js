@@ -5,6 +5,7 @@ const Builder = require('systemjs-builder');
 const babel = require('@babel/core');
 const url = require('url');
 
+const GRID_COMMON_STAR_IMPORT = 'exports.Grids = __importStar(require("./grids"));';
 
 // https://stackoverflow.com/questions/42412965/how-to-load-named-exports-with-systemjs/47108328
 const prepareModulesToNamedImport = () => {
@@ -47,6 +48,9 @@ const getDefaultBuilderConfig = (framework, additionPaths, map) => ({
   defaultExtension: false,
   defaultJSExtensions: 'js',
   packages: {
+    'devextreme/common/core/events/utils': {
+      main: 'index',
+    },
     'devextreme/events/utils': {
       main: 'index',
     },
@@ -133,6 +137,7 @@ const prepareConfigs = (framework)=> {
       prepareDevextremexAngularFiles();
 
       const bundlesRoot = 'node_modules/devextreme-angular/bundles';
+
       const componentNames = fs.readdirSync(bundlesRoot)
           .filter((fileName) => fileName.indexOf('umd.js') !== -1)
           .filter((fileName) => fileName.indexOf('devextreme-angular-ui') === 0)
@@ -215,6 +220,14 @@ const prepareConfigs = (framework)=> {
             ]
           };
 
+          // This auto-generated runtime import is useless because grid.js exports only types,
+          // but System.js transpiles this import into code that crashes when triggered in a Demo.
+          const removeImportTranspiledToCrashingCode = (result) => {
+            if(result.code.includes(GRID_COMMON_STAR_IMPORT)) {
+              result.code = result.code.replace(GRID_COMMON_STAR_IMPORT, '');
+            }
+          }
+
           const result = new Promise((resolve) => {
             // systemjs-builder uses babel 6, so we use babel 7 here for transpiling ES2020
             babel.transformFile(url.fileURLToPath(load.name), babelOptions, (err, result) => {
@@ -222,6 +235,7 @@ const prepareConfigs = (framework)=> {
                   fetch(load).then(r => resolve(r));
                   console.log('Unexpected transipling error (babel 7): ' + err);
                 } else {
+                  removeImportTranspiledToCrashingCode(result);
                   resolve(result.code);
                 }
             });

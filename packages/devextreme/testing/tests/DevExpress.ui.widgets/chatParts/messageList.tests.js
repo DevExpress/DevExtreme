@@ -5,14 +5,16 @@ import ScrollView from 'ui/scroll_view';
 import {
     generateMessages,
     userFirst,
+    userSecond,
     NOW,
     MOCK_COMPANION_USER_ID,
     MOCK_CURRENT_USER_ID,
 } from './chat.tests.js';
 import MessageGroup from '__internal/ui/chat/messagegroup';
 import TypingIndicator from '__internal/ui/chat/typingindicator';
+import devices from '__internal/core/m_devices';
 import localization from 'localization';
-import dateLocalization from 'localization/date';
+import dateLocalization from 'common/core/localization/date';
 
 const CHAT_MESSAGELIST_CONTENT_CLASS = 'dx-chat-messagelist-content';
 const CHAT_MESSAGELIST_EMPTY_MESSAGE_CLASS = 'dx-chat-messagelist-empty-message';
@@ -20,9 +22,14 @@ const CHAT_MESSAGELIST_EMPTY_PROMPT_CLASS = 'dx-chat-messagelist-empty-prompt';
 const CHAT_MESSAGELIST_DAY_HEADER_CLASS = 'dx-chat-messagelist-day-header';
 
 const CHAT_MESSAGEGROUP_CLASS = 'dx-chat-messagegroup';
+const CHAT_MESSAGEGROUP_ALIGNMENT_START_CLASS = 'dx-chat-messagegroup-alignment-start';
+const CHAT_MESSAGEGROUP_ALIGNMENT_END_CLASS = 'dx-chat-messagegroup-alignment-end';
+const CHAT_LAST_MESSAGEGROUP_ALIGNMENT_START_CLASS = 'dx-chat-last-messagegroup-alignment-start';
+const CHAT_LAST_MESSAGEGROUP_ALIGNMENT_END_CLASS = 'dx-chat-last-messagegroup-alignment-end';
 const CHAT_MESSAGEBUBBLE_CLASS = 'dx-chat-messagebubble';
 const CHAT_TYPINGINDICATOR_CLASS = 'dx-chat-typingindicator';
 const SCROLLVIEW_REACHBOTTOM_INDICATOR = 'dx-scrollview-scrollbottom';
+const SCROLLABLE_CONTENT = 'dx-scrollable-content';
 
 const MS_IN_DAY = 86400000;
 
@@ -39,6 +46,8 @@ const moduleConfig = {
 
             this.getScrollView = () => ScrollView.getInstance(this.$element.find(`.${SCROLLVIEW_CLASS}`));
             this.getDayHeaders = () => $(this.getScrollView().content()).find(`.${CHAT_MESSAGELIST_DAY_HEADER_CLASS}`);
+            this.getMessageGroups = () => this.$element.find(`.${CHAT_MESSAGEGROUP_CLASS}`);
+            this.getBubbles = () => this.$element.find(`.${CHAT_MESSAGEBUBBLE_CLASS}`);
 
             this.scrollView = this.getScrollView();
             this.$scrollViewContent = $(this.scrollView.content());
@@ -58,6 +67,17 @@ QUnit.module('MessageList', () => {
     QUnit.module('Render', moduleConfig, () => {
         QUnit.test('should be initialized with correct type', function(assert) {
             assert.ok(this.instance instanceof MessageList);
+        });
+
+        QUnit.test('scrollable content box-sizing value should be border-box', function(assert) {
+            if(devices.real().platform !== 'ios') {
+                assert.ok(true, 'test does not actual other than ios');
+                return;
+            }
+            const $scrollableContent = this.$element.find(`.${SCROLLABLE_CONTENT}`);
+            const scrollBoxSizing = $scrollableContent.css('box-sizing');
+
+            assert.strictEqual(scrollBoxSizing, 'border-box', 'scrollable content has right box-sizing value');
         });
 
         QUnit.test('should not be any errors if the items contain undefined values', function(assert) {
@@ -425,6 +445,24 @@ QUnit.module('MessageList', () => {
             const $indicator = this.$element.find(`.${SCROLLVIEW_REACHBOTTOM_INDICATOR}`);
             assert.strictEqual($indicator.is(':visible'), true);
         });
+
+        QUnit.test('loading indicator should be change visibility after change isLoading option value at runtime', function(assert) {
+            this.reinit({
+                items: [
+                    { author: { id: 'UserID' } },
+                ],
+                isLoading: true
+            });
+
+            this.instance.option('isLoading', false);
+
+            const $indicator = this.$element.find(`.${SCROLLVIEW_REACHBOTTOM_INDICATOR}`);
+            assert.strictEqual($indicator.is(':visible'), false, 'loadindicator is not visible');
+
+            this.instance.option('isLoading', true);
+
+            assert.strictEqual($indicator.is(':visible'), true, 'loadindicator is visible');
+        });
     });
 
     QUnit.module('Options', () => {
@@ -654,6 +692,56 @@ QUnit.module('MessageList', () => {
             assert.strictEqual($secondMessageGroupBubbles.length, 1, 'correct bubble count');
         });
 
+        QUnit.test('new messages should be rendered after the last group', function(assert) {
+            const items = [
+                {
+                    timestamp: '2024-09-26T14:00:00',
+                    text: 'first messagegroup',
+                    author: userFirst,
+                },
+                {
+                    timestamp: '2024-09-26T14:02:00',
+                    text: 'first messagegroup',
+                    author: userFirst,
+                },
+                {
+                    timestamp: '2024-09-26T14:05:01',
+                    text: 'first messagegroup',
+                    author: userFirst,
+                },
+                {
+                    timestamp: '2024-09-26T14:10:02',
+                    text: 'second messagegroup',
+                    author: userSecond,
+                },
+            ];
+
+            this.reinit({
+                items,
+                showDayHeaders: false,
+                currentUserId: userFirst.id,
+            });
+
+            let $messageGroups = this.getMessageGroups();
+
+            assert.strictEqual($messageGroups.length, 2, 'correct messagegroup count');
+            assert.strictEqual($messageGroups.eq(0).find(`.${CHAT_MESSAGEBUBBLE_CLASS}`).length, 3, 'correct bubble count');
+            assert.strictEqual($messageGroups.eq(1).find(`.${CHAT_MESSAGEBUBBLE_CLASS}`).length, 1, 'correct bubble count');
+
+            this.instance.option('items', [...items, {
+                timestamp: '2024-09-26T14:05:05',
+                text: 'message_text',
+                author: userFirst,
+            }]);
+
+            $messageGroups = this.getMessageGroups();
+
+            assert.strictEqual($messageGroups.length, 3, 'correct messagegroup count');
+            assert.strictEqual($messageGroups.eq(0).find(`.${CHAT_MESSAGEBUBBLE_CLASS}`).length, 3, 'correct bubble count');
+            assert.strictEqual($messageGroups.eq(1).find(`.${CHAT_MESSAGEBUBBLE_CLASS}`).length, 1, 'correct bubble count');
+            assert.strictEqual($messageGroups.eq(2).find(`.${CHAT_MESSAGEBUBBLE_CLASS}`).length, 1, 'correct bubble count');
+        });
+
         QUnit.test(`new message group should not be rendered if ${MESSAGEGROUP_TIMEOUT} ms elapsed between the first and new messages at runtime`, function(assert) {
             const user = { id: 1 };
 
@@ -749,6 +837,86 @@ QUnit.module('MessageList', () => {
             const messageGroup = MessageGroup.getInstance(this.$element.find(`.${CHAT_MESSAGEGROUP_CLASS}`));
 
             assert.strictEqual(messageGroup.option('messageTimestampFormat'), 'hh.mm');
+        });
+
+        [{
+            alignment: 'alignment-start',
+            expectedGroupClass: CHAT_MESSAGEGROUP_ALIGNMENT_START_CLASS,
+            expectedLastGroupClass: CHAT_LAST_MESSAGEGROUP_ALIGNMENT_START_CLASS,
+        }, {
+            alignment: 'alignment-end',
+            expectedGroupClass: CHAT_MESSAGEGROUP_ALIGNMENT_END_CLASS,
+            expectedLastGroupClass: CHAT_LAST_MESSAGEGROUP_ALIGNMENT_END_CLASS,
+        }].forEach(({ alignment, expectedGroupClass, expectedLastGroupClass, author }) => {
+            QUnit.test(`last message group with ${alignment} should have ${expectedLastGroupClass} class`, function(assert) {
+                this.reinit({
+                    items: [
+                        { text: 'a', author: userFirst },
+                        { text: 'b', author: userSecond },
+                        { text: 'c', author: userFirst },
+                        { text: 'd', author: userSecond },
+                    ],
+                    currentUserId: userFirst.id,
+                });
+
+                const $messageGroups = this.$element.find(`.${expectedGroupClass}`);
+                const $lastGroup = this.$element.find(`.${expectedLastGroupClass}`);
+
+                assert.strictEqual($messageGroups.last().hasClass(expectedLastGroupClass), true, 'last group has expected class');
+                assert.strictEqual($lastGroup.length, 1, 'only one message group has expected class');
+            });
+
+            QUnit.test(`${expectedLastGroupClass} class should be moved to a new message group on runtime message with ${alignment} add`, function(assert) {
+                this.reinit({
+                    items: [
+                        { text: 'a', author: userFirst },
+                        { text: 'b', author: userSecond },
+                    ],
+                    currentUserId: userFirst.id,
+                });
+
+                let newMessage = { text: 'c', author: userFirst };
+
+                this.instance.option({ items: [ ...this.instance.option('items'), newMessage ] });
+
+                newMessage = { text: 'd', author: userSecond };
+
+                this.instance.option({ items: [ ...this.instance.option('items'), newMessage ] });
+
+                const $messageGroups = this.$element.find(`.${expectedGroupClass}`);
+                const $lastGroup = this.$element.find(`.${expectedLastGroupClass}`);
+
+                assert.strictEqual($messageGroups.last().hasClass(expectedLastGroupClass), true, 'last group has expected class');
+                assert.strictEqual($lastGroup.length, 1, 'only one message group has expected class');
+            });
+        });
+
+        QUnit.test('messageTemplate should be passed to messageGroup on init', function(assert) {
+            const messageTemplate = () => {};
+
+            this.reinit({
+                items: [{ text: 'text' }],
+                messageTemplate,
+            });
+
+            const messageGroup = MessageGroup.getInstance(this.$element.find(`.${CHAT_MESSAGEGROUP_CLASS}`));
+
+            assert.strictEqual(messageGroup.option('messageTemplate'), messageTemplate, 'messageTemplate is passed to messageGroup');
+        });
+
+        QUnit.test('messageTemplate should be passed to messageGroup at runtime', function(assert) {
+
+            this.reinit({
+                items: [{ text: 'text' }],
+            });
+
+            const messageTemplate = () => {};
+
+            this.instance.option('messageTemplate', messageTemplate);
+
+            const messageGroup = MessageGroup.getInstance(this.$element.find(`.${CHAT_MESSAGEGROUP_CLASS}`));
+
+            assert.strictEqual(messageGroup.option('messageTemplate'), messageTemplate, 'messageTemplate is passed to messageGroup');
         });
     });
 
@@ -987,6 +1155,7 @@ QUnit.module('MessageList', () => {
         });
 
         QUnit.test('should be scrolled down if typingUsers changed at runtime if scroll position at the bottom', function(assert) {
+            const done = assert.async();
             this.reinit({
                 width: 300,
                 height: 500,
@@ -997,12 +1166,16 @@ QUnit.module('MessageList', () => {
 
             assert.roughEqual(scrollTopBefore, this.getScrollOffsetMax(), 1, 'scroll position should be at the bottom before updating typingUsers');
 
-            this.instance.option({ typingUsers: [{ name: 'User' }] });
+            setTimeout(() => {
+                this.instance.option({ typingUsers: [{ name: 'User' }] });
 
-            const scrollTop = this.getScrollView().scrollTop();
+                const scrollTop = this.getScrollView().scrollTop();
 
-            assert.notEqual(scrollTop, 0, 'scroll position should not be 0 after items are updated at runtime');
-            assert.roughEqual(scrollTop, this.getScrollOffsetMax(), 1, 'scroll position should be at the bottom after typingUsers are updated at runtime');
+                assert.notEqual(scrollTop, 0, 'scroll position should not be 0 after items are updated at runtime');
+                assert.roughEqual(scrollTop, this.getScrollOffsetMax(), 1, 'scroll position should be at the bottom after typingUsers are updated at runtime');
+
+                done();
+            });
         });
 
         QUnit.test('should not be scroll down if typingUsers changed at runtime if scroll position not at the bottom', function(assert) {
@@ -1031,8 +1204,32 @@ QUnit.module('MessageList', () => {
 
                         assert.roughEqual(scrollTop, scrollTopBefore, 1, 'scroll position should remain the same after updating typingUsers when not at the bottom');
                         done();
-                    });
-                });
+                    }, this._resizeTimeout);
+                }, this._resizeTimeout);
+            }, this._resizeTimeout);
+        });
+
+        QUnit.test('should be scroll down if typingUsers changed at runtime, provided the content does not overflow before the typing indicator is displayed', function(assert) {
+            const done = assert.async();
+            this.reinit({
+                width: 300,
+                height: 500,
+                items: generateMessages(7),
+            });
+
+            const scrollTopBefore = this.getScrollView().scrollTop();
+
+            assert.strictEqual(scrollTopBefore, 0, 'content is not overflowing');
+
+            setTimeout(() => {
+                this.instance.option({ typingUsers: [{ name: 'User' }] });
+
+                const scrollTop = this.getScrollView().scrollTop();
+
+                assert.notEqual(scrollTop, 0, 'scroll position should not be 0 after items are updated at runtime');
+                assert.roughEqual(scrollTop, this.getScrollOffsetMax(), 1, 'scroll position should be at the bottom after typingUsers are updated at runtime');
+
+                done();
             });
         });
 
@@ -1059,10 +1256,9 @@ QUnit.module('MessageList', () => {
         [MOCK_CURRENT_USER_ID, MOCK_COMPANION_USER_ID].forEach(id => {
             const isCurrentUser = id === MOCK_CURRENT_USER_ID;
 
-            QUnit.test(`ScrollView should be scrolled down after render ${isCurrentUser ? 'current user' : 'companion'} message`, function(assert) {
+            QUnit.test(`should be scrolled down after render ${isCurrentUser ? 'current user' : 'companion'} message`, function(assert) {
                 const done = assert.async();
-                assert.expect(2);
-                const items = generateMessages(31);
+                const items = generateMessages(52);
 
                 this.reinit({
                     width: 300,
@@ -1077,16 +1273,133 @@ QUnit.module('MessageList', () => {
                     text: 'NEW MESSAGE',
                 };
 
-                this.instance.option('items', [...items, newMessage]);
+                const scrollTopBefore = this.getScrollView().scrollTop();
+                assert.roughEqual(scrollTopBefore, this.getScrollOffsetMax(), 1, 'scroll position should be at the bottom before render new message');
 
                 setTimeout(() => {
+                    this.instance.option('items', [...items, newMessage]);
+
+                    setTimeout(() => {
+                        const scrollTop = this.getScrollView().scrollTop();
+
+                        assert.notEqual(scrollTop, 0, 'scroll position should not be 0 after a new message is rendered');
+                        assert.roughEqual(scrollTop, this.getScrollOffsetMax(), 1, 'scroll position should be at the bottom after rendering the new message');
+                        done();
+                    });
+                });
+            });
+
+            QUnit.test(`should be scrolled down after render ${isCurrentUser ? 'current user' : 'companion'} message, provided the content does not overflow before the message is rendered`, function(assert) {
+                const done = assert.async();
+                const items = generateMessages(7);
+
+                this.reinit({
+                    width: 300,
+                    height: 500,
+                    items: generateMessages(7),
+                });
+
+                const author = { id };
+                const newMessage = {
+                    author,
+                    timestamp: NOW,
+                    text: 'NEW MESSAGE',
+                };
+
+                const scrollTopBefore = this.getScrollView().scrollTop();
+
+                assert.strictEqual(scrollTopBefore, 0, 'content is not overflowing');
+
+                setTimeout(() => {
+                    this.instance.option('items', [...items, newMessage]);
+
                     const scrollTop = this.getScrollView().scrollTop();
 
                     assert.notEqual(scrollTop, 0, 'scroll position should not be 0 after a new message is rendered');
                     assert.roughEqual(scrollTop, this.getScrollOffsetMax(), 1, 'scroll position should be at the bottom after rendering the new message');
+
                     done();
                 });
             });
+        });
+
+        QUnit.test('should be scroll down after render current user message if scroll position not at the bottom', function(assert) {
+            const done = assert.async();
+            const items = generateMessages(52);
+
+            this.reinit({
+                width: 300,
+                height: 500,
+                items,
+                currentUserId: MOCK_CURRENT_USER_ID,
+            });
+
+            const author = { id: MOCK_CURRENT_USER_ID };
+            const newMessage = {
+                author,
+                timestamp: NOW,
+                text: 'NEW MESSAGE',
+            };
+
+            setTimeout(() => {
+                const initialScrollTop = this.getScrollOffsetMax() - 100;
+                this.getScrollView().scrollTo({ top: initialScrollTop });
+
+                setTimeout(() => {
+                    const scrollTopBefore = this.getScrollView().scrollTop();
+                    assert.roughEqual(scrollTopBefore, this.getScrollOffsetMax() - 100, 1, 'scroll position should not be at the bottom before rendering the message');
+
+                    setTimeout(() => {
+                        this.instance.option('items', [...items, newMessage]);
+
+                        setTimeout(() => {
+                            const scrollTop = this.getScrollView().scrollTop();
+
+                            assert.notEqual(scrollTop, 0, 'scroll position should not be 0 after a new message is rendered');
+                            assert.roughEqual(scrollTop, this.getScrollOffsetMax(), 1, 'scroll position should be at the bottom after rendering the new message');
+                            done();
+                        });
+                    });
+                });
+            });
+        });
+
+        QUnit.test('should not be scroll down after render companion message if scroll position not at the bottom', function(assert) {
+            const done = assert.async();
+            const items = generateMessages(52);
+
+            this.reinit({
+                width: 300,
+                height: 500,
+                items,
+                currentUserId: MOCK_CURRENT_USER_ID
+            });
+
+            const author = { id: MOCK_COMPANION_USER_ID };
+            const newMessage = {
+                author,
+                timestamp: NOW,
+                text: 'NEW MESSAGE',
+            };
+
+            setTimeout(() => {
+                this.getScrollView().scrollBy({ top: -100 });
+                setTimeout(() => {
+
+                    const scrollTopBefore = this.getScrollView().scrollTop();
+                    assert.roughEqual(scrollTopBefore, this.getScrollOffsetMax() - 100, 1, 'scroll position should not be at the bottom before rendering the message');
+
+                    setTimeout(() => {
+                        this.instance.option('items', [...items, newMessage]);
+
+                        const scrollTop = this.getScrollView().scrollTop();
+
+                        assert.notEqual(scrollTop, 0, 'scroll position should not be 0 after a new message is rendered');
+                        assert.roughEqual(scrollTop, scrollTopBefore, 1, 'scroll position should be at the bottom after rendering the new message');
+                        done();
+                    }, this._resizeTimeout);
+                }, this._resizeTimeout);
+            }, this._resizeTimeout);
         });
 
         QUnit.test('should be scrolled down after showing if was initially rendered inside an invisible element', function(assert) {

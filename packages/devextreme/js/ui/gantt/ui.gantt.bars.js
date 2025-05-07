@@ -1,7 +1,7 @@
 import $ from '../../core/renderer';
 import ToolbarMenu from '../toolbar';
 import ContextMenu from '../context_menu';
-import messageLocalization from '../../localization/message';
+import messageLocalization from '../../common/core/localization/message';
 import { extend } from '../../core/utils/extend';
 
 const TOOLBAR_SEPARATOR_CLASS = 'dx-gantt-toolbar-separator';
@@ -144,23 +144,10 @@ export class GanttToolbar extends Bar {
             onItemClick: (e) => {
                 const commandId = e.itemData.commandId;
                 if(commandId !== undefined) {
-                    this._executeCommand(e.itemData.commandId);
+                    this._owner._executeCoreCommand(commandId);
                 }
             }
         });
-    }
-
-    _executeCommand(commandId) {
-        switch(commandId) {
-            case COMMANDS.toggleResources:
-                this._owner.option('showResources', !this._owner.option('showResources'));
-                break;
-            case COMMANDS.toggleDependencies:
-                this._owner.option('showDependencies', !this._owner.option('showDependencies'));
-                break;
-            default:
-                this._owner._executeCoreCommand(commandId);
-        }
     }
 
     _createDefaultItem(commandId, hint, icon) {

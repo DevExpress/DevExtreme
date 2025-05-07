@@ -1,13 +1,13 @@
 import { extend } from '../../core/utils/extend';
 import { when } from '../../core/utils/deferred';
 import { hasWindow } from '../../core/utils/window';
-import { name as dblClickName } from '../../events/double_click';
-import { addNamespace } from '../../events/utils/index';
-import eventsEngine from '../../events/core/events_engine';
+import { name as dblClickName } from '../../common/core/events/double_click';
+import { addNamespace } from '../../common/core/events/utils/index';
+import eventsEngine from '../../common/core/events/core/events_engine';
 import { getImageContainer } from '../../core/utils/icon';
 import devices from '../../core/devices';
 
-import CustomStore from '../../data/custom_store';
+import { CustomStore } from '../../common/data/custom_store';
 import Widget from '../widget/ui.widget';
 
 const FILE_MANAGER_FILES_VIEW_CLASS = 'dx-filemanager-files-view';

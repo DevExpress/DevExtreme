@@ -1,7 +1,7 @@
 const $ = require('jquery');
 const devices = require('core/devices');
 const tooltip = require('__internal/ui/tooltip/m_tooltip');
-const fx = require('animation/fx');
+const fx = require('common/core/animation/fx');
 const keyboardMock = require('../../helpers/keyboardMock.js');
 const dataUtils = require('core/element_data');
 

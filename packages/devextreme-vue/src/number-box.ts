@@ -1,6 +1,49 @@
-import NumberBox, { Properties } from "devextreme/ui/number_box";
+import { PropType } from "vue";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
+import NumberBox, { Properties } from "devextreme/ui/number_box";
+import {
+ NumberBoxPredefinedButton,
+ NumberBoxType,
+ ChangeEvent,
+ ContentReadyEvent,
+ CopyEvent,
+ CutEvent,
+ DisposingEvent,
+ EnterKeyEvent,
+ FocusInEvent,
+ FocusOutEvent,
+ InitializedEvent,
+ InputEvent,
+ KeyDownEvent,
+ KeyUpEvent,
+ OptionChangedEvent,
+ PasteEvent,
+ ValueChangedEvent,
+} from "devextreme/ui/number_box";
+import {
+ TextEditorButton,
+ Format as CommonFormat,
+ LabelMode,
+ EditorStyle,
+ ValidationMessageMode,
+ Position,
+ ValidationStatus,
+ TextEditorButtonLocation,
+ ButtonStyle,
+ ButtonType,
+} from "devextreme/common";
+import {
+ Format,
+} from "devextreme/common/core/localization";
+import {
+ dxButtonOptions,
+ ClickEvent,
+ ContentReadyEvent as ButtonContentReadyEvent,
+ DisposingEvent as ButtonDisposingEvent,
+ InitializedEvent as ButtonInitializedEvent,
+ OptionChangedEvent as ButtonOptionChangedEvent,
+} from "devextreme/ui/button";
 import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
@@ -68,12 +111,12 @@ const componentConfig = {
   props: {
     accessKey: String,
     activeStateEnabled: Boolean,
-    buttons: Array,
+    buttons: Array as PropType<Array<NumberBoxPredefinedButton | TextEditorButton>>,
     disabled: Boolean,
-    elementAttr: Object,
+    elementAttr: Object as PropType<Record<string, any>>,
     focusStateEnabled: Boolean,
-    format: [Object, Function, String],
-    height: [Function, Number, String],
+    format: [Object, String, Function] as PropType<Format | CommonFormat | (((value: number | Date) => string)) | Record<string, any> | string>,
+    height: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
     hint: String,
     hoverStateEnabled: Boolean,
     inputAttr: {},
@@ -81,45 +124,45 @@ const componentConfig = {
     isDirty: Boolean,
     isValid: Boolean,
     label: String,
-    labelMode: String,
+    labelMode: String as PropType<LabelMode>,
     max: Number,
     min: Number,
-    mode: String,
+    mode: String as PropType<NumberBoxType>,
     name: String,
-    onChange: Function,
-    onContentReady: Function,
-    onCopy: Function,
-    onCut: Function,
-    onDisposing: Function,
-    onEnterKey: Function,
-    onFocusIn: Function,
-    onFocusOut: Function,
-    onInitialized: Function,
-    onInput: Function,
-    onKeyDown: Function,
-    onKeyUp: Function,
-    onOptionChanged: Function,
-    onPaste: Function,
-    onValueChanged: Function,
+    onChange: Function as PropType<((e: ChangeEvent) => void)>,
+    onContentReady: Function as PropType<((e: ContentReadyEvent) => void)>,
+    onCopy: Function as PropType<((e: CopyEvent) => void)>,
+    onCut: Function as PropType<((e: CutEvent) => void)>,
+    onDisposing: Function as PropType<((e: DisposingEvent) => void)>,
+    onEnterKey: Function as PropType<((e: EnterKeyEvent) => void)>,
+    onFocusIn: Function as PropType<((e: FocusInEvent) => void)>,
+    onFocusOut: Function as PropType<((e: FocusOutEvent) => void)>,
+    onInitialized: Function as PropType<((e: InitializedEvent) => void)>,
+    onInput: Function as PropType<((e: InputEvent) => void)>,
+    onKeyDown: Function as PropType<((e: KeyDownEvent) => void)>,
+    onKeyUp: Function as PropType<((e: KeyUpEvent) => void)>,
+    onOptionChanged: Function as PropType<((e: OptionChangedEvent) => void)>,
+    onPaste: Function as PropType<((e: PasteEvent) => void)>,
+    onValueChanged: Function as PropType<((e: ValueChangedEvent) => void)>,
     placeholder: String,
     readOnly: Boolean,
     rtlEnabled: Boolean,
     showClearButton: Boolean,
     showSpinButtons: Boolean,
     step: Number,
-    stylingMode: String,
+    stylingMode: String as PropType<EditorStyle>,
     tabIndex: Number,
     text: String,
     useLargeSpinButtons: Boolean,
     validationError: {},
-    validationErrors: Array,
-    validationMessageMode: String,
-    validationMessagePosition: String,
-    validationStatus: String,
+    validationErrors: Array as PropType<Array<any>>,
+    validationMessageMode: String as PropType<ValidationMessageMode>,
+    validationMessagePosition: String as PropType<Position>,
+    validationStatus: String as PropType<ValidationStatus>,
     value: Number,
     valueChangeEvent: String,
     visible: Boolean,
-    width: [Function, Number, String]
+    width: [Function, Number, String] as PropType<((() => number | string)) | number | string>
   },
   emits: {
     "update:isActive": null,
@@ -209,9 +252,9 @@ const DxButtonConfig = {
     "update:options": null,
   },
   props: {
-    location: String,
+    location: String as PropType<TextEditorButtonLocation>,
     name: String,
-    options: Object
+    options: Object as PropType<dxButtonOptions | Record<string, any>>
   }
 };
 
@@ -238,10 +281,10 @@ const DxFormatConfig = {
   },
   props: {
     currency: String,
-    formatter: Function,
-    parser: Function,
+    formatter: Function as PropType<((value: number | Date) => string)>,
+    parser: Function as PropType<((value: string) => number | Date)>,
     precision: Number,
-    type: String,
+    type: String as PropType<CommonFormat | string>,
     useCurrencyAccountingStyle: Boolean
   }
 };
@@ -285,29 +328,29 @@ const DxOptionsConfig = {
   props: {
     accessKey: String,
     activeStateEnabled: Boolean,
-    bindingOptions: Object,
+    bindingOptions: Object as PropType<Record<string, any>>,
     disabled: Boolean,
-    elementAttr: Object,
+    elementAttr: Object as PropType<Record<string, any>>,
     focusStateEnabled: Boolean,
-    height: [Function, Number, String],
+    height: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
     hint: String,
     hoverStateEnabled: Boolean,
     icon: String,
-    onClick: Function,
-    onContentReady: Function,
-    onDisposing: Function,
-    onInitialized: Function,
-    onOptionChanged: Function,
+    onClick: Function as PropType<((e: ClickEvent) => void)>,
+    onContentReady: Function as PropType<((e: ButtonContentReadyEvent) => void)>,
+    onDisposing: Function as PropType<((e: ButtonDisposingEvent) => void)>,
+    onInitialized: Function as PropType<((e: ButtonInitializedEvent) => void)>,
+    onOptionChanged: Function as PropType<((e: ButtonOptionChangedEvent) => void)>,
     rtlEnabled: Boolean,
-    stylingMode: String,
+    stylingMode: String as PropType<ButtonStyle>,
     tabIndex: Number,
     template: {},
     text: String,
-    type: String,
+    type: String as PropType<ButtonType | string>,
     useSubmitBehavior: Boolean,
     validationGroup: String,
     visible: Boolean,
-    width: [Function, Number, String]
+    width: [Function, Number, String] as PropType<((() => number | string)) | number | string>
   }
 };
 

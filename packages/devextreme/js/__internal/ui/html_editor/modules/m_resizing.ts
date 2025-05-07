@@ -1,4 +1,7 @@
-import { move } from '@js/animation/translator';
+import { move } from '@js/common/core/animation/translator';
+import { name as ClickEvent } from '@js/common/core/events/click';
+import eventsEngine from '@js/common/core/events/core/events_engine';
+import { addNamespace, normalizeKeyName } from '@js/common/core/events/utils/index';
 import devices from '@js/core/devices';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
@@ -6,9 +9,6 @@ import { getBoundingRect } from '@js/core/utils/position';
 import {
   getHeight, getOuterHeight, getOuterWidth, getWidth,
 } from '@js/core/utils/size';
-import { name as ClickEvent } from '@js/events/click';
-import eventsEngine from '@js/events/core/events_engine';
-import { addNamespace, normalizeKeyName } from '@js/events/utils/index';
 import Resizable from '@js/ui/resizable';
 import Quill from 'devextreme-quill';
 

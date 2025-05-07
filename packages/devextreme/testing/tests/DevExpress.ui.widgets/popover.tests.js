@@ -1,9 +1,9 @@
 import { getHeight, getWidth, getOuterHeight, getOuterWidth } from 'core/utils/size';
 import $ from 'jquery';
 import fixtures from '../../helpers/positionFixtures.js';
-import fx from 'animation/fx';
+import fx from 'common/core/animation/fx';
 import pointerMock from '../../helpers/pointerMock.js';
-import positionUtils from 'animation/position';
+import positionUtils from 'common/core/animation/position';
 import uiErrors from 'ui/widget/ui.errors';
 import Popover from 'ui/popover';
 import { getBoundingRect } from 'core/utils/position';
@@ -2281,6 +2281,78 @@ QUnit.module('target option', {
 
         assert.roughEqual(arrowRect.top, positionOfRect.bottom, 0.1, 'y coordinate is correct');
         assert.roughEqual(this.getMiddleX(arrowRect), this.getMiddleX(positionOfRect), 0.1, 'y coordinate is correct');
+    });
+});
+
+QUnit.module('disabled option', {
+    beforeEach: function() {
+        fixtures.simple.create();
+    },
+    afterEach: function() {
+        fixtures.simple.drop();
+    }
+}, () => {
+    QUnit.test('popover should not be shown after clicking on the target if disable is set to true during initialization', function(assert) {
+        const $popover = $('#what');
+        const $target = $('#where');
+
+        const popover = new Popover($popover, {
+            target: $target,
+            showEvent: 'dxclick',
+            disabled: true,
+        });
+
+        $target.trigger('dxclick');
+
+        assert.strictEqual(popover.option('visible'), false, 'popover should not be shown after clicking on the target');
+    });
+
+    QUnit.test('popover should be shown after clicking on the target if disable is set to false during initialization', function(assert) {
+        const $popover = $('#what');
+        const $target = $('#where');
+
+        const popover = new Popover($popover, {
+            target: $target,
+            showEvent: 'dxclick',
+            disabled: false,
+        });
+
+        $target.trigger('dxclick');
+
+        assert.strictEqual(popover.option('visible'), true, 'popover should be shown after clicking on the target');
+    });
+
+    QUnit.test('popover should not be shown after clicking on the target if disable is set to true at runtime', function(assert) {
+        const $popover = $('#what');
+        const $target = $('#where');
+
+        const popover = new Popover($popover, {
+            target: $target,
+            showEvent: 'dxclick',
+        });
+
+        popover.option('disabled', true);
+
+        $target.trigger('dxclick');
+
+        assert.strictEqual(popover.option('visible'), false, 'popover should not be shown after clicking on the target');
+    });
+
+    QUnit.test('popover should be shown after clicking on the target if disable is set to false at runtime', function(assert) {
+        const $popover = $('#what');
+        const $target = $('#where');
+
+        const popover = new Popover($popover, {
+            target: $target,
+            showEvent: 'dxclick',
+            disabled: true,
+        });
+
+        popover.option('disabled', false);
+
+        $target.trigger('dxclick');
+
+        assert.strictEqual(popover.option('visible'), true, 'popover should be shown after clicking on the target');
     });
 });
 

@@ -14,7 +14,7 @@ import {
 
 
 
-import { DashStyle, DiscreteAxisDivisionMode, Font, LabelOverlap } from 'devextreme/common/charts';
+import { DashStyle, Font, DiscreteAxisDivisionMode, LabelOverlap } from 'devextreme/common/charts';
 
 import {
     NestedOptionHost,

@@ -1,1 +1,1 @@
-export { default } from '../../__internal/events/gesture/m_emitter.gesture';
+export { default } from '../../common/core/events/gesture/emitter.gesture';

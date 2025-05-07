@@ -1,8 +1,8 @@
+import dateLocalization from '@js/common/core/localization/date';
 import $ from '@js/core/renderer';
 import dateSerialization from '@js/core/utils/date_serialization';
 import { each } from '@js/core/utils/iterator';
 import { isDate } from '@js/core/utils/type';
-import dateLocalization from '@js/localization/date';
 
 const DATE_COMPONENTS = ['year', 'day', 'month', 'day'];
 const TIME_COMPONENTS = ['hours', 'minutes', 'seconds', 'milliseconds'];

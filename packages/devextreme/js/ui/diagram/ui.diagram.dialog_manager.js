@@ -1,6 +1,6 @@
 import $ from '../../core/renderer';
 import { getDiagram } from './diagram.importer';
-import messageLocalization from '../../localization/message';
+import messageLocalization from '../../common/core/localization/message';
 
 import FileUploader from '../file_uploader';
 import { getWindow } from '../../core/utils/window';

@@ -1,1 +1,2 @@
-export * from '../__internal/events/m_short';
+// eslint-disable-next-line import/export
+export * from '../common/core/events/short';

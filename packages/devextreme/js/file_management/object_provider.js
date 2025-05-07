@@ -1,8 +1,8 @@
 import { ensureDefined } from '../core/utils/common';
 import { compileGetter, compileSetter } from '../core/utils/data';
-import Guid from '../core/guid';
+import { Guid } from '../common';
 import { isFunction } from '../core/utils/type';
-import { errors } from '../data/errors';
+import { errors } from '../common/data/errors';
 import { Deferred } from '../core/utils/deferred';
 import { getWindow } from '../core/utils/window';
 import { fileSaver } from '../exporter/file_saver';

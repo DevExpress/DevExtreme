@@ -1,4 +1,4 @@
-const easing = require('animation/easing');
+const easing = require('common/core/animation/easing');
 
 QUnit.module('easing');
 

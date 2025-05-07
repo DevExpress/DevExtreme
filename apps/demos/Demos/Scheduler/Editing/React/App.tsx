@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react';
-import Scheduler, { Editing, SchedulerTypes } from 'devextreme-react/scheduler';
-import { CheckBox, CheckBoxTypes } from 'devextreme-react/check-box';
+import Scheduler, { Editing, type SchedulerTypes } from 'devextreme-react/scheduler';
+import { CheckBox, type CheckBoxTypes } from 'devextreme-react/check-box';
 import notify from 'devextreme/ui/notify';
 
 import { data } from './data.ts';

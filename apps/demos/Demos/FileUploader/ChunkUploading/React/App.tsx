@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react';
-import FileUploader, { FileUploaderTypes } from 'devextreme-react/file-uploader';
+import FileUploader, { type FileUploaderTypes } from 'devextreme-react/file-uploader';
 
 function getValueInKb(value: number) {
   return `${(value / 1024).toFixed(0)}kb`;

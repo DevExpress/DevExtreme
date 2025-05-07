@@ -1,7 +1,7 @@
+import registerEvent from '@js/common/core/events/core/event_registrator';
+import eventsEngine from '@js/common/core/events/core/events_engine';
 import { beforeCleanData } from '@js/core/element_data';
 import $ from '@js/core/renderer';
-import registerEvent from '@js/events/core/event_registrator';
-import eventsEngine from '@js/events/core/events_engine';
 
 export const removeEvent = 'dxremove';
 const eventPropName = 'dxRemoveEvent';

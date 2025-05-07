@@ -1,5 +1,5 @@
 import { Component } from '../../core/component';
-import DataHelperMixin from '../../data_helper';
+import { DataHelperMixin } from '../../common/data';
 
 class DataOption extends Component {
     constructor(optionName, getLoadPanel, dataSourceChangedCallback) {

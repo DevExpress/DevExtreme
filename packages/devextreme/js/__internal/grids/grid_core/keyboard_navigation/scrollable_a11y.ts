@@ -55,11 +55,11 @@ export const keyboardNavigationScrollableA11yExtender = (Base: ModuleType<Keyboa
     }
   }
 
-  protected renderCompleted(e: any): void {
+  protected rowsViewRenderCompleted(e: any): void {
     this._$firstNotFixedCell = this.getFirstNotFixedCell();
     this.makeScrollableFocusableIfNeed();
 
-    super.renderCompleted(e);
+    super.rowsViewRenderCompleted(e);
   }
 
   public _focus($cell: any, disableFocus?: any, skipFocusEvent?: any): void {

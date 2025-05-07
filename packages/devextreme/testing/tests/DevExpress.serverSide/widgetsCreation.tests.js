@@ -1,6 +1,6 @@
 const widgets = require('../../helpers/widgetsList.js').widgetsList;
 
-const DataSource = require('data/data_source');
+const DataSource = require('common/data/data_source');
 
 QUnit.module('Widget creation', {
     beforeEach: function() {

@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import KeyboardProcessor from 'events/core/keyboard_processor';
+import KeyboardProcessor from 'common/core/events/core/keyboard_processor';
 
 const { test } = QUnit;
 

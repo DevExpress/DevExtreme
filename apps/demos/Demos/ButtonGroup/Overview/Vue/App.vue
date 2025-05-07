@@ -36,11 +36,11 @@
   </div>
 </template>
 <script setup lang="ts">
-import DxButtonGroup from 'devextreme-vue/button-group';
+import DxButtonGroup, { type DxButtonGroupTypes } from 'devextreme-vue/button-group';
 import notify from 'devextreme/ui/notify';
 import { alignments, fontStyles } from './data.ts';
 
-function itemClick(e) {
+function itemClick(e: DxButtonGroupTypes.ItemClickEvent) {
   notify({ message: `The "${e.itemData.hint}" button was clicked`, width: 320 }, 'success', 1000);
 }
 </script>

@@ -1,13 +1,13 @@
 import 'ui/data_grid';
-import 'data/odata/store';
+import 'common/data/odata/store';
 
 import $ from 'jquery';
 import { setupDataGridModules, generateItems } from '../../helpers/dataGridMocks.js';
-import { DataSource } from 'data/data_source/data_source';
-import ArrayStore from 'data/array_store';
-import CustomStore from 'data/custom_store';
+import { DataSource } from 'common/data/data_source/data_source';
+import ArrayStore from 'common/data/array_store';
+import { CustomStore } from 'common/data/custom_store';
 import DataGridWrapper from '../../helpers/wrappers/dataGridWrappers.js';
-import clickEvent from 'events/click';
+import clickEvent from 'common/core/events/click';
 import errors from 'ui/widget/ui.errors';
 
 const dataGridWrapper = new DataGridWrapper('#container');

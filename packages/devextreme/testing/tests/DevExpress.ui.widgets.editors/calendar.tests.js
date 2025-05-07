@@ -1,11 +1,11 @@
 import $ from 'jquery';
 import { camelize } from 'core/utils/inflector';
-import translator from 'animation/translator';
+import translator from 'common/core/animation/translator';
 import dateUtils from 'core/utils/date';
 import dateSerialization from 'core/utils/date_serialization';
 import { noop } from 'core/utils/common';
-import swipeEvents from 'events/swipe';
-import fx from 'animation/fx';
+import swipeEvents from 'common/core/events/swipe';
+import fx from 'common/core/animation/fx';
 import Views from '__internal/ui/calendar/m_calendar.views';
 import Calendar from 'ui/calendar';
 import pointerMock from '../../helpers/pointerMock.js';
@@ -13,8 +13,8 @@ import keyboardMock from '../../helpers/keyboardMock.js';
 import config from 'core/config';
 import dataUtils from 'core/element_data';
 import devices from 'core/devices.js';
-import dateLocalization from 'localization/date';
-import { normalizeKeyName } from 'events/utils/index';
+import dateLocalization from 'common/core/localization/date';
+import { normalizeKeyName } from 'common/core/events/utils/index';
 import localization from 'localization';
 
 import 'generic_light.css!';
@@ -323,6 +323,18 @@ QUnit.module('Navigator integration', {
 
         calendar.option('currentDate', new Date(2015, 6, 15));
         assert.equal($navigatorCaption.text(), 'July 2015', 'navigator caption is correct');
+    });
+
+    QUnit.test('should not throw any errors if value on initialization is empty string (T1257679)', function(assert) {
+        try {
+            this.reinit({
+                value: ''
+            });
+        } catch(e) {
+            assert.ok(false, `error: ${e.message}`);
+        } finally {
+            assert.ok(true, 'there is no error');
+        }
     });
 
     QUnit.test('navigator caption should be changed during swipe', function(assert) {
@@ -860,6 +872,46 @@ QUnit.module('Views integration', {
         const $contouredCell = getCurrentViewInstance(this.calendar).$element().find(toSelector(CALENDAR_CONTOURED_DATE_CLASS));
 
         assert.strictEqual($contouredCell.length, 0, 'there is no contoured date cell');
+    });
+
+    QUnit.test('should not navigate view after new date UI select, even in React controlled mode (T1279950)', function(assert) {
+        this.calendar.option({
+            selectionMode: 'multiple',
+            value: [new Date(2025, 1, 10), new Date(2025, 2, 10)],
+        });
+
+        const calendar = this.calendar;
+        const $nextMonthButton = this.$element.find(toSelector(CALENDAR_NAVIGATOR_NEXT_MONTH_CLASS));
+
+        assert.ok(
+            dateUtils.sameMonth(calendar.option('currentDate'), new Date(2025, 1, 10)),
+            'initially navigated to the earliest date'
+        );
+
+        $($nextMonthButton).trigger('dxclick');
+
+        assert.ok(
+            dateUtils.sameMonth(calendar.option('currentDate'), new Date(2025, 2, 10)),
+            'navigated to the next month'
+        );
+
+        calendar.option('value', [new Date(2025, 1, 10), new Date(2025, 2, 10)]);
+
+        assert.ok(
+            dateUtils.sameMonth(calendar.option('currentDate'), new Date(2025, 2, 10)),
+            'did not navigate back to the earliest date'
+        );
+
+        const $cell = this.$element.find('*[data-value="2025/03/10"]');
+
+        $cell.trigger('dxclick');
+
+        assert.strictEqual(this.calendar.option('value').length, 1, 'deselected correctly');
+
+        assert.ok(
+            dateUtils.sameMonth(calendar.option('currentDate'), new Date(2025, 2, 10)),
+            'did not navigate back to the earliest date after deseleting'
+        );
     });
 });
 
@@ -2137,6 +2189,24 @@ QUnit.module('Options', {
                 const $cell = $(getCurrentViewInstance(this.calendar).$element().find('*[data-value="2023/01/15"]'));
 
                 assert.ok($cell.hasClass(CALENDAR_CELL_IN_RANGE_CLASS));
+            });
+
+
+            QUnit.test(`Cells between startDate and endDate should have ${CALENDAR_CELL_IN_RANGE_CLASS} class even after currentDate runtime change (T1253076)`, function(assert) {
+                this.reinit({
+                    value: ['2025/01/01', '2025/12/31'],
+                    selectionMode: 'range',
+                    viewsCount: 2,
+                });
+
+                this.calendar.option('currentDate', new Date('2025-12-31'));
+
+                const $prevButton = $(this.$element.find(toSelector(CALENDAR_NAVIGATOR_PREVIOUS_VIEW_CLASS)));
+                $prevButton.trigger('dxclick');
+
+                const $cell = $(getCurrentViewInstance(this.calendar).$element().find('*[data-value="2025/11/01"]'));
+
+                assert.ok($cell.hasClass(CALENDAR_CELL_IN_RANGE_CLASS), 'cell is highlighted');
             });
 
             QUnit.test('Should reselect startDate and clear endDate on click when both value are defined', function(assert) {

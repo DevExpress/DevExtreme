@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import messageLocalization from 'localization/message';
+import messageLocalization from 'common/core/localization/message';
 import 'ui/gantt';
 import { Consts, options, data, getGanttViewCore, showTaskEditDialog, getDependencyElements } from '../../../helpers/ganttHelpers.js';
 const { test } = QUnit;

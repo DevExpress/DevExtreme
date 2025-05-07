@@ -14,6 +14,7 @@ import {
 
 
 
+import { dxSankeyNode } from 'devextreme/viz/sankey';
 import { Font, TextOverflow } from 'devextreme/common/charts';
 
 import {
@@ -30,18 +31,18 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoSankeyLabelComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get border(): { color?: string, visible?: boolean, width?: number } {
+    get border(): { color?: string | undefined, visible?: boolean | undefined, width?: number | undefined } {
         return this._getOption('border');
     }
-    set border(value: { color?: string, visible?: boolean, width?: number }) {
+    set border(value: { color?: string | undefined, visible?: boolean | undefined, width?: number | undefined }) {
         this._setOption('border', value);
     }
 
     @Input()
-    get customizeText(): Function {
+    get customizeText(): ((itemInfo: dxSankeyNode) => string) {
         return this._getOption('customizeText');
     }
-    set customizeText(value: Function) {
+    set customizeText(value: ((itemInfo: dxSankeyNode) => string)) {
         this._setOption('customizeText', value);
     }
 

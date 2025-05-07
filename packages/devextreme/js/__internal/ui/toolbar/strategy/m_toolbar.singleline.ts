@@ -2,7 +2,7 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import {
   deferRender,
-  // @ts-expect-error
+  // @ts-expect-error ts-error
   grep,
 } from '@js/core/utils/common';
 import { compileGetter } from '@js/core/utils/data';
@@ -10,9 +10,8 @@ import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import { getWidth } from '@js/core/utils/size';
 import type { Item } from '@js/ui/toolbar';
-
-import DropDownMenu from '../internal/m_toolbar.menu';
-import type Toolbar from '../m_toolbar';
+import DropDownMenu from '@ts/ui/toolbar/internal/m_toolbar.menu';
+import type Toolbar from '@ts/ui/toolbar/m_toolbar';
 
 const INVISIBLE_STATE_CLASS = 'dx-state-invisible';
 const TOOLBAR_DROP_DOWN_MENU_CONTAINER_CLASS = 'dx-toolbar-menu-container';
@@ -38,14 +37,14 @@ export class SingleLineStrategy {
     this._toolbar = toolbar;
   }
 
-  _initMarkup() {
+  _initMarkup(): void {
     deferRender(() => {
       this._renderOverflowMenu();
       this._renderMenuItems();
     });
   }
 
-  _renderOverflowMenu() {
+  _renderOverflowMenu(): void {
     if (!this._hasVisibleMenuItems()) {
       return;
     }
@@ -57,12 +56,17 @@ export class SingleLineStrategy {
     const itemClickAction = this._toolbar._createActionByOption('onItemClick');
     const menuItemTemplate = this._toolbar._getTemplateByOption('menuItemTemplate');
 
+    const {
+      disabled,
+      // @ts-expect-error
+      menuContainer,
+    } = this._toolbar.option();
+
     this._menu = this._toolbar._createComponent($menu, DropDownMenu, {
-      disabled: this._toolbar.option('disabled'),
+      disabled,
       itemTemplate: () => menuItemTemplate,
       onItemClick: (e) => { itemClickAction(e); },
-      // @ts-expect-error
-      container: this._toolbar.option('menuContainer'),
+      container: menuContainer,
       onOptionChanged: ({ name, value }) => {
         if (name === 'opened') {
           this._toolbar.option('overflowMenuVisible', value);
@@ -79,7 +83,7 @@ export class SingleLineStrategy {
       this._renderOverflowMenu();
     }
 
-    this._menu && this._menu.option('items', this._getMenuItems());
+    this._menu?.option('items', this._getMenuItems());
     // @ts-expect-error
     if (this._menu && !this._menu.option('items').length) {
       this._menu.option('opened', false);
@@ -199,8 +203,7 @@ export class SingleLineStrategy {
     return elementWidth;
   }
 
-  _hideOverflowItems(width?: number) {
-    // @ts-expect-error
+  _hideOverflowItems(width?: number): void {
     let overflowItems = this._toolbar.$element().find(`.${TOOLBAR_AUTO_HIDE_ITEM_CLASS}`);
 
     if (!overflowItems.length) {

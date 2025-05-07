@@ -1,7 +1,7 @@
 import searchBoxMixin from '@js/ui/widget/ui.search_box_mixin';
 
 import ListEdit from './m_list.edit';
-
+// @ts-expect-error ts-error
 const ListSearch = ListEdit.inherit(searchBoxMixin).inherit({
   _addWidgetPrefix(className) {
     return `dx-list-${className}`;
@@ -25,7 +25,7 @@ const ListSearch = ListEdit.inherit(searchBoxMixin).inherit({
 
     const dataController = this._dataController;
 
-    value && value.length && dataController.searchValue(value);
+    value?.length && dataController.searchValue(value);
     // @ts-expect-error
     mode.length && dataController.searchOperation(searchBoxMixin.getOperationBySearchMode(mode));
     expr && dataController.searchExpr(expr);

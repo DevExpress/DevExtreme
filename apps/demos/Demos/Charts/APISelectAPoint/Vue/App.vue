@@ -32,7 +32,7 @@ import DxChart, {
   DxSeries,
   DxLegend,
   DxExport,
-  DxChartTypes,
+  type DxChartTypes,
 } from 'devextreme-vue/chart';
 import { catBreedsData } from './data.ts';
 

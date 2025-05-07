@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react';
-import Scheduler, { Editing, SchedulerTypes } from 'devextreme-react/scheduler';
-import SelectBox, { SelectBoxTypes } from 'devextreme-react/select-box';
+import Scheduler, { Editing, type SchedulerTypes } from 'devextreme-react/scheduler';
+import SelectBox, { type SelectBoxTypes } from 'devextreme-react/select-box';
 
 import * as timeZoneUtils from 'devextreme/time_zone_utils';
 import { data, locations } from './data.ts';

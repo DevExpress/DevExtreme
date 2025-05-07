@@ -1,4 +1,6 @@
 /* eslint-disable @typescript-eslint/method-signature-style */
+import ArrayStore from '@js/common/data/array_store';
+import { CustomStore } from '@js/common/data/custom_store';
 import $ from '@js/core/renderer';
 import { findChanges } from '@js/core/utils/array_compare';
 import { deferRender, equalByValue } from '@js/core/utils/common';
@@ -6,8 +8,6 @@ import { Deferred, when } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import { isDefined, isObject } from '@js/core/utils/type';
-import ArrayStore from '@js/data/array_store';
-import CustomStore from '@js/data/custom_store';
 import errors from '@js/ui/widget/ui.errors';
 import type { EditingController } from '@ts/grids/grid_core/editing/m_editing';
 import type { EditorFactory } from '@ts/grids/grid_core/editor_factory/m_editor_factory';
@@ -57,6 +57,10 @@ const changePaging = function (that, optionName, value) {
     return dataSource[optionName]();
   }
 
+  if (optionName === 'pageIndex' && value !== undefined) {
+    return Deferred().resolve().promise();
+  }
+
   return 0;
 };
 
@@ -76,6 +80,7 @@ interface Item {
   values?: unknown[];
   visible?: boolean;
   isExpanded?: boolean;
+  isNewRow?: boolean;
   summaryCells?: unknown[];
   rowIndex?: number;
   cells?: unknown[];
@@ -494,6 +499,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
       that._columnsController.columnsChanged.remove(updateItemsHandler);
       that.updateItems({
         repaintChangesOnly: false,
+        event: change?.changeTypes?.event,
         virtualColumnsScrolling: change?.changeTypes?.virtualColumnsScrolling,
       });
     };
@@ -1304,7 +1310,8 @@ export class DataController extends DataHelperMixin(modules.Controller) {
 
   private filter(filterExpr) {
     const dataSource = this._dataSource;
-    const filter = dataSource && dataSource.filter();
+    const filter = dataSource?.filter();
+    const langParams = dataSource?.loadOptions?.()?.langParams;
 
     if (arguments.length === 0) {
       return filter;
@@ -1312,7 +1319,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
 
     filterExpr = arguments.length > 1 ? Array.prototype.slice.call(arguments, 0) : filterExpr;
 
-    if (gridCoreUtils.equalFilterParameters(filter, filterExpr)) {
+    if (gridCoreUtils.equalFilterParameters(filter, filterExpr, langParams)) {
       return;
     }
     if (dataSource) {

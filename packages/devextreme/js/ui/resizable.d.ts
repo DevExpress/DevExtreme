@@ -8,7 +8,7 @@ import {
     NativeEventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
-} from '../events/index';
+} from '../common/core/events';
 
 /** @public */
 export type ResizeHandle = 'bottom' | 'left' | 'right' | 'top' | 'all';
@@ -83,7 +83,7 @@ export interface dxResizableOptions extends DOMComponentOptions<dxResizable> {
      * @default undefined
      * @public
      */
-    area?: string | UserDefinedElement;
+    area?: string | UserDefinedElement | undefined;
     /**
      * @docid
      * @default "all"

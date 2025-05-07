@@ -1,6 +1,10 @@
+'use client';
+
 import * as React from 'react';
 
-import { memo } from 'react';
+import { memo, useContext, useLayoutEffect } from 'react';
+import { NestedOptionContext, TemplateRenderingContext } from './contexts';
+import { getNamedTemplate } from './configuration/react/templates';
 
 interface ITemplateMeta {
   tmplOption: string;
@@ -20,7 +24,24 @@ interface ITemplateArgs {
   index?: number;
 }
 
-const Template: React.FC<ITemplateProps> = memo(() => null);
+const Template: React.FC<ITemplateProps> = memo((props) => {
+  const {
+    onNamedTemplateReady,
+    treeUpdateToken,
+  } = useContext(NestedOptionContext);
+
+  const { isTemplateRendering } = useContext(TemplateRenderingContext);
+
+  const template = getNamedTemplate(props);
+
+  useLayoutEffect(() => {
+    if (!isTemplateRendering) {
+      onNamedTemplateReady(template, treeUpdateToken);
+    }
+  }, [treeUpdateToken]);
+
+  return null;
+});
 
 function findProps(child: React.ReactElement): ITemplateProps | undefined {
   if (child.type !== Template) {

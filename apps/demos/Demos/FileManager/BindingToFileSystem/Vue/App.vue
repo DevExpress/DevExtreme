@@ -22,7 +22,7 @@ import { DxFileManager /* DxPermissions */ } from 'devextreme-vue/file-manager';
 import RemoteFileSystemProvider from 'devextreme/file_management/remote_provider';
 
 const remoteProvider = new RemoteFileSystemProvider({
-  endpointUrl: 'https://js.devexpress.com/Demos/Mvc/api/file-manager-file-system-scripts',
+  endpointUrl: 'https://js.devexpress.com/Demos/NetCore/api/file-manager-file-system',
 });
 const allowedFileExtensions = ['.js', '.json', '.css'];
 </script>

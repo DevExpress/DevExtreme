@@ -16,7 +16,7 @@ $(() => {
       text: 'Fifth Avenue',
     },
   }, {
-    location: 'Brooklyn Bridge,New York,NY',
+    location: { lat: 40.705748, lng: -73.996299 },
     tooltip: {
       text: 'Brooklyn Bridge',
     },
@@ -24,10 +24,8 @@ $(() => {
   ];
 
   const mapWidget = $('#map').dxMap({
-    provider: 'bing',
-    apiKey: {
-      bing: 'Aq3LKP2BOmzWY47TZoT1YdieypN_rB6RY9FqBfx-MDCKjvvWBbT68R51xwbL-AqC',
-    },
+    provider: 'azure',
+    apiKey: '6N8zuPkBsnfwniNAJkldM3cUgm3lXg3y9gkIKy59benICnnepK4DJQQJ99AIACYeBjFllM6LAAAgAZMPGFXE',
     zoom: 11,
     height: 440,
     width: '100%',

@@ -2,7 +2,7 @@ import React, { useCallback, useState } from 'react';
 import DataGrid, {
   Column, RowDragging, Scrolling, Lookup, Sorting,
 } from 'devextreme-react/data-grid';
-import { CheckBox, CheckBoxTypes } from 'devextreme-react/check-box';
+import { CheckBox, type CheckBoxTypes } from 'devextreme-react/check-box';
 import { tasks as defaultTasks, employees } from './data.ts';
 
 const App = () => {

@@ -594,7 +594,7 @@ const baseScatterMethods = {
     },
 
     usePointsToDefineAutoHiding() {
-        return true;
+        return !!this._getOptionsForPoint().visible;
     }
 };
 

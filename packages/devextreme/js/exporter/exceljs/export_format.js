@@ -1,11 +1,11 @@
 import { format as stringFormat } from '../../core/utils/string';
-import numberFormatter from '../../localization/number';
-import dateLocalization from '../../localization/date';
+import numberFormatter from '../../common/core/localization/number';
+import dateLocalization from '../../common/core/localization/date';
 import { isDefined, isString, isObject, isNumeric } from '../../core/utils/type';
-import { getFormat } from '../../localization/ldml/date.format';
-import { getLanguageId } from '../../localization/language_codes';
+import { getFormat } from '../../common/core/localization/ldml/date.format';
+import { getLanguageId } from '../../common/core/localization/language_codes';
 import { extend } from '../../core/utils/extend';
-import '../../localization/currency';
+import '../../common/core/localization/currency';
 
 const ARABIC_ZERO_CODE = 1632;
 const DEFINED_NUMBER_FORMTATS = {

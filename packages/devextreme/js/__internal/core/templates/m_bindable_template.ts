@@ -1,8 +1,8 @@
+import eventsEngine from '@js/common/core/events/core/events_engine';
+import { removeEvent } from '@js/common/core/events/remove';
 import $ from '@js/core/renderer';
 import { TemplateBase } from '@js/core/templates/template_base';
 import { isPrimitive } from '@js/core/utils/type';
-import eventsEngine from '@js/events/core/events_engine';
-import { removeEvent } from '@js/events/remove';
 
 const watchChanges = (function () {
   const globalWatch = (data, watchMethod, callback) => watchMethod(() => data, callback);

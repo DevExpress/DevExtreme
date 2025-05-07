@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import GoogleStaticProvider from '__internal/ui/map/m_provider.google_static';
-import fx from 'animation/fx';
+import fx from 'common/core/animation/fx';
 import executeAsyncMock from '../../helpers/executeAsyncMock.js';
 
 import 'generic_light.css!';
@@ -17,7 +17,7 @@ QUnit.testStart(function() {
 
 executeAsyncMock.setup();
 
-const BOOTSTRAP_CSS_URL = window.ROOT_URL + 'packages/devextreme/node_modules/bootstrap/dist/css/bootstrap.css';
+const BOOTSTRAP_CSS_URL = window.ROOT_URL + 'packages/devextreme-themebuilder/node_modules/bootstrap/dist/css/bootstrap.css';
 
 const applyBootstrap = (function() {
     let styles = null;

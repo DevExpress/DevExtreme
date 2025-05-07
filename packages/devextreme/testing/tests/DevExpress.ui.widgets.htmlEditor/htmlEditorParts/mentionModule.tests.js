@@ -5,8 +5,8 @@ import Mentions from '__internal/ui/html_editor/modules/m_mentions';
 
 import { noop } from 'core/utils/common';
 import devices from '__internal/core/m_devices';
-import { Event as dxEvent } from 'events/index';
-import { normalizeKeyName } from 'events/utils/index';
+import { Event as dxEvent } from 'common/core/events';
+import { normalizeKeyName } from 'common/core/events/utils/index';
 import Quill from 'devextreme-quill';
 
 const SUGGESTION_LIST_CLASS = 'dx-suggestion-list';

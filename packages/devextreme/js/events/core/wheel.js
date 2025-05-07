@@ -1,1 +1,2 @@
-export * from '../../__internal/events/core/m_wheel';
+// eslint-disable-next-line import/export
+export * from '../../common/core/events/core/wheel';

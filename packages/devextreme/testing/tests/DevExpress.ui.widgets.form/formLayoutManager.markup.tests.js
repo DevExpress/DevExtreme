@@ -2688,6 +2688,40 @@ QUnit.module('Supported editors', () => {
         assert.deepEqual(layoutManager.option('layoutData.noRange'), [2, 6], 'data updated');
     });
 
+    test('RangeSlider should be rendered with passed name attributes for startName and endName inputs (T1256743)', function(assert) {
+        const layoutManager = $('#container').dxLayoutManager({
+            layoutData: {
+                range: [10, 20]
+            },
+            items: [{
+                dataField: 'CustomRange',
+                editorType: 'dxRangeSlider',
+                editorOptions: {
+                    startName: 'RangeStart',
+                    endName: 'RangeEnd'
+                }
+            }]
+        }).dxLayoutManager('instance');
+
+        assert.deepEqual(layoutManager.getEditor('CustomRange').option('startName'), 'RangeStart', 'startName specified correctly');
+        assert.deepEqual(layoutManager.getEditor('CustomRange').option('endName'), 'RangeEnd', 'endName specified correctly');
+    });
+
+    test('RangeSlider inputs should be rendered with predefined name attributes if startName and endName are not specified (T1256743)', function(assert) {
+        const layoutManager = $('#container').dxLayoutManager({
+            layoutData: {
+                range: [10, 20]
+            },
+            items: [{
+                dataField: 'CustomRange',
+                editorType: 'dxRangeSlider'
+            }]
+        }).dxLayoutManager('instance');
+
+        assert.deepEqual(layoutManager.getEditor('CustomRange').option('startName'), 'CustomRangeStart', 'startName specified correctly');
+        assert.deepEqual(layoutManager.getEditor('CustomRange').option('endName'), 'CustomRangeEnd', 'endName specified correctly');
+    });
+
     test('Render DateRangeBox', function(assert) {
         const layoutManager = $('#container').dxLayoutManager({
             layoutData: {
@@ -2708,6 +2742,40 @@ QUnit.module('Supported editors', () => {
 
         layoutManager.getEditor('noRange').option('value', newRangeValue);
         assert.deepEqual(layoutManager.option('layoutData.noRange'), newRangeValue, 'data updated');
+    });
+
+    test('DateRangeBox should be rendered with passed name attributes for startDateName and endDateName inputs (T1256743)', function(assert) {
+        const layoutManager = $('#container').dxLayoutManager({
+            layoutData: {
+                range: [new Date(2021, 9, 17), new Date(2021, 9, 25)]
+            },
+            items: [{
+                dataField: 'DateRange',
+                editorType: 'dxDateRangeBox',
+                editorOptions: {
+                    startDateName: 'RangeStart',
+                    endDateName: 'RangeEnd'
+                }
+            }]
+        }).dxLayoutManager('instance');
+
+        assert.deepEqual(layoutManager.getEditor('DateRange').option('startDateName'), 'RangeStart', 'startDateName specified correctly');
+        assert.deepEqual(layoutManager.getEditor('DateRange').option('endDateName'), 'RangeEnd', 'endDateName specified correctly');
+    });
+
+    test('DateRangeBox inputs should be rendered with predefined name attributes if startDateName and endDateName are not specified (T1256743)', function(assert) {
+        const layoutManager = $('#container').dxLayoutManager({
+            layoutData: {
+                range: [new Date(2021, 9, 17), new Date(2021, 9, 25)]
+            },
+            items: [{
+                dataField: 'DateRange',
+                editorType: 'dxDateRangeBox'
+            }]
+        }).dxLayoutManager('instance');
+
+        assert.deepEqual(layoutManager.getEditor('DateRange').option('startDateName'), 'DateRangeStart', 'startDateName specified correctly');
+        assert.deepEqual(layoutManager.getEditor('DateRange').option('endDateName'), 'DateRangeEnd', 'endDateName specified correctly');
     });
 
     test('Form with dxRadioGroup that items are defined via \'dataSource\' option renders without error', function(assert) {

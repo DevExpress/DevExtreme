@@ -1,7 +1,6 @@
 define(function(require) {
     const $ = require('jquery');
     const typeUtils = require('core/utils/type');
-    const registerEvent = require('events/core/event_registrator');
     const Class = require('core/class');
 
     require('integration/jquery');

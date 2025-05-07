@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import { renderDateParts, getDatePartIndexByPosition } from '__internal/ui/date_box/m_date_box.mask.parts';
-import dateParser from 'localization/ldml/date.parser';
-import dateLocalization from 'localization/date';
+import dateParser from 'common/core/localization/ldml/date.parser';
+import dateLocalization from 'common/core/localization/date';
 import { noop } from 'core/utils/common';
 import pointerMock from '../../helpers/pointerMock.js';
 import 'ui/date_box';
@@ -1004,6 +1004,31 @@ module('Events', setupModule, () => {
 
         assert.strictEqual(event.isDefaultPrevented(), true, `the ${DROP_EVENT_NAME} event is prevented`);
     });
+
+    QUnit.test('should clear search value on active part change on click (T1246215)', function(assert) {
+        this.instance.option({
+            displayFormat: 'dd/MM/yyyy HH:mm',
+            useMaskBehavior: true
+        });
+
+        const $input = this.$input;
+        this.keyboard.caret(0);
+        this.$input.trigger('dxclick');
+
+        this.keyboard.type('1');
+
+        const textVal = $input.val();
+        const minutesIndex = textVal.length - 2;
+        this.keyboard.caret({ start: minutesIndex, end: minutesIndex });
+        this.$input.trigger('dxclick');
+        this.keyboard.type('1');
+
+        const finalText = $input.val();
+
+        const minutesPart = finalText.slice(-2);
+
+        assert.strictEqual(minutesPart, '01', 'minutes should be "01"');
+    });
 });
 
 module('Search', setupModule, () => {
@@ -1581,6 +1606,32 @@ module('Regression', () => {
             .change();
 
         assert.strictEqual($dateBox.dxDateBox('option', 'value').getFullYear(), new Date(null).getFullYear(), 'year is correct');
+    });
+
+    QUnit.test('There should be no error here after the component loses focus on Option Changed (T1264236)', function(assert) {
+        assert.expect(1);
+
+        const instance = $('#dateBox').dxDateBox({
+            displayFormat: 'MM/dd/yyyy',
+            useMaskBehavior: true,
+            openOnFieldClick: true,
+            onFocusIn: (e) => {
+                e.component.option({ value: new Date('01/13/2025') });
+            },
+            onOptionChanged: (e) => {
+                if(e.name === 'text' && e.value) {
+                    try {
+                        e.component.blur();
+                    } catch(e) {
+                        assert.ok(false, `error: ${e.message}`);
+                    } finally {
+                        assert.ok(true, 'there is no error');
+                    }
+                }
+            },
+        }).dxDateBox('instance');
+
+        instance.focus();
     });
 });
 

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import Scheduler, { Resource, SchedulerTypes } from 'devextreme-react/scheduler';
+import Scheduler, { Resource, type SchedulerTypes } from 'devextreme-react/scheduler';
 
 import { employees, data } from './data.ts';
 import DataCell from './DataCell.tsx';
@@ -20,7 +20,7 @@ const App = () => (
     views={views}
     defaultCurrentView="month"
     defaultCurrentDate={currentDate}
-    height={600}
+    height={710}
     showAllDayPanel={true}
     firstDayOfWeek={1}
     startDayHour={8}

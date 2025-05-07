@@ -1,4 +1,4 @@
-import { move } from '@js/animation/translator';
+import { move } from '@js/common/core/animation/translator';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { originalViewPort } from '@js/core/utils/view_port';
@@ -46,7 +46,7 @@ class PopupPositionController extends OverlayPositionController {
     }
   }
 
-  get $dragResizeContainer() {
+  get $dragResizeContainer(): dxElementWrapper | undefined {
     return this._$dragResizeContainer;
   }
 
@@ -103,7 +103,7 @@ class PopupPositionController extends OverlayPositionController {
     this._$dragResizeContainer = this._getDragResizeContainer();
   }
 
-  _getDragResizeContainer() {
+  _getDragResizeContainer(): dxElementWrapper {
     if (this._props.dragOutsideBoundary) {
       return $(window);
     }

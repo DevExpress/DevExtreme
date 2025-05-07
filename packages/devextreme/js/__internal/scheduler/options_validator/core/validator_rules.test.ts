@@ -1,3 +1,4 @@
+import { describe, expect, it } from '@jest/globals';
 import { createValidatorRule } from '@ts/scheduler/options_validator/core/validator_rules';
 
 describe('createValidatorRule', () => {

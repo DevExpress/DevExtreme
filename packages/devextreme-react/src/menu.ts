@@ -10,10 +10,9 @@ import { Component as BaseComponent, IHtmlOptions, ComponentRef, NestedComponent
 import NestedOption from "./core/nested-option";
 
 import type { dxMenuItem, ContentReadyEvent, DisposingEvent, InitializedEvent, ItemClickEvent, ItemContextMenuEvent, ItemRenderedEvent, SubmenuHiddenEvent, SubmenuHidingEvent, SubmenuShowingEvent, SubmenuShownEvent } from "devextreme/ui/menu";
-import type { AnimationConfig, AnimationState } from "devextreme/animation/fx";
-import type { PositionConfig } from "devextreme/animation/position";
+import type { AnimationConfig, CollisionResolution, PositionConfig, AnimationState, AnimationType, CollisionResolutionCombination } from "devextreme/common/core/animation";
+import type { HorizontalAlignment, VerticalAlignment, Direction, template, PositionAlignment, SubmenuShowMode } from "devextreme/common";
 import type { CollectionWidgetItem } from "devextreme/ui/collection/ui.collection_widget.base";
-import type { template } from "devextreme/core/templates/template";
 
 type ReplaceFieldTypes<TSource, TReplacement> = {
   [P in keyof TSource]: P extends keyof TReplacement ? TReplacement[P] : TSource[P];
@@ -125,8 +124,8 @@ const Animation = Object.assign<typeof _componentAnimation, NestedComponentMeta>
 // owners:
 // Position
 type IAtProps = React.PropsWithChildren<{
-  x?: "center" | "left" | "right";
-  y?: "bottom" | "center" | "top";
+  x?: HorizontalAlignment;
+  y?: VerticalAlignment;
 }>
 const _componentAt = (props: IAtProps) => {
   return React.createElement(NestedOption<IAtProps>, {
@@ -163,8 +162,8 @@ const BoundaryOffset = Object.assign<typeof _componentBoundaryOffset, NestedComp
 // owners:
 // Position
 type ICollisionProps = React.PropsWithChildren<{
-  x?: "fit" | "flip" | "flipfit" | "none";
-  y?: "fit" | "flip" | "flipfit" | "none";
+  x?: CollisionResolution;
+  y?: CollisionResolution;
 }>
 const _componentCollision = (props: ICollisionProps) => {
   return React.createElement(NestedOption<ICollisionProps>, {
@@ -201,6 +200,7 @@ const Delay = Object.assign<typeof _componentDelay, NestedComponentMeta>(_compon
 
 // owners:
 // Hide
+// Show
 type IFromProps = React.PropsWithChildren<{
   left?: number;
   opacity?: number;
@@ -229,14 +229,14 @@ const From = Object.assign<typeof _componentFrom, NestedComponentMeta>(_componen
 type IHideProps = React.PropsWithChildren<{
   complete?: (($element: any, config: AnimationConfig) => void);
   delay?: number;
-  direction?: "bottom" | "left" | "right" | "top";
+  direction?: Direction | undefined;
   duration?: number;
   easing?: string;
   from?: AnimationState;
-  staggerDelay?: number;
+  staggerDelay?: number | undefined;
   start?: (($element: any, config: AnimationConfig) => void);
   to?: AnimationState;
-  type?: "css" | "fade" | "fadeIn" | "fadeOut" | "pop" | "slide" | "slideIn" | "slideOut";
+  type?: AnimationType;
 }>
 const _componentHide = (props: IHideProps) => {
   return React.createElement(NestedOption<IHideProps>, {
@@ -257,6 +257,7 @@ const Hide = Object.assign<typeof _componentHide, NestedComponentMeta>(_componen
 
 // owners:
 // Menu
+// Item
 type IItemProps = React.PropsWithChildren<{
   beginGroup?: boolean;
   closeMenuOnClick?: boolean;
@@ -279,6 +280,9 @@ const _componentItem = (props: IItemProps) => {
     elementDescriptor: {
       OptionName: "items",
       IsCollectionItem: true,
+      ExpectedChildren: {
+        item: { optionName: "items", isCollectionItem: true }
+      },
       TemplateProps: [{
         tmplOption: "template",
         render: "render",
@@ -295,8 +299,8 @@ const Item = Object.assign<typeof _componentItem, NestedComponentMeta>(_componen
 // owners:
 // Position
 type IMyProps = React.PropsWithChildren<{
-  x?: "center" | "left" | "right";
-  y?: "bottom" | "center" | "top";
+  x?: HorizontalAlignment;
+  y?: VerticalAlignment;
 }>
 const _componentMy = (props: IMyProps) => {
   return React.createElement(NestedOption<IMyProps>, {
@@ -332,23 +336,24 @@ const Offset = Object.assign<typeof _componentOffset, NestedComponentMeta>(_comp
 
 // owners:
 // From
+// To
 type IPositionProps = React.PropsWithChildren<{
-  at?: Record<string, any> | "bottom" | "center" | "left" | "left bottom" | "left top" | "right" | "right bottom" | "right top" | "top" | {
-    x?: "center" | "left" | "right";
-    y?: "bottom" | "center" | "top";
+  at?: Record<string, any> | PositionAlignment | {
+    x?: HorizontalAlignment;
+    y?: VerticalAlignment;
   };
   boundary?: any | string;
   boundaryOffset?: Record<string, any> | string | {
     x?: number;
     y?: number;
   };
-  collision?: Record<string, any> | "fit" | "fit flip" | "fit flipfit" | "fit none" | "flip" | "flip fit" | "flip none" | "flipfit" | "flipfit fit" | "flipfit none" | "none" | "none fit" | "none flip" | "none flipfit" | {
-    x?: "fit" | "flip" | "flipfit" | "none";
-    y?: "fit" | "flip" | "flipfit" | "none";
+  collision?: CollisionResolutionCombination | Record<string, any> | {
+    x?: CollisionResolution;
+    y?: CollisionResolution;
   };
-  my?: Record<string, any> | "bottom" | "center" | "left" | "left bottom" | "left top" | "right" | "right bottom" | "right top" | "top" | {
-    x?: "center" | "left" | "right";
-    y?: "bottom" | "center" | "top";
+  my?: Record<string, any> | PositionAlignment | {
+    x?: HorizontalAlignment;
+    y?: VerticalAlignment;
   };
   of?: any | string;
   offset?: Record<string, any> | string | {
@@ -381,20 +386,24 @@ const Position = Object.assign<typeof _componentPosition, NestedComponentMeta>(_
 type IShowProps = React.PropsWithChildren<{
   complete?: (($element: any, config: AnimationConfig) => void);
   delay?: number;
-  direction?: "bottom" | "left" | "right" | "top";
+  direction?: Direction | undefined;
   duration?: number;
   easing?: string;
   from?: AnimationState;
-  staggerDelay?: number;
+  staggerDelay?: number | undefined;
   start?: (($element: any, config: AnimationConfig) => void);
   to?: AnimationState;
-  type?: "css" | "fade" | "fadeIn" | "fadeOut" | "pop" | "slide" | "slideIn" | "slideOut";
+  type?: AnimationType;
 }>
 const _componentShow = (props: IShowProps) => {
   return React.createElement(NestedOption<IShowProps>, {
     ...props,
     elementDescriptor: {
       OptionName: "show",
+      ExpectedChildren: {
+        from: { optionName: "from", isCollectionItem: false },
+        to: { optionName: "to", isCollectionItem: false }
+      },
     },
   });
 };
@@ -410,7 +419,7 @@ type IShowFirstSubmenuModeProps = React.PropsWithChildren<{
     hide?: number;
     show?: number;
   };
-  name?: "onClick" | "onHover";
+  name?: SubmenuShowMode;
 }>
 const _componentShowFirstSubmenuMode = (props: IShowFirstSubmenuModeProps) => {
   return React.createElement(NestedOption<IShowFirstSubmenuModeProps>, {
@@ -435,7 +444,7 @@ type IShowSubmenuModeProps = React.PropsWithChildren<{
     hide?: number;
     show?: number;
   };
-  name?: "onClick" | "onHover";
+  name?: SubmenuShowMode;
 }>
 const _componentShowSubmenuMode = (props: IShowSubmenuModeProps) => {
   return React.createElement(NestedOption<IShowSubmenuModeProps>, {
@@ -455,6 +464,7 @@ const ShowSubmenuMode = Object.assign<typeof _componentShowSubmenuMode, NestedCo
 
 // owners:
 // Hide
+// Show
 type IToProps = React.PropsWithChildren<{
   left?: number;
   opacity?: number;
@@ -467,6 +477,9 @@ const _componentTo = (props: IToProps) => {
     ...props,
     elementDescriptor: {
       OptionName: "to",
+      ExpectedChildren: {
+        position: { optionName: "position", isCollectionItem: false }
+      },
     },
   });
 };

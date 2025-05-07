@@ -1,4 +1,4 @@
-import { Selector } from 'testcafe';
+import { ClientFunction, Selector } from 'testcafe';
 import FocusableElement from '../../internal/focusable';
 import Widget from '../../internal/widget';
 
@@ -6,6 +6,7 @@ const CLASS = {
   hiddenColumn: 'hidden-column',
   filterMenu: 'dx-header-filter-menu',
   list: 'dx-list',
+  stateHover: 'dx-state-hover',
 };
 
 export default class HeaderCell {
@@ -16,6 +17,12 @@ export default class HeaderCell {
   isFocused: Promise<boolean>;
 
   isHidden: Promise<boolean>;
+
+  isHovered(): Promise<boolean> {
+    return ClientFunction((element) => {
+      return element() === document.querySelector("td:hover");
+    })(this.element);
+  }
 
   constructor(headerRow: Selector, index: number, widgetName: string) {
     this.element = headerRow.find(`td[aria-colindex='${index + 1}']`);

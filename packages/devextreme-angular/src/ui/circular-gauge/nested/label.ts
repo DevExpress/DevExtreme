@@ -15,7 +15,7 @@ import {
 
 
 import { Font, LabelOverlap } from 'devextreme/common/charts';
-import { Format } from 'devextreme/localization';
+import { Format } from 'devextreme/common/core/localization';
 import { CircularGaugeLabelOverlap } from 'devextreme/viz/circular_gauge';
 
 import {
@@ -32,10 +32,10 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoCircularGaugeLabelComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get customizeText(): Function {
+    get customizeText(): ((scaleValue: { value: number, valueText: string }) => string) {
         return this._getOption('customizeText');
     }
-    set customizeText(value: Function) {
+    set customizeText(value: ((scaleValue: { value: number, valueText: string }) => string)) {
         this._setOption('customizeText', value);
     }
 
@@ -48,10 +48,10 @@ export class DxoCircularGaugeLabelComponent extends NestedOption implements OnDe
     }
 
     @Input()
-    get format(): Format | string | undefined {
+    get format(): Format | undefined {
         return this._getOption('format');
     }
-    set format(value: Format | string | undefined) {
+    set format(value: Format | undefined) {
         this._setOption('format', value);
     }
 

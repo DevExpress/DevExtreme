@@ -1,10 +1,14 @@
 /* eslint-disable max-classes-per-file */
 import {
+    DateLike,
+} from '../common';
+
+import {
     EventInfo,
     NativeEventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
-} from '../events/index';
+} from '../common/core/events';
 
 import {
     ComponentDisabledDate,
@@ -27,6 +31,10 @@ import {
 import {
     Properties as PopupProperties,
 } from './popup';
+
+export {
+    DateLike,
+};
 
 /** @public */
 export type DateType = 'date' | 'datetime' | 'time';
@@ -275,9 +283,10 @@ export interface dxDateBoxOptions extends DateBoxBaseOptions<dxDateBox> {
     /**
      * @docid
      * @default null
+     * @type Date|number|string|null
      * @public
      */
-    value?: Date | number | string;
+    value?: DateLike;
 }
 
 /**
@@ -309,7 +318,7 @@ export interface DateBoxBaseOptions<TComponent> extends dxDropDownEditorOptions<
      * @default undefined
      * @public
      */
-    dateSerializationFormat?: string;
+    dateSerializationFormat?: string | undefined;
     /**
      * @docid
      * @default null
@@ -318,16 +327,18 @@ export interface DateBoxBaseOptions<TComponent> extends dxDropDownEditorOptions<
     displayFormat?: Format;
     /**
      * @docid
+     * @type Date|number|string|null|undefined
      * @default undefined
      * @public
      */
-    max?: Date | number | string;
+    max?: DateLike | undefined;
     /**
      * @docid
+     * @type Date|number|string|null|undefined
      * @default undefined
      * @public
      */
-    min?: Date | number | string;
+    min?: DateLike | undefined;
     /**
      * @docid
      * @default "Today"
@@ -382,8 +393,9 @@ export default class dxDateBox extends DateBoxBase<Properties> {
      * @docid
      * @publicName reset(value)
      * @public
+     * @param1 value:Date|number|string|null
      */
-    reset(value?: Date | number | string | null): void;
+    reset(value?: DateLike): void;
 }
 
 /**

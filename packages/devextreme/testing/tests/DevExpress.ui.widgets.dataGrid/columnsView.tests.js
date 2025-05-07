@@ -7,7 +7,7 @@ import 'ui/data_grid';
 
 import browser from 'core/utils/browser';
 import { ColumnsView } from '__internal/grids/grid_core/views/m_columns_view';
-import fx from 'animation/fx';
+import fx from 'common/core/animation/fx';
 import dataGridMocks from '../../helpers/dataGridMocks.js';
 
 const MockColumnsController = dataGridMocks.MockColumnsController;

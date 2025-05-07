@@ -9,7 +9,7 @@ import { TextBox } from 'devextreme-react/text-box';
 import { DateBox } from 'devextreme-react/date-box';
 import { DateRangeBox } from 'devextreme-react/date-range-box';
 import { TextArea } from 'devextreme-react/text-area';
-import { Button, ButtonTypes } from 'devextreme-react/button';
+import { Button, type ButtonTypes } from 'devextreme-react/button';
 import { Validator, RequiredRule } from 'devextreme-react/validator';
 
 import {

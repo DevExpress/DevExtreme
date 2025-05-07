@@ -44,7 +44,7 @@
 </template>
 <script setup lang="ts">
 import { computed, ref } from 'vue';
-import { DxScheduler, DxSchedulerTypes } from 'devextreme-vue/scheduler';
+import { DxScheduler, type DxSchedulerTypes } from 'devextreme-vue/scheduler';
 import notify from 'devextreme/ui/notify';
 import { data, holidays } from './data.ts';
 import Utils from './utils.ts';

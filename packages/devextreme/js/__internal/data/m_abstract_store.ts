@@ -1,3 +1,6 @@
+import { errors, handleError } from '@js/common/data/errors';
+import storeHelper from '@js/common/data/store_helper';
+import { processRequestResultLock } from '@js/common/data/utils';
 import Class from '@js/core/class';
 import { EventsStrategy } from '@js/core/events_strategy';
 import { noop } from '@js/core/utils/common';
@@ -5,11 +8,6 @@ import { compileGetter } from '@js/core/utils/data';
 import { Deferred, when } from '@js/core/utils/deferred';
 import { each } from '@js/core/utils/iterator';
 import { isEmptyObject } from '@js/core/utils/type';
-// @ts-expect-error
-import { errors, handleError } from '@js/data/errors';
-import storeHelper from '@js/data/store_helper';
-// @ts-expect-error
-import { processRequestResultLock } from '@js/data/utils';
 
 const { abstract } = Class;
 const { queryByOptions } = storeHelper;

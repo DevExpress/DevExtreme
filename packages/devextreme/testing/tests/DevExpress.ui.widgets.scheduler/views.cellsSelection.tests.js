@@ -1,5 +1,5 @@
 import 'generic_light.css!';
-import fx from 'animation/fx';
+import fx from 'common/core/animation/fx';
 import { createWrapper, initTestMarkup, CLASSES, isDesktopEnvironment } from '../../helpers/scheduler/helpers.js';
 
 const { test, module, testStart } = QUnit;

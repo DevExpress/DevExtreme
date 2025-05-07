@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import fx from 'animation/fx';
+import fx from 'common/core/animation/fx';
 import Tooltip from 'ui/tooltip';
 import renderer from 'core/renderer';
 import uiErrors from 'ui/widget/ui.errors';

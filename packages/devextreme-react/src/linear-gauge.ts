@@ -9,10 +9,9 @@ import { Component as BaseComponent, IHtmlOptions, ComponentRef, NestedComponent
 import NestedOption from "./core/nested-option";
 
 import type { DisposingEvent, DrawnEvent, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, TooltipHiddenEvent, TooltipShownEvent } from "devextreme/viz/linear_gauge";
-import type { Font as ChartsFont, ChartsColor } from "devextreme/common/charts";
-import type { template } from "devextreme/core/templates/template";
-
-import type * as LocalizationTypes from "devextreme/localization";
+import type { AnimationEaseMode, DashStyle, Font as ChartsFont, LabelOverlap, ChartsColor, Palette, PaletteExtensionMode, TextOverflow, WordWrap } from "devextreme/common/charts";
+import type { ExportFormat, Format as CommonFormat, Orientation, HorizontalAlignment, VerticalAlignment, HorizontalEdge, VerticalEdge, template } from "devextreme/common";
+import type { Format as LocalizationFormat } from "devextreme/common/core/localization";
 
 type ReplaceFieldTypes<TSource, TReplacement> = {
   [P in keyof TSource]: P extends keyof TReplacement ? TReplacement[P] : TSource[P];
@@ -33,10 +32,10 @@ type ILinearGaugeOptionsNarrowedEvents = {
 type ILinearGaugeOptions = React.PropsWithChildren<ReplaceFieldTypes<Properties, ILinearGaugeOptionsNarrowedEvents> & IHtmlOptions & {
   defaultLoadingIndicator?: Record<string, any>;
   defaultSubvalues?: Array<number>;
-  defaultValue?: number;
+  defaultValue?: number | undefined;
   onLoadingIndicatorChange?: (value: Record<string, any>) => void;
   onSubvaluesChange?: (value: Array<number>) => void;
-  onValueChange?: (value: number) => void;
+  onValueChange?: (value: number | undefined) => void;
 }>
 
 interface LinearGaugeRef {
@@ -100,7 +99,7 @@ const LinearGauge = memo(
 // LinearGauge
 type IAnimationProps = React.PropsWithChildren<{
   duration?: number;
-  easing?: "easeOutCubic" | "linear";
+  easing?: AnimationEaseMode;
   enabled?: boolean;
 }>
 const _componentAnimation = (props: IAnimationProps) => {
@@ -119,8 +118,8 @@ const Animation = Object.assign<typeof _componentAnimation, NestedComponentMeta>
 // owners:
 // RangeContainer
 type IBackgroundColorProps = React.PropsWithChildren<{
-  base?: string;
-  fillId?: string;
+  base?: string | undefined;
+  fillId?: string | undefined;
 }>
 const _componentBackgroundColor = (props: IBackgroundColorProps) => {
   return React.createElement(NestedOption<IBackgroundColorProps>, {
@@ -139,8 +138,8 @@ const BackgroundColor = Object.assign<typeof _componentBackgroundColor, NestedCo
 // Tooltip
 type IBorderProps = React.PropsWithChildren<{
   color?: string;
-  dashStyle?: "dash" | "dot" | "longDash" | "solid";
-  opacity?: number;
+  dashStyle?: DashStyle;
+  opacity?: number | undefined;
   visible?: boolean;
   width?: number;
 }>
@@ -160,9 +159,10 @@ const Border = Object.assign<typeof _componentBorder, NestedComponentMeta>(_comp
 // owners:
 // Range
 // SubvalueIndicator
+// ValueIndicator
 type IColorProps = React.PropsWithChildren<{
-  base?: string;
-  fillId?: string;
+  base?: string | undefined;
+  fillId?: string | undefined;
 }>
 const _componentColor = (props: IColorProps) => {
   return React.createElement(NestedOption<IColorProps>, {
@@ -183,10 +183,10 @@ type IExportProps = React.PropsWithChildren<{
   backgroundColor?: string;
   enabled?: boolean;
   fileName?: string;
-  formats?: Array<"GIF" | "JPEG" | "PDF" | "PNG" | "SVG">;
+  formats?: Array<ExportFormat>;
   margin?: number;
   printingEnabled?: boolean;
-  svgToCanvas?: ((svg: any, canvas: any) => any);
+  svgToCanvas?: ((svg: any, canvas: any) => any) | undefined;
 }>
 const _componentExport = (props: IExportProps) => {
   return React.createElement(NestedOption<IExportProps>, {
@@ -237,7 +237,7 @@ type IFormatProps = React.PropsWithChildren<{
   formatter?: ((value: number | Date) => string);
   parser?: ((value: string) => number | Date);
   precision?: number;
-  type?: "billions" | "currency" | "day" | "decimal" | "exponential" | "fixedPoint" | "largeNumber" | "longDate" | "longTime" | "millions" | "millisecond" | "month" | "monthAndDay" | "monthAndYear" | "percent" | "quarter" | "quarterAndYear" | "shortDate" | "shortTime" | "thousands" | "trillions" | "year" | "dayOfWeek" | "hour" | "longDateLongTime" | "minute" | "second" | "shortDateShortTime";
+  type?: CommonFormat | string;
   useCurrencyAccountingStyle?: boolean;
 }>
 const _componentFormat = (props: IFormatProps) => {
@@ -256,7 +256,7 @@ const Format = Object.assign<typeof _componentFormat, NestedComponentMeta>(_comp
 // owners:
 // LinearGauge
 type IGeometryProps = React.PropsWithChildren<{
-  orientation?: "horizontal" | "vertical";
+  orientation?: Orientation;
 }>
 const _componentGeometry = (props: IGeometryProps) => {
   return React.createElement(NestedOption<IGeometryProps>, {
@@ -276,9 +276,9 @@ const Geometry = Object.assign<typeof _componentGeometry, NestedComponentMeta>(_
 type ILabelProps = React.PropsWithChildren<{
   customizeText?: ((scaleValue: { value: number, valueText: string }) => string);
   font?: ChartsFont;
-  format?: LocalizationTypes.Format;
+  format?: LocalizationFormat | undefined;
   indentFromTick?: number;
-  overlappingBehavior?: "hide" | "none";
+  overlappingBehavior?: LabelOverlap;
   useRangeColors?: boolean;
   visible?: boolean;
 }>
@@ -400,16 +400,16 @@ const Range = Object.assign<typeof _componentRange, NestedComponentMeta>(_compon
 // LinearGauge
 type IRangeContainerProps = React.PropsWithChildren<{
   backgroundColor?: ChartsColor | string;
-  horizontalOrientation?: "center" | "left" | "right";
+  horizontalOrientation?: HorizontalAlignment;
   offset?: number;
-  palette?: Array<string> | "Bright" | "Harmony Light" | "Ocean" | "Pastel" | "Soft" | "Soft Pastel" | "Vintage" | "Violet" | "Carmine" | "Dark Moon" | "Dark Violet" | "Green Mist" | "Soft Blue" | "Material" | "Office";
-  paletteExtensionMode?: "alternate" | "blend" | "extrapolate";
+  palette?: Array<string> | Palette;
+  paletteExtensionMode?: PaletteExtensionMode;
   ranges?: Array<Record<string, any>> | {
     color?: ChartsColor | string;
     endValue?: number;
     startValue?: number;
   }[];
-  verticalOrientation?: "bottom" | "center" | "top";
+  verticalOrientation?: VerticalAlignment;
   width?: number | Record<string, any> | {
     end?: number;
     start?: number;
@@ -436,17 +436,17 @@ const RangeContainer = Object.assign<typeof _componentRangeContainer, NestedComp
 // owners:
 // LinearGauge
 type IScaleProps = React.PropsWithChildren<{
-  allowDecimals?: boolean;
+  allowDecimals?: boolean | undefined;
   customMinorTicks?: Array<number>;
   customTicks?: Array<number>;
   endValue?: number;
-  horizontalOrientation?: "center" | "left" | "right";
+  horizontalOrientation?: HorizontalAlignment;
   label?: Record<string, any> | {
     customizeText?: ((scaleValue: { value: number, valueText: string }) => string);
     font?: ChartsFont;
-    format?: LocalizationTypes.Format;
+    format?: LocalizationFormat | undefined;
     indentFromTick?: number;
-    overlappingBehavior?: "hide" | "none";
+    overlappingBehavior?: LabelOverlap;
     useRangeColors?: boolean;
     visible?: boolean;
   };
@@ -457,7 +457,7 @@ type IScaleProps = React.PropsWithChildren<{
     visible?: boolean;
     width?: number;
   };
-  minorTickInterval?: number;
+  minorTickInterval?: number | undefined;
   scaleDivisionFactor?: number;
   startValue?: number;
   tick?: Record<string, any> | {
@@ -467,8 +467,8 @@ type IScaleProps = React.PropsWithChildren<{
     visible?: boolean;
     width?: number;
   };
-  tickInterval?: number;
-  verticalOrientation?: "bottom" | "center" | "top";
+  tickInterval?: number | undefined;
+  verticalOrientation?: VerticalAlignment;
 }>
 const _componentScale = (props: IScaleProps) => {
   return React.createElement(NestedOption<IScaleProps>, {
@@ -513,8 +513,8 @@ const Shadow = Object.assign<typeof _componentShadow, NestedComponentMeta>(_comp
 // owners:
 // LinearGauge
 type ISizeProps = React.PropsWithChildren<{
-  height?: number;
-  width?: number;
+  height?: number | undefined;
+  width?: number | undefined;
 }>
 const _componentSize = (props: ISizeProps) => {
   return React.createElement(NestedOption<ISizeProps>, {
@@ -535,8 +535,8 @@ type ISubtitleProps = React.PropsWithChildren<{
   font?: ChartsFont;
   offset?: number;
   text?: string;
-  textOverflow?: "ellipsis" | "hide" | "none";
-  wordWrap?: "normal" | "breakWord" | "none";
+  textOverflow?: TextOverflow;
+  wordWrap?: WordWrap;
 }>
 const _componentSubtitle = (props: ISubtitleProps) => {
   return React.createElement(NestedOption<ISubtitleProps>, {
@@ -559,27 +559,27 @@ const Subtitle = Object.assign<typeof _componentSubtitle, NestedComponentMeta>(_
 type ISubvalueIndicatorProps = React.PropsWithChildren<{
   arrowLength?: number;
   backgroundColor?: string;
-  baseValue?: number;
+  baseValue?: number | undefined;
   beginAdaptingAtRadius?: number;
   color?: ChartsColor | string;
-  horizontalOrientation?: "left" | "right";
+  horizontalOrientation?: HorizontalEdge;
   indentFromCenter?: number;
   length?: number;
   offset?: number;
-  palette?: Array<string> | "Bright" | "Harmony Light" | "Ocean" | "Pastel" | "Soft" | "Soft Pastel" | "Vintage" | "Violet" | "Carmine" | "Dark Moon" | "Dark Violet" | "Green Mist" | "Soft Blue" | "Material" | "Office";
+  palette?: Array<string> | Palette;
   secondColor?: string;
   secondFraction?: number;
   size?: number;
   spindleGapSize?: number;
   spindleSize?: number;
   text?: Record<string, any> | {
-    customizeText?: ((indicatedValue: { value: number, valueText: string }) => string);
+    customizeText?: ((indicatedValue: { value: number, valueText: string }) => string) | undefined;
     font?: ChartsFont;
-    format?: LocalizationTypes.Format;
+    format?: LocalizationFormat | undefined;
     indent?: number;
   };
   type?: "circle" | "rangeBar" | "rectangle" | "rectangleNeedle" | "rhombus" | "textCloud" | "triangleMarker" | "triangleNeedle" | "twoColorNeedle";
-  verticalOrientation?: "bottom" | "top";
+  verticalOrientation?: VerticalEdge;
   width?: number;
 }>
 const _componentSubvalueIndicator = (props: ISubvalueIndicatorProps) => {
@@ -601,10 +601,11 @@ const SubvalueIndicator = Object.assign<typeof _componentSubvalueIndicator, Nest
 
 // owners:
 // SubvalueIndicator
+// ValueIndicator
 type ITextProps = React.PropsWithChildren<{
-  customizeText?: ((indicatedValue: { value: number, valueText: string }) => string);
+  customizeText?: ((indicatedValue: { value: number, valueText: string }) => string) | undefined;
   font?: ChartsFont;
-  format?: LocalizationTypes.Format;
+  format?: LocalizationFormat | undefined;
   indent?: number;
 }>
 const _componentText = (props: ITextProps) => {
@@ -650,25 +651,25 @@ const Tick = Object.assign<typeof _componentTick, NestedComponentMeta>(_componen
 // LinearGauge
 type ITitleProps = React.PropsWithChildren<{
   font?: ChartsFont;
-  horizontalAlignment?: "center" | "left" | "right";
+  horizontalAlignment?: HorizontalAlignment;
   margin?: number | Record<string, any> | {
     bottom?: number;
     left?: number;
     right?: number;
     top?: number;
   };
-  placeholderSize?: number;
+  placeholderSize?: number | undefined;
   subtitle?: Record<string, any> | string | {
     font?: ChartsFont;
     offset?: number;
     text?: string;
-    textOverflow?: "ellipsis" | "hide" | "none";
-    wordWrap?: "normal" | "breakWord" | "none";
+    textOverflow?: TextOverflow;
+    wordWrap?: WordWrap;
   };
   text?: string;
-  textOverflow?: "ellipsis" | "hide" | "none";
-  verticalAlignment?: "bottom" | "top";
-  wordWrap?: "normal" | "breakWord" | "none";
+  textOverflow?: TextOverflow;
+  verticalAlignment?: VerticalEdge;
+  wordWrap?: WordWrap;
 }>
 const _componentTitle = (props: ITitleProps) => {
   return React.createElement(NestedOption<ITitleProps>, {
@@ -694,21 +695,21 @@ type ITooltipProps = React.PropsWithChildren<{
   arrowLength?: number;
   border?: Record<string, any> | {
     color?: string;
-    dashStyle?: "dash" | "dot" | "longDash" | "solid";
-    opacity?: number;
+    dashStyle?: DashStyle;
+    opacity?: number | undefined;
     visible?: boolean;
     width?: number;
   };
   color?: string;
-  container?: any | string;
-  contentTemplate?: ((scaleValue: { value: number, valueText: string }, element: any) => string | any) | template;
+  container?: any | string | undefined;
+  contentTemplate?: ((scaleValue: { value: number, valueText: string }, element: any) => string | any) | template | undefined;
   cornerRadius?: number;
-  customizeTooltip?: ((scaleValue: { value: number, valueText: string }) => Record<string, any>);
+  customizeTooltip?: ((scaleValue: { value: number, valueText: string }) => Record<string, any>) | undefined;
   enabled?: boolean;
   font?: ChartsFont;
-  format?: LocalizationTypes.Format;
+  format?: LocalizationFormat | undefined;
   interactive?: boolean;
-  opacity?: number;
+  opacity?: number | undefined;
   paddingLeftRight?: number;
   paddingTopBottom?: number;
   shadow?: Record<string, any> | {
@@ -718,7 +719,7 @@ type ITooltipProps = React.PropsWithChildren<{
     offsetY?: number;
     opacity?: number;
   };
-  zIndex?: number;
+  zIndex?: number | undefined;
   contentRender?: (...params: any) => React.ReactNode;
   contentComponent?: React.ComponentType<any>;
 }>
@@ -751,27 +752,27 @@ const Tooltip = Object.assign<typeof _componentTooltip, NestedComponentMeta>(_co
 type IValueIndicatorProps = React.PropsWithChildren<{
   arrowLength?: number;
   backgroundColor?: string;
-  baseValue?: number;
+  baseValue?: number | undefined;
   beginAdaptingAtRadius?: number;
   color?: ChartsColor | string;
-  horizontalOrientation?: "left" | "right";
+  horizontalOrientation?: HorizontalEdge;
   indentFromCenter?: number;
   length?: number;
   offset?: number;
-  palette?: Array<string> | "Bright" | "Harmony Light" | "Ocean" | "Pastel" | "Soft" | "Soft Pastel" | "Vintage" | "Violet" | "Carmine" | "Dark Moon" | "Dark Violet" | "Green Mist" | "Soft Blue" | "Material" | "Office";
+  palette?: Array<string> | Palette;
   secondColor?: string;
   secondFraction?: number;
   size?: number;
   spindleGapSize?: number;
   spindleSize?: number;
   text?: Record<string, any> | {
-    customizeText?: ((indicatedValue: { value: number, valueText: string }) => string);
+    customizeText?: ((indicatedValue: { value: number, valueText: string }) => string) | undefined;
     font?: ChartsFont;
-    format?: LocalizationTypes.Format;
+    format?: LocalizationFormat | undefined;
     indent?: number;
   };
   type?: "circle" | "rangeBar" | "rectangle" | "rectangleNeedle" | "rhombus" | "textCloud" | "triangleMarker" | "triangleNeedle" | "twoColorNeedle";
-  verticalOrientation?: "bottom" | "top";
+  verticalOrientation?: VerticalEdge;
   width?: number;
 }>
 const _componentValueIndicator = (props: IValueIndicatorProps) => {
@@ -779,6 +780,10 @@ const _componentValueIndicator = (props: IValueIndicatorProps) => {
     ...props,
     elementDescriptor: {
       OptionName: "valueIndicator",
+      ExpectedChildren: {
+        color: { optionName: "color", isCollectionItem: false },
+        text: { optionName: "text", isCollectionItem: false }
+      },
     },
   });
 };

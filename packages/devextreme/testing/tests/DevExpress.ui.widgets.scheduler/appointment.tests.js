@@ -1,7 +1,7 @@
 import $ from 'jquery';
-import { Appointment } from '__internal/scheduler/appointments/m_appointment';
+import { Appointment } from '__internal/scheduler/appointments/appointment/m_appointment';
 import { Deferred } from 'core/utils/deferred';
-import fx from 'animation/fx';
+import fx from 'common/core/animation/fx';
 
 const { module, test, testStart } = QUnit;
 
@@ -14,10 +14,6 @@ testStart(function() {
 });
 
 const createInstance = () => {
-    const dataAccessorsMock = {
-        getter: {},
-        setter: {}
-    };
     const observer = {
         fire: (command) => {
             switch(command) {
@@ -36,7 +32,11 @@ const createInstance = () => {
     return $('#scheduler-appointment').dxSchedulerAppointment({
         observer,
         getAppointmentColor: () => new Deferred(),
-        dataAccessors: dataAccessorsMock
+        dataAccessors: {
+            get(prop, obj) {
+                return obj[prop];
+            },
+        },
     }).dxSchedulerAppointment('instance');
 };
 

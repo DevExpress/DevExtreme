@@ -1,6 +1,35 @@
-import PivotGrid, { Properties } from "devextreme/ui/pivot_grid";
+import { PropType } from "vue";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
+import PivotGrid, { Properties } from "devextreme/ui/pivot_grid";
+import  PivotGridDataSource from "devextreme/ui/pivot_grid/data_source";
+import {
+ PivotGridDataFieldArea,
+ CellClickEvent,
+ CellPreparedEvent,
+ ContentReadyEvent,
+ ContextMenuPreparingEvent,
+ DisposingEvent,
+ ExportingEvent,
+ InitializedEvent,
+ OptionChangedEvent,
+ PivotGridRowHeaderLayout,
+ PivotGridTotalDisplayMode,
+} from "devextreme/ui/pivot_grid";
+import {
+ PivotGridDataSourceOptions,
+} from "devextreme/ui/pivot_grid/data_source";
+import {
+ ApplyChangesMode,
+ HeaderFilterSearchConfig,
+ StateStoreType,
+} from "devextreme/common/grids";
+import {
+ FieldChooserLayout,
+ ScrollMode,
+ Mode,
+ SearchMode,
+} from "devextreme/common";
 import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
@@ -56,41 +85,41 @@ const componentConfig = {
     allowFiltering: Boolean,
     allowSorting: Boolean,
     allowSortingBySummary: Boolean,
-    dataFieldArea: String,
-    dataSource: {},
+    dataFieldArea: String as PropType<PivotGridDataFieldArea>,
+    dataSource: [Array, Object] as PropType<Array<any> | null | PivotGridDataSource | PivotGridDataSourceOptions>,
     disabled: Boolean,
-    elementAttr: Object,
+    elementAttr: Object as PropType<Record<string, any>>,
     encodeHtml: Boolean,
-    export: Object,
-    fieldChooser: Object,
-    fieldPanel: Object,
-    headerFilter: Object,
-    height: [Function, Number, String],
+    export: Object as PropType<Record<string, any>>,
+    fieldChooser: Object as PropType<Record<string, any>>,
+    fieldPanel: Object as PropType<Record<string, any>>,
+    headerFilter: Object as PropType<Record<string, any>>,
+    height: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
     hideEmptySummaryCells: Boolean,
     hint: String,
-    loadPanel: Object,
-    onCellClick: Function,
-    onCellPrepared: Function,
-    onContentReady: Function,
-    onContextMenuPreparing: Function,
-    onDisposing: Function,
-    onExporting: Function,
-    onInitialized: Function,
-    onOptionChanged: Function,
-    rowHeaderLayout: String,
+    loadPanel: Object as PropType<Record<string, any>>,
+    onCellClick: Function as PropType<((e: CellClickEvent) => void)>,
+    onCellPrepared: Function as PropType<((e: CellPreparedEvent) => void)>,
+    onContentReady: Function as PropType<((e: ContentReadyEvent) => void)>,
+    onContextMenuPreparing: Function as PropType<((e: ContextMenuPreparingEvent) => void)>,
+    onDisposing: Function as PropType<((e: DisposingEvent) => void)>,
+    onExporting: Function as PropType<((e: ExportingEvent) => void)>,
+    onInitialized: Function as PropType<((e: InitializedEvent) => void)>,
+    onOptionChanged: Function as PropType<((e: OptionChangedEvent) => void)>,
+    rowHeaderLayout: String as PropType<PivotGridRowHeaderLayout>,
     rtlEnabled: Boolean,
-    scrolling: Object,
+    scrolling: Object as PropType<Record<string, any>>,
     showBorders: Boolean,
     showColumnGrandTotals: Boolean,
     showColumnTotals: Boolean,
     showRowGrandTotals: Boolean,
     showRowTotals: Boolean,
-    showTotalsPrior: String,
-    stateStoring: Object,
+    showTotalsPrior: String as PropType<PivotGridTotalDisplayMode>,
+    stateStoring: Object as PropType<Record<string, any>>,
     tabIndex: Number,
-    texts: Object,
+    texts: Object as PropType<Record<string, any>>,
     visible: Boolean,
-    width: [Function, Number, String],
+    width: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
     wordWrapEnabled: Boolean
   },
   emits: {
@@ -197,19 +226,12 @@ const DxFieldChooserConfig = {
   },
   props: {
     allowSearch: Boolean,
-    applyChangesMode: String,
+    applyChangesMode: String as PropType<ApplyChangesMode>,
     enabled: Boolean,
     height: Number,
-    layout: {
-      type: Number,
-      validator: (v) => typeof(v) !== "number" || [
-        0,
-        1,
-        2
-      ].indexOf(v) !== -1
-    },
+    layout: Number as PropType<FieldChooserLayout>,
     searchTimeout: Number,
-    texts: Object,
+    texts: Object as PropType<Record<string, any>>,
     title: String,
     width: Number
   }
@@ -268,7 +290,7 @@ const DxFieldPanelConfig = {
     showDataFields: Boolean,
     showFilterFields: Boolean,
     showRowFields: Boolean,
-    texts: Object,
+    texts: Object as PropType<Record<string, any>>,
     visible: Boolean
   }
 };
@@ -323,10 +345,10 @@ const DxHeaderFilterConfig = {
     allowSearch: Boolean,
     allowSelectAll: Boolean,
     height: Number,
-    search: Object,
+    search: Object as PropType<HeaderFilterSearchConfig | Record<string, any>>,
     searchTimeout: Number,
     showRelevantValues: Boolean,
-    texts: Object,
+    texts: Object as PropType<Record<string, any>>,
     width: Number
   }
 };
@@ -441,8 +463,8 @@ const DxScrollingConfig = {
     "update:useNative": null,
   },
   props: {
-    mode: String,
-    useNative: [Boolean, String]
+    mode: String as PropType<ScrollMode>,
+    useNative: [Boolean, String] as PropType<boolean | Mode>
   }
 };
 
@@ -464,7 +486,7 @@ const DxSearchConfig = {
   props: {
     editorOptions: {},
     enabled: Boolean,
-    mode: String,
+    mode: String as PropType<SearchMode>,
     timeout: Number
   }
 };
@@ -487,12 +509,12 @@ const DxStateStoringConfig = {
     "update:type": null,
   },
   props: {
-    customLoad: Function,
-    customSave: Function,
+    customLoad: Function as PropType<(() => any)>,
+    customSave: Function as PropType<((state: any) => void)>,
     enabled: Boolean,
     savingTimeout: Number,
     storageKey: String,
-    type: String
+    type: String as PropType<StateStoreType>
   }
 };
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import Scheduler, { Resource, SchedulerTypes } from 'devextreme-react/scheduler';
+import Scheduler, { Resource, type SchedulerTypes } from 'devextreme-react/scheduler';
 
 import { data, resourcesData } from './data.ts';
 
@@ -23,7 +23,7 @@ const App = () => (
     timeZone="America/Los_Angeles"
     dataSource={data}
     views={views}
-    defaultCurrentView={'Auto Mode' as any}
+    defaultCurrentView={'Auto Mode'}
     defaultCurrentDate={currentDate}
     height={730}
   >

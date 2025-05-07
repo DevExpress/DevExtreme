@@ -1,8 +1,7 @@
 const $ = require('jquery');
 const noop = require('core/utils/common').noop;
 const typeUtils = require('core/utils/type');
-const BaseStrategy = require('events/pointer/base');
-const registerEvent = require('events/core/event_registrator');
+const registerEvent = require('common/core/events/core/event_registrator');
 const special = require('../../../helpers/eventHelper.js').special;
 
 

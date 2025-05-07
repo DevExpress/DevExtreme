@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react';
-import SelectBox, { SelectBoxTypes } from 'devextreme-react/select-box';
+import SelectBox, { type SelectBoxTypes } from 'devextreme-react/select-box';
 import {
   Chart,
   Series,

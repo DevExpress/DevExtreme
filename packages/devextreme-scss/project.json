@@ -29,7 +29,7 @@
         "script": "lint"
       },
       "inputs": [
-        "{projectRoot}/widgets/**/*"
+        "{projectRoot}/**/*"
       ],
       "cache": true
     }

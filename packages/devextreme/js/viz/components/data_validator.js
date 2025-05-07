@@ -334,20 +334,25 @@ function sortData(data, groupsData, options, uniqueArgumentFields) {
     return dataByArguments;
 }
 
-function checkItemExistence(collection, item) {
-    return collection.map(function(collectionItem) { return collectionItem.valueOf(); }).indexOf(item.valueOf()) === -1;
-}
-
 function getCategories(data, uniqueArgumentFields, userCategories) {
     const categories = userCategories ? userCategories.slice() : [];
+    const existingValues = new Set(categories.map(item => item.valueOf()));
 
     uniqueArgumentFields.forEach(function(field) {
         data.forEach(function(item) {
             const dataItem = item[field];
+            if(!_isDefined(dataItem)) {
+                return;
+            }
 
-            _isDefined(dataItem) && checkItemExistence(categories, dataItem) && categories.push(dataItem);
+            const dataItemValue = dataItem.valueOf();
+            if(!existingValues.has(dataItemValue)) {
+                categories.push(dataItem);
+                existingValues.add(dataItemValue);
+            }
         });
     });
+
     return categories;
 }
 

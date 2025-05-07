@@ -128,7 +128,7 @@
 
 @mixin dx-button-mode-outlined-styling() {
   @include dx-button-styling-variant(
-    transparent,
+    $button-normal-outlined-bg,
     $button-normal-border-color,
     $button-normal-color,
     $button-normal-outlined-bg-hover,
@@ -171,7 +171,7 @@
     @include dx-button-styling-variant(
       transparent,
       $button-default-border-color,
-      $button-default-border-color,
+      $button-default-outlined-color,
       $button-default-outlined-bg-hover,
       $button-default-outlined-bg-focused,
       $button-default-outlined-bg-active,
@@ -184,7 +184,7 @@
 
 @mixin dx-button-mode-text-styling() {
   @include dx-button-styling-variant(
-    transparent,
+    $button-normal-text-bg,
     transparent,
     $button-normal-color,
     $button-normal-text-bg-hover,
@@ -227,7 +227,7 @@
     @include dx-button-styling-variant(
       transparent,
       transparent,
-      $button-default-border-color,
+      $button-default-text-color,
       $button-default-text-bg-hover,
       $button-default-text-bg-focused,
       $button-default-text-bg-active,
