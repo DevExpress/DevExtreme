@@ -197,7 +197,7 @@ export class GroupPanelKeyboardNavigationController extends ColumnKeyboardNaviga
   }
 
   public ungroupAllColumns(): void {
-    this.needToRestoreFocus = true;
+    this.updateViewFocusPosition();
     this._columnsController.clearGrouping();
   }
 }

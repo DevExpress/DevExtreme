@@ -65,7 +65,9 @@ const headersKeyboardNavigation = (
       const lastFocusableColumn = focusableColumns[focusableColumns.length - 1];
 
       if (visibleIndex === this._columnsController.getVisibleIndex(lastFocusableColumn.index)) {
-        return this.getNewVisibleIndex(visibleIndex, Direction.Previous, ViewName.Headers) + 1;
+        return focusableColumns.length === 1
+          ? -1
+          : this.getNewVisibleIndex(visibleIndex, Direction.Previous, ViewName.Headers) + 1;
       }
 
       return this.getNewVisibleIndex(visibleIndex, Direction.Next, ViewName.Headers) - 1;

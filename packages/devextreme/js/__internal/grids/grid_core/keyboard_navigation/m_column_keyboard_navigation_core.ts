@@ -1,20 +1,14 @@
 import eventsEngine from '@js/common/core/events/core/events_engine';
-import $ from '@js/core/renderer';
+import { isDefined, isEmptyObject } from '@js/core/utils/type';
 
 import { Direction, ViewName } from './const';
 import type { ColumnFocusDispatcher } from './m_column_focus_dispatcher';
 import { KeyboardNavigationController as KeyboardNavigationControllerCore } from './m_keyboard_navigation_core';
 
 export class ColumnKeyboardNavigationController extends KeyboardNavigationControllerCore {
-  private contentReadyHandlerContext!: (e?: any) => void;
+  protected needToRestoreFocus = false;
 
   public columnFocusDispatcher!: ColumnFocusDispatcher;
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  private contentReadyHandler(e?: any) {
-    this.component.off('contentReady', this.contentReadyHandlerContext);
-    this.restoreViewFocus();
-  }
 
   protected getVisibleIndex(column, rowIndex?): number {
     return this._columnsController.getVisibleIndex(column.index, rowIndex);
@@ -56,10 +50,13 @@ export class ColumnKeyboardNavigationController extends KeyboardNavigationContro
     super.renderCompleted(e);
 
     if (this.needToRestoreFocus) {
-      this.component.off('contentReady', this.contentReadyHandlerContext);
-      this.component.on('contentReady', this.contentReadyHandlerContext);
+      this.restoreFocus();
       this.needToRestoreFocus = false;
     }
+  }
+
+  protected resetFocusedCellPosition(): void {
+    this._focusedCellPosition = {};
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -72,8 +69,6 @@ export class ColumnKeyboardNavigationController extends KeyboardNavigationContro
 
     this.columnFocusDispatcher = this.getController('columnFocusDispatcher');
     this.columnFocusDispatcher?.registerKeyboardNavigationController(this);
-    this.contentReadyHandlerContext = this.contentReadyHandlerContext
-      ?? this.contentReadyHandler.bind(this);
   }
 
   public moveColumn({
@@ -97,8 +92,10 @@ export class ColumnKeyboardNavigationController extends KeyboardNavigationContro
       column.showWhenGrouped,
     );
 
-    this.needToRestoreFocus = true;
-    this.setFocusedCellPosition(rowIndex, newFocusedColumnIndex);
+    this.updateViewFocusPosition(newFocusedColumnIndex >= 0 ? {
+      rowIndex,
+      columnIndex: newFocusedColumnIndex,
+    } : undefined);
     this._columnsController.moveColumn(
       { columnIndex: visibleIndex, rowIndex },
       { columnIndex: newVisibleIndex, rowIndex },
@@ -111,12 +108,30 @@ export class ColumnKeyboardNavigationController extends KeyboardNavigationContro
     return -1;
   }
 
+  public updateViewFocusPosition(cellPosition?: { rowIndex: number; columnIndex: number }) {
+    this.columnFocusDispatcher?.updateFocusPosition(this, cellPosition);
+  }
+
+  public updateFocusPosition(cellPosition?: { rowIndex: number; columnIndex: number }) {
+    this.needToRestoreFocus = true;
+
+    if (isDefined(cellPosition)) {
+      this.setFocusedCellPosition(cellPosition.rowIndex, cellPosition.columnIndex);
+    } else {
+      this.resetFocusedCellPosition();
+    }
+  }
+
   public restoreViewFocus() {
     this.columnFocusDispatcher?.restoreFocus(this);
   }
 
-  public focusCell(cellPosition?) {
-    const $focusedCell = cellPosition ? $(this._getCell(cellPosition)) : this._getFocusedCell();
+  public restoreFocus() {
+    if (isEmptyObject(this._focusedCellPosition)) {
+      this.setFocusedCellPosition(0, this.getFirstFocusableVisibleIndex());
+    }
+
+    const $focusedCell = this._getFocusedCell();
 
     // @ts-expect-error
     eventsEngine.trigger($focusedCell, 'focus');
