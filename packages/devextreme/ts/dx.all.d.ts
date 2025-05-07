@@ -25589,6 +25589,16 @@ declare module DevExpress.ui {
     mode?: DevExpress.common.ScrollMode;
   }
   /**
+   * @deprecated Use DevExpress.ui.dxScheduler.Toolbar instead
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  export type dxSchedulerToolbar = DevExpress.ui.dxScheduler.Toolbar;
+  /**
+   * @deprecated Use DevExpress.ui.dxScheduler.ToolbarItem instead
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  export type dxSchedulerToolbarItem = DevExpress.ui.dxScheduler.ToolbarItem;
+  /**
    * [descr:dxScrollable]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
@@ -32328,40 +32338,40 @@ declare module DevExpress.ui.dxScheduler {
     items: Array<dxButtonGroupItem | SchedulerPredefinedDateNavigatorItem>;
   };
   /**
-   * [descr:Toolbar]
+   * [descr:dxSchedulerToolbar]
    */
   export type Toolbar = {
     /**
-     * [descr:Toolbar.items]
+     * [descr:dxSchedulerToolbar.items]
      */
     items?: Array<SchedulerPredefinedToolbarItem | ToolbarItem>;
     /**
-     * [descr:Toolbar.visible]
+     * [descr:dxSchedulerToolbar.visible]
      */
     visible?: boolean | undefined;
     /**
-     * [descr:Toolbar.multiline]
+     * [descr:dxSchedulerToolbar.multiline]
      */
     multiline?: boolean;
     /**
-     * [descr:Toolbar.disabled]
+     * [descr:dxSchedulerToolbar.disabled]
      */
     disabled?: boolean;
   };
   /**
-   * [descr:ToolbarItem]
+   * [descr:dxSchedulerToolbarItem]
    */
   export type ToolbarItem = dxToolbarItem & {
     /**
-     * [descr:ToolbarItem.name]
+     * [descr:dxSchedulerToolbarItem.name]
      */
     name?: SchedulerPredefinedToolbarItem;
     /**
-     * [descr:ToolbarItem.options]
+     * [descr:dxSchedulerToolbarItem.options]
      */
     options?: DateNavigatorItemProperties | Object;
     /**
-     * [descr:ToolbarItem.location]
+     * [descr:dxSchedulerToolbarItem.location]
      */
     location?: DevExpress.common.ToolbarItemLocation;
   };

@@ -17,7 +17,7 @@ import {
 
 
 
-import { SchedulerPredefinedToolbarItem, ToolbarItem } from 'devextreme/ui/scheduler';
+import { dxSchedulerToolbarItem, SchedulerPredefinedToolbarItem } from 'devextreme/ui/scheduler';
 
 import {
     DxIntegrationModule,
@@ -46,10 +46,10 @@ export class DxoSchedulerToolbarComponent extends NestedOption implements OnDest
     }
 
     @Input()
-    get items(): Array<SchedulerPredefinedToolbarItem | ToolbarItem> {
+    get items(): Array<dxSchedulerToolbarItem | SchedulerPredefinedToolbarItem> {
         return this._getOption('items');
     }
-    set items(value: Array<SchedulerPredefinedToolbarItem | ToolbarItem>) {
+    set items(value: Array<dxSchedulerToolbarItem | SchedulerPredefinedToolbarItem>) {
         this._setOption('items', value);
     }
 

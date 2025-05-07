@@ -31,11 +31,11 @@ import {
  OptionChangedEvent,
  RecurrenceEditMode,
  dxSchedulerScrolling,
- Toolbar,
+ dxSchedulerToolbar,
  SchedulerPredefinedToolbarItem,
  DateNavigatorItemProperties,
  SchedulerPredefinedDateNavigatorItem,
- ToolbarItem,
+ dxSchedulerToolbarItem,
 } from "devextreme/ui/scheduler";
 import {
  DataSourceOptions,
@@ -234,7 +234,7 @@ const componentConfig = {
     textExpr: String,
     timeCellTemplate: {},
     timeZone: String,
-    toolbar: Object as PropType<Toolbar | Record<string, any>>,
+    toolbar: Object as PropType<dxSchedulerToolbar | Record<string, any>>,
     useDropDownViewSwitcher: Boolean,
     views: Array as PropType<Array<Record<string, any> | string>>,
     visible: Boolean,
@@ -625,7 +625,7 @@ const DxToolbarConfig = {
   },
   props: {
     disabled: Boolean,
-    items: Array as PropType<Array<SchedulerPredefinedToolbarItem | ToolbarItem>>,
+    items: Array as PropType<Array<dxSchedulerToolbarItem | SchedulerPredefinedToolbarItem>>,
     multiline: Boolean,
     visible: Boolean
   }
