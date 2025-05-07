@@ -254,7 +254,6 @@ export type TextMessage = MessageBase & {
  * @public
  * @namespace DevExpress.ui.dxChat
  * @inherits MessageBase
- * @type object
  */
 export type ImageMessage = MessageBase & {
     /**
@@ -278,8 +277,7 @@ export type ImageMessage = MessageBase & {
  * @docid
  * @namespace DevExpress.ui.dxChat
  * @public
- * @inherits MessageBase
- * @type object
+ * @inherits TextMessage,ImageMessage
  */
 export type Message = TextMessage | ImageMessage;
 

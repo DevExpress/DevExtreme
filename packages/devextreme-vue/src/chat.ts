@@ -257,14 +257,26 @@ const DxItemConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
+    "update:alt": null,
     "update:author": null,
     "update:id": null,
+    "update:isDeleted": null,
+    "update:isEdited": null,
+    "update:src": null,
+    "update:text": null,
     "update:timestamp": null,
+    "update:type": null,
   },
   props: {
+    alt: String,
     author: Object as PropType<User | Record<string, any>>,
     id: [Number, String],
-    timestamp: [Date, Number, String]
+    isDeleted: Boolean,
+    isEdited: Boolean,
+    src: String,
+    text: String,
+    timestamp: [Date, Number, String],
+    type: String as PropType<"text">
   }
 };
 

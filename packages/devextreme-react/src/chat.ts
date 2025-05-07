@@ -161,9 +161,15 @@ const DayHeaderFormat = Object.assign<typeof _componentDayHeaderFormat, NestedCo
 // owners:
 // Chat
 type IItemProps = React.PropsWithChildren<{
+  alt?: string;
   author?: ChatUser;
   id?: number | string;
+  isDeleted?: boolean;
+  isEdited?: boolean;
+  src?: string;
+  text?: string;
   timestamp?: Date | number | string;
+  type?: "text" | undefined;
 }>
 const _componentItem = (props: IItemProps) => {
   return React.createElement(NestedOption<IItemProps>, {

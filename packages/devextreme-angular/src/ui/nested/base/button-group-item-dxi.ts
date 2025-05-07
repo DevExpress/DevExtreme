@@ -98,10 +98,10 @@ export abstract class DxiButtonGroupItem extends CollectionNestedOption {
         this._setOption('stylingMode', value);
     }
 
-    get type(): ButtonType | string {
+    get type(): ButtonType | string | undefined {
         return this._getOption('type');
     }
-    set type(value: ButtonType | string) {
+    set type(value: ButtonType | string | undefined) {
         this._setOption('type', value);
     }
 
@@ -147,6 +147,13 @@ export abstract class DxiButtonGroupItem extends CollectionNestedOption {
         this._setOption('hint', value);
     }
 
+    get alt(): string {
+        return this._getOption('alt');
+    }
+    set alt(value: string) {
+        this._setOption('alt', value);
+    }
+
     get author(): User {
         return this._getOption('author');
     }
@@ -159,6 +166,27 @@ export abstract class DxiButtonGroupItem extends CollectionNestedOption {
     }
     set id(value: number | string | undefined) {
         this._setOption('id', value);
+    }
+
+    get isDeleted(): boolean {
+        return this._getOption('isDeleted');
+    }
+    set isDeleted(value: boolean) {
+        this._setOption('isDeleted', value);
+    }
+
+    get isEdited(): boolean {
+        return this._getOption('isEdited');
+    }
+    set isEdited(value: boolean) {
+        this._setOption('isEdited', value);
+    }
+
+    get src(): string {
+        return this._getOption('src');
+    }
+    set src(value: string) {
+        this._setOption('src', value);
     }
 
     get timestamp(): Date | number | string {
