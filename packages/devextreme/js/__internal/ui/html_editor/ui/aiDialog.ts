@@ -7,6 +7,7 @@ import $ from '@js/core/renderer';
 import { extend } from '@js/core/utils/extend';
 import type { ButtonClickEvent, ItemClickEvent } from '@js/ui/drop_down_button_types';
 import type { AICommandNameExtended, AICustomCommand } from '@js/ui/html_editor';
+import Informer from '@js/ui/informer';
 import LoadIndicator from '@js/ui/load_indicator';
 import type { Properties as PopupProperties, ToolbarItem } from '@js/ui/popup';
 import type dxSelectBox from '@js/ui/select_box';
@@ -27,6 +28,7 @@ import {
   buildAICommandParams,
   getAICommandName,
 } from '@ts/ui/html_editor/utils/ai';
+import type { Properties as InformerProperties } from '@ts/ui/informer/informer';
 import type { LoadIndicatorProperties } from '@ts/ui/m_load_indicator';
 import { AnimationType } from '@ts/ui/m_load_indicator';
 import { TEXTEDITOR_INPUT_CONTAINER_CLASS } from '@ts/ui/text_box/m_text_editor.base';
@@ -111,6 +113,8 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
   private _dialogState: DialogState = DialogState.Initial;
 
   private _getCustomCommandPrompt?: AICustomCommand['prompt'];
+
+  private _informer!: Informer;
 
   private _isAICommandExecuting = false;
 
@@ -250,6 +254,7 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
     this._renderOptionSelectBox($controls);
     this._renderPromptTextArea($contentElem);
     this._renderResultTextArea($contentElem);
+    this._renderInformer($contentElem);
   }
 
   private _renderLoadIndicator(): void {
@@ -272,6 +277,19 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
     };
 
     this._loadIndicator = new LoadIndicator($indicatorElement[0], options);
+  }
+
+  private _renderInformer($container: dxElementWrapper): void {
+    const $informer = $('<div>').appendTo($container);
+    const text = localizationMessage.format('dxHtmlEditor-aiDialogError');
+
+    const options: InformerProperties = {
+      contentAlignment: 'center',
+      showBackground: true,
+      text,
+    };
+    // @ts-expect-error no .d.ts for private component
+    this._informer = new Informer($informer.get(0), options);
   }
 
   protected _getPopupClass(): string {
@@ -444,6 +462,7 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
     this._refreshTextAreas();
     this._refreshToolbarItems();
     this._refreshLoadIndicator();
+    this._refreshInformer();
   }
 
   private _refreshToolbarItems(): void {
@@ -647,6 +666,12 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
     } else {
       this._disposeLoadIndicator();
     }
+  }
+
+  private _refreshInformer(): void {
+    const visible = this._dialogState === DialogState.Error;
+
+    this._informer.option('visible', visible);
   }
 
   private _getInitialDialogState(): DialogState {
