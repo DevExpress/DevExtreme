@@ -620,7 +620,7 @@ class MessageList extends Widget<Properties> {
       const $targetMessage = this._findMessageElementByKey(key);
 
       const bubble = MessageBubble.getInstance($targetMessage);
-      bubble.option('message', data);
+      bubble.option(data);
 
       if (data.type !== 'image') {
         const $currentMessageGroup = $targetMessage.closest(`.${CHAT_MESSAGEGROUP_CLASS}`);

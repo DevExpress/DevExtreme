@@ -663,6 +663,9 @@ QUnit.module('Chat', () => {
                     timestamp: 1234567,
                     text: 'message text',
                     author: { name: 'UserName', id: 'UserID' },
+                    alt: undefined,
+                    src: undefined,
+                    type: undefined
                 };
 
                 const messageTemplate = (data) => {

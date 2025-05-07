@@ -297,6 +297,9 @@ QUnit.module('MessageGroup', moduleConfig, () => {
                 text: 'CustomText',
                 timestamp: 1234567,
                 author: { name: 'someName', id: 'someId' },
+                alt: undefined,
+                src: undefined,
+                type: undefined
             };
 
             this.reinit({

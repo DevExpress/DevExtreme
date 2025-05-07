@@ -121,9 +121,27 @@ class MessageGroup extends Widget<Properties> {
   }
 
   _getMessageBubbleOptions(message: Message): MessageBubbleProperties {
+    const options: MessageBubbleProperties = {
+      isDeleted: message.isDeleted,
+      type: message.type,
+    };
+
     const { messageTemplate } = this.option();
 
-    return { template: messageTemplate, message };
+    if (message.type === 'image') {
+      options.alt = message.alt;
+      options.src = message.src;
+    } else {
+      options.text = (message as TextMessage).text;
+    }
+
+    if (messageTemplate) {
+      options.template = (messageData, container): void => {
+        messageTemplate({ ...message, ...messageData }, container);
+      };
+    }
+
+    return options;
   }
 
   _renderMessageBubbles(items: Message[]): void {

@@ -32,7 +32,7 @@ QUnit.module('MessageBubble', moduleConfig, () => {
         });
 
         QUnit.test('should be rendered with passed text value', function(assert) {
-            this.reinit({ message: { text: 'message text', type: 'text' } });
+            this.reinit({ text: 'message text' });
 
             assert.strictEqual(this.$element.text(), 'message text');
         });
@@ -46,7 +46,7 @@ QUnit.module('MessageBubble', moduleConfig, () => {
         QUnit.test('should render an image with correct attributes', function(assert) {
             const imageSrc = 'test image src';
             const imageAlt = 'Image alt';
-            this.reinit({ message: { src: imageSrc, type: 'image', alt: imageAlt } });
+            this.reinit({ src: imageSrc, type: 'image', alt: imageAlt });
 
             const $img = this.$element.find('img');
 
@@ -56,7 +56,7 @@ QUnit.module('MessageBubble', moduleConfig, () => {
         });
 
         QUnit.test('should render an image with default alt', function(assert) {
-            this.reinit({ message: { src: '', type: 'image' } });
+            this.reinit({ src: '', type: 'image' });
 
             const $img = this.$element.find('img');
 
@@ -65,8 +65,8 @@ QUnit.module('MessageBubble', moduleConfig, () => {
     });
 
     QUnit.module('Options', () => {
-        QUnit.test('message option should be updatable at runtime', function(assert) {
-            this.instance.option('message', { text: 'new message text', type: 'text' });
+        QUnit.test('text option should be updatable at runtime', function(assert) {
+            this.instance.option('text', 'new message text');
 
             assert.strictEqual(this.$element.text(), 'new message text');
         });
@@ -84,7 +84,7 @@ QUnit.module('MessageBubble', moduleConfig, () => {
         });
 
         [
-            { name: 'message', newValue: { text: 'updated message text' } },
+            { name: 'text', newValue: { text: 'updated message text' } },
             { name: 'isDeleted', newValue: true },
             { name: 'isEdited', newValue: true },
         ].forEach(({ name, newValue }) => {
@@ -99,10 +99,10 @@ QUnit.module('MessageBubble', moduleConfig, () => {
 
         QUnit.test('template render function should be called if it has been passed', function(assert) {
             const templateSpy = sinon.spy();
-            const message = { text: 'message text', type: 'text' };
+            const message = { text: 'message text', type: 'text', src: undefined, alt: undefined };
 
             this.reinit({
-                message,
+                ...message,
                 template: templateSpy,
             });
 
@@ -116,13 +116,13 @@ QUnit.module('MessageBubble', moduleConfig, () => {
             const messageText = 'message text';
 
             this.reinit({
-                message: { text: messageText },
+                text: messageText,
                 template: templateSpy,
             });
 
             assert.strictEqual(templateSpy.callCount, 1, 'template was rendered once');
 
-            this.instance.option('message', 'new message text');
+            this.instance.option('text', 'new message text');
             assert.strictEqual(templateSpy.callCount, 2, 'template was rendered');
         });
 
@@ -131,7 +131,8 @@ QUnit.module('MessageBubble', moduleConfig, () => {
             const messageText = 'message text';
 
             this.reinit({
-                message: { text: messageText, type: 'text' },
+                text: messageText,
+                type: 'text',
                 template: templateSpy,
             });
 
@@ -146,7 +147,7 @@ QUnit.module('MessageBubble', moduleConfig, () => {
             };
 
             this.reinit({
-                message: { text: 'text' }
+                text: 'text',
             });
 
             assert.strictEqual(this.$element.text(), 'text', 'text is correct');
