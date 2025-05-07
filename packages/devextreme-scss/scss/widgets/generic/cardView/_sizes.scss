@@ -32,6 +32,9 @@ $cardview-generic-headerpanel-dropzone-height: null;
 $cardview-generic-headerpanel-dropzone-top: null;
 $cardview-generic-column-chooser-select-all-item-horizontal-padding: null;
 
+$cardview-generic-headers-container-gap: null;
+$cardview-generic-headerpanel-vertical-margin: null;
+
 @if $size == "default" {
   $cardview-generic-sizes-60: 60px;
   $cardview-generic-sizes-48: 48px;
@@ -52,6 +55,9 @@ $cardview-generic-column-chooser-select-all-item-horizontal-padding: null;
   $cardview-generic-headerpanel-dropzone-height: 36px;
   $cardview-generic-headerpanel-dropzone-top: 0;
   $cardview-generic-column-chooser-select-all-item-horizontal-padding: 10px;
+
+  $cardview-generic-headers-container-gap: 4px;
+  $cardview-generic-headerpanel-vertical-margin: 4px;
 }
 @else if $size == "compact" {
   $cardview-generic-sizes-60: 40px;
@@ -73,12 +79,17 @@ $cardview-generic-column-chooser-select-all-item-horizontal-padding: null;
   $cardview-generic-headerpanel-dropzone-height: 24px;
   $cardview-generic-headerpanel-dropzone-top: 0;
   $cardview-generic-column-chooser-select-all-item-horizontal-padding: 6px;
+
+  $cardview-generic-headers-container-gap: 4px;
+  $cardview-generic-headerpanel-vertical-margin: 0;
 }
 
 $cardview-border-radius: 16px !default;
 $cardview-gap: $cardview-generic-gaps-20 !default;
 $cardview-padding: $cardview-generic-paddings-24 !default;
 
+$cardview-headers-container-gap: $cardview-generic-headers-container-gap !default;
+$cardview-headerpanel-vertical-margin: $cardview-generic-headerpanel-vertical-margin !default;
 $cardview-headerpanel-content-gap: $cardview-generic-gaps-8 !default;
 $cardview-headerpanel-text-empty-line-height: $cardview-generic-headerpanel-text-empty-line-height !default;
 
