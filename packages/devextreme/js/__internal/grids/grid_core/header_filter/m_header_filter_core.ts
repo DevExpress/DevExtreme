@@ -334,7 +334,7 @@ export class HeaderFilterView extends Modules.View {
       if (e.fullName === 'searchValue' && needShowSelectAllCheckbox && that.option('headerFilter.hideSelectAllOnSearch') !== false) {
         if (options.type === 'tree') {
           e.component.option('showCheckBoxesMode', e.value ? 'normal' : 'selectAll');
-          e.component.option('focusedElement', this._searchEditor.element());
+          e.component.option('focusedElement', this._searchEditor);
         } else {
           e.component.option('selectionMode', e.value ? 'multiple' : 'all');
         }
