@@ -100,12 +100,6 @@ export type ApplyChangesMode = 'instantly' | 'onDemand';
  * @public
  * @namespace DevExpress.common.grids
  */
-export type ContextMenuTarget = 'toolbar' | 'header' | 'content' | 'footer';
-
-/**
- * @public
- * @namespace DevExpress.common.grids
- */
 export type FixedPosition = 'left' | 'right' | 'sticky';
 
 /**
@@ -2363,6 +2357,12 @@ export type GridBaseOptions<TComponent extends GridBase<TRowData, TKey>, TRowDat
    */
   syncLookupFilterValues?: boolean;
 };
+
+/**
+ * @public
+ * @namespace DevExpress.common.grids
+ */
+export type GridsContextMenuTarget = 'toolbar' | 'header' | 'content' | 'footer';
 
 /**
  * @public

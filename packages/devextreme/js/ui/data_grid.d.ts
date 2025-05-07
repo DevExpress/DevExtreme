@@ -43,7 +43,7 @@ import {
     AdaptiveDetailRowPreparingInfo,
     ColumnBase as ComponentColumnBase,
     ColumnButtonBase as ComponentColumnButtonBase,
-    ContextMenuTarget,
+    GridsContextMenuTarget,
     EditingBase as ComponentEditingBase,
     EditingTextsBase as ComponentEditingTextsBase,
     DataChangeInfo,
@@ -110,7 +110,7 @@ export {
     ColumnHeaderFilterSearchConfig,
     ColumnLookup,
     ColumnResizeMode,
-    ContextMenuTarget,
+    GridsContextMenuTarget,
     DataChange,
     DataChangeType,
     DataRenderMode,
@@ -463,7 +463,7 @@ export type ContextMenuPreparingEvent<TRowData = any, TKey = any> = EventInfo<dx
    */
   items?: Array<any>;
   /** @docid _ui_data_grid_ContextMenuPreparingEvent.target */
-  readonly target: ContextMenuTarget;
+  readonly target: GridsContextMenuTarget;
   /** @docid _ui_data_grid_ContextMenuPreparingEvent.targetElement */
   readonly targetElement: DxElement;
   /** @docid _ui_data_grid_ContextMenuPreparingEvent.columnIndex */
