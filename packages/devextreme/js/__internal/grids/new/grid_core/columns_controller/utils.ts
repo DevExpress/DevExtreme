@@ -5,7 +5,7 @@ import {
   isDefined,
   isString, type,
 } from '@js/core/utils/type';
-import { getTreeNodeByPath, setTreeNodeByPath } from '@ts/grids/new/grid_core/utils/tree';
+import { getTreeNodeByPath, setTreeNodeByPath } from '@ts/grids/new/grid_core/utils/tree/index';
 import type { ComponentType } from 'inferno';
 
 import type { DataObject } from '../data_controller/types';
