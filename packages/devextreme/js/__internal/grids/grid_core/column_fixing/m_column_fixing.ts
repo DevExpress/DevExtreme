@@ -1,7 +1,10 @@
 /* eslint-disable max-classes-per-file */
 // TODO Move DataGrid's summary methods to the DataGrid
 // TODO Move virtual scrolling related methods to the virtual_scrolling
-import { move } from '@js/animation/translator';
+import { move } from '@js/common/core/animation/translator';
+import eventsEngine from '@js/common/core/events/core/events_engine';
+import { name as wheelEventName } from '@js/common/core/events/core/wheel';
+import messageLocalization from '@js/common/core/localization/message';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import browser from '@js/core/utils/browser';
@@ -11,9 +14,6 @@ import { getBoundingRect } from '@js/core/utils/position';
 import { getOuterWidth } from '@js/core/utils/size';
 import { setWidth } from '@js/core/utils/style';
 import { isDefined } from '@js/core/utils/type';
-import eventsEngine from '@js/events/core/events_engine';
-import { name as wheelEventName } from '@js/events/core/wheel';
-import messageLocalization from '@js/localization/message';
 import Scrollable from '@js/ui/scroll_view/ui.scrollable';
 import type { EditorFactory } from '@ts/grids/grid_core/editor_factory/m_editor_factory';
 
@@ -637,11 +637,18 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
       return this._fixedTableElement && this._getRowElements(this._fixedTableElement).eq(rowIndex).children();
     }
 
-    let columnElements: any = that.getColumnElements();
+    const columnElements: any = that.getColumnElements();
     const $transparentColumnElement = that.getTransparentColumnElement();
     if (columnElements && $transparentColumnElement && $transparentColumnElement.length) {
       const transparentColumnIndex = getTransparentColumnIndex(that.getFixedColumns());
-      columnElements = columnElements.slice(0, transparentColumnIndex).add(columnElements.slice(transparentColumnIndex + $transparentColumnElement.get(0).colSpan)); //$.splice
+      [].splice.apply(
+        columnElements,
+        [
+          transparentColumnIndex,
+          $transparentColumnElement.get(0)?.colSpan,
+          $transparentColumnElement.get(0) as never,
+        ],
+      );
     }
 
     return columnElements;
@@ -912,12 +919,12 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewFixedColumnsExten
     }
   }
 
-  public setRowsOpacity(columnIndex, value) {
-    super.setRowsOpacity(columnIndex, value);
+  public toggleDraggableColumnClass(columnIndex, value) {
+    super.toggleDraggableColumnClass(columnIndex, value);
 
-    if (this._isFixedColumns) {
+    if (this.isFixedColumns()) {
       const $rows = this._getRowElements(this._fixedTableElement);
-      this._setRowsOpacityCore($rows, this.getFixedColumns(), columnIndex, value);
+      this._toggleDraggableSourceColumnClass($rows, this.getFixedColumns(), columnIndex, value);
     }
   }
 
@@ -1012,7 +1019,7 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewFixedColumnsExten
     super._handleScroll(e);
   }
 
-  private _updateContentPosition(isRender) {
+  protected _updateContentPosition(isRender) {
     // @ts-expect-error m_virtual_scrolling method
     super._updateContentPosition.apply(this, arguments);
     if (!isRender) {
@@ -1162,17 +1169,16 @@ const keyboardNavigation = (Base: ModuleType<KeyboardNavigationController>) => c
 };
 
 const editorFactory = (Base: ModuleType<EditorFactory>) => class EditorFactoryFixedColumnsExtender extends Base {
-  protected getValidationOverlayContainer($cell: dxElementWrapper): dxElementWrapper {
-    const rowsViewModule = this.getView('rowsView');
+  protected getValidationMessageContainer($cell: dxElementWrapper): dxElementWrapper {
     // @ts-expect-error RowsView's method
-    const isFixedColumns = rowsViewModule.isFixedColumns();
+    const isFixedColumns = this._rowsView.isFixedColumns();
 
     if (isFixedColumns) {
-      return rowsViewModule.element() as dxElementWrapper;
+      return this._rowsView.element() as dxElementWrapper;
     }
 
     // @ts-expect-error EditorFactory's method
-    return super.getValidationOverlayContainer($cell);
+    return super.getValidationMessageContainer($cell);
   }
 };
 
