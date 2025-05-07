@@ -1,24 +1,23 @@
 import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-
 import { DxChatModule, DxSelectBoxModule } from 'devextreme-angular';
 import {
   User,
   MessageEnteredEvent,
   MessageDeletedEvent,
   MessageUpdatedEvent,
-  Editing
+  Editing,
 } from 'devextreme/ui/chat';
-import { AppService } from './app.service';
 import DataSource from 'devextreme/data/data_source';
+import { AppService } from './app.service';
 
-if (!/localhost/.test(document.location.host)) {
+if (!document.location.host.includes('localhost')) {
   enableProdMode();
 }
 
 let modulePrefix = '';
-// @ts-ignore
+// @ts-expect-error
 if (window && window.config?.packageConfigPaths) {
   modulePrefix = '/app';
 }
@@ -39,14 +38,17 @@ export class AppComponent {
   editingStrategies = [
     { key: 'enabled', text: 'Enabled' },
     { key: 'disabled', text: 'Disabled' },
-    { key: 'Only the last message (custom)', text: 'Custom' },
+    { key: 'custom', text: 'Only the last message (custom)' },
   ];
 
   dataSource: DataSource;
 
   selectedEditingStrategy = 'enabled';
+
   selectedDeletingStrategy = 'enabled';
+
   allowEditingLabel = this.appService.allowEditingLabel;
+
   allowDeletingLabel = this.appService.allowDeletingLabel;
 
   editingStrategy: Record<string, any> = {
@@ -56,9 +58,7 @@ export class AppComponent {
       const { items, user } = component.option();
       const userId = user.id;
 
-      const lastNotDeletedMessage = items.findLast((item: any) => {
-        return item.author?.id === userId && !item.isDeleted;
-      });
+      const lastNotDeletedMessage = items.findLast((item: any) => item.author?.id === userId && !item.isDeleted);
 
       return message.id === lastNotDeletedMessage?.id;
     },
@@ -69,21 +69,21 @@ export class AppComponent {
     this.dataSource = this.appService.dataSource;
   }
 
-  onMessageEntered(e: MessageEnteredEvent) {
+  onMessageEntered(e: MessageEnteredEvent): void {
     this.appService.onMessageEntered(e);
   }
 
-  onMessageDeleted(e: MessageDeletedEvent) {
+  onMessageDeleted(e: MessageDeletedEvent): void {
     this.appService.onMessageDeleted(e);
   }
 
-  onMessageUpdated(e: MessageUpdatedEvent) {
+  onMessageUpdated(e: MessageUpdatedEvent): void {
     this.appService.onMessageUpdated(e);
   }
 
   onEditingStrategyChange(event: any, type: string): void {
     this.editingOptions = {
-      [type]: this.editingStrategy[event.value]
+      [type]: this.editingStrategy[event.value],
     };
   }
 }

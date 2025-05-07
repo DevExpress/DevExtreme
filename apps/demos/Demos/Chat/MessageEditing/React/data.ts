@@ -1,7 +1,7 @@
 import { ChatTypes } from 'devextreme-react/chat';
 import Guid from 'devextreme/core/guid';
 
-function getTimestamp(date, offsetMinutes = 0) {
+function getTimestamp(date, offsetMinutes = 0): number {
   return date.getTime() + offsetMinutes * 60000;
 }
 
@@ -30,7 +30,7 @@ export const messages = [
     id: new Guid().toString(),
     timestamp: getTimestamp(date, -7),
     author: currentUser,
-    text: "Hi, I'm having trouble accessing my account.",
+    text: 'Hi, I\'m having trouble accessing my account.',
   },
   {
     id: new Guid().toString(),

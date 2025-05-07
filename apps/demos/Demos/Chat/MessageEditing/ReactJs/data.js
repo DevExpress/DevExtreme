@@ -1,23 +1,19 @@
 import Guid from 'devextreme/core/guid';
 
-function getTimestamp(date, offsetMinutes = 0): number {
+function getTimestamp(date, offsetMinutes = 0) {
   return date.getTime() + offsetMinutes * 60000;
 }
-
 const date = new Date();
 date.setHours(0, 0, 0, 0);
-
 export const currentUser = {
   id: 'c94c0e76-fb49-4b9b-8f07-9f93ed93b4f3',
   name: 'John Doe',
 };
-
 export const supportAgent = {
   id: 'd16d1a4c-5c67-4e20-b70e-2991c22747c3',
   name: 'Support Agent',
   avatarUrl: '../../../../images/petersmith.png',
 };
-
 export const messages = [
   {
     id: new Guid().toString(),
@@ -29,7 +25,7 @@ export const messages = [
     id: new Guid().toString(),
     timestamp: getTimestamp(date, -7),
     author: currentUser,
-    text: 'Hi, I\'m having trouble accessing my account.',
+    text: "Hi, I'm having trouble accessing my account.",
   },
   {
     id: new Guid().toString(),
@@ -51,10 +47,8 @@ export const messages = [
     isEdited: true,
   },
 ];
-
 export const allowEditingLabel = { 'aria-label': 'Allow Editing' };
 export const allowDeletingLabel = { 'aria-label': 'Allow Deleting' };
-
 export const editingOptions = [
   { text: 'Enabled', key: 'enabled' },
   { text: 'Disabled', key: 'disabled' },

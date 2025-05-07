@@ -1,24 +1,10 @@
 $(() => {
   const customStore = new DevExpress.data.CustomStore({
     key: 'id',
-    load: () => {
-      const d = $.Deferred();
-
-      setTimeout(() => {
-        d.resolve([...messages]);
-      });
-
-      return d.promise();
-    },
-    insert: (message) => {
-      const d = $.Deferred();
-
-      setTimeout(() => {
-        store.push(message);
-        d.resolve();
-      });
-
-      return d.promise();
+    load: async () => messages,
+    insert: async (message) => {
+      messages.push(message);
+      return message;
     },
   });
 
@@ -93,13 +79,13 @@ $(() => {
     enabled: true,
     disabled: false,
     custom: ({ component, message }) => {
-      const { items, user} = component.option();
+      const { items, user } = component.option();
       const userId = user.id;
-   
-      const lastNotDeletedMessage = items.findLast((item) => {
-        return item.author?.id === userId && !item.isDeleted;
-      });
-   
+
+      const lastNotDeletedMessage = items.findLast(
+        (item) => item.author?.id === userId && !item.isDeleted
+      );
+
       return message.id === lastNotDeletedMessage?.id;
     },
   };

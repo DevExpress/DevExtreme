@@ -2,9 +2,9 @@
   <div class="chat-container">
     <DxChat
       :height="600"
-      :dataSource="dataSource"
+      :data-source="dataSource"
       :user="currentUser"
-      :reloadOnChange="false"
+      :reload-on-change="false"
       v-model:editing="chatEditing"
       @messageEntered="onMessageEntered"
       @messageDeleted="onMessageDeleted"
@@ -17,9 +17,9 @@
       <span>Allow Editing:</span>
       <DxSelectBox
         :items="editingOptions"
-        valueExpr="key"
-        displayExpr="text"
-        :inputAttr="allowEditingLabel"
+        value-expr="key"
+        display-expr="text"
+        :input-attr="allowEditingLabel"
         :value="editingOptions[0].key"
         @valueChanged="(e) => handleEditingChange(e, 'allowUpdating')"
       />
@@ -28,9 +28,9 @@
       <span>Allow Deleting:</span>
       <DxSelectBox
         :items="editingOptions"
-        valueExpr="key"
-        displayExpr="text"
-        :inputAttr="allowDeletingLabel"
+        value-expr="key"
+        display-expr="text"
+        :input-attr="allowDeletingLabel"
         :value="editingOptions[0].key"
         @valueChanged="(e) => handleEditingChange(e, 'allowDeleting')"
       />
@@ -49,9 +49,11 @@ import {
   messages as initialMessages,
   currentUser,
   editingOptions,
+  allowEditingLabel,
+  allowDeletingLabel,
 } from './data.ts';
 
-const chatEditing = ref({
+const chatEditing = ref<{ allowUpdating?: boolean, allowDeleting?: boolean }>({
   allowUpdating: true,
   allowDeleting: true,
 });
@@ -60,19 +62,11 @@ const store = [...initialMessages];
 
 const customStore = new CustomStore({
   key: 'id',
-  load: () =>
-    new Promise((resolve) => {
-      setTimeout(() => {
-        resolve([...store]);
-      }, 0);
-    }),
-  insert: (message) =>
-    new Promise((resolve) => {
-      setTimeout(() => {
-        store.push(message);
-        resolve(message);
-      }, 0);
-    }),
+  load: async() => store,
+  insert: async(message) => {
+    store.push(message);
+    return message;
+  },
 });
 
 const dataSource = computed(() => new DataSource({
@@ -122,15 +116,15 @@ const editingStrategy = {
     const { items, user } = component.option();
     const userId = user.id;
 
-    const lastNotDeletedMessage = items.findLast((item) => {
-      return item.author?.id === userId && !item.isDeleted;
-    });
+    const lastNotDeletedMessage = items.findLast(
+      (item) => item.author?.id === userId && !item.isDeleted
+    );
 
     return message.id === lastNotDeletedMessage?.id;
   },
 };
 
-const handleEditingChange = (e, type) => {
+const handleEditingChange = (e, type: 'allowUpdating' | 'allowDeleting') => {
   chatEditing.value = { [type]: editingStrategy[e.value] };
 };
 </script>

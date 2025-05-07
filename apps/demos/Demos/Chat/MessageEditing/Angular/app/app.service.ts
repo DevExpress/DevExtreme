@@ -1,18 +1,14 @@
-import { Injectable } from '@angular/core';
 import {
   User,
   Message,
   MessageEnteredEvent,
   MessageUpdatedEvent,
-  MessageDeletedEvent
+  MessageDeletedEvent,
 } from 'devextreme/ui/chat';
 import DataSource from 'devextreme/data/data_source';
 import CustomStore from 'devextreme/data/custom_store';
 import Guid from 'devextreme/core/guid';
 
-@Injectable({
-  providedIn: 'root',
-})
 export class AppService {
   date: Date;
 
@@ -54,7 +50,7 @@ export class AppService {
         id: new Guid().toString(),
         timestamp: this.getTimestamp(this.date, -7),
         author: this.currentUser,
-        text: "Hi, I'm having trouble accessing my account.",
+        text: 'Hi, I\'m having trouble accessing my account.',
       },
       {
         id: new Guid().toString(),
@@ -83,17 +79,11 @@ export class AppService {
   initDataSource() {
     this.customStore = new CustomStore({
       key: 'id',
-      load: () => new Promise((resolve) => {
-        setTimeout(() => {
-          resolve([...this.messages]);
-        }, 0);
-      }),
-      insert: (message) => new Promise((resolve) => {
-        setTimeout(() => {
-          this.messages.push(message);
-          resolve(message);
-        });
-      }),
+      load: async () => this.messages,
+      insert: async (message) => {
+        this.messages.push(message);
+        return message;
+      },
     });
 
     this.dataSource = new DataSource({
@@ -110,7 +100,7 @@ export class AppService {
     return date.getTime() + offsetMinutes * 60000;
   }
 
-  onMessageEntered({ message }: MessageEnteredEvent) {
+  onMessageEntered({ message }: MessageEnteredEvent): void {
     this.dataSource.store().push([{
       type: 'insert',
       data: {
@@ -120,7 +110,7 @@ export class AppService {
     }]);
   }
 
-  onMessageDeleted({ message }: MessageDeletedEvent) {
+  onMessageDeleted({ message }: MessageDeletedEvent): void {
     this.dataSource.store().push([{
       type: 'update',
       key: message.id,
@@ -128,7 +118,7 @@ export class AppService {
     }]);
   }
 
-  onMessageUpdated({ message, text }: MessageUpdatedEvent) {
+  onMessageUpdated({ message, text }: MessageUpdatedEvent): void {
     this.dataSource.store().push([{
       type: 'update',
       key: message.id,
