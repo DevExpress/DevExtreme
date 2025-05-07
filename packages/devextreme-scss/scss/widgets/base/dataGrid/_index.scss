@@ -53,6 +53,7 @@ $datagrid-text-stub-background-image-path: null !default;
 
 @mixin dx-datagrid-error-message() {
   background-color: $datagrid-row-error-bg;
+
   @include dx-datagrid-error-popup();
 }
 
