@@ -35,6 +35,7 @@ export class OptionsController<
 > {
   private readonly cache = {
     oneWay: {},
+    oneWayWithChanges: {},
     twoWay: {},
     action: {},
     template: {},
@@ -105,7 +106,7 @@ export class OptionsController<
   public oneWayWithChanges<TProp extends string>(
     name: TProp,
   ): ReadonlySignal<OptionWithChanges<PropertyWithDefaults<TProps, TDefaultProps, TProp>>> {
-    return getOr(this.cache.oneWay, name, () => {
+    return getOr(this.cache.oneWayWithChanges, name, () => {
       const pathArray = getPathParts(name);
 
       return computed(
