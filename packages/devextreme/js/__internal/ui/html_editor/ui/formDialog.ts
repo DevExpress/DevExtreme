@@ -165,7 +165,7 @@ export default class FormDialog extends BaseDialog {
   }
 
   public callAddButtonAction(event?: Event): void {
-    if (!this.beforeAddButtonAction?.()) {
+    if (this.beforeAddButtonAction && !this.beforeAddButtonAction()) {
       return;
     }
 
