@@ -362,6 +362,9 @@
         "dxCardView-selectAll": "Select all",
         "dxCardView-clearSelection": "Clear selection",
         "dxCardView-cardNoImageAriaLabel": "No image",
+        "dxCardView-headerItemDropZoneText": "Drop the header item here",
+        "dxCardView-emptyHeaderPanelText": "Use {0} to display columns",
+        "dxCardView-emptyHeaderPanelColumnChooserText": "column chooser",
 
         "dxAvatar-defaultImageAlt": "Avatar",
 

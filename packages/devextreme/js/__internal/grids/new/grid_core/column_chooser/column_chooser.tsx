@@ -1,5 +1,4 @@
 import type { ColumnChooserMode } from '@js/common/grids';
-import $ from '@js/core/renderer';
 import messageLocalization from '@js/localization/message';
 import type {
   Properties as PopupProperties, ShowingEvent,
@@ -11,6 +10,7 @@ import {
   Component, type RefObject,
 } from 'inferno';
 
+import type { Props as ColumnSortableProps } from '../../card_view/header_panel/column_sortable';
 import { ColumnSortable } from '../../card_view/header_panel/column_sortable';
 import { Item } from '../../card_view/header_panel/item';
 import type { Column, VisibleColumn } from '../columns_controller/types';
@@ -27,7 +27,6 @@ export const CLASS = {
 
   treeviewItem: 'dx-treeview-item',
   treeviewExpanderIcon: 'dx-treeview-expander-icon-stub',
-  hidden: 'dx-hidden',
 };
 
 export interface ColumnChooserProps {
@@ -56,11 +55,15 @@ export interface ColumnChooserProps {
   treeViewSelectModeConfig: TreeViewProperties;
 
   treeViewDragAndDropModeConfig: TreeViewProperties;
+
+  sortableConfig: Partial<ColumnSortableProps>;
 }
 
 export class ColumnChooser extends Component<ColumnChooserProps> {
   public render(): JSX.Element {
-    const { visible, popupConfig, popupRef } = this.props;
+    const {
+      visible, popupConfig, popupRef, sortableConfig,
+    } = this.props;
 
     if (!visible) {
       return <></>;
@@ -94,12 +97,14 @@ export class ColumnChooser extends Component<ColumnChooserProps> {
           source='column-chooser'
           filter={`.${CLASS.treeviewItem}`}
           getColumnByIndex={this.getColumnByIndex}
+          isColumnDraggable={sortableConfig.isColumnDraggable}
           visibleColumns={this.props.visibleColumns}
           allowDragging={!this.isSelectMode()}
           columnDragTemplate={Item}
           onColumnMove={this.props.onColumnMove}
-          // @ts-expect-error
-          onPlaceholderPrepared={this.onSortablePlaceholderPrepared}
+          onDragStart={sortableConfig.onDragStart}
+          onDragEnd={sortableConfig.onDragEnd}
+          onPlaceholderPrepared={sortableConfig.onPlaceholderPrepared}
         >
           { treeView }
         </ColumnSortable>
@@ -194,10 +199,5 @@ export class ColumnChooser extends Component<ColumnChooserProps> {
     const column = treeView!.getNodes()[index].itemData!.column as Column;
 
     return column;
-  };
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  private readonly onSortablePlaceholderPrepared = (e: any): void => {
-    $(e.placeholderElement).addClass(CLASS.hidden);
   };
 }
