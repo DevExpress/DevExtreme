@@ -176,7 +176,8 @@ export default class FormDialog extends BaseDialog {
 
   hide(formData, event): void {
     this.deferred?.resolve(formData, event);
-    this._popup.hide();
+
+    super.hide();
   }
 
   onHiding(): void {
