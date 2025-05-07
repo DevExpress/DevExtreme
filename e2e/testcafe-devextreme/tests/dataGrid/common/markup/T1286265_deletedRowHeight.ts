@@ -3,7 +3,6 @@ import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import { createWidget } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
 import { changeTheme } from '../../../../helpers/changeTheme';
-import { testScreenshot } from '../../../../helpers/themeUtils';
 import { Themes } from '../../../../helpers/themes';
 
 fixture.disablePageReloads`DataGrid deleted row height consistency T1286265`
@@ -24,7 +23,7 @@ const ROW_INDEXES = [0, 1];
   ROW_INDEXES.forEach((rowIndex) => {
     test(`Row height should not change when marked as deleted - ${theme} - row - ${rowIndex}`, async (t) => {
       // Arrange
-      const { takeScreenshot } = createScreenshotsComparer(t);
+      const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
       const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
 
       // Get the initial height of the row at index
@@ -49,10 +48,10 @@ const ROW_INDEXES = [0, 1];
         .eql(initialRowHeight, 'Row height should not change when marked as deleted');
 
       // Take a screenshot for visual verification
-      await testScreenshot(t, takeScreenshot, `datagrid-deleted-row-height-${theme}`, {
-        element: dataGrid.element,
-        theme,
-      });
+      await takeScreenshot(`datagrid-deleted-row-height (${theme}) row-${rowIndex}.png`, dataGrid.element);
+      await t
+        .expect(compareResults.isValid())
+        .ok(compareResults.errorMessages());
     }).before(async () => {
       await changeTheme(theme);
 
