@@ -333,13 +333,8 @@ export class HeaderFilterView extends Modules.View {
       // T835492, T833015
       if (e.fullName === 'searchValue' && needShowSelectAllCheckbox && that.option('headerFilter.hideSelectAllOnSearch') !== false) {
         if (options.type === 'tree') {
-          const list = that.getListComponent();
-          const selectAll = getSelectAllCheckBox(list);
-          if (e.value) {
-            selectAll.$element().hide();
-          } else {
-            selectAll.$element().show();
-          }
+          e.component.option('showCheckBoxesMode', e.value ? 'normal' : 'selectAll');
+          e.component.option('focusedElement', this._searchEditor.element());
         } else {
           e.component.option('selectionMode', e.value ? 'multiple' : 'all');
         }

@@ -43,6 +43,10 @@ export default {
       $element.addClass(rootElementClassName);
       this._$searchEditorElement = $('<div>').addClass(searchBoxClassName).prependTo($element);
       this._searchEditor = this._createComponent(this._$searchEditorElement, EditorClass, editorOptions);
+      const isSearchEditorFocused = this.option('focusedElement')?.get(0).classList.contains(searchBoxClassName);
+      if (isSearchEditorFocused) {
+        this._searchEditor.focus();
+      }
     }
   },
 
