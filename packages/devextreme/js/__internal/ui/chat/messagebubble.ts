@@ -18,8 +18,8 @@ export const MESSAGE_DATA_KEY = 'dxMessageData';
 
 export interface Properties extends WidgetOptions<MessageBubble> {
   message: Message;
-  isDeleted: boolean;
-  isEdited: boolean;
+  isDeleted?: boolean;
+  isEdited?: boolean;
   template?: ((message: Message, container: Element) => void) | null;
 }
 

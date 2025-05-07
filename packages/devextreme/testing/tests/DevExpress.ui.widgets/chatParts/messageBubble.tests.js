@@ -84,7 +84,7 @@ QUnit.module('MessageBubble', moduleConfig, () => {
         });
 
         [
-            { name: 'text', newValue: 'updated message text' },
+            { name: 'message', newValue: { text: 'updated message text' } },
             { name: 'isDeleted', newValue: true },
             { name: 'isEdited', newValue: true },
         ].forEach(({ name, newValue }) => {
