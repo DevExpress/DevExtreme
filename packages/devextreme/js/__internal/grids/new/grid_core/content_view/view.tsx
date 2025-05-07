@@ -2,6 +2,7 @@
   @typescript-eslint/explicit-function-return-type,
   @typescript-eslint/explicit-module-boundary-types
 */
+import $ from '@js/core/renderer';
 import type dxScrollable from '@js/ui/scroll_view/ui.scrollable';
 import type { ScrollEventInfo } from '@js/ui/scroll_view/ui.scrollable';
 import { computed, signal } from '@preact/signals-core';
@@ -119,8 +120,7 @@ export abstract class ContentView<TProps extends {}> extends View<TProps> {
           const useKeyboardDisabled = component.option('useKeyboard') === false;
           const useNativeEnabled = component.option('useNative') === true;
           if (useKeyboardDisabled && useNativeEnabled) {
-            // TODO: Check that it's ok in frameworks
-            component?.container()?.get(0)?.setAttribute('tabindex', '-1');
+            $(component.container()).attr('tabindex', -1);
           }
         },
         // Bad scrollable types
@@ -128,8 +128,7 @@ export abstract class ContentView<TProps extends {}> extends View<TProps> {
         onOptionChanged: ({ fullName, value, component }: any) => {
           const useKeyboardDisabled = component.option('useKeyboard') === false;
           if (useKeyboardDisabled && fullName === 'useNative' && value === true) {
-            // TODO: Check that it's ok in frameworks
-            component?.container()?.get(0)?.setAttribute('tabindex', '-1');
+            $(component.container()).attr('tabindex', -1);
           }
         },
       },
