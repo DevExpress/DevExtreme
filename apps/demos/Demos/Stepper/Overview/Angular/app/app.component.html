@@ -12,12 +12,12 @@
           [selectOnFocus]="selectOnFocus"
           [rtlEnabled]="rtlMode"
         >
-          <dxi-item
+          <dxi-stepper-item
             *ngFor="let step of steps"
             [label]="step.label"
             [icon]="step.icon"
             [optional]="step.optional"
-          ></dxi-item>
+          ></dxi-stepper-item>
         </dx-stepper>
       </div>
 
@@ -32,11 +32,11 @@
           [selectOnFocus]="selectOnFocus"
           [rtlEnabled]="rtlMode"
         >
-          <dxi-item
+          <dxi-stepper-item
             *ngFor="let step of steps"
             [label]="step.label"
             [optional]="step.optional"
-          ></dxi-item>
+          ></dxi-stepper-item>
         </dx-stepper>
       </div>
 
@@ -51,7 +51,10 @@
           [selectOnFocus]="selectOnFocus"
           [rtlEnabled]="rtlMode"
         >
-          <dxi-item *ngFor="let step of steps" [text]="step.text"></dxi-item>
+          <dxi-stepper-item
+            *ngFor="let step of steps"
+            [text]="step.text"
+          ></dxi-stepper-item>
         </dx-stepper>
       </div>
     </div>
