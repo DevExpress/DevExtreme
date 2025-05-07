@@ -459,18 +459,23 @@ QUnit.module('Events', () => {
 });
 
 QUnit.module('Keyboard navigation', () => {
-    QUnit.test('Enter key press event should be default prevented', function(assert) {
-        assert.expect(1);
+    [
+        { key: 'enter', eventKey: 'Enter' },
+        { key: 'space', eventKey: ' ' },
+    ].forEach(({ key, eventKey }) => {
+        QUnit.test(`${key} keydown event should be default prevented`, function(assert) {
+            assert.expect(1);
 
-        const $element = $('#buttonGroup').dxButtonGroup({ items: [{ text: 'button 1' }] });
+            const $element = $('#buttonGroup').dxButtonGroup({ items: [{ text: 'button 1' }] });
 
-        $element.on('keydown', (e) => {
-            if(e.key === 'Enter') {
-                assert.ok(e.isDefaultPrevented(), 'event is prevented');
-            }
+            $element.on('keydown', (e) => {
+                if(e.key === eventKey) {
+                    assert.ok(e.isDefaultPrevented(), `${key} event is prevented`);
+                }
+            });
+
+            keyboardMock($element).keyDown(key);
         });
-
-        keyboardMock($element).press('enter');
     });
 });
 
