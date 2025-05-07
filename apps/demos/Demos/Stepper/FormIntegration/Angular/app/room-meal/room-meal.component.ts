@@ -10,10 +10,10 @@ if (window && window.config?.packageConfigPaths) {
 }
 
 @Component({
-  selector: 'room-meal-plan-form',
-  templateUrl: `.${modulePrefix}/room-meal-plan-form/room-meal-plan-form.component.html`,
+  selector: 'room-meal',
+  templateUrl: `.${modulePrefix}/room-meal/room-meal.component.html`,
 })
-export class RoomMealPlanFormComponent {
+export class RoomMealPlanComponent {
   @Input() formData: BookingFormData;
 
   @Input() validationGroup: string;

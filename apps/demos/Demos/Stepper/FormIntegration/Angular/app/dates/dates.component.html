@@ -4,11 +4,12 @@
   pricing options, depending on room availability.
 </p>
 <dx-form [(formData)]="formData" [validationGroup]="validationGroup">
-  <dxi-item
+  <dxi-form-item
     [isRequired]="true"
     dataField="dates"
     editorType="dxDateRangeBox"
     [editorOptions]="dateRangeBoxOptions"
     [label]="labelOptions"
-  />
+  >
+  </dxi-form-item>
 </dx-form>

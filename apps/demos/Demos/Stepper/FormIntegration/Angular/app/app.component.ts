@@ -15,11 +15,11 @@ import type { Item, SelectionChangingEvent } from 'devextreme/ui/stepper';
 import validationEngine from 'devextreme/ui/validation_engine';
 import { AppService } from './app.service';
 import { BookingFormData } from './app.types';
-import { DatesFormComponent } from "./dates-form/dates-form.component";
-import { GuestsFormComponent } from "./guests-form/guests-form.component";
-import { RoomMealPlanFormComponent } from "./room-meal-plan-form/room-meal-plan-form.component";
-import { AdditionalFormComponent } from "./additional-form/additional-form.component";
-import { ConfirmationComponent } from "./confirmation/confirmation.component";
+import { DatesComponent } from './dates/dates.component';
+import { GuestsComponent } from './guests/guests.component';
+import { RoomMealPlanComponent } from './room-meal/room-meal.component';
+import { AdditionalRequestComponent } from './additional-request/additional-request.component';
+import { ConfirmationComponent } from './confirmation/confirmation.component';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -154,10 +154,10 @@ export class AppComponent {
   ],
   declarations: [
     AppComponent,
-    DatesFormComponent,
-    GuestsFormComponent,
-    RoomMealPlanFormComponent,
-    AdditionalFormComponent,
+    DatesComponent,
+    GuestsComponent,
+    RoomMealPlanComponent,
+    AdditionalRequestComponent,
     ConfirmationComponent,
   ],
   bootstrap: [AppComponent],

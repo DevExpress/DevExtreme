@@ -10,10 +10,10 @@ if (window && window.config?.packageConfigPaths) {
 }
 
 @Component({
-  selector: 'guests-form',
-  templateUrl: `.${modulePrefix}/guests-form/guests-form.component.html`,
+  selector: 'guests',
+  templateUrl: `.${modulePrefix}/guests/guests.component.html`,
 })
-export class GuestsFormComponent {
+export class GuestsComponent {
   @Input() formData: BookingFormData;
 
   @Input() validationGroup: string;

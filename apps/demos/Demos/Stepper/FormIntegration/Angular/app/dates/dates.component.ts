@@ -10,10 +10,10 @@ if (window && window.config?.packageConfigPaths) {
 }
 
 @Component({
-  selector: 'dates-form',
-  templateUrl: `.${modulePrefix}/dates-form/dates-form.component.html`,
+  selector: 'dates',
+  templateUrl: `.${modulePrefix}/dates/dates.component.html`,
 })
-export class DatesFormComponent {
+export class DatesComponent {
   @Input() formData: BookingFormData;
 
   @Input() validationGroup: string;

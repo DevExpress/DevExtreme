@@ -10,10 +10,10 @@ if (window && window.config?.packageConfigPaths) {
 }
 
 @Component({
-  selector: 'additional-form',
-  templateUrl: `.${modulePrefix}/additional-form/additional-form.component.html`,
+  selector: 'additional-request',
+  templateUrl: `.${modulePrefix}/additional-request/additional-request.component.html`,
 })
-export class AdditionalFormComponent {
+export class AdditionalRequestComponent {
   @Input() formData: BookingFormData;
 
   textAreaOptions: DxTextAreaTypes.Properties = {

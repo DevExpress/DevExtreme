@@ -21,31 +21,31 @@
   >
     <dxi-multi-view-item>
       <div *dxTemplate>
-        <dates-form
+        <dates
           [formData]="formData"
           [validationGroup]="validationGroups[0]"
-        ></dates-form>
+        ></dates>
       </div>
     </dxi-multi-view-item>
     <dxi-multi-view-item>
       <div *dxTemplate>
-        <guests-form
+        <guests
           [formData]="formData"
           [validationGroup]="validationGroups[1]"
-        ></guests-form>
+        ></guests>
       </div>
     </dxi-multi-view-item>
     <dxi-multi-view-item>
       <div *dxTemplate>
-        <room-meal-plan-form
+        <room-meal
           [formData]="formData"
           [validationGroup]="validationGroups[2]"
-        ></room-meal-plan-form>
+        ></room-meal>
       </div>
     </dxi-multi-view-item>
     <dxi-multi-view-item>
       <div *dxTemplate>
-        <additional-form [formData]="formData"></additional-form>
+        <additional-request [formData]="formData"></additional-request>
       </div>
     </dxi-multi-view-item>
     <dxi-multi-view-item>
