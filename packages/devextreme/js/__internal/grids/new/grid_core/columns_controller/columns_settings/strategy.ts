@@ -1,6 +1,6 @@
 import type { ChangedOptionInfo } from '@js/common/core/events';
 
-import type { PreNormalizedColumn } from '../options';
+import type { ColumnProperties, PreNormalizedColumn } from '../options';
 import { columnOptionUpdate, preNormalizeColumns } from '../utils';
 import {
   extractColumnsOptionsChange,
@@ -10,7 +10,7 @@ import type { ColumnChangeColumnOption, ColumnsChangeAll, ColumnsChangeColumn } 
 export const updateAllColumns = (
   settings: PreNormalizedColumn[],
   { value }: ColumnsChangeAll,
-): PreNormalizedColumn[] | null => (value
+): PreNormalizedColumn[] => (value
   ? preNormalizeColumns(value)
   : settings);
 
@@ -18,13 +18,10 @@ export const updateColumn = (
   settings: PreNormalizedColumn[],
   { columnIdx, value }: ColumnsChangeColumn,
 ): PreNormalizedColumn[] => {
-  // TODO: Separate logic for normalization of one column in a separate util func
-  const [normalizedColumnValue] = preNormalizeColumns([value]);
+  const newSettings = [...settings] as ColumnProperties[];
+  newSettings[columnIdx] = value;
 
-  const newSettings = [...settings];
-  newSettings[columnIdx] = normalizedColumnValue;
-
-  return newSettings;
+  return preNormalizeColumns(newSettings);
 };
 
 export const updateColumnOption = (
@@ -40,7 +37,7 @@ export const updateColumnOption = (
 export const updateColumnSettings = (
   settings: PreNormalizedColumn[],
   optionsChange: ChangedOptionInfo | null,
-): PreNormalizedColumn[] | null => {
+): PreNormalizedColumn[] => {
   if (!optionsChange) {
     return settings;
   }

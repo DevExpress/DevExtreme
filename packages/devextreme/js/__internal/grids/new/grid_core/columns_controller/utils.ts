@@ -108,6 +108,24 @@ export function normalizeVisibleIndexes(
   return returnIndexes;
 }
 
+export function normalizeColumnsVisibleIndexes(
+  columns: PreNormalizedColumn[],
+  forceIndex?: number,
+): PreNormalizedColumn[] {
+  const result = [...columns];
+
+  const visibleIndexes = normalizeVisibleIndexes(
+    columns.map((c) => c.visibleIndex),
+    forceIndex,
+  );
+
+  visibleIndexes.forEach((visibleIndex, i) => {
+    result[i].visibleIndex = visibleIndex;
+  });
+
+  return result;
+}
+
 export function normalizeColumns(
   columns: PreNormalizedColumn[],
   templateNormalizationFunc: TemplateNormalizationFunc,
@@ -240,5 +258,5 @@ export const columnOptionUpdate = (
 
   newSettings[columnIdx] = setTreeNodeByPath(settings[columnIdx], value, updatePathParts);
 
-  return newSettings;
+  return normalizeColumnsVisibleIndexes(newSettings, columnIdx);
 };

@@ -14,7 +14,7 @@ import {
   getColumnIndexByName,
   getColumnOptionsFromDataItem,
   normalizeColumns,
-  normalizeVisibleIndexes,
+  normalizeColumnsVisibleIndexes,
   preNormalizeColumns,
 } from './utils';
 
@@ -45,19 +45,18 @@ export class ColumnsController {
     this.columnsConfiguration = this.options.oneWayWithChanges('columns');
     this.headerFilterConfiguration = this.options.oneWay('headerFilter');
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    this.columnsSettings = signal(undefined as any);
+    this.columnsSettings = signal([]);
     this.columnsConfigurationFromData = signal<
       ColumnsConfigurationFromData | null
     >(null);
 
     effect(() => {
-      const settings = this.columnsSettings.peek();
+      const settings = this.columnsSettings.peek() ?? [];
       const { value: columnsConfigurationFromOptions, changes } = this.columnsConfiguration.value;
 
       const newSettings = updateColumnSettings(settings, changes);
 
-      if (newSettings) {
+      if (newSettings.length !== 0) {
         this.columnsSettings.value = newSettings;
         return;
       }
@@ -131,44 +130,12 @@ export class ColumnsController {
       option,
       value,
     );
-
-    // const updatePathParts = getPathParts(option);
-    //
-    // const newColumns = [...this.columnsSettings.peek()];
-    // const index = getColumnIndexByName(newColumns, column.name);
-    // const columnTreeNode = getTreeNodeByPath(newColumns[index], updatePathParts);
-    //
-    // if (columnTreeNode === value) {
-    //   return;
-    // }
-    //
-    // newColumns[index] = setTreeNodeByPath(newColumns[index], value, updatePathParts);
-    //
-    // this.columnsSettings.value = this.normalizeColumnsVisibleIndexes(newColumns, index);
   }
 
   public updateColumns(func: (columns: PreNormalizedColumn[]) => PreNormalizedColumn[]): void {
     let newColumnSettings = func(this.columnsSettings.peek());
-    newColumnSettings = this.normalizeColumnsVisibleIndexes(newColumnSettings);
+    newColumnSettings = normalizeColumnsVisibleIndexes(newColumnSettings);
     this.columnsSettings.value = newColumnSettings;
-  }
-
-  private normalizeColumnsVisibleIndexes(
-    columns: PreNormalizedColumn[],
-    forceIndex?: number,
-  ): PreNormalizedColumn[] {
-    const result = [...columns];
-
-    const visibleIndexes = normalizeVisibleIndexes(
-      columns.map((c) => c.visibleIndex),
-      forceIndex,
-    );
-
-    visibleIndexes.forEach((visibleIndex, i) => {
-      result[i].visibleIndex = visibleIndex;
-    });
-
-    return result;
   }
 
   public setColumnOptionsFromDataItem(
