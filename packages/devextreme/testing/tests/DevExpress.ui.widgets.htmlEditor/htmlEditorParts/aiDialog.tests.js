@@ -30,6 +30,7 @@ import {
     getOptionSelectBoxInstance,
     getPromptTextAreaInstance,
     getResultTextAreaInstance,
+    getInformerInstance,
     showAIDialog,
 } from '../../../helpers/aiDialog.js';
 
@@ -40,6 +41,7 @@ import 'ui/select_box';
 
 const TEXT_AREA_CLASS = 'dx-textarea';
 const SELECT_BOX_CLASS = 'dx-selectbox';
+const INFORMER_CLASS = 'dx-informer';
 
 const moduleConfig = {
     beforeEach() {
@@ -112,15 +114,18 @@ QUnit.module('AIDialog', {}, () => {
             const $controls = $aiContent.find(`.${AI_DIALOG_CONTROLS_CLASS}`);
             const $selectBoxes = $controls.find(`.${SELECT_BOX_CLASS}`);
             const $textAreas = $aiContent.find(`.${TEXT_AREA_CLASS}`);
+            const $informer = $aiContent.find(`.${INFORMER_CLASS}`);
             const commandSelectBox = $selectBoxes.eq(0).dxSelectBox('instance');
             const optionSelectBox = $selectBoxes.eq(1).dxSelectBox('instance');
             const commandSelectDataSource = commandSelectBox.option('dataSource').map((item) => item.name);
             const resultTextAreaInstance = getResultTextAreaInstance($wrapper);
             const promptTextAreaInstance = getPromptTextAreaInstance($wrapper);
+            const informerInstance = getInformerInstance($wrapper);
 
             assert.strictEqual($aiContent.length, 1, 'AI dialog content rendered');
             assert.strictEqual($controls.length, 1, 'controls container rendered');
             assert.strictEqual($selectBoxes.length, 2, 'two SelectBox components rendered');
+            assert.strictEqual($informer.length, 1, 'Informer component is rendered');
             assert.strictEqual(commandSelectBox.option('value'), 'translate', 'correct command selected');
             assert.deepEqual(commandSelectDataSource, ['translate', 'summarize'], 'command SelectBox contains correct items');
             assert.strictEqual(optionSelectBox.option('value'), 'english', 'correct option selected');
@@ -129,6 +134,7 @@ QUnit.module('AIDialog', {}, () => {
             assert.strictEqual(resultTextAreaInstance.option('value'), undefined, 'result TextArea contains empty text');
             assert.strictEqual(promptTextAreaInstance.option('value'), '', 'prompt TextArea contains empty text');
             assert.strictEqual(promptTextAreaInstance.option('visible'), false, 'prompt TextArea is hidden by default');
+            assert.strictEqual(informerInstance.option('visible'), false, 'Informer is hidden by default');
         });
 
         QUnit.test('should hide option SelectBox if command has no options', function(assert) {
@@ -358,12 +364,14 @@ QUnit.module('AIDialog', {}, () => {
 
             const promptTextAreaInstance = getPromptTextAreaInstance(this.$element);
             const resultTextAreaInstance = getResultTextAreaInstance(this.$element);
+            const informerInstance = getInformerInstance(this.$element);
 
             const bottomToolbarItems = getBottomToolbarItems(this.aiDialogPopup);
 
             assert.strictEqual(promptTextAreaInstance.option('visible'), true, 'prompt TextArea is visible');
             assert.strictEqual(promptTextAreaInstance.option('readOnly'), false, 'prompt TextArea is not readOnly');
             assert.strictEqual(resultTextAreaInstance.option('visible'), false, 'result TextArea is hidden');
+            assert.strictEqual(informerInstance.option('visible'), false, 'Informer is hidden');
 
             assert.strictEqual(bottomToolbarItems.length, 1, '1 button is rendered');
             assert.strictEqual(bottomToolbarItems[0].name, 'generate', 'generate button is shown');
@@ -380,10 +388,12 @@ QUnit.module('AIDialog', {}, () => {
 
             const promptTextAreaInstance = getPromptTextAreaInstance(this.$element);
             const resultTextAreaInstance = getResultTextAreaInstance(this.$element);
+            const informerInstance = getInformerInstance(this.$element);
 
             assert.strictEqual(promptTextAreaInstance.option('visible'), false, 'prompt TextArea is hidden');
             assert.strictEqual(promptTextAreaInstance.option('value'), undefined, 'prompt TextArea is cleared');
             assert.strictEqual(resultTextAreaInstance.option('visible'), true, 'result TextArea is visible');
+            assert.strictEqual(informerInstance.option('visible'), false, 'Informer is hidden');
         });
 
         QUnit.test('should render correct UI on command change to askAI', function(assert) {
@@ -398,6 +408,7 @@ QUnit.module('AIDialog', {}, () => {
 
             const promptTextAreaInstance = getPromptTextAreaInstance(this.$element);
             const resultTextAreaInstance = getResultTextAreaInstance(this.$element);
+            const informerInstance = getInformerInstance(this.$element);
 
             const bottomToolbarItems = getBottomToolbarItems(this.aiDialogPopup);
 
@@ -405,6 +416,7 @@ QUnit.module('AIDialog', {}, () => {
             assert.strictEqual(promptTextAreaInstance.option('readOnly'), false, 'prompt TextArea is not readOnly');
             assert.strictEqual(resultTextAreaInstance.option('visible'), false, 'result TextArea is hidden');
             assert.strictEqual(optionSelectBoxInstance.option('visible'), false, 'option SelectBox hidden for askAI');
+            assert.strictEqual(informerInstance.option('visible'), false, 'Informer is hidden');
 
             assert.strictEqual(bottomToolbarItems.length, 1, '1 button is rendered');
             assert.strictEqual(bottomToolbarItems[0].name, 'generate', 'generate button is shown');
@@ -595,6 +607,27 @@ QUnit.module('AIDialog', {}, () => {
             });
         });
 
+        QUnit.test('try again should make Informer invisible', function(assert) {
+            const done = assert.async();
+
+            this.showDialog({ currentCommand: 'summarize' });
+
+            this.reject('Error');
+
+            setTimeout(() => {
+                const informerInstance = getInformerInstance(this.$element);
+
+                assert.strictEqual(informerInstance.option('visible'), true, 'Informer is visible');
+
+                const $tryAgain = findButtonByName(this.aiDialogPopup, 'tryAgain');
+
+                $tryAgain.trigger('dxclick');
+
+                assert.strictEqual(informerInstance.option('visible'), false, 'Informer is hidden');
+                done();
+            });
+        });
+
         QUnit.test('hide during generation should abort request', function(assert) {
             this.showDialog({ currentCommand: 'translate' });
 
@@ -637,7 +670,26 @@ QUnit.module('AIDialog', {}, () => {
             });
         });
 
-        QUnit.test('onError should update buttons, textareas and remove loadindicator', function(assert) {
+        QUnit.test('should make Informer visible on reject', function(assert) {
+            const done = assert.async();
+
+            this.showDialog({ currentCommand: 'translate' });
+
+            const informerInstance = getInformerInstance(this.$element);
+
+            assert.strictEqual(informerInstance.option('visible'), false, 'Informer is not visible on dialog shown');
+
+            this.reject('Error');
+
+            setTimeout(() => {
+                const informerInstance = getInformerInstance(this.$element);
+
+                assert.strictEqual(informerInstance.option('visible'), true, 'Informer is visible on reject');
+                done();
+            });
+        });
+
+        QUnit.test('onError should update buttons, textareas, informer and remove loadindicator', function(assert) {
             const done = assert.async();
 
             this.showDialog({ currentCommand: 'translate' });
@@ -649,6 +701,7 @@ QUnit.module('AIDialog', {}, () => {
                 const tryAgainButton = getItemByName(bottomToolbarItems, 'tryAgain');
                 const resultTextAreaInstance = getResultTextAreaInstance(this.$element);
                 const promptTextAreaInstance = getPromptTextAreaInstance(this.$element);
+                const informerInstance = getInformerInstance(this.$element);
 
                 assert.strictEqual(bottomToolbarItems.length, 3, '3 buttons in bottom toolbar: tryAgain, copy and replace');
                 assert.strictEqual(replaceButton.disabled, undefined, 'replace button is not disabled');
@@ -659,13 +712,14 @@ QUnit.module('AIDialog', {}, () => {
                 assert.strictEqual(promptTextAreaInstance.option('disabled'), true), 'promts textArea is disabled';
                 assert.strictEqual(promptTextAreaInstance.option('readOnly'), false, 'result textArea is not readOnly');
                 assert.strictEqual(promptTextAreaInstance.option('visible'), false, 'result textArea is not visible');
+                assert.strictEqual(informerInstance.option('visible'), true, 'informer is visible');
                 assert.strictEqual(getLoadIndicator(this.$element).length, 0, 'indicator is removed');
 
                 done();
             }, 0);
         });
 
-        QUnit.test('onError should update buttons, textareas and remove loadindicator correctly with askAI', function(assert) {
+        QUnit.test('onError should update buttons, textareas, informer and remove loadindicator correctly with askAI', function(assert) {
             const done = assert.async();
 
             this.showDialog({ currentCommand: 'askAI' });
@@ -679,6 +733,7 @@ QUnit.module('AIDialog', {}, () => {
                 const $generateButton = findButtonByName(this.aiDialogPopup, 'generate');
                 const resultTextAreaInstance = getResultTextAreaInstance(this.$element);
                 const promptTextAreaInstance = getPromptTextAreaInstance(this.$element);
+                const informerInstance = getInformerInstance(this.$element);
 
                 assert.ok($generateButton.length, 'generate button is visible');
                 assert.strictEqual(resultTextAreaInstance.option('disabled'), true);
@@ -687,6 +742,7 @@ QUnit.module('AIDialog', {}, () => {
                 assert.strictEqual(promptTextAreaInstance.option('disabled'), false);
                 assert.strictEqual(promptTextAreaInstance.option('readOnly'), false);
                 assert.strictEqual(promptTextAreaInstance.option('visible'), true);
+                assert.strictEqual(informerInstance.option('visible'), true, 'informer is visible');
                 assert.strictEqual(getLoadIndicator(this.$element).length, 0, 'indicator is removed');
 
                 done();
@@ -1038,6 +1094,39 @@ QUnit.module('AIDialog', {}, () => {
                 autoResizeEnabled: true,
                 width: '100%',
                 placeholder: this.localizedAskAiPlaceholder,
+            });
+        });
+    });
+
+    QUnit.module('Informer config', {
+        beforeEach: function() {
+            this.initialLocale = localization.locale();
+            this.localizedAIDialogError = 'custom error';
+            localization.loadMessages({
+                'ja': {
+                    'dxHtmlEditor-aiDialogError': this.localizedAIDialogError,
+                }
+            });
+            localization.locale('ja');
+            integrationModuleConfig.beforeEach.apply(this);
+        },
+        afterEach: function() {
+            localization.locale(this.initialLocale);
+            integrationModuleConfig.afterEach.apply(this);
+        }
+    }, () => {
+        QUnit.test('is correct', function(assert) {
+            showAIDialog(this, {
+                config: { currentCommand: 'askAI' },
+            });
+
+            const informerInstance = getInformerInstance(this.$element);
+
+            assertConfig(assert, informerInstance.option(), {
+                contentAlignment: 'center',
+                showBackground: true,
+                text: this.localizedAIDialogError,
+                visible: false,
             });
         });
     });
