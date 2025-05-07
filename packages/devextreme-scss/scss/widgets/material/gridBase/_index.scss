@@ -965,10 +965,6 @@ $material-grid-base-group-panel-message-line-height: $material-button-text-line-
       color: $datagrid-cell-removed-text-color;
     }
 
-    .dx-row-removed:not(:first-child) > td {
-      padding-top: $material-grid-base-cell-vertical-padding - 1px;
-    }
-
     .dx-adaptive-detail-row {
       .dx-field-item-label {
         padding-top: 0;
@@ -1143,6 +1139,14 @@ $material-grid-base-group-panel-message-line-height: $material-button-text-line-
       }
 
       .dx-row.dx-row-lines.dx-edit-row > td {
+        border-top-width: 0;
+      }
+
+      .dx-row-removed:not(.dx-row-lines) > td {
+        border-bottom-width: 0;
+      }
+
+      .dx-row-removed.dx-row-lines > td {
         border-top-width: 0;
       }
     }

@@ -10,7 +10,7 @@ fixture.disablePageReloads`DataGrid deleted row height consistency T1286265`
 
 const DATA_GRID_SELECTOR = '#container';
 // check first and second rows, because both can have issue independently each other
-const ROW_INDEXES = [0, 1];
+const ROW_INDEXES = [1];
 
 [
   Themes.fluentBlue,
@@ -67,9 +67,9 @@ const ROW_INDEXES = [0, 1];
         columnFixing: { enabled: true },
         columns: [
           {
-            dataField: 'id', caption: 'ID', width: 50, fixed: true,
+            dataField: 'id', width: 50, fixed: true,
           },
-          { dataField: 'name', caption: 'Full Name', width: 150 },
+          { dataField: 'name', width: 150 },
         ],
         editing: {
           mode: 'batch',

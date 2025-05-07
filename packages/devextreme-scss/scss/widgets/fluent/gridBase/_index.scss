@@ -990,10 +990,6 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
       color: $datagrid-cell-removed-text-color;
     }
 
-    .dx-row-removed:not(:first-child) > td {
-      padding-top: $fluent-grid-base-cell-vertical-padding - 1px;
-    }
-
     .dx-row-removed.dx-row-lines > td {
       border-top: 1px solid $datagrid-cell-removed-border-color;
       border-bottom: 1px solid $datagrid-cell-removed-border-color;
@@ -1001,7 +997,6 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
 
     .dx-row-removed:not(.dx-row-lines) > td {
       border-top: 1px solid $datagrid-hover-bg;
-      border-bottom: 1px solid $datagrid-hover-bg;
     }
 
     .dx-adaptive-detail-row {
@@ -1170,7 +1165,8 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
         }
       }
 
-      .dx-row.dx-row-lines.dx-edit-row > td {
+      .dx-row.dx-row-lines.dx-edit-row > td,
+      .dx-row-removed.dx-row-lines > td {
         border-top-width: 0;
       }
     }

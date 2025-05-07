@@ -766,12 +766,13 @@ $generic-grid-base-cell-input-height: round($generic-base-line-height * $generic
     .dx-row-removed > td {
       background-color: $datagrid-row-removed-bg;
       border-top: 1px solid $datagrid-cell-removed-border-color;
+      border-bottom: 1px solid $datagrid-cell-removed-border-color;
       color: $datagrid-cell-removed-text-color;
     }
 
-    .dx-row-removed:not(:first-child) > td {
-      border-bottom: 1px solid $datagrid-cell-removed-border-color;
-      padding-bottom: $generic-grid-base-cell-padding - 1px;
+    .dx-row-removed:not(.dx-row-lines) > td {
+      border-top-color: $datagrid-row-removed-bg;
+      border-bottom-width: 0;
     }
 
     @include dx-set-checkbox-border-color-as-background();
@@ -1052,6 +1053,14 @@ $generic-grid-base-cell-input-height: round($generic-base-line-height * $generic
     }
 
     .dx-row.dx-row-lines.dx-edit-row > td {
+      border-top-width: 0;
+    }
+
+    .dx-row-removed:not(.dx-row-lines) > td {
+      border-bottom-width: 0;
+    }
+
+    .dx-row-removed.dx-row-lines > td {
       border-top-width: 0;
     }
   }
