@@ -42,18 +42,10 @@ export class DxoLookupComponent extends NestedOption implements OnDestroy, OnIni
     }
 
     @Input()
-    get calculateCellValue(): Function {
-        return this._getOption('calculateCellValue');
-    }
-    set calculateCellValue(value: Function) {
-        this._setOption('calculateCellValue', value);
-    }
-
-    @Input()
-    get dataSource(): Store | DataSourceOptions | Function | null | undefined | Array<any> {
+    get dataSource(): Store | DataSourceOptions | undefined | Function | null | Array<any> {
         return this._getOption('dataSource');
     }
-    set dataSource(value: Store | DataSourceOptions | Function | null | undefined | Array<any>) {
+    set dataSource(value: Store | DataSourceOptions | undefined | Function | null | Array<any>) {
         this._setOption('dataSource', value);
     }
 
@@ -66,11 +58,19 @@ export class DxoLookupComponent extends NestedOption implements OnDestroy, OnIni
     }
 
     @Input()
-    get valueExpr(): string | undefined | Function {
+    get valueExpr(): Function | string | undefined {
         return this._getOption('valueExpr');
     }
-    set valueExpr(value: string | undefined | Function) {
+    set valueExpr(value: Function | string | undefined) {
         this._setOption('valueExpr', value);
+    }
+
+    @Input()
+    get calculateCellValue(): Function {
+        return this._getOption('calculateCellValue');
+    }
+    set calculateCellValue(value: Function) {
+        this._setOption('calculateCellValue', value);
     }
 
 
