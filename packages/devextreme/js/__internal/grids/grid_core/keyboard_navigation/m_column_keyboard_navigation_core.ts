@@ -55,10 +55,10 @@ export class ColumnKeyboardNavigationController extends KeyboardNavigationContro
   protected renderCompleted(e: any): void {
     super.renderCompleted(e);
 
-    if (this.isNeedToFocus) {
+    if (this.needToRestoreFocus) {
       this.component.off('contentReady', this.contentReadyHandlerContext);
       this.component.on('contentReady', this.contentReadyHandlerContext);
-      this.isNeedToFocus = false;
+      this.needToRestoreFocus = false;
     }
   }
 
@@ -97,7 +97,7 @@ export class ColumnKeyboardNavigationController extends KeyboardNavigationContro
       column.showWhenGrouped,
     );
 
-    this.isNeedToFocus = true;
+    this.needToRestoreFocus = true;
     this.setFocusedCellPosition(rowIndex, newFocusedColumnIndex);
     this._columnsController.moveColumn(
       { columnIndex: visibleIndex, rowIndex },

@@ -151,13 +151,13 @@ export class GroupPanelKeyboardNavigationController extends ColumnKeyboardNaviga
   }
 
   protected renderCompleted(e: any) {
-    const { isNeedToFocus } = this;
+    const { needToRestoreFocus } = this;
 
     super.renderCompleted(e);
     this.unsubscribeFromGroupItemClick();
     this.subscribeToGroupItemClick();
 
-    if (!isNeedToFocus && this.isNeedToHiddenFocusAfterClick) {
+    if (!needToRestoreFocus && this.isNeedToHiddenFocusAfterClick) {
       const $focusElement = this._getFocusedCell();
 
       if ($focusElement?.length) {
@@ -197,7 +197,7 @@ export class GroupPanelKeyboardNavigationController extends ColumnKeyboardNaviga
   }
 
   public ungroupAllColumns(): void {
-    this.isNeedToFocus = true;
+    this.needToRestoreFocus = true;
     this._columnsController.clearGrouping();
   }
 }

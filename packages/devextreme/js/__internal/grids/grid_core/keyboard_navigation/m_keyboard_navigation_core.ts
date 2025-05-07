@@ -10,7 +10,7 @@ import { isElementDefined, isFixedColumnIndexOffsetRequired } from './m_keyboard
 export class KeyboardNavigationController extends modules.ViewController {
   private keyDownListener: any;
 
-  protected isNeedToFocus = false;
+  protected needToRestoreFocus = false;
 
   protected renderCompletedWithContext!: (e: any) => void;
 
