@@ -307,7 +307,10 @@ function prepareLinkHandler(module) {
       text: selection && !selectionHasEmbedContent ? module.quill.getText(selection) : '',
       target: Object.prototype.hasOwnProperty.call(formats, 'target') ? !!formats.target : true,
     };
-    module.editorInstance.formDialogOption('title', localizationMessage.format(DIALOG_LINK_CAPTION));
+
+    module.editorInstance.formDialogOption({
+      title: localizationMessage.format(DIALOG_LINK_CAPTION),
+    });
 
     const promise = module.editorInstance.showFormDialog({
       formData,
@@ -368,7 +371,11 @@ function prepareColorClickHandler(module, name) {
   return () => {
     const formData = module.quill.getFormat();
     const caption = name === 'color' ? DIALOG_COLOR_CAPTION : DIALOG_BACKGROUND_CAPTION;
-    module.editorInstance.formDialogOption('title', localizationMessage.format(caption));
+
+    module.editorInstance.formDialogOption({
+      title: localizationMessage.format(caption),
+    });
+
     const promise = module.editorInstance.showFormDialog({
       formData,
       items: [{
@@ -451,7 +458,9 @@ function prepareInsertTableHandler(module) {
       return;
     }
 
-    module.editorInstance.formDialogOption('title', localizationMessage.format(DIALOG_TABLE_CAPTION));
+    module.editorInstance.formDialogOption({
+      title: localizationMessage.format(DIALOG_TABLE_CAPTION),
+    });
 
     const promise = module.editorInstance.showFormDialog({
       formData,

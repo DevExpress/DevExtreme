@@ -24,6 +24,14 @@ abstract class BaseDialog<T = unknown> {
     this._renderPopup();
   }
 
+  protected _escKeyHandler(): void {
+    this._popup?.hide();
+  }
+
+  protected _addEscapeHandler(e): void {
+    e.component.registerKeyHandler('escape', this._escKeyHandler.bind(this));
+  }
+
   protected _renderPopup(): void {
     const $popupContainer = $('<div>')
       .addClass(this._getPopupClass())
@@ -75,7 +83,7 @@ abstract class BaseDialog<T = unknown> {
     this._popup.hide();
   }
 
-  popupOption(...args) {
+  popupOption(...args): unknown {
     // @ts-expect-error args is any
     return this._popup.option.apply(this._popup, args);
   }
