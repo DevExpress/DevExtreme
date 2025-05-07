@@ -1,8 +1,31 @@
+import { Injectable } from '@angular/core';
+import DataSource from 'devextreme/data/data_source';
+
+export class Appointment {
+  text: string;
+
+  startDate: number;
+
+  endDate: number;
+
+  allDay?: boolean;
+
+  assigneeId: number[];
+
+  recurrenceRule?: string;
+}
+
+export class Assignee {
+  text: string;
+
+  id: number;
+}
+
 const addDays = (date, days) => new Date(new Date(date).setUTCDate(date.getUTCDate() + days));
 const startOfTheWeek = addDays(new Date(), -new Date().getUTCDay());
 const currentDate = addDays(new Date(), 30);
 const currentStartOfTheWeek = addDays(currentDate, -currentDate.getUTCDay());
-const data = [
+const appointments: Appointment[] = [
   {
     text: 'Website Re-Design Plan',
     assigneeId: [4],
@@ -88,7 +111,7 @@ const data = [
   },
 ];
 
-const assignees = [
+const assignees: Assignee[] = [
   {
     text: 'Samantha Bright',
     id: 1,
@@ -103,3 +126,14 @@ const assignees = [
     id: 4,
   },
 ];
+
+@Injectable()
+export class Service {
+  getAppointmentsDataSource(): DataSource {
+    return new DataSource(appointments);
+  }
+
+  getAssignees(): Assignee[] {
+    return assignees;
+  }
+}

@@ -1,7 +1,8 @@
 $(() => {
+  const schedulerDataSource = new DevExpress.data.DataSource(data);
   const scheduler = $('#scheduler').dxScheduler({
     timeZone: 'America/Los_Angeles',
-    dataSource: data,
+    dataSource: schedulerDataSource,
     views: ['day', 'week', 'workWeek', 'month'],
     currentView: 'workWeek',
     currentDate: new Date(2021, 3, 27),
@@ -23,7 +24,9 @@ $(() => {
           widget: 'dxButton',
           options: {
             icon: 'plus',
-            text: 'New Event',
+            text: 'New Appointment',
+            stylingMode: 'outlined',
+            type: 'normal',
             onClick() {
               const selected = scheduler.option('selectedCellData');
 
@@ -35,8 +38,9 @@ $(() => {
                   endDate: new Date(selected.at(-1).endDateUTC),
                 }, true);
               } else {
+                const currentDate = scheduler.option('currentDate');
                 const cellDuration = scheduler.option('cellDuration') * 60 * 1000; // ms
-                const currentTime = new Date().getTime();
+                const currentTime = currentDate.getTime();
                 const roundTime = Math.round(currentTime / cellDuration) * cellDuration;
 
                 scheduler.showAppointmentPopup({
@@ -50,24 +54,23 @@ $(() => {
         {
           location: 'center',
           locateInMenu: 'auto',
-          widget: 'dxTagBox',
+          widget: 'dxSelectBox',
           options: {
+            placeholder: 'Select Employee',
             items: assignees,
+            showClearButton: true,
             displayExpr: 'text',
             valueExpr: 'id',
-            searchEnabled: true,
-            showSelectionControls: true,
-            maxDisplayedTags: 1,
             inputAttr: {
-              'aria-label': 'Assignees',
+              'aria-label': 'Select Employee',
             },
             width: 200,
             onValueChanged({ value }) {
-              const nextDataSource = value.length
-                ? data.filter((item) => value.some((id) => item.assigneeId?.includes(id)))
-                : data;
+              const dataSource = scheduler.option('dataSource');
+              const filter = value ? ['assigneeId', 'contains', value] : null;
 
-              scheduler.option('dataSource', nextDataSource);
+              dataSource.filter(filter);
+              scheduler.option('dataSource', dataSource);
             },
           },
         },
