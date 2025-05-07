@@ -5,6 +5,10 @@
     "mutations": [
         {
             "kind": "remove",
+            "uid": "/chat:MessageEditing"
+        },
+        {
+            "kind": "remove",
             "uid": "/scheduler:Toolbar"
         }
     ]
