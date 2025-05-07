@@ -4,7 +4,7 @@ $arrow-down: "\f016";
   $border,
 ) {
   border: $border;
-  border-bottom-color: transparent;
+  margin-bottom: -1px;
   position: relative;
   z-index: 1;
   width: 100%;
