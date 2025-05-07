@@ -1,7 +1,7 @@
 import type {Meta, StoryObj} from "@storybook/react";
 
 import dxCardView from "devextreme/ui/card_view";
-import {wrapDxWithReact} from "../utils";
+import { wrapDxWithReact } from "../../utils";
 import Button from "devextreme/ui/button";
 
 const CardView = wrapDxWithReact(dxCardView);
@@ -15,6 +15,8 @@ interface HumanReadableProps {
   headerShowDeleteButton: boolean;
   headerShowCardTitle: boolean;
   image: ImageType;
+  imageRatio: string;
+  imageMaxHeight: number;
   cardFields: Record<string, string>,
   showCardFooterTemplate: boolean,
 }
@@ -61,21 +63,35 @@ const CARD_FOOTER_TEMPLATE = () => {
 const setImageProps = (
   props: Record<string, any>,
   image: ImageType,
+  ratio: string,
+  maxHeight: number,
 ): void => {
+  const baseCardCoverOptions = {aspectRatio: ratio, maxHeight};
+
   switch (image) {
     case 'placeholder':
-      props.cardCover = {imageExpr: 'image'};
+      props.cardCover = {
+        imageExpr: 'image',
+        ...baseCardCoverOptions,
+      };
       return;
     case 'small':
-      props.cardCover = {imageExpr: () => 'images/card_view/cat_small_crop.jpg'};
+      props.cardCover = {
+        imageExpr: () => 'images/card_view/cat_small_crop.jpg',
+        ...baseCardCoverOptions,
+      };
       return;
     case 'wide':
       props.cardCover = {
         imageExpr: () => 'images/card_view/cat_wide.jpg',
+        ...baseCardCoverOptions,
       };
       return;
     case 'tall':
-      props.cardCover = {imageExpr: () => 'images/card_view/cat_tall.jpg'};
+      props.cardCover = {
+        imageExpr: () => 'images/card_view/cat_tall.jpg',
+        ...baseCardCoverOptions,
+      };
       return;
     case 'none':
     default:
@@ -95,6 +111,8 @@ const mergeProps = (
     headerShowDeleteButton,
     headerShowCardTitle,
     image,
+    imageRatio,
+    imageMaxHeight,
     cardFields,
     showCardFooterTemplate
   } = humanReadableProps;
@@ -121,7 +139,7 @@ const mergeProps = (
     }
     : undefined;
 
-  setImageProps(result, image);
+  setImageProps(result, image, imageRatio, imageMaxHeight);
 
   result.cardFooterTemplate = showCardFooterTemplate
     ? CARD_FOOTER_TEMPLATE
@@ -138,7 +156,7 @@ const CardViewHumanReadableWrapper = (
 }
 
 const meta: Meta<typeof CardView> = {
-  title: "Grids/CardView/Card",
+  title: "Grids/CardView/Parts",
   component: CardViewHumanReadableWrapper,
   argTypes: {
     headerShowCheckBox: {
@@ -157,6 +175,12 @@ const meta: Meta<typeof CardView> = {
       control: 'select',
       options: imageTypes,
     },
+    imageRatio: {
+      control: 'text',
+    },
+    imageMaxHeight: {
+      control: 'number',
+    },
     cardFields: {
       control: 'object',
     },
@@ -170,13 +194,15 @@ export default meta;
 
 type Story = StoryObj<typeof CardView>;
 
-export const Playground: Story = {
+export const Card: Story = {
   args: {
     headerShowCheckBox: true,
     headerShowEditingButton: true,
     headerShowDeleteButton: true,
     headerShowCardTitle: true,
     image: 'none',
+    imageRatio: '1/1',
+    imageMaxHeight: 0,
     cardFields: {
       id: 0,
       firstName: 'John',
