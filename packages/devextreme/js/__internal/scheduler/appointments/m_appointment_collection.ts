@@ -9,7 +9,6 @@ import { getPublicElement } from '@js/core/element';
 import { data as elementData } from '@js/core/element_data';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
-import { wrapToArray } from '@js/core/utils/array';
 // @ts-expect-error
 import { grep, normalizeKey } from '@js/core/utils/common';
 import dateUtils from '@js/core/utils/date';
@@ -619,6 +618,7 @@ class SchedulerAppointments extends CollectionWidget {
         timeZoneCalculator: this.option('timeZoneCalculator'),
         getAppointmentColor: this.option('getAppointmentColor'),
         getResizableStep: this.option('getResizableStep'),
+        getResourceManager: this.option('getResourceManager'),
       };
 
       (this as any)._createComponent(

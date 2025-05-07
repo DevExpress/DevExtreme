@@ -29,6 +29,7 @@ export class ResourceLoader extends Loader<RawResourceData, ResourceData> {
 
     this.idsGetter = accessor.idsGetter;
     this.idsSetter = accessor.idsSetter;
+    this.onInit();
   }
 
   protected onLoadTransform(items: RawResourceData[]): ResourceData[] {
@@ -39,9 +40,7 @@ export class ResourceLoader extends Loader<RawResourceData, ResourceData> {
     }));
   }
 
-  protected onChange(): void {}
-
   protected onLoadError(): void {}
 
-  protected onLoadingChanged(): void {}
+  protected onChange(): void {}
 }

@@ -8,10 +8,6 @@ import dateUtils from '@js/core/utils/date';
 import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import { setHeight, setOuterHeight } from '@js/core/utils/size';
-import { agendaUtils, formatWeekday, getVerticalGroupCountClass } from '@ts/scheduler/r1/utils/index';
-import type { SafeAppointment } from '@ts/scheduler/types';
-import { convertToOldTree, reduceResourcesTree } from '@ts/scheduler/utils/resource_manager/agenda_group_utils';
-import type { ResourceManager } from '@ts/scheduler/utils/resource_manager/resource_manager';
 
 import { VIEWS } from '../constants';
 import {
@@ -22,6 +18,9 @@ import {
   TIME_PANEL_CLASS,
 } from '../m_classes';
 import tableCreatorModule from '../m_table_creator';
+import { agendaUtils, formatWeekday, getVerticalGroupCountClass } from '../r1/utils/index';
+import type { SafeAppointment } from '../types';
+import { convertToOldTree, reduceResourcesTree } from '../utils/resource_manager/agenda_group_utils';
 import WorkSpace from './m_work_space';
 
 const { tableCreator } = tableCreatorModule;
@@ -254,7 +253,7 @@ class SchedulerAgenda extends WorkSpace {
   }
 
   _makeGroupRows() {
-    const resourceManager = this.option('resourceManager') as ResourceManager;
+    const resourceManager = this.option('getResourceManager')();
     const allAppointments = (this.option('getFilteredItems') as any)();
     const tree = reduceResourcesTree(
       resourceManager.resourceById,

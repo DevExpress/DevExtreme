@@ -15,16 +15,14 @@ export const getPaintedResource = (
   resources: ResourceLoader[],
   groups: string[],
 ): ResourceLoader => {
-  const newGroups = groups || [];
-
   const result = resources.find((resource) => resource.useColorAsDefault);
 
   if (result) {
     return result;
   }
 
-  const newResources = newGroups.length
-    ? filterResourcesByGroups(resources, newGroups)
+  const newResources = groups.length
+    ? filterResourcesByGroups(resources, groups)
     : resources;
 
   return newResources[newResources.length - 1];
@@ -41,7 +39,7 @@ export const getAppointmentColor = async (
   groupsLeafs: GroupLeaf[],
   appointmentConfig: {
     itemData: SafeAppointment;
-    groupIndex: number;
+    groupIndex: string | number;
   },
 ): Promise<string | undefined> => {
   const { groupIndex, itemData } = appointmentConfig;
@@ -50,9 +48,7 @@ export const getAppointmentColor = async (
   const paintedResource = getPaintedResource(resources || [], groups);
 
   if (paintedResource) {
-    if (!paintedResource.isLoaded()) {
-      await paintedResource.load();
-    }
+    await paintedResource.load();
 
     const cellGroups = getLeafGroupValues(groupsLeafs, groupIndex);
     const resourceValues = paintedResource.idsGetter(itemData);

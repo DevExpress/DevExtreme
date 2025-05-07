@@ -4,7 +4,7 @@ import { normalizeDataSourceOptions } from '@ts/data/data_source/m_utils';
 
 export const normalizeDataSource = <T>(
   dataSourceOptions: DataSourceLike<T> | null | undefined,
-  options: object,
+  options: object = {},
 ): DataSource<T, unknown> | undefined => {
   if (!dataSourceOptions) {
     return undefined;
@@ -18,10 +18,6 @@ export const normalizeDataSource = <T>(
     ...normalizeDataSourceOptions(dataSourceOptions, {}),
     ...options,
   };
-
-  if (typeof dataSourceOptions !== 'string' && 'filter' in dataSourceOptions) {
-    result.filter = dataSourceOptions.filter;
-  }
 
   return new DataSource(result);
 };

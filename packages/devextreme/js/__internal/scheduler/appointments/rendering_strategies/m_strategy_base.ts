@@ -9,6 +9,7 @@ import type { SafeAppointment } from '@ts/scheduler/types';
 import { createAppointmentAdapter } from '../../m_appointment_adapter';
 import timeZoneUtils from '../../m_utils_time_zone';
 import type { AppointmentDataAccessor } from '../../utils';
+import type { ResourceManager } from '../../utils/resource_manager/resource_manager';
 import { AppointmentSettingsGenerator } from '../m_settings_generator';
 import AdaptivePositioningStrategy from './m_appointments_positioning_strategy_adaptive';
 import AppointmentPositioningStrategy from './m_appointments_positioning_strategy_base';
@@ -36,6 +37,8 @@ class BaseRenderingStrategy {
     this.options = options;
     this._initPositioningStrategy();
   }
+
+  get resourceManager(): ResourceManager { return this.options.getResourceManager(); }
 
   get isAdaptive() { return this.options.adaptivityEnabled; }
 

@@ -48,10 +48,10 @@ export const getSafeGroupValues = (
   }, {});
 
 export const getAppointmentResources = (
-  appointmentGroups: GroupValues,
+  appointmentGroupValues: GroupValues,
   resourceById: Record<string, ResourceLoader>,
 ): AppointmentResource[] => Object
-  .entries(appointmentGroups)
+  .entries(appointmentGroupValues)
   .reduce<AppointmentResource[]>((result, [resourceIndex, resourceIds]) => {
     const resource = resourceById[resourceIndex];
     const resourceData = resource.items.filter((data) => resourceIds.includes(data.id));
@@ -79,14 +79,35 @@ export const setAppointmentGroupValues = <T extends Record<string, unknown>>(
 };
 
 export const getAppointmentGroupIndex = (
-  appointmentGroups: GroupValues,
+  appointmentGroupValues: GroupValues,
   groupLeafs: GroupLeaf[],
-): GroupLeaf['groupIndex'] | undefined => {
-  const found = groupLeafs.find((leaf) => Object
-    .entries(leaf.grouped)
-    .every((
-      [resourceIndex, resourceId],
-    ) => appointmentGroups[resourceIndex]?.includes(resourceId)));
+): GroupLeaf['groupIndex'][] => groupLeafs
+  .filter(
+    (leaf) => Object
+      .entries(leaf.grouped)
+      .every((
+        [resourceIndex, resourceId],
+      ) => appointmentGroupValues[resourceIndex]?.includes(resourceId)),
+  ).map((leaf) => leaf.groupIndex);
 
-  return found?.groupIndex;
+export const groupAppointmentsByGroupLeafs = (
+  resourceById: Record<string, ResourceLoader>,
+  groupLeafs: GroupLeaf[],
+  appointments: SafeAppointment[],
+): SafeAppointment[][] => {
+  if (!groupLeafs.length) {
+    return [appointments];
+  }
+
+  return groupLeafs.map(
+    (leaf) => appointments.filter((item) => {
+      const appointmentGroupValues = getAppointmentGroupValues(item, Object.values(resourceById));
+
+      return Object
+        .entries(leaf.grouped)
+        .every((
+          [resourceIndex, resourceId],
+        ) => appointmentGroupValues[resourceIndex]?.includes(resourceId));
+    }),
+  );
 };

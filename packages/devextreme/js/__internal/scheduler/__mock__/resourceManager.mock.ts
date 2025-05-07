@@ -23,7 +23,7 @@ export const resourceItemsByIdMock = {
 
 export const resourceIndexesMock = Object.keys(resourceItemsByIdMock);
 
-export const getResourceManagerMock = (): ResourceManager => new ResourceManager([{
+export const resourceConfigMock = [{
   allowMultiple: false,
   dataSource: resourceItemsByIdMock['nested.priorityId'],
   fieldExpr: 'nested.priorityId',
@@ -43,7 +43,11 @@ export const getResourceManagerMock = (): ResourceManager => new ResourceManager
   displayExpr: 'name', // Resource instance's field used instead of "text"
   label: 'Assignee',
 }, {
-  fieldExpr: 'roomId',
+  field: 'roomId',
   dataSource: resourceItemsByIdMock.roomId,
   label: 'Room',
-}]);
+}];
+
+export const getResourceManagerMock = (): ResourceManager => new ResourceManager(
+  resourceConfigMock.map((item) => ({ ...item })),
+);

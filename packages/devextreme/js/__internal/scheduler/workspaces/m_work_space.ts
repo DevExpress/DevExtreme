@@ -885,7 +885,7 @@ class SchedulerWorkSpace extends WidgetObserver<Omit<dxSchedulerOptions, 'groups
     return groupValues && getAppointmentGroupIndex(
       getSafeGroupValues(groupValues),
       this.resourceManager.groupsLeafs,
-    );
+    )[0];
   }
 
   _getViewStartByOptions() {

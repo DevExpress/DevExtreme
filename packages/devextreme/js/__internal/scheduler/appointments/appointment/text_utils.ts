@@ -76,8 +76,8 @@ const getGroupText = (options: AppointmentProperties): string => {
 };
 
 const getResourceText = async (options: AppointmentProperties): Promise<string[]> => {
-  const resourceProcessor = options.getResourceProcessor();
-  const list = await resourceProcessor.getAppointmentResourcesValues(options.data);
+  const resourceManager = options.getResourceManager();
+  const list = await resourceManager.getAppointmentResourcesValues(options.data);
 
   return list.map((item) => `${item.label}: ${item.values.join(', ')}`);
 };

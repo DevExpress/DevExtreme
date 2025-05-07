@@ -1,3 +1,4 @@
+import { equalByValue } from '@js/core/utils/common';
 import type { SafeAppointment } from '@ts/scheduler/types';
 import { getAppointmentColor } from '@ts/scheduler/utils/resource_manager/appointment_color_utils';
 import type { AppointmentResource } from '@ts/scheduler/utils/resource_manager/appointment_groups_utils';
@@ -38,7 +39,7 @@ export class ResourceManager {
   }
 
   async loadGroupResources(groups: string[], forceReload = false): Promise<ResourceLoader[]> {
-    await this.load(groups, forceReload);
+    await this.load(groups, forceReload || !equalByValue(groups, this.groups));
 
     const { groupTree, groupLeafs } = groupResources(this.resourceById, groups);
 

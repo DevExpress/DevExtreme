@@ -1,7 +1,17 @@
 import type { ResourceLoader } from '../loader/resource_loader';
 import type { GroupLeaf, GroupNode } from './types';
 
-export const groupResources = (resourceById: Record<string, ResourceLoader>, groups: string[]) => {
+export const groupResources = (resourceById: Record<string, ResourceLoader>, groups: string[]): {
+  groupTree: GroupNode[];
+  groupLeafs: GroupLeaf[];
+} => {
+  if (!groups.length) {
+    return {
+      groupTree: [],
+      groupLeafs: [],
+    };
+  }
+
   const head: GroupNode[] = [{} as GroupNode];
   let leafs: GroupNode[] = head;
 
@@ -48,7 +58,7 @@ export const getLeafGroupValues = (
 export const getGroupTexts = (
   groupsLeafs: GroupLeaf[],
   resourceById: Record<string, ResourceLoader>,
-  groupIndex: number,
+  groupIndex: GroupLeaf['groupIndex'],
 ): string[] => {
   const leafGroups = getLeafGroupValues(groupsLeafs, groupIndex);
   const textPath = Object.entries(leafGroups).map(([resourceIndex, resourceId]) => {
@@ -61,8 +71,8 @@ export const getGroupTexts = (
 };
 
 export const getResourcesByGroupIndex = (
-  resourceById: Record<string, ResourceLoader>,
   groupsLeafs: GroupLeaf[],
+  resourceById: Record<string, ResourceLoader>,
   groupIndex: GroupLeaf['groupIndex'],
 ): ResourceLoader[] => {
   const leafGroups = getLeafGroupValues(groupsLeafs, groupIndex);

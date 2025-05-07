@@ -16,11 +16,18 @@ export abstract class Loader<T, Data, Config extends BaseConfig<T> = BaseConfig<
       dataSourceOptions,
     ),
     public items: Data[] = [],
-    public data: T[] = [], // TODO: probably we dont need it. Used in getGroupPanelData
+    public data: T[] = [], // TODO(9): probably we dont need it. Used in getGroupPanelData
     protected readonly isSharedDataSource = config.dataSource instanceof DataSource,
-    protected loadingPromise?: Promise<T[]>,
     protected unsubscribe = noop,
-  ) {}
+  ) {
+    this.addDataSourceHandlers();
+  }
+
+  protected onInit(): void {
+    if (this.isLoaded()) {
+      this.applyChanges(this.dataSource?.items() ?? []);
+    }
+  }
 
   public isLoaded(): boolean {
     return Boolean(this.dataSource?.isLoaded());
@@ -47,19 +54,26 @@ export abstract class Loader<T, Data, Config extends BaseConfig<T> = BaseConfig<
 
   async load(forceReload = false): Promise<void> {
     if (this.dataSource && (forceReload || !this.dataSource.isLoaded())) {
-      this.loadingPromise = this.loadingPromise && !forceReload
-        ? this.loadingPromise
-        : loadResource(this.dataSource);
-
-      this.data = await this.loadingPromise;
-      this.items = this.onLoadTransform(this.data);
+      await loadResource(this.dataSource);
     }
   }
 
   protected abstract onLoadTransform(items: T[]): Data[];
-  protected abstract onChange(items: Data[], event: unknown): void;
   protected abstract onLoadError(): void;
-  protected abstract onLoadingChanged(isLoading?: boolean): void;
+  protected abstract onChange(changes: unknown): void;
+
+  protected onLoadingChanged(isLoading?: boolean): void {
+    if (!isLoading && this.isLoaded()) {
+      this.applyChanges(this.dataSource?.items() ?? []);
+    }
+  }
+
+  protected applyChanges(items: T[]): void {
+    if (items && items !== this.data) {
+      this.data = items;
+      this.items = this.onLoadTransform(this.data);
+    }
+  }
 
   public dispose(): void {
     if (this.dataSource) {
@@ -69,6 +83,8 @@ export abstract class Loader<T, Data, Config extends BaseConfig<T> = BaseConfig<
       } else {
         this.dataSource.dispose();
       }
+      this.data = [];
+      this.items = [];
     }
   }
 }

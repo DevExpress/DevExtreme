@@ -500,7 +500,7 @@ class Scheduler extends Widget<any> {
     const whenLoaded = this.postponedOperations.add('loadResources', () => {
       const groups = this._getCurrentViewOption('groups');
 
-      return this.resourceManager.loadGroupResources(groups, true);
+      return promiseToDeferred(this.resourceManager.loadGroupResources(groups, true));
     });
 
     // @ts-expect-error
@@ -2284,9 +2284,9 @@ class Scheduler extends Widget<any> {
     if (groups?.length) {
       const { resourceById, groupsLeafs } = this.resourceManager;
       const appointmentSettings = this._isAgenda()
-        ? this.getLayoutManager()._positionMap[appointmentIndex]
+        ? this.getLayoutManager()._positionMap[appointmentIndex][0]
         : utils.dataAccessors.getAppointmentSettings(element) || {};
-      const cellGroups = getLeafGroupValues(groupsLeafs, appointmentSettings[0].groupIndex);
+      const cellGroups = getLeafGroupValues(groupsLeafs, appointmentSettings.groupIndex);
 
       setAppointmentGroupValues(rawAppointment, resourceById, cellGroups);
     }
