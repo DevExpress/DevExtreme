@@ -48,7 +48,7 @@ QUnit.module('MessageBubble', moduleConfig, () => {
         });
 
         QUnit.test('should have correct classes for image message', function(assert) {
-            this.reinit({ message: { type: 'image', src: '', alt: '' } });
+            this.reinit({ type: 'image', src: '', alt: '' });
 
             const $content = this.$element.find(`.${CHAT_MESSAGEBUBBLE_CONTENT_CLASS}`);
             const $img = $content.find('img');
