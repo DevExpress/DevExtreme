@@ -719,22 +719,21 @@ export const Editing: Story = {
             return <div>{message.text}</div>;
         }, [user]);
 
-        const showToast = (message: string) => {
+        const showToast = useCallback((message: string) => {
             setToastConfig({
                 visible: true,
                 message,
             });
-        };
+        }, []);
 
-        const onToastHiding = () => {
+        const onToastHiding = useCallback(() => {
             setToastConfig({
                 visible: false,
                 message: '',
             });
-        };
+        }, []);
 
-        const validateMessage = (message: string) =>
-            message.match(/^[a-zA-Z0-9.,!? ]+$/);
+        const validateMessage = (message: string) => message.match(/^[a-zA-Z0-9.,!? ]+$/);
 
         return (
             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
@@ -743,32 +742,30 @@ export const Editing: Story = {
                     width={width}
                     height={height}
                     dataSource={dataSource}
-                    reloadOnChange={true}
+                    reloadOnChange={false}
                     user={user}
                     onMessageEntered={(e) => {
                         e.component.getDataSource().store().push([{ type: 'insert', data: e.message }]);
                     }}
                     onMessageEditingStart={async (e) => {
-                        console.log('onMessageEditingStart', e)
                         if (cancelMessageEditingStart) {
                             showToast('Message editing not allowed');
                             e.cancel = true;
                         }
                     }}
-                    onMessageEditCanceled={(e) => console.log('onMessageEditCancelled', e)}
+                    onMessageEditCanceled={() => {
+                        showToast('Message editing is canceled');
+                    }}
                     onMessageDeleting={(e) => {
-                        console.log('onMessageDeleting', e)
                         if (cancelMessageDeleting) {
                             showToast('Message deleting was canceled');
                             e.cancel = true;
                         }
                     }}
                     onMessageDeleted={(e) => {
-                        console.log('onMessageDeleted', e);
                         e.component.getDataSource().store().push([{ type: 'update', key: e.message.id, data: { isDeleted: true } }]);
                     }}
                     onMessageUpdating={async (e) => {
-                        console.log('onMessageUpdating', e);
                         if (allowOnlyLatinTextOnEdit) {
                             if (!validateMessage(e.text ?? '')) {
                                 showToast('Only latin allowed in message');
@@ -777,7 +774,6 @@ export const Editing: Story = {
                         }
                     }}
                     onMessageUpdated={(e) => {
-                        console.log('onMessageUpdated', e);
                         e.component.getDataSource().store().push([{ type: 'update', key: e.message.id, data: { text: e.text, isEdited: true } }]);
                     }}
                     activeStateEnabled={activeStateEnabled}
