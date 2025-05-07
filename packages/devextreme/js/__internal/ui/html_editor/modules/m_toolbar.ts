@@ -21,8 +21,12 @@ import errors from '@js/ui/widget/ui.errors';
 import { capitalize } from '@ts/core/utils/capitalize';
 import Quill from 'devextreme-quill';
 
+import type { CommandsMap } from '../utils/ai';
 import {
-  buildCommandsMap, defaultCommandNames, getDefaultOptionsByCommand,
+  buildCommandsMap,
+  defaultCommandNames,
+  getDefaultOptionsByCommand,
+  hasInvalidCustomCommand,
 } from '../utils/ai';
 import { getTableFormats, TABLE_OPERATIONS } from '../utils/m_table_helper';
 import {
@@ -425,6 +429,7 @@ if (Quill) {
 
                 return result;
               }),
+              disabled: !prompt,
               prompt,
             };
 
@@ -442,6 +447,18 @@ if (Quill) {
       return items;
     }
 
+    _validateAIToolbarItemConfig(commandsMap: CommandsMap): void {
+      const { aiIntegration } = this.editorInstance.option();
+
+      if (!aiIntegration) {
+        errors.log('W1026');
+      }
+
+      if (hasInvalidCustomCommand(commandsMap)) {
+        errors.log('W1027');
+      }
+    }
+
     _prepareAIMenuItemConfig(item: AIToolbarItem) {
       const {
         name = TOOLBAR_AI_ITEM_NAME,
@@ -451,11 +468,16 @@ if (Quill) {
       const commandsMap = buildCommandsMap(commands);
       const menuItems = this._buildMenuItems(commands);
 
+      this._validateAIToolbarItemConfig(commandsMap);
+
       const dataSource = [{
         id: 'root',
         icon: 'sparkle',
         items: menuItems,
       }];
+
+      const { aiIntegration } = this.editorInstance.option();
+      const isMenuDisabled = !dataSource[0].items?.length || !aiIntegration;
 
       const options = {
         dataSource,
@@ -475,7 +497,7 @@ if (Quill) {
 
           this._formatHandlers[name](aiDialogOptions);
         },
-        disabled: !dataSource[0].items?.length,
+        disabled: isMenuDisabled,
       };
 
       return extend(true, {

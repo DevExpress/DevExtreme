@@ -96,7 +96,7 @@ $chat-confirmation-popup-toolbar-gap: null !default;
   $chat-typingindicator-padding: $chat-messagegroup-padding !default;
   $chat-typingindicator-bubble-border-radius: $chat-bubble-border-radius !default;
 
-  $chat-confirmation-popup-toolbar-gap: 16px !default;
+  $chat-confirmation-popup-toolbar-gap: 8px !default;
 }
 
 @else if $size == "compact" {
@@ -129,5 +129,5 @@ $chat-confirmation-popup-toolbar-gap: null !default;
   $chat-typingindicator-padding: $chat-messagegroup-padding !default;
   $chat-typingindicator-bubble-border-radius: $chat-bubble-border-radius !default;
 
-  $chat-confirmation-popup-toolbar-gap: 8px !default;
+  $chat-confirmation-popup-toolbar-gap: 4px !default;
 }

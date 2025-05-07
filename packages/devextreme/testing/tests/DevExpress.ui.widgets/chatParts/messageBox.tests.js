@@ -644,11 +644,17 @@ QUnit.module('MessageBox', moduleConfig, () => {
                     hoverStateEnabled: value,
                 };
 
-                this.reinit(options);
+                this.reinit({
+                    ...options,
+                    text: 'message text'
+                });
+
+                const editingPreview = this.getEditingPreviewInstance();
 
                 Object.entries(options).forEach(([key, value]) => {
                     assert.deepEqual(value, this.sendButton.option(key), `button ${key} value is correct`);
                     assert.deepEqual(value, this.textArea.option(key), `textarea ${key} value is correct`);
+                    assert.deepEqual(value, editingPreview.option(key), `editing preview ${key} value is correct`);
                 });
             });
 
@@ -659,11 +665,17 @@ QUnit.module('MessageBox', moduleConfig, () => {
                     hoverStateEnabled: value,
                 };
 
-                this.instance.option(options);
+                this.instance.option({
+                    ...options,
+                    text: 'message text'
+                });
+
+                const editingPreview = this.getEditingPreviewInstance();
 
                 Object.entries(options).forEach(([key, value]) => {
                     assert.deepEqual(value, this.sendButton.option(key), `button ${key} value is correct`);
                     assert.deepEqual(value, this.textArea.option(key), `textarea ${key} value is correct`);
+                    assert.deepEqual(value, editingPreview.option(key), `editing preview ${key} value is correct`);
                 });
             });
         });
