@@ -106,9 +106,11 @@ import { DxiVectorMapLegendComponent } from 'devextreme-angular/ui/vector-map/ne
  */
 @Component({
     selector: 'dx-vector-map',
+    standalone: true,
     template: '',
     styles: [ ' :host {  display: block; }'],
     host: { ngSkipHydration: 'true' },
+    imports: [ DxIntegrationModule ],
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -930,6 +932,7 @@ export class DxVectorMapComponent extends DxComponent implements OnDestroy, OnCh
 
 @NgModule({
   imports: [
+    DxVectorMapComponent,
     DxiAnnotationModule,
     DxoBorderModule,
     DxoFontModule,
@@ -978,9 +981,6 @@ export class DxVectorMapComponent extends DxComponent implements OnDestroy, OnCh
     DxoVectorMapVectorMapTitleSubtitleModule,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxVectorMapComponent
   ],
   exports: [
     DxVectorMapComponent,
@@ -1034,6 +1034,8 @@ export class DxVectorMapComponent extends DxComponent implements OnDestroy, OnCh
   ]
 })
 export class DxVectorMapModule { }
+
+export * from 'devextreme-angular/ui/vector-map/nested';
 
 import type * as DxVectorMapTypes from "devextreme/viz/vector_map_types";
 export { DxVectorMapTypes };

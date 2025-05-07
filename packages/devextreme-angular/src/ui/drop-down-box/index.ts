@@ -99,8 +99,10 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
  */
 @Component({
     selector: 'dx-drop-down-box',
+    standalone: true,
     template: '<ng-content></ng-content>',
     host: { ngSkipHydration: 'true' },
+    imports: [ DxIntegrationModule ],
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -1345,6 +1347,7 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
 
 @NgModule({
   imports: [
+    DxDropDownBoxComponent,
     DxiButtonModule,
     DxoOptionsModule,
     DxoDropDownOptionsModule,
@@ -1377,9 +1380,6 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
     DxiDropDownBoxToolbarItemModule,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxDropDownBoxComponent
   ],
   exports: [
     DxDropDownBoxComponent,
@@ -1417,6 +1417,8 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
   ]
 })
 export class DxDropDownBoxModule { }
+
+export * from 'devextreme-angular/ui/drop-down-box/nested';
 
 import type * as DxDropDownBoxTypes from "devextreme/ui/drop_down_box_types";
 export { DxDropDownBoxTypes };

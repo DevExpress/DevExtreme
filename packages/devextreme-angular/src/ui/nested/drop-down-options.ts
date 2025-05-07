@@ -23,6 +23,7 @@ import { PositionAlignment } from 'devextreme/common';
 import { PositionConfig } from 'devextreme/common/core/animation';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxoPopupOptions } from './base/popup-options';
@@ -31,8 +32,10 @@ import { DxiToolbarItemComponent } from './toolbar-item-dxi';
 
 @Component({
     selector: 'dxo-drop-down-options',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost],
     inputs: [
         'accessKey',
@@ -159,7 +162,7 @@ export class DxoDropDownOptionsComponent extends DxoPopupOptions implements OnDe
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoDropDownOptionsComponent
   ],
   exports: [

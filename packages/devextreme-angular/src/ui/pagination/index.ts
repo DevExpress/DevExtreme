@@ -47,8 +47,10 @@ import {
  */
 @Component({
     selector: 'dx-pagination',
+    standalone: true,
     template: '',
     host: { ngSkipHydration: 'true' },
+    imports: [ DxIntegrationModule ],
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -619,11 +621,9 @@ export class DxPaginationComponent extends DxComponent implements OnDestroy, OnC
 
 @NgModule({
   imports: [
+    DxPaginationComponent,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxPaginationComponent
   ],
   exports: [
     DxPaginationComponent,
@@ -631,6 +631,7 @@ export class DxPaginationComponent extends DxComponent implements OnDestroy, OnC
   ]
 })
 export class DxPaginationModule { }
+
 
 import type * as DxPaginationTypes from "devextreme/ui/pagination_types";
 export { DxPaginationTypes };

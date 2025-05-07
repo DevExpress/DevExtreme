@@ -18,6 +18,7 @@ import { Format } from 'devextreme/common/core/localization';
 import { VerticalEdge } from 'devextreme/common';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
@@ -25,8 +26,10 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-range-slider-label',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxoRangeSliderLabelComponent extends NestedOption implements OnDestroy, OnInit  {
@@ -80,7 +83,7 @@ export class DxoRangeSliderLabelComponent extends NestedOption implements OnDest
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoRangeSliderLabelComponent
   ],
   exports: [

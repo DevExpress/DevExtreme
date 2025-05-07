@@ -85,4 +85,13 @@
       }
     }
   }
+
+  .dx-chat-messagelist {
+    .dx-scrollable-container {
+      > .dx-overlay-wrapper {
+        max-width: 100%;
+        max-height: 100%;
+      }
+    }
+  }
 }

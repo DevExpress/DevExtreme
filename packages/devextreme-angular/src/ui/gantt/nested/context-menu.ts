@@ -20,6 +20,7 @@ import {
 import { dxGanttContextMenuItem, GanttPredefinedContextMenuItem } from 'devextreme/ui/gantt';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
@@ -29,8 +30,10 @@ import { DxiGanttItemComponent } from './item-dxi';
 
 @Component({
     selector: 'dxo-gantt-context-menu',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxoGanttContextMenuComponent extends NestedOption implements OnDestroy, OnInit  {
@@ -92,7 +95,7 @@ export class DxoGanttContextMenuComponent extends NestedOption implements OnDest
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoGanttContextMenuComponent
   ],
   exports: [

@@ -28,13 +28,15 @@ import { getScrollTopMax } from '@ts/ui/scroll_view/utils/get_scroll_top_max';
 
 import type { DataChange } from '../collection/collection_widget.base';
 import { isElementVisible } from '../splitter/utils/layout';
-import MessageBubble, { CHAT_MESSAGEBUBBLE_CLASS } from './messagebubble';
+import MessageBubble, {
+  CHAT_MESSAGEBUBBLE_CLASS,
+  MESSAGE_DATA_KEY,
+} from './messagebubble';
 import type { MessageGroupAlignment } from './messagegroup';
 import MessageGroup, {
   CHAT_MESSAGEGROUP_ALIGNMENT_END_CLASS,
   CHAT_MESSAGEGROUP_ALIGNMENT_START_CLASS,
   CHAT_MESSAGEGROUP_CLASS,
-  MESSAGE_DATA_KEY,
 } from './messagegroup';
 import TypingIndicator from './typingindicator';
 
@@ -77,6 +79,7 @@ export interface Properties extends WidgetOptions<MessageList> {
   items: Message[];
   allowUpdating: ((message: Message) => boolean);
   allowDeleting: ((message: Message) => boolean);
+  isEditActionDisabled: ((message: Message) => boolean);
   currentUserId: number | string | undefined;
   showDayHeaders: boolean;
   messageTemplate?: MessageTemplate;
@@ -87,9 +90,9 @@ export interface Properties extends WidgetOptions<MessageList> {
   showAvatar: boolean;
   showUserName: boolean;
   showMessageTimestamp: boolean;
-  onMessageEditingStart?: (e: MessageEditingEvent) => void;
+  onMessageEditingStart?: (e: MessageEditingEvent) => () => void;
   onMessageDeleting?: (e: MessageEditingEvent) => void;
-  onKeyHandled?: (e: KeyboardEvent) => void;
+  onEscapeKeyPressed?: (e: KeyboardEvent) => void;
 }
 
 class MessageList extends Widget<Properties> {
@@ -112,6 +115,7 @@ class MessageList extends Widget<Properties> {
       ...super._getDefaultOptions(),
       allowUpdating: () => false,
       allowDeleting: () => false,
+      isEditActionDisabled: () => false,
       items: [],
       currentUserId: '',
       showDayHeaders: true,
@@ -266,6 +270,7 @@ class MessageList extends Widget<Properties> {
     const {
       allowUpdating,
       allowDeleting,
+      isEditActionDisabled,
       onMessageEditingStart,
       onMessageDeleting,
     } = this.option();
@@ -279,8 +284,16 @@ class MessageList extends Widget<Properties> {
       buttons.push({
         icon: 'edit',
         text: editText,
-        onClick(e: ItemClick): void {
-          onMessageEditingStart?.({ event: e.event, message });
+        disabled: isEditActionDisabled(message),
+        onClick: (e: ItemClick): void => {
+          const onMessageEditStarted = onMessageEditingStart?.({ event: e.event, message });
+
+          const onContextMenuHidden = (): void => {
+            this._contextMenu.off('hidden', onContextMenuHidden);
+            onMessageEditStarted?.();
+          };
+
+          this._contextMenu.on('hidden', onContextMenuHidden);
         },
       });
     }
@@ -310,7 +323,7 @@ class MessageList extends Widget<Properties> {
       },
       cssClass: CHAT_MESSAGELIST_CONTEXT_MENU_CONTENT_CLASS,
       hideOnParentScroll: false,
-      overlayContainer: this._scrollView.content(),
+      overlayContainer: this._scrollView.container(),
       visualContainer: this._scrollView.container(),
       boundaryOffset: { h: 16 },
     });
@@ -319,8 +332,8 @@ class MessageList extends Widget<Properties> {
       // eslint-disable-next-line @typescript-eslint/no-floating-promises
       this._contextMenu.hide();
 
-      const { onKeyHandled } = this.option();
-      onKeyHandled?.(event);
+      const { onEscapeKeyPressed } = this.option();
+      onEscapeKeyPressed?.(event);
     });
 
     $contextMenu.appendTo(this.$element());
@@ -339,6 +352,11 @@ class MessageList extends Widget<Properties> {
 
     const message = this._getMessageData(currentTarget);
 
+    if (message?.isDeleted) {
+      e.cancel = true;
+      return;
+    }
+
     const items = this._getContextMenuButtons(message);
 
     if (!items.length) {
@@ -347,6 +365,7 @@ class MessageList extends Widget<Properties> {
     }
 
     e.component.option('items', items);
+    e.element.focus();
   }
 
   _renderScrollView(): void {
@@ -582,12 +601,24 @@ class MessageList extends Widget<Properties> {
     return result;
   }
 
+  _getMessageGroupByBubbleElement($bubble: dxElementWrapper): MessageGroup {
+    const $currentMessageGroup = $bubble.closest(`.${CHAT_MESSAGEGROUP_CLASS}`);
+    const group: MessageGroup = MessageGroup.getInstance($currentMessageGroup);
+
+    return group;
+  }
+
   _updateMessageByKey(key: string | number | undefined, data: Message): void {
-    if (key) {
+    if (isDefined(key)) {
       const $targetMessage = this._findMessageElementByKey(key);
 
       const bubble = MessageBubble.getInstance($targetMessage);
-      bubble.option('text', data.text);
+      bubble.option(data);
+
+      const isEdited = data.isEdited === true && !data.isDeleted;
+      const group = this._getMessageGroupByBubbleElement($targetMessage);
+
+      group._updateMessageEditedText($targetMessage, isEdited);
     }
   }
 
@@ -602,10 +633,7 @@ class MessageList extends Widget<Properties> {
       return;
     }
 
-    const $currentMessageGroup = $targetMessage.closest(`.${CHAT_MESSAGEGROUP_CLASS}`);
-
-    const group: MessageGroup = MessageGroup.getInstance($currentMessageGroup);
-
+    const group = this._getMessageGroupByBubbleElement($targetMessage);
     const { items } = group.option();
     const newItems = items.filter((item) => item.id !== key);
 

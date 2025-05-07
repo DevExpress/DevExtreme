@@ -20,6 +20,7 @@ import { HeaderFilterGroupInterval, ColumnHeaderFilterSearchConfig, HeaderFilter
 import { SearchMode } from 'devextreme/common';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
@@ -27,8 +28,10 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-tree-list-header-filter',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxoTreeListHeaderFilterComponent extends NestedOption implements OnDestroy, OnInit  {
@@ -146,7 +149,7 @@ export class DxoTreeListHeaderFilterComponent extends NestedOption implements On
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoTreeListHeaderFilterComponent
   ],
   exports: [

@@ -40,6 +40,7 @@ export const generateMessages = (
   useLineBreaks = false,
   coefficient = 4,
   n = 1,
+  isEdited = false,
 ): any => {
   const messages = Array.from({ length: length * n }, (_, i) => {
     const text = useLongText
@@ -58,6 +59,7 @@ export const generateMessages = (
       timestamp,
       author: getAuthor(),
       text,
+      isEdited,
     };
 
     return item;

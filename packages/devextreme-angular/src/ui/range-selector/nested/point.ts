@@ -17,6 +17,7 @@ import {
 import { ChartsColor, PointInteractionMode, PointSymbol } from 'devextreme/common/charts';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
@@ -24,8 +25,10 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-range-selector-point',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxoRangeSelectorPointComponent extends NestedOption implements OnDestroy, OnInit  {
@@ -135,7 +138,7 @@ export class DxoRangeSelectorPointComponent extends NestedOption implements OnDe
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoRangeSelectorPointComponent
   ],
   exports: [

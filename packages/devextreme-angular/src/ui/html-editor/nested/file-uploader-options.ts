@@ -21,6 +21,7 @@ import { BeforeSendEvent, ContentReadyEvent, DisposingEvent, DropZoneEnterEvent,
 import { ValidationStatus } from 'devextreme/common';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
@@ -28,8 +29,10 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-html-editor-file-uploader-options',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxoHtmlEditorFileUploaderOptionsComponent extends NestedOption implements OnDestroy, OnInit  {
@@ -582,7 +585,7 @@ export class DxoHtmlEditorFileUploaderOptionsComponent extends NestedOption impl
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoHtmlEditorFileUploaderOptionsComponent
   ],
   exports: [

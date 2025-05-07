@@ -56,8 +56,10 @@ import { DxiToolbarItemComponent } from 'devextreme-angular/ui/toolbar/nested';
  */
 @Component({
     selector: 'dx-toolbar',
+    standalone: true,
     template: '',
     host: { ngSkipHydration: 'true' },
+    imports: [ DxIntegrationModule ],
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -514,13 +516,11 @@ export class DxToolbarComponent<TItem = any, TKey = any> extends DxComponent imp
 
 @NgModule({
   imports: [
+    DxToolbarComponent,
     DxiItemModule,
     DxiToolbarItemModule,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxToolbarComponent
   ],
   exports: [
     DxToolbarComponent,
@@ -530,6 +530,8 @@ export class DxToolbarComponent<TItem = any, TKey = any> extends DxComponent imp
   ]
 })
 export class DxToolbarModule { }
+
+export * from 'devextreme-angular/ui/toolbar/nested';
 
 import type * as DxToolbarTypes from "devextreme/ui/toolbar_types";
 export { DxToolbarTypes };

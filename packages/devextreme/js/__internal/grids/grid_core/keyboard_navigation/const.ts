@@ -53,6 +53,9 @@ export const COLUMN_HEADERS_VIEW = 'columnHeadersView';
 export const ROWS_VIEW = 'rowsView';
 export const FUNCTIONAL_KEYS = ['shift', 'control', 'alt'];
 
+export const CONTEXT_MENU_MOVE_PREVIOUS_ICON = 'arrowleft';
+export const CONTEXT_MENU_MOVE_NEXT_ICON = 'arrowright';
+
 export enum Direction {
   Next = 'next',
   Previous = 'previous',

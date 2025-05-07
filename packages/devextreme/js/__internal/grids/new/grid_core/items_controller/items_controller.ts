@@ -65,7 +65,7 @@ export class ItemsController {
     const fields = columns.map((column, index): FieldInfo => {
       const value = column.calculateFieldValue(data);
       const displayValue = column.calculateDisplayValue(data);
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
       const formattedText = formatHelper.format(
         parseValue(column, displayValue as string) as never,
         column.format,

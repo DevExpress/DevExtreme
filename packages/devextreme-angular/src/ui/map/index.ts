@@ -68,8 +68,10 @@ import { DxiMapRouteComponent } from 'devextreme-angular/ui/map/nested';
  */
 @Component({
     selector: 'dx-map',
+    standalone: true,
     template: '',
     host: { ngSkipHydration: 'true' },
+    imports: [ DxIntegrationModule ],
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -750,6 +752,7 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
 
 @NgModule({
   imports: [
+    DxMapComponent,
     DxoApiKeyModule,
     DxiCenterModule,
     DxiMarkerModule,
@@ -767,9 +770,6 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
     DxiMapLocationModule,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxMapComponent
   ],
   exports: [
     DxMapComponent,
@@ -792,6 +792,8 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
   ]
 })
 export class DxMapModule { }
+
+export * from 'devextreme-angular/ui/map/nested';
 
 import type * as DxMapTypes from "devextreme/ui/map_types";
 export { DxMapTypes };

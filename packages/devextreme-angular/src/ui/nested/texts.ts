@@ -16,6 +16,7 @@ import {
 
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxoGanttHeaderFilterTexts } from './base/gantt-header-filter-texts';
@@ -23,8 +24,10 @@ import { DxoGanttHeaderFilterTexts } from './base/gantt-header-filter-texts';
 
 @Component({
     selector: 'dxo-texts',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost],
     inputs: [
         'fix',
@@ -116,7 +119,7 @@ export class DxoTextsComponent extends DxoGanttHeaderFilterTexts implements OnDe
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoTextsComponent
   ],
   exports: [

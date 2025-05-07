@@ -550,7 +550,7 @@ export const GroupingHeaderPanelExtender = (Base: ModuleType<HeaderPanel>) => cl
     return 'group';
   }
 
-  private getContextMenuItems(options) {
+  public getContextMenuItems(options) {
     const that = this;
     const contextMenuEnabled = that.option('grouping.contextMenuEnabled');
     const $groupedColumnElement = $(options.targetElement).closest(`.${CLASSES.groupPanelItem}`);

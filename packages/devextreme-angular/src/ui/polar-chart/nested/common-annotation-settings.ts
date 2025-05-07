@@ -22,6 +22,7 @@ import { DashStyle, Font, TextOverflow, AnnotationType, WordWrap } from 'devextr
 import { dxPolarChartAnnotationConfig } from 'devextreme/viz/polar_chart';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
     extractTemplate,
     DxTemplateDirective,
@@ -33,8 +34,10 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-polar-chart-common-annotation-settings',
+    standalone: true,
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost, DxTemplateHost]
 })
 export class DxoPolarChartCommonAnnotationSettingsComponent extends NestedOption implements AfterViewInit, OnDestroy, OnInit,
@@ -333,7 +336,7 @@ export class DxoPolarChartCommonAnnotationSettingsComponent extends NestedOption
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoPolarChartCommonAnnotationSettingsComponent
   ],
   exports: [

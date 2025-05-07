@@ -15,6 +15,7 @@ import {
 import { HtmlEditorImageUploadTab } from 'devextreme/ui/html_editor';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
@@ -22,8 +23,10 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxi-html-editor-tab',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxiHtmlEditorTabComponent extends CollectionNestedOption {
@@ -57,7 +60,7 @@ export class DxiHtmlEditorTabComponent extends CollectionNestedOption {
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiHtmlEditorTabComponent
   ],
   exports: [

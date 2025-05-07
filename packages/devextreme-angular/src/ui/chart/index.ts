@@ -240,9 +240,11 @@ import { DxiChartValueAxisComponent } from 'devextreme-angular/ui/chart/nested';
  */
 @Component({
     selector: 'dx-chart',
+    standalone: true,
     template: '',
     styles: [ ' :host {  display: block; }'],
     host: { ngSkipHydration: 'true' },
+    imports: [ DxIntegrationModule ],
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -1649,6 +1651,7 @@ export class DxChartComponent extends DxComponent implements OnDestroy, OnChange
 
 @NgModule({
   imports: [
+    DxChartComponent,
     DxoAdaptiveLayoutModule,
     DxoAnimationModule,
     DxiAnnotationModule,
@@ -1827,9 +1830,6 @@ export class DxChartComponent extends DxComponent implements OnDestroy, OnChange
     DxoChartZoomAndPanModule,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxChartComponent
   ],
   exports: [
     DxChartComponent,
@@ -2013,6 +2013,8 @@ export class DxChartComponent extends DxComponent implements OnDestroy, OnChange
   ]
 })
 export class DxChartModule { }
+
+export * from 'devextreme-angular/ui/chart/nested';
 
 import type * as DxChartTypes from "devextreme/viz/chart_types";
 export { DxChartTypes };

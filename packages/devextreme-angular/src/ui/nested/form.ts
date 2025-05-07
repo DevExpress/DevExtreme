@@ -21,6 +21,7 @@ import {
 
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxoFormOptions } from './base/form-options';
@@ -29,8 +30,10 @@ import { DxiItemComponent } from './item-dxi';
 
 @Component({
     selector: 'dxo-form',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost],
     inputs: [
         'accessKey',
@@ -121,7 +124,7 @@ export class DxoFormComponent extends DxoFormOptions implements OnDestroy, OnIni
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoFormComponent
   ],
   exports: [

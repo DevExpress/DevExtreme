@@ -99,8 +99,10 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
  */
 @Component({
     selector: 'dx-lookup',
+    standalone: true,
     template: '',
     host: { ngSkipHydration: 'true' },
+    imports: [ DxIntegrationModule ],
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -1809,6 +1811,7 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
 
 @NgModule({
   imports: [
+    DxLookupComponent,
     DxoDropDownOptionsModule,
     DxoAnimationModule,
     DxoHideModule,
@@ -1842,9 +1845,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
     DxiLookupToolbarItemModule,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxLookupComponent
   ],
   exports: [
     DxLookupComponent,
@@ -1883,6 +1883,8 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
   ]
 })
 export class DxLookupModule { }
+
+export * from 'devextreme-angular/ui/lookup/nested';
 
 import type * as DxLookupTypes from "devextreme/ui/lookup_types";
 export { DxLookupTypes };

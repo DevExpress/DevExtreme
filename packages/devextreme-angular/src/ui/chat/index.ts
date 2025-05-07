@@ -72,8 +72,10 @@ import { DxiChatTypingUserComponent } from 'devextreme-angular/ui/chat/nested';
  */
 @Component({
     selector: 'dx-chat',
+    standalone: true,
     template: '',
     host: { ngSkipHydration: 'true' },
+    imports: [ DxIntegrationModule ],
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -833,6 +835,7 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
 
 @NgModule({
   imports: [
+    DxChatComponent,
     DxiAlertModule,
     DxoDayHeaderFormatModule,
     DxiItemModule,
@@ -849,9 +852,6 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
     DxoChatUserModule,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxChatComponent
   ],
   exports: [
     DxChatComponent,
@@ -873,6 +873,8 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
   ]
 })
 export class DxChatModule { }
+
+export * from 'devextreme-angular/ui/chat/nested';
 
 import type * as DxChatTypes from "devextreme/ui/chat_types";
 export { DxChatTypes };

@@ -11,6 +11,8 @@ $chat-border-radius: $base-border-radius !default;
 $chat-bubble-border-radius: $base-border-radius !default;
 $chat-bubble-padding: null !default;
 $chat-bubble-container-gap: 4px !default;
+$chat-bubble-delete-gap: null !default;
+$chat-bubble-delete-icon-size: null !default;
 $chat-messagebox-padding: null !default;
 $chat-messagebox-textarea-border-radius: $texteditor-input-border-radius !default;
 $chat-messagebox-gap: 8px !default;
@@ -24,10 +26,17 @@ $chat-messagegroup-alignment-start-template: auto 82.5% 1fr !default;
 $chat-messagegroup-alignment-start-gap: 12px !default;
 $chat-header-padding: 20px !default;
 $chat-information-font-size: 12px !default;
+$chat-information-icon-size: 12px !default;
+$chat-information-edited-gap: 2px !default;
 $chat-alerts-padding-block: null !default;
 $chat-alerts-padding-inline: 8px !default;
 $chat-alerts-row-gap: null !default;
 $chat-alert-padding-block: null !default;
+
+$chat-message-editing-preview-caption-font-size: 12px !default;
+$chat-message-editing-preview-content-row-gap: null !default;
+$chat-message-editing-preview-content-padding-inline: null !default;
+$chat-message-editing-preview-border-width: 3px !default;
 
 $chat-messagelist-empty-icon-box-size: null !default;
 $chat-messagelist-empty-icon-size: null !default;
@@ -58,6 +67,8 @@ $chat-confirmation-popup-toolbar-gap: null !default;
 
 @if $size == "default" {
   $chat-bubble-padding: 8px 12px !default;
+  $chat-bubble-delete-gap: 4px !default;
+  $chat-bubble-delete-icon-size: 18px !default;
   $chat-messagebox-padding: 20px !default;
   $chat-messagelist-padding: 20px !default;
   $chat-messagegroup-padding: 24px !default;
@@ -65,6 +76,9 @@ $chat-confirmation-popup-toolbar-gap: null !default;
   $chat-alerts-padding-block: 16px !default;
   $chat-alerts-row-gap: 4px !default;
   $chat-alert-padding-block: 9px !default;
+
+  $chat-message-editing-preview-content-padding-inline: 12px !default;
+  $chat-message-editing-preview-content-row-gap: 4px !default;
 
   $chat-messagelist-empty-icon-box-size: 64px !default;
   $chat-messagelist-empty-icon-size: 40px !default;
@@ -80,11 +94,13 @@ $chat-confirmation-popup-toolbar-gap: null !default;
   $chat-typingindicator-padding: $chat-messagegroup-padding !default;
 
   $chat-confirmation-popup-content-padding: 0 !default;
-  $chat-confirmation-popup-toolbar-gap: 16px !default;
+  $chat-confirmation-popup-toolbar-gap: 8px !default;
 }
 
 @else if $size == "compact" {
   $chat-bubble-padding: 6px 8px !default;
+  $chat-bubble-delete-gap: 2px !default;
+  $chat-bubble-delete-icon-size: 14px !default;
   $chat-messagebox-padding: 16px !default;
   $chat-messagelist-padding: 16px !default;
   $chat-messagegroup-padding: 12px !default;
@@ -92,6 +108,9 @@ $chat-confirmation-popup-toolbar-gap: null !default;
   $chat-alerts-padding-block: 12px !default;
   $chat-alerts-row-gap: 2px !default;
   $chat-alert-padding-block: 6px !default;
+
+  $chat-message-editing-preview-content-padding-inline: 8px !default;
+  $chat-message-editing-preview-content-row-gap: 2px !default;
 
   $chat-messagelist-empty-icon-box-size: 48px !default;
   $chat-messagelist-empty-icon-size: 32px !default;
@@ -107,5 +126,5 @@ $chat-confirmation-popup-toolbar-gap: null !default;
   $chat-typingindicator-padding: $chat-messagegroup-padding !default;
 
   $chat-confirmation-popup-content-padding: $generic-popup-content-padding !default;
-  $chat-confirmation-popup-toolbar-gap: 8px !default;
+  $chat-confirmation-popup-toolbar-gap: 4px !default;
 }

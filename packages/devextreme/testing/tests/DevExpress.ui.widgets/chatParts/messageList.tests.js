@@ -1112,7 +1112,7 @@ QUnit.module('MessageList', () => {
                 target: CHAT_MESSAGELIST_CONTEXT_MENU_TARGET,
                 cssClass: CHAT_MESSAGELIST_CONTEXT_MENU_CONTENT_CLASS,
                 visible: false,
-                overlayContainer: this.getScrollView().content(),
+                overlayContainer: this.getScrollView().container(),
                 visualContainer: this.getScrollView().container(),
             };
 

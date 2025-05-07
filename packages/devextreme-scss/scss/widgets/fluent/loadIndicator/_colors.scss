@@ -15,25 +15,8 @@ $load-indicator-segment-bg-color: $base-accent !default;
 * $type color
 */
 $load-indicator-inner-segment-border-color: null !default;
-
-/**
-* $name 30. Indicator sparkle animation background color 1
-* $type color
-*/
 $load-indicator-animation-sparkle-bg-color1: null !default;
-
-
-/**
-* $name 31. Indicator sparkle animation background color 2
-* $type color
-*/
 $load-indicator-animation-sparkle-bg-color2: null !default;
-
-
-/**
-* $name 32. Indicator sparkle animation background color 3
-* $type color
-*/
 $load-indicator-animation-sparkle-bg-color3: null !default;
 
 @if $mode == "light" {

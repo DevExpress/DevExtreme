@@ -28,6 +28,7 @@ export class RenderData {
 
 @Directive({
   selector: '[dxTemplate]',
+  standalone: true,
 })
 export class DxTemplateDirective {
   @Input()
@@ -92,7 +93,7 @@ export class DxTemplateDirective {
 }
 
 @NgModule({
-  declarations: [DxTemplateDirective],
+  imports: [DxTemplateDirective],
   exports: [DxTemplateDirective],
 })
 export class DxTemplateModule { }

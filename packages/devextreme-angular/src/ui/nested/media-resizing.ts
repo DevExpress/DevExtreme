@@ -16,6 +16,7 @@ import {
 
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxoHtmlEditorMediaResizing } from './base/html-editor-media-resizing';
@@ -23,8 +24,10 @@ import { DxoHtmlEditorMediaResizing } from './base/html-editor-media-resizing';
 
 @Component({
     selector: 'dxo-media-resizing',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost],
     inputs: [
         'allowedTargets',
@@ -58,7 +61,7 @@ export class DxoMediaResizingComponent extends DxoHtmlEditorMediaResizing implem
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoMediaResizingComponent
   ],
   exports: [

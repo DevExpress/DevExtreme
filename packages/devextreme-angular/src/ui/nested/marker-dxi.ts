@@ -17,6 +17,7 @@ import {
 
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
@@ -25,8 +26,10 @@ import { DxiLocationComponent } from './location-dxi';
 
 @Component({
     selector: 'dxi-marker',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxiMarkerComponent extends CollectionNestedOption {
@@ -92,7 +95,7 @@ export class DxiMarkerComponent extends CollectionNestedOption {
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiMarkerComponent
   ],
   exports: [

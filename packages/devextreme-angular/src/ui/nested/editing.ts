@@ -24,6 +24,7 @@ import { Properties as dxFormOptions } from 'devextreme/ui/form';
 import { Properties as dxPopupOptions } from 'devextreme/ui/popup';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
@@ -32,8 +33,10 @@ import { DxiChangeComponent } from './change-dxi';
 
 @Component({
     selector: 'dxo-editing',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxoEditingComponent extends NestedOption implements OnDestroy, OnInit  {
@@ -402,7 +405,7 @@ export class DxoEditingComponent extends NestedOption implements OnDestroy, OnIn
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoEditingComponent
   ],
   exports: [

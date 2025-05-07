@@ -236,6 +236,12 @@ class Stepper extends CollectionWidgetAsync<StepperProperties> {
     return STEP_SELECTED_CLASS;
   }
 
+  _isItemSelected(index: number): boolean {
+    const { items = [], selectedItem } = this.option();
+
+    return selectedItem === items[index];
+  }
+
   _itemDataKey(): string {
     return STEPPER_ITEM_DATA_KEY;
   }

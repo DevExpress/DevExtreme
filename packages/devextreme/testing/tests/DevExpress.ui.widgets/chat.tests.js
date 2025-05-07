@@ -15,4 +15,5 @@ import './chatParts/messageGroup.tests.js';
 import './chatParts/messageList.tests.js';
 import './chatParts/alertList.tests.js';
 import './chatParts/typingIndicator.tests.js';
+import './chatParts/editingPreview.tests.js';
 import './chatParts/chat.tests.js';
