@@ -989,6 +989,7 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
       background-color: $datagrid-row-removed-bg;
       color: $datagrid-cell-removed-text-color;
     }
+
     .dx-row-removed:not(:first-child) > td {
       padding-top: $fluent-grid-base-cell-vertical-padding - 1px;
     }
