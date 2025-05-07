@@ -530,6 +530,7 @@
         "dxHtmlEditor-borderStyleInset": "inset",
         "dxHtmlEditor-borderStyleOutset": "outset",
         "dxHtmlEditor-aiDialogTitle": "AI Assistant",
+        "dxHtmlEditor-aiDialogError": "Something went wrong. Please try again.",
         "dxHtmlEditor-aiReplace": "Replace",
         "dxHtmlEditor-aiInsertAbove": "Insert above",
         "dxHtmlEditor-aiInsertBelow": "Insert below",
