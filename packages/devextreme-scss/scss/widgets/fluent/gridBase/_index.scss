@@ -797,10 +797,10 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
 
     td .dx-editor-container .dx-filter-range-content {
       padding:
-              $fluent-grid-base-cell-vertical-padding
-              $fluent-grid-base-cell-horizontal-padding
-              $fluent-grid-base-cell-vertical-padding
-              $fluent-grid-base-texteditor-input-padding;
+        $fluent-grid-base-cell-vertical-padding
+        $fluent-grid-base-cell-horizontal-padding
+        $fluent-grid-base-cell-vertical-padding
+        $fluent-grid-base-texteditor-input-padding;
     }
 
     .dx-#{$widget-name} .dx-#{$widget-name}-table & {
@@ -1216,14 +1216,14 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
       border-radius: $button-border-radius;
 
       @include dx-button-styling-variant(
-                      $button-danger-bg,
-                      $button-danger-color,
-                      $button-danger-color,
-                      $button-danger-color,
-                      $button-danger-bg,
-                      $button-danger-bg,
-                      $button-danger-bg,
-                      $button-danger-color
+        $button-danger-bg,
+        $button-danger-color,
+        $button-danger-color,
+        $button-danger-color,
+        $button-danger-bg,
+        $button-danger-bg,
+        $button-danger-bg,
+        $button-danger-color
       );
 
       margin: 0 0 0 1px;

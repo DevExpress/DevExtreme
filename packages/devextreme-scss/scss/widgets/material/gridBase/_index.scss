@@ -770,10 +770,10 @@ $material-grid-base-group-panel-message-line-height: $material-button-text-line-
 
     td .dx-editor-container .dx-filter-range-content {
       padding:
-              $material-grid-base-cell-vertical-padding
-              $material-grid-base-cell-horizontal-padding
-              $material-grid-base-cell-vertical-padding
-              $material-grid-base-texteditor-input-padding;
+        $material-grid-base-cell-vertical-padding
+        $material-grid-base-cell-horizontal-padding
+        $material-grid-base-cell-vertical-padding
+        $material-grid-base-texteditor-input-padding;
     }
 
     .dx-#{$widget-name} .dx-#{$widget-name}-table & {
@@ -1188,12 +1188,12 @@ $material-grid-base-group-panel-message-line-height: $material-button-text-line-
       border-radius: $button-border-radius;
 
       @include dx-button-styling-variant(
-                      $button-danger-color,
-                      $button-danger-bg,
-                      $button-danger-bg,
-                      $button-danger-bg,
-                      $button-danger-bg,
-                      $button-danger-color
+        $button-danger-color,
+        $button-danger-bg,
+        $button-danger-bg,
+        $button-danger-bg,
+        $button-danger-bg,
+        $button-danger-color
       );
 
       margin: 0 0 0 1px;

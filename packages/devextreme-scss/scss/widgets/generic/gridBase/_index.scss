@@ -998,12 +998,12 @@ $generic-grid-base-cell-input-height: round($generic-base-line-height * $generic
       margin-left: 1px;
 
       @include dx-button-styling-variant(
-                      $button-danger-bg, $button-danger-border-color, $button-danger-color,
-                      darken($button-danger-bg, 10%),
-                      darken($button-danger-bg, 15%),
-                      darken($button-danger-bg, 20%),
-                      $button-danger-color,
-                      $button-danger-color
+        $button-danger-bg, $button-danger-border-color, $button-danger-color,
+        darken($button-danger-bg, 10%),
+        darken($button-danger-bg, 15%),
+        darken($button-danger-bg, 20%),
+        $button-danger-color,
+        $button-danger-color
       );
 
       > .dx-button-content {
