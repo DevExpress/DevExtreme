@@ -766,8 +766,11 @@ $generic-grid-base-cell-input-height: round($generic-base-line-height * $generic
     .dx-row-removed > td {
       background-color: $datagrid-row-removed-bg;
       border-top: 1px solid $datagrid-cell-removed-border-color;
-      border-bottom: 1px solid $datagrid-cell-removed-border-color;
       color: $datagrid-cell-removed-text-color;
+    }
+    .dx-row-removed:not(:first-child) > td {
+      border-bottom: 1px solid $datagrid-cell-removed-border-color;
+      padding-bottom: $generic-grid-base-cell-padding - 1px;
     }
 
     @include dx-set-checkbox-border-color-as-background();
@@ -1023,7 +1026,7 @@ $generic-grid-base-cell-input-height: round($generic-base-line-height * $generic
   }
 
   .dx-#{$widget-name}-rowsview.dx-#{$widget-name}-sticky-columns {
-    .dx-data-row:not(.dx-row-lines, .dx-edit-row, .dx-selection, .dx-row-focused) > td:not(.dx-editor-cell, .dx-master-detail-cell) {
+    .dx-data-row:not(.dx-row-lines, .dx-edit-row, .dx-selection, .dx-row-focused, .dx-row-removed) > td:not(.dx-editor-cell, .dx-master-detail-cell) {
       padding-top: $generic-grid-base-cell-padding + 1px;
     }
 
