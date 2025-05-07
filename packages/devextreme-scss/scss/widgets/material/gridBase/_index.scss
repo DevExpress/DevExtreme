@@ -770,10 +770,10 @@ $material-grid-base-group-panel-message-line-height: $material-button-text-line-
 
     td .dx-editor-container .dx-filter-range-content {
       padding:
-        $material-grid-base-cell-vertical-padding
-        $material-grid-base-cell-horizontal-padding
-        $material-grid-base-cell-vertical-padding
-        $material-grid-base-texteditor-input-padding;
+              $material-grid-base-cell-vertical-padding
+              $material-grid-base-cell-horizontal-padding
+              $material-grid-base-cell-vertical-padding
+              $material-grid-base-texteditor-input-padding;
     }
 
     .dx-#{$widget-name} .dx-#{$widget-name}-table & {
@@ -965,6 +965,10 @@ $material-grid-base-group-panel-message-line-height: $material-button-text-line-
       color: $datagrid-cell-removed-text-color;
     }
 
+    .dx-row-removed:not(:first-child) > td {
+      padding-top: $material-grid-base-cell-vertical-padding - 1px;
+    }
+
     .dx-adaptive-detail-row {
       .dx-field-item-label {
         padding-top: 0;
@@ -1113,7 +1117,7 @@ $material-grid-base-group-panel-message-line-height: $material-button-text-line-
     }
 
     &.dx-#{$widget-name}-sticky-columns {
-      .dx-data-row:not(.dx-row-lines, .dx-edit-row, .dx-selection, .dx-row-focused) > td:not(.dx-editor-cell, .dx-master-detail-cell) {
+      .dx-data-row:not(.dx-row-lines, .dx-edit-row, .dx-selection, .dx-row-focused, .dx-row-removed) > td:not(.dx-editor-cell, .dx-master-detail-cell) {
         padding-top: $material-grid-base-cell-vertical-padding + 1px;
       }
 
@@ -1184,12 +1188,12 @@ $material-grid-base-group-panel-message-line-height: $material-button-text-line-
       border-radius: $button-border-radius;
 
       @include dx-button-styling-variant(
-        $button-danger-color,
-        $button-danger-bg,
-        $button-danger-bg,
-        $button-danger-bg,
-        $button-danger-bg,
-        $button-danger-color
+                      $button-danger-color,
+                      $button-danger-bg,
+                      $button-danger-bg,
+                      $button-danger-bg,
+                      $button-danger-bg,
+                      $button-danger-color
       );
 
       margin: 0 0 0 1px;
