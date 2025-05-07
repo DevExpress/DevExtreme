@@ -46,10 +46,14 @@ $datagrid-text-stub-background-image-path: null !default;
   border-color: $datagrid-drag-header-border-color;
 }
 
-@mixin dx-datagrid-error-message() {
-  background-color: $datagrid-row-error-bg;
+@mixin dx-datagrid-error-popup() {
   white-space: normal;
   word-wrap: break-word;
+}
+
+@mixin dx-datagrid-error-message() {
+  background-color: $datagrid-row-error-bg;
+  @include dx-datagrid-error-popup();
 }
 
 .dx-datagrid {
@@ -210,8 +214,12 @@ $datagrid-text-stub-background-image-path: null !default;
       padding: 0;
     }
 
-    .dx-error-message, .dx-overlay-content {
+    .dx-error-message {
       @include dx-datagrid-error-message();
+    }
+
+    .dx-overlay-content {
+      @include dx-datagrid-error-popup();
     }
   }
 
