@@ -19,11 +19,12 @@ test('items inside toolbar menu should stretch', async (t) => {
   const scheduler = new Scheduler('#container');
 
   await t.click(scheduler.toolbar.menuButton);
-  await t.expect(await compareScreenshot(t, 'scheduler-toolbar-menu.png', scheduler.toolbar.menuOverlay)).ok();
+  await t.expect(await compareScreenshot(t, 'scheduler-toolbar-menu.png', scheduler.element)).ok();
 }).before(async () => {
   await changeTheme('fluent.blue.light');
   return createWidget('dxScheduler', {
     width: 320,
+    currentDate: new Date('2025-05-02T07:59:01.167Z'),
     toolbar: {
       items: ['today', 'dateNavigator', ...buttons, {
         location: 'after',
@@ -32,15 +33,17 @@ test('items inside toolbar menu should stretch', async (t) => {
       }],
     },
   });
+}).after(async () => {
+  await changeTheme('generic.light');
 });
 
 [
-  Themes.genericLight,
-  Themes.genericLightCompact,
-  Themes.materialBlue,
-  Themes.materialBlueCompact,
-  Themes.fluentBlue,
   Themes.fluentBlueCompact,
+  Themes.fluentBlue,
+  Themes.materialBlueCompact,
+  Themes.materialBlue,
+  Themes.genericLightCompact,
+  Themes.genericLight,
 ].forEach((theme) => {
   test('Scheduler header should have correct sizes', async (t) => {
     const scheduler = new Scheduler('#container');
@@ -49,7 +52,10 @@ test('items inside toolbar menu should stretch', async (t) => {
   }).before(async () => {
     await changeTheme(theme);
     return createWidget('dxScheduler', {
+      currentDate: new Date('2025-05-02T07:59:01.167Z'),
       toolbar: { items: ['today', 'dateNavigator', ...buttons, 'viewSwitcher'] },
     });
+  }).after(async () => {
+    await changeTheme('generic.light');
   });
 });

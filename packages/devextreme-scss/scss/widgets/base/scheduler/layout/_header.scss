@@ -4,6 +4,7 @@ $arrow-down: "\f016";
   $border,
 ) {
   border: $border;
+  border-bottom-color: transparent;
   position: relative;
   z-index: 1;
   width: 100%;
@@ -29,17 +30,13 @@ $arrow-down: "\f016";
   $height,
   $padding,
   $item-padding,
-  $border,
 ) {
   padding: $padding;
 
   .dx-toolbar {
-    &:not(.dx-toolbar-multiline) {
-      @if $border {
-        height: $height - 2px;
-      } @else {
-        height: $height;
-      }
+    &:not(.dx-toolbar-multiline),
+    &.dx-toolbar-multiline .dx-toolbar-item {
+      height: $height;
     }
 
     .dx-toolbar-before .dx-toolbar-item-content {
