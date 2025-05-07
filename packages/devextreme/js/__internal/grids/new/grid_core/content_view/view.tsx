@@ -5,8 +5,8 @@
 import type dxScrollable from '@js/ui/scroll_view/ui.scrollable';
 import type { ScrollEventInfo } from '@js/ui/scroll_view/ui.scrollable';
 import { computed, signal } from '@preact/signals-core';
-import { ContextMenuController } from '@ts/grids/new/card_view/context_menu/index';
 import { ColumnsController } from '@ts/grids/new/grid_core/columns_controller/columns_controller';
+import { BaseContextMenuController } from '@ts/grids/new/grid_core/context_menu/controller';
 import { View } from '@ts/grids/new/grid_core/core/view';
 import { DataController } from '@ts/grids/new/grid_core/data_controller/index';
 import { ErrorController } from '@ts/grids/new/grid_core/error_controller/error_controller';
@@ -21,8 +21,13 @@ import { OptionsController } from '../options_controller/options_controller';
 
 export abstract class ContentView<TProps extends {}> extends View<TProps> {
   private readonly isNoData = computed(
-    () => !this.dataController.isLoading.value
-      && this.dataController.items.value.length === 0,
+    () => {
+      const { isLoading, items } = this.dataController;
+      const isEmptyDataLoaded = !isLoading.value && items.value.length === 0;
+      const isNoVisibleColumns = this.columnsController.visibleColumns.value.length === 0;
+
+      return isEmptyDataLoaded || isNoVisibleColumns;
+    },
   );
 
   public readonly scrollableRef = createRef<dxScrollable>();
@@ -43,7 +48,7 @@ export abstract class ContentView<TProps extends {}> extends View<TProps> {
     SelectionController,
     ItemsController,
     EditingController,
-    ContextMenuController,
+    BaseContextMenuController,
     SearchUIController,
     KeyboardNavigationController,
   ] as const;
@@ -56,7 +61,7 @@ export abstract class ContentView<TProps extends {}> extends View<TProps> {
     protected readonly selectionController: SelectionController,
     protected readonly itemsController: ItemsController,
     protected readonly editingController: EditingController,
-    protected readonly contextMenuController: ContextMenuController,
+    protected readonly contextMenuController: BaseContextMenuController,
     protected readonly searchUIController: SearchUIController,
     protected readonly keyboardNavigationController: KeyboardNavigationController,
   ) {
@@ -103,7 +108,12 @@ export abstract class ContentView<TProps extends {}> extends View<TProps> {
         showScrollbar: showScrollbar.value,
         useNative: useNativeConfig.value === 'auto' ? undefined : useNativeConfig.value,
       },
+      showContextMenu: this.showContextMenu.bind(this),
     };
+  }
+
+  private showContextMenu(e: MouseEvent): void {
+    this.contextMenuController.show(e, 'content');
   }
 
   private onScroll(e: ScrollEventInfo<unknown>): void {

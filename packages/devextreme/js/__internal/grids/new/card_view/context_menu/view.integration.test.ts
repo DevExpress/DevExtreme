@@ -30,7 +30,7 @@ const SELECTORS = {
   contextMenuContent: '.dx-context-menu.dx-overlay-content',
   toolbar: '.dx-widget.dx-toolbar',
   headerPanel: '.dx-cardview-headerpanel-content',
-  contentView: '.dx-cardview-content',
+  contentView: '.dx-gridcore-contentview',
   headerItem: '.dx-cardview-header-item',
   card: '.dx-cardview-card',
   menuItem: '.dx-menu-item',
