@@ -57,6 +57,7 @@ class MessageBubble extends Widget<Properties> {
     const {
       template,
       message,
+      isDeleted = false,
     } = this.option();
 
     this.$element().removeClass(CHAT_MESSAGEBUBBLE_DELETED_CLASS);
@@ -70,7 +71,7 @@ class MessageBubble extends Widget<Properties> {
       return;
     }
 
-    if (message.isDeleted) {
+    if (isDeleted) {
       this.$element().addClass(CHAT_MESSAGEBUBBLE_DELETED_CLASS);
 
       const icon = $('<div>')
@@ -102,7 +103,7 @@ class MessageBubble extends Widget<Properties> {
     }
   }
 
-  _updateMessageData(property: string, value: string | boolean | undefined): void {
+  _updateMessageData(property: string, value: Message | string | boolean | undefined): void {
     const messageData = this.$element().data(MESSAGE_DATA_KEY) || {};
 
     messageData[property] = value;
@@ -113,12 +114,15 @@ class MessageBubble extends Widget<Properties> {
     const { name, value } = args;
 
     switch (name) {
-      case 'message':
       case 'template':
         this._updateContent();
         break;
       case 'isEdited':
         this._updateMessageData(name, value);
+        break;
+      case 'message':
+        this._updateMessageData(name, value as Message);
+        this._updateContent();
         break;
       case 'isDeleted':
         this._updateMessageData(name, value);

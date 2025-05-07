@@ -40,10 +40,10 @@ QUnit.module('MessageBubble', moduleConfig, () => {
         });
 
         QUnit.test('root element should switch classes when deletion and undo happens', function(assert) {
-            this.instance.option('message', { isDeleted: true });
+            this.instance.option('isDeleted', true);
             assert.strictEqual(this.$element.hasClass(CHAT_MESSAGEBUBBLE_DELETED_CLASS), true, 'root element has deleted class');
 
-            this.instance.option('message', { isDeleted: false });
+            this.instance.option('isDeleted', false);
             assert.strictEqual(this.$element.hasClass(CHAT_MESSAGEBUBBLE_DELETED_CLASS), false, 'root element does not have deleted class');
         });
 
@@ -74,7 +74,7 @@ QUnit.module('MessageBubble', moduleConfig, () => {
 
                 this.reinit();
 
-                this.instance.option('message', { isDeleted: true });
+                this.instance.option('isDeleted', true);
 
                 const $content = this.$element.find(`.${CHAT_MESSAGEBUBBLE_CONTENT_CLASS}`);
                 assert.strictEqual($content.text(), deletedMessageText, 'deleted text is correct');
