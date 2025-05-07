@@ -33,6 +33,7 @@ export interface PaginationContentProps extends PaginationProps {
   allowedPageSizesRef?: RefObject<HTMLDivElement>;
   pagesRef?: RefObject<HTMLElement>;
   infoTextRef?: RefObject<HTMLDivElement>;
+  _getParentComponentRootNode?: () => void;
 }
 
 export const PaginationContentDefaultProps: PaginationContentProps = {
@@ -86,14 +87,32 @@ export class PaginationContent extends InfernoComponent<PaginationContentProps> 
     }
   }
 
+  private getWidgetRootElement(): HTMLElement {
+    return this.widgetRootElementRef?.current as HTMLElement;
+  }
+
   private createFakeInstance(): {
     option: () => boolean;
     element: () => HTMLElement | null;
+    component: any;
     _createActionByOption: () => (e: any) => void;
   } {
     return {
       option: (): boolean => false,
-      element: (): HTMLElement | null => this.widgetRootElementRef?.current as HTMLElement,
+      element: (): HTMLElement | null => this.getWidgetRootElement(),
+      // NOTE: Fix of the T1285596
+      //
+      // 1) For Pagination used inside the DataGrid
+      // In this case the instance element should be
+      // DataGrid for correct keyboard shortcuts handling.
+      //
+      // 2) For standalone Pagination pass the instance mock
+      // In this case the element should be Pagination root node
+      //
+      // See the ui/shared/accessibility.js "selectView" util function for more details.
+      component: this.props._getParentComponentRootNode
+        ? { element: () => this.props._getParentComponentRootNode?.() }
+        : { element: () => this.getWidgetRootElement() },
 
       _createActionByOption: () => (e: any) => {
         this.props.onKeyDown?.(e);
@@ -106,6 +125,7 @@ export class PaginationContent extends InfernoComponent<PaginationContentProps> 
       registerKeyboardAction:
         (element: HTMLElement, action: EventCallback): DisposeEffectReturn => {
           const fakePaginationInstance = this.createFakeInstance();
+          // TODO Pager: Get rid of this utils usage
           return registerKeyboardAction('pager', fakePaginationInstance, element, undefined, action);
         },
     };

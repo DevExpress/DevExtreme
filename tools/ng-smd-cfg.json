@@ -5,7 +5,7 @@
     "mutations": [
         {
             "kind": "remove",
-            "uid": "/card_view"
+            "uid": "/scheduler:Toolbar"
         }
     ]
 }

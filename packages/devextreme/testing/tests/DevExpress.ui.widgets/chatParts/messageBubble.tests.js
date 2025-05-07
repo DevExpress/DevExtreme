@@ -1,7 +1,9 @@
 import $ from 'jquery';
 import messageLocalization from 'common/core/localization/message';
 
-import MessageBubble from '__internal/ui/chat/messagebubble';
+import MessageBubble, {
+    MESSAGE_DATA_KEY
+} from '__internal/ui/chat/messagebubble';
 
 const CHAT_MESSAGEBUBBLE_CONTENT_CLASS = 'dx-chat-messagebubble-content';
 
@@ -59,6 +61,20 @@ QUnit.module('MessageBubble', moduleConfig, () => {
             this.instance.option('isDeleted', true);
 
             assert.strictEqual(this.$element.text(), messageLocalization.format('dxChat-deletedMessageText'));
+        });
+
+        [
+            { name: 'text', newValue: 'updated message text' },
+            { name: 'isDeleted', newValue: true },
+            { name: 'isEdited', newValue: true },
+        ].forEach(({ name, newValue }) => {
+            QUnit.test(`message data should be updated after changing ${name} option at runtime`, function(assert) {
+                this.reinit({});
+
+                this.instance.option(name, newValue);
+
+                assert.strictEqual(this.instance.$element().data(MESSAGE_DATA_KEY)[name], newValue, 'message data is updated');
+            });
         });
 
         QUnit.test('template render function should be called if it has been passed', function(assert) {

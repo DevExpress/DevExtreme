@@ -16,7 +16,7 @@ import Widget from '@ts/core/widget/widget';
 import type { ItemRenderInfo } from './collection/collection_widget.base';
 import type { CollectionWidgetEditProperties } from './collection/m_collection_widget.edit';
 
-const BUTTON_GROUP_CLASS = 'dx-buttongroup';
+export const BUTTON_GROUP_CLASS = 'dx-buttongroup';
 const BUTTON_GROUP_WRAPPER_CLASS = `${BUTTON_GROUP_CLASS}-wrapper`;
 const BUTTON_GROUP_ITEM_CLASS = `${BUTTON_GROUP_CLASS}-item`;
 const BUTTON_GROUP_FIRST_ITEM_CLASS = `${BUTTON_GROUP_CLASS}-first-item`;
@@ -119,6 +119,11 @@ class ButtonCollection extends CollectionWidget<ButtonCollectionProperties> {
 
   _keyboardEventBindingTarget(): dxElementWrapper {
     return this._focusTarget();
+  }
+
+  _enterKeyHandler(e: KeyboardEvent): void {
+    e.preventDefault();
+    super._enterKeyHandler(e);
   }
 
   _refreshContent(): void {

@@ -4,10 +4,11 @@ import {
 } from '../core/element';
 
 import {
-    template,
-    FirstDayOfWeek,
-    Orientation,
-    ScrollMode,
+  template,
+  FirstDayOfWeek,
+  Orientation,
+  ScrollMode,
+  ToolbarItemLocation,
 } from '../common';
 
 import DataSource, { DataSourceLike } from '../data/data_source';
@@ -22,6 +23,7 @@ import {
 
 import { DxEvent } from '../events';
 
+import { dxButtonGroupOptions, dxButtonGroupItem } from './button_group';
 import {
     CollectionWidgetItem,
 } from './collection/ui.collection_widget.base';
@@ -32,6 +34,7 @@ import dxForm from './form';
 import dxPopup from './popup';
 
 import dxSortable from './sortable';
+import { dxToolbarItem } from './toolbar';
 
 import Widget, {
     WidgetOptions,
@@ -76,6 +79,10 @@ export type CellAppointmentsLimit = 'auto' | 'unlimited';
 export type RecurrenceEditMode = 'dialog' | 'occurrence' | 'series';
 /** @public */
 export type ViewType = 'agenda' | 'day' | 'month' | 'timelineDay' | 'timelineMonth' | 'timelineWeek' | 'timelineWorkWeek' | 'week' | 'workWeek';
+/** @public */
+export type SchedulerPredefinedToolbarItem = 'today' | 'dateNavigator' | 'viewSwitcher';
+/** @public */
+export type SchedulerPredefinedDateNavigatorItem = 'prev' | 'next' | 'dateInterval';
 
 /**
  * @docid _ui_scheduler_AppointmentAddedEvent
@@ -1131,7 +1138,98 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
         */
        offset?: number;
     }>;
+    /**
+     * @docid
+     * @type dxSchedulerToolbar|undefined
+     * @default undefined
+     * @public
+     */
+    toolbar?: Toolbar | undefined;
 }
+
+/**
+ * @docid
+ * @inherits dxButtonGroupOptions
+ * @namespace DevExpress.ui.dxScheduler
+ * @public
+ */
+export type DateNavigatorItemProperties = dxButtonGroupOptions & {
+  /**
+   * @docid
+   * @type Array<dxButtonGroupItem,Enums.SchedulerPredefinedDateNavigatorItem>
+   * @public
+   */
+  items: Array<dxButtonGroupItem | SchedulerPredefinedDateNavigatorItem>;
+};
+
+/**
+ * @namespace DevExpress.ui
+ * @deprecated Use ToolbarItem instead
+ */
+export type dxSchedulerToolbarItem = ToolbarItem;
+
+/**
+ * @docid dxSchedulerToolbarItem
+ * @inherits dxToolbarItem
+ * @namespace DevExpress.ui.dxScheduler
+ * @public
+ */
+export type ToolbarItem = dxToolbarItem & {
+  /**
+   * @docid dxSchedulerToolbarItem.name
+   * @public
+   */
+  name?: SchedulerPredefinedToolbarItem;
+  /**
+   * @docid dxSchedulerToolbarItem.options
+   * @public
+   */
+  options?: DateNavigatorItemProperties | Object;
+  /**
+   * @docid dxSchedulerToolbarItem.location
+   * @public
+   */
+  location?: ToolbarItemLocation;
+};
+
+/**
+ * @namespace DevExpress.ui
+ * @deprecated Use Toolbar instead
+ */
+export type dxSchedulerToolbar = Toolbar;
+
+/**
+ * @docid dxSchedulerToolbar
+ * @namespace DevExpress.ui.dxScheduler
+ * @public
+ */
+export type Toolbar = {
+  /**
+   * @docid dxSchedulerToolbar.items
+   * @type Array<Enums.SchedulerPredefinedToolbarItem|dxSchedulerToolbarItem>
+   * @public
+   */
+  items?: Array<SchedulerPredefinedToolbarItem | ToolbarItem>;
+  /**
+   * @docid dxSchedulerToolbar.visible
+   * @default undefined
+   * @public
+   */
+  visible?: boolean | undefined;
+  /**
+   * @docid dxSchedulerToolbar.multiline
+   * @default false
+   * @public
+   */
+  multiline?: boolean;
+  /**
+   * @docid dxSchedulerToolbar.disabled
+   * @default false
+   * @public
+   */
+  disabled?: boolean;
+};
+
 /**
  * @docid
  * @inherits Widget, DataHelperMixin

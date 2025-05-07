@@ -2124,8 +2124,11 @@
             "Name": "MessageEditing",
             "Widget": "Chat",
             "DemoType": "Web",
-            "Badge": "Roadmap",
-            "RoadmapSurveyUrl": "https://www.devexpress.com/support/surveys/devextreme-roadmap-messages.xml"
+            "Badge": "New",
+            "DocUrl": "",
+            "MvcDescription": "",
+            "NetCoreDescription": "",
+            "MvcAdditionalFiles": []
           }
         ]
       },

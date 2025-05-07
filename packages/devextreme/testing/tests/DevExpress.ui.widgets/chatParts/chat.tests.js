@@ -37,7 +37,7 @@ import { CHAT_CONFIRMATION_POPUP_WRAPPER_CLASS } from '__internal/ui/chat/confir
 import { POPUP_CLASS } from '__internal/ui/popup/m_popup';
 import { BUTTON_CLASS } from '__internal/ui/button/button';
 import { isDesktopDevice } from '../../../helpers/chat.js';
-import messageLocalization from 'common/core/localization/message';
+import MessageBubble from '__internal/ui/chat/messagebubble';
 
 const CHAT_MESSAGEGROUP_CLASS = 'dx-chat-messagegroup';
 const CHAT_MESSAGELIST_CLASS = 'dx-chat-messagelist';
@@ -50,6 +50,7 @@ const CHAT_MESSAGELIST_DAY_HEADER_CLASS = 'dx-chat-messagelist-day-header';
 const CHAT_MESSAGEGROUP_INFORMATION_CLASS = 'dx-chat-messagegroup-information';
 const CHAT_MESSAGEGROUP_CONTENT_CLASS = 'dx-chat-messagegroup-content';
 const CHAT_MESSAGE_EDITED_CLASS = 'dx-chat-message-edited';
+const CHAT_MESSAGE_EDITED_HIDING_CLASS = 'dx-chat-message-edited-hiding';
 
 const CHAT_LAST_MESSAGEGROUP_ALIGNMENT_START_CLASS = 'dx-chat-last-messagegroup-alignment-start';
 const CHAT_LAST_MESSAGEGROUP_ALIGNMENT_END_CLASS = 'dx-chat-last-messagegroup-alignment-end';
@@ -427,7 +428,7 @@ QUnit.module('Chat', () => {
                 assert.strictEqual(this.$textArea.hasClass(FOCUSED_STATE_CLASS), true, 'input is focused');
             });
 
-            QUnit.skip('Input focused after context menu is hidden', function(assert) {
+            QUnit.testInActiveWindow('Input not focused after context menu is hidden by outside click', function(assert) {
                 if(!isDesktopDevice()) {
                     assert.ok(true, 'Test is not applicable for mobile devices');
                     return;
@@ -454,7 +455,7 @@ QUnit.module('Chat', () => {
                 pointerMock($bubbles.eq(0)).click();
 
                 assert.strictEqual(this.getContextMenu().option('visible'), false, 'context menu is hidden');
-                assert.strictEqual(this.$textArea.hasClass(FOCUSED_STATE_CLASS), true, 'input is focused');
+                assert.strictEqual(this.$textArea.hasClass(FOCUSED_STATE_CLASS), false, 'input is focused');
             });
 
             QUnit.testInActiveWindow('Input should be blurred after context menu is shown', function(assert) {
@@ -935,7 +936,7 @@ QUnit.module('Chat', () => {
             });
         });
 
-        QUnit.skip('editing preview should be shown after the Edit button is clicked if cancel promise rejected', function(assert) {
+        QUnit.testInActiveWindow('editing preview should be shown after the Edit button is clicked if cancel promise rejected', function(assert) {
             if(!isDesktopDevice()) {
                 assert.ok(true, 'Test is not applicable for mobile devices');
                 return;
@@ -1082,7 +1083,7 @@ QUnit.module('Chat', () => {
             }, ANIMATION_TIMEOUT);
         });
 
-        QUnit.skip('message box should have editing message text and focus after the Edit button is clicked and not cancelled', function(assert) {
+        QUnit.testInActiveWindow('message box should have editing message text and focus after the Edit button is clicked and not cancelled', function(assert) {
             if(!isDesktopDevice()) {
                 assert.ok(true, 'Test is not applicable for mobile devices');
                 return;
@@ -1107,6 +1108,37 @@ QUnit.module('Chat', () => {
 
             const $editButton = this.getContextMenuItems().eq(0);
             $editButton.trigger('dxclick');
+
+            assert.strictEqual(this.textArea.option('value'), 'b', 'input contains editing message text');
+            assert.strictEqual(this.$textArea.hasClass(FOCUSED_STATE_CLASS), true, 'input is focused');
+        });
+
+        QUnit.testInActiveWindow('message box should have editing message text and focus after the Edit was triggered from keyboard', function(assert) {
+            if(!isDesktopDevice()) {
+                assert.ok(true, 'Test is not applicable for mobile devices');
+                return;
+            }
+
+            const items = [
+                { text: 'a', author: userFirst },
+                { text: 'b', author: userSecond },
+            ];
+
+            this.reinit({
+                focusStateEnabled: true,
+                user: userSecond,
+                editing: {
+                    allowUpdating: true
+                },
+                items,
+            });
+
+            const $bubbles = this.getBubbles();
+            $bubbles.eq(1).trigger('dxcontextmenu');
+
+            keyboardMock(this.getContextMenu().itemsContainer())
+                .press('down')
+                .press('enter');
 
             assert.strictEqual(this.textArea.option('value'), 'b', 'input contains editing message text');
             assert.strictEqual(this.$textArea.hasClass(FOCUSED_STATE_CLASS), true, 'input is focused');
@@ -2736,7 +2768,7 @@ QUnit.module('Chat', () => {
         });
 
         QUnit.test('it should be possible to update isEdited state of not first message in group using push api', function(assert) {
-            const messages = [{ id: 0, text: 'message_0' }, { id: 1, text: 'message_1', isEdited: true }];
+            const messages = [{ id: 0, text: 'message_0' }, { id: 1, text: 'message_1' }];
             const timeout = 100;
 
             const store = new CustomStore({
@@ -2760,14 +2792,108 @@ QUnit.module('Chat', () => {
             const $groupContent = this.$element.find(`.${CHAT_MESSAGEGROUP_CONTENT_CLASS}`);
             let $editedMessage = $groupContent.find(`.${CHAT_MESSAGE_EDITED_CLASS}`);
 
-            assert.strictEqual($editedMessage.length, 1, 'edited text was added on init');
+            assert.strictEqual($editedMessage.length, 0, 'edited text was not added on init');
 
-            store.push([{ type: 'update', key: 1, data: { ...messages[1], isEdited: false } }]);
+            store.push([{ type: 'update', key: 1, data: { ...messages[1], isEdited: true } }]);
             this.clock.tick(timeout * 2);
 
             $editedMessage = $groupContent.find(`.${CHAT_MESSAGE_EDITED_CLASS}`);
 
-            assert.strictEqual($editedMessage.length, 0, 'edited text was removed at runtime');
+            assert.strictEqual($editedMessage.length, 1, 'edited text was added at runtime');
+        });
+
+        QUnit.test('it should be possible to update isEdited state of new message added using push api', function(assert) {
+            const messages = [];
+            const timeout = 100;
+
+            const store = new CustomStore({
+                key: 'id',
+                load: function() {
+                    const d = $.Deferred();
+                    setTimeout(function() {
+                        d.resolve([...messages]);
+                    }, timeout);
+                    return d.promise();
+                },
+                insert: (message) => {
+                    const d = $.Deferred();
+
+                    setTimeout(() => {
+                        messages.push(message);
+                        d.resolve();
+                    });
+
+                    return d.promise();
+                },
+            });
+
+            this.reinit({
+                dataSource: store,
+                reloadOnChange: false,
+            });
+
+            this.clock.tick(timeout);
+
+            store.push([{ type: 'insert', data: { id: 1, text: 'inserted message' } }]);
+
+            this.clock.tick(timeout);
+
+            let $editedMessage = this.$element.find(`.${CHAT_MESSAGE_EDITED_CLASS}`);
+
+            assert.strictEqual($editedMessage.length, 0, 'there is no edited messages');
+
+            store.push([{ type: 'update', key: 1, data: { isEdited: true } }]);
+
+            this.clock.tick(timeout);
+
+            $editedMessage = this.$element.find(`.${CHAT_MESSAGE_EDITED_CLASS}`);
+
+            assert.strictEqual($editedMessage.length, 1, 'there is an edited message');
+        });
+
+        [
+            {
+                scenario: 'in information element',
+                messages: [{ id: 0, text: 'message_0', isEdited: true }, { id: 1, text: 'message_1' }],
+            },
+            {
+                scenario: 'not in information element',
+                messages: [{ id: 0, text: 'message_0' }, { id: 1, text: 'message_1', isEdited: true }],
+            },
+        ].forEach(({ scenario, messages }) => {
+            QUnit.test(`Edited text ${scenario} should get hiding class on isEdited runtime disable`, function(assert) {
+                const timeout = 100;
+
+                const store = new CustomStore({
+                    key: 'id',
+                    load: function() {
+                        const d = $.Deferred();
+                        setTimeout(function() {
+                            d.resolve([...messages]);
+                        }, timeout);
+                        return d.promise();
+                    },
+                });
+
+                this.reinit({
+                    dataSource: store,
+                    reloadOnChange: false,
+                });
+
+                this.clock.tick(timeout);
+
+                const $editedMessage = this.$element.find(`.${CHAT_MESSAGE_EDITED_CLASS}`);
+
+                assert.strictEqual($editedMessage.length, 1, 'edited text was added on init');
+
+                store.push([{ type: 'update', key: 0, data: { ...messages[0], isEdited: false } }]);
+                store.push([{ type: 'update', key: 1, data: { ...messages[1], isEdited: false } }]);
+
+                this.clock.tick(timeout);
+
+                assert.strictEqual($editedMessage.hasClass(CHAT_MESSAGE_EDITED_HIDING_CLASS), true, 'edited text has hiding class');
+
+            });
         });
 
         QUnit.test('Message should be removed along with its group when using store.push({ type: "remove", key: "message_id" }), and the message was the last one in the group', function(assert) {
@@ -3147,6 +3273,56 @@ QUnit.module('Chat', () => {
 
             $indicator = this.$element.find(`.${SCROLLVIEW_REACHBOTTOM_INDICATOR}`);
             assert.strictEqual($indicator.is(':visible'), false, 'loading indicator is hidden');
+        });
+
+        QUnit.test('should update only the necessary changes if the new Message object is passed to store.push', function(assert) {
+            const initialMessageData = { text: 'message_1', isDeleted: false };
+            const messages = [
+                { id: 1, ...initialMessageData },
+                { id: 2, text: 'message_2' }
+            ];
+            const timeout = 400;
+
+            const store = new CustomStore({
+                key: 'id',
+                load: function() {
+                    const d = $.Deferred();
+                    setTimeout(function() {
+                        d.resolve(messages);
+                    }, timeout);
+                    return d.promise();
+                },
+            });
+
+            this.reinit({ dataSource: store });
+
+            this.clock.tick(timeout);
+
+            const bubble = MessageBubble.getInstance(this.getBubbles().eq(0));
+            const updateContentSpy = sinon.spy(bubble, '_updateContent');
+
+            [
+                { config: {}, expected: { optionChangedCallCount: 0 } },
+                { config: { ...initialMessageData }, expected: { optionChangedCallCount: 0 } },
+                { config: { text: 'new text 1', isDeleted: false }, expected: { optionChangedCallCount: 1 } },
+                { config: { text: 'new text 1', isDeleted: true }, expected: { optionChangedCallCount: 1 } },
+                { config: { text: 'new text 2', isDeleted: true }, expected: { optionChangedCallCount: 1 } },
+                { config: { text: 'new text 3', isDeleted: false }, expected: { optionChangedCallCount: 2 } },
+            ].forEach(testConfig => {
+                const { config, expected } = testConfig;
+                store.push([{ type: 'update', key: 1, data: config }]);
+
+                this.clock.tick(timeout);
+
+                assert.strictEqual(
+                    updateContentSpy.callCount,
+                    expected.optionChangedCallCount,
+                    `bubble's _updateContent was called ${expected.optionChangedCallCount} time(s) for changes: ${JSON.stringify(config)}`
+                );
+                updateContentSpy.resetHistory();
+            });
+
+            updateContentSpy.restore();
         });
     });
 });

@@ -25832,6 +25832,14 @@ declare module DevExpress.ui {
         DevExpress.common.core.events.ChangedOptionInfo;
     export type Properties = dxSchedulerOptions;
     export type RecurrenceEditMode = 'dialog' | 'occurrence' | 'series';
+    export type SchedulerPredefinedDateNavigatorItem =
+      | 'prev'
+      | 'next'
+      | 'dateInterval';
+    export type SchedulerPredefinedToolbarItem =
+      | 'today'
+      | 'dateNavigator'
+      | 'viewSwitcher';
     /**
      * [descr:TargetedAppointmentInfo]
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
@@ -26531,6 +26539,10 @@ declare module DevExpress.ui {
           offset?: number;
         }
     >;
+    /**
+     * [descr:dxSchedulerOptions.toolbar]
+     */
+    toolbar?: DevExpress.ui.dxScheduler.Toolbar | undefined;
   }
   /**
    * [descr:dxSchedulerScrolling]
@@ -26541,6 +26553,16 @@ declare module DevExpress.ui {
      */
     mode?: DevExpress.common.ScrollMode;
   }
+  /**
+   * @deprecated Use DevExpress.ui.dxScheduler.Toolbar instead
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  export type dxSchedulerToolbar = DevExpress.ui.dxScheduler.Toolbar;
+  /**
+   * @deprecated Use DevExpress.ui.dxScheduler.ToolbarItem instead
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  export type dxSchedulerToolbarItem = DevExpress.ui.dxScheduler.ToolbarItem;
   /**
    * [descr:dxScrollable]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
@@ -33719,6 +33741,55 @@ declare module DevExpress.ui.dxPopup {
 }
 declare module DevExpress.ui.dxResponsiveBox {
   export type Item = dxResponsiveBoxItem;
+}
+declare module DevExpress.ui.dxScheduler {
+  /**
+   * [descr:DateNavigatorItemProperties]
+   */
+  export type DateNavigatorItemProperties = dxButtonGroupOptions & {
+    /**
+     * [descr:DateNavigatorItemProperties.items]
+     */
+    items: Array<dxButtonGroupItem | SchedulerPredefinedDateNavigatorItem>;
+  };
+  /**
+   * [descr:dxSchedulerToolbar]
+   */
+  export type Toolbar = {
+    /**
+     * [descr:dxSchedulerToolbar.items]
+     */
+    items?: Array<SchedulerPredefinedToolbarItem | ToolbarItem>;
+    /**
+     * [descr:dxSchedulerToolbar.visible]
+     */
+    visible?: boolean | undefined;
+    /**
+     * [descr:dxSchedulerToolbar.multiline]
+     */
+    multiline?: boolean;
+    /**
+     * [descr:dxSchedulerToolbar.disabled]
+     */
+    disabled?: boolean;
+  };
+  /**
+   * [descr:dxSchedulerToolbarItem]
+   */
+  export type ToolbarItem = dxToolbarItem & {
+    /**
+     * [descr:dxSchedulerToolbarItem.name]
+     */
+    name?: SchedulerPredefinedToolbarItem;
+    /**
+     * [descr:dxSchedulerToolbarItem.options]
+     */
+    options?: DateNavigatorItemProperties | Object;
+    /**
+     * [descr:dxSchedulerToolbarItem.location]
+     */
+    location?: DevExpress.common.ToolbarItemLocation;
+  };
 }
 declare module DevExpress.ui.dxSplitter {
   export type Item<TKey = any> = dxSplitterItem<TKey>;

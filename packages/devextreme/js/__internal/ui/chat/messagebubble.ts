@@ -7,13 +7,16 @@ import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
 
 export const CHAT_MESSAGEBUBBLE_CLASS = 'dx-chat-messagebubble';
-export const CHAT_MESSAGEBUBBLE_CONTENT_CLASS = 'dx-chat-messagebubble-content';
 export const CHAT_MESSAGEBUBBLE_DELETED_CLASS = 'dx-chat-messagebubble-deleted';
+export const CHAT_MESSAGEBUBBLE_CONTENT_CLASS = 'dx-chat-messagebubble-content';
 export const CHAT_MESSAGEBUBBLE_ICON_PROHIBITION_CLASS = `${ICON_CLASS}-cursorprohibition`;
+
+export const MESSAGE_DATA_KEY = 'dxMessageData';
 
 export interface Properties extends WidgetOptions<MessageBubble> {
   text?: string;
   isDeleted?: boolean;
+  isEdited?: boolean;
   template?: ((text: string, container: Element) => void) | null;
 }
 
@@ -23,6 +26,7 @@ class MessageBubble extends Widget<Properties> {
       ...super._getDefaultOptions(),
       text: '',
       isDeleted: false,
+      isEdited: false,
       template: null,
     };
   }
@@ -47,8 +51,9 @@ class MessageBubble extends Widget<Properties> {
       isDeleted = false,
       template,
     } = this.option();
-    const $bubbleContainer = $(this.element()).find(`.${CHAT_MESSAGEBUBBLE_CONTENT_CLASS}`);
+    this.$element().removeClass(CHAT_MESSAGEBUBBLE_DELETED_CLASS);
 
+    const $bubbleContainer = $(this.element()).find(`.${CHAT_MESSAGEBUBBLE_CONTENT_CLASS}`);
     $bubbleContainer.empty();
 
     if (template) {
@@ -58,6 +63,8 @@ class MessageBubble extends Widget<Properties> {
     }
 
     if (isDeleted) {
+      this.$element().addClass(CHAT_MESSAGEBUBBLE_DELETED_CLASS);
+
       const icon = $('<div>')
         .addClass(ICON_CLASS)
         .addClass(CHAT_MESSAGEBUBBLE_ICON_PROHIBITION_CLASS);
@@ -66,7 +73,6 @@ class MessageBubble extends Widget<Properties> {
         .text(messageLocalization.format('dxChat-deletedMessageText'));
 
       $bubbleContainer
-        .addClass(CHAT_MESSAGEBUBBLE_DELETED_CLASS)
         .append(icon)
         .append(deletedMessage);
 
@@ -76,14 +82,27 @@ class MessageBubble extends Widget<Properties> {
     $bubbleContainer.text(text);
   }
 
+  _updateMessageData(property: string, value: string | boolean | undefined): void {
+    const messageData = this.$element().data(MESSAGE_DATA_KEY) || {};
+
+    messageData[property] = value;
+    this.$element().data(MESSAGE_DATA_KEY, messageData);
+  }
+
   _optionChanged(args: OptionChanged<Properties>): void {
-    const { name } = args;
+    const { name, value } = args;
 
     switch (name) {
       case 'text':
       case 'isDeleted':
+        this._updateMessageData(name, value);
+        this._updateContent();
+        break;
       case 'template':
         this._updateContent();
+        break;
+      case 'isEdited':
+        this._updateMessageData(name, value);
         break;
       default:
         super._optionChanged(args);

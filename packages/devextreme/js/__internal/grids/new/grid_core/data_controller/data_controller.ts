@@ -1,6 +1,7 @@
 import type { DataSource } from '@js/common/data';
 import ArrayStore from '@js/common/data/array_store';
 import { Deferred } from '@js/core/utils/deferred';
+import { isDefined } from '@js/core/utils/type';
 import type { ReadonlySignal } from '@preact/signals-core';
 import { computed, effect, signal } from '@preact/signals-core';
 import { equalByValue } from '@ts/core/utils/m_common';
@@ -64,6 +65,10 @@ export class DataController {
   public readonly totalCount: ReadonlySignal<number> = this._totalCount;
 
   public readonly isLoading = signal(false);
+
+  private readonly _filteredItemCount = signal<number | null>(0);
+
+  public readonly filteredItemCount: ReadonlySignal<number | null> = this._filteredItemCount;
 
   public readonly pageCount = computed(
     () => Math.ceil(
@@ -137,18 +142,44 @@ export class DataController {
           );
         };
 
+        const getLoadOptionsWithoutLocalPaging = (loadOptions): unknown => {
+          const { skip, take, ...rest } = loadOptions;
+          return rest;
+        };
+
         const dataLoadedCallback = (e): void => {
           /*
             We use Deffered here because the code below is synchronous.
             customizeLoadResult callback does not support async code.
           */
-          new ArrayStore(e.data).load(this.pendingLocalOperations[e.operationId]).done((data) => {
-            e.data = data;
+          const { operationId } = e;
+          const loadOptions = { ...this.pendingLocalOperations[operationId] };
+          const { skip, take } = loadOptions;
+          const hasLocalPaging = isDefined(skip) && isDefined(take);
+
+          const tempLoadOptions = getLoadOptionsWithoutLocalPaging(loadOptions);
+
+          new ArrayStore(e.data).load(tempLoadOptions).done((filteredData) => {
+            e.extra = e.extra || {};
+
+            if (hasLocalPaging) {
+              this._filteredItemCount.value = filteredData.length;
+              e.take = take;
+              e.skip = skip;
+
+              new ArrayStore(e.data).load(loadOptions).done((newData) => {
+                e.data = newData;
+              });
+            } else {
+              e.data = filteredData;
+              this._filteredItemCount.value = null;
+            }
           }).fail((error) => {
             // @ts-expect-error
             e.data = new Deferred().reject(error);
           });
-          this.pendingLocalOperations[e.operationId] = undefined;
+
+          this.pendingLocalOperations[operationId] = undefined;
         };
 
         if (dataSource.isLoaded()) {
@@ -259,7 +290,8 @@ export class DataController {
     this._items.value = items;
     this.pageIndex.value = dataSource.pageIndex();
     this.pageSize.value = dataSource.pageSize();
-    this._totalCount.value = dataSource.totalCount();
+    const filteredCount = this.filteredItemCount.peek();
+    this._totalCount.value = filteredCount ?? dataSource.totalCount();
 
     // eslint-disable-next-line @typescript-eslint/no-floating-promises
     Promise.resolve().then(() => {
