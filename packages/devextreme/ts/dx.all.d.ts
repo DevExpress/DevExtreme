@@ -5933,6 +5933,11 @@ declare module DevExpress.common.grids {
      */
     focusStateEnabled?: any;
   }
+  export type GridsContextMenuTarget =
+    | 'toolbar'
+    | 'header'
+    | 'content'
+    | 'footer';
   export type GridsEditMode = 'batch' | 'cell' | 'row' | 'form' | 'popup';
   export type GridsEditRefreshMode = 'full' | 'reshape' | 'repaint';
   export type GroupExpandMode = 'buttonClick' | 'rowClick';
@@ -11223,7 +11228,7 @@ declare module DevExpress.ui {
       /**
        * [descr:_ui_data_grid_ContextMenuPreparingEvent.target]
        */
-      readonly target: string;
+      readonly target: DevExpress.common.grids.GridsContextMenuTarget;
       /**
        * [descr:_ui_data_grid_ContextMenuPreparingEvent.targetElement]
        */
@@ -29299,7 +29304,7 @@ declare module DevExpress.ui {
       /**
        * [descr:_ui_tree_list_ContextMenuPreparingEvent.target]
        */
-      readonly target: string;
+      readonly target: DevExpress.common.grids.GridsContextMenuTarget;
       /**
        * [descr:_ui_tree_list_ContextMenuPreparingEvent.targetElement]
        */
