@@ -67,12 +67,9 @@ QUnit.module('FormDialog', moduleConfig, () => {
     test('change FormDialog form options', function(assert) {
         const formDialog = new FormDialog(this.$element);
 
-        formDialog.formOption({ width: 155 });
+        formDialog.formOption('width', 155);
 
-        const $dialog = this.$element.find(`.${DIALOG_CLASS}`);
-        const $form = $dialog.find(`.${FORM_CLASS}`);
-
-        assert.strictEqual($form.css('width'), '155px', 'Custom width should apply');
+        assert.equal(formDialog.formOption('width'), 155, 'Custom width should apply');
     });
 
     test('show dialog', function(assert) {

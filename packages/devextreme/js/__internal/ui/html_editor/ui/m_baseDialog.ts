@@ -85,7 +85,7 @@ abstract class BaseDialog<T = unknown> {
     this._popup.hide();
   }
 
-  public popupOption(...args): unknown {
+  public popupOption(...args): void {
     // @ts-expect-error args is any
     return this._popup.option.apply(this._popup, args);
   }

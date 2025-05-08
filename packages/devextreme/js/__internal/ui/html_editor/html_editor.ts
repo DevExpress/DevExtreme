@@ -912,8 +912,14 @@ class HtmlEditor extends Editor<Properties> {
     return this._aiDialog?.show(payload);
   }
 
-  formDialogOption(options: Partial<FormProperties>): void {
-    this._formDialog.popupOption(options);
+  formDialogOption(
+    optionName: string,
+    optionValue: unknown,
+  ): void {
+    return this._formDialog.popupOption.apply(
+      this._formDialog,
+      [optionName, optionValue],
+    );
   }
 
   focus(): void {
