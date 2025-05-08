@@ -296,6 +296,34 @@ QUnit.module('collapsible groups', moduleSetup, () => {
         assert.ok(!$group.hasClass(LIST_GROUP_COLLAPSED_CLASS), 'collapsed class is not present');
     });
 
+    QUnit.test('group body should be correctly collapsed on fast multiple clicks on header (T1282693)', function(assert) {
+        this.clock.restore();
+        const done = assert.async();
+
+        const $element = this.element.dxList({
+            items: [{ key: 'a', items: ['0'] }],
+            grouped: true,
+            collapsibleGroups: true
+        });
+
+        const $group = $element.find('.' + LIST_GROUP_CLASS);
+        const $groupBody = $group.find('.' + LIST_GROUP_BODY_CLASS);
+        const $groupHeader = $element.find('.' + LIST_GROUP_HEADER_CLASS);
+
+        const animationDuration = 200;
+
+        for(let i = 0; i < 11; i++) {
+            $groupHeader.trigger('dxclick');
+        }
+
+        setTimeout(() => {
+            assert.strictEqual($group.hasClass(LIST_GROUP_COLLAPSED_CLASS), true, 'collapsed class is present');
+            assert.strictEqual($groupBody.height(), 0, 'group items are hidden');
+
+            done();
+        }, 2 * animationDuration);
+    });
+
     QUnit.test('group body should be not collapsed by click on header if collapsibleGroups is disabled', function(assert) {
         const $element = this.element.dxList({
             items: [{ key: 'a', items: ['0'] }],
