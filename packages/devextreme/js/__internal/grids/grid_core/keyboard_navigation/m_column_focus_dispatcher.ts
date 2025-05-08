@@ -24,11 +24,7 @@ export class ColumnFocusDispatcher extends Controller {
           return;
         }
 
-        const firstFocusableVisibleIndex = keyboardController.getFirstFocusableVisibleIndex();
-
-        if (firstFocusableVisibleIndex >= 0) {
-          keyboardController.updateFocusPosition();
-        }
+        keyboardController.updateFocusPosition();
       });
     }
   }
