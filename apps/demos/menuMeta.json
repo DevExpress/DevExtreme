@@ -2117,7 +2117,7 @@
       },
       {
         "Name": "Message Editing",
-        "Equivalents": "Editing",
+        "Equivalents": "Editing, Delete, Deleting, Update, Correct, Modify",
         "Demos": [
           {
             "Title": "Message Editing",
@@ -2128,7 +2128,12 @@
             "DocUrl": "",
             "MvcDescription": "",
             "NetCoreDescription": "",
-            "MvcAdditionalFiles": []
+            "MvcAdditionalFiles": [
+              "/Models/SampleData/ChatData.cs",
+              "/Models/Chat/User.cs",
+              "/Models/Chat/Message.cs",
+              "/ViewModels/ChatViewModel.cs"
+            ]
           }
         ]
       },
