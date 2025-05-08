@@ -41,12 +41,12 @@ class TextArea extends TextBox<TextAreaProperties> {
 
   _shouldAttachKeyboardEvents(): boolean {
     const {
-      _shouldAttachKeyboardEvents: shouldForceAttachKeyboardEvents,
+      _shouldAttachKeyboardEvents: shouldAttachKeyboardEvents,
       readOnly,
     } = this.option();
 
     // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-    return shouldForceAttachKeyboardEvents || !readOnly;
+    return shouldAttachKeyboardEvents || !readOnly;
   }
 
   _initMarkup(): void {
