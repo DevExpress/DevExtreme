@@ -40,9 +40,16 @@ test('Scheduler toolbar should be hided', async (t) => {
   const scheduler = new Scheduler('#container');
 
   await t.expect(scheduler.toolbar.element.exists).notOk();
+  await t.expect(await compareScreenshot(t, 'scheduler-hidden-toolbar.png', scheduler.element)).ok();
 }).before(async () => createWidget('dxScheduler', {
   currentDate: new Date(2021, 3, 27),
-  toolbar: { visible: false },
+  toolbar: {
+    visible: false,
+    items: [
+      { location: 'before', name: 'viewSwitcher' },
+      { location: 'after', name: 'dateNavigator' },
+    ],
+  },
 }));
 
 [

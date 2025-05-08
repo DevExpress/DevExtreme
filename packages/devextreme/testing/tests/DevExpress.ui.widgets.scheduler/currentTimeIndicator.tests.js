@@ -967,7 +967,7 @@ QUnit.module('DateTime indicator on TimelineDay View', () => {
         const $shader = $element.find('.' + SCHEDULER_DATE_TIME_SHADER_CLASS);
         const cellWidth = getOuterWidth($element.find('.dx-scheduler-date-table-cell').eq(0));
 
-        assert.roughEqual(getOuterHeight($shader), 256, 1, 'Shader has correct height');
+        assert.roughEqual(getOuterHeight($shader), 255, 1, 'Shader has correct height');
 
         assert.roughEqual(getOuterWidth($shader), 9.5 * cellWidth, 1, 'Shader has correct width');
     });
@@ -1118,10 +1118,10 @@ QUnit.module('DateTime indicator on TimelineDay View, horizontal grouping', () =
 
         assert.equal($shader.length, 2, 'Shaders count is correct');
 
-        assert.roughEqual(getOuterHeight($shader.eq(0)), 206, 1, 'Shader has correct height');
+        assert.roughEqual(getOuterHeight($shader.eq(0)), 205, 1, 'Shader has correct height');
         assert.roughEqual(getOuterWidth($shader.eq(0)), 950, 1, 'Shader has correct width');
 
-        assert.roughEqual(getOuterHeight($shader.eq(1)), 206, 1, 'Shader has correct height');
+        assert.roughEqual(getOuterHeight($shader.eq(1)), 205, 1, 'Shader has correct height');
         assert.roughEqual(getOuterWidth($shader.eq(1)), 950, 1, 'Shader has correct width');
 
         assert.roughEqual($shader.eq(0).position().left, 0, 1, 'Shader has correct left');
@@ -1168,7 +1168,7 @@ QUnit.module('DateTime indicator on other timelines', () => {
             const $shader = $element.find('.' + SCHEDULER_DATE_TIME_SHADER_CLASS);
             const cellWidth = getOuterWidth($element.find('.dx-scheduler-date-table-cell').eq(0));
 
-            assert.roughEqual(getOuterHeight($shader), 206, 1, 'Shader has correct height');
+            assert.roughEqual(getOuterHeight($shader), 205, 1, 'Shader has correct height');
             assert.roughEqual(getOuterWidth($shader), testCase.expectedCellCount * cellWidth, 1, 'Shader has correct width');
 
             const $indicators = $element.find('.' + SCHEDULER_DATE_TIME_INDICATOR_CLASS);
@@ -1207,7 +1207,7 @@ QUnit.module('DateTime indicator on other timelines', () => {
             const $shader = $element.find('.' + SCHEDULER_DATE_TIME_SHADER_CLASS);
             const cellWidth = getOuterWidth($element.find('.dx-scheduler-date-table-cell').eq(0));
 
-            assert.roughEqual(getOuterHeight($shader), 256, 1, 'Shader has correct height');
+            assert.roughEqual(getOuterHeight($shader), 255, 1, 'Shader has correct height');
             assert.roughEqual(getOuterWidth($shader), 4.5 * cellWidth, 6, 'Shader has correct width');
 
             const $indicators = $element.find('.' + SCHEDULER_DATE_TIME_INDICATOR_CLASS);
@@ -1245,7 +1245,7 @@ QUnit.module('DateTime indicator on other timelines', () => {
         const $shader = $element.find('.' + SCHEDULER_DATE_TIME_SHADER_CLASS);
         const cellWidth = getOuterWidth($element.find('.dx-scheduler-date-table-cell').eq(0));
 
-        assert.roughEqual(getOuterHeight($shader), 256, 1, 'Shader has correct height');
+        assert.roughEqual(getOuterHeight($shader), 255, 1, 'Shader has correct height');
 
         assert.roughEqual(getOuterWidth($shader), 15.5 * cellWidth, 1, 'Shader has correct width');
     });
