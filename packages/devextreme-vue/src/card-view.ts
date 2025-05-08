@@ -41,8 +41,9 @@ import {
  RemoteOperations,
  SelectionConfiguration,
  Toolbar,
- CardHeaderPredefinedToolbarItem,
- CardHeaderToolbarItem,
+ CardHeaderItem,
+ CardHeaderPredefinedItem,
+ FieldInfo,
  PredefinedToolbarItem,
  ToolbarItem,
 } from "devextreme/ui/card_view";
@@ -72,7 +73,6 @@ import {
 import {
  dxFilterBuilderOptions,
  dxFilterBuilderField,
- FieldInfo,
  FilterBuilderOperation,
  dxFilterBuilderCustomOperation,
  GroupOperation,
@@ -538,7 +538,7 @@ const DxCardHeaderConfig = {
     "update:visible": null,
   },
   props: {
-    items: Array as PropType<Array<CardHeaderPredefinedToolbarItem | CardHeaderToolbarItem>>,
+    items: Array as PropType<Array<CardHeaderItem | CardHeaderPredefinedItem>>,
     template: {},
     visible: Boolean
   }
@@ -579,7 +579,7 @@ const DxCardHeaderItemConfig = {
     locateInMenu: String as PropType<LocateInMenuMode>,
     location: String as PropType<ToolbarItemLocation>,
     menuItemTemplate: {},
-    name: String as PropType<CardHeaderPredefinedToolbarItem | string>,
+    name: String as PropType<CardHeaderPredefinedItem | string>,
     options: {},
     showText: String as PropType<ShowTextMode>,
     template: {},
@@ -1281,7 +1281,7 @@ const DxItemConfig = {
     locateInMenu: String as PropType<LocateInMenuMode>,
     location: String as PropType<ToolbarItemLocation>,
     menuItemTemplate: {},
-    name: String as PropType<CardHeaderPredefinedToolbarItem | string | PredefinedToolbarItem>,
+    name: String as PropType<CardHeaderPredefinedItem | string | PredefinedToolbarItem>,
     options: {},
     showText: String as PropType<ShowTextMode>,
     template: {},

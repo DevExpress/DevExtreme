@@ -18,7 +18,7 @@ import { DOCUMENT } from '@angular/common';
 
 import { LocateInMenuMode, ShowTextMode } from 'devextreme/ui/toolbar';
 import { ToolbarItemLocation, ToolbarItemComponent } from 'devextreme/common';
-import { CardHeaderPredefinedToolbarItem } from 'devextreme/ui/card_view';
+import { CardHeaderPredefinedItem } from 'devextreme/ui/card_view';
 
 import {
     DxIntegrationModule,
@@ -90,10 +90,10 @@ export class DxiCardViewCardHeaderItemComponent extends CollectionNestedOption i
     }
 
     @Input()
-    get name(): CardHeaderPredefinedToolbarItem | string {
+    get name(): CardHeaderPredefinedItem | string {
         return this._getOption('name');
     }
-    set name(value: CardHeaderPredefinedToolbarItem | string) {
+    set name(value: CardHeaderPredefinedItem | string) {
         this._setOption('name', value);
     }
 

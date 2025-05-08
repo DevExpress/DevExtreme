@@ -21,7 +21,7 @@ import {
 import { DOCUMENT } from '@angular/common';
 
 
-import { CardHeaderPredefinedToolbarItem, CardHeaderToolbarItem } from 'devextreme/ui/card_view';
+import { CardHeaderItem, CardHeaderPredefinedItem } from 'devextreme/ui/card_view';
 
 import {
     DxIntegrationModule,
@@ -47,10 +47,10 @@ import { DxiCardViewItemComponent } from './item-dxi';
 export class DxoCardViewCardHeaderComponent extends NestedOption implements AfterViewInit, OnDestroy, OnInit,
     IDxTemplateHost {
     @Input()
-    get items(): Array<CardHeaderPredefinedToolbarItem | CardHeaderToolbarItem> {
+    get items(): Array<CardHeaderItem | CardHeaderPredefinedItem> {
         return this._getOption('items');
     }
-    set items(value: Array<CardHeaderPredefinedToolbarItem | CardHeaderToolbarItem>) {
+    set items(value: Array<CardHeaderItem | CardHeaderPredefinedItem>) {
         this._setOption('items', value);
     }
 

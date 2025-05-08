@@ -12,8 +12,9 @@ import {
 
 
 
-import { FieldInfo, FilterBuilderOperation } from 'devextreme/ui/filter_builder';
+import { FieldInfo } from 'devextreme/ui/card_view';
 import { DataType } from 'devextreme/common';
+import { FilterBuilderOperation } from 'devextreme/ui/filter_builder';
 import { Format } from 'devextreme/common/core/localization';
 import { DataSourceOptions } from 'devextreme/data/data_source';
 import { Store } from 'devextreme/data/store';
