@@ -25,6 +25,12 @@
   height: 100%;
 }
 
+.dx-cardview-header-container {
+  display: flex;
+  flex-direction: column;
+  gap: $cardview-headers-container-gap;
+}
+
 .dx-cardview-exclude-flexbox {
   position: absolute;
 }
