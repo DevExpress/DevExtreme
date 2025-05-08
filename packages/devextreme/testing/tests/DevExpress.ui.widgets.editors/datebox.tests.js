@@ -22,7 +22,7 @@ import { noop } from 'core/utils/common';
 import { logger } from 'core/utils/console';
 import { normalizeKeyName } from 'common/core/events/utils/index';
 import browser from 'core/utils/browser';
-import { shouldSkipTestIfDeviceTypeNot } from '../../helpers/device.js';
+import { isRealDeviceTypeNotIn } from '../../helpers/device.js';
 
 import '../../helpers/calendarFixtures.js';
 
@@ -717,7 +717,7 @@ QUnit.module('focus policy', {}, () => {
     QUnit.test('dateBox should stay focused after value selecting in date strategy', function(assert) {
         assert.expect(1);
 
-        if(shouldSkipTestIfDeviceTypeNot('desktop', assert)) {
+        if(isRealDeviceTypeNotIn('desktop', assert)) {
             return;
         }
 
@@ -740,7 +740,7 @@ QUnit.module('focus policy', {}, () => {
     QUnit.test('dateBox should stay focused after value selecting in time strategy', function(assert) {
         assert.expect(1);
 
-        if(shouldSkipTestIfDeviceTypeNot('desktop', assert)) {
+        if(isRealDeviceTypeNotIn('desktop', assert)) {
             return;
         }
 
@@ -764,7 +764,7 @@ QUnit.module('focus policy', {}, () => {
     QUnit.test('dateBox should stay focused after value selecting in datetime strategy', function(assert) {
         assert.expect(1);
 
-        if(shouldSkipTestIfDeviceTypeNot('desktop', assert)) {
+        if(isRealDeviceTypeNotIn('desktop', assert)) {
             return;
         }
 
@@ -788,7 +788,7 @@ QUnit.module('focus policy', {}, () => {
     QUnit.test('calendar in datebox should not have tabIndex attribute', function(assert) {
         assert.expect(1);
 
-        if(shouldSkipTestIfDeviceTypeNot('desktop', assert)) {
+        if(isRealDeviceTypeNotIn('desktop', assert)) {
             return;
         }
 
@@ -805,7 +805,7 @@ QUnit.module('focus policy', {}, () => {
     });
 
     QUnit.testInActiveWindow('set focus on \'tab\' key from editor to overlay and inversely', function(assert) {
-        if(shouldSkipTestIfDeviceTypeNot('desktop', assert)) {
+        if(isRealDeviceTypeNotIn('desktop', assert)) {
             return;
         }
 
@@ -844,7 +844,7 @@ QUnit.module('focus policy', {}, () => {
     });
 
     QUnit.testInActiveWindow('first input in poup should have selected text when move from dateBox input on tab (T1127632)', function(assert) {
-        if(shouldSkipTestIfDeviceTypeNot('desktop', assert)) {
+        if(isRealDeviceTypeNotIn('desktop', assert)) {
             return;
         }
 
@@ -875,7 +875,7 @@ QUnit.module('focus policy', {}, () => {
     });
 
     QUnit.test('mousewheel action should not work if dateBox is not focused', function(assert) {
-        if(shouldSkipTestIfDeviceTypeNot('desktop', assert)) {
+        if(isRealDeviceTypeNotIn('desktop', assert)) {
             return;
         }
 
@@ -1544,7 +1544,7 @@ QUnit.module('dateView integration', {
     });
 
     QUnit.test('Gesture cover should be hidden after wheel event processed by Overlay emitter (T820405)', function(assert) {
-        if(shouldSkipTestIfDeviceTypeNot('desktop', assert)) {
+        if(isRealDeviceTypeNotIn('desktop', assert)) {
             return;
         }
 
@@ -2117,7 +2117,7 @@ QUnit.module('datebox and calendar integration', () => {
     });
 
     QUnit.test('change year via scroll should log proper year in on value change event (T1229926)', function(assert) {
-        if(shouldSkipTestIfDeviceTypeNot('desktop', assert)) {
+        if(isRealDeviceTypeNotIn('desktop', assert)) {
             return;
         }
 
@@ -3150,7 +3150,7 @@ QUnit.module('datebox with time component', {
     });
 
     QUnit.test('DateBox with pickerType=rollers should scroll to the neighbor item independent of deltaY when device is desktop (T921228)', function(assert) {
-        if(shouldSkipTestIfDeviceTypeNot('desktop', assert)) {
+        if(isRealDeviceTypeNotIn('desktop', assert)) {
             return;
         }
 
@@ -3185,7 +3185,7 @@ QUnit.module('datebox with time component', {
     });
 
     QUnit.test('dateview selectedIndex should not be changed after dateBox reopen (T934663)', function(assert) {
-        if(shouldSkipTestIfDeviceTypeNot('desktop', assert)) {
+        if(isRealDeviceTypeNotIn('desktop', assert)) {
             return;
         }
 
@@ -3240,7 +3240,7 @@ QUnit.module('datebox with time component', {
     });
 
     QUnit.test('DateBox renders the right stylingMode for editors in time view overlay (default)', function(assert) {
-        if(shouldSkipTestIfDeviceTypeNot('desktop', assert)) {
+        if(isRealDeviceTypeNotIn('desktop', assert)) {
             return;
         }
         const dateBox = $('#dateBox').dxDateBox({
@@ -3260,7 +3260,7 @@ QUnit.module('datebox with time component', {
     });
 
     QUnit.test('DateBox renders the right stylingMode for editors in time view overlay (custom)', function(assert) {
-        if(shouldSkipTestIfDeviceTypeNot('desktop', assert)) {
+        if(isRealDeviceTypeNotIn('desktop', assert)) {
             return;
         }
         const dateBox = $('#dateBox').dxDateBox({
@@ -4144,7 +4144,7 @@ QUnit.module('datebox w/ time list', {
         });
 
         QUnit.testInActiveWindow('should not close on "tab" press', function(assert) {
-            if(shouldSkipTestIfDeviceTypeNot('desktop', assert)) {
+            if(isRealDeviceTypeNotIn('desktop', assert)) {
                 return;
             }
             const $input = this.$dateBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
@@ -5099,7 +5099,7 @@ QUnit.module('Popup open state', () => {
     ['date', 'time'].forEach(type => {
         ['calendar', 'list'].forEach(pickerType => {
             QUnit.testInActiveWindow(`Popup should be closed on tab key when there is no focusable elements, applyValueMode: "instantly", type: "${type}", pickerType: "${pickerType}"`, function(assert) {
-                if(shouldSkipTestIfDeviceTypeNot('desktop', assert)) {
+                if(isRealDeviceTypeNotIn('desktop', assert)) {
                     return;
                 }
                 const $dateBox = $('#dateBox').dxDateBox({
@@ -5126,7 +5126,7 @@ QUnit.module('Popup open state', () => {
     ['date', 'time', 'datetime'].forEach(type => {
         ['calendar', 'list', 'rollers'].forEach(pickerType => {
             QUnit.testInActiveWindow(`Popup should be opened on tab key when there are focusable items, applyValueMode: "useButtons", type: "${type}", pickerType: "${pickerType}"`, function(assert) {
-                if(shouldSkipTestIfDeviceTypeNot('desktop', assert)) {
+                if(isRealDeviceTypeNotIn('desktop', assert)) {
                     return;
                 }
                 const $dateBox = $('#dateBox').dxDateBox({
@@ -5150,7 +5150,7 @@ QUnit.module('Popup open state', () => {
 
 QUnit.module('aria accessibility', {}, () => {
     QUnit.test('aria-activedescendant on combobox should point to the active list item (date view)', function(assert) {
-        if(shouldSkipTestIfDeviceTypeNot('desktop', assert)) {
+        if(isRealDeviceTypeNotIn('desktop', assert)) {
             return;
         }
         const $element = $('#dateBox').dxDateBox({
@@ -5171,7 +5171,7 @@ QUnit.module('aria accessibility', {}, () => {
     });
 
     QUnit.test('aria-activedescendant on combobox should point to the active list item (time view)', function(assert) {
-        if(shouldSkipTestIfDeviceTypeNot('desktop', assert)) {
+        if(isRealDeviceTypeNotIn('desktop', assert)) {
             return;
         }
 
@@ -5416,7 +5416,7 @@ QUnit.module('datebox validation', {}, () => {
     });
 
     QUnit.test('invalidDateMessage', function(assert) {
-        if(shouldSkipTestIfDeviceTypeNot('desktop', assert)) {
+        if(isRealDeviceTypeNotIn('desktop', assert)) {
             return;
         }
 

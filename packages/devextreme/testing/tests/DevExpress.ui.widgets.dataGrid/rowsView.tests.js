@@ -21,7 +21,7 @@ import numberLocalization from 'common/core/localization/number';
 import virtualScrollingCore from '__internal/grids/grid_core/virtual_scrolling/m_virtual_scrolling_core';
 import ODataStore from 'common/data/odata/store';
 import ArrayStore from 'common/data/array_store';
-import { shouldSkipTestIfDeviceTypeNot } from '../../helpers/device.js';
+import { isRealDeviceTypeNotIn } from '../../helpers/device.js';
 
 const expandCellTemplate = gridCoreUtils.getExpandCellTemplate();
 
@@ -1374,7 +1374,7 @@ QUnit.module('Rows view', {
     });
 
     QUnit.test('Selection rows by space keydown on checkbox', function(assert) {
-        if(shouldSkipTestIfDeviceTypeNot('desktop', assert, 'Keyboard navigation does not work on mobile devices')) {
+        if(isRealDeviceTypeNotIn('desktop', assert, 'Keyboard navigation does not work on mobile devices')) {
             return;
         }
 
@@ -4166,7 +4166,7 @@ QUnit.module('Rows view with real dataController and columnController', {
     });
 
     QUnit.test('Touch click on cell should raise rowClick with correct target arguments (T593150)', function(assert) {
-        if(shouldSkipTestIfDeviceTypeNot('desktop', assert)) {
+        if(isRealDeviceTypeNotIn('desktop', assert)) {
             return;
         }
 

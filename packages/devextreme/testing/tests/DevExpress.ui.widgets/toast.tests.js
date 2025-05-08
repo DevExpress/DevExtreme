@@ -4,7 +4,7 @@ import pointerMock from '../../helpers/pointerMock.js';
 import fx from 'common/core/animation/fx';
 import { value as setViewPort } from 'core/utils/view_port';
 import Toast from 'ui/toast';
-import { shouldSkipTestIfDeviceTypeNot } from '../../helpers/device.js';
+import { isRealDeviceTypeNotIn } from '../../helpers/device.js';
 
 import 'generic_light.css!';
 
@@ -89,7 +89,7 @@ QUnit.module('general', moduleConfig, () => {
     });
 
     QUnit.test('position on mobile devices', function(assert) {
-        if(shouldSkipTestIfDeviceTypeNot('phone', assert)) {
+        if(isRealDeviceTypeNotIn('phone', assert)) {
             return;
         }
 

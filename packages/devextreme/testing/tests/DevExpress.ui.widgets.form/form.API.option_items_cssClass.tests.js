@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import { shouldSkipTestIfDeviceTypeNot } from '../../helpers/device.js';
+import { isRealDeviceTypeNotIn } from '../../helpers/device.js';
 
 import 'ui/form';
 
@@ -252,7 +252,7 @@ function isFocusedElement(element) {
         });
 
         QUnit.testInActiveWindow('ButtonItem(class1 -> class2)', function(assert) {
-            if(shouldSkipTestIfDeviceTypeNot('desktop', assert)) {
+            if(isRealDeviceTypeNotIn('desktop', assert)) {
                 return;
             }
 
@@ -280,7 +280,7 @@ function isFocusedElement(element) {
         });
 
         QUnit.testInActiveWindow('ButtonItem(class1 -> class2) in form with 2 items', function(assert) {
-            if(shouldSkipTestIfDeviceTypeNot('desktop', assert)) {
+            if(isRealDeviceTypeNotIn('desktop', assert)) {
                 return;
             }
 
