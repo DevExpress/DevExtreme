@@ -15,17 +15,7 @@ $(() => {
     }],
     toolbar: {
       items: [
-        {
-          location: 'before',
-          locateInMenu: 'auto',
-          widget: 'dxButton',
-          options: {
-            text: 'Today',
-            onClick() {
-              scheduler.option('currentDate', new Date());
-            },
-          },
-        },
+        'today',
         'dateNavigator',
         {
           location: 'before',

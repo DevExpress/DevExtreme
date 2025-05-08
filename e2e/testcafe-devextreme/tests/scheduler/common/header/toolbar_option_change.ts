@@ -42,6 +42,15 @@ test('Scheduler should change toolbar', async (t) => {
   ).ok();
 }).before(createScheduler);
 
+test('Scheduler should hide and show toolbar', async (t) => {
+  const scheduler = new Scheduler('#container');
+
+  await updateOption('toolbar.visible', false);
+  await t.expect(scheduler.toolbar.isInvisible()).ok();
+  await updateOption('toolbar.visible', true);
+  await t.expect(scheduler.toolbar.isInvisible()).notOk();
+}).before(createScheduler);
+
 test('Scheduler should change toolbar items', async (t) => {
   const scheduler = new Scheduler('#container');
 

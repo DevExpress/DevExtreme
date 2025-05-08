@@ -441,8 +441,8 @@ $fluent-scheduler-agenda-time-panel-cell-padding: 8px;
 .dx-scheduler-header {
   @include header-sizes(
     $fluent-scheduler-header-height,
+    $fluent-scheduler-header-offset,
     $fluent-scheduler-toolbar-item-offset,
-    baseScheduler.$scheduler-base-border,
   );
 
   .dx-scheduler-navigator-next,
