@@ -58,23 +58,25 @@ abstract class BaseDialog<T = unknown> {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   show(options?: unknown): Promise<T> | undefined {
     if (this._popup.option('visible')) {
-      return;
+      return undefined;
     }
 
     this.deferred = Deferred<T>();
 
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     this._popup.show();
 
     return this.deferred.promise();
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  hide(_options?: unknown, _event?: unknown): void {
+  hide(options?: unknown, event?: unknown): void {
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     this._popup.hide();
   }
 
   popupOption(...args) {
-    // @ts-expect-error
+    // @ts-expect-error args is any
     return this._popup.option.apply(this._popup, args);
   }
 }

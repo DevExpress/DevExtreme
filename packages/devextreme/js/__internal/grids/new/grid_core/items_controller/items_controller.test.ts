@@ -1,4 +1,5 @@
 import { describe, expect, it } from '@jest/globals';
+import formatHelper from '@js/format_helper';
 
 import { ColumnsController } from '../columns_controller/columns_controller';
 import { DataController } from '../data_controller';
@@ -50,6 +51,88 @@ describe('ItemsController', () => {
       const columns = columnsController.columns.peek();
       const CardInfo = itemsController.createCardInfo(dataObject, columns, 0, [1]);
       expect(CardInfo).toMatchSnapshot();
+    });
+    it('should parse number value correctly', () => {
+      const { columnsController, itemsController } = setup({
+        columns: [{ dataField: 'a', dataType: 'number' }],
+      });
+
+      const dataObject = { a: '123' };
+      const columns = columnsController.columns.peek();
+      const CardInfo = itemsController.createCardInfo(dataObject, columns, 0);
+
+      expect(CardInfo.fields[0].value).toBe(123);
+    });
+
+    it('should parse date value correctly', () => {
+      const { columnsController, itemsController } = setup({
+        columns: [{ dataField: 'a', dataType: 'date' }],
+      });
+
+      const dateString = '2024-12-25T00:00:00.000Z';
+      const dataObject = { a: dateString };
+      const columns = columnsController.columns.peek();
+      const CardInfo = itemsController.createCardInfo(dataObject, columns, 0);
+
+      expect(CardInfo.fields[0].value).toEqual(new Date(dateString));
+    });
+
+    it('should fallback to raw value if parseValue returns undefined', () => {
+      const { columnsController, itemsController } = setup({
+        columns: [{ dataField: 'a', dataType: 'number' }],
+      });
+
+      const dataObject = { a: 'abc' };
+      const columns = columnsController.columns.peek();
+      const CardInfo = itemsController.createCardInfo(dataObject, columns, 0);
+
+      expect(CardInfo.fields[0].value).toBe('abc');
+    });
+
+    it('should infer dataType as "number" if value is a number and dataType is not set', () => {
+      const { columnsController } = setup({
+        columns: [{ dataField: 'a' }],
+        dataSource: [{ a: 456 }],
+      });
+
+      const columns = columnsController.columns.peek();
+      expect(columns[0].dataType).toBe('number');
+    });
+
+    it('should infer dataType as "date" if value is a Date object and dataType is not set', () => {
+      const dateObject = new Date('2025-01-01');
+      const { columnsController } = setup({
+        columns: [{ dataField: 'a' }],
+        dataSource: [{ a: dateObject }],
+      });
+
+      const columns = columnsController.columns.peek();
+      expect(columns[0].dataType).toBe('date');
+    });
+
+    it('should infer dataType as "boolean" if value is a boolean and dataType is not set', () => {
+      const { columnsController } = setup({
+        columns: [{ dataField: 'a' }],
+        dataSource: [{ a: true }],
+      });
+
+      const columns = columnsController.columns.peek();
+      expect(columns[0].dataType).toBe('boolean');
+    });
+
+    it('should format datetime value using shortDateShortTime format', () => {
+      const dateObject = new Date('2025-05-05T14:30:00Z');
+      const { columnsController, itemsController } = setup({
+        columns: [{ dataField: 'a', dataType: 'datetime' }],
+        dataSource: [{ a: dateObject }],
+      });
+
+      const columns = columnsController.columns.peek();
+      const CardInfo = itemsController.createCardInfo({ a: dateObject }, columns, 0);
+
+      const expectedResult = formatHelper.format(dateObject, 'shortDateShortTime');
+
+      expect(CardInfo.fields[0].text).toMatch(expectedResult);
     });
   });
 

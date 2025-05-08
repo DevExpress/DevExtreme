@@ -10,6 +10,12 @@
   padding: $cardview-padding;
   background-color: $cardview-background-color;
   border-radius: $cardview-border-radius;
+
+  .dx-link {
+    text-decoration: underline;
+    cursor: pointer;
+    color: $cardview-link-color;
+  }
 }
 
 .dx-cardview-root-container {

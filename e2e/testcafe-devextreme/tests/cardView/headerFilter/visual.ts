@@ -100,8 +100,6 @@ test('popup with tree', async (t) => {
     {
       dataField: 'A',
       dataType: 'date',
-      // TODO calculateFieldValue issue: Remove after task will be complete
-      calculateFieldValue: ({ A }) => new Date(A),
     },
     'B',
     'C',

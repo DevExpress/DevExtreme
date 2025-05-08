@@ -7,6 +7,7 @@ import $ from '@js/core/renderer';
 import { extend } from '@js/core/utils/extend';
 import type { ButtonClickEvent, ItemClickEvent } from '@js/ui/drop_down_button_types';
 import type { AICommandNameExtended, AICustomCommand } from '@js/ui/html_editor';
+import Informer from '@js/ui/informer';
 import LoadIndicator from '@js/ui/load_indicator';
 import type { Properties as PopupProperties, ToolbarItem } from '@js/ui/popup';
 import type dxSelectBox from '@js/ui/select_box';
@@ -27,6 +28,7 @@ import {
   buildAICommandParams,
   getAICommandName,
 } from '@ts/ui/html_editor/utils/ai';
+import type { Properties as InformerProperties } from '@ts/ui/informer/informer';
 import type { LoadIndicatorProperties } from '@ts/ui/m_load_indicator';
 import { AnimationType } from '@ts/ui/m_load_indicator';
 import { TEXTEDITOR_INPUT_CONTAINER_CLASS } from '@ts/ui/text_box/m_text_editor.base';
@@ -50,6 +52,7 @@ const AI_DIALOG_COMMANDS_WITH_OPTIONS = ['translate', 'changeStyle', 'changeTone
 
 const POPUP_MIN_WIDTH = 288;
 const POPUP_MAX_WIDTH = 460;
+const LOADINDICATOR_SIZE = 48;
 export const TEXT_AREA_MIN_HEIGHT = 64;
 export const TEXT_AREA_MAX_HEIGHT = 128;
 export const REPLACE_DROPDOWN_WIDTH = 150;
@@ -111,6 +114,8 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
   private _dialogState: DialogState = DialogState.Initial;
 
   private _getCustomCommandPrompt?: AICustomCommand['prompt'];
+
+  private _informer!: Informer;
 
   private _isAICommandExecuting = false;
 
@@ -250,6 +255,7 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
     this._renderOptionSelectBox($controls);
     this._renderPromptTextArea($contentElem);
     this._renderResultTextArea($contentElem);
+    this._renderInformer($contentElem);
   }
 
   private _renderLoadIndicator(): void {
@@ -267,11 +273,24 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
 
     const options: LoadIndicatorProperties = {
       _animationType: AnimationType.Sparkle,
-      width: 48,
-      height: 48,
+      width: LOADINDICATOR_SIZE,
+      height: LOADINDICATOR_SIZE,
     };
 
     this._loadIndicator = new LoadIndicator($indicatorElement[0], options);
+  }
+
+  private _renderInformer($container: dxElementWrapper): void {
+    const $informer = $('<div>').appendTo($container);
+    const text = localizationMessage.format('dxHtmlEditor-aiDialogError');
+
+    const options: InformerProperties = {
+      contentAlignment: 'center',
+      showBackground: true,
+      text,
+    };
+    // @ts-expect-error no .d.ts for private component
+    this._informer = new Informer($informer.get(0), options);
   }
 
   protected _getPopupClass(): string {
@@ -444,6 +463,7 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
     this._refreshTextAreas();
     this._refreshToolbarItems();
     this._refreshLoadIndicator();
+    this._refreshInformer();
   }
 
   private _refreshToolbarItems(): void {
@@ -482,10 +502,13 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
     this._resultTextArea.option({ value });
   }
 
-  private _processCommandCompletion(dialogState: DialogState): void {
+  private _processCommandCompletion(dialogState?: DialogState): void {
     this._abort = undefined;
     this._isAICommandExecuting = false;
-    this._setDialogState(dialogState);
+
+    if (dialogState) {
+      this._setDialogState(dialogState);
+    }
   }
 
   private _getAICommandCallbacks<T>(): RequestCallbacks<T> {
@@ -649,6 +672,12 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
     }
   }
 
+  private _refreshInformer(): void {
+    const visible = this._dialogState === DialogState.Error;
+
+    this._informer.option('visible', visible);
+  }
+
   private _getInitialDialogState(): DialogState {
     return this._isAskAICommandSelected ? DialogState.Asking : DialogState.Initial;
   }
@@ -704,11 +733,11 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
     return super.show();
   }
 
-  hide(resultText: string, event: AIDialogResult['event']): void {
+  hide(resultText: AIDialogResult['resultText'], event: AIDialogResult['event']): void {
     this.deferred?.resolve({ resultText, event });
 
     this._abort?.();
-    this._processCommandCompletion(this._getInitialDialogState());
+    this._processCommandCompletion();
 
     super.hide();
   }

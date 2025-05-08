@@ -12,7 +12,7 @@ import {
   DxTextAreaModule,
 } from 'devextreme-angular';
 import type { Item, SelectionChangingEvent } from 'devextreme/ui/stepper';
-import validationEngine from "devextreme/ui/validation_engine";
+import validationEngine from 'devextreme/ui/validation_engine';
 import { AppService } from './app.service';
 import { BookingFormData } from './app.types';
 import { DatesFormComponent } from "./dates-form/dates-form.component";

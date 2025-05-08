@@ -5,6 +5,7 @@ import filterUtils from '@js/ui/shared/filtering';
 
 import { defaultSetFieldValue } from '../editing/utils';
 import type { Template, WithRequired } from '../types';
+import { parseValue } from '../utils';
 import type { Column, FieldInfo } from './types';
 
 interface NonNormalizedColumnOptions {
@@ -28,10 +29,12 @@ export const defaultColumnProperties = {
   dataType: 'string',
   calculateFieldValue(data): unknown {
     // @ts-expect-error
-    return data[this.dataField!];
+    const value = data[this.dataField];
+    return parseValue(this, value) ?? value;
   },
   calculateDisplayValue(data): unknown {
-    return this.calculateFieldValue(data);
+    // @ts-expect-error
+    return data[this.dataField!];
   },
   calculateFilterExpression: filterUtils.defaultCalculateFilterExpression,
   alignment: 'left',
@@ -68,10 +71,10 @@ Exclude<ColumnProperties, string>
 
   },
   date: {
-
+    format: 'shortDate',
   },
   datetime: {
-
+    format: 'shortDateShortTime',
   },
   number: {
 
