@@ -273,7 +273,7 @@ QUnit.module('Chat', () => {
             assert.deepEqual(messageList.option('items'), newItems, 'items value is updated');
         });
 
-        QUnit.test('items should be passed to messageList after update only one item', function(assert) {
+        QUnit.test('items should be passed to messageList after update only one item (T1290746)', function(assert) {
             this.reinit({
                 items: [{ text: 'one' }, { text: 'two' }],
             });
@@ -285,7 +285,7 @@ QUnit.module('Chat', () => {
             assert.deepEqual(messageList.option('items'), [{ text: 'new one' }, { text: 'two' }], 'items value is updated');
         });
 
-        QUnit.test('items should be passed to messageList after update only one item field', function(assert) {
+        QUnit.test('items should be passed to messageList after update only one item field (T1290746)', function(assert) {
             this.reinit({
                 items: [{ text: 'one' }, { text: 'two' }],
             });
