@@ -14,7 +14,6 @@ import {
   WidgetClass,
 } from './test-component';
 
-
 jest.useFakeTimers();
 jest.mock('react-dom', () => ({
   __esModule: true,
@@ -44,7 +43,6 @@ describe('rendering', () => {
   });
 
   it('renders component with children correctly', () => {
-
     const { container } = testingLib.render(
       <TestComponent>
         <span />
@@ -84,7 +82,7 @@ describe('rendering', () => {
       WidgetClass.mockImplementation(() => {
         componentRendered = true;
         return Widget;
-      })
+      });
     });
 
     afterEach(() => {
@@ -95,7 +93,7 @@ describe('rendering', () => {
     const MyComponent = () => {
       useLayoutEffect(() => {
         expect(componentRendered).toBeTruthy();
-      })
+      });
 
       return (
         <TestComponent />
@@ -107,7 +105,7 @@ describe('rendering', () => {
 
       const ref = () => {
         expect(componentRendered).toBeTruthy();
-      }
+      };
       const { unmount } = testingLib.render(<TestComponent ref={ref} />);
 
       // required to make the second call to ref callback (on unmount)
@@ -137,7 +135,7 @@ describe('rendering', () => {
       WidgetClass.mockImplementation((element: Element) => {
         didRenderToDetachedBranch = didRenderToDetachedBranch || !element.isConnected;
         return Widget;
-      })
+      });
     });
 
     afterEach(() => {
@@ -155,7 +153,7 @@ describe('rendering', () => {
         </TestComponent>
       );
       testingLib.render(component);
-  
+
       expect(didRenderToDetachedBranch).toBeFalsy();
     });
 
@@ -295,6 +293,30 @@ describe('element attrs management', () => {
     expect(element.style.color).toEqual('red');
   });
 
+  it('element inline styles that should convert to px in strict mode (T1289861)', () => {
+    const { container } = testingLib.render(
+        <React.StrictMode>
+          <TestComponent style={{ maxWidth: 300 }} />
+        </React.StrictMode>,
+    );
+
+    const element: HTMLElement = container?.firstChild as HTMLElement;
+
+    expect(element.style.maxWidth).toEqual('300px');
+  });
+
+  it('element inline styles that should not convert to px in strict mode (T1289861)', () => {
+    const { container } = testingLib.render(
+        <React.StrictMode>
+          <TestComponent style={{ zIndex: 1000 }} />
+        </React.StrictMode>,
+    );
+
+    const element: HTMLElement = container?.firstChild as HTMLElement;
+
+    expect(element.style.zIndex).toEqual('1000');
+  });
+
   it('updates id, className and style', () => {
     const { container, rerender } = testingLib.render(
       <TestComponent id="id1" className="class1" style={{ background: 'red' }} />,
@@ -401,7 +423,7 @@ describe('disposing', () => {
 
   it('saves and restores focus state after dispose', async () => {
     let firstRender = true;
-  
+
     WidgetClass.mockImplementation((container: HTMLElement) => {
       const input = document.createElement('input');
 
@@ -414,12 +436,12 @@ describe('disposing', () => {
       firstRender = false;
 
       return Widget;
-    })
+    });
 
     testingLib.render(
       <React.StrictMode>
         <TestComponent />
-      </React.StrictMode>
+      </React.StrictMode>,
     );
 
     expect(Widget.focus).toHaveBeenCalledTimes(1);
