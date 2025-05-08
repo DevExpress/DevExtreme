@@ -5,9 +5,9 @@
 $generic-recurrence-interval-number-box-margin-top: null !default;
 
 @if $size == "default" {
-  $generic-recurrence-interval-number-box-margin-top: 25px !default;
+  $generic-recurrence-interval-number-box-margin-top: 31px !default;
 }
 
 @else if $size == "compact" {
-  $generic-recurrence-interval-number-box-margin-top: 18px !default;
+  $generic-recurrence-interval-number-box-margin-top: 23px !default;
 }
