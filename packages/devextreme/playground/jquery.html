@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <title>DevExtreme jQuery Example</title>
 
@@ -19,7 +18,7 @@
 
     <script type="text/javascript" src="../artifacts/js/jquery.js"></script>
     <!-- HtmlEditor -->
-    <script type="text/javascript" src="../artifacts/js/dx-quill.min.js"></script>
+    <!-- <script type="text/javascript" src="../artifacts/js/dx-quill.min.js"></script> -->
 
     <!--<script type="text/javascript" src="../artifacts/js/cldr.js"></script>
     <script type="text/javascript" src="../artifacts/js/cldr/event.js"></script>
@@ -40,11 +39,9 @@
     -->
 
     <script type="text/javascript" src="../artifacts/js/dx.all.debug.js" charset="utf-8"></script>
-    <script type="text/javascript" src="../artifacts/js/dx.ai-integration.debug.js" charset="utf-8"></script>
     <script type="text/javascript" src="./themeSelector.js"></script>
     <script type="text/javascript" src="../../../node_modules/axe-core/axe.min.js"></script>
 </head>
-
 <body class="dx-surface">
     <div role="main">
         <h1 style="position: fixed; left: 0; top: 0; clip: rect(1px, 1px, 1px, 1px);">Test header</h1>
@@ -52,83 +49,12 @@
         <select id="theme-selector" style="display: block;">
         </select>
         <br />
-
-        <script type="module">
-            import { AzureOpenAI } from "https://esm.sh/openai@4.73.1";
-
-            window.AzureOpenAI = AzureOpenAI;
-        </script>
-
-        <div class="dx-viewport">
-            <div id="button"></div>
-        <div>
-
+        <div id="button"></div>
         <script>
-            // const deployment = 'gpt-4o-mini';
-            // const apiVersion = '2024-02-01';
-            // const endpoint = 'https://public-api.devexpress.com/demo-openai';
-            // const apiKey = 'DEMO';
-            const value = 'Identity is cached.';
-
-            $(() => {
-                // const aiService = new AzureOpenAI({
-                //     dangerouslyAllowBrowser: true,
-                //     deployment,
-                //     endpoint,
-                //     apiVersion,
-                //     apiKey,
-                // });
-
-                // async function getAIResponse(messages, signal) {
-                //     const params = {
-                //         messages,
-                //         model: deployment,
-                //         max_tokens: 1000,
-                //         temperature: 0.7,
-                //     };
-
-                //     return aiService.chat.completions.create(params, { signal });
-                // }
-
-                const aiIntegration = new DevExpress.aiIntegration({
-                    sendRequest({ prompt }) {
-                        const controller = new AbortController();
-                        const signal = controller.signal;
-
-                        const aiPrompt = [
-                            { role: 'system', content: prompt.system, },
-                            { role: 'user', content: prompt.user, },
-                        ];
-
-                        const promise = new Promise(async (resolve) => {
-                            // const response = await getAIResponse(aiPrompt, signal);
-                            // const result = response.choices[0].message?.content;
-
-                            // resolve(result);
-
-                            setTimeout(() => {
-                                resolve('Successful');
-                            }, 500);
-                        });
-
-                        const result = {
-                            promise,
-                            abort: () => {
-                                controller.abort();
-                            },
-                        };
-
-                        return result;
-                    },
-                });
-
-                $("#button").dxHtmlEditor({
-                    value,
-                    height: 600,
-                    aiIntegration,
-                    toolbar: {
-                        items: ['link', 'ai'],
-                    },
+            $(function() {
+                $("#button").dxButton({
+                    text: 'Click me!',
+                    onClick: function() { alert("clicked"); }
                 });
             });
         </script>
