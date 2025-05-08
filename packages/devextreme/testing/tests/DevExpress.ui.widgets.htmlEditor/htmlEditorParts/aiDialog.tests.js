@@ -194,6 +194,11 @@ QUnit.module('AIDialog', () => {
             { name: 'stop button', domClass: BUTTON_CLASS, index: 1, state: 'generating', class: 'dxButton' },
         ].forEach(element => {
             QUnit.test(`esc keydown on ${element.name} should hide dialog`, function(assert) {
+                if(devices.real().deviceType !== 'desktop') {
+                    assert.ok(true, 'Test is not applicable for mobile devices');
+                    return;
+                }
+
                 const done = assert.async();
                 const config = element.state === 'asking'
                     ? { currentCommand: 'askAI' }
