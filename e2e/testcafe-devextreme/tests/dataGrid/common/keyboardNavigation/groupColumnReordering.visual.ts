@@ -501,7 +501,7 @@ test('Ungroup a single grouped column when pressing Backspace', async (t) => {
   });
 });
 
-test('Ungroup second column via context menu', async (t) => {
+safeSizeTest('Ungroup second column via context menu', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
   const contextMenu = dataGrid.getContextMenu();
@@ -556,7 +556,7 @@ test('Ungroup second column via context menu', async (t) => {
   });
 });
 
-test('Ungroup last column via context menu', async (t) => {
+safeSizeTest('Ungroup last column via context menu', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
   const contextMenu = dataGrid.getContextMenu();
@@ -611,7 +611,7 @@ test('Ungroup last column via context menu', async (t) => {
   });
 });
 
-test('Ungroup a single grouped column via context menu', async (t) => {
+safeSizeTest('Ungroup a single grouped column via context menu', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
   const contextMenu = dataGrid.getContextMenu();
@@ -750,7 +750,7 @@ test('Ungroup a single grouped column when pressing Backspace if there is comman
   });
 });
 
-test('Ungroup column via context menu if showWhenGrouped is enabled', async (t) => {
+safeSizeTest('Ungroup column via context menu if showWhenGrouped is enabled', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
   const contextMenu = dataGrid.getContextMenu();
@@ -798,7 +798,7 @@ test('Ungroup column via context menu if showWhenGrouped is enabled', async (t) 
   });
 });
 
-test('Ungroup all columns via context menu', async (t) => {
+safeSizeTest('Ungroup all columns via context menu', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
   const contextMenu = dataGrid.getContextMenu();
@@ -853,7 +853,7 @@ test('Ungroup all columns via context menu', async (t) => {
   });
 });
 
-test('Ungroup all columns via context menu if showWhenGrouped is enabled', async (t) => {
+safeSizeTest('Ungroup all columns via context menu if showWhenGrouped is enabled', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
   const contextMenu = dataGrid.getContextMenu();
@@ -1044,7 +1044,7 @@ test('Group column when pressing ctrl + g if showWhenGrouped is enabled', async 
   });
 });
 
-test('Group second column via context menu', async (t) => {
+safeSizeTest('Group second column via context menu', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
   const contextMenu = dataGrid.getContextMenu();
@@ -1083,7 +1083,7 @@ test('Group second column via context menu', async (t) => {
   });
 });
 
-test('Group last column via context menu', async (t) => {
+safeSizeTest('Group last column via context menu', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
   const contextMenu = dataGrid.getContextMenu();
@@ -1122,7 +1122,7 @@ test('Group last column via context menu', async (t) => {
   });
 });
 
-test('Group a single column via context menu', async (t) => {
+safeSizeTest('Group a single column via context menu', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
   const contextMenu = dataGrid.getContextMenu();
@@ -1159,7 +1159,7 @@ test('Group a single column via context menu', async (t) => {
   });
 });
 
-test('Group column via context menu if showWhenGrouped is enabled', async (t) => {
+safeSizeTest('Group column via context menu if showWhenGrouped is enabled', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
   const contextMenu = dataGrid.getContextMenu();
