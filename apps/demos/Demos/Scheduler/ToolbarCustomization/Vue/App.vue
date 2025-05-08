@@ -17,11 +17,8 @@
       :allow-multiple="true"
     />
     <DxToolbar>
-      <DxItem
-        location="before"
-        name="dateNavigator"
-        :options="dateNavigatorOptions"
-      />
+      <DxItem name="today"/>
+      <DxItem name="dateNavigator"/>
       <DxItem
         location="before"
         locate-in-menu="auto"
@@ -40,14 +37,14 @@
       />
     </DxToolbar>
     <template #assigneesTemplate>
-      <DxTagBox
+      <DxSelectBox
+        placeholder="Select Employee"
         :items="assignees"
-        :input-attr="{ 'aria-label': 'Group' }"
-        :element-attr="{ class: 'assignees-tag-box' }"
+        show-clear-button="true"
         display-expr="text"
         value-expr="id"
-        show-selection-controls="true"
-        max-displayed-tags="1"
+        :input-attr="{ 'aria-label': 'Select Employee' }"
+        width="200"
         :value="assigneesFilterValue"
         @value-changed="onAssigneesFilterChange"
       />
@@ -59,41 +56,51 @@ import { ref, computed } from 'vue';
 import DxScheduler, {
   DxResource, DxToolbar, DxItem, DxSchedulerTypes,
 } from 'devextreme-vue/scheduler';
-import { DxTagBox, DxTagBoxTypes } from 'devextreme-vue/tag-box';
-import { data, assignees } from './data.ts';
+import { DxSelectBox, type DxSelectBoxTypes } from 'devextreme-vue/select-box';
+import { assignees, currentDate, schedulerDataSource } from './data.ts';
 
 const views: DxSchedulerTypes.ViewType[] = ['day', 'week', 'workWeek', 'month'];
-const currentDate = ref(new Date(2021, 3, 27));
 const assigneesFilterValue = ref([]);
 const schedulerRef = ref<DxScheduler | null>(null);
-const dataSource = computed(() => (assigneesFilterValue.value.length > 0
-  ? data.filter((item) => assigneesFilterValue.value.some((id) => item.assigneeId.includes(id)))
-  : data));
+const dataSource = ref(schedulerDataSource);
 
-const dateNavigatorOptions = {
-  onItemClick(event) {
-    if (event.itemData.key === 'today') {
-      currentDate.value = new Date();
-    }
-  },
-  items: [
-    { key: 'today', text: 'Today' },
-    'prev',
-    'next',
-    'current',
-  ],
-};
 const newEventButtonOptions = {
   icon: 'plus',
-  text: 'New event',
+  text: 'New Appointment',
+  stylingMode: 'outlined',
+  type: 'normal',
   onClick: () => {
-    schedulerRef.value!.instance!.showAppointmentPopup({
-      startDate: new Date(),
-    }, true);
+    const scheduler = schedulerRef.value!.instance!;
+    const selected = scheduler.option('selectedCellData') ?? [];
+
+    if (selected.length) {
+      scheduler.showAppointmentPopup({
+        ...selected[0].groups,
+        allDay: selected[0].allDay,
+        startDate: new Date(selected[0].startDateUTC),
+        endDate: new Date(selected.at(-1).endDateUTC),
+      }, true);
+    } else {
+      const currentDate = scheduler.option('currentDate');
+      const cellDuration = scheduler.option('cellDuration') as number;
+      const cellDurationMs = cellDuration * 60 * 1000; // ms
+      const currentTime = new Date(currentDate as Date).getTime();
+      const roundTime = Math.round(currentTime / cellDurationMs) * cellDurationMs;
+
+      scheduler.showAppointmentPopup({
+        startDate: new Date(roundTime),
+        endDate: new Date(roundTime + cellDurationMs),
+      }, true);
+    }
   },
 };
 
-function onAssigneesFilterChange(event: DxTagBoxTypes.ValueChangedEvent) {
+function onAssigneesFilterChange(event: DxSelectBoxTypes.ValueChangedEvent) {
+  const scheduler = schedulerRef.value!.instance!;
+  const filter = event.value ? ['assigneeId', 'contains', event.value] : null;
+
+  schedulerDataSource.filter(filter);
+  scheduler.option('dataSource', schedulerDataSource);
   assigneesFilterValue.value = event.value;
 }
 </script>

@@ -9,7 +9,7 @@ import {
 } from 'devextreme-angular';
 import DataSource from 'devextreme/data/data_source';
 import { DxButtonTypes } from 'devextreme-angular/ui/button';
-import { DxTagBoxModule, DxTagBoxTypes } from 'devextreme-angular/ui/tag-box';
+import { DxSelectBoxModule, DxSelectBoxTypes } from 'devextreme-angular/ui/select-box';
 import {
   Service, Assignee
 } from './app.service';
@@ -28,7 +28,6 @@ if (window && window.config?.packageConfigPaths) {
   selector: 'demo-app',
   templateUrl: `.${modulePrefix}/app.component.html`,
   providers: [Service],
-  preserveWhitespaces: true,
 })
 export class AppComponent {
   @ViewChild(DxSchedulerComponent, { static: false }) scheduler: DxSchedulerComponent;
@@ -37,7 +36,7 @@ export class AppComponent {
 
   assignees: Assignee[];
 
-  currentDate: Date = new Date(2021, 3, 27);
+  currentDate: Date;
 
   newEventButtonOptions: DxButtonTypes.Properties = {
     icon: 'plus',
@@ -72,9 +71,10 @@ export class AppComponent {
   constructor(service: Service) {
     this.dataSource = service.getAppointmentsDataSource();
     this.assignees = service.getAssignees();
+    this.currentDate = service.getInitialCurrentDate();
   }
 
-  onAssigneesChange(event: DxTagBoxTypes.ValueChangedEvent) {
+  onAssigneesChange(event: DxSelectBoxTypes.ValueChangedEvent) {
     const filter = event.value ? ['assigneeId', 'contains', event.value] : null;
     this.dataSource.filter(filter);
   }
@@ -85,7 +85,7 @@ export class AppComponent {
     BrowserModule,
     DxSchedulerModule,
     DxTemplateModule,
-    DxTagBoxModule,
+    DxSelectBoxModule,
     DxButtonModule,
   ],
   declarations: [AppComponent],

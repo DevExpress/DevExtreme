@@ -136,4 +136,8 @@ export class Service {
   getAssignees(): Assignee[] {
     return assignees;
   }
+
+  getInitialCurrentDate(): Date {
+    return currentDate;
+  }
 }

@@ -2,49 +2,55 @@ import React, {
   useCallback, useMemo, useRef, useState,
 } from 'react';
 import Scheduler, { Toolbar, Item, Resource } from 'devextreme-react/scheduler';
-import TagBox from 'devextreme-react/cjs/tag-box';
-import { data, assignees } from './data.js';
+import SelectBox from 'devextreme-react/select-box';
+import { assignees, schedulerDataSource, currentDate } from './data.js';
 
-const initialCurrentDate = new Date(2021, 3, 27);
 const views = ['day', 'week', 'workWeek', 'month'];
-const inputAttr = { 'aria-label': 'Assignees' };
-const elementAttr = { class: 'assignees-tag-box' };
+const selectBoxPlaceholder = 'Select Employee';
+const inputAttr = { 'aria-label': selectBoxPlaceholder };
 const App = () => {
   const schedulerRef = useRef(null);
-  const [currentDate, setCurrentDate] = useState(initialCurrentDate);
-  const [assigneesFilterValue, setAssigneesFilterValue] = useState([]);
-  const filteredData = useMemo(
-    () =>
-      (assigneesFilterValue.length
-        ? data.filter((item) => assigneesFilterValue.some((id) => item.assigneeId.includes(id)))
-        : data),
-    [assigneesFilterValue],
-  );
+  const [assigneesFilterValue, setAssigneesFilterValue] = useState();
   const onAssigneesFilterChange = useCallback((event) => {
+    const scheduler = schedulerRef.current.instance();
+    const filter = event.value ? ['assigneeId', 'contains', event.value] : null;
+    schedulerDataSource.filter(filter);
+    scheduler.option('dataSource', schedulerDataSource);
     setAssigneesFilterValue(event.value);
   }, []);
-  const dateNavigatorOptions = useMemo(
-    () => ({
-      onItemClick: (event) => {
-        if (event.itemData.key === 'today') {
-          setCurrentDate(new Date());
-        }
-      },
-      items: [{ key: 'today', text: 'Today' }, 'prev', 'next', 'current'],
-    }),
-    [],
-  );
   const toggleButtonOptions = useMemo(
     () => ({
       icon: 'plus',
-      text: 'New event',
-      onClick: () => {
-        schedulerRef.current?.instance().showAppointmentPopup(
-          {
-            startDate: new Date(),
-          },
-          true,
-        );
+      text: 'New Appointment',
+      stylingMode: 'outlined',
+      type: 'normal',
+      onClick() {
+        const scheduler = schedulerRef.current.instance();
+        const selected = scheduler.option('selectedCellData') ?? [];
+        if (selected.length) {
+          scheduler.showAppointmentPopup(
+            {
+              ...selected[0].groups,
+              allDay: selected[0].allDay,
+              startDate: new Date(selected[0].startDateUTC),
+              endDate: new Date(selected.at(-1).endDateUTC),
+            },
+            true,
+          );
+        } else {
+          const currentDate = scheduler.option('currentDate');
+          const cellDuration = scheduler.option('cellDuration');
+          const cellDurationMs = cellDuration * 60 * 1000; // ms
+          const currentTime = new Date(currentDate).getTime();
+          const roundTime = Math.round(currentTime / cellDurationMs) * cellDurationMs;
+          scheduler.showAppointmentPopup(
+            {
+              startDate: new Date(roundTime),
+              endDate: new Date(roundTime + cellDurationMs),
+            },
+            true,
+          );
+        }
       },
     }),
     [],
@@ -52,7 +58,7 @@ const App = () => {
   return (
     <Scheduler
       timeZone="America/Los_Angeles"
-      dataSource={filteredData}
+      dataSource={schedulerDataSource}
       views={views}
       defaultCurrentView="workWeek"
       defaultCurrentDate={currentDate}
@@ -68,11 +74,8 @@ const App = () => {
         label="Assignee"
       />
       <Toolbar>
-        <Item
-          location="before"
-          name="dateNavigator"
-          options={dateNavigatorOptions}
-        />
+        <Item name="today" />
+        <Item name="dateNavigator" />
         <Item
           location="before"
           locateInMenu="auto"
@@ -83,14 +86,14 @@ const App = () => {
           location="center"
           locateInMenu="auto"
         >
-          <TagBox
+          <SelectBox
+            placeholder={selectBoxPlaceholder}
             items={assignees}
+            showClearButton={true}
             displayExpr="text"
             valueExpr="id"
-            showSelectionControls={true}
-            maxDisplayedTags={1}
             inputAttr={inputAttr}
-            elementAttr={elementAttr}
+            width={200}
             value={assigneesFilterValue}
             onValueChanged={onAssigneesFilterChange}
           />
@@ -98,7 +101,7 @@ const App = () => {
         <Item
           location="after"
           locateInMenu="auto"
-          name="columnChooserButton"
+          name="viewSwitcher"
         />
       </Toolbar>
     </Scheduler>

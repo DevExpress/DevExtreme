@@ -1,22 +1,24 @@
 import React, { useCallback, useMemo, useRef, useState } from 'react';
 
 import Scheduler, { Toolbar, Item, Resource, SchedulerTypes, SchedulerRef } from 'devextreme-react/scheduler';
+import SelectBox, { type SelectBoxTypes } from 'devextreme-react/select-box';
 
-import { data, assignees, schedulerDataSource, currentDate } from './data.ts';
-import TagBox, { TagBoxTypes } from "devextreme-react/cjs/tag-box";
+import { assignees, schedulerDataSource, currentDate } from './data.ts';
 
 const views: SchedulerTypes.ViewType[] = ['day', 'week', 'workWeek', 'month'];
-const inputAttr = { 'aria-label': 'Assignees' };
-const elementAttr = { class: 'assignees-tag-box' };
+const selectBoxPlaceholder = 'Select Employee';
+const inputAttr = { 'aria-label': selectBoxPlaceholder };
 
 const App = () => {
   const schedulerRef = useRef<SchedulerRef>(null);
   const [assigneesFilterValue, setAssigneesFilterValue] = useState<number>();
 
-  const onAssigneesFilterChange = useCallback((event: TagBoxTypes.ValueChangedEvent) => {
+  const onAssigneesFilterChange = useCallback((event: SelectBoxTypes.ValueChangedEvent) => {
+    const scheduler = schedulerRef.current!.instance()!;
     const filter = event.value ? ['assigneeId', 'contains', event.value] : null;
 
     schedulerDataSource.filter(filter);
+    scheduler.option('dataSource', schedulerDataSource);
     setAssigneesFilterValue(event.value);
   }, []);
   const toggleButtonOptions = useMemo(() => ({
@@ -25,11 +27,7 @@ const App = () => {
     stylingMode: 'outlined',
     type: 'normal',
     onClick() {
-      const scheduler = schedulerRef.current?.instance();
-      if (!scheduler) {
-        return;
-      }
-
+      const scheduler = schedulerRef.current!.instance()!;
       const selected = scheduler.option('selectedCellData') ?? [];
 
       if (selected.length) {
@@ -81,18 +79,18 @@ const App = () => {
           widget="dxButton"
           options={toggleButtonOptions} />
         <Item location="center" locateInMenu="auto">
-          <TagBox
+          <SelectBox
+            placeholder={selectBoxPlaceholder}
             items={assignees}
+            showClearButton={true}
             displayExpr="text"
             valueExpr="id"
-            showSelectionControls={true}
-            maxDisplayedTags={1}
             inputAttr={inputAttr}
-            elementAttr={elementAttr}
+            width={200}
             value={assigneesFilterValue}
             onValueChanged={onAssigneesFilterChange} />
         </Item>
-        <Item location="after" locateInMenu="auto" name="columnChooserButton" />
+        <Item location="after" locateInMenu="auto" name="viewSwitcher" />
       </Toolbar>
     </Scheduler>
   );
