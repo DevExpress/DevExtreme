@@ -20,6 +20,7 @@ import {
 } from '__internal/ui/m_load_indicator';
 import { AIIntegration } from '__internal/core/ai_integration/core/ai_integration';
 import { isPromise } from 'core/utils/type';
+import keyboardMock from '../../../helpers/keyboardMock.js';
 import {
     buildDefaultCommandsMap,
     clickActionButton,
@@ -217,6 +218,32 @@ QUnit.module('AIDialog', {}, () => {
 
             assert.strictEqual(optionSelectBox.option('visible'), true, 'option SelectBox is visible after changing command');
             assert.strictEqual(optionSelectBox.option('value'), 'english', 'first command option is selected after command change');
+        });
+    });
+
+    QUnit.module('runtime command and option change', integrationModuleConfig, () => {
+        QUnit.test('should not send ai request after switch from command with options to askAi', function(assert) {
+            this.showDialog({ currentCommand: 'changeStyle', currentCommandOption: 'formal' });
+
+            assert.strictEqual(this.sendRequestStub.callCount, 1, 'request is sent on dialog show');
+
+            const commandSelectBox = getCommandSelectBoxInstance(this.$element);
+
+            commandSelectBox.option('value', 'askAI');
+
+            assert.strictEqual(this.sendRequestStub.callCount, 1, 'no new requests are sent on switch to askAI command');
+        });
+
+        QUnit.test('should send ai request after switch from command with options to not askAi command without options', function(assert) {
+            this.showDialog({ currentCommand: 'changeStyle', currentCommandOption: 'formal' });
+
+            assert.strictEqual(this.sendRequestStub.callCount, 1, 'request is sent on dialog show');
+
+            const commandSelectBox = getCommandSelectBoxInstance(this.$element);
+
+            commandSelectBox.option('value', 'summarize');
+
+            assert.strictEqual(this.sendRequestStub.callCount, 2, 'new request is sent on switch to summarize');
         });
     });
 
@@ -608,7 +635,7 @@ QUnit.module('AIDialog', {}, () => {
             });
         });
 
-        QUnit.test('try again should make Informer invisible', function(assert) {
+        QUnit.test('try again should hide Informer', function(assert) {
             const done = assert.async();
 
             this.showDialog({ currentCommand: 'summarize' });
