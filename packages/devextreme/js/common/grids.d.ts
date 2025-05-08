@@ -2363,6 +2363,12 @@ export type GridBaseOptions<TComponent extends GridBase<TRowData, TKey>, TRowDat
  * @public
  * @namespace DevExpress.common.grids
  */
+export type GridsContextMenuTarget = 'toolbar' | 'header' | 'content' | 'footer';
+
+/**
+ * @public
+ * @namespace DevExpress.common.grids
+ */
 export type GridsEditMode = 'batch' | 'cell' | 'row' | 'form' | 'popup';
 
 /**
