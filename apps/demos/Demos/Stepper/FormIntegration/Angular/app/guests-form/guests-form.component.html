@@ -8,7 +8,7 @@
   [validationGroup]="validationGroup"
   [colCount]="3"
 >
-  <dxi-item
+  <dxi-form-item
     [isRequired]="true"
     dataField="adultsCount"
     editorType="dxNumberBox"
@@ -16,21 +16,21 @@
     [label]="adultsLabelOptions"
   >
     <dxi-validation-rule type="range" [min]="1"></dxi-validation-rule>
-  </dxi-item>
+  </dxi-form-item>
 
-  <dxi-item
+  <dxi-form-item
     dataField="childrenCount"
     editorType="dxNumberBox"
     [editorOptions]="numberBoxOptions"
     [label]="childrenLabelOptions"
   >
-  </dxi-item>
+  </dxi-form-item>
 
-  <dxi-item
+  <dxi-form-item
     dataField="petsCount"
     editorType="dxNumberBox"
     [editorOptions]="numberBoxOptions"
     [label]="petsLabelOptions"
   >
-  </dxi-item>
+  </dxi-form-item>
 </dx-form>

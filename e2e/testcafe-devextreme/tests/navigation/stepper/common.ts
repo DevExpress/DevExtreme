@@ -110,8 +110,7 @@ test('Stepper text overflow in vertical orientation', async (t) => {
   test('Stepper item states', async (t) => {
     const state = selectOnFocus ? 'selected' : 'focused';
 
-    const stepper = new Stepper('#container');
-    await t.click(stepper.getItem(0).element);
+    await t.pressKey('tab');
 
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
     await testScreenshot(t, takeScreenshot, `Stepper 1st step selected,selectOnFocus=${selectOnFocus}.png`, { element: '#stepper' });
@@ -133,11 +132,6 @@ test('Stepper text overflow in vertical orientation', async (t) => {
 
     await t.pressKey('right');
     await testScreenshot(t, takeScreenshot, `Stepper last step ${state},selectOnFocus=${selectOnFocus}.png`, { element: '#stepper' });
-
-    await t.click('body', {
-      offsetX: -10,
-      offsetY: -10,
-    });
 
     await t
       .expect(compareResults.isValid())
