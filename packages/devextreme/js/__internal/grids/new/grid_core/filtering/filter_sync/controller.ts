@@ -6,7 +6,6 @@ import { getMatchedConditions } from '@ts/filter_builder/m_utils';
 import { ColumnsController } from '../../columns_controller/index';
 import type { Column } from '../../columns_controller/types';
 import { getColumnByIndexOrName } from '../../columns_controller/utils';
-import { OptionsController } from '../../options_controller/options_controller';
 import { HeaderFilterController } from '../header_filter/index';
 import { getColumnIdentifier, isColumnFilterable } from '../header_filter/utils';
 import { FilterController } from '../index';
@@ -20,7 +19,6 @@ const FILTER_OBJ_COMPARE_DEPTH = 6;
 
 export class FilterSyncController {
   public static dependencies = [
-    OptionsController,
     ColumnsController,
     FilterController,
     HeaderFilterController,
@@ -31,7 +29,6 @@ export class FilterSyncController {
   private previousComposedHeaderFilter: FilterValue | null = null;
 
   constructor(
-    private readonly options: OptionsController,
     private readonly columnsController: ColumnsController,
     private readonly filterController: FilterController,
     private readonly headerFilterController: HeaderFilterController,
@@ -114,4 +111,3 @@ export class FilterSyncController {
     }
   }
 }
-// (!A && !B && !C) == !(A || B || C)
