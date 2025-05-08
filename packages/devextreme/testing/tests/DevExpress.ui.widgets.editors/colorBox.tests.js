@@ -6,7 +6,7 @@ import pointerMock from '../../helpers/pointerMock.js';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import fx from 'common/core/animation/fx';
 import { normalizeKeyName } from 'common/core/events/utils/index';
-import { shouldSkipTestIfDeviceTypeNot } from '../../helpers/device.js';
+import { isRealDeviceTypeNotIn } from '../../helpers/device.js';
 
 import 'generic_light.css!';
 import 'ui/color_box';
@@ -811,7 +811,7 @@ QUnit.module('keyboard navigation', {
     });
 
     QUnit.testInActiveWindow('first input focused on tab should have selected text (T1127632)', function(assert) {
-        if(shouldSkipTestIfDeviceTypeNot('desktop', assert)) {
+        if(isRealDeviceTypeNotIn('desktop', assert)) {
             return;
         }
 

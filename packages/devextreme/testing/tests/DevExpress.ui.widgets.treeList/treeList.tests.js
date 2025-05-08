@@ -24,7 +24,7 @@ import TreeList from '__internal/grids/tree_list/m_widget';
 import pointerMock from '../../helpers/pointerMock.js';
 import { CLICK_EVENT } from '../../helpers/grid/keyboardNavigationHelper.js';
 import { createEvent } from 'common/core/events/utils/index';
-import { shouldSkipTestIfDeviceTypeNot } from '../../helpers/device.js';
+import { isRealDeviceTypeNotIn } from '../../helpers/device.js';
 
 fx.off = true;
 
@@ -264,7 +264,7 @@ QUnit.module('Initialization', defaultModuleConfig, () => {
 
 
     QUnit.testInActiveWindow('Ctrl + left/right keys should collapse/expand row', function(assert) {
-        if(shouldSkipTestIfDeviceTypeNot('desktop', assert, 'keyboard navigation is disabled for non-desktop devices')) {
+        if(isRealDeviceTypeNotIn('desktop', assert, 'keyboard navigation is disabled for non-desktop devices')) {
             return;
         }
 
@@ -300,7 +300,7 @@ QUnit.module('Initialization', defaultModuleConfig, () => {
 
     // T917248
     QUnit.testInActiveWindow('Row should be selected via space key press on check box', function(assert) {
-        if(shouldSkipTestIfDeviceTypeNot('desktop', assert, 'keyboard navigation is disabled for non-desktop devices')) {
+        if(isRealDeviceTypeNotIn('desktop', assert, 'keyboard navigation is disabled for non-desktop devices')) {
             return;
         }
 

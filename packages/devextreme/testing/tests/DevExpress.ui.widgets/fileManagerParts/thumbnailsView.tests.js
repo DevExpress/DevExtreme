@@ -2,7 +2,7 @@ import $ from 'jquery';
 import 'ui/file_manager';
 import fx from 'common/core/animation/fx';
 import { FileManagerWrapper, createTestFileSystem } from '../../../helpers/fileManagerHelpers.js';
-import { shouldSkipTestIfDeviceTypeNot } from '../../../helpers/device.js';
+import { isRealDeviceTypeNotIn } from '../../../helpers/device.js';
 
 const { test } = QUnit;
 
@@ -214,7 +214,7 @@ QUnit.module('Thumbnails View', moduleConfig, () => {
     });
 
     test('Raise the ContextMenuItemClick event', function(assert) {
-        if(shouldSkipTestIfDeviceTypeNot('desktop', assert)) {
+        if(isRealDeviceTypeNotIn('desktop', assert)) {
             return;
         }
 

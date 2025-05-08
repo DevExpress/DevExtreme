@@ -22,7 +22,7 @@ import { setScrollView } from '__internal/ui/list/m_list.base';
 import ScrollView from 'ui/scroll_view';
 import eventsEngine from 'common/core/events/core/events_engine';
 import ariaAccessibilityTestHelper from '../../../helpers/ariaAccessibilityTestHelper.js';
-import { shouldSkipTestIfDeviceTypeNot } from '../../../helpers/device.js';
+import { isRealDeviceTypeNotIn } from '../../../helpers/device.js';
 
 const LIST_ITEM_CLASS = 'dx-list-item';
 const LIST_ITEMS_CLASS = 'dx-list-items';
@@ -2065,7 +2065,7 @@ QUnit.module('events', moduleSetup, () => {
     });
 
     QUnit.test('item onClick handler should be fired on "enter" key press', function(assert) {
-        if(shouldSkipTestIfDeviceTypeNot('desktop', assert)) {
+        if(isRealDeviceTypeNotIn('desktop', assert)) {
             return;
         }
 
@@ -4039,7 +4039,7 @@ QUnit.module('keyboard navigation', {
     });
 
     QUnit.test('\'enter\'/\'space\' keys pressing on selectAll checkbox', function(assert) {
-        if(shouldSkipTestIfDeviceTypeNot('desktop', assert)) {
+        if(isRealDeviceTypeNotIn('desktop', assert)) {
             return;
         }
         assert.expect(3);
@@ -4073,7 +4073,7 @@ QUnit.module('keyboard navigation', {
     });
 
     QUnit.test('focusing on selectAll checkbox after \'down\'/\'up\' pressing', function(assert) {
-        if(shouldSkipTestIfDeviceTypeNot('desktop', assert)) {
+        if(isRealDeviceTypeNotIn('desktop', assert)) {
             return;
         }
         assert.expect(6);
@@ -4763,7 +4763,7 @@ QUnit.module('Accessibility', () => {
         const itemDeleteMode = buttonClass === STATIC_DELETE_BUTTON_CLASS ? 'static' : 'toggle';
 
         QUnit.test(`List item ${itemDeleteMode} button should have a correct role, aria-label, tabindex`, function(assert) {
-            if(shouldSkipTestIfDeviceTypeNot('desktop', assert)) {
+            if(isRealDeviceTypeNotIn('desktop', assert)) {
                 return;
             }
 
@@ -4784,7 +4784,7 @@ QUnit.module('Accessibility', () => {
     });
 
     QUnit.test('List item switchable button should have a correct role, aria-label, tabindex', function(assert) {
-        if(shouldSkipTestIfDeviceTypeNot('desktop', assert)) {
+        if(isRealDeviceTypeNotIn('desktop', assert)) {
             return;
         }
 

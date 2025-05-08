@@ -15,7 +15,7 @@ import dataUtils from 'core/element_data';
 import dateLocalization from 'common/core/localization/date';
 import { normalizeKeyName } from 'common/core/events/utils/index';
 import localization from 'localization';
-import { shouldSkipTestIfDeviceTypeNot } from '../../helpers/device.js';
+import { isRealDeviceTypeNotIn } from '../../helpers/device.js';
 
 import 'generic_light.css!';
 
@@ -2255,7 +2255,7 @@ QUnit.module('Options', {
                 }
             ].forEach(({ value, scenario }) => {
                 QUnit.test(`Cells should not have ${CALENDAR_CELL_IN_RANGE_CLASS} class on hover ${scenario}`, function(assert) {
-                    if(shouldSkipTestIfDeviceTypeNot('desktop', assert)) {
+                    if(isRealDeviceTypeNotIn('desktop', assert)) {
                         return;
                     }
 
@@ -2272,7 +2272,7 @@ QUnit.module('Options', {
             });
 
             QUnit.test(`Cells should have ${CALENDAR_CELL_RANGE_HOVER_CLASS} class on hover when only startDate is defined`, function(assert) {
-                if(shouldSkipTestIfDeviceTypeNot('desktop', assert)) {
+                if(isRealDeviceTypeNotIn('desktop', assert)) {
                     return;
                 }
 
@@ -2305,7 +2305,7 @@ QUnit.module('Options', {
             });
 
             QUnit.test('Hovered range should be cleared after mouseleave on viewsWrapper element', function(assert) {
-                if(shouldSkipTestIfDeviceTypeNot('desktop', assert)) {
+                if(isRealDeviceTypeNotIn('desktop', assert)) {
                     return;
                 }
 

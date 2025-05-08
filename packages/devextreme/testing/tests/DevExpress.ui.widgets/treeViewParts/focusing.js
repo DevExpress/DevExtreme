@@ -5,7 +5,7 @@ import { isRenderer } from 'core/utils/type';
 import config from 'core/config';
 import TreeViewTestWrapper from '../../../helpers/TreeViewTestHelper.js';
 import keyboardMock from '../../../helpers/keyboardMock.js';
-import { shouldSkipTestIfDeviceTypeNot } from '../../../helpers/device.js';
+import { isRealDeviceTypeNotIn } from '../../../helpers/device.js';
 
 const NODE_CLASS = 'dx-treeview-node';
 const ITEM_CLASS = 'dx-treeview-item';
@@ -75,7 +75,7 @@ const configs = [];
 
 configs.forEach(config => {
     QUnit.test(`all.Expanded: ${config.expanded} -> emulateFocus(key:${config.initialFocusedKey}) -> moveFocus('${config.direction}'); (T226868)`, function(assert) {
-        if(shouldSkipTestIfDeviceTypeNot('desktop', assert)) {
+        if(isRealDeviceTypeNotIn('desktop', assert)) {
             return;
         }
         const wrapper = new TreeViewTestWrapper({
@@ -283,7 +283,7 @@ QUnit.testInActiveWindow('Focusing widget when there is search editor', function
 });
 
 QUnit.test('select all item should be focused on treeview focus', function(assert) {
-    if(shouldSkipTestIfDeviceTypeNot('desktop', assert)) {
+    if(isRealDeviceTypeNotIn('desktop', assert)) {
         return;
     }
 
@@ -298,7 +298,7 @@ QUnit.test('select all item should be focused on treeview focus', function(asser
 });
 
 QUnit.test('SelectAll checkbox should be checked with space key', function(assert) {
-    if(shouldSkipTestIfDeviceTypeNot('desktop', assert)) {
+    if(isRealDeviceTypeNotIn('desktop', assert)) {
         return;
     }
 
@@ -317,7 +317,7 @@ QUnit.test('SelectAll checkbox should be checked with space key', function(asser
 });
 
 QUnit.test('search bar should be focused when both search and selectAll item are enabled', function(assert) {
-    if(shouldSkipTestIfDeviceTypeNot('desktop', assert)) {
+    if(isRealDeviceTypeNotIn('desktop', assert)) {
         return;
     }
 
@@ -333,7 +333,7 @@ QUnit.test('search bar should be focused when both search and selectAll item are
 });
 
 QUnit.test('first item should be focused if both search bar and selectAll item are absent', function(assert) {
-    if(shouldSkipTestIfDeviceTypeNot('desktop', assert)) {
+    if(isRealDeviceTypeNotIn('desktop', assert)) {
         return;
     }
 
@@ -347,7 +347,7 @@ QUnit.test('first item should be focused if both search bar and selectAll item a
 });
 
 QUnit.test('events order should not affect focused items', function(assert) {
-    if(shouldSkipTestIfDeviceTypeNot('desktop', assert)) {
+    if(isRealDeviceTypeNotIn('desktop', assert)) {
         return;
     }
 

@@ -14,7 +14,7 @@ import config from 'core/config';
 import ariaAccessibilityTestHelper from '../../helpers/ariaAccessibilityTestHelper.js';
 import { normalizeKeyName } from 'common/core/events/utils/index';
 import messageLocalization from 'common/core/localization/message';
-import { shouldSkipTestIfDeviceTypeNot } from '../../helpers/device.js';
+import { isRealDeviceTypeNotIn } from '../../helpers/device.js';
 
 import 'generic_light.css!';
 import 'ui/validator';
@@ -411,7 +411,7 @@ QUnit.module('functionality', moduleSetup, () => {
     });
 
     QUnit.testInActiveWindow('input focused after click on drop button', function(assert) {
-        if(shouldSkipTestIfDeviceTypeNot('desktop', assert)) {
+        if(isRealDeviceTypeNotIn('desktop', assert)) {
             return;
         }
 
@@ -500,7 +500,7 @@ QUnit.module('functionality', moduleSetup, () => {
     });
 
     QUnit.test('list item obtained focus only after press on control key', function(assert) {
-        if(shouldSkipTestIfDeviceTypeNot('desktop', assert)) {
+        if(isRealDeviceTypeNotIn('desktop', assert)) {
             return;
         }
 
@@ -3717,7 +3717,7 @@ QUnit.module('search', moduleSetup, () => {
     });
 
     QUnit.test('Input value should not be changed after dropdown click when "startswith" search mode is enabled', function(assert) {
-        if(shouldSkipTestIfDeviceTypeNot('desktop', assert)) {
+        if(isRealDeviceTypeNotIn('desktop', assert)) {
             return;
         }
 
@@ -4091,7 +4091,7 @@ QUnit.module('search substitution', {
     });
 
     QUnit.test('the list item value should be displayed in input while navigating without substitution', function(assert) {
-        if(shouldSkipTestIfDeviceTypeNot('desktop', assert)) {
+        if(isRealDeviceTypeNotIn('desktop', assert)) {
             return;
         }
 
@@ -4114,7 +4114,7 @@ QUnit.module('search substitution', {
     });
 
     QUnit.test('the list item value should not be displayed in input after click on item', function(assert) {
-        if(shouldSkipTestIfDeviceTypeNot('desktop', assert)) {
+        if(isRealDeviceTypeNotIn('desktop', assert)) {
             return;
         }
         const dataSource = [
@@ -4151,7 +4151,7 @@ QUnit.module('search substitution', {
     });
 
     QUnit.testInActiveWindow('the first list item should be focused while searching', function(assert) {
-        if(shouldSkipTestIfDeviceTypeNot('desktop', assert)) {
+        if(isRealDeviceTypeNotIn('desktop', assert)) {
             return;
         }
 
@@ -4539,7 +4539,7 @@ QUnit.module('regressions', moduleSetup, () => {
     });
 
     QUnit.test('press "enter" key sets option value (T100679)', function(assert) {
-        if(shouldSkipTestIfDeviceTypeNot('desktop', assert)) {
+        if(isRealDeviceTypeNotIn('desktop', assert)) {
             return;
         }
 
@@ -4568,7 +4568,7 @@ QUnit.module('regressions', moduleSetup, () => {
     });
 
     QUnit.test('press "space" key sets option value', function(assert) {
-        if(shouldSkipTestIfDeviceTypeNot('desktop', assert)) {
+        if(isRealDeviceTypeNotIn('desktop', assert)) {
             return;
         }
 
@@ -4597,7 +4597,7 @@ QUnit.module('regressions', moduleSetup, () => {
     });
 
     QUnit.test('press "space" key shouldn\'t sets option value if SelectBox accept custom value', function(assert) {
-        if(shouldSkipTestIfDeviceTypeNot('desktop', assert)) {
+        if(isRealDeviceTypeNotIn('desktop', assert)) {
             return;
         }
 
@@ -4627,7 +4627,7 @@ QUnit.module('regressions', moduleSetup, () => {
     });
 
     QUnit.test('press "space" key shouldn\'t sets option value if search is enabled', function(assert) {
-        if(shouldSkipTestIfDeviceTypeNot('desktop', assert)) {
+        if(isRealDeviceTypeNotIn('desktop', assert)) {
             return;
         }
 
@@ -5367,7 +5367,7 @@ QUnit.module('keyboard navigation', moduleSetup, () => {
     });
 
     QUnit.testInActiveWindow('value should be reset to the previous one on the "tab" press if popup is closed', function(assert) {
-        if(shouldSkipTestIfDeviceTypeNot('desktop', assert)) {
+        if(isRealDeviceTypeNotIn('desktop', assert)) {
             return;
         }
 
@@ -5394,7 +5394,7 @@ QUnit.module('keyboard navigation', moduleSetup, () => {
     });
 
     QUnit.testInActiveWindow('input value should be reset to the previous one on the "esc" press', function(assert) {
-        if(shouldSkipTestIfDeviceTypeNot('desktop', assert)) {
+        if(isRealDeviceTypeNotIn('desktop', assert)) {
             return;
         }
         const items = ['aaa', 'aab'];
@@ -5415,7 +5415,7 @@ QUnit.module('keyboard navigation', moduleSetup, () => {
     });
 
     QUnit.testInActiveWindow('value should be reset on the "tab" press after input value was cleared', function(assert) {
-        if(shouldSkipTestIfDeviceTypeNot('desktop', assert)) {
+        if(isRealDeviceTypeNotIn('desktop', assert)) {
             return;
         }
 
@@ -5441,7 +5441,7 @@ QUnit.module('keyboard navigation', moduleSetup, () => {
     });
 
     QUnit.testInActiveWindow('value should be restored after the focusout when selection was not changed', function(assert) {
-        if(shouldSkipTestIfDeviceTypeNot('desktop', assert)) {
+        if(isRealDeviceTypeNotIn('desktop', assert)) {
             return;
         }
 
@@ -5463,7 +5463,7 @@ QUnit.module('keyboard navigation', moduleSetup, () => {
     });
 
     QUnit.test('value should be restored after the drop down button pressed when selection was not changed', function(assert) {
-        if(shouldSkipTestIfDeviceTypeNot('desktop', assert)) {
+        if(isRealDeviceTypeNotIn('desktop', assert)) {
             return;
         }
 
@@ -5582,7 +5582,7 @@ QUnit.module('keyboard navigation "TAB" button', moduleSetup, () => {
     });
 
     QUnit.test('After highlighting item and pressing "tab" it should be chosen', function(assert) {
-        if(shouldSkipTestIfDeviceTypeNot('desktop', assert)) {
+        if(isRealDeviceTypeNotIn('desktop', assert)) {
             return;
         }
 
@@ -5665,7 +5665,7 @@ QUnit.module('keyboard navigation "TAB" button', moduleSetup, () => {
     });
 
     QUnit.testInActiveWindow('the "tab" key press should focus the "apply" button if the input is focused', function(assert) {
-        if(shouldSkipTestIfDeviceTypeNot('desktop', assert)) {
+        if(isRealDeviceTypeNotIn('desktop', assert)) {
             return;
         }
 
