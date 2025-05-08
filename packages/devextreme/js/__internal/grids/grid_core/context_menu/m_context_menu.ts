@@ -12,7 +12,7 @@ const viewName = {
   columnHeadersView: 'header',
   rowsView: 'content',
   footerView: 'footer',
-  headerPanel: 'headerPanel',
+  headerPanel: 'toolbar',
 };
 const VIEW_NAMES = ['columnHeadersView', 'rowsView', 'footerView', 'headerPanel'] as const;
 

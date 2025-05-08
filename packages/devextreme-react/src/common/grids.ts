@@ -34,6 +34,7 @@ export {
     FixedPosition,
     GridBase,
     GridBaseOptions,
+    GridsContextMenuTarget,
     GridsEditMode,
     GridsEditRefreshMode,
     GroupExpandMode,

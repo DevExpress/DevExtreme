@@ -13,6 +13,7 @@ export {
   ColumnHeaderFilterSearchConfig,
   ColumnLookup,
   ColumnResizeMode,
+  GridsContextMenuTarget,
   DataChange,
   DataChangeType,
   DataRenderMode,
