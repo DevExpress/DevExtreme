@@ -200,10 +200,10 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
       items: this._commandOptionsList,
       value: this._currentOption ?? this._commandOptionsList?.[0],
       visible: this._isCommandWithOptionsSelected(),
-      onValueChanged: (e): void => {
-        this._currentOption = e.value;
+      onValueChanged: ({ value }): void => {
+        this._currentOption = value;
 
-        if (this._isOpen()) {
+        if (this._isOpen() && value) {
           this._executeAICommand();
         }
       },
