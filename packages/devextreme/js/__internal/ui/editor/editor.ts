@@ -129,8 +129,14 @@ class Editor<
     };
   }
 
+  _shouldAttachKeyboardEvents(): boolean {
+    const { readOnly } = this.option();
+
+    return !readOnly;
+  }
+
   _attachKeyboardEvents(): void {
-    if (!this.option('readOnly')) {
+    if (this._shouldAttachKeyboardEvents()) {
       super._attachKeyboardEvents();
     }
   }
