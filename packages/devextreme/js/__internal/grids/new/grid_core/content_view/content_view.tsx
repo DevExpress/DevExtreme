@@ -20,7 +20,9 @@ export interface ContentViewProps {
   loadPanelProps: LoadPanelProperties & { visible: boolean };
   noDataTextProps: NoDataTextProperties & { visible: boolean };
 
-  scrollableProps: ScrollableProps;
+  scrollableProps: ScrollableProps & {
+    useKeyboard: boolean;
+  };
 
   onViewportHeightChange?: (value: number) => void;
 

@@ -115,6 +115,7 @@ export class ContentView extends ContentViewBase<ContentViewProps> {
             altExpr: this.processExpr(
               this.options.oneWay('cardCover.altExpr').value,
             ),
+            // NOTE: Default value set in SCSS (180px / 140px)
             maxHeight: this.options.oneWay('cardCover.maxHeight').value,
             ratio: this.options.oneWay('cardCover.aspectRatio').value,
             template: this.options.template('cardCover.template').value,
