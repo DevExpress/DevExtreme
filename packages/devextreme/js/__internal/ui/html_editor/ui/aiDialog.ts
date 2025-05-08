@@ -171,6 +171,7 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
       value: this._currentCommand,
       displayExpr: 'text',
       valueExpr: 'name',
+      onInitialized: this._addEscapeHandler.bind(this),
       onValueChanged: (e): void => {
         if (this._commandChangeSuppressed) {
           return;
@@ -200,6 +201,7 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
       items: this._commandOptionsList,
       value: this._currentOption ?? this._commandOptionsList?.[0],
       visible: this._isCommandWithOptionsSelected(),
+      onInitialized: this._addEscapeHandler.bind(this),
       onValueChanged: ({ value }): void => {
         this._currentOption = value;
 
@@ -212,17 +214,22 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
 
   protected _renderPromptTextArea($container: dxElementWrapper): void {
     const $textArea = $('<div>').appendTo($container);
-    this._promptTextArea = new TextArea($textArea.get(0), {
+
+    const options = {
       value: this._askAIPrompt,
       minHeight: TEXT_AREA_MIN_HEIGHT,
       maxHeight: TEXT_AREA_MAX_HEIGHT,
       autoResizeEnabled: true,
       width: '100%',
       placeholder: localizationMessage.format('dxHtmlEditor-aiAskPlaceholder'),
+      _shouldAttachKeyboardEvents: true,
+      onInitialized: this._addEscapeHandler.bind(this),
       onValueChanged: (e): void => {
         this._askAIPrompt = e.value;
       },
-    });
+    };
+
+    this._promptTextArea = new TextArea($textArea.get(0), options);
   }
 
   protected _renderResultTextArea($container: dxElementWrapper): void {
@@ -236,12 +243,16 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
       autoResizeEnabled: true,
     };
 
-    this._resultTextArea = new TextArea($textArea.get(0), {
+    const options = {
       minHeight: TEXT_AREA_MIN_HEIGHT,
       width: '100%',
       readOnly: true,
+      _shouldAttachKeyboardEvents: true,
+      onInitialized: this._addEscapeHandler.bind(this),
       ...screenSpecificOptions,
-    });
+    };
+
+    this._resultTextArea = new TextArea($textArea.get(0), options);
   }
 
   protected _renderContent($contentElem: dxElementWrapper): void {
@@ -339,6 +350,7 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
         onButtonClick: (e: ButtonClickEvent): void => {
           this._replaceButtonAction({ ...e, itemData: { id: ReplaceButtonActions.Replace } });
         },
+        onInitialized: this._addEscapeHandler.bind(this),
         onItemClick: (e: ItemClickEvent) => this._replaceButtonAction(e),
       },
     };
@@ -361,6 +373,7 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
           // eslint-disable-next-line @typescript-eslint/no-floating-promises
           navigator?.clipboard?.writeText(value ?? '');
         },
+        onInitialized: this._addEscapeHandler.bind(this),
       },
     };
   }
@@ -377,6 +390,7 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
         icon: TRY_AGAIN_BUTTON_ICON,
         text,
         onClick: () => this._retryExecuteAICommand(),
+        onInitialized: this._addEscapeHandler.bind(this),
       },
     };
   }
@@ -394,6 +408,7 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
         stylingMode: 'contained',
         width,
         onClick: () => this._executeAICommand(),
+        onInitialized: this._addEscapeHandler.bind(this),
       },
     };
   }
@@ -411,6 +426,7 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
         text: localizationMessage.format('dxHtmlEditor-aiStop'),
         width,
         onClick: () => this._stopAICommandExecution(),
+        onInitialized: this._addEscapeHandler.bind(this),
       },
     };
   }
