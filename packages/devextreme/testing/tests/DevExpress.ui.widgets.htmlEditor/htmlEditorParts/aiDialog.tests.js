@@ -14,6 +14,11 @@ import AIDialog, {
     TEXT_AREA_MAX_HEIGHT
 } from '__internal/ui/html_editor/ui/aiDialog';
 import { BUTTON_GROUP_CLASS } from '__internal/ui/m_button_group';
+import { POPUP_CLASS } from '__internal/ui/popup/m_popup';
+import { TEXTAREA_CLASS } from '__internal/ui/m_text_area';
+import { SELECTBOX_CLASS } from '__internal/ui/m_select_box';
+import { INFORMER_CLASS } from '__internal/ui/informer/informer';
+import { BUTTON_CLASS } from '__internal/ui/button/button';
 import {
     ANIMATION_TYPE_CLASSES,
     LOADINDICATOR_CONTENT_CLASS,
@@ -40,10 +45,6 @@ import 'ui/menu';
 import 'ui/popup';
 import 'ui/text_area';
 import 'ui/select_box';
-
-const TEXT_AREA_CLASS = 'dx-textarea';
-const SELECT_BOX_CLASS = 'dx-selectbox';
-const INFORMER_CLASS = 'dx-informer';
 
 const moduleConfig = {
     beforeEach() {
@@ -94,6 +95,12 @@ const integrationModuleConfig = {
         };
         this.setDialogState = (state) => this.aiDialog['_setDialogState'](state);
         this.getAbort = () => this.aiDialog._abort;
+        this.getFocusTarget = (instance) => {
+            const focusTarget = instance._focusTarget && instance._focusTarget();
+            const element = instance.$element();
+
+            return focusTarget || element;
+        };
     },
     afterEach() {
         sinon.restore();
@@ -106,7 +113,7 @@ function assertConfig(assert, config, expectations) {
     }
 };
 
-QUnit.module('AIDialog', {}, () => {
+QUnit.module('AIDialog', () => {
     QUnit.module('rendering and initial state', moduleConfig, () => {
         QUnit.test('should render AI dialog content with correct values', function(assert) {
             showAIDialog(this);
@@ -114,8 +121,8 @@ QUnit.module('AIDialog', {}, () => {
             const $wrapper = this.$element.find(`.${AI_DIALOG_CLASS}`);
             const $aiContent = $wrapper.find(`.${AI_DIALOG_CONTENT_CLASS}`);
             const $controls = $aiContent.find(`.${AI_DIALOG_CONTROLS_CLASS}`);
-            const $selectBoxes = $controls.find(`.${SELECT_BOX_CLASS}`);
-            const $textAreas = $aiContent.find(`.${TEXT_AREA_CLASS}`);
+            const $selectBoxes = $controls.find(`.${SELECTBOX_CLASS}`);
+            const $textAreas = $aiContent.find(`.${TEXTAREA_CLASS}`);
             const $informer = $aiContent.find(`.${INFORMER_CLASS}`);
             const commandSelectBox = $selectBoxes.eq(0).dxSelectBox('instance');
             const optionSelectBox = $selectBoxes.eq(1).dxSelectBox('instance');
@@ -171,6 +178,44 @@ QUnit.module('AIDialog', {}, () => {
 
             const dropDownItem = toolbarItems.find(item => item.widget === 'dxDropDownButton');
             assert.deepEqual(dropDownItem.options.items.map(i => i.id), ['insertAbove', 'insertBelow'], 'DropDown has correct items');
+        });
+    });
+
+    QUnit.module('keyboard navigation', integrationModuleConfig, () => {
+        [
+            { name: 'dialog', domClass: POPUP_CLASS, index: 0, state: 'initial', class: 'dxPopup' },
+            { name: 'command selectbox', domClass: SELECTBOX_CLASS, index: 0, state: 'initial', class: 'dxSelectBox' },
+            { name: 'option selectbox', domClass: SELECTBOX_CLASS, index: 1, state: 'initial', class: 'dxSelectBox' },
+            { name: 'prompt textarea', domClass: TEXTAREA_CLASS, index: 0, state: 'asking', class: 'dxTextArea' },
+            { name: 'result textarea', domClass: TEXTAREA_CLASS, index: 1, state: 'resultReady', class: 'dxTextArea' },
+            { name: 'replace button', domClass: BUTTON_CLASS, index: 1, state: 'resultReady', class: 'dxButton' },
+            { name: 'copy button', domClass: BUTTON_CLASS, index: 1, state: 'resultReady', class: 'dxButton' },
+            { name: 'generate button', domClass: BUTTON_CLASS, index: 1, state: 'asking', class: 'dxButton' },
+            { name: 'stop button', domClass: BUTTON_CLASS, index: 1, state: 'generating', class: 'dxButton' },
+        ].forEach(element => {
+            QUnit.test(`esc keydown on ${element.name} should hide dialog`, function(assert) {
+                const done = assert.async();
+                const config = element.state === 'asking'
+                    ? { currentCommand: 'askAI' }
+                    : { currentCommand: 'changeStyle', currentCommandOption: 'formal' };
+
+                this.showDialog(config);
+                this.promise.then(() => {
+                    this.setDialogState(element.state);
+
+                    const $element = $(`.${element.domClass}`).eq(element.index);
+                    const instance = $element[element.class]('instance');
+
+                    instance.focus();
+                    assert.strictEqual(this.aiDialogPopup.option('visible'), true, 'dialog open');
+
+                    keyboardMock(this.getFocusTarget(instance)).press('escape');
+                    assert.strictEqual(this.aiDialogPopup.option('visible'), false, `dialog hidden by esc on ${element.name}`);
+
+                    done();
+                });
+                this.resolve('response');
+            });
         });
     });
 
@@ -1156,7 +1201,7 @@ QUnit.module('AIDialog', {}, () => {
         });
     });
 
-    QUnit.module('Informer config', {
+    QUnit.module('informer config', {
         beforeEach: function() {
             this.initialLocale = localization.locale();
             this.localizedAIDialogError = 'custom error';

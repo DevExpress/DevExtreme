@@ -6,7 +6,7 @@ import { getImageContainer } from '@ts/core/utils/m_icon';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
 
-const INFORMER_CLASS = 'dx-informer';
+export const INFORMER_CLASS = 'dx-informer';
 const INFORMER_ALIGNMENT_START_CLASS = 'dx-informer-alignment-start';
 const INFORMER_ALIGNMENT_CENTER_CLASS = 'dx-informer-alignment-center';
 const INFORMER_ALIGNMENT_END_CLASS = 'dx-informer-alignment-end';
