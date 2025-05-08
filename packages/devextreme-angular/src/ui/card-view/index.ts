@@ -46,40 +46,6 @@ import {
     WatcherHelper
 } from 'devextreme-angular/core';
 
-import { DxoCardCoverModule } from 'devextreme-angular/ui/nested';
-import { DxoCardHeaderModule } from 'devextreme-angular/ui/nested';
-import { DxiItemModule } from 'devextreme-angular/ui/nested';
-import { DxiColumnModule } from 'devextreme-angular/ui/nested';
-import { DxoFormatModule } from 'devextreme-angular/ui/nested';
-import { DxoFormItemModule } from 'devextreme-angular/ui/nested';
-import { DxoLabelModule } from 'devextreme-angular/ui/nested';
-import { DxiValidationRuleModule } from 'devextreme-angular/ui/nested';
-import { DxoEditingModule } from 'devextreme-angular/ui/nested';
-import { DxiChangeModule } from 'devextreme-angular/ui/nested';
-import { DxoFilterBuilderModule } from 'devextreme-angular/ui/nested';
-import { DxiCustomOperationModule } from 'devextreme-angular/ui/nested';
-import { DxiFieldModule } from 'devextreme-angular/ui/nested';
-import { DxoLookupModule } from 'devextreme-angular/ui/nested';
-import { DxoFilterOperationDescriptionsModule } from 'devextreme-angular/ui/nested';
-import { DxoGroupOperationDescriptionsModule } from 'devextreme-angular/ui/nested';
-import { DxoHeaderPanelModule } from 'devextreme-angular/ui/nested';
-import { DxoLoadPanelModule } from 'devextreme-angular/ui/nested';
-import { DxoAnimationModule } from 'devextreme-angular/ui/nested';
-import { DxoHideModule } from 'devextreme-angular/ui/nested';
-import { DxoFromModule } from 'devextreme-angular/ui/nested';
-import { DxoPositionModule } from 'devextreme-angular/ui/nested';
-import { DxoAtModule } from 'devextreme-angular/ui/nested';
-import { DxoBoundaryOffsetModule } from 'devextreme-angular/ui/nested';
-import { DxoCollisionModule } from 'devextreme-angular/ui/nested';
-import { DxoMyModule } from 'devextreme-angular/ui/nested';
-import { DxoOffsetModule } from 'devextreme-angular/ui/nested';
-import { DxoToModule } from 'devextreme-angular/ui/nested';
-import { DxoShowModule } from 'devextreme-angular/ui/nested';
-import { DxoPagerModule } from 'devextreme-angular/ui/nested';
-import { DxoPagingModule } from 'devextreme-angular/ui/nested';
-import { DxoRemoteOperationsModule } from 'devextreme-angular/ui/nested';
-import { DxoSelectionModule } from 'devextreme-angular/ui/nested';
-import { DxoToolbarModule } from 'devextreme-angular/ui/nested';
 
 import { DxoCardViewAnimationModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxiCardViewAsyncRuleModule } from 'devextreme-angular/ui/card-view/nested';
@@ -127,15 +93,11 @@ import { DxoCardViewToolbarModule } from 'devextreme-angular/ui/card-view/nested
 import { DxiCardViewToolbarItemModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxiCardViewValidationRuleModule } from 'devextreme-angular/ui/card-view/nested';
 
-import { DxiColumnComponent } from 'devextreme-angular/ui/nested';
 
 import { DxiCardViewColumnComponent } from 'devextreme-angular/ui/card-view/nested';
 
 
-/**
- * [descr:dxCardView]
 
- */
 @Component({
     selector: 'dx-card-view',
     standalone: true,
@@ -152,10 +114,7 @@ import { DxiCardViewColumnComponent } from 'devextreme-angular/ui/card-view/nest
 export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponent implements OnDestroy, OnChanges, DoCheck {
     instance: DxCardView<TCardData, TKey> = null;
 
-    /**
-     * [descr:WidgetOptions.accessKey]
     
-     */
     @Input()
     get accessKey(): string | undefined {
         return this._getOption('accessKey');
@@ -165,10 +124,7 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     }
 
 
-    /**
-     * [descr:WidgetOptions.activeStateEnabled]
     
-     */
     @Input()
     get activeStateEnabled(): boolean {
         return this._getOption('activeStateEnabled');
@@ -178,10 +134,7 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     }
 
 
-    /**
-     * [descr:dxCardViewOptions.allowColumnReordering]
     
-     */
     @Input()
     get allowColumnReordering(): boolean {
         return this._getOption('allowColumnReordering');
@@ -191,10 +144,7 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     }
 
 
-    /**
-     * [descr:dxCardViewOptions.cardContentTemplate]
     
-     */
     @Input()
     get cardContentTemplate(): any {
         return this._getOption('cardContentTemplate');
@@ -204,10 +154,7 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     }
 
 
-    /**
-     * [descr:dxCardViewOptions.cardCover]
     
-     */
     @Input()
     get cardCover(): CardCover {
         return this._getOption('cardCover');
@@ -217,10 +164,7 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     }
 
 
-    /**
-     * [descr:dxCardViewOptions.cardFooterTemplate]
     
-     */
     @Input()
     get cardFooterTemplate(): any {
         return this._getOption('cardFooterTemplate');
@@ -230,10 +174,7 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     }
 
 
-    /**
-     * [descr:dxCardViewOptions.cardHeader]
     
-     */
     @Input()
     get cardHeader(): CardHeader {
         return this._getOption('cardHeader');
@@ -243,10 +184,7 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     }
 
 
-    /**
-     * [descr:dxCardViewOptions.cardMaxWidth]
     
-     */
     @Input()
     get cardMaxWidth(): number {
         return this._getOption('cardMaxWidth');
@@ -256,10 +194,7 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     }
 
 
-    /**
-     * [descr:dxCardViewOptions.cardMinWidth]
     
-     */
     @Input()
     get cardMinWidth(): number {
         return this._getOption('cardMinWidth');
@@ -269,10 +204,7 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     }
 
 
-    /**
-     * [descr:dxCardViewOptions.cardsPerRow]
     
-     */
     @Input()
     get cardsPerRow(): Mode | number {
         return this._getOption('cardsPerRow');
@@ -282,10 +214,7 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     }
 
 
-    /**
-     * [descr:dxCardViewOptions.cardTemplate]
     
-     */
     @Input()
     get cardTemplate(): any {
         return this._getOption('cardTemplate');
@@ -295,10 +224,7 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     }
 
 
-    /**
-     * [descr:dxCardViewOptions.columnChooser]
     
-     */
     @Input()
     get columnChooser(): Record<string, any> {
         return this._getOption('columnChooser');
@@ -308,10 +234,7 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     }
 
 
-    /**
-     * [descr:dxCardViewOptions.columns]
     
-     */
     @Input()
     get columns(): Array<ColumnProperties | string> {
         return this._getOption('columns');
@@ -321,10 +244,7 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     }
 
 
-    /**
-     * [descr:dxCardViewOptions.dataSource]
     
-     */
     @Input()
     get dataSource(): Array<any> | DataSource | DataSourceOptions | Store | string {
         return this._getOption('dataSource');
@@ -334,10 +254,7 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     }
 
 
-    /**
-     * [descr:WidgetOptions.disabled]
     
-     */
     @Input()
     get disabled(): boolean {
         return this._getOption('disabled');
@@ -347,10 +264,7 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     }
 
 
-    /**
-     * [descr:dxCardViewOptions.editing]
     
-     */
     @Input()
     get editing(): dxCardViewEditing {
         return this._getOption('editing');
@@ -360,10 +274,7 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     }
 
 
-    /**
-     * [descr:DOMComponentOptions.elementAttr]
     
-     */
     @Input()
     get elementAttr(): Record<string, any> {
         return this._getOption('elementAttr');
@@ -373,10 +284,7 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     }
 
 
-    /**
-     * [descr:dxCardViewOptions.errorRowEnabled]
     
-     */
     @Input()
     get errorRowEnabled(): boolean {
         return this._getOption('errorRowEnabled');
@@ -386,10 +294,7 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     }
 
 
-    /**
-     * [descr:dxCardViewOptions.fieldHintEnabled]
     
-     */
     @Input()
     get fieldHintEnabled(): boolean {
         return this._getOption('fieldHintEnabled');
@@ -399,10 +304,7 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     }
 
 
-    /**
-     * [descr:dxCardViewOptions.filterBuilder]
     
-     */
     @Input()
     get filterBuilder(): dxFilterBuilderOptions {
         return this._getOption('filterBuilder');
@@ -412,10 +314,7 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     }
 
 
-    /**
-     * [descr:dxCardViewOptions.filterBuilderPopup]
     
-     */
     @Input()
     get filterBuilderPopup(): Record<string, any> {
         return this._getOption('filterBuilderPopup');
@@ -425,10 +324,7 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     }
 
 
-    /**
-     * [descr:dxCardViewOptions.filterPanel]
     
-     */
     @Input()
     get filterPanel(): Record<string, any> {
         return this._getOption('filterPanel');
@@ -438,10 +334,7 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     }
 
 
-    /**
-     * [descr:dxCardViewOptions.filterValue]
     
-     */
     @Input()
     get filterValue(): Array<any> | Function | string {
         return this._getOption('filterValue');
@@ -451,10 +344,7 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     }
 
 
-    /**
-     * [descr:WidgetOptions.focusStateEnabled]
     
-     */
     @Input()
     get focusStateEnabled(): boolean {
         return this._getOption('focusStateEnabled');
@@ -464,10 +354,7 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     }
 
 
-    /**
-     * [descr:dxCardViewOptions.headerFilter]
     
-     */
     @Input()
     get headerFilter(): Record<string, any> {
         return this._getOption('headerFilter');
@@ -477,10 +364,7 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     }
 
 
-    /**
-     * [descr:dxCardViewOptions.headerPanel]
     
-     */
     @Input()
     get headerPanel(): HeaderPanel {
         return this._getOption('headerPanel');
@@ -490,10 +374,7 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     }
 
 
-    /**
-     * [descr:DOMComponentOptions.height]
     
-     */
     @Input()
     get height(): (() => number | string) | number | string | undefined {
         return this._getOption('height');
@@ -503,10 +384,7 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     }
 
 
-    /**
-     * [descr:WidgetOptions.hint]
     
-     */
     @Input()
     get hint(): string | undefined {
         return this._getOption('hint');
@@ -516,10 +394,7 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     }
 
 
-    /**
-     * [descr:dxCardViewOptions.hoverStateEnabled]
     
-     */
     @Input()
     get hoverStateEnabled(): boolean {
         return this._getOption('hoverStateEnabled');
@@ -529,10 +404,7 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     }
 
 
-    /**
-     * [descr:dxCardViewOptions.keyExpr]
     
-     */
     @Input()
     get keyExpr(): Array<string> | string {
         return this._getOption('keyExpr');
@@ -542,10 +414,7 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     }
 
 
-    /**
-     * [descr:dxCardViewOptions.loadPanel]
     
-     */
     @Input()
     get loadPanel(): dxLoadPanelOptions {
         return this._getOption('loadPanel');
@@ -555,10 +424,7 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     }
 
 
-    /**
-     * [descr:dxCardViewOptions.noDataTemplate]
     
-     */
     @Input()
     get noDataTemplate(): any {
         return this._getOption('noDataTemplate');
@@ -568,10 +434,7 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     }
 
 
-    /**
-     * [descr:dxCardViewOptions.noDataText]
     
-     */
     @Input()
     get noDataText(): string {
         return this._getOption('noDataText');
@@ -581,10 +444,7 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     }
 
 
-    /**
-     * [descr:dxCardViewOptions.pager]
     
-     */
     @Input()
     get pager(): Pager {
         return this._getOption('pager');
@@ -594,10 +454,7 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     }
 
 
-    /**
-     * [descr:dxCardViewOptions.paging]
     
-     */
     @Input()
     get paging(): Paging {
         return this._getOption('paging');
@@ -607,10 +464,7 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     }
 
 
-    /**
-     * [descr:dxCardViewOptions.remoteOperations]
     
-     */
     @Input()
     get remoteOperations(): boolean | Mode | RemoteOperations {
         return this._getOption('remoteOperations');
@@ -620,10 +474,7 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     }
 
 
-    /**
-     * [descr:DOMComponentOptions.rtlEnabled]
     
-     */
     @Input()
     get rtlEnabled(): boolean {
         return this._getOption('rtlEnabled');
@@ -633,10 +484,7 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     }
 
 
-    /**
-     * [descr:dxCardViewOptions.scrolling]
     
-     */
     @Input()
     get scrolling(): Record<string, any> {
         return this._getOption('scrolling');
@@ -646,10 +494,7 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     }
 
 
-    /**
-     * [descr:dxCardViewOptions.searchPanel]
     
-     */
     @Input()
     get searchPanel(): Record<string, any> {
         return this._getOption('searchPanel');
@@ -659,10 +504,7 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     }
 
 
-    /**
-     * [descr:dxCardViewOptions.selectedCardKeys]
     
-     */
     @Input()
     get selectedCardKeys(): Array<any> {
         return this._getOption('selectedCardKeys');
@@ -672,10 +514,7 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     }
 
 
-    /**
-     * [descr:dxCardViewOptions.selection]
     
-     */
     @Input()
     get selection(): SelectionConfiguration {
         return this._getOption('selection');
@@ -685,10 +524,7 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     }
 
 
-    /**
-     * [descr:WidgetOptions.tabIndex]
     
-     */
     @Input()
     get tabIndex(): number {
         return this._getOption('tabIndex');
@@ -698,10 +534,7 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     }
 
 
-    /**
-     * [descr:dxCardViewOptions.toolbar]
     
-     */
     @Input()
     get toolbar(): Toolbar {
         return this._getOption('toolbar');
@@ -711,10 +544,7 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     }
 
 
-    /**
-     * [descr:WidgetOptions.visible]
     
-     */
     @Input()
     get visible(): boolean {
         return this._getOption('visible');
@@ -724,10 +554,7 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     }
 
 
-    /**
-     * [descr:DOMComponentOptions.width]
     
-     */
     @Input()
     get width(): (() => number | string) | number | string | undefined {
         return this._getOption('width');
@@ -737,10 +564,7 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     }
 
 
-    /**
-     * [descr:dxCardViewOptions.wordWrapEnabled]
     
-     */
     @Input()
     get wordWrapEnabled(): boolean {
         return this._getOption('wordWrapEnabled');
@@ -751,7 +575,7 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
 
     /**
     
-     * [descr:dxCardViewOptions.onCardClick]
+     * [descr:undefined]
     
     
      */
@@ -759,7 +583,7 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
 
     /**
     
-     * [descr:dxCardViewOptions.onCardDblClick]
+     * [descr:undefined]
     
     
      */
@@ -767,7 +591,7 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
 
     /**
     
-     * [descr:dxCardViewOptions.onCardHoverChanged]
+     * [descr:undefined]
     
     
      */
@@ -775,7 +599,7 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
 
     /**
     
-     * [descr:dxCardViewOptions.onCardInserted]
+     * [descr:undefined]
     
     
      */
@@ -783,7 +607,7 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
 
     /**
     
-     * [descr:dxCardViewOptions.onCardInserting]
+     * [descr:undefined]
     
     
      */
@@ -791,7 +615,7 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
 
     /**
     
-     * [descr:dxCardViewOptions.onCardPrepared]
+     * [descr:undefined]
     
     
      */
@@ -799,7 +623,7 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
 
     /**
     
-     * [descr:dxCardViewOptions.onCardRemoved]
+     * [descr:undefined]
     
     
      */
@@ -807,7 +631,7 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
 
     /**
     
-     * [descr:dxCardViewOptions.onCardRemoving]
+     * [descr:undefined]
     
     
      */
@@ -815,7 +639,7 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
 
     /**
     
-     * [descr:dxCardViewOptions.onCardSaved]
+     * [descr:undefined]
     
     
      */
@@ -823,7 +647,7 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
 
     /**
     
-     * [descr:dxCardViewOptions.onCardSaving]
+     * [descr:undefined]
     
     
      */
@@ -831,7 +655,7 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
 
     /**
     
-     * [descr:dxCardViewOptions.onCardUpdated]
+     * [descr:undefined]
     
     
      */
@@ -839,7 +663,7 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
 
     /**
     
-     * [descr:dxCardViewOptions.onCardUpdating]
+     * [descr:undefined]
     
     
      */
@@ -847,7 +671,7 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
 
     /**
     
-     * [descr:WidgetOptions.onContentReady]
+     * [descr:undefined]
     
     
      */
@@ -855,7 +679,7 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
 
     /**
     
-     * [descr:dxCardViewOptions.onContextMenuPreparing]
+     * [descr:undefined]
     
     
      */
@@ -863,7 +687,7 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
 
     /**
     
-     * [descr:dxCardViewOptions.onDataErrorOccurred]
+     * [descr:undefined]
     
     
      */
@@ -871,7 +695,7 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
 
     /**
     
-     * [descr:DOMComponentOptions.onDisposing]
+     * [descr:undefined]
     
     
      */
@@ -879,7 +703,7 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
 
     /**
     
-     * [descr:dxCardViewOptions.onEditCanceled]
+     * [descr:undefined]
     
     
      */
@@ -887,7 +711,7 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
 
     /**
     
-     * [descr:dxCardViewOptions.onEditCanceling]
+     * [descr:undefined]
     
     
      */
@@ -895,7 +719,7 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
 
     /**
     
-     * [descr:dxCardViewOptions.onEditingStart]
+     * [descr:undefined]
     
     
      */
@@ -903,7 +727,7 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
 
     /**
     
-     * [descr:dxCardViewOptions.onFieldCaptionClick]
+     * [descr:undefined]
     
     
      */
@@ -911,7 +735,7 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
 
     /**
     
-     * [descr:dxCardViewOptions.onFieldCaptionDblClick]
+     * [descr:undefined]
     
     
      */
@@ -919,7 +743,7 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
 
     /**
     
-     * [descr:dxCardViewOptions.onFieldCaptionPrepared]
+     * [descr:undefined]
     
     
      */
@@ -927,7 +751,7 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
 
     /**
     
-     * [descr:dxCardViewOptions.onFieldValueClick]
+     * [descr:undefined]
     
     
      */
@@ -935,7 +759,7 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
 
     /**
     
-     * [descr:dxCardViewOptions.onFieldValueDblClick]
+     * [descr:undefined]
     
     
      */
@@ -943,7 +767,7 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
 
     /**
     
-     * [descr:dxCardViewOptions.onFieldValuePrepared]
+     * [descr:undefined]
     
     
      */
@@ -951,7 +775,7 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
 
     /**
     
-     * [descr:dxCardViewOptions.onFocusedCardChanged]
+     * [descr:undefined]
     
     
      */
@@ -959,7 +783,7 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
 
     /**
     
-     * [descr:ComponentOptions.onInitialized]
+     * [descr:undefined]
     
     
      */
@@ -967,7 +791,7 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
 
     /**
     
-     * [descr:dxCardViewOptions.onInitNewCard]
+     * [descr:undefined]
     
     
      */
@@ -975,7 +799,7 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
 
     /**
     
-     * [descr:DOMComponentOptions.onOptionChanged]
+     * [descr:undefined]
     
     
      */
@@ -983,7 +807,7 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
 
     /**
     
-     * [descr:dxCardViewOptions.onSelectionChanged]
+     * [descr:undefined]
     
     
      */
@@ -991,7 +815,7 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
 
     /**
     
-     * [descr:dxCardViewOptions.onSelectionChanging]
+     * [descr:undefined]
     
     
      */
@@ -1331,14 +1155,6 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     }
 
 
-    @ContentChildren(DxiColumnComponent)
-    get columnsLegacyChildren(): QueryList<DxiColumnComponent> {
-        return this._getOption('columns');
-    }
-    set columnsLegacyChildren(value) {
-        this._setChildren('columns', value, 'DxiColumnComponent');
-    }
-
 
 
 
@@ -1484,40 +1300,6 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
 @NgModule({
   imports: [
     DxCardViewComponent,
-    DxoCardCoverModule,
-    DxoCardHeaderModule,
-    DxiItemModule,
-    DxiColumnModule,
-    DxoFormatModule,
-    DxoFormItemModule,
-    DxoLabelModule,
-    DxiValidationRuleModule,
-    DxoEditingModule,
-    DxiChangeModule,
-    DxoFilterBuilderModule,
-    DxiCustomOperationModule,
-    DxiFieldModule,
-    DxoLookupModule,
-    DxoFilterOperationDescriptionsModule,
-    DxoGroupOperationDescriptionsModule,
-    DxoHeaderPanelModule,
-    DxoLoadPanelModule,
-    DxoAnimationModule,
-    DxoHideModule,
-    DxoFromModule,
-    DxoPositionModule,
-    DxoAtModule,
-    DxoBoundaryOffsetModule,
-    DxoCollisionModule,
-    DxoMyModule,
-    DxoOffsetModule,
-    DxoToModule,
-    DxoShowModule,
-    DxoPagerModule,
-    DxoPagingModule,
-    DxoRemoteOperationsModule,
-    DxoSelectionModule,
-    DxoToolbarModule,
     DxoCardViewAnimationModule,
     DxiCardViewAsyncRuleModule,
     DxoCardViewAtModule,
@@ -1568,40 +1350,6 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
   ],
   exports: [
     DxCardViewComponent,
-    DxoCardCoverModule,
-    DxoCardHeaderModule,
-    DxiItemModule,
-    DxiColumnModule,
-    DxoFormatModule,
-    DxoFormItemModule,
-    DxoLabelModule,
-    DxiValidationRuleModule,
-    DxoEditingModule,
-    DxiChangeModule,
-    DxoFilterBuilderModule,
-    DxiCustomOperationModule,
-    DxiFieldModule,
-    DxoLookupModule,
-    DxoFilterOperationDescriptionsModule,
-    DxoGroupOperationDescriptionsModule,
-    DxoHeaderPanelModule,
-    DxoLoadPanelModule,
-    DxoAnimationModule,
-    DxoHideModule,
-    DxoFromModule,
-    DxoPositionModule,
-    DxoAtModule,
-    DxoBoundaryOffsetModule,
-    DxoCollisionModule,
-    DxoMyModule,
-    DxoOffsetModule,
-    DxoToModule,
-    DxoShowModule,
-    DxoPagerModule,
-    DxoPagingModule,
-    DxoRemoteOperationsModule,
-    DxoSelectionModule,
-    DxoToolbarModule,
     DxoCardViewAnimationModule,
     DxiCardViewAsyncRuleModule,
     DxoCardViewAtModule,

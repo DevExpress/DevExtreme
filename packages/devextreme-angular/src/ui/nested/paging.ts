@@ -1,6 +1,5 @@
 /* tslint:disable:max-line-length */
 
-/* tslint:disable:use-input-property-decorator */
 
 import {
     Component,
@@ -9,6 +8,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
+    Input,
     Output,
     EventEmitter
 } from '@angular/core';
@@ -21,7 +21,7 @@ import {
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
-import { DxoPaging } from './base/paging';
+import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
@@ -30,14 +30,33 @@ import { DxoPaging } from './base/paging';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost],
-    inputs: [
-        'enabled',
-        'pageIndex',
-        'pageSize'
-    ]
+    providers: [NestedOptionHost]
 })
-export class DxoPagingComponent extends DxoPaging implements OnDestroy, OnInit  {
+export class DxoPagingComponent extends NestedOption implements OnDestroy, OnInit  {
+    @Input()
+    get enabled(): boolean {
+        return this._getOption('enabled');
+    }
+    set enabled(value: boolean) {
+        this._setOption('enabled', value);
+    }
+
+    @Input()
+    get pageIndex(): number {
+        return this._getOption('pageIndex');
+    }
+    set pageIndex(value: number) {
+        this._setOption('pageIndex', value);
+    }
+
+    @Input()
+    get pageSize(): number {
+        return this._getOption('pageSize');
+    }
+    set pageSize(value: number) {
+        this._setOption('pageSize', value);
+    }
+
 
     /**
     
