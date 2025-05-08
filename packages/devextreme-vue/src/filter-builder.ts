@@ -13,11 +13,9 @@ import {
  InitializedEvent,
  OptionChangedEvent,
  ValueChangedEvent,
+ FieldInfo,
  FilterBuilderOperation,
 } from "devextreme/ui/filter_builder";
-import {
- FieldInfo,
-} from "devextreme/ui/card_view";
 import {
  DataType,
  Format as CommonFormat,

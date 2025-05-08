@@ -43,7 +43,6 @@ import {
  Toolbar,
  CardHeaderItem,
  CardHeaderPredefinedItem,
- FieldInfo,
  PredefinedToolbarItem,
  ToolbarItem,
 } from "devextreme/ui/card_view";
@@ -73,6 +72,7 @@ import {
 import {
  dxFilterBuilderOptions,
  dxFilterBuilderField,
+ FieldInfo,
  FilterBuilderOperation,
  dxFilterBuilderCustomOperation,
  GroupOperation,

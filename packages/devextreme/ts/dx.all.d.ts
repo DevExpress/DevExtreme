@@ -10397,6 +10397,9 @@ declare module DevExpress.ui {
      * [descr:FieldTemplateData]
      */
     export type FieldTemplateData = {
+      /**
+       * [descr:FieldTemplateData.field]
+       */
       field: FieldInfo;
     };
     /**
@@ -10590,6 +10593,12 @@ declare module DevExpress.ui {
     TCardData = unknown,
     TKey = unknown
   > = DevExpress.ui.dxCardView.Editing<TCardData, TKey>;
+
+  /**
+   * @deprecated Use DevExpress.ui.dxCardView.FieldInfo instead
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  export type dxCardViewFieldInfo = DevExpress.ui.dxCardView.FieldInfo;
 
   /**
    * [descr:dxCardViewOptions]
@@ -33165,33 +33174,32 @@ declare module DevExpress.ui.dxCardView {
      */
     headerItemCssClass?: string;
   };
-
   /**
-   * [descr:FieldInfo]
+   * [descr:dxCardViewFieldInfo]
    */
   export type FieldInfo = {
     /**
-     * [descr:FieldInfo.value]
+     * [descr:dxCardViewFieldInfo.value]
      */
     value: any;
     /**
-     * [descr:FieldInfo.displayValue]
+     * [descr:dxCardViewFieldInfo.displayValue]
      */
     displayValue: any;
     /**
-     * [descr:FieldInfo.text]
+     * [descr:dxCardViewFieldInfo.text]
      */
     text: string;
     /**
-     * [descr:FieldInfo.column]
+     * [descr:dxCardViewFieldInfo.column]
      */
     column: Column;
     /**
-     * [descr:FieldInfo.index]
+     * [descr:dxCardViewFieldInfo.index]
      */
     index: number;
     /**
-     * [descr:FieldInfo.card]
+     * [descr:dxCardViewFieldInfo.card]
      */
     card: CardInfo;
   };

@@ -141,41 +141,47 @@ export type Toolbar = {
 // #region ColumnsController
 
 /**
- * @docid
+ * @deprecated Use FieldInfo instead
+ * @namespace DevExpress.ui
+ */
+export type dxCardViewFieldInfo = FieldInfo;
+
+/**
+ * @docid dxCardViewFieldInfo
  * @public
  * @namespace DevExpress.ui.dxCardView
  */
 export type FieldInfo = {
     /**
      * @public
-     * @docid
+     * @docid dxCardViewFieldInfo.value
      * @type object
      */
     value: any;
     /**
      * @public
-     * @docid
+     * @docid dxCardViewFieldInfo.displayValue
      * @type object
      */
     displayValue: any;
     /**
      * @public
-     * @docid
+     * @docid dxCardViewFieldInfo.text
      */
     text: string;
     /**
      * @public
-     * @docid
+     * @docid dxCardViewFieldInfo.column
      */
     column: Column;
     /**
      * @public
-     * @docid
+     * @docid dxCardViewFieldInfo.index
      */
     index: number;
     /**
      * @public
-     * @docid
+     * @docid dxCardViewFieldInfo.card
      */
     card: CardInfo;
 };
@@ -199,6 +205,7 @@ export type CardInfo<TCardData = unknown, TKey = unknown> = {
     /**
      * @public
      * @docid
+     * @type Array<dxCardViewFieldInfo>
      */
     fields: FieldInfo[];
     /**
@@ -534,7 +541,10 @@ type WithCardInfo = {
  * @docid
  */
 type WithFieldCaptionInfo = {
-    /** @docid */
+    /**
+     * @docid
+     * @type dxCardViewFieldInfo
+     */
     readonly field: FieldInfo;
     /** @docid */
     readonly fieldCaptionElement: DxElement;
@@ -544,7 +554,10 @@ type WithFieldCaptionInfo = {
  * @docid
  */
 type WithFieldValueInfo = {
-    /** @docid */
+    /**
+     * @docid
+     * @type dxCardViewFieldInfo
+     */
     readonly field: FieldInfo;
     /** @docid */
     readonly fieldValueElement: DxElement;
@@ -638,6 +651,10 @@ export type CardHoverChangedEvent = EventInfo<dxCardView> & WithCardInfo & {
  * @docid
  */
 export type FieldTemplateData = {
+    /**
+     * @docid
+     * @type dxCardViewFieldInfo
+     */
     field: FieldInfo;
 };
 
