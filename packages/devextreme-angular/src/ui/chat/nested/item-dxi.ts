@@ -95,10 +95,10 @@ export class DxiChatItemComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get type(): "text" | undefined {
+    get type(): string | undefined {
         return this._getOption('type');
     }
-    set type(value: "text" | undefined) {
+    set type(value: string | undefined) {
         this._setOption('type', value);
     }
 

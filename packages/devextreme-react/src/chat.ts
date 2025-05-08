@@ -169,7 +169,7 @@ type IItemProps = React.PropsWithChildren<{
   src?: string;
   text?: string;
   timestamp?: Date | number | string;
-  type?: "text" | undefined;
+  type?: string | undefined;
 }>
 const _componentItem = (props: IItemProps) => {
   return React.createElement(NestedOption<IItemProps>, {

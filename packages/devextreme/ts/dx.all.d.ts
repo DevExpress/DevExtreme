@@ -31909,10 +31909,6 @@ declare module DevExpress.ui.dxChat {
    */
   export type ImageMessage = MessageBase & {
     /**
-     * [descr:ImageMessage.type]
-     */
-    type?: 'image';
-    /**
      * [descr:ImageMessage.src]
      */
     src?: string;
@@ -31935,6 +31931,10 @@ declare module DevExpress.ui.dxChat {
      */
     id?: number | string;
     /**
+     * [descr:MessageBase.type]
+     */
+    type?: 'text' | 'image' | undefined;
+    /**
      * [descr:MessageBase.timestamp]
      */
     timestamp?: Date | number | string;
@@ -31951,10 +31951,6 @@ declare module DevExpress.ui.dxChat {
    * [descr:TextMessage]
    */
   export type TextMessage = MessageBase & {
-    /**
-     * [descr:TextMessage.type]
-     */
-    type?: 'text' | undefined;
     /**
      * [descr:TextMessage.text]
      */

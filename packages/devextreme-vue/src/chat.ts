@@ -276,7 +276,7 @@ const DxItemConfig = {
     src: String,
     text: String,
     timestamp: [Date, Number, String],
-    type: String as PropType<"text">
+    type: String
   }
 };
 

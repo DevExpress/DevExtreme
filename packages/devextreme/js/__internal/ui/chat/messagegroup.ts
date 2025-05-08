@@ -5,7 +5,7 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import dateSerialization from '@js/core/utils/date_serialization';
 import { isDate, isDefined } from '@js/core/utils/type';
-import type { Message, TextMessage } from '@js/ui/chat';
+import type { ImageMessage, Message, TextMessage } from '@js/ui/chat';
 import type { WidgetOptions } from '@js/ui/widget/ui.widget';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
@@ -129,8 +129,8 @@ class MessageGroup extends Widget<Properties> {
     const { messageTemplate } = this.option();
 
     if (message.type === 'image') {
-      options.alt = message.alt;
-      options.src = message.src;
+      options.alt = (message as ImageMessage).alt;
+      options.src = (message as ImageMessage).src;
     } else {
       options.text = (message as TextMessage).text;
     }

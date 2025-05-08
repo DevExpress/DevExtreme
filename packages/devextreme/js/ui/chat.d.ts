@@ -208,6 +208,13 @@ export type MessageBase = {
     id?: number | string;
     /**
      * @docid
+     * @default undefined
+     * @type string|undefined
+     * @public
+     */
+    type?: 'text' | 'image' | undefined;
+    /**
+     * @docid
      * @public
      */
     timestamp?: Date | number | string;
@@ -232,12 +239,6 @@ export type MessageBase = {
 export type TextMessage = MessageBase & {
     /**
      * @docid
-     * @default undefined
-     * @public
-     */
-    type?: 'text' | undefined;
-    /**
-     * @docid
      * @public
      */
     text?: string;
@@ -255,11 +256,6 @@ export type TextMessage = MessageBase & {
  * @inherits MessageBase
  */
 export type ImageMessage = MessageBase & {
-    /**
-     * @docid
-     * @public
-     */
-    type?: 'image';
     /**
      * @docid
      * @public
