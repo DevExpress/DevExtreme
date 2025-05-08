@@ -10,6 +10,7 @@ import hoverEvents from 'common/core/events/hover';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import Popup from 'ui/popup/ui.popup';
 import localization from 'localization';
+import { shouldSkipTestIfDeviceTypeNot } from '../../helpers/device.js';
 
 import 'ui/validator';
 import 'generic_light.css!';
@@ -129,8 +130,7 @@ QUnit.module('DateRangeBox Initialization', moduleConfig, () => {
     });
 
     QUnit.test('Calendar should have one view by default on mobile device', function(assert) {
-        if(devices.real().deviceType === 'desktop') {
-            assert.ok(true, 'test does not actual for desktop devices');
+        if(shouldSkipTestIfDeviceTypeNot(['phone', 'tablet'], assert)) {
             return;
         }
 
@@ -143,8 +143,7 @@ QUnit.module('DateRangeBox Initialization', moduleConfig, () => {
     });
 
     QUnit.test('Calendar should have two views by default on desktop device', function(assert) {
-        if(devices.real().deviceType !== 'desktop') {
-            assert.ok(true, 'test does not actual for mobile devices');
+        if(shouldSkipTestIfDeviceTypeNot('desktop', assert)) {
             return;
         }
 
@@ -4110,8 +4109,7 @@ QUnit.module('Aria accessibility', {
         });
 
         QUnit.test('aria-activedescendant attribute value of each input should equal contoured calendar cell\'s identifier, deferRendering="${deferRendering}', function(assert) {
-            if(devices.real().deviceType !== 'desktop') {
-                assert.ok(true, 'test does not actual for mobile devices');
+            if(shouldSkipTestIfDeviceTypeNot('desktop', assert)) {
                 return;
             }
 
@@ -4128,8 +4126,7 @@ QUnit.module('Aria accessibility', {
         });
 
         QUnit.test('aria-activedescendant attribute value of each input should be saved after change opened option value to false in runtime', function(assert) {
-            if(devices.real().deviceType !== 'desktop') {
-                assert.ok(true, 'test does not actual for mobile devices');
+            if(shouldSkipTestIfDeviceTypeNot('desktop', assert)) {
                 return;
             }
 
@@ -4149,8 +4146,7 @@ QUnit.module('Aria accessibility', {
     });
 
     QUnit.test('aria-activedescendant attribute value of each input should be synchronized with contoured calendar cell\'s identifier after navigation in calendar', function(assert) {
-        if(devices.real().deviceType !== 'desktop') {
-            assert.ok(true, 'test does not actual for mobile devices');
+        if(shouldSkipTestIfDeviceTypeNot('desktop', assert)) {
             return;
         }
 

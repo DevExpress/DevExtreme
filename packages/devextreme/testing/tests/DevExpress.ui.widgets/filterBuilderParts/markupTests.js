@@ -1,16 +1,16 @@
 import $ from 'jquery';
-import devices from '__internal/core/m_devices';
 import fields from '../../../helpers/filterBuilderTestData.js';
+import { shouldSkipTestIfDeviceTypeNot } from '../../../helpers/device.js';
 
 import 'ui/filter_builder';
 
 const FILTER_BUILDER_GROUP_CONTENT_CLASS = 'dx-filterbuilder-group-content';
 
 QUnit.test('markup init', function(assert) {
-    if(devices.real().deviceType !== 'desktop') {
-        assert.ok(true, 'This test is not actual for mobile devices, dxclick add onclick=\'void(0)\' to every button in mobile');
+    if(shouldSkipTestIfDeviceTypeNot('desktop', assert)) {
         return;
     }
+
     const element = $('#container').dxFilterBuilder();
     const guid = element.find('.dx-filterbuilder-group-item').attr('aria-owns');
 
@@ -51,8 +51,7 @@ QUnit.test('filterbuilder is created by different values', function(assert) {
 });
 
 QUnit.test('filter Content init by one condition', function(assert) {
-    if(devices.real().deviceType !== 'desktop') {
-        assert.ok(true, 'This test is not actual for mobile devices, dxclick add onclick=\'void(0)\' to every button in mobile');
+    if(shouldSkipTestIfDeviceTypeNot('desktop', assert)) {
         return;
     }
 
@@ -88,10 +87,10 @@ QUnit.test('filter Content init by one condition', function(assert) {
 });
 
 QUnit.test('filter Content init by several conditions', function(assert) {
-    if(devices.real().deviceType !== 'desktop') {
-        assert.ok(true, 'This test is not actual for mobile devices, because dxclick add onclick=\'void(0)\' to every button in mobile');
+    if(shouldSkipTestIfDeviceTypeNot('desktop', assert, 'Not applicable to non-desktop devices: dxclick adds onclick=\'void(0)\' to every button in mobile')) {
         return;
     }
+
     const $etalon = $('<div/>').html(
         '<div class="dx-filterbuilder-group">'
             + '<div class="dx-filterbuilder-group-item" role="treeitem" aria-level="1">'
@@ -134,8 +133,7 @@ QUnit.test('filter Content init by several conditions', function(assert) {
     };
     [null, []].forEach(value => {
         QUnit.test(`filter content with custom group operations (${groupOperations}) and ${!value ? value : 'empty'} value`, function(assert) {
-            if(devices.real().deviceType !== 'desktop') {
-                assert.ok(true, 'This test is not actual for mobile devices, because dxclick add onclick=\'void(0)\' to every button in mobile');
+            if(shouldSkipTestIfDeviceTypeNot('desktop', assert, 'Not applicable to non-desktop devices: dxclick adds onclick=\'void(0)\' to every button in mobile')) {
                 return;
             }
 

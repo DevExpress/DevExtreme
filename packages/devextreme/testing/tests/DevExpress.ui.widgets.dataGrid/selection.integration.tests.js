@@ -1,8 +1,8 @@
-import devices from '__internal/core/m_devices';
 import errors from 'ui/widget/ui.errors';
 import { createDataGrid, baseModuleConfig } from '../../helpers/dataGridHelper.js';
 import pointerMock from '../../helpers/pointerMock.js';
 import $ from 'jquery';
+import { shouldSkipTestIfDeviceTypeNot } from '../../helpers/device.js';
 
 const DX_STATE_HOVER_CLASS = 'dx-state-hover';
 
@@ -20,8 +20,7 @@ QUnit.testStart(function() {
 QUnit.module('Initialization', baseModuleConfig, () => {
     // T837103
     QUnit.test('Enable rows hover with showCheckBoxesMode = onClick', function(assert) {
-        if(devices.real().deviceType !== 'desktop') {
-            assert.ok(true, 'hover is disabled for not desktop devices');
+        if(shouldSkipTestIfDeviceTypeNot('desktop', assert, 'hover is disabled for non-desktop devices')) {
             return;
         }
 

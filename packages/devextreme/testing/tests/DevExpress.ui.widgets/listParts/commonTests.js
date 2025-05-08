@@ -22,6 +22,7 @@ import { setScrollView } from '__internal/ui/list/m_list.base';
 import ScrollView from 'ui/scroll_view';
 import eventsEngine from 'common/core/events/core/events_engine';
 import ariaAccessibilityTestHelper from '../../../helpers/ariaAccessibilityTestHelper.js';
+import { shouldSkipTestIfDeviceTypeNot } from '../../../helpers/device.js';
 
 const LIST_ITEM_CLASS = 'dx-list-item';
 const LIST_ITEMS_CLASS = 'dx-list-items';
@@ -44,14 +45,6 @@ const TOGGLE_DELETE_SWITCH_CLASS = 'dx-list-toggle-delete-switch';
 const SWITCHABLE_DELETE_BUTTON_CLASS = 'dx-list-switchable-delete-button';
 const SCROLLVIEW_CONTENT_CLASS = 'dx-scrollview-content';
 const FOCUSED_STATE_CLASS = 'dx-state-focused';
-
-const isDeviceDesktop = function(assert) {
-    if(devices.real().deviceType !== 'desktop') {
-        assert.ok(true, 'skip this test on mobile devices');
-        return false;
-    }
-    return true;
-};
 
 const getListKeyboard = ($list) => {
     return keyboardMock($list.find('[tabindex=0]'));
@@ -2100,7 +2093,7 @@ QUnit.module('events', moduleSetup, () => {
     });
 
     QUnit.test('item onClick handler should be fired on "enter" key press', function(assert) {
-        if(!isDeviceDesktop(assert)) {
+        if(shouldSkipTestIfDeviceTypeNot('desktop', assert)) {
             return;
         }
 
@@ -4074,7 +4067,7 @@ QUnit.module('keyboard navigation', {
     });
 
     QUnit.test('\'enter\'/\'space\' keys pressing on selectAll checkbox', function(assert) {
-        if(!isDeviceDesktop(assert)) {
+        if(shouldSkipTestIfDeviceTypeNot('desktop', assert)) {
             return;
         }
         assert.expect(3);
@@ -4108,7 +4101,7 @@ QUnit.module('keyboard navigation', {
     });
 
     QUnit.test('focusing on selectAll checkbox after \'down\'/\'up\' pressing', function(assert) {
-        if(!isDeviceDesktop(assert)) {
+        if(shouldSkipTestIfDeviceTypeNot('desktop', assert)) {
             return;
         }
         assert.expect(6);
@@ -4798,7 +4791,7 @@ QUnit.module('Accessibility', () => {
         const itemDeleteMode = buttonClass === STATIC_DELETE_BUTTON_CLASS ? 'static' : 'toggle';
 
         QUnit.test(`List item ${itemDeleteMode} button should have a correct role, aria-label, tabindex`, function(assert) {
-            if(!isDeviceDesktop(assert)) {
+            if(shouldSkipTestIfDeviceTypeNot('desktop', assert)) {
                 return;
             }
 
@@ -4819,7 +4812,7 @@ QUnit.module('Accessibility', () => {
     });
 
     QUnit.test('List item switchable button should have a correct role, aria-label, tabindex', function(assert) {
-        if(!isDeviceDesktop(assert)) {
+        if(shouldSkipTestIfDeviceTypeNot('desktop', assert)) {
             return;
         }
 

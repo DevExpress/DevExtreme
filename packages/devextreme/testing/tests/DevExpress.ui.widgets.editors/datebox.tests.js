@@ -22,6 +22,7 @@ import { noop } from 'core/utils/common';
 import { logger } from 'core/utils/console';
 import { normalizeKeyName } from 'common/core/events/utils/index';
 import browser from 'core/utils/browser';
+import { shouldSkipTestIfDeviceTypeNot } from '../../helpers/device.js';
 
 import '../../helpers/calendarFixtures.js';
 
@@ -716,8 +717,7 @@ QUnit.module('focus policy', {}, () => {
     QUnit.test('dateBox should stay focused after value selecting in date strategy', function(assert) {
         assert.expect(1);
 
-        if(devices.real().deviceType !== 'desktop') {
-            assert.ok(true, 'test does not actual for mobile devices');
+        if(shouldSkipTestIfDeviceTypeNot('desktop', assert)) {
             return;
         }
 
@@ -740,8 +740,7 @@ QUnit.module('focus policy', {}, () => {
     QUnit.test('dateBox should stay focused after value selecting in time strategy', function(assert) {
         assert.expect(1);
 
-        if(devices.real().deviceType !== 'desktop') {
-            assert.ok(true, 'test does not actual for mobile devices');
+        if(shouldSkipTestIfDeviceTypeNot('desktop', assert)) {
             return;
         }
 
@@ -765,8 +764,7 @@ QUnit.module('focus policy', {}, () => {
     QUnit.test('dateBox should stay focused after value selecting in datetime strategy', function(assert) {
         assert.expect(1);
 
-        if(devices.real().deviceType !== 'desktop') {
-            assert.ok(true, 'test does not actual for mobile devices');
+        if(shouldSkipTestIfDeviceTypeNot('desktop', assert)) {
             return;
         }
 
@@ -790,8 +788,7 @@ QUnit.module('focus policy', {}, () => {
     QUnit.test('calendar in datebox should not have tabIndex attribute', function(assert) {
         assert.expect(1);
 
-        if(devices.real().deviceType !== 'desktop') {
-            assert.ok(true, 'test does not actual for mobile devices');
+        if(shouldSkipTestIfDeviceTypeNot('desktop', assert)) {
             return;
         }
 
@@ -808,8 +805,7 @@ QUnit.module('focus policy', {}, () => {
     });
 
     QUnit.testInActiveWindow('set focus on \'tab\' key from editor to overlay and inversely', function(assert) {
-        if(devices.real().deviceType !== 'desktop') {
-            assert.ok(true, 'test does not actual for mobile devices');
+        if(shouldSkipTestIfDeviceTypeNot('desktop', assert)) {
             return;
         }
 
@@ -848,8 +844,7 @@ QUnit.module('focus policy', {}, () => {
     });
 
     QUnit.testInActiveWindow('first input in poup should have selected text when move from dateBox input on tab (T1127632)', function(assert) {
-        if(devices.real().deviceType !== 'desktop') {
-            assert.ok(true, 'test does not actual for mobile devices');
+        if(shouldSkipTestIfDeviceTypeNot('desktop', assert)) {
             return;
         }
 
@@ -880,8 +875,7 @@ QUnit.module('focus policy', {}, () => {
     });
 
     QUnit.test('mousewheel action should not work if dateBox is not focused', function(assert) {
-        if(devices.real().deviceType !== 'desktop') {
-            assert.ok(true, 'desktop specific test');
+        if(shouldSkipTestIfDeviceTypeNot('desktop', assert)) {
             return;
         }
 
@@ -1550,8 +1544,7 @@ QUnit.module('dateView integration', {
     });
 
     QUnit.test('Gesture cover should be hidden after wheel event processed by Overlay emitter (T820405)', function(assert) {
-        if(devices.real().deviceType !== 'desktop') {
-            assert.ok(true, 'gesture cover element is specific for desktop');
+        if(shouldSkipTestIfDeviceTypeNot('desktop', assert)) {
             return;
         }
 
@@ -2124,8 +2117,7 @@ QUnit.module('datebox and calendar integration', () => {
     });
 
     QUnit.test('change year via scroll should log proper year in on value change event (T1229926)', function(assert) {
-        if(devices.real().deviceType !== 'desktop') {
-            assert.ok(true, 'device is not desktop');
+        if(shouldSkipTestIfDeviceTypeNot('desktop', assert)) {
             return;
         }
 
@@ -3158,8 +3150,7 @@ QUnit.module('datebox with time component', {
     });
 
     QUnit.test('DateBox with pickerType=rollers should scroll to the neighbor item independent of deltaY when device is desktop (T921228)', function(assert) {
-        if(devices.real().deviceType !== 'desktop') {
-            assert.ok(true, 'device is not desktop');
+        if(shouldSkipTestIfDeviceTypeNot('desktop', assert)) {
             return;
         }
 
@@ -3194,8 +3185,7 @@ QUnit.module('datebox with time component', {
     });
 
     QUnit.test('dateview selectedIndex should not be changed after dateBox reopen (T934663)', function(assert) {
-        if(devices.real().deviceType !== 'desktop') {
-            assert.ok(true, 'device is not desktop');
+        if(shouldSkipTestIfDeviceTypeNot('desktop', assert)) {
             return;
         }
 
@@ -3250,8 +3240,7 @@ QUnit.module('datebox with time component', {
     });
 
     QUnit.test('DateBox renders the right stylingMode for editors in time view overlay (default)', function(assert) {
-        if(devices.real().deviceType !== 'desktop') {
-            assert.ok(true, 'test does not actual for mobile devices');
+        if(shouldSkipTestIfDeviceTypeNot('desktop', assert)) {
             return;
         }
         const dateBox = $('#dateBox').dxDateBox({
@@ -3271,8 +3260,7 @@ QUnit.module('datebox with time component', {
     });
 
     QUnit.test('DateBox renders the right stylingMode for editors in time view overlay (custom)', function(assert) {
-        if(devices.real().deviceType !== 'desktop') {
-            assert.ok(true, 'test does not actual for mobile devices');
+        if(shouldSkipTestIfDeviceTypeNot('desktop', assert)) {
             return;
         }
         const dateBox = $('#dateBox').dxDateBox({
@@ -4156,8 +4144,7 @@ QUnit.module('datebox w/ time list', {
         });
 
         QUnit.testInActiveWindow('should not close on "tab" press', function(assert) {
-            if(devices.real().deviceType !== 'desktop') {
-                assert.ok(true, 'test does not actual for mobile devices');
+            if(shouldSkipTestIfDeviceTypeNot('desktop', assert)) {
                 return;
             }
             const $input = this.$dateBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
@@ -5112,8 +5099,7 @@ QUnit.module('Popup open state', () => {
     ['date', 'time'].forEach(type => {
         ['calendar', 'list'].forEach(pickerType => {
             QUnit.testInActiveWindow(`Popup should be closed on tab key when there is no focusable elements, applyValueMode: "instantly", type: "${type}", pickerType: "${pickerType}"`, function(assert) {
-                if(devices.real().deviceType !== 'desktop') {
-                    assert.ok(true, 'test does not actual for mobile devices');
+                if(shouldSkipTestIfDeviceTypeNot('desktop', assert)) {
                     return;
                 }
                 const $dateBox = $('#dateBox').dxDateBox({
@@ -5140,8 +5126,7 @@ QUnit.module('Popup open state', () => {
     ['date', 'time', 'datetime'].forEach(type => {
         ['calendar', 'list', 'rollers'].forEach(pickerType => {
             QUnit.testInActiveWindow(`Popup should be opened on tab key when there are focusable items, applyValueMode: "useButtons", type: "${type}", pickerType: "${pickerType}"`, function(assert) {
-                if(devices.real().deviceType !== 'desktop') {
-                    assert.ok(true, 'test does not actual for mobile devices');
+                if(shouldSkipTestIfDeviceTypeNot('desktop', assert)) {
                     return;
                 }
                 const $dateBox = $('#dateBox').dxDateBox({
@@ -5165,8 +5150,7 @@ QUnit.module('Popup open state', () => {
 
 QUnit.module('aria accessibility', {}, () => {
     QUnit.test('aria-activedescendant on combobox should point to the active list item (date view)', function(assert) {
-        if(devices.real().deviceType !== 'desktop') {
-            assert.ok(true, 'test does not actual for mobile devices');
+        if(shouldSkipTestIfDeviceTypeNot('desktop', assert)) {
             return;
         }
         const $element = $('#dateBox').dxDateBox({
@@ -5187,28 +5171,26 @@ QUnit.module('aria accessibility', {}, () => {
     });
 
     QUnit.test('aria-activedescendant on combobox should point to the active list item (time view)', function(assert) {
-        const isDesktop = devices.real().deviceType === 'desktop';
-
-        if(isDesktop) {
-            const $element = $('#dateBox').dxDateBox({
-                type: 'time',
-                pickerType: 'list',
-                value: new Date(2008, 7, 8, 5, 0),
-                opened: true
-            });
-
-            const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
-            const keyboard = keyboardMock($input);
-
-            keyboard.keyDown('down');
-
-            const $activeItem = $('.dx-state-focused');
-
-            assert.notEqual($input.attr('aria-activedescendant'), undefined, 'aria-activedescendant exists');
-            assert.equal($input.attr('aria-activedescendant'), $activeItem.attr('id'), 'aria-activedescendant equals contoured cell\'s id');
-        } else {
-            assert.ok(true, 'skip test on devices');
+        if(shouldSkipTestIfDeviceTypeNot('desktop', assert)) {
+            return;
         }
+
+        const $element = $('#dateBox').dxDateBox({
+            type: 'time',
+            pickerType: 'list',
+            value: new Date(2008, 7, 8, 5, 0),
+            opened: true
+        });
+
+        const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        const keyboard = keyboardMock($input);
+
+        keyboard.keyDown('down');
+
+        const $activeItem = $('.dx-state-focused');
+
+        assert.notEqual($input.attr('aria-activedescendant'), undefined, 'aria-activedescendant exists');
+        assert.equal($input.attr('aria-activedescendant'), $activeItem.attr('id'), 'aria-activedescendant equals contoured cell\'s id');
     });
 });
 
@@ -5434,8 +5416,7 @@ QUnit.module('datebox validation', {}, () => {
     });
 
     QUnit.test('invalidDateMessage', function(assert) {
-        if(devices.real().deviceType !== 'desktop') {
-            assert.expect(0);
+        if(shouldSkipTestIfDeviceTypeNot('desktop', assert)) {
             return;
         }
 

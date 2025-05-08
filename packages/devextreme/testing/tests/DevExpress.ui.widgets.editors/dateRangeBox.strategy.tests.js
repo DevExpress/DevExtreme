@@ -1,8 +1,8 @@
 import $ from 'jquery';
 import fx from 'common/core/animation/fx';
 import dataUtils from 'core/element_data';
-import devices from 'core/devices.js';
 import keyboardMock from '../../helpers/keyboardMock.js';
+import { shouldSkipTestIfDeviceTypeNot } from '../../helpers/device.js';
 
 import 'ui/date_range_box';
 
@@ -553,8 +553,7 @@ QUnit.module('Strategy', moduleConfig, () => {
         });
 
         QUnit.test('startDate should be contoured after moving focus from endDate to startDate', function(assert) {
-            if(devices.real().deviceType !== 'desktop') {
-                assert.ok(true, 'test does not actual for mobile devices');
+            if(shouldSkipTestIfDeviceTypeNot('desktop', assert)) {
                 return;
             }
 
@@ -573,8 +572,7 @@ QUnit.module('Strategy', moduleConfig, () => {
         });
 
         QUnit.test('endDate should be contoured after moving focus from startDate to endDate', function(assert) {
-            if(devices.real().deviceType !== 'desktop') {
-                assert.ok(true, 'test does not actual for mobile devices');
+            if(shouldSkipTestIfDeviceTypeNot('desktop', assert)) {
                 return;
             }
 

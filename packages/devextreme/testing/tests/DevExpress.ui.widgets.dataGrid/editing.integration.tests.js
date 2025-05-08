@@ -19,6 +19,7 @@ import { generateItems } from '../../helpers/dataGridMocks.js';
 import { getOuterHeight } from 'core/utils/size';
 import { getEmulatorStyles } from '../../helpers/stylesHelper.js';
 import messageLocalization from 'common/core/localization/message';
+import { shouldSkipTestIfDeviceTypeNot } from '../../helpers/device.js';
 
 const TEXTEDITOR_INPUT_SELECTOR = '.dx-texteditor-input';
 
@@ -3321,10 +3322,10 @@ QUnit.module('Editing', baseModuleConfig, () => {
 
     ['Batch', 'Cell'].forEach((editMode) => {
         QUnit.testInActiveWindow(`${editMode} - Cell value should not be reset when a checkbox in a neigboring cell is clicked (T1023809)`, function(assert) {
-            if(devices.real().deviceType === 'desktop') {
-                assert.ok(true, 'test only for mobile devices');
+            if(shouldSkipTestIfDeviceTypeNot(['phone', 'tablet'], assert)) {
                 return;
             }
+
             const data = [
                 { id: 1, field1: 'test', field2: true }
             ];
@@ -5268,8 +5269,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
 
     // T553067
     QUnit.testInActiveWindow('Enter key on editor should prevent default behaviour', function(assert) {
-        if(devices.real().deviceType !== 'desktop') {
-            assert.ok(true, 'keyboard navigation is disabled for not desktop devices');
+        if(shouldSkipTestIfDeviceTypeNot('desktop', assert, 'keyboard navigation is disabled for non-desktop devices')) {
             return;
         }
 
@@ -5338,8 +5338,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
     });
 
     QUnit.testInActiveWindow('Datebox editor\'s enter key handler should be replaced by noop (T819067)', function(assert) {
-        if(devices.real().deviceType !== 'desktop') {
-            assert.ok(true, 'keyboard navigation is disabled for not desktop devices');
+        if(shouldSkipTestIfDeviceTypeNot('desktop', assert, 'keyboard navigation is disabled for non-desktop devices')) {
             return;
         }
 
@@ -5369,8 +5368,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
     });
 
     QUnit.testInActiveWindow('Datebox changed value should be saved on enter key if useMaskBehaviour is true (T1070850)', function(assert) {
-        if(devices.real().deviceType !== 'desktop') {
-            assert.ok(true, 'keyboard navigation is disabled for not desktop devices');
+        if(shouldSkipTestIfDeviceTypeNot('desktop', assert, 'keyboard navigation is disabled for non-desktop devices')) {
             return;
         }
 
@@ -5423,8 +5421,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
     ['date', 'datetime'].forEach(dataType => {
         [true, false].forEach(useMaskBehavior => {
             QUnit.testInActiveWindow(`Datebox editor's value should be selected from calendar by keyboard (useMaskBehavior = ${useMaskBehavior}, dataType = ${dataType})`, function(assert) {
-                if(devices.real().deviceType !== 'desktop') {
-                    assert.ok(true, 'keyboard navigation is disabled for not desktop devices');
+                if(shouldSkipTestIfDeviceTypeNot('desktop', assert, 'keyboard navigation is disabled for non-desktop devices')) {
                     return;
                 }
 
@@ -5598,8 +5595,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
     });
 
     QUnit.testInActiveWindow('Scroll positioned correct with fixed columns and editing', function(assert) {
-        if(devices.real().deviceType !== 'desktop') {
-            assert.ok(true, 'keyboard navigation is not actual for not desktop devices');
+        if(shouldSkipTestIfDeviceTypeNot('desktop', assert, 'keyboard navigation is not actual for non-desktop devices')) {
             return;
         }
 
