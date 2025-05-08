@@ -194,7 +194,9 @@ export default class FormDialog extends BaseDialog {
     super.onHiding();
   }
 
-  public formOption(options: Partial<FormProperties>): void {
-    this._form.option(options);
+  public formOption(...args: unknown[]): unknown {
+    // @ts-expect-error args
+    // eslint-disable-next-line prefer-spread
+    return this._form.option.apply(this._form, args);
   }
 }
