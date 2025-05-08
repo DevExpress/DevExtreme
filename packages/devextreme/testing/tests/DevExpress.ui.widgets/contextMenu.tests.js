@@ -14,6 +14,7 @@ import config from 'core/config';
 import themes from 'ui/themes';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import ariaAccessibilityTestHelper from '../../helpers/ariaAccessibilityTestHelper.js';
+import { shouldSkipTestIfDeviceTypeNot } from '../../helpers/device.js';
 
 import 'ui/button';
 import 'generic_light.css!';
@@ -43,14 +44,6 @@ const DX_MENU_ITEM_POPOUT_CLASS = 'dx-menu-item-popout';
 const DX_SUBMENU_CLASS = 'dx-submenu';
 const DX_HAS_SUBMENU_CLASS = 'dx-menu-item-has-submenu';
 const DX_OVERLAY_WRAPPER_CLASS = 'dx-overlay-wrapper';
-
-const isDeviceDesktop = function(assert) {
-    if(devices.real().deviceType !== 'desktop') {
-        assert.ok(true, 'skip this test on mobile devices');
-        return false;
-    }
-    return true;
-};
 
 const moduleConfig = {
     beforeEach: function() {
@@ -294,7 +287,7 @@ QUnit.module('Rendering', moduleConfig, () => {
 
 QUnit.module('Repaint', moduleConfig, () => {
     QUnit.test('On repaint all submenus should be hidden without console errors (T1257288)', function(assert) {
-        if(!isDeviceDesktop(assert)) {
+        if(shouldSkipTestIfDeviceTypeNot('desktop', assert)) {
             return;
         }
 
@@ -344,7 +337,7 @@ QUnit.module('Rendering Scrollable', moduleConfig, () => {
     });
 
     QUnit.test('Scrollable should be initialized on a 2nd level submenu', function(assert) {
-        if(!isDeviceDesktop(assert)) {
+        if(shouldSkipTestIfDeviceTypeNot('desktop', assert)) {
             return;
         }
 
@@ -369,7 +362,7 @@ QUnit.module('Rendering Scrollable', moduleConfig, () => {
     });
 
     QUnit.test('Height of the submenu should not exceed content height', function(assert) {
-        if(!isDeviceDesktop(assert)) {
+        if(shouldSkipTestIfDeviceTypeNot('desktop', assert)) {
             return;
         }
 
@@ -386,7 +379,7 @@ QUnit.module('Rendering Scrollable', moduleConfig, () => {
     });
 
     QUnit.test('Nested submenu should be positioned to a clicked item', function(assert) {
-        if(!isDeviceDesktop(assert)) {
+        if(shouldSkipTestIfDeviceTypeNot('desktop', assert)) {
             return;
         }
 
@@ -413,7 +406,7 @@ QUnit.module('Rendering Scrollable', moduleConfig, () => {
     });
 
     QUnit.test('Flipping 2nd level submenu', function(assert) {
-        if(!isDeviceDesktop(assert)) {
+        if(shouldSkipTestIfDeviceTypeNot('desktop', assert)) {
             return;
         }
 
@@ -458,7 +451,7 @@ QUnit.module('Rendering Scrollable', moduleConfig, () => {
     });
 
     QUnit.test('Selected item should be always visible during keyboard navigation (root menu)', function(assert) {
-        if(!isDeviceDesktop(assert)) {
+        if(shouldSkipTestIfDeviceTypeNot('desktop', assert)) {
             return;
         }
 
@@ -490,7 +483,7 @@ QUnit.module('Rendering Scrollable', moduleConfig, () => {
     });
 
     QUnit.test('Selected item should be always visible during keyboard navigation (nested menu)', function(assert) {
-        if(!isDeviceDesktop(assert)) {
+        if(shouldSkipTestIfDeviceTypeNot('desktop', assert)) {
             return;
         }
 
@@ -523,7 +516,7 @@ QUnit.module('Rendering Scrollable', moduleConfig, () => {
     });
 
     QUnit.test('Scroll position should be set to 0 after reopen (root menu)', function(assert) {
-        if(!isDeviceDesktop(assert)) {
+        if(shouldSkipTestIfDeviceTypeNot('desktop', assert)) {
             return;
         }
 
@@ -553,7 +546,7 @@ QUnit.module('Rendering Scrollable', moduleConfig, () => {
     });
 
     QUnit.test('Scroll position should be set to 0 after reopen (nested menu, KBN)', function(assert) {
-        if(!isDeviceDesktop(assert)) {
+        if(shouldSkipTestIfDeviceTypeNot('desktop', assert)) {
             return;
         }
 
@@ -587,7 +580,7 @@ QUnit.module('Rendering Scrollable', moduleConfig, () => {
     });
 
     QUnit.test('Scroll position should be set to 0 after reopen (nested menu, pointer)', function(assert) {
-        if(!isDeviceDesktop(assert)) {
+        if(shouldSkipTestIfDeviceTypeNot('desktop', assert)) {
             return;
         }
 
@@ -1163,7 +1156,7 @@ QUnit.module('Showing and hiding submenus', moduleConfig, () => {
 
     [0, { show: 0 }].forEach((delay) => {
         QUnit.test(`submenu should be shown synchronously if showSubmenuMode.delay=${JSON.stringify(delay)} (T1247739)`, function(assert) {
-            if(!isDeviceDesktop(assert)) {
+            if(shouldSkipTestIfDeviceTypeNot('desktop', assert)) {
                 return;
             }
 
@@ -1186,7 +1179,7 @@ QUnit.module('Showing and hiding submenus', moduleConfig, () => {
     });
 
     QUnit.test('context menu should not blink after second hover on root item', function(assert) {
-        if(!isDeviceDesktop(assert)) {
+        if(shouldSkipTestIfDeviceTypeNot('desktop', assert)) {
             return;
         }
 
@@ -1475,7 +1468,7 @@ QUnit.module('Options', moduleConfig, () => {
     });
 
     QUnit.test('showSubmenuMode hover without delay', function(assert) {
-        if(!isDeviceDesktop(assert)) {
+        if(shouldSkipTestIfDeviceTypeNot('desktop', assert)) {
             return;
         }
 
@@ -1497,7 +1490,7 @@ QUnit.module('Options', moduleConfig, () => {
     });
 
     QUnit.test('showSubmenuMode hover with custom delay', function(assert) {
-        if(!isDeviceDesktop(assert)) {
+        if(shouldSkipTestIfDeviceTypeNot('desktop', assert)) {
             return;
         }
 
@@ -1519,7 +1512,7 @@ QUnit.module('Options', moduleConfig, () => {
     });
 
     QUnit.test('submenu should not be shown if hover was ended before show delay time exceeded', function(assert) {
-        if(!isDeviceDesktop(assert)) {
+        if(shouldSkipTestIfDeviceTypeNot('desktop', assert)) {
             return;
         }
 
@@ -1815,7 +1808,7 @@ QUnit.module('Options', moduleConfig, () => {
     });
 
     QUnit.test('items changed should not break keyboard navigation', function(assert) {
-        if(!isDeviceDesktop(assert)) {
+        if(shouldSkipTestIfDeviceTypeNot('desktop', assert)) {
             return;
         }
 

@@ -13,6 +13,7 @@ import pointerMock from '../../helpers/pointerMock.js';
 import translator from 'common/core/animation/translator';
 import dataUtils from 'core/element_data';
 import ODataStore from 'common/data/odata/store';
+import { shouldSkipTestIfDeviceTypeNot } from '../../helpers/device.js';
 
 const dataGridWrapper = new DataGridWrapper('#dataGrid');
 const isRenovatedScrollable = !!Scrollable.IS_RENOVATED_WIDGET;
@@ -1363,8 +1364,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
 
     // T878343
     QUnit.test('cellValue should work correctly with virtual scrolling and row rendering', function(assert) {
-        if(devices.real().deviceType !== 'desktop') {
-            assert.ok(true, 'test is not actual for mobile devices');
+        if(shouldSkipTestIfDeviceTypeNot('desktop', assert)) {
             return;
         }
 

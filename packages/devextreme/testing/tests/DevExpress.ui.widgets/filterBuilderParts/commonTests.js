@@ -1,6 +1,5 @@
 import $ from 'jquery';
 import { isRenderer } from 'core/utils/type';
-import devices from '__internal/core/m_devices';
 import config from 'core/config';
 import renderer from 'core/renderer';
 import fields from '../../../helpers/filterBuilderTestData.js';
@@ -40,6 +39,7 @@ import {
     clickByButtonAndSelectMenuItem
 } from './helpers.js';
 import { implementationsMap } from 'core/utils/size';
+import { shouldSkipTestIfDeviceTypeNot } from '../../../helpers/device.js';
 
 QUnit.module('Rendering', function() {
     QUnit.test('field menu test', function(assert) {
@@ -349,8 +349,7 @@ QUnit.module('Rendering', function() {
 
     // T589341
     QUnit.test('the formatter is applied to a field with the date type', function(assert) {
-        if(devices.real().deviceType !== 'desktop') {
-            assert.ok(true, 'This test is not actual for mobile devices');
+        if(shouldSkipTestIfDeviceTypeNot('desktop', assert)) {
             return;
         }
 

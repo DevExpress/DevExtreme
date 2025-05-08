@@ -36,7 +36,7 @@ import {
 import { CHAT_CONFIRMATION_POPUP_WRAPPER_CLASS } from '__internal/ui/chat/confirmationpopup';
 import { POPUP_CLASS } from '__internal/ui/popup/m_popup';
 import { BUTTON_CLASS } from '__internal/ui/button/button';
-import { isDesktopDevice } from '../../../helpers/chat.js';
+import { shouldSkipTestIfDeviceTypeNot } from '../../../helpers/device.js';
 import MessageBubble from '__internal/ui/chat/messagebubble';
 
 const CHAT_MESSAGEGROUP_CLASS = 'dx-chat-messagegroup';
@@ -398,8 +398,7 @@ QUnit.module('Chat', () => {
             });
 
             QUnit.testInActiveWindow('Contextmenu should be hidden and input focused after esc is pressed', function(assert) {
-                if(!isDesktopDevice()) {
-                    assert.ok(true, 'Test is not applicable for mobile devices');
+                if(shouldSkipTestIfDeviceTypeNot('desktop', assert)) {
                     return;
                 }
 
@@ -429,8 +428,7 @@ QUnit.module('Chat', () => {
             });
 
             QUnit.testInActiveWindow('Input not focused after context menu is hidden by outside click', function(assert) {
-                if(!isDesktopDevice()) {
-                    assert.ok(true, 'Test is not applicable for mobile devices');
+                if(shouldSkipTestIfDeviceTypeNot('desktop', assert)) {
                     return;
                 }
 
@@ -459,8 +457,7 @@ QUnit.module('Chat', () => {
             });
 
             QUnit.testInActiveWindow('Input should be blurred after context menu is shown', function(assert) {
-                if(!isDesktopDevice()) {
-                    assert.ok(true, 'Test is not applicable for mobile devices');
+                if(shouldSkipTestIfDeviceTypeNot('desktop', assert)) {
                     return;
                 }
 
@@ -577,8 +574,7 @@ QUnit.module('Chat', () => {
             });
 
             QUnit.testInActiveWindow('Context menu should not be shown for deleted messages', function(assert) {
-                if(!isDesktopDevice()) {
-                    assert.ok(true, 'Test is not applicable for mobile devices');
+                if(shouldSkipTestIfDeviceTypeNot('desktop', assert)) {
                     return;
                 }
 
@@ -830,8 +826,7 @@ QUnit.module('Chat', () => {
         });
 
         QUnit.testInActiveWindow('input should be focused after message delete popup is closed', function(assert) {
-            if(!isDesktopDevice()) {
-                assert.ok(true, 'Test is not applicable for mobile devices');
+            if(shouldSkipTestIfDeviceTypeNot('desktop', assert)) {
                 return;
             }
 
@@ -937,8 +932,7 @@ QUnit.module('Chat', () => {
         });
 
         QUnit.testInActiveWindow('editing preview should be shown after the Edit button is clicked if cancel promise rejected', function(assert) {
-            if(!isDesktopDevice()) {
-                assert.ok(true, 'Test is not applicable for mobile devices');
+            if(shouldSkipTestIfDeviceTypeNot('desktop', assert)) {
                 return;
             }
 
@@ -1084,8 +1078,7 @@ QUnit.module('Chat', () => {
         });
 
         QUnit.testInActiveWindow('message box should have editing message text and focus after the Edit button is clicked and not cancelled', function(assert) {
-            if(!isDesktopDevice()) {
-                assert.ok(true, 'Test is not applicable for mobile devices');
+            if(shouldSkipTestIfDeviceTypeNot('desktop', assert)) {
                 return;
             }
 
@@ -1114,8 +1107,7 @@ QUnit.module('Chat', () => {
         });
 
         QUnit.testInActiveWindow('message box should have editing message text and focus after the Edit was triggered from keyboard', function(assert) {
-            if(!isDesktopDevice()) {
-                assert.ok(true, 'Test is not applicable for mobile devices');
+            if(shouldSkipTestIfDeviceTypeNot('desktop', assert)) {
                 return;
             }
 
