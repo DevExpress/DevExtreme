@@ -1,5 +1,4 @@
 /* eslint-disable max-classes-per-file */
-import { name as clickEventName } from '@js/common/core/events/click';
 import eventsEngine from '@js/common/core/events/core/events_engine';
 import holdEvent from '@js/common/core/events/hold';
 import pointerEvents from '@js/common/core/events/pointer';
@@ -95,7 +94,7 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
 
       eventsEngine.on(domAdapter.getDocument(), pointerEvents.up, this._pointerUpEditorHandler);
       eventsEngine.on(domAdapter.getDocument(), pointerEvents.down, this._pointerDownEditorHandler);
-      eventsEngine.on(domAdapter.getDocument(), clickEventName, this._saveEditorHandler);
+      eventsEngine.on(domAdapter.getDocument(), pointerEvents.down, this._saveEditorHandler);
     }
   }
 
