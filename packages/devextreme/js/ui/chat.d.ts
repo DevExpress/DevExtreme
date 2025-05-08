@@ -226,9 +226,8 @@ export type MessageBase = {
 /**
  * @docid
  * @public
- * @inherits MessageBase
  * @namespace DevExpress.ui.dxChat
- * @type object
+ * @inherits MessageBase
  */
 export type TextMessage = MessageBase & {
     /**
