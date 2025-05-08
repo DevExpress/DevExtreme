@@ -23,7 +23,10 @@ export interface TextAreaProperties extends Omit<Properties,
 'onChange' | 'onCopy' | 'onCut' | 'onEnterKey' | 'onFocusIn' | 'onFocusOut' | 'onInput' |
 'onKeyDown' | 'onKeyUp' | 'onPaste' | 'onValueChanged' | 'onContentReady' | 'onDisposing' |
 'onOptionChanged' | 'onInitialized'
-> {}
+> {
+  _shouldForceAttachKeyboardEvents?: boolean;
+}
+
 class TextArea extends TextBox<TextAreaProperties> {
   _eventY!: number;
 
@@ -32,7 +35,18 @@ class TextArea extends TextBox<TextAreaProperties> {
       ...super._getDefaultOptions(),
       spellcheck: true,
       autoResizeEnabled: false,
+      _shouldForceAttachKeyboardEvents: false,
     };
+  }
+
+  _shouldAttachKeyboardEvents(): boolean {
+    const {
+      _shouldForceAttachKeyboardEvents: shouldForceAttachKeyboardEvents,
+      readOnly,
+    } = this.option();
+
+    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+    return shouldForceAttachKeyboardEvents || !readOnly;
   }
 
   _initMarkup(): void {
@@ -218,6 +232,7 @@ class TextArea extends TextBox<TextAreaProperties> {
     const { name, value } = args;
 
     switch (name) {
+      case '_shouldForceAttachKeyboardEvents':
       case 'autoResizeEnabled':
         this._updateInputAutoResizeAppearance(this._input(), value);
         this._refreshEvents();

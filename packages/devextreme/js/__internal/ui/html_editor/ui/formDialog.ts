@@ -6,6 +6,7 @@ import type { ClickEvent } from '@js/ui/button';
 import type { EditorEnterKeyEvent, Item, SimpleItem } from '@js/ui/form';
 import Form from '@js/ui/form';
 import type { InitializedEvent, Properties as PopupProperties } from '@js/ui/popup';
+import type Popup from '@js/ui/popup';
 import { current, isFluent, isMaterialBased } from '@js/ui/themes';
 import type { FormProperties } from '@ts/ui/form/m_form';
 
@@ -72,8 +73,7 @@ export default class FormDialog extends BaseDialog {
     return extend(true, {}, baseConfig, {
       showCloseButton: false,
       onInitialized: (e: InitializedEvent) => {
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        this._popup = e.component!;
+        this._popup = e.component as Popup;
         this._popup.on('hiding', () => this.onHiding());
         this._popup.on('shown', () => { this._form.focus(); });
         this._addEscapeHandler.bind(this);
@@ -116,7 +116,7 @@ export default class FormDialog extends BaseDialog {
 
     this._renderForm($formContainer, {
       onEditorEnterKey: (e: EditorEnterKeyEvent): void => {
-        // @ts-ignore 'event' does not exist in EditorEnterKeyEvent
+        // @ts-expect-error 'event' does not exist in EditorEnterKeyEvent
         this.callAddButtonAction(e.event);
       },
       customizeItem: (item: Item) => {
