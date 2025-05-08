@@ -27,15 +27,7 @@ export class ContextMenuController extends modules.ViewController {
     }
 
     const that = this;
-    let $targetElement = $(dxEvent.target);
-
-    if ($targetElement.is('.dx-row')) {
-      const $firstCell = $targetElement.find('td.dx-group-cell').first();
-      if ($firstCell.length) {
-        $targetElement = $firstCell;
-      }
-    }
-
+    const $targetElement = $(dxEvent.target);
     let $element;
     let $targetRowElement;
     let $targetCellElement;
@@ -46,7 +38,9 @@ export class ContextMenuController extends modules.ViewController {
       $element = view && view.element();
 
       if ($element && ($element.is($targetElement) || $element.find($targetElement).length)) {
-        $targetCellElement = $targetElement.closest('.dx-row > td, .dx-row > tr');
+        $targetCellElement = $targetElement.closest('.dx-row > td, .dx-row > tr').length
+          ? $targetElement.closest('.dx-row > td, .dx-row > tr')
+          : $targetElement.find('.dx-group-cell').first();
         $targetRowElement = $targetCellElement.parent();
         const rowIndex = view.getRowIndex($targetRowElement);
         const columnIndex = $targetCellElement[0] && $targetCellElement[0].cellIndex;
