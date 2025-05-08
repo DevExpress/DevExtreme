@@ -3593,7 +3593,9 @@ exports[`Options HeaderFilter visible: false 1`] = `
                 class="dx-cardview-headerpanel-content"
               >
                 <div
+                  aria-label="Field name A"
                   class="dx-cardview-header-item  "
+                  role="button"
                   tabindex="0"
                 >
                   A
@@ -3669,7 +3671,9 @@ exports[`Options HeaderFilter visible: true 1`] = `
                 class="dx-cardview-headerpanel-content"
               >
                 <div
+                  aria-label="Field name A"
                   class="dx-cardview-header-item  "
+                  role="button"
                   tabindex="0"
                 >
                   A
@@ -3745,7 +3749,9 @@ exports[`Options HeaderFilter visible: undefined 1`] = `
                 class="dx-cardview-headerpanel-content"
               >
                 <div
+                  aria-label="Field name A"
                   class="dx-cardview-header-item  "
+                  role="button"
                   tabindex="0"
                 >
                   A
