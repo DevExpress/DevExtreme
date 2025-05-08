@@ -509,18 +509,12 @@ safeSizeTest('Ungroup second column via context menu', async (t) => {
 
   await t.rightClick(secondGroupedHeader.element);
 
-  await takeScreenshot(
-    'ungroup_second_column_via_context_menu_1',
-    dataGrid.element,
-  );
+  await takeScreenshot('ungroup_second_column_via_context_menu_1');
 
   await t
     .click(contextMenu.getItemByText('Ungroup'));
 
-  await takeScreenshot(
-    'ungroup_second_column_via_context_menu_2',
-    dataGrid.element,
-  );
+  await takeScreenshot('ungroup_second_column_via_context_menu_2');
 
   await t.expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
@@ -564,18 +558,12 @@ safeSizeTest('Ungroup last column via context menu', async (t) => {
 
   await t.rightClick(lastGroupedHeader.element);
 
-  await takeScreenshot(
-    'ungroup_last_column_via_context_menu_1',
-    dataGrid.element,
-  );
+  await takeScreenshot('ungroup_last_column_via_context_menu_1');
 
   await t
     .click(contextMenu.getItemByText('Ungroup'));
 
-  await takeScreenshot(
-    'ungroup_last_column_via_context_menu_2',
-    dataGrid.element,
-  );
+  await takeScreenshot('ungroup_last_column_via_context_menu_2');
 
   await t.expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
@@ -619,18 +607,12 @@ safeSizeTest('Ungroup a single grouped column via context menu', async (t) => {
 
   await t.rightClick(groupedHeader.element);
 
-  await takeScreenshot(
-    'ungroup_single_column_via_context_menu_1',
-    dataGrid.element,
-  );
+  await takeScreenshot('ungroup_single_column_via_context_menu_1');
 
   await t
     .click(contextMenu.getItemByText('Ungroup'));
 
-  await takeScreenshot(
-    'ungroup_single_column_via_context_menu_2',
-    dataGrid.element,
-  );
+  await takeScreenshot('ungroup_single_column_via_context_menu_2');
 
   await t.expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
@@ -758,18 +740,12 @@ safeSizeTest('Ungroup column via context menu if showWhenGrouped is enabled', as
 
   await t.rightClick(secondHeader.element);
 
-  await takeScreenshot(
-    'ungroup_column_via_context_menu_when_showWhenGrouped_is_true_1',
-    dataGrid.element,
-  );
+  await takeScreenshot('ungroup_column_via_context_menu_when_showWhenGrouped_is_true_1');
 
   await t
     .click(contextMenu.getItemByText('Ungroup'));
 
-  await takeScreenshot(
-    'ungroup_column_via_context_menu_when_showWhenGrouped_is_true_2',
-    dataGrid.element,
-  );
+  await takeScreenshot('ungroup_column_via_context_menu_when_showWhenGrouped_is_true_2');
 
   await t.expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
@@ -806,18 +782,12 @@ safeSizeTest('Ungroup all columns via context menu', async (t) => {
 
   await t.rightClick(firstGroupedHeader.element);
 
-  await takeScreenshot(
-    'ungroup_all_columns_via_context_menu_1',
-    dataGrid.element,
-  );
+  await takeScreenshot('ungroup_all_columns_via_context_menu_1');
 
   await t
     .click(contextMenu.getItemByText('Ungroup All'));
 
-  await takeScreenshot(
-    'ungroup_all_columns_via_context_menu_2',
-    dataGrid.element,
-  );
+  await takeScreenshot('ungroup_all_columns_via_context_menu_2');
 
   await t.expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
@@ -861,18 +831,12 @@ safeSizeTest('Ungroup all columns via context menu if showWhenGrouped is enabled
 
   await t.rightClick(fourthHeader.element);
 
-  await takeScreenshot(
-    'ungroup_all_columns_via_context_menu_when_showWhenGrouped_is_true_1',
-    dataGrid.element,
-  );
+  await takeScreenshot('ungroup_all_columns_via_context_menu_when_showWhenGrouped_is_true_1');
 
   await t
     .click(contextMenu.getItemByText('Ungroup All'));
 
-  await takeScreenshot(
-    'ungroup_all_columns_via_context_menu_when_showWhenGrouped_is_true_2',
-    dataGrid.element,
-  );
+  await takeScreenshot('ungroup_all_columns_via_context_menu_when_showWhenGrouped_is_true_2');
 
   await t.expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
@@ -1052,18 +1016,12 @@ safeSizeTest('Group second column via context menu', async (t) => {
 
   await t.rightClick(secondHeader.element);
 
-  await takeScreenshot(
-    'group_second_column_via_context_menu_1',
-    dataGrid.element,
-  );
+  await takeScreenshot('group_second_column_via_context_menu_1');
 
   await t
     .click(contextMenu.getItemByText('Group by This Column'));
 
-  await takeScreenshot(
-    'group_second_column_via_context_menu_2',
-    dataGrid.element,
-  );
+  await takeScreenshot('group_second_column_via_context_menu_2');
 
   await t.expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
@@ -1091,18 +1049,12 @@ safeSizeTest('Group last column via context menu', async (t) => {
 
   await t.rightClick(lastHeader.element);
 
-  await takeScreenshot(
-    'group_last_column_via_context_menu_1',
-    dataGrid.element,
-  );
+  await takeScreenshot('group_last_column_via_context_menu_1');
 
   await t
     .click(contextMenu.getItemByText('Group by This Column'));
 
-  await takeScreenshot(
-    'group_last_column_via_context_menu_2',
-    dataGrid.element,
-  );
+  await takeScreenshot('group_last_column_via_context_menu_2');
 
   await t.expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
@@ -1130,18 +1082,12 @@ safeSizeTest('Group a single column via context menu', async (t) => {
 
   await t.rightClick(lastHeader.element);
 
-  await takeScreenshot(
-    'group_single_column_via_context_menu_1',
-    dataGrid.element,
-  );
+  await takeScreenshot('group_single_column_via_context_menu_1');
 
   await t
     .click(contextMenu.getItemByText('Group by This Column'));
 
-  await takeScreenshot(
-    'group_single_column_via_context_menu_2',
-    dataGrid.element,
-  );
+  await takeScreenshot('group_single_column_via_context_menu_2');
 
   await t.expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
@@ -1167,18 +1113,12 @@ safeSizeTest('Group column via context menu if showWhenGrouped is enabled', asyn
 
   await t.rightClick(secondHeader.element);
 
-  await takeScreenshot(
-    'group_column_via_context_menu_when_showWhenGrouped_is_true_1',
-    dataGrid.element,
-  );
+  await takeScreenshot('group_column_via_context_menu_when_showWhenGrouped_is_true_1');
 
   await t
     .click(contextMenu.getItemByText('Group by This Column'));
 
-  await takeScreenshot(
-    'group_column_via_context_menu_when_showWhenGrouped_is_true_2',
-    dataGrid.element,
-  );
+  await takeScreenshot('group_column_via_context_menu_when_showWhenGrouped_is_true_2');
 
   await t.expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
