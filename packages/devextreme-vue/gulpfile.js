@@ -23,6 +23,8 @@ const NPM_PREPARE_MODULES = 'npm.prepare-modules';
 const NPM_PACK = 'npm.pack';
 const VUE_VERSION = 3;
 
+const unifiedConfig = require('../../tools/generators-config').vueConfig;
+
 gulp.task(OUTPUTDIR_CLEAN, (c) =>
     del([`${config.generatedComponentsDir}\\*`, `!${config.coreComponentsDir}`], c)
 );
@@ -48,7 +50,8 @@ gulp.task(GENERATE,
             {
               quotes: 'double',
               excplicitIndexInImports: true,
-            }
+            },
+            unifiedConfig,
         );
 
         done();
