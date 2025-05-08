@@ -222,7 +222,7 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
       autoResizeEnabled: true,
       width: '100%',
       placeholder: localizationMessage.format('dxHtmlEditor-aiAskPlaceholder'),
-      _shouldForceAttachKeyboardEvents: true,
+      _shouldAttachKeyboardEvents: true,
       onInitialized: this._addEscapeHandler.bind(this),
       onValueChanged: (e): void => {
         this._askAIPrompt = e.value;
@@ -247,7 +247,7 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
       minHeight: TEXT_AREA_MIN_HEIGHT,
       width: '100%',
       readOnly: true,
-      _shouldForceAttachKeyboardEvents: true,
+      _shouldAttachKeyboardEvents: true,
       onInitialized: this._addEscapeHandler.bind(this),
       ...screenSpecificOptions,
     };

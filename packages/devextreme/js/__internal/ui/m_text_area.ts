@@ -24,7 +24,7 @@ export interface TextAreaProperties extends Omit<Properties,
 'onKeyDown' | 'onKeyUp' | 'onPaste' | 'onValueChanged' | 'onContentReady' | 'onDisposing' |
 'onOptionChanged' | 'onInitialized'
 > {
-  _shouldForceAttachKeyboardEvents?: boolean;
+  _shouldAttachKeyboardEvents?: boolean;
 }
 
 class TextArea extends TextBox<TextAreaProperties> {
@@ -35,13 +35,13 @@ class TextArea extends TextBox<TextAreaProperties> {
       ...super._getDefaultOptions(),
       spellcheck: true,
       autoResizeEnabled: false,
-      _shouldForceAttachKeyboardEvents: false,
+      _shouldAttachKeyboardEvents: false,
     };
   }
 
   _shouldAttachKeyboardEvents(): boolean {
     const {
-      _shouldForceAttachKeyboardEvents: shouldForceAttachKeyboardEvents,
+      _shouldAttachKeyboardEvents: shouldForceAttachKeyboardEvents,
       readOnly,
     } = this.option();
 
@@ -232,7 +232,7 @@ class TextArea extends TextBox<TextAreaProperties> {
     const { name, value } = args;
 
     switch (name) {
-      case '_shouldForceAttachKeyboardEvents':
+      case '_shouldAttachKeyboardEvents':
       case 'autoResizeEnabled':
         this._updateInputAutoResizeAppearance(this._input(), value);
         this._refreshEvents();
