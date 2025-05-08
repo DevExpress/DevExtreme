@@ -419,7 +419,7 @@ export const ListBase = CollectionWidget.inherit({
   },
 
   _scrollHandler(e) {
-    this._scrollAction && this._scrollAction(e);
+    this._scrollAction?.(e);
   },
 
   _initTemplates() {
@@ -495,7 +495,7 @@ export const ListBase = CollectionWidget.inherit({
       });
     } else {
       clearTimeout(this._showLoadingIndicatorTimer);
-      this._scrollView && this._scrollView.finishLoading();
+      this._scrollView?.finishLoading();
     }
     if (!isLoading) {
       this._isDataSourceFirstLoadCompleted(false);
@@ -504,7 +504,7 @@ export const ListBase = CollectionWidget.inherit({
 
   _dataSourceChangedHandler() {
     if (!this._shouldAppendItems() && hasWindow()) {
-      this._scrollView && this._scrollView.scrollTo(0);
+      this._scrollView?.scrollTo(0);
     }
 
     this.callBase.apply(this, arguments);
@@ -623,20 +623,26 @@ export const ListBase = CollectionWidget.inherit({
   _collapseGroupHandler($group, toggle) {
     const deferred = Deferred();
 
-    if ($group.hasClass(LIST_GROUP_COLLAPSED_CLASS) === toggle) {
+    const collapsed = $group.hasClass(LIST_GROUP_COLLAPSED_CLASS);
+
+    if (collapsed === toggle) {
       return deferred.resolve();
     }
 
     const $groupBody = $group.children(`.${LIST_GROUP_BODY_CLASS}`);
-
     const startHeight = getOuterHeight($groupBody);
     let endHeight = 0;
-    if (startHeight === 0) {
+
+    if (collapsed) {
       setHeight($groupBody, 'auto');
       endHeight = getOuterHeight($groupBody);
     }
 
     $group.toggleClass(LIST_GROUP_COLLAPSED_CLASS, toggle);
+
+    if (fx.isAnimating($groupBody)) {
+      fx.stop($groupBody, false);
+    }
 
     fx.animate($groupBody, {
       // @ts-expect-error
