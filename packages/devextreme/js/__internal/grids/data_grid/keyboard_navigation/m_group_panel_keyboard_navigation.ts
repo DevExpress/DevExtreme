@@ -78,26 +78,11 @@ export class GroupPanelKeyboardNavigationController extends ColumnKeyboardNaviga
     }
   }
 
-  protected getVisibleIndex(column): number {
-    return column.groupIndex;
-  }
-
-  protected getNewVisibleIndex(
-    visibleIndex: number,
-    direction: Direction,
-    targetLocation: ViewName,
-  ): number {
-    if (targetLocation === ViewName.Headers) {
-      return -1;
-    }
-
-    return super.getNewVisibleIndex(visibleIndex, direction, targetLocation);
-  }
-
   protected getNewFocusedColumnIndex(
     visibleIndex: number,
     direction: Direction,
-    targetLocation: string,
+    sourceLocation: ViewName,
+    targetLocation: ViewName,
     showWhenGrouped?: boolean,
   ): number {
     if (targetLocation === ViewName.Headers) {
@@ -109,6 +94,7 @@ export class GroupPanelKeyboardNavigationController extends ColumnKeyboardNaviga
     return super.getNewFocusedColumnIndex(
       visibleIndex,
       direction,
+      sourceLocation,
       targetLocation,
       showWhenGrouped,
     );
@@ -198,7 +184,7 @@ export class GroupPanelKeyboardNavigationController extends ColumnKeyboardNaviga
 
   public ungroupAllColumns(): void {
     this.updateViewFocusPosition();
-    this._columnsController.clearGrouping();
+    super.ungroupAllColumns();
   }
 }
 

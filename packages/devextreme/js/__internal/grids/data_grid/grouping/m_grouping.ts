@@ -371,22 +371,32 @@ const GroupingDataControllerExtender = (Base: ModuleType<DataController>) => cla
   }
 };
 
-const onGroupingMenuItemClick = function (column, params) {
-  const columnsController = this._columnsController;
+const onGroupingMenuItemClick = function (column, rowIndex, params) {
+  const keyboardNavigationController = this.getKeyboardNavigationController?.();
 
   // eslint-disable-next-line default-case
   switch (params.itemData.value) {
     case 'group': {
-      const groups = columnsController._dataSource.group() || [];
-
-      columnsController.columnOption(column.dataField, 'groupIndex', groups.length);
+      this.isNeedToFocusColumn = true;
+      keyboardNavigationController.moveColumn({
+        column,
+        sourceLocation: 'headers',
+        targetLocation: 'group',
+      });
       break;
     }
     case 'ungroup':
-      columnsController.columnOption(column.dataField, 'groupIndex', -1);
+      this.isNeedToFocusColumn = true;
+      keyboardNavigationController.moveColumn({
+        column,
+        sourceLocation: 'group',
+        targetLocation: 'headers',
+        rowIndex,
+      });
       break;
     case 'ungroupAll':
-      this.component.clearGrouping();
+      this.isNeedToFocusColumn = true;
+      keyboardNavigationController.ungroupAllColumns();
       break;
   }
 };
@@ -493,24 +503,12 @@ export const GroupingHeaderPanelExtender = (
     const contextMenuEnabled = this.option('grouping.contextMenuEnabled');
 
     if (contextMenuEnabled && column) {
-      const keyboardNavigationController = this.getKeyboardNavigationController();
       const isGroupingAllowed = isDefined(column.allowGrouping) ? column.allowGrouping : true;
 
       if (isGroupingAllowed) {
         const isColumnGrouped = isDefined(column.groupIndex) && column.groupIndex > -1;
         const groupingTexts: any = this.option('grouping.texts');
-        const onItemClick = (e) => {
-          this.isNeedToFocusColumn = true;
-          if (e.itemData?.value === 'ungroup') {
-            keyboardNavigationController.moveColumn({
-              column,
-              sourceLocation: 'group',
-              targetLocation: 'headers',
-            });
-          } else if (e.itemData?.value === 'ungroupAll') {
-            keyboardNavigationController.ungroupAllColumns();
-          }
-        };
+        const onItemClick = onGroupingMenuItemClick.bind(this, column, 0);
 
         return [
           {
@@ -650,7 +648,13 @@ const GroupingRowsViewExtender = (Base: ModuleType<RowsView>) => class GroupingR
 
       if (column && column.allowGrouping) {
         const groupingTexts: any = that.option('grouping.texts');
-        const onItemClick = onGroupingMenuItemClick.bind(that, column);
+        const onItemClick = (e) => {
+          if (e.itemData?.value === 'ungroup') {
+            columnsController.columnOption(column.dataField, 'groupIndex', -1);
+          } else if (e.itemData?.value === 'ungroupAll') {
+            columnsController.clearGrouping();
+          }
+        };
 
         items = [];
 
@@ -699,12 +703,12 @@ const columnHeadersViewExtender = (Base: ModuleType<ColumnHeadersView>) => class
     let items: any[] | undefined = super.getContextMenuItems(options);
 
     if (contextMenuEnabled && options.row && (options.row.rowType === 'header' || options.row.rowType === 'detailAdaptive')) {
-      const { column } = options;
+      const { column, rowIndex } = options;
 
       if (!column.command && (!isDefined(column.allowGrouping) || column.allowGrouping)) {
         const groupingTexts: any = that.option('grouping.texts');
         const isColumnGrouped = isDefined(column.groupIndex) && column.groupIndex > -1;
-        const onItemClick = onGroupingMenuItemClick.bind(that, column);
+        const onItemClick = onGroupingMenuItemClick.bind(that, column, rowIndex);
 
         groupItems.push({
           text: groupingTexts.groupByThisColumn, value: 'group', beginGroup: true, disabled: isColumnGrouped, onItemClick,

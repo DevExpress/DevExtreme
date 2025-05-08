@@ -42,40 +42,63 @@ const headersKeyboardNavigation = (
     return false;
   }
 
-  protected getNewVisibleIndex(visibleIndex, direction, targetLocation): number {
+  protected getNewVisibleIndex(
+    visibleIndex: number,
+    direction: Direction,
+    sourceLocation?: ViewName,
+    targetLocation?: ViewName,
+  ): number {
     if (targetLocation === ViewName.Group) {
       return this._columnsController.getGroupColumns()?.length ?? 0;
     }
 
-    return super.getNewVisibleIndex(visibleIndex, direction, targetLocation);
+    return super.getNewVisibleIndex(visibleIndex, direction, sourceLocation, targetLocation);
   }
 
   protected getNewFocusedColumnIndex(
     visibleIndex: number,
     direction: Direction,
+    sourceLocation: ViewName,
     targetLocation: ViewName,
     showWhenGrouped?: boolean,
   ): number {
-    if (targetLocation === ViewName.Group) {
-      if (showWhenGrouped) {
+    if (showWhenGrouped && sourceLocation !== targetLocation) {
+      const isGroupingOperation = targetLocation === ViewName.Group;
+
+      if (isGroupingOperation) {
         return visibleIndex + 1;
       }
 
+      return visibleIndex;
+    }
+
+    if (targetLocation === ViewName.Group) {
       const focusableColumns = this.getFocusableColumns();
       const lastFocusableColumn = focusableColumns[focusableColumns.length - 1];
 
       if (visibleIndex === this._columnsController.getVisibleIndex(lastFocusableColumn.index)) {
         return focusableColumns.length === 1
           ? -1
-          : this.getNewVisibleIndex(visibleIndex, Direction.Previous, ViewName.Headers) + 1;
+          : this.getNewVisibleIndex(
+            visibleIndex,
+            Direction.Previous,
+            ViewName.Headers,
+            ViewName.Headers,
+          ) + 1;
       }
 
-      return this.getNewVisibleIndex(visibleIndex, Direction.Next, ViewName.Headers) - 1;
+      return this.getNewVisibleIndex(
+        visibleIndex,
+        Direction.Next,
+        ViewName.Headers,
+        ViewName.Headers,
+      ) - 1;
     }
 
     return super.getNewFocusedColumnIndex(
       visibleIndex,
       direction,
+      sourceLocation,
       targetLocation,
       showWhenGrouped,
     );

@@ -4,6 +4,7 @@ import $ from '@js/core/renderer';
 
 import modules from '../m_modules';
 import type { Controllers, OptionChanged } from '../m_types';
+import type { ViewName } from './const';
 import { Direction } from './const';
 import { isElementDefined, isFixedColumnIndexOffsetRequired } from './m_keyboard_navigation_utils';
 
@@ -131,9 +132,11 @@ export class KeyboardNavigationController extends modules.ViewController {
 
   protected getNewVisibleIndex(
     visibleIndex: number,
-    direction: string,
+    direction: Direction,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    targetLocation?: string,
+    sourceLocation?: ViewName,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    targetLocation?: ViewName,
   ): number {
     return direction === 'previous' ? visibleIndex - 1 : visibleIndex + 1;
   }

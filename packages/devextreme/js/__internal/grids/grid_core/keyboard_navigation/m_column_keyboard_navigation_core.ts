@@ -10,16 +10,31 @@ export class ColumnKeyboardNavigationController extends KeyboardNavigationContro
 
   public columnFocusDispatcher!: ColumnFocusDispatcher;
 
-  protected getVisibleIndex(column, rowIndex?): number {
+  protected getVisibleIndex(
+    column,
+    rowIndex?: number,
+    sourceLocation?: ViewName,
+  ): number {
+    if (sourceLocation === ViewName.Group) {
+      return column.groupIndex as number;
+    }
+
     return this._columnsController.getVisibleIndex(column.index, rowIndex);
   }
 
   protected getNewVisibleIndex(
     visibleIndex: number,
     direction: Direction,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    targetLocation: ViewName,
+    sourceLocation?: ViewName,
+    targetLocation?: ViewName,
   ): number {
+    const isUngroupColumn = sourceLocation === ViewName.Group
+      && targetLocation === ViewName.Headers;
+
+    if (isUngroupColumn) {
+      return -1;
+    }
+
     /*
           We need to add 2 to the index instead of 1,
           because that's how normalization of these indexes works.
@@ -39,7 +54,8 @@ export class ColumnKeyboardNavigationController extends KeyboardNavigationContro
   protected getNewFocusedColumnIndex(
     newVisibleIndex: number,
     direction: Direction,
-    targetLocation: string,
+    sourceLocation: ViewName,
+    targetLocation: ViewName,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     showWhenGrouped = false,
   ): number {
@@ -79,15 +95,17 @@ export class ColumnKeyboardNavigationController extends KeyboardNavigationContro
     rowIndex = 0,
   }) {
     const isGrouping = sourceLocation === ViewName.Headers && targetLocation === ViewName.Group;
-    const visibleIndex = this.getVisibleIndex(column, rowIndex);
+    const visibleIndex = this.getVisibleIndex(column, rowIndex, sourceLocation);
     const newVisibleIndex = this.getNewVisibleIndex(
       visibleIndex,
       direction,
+      sourceLocation,
       targetLocation,
     );
     const newFocusedColumnIndex = this.getNewFocusedColumnIndex(
       !isGrouping && newVisibleIndex >= 0 ? newVisibleIndex : visibleIndex,
       direction,
+      sourceLocation,
       targetLocation,
       column.showWhenGrouped,
     );
@@ -135,5 +153,9 @@ export class ColumnKeyboardNavigationController extends KeyboardNavigationContro
 
     // @ts-expect-error
     eventsEngine.trigger($focusedCell, 'focus');
+  }
+
+  public ungroupAllColumns(): void {
+    this._columnsController.clearGrouping();
   }
 }
