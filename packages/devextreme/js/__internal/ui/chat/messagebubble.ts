@@ -16,11 +16,6 @@ export const CHAT_MESSAGEBUBBLE_IMAGE_CLASS = 'dx-chat-messagebubble-image';
 
 export const MESSAGE_DATA_KEY = 'dxMessageData';
 
-export enum MessageType {
-  Text = 'text',
-  Image = 'image',
-}
-
 export interface Properties extends WidgetOptions<MessageBubble> {
   type?: 'text' | 'image';
   text?: string;
@@ -97,7 +92,7 @@ class MessageBubble extends Widget<Properties> {
     }
 
     switch (type) {
-      case MessageType.Image:
+      case 'image':
         this.$element().addClass(CHAT_MESSAGEBUBBLE_HAS_IMAGE_CLASS);
         $('<img>')
           .attr('src', src ?? '')
@@ -105,7 +100,7 @@ class MessageBubble extends Widget<Properties> {
           .addClass(CHAT_MESSAGEBUBBLE_IMAGE_CLASS)
           .appendTo($bubbleContainer);
         break;
-      case MessageType.Text:
+      case 'text':
       default:
         $bubbleContainer.text(text ?? '');
     }
