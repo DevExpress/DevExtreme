@@ -87,6 +87,7 @@ const data = [
     endDate: addDays(currentStartOfTheWeek, 4).setUTCHours(21),
   },
 ];
+const schedulerDataSource = new DevExpress.data.DataSource(data);
 
 const assignees = [
   {

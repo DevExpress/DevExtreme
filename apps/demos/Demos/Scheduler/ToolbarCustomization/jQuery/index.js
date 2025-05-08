@@ -1,11 +1,10 @@
 $(() => {
-  const schedulerDataSource = new DevExpress.data.DataSource(data);
   const scheduler = $('#scheduler').dxScheduler({
     timeZone: 'America/Los_Angeles',
     dataSource: schedulerDataSource,
     views: ['day', 'week', 'workWeek', 'month'],
     currentView: 'workWeek',
-    currentDate: new Date(2021, 3, 27),
+    currentDate,
     startDayHour: 9,
     endDayHour: 19,
     resources: [{

@@ -11,7 +11,7 @@ import DataSource from 'devextreme/data/data_source';
 import { DxButtonTypes } from 'devextreme-angular/ui/button';
 import { DxTagBoxModule, DxTagBoxTypes } from 'devextreme-angular/ui/tag-box';
 import {
-  Appointment, Service, Assignee
+  Service, Assignee
 } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
@@ -27,14 +27,13 @@ if (window && window.config?.packageConfigPaths) {
 @Component({
   selector: 'demo-app',
   templateUrl: `.${modulePrefix}/app.component.html`,
-  styleUrls: [`.${modulePrefix}/app.component.css`],
   providers: [Service],
   preserveWhitespaces: true,
 })
 export class AppComponent {
   @ViewChild(DxSchedulerComponent, { static: false }) scheduler: DxSchedulerComponent;
 
-  dataSource: DataSource<Appointment>;
+  dataSource: DataSource;
 
   assignees: Assignee[];
 
