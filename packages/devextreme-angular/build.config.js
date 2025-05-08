@@ -1,4 +1,3 @@
-
 const unifiedConfig = require('../../tools/generators-config').angularConfig;
 
 module.exports = {
