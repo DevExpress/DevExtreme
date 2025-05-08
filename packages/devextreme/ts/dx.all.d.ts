@@ -10102,7 +10102,7 @@ declare module DevExpress.ui {
         PointerEvent | MouseEvent | TouchEvent
       > &
         WithCardInfo;
-    export type CardHeaderPredefinedToolbarItem =
+    export type CardHeaderPredefinedItem =
       | 'selectionCheckBox'
       | 'updateButton'
       | 'deleteButton';
@@ -10392,7 +10392,7 @@ declare module DevExpress.ui {
      * [descr:FieldTemplateData]
      */
     export type FieldTemplateData = {
-      field: FieldInfoType;
+      field: FieldInfo;
     };
     /**
      * [descr:_ui_card_view_FieldValueClickEvent]
@@ -10423,6 +10423,19 @@ declare module DevExpress.ui {
      */
     export type FocusedCardChanged =
       DevExpress.common.core.events.EventInfo<dxCardView> & WithCardInfo;
+
+    export type HeaderPanelDragging = Pick<
+      dxSortableOptions,
+      | 'dropFeedbackMode'
+      | 'scrollSpeed'
+      | 'scrollSensitivity'
+      | 'onDragChange'
+      | 'onDragEnd'
+      | 'onDragMove'
+      | 'onDragStart'
+      | 'onRemove'
+      | 'onReorder'
+    >;
     /**
      * [descr:_ui_card_view_InitNewCardEvent]
      */
@@ -10542,7 +10555,7 @@ declare module DevExpress.ui {
       /**
        * [descr:WithFieldCaptionInfo.field]
        */
-      readonly field: FieldInfoType;
+      readonly field: FieldInfo;
       /**
        * [descr:WithFieldCaptionInfo.fieldCaptionElement]
        */
@@ -10556,7 +10569,7 @@ declare module DevExpress.ui {
       /**
        * [descr:WithFieldValueInfo.field]
        */
-      readonly field: FieldInfoType;
+      readonly field: FieldInfo;
       /**
        * [descr:WithFieldValueInfo.fieldValueElement]
        */
@@ -32880,7 +32893,7 @@ declare module DevExpress.ui.dxCardView {
     /**
      * [descr:CardHeader.items]
      */
-    items?: Array<CardHeaderPredefinedToolbarItem | CardHeaderToolbarItem>;
+    items?: Array<CardHeaderPredefinedItem | CardHeaderItem>;
     /**
      * [descr:CardHeader.template]
      */
@@ -32891,15 +32904,15 @@ declare module DevExpress.ui.dxCardView {
         ) => string | DevExpress.core.UserDefinedElement);
   };
   /**
-   * [descr:CardHeaderToolbarItem]
+   * [descr:CardHeaderItem]
    */
-  export type CardHeaderToolbarItem = dxToolbarItem & {
+  export type CardHeaderItem = dxToolbarItem & {
     /**
-     * [descr:CardHeaderToolbarItem.name]
+     * [descr:CardHeaderItem.name]
      */
-    name?: CardHeaderPredefinedToolbarItem | string;
+    name?: CardHeaderPredefinedItem | string;
     /**
-     * [descr:CardHeaderToolbarItem.location]
+     * [descr:CardHeaderItem.location]
      */
     location?: DevExpress.common.ToolbarItemLocation;
   };
@@ -32918,7 +32931,7 @@ declare module DevExpress.ui.dxCardView {
     /**
      * [descr:CardInfo.fields]
      */
-    fields: FieldInfoType[];
+    fields: FieldInfo[];
     /**
      * [descr:CardInfo.key]
      */
@@ -33149,35 +33162,34 @@ declare module DevExpress.ui.dxCardView {
   };
 
   /**
-   * [descr:FieldInfoType]
+   * [descr:FieldInfo]
    */
-  export type FieldInfoType = {
+  export type FieldInfo = {
     /**
-     * [descr:FieldInfoType.value]
+     * [descr:FieldInfo.value]
      */
-    value: unknown;
+    value: any;
     /**
-     * [descr:FieldInfoType.displayValue]
+     * [descr:FieldInfo.displayValue]
      */
-    displayValue: unknown;
+    displayValue: any;
     /**
-     * [descr:FieldInfoType.text]
+     * [descr:FieldInfo.text]
      */
     text: string;
     /**
-     * [descr:FieldInfoType.column]
+     * [descr:FieldInfo.column]
      */
     column: Column;
     /**
-     * [descr:FieldInfoType.index]
+     * [descr:FieldInfo.index]
      */
     index: number;
     /**
-     * [descr:FieldInfoType.card]
+     * [descr:FieldInfo.card]
      */
     card: CardInfo;
   };
-
   /**
    * [descr:HeaderPanel]
    */
@@ -33185,18 +33197,7 @@ declare module DevExpress.ui.dxCardView {
     /**
      * [descr:HeaderPanel.dragging]
      */
-    dragging?: Pick<
-      dxSortableOptions,
-      | 'dropFeedbackMode'
-      | 'scrollSpeed'
-      | 'scrollSensitivity'
-      | 'onDragChange'
-      | 'onDragEnd'
-      | 'onDragMove'
-      | 'onDragStart'
-      | 'onRemove'
-      | 'onReorder'
-    >;
+    dragging?: HeaderPanelDragging;
     /**
      * [descr:HeaderPanel.visible]
      */

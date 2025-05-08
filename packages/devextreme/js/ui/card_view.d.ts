@@ -145,19 +145,19 @@ export type Toolbar = {
  * @public
  * @namespace DevExpress.ui.dxCardView
  */
-export type FieldInfoType = { // TODO: rename to FieldInfo
+export type FieldInfo = {
     /**
      * @public
      * @docid
      * @type object
      */
-    value: unknown;
+    value: any;
     /**
      * @public
      * @docid
      * @type object
      */
-    displayValue: unknown;
+    displayValue: any;
     /**
      * @public
      * @docid
@@ -200,7 +200,7 @@ export type CardInfo<TCardData = unknown, TKey = unknown> = {
      * @public
      * @docid
      */
-    fields: FieldInfoType[];
+    fields: FieldInfo[];
     /**
      * @public
      * @docid
@@ -482,6 +482,11 @@ export type Column<TCardData = unknown, TKey = unknown> = ColumnProperties<TCard
 // #region HeaderPanel
 
 /**
+ * @public
+ * */
+export type HeaderPanelDragging = Pick<dxSortableOptions, 'dropFeedbackMode' | 'scrollSpeed' | 'scrollSensitivity' | 'onDragChange' | 'onDragEnd' | 'onDragMove' | 'onDragStart' | 'onRemove' | 'onReorder'>;
+
+/**
  * @docid
  * @public
  * @namespace DevExpress.ui.dxCardView
@@ -492,7 +497,7 @@ export type HeaderPanel<TCardData = unknown, TKey = unknown> = {
      * @public
      * @type object
      */
-    dragging?: Pick<dxSortableOptions, 'dropFeedbackMode' | 'scrollSpeed' | 'scrollSensitivity' | 'onDragChange' | 'onDragEnd' | 'onDragMove' | 'onDragStart' | 'onRemove' | 'onReorder'>;
+    dragging?: HeaderPanelDragging;
     /**
      * @docid
      * @public
@@ -530,7 +535,7 @@ type WithCardInfo = {
  */
 type WithFieldCaptionInfo = {
     /** @docid */
-    readonly field: FieldInfoType;
+    readonly field: FieldInfo;
     /** @docid */
     readonly fieldCaptionElement: DxElement;
 };
@@ -540,7 +545,7 @@ type WithFieldCaptionInfo = {
  */
 type WithFieldValueInfo = {
     /** @docid */
-    readonly field: FieldInfoType;
+    readonly field: FieldInfo;
     /** @docid */
     readonly fieldValueElement: DxElement;
 };
@@ -633,7 +638,7 @@ export type CardHoverChangedEvent = EventInfo<dxCardView> & WithCardInfo & {
  * @docid
  */
 export type FieldTemplateData = {
-    field: FieldInfoType;
+    field: FieldInfo;
 };
 
 /**
@@ -686,7 +691,7 @@ export type CardCover<TCardData = unknown> = { // TODO: sync with impl
 };
 
 /** @public */
-export type CardHeaderPredefinedToolbarItem = 'selectionCheckBox' | 'updateButton' | 'deleteButton';
+export type CardHeaderPredefinedItem = 'selectionCheckBox' | 'updateButton' | 'deleteButton';
 
 /**
  * @docid
@@ -694,12 +699,12 @@ export type CardHeaderPredefinedToolbarItem = 'selectionCheckBox' | 'updateButto
  * @public
  * @namespace DevExpress.ui.dxCardView
  */
-export type CardHeaderToolbarItem = dxToolbarItem & {
+export type CardHeaderItem = dxToolbarItem & {
     /**
      * @docid
      * @public
      */
-    name?: CardHeaderPredefinedToolbarItem | string;
+    name?: CardHeaderPredefinedItem | string;
     /**
      * @docid
      * @default 'after'
@@ -723,7 +728,7 @@ export type CardHeader = { // TODO: sync with impl
      * @docid
      * @public
      */
-    items?: Array<CardHeaderPredefinedToolbarItem | CardHeaderToolbarItem>;
+    items?: Array<CardHeaderPredefinedItem | CardHeaderItem>;
     /**
      * @docid
      * @public
