@@ -11,7 +11,8 @@ import type { ComponentType } from 'inferno';
 import { Component } from 'inferno';
 
 import { getColumnIdentifier } from '../../grid_core/filtering/header_filter/utils';
-import type { DraggingColumnData, Props as ColumnSortableProps } from './column_sortable';
+import type { FilterValue } from '../../grid_core/filtering/types';
+import type { Props as ColumnSortableProps } from './column_sortable';
 import { ColumnSortable } from './column_sortable';
 import { CLASSES as itemClasses, Item } from './item';
 import type { DraggingOptions } from './options';
@@ -61,7 +62,7 @@ export interface HeaderPanelProps {
 
   openColumnChooser: () => void;
 
-  syncFilterPanelValue?: unknown;
+  filterSyncValue: FilterValue | null;
 }
 
 const EmptyHeaderPanelText = (props: { openColumnChooser: () => void }): JSX.Element => {
@@ -136,7 +137,7 @@ export class HeaderPanel extends Component<HeaderPanelProps> {
                     column={column}
                     template={this.props.itemTemplate}
                     cssClass={this.props.itemCssClass}
-                    isFiltered={this.isFiltered(column, this.props.syncFilterPanelValue)}
+                    hasFilters={this.itemHasFilters(column, this.props.filterSyncValue)}
                     keyDownConfig={{
                       Enter: (event) => { this.props.onColumnSort(column, event); },
                       'Enter+ctrl': (event) => { this.props.onColumnSort(column, event); },
@@ -177,15 +178,14 @@ export class HeaderPanel extends Component<HeaderPanelProps> {
     );
   }
 
-  private isFiltered(column: VisibleColumn, syncFilter: unknown): boolean {
-    const { filterType, filterValues } = column;
+  private itemHasFilters(column: VisibleColumn, filterSyncValue: unknown): boolean {
+    const { filterValues } = column;
 
-    let result = filterType === 'exclude'
-      || !!filterValues?.length;
+    const columnId = getColumnIdentifier(column);
 
-    if (!result && syncFilter) {
-      result = filterHasField(syncFilter, getColumnIdentifier(column));
-    }
-    return result;
+    const hasHeaderFilterValue = !!filterValues?.length;
+    const hasFilterSyncValue = filterHasField(filterSyncValue, columnId) as boolean;
+
+    return hasHeaderFilterValue || hasFilterSyncValue;
   }
 }

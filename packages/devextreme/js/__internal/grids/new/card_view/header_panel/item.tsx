@@ -15,7 +15,7 @@ export const CLASSES = {
     order: 'dx-cardview-header-item-sorting-order',
   },
   headerFilter: {
-    iconEmpty: 'dx-header-filter-icon',
+    icon: 'dx-header-filter-icon',
     iconFilled: 'dx-header-filter-icon--selected',
   },
 };
@@ -51,7 +51,7 @@ export interface ItemProps {
   isDragging?: boolean;
   template?: ComponentType<{ column: Column }>;
   cssClass?: string;
-  isFiltered?: boolean;
+  hasFilters?: boolean;
   onKeyDown?: (event: KeyboardEvent) => void;
   onSortClick?: (event: MouseEvent) => void;
   onFilterClick?: (element: Element) => void;
@@ -66,8 +66,8 @@ export class Item extends Component<ItemProps> {
     const cssClass = `${CLASSES.item} ${column.headerItemCssClass ?? ''} ${this.props.cssClass ?? ''}`;
 
     const headerFilterIconClass = [
-      CLASSES.headerFilter.iconEmpty,
-      this.props.isFiltered ? CLASSES.headerFilter.iconFilled : '',
+      CLASSES.headerFilter.icon,
+      this.props.hasFilters ? CLASSES.headerFilter.iconFilled : '',
     ].join(' ');
 
     const icon = this.props.status && {

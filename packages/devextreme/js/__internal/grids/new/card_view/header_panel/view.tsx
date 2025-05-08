@@ -87,9 +87,7 @@ export class HeaderPanelView extends View<HeaderPanelProps> {
       } as Partial<ColumnSortableProps>,
       showContextMenu: this.showContextMenu.bind(this),
       openColumnChooser: (): void => { this.columnChooserView.show(); },
-      syncFilterPanelValue: this.filterController.filterSyncEnabled
-        ? this.filterController.filterPanelValue.value
-        : null,
+      filterSyncValue: this.filterController.filterSyncValue.value,
     }));
   }
 

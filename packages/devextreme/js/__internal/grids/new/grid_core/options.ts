@@ -9,7 +9,7 @@ import * as dataController from './data_controller/index';
 import * as editing from './editing/index';
 import * as filterSync from './filtering/filter_sync/index';
 import * as headerFilter from './filtering/header_filter/index';
-import type * as filterController from './filtering/index';
+import * as filterController from './filtering/index';
 import { filterPanel } from './filtering/index';
 import * as keyboardNavigation from './keyboard_navigation/index';
 import * as pager from './pager/index';
@@ -46,6 +46,7 @@ export const defaultOptions = {
   ...columnsController.defaultOptions,
   ...pager.defaultOptions,
   ...filterPanel.defaultOptions,
+  ...filterController.defaultOptions,
   ...headerFilter.defaultOptions,
   ...filterSync.defaultOptions,
   ...contentView.defaultOptions,

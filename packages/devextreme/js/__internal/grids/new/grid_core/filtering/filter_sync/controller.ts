@@ -10,6 +10,7 @@ import { OptionsController } from '../../options_controller/options_controller';
 import { HeaderFilterController } from '../header_filter/index';
 import { getColumnIdentifier, isColumnFilterable } from '../header_filter/utils';
 import { FilterController } from '../index';
+import type { FilterValue } from '../types';
 import {
   getFilterType,
   getFilterValues,
@@ -27,7 +28,7 @@ export class FilterSyncController {
 
   private isFirstLoad = true;
 
-  private previousComposedHeaderFilter: unknown[] | null = null;
+  private previousComposedHeaderFilter: FilterValue | null = null;
 
   constructor(
     private readonly options: OptionsController,
@@ -36,78 +37,81 @@ export class FilterSyncController {
     private readonly headerFilterController: HeaderFilterController,
   ) {
     // Sync from FilterPanel to HeaderFilter
-    this.filterController.filterPanelValue.subscribe((filter) => {
-      if (filter === undefined) {
+    this.filterController.filterPanelValue.subscribe((filterPanelValue) => {
+      if (filterPanelValue === null) {
         return;
       }
+
       if (!this.filterController.filterSyncEnabled.value) {
         return;
       }
 
-      const sourceColumns = this.columnsController.columns.peek();
-
-      this.columnsController.updateColumns(
-        (columns) => columns.map((col) => {
-          const sourceColumn = getColumnByIndexOrName(sourceColumns, col.name) as Column;
-          if (!isColumnFilterable(sourceColumn)) {
-            return col;
-          }
-
-          const filterConditions = getMatchedConditions(filter, getColumnIdentifier(col as Column));
-          const filterType = getFilterType(filterConditions);
-          // eslint-disable-next-line @stylistic/max-len
-          // eslint-disable-next-line @typescript-eslint/init-declarations, @typescript-eslint/no-explicit-any
-          let filterValues: any[] | undefined;
-          if (filterType) {
-            filterValues = getFilterValues(filterConditions);
-          }
-
-          return {
-            ...col,
-            filterValues,
-            filterType,
-          };
-        }),
-      );
+      this.handleFilterPanelSync(filterPanelValue);
     });
 
     // Sync from HeaderFilter to FilterPanel
-    this.headerFilterController.composedHeaderFilter.subscribe((filter) => {
+    this.headerFilterController.composedHeaderFilter.subscribe((headerFilter) => {
       if (this.isFirstLoad) {
-        this.isFirstLoad = false;
-        if (this.filterController.filterPanelValue.value || filter.length === 0) {
-          this.previousComposedHeaderFilter = filter;
-          return;
-        }
-      }
-      if (!this.filterController.filterSyncEnabled.value) {
-        this.previousComposedHeaderFilter = filter;
+        this.handleHeaderFilterFirstLoad(headerFilter);
         return;
       }
-      const areEqualByValue = equalByValue(
-        filter,
-        this.filterController.filterValueOption.value,
-        {
-          maxDepth: FILTER_OBJ_COMPARE_DEPTH,
-          strict: true,
-        },
-      );
-      const areEqualByPrevious = equalByValue(
-        filter,
-        this.previousComposedHeaderFilter,
-        {
-          maxDepth: FILTER_OBJ_COMPARE_DEPTH,
-          strict: true,
-        },
-      );
-      const areEqualByEmpty = filter.length === 0
-      && this.filterController.filterValueOption.value === null;
 
-      if (!areEqualByValue && !areEqualByEmpty && !areEqualByPrevious) {
-        this.filterController.filterValueOption.value = filter;
+      if (this.filterController.filterSyncEnabled.value) {
+        this.handleHeaderFilterSync(headerFilter);
       }
 
-      this.previousComposedHeaderFilter = filter;
+      this.previousComposedHeaderFilter = headerFilter;
     });
   }
+
+  private handleFilterPanelSync(filterPanelValue: FilterValue | null): void {
+    const sourceColumns = this.columnsController.columns.peek();
+
+    this.columnsController.updateColumns(
+      (columns) => columns.map((column) => {
+        const sourceColumn = getColumnByIndexOrName(sourceColumns, column.name) as Column;
+
+        if (!isColumnFilterable(sourceColumn)) {
+          return column;
+        }
+
+        const columnId = getColumnIdentifier(column as Column);
+        const filterConditions = getMatchedConditions(filterPanelValue, columnId) as FilterValue;
+        const filterType = getFilterType(filterConditions);
+        const filterValues = filterType ? getFilterValues(filterConditions) : undefined;
+
+        return {
+          ...column,
+          filterValues,
+          filterType,
+        };
+      }),
+    );
+  }
+
+  private handleHeaderFilterFirstLoad(headerFilter: FilterValue): void {
+    this.isFirstLoad = false;
+
+    if (this.filterController.filterPanelValue.value || headerFilter.length === 0) {
+      this.previousComposedHeaderFilter = headerFilter;
+    }
+  }
+
+  private handleHeaderFilterSync(headerFilter: FilterValue): void {
+    const comparisonOptions = { maxDepth: FILTER_OBJ_COMPARE_DEPTH, strict: true };
+    const filterValue = this.filterController.filterValueOption.value;
+
+    const areEqualByValue = equalByValue(headerFilter, filterValue, comparisonOptions);
+    const areEqualByPrevious = equalByValue(
+      headerFilter,
+      this.previousComposedHeaderFilter,
+      comparisonOptions,
+    );
+    const areEqualByEmpty = headerFilter.length === 0 && filterValue === null;
+
+    if (!areEqualByValue && !areEqualByEmpty && !areEqualByPrevious) {
+      this.filterController.filterValueOption.value = headerFilter;
+    }
+  }
 }
+// (!A && !B && !C) == !(A || B || C)

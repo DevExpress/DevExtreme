@@ -1,7 +1,9 @@
 import type { FilterType } from '@js/common/grids';
 
+import type { FilterValue } from '../types';
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const getFilterValues = (filterConditions: unknown[]): any[] | undefined => {
+export const getFilterValues = (filterConditions: FilterValue): any[] | undefined => {
   if (filterConditions.length !== 1) {
     return undefined;
   }
@@ -18,7 +20,7 @@ export const getFilterValues = (filterConditions: unknown[]): any[] | undefined 
   return hasArrayValue ? value : [value];
 };
 
-export const getFilterType = (filterConditions: unknown[]): FilterType | undefined => {
+export const getFilterType = (filterConditions: FilterValue): FilterType | undefined => {
   if (filterConditions.length !== 1) {
     return undefined;
   }

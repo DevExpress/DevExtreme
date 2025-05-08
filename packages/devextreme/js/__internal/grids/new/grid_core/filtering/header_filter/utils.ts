@@ -3,6 +3,7 @@ import errors from '@js/core/errors';
 import { isDefined } from '@js/core/utils/type';
 import type { Column } from '@ts/grids/new/grid_core/columns_controller/types';
 
+import type { FilterValue } from '../types';
 import type { HeaderFilterRootOptions } from './types';
 
 export const mergeColumnHeaderFilterOptions = (
@@ -62,28 +63,30 @@ export const isColumnFilterable = (column: Column): boolean => isFilteringAllowe
 export const needCreateHeaderFilter = (column: Column): boolean => {
   const values = column.headerFilter?.values;
   const hasSelectedItems = isDefined(values) && values.length > 0;
+
   return isFilteringAllowed(column) && hasSelectedItems;
 };
 
-export const getComposedHeaderFilter = (columns: Column[]): unknown[] => {
-  const filterValue: unknown[] = [];
-  const filterableColumns = columns
-    .filter((col) => needCreateHeaderFilter(col));
-  filterableColumns
-    .forEach((col, index) => {
-      const { filterValues } = col;
-      let normalizedFilterValues = filterValues;
-      if (col.filterValues?.length === 1) {
-        [normalizedFilterValues] = filterValues;
-      }
-      filterValue.push([
-        getColumnName(col),
-        getFilterOperator(normalizedFilterValues, col.filterType),
-        normalizedFilterValues,
-      ]);
-      if (index < filterableColumns.length - 1) {
-        filterValue.push('and');
-      }
-    });
+export const getComposedHeaderFilter = (columns: Column[]): FilterValue => {
+  const filterValue: FilterValue = [];
+  const filterableColumns = columns.filter((col) => needCreateHeaderFilter(col));
+
+  filterableColumns.forEach((column, index) => {
+    const { filterValues } = column;
+
+    const normalizedFilterValues = filterValues?.length === 1
+      ? filterValues[0]
+      : filterValues;
+
+    const columnName = getColumnName(column);
+    const filterOperator = getFilterOperator(normalizedFilterValues, column.filterType);
+
+    filterValue.push([columnName, filterOperator, normalizedFilterValues]);
+
+    if (index < filterableColumns.length - 1) {
+      filterValue.push('and');
+    }
+  });
+
   return filterValue;
 };

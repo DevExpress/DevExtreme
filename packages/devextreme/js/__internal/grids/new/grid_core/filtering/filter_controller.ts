@@ -36,10 +36,14 @@ export class FilterController {
 
   public readonly filterSyncEnabled = computed(
     () => {
-      if (this.filterSyncEnabledOption.value === 'auto') {
-        return !!this.filterPanelVisible.value;
+      const filterSyncEnabledOption = this.filterSyncEnabledOption.value;
+      const filterPanelVisible = !!this.filterPanelVisible.value;
+
+      if (filterSyncEnabledOption === 'auto') {
+        return !!filterPanelVisible;
       }
-      return !!this.filterSyncEnabledOption.value;
+
+      return !!filterSyncEnabledOption;
     },
   );
 
@@ -53,12 +57,20 @@ export class FilterController {
   );
 
   public readonly filterPanelValue = computed(
-    () => (
-      this.filterPanelFilterEnabled.value
-        ? this.filterValueOption.value
-        : undefined
-    ),
+    () => {
+      const filterPanelFilterEnabled = this.filterPanelFilterEnabled.value;
+      const filterValueOption = this.filterValueOption.value;
+
+      return filterPanelFilterEnabled ? filterValueOption : null;
+    },
   );
+
+  public readonly filterSyncValue = computed(() => {
+    const filterSyncEnabled = this.filterSyncEnabled.value;
+    const filterPanelValue = this.filterPanelValue.value;
+
+    return filterSyncEnabled ? filterPanelValue : null;
+  });
 
   private readonly appliedFilterExpressions = computed(
     () => getAppliedFilterExpressions(

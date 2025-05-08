@@ -2,6 +2,7 @@ import type { ReadonlySignal } from '@preact/signals-core';
 import { computed } from '@preact/signals-core';
 import { ColumnsController } from '@ts/grids/new/grid_core/columns_controller/index';
 
+import type { FilterValue } from '../types';
 import { getComposedHeaderFilter } from './utils';
 
 export class HeaderFilterController {
@@ -9,7 +10,7 @@ export class HeaderFilterController {
     ColumnsController,
   ] as const;
 
-  public readonly composedHeaderFilter: ReadonlySignal<unknown[]>;
+  public readonly composedHeaderFilter: ReadonlySignal<FilterValue>;
 
   constructor(
     private readonly columnsController: ColumnsController,
