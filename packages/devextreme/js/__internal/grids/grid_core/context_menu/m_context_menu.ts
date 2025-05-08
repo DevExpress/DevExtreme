@@ -27,7 +27,15 @@ export class ContextMenuController extends modules.ViewController {
     }
 
     const that = this;
-    const $targetElement = $(dxEvent.target);
+    let $targetElement = $(dxEvent.target);
+
+    if ($targetElement.is('.dx-row')) {
+      const $firstCell = $targetElement.find('td.dx-group-cell').first();
+      if ($firstCell.length) {
+        $targetElement = $firstCell;
+      }
+    }
+
     let $element;
     let $targetRowElement;
     let $targetCellElement;
