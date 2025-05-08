@@ -33,6 +33,7 @@ import {
   RestoreTreeContext,
   TemplateRenderingContext,
 } from './contexts';
+import { UnitLessNumbersSet } from './unitlessNumbers';
 
 const DX_REMOVE_EVENT = 'dxremove';
 
@@ -159,7 +160,11 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
 
         Object.entries(styles).forEach(
           ([name, value]) => {
-            el.style[name] = value;
+            if (typeof value === 'number' && !UnitLessNumbersSet.has(name)) {
+              el.style[name] = `${value}px`;
+            } else {
+              el.style[name] = value;
+            }
           },
         );
       }
