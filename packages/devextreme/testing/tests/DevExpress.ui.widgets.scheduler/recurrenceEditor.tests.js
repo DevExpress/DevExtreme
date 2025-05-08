@@ -346,7 +346,7 @@ module('Repeat-end editor', () => {
         assert.equal(repeatCount.option('useLargeSpinButtons'), false, 'numberBox have right useLargeSpinButtons');
         assert.equal(repeatCount.option('min'), 1, 'numberBox has right min value');
         assert.equal(repeatCount.option('value'), 1, 'numberBox has right value');
-        assert.equal(repeatCount.option('width'), 70, 'numberBox has right width');
+        assert.equal(repeatCount.option('width'), 90, 'numberBox has right width');
     });
 
     test('Recurrence repeat-count editor should process rules correctly', function(assert) {
@@ -496,7 +496,7 @@ module('Interval editor', () => {
         assert.equal(getIntervalEditor(instance).option('useLargeSpinButtons'), false, 'Interval editor has right useLargeSpinButtons');
         assert.equal(getIntervalEditor(instance).option('min'), 1, 'Interval editor has right min value');
         assert.equal(getIntervalEditor(instance).option('value'), 1, 'Interval editor hase right value');
-        assert.equal(getIntervalEditor(instance).option('width'), 70, 'Interval editor has right width');
+        assert.equal(getIntervalEditor(instance).option('width'), 90, 'Interval editor has right width');
     });
 
     test('Interval editor should have right css class', function(assert) {
