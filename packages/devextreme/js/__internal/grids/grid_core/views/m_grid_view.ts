@@ -193,23 +193,26 @@ export class ResizingController extends modules.ViewController {
 
   private _setAriaLabel(e?: any): void {
     let widgetStatusText = '';
+    let labelParts: string[] = [];
 
-    if (!e?.operationTypes?.fullReload) {
+    if (e?.isDataValueChanged) {
       const columnCount = this._columnsController?._columns?.filter(({ visible }) => !!visible).length ?? 0;
       const totalItemsCount = Math.max(0, this._dataController.totalItemsCount());
       const widgetAriaLabel = this._getWidgetAriaLabel();
       widgetStatusText = messageLocalization
       // @ts-expect-error Badly typed format method
         .format(widgetAriaLabel, totalItemsCount, columnCount);
+
+      // @ts-expect-error Treelist Variable
+      const expandableWidgetAriaLabel = messageLocalization.format(this._expandableWidgetAriaId);
+      labelParts = [widgetStatusText];
+      if (expandableWidgetAriaLabel) {
+        labelParts.push(expandableWidgetAriaLabel);
+      }
     }
 
     const $ariaLabelElement = this.component.$element().children(`.${GRIDBASE_CONTAINER_CLASS}`);
-    // @ts-expect-error Treelist Variable
-    const expandableWidgetAriaLabel = messageLocalization.format(this._expandableWidgetAriaId);
-    const labelParts = [widgetStatusText];
-    if (expandableWidgetAriaLabel) {
-      labelParts.push(expandableWidgetAriaLabel);
-    }
+
     this.component.setAria('label', labelParts.join('. '), $ariaLabelElement);
     this._gridView.setWidgetA11yStatusText(widgetStatusText);
   }

@@ -1222,6 +1222,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     if (that._repaintChangesOnly !== undefined) {
       change.repaintChangesOnly = change.repaintChangesOnly ?? that._repaintChangesOnly;
       change.needUpdateDimensions = change.needUpdateDimensions || that._needUpdateDimensions;
+      change.isDataValueChanged = that.changed._fired;
     } else if (change.changes) {
       change.repaintChangesOnly = that.option('repaintChangesOnly');
     } else if (isDataChanged) {
