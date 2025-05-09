@@ -1979,7 +1979,7 @@ QUnit.module('Headers with grouping', {
             return $('#container');
         };
 
-        dataGridMocks.setupDataGridModules(this, ['data', 'columnHeaders', 'filterRow', 'selection', 'editorFactory', 'contextMenu', 'headerFilter', 'grouping', 'headerPanel'], {
+        dataGridMocks.setupDataGridModules(this, ['data', 'columnHeaders', 'filterRow', 'selection', 'editorFactory', 'contextMenu', 'headerFilter', 'grouping', 'headerPanel', 'groupPanelKeyboardNavigation'], {
             initViews: true,
             controllers: {
                 columns: new dataGridMocks.MockColumnsController(this.columns),
