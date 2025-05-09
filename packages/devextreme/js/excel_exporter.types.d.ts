@@ -1,7 +1,7 @@
 import { ExportLoadPanel } from './exporter/export_load_panel';
 import { Cell } from './ui/pivot_grid';
 import { Column } from './ui/data_grid';
-import { CellAddress } from './common/export/excel.types';
+import { CellAddress, CellRange } from './common/export/excel.types';
 
 /**
  * @docid
@@ -119,3 +119,8 @@ export interface ExcelDataGridCell {
    */
   value?: any;
 }
+
+export {
+  CellAddress,
+  CellRange,
+};
