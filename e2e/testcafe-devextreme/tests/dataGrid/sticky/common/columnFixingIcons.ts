@@ -6,6 +6,7 @@ import { createWidget } from '../../../../helpers/createWidget';
 import { changeTheme } from '../../../../helpers/changeTheme';
 import { Themes } from '../../../../helpers/themes';
 import { getData } from '../../helpers/generateDataSourceData';
+import { safeSizeTest } from '../../../../helpers/safeSizeTest';
 
 fixture.disablePageReloads`Column Fixing`.page(
   url(__dirname, '../../../container.html'),
@@ -13,7 +14,7 @@ fixture.disablePageReloads`Column Fixing`.page(
 
 [Themes.genericLight, Themes.materialBlue, Themes.fluentBlue].forEach(
   (theme) => {
-    test('Fixed columns: Check context menu items', async (t) => {
+    safeSizeTest('Fixed columns: Check context menu items', async (t) => {
       const dataGrid = new DataGrid('#container');
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
@@ -21,12 +22,9 @@ fixture.disablePageReloads`Column Fixing`.page(
 
       await t
         .rightClick(dataGrid.getHeaders().getHeaderRow(0).element)
-        .click(dataGrid.getContextMenu().getItemByOrder(7))
+        .click(dataGrid.getContextMenu().getItemByText('Set Fixed Position'))
         .expect(
-          await takeScreenshot(
-            `sticky_columns_context_menu_(${theme}).png`,
-            dataGrid.element,
-          ),
+          await takeScreenshot(`sticky_columns_context_menu_(${theme}).png`),
         )
         .ok()
         .expect(compareResults.isValid())
