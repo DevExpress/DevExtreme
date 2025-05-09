@@ -1,4 +1,3 @@
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import { isDefined, isEmptyObject } from '@js/core/utils/type';
 
 import { Direction, ViewName } from './const';
@@ -150,9 +149,7 @@ export class ColumnKeyboardNavigationController extends KeyboardNavigationContro
     }
 
     const $focusedCell = this._getFocusedCell();
-
-    // @ts-expect-error
-    eventsEngine.trigger($focusedCell, 'focus');
+    $focusedCell?.[0]?.focus({ preventScroll: true });
   }
 
   public ungroupAllColumns(): void {

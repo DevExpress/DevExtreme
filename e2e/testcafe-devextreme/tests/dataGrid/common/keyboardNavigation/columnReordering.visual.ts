@@ -1439,3 +1439,96 @@ test('reorder column to left when adaptability is enabled and there are hidden c
     });
   });
 });
+
+// Autoscroll
+[true, false].forEach((useNative) => {
+  test(`Auto scroll to the right when column reordering via keyboard (scrolling.useNative = ${useNative})`, async (t) => {
+    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+    const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+    const firstHeaderCell = dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(0);
+
+    await t
+      .click(firstHeaderCell.element)
+      .pressKey('ctrl+right')
+      .pressKey('ctrl+right')
+      .pressKey('ctrl+right')
+      .pressKey('ctrl+right');
+
+    await takeScreenshot(
+      `auto_scroll_to_right_when_column_reordering_and_useNative_=_${useNative}`,
+      dataGrid.element,
+    );
+
+    await t.expect(compareResults.isValid())
+      .ok(compareResults.errorMessages());
+  }).before(async () => {
+    await createWidget('dxDataGrid', {
+      allowColumnReordering: true,
+      columnWidth: 200,
+      width: 800,
+      dataSource: [{
+        field1: 'test1',
+        field2: 'test2',
+        field3: 'test3',
+        field4: 'test4',
+        field5: 'test5',
+        field6: 'test6',
+        field7: 'test7',
+        field8: 'test8',
+        field9: 'test9',
+        field10: 'test10',
+      }],
+      scrolling: {
+        useNative,
+      },
+    });
+  });
+
+  test(`Auto scroll to the left when column reordering via keyboard (scrolling.useNative = ${useNative})`, async (t) => {
+    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+    const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+    const lastHeaderCell = dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(10);
+
+    await dataGrid.scrollTo(t, { x: 1200 });
+
+    await t
+      .expect(dataGrid.getScrollLeft())
+      .eql(1200);
+
+    await t
+      .click(lastHeaderCell.element)
+      .pressKey('ctrl+left')
+      .pressKey('ctrl+left')
+      .pressKey('ctrl+left')
+      .pressKey('ctrl+left');
+
+    await takeScreenshot(
+      `auto_scroll_to_left_when_column_reordering_and_useNative_=_${useNative}`,
+      dataGrid.element,
+    );
+
+    await t.expect(compareResults.isValid())
+      .ok(compareResults.errorMessages());
+  }).before(async () => {
+    await createWidget('dxDataGrid', {
+      allowColumnReordering: true,
+      columnWidth: 200,
+      width: 800,
+      dataSource: [{
+        field1: 'test1',
+        field2: 'test2',
+        field3: 'test3',
+        field4: 'test4',
+        field5: 'test5',
+        field6: 'test6',
+        field7: 'test7',
+        field8: 'test8',
+        field9: 'test9',
+        field10: 'test10',
+      }],
+      scrolling: {
+        useNative: true,
+      },
+    });
+  });
+});
