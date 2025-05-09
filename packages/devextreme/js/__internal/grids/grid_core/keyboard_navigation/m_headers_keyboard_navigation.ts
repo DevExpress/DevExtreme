@@ -1,20 +1,18 @@
-/* eslint-disable max-classes-per-file */
 import {
   isCommandKeyPressed,
 } from '@js/common/core/events/utils/index';
-import messageLocalization from '@js/common/core/localization/message';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { isDefined } from '@js/core/utils/type';
 
-import type { ColumnHeadersView } from '../column_headers/m_column_headers';
-import type { ModuleType, Views } from '../m_types';
+import type { Views } from '../m_types';
 import { StickyPosition } from '../sticky_columns/const';
 import { getColumnFixedPosition } from '../sticky_columns/utils';
-import { CONTEXT_MENU_MOVE_NEXT_ICON, CONTEXT_MENU_MOVE_PREVIOUS_ICON, Direction } from './const';
-import { KeyboardNavigationController as KeyboardNavigationControllerCore } from './m_keyboard_navigation_core';
+import { Direction } from './const';
+import { ColumnFocusDispatcher } from './m_column_focus_dispatcher';
+import { ColumnKeyboardNavigationController } from './m_column_keyboard_navigation_core';
 
-export class HeadersKeyboardNavigationController extends KeyboardNavigationControllerCore {
+export class HeadersKeyboardNavigationController extends ColumnKeyboardNavigationController {
   protected _columnHeadersView!: Views['columnHeadersView'];
 
   private leftRightKeysHandler(e): void {
@@ -26,8 +24,14 @@ export class HeadersKeyboardNavigationController extends KeyboardNavigationContr
       const rowIndex = this._getRowIndex($cell.parent());
       const column = this._getColumnByCellElement($cell, rowIndex);
 
-      if (this.isHeaderValidForReordering(column, direction, rowIndex)) {
-        this.moveHeader(column, rowIndex, direction);
+      if (this.canReorderColumn(column, direction, rowIndex)) {
+        this.moveColumn({
+          column,
+          sourceLocation: 'headers',
+          targetLocation: 'headers',
+          direction,
+          rowIndex,
+        });
       }
       originalEvent?.preventDefault();
     }
@@ -55,11 +59,11 @@ export class HeadersKeyboardNavigationController extends KeyboardNavigationContr
     return visibleColumns.filter((column) => !column.fixed || column.fixedPosition === StickyPosition.Sticky);
   }
 
-  protected keyDownHandler(e): void {
+  protected keyDownHandler(e): boolean {
     const isHandled = this.processOnKeyDown(e);
 
     if (isHandled) {
-      return;
+      return true;
     }
 
     // eslint-disable-next-line default-case
@@ -73,23 +77,8 @@ export class HeadersKeyboardNavigationController extends KeyboardNavigationContr
         this.leftRightKeysHandler(e);
         break;
     }
-  }
 
-  protected getNewVisibleIndex(visibleIndex, direction) {
-    /*
-      We need to add 2 to the index instead of 1,
-      because that's how normalization of these indexes works.
-
-      For example, we have columns with the following indexes:
-      0 1 2 3
-
-      We drag 1 to the right. Its index becomes 3.
-      0 2 3(1) 3(3)
-
-      After normalization of the indexes:
-      0 1(2) 2(1) 3(3)
-    */
-    return direction === 'previous' ? visibleIndex - 1 : visibleIndex + 2;
+    return false;
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -115,13 +104,22 @@ export class HeadersKeyboardNavigationController extends KeyboardNavigationContr
     return '.dx-header-row > td';
   }
 
+  protected getFocusableColumns(): any[] {
+    const visibleColumns = this._columnsController.getVisibleColumns();
+
+    return visibleColumns.filter(
+      (column) => !isDefined(column.type)
+        || this._columnsController.isCustomCommandColumn(column),
+    );
+  }
+
   public init(): void {
     super.init();
     this._columnHeadersView = this.getView('columnHeadersView');
   }
 
-  public isHeaderValidForReordering(column, direction, rowIndex): boolean {
-    const allowReordering = this._columnHeadersView.isReorderingEnabled(column);
+  public canReorderColumn(column, direction, rowIndex): boolean {
+    const allowReordering = this._columnHeadersView.isColumnReorderingEnabled(column);
 
     if (!allowReordering) {
       return false;
@@ -134,94 +132,37 @@ export class HeadersKeyboardNavigationController extends KeyboardNavigationContr
     return direction === Direction.Next ? !isLastColumn : !isFirstColumn;
   }
 
-  public moveHeader(column, rowIndex, direction) {
-    const visibleIndex = this._columnsController.getVisibleIndex(column.index, rowIndex);
-    const newVisibleIndex = this.getNewVisibleIndex(visibleIndex, direction);
-    const newFocusedColumnIndex = direction === Direction.Next
-      ? newVisibleIndex - 1
-      : newVisibleIndex;
+  public getFirstFocusableVisibleIndex(): number {
+    const focusableColumns = this.getFocusableColumns();
 
-    this.isNeedToFocus = true;
-    this.setFocusedCellPosition(rowIndex, newFocusedColumnIndex);
-    this._columnsController.moveColumn(
-      { columnIndex: visibleIndex, rowIndex },
-      { columnIndex: newVisibleIndex, rowIndex },
-      'headers',
-      'headers',
-    );
+    if (focusableColumns?.length) {
+      return this._columnsController.getVisibleIndex(focusableColumns[0].index);
+    }
+
+    return -1;
+  }
+
+  public ungroupAllColumns(): void {
+    const $focusedCell = this._getFocusedCell();
+    const focusedColumn = this._getColumnByCellElement($focusedCell);
+
+    this._columnsController.beginUpdate();
+    super.ungroupAllColumns();
+
+    const rowIndex = this._columnsController.getRowIndex(focusedColumn.index, true);
+    const newVisibleIndex = this.getVisibleIndex(focusedColumn);
+
+    this.updateFocusPosition({
+      rowIndex,
+      columnIndex: newVisibleIndex,
+    });
+    this._columnsController.endUpdate();
   }
 }
-
-const columnHeadersView = (
-  Base: ModuleType<ColumnHeadersView>,
-) => class ColumnHeadersViewKeyboardNavigationExtender extends Base {
-  private isNeedToFocusHeader = false;
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  protected contextMenuHiddenHandler(e) {
-    const headersKeyboardNavigationController = this.getController('headersKeyboardNavigation');
-
-    if (this.isNeedToFocusHeader) {
-      headersKeyboardNavigationController?.restoreFocus();
-      this.isNeedToFocusHeader = false;
-    }
-  }
-
-  public getContextMenuItems(options) {
-    let items: any = super.getContextMenuItems(options);
-    const { column, rowIndex } = options;
-    const allowColumnReordering = this.isReorderingEnabled(options?.column);
-
-    if (allowColumnReordering) {
-      const headersKeyboardNavigationController = this.getController('headersKeyboardNavigation');
-
-      if (headersKeyboardNavigationController) {
-        const rtlEnabled = this.option('rtlEnabled');
-        const onItemClick = (e) => {
-          this.isNeedToFocusHeader = true;
-          headersKeyboardNavigationController.moveHeader(column, rowIndex, e.itemData?.value);
-        };
-
-        items = items ?? [];
-        items.push(
-          {
-            text: messageLocalization.format('dxDataGrid-moveColumnToTheLeft'),
-            value: Direction.Previous,
-            beginGroup: true,
-            disabled: !headersKeyboardNavigationController.isHeaderValidForReordering(
-              column,
-              Direction.Previous,
-              rowIndex,
-            ),
-            icon: rtlEnabled ? CONTEXT_MENU_MOVE_NEXT_ICON : CONTEXT_MENU_MOVE_PREVIOUS_ICON,
-            onItemClick,
-          },
-          {
-            text: messageLocalization.format('dxDataGrid-moveColumnToTheRight'),
-            value: Direction.Next,
-            disabled: !headersKeyboardNavigationController.isHeaderValidForReordering(
-              column,
-              Direction.Next,
-              rowIndex,
-            ),
-            icon: rtlEnabled ? CONTEXT_MENU_MOVE_PREVIOUS_ICON : CONTEXT_MENU_MOVE_NEXT_ICON,
-            onItemClick,
-          },
-        );
-      }
-    }
-
-    return items;
-  }
-};
 
 export const headersKeyboardNavigationModule = {
   controllers: {
     headersKeyboardNavigation: HeadersKeyboardNavigationController,
-  },
-  extenders: {
-    views: {
-      columnHeadersView,
-    },
+    columnFocusDispatcher: ColumnFocusDispatcher,
   },
 };
