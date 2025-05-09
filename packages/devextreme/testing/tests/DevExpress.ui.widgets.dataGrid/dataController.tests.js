@@ -6880,15 +6880,15 @@ QUnit.module('Filtering', {
 
         // assert
         filter = this.getCombinedFilter();
-        assert.ok($.isArray(filter[0]), 'first argument is filter expression');
+        assert.ok(Array.isArray(filter[0]), 'first argument is filter expression');
         assert.strictEqual(filter[1], 'and', 'second argument is operation \'and\'');
-        assert.ok($.isArray(filter[2]), 'third argument is filter expression');
+        assert.ok(Array.isArray(filter[2]), 'third argument is filter expression');
         assert.ok($.isFunction(filter[0][0]), 'filter expression selector is function');
 
         filter = this.getCombinedFilter(true);
-        assert.ok($.isArray(filter[0]), 'first argument is filter expression');
+        assert.ok(Array.isArray(filter[0]), 'first argument is filter expression');
         assert.strictEqual(filter[1], 'and', 'second argument is operation \'and\'');
-        assert.ok($.isArray(filter[2]), 'third argument is filter expression');
+        assert.ok(Array.isArray(filter[2]), 'third argument is filter expression');
         assert.equal(filter.length, 3, 'filter expression + \'and\' + \'filter expression\'');
         assert.ok(!$.isFunction(filter[2][0]), 'filter expression selector isn\'t function');
         assert.strictEqual(filter[0][0], 'name', 'value of the selector');

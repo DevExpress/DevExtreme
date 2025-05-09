@@ -82,7 +82,7 @@ QUnit.module('widgets defaults');
 const testComponentDefaults = function(componentClass, forcedDevices, options, before, after) {
     const componentName = publicComponentUtils.name(componentClass);
 
-    forcedDevices = $.isArray(forcedDevices) ? forcedDevices : [forcedDevices];
+    forcedDevices = Array.isArray(forcedDevices) ? forcedDevices : [forcedDevices];
     before = before || noop;
     after = after || noop;
 

@@ -87,7 +87,7 @@
             },
 
             move: function(x, y) {
-                if($.isArray(x)) {
+                if(Array.isArray(x)) {
                     this.move.apply(this, x);
                 } else {
                     _x += x || 0;

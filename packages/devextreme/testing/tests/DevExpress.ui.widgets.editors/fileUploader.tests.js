@@ -49,7 +49,7 @@ const FILEUPLOADER_AFTER_LOAD_DELAY = 500;
 const simulateFileChoose = function($fileUploader, files) {
     const $input = $fileUploader.find('.' + FILEUPLOADER_INPUT_CLASS);
 
-    files = $.isArray(files) ? files : [files];
+    files = Array.isArray(files) ? files : [files];
 
     if($.isPlainObject(files[0])) {
         $input.val(files[0].name);
