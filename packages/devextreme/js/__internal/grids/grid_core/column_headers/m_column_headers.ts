@@ -8,6 +8,7 @@ import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import { getHeight } from '@js/core/utils/size';
 import { isDefined } from '@js/core/utils/type';
+import { ColumnContextMenuMixin } from '@ts/grids/grid_core/context_menu/m_column_context_menu_mixin';
 import type { HeaderFilterController } from '@ts/grids/grid_core/header_filter/m_header_filter';
 import type { HeaderPanel } from '@ts/grids/grid_core/header_panel/m_header_panel';
 
@@ -69,7 +70,7 @@ function addCssClassesToCellContent(that, $cell, column, $cellContent?) {
     .toggleClass(HEADER_FILTER_INDICATOR_CLASS, !!$visibleIndicatorElements.filter(`.${that._getIndicatorClassName('headerFilter')}`).length);
 }
 
-export class ColumnHeadersView extends ColumnsView {
+export class ColumnHeadersView extends ColumnContextMenuMixin(ColumnsView) {
   private _isGroupingChanged: any;
 
   private _lastActionElement: any;
@@ -520,7 +521,7 @@ export class ColumnHeadersView extends ColumnsView {
   /**
    * @extended: column_chooser
    */
-  public isReorderingEnabled(column): boolean {
+  public isColumnReorderingEnabled(column): boolean {
     return column.allowReordering
       && (this.option('allowColumnReordering') ?? this._columnsController.isColumnOptionUsed('allowReordering'));
   }
@@ -529,7 +530,7 @@ export class ColumnHeadersView extends ColumnsView {
     const rowIndex = column && this._columnsController.getRowIndex(column.index);
     const columns = this.getColumns(rowIndex);
 
-    return this.isReorderingEnabled(column) && columns.length > 1;
+    return this.isColumnReorderingEnabled(column) && columns.length > 1;
   }
 
   protected getBoundingRect() {
@@ -585,19 +586,20 @@ export class ColumnHeadersView extends ColumnsView {
    * @extended: column_fixing
    */
   public getContextMenuItems(options) {
-    const that = this;
+    let items;
     const { column } = options;
 
     if (options.row && (options.row.rowType === 'header' || options.row.rowType === 'detailAdaptive')) {
-      const sortingOptions = that.option('sorting');
+      const sortingOptions = this.option('sorting');
 
       if (sortingOptions && sortingOptions.mode !== 'none' && column?.allowSorting) {
-        const onItemClick = function (params) {
+        const onItemClick = (params) => {
           setTimeout(() => {
-            that._columnsController.changeSortOrder(column.index, params.itemData.value);
+            this._columnsController.changeSortOrder(column.index, params.itemData.value);
           });
         };
-        return [
+
+        items = [
           {
             text: sortingOptions.ascendingText, value: 'asc', disabled: column.sortOrder === 'asc', icon: CONTEXT_MENU_SORT_ASC_ICON, onItemClick,
           },
@@ -605,12 +607,22 @@ export class ColumnHeadersView extends ColumnsView {
             text: sortingOptions.descendingText, value: 'desc', disabled: column.sortOrder === 'desc', icon: CONTEXT_MENU_SORT_DESC_ICON, onItemClick,
           },
           {
-            text: sortingOptions.clearText, value: 'none', disabled: !column.sortOrder, icon: CONTEXT_MENU_SORT_NONE_ICON, onItemClick,
+            name: 'clearSorting', text: sortingOptions.clearText, value: 'none', disabled: !column.sortOrder, icon: CONTEXT_MENU_SORT_NONE_ICON, onItemClick,
           },
         ];
       }
+
+      if (options.row.rowType === 'header') {
+        const moveColumnItems = this.getMoveColumnContextMenuItems(options);
+
+        if (moveColumnItems?.length) {
+          items = items ?? [];
+          items.push(...moveColumnItems);
+        }
+      }
     }
-    return undefined;
+
+    return items;
   }
 
   protected getRowCount() {
@@ -652,6 +664,10 @@ export class ColumnHeadersView extends ColumnsView {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public isFilterRowCell($cell: dxElementWrapper): boolean {
     return false;
+  }
+
+  public getKeyboardNavigationController() {
+    return this.getController('headersKeyboardNavigation');
   }
 }
 
