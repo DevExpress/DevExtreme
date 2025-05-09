@@ -28,6 +28,21 @@ const headersKeyboardNavigation = (
     }
   }
 
+  private getGroupColumnVisibleIndex(
+    visibleIndex: number,
+    targetLocation: ViewName,
+  ) {
+    const isGrouping = targetLocation === ViewName.Group;
+
+    if (isGrouping) {
+      return visibleIndex + 1;
+    }
+
+    const groupColumns = this._columnsController.getGroupColumns();
+
+    return this.getVisibleIndex(groupColumns[visibleIndex]) - 1;
+  }
+
   protected keyDownHandler(e): boolean {
     const isHandled = super.keyDownHandler(e);
 
@@ -62,14 +77,10 @@ const headersKeyboardNavigation = (
     targetLocation: ViewName,
     showWhenGrouped?: boolean,
   ): number {
-    if (showWhenGrouped && sourceLocation !== targetLocation) {
-      const isGroupingOperation = targetLocation === ViewName.Group;
+    const isGroupOperation = sourceLocation !== targetLocation;
 
-      if (isGroupingOperation) {
-        return visibleIndex + 1;
-      }
-
-      return visibleIndex;
+    if (showWhenGrouped && isGroupOperation) {
+      return this.getGroupColumnVisibleIndex(visibleIndex, targetLocation);
     }
 
     if (targetLocation === ViewName.Group) {
