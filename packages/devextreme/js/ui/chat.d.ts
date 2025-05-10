@@ -239,28 +239,6 @@ export type MessageTemplateData = {
 };
 
 /**
- * @docid
- * @namespace DevExpress.ui.dxChat
- * @public
- */
-export type Editing = {
-  /**
-   * @docid
-   * @default false
-   * @type boolean|function
-   * @public
-   */
-  allowUpdating?: boolean | ((options: { component?: dxChat; message?: Message }) => boolean);
-  /**
-   * @docid
-   * @default false
-   * @type boolean|function
-   * @public
-   */
-  allowDeleting?: boolean | ((options: { component?: dxChat; message?: Message }) => boolean);
-};
-
-/**
  * @deprecated use Properties instead
  * @namespace DevExpress.ui
  * @public
@@ -299,10 +277,22 @@ export interface dxChatOptions extends WidgetOptions<dxChat> {
     items?: Array<Message>;
     /**
      * @docid
-     * @type object
      * @public
      */
-    editing?: Editing;
+    editing?: {
+      /**
+       * @docid
+       * @default false
+       * @public
+       */
+      allowUpdating?: boolean | ((options: { component?: dxChat; message?: Message }) => boolean);
+      /**
+       * @docid
+       * @default false
+       * @public
+       */
+      allowDeleting?: boolean | ((options: { component?: dxChat; message?: Message }) => boolean);
+    };
     /**
      * @docid
      * @type string | Array<Message> | Store | DataSource | DataSourceOptions | null
