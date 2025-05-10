@@ -239,13 +239,13 @@ export class HeadersKeyboardNavigationController extends ColumnKeyboardNavigatio
   }
 
   public restoreFocus(): void {
-    super.restoreFocus();
-
     const $focusedCell = this._getFocusedCell();
 
     if ($focusedCell?.length) {
       this.scrollToColumn($focusedCell);
     }
+
+    super.restoreFocus();
   }
 }
 

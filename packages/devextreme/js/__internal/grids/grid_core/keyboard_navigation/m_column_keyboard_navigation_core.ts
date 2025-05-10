@@ -5,6 +5,8 @@ import type { ColumnFocusDispatcher } from './m_column_focus_dispatcher';
 import { KeyboardNavigationController as KeyboardNavigationControllerCore } from './m_keyboard_navigation_core';
 
 export class ColumnKeyboardNavigationController extends KeyboardNavigationControllerCore {
+  private resizeCompletedWithContext!: (e: any) => void;
+
   protected needToRestoreFocus = false;
 
   public columnFocusDispatcher!: ColumnFocusDispatcher;
@@ -64,9 +66,7 @@ export class ColumnKeyboardNavigationController extends KeyboardNavigationContro
     return direction === Direction.Next ? newVisibleIndex - 1 : newVisibleIndex;
   }
 
-  protected renderCompleted(e: any): void {
-    super.renderCompleted(e);
-
+  protected resizeCompleted(): void {
     if (this.needToRestoreFocus) {
       this.restoreFocus();
       this.needToRestoreFocus = false;
@@ -85,8 +85,16 @@ export class ColumnKeyboardNavigationController extends KeyboardNavigationContro
   public init() {
     super.init();
 
+    const focusedView = this.getFocusedView();
+
     this.columnFocusDispatcher = this.getController('columnFocusDispatcher');
     this.columnFocusDispatcher?.registerKeyboardNavigationController(this);
+
+    this.resizeCompletedWithContext = this.resizeCompletedWithContext
+      ?? this.resizeCompleted.bind(this);
+
+    focusedView?.resizeCompleted?.remove(this.resizeCompletedWithContext);
+    focusedView?.resizeCompleted?.add(this.resizeCompletedWithContext);
   }
 
   public moveColumn({
