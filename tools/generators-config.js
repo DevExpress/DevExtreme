@@ -6,6 +6,7 @@ function commonConfig() {
         "DataSource": "devextreme/data/data_source",
         "DOMComponent": "devextreme/core/dom_component",
         "dxButton": "devextreme/ui/button",
+        "dxChat": "devextreme/ui/chat",
         "dxDataGrid": "devextreme/ui/data_grid",
         "dxDateBox": "devextreme/ui/date_box",
         "dxDraggable": "devextreme/ui/draggable",
