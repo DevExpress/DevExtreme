@@ -179,11 +179,11 @@ export class HeaderPanel extends Component<HeaderPanelProps> {
   }
 
   private itemHasFilters(column: VisibleColumn, filterSyncValue: unknown): boolean {
-    const { filterValues } = column;
+    const { filterValues, filterType } = column;
 
     const columnId = getColumnIdentifier(column);
 
-    const hasHeaderFilterValue = !!filterValues?.length;
+    const hasHeaderFilterValue = !!filterValues?.length || filterType === 'exclude';
     const hasFilterSyncValue = filterHasField(filterSyncValue, columnId) as boolean;
 
     return hasHeaderFilterValue || hasFilterSyncValue;
