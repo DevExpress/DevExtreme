@@ -5,10 +5,6 @@ import type { ColumnFocusDispatcher } from './m_column_focus_dispatcher';
 import { KeyboardNavigationController as KeyboardNavigationControllerCore } from './m_keyboard_navigation_core';
 
 export class ColumnKeyboardNavigationController extends KeyboardNavigationControllerCore {
-  private resizeCompletedWithContext!: (e: any) => void;
-
-  protected needToRestoreFocus = false;
-
   public columnFocusDispatcher!: ColumnFocusDispatcher;
 
   protected getVisibleIndex(

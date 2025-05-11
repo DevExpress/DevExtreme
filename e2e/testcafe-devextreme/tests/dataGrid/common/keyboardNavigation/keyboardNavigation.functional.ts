@@ -5247,3 +5247,66 @@ test('Navigation should not work when pressing the End key when the row is in ed
     editRowKey: 'val_0_0',
   },
 }));
+
+test('Navigate to last cell in the row that contains focus when virtual columns are enabled', async (t) => {
+  // arrange
+  const dataGrid = new DataGrid('#container');
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  // act
+  await t
+    .click(dataGrid.getDataCell(0, 0).element)
+    .pressKey('end');
+
+  await takeScreenshot('navigate_to_last_cell_in_row_that_contains_focus_when_virtual_columns_are_enabled', dataGrid.element);
+
+  // assert
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: getData(20, 50),
+  columnWidth: 100,
+  height: 500,
+  width: 800,
+  showBorders: true,
+  scrolling: {
+    useNative: false,
+    columnRenderingMode: 'virtual',
+  },
+}));
+
+test('Navigate to first cell in the row that contains focus when virtual columns are enabled', async (t) => {
+  // arrange
+  const dataGrid = new DataGrid('#container');
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  await dataGrid.scrollTo(t, { x: 4200 });
+
+  // assert
+  await t
+    .expect(dataGrid.getScrollLeft())
+    .eql(4200);
+
+  // act
+  await t
+    .click(dataGrid.getDataCell(0, 49).element)
+    .pressKey('home');
+
+  await takeScreenshot('navigate_to_first_cell_in_row_that_contains_focus_when_virtual_columns_are_enabled', dataGrid.element);
+
+  // assert
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: getData(20, 50),
+  columnWidth: 100,
+  height: 500,
+  width: 800,
+  showBorders: true,
+  scrolling: {
+    useNative: false,
+    columnRenderingMode: 'virtual',
+  },
+}));
