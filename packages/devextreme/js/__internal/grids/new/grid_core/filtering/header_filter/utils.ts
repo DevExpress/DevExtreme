@@ -61,7 +61,7 @@ export const isColumnFilterable = (column: Column): boolean => isFilteringAllowe
 && !!column.dataField;
 
 export const needCreateHeaderFilter = (column: Column): boolean => {
-  const values = column.headerFilter?.values;
+  const values = column.filterValues;
   const hasSelectedItems = isDefined(values) && values.length > 0;
 
   return isFilteringAllowed(column) && hasSelectedItems;

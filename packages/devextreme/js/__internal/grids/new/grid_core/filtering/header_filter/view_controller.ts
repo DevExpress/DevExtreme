@@ -90,11 +90,11 @@ export class HeaderFilterViewController {
                   ...newColumns[index],
                   headerFilter: {
                     ...newColumns[index].headerFilter,
-                    // NOTE: Copy array because of mutations in legacy code
-                    values: Array.isArray(this.filterValues)
-                      ? [...this.filterValues]
-                      : this.filterValues,
                   },
+                  // NOTE: Copy array because of mutations in legacy code
+                  filterValues: Array.isArray(this.filterValues)
+                    ? [...this.filterValues]
+                    : this.filterValues,
                   filterType: this.filterType,
                 };
                 return newColumns;
