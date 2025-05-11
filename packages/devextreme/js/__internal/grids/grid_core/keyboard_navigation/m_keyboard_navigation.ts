@@ -55,6 +55,7 @@ import {
   COMMAND_SELECT_CLASS,
   DATA_ROW_CLASS,
   DATEBOX_WIDGET_NAME,
+  DRAG_COLUMN_NAME,
   DROPDOWN_EDITOR_OVERLAY_CLASS,
   EDIT_FORM_ITEM_CLASS,
   FAST_EDITING_DELETE_KEY,
@@ -498,6 +499,10 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
           if (this._isFastEditingAllowed() && !this._isFastEditingStarted()) {
             isHandled = this._beginFastEditing(originalEvent, true);
           }
+          break;
+        case 'home':
+        case 'end':
+          this.homeOrEndKeyHandler(e);
           break;
       }
 
@@ -1193,6 +1198,49 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
     }
 
     return true;
+  }
+
+  // ## Quick navigation through grid rows
+  private canNavigateQuickly(): boolean {
+    const visibleRowIndex = this.getVisibleRowIndex();
+    const $row = this._rowsView?.getRow(visibleRowIndex);
+    const dataRowTemplate = this.option('dataRowTemplate');
+    const isEditRowByIndex = this._editingController?.isEditRowByIndex?.(visibleRowIndex);
+
+    return !isEditRowByIndex && !dataRowTemplate && isDataRow($row);
+  }
+
+  private getFirstOrLastVisibleColumnIndex(isFirst: boolean): number {
+    const allVisibleColumns: any[] = this._columnsController.getVisibleColumns(null, true);
+
+    return allVisibleColumns[isFirst ? 'findIndex' : 'findLastIndex']((column) => column.type !== DRAG_COLUMN_NAME) as number;
+  }
+
+  private navigateToFirstOrLastCell(e): void {
+    const rowIndex = this.getVisibleRowIndex();
+    const isFirst = e.keyName === 'home';
+    const firstOrLastVisibleColumnIndex = this.getFirstOrLastVisibleColumnIndex(isFirst);
+    const $cell = this._getCell({
+      rowIndex,
+      columnIndex: firstOrLastVisibleColumnIndex,
+    });
+
+    if ($cell?.length) {
+      this.setCellFocusType();
+
+      const args = this._fireFocusedCellChanging(e, $cell, true);
+
+      if (!args?.cancel) {
+        this._focus($cell);
+      }
+    }
+  }
+
+  private homeOrEndKeyHandler(e): void {
+    if (this.canNavigateQuickly()) {
+      this.navigateToFirstOrLastCell(e);
+      e.originalEvent.preventDefault();
+    }
   }
   // #endregion Key_Handlers
 

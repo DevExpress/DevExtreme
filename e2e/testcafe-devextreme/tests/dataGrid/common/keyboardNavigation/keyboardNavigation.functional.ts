@@ -11,6 +11,14 @@ import { getData } from '../../helpers/generateDataSourceData';
 
 const CLASS = ClassNames;
 
+const isFocusedCellChangingCalled = ClientFunction(
+  () => (window as any).isFocusedCellChangingCalled,
+);
+
+const isFocusedCellChangedCalled = ClientFunction(
+  () => (window as any).isFocusedCellChangedCalled,
+);
+
 fixture.disablePageReloads`Keyboard Navigation - common`
   .page(url(__dirname, '../../../container.html'));
 
@@ -5011,3 +5019,231 @@ test('DataGrid with Pagination in master detail - Ctrl+Up on focused standalone 
     },
   });
 });
+
+// Quick navigation through grid rows
+test('Focus the last cell in the row that contains focus when pressing the End key', async (t) => {
+  // arrange
+  const dataGrid = new DataGrid('#container');
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  // act
+  await t
+    .click(dataGrid.getDataCell(0, 0).element)
+    .pressKey('end');
+
+  await takeScreenshot('focus_last_cell_in_row_that_contains_focus_when_pressing_End_key', dataGrid.element);
+
+  // assert
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: getData(20, 7),
+  columnWidth: 100,
+  height: 500,
+  width: 800,
+  showBorders: true,
+}));
+
+test('Focus the first cell in the row that contains focus when pressing the Home key', async (t) => {
+  // arrange
+  const dataGrid = new DataGrid('#container');
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  // act
+  await t
+    .click(dataGrid.getDataCell(0, 6).element)
+    .pressKey('home');
+
+  await takeScreenshot('focus_first_cell_in_row_that_contains_focus_when_pressing_Home_key', dataGrid.element);
+
+  // assert
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: getData(20, 7),
+  columnWidth: 100,
+  height: 500,
+  width: 800,
+  showBorders: true,
+}));
+
+test('Navigate to last cell in the row that contains focus when pressing the End key', async (t) => {
+  // arrange
+  const dataGrid = new DataGrid('#container');
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  // act
+  await t
+    .click(dataGrid.getDataCell(0, 0).element)
+    .pressKey('end');
+
+  await takeScreenshot('navigate_to_last_cell_in_row_that_contains_focus_when_pressing_End_key', dataGrid.element);
+
+  // assert
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: getData(20, 15),
+  columnWidth: 100,
+  height: 500,
+  width: 800,
+  showBorders: true,
+}));
+
+test('Navigate to first cell in the row that contains focus when pressing the Home key', async (t) => {
+  // arrange
+  const dataGrid = new DataGrid('#container');
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  await dataGrid.scrollTo(t, { x: 700 });
+
+  // assert
+  await t
+    .expect(dataGrid.getScrollLeft())
+    .eql(700);
+
+  // act
+  await t
+    .click(dataGrid.getDataCell(0, 14).element)
+    .pressKey('home');
+
+  await takeScreenshot('navigate_to_first_cell_in_row_that_contains_focus_when_pressing_Home_key', dataGrid.element);
+
+  // assert
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: getData(20, 15),
+  columnWidth: 100,
+  height: 500,
+  width: 800,
+  showBorders: true,
+}));
+
+test('Focus events should be called when quickly navigating through cells', async (t) => {
+  // arrange
+  const dataGrid = new DataGrid('#container');
+
+  // act
+  await t
+    .click(dataGrid.getDataCell(0, 0).element)
+    .pressKey('end');
+
+  // assert
+  await t
+    .expect(dataGrid.getDataCell(0, 14).element.focused)
+    .ok()
+    .expect(isFocusedCellChangingCalled())
+    .ok()
+    .expect(isFocusedCellChangedCalled())
+    .ok();
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: getData(20, 15),
+  columnWidth: 100,
+  height: 500,
+  width: 800,
+  showBorders: true,
+  onFocusedCellChanging: () => {
+    (window as any).isFocusedCellChangingCalled = true;
+  },
+  onFocusedCellChanged: () => {
+    (window as any).isFocusedCellChangedCalled = true;
+  },
+})).after(async () => {
+  await ClientFunction(() => {
+    delete (window as any).isFocusedCellChangingCalled;
+    delete (window as any).isFocusedCellChangedCalled;
+  })();
+});
+
+test('Navigate to last cell in the row that contains focus when focusedRowEnabled is true', async (t) => {
+  // arrange
+  const dataGrid = new DataGrid('#container');
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  // act
+  await t
+    .click(dataGrid.getDataCell(0, 0).element)
+    .pressKey('end');
+
+  await takeScreenshot('navigate_to_last_cell_in_row_that_contains_focus_when_focusedRowEnabled_is_true', dataGrid.element);
+
+  // assert
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: getData(20, 15),
+  columnWidth: 100,
+  height: 500,
+  width: 800,
+  showBorders: true,
+  focusedRowEnabled: true,
+}));
+
+test('Navigate to first cell in the row that contains focus when row dragging is enabled', async (t) => {
+  // arrange
+  const dataGrid = new DataGrid('#container');
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  await dataGrid.scrollTo(t, { x: 700 });
+
+  // assert
+  await t
+    .expect(dataGrid.getScrollLeft())
+    .eql(700);
+
+  // act
+  await t
+    .click(dataGrid.getDataCell(0, 14).element)
+    .pressKey('home');
+
+  await takeScreenshot('navigate_to_first_cell_in_row_that_contains_focus_when_row_dragging_is_enabled', dataGrid.element);
+
+  // assert
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: getData(20, 15),
+  columnWidth: 100,
+  height: 500,
+  width: 800,
+  showBorders: true,
+  rowDragging: {
+    allowReordering: true,
+    showDragIcons: true,
+  },
+}));
+
+test('Navigation should not work when pressing the End key when the row is in edit state', async (t) => {
+  // arrange
+  const dataGrid = new DataGrid('#container');
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  // act
+  await t
+    .click(dataGrid.getDataCell(0, 0).element)
+    .pressKey('end');
+
+  await takeScreenshot('navigation_should_not_work_when_pressing_End_when_row_is_in_edit_state', dataGrid.element);
+
+  // assert
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: getData(20, 15),
+  keyExpr: 'field_0',
+  columnWidth: 100,
+  height: 500,
+  width: 800,
+  showBorders: true,
+  editing: {
+    editRowKey: 'val_0_0',
+  },
+}));
