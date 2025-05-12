@@ -51,7 +51,7 @@ $(() => {
   });
   
   $('.html-editor').dxHtmlEditor({
-    height: 525,
+    height: 530,
     value: markup,
     aiIntegration,
     toolbar: {
