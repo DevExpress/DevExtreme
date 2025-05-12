@@ -598,7 +598,7 @@
                 // values: window
                 view: window, // The window in which the touch occurred
 
-                // values: DOMNode || document || window || etc.
+                // values: DOMNode || document || window || etc
                 target: null, // The EventTarget for the touch
 
                 // Returns a value uniquely identifying this point of contact
