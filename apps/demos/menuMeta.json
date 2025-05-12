@@ -2050,15 +2050,14 @@
       },
       {
         "Name": "AI-powered Text Editing",
-        "Equivalents": "AI, text editing, text editor",
+        "Equivalents": "AI, AI text transformation, AI editor",
         "Demos": [
           {
             "Title": "AI-powered Text Editing",
             "Name": "AITextEditing",
             "Widget": "HtmlEditor",
             "DemoType": "Web",
-            "Badge": "Roadmap",
-            "RoadmapSurveyUrl": "https://www.devexpress.com/support/surveys/devextreme-roadmap-ai.xml"
+            "Badge": "New"
           }
         ]
       },
@@ -2084,7 +2083,8 @@
             "Name": "ToolbarCustomization",
             "DocUrl": "Guide/UI_Components/HtmlEditor/Toolbar/Built-In_Controls/",
             "Widget": "HtmlEditor",
-            "DemoType": "Web"
+            "DemoType": "Web",
+            "Modules": "openai"
           }
         ]
       }
