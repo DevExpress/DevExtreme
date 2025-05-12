@@ -156,6 +156,10 @@ window.config = {
     'externals:': '../../../../bundles/externals/',
   },
   map: {
+    //
+    '@preact/signals-core': '../../../../../../node_modules/.pnpm/@preact+signals-core@1.8.0/node_modules/@preact/signals-core/dist/signals-core.js',
+    //
+
     'ts': 'npm:plugin-typescript/lib/plugin.js',
     'typescript': 'npm:typescript/lib/typescript.js',
     'jszip': 'npm:jszip/dist/jszip.min.js',
