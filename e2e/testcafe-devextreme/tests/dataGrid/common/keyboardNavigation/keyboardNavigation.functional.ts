@@ -19,6 +19,14 @@ const isFocusedCellChangedCalled = ClientFunction(
   () => (window as any).isFocusedCellChangedCalled,
 );
 
+const isFocusedRowChangingCalled = ClientFunction(
+  () => (window as any).isFocusedRowChangingCalled,
+);
+
+const isFocusedRowChangedCalled = ClientFunction(
+  () => (window as any).isFocusedRowChangedCalled,
+);
+
 fixture.disablePageReloads`Keyboard Navigation - common`
   .page(url(__dirname, '../../../container.html'));
 
@@ -5020,7 +5028,7 @@ test('DataGrid with Pagination in master detail - Ctrl+Up on focused standalone 
   });
 });
 
-// Quick navigation through grid rows
+// Quick navigation through grid cells via Home and End keys
 test('Focus the last cell in the row that contains focus when pressing the End key', async (t) => {
   // arrange
   const dataGrid = new DataGrid('#container');
@@ -5308,5 +5316,291 @@ test('Navigate to first cell in the row that contains focus when virtual columns
   scrolling: {
     useNative: false,
     columnRenderingMode: 'virtual',
+  },
+}));
+
+// Quick navigation through grid rows via Ctrl+Home and Ctrl+End keys
+test('Focus the last cell in the last row when pressing the Ctrl+End key', async (t) => {
+  // arrange
+  const dataGrid = new DataGrid('#container');
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  // act
+  await t
+    .click(dataGrid.getDataCell(0, 0).element)
+    .pressKey('ctrl+end');
+
+  await takeScreenshot('focus_last_cell_in_last_row_when_pressing_Ctrl_+_End_key', dataGrid.element);
+
+  // assert
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: getData(5, 7),
+  columnWidth: 100,
+  height: 400,
+  width: 800,
+  showBorders: true,
+}));
+
+test('Focus the first cell in the firs row when pressing the Ctrl+Home key', async (t) => {
+  // arrange
+  const dataGrid = new DataGrid('#container');
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  // act
+  await t
+    .click(dataGrid.getDataCell(4, 6).element)
+    .pressKey('ctrl+home');
+
+  await takeScreenshot('focus_first_cell_in_first_row_when_pressing_Ctrl_+_Home_key', dataGrid.element);
+
+  // assert
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: getData(5, 7),
+  columnWidth: 100,
+  height: 400,
+  width: 800,
+  showBorders: true,
+}));
+
+test('Navigate to last cell in the last row when pressing the Ctrl+End key', async (t) => {
+  // arrange
+  const dataGrid = new DataGrid('#container');
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  // act
+  await t
+    .click(dataGrid.getDataCell(0, 0).element)
+    .pressKey('ctrl+end');
+
+  await takeScreenshot('navigate_to_last_cell_in_last_row_when_pressing_Ctrl_+_End_key', dataGrid.element);
+
+  // assert
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: getData(20, 15),
+  columnWidth: 100,
+  height: 500,
+  width: 800,
+  showBorders: true,
+}));
+
+test('Navigate to first cell in the first row when pressing the Ctrl + Home key', async (t) => {
+  // arrange
+  const dataGrid = new DataGrid('#container');
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  await dataGrid.scrollTo(t, { x: 700, y: 1000 });
+
+  // assert
+  await t
+    .expect(dataGrid.getScrollLeft())
+    .eql(700);
+
+  await takeScreenshot('navigate_to_first_cell_in_first_row_when_pressing_Ctrl_+_Home_key_1', dataGrid.element);
+
+  // act
+  await t
+    .click(dataGrid.getDataCell(19, 14).element)
+    .pressKey('ctrl+home');
+
+  await takeScreenshot('navigate_to_first_cell_in_first_row_when_pressing_Ctrl_+_Home_key_2', dataGrid.element);
+
+  // assert
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: getData(20, 15),
+  columnWidth: 100,
+  height: 500,
+  width: 800,
+  showBorders: true,
+}));
+
+test.skip('Focus events should be called when pressing the Ctrl + End key', async (t) => {
+  // arrange
+  const dataGrid = new DataGrid('#container');
+
+  // act
+  await t
+    .click(dataGrid.getDataCell(0, 0).element)
+    .pressKey('ctrl+end');
+
+  // assert
+  await t
+    .expect(dataGrid.getDataCell(0, 14).element.focused)
+    .ok()
+    .expect(isFocusedCellChangingCalled())
+    .ok()
+    .expect(isFocusedCellChangedCalled())
+    .ok()
+    .expect(isFocusedRowChangingCalled())
+    .ok()
+    .expect(isFocusedRowChangedCalled())
+    .ok();
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: getData(20, 15),
+  columnWidth: 100,
+  height: 500,
+  width: 800,
+  showBorders: true,
+  onFocusedCellChanging: () => {
+    (window as any).isFocusedCellChangingCalled = true;
+  },
+  onFocusedCellChanged: () => {
+    (window as any).isFocusedCellChangedCalled = true;
+  },
+  onFocusedRowChanging: () => {
+    (window as any).isFocusedRowChangingCalled = true;
+  },
+  onFocusedRowChanged: () => {
+    (window as any).isFocusedRowChangedCalled = true;
+  },
+})).after(async () => {
+  await ClientFunction(() => {
+    delete (window as any).isFocusedCellChangingCalled;
+    delete (window as any).isFocusedCellChangedCalled;
+    delete (window as any).isFocusedRowChangingCalled;
+    delete (window as any).isFocusedRowChangedCalled;
+  })();
+});
+
+test('Navigate to last cell in the last row when virtual scrolling is enabled', async (t) => {
+  // arrange
+  const dataGrid = new DataGrid('#container');
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  // act
+  await t
+    .click(dataGrid.getDataCell(0, 0).element)
+    .pressKey('ctrl+end');
+
+  await takeScreenshot('navigate_to_last_cell_in_last_row_when_virtual_scrolling_is_enabled', dataGrid.element);
+
+  // assert
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: getData(200, 15),
+  columnWidth: 100,
+  height: 500,
+  width: 800,
+  showBorders: true,
+  scrolling: {
+    mode: 'virtual',
+    useNative: false,
+  },
+}));
+
+test('Navigate to first cell in the first row when virtual scrolling is enabled', async (t) => {
+  // arrange
+  const dataGrid = new DataGrid('#container');
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  await dataGrid.scrollTo(t, { x: 700, y: 10000 });
+
+  // assert
+  await t
+    .expect(dataGrid.getScrollLeft())
+    .eql(700);
+
+  await takeScreenshot('navigate_to_first_cell_in_first_row_when_virtual_scrolling_is_enabled_1', dataGrid.element);
+
+  // act
+  await t
+    .click(dataGrid.getDataCell(199, 14).element)
+    .pressKey('ctrl+home');
+
+  await takeScreenshot('navigate_to_first_cell_in_first_row_when_virtual_scrolling_is_enabled_2', dataGrid.element);
+
+  // assert
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: getData(200, 15),
+  columnWidth: 100,
+  height: 500,
+  width: 800,
+  showBorders: true,
+  scrolling: {
+    mode: 'virtual',
+    useNative: false,
+  },
+}));
+
+test.skip('Navigate to last cell in the last row when virtual scrolling and columns are enabled', async (t) => {
+  // arrange
+  const dataGrid = new DataGrid('#container');
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  // act
+  await t
+    .click(dataGrid.getDataCell(0, 0).element)
+    .pressKey('ctrl+end');
+
+  await takeScreenshot('navigate_to_last_cell_in_last_row_when_virtual_scrolling_and_columns_are_enabled', dataGrid.element);
+
+  // assert
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: getData(200, 15),
+  columnWidth: 100,
+  height: 500,
+  width: 800,
+  showBorders: true,
+  scrolling: {
+    mode: 'virtual',
+    columnRenderingMode: 'virtual',
+    useNative: false,
+  },
+}));
+
+test.skip('Navigate to first cell in the first row when virtual scrolling and columns are enabled', async (t) => {
+  // arrange
+  const dataGrid = new DataGrid('#container');
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  await dataGrid.scrollTo(t, { x: 700, y: 10000 });
+
+  // assert
+  await t
+    .expect(dataGrid.getScrollLeft())
+    .eql(700);
+
+  await takeScreenshot('navigate_to_first_cell_in_first_row_when_virtual_scrolling_and_columns_are_enabled_1', dataGrid.element);
+
+  // act
+  await t
+    .click(dataGrid.getDataCell(199, 14).element)
+    .pressKey('ctrl+home');
+
+  await takeScreenshot('navigate_to_first_cell_in_first_row_when_virtual_scrolling_and_columns_are_enabled_2', dataGrid.element);
+
+  // assert
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: getData(200, 15),
+  columnWidth: 100,
+  height: 500,
+  width: 800,
+  showBorders: true,
+  scrolling: {
+    mode: 'virtual',
+    columnRenderingMode: 'virtual',
+    useNative: false,
   },
 }));
