@@ -8,6 +8,10 @@
   row-gap: $cardview-card-content-row-gap;
   width: 100%;
   border-top: $cardview-card-border-size solid $cardview-card-border-color;
+
+  // NOTE: Override default fonts only in "material-compact"
+  font-size: $cardview-card-content-font-size;
+  line-height: $cardview-card-content-line-height;
 }
 
 .dx-cardview-field-template {
@@ -28,7 +32,7 @@
 }
 
 .dx-cardview-field-caption {
-  font-weight: 600;
+  font-weight: $cardview-card-content-field-caption-font-weight;
 }
 
 .dx-cardview-field-value {

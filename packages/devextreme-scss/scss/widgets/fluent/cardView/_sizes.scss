@@ -59,7 +59,7 @@ $cardview-fluent-card-content-row-gap: null;
   $cardview-fluent-column-chooser-select-all-item-horizontal-padding: 14px;
 
   $cardview-fluent-headers-container-gap: 0;
-  $cardview-fluent-headerpanel-vertical-margin: 8x;
+  $cardview-fluent-headerpanel-vertical-margin: 8px;
 
   $cardview-fluent-content-card-cover-max-height-default: 180px;
   $cardview-fluent-headerpanel-content-gap: 8px;
@@ -142,3 +142,5 @@ $cardview-column-chooser-select-all-item-horizontal-padding: $cardview-fluent-co
 $cardview-content-card-cover-max-height-default: $cardview-fluent-content-card-cover-max-height-default !default;
 
 $cardview-card-header-selection-checkbox-padding-right: $cardview-fluent-paddings-12 !default;
+
+$cardview-card-content-field-caption-font-weight: 600;
