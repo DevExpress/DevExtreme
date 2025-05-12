@@ -28,13 +28,12 @@
         <dxi-item location="center" locateInMenu="auto">
             <div *dxTemplate>
                 <dx-select-box
+                    placeholder="Select Employee"
                     [items]="assignees"
+                    showClearButton="true"
                     displayExpr="text"
                     valueExpr="id"
-                    searchEnabled="true"
-                    showSelectionControls="true"
-                    maxDisplayedTags="1"
-                    [inputAttr]="{ 'aria-label': 'Assignees' }"
+                    [inputAttr]="{ 'aria-label': 'Select Employee' }"
                     width="200"
                     (onValueChanged)="onAssigneesChange($event)"
                 >
