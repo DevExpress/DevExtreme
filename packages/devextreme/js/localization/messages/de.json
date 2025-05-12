@@ -542,6 +542,7 @@
         "dxHtmlEditor-aiTryAgain": "Try again",
         "dxHtmlEditor-aiGenerate": "Generate",
         "dxHtmlEditor-aiStop": "Stop",
+        "dxHtmlEditor-aiToolbarItem": "AI Assistant toolbar item",
         "dxHtmlEditor-aiAskPlaceholder": "Ask AI to modify text",
 
         "dxFileManager-newDirectoryName": "Ohne Titel",

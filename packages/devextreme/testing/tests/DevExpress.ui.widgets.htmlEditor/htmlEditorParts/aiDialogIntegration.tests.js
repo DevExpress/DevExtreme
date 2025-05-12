@@ -14,6 +14,7 @@ import {
     getResultTextAreaValue,
 } from '../../../helpers/aiDialog.js';
 import { AI_DIALOG_CLASS } from '__internal/ui/html_editor/ui/aiDialog';
+import { DX_MENU_ITEM_CLASS } from '__internal/ui/menu/m_menu';
 import uiErrors from 'ui/widget/ui.errors';
 
 const MENU_ITEM_CLASS = 'dx-menu-item';
@@ -42,7 +43,7 @@ const getAIDialogElement = ($htmlEditor) => {
     return $htmlEditor.find(`.${AI_DIALOG_CLASS}`);
 };
 
-QUnit.module('AI dialog integration', {}, () => {
+QUnit.module('AI dialog integration', () => {
     QUnit.module('toolbar', () => {
         QUnit.test('Should pass correct payload to dialog on item click', function(assert) {
             const instance = setupHtmlEditorWithAi();
@@ -495,6 +496,15 @@ QUnit.module('AI dialog integration', {}, () => {
             }] } });
 
             assert.deepEqual(uiErrors.log.lastCall.args, ['W1027'], 'logged with correct args');
+        });
+    });
+
+    QUnit.module('Accessibility', () => {
+        QUnit.test('menu item should have correct aria-label', function(assert) {
+            const instance = setupHtmlEditorWithAi();
+            const $menuItem = instance.$element().find(`.${DX_MENU_ITEM_CLASS}`).first();
+
+            assert.strictEqual($menuItem.attr('aria-label'), 'AI Assistant toolbar item', 'menu item has correct aria-label');
         });
     });
 });
