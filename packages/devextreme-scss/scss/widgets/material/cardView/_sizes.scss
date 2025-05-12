@@ -41,6 +41,9 @@ $cardview-material-card-content-row-gap: null;
 $cardview-material-card-header-selection-checkbox-padding-right: null;
 $cardview-material-card-header-toolbar-override-height: null;
 
+$cardview-material-card-content-font-size: null;
+$cardview-material-card-content-line-height: null;
+
 @if $size == "default" {
   $cardview-material-sizes-64: 64px;
   $cardview-material-sizes-48: 48px;
@@ -99,6 +102,9 @@ $cardview-material-card-header-toolbar-override-height: null;
   $cardview-material-card-content-padding: 8px;
   $cardview-material-card-content-row-gap: 2px;
   $cardview-material-card-header-selection-checkbox-padding-right: 8px;
+
+  $cardview-material-card-content-font-size: 12px;
+  $cardview-material-card-content-line-height: 16px;
 }
 
 $cardview-border-radius: 16px !default;
@@ -154,3 +160,7 @@ $cardview-card-header-selection-checkbox-padding-right: $cardview-material-card-
 
 /* NOTE: Toolbar height override */
 $cardview-card-header-toolbar-override-height: $cardview-material-card-header-toolbar-override-height !default;
+
+$cardview-card-content-field-caption-font-weight: 500;
+$cardview-card-content-font-size: $cardview-material-card-content-font-size;
+$cardview-card-content-line-height: $cardview-material-card-content-line-height;

@@ -63,7 +63,7 @@ $cardview-generic-card-content-row-gap: null;
   $cardview-generic-headerpanel-dropzone-top: 0;
   $cardview-generic-column-chooser-select-all-item-horizontal-padding: 10px;
 
-  $cardview-generic-headers-container-gap: 4px;
+  $cardview-generic-headers-container-gap: 12px;
   $cardview-generic-headerpanel-vertical-margin: 4px;
 
   $cardview-generic-content-card-cover-max-height-default: 180px;
@@ -92,7 +92,7 @@ $cardview-generic-card-content-row-gap: null;
   $cardview-generic-headerpanel-dropzone-top: 0;
   $cardview-generic-column-chooser-select-all-item-horizontal-padding: 6px;
 
-  $cardview-generic-headers-container-gap: 4px;
+  $cardview-generic-headers-container-gap: 12px;
   $cardview-generic-headerpanel-vertical-margin: 0;
 
   $cardview-generic-content-card-cover-max-height-default: 140px;
@@ -149,5 +149,7 @@ $cardview-column-chooser-select-all-item-horizontal-padding: $cardview-generic-c
 $cardview-content-card-cover-max-height-default: $cardview-generic-content-card-cover-max-height-default !default;
 
 $cardview-card-header-selection-checkbox-padding-right: $cardview-generic-paddings-12 !default;
+
+$cardview-card-content-field-caption-font-weight: 600;
 
 // adduse
