@@ -770,6 +770,11 @@ $generic-grid-base-cell-input-height: round($generic-base-line-height * $generic
       color: $datagrid-cell-removed-text-color;
     }
 
+    .dx-row-removed:not(.dx-row-lines) > td {
+      border-top-color: $datagrid-row-removed-bg;
+      border-bottom-width: 0;
+    }
+
     @include dx-set-checkbox-border-color-as-background();
 
     .dx-adaptive-detail-row {
@@ -1023,7 +1028,7 @@ $generic-grid-base-cell-input-height: round($generic-base-line-height * $generic
   }
 
   .dx-#{$widget-name}-rowsview.dx-#{$widget-name}-sticky-columns {
-    .dx-data-row:not(.dx-row-lines, .dx-edit-row, .dx-selection, .dx-row-focused) > td:not(.dx-editor-cell, .dx-master-detail-cell) {
+    .dx-data-row:not(.dx-row-lines, .dx-edit-row, .dx-selection, .dx-row-focused, .dx-row-removed) > td:not(.dx-editor-cell, .dx-master-detail-cell) {
       padding-top: $generic-grid-base-cell-padding + 1px;
     }
 
@@ -1048,6 +1053,14 @@ $generic-grid-base-cell-input-height: round($generic-base-line-height * $generic
     }
 
     .dx-row.dx-row-lines.dx-edit-row > td {
+      border-top-width: 0;
+    }
+
+    .dx-row-removed:not(.dx-row-lines) > td {
+      border-bottom-width: 0;
+    }
+
+    .dx-row-removed.dx-row-lines > td {
       border-top-width: 0;
     }
   }
