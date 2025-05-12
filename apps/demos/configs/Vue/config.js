@@ -46,6 +46,10 @@ window.config = {
     'externals:': '../../../../bundles/externals/',
   },
   map: {
+    //
+    '@preact/signals-core': '../../../../../../node_modules/.pnpm/@preact+signals-core@1.8.0/node_modules/@preact/signals-core/dist/signals-core.js',
+    //
+
     'vue': 'npm:vue/dist/vue.esm-browser.js',
     '@vue/shared': 'npm:@vue/shared/dist/shared.cjs.prod.js',
     'vue-loader': 'npm:dx-systemjs-vue-browser/index.js',
