@@ -19,19 +19,6 @@ export class KeyboardNavigationController extends modules.ViewController {
 
   public _focusedCellPosition: any;
 
-  private _getFocusedColumnIndexOffset(columnIndex) {
-    let offset = 0;
-    const column = this._columnsController.getVisibleColumns()[columnIndex];
-
-    if (column?.fixed) {
-      offset = this._getFixedColumnIndexOffset(column);
-    } else if (columnIndex >= 0) {
-      offset = this._columnsController.getColumnIndexOffset();
-    }
-
-    return offset;
-  }
-
   private _applyColumnIndexBoundaries(columnIndex) {
     const visibleColumnCount = this._columnsController.getVisibleColumns(null, true).length;
 
@@ -56,6 +43,19 @@ export class KeyboardNavigationController extends modules.ViewController {
     if ($focusedViewElement) {
       this.keyDownListener = keyboard.on($focusedViewElement, null, (e) => this.keyDownHandler(e));
     }
+  }
+
+  protected getColumnIndexOffset(visibleIndex) {
+    let offset = 0;
+    const column = this._columnsController.getVisibleColumns()[visibleIndex];
+
+    if (column?.fixed) {
+      offset = this._getFixedColumnIndexOffset(column);
+    } else if (visibleIndex >= 0) {
+      offset = this._columnsController.getColumnIndexOffset();
+    }
+
+    return offset;
   }
 
   protected getFocusedViewElement() {
@@ -151,7 +151,7 @@ export class KeyboardNavigationController extends modules.ViewController {
       const rowIndex = this._getRowIndex($row);
       let columnIndex = this.getCellIndex($cell, rowIndex);
 
-      columnIndex += this._getFocusedColumnIndexOffset(columnIndex);
+      columnIndex += this.getColumnIndexOffset(columnIndex);
 
       if (direction) {
         columnIndex = this.getNewVisibleIndex(columnIndex, direction);

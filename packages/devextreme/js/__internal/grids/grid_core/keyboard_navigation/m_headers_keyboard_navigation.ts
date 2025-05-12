@@ -3,7 +3,9 @@ import {
 } from '@js/common/core/events/utils/index';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
+import { getBoundingRect } from '@js/core/utils/position';
 import { isDefined } from '@js/core/utils/type';
+import { getElementLocationInternal } from '@ts/ui/scroll_view/utils/get_element_location_internal';
 
 import type { Views } from '../m_types';
 import { StickyPosition } from '../sticky_columns/const';
@@ -89,7 +91,15 @@ export class HeadersKeyboardNavigationController extends ColumnKeyboardNavigatio
   }
 
   protected _getCell(cellPosition): dxElementWrapper {
-    return this._columnHeadersView?.getCell(cellPosition);
+    const columnIndexOffset = this.getColumnIndexOffset(cellPosition.columnIndex);
+    const columnIndex = cellPosition.columnIndex >= 0
+      ? cellPosition.columnIndex - columnIndexOffset
+      : -1;
+
+    return this._columnHeadersView?.getCell({
+      rowIndex: cellPosition.rowIndex,
+      columnIndex,
+    });
   }
 
   protected getFocusedView(): any {
@@ -111,6 +121,75 @@ export class HeadersKeyboardNavigationController extends ColumnKeyboardNavigatio
       (column) => !isDefined(column.type)
         || this._columnsController.isCustomCommandColumn(column),
     );
+  }
+
+  protected getContainerBoundingRect($container: dxElementWrapper) {
+    const containerRect = getBoundingRect($container.get(0));
+
+    return {
+      left: containerRect.left,
+      right: containerRect.right,
+    };
+  }
+
+  protected getScrollPadding(
+    $container: dxElementWrapper,
+  ): {
+      left: number;
+      right: number;
+    } {
+    const containerRect = getBoundingRect($container.get(0));
+    const containerBoundingRect = this.getContainerBoundingRect($container);
+
+    return {
+      left: containerBoundingRect.left - containerRect.left,
+      right: containerRect.right - containerBoundingRect.right,
+    };
+  }
+
+  protected isOutsideVisibleArea = (
+    $element: dxElementWrapper,
+    $container: dxElementWrapper,
+  ): boolean => {
+    const elementRect = getBoundingRect($element.get(0));
+    const elementRectLeft = Math.round(elementRect.left);
+    const elementRectRight = Math.round(elementRect.right);
+    const containerBoundingRect = this.getContainerBoundingRect($container);
+
+    return elementRectLeft < containerBoundingRect.left
+      || elementRectRight > containerBoundingRect.right;
+  };
+
+  protected scrollToColumn($cell: dxElementWrapper): void {
+    const scrollable = this.getView('rowsView')?.getScrollable();
+
+    if (scrollable) {
+      const cellIsOutsideVisibleArea = this.isOutsideVisibleArea(
+        $cell,
+        $(this._columnHeadersView.getContent()),
+      );
+
+      if (cellIsOutsideVisibleArea) {
+        const scrollPadding = this.getScrollPadding($(scrollable.container()));
+        const scrollPosition = getElementLocationInternal(
+          $cell[0],
+          'horizontal',
+          $(this._columnHeadersView.getContent())[0],
+          scrollable.scrollOffset(),
+          scrollPadding,
+          this.addWidgetPrefix('table'),
+        );
+
+        const isNeedToRenderVirtualColumns = this._columnsController
+          ?.isNeedToRenderVirtualColumns(scrollPosition);
+
+        if (isNeedToRenderVirtualColumns) {
+          this.needToRestoreFocus = true;
+        }
+
+        scrollable.scrollTo({ x: scrollPosition });
+      }
+    }
   }
 
   public init(): void {
@@ -157,6 +236,16 @@ export class HeadersKeyboardNavigationController extends ColumnKeyboardNavigatio
       columnIndex: newVisibleIndex,
     });
     this._columnsController.endUpdate();
+  }
+
+  public restoreFocus(): void {
+    const $focusedCell = this._getFocusedCell();
+
+    if ($focusedCell?.length) {
+      this.scrollToColumn($focusedCell);
+    }
+
+    super.restoreFocus();
   }
 }
 
