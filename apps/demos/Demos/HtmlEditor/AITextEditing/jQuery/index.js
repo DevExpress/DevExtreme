@@ -28,11 +28,15 @@ $(() => {
         { role: 'user', content: prompt.user, },
       ];
 
-      const promise = new Promise(async (resolve) => {
-        const response = await getAIResponse(aiPrompt, signal);
-        const result = response.choices[0].message?.content;
-
-        resolve(result);
+      const promise = new Promise(async (resolve, reject) => {
+        try {
+          const response = await getAIResponse(aiPrompt, signal);
+          const result = response.choices[0].message?.content;
+  
+          resolve(result);
+        } catch {
+          reject();
+        }
       });
 
       const result = {
