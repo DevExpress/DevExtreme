@@ -230,6 +230,8 @@ export type Message = {
      * @public
      */
     isDeleted?: boolean;
+
+    [key: string]: any;
 };
 
 /** @public */
