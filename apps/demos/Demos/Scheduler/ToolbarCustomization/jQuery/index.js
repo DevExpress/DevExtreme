@@ -51,7 +51,7 @@ $(() => {
           },
         },
         {
-          location: 'center',
+          location: 'before',
           locateInMenu: 'auto',
           widget: 'dxSelectBox',
           options: {

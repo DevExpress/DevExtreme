@@ -83,7 +83,7 @@ const App = () => {
           options={toggleButtonOptions}
         />
         <Item
-          location="center"
+          location="before"
           locateInMenu="auto"
         >
           <SelectBox

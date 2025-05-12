@@ -26,7 +26,7 @@
         :options="newEventButtonOptions"
       />
       <DxItem
-        location="center"
+        location="before"
         locate-in-menu="auto"
         template="assigneesTemplate"
       />

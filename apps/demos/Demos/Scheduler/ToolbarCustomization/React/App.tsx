@@ -78,7 +78,7 @@ const App = () => {
           locateInMenu="auto"
           widget="dxButton"
           options={toggleButtonOptions} />
-        <Item location="center" locateInMenu="auto">
+        <Item location="before" locateInMenu="auto">
           <SelectBox
             placeholder={selectBoxPlaceholder}
             items={assignees}
