@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import translator2DModule from 'viz/translators/translator2d';
 import { adjust } from 'core/utils/math';
-import { isFunction } from '../../../js/core/utils/type';
+import { isFunction } from 'core/utils/type';
 
 function prepareScaleBreaks(array, breakSize) {
     const breaks = [];
