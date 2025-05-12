@@ -73,12 +73,13 @@ export const getComposedHeaderFilter = (columns: Column[]): FilterValue => {
 
   filterableColumns.forEach((column, index) => {
     const { filterValues } = column;
+    const columnName = getColumnName(column);
+    const hasGroupInterval = !!column.headerFilter?.groupInterval;
 
-    const normalizedFilterValues = filterValues?.length === 1
+    const needNormalizeFilterValues = filterValues?.length === 1 && !hasGroupInterval;
+    const normalizedFilterValues = needNormalizeFilterValues
       ? filterValues[0]
       : filterValues;
-
-    const columnName = getColumnName(column);
     const filterOperator = getFilterOperator(normalizedFilterValues, column.filterType);
 
     filterValue.push([columnName, filterOperator, normalizedFilterValues]);

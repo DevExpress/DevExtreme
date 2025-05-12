@@ -39,11 +39,9 @@ export class FilterSyncController {
         return;
       }
 
-      if (!this.filterController.filterSyncEnabled.value) {
-        return;
+      if (this.filterController.filterSyncEnabled.value) {
+        this.handleFilterPanelSync(filterPanelValue);
       }
-
-      this.handleFilterPanelSync(filterPanelValue);
     });
 
     // Sync from HeaderFilter to FilterPanel

@@ -139,7 +139,7 @@ test('sync from headerFilter: filter by all values', async (t) => {
   await t.expect(cardView.apiOption('filterValue')).eql(null);
 }).before(() => createWidget('dxCardView', baseConfig));
 
-test('sync first from headerPanel: filter by two columns', async (t) => {
+test('sync from headerPanel: filter by two columns', async (t) => {
   const cardView = new CardView('#container');
 
   await cardView.apiColumnOption('id', 'filterType', 'include');
@@ -159,6 +159,27 @@ test('sync first from headerPanel: filter by two columns', async (t) => {
   await expectFilterElementsState(t, ['id']);
   await expectFilterElementsState(t, ['gender']);
 }).before(() => createWidget('dxCardView', baseConfig));
+
+test.only('sync from headerPanel: filter by groupInterval', async (t) => {
+  const cardView = new CardView('#container');
+
+  await cardView.apiColumnOption('id', 'filterType', 'include');
+  await cardView.apiColumnOption('id', 'filterValues', [0]);
+
+  await t.expect(cardView.apiOption('filterValue')).eql(
+    [['id', 'anyof', [0]]],
+  );
+}).before(() => createWidget('dxCardView', {
+  ...baseConfig,
+  columns: [{
+    dataField: 'id',
+    caption: 'id',
+    allowHeaderFiltering: true,
+    headerFilter: {
+      groupInterval: 2,
+    },
+  }],
+}));
 
 /*
  sync from filterPanel
@@ -287,6 +308,25 @@ test('sync from filterPanel: filter by two columns', async (t) => {
 
   await expectFilterElementsState(t, ['id', 'gender']);
 }).before(() => createWidget('dxCardView', baseConfig));
+
+test.only('sync from filterPanel: filter by groupInterval', async (t) => {
+  const cardView = new CardView('#container');
+
+  await cardView.apiOption('filterValue', [['id', 'anyof', 0]]);
+
+  await t.expect(cardView.apiColumnOption('id', 'filterType')).eql('include');
+  await t.expect(cardView.apiColumnOption('id', 'filterValues')).eql([0]);
+}).before(() => createWidget('dxCardView', {
+  ...baseConfig,
+  columns: [{
+    dataField: 'id',
+    caption: 'id',
+    allowHeaderFiltering: true,
+    headerFilter: {
+      groupInterval: 2,
+    },
+  }],
+}));
 
 /*
  Other sync scenarios
