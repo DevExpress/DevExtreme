@@ -135,7 +135,7 @@ QUnit.module('AI dialog integration', {}, () => {
 
             openAIToolbarMenu($('#htmlEditor'));
 
-            const $rootItem = $(`${MENU_CLASS} .${MENU_ITEM_CLASS}`).eq(0);
+            const $rootItem = $(`.${MENU_CLASS} .${MENU_ITEM_CLASS}`).eq(0);
             $rootItem.trigger('dxclick');
 
             assert.strictEqual(showSpy.callCount, 0, 'showAIDialog is not called on root item click');
