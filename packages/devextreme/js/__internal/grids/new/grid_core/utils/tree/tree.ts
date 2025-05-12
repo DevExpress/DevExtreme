@@ -97,6 +97,31 @@ export const shallowCopySubtreePath = (
   return shallowCopiedTree;
 };
 
+export const createOrShallowCopySubtreePath = (
+  tree: TreeNodeType,
+  path: string[],
+): TreeNodeType => {
+  const shallowCopiedTree = shallowCopyTree(tree);
+  let currentNode = shallowCopiedTree;
+
+  for (let idx = 0; idx < path.length; idx += 1) {
+    const isLastPath = idx === path.length - 1;
+    const nextNodePath = path[idx];
+
+    if (currentNode[nextNodePath] === undefined) {
+      currentNode[nextNodePath] = !isLastPath
+        ? {}
+        : undefined;
+    } else {
+      currentNode[nextNodePath] = shallowCopyTree(currentNode[nextNodePath]);
+    }
+
+    currentNode = currentNode[nextNodePath];
+  }
+
+  return shallowCopiedTree;
+};
+
 export const mergeOptionTrees = (
   internalTree: TreeNodeType,
   publicTree: TreeNodeType,
@@ -118,4 +143,17 @@ export const mergeOptionTrees = (
   targetNodeParent[lastNodePath] = deepMergeTrees(defaultNodeValue, newNodeValue);
 
   return result;
+};
+
+export const setTreeNodeByPath = (
+  tree: TreeNodeType,
+  node: TreeNodeType,
+  path: string[],
+): TreeNodeType => {
+  const [lastNodePath] = path.slice(-1);
+  const shallowCopiedTree = createOrShallowCopySubtreePath(tree, path);
+  const subtree = getTreeNodeParentByPath(shallowCopiedTree, path);
+
+  subtree[lastNodePath] = node;
+  return shallowCopiedTree;
 };
