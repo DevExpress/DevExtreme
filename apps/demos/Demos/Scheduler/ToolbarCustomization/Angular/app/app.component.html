@@ -15,31 +15,31 @@
         [dataSource]="assignees"
     >
     </dxi-resource>
-    <dxo-toolbar>
-        <dxi-item location="before" name="today"></dxi-item>
-        <dxi-item location="before" name="dateNavigator"></dxi-item>
-        <dxi-item
+    <dxo-scheduler-toolbar>
+        <dxi-scheduler-toolbar-item location="before" name="today"></dxi-scheduler-toolbar-item>
+        <dxi-scheduler-toolbar-item location="before" name="dateNavigator"></dxi-scheduler-toolbar-item>
+        <dxi-scheduler-toolbar-item
             location="before"
             locateInMenu="auto"
             widget="dxButton"
             [options]="newEventButtonOptions"
         >
-        </dxi-item>
-        <dxi-item location="center" locateInMenu="auto">
+        </dxi-scheduler-toolbar-item>
+        <dxi-scheduler-toolbar-item location="center" locateInMenu="auto">
             <div *dxTemplate>
                 <dx-select-box
                     placeholder="Select Employee"
                     [items]="assignees"
-                    showClearButton="true"
+                    [showClearButton]="true"
                     displayExpr="text"
                     valueExpr="id"
                     [inputAttr]="{ 'aria-label': 'Select Employee' }"
-                    width="200"
+                    [width]="200"
                     (onValueChanged)="onAssigneesChange($event)"
                 >
                 </dx-select-box>
             </div>
-        </dxi-item>
-        <dxi-item location="after" locateInMenu="auto" name="viewSwitcher"></dxi-item>
-    </dxo-toolbar>
+        </dxi-scheduler-toolbar-item>
+        <dxi-scheduler-toolbar-item location="after" locateInMenu="auto" name="viewSwitcher"></dxi-scheduler-toolbar-item>
+    </dxo-scheduler-toolbar>
 </dx-scheduler>

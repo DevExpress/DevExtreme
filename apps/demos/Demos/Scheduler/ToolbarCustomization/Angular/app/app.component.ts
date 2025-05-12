@@ -8,8 +8,8 @@ import {
   DxButtonModule,
 } from 'devextreme-angular';
 import DataSource from 'devextreme/data/data_source';
-import { DxButtonTypes } from 'devextreme-angular/ui/button';
-import { DxSelectBoxModule, DxSelectBoxTypes } from 'devextreme-angular/ui/select-box';
+import type { DxButtonTypes } from 'devextreme-angular/ui/button';
+import { DxSelectBoxModule, type DxSelectBoxTypes } from 'devextreme-angular/ui/select-box';
 import {
   Service, Assignee
 } from './app.service';

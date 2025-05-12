@@ -40,11 +40,11 @@
       <DxSelectBox
         placeholder="Select Employee"
         :items="assignees"
-        show-clear-button="true"
+        :show-clear-button="true"
         display-expr="text"
         value-expr="id"
         :input-attr="{ 'aria-label': 'Select Employee' }"
-        width="200"
+        :width="200"
         :value="assigneesFilterValue"
         @value-changed="onAssigneesFilterChange"
       />
@@ -54,7 +54,7 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
 import DxScheduler, {
-  DxResource, DxToolbar, DxItem, DxSchedulerTypes,
+  DxResource, DxToolbar, DxItem, type DxSchedulerTypes,
 } from 'devextreme-vue/scheduler';
 import { DxSelectBox, type DxSelectBoxTypes } from 'devextreme-vue/select-box';
 import { assignees, currentDate, schedulerDataSource } from './data.ts';
