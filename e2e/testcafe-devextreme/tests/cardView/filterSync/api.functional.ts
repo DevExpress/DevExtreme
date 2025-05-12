@@ -160,7 +160,7 @@ test('sync from headerPanel: filter by two columns', async (t) => {
   await expectFilterElementsState(t, ['gender']);
 }).before(() => createWidget('dxCardView', baseConfig));
 
-test.only('sync from headerPanel: filter by groupInterval', async (t) => {
+test('sync from headerPanel: filter by groupInterval', async (t) => {
   const cardView = new CardView('#container');
 
   await cardView.apiColumnOption('id', 'filterType', 'include');
@@ -309,7 +309,7 @@ test('sync from filterPanel: filter by two columns', async (t) => {
   await expectFilterElementsState(t, ['id', 'gender']);
 }).before(() => createWidget('dxCardView', baseConfig));
 
-test.only('sync from filterPanel: filter by groupInterval', async (t) => {
+test('sync from filterPanel: filter by groupInterval', async (t) => {
   const cardView = new CardView('#container');
 
   await cardView.apiOption('filterValue', [['id', 'anyof', 0]]);
