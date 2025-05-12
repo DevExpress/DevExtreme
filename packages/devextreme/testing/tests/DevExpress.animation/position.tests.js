@@ -6,7 +6,7 @@ import fixtures from '../../helpers/positionFixtures.js';
 import devices from 'core/devices.js';
 import { implementationsMap } from 'core/utils/size';
 import { getWindow } from 'core/utils/window.js';
-import { isRealDeviceTypeNotIn } from '../../helpers/device.js';
+import { shouldSkipTestForDevice } from '../../helpers/device.js';
 
 const setupPosition = positionUtils.setup;
 const calculatePosition = positionUtils.calculate;
@@ -965,7 +965,7 @@ const testCollision = (name, fixtureName, params, expectedHorzDist, expectedVert
     });
 
     QUnit.test('position should return window.height() if window.outerHeight == window.innerHeight (T939748)', function(assert) {
-        if(isRealDeviceTypeNotIn(['desktop', 'tablet'], assert)) {
+        if(shouldSkipTestForDevice(['desktop', 'tablet'], assert)) {
             return;
         }
 
@@ -997,7 +997,7 @@ const testCollision = (name, fixtureName, params, expectedHorzDist, expectedVert
     });
 
     QUnit.test('position should return window.width() if window.outerWidth == window.innerWidth (T939748)', function(assert) {
-        if(isRealDeviceTypeNotIn(['desktop', 'tablet'], assert)) {
+        if(shouldSkipTestForDevice(['desktop', 'tablet'], assert)) {
             return;
         }
 
@@ -1029,7 +1029,7 @@ const testCollision = (name, fixtureName, params, expectedHorzDist, expectedVert
     });
 
     QUnit.test('position should be correct relative to the viewport on mobile devices', function(assert) {
-        if(isRealDeviceTypeNotIn('phone', assert)) {
+        if(shouldSkipTestForDevice(['phone'], assert)) {
             return;
         }
 
@@ -1056,7 +1056,7 @@ const testCollision = (name, fixtureName, params, expectedHorzDist, expectedVert
     });
 
     QUnit.test('position should be correct relative to the viewport on mobile devices when window is scrolled', function(assert) {
-        if(isRealDeviceTypeNotIn('phone', assert)) {
+        if(shouldSkipTestForDevice(['phone'], assert)) {
             return;
         }
 
@@ -1083,7 +1083,7 @@ const testCollision = (name, fixtureName, params, expectedHorzDist, expectedVert
     });
 
     QUnit.test('position should be correct relative to the viewport on mobile devices when window is scrolled and window.scrollTop is bigger than visualViewport.offsetTop (T750017)', function(assert) {
-        if(isRealDeviceTypeNotIn('phone', assert)) {
+        if(shouldSkipTestForDevice(['phone'], assert)) {
             return;
         }
 

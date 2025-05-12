@@ -15,7 +15,7 @@ import 'ui/autocomplete';
 import 'ui/date_box';
 import 'ui/menu';
 
-import { isRealDeviceTypeNotIn } from '../../helpers/device.js';
+import { shouldSkipTestForDevice } from '../../helpers/device.js';
 
 import fx from 'common/core/animation/fx';
 
@@ -60,7 +60,7 @@ const openDropDownMenuIfExist = (toolbar) => {
 };
 
 ['never', 'always'].forEach((locateInMenu) => {
-    if(isRealDeviceTypeNotIn('desktop')) {
+    if(shouldSkipTestForDevice(['desktop'])) {
         return;
     }
 

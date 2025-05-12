@@ -39,7 +39,7 @@ import {
     clickByButtonAndSelectMenuItem
 } from './helpers.js';
 import { implementationsMap } from 'core/utils/size';
-import { isRealDeviceTypeNotIn } from '../../../helpers/device.js';
+import { shouldSkipTestForDevice } from '../../../helpers/device.js';
 
 QUnit.module('Rendering', function() {
     QUnit.test('field menu test', function(assert) {
@@ -349,7 +349,7 @@ QUnit.module('Rendering', function() {
 
     // T589341
     QUnit.test('the formatter is applied to a field with the date type', function(assert) {
-        if(isRealDeviceTypeNotIn('desktop', assert)) {
+        if(shouldSkipTestForDevice(['desktop'], assert)) {
             return;
         }
 
