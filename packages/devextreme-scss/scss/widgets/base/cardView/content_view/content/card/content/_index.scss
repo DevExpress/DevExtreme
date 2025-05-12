@@ -2,10 +2,10 @@
 @use '../variables' as *;
 
 .dx-cardview-card-content {
-  padding: ($cardview-card-content-padding-vertical - $cardview-card-content-field-gap) $cardview-card-content-padding-horizontal;
+  padding: $cardview-card-content-padding;
   display: grid;
   grid-template-columns: auto 1fr;
-  border-spacing: $cardview-card-content-field-gap;
+  row-gap: $cardview-card-content-row-gap;
   width: 100%;
   border-top: $cardview-card-border-size solid $cardview-card-border-color;
 }
