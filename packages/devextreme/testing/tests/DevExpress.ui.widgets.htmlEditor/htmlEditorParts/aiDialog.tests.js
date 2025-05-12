@@ -59,11 +59,6 @@ const moduleConfig = {
         this.setDialogState = (state) => {
             this.aiDialog['_setDialogState'](state);
         };
-        this.getTitleId = () => this.aiDialogPopup.$overlayContent()
-            .find(`.${AI_DIALOG_TITLE_CLASS}`)
-            .attr('id');
-        this.getDialogAriaLabel = () => this.aiDialogPopup.$overlayContent()
-            .attr('aria-labelledby');
     },
     afterEach() {
         sinon.restore();
@@ -1396,7 +1391,12 @@ QUnit.module('AIDialog', () => {
                 showAIDialog(this);
                 this.setDialogState(state);
 
-                assert.strictEqual(this.getDialogAriaLabel(), this.getTitleId(), 'aria-labelledby is equal to id');
+                const ariaLabel = this.aiDialogPopup.$overlayContent().attr('aria-labelledby');
+                const id = this.aiDialogPopup.$overlayContent()
+                    .find(`.${AI_DIALOG_TITLE_CLASS}`)
+                    .attr('id');
+
+                assert.strictEqual(ariaLabel, id, 'aria-labelledby is equal to id');
             });
         });
     });
