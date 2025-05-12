@@ -182,12 +182,15 @@ const Editing = Object.assign<typeof _componentEditing, NestedComponentMeta>(_co
 // owners:
 // Chat
 type IItemProps = React.PropsWithChildren<{
+  alt?: string;
   author?: ChatUser;
   id?: number | string;
   isDeleted?: boolean;
   isEdited?: boolean;
+  src?: string;
   text?: string;
   timestamp?: Date | number | string;
+  type?: string | undefined;
 }>
 const _componentItem = (props: IItemProps) => {
   return React.createElement(NestedOption<IItemProps>, {
