@@ -542,8 +542,8 @@
         "dxHtmlEditor-aiTryAgain": "Try again",
         "dxHtmlEditor-aiGenerate": "Generate",
         "dxHtmlEditor-aiStop": "Stop",
-        "dxHtmlEditor-aiToolbarItem": "AI Assistant toolbar item",
-        "dxHtmlEditor-aiResultTextArea": "AI Assistant result",
+        "dxHtmlEditor-aiToolbarItemLabel": "AI Assistant toolbar item",
+        "dxHtmlEditor-aiResultTextAreaLabel": "AI Assistant result",
         "dxHtmlEditor-aiAskPlaceholder": "Ask AI to modify text",
 
         "dxFileManager-newDirectoryName": "Nepavadintas aplankas",
