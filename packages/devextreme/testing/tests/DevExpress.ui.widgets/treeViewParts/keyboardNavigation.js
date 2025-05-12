@@ -6,7 +6,7 @@ import fx from 'common/core/animation/fx';
 import keyboardMock from '../../../helpers/keyboardMock.js';
 import { isRenderer } from 'core/utils/type';
 import config from 'core/config';
-import { shouldSkipTestForDevice } from '../../../helpers/device.js';
+import { shouldSkipOnDevice } from '../../../helpers/device.js';
 
 QUnit.module('keyboard navigation', {
     beforeEach: function() {
@@ -775,7 +775,7 @@ QUnit.test('T179601', function(assert) {
 });
 
 QUnit.test('treeview should not lose focus when parent item is disabled (T303800)', function(assert) {
-    if(shouldSkipTestForDevice(['desktop'], assert)) {
+    if(shouldSkipOnDevice({ allowedDevices: ['desktop'], assert })) {
         return;
     }
 
@@ -800,7 +800,11 @@ QUnit.test('treeview should not lose focus when parent item is disabled (T303800
 });
 
 QUnit.testInActiveWindow('First list item should be focused on the \'tab\' key press when the search editor is focused', function(assert) {
-    if(shouldSkipTestForDevice(['desktop'], assert, 'keyboard navigation is disabled for not desktop devices')) {
+    if(shouldSkipOnDevice({
+        allowedDevices: ['desktop'],
+        assert,
+        message: 'keyboard navigation is disabled for not desktop devices',
+    })) {
         return;
     }
 

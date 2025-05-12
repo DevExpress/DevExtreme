@@ -14,7 +14,7 @@ import caretWorkaround from './textEditorParts/caretWorkaround.js';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import dxButton from 'ui/button';
 import domAdapter from '__internal/core/m_dom_adapter';
-import { shouldSkipTestForDevice } from '../../helpers/device.js';
+import { shouldSkipOnDevice } from '../../helpers/device.js';
 
 import 'generic_light.css!';
 import 'ui/validator';
@@ -387,7 +387,11 @@ QUnit.module('dxDropDownEditor', testEnvironment, () => {
 
 QUnit.module('focus policy', () => {
     QUnit.testInActiveWindow('editor should save focus on button clicking', function(assert) {
-        if(shouldSkipTestForDevice(['desktop'], assert, 'blur preventing is unnecessary on mobile devices')) {
+        if(shouldSkipOnDevice({
+            allowedDevices: ['desktop'],
+            assert,
+            message: 'blur preventing is unnecessary on mobile devices',
+        })) {
             return;
         }
 
@@ -423,7 +427,11 @@ QUnit.module('focus policy', () => {
     });
 
     QUnit.testInActiveWindow('editor should save focus on clearbutton clicking, fieldTemplate is used', function(assert) {
-        if(shouldSkipTestForDevice(['desktop'], assert, 'blur preventing is unnecessary on mobile devices')) {
+        if(shouldSkipOnDevice({
+            allowedDevices: ['desktop'],
+            assert,
+            message: 'blur preventing is unnecessary on mobile devices',
+        })) {
             return;
         }
 
@@ -765,7 +773,11 @@ QUnit.module('keyboard navigation', {
     });
 
     QUnit.testInActiveWindow('Focus policy with field template', function(assert) {
-        if(shouldSkipTestForDevice(['desktop'], assert, 'blur preventing is unnecessary on mobile devices')) {
+        if(shouldSkipOnDevice({
+            allowedDevices: ['desktop'],
+            assert,
+            message: 'blur preventing is unnecessary on mobile devices',
+        })) {
             return;
         }
 

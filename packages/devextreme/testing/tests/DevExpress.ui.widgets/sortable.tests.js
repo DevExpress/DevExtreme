@@ -8,7 +8,7 @@ import browser from 'core/utils/browser';
 import translator from 'common/core/animation/translator';
 import viewPort from 'core/utils/view_port';
 import devices from '__internal/core/m_devices';
-import { shouldSkipTestForDevice } from '../../helpers/device.js';
+import { shouldSkipOnDevice } from '../../helpers/device.js';
 
 import 'generic_light.css!';
 
@@ -524,7 +524,7 @@ QUnit.module('allowReordering', moduleConfig, () => {
 
     // T969161
     QUnit.test('The gesture cover cursor should be correct when viewport container is specified and it is before the sortable.', function(assert) {
-        if(shouldSkipTestForDevice(['desktop'], assert)) {
+        if(shouldSkipOnDevice({ allowedDevices: ['desktop'], assert })) {
             return;
         }
 

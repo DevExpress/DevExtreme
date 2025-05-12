@@ -30,7 +30,7 @@ import pointerMock from '../../helpers/pointerMock.js';
 import DataGridWrapper from '../../helpers/wrappers/dataGridWrappers.js';
 import { findShadowHostOrDocument } from '../../helpers/dataGridHelper.js';
 import { DataSource } from 'common/data/data_source/data_source';
-import { shouldSkipTestForDevice } from '../../helpers/device.js';
+import { shouldSkipOnDevice } from '../../helpers/device.js';
 
 QUnit.testStart(function() {
     const markup =
@@ -1108,7 +1108,11 @@ QUnit.module('Editing', {
 
     // T124946
     QUnit.test('Api method editCell with button', function(assert) {
-        if(shouldSkipTestForDevice(['desktop'], assert, 'The problem is fixed for desktop only')) {
+        if(shouldSkipOnDevice({
+            allowedDevices: ['desktop'],
+            assert,
+            message: 'The problem is fixed for desktop only',
+        })) {
             return;
         }
 
@@ -1688,7 +1692,7 @@ QUnit.module('Editing', {
 
     // T749034
     QUnit.test('Changed value should be saved on click outside dataGrid on mobile devices when cell editing mode', function(assert) {
-        if(shouldSkipTestForDevice(['phone', 'tablet'], assert)) {
+        if(shouldSkipOnDevice({ allowedDevices: ['phone', 'tablet'], assert })) {
             return;
         }
 
@@ -1767,7 +1771,11 @@ QUnit.module('Editing', {
 
     // T727856
     QUnit.test('Not close Editing Cell in batch mode on down in editing cell and up in another cell', function(assert) {
-        if(shouldSkipTestForDevice(['desktop'], assert, 'focus is not actual for mobile devices')) {
+        if(shouldSkipOnDevice({
+            allowedDevices: ['desktop'],
+            assert,
+            message: 'focus is not actual for mobile devices',
+        })) {
             return;
         }
         // arrange
@@ -7541,7 +7549,11 @@ QUnit.module('Editing with real dataController', {
 
     // T319885
     QUnit.testInActiveWindow('Focused lookup column with showEditorAlways is enabled', function(assert) {
-        if(shouldSkipTestForDevice(['desktop'], assert, 'focus is not actual for mobile devices')) {
+        if(shouldSkipOnDevice({
+            allowedDevices: ['desktop'],
+            assert,
+            message: 'focus is not actual for mobile devices',
+        })) {
             return;
         }
 
@@ -13302,7 +13314,11 @@ QUnit.module('Editing with validation', {
 
     // T497279
     QUnit.testInActiveWindow('Insert row using extern button when edit mode cell', function(assert) {
-        if(shouldSkipTestForDevice(['desktop'], assert, 'focus is not actual for mobile devices')) {
+        if(shouldSkipOnDevice({
+            allowedDevices: ['desktop'],
+            assert,
+            message: 'focus is not actual for mobile devices',
+        })) {
             return;
         }
         // arrange
