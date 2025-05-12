@@ -13,6 +13,7 @@ import { DxSelectBoxModule, type DxSelectBoxTypes } from 'devextreme-angular/ui/
 import {
   Service, Assignee
 } from './app.service';
+import {schedulerDataSource} from "../../React/data";
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -77,6 +78,7 @@ export class AppComponent {
   onAssigneesChange(event: DxSelectBoxTypes.ValueChangedEvent) {
     const filter = event.value ? ['assigneeId', 'contains', event.value] : null;
     this.dataSource.filter(filter);
+    this.scheduler.instance.option('dataSource', this.dataSource);
   }
 }
 
