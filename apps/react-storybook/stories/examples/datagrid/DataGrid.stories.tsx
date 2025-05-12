@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import React, { useCallback, useState } from "react";
-import { countries } from './data';
+import { countries, generateData } from './data';
 
 import DataGrid, {
     Column,
@@ -251,5 +251,23 @@ export const ColumnReordering: Story = {
             visible: true,
             allowColumnDragging: true,
         },
+    }
+  }
+
+  const generatedData = generateData(10, 100);
+
+  export const ColumnReorderingWithVirtualColumns: Story = {
+    argTypes: {
+        columns: {
+            control: 'object',
+            mapping: null,
+        },
+    },
+    args: {
+        allowColumnReordering: true,
+        rtlEnabled: false,
+        columnWidth: 100,
+        dataSource: generatedData,
+        columns: Object.keys(generatedData[0]),
     }
   }

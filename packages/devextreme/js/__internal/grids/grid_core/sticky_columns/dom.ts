@@ -359,6 +359,7 @@ export const GridCoreStickyColumnsDom = {
   getLeftFixedCells,
   getRightFixedCells,
   getNonFixedAndStickyCells,
+  getNonFixedAreaBoundingRect,
   getScrollPadding,
   getNextHeaderCell,
   noNeedToCreateResizingPoint,

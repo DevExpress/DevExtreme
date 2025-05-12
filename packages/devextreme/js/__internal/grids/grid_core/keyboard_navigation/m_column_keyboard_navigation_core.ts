@@ -1,4 +1,3 @@
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import { isDefined, isEmptyObject } from '@js/core/utils/type';
 
 import { Direction, ViewName } from './const';
@@ -6,6 +5,8 @@ import type { ColumnFocusDispatcher } from './m_column_focus_dispatcher';
 import { KeyboardNavigationController as KeyboardNavigationControllerCore } from './m_keyboard_navigation_core';
 
 export class ColumnKeyboardNavigationController extends KeyboardNavigationControllerCore {
+  private resizeCompletedWithContext!: (e: any) => void;
+
   protected needToRestoreFocus = false;
 
   public columnFocusDispatcher!: ColumnFocusDispatcher;
@@ -19,7 +20,10 @@ export class ColumnKeyboardNavigationController extends KeyboardNavigationContro
       return column.groupIndex as number;
     }
 
-    return this._columnsController.getVisibleIndex(column.index, rowIndex);
+    const visibleIndex = this._columnsController.getVisibleIndex(column.index, rowIndex);
+    const columnIndexOffset = this.getColumnIndexOffset(visibleIndex);
+
+    return visibleIndex >= 0 ? visibleIndex + columnIndexOffset : -1;
   }
 
   protected getNewVisibleIndex(
@@ -62,9 +66,7 @@ export class ColumnKeyboardNavigationController extends KeyboardNavigationContro
     return direction === Direction.Next ? newVisibleIndex - 1 : newVisibleIndex;
   }
 
-  protected renderCompleted(e: any): void {
-    super.renderCompleted(e);
-
+  protected resizeCompleted(): void {
     if (this.needToRestoreFocus) {
       this.restoreFocus();
       this.needToRestoreFocus = false;
@@ -83,8 +85,16 @@ export class ColumnKeyboardNavigationController extends KeyboardNavigationContro
   public init() {
     super.init();
 
+    const focusedView = this.getFocusedView();
+
     this.columnFocusDispatcher = this.getController('columnFocusDispatcher');
     this.columnFocusDispatcher?.registerKeyboardNavigationController(this);
+
+    this.resizeCompletedWithContext = this.resizeCompletedWithContext
+      ?? this.resizeCompleted.bind(this);
+
+    focusedView?.resizeCompleted?.remove(this.resizeCompletedWithContext);
+    focusedView?.resizeCompleted?.add(this.resizeCompletedWithContext);
   }
 
   public moveColumn({
@@ -150,9 +160,7 @@ export class ColumnKeyboardNavigationController extends KeyboardNavigationContro
     }
 
     const $focusedCell = this._getFocusedCell();
-
-    // @ts-expect-error
-    eventsEngine.trigger($focusedCell, 'focus');
+    $focusedCell?.[0]?.focus({ preventScroll: true });
   }
 
   public ungroupAllColumns(): void {
