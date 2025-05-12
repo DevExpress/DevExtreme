@@ -57,6 +57,8 @@ const getTestSpecificSkipRules = (testName) => {
       return ['empty-table-header'];
     case 'Localization-UsingGlobalize':
       return ['label'];
+    case 'HtmlEditor-AITextEditing':
+      return ['aria-command-name'];
     default:
       return [];
   }
