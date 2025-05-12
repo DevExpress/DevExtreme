@@ -16,6 +16,7 @@ import AIDialog, {
 import { BUTTON_GROUP_CLASS } from '__internal/ui/m_button_group';
 import { POPUP_CLASS } from '__internal/ui/popup/m_popup';
 import { TEXTAREA_CLASS } from '__internal/ui/m_text_area';
+import { TEXTEDITOR_INPUT_CLASS } from '__internal/ui/text_box/m_text_editor.base';
 import { SELECTBOX_CLASS } from '__internal/ui/m_select_box';
 import { INFORMER_CLASS } from '__internal/ui/informer/informer';
 import { BUTTON_CLASS } from '__internal/ui/button/button';
@@ -1370,6 +1371,17 @@ QUnit.module('AIDialog', () => {
             const stopButtonOptions = stopToolbarItem.options;
 
             assert.strictEqual(stopButtonOptions.width, COMPACT_ACTION_BUTTON_WIDTH, 'width is specific');
+        });
+    });
+
+    QUnit.module('Accessibility', moduleConfig, () => {
+        QUnit.test('result textarea should have correct aria-label', function(assert) {
+            showAIDialog(this);
+
+            const $resultTextArea = this.$element.find(`.${TEXTAREA_CLASS}`).eq(1);
+            const $textArea = $resultTextArea.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+
+            assert.strictEqual($textArea.attr('aria-label'), 'AI Assistant result', 'aria-label is correct');
         });
     });
 });

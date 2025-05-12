@@ -543,6 +543,7 @@
         "dxHtmlEditor-aiGenerate": "Generate",
         "dxHtmlEditor-aiStop": "Stop",
         "dxHtmlEditor-aiToolbarItem": "AI Assistant toolbar item",
+        "dxHtmlEditor-aiResultTextArea": "AI Assistant result",
         "dxHtmlEditor-aiAskPlaceholder": "Ask AI to modify text",
 
         "dxFileManager-newDirectoryName": "Director fără titlu",
