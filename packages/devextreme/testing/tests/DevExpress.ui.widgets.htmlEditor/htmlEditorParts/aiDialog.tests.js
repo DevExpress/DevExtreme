@@ -1052,6 +1052,7 @@ QUnit.module('AIDialog', () => {
                     locateInMenu: 'auto'
                 });
                 assertConfig(assert, replaceButtonOptions, {
+                    displayExpr: 'text',
                     stylingMode: 'contained',
                     type: 'default',
                     splitButton: true,

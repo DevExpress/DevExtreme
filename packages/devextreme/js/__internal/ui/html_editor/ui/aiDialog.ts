@@ -338,6 +338,7 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
       widget: 'dxDropDownButton',
       locateInMenu: 'auto',
       options: {
+        displayExpr: 'text',
         text: localizationMessage.format('dxHtmlEditor-aiReplace'),
         stylingMode: 'contained',
         type: 'default',

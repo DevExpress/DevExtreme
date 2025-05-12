@@ -1243,7 +1243,6 @@ class CollectionWidget<
     if (this.option('useItemTextAsTitle')) {
       // @ts-expect-error ts-error
       const displayValue = this._displayGetter ? this._displayGetter(itemData) : itemData;
-      debugger;
       $itemFrame.attr('title', displayValue);
     }
 
