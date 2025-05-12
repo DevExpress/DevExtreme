@@ -1,5 +1,5 @@
 const addDays = (date, days) => new Date(new Date(date).setUTCDate(date.getUTCDate() + days));
-const now = new Date().setUTCHours(0, 0, 0, 0);
+const now = new Date(new Date().setUTCHours(0, 0, 0, 0));
 const startOfTheWeek = addDays(now, -new Date().getUTCDay());
 const currentDate = addDays(now, 30);
 const currentStartOfTheWeek = addDays(currentDate, -currentDate.getUTCDay());
