@@ -4,7 +4,7 @@ import 'ui/file_manager';
 import fx from 'common/core/animation/fx';
 import { FileManagerWrapper, createTestFileSystem } from '../../../helpers/fileManagerHelpers.js';
 import { triggerCellClick } from '../../../helpers/fileManager/events.js';
-import { shouldSkipTestForDevice } from '../../../helpers/device.js';
+import { shouldSkipOnDevice } from '../../../helpers/device.js';
 
 const moduleConfig = {
 
@@ -218,7 +218,7 @@ QUnit.module('Selection', moduleConfig, () => {
     });
 
     test('Details view - select all raises selection changed event', function(assert) {
-        if(shouldSkipTestForDevice(['desktop'], assert)) {
+        if(shouldSkipOnDevice({ allowedDevices: ['desktop'], assert })) {
             return;
         }
 

@@ -22,7 +22,7 @@ import { checkDxFontIcon, DX_ICON_XLSX_FILE_CONTENT_CODE, DX_ICON_EXPORT_SELECTE
 import { createDataGrid, baseModuleConfig, findShadowHostOrDocument } from '../../helpers/dataGridHelper.js';
 import { getOuterWidth } from 'core/utils/size';
 import { generateItems } from '../../helpers/dataGridMocks.js';
-import { shouldSkipTestForDevice } from '../../helpers/device.js';
+import { shouldSkipOnDevice } from '../../helpers/device.js';
 
 const DX_STATE_HOVER_CLASS = 'dx-state-hover';
 const CELL_UPDATED_CLASS = 'dx-datagrid-cell-updated-animation';
@@ -554,7 +554,11 @@ QUnit.module('Initialization', baseModuleConfig, () => {
     });
 
     QUnit.test('Enable rows hover', function(assert) {
-        if(shouldSkipTestForDevice(['desktop'], assert, 'hover is disabled for non desktop devices')) {
+        if(shouldSkipOnDevice({
+            allowedDevices: ['desktop'],
+            assert,
+            message: 'hover is disabled for non desktop devices',
+        })) {
             return;
         }
 
@@ -579,7 +583,11 @@ QUnit.module('Initialization', baseModuleConfig, () => {
     });
 
     QUnit.test('Enable rows hover and row position', function(assert) {
-        if(shouldSkipTestForDevice(['desktop'], assert, 'hover is disabled for non desktop devices')) {
+        if(shouldSkipOnDevice({
+            allowedDevices: ['desktop'],
+            assert,
+            message: 'hover is disabled for non desktop devices',
+        })) {
             return;
         }
 
@@ -635,7 +643,11 @@ QUnit.module('Initialization', baseModuleConfig, () => {
     });
 
     QUnit.test('Enable rows hover via option method', function(assert) {
-        if(shouldSkipTestForDevice(['desktop'], assert, 'hover is disabled for non desktop devices')) {
+        if(shouldSkipOnDevice({
+            allowedDevices: ['desktop'],
+            assert,
+            message: 'hover is disabled for non desktop devices',
+        })) {
             return;
         }
 

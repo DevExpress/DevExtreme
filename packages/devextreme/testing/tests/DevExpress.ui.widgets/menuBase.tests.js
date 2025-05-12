@@ -4,7 +4,7 @@ import config from 'core/config';
 import MenuBase from 'ui/context_menu/ui.menu_base';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import ariaAccessibilityTestHelper from '../../helpers/ariaAccessibilityTestHelper.js';
-import { shouldSkipTestForDevice } from '../../helpers/device.js';
+import { shouldSkipOnDevice } from '../../helpers/device.js';
 
 import 'generic_light.css!';
 
@@ -572,7 +572,7 @@ QUnit.module('ShowSubmenuMode', {
     });
 
     QUnit.test('showSubmenuMode - by default', function(assert) {
-        if(shouldSkipTestForDevice(['desktop'], assert)) {
+        if(shouldSkipOnDevice({ allowedDevices: ['desktop'], assert })) {
             return;
         }
 
@@ -588,7 +588,7 @@ QUnit.module('ShowSubmenuMode', {
     });
 
     QUnit.test('showSubmenuMode - onHover - set as object and delay set as number', function(assert) {
-        if(shouldSkipTestForDevice(['desktop'], assert)) {
+        if(shouldSkipOnDevice({ allowedDevices: ['desktop'], assert })) {
             return;
         }
 
@@ -604,7 +604,7 @@ QUnit.module('ShowSubmenuMode', {
     });
 
     QUnit.test('showSubmenuMode - onHover - function has item element as parameter', function(assert) {
-        if(shouldSkipTestForDevice(['desktop'], assert)) {
+        if(shouldSkipOnDevice({ allowedDevices: ['desktop'], assert })) {
             return;
         }
 
@@ -620,7 +620,7 @@ QUnit.module('ShowSubmenuMode', {
     });
 
     QUnit.test('showSubmenuMode - onHover - set as object and delay set as object too', function(assert) {
-        if(shouldSkipTestForDevice(['desktop'], assert)) {
+        if(shouldSkipOnDevice({ allowedDevices: ['desktop'], assert })) {
             return;
         }
 
@@ -636,7 +636,7 @@ QUnit.module('ShowSubmenuMode', {
     });
 
     QUnit.test('showSubmenuMode - onHover - set as string without delay', function(assert) {
-        if(shouldSkipTestForDevice(['desktop'], assert)) {
+        if(shouldSkipOnDevice({ allowedDevices: ['desktop'], assert })) {
             return;
         }
 
@@ -652,7 +652,7 @@ QUnit.module('ShowSubmenuMode', {
     });
 
     QUnit.test('previous submenu should not appear if other submenu shown timeout is started', function(assert) {
-        if(shouldSkipTestForDevice(['desktop'], assert)) {
+        if(shouldSkipOnDevice({ allowedDevices: ['desktop'], assert })) {
             return;
         }
 

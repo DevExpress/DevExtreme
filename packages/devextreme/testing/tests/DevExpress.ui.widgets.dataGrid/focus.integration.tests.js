@@ -11,7 +11,7 @@ import { createDataGrid, baseModuleConfig } from '../../helpers/dataGridHelper.j
 import ArrayStore from 'common/data/array_store';
 import DataGrid from 'ui/data_grid';
 import { getEmulatorStyles } from '../../helpers/stylesHelper.js';
-import { shouldSkipTestForDevice } from '../../helpers/device.js';
+import { shouldSkipOnDevice } from '../../helpers/device.js';
 
 const DX_STATE_HOVER_CLASS = 'dx-state-hover';
 const TEXTEDITOR_INPUT_SELECTOR = '.dx-texteditor-input';
@@ -111,7 +111,11 @@ QUnit.module('Initialization', baseModuleConfig, () => {
     });
 
     QUnit.test('Enable rows hover, row position and focused row', function(assert) {
-        if(shouldSkipTestForDevice(['desktop'], assert, 'hover is disabled for non-desktop devices')) {
+        if(shouldSkipOnDevice({
+            allowedDevices: ['desktop'],
+            assert,
+            message: 'hover is disabled for non-desktop devices',
+        })) {
             return;
         }
 
@@ -1785,7 +1789,7 @@ QUnit.module('Virtual row rendering', baseModuleConfig, () => {
 
     // T872126
     QUnit.test('Incorrect cell should not be focused after editing boolean column in cell edit mode', function(assert) {
-        if(shouldSkipTestForDevice(['desktop'], assert)) {
+        if(shouldSkipOnDevice({ allowedDevices: ['desktop'], assert })) {
             return;
         }
 
@@ -2837,7 +2841,11 @@ QUnit.module('View\'s focus', {
 
     ['Batch', 'Cell'].forEach(editMode => {
         QUnit.testInActiveWindow(`${editMode} - Date cell should have correct text when the useMaskBehavior and editOnKeyPress options are enabled (T976144)`, function(assert) {
-            if(shouldSkipTestForDevice(['desktop'], assert, 'keyboard navigation is disabled for non-desktop devices')) {
+            if(shouldSkipOnDevice({
+                allowedDevices: ['desktop'],
+                assert,
+                message: 'keyboard navigation is disabled for non-desktop devices',
+            })) {
                 return;
             }
             // arrange
@@ -4153,7 +4161,7 @@ QUnit.module('View\'s focus', {
     });
 
     QUnit.testInActiveWindow('Vertical moving by keydown if scrolling.mode: virtual, scrolling.rowRenderingMode: virtual', function(assert) {
-        if(shouldSkipTestForDevice(['desktop'], assert)) {
+        if(shouldSkipOnDevice({ allowedDevices: ['desktop'], assert })) {
             return;
         }
 
@@ -4410,7 +4418,11 @@ QUnit.module('API methods', baseModuleConfig, () => {
 
     // T460276
     QUnit.testInActiveWindow('Tab key should open editor in next cell when virtual scrolling enabled and editing mode is cell', function(assert) {
-        if(shouldSkipTestForDevice(['desktop'], assert, 'keyboard navigation is disabled for non-desktop devices')) {
+        if(shouldSkipOnDevice({
+            allowedDevices: ['desktop'],
+            assert,
+            message: 'keyboard navigation is disabled for non-desktop devices',
+        })) {
             return;
         }
 
@@ -4458,7 +4470,11 @@ QUnit.module('API methods', baseModuleConfig, () => {
 
     // T460276
     QUnit.testInActiveWindow('Tab key should open editor in next cell when virtual scrolling enabled and editing mode is cell at the end of table', function(assert) {
-        if(shouldSkipTestForDevice(['desktop'], assert, 'keyboard navigation is disabled for non-desktop devices')) {
+        if(shouldSkipOnDevice({
+            allowedDevices: ['desktop'],
+            assert,
+            message: 'keyboard navigation is disabled for non-desktop devices',
+        })) {
             return;
         }
         const array = [];
@@ -4824,7 +4840,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
     });
 
     QUnit.testInActiveWindow('DataGrid should not focus command cell after edit canceling', function(assert) {
-        if(shouldSkipTestForDevice(['desktop'], assert)) {
+        if(shouldSkipOnDevice({ allowedDevices: ['desktop'], assert })) {
             return;
         }
 
@@ -4948,7 +4964,7 @@ QUnit.module('Column Resizing', baseModuleConfig, () => {
 
     // T882682
     QUnit.test('focus overlay should be shown again after resizing', function(assert) {
-        if(shouldSkipTestForDevice(['desktop'], assert)) {
+        if(shouldSkipOnDevice({ allowedDevices: ['desktop'], assert })) {
             return;
         }
         // arrange
@@ -5031,7 +5047,7 @@ QUnit.module('Column Resizing', baseModuleConfig, () => {
     });
 
     QUnit.testInActiveWindow('Scroll position should not be changed after click on button element (T945907)', function(assert) {
-        if(shouldSkipTestForDevice(['desktop'], assert)) {
+        if(shouldSkipOnDevice({ allowedDevices: ['desktop'], assert })) {
             return;
         }
 

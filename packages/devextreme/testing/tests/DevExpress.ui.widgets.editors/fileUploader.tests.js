@@ -6,7 +6,7 @@ import { Deferred } from 'core/utils/deferred';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import { createBlobFile } from '../../helpers/fileHelper.js';
 import { getFileChunkCount } from '../../helpers/fileManagerHelpers.js';
-import { shouldSkipTestForDevice } from '../../helpers/device.js';
+import { shouldSkipOnDevice } from '../../helpers/device.js';
 import '../../helpers/xmlHttpRequestMock.js';
 import 'generic_light.css!';
 
@@ -3553,7 +3553,11 @@ QUnit.module('keyboard navigation', moduleConfig, () => {
     });
 
     QUnit.test('T328503 - \'enter\' press on select button should lead to input click', function(assert) {
-        if(shouldSkipTestForDevice(['desktop'], assert, 'keyboard is not supported for non-desktop devices')) {
+        if(shouldSkipOnDevice({
+            allowedDevices: ['desktop'],
+            assert,
+            message: 'keyboard is not supported for non-desktop devices',
+        })) {
             return;
         }
 
@@ -4292,7 +4296,11 @@ QUnit.module('integration of dx button components via dialogTrigger', moduleConf
     ['enter', 'space'].forEach(keyName => {
         ['dxButton', 'dxButtonGroup', 'dxDropDownButton'].forEach(component => {
             QUnit.test(`dialog should be shown after press ${keyName} key on ${component} (T1178836, T1256752)`, function(assert) {
-                if(shouldSkipTestForDevice(['desktop'], assert, 'keyboard is not supported for non-desktop devices')) {
+                if(shouldSkipOnDevice({
+                    allowedDevices: ['desktop'],
+                    assert,
+                    message: 'keyboard is not supported for non-desktop devices',
+                })) {
                     return;
                 }
 
