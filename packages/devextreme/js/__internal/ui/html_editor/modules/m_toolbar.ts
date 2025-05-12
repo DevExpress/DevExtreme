@@ -486,7 +486,7 @@ if (Quill) {
         disabled: isMenuDisabled,
         onContentReady: (e: ContentReadyEvent): void => {
           const $item = $(e.element).find(`.${DX_MENU_ITEM_CLASS}`).first();
-          $item.attr('aria-label', localizationMessage.format('dxHtmlEditor-aiToolbarItemLabel'));
+          $item.attr('aria-label', localizationMessage.format('dxHtmlEditor-aiToolbarItemAriaLabel'));
         },
         onItemClick: (e: ItemClickEvent): void => {
           const { itemData } = e;

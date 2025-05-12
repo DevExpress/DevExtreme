@@ -246,7 +246,7 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
     };
 
     const options = {
-      inputAttr: { 'aria-label': localizationMessage.format('dxHtmlEditor-aiResultTextAreaLabel') },
+      inputAttr: { 'aria-label': localizationMessage.format('dxHtmlEditor-aiResultTextAreaAriaLabel') },
       minHeight: TEXT_AREA_MIN_HEIGHT,
       width: '100%',
       readOnly: true,
