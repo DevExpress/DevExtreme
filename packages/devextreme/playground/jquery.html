@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <title>DevExtreme jQuery Example</title>
 
@@ -40,11 +39,9 @@
     -->
 
     <script type="text/javascript" src="../artifacts/js/dx.all.debug.js" charset="utf-8"></script>
-    <!-- <script type="text/javascript" src="../artifacts/js/dx.ai-integration.debug.js" charset="utf-8"></script> -->
     <script type="text/javascript" src="./themeSelector.js"></script>
     <script type="text/javascript" src="../../../node_modules/axe-core/axe.min.js"></script>
 </head>
-
 <body class="dx-surface">
     <div role="main">
         <h1 style="position: fixed; left: 0; top: 0; clip: rect(1px, 1px, 1px, 1px);">Test header</h1>
@@ -52,27 +49,13 @@
         <select id="theme-selector" style="display: block;">
         </select>
         <br />
-
         <div id="button"></div>
-
         <script>
-
-            $(() => {
-                const dataSource = [{
-                    id: 'root',
-                    text: 'menu level 1',
-                    items: [
-                        { text: 'item 1' },
-                        { text: 'item 2' },
-                    ],
-                }];
-
-                const dxMenu = $('#button').dxMenu({
-                    dataSource,
-                    hideSubmenuOnMouseLeave: false,
-                    onItemClick(e) {
-                    },
-                }).dxMenu('instance');
+            $(function() {
+                $("#button").dxButton({
+                    text: 'Click me!',
+                    onClick: function() { alert("clicked"); }
+                });
             });
         </script>
     </div>
