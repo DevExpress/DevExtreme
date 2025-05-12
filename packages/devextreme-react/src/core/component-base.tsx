@@ -25,7 +25,7 @@ import { elementPropNames, getClassName } from './widget-config';
 import { buildConfigTree } from './configuration/react/tree';
 import { TemplateManager } from './template-manager';
 import { ComponentProps } from './component';
-import { UnitLessNumbersSet } from './unitlessNumbers';
+import { UNITLESS_NUMBERS_SET } from './const';
 
 const DX_REMOVE_EVENT = 'dxremove';
 
@@ -131,7 +131,7 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
 
         Object.entries(styles).forEach(
           ([name, value]) => {
-            if (typeof value === 'number' && !UnitLessNumbersSet.has(name)) {
+            if (typeof value === 'number' && !UNITLESS_NUMBERS_SET.has(name)) {
               el.style[name] = `${value}px`;
             } else {
               el.style[name] = value;

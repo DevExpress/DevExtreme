@@ -14,6 +14,7 @@ import {
   WidgetClass,
 } from './test-component';
 
+
 jest.useFakeTimers();
 jest.mock('react-dom', () => ({
   __esModule: true,
@@ -43,6 +44,7 @@ describe('rendering', () => {
   });
 
   it('renders component with children correctly', () => {
+
     const { container } = testingLib.render(
       <TestComponent>
         <span />
@@ -82,7 +84,7 @@ describe('rendering', () => {
       WidgetClass.mockImplementation(() => {
         componentRendered = true;
         return Widget;
-      });
+      })
     });
 
     afterEach(() => {
@@ -93,7 +95,7 @@ describe('rendering', () => {
     const MyComponent = () => {
       useLayoutEffect(() => {
         expect(componentRendered).toBeTruthy();
-      });
+      })
 
       return (
         <TestComponent />
@@ -105,7 +107,7 @@ describe('rendering', () => {
 
       const ref = () => {
         expect(componentRendered).toBeTruthy();
-      };
+      }
       const { unmount } = testingLib.render(<TestComponent ref={ref} />);
 
       // required to make the second call to ref callback (on unmount)
@@ -135,7 +137,7 @@ describe('rendering', () => {
       WidgetClass.mockImplementation((element: Element) => {
         didRenderToDetachedBranch = didRenderToDetachedBranch || !element.isConnected;
         return Widget;
-      });
+      })
     });
 
     afterEach(() => {
@@ -153,7 +155,7 @@ describe('rendering', () => {
         </TestComponent>
       );
       testingLib.render(component);
-
+  
       expect(didRenderToDetachedBranch).toBeFalsy();
     });
 
@@ -423,7 +425,7 @@ describe('disposing', () => {
 
   it('saves and restores focus state after dispose', async () => {
     let firstRender = true;
-
+  
     WidgetClass.mockImplementation((container: HTMLElement) => {
       const input = document.createElement('input');
 
@@ -436,12 +438,12 @@ describe('disposing', () => {
       firstRender = false;
 
       return Widget;
-    });
+    })
 
     testingLib.render(
       <React.StrictMode>
         <TestComponent />
-      </React.StrictMode>,
+      </React.StrictMode>
     );
 
     expect(Widget.focus).toHaveBeenCalledTimes(1);
