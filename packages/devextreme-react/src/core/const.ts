@@ -1,4 +1,4 @@
-export const UnitLessNumbersSet = new Set([
+export const UNITLESS_NUMBERS_SET = new Set([
   'animationIterationCount',
   'aspectRatio',
   'borderImageOutset',

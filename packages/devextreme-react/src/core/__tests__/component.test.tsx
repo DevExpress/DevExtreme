@@ -15,6 +15,7 @@ import {
 } from './test-component';
 import { TemplateRenderingContext } from '../contexts';
 
+
 jest.useFakeTimers();
 jest.mock('react-dom', () => ({
   __esModule: true,
@@ -44,6 +45,7 @@ describe('rendering', () => {
   });
 
   it('renders component with children correctly', () => {
+
     const { container } = testingLib.render(
       <TestComponent>
         <span />
@@ -83,7 +85,7 @@ describe('rendering', () => {
       WidgetClass.mockImplementation(() => {
         componentRendered = true;
         return Widget;
-      });
+      })
     });
 
     afterEach(() => {
@@ -94,7 +96,7 @@ describe('rendering', () => {
     const MyComponent = () => {
       useLayoutEffect(() => {
         expect(componentRendered).toBeTruthy();
-      });
+      })
 
       return (
         <TestComponent />
@@ -106,7 +108,7 @@ describe('rendering', () => {
 
       const ref = () => {
         expect(componentRendered).toBeTruthy();
-      };
+      }
       const { unmount } = testingLib.render(<TestComponent ref={ref} />);
 
       // required to make the second call to ref callback (on unmount)
@@ -136,7 +138,7 @@ describe('rendering', () => {
       WidgetClass.mockImplementation((element: Element, options: any) => {
         didRenderToDetachedBranch = didRenderToDetachedBranch || (!element.isConnected && options.isTemplateTested === false);
         return Widget;
-      });
+      })
     });
 
     afterEach(() => {
@@ -162,7 +164,7 @@ describe('rendering', () => {
         </TestComponent>
       );
       testingLib.render(component);
-
+  
       expect(didRenderToDetachedBranch).toBeFalsy();
     });
 
@@ -201,10 +203,10 @@ describe('rendering', () => {
     const content = container.firstChild as HTMLElement;
     expect(content.tagName.toLowerCase()).toBe('div');
 
-    expect(createPortalFn.mock.calls.some((call) => {
+    expect(createPortalFn.mock.calls.some(call => {
       const reactElement = call[0] as unknown as React.ReactElement;
 
-      return reactElement.type !== TemplateRenderingContext.Provider;
+      return reactElement.type !== TemplateRenderingContext.Provider
     })).toBeFalsy();
   });
 
@@ -230,10 +232,10 @@ describe('rendering', () => {
     expect(portal.children.length).toBe(1);
     expect(portal.children[0].tagName.toLowerCase()).toBe('span');
 
-    expect(createPortalFn.mock.calls.filter((call) => {
+    expect(createPortalFn.mock.calls.filter(call => {
       const reactElement = call[0] as unknown as React.ReactElement;
 
-      return reactElement.type !== TemplateRenderingContext.Provider;
+      return reactElement.type !== TemplateRenderingContext.Provider
     }).length).toEqual(1);
   });
 
@@ -440,7 +442,7 @@ describe('disposing', () => {
 
   it('saves and restores focus state after dispose', async () => {
     let firstRender = true;
-
+  
     WidgetClass.mockImplementation((container: HTMLElement) => {
       const input = document.createElement('input');
 
@@ -453,12 +455,12 @@ describe('disposing', () => {
       firstRender = false;
 
       return Widget;
-    });
+    })
 
     testingLib.render(
       <React.StrictMode>
         <TestComponent />
-      </React.StrictMode>,
+      </React.StrictMode>
     );
 
     expect(Widget.focus).toHaveBeenCalledTimes(1);
