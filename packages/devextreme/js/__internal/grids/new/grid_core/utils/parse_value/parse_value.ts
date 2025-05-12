@@ -5,8 +5,7 @@ import {
 } from '@js/core/utils/type';
 import { strictParseNumber } from '@ts/grids/grid_core/columns_controller/m_columns_controller_utils';
 import gridCoreUtils from '@ts/grids/grid_core/m_utils';
-
-import type { Column } from './columns_controller/types';
+import type { Column } from '@ts/grids/new/grid_core/columns_controller/types';
 
 export const parseNumberValue = (
   text: string,
@@ -71,6 +70,3 @@ export const parseValue = (column: Column, text: string): unknown => {
       return text;
   }
 };
-
-export const getName = (): string => 'dxCardView';
-export const addWidgetPrefix = (className: string): string => `dx-${getName().slice(2).toLowerCase()}${className ? `-${className}` : ''}`;

@@ -3,24 +3,29 @@ import { computed, effect, signal } from '@preact/signals-core';
 import type { DataObject } from '@ts/grids/new/grid_core/data_controller/types';
 import type { HeaderFilterRootOptions } from '@ts/grids/new/grid_core/filtering/header_filter/index';
 import { mergeColumnHeaderFilterOptions } from '@ts/grids/new/grid_core/filtering/header_filter/utils';
+import type { OptionWithChanges } from '@ts/grids/new/grid_core/options_controller/types';
 
 import { OptionsController } from '../options_controller/options_controller';
+import { updateColumnSettings } from './columns_settings/index';
 import type { ColumnProperties, ColumnSettings, PreNormalizedColumn } from './options';
 import type { Column, ColumnsConfigurationFromData, VisibleColumn } from './types';
 import {
+  columnOptionUpdate,
   getColumnIndexByName,
   getColumnOptionsFromDataItem,
   normalizeColumns,
-  normalizeVisibleIndexes,
+  normalizeColumnsVisibleIndexes,
   preNormalizeColumns,
 } from './utils';
 
 export class ColumnsController {
-  private readonly columnsConfiguration: ReadonlySignal<ColumnProperties[] | undefined | null>;
-
   private readonly headerFilterConfiguration: ReadonlySignal<HeaderFilterRootOptions | undefined>;
 
   private readonly columnsSettings: Signal<PreNormalizedColumn[]>;
+
+  private readonly columnsConfiguration: ReadonlySignal<
+    OptionWithChanges<ColumnProperties[] | undefined | null>
+  >;
 
   private readonly columnsConfigurationFromData: Signal<ColumnsConfigurationFromData | null>;
 
@@ -37,17 +42,25 @@ export class ColumnsController {
   constructor(
     private readonly options: OptionsController,
   ) {
-    this.columnsConfiguration = this.options.oneWay('columns');
+    this.columnsConfiguration = this.options.oneWayWithChanges('columns');
     this.headerFilterConfiguration = this.options.oneWay('headerFilter');
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    this.columnsSettings = signal(undefined as any);
+    this.columnsSettings = signal([]);
     this.columnsConfigurationFromData = signal<
       ColumnsConfigurationFromData | null
     >(null);
 
     effect(() => {
-      const columnsConfigurationFromOptions = this.columnsConfiguration.value;
+      const settings = this.columnsSettings.peek() ?? [];
+      const { value: columnsConfigurationFromOptions, changes } = this.columnsConfiguration.value;
+
+      const newSettings = updateColumnSettings(settings, changes);
+
+      if (newSettings.length !== 0) {
+        this.columnsSettings.value = newSettings;
+        return;
+      }
+
       const columnsConfigurationFromData = this.columnsConfigurationFromData.value?.dataFields;
       const columnsConfiguration = columnsConfigurationFromOptions
         ?? columnsConfigurationFromData
@@ -102,52 +115,27 @@ export class ColumnsController {
   }
 
   public columnOption<TProp extends keyof ColumnSettings>(
-    column: Column,
+    { name }: Column,
+    // TODO: Fix type -> option may be path with dots in runtime
+    //  E.g: 'columnOption('A', 'headerFilter.search.enabled', true)
     option: TProp,
     value: ColumnSettings[TProp],
   ): void {
-    const columns = this.columnsSettings.peek();
-    const index = getColumnIndexByName(columns, column.name);
+    const settings = this.columnsSettings.peek();
+    const columnIdx = getColumnIndexByName(settings, name);
 
-    if (columns[index][option] === value) {
-      this.columnsSettings.value = columns;
-      return;
-    }
-
-    let newColumns = [...columns];
-
-    newColumns[index] = {
-      ...newColumns[index],
-      [option]: value,
-    };
-
-    newColumns = this.normalizeColumnsVisibleIndexes(newColumns, index);
-
-    this.columnsSettings.value = newColumns;
+    this.columnsSettings.value = columnOptionUpdate(
+      settings,
+      columnIdx,
+      option,
+      value,
+    );
   }
 
   public updateColumns(func: (columns: PreNormalizedColumn[]) => PreNormalizedColumn[]): void {
     let newColumnSettings = func(this.columnsSettings.peek());
-    newColumnSettings = this.normalizeColumnsVisibleIndexes(newColumnSettings);
+    newColumnSettings = normalizeColumnsVisibleIndexes(newColumnSettings);
     this.columnsSettings.value = newColumnSettings;
-  }
-
-  private normalizeColumnsVisibleIndexes(
-    columns: PreNormalizedColumn[],
-    forceIndex?: number,
-  ): PreNormalizedColumn[] {
-    const result = [...columns];
-
-    const visibleIndexes = normalizeVisibleIndexes(
-      columns.map((c) => c.visibleIndex),
-      forceIndex,
-    );
-
-    visibleIndexes.forEach((visibleIndex, i) => {
-      result[i].visibleIndex = visibleIndex;
-    });
-
-    return result;
   }
 
   public setColumnOptionsFromDataItem(
