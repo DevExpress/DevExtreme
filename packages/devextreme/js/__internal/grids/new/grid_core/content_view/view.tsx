@@ -2,6 +2,7 @@
   @typescript-eslint/explicit-function-return-type,
   @typescript-eslint/explicit-module-boundary-types
 */
+import $ from '@js/core/renderer';
 import type dxScrollable from '@js/ui/scroll_view/ui.scrollable';
 import type { ScrollEventInfo } from '@js/ui/scroll_view/ui.scrollable';
 import { computed, signal } from '@preact/signals-core';
@@ -107,6 +108,29 @@ export abstract class ContentView<TProps extends {}> extends View<TProps> {
         scrollByThumb: scrollByThumb.value,
         showScrollbar: showScrollbar.value,
         useNative: useNativeConfig.value === 'auto' ? undefined : useNativeConfig.value,
+        // TODO (Scrollable:useKeyboard) -> remove this WA
+        //  after ScrollView private option "useKeyboard" will be extended to useNative: true
+        // NOTE: Scrollable container focusable by default
+        // To prevent scroll container focus in native mode we set tabindex -1 to container
+        // In simulated mode focusable behavior prevented by useKeyboard: false private option
+        useKeyboard: false,
+        // Bad scrollable types
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        onInitialized: ({ component }: any) => {
+          const useKeyboardDisabled = component.option('useKeyboard') === false;
+          const useNativeEnabled = component.option('useNative') === true;
+          if (useKeyboardDisabled && useNativeEnabled) {
+            $(component.container()).attr('tabindex', -1);
+          }
+        },
+        // Bad scrollable types
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        onOptionChanged: ({ fullName, value, component }: any) => {
+          const useKeyboardDisabled = component.option('useKeyboard') === false;
+          if (useKeyboardDisabled && fullName === 'useNative' && value === true) {
+            $(component.container()).attr('tabindex', -1);
+          }
+        },
       },
       showContextMenu: this.showContextMenu.bind(this),
     };

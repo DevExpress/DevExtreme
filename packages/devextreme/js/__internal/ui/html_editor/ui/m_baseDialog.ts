@@ -24,6 +24,15 @@ abstract class BaseDialog<T = unknown> {
     this._renderPopup();
   }
 
+  protected _escKeyHandler(): void {
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
+    this._popup?.hide();
+  }
+
+  protected _addEscapeHandler(e): void {
+    e.component.registerKeyHandler('escape', () => this._escKeyHandler());
+  }
+
   protected _renderPopup(): void {
     const $popupContainer = $('<div>')
       .addClass(this._getPopupClass())
@@ -34,16 +43,17 @@ abstract class BaseDialog<T = unknown> {
 
   protected _getPopupConfig(): PopupProperties {
     return ({
-      onInitialized: (e) => {
-        this._popup = e.component as Popup;
-        this._popup.on('hiding', () => this.onHiding());
-      },
       deferRendering: false,
       focusStateEnabled: false,
       fullScreen: isSmallScreen(),
       _wrapperClassExternal: `${this._getPopupClass()} ${DROPDOWN_EDITOR_OVERLAY_CLASS}`,
       contentTemplate: (contentElem) => {
         this._renderContent($(contentElem));
+      },
+      onInitialized: (e) => {
+        this._popup = e.component as Popup;
+        this._popup.on('hiding', () => this.onHiding());
+        this._addEscapeHandler.bind(this);
       },
     }) as PopupProperties;
   }
@@ -56,25 +66,27 @@ abstract class BaseDialog<T = unknown> {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  show(options?: unknown): Promise<T> | undefined {
+  public show(options?: unknown): Promise<T> | undefined {
     if (this._popup.option('visible')) {
-      return;
+      return undefined;
     }
 
     this.deferred = Deferred<T>();
 
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     this._popup.show();
 
     return this.deferred.promise();
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  hide(_options?: unknown, _event?: unknown): void {
+  public hide(options?: unknown, event?: unknown): void {
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     this._popup.hide();
   }
 
-  popupOption(...args) {
-    // @ts-expect-error
+  public popupOption(...args): void {
+    // @ts-expect-error args is any
     return this._popup.option.apply(this._popup, args);
   }
 }

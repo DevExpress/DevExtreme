@@ -52,6 +52,7 @@ const AI_DIALOG_COMMANDS_WITH_OPTIONS = ['translate', 'changeStyle', 'changeTone
 
 const POPUP_MIN_WIDTH = 288;
 const POPUP_MAX_WIDTH = 460;
+const LOADINDICATOR_SIZE = 48;
 export const TEXT_AREA_MIN_HEIGHT = 64;
 export const TEXT_AREA_MAX_HEIGHT = 128;
 export const REPLACE_DROPDOWN_WIDTH = 150;
@@ -170,6 +171,7 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
       value: this._currentCommand,
       displayExpr: 'text',
       valueExpr: 'name',
+      onInitialized: this._addEscapeHandler.bind(this),
       onValueChanged: (e): void => {
         if (this._commandChangeSuppressed) {
           return;
@@ -199,10 +201,11 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
       items: this._commandOptionsList,
       value: this._currentOption ?? this._commandOptionsList?.[0],
       visible: this._isCommandWithOptionsSelected(),
-      onValueChanged: (e): void => {
-        this._currentOption = e.value;
+      onInitialized: this._addEscapeHandler.bind(this),
+      onValueChanged: ({ value }): void => {
+        this._currentOption = value;
 
-        if (this._isOpen()) {
+        if (this._isOpen() && value) {
           this._executeAICommand();
         }
       },
@@ -211,17 +214,22 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
 
   protected _renderPromptTextArea($container: dxElementWrapper): void {
     const $textArea = $('<div>').appendTo($container);
-    this._promptTextArea = new TextArea($textArea.get(0), {
+
+    const options = {
       value: this._askAIPrompt,
       minHeight: TEXT_AREA_MIN_HEIGHT,
       maxHeight: TEXT_AREA_MAX_HEIGHT,
       autoResizeEnabled: true,
       width: '100%',
       placeholder: localizationMessage.format('dxHtmlEditor-aiAskPlaceholder'),
+      _shouldAttachKeyboardEvents: true,
+      onInitialized: this._addEscapeHandler.bind(this),
       onValueChanged: (e): void => {
         this._askAIPrompt = e.value;
       },
-    });
+    };
+
+    this._promptTextArea = new TextArea($textArea.get(0), options);
   }
 
   protected _renderResultTextArea($container: dxElementWrapper): void {
@@ -235,12 +243,16 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
       autoResizeEnabled: true,
     };
 
-    this._resultTextArea = new TextArea($textArea.get(0), {
+    const options = {
       minHeight: TEXT_AREA_MIN_HEIGHT,
       width: '100%',
       readOnly: true,
+      _shouldAttachKeyboardEvents: true,
+      onInitialized: this._addEscapeHandler.bind(this),
       ...screenSpecificOptions,
-    });
+    };
+
+    this._resultTextArea = new TextArea($textArea.get(0), options);
   }
 
   protected _renderContent($contentElem: dxElementWrapper): void {
@@ -272,8 +284,8 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
 
     const options: LoadIndicatorProperties = {
       _animationType: AnimationType.Sparkle,
-      width: 48,
-      height: 48,
+      width: LOADINDICATOR_SIZE,
+      height: LOADINDICATOR_SIZE,
     };
 
     this._loadIndicator = new LoadIndicator($indicatorElement[0], options);
@@ -338,6 +350,7 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
         onButtonClick: (e: ButtonClickEvent): void => {
           this._replaceButtonAction({ ...e, itemData: { id: ReplaceButtonActions.Replace } });
         },
+        onInitialized: this._addEscapeHandler.bind(this),
         onItemClick: (e: ItemClickEvent) => this._replaceButtonAction(e),
       },
     };
@@ -360,6 +373,7 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
           // eslint-disable-next-line @typescript-eslint/no-floating-promises
           navigator?.clipboard?.writeText(value ?? '');
         },
+        onInitialized: this._addEscapeHandler.bind(this),
       },
     };
   }
@@ -376,6 +390,7 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
         icon: TRY_AGAIN_BUTTON_ICON,
         text,
         onClick: () => this._retryExecuteAICommand(),
+        onInitialized: this._addEscapeHandler.bind(this),
       },
     };
   }
@@ -393,6 +408,7 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
         stylingMode: 'contained',
         width,
         onClick: () => this._executeAICommand(),
+        onInitialized: this._addEscapeHandler.bind(this),
       },
     };
   }
@@ -410,6 +426,7 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
         text: localizationMessage.format('dxHtmlEditor-aiStop'),
         width,
         onClick: () => this._stopAICommandExecution(),
+        onInitialized: this._addEscapeHandler.bind(this),
       },
     };
   }
@@ -501,10 +518,13 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
     this._resultTextArea.option({ value });
   }
 
-  private _processCommandCompletion(dialogState: DialogState): void {
+  private _processCommandCompletion(dialogState?: DialogState): void {
     this._abort = undefined;
     this._isAICommandExecuting = false;
-    this._setDialogState(dialogState);
+
+    if (dialogState) {
+      this._setDialogState(dialogState);
+    }
   }
 
   private _getAICommandCallbacks<T>(): RequestCallbacks<T> {
@@ -729,11 +749,11 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
     return super.show();
   }
 
-  hide(resultText: string, event: AIDialogResult['event']): void {
+  hide(resultText: AIDialogResult['resultText'], event: AIDialogResult['event']): void {
     this.deferred?.resolve({ resultText, event });
 
     this._abort?.();
-    this._processCommandCompletion(this._getInitialDialogState());
+    this._processCommandCompletion();
 
     super.hide();
   }

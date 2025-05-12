@@ -1,3 +1,5 @@
+const unifiedConfig = require('../../tools/generators-config').angularConfig;
+
 module.exports = {
   tools: {
     metadataGenerator: {
@@ -9,6 +11,7 @@ module.exports = {
       widgetPackageName: 'devextreme',
       wrapperPackageName: 'devextreme-angular',
       generateReexports: true,
+      unifiedConfig,
     },
     componentGenerator: {
       metadataFolderPath: './metadata/generated/',

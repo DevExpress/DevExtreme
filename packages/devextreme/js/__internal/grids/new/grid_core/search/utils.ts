@@ -14,7 +14,8 @@ import type { TextBoxProperties } from '@ts/ui/text_box/m_text_box';
 
 import type { Column } from '../columns_controller/types';
 import type { PredefinedToolbarItem } from '../toolbar/types';
-import { addWidgetPrefix, getName, parseValue } from '../utils';
+import { addWidgetPrefix, getName } from '../utils/common';
+import { parseValue } from '../utils/parse_value/index';
 import type { HighlightedTextItem, HighlightTextOptions, SearchFieldProps } from './types';
 
 const HIGHLIGHT_SPLIT_SEPARATOR = '<--|-->';

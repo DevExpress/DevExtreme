@@ -5132,11 +5132,7 @@ declare module DevExpress.common.grids {
    * [descr:FilterPanel]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface FilterPanel<
-    TComponent extends GridBase<TRowData, TKey>,
-    TRowData = any,
-    TKey = any
-  > {
+  export interface FilterPanel<TComponent, TRowData = any, TKey = any> {
     /**
      * [descr:GridBaseOptions.filterPanel.customizeText]
      */
@@ -5933,6 +5929,11 @@ declare module DevExpress.common.grids {
      */
     focusStateEnabled?: any;
   }
+  export type GridsContextMenuTarget =
+    | 'toolbar'
+    | 'header'
+    | 'content'
+    | 'footer';
   export type GridsEditMode = 'batch' | 'cell' | 'row' | 'form' | 'popup';
   export type GridsEditRefreshMode = 'full' | 'reshape' | 'repaint';
   export type GroupExpandMode = 'buttonClick' | 'rowClick';
@@ -9934,6 +9935,997 @@ declare module DevExpress.ui {
     zoomLevel?: DevExpress.ui.dxCalendar.CalendarZoomLevel;
   }
   /**
+   * [descr:dxCardView]
+   */
+  export class dxCardView<
+    TCardData = unknown,
+    TKey = unknown
+  > extends Widget<DevExpress.ui.dxCardView.Properties> {
+    /**
+     * [descr:dxCardView.getCardElement(cardIndex)]
+     */
+    getCardElement(cardIndex: number): DevExpress.core.DxElement;
+    /**
+     * [descr:dxCardView.getVisibleCards()]
+     */
+    getVisibleCards(): DevExpress.ui.dxCardView.CardInfo[];
+    /**
+     * [descr:dxCardView.getCardIndexByKey(key)]
+     */
+    getCardIndexByKey(key: TKey): number;
+    /**
+     * [descr:dxCardView.getKeyByCardIndex(cardIndex)]
+     */
+    getKeyByCardIndex(cardIndex: number): TKey;
+    /**
+     * [descr:dxCardView.getScrollable()]
+     */
+    getScrollable(): dxScrollable;
+    /**
+     * [descr:dxCardView.beginCustomLoading(text)]
+     */
+    beginCustomLoading(text?: string): void;
+    /**
+     * [descr:dxCardView.endCustomLoading()]
+     */
+    endCustomLoading(): void;
+    /**
+     * [descr:dxCardView.clearSorting()]
+     */
+    clearSorting(): void;
+    /**
+     * [descr:dxCardView.getCombinedFilter()]
+     */
+    getCombinedFilter(): any;
+    /**
+     * [descr:dxCardView.clearFilter()]
+     */
+    clearFilter(): void;
+    /**
+     * [descr:dxCardView.hideColumnChooser()]
+     */
+    hideColumnChooser(): void;
+    /**
+     * [descr:dxCardView.showColumnChooser()]
+     */
+    showColumnChooser(): void;
+    /**
+     * [descr:dxCardView.searchByText(text)]
+     */
+    searchByText(text: string): void;
+
+    /**
+     * [descr:dxCardView.addRow()]
+     */
+    addCard(): void;
+    /**
+     * [descr:dxCardView.cancelEditData()]
+     */
+    cancelEditData(): void;
+    /**
+     * [descr:dxCardView.deleteCard(cardIndex)]
+     */
+    deleteCard(cardIndex: number): void;
+    /**
+     * [descr:dxCardView.editCard(cardIndex)]
+     */
+    editCard(cardIndex: number): void;
+    /**
+     * [descr:dxCardView.hasEditData()]
+     */
+    hasEditData(): void;
+    /**
+     * [descr:dxCardView.saveEditData()]
+     */
+    saveEditData(): void;
+
+    /**
+      * [descr:dxCardView.byKey()]
+      */
+     byKey(key: TKey): TCardData;
+    /**
+     * [descr:dxCardView.getDataSource()]
+     */
+    getDataSource(): DevExpress.common.data.DataSource<TCardData, TKey>;
+    /**
+     * [descr:dxCardView.keyOf(obj)]
+     */
+    keyOf(obj: TCardData): TKey;
+    /**
+     * [descr:dxCardView.pageCount()]
+     */
+    pageCount(): number;
+    /**
+     * [descr:dxCardView.pageIndex()]
+     */
+    pageIndex(): number;
+    /**
+     * [descr:dxCardView.pageIndex(value)]
+     */
+    pageIndex(value: number): void;
+    /**
+     * [descr:dxCardView.pageSize()]
+     */
+    pageSize(): number;
+    /**
+     * [descr:dxCardView.pageSize(value)]
+     */
+    pageSize(value: number): void;
+    /**
+     * [descr:dxCardView.totalCount()]
+     */
+    totalCount(): number;
+
+    /**
+     * [descr:dxCardView.selectCards(keys, preserve)]
+     */
+    selectCards(keys: Array<TKey>, preserve: boolean): void;
+    /**
+     * [descr:dxCardView.deselectCards(keys)]
+     */
+    deselectCards(keys: Array<TKey>): void;
+    /**
+     * [descr:dxCardView.selectAll()]
+     */
+    selectAll(): void;
+    /**
+     * [descr:dxCardView.deselectAll()]
+     */
+    deselectAll(): void;
+    /**
+     * [descr:dxCardView.clearSelection()]
+     */
+    clearSelection(): void;
+    /**
+     * [descr:dxCardView.getSelectedCardsData()]
+     */
+    getSelectedCardsData(): Array<TCardData>;
+    /**
+     * [descr:dxCardView.getSelectedCardKeys()]
+     */
+    getSelectedCardKeys(): Array<TKey>;
+    /**
+     * [descr:dxCardView.isCardSelected(key)]
+     */
+    isCardSelected(key: TKey): boolean;
+  }
+  module dxCardView {
+    /**
+     * [descr:_ui_card_view_CardClickEvent]
+     */
+    export type CardClickEvent = DevExpress.common.core.events.NativeEventInfo<
+      dxCardView,
+      PointerEvent | MouseEvent | TouchEvent
+    > &
+      WithCardInfo;
+    /**
+     * [descr:_ui_card_view_CardDblClickEvent]
+     */
+    export type CardDblClickEvent =
+      DevExpress.common.core.events.NativeEventInfo<
+        dxCardView,
+        PointerEvent | MouseEvent | TouchEvent
+      > &
+        WithCardInfo;
+    export type CardHeaderPredefinedItem =
+      | 'selectionCheckBox'
+      | 'updateButton'
+      | 'deleteButton';
+    /**
+     * [descr:_ui_card_view_CardHoverChangedEvent]
+     */
+    export type CardHoverChangedEvent =
+      DevExpress.common.core.events.EventInfo<dxCardView> &
+        WithCardInfo & {
+          /**
+           * [descr:_ui_card_view_CardHoverChangedEvent.eventType]
+           */
+          eventType: string;
+        };
+    /**
+     * [descr:_ui_card_view_CardInsertedEvent]
+     */
+    export type CardInsertedEvent<TCardData = unknown> =
+      DevExpress.common.core.events.EventInfo<dxCardView> & {
+        /**
+         * [descr:_ui_card_view_CardInsertedEvent.data]
+         */
+        data: DevExpress.core.DeepPartial<TCardData>;
+      };
+    /**
+     * [descr:_ui_card_view_CardInsertingEvent]
+     */
+    export type CardInsertingEvent<TCardData = unknown> =
+      DevExpress.common.core.events.EventInfo<dxCardView> &
+        DevExpress.common.core.events.Cancelable & {
+          /**
+           * [descr:_ui_card_view_CardInsertingEvent.data]
+           */
+          data: DevExpress.core.DeepPartial<TCardData>;
+        };
+    /**
+     * [descr:_ui_card_view_CardPreparedEvent]
+     */
+    export type CardPreparedEvent =
+      DevExpress.common.core.events.EventInfo<dxCardView> & WithCardInfo;
+    /**
+     * [descr:_ui_card_view_CardRemovedEvent]
+     */
+    export type CardRemovedEvent<
+      TCardData = unknown,
+      TKey = unknown
+    > = DevExpress.common.core.events.EventInfo<dxCardView> & {
+      /**
+       * [descr:_ui_card_view_CardRemovedEvent.data]
+       */
+      data: TCardData;
+      /**
+       * [descr:_ui_card_view_CardRemovedEvent.key]
+       */
+      key: TKey;
+    };
+    /**
+     * [descr:_ui_card_view_CardRemovingEvent]
+     */
+    export type CardRemovingEvent<
+      TCardData = unknown,
+      TKey = unknown
+    > = DevExpress.common.core.events.EventInfo<dxCardView> &
+      DevExpress.common.core.events.Cancelable & {
+        /**
+         * [descr:_ui_card_view_CardRemovingEvent.data]
+         */
+        data: TCardData;
+        /**
+         * [descr:_ui_card_view_CardRemovingEvent.key]
+         */
+        key: TKey;
+      };
+    /**
+     * [descr:_ui_card_view_CardSavedEvent]
+     */
+    export type CardSavedEvent =
+      DevExpress.common.core.events.EventInfo<dxCardView> & {
+        /**
+         * [descr:_ui_card_view_CardSavedEvent.changes]
+         */
+        changes: DevExpress.common.grids.DataChange[];
+      };
+    /**
+     * [descr:_ui_card_view_CardSavingEvent]
+     */
+    export type CardSavingEvent =
+      DevExpress.common.core.events.EventInfo<dxCardView> &
+        DevExpress.common.core.events.Cancelable & {
+          /**
+           * [descr:_ui_card_view_CardSavingEvent.promise]
+           */
+          promise?: PromiseLike<void>;
+          /**
+           * [descr:_ui_card_view_CardSavingEvent.changes]
+           */
+          changes: DevExpress.common.grids.DataChange[];
+        };
+    /**
+     * [descr:CardTemplateData]
+     */
+    export type CardTemplateData = {
+      card: CardInfo;
+    };
+    /**
+     * [descr:_ui_card_view_CardUpdatedEvent]
+     */
+    export type CardUpdatedEvent<
+      TCardData = unknown,
+      TKey = unknown
+    > = DevExpress.common.core.events.EventInfo<dxCardView> & {
+      /**
+       * [descr:_ui_card_view_CardUpdatedEvent.data]
+       */
+      data: TCardData;
+      /**
+       * [descr:_ui_card_view_CardUpdatedEvent.key]
+       */
+      key: TKey;
+    };
+    /**
+     * [descr:_ui_card_view_CardUpdatingEvent]
+     */
+    export type CardUpdatingEvent<
+      TCardData = unknown,
+      TKey = unknown
+    > = DevExpress.common.core.events.EventInfo<dxCardView> &
+      DevExpress.common.core.events.Cancelable & {
+        /**
+         * [descr:_ui_card_view_CardUpdatingEvent.key]
+         */
+        key: TKey;
+        /**
+         * [descr:_ui_card_view_CardUpdatingEvent.oldData]
+         */
+        oldData: TCardData;
+        /**
+         * [descr:_ui_card_view_CardUpdatingEvent.newData]
+         */
+        newData: DevExpress.core.DeepPartial<TCardData>;
+      };
+    /**
+     * [descr:ColumnTemplateData]
+     */
+    export type ColumnTemplateData<TCardData = unknown, TKey = unknown> = {
+      column: Column<TCardData, TKey>;
+    };
+    /**
+     * [descr:_ui_card_view_ContextMenuPreparingEvent]
+     */
+    export type ContextMenuPreparingEvent<TCardData = unknown> =
+      DevExpress.common.core.events.EventInfo<dxCardView> & {
+        /**
+         * [descr:_ui_card_view_ContextMenuPreparingEvent.items]
+         */
+        items?: any[];
+        /**
+         * [descr:_ui_card_view_ContextMenuPreparingEvent.target]
+         */
+        readonly target: ContextMenuTarget;
+        /**
+         * [descr:_ui_card_view_ContextMenuPreparingEvent.targetElement]
+         */
+        readonly targetElement: DevExpress.core.DxElement;
+        /**
+         * [descr:_ui_card_view_ContextMenuPreparingEvent.columnIndex]
+         */
+        readonly columnIndex?: number;
+        /**
+         * [descr:_ui_card_view_ContextMenuPreparingEvent.column]
+         */
+        readonly column?: Column;
+        /**
+         * [descr:_ui_card_view_ContextMenuPreparingEvent.cardIndex]
+         */
+        readonly cardIndex?: number;
+        /**
+         * [descr:_ui_card_view_ContextMenuPreparingEvent.card]
+         */
+        readonly card?: TCardData;
+      };
+
+    export type ContextMenuTarget = 'toolbar' | 'headerPanel' | 'content';
+    /**
+     * [descr:_ui_card_view_EditCanceledEvent]
+     */
+    export type EditCanceledEvent =
+      DevExpress.common.core.events.EventInfo<dxCardView> & {
+        /**
+         * [descr:_ui_card_view_EditCanceledEvent.changes]
+         */
+        changes: DevExpress.common.grids.DataChange[];
+      };
+    /**
+     * [descr:_ui_card_view_EditCancelingEvent]
+     */
+    export type EditCancelingEvent =
+      DevExpress.common.core.events.EventInfo<dxCardView> &
+        DevExpress.common.core.events.Cancelable & {
+          /**
+           * [descr:_ui_card_view_EditCancelingEvent.changes]
+           */
+          changes: DevExpress.common.grids.DataChange[];
+        };
+    /**
+     * [descr:dxCardViewEditing]
+     */
+    export type Editing<TCardData = unknown, TKey = unknown> = {
+      /**
+       * [descr:dxCardViewEditing.allowAdding]
+       */
+      allowAdding?: boolean;
+      /**
+       * [descr:dxCardViewEditing.allowDeleting]
+       */
+      allowDeleting?: boolean;
+      /**
+       * [descr:dxCardViewEditing.allowUpdating]
+       */
+      allowUpdating?: boolean;
+      /**
+       * [descr:dxCardViewEditing.changes]
+       */
+      changes?: DevExpress.common.grids.DataChange<TCardData, TKey>[];
+      /**
+       * [descr:dxCardViewEditing.confirmDelete]
+       */
+      confirmDelete?: boolean;
+      /**
+       * [descr:dxCardViewEditing.editCardKey]
+       */
+      editCardKey?: TKey | null;
+      /**
+       * [descr:dxCardViewEditing.form]
+       */
+      form?: DevExpress.ui.dxForm.Properties;
+      /**
+       * [descr:dxCardViewEditing.popup]
+       */
+      popup?: DevExpress.ui.dxPopup.Properties;
+    };
+    /**
+     * [descr:_ui_card_view_EditingStartEvent]
+     */
+    export type EditingStartEvent<
+      TCardData = unknown,
+      TKey = unknown
+    > = DevExpress.common.core.events.EventInfo<dxCardView> &
+      DevExpress.common.core.events.Cancelable & {
+        /**
+         * [descr:_ui_card_view_EditingStartEvent.data]
+         */
+        data: TCardData;
+        /**
+         * [descr:_ui_card_view_EditingStartEvent.key]
+         */
+        key: TKey;
+      };
+    export type ExplicitTypes<TCardData = unknown, TKey = unknown> = {
+      Properties: Properties<TCardData, TKey>;
+    };
+    /**
+     * [descr:_ui_card_view_FieldCaptionClickEvent]
+     */
+    export type FieldCaptionClickEvent =
+      DevExpress.common.core.events.NativeEventInfo<
+        dxCardView,
+        PointerEvent | MouseEvent | TouchEvent
+      > &
+        WithFieldCaptionInfo;
+    /**
+     * [descr:_ui_card_view_FieldCaptionDblClickEvent]
+     */
+    export type FieldCaptionDblClickEvent =
+      DevExpress.common.core.events.NativeEventInfo<
+        dxCardView,
+        PointerEvent | MouseEvent | TouchEvent
+      > &
+        WithFieldCaptionInfo;
+    /**
+     * [descr:_ui_card_view_FieldCaptionPreparedEvent]
+     */
+    export type FieldCaptionPreparedEvent =
+      DevExpress.common.core.events.EventInfo<dxCardView> &
+        WithFieldCaptionInfo;
+    /**
+     * [descr:FieldTemplateData]
+     */
+    export type FieldTemplateData = {
+      /**
+       * [descr:FieldTemplateData.field]
+       */
+      field: FieldInfo;
+    };
+    /**
+     * [descr:_ui_card_view_FieldValueClickEvent]
+     */
+    export type FieldValueClickEvent =
+      DevExpress.common.core.events.NativeEventInfo<
+        dxCardView,
+        PointerEvent | MouseEvent | TouchEvent
+      > &
+        WithFieldValueInfo;
+    /**
+     * [descr:_ui_card_view_FieldValueDblClickEvent]
+     */
+    export type FieldValueDblClickEvent =
+      DevExpress.common.core.events.NativeEventInfo<
+        dxCardView,
+        PointerEvent | MouseEvent | TouchEvent
+      > &
+        WithFieldValueInfo;
+    /**
+     * [descr:_ui_card_view_FieldValuePreparedEvent]
+     */
+    export type FieldValuePreparedEvent =
+      DevExpress.common.core.events.EventInfo<dxCardView> & WithFieldValueInfo;
+
+    /**
+     * [descr:_ui_card_view_FocusedCardChanged]
+     */
+    export type FocusedCardChanged =
+      DevExpress.common.core.events.EventInfo<dxCardView> & WithCardInfo;
+
+    export type HeaderPanelDragging = Pick<
+      dxSortableOptions,
+      | 'dropFeedbackMode'
+      | 'scrollSpeed'
+      | 'scrollSensitivity'
+      | 'onDragChange'
+      | 'onDragEnd'
+      | 'onDragMove'
+      | 'onDragStart'
+      | 'onRemove'
+      | 'onReorder'
+    >;
+    /**
+     * [descr:_ui_card_view_InitNewCardEvent]
+     */
+    export type InitNewCardEvent<TCardData = unknown> =
+      DevExpress.common.core.events.EventInfo<dxCardView> & {
+        /**
+         * [descr:_ui_card_view_InitNewCardEvent.data]
+         */
+        data: DevExpress.core.DeepPartial<TCardData>;
+        /**
+         * [descr:_ui_card_view_InitNewCardEvent.promise]
+         */
+        promise?: PromiseLike<void>;
+      };
+
+    export type PredefinedToolbarItem =
+      | 'columnChooserButton'
+      | 'searchPanel'
+      | 'addCardButton'
+      | 'selectAllButton'
+      | 'clearSelectionButton';
+    export type Properties<
+      TCardData = unknown,
+      TKey = unknown
+    > = dxCardViewOptions<TCardData, TKey>;
+    /**
+     * [descr:_ui_card_view_SelectionChangedEvent]
+     */
+    export type SelectionChangedEvent<
+      TCardData = unknown,
+      TKey = unknown
+    > = DevExpress.common.core.events.EventInfo<dxCardView> & {
+      /**
+       * [descr:_ui_card_view_SelectionChangedEvent.selectedCardsData]
+       */
+      selectedCardsData: Array<TCardData>;
+      /**
+       * [descr:_ui_card_view_SelectionChangedEvent.selectedCardKeys]
+       */
+      selectedCardKeys: Array<TKey>;
+      /**
+       * [descr:_ui_card_view_SelectionChangedEvent.currentSelectedCardKeys]
+       */
+      currentSelectedCardKeys: Array<TKey>;
+      /**
+       * [descr:_ui_card_view_SelectionChangedEvent.currentDeselectedCardKeys]
+       */
+      currentDeselectedCardKeys: Array<TKey>;
+    };
+    /**
+     * [descr:_ui_card_view_SelectionChangingEvent]
+     */
+    export type SelectionChangingEvent<
+      TCardData = unknown,
+      TKey = unknown
+    > = DevExpress.common.core.events.EventInfo<dxCardView> &
+      DevExpress.common.core.events.Cancelable & {
+        /**
+         * [descr:_ui_card_view_SelectionChangingEvent.selectedCardsData]
+         */
+        selectedCardsData: Array<TCardData>;
+        /**
+         * [descr:_ui_card_view_SelectionChangingEvent.selectedCardKeys]
+         */
+        selectedCardKeys: Array<TKey>;
+        /**
+         * [descr:_ui_card_view_SelectionChangingEvent.currentSelectedCardKeys]
+         */
+        currentSelectedCardKeys: Array<TKey>;
+        /**
+         * [descr:_ui_card_view_SelectionChangingEvent.currentDeselectedCardKeys]
+         */
+        currentDeselectedCardKeys: Array<TKey>;
+      };
+
+    /**
+     * [descr:SelectionConfiguration]
+     */
+    export type SelectionConfiguration = {
+      /**
+       * [descr:SelectionConfiguration.allowSelectAll]
+       */
+      allowSelectAll?: boolean;
+      /**
+       * [descr:SelectionConfiguration.mode]
+       */
+      mode?: DevExpress.common.SingleMultipleOrNone;
+      /**
+       * [descr:SelectionConfiguration.selectAllMode]
+       */
+      selectAllMode?: DevExpress.common.SelectAllMode;
+      /**
+       * [descr:SelectionConfiguration.showCheckBoxesMode]
+       */
+      showCheckBoxesMode?: DevExpress.common.grids.SelectionColumnDisplayMode;
+    };
+
+    /**
+     * [descr:WithCardInfo]
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+     */
+    type WithCardInfo = {
+      /**
+       * [descr:WithCardInfo.card]
+       */
+      readonly card: CardInfo;
+      /**
+       * [descr:WithCardInfo.cardElement]
+       */
+      readonly cardElement: DevExpress.core.DxElement;
+    };
+    /**
+     * [descr:WithFieldCaptionInfo]
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+     */
+    type WithFieldCaptionInfo = {
+      /**
+       * [descr:WithFieldCaptionInfo.field]
+       */
+      readonly field: FieldInfo;
+      /**
+       * [descr:WithFieldCaptionInfo.fieldCaptionElement]
+       */
+      readonly fieldCaptionElement: DevExpress.core.DxElement;
+    };
+    /**
+     * [descr:WithFieldValueInfo]
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+     */
+    type WithFieldValueInfo = {
+      /**
+       * [descr:WithFieldValueInfo.field]
+       */
+      readonly field: FieldInfo;
+      /**
+       * [descr:WithFieldValueInfo.fieldValueElement]
+       */
+      readonly fieldValueElement: DevExpress.core.DxElement;
+    };
+  }
+
+  /**
+   * @deprecated Use DevExpress.ui.dxCardView.Editing instead
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  export type dxCardViewEditing<
+    TCardData = unknown,
+    TKey = unknown
+  > = DevExpress.ui.dxCardView.Editing<TCardData, TKey>;
+
+  /**
+   * @deprecated Use DevExpress.ui.dxCardView.FieldInfo instead
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  export type dxCardViewFieldInfo = DevExpress.ui.dxCardView.FieldInfo;
+
+  /**
+   * [descr:dxCardViewOptions]
+   * @deprecated [depNote:dxCardViewOptions]
+   */
+  export interface dxCardViewOptions<TCardData = unknown, TKey = unknown>
+    extends WidgetOptions<dxCardView> {
+    /**
+     * [descr:dxCardViewOptions.dataSource]
+     */
+    dataSource?: DevExpress.data.DataSourceLike<TCardData, TKey>;
+    /**
+     * [descr:dxCardViewOptions.paging]
+     */
+    paging?: DevExpress.ui.dxCardView.Paging;
+    /**
+     * [descr:dxCardViewOptions.keyExpr]
+     */
+    keyExpr?: string | string[];
+    /**
+     * [descr:dxCardViewOptions.remoteOperations]
+     */
+    remoteOperations?:
+      | DevExpress.ui.dxCardView.RemoteOperations
+      | boolean
+      | DevExpress.common.Mode;
+    /**
+     * [descr:dxCardViewOptions.onDataErrorOccurred]
+     */
+    onDataErrorOccurred?: (
+      e: DevExpress.common.core.events.EventInfo<dxCardView> &
+        DevExpress.common.grids.DataErrorOccurredInfo
+    ) => void;
+
+    /**
+     * [descr:dxCardViewOptions.pager]
+     */
+    pager?: DevExpress.common.grids.Pager;
+
+    /**
+     * [descr:dxCardViewOptions.columns]
+     */
+    columns?: (
+      | DevExpress.ui.dxCardView.ColumnProperties<TCardData, TKey>
+      | string
+    )[];
+
+    /**
+     * [descr:dxCardViewOptions.allowColumnReordering]
+     */
+    allowColumnReordering?: boolean;
+
+    /**
+     * [descr:dxCardViewOptions.headerPanel]
+     */
+    headerPanel?: DevExpress.ui.dxCardView.HeaderPanel<TCardData, TKey>;
+
+    /**
+     * [descr:dxCardViewOptions.scrolling]
+     */
+    scrolling?: Pick<
+      DevExpress.common.grids.ScrollingBase,
+      'scrollByContent' | 'scrollByThumb' | 'showScrollbar' | 'useNative'
+    >;
+    /**
+     * [descr:dxCardViewOptions.errorRowEnabled]
+     */
+    errorRowEnabled?: boolean;
+    /**
+     * [descr:dxCardViewOptions.loadPanel]
+     */
+    loadPanel?: dxLoadPanelOptions;
+    /**
+     * [descr:dxCardViewOptions.noDataText]
+     */
+    noDataText?: string;
+    /**
+     * [descr:dxCardViewOptions.noDataTemplate]
+     */
+    noDataTemplate?:
+      | template
+      | ((
+          e: { text: string },
+          container: DevExpress.core.DxElement
+        ) => string | DevExpress.core.UserDefinedElement);
+    /**
+     * [descr:dxCardViewOptions.cardsPerRow]
+     */
+    cardsPerRow?: number | DevExpress.common.Mode;
+    /**
+     * [descr:dxCardViewOptions.cardMinWidth]
+     */
+    cardMinWidth?: number;
+    /**
+     * [descr:dxCardViewOptions.cardMaxWidth]
+     */
+    cardMaxWidth?: number;
+    /**
+     * [descr:dxCardViewOptions.wordWrapEnabled]
+     */
+    wordWrapEnabled?: boolean;
+    /**
+     * [descr:dxCardViewOptions.cardCover]
+     */
+    cardCover?: DevExpress.ui.dxCardView.CardCover<TCardData>;
+    /**
+     * [descr:dxCardViewOptions.cardTemplate]
+     */
+    cardTemplate?:
+      | template
+      | ((
+          data: DevExpress.ui.dxCardView.CardTemplateData,
+          container: DevExpress.core.DxElement
+        ) => string | DevExpress.core.UserDefinedElement);
+    /**
+     * [descr:dxCardViewOptions.cardContentTemplate]
+     */
+    cardContentTemplate?:
+      | template
+      | ((
+          data: DevExpress.ui.dxCardView.CardTemplateData,
+          container: DevExpress.core.DxElement
+        ) => string | DevExpress.core.UserDefinedElement);
+    /**
+     * [descr:dxCardViewOptions.fieldHintEnabled]
+     */
+    fieldHintEnabled?: boolean;
+    /**
+     * [descr:dxCardViewOptions.onCardClick]
+     */
+    onCardClick?: (e: DevExpress.ui.dxCardView.CardClickEvent) => void;
+    /**
+     * [descr:dxCardViewOptions.onCardDblClick]
+     */
+    onCardDblClick?: (e: DevExpress.ui.dxCardView.CardDblClickEvent) => void;
+    /**
+     * [descr:dxCardViewOptions.onCardPrepared]
+     */
+    onCardPrepared?: (e: DevExpress.ui.dxCardView.CardPreparedEvent) => void;
+    /**
+     * [descr:dxCardViewOptions.onFieldCaptionClick]
+     */
+    onFieldCaptionClick?: (
+      e: DevExpress.ui.dxCardView.FieldCaptionClickEvent
+    ) => void;
+    /**
+     * [descr:dxCardViewOptions.onFieldCaptionDblClick]
+     */
+    onFieldCaptionDblClick?: (
+      e: DevExpress.ui.dxCardView.FieldCaptionDblClickEvent
+    ) => void;
+    /**
+     * [descr:dxCardViewOptions.onFieldCaptionPrepared]
+     */
+    onFieldCaptionPrepared?: (
+      e: DevExpress.ui.dxCardView.FieldCaptionPreparedEvent
+    ) => void;
+    /**
+     * [descr:dxCardViewOptions.onFieldValueClick]
+     */
+    onFieldValueClick?: (
+      e: DevExpress.ui.dxCardView.FieldValueClickEvent
+    ) => void;
+    /**
+     * [descr:dxCardViewOptions.onFieldValueDblClick]
+     */
+    onFieldValueDblClick?: (
+      e: DevExpress.ui.dxCardView.FieldValueDblClickEvent
+    ) => void;
+    /**
+     * [descr:dxCardViewOptions.onFieldValuePrepared]
+     */
+    onFieldValuePrepared?: (
+      e: DevExpress.ui.dxCardView.FieldValuePreparedEvent
+    ) => void;
+    /**
+     * [descr:dxCardViewOptions.onCardHoverChanged]
+     */
+    onCardHoverChanged?: (
+      e: DevExpress.ui.dxCardView.CardHoverChangedEvent
+    ) => void;
+    /**
+     * [descr:dxCardViewOptions.cardFooterTemplate]
+     */
+    cardFooterTemplate?:
+      | template
+      | ((
+          data: DevExpress.ui.dxCardView.CardTemplateData,
+          container: DevExpress.core.DxElement
+        ) => string | DevExpress.core.UserDefinedElement);
+    /**
+     * [descr:dxCardViewOptions.cardHeader]
+     */
+    cardHeader?: DevExpress.ui.dxCardView.CardHeader;
+
+    /**
+     * [descr:dxCardViewOptions.hoverStateEnabled]
+     */
+    hoverStateEnabled?: boolean;
+
+    /**
+     * [descr:dxCardViewOptions.toolbar]
+     */
+    toolbar?: DevExpress.ui.dxCardView.Toolbar;
+
+    sorting?: DevExpress.common.grids.Sorting;
+
+    /**
+     * [descr:dxCardViewOptions.filterValue]
+     */
+    filterValue?: string | Array<any> | Function;
+    /**
+     * [descr:dxCardViewOptions.filterBuilderPopup]
+     */
+    filterBuilderPopup?: DevExpress.ui.dxPopup.Properties;
+    /**
+     * [descr:dxCardViewOptions.filterBuilder]
+     */
+    filterBuilder?: dxFilterBuilderOptions;
+    /**
+     * [descr:dxCardViewOptions.filterPanel]
+     */
+    filterPanel?: DevExpress.common.grids.FilterPanel<dxCardView>;
+    /**
+     * [descr:dxCardViewOptions.columnChooser]
+     */
+    columnChooser?: DevExpress.common.grids.ColumnChooser;
+    /**
+     * [descr:dxCardViewOptions.searchPanel]
+     */
+    searchPanel?: DevExpress.common.grids.SearchPanel;
+    /**
+     * [descr:dxCardViewOptions.headerFilter]
+     */
+    headerFilter?: DevExpress.common.grids.HeaderFilter;
+
+    /**
+     * [descr:dxCardViewOptions.editing]
+     */
+    editing?: DevExpress.ui.dxCardView.Editing<TCardData, TKey>;
+    /**
+     * [descr:dxCardViewOptions.onEditCanceled]
+     */
+    onEditCanceled?: (e: DevExpress.ui.dxCardView.EditCanceledEvent) => void;
+    /**
+     * [descr:dxCardViewOptions.onEditCanceling]
+     */
+    onEditCanceling?: (e: DevExpress.ui.dxCardView.EditCancelingEvent) => void;
+    /**
+     * [descr:dxCardViewOptions.onEditingStart]
+     */
+    onEditingStart?: (e: DevExpress.ui.dxCardView.EditingStartEvent) => void;
+    /**
+     * [descr:dxCardViewOptions.onInitNewCard]
+     */
+    onInitNewCard?: (
+      e: DevExpress.ui.dxCardView.InitNewCardEvent<TCardData>
+    ) => void;
+    /**
+     * [descr:dxCardViewOptions.onCardInserted]
+     */
+    onCardInserted?: (e: DevExpress.ui.dxCardView.CardInsertedEvent) => void;
+    /**
+     * [descr:dxCardViewOptions.onCardInserting]
+     */
+    onCardInserting?: (e: DevExpress.ui.dxCardView.CardInsertingEvent) => void;
+    /**
+     * [descr:dxCardViewOptions.onCardRemoved]
+     */
+    onCardRemoved?: (e: DevExpress.ui.dxCardView.CardRemovedEvent) => void;
+    /**
+     * [descr:dxCardViewOptions.onCardRemoving]
+     */
+    onCardRemoving?: (e: DevExpress.ui.dxCardView.CardRemovingEvent) => void;
+    /**
+     * [descr:dxCardViewOptions.onCardUpdated]
+     */
+    onCardUpdated?: (e: DevExpress.ui.dxCardView.CardUpdatedEvent) => void;
+    /**
+     * [descr:dxCardViewOptions.onCardUpdating]
+     */
+    onCardUpdating?: (e: DevExpress.ui.dxCardView.CardUpdatingEvent) => void;
+    /**
+     * [descr:dxCardViewOptions.onCardSaved]
+     */
+    onCardSaved?: (e: DevExpress.ui.dxCardView.CardSavedEvent) => void;
+    /**
+     * [descr:dxCardViewOptions.onCardSaving]
+     */
+    onCardSaving?: (e: DevExpress.ui.dxCardView.CardSavingEvent) => void;
+
+    /**
+     * [descr:dxCardViewOptions.selectedCardKeys]
+     */
+    selectedCardKeys?: Array<TKey>;
+    /**
+     * [descr:dxCardViewOptions.selection]
+     */
+    selection?: DevExpress.ui.dxCardView.SelectionConfiguration;
+    /**
+     * [descr:dxCardViewOptions.onSelectionChanging]
+     */
+    onSelectionChanging?: (
+      e: DevExpress.ui.dxCardView.SelectionChangingEvent
+    ) => void;
+    /**
+     * [descr:dxCardViewOptions.onSelectionChanged]
+     */
+    onSelectionChanged?: (
+      e: DevExpress.ui.dxCardView.SelectionChangedEvent
+    ) => void;
+
+    /**
+     * [descr:dxCardViewOptions.onFocusedCardChanged]
+     */
+    onFocusedCardChanged?: (
+      e: DevExpress.ui.dxCardView.FocusedCardChanged
+    ) => void;
+
+    /**
+     * [descr:dxCardViewOptions.onContextMenuPreparing]
+     */
+    onContextMenuPreparing?: (
+      e: DevExpress.ui.dxCardView.ContextMenuPreparingEvent<TCardData>
+    ) => void;
+  }
+  /**
    * [descr:dxChat]
    */
   export class dxChat extends Widget<DevExpress.ui.dxChat.Properties> {
@@ -10108,7 +11100,26 @@ declare module DevExpress.ui {
     /**
      * [descr:dxChatOptions.editing]
      */
-    editing?: DevExpress.ui.dxChat.Editing;
+    editing?: {
+      /**
+       * [descr:dxChatOptions.editing.allowUpdating]
+       */
+      allowUpdating?:
+        | boolean
+        | ((options: {
+            component?: dxChat;
+            message?: DevExpress.ui.dxChat.Message;
+          }) => boolean);
+      /**
+       * [descr:dxChatOptions.editing.allowDeleting]
+       */
+      allowDeleting?:
+        | boolean
+        | ((options: {
+            component?: dxChat;
+            message?: DevExpress.ui.dxChat.Message;
+          }) => boolean);
+    };
     /**
      * [descr:dxChatOptions.dataSource]
      */
@@ -11223,7 +12234,7 @@ declare module DevExpress.ui {
       /**
        * [descr:_ui_data_grid_ContextMenuPreparingEvent.target]
        */
-      readonly target: string;
+      readonly target: DevExpress.common.grids.GridsContextMenuTarget;
       /**
        * [descr:_ui_data_grid_ContextMenuPreparingEvent.targetElement]
        */
@@ -29299,7 +30310,7 @@ declare module DevExpress.ui {
       /**
        * [descr:_ui_tree_list_ContextMenuPreparingEvent.target]
        */
-      readonly target: string;
+      readonly target: DevExpress.common.grids.GridsContextMenuTarget;
       /**
        * [descr:_ui_tree_list_ContextMenuPreparingEvent.targetElement]
        */
@@ -31873,6 +32884,443 @@ declare module DevExpress.ui.dxBox {
 declare module DevExpress.ui.dxButtonGroup {
   export type Item = dxButtonGroupItem;
 }
+declare module DevExpress.ui.dxCardView {
+  /**
+   * [descr:CardCover]
+   */
+  export type CardCover<TCardData = unknown> = {
+    /**
+     * [descr:CardCover.imageExpr]
+     */
+    imageExpr: string | ((data: TCardData) => string);
+    /**
+     * [descr:CardCover.altExpr]
+     */
+    altExpr: string | ((data: TCardData) => string);
+    /**
+     * [descr:CardCover.maxHeight]
+     */
+    maxHeight?: number;
+    /**
+     * [descr:CardCover.aspectRatio]
+     */
+    aspectRatio?: string;
+    /**
+     * [descr:CardCover.template]
+     */
+    template?:
+      | template
+      | ((
+          data: CardTemplateData,
+          container: DevExpress.core.DxElement
+        ) => string | DevExpress.core.UserDefinedElement);
+  };
+  /**
+   * [descr:CardHeader]
+   */
+  export type CardHeader = {
+    /**
+     * [descr:CardHeader.visible]
+     */
+    visible?: boolean;
+    /**
+     * [descr:CardHeader.items]
+     */
+    items?: Array<CardHeaderPredefinedItem | CardHeaderItem>;
+    /**
+     * [descr:CardHeader.template]
+     */
+    template?:
+      | template
+      | ((
+          data: CardTemplateData
+        ) => string | DevExpress.core.UserDefinedElement);
+  };
+  /**
+   * [descr:CardHeaderItem]
+   */
+  export type CardHeaderItem = dxToolbarItem & {
+    /**
+     * [descr:CardHeaderItem.name]
+     */
+    name?: CardHeaderPredefinedItem | string;
+    /**
+     * [descr:CardHeaderItem.location]
+     */
+    location?: DevExpress.common.ToolbarItemLocation;
+  };
+  /**
+   * [descr:CardInfo]
+   */
+  export type CardInfo<TCardData = unknown, TKey = unknown> = {
+    /**
+     * [descr:CardInfo.index]
+     */
+    index: number;
+    /**
+     * [descr:CardInfo.columns]
+     */
+    columns: Column[];
+    /**
+     * [descr:CardInfo.fields]
+     */
+    fields: FieldInfo[];
+    /**
+     * [descr:CardInfo.key]
+     */
+    key: TKey;
+    /**
+     * [descr:CardInfo.data]
+     */
+    data: TCardData;
+    /**
+     * [descr:CardInfo.isSelected]
+     */
+    isSelected?: boolean;
+    /**
+     * [descr:CardInfo.values]
+     */
+    values: any[];
+  };
+  /**
+   * [descr:Column]
+   */
+  export type Column<TCardData = unknown, TKey = unknown> = ColumnProperties<
+    TCardData,
+    TKey
+  > & {
+    defaultCalculateFilterExpression: NonNullable<
+      ColumnProperties['calculateFilterExpression']
+    >;
+    defaultSetFieldValue: NonNullable<ColumnProperties['setFieldValue']>;
+    defaultCalculateFieldValue: NonNullable<
+      ColumnProperties['calculateFieldValue']
+    >;
+  };
+  /**
+   * [descr:ColumnProperties]
+   */
+  export type ColumnProperties<TCardData = unknown, TKey = unknown> = {
+    /**
+     * [descr:ColumnProperties.alignment]
+     */
+    alignment?: DevExpress.common.HorizontalAlignment | undefined;
+    /**
+     * [descr:ColumnProperties.allowEditing]
+     */
+    allowEditing?: boolean;
+    /**
+     * [descr:ColumnProperties.allowFiltering]
+     */
+    allowFiltering?: boolean;
+    /**
+     * [descr:ColumnProperties.allowHeaderFiltering]
+     */
+    allowHeaderFiltering?: boolean;
+    /**
+     * [descr:ColumnProperties.allowHiding]
+     */
+    allowHiding?: boolean;
+    /**
+     * [descr:ColumnProperties.allowReordering]
+     */
+    allowReordering?: boolean;
+    /**
+     * [descr:ColumnProperties.allowSearch]
+     */
+    allowSearch?: boolean;
+    /**
+     * [descr:ColumnProperties.allowSorting]
+     */
+    allowSorting?: boolean;
+    /**
+     * [descr:ColumnProperties.calculateFieldValue]
+     */
+    calculateFieldValue?: (this: Column, cardData: TCardData) => any;
+    /**
+     * [descr:ColumnProperties.calculateDisplayValue]
+     */
+    calculateDisplayValue?: (this: Column, cardData: TCardData) => any;
+    /**
+     * [descr:ColumnProperties.calculateFilterExpression]
+     */
+    calculateFilterExpression?: (
+      this: Column,
+      filterValue: any,
+      selectedFilterOperation: string | null,
+      target: string
+    ) => string | Array<any> | Function;
+    /**
+     * [descr:ColumnProperties.calculateSortValue]
+     */
+    calculateSortValue?: string | ((this: Column, cardData: TCardData) => any);
+    /**
+     * [descr:ColumnProperties.caption]
+     */
+    caption?: string | undefined;
+    /**
+     * [descr:ColumnProperties.customizeText]
+     */
+    customizeText?: (
+      this: Column,
+      cellInfo: DevExpress.common.grids.ColumnCustomizeTextArg
+    ) => string;
+    /**
+     * [descr:ColumnProperties.dataField]
+     */
+    dataField?: string | undefined;
+    /**
+     * [descr:ColumnProperties.dataType]
+     */
+    dataType?: DevExpress.common.DataType | undefined;
+    /**
+     * [descr:ColumnProperties.editorOptions]
+     */
+    editorOptions?: any;
+    /**
+     * [descr:ColumnProperties.falseText]
+     */
+    falseText?: string;
+    /**
+     * [descr:ColumnProperties.filterType]
+     */
+    filterType?: DevExpress.common.grids.FilterType;
+    /**
+     * [descr:ColumnProperties.filterValue]
+     */
+    filterValue?: any | undefined;
+    /**
+     * [descr:ColumnProperties.filterValues]
+     */
+    filterValues?: Array<any>;
+    /**
+     * [descr:ColumnProperties.formItem]
+     */
+    formItem?: DevExpress.ui.dxForm.SimpleItem;
+    /**
+     * [descr:ColumnProperties.format]
+     */
+    format?: DevExpress.common.core.localization.Format;
+    /**
+     * [descr:ColumnProperties.headerFilter]
+     */
+    headerFilter?: DevExpress.common.grids.ColumnHeaderFilter | undefined;
+    /**
+     * [descr:ColumnProperties.name]
+     */
+    name?: string | undefined;
+    /**
+     * [descr:ColumnProperties.setFieldValue]
+     */
+    setFieldValue?: (
+      this: Column,
+      newData: DevExpress.core.DeepPartial<TCardData>,
+      value: any,
+      currentCardData: TCardData
+    ) => void | PromiseLike<void>;
+    /**
+     * [descr:ColumnProperties.showInColumnChooser]
+     */
+    showInColumnChooser?: boolean;
+    /**
+     * [descr:ColumnProperties.sortIndex]
+     */
+    sortIndex?: number | undefined;
+    /**
+     * [descr:ColumnProperties.sortOrder]
+     */
+    sortOrder?: DevExpress.common.SortOrder | undefined;
+    /**
+     * [descr:ColumnProperties.sortingMethod]
+     */
+    sortingMethod?:
+      | ((this: Column, value1: any, value2: any) => number)
+      | undefined;
+    /**
+     * [descr:ColumnProperties.trueText]
+     */
+    trueText?: string;
+    /**
+     * [descr:ColumnProperties.validationRules]
+     */
+    validationRules?: Array<DevExpress.common.ValidationRule>;
+    /**
+     * [descr:ColumnProperties.visible]
+     */
+    visible?: boolean;
+    /**
+     * [descr:ColumnProperties.visibleIndex]
+     */
+    visibleIndex?: number | undefined;
+    /**
+     * [descr:ColumnProperties.fieldTemplate]
+     */
+    fieldTemplate?:
+      | template
+      | ((
+          data: FieldTemplateData,
+          container: DevExpress.core.DxElement
+        ) => string | DevExpress.core.UserDefinedElement);
+    /**
+     * [descr:ColumnProperties.fieldCaptionTemplate]
+     */
+    fieldCaptionTemplate?:
+      | template
+      | ((
+          data: FieldTemplateData,
+          container: DevExpress.core.DxElement
+        ) => string | DevExpress.core.UserDefinedElement);
+    /**
+     * [descr:ColumnProperties.fieldValueTemplate]
+     */
+    fieldValueTemplate?:
+      | template
+      | ((
+          data: FieldTemplateData,
+          container: DevExpress.core.DxElement
+        ) => string | DevExpress.core.UserDefinedElement);
+    /**
+     * [descr:ColumnProperties.headerItemTemplate]
+     */
+    headerItemTemplate?:
+      | template
+      | ((
+          data: ColumnTemplateData<TCardData, TKey>,
+          container: DevExpress.core.DxElement
+        ) => string | DevExpress.core.UserDefinedElement);
+    /**
+     * [descr:ColumnProperties.headerItemCssClass]
+     */
+    headerItemCssClass?: string;
+  };
+  /**
+   * [descr:dxCardViewFieldInfo]
+   */
+  export type FieldInfo = {
+    /**
+     * [descr:dxCardViewFieldInfo.value]
+     */
+    value: any;
+    /**
+     * [descr:dxCardViewFieldInfo.displayValue]
+     */
+    displayValue: any;
+    /**
+     * [descr:dxCardViewFieldInfo.text]
+     */
+    text: string;
+    /**
+     * [descr:dxCardViewFieldInfo.column]
+     */
+    column: Column;
+    /**
+     * [descr:dxCardViewFieldInfo.index]
+     */
+    index: number;
+    /**
+     * [descr:dxCardViewFieldInfo.card]
+     */
+    card: CardInfo;
+  };
+  /**
+   * [descr:HeaderPanel]
+   */
+  export type HeaderPanel<TCardData = unknown, TKey = unknown> = {
+    /**
+     * [descr:HeaderPanel.dragging]
+     */
+    dragging?: HeaderPanelDragging;
+    /**
+     * [descr:HeaderPanel.visible]
+     */
+    visible?: boolean;
+    /**
+     * [descr:HeaderPanel.itemTemplate]
+     */
+    itemTemplate?:
+      | template
+      | ((
+          data: ColumnTemplateData<TCardData, TKey>,
+          container: DevExpress.core.DxElement
+        ) => string | DevExpress.core.UserDefinedElement);
+    /**
+     * [descr:HeaderPanel.itemCssClass]
+     */
+    itemCssClass?: string;
+  };
+  /**
+   * [descr:Paging]
+   */
+  export type Paging = {
+    /**
+     * [descr:Paging.enabled]
+     */
+    enabled?: boolean;
+    /**
+     * [descr:Paging.pageIndex]
+     */
+    pageIndex?: number;
+    /**
+     * [descr:Paging.pageSize]
+     */
+    pageSize?: number;
+  };
+  /**
+   * [descr:RemoteOperations]
+   */
+  export type RemoteOperations = {
+    /**
+     * [descr:RemoteOperations.filtering]
+     */
+    filtering?: boolean;
+    /**
+     * [descr:RemoteOperations.paging]
+     */
+    paging?: boolean;
+    /**
+     * [descr:RemoteOperations.sorting]
+     */
+    sorting?: boolean;
+    /**
+     * [descr:RemoteOperations.grouping]
+     */
+    grouping?: boolean;
+  };
+  /**
+   * [descr:Toolbar]
+   */
+  export type Toolbar = {
+    /**
+     * [descr:Toolbar.items]
+     */
+    items?: Array<PredefinedToolbarItem | ToolbarItem>;
+    /**
+     * [descr:Toolbar.visible]
+     */
+    visible?: boolean | undefined;
+    /**
+     * [descr:Toolbar.disabled]
+     */
+    disabled?: boolean;
+    /**
+     * [descr:Toolbar.multiline]
+     */
+    multiline?: boolean;
+  };
+  /**
+   * [descr:ToolbarItem]
+   */
+  export type ToolbarItem = dxToolbarItem & {
+    /**
+     * [descr:ToolbarItem.name]
+     */
+    name?: PredefinedToolbarItem | string;
+    /**
+     * [descr:ToolbarItem.location]
+     */
+    location?: DevExpress.common.ToolbarItemLocation;
+  };
+}
 declare module DevExpress.ui.dxChat {
   /**
    * [descr:Alert]
@@ -31888,77 +33336,35 @@ declare module DevExpress.ui.dxChat {
     message?: string;
   };
   /**
-   * [descr:Editing]
-   */
-  export type Editing = {
-    /**
-     * [descr:Editing.allowUpdating]
-     */
-    allowUpdating?:
-      | boolean
-      | ((options: { component?: dxChat; message?: Message }) => boolean);
-    /**
-     * [descr:Editing.allowDeleting]
-     */
-    allowDeleting?:
-      | boolean
-      | ((options: { component?: dxChat; message?: Message }) => boolean);
-  };
-  /**
-   * [descr:ImageMessage]
-   */
-  export type ImageMessage = MessageBase & {
-    /**
-     * [descr:ImageMessage.src]
-     */
-    src?: string;
-    /**
-     * [descr:ImageMessage.alt]
-     */
-    alt?: string;
-  };
-  /**
    * [descr:Message]
    */
-  export type Message = TextMessage | ImageMessage;
-  /**
-   * [descr:MessageBase]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export type MessageBase = {
+  export type Message = {
     /**
-     * [descr:MessageBase.id]
+     * [descr:Message.id]
      */
     id?: number | string;
     /**
-     * [descr:MessageBase.type]
-     */
-    type?: 'text' | 'image' | undefined;
-    /**
-     * [descr:MessageBase.timestamp]
+     * [descr:Message.timestamp]
      */
     timestamp?: Date | number | string;
     /**
-     * [descr:MessageBase.author]
+     * [descr:Message.author]
      */
     author?: User;
     /**
-     * [descr:MessageBase.isDeleted]
-     */
-    isDeleted?: boolean;
-  };
-  /**
-   * [descr:TextMessage]
-   */
-  export type TextMessage = MessageBase & {
-    /**
-     * [descr:TextMessage.text]
+     * [descr:Message.text]
      */
     text?: string;
     /**
-     * [descr:TextMessage.isEdited]
+     * [descr:Message.isEdited]
      */
     isEdited?: boolean;
+    /**
+     * [descr:Message.isDeleted]
+     */
+    isDeleted?: boolean;
+
+    [key: string]: any;
   };
   /**
    * [descr:User]

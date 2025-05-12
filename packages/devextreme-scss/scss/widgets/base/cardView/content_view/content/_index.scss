@@ -7,4 +7,7 @@
   column-gap: $cardview-content-column-gap;
   row-gap: $cardview-content-row-gap;
   grid-template-columns: repeat(var(--dx-cardview-cardsperrow), 1fr);
+
+  // NOTE: This is default value for the cardCover.maxHeight option
+  --dx-cardview-card-cover-max-height: #{$cardview-content-card-cover-max-height-default};
 }

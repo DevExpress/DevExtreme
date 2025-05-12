@@ -6,7 +6,6 @@ import { getBoundingRect } from '@js/core/utils/position';
 import { getWidth, setWidth } from '@js/core/utils/size';
 import type { EditorFactory } from '@ts/grids/grid_core/editor_factory/m_editor_factory';
 import type { ResizingController } from '@ts/grids/grid_core/views/m_grid_view';
-import { getElementLocationInternal } from '@ts/ui/scroll_view/utils/get_element_location_internal';
 
 import { HIDDEN_COLUMNS_WIDTH } from '../adaptivity/const';
 import type { ColumnHeadersView } from '../column_headers/m_column_headers';
@@ -796,6 +795,23 @@ const resizing = (Base: ModuleType<ResizingController>) => class ResizingStickyC
 };
 
 const headersKeyboardNavigation = (Base: ModuleType<HeadersKeyboardNavigationController>) => class HeadersKeyboardNavigationStickyColumnsExtender extends Base {
+  protected getContainerBoundingRect($container: dxElementWrapper) {
+    // @ts-expect-error columnHeadersView's method
+    const hasStickyColumns = this._columnHeadersView?.hasStickyColumns();
+
+    if (hasStickyColumns) {
+      const $cells = $(this._columnHeadersView.getColumnElements());
+
+      return GridCoreStickyColumnsDom.getNonFixedAreaBoundingRect(
+        $cells,
+        $container,
+        this.addWidgetPrefix.bind(this),
+      );
+    }
+
+    return super.getContainerBoundingRect($container);
+  }
+
   // TODO Salimov: Most likely, we will need to remove the subscription
   // for headers after we implement sticky headers (pqKdLLL1).
   // Perhaps the headers will be rendered in the same table with data cells.
@@ -815,31 +831,7 @@ const headersKeyboardNavigation = (Base: ModuleType<HeadersKeyboardNavigationCon
         .isFixedCell($nextCell, this.addWidgetPrefix.bind(this));
 
       if ($nextCell.length && !isFixedCell) {
-        const $cells = $(this._columnHeadersView.getColumnElements());
-        const cellIsOutsideVisibleArea = GridCoreStickyColumnsDom.isOutsideVisibleArea(
-          $nextCell,
-          $cells,
-          $(this._columnHeadersView.getContent()),
-          this.addWidgetPrefix.bind(this),
-        );
-
-        if (cellIsOutsideVisibleArea) {
-          const scrollPadding = GridCoreStickyColumnsDom.getScrollPadding(
-            $cells,
-            $(scrollable.container()),
-            this.addWidgetPrefix.bind(this),
-          );
-          const scrollPosition = getElementLocationInternal(
-            $nextCell[0],
-            'horizontal',
-            $(this._columnHeadersView.getContent())[0],
-            scrollable.scrollOffset(),
-            scrollPadding,
-            this.addWidgetPrefix('table'),
-          );
-
-          scrollable.scrollTo({ x: scrollPosition });
-        }
+        this.scrollToColumn($nextCell);
       }
     }
   }

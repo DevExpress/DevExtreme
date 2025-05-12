@@ -2741,3 +2741,34 @@ test('Focus behavior should be correct when editing cells', async (t) => {
     mode: 'batch',
   },
 }));
+
+test('DataGrid - A new row is added above the existing row if the data source is empty or contains only one record and newRowPosition is set to "pageBottom" (T1287287)', async (t) => {
+  const dataGrid = new DataGrid('#container');
+  const addRowButton = dataGrid.getHeaderPanel().getAddRowButton();
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  await t
+    .click(addRowButton)
+    .click(addRowButton);
+
+  await t
+    .expect(dataGrid.getDataRow(1).isInserted)
+    .ok()
+    .expect(await takeScreenshot('newRowPosition-pageBottom-add-row-to-bottom.png', dataGrid.element))
+    .ok()
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: [],
+  keyExpr: 'ID',
+  editing: {
+    mode: 'batch',
+    allowAdding: true,
+    newRowPosition: 'pageBottom',
+  },
+  columns: [
+    {
+      dataField: 'A',
+    },
+  ],
+}));
