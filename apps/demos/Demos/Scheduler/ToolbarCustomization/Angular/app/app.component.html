@@ -27,7 +27,7 @@
         </dxi-item>
         <dxi-item location="center" locateInMenu="auto">
             <div *dxTemplate>
-                <dx-tag-box
+                <dx-select-box
                     [items]="assignees"
                     displayExpr="text"
                     valueExpr="id"
@@ -38,7 +38,7 @@
                     width="200"
                     (onValueChanged)="onAssigneesChange($event)"
                 >
-                </dx-tag-box>
+                </dx-select-box>
             </div>
         </dxi-item>
         <dxi-item location="after" locateInMenu="auto" name="viewSwitcher"></dxi-item>
