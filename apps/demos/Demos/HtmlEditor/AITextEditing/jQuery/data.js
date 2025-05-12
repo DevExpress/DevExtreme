@@ -1,3 +1,8 @@
+const deployment = 'gpt-4o-mini';
+const apiVersion = '2024-02-01';
+const endpoint = 'https://public-api.devexpress.com/demo-openai';
+const apiKey = 'DEMO';
+
 const markup = `
     <h1>
         <img src="../../../../images/widgets/HtmlEditor.svg" alt="HtmlEditor">
