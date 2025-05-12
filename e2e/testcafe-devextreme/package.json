@@ -14,7 +14,7 @@
     "@typescript-eslint/eslint-plugin": "catalog:eslint8",
     "@typescript-eslint/parser": "catalog:eslint8",
     "axe-core": "4.10.3",
-    "devextreme": "workspace:~",
+    "devextreme": "workspace:*",
     "devextreme-screenshot-comparer": "2.0.17",
     "devextreme-testcafe-models": "workspace:*",
     "eslint": "catalog:eslint8",
