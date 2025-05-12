@@ -14,7 +14,7 @@ import ArrayStore from 'common/data/array_store';
 import eventsEngine from 'common/core/events/core/events_engine';
 import { DataSource } from 'common/data/data_source/data_source';
 import * as checkStyleHelper from '../../helpers/checkStyleHelper.js';
-import { isRealDeviceTypeNotIn } from '../../helpers/device.js';
+import { shouldSkipTestForDevice } from '../../helpers/device.js';
 
 import 'generic_light.css!';
 import { implementationsMap, getHeight, getWidth, getOuterHeight } from 'core/utils/size';
@@ -158,7 +158,7 @@ QUnit.module('Render content delimiters', {
     });
 
     QUnit.test('container border should not be hidden when non-top level submenu hides', function(assert) {
-        if(isRealDeviceTypeNotIn('desktop', assert)) {
+        if(shouldSkipTestForDevice(['desktop'], assert)) {
             return;
         }
 
@@ -419,7 +419,7 @@ QUnit.module('Rendering Scrollable', {
     });
 
     QUnit.test('Scrollable should be initialized on a 2nd level submenu', function(assert) {
-        if(isRealDeviceTypeNotIn('desktop', assert)) {
+        if(shouldSkipTestForDevice(['desktop'], assert)) {
             return;
         }
 
@@ -477,7 +477,7 @@ QUnit.module('Rendering Scrollable', {
     });
 
     QUnit.test('Height of the submenu should not exceed content height', function(assert) {
-        if(isRealDeviceTypeNotIn('desktop', assert)) {
+        if(shouldSkipTestForDevice(['desktop'], assert)) {
             return;
         }
 
@@ -499,7 +499,7 @@ QUnit.module('Rendering Scrollable', {
     });
 
     QUnit.test('Nested submenu should be positioned to a clicked item', function(assert) {
-        if(isRealDeviceTypeNotIn('desktop', assert)) {
+        if(shouldSkipTestForDevice(['desktop'], assert)) {
             return;
         }
 
@@ -558,7 +558,7 @@ QUnit.module('Rendering Scrollable', {
     });
 
     QUnit.test('Flipping 2nd level submenu', function(assert) {
-        if(isRealDeviceTypeNotIn('desktop', assert)) {
+        if(shouldSkipTestForDevice(['desktop'], assert)) {
             return;
         }
 
@@ -593,7 +593,7 @@ QUnit.module('Rendering Scrollable', {
     });
 
     QUnit.test('Selected item should be always visible during keyboard navigation (root submenu)', function(assert) {
-        if(isRealDeviceTypeNotIn('desktop', assert)) {
+        if(shouldSkipTestForDevice(['desktop'], assert)) {
             return;
         }
 
@@ -630,7 +630,7 @@ QUnit.module('Rendering Scrollable', {
     });
 
     QUnit.test('Selected item should be always visible during keyboard navigation (nested submenu)', function(assert) {
-        if(isRealDeviceTypeNotIn('desktop', assert)) {
+        if(shouldSkipTestForDevice(['desktop'], assert)) {
             return;
         }
 
@@ -671,7 +671,7 @@ QUnit.module('Rendering Scrollable', {
     });
 
     QUnit.test('Scroll position should be set to 0 after reopen (root submenu)', function(assert) {
-        if(isRealDeviceTypeNotIn('desktop', assert)) {
+        if(shouldSkipTestForDevice(['desktop'], assert)) {
             return;
         }
 
@@ -713,7 +713,7 @@ QUnit.module('Rendering Scrollable', {
     });
 
     QUnit.test('Scroll position should be set to 0 after reopen (nested submenu, KBN)', function(assert) {
-        if(isRealDeviceTypeNotIn('desktop', assert)) {
+        if(shouldSkipTestForDevice(['desktop'], assert)) {
             return;
         }
 
@@ -763,7 +763,7 @@ QUnit.module('Rendering Scrollable', {
     });
 
     QUnit.test('Scroll position should be set to 0 after reopen (nested submenu, pointer)', function(assert) {
-        if(isRealDeviceTypeNotIn('desktop', assert)) {
+        if(shouldSkipTestForDevice(['desktop'], assert)) {
             return;
         }
 
@@ -822,7 +822,7 @@ QUnit.module('Rendering Scrollable', {
     });
 
     QUnit.test('Option focusedElement should be null after reopen root submenu', function(assert) {
-        if(isRealDeviceTypeNotIn('desktop', assert)) {
+        if(shouldSkipTestForDevice(['desktop'], assert)) {
             return;
         }
 
@@ -1119,7 +1119,7 @@ QUnit.module('Menu - selection', {
     }
 }, () => {
     QUnit.test('Menu should not crash when items changed (T310030)', function(assert) {
-        if(isRealDeviceTypeNotIn('desktop', assert)) {
+        if(shouldSkipTestForDevice(['desktop'], assert)) {
             return;
         }
 
@@ -1856,7 +1856,7 @@ QUnit.module('Menu tests', {
     });
 
     QUnit.test('Menu was not shown on some browsers with not synchronized mouse event arguments (T191149)', function(assert) {
-        if(isRealDeviceTypeNotIn('desktop', assert)) {
+        if(shouldSkipTestForDevice(['desktop'], assert)) {
             return;
         }
 
@@ -1878,7 +1878,7 @@ QUnit.module('Menu tests', {
     });
 
     QUnit.test('Show submenu onHover', function(assert) {
-        if(isRealDeviceTypeNotIn('desktop', assert)) {
+        if(shouldSkipTestForDevice(['desktop'], assert)) {
             return;
         }
 
@@ -1896,7 +1896,7 @@ QUnit.module('Menu tests', {
     });
 
     QUnit.test('Show submenu onHover with custom timeout set as an object', function(assert) {
-        if(isRealDeviceTypeNotIn('desktop', assert)) {
+        if(shouldSkipTestForDevice(['desktop'], assert)) {
             return;
         }
 
@@ -1914,7 +1914,7 @@ QUnit.module('Menu tests', {
     });
 
     QUnit.test('Show submenu onHover with custom timeout set as a number', function(assert) {
-        if(isRealDeviceTypeNotIn('desktop', assert)) {
+        if(shouldSkipTestForDevice(['desktop'], assert)) {
             return;
         }
 
@@ -1963,7 +1963,7 @@ QUnit.module('Menu tests', {
     });
 
     QUnit.test('Show submenu and sub-submenu on hover', function(assert) {
-        if(isRealDeviceTypeNotIn('desktop', assert)) {
+        if(shouldSkipTestForDevice(['desktop'], assert)) {
             return;
         }
 
@@ -2001,7 +2001,7 @@ QUnit.module('Menu tests', {
     });
 
     QUnit.test('Do not show submenu on hover if item is disabled', function(assert) {
-        if(isRealDeviceTypeNotIn('desktop', assert)) {
+        if(shouldSkipTestForDevice(['desktop'], assert)) {
             return;
         }
 
@@ -2026,7 +2026,7 @@ QUnit.module('Menu tests', {
     });
 
     QUnit.test('Show submenu on hover and sub-submenu onClick', function(assert) {
-        if(isRealDeviceTypeNotIn('desktop', assert)) {
+        if(shouldSkipTestForDevice(['desktop'], assert)) {
             return;
         }
 
@@ -2085,7 +2085,7 @@ QUnit.module('Menu tests', {
     });
 
     QUnit.test('hover should not open menu when mouse button is pressed', function(assert) {
-        if(isRealDeviceTypeNotIn('desktop', assert)) {
+        if(shouldSkipTestForDevice(['desktop'], assert)) {
             return;
         }
 
@@ -2106,7 +2106,7 @@ QUnit.module('Menu tests', {
     });
 
     QUnit.test('hover on opened menu should not close it (T317062)', function(assert) {
-        if(isRealDeviceTypeNotIn('desktop', assert)) {
+        if(shouldSkipTestForDevice(['desktop'], assert)) {
             return;
         }
 
@@ -2130,7 +2130,7 @@ QUnit.module('Menu tests', {
     });
 
     QUnit.test('Menu should show when show delay is 0', function(assert) {
-        if(isRealDeviceTypeNotIn('desktop', assert)) {
+        if(shouldSkipTestForDevice(['desktop'], assert)) {
             return;
         }
 
@@ -2149,7 +2149,7 @@ QUnit.module('Menu tests', {
     });
 
     QUnit.test('Menu should not be shown if hover was ended before show delay time exceeded', function(assert) {
-        if(isRealDeviceTypeNotIn('desktop', assert)) {
+        if(shouldSkipTestForDevice(['desktop'], assert)) {
             return;
         }
 
@@ -2171,7 +2171,7 @@ QUnit.module('Menu tests', {
     });
 
     QUnit.test('Submenu should not be shown if hover was ended before show delay time exceeded', function(assert) {
-        if(isRealDeviceTypeNotIn('desktop', assert)) {
+        if(shouldSkipTestForDevice(['desktop'], assert)) {
             return;
         }
 
@@ -2197,7 +2197,7 @@ QUnit.module('Menu tests', {
     });
 
     QUnit.test('Submenu shoyld not be hidden if other submenu was opened before hide delay time exceeded', function(assert) {
-        if(isRealDeviceTypeNotIn('desktop', assert)) {
+        if(shouldSkipTestForDevice(['desktop'], assert)) {
             return;
         }
 
@@ -2228,7 +2228,7 @@ QUnit.module('Menu tests', {
     });
 
     QUnit.test('Submenu should not be closed after showFirstSubmenuMode option is changed', function(assert) {
-        if(isRealDeviceTypeNotIn('desktop', assert)) {
+        if(shouldSkipTestForDevice(['desktop'], assert)) {
             return;
         }
 
@@ -2248,7 +2248,7 @@ QUnit.module('Menu tests', {
     });
 
     QUnit.test('Menu should hide after mouseleave when pointer goes through siblings menus (T325923)', function(assert) {
-        if(isRealDeviceTypeNotIn('desktop', assert)) {
+        if(shouldSkipTestForDevice(['desktop'], assert)) {
             return;
         }
 
@@ -2274,7 +2274,7 @@ QUnit.module('Menu tests', {
     });
 
     QUnit.test('Link should be programmatically clicked if item.url is set and item is clicked, showSubmenuMode is `onHover` (T1209825)', function(assert) {
-        if(isRealDeviceTypeNotIn('desktop', assert)) {
+        if(shouldSkipTestForDevice(['desktop'], assert)) {
             return;
         }
 
@@ -2321,7 +2321,7 @@ QUnit.module('Menu tests', {
     });
 
     QUnit.test('Menu should hide after mouseleave when hideOnMouseLeave = true', function(assert) {
-        if(isRealDeviceTypeNotIn('desktop', assert)) {
+        if(shouldSkipTestForDevice(['desktop'], assert)) {
             return;
         }
 
@@ -2352,7 +2352,7 @@ QUnit.module('Menu tests', {
     });
 
     QUnit.test('Menu should not hide after mouseleave to children of a target', function(assert) {
-        if(isRealDeviceTypeNotIn('desktop', assert)) {
+        if(shouldSkipTestForDevice(['desktop'], assert)) {
             return;
         }
 
@@ -2391,7 +2391,7 @@ QUnit.module('Menu tests', {
     });
 
     QUnit.test('Menu should not hide when root item clicked', function(assert) {
-        if(isRealDeviceTypeNotIn('desktop', assert)) {
+        if(shouldSkipTestForDevice(['desktop'], assert)) {
             return;
         }
 
@@ -2419,7 +2419,7 @@ QUnit.module('Menu tests', {
     });
 
     QUnit.test('Menu should not hide when root item clicked right after mouseleave, hideSubmenuOnMouseLeave: true', function(assert) {
-        if(isRealDeviceTypeNotIn('desktop', assert)) {
+        if(shouldSkipTestForDevice(['desktop'], assert)) {
             return;
         }
 
@@ -2441,7 +2441,7 @@ QUnit.module('Menu tests', {
     });
     // T431949
     QUnit.test('Menu should stop show submenu timeout when another level submenu was hovered', function(assert) {
-        if(isRealDeviceTypeNotIn('desktop', assert)) {
+        if(shouldSkipTestForDevice(['desktop'], assert)) {
             return;
         }
 
@@ -2488,7 +2488,7 @@ QUnit.module('Menu tests', {
     });
 
     QUnit.test('Hover root menu item -> move mouse pointer to the first submenu item (disabled)', function(assert) {
-        if(isRealDeviceTypeNotIn('desktop', assert)) {
+        if(shouldSkipTestForDevice(['desktop'], assert)) {
             return;
         }
 
@@ -2697,7 +2697,7 @@ QUnit.module('keyboard navigation', {
     });
 
     QUnit.test('keyboard navigation should work after a click', function(assert) {
-        if(isRealDeviceTypeNotIn('desktop', assert)) {
+        if(shouldSkipTestForDevice(['desktop'], assert)) {
             return;
         }
 
@@ -3651,7 +3651,7 @@ QUnit.module('adaptivity: behavior', {
     });
 
     QUnit.test('link should be clicked programmatically with enter key if item.url is set', function(assert) {
-        if(isRealDeviceTypeNotIn('desktop', assert)) {
+        if(shouldSkipTestForDevice(['desktop'], assert)) {
             return;
         }
 
@@ -3972,7 +3972,7 @@ QUnit.module('adaptivity: behavior', {
     });
 
     QUnit.test('TreeView should be focused after click on hamburger button (T1207839)', function(assert) {
-        if(isRealDeviceTypeNotIn('desktop', assert)) {
+        if(shouldSkipTestForDevice(['desktop'], assert)) {
             return;
         }
 
@@ -4002,7 +4002,7 @@ QUnit.module('Aria accessibility', {
     }
 }, () => {
     QUnit.test('Nested submenu has the "menu" role', function(assert) {
-        if(isRealDeviceTypeNotIn('desktop', assert)) {
+        if(shouldSkipTestForDevice(['desktop'], assert)) {
             return;
         }
 
@@ -4036,7 +4036,7 @@ QUnit.module('Aria accessibility', {
     });
 
     QUnit.test('Nested submenu items has not "dxPrivateComponent" text in alt', function(assert) {
-        if(isRealDeviceTypeNotIn('desktop', assert)) {
+        if(shouldSkipTestForDevice(['desktop'], assert)) {
             return;
         }
 
