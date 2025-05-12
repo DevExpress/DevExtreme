@@ -324,7 +324,7 @@ class Chat extends Widget<Properties> {
         break;
       }
       case 'items':
-        this._messageList.option(name, value);
+        this._messageList.option(name, this.option('items'));
         this._updateMessageBoxAria();
         break;
       case 'dataSource':
