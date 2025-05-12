@@ -7,6 +7,7 @@ import AIDialog, {
     AI_DIALOG_CLASS,
     AI_DIALOG_CONTROLS_CLASS,
     AI_DIALOG_CONTENT_CLASS,
+    AI_DIALOG_TITLE_CLASS,
     REPLACE_DROPDOWN_WIDTH,
     ACTION_BUTTON_WIDTH,
     COMPACT_ACTION_BUTTON_WIDTH,
@@ -58,6 +59,11 @@ const moduleConfig = {
         this.setDialogState = (state) => {
             this.aiDialog['_setDialogState'](state);
         };
+        this.getTitleId = () => this.aiDialogPopup.$overlayContent()
+            .find(`.${AI_DIALOG_TITLE_CLASS}`)
+            .attr('id');
+        this.getDialogAriaLabel = () => this.aiDialogPopup.$overlayContent()
+            .attr('aria-labelledby');
     },
     afterEach() {
         sinon.restore();
@@ -1382,6 +1388,15 @@ QUnit.module('AIDialog', () => {
             const $textArea = $resultTextArea.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
             assert.strictEqual($textArea.attr('aria-label'), 'AI Assistant result', 'aria-label is correct');
+        });
+
+        ['initial', 'asking', 'resultReady', 'generating'].forEach(state => {
+            QUnit.test(`dialog content aria-labelledby should be equal to title id when dialog in ${state} state`, function(assert) {
+                showAIDialog(this);
+                this.setDialogState(state);
+
+                assert.strictEqual(this.getDialogAriaLabel(), this.getTitleId(), 'aria-labelledby is equal to id');
+            });
         });
     });
 });
