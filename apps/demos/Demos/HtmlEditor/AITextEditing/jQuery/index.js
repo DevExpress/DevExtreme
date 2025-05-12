@@ -55,9 +55,10 @@ $(() => {
     value: markup,
     aiIntegration,
     toolbar: {
-      items: [{
-        name: 'ai',
-        commands: [
+      items: [
+        {
+          name: 'ai',
+          commands: [
             'summarize',
             'proofread',
             'expand',
@@ -73,9 +74,12 @@ $(() => {
                     return 'Extract a list of keywords from the text and return them as a comma-separated string';
                 },
             },
-        ],
-      }, 'separator', 'undo', 'redo'
-    ],
+          ],
+        }, 
+        'separator',
+        'undo',
+        'redo'
+      ],
     }
   });
 });
