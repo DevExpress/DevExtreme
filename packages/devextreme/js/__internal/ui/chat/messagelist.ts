@@ -585,7 +585,6 @@ class MessageList extends Widget<Properties> {
   }
 
   _getMessageData(message: Element): Message {
-    // @ts-expect-error
     return $(message).data(MESSAGE_DATA_KEY);
   }
 
