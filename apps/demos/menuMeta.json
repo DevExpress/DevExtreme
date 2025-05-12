@@ -2057,7 +2057,8 @@
             "Name": "AITextEditing",
             "Widget": "HtmlEditor",
             "DemoType": "Web",
-            "Badge": "New"
+            "Badge": "New",
+            "Modules": "openai"
           }
         ]
       },
@@ -2083,8 +2084,7 @@
             "Name": "ToolbarCustomization",
             "DocUrl": "Guide/UI_Components/HtmlEditor/Toolbar/Built-In_Controls/",
             "Widget": "HtmlEditor",
-            "DemoType": "Web",
-            "Modules": "openai"
+            "DemoType": "Web"
           }
         ]
       }
