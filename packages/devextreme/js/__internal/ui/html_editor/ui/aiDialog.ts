@@ -726,8 +726,7 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
 
   private _refreshDialogAria(): void {
     const id = String(new Guid());
-    // @ts-expect-error $overlayContent does not exist on public type
-    const $overlayContent = this._popup.$overlayContent();
+    const $overlayContent = $(this._popup.content()).parent();
     const $title = $overlayContent.find(`.${AI_DIALOG_TITLE_CLASS}`);
 
     $title.attr('id', id);
