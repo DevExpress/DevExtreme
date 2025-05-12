@@ -81,16 +81,8 @@ export class ColumnKeyboardNavigationController extends KeyboardNavigationContro
   public init() {
     super.init();
 
-    const focusedView = this.getFocusedView();
-
     this.columnFocusDispatcher = this.getController('columnFocusDispatcher');
     this.columnFocusDispatcher?.registerKeyboardNavigationController(this);
-
-    this.resizeCompletedWithContext = this.resizeCompletedWithContext
-      ?? this.resizeCompleted.bind(this);
-
-    focusedView?.resizeCompleted?.remove(this.resizeCompletedWithContext);
-    focusedView?.resizeCompleted?.add(this.resizeCompletedWithContext);
   }
 
   public moveColumn({
