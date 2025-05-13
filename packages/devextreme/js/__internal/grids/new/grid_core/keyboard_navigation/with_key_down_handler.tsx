@@ -40,8 +40,10 @@ export const withKeyDownHandler = <
       );
     }
 
+    // TODO: KeyboardEvent
     @eventHandler
-    private onKeyDown(event: KeyboardEvent): void {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    private onKeyDown(event: any): void {
       const { keyDownConfig, onKeyDown, caughtEventPreventDefault } = this.props;
       const ref = this.getActualRef();
       const fullKeyName = getKeyWithModifications(event);
