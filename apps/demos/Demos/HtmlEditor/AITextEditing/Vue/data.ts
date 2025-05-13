@@ -19,7 +19,7 @@ export const commands = [
     name: 'custom',
     text: 'Extract Keywords',
     prompt: () => {
-      return 'Extract a list of keywords from the text and return them as a comma-separated string';
+      return 'Extract a list of keywords from the text and return it as a comma-separated string';
     },
   },
 ];
