@@ -3586,7 +3586,6 @@ exports[`Options HeaderFilter visible: false 1`] = `
               data-dx-focus-container="true"
             >
               <div
-                aria-hidden="true"
                 data-dx-focus-decoy="true"
                 tabindex="0"
               />
@@ -3607,7 +3606,6 @@ exports[`Options HeaderFilter visible: false 1`] = `
                 </div>
               </div>
               <div
-                aria-hidden="true"
                 data-dx-focus-decoy="true"
                 tabindex="0"
               />
@@ -3667,7 +3665,6 @@ exports[`Options HeaderFilter visible: true 1`] = `
               data-dx-focus-container="true"
             >
               <div
-                aria-hidden="true"
                 data-dx-focus-decoy="true"
                 tabindex="0"
               />
@@ -3688,7 +3685,6 @@ exports[`Options HeaderFilter visible: true 1`] = `
                 </div>
               </div>
               <div
-                aria-hidden="true"
                 data-dx-focus-decoy="true"
                 tabindex="0"
               />
@@ -3748,7 +3744,6 @@ exports[`Options HeaderFilter visible: undefined 1`] = `
               data-dx-focus-container="true"
             >
               <div
-                aria-hidden="true"
                 data-dx-focus-decoy="true"
                 tabindex="0"
               />
@@ -3769,7 +3764,6 @@ exports[`Options HeaderFilter visible: undefined 1`] = `
                 </div>
               </div>
               <div
-                aria-hidden="true"
                 data-dx-focus-decoy="true"
                 tabindex="0"
               />
