@@ -34,22 +34,25 @@ export class ContextMenuController extends modules.ViewController {
 
     const that = this;
     const $targetElement = $(dxEvent.target);
-    let $element;
-    let $targetRowElement;
-    let $targetCellElement;
     let menuItems;
 
     each(VIEW_NAMES, function () {
       const view = that.getView(this);
-      $element = view && view.element();
 
-      if ($element && ($element.is($targetElement) || $element.find($targetElement).length)) {
-        $targetCellElement = $targetElement.closest('.dx-row > td, .dx-row > tr').length
+      if (!view) {
+        return;
+      }
+
+      const $viewElement = view.element();
+      const isTargetElementInsideView = $viewElement.is($targetElement) || $viewElement.find($targetElement).length;
+
+      if (isTargetElementInsideView) {
+        const $targetCellElement = $targetElement.closest('.dx-row > td, .dx-row > tr').length
           ? $targetElement.closest('.dx-row > td, .dx-row > tr')
           : $targetElement.find('.dx-group-cell').first();
-        $targetRowElement = $targetCellElement.parent();
+        const $targetRowElement = $targetCellElement.parent();
         const rowIndex = view.getRowIndex($targetRowElement);
-        const columnIndex = $targetCellElement[0] && $targetCellElement[0].cellIndex;
+        const columnIndex = $targetCellElement[0]?.cellIndex;
         const rowOptions = $targetRowElement.data('options');
         const options: any = {
           event: dxEvent,
@@ -58,6 +61,7 @@ export class ContextMenuController extends modules.ViewController {
           rowIndex,
           row: view._getRows()[rowIndex],
           columnIndex,
+          // @ts-expect-error
           column: rowOptions?.cells?.[columnIndex]?.column,
         };
 
