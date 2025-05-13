@@ -221,23 +221,6 @@ export class HeadersKeyboardNavigationController extends ColumnKeyboardNavigatio
     return -1;
   }
 
-  public ungroupAllColumns(): void {
-    const $focusedCell = this._getFocusedCell();
-    const focusedColumn = this._getColumnByCellElement($focusedCell);
-
-    this._columnsController.beginUpdate();
-    super.ungroupAllColumns();
-
-    const rowIndex = this._columnsController.getRowIndex(focusedColumn.index, true);
-    const newVisibleIndex = this.getVisibleIndex(focusedColumn);
-
-    this.updateFocusPosition({
-      rowIndex,
-      columnIndex: newVisibleIndex,
-    });
-    this._columnsController.endUpdate();
-  }
-
   public restoreFocus(): void {
     const $focusedCell = this._getFocusedCell();
 

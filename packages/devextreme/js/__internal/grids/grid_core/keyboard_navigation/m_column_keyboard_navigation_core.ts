@@ -162,8 +162,4 @@ export class ColumnKeyboardNavigationController extends KeyboardNavigationContro
     const $focusedCell = this._getFocusedCell();
     $focusedCell?.[0]?.focus({ preventScroll: true });
   }
-
-  public ungroupAllColumns(): void {
-    this._columnsController.clearGrouping();
-  }
 }
