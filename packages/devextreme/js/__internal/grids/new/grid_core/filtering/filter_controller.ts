@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
-import type { ReadonlySignal, Signal } from '@preact/signals-core';
+import type { Signal } from '@preact/signals-core';
 import { computed, signal } from '@preact/signals-core';
 import gridCoreUtils from '@ts/grids/grid_core/m_utils';
 
@@ -25,50 +25,46 @@ export class FilterController {
 
   public readonly appliedFilters: Signal<AppliedFilters> = signal({});
 
+  public readonly customOperations: Signal<unknown[]> = signal([]);
+
   public static dependencies = [
     OptionsController,
     ColumnsController,
   ] as const;
 
-  public readonly filterSyncEnabled = computed(
-    () => {
-      const filterSyncEnabledOption = this.filterSyncEnabledOption.value;
-      const filterPanelVisible = !!this.filterPanelVisible.value;
+  public readonly filterSyncEnabled = computed(() => (
+    this.filterSyncEnabledOption.value === 'auto'
+      ? !!this.filterPanelVisible.value
+      : !!this.filterSyncEnabledOption.value
+  ));
 
-      if (filterSyncEnabledOption === 'auto') {
-        return !!filterPanelVisible;
-      }
+  public readonly filterPanelValue = computed(() => (
+    this.filterPanelFilterEnabled.value
+      ? this.filterValueOption.value
+      : null
+  ));
 
-      return !!filterSyncEnabledOption;
-    },
-  );
-
-  // This property is defined in filter_custom_operations_visitor.ts
-  public customOperations: Signal<unknown[]> = signal([]);
-
-  public readonly filterPanelValue = computed(
-    () => {
-      const filterPanelFilterEnabled = this.filterPanelFilterEnabled.value;
-      const filterValueOption = this.filterValueOption.value;
-
-      return filterPanelFilterEnabled ? filterValueOption : null;
-    },
-  );
-
-  public readonly filterSyncValue = computed(() => {
-    const filterSyncEnabled = this.filterSyncEnabled.value;
-    const filterPanelValue = this.filterPanelValue.value;
-
-    return filterSyncEnabled ? filterPanelValue : null;
-  });
+  public readonly filterSyncValue = computed(() => (
+    this.filterSyncEnabled.value
+      ? this.filterPanelValue.value
+      : null
+  ));
 
   private readonly appliedFilterExpressions = computed(
-    () => getAppliedFilterExpressions(
-      this.appliedFilters.value,
-      this.columnsController.filterableColumns.value,
-      this.customOperations.value,
-      this.filterSyncEnabled.value,
-    ),
+    () => {
+      const isCustomOperationsCreated = this.customOperations.value.length > 0;
+
+      if (!isCustomOperationsCreated) {
+        return [];
+      }
+
+      return getAppliedFilterExpressions(
+        this.appliedFilters.value,
+        this.columnsController.filterableColumns.value,
+        this.customOperations.value,
+        this.filterSyncEnabled.value,
+      );
+    },
   );
 
   public readonly displayFilter = computed(
