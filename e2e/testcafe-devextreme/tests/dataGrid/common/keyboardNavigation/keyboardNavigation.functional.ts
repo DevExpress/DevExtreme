@@ -11,6 +11,10 @@ import { getData } from '../../helpers/generateDataSourceData';
 
 const CLASS = ClassNames;
 
+const getOrderOfEventCalls = ClientFunction(
+  () => (window as any).focusedEventsTestData.map((data) => data.type),
+);
+
 fixture.disablePageReloads`Keyboard Navigation - common`
   .page(url(__dirname, '../../../container.html'));
 
@@ -5010,4 +5014,90 @@ test('DataGrid with Pagination in master detail - Ctrl+Up on focused standalone 
       },
     },
   });
+});
+
+test('Focus events should be called when pressing the End key', async (t) => {
+  // arrange
+  const dataGrid = new DataGrid('#container');
+
+  await t.click(dataGrid.getDataCell(0, 0).element);
+
+  await ClientFunction(() => {
+    (window as any).focusedEventsTestData = [];
+  })();
+
+  // act
+  await t.pressKey('end');
+
+  // assert
+  await t
+    .expect(dataGrid.getDataCell(0, 14).element.focused)
+    .ok()
+    .expect(getOrderOfEventCalls())
+    .eql(['onFocusedCellChanging', 'onFocusedCellChanged']);
+}).before(async () => {
+  await ClientFunction(() => {
+    (window as any).focusedEventsTestData = [];
+  })();
+
+  await createWidget('dxDataGrid', {
+    dataSource: getData(20, 15),
+    columnWidth: 100,
+    height: 500,
+    width: 800,
+    showBorders: true,
+    onFocusedCellChanging: () => {
+      (window as any).focusedEventsTestData.push({ type: 'onFocusedCellChanging' });
+    },
+    onFocusedCellChanged: () => {
+      (window as any).focusedEventsTestData.push({ type: 'onFocusedCellChanged' });
+    },
+  });
+}).after(async () => {
+  await ClientFunction(() => {
+    delete (window as any).focusedEventsTestData;
+  })();
+});
+
+test('Focus events should be called when pressing the Ctrl + End key', async (t) => {
+  // arrange
+  const dataGrid = new DataGrid('#container');
+
+  await t.click(dataGrid.getDataCell(0, 0).element);
+
+  await ClientFunction(() => {
+    (window as any).focusedEventsTestData = [];
+  })();
+
+  // act
+  await t.pressKey('end');
+
+  // assert
+  await t
+    .expect(dataGrid.getDataCell(0, 14).element.focused)
+    .ok()
+    .expect(getOrderOfEventCalls())
+    .eql(['onFocusedCellChanging', 'onFocusedCellChanged']);
+}).before(async () => {
+  await ClientFunction(() => {
+    (window as any).focusedEventsTestData = [];
+  })();
+
+  await createWidget('dxDataGrid', {
+    dataSource: getData(20, 15),
+    columnWidth: 100,
+    height: 500,
+    width: 800,
+    showBorders: true,
+    onFocusedCellChanging: () => {
+      (window as any).focusedEventsTestData.push({ type: 'onFocusedCellChanging' });
+    },
+    onFocusedCellChanged: () => {
+      (window as any).focusedEventsTestData.push({ type: 'onFocusedCellChanged' });
+    },
+  });
+}).after(async () => {
+  await ClientFunction(() => {
+    delete (window as any).focusedEventsTestData;
+  })();
 });
