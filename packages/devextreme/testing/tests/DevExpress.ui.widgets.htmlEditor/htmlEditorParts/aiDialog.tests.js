@@ -7,6 +7,7 @@ import AIDialog, {
     AI_DIALOG_CLASS,
     AI_DIALOG_CONTROLS_CLASS,
     AI_DIALOG_CONTENT_CLASS,
+    AI_DIALOG_TITLE_CLASS,
     REPLACE_DROPDOWN_WIDTH,
     ACTION_BUTTON_WIDTH,
     COMPACT_ACTION_BUTTON_WIDTH,
@@ -16,6 +17,7 @@ import AIDialog, {
 import { BUTTON_GROUP_CLASS } from '__internal/ui/m_button_group';
 import { POPUP_CLASS } from '__internal/ui/popup/m_popup';
 import { TEXTAREA_CLASS } from '__internal/ui/m_text_area';
+import { TEXTEDITOR_INPUT_CLASS } from '__internal/ui/text_box/m_text_editor.base';
 import { SELECTBOX_CLASS } from '__internal/ui/m_select_box';
 import { INFORMER_CLASS } from '__internal/ui/informer/informer';
 import { BUTTON_CLASS } from '__internal/ui/button/button';
@@ -1045,6 +1047,7 @@ QUnit.module('AIDialog', () => {
                     locateInMenu: 'auto'
                 });
                 assertConfig(assert, replaceButtonOptions, {
+                    displayExpr: 'text',
                     stylingMode: 'contained',
                     type: 'default',
                     splitButton: true,
@@ -1370,6 +1373,31 @@ QUnit.module('AIDialog', () => {
             const stopButtonOptions = stopToolbarItem.options;
 
             assert.strictEqual(stopButtonOptions.width, COMPACT_ACTION_BUTTON_WIDTH, 'width is specific');
+        });
+    });
+
+    QUnit.module('Accessibility', moduleConfig, () => {
+        QUnit.test('result textarea should have correct aria-label', function(assert) {
+            showAIDialog(this);
+
+            const $resultTextArea = this.$element.find(`.${TEXTAREA_CLASS}`).eq(1);
+            const $textArea = $resultTextArea.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+
+            assert.strictEqual($textArea.attr('aria-label'), 'AI Assistant result', 'aria-label is correct');
+        });
+
+        ['initial', 'asking', 'resultReady', 'generating'].forEach(state => {
+            QUnit.test(`dialog content aria-labelledby should be equal to title id when dialog in ${state} state`, function(assert) {
+                showAIDialog(this);
+                this.setDialogState(state);
+
+                const ariaLabel = this.aiDialogPopup.$overlayContent().attr('aria-labelledby');
+                const id = this.aiDialogPopup.$overlayContent()
+                    .find(`.${AI_DIALOG_TITLE_CLASS}`)
+                    .attr('id');
+
+                assert.strictEqual(ariaLabel, id, 'aria-labelledby is equal to id');
+            });
         });
     });
 });
