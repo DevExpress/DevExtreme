@@ -5,7 +5,7 @@
   "scripts": {
     "dev:react19": "vite builders/react19",
     "dev:vue3": "vite builders/vue3",
-    "dev:angular19": "cd builders/angular19 && node scripts/link-external.js && ng build --watch --configuration development",
+    "dev:angular19": "cd builders/angular19 && node scripts/link-external.js && ng serve --configuration development",
     "build:react19": "vite build builders/react19",
     "build:vue3": "vite build builders/vue3",
     "build:angular19": "cd builders/angular19 && node scripts/link-external.js && ng build",
