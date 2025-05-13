@@ -7,7 +7,6 @@ import {
   MessageEnteredEvent,
   MessageDeletedEvent,
   MessageUpdatedEvent,
-  Editing,
 } from 'devextreme/ui/chat';
 import DataSource from 'devextreme/data/data_source';
 import { AppService } from './app.service';
@@ -30,10 +29,9 @@ if (window && window.config?.packageConfigPaths) {
 export class AppComponent {
   currentUser: User;
 
-  editingOptions: Editing = {
-    allowUpdating: true,
-    allowDeleting: true,
-  };
+  allowUpdating = true;
+
+  allowDeleting = true;
 
   editingStrategies = [
     { key: 'enabled', text: 'Enabled' },
@@ -58,7 +56,9 @@ export class AppComponent {
       const { items, user } = component.option();
       const userId = user.id;
 
-      const lastNotDeletedMessage = items.findLast((item: any) => item.author?.id === userId && !item.isDeleted);
+      const lastNotDeletedMessage = items.findLast(
+        (item: any) => item.author?.id === userId && !item.isDeleted
+      );
 
       return message.id === lastNotDeletedMessage?.id;
     },
@@ -81,10 +81,14 @@ export class AppComponent {
     this.appService.onMessageUpdated(e);
   }
 
-  onEditingStrategyChange(event: any, type: string): void {
-    this.editingOptions = {
-      [type]: this.editingStrategy[event.value],
-    };
+  onAllowUpdatingChange(event: any): void {
+    this.allowUpdating = this.editingStrategy[event.value];
+    this.selectedEditingStrategy = event.value;
+  }
+
+  onAllowDeletingChange(event: any): void {
+    this.allowDeleting = this.editingStrategy[event.value];
+    this.selectedDeletingStrategy = event.value;
   }
 }
 
