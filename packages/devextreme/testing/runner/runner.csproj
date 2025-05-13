@@ -1,10 +1,5 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web" ToolsVersion="15.0">
 
-  <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.27" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="6.0.27" />
-  </ItemGroup>
-
   <PropertyGroup>
     <TargetFramework>net6</TargetFramework>
     <PreserveCompilationContext>true</PreserveCompilationContext>
@@ -15,5 +10,14 @@
     <DebugType>portable</DebugType>
     <RazorCompileToolset>PrecompilationTool</RazorCompileToolset>
   </PropertyGroup>
+
+  <ItemGroup Condition="'$(Configuration)' == 'Debug'">
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="6.0.27" />
+  </ItemGroup>
+
+  <!-- <ItemGroup Condition="'$(Configuration)' == 'Release'"> -->
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.27" />
+  </ItemGroup>
 
 </Project>

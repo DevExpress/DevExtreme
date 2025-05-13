@@ -120,7 +120,7 @@ runs:
     - name: Build dotnet
       working-directory: ./packages/devextreme
       shell: bash
-      run: dotnet build build/build-dotnet.sln
+      run: dotnet build build/build-dotnet.sln -c Release
 
     - name: Run QUnit tests
       working-directory: ./packages/devextreme
