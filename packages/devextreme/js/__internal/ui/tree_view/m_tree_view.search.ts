@@ -27,7 +27,7 @@ const TreeViewSearch = TreeViewBase.inherit(searchBoxMixin).inherit({
         this._initDataAdapter();
         this._updateSearch();
         this._repaintContainer();
-        if (this._searchEditor.id !== this.option('focusedElement')?.id) {
+        if (this._searchEditor?.id !== this.option('focusedElement')?.id) {
           this.option('focusedElement', null);
         }
         break;
