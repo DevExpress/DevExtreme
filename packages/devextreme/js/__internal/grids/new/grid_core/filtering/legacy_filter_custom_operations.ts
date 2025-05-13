@@ -19,11 +19,10 @@ import {
   getFilterExpression, isCondition, isGroup, renderValueText,
 } from '@ts/filter_builder/m_utils';
 
-import { getColumnByIndexOrName } from '../columns_controller/utils';
 import { getHeaderItemText } from './header_filter/legacy_header_filter';
 
 function baseOperation(config) {
-  const { headerFilterController, headerFilterOptions, columns } = config;
+  const { headerFilterController } = config;
 
   const calculateFilterExpression = function (filterValue, field, fields) {
     const result: string[] = [];
@@ -64,9 +63,9 @@ function baseOperation(config) {
   const customizeText = function (fieldInfo, options) {
     options = options || {};
     const { value } = fieldInfo;
-    let column = getColumnByIndexOrName(columns, fieldInfo.field.dataField);
+    let column = config.columnOption(fieldInfo.field.dataField);
     const headerFilter = column && column.headerFilter;
-    // @ts-expect-error lookup is not supported in CardView yet
+    // TODO: lookup is not supported in CardView yet
     const lookup = column && column.lookup;
     const values = options.values || [value];
 
@@ -110,6 +109,7 @@ function baseOperation(config) {
       });
       return result;
     }
+    const headerFilterOptions = config.getHeaderFilterOptions();
     const text = getHeaderItemText(value, column, 0, headerFilterOptions);
     return text;
   };
@@ -122,7 +122,7 @@ function baseOperation(config) {
         .addClass('dx-filterbuilder-item-value-text')
         .appendTo(container);
 
-      const originalColumn = getColumnByIndexOrName(columns, conditionInfo.field.dataField);
+      const originalColumn = config.columnOption(conditionInfo.field.dataField);
       const column = extend(true, {}, originalColumn);
 
       renderValueText(div, conditionInfo.text && conditionInfo.text.split('|'));

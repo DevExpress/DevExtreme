@@ -1,8 +1,11 @@
 import { computed } from '@preact/signals-core';
 
 import { ColumnsController } from '../../columns_controller/index';
+import type { Column } from '../../columns_controller/types';
+import { getColumnByIndexOrName } from '../../columns_controller/utils';
 import { OptionsController } from '../../options_controller/options_controller';
 import { FilterController } from '../filter_controller';
+import type { HeaderFilterRootOptions } from '../header_filter/index';
 import { CompatibilityHeaderFilterController } from '../header_filter/index';
 import { anyOf, noneOf } from '../legacy_filter_custom_operations';
 
@@ -22,11 +25,16 @@ export class FilterCustomOperationsVisitor {
     private readonly headerFilterController: CompatibilityHeaderFilterController,
     private readonly filterController: FilterController,
   ) {
+    console.log('constructor');
     this.filterController.customOperations = computed((): unknown[] => {
       const config = {
-        columns: this.columnsController.columns.value,
+        columnOption: (columnName: string): Column | undefined => {
+          const columns = this.columnsController.columns.peek();
+
+          return getColumnByIndexOrName(columns, columnName);
+        },
+        getHeaderFilterOptions: (): HeaderFilterRootOptions => this.options.oneWay('headerFilter').peek(),
         headerFilterController: this.headerFilterController,
-        headerFilterOptions: options.oneWay('headerFilter').value,
       };
 
       const builtInCustomOperation = [
