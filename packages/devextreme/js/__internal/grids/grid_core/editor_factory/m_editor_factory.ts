@@ -14,6 +14,7 @@ import eventsEngine from '@js/events/core/events_engine';
 import pointerEvents from '@js/events/pointer';
 import { addNamespace, normalizeKeyName } from '@js/events/utils/index';
 import EditorFactoryMixin from '@js/ui/shared/ui.editor_factory_mixin';
+import type { ColumnHeadersView } from '@ts/grids/grid_core/column_headers/m_column_headers';
 import type {
   ColumnsResizerViewController,
 } from '@ts/grids/grid_core/columns_resizing_reordering/m_columns_resizing_reordering';
@@ -78,6 +79,8 @@ export class EditorFactory extends ViewControllerWithMixin {
 
   protected _validatingController!: ValidatingController;
 
+  protected _columnHeadersView!: ColumnHeadersView;
+
   private _subscribedContainerRoot!: Node;
 
   public init() {
@@ -89,6 +92,7 @@ export class EditorFactory extends ViewControllerWithMixin {
     this._keyboardNavigationController = this.getController('keyboardNavigation');
     this._columnsController = this.getController('columns');
     this._validatingController = this.getController('validating');
+    this._columnHeadersView = this.getView('columnHeadersView');
     this._rowsView = this.getView('rowsView');
 
     this._updateFocusHandler = this._updateFocusHandler || this.createAction(this._updateFocus.bind(this));

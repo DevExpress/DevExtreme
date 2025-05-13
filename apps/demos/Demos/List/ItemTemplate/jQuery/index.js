@@ -9,6 +9,7 @@ $(() => {
   $('#listWidget').dxList({
     dataSource: products,
     height: '100%',
+    displayExpr: 'Name',
     itemTemplate(data) {
       const result = $('<div>').addClass('product');
 

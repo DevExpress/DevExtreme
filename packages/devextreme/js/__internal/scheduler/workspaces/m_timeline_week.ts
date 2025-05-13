@@ -1,7 +1,7 @@
 import registerComponent from '@js/core/component_registrator';
 import { getBoundingRect } from '@js/core/utils/position';
 
-import { VIEWS } from '../m_constants';
+import { VIEWS } from '../constants';
 import SchedulerTimeline from './m_timeline';
 
 const TIMELINE_CLASS = 'dx-scheduler-timeline-week';

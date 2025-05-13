@@ -40,15 +40,16 @@ import {
   TimePanelComponent,
 } from '@ts/scheduler/r1/components/index';
 import type { ViewContext } from '@ts/scheduler/r1/components/types';
-import type { ViewType } from '@ts/scheduler/r1/types';
 import {
   calculateIsGroupedAllDayPanel,
   calculateViewStartDate, getCellDuration, getGroupCount, getStartViewDateTimeOffset,
   getViewStartByOptions,
   isDateAndTimeView,
 } from '@ts/scheduler/r1/utils/index';
+import type { SafeAppointment, ViewType } from '@ts/scheduler/types';
 
 import WidgetObserver from '../base/m_widget_observer';
+import { APPOINTMENT_SETTINGS_KEY } from '../constants';
 import AppointmentDragBehavior from '../m_appointment_drag_behavior';
 import {
   APPOINTMENT_DRAG_SOURCE_CLASS,
@@ -61,7 +62,6 @@ import {
   VERTICAL_GROUP_COUNT_CLASSES,
   VIRTUAL_CELL_CLASS,
 } from '../m_classes';
-import { APPOINTMENT_SETTINGS_KEY } from '../m_constants';
 import tableCreatorModule from '../m_table_creator';
 import { utils } from '../m_utils';
 import {
@@ -605,10 +605,30 @@ class SchedulerWorkSpace extends WidgetObserver {
       onScroll: () => {
         this._groupedStrategy.cache?.clear();
       },
+      // TODO (Scrollable:useKeyboard) -> remove this WA
+      //  after ScrollView private option "useKeyboard" will be extended to useNative: true
+      // NOTE: Scrollable container focusable by default
+      // To prevent scroll container focus in native mode we set tabindex -1 to container
+      // In simulated mode focusable behavior prevented by useKeyboard: false private option
+      onInitialized: ({ component }) => {
+        const useKeyboardDisabled = component.option('useKeyboard') === false;
+        const useNativeEnabled = component.option('useNative') === true;
+        if (useKeyboardDisabled && useNativeEnabled) {
+          $(component.container()).attr('tabindex', -1);
+        }
+      },
+      onOptionChanged: ({ fullName, value, component }) => {
+        const useKeyboardDisabled = component.option('useKeyboard') === false;
+        if (useKeyboardDisabled && fullName === 'useNative' && value === true) {
+          $(component.container()).attr('tabindex', -1);
+        }
+      },
     };
+
     if (this._needCreateCrossScrolling()) {
       config = extend(config, this._createCrossScrollingConfig(config));
     }
+
     if (this.isVirtualScrolling()
             && (this.virtualScrollingDispatcher.horizontalScrollingAllowed
                 || this.virtualScrollingDispatcher.height)) {
@@ -775,7 +795,7 @@ class SchedulerWorkSpace extends WidgetObserver {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  onDataSourceChanged(argument?: any) {
+  onDataSourceChanged(argument?: SafeAppointment[]): void {
   }
 
   isGroupedAllDayPanel() {
@@ -1021,7 +1041,6 @@ class SchedulerWorkSpace extends WidgetObserver {
 
   _updateScrollable() {
     this._dateTableScrollable.update();
-
     this._headerScrollable?.update();
     this._sidebarScrollable?.update();
   }
@@ -2115,7 +2134,7 @@ class SchedulerWorkSpace extends WidgetObserver {
     const visible = this.isAllDayPanelVisible && !this.isGroupedAllDayPanel();
 
     if (visible) {
-      this._toggleAllDayVisibility(false);
+      this._updateAllDayVisibility();
 
       const options = {
         viewData: this.viewDataProvider.viewData,
@@ -2129,7 +2148,8 @@ class SchedulerWorkSpace extends WidgetObserver {
       utils.renovation.renderComponent(this, this._$allDayTitle, AllDayPanelTitleComponent, 'renovatedAllDayPanelTitle', {});
     }
 
-    this._toggleAllDayVisibility(true);
+    this._updateAllDayVisibility();
+    this._updateScrollable();
   }
 
   renderRTimeTable() {
@@ -2332,13 +2352,14 @@ class SchedulerWorkSpace extends WidgetObserver {
           this._initGrouping();
           this.repaint();
         } else if (!this.isRenovatedRender()) {
-          this._toggleAllDayVisibility(true);
+          this._updateAllDayVisibility();
+          this._updateScrollable();
         } else {
           this.renderWorkSpace();
         }
         break;
       case 'allDayExpanded':
-        this._changeAllDayVisibility();
+        this._updateAllDayExpansion();
         this._attachTablesEvents();
         this._updateScrollable();
         break;
@@ -2782,9 +2803,7 @@ class SchedulerWorkSpace extends WidgetObserver {
   protected _setIndicationUpdateInterval() { return noop(); }
 
   _detachGroupCountClass() {
-    [
-      ...VERTICAL_GROUP_COUNT_CLASSES,
-    ].forEach((className) => {
+    VERTICAL_GROUP_COUNT_CLASSES.forEach((className) => {
       (this.$element() as any).removeClass(className);
     });
   }
@@ -2799,17 +2818,16 @@ class SchedulerWorkSpace extends WidgetObserver {
     return this.option('dateCellTemplate');
   }
 
-  _toggleAllDayVisibility(isUpdateScrollable) {
-    const showAllDayPanel = this._isShowAllDayPanel();
-    (this.$element() as any).toggleClass(WORKSPACE_WITH_ALL_DAY_CLASS, showAllDayPanel);
-
-    this._changeAllDayVisibility();
-    isUpdateScrollable && this._updateScrollable();
+  _updateAllDayVisibility(): void {
+    (this.$element() as any).toggleClass(WORKSPACE_WITH_ALL_DAY_CLASS, this._isShowAllDayPanel());
+    this._updateAllDayExpansion();
   }
 
-  _changeAllDayVisibility() {
+  _updateAllDayExpansion(): void {
+    const isExpanded = !this.option('allDayExpanded') && this._isShowAllDayPanel();
+
     this.cache.clear();
-    (this.$element() as any).toggleClass(WORKSPACE_WITH_COLLAPSED_ALL_DAY_CLASS, !this.option('allDayExpanded') && this._isShowAllDayPanel());
+    (this.$element() as any).toggleClass(WORKSPACE_WITH_COLLAPSED_ALL_DAY_CLASS, isExpanded);
   }
 
   _getDateTables() {
@@ -3109,7 +3127,8 @@ class SchedulerWorkSpace extends WidgetObserver {
       groupIndex: index,
     }, true);
 
-    this._toggleAllDayVisibility(true);
+    this._updateAllDayVisibility();
+    this._updateScrollable();
     this._applyCellTemplates(cellTemplates);
   }
 

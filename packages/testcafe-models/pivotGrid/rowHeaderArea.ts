@@ -1,6 +1,7 @@
+import HeaderFilter from './headerFilter';
+
 const CLASSES = {
   rowHeader: 'dx-area-description-cell',
-  action: 'dx-pivotgrid-action',
   field: 'dx-area-field',
 };
 
@@ -11,11 +12,11 @@ export default class RowHeaderArea {
     this.element = selector.find(`.${CLASSES.rowHeader}`);
   }
 
-  getAction(idx = 0): Selector {
-    return this.element.find(`.${CLASSES.action}`).nth(idx);
-  }
-
   getField(idx = 0): Selector {
     return this.element.find(`.${CLASSES.field}`).nth(idx);
+  }
+
+  getHeaderFilterIcon(idx = 0): HeaderFilter {
+    return new HeaderFilter(this.getField(idx));
   }
 }

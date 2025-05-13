@@ -2,7 +2,7 @@ import type { PropsWithClassName } from '__internal/core/r1';
 import { BaseInfernoComponent } from '@devextreme/runtime/inferno';
 import type { JSXTemplate } from '@devextreme-generator/declarations';
 
-import type { ViewCellData } from '../../types';
+import type { ViewCellData } from '../../../types';
 import { renderUtils } from '../../utils/index';
 import type { DataCellTemplateProps, DefaultProps, PropsWithViewContext } from '../types';
 import { AllDayPanelCell } from './all_day_panel_cell';

@@ -11,7 +11,7 @@ export default class DataHeaderArea {
     this.element = selector.find(`.${CLASSES.dataHeader}`);
   }
 
-  getAction(idx = 0): Selector {
+  getField(idx = 0): Selector {
     return this.element.find(`.${CLASSES.field}.${CLASSES.box}`).nth(idx);
   }
 }

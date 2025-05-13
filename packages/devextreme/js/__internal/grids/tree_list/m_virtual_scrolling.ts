@@ -3,9 +3,12 @@ import { extend } from '@js/core/utils/extend';
 import type { DataController } from '@ts/grids/grid_core/data_controller/m_data_controller';
 import type DataSourceAdapter from '@ts/grids/grid_core/data_source_adapter/m_data_source_adapter';
 import type { ModuleType } from '@ts/grids/grid_core/m_types';
+import gridCoreUtils from '@ts/grids/grid_core/m_utils';
+import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
 import {
   data as virtualScrollingDataControllerExtender,
   dataSourceAdapterExtender as virtualScrollingDataSourceAdapterExtender,
+  rowsView as virtualScrollingRowsViewExtender,
   virtualScrollingModule,
 } from '@ts/grids/grid_core/virtual_scrolling/m_virtual_scrolling';
 
@@ -13,6 +16,22 @@ import dataSourceAdapterProvider from './data_source_adapter/m_data_source_adapt
 import gridCore from './m_core';
 
 const oldDefaultOptions = virtualScrollingModule.defaultOptions;
+
+virtualScrollingModule.extenders.views.rowsView = (Base: ModuleType<RowsView>) => class TreeListVirtualScrollingRowsViewExtender extends virtualScrollingRowsViewExtender(Base) {
+  protected _handleDataChanged(e) {
+    const { operationTypes } = e;
+
+    if (e?.isDataChanged && gridCoreUtils.isVirtualRowRendering(this) && operationTypes) {
+      const { fullReload, pageIndex } = operationTypes;
+
+      if (!fullReload && pageIndex) {
+        this._updateContentPosition();
+      }
+    }
+
+    super._handleDataChanged(e);
+  }
+};
 
 virtualScrollingModule.extenders.controllers.data = (Base: ModuleType<DataController>) => class TreeListVirtualScrollingDataControllerExtender extends virtualScrollingDataControllerExtender(Base) {
   protected _loadOnOptionChange() {

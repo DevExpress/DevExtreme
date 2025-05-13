@@ -31,7 +31,7 @@ import { triggerResizeEvent } from '@js/events/visibility_change';
 import dateLocalization from '@js/localization/date';
 import messageLocalization from '@js/localization/message';
 import { custom as customDialog } from '@js/ui/dialog';
-import type { AppointmentTooltipShowingEvent } from '@js/ui/scheduler';
+import type { Appointment, AppointmentTooltipShowingEvent } from '@js/ui/scheduler';
 import { isMaterial, isMaterialBased } from '@js/ui/themes';
 import errors from '@js/ui/widget/ui.errors';
 import Widget from '@js/ui/widget/ui.widget';
@@ -39,9 +39,11 @@ import { dateUtilsTs } from '@ts/core/utils/date';
 import { createTimeZoneCalculator } from '@ts/scheduler/r1/timezone_calculator/index';
 import {
   excludeFromRecurrence,
-  getAppointmentTakesAllDay,
-  getPreparedDataItems,
-  isDateAndTimeView, isTimelineView, viewsUtils,
+  getAppointmentDataItems,
+  isAppointmentTakesAllDay,
+  isDateAndTimeView,
+  isTimelineView,
+  viewsUtils,
 } from '@ts/scheduler/r1/utils/index';
 import type { IFieldExpr } from '@ts/scheduler/utils/index';
 import { macroTaskArray } from '@ts/scheduler/utils/index';
@@ -50,11 +52,11 @@ import { AppointmentForm } from './appointment_popup/m_form';
 import { ACTION_TO_APPOINTMENT, AppointmentPopup } from './appointment_popup/m_popup';
 import { AppointmentDataProvider } from './appointments/data_provider/m_appointment_data_provider';
 import AppointmentCollection from './appointments/m_appointment_collection';
+import { VIEWS } from './constants';
 import { SchedulerHeader } from './header/m_header';
 import { createAppointmentAdapter } from './m_appointment_adapter';
 import AppointmentLayoutManager from './m_appointments_layout_manager';
 import { CompactAppointmentsHelper } from './m_compact_appointments_helper';
-import { VIEWS } from './m_constants';
 import { AppointmentTooltipInfo } from './m_data_structures';
 import { hide as hideLoading, show as showLoading } from './m_loading';
 import { getRecurrenceProcessor } from './m_recurrence';
@@ -73,6 +75,9 @@ import {
 } from './resources/m_utils';
 import { DesktopTooltipStrategy } from './tooltip_strategies/m_desktop_tooltip_strategy';
 import { MobileTooltipStrategy } from './tooltip_strategies/m_mobile_tooltip_strategy';
+import type {
+  AppointmentDataItem, AppointmentViewModel, SafeAppointment, ViewType,
+} from './types';
 import { AppointmentDataAccessor } from './utils/data_accessor/appointment_data_accessor';
 import SchedulerAgenda from './workspaces/m_agenda';
 import SchedulerTimelineDay from './workspaces/m_timeline_day';
@@ -158,9 +163,11 @@ const RECURRENCE_EDITING_MODE = {
 };
 
 class Scheduler extends Widget<any> {
-  _filteredItems!: any[];
+  // NOTE: Do not initialize variables here, because `_initMarkup` function runs before constructor,
+  // and initialization in constructor will erase the data
+  filteredItems!: SafeAppointment[];
 
-  _preparedItems!: any[];
+  preparedItems!: AppointmentDataItem[];
 
   _timeZoneCalculator!: any;
 
@@ -172,7 +179,7 @@ class Scheduler extends Widget<any> {
 
   _appointments: any;
 
-  appointmentDataProvider: any;
+  appointmentDataProvider!: AppointmentDataProvider;
 
   _dataSource: any;
 
@@ -186,7 +193,7 @@ class Scheduler extends Widget<any> {
 
   _appointmentTooltip: any;
 
-  _readyToRenderAppointments: any;
+  _readyToRenderAppointments?: boolean;
 
   _editing: any;
 
@@ -393,28 +400,6 @@ class Scheduler extends Widget<any> {
     });
   }
 
-  get filteredItems() {
-    if (!this._filteredItems) {
-      this._filteredItems = [];
-    }
-    return this._filteredItems;
-  }
-
-  set filteredItems(value) {
-    this._filteredItems = value;
-  }
-
-  get preparedItems() {
-    if (!this._preparedItems) {
-      this._preparedItems = [];
-    }
-    return this._preparedItems;
-  }
-
-  set preparedItems(value) {
-    this._preparedItems = value;
-  }
-
   get currentView() {
     return viewsUtils.getCurrentView(
       this.option('currentView'),
@@ -422,9 +407,9 @@ class Scheduler extends Widget<any> {
     );
   }
 
-  get currentViewType() {
+  get currentViewType(): ViewType {
     return isObject(this.currentView)
-      ? (this.currentView as any).type
+      ? (this.currentView as any).type as ViewType
       : this.currentView;
   }
 
@@ -1152,8 +1137,8 @@ class Scheduler extends Widget<any> {
     this._renderContentImpl();
   }
 
-  _updatePreparedItems(items) {
-    this.preparedItems = getPreparedDataItems(
+  _updatePreparedItems(items?: Appointment[]): void {
+    this.preparedItems = getAppointmentDataItems(
       items,
       this._dataAccessors,
       this._getCurrentViewOption('cellDuration'),
@@ -1161,7 +1146,7 @@ class Scheduler extends Widget<any> {
     );
   }
 
-  _dataSourceChangedHandler(result) {
+  _dataSourceChangedHandler(result?: Appointment[]) {
     if (this._readyToRenderAppointments) {
       this._workSpaceRecalculation.done(() => {
         this._updatePreparedItems(result);
@@ -1195,17 +1180,16 @@ class Scheduler extends Widget<any> {
 
     workspace.option('allDayExpanded', this._isAllDayExpanded());
 
-    let viewModel = [];
     // @ts-expect-error
-    if (this._isVisible()) {
-      viewModel = this._getAppointmentsToRepaint();
-    }
+    const viewModel: AppointmentViewModel[] = this._isVisible()
+      ? this._getAppointmentsToRepaint()
+      : [];
 
     this._appointments.option('items', viewModel);
     this.appointmentDataProvider.cleanState();
   }
 
-  _getAppointmentsToRepaint() {
+  _getAppointmentsToRepaint(): AppointmentViewModel[] {
     const layoutManager = this.getLayoutManager();
 
     const appointmentsMap = layoutManager.createAppointmentsMap(this.filteredItems);
@@ -1477,6 +1461,8 @@ class Scheduler extends Widget<any> {
   }
 
   _initMarkupCore(resources) {
+    this.filteredItems = [];
+    this.preparedItems = [];
     this._readyToRenderAppointments = hasWindow();
 
     this._workSpace && this._cleanWorkspace();
@@ -1693,7 +1679,6 @@ class Scheduler extends Widget<any> {
       indicatorTime: this.option('indicatorTime'),
       indicatorUpdateInterval: this.option('indicatorUpdateInterval'),
       shadeUntilCurrentTime: this.option('shadeUntilCurrentTime'),
-      allDayExpanded: this._appointments.option('items'),
       crossScrollingEnabled,
       dataCellTemplate: this.option('dataCellTemplate'),
       timeCellTemplate: this.option('timeCellTemplate'),
@@ -2227,7 +2212,7 @@ class Scheduler extends Widget<any> {
       this.timeZoneCalculator,
     );
 
-    return getAppointmentTakesAllDay(
+    return isAppointmentTakesAllDay(
       appointment,
       this._getCurrentViewOption('allDayPanelMode'),
     );

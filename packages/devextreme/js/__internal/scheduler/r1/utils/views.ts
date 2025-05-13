@@ -1,7 +1,7 @@
 import { isObject } from '@js/core/utils/type';
 
-import { VIEW_TYPES } from '../const';
-import type { ViewType } from '../types';
+import { VIEW_TYPES } from '../../constants';
+import type { ViewType } from '../../types';
 
 export const getCurrentView = (
   currentView: string | ViewType,

@@ -3,7 +3,7 @@ import { createReRenderEffect, InfernoWrapperComponent } from '@devextreme/runti
 import type { JSXTemplate } from '@devextreme-generator/declarations';
 import { PublicTemplate } from '@ts/scheduler/r1/components/templates/index';
 
-import type { DateHeaderData } from '../../types';
+import type { DateHeaderData } from '../../../types';
 import { isHorizontalGroupingApplied } from '../../utils/index';
 import type { DateTimeCellTemplateProps } from '../types';
 import type { DateHeaderProps } from './date_header';

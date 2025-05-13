@@ -7,8 +7,8 @@ import messageLocalization from '@js/localization/message';
 import Button from '@js/ui/button';
 import { getOverflowIndicatorColor } from '@ts/scheduler/r1/utils/index';
 
+import { LIST_ITEM_CLASS, LIST_ITEM_DATA_KEY } from './constants';
 import { createAppointmentAdapter } from './m_appointment_adapter';
-import { LIST_ITEM_CLASS, LIST_ITEM_DATA_KEY } from './m_constants';
 import { AppointmentTooltipInfo } from './m_data_structures';
 
 const APPOINTMENT_COLLECTOR_CLASS = 'dx-scheduler-appointment-collector';

@@ -1,7 +1,7 @@
 import { BaseInfernoComponent } from '@devextreme/runtime/inferno';
 import type { JSXTemplate } from '@devextreme-generator/declarations';
 
-import type { DateHeaderData, Group, GroupOrientation } from '../../types';
+import type { DateHeaderData, Group, GroupOrientation } from '../../../types';
 import { isHorizontalGroupingApplied, themeUtils } from '../../utils/index';
 import type { DateTimeCellTemplateProps, PropsWithViewContext } from '../types';
 import { DateHeaderCell } from './date_header_cell';

@@ -1,6 +1,6 @@
 import type { Properties } from 'csstype';
 
-import type { ViewType } from '../types';
+import type { ViewType } from '../../types';
 
 type CSSAttributes = Properties<string | number>;
 

@@ -1,6 +1,6 @@
 import dateUtils from '@js/core/utils/date';
 
-import type { CalculateStartViewDate } from '../types';
+import type { CalculateStartViewDate } from '../../types';
 import { setOptionHour } from './base';
 import { getViewStartByOptions } from './month';
 

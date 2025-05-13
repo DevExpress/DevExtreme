@@ -4,6 +4,7 @@ import { changeTheme } from '../../../../helpers/changeTheme';
 import { createWidget } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
 import { Themes } from '../../../../helpers/themes';
+import { insertStylesheetRulesToPage, removeStylesheetRulesFromPage } from '../../../../helpers/domUtils';
 
 fixture.disablePageReloads`Focused row - markup`
   .page(url(__dirname, '../../../container.html'));
@@ -105,4 +106,43 @@ fixture.disablePageReloads`Focused row - markup`
       }, 'dataB', 'dataC'],
     });
   }).after(async () => changeTheme(Themes.genericLight));
+});
+
+[
+  Themes.materialBlue,
+  Themes.genericLight,
+  Themes.fluentBlue,
+].forEach((theme) => {
+  test(`Link should not have background color in ${theme} (T1282624)`, async (t) => {
+    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+    const dataGrid = new DataGrid('#container');
+
+    // assert
+    await takeScreenshot(`focused-row-link-background (${theme}).png`, dataGrid.element);
+    await t
+      .expect(compareResults.isValid())
+      .ok(compareResults.errorMessages());
+  }).before(async () => {
+    await changeTheme(theme);
+
+    await insertStylesheetRulesToPage('#container tr.dx-row-focused td { background-color: red }');
+
+    await createWidget('dxDataGrid', {
+      dataSource: [
+        { id: 0, text: 'text_1' },
+        { id: 1, text: 'text_2' },
+        { id: 2, text: 'text_3' },
+      ],
+      focusedRowEnabled: true,
+      editing: {
+        allowDeleting: true,
+        useIcons: false,
+      },
+      focusedRowKey: 1,
+      keyExpr: 'id',
+    });
+  }).after(async () => {
+    await changeTheme(Themes.genericLight);
+    await removeStylesheetRulesFromPage();
+  });
 });

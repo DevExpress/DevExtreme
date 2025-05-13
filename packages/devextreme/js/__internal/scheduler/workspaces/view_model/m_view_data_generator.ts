@@ -13,7 +13,7 @@ import {
   isHorizontalView,
 } from '@ts/scheduler/r1/utils/index';
 
-import { HORIZONTAL_GROUP_ORIENTATION } from '../../m_constants';
+import { HORIZONTAL_GROUP_ORIENTATION } from '../../constants';
 import timezoneUtils from '../../m_utils_time_zone';
 import { getAllGroups } from '../../resources/m_utils';
 

@@ -1,26 +1,11 @@
-import { compileGetter, compileSetter } from '@js/core/utils/data';
+import { mockAppointmentDataAccessor } from '@ts/scheduler/__mock__/appointment_data_accessor.mock';
 
-import { createTimeZoneCalculator } from '../../timezone_calculator';
 import type { AppointmentDataItem } from '../../types';
-import { getPreparedDataItems, resolveDataItems } from '../data';
-
-const defaultDataAccessors = {
-  expr: {
-    startDateExpr: 'startDate',
-    endDateExpr: 'endDate',
-    recurrenceRuleExpr: 'recurrenceRule',
-    visibleExpr: 'visible',
-  } as any,
-  get(name, obj) {
-    return (compileGetter(name) as any)(obj);
-  },
-  set(name, obj, value) {
-    return (compileSetter(name) as any)(obj, value);
-  },
-} as any;
+import { createTimeZoneCalculator } from '../timezone_calculator';
+import { getAppointmentDataItems, replaceIncorrectEndDate } from './get_appointment_data_items';
 
 describe('Data API', () => {
-  describe('getPreparedDataItems', () => {
+  describe('getAppointmentDataItems', () => {
     it('should prepare correct data items', () => {
       const data = [{
         startDate: new Date(2021, 9, 8),
@@ -37,9 +22,9 @@ describe('Data API', () => {
         startDate: new Date(2021, 9, 8),
         visible: true,
       };
-      const result = getPreparedDataItems(
+      const result = getAppointmentDataItems(
         data,
-        defaultDataAccessors,
+        mockAppointmentDataAccessor,
         30,
         createTimeZoneCalculator(''),
       );
@@ -65,9 +50,9 @@ describe('Data API', () => {
           startDate: new Date(2021, 9, 8),
           visible: true,
         };
-        const result = getPreparedDataItems(
+        const result = getAppointmentDataItems(
           data as any,
-          defaultDataAccessors,
+          mockAppointmentDataAccessor,
           30,
           createTimeZoneCalculator(''),
         );
@@ -89,9 +74,9 @@ describe('Data API', () => {
           endDate: new Date(2021, 9, 9),
           visible,
         }];
-        const result = getPreparedDataItems(
+        const result = getAppointmentDataItems(
           data as any,
-          defaultDataAccessors,
+          mockAppointmentDataAccessor,
           30,
           createTimeZoneCalculator(''),
         );
@@ -104,9 +89,9 @@ describe('Data API', () => {
     });
 
     it('should return empty array if no dataItems', () => {
-      let result = getPreparedDataItems(
+      let result = getAppointmentDataItems(
         undefined as any,
-        defaultDataAccessors,
+        mockAppointmentDataAccessor,
         30,
         createTimeZoneCalculator(''),
       );
@@ -114,9 +99,9 @@ describe('Data API', () => {
       expect(result)
         .toEqual([]);
 
-      result = getPreparedDataItems(
+      result = getAppointmentDataItems(
         [] as any,
-        defaultDataAccessors,
+        mockAppointmentDataAccessor,
         30,
         createTimeZoneCalculator(''),
       );
@@ -130,9 +115,9 @@ describe('Data API', () => {
         endDate: new Date(2021, 9, 9),
       }];
 
-      const result = getPreparedDataItems(
+      const result = getAppointmentDataItems(
         data as any,
-        defaultDataAccessors,
+        mockAppointmentDataAccessor,
         30,
         createTimeZoneCalculator(''),
       );
@@ -141,7 +126,7 @@ describe('Data API', () => {
         .toEqual([]);
     });
 
-    it('should return correct value without endDate', () => {
+    it('should correct endDate value if it doesn\'t set', () => {
       const data = [{
         startDate: new Date(2021, 9, 9, 17),
       }];
@@ -150,15 +135,18 @@ describe('Data API', () => {
         allDay: false,
         endDate: new Date(2021, 9, 9, 17, 30),
         hasRecurrenceRule: false,
-        rawAppointment: data[0],
+        rawAppointment: {
+          ...data[0],
+          endDate: new Date(2021, 9, 9, 17, 30),
+        },
         recurrenceException: undefined,
         recurrenceRule: undefined,
         startDate: new Date(2021, 9, 9, 17),
         visible: true,
       };
-      const result = getPreparedDataItems(
+      const result = getAppointmentDataItems(
         data as any,
-        defaultDataAccessors,
+        mockAppointmentDataAccessor,
         30,
         createTimeZoneCalculator(''),
       );
@@ -178,9 +166,9 @@ describe('Data API', () => {
         ...expectedTimezones,
       }];
 
-      const result = getPreparedDataItems(
+      const result = getAppointmentDataItems(
         data as any,
-        defaultDataAccessors,
+        mockAppointmentDataAccessor,
         30,
         createTimeZoneCalculator(''),
       );
@@ -188,22 +176,42 @@ describe('Data API', () => {
       expect(result).toMatchObject([expectedTimezones]);
     });
   });
+});
 
-  describe('resolveDataItems', () => {
-    it('should return correct items if loaded Array', () => {
-      const data = [1, 2, 3];
+describe('replaceIncorrectEndDate', () => {
+  it('should process endDate correctly', () => {
+    [
+      {
+        data: {
+          startDate: new Date(2019, 4, 3, 12),
+          allDay: false,
+        },
+        expectedEndDate: new Date(2019, 4, 3, 12, 30),
+      },
+      {
+        data: {
+          startDate: new Date(2019, 4, 3, 12),
+          allDay: false,
+          endDate: new Date('string'),
+        },
+        expectedEndDate: new Date(2019, 4, 3, 12, 30),
+      },
+      {
+        data: {
+          startDate: new Date(2019, 4, 3, 12),
+          allDay: true,
+        },
+        expectedEndDate: new Date(2019, 4, 3, 23, 59),
+      },
+    ].forEach((item) => {
+      replaceIncorrectEndDate(
+        item.data,
+        30,
+        mockAppointmentDataAccessor,
+      );
 
-      expect(resolveDataItems(data as any))
-        .toBe(data);
-    });
-
-    it('should return correct items if loaded Object', () => {
-      const options = {
-        data: [1, 2, 3],
-      };
-
-      expect(resolveDataItems(options as any))
-        .toBe(options.data);
+      expect((item.data.endDate as Date).getHours()).toBe(item.expectedEndDate.getHours());
+      expect((item.data.endDate as Date).getMinutes()).toBe(item.expectedEndDate.getMinutes());
     });
   });
 });

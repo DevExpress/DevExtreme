@@ -12,7 +12,7 @@ test.meta({ unstable: true })('Header filter popup', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const pivotGrid = new PivotGrid('#container');
 
-  await t.click(pivotGrid.getColumnHeaderArea().getHeaderFilterIcon());
+  await t.click(pivotGrid.getColumnHeaderArea().getHeaderFilterIcon().element);
 
   await testScreenshot(t, takeScreenshot, 'headerFilter - before scroll.png');
 

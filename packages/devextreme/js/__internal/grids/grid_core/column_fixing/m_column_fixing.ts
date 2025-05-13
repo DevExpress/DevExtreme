@@ -1048,7 +1048,7 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewFixedColumnsExten
     super._handleScroll(e);
   }
 
-  private _updateContentPosition(isRender) {
+  protected _updateContentPosition(isRender) {
     // @ts-expect-error m_virtual_scrolling method
     super._updateContentPosition.apply(this, arguments);
     if (!isRender) {

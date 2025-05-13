@@ -683,6 +683,19 @@ export default class DataGrid extends Widget {
     )();
   }
 
+  apiNavigateToRow(key: any): Promise<any> {
+    const { getInstance } = this;
+
+    return ClientFunction(
+      () => (getInstance() as DataGridInstance).navigateToRow(key),
+      {
+        dependencies: {
+          getInstance, key
+        },
+      },
+    )();
+  }
+
   moveRow(rowIndex: number, x: number, y: number, isStart = false): Promise<void> {
     const { getInstance } = this;
 

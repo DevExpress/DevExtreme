@@ -53,6 +53,7 @@
         "dxList-selectAll-checked": "Checked",
         "dxList-selectAll-notChecked": "Not checked",
         "dxList-ariaRoleDescription": "List",
+        "dxList-listAriaLabel-itemContent": "List item content",
 
         "dxScrollView-pullingDownText": "下拉以重新整理...",
         "dxScrollView-pulledDownText": "放開以重新整理...",

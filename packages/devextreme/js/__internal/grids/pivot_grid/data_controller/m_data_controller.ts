@@ -107,8 +107,7 @@ const DataController = Class.inherit((function () {
 
       if (
         isTree
-        && headerItem.children
-        && headerItem.children.length
+        && headerItem.children?.length
         && !headerItem.children[0].isMetric
       ) {
         infoItem.width = null;
@@ -237,7 +236,7 @@ const DataController = Class.inherit((function () {
               item.wordWrapEnabled = field.wordWrapEnabled;
             }
 
-            item.isLast = !item.children || !item.children.length;
+            item.isLast = !item.children?.length;
             if (item.isLast) {
               each(options.sortBySummaryPaths, (_, sortBySummaryPath) => {
                 if (!isDefined(item.dataIndex)) {
@@ -284,7 +283,7 @@ const DataController = Class.inherit((function () {
     }
 
     function createViewHeaderItems(headerItems, headerDescriptions) {
-      const headerDescriptionsCount = (headerDescriptions && headerDescriptions.length) || 0;
+      const headerDescriptionsCount = headerDescriptions?.length || 0;
       const childrenStack = [];
       // @ts-expect-error
       const d = new Deferred();
@@ -344,7 +343,7 @@ const DataController = Class.inherit((function () {
               index: item.index,
               dataIndex: i,
               isMetric: true,
-              isEmpty: item.isEmpty && item.isEmpty[i],
+              isEmpty: item.isEmpty?.[i],
             });
           }
         }
@@ -390,7 +389,7 @@ const DataController = Class.inherit((function () {
     const removeEmptyParent = function (items, index) {
       const parent = items[index + 1];
 
-      if (!items[index].children.length && parent && parent.children) {
+      if (!items[index].children.length && parent?.children) {
         parent.children.splice(parent.children.indexOf(items[index]), 1);
         removeEmptyParent(items, index + 1);
       }
@@ -402,7 +401,7 @@ const DataController = Class.inherit((function () {
         const parentChildren = (items[1] ? items[1].children : headerItems) || [];
         let { isEmpty } = item;
 
-        if (isEmpty && isEmpty.length) {
+        if (isEmpty?.length) {
           isEmpty = item.isEmpty.filter((isEmpty) => isEmpty).length === isEmpty.length;
         }
 
@@ -1025,7 +1024,7 @@ const DataController = Class.inherit((function () {
       this.progressChanged.fire(progress);
     },
     _handleFieldsPrepared(e) {
-      this._options.onFieldsPrepared && this._options.onFieldsPrepared(e);
+      this._options.onFieldsPrepared?.(e);
     },
     _createDataSource(options) {
       const that: any = this;
@@ -1173,8 +1172,12 @@ const DataController = Class.inherit((function () {
       const rowsInfo = that._rowsInfo;
       const scrollController = that._rowsScrollController;
       let rowspan;
+      const isOnePredefinedRow = rowsInfo.length === 1 && (
+        !rowsInfo[0].type
+        || rowsInfo[0].type === GRAND_TOTAL_TYPE
+      );
 
-      if (scrollController && !getAllData) {
+      if (scrollController && !getAllData && !isOnePredefinedRow) {
         const startIndex = scrollController.beginPageIndex() * that.rowPageSize();
         const endIndex = scrollController.endPageIndex() * that.rowPageSize() + that.rowPageSize();
         const summaryFields = that._dataSource.getSummaryFields();
@@ -1265,7 +1268,7 @@ const DataController = Class.inherit((function () {
 
     totalColumnCount() {
       let count = 0;
-      if (this._columnsInfo && this._columnsInfo.length) {
+      if (this._columnsInfo?.length) {
         for (let i = 0; i < this._columnsInfo[0].length; i += 1) {
           count += this._columnsInfo[0][i].colspan || 1;
         }
@@ -1324,8 +1327,8 @@ const DataController = Class.inherit((function () {
         that._dataSource.dispose();
       }
 
-      that._columnsScrollController && that._columnsScrollController.dispose();
-      that._rowsScrollController && that._rowsScrollController.dispose();
+      that._columnsScrollController?.dispose();
+      that._rowsScrollController?.dispose();
 
       that._stateStoringController.dispose();
 

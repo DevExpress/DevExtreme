@@ -213,6 +213,7 @@ export class FocusController extends core.ViewController {
     const isAutoNavigate = that.isAutoNavigateToFocusedRow();
     // @ts-expect-error
     const d = new Deferred();
+    const rowsView = this.getView('rowsView');
 
     if (key === undefined || !this.getDataController().dataSource()) {
       return d.reject().promise();
@@ -239,7 +240,9 @@ export class FocusController extends core.ViewController {
           }).fail(d.reject);
         } else {
           this.getDataController().pageIndex(pageIndex).done(() => {
-            that._navigateTo(key, d, needFocusRow);
+            rowsView.waitAsyncTemplates(true).done(() => {
+              that._navigateTo(key, d, needFocusRow);
+            });
           }).fail(d.reject);
         }
       }).fail(d.reject);
@@ -502,15 +505,19 @@ const keyboardNavigation = (Base: ModuleType<KeyboardNavigationController>) => c
 const editorFactory = (Base: ModuleType<EditorFactory>) => class FocusEditorFactoryExtender extends Base {
   protected renderFocusOverlay($element, isHideBorder) {
     const focusedRowEnabled = this.option('focusedRowEnabled');
-    let $cell;
 
-    if (!focusedRowEnabled || !this._keyboardNavigationController?.isRowFocusType() || this._editingController.isEditing()) {
+    if (
+      !focusedRowEnabled
+      || !this._keyboardNavigationController?.isRowFocusType()
+      || this._editingController.isEditing()
+      || this._columnHeadersView.isFilterRowCell($element)
+    ) {
       super.renderFocusOverlay($element, isHideBorder);
     } else if (focusedRowEnabled) {
       const isRowElement = this._keyboardNavigationController._getElementType($element) === 'row';
 
       if (isRowElement && !$element.hasClass(ROW_FOCUSED_CLASS)) {
-        $cell = this._keyboardNavigationController.getFirstValidCellInRow($element);
+        const $cell = this._keyboardNavigationController.getFirstValidCellInRow($element);
         this._keyboardNavigationController.focus($cell);
       }
     }

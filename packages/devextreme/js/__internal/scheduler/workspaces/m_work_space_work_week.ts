@@ -3,7 +3,7 @@ import {
   getWeekendsCount,
 } from '@ts/scheduler/r1/utils/index';
 
-import { VIEWS } from '../m_constants';
+import { VIEWS } from '../constants';
 import SchedulerWorkSpaceWeek from './m_work_space_week';
 
 const WORK_WEEK_CLASS = 'dx-scheduler-work-space-work-week';

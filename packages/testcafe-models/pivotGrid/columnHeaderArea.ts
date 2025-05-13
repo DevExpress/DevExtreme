@@ -1,8 +1,9 @@
 import { Selector } from 'testcafe';
+import HeaderFilter from './headerFilter';
 
 const CLASSES = {
   columnHeader: 'dx-column-header',
-  action: 'dx-pivotgrid-action',
+  field: 'dx-area-field',
   columnIndicators: 'dx-column-indicators',
   headerFilter: {
     icon: 'dx-header-filter',
@@ -19,8 +20,8 @@ export default class ColumnHeaderArea {
     this.element = selector.find(`.${CLASSES.columnHeader}`);
   }
 
-  getAction(idx = 0): Selector {
-    return this.element.find(`.${CLASSES.action}`).nth(idx);
+  getField(idx = 0): Selector {
+    return this.element.find(`.${CLASSES.field}`).nth(idx);
   }
 
   // todo: move header filter to seperate file
@@ -31,8 +32,8 @@ export default class ColumnHeaderArea {
     return Selector(`.${CLASSES.headerFilter.menu}`);
   }
 
-  getHeaderFilterIcon(idx = 0): Selector {
-    return this.getAction(idx).find(`.${CLASSES.headerFilter.icon}`);
+  getHeaderFilterIcon(idx = 0): HeaderFilter {
+    return new HeaderFilter(this.getField(idx));
   }
 
   getHeaderFilterScrollable(): Selector {

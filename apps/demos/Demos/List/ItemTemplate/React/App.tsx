@@ -8,6 +8,7 @@ const App = () => (
     <List
       dataSource={products}
       height="100%"
+      displayExpr="Name"
       itemRender={ProductInfo} />
   </div>
 );

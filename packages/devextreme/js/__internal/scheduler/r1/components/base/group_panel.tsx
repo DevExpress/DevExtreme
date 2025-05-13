@@ -2,8 +2,8 @@ import type { InfernoEffect } from '@devextreme/runtime/inferno';
 import { createReRenderEffect, InfernoWrapperComponent } from '@devextreme/runtime/inferno';
 import type { RefObject } from '@devextreme-generator/declarations';
 
-import { VERTICAL_GROUP_ORIENTATION } from '../../const';
-import type { Group, GroupOrientation } from '../../types';
+import { VERTICAL_GROUP_ORIENTATION } from '../../../constants';
+import type { Group, GroupOrientation } from '../../../types';
 import { isVerticalGroupingApplied } from '../../utils/index';
 import type { DefaultProps } from '../types';
 import { GroupPanelHorizontal } from './group_panel_horizontal';

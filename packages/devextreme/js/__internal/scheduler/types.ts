@@ -1,20 +1,16 @@
-import type { DxPromise } from '@js/core/utils/deferred';
 import type { Appointment } from '@js/ui/scheduler';
 
 export type Direction = 'vertical' | 'horizontal';
 export type GroupOrientation = 'vertical' | 'horizontal';
 export type ViewType = 'agenda' | 'day' | 'month' | 'timelineDay' | 'timelineMonth' | 'timelineWeek' | 'timelineWorkWeek' | 'week' | 'workWeek';
 export type AllDayPanelModeType = 'all' | 'allDay' | 'hidden';
-export type LoadDataType = Appointment[] | CustomLoadDataType;
+export type RenderStrategyName = 'horizontal' | 'horizontalMonth' | 'horizontalMonthLine' | 'vertical' | 'week' | 'agenda';
 export type FilterItemType = Record<string, string | number> | string | number;
 export type HeaderCellTextFormat = string | ((date: Date) => string);
 
-export interface BaseTemplateProps {
-  index: number;
-}
-
-export interface DataSourcePromise extends DxPromise {
-  done: (items: unknown) => void;
+export interface SafeAppointment extends Appointment {
+  startDate: Date | string;
+  endDate: Date | string;
 }
 
 export interface AppointmentDataItem {
@@ -27,15 +23,25 @@ export interface AppointmentDataItem {
   hasRecurrenceRule: boolean;
   allDay: boolean;
   visible: boolean;
-  rawAppointment: Appointment;
+  rawAppointment: SafeAppointment;
 }
 
-export interface AppointmentFilter {
-  filter: (dataItems: AppointmentDataItem[]) => Appointment[];
+// TODO: add correct types here. Agenda and other views have different types
+export interface BaseAppointmentViewModelSettings extends Record<string, unknown> {
+  allDay?: boolean;
+  direction: string;
+  height: number | string;
+  width: number | string;
+  groupIndex: number;
+  sortedIndex: number;
 }
 
-// NOTE: CustomStore add "data" field to the result Object.
-export interface CustomLoadDataType { data: Appointment[] }
+export interface AppointmentViewModel {
+  itemData: SafeAppointment;
+  needRepaint: boolean;
+  needRemove: boolean;
+  settings: BaseAppointmentViewModelSettings[];
+}
 
 export interface AppointmentGeometry {
   empty: boolean;

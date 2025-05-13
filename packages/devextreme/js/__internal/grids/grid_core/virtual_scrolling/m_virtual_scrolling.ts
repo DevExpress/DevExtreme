@@ -1605,7 +1605,7 @@ export const rowsView = (Base: ModuleType<RowsView>) => class VirtualScrollingRo
     return correctedRowHeights;
   }
 
-  private _updateContentPosition(isRender?) {
+  protected _updateContentPosition(isRender?) {
     const rowHeight = this._rowHeight || 20;
 
     this._dataController
