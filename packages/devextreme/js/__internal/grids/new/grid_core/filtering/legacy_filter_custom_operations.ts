@@ -77,7 +77,6 @@ function baseOperation(config) {
       const itemsDeferred = options.items || new Deferred();
       if (!options.items) {
         column = extend({}, column, { filterType: 'include', filterValues: values });
-        // TODO:
         const dataSourceOptions = headerFilterController.getDataSource(column);
         dataSourceOptions.paginate = false;
         const dataSource = new DataSource(dataSourceOptions);

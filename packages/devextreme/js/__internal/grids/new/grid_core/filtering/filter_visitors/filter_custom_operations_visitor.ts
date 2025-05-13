@@ -26,7 +26,7 @@ export class FilterCustomOperationsVisitor {
       const config = {
         columns: this.columnsController.columns.value,
         headerFilterController: this.headerFilterController,
-        headerFilterOptions: options.oneWay('headerFilter'),
+        headerFilterOptions: options.oneWay('headerFilter').value,
       };
 
       const builtInCustomOperation = [
