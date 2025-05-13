@@ -15,6 +15,8 @@ const getOrderOfEventCalls = ClientFunction(
   () => (window as any).focusedEventsTestData.map((data) => data.type),
 );
 
+const getOnKeyDownCallCount = ClientFunction(() => (window as any).onKeyDownCallCount);
+
 fixture.disablePageReloads`Keyboard Navigation - common`
   .page(url(__dirname, '../../../container.html'));
 
@@ -5099,5 +5101,75 @@ test('Focus events should be called when pressing the Ctrl + End key', async (t)
 }).after(async () => {
   await ClientFunction(() => {
     delete (window as any).focusedEventsTestData;
+  })();
+});
+
+test('DataGrid - The onKeyDown event should be called once for group panel', async (t) => {
+  // arrange
+  const dataGrid = new DataGrid('#container');
+  const firstGroupedColumn = dataGrid.getGroupPanel().getHeader(0);
+
+  await t.click(firstGroupedColumn.element);
+
+  // act
+  await t.pressKey('tab');
+
+  // assert
+  await t.expect(getOnKeyDownCallCount()).eql(1);
+}).before(async () => {
+  await ClientFunction(() => {
+    (window as any).onKeyDownCallCount = 0;
+  })();
+
+  await createWidget('dxDataGrid', {
+    dataSource: getData(5, 5),
+    showBorders: true,
+    onKeyDown() {
+      (window as any).onKeyDownCallCount += 1;
+    },
+    groupPanel: {
+      visible: true,
+    },
+    columns: [
+      { dataField: 'field_0', groupIndex: 0 },
+      { dataField: 'field_1', groupIndex: 1 },
+      'field_2',
+      'field_3',
+      'field_4',
+    ],
+  });
+}).after(async () => {
+  await ClientFunction(() => {
+    delete (window as any).onKeyDownCallCount;
+  })();
+});
+
+test('DataGrid - The onKeyDown event should be called once for headers', async (t) => {
+  // arrange
+  const dataGrid = new DataGrid('#container');
+  const firstHeader = dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(0);
+
+  await t.click(firstHeader.element);
+
+  // act
+  await t.pressKey('tab');
+
+  // assert
+  await t.expect(getOnKeyDownCallCount()).eql(1);
+}).before(async () => {
+  await ClientFunction(() => {
+    (window as any).onKeyDownCallCount = 0;
+  })();
+
+  await createWidget('dxDataGrid', {
+    dataSource: getData(5, 5),
+    showBorders: true,
+    onKeyDown() {
+      (window as any).onKeyDownCallCount += 1;
+    },
+  });
+}).after(async () => {
+  await ClientFunction(() => {
+    delete (window as any).onKeyDownCallCount;
   })();
 });
