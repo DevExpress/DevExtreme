@@ -27,22 +27,25 @@ exports[`ColumnProperties headerItemCssClass should override content of headerPa
                 data-dx-focus-container="true"
               >
                 <div
+                  aria-hidden="true"
                   data-dx-focus-decoy="true"
                   tabindex="0"
                 />
                 <div
                   class="dx-cardview-headerpanel-content"
+                  role="menubar"
                 >
                   <div
                     aria-label="Field name Column 1"
                     class="dx-cardview-header-item my-css-class "
-                    role="button"
+                    role="menuitem"
                     tabindex="0"
                   >
                     Column 1
                   </div>
                 </div>
                 <div
+                  aria-hidden="true"
                   data-dx-focus-decoy="true"
                   tabindex="0"
                 />
@@ -97,22 +100,25 @@ exports[`Options headerPanel itemCssClass should add css class to headerPanel it
           data-dx-focus-container="true"
         >
           <div
+            aria-hidden="true"
             data-dx-focus-decoy="true"
             tabindex="0"
           />
           <div
             class="dx-cardview-headerpanel-content"
+            role="menubar"
           >
             <div
               aria-label="Field name Column 1"
               class="dx-cardview-header-item  my-class"
-              role="button"
+              role="menuitem"
               tabindex="0"
             >
               Column 1
             </div>
           </div>
           <div
+            aria-hidden="true"
             data-dx-focus-decoy="true"
             tabindex="0"
           />
@@ -170,22 +176,25 @@ exports[`Options headerPanel visible when it is true should show headerPanel 1`]
                 data-dx-focus-container="true"
               >
                 <div
+                  aria-hidden="true"
                   data-dx-focus-decoy="true"
                   tabindex="0"
                 />
                 <div
                   class="dx-cardview-headerpanel-content"
+                  role="menubar"
                 >
                   <div
                     aria-label="Field name Column 1"
                     class="dx-cardview-header-item  "
-                    role="button"
+                    role="menuitem"
                     tabindex="0"
                   >
                     Column 1
                   </div>
                 </div>
                 <div
+                  aria-hidden="true"
                   data-dx-focus-decoy="true"
                   tabindex="0"
                 />
