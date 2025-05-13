@@ -20,7 +20,9 @@ export interface ContentViewProps {
   loadPanelProps: LoadPanelProperties & { visible: boolean };
   noDataTextProps: NoDataTextProperties & { visible: boolean };
 
-  scrollableProps: ScrollableProps;
+  scrollableProps: ScrollableProps & {
+    useKeyboard: boolean;
+  };
 
   onViewportHeightChange?: (value: number) => void;
 
@@ -31,6 +33,8 @@ export interface ContentViewProps {
   onWidthChange?: (value: number) => void;
 
   scrollableRef?: RefObject<dxScrollable>;
+
+  showContextMenu?: (e: MouseEvent) => void;
 }
 
 export class ContentView extends Component<ContentViewProps> {
@@ -40,24 +44,37 @@ export class ContentView extends Component<ContentViewProps> {
 
   public render(): JSX.Element {
     return (
-      <div className={CLASSES.contentView} ref={this.containerRef}>
+      <div
+        className={CLASSES.contentView}
+        ref={this.containerRef}
+        oncontextmenu={this.props.showContextMenu}
+      >
         <LoadPanel {...this.props.loadPanelProps} />
-        {this.props.noDataTextProps.visible && <NoDataText {...this.props.noDataTextProps} />}
-        <Scrollable
-          ref={this.scrollableRef}
-          componentRef={this.props.scrollableRef}
-          {...this.props.scrollableProps}
-        >
-          {this.props.children!}
-        </Scrollable>
+
+        {
+          this.props.noDataTextProps.visible
+            ? <NoDataText {...this.props.noDataTextProps} />
+            : (
+            <Scrollable
+              ref={this.scrollableRef}
+              componentRef={this.props.scrollableRef}
+              {...this.props.scrollableProps}
+            >
+              {this.props.children!}
+            </Scrollable>
+            )
+        }
+
         <ErrorRow {...this.props.errorRowProps} />
       </div>
     );
   }
 
   private updateSizesInfo(): void {
-    const clientHeight = this.scrollableRef.current!.clientHeight();
-    this.props?.onViewportHeightChange?.(clientHeight);
+    if (this.scrollableRef.current) {
+      const clientHeight = this.scrollableRef.current.clientHeight();
+      this.props?.onViewportHeightChange?.(clientHeight);
+    }
   }
 
   public componentDidMount(): void {

@@ -15,6 +15,9 @@ export const CHAT_EDITING_PREVIEW_TEXT_CLASS = 'dx-chat-editing-preview-text';
 export const CHAT_EDITING_PREVIEW_CANCEL_BUTTON_CLASS = 'dx-chat-editing-preview-cancel-button';
 
 export interface Properties extends DOMComponentProperties<EditingPreview> {
+  activeStateEnabled?: boolean;
+  focusStateEnabled?: boolean;
+  hoverStateEnabled?: boolean;
   text?: string;
   onCancel?: (e: ClickEvent) => void;
 }
@@ -27,6 +30,9 @@ class EditingPreview extends DOMComponent<EditingPreview, Properties> {
   _getDefaultOptions(): Properties {
     return {
       ...super._getDefaultOptions(),
+      activeStateEnabled: true,
+      focusStateEnabled: true,
+      hoverStateEnabled: true,
       text: '',
       onCancel: undefined,
     };
@@ -78,13 +84,21 @@ class EditingPreview extends DOMComponent<EditingPreview, Properties> {
   }
 
   _renderCloseButton(): void {
-    const { onCancel } = this.option();
+    const {
+      onCancel,
+      activeStateEnabled,
+      focusStateEnabled,
+      hoverStateEnabled,
+    } = this.option();
 
     const $button = $('<div>')
       .addClass(CHAT_EDITING_PREVIEW_CANCEL_BUTTON_CLASS)
       .appendTo(this.element());
 
     this._closeButton = this._createComponent($button, Button, {
+      activeStateEnabled,
+      focusStateEnabled,
+      hoverStateEnabled,
       icon: 'remove',
       type: 'normal',
       stylingMode: 'text',
@@ -126,6 +140,12 @@ class EditingPreview extends DOMComponent<EditingPreview, Properties> {
     const { name, value, previousValue } = args;
 
     switch (name) {
+      case 'activeStateEnabled':
+      case 'focusStateEnabled':
+      case 'hoverStateEnabled': {
+        this._closeButton.option(name, value);
+        break;
+      }
       case 'text':
         this._processTextUpdate(previousValue);
         break;

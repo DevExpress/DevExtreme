@@ -50,6 +50,7 @@ const CHAT_MESSAGELIST_DAY_HEADER_CLASS = 'dx-chat-messagelist-day-header';
 const CHAT_MESSAGEGROUP_INFORMATION_CLASS = 'dx-chat-messagegroup-information';
 const CHAT_MESSAGEGROUP_CONTENT_CLASS = 'dx-chat-messagegroup-content';
 const CHAT_MESSAGE_EDITED_CLASS = 'dx-chat-message-edited';
+const CHAT_MESSAGE_EDITED_HIDING_CLASS = 'dx-chat-message-edited-hiding';
 
 const CHAT_LAST_MESSAGEGROUP_ALIGNMENT_START_CLASS = 'dx-chat-last-messagegroup-alignment-start';
 const CHAT_LAST_MESSAGEGROUP_ALIGNMENT_END_CLASS = 'dx-chat-last-messagegroup-alignment-end';
@@ -272,6 +273,30 @@ QUnit.module('Chat', () => {
             assert.deepEqual(messageList.option('items'), newItems, 'items value is updated');
         });
 
+        QUnit.test('items should be passed to messageList after update only one item (T1290746)', function(assert) {
+            this.reinit({
+                items: [{ text: 'one' }, { text: 'two' }],
+            });
+
+            this.instance.option('items[0]', { text: 'new one' });
+
+            const messageList = this.getMessageList();
+
+            assert.deepEqual(messageList.option('items'), [{ text: 'new one' }, { text: 'two' }], 'items value is updated');
+        });
+
+        QUnit.test('items should be passed to messageList after update only one item field (T1290746)', function(assert) {
+            this.reinit({
+                items: [{ text: 'one' }, { text: 'two' }],
+            });
+
+            this.instance.option('items[0].text', 'new one');
+
+            const messageList = this.getMessageList();
+
+            assert.deepEqual(messageList.option('items'), [{ text: 'new one' }, { text: 'two' }], 'items value is updated');
+        });
+
         ['showDayHeaders', 'showAvatar', 'showUserName', 'showMessageTimestamp'].forEach(option => {
             QUnit.test(`Chat should pass ${option} to messageList on init`, function(assert) {
                 this.reinit({
@@ -416,7 +441,6 @@ QUnit.module('Chat', () => {
                         allowDeleting: true,
                     }
                 });
-
                 const $bubbles = this.getBubbles();
                 $bubbles.eq(1).trigger('dxcontextmenu');
 
@@ -600,6 +624,28 @@ QUnit.module('Chat', () => {
 
                 assert.strictEqual(this.getContextMenu().option('visible'), false, 'Context menu is not shown for deleted message');
             });
+
+            QUnit.test('Edit menu item should not be shown for image messages', function(assert) {
+                this.reinit({
+                    focusStateEnabled: true,
+                    editing: {
+                        allowUpdating: true,
+                    },
+                    items: [
+                        { type: 'image', src: 'image.jpg', author: userSecond },
+                    ],
+                    user: userSecond,
+                });
+
+                const $bubbles = this.getBubbles();
+
+                $bubbles.trigger('dxcontextmenu');
+
+                const contextMenuItems = this.getContextMenu().option('items');
+                const editItem = contextMenuItems.find((item) => item.text === 'Edit');
+
+                assert.strictEqual(editItem, undefined, 'Edit menu item is not shown for image message');
+            });
         });
 
         QUnit.module('messageTemplate', () => {
@@ -641,6 +687,9 @@ QUnit.module('Chat', () => {
                     timestamp: 1234567,
                     text: 'message text',
                     author: { name: 'UserName', id: 'UserID' },
+                    alt: undefined,
+                    src: undefined,
+                    type: undefined
                 };
 
                 const messageTemplate = (data) => {
@@ -2767,7 +2816,7 @@ QUnit.module('Chat', () => {
         });
 
         QUnit.test('it should be possible to update isEdited state of not first message in group using push api', function(assert) {
-            const messages = [{ id: 0, text: 'message_0' }, { id: 1, text: 'message_1', isEdited: true }];
+            const messages = [{ id: 0, text: 'message_0' }, { id: 1, text: 'message_1' }];
             const timeout = 100;
 
             const store = new CustomStore({
@@ -2791,14 +2840,108 @@ QUnit.module('Chat', () => {
             const $groupContent = this.$element.find(`.${CHAT_MESSAGEGROUP_CONTENT_CLASS}`);
             let $editedMessage = $groupContent.find(`.${CHAT_MESSAGE_EDITED_CLASS}`);
 
-            assert.strictEqual($editedMessage.length, 1, 'edited text was added on init');
+            assert.strictEqual($editedMessage.length, 0, 'edited text was not added on init');
 
-            store.push([{ type: 'update', key: 1, data: { ...messages[1], isEdited: false } }]);
+            store.push([{ type: 'update', key: 1, data: { ...messages[1], isEdited: true } }]);
             this.clock.tick(timeout * 2);
 
             $editedMessage = $groupContent.find(`.${CHAT_MESSAGE_EDITED_CLASS}`);
 
-            assert.strictEqual($editedMessage.length, 0, 'edited text was removed at runtime');
+            assert.strictEqual($editedMessage.length, 1, 'edited text was added at runtime');
+        });
+
+        QUnit.test('it should be possible to update isEdited state of new message added using push api', function(assert) {
+            const messages = [];
+            const timeout = 100;
+
+            const store = new CustomStore({
+                key: 'id',
+                load: function() {
+                    const d = $.Deferred();
+                    setTimeout(function() {
+                        d.resolve([...messages]);
+                    }, timeout);
+                    return d.promise();
+                },
+                insert: (message) => {
+                    const d = $.Deferred();
+
+                    setTimeout(() => {
+                        messages.push(message);
+                        d.resolve();
+                    });
+
+                    return d.promise();
+                },
+            });
+
+            this.reinit({
+                dataSource: store,
+                reloadOnChange: false,
+            });
+
+            this.clock.tick(timeout);
+
+            store.push([{ type: 'insert', data: { id: 1, text: 'inserted message' } }]);
+
+            this.clock.tick(timeout);
+
+            let $editedMessage = this.$element.find(`.${CHAT_MESSAGE_EDITED_CLASS}`);
+
+            assert.strictEqual($editedMessage.length, 0, 'there is no edited messages');
+
+            store.push([{ type: 'update', key: 1, data: { isEdited: true } }]);
+
+            this.clock.tick(timeout);
+
+            $editedMessage = this.$element.find(`.${CHAT_MESSAGE_EDITED_CLASS}`);
+
+            assert.strictEqual($editedMessage.length, 1, 'there is an edited message');
+        });
+
+        [
+            {
+                scenario: 'in information element',
+                messages: [{ id: 0, text: 'message_0', isEdited: true }, { id: 1, text: 'message_1' }],
+            },
+            {
+                scenario: 'not in information element',
+                messages: [{ id: 0, text: 'message_0' }, { id: 1, text: 'message_1', isEdited: true }],
+            },
+        ].forEach(({ scenario, messages }) => {
+            QUnit.test(`Edited text ${scenario} should get hiding class on isEdited runtime disable`, function(assert) {
+                const timeout = 100;
+
+                const store = new CustomStore({
+                    key: 'id',
+                    load: function() {
+                        const d = $.Deferred();
+                        setTimeout(function() {
+                            d.resolve([...messages]);
+                        }, timeout);
+                        return d.promise();
+                    },
+                });
+
+                this.reinit({
+                    dataSource: store,
+                    reloadOnChange: false,
+                });
+
+                this.clock.tick(timeout);
+
+                const $editedMessage = this.$element.find(`.${CHAT_MESSAGE_EDITED_CLASS}`);
+
+                assert.strictEqual($editedMessage.length, 1, 'edited text was added on init');
+
+                store.push([{ type: 'update', key: 0, data: { ...messages[0], isEdited: false } }]);
+                store.push([{ type: 'update', key: 1, data: { ...messages[1], isEdited: false } }]);
+
+                this.clock.tick(timeout);
+
+                assert.strictEqual($editedMessage.hasClass(CHAT_MESSAGE_EDITED_HIDING_CLASS), true, 'edited text has hiding class');
+
+            });
         });
 
         QUnit.test('Message should be removed along with its group when using store.push({ type: "remove", key: "message_id" }), and the message was the last one in the group', function(assert) {

@@ -1,10 +1,11 @@
 import type { DataType, Format } from '@js/common';
-import { compileGetter } from '@js/core/utils/data';
+import { compileGetter, getPathParts } from '@js/core/utils/data';
 import { captionize } from '@js/core/utils/inflector';
 import {
   isDefined,
   isString, type,
 } from '@js/core/utils/type';
+import { getTreeNodeByPath, setTreeNodeByPath } from '@ts/grids/new/grid_core/utils/tree/index';
 import type { ComponentType } from 'inferno';
 
 import type { DataObject } from '../data_controller/types';
@@ -26,7 +27,9 @@ function normalizeColumn(
     ?? columnFromDataOptions?.dataType
     ?? defaultColumnProperties.dataType;
   const columnDataTypeDefaultOptions = defaultColumnPropertiesByDataType[dataType];
-  const columnFormat = column.format ?? columnFromDataOptions?.format;
+  const columnFormat = column.format
+    ?? columnDataTypeDefaultOptions?.format
+    ?? columnFromDataOptions?.format;
   const caption = captionize(column.name);
 
   const colWithDefaults = {
@@ -103,6 +106,24 @@ export function normalizeVisibleIndexes(
     returnIndexes[index] = visibleIndex;
   });
   return returnIndexes;
+}
+
+export function normalizeColumnsVisibleIndexes(
+  columns: PreNormalizedColumn[],
+  forceIndex?: number,
+): PreNormalizedColumn[] {
+  const result = [...columns];
+
+  const visibleIndexes = normalizeVisibleIndexes(
+    columns.map((c) => c.visibleIndex),
+    forceIndex,
+  );
+
+  visibleIndexes.forEach((visibleIndex, i) => {
+    result[i].visibleIndex = visibleIndex;
+  });
+
+  return result;
 }
 
 export function normalizeColumns(
@@ -218,4 +239,24 @@ export const getColumnOptionsFromDataItem = (
       return result;
     }, {}),
   };
+};
+
+export const columnOptionUpdate = (
+  settings: PreNormalizedColumn[],
+  columnIdx: number,
+  updatePath: string,
+  value: unknown,
+): PreNormalizedColumn[] => {
+  const newSettings = [...settings];
+  const updatePathParts = getPathParts(updatePath);
+
+  const columnTreeNode = getTreeNodeByPath(newSettings[columnIdx], updatePathParts);
+
+  if (columnTreeNode === value) {
+    return settings;
+  }
+
+  newSettings[columnIdx] = setTreeNodeByPath(settings[columnIdx], value, updatePathParts);
+
+  return normalizeColumnsVisibleIndexes(newSettings, columnIdx);
 };

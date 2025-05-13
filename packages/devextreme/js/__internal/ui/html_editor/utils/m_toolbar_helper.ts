@@ -110,7 +110,10 @@ function getFormatHandlers(module) {
 function prepareAITextTrasformHandler(module) {
   return (options): void => {
     const {
-      command, parentCommand, commandsMap, prompt,
+      command,
+      commandsMap,
+      parentCommand,
+      prompt,
     } = options;
 
     const { quill } = module;
@@ -126,7 +129,9 @@ function prepareAITextTrasformHandler(module) {
       prompt,
     };
 
-    module.editorInstance.showAIDialog(aiDialogConfig)?.done(({
+    const promise = module.editorInstance.showAIDialog(aiDialogConfig);
+
+    promise.done(({
       resultText,
       event: eventData,
     }: AIDialogResult) => {
@@ -302,6 +307,7 @@ function prepareLinkHandler(module) {
       text: selection && !selectionHasEmbedContent ? module.quill.getText(selection) : '',
       target: Object.prototype.hasOwnProperty.call(formats, 'target') ? !!formats.target : true,
     };
+
     module.editorInstance.formDialogOption('title', localizationMessage.format(DIALOG_LINK_CAPTION));
 
     const promise = module.editorInstance.showFormDialog({
@@ -363,7 +369,9 @@ function prepareColorClickHandler(module, name) {
   return () => {
     const formData = module.quill.getFormat();
     const caption = name === 'color' ? DIALOG_COLOR_CAPTION : DIALOG_BACKGROUND_CAPTION;
+
     module.editorInstance.formDialogOption('title', localizationMessage.format(caption));
+
     const promise = module.editorInstance.showFormDialog({
       formData,
       items: [{

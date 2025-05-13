@@ -11,6 +11,7 @@ import NestedOption from "./core/nested-option";
 import type { Message, DisposingEvent, InitializedEvent, MessageDeletedEvent, MessageDeletingEvent, MessageEditCanceledEvent, MessageEditingStartEvent, MessageEnteredEvent, MessageUpdatedEvent, MessageUpdatingEvent, TypingEndEvent, TypingStartEvent, User as ChatUser } from "devextreme/ui/chat";
 import type { Format } from "devextreme/common";
 
+
 type ReplaceFieldTypes<TSource, TReplacement> = {
   [P in keyof TSource]: P extends keyof TReplacement ? TReplacement[P] : TSource[P];
 }
@@ -63,6 +64,7 @@ const Chat = memo(
       const expectedChildren = useMemo(() => ({
         alert: { optionName: "alerts", isCollectionItem: true },
         dayHeaderFormat: { optionName: "dayHeaderFormat", isCollectionItem: false },
+        editing: { optionName: "editing", isCollectionItem: false },
         item: { optionName: "items", isCollectionItem: true },
         messageTimestampFormat: { optionName: "messageTimestampFormat", isCollectionItem: false },
         typingUser: { optionName: "typingUsers", isCollectionItem: true },
@@ -160,13 +162,35 @@ const DayHeaderFormat = Object.assign<typeof _componentDayHeaderFormat, NestedCo
 
 // owners:
 // Chat
+type IEditingProps = React.PropsWithChildren<{
+  allowDeleting?: boolean | ((options: { component: dxChat, message: Message }) => boolean);
+  allowUpdating?: boolean | ((options: { component: dxChat, message: Message }) => boolean);
+}>
+const _componentEditing = (props: IEditingProps) => {
+  return React.createElement(NestedOption<IEditingProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "editing",
+    },
+  });
+};
+
+const Editing = Object.assign<typeof _componentEditing, NestedComponentMeta>(_componentEditing, {
+  componentType: "option",
+});
+
+// owners:
+// Chat
 type IItemProps = React.PropsWithChildren<{
+  alt?: string;
   author?: ChatUser;
   id?: number | string;
   isDeleted?: boolean;
   isEdited?: boolean;
+  src?: string;
   text?: string;
   timestamp?: Date | number | string;
+  type?: string | undefined;
 }>
 const _componentItem = (props: IItemProps) => {
   return React.createElement(NestedOption<IItemProps>, {
@@ -262,6 +286,8 @@ export {
   IAuthorProps,
   DayHeaderFormat,
   IDayHeaderFormatProps,
+  Editing,
+  IEditingProps,
   Item,
   IItemProps,
   MessageTimestampFormat,

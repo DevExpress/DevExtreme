@@ -1,9 +1,12 @@
 import $ from '@js/core/renderer';
+import messageLocalization from '@js/localization/message';
 import type * as SortableTypes from '@js/ui/sortable_types';
+import { combineClasses } from '@ts/core/utils/combine_classes';
 import type { ComponentType, InfernoNode } from 'inferno';
 import { Component, render } from 'inferno';
 
 import type { Column, VisibleColumn } from '../../grid_core/columns_controller/types';
+import { Icon } from '../../grid_core/icon';
 import type { Props as SortableProps } from '../../grid_core/inferno_wrappers/sortable';
 import { Sortable } from '../../grid_core/inferno_wrappers/sortable';
 
@@ -25,31 +28,43 @@ export interface Props extends Omit<SortableProps, 'onAdd' | 'onReorder' | 'drag
 
   getColumnByIndex: (index: number) => Column;
 
+  isColumnDraggable?: (column: Column) => boolean;
+
   visibleColumns: VisibleColumn[];
 
-  allowDragging: boolean;
+  allowDragging?: boolean;
 
-  columnChooserDragModeOpened?: boolean;
-
-  onColumnMove: (column: Column, toIndex: number, draggingData: DraggingColumnData) => void;
+  onColumnMove?: (column: Column, toIndex: number, draggingData: DraggingColumnData) => void;
 
   columnDragTemplate?: ComponentType<{ column: Column; status?: Status; isDragging?: boolean }>;
+
+  showDropzone?: boolean;
+
+  onPlaceholderPrepared?: (e) => void;
 }
 
 const ALLOWED_DRAGGING_DISTANCE = 20;
+
+const CLASS = {
+  widget: 'dx-widget',
+  columnSortable: 'dx-cardview-column-sortable',
+  dropzone: 'dx-cardview-dropzone',
+  dropzoneVisible: 'dx-cardview-dropzone-visible',
+};
 
 export class ColumnSortable extends Component<Props> {
   private dragItemContainer?: Element;
 
   private readonly onDragStart = (e: SortableTypes.DragStartEvent): void => {
     const column = this.props.getColumnByIndex(e.fromIndex);
-    const { source } = this.props;
-    const isDraggable = this.isColumnDraggable(column);
+    const isDraggable = this.props.isColumnDraggable?.(column) ?? true;
 
     if (!isDraggable) {
       e.cancel = true;
       return;
     }
+
+    const { source } = this.props;
 
     e.itemData = {
       column,
@@ -62,6 +77,14 @@ export class ColumnSortable extends Component<Props> {
       ...e.itemData,
       ...this.getNeighborColumns(e),
     };
+
+    this.props.onDragStart?.(e);
+  };
+
+  private readonly onDraggableElementShown = (e): void => {
+    // add dx-widget for correct font
+    $(e.dragElement).addClass(CLASS.widget);
+    $(e.dragElement).addClass(CLASS.columnSortable);
   };
 
   private readonly onDragMove = (e: SortableTypes.DragMoveEvent): void => {
@@ -84,7 +107,7 @@ export class ColumnSortable extends Component<Props> {
       return;
     }
 
-    this.props.onColumnMove(e.itemData.column, e.toIndex, e.itemData);
+    this.props.onColumnMove?.(e.itemData.column, e.toIndex, e.itemData);
   };
 
   // TODO: move all none-native approaches to sortable wrapper
@@ -111,14 +134,13 @@ export class ColumnSortable extends Component<Props> {
       source,
       getColumnByIndex,
       allowDragging,
-      columnChooserDragModeOpened,
       onColumnMove,
       columnDragTemplate,
       dropFeedbackMode,
       ...restProps
     } = this.props;
 
-    const needSortable = allowDragging || columnChooserDragModeOpened;
+    const needSortable = allowDragging ?? true;
 
     if (!needSortable) {
       return this.props.children;
@@ -129,6 +151,11 @@ export class ColumnSortable extends Component<Props> {
 
       this.renderDragTemplate(e.itemData);
     } : undefined;
+
+    const dropzoneClasses = combineClasses({
+      [CLASS.dropzone]: true,
+      [CLASS.dropzoneVisible]: !!this.props.showDropzone,
+    });
 
     return (
       <Sortable
@@ -142,24 +169,17 @@ export class ColumnSortable extends Component<Props> {
         dragTemplate={dragTemplate}
         // @ts-expect-error
         _source={source}
+        onPlaceholderPrepared={this.props.onPlaceholderPrepared}
+        onDraggableElementShown={this.onDraggableElementShown}
       >
       {this.props.children}
+
+      <div className={dropzoneClasses}>
+        <Icon name='dropzone'/>
+        <span>{messageLocalization.format('dxCardView-headerItemDropZoneText')}</span>
+      </div>
     </Sortable>
     );
-  }
-
-  private isColumnDraggable(column: Column): boolean {
-    if (this.props.source === 'header-panel-main') {
-      const canBeHidden = column.allowHiding && !!this.props.columnChooserDragModeOpened;
-
-      return column.allowReordering || canBeHidden;
-    }
-
-    if (this.props.source === 'column-chooser') {
-      return true;
-    }
-
-    return false;
   }
 
   private getDraggingStatus(e: SortableTypes.DragMoveEvent): Status {

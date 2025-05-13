@@ -33,7 +33,10 @@ import {
 } from './m_view_switcher';
 import { getTodayButtonOptions } from './today';
 
-const COMPONENT_CLASS = 'dx-scheduler-header';
+const CLASSES = {
+  component: 'dx-scheduler-header',
+  invisible: 'dx-state-invisible',
+};
 const ITEM_NAMES = {
   today: 'today',
   dateNavigator: 'dateNavigator',
@@ -121,6 +124,7 @@ export class SchedulerHeader extends Widget<dxSchedulerOptions> {
     const optionName = fullName.replace(/^toolbar\./, '');
 
     this.option(fullName, value);
+    this._toggleVisibility();
     switch (true) {
       case fullName === 'toolbar':
         this.repaint();
@@ -147,7 +151,7 @@ export class SchedulerHeader extends Widget<dxSchedulerOptions> {
     super._init();
     this._createEventMap();
 
-    this.$element().addClass(COMPONENT_CLASS);
+    this.$element().addClass(CLASSES.component);
 
     this.currentView = viewsUtils.getCurrentView(
       getViewName(this.option('currentView') as ViewType) as string,
@@ -161,6 +165,7 @@ export class SchedulerHeader extends Widget<dxSchedulerOptions> {
 
     this._createEventMap();
     this._renderToolbar();
+    this._toggleVisibility();
   }
 
   _renderToolbar() {
@@ -171,6 +176,18 @@ export class SchedulerHeader extends Widget<dxSchedulerOptions> {
 
     // @ts-expect-error
     this._toolbar = this._createComponent(toolbarElement, Toolbar, config);
+  }
+
+  _toggleVisibility(): void {
+    const toolbarOptions = this.option('toolbar') as any;
+    const isHeaderShown = toolbarOptions.visible
+      || (toolbarOptions.visible === undefined && toolbarOptions.items.length);
+
+    if (isHeaderShown) {
+      this.$element().removeClass(CLASSES.invisible);
+    } else {
+      this.$element().addClass(CLASSES.invisible);
+    }
   }
 
   _createToolbarConfig() {

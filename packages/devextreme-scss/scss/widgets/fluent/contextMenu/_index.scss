@@ -18,11 +18,25 @@
 .dx-context-menu {
   color: $menu-color;
 
+  .dx-menu-items-container {
+    display: flex;
+    flex-direction: column;
+    padding: $fluent-context-menu-items-container-padding;
+    gap: $fluent-context-menu-items-container-gap;
+  }
+
   .dx-menu-item {
+    border-radius: $fluent-context-menu-item-border-radius;
+
     .dx-menu-item-content {
       display: flex;
       align-items: center;
       padding: $fluent-menu-vertical-padding $fluent-context-menu-horizontal-padding;
+      gap: $fluent-context-menu-item-content-gap;
+
+      .dx-menu-item-text {
+        padding-inline: $fluent-context-menu-item-text-padding-inline;
+      }
 
       .dx-menu-item-popout-container {
         inset-inline-end: $fluent-context-menu-horizontal-padding;
@@ -53,18 +67,6 @@
     &.dx-menu-item-has-submenu > .dx-menu-item-content {
       padding-inline-end: $fluent-menu-item-with-icon-horizontal-padding;
     }
-
-    &.dx-menu-item-has-text {
-      &.dx-menu-item-has-icon {
-        .dx-icon {
-          margin-inline-end: $fluent-menu-icon-to-text-offset;
-        }
-      }
-    }
-  }
-
-  .dx-menu-items-container {
-    padding: $fluent-context-menu-container-vertical-padding 0;
   }
 
   &.dx-overlay-content.dx-state-focused {

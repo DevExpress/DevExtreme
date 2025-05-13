@@ -1109,7 +1109,8 @@ export type FilterPanelTexts = {
  * @docid
  * @namespace DevExpress.common.grids
  */
-export interface FilterPanel<TComponent extends GridBase<TRowData, TKey>, TRowData = any, TKey = any> {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export interface FilterPanel<TComponent, TRowData = any, TKey = any> {
   /**
    * @docid GridBaseOptions.filterPanel.customizeText
    * @type_function_param1 e:object
@@ -2357,6 +2358,12 @@ export type GridBaseOptions<TComponent extends GridBase<TRowData, TKey>, TRowDat
    */
   syncLookupFilterValues?: boolean;
 };
+
+/**
+ * @public
+ * @namespace DevExpress.common.grids
+ */
+export type GridsContextMenuTarget = 'toolbar' | 'header' | 'content' | 'footer';
 
 /**
  * @public

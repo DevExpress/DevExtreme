@@ -8,19 +8,19 @@
   [validationGroup]="validationGroup"
   [colCount]="2"
 >
-  <dxi-item
+  <dxi-form-item
     [isRequired]="true"
     dataField="roomType"
     editorType="dxSelectBox"
     [editorOptions]="roomSelectBoxOptions"
     [label]="roomLabelOptions"
-  />
+  ></dxi-form-item>
 
-  <dxi-item
+  <dxi-form-item
     [isRequired]="true"
     dataField="mealPlan"
     editorType="dxSelectBox"
     [editorOptions]="mealSelectBoxOptions"
     [label]="mealLabelOptions"
-  />
+  ></dxi-form-item>
 </dx-form>
