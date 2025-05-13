@@ -765,3 +765,66 @@ describe('twoWay', () => {
     });
   });
 });
+
+describe('oneWayWithChanges', () => {
+  it('should return changes: null if optionChanged was not called', () => {
+    const publicOptions = { value: { str: 'str' } };
+    const { optionsController } = setup<{ value?: { str?: string } }>(publicOptions, {});
+
+    const value = optionsController.oneWayWithChanges('value');
+
+    expect(value.peek()).toStrictEqual({ changes: null, value: publicOptions.value });
+  });
+
+  it('should return changes if optionChanged was called', () => {
+    const publicOptions = { value: 'str' };
+    const { component, optionsController } = setup<{ value?: string }>(publicOptions, {});
+
+    component.option('value', 'str_2');
+    const value = optionsController.oneWayWithChanges('value');
+
+    const result = value.peek();
+
+    expect(result.changes).toMatchObject({
+      name: 'value',
+      fullName: 'value',
+      value: 'str_2',
+      previousValue: 'str',
+    });
+    expect(result.value).toStrictEqual('str_2');
+  });
+
+  it('should return changes of nested option if optionChanged was called', () => {
+    const publicOptions = { a: { b: { c: 'C_0' } } };
+    const { component, optionsController } = setup<
+      { a?: { b?: { c?: string } } }
+    >(publicOptions, {});
+
+    component.option('a.b.c', 'C_1');
+    const value = optionsController.oneWayWithChanges('a.b.c');
+
+    const result = value.peek();
+
+    expect(result.changes).toMatchObject({
+      name: 'a',
+      fullName: 'a.b.c',
+      value: 'C_1',
+      previousValue: 'C_0',
+    });
+    expect(result.value).toStrictEqual('C_1');
+  });
+
+  it('should use different cache with oneWay', () => {
+    const publicOptions = { value: '123' };
+    const { optionsController } = setup<{ value?: string }>(publicOptions, {});
+
+    const value = optionsController.oneWay('value');
+    const valueWithChanges = optionsController.oneWayWithChanges('value');
+
+    expect(value.peek()).toBe('123');
+    expect(valueWithChanges.peek()).toStrictEqual({
+      changes: null,
+      value: '123',
+    });
+  });
+});

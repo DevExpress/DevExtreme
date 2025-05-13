@@ -10,12 +10,13 @@ import type { ReadonlySignal } from '@preact/signals-core';
 import { computed, signal } from '@preact/signals-core';
 import { createRef } from 'inferno';
 
+import type { Props as ColumnSortableProps } from '../../card_view/header_panel/column_sortable';
 import { ColumnsController } from '../columns_controller/index';
 import { View } from '../core/view';
 import { OptionsController } from '../options_controller/options_controller';
 import { ToolbarController } from '../toolbar/controller';
 import type { PredefinedToolbarItem } from '../toolbar/types';
-import { addWidgetPrefix } from '../utils';
+import { addWidgetPrefix } from '../utils/common';
 import type { ColumnChooserProps } from './column_chooser';
 import { CLASS, ColumnChooser } from './column_chooser';
 import { ColumnChooserController } from './controller';
@@ -53,7 +54,7 @@ export class ColumnChooserView extends View<ColumnChooserProps> {
   private readonly popupToolbarItems: ReadonlySignal<ToolbarItem[]> = computed(() => {
     const title = this.options.oneWay('columnChooser.title').value;
     const items = [
-      { text: title, toolbar: 'top', location: this.isMaterialOrGeneric() ? 'before' : 'center' },
+      { text: title, toolbar: 'top', location: 'before' },
     ] as ToolbarItem[];
 
     if (!this.isMaterialOrGeneric()) {
@@ -154,6 +155,13 @@ export class ColumnChooserView extends View<ColumnChooserProps> {
 
       treeViewSelectModeConfig: this.selectModeConfig.value,
       treeViewDragAndDropModeConfig: this.dragAndDropModeConfig.value,
+
+      sortableConfig: {
+        isColumnDraggable: this.columnChooserController.isColumnDraggable,
+        onDragStart: this.columnChooserController.onDragStart,
+        onDragEnd: this.columnChooserController.onDragEnd,
+        onPlaceholderPrepared: this.columnChooserController.onPlaceholderPrepared,
+      } as Partial<ColumnSortableProps>,
     }));
   }
 

@@ -36,7 +36,7 @@ import ConverterController from '@ts/ui/html_editor/m_converterController';
 import { getQuill } from '@ts/ui/html_editor/m_quill_importer';
 import QuillRegistrator from '@ts/ui/html_editor/m_quill_registrator';
 import getWordMatcher from '@ts/ui/html_editor/matchers/m_wordLists';
-import FormDialog from '@ts/ui/html_editor/ui/m_formDialog';
+import FormDialog from '@ts/ui/html_editor/ui/formDialog';
 import { sanitizeHtml } from '@ts/ui/html_editor/utils/html_sanitizer';
 import { prepareScrollData } from '@ts/ui/text_box/m_utils.scroll';
 

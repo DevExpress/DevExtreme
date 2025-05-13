@@ -305,4 +305,5 @@ export type IconName =
 | 'unfixcolumn'
 | 'fixcolumnleft'
 | 'stickcolumn'
-| 'fixcolumnright';
+| 'fixcolumnright'
+| 'dropzone';

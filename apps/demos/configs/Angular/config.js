@@ -156,6 +156,10 @@ window.config = {
     'externals:': '../../../../bundles/externals/',
   },
   map: {
+    //
+    '@preact/signals-core': '../../../../../../node_modules/.pnpm/@preact+signals-core@1.8.0/node_modules/@preact/signals-core/dist/signals-core.js',
+    //
+
     'ts': 'npm:plugin-typescript/lib/plugin.js',
     'typescript': 'npm:typescript/lib/typescript.js',
     'jszip': 'npm:jszip/dist/jszip.min.js',
@@ -180,6 +184,7 @@ window.config = {
 
     /* devextreme-angular umd maps */
     'devextreme-angular': 'bundles:devextreme-angular/devextreme-angular.umd.js',
+    'devextreme-angular/common/ai-integration': 'bundles:devextreme-angular/devextreme-angular-common-ai-integration.umd.js',
     'devextreme-angular/core': 'bundles:devextreme-angular/devextreme-angular-core.umd.js',
     'devextreme-angular/http': 'bundles:devextreme-angular/devextreme-angular-http.umd.js',
     ...componentNames.reduce((acc, name) => {

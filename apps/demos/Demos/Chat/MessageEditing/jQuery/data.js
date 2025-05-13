@@ -50,20 +50,6 @@ const messages = [
   },
 ];
 
-const editingStrategy = {
-  enabled: true,
-  disabled: false,
-  custom: ({ component, message }) => {
-    const { items, user } = component.option();
-
-    const lastMessage = [...items]
-      .reverse()
-      .find((m) => m.author?.id === user.id);
-
-    return !lastMessage.isDeleted && lastMessage?.id === message.id;
-  },
-};
-
 const editingOptions = [
   { text: 'Enabled', key: 'enabled' },
   { text: 'Disabled', key: 'disabled' },
