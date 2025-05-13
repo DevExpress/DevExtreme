@@ -17,6 +17,9 @@
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
+            "styles": [
+              "devextreme/dist/css/dx.light.css"
+            ],
             "preserveSymlinks": true,
             "outputPath": "dist/angular",
             "index": "src/index.html",
