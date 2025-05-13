@@ -699,7 +699,7 @@ class Menu extends MenuBase {
     const isFocusedElementHiding = focusedElement === submenuFocusedElement;
 
     if (isVisibleSubmenuHiding && isFocusedElementHiding) {
-      this.option('focusedElement', null);
+      this.option('focusedElement', $menuAnchorItem);
     }
 
     if (!eventArgs.cancel) {
