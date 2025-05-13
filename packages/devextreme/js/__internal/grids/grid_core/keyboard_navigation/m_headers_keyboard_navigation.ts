@@ -62,7 +62,7 @@ export class HeadersKeyboardNavigationController extends ColumnKeyboardNavigatio
   }
 
   protected keyDownHandler(e): boolean {
-    const isHandled = this.processOnKeyDown(e);
+    let isHandled = super.keyDownHandler(e);
 
     if (isHandled) {
       return true;
@@ -72,15 +72,17 @@ export class HeadersKeyboardNavigationController extends ColumnKeyboardNavigatio
     switch (e.keyName) {
       case 'tab': {
         this.tabKeyHandler(e);
+        isHandled = true;
         break;
       }
       case 'leftArrow':
       case 'rightArrow':
         this.leftRightKeysHandler(e);
+        isHandled = true;
         break;
     }
 
-    return false;
+    return isHandled;
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

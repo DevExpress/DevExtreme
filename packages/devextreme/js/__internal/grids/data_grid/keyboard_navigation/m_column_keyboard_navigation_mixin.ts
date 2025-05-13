@@ -23,7 +23,7 @@ export const ColumnKeyboardNavigationMixin = <T extends ModuleType<ColumnKeyboar
   protected getColumnFromEvent(e): any {}
 
   protected keyDownHandler(e): boolean {
-    let isHandled = this.processOnKeyDown(e);
+    let isHandled = super.keyDownHandler(e);
 
     if (isHandled) {
       return true;

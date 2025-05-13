@@ -11,6 +11,10 @@ export class ColumnKeyboardNavigationController extends KeyboardNavigationContro
 
   public columnFocusDispatcher!: ColumnFocusDispatcher;
 
+  protected keyDownHandler(e): boolean {
+    return this.processOnKeyDown(e);
+  }
+
   protected getVisibleIndex(
     column,
     rowIndex?: number,
