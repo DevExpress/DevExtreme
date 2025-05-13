@@ -26,7 +26,7 @@ import Submenu from './m_submenu';
 const DX_MENU_CLASS = 'dx-menu';
 const DX_MENU_VERTICAL_CLASS = `${DX_MENU_CLASS}-vertical`;
 const DX_MENU_HORIZONTAL_CLASS = `${DX_MENU_CLASS}-horizontal`;
-const DX_MENU_ITEM_CLASS = `${DX_MENU_CLASS}-item`;
+export const DX_MENU_ITEM_CLASS = `${DX_MENU_CLASS}-item`;
 const DX_MENU_ITEMS_CONTAINER_CLASS = `${DX_MENU_CLASS}-items-container`;
 const DX_MENU_ITEM_EXPANDED_CLASS = `${DX_MENU_ITEM_CLASS}-expanded`;
 const DX_CONTEXT_MENU_CLASS = 'dx-context-menu';
@@ -331,7 +331,7 @@ class Menu extends MenuBase {
   }
 
   _toggleHamburgerActiveState(state) {
-    this._hamburger && this._hamburger.$element().toggleClass(DX_STATE_ACTIVE_CLASS, state);
+    this._hamburger?.$element().toggleClass(DX_STATE_ACTIVE_CLASS, state);
   }
 
   _toggleAdaptiveMode(state: boolean): void {
@@ -611,7 +611,7 @@ class Menu extends MenuBase {
 
     each(this._submenus, (index, submenu) => {
       const $submenu = submenu._itemContainer();
-      const isOtherItem = !$submenu.is(targetSubmenu && targetSubmenu._itemContainer());
+      const isOtherItem = !$submenu.is(targetSubmenu?._itemContainer());
       const $selectedItem = $submenu.find(`.${this._selectedItemClass()}`);
 
       if ((isOtherItem && $selectedItem.length) || cleanAllSubmenus) {
@@ -913,7 +913,7 @@ class Menu extends MenuBase {
 
   _itemMouseMoveHandler(e) {
     // todo: replace mousemove with hover event
-    if (e.pointers && e.pointers.length) {
+    if (e.pointers?.length) {
       return;
     }
 
