@@ -61,16 +61,7 @@ export class AppComponent {
       { role: 'system', content: prompt.system, },
       { role: 'user', content: prompt.user, },
     ];
-    const promise = new Promise<string>(async (resolve, reject) => {
-      try {
-        const response = await this.getAIResponse(aiPrompt, signal);
-        const result = response.choices[0].message?.content;
-
-        resolve(result);
-      } catch {
-        reject();
-      }
-    });
+    const promise = this.getAIResponse(aiPrompt, signal);
 
     const result: Response = {
       promise,
@@ -90,7 +81,10 @@ export class AppComponent {
       temperature: 0.7,
     };
 
-    return this.aiService.chat.completions.create(params, { signal });
+    const response = await this.aiService.chat.completions.create(params, { signal });
+    const result = response.choices[0].message?.content;
+
+    return result;
   }
 }
 
