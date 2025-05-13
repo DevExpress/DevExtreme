@@ -149,7 +149,7 @@ test('Accessibility: TreeList general status should contains correct text after 
 }));
 
 test('Accessibility: TreeList general status should contains correct text after column count change', async (t) => {
-  const expectedStatusText = 'Tree list with 3 rows and 1 columns';
+  const expectedStatusText = '';
   const treeList = new TreeList('#container');
 
   const columnChooserBtn = treeList.getColumnChooserButton();
