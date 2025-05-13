@@ -5,7 +5,7 @@ import filterUtils from '@js/ui/shared/filtering';
 
 import { defaultSetFieldValue } from '../editing/utils';
 import type { Template, WithRequired } from '../types';
-import { parseValue } from '../utils';
+import { parseValue } from '../utils/parse_value/index';
 import type { Column, FieldInfo } from './types';
 
 interface NonNormalizedColumnOptions {

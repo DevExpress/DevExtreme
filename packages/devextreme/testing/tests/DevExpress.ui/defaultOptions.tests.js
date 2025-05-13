@@ -1401,9 +1401,10 @@ testComponentDefaults(ChatMessageBox,
 testComponentDefaults(ChatMessageBubble,
     {},
     {
-        text: '',
         isDeleted: false,
         isEdited: false,
+        template: null,
+        message: {},
     }
 );
 

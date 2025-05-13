@@ -2,6 +2,7 @@ import '@js/ui/drop_down_button';
 
 import type { AIIntegration, RequestCallbacks } from '@js/common/ai-integration';
 import localizationMessage from '@js/common/core/localization/message';
+import Guid from '@js/core/guid';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { extend } from '@js/core/utils/extend';
@@ -39,9 +40,9 @@ import BaseDialog from './m_baseDialog';
 export const AI_DIALOG_CLASS = 'dx-aidialog';
 export const AI_DIALOG_CONTROLS_CLASS = 'dx-aidialog-controls';
 export const AI_DIALOG_CONTENT_CLASS = 'dx-aidialog-content';
+export const AI_DIALOG_TITLE_CLASS = 'dx-aidialog-title';
 
 const AI_DIALOG_LOAD_INDICATOR_CLASS = 'dx-pending-indicator';
-const AI_DIALOG_TITLE_CLASS = 'dx-aidialog-title';
 const AI_DIALOG_TITLE_TEXT_CLASS = 'dx-aidialog-title-text';
 const ICON_CLASS = 'dx-icon';
 const ICON_SPARKLE_CLASS = 'dx-icon-sparkle';
@@ -53,6 +54,7 @@ const AI_DIALOG_COMMANDS_WITH_OPTIONS = ['translate', 'changeStyle', 'changeTone
 const POPUP_MIN_WIDTH = 288;
 const POPUP_MAX_WIDTH = 460;
 const LOADINDICATOR_SIZE = 48;
+
 export const TEXT_AREA_MIN_HEIGHT = 64;
 export const TEXT_AREA_MAX_HEIGHT = 128;
 export const REPLACE_DROPDOWN_WIDTH = 150;
@@ -171,6 +173,7 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
       value: this._currentCommand,
       displayExpr: 'text',
       valueExpr: 'name',
+      onInitialized: this._addEscapeHandler.bind(this),
       onValueChanged: (e): void => {
         if (this._commandChangeSuppressed) {
           return;
@@ -200,10 +203,11 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
       items: this._commandOptionsList,
       value: this._currentOption ?? this._commandOptionsList?.[0],
       visible: this._isCommandWithOptionsSelected(),
-      onValueChanged: (e): void => {
-        this._currentOption = e.value;
+      onInitialized: this._addEscapeHandler.bind(this),
+      onValueChanged: ({ value }): void => {
+        this._currentOption = value;
 
-        if (this._isOpen()) {
+        if (this._isOpen() && value) {
           this._executeAICommand();
         }
       },
@@ -212,17 +216,22 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
 
   protected _renderPromptTextArea($container: dxElementWrapper): void {
     const $textArea = $('<div>').appendTo($container);
-    this._promptTextArea = new TextArea($textArea.get(0), {
+
+    const options = {
       value: this._askAIPrompt,
       minHeight: TEXT_AREA_MIN_HEIGHT,
       maxHeight: TEXT_AREA_MAX_HEIGHT,
       autoResizeEnabled: true,
       width: '100%',
       placeholder: localizationMessage.format('dxHtmlEditor-aiAskPlaceholder'),
+      _shouldAttachKeyboardEvents: true,
+      onInitialized: this._addEscapeHandler.bind(this),
       onValueChanged: (e): void => {
         this._askAIPrompt = e.value;
       },
-    });
+    };
+
+    this._promptTextArea = new TextArea($textArea.get(0), options);
   }
 
   protected _renderResultTextArea($container: dxElementWrapper): void {
@@ -236,12 +245,17 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
       autoResizeEnabled: true,
     };
 
-    this._resultTextArea = new TextArea($textArea.get(0), {
+    const options = {
+      inputAttr: { 'aria-label': localizationMessage.format('dxHtmlEditor-aiResultTextAreaAriaLabel') },
       minHeight: TEXT_AREA_MIN_HEIGHT,
       width: '100%',
       readOnly: true,
+      _shouldAttachKeyboardEvents: true,
+      onInitialized: this._addEscapeHandler.bind(this),
       ...screenSpecificOptions,
-    });
+    };
+
+    this._resultTextArea = new TextArea($textArea.get(0), options);
   }
 
   protected _renderContent($contentElem: dxElementWrapper): void {
@@ -324,6 +338,7 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
       widget: 'dxDropDownButton',
       locateInMenu: 'auto',
       options: {
+        displayExpr: 'text',
         text: localizationMessage.format('dxHtmlEditor-aiReplace'),
         stylingMode: 'contained',
         type: 'default',
@@ -339,6 +354,7 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
         onButtonClick: (e: ButtonClickEvent): void => {
           this._replaceButtonAction({ ...e, itemData: { id: ReplaceButtonActions.Replace } });
         },
+        onInitialized: this._addEscapeHandler.bind(this),
         onItemClick: (e: ItemClickEvent) => this._replaceButtonAction(e),
       },
     };
@@ -361,6 +377,7 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
           // eslint-disable-next-line @typescript-eslint/no-floating-promises
           navigator?.clipboard?.writeText(value ?? '');
         },
+        onInitialized: this._addEscapeHandler.bind(this),
       },
     };
   }
@@ -377,6 +394,7 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
         icon: TRY_AGAIN_BUTTON_ICON,
         text,
         onClick: () => this._retryExecuteAICommand(),
+        onInitialized: this._addEscapeHandler.bind(this),
       },
     };
   }
@@ -394,6 +412,7 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
         stylingMode: 'contained',
         width,
         onClick: () => this._executeAICommand(),
+        onInitialized: this._addEscapeHandler.bind(this),
       },
     };
   }
@@ -411,6 +430,7 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
         text: localizationMessage.format('dxHtmlEditor-aiStop'),
         width,
         onClick: () => this._stopAICommandExecution(),
+        onInitialized: this._addEscapeHandler.bind(this),
       },
     };
   }
@@ -464,6 +484,7 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
     this._refreshToolbarItems();
     this._refreshLoadIndicator();
     this._refreshInformer();
+    this._refreshDialogAria();
   }
 
   private _refreshToolbarItems(): void {
@@ -701,6 +722,15 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
     const { visible } = this._popup.option();
 
     return visible as boolean;
+  }
+
+  private _refreshDialogAria(): void {
+    const id = String(new Guid());
+    const $overlayContent = $(this._popup.content()).parent();
+    const $title = $overlayContent.find(`.${AI_DIALOG_TITLE_CLASS}`);
+
+    $title.attr('id', id);
+    $overlayContent.attr('aria-labelledby', id);
   }
 
   updateAIIntegration(aiIntegration: AIIntegration): void {

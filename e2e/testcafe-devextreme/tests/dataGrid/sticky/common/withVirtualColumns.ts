@@ -55,10 +55,10 @@ safeSizeTest('There should be no way to set a sticky fixed position for columns 
   // act
   await t
     .rightClick(dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(3).element)
-    .click(dataGrid.getContextMenu().getItemByOrder(4));
+    .click(dataGrid.getContextMenu().getItemByText('Set Fixed Position'));
 
   // assert
-  await takeScreenshot('context_menu_and_virtual_columns_with_fixed_columns.png', dataGrid.element);
+  await takeScreenshot('context_menu_and_virtual_columns_with_fixed_columns.png');
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());

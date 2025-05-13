@@ -793,12 +793,16 @@ export class ListBase extends CollectionWidget<ListBaseProperties> {
 
     let endHeight = 0;
 
-    if (startHeight === 0) {
+    if (collapsed) {
       setHeight($groupBody, 'auto');
       endHeight = getOuterHeight($groupBody);
     }
 
     $group.toggleClass(LIST_GROUP_COLLAPSED_CLASS, toggle);
+
+    if (fx.isAnimating($groupBody)) {
+      fx.stop($groupBody, false);
+    }
 
     fx.animate($groupBody, {
       // @ts-expect-error
