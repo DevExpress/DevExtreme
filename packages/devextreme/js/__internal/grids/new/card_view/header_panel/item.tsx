@@ -93,7 +93,7 @@ export class Item extends Component<ItemProps> {
         ref={this.props.elementRef}
         className={cssClass}
         tabIndex={this.props.tabIndex}
-        role="button"
+        role="menuitem"
         aria-label={ariaLabel}
         onClick={this.props.onSortClick}
         onKeyDown={this.props.onKeyDown}
