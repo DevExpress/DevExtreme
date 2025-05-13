@@ -21,7 +21,7 @@ import {
   DxToolbar,
   DxItem,
 } from 'devextreme-vue/html-editor';
-import { AIIntegration, Response } from 'devextreme/common/ai-integration';
+import { AIIntegration } from 'devextreme/common/ai-integration';
 import { AzureOpenAI, OpenAI } from 'openai';
 import { 
   markup,
@@ -61,7 +61,7 @@ const aiIntegration = new AIIntegration({
 
     const promise = getAIResponse(aiPrompt, signal);
 
-    const result: Response = {
+    const result = {
       promise,
       abort: () => {
         controller.abort();
