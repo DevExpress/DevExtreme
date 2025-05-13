@@ -16,7 +16,9 @@ async function getAIResponse(messages, signal) {
     max_tokens: 1000,
     temperature: 0.7,
   };
-  return aiService.chat.completions.create(params, { signal });
+  const response = await aiService.chat.completions.create(params, { signal });
+  const result = response.choices[0].message?.content;
+  return result;
 }
 export const aiIntegration = new AIIntegration({
   sendRequest({ prompt }) {
@@ -26,15 +28,7 @@ export const aiIntegration = new AIIntegration({
       { role: 'system', content: prompt.system },
       { role: 'user', content: prompt.user },
     ];
-    const promise = new Promise(async(resolve, reject) => {
-      try {
-        const response = await getAIResponse(aiPrompt, signal);
-        const result = response.choices[0].message?.content;
-        resolve(result);
-      } catch {
-        reject();
-      }
-    });
+    const promise = getAIResponse(aiPrompt, signal);
     const result = {
       promise,
       abort: () => {
@@ -90,4 +84,10 @@ export const commands = [
     text: 'Extract Keywords',
     prompt: () => 'Extract a list of keywords from the text and return them as a comma-separated string',
   },
+];
+export const toolbarItems = [
+  { name: 'ai', commands },
+  { name: 'separator' },
+  { name: 'undo' },
+  { name: 'redo' },
 ];

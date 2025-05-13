@@ -1,10 +1,6 @@
 import React from 'react';
-import HtmlEditor, { Toolbar, Item } from 'devextreme-react/html-editor';
-import {
-  markup,
-  commands,
-  aiIntegration
-} from './data.js';
+import HtmlEditor, { Toolbar } from 'devextreme-react/html-editor';
+import { markup, toolbarItems, aiIntegration } from './data.js';
 
 export default function App() {
   return (
@@ -13,12 +9,7 @@ export default function App() {
       defaultValue={markup}
       aiIntegration={aiIntegration}
     >
-      <Toolbar>
-        <Item name="ai" commands={commands} />
-        <Item name="separator" />
-        <Item name="undo" />
-        <Item name="redo" />
-      </Toolbar>
+      <Toolbar items={toolbarItems}></Toolbar>
     </HtmlEditor>
   );
 }

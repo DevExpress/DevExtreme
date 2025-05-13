@@ -5,7 +5,7 @@ import HtmlEditor, {
 } from 'devextreme-react/html-editor';
 import {
   markup,
-  commands,
+  toolbarItems,
   aiIntegration,
 } from './data.ts';
 
@@ -16,12 +16,7 @@ export default function App() {
       defaultValue={markup}
       aiIntegration={aiIntegration}
     >
-      <Toolbar>
-        <Item name="ai" commands={commands} />
-        <Item name="separator" />
-        <Item name="undo" />
-        <Item name="redo" />
-      </Toolbar>
+      <Toolbar items={toolbarItems}></Toolbar>
     </HtmlEditor>
   );
 }
