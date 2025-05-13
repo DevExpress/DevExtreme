@@ -62,7 +62,7 @@ export class HeadersKeyboardNavigationController extends ColumnKeyboardNavigatio
   }
 
   protected keyDownHandler(e): boolean {
-    const isHandled = this.processOnKeyDown(e);
+    let isHandled = super.keyDownHandler(e);
 
     if (isHandled) {
       return true;
@@ -72,15 +72,17 @@ export class HeadersKeyboardNavigationController extends ColumnKeyboardNavigatio
     switch (e.keyName) {
       case 'tab': {
         this.tabKeyHandler(e);
+        isHandled = true;
         break;
       }
       case 'leftArrow':
       case 'rightArrow':
         this.leftRightKeysHandler(e);
+        isHandled = true;
         break;
     }
 
-    return false;
+    return isHandled;
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -219,23 +221,6 @@ export class HeadersKeyboardNavigationController extends ColumnKeyboardNavigatio
     }
 
     return -1;
-  }
-
-  public ungroupAllColumns(): void {
-    const $focusedCell = this._getFocusedCell();
-    const focusedColumn = this._getColumnByCellElement($focusedCell);
-
-    this._columnsController.beginUpdate();
-    super.ungroupAllColumns();
-
-    const rowIndex = this._columnsController.getRowIndex(focusedColumn.index, true);
-    const newVisibleIndex = this.getVisibleIndex(focusedColumn);
-
-    this.updateFocusPosition({
-      rowIndex,
-      columnIndex: newVisibleIndex,
-    });
-    this._columnsController.endUpdate();
   }
 
   public restoreFocus(): void {

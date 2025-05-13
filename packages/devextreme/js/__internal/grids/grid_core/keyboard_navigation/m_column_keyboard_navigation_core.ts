@@ -7,6 +7,10 @@ import { KeyboardNavigationController as KeyboardNavigationControllerCore } from
 export class ColumnKeyboardNavigationController extends KeyboardNavigationControllerCore {
   public columnFocusDispatcher!: ColumnFocusDispatcher;
 
+  protected keyDownHandler(e): boolean {
+    return this.processOnKeyDown(e);
+  }
+
   protected getVisibleIndex(
     column,
     rowIndex?: number,
@@ -149,9 +153,5 @@ export class ColumnKeyboardNavigationController extends KeyboardNavigationContro
 
     const $focusedCell = this._getFocusedCell();
     $focusedCell?.[0]?.focus({ preventScroll: true });
-  }
-
-  public ungroupAllColumns(): void {
-    this._columnsController.clearGrouping();
   }
 }
