@@ -183,6 +183,7 @@ class Menu extends MenuBase {
     }
 
     if ($newTarget && $newTarget.length !== 0) {
+      // @ts-expect-error
       this.option('focusedElement', getPublicElement($newTarget));
     }
   }
@@ -589,6 +590,7 @@ class Menu extends MenuBase {
 
     const $newItem = $items.eq(itemIndex);
 
+    // @ts-expect-error
     this.option('focusedElement', getPublicElement($newItem));
   }
 
@@ -699,7 +701,7 @@ class Menu extends MenuBase {
     const isFocusedElementHiding = focusedElement === submenuFocusedElement;
 
     if (isVisibleSubmenuHiding && isFocusedElementHiding) {
-      this.option('focusedElement', null);
+      this.option('focusedElement', $menuAnchorItem);
     }
 
     if (!eventArgs.cancel) {
@@ -825,6 +827,7 @@ class Menu extends MenuBase {
     const $closestItem = $target.closest(this._itemElements());
 
     if ($closestItem.hasClass('dx-menu-item-has-submenu')) {
+      // @ts-expect-error
       this.option('focusedElement', null);
       return;
     }

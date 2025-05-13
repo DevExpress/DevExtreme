@@ -119,6 +119,7 @@ class MenuBase extends HierarchicalCollectionWidget<Properties> {
   }
 
   _clean(): void {
+    // @ts-expect-error
     this.option('focusedElement', null);
 
     super._clean();

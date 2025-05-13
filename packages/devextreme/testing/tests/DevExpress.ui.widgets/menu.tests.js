@@ -2585,7 +2585,6 @@ QUnit.module('keyboard navigation', {
 
         this.keyboard
             .press('down')
-            .press('down')
             .press('right')
             .press('down')
             .press('down')
@@ -2631,10 +2630,12 @@ QUnit.module('keyboard navigation', {
             .press('down')
             .press('down')
             .press('down')
-            .press('down')
-            .press('space');
+            .press('down');
 
         assert.equal(isRenderer(this.instance.option('focusedElement')), !!config().useJQuery, 'focusedElement is correct');
+
+        this.keyboard.press('space');
+
         assert.equal(this.instance.option('selectedItem').text, 'item2-3', 'correct item is selected');
     });
 
@@ -2948,7 +2949,7 @@ QUnit.module('keyboard navigation', {
         assert.equal($(this.instance._visibleSubmenu.option('focusedElement')).text(), 'Item 113');
     });
 
-    QUnit.test('focusedElement should be cleared if it is in hiding submenu', function(assert) {
+    QUnit.test('focusedElement should be set to main menu item after hiding submenu', function(assert) {
         this.instance.option({
             orientation: 'horizontal',
             items: [
@@ -2966,14 +2967,16 @@ QUnit.module('keyboard navigation', {
             .press('down')
             .press('down');
 
-        assert.strictEqual($(this.instance.option('focusedElement')).text(), 'Item 12', 'focusedElement is navigated item');
+        assert.strictEqual($(this.instance.option('focusedElement')).text(), 'Item 12', 'focusedElement is submenu item');
 
         this.keyboard.press('enter');
 
-        assert.strictEqual(this.instance.option('focusedElement'), null, 'focusedElement is cleared');
+        const mainMenuItemText = $(this.instance.itemElements()[0]).text();
+
+        assert.strictEqual($(this.instance.option('focusedElement')).text(), mainMenuItemText, 'focusedElement is main menu item');
     });
 
-    QUnit.test('focusedElement should be cleared if it is in hiding nested submenu', function(assert) {
+    QUnit.test('focusedElement should be set to main menu item after hiding nested submenu', function(assert) {
         this.instance.option({
             orientation: 'horizontal',
             items: [
@@ -2993,11 +2996,13 @@ QUnit.module('keyboard navigation', {
             .press('right')
             .press('down');
 
-        assert.strictEqual($(this.instance.option('focusedElement')).text(), 'Item 112', 'focusedElement is navigated item');
+        assert.strictEqual($(this.instance.option('focusedElement')).text(), 'Item 112', 'focusedElement is submenu item');
 
         this.keyboard.press('enter');
 
-        assert.strictEqual(this.instance.option('focusedElement'), null, 'focusedElement is cleared');
+        const mainMenuItemText = $(this.instance.itemElements()[0]).text();
+
+        assert.strictEqual($(this.instance.option('focusedElement')).text(), mainMenuItemText, 'focusedElement is main menu item');
     });
 });
 
