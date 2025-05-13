@@ -83,9 +83,9 @@ export class KbnNavigationContainerEnabled extends Component<KbnNavigationContai
         onKeyDown={this.onKeyDown.bind(this)}
         data-dx-focus-container={true}
       >
-        <div ref={this.firstFocusDecoyRef} data-dx-focus-decoy={true} tabIndex={0} aria-hidden="true" />
+        <div ref={this.firstFocusDecoyRef} data-dx-focus-decoy={true} tabIndex={0} />
         { children }
-        <div ref={this.lastFocusDecoyRef} data-dx-focus-decoy={true} tabIndex={0} aria-hidden="true" />
+        <div ref={this.lastFocusDecoyRef} data-dx-focus-decoy={true} tabIndex={0} />
       </div>
     );
   }

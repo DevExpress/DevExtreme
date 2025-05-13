@@ -69,9 +69,9 @@ export class KbnFocusTrapEnabled extends Component<KbnFocusTrapBaseProps> {
           {...(restProps as KbnFocusTrapProps)}
         >
           <div data-dx-focus-trap-content={true} onKeyDown={this.onContentKeyDown.bind(this)}>
-            <div ref={this.firstFocusDecoyRef} data-dx-focus-decoy={true} tabIndex={0} aria-hidden="true" />
+            <div ref={this.firstFocusDecoyRef} data-dx-focus-decoy={true} tabIndex={0} />
             {children}
-            <div ref={this.lastFocusDecoyRef} data-dx-focus-decoy={true} tabIndex={0} aria-hidden="true" />
+            <div ref={this.lastFocusDecoyRef} data-dx-focus-decoy={true} tabIndex={0} />
           </div>
         </div>
     );

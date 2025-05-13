@@ -27,7 +27,6 @@ exports[`ColumnProperties headerItemCssClass should override content of headerPa
                 data-dx-focus-container="true"
               >
                 <div
-                  aria-hidden="true"
                   data-dx-focus-decoy="true"
                   tabindex="0"
                 />
@@ -45,7 +44,6 @@ exports[`ColumnProperties headerItemCssClass should override content of headerPa
                   </div>
                 </div>
                 <div
-                  aria-hidden="true"
                   data-dx-focus-decoy="true"
                   tabindex="0"
                 />
@@ -100,7 +98,6 @@ exports[`Options headerPanel itemCssClass should add css class to headerPanel it
           data-dx-focus-container="true"
         >
           <div
-            aria-hidden="true"
             data-dx-focus-decoy="true"
             tabindex="0"
           />
@@ -118,7 +115,6 @@ exports[`Options headerPanel itemCssClass should add css class to headerPanel it
             </div>
           </div>
           <div
-            aria-hidden="true"
             data-dx-focus-decoy="true"
             tabindex="0"
           />
@@ -176,7 +172,6 @@ exports[`Options headerPanel visible when it is true should show headerPanel 1`]
                 data-dx-focus-container="true"
               >
                 <div
-                  aria-hidden="true"
                   data-dx-focus-decoy="true"
                   tabindex="0"
                 />
@@ -194,7 +189,6 @@ exports[`Options headerPanel visible when it is true should show headerPanel 1`]
                   </div>
                 </div>
                 <div
-                  aria-hidden="true"
                   data-dx-focus-decoy="true"
                   tabindex="0"
                 />
