@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react';
-import Chat, { type ChatTypes } from 'devextreme-react/chat';
+import Chat, { type ChatTypes, Editing } from 'devextreme-react/chat';
 import SelectBox from 'devextreme-react/select-box';
 import CustomStore from 'devextreme/data/custom_store';
 import DataSource from 'devextreme/data/data_source';
@@ -43,10 +43,8 @@ const dataSource = new DataSource({
 });
 
 export default function App() {
-  const [chatEditing, setChatEditing] = useState<ChatTypes.Editing>({
-    allowUpdating: true,
-    allowDeleting: true,
-  });
+  const [allowUpdating, setAllowUpdating] = useState(true);
+  const [allowDeleting, setAllowDeleting] = useState(true);
 
   const onMessageEntered = useCallback((
     { message }: ChatTypes.MessageEnteredEvent,
@@ -83,11 +81,14 @@ export default function App() {
     }]);
   }, []);
 
-  const handleEditingChange = useCallback((type) => (e) => {
-    setChatEditing((prev) => ({
-      ...prev,
-      [type]: editingStrategy[e.value],
-    }));
+  const handleAllowUpdatingChange = useCallback((e) => {
+    const strategy = editingStrategy[e.value];
+    setAllowUpdating(() => strategy);
+  }, []);
+
+  const handleAllowDeletingChange = useCallback((e) => {
+    const strategy = editingStrategy[e.value];
+    setAllowDeleting(() => strategy);
   }, []);
 
   return (
@@ -98,11 +99,15 @@ export default function App() {
           dataSource={dataSource}
           user={currentUser}
           reloadOnChange={false}
-          editing={chatEditing}
           onMessageEntered={onMessageEntered}
           onMessageDeleted={onMessageDeleted}
           onMessageUpdated={onMessageUpdated}
-        />
+        >
+          <Editing
+            allowDeleting={allowDeleting}
+            allowUpdating={allowUpdating}
+          />
+        </Chat>
       </div>
 
       <div className="options">
@@ -115,7 +120,7 @@ export default function App() {
             displayExpr="text"
             inputAttr= {allowEditingLabel}
             defaultValue={editingOptions[0].key}
-            onValueChanged={handleEditingChange('allowUpdating')}
+            onValueChanged={handleAllowUpdatingChange}
           />
         </div>
         <div className="option">
@@ -126,7 +131,7 @@ export default function App() {
             displayExpr="text"
             inputAttr= {allowDeletingLabel}
             defaultValue={editingOptions[0].key}
-            onValueChanged={handleEditingChange('allowDeleting')}
+            onValueChanged={handleAllowDeletingChange}
           />
         </div>
       </div>
