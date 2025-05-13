@@ -9,8 +9,6 @@ import {
   aiIntegration,
 } from './data.ts';
 
-console.log(aiIntegration)
-
 export default function App() {
   return (
     <HtmlEditor
