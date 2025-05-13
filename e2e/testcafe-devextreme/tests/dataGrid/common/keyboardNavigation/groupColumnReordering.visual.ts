@@ -687,6 +687,51 @@ test('Ungroup column when pressing Delete', async (t) => {
   });
 });
 
+test('Ungroup column when pressing Ctrl + Shift + G', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+  const firstGroupedHeader = dataGrid.getGroupPanel().getHeader(0);
+
+  await t
+    .click(firstGroupedHeader.element)
+    .pressKey('ctrl+shift+g');
+
+  await takeScreenshot(
+    'ungroup_column_when_pressing_Ctrl_+_Shift_+_G.png',
+    dataGrid.element,
+  );
+
+  await t.expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  await createWidget('dxDataGrid', {
+    dataSource: [{
+      field1: 'test1',
+      field2: 'test2',
+      field3: 'test3',
+      field4: 'test4',
+    }],
+    grouping: {
+      contextMenuEnabled: true,
+    },
+    groupPanel: {
+      visible: true,
+    },
+    columns: [
+      {
+        dataField: 'field1',
+        groupIndex: 1,
+      },
+      'field2',
+      'field3',
+      {
+        dataField: 'field4',
+        groupIndex: 0,
+      },
+    ],
+  });
+});
+
 test('Ungroup a single grouped column when pressing Backspace if there is command column', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
@@ -774,6 +819,47 @@ safeSizeTest('Ungroup column via context menu if showWhenGrouped is enabled', as
   });
 });
 
+test('Ungroup column when pressing Ctrl + Shift + G if showWhenGrouped is enabled', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+  const secondHeader = dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(2);
+
+  await t
+    .click(secondHeader.element)
+    .pressKey('ctrl+shift+g');
+
+  await takeScreenshot(
+    'ungroup_column_when_pressing_ctrl_+_shift_+_g_if_showWhenGrouped_is_true.png',
+    dataGrid.element,
+  );
+
+  await t.expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  await createWidget('dxDataGrid', {
+    dataSource: [{
+      field1: 'test1',
+      field2: 'test2',
+      field3: 'test3',
+    }],
+    columns: [
+      'field1',
+      {
+        dataField: 'field2',
+        showWhenGrouped: true,
+        groupIndex: 0,
+      },
+      'field2',
+    ],
+    grouping: {
+      contextMenuEnabled: true,
+    },
+    groupPanel: {
+      visible: true,
+    },
+  });
+});
+
 safeSizeTest('Ungroup all columns via context menu', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
@@ -788,6 +874,54 @@ safeSizeTest('Ungroup all columns via context menu', async (t) => {
     .click(contextMenu.getItemByText('Ungroup All'));
 
   await takeScreenshot('ungroup_all_columns_via_context_menu_2');
+
+  await t.expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  await createWidget('dxDataGrid', {
+    dataSource: [{
+      field1: 'test1',
+      field2: 'test2',
+      field3: 'test3',
+      field4: 'test4',
+    }],
+    grouping: {
+      contextMenuEnabled: true,
+    },
+    groupPanel: {
+      visible: true,
+    },
+    columns: [
+      {
+        dataField: 'field1',
+        groupIndex: 1,
+      },
+      {
+        dataField: 'field2',
+        groupIndex: 2,
+      },
+      'field3',
+      {
+        dataField: 'field4',
+        groupIndex: 0,
+      },
+    ],
+  });
+});
+
+test('Ungroup all columns when pressing Shift + Alt + G', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+  const firstGroupedHeader = dataGrid.getGroupPanel().getHeader(0);
+
+  await t
+    .click(firstGroupedHeader.element)
+    .pressKey('shift+alt+g');
+
+  await takeScreenshot(
+    'ungroup_all_columns_when_pressing_Shift_+_Alt_+_G.png',
+    dataGrid.element,
+  );
 
   await t.expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
@@ -863,6 +997,54 @@ safeSizeTest('Ungroup all columns via context menu if showWhenGrouped is enabled
         dataField: 'field2',
         groupIndex: 2,
         showWhenGrouped: true,
+      },
+      'field3',
+      {
+        dataField: 'field4',
+        groupIndex: 0,
+      },
+    ],
+  });
+});
+
+safeSizeTest('Ungroup all columns when pressing Shift + Alt + G on the header', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+  const fourthHeader = dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(3);
+
+  await t
+    .click(fourthHeader.element)
+    .pressKey('shift+alt+g');
+
+  await takeScreenshot(
+    'ungroup_all_columns_when_pressing_Shift_+_Alt_+_G_on_header.png',
+    dataGrid.element,
+  );
+
+  await t.expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  await createWidget('dxDataGrid', {
+    dataSource: [{
+      field1: 'test1',
+      field2: 'test2',
+      field3: 'test3',
+      field4: 'test4',
+    }],
+    grouping: {
+      contextMenuEnabled: true,
+    },
+    groupPanel: {
+      visible: true,
+    },
+    columns: [
+      {
+        dataField: 'field1',
+        groupIndex: 1,
+      },
+      {
+        dataField: 'field2',
+        groupIndex: 2,
       },
       'field3',
       {

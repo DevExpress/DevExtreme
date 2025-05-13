@@ -11,8 +11,9 @@ import type { Views } from '@ts/grids/grid_core/m_types';
 
 import { CLASSES as GROUPING_CLASSES } from '../grouping/const';
 import gridCore from '../m_core';
+import { ColumnKeyboardNavigationMixin } from './m_column_keyboard_navigation_mixin';
 
-export class GroupPanelKeyboardNavigationController extends ColumnKeyboardNavigationController {
+export class GroupPanelKeyboardNavigationController extends ColumnKeyboardNavigationMixin(ColumnKeyboardNavigationController) {
   private isNeedToHiddenFocusAfterClick = false;
 
   private groupItemClickHandlerContext!: (event: any) => void;
@@ -42,21 +43,6 @@ export class GroupPanelKeyboardNavigationController extends ColumnKeyboardNaviga
     }
   }
 
-  private backspaceOrDelKeysHandler(e): void {
-    const { originalEvent } = e;
-    const $groupedColumnElement = $(originalEvent.target);
-    const column = this._columnsController.columnOption(`groupIndex:${$groupedColumnElement.index()}`);
-    const contextMenuEnabled = this.option('grouping.contextMenuEnabled');
-
-    if (column && contextMenuEnabled) {
-      this.moveColumn({
-        column,
-        sourceLocation: 'group',
-        targetLocation: 'headers',
-      });
-    }
-  }
-
   private leftRightKeysHandler(e): void {
     const { originalEvent } = e;
 
@@ -76,6 +62,13 @@ export class GroupPanelKeyboardNavigationController extends ColumnKeyboardNaviga
 
       originalEvent?.preventDefault();
     }
+  }
+
+  protected getColumnFromEvent(e) {
+    const $groupedColumnElement = $(e.originalEvent.target);
+
+    return this._columnsController
+      .columnOption(`groupIndex:${$groupedColumnElement.index()}`);
   }
 
   protected getNewFocusedColumnIndex(
@@ -122,18 +115,19 @@ export class GroupPanelKeyboardNavigationController extends ColumnKeyboardNaviga
     this.setFocusedCellPosition(0, $(e.target).index());
   }
 
-  protected keyDownHandler(e): void {
-    const isHandled = this.processOnKeyDown(e);
+  protected keyDownHandler(e): boolean {
+    let isHandled = super.keyDownHandler(e);
 
     if (isHandled) {
-      return;
+      return true;
     }
 
     if (e.keyName === 'leftArrow' || e.keyName === 'rightArrow') {
       this.leftRightKeysHandler(e);
-    } else if (e.keyName === 'backspace' || e.keyName === 'del') {
-      this.backspaceOrDelKeysHandler(e);
+      isHandled = true;
     }
+
+    return isHandled;
   }
 
   protected renderCompleted(e: any) {
@@ -152,6 +146,10 @@ export class GroupPanelKeyboardNavigationController extends ColumnKeyboardNaviga
 
       this.isNeedToHiddenFocusAfterClick = false;
     }
+  }
+
+  public canUngroupColumnByPressingKey(e) {
+    return super.canUngroupColumnByPressingKey(e) || e.keyName === 'backspace' || e.keyName === 'del';
   }
 
   public getFirstFocusableVisibleIndex(): number {

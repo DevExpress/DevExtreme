@@ -1,17 +1,18 @@
 import { isCommandKeyPressed } from '@js/common/core/events/utils';
 import $ from '@js/core/renderer';
 import { isDefined } from '@js/core/utils/type';
-import { Direction, ViewName } from '@ts/grids/grid_core/keyboard_navigation/const';
+import { Direction, KEY_CODES, ViewName } from '@ts/grids/grid_core/keyboard_navigation/const';
 import type { HeadersKeyboardNavigationController } from '@ts/grids/grid_core/keyboard_navigation/m_headers_keyboard_navigation';
 import { headersKeyboardNavigationModule } from '@ts/grids/grid_core/keyboard_navigation/m_headers_keyboard_navigation';
 import type { ModuleType } from '@ts/grids/grid_core/m_types';
 
 import gridCore from '../m_core';
+import { ColumnKeyboardNavigationMixin } from './m_column_keyboard_navigation_mixin';
 
 const headersKeyboardNavigation = (
   Base: ModuleType<HeadersKeyboardNavigationController>,
-) => class HeadersKeyboardNavigationControllerExtender extends Base {
-  private ctrlGKeyHandler(e): void {
+) => class HeadersKeyboardNavigationControllerExtender extends ColumnKeyboardNavigationMixin(Base) {
+  private groupColumn(e): void {
     const $cell = $(e.originalEvent.target).closest('td');
     const rowIndex = this._getRowIndex($cell.parent());
     const column = this._getColumnByCellElement($cell, rowIndex);
@@ -43,18 +44,38 @@ const headersKeyboardNavigation = (
     return this.getVisibleIndex(groupColumns[visibleIndex]) - 1;
   }
 
+  private canGroupColumnByPressingKey(e) {
+    return e.which === KEY_CODES.G && isCommandKeyPressed(e.originalEvent);
+  }
+
+  protected ungroupColumn(e): void {
+    const column = this.getColumnFromEvent(e);
+
+    if (isDefined(column?.groupIndex)) {
+      super.ungroupColumn(e);
+    }
+  }
+
+  protected getColumnFromEvent(e) {
+    const $cell = $(e.originalEvent.target).closest('td');
+    const rowIndex = this._getRowIndex($cell.parent());
+
+    return this._getColumnByCellElement($cell, rowIndex);
+  }
+
   protected keyDownHandler(e): boolean {
-    const isHandled = super.keyDownHandler(e);
+    let isHandled = super.keyDownHandler(e);
 
     if (isHandled) {
       return true;
     }
 
-    if (e.keyName.toLowerCase() === 'g' && isCommandKeyPressed(e.originalEvent)) {
-      this.ctrlGKeyHandler(e);
+    if (this.canGroupColumnByPressingKey(e)) {
+      this.groupColumn(e);
+      isHandled = true;
     }
 
-    return false;
+    return isHandled;
   }
 
   protected getNewVisibleIndex(
@@ -113,6 +134,23 @@ const headersKeyboardNavigation = (
       targetLocation,
       showWhenGrouped,
     );
+  }
+
+  public ungroupAllColumns(): void {
+    const $focusedCell = this._getFocusedCell();
+    const focusedColumn = this._getColumnByCellElement($focusedCell);
+
+    this._columnsController.beginUpdate();
+    super.ungroupAllColumns();
+
+    const rowIndex = this._columnsController.getRowIndex(focusedColumn.index, true);
+    const newVisibleIndex = this.getVisibleIndex(focusedColumn);
+
+    this.updateFocusPosition({
+      rowIndex,
+      columnIndex: newVisibleIndex,
+    });
+    this._columnsController.endUpdate();
   }
 };
 
