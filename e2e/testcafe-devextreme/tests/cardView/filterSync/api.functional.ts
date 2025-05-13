@@ -137,9 +137,10 @@ test('sync from headerFilter: filter by all values', async (t) => {
   await cardView.apiColumnOption('id', 'filterValues', undefined);
 
   await t.expect(cardView.apiOption('filterValue')).eql(null);
+  await expectFilterElementsState(t, ['id']);
 }).before(() => createWidget('dxCardView', baseConfig));
 
-test('sync from headerPanel: filter by two columns', async (t) => {
+test('sync from headerFilter: filter by two columns', async (t) => {
   const cardView = new CardView('#container');
 
   await cardView.apiColumnOption('id', 'filterType', 'include');
@@ -156,11 +157,10 @@ test('sync from headerPanel: filter by two columns', async (t) => {
     ],
   );
 
-  await expectFilterElementsState(t, ['id']);
-  await expectFilterElementsState(t, ['gender']);
+  await expectFilterElementsState(t, ['id', 'gender']);
 }).before(() => createWidget('dxCardView', baseConfig));
 
-test('sync from headerPanel: filter by groupInterval', async (t) => {
+test('sync from headerFilter: filter by groupInterval', async (t) => {
   const cardView = new CardView('#container');
 
   await cardView.apiColumnOption('id', 'filterType', 'include');
@@ -180,6 +180,19 @@ test('sync from headerPanel: filter by groupInterval', async (t) => {
     },
   }],
 }));
+
+test('sync from headerFilter: filter by a column, then remove filter', async (t) => {
+  const cardView = new CardView('#container');
+
+  await cardView.apiColumnOption('id', 'filterType', 'include');
+  await cardView.apiColumnOption('id', 'filterValues', [0]);
+
+  await cardView.apiColumnOption('id', 'filterValues', []);
+
+  await t.expect(cardView.apiOption('filterValue')).eql(null);
+
+  await t.expect(cardView.getFilterPanel().getClearFilterButton().element.exists).notOk();
+}).before(() => createWidget('dxCardView', baseConfig));
 
 /*
  sync from filterPanel

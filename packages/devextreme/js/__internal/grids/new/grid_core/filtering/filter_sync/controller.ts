@@ -105,7 +105,8 @@ export class FilterSyncController {
     const areEqualByEmpty = headerFilter.length === 0 && filterValue === null;
 
     if (!areEqualByValue && !areEqualByEmpty && !areEqualByPrevious) {
-      this.filterController.filterValueOption.value = headerFilter;
+      const newFilterValue = headerFilter.length === 0 ? null : headerFilter;
+      this.filterController.filterValueOption.value = newFilterValue;
     }
   }
 }
