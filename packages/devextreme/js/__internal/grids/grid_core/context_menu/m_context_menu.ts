@@ -7,6 +7,7 @@ import ContextMenu from '@js/ui/context_menu';
 import modules from '../m_modules';
 
 const CONTEXT_MENU = 'dx-context-menu';
+const GROUP_ROW_CLASS = 'dx-group-row';
 
 const viewName = {
   columnHeadersView: 'header',
@@ -47,9 +48,10 @@ export class ContextMenuController extends modules.ViewController {
       const isTargetElementInsideView = $viewElement?.is($targetElement) || $viewElement?.find($targetElement).length;
 
       if (isTargetElementInsideView) {
-        const $targetCellElement = $targetElement.closest('.dx-row > td, .dx-row > tr').length
-          ? $targetElement.closest('.dx-row > td, .dx-row > tr')
-          : $targetElement.find('.dx-group-cell').first();
+        const isGroupRow = $targetElement.hasClass(GROUP_ROW_CLASS);
+        const $targetCellElement = isGroupRow
+          ? $targetElement.find('.dx-group-cell').first()
+          : $targetElement.closest('.dx-row > td, .dx-row > tr');
         const $targetRowElement = $targetCellElement.parent();
         const rowIndex = view.getRowIndex($targetRowElement);
         const columnIndex = $targetCellElement[0]?.cellIndex;
