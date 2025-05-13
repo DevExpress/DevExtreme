@@ -2947,6 +2947,58 @@ QUnit.module('keyboard navigation', {
 
         assert.equal($(this.instance._visibleSubmenu.option('focusedElement')).text(), 'Item 113');
     });
+
+    QUnit.test('focusedElement should be cleared if it is in hiding submenu', function(assert) {
+        this.instance.option({
+            orientation: 'horizontal',
+            items: [
+                {
+                    text: 'Item 1',
+                    items: [
+                        { text: 'Item 11', items: [ { text: 'Item 111' }, { text: 'Item 112' }, { text: 'Item 113' } ] },
+                        { text: 'Item 12' }
+                    ],
+                },
+            ]
+        });
+
+        this.keyboard.press('enter')
+            .press('down')
+            .press('down');
+
+        assert.strictEqual($(this.instance.option('focusedElement')).text(), 'Item 12', 'focusedElement is navigated item');
+
+        this.keyboard.press('enter');
+
+        assert.strictEqual(this.instance.option('focusedElement'), null, 'focusedElement is cleared');
+    });
+
+    QUnit.test('focusedElement should be cleared if it is in hiding nested submenu', function(assert) {
+        this.instance.option({
+            orientation: 'horizontal',
+            items: [
+                {
+                    text: 'Item 1',
+                    items: [
+                        { text: 'Item 11', items: [ { text: 'Item 111' }, { text: 'Item 112' }, { text: 'Item 113' } ] },
+                        { text: 'Item 12' }
+                    ],
+                },
+            ]
+        });
+
+        this.keyboard.press('enter')
+            .press('down')
+            .press('enter')
+            .press('right')
+            .press('down');
+
+        assert.strictEqual($(this.instance.option('focusedElement')).text(), 'Item 112', 'focusedElement is navigated item');
+
+        this.keyboard.press('enter');
+
+        assert.strictEqual(this.instance.option('focusedElement'), null, 'focusedElement is cleared');
+    });
 });
 
 QUnit.module('Menu with templates', {
