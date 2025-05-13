@@ -34,11 +34,13 @@ exports[`common initial render should be successfull 1`] = `
                     data-dx-focus-container="true"
                   >
                     <div
+                      aria-hidden="true"
                       data-dx-focus-decoy="true"
                       tabindex="0"
                     />
                     <div
                       class="dx-cardview-headerpanel-content"
+                      role="menubar"
                     >
                       <span
                         class="dx-cardview-headerpanel-text-empty"
@@ -53,6 +55,7 @@ exports[`common initial render should be successfull 1`] = `
                       </span>
                     </div>
                     <div
+                      aria-hidden="true"
                       data-dx-focus-decoy="true"
                       tabindex="0"
                     />

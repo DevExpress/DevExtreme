@@ -3586,16 +3586,18 @@ exports[`Options HeaderFilter visible: false 1`] = `
               data-dx-focus-container="true"
             >
               <div
+                aria-hidden="true"
                 data-dx-focus-decoy="true"
                 tabindex="0"
               />
               <div
                 class="dx-cardview-headerpanel-content"
+                role="menubar"
               >
                 <div
                   aria-label="Field name A"
                   class="dx-cardview-header-item  "
-                  role="button"
+                  role="menuitem"
                   tabindex="0"
                 >
                   A
@@ -3605,6 +3607,7 @@ exports[`Options HeaderFilter visible: false 1`] = `
                 </div>
               </div>
               <div
+                aria-hidden="true"
                 data-dx-focus-decoy="true"
                 tabindex="0"
               />
@@ -3664,16 +3667,18 @@ exports[`Options HeaderFilter visible: true 1`] = `
               data-dx-focus-container="true"
             >
               <div
+                aria-hidden="true"
                 data-dx-focus-decoy="true"
                 tabindex="0"
               />
               <div
                 class="dx-cardview-headerpanel-content"
+                role="menubar"
               >
                 <div
                   aria-label="Field name A"
                   class="dx-cardview-header-item  "
-                  role="button"
+                  role="menuitem"
                   tabindex="0"
                 >
                   A
@@ -3683,6 +3688,7 @@ exports[`Options HeaderFilter visible: true 1`] = `
                 </div>
               </div>
               <div
+                aria-hidden="true"
                 data-dx-focus-decoy="true"
                 tabindex="0"
               />
@@ -3742,16 +3748,18 @@ exports[`Options HeaderFilter visible: undefined 1`] = `
               data-dx-focus-container="true"
             >
               <div
+                aria-hidden="true"
                 data-dx-focus-decoy="true"
                 tabindex="0"
               />
               <div
                 class="dx-cardview-headerpanel-content"
+                role="menubar"
               >
                 <div
                   aria-label="Field name A"
                   class="dx-cardview-header-item  "
-                  role="button"
+                  role="menuitem"
                   tabindex="0"
                 >
                   A
@@ -3761,6 +3769,7 @@ exports[`Options HeaderFilter visible: undefined 1`] = `
                 </div>
               </div>
               <div
+                aria-hidden="true"
                 data-dx-focus-decoy="true"
                 tabindex="0"
               />
