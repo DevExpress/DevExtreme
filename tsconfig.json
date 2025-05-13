@@ -1,51 +1,51 @@
 {
-  "compilerOptions": {
-    "baseUrl": "./packages",
-    "paths": {
-      "devextreme-angular": [
-        "devextreme-angular/npm/dist"
+    "compilerOptions": {
+      "baseUrl": "./packages",
+      "paths": {
+        "devextreme-angular": [
+          "devextreme-angular/npm/dist"
+        ],
+        "devextreme-angular/*": [
+          "devextreme-angular/npm/dist/*"
+        ],
+        "devextreme-react": [
+          "devextreme-react/npm"
+        ],
+        "devextreme-react/*": [
+          "devextreme-react/npm/*"
+        ],
+        "devextreme-vue": [
+          "devextreme-vue/src"
+        ],
+        "devextreme-vue/*": [
+          "devextreme-vue/src/*"
+        ],
+        "devextreme-monorepo-tools": [
+          "devextreme-monorepo-tools/src"
+        ],
+      },
+      "esModuleInterop": true,
+      "allowSyntheticDefaultImports": true,
+      "target": "es2020",
+      "module": "commonjs",
+      "jsx": "react",
+      "noEmitOnError": true,
+      "declaration": true,
+      "forceConsistentCasingInFileNames": true,
+      "noFallthroughCasesInSwitch": true,
+      "noImplicitAny": false,
+      "noImplicitReturns": true,
+      "noImplicitThis": true,
+      "noUnusedLocals": true,
+      "noUnusedParameters": true,
+      "strictNullChecks": true,
+      "lib": [
+        "dom"
       ],
-      "devextreme-angular/*": [
-        "devextreme-angular/npm/dist/*"
-      ],
-      "devextreme-react": [
-        "devextreme-react/npm"
-      ],
-      "devextreme-react/*": [
-        "devextreme-react/npm/*"
-      ],
-      "devextreme-vue": [
-        "devextreme-vue/src"
-      ],
-      "devextreme-vue/*": [
-        "devextreme-vue/src/*"
-      ],
-      "devextreme-monorepo-tools": [
-        "devextreme-monorepo-tools/src"
-      ],
+      "types": ["jest"]
     },
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "target": "es2020",
-    "module": "commonjs",
-    "jsx": "react",
-    "noEmitOnError": true,
-    "declaration": true,
-    "forceConsistentCasingInFileNames": true,
-    "noFallthroughCasesInSwitch": true,
-    "noImplicitAny": false,
-    "noImplicitReturns": true,
-    "noImplicitThis": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "strictNullChecks": true,
-    "lib": [
-      "dom"
-    ],
-    "types": ["jest"]
-  },
-  "exclude": [
-    "node_modules",
-    "dist"
-  ]
-}
+    "exclude": [
+      "node_modules",
+      "dist"
+    ]
+  }
