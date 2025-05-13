@@ -13,7 +13,7 @@ import { isElementInDom } from '@js/core/utils/dom';
 import { getHeight } from '@js/core/utils/size';
 import { isDate, isDefined } from '@js/core/utils/type';
 import type { DxEvent } from '@js/events';
-import type { Message, User } from '@js/ui/chat';
+import type { Message, TextMessage, User } from '@js/ui/chat';
 import type { Item as ContextMenuItem } from '@js/ui/context_menu';
 import type { WidgetOptions } from '@js/ui/widget/ui.widget';
 import type { OptionChanged } from '@ts/core/widget/types';
@@ -28,13 +28,15 @@ import { getScrollTopMax } from '@ts/ui/scroll_view/utils/get_scroll_top_max';
 
 import type { DataChange } from '../collection/collection_widget.base';
 import { isElementVisible } from '../splitter/utils/layout';
-import MessageBubble, { CHAT_MESSAGEBUBBLE_CLASS } from './messagebubble';
+import MessageBubble, {
+  CHAT_MESSAGEBUBBLE_CLASS,
+  MESSAGE_DATA_KEY,
+} from './messagebubble';
 import type { MessageGroupAlignment } from './messagegroup';
 import MessageGroup, {
   CHAT_MESSAGEGROUP_ALIGNMENT_END_CLASS,
   CHAT_MESSAGEGROUP_ALIGNMENT_START_CLASS,
   CHAT_MESSAGEGROUP_CLASS,
-  MESSAGE_DATA_KEY,
 } from './messagegroup';
 import TypingIndicator from './typingindicator';
 
@@ -70,6 +72,11 @@ export type ItemClick = NativeEventInfo<ContextMenu, KeyboardEvent | MouseEvent 
 
 export interface MessageEditingEvent {
   event: DxEvent<KeyboardEvent | MouseEvent | PointerEvent> | undefined;
+  message: TextMessage;
+}
+
+export interface MessageDeletingEvent {
+  event: DxEvent<KeyboardEvent | MouseEvent | PointerEvent> | undefined;
   message: Message;
 }
 
@@ -89,7 +96,7 @@ export interface Properties extends WidgetOptions<MessageList> {
   showUserName: boolean;
   showMessageTimestamp: boolean;
   onMessageEditingStart?: (e: MessageEditingEvent) => () => void;
-  onMessageDeleting?: (e: MessageEditingEvent) => void;
+  onMessageDeleting?: (e: MessageDeletingEvent) => void;
   onEscapeKeyPressed?: (e: KeyboardEvent) => void;
 }
 
@@ -278,13 +285,15 @@ class MessageList extends Widget<Properties> {
 
     const buttons: ContextMenuItem[] = [];
 
-    if (allowUpdating(message)) {
+    if (allowUpdating(message) && message.type !== 'image') {
       buttons.push({
         icon: 'edit',
         text: editText,
         disabled: isEditActionDisabled(message),
         onClick: (e: ItemClick): void => {
-          const onMessageEditStarted = onMessageEditingStart?.({ event: e.event, message });
+          const onMessageEditStarted = onMessageEditingStart?.({
+            event: e.event, message: message as TextMessage,
+          });
 
           const onContextMenuHidden = (): void => {
             this._contextMenu.off('hidden', onContextMenuHidden);
@@ -576,7 +585,6 @@ class MessageList extends Widget<Properties> {
   }
 
   _getMessageData(message: Element): Message {
-    // @ts-expect-error
     return $(message).data(MESSAGE_DATA_KEY);
   }
 
@@ -599,6 +607,13 @@ class MessageList extends Widget<Properties> {
     return result;
   }
 
+  _getMessageGroupByBubbleElement($bubble: dxElementWrapper): MessageGroup {
+    const $currentMessageGroup = $bubble.closest(`.${CHAT_MESSAGEGROUP_CLASS}`);
+    const group: MessageGroup = MessageGroup.getInstance($currentMessageGroup);
+
+    return group;
+  }
+
   _updateMessageByKey(key: string | number | undefined, data: Message): void {
     if (isDefined(key)) {
       const $targetMessage = this._findMessageElementByKey(key);
@@ -606,11 +621,13 @@ class MessageList extends Widget<Properties> {
       const bubble = MessageBubble.getInstance($targetMessage);
       bubble.option(data);
 
-      const $currentMessageGroup = $targetMessage.closest(`.${CHAT_MESSAGEGROUP_CLASS}`);
-      const group: MessageGroup = MessageGroup.getInstance($currentMessageGroup);
-      const isEdited = data.isEdited === true && !data.isDeleted;
+      if (data.type !== 'image') {
+        const $currentMessageGroup = $targetMessage.closest(`.${CHAT_MESSAGEGROUP_CLASS}`);
+        const group: MessageGroup = MessageGroup.getInstance($currentMessageGroup);
+        const isEdited = (data as TextMessage).isEdited === true && !data.isDeleted;
 
-      group._updateMessageEditedText($targetMessage, isEdited);
+        group._updateMessageEditedText($targetMessage, isEdited);
+      }
     }
   }
 
@@ -625,10 +642,7 @@ class MessageList extends Widget<Properties> {
       return;
     }
 
-    const $currentMessageGroup = $targetMessage.closest(`.${CHAT_MESSAGEGROUP_CLASS}`);
-
-    const group: MessageGroup = MessageGroup.getInstance($currentMessageGroup);
-
+    const group = this._getMessageGroupByBubbleElement($targetMessage);
     const { items } = group.option();
     const newItems = items.filter((item) => item.id !== key);
 
@@ -767,7 +781,7 @@ class MessageList extends Widget<Properties> {
     changes.forEach((change) => {
       switch (change.type) {
         case 'update':
-          this._updateMessageByKey(change.key, change.data ?? {});
+          this._updateMessageByKey(change.key, change.data as Message ?? {});
           break;
         case 'insert': {
           const { items } = this.option();

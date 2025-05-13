@@ -1,5 +1,15 @@
 {
     "cli": {
         "artifacts": "./artifacts/internal-tools"
-    }
+    },
+    "mutations": [
+        {
+            "kind": "remove",
+            "uid": "/card_view"
+        },
+        {
+            "kind": "remove",
+            "uid": "/scheduler:Toolbar"
+        }
+    ]
 }

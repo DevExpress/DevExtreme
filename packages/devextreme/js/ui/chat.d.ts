@@ -197,14 +197,22 @@ export type Alert = {
 /**
  * @docid
  * @namespace DevExpress.ui.dxChat
- * @public
+ * @type object
+ * @hidden
  */
-export type Message = {
+export type MessageBase = {
     /**
      * @docid
      * @public
      */
     id?: number | string;
+    /**
+     * @docid
+     * @default undefined
+     * @type string|undefined
+     * @public
+     */
+    type?: 'text' | 'image' | undefined;
     /**
      * @docid
      * @public
@@ -219,45 +227,61 @@ export type Message = {
      * @docid
      * @public
      */
+    isDeleted?: boolean;
+
+    [key: string]: any;
+};
+
+/**
+ * @docid
+ * @public
+ * @namespace DevExpress.ui.dxChat
+ * @inherits MessageBase
+ */
+export type TextMessage = MessageBase & {
+    /**
+     * @docid
+     * @public
+     */
     text?: string;
     /**
      * @docid
      * @public
      */
     isEdited?: boolean;
+};
+
+/**
+ * @docid
+ * @public
+ * @namespace DevExpress.ui.dxChat
+ * @inherits MessageBase
+ */
+export type ImageMessage = MessageBase & {
     /**
      * @docid
      * @public
      */
-    isDeleted?: boolean;
-};
-
-/** @public */
-export type MessageTemplateData = {
-    readonly component: dxChat;
-    readonly message?: Message;
+    src?: string;
+    /**
+     * @docid
+     * @public
+     */
+    alt?: string;
 };
 
 /**
  * @docid
  * @namespace DevExpress.ui.dxChat
  * @public
+ * @inherits TextMessage,ImageMessage
  */
-export type Editing = {
-  /**
-   * @docid
-   * @default false
-   * @type boolean|function
-   * @public
-   */
-  allowUpdating?: boolean | ((options: { component?: dxChat; message?: Message }) => boolean);
-  /**
-   * @docid
-   * @default false
-   * @type boolean|function
-   * @public
-   */
-  allowDeleting?: boolean | ((options: { component?: dxChat; message?: Message }) => boolean);
+export type Message = TextMessage | ImageMessage;
+
+/** @public */
+export type MessageTemplateData = {
+    readonly component: dxChat;
+    readonly message?: Message;
 };
 
 /**
@@ -299,10 +323,22 @@ export interface dxChatOptions extends WidgetOptions<dxChat> {
     items?: Array<Message>;
     /**
      * @docid
-     * @type object
      * @public
      */
-    editing?: Editing;
+    editing?: {
+      /**
+       * @docid
+       * @default false
+       * @public
+       */
+      allowUpdating?: boolean | ((options: { component?: dxChat; message?: Message }) => boolean);
+      /**
+       * @docid
+       * @default false
+       * @public
+       */
+      allowDeleting?: boolean | ((options: { component?: dxChat; message?: Message }) => boolean);
+    };
     /**
      * @docid
      * @type string | Array<Message> | Store | DataSource | DataSourceOptions | null

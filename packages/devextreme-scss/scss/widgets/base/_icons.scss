@@ -150,7 +150,10 @@
 .dx-icon-sparkle,
 .dx-icon-servicebell,
 .dx-icon-dropzone,
-.dx-icon-restore {
+.dx-icon-restore
+.dx-icon-groupbycolumn,
+.dx-icon-ungroupcolumn,
+.dx-icon-ungroupallcolumns {
   background-position: 0 0;
   background-repeat: no-repeat;
 }
@@ -516,6 +519,9 @@ $icons: (
     "fixcolumnright":"\f17d",
     "dropzone":"\f195",
     "restore":"\f196",
+    "groupbycolumn":"\f197",
+    "ungroupcolumn":"\f198",
+    "ungroupallcolumns":"\f199",
 );
 
 // stylelint-enable

@@ -52,11 +52,18 @@ export const FOCUS_TYPE_CELL = 'cell';
 export const COLUMN_HEADERS_VIEW = 'columnHeadersView';
 export const ROWS_VIEW = 'rowsView';
 export const FUNCTIONAL_KEYS = ['shift', 'control', 'alt'];
-
-export const CONTEXT_MENU_MOVE_PREVIOUS_ICON = 'arrowleft';
-export const CONTEXT_MENU_MOVE_NEXT_ICON = 'arrowright';
+export const DRAG_COLUMN_NAME = 'drag';
 
 export enum Direction {
   Next = 'next',
   Previous = 'previous',
 }
+
+export enum ViewName {
+  Group = 'group',
+  Headers = 'headers',
+}
+
+export const KEY_CODES = {
+  G: 71,
+};

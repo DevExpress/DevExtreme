@@ -2050,15 +2050,15 @@
       },
       {
         "Name": "AI-powered Text Editing",
-        "Equivalents": "AI, text editing, text editor",
+        "Equivalents": "AI, AI text transformation, AI editor",
         "Demos": [
           {
             "Title": "AI-powered Text Editing",
             "Name": "AITextEditing",
             "Widget": "HtmlEditor",
             "DemoType": "Web",
-            "Badge": "Roadmap",
-            "RoadmapSurveyUrl": "https://www.devexpress.com/support/surveys/devextreme-roadmap-ai.xml"
+            "Badge": "New",
+            "Modules": "openai"
           }
         ]
       },
@@ -2117,15 +2117,23 @@
       },
       {
         "Name": "Message Editing",
-        "Equivalents": "Editing",
+        "Equivalents": "Editing, Delete, Deleting, Update, Correct, Modify",
         "Demos": [
           {
             "Title": "Message Editing",
             "Name": "MessageEditing",
             "Widget": "Chat",
             "DemoType": "Web",
-            "Badge": "Roadmap",
-            "RoadmapSurveyUrl": "https://www.devexpress.com/support/surveys/devextreme-roadmap-messages.xml"
+            "Badge": "New",
+            "DocUrl": "",
+            "MvcDescription": "",
+            "NetCoreDescription": "",
+            "MvcAdditionalFiles": [
+              "/Models/SampleData/ChatData.cs",
+              "/Models/Chat/User.cs",
+              "/Models/Chat/Message.cs",
+              "/ViewModels/ChatViewModel.cs"
+            ]
           }
         ]
       },

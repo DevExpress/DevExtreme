@@ -1,7 +1,9 @@
 import $ from 'jquery';
 import messageLocalization from 'common/core/localization/message';
 
-import MessageBubble from '__internal/ui/chat/messagebubble';
+import MessageBubble, {
+    MESSAGE_DATA_KEY
+} from '__internal/ui/chat/messagebubble';
 
 const CHAT_MESSAGEBUBBLE_CONTENT_CLASS = 'dx-chat-messagebubble-content';
 
@@ -40,6 +42,26 @@ QUnit.module('MessageBubble', moduleConfig, () => {
 
             assert.strictEqual(this.$element.text(), messageLocalization.format('dxChat-deletedMessageText'));
         });
+
+        QUnit.test('should render an image with correct attributes', function(assert) {
+            const imageSrc = 'test image src';
+            const imageAlt = 'Image alt';
+            this.reinit({ src: imageSrc, type: 'image', alt: imageAlt });
+
+            const $img = this.$element.find('img');
+
+            assert.strictEqual($img.length, 1, 'One <img> element is rendered');
+            assert.strictEqual($img.attr('src'), imageSrc, 'Image has correct src');
+            assert.strictEqual($img.attr('alt'), imageAlt, 'Image has correct default alt');
+        });
+
+        QUnit.test('should render an image with default alt', function(assert) {
+            this.reinit({ src: '', type: 'image' });
+
+            const $img = this.$element.find('img');
+
+            assert.strictEqual($img.attr('alt'), 'Image shared in chat', 'Image has correct default alt');
+        });
     });
 
     QUnit.module('Options', () => {
@@ -61,17 +83,31 @@ QUnit.module('MessageBubble', moduleConfig, () => {
             assert.strictEqual(this.$element.text(), messageLocalization.format('dxChat-deletedMessageText'));
         });
 
+        [
+            { name: 'text', newValue: { text: 'updated message text' } },
+            { name: 'isDeleted', newValue: true },
+            { name: 'isEdited', newValue: true },
+        ].forEach(({ name, newValue }) => {
+            QUnit.test(`message data should be updated after changing ${name} option at runtime`, function(assert) {
+                this.reinit({});
+
+                this.instance.option(name, newValue);
+
+                assert.strictEqual(this.instance.$element().data(MESSAGE_DATA_KEY)[name], newValue, 'message data is updated');
+            });
+        });
+
         QUnit.test('template render function should be called if it has been passed', function(assert) {
             const templateSpy = sinon.spy();
-            const messageText = 'message text';
+            const message = { text: 'message text', type: 'text', src: undefined, alt: undefined };
 
             this.reinit({
-                text: messageText,
+                ...message,
                 template: templateSpy,
             });
 
             assert.strictEqual(templateSpy.callCount, 1, 'template was rendered once');
-            assert.strictEqual(templateSpy.args[0][0], messageText, 'text argument is correct');
+            assert.deepEqual(templateSpy.args[0][0], message, 'message argument is correct');
             assert.strictEqual($(templateSpy.args[0][1]).get(0), this.$content.get(0), 'container element is correct');
         });
 
@@ -96,6 +132,7 @@ QUnit.module('MessageBubble', moduleConfig, () => {
 
             this.reinit({
                 text: messageText,
+                type: 'text',
                 template: templateSpy,
             });
 
@@ -106,11 +143,11 @@ QUnit.module('MessageBubble', moduleConfig, () => {
 
         QUnit.test('template option should set message bubble content at runtime', function(assert) {
             const template = (data, container) => {
-                $('<h1>').text(`template text: ${data}`).appendTo(container);
+                $('<h1>').text(`template text: ${data.text}`).appendTo(container);
             };
 
             this.reinit({
-                text: 'text'
+                text: 'text',
             });
 
             assert.strictEqual(this.$element.text(), 'text', 'text is correct');

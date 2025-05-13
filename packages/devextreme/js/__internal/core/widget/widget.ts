@@ -681,8 +681,11 @@ class Widget<
   registerKeyHandler(key: string, handler: (event?) => void): void {
     const currentKeys = this._supportedKeys();
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @stylistic/max-len
-    this._supportedKeys = (): Record<string, (e) => boolean> => extend(currentKeys, { [key]: handler });
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+    this._supportedKeys = (): Record<string, (e) => boolean> => extend(
+      currentKeys,
+      { [key]: handler },
+    );
   }
 }
 

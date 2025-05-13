@@ -11,12 +11,12 @@ import type { ComponentType } from 'inferno';
 
 import { TemplateWrapper } from '../inferno_wrappers/template_wrapper';
 import type { Template } from '../types';
+import { getTreeNodeByPath, mergeOptionTrees } from '../utils/tree/index';
 import type {
-  ActionProperty,
+  ActionProperty, InternalOptionsState, OptionWithChanges,
   PropertyWithDefaults,
   TemplateProperty,
 } from './types';
-import { getTreeNodeByPath, mergeOptionTrees } from './utils/index';
 
 function getOr<T>(cache: Record<string, T>, key: string, orElse: () => T): T {
   if (cache[key]) {
@@ -35,6 +35,7 @@ export class OptionsController<
 > {
   private readonly cache = {
     oneWay: {},
+    oneWayWithChanges: {},
     twoWay: {},
     action: {},
     template: {},
@@ -46,7 +47,7 @@ export class OptionsController<
 
   private isControlledMode = false;
 
-  private readonly internalOptions: Signal<TProps>;
+  private readonly internalOptions: Signal<InternalOptionsState<TProps>>;
 
   constructor(
     private readonly component: Component<TProps>,
@@ -54,9 +55,10 @@ export class OptionsController<
     // @ts-expect-error
     this.defaults = component._getDefaultOptions?.() ?? {};
 
-    this.internalOptions = signal(
-      extend(true, {}, component.option()),
-    );
+    this.internalOptions = signal({
+      options: extend(true, {}, component.option()),
+      changes: null,
+    });
 
     this.updateIsControlledMode();
 
@@ -68,17 +70,22 @@ export class OptionsController<
     this.isControlledMode = (isControlledMode as boolean | undefined) ?? false;
   }
 
-  private onOptionChangedHandler({ fullName }: ChangedOptionInfo): void {
+  private onOptionChangedHandler(optionChanges: ChangedOptionInfo): void {
+    const { fullName } = optionChanges;
+
     this.updateIsControlledMode();
 
     const pathParts = getPathParts(fullName);
 
-    this.internalOptions.value = mergeOptionTrees(
-      this.internalOptions.peek(),
-      this.component.option(),
-      this.defaults,
-      pathParts,
-    );
+    this.internalOptions.value = {
+      options: mergeOptionTrees(
+        this.internalOptions.peek().options,
+        this.component.option(),
+        this.defaults,
+        pathParts,
+      ),
+      changes: optionChanges,
+    };
   }
 
   public oneWay<TProp extends string>(
@@ -89,9 +96,28 @@ export class OptionsController<
 
       return computed(
         () => getTreeNodeByPath(
-          this.internalOptions.value,
+          this.internalOptions.value.options,
           pathArray,
         ),
+      );
+    });
+  }
+
+  public oneWayWithChanges<TProp extends string>(
+    name: TProp,
+  ): ReadonlySignal<OptionWithChanges<PropertyWithDefaults<TProps, TDefaultProps, TProp>>> {
+    return getOr(this.cache.oneWayWithChanges, name, () => {
+      const pathArray = getPathParts(name);
+
+      return computed(
+        () => {
+          const { options, changes } = this.internalOptions.value;
+
+          return {
+            value: getTreeNodeByPath(options, pathArray),
+            changes,
+          };
+        },
       );
     });
   }

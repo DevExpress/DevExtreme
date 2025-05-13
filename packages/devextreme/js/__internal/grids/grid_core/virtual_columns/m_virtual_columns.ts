@@ -223,20 +223,26 @@ const columns = (Base: ModuleType<ColumnsController>) => class VirtualColumnsCon
   }
 
   private _setScrollPositionCore(position, event?) {
-    const that = this;
+    const needColumnsChanged = this.isNeedToRenderVirtualColumns(position);
 
-    if (that.isVirtualMode()) {
-      const beginPageIndex = that.getBeginPageIndex(position);
-      const endPageIndex = that.getEndPageIndex(position);
-      const needColumnsChanged = position < that._position ? that._beginPageIndex > beginPageIndex : that._endPageIndex < endPageIndex;
-
-      that._position = position;
-      if (needColumnsChanged) {
-        that._beginPageIndex = beginPageIndex;
-        that._endPageIndex = endPageIndex;
-        that._fireColumnsChanged(event);
-      }
+    if (needColumnsChanged) {
+      this._position = position;
+      this._beginPageIndex = this.getBeginPageIndex(position);
+      this._endPageIndex = this.getEndPageIndex(position);
+      this._fireColumnsChanged(event);
     }
+  }
+
+  public isNeedToRenderVirtualColumns(scrollPosition): boolean {
+    if (this.isVirtualMode()) {
+      if (scrollPosition < this._position) {
+        return this._beginPageIndex > this.getBeginPageIndex(scrollPosition);
+      }
+
+      return this._endPageIndex < this.getEndPageIndex(scrollPosition);
+    }
+
+    return false;
   }
 
   public getFixedColumns(rowIndex?, isBase?) {

@@ -1979,7 +1979,7 @@ QUnit.module('Headers with grouping', {
             return $('#container');
         };
 
-        dataGridMocks.setupDataGridModules(this, ['data', 'columnHeaders', 'filterRow', 'selection', 'editorFactory', 'contextMenu', 'headerFilter', 'grouping', 'headerPanel'], {
+        dataGridMocks.setupDataGridModules(this, ['data', 'columnHeaders', 'filterRow', 'selection', 'editorFactory', 'contextMenu', 'headerFilter', 'grouping', 'headerPanel', 'groupPanelKeyboardNavigation'], {
             initViews: true,
             controllers: {
                 columns: new dataGridMocks.MockColumnsController(this.columns),
@@ -2121,7 +2121,7 @@ QUnit.module('Headers with grouping', {
         // assert
         const items = contextMenuArgs.items;
 
-        assert.equal(contextMenuArgs.target, 'headerPanel', 'context menu target');
+        assert.equal(contextMenuArgs.target, 'toolbar', 'context menu target');
         // T390121
         assert.deepEqual(contextMenuArgs.column, this.columns[0], 'context menu column');
 

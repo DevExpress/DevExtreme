@@ -3,6 +3,7 @@ import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 import Chat, { Properties } from "devextreme/ui/chat";
 import  DataSource from "devextreme/data/data_source";
+import  dxChat from "devextreme/ui/chat";
 import {
  Alert,
  Message,
@@ -170,6 +171,7 @@ const componentConfig = {
     (this as any).$_expectedChildren = {
       alert: { isCollectionItem: true, optionName: "alerts" },
       dayHeaderFormat: { isCollectionItem: false, optionName: "dayHeaderFormat" },
+      editing: { isCollectionItem: false, optionName: "editing" },
       item: { isCollectionItem: true, optionName: "items" },
       messageTimestampFormat: { isCollectionItem: false, optionName: "messageTimestampFormat" },
       typingUser: { isCollectionItem: true, optionName: "typingUsers" },
@@ -253,24 +255,49 @@ const DxDayHeaderFormat = defineComponent(DxDayHeaderFormatConfig);
 
 (DxDayHeaderFormat as any).$_optionName = "dayHeaderFormat";
 
+const DxEditingConfig = {
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:allowDeleting": null,
+    "update:allowUpdating": null,
+  },
+  props: {
+    allowDeleting: [Boolean, Function] as PropType<boolean | (((options: { component: dxChat, message: Message }) => boolean))>,
+    allowUpdating: [Boolean, Function] as PropType<boolean | (((options: { component: dxChat, message: Message }) => boolean))>
+  }
+};
+
+prepareConfigurationComponentConfig(DxEditingConfig);
+
+const DxEditing = defineComponent(DxEditingConfig);
+
+(DxEditing as any).$_optionName = "editing";
+
 const DxItemConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
+    "update:alt": null,
     "update:author": null,
     "update:id": null,
     "update:isDeleted": null,
     "update:isEdited": null,
+    "update:src": null,
     "update:text": null,
     "update:timestamp": null,
+    "update:type": null,
   },
   props: {
+    alt: String,
     author: Object as PropType<User | Record<string, any>>,
     id: [Number, String],
     isDeleted: Boolean,
     isEdited: Boolean,
+    src: String,
     text: String,
-    timestamp: [Date, Number, String]
+    timestamp: [Date, Number, String],
+    type: String
   }
 };
 
@@ -364,6 +391,7 @@ export {
   DxAlert,
   DxAuthor,
   DxDayHeaderFormat,
+  DxEditing,
   DxItem,
   DxMessageTimestampFormat,
   DxTypingUser,

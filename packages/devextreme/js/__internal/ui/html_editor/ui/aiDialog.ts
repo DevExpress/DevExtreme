@@ -2,11 +2,13 @@ import '@js/ui/drop_down_button';
 
 import type { AIIntegration, RequestCallbacks } from '@js/common/ai-integration';
 import localizationMessage from '@js/common/core/localization/message';
+import Guid from '@js/core/guid';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { extend } from '@js/core/utils/extend';
 import type { ButtonClickEvent, ItemClickEvent } from '@js/ui/drop_down_button_types';
 import type { AICommandNameExtended, AICustomCommand } from '@js/ui/html_editor';
+import Informer from '@js/ui/informer';
 import LoadIndicator from '@js/ui/load_indicator';
 import type { Properties as PopupProperties, ToolbarItem } from '@js/ui/popup';
 import type dxSelectBox from '@js/ui/select_box';
@@ -27,6 +29,7 @@ import {
   buildAICommandParams,
   getAICommandName,
 } from '@ts/ui/html_editor/utils/ai';
+import type { Properties as InformerProperties } from '@ts/ui/informer/informer';
 import type { LoadIndicatorProperties } from '@ts/ui/m_load_indicator';
 import { AnimationType } from '@ts/ui/m_load_indicator';
 import { TEXTEDITOR_INPUT_CONTAINER_CLASS } from '@ts/ui/text_box/m_text_editor.base';
@@ -37,9 +40,9 @@ import BaseDialog from './m_baseDialog';
 export const AI_DIALOG_CLASS = 'dx-aidialog';
 export const AI_DIALOG_CONTROLS_CLASS = 'dx-aidialog-controls';
 export const AI_DIALOG_CONTENT_CLASS = 'dx-aidialog-content';
+export const AI_DIALOG_TITLE_CLASS = 'dx-aidialog-title';
 
 const AI_DIALOG_LOAD_INDICATOR_CLASS = 'dx-pending-indicator';
-const AI_DIALOG_TITLE_CLASS = 'dx-aidialog-title';
 const AI_DIALOG_TITLE_TEXT_CLASS = 'dx-aidialog-title-text';
 const ICON_CLASS = 'dx-icon';
 const ICON_SPARKLE_CLASS = 'dx-icon-sparkle';
@@ -50,6 +53,8 @@ const AI_DIALOG_COMMANDS_WITH_OPTIONS = ['translate', 'changeStyle', 'changeTone
 
 const POPUP_MIN_WIDTH = 288;
 const POPUP_MAX_WIDTH = 460;
+const LOADINDICATOR_SIZE = 48;
+
 export const TEXT_AREA_MIN_HEIGHT = 64;
 export const TEXT_AREA_MAX_HEIGHT = 128;
 export const REPLACE_DROPDOWN_WIDTH = 150;
@@ -112,6 +117,8 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
 
   private _getCustomCommandPrompt?: AICustomCommand['prompt'];
 
+  private _informer!: Informer;
+
   private _isAICommandExecuting = false;
 
   private _isAskAICommandSelected = false;
@@ -166,6 +173,7 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
       value: this._currentCommand,
       displayExpr: 'text',
       valueExpr: 'name',
+      onInitialized: this._addEscapeHandler.bind(this),
       onValueChanged: (e): void => {
         if (this._commandChangeSuppressed) {
           return;
@@ -195,10 +203,11 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
       items: this._commandOptionsList,
       value: this._currentOption ?? this._commandOptionsList?.[0],
       visible: this._isCommandWithOptionsSelected(),
-      onValueChanged: (e): void => {
-        this._currentOption = e.value;
+      onInitialized: this._addEscapeHandler.bind(this),
+      onValueChanged: ({ value }): void => {
+        this._currentOption = value;
 
-        if (this._isOpen()) {
+        if (this._isOpen() && value) {
           this._executeAICommand();
         }
       },
@@ -207,17 +216,22 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
 
   protected _renderPromptTextArea($container: dxElementWrapper): void {
     const $textArea = $('<div>').appendTo($container);
-    this._promptTextArea = new TextArea($textArea.get(0), {
+
+    const options = {
       value: this._askAIPrompt,
       minHeight: TEXT_AREA_MIN_HEIGHT,
       maxHeight: TEXT_AREA_MAX_HEIGHT,
       autoResizeEnabled: true,
       width: '100%',
       placeholder: localizationMessage.format('dxHtmlEditor-aiAskPlaceholder'),
+      _shouldAttachKeyboardEvents: true,
+      onInitialized: this._addEscapeHandler.bind(this),
       onValueChanged: (e): void => {
         this._askAIPrompt = e.value;
       },
-    });
+    };
+
+    this._promptTextArea = new TextArea($textArea.get(0), options);
   }
 
   protected _renderResultTextArea($container: dxElementWrapper): void {
@@ -231,12 +245,17 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
       autoResizeEnabled: true,
     };
 
-    this._resultTextArea = new TextArea($textArea.get(0), {
+    const options = {
+      inputAttr: { 'aria-label': localizationMessage.format('dxHtmlEditor-aiResultTextAreaAriaLabel') },
       minHeight: TEXT_AREA_MIN_HEIGHT,
       width: '100%',
       readOnly: true,
+      _shouldAttachKeyboardEvents: true,
+      onInitialized: this._addEscapeHandler.bind(this),
       ...screenSpecificOptions,
-    });
+    };
+
+    this._resultTextArea = new TextArea($textArea.get(0), options);
   }
 
   protected _renderContent($contentElem: dxElementWrapper): void {
@@ -250,6 +269,7 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
     this._renderOptionSelectBox($controls);
     this._renderPromptTextArea($contentElem);
     this._renderResultTextArea($contentElem);
+    this._renderInformer($contentElem);
   }
 
   private _renderLoadIndicator(): void {
@@ -267,11 +287,24 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
 
     const options: LoadIndicatorProperties = {
       _animationType: AnimationType.Sparkle,
-      width: 48,
-      height: 48,
+      width: LOADINDICATOR_SIZE,
+      height: LOADINDICATOR_SIZE,
     };
 
     this._loadIndicator = new LoadIndicator($indicatorElement[0], options);
+  }
+
+  private _renderInformer($container: dxElementWrapper): void {
+    const $informer = $('<div>').appendTo($container);
+    const text = localizationMessage.format('dxHtmlEditor-aiDialogError');
+
+    const options: InformerProperties = {
+      contentAlignment: 'center',
+      showBackground: true,
+      text,
+    };
+    // @ts-expect-error no .d.ts for private component
+    this._informer = new Informer($informer.get(0), options);
   }
 
   protected _getPopupClass(): string {
@@ -305,6 +338,7 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
       widget: 'dxDropDownButton',
       locateInMenu: 'auto',
       options: {
+        displayExpr: 'text',
         text: localizationMessage.format('dxHtmlEditor-aiReplace'),
         stylingMode: 'contained',
         type: 'default',
@@ -320,6 +354,7 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
         onButtonClick: (e: ButtonClickEvent): void => {
           this._replaceButtonAction({ ...e, itemData: { id: ReplaceButtonActions.Replace } });
         },
+        onInitialized: this._addEscapeHandler.bind(this),
         onItemClick: (e: ItemClickEvent) => this._replaceButtonAction(e),
       },
     };
@@ -342,6 +377,7 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
           // eslint-disable-next-line @typescript-eslint/no-floating-promises
           navigator?.clipboard?.writeText(value ?? '');
         },
+        onInitialized: this._addEscapeHandler.bind(this),
       },
     };
   }
@@ -358,6 +394,7 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
         icon: TRY_AGAIN_BUTTON_ICON,
         text,
         onClick: () => this._retryExecuteAICommand(),
+        onInitialized: this._addEscapeHandler.bind(this),
       },
     };
   }
@@ -375,6 +412,7 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
         stylingMode: 'contained',
         width,
         onClick: () => this._executeAICommand(),
+        onInitialized: this._addEscapeHandler.bind(this),
       },
     };
   }
@@ -392,6 +430,7 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
         text: localizationMessage.format('dxHtmlEditor-aiStop'),
         width,
         onClick: () => this._stopAICommandExecution(),
+        onInitialized: this._addEscapeHandler.bind(this),
       },
     };
   }
@@ -444,6 +483,8 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
     this._refreshTextAreas();
     this._refreshToolbarItems();
     this._refreshLoadIndicator();
+    this._refreshInformer();
+    this._refreshDialogAria();
   }
 
   private _refreshToolbarItems(): void {
@@ -482,10 +523,13 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
     this._resultTextArea.option({ value });
   }
 
-  private _processCommandCompletion(dialogState: DialogState): void {
+  private _processCommandCompletion(dialogState?: DialogState): void {
     this._abort = undefined;
     this._isAICommandExecuting = false;
-    this._setDialogState(dialogState);
+
+    if (dialogState) {
+      this._setDialogState(dialogState);
+    }
   }
 
   private _getAICommandCallbacks<T>(): RequestCallbacks<T> {
@@ -649,6 +693,12 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
     }
   }
 
+  private _refreshInformer(): void {
+    const visible = this._dialogState === DialogState.Error;
+
+    this._informer.option('visible', visible);
+  }
+
   private _getInitialDialogState(): DialogState {
     return this._isAskAICommandSelected ? DialogState.Asking : DialogState.Initial;
   }
@@ -672,6 +722,15 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
     const { visible } = this._popup.option();
 
     return visible as boolean;
+  }
+
+  private _refreshDialogAria(): void {
+    const id = String(new Guid());
+    const $overlayContent = $(this._popup.content()).parent();
+    const $title = $overlayContent.find(`.${AI_DIALOG_TITLE_CLASS}`);
+
+    $title.attr('id', id);
+    $overlayContent.attr('aria-labelledby', id);
   }
 
   updateAIIntegration(aiIntegration: AIIntegration): void {
@@ -704,11 +763,11 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
     return super.show();
   }
 
-  hide(resultText: string, event: AIDialogResult['event']): void {
+  hide(resultText: AIDialogResult['resultText'], event: AIDialogResult['event']): void {
     this.deferred?.resolve({ resultText, event });
 
     this._abort?.();
-    this._processCommandCompletion(this._getInitialDialogState());
+    this._processCommandCompletion();
 
     super.hide();
   }

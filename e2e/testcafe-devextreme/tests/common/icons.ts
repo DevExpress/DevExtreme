@@ -292,6 +292,9 @@ const iconSet = {
   servicebell: '\f194',
   dropzone: '\f195',
   restore: '\f196',
+  groupbycolumn: '\f197',
+  ungroupcolumn: '\f198',
+  ungroupallcolumns: '\f199',
 };
 
 fixture.disablePageReloads`Icons`

@@ -10,6 +10,12 @@
   padding: $cardview-padding;
   background-color: $cardview-background-color;
   border-radius: $cardview-border-radius;
+
+  .dx-link {
+    text-decoration: underline;
+    cursor: pointer;
+    color: $cardview-link-color;
+  }
 }
 
 .dx-cardview-root-container {
@@ -17,6 +23,12 @@
   flex-direction: column;
   gap: $cardview-gap;
   height: 100%;
+}
+
+.dx-cardview-header-container {
+  display: flex;
+  flex-direction: column;
+  gap: $cardview-headers-container-gap;
 }
 
 .dx-cardview-exclude-flexbox {

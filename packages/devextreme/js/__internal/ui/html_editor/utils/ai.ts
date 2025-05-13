@@ -263,3 +263,5 @@ export const buildAICommandParams = <T extends AICommandNameExtended>(
     }
   }
 };
+
+export const hasInvalidCustomCommand = (commandsMap: CommandsMap): boolean => Object.keys(commandsMap).some((command) => command.startsWith('custom') && !commandsMap[command].prompt);

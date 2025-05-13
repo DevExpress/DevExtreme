@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Item } from 'devextreme/ui/stepper';
-import {BookingFormData} from "./app.types";
-import {initialFormData, initialSteps} from "../../Vue/data";
+import { BookingFormData } from "./app.types";
 
 @Injectable({
   providedIn: 'root',

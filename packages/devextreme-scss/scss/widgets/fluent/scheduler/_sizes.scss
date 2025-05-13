@@ -46,7 +46,8 @@ $fluent-scheduler-workspace-month-header-height: 22px !default;
 $fluent-scheduler-workspace-month-timeline--time-height: 34px !default;
 
 $agenda-appointment-title-font-size: null !default;
-$fluent-scheduler-header-height: $fluent-toolbar-height + 2px !default;
+$fluent-scheduler-header-height: null !default;
+$fluent-scheduler-header-offset: null !default;
 
 $scheduler-timeline-cell-height: 50px !default;
 
@@ -65,9 +66,11 @@ $header-panel-time-cell-padding: null !default;
   $header-day-element-height: 26px;
   $fluent-scheduler-workspace-date-table-cell-height: 38px !default;
 
-  $fluent-scheduler-toolbar-item-offset: 0 12px !default;
   $fluent-scheduler-navigator-height: 36px !default;
   $fluent-scheduler-header-panel-day-font-size: 16px !default;
+  $fluent-scheduler-header-height: 46px !default;
+  $fluent-scheduler-header-offset: 0 12px !default;
+  $fluent-scheduler-toolbar-item-offset: 4px !default;
 
   $fluent-scheduler-appointment-tooltip-title-font-size: 16px !default;
   $fluent-scheduler-appointment-tooltip-date-font-size: 14px !default;
@@ -97,9 +100,11 @@ $header-panel-time-cell-padding: null !default;
   $header-day-element-height: 24px;
   $fluent-scheduler-workspace-date-table-cell-height: 28px !default;
 
-  $fluent-scheduler-toolbar-item-offset: 0 8px !default;
   $fluent-scheduler-navigator-height: 28px !default;
   $fluent-scheduler-header-panel-day-font-size: 14px !default;
+  $fluent-scheduler-header-height: 34px !default;
+  $fluent-scheduler-header-offset: 2px 8px !default;
+  $fluent-scheduler-toolbar-item-offset: 4px !default;
 
   $fluent-scheduler-appointment-tooltip-title-font-size: 14px !default;
   $fluent-scheduler-appointment-tooltip-date-font-size: 11px !default;

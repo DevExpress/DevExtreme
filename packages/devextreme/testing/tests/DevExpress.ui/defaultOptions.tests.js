@@ -1401,8 +1401,10 @@ testComponentDefaults(ChatMessageBox,
 testComponentDefaults(ChatMessageBubble,
     {},
     {
-        text: '',
         isDeleted: false,
+        isEdited: false,
+        template: null,
+        message: {},
     }
 );
 
@@ -1446,6 +1448,9 @@ testComponentDefaults(ChatTypingIndicator,
 testComponentDefaults(ChatEditingPreview,
     {},
     {
+        activeStateEnabled: true,
+        focusStateEnabled: true,
+        hoverStateEnabled: true,
         text: '',
         onCancel: undefined,
     }

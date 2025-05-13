@@ -10,6 +10,7 @@ const LIST_ITEM_CLASS = 'dx-list-item';
 const OVERLAY_CONTENT_CLASS = 'dx-overlay-content';
 const SELECTBOX_CLASS = 'dx-selectbox';
 const TEXTAREA_CLASS = 'dx-textarea';
+const INFORMER_CLASS = 'dx-informer';
 
 const CLICK_EVENT_NAME = 'dxclick';
 
@@ -145,6 +146,7 @@ export const getCommandSelectBoxInstance = ($container) => getDialogSelectBoxes(
 export const getOptionSelectBoxInstance = ($container) => getDialogSelectBoxes($container).eq(1).dxSelectBox('instance');
 export const getPromptTextAreaInstance = ($container) => $container.find(`.${TEXTAREA_CLASS}`).eq(0).dxTextArea('instance');
 export const getResultTextAreaInstance = ($container) => $container.find(`.${TEXTAREA_CLASS}`).eq(1).dxTextArea('instance');
+export const getInformerInstance = ($container) => $container.find(`.${INFORMER_CLASS}`).eq(0).dxInformer('instance');
 
 export const setResultText = (value) => {
     const textAreaInstance = $(`.${TEXTAREA_CLASS}`).eq(1).dxTextArea('instance');

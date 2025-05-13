@@ -1,3 +1,4 @@
+import type { ChangedOptionInfo } from '@js/common/core/events';
 import type { Action, Template } from '@ts/grids/new/grid_core/types';
 import type { ComponentType } from 'inferno';
 
@@ -30,3 +31,14 @@ export type ActionProperty<TProps, TProp extends string> =
   NonNullable<PropertyType<TProps, TProp>> extends Action<infer TActionArgs>
     ? (args: TActionArgs) => void
     : unknown;
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export interface InternalOptionsState<TProps extends Record<string, any>> {
+  options: TProps;
+  changes: ChangedOptionInfo | null;
+}
+
+export interface OptionWithChanges<TPropValue> {
+  value: TPropValue;
+  changes: ChangedOptionInfo | null;
+}
