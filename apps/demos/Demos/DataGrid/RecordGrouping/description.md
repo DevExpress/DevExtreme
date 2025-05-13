@@ -1,21 +1,23 @@
-DataGrid allows users to group data by columns with the group panel. To display the group panel area, assign `true` to [groupPanel](/Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/groupPanel/).[visible](/Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/groupPanel/#visible).
+To group data by columns, users can utilize the group panel. Enable the [groupPanel](/Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/groupPanel/).[visible](/Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/groupPanel/#visible) property to display the group panel area.
 <!--split-->
 
-To group data, users can drag and drop column headers between the column headers area and the group panel. DataGrid also supports keyboard shortcuts to perform grouping actions:
+To group data, users can drag and drop column headers onto and from the group panel. DataGrid also supports keyboard shortcuts to perform grouping actions:
 
-- Ctrl+G:    
-Group the focused column header from the column headers area.
-- Backspace, Delete, and Ctrl+Shift+G:    
-Ungroup the focused column header from the group panel or the column headers area. Users can ungroup from the column headers area only when the focused item's [showWhenGrouped](/Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/columns/#showWhenGrouped) is set to `true`.
-- Shift+Alt+G:    
-Ungroup all grouped items from the group panel.
+- **Ctrl+G**    
+Move the focused column header to the group panel. 
+- **Backspace**, **Delete**, and **Ctrl+Shift+G**    
+Remove the focused column header from the group panel. This shortcut is available for items in:
+    - The group panel.
+    - The column header if [showWhenGrouped](/Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/columns/#showWhenGrouped) is enabled.
+- **Shift+Alt+G**    
+Ungroup all items from the group panel.
 
 To allow users to reorder headers within the group panel, assign `true` to the [allowColumnReordering](/Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/#allowColumnReordering) property. Reordering headers in the group panel will change the component's group hierarchy. Users can reorder headers with mouse drag-and-drop operations or with keyboard shortcuts:
 
-- Ctrl+Left Arrow    
-Reorder the focused header to the left.
-- Ctrl+Right Arrow    
-Reorder the focused header to the right.
+- **Ctrl+Left Arrow**    
+Move the focused header to the left.
+- **Ctrl+Right Arrow**    
+Move the focused header to the right.
 
 Grouping and reordering operations are also available in the component's context menu.
 
