@@ -1,6 +1,6 @@
 import { computed } from '@preact/signals-core';
 
-import { ColumnsController } from '../../columns_controller';
+import { ColumnsController } from '../../columns_controller/index';
 import { OptionsController } from '../../options_controller/options_controller';
 import { FilterController } from '../filter_controller';
 import { CompatibilityHeaderFilterController } from '../header_filter/index';
