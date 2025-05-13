@@ -2,7 +2,6 @@ import type { Column } from '../../columns_controller/types';
 import { FilterController } from '../filter_controller';
 import { HeaderFilterViewController } from './view_controller';
 
-// This class is used for filterBuilder anyof/noneof custom operations
 export class CompatibilityHeaderFilterController {
   public static dependencies = [
     FilterController,

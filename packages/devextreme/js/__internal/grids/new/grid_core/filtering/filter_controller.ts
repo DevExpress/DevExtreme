@@ -44,7 +44,7 @@ export class FilterController {
   );
 
   // This property is defined in filter_custom_operations_visitor.ts
-  public customOperations: ReadonlySignal<unknown[]> = computed(() => []);
+  public customOperations: Signal<unknown[]> = signal([]);
 
   public readonly filterPanelValue = computed(
     () => {

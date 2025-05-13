@@ -1,4 +1,4 @@
-import { computed } from '@preact/signals-core';
+import { computed, effect } from '@preact/signals-core';
 
 import { ColumnsController } from '../../columns_controller/index';
 import type { Column } from '../../columns_controller/types';
@@ -25,8 +25,7 @@ export class FilterCustomOperationsVisitor {
     private readonly headerFilterController: CompatibilityHeaderFilterController,
     private readonly filterController: FilterController,
   ) {
-    console.log('constructor');
-    this.filterController.customOperations = computed((): unknown[] => {
+    effect(() => {
       const config = {
         columnOption: (columnName: string): Column | undefined => {
           const columns = this.columnsController.columns.peek();
@@ -46,7 +45,7 @@ export class FilterCustomOperationsVisitor {
         .concat(this.filterBuilderCustomOperations.value)
         .filter((o) => o);
 
-      return customOperations;
+      this.filterController.customOperations.value = customOperations;
     });
   }
 }
