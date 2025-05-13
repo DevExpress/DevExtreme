@@ -63,3 +63,7 @@ export enum ViewName {
   Group = 'group',
   Headers = 'headers',
 }
+
+export const KEY_CODES = {
+  G: 71,
+};
