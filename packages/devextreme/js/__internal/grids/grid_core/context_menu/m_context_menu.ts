@@ -44,7 +44,7 @@ export class ContextMenuController extends modules.ViewController {
       }
 
       const $viewElement = view.element();
-      const isTargetElementInsideView = $viewElement.is($targetElement) || $viewElement.find($targetElement).length;
+      const isTargetElementInsideView = $viewElement?.is($targetElement) || $viewElement?.find($targetElement).length;
 
       if (isTargetElementInsideView) {
         const $targetCellElement = $targetElement.closest('.dx-row > td, .dx-row > tr').length
